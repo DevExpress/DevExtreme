@@ -2,6 +2,7 @@
 
 var $ = require("../../core/renderer"),
     Class = require("../../core/class"),
+    getPublicElement = require("../../core/utils/dom").getPublicElement,
     extend = require("../../core/utils/extend").extend,
     isDefined = require("../../core/utils/type").isDefined;
 
@@ -227,7 +228,7 @@ exports.AreaItem = Class.inherit({
             onCellPrepared = that.option("onCellPrepared"),
             hasEvent = that.component.hasEvent("cellPrepared"),
             rowElement,
-            cellElement,
+            $cellElement,
             onCellPreparedArgs,
             defaultActionArgs = this.component._defaultActionArgs(),
             row,
@@ -242,12 +243,12 @@ exports.AreaItem = Class.inherit({
 
                 for(columnIndex = 0; columnIndex < row.length; columnIndex++) {
                     cell = row[columnIndex];
-                    cellElement = rowElement.children().eq(columnIndex);
+                    $cellElement = rowElement.children().eq(columnIndex);
                     onCellPreparedArgs = {
                         area: areaName,
                         rowIndex: rowIndex,
                         columnIndex: columnIndex,
-                        cellElement: cellElement,
+                        cellElement: getPublicElement($cellElement),
                         cell: cell
                     };
                     if(hasEvent) {

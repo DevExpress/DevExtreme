@@ -4,6 +4,7 @@ var $ = require("../../core/renderer"),
     eventsEngine = require("../../events/core/events_engine"),
     dataUtils = require("../../core/element_data"),
     dateUtils = require("../../core/utils/date"),
+    getPublicElement = require("../../core/utils/dom").getPublicElement,
     extend = require("../../core/utils/extend").extend,
     each = require("../../core/utils/iterator").each,
     messageLocalization = require("../../localization/message"),
@@ -808,7 +809,7 @@ var SchedulerWorkSpace = Widget.inherit({
         });
         eventsEngine.on($element, SCHEDULER_CELL_DXCLICK_EVENT_NAME, cellSelector, function(e) {
             var $cell = $(e.target);
-            that._cellClickAction({ jQueryEvent: e, cellElement: $cell, cellData: that.getCellData($cell) });
+            that._cellClickAction({ jQueryEvent: e, cellElement: getPublicElement($cell), cellData: that.getCellData($cell) });
         });
     },
 

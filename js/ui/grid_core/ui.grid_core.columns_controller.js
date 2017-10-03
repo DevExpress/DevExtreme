@@ -550,6 +550,18 @@ module.exports = {
              * @default false
              */
             /**
+             * @name GridBaseOptions_columns_headerFilter_width
+             * @publicName width
+             * @type number
+             * @default undefined
+             */
+            /**
+             * @name GridBaseOptions_columns_headerFilter_height
+             * @publicName height
+             * @type number
+             * @default undefined
+             */
+            /**
              * @name GridBaseOptions_columns_editorOptions
              * @publicName editorOptions
              * @type object

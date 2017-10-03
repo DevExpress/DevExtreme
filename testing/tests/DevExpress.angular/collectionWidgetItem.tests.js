@@ -161,7 +161,7 @@ QUnit.test("onItemRendered event should have a completely rendered itemElement",
     this.testApp.controller("my-controller", function($scope) {
         $scope.items = [{ text: "test" }];
         $scope.onItemRendered = function(e) {
-            itemElementText = e.itemElement.text();
+            itemElementText = $(e.itemElement).text();
         };
     });
 

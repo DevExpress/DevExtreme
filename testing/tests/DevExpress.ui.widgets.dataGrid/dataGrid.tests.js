@@ -195,7 +195,7 @@ QUnit.test("Correct start scroll position when RTL and detached container of the
     clock.tick();
 
     $("#container").append($dataGrid);
-    $dataGrid.data("dxDataGrid").updateDimensions();
+    $dataGrid.dxDataGrid("instance").updateDimensions();
     scrollLeft = $(".dx-scrollable").dxScrollable("instance").scrollLeft();
 
     //assert
@@ -412,15 +412,15 @@ QUnit.test("cellClick/cellHoverChanged handler should be executed when define vi
     dataGrid.on("cellClick", function(e) {
         cellClickCount++;
 
-        assert.equal(e.cellElement.get(0).tagName, "TD", "correct cell element tag");
-        assert.equal(e.cellElement.text(), "1", "correct cell content");
+        assert.equal($(e.cellElement).get(0).tagName, "TD", "correct cell element tag");
+        assert.equal($(e.cellElement).text(), "1", "correct cell content");
     });
 
     dataGrid.on("cellHoverChanged", function(e) {
         cellHoverChangedCount++;
 
-        assert.equal(e.cellElement.get(0).tagName, "TD", "correct cell element tag");
-        assert.equal(e.cellElement.text(), "1", "correct cell content");
+        assert.equal($(e.cellElement).get(0).tagName, "TD", "correct cell element tag");
+        assert.equal($(e.cellElement).text(), "1", "correct cell content");
     });
 
     $(dataGrid.$element())
@@ -543,6 +543,41 @@ QUnit.test("Check grouping context menu operability", function(assert) {
     clock.tick(300);
 
     assert.equal(dataGrid.columnOption("field2", "groupIndex"), undefined, "field2 has no groupIndex");
+
+    clock.restore();
+});
+
+QUnit.test("Group panel should set correct 'max-width' after clear grouping", function(assert) {
+    var clock = sinon.useFakeTimers(),
+        dataGrid = $("#dataGrid").dxDataGrid({
+            dataSource: {
+                store: [
+                    { field1: "1", field2: "2", field3: "3", field4: "4", field5: "5" },
+                    { field1: "11", field2: "22", field3: "33", field4: "44", field5: "55" }]
+            },
+            width: 460,
+            groupPanel: {
+                emptyPanelText: "Long long long long long long long long long long long text",
+                visible: true
+            },
+            editing: { allowAdding: true, mode: "batch" },
+            columnChooser: {
+                enabled: true
+            }
+        }).dxDataGrid("instance"),
+        $dataGrid = $(dataGrid.element());
+
+    clock.tick();
+    assert.equal($dataGrid.find(".dx-toolbar-item-invisible").length, 4, "4 toolbar items are hidden, group panel has a long message");
+
+    dataGrid.columnOption("field2", "groupIndex", 0);
+    clock.tick();
+
+    assert.equal($dataGrid.find(".dx-toolbar-item-invisible").length, 0, "all toolbar items are visible, group panel has a group with short name");
+
+    dataGrid.clearGrouping();
+    clock.tick();
+    assert.equal($dataGrid.find(".dx-toolbar-item-invisible").length, 4, "4 toolbar items are hidden after clear grouping");
 
     clock.restore();
 });
@@ -1821,7 +1856,7 @@ QUnit.test("column headers visibility when hide removing row in batch editing mo
             },
             onCellPrepared: function(e) {
                 if(e.rowType === "data" && e.column.command === "edit" && e.row.removed) {
-                    e.cellElement.parent().css({ display: 'none' });
+                    $(e.cellElement).parent().css({ display: 'none' });
                 }
             }
         }),
@@ -2438,7 +2473,7 @@ QUnit.test("Resize columns for virtual scrolling", function(assert) {
                 { dataField: "field4" }
             ]
         }),
-        dataGrid = $dataGrid.data("dxDataGrid"),
+        dataGrid = $dataGrid.dxDataGrid("instance"),
         $tables,
         columnsResizer = dataGrid.getController("columnsResizer");
 
@@ -2681,7 +2716,7 @@ QUnit.test("columns width when all columns have width and dataGrid with fixed wi
             loadingTimeout: undefined,
             dataSource: [{ field1: "1", field2: "2", field3: "3", field4: "4" }]
         }),
-        dataGridInstance = $dataGrid.data("dxDataGrid");
+        dataGridInstance = $dataGrid.dxDataGrid("instance");
 
     //act
     dataGridInstance.option("columns", [
@@ -4992,7 +5027,7 @@ QUnit.test("Updating after changing the option", function(assert) {
         dataSource: {
             store: [{ field1: "1", field2: "2" }, { field1: "3", field2: "4" }, { field1: "5", field2: "6" }]
         }
-    }).data("dxDataGrid");
+    }).dxDataGrid("instance");
 
     this.clock.tick();
 
@@ -5023,7 +5058,7 @@ QUnit.test("Correct update group panel items runtime", function(assert) {
         dataSource: {
             store: [{ field1: "1", field2: "2" }, { field1: "3", field2: "4" }, { field1: "5", field2: "6" }]
         }
-    }).data("dxDataGrid");
+    }).dxDataGrid("instance");
 
     this.clock.tick();
 

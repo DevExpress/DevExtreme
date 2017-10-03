@@ -586,6 +586,10 @@ var CollectionWidget = BaseCollectionWidget.inherit({
                     this._invalidate();
                 }
                 break;
+            case "dataSource":
+                this.option("selectedItemKeys", []);
+                this.callBase(args);
+                break;
             case "selectedIndex":
             case "selectedItem":
             case "selectedItems":

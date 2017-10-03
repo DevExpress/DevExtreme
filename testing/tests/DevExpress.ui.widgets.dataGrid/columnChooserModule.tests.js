@@ -961,7 +961,7 @@ QUnit.test("CheckBox mode - scroll position after selecting an last item", funct
 
     $columnChooser = $("body").children(".dx-datagrid-column-chooser");
     $lastItemElement = $columnChooser.find(".dx-treeview-item").last();
-    scrollableInstance = $columnChooser.find(".dx-scrollable").data("dxScrollable");
+    scrollableInstance = $columnChooser.find(".dx-scrollable").dxScrollable("instance");
     scrollableInstance.scrollToElement($lastItemElement);
 
     //act
@@ -969,7 +969,7 @@ QUnit.test("CheckBox mode - scroll position after selecting an last item", funct
     this.columnChooserView.render($testElement, true);
 
     //assert
-    scrollableInstance = $columnChooser.find(".dx-scrollable").data("dxScrollable");
+    scrollableInstance = $columnChooser.find(".dx-scrollable").dxScrollable("instance");
     assert.ok(scrollableInstance.scrollTop() > 0, "scroll position");
 });
 

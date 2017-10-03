@@ -1296,7 +1296,7 @@ QUnit.test("Synchronize position fixed table with main table", function(assert) 
     that.rowsView.height(50);
     that.rowsView.resize();
 
-    scrollableInstance = that.rowsView.element().data("dxScrollable");
+    scrollableInstance = that.rowsView.element().dxScrollable("instance");
     $fixTable = $testElement.find(".dx-datagrid-rowsview").children(".dx-datagrid-content-fixed").find("table");
 
     //assert
@@ -1338,7 +1338,7 @@ QUnit.test("Synchronize position fixed table with main table when scrolling mode
     that.rowsView.height(50);
     that.rowsView.resize();
 
-    scrollableInstance = that.rowsView.element().data("dxScrollable");
+    scrollableInstance = that.rowsView.element().dxScrollable("instance");
     $fixTable = $testElement.find(".dx-datagrid-rowsview").children(".dx-datagrid-content-fixed").find("table");
     $table = $testElement.find(".dx-datagrid-rowsview").children(".dx-scrollable-wrapper").find("table").first();
 
@@ -1387,7 +1387,7 @@ if(device.deviceType === "desktop") {
 
         $fixTable = $testElement.find(".dx-datagrid-rowsview").children(".dx-datagrid-content-fixed").find("table");
         $table = $testElement.find(".dx-datagrid-rowsview").children(".dx-scrollable-wrapper").find("table").first();
-        scrollableInstance = that.rowsView.element().data("dxScrollable");
+        scrollableInstance = that.rowsView.element().dxScrollable("instance");
 
         that.editorFactoryController.focus($fixTable.find("tr").eq(1).find("td").first());
 
@@ -1448,7 +1448,7 @@ if(device.deviceType === "desktop") {
 
         $fixTable = $testElement.find(".dx-datagrid-rowsview").children(".dx-datagrid-content-fixed").find("table");
         $table = $testElement.find(".dx-datagrid-rowsview").children(".dx-scrollable-wrapper").find("table").first();
-        scrollableInstance = that.rowsView.element().data("dxScrollable");
+        scrollableInstance = that.rowsView.element().dxScrollable("instance");
 
         //assert
         assert.ok(scrollableInstance, "has scrollable");
@@ -1506,7 +1506,7 @@ if(device.deviceType === "desktop") {
 
         $fixTable = $testElement.find(".dx-datagrid-rowsview").children(".dx-datagrid-content-fixed").find("table");
         $table = $testElement.find(".dx-datagrid-rowsview").children(".dx-scrollable-wrapper").find("table").first();
-        scrollableInstance = that.rowsView.element().data("dxScrollable");
+        scrollableInstance = that.rowsView.element().dxScrollable("instance");
 
         //assert
         assert.ok(scrollableInstance, "has scrollable");
@@ -1656,7 +1656,7 @@ QUnit.test("Call the onRowPrepared for main and fixed table", function(assert) {
 
     that.options.onRowPrepared = function(rowInfo) {
         countCallOnRowPrepared++;
-        rowInfo.rowElement.attr("test", "test");
+        $(rowInfo.rowElement).attr("test", "test");
     };
     that.setupDataGrid();
 

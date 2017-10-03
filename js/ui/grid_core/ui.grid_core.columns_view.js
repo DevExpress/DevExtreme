@@ -7,6 +7,7 @@ var $ = require("../../core/renderer"),
     browser = require("../../core/utils/browser"),
     commonUtils = require("../../core/utils/common"),
     config = require("../../core/config"),
+    getPublicElement = require("../../core/utils/dom").getPublicElement,
     typeUtils = require("../../core/utils/type"),
     iteratorUtils = require("../../core/utils/iterator"),
     extend = require("../../core/utils/extend").extend,
@@ -170,13 +171,13 @@ exports.ColumnsView = modules.View.inherit(columnStateMixin).inherit({
                 resultOptions;
 
             resultOptions = extend({}, options, {
-                cellElement: $cell,
+                cellElement: getPublicElement($cell),
                 jQueryEvent: event,
                 eventType: event.type
             });
 
             if($fieldItemContent.length) {
-                formItemOptions = $fieldItemContent.data("dxFormItem");
+                formItemOptions = $fieldItemContent.data("dx-form-item");
                 if(formItemOptions.column) {
                     resultOptions.column = formItemOptions.column;
                     resultOptions.columnIndex = that._columnsController.getVisibleIndex(resultOptions.column.index);
@@ -204,7 +205,7 @@ exports.ColumnsView = modules.View.inherit(columnStateMixin).inherit({
                 e.rowIndex = that.getRowIndex(jQueryEvent.currentTarget);
 
                 if(e.rowIndex >= 0) {
-                    e.rowElement = $(jQueryEvent.currentTarget);
+                    e.rowElement = getPublicElement($(jQueryEvent.currentTarget));
                     e.columns = that.getColumns();
                     that._rowClick(e);
                 }
@@ -435,15 +436,15 @@ exports.ColumnsView = modules.View.inherit(columnStateMixin).inherit({
         };
     },
 
-    _cellPrepared: function($cell, options) {
-        options.cellElement = $cell;
+    _cellPrepared: function(cell, options) {
+        options.cellElement = getPublicElement($(cell));
         this.executeAction("onCellPrepared", options);
     },
 
     _rowPrepared: function($row, options) {
         dataUtils.data($row.get(0), "options", options);
 
-        options.rowElement = $row;
+        options.rowElement = getPublicElement($row);
         this.executeAction("onRowPrepared", options);
     },
 

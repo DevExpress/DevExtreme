@@ -28,7 +28,7 @@ function updateSelectAllState(e, filterValues) {
     if(e.component.option("searchValue")) {
         return;
     }
-    var selectAllCheckBox = e.element.find(".dx-list-select-all-checkbox").data("dxCheckBox");
+    var selectAllCheckBox = $(e.element).find(".dx-list-select-all-checkbox").data("dxCheckBox");
 
     if(selectAllCheckBox && filterValues && filterValues.length) {
         selectAllCheckBox.option("value", undefined);
@@ -150,9 +150,10 @@ exports.HeaderFilterView = modules.View.inherit({
 
     _getSearchExpr: function(options) {
         var lookup = options.lookup,
+            useDefaultSearchExpr = options.useDefaultSearchExpr,
             headerFilterDataSource = options.headerFilter && options.headerFilter.dataSource;
 
-        if(isDefined(headerFilterDataSource) && !isFunction(headerFilterDataSource)) {
+        if(useDefaultSearchExpr || isDefined(headerFilterDataSource) && !isFunction(headerFilterDataSource)) {
             return DEFAULT_SEARCH_EXPRESSION;
         }
 

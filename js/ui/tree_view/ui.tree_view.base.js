@@ -1307,7 +1307,7 @@ var TreeViewBase = HierarchicalCollectionWidget.inherit({
     },
 
     _changeCheckboxValue: function(e) {
-        var $node = e.element.parent("." + NODE_CLASS),
+        var $node = $(e.element).parent("." + NODE_CLASS),
             $item = $node.children("." + ITEM_CLASS),
             item = this._getItemData($item),
             node = this._getNodeByElement($item),

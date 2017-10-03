@@ -19,11 +19,12 @@ var $ = require("jquery"),
     noop = require("core/utils/common").noop,
     dataGridMocks = require("../../helpers/dataGridMocks.js"),
     CLICK_NAMESPACE = "dxclick.dxDataGridAdaptivity",
-    eventsEngine = require("events/core/events_engine");
+    eventsEngine = require("events/core/events_engine"),
+    renderer = require("core/renderer");
 
 function setupDataGrid(that, $dataGridContainer) {
     that.$element = function() {
-        return $dataGridContainer ? $dataGridContainer : $(".dx-datagrid");
+        return $dataGridContainer ? $dataGridContainer : renderer(".dx-datagrid");
     };
 
     if(that.columns !== null) {
@@ -452,7 +453,7 @@ QUnit.test("Show the form when an adaptive row is expanded", function(assert) {
     $(".dx-data-row .dx-datagrid-adaptive-more").first().trigger("dxclick");
 
     //assert
-    var form = $(".dx-master-detail-row .dx-form").data("dxForm");
+    var form = $(".dx-master-detail-row .dx-form").dxForm("instance");
     assert.ok(form !== undefined, "form is initialized");
     assert.equal(form.option("items")[0].column.dataField, "lastName", "dataField of column");
     assert.equal(form.option("items")[0].dataField, "lastName", "dataField of item");
@@ -717,7 +718,7 @@ QUnit.test("Show the form with cellTemplate when an adaptive row is expanded", f
     $(".dx-data-row .dx-datagrid-adaptive-more").first().trigger("dxclick");
 
     //assert
-    var form = $(".dx-master-detail-row .dx-form").data("dxForm");
+    var form = $(".dx-master-detail-row .dx-form").dxForm("instance");
     assert.ok(form !== undefined, "form is initialized");
     assert.equal(form.option("items")[0].column.dataField, "lastName", "dataField of column");
     assert.equal(form.option("items")[0].dataField, "lastName", "dataField of item");
@@ -1071,7 +1072,7 @@ QUnit.test("ShowEditorAlways option for form's item", function(assert) {
 
     //assert
     var $editors = $(".dx-form .dx-texteditor"),
-        editor = $editors.first().data("dxTextBox");
+        editor = $editors.first().dxTextBox("instance");
 
     assert.equal($editors.length, 1, "editors count");
     assert.equal(editor.option("value"), "Psy", "editor's value");
@@ -1730,13 +1731,13 @@ QUnit.test("Edit form. Check that adaptive form is hidden", function(assert) {
     this.adaptiveColumnsController.expandAdaptiveDetailRow(this.items[0]);
     this.clock.tick();
 
-    var adaptiveDetailForm = $(".dx-adaptive-detail-row .dx-form").data("dxForm");
+    var adaptiveDetailForm = $(".dx-adaptive-detail-row .dx-form").dxForm("instance");
     assert.ok(adaptiveDetailForm !== undefined, "adaptive detail form is initialized");
 
     this.editingController.editRow(0);
     this.clock.tick();
 
-    adaptiveDetailForm = $(".dx-adaptive-detail-row .dx-form").data("dxForm");
+    adaptiveDetailForm = $(".dx-adaptive-detail-row .dx-form").dxForm("instance");
     assert.ok(adaptiveDetailForm === undefined, "adaptive detail form is not initialized");
 });
 
@@ -1840,7 +1841,7 @@ QUnit.test("Edit row", function(assert) {
     this.editingController.editRow(0);
 
     //assert
-    var form = $(".dx-master-detail-row .dx-form").data("dxForm"),
+    var form = $(".dx-master-detail-row .dx-form").dxForm("instance"),
         $editors = $(".dx-texteditor"),
         editor1 = $editors.eq(0).dxTextBox("instance"),
         editor2 = $editors.eq(2).dxTextBox("instance");
@@ -1855,7 +1856,7 @@ QUnit.test("Edit row", function(assert) {
     this.editingController.saveEditData();
 
     //assert
-    form = $(".dx-master-detail-row .dx-form").data("dxForm");
+    form = $(".dx-master-detail-row .dx-form").dxForm("instance");
     $editors = $(".dx-texteditor");
 
     assert.ok(form === undefined, "form is not initialized");
@@ -1965,7 +1966,7 @@ QUnit.test("Edit row. Check repeat edit", function(assert) {
     this.editingController.editRow(0);
 
     //assert
-    form = $(".dx-master-detail-row .dx-form").data("dxForm");
+    form = $(".dx-master-detail-row .dx-form").dxForm("instance");
     $editors = $(".dx-texteditor");
 
     assert.ok(form !== undefined, "form is initialized");
@@ -2028,7 +2029,7 @@ QUnit.test("Edit row. Editor is not rendered inside the form widget when clicked
     this.adaptiveColumnsController.expandAdaptiveDetailRow(this.items[0]);
 
     var $itemContent = $(".dx-field-item-content"),
-        form = $(".dx-master-detail-row .dx-form").data("dxForm");
+        form = $(".dx-master-detail-row .dx-form").dxForm("instance");
 
     $($itemContent).trigger("dxclick");
 
@@ -2107,7 +2108,7 @@ QUnit.test("Check 'onAdaptiveDetailRowPreparing' action", function(assert) {
     this.adaptiveColumnsController.expandAdaptiveDetailRow(this.items[0]);
 
     var $itemContent = $(".dx-field-item-content"),
-        form = $(".dx-master-detail-row .dx-form").data("dxForm");
+        form = $(".dx-master-detail-row .dx-form").dxForm("instance");
 
     $($itemContent).trigger("dxclick");
 
@@ -2140,7 +2141,7 @@ QUnit.test("Edit row. Editors are rendered inside the form widget when the adapt
     this.adaptiveColumnsController.expandAdaptiveDetailRow(this.items[0]);
     this.editingController.editRow(0);
 
-    var form = $(".dx-master-detail-row .dx-form").data("dxForm");
+    var form = $(".dx-master-detail-row .dx-form").dxForm("instance");
 
     //assert
     assert.ok(form !== undefined, "form is initialized");
@@ -2282,7 +2283,7 @@ QUnit.test("Edit row. The adaptive detail row is collapsed when an other row is 
 
     assert.equal($form.length, 1, "form element");
     assert.equal($editors.length, 1, "editor's count");
-    assert.equal($editors.eq(0).data("dxTextBox").option("value"), "Star", "editor's value");
+    assert.equal($editors.eq(0).dxTextBox("instance").option("value"), "Star", "editor's value");
 });
 
 QUnit.test("Edit row. Expand the adaptive detail row when an other row is edited", function(assert) {
@@ -2343,7 +2344,7 @@ QUnit.test("Edit row. ShowEditorAlways option for form's item", function(assert)
 
     //assert
     var $editors = $(".dx-form .dx-texteditor"),
-        editor = $editors.first().data("dxTextBox");
+        editor = $editors.first().dxTextBox("instance");
 
     assert.equal($editors.length, 1, "editors count");
     assert.ok(!editor.option("readOnly"), "editor has not readOnly mode");
@@ -2851,7 +2852,7 @@ QUnit.test("Edit batch. ShowEditorAlways option for form's item", function(asser
 
     //assert
     var $editors = $(".dx-form .dx-texteditor"),
-        editor = $editors.first().data("dxTextBox");
+        editor = $editors.first().dxTextBox("instance");
 
     assert.equal($editors.length, 1, "editors count");
     assert.ok(!editor.option("readOnly"), "editor has not readOnly mode");
@@ -3128,7 +3129,7 @@ QUnit.test("Create new row is the batch mode. Save new values", function(assert)
     $($itemsContent.first()).trigger("dxclick");
 
     editors = $(".dx-adaptive-detail-row .dx-texteditor");
-    editors.first().data("dxTextBox").option("value", "12test");
+    editors.first().dxTextBox("instance").option("value", "12test");
     this.editingController.saveEditData();
 
     //assert
@@ -3161,7 +3162,7 @@ QUnit.test("Create new row is the batch mode. Cancel new values", function(asser
     $($itemsContent.first()).trigger("dxclick");
 
     editors = $(".dx-texteditor");
-    editors.first().data("dxTextBox").option("value", "12test");
+    editors.first().dxTextBox("instance").option("value", "12test");
     this.editingController.cancelEditData();
 
     //assert
@@ -3227,7 +3228,7 @@ QUnit.test("Create new row is the cell mode. Save new values", function(assert) 
     assert.equal(editors.length, 1, "editor's count");
 
     //act
-    editors.first().data("dxTextBox").option("value", "12test");
+    editors.first().dxTextBox("instance").option("value", "12test");
     $(document).trigger("dxclick");
     this.clock.tick();
 
@@ -3686,7 +3687,6 @@ QUnit.module("Keyboard navigation", {
         //assert
         var $input = this.getActiveInputElement();
         assert.equal($input.val(), "Full Name", "current input is correct");
-        assert.ok($input.is(":focus"), "current input is focused");
     });
 
     QUnit.testInActiveWindow("Edit previous an adaptive detail item by shift + tab key", function(assert) {
@@ -3705,7 +3705,6 @@ QUnit.module("Keyboard navigation", {
         //assert
         var $input = this.getActiveInputElement();
         assert.equal($input.val(), "Psy", "current input is correct");
-        assert.ok($input.is(":focus"), "current input is focused");
     });
 
     QUnit.testInActiveWindow("Editable cell is closed when focus moving outside detail form", function(assert) {

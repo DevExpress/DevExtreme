@@ -736,7 +736,7 @@ QUnit.test("update filter value for array column with dxTagBox", function(assert
     this.columnHeadersView.render(testElement);
 
     //act
-    testElement.find(".dx-tagbox").first().data("dxTagBox").option("value", [1, 2, 3]);
+    testElement.find(".dx-tagbox").first().dxTagBox("instance").option("value", [1, 2, 3]);
 
 
     //assert
@@ -755,7 +755,7 @@ QUnit.test("update filter value for array column with dxTagBox", function(assert
     });
 
     assert.equal(testElement.find(".dx-tagbox").length, 1);
-    assert.deepEqual(testElement.find(".dx-tagbox").data("dxTagBox").option("value"), [1, 2, 3]);
+    assert.deepEqual(testElement.find(".dx-tagbox").dxTagBox("instance").option("value"), [1, 2, 3]);
 });
 
 //B254521
@@ -2043,7 +2043,7 @@ QUnit.test("Reset an invalid value of filter row for the DateBox editor", functi
 
     //assert
     assert.equal($resetMenuItem.text(), "My Reset");
-    var dateBox = $(".dx-datebox").data("dxDateBox");
+    var dateBox = $(".dx-datebox").dxDateBox("instance");
     assert.ok(!dateBox.option("text"), "text option");
     assert.ok(dateBox.option("isValid"), "isValid option");
 });

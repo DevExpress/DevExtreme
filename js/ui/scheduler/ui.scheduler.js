@@ -2623,7 +2623,7 @@ var Scheduler = Widget.inherit({
                 };
             } else {
                 getGroups = function() {
-                    var apptPosition = appointmentElement.position();
+                    var apptPosition = $(appointmentElement).position();
                     return workSpace.getCellDataByCoordinates(apptPosition).groups;
                 };
 

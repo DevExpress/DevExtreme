@@ -1,6 +1,7 @@
 "use strict";
 
 var $ = require("jquery"),
+    renderer = require("core/renderer"),
     eventsEngine = require("events/core/events_engine"),
     fx = require("animation/fx"),
     translator = require("animation/translator"),
@@ -170,7 +171,7 @@ QUnit.test("animation from", function(assert) {
 QUnit.test("isAnimating func", function(assert) {
     assert.expect(1);
 
-    var $element = $("#test");
+    var $element = renderer("#test");
 
     this.animate($element, {
         to: { left: 1000 },
@@ -618,7 +619,7 @@ if(support.transition) {
     QUnit.test("isAnimating func", function(assert) {
         assert.expect(1);
 
-        var $element = $("#test");
+        var $element = renderer("#test");
 
         this.animate($element, {
             to: { left: 1000 },

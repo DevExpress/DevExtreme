@@ -1,6 +1,7 @@
 "use strict";
 
 var $ = require("jquery");
+var dataUtils = require("core/element_data");
 
 QUnit.testStart(function() {
     var markup =
@@ -256,7 +257,7 @@ QUnit.test("Text editor with set onEditorPreparing", function(assert) {
         parentType: "filterRow"
     });
 
-    textBox = $container.data("dxTextBox");
+    textBox = dataUtils.data($container.get(0), "dxTextBox");
 
     //assert
     assert.equal(this.__actionConfigs.onEditorPreparing.category, "rendering", "onEditorPreparing category");
@@ -277,7 +278,7 @@ QUnit.test("Text editor with set onEditorPreparing", function(assert) {
         parentType: "filterRow"
     });
 
-    textBox = $container.data("dxTextBox");
+    textBox = $container.dxTextBox("instance");
 
     //assert
     assert.ok(textBox, "dxTextBox created");
@@ -305,7 +306,7 @@ QUnit.test("Text editor with set onEditorPrepared", function(assert) {
         parentType: "filterRow"
     });
 
-    textBox = $container.data("dxTextBox");
+    textBox = $container.dxTextBox("instance");
 
     //assert
     assert.equal(this.__actionConfigs.onEditorPrepared.category, "rendering", "onEditorPrepared category");
@@ -516,7 +517,7 @@ QUnit.test("DateTime editor", function(assert) {
     });
 
     //assert
-    editor = $container.data("dxDateBox");
+    editor = $container.dxDateBox("instance");
     assert.ok(editor, "has editor");
     assert.equal(editor.option("type"), "datetime", "editor type");
     assert.equal(editor.option("displayFormat"), "shortDateShortTime", "display format of the editor");

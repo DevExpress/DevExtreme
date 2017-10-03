@@ -3,6 +3,7 @@
 (function(factory) {
     if(typeof define === 'function' && define.amd) {
         define(function(require, exports, module) {
+            require("integration/jquery"),
             require("ui/validator");
             require("ui/validation_summary");
             require("ui/text_box");
@@ -22,6 +23,10 @@
         );
     }
 }(function($, setTemplateEngine, aspnet) {
+
+    if(QUnit.urlParams["nojquery"]) {
+        return;
+    }
 
     QUnit.module(
         "Client Validation",

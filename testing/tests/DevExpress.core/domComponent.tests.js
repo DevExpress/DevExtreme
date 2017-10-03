@@ -12,7 +12,8 @@ var $ = require("jquery"),
     nameSpace = {},
     coreConfig = require("core/config"),
     eventsEngine = require("events/core/events_engine"),
-    browser = require("core/utils/browser");
+    browser = require("core/utils/browser"),
+    dataUtils = require("core/element_data");
 
 QUnit.testStart(function() {
     var markup = '<div id="component"></div>' + '<div id="anotherComponent"></div>';
@@ -154,7 +155,9 @@ QUnit.test("component has registered", function(assert) {
 
 QUnit.test("obtaining instance from element", function(assert) {
     var element = $("#component").TestComponent();
-    assert.ok(element.data("TestComponent") instanceof this.TestComponent);
+    if(!QUnit.urlParams["nojquery"]) {
+        assert.ok(element.TestComponent("instance") instanceof this.TestComponent);
+    }
     assert.ok(element.TestComponent("instance") instanceof this.TestComponent);
 });
 
@@ -299,7 +302,7 @@ QUnit.test("mass option change call 'refresh' once", function(assert) {
 
 QUnit.test("mass option getting", function(assert) {
     var element = $("#component").TestComponent({}),
-        instance = element.data("TestComponent");
+        instance = element.TestComponent("instance");
     var options = instance.option();
 
     assert.ok($.isPlainObject(options));
@@ -780,8 +783,9 @@ $.each(["onInitialized", "onOptionChanged", "onDisposing"], function(_, action) 
         var config = {
             value: true
         };
-        config[action] = function() {
+        config[action] = function(e) {
             assert.ok(true, "action fired");
+            assert.equal(e.element, e.component.element(), "action has correct element");
         };
 
         var $component = $("#component");
@@ -831,24 +835,23 @@ QUnit.test("changing class via 'elementAttr' option should preserve component sp
 
 QUnit.test("Dispose: component can be recreated after dispose", function(assert) {
     var element = $("#component").TestComponent(),
-        instance = element.data("TestComponent");
+        instance = element.TestComponent("instance");
 
     instance.option("opt1", "notDefault");
 
-    assert.deepEqual(element.data("dxComponents"), ["TestComponent"]);
+    assert.deepEqual(dataUtils.data(element.get(0), "dxComponents"), ["TestComponent"]);
     assert.equal(instance.option("opt1"), "notDefault");
 
     instance.dispose();
 
-    assert.notOk(element.data("TestComponent"));
-    assert.notOk(element.data("dxComponents"));
+    assert.notOk(dataUtils.data(element.get(0), "TestComponent"));
+    assert.notOk(dataUtils.data(element.get(0), "dxComponents"));
 
     element = $("#component").TestComponent();
-    instance = element.data("TestComponent");
+    instance = element.TestComponent("instance");
 
     assert.notEqual(instance.option("opt1"), "notDefault");
-
-    assert.ok(element.data("TestComponent") instanceof this.TestComponent);
+    assert.ok(dataUtils.data(element.get(0), "TestComponent") instanceof this.TestComponent);
     assert.ok(element.TestComponent("instance") instanceof this.TestComponent);
 });
 
@@ -877,7 +880,7 @@ QUnit.test("Dispose: content of container is cleaned", function(assert) {
 
 QUnit.test("Dispose: dx classes are removed", function(assert) {
     var element = $("#component").TestComponent(),
-        instance = element.data("TestComponent");
+        instance = element.TestComponent("instance");
 
     element.addClass("dx-some-class-1");
     element.addClass("dx-some-class-2");
@@ -897,7 +900,7 @@ QUnit.test("Dispose: dx classes are removed", function(assert) {
 
 QUnit.test("Dispose: attributes deleted", function(assert) {
     var element = $("#component").TestComponent(),
-        instance = element.data("TestComponent"),
+        instance = element.TestComponent("instance"),
         attributes = [
             //setAria
             "role",
@@ -980,7 +983,7 @@ QUnit.test("Dispose: events are cleaned, dxremove is fired", function(assert) {
 
 QUnit.test("get element", function(assert) {
     var element = $("#component").TestComponent(),
-        instance = element.data("TestComponent");
+        instance = dataUtils.data(element[0], "TestComponent");
 
     if(config().useJQueryRenderer) {
         assert.deepEqual(instance.element()[0], $("#component")[0]);

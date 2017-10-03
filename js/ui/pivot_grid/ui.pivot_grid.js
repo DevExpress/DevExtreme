@@ -3,6 +3,7 @@
 var $ = require("../../core/renderer"),
     eventsEngine = require("../../events/core/events_engine"),
     registerComponent = require("../../core/component_registrator"),
+    getPublicElement = require("../../core/utils/dom").getPublicElement,
     stringUtils = require("../../core/utils/string"),
     commonUtils = require("../../core/utils/common"),
     each = require("../../core/utils/iterator").each,
@@ -801,7 +802,63 @@ var PivotGrid = Widget.inherit({
             * @extends Action
             * @action
             */
-            onFileSaving: null
+            onFileSaving: null,
+            /**
+             * @name dxPivotGridOptions_headerFilter
+             * @publicName headerFilter
+             * @type object
+             */
+            headerFilter: {
+                /**
+                 * @name dxPivotGridOptions_headerFilter_width
+                 * @publicName width
+                 * @type number
+                 * @default 252
+                 */
+                width: 252,
+                /**
+                 * @name dxPivotGridOptions_headerFilter_height
+                 * @publicName height
+                 * @type number
+                 * @default 325
+                 */
+                height: 325,
+                /**
+                 * @name dxPivotGridOptions_headerFilter_allowSearch
+                 * @publicName allowSearch
+                 * @type boolean
+                 * @default false
+                 */
+                allowSearch: false,
+                /**
+                 * @name dxPivotGridOptions_headerFilter_texts
+                 * @publicName texts
+                 * @type object
+                 */
+                texts: {
+                    /**
+                     * @name dxPivotGridOptions_headerFilter_texts_emptyValue
+                     * @publicName emptyValue
+                     * @type string
+                     * @default "(Blanks)"
+                     */
+                    emptyValue: messageLocalization.format("dxDataGrid-headerFilterEmptyValue"),
+                    /**
+                     * @name dxPivotGridOptions_headerFilter_texts_ok
+                     * @publicName ok
+                     * @type string
+                     * @default "Ok"
+                     */
+                    ok: messageLocalization.format("dxDataGrid-headerFilterOK"),
+                    /**
+                     * @name dxPivotGridOptions_headerFilter_texts_cancel
+                     * @publicName cancel
+                     * @type string
+                     * @default "Cancel"
+                     */
+                    cancel: messageLocalization.format("dxDataGrid-headerFilterCancel")
+                }
+            }
         });
     },
 
@@ -977,6 +1034,10 @@ var PivotGrid = Widget.inherit({
                 that._renderDescriptionArea();
                 that._invalidate();
                 break;
+            case "headerFilter":
+                that._renderFieldChooser();
+                that._invalidate();
+                break;
             case "showBorders":
                 that._tableElement().toggleClass(BORDERS_CLASS, !!args.value);
                 that.updateDimensions();
@@ -1065,9 +1126,10 @@ var PivotGrid = Widget.inherit({
                 layout: fieldChooserOptions.layout,
                 texts: fieldChooserOptions.texts || {},
                 dataSource: that.getDataSource(),
-                searchEnabled: fieldChooserOptions.allowSearch,
+                allowSearch: fieldChooserOptions.allowSearch,
                 width: undefined,
-                height: undefined
+                height: undefined,
+                headerFilter: that.option("headerFilter")
             },
             popupOptions = {
                 shading: false,
@@ -1290,7 +1352,7 @@ var PivotGrid = Widget.inherit({
                 area: $table.data("area"),
                 rowIndex: rowIndex,
                 columnIndex: columnIndex,
-                cellElement: $cellElement,
+                cellElement: getPublicElement($cellElement),
                 cell: cell
             };
         return args;
@@ -1556,7 +1618,8 @@ var PivotGrid = Widget.inherit({
 
         that._createComponent(that.$element(), PivotGridFieldChooserBase, {
             dataSource: that.getDataSource(),
-            allowFieldDragging: that.option("fieldPanel.allowFieldDragging")
+            allowFieldDragging: that.option("fieldPanel.allowFieldDragging"),
+            headerFilter: that.option("headerFilter")
         });
 
         dataArea = that._renderDataArea(dataAreaElement);

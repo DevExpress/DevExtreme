@@ -518,8 +518,8 @@ var MenuBase = HierarchicalCollectionWidget.inherit({
         this._addExpandedClass($itemElement);
     },
 
-    _addExpandedClass: function($itemElement) {
-        $itemElement.addClass(DX_MENU_ITEM_EXPANDED_CLASS);
+    _addExpandedClass: function(itemElement) {
+        $(itemElement).addClass(DX_MENU_ITEM_EXPANDED_CLASS);
     },
 
     _getSubmenuDelay: function(action) {

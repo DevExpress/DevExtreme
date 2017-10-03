@@ -19,7 +19,7 @@ var notify = function(message, /* optional */ type, displayTime) {
         type: type,
         displayTime: displayTime,
         onHidden: function(args) {
-            args.element.remove();
+            $(args.element).remove();
 
             new Action(userHiddenAction, {
                 context: args.model

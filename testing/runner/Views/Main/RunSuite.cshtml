@@ -248,6 +248,7 @@
         Promise.all([
             SystemJS.import("@Url.Content(Model.ScriptVirtualPath)"),
             SystemJS.import("@Url.Content("~/testing/helpers/jQueryEventsPatch.js")"),
+            SystemJS.import("@Url.Content("~/testing/helpers/dataPatch.js")"),
             new Promise(function(resolve) { jQuery(resolve); })
         ]).then(function() {
             QUnit.start();
