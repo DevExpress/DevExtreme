@@ -247,7 +247,7 @@ QUnit.test("it should be possible to select a message in the toast by the mouse"
             shading: true,
             visible: true
         }),
-        $shader = $toast.dxToast("content").closest(".dx-overlay-shader");
+        $shader = $toast.dxToast("$content").closest(".dx-overlay-shader");
 
     $($shader).on("dxdrag", function(e) {
         assert.equal(e.isDefaultPrevented(), false, "touchmove is not prevented");
