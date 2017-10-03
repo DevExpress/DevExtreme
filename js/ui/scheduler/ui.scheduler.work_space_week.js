@@ -5,7 +5,7 @@ var $ = require("../../core/renderer"),
     dateUtils = require("../../core/utils/date"),
     dateLocalization = require("../../localization/date"),
     each = require("../../core/utils/iterator").each,
-    SchedulerWorkSpace = require("./ui.scheduler.work_space");
+    SchedulerWorkSpace = require("./ui.scheduler.work_space.indicator");
 
 var WEEK_CLASS = "dx-scheduler-work-space-week";
 
