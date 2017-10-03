@@ -1635,7 +1635,7 @@ QUnit.test("Full-size appointment count depends on maxAppointmentsPerCell option
                 type: "month",
                 maxAppointmentsPerCell: 'auto'
             }],
-            height: 500,
+            height: 600,
             dataSource: items
         }
     );
@@ -1701,21 +1701,21 @@ QUnit.test("Full-size appointment should have correct height, 'auto' mode", func
                 type: "month",
                 maxAppointmentsPerCell: 'auto'
             }],
-            height: 500,
+            height: 550,
             dataSource: items
         }
     );
 
     var $appointment = $(this.instance.$element().find(".dx-scheduler-appointment"));
 
-    assert.ok($appointment.eq(0).outerHeight() > 15, "appointment height is ok");
-    assert.ok($appointment.eq(1).outerHeight() > 15, "appointment height is ok");
+    assert.roughEqual($appointment.eq(0).outerHeight(), 23.5, 1, "appointment height is ok");
+    assert.roughEqual($appointment.eq(1).outerHeight(), 23.5, 1, "appointment height is ok");
 
     this.instance.option("height", 900);
     $appointment = $(this.instance.$element().find(".dx-scheduler-appointment"));
 
-    assert.ok($appointment.eq(0).outerHeight() > 15, "appointment height is ok");
-    assert.ok($appointment.eq(3).outerHeight() > 15, "appointment height is ok");
+    assert.roughEqual($appointment.eq(0).outerHeight(), 21, 1, "appointment height is ok");
+    assert.roughEqual($appointment.eq(1).outerHeight(), 21, 1, "appointment height is ok");
 });
 
 QUnit.test("Full-size appointment count depends on maxAppointmentsPerCell option, 'unlimited' mode", function(assert) {
@@ -1816,12 +1816,12 @@ QUnit.test("Full-size appointment count depends on maxAppointmentsPerCell option
         tableCellWidth = this.instance.$element().find(".dx-scheduler-all-day-table-cell").eq(0).outerWidth(),
         tableCellHeight = this.instance.$element().find(".dx-scheduler-all-day-table-cell").eq(0).outerHeight();
 
-    for(var i = 0; i < 3; i++) {
+    for(var i = 0; i < 2; i++) {
         var appointmentWidth = $appointment.eq(i).outerWidth(),
             appointmentHeight = $appointment.eq(i).outerHeight();
 
         assert.roughEqual(appointmentWidth, tableCellWidth, 1.5, "appointment is full-size");
-        assert.roughEqual(appointmentHeight, (tableCellHeight - 20) / 3, 1.5, "appointment is full-size");
+        assert.roughEqual(appointmentHeight, (tableCellHeight - 24) / 2, 1.5, "appointment is full-size");
     }
 
     var $dropDownMenu = $(this.instance.$element()).find(".dx-scheduler-dropdown-appointments").trigger("dxclick"),
@@ -1831,8 +1831,8 @@ QUnit.test("Full-size appointment count depends on maxAppointmentsPerCell option
 
     assert.equal($dropDownMenu.length, 1, "ddAppointment is rendered");
 
-    assert.equal(groupedAppointments.length, 2, "DropDown menu has correct items");
-    assert.equal(dropDownMenuText, "2", "DropDown menu has correct text");
+    assert.equal(groupedAppointments.length, 3, "DropDown menu has correct items");
+    assert.equal(dropDownMenuText, "3", "DropDown menu has correct text");
 });
 
 QUnit.test("Appointment should have an unchangeable height, Day view, 'auto' mode", function(assert) {
@@ -1853,7 +1853,7 @@ QUnit.test("Appointment should have an unchangeable height, Day view, 'auto' mod
 
     var $appointment = $(this.instance.$element().find(".dx-scheduler-all-day-appointment")),
         tableCellHeight = this.instance.$element().find(".dx-scheduler-all-day-table-cell").eq(0).outerHeight(),
-        appointmentHeight = (tableCellHeight - 20) / 3;
+        appointmentHeight = (tableCellHeight - 24) / 2;
 
     assert.roughEqual($appointment.eq(0).outerHeight(), appointmentHeight, 1.5, "appointment has a correct height");
 

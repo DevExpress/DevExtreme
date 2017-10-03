@@ -12,6 +12,7 @@ var abstract = Class.abstract;
 var APPOINTMENT_MIN_SIZE = 2,
     COMPACT_APPOINTMENT_DEFAULT_SIZE = 15,
     APPOINTMENT_DEFAULT_HEIGHT = 20,
+    APPOINTMENT_DEFAULT_OFFSET = APPOINTMENT_DEFAULT_HEIGHT + 6,
     COMPACT_APPOINTMENT_DEFAULT_OFFSET = 3;
 
 var BaseRenderingStrategy = Class.inherit({
@@ -519,10 +520,10 @@ var BaseRenderingStrategy = Class.inherit({
 
     getAppointmentDataCalculator: noop,
 
-    _customizeCoordinates: function(coordinates, ratio, appointmentCountPerCell, maxHeight, isAllDay) {
+    _customizeCoordinates: function(coordinates, ratio, appointmentCountPerCell, topOffset, maxHeight, isAllDay) {
         var index = coordinates.index,
             height = ratio * maxHeight / appointmentCountPerCell,
-            top = (1 - ratio) * maxHeight + coordinates.top + (index * height),
+            top = topOffset + coordinates.top + (index * height),
             width = coordinates.width,
             left = coordinates.left,
             compactAppointmentDefaultSize,
@@ -559,14 +560,19 @@ var BaseRenderingStrategy = Class.inherit({
             appointmentCountPerCell = coordinates.count;
             ratio = (maxHeight - offsets.unlimited) / maxHeight;
         }
+
+        var topOffset = (1 - ratio) * maxHeight;
         if(overlappingMode === "auto") {
-            ratio = (maxHeight - offsets.auto) / maxHeight;
+            ratio = 1;
+            maxHeight = maxHeight - APPOINTMENT_DEFAULT_OFFSET;
+            topOffset = APPOINTMENT_DEFAULT_OFFSET;
         }
 
         return {
             ratio: ratio,
             appointmentCountPerCell: appointmentCountPerCell,
-            maxHeight: maxHeight
+            maxHeight: maxHeight,
+            offset: topOffset
         };
     },
 
@@ -605,7 +611,7 @@ var BaseRenderingStrategy = Class.inherit({
     _getDynamicAppointmentCountPerCell: function() {
         var cellHeight = this.instance.fire("getCellHeight");
 
-        return Math.floor((cellHeight - APPOINTMENT_DEFAULT_HEIGHT) / APPOINTMENT_DEFAULT_HEIGHT);
+        return Math.floor((cellHeight - APPOINTMENT_DEFAULT_OFFSET) / APPOINTMENT_DEFAULT_HEIGHT);
     }
 });
 
