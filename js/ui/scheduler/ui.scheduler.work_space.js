@@ -13,7 +13,6 @@ var $ = require("../../core/renderer"),
     abstract = Widget.abstract,
     noop = require("../../core/utils/common").noop,
     isDefined = require("../../core/utils/type").isDefined,
-    registerComponent = require("../../core/component_registrator"),
     publisherMixin = require("./ui.scheduler.publisher_mixin"),
     eventUtils = require("../../events/utils"),
     pointerEvents = require("../../events/pointer"),
@@ -1528,7 +1527,7 @@ var SchedulerWorkSpace = Widget.inherit({
         this._cleanAllowedPositions();
         this._$thead.empty();
         this._$dateTable.empty();
-        this._shader.clean();
+        this._shader && this._shader.clean();
         this._cleanDateTimeIndicator();
         this._$timePanel.empty();
         this._$allDayTable.empty();
@@ -1538,7 +1537,7 @@ var SchedulerWorkSpace = Widget.inherit({
 
     _refreshDateTimeIndication: function() {
         this._cleanDateTimeIndicator();
-        this._shader.clean();
+        this._shader && this._shader.clean();
         this._renderDateTimeIndication();
     },
 
@@ -2129,7 +2128,5 @@ var SchedulerWorkSpace = Widget.inherit({
     }
 
 }).include(publisherMixin);
-
-registerComponent("dxSchedulerWorkSpace", SchedulerWorkSpace);
 
 module.exports = SchedulerWorkSpace;
