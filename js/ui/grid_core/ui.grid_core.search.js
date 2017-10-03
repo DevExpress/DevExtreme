@@ -191,10 +191,10 @@ module.exports = {
 
                         if(searchPanelOptions && searchPanelOptions.visible) {
                             var toolbarItem = {
-                                template: function(data, index, $container) {
+                                template: function(data, index, container) {
                                     var $search = $("<div>")
                                             .addClass(that.addWidgetPrefix(SEARCH_PANEL_CLASS))
-                                            .appendTo($container);
+                                            .appendTo(container);
 
                                     that.setAria("label", messageLocalization.format("dxDataGrid-ariaSearchInGrid"), $search);
 

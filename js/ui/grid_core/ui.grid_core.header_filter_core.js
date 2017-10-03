@@ -224,7 +224,8 @@ exports.HeaderFilterView = modules.View.inherit({
                 onContentReady: function() {
                     that.renderCompleted.fire();
                 },
-                itemTemplate: function(data, _, $element) {
+                itemTemplate: function(data, _, element) {
+                    var $element = $(element);
                     if(options.encodeHtml) {
                         return $element.text(data.text);
                     }

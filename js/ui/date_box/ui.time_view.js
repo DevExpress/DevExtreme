@@ -102,10 +102,11 @@ var TimeView = Editor.inherit({
         });
     },
 
-    _renderClock: function(_, __, $container) {
+    _renderClock: function(_, __, container) {
         this._$hourArrow = $("<div>").addClass(TIMEVIEW_HOURARROW_CLASS);
         this._$minuteArrow = $("<div>").addClass(TIMEVIEW_MINUTEARROW_CLASS);
 
+        var $container = $(container);
         $container.addClass(TIMEVIEW_CLOCK_CLASS)
             .append(this._$hourArrow)
             .append(this._$minuteArrow);

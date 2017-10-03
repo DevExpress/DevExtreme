@@ -1,6 +1,7 @@
 "use strict";
 
-var Callbacks = require("../../core/utils/callbacks"),
+var $ = require("../../core/renderer"),
+    Callbacks = require("../../core/utils/callbacks"),
     domUtils = require("../../core/utils/dom"),
     Class = require("../../core/class"),
     abstract = Class.abstract;
@@ -34,11 +35,12 @@ var TemplateBase = Class.inherit({
         return $result;
     },
 
-    _ensureResultInContainer: function($result, $container) {
-        if(!$container) {
+    _ensureResultInContainer: function($result, container) {
+        if(!container) {
             return;
         }
 
+        var $container = $(container);
         var resultInContainer = domUtils.contains($container.get(0), $result.get(0));
         $container.append($result);
         if(resultInContainer) {

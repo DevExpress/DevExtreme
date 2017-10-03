@@ -138,7 +138,7 @@ QUnit.test("custom render func, returns jquery", function(assert) {
             testProp: 2
         }],
         itemTemplate: function(item, index, itemElement) {
-            assert.ok(itemElement.hasClass(ITEM_CONTENT_CLASS), "content class added");
+            assert.ok($(itemElement).hasClass(ITEM_CONTENT_CLASS), "content class added");
             return $("<span />").html("Text is: " + String(item.testProp) + ";");
         }
     });
@@ -159,7 +159,8 @@ QUnit.test("custom render func, returns jquery", function(assert) {
             testProp: 5
         }],
         itemTemplate: function(item, index, itemElement) {
-            itemElement.append($("<span />").html("Text is: " + String(item.testProp) + ";"));
+            assert.equal(isRenderer(itemElement), config().useJQueryRenderer, "itemElemenet is correct");
+            $(itemElement).append($("<span />").html("Text is: " + String(item.testProp) + ";"));
         }
     });
 

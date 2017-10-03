@@ -294,8 +294,8 @@ QUnit.test("plain list with nested list should contain correct items", function(
     var $element = $("<div>").appendTo("#qunit-fixture");
     var instance = new List($element, {
         items: [1, 2],
-        itemTemplate: function(data, index, $container) {
-            var $nestedElement = $("<div>").appendTo($container);
+        itemTemplate: function(data, index, container) {
+            var $nestedElement = $("<div>").appendTo(container);
             new List($nestedElement, {
                 items: [1, 2]
             });
@@ -310,8 +310,8 @@ QUnit.test("grouped list with nested list should contain correct items", functio
     var instance = new List($element, {
         grouped: true,
         items: [{ key: 1, items: [1] }, { key: 2, items: [2] }],
-        itemTemplate: function(data, index, $container) {
-            var $nestedElement = $("<div>").appendTo($container);
+        itemTemplate: function(data, index, container) {
+            var $nestedElement = $("<div>").appendTo(container);
             new List($nestedElement, {
                 grouped: true,
                 items: [{ key: 1, items: [1] }, { key: 2, items: [2] }]
