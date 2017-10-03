@@ -114,10 +114,7 @@ exports.pie = _extend({}, barSeries, {
     },
 
     _getMainColor: function(data) {
-        var that = this,
-            argument = data.argument;
-
-        return that._options.mainSeriesColor(argument, data.index);
+        return this._options.mainSeriesColor(data.argument, data.index);
     },
 
     _getPointOptions: function(data) {
