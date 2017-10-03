@@ -5,14 +5,17 @@ var noop = require("../../core/utils/common").noop,
     extend = require("../../core/utils/extend").extend,
     errors = require("../widget/ui.errors"),
     dateUtils = require("../../core/utils/date"),
-    isNumeric = require("../../core/utils/type").isNumeric;
+    isNumeric = require("../../core/utils/type").isNumeric,
+    themes = require("../themes");
 
 var abstract = Class.abstract;
 
 var APPOINTMENT_MIN_SIZE = 2,
     COMPACT_APPOINTMENT_DEFAULT_SIZE = 15,
     APPOINTMENT_DEFAULT_HEIGHT = 20,
+    COMPACT_THEME_APPOINTMENT_DEFAULT_HEIGHT = 18,
     APPOINTMENT_DEFAULT_OFFSET = APPOINTMENT_DEFAULT_HEIGHT + 6,
+    COMPACT_THEME_APPOINTMENT_DEFAULT_OFFSET = COMPACT_THEME_APPOINTMENT_DEFAULT_HEIGHT + 4,
     COMPACT_APPOINTMENT_DEFAULT_OFFSET = 3;
 
 var BaseRenderingStrategy = Class.inherit({
@@ -565,8 +568,8 @@ var BaseRenderingStrategy = Class.inherit({
         var topOffset = (1 - ratio) * maxHeight;
         if(overlappingMode === "auto") {
             ratio = 1;
-            maxHeight = maxHeight - APPOINTMENT_DEFAULT_OFFSET;
-            topOffset = APPOINTMENT_DEFAULT_OFFSET;
+            maxHeight = maxHeight - this._getAppointmentDefaultOffset();
+            topOffset = this._getAppointmentDefaultOffset();
         }
 
         return {
@@ -612,8 +615,20 @@ var BaseRenderingStrategy = Class.inherit({
     _getDynamicAppointmentCountPerCell: function() {
         var cellHeight = this.instance.fire("getCellHeight");
 
-        return Math.floor((cellHeight - APPOINTMENT_DEFAULT_OFFSET) / APPOINTMENT_DEFAULT_HEIGHT);
-    }
+        return Math.floor((cellHeight - this._getAppointmentDefaultOffset()) / this._getAppointmentDefaultHeight());
+    },
+
+    _getAppointmentDefaultOffset: function() {
+        var isCompact = (themes.current() || "").split(".")[2] === "compact";
+
+        return isCompact ? COMPACT_THEME_APPOINTMENT_DEFAULT_OFFSET : APPOINTMENT_DEFAULT_OFFSET;
+    },
+
+    _getAppointmentDefaultHeight: function() {
+        var isCompact = (themes.current() || "").split(".")[2] === "compact";
+
+        return isCompact ? COMPACT_THEME_APPOINTMENT_DEFAULT_HEIGHT : APPOINTMENT_DEFAULT_HEIGHT;
+    },
 });
 
 module.exports = BaseRenderingStrategy;
