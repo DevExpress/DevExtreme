@@ -769,7 +769,7 @@ QUnit.test("Draggable clone should be correct", function(assert) {
         pointer = pointerMock($secondAppointment).start();
 
     $secondAppointment.dxDraggable("instance").option("onDrag", function(e) {
-        assert.deepEqual(arguments[0].element.get(0), $secondAppointment.get(0), "draggable element is right");
+        assert.deepEqual($(arguments[0].element).get(0), $secondAppointment.get(0), "draggable element is right");
     });
 
     pointer.dragStart().drag(0, 60).dragEnd();
@@ -986,7 +986,7 @@ QUnit.test("onAppointmentDblClick should fires when item is dbl clicked", functi
         currentView: "month",
         currentDate: new Date(2015, 2, 9),
         onAppointmentDblClick: function(e) {
-            assert.deepEqual(e.appointmentElement[0], $item[0], "appointmentElement is correct");
+            assert.deepEqual($(e.appointmentElement)[0], $item[0], "appointmentElement is correct");
             assert.deepEqual(e.appointmentData, items[0].itemData, "appointmentData is correct");
         }
     });

@@ -704,8 +704,7 @@ var Widget = DOMComponent.inherit({
         if(that.option("hoverStateEnabled")) {
             var startAction = new Action(function(args) {
                 that._hoverStartHandler(args.event);
-                var $target = args.element;
-                that._refreshHoveredElement($target);
+                that._refreshHoveredElement($(args.element));
             }, {
                 excludeValidators: ["readOnly"]
             });
@@ -744,7 +743,7 @@ var Widget = DOMComponent.inherit({
 
         if(that.option("activeStateEnabled")) {
             var feedbackActionHandler = function(args) {
-                var $element = args.element,
+                var $element = $(args.element),
                     value = args.value,
                     dxEvent = args.event;
 

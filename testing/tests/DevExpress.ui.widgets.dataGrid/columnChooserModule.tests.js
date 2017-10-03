@@ -514,7 +514,7 @@ QUnit.test("Enable search", function(assert) {
 
     this.setTestElement(testElement);
 
-    this.options.columnChooser.searchEnabled = true;
+    this.options.columnChooser.allowSearch = true;
 
     //act
     this.renderColumnChooser();
@@ -872,7 +872,7 @@ QUnit.test("CheckBox mode - column chooser with hidden band column", function(as
     columnChooserView._popupContainer.option("visible", true);
 
     //assert
-    $checkBoxElements = columnChooserView._popupContainer.content().find(".dx-checkbox");
+    $checkBoxElements = columnChooserView._popupContainer.$content().find(".dx-checkbox");
     assert.equal($checkBoxElements.length, 3, "count checkbox");
     assert.ok(!$checkBoxElements.eq(0).hasClass("dx-checkbox-checked"), "checkbox isn't checked");
     assert.ok($checkBoxElements.eq(1).hasClass("dx-checkbox-checked"), "checkbox is checked");
@@ -898,11 +898,11 @@ QUnit.test("CheckBox mode - check hidden band column", function(assert) {
     this.renderColumnChooser();
     columnChooserView._popupContainer.option("visible", true);
 
-    $(columnChooserView._popupContainer.content().find(".dx-checkbox").first()).trigger("dxclick");
+    $(columnChooserView._popupContainer.$content().find(".dx-checkbox").first()).trigger("dxclick");
 
 
     //assert
-    $checkBoxElements = columnChooserView._popupContainer.content().find(".dx-checkbox");
+    $checkBoxElements = columnChooserView._popupContainer.$content().find(".dx-checkbox");
     assert.equal($checkBoxElements.length, 3, "count checkbox");
     assert.ok($checkBoxElements.eq(0).hasClass("dx-checkbox-checked"), "checkbox is checked");
     assert.ok($checkBoxElements.eq(1).hasClass("dx-checkbox-checked"), "checkbox is checked");
@@ -961,7 +961,7 @@ QUnit.test("CheckBox mode - scroll position after selecting an last item", funct
 
     $columnChooser = $("body").children(".dx-datagrid-column-chooser");
     $lastItemElement = $columnChooser.find(".dx-treeview-item").last();
-    scrollableInstance = $columnChooser.find(".dx-scrollable").data("dxScrollable");
+    scrollableInstance = $columnChooser.find(".dx-scrollable").dxScrollable("instance");
     scrollableInstance.scrollToElement($lastItemElement);
 
     //act
@@ -969,7 +969,7 @@ QUnit.test("CheckBox mode - scroll position after selecting an last item", funct
     this.columnChooserView.render($testElement, true);
 
     //assert
-    scrollableInstance = $columnChooser.find(".dx-scrollable").data("dxScrollable");
+    scrollableInstance = $columnChooser.find(".dx-scrollable").dxScrollable("instance");
     assert.ok(scrollableInstance.scrollTop() > 0, "scroll position");
 });
 

@@ -160,7 +160,7 @@ QUnit.test("content template should work", function(assert) {
         value: 1
     });
 
-    assert.equal(instance.content().text(), "Test content", "content template has been rendered");
+    assert.equal($(instance.content()).text(), "Test content", "content template has been rendered");
 });
 
 QUnit.test("popup and editor width should be equal", function(assert) {
@@ -176,12 +176,12 @@ QUnit.test("popup and editor width should be equal", function(assert) {
         value: [1, 3]
     });
 
-    assert.equal(instance.content().outerWidth(), this.$element.outerWidth(), "width are equal on init");
-    assert.equal(instance.content().outerWidth(), 500, "width are equal on init");
+    assert.equal($(instance.content()).outerWidth(), this.$element.outerWidth(), "width are equal on init");
+    assert.equal($(instance.content()).outerWidth(), 500, "width are equal on init");
 
     instance.option("width", 700);
-    assert.equal(instance.content().outerWidth(), this.$element.outerWidth(), "width are equal after option change");
-    assert.equal(instance.content().outerWidth(), 700, "width are equal after option change");
+    assert.equal($(instance.content()).outerWidth(), this.$element.outerWidth(), "width are equal after option change");
+    assert.equal($(instance.content()).outerWidth(), 700, "width are equal after option change");
 });
 
 QUnit.test("dropDownBox should work with the slow dataSource", function(assert) {
@@ -262,7 +262,7 @@ QUnit.test("customize width and height", function(assert) {
             },
             opened: true
         }),
-        $popupContent = instance.content();
+        $popupContent = $(instance.content());
 
     assert.equal($popupContent.outerWidth(), 100, "popup width has been customized");
     assert.equal($popupContent.outerHeight(), 100, "popup height has been customized");
@@ -492,7 +492,7 @@ QUnit.testInActiveWindow("first focusable element inside of content should get f
 
     keyboard.press("tab");
 
-    assert.equal(instance.content().parent(".dx-overlay-content").attr("tabindex"), -1, "popup content should not be tabbable");
+    assert.equal($(instance.content()).parent(".dx-overlay-content").attr("tabindex"), -1, "popup content should not be tabbable");
     assert.ok(instance.option("opened"), "popup was not closed after tab key pressed");
     assert.ok($input1.is(":focus"), "first focusable content element got focused");
 });

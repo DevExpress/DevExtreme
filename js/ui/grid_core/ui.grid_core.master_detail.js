@@ -250,7 +250,7 @@ module.exports = {
 
                                 if(dataGrid) {
                                     dataGrid.on("contentReady", function() {
-                                        var $rows = component.getRowElement(options.rowIndex);
+                                        var $rows = $(component.getRowElement(options.rowIndex));
                                         if($rows && $rows.length === 2 && $rows.eq(0).height() !== $rows.eq(1).height()) {
                                             component.updateDimensions();
                                         }

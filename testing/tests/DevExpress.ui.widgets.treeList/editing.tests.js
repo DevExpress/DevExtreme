@@ -176,7 +176,7 @@ QUnit.test("Edit popup", function(assert) {
     //assert
     var $editPopup = $testElement.find(".dx-treelist-edit-popup"),
         editPopup = $editPopup.dxPopup("instance"),
-        $editPopupContent = editPopup.content();
+        $editPopupContent = editPopup.$content();
 
     assert.equal($editPopup.length, 1, "edit popup was rendered");
     assert.ok(editPopup.option("visible"), "Edit popup is visible");

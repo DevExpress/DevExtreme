@@ -460,7 +460,7 @@ module.exports = {
 
                 _beforeEditCell: function(rowIndex, columnIndex, item) {
                     var result = this.callBase(rowIndex, columnIndex, item),
-                        $cell = this.component.getCellElement(rowIndex, columnIndex),
+                        $cell = this._rowsView._getCellElement(rowIndex, columnIndex),
                         validator = $cell && $cell.data("dxValidator"),
                         value = validator && validator.option("adapter").getValue();
 
@@ -570,7 +570,7 @@ module.exports = {
                     var that = this,
                         needRepaint,
                         $highlightContainer = $cell.find("." + CELL_HIGHLIGHT_OUTLINE),
-                        isOverlayVisible = $cell.find(".dx-dropdowneditor-overlay:visible").length,
+                        isOverlayVisible = $cell.find(".dx-dropdowneditor-overlay").is(":visible"),
                         myPosition = isOverlayVisible ? "top right" : "top " + alignment,
                         atPosition = isOverlayVisible ? "top left" : "bottom " + alignment;
 
@@ -604,7 +604,7 @@ module.exports = {
                                     }
                                 }
 
-                                that._shiftValidationMessageIfNeed(e.component.content(), revertTooltip && revertTooltip.content(), $cell);
+                                that._shiftValidationMessageIfNeed(e.component.$content(), revertTooltip && revertTooltip.$content(), $cell);
                             }
                         });
                 },

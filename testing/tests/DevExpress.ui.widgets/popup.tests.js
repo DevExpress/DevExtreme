@@ -104,7 +104,7 @@ QUnit.test("content", function(assert) {
         visible: true
     }).dxPopup("instance");
 
-    assert.equal(instance.content().get(0), viewport().find(toSelector(POPUP_WRAPPER_CLASS)).find(toSelector(POPUP_CONTENT_CLASS)).get(0));
+    assert.equal(instance.$content().get(0), viewport().find(toSelector(POPUP_WRAPPER_CLASS)).find(toSelector(POPUP_CONTENT_CLASS)).get(0));
 });
 
 QUnit.test("popup wrapper should have 'fixed' or 'absolute' position in fullscreen", function(assert) {
@@ -126,8 +126,8 @@ QUnit.test("shading has width and height if enabled", function(assert) {
 
 QUnit.test("default options", function(assert) {
     var $popup = $("#popup").dxPopup({ title: 'Any header', visible: true }),
-        instance = $popup.data("dxPopup"),
-        $overlayContent = instance.content().parent();
+        instance = $popup.dxPopup("instance"),
+        $overlayContent = instance.$content().parent();
 
     assert.equal(instance.option("title"), 'Any header');
     assert.equal(instance.option("title"), $overlayContent.children().eq(0).text());
@@ -138,8 +138,8 @@ QUnit.test("default options", function(assert) {
 
 QUnit.test("content template", function(assert) {
     var $popup = $("#popupWithContentTmpl").dxPopup({ visible: true }),
-        instance = $popup.data("dxPopup"),
-        $content = instance.content();
+        instance = $popup.dxPopup("instance"),
+        $content = instance.$content();
 
     instance.show();
 
@@ -150,9 +150,9 @@ QUnit.test("content template", function(assert) {
 
 QUnit.test("title and content template", function(assert) {
     var $popup = $("#popupWithTitleAndContentTmpl").dxPopup({ visible: true }),
-        instance = $popup.data("dxPopup"),
+        instance = $popup.dxPopup("instance"),
         $title = $(toSelector(POPUP_TITLE_CLASS), viewport()),
-        $content = instance.content();
+        $content = instance.$content();
 
     assert.equal($title.children().length, 1);
     assert.ok($title.find(".testTitle").length);
@@ -178,13 +178,13 @@ QUnit.test("done button is located after cancel button in non-win8 device", func
             animation: null,
             visible: true
         }),
-        instance = $popup.data("dxPopup"),
-        $popupBottom = instance.content().parent().find(".dx-popup-bottom");
+        instance = $popup.dxPopup("instance"),
+        $popupBottom = instance.$content().parent().find(".dx-popup-bottom");
 
     assert.equal($popupBottom.text(), "CancelDone", "buttons order is correct");
 
     instance.option("toolbarItems", [{ shortcut: "cancel" }, { shortcut: "done" }]);
-    $popupBottom = instance.content().parent().find(".dx-popup-bottom");
+    $popupBottom = instance.$content().parent().find(".dx-popup-bottom");
     assert.equal($popupBottom.text(), "CancelDone", "buttons order is correct");
 });
 
@@ -196,13 +196,13 @@ QUnit.test("done button is located before cancel button in win10", function(asse
             animation: null,
             visible: true
         }),
-        instance = $popup.data("dxPopup"),
-        $popupBottom = instance.content().parent().find(".dx-popup-bottom");
+        instance = $popup.dxPopup("instance"),
+        $popupBottom = instance.$content().parent().find(".dx-popup-bottom");
 
     assert.equal($popupBottom.text(), "DoneCancel", "buttons order is correct");
 
     instance.option("toolbarItems", [{ shortcut: "done" }, { shortcut: "cancel" }]);
-    $popupBottom = instance.content().parent().find(".dx-popup-bottom");
+    $popupBottom = instance.$content().parent().find(".dx-popup-bottom");
     assert.equal($popupBottom.text(), "DoneCancel", "buttons order is correct");
 });
 
@@ -215,8 +215,8 @@ QUnit.test("buttons should be rendered correctly after toolbar was repainted", f
             { 'shortcut': 'cancel', 'options': { 'text': 'Cancel' }, 'toolbar': 'bottom', 'location': 'after' }]
 
         }),
-        instance = $popup.data("dxPopup"),
-        $popupBottom = instance.content().parent().find(".dx-popup-bottom");
+        instance = $popup.dxPopup("instance"),
+        $popupBottom = instance.$content().parent().find(".dx-popup-bottom");
 
     $popupBottom.dxToolbarBase("repaint");
     assert.equal($popupBottom.text(), "TodayOKCancel", "buttons order is correct");
@@ -224,7 +224,7 @@ QUnit.test("buttons should be rendered correctly after toolbar was repainted", f
 
 QUnit.test("Check that title do not render twice or more, Q553652", function(assert) {
     var $popup = $("#popup").dxPopup({ visible: true, title: "test" }),
-        instance = $popup.data("dxPopup");
+        instance = $popup.dxPopup("instance");
 
     assert.equal(instance.option("title"), "test", "title is test");
     assert.equal($(toSelector(POPUP_TITLE_CLASS), viewport()).length, 1, "there can be only one title");
@@ -324,8 +324,8 @@ QUnit.test("toolbar must receive 'rtlEnabled' option from dxPopup", function(ass
             { 'shortcut': 'cancel', 'options': { 'text': 'Cancel' }, 'toolbar': 'bottom', 'location': 'after' }]
 
         }),
-        instance = $popup.data("dxPopup"),
-        toolbarInstance = instance.content().parent().find(".dx-popup-bottom").dxToolbarBase("instance");
+        instance = $popup.dxPopup("instance"),
+        toolbarInstance = instance.$content().parent().find(".dx-popup-bottom").dxToolbarBase("instance");
 
     assert.ok(toolbarInstance.option("rtlEnabled"), "toolbar's 'rtlEnabled' option is true");
 });
@@ -341,11 +341,10 @@ QUnit.test("toolbar must receive 'rtlEnabled' from dxPopup after optionChanged",
             { 'shortcut': 'cancel', 'options': { 'text': 'Cancel' }, 'toolbar': 'bottom', 'location': 'after' }]
 
         }),
-        instance = $popup.data("dxPopup");
+        instance = $popup.dxPopup("instance");
 
     instance.option("rtlEnabled", false);
-
-    var toolbarInstance = instance.content().parent().find(".dx-popup-bottom").dxToolbarBase("instance");
+    var toolbarInstance = instance.$content().parent().find(".dx-popup-bottom").dxToolbarBase("instance");
 
     assert.notOk(toolbarInstance.option("rtlEnabled"), "toolbar's 'rtlEnabled' option is false");
 });
@@ -359,8 +358,8 @@ QUnit.test("content must not overlap bottom buttons", function(assert) {
             showCloseButton: true,
             visible: true
         }),
-        instance = $popup.data("dxPopup"),
-        $popupContent = instance.content(),
+        instance = $popup.dxPopup("instance"),
+        $popupContent = instance.$content(),
         $popupBottom = $popupContent.parent().find(".dx-popup-bottom");
 
     assert.equal($popupContent.outerHeight() + $popupBottom.outerHeight(true), $popupContent.outerHeight(true), "content doesn't overlap bottom buttons");
@@ -374,7 +373,7 @@ QUnit.test("dimensions should be shrunk correctly with height = auto specified",
         contentTemplate: function() {
             return $("<div>").width(200).height(200);
         }
-    }).dxPopup("instance").content();
+    }).dxPopup("instance").$content();
 
     var popupContentHeight = $content.height();
     var addedContent = $("<div>").width(200).height(200);
@@ -399,7 +398,7 @@ QUnit.test("dimensions should be shrunk correctly with floating heights", functi
         titleTemplate: floatingTemplate,
         contentTemplate: floatingTemplate,
         bottomTemplate: floatingTemplate
-    }).dxPopup("instance").content();
+    }).dxPopup("instance").$content();
 
     var contentPaddings = $content.outerHeight() - $content.height(),
         computedContentHeight = $content.get(0).getBoundingClientRect().height - contentPaddings;
@@ -414,7 +413,7 @@ QUnit.test("content height change should be correctly handled", function(assert)
         "visible": true
     }).dxPopup("instance");
 
-    var $popupContent = instance.content(),
+    var $popupContent = instance.$content(),
         $overlayContent = $popupContent.parent(),
         $contentElement = $("<div>").height(50);
 
@@ -434,8 +433,8 @@ QUnit.test("minHeight should affect popup content height correctly", function(as
             bottomTemplate: function() { return $("<div>").width("100%").height(100); },
             contentTemplate: function() { return $("<div>").width(1000).height(0); }
         }),
-        instance = $popup.data("dxPopup"),
-        $popupContent = instance.content(),
+        instance = $popup.dxPopup("instance"),
+        $popupContent = instance.$content(),
         $overlayContent = $popupContent.parent(),
         $popupTitle = $overlayContent.find(".dx-popup-title"),
         $popupBottom = $overlayContent.find(".dx-popup-bottom");
@@ -457,8 +456,8 @@ QUnit.test("maxHeight should affect popup content height correctly", function(as
             bottomTemplate: function() { return $("<div>").width("100%").height(100); },
             contentTemplate: function() { return $("<div>").width(1000).height(1000); }
         }),
-        instance = $popup.data("dxPopup"),
-        $popupContent = instance.content(),
+        instance = $popup.dxPopup("instance"),
+        $popupContent = instance.$content(),
         $overlayContent = $popupContent.parent(),
         $popupTitle = $overlayContent.find(".dx-popup-title"),
         $popupBottom = $overlayContent.find(".dx-popup-bottom");
@@ -490,7 +489,7 @@ QUnit.test("width/height", function(assert) {
 
     instance.show();
 
-    var $overlayContent = instance.content().parent();
+    var $overlayContent = instance.$content().parent();
 
     instance.option("width", 345);
     assert.equal($overlayContent.outerWidth(), 345);
@@ -507,7 +506,7 @@ QUnit.test("fullScreen", function(assert) {
         visible: true
     });
 
-    var $overlayContent = this.instance.content().parent();
+    var $overlayContent = this.instance.$content().parent();
 
     assert.equal($overlayContent.parent().get(0).style.width, "100%", "wrappers width specified");
     assert.equal($overlayContent.parent().get(0).style.height, "100%", "wrappers height specified");
@@ -532,7 +531,7 @@ QUnit.test("PopupContent doesn't disappear while fullScreen option changing", fu
         visible: true
     });
 
-    var popupContent = this.instance.content();
+    var popupContent = this.instance.$content();
 
     $("<iframe>").attr("src", "about:blank").appendTo(popupContent);
 
@@ -562,7 +561,7 @@ QUnit.test("fullScreen with disabled shading", function(assert) {
         visible: true
     });
 
-    var $overlayContent = this.instance.content().parent();
+    var $overlayContent = this.instance.$content().parent();
 
     assert.equal($overlayContent.parent().get(0).style.width, "100%", "wrappers width specified");
     assert.equal($overlayContent.parent().get(0).style.height, "100%", "wrappers height specified");
@@ -579,7 +578,7 @@ QUnit.test("shading should be synchronized with the option when popup goes from 
 
     this.instance.option("fullScreen", false);
 
-    var $popupWrapper = this.instance.content().closest("." + POPUP_WRAPPER_CLASS);
+    var $popupWrapper = this.instance.$content().closest("." + POPUP_WRAPPER_CLASS);
 
     assert.equal($popupWrapper.prop('style').width, "", "wrapper is collapsed by width");
     assert.equal($popupWrapper.prop('style').height, "", "wrapper is collapsed by height");
@@ -634,7 +633,7 @@ $.each(["cancel", "clear", "done"], function(_, buttonType) {
 
 QUnit.test("buttons close button", function(assert) {
     var $popup = $("#popup").dxPopup({ visible: true, showCloseButton: true }),
-        instance = $popup.data("dxPopup"),
+        instance = $popup.dxPopup("instance"),
         $title = $(toSelector(POPUP_TITLE_CLASS), viewport()),
         $closeButton = $(toSelector(POPUP_TITLE_CLOSEBUTTON_CLASS), viewport());
 
@@ -698,7 +697,7 @@ $.each(["cancel", "clear", "done"], function(_, buttonType) {
 QUnit.test("buttons", function(assert) {
     this.instance.option("visible", true);
 
-    var $container = this.instance.content().parent();
+    var $container = this.instance.$content().parent();
     var $popupTitle = $container.find("." + POPUP_TITLE_CLASS),
         $popupBottom = $container.find("." + POPUP_BOTTOM_CLASS);
 
@@ -734,11 +733,11 @@ QUnit.test("buttons aliases change affects container classes", function(assert) 
         toolbarItems: [{ shortcut: "cancel" }]
     }).dxPopup("instance");
 
-    var $popupBottom = this.instance.content().parent().find("." + POPUP_BOTTOM_CLASS);
+    var $popupBottom = this.instance.$content().parent().find("." + POPUP_BOTTOM_CLASS);
     assert.ok($popupBottom.hasClass("dx-popup-cancel"), "popup bottom has cancel class");
 
     popup.option("toolbarItems", [{ shortcut: "done" }]);
-    $popupBottom = this.instance.content().parent().find(".dx-popup-bottom");
+    $popupBottom = this.instance.$content().parent().find(".dx-popup-bottom");
     assert.ok($popupBottom.hasClass("dx-popup-done"), "popup bottom has done class");
     assert.ok(!$popupBottom.hasClass("dx-popup-cancel"), "popup bottom has not cancel class");
 });
@@ -774,12 +773,12 @@ QUnit.test("popup content should update height after resize", function(assert) {
             toolbarItems: []
         }),
         popup = $popup.dxPopup("instance"),
-        $overlayContent = popup.content().parent(),
+        $overlayContent = popup.$content().parent(),
         $handle = $overlayContent.find(".dx-resizable-handle-corner-bottom-right"),
         pointer = pointerMock($handle).start();
 
     pointer.dragStart().drag(-100, -100);
-    assert.equal(popup.content().outerHeight(), $overlayContent.height(), "size of popup and overlay is equal");
+    assert.equal(popup.$content().outerHeight(), $overlayContent.height(), "size of popup and overlay is equal");
 });
 
 QUnit.test("popup content position should be reset after show/hide", function(assert) {
@@ -788,9 +787,9 @@ QUnit.test("popup content position should be reset after show/hide", function(as
             height: "auto"
         }),
         popup = $popup.dxPopup("instance"),
-        $overlayContent = popup.content().parent();
+        $overlayContent = popup.$content().parent();
 
-    popup.content().append($("<div>").height(10));
+    popup.$content().append($("<div>").height(10));
     popup.show();
     var $handle = $overlayContent.find(".dx-resizable-handle-corner-bottom-right"),
         pointer = pointerMock($handle),
@@ -842,7 +841,7 @@ QUnit.test("class should be added if drag is enabled", function(assert) {
             visible: true
         }),
         popup = $popup.dxPopup("instance"),
-        $overlayContent = popup.content().parent();
+        $overlayContent = popup.$content().parent();
 
     assert.ok($overlayContent.hasClass(POPUP_DRAGGABLE_CLASS), "class was added");
 
@@ -856,7 +855,7 @@ QUnit.test("popup should be dragged by title", function(assert) {
             visible: true
         }),
         popup = $popup.dxPopup("instance"),
-        $overlayContent = popup.content().parent(),
+        $overlayContent = popup.$content().parent(),
         $title = $overlayContent.children(toSelector(POPUP_TITLE_CLASS)),
         pointer = pointerMock($title),
         position = $overlayContent.position();
@@ -875,8 +874,8 @@ QUnit.test("popup shouldn't be dragged by content", function(assert) {
             visible: true
         }),
         popup = $popup.dxPopup("instance"),
-        $overlayContent = popup.content().parent(),
-        pointer = pointerMock(popup.content()),
+        $overlayContent = popup.$content().parent(),
+        pointer = pointerMock(popup.$content()),
         position = $overlayContent.position();
 
     pointer.start().dragStart().drag(50, 50).dragEnd();
@@ -893,7 +892,7 @@ QUnit.test("popup should be dragged if title was changed", function(assert) {
             visible: true
         }),
         popup = $popup.dxPopup("instance"),
-        $overlayContent = popup.content().parent(),
+        $overlayContent = popup.$content().parent(),
         position = $overlayContent.position();
 
     popup.option("title", "newTitle");
@@ -923,7 +922,7 @@ QUnit.test("anonymous content template rendering", function(assert) {
         visible: true
     });
 
-    var $content = $popup.dxPopup("content");
+    var $content = $popup.dxPopup("$content");
 
     assert.equal($.trim($content.text()), "TestContent", "content rendered");
 });
@@ -934,7 +933,7 @@ QUnit.test("custom content template is applied even if there is 'content' templa
         visible: true
     });
 
-    var $content = $popup.dxPopup("content");
+    var $content = $popup.dxPopup("$content");
 
     assert.equal($.trim($content.text()), "TestContent", "content is correct");
 });
@@ -988,7 +987,7 @@ QUnit.test("titleTemplate test", function(assert) {
             }
         }),
         instance = $element.dxPopup("instance"),
-        $popupContent = instance.content().parent();
+        $popupContent = instance.$content().parent();
 
     assert.equal($popupContent.find(toSelector("test-title-renderer")).length, 1, "option 'titleTemplate'  was set successfully");
 
@@ -1022,7 +1021,7 @@ QUnit.test("'bottomTemplate' options test", function(assert) {
             }
         }),
         instance = $element.dxPopup("instance"),
-        $popupContent = instance.content().parent();
+        $popupContent = instance.$content().parent();
 
     assert.equal($popupContent.find(toSelector("test-bottom-renderer")).length, 1, "option 'bottomTemplate'  was set successfully");
 

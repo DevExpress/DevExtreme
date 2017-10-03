@@ -6,12 +6,15 @@ var $ = require("../../core/renderer"),
     clickEvent = require("../../events/click"),
     browser = require("../../core/utils/browser"),
     commonUtils = require("../../core/utils/common"),
+    config = require("../../core/config"),
+    getPublicElement = require("../../core/utils/dom").getPublicElement,
     typeUtils = require("../../core/utils/type"),
     iteratorUtils = require("../../core/utils/iterator"),
     extend = require("../../core/utils/extend").extend,
     getDefaultAlignment = require("../../core/utils/position").getDefaultAlignment,
     devices = require("../../core/devices"),
     modules = require("./ui.grid_core.modules"),
+    getPublicElement = require("../../core/utils/dom").getPublicElement,
     gridCoreUtils = require("./ui.grid_core.utils"),
     columnStateMixin = require("./ui.grid_core.column_state_mixin"),
     noop = commonUtils.noop;
@@ -168,13 +171,13 @@ exports.ColumnsView = modules.View.inherit(columnStateMixin).inherit({
                 resultOptions;
 
             resultOptions = extend({}, options, {
-                cellElement: $cell,
+                cellElement: getPublicElement($cell),
                 event: event,
                 eventType: event.type
             });
 
             if($fieldItemContent.length) {
-                formItemOptions = $fieldItemContent.data("dxFormItem");
+                formItemOptions = $fieldItemContent.data("dx-form-item");
                 if(formItemOptions.column) {
                     resultOptions.column = formItemOptions.column;
                     resultOptions.columnIndex = that._columnsController.getVisibleIndex(resultOptions.column.index);
@@ -202,7 +205,7 @@ exports.ColumnsView = modules.View.inherit(columnStateMixin).inherit({
                 e.rowIndex = that.getRowIndex(dxEvent.currentTarget);
 
                 if(e.rowIndex >= 0) {
-                    e.rowElement = $(dxEvent.currentTarget);
+                    e.rowElement = getPublicElement($(dxEvent.currentTarget));
                     e.columns = that.getColumns();
                     that._rowClick(e);
                 }
@@ -433,15 +436,15 @@ exports.ColumnsView = modules.View.inherit(columnStateMixin).inherit({
         };
     },
 
-    _cellPrepared: function($cell, options) {
-        options.cellElement = $cell;
+    _cellPrepared: function(cell, options) {
+        options.cellElement = getPublicElement($(cell));
         this.executeAction("onCellPrepared", options);
     },
 
     _rowPrepared: function($row, options) {
         dataUtils.data($row.get(0), "options", options);
 
-        options.rowElement = $row;
+        options.rowElement = getPublicElement($row);
         this.executeAction("onRowPrepared", options);
     },
 
@@ -643,6 +646,35 @@ exports.ColumnsView = modules.View.inherit(columnStateMixin).inherit({
         return $row.children();
     },
 
+    _getCellElement: function(rowIndex, columnIdentifier) {
+        var that = this,
+            $cell,
+            $cells = that.getCellElements(rowIndex),
+            columnVisibleIndex = that._getVisibleColumnIndex($cells, rowIndex, columnIdentifier);
+
+        if($cells.length && columnVisibleIndex >= 0) {
+            $cell = $cells.eq(columnVisibleIndex);
+        }
+
+        if($cell && $cell.length) {
+            return $cell;
+        }
+    },
+
+    _getRowElement: function(rowIndex) {
+        var that = this,
+            $rowElement = $(),
+            $tableElements = that.getTableElements();
+
+        iteratorUtils.each($tableElements, function(_, tableElement) {
+            $rowElement = $rowElement.add(that._getRowElements($(tableElement)).eq(rowIndex));
+        });
+
+        if($rowElement.length) {
+            return $rowElement;
+        }
+    },
+
     /**
      * @name GridBaseMethods_getCellElement
      * @publicName getCellElement(rowIndex, visibleColumnIndex)
@@ -658,18 +690,7 @@ exports.ColumnsView = modules.View.inherit(columnStateMixin).inherit({
      * @return jQuery|undefined
      */
     getCellElement: function(rowIndex, columnIdentifier) {
-        var that = this,
-            $cell,
-            $cells = that.getCellElements(rowIndex),
-            columnVisibleIndex = that._getVisibleColumnIndex($cells, rowIndex, columnIdentifier);
-
-        if($cells.length && columnVisibleIndex >= 0) {
-            $cell = $cells.eq(columnVisibleIndex);
-        }
-
-        if($cell && $cell.length) {
-            return $cell;
-        }
+        return getPublicElement(this._getCellElement(rowIndex, columnIdentifier));
     },
 
     /**
@@ -679,17 +700,17 @@ exports.ColumnsView = modules.View.inherit(columnStateMixin).inherit({
      * @return jQuery|undefined
      */
     getRowElement: function(rowIndex) {
-        var that = this,
-            $rowElement = $(),
-            $tableElements = that.getTableElements();
+        var $rows = this._getRowElement(rowIndex),
+            elements = [];
 
-        iteratorUtils.each($tableElements, function(_, tableElement) {
-            $rowElement = $rowElement.add(that._getRowElements($(tableElement)).eq(rowIndex));
-        });
-
-        if($rowElement.length) {
-            return $rowElement;
+        if($rows && !config().useJQueryRenderer) {
+            for(var i = 0; i < $rows.length; i++) {
+                elements.push($rows[i]);
+            }
+        } else {
+            elements = $rows;
         }
+        return elements;
     },
 
     _getVisibleColumnIndex: function($cells, rowIndex, columnIdentifier) {

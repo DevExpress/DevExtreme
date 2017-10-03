@@ -313,10 +313,9 @@ var DOMComponent = Component.inherit({
     * @type_function_param1_field3 model:object
     **/
     _defaultActionArgs: function() {
-        var element = this.$element(),
-            model = this._modelByElement(this.$element());
+        var model = this._modelByElement(this.$element());
         return extend(this.callBase(), {
-            element: element,
+            element: this.element(),
             model: model
         });
     },

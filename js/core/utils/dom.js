@@ -174,7 +174,7 @@ var getPublicElement = function($element) {
     if(config().useJQueryRenderer) {
         return $element;
     }
-    return $element.get(0);
+    return $element && $element.get(0);
 };
 
 exports.resetActiveElement = resetActiveElement;

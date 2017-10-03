@@ -153,7 +153,7 @@ var Accordion = CollectionWidget.inherit({
             * @name dxAccordionItemTemplate_iconSrc
             * @publicName iconSrc
             * @type String
-            * @deprecated
+            * @deprecated dxAccordionItemTemplate_icon
             */
         });
     },
@@ -269,7 +269,7 @@ var Accordion = CollectionWidget.inherit({
     },
 
     _renderItemContent: function(args) {
-        var $itemTitle = this.callBase(extend({}, args, {
+        var itemTitle = this.callBase(extend({}, args, {
             contentClass: ACCORDION_ITEM_TITLE_CLASS,
             templateProperty: "titleTemplate",
             defaultTemplateName: this.option("itemTitleTemplate")
@@ -284,7 +284,7 @@ var Accordion = CollectionWidget.inherit({
 
         deferred.done(this.callBase.bind(this, extend({}, args, {
             contentClass: ACCORDION_ITEM_BODY_CLASS,
-            container: $("<div>").appendTo($itemTitle.parent())
+            container: $("<div>").appendTo($(itemTitle).parent())
         })));
     },
 

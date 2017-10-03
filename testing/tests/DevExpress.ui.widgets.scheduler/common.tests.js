@@ -4,6 +4,7 @@ var pointerMock = require("../../helpers/pointerMock.js");
 
 var $ = require("jquery"),
     noop = require("core/utils/common").noop,
+    isRenderer = require("core/utils/type").isRenderer,
     dxScheduler = require("ui/scheduler/ui.scheduler"),
     translator = require("animation/translator"),
     devices = require("core/devices"),
@@ -18,7 +19,8 @@ var $ = require("jquery"),
     dragEvents = require("events/drag"),
     DataSource = require("data/data_source/data_source").DataSource,
     CustomStore = require("data/custom_store"),
-    SchedulerTimezones = require("ui/scheduler/ui.scheduler.timezones");
+    SchedulerTimezones = require("ui/scheduler/ui.scheduler.timezones"),
+    dataUtils = require("core/element_data");
 
 require("common.css!");
 require("generic_light.css!");
@@ -1439,7 +1441,7 @@ QUnit.testStart(function() {
         var args = addingSpy.getCall(0).args[0];
 
         assert.ok(addingSpy.calledOnce, "onAppointmentAdding was called");
-        assert.equal(args.element, this.instance.$element(), "Element field is OK");
+        assert.equal(args.element, this.instance.element(), "Element field is OK");
         assert.equal(args.component, this.instance, "Component field is OK");
         assert.strictEqual(args.cancel, false, "'Cancel' flag is OK");
         assert.deepEqual(args.appointmentData, newAppointment, "Appointment field is OK");
@@ -1525,7 +1527,7 @@ QUnit.testStart(function() {
 
         assert.ok(addedSpy.calledOnce, "onAppointmentAdded was called");
         assert.deepEqual(args.appointmentData, newAppointment, "Appointment field is OK");
-        assert.equal(args.element, this.instance.$element(), "Element field is OK");
+        assert.equal(args.element, this.instance.element(), "Element field is OK");
         assert.equal(args.component, this.instance, "Component field is OK");
         assert.strictEqual(args.error, undefined, "Error field is not defined");
     });
@@ -1571,7 +1573,7 @@ QUnit.testStart(function() {
         var args = updatingSpy.getCall(0).args[0];
 
         assert.ok(updatingSpy.calledOnce, "onAppointmentUpdating was called");
-        assert.equal(args.element, this.instance.$element(), "Element field is OK");
+        assert.equal(args.element, this.instance.element(), "Element field is OK");
         assert.equal(args.component, this.instance, "Component field is OK");
         assert.strictEqual(args.cancel, false, "'Cancel' flag is OK");
         assert.deepEqual(args.newData, newData, "newData field is OK");
@@ -1795,7 +1797,7 @@ QUnit.testStart(function() {
         var args = updatedSpy.getCall(0).args[0];
 
         assert.ok(updatedSpy.calledOnce, "onAppointmentUpdated was called");
-        assert.equal(args.element, this.instance.$element(), "Element field is OK");
+        assert.equal(args.element, this.instance.element(), "Element field is OK");
         assert.equal(args.component, this.instance, "Component field is OK");
         assert.deepEqual(args.appointmentData, newData, "newData field is OK");
         assert.strictEqual(args.error, undefined, "Error field is not defined");
@@ -1851,7 +1853,7 @@ QUnit.testStart(function() {
         var args = deletingSpy.getCall(0).args[0];
 
         assert.ok(deletingSpy.calledOnce, "onAppointmentDeleting was called");
-        assert.equal(args.element, this.instance.$element(), "Element field is OK");
+        assert.equal(args.element, this.instance.element(), "Element field is OK");
         assert.equal(args.component, this.instance, "Component field is OK");
         assert.deepEqual(args.appointmentData, { startDate: new Date(2015, 3, 29, 5), text: "Appointment 1", endDate: new Date(2015, 3, 29, 6) }, "Appointment field is OK");
         assert.strictEqual(args.cancel, false, "'Cancel' flag is OK");
@@ -1942,7 +1944,7 @@ QUnit.testStart(function() {
 
         var args = deletedSpy.getCall(0).args[0];
         assert.ok(deletedSpy.calledOnce, "onAppointmentDeleted was called");
-        assert.equal(args.element, this.instance.$element(), "Element field is OK");
+        assert.equal(args.element, this.instance.element(), "Element field is OK");
         assert.equal(args.component, this.instance, "Component field is OK");
         assert.deepEqual(args.appointmentData, { startDate: new Date(2015, 3, 29, 5), text: "Appointment 1", endDate: new Date(2015, 3, 29, 6) }, "newData field is OK");
         assert.strictEqual(args.error, undefined, "Error field is not defined");
@@ -1989,9 +1991,9 @@ QUnit.testStart(function() {
 
         assert.ok(renderedSpy.calledOnce, "onAppointmentRendered was called");
         assert.deepEqual(args.component, this.instance, "component is scheduler instance");
-        assert.deepEqual(args.element.get(0), this.instance.$element().get(0), "element is $scheduler");
+        assert.deepEqual($(args.element).get(0), this.instance.$element().get(0), "element is $scheduler");
         assert.deepEqual(args.appointmentData, appointments[0], "appointment is OK");
-        assert.deepEqual(args.appointmentElement.get(0), this.instance.$element().find(".dx-scheduler-appointment").get(0), "appointment element is OK");
+        assert.deepEqual($(args.appointmentElement).get(0), this.instance.$element().find(".dx-scheduler-appointment").get(0), "appointment element is OK");
     });
 
     QUnit.test("onAppointmentRendered should called on each recurrence", function(assert) {
@@ -2059,7 +2061,7 @@ QUnit.testStart(function() {
                 }
             ],
             onAppointmentRendered: function(args) {
-                var $appointment = args.appointmentElement;
+                var $appointment = $(args.appointmentElement);
 
                 assert.equal(new Color($appointment.css("background-color")).toHex(), "#ff0000", "Resource color is applied");
                 assert.ok($appointment.attr("data-groupid-1"), "Resource data attribute is defined");
@@ -2085,7 +2087,7 @@ QUnit.testStart(function() {
             views: ["month"],
             currentView: "month",
             onAppointmentRendered: function(args) {
-                assert.equal(args.appointmentElement.find(".dx-scheduler-appointment-reduced-icon").length, 1, "Appointment reduced icon is applied");
+                assert.equal($(args.appointmentElement).find(".dx-scheduler-appointment-reduced-icon").length, 1, "Appointment reduced icon is applied");
             },
             currentDate: new Date(2015, 1, 9)
         });
@@ -2103,7 +2105,7 @@ QUnit.testStart(function() {
             ]),
             onAppointmentRendered: function(e) {
                 var targetedAppointmentData = e.targetedAppointmentData,
-                    appointmentIndex = e.appointmentElement.index();
+                    appointmentIndex = $(e.appointmentElement).index();
 
                 assert.equal(targetedAppointmentData.startDate.getTime(), new Date(2015, 1, 9 + appointmentIndex, 16).getTime(), "Start date is OK");
                 assert.equal(targetedAppointmentData.endDate.getTime(), new Date(2015, 1, 9 + appointmentIndex, 17).getTime(), "End date is OK");
@@ -2176,7 +2178,7 @@ QUnit.testStart(function() {
             ]),
             onAppointmentRendered: function(e) {
                 var targetedAppointmentData = e.targetedAppointmentData,
-                    appointmentIndex = e.appointmentElement.index();
+                    appointmentIndex = $(e.appointmentElement).index();
 
                 assert.equal(targetedAppointmentData.settings.startDate.getTime(), new Date(2015, 1, 9 + appointmentIndex, 16).getTime(), "Start date is OK");
                 assert.equal(targetedAppointmentData.settings.endDate.getTime(), new Date(2015, 1, 9 + appointmentIndex, 17).getTime(), "End date is OK");
@@ -2208,7 +2210,7 @@ QUnit.testStart(function() {
     });
 
     QUnit.test("onAppointmentClick should fires when appointment is clicked", function(assert) {
-        assert.expect(2);
+        assert.expect(3);
 
         var items = [{
             startDate: new Date(2015, 2, 10),
@@ -2228,7 +2230,8 @@ QUnit.testStart(function() {
             currentView: "month",
             currentDate: new Date(2015, 2, 9),
             onAppointmentClick: function(e) {
-                assert.deepEqual(e.appointmentElement[0], $item[0], "appointmentElement is correct");
+                assert.deepEqual(isRenderer(e.appointmentElement), config().useJQueryRenderer, "appointmentElement is correct");
+                assert.deepEqual($(e.appointmentElement)[0], $item[0], "appointmentElement is correct");
                 assert.strictEqual(e.appointmentData, items[0], "appointmentData is correct");
             }
         });
@@ -2312,7 +2315,7 @@ QUnit.testStart(function() {
                 var targetedAppointmentData = e.targetedAppointmentData,
                     expectedOwnerId = 1;
 
-                if(e.appointmentElement.index() === 1) {
+                if($(e.appointmentElement).index() === 1) {
                     expectedOwnerId = 2;
                 }
 
@@ -2370,7 +2373,7 @@ QUnit.testStart(function() {
                 var targetedAppointmentData = e.targetedAppointmentData,
                     expectedOwnerId = 1;
 
-                if(e.appointmentElement.index() === 1) {
+                if($(e.appointmentElement).index() === 1) {
                     expectedOwnerId = 2;
                 }
 
@@ -2816,7 +2819,7 @@ QUnit.testStart(function() {
         var $appointments = $(this.instance.$element().find(".dx-scheduler-appointment"));
 
         assert.equal($appointments.length, 1, "There is only one appt");
-        assert.deepEqual($appointments.data("dxItemData"), { StartDate: new Date(2015, 11, 23).toString(), EndDate: new Date(2015, 11, 23, 0, 30).toString() }, "Appointment data is OK");
+        assert.deepEqual(dataUtils.data($appointments[0], "dxItemData"), { StartDate: new Date(2015, 11, 23).toString(), EndDate: new Date(2015, 11, 23, 0, 30).toString() }, "Appointment data is OK");
     });
 
     QUnit.test("Scheduler should filter data on client side if the remoteFiltering option is false and forceIsoDateParsing", function(assert) {
@@ -2841,7 +2844,7 @@ QUnit.testStart(function() {
             var $appointments = $(this.instance.$element().find(".dx-scheduler-appointment"));
 
             assert.equal($appointments.length, 1, "There is only one appt");
-            assert.deepEqual($appointments.data("dxItemData"), { StartDate: new Date(2015, 11, 23).toString(), EndDate: new Date(2015, 11, 23, 0, 30).toString() }, "Appointment data is OK");
+            assert.deepEqual(dataUtils.data($appointments[0], "dxItemData"), { StartDate: new Date(2015, 11, 23).toString(), EndDate: new Date(2015, 11, 23, 0, 30).toString() }, "Appointment data is OK");
         } finally {
             config().forceIsoDateParsing = defaultForceIsoDateParsing;
         }

@@ -16,7 +16,8 @@ var $ = require("jquery"),
     dragEvents = require("events/drag"),
     DataSource = require("data/data_source/data_source").DataSource,
     CustomStore = require("data/custom_store"),
-    subscribes = require("ui/scheduler/ui.scheduler.subscribes");
+    subscribes = require("ui/scheduler/ui.scheduler.subscribes"),
+    dataUtils = require("core/element_data");
 
 require("ui/scheduler/ui.scheduler");
 require("ui/switch");
@@ -221,15 +222,15 @@ QUnit.test("Tasks should be filtered by start day hour before render", function(
     var $appointments = this.instance.$element().find(".dx-scheduler-appointment");
 
     assert.equal($appointments.length, 1, "There is only one appointment");
-    assert.deepEqual($appointments.data("dxItemData"), tasks[0], "Appointment data is OK");
+    assert.deepEqual(dataUtils.data($appointments[0], "dxItemData"), tasks[0], "Appointment data is OK");
 
     this.instance.option("startDayHour", 1);
     $appointments = this.instance.$element().find(".dx-scheduler-appointment");
 
     assert.equal($appointments.length, 3, "There are three appointments");
-    assert.deepEqual($appointments.eq(0).data("dxItemData"), tasks[0], "Appointment data is OK");
-    assert.deepEqual($appointments.eq(1).data("dxItemData"), tasks[1], "Appointment data is OK");
-    assert.deepEqual($appointments.eq(2).data("dxItemData"), tasks[2], "Appointment data is OK");
+    assert.deepEqual(dataUtils.data($appointments.get(0), "dxItemData"), tasks[0], "Appointment data is OK");
+    assert.deepEqual(dataUtils.data($appointments.get(1), "dxItemData"), tasks[1], "Appointment data is OK");
+    assert.deepEqual(dataUtils.data($appointments.get(2), "dxItemData"), tasks[2], "Appointment data is OK");
 });
 
 QUnit.test("Tasks should be filtered by end day hour before render", function(assert) {
@@ -252,18 +253,18 @@ QUnit.test("Tasks should be filtered by end day hour before render", function(as
     var $appointments = this.instance.$element().find(".dx-scheduler-appointment");
 
     assert.equal($appointments.length, 1, "There is only one appointment");
-    assert.deepEqual($appointments.data("dxItemData"), tasks[0], "Appointment data is OK");
+    assert.deepEqual(dataUtils.data($appointments[0], "dxItemData"), tasks[0], "Appointment data is OK");
 
     this.instance.option("endDayHour", 14);
     $appointments = this.instance.$element().find(".dx-scheduler-appointment");
 
     assert.equal($appointments.length, 3, "There are three appointments");
-    assert.deepEqual($appointments.eq(0).data("dxItemData"), tasks[0], "Appointment data is OK");
-    assert.deepEqual($appointments.eq(1).data("dxItemData"), tasks[1], "Appointment data is OK");
-    assert.deepEqual($appointments.eq(2).data("dxItemData"), tasks[2], "Appointment data is OK");
+    assert.deepEqual(dataUtils.data($appointments.get(0), "dxItemData"), tasks[0], "Appointment data is OK");
+    assert.deepEqual(dataUtils.data($appointments.get(1), "dxItemData"), tasks[1], "Appointment data is OK");
+    assert.deepEqual(dataUtils.data($appointments.get(2), "dxItemData"), tasks[2], "Appointment data is OK");
 });
 
-QUnit.test("Tasks should be filtered by resources before render", function(assert) {
+QUnit.test("getsks, d be filtered by resources before render", function(assert) {
     var tasks = [
         { text: "a", startDate: new Date(2015, 2, 16), endDate: new Date(2015, 2, 16, 0, 30), ownerId: [1, 2] }, // false
         { text: "b", startDate: new Date(2015, 2, 16), endDate: new Date(2015, 2, 16, 0, 30), ownerId: 1, roomId: [1, 2], managerId: 4 }, // true
@@ -299,10 +300,10 @@ QUnit.test("Tasks should be filtered by resources before render", function(asser
     var $appointments = this.instance.$element().find(".dx-scheduler-appointment");
 
     assert.equal($appointments.length, 4, "There are four appointment");
-    assert.deepEqual($appointments.eq(0).data("dxItemData"), tasks[1], "The first appointment data is OK");
-    assert.deepEqual($appointments.eq(1).data("dxItemData"), tasks[1], "The second appointment dat is OK");
-    assert.deepEqual($appointments.eq(2).data("dxItemData"), tasks[3], "The first appointment data is OK");
-    assert.deepEqual($appointments.eq(3).data("dxItemData"), tasks[3], "The second appointment dat is OK");
+    assert.deepEqual(dataUtils.data($appointments.get(0), "dxItemData"), tasks[1], "The first appointment data is OK");
+    assert.deepEqual(dataUtils.data($appointments.get(1), "dxItemData"), tasks[1], "The second appointment dat is OK");
+    assert.deepEqual(dataUtils.data($appointments.get(2), "dxItemData"), tasks[3], "The first appointment data is OK");
+    assert.deepEqual(dataUtils.data($appointments.get(3), "dxItemData"), tasks[3], "The second appointment dat is OK");
 });
 
 QUnit.test("Tasks should be filtered by resources if dataSource is changed", function(assert) {
@@ -342,10 +343,10 @@ QUnit.test("Tasks should be filtered by resources if dataSource is changed", fun
     var $appointments = this.instance.$element().find(".dx-scheduler-appointment");
 
     assert.equal($appointments.length, 4, "There are four appointment");
-    assert.deepEqual($appointments.eq(0).data("dxItemData"), tasks[1], "The first appointment data is OK");
-    assert.deepEqual($appointments.eq(1).data("dxItemData"), tasks[1], "The second appointment dat is OK");
-    assert.deepEqual($appointments.eq(2).data("dxItemData"), tasks[3], "The first appointment data is OK");
-    assert.deepEqual($appointments.eq(3).data("dxItemData"), tasks[3], "The second appointment dat is OK");
+    assert.deepEqual(dataUtils.data($appointments.get(0), "dxItemData"), tasks[1], "The first appointment data is OK");
+    assert.deepEqual(dataUtils.data($appointments.get(1), "dxItemData"), tasks[1], "The second appointment dat is OK");
+    assert.deepEqual(dataUtils.data($appointments.get(2), "dxItemData"), tasks[3], "The first appointment data is OK");
+    assert.deepEqual(dataUtils.data($appointments.get(3), "dxItemData"), tasks[3], "The second appointment dat is OK");
 });
 
 QUnit.test("Tasks should be filtered by resources if resources are changed", function(assert) {
@@ -385,10 +386,10 @@ QUnit.test("Tasks should be filtered by resources if resources are changed", fun
     var $appointments = this.instance.$element().find(".dx-scheduler-appointment");
 
     assert.equal($appointments.length, 4, "There are four appointment");
-    assert.deepEqual($appointments.eq(0).data("dxItemData"), tasks[1], "The first appointment data is OK");
-    assert.deepEqual($appointments.eq(1).data("dxItemData"), tasks[1], "The second appointment dat is OK");
-    assert.deepEqual($appointments.eq(2).data("dxItemData"), tasks[3], "The first appointment data is OK");
-    assert.deepEqual($appointments.eq(3).data("dxItemData"), tasks[3], "The second appointment dat is OK");
+    assert.deepEqual(dataUtils.data($appointments.get(0), "dxItemData"), tasks[1], "The first appointment data is OK");
+    assert.deepEqual(dataUtils.data($appointments.get(1), "dxItemData"), tasks[1], "The second appointment dat is OK");
+    assert.deepEqual(dataUtils.data($appointments.get(2), "dxItemData"), tasks[3], "The first appointment data is OK");
+    assert.deepEqual(dataUtils.data($appointments.get(3), "dxItemData"), tasks[3], "The second appointment dat is OK");
 });
 
 QUnit.test("Tasks should be filtered by resources if groups are changed", function(assert) {
@@ -427,8 +428,8 @@ QUnit.test("Tasks should be filtered by resources if groups are changed", functi
     var $appointments = this.instance.$element().find(".dx-scheduler-appointment");
 
     assert.equal($appointments.length, 2, "There are two appointment");
-    assert.deepEqual($appointments.eq(0).data("dxItemData"), tasks[1], "The first appointment data is OK");
-    assert.deepEqual($appointments.eq(1).data("dxItemData"), tasks[1], "The second appointment data is OK");
+    assert.deepEqual(dataUtils.data($appointments.get(0), "dxItemData"), tasks[1], "The first appointment data is OK");
+    assert.deepEqual(dataUtils.data($appointments.get(1), "dxItemData"), tasks[1], "The second appointment data is OK");
 });
 
 QUnit.test("Appointments on Day view should have a right height and position if startDate begins day before", function(assert) {
@@ -933,13 +934,13 @@ QUnit.test("DblClick on appointment should not affect the related cell start dat
 
     try {
         var $appt = $(this.instance.$element()).find(".dx-scheduler-appointment").eq(0),
-            apptData = $appt.data("dxItemData");
+            apptData = dataUtils.data($appt[0], "dxItemData");
 
         apptData.startDate = new Date(2015, 1, 9, 2);
 
         $appt.trigger(dblclickEvent.name);
 
-        var relatedCellData = $(this.instance.$element()).find(".dx-scheduler-date-table-cell").eq(2).data("dxCellData").startDate;
+        var relatedCellData = dataUtils.data($(this.instance.$element()).find(".dx-scheduler-date-table-cell").get(2), "dxCellData").startDate;
 
         assert.equal(relatedCellData.getTime(), new Date(2015, 1, 9, 1).getTime(), "Cell start date is OK");
     } finally {
@@ -2086,7 +2087,7 @@ QUnit.test("Appointment with custom tz that isn't equal to scheduler tz should b
 
     var startDateText = $appointment.find(".dx-scheduler-appointment-content-date").eq(0).text(),
         endDateText = $appointment.find(".dx-scheduler-appointment-content-date").eq(2).text(),
-        cellData = $cell.data("dxCellData"),
+        cellData = dataUtils.data($cell.get(0), "dxCellData"),
         startDate = cellData.startDate,
         endDate = new Date(cellData.startDate.getTime() + 15 * 60 * 1000);
 
@@ -2132,7 +2133,7 @@ QUnit.test("Appointment with 'Etc/UTC' tz should be rendered correctly(T394991)"
 
         var startDateText = $appointment.find(".dx-scheduler-appointment-content-date").eq(0).text(),
             endDateText = $appointment.find(".dx-scheduler-appointment-content-date").eq(2).text(),
-            cellData = $cell.data("dxCellData"),
+            cellData = dataUtils.data($cell.get(0), "dxCellData"),
             startDate = cellData.startDate,
             endDate = new Date(cellData.startDate.getTime() + 30 * 60 * 1000);
 
@@ -2182,7 +2183,7 @@ QUnit.test("Recurrence appointment with 'Etc/UTC' tz should be updated correctly
 
         var startDateText = $appointment.find(".dx-scheduler-appointment-content-date").eq(0).text(),
             endDateText = $appointment.find(".dx-scheduler-appointment-content-date").eq(2).text(),
-            cellData = $cell.data("dxCellData"),
+            cellData = dataUtils.data($cell.get(0), "dxCellData"),
             startDate = cellData.startDate,
             endDate = new Date(cellData.startDate.getTime() + 30 * 60 * 1000);
 
@@ -2423,7 +2424,7 @@ QUnit.test("Appointment should have correct position while dragging from group",
     $appointment.trigger(dragEvents.end);
 
     this.clock.tick();
-    var appointmentData = this.instance.$element().find(".dx-scheduler-appointment").eq(0).data("dxItemData");
+    var appointmentData = dataUtils.data(this.instance.$element().find(".dx-scheduler-appointment").get(0), "dxItemData");
 
     assert.deepEqual(appointmentData.startDate, new Date(2015, 6, 5, 0), "Start date is correct");
     assert.deepEqual(appointmentData.endDate, new Date(2015, 6, 5, 0, 30), "End date is correct");
@@ -2534,7 +2535,7 @@ QUnit.test("Appointment should not be updated if it is dropped to the initial ce
     $appointment.trigger(dragEvents.end);
 
     this.clock.tick();
-    var appointmentData = this.instance.$element().find(".dx-scheduler-appointment").eq(0).data("dxItemData");
+    var appointmentData = dataUtils.data(this.instance.$element().find(".dx-scheduler-appointment").get(0), "dxItemData");
 
     assert.deepEqual(appointmentData.startDate, new Date(2015, 1, 9, 0, 7), "Start date is correct");
     assert.deepEqual(appointmentData.endDate, new Date(2015, 1, 9, 0, 37), "End date is correct");
@@ -2561,7 +2562,7 @@ QUnit.test("Appointment should not be updated if it is dropped to the initial ce
 
     this.clock.tick();
 
-    var appointmentData = this.instance.$element().find(".dx-scheduler-appointment").eq(0).data("dxItemData");
+    var appointmentData = dataUtils.data(this.instance.$element().find(".dx-scheduler-appointment").get(0), "dxItemData");
 
     assert.deepEqual(appointmentData.startDate, new Date(2015, 1, 9, 8, 7), "Start date is correct");
     assert.deepEqual(appointmentData.endDate, new Date(2015, 1, 9, 8, 37), "End date is correct");
@@ -2587,7 +2588,7 @@ QUnit.test("Appointment should be updated correctly if it is dropped to the neig
     $appointment.trigger(dragEvents.end);
 
     this.clock.tick();
-    var appointmentData = this.instance.$element().find(".dx-scheduler-appointment").eq(0).data("dxItemData");
+    var appointmentData = dataUtils.data(this.instance.$element().find(".dx-scheduler-appointment").get(0), "dxItemData");
 
     assert.deepEqual(appointmentData.startDate, new Date(2015, 1, 10, 8, 0), "Start date is correct");
     assert.deepEqual(appointmentData.endDate, new Date(2015, 1, 10, 9, 0), "End date is correct");
@@ -2615,7 +2616,7 @@ QUnit.test("Dropping appointment to the neighbor cell (month view) with predefin
     $appointment.trigger(dragEvents.end);
 
     this.clock.tick();
-    var appointmentData = this.instance.$element().find(".dx-scheduler-appointment").eq(0).data("dxItemData");
+    var appointmentData = dataUtils.data(this.instance.$element().find(".dx-scheduler-appointment").get(0), "dxItemData");
 
     assert.deepEqual(appointmentData.startDate, new Date(2015, 4, 12, 8), "Start date is correct");
     assert.deepEqual(appointmentData.endDate, new Date(2015, 4, 12, 9, 30), "End date is correct");
@@ -2643,7 +2644,7 @@ QUnit.test("Dropping appointment should keep predefined hours (month view)", fun
     $appointment.trigger(dragEvents.end);
 
     this.clock.tick();
-    var appointmentData = this.instance.$element().find(".dx-scheduler-appointment").eq(0).data("dxItemData");
+    var appointmentData = dataUtils.data(this.instance.$element().find(".dx-scheduler-appointment").get(0), "dxItemData");
 
     assert.deepEqual(appointmentData.startDate, new Date(2015, 4, 12, 10), "Start date is correct");
     assert.deepEqual(appointmentData.endDate, new Date(2015, 4, 12, 17), "End date is correct");
@@ -3488,9 +3489,9 @@ QUnit.test("DropDown appointment should raise the onAppointmentClick event", fun
         onAppointmentClick: function(args) {
 
             assert.equal(args.component, instance, "dxScheduler is 'component'");
-            assert.equal(args.element, instance.$element(), "dxScheduler element is 'element'");
+            assert.equal(args.element, instance.element(), "dxScheduler element is 'element'");
             assert.deepEqual(args.appointmentData, appointments[4], "Appointment data is OK");
-            assert.equal(args.appointmentElement.get(0), dropDown._list.$element().find(".dx-list-item").eq(2).get(0), "Appointment element is OK");
+            assert.equal($(args.appointmentElement).get(0), dropDown._list.$element().find(".dx-list-item").eq(2).get(0), "Appointment element is OK");
             assert.ok(args.event instanceof $.Event, "Event is OK");
 
             assert.strictEqual(args.itemData, undefined);

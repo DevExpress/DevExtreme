@@ -694,7 +694,7 @@ module.exports = {
 
                     if($content) {
                         if(scrollable) {
-                            $content = scrollable.content();
+                            $content = scrollable.$content();
                         }
                         return $content.children().first();
                     }

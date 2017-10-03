@@ -169,7 +169,7 @@ QUnit.test("regression test. Change value used option", function(assert) {
         value: false
     });
 
-    var instance = element.data("dxSwitch");
+    var instance = element.dxSwitch("instance");
     instance.option("value", true);
     assert.ok(element.hasClass("dx-switch-on-value"));
 });
@@ -177,7 +177,7 @@ QUnit.test("regression test. Change value used option", function(assert) {
 QUnit.test("regression test. Used non bool value", function(assert) {
     var element = $("#switch").dxSwitch();
 
-    var instance = element.data("dxSwitch");
+    var instance = element.dxSwitch("instance");
 
     instance.option("value", undefined);
     assert.equal(element.dxSwitch("option", "value"), false);
@@ -345,7 +345,7 @@ QUnit.test("click during animation hasn't any effects", function(assert) {
     var clock = sinon.useFakeTimers();
     try {
         var element = this.element,
-            instance = element.data("dxSwitch"),
+            instance = element.dxSwitch("instance"),
             originalRenderPosition = instance._renderPosition,
             prevState = Number.MAX_VALUE,
             stateMonotonicallyDecreases = true,
@@ -420,7 +420,7 @@ QUnit.test("handle follow of mouse during swipe", function(assert) {
 QUnit.module("options changed callbacks", {
     beforeEach: function() {
         this.element = $("#switch").dxSwitch();
-        this.instance = $("#switch").data("dxSwitch");
+        this.instance = $("#switch").dxSwitch("instance");
     }
 });
 
@@ -447,7 +447,7 @@ QUnit.test("onText/offText", function(assert) {
 QUnit.module("regressions", {
     beforeEach: function() {
         this.element = $("#switch").dxSwitch();
-        this.instance = this.element.data("dxSwitch");
+        this.instance = this.element.dxSwitch("instance");
         this.mouse = pointerMock(this.element);
     }
 });

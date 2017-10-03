@@ -4,6 +4,7 @@ var $ = require("../../core/renderer"),
     eventsEngine = require("../../events/core/events_engine"),
     commonUtils = require("../../core/utils/common"),
     typeUtils = require("../../core/utils/type"),
+    getPublicElement = require("../../core/utils/dom").getPublicElement,
     each = require("../../core/utils/iterator").each,
     compileGetter = require("../../core/utils/data").compileGetter,
     extend = require("../../core/utils/extend").extend,
@@ -880,7 +881,7 @@ var ListBase = CollectionWidget.inherit({
             renderArgs = {
                 index: index,
                 itemData: group,
-                container: $groupHeaderElement
+                container: getPublicElement($groupHeaderElement)
             };
 
         this._createItemByTemplate(groupTemplate, renderArgs);
@@ -896,7 +897,7 @@ var ListBase = CollectionWidget.inherit({
         }).bind(this));
 
         this._groupRenderAction({
-            groupElement: $groupElement,
+            groupElement: getPublicElement($groupElement),
             groupIndex: index,
             groupData: group
         });

@@ -190,7 +190,7 @@ QUnit.test("overlay created with templatesRenderAsynchronously option should not
         });
         overlay.hide();
         clock.tick();
-        assert.equal(overlay.content().is(":visible"), false);
+        assert.equal(overlay.$content().is(":visible"), false);
     } finally {
         clock.restore();
     }
@@ -201,8 +201,8 @@ QUnit.test("overlay should have hover class on content", function(assert) {
             hoverStateEnabled: true,
             visible: true
         }),
-        instance = element.data("dxOverlay"),
-        $content = $(instance.content());
+        instance = element.dxOverlay("instance"),
+        $content = $(instance.$content());
 
     $($content).trigger("dxhoverstart");
     assert.ok($content.hasClass(HOVER_STATE_CLASS));
@@ -230,7 +230,7 @@ QUnit.test("overlay should stop animation on window resize", function(assert) {
 
 QUnit.test("default", function(assert) {
     var instance = $("#overlay").dxOverlay().dxOverlay("instance"),
-        $content = $(instance.content());
+        $content = $(instance.$content());
 
     assert.ok(!$content.is(":visible"));
     assert.ok(!viewport().children("." + OVERLAY_SHADER_CLASS).is(":visible"));
@@ -243,7 +243,7 @@ QUnit.test("RTL markup - rtlEnabled by default", function(assert) {
 
     overlay.show();
 
-    var $content = $(overlay.content());
+    var $content = $(overlay.$content());
 
     assert.ok($content.hasClass("dx-rtl"));
 });
@@ -252,7 +252,7 @@ QUnit.module("option", moduleConfig);
 
 QUnit.test("RTL markup - rtlEnabled by option", function(assert) {
     var overlay = $("#overlay").dxOverlay({ deferRendering: false }).dxOverlay("instance"),
-        $content = $(overlay.content()),
+        $content = $(overlay.$content()),
         contentRenderSpy = sinon.spy(overlay, "_renderContentImpl");
 
     overlay.option("rtlEnabled", true);
@@ -290,33 +290,33 @@ QUnit.test("visibility callbacks", function(assert) {
 
     var instance = $("#overlay").dxOverlay({
         onShowing: function() {
-            assert.equal(this.content().css("display"), "block");
+            assert.equal(this.$content().css("display"), "block");
             assert.equal(afterShowFired, 0);
 
             beforeShowFired++;
         },
         onPositioned: function(options) {
             assert.equal(beforeShowFired, 1);
-            assert.equal(this.content().css("display"), "block");
+            assert.equal(this.$content().css("display"), "block");
             assert.ok(options.position);
 
             positionedFired++;
         },
         onShown: function() {
             assert.equal(positionedFired, 1);
-            assert.equal(this.content().css("display"), "block");
+            assert.equal(this.$content().css("display"), "block");
 
             afterShowFired++;
         },
         onHiding: function() {
-            assert.equal(this.content().css("display"), "block");
+            assert.equal(this.$content().css("display"), "block");
             assert.equal(afterHideFired, 0);
 
             beforeHideFired++;
         },
         onHidden: function() {
             assert.equal(beforeHideFired, 1);
-            assert.equal(this.content().css("display"), "none");
+            assert.equal(this.$content().css("display"), "none");
 
             afterHideFired++;
         }
@@ -348,7 +348,7 @@ QUnit.test("resize callbacks", function(assert) {
             onResizeEnd: function() { onResizeEndFired++; }
         }).dxOverlay("instance"),
 
-        $content = $(instance.content()),
+        $content = $(instance.$content()),
         $handle = $content.find(".dx-resizable-handle-top"),
         pointer = pointerMock($handle);
 
@@ -367,7 +367,7 @@ QUnit.test("overlay should be shown when option visible set to true", function(a
             visible: true
         }),
         overlay = $overlay.dxOverlay("instance"),
-        $content = $(overlay.content()),
+        $content = $(overlay.$content()),
         $wrapper = $content.parent();
 
     assert.ok($wrapper.is(":visible"));
@@ -387,12 +387,12 @@ QUnit.test("new shown overlay should be displayed with greater z-index (Q518355)
         overlay2 = $overlay2.dxOverlay("instance");
 
     overlay1.show();
-    var $content1 = $(overlay1.content()),
+    var $content1 = $(overlay1.$content()),
         contentZIndex = parseInt($content1.css("z-index"), 10),
         wrapperZIndex = parseInt($content1.parent().css("z-index"), 10);
 
     overlay2.show();
-    var $content2 = $(overlay2.content());
+    var $content2 = $(overlay2.$content());
     assert.equal(parseInt($content2.css("z-index"), 10), contentZIndex + 1);
     assert.equal(parseInt($content2.parent().css("z-index"), 10), wrapperZIndex + 1);
 });
@@ -430,7 +430,7 @@ QUnit.test("overlay should fire dxshown and dxhiding events on show/hide", funct
     var shownFired = 0,
         hidingFired = 0;
 
-    $(overlay.content().find("#target")).on({
+    $(overlay.$content().find("#target")).on({
         "dxshown": function() {
             shownFired++;
         },
@@ -474,7 +474,7 @@ QUnit.test("overlay is not shown when parent is hidden", function(assert) {
     overlay.option("visible", true);
 
     assert.ok(overlay.option("visible"), "option was set");
-    assert.ok(overlay.content().is(":hidden"), "overlay was not visible");
+    assert.ok(overlay.$content().is(":hidden"), "overlay was not visible");
 });
 
 QUnit.test("overlay content is shown on 'dxshown' after hidden parent becomes visible", function(assert) {
@@ -487,12 +487,12 @@ QUnit.test("overlay content is shown on 'dxshown' after hidden parent becomes vi
         deferRendering: true
     }).dxOverlay("instance");
 
-    assert.ok(overlay.content().is(":hidden"), "overlay hidden");
+    assert.ok(overlay.$content().is(":hidden"), "overlay hidden");
 
     $overlay.parent().show();
     $($overlay).trigger("dxshown");
 
-    assert.ok(overlay.content().find(".content-inner").is(":visible"), "overlay shown");
+    assert.ok(overlay.$content().find(".content-inner").is(":visible"), "overlay shown");
 });
 
 QUnit.test("overlay is hidden when dxhiding event is fired", function(assert) {
@@ -504,7 +504,7 @@ QUnit.test("overlay is hidden when dxhiding event is fired", function(assert) {
 
     $($overlay).trigger("dxhiding").hide();
 
-    assert.ok(overlay.content().is(":hidden"), "overlay was disappeared");
+    assert.ok(overlay.$content().is(":hidden"), "overlay was disappeared");
     assert.ok(overlay.option("visible"), "overlay option visible is true");
 });
 
@@ -518,7 +518,7 @@ QUnit.test("overlay is shown when dxshown event is fired", function(assert) {
     $($overlay).trigger("dxhiding").hide();
     $($overlay.show()).trigger("dxshown");
 
-    assert.ok(overlay.content().is(":visible"), "overlay shown");
+    assert.ok(overlay.$content().is(":visible"), "overlay shown");
 });
 
 QUnit.test("overlay is not shown when dxshown event was fired and option 'visible' is false", function(assert) {
@@ -532,7 +532,7 @@ QUnit.test("overlay is not shown when dxshown event was fired and option 'visibl
         .trigger("dxhiding")
         .trigger("dxshown");
 
-    assert.ok(overlay.content().is(":hidden"), "overlay does not shown");
+    assert.ok(overlay.$content().is(":hidden"), "overlay does not shown");
 });
 
 QUnit.test("overlay should be shown when visibility is true and dxshown event was fired", function(assert) {
@@ -622,7 +622,7 @@ QUnit.test("position change should not show the content if the overlay is hidden
     var instance = $("#overlay").dxOverlay().dxOverlay("instance");
 
     instance.option("position", { my: "top left", at: "top left", of: document });
-    assert.ok(instance.content().is(":hidden"));
+    assert.ok(instance.$content().is(":hidden"));
 });
 
 QUnit.test("position should be correct on second showing (B238662, B232822)", function(assert) {
@@ -744,7 +744,7 @@ QUnit.test("shading should be present", function(assert) {
             shading: true,
             visible: true
         }).dxOverlay("instance"),
-        $wrapper = $(overlay.content().parent());
+        $wrapper = $(overlay.$content().parent());
 
     assert.ok($wrapper.hasClass(OVERLAY_SHADER_CLASS));
 
@@ -761,7 +761,7 @@ QUnit.test("shading height should change after container resize (B237292)", func
                 of: $container
             }
         }).dxOverlay("instance"),
-        $wrapper = $(overlay.content().parent());
+        $wrapper = $(overlay.$content().parent());
 
     $container
         .width(200)
@@ -783,7 +783,7 @@ QUnit.test("shading color should be customized by option", function(assert) {
             shadingColor: "rgb(255, 0, 0)",
             visible: true
         }).dxOverlay("instance"),
-        $wrapper = $(overlay.content().parent());
+        $wrapper = $(overlay.$content().parent());
 
     assert.ok(/rgb\(255,\s?0,\s?0\)/.test($wrapper.css("background-color")));
 
@@ -799,7 +799,7 @@ QUnit.test("dimensions should be set correctly as number", function(assert) {
         visible: true,
         width: 20,
         height: 15
-    }).dxOverlay("instance").content();
+    }).dxOverlay("instance").$content();
 
     assert.equal($content.width(), 20);
     assert.equal($content.height(), 15);
@@ -819,7 +819,7 @@ QUnit.test("dimensions should be set correctly as function", function(assert) {
         height: function() {
             return $(window).height();
         }
-    }).dxOverlay("instance").content();
+    }).dxOverlay("instance").$content();
 
     assert.equal($content.width(), $(window).width());
     assert.equal($content.height(), $(window).height());
@@ -840,7 +840,7 @@ QUnit.test("dimensions should be shrunk correctly with max sizes specified", fun
         contentTemplate: function() {
             return $("<div>").width(1000).height(1000);
         }
-    }).dxOverlay("instance").content();
+    }).dxOverlay("instance").$content();
 
     assert.equal($content.width(), 200);
     assert.equal($content.height(), 200);
@@ -871,7 +871,7 @@ QUnit.test("dimensions should be expanded correctly with min sizes specified", f
         height: "auto",
         minWidth: 200,
         minHeight: 200
-    }).dxOverlay("instance").content();
+    }).dxOverlay("instance").$content();
 
     assert.equal($content.width(), 200);
     assert.equal($content.height(), 200);
@@ -898,7 +898,7 @@ QUnit.module("animation", moduleConfig);
 QUnit.test("correct animation should be present", function(assert) {
     var originAnimate = fx.animate;
     fx.animate = function($element, config) {
-        if(instance.content().get(0) === $element.get(0)) {
+        if(instance.$content().get(0) === $element.get(0)) {
             lastConfig = config;
         }
     };
@@ -1123,10 +1123,10 @@ QUnit.test("pointer events should be disabled during hide animation", function(a
     var animationConfig = {
         duration: 0,
         start: function() {
-            assert.equal(instance.content().css("pointer-events"), "none", "start of the hiding animation has correct pointer-events");
+            assert.equal(instance.$content().css("pointer-events"), "none", "start of the hiding animation has correct pointer-events");
         },
         complete: function() {
-            assert.equal(instance.content().css("pointer-events"), originalPointerEvents, "complete of the hiding animation has correct pointer-events");
+            assert.equal(instance.$content().css("pointer-events"), originalPointerEvents, "complete of the hiding animation has correct pointer-events");
         }
     };
 
@@ -1137,7 +1137,7 @@ QUnit.test("pointer events should be disabled during hide animation", function(a
             }
         }),
         instance = $element.dxOverlay("instance"),
-        originalPointerEvents = instance.content().css("pointer-events");
+        originalPointerEvents = instance.$content().css("pointer-events");
 
     instance.hide();
 });
@@ -1234,7 +1234,7 @@ QUnit.test("content should be rendered only once after container change", functi
 
 QUnit.test("custom content template", function(assert) {
     var $overlay = $("#overlayWithContentTemplate").dxOverlay({ contentTemplate: 'custom', visible: true }),
-        $content = $($overlay.dxOverlay("instance").content());
+        $content = $($overlay.dxOverlay("instance").$content());
 
     assert.equal($content.children().length, 1, "Overlay content has only one child");
     assert.equal($.trim($content.text()), "TestContent", "Overlay content text is correct");
@@ -1242,7 +1242,7 @@ QUnit.test("custom content template", function(assert) {
 
 QUnit.test("wrong content template name is specified", function(assert) {
     var $overlay = $("#overlayWithWrongTemplateName").dxOverlay({ contentTemplate: 'custom', visible: true }),
-        $content = $($overlay.dxOverlay("instance").content());
+        $content = $($overlay.dxOverlay("instance").$content());
 
     assert.equal($.trim($content.text()), "custom", "content has no text");
 });
@@ -1255,7 +1255,7 @@ QUnit.test("contentTemplate option accepts template instance", function(assert) 
         visible: true
     });
 
-    var $content = $($overlay.dxOverlay("instance").content());
+    var $content = $($overlay.dxOverlay("instance").$content());
 
     assert.equal($.trim($content.text()), "test", "template rendered");
 });
@@ -1268,7 +1268,7 @@ QUnit.test("contentTemplate option support dynamic change", function(assert) {
 
     $overlay.dxOverlay("option", "contentTemplate", "template2");
 
-    assert.equal($.trim($overlay.dxOverlay("content").text()), "template2", "template rerendered");
+    assert.equal($.trim($overlay.dxOverlay("$content").text()), "template2", "template rerendered");
 });
 
 
@@ -1310,7 +1310,7 @@ QUnit.test("overlay should be hidden after click outside was present", function(
             visible: true
         })
         .dxOverlay("instance"),
-        $content = $(overlay.content());
+        $content = overlay.$content();
 
     $($content).trigger("dxpointerdown");
     assert.equal(overlay.option("visible"), true, "overlay is not hidden");
@@ -1783,7 +1783,7 @@ QUnit.test("content should not be moved to container before content ready action
 });
 
 QUnit.test("content should not be moved if overlay in container", function(assert) {
-    var overlay = $("#overlayInTargetContainer").dxOverlay().data("dxOverlay");
+    var overlay = $("#overlayInTargetContainer").dxOverlay().dxOverlay("instance");
 
     overlay.show();
     assert.equal(viewport().children(toSelector(OVERLAY_CLASS)).children(toSelector(OVERLAY_WRAPPER_CLASS)).length, 1);
@@ -1825,7 +1825,7 @@ QUnit.test("content should be moved back to overlay element on hide (B253278)", 
     overlay.show();
     overlay.hide();
 
-    assert.ok($overlay.find(overlay.content()).length, "content moved back");
+    assert.ok($overlay.find(overlay.$content()).length, "content moved back");
 });
 
 QUnit.test("content should be moved to container on show (B253278)", function(assert) {
@@ -1836,7 +1836,7 @@ QUnit.test("content should be moved to container on show (B253278)", function(as
     overlay.hide();
     overlay.show();
 
-    assert.ok(!$overlay.find(overlay.content()).length, "content moved back");
+    assert.ok(!$overlay.find(overlay.$content()).length, "content moved back");
 });
 
 QUnit.test("shader should be positioned relatively to container", function(assert) {
@@ -2158,7 +2158,7 @@ QUnit.test("content()", function(assert) {
     var $element = $("#overlay"),
         instance = $element.dxOverlay().dxOverlay("instance");
 
-    assert.ok(instance.content().hasClass(OVERLAY_CONTENT_CLASS), "API method content() returns correct jQuery object");
+    assert.ok(instance.$content().hasClass(OVERLAY_CONTENT_CLASS), "API method content() returns correct jQuery object");
 });
 
 
@@ -2193,7 +2193,7 @@ QUnit.test("constructor", function(assert) {
     instance.show();
 
     assert.strictEqual(instance.option("width"), 400);
-    assert.strictEqual(instance.content().outerWidth(), 400, "outer width of the element must be equal to custom width");
+    assert.strictEqual(instance.$content().outerWidth(), 400, "outer width of the element must be equal to custom width");
 });
 
 QUnit.test("change width", function(assert) {
@@ -2205,7 +2205,7 @@ QUnit.test("change width", function(assert) {
 
     instance.show();
 
-    assert.strictEqual(instance.content().outerWidth(), customWidth, "outer width of the element must be equal to custom width");
+    assert.strictEqual(instance.$content().outerWidth(), customWidth, "outer width of the element must be equal to custom width");
 });
 
 
@@ -2397,7 +2397,7 @@ QUnit.test("overlay should not be dragged when container size less than overlay 
         container: $container
     });
 
-    var $overlayContent = $overlay.dxOverlay("content");
+    var $overlayContent = $overlay.dxOverlay("$content");
     var pointer = pointerMock($overlayContent);
 
     var startEvent = pointer.start().dragStart().lastEvent();
@@ -2422,7 +2422,7 @@ QUnit.test("overlay should be dragged correctly when position.of and shading (T5
         position: { of: $container }
     });
 
-    var $overlayContent = $overlay.dxOverlay("content"),
+    var $overlayContent = $overlay.dxOverlay("$content"),
         overlayPosition = $overlayContent.position(),
         containerPosition = $container.position(),
         viewWidth = viewport().outerWidth(),
@@ -2633,7 +2633,7 @@ QUnit.test("overlay should not be dragged when container size less than overlay 
         position: { my: "center center", at: "center center", of: $container }
     });
 
-    var $overlayContent = $overlay.dxOverlay("content");
+    var $overlayContent = $overlay.dxOverlay("$content");
     var keyboard = keyboardMock($overlayContent);
 
     keyboard.keyDown("left");
@@ -2861,7 +2861,7 @@ QUnit.test("scroll event prevented on overlay shader 1", function(assert) {
 
     $overlay.dxOverlay("option", "visible", true);
 
-    var $content = $overlay.dxOverlay("content"),
+    var $content = $overlay.dxOverlay("$content"),
         $shader = $content.closest(".dx-overlay-shader");
 
     $($shader.parent()).on("dxdrag.TEST", {
@@ -2884,7 +2884,7 @@ QUnit.test("scroll event should not be prevented if originalEvent is mousemove",
         visible: true
     });
 
-    var $content = $overlay.dxOverlay("content");
+    var $content = $overlay.dxOverlay("$content");
     var $shader = $content.closest(".dx-overlay-shader");
 
     $($shader).on("dxdrag", {
@@ -2921,7 +2921,7 @@ QUnit.test("scroll event prevented on overlay shader", function(assert) {
                 shading: true,
                 visible: true
             })),
-            $content = $($overlay.dxOverlay("content"));
+            $content = $($overlay.dxOverlay("$content"));
 
         $(document).on("dxpointermove.TEST", function(e) {
             assert.ok(e.isScrollingEvent, "scrolling event set");
@@ -2949,7 +2949,7 @@ QUnit.test("scroll event prevented on overlay", function(assert) {
         $scrollable = $("<div>");
 
     $overlay.dxOverlay("option", "visible", true);
-    var $content = $($overlay.dxOverlay("content")).append($scrollable);
+    var $content = $($overlay.dxOverlay("$content")).append($scrollable);
 
     $scrollable.dxScrollable({
         useNative: false,
@@ -2993,7 +2993,7 @@ QUnit.test("scroll event does not prevent gestures", function(assert) {
         visible: true
     });
 
-    var $content = $overlay.dxOverlay("content"),
+    var $content = $overlay.dxOverlay("$content"),
         $shader = $content.closest(".dx-overlay-shader");
 
     $($shader).on({
@@ -3018,7 +3018,7 @@ QUnit.test("scroll event should not prevent text selection in content", function
         visible: true
     });
 
-    var $content = $overlay.dxOverlay("content"),
+    var $content = $overlay.dxOverlay("$content"),
         $shader = $content.closest(".dx-overlay-shader");
 
     var e = pointerMock($shader)

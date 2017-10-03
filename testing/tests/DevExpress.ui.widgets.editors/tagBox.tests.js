@@ -1382,7 +1382,7 @@ QUnit.module("keyboard navigation", {
         this.$element = $("<div>")
             .appendTo("#qunit-fixture")
             .dxTagBox(options);
-        this.instance = this.$element.data("dxTagBox");
+        this.instance = this.$element.dxTagBox("instance");
         this.$input = this.$element.find("." + TEXTBOX_CLASS);
         this.keyboard = keyboardMock(this.$input);
     },
@@ -2833,11 +2833,12 @@ QUnit.test("popup changes its position when field height changed", function(asse
 
     var initialHeight = $tagBox.height();
     var $selectAllItem = $(".dx-list-select-all"),
-        popupContentTop = tagBox.content().offset().top;
+        popupContent = $(tagBox.content()),
+        popupContentTop = popupContent.offset().top;
 
     $($selectAllItem).trigger("dxclick");
 
-    assert.roughEqual(tagBox.content().offset().top, popupContentTop - initialHeight + $tagBox.height(), 1, "selectAll moved");
+    assert.roughEqual(popupContent.offset().top, popupContentTop - initialHeight + $tagBox.height(), 1, "selectAll moved");
 });
 
 QUnit.test("refresh popup size after dataSource loaded", function(assert) {
@@ -3134,13 +3135,13 @@ QUnit.test("value should be cleared after deselect all items if fieldTemplate an
             opened: true,
             value: [1],
             searchEnabled: true,
-            fieldTemplate: function(itemData, $container) {
+            fieldTemplate: function(itemData, container) {
                 var $textBox = $("<div>").dxTextBox();
 
                 itemData = Array.isArray(itemData) ? itemData : [itemData];
                 $field.text(itemData[0] || "");
 
-                $container.append($field).append($textBox);
+                $(container).append($field).append($textBox);
             }
         }),
         $items = $("." + LIST_ITEM_CLASS);
@@ -3616,7 +3617,7 @@ QUnit.test("list should save it's scroll position after value changed", function
         showSelectionControls: true
     });
 
-    var $content = this.instance.content(),
+    var $content = $(this.instance.content()),
         $list = $content.find("." + LIST_CLASS),
         list = $list.dxList("instance"),
         scrollView = $list.dxScrollView("instance");

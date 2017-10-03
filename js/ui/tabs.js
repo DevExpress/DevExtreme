@@ -142,7 +142,7 @@ var Tabs = CollectionWidget.inherit({
             * @name dxTabsItemTemplate_iconSrc
             * @publicName iconSrc
             * @type String
-            * @deprecated
+            * @deprecated dxTabsItemTemplate_icon
             */
             /**
             * @name dxTabsItemTemplate_badge
@@ -296,7 +296,7 @@ var Tabs = CollectionWidget.inherit({
     _cleanScrolling: function() {
         if(!this._scrollable) return;
 
-        this._scrollable.content().children("." + TABS_WRAPPER_CLASS)
+        this._scrollable.$content().children("." + TABS_WRAPPER_CLASS)
             .appendTo(this._itemContainer());
 
         this._scrollable.$element().remove();

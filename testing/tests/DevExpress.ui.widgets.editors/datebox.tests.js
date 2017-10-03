@@ -73,7 +73,7 @@ var moduleConfig = {
         this.clock = sinon.useFakeTimers(new Date().valueOf());
 
         this.$element = $("#dateBox")[widgetName]({ pickerType: "native" });
-        this.instance = this.$element.data(widgetName);
+        this.instance = this.$element[widgetName]("instance");
         this.$input = $.proxy(this.instance._input, this.instance);
     },
     afterEach: function() {
@@ -508,7 +508,7 @@ QUnit.test("dateBox should stay focused after value selecting in date strategy",
         focusStateEnabled: true
     });
     var instance = $dateBox.dxDateBox("instance");
-    var $popupContent = $(instance._popup.content().parent());
+    var $popupContent = $(instance._popup.$content().parent());
 
     $($popupContent).on("mousedown", function(e) {
         assert.ok(e.isDefaultPrevented(), "datebox does not lose focus on overlay content clicking");
@@ -532,7 +532,7 @@ QUnit.test("dateBox should stay focused after value selecting in time strategy",
             focusStateEnabled: true
         }),
         instance = $dateBox.dxDateBox("instance"),
-        $popupContent = $(instance._popup.content().parent());
+        $popupContent = $(instance._popup.$content().parent());
 
     $($popupContent).on("mousedown", function(e) {
         assert.ok(e.isDefaultPrevented(), "datebox does not lose focus on popup content clicking");
@@ -556,7 +556,7 @@ QUnit.test("dateBox should stay focused after value selecting in datetime strate
             focusStateEnabled: true
         }),
         instance = $dateBox.dxDateBox("instance"),
-        $popupContent = $(instance._popup.content().parent());
+        $popupContent = $(instance._popup.$content().parent());
 
     $($popupContent).on("mousedown", function(e) {
         assert.ok(e.isDefaultPrevented(), "datebox does not lose focus on popup content clicking");
@@ -580,7 +580,7 @@ QUnit.test("calendar in datebox should not have tabIndex attribute", function(as
             focusStateEnabled: true
         }),
         instance = $dateBox.dxDateBox("instance"),
-        $calendar = $(instance._popup.content().find(".dx-calendar"));
+        $calendar = $(instance._popup.$content().find(".dx-calendar"));
 
     assert.equal($calendar.attr("tabindex"), null, "calendar has not tabindex");
 });
@@ -900,7 +900,7 @@ QUnit.module("dateView integration", {
 });
 
 QUnit.test("dateView renders", function(assert) {
-    assert.equal(this.popup().content().find(".dx-dateview").length, 1);
+    assert.equal(this.popup().$content().find(".dx-dateview").length, 1);
 });
 
 QUnit.test("readOnly input prop should be always true to prevent keyboard open if simulated dateView is using", function(assert) {
@@ -1155,7 +1155,7 @@ QUnit.test("B251997 - date picker is shown in spite of 'readOnly' is true", func
         this.instance.open();
 
         assert.equal($(".dx-dateview").length, 1, "simulated picker is created");
-        assert.ok(this.popup().content().find(".dx-dateview").is(":visible"), "picker is shown");
+        assert.ok(this.popup().$content().find(".dx-dateview").is(":visible"), "picker is shown");
     } finally {
         support.inputType = originalSupportInputType;
     }
@@ -1603,7 +1603,7 @@ QUnit.test("displayFormat should affect on timeView", function(assert) {
             type: 'datetime'
         }),
         dateBox = $dateBox.dxDateBox("instance"),
-        $content = $(dateBox._popup.content()),
+        $content = $(dateBox._popup.$content()),
         timeView = $content.find("." + TIMEVIEW_CLASS).dxTimeView("instance");
 
     assert.notOk(timeView.option("use24HourFormat"), "using 12 hour format");
@@ -2393,7 +2393,7 @@ QUnit.test("date box should contain calendar and time view inside box in large s
                 opened: true
             }),
             instance = $element.dxDateBox("instance"),
-            $content = $(instance._popup.content()),
+            $content = $(instance._popup.$content()),
             box = Box.getInstance($content.find("." + BOX_CLASS)),
             $clock = $content.find(".dx-timeview-clock");
 
@@ -2419,7 +2419,7 @@ QUnit.test("date box should contain calendar and time view inside box in small s
                 opened: true
             }),
             instance = $element.dxDateBox("instance"),
-            $content = $(instance._popup.content()),
+            $content = $(instance._popup.$content()),
             box = Box.getInstance($content.find("." + BOX_CLASS)),
             $clock = $content.find(".dx-timeview-clock");
 
@@ -2480,7 +2480,7 @@ QUnit.test("datebox value is bound to time view value", function(assert) {
             opened: true
         }),
         instance = $element.dxDateBox("instance"),
-        $content = $(instance._popup.content()),
+        $content = $(instance._popup.$content()),
         timeView = $content.find("." + TIMEVIEW_CLASS).dxTimeView("instance");
 
     var date = new Date(2014, 2, 1, 14, 33);
@@ -2502,7 +2502,7 @@ QUnit.test("time value should be updated after select date", function(assert) {
             opened: true
         }),
         dateBox = $element.dxDateBox("instance"),
-        $content = $(dateBox._popup.content()),
+        $content = $(dateBox._popup.$content()),
         calendar = $content.find("." + CALENDAR_CLASS).dxCalendar("instance"),
         timeView = $content.find("." + TIMEVIEW_CLASS).dxTimeView("instance");
 
@@ -2632,7 +2632,7 @@ QUnit.test("DateBox with time should be rendered correctly in IE, templatesRende
         dateBox.option("opened", true);
         clock.tick();
 
-        var $content = $(dateBox._popup.content()),
+        var $content = $(dateBox._popup.$content()),
             $timeView = $content.find(".dx-timeview-clock");
         assert.ok($timeView.parent().width() > 100, "Time view was rendered correctly");
     } finally {

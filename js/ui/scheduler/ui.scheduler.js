@@ -369,7 +369,7 @@ var Scheduler = Widget.inherit({
                     /**
                     * @name dxSchedulerOptions_resources_field
                     * @publicName field
-                    * @deprecated
+                    * @deprecated dxSchedulerOptions_resources_fieldExpr
                     * @type String
                     * @default ""
                     */
@@ -405,7 +405,7 @@ var Scheduler = Widget.inherit({
                     /**
                     * @name dxSchedulerOptions_resources_mainColor
                     * @publicName mainColor
-                    * @deprecated
+                    * @deprecated dxSchedulerOptions_resources_useColorAsDefault
                     * @type Boolean
                     * @default false
                     */
@@ -1933,7 +1933,7 @@ var Scheduler = Widget.inherit({
     },
 
     _popupContent: function(appointmentData, processTimeZone) {
-        var $popupContent = this._popup.content();
+        var $popupContent = this._popup.$content();
         this._createAppointmentForm(appointmentData, $popupContent, processTimeZone);
 
         return $popupContent;
@@ -2623,7 +2623,7 @@ var Scheduler = Widget.inherit({
                 };
             } else {
                 getGroups = function() {
-                    var apptPosition = appointmentElement.position();
+                    var apptPosition = $(appointmentElement).position();
                     return workSpace.getCellDataByCoordinates(apptPosition).groups;
                 };
 

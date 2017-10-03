@@ -189,13 +189,13 @@ QUnit.test("Render items with custom model", function(assert) {
     assert.ok($item1.find("." + DX_MENU_ITEM_POPOUT_CLASS).length, "popout was rendered");
 
     $($item1).trigger("dxclick");
-    submenu = getSubMenuInstance($item1)._overlay.content();
+    submenu = getSubMenuInstance($item1)._overlay.$content();
     $item11 = submenu.find("." + DX_MENU_ITEM_CLASS).eq(0);
     assert.equal($item11.text(), "item 11");
     assert.ok($item11.find("." + DX_MENU_ITEM_POPOUT_CLASS).length, "popout was rendered");
 
     $($item11).trigger("dxclick");
-    submenu = getSubMenuInstance($item1)._overlay.content();
+    submenu = getSubMenuInstance($item1)._overlay.$content();
     $item111 = submenu.find("." + DX_MENU_ITEM_CLASS).eq(1);
     assert.equal($item111.text(), "item 111");
 });
@@ -247,7 +247,7 @@ QUnit.test("Render custom template for submenu items", function(assert) {
     assert.equal($menu.find("." + DX_MENU_ITEM_CLASS).length, 1);
     rootMenuItem.trigger("dxclick");
     submenu = getSubMenuInstance(rootMenuItem);
-    assert.equal($(submenu._overlay.content()).find("." + DX_MENU_ITEM_CLASS).eq(0).text(), "test");
+    assert.equal($(submenu._overlay.$content()).find("." + DX_MENU_ITEM_CLASS).eq(0).text(), "test");
 });
 
 QUnit.test("Render custom template via script (T195165)", function(assert) {
@@ -265,7 +265,7 @@ QUnit.test("Render custom template via script (T195165)", function(assert) {
     assert.equal($menu.find("." + DX_MENU_ITEM_CLASS).length, 1);
     rootMenuItem.trigger("dxclick");
     submenu = getSubMenuInstance(rootMenuItem);
-    assert.equal($.trim($(submenu._overlay.content()).find("." + DX_MENU_ITEM_CLASS).eq(0).text()), "Menu Test");
+    assert.equal($.trim($(submenu._overlay.$content()).find("." + DX_MENU_ITEM_CLASS).eq(0).text()), "Menu Test");
 });
 
 QUnit.test("Render horizontal menu with default submenuDirection", function(assert) {

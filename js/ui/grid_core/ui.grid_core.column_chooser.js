@@ -105,7 +105,7 @@ var ColumnChooserView = columnsView.ColumnsView.inherit({
 
     _updateList: function(allowUpdate) {
         var items,
-            $popupContent = this._popupContainer.content(),
+            $popupContent = this._popupContainer.$content(),
             isSelectMode = this.option("columnChooser.mode") === "select",
             chooserColumns = this._columnsController.getChooserColumns(isSelectMode);
 
@@ -187,7 +187,7 @@ var ColumnChooserView = columnsView.ColumnsView.inherit({
                 itemTemplate: "item",
                 showCheckBoxesMode: "none",
                 rootValue: null,
-                searchEnabled: columnChooser.searchEnabled
+                searchEnabled: columnChooser.allowSearch
             };
 
 
@@ -198,7 +198,7 @@ var ColumnChooserView = columnsView.ColumnsView.inherit({
 
         treeViewConfig.onContentReady = function(e) {
             if(scrollTop) {
-                var scrollable = e.element.find(".dx-scrollable").data("dxScrollable");
+                var scrollable = $(e.element).find(".dx-scrollable").data("dxScrollable");
                 scrollable && scrollable.scrollTo({ y: scrollTop });
             }
 
@@ -227,8 +227,8 @@ var ColumnChooserView = columnsView.ColumnsView.inherit({
             activeStateEnabled: false,
             focusStateEnabled: false,
             hoverStateEnabled: false,
-            itemTemplate: function(data, index, $item) {
-                $item
+            itemTemplate: function(data, index, item) {
+                $(item)
                     .text(data.text)
                     .parent()
                     .addClass(data.cssClass)
@@ -289,7 +289,7 @@ var ColumnChooserView = columnsView.ColumnsView.inherit({
             $item,
             isSelectMode = this.option("columnChooser.mode") === "select",
             chooserColumns = this._columnsController.getChooserColumns(isSelectMode),
-            $content = this._popupContainer && this._popupContainer.content(),
+            $content = this._popupContainer && this._popupContainer.$content(),
             $nodes = $content && $content.find(".dx-treeview-node");
 
         if($nodes) {
@@ -398,12 +398,12 @@ module.exports = {
                  */
                 enabled: false,
                 /**
-                 * @name GridBaseOptions_columnChooser_searchEnabled
-                 * @publicName searchEnabled
+                 * @name GridBaseOptions_columnChooser_allowSearch
+                 * @publicName allowSearch
                  * @type boolean
                  * @default false
                  */
-                searchEnabled: false,
+                allowSearch: false,
                 /**
                  * @name GridBaseOptions_columnChooser_mode
                  * @publicName mode
@@ -469,7 +469,7 @@ module.exports = {
                                 that.component.getView("columnChooserView").showColumnChooser();
                             },
                             onInitialized = function(e) {
-                                e.element.addClass(that._getToolbarButtonClass(that.addWidgetPrefix(COLUMN_CHOOSER_BUTTON_CLASS)));
+                                $(e.element).addClass(that._getToolbarButtonClass(that.addWidgetPrefix(COLUMN_CHOOSER_BUTTON_CLASS)));
                             },
                             hintText = that.option("columnChooser.title"),
                             toolbarItem = {

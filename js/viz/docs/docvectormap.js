@@ -311,7 +311,7 @@ var dxVectorMap = {
     * @publicName mapData
     * @type Array<string>|string
     * @default undefined
-    * @deprecated
+    * @deprecated dxvectormapoptions_layers_dataSource
     * @notUsedInTheme
     */
     mapData: undefined,
@@ -319,7 +319,7 @@ var dxVectorMap = {
     * @name dxvectormapoptions_areaSettings
     * @publicName areaSettings
     * @type object
-    * @deprecated
+    * @deprecated dxvectormapoptions_layers
     */
     areaSettings: {
         /**
@@ -528,7 +528,7 @@ var dxVectorMap = {
     * @publicName markers
     * @type Array<Object>|string
     * @default undefined
-    * @deprecated
+    * @deprecated dxvectormapoptions_layers_dataSource
     * @notUsedInTheme
     */
     /**
@@ -536,49 +536,49 @@ var dxVectorMap = {
     * @publicName coordinates
     * @type Array<any>
     * @default undefined
-    * @deprecated
+    * @deprecated dxvectormapoptions_layers_dataSource
     */
     /**
     * @name dxvectormapoptions_markers_attributes
     * @publicName attributes
     * @type object
     * @default undefined
-    * @deprecated
+    * @deprecated dxvectormapoptions_layers_dataSource
     */
     /**
     * @name dxvectormapoptions_markers_text
     * @publicName text
     * @type string
     * @default undefined
-    * @deprecated
+    * @deprecated dxvectormapoptions_layers_dataSource
     */
     /**
     * @name dxvectormapoptions_markers_value
     * @publicName value
     * @type number
     * @default undefined
-    * @deprecated
+    * @deprecated dxvectormapoptions_layers_dataSource
     */
     /**
     * @name dxvectormapoptions_markers_values
     * @publicName values
     * @type Array<any>
     * @default undefined
-    * @deprecated
+    * @deprecated dxvectormapoptions_layers_dataSource
     */
     /**
     * @name dxvectormapoptions_markers_url
     * @publicName url
     * @type string
     * @default undefined
-    * @deprecated
+    * @deprecated dxvectormapoptions_layers_dataSource
     */
     markers: undefined,
     /**
     * @name dxvectormapoptions_markerSettings
     * @publicName markerSettings
     * @type object
-    * @deprecated
+    * @deprecated dxvectormapoptions_layers
     */
     markerSettings: {
         /**
@@ -1369,7 +1369,7 @@ var dxVectorMap = {
     * @type_function_param1_field3 jQueryEvent:jQuery.Event
     * @type_function_param1_field4 target:areaObjects
     * @notUsedInTheme
-    * @deprecated
+    * @deprecated dxvectormapoptions_onClick
     * @action
     */
     onAreaClick: function() { },
@@ -1382,7 +1382,7 @@ var dxVectorMap = {
     * @type_function_param1_field2 element:object
     * @type_function_param1_field3 target:areaObjects
     * @notUsedInTheme
-    * @deprecated
+    * @deprecated dxvectormapoptions_onSelectionChanged
     * @action
     */
     onAreaSelectionChanged: function() { },
@@ -1396,7 +1396,7 @@ var dxVectorMap = {
     * @type_function_param1_field3 jQueryEvent:jQuery.Event
     * @type_function_param1_field4 target:Marker object
     * @notUsedInTheme
-    * @deprecated
+    * @deprecated dxvectormapoptions_onClick
     * @action
     */
     onMarkerClick: function() { },
@@ -1409,7 +1409,7 @@ var dxVectorMap = {
     * @type_function_param1_field2 element:object
     * @type_function_param1_field3 target:Marker object
     * @notUsedInTheme
-    * @deprecated
+    * @deprecated dxvectormapoptions_onSelectionChanged
     * @action
     */
     onMarkerSelectionChanged: function() { },
@@ -1437,26 +1437,26 @@ var dxVectorMap = {
     * @name dxvectormapmethods_getAreas
     * @publicName getAreas()
     * @return Array<areaObjects>
-    * @deprecated
+    * @deprecated dxvectormapmethods_getLayers
     */
     getAreas: function() { },
     /**
     * @name dxvectormapmethods_getMarkers
     * @publicName getMarkers()
     * @return Array<markerObjects>
-    * @deprecated
+    * @deprecated dxvectormapmethods_getLayers
     */
     getMarkers: function() { },
     /**
     * @name dxvectormapmethods_clearAreaSelection
     * @publicName clearAreaSelection()
-    * @deprecated
+    * @deprecated dxvectormapmethods_clearSelection
     */
     clearAreaSelection: function() { },
     /**
     * @name dxvectormapmethods_clearMarkerSelection
     * @publicName clearMarkerSelection()
-    * @deprecated
+    * @deprecated dxvectormapmethods_clearSelection
     */
     clearMarkerSelection: function() { },
     /**

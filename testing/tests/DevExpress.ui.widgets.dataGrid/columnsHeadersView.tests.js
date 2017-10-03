@@ -4,8 +4,10 @@ require("common.css!");
 require("generic_light.css!");
 
 var $ = require("jquery"),
+    dataUtils = require("core/element_data"),
     setTemplateEngine = require("ui/set_template_engine"),
     typeUtils = require("core/utils/type"),
+    config = require("core/config"),
     devices = require("core/devices"),
     DataSource = require("data/data_source/data_source").DataSource,
     dataGridMocks = require("../../helpers/dataGridMocks.js"),
@@ -1614,8 +1616,9 @@ QUnit.test("onCellPrepared - header with sorting and headerFilter", function(ass
         resultOptions = options;
 
         //assert
-        assert.ok(options.cellElement.find(".dx-header-filter").length, "has header filter");
-        assert.ok(options.cellElement.find(".dx-sort-up").length, "has sort");
+        assert.equal(typeUtils.isRenderer(options.cellElement), config().useJQueryRenderer, "has header filter");
+        assert.ok($(options.cellElement).find(".dx-header-filter").length, "has header filter");
+        assert.ok($(options.cellElement).find(".dx-sort-up").length, "has sort");
     };
     this.columnHeadersView.init();
 
@@ -1650,7 +1653,7 @@ QUnit.test("Headers with option onRowPrepared", function(assert) {
 
     //assert
     assert.equal(countCallRowPrepared, 1, "countCallRowPrepared");
-    assert.ok(resultOptions.rowElement.data("options"), "has row options");
+    assert.ok(dataUtils.data($(resultOptions.rowElement).get(0), "options"), "has row options");
     assert.strictEqual(resultOptions.rowType, "header", "rowType");
     assert.deepEqual(resultOptions.columns, [{ caption: 'Column 1' }, { caption: 'Column 2' }, { caption: 'Column 3' }, { caption: 'Column 4' }, { caption: 'Column 5' }], "columns");
 });

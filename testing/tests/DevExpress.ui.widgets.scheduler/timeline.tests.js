@@ -16,7 +16,8 @@ var $ = require("jquery"),
     domUtils = require("core/utils/dom"),
     dateLocalization = require("localization/date"),
     resizeCallbacks = require("core/utils/window").resizeCallbacks,
-    dateUtils = require("core/utils/date");
+    dateUtils = require("core/utils/date"),
+    dataUtils = require("core/element_data");
 
 QUnit.testStart(function() {
     $("#qunit-fixture").html('<div id="scheduler-timeline"></div>\
@@ -85,10 +86,10 @@ QUnit.test("Two scrollable elements should be rendered", function(assert) {
 
 
     assert.equal($dateTableScrollable.length, 1, "Date table scrollable was rendered");
-    assert.ok($dateTableScrollable.data("dxScrollable"), "Date table scrollable is instance of dxScrollable");
+    assert.ok($dateTableScrollable.dxScrollable("instance"), "Date table scrollable is instance of dxScrollable");
 
     assert.equal($headerScrollable.length, 1, "Header scrollable was rendered");
-    assert.ok($headerScrollable.data("dxScrollable"), "Header scrollable is instance of dxScrollable");
+    assert.ok($headerScrollable.dxScrollable("instance"), "Header scrollable is instance of dxScrollable");
 });
 
 QUnit.test("Both scrollable elements should be rendered if crossScrollingEnabled=true", function(assert) {
@@ -464,19 +465,19 @@ QUnit.test("Each cell of scheduler timeline day should contain rigth jQuery dxCe
 
     var $cells = this.instance.$element().find("." + CELL_CLASS);
 
-    assert.deepEqual($cells.eq(0).data("dxCellData"), {
+    assert.deepEqual(dataUtils.data($cells.get(0), "dxCellData"), {
         startDate: new Date(2015, 9, 21, 5),
         endDate: new Date(2015, 9, 21, 6),
         allDay: false
     }, "data of first cell is rigth");
 
-    assert.deepEqual($cells.eq(5).data("dxCellData"), {
+    assert.deepEqual(dataUtils.data($cells.get(5), "dxCellData"), {
         startDate: new Date(2015, 9, 21, 10),
         endDate: new Date(2015, 9, 21, 11),
         allDay: false
     }, "data of 5th cell is rigth");
 
-    assert.deepEqual($cells.eq(10).data("dxCellData"), {
+    assert.deepEqual(dataUtils.data($cells.get(10), "dxCellData"), {
         startDate: new Date(2015, 9, 21, 15),
         endDate: new Date(2015, 9, 21, 16),
         allDay: false
@@ -498,7 +499,7 @@ QUnit.test("Each cell of grouped scheduler timeline day should contain rigth jQu
 
     var $cells = this.instance.$element().find(".dx-scheduler-date-table-row").eq(2).find("." + CELL_CLASS);
 
-    assert.deepEqual($cells.eq(0).data("dxCellData"), {
+    assert.deepEqual(dataUtils.data($cells.get(0), "dxCellData"), {
         startDate: new Date(2015, 9, 21, 5),
         endDate: new Date(2015, 9, 21, 6),
         allDay: false,
@@ -508,7 +509,7 @@ QUnit.test("Each cell of grouped scheduler timeline day should contain rigth jQu
         }
     }, "data of first cell is rigth");
 
-    assert.deepEqual($cells.eq(5).data("dxCellData"), {
+    assert.deepEqual(dataUtils.data($cells.get(5), "dxCellData"), {
         startDate: new Date(2015, 9, 21, 10),
         endDate: new Date(2015, 9, 21, 11),
         allDay: false,
@@ -518,7 +519,7 @@ QUnit.test("Each cell of grouped scheduler timeline day should contain rigth jQu
         }
     }, "data of 5th cell is rigth");
 
-    assert.deepEqual($cells.eq(10).data("dxCellData"), {
+    assert.deepEqual(dataUtils.data($cells.get(10), "dxCellData"), {
         startDate: new Date(2015, 9, 21, 15),
         endDate: new Date(2015, 9, 21, 16),
         allDay: false,
@@ -957,7 +958,7 @@ QUnit.test("Each cell of scheduler timeline month should contain rigth jQuery dx
     var $cells = this.instance.$element().find("." + CELL_CLASS);
 
     $cells.each(function(index) {
-        assert.deepEqual($(this).data("dxCellData"), {
+        assert.deepEqual(dataUtils.data($(this)[0], "dxCellData"), {
             startDate: new Date(2015, 3, 1 + index, 1),
             endDate: new Date(2015, 3, 1 + index, 10),
             allDay: false
@@ -983,7 +984,7 @@ QUnit.test("Cells should have right date", function(assert) {
     });
 
     var $cells = this.instance.$element().find("." + CELL_CLASS);
-    assert.deepEqual($cells.eq(25).data("dxCellData").startDate, new Date(2016, 3, 26, 8), "Date is OK");
+    assert.deepEqual(dataUtils.data($cells.get(25), "dxCellData").startDate, new Date(2016, 3, 26, 8), "Date is OK");
 });
 
 QUnit.test("Scrollables should be updated after currentDate changing", function(assert) {
@@ -1089,8 +1090,8 @@ QUnit.test("TimelineDay Day view cells have right cellData with view option inte
     this.instance.option("intervalCount", 2);
     this.instance.option("currentDate", new Date(2017, 5, 29));
 
-    var firstCellData = this.instance.$element().find(".dx-scheduler-date-table-cell").eq(0).data("dxCellData"),
-        secondCellData = this.instance.$element().find(".dx-scheduler-date-table-cell").eq(95).data("dxCellData");
+    var firstCellData = dataUtils.data(this.instance.$element().find(".dx-scheduler-date-table-cell").get(0), "dxCellData"),
+        secondCellData = dataUtils.data(this.instance.$element().find(".dx-scheduler-date-table-cell").get(95), "dxCellData");
 
     assert.deepEqual(firstCellData.startDate, new Date(2017, 5, 29, 0), "cell has right startDate");
     assert.deepEqual(firstCellData.endDate, new Date(2017, 5, 29, 0, 30), "cell has right endtDate");
@@ -1134,8 +1135,8 @@ QUnit.test("TimelineWeek view cells have right cellData with view option interva
     this.instance.option("intervalCount", 2);
     this.instance.option("currentDate", new Date(2017, 5, 29));
 
-    var firstCellData = this.instance.$element().find(".dx-scheduler-date-table-cell").eq(7 * 48).data("dxCellData"),
-        secondCellData = this.instance.$element().find(".dx-scheduler-date-table-cell").eq(2 * 7 * 48 - 1).data("dxCellData");
+    var firstCellData = dataUtils.data(this.instance.$element().find(".dx-scheduler-date-table-cell").get(7 * 48), "dxCellData"),
+        secondCellData = dataUtils.data(this.instance.$element().find(".dx-scheduler-date-table-cell").get(2 * 7 * 48 - 1), "dxCellData");
 
     assert.deepEqual(firstCellData.startDate, new Date(2017, 6, 2, 0), "cell has right startDate");
     assert.deepEqual(firstCellData.endDate, new Date(2017, 6, 2, 0, 30), "cell has right endtDate");
@@ -1207,8 +1208,8 @@ QUnit.test("TimelineWorkWeek view cells have right cellData with view option int
     this.instance.option("intervalCount", 2);
     this.instance.option("currentDate", new Date(2017, 5, 29));
 
-    var firstCellData = this.instance.$element().find(".dx-scheduler-date-table-cell").eq(5 * 48).data("dxCellData"),
-        secondCellData = this.instance.$element().find(".dx-scheduler-date-table-cell").eq(2 * 5 * 48 - 1).data("dxCellData");
+    var firstCellData = dataUtils.data(this.instance.$element().find(".dx-scheduler-date-table-cell").get(5 * 48), "dxCellData"),
+        secondCellData = dataUtils.data(this.instance.$element().find(".dx-scheduler-date-table-cell").get(2 * 5 * 48 - 1), "dxCellData");
 
     assert.deepEqual(firstCellData.startDate, new Date(2017, 6, 3, 0), "cell has right startDate");
     assert.deepEqual(firstCellData.endDate, new Date(2017, 6, 3, 0, 30), "cell has right endtDate");
@@ -1267,8 +1268,8 @@ QUnit.test("TimelineMonth view cells have right cellData with view option interv
     this.instance.option("intervalCount", 2);
     this.instance.option("currentDate", new Date(2017, 5, 29));
 
-    var firstCellData = this.instance.$element().find(".dx-scheduler-date-table-cell").eq(0).data("dxCellData"),
-        secondCellData = this.instance.$element().find(".dx-scheduler-date-table-cell").last().data("dxCellData");
+    var firstCellData = dataUtils.data(this.instance.$element().find(".dx-scheduler-date-table-cell").get(0), "dxCellData"),
+        secondCellData = dataUtils.data(this.instance.$element().find(".dx-scheduler-date-table-cell").last().get(0), "dxCellData");
 
     assert.deepEqual(firstCellData.startDate, new Date(2017, 5, 1, 0), "cell has right startDate");
     assert.deepEqual(firstCellData.endDate, new Date(2017, 5, 2, 0), "cell has right endtDate");

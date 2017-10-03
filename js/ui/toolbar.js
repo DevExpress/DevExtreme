@@ -55,7 +55,7 @@ var Toolbar = ToolbarBase.inherit({
             * @name dxToolbarOptions_submenuType
             * @publicName submenuType
             * @type string
-            * @default 'dxDropDownMenu'
+            * @default 'dropDownMenu'
             * @acceptValues 'actionSheet'|'listTop'|'listBottom'|'dropDownMenu'
             * @hidden
             */

@@ -1,6 +1,7 @@
 "use strict";
 
-var TemplateBase = require("./ui.template_base"),
+var $ = require("../../core/renderer"),
+    TemplateBase = require("./ui.template_base"),
     eventsEngine = require("../../events/core/events_engine"),
     removeEvent = require("../../core/remove_event"),
     iteratorUtils = require("../../core/utils/iterator"),
@@ -87,7 +88,7 @@ module.exports = TemplateBase.inherit({
     },
 
     _renderCore: function(options) {
-        var $container = options.container;
+        var $container = $(options.container);
 
         var dispose = watchChanges(options.model, this._watchMethod, this._fields, this._fieldsMap, function(data) {
             $container.empty();

@@ -59,7 +59,7 @@ QUnit.test("DropDown menu should be rendered with right class", function(assert)
     var $dropDownMenu = this.renderDropDownAppointmentsContainer();
 
     assert.ok($dropDownMenu.hasClass("dx-scheduler-dropdown-appointments"), "Container is rendered");
-    assert.ok($dropDownMenu.data("dxButton"), "Container is button");
+    assert.ok($dropDownMenu.dxButton("instance"), "Container is button");
     assert.ok($dropDownMenu.hasClass("dx-dropdownmenu"), "DropDown menu is initialized");
 });
 

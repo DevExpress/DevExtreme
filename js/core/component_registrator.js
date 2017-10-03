@@ -7,18 +7,18 @@ var publicComponentUtils = require("./utils/public_component");
 
 /**
  * @name registerComponent
- * @publicName registerComponent(name, class)
+ * @publicName registerComponent(name, componentClass)
  * @param1 name:string
- * @param2 class:object
+ * @param2 componentClass:object
  * @module core/component_registrator
  * @hidden
  */
 /**
  * @name registerComponent
- * @publicName registerComponent(name, namespace, class)
+ * @publicName registerComponent(name, namespace, componentClass)
  * @param1 name:string
  * @param2 namespace:object
- * @param3 class:object
+ * @param3 componentClass:object
  * @module core/component_registrator
  * @hidden
  */

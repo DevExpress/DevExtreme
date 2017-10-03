@@ -1,6 +1,7 @@
 "use strict";
 
-var config = require("./config"),
+var $ = require("./renderer"),
+    config = require("./config"),
     typeUtils = require("./utils/type"),
     each = require("./utils/iterator").each,
     Class = require("./class"),
@@ -169,7 +170,7 @@ var createValidatorByTargetElement = function(condition) {
         var args = e.args[0],
             element = args[e.validatingTargetName] || args.element;
 
-        if(element && condition(element)) {
+        if(element && condition($(element))) {
             e.cancel = true;
         }
     };

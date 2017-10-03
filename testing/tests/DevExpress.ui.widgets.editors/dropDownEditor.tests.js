@@ -9,6 +9,7 @@ var $ = require("jquery"),
     fx = require("animation/fx"),
     pointerMock = require("../../helpers/pointerMock.js"),
     keyboardMock = require("../../helpers/keyboardMock.js"),
+    isRenderer = require("core/utils/type").isRenderer,
     config = require("core/config");
 
 require("common.css!");
@@ -110,10 +111,10 @@ QUnit.test("content returned by _renderPopupContent must be rendered inside the 
     var content = $("<div>test</div>");
     var dropDownEditor = this.dropDownEditor;
     dropDownEditor._renderPopupContent = function() {
-        return content.appendTo(dropDownEditor._popup.content());
+        return content.appendTo(dropDownEditor._popup.$content());
     };
     dropDownEditor.open();
-    assert.strictEqual(dropDownEditor._$popup.dxPopup("content").find(content)[0], content[0]);
+    assert.strictEqual(dropDownEditor._$popup.dxPopup("$content").find(content)[0], content[0]);
 });
 
 QUnit.test("dropdown must close on outside click", function(assert) {
@@ -149,13 +150,13 @@ QUnit.test("option opened", function(assert) {
 
     var $popup = $(".dx-popup");
     var popup = $popup.dxPopup("instance");
-    popup.content().append("test");
+    popup.$content().append("test");
 
-    assert.ok(popup.content().is(":visible"), "popup is visible after opening");
+    assert.ok(popup.$content().is(":visible"), "popup is visible after opening");
 
     this.dropDownEditor.option("opened", false);
 
-    assert.ok(popup.content().is(":hidden"), "popup is hidden after closing");
+    assert.ok(popup.$content().is(":hidden"), "popup is hidden after closing");
 });
 
 QUnit.test("overlay get correct open and close", function(assert) {
@@ -338,15 +339,17 @@ QUnit.test("content method returning overlay content", function(assert) {
 
     dropDownEditor.open();
 
-    var $content = dropDownEditor.content();
+    var $content = $(dropDownEditor.content());
 
     assert.ok($content.hasClass("dx-popup-content"), "content has class dx-popup-content");
 });
 
 QUnit.test("field method returning overlay content", function(assert) {
     var dropDownEditor = this.dropDownEditor,
-        $field = dropDownEditor.field();
+        $field = $(dropDownEditor.field());
 
+    assert.equal(isRenderer(dropDownEditor.field()), config().useJQueryRenderer, "fieldElement is correct");
+    assert.ok($field.hasClass("dx-texteditor-input"), "field has class dx-texteditor-input");
     assert.ok($field.hasClass("dx-texteditor-input"), "field has class dx-texteditor-input");
 });
 
@@ -529,7 +532,7 @@ QUnit.test("Enter and escape key press does not prevent default when popup in no
 
 QUnit.test("Keyboard navigation with field template", function(assert) {
     this.dropDownEditor.option("fieldTemplate", function(data, container) {
-        container.append($("<div>").dxTextBox({ value: data }));
+        $(container).append($("<div>").dxTextBox({ value: data }));
     });
 
     this.$rootElement.find(".dx-texteditor-input").trigger($.Event("keydown", { which: 40, altKey: true }));
@@ -551,7 +554,7 @@ QUnit.testInActiveWindow("Focus policy with field template", function(assert) {
     }
 
     this.dropDownEditor.option("fieldTemplate", function(data, container) {
-        container.append($("<div>").dxTextBox({ value: data }));
+        $(container).append($("<div>").dxTextBox({ value: data }));
     });
 
     this.$rootElement.find(".dx-texteditor-input").focus();
@@ -765,11 +768,12 @@ QUnit.test("field template should be correctly removed after it is been applied 
             opened: true,
             value: [1],
             searchEnabled: true,
-            fieldTemplate: function(itemData, $container) {
+            fieldTemplate: function(itemData, container) {
                 var $textBox = $("<div>").dxTextBox(),
                     $field = $('<div>Test<div/>');
 
-                $container.append($field).append($textBox);
+                assert.equal(isRenderer(container), config().useJQueryRenderer, "container is correct");
+                $(container).append($field).append($textBox);
             }
         }).dxDropDownEditor("instance");
 

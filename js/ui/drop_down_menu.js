@@ -398,7 +398,7 @@ var DropDownMenu = Widget.inherit({
     },
 
     _renderList: function(instance) {
-        var $content = instance.content(),
+        var $content = instance.$content(),
             listConfig = this._listOptions();
 
         $content.addClass(DROP_DOWN_MENU_LIST_CLASS);

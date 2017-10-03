@@ -4,7 +4,8 @@ var $ = require("jquery"),
     devices = require("core/devices"),
     tooltip = require("ui/tooltip/ui.tooltip"),
     fx = require("animation/fx"),
-    keyboardMock = require("../../helpers/keyboardMock.js");
+    keyboardMock = require("../../helpers/keyboardMock.js"),
+    dataUtils = require("core/element_data");
 
 require("common.css!");
 require("generic_light.css!");
@@ -90,7 +91,7 @@ QUnit.test("Delete button should not be rendered in details tooltip", function(a
     });
 
     var $appointment = $(this.instance.$element().find(".dx-scheduler-appointment").first()),
-        itemData = $appointment.data("dxItemData");
+        itemData = dataUtils.data($appointment[0], "dxItemData");
 
     this.instance.showAppointmentTooltip(itemData, $appointment);
 
@@ -112,7 +113,7 @@ QUnit.test("Edit button should not be contain the 'pencil' icon", function(asser
 
     var $appointment = $(this.instance.$element().find(".dx-scheduler-appointment").first());
 
-    var itemData = $appointment.data("dxItemData");
+    var itemData = dataUtils.data($appointment[0], "dxItemData");
 
     this.instance.showAppointmentTooltip(itemData, $appointment);
 
@@ -354,7 +355,7 @@ QUnit.test("Edit button should not be contain the 'pencil' icon if editing.allow
     });
 
     var $appointment = $(this.instance.$element().find(".dx-scheduler-appointment").first()),
-        itemData = $appointment.data("dxItemData");
+        itemData = dataUtils.data($appointment[0], "dxItemData");
 
     this.instance.showAppointmentTooltip(itemData, $appointment);
 
@@ -381,7 +382,7 @@ QUnit.test("There is no need to check recurring appointment if editing.allowUpda
     });
 
     var $appointment = $(this.instance.$element().find(".dx-scheduler-appointment").first()),
-        itemData = $appointment.data("dxItemData");
+        itemData = dataUtils.data($appointment[0], "dxItemData");
 
     this.instance.showAppointmentTooltip(itemData, $appointment);
 
@@ -406,7 +407,7 @@ QUnit.test("Delete button should not exist if editing.allowUpdating is false", f
     });
 
     var $appointment = $(this.instance.$element().find(".dx-scheduler-appointment").first()),
-        itemData = $appointment.data("dxItemData");
+        itemData = dataUtils.data($appointment[0], "dxItemData");
 
     this.instance.showAppointmentTooltip(itemData, $appointment);
 

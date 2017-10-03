@@ -1,6 +1,7 @@
 "use strict";
 
 var $ = require("../../core/renderer"),
+    getPublicElement = require("../../core/utils/dom").getPublicElement,
     noop = require("../../core/utils/common").noop,
     each = require("../../core/utils/iterator").each,
     modules = require("./ui.grid_core.modules"),
@@ -50,7 +51,7 @@ var ContextMenuController = modules.ViewController.inherit({
                 rowOptions = $targetRowElement.data("options");
                 options = {
                     event: dxEvent,
-                    targetElement: $targetElement,
+                    targetElement: getPublicElement($targetElement),
                     target: viewName[this],
                     rowIndex: rowIndex,
                     row: view._getRows()[rowIndex],

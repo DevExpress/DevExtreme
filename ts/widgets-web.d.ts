@@ -137,6 +137,18 @@ declare module DevExpress.data {
 
         /** @docid PivotGridDataSourceOptions_fields_showValues */
         showValues?: boolean;
+
+        /** @docid PivotGridDataSourceOptions_fields_headerFilter */
+        headerFilter?: {
+            /** @docid PivotGridDataSourceOptions_fields_headerFilter_height */
+            height?: number;
+
+            /** @docid PivotGridDataSourceOptions_fields_headerFilter_width */
+            width?: number;
+
+            /** @docid PivotGridDataSourceOptions_fields_headerFilter_allowSearch */
+            allowSearch?: boolean;
+        };
     }
 
     export class SummaryCell {
@@ -1254,6 +1266,15 @@ declare module DevExpress.ui {
 
             /** @docid GridBaseOptions_columns_headerFilter_groupInterval */
             groupInterval?: any;
+
+            /** @docid GridBaseOptions_columns_headerFilter_allowSearch */
+            allowSearch?: boolean;
+
+            /** @docid GridBaseOptions_columns_headerFilter_height */
+            height?: number;
+
+            /** @docid GridBaseOptions_columns_headerFilter_width */
+            width?: number;
         };
     }
 
@@ -2026,8 +2047,8 @@ declare module DevExpress.ui {
             /** @docid GridBaseOptions_columnChooser_enabled */
             enabled?: boolean;
 
-            /** @docid GridBaseOptions_columnChooser_searchEnabled */
-            searchEnabled?: boolean;
+            /** @docid GridBaseOptions_columnChooser_allowSearch */
+            allowSearch?: boolean;
 
             /** @docid GridBaseOptions_columnChooser_mode */
             mode?: string;
@@ -2127,6 +2148,9 @@ declare module DevExpress.ui {
 
             /** @docid GridBaseOptions_headerFilter_width */
             width?: number;
+
+            /** @docid GridBaseOptions_headerFilter_allowSearch */
+            allowSearch?: boolean;
 
             /** @docid GridBaseOptions_headerFilter_texts */
             texts?: {
@@ -2629,8 +2653,8 @@ declare module DevExpress.ui {
             /** @docid dxPivotGridOptions_fieldChooser_enabled */
             enabled?: boolean;
 
-            /** @docid dxPivotGridOptions_fieldChooser_searchEnabled */
-            searchEnabled?: boolean;
+            /** @docid dxPivotGridOptions_fieldChooser_allowSearch */
+            allowSearch?: boolean;
 
             /** @docid dxPivotGridOptions_fieldChooser_layout */
             layout?: number;
@@ -2764,6 +2788,30 @@ declare module DevExpress.ui {
             /** @docid dxPivotGridOptions_stateStoring_type */
             type?: string;
         };
+
+        /** @docid dxPivotGridOptions_headerFilter */
+        headerFilter?: {
+            /** @docid dxPivotGridOptions_headerFilter_height */
+            height?: number;
+
+            /** @docid dxPivotGridOptions_headerFilter_width */
+            width?: number;
+
+            /** @docid dxPivotGridOptions_headerFilter_allowSearch */
+            allowSearch?: boolean;
+
+            /** @docid dxPivotGridOptions_headerFilter_texts */
+            texts?: {
+                /** @docid dxPivotGridOptions_headerFilter_texts_emptyValue */
+                emptyValue?: string;
+
+                /** @docid dxPivotGridOptions_headerFilter_texts_ok */
+                ok?: string;
+
+                /** @docid dxPivotGridOptions_headerFilter_texts_cancel */
+                cancel?: string;
+            }
+        };
     }
 
 
@@ -2801,8 +2849,8 @@ declare module DevExpress.ui {
         /** @docid dxPivotGridFieldChooserOptions_height*/
         height?: any;
 
-        /** @docid dxPivotGridFieldChooserOptions_searchEnabled*/
-        searchEnabled?: boolean;
+        /** @docid dxPivotGridFieldChooserOptions_allowSearch*/
+        allowSearch?: boolean;
 
         /** @docid dxPivotGridFieldChooserOptions_layout */
         layout?: number;
@@ -2828,6 +2876,30 @@ declare module DevExpress.ui {
             filterFields?: string;
             /** @docid dxPivotGridFieldChooserOptions_texts_allFields */
             allFields?: string;
+        };
+
+        /** @docid dxPivotGridFieldChooserOptions_headerFilter */
+        headerFilter?: {
+            /** @docid dxPivotGridFieldChooserOptions_headerFilter_height */
+            height?: number;
+
+            /** @docid dxPivotGridFieldChooserOptions_headerFilter_width */
+            width?: number;
+
+            /** @docid dxPivotGridFieldChooserOptions_headerFilter_allowSearch */
+            allowSearch?: boolean;
+
+            /** @docid dxPivotGridFieldChooserOptions_headerFilter_texts */
+            texts?: {
+                /** @docid dxPivotGridFieldChooserOptions_headerFilter_texts_emptyValue */
+                emptyValue?: string;
+
+                /** @docid dxPivotGridFieldChooserOptions_headerFilter_texts_ok */
+                ok?: string;
+
+                /** @docid dxPivotGridFieldChooserOptions_headerFilter_texts_cancel */
+                cancel?: string;
+            };
         };
     }
 

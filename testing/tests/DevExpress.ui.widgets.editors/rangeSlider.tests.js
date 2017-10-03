@@ -69,7 +69,7 @@ QUnit.test("render value", function(assert) {
         useInkRipple: false
     });
 
-    var slider = el.data("dxRangeSlider");
+    var slider = el.dxRangeSlider("instance");
 
     var handleStart = el.find("." + SLIDER_HANDLE_CLASS).eq(0),
         handleEnd = el.find("." + SLIDER_HANDLE_CLASS).eq(1),
@@ -144,7 +144,7 @@ QUnit.test("design mode", function(assert) {
             useInkRipple: false
         }).css("width", 500);
 
-        var instance = el.data("dxRangeSlider");
+        var instance = el.dxRangeSlider("instance");
 
         el.click({
             offsetX: 124
@@ -797,7 +797,7 @@ QUnit.module("regressions", {
         this.leftHandle = handles.eq(0);
         this.rightHandle = handles.eq(1);
         this.range = this.element.find("." + SLIDER_RANGE_CLASS);
-        this.instance = this.element.data("dxRangeSlider");
+        this.instance = this.element.dxRangeSlider("instance");
 
     },
     afterEach: function() {
@@ -1149,7 +1149,7 @@ QUnit.test("render value", function(assert) {
         useInkRipple: false
     });
 
-    var slider = $element.data("dxRangeSlider");
+    var slider = $element.dxRangeSlider("instance");
 
     var $handleStart = $element.find("." + SLIDER_HANDLE_CLASS).eq(0),
         $handleEnd = $element.find("." + SLIDER_HANDLE_CLASS).eq(1),

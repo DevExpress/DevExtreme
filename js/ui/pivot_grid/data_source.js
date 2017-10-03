@@ -959,6 +959,29 @@ module.exports = Class.inherit((function() {
             * @type boolean
             * @default undefined
             */
+            /**
+            * @name PivotGridDataSourceOptions_fields_headerFilter
+            * @publicName headerFilter
+            * @type object
+            */
+            /**
+            * @name PivotGridDataSourceOptions_fields_headerFilter_width
+            * @publicName width
+            * @type number
+            * @default undefined
+            */
+            /**
+            * @name PivotGridDataSourceOptions_fields_headerFilter_height
+            * @publicName height
+            * @type number
+            * @default undefined
+            */
+            /**
+            * @name PivotGridDataSourceOptions_fields_headerFilter_allowSearch
+            * @publicName allowSearch
+            * @type boolean
+            * @default undefined
+            */
 
             that._descriptions = options.descriptions ? extend(that._createDescriptions(), options.descriptions) : undefined;
 

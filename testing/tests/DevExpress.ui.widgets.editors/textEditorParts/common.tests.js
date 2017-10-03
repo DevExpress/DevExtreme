@@ -29,7 +29,7 @@ var moduleConfig = {
     beforeEach: function() {
         this.element = $("#texteditor").dxTextEditor({});
         this.input = this.element.find("." + INPUT_CLASS);
-        this.instance = this.element.data("dxTextEditor");
+        this.instance = this.element.dxTextEditor("instance");
         this.keyboard = keyboardMock(this.input);
         this.clock = sinon.useFakeTimers();
     },
@@ -149,7 +149,7 @@ QUnit.test("render placeholder", function(assert) {
     var element = $("#texteditor").dxTextEditor({
             placeholder: "enter value"
         }),
-        instance = element.data("dxTextEditor"),
+        instance = element.dxTextEditor("instance"),
         input = element.find("input"),
         $placeholderDiv = element.find("." + PLACEHOLDER_CLASS);
 
@@ -783,21 +783,21 @@ QUnit.test("events work when relevant actions is not set", function(assert) {
 
     textBox.on("keyDown", function(e) {
         assert.equal(e.component, textBox, "event has link on component");
-        assert.equal(e.element.get(0), textBox.$element().get(0), "event has link on element");
+        assert.equal($(e.element).get(0), textBox.$element().get(0), "event has link on element");
         assert.equal(e.event.type, "keydown", "event has related Event");
         assert.ok(true, "keyDown was fired");
     });
 
     textBox.on("keyPress", function(e) {
         assert.equal(e.component, textBox, "event has link on component");
-        assert.equal(e.element.get(0), textBox.$element().get(0), "event has link on element");
+        assert.equal($(e.element).get(0), textBox.$element().get(0), "event has link on element");
         assert.equal(e.event.type, "keypress", "event has related Event");
         assert.ok(true, "keyPress was fired");
     });
 
     textBox.on("keyUp", function(e) {
         assert.equal(e.component, textBox, "event has link on component");
-        assert.equal(e.element.get(0), textBox.$element().get(0), "event has link on element");
+        assert.equal($(e.element).get(0), textBox.$element().get(0), "event has link on element");
         assert.equal(e.event.type, "keyup", "event has related Event");
         assert.ok(true, "keyUp was fired");
     });
@@ -906,7 +906,7 @@ QUnit.test("Enter key event raising (B238135)", function(assert) {
 
     $("#texteditor").dxTextEditor({
         onEnterKey: handler
-    }).data("dxTextEditor");
+    }).dxTextEditor("instance");
 
     $("#texteditor input").trigger($.Event("keyup", { which: 13 }));
 
@@ -915,7 +915,7 @@ QUnit.test("Enter key event raising (B238135)", function(assert) {
 });
 
 QUnit.test("Enter key event changing handler (B238135)", function(assert) {
-    var instance = $("#texteditor").dxTextEditor({}).data("dxTextEditor");
+    var instance = $("#texteditor").dxTextEditor({}).dxTextEditor("instance");
     var once = true;
 
     instance.option("onEnterKey", function(e) {

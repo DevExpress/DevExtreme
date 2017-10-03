@@ -95,7 +95,7 @@ var config = DevExpress.config = require("../../core/config");
  * @publicName rtlEnabled
  * @type boolean
  * @default false
- * @deprecated #config
+ * @deprecated config
  */
 
 Object.defineProperty(DevExpress, 'rtlEnabled', {
@@ -123,7 +123,8 @@ DevExpress.fx = require("../../animation/fx");
 DevExpress.TransitionExecutor = require("../../animation/transition_executor/transition_executor").TransitionExecutor;
 DevExpress.AnimationPresetCollection = require("../../animation/presets/presets").PresetCollection;
 
-module.exports = DevExpress.events = {};
+DevExpress.events = require("../../events");
+
 DevExpress.events.click = require("../../events/click");
 DevExpress.events.utils = require("../../events/utils");
 DevExpress.events.GestureEmitter = require("../../events/gesture/emitter.gesture");

@@ -4,6 +4,7 @@ var $ = require("../../core/renderer"),
     eventsEngine = require("../../events/core/events_engine"),
     registerComponent = require("../../core/component_registrator"),
     commonUtils = require("../../core/utils/common"),
+    getPublicElement = require("../../core/utils/dom").getPublicElement,
     each = require("../../core/utils/iterator").each,
     typeUtils = require("../../core/utils/type"),
     extend = require("../../core/utils/extend").extend,
@@ -485,7 +486,7 @@ var Menu = MenuBase.inherit({
 
         this._overlay = this._createComponent($("<div>"), Overlay, this._getAdaptiveOverlayOptions());
 
-        this._overlay.content()
+        this._overlay.$content()
             .append(this._treeView.$element())
             .addClass(DX_ADAPTIVE_MODE_CLASS)
             .addClass(this.option("cssClass"));
@@ -681,7 +682,7 @@ var Menu = MenuBase.inherit({
         var $border = $rootItem.children("." + DX_CONTEXT_MENU_CONTAINER_BORDER_CLASS);
 
         this._actions.onSubmenuShowing({
-            rootItem: $rootItem,
+            rootItem: getPublicElement($rootItem),
             submenu: submenu
         });
 
@@ -692,7 +693,7 @@ var Menu = MenuBase.inherit({
 
     _submenuOnShownHandler: function($rootItem, submenu) {
         this._actions.onSubmenuShown({
-            rootItem: $rootItem,
+            rootItem: getPublicElement($rootItem),
             submenu: submenu
         });
     },
@@ -701,7 +702,7 @@ var Menu = MenuBase.inherit({
         var $border = $rootItem.children("." + DX_CONTEXT_MENU_CONTAINER_BORDER_CLASS),
             args = eventArgs;
 
-        args.rootItem = $rootItem;
+        args.rootItem = getPublicElement($rootItem);
         args.submenu = submenu;
 
         this._actions.onSubmenuHiding(args);
@@ -716,7 +717,7 @@ var Menu = MenuBase.inherit({
 
     _submenuOnHiddenHandler: function($rootItem, submenu) {
         this._actions.onSubmenuHidden({
-            rootItem: $rootItem,
+            rootItem: getPublicElement($rootItem),
             submenu: submenu
         });
     },
@@ -937,7 +938,8 @@ var Menu = MenuBase.inherit({
             return;
         }
 
-        currentSubmenu = this._getSubmenuByElement(args.itemElement, args.itemData);
+        var $itemElement = $(args.itemElement);
+        currentSubmenu = this._getSubmenuByElement($itemElement, args.itemData);
 
         this._updateSelectedItemOnClick(actionArgs);
 
@@ -955,7 +957,7 @@ var Menu = MenuBase.inherit({
         }
 
         if(!currentSubmenu.isOverlayVisible()) {
-            this._showSubmenu(args.itemElement);
+            this._showSubmenu($itemElement);
             return;
         }
 
