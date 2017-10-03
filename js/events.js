@@ -156,8 +156,8 @@ exports.triggerHandler = eventsEngine.triggerHandler;
 */
 
 /**
-* @name eventToRename
-* @publicName eventToRename
+* @name event
+* @publicName event
 * @type dxEvent|jQery.Event
 * @return dxEvent
 */
@@ -168,7 +168,7 @@ exports.triggerHandler = eventsEngine.triggerHandler;
 * @type function
 * @param1 source:string|event
 * @param2 config:object
-* @return eventToRename
+* @return event
 * @module events
 * @export Event
 */
