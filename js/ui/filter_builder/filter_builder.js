@@ -1,7 +1,6 @@
 "use strict";
 
 var $ = require("../../core/renderer"),
-    Class = require("../../core/class"),
     eventsEngine = require("../../events/core/events_engine"),
     Widget = require("../widget/ui.widget"),
     registerComponent = require("../../core/component_registrator"),
@@ -30,33 +29,6 @@ var FILTER_BUILDER_CLASS = "dx-filterbuilder",
     ACTIONS = [
         "onEditorPreparing", "onEditorPrepared"
     ];
-
-var EditorFactory = Class.inherit(EditorFactoryMixin).inherit({
-    _createComponent: function() {
-        return this._component._createComponent.apply(this._component, arguments);
-    },
-
-    ctor: function(component) {
-        var that = this;
-
-        that._component = component;
-        that._actions = {};
-
-        ACTIONS.forEach(function(action) {
-            that._actions[action] = component._createActionByOption(action, { excludeValidators: ["designMode", "disabled", "readOnly"], category: "rendering" });
-        });
-    },
-
-    executeAction: function(actionName, options) {
-        var action = this._actions[actionName];
-
-        return action && action(options);
-    },
-
-    option: function() {
-        return this._component.option.apply(this._component, arguments);
-    }
-});
 
 var FilterBuilder = Widget.inherit({
     _getDefaultOptions: function() {
@@ -140,12 +112,24 @@ var FilterBuilder = Widget.inherit({
     },
 
     _init: function() {
-        this._initEditorFactory();
+        this._initActions();
         this.callBase();
     },
 
-    _initEditorFactory: function() {
-        this._editorFactory = new EditorFactory(this);
+    _initActions: function() {
+        var that = this;
+
+        that._actions = {};
+
+        ACTIONS.forEach(function(action) {
+            that._actions[action] = that._createActionByOption(action, { excludeValidators: ["designMode", "disabled", "readOnly"], category: "rendering" });
+        });
+    },
+
+    executeAction: function(actionName, options) {
+        var action = this._actions[actionName];
+
+        return action && action(options);
     },
 
     _render: function() {
@@ -428,7 +412,7 @@ var FilterBuilder = Widget.inherit({
     _createValueEditor: function(value, field, setValueHandler) {
         var $editor = $("<div>").attr("tabindex", 0);
         // TODO: it have to be in shared file
-        this._editorFactory.createEditor($editor, extend({}, field, {
+        this.createEditor($editor, extend({}, field, {
             value: value,
             parentType: "filterRow",
             setValue: setValueHandler,
@@ -457,7 +441,7 @@ var FilterBuilder = Widget.inherit({
             }
         });
     }
-});
+}).include(EditorFactoryMixin);
 
 registerComponent("dxFilterBuilder", FilterBuilder);
 

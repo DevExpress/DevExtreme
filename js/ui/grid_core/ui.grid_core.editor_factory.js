@@ -216,7 +216,7 @@ var EditorFactory = modules.ViewController.inherit({
         clearTimeout(this._updateFocusTimeoutID);
         eventsEngine.off(document, UPDATE_FOCUS_EVENTS, this._updateFocusHandler);
     }
-}).inherit(EditorFactoryMixin);
+}).include(EditorFactoryMixin);
 
 module.exports = {
     defaultOptions: function() {
