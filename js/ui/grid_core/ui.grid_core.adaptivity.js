@@ -352,11 +352,12 @@ var AdaptiveColumnsController = modules.ViewController.inherit({
 
         if(view && view.isVisible() && column) {
             rowsCount = view.getRowsCount();
+            var $rowElements = view._getRowElements();
             for(rowIndex = 0; rowIndex < rowsCount; rowIndex++) {
                 if(rowIndex !== editFormRowIndex || viewName !== ROWS_VIEW) {
                     currentVisibleIndex = viewName === COLUMN_HEADERS_VIEW ? this._columnsController.getVisibleIndex(column.index, rowIndex) : visibleIndex;
                     if(currentVisibleIndex >= 0) {
-                        $cellElement = view.getCellElements(rowIndex).eq(currentVisibleIndex);
+                        $cellElement = $rowElements.eq(rowIndex).children().eq(currentVisibleIndex);
                         this._isCellValid($cellElement) && $cellElement.addClass(cssClassName);
                     }
                 }
