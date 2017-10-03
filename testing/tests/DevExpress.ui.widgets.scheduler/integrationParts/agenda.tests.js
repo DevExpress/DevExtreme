@@ -22,7 +22,7 @@ QUnit.module("Integration: Agenda", {
     beforeEach: function() {
         fx.off = true;
         this.createInstance = function(options) {
-            this.instance = $("#scheduler").dxScheduler(options).dxScheduler("instance");
+            this.instance = $("#scheduler").dxScheduler($.extend(options, { height: 600 })).dxScheduler("instance");
         };
         this.clock = sinon.useFakeTimers();
     },

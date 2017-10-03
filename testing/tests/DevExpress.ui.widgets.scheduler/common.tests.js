@@ -2085,6 +2085,7 @@ QUnit.testStart(function() {
                 }],
             }),
             views: ["month"],
+            maxAppointmentsPerCell: null,
             currentView: "month",
             onAppointmentRendered: function(args) {
                 assert.equal($(args.appointmentElement).find(".dx-scheduler-appointment-reduced-icon").length, 1, "Appointment reduced icon is applied");
@@ -2128,6 +2129,7 @@ QUnit.testStart(function() {
                 }],
             }),
             views: ["month"],
+            maxAppointmentsPerCell: null,
             currentView: "month",
             onAppointmentRendered: function(args) {
                 assert.ok(true, "Appointment was rendered");
@@ -2228,6 +2230,7 @@ QUnit.testStart(function() {
             }),
             views: ["month"],
             currentView: "month",
+            maxAppointmentsPerCell: null,
             currentDate: new Date(2015, 2, 9),
             onAppointmentClick: function(e) {
                 assert.deepEqual(isRenderer(e.appointmentElement), config().useJQueryRenderer, "appointmentElement is correct");

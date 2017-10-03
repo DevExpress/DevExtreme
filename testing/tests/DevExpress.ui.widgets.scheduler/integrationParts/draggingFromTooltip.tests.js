@@ -31,7 +31,7 @@ QUnit.module("Integration: Dragging from Tooltip", {
         this.createInstance = function(options) {
             this.instance = $("#scheduler").dxScheduler($.extend(options, {
                 editing: true,
-                height: 500,
+                height: 600,
                 views: ["month"],
                 currentView: "month",
                 dataSource: this.tasks,
