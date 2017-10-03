@@ -1803,7 +1803,7 @@ QUnit.test("css classes from overlay should be duplicated to wrapper", function(
     var instance = $("#overlayWithClass").dxOverlay({
             visible: true
         }).dxOverlay("instance"),
-        $wrapper = $(instance.content().closest(toSelector(OVERLAY_WRAPPER_CLASS)));
+        $wrapper = $(instance.$content().closest(toSelector(OVERLAY_WRAPPER_CLASS)));
     assert.ok($wrapper.hasClass("something"), "class added to wrapper");
     assert.ok($wrapper.hasClass("another"), "another class added to wrapper");
     assert.ok($wrapper.hasClass(OVERLAY_WRAPPER_CLASS), "classes does not removed from wrapper");
@@ -2348,7 +2348,7 @@ QUnit.test("overlay can be dragged out of target if viewport and container is no
                 visible: true
             }),
             overlay = $overlay.dxOverlay("instance"),
-            $overlayContent = $(overlay.content()),
+            $overlayContent = overlay.$content(),
             pointer = pointerMock($overlayContent);
 
         $(".dx-viewport").attr("style", "width: 100px; height: 100px");
