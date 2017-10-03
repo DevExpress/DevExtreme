@@ -70,8 +70,6 @@ var COMPONENT_CLASS = "dx-scheduler-work-space",
     SCHEDULER_SIDEBAR_SCROLLABLE_CLASS = "dx-scheduler-sidebar-scrollable",
     SCHEDULER_DATE_TABLE_SCROLLABLE_CLASS = "dx-scheduler-date-table-scrollable",
 
-    SCHEDULER_DATE_TIME_INDICATOR_CLASS = "dx-scheduler-date-time-indicator",
-
     SCHEDULER_WORKSPACE_DXPOINTERDOWN_EVENT_NAME = eventUtils.addNamespace(pointerEvents.down, "dxSchedulerWorkSpace"),
 
     SCHEDULER_CELL_DXDRAGENTER_EVENT_NAME = eventUtils.addNamespace(dragEvents.enter, "dxSchedulerDateTable"),
@@ -386,23 +384,16 @@ var SchedulerWorkSpace = Widget.inherit({
             case "currentDate":
             case "groups":
             case "startDate":
-            case "showCurrentTimeIndicator":
-            case "indicatorTime":
                 this._cleanWorkSpace();
-                break;
-            case "indicatorUpdateInterval":
-                this._setIndicationUpdateInterval();
                 break;
             case "showAllDayPanel":
                 this._toggleAllDayVisibility();
-                this._refreshDateTimeIndication();
                 break;
             case "allDayExpanded":
                 this._changeAllDayVisibility();
                 this.notifyObserver("allDayPanelToggled");
                 this._attachTablesEvents();
                 this.headerPanelOffsetRecalculate();
-                this._refreshDateTimeIndication();
                 break;
             case "onCellClick":
                 this._createCellClickAction();
@@ -414,10 +405,6 @@ var SchedulerWorkSpace = Widget.inherit({
             case "crossScrollingEnabled":
                 this._toggleHorizontalScrollClass();
                 this._dateTableScrollable.option(this._dateTableScrollableConfig());
-                this._refreshDateTimeIndication();
-                break;
-            case "shadeUntilNow":
-                this._refreshDateTimeIndication();
                 break;
             case "width":
                 this.callBase(args);
@@ -717,8 +704,6 @@ var SchedulerWorkSpace = Widget.inherit({
         this.headerPanelOffsetRecalculate();
         this._cleanCellDataCache();
         this._cleanAllowedPositions();
-
-        this._refreshDateTimeIndication();
     },
 
     _getElementClass: noop,
@@ -1383,15 +1368,10 @@ var SchedulerWorkSpace = Widget.inherit({
         this._$thead.empty();
         this._$dateTable.empty();
         this._shader && this._shader.clean();
-        this._cleanDateTimeIndicator();
         this._$timePanel.empty();
         this._$allDayTable.empty();
         delete this._hiddenInterval;
         delete this._interval;
-    },
-
-    _cleanDateTimeIndicator: function() {
-        this.$element().find("." + SCHEDULER_DATE_TIME_INDICATOR_CLASS).remove();
     },
 
     getWorkArea: function() {

@@ -4,6 +4,7 @@ var $ = require("../../core/renderer"),
     SchedulerWorkSpace = require("./ui.scheduler.work_space"),
     registerComponent = require("../../core/component_registrator"),
     dateUtils = require("../../core/utils/date"),
+    extend = require("../../core/utils/extend").extend,
     toMs = dateUtils.dateToMilliseconds;
 
 var SCHEDULER_DATE_TIME_INDICATOR_CLASS = "dx-scheduler-date-time-indicator",
@@ -165,6 +166,61 @@ var SchedulerWorkSpaceIndicator = SchedulerWorkSpace.inherit({
         } else {
             return cellClass;
         }
+    },
+
+    _cleanView: function() {
+        this.callBase();
+
+        this._cleanDateTimeIndicator();
+    },
+
+    _dimensionChanged: function() {
+        this.callBase();
+
+        this._refreshDateTimeIndication();
+    },
+
+    _cleanDateTimeIndicator: function() {
+        this.$element().find("." + SCHEDULER_DATE_TIME_INDICATOR_CLASS).remove();
+    },
+
+    _optionChanged: function(args) {
+
+        switch(args.name) {
+            case "showCurrentTimeIndicator":
+            case "indicatorTime":
+                this._cleanWorkSpace();
+                break;
+            case "indicatorUpdateInterval":
+                this._setIndicationUpdateInterval();
+                break;
+            case "showAllDayPanel":
+                this.callBase(args);
+                this._refreshDateTimeIndication();
+                break;
+            case "allDayExpanded":
+                this.callBase(args);
+                this._refreshDateTimeIndication();
+                break;
+            case "crossScrollingEnabled":
+                this.callBase(args);
+                this._refreshDateTimeIndication();
+                break;
+            case "shadeUntilNow":
+                this._refreshDateTimeIndication();
+                break;
+            default:
+                this.callBase(args);
+        }
+    },
+
+    _getDefaultOptions: function() {
+        return extend(this.callBase(), {
+            showCurrentTimeIndicator: true,
+            indicatorTime: new Date(),
+            indicatorUpdateInterval: 5 * toMs("minute"),
+            shadeUntilNow: true
+        });
     },
 });
 
