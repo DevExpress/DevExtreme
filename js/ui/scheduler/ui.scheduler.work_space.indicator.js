@@ -70,7 +70,7 @@ var SchedulerWorkSpaceIndicator = SchedulerWorkSpace.inherit({
 
         this._indicatorInterval = setInterval(function() {
             this._refreshDateTimeIndication();
-        }, this.option("indicatorUpdateInterval")).bind(this);
+        }.bind(this), this.option("indicatorUpdateInterval"));
     },
 
     _clearIndicatorUpdateInterval: function() {
@@ -221,7 +221,7 @@ var SchedulerWorkSpaceIndicator = SchedulerWorkSpace.inherit({
             indicatorUpdateInterval: 5 * toMs("minute"),
             shadeUntilNow: true
         });
-    },
+    }
 });
 
 registerComponent("dxSchedulerWorkSpace", SchedulerWorkSpaceIndicator);

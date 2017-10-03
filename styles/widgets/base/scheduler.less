@@ -75,7 +75,12 @@
 @SCHEDULER_SMALL_FONT_SIZE: 14px;
 
 @SCHEDULER_TIME_INDICATOR_FONT_SIZE: 30px;
+@SCHEDULER_TIME_INDICATOR_SIZE: 1px;
+@SCHEDULER_TIME_INDICATOR_TOP: -15px;
+@SCHEDULER_TIME_INDICATOR_LEFT: -12px;
 @SCHEDULER_TIME_INDICATOR_SHADOW: 0 1px 0 0px @SCHEDULER_BASE_BORDER_COLOR;
+@SCHEDULER_TIME_INDICATOR_TEXT_SHADOW: @SCHEDULER_WORKSPACE_BACKGROUND_COLOR 1px -1px 3px;
+@SCHEDULER_HEADER_PANEL_CURRENT_TIME_BOX_SHADOW: inset 0px -2px 0px 0px @SCHEDULER_APPOINTMENT_BASE_COLOR;
 
 .dx-scheduler-pseudo-cell {
     &:before {
@@ -446,7 +451,7 @@
 }
 
 .dx-scheduler-header-panel-cell.dx-scheduler-header-panel-current-time-cell {
-    box-shadow: inset 0px -2px 0px 0px @SCHEDULER_APPOINTMENT_BASE_COLOR;
+    .box-shadow(@SCHEDULER_HEADER_PANEL_CURRENT_TIME_BOX_SHADOW);
     color: @SCHEDULER_APPOINTMENT_BASE_COLOR;
 }
 
@@ -461,16 +466,16 @@
 .dx-scheduler-date-time-indicator {
         background-color:  @SCHEDULER_APPOINTMENT_BASE_COLOR;
         position: absolute;
-        box-shadow: @SCHEDULER_TIME_INDICATOR_SHADOW;
+        .box-shadow(@SCHEDULER_TIME_INDICATOR_SHADOW);
 
         &:before {
             font-size: @SCHEDULER_TIME_INDICATOR_FONT_SIZE;
             color: @SCHEDULER_APPOINTMENT_BASE_COLOR;
-            text-shadow: @SCHEDULER_WORKSPACE_BACKGROUND_COLOR 1px -1px 3px;
             position: absolute;
             z-index: 1000;
-            margin-top: -15px;
-            margin-left: -12px;
+            margin-top: @SCHEDULER_TIME_INDICATOR_TOP;
+            margin-left: @SCHEDULER_TIME_INDICATOR_LEFT;
+            .text-shadow(@SCHEDULER_TIME_INDICATOR_TEXT_SHADOW);
         }
 }
 
@@ -479,7 +484,7 @@
 .dx-scheduler-work-space-day {
     .dx-scheduler-date-time-indicator {
         margin-left: @SCHEDULER_LEFT_COLUMN_WIDTH;
-        height: 1px;
+        height: @SCHEDULER_TIME_INDICATOR_SIZE;
         .dx-icon-spinright;
     }
 
@@ -520,13 +525,13 @@
 
 .dx-scheduler-timeline {
     .dx-scheduler-date-time-indicator {
-        width: 1px;
+        width: @SCHEDULER_TIME_INDICATOR_SIZE;
         top: 0;
         .dx-icon-spindown;
 
         &:before {
-            margin-left: -15px;
-            margin-top: -12px;
+            margin-left: @SCHEDULER_TIME_INDICATOR_TOP;
+            margin-top: @SCHEDULER_TIME_INDICATOR_LEFT;
         }
     }
     .dx-scheduler-date-time-shader{
@@ -546,7 +551,7 @@
 
     .dx-scheduler-header-panel-cell.dx-scheduler-header-panel-current-time-cell {
         border-bottom: 2px solid @SCHEDULER_APPOINTMENT_BASE_COLOR;
-        box-shadow: none;
+        .box-shadow(none);
     }
 }
 
