@@ -14,7 +14,9 @@ var $ = require("jquery"),
     CustomStore = require("data/custom_store"),
     Query = require("data/query"),
     fx = require("animation/fx"),
-    dataUtils = require("core/element_data");
+    dataUtils = require("core/element_data"),
+    isRenderer = require("core/utils/type").isRenderer,
+    config = require("core/config");
 
 require("common.css!");
 require("generic_light.css!");
@@ -2026,7 +2028,9 @@ QUnit.test("Placeholder should be rendered if fieldTemplate defined with 'input'
 
     var $element = $("#lookupWithFieldTemplate").dxLookup({
         fieldTemplate: function(data, element) {
-            element.append($("<div>").dxTextBox({}));
+            assert.equal(isRenderer(element), config().useJQueryRenderer, "element is correct");
+
+            $(element).append($("<div>").dxTextBox({}));
         },
         placeholder: placeholderText
     });

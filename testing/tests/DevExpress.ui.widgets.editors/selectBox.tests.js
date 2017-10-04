@@ -9,7 +9,9 @@ var $ = require("jquery"),
     DataSource = require("data/data_source/data_source").DataSource,
     ArrayStore = require("data/array_store"),
     CustomStore = require("data/custom_store"),
-    fx = require("animation/fx");
+    fx = require("animation/fx"),
+    isRenderer = require("core/utils/type").isRenderer,
+    config = require("core/config");
 
 require("common.css!");
 require("generic_light.css!");
@@ -1086,7 +1088,9 @@ QUnit.test("the 'fieldTemplate' function should be called only once on init and 
     var callCount = 0;
     var instance = $("#selectBoxWithItemTemplate").dxSelectBox({
         items: [1, 2],
-        fieldTemplate: function() {
+        fieldTemplate: function(value, element) {
+            assert.equal(isRenderer(element), config().useJQueryRenderer, "element is correct");
+
             callCount++;
             return $("<div>").dxTextBox();
         }

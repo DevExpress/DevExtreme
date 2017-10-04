@@ -4,6 +4,7 @@ var $ = require("../core/renderer"),
     eventsEngine = require("../events/core/events_engine"),
     support = require("../core/utils/support"),
     commonUtils = require("../core/utils/common"),
+    domUtils = require("../core/utils/dom"),
     typeUtils = require("../core/utils/type"),
     each = require("../core/utils/iterator").each,
     extend = require("../core/utils/extend").extend,
@@ -767,7 +768,7 @@ var Lookup = DropDownList.inherit({
         var data = this._fieldRenderData();
         template.render({
             model: data,
-            container: this._$field
+            container: domUtils.getPublicElement(this._$field)
         });
     },
 
