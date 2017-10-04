@@ -523,10 +523,10 @@ var BaseRenderingStrategy = Class.inherit({
 
     getAppointmentDataCalculator: noop,
 
-    _customizeCoordinates: function(coordinates, ratio, appointmentCountPerCell, topOffset, maxHeight, isAllDay) {
+    _customizeCoordinates: function(coordinates, height, appointmentCountPerCell, topOffset, isAllDay) {
         var index = coordinates.index,
-            height = ratio * maxHeight / appointmentCountPerCell,
-            appointmentTop = coordinates.top + (index * height),
+            appointmentHeight = height / appointmentCountPerCell,
+            appointmentTop = coordinates.top + (index * appointmentHeight),
             top = appointmentTop + topOffset,
             width = coordinates.width,
             left = coordinates.left,
@@ -538,14 +538,14 @@ var BaseRenderingStrategy = Class.inherit({
             compactAppointmentDefaultOffset = this.getCompactAppointmentDefaultOffset();
             top = coordinates.top + compactAppointmentDefaultOffset;
             left = coordinates.left + (index - appointmentCountPerCell) * (compactAppointmentDefaultSize + compactAppointmentDefaultOffset) + compactAppointmentDefaultOffset;
-            height = compactAppointmentDefaultSize;
+            appointmentHeight = compactAppointmentDefaultSize;
             width = compactAppointmentDefaultSize;
 
             this._markAppointmentAsVirtual(coordinates, isAllDay);
         }
 
         return {
-            height: height,
+            height: appointmentHeight,
             width: width,
             top: top,
             left: left
@@ -574,9 +574,8 @@ var BaseRenderingStrategy = Class.inherit({
         }
 
         return {
-            ratio: ratio,
+            height: ratio * maxHeight,
             appointmentCountPerCell: appointmentCountPerCell,
-            maxHeight: maxHeight,
             offset: topOffset
         };
     },

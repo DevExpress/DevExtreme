@@ -104,7 +104,7 @@ var HorizontalMonthRenderingStrategy = HorizontalMonthLineAppointmentsStrategy.i
     _customizeAppointmentGeometry: function(coordinates) {
         var config = this._calculateGeometryConfig(coordinates);
 
-        return this._customizeCoordinates(coordinates, config.ratio, config.appointmentCountPerCell, config.offset, config.maxHeight);
+        return this._customizeCoordinates(coordinates, config.height, config.appointmentCountPerCell, config.offset);
     },
 
     _getAppointmentCount: function() {

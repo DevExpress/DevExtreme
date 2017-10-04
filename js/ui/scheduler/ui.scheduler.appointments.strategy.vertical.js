@@ -221,7 +221,7 @@ var VerticalRenderingStrategy = BaseAppointmentsStrategy.inherit({
     _getAllDayAppointmentGeometry: function(coordinates) {
         var config = this._calculateGeometryConfig(coordinates);
 
-        return this._customizeCoordinates(coordinates, config.ratio, config.appointmentCountPerCell, config.offset, config.maxHeight, true);
+        return this._customizeCoordinates(coordinates, config.height, config.appointmentCountPerCell, config.offset, true);
     },
 
     _calculateGeometryConfig: function(coordinates) {
