@@ -6,6 +6,7 @@ var $ = require("../core/renderer"),
     clickEvent = require("../events/click"),
     devices = require("../core/devices"),
     extend = require("../core/utils/extend").extend,
+    getPublicElement = require("core/utils/dom").getPublicElement,
     iteratorUtils = require("../core/utils/iterator"),
     isPlainObject = require("../core/utils/type").isPlainObject,
     registerComponent = require("../core/component_registrator"),
@@ -284,7 +285,7 @@ var Accordion = CollectionWidget.inherit({
 
         deferred.done(this.callBase.bind(this, extend({}, args, {
             contentClass: ACCORDION_ITEM_BODY_CLASS,
-            container: $("<div>").appendTo($(itemTitle).parent())
+            container: getPublicElement($("<div>").appendTo($(itemTitle).parent()))
         })));
     },
 
