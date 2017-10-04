@@ -1027,7 +1027,7 @@ var DraggingHeaderViewController = modules.ViewController.inherit({
                     rowCount = draggingPanel.getRowCount ? draggingPanel.getRowCount() : 1,
                     nameDraggingPanel = draggingPanel.getName(),
                     subscribeToEvents = function(index, columnElement) {
-                        if(!columnElement) {
+                        if(typeUtils.isEmptyObject(columnElement)) {
                             return;
                         }
 
