@@ -885,6 +885,7 @@ var stop = function(element, jumpToEnd) {
 * @publicName fx
 * @section utils
 * @module animation/fx
+* @namespace DevExpress
 * @export default
 */
 var fx = {

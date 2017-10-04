@@ -599,6 +599,7 @@ module.exports = Class.inherit((function() {
     * @publicName PivotGridDataSource
     * @type object
     * @inherits EventsMixin
+    * @namespace DevExpress.data
     * @module ui/pivot_grid/data_source
     * @export default
     */
@@ -693,6 +694,7 @@ module.exports = Class.inherit((function() {
             /**
             * @name PivotGridDataSourceOptions_fields
             * @publicName fields
+            * @namespace DevExpress.data
             * @type Array<Object>
             * @default undefined
             */
