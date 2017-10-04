@@ -120,7 +120,7 @@ var HorizontalMonthRenderingStrategy = HorizontalMonthLineAppointmentsStrategy.i
             unlimited: MONTH_APPOINTMENT_MIN_OFFSET,
             auto: MONTH_APPOINTMENT_MAX_OFFSET
         };
-    },
+    }
 });
 
 module.exports = HorizontalMonthRenderingStrategy;

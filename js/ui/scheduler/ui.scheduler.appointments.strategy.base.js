@@ -14,8 +14,8 @@ var APPOINTMENT_MIN_SIZE = 2,
     COMPACT_APPOINTMENT_DEFAULT_SIZE = 15,
     APPOINTMENT_DEFAULT_HEIGHT = 20,
     COMPACT_THEME_APPOINTMENT_DEFAULT_HEIGHT = 18,
-    APPOINTMENT_DEFAULT_OFFSET = APPOINTMENT_DEFAULT_HEIGHT + 6,
-    COMPACT_THEME_APPOINTMENT_DEFAULT_OFFSET = COMPACT_THEME_APPOINTMENT_DEFAULT_HEIGHT + 4,
+    APPOINTMENT_DEFAULT_OFFSET = 26,
+    COMPACT_THEME_APPOINTMENT_DEFAULT_OFFSET = 22,
     COMPACT_APPOINTMENT_DEFAULT_OFFSET = 3;
 
 var BaseRenderingStrategy = Class.inherit({
@@ -554,7 +554,8 @@ var BaseRenderingStrategy = Class.inherit({
 
     _calculateGeometryConfig: function(coordinates) {
         var overlappingMode = this.instance.fire("getMaxAppointmentsPerCell"),
-            offsets = this._getOffsets();
+            offsets = this._getOffsets(),
+            appointmentDefaultOffset = this._getAppointmentDefaultOffset();
 
         var appointmentCountPerCell = this._getAppointmentCount(overlappingMode, coordinates);
         var ratio = this._getDefaultRatio(coordinates, appointmentCountPerCell);
@@ -568,8 +569,8 @@ var BaseRenderingStrategy = Class.inherit({
         var topOffset = (1 - ratio) * maxHeight;
         if(overlappingMode === "auto") {
             ratio = 1;
-            maxHeight = maxHeight - this._getAppointmentDefaultOffset();
-            topOffset = this._getAppointmentDefaultOffset();
+            maxHeight = maxHeight - appointmentDefaultOffset;
+            topOffset = appointmentDefaultOffset;
         }
 
         return {
@@ -618,17 +619,17 @@ var BaseRenderingStrategy = Class.inherit({
         return Math.floor((cellHeight - this._getAppointmentDefaultOffset()) / this._getAppointmentDefaultHeight());
     },
 
-    _getAppointmentDefaultOffset: function() {
-        var isCompact = (themes.current() || "").split(".")[2] === "compact";
+    _isCompactTheme: function() {
+        return (themes.current() || "").split(".")[2] === "compact";
+    },
 
-        return isCompact ? COMPACT_THEME_APPOINTMENT_DEFAULT_OFFSET : APPOINTMENT_DEFAULT_OFFSET;
+    _getAppointmentDefaultOffset: function() {
+        return this._isCompactTheme() ? COMPACT_THEME_APPOINTMENT_DEFAULT_OFFSET : APPOINTMENT_DEFAULT_OFFSET;
     },
 
     _getAppointmentDefaultHeight: function() {
-        var isCompact = (themes.current() || "").split(".")[2] === "compact";
-
-        return isCompact ? COMPACT_THEME_APPOINTMENT_DEFAULT_HEIGHT : APPOINTMENT_DEFAULT_HEIGHT;
-    },
+        return this._isCompactTheme() ? COMPACT_THEME_APPOINTMENT_DEFAULT_HEIGHT : APPOINTMENT_DEFAULT_HEIGHT;
+    }
 });
 
 module.exports = BaseRenderingStrategy;
