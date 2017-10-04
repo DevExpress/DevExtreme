@@ -3,6 +3,8 @@
 var $ = require("jquery"),
     Accordion = require("ui/accordion"),
     domUtils = require("core/utils/dom"),
+    isRenderer = require("core/utils/type").isRenderer,
+    config = require("core/config"),
     fx = require("animation/fx"),
     holdEvent = require("events/hold"),
     DataSource = require("data/data_source/data_source").DataSource,
@@ -723,6 +725,7 @@ QUnit.test("itemTemplate option changed (function)", function(assert) {
     }).dxAccordion("instance");
 
     instance.option("itemTemplate", function(itemData, itemIndex, itemElement) {
+        assert.equal(isRenderer(itemElement), config().useJQueryRenderer, "element is correct");
         return $("<div>")
             .addClass("item-content-render-changed")
             .text("Changed: " + itemData.text);
