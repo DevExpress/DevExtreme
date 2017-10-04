@@ -388,8 +388,8 @@ QUnit.test("Get column elements", function(assert) {
 
     //assert
     assert.equal(columnHiddenElements.length, 2, "count hidden elements");
-    assert.strictEqual(columnHiddenElements[0].text(), "Column 2", "text hidden element 1");
-    assert.strictEqual(columnHiddenElements[1].text(), "Column 3", "text hidden element 2");
+    assert.strictEqual(columnHiddenElements.eq(0).text(), "Column 2", "text hidden element 1");
+    assert.strictEqual(columnHiddenElements.eq(1).text(), "Column 3", "text hidden element 2");
 });
 
 //B255428
