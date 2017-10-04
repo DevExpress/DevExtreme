@@ -284,9 +284,9 @@ var ColumnChooserView = columnsView.ColumnsView.inherit({
     },
 
     getColumnElements: function() {
-        var result = $(),
+        var result = [],
             $node,
-            $item,
+            item,
             isSelectMode = this.option("columnChooser.mode") === "select",
             chooserColumns = this._columnsController.getChooserColumns(isSelectMode),
             $content = this._popupContainer && this._popupContainer.$content(),
@@ -295,12 +295,12 @@ var ColumnChooserView = columnsView.ColumnsView.inherit({
         if($nodes) {
             chooserColumns.forEach(function(column) {
                 $node = $nodes.filter("[data-item-id = '" + column.index + "']");
-                $item = $node.length ? $node.children("." + COLUMN_CHOOSER_ITEM_CLASS) : {};
-                result = result.add($item);
+                item = $node.length ? $node.children("." + COLUMN_CHOOSER_ITEM_CLASS).get(0) : null;
+                result.push(item);
             });
         }
 
-        return result;
+        return $(result);
     },
 
     getName: function() {
