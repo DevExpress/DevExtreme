@@ -136,7 +136,7 @@ var Button = Widget.inherit({
             * @type_function_param1 buttonData:object
             * @type_function_param1_field1 text:string
             * @type_function_param1_field2 icon:string
-            * @type_function_param2 contentElement:jQuery
+            * @type_function_param2 contentElement:Element
             * @type_function_return string|jQuery
             */
             template: "content",

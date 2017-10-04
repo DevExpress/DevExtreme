@@ -519,7 +519,7 @@ var Scrollable = DOMComponent.inherit({
     /**
     * @name dxscrollablemethods_content
     * @publicName content()
-    * @return jQuery
+    * @return Element
     */
     content: function() {
         return getPublicElement(this._$content);
