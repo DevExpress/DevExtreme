@@ -89,6 +89,13 @@ var FilterBuilder = Widget.inherit({
              * @default []
              */
             filter: [],
+
+            /**
+             * @name dxFilterBuilderOptions_allowHierarchicalFields
+             * @publicName allowHierarchicalFields
+             * @default false
+             */
+            allowHierarchicalFields: false
         });
     },
 
@@ -101,6 +108,7 @@ var FilterBuilder = Widget.inherit({
             case "fields":
             case "defaultGroupOperation":
             case "filter":
+            case "allowHierarchicalFields":
                 this._invalidate();
                 break;
             default:
@@ -232,7 +240,7 @@ var FilterBuilder = Widget.inherit({
                 onItemClick: menuOnItemClickWrapper(options.menu.onItemClick),
                 rtlEnabled: this.option("rtlEnabled")
             }),
-            showContextMenu = function() {
+            showPopup = function() {
                 removeMenu();
                 $button.addClass(ACTIVE_CLASS);
                 var popupOptions = {
@@ -249,10 +257,10 @@ var FilterBuilder = Widget.inherit({
                         that._createComponent($treeView, TreeView, treeViewOptions);
                         return $treeView;
                     }
-                }
+                };
                 that._createPopup(popupOptions, $button);
             };
-        this._subscribeOnClickAndEnterKey($button, showContextMenu);
+        this._subscribeOnClickAndEnterKey($button, showPopup);
         return $button;
     },
 
@@ -282,11 +290,16 @@ var FilterBuilder = Widget.inherit({
     },
 
     _createFieldButtonWithMenu: function(condition, field) {
-        var that = this;
+        var that = this,
+            fields = this.option("fields"),
+            items = this.option("allowHierarchicalFields") ? utils.getPlainItems(fields) : fields;
+
         var $fieldButton = this._createButtonWithMenu({
             caption: field.caption,
             menu: {
-                items: this.option("fields"),
+                items: items,
+                dataStructure: "plain",
+                keyExpr: "dataField",
                 displayExpr: "caption",
                 onItemClick: function(e) {
                     if(field.dataType !== e.itemData.dataType

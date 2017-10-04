@@ -370,3 +370,104 @@ QUnit.test("create condition", function(assert) {
     assert.equal(condition[1], "contains");
     assert.equal(condition[2], "");
 });
+
+QUnit.test("getPlainItems", function(assert) {
+    var hierarchicalFields = [{
+        caption: "Group",
+        dataField: "group",
+        dataType: "object"
+    }, {
+        caption: "Group Field1",
+        dataField: "group.field1",
+        dataType: "string"
+    }, {
+        caption: "Group Group2",
+        dataField: "group.group2",
+        dataType: "object"
+    }, {
+        caption: "Group Group2 Field2",
+        dataField: "group.group2.field2",
+        dataType: "string"
+    }, {
+        caption: "Group Group2 Field3",
+        dataField: "group.group2.field3",
+        dataType: "string"
+    }];
+
+    var plainItems = utils.getPlainItems(hierarchicalFields);
+    assert.deepEqual(plainItems, [{
+        caption: "Group",
+        dataField: "group",
+        dataType: "object"
+    }, {
+        caption: "Group Field1",
+        dataField: "group.field1",
+        dataType: "string",
+        parentId: "group"
+    }, {
+        caption: "Group Group2",
+        dataField: "group.group2",
+        dataType: "object",
+        parentId: "group"
+    }, {
+        caption: "Group Group2 Field2",
+        dataField: "group.group2.field2",
+        dataType: "string",
+        parentId: "group.group2"
+    }, {
+        caption: "Group Group2 Field3",
+        dataField: "group.group2.field3",
+        dataType: "string",
+        parentId: "group.group2"
+    }]);
+
+
+    hierarchicalFields = [{
+        caption: "Group Field1",
+        dataField: "group.field1",
+        dataType: "string"
+    }, {
+        caption: "Group Group2 Field3",
+        dataField: "group.group2.field3",
+        dataType: "string"
+    }, {
+        caption: "Group3 Field4",
+        dataField: "group3.field4",
+        dataType: "string"
+    }, {
+        caption: "Group3",
+        dataField: "group3",
+        dataType: "object"
+    }];
+
+    plainItems = utils.getPlainItems(hierarchicalFields);
+    assert.deepEqual(plainItems, [{
+        caption: "group",
+        dataField: "group",
+        dataType: "object"
+    }, {
+        caption: "Group Field1",
+        dataField: "group.field1",
+        dataType: "string",
+        parentId: "group"
+    }, {
+        caption: "group2",
+        dataField: "group.group2",
+        dataType: "object",
+        parentId: "group"
+    }, {
+        caption: "Group Group2 Field3",
+        dataField: "group.group2.field3",
+        dataType: "string",
+        parentId: "group.group2"
+    }, {
+        caption: "Group3 Field4",
+        dataField: "group3.field4",
+        dataType: "string",
+        parentId: "group3"
+    }, {
+        caption: "Group3",
+        dataField: "group3",
+        dataType: "object"
+    }]);
+});
