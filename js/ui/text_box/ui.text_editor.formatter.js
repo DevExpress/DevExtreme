@@ -16,14 +16,13 @@ var TextEditorFormatter = TextEditorBase.inherit({
         var that = this;
 
         return extend(this.callBase(), {
-            backspace: that._removeHandler.bind(that),
-            del: that._removeHandler.bind(that),
-            minus: that._revertNumber.bind(that)
+            minus: that._revertSign.bind(that)
         });
     },
 
-    _removeHandler: function(e) {
-        this._lastKey = e.key;
+    _keyboardHandler: function(e) {
+        this._lastKey = e.originalEvent.key;
+        this.callBase(e);
     },
 
     _renderInput: function() {
@@ -50,144 +49,87 @@ var TextEditorFormatter = TextEditorBase.inherit({
         eventsEngine.on($input, eventUtils.addNamespace("dxclick", MASK_FORMATTER_NAMESPACE), this._clickHandler.bind(this));
     },
 
-    _replaceForward: function(text, position) {
-        if(position >= text.length) return text;
-
-        var replaceFrom = text.charAt(position + 1),
-            replaceTo = text.charAt(position),
-            isDigitFrom = !!replaceFrom.match(/^\d$/),
-            isDigitTo = !!replaceTo.match(/^\d$/);
-
-        if((!replaceFrom || !replaceTo) || (isDigitFrom && !isDigitTo || !isDigitFrom && isDigitTo)) {
-            return null;
-
-        }
-
-        var result = text.substr(0, position) + replaceTo + text.substr(position + 2, text.length);
-
-        return result;
-    },
-
-    _tryToReplaceChar: function() {
-        var caret = this._caret(),
-            text = this._input().val(),
-            replacedText = this._replaceForward(text, caret.start - 1);
-
-        return replacedText;
-    },
-
-    _adjustCaret: function() {
+    _clickHandler: function() {
         var value = this.option("value");
         if(!type.isDefined(value)) this._caret(0);
     },
 
-    _clickHandler: function() {
-        this._adjustCaret();
+    _normalizeCaret: function(caret) {
+        var delta = 0;
+
+        if(this._lastKey === "Backspace") {
+            delta = 0;
+        } else if(this._lastKey === "Delete") {
+            delta = 1;
+        }
+
+        return {
+            start: caret.start + delta < 0 ? 0 : caret.start + delta,
+            end: caret.end + delta < 0 ? 0 : caret.end + delta
+        };
     },
 
-    _applyValue: function(value, forced, caret) {
-        caret = caret || this._caret();
+    _normalizeFormattedValue: function() {
+        if(!this._formattedValue) return;
 
+        var caret = this._caret(),
+            text = this._input().val(),
+            resultValue;
+
+        if(this._lastKey === "Backspace") {
+            resultValue = text.substr(0, caret.start) + "0" + text.substr(caret.end, text.length);
+        } else if(this._lastKey === "Delete") {
+            resultValue = text.substr(0, caret.end - 1) + "0" + text.substr(caret.end, text.length);
+        } else {
+            resultValue = text.slice(0, caret.start) + text.slice(caret.start + 1);
+        }
+
+        if(this._parser(resultValue) !== null) {
+            this._formattedValue = resultValue;
+        }
+    },
+
+    _applyValue: function(value, forced) {
         if(this._parsedValue === value && !forced) {
             return;
-        } else if(value === null && !forced) {
-            this._input().val(this._formattedValue);
-        } else {
-            this._parsedValue = value;
-            this._formattedValue = this._formatter(value);
-            this._input().val(this._formattedValue);
         }
+
+        var caret = this._caret();
+
+        if(value === null && !forced) {
+            caret = this._normalizeCaret(caret);
+            this._normalizeFormattedValue();
+
+            if(!this._formattedValue) {
+                value = parseFloat(this._input().val());
+            } else {
+                this._input().val(this._formattedValue);
+                this._caret(caret);
+                return;
+            }
+        }
+
+        this._parsedValue = value;
+        this._formattedValue = this._formatter(value);
+        this._input().val(this._formattedValue);
 
         this._caret(caret);
     },
 
-    _formatFirstInputIfNeed: function(text) {
-        if(!this._formattedValue) {
-            var formattedValue = this._formatter(parseInt(text));
-
-            if(formattedValue) {
-                var caretPosition = formattedValue.indexOf(text) + 1;
-
-                return {
-                    text: formattedValue,
-                    caret: { start: caretPosition, end: caretPosition }
-                };
-            }
-        }
-    },
-
-    _revertNumber: function() {
+    _revertSign: function() {
         this._applyValue(-1 * this._parsedValue);
     },
 
     _formatValue: function() {
         if(!this.option("displayFormat")) return;
 
-        var text = this._input().val(),
-            caret;
+        var text = this._input().val();
 
         if(!text.length) return;
 
-        var firstInputResult = this._formatFirstInputIfNeed(text);
+        var parsedValue = this._parser(text);
 
-        if(firstInputResult) {
-            text = firstInputResult.text;
-            caret = firstInputResult.caret;
-        }
-
-        var parsedValue = this._parser(text),
-            operation = "insert";
-
-        var offset;
-
-        if(parsedValue === null && this._lastKey === "Delete") {
-            // 12|.34 -> 12|34
-            caret = this._caret();
-            text = this._formattedValue;
-
-            text = text.substr(0, caret.start) + text.substr(caret.start).replace(/\d/, "0");
-            parsedValue = this._parser(text);
-            if(text !== null) {
-                offset = text.substr(caret.start).indexOf("0") + 1;
-                caret.start += offset;
-                caret.end += offset;
-                operation = "replace";
-            }
-        }
-
-        function reverseString(str) {
-            return str.split("").reverse().join("");
-        }
-
-        if(parsedValue === null && this._lastKey === "Backspace") {
-            // 12.3|4 -> 12.|4
-            caret = this._caret();
-            text = this._formattedValue;
-
-            caret.start++;
-            caret.end++;
-
-            text = reverseString(reverseString(text.substr(0, caret.start)).replace(/\d/, "0")) + text.substr(caret.start);
-            parsedValue = this._parser(text);
-            if(text !== null) {
-                offset = reverseString(text.substr(0, caret.start)).indexOf("0") + 1;
-                caret.start -= offset;
-                caret.end -= offset;
-                operation = "replace";
-            }
-        }
-
-        this._lastKey = null;
-
-        if(parsedValue === null) {
-            var replacedText = this._tryToReplaceChar();
-            parsedValue = this._parser(replacedText);
-            if(replacedText !== null) {
-                operation = "replace";
-            }
-        }
-
-        this._applyValue(parsedValue, operation === "replace", caret);
+        this._applyValue(parsedValue);
     },
 
     _renderValue: function() {
