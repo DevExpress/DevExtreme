@@ -63,7 +63,7 @@ QUnit.test("getGroupValue", function(assert) {
     assert.equal(groupValue, "!And");
 });
 
-QUnit.test("getGroupText", function(assert) {
+QUnit.test("getGroupMenuItem", function(assert) {
     var group = ["!",
         [
             condition1,
@@ -73,7 +73,7 @@ QUnit.test("getGroupText", function(assert) {
             condition3
         ]
     ];
-    assert.equal(utils.getGroupText(group, groupOperations), "Not And");
+    assert.deepEqual(utils.getGroupMenuItem(group, groupOperations), { text: "Not And", value: "!And" });
 });
 
 QUnit.test("setGroupValue", function(assert) {
@@ -471,3 +471,5 @@ QUnit.test("getPlainItems", function(assert) {
         dataType: "object"
     }]);
 });
+
+
