@@ -5,7 +5,7 @@ var noop = require("../../core/utils/common").noop,
     HorizontalMonthLineAppointmentsStrategy = require("./ui.scheduler.appointments.strategy.horizontal_month_line");
 
 var MONTH_APPOINTMENT_HEIGHT_RATIO = 0.6,
-    MONTH_APPOINTMENT_MIN_OFFSET = 21,
+    MONTH_APPOINTMENT_MIN_OFFSET = 26,
     MONTH_APPOINTMENT_MAX_OFFSET = 30;
 
 var HorizontalMonthRenderingStrategy = HorizontalMonthLineAppointmentsStrategy.inherit({
@@ -104,7 +104,7 @@ var HorizontalMonthRenderingStrategy = HorizontalMonthLineAppointmentsStrategy.i
     _customizeAppointmentGeometry: function(coordinates) {
         var config = this._calculateGeometryConfig(coordinates);
 
-        return this._customizeCoordinates(coordinates, config.ratio, config.appointmentCountPerCell, config.maxHeight);
+        return this._customizeCoordinates(coordinates, config.height, config.appointmentCountPerCell, config.offset);
     },
 
     _getAppointmentCount: function() {
@@ -120,7 +120,7 @@ var HorizontalMonthRenderingStrategy = HorizontalMonthLineAppointmentsStrategy.i
             unlimited: MONTH_APPOINTMENT_MIN_OFFSET,
             auto: MONTH_APPOINTMENT_MAX_OFFSET
         };
-    },
+    }
 });
 
 module.exports = HorizontalMonthRenderingStrategy;
