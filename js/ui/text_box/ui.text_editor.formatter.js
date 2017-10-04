@@ -8,7 +8,8 @@ var eventsEngine = require("../../events/core/events_engine"),
     TextEditorBase = require("./ui.text_editor.base"),
     eventUtils = require("../../events/utils");
 
-var MASK_FORMATTER_NAMESPACE = "dxMaskFormatter";
+var MASK_FORMATTER_NAMESPACE = "dxMaskFormatter",
+    FLOAT_SEPARATOR = ".";
 
 var TextEditorFormatter = TextEditorBase.inherit({
 
@@ -84,9 +85,19 @@ var TextEditorFormatter = TextEditorBase.inherit({
             resultValue = text.slice(0, caret.start) + text.slice(caret.start + 1);
         }
 
+        var formattedResult = this._formatter(parseFloat(resultValue));
+        if(formattedResult !== null) {
+            resultValue = formattedResult;
+        }
+
         if(this._parser(resultValue) !== null) {
             this._formattedValue = resultValue;
         }
+    },
+
+    _getClearValue: function() {
+        var regexp = new RegExp("[^0-9" + FLOAT_SEPARATOR + "]", "g");
+        return this._input().val().replace(regexp, "");
     },
 
     _applyValue: function(value, forced) {
@@ -101,7 +112,7 @@ var TextEditorFormatter = TextEditorBase.inherit({
             this._normalizeFormattedValue();
 
             if(!this._formattedValue) {
-                value = parseFloat(this._input().val());
+                value = parseFloat(this._getClearValue());
             } else {
                 this._input().val(this._formattedValue);
                 this._caret(caret);
@@ -125,7 +136,10 @@ var TextEditorFormatter = TextEditorBase.inherit({
 
         var text = this._input().val();
 
-        if(!text.length) return;
+        if(!text.length) {
+            this._applyValue("", true);
+            return;
+        }
 
         var parsedValue = this._parser(text);
 
@@ -134,7 +148,7 @@ var TextEditorFormatter = TextEditorBase.inherit({
 
     _renderValue: function() {
         this.callBase();
-        this._applyValue(this.option("value"));
+        this._applyValue(this.option("value") || "");
     },
 
     _valueChangeEventHandler: function(e) {

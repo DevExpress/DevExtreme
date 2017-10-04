@@ -39,7 +39,7 @@ QUnit.test("parser should work with strict formats", function(assert) {
 
 QUnit.test("format should be applied on input", function(assert) {
     this.keyboard.type("12e*3.456");
-    assert.equal(this.input.val(), "123.45", "value is correct");
+    assert.equal(this.input.val(), "123.46", "value is correct");
 });
 
 QUnit.test("format should be applied on value change", function(assert) {
@@ -100,4 +100,52 @@ QUnit.test("pressing '-' button should revert the number", function(assert) {
 
     this.keyboard.caret(2).press("-");
     assert.equal(this.input.val(), "123.456", "value is correct");
+});
+
+QUnit.test("clear input value should clear a formatted value", function(assert) {
+    this.instance.option({
+        displayFormat: "#.000",
+        value: 123
+    });
+
+    this.keyboard
+        .caret({ start: 0, end: 7 })
+        .press("backspace")
+        .input()
+        .change();
+
+
+    assert.equal(this.input.val(), "", "value is empty");
+});
+
+QUnit.test("new value should correctly apply after clear an old one", function(assert) {
+    this.instance.option({
+        displayFormat: "#.000",
+        value: 123
+    });
+
+    this.keyboard
+        .caret({ start: 0, end: 7 })
+        .press("backspace")
+        .input()
+        .type("2")
+        .input();
+
+
+    assert.equal(this.input.val(), "2.000", "value is correct");
+});
+
+QUnit.test("replace all text should work correctly", function(assert) {
+    this.instance.option({
+        displayFormat: "#.000",
+        value: 123
+    });
+
+    this.keyboard
+        .caret({ start: 0, end: 7 })
+        .type("4")
+        .input()
+        .change();
+
+    assert.equal(this.input.val(), "4.000", "value is correct");
 });
