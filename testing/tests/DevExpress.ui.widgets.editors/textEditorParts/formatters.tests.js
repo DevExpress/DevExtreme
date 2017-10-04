@@ -149,3 +149,106 @@ QUnit.test("replace all text should work correctly", function(assert) {
 
     assert.equal(this.input.val(), "4.000", "value is correct");
 });
+
+QUnit.test("displayFormat with stub symbol", function(assert) {
+    this.instance.option({
+        displayFormat: "$#"
+    });
+
+    this.keyboard
+        .type("12")
+        .input()
+        .change();
+
+    assert.equal(this.input.val(), "$12", "value is correct");
+});
+
+QUnit.test("update whole value in case when displayFormat contains a stub symbols", function(assert) {
+    this.instance.option({
+        displayFormat: "$#",
+        value: 1
+    });
+
+    this.keyboard
+        .caret({ start: 0, end: 3 })
+        .type("23")
+        .input()
+        .change();
+
+
+    assert.equal(this.input.val(), "$23", "value is correct");
+
+});
+
+QUnit.test("displayFormat with several stub symbols", function(assert) {
+    this.instance.option({
+        displayFormat: "$$#",
+        value: 1
+    });
+
+    this.keyboard
+        .caret({ start: 0, end: 3 })
+        .type("23")
+        .input()
+        .change();
+
+
+    assert.equal(this.input.val(), "$$23", "value is correct");
+
+});
+
+QUnit.test("remove stub symbol", function(assert) {
+    this.instance.option({
+        displayFormat: "$$#",
+        value: 1
+    });
+
+    this.keyboard
+        .caret({ start: 2, end: 2 })
+        .press("backspace")
+        .input();
+
+
+    assert.equal(this.input.val(), "$$1", "do not remove a stub symbol");
+
+});
+
+QUnit.skip("displayFormat with escaped symbol", function(assert) {
+    //parser should work with escaping
+    this.instance.option({
+        displayFormat: "$'#'$#"
+    });
+
+    this.keyboard
+        .type("12")
+        .input()
+        .change();
+
+    assert.equal(this.input.val(), "$#$12", "value is correct");
+});
+
+QUnit.test("commonly used formats", function(assert) {
+    var formats = [
+        { format: '$ #.##', value: 123.456, expected: "$ 123.46" },
+        { format: '#.## р', value: 123.456, expected: "123.46 р" },
+        // { format: '#,##0 р', value: 12345.678, expected: "12,345.678 р" },
+        // { format: '$ #,##0', value: 1234.567, expected: "$ 1,234.567" },
+        { format: '$ #.##;($ #.##)', value: -123.456, expected: "($ 123.46)" },
+        { format: '#.## р;($ #.##) р', value: 123.456, expected: "123.46 р" },
+        // { format: '$ #,##0;($ #,##0)', value: 1234.567, expected: "$ 1,234.567" },
+        // { format: '$ #,##0 mil;($ #,##0 mil)', value: 123.45, expected: "$ 123.450 mil" },
+        { format: '#.##%', value: 123.456, expected: "12345.60%" },
+        { format: '#.00%', value: 123.456, expected: "12345.60%" },
+        // { format: '#,##.00%', value: 123.456, expected: "12,345.60%" },
+        { format: '0#.###', value: 1.234, expected: "01.234" },
+        { format: '0000', value: 123.456, expected: "0123" }
+    ];
+
+    formats.forEach(function(format) {
+        this.instance.option("value", "");
+        this.instance.option("displayFormat", format.format);
+        this.instance.option("value", format.value);
+
+        assert.equal(this.input.val(), format.expected, format.format + " with value " + format.value + " is correct");
+    }.bind(this));
+});

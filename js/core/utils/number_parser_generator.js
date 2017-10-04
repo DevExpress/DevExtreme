@@ -175,6 +175,7 @@ function getMaxPrecision(floatFormat) {
 function generateNumberFormatter(format) {
     return function(value) {
         if(typeof value !== "number") return "";
+        if(isNaN(value)) return null;
 
         var signParts = getSignParts(format),
             numberFormat = signParts[value >= 0 ? 0 : 1];

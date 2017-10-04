@@ -31,7 +31,17 @@ var TextEditorFormatter = TextEditorBase.inherit({
         this._renderFormatter();
     },
 
+    _clearCache: function() {
+        delete this._formatter;
+        delete this._parser;
+        delete this._formattedValue;
+        delete this._lastKey;
+        delete this._parsedValue;
+    },
+
     _renderFormatter: function() {
+        this._clearCache();
+
         this._formatter = numberParserGenerator.generateNumberFormatter(this.option("displayFormat"));
         this._parser = numberParserGenerator.generateNumberParser(this.option("displayFormat"));
 
@@ -62,12 +72,43 @@ var TextEditorFormatter = TextEditorBase.inherit({
             delta = 0;
         } else if(this._lastKey === "Delete") {
             delta = 1;
+        } else {
+            var formattedFloat = this._getFormattedFloat(this._input().val());
+            if(formattedFloat !== null) {
+                delta = this._getStubCountBeforeInput();
+            }
         }
 
         return {
             start: caret.start + delta < 0 ? 0 : caret.start + delta,
             end: caret.end + delta < 0 ? 0 : caret.end + delta
         };
+    },
+
+    _getStubCountBeforeInput: function() {
+        var format = this.option("displayFormat"),
+            escapedRegExp = new RegExp("^('[^']+')([#0])"),
+            stubRegexp = new RegExp("^([^0#]+)[0#]"),
+            escapedMatches = format.match(escapedRegExp),
+            escapedCount = 0,
+            stubCount = 0;
+
+        if(escapedMatches) {
+            escapedCount = escapedMatches[0].length - 2;
+            format.replace(escapedRegExp, "$2");
+        }
+
+        var stubMatches = format.match(stubRegexp);
+
+        if(stubMatches) {
+            stubCount = stubMatches[0].length;
+        }
+
+        return escapedCount + stubCount;
+    },
+
+    _getFormattedFloat: function(text) {
+        return this._formatter(parseFloat(text));
     },
 
     _normalizeFormattedValue: function() {
@@ -85,7 +126,7 @@ var TextEditorFormatter = TextEditorBase.inherit({
             resultValue = text.slice(0, caret.start) + text.slice(caret.start + 1);
         }
 
-        var formattedResult = this._formatter(parseFloat(resultValue));
+        var formattedResult = this._getFormattedFloat(resultValue);
         if(formattedResult !== null) {
             resultValue = formattedResult;
         }
@@ -175,10 +216,7 @@ var TextEditorFormatter = TextEditorBase.inherit({
     },
 
     _clean: function() {
-        delete this._formatter;
-        delete this._parser;
-        delete this._formattedValue;
-        delete this._parsedValue;
+        this._clearCache();
         this.callBase();
     }
 
