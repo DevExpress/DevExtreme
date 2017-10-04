@@ -568,7 +568,9 @@ QUnit.testInActiveWindow("Focus policy with field template", function(assert) {
 });
 
 QUnit.test("Drop button template should be rendered correctly", function(assert) {
-    var buttonTemplate = function() {
+    var buttonTemplate = function(buttonData, contentElement) {
+        assert.equal(isRenderer(contentElement), config().useJQueryRenderer, "contentElement is correct");
+
         return "<div>Template</div>";
     };
 

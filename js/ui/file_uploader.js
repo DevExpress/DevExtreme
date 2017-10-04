@@ -845,7 +845,8 @@ var FileUploader = Editor.inherit({
         }
     },
 
-    _selectButtonInputTemplate: function(data, $content) {
+    _selectButtonInputTemplate: function(data, content) {
+        var $content = $(content);
         var $text = $("<span>")
             .addClass("dx-button-text")
             .text(data.text);
