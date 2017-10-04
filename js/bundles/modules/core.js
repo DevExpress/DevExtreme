@@ -27,6 +27,7 @@ var animationFrame = require("../../animation/frame");
 /**
  * @name requestAnimationFrame
  * @publicName requestAnimationFrame(callback)
+ * @namespace DevExpress
  * @type method
  * @deprecated utils_requestAnimationFrame
  * @extend_doc
@@ -39,6 +40,7 @@ DevExpress.requestAnimationFrame = function() {
 /**
  * @name cancelAnimationFrame
  * @publicName cancelAnimationFrame(requestID)
+ * @namespace DevExpress
  * @type method
  * @deprecated utils_cancelAnimationFrame
  * @extend_doc
@@ -53,6 +55,7 @@ DevExpress.EventsMixin = require("../../core/events_mixin");
 /**
  * @name utils
  * @publicName utils
+ * @namespace DevExpress
  */
 DevExpress.utils = {};
 
@@ -93,6 +96,7 @@ var config = DevExpress.config = require("../../core/config");
 /**
  * @name rtlEnabled
  * @publicName rtlEnabled
+ * @namespace DevExpress
  * @type boolean
  * @default false
  * @deprecated config

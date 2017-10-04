@@ -372,6 +372,7 @@ var interpretLightJsonFormat = function(obj) {
 * @name EdmLiteral
 * @publicName EdmLiteral
 * @type object
+* @namespace DevExpress.data
 * @module data/odata/utils
 * @export EdmLiteral
 */
@@ -499,6 +500,7 @@ var serializeKey = function(key, protocolVersion) {
 * @name Utils_odatakeyConverters
 * @publicName odata.keyConverters
 * @type object
+* @namespace DevExpress.data.utils.odata
 * @module data/odata/utils
 * @export keyConverters
 */

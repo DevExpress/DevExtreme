@@ -35,6 +35,7 @@ var KNOWN_UA_TABLE = {
 * @section commonObjectStructures
 * @publicName Device
 * @type object
+* @namespace DevExpress
 * @module core/devices
 * @export default
 */

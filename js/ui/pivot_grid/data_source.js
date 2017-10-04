@@ -599,6 +599,7 @@ module.exports = Class.inherit((function() {
     * @publicName PivotGridDataSource
     * @type object
     * @inherits EventsMixin
+    * @namespace DevExpress.data
     * @module ui/pivot_grid/data_source
     * @export default
     */
