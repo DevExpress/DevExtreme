@@ -379,6 +379,10 @@ declare module DevExpress.ui {
         /** @docid_ignore dxSchedulerOptions_activeStateEnabled */
         /** @docid_ignore dxSchedulerOptions_hoverStateEnabled */
 
+        /** @docid_ignore dxSchedulerOptions_indicatorTime */
+        /** @docid_ignore dxSchedulerOptions_indicatorUpdateInterval */
+        /** @docid_ignore dxSchedulerOptions_shadeUntilNow */
+        
         /** @docid dxSchedulerOptions_dateSerializationFormat */
         dateSerializationFormat?: string;
         /** @docid dxSchedulerOptions_currentDate */
@@ -511,6 +515,8 @@ declare module DevExpress.ui {
         timeZone?: string;
         /** @docid dxSchedulerOptions_noDataText */
         noDataText?: string;
+        /** @docid dxSchedulerOptions_showCurrentTimeIndicator */
+        showCurrentTimeIndicator?: boolean;
     }
 
     /** @docid dxScheduler */

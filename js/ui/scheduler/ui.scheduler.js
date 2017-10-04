@@ -549,15 +549,38 @@ var Scheduler = Widget.inherit({
                 */
             showAllDayPanel: true,
 
-            /**
+                /**
                 * @name dxSchedulerOptions_showCurrentTimeIndicator
                 * @publicName showCurrentTimeIndicator
                 * @type boolean
                 * @default true
                 */
             showCurrentTimeIndicator: true,
+
+                /**
+                * @hidden
+                * @name dxSchedulerOptions_indicatorTime
+                * @publicName indicatorTime
+                * @type Date
+                * @default undefined
+                */
             indicatorTime: undefined,
-            indicatorUpdateInterval: dateUtils.dateToMilliseconds("minute") * 5,
+
+                /**
+                * @hidden
+                * @name dxSchedulerOptions_indicatorUpdateInterval
+                * @publicName indicatorUpdateInterval
+                * @type number
+                * @default 300000
+                */
+            indicatorUpdateInterval: 300000,
+                /**
+                * @hidden
+                * @name dxSchedulerOptions_shadeUntilNow
+                * @publicName shadeUntilNow
+                * @type boolean
+                * @default false
+                */
             shadeUntilNow: false,
 
                 /**
