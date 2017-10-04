@@ -1283,8 +1283,8 @@ QUnit.test("Get date range", function(assert) {
     this.instance.option("intervalCount", 2);
     this.instance.option("firstDayOfWeek", 1);
 
-    assert.deepEqual(this.instance.getDateRange(), [new Date(2017, 5, 1), new Date(2017, 6, 31, 0, 29)], "Range is OK");
+    assert.deepEqual(this.instance.getDateRange(), [new Date(2017, 5, 1), new Date(2017, 6, 31, 23, 59)], "Range is OK");
 
     this.instance.option("intervalCount", 4);
-    assert.deepEqual(this.instance.getDateRange(), [new Date(2017, 5, 1), new Date(2017, 8, 30, 0, 29)], "Range is OK");
+    assert.deepEqual(this.instance.getDateRange(), [new Date(2017, 5, 1), new Date(2017, 8, 30, 23, 59)], "Range is OK");
 });

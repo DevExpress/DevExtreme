@@ -282,14 +282,6 @@ var TreeViewBase = HierarchicalCollectionWidget.inherit({
             */
             rootValue: 0,
 
-            /*
-            component: inheritor
-            element: jQuery.fn.init[1]
-            itemData: Object
-            itemElement: jQuery.fn.init[1]
-            jQueryEvent: jQuery.Event
-            */
-
             focusStateEnabled: false,
 
             /**

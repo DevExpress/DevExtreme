@@ -548,6 +548,18 @@ var Scheduler = Widget.inherit({
                 * @default true
                 */
             showAllDayPanel: true,
+
+            /**
+                * @name dxSchedulerOptions_showCurrentTimeIndicator
+                * @publicName showCurrentTimeIndicator
+                * @type boolean
+                * @default true
+                */
+            showCurrentTimeIndicator: true,
+            indicatorTime: undefined,
+            indicatorUpdateInterval: dateUtils.dateToMilliseconds("minute") * 5,
+            shadeUntilNow: false,
+
                 /**
                 * @name dxSchedulerOptions_recurrenceEditMode
                 * @publicName recurrenceEditMode
@@ -1205,6 +1217,12 @@ var Scheduler = Widget.inherit({
                     this._reloadDataSource();
                 }).bind(this));
                 break;
+            case "showCurrentTimeIndicator":
+            case "indicatorTime":
+            case "indicatorUpdateInterval":
+            case "shadeUntilNow":
+                this._updateOption("workSpace", name, value);
+                break;
             case "appointmentTooltipTemplate":
             case "appointmentPopupTemplate":
             case "recurrenceEditMode":
@@ -1808,6 +1826,10 @@ var Scheduler = Widget.inherit({
             focusStateEnabled: this.option("focusStateEnabled"),
             cellDuration: this.option("cellDuration"),
             showAllDayPanel: this.option("showAllDayPanel"),
+            showCurrentTimeIndicator: this.option("showCurrentTimeIndicator"),
+            indicatorTime: this.option("indicatorTime"),
+            indicatorUpdateInterval: this.option("indicatorUpdateInterval"),
+            shadeUntilNow: this.option("shadeUntilNow"),
             allDayExpanded: this._appointments.option("items"),
             crossScrollingEnabled: this.option("crossScrollingEnabled"),
             dataCellTemplate: this.option("dataCellTemplate"),

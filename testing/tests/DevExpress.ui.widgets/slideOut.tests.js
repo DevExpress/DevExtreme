@@ -3,6 +3,7 @@
 var $ = require("jquery"),
     fx = require("animation/fx"),
     config = require("core/config"),
+    typeUtils = require("core/utils/type"),
     hideTopOverlayCallback = require("mobile/hide_top_overlay").hideCallback,
     pointerMock = require("../../helpers/pointerMock.js");
 
@@ -102,7 +103,7 @@ QUnit.test("show only one item at same time if contentTemplate append markup in 
             { text: "2" }
         ],
         contentTemplate: function(element) {
-            element.append($("<div>").text("itemText"));
+            $(element).append($("<div>").text("itemText"));
         },
         selectedIndex: 0
     });
@@ -266,7 +267,8 @@ QUnit.test("grouped list should change it's selection after selectedItem option 
 
 QUnit.test("menu item itemTemplate (dataSource)", function(assert) {
     this.$element.dxSlideOut({
-        menuItemTemplate: function(item, index) {
+        menuItemTemplate: function(item, index, element) {
+            assert.equal(typeUtils.isRenderer(element), config().useJQueryRenderer, "element is correct");
             return index + ": " + item.text;
         },
         dataSource: [
@@ -405,7 +407,8 @@ QUnit.test("menuGroupTemplate option", function(assert) {
 
     assert.equal($groupHeader.text(), "Group 1", "correct group name");
 
-    instance.option("menuGroupTemplate", function() {
+    instance.option("menuGroupTemplate", function(item, index, element) {
+        assert.equal(typeUtils.isRenderer(element), config().useJQueryRenderer, "element is correct");
         return "new template";
     });
 
@@ -779,7 +782,8 @@ QUnit.test("content should be rendered from content template if specified", func
     var $slideOut = $("#slideOut").dxSlideOut({
             selectedIndex: 0,
             items: [{ text: "all content" }, { text: "unread content" }],
-            contentTemplate: function() {
+            contentTemplate: function(element) {
+                assert.equal(typeUtils.isRenderer(element), config().useJQueryRenderer, "element is correct");
                 return "<div>content</div>";
             }
         }),

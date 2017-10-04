@@ -175,5 +175,5 @@ QUnit.test("Customize tooltip", function(assert) {
 
     widget.getAllItems()[0].showTooltip();
 
-    assert.equal(this.tooltip.update.args[0][0].customizeTooltip({ valueText: "value", item: { data: { argument: "argument" } } }).text, "argument value");
+    assert.equal(this.tooltip.update.args[0][0].customizeTooltip({ valueText: "value", item: { argument: "argument" } }).text, "argument value");
 });

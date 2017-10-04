@@ -114,6 +114,18 @@ QUnit.test("custom content template for menu should be rendered correctly", func
     assert.equal($.trim($menu.text()), "Test Menu Template", "menu content text is correct");
 });
 
+QUnit.test("templates should be dom nodes without jQuery", function(assert) {
+    assert.expect(2);
+    $("#contentTemplate").dxSlideOutView({
+        menuTemplate: function(element) {
+            assert.equal(typeUtils.isRenderer(element), config().useJQueryRenderer, "element is correct");
+        },
+        contentTemplate: function(element) {
+            assert.equal(typeUtils.isRenderer(element), config().useJQueryRenderer, "element is correct");
+        }
+    });
+});
+
 QUnit.test("custom content template for content should be rendered correctly", function(assert) {
     var $element = $("#contentTemplate").dxSlideOutView({
             contentTemplate: "customContent"

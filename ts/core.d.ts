@@ -1084,6 +1084,26 @@ declare module DevExpress {
         export function loadMessages(messages: any): void;
     }
 
+    /** @docid_ignore events */
+    /** @docid_ignore events_on */
+    /** @docid_ignore events_one */
+    /** @docid_ignore events_off */
+    /** @docid_ignore events_trigger */
+    /** @docid_ignore events_triggerHandler */
+    /** @docid_ignore eventsHandler */
+    /** @docid_ignore dxEvent */
+    /** @docid_ignore dxEventFields_isPropagationStopped */
+    /** @docid_ignore dxEventFields_stopPropagation */
+    /** @docid_ignore dxEventFields_isImmediatePropagationStopped */
+    /** @docid_ignore dxEventFields_stopImmediatePropagation */
+    /** @docid_ignore dxEventFields_isDefaultPrevented */
+    /** @docid_ignore dxEventFields_preventDefault */
+    /** @docid_ignore dxEventFields_target */
+    /** @docid_ignore dxEventFields_currentTarget */
+    /** @docid_ignore dxEventFields_delegateTarget */
+    /** @docid_ignore dxEventFields_data */
+    /** @docid_ignore event */
+
     /** @docid ui */
     export module ui {
         /** @docid_ignore dxTemplate */

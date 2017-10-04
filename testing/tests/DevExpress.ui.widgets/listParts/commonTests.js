@@ -244,7 +244,8 @@ QUnit.test("groupTemplate returning string", function(assert) {
 
         grouped: true,
 
-        groupTemplate: function(group, index) {
+        groupTemplate: function(group, index, itemElement) {
+            assert.equal(isRenderer(itemElement), config().useJQueryRenderer, "itemElement is correct");
             return index + ": " + group.key;
         }
     });
@@ -265,7 +266,8 @@ QUnit.test("groupTemplate returning jquery", function(assert) {
 
         grouped: true,
 
-        groupTemplate: function(group, index) {
+        groupTemplate: function(group, index, element) {
+            assert.equal(isRenderer(element), config().useJQueryRenderer, "element is correct");
             return $("<span />");
         }
     });

@@ -14,7 +14,6 @@ var $ = require("../../core/renderer"),
     abstract = Widget.abstract,
     noop = require("../../core/utils/common").noop,
     isDefined = require("../../core/utils/type").isDefined,
-    registerComponent = require("../../core/component_registrator"),
     publisherMixin = require("./ui.scheduler.publisher_mixin"),
     eventUtils = require("../../events/utils"),
     pointerEvents = require("../../events/pointer"),
@@ -22,7 +21,8 @@ var $ = require("../../core/renderer"),
     clickEvent = require("../../events/click"),
     dragEvents = require("../../events/drag"),
     Scrollable = require("../scroll_view/ui.scrollable"),
-    tableCreator = require("./ui.scheduler.table_creator");
+    tableCreator = require("./ui.scheduler.table_creator"),
+    VerticalShader = require("./ui.scheduler.currentTimeShader.vertical");
 
 var COMPONENT_CLASS = "dx-scheduler-work-space",
     GROUPED_WORKSPACE_CLASS = "dx-scheduler-work-space-grouped",
@@ -55,6 +55,7 @@ var COMPONENT_CLASS = "dx-scheduler-work-space",
     HEADER_PANEL_CLASS = "dx-scheduler-header-panel",
     HEADER_PANEL_CELL_CLASS = "dx-scheduler-header-panel-cell",
     HEADER_ROW_CLASS = "dx-scheduler-header-row",
+    HEADER_CURRENT_TIME_CELL_CLASS = "dx-scheduler-header-panel-current-time-cell",
     GROUP_ROW_CLASS = "dx-scheduler-group-row",
     GROUP_HEADER_CLASS = "dx-scheduler-group-header",
     GROUP_HEADER_CONTENT_CLASS = "dx-scheduler-group-header-content",
@@ -363,7 +364,10 @@ var SchedulerWorkSpace = Widget.inherit({
             timeCellTemplate: null,
             resourceCellTemplate: null,
             dateCellTemplate: null,
-            allowMultipleCellSelection: true
+            allowMultipleCellSelection: true,
+            indicatorTime: new Date(),
+            indicatorUpdateInterval: 5 * toMs("minute"),
+            shadeUntilNow: true
         });
     },
 
@@ -739,7 +743,15 @@ var SchedulerWorkSpace = Widget.inherit({
         this._renderAllDayPanel();
 
         this._renderDateTable();
+
+        this._shader = new VerticalShader();
+        this._renderDateTimeIndication();
+
+        this._setIndicationUpdateInterval();
     },
+
+    _renderDateTimeIndication: noop,
+    _setIndicationUpdateInterval: noop,
 
     _setFirstViewDate: function() {
         this._firstViewDate = dateUtils.getFirstWeekDate(this._getViewStartByOptions(), this._firstDayOfWeek() || dateLocalization.firstDayOfWeekIndex());
@@ -972,6 +984,10 @@ var SchedulerWorkSpace = Widget.inherit({
                     $cell.text(text);
                 }
 
+                if(this._isCurrentTimeHeaderCell(i)) {
+                    $($cell).addClass(HEADER_CURRENT_TIME_CELL_CLASS);
+                }
+
                 $headerRow.append($cell);
             }
         }
@@ -1051,7 +1067,7 @@ var SchedulerWorkSpace = Widget.inherit({
             container: this._$timePanel,
             rowCount: rowCount,
             cellCount: 1,
-            cellClass: TIME_PANEL_CELL_CLASS,
+            cellClass: this._getTimeCellClass.bind(this),
             rowClass: TIME_PANEL_ROW_CLASS,
             cellTemplate: this.option("timeCellTemplate"),
             getCellText: this._getTimeText.bind(this)
@@ -1070,14 +1086,37 @@ var SchedulerWorkSpace = Widget.inherit({
         return this.option("endDayHour") - this.option("startDayHour");
     },
 
+    _getTimeCellClass: function(i) {
+        return TIME_PANEL_CELL_CLASS;
+    },
+
     _getTimeText: function(i) {
         // T410490: incorrectly displaying time slots on Linux
+        var startViewDate = this._getTimeCellDate(i);
+
+        return dateLocalization.format(startViewDate, "shorttime");
+    },
+
+    _getTimeCellDate: function(i) {
         var startViewDate = new Date(this.getStartViewDate()),
             timeCellDuration = this.getCellDuration() * 2;
 
         startViewDate.setMilliseconds(startViewDate.getMilliseconds() + timeCellDuration * i);
 
-        return dateLocalization.format(startViewDate, "shorttime");
+        return startViewDate;
+    },
+
+    _isCurrentTimeHeaderCell: function(headerIndex) {
+        var result = false;
+
+        if(this.option("showCurrentTimeIndicator") && this._needRenderDateTimeIndicator()) {
+            var date = this._getDateByIndex(headerIndex),
+                now = this.option("indicatorTime") || new Date();
+
+            result = dateUtils.sameDate(date, now);
+        }
+
+        return result;
     },
 
     _renderDateTable: function() {
@@ -1329,6 +1368,7 @@ var SchedulerWorkSpace = Widget.inherit({
         this._cleanAllowedPositions();
         this._$thead.empty();
         this._$dateTable.empty();
+        this._shader && this._shader.clean();
         this._$timePanel.empty();
         this._$allDayTable.empty();
         delete this._hiddenInterval;
@@ -1918,7 +1958,5 @@ var SchedulerWorkSpace = Widget.inherit({
     }
 
 }).include(publisherMixin);
-
-registerComponent("dxSchedulerWorkSpace", SchedulerWorkSpace);
 
 module.exports = SchedulerWorkSpace;

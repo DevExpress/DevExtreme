@@ -46,7 +46,6 @@ QUnit.test("Create labels", function(assert) {
         value: 5,
         color: "#121212"
     }, "data");
-    assert.equal(label.setData.lastCall.args[0].item.id, 0);
 });
 
 QUnit.test("Create labels with styles", function(assert) {
@@ -99,7 +98,7 @@ QUnit.test("Create labels with styles", function(assert) {
     assert.deepEqual(options.verticalOffset, 0, "verticalOffset");
     assert.deepEqual(options.visible, true, "visible");
     assert.deepEqual(options.showForZeroValues, false, "showForZeroValues");
-    assert.deepEqual(options.customizeText({ valueText: "value", item: { data: { argument: "argument" } } }), "argument value", "customizeText");
+    assert.deepEqual(options.customizeText({ valueText: "value", item: { argument: "argument" } }), "argument value", "customizeText");
     assert.deepEqual(options.textAlignment, "center", "textAlign");
 });
 

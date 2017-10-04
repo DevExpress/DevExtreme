@@ -184,7 +184,7 @@ var Devices = Class.inherit({
     /**
     * @name devicesevents_orientationChanged
     * @publicName orientationChanged
-    * @type EVENT
+    * @type classEventType
     * @type_function_param1 e:object
     * @type_function_param1_field1 orientation:String
     */
