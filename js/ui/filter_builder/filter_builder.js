@@ -197,21 +197,7 @@ var FilterBuilder = Widget.inherit({
             }).appendTo($groupItem);
         }
 
-        var $operationButton = this._createButtonWithMenu({
-            caption: utils.getGroupText(criteria, this._getGroupOperations()),
-            menu: {
-                items: this._getGroupOperations(),
-                displayExpr: "text",
-                onItemClick: function(e) {
-                    utils.setGroupValue(criteria, e.itemData.value);
-                    $operationButton.html(e.itemData.text);
-                    // EVENT: groupValueChanged(e = {newValue, ?oldValue?})
-                }
-            }
-        }).addClass(FILTER_BUILDER_ITEM_TEXT_CLASS)
-            .addClass(FILTER_BUILDER_GROUP_OPERATION_CLASS)
-            .attr("tabindex", 0)
-            .appendTo($groupItem);
+        this._createGroupOperationButton(criteria).appendTo($groupItem);
 
         this._createAddButton(function() {
             var newGroup = utils.createEmptyGroup(that.option("defaultGroupOperation"));
@@ -224,6 +210,35 @@ var FilterBuilder = Widget.inherit({
         }).appendTo($groupItem);
 
         return $group;
+    },
+
+    _createGroupOperationButton: function(criteria) {
+        var groupMenuItem = utils.getGroupMenuItem(criteria, this._getGroupOperations()),
+            updateGroupMenuItem = function(component, groupMenuItem) {
+                component.unselectAll();
+                component.selectItem(groupMenuItem.value);
+            };
+        var $operationButton = this._createButtonWithMenu({
+            caption: groupMenuItem.text,
+            menu: {
+                items: this._getGroupOperations(),
+                displayExpr: "text",
+                keyExpr: "value",
+                onItemClick: function(e) {
+                    utils.setGroupValue(criteria, e.itemData.value);
+                    groupMenuItem = e.itemData;
+                    updateGroupMenuItem(e.component, groupMenuItem);
+                    $operationButton.html(e.itemData.text);
+                    // EVENT: groupValueChanged(e = {newValue, ?oldValue?})
+                },
+                onContentReady: function(e) {
+                    updateGroupMenuItem(e.component, groupMenuItem);
+                }
+            }
+        }).addClass(FILTER_BUILDER_ITEM_TEXT_CLASS)
+            .addClass(FILTER_BUILDER_GROUP_OPERATION_CLASS)
+            .attr("tabindex", 0);
+        return $operationButton;
     },
 
     _createButtonWithMenu: function(options) {
@@ -300,7 +315,11 @@ var FilterBuilder = Widget.inherit({
     _createFieldButtonWithMenu: function(condition, field) {
         var that = this,
             fields = this.option("fields"),
-            items = this.option("allowHierarchicalFields") ? utils.getPlainItems(fields) : fields;
+            items = this.option("allowHierarchicalFields") ? utils.getPlainItems(fields) : fields,
+            updateFieldMenuItem = function(component, field) {
+                component.unselectAll();
+                component.selectItem(field.dataField);
+            };
 
         var $fieldButton = this._createButtonWithMenu({
             caption: field.caption,
@@ -320,7 +339,11 @@ var FilterBuilder = Widget.inherit({
                     }
                     condition[0] = e.itemData.dataField;
                     field = e.itemData;
+                    updateFieldMenuItem(e.component, field);
                     $fieldButton.html(e.itemData.caption);
+                },
+                onContentReady: function(e) {
+                    updateFieldMenuItem(e.component, field);
                 }
             }
         }).addClass(FILTER_BUILDER_ITEM_TEXT_CLASS)

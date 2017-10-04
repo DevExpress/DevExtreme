@@ -91,14 +91,15 @@ function setGroupValue(group, value) {
     return group;
 }
 
-function getGroupText(group, availableGroups) {
+function getGroupMenuItem(group, availableGroups) {
     var groupValue = getGroupValue(group);
     for(var i = 0; i < availableGroups.length; i++) {
         var item = availableGroups[i];
         if(item.value === groupValue) {
-            return item.text;
+            return item;
         }
     }
+    //TODO: group item wasn't found
 }
 
 function getGroupValue(group) {
@@ -352,7 +353,7 @@ function getPlainItems(items) {
 
 exports.getPlainItems = getPlainItems;
 exports.setGroupValue = setGroupValue;
-exports.getGroupText = getGroupText;
+exports.getGroupMenuItem = getGroupMenuItem;
 exports.getGroupValue = getGroupValue;
 exports.getAvailableOperations = getAvailableOperations;
 exports.removeItem = removeItem;
