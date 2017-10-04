@@ -7,7 +7,8 @@ var $ = require("../../core/renderer"),
     extend = require("../../core/utils/extend").extend,
     messageLocalization = require("../../localization/message"),
     utils = require("./utils"),
-    ContextMenu = require("../context_menu"),
+    TreeView = require("../tree_view"),
+    Popup = require("../popup"),
     EditorFactoryMixin = require("../shared/ui.editor_factory_mixin");
 
 var FILTER_BUILDER_CLASS = "dx-filterbuilder",
@@ -24,6 +25,7 @@ var FILTER_BUILDER_CLASS = "dx-filterbuilder",
     FILTER_BUILDER_ITEM_OPERATION_CLASS = "dx-filterbuilder-item-operation",
     FILTER_BUILDER_ITEM_VALUE_CLASS = "dx-filterbuilder-item-value",
     FILTER_BUILDER_ITEM_VALUE_TEXT_CLASS = "dx-filterbuilder-item-value-text",
+    FILTER_BUILDER_POPUP_CLASS = "dx-filter-builder-popup",
     ACTIVE_CLASS = "dx-state-active",
 
     ACTIONS = [
@@ -181,7 +183,7 @@ var FilterBuilder = Widget.inherit({
 
         var $operationButton = this._createButtonWithMenu({
             caption: utils.getGroupText(criteria, this._getGroupOperations()),
-            contextMenu: {
+            menu: {
                 items: this._getGroupOperations(),
                 displayExpr: "text",
                 onItemClick: function(e) {
@@ -211,45 +213,53 @@ var FilterBuilder = Widget.inherit({
     _createButtonWithMenu: function(options) {
         var that = this,
             $button = $("<div>").text(options.caption),
-            removeAllAvailableMenu = function() {
+            removeMenu = function() {
                 that.element().find("." + ACTIVE_CLASS).removeClass(ACTIVE_CLASS);
-                that.element().find(".dx-has-context-menu").remove();
+                that.element().find(".dx-overlay .dx-treeview").remove();
+                that.element().find(".dx-overlay").remove();
             },
-            contextMenuOnItemClickWrapper = function(handler) {
+            menuOnItemClickWrapper = function(handler) {
                 return function(e) {
                     handler(e);
-
+                    removeMenu();
                     if(e.jQueryEvent.type === "keydown") {
                         eventsEngine.trigger($button, "focus");
                     }
                 };
             },
-            extendedMenuOptions = extend(options.contextMenu, {
-                target: $button,
-                rtlEnabled: this.option("rtlEnabled"),
-                onHidden: function(e) {
-                    $button.removeClass(ACTIVE_CLASS);
-                    removeAllAvailableMenu();
-                },
-                onItemClick: contextMenuOnItemClickWrapper(options.contextMenu.onItemClick)
+            treeViewOptions = extend(options.menu, {
+                focusStateEnabled: true,
+                onItemClick: menuOnItemClickWrapper(options.menu.onItemClick),
+                rtlEnabled: this.option("rtlEnabled")
             }),
             showContextMenu = function() {
-                removeAllAvailableMenu();
+                removeMenu();
                 $button.addClass(ACTIVE_CLASS);
-                that._createContextMenu(extendedMenuOptions)
-                    .appendTo(that.element())
-                    .dxContextMenu("show");
+                var popupOptions = {
+                    target: $button,
+                    onHiding: function(e) {
+                        $button.removeClass(ACTIVE_CLASS);
+                    },
+                    onHidden: function() {
+                        removeMenu();
+                    },
+                    rtlEnabled: treeViewOptions.rtlEnabled,
+                    contentTemplate: function(contentElement) {
+                        var $treeView = $("<div>");
+                        that._createComponent($treeView, TreeView, treeViewOptions);
+                        return $treeView;
+                    }
+                }
+                that._createPopup(popupOptions, $button);
             };
-
         this._subscribeOnClickAndEnterKey($button, showContextMenu);
-
         return $button;
     },
 
     _createOperationButtonWithMenu: function(condition, field) {
         var $operationButton = this._createButtonWithMenu({
             caption: condition[1],
-            contextMenu: {
+            menu: {
                 items: utils.getAvailableOperations(field.filterOperations),
                 displayExpr: "text",
                 onItemClick: function(e) {
@@ -275,7 +285,7 @@ var FilterBuilder = Widget.inherit({
         var that = this;
         var $fieldButton = this._createButtonWithMenu({
             caption: field.caption,
-            contextMenu: {
+            menu: {
                 items: this.option("fields"),
                 displayExpr: "caption",
                 onItemClick: function(e) {
@@ -341,7 +351,7 @@ var FilterBuilder = Widget.inherit({
 
     _createAddButton: function(addGroupHandler, addConditionHandler) {
         return this._createButtonWithMenu({
-            contextMenu: {
+            menu: {
                 items: [{
                     caption: messageLocalization.format("dxFilterBuilder-addGroup"),
                     click: addGroupHandler
@@ -421,16 +431,28 @@ var FilterBuilder = Widget.inherit({
         return $editor;
     },
 
-    _createContextMenu: function(options) {
-        var $contextMenuElement = $("<div>"),
+    _createPopup: function(options, $button) {
+        var $popup = $("<div>")
+                .addClass(FILTER_BUILDER_POPUP_CLASS)
+                .insertAfter($button),
             position = options.rtlEnabled ? "right" : "left";
 
-        this._createComponent($contextMenuElement, ContextMenu, extend({
-            visible: false,
-            focusStateEnabled: true,
-            position: { my: position + " top", at: position + " bottom", offset: "0 1" }
+        this._createComponent($popup, Popup, extend({
+            visible: true,
+            focusStateEnabled: false,
+            closeOnOutsideClick: true,
+            container: $popup,
+            rtlEnabled: this.option("rtlEnabled"),
+            shading: false,
+            width: "auto",
+            height: "auto",
+            showTitle: false,
+            deferRendering: false,
+            position: { my: position + " top", at: position + " bottom", offset: "0 1" },
+            animation: { show: { type: 'fade', from: 1, to: 1, delay: 0 }, hide: { type: 'fade', from: 0, to: 0, delay: 0 } }
         }, options));
-        return $contextMenuElement;
+
+        return $popup;
     },
 
     _subscribeOnClickAndEnterKey: function($button, handler, keyEvent) {

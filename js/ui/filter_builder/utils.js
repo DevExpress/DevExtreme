@@ -5,7 +5,10 @@ var errors = require("../../data/errors").errors,
 
 function getGroupCriteria(group) {
     var criteria;
-    if(group.length > 1 && group[0] === "!") {
+    if(group.length > 1
+        && group[0] === "!"
+        && !isCondition(group)
+    ) {
         criteria = group[1];
     } else {
         criteria = group;
@@ -64,14 +67,14 @@ function setGroupValue(group, value) {
             }
         },
         addValueToCriteria = function(criteria, value) {
-            var buffer = [];
+            var oldCriteria = [];
             for(i = 0; i < criteria.length; i++) {
-                buffer.push(criteria[i]);
+                oldCriteria.push(criteria[i]);
             }
             criteria.length = 0;
-            for(i = 0; i < buffer.length; i++) {
-                criteria.push(buffer[i]);
-                if(i !== buffer.length - 1) {
+            for(i = 0; i < oldCriteria.length; i++) {
+                criteria.push(oldCriteria[i]);
+                if(i !== oldCriteria.length - 1) {
                     criteria.push(value);
                 }
             }
@@ -227,11 +230,12 @@ function getField(dataField, fields) {
             return fields[i];
         }
     }
+    //TODO: move it to ../../data/errors
     throw "Field \"" + dataField + "\" has not found";
 }
 
 function isGroup(item) {
-    var isGroup = item.length === 1;
+    var isGroup = Array.isArray(item) && item.length === 1;
     if(!isGroup) {
         for(var i = 0; i < item.length; i++) {
             if(Array.isArray(item[i])) {
