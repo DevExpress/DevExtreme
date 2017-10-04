@@ -5,7 +5,9 @@ var $ = require("jquery"),
     keyboardMock = require("../../helpers/keyboardMock.js"),
     fx = require("animation/fx"),
     CustomStore = require("data/custom_store"),
-    DropDownBox = require("ui/drop_down_box");
+    DropDownBox = require("ui/drop_down_box"),
+    isRenderer = require("core/utils/type").isRenderer,
+    config = require("core/config");
 
 require("common.css!");
 
@@ -161,6 +163,20 @@ QUnit.test("content template should work", function(assert) {
     });
 
     assert.equal($(instance.content()).text(), "Test content", "content template has been rendered");
+});
+
+QUnit.test("field template should work", function(assert) {
+    new DropDownBox(this.$element, {
+        items: this.simpleItems,
+        opened: true,
+        fieldTemplate: function(value, fieldElement) {
+            assert.equal(isRenderer(fieldElement), config().useJQueryRenderer, "fieldElement is correct");
+            return $("<div>").dxTextBox({ value: 1 });
+        },
+        valueExpr: "id",
+        displayExpr: "name",
+        value: 1
+    });
 });
 
 QUnit.test("popup and editor width should be equal", function(assert) {

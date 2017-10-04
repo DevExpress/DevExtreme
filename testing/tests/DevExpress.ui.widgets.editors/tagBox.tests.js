@@ -11,7 +11,9 @@ var $ = require("jquery"),
     DataSource = require("data/data_source/data_source").DataSource,
     fx = require("animation/fx"),
     browser = require("core/utils/browser"),
-    dataQuery = require("data/query");
+    dataQuery = require("data/query"),
+    isRenderer = require("core/utils/type").isRenderer,
+    config = require("core/config");
 
 require("common.css!");
 
@@ -3075,7 +3077,9 @@ QUnit.test("the 'fieldTemplate' has correct arguments", function(assert) {
         tagBox = $("#tagBox").dxTagBox({
             dataSource: [1, 2, 3],
             value: [1],
-            fieldTemplate: function(selectedItems) {
+            fieldTemplate: function(selectedItems, fieldElement) {
+                assert.equal(isRenderer(fieldElement), config().useJQueryRenderer, "fieldElement is correct");
+
                 args.push(selectedItems);
                 return $("<div>").dxTextBox();
             }
