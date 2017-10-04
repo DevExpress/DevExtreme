@@ -1,6 +1,7 @@
 "use strict";
 
 var $ = require("../../core/renderer"),
+    Class = require("../../core/class"),
     eventsEngine = require("../../events/core/events_engine"),
     Widget = require("../widget/ui.widget"),
     registerComponent = require("../../core/component_registrator"),
@@ -31,6 +32,8 @@ var FILTER_BUILDER_CLASS = "dx-filterbuilder",
     ACTIONS = [
         "onEditorPreparing", "onEditorPrepared"
     ];
+
+var EditorFactory = Class.inherit(EditorFactoryMixin);
 
 var FilterBuilder = Widget.inherit({
     _getDefaultOptions: function() {
@@ -114,8 +117,13 @@ var FilterBuilder = Widget.inherit({
     },
 
     _init: function() {
+        this._initEditorFactory();
         this._initActions();
         this.callBase();
+    },
+
+    _initEditorFactory: function() {
+        this._editorFactory = new EditorFactory();
     },
 
     _initActions: function() {
@@ -249,7 +257,7 @@ var FilterBuilder = Widget.inherit({
                         that._createComponent($treeView, TreeView, treeViewOptions);
                         return $treeView;
                     }
-                }
+                };
                 that._createPopup(popupOptions, $button);
             };
         this._subscribeOnClickAndEnterKey($button, showContextMenu);
@@ -422,7 +430,7 @@ var FilterBuilder = Widget.inherit({
     _createValueEditor: function(value, field, setValueHandler) {
         var $editor = $("<div>").attr("tabindex", 0);
         // TODO: it have to be in shared file
-        this.createEditor($editor, extend({}, field, {
+        this._editorFactory.createEditor.call(this, $editor, extend({}, field, {
             value: value,
             parentType: "filterRow",
             setValue: setValueHandler,
@@ -463,7 +471,7 @@ var FilterBuilder = Widget.inherit({
             }
         });
     }
-}).include(EditorFactoryMixin);
+});
 
 registerComponent("dxFilterBuilder", FilterBuilder);
 
