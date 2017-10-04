@@ -4,7 +4,7 @@ var Shader = require("./ui.scheduler.currentTimeShader");
 
 var HorizontalCurrentTimeShader = Shader.inherit({
     _renderShader: function() {
-        var shaderWidth = this._workspace._getIndicationWidth(),
+        var shaderWidth = this._workspace.getIndicationWidth(),
             maxWidth = this._$container.outerWidth();
 
         if(shaderWidth > maxWidth) {

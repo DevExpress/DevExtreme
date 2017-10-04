@@ -9,7 +9,7 @@ var DATE_TIME_SHADER_ALL_DAY_CLASS = "dx-scheduler-date-time-shader-all-day",
 
 var VerticalCurrentTimeShader = Shader.inherit({
     _renderShader: function() {
-        var shaderHeight = this._workspace._getIndicationHeight(),
+        var shaderHeight = this._workspace.getIndicationHeight(),
             maxHeight = this._$container.outerHeight();
 
         if(shaderHeight > maxHeight) {
@@ -19,7 +19,7 @@ var VerticalCurrentTimeShader = Shader.inherit({
         if(shaderHeight > 0) {
             this._$shader.height(shaderHeight);
 
-            var shaderWidth = this._workspace._getIndicationWidth();
+            var shaderWidth = this._workspace.getIndicationWidth();
             var groupCount = this._workspace._getGroupCount() || 1;
             for(var i = 0; i < groupCount; i++) {
                 this._renderTopShader(this._$shader, shaderHeight, shaderWidth, i);

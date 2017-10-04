@@ -170,7 +170,7 @@ var SchedulerTimeline = SchedulerWorkSpace.inherit({
         this._applyCellTemplates(groupCellTemplates);
     },
 
-    _getIndicationWidth: function() {
+    getIndicationWidth: function() {
         var today = this._getToday(),
             cellWidth = this.getCellWidth(),
             date = this._getIndicationFirstViewDate(),
@@ -182,6 +182,12 @@ var SchedulerTimeline = SchedulerWorkSpace.inherit({
             cellCount = duration / this.getCellDuration();
 
         return cellCount * cellWidth;
+    },
+
+    _renderIndicator: function(width, height, rtlOffset, $container) {
+        var $indicator = this._createIndicator($container);
+        $indicator.height($container.outerHeight());
+        $indicator.css("left", rtlOffset ? rtlOffset - width : width);
     },
 
     _isVerticalShader: function() {

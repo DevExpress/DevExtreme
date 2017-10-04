@@ -166,6 +166,25 @@ var stubInvokeMethod = function(instance, options) {
         assert.equal($indicators.eq(1).position().top, 9.5 * cellHeight);
     });
 
+    QUnit.test("DateTimeIndicator should have correct positions, Day view with groups without shader", function(assert) {
+        this.instance.option({
+            indicatorTime: new Date(2017, 8, 5, 12, 45),
+            shadeUntilNow: false
+        });
+
+        this.instance.option("groups", [{ name: "a", items: [{ id: 1, text: "a.1" }, { id: 2, text: "a.2" }] }]);
+
+        var $element = this.instance.$element(),
+            $indicators = $element.find("." + SCHEDULER_DATE_TIME_INDICATOR_CLASS),
+            cellHeight = this.instance.$element().find(".dx-scheduler-date-table-cell").eq(0).outerHeight();
+
+        assert.equal($indicators.length, 2, "Indicator count is correct");
+        assert.equal($indicators.eq(0).position().left, 0);
+        assert.equal($indicators.eq(0).position().top, 9.5 * cellHeight);
+        assert.equal($indicators.eq(1).position().left, this.instance._getRoundedCellWidth());
+        assert.equal($indicators.eq(1).position().top, 9.5 * cellHeight);
+    });
+
     QUnit.test("Shader should be rendered if needed, Day view", function(assert) {
         this.instance.option({
             indicatorTime: new Date(2017, 8, 5, 12, 45),

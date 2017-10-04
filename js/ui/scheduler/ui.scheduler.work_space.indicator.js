@@ -39,28 +39,33 @@ var SchedulerWorkSpaceIndicator = SchedulerWorkSpace.inherit({
             if(this.option("showCurrentTimeIndicator") && this._needRenderDateTimeIndicator()) {
                 var groupCount = isVertical && this._getGroupCount() || 1,
                     $container = this._dateTableScrollable.$content(),
-                    width = this._getIndicationWidth(),
-                    height = this._getIndicationHeight(),
+                    width = this.getIndicationWidth(),
+                    height = this.getIndicationHeight(),
                     rtlOffset = this._getRtlOffset(this.getCellWidth());
 
                 if(height > 0) {
-                    for(var i = 0; i < groupCount; i++) {
-                        var $indicator = $("<div>").addClass(SCHEDULER_DATE_TIME_INDICATOR_CLASS),
-                            offset = this._getCellCount() * this._getRoundedCellWidth() * i + (width - this._getRoundedCellWidth());
-
-                        if(isVertical) {
-                            $indicator.width(this.getCellWidth());
-                            $indicator.css("left", rtlOffset ? rtlOffset - offset : offset);
-                        } else {
-                            $indicator.height($container.outerHeight());
-                            $indicator.css("left", rtlOffset ? rtlOffset - width : width);
-                        }
-
-                        $container.append($indicator);
-                    }
+                    this._renderIndicator(width, height, rtlOffset, $container, groupCount);
                 }
             }
         }
+    },
+
+    _renderIndicator: function(width, height, rtlOffset, $container, groupCount) {
+        for(var i = 0; i < groupCount; i++) {
+            var $indicator = this._createIndicator($container);
+            var offset = this._getCellCount() * this._getRoundedCellWidth() * i + (width - this._getRoundedCellWidth());
+
+            $indicator.width(this.getCellWidth());
+            $indicator.css("left", rtlOffset ? rtlOffset - offset : offset);
+            $indicator.css("top", height);
+        }
+    },
+
+    _createIndicator: function($container) {
+        var $indicator = $("<div>").addClass(SCHEDULER_DATE_TIME_INDICATOR_CLASS);
+        $container.append($indicator);
+
+        return $indicator;
     },
 
     _getRtlOffset: function(width) {
@@ -90,7 +95,7 @@ var SchedulerWorkSpaceIndicator = SchedulerWorkSpace.inherit({
         return true;
     },
 
-    _getIndicationWidth: function() {
+    getIndicationWidth: function() {
         var today = this._getToday(),
             firstViewDate = new Date(this._firstViewDate),
             maxWidth = this.getCellWidth() * this._getCellCount();
@@ -116,7 +121,7 @@ var SchedulerWorkSpaceIndicator = SchedulerWorkSpace.inherit({
         return width / cellCount;
     },
 
-    _getIndicationHeight: function() {
+    getIndicationHeight: function() {
         var today = this._getToday(),
             cellHeight = this.getCellHeight(),
             date = new Date(this._firstViewDate);
