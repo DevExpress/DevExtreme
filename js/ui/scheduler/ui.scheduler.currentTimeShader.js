@@ -9,7 +9,7 @@ var DATE_TIME_SHADER_CLASS = "dx-scheduler-date-time-shader";
 var currentTimeShader = Class.inherit({
     render: function(workspace) {
         this._workspace = workspace;
-        this._$container = workspace._dateTableScrollable.content();
+        this._$container = workspace._dateTableScrollable.$content();
 
         this._$shader = $("<div>").addClass(DATE_TIME_SHADER_CLASS);
 

@@ -38,7 +38,7 @@ var SchedulerWorkSpaceIndicator = SchedulerWorkSpace.inherit({
 
             if(this.option("showCurrentTimeIndicator") && this._needRenderDateTimeIndicator()) {
                 var groupCount = isVertical && this._getGroupCount() || 1,
-                    $container = this._dateTableScrollable.content(),
+                    $container = this._dateTableScrollable.$content(),
                     width = this._getIndicationWidth(),
                     height = this._getIndicationHeight(),
                     rtlOffset = this._getRtlOffset(this.getCellWidth());
@@ -64,7 +64,7 @@ var SchedulerWorkSpaceIndicator = SchedulerWorkSpace.inherit({
     },
 
     _getRtlOffset: function(width) {
-        return this.option("rtlEnabled") ? this._dateTableScrollable.content().outerWidth() - this.getTimePanelWidth() - width : 0;
+        return this.option("rtlEnabled") ? this._dateTableScrollable.$content().outerWidth() - this.getTimePanelWidth() - width : 0;
     },
 
     _setIndicationUpdateInterval: function() {
