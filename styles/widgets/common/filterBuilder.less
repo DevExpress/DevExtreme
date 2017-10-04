@@ -1,4 +1,16 @@
 .dx-filterbuilder {
+    .dx-overlay-wrapper .dx-overlay-content{
+        border-radius: 0;
+        > .dx-popup-content{
+            padding: 0;
+        }
+    }
+    .dx-treeview .dx-treeview-node {
+        padding-left: 0;
+        .dx-treeview-node-container-opened {
+            margin-left: 15px;
+        }
+    }
     &.dx-rtl {
         .dx-filterbuilder-text, .dx-filterbuilder-action-icon {
             margin-left: 5px;
@@ -24,6 +36,10 @@
             display: inline-block;
             white-space: nowrap;
 
+            > .dx-filter-builder-popup {
+                float: left;
+            }
+
             .dx-filterbuilder-text {
                 display: inline-block;
                 cursor: pointer;
@@ -33,8 +49,7 @@
                 &.dx-filterbuilder-item-field,
                 &.dx-filterbuilder-item-operation,
                 .dx-filterbuilder-item-value-text  {
-                    min-width: 30px;
-                    text-align: center;
+                    min-width: 20px;
                     padding: 2px 7px 3px 7px;
                 }
 

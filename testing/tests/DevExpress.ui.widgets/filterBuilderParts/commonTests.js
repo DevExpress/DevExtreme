@@ -133,13 +133,13 @@ QUnit.test("value and operations depend on selected field", function(assert) {
         fieldButton.click();
         assert.ok(fieldButton.hasClass(ACTIVE_CLASS));
 
-        $menu = container.children(".dx-has-context-menu");
+        $menu = container.find(".dx-overlay");
         assert.ok($menu.length === 1);
 
-        var $dateMenuItem = $(".dx-menu-item-text").eq(2);
-        assert.equal($dateMenuItem.html(), "State");
+        var $dateMenuItem = $(".dx-treeview-item").eq(2);
+        assert.equal($dateMenuItem.text(), "State");
 
-        $dateMenuItem.click();
+        $dateMenuItem.trigger("dxclick");
         assert.equal(fieldButton.html(), "State");
 
         operationButton = container.find("." + FILTER_BUILDER_ITEM_OPERATION_CLASS);
@@ -149,7 +149,7 @@ QUnit.test("value and operations depend on selected field", function(assert) {
         assert.equal(valueButton.text(), "<enter a value>");
 
         assert.ok(!fieldButton.hasClass(ACTIVE_CLASS));
-        $menu = container.children(".dx-has-context-menu");
+        $menu = container.children(".dx-overlay");
         assert.ok($menu.length === 0);
     } finally {
         fx.off = false;
