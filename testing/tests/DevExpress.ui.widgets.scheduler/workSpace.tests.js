@@ -739,7 +739,9 @@ QUnit.testStart(function() {
 
     QUnit.module("Work Space Week", {
         beforeEach: function() {
-            this.instance = $("#scheduler-work-space").dxSchedulerWorkSpaceWeek().dxSchedulerWorkSpaceWeek("instance");
+            this.instance = $("#scheduler-work-space").dxSchedulerWorkSpaceWeek({
+                showCurrentTimeIndicator: false
+            }).dxSchedulerWorkSpaceWeek("instance");
             stubInvokeMethod(this.instance);
         }
     });
@@ -1201,7 +1203,7 @@ QUnit.testStart(function() {
             currentDate: new Date(2016, 2, 14)
         });
 
-        assert.equal(spy.callCount, 343);
+        assert.equal(spy.callCount, 344);
         spy.restore();
     });
 })("Work Space Week");
@@ -3431,3 +3433,4 @@ QUnit.testStart(function() {
     });
 
 })("Work Space Work Week with intervalCount");
+

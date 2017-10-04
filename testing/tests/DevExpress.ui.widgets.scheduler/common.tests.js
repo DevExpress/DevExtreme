@@ -229,7 +229,9 @@ QUnit.testStart(function() {
 
     QUnit.module("Methods", {
         beforeEach: function() {
-            this.instance = $("#scheduler").dxScheduler().dxScheduler("instance");
+            this.instance = $("#scheduler").dxScheduler({
+                showCurrentTimeIndicator: false
+            }).dxScheduler("instance");
             this.clock = sinon.useFakeTimers();
 
             fx.off = true;
@@ -1040,6 +1042,88 @@ QUnit.testStart(function() {
         this.createInstance();
 
         assert.equal(this.instance.option("showAllDayPanel"), true, "showAllDayPanel option value is right on init");
+    });
+
+    QUnit.test("showCurrentTimeIndicator should have right default", function(assert) {
+        this.createInstance();
+
+        assert.equal(this.instance.option("showCurrentTimeIndicator"), true, "showCurrentTimeIndicator option value is right on init");
+    });
+
+    QUnit.test("showCurrentTimeIndicator option should be passed to workSpace", function(assert) {
+        this.createInstance({
+            currentView: "week",
+            showCurrentTimeIndicator: false
+        });
+
+        var workSpaceWeek = this.instance.getWorkSpace();
+
+        assert.equal(workSpaceWeek.option("showCurrentTimeIndicator"), false, "workspace has correct showCurrentTimeIndicator");
+
+        this.instance.option("showCurrentTimeIndicator", true);
+
+        assert.equal(workSpaceWeek.option("showCurrentTimeIndicator"), true, "workspace has correct showCurrentTimeIndicator");
+    });
+
+    QUnit.test("indicatorTime option should be passed to workSpace", function(assert) {
+        this.createInstance({
+            currentView: "week",
+            indicatorTime: new Date(2017, 8, 19)
+        });
+
+        var workSpaceWeek = this.instance.getWorkSpace();
+
+        assert.deepEqual(workSpaceWeek.option("indicatorTime"), new Date(2017, 8, 19), "workspace has correct indicatorTime");
+
+        this.instance.option("indicatorTime", new Date(2017, 8, 20));
+
+        assert.deepEqual(workSpaceWeek.option("indicatorTime"), new Date(2017, 8, 20), "workspace has correct indicatorTime");
+    });
+
+    QUnit.test("indicatorUpdateInterval should have right default", function(assert) {
+        this.createInstance({
+            currentView: "week"
+        });
+
+        assert.equal(this.instance.option("indicatorUpdateInterval"), 300000, "workspace has correct indicatorUpdateInterval");
+    });
+
+    QUnit.test("indicatorUpdateInterval option should be passed to workSpace", function(assert) {
+        this.createInstance({
+            currentView: "week",
+            indicatorUpdateInterval: 2000
+        });
+
+        var workSpaceWeek = this.instance.getWorkSpace();
+
+        assert.equal(workSpaceWeek.option("indicatorUpdateInterval"), 2000, "workspace has correct indicatorUpdateInterval");
+
+        this.instance.option("indicatorUpdateInterval", 3000);
+
+        assert.equal(workSpaceWeek.option("indicatorUpdateInterval"), 3000, "workspace has correct indicatorUpdateInterval");
+    });
+
+    QUnit.test("shadeUntilNow should have right default", function(assert) {
+        this.createInstance({
+            currentView: "week"
+        });
+
+        assert.equal(this.instance.option("shadeUntilNow"), false, "workspace has correct shadeUntilNow");
+    });
+
+    QUnit.test("shadeUntilNow option should be passed to workSpace", function(assert) {
+        this.createInstance({
+            currentView: "week",
+            shadeUntilNow: false
+        });
+
+        var workSpaceWeek = this.instance.getWorkSpace();
+
+        assert.equal(workSpaceWeek.option("shadeUntilNow"), false, "workspace has correct shadeUntilNow");
+
+        this.instance.option("shadeUntilNow", true);
+
+        assert.equal(workSpaceWeek.option("shadeUntilNow"), true, "workspace has correct shadeUntilNow");
     });
 
     QUnit.test("appointments should be repainted after scheduler dimensions changing", function(assert) {
@@ -2639,7 +2723,9 @@ QUnit.testStart(function() {
 
     QUnit.module("Loading", {
         beforeEach: function() {
-            this.instance = $("#scheduler").dxScheduler().dxScheduler("instance");
+            this.instance = $("#scheduler").dxScheduler({
+                showCurrentTimeIndicator: false
+            }).dxScheduler("instance");
             this.clock = sinon.useFakeTimers();
             this.instance.option({
                 currentView: "day",
