@@ -227,7 +227,7 @@ QUnit.test("View switcher should be rendered correctly when views contains objec
         switcher = $element.find(".dx-dropdownmenu.dx-scheduler-view-switcher").dxDropDownMenu("instance");
 
     switcher.open();
-    assert.equal(switcher._popup.content().find(".dx-item").eq(1).text(), "TestDay", "ViewSwitcher was rendered correctly");
+    assert.equal(switcher._popup.$content().find(".dx-item").eq(1).text(), "TestDay", "ViewSwitcher was rendered correctly");
 });
 
 QUnit.test("currentView option should be saved then views changed", function(assert) {
@@ -300,7 +300,7 @@ QUnit.test("'currentViewUpdated' observer should be notified after click on dxDr
     switcher.open();
 
     var stub = sinon.stub(this.instance, "notifyObserver").withArgs("currentViewUpdated"),
-        $item = switcher._popup.content().find(".dx-item").eq(1);
+        $item = switcher._popup.$content().find(".dx-item").eq(1);
 
     $($item).trigger("dxclick");
 

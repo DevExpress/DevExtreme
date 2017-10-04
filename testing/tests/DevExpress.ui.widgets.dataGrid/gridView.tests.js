@@ -1420,7 +1420,7 @@ function createGridView(options, userOptions) {
 
         //assert
         scrollable = $testElement.find(".dx-datagrid-rowsview").dxScrollable("instance");
-        assert.strictEqual(scrollable.content()[0].style.width, "", "no width in scrollable content");
+        assert.strictEqual(scrollable.$content()[0].style.width, "", "no width in scrollable content");
     });
 
     QUnit.test('Scrollable content without width when there is no horizontal scrollbar', function(assert) {
@@ -1444,8 +1444,9 @@ function createGridView(options, userOptions) {
         gridView.resize();
 
         //assert
+
         scrollable = $testElement.find(".dx-datagrid-rowsview").dxScrollable("instance");
-        assert.strictEqual(scrollable.content()[0].style.width, "", "width of the scrollable content");
+        assert.strictEqual(scrollable.$content()[0].style.width, "", "width of the scrollable content");
     });
 
     QUnit.test('Scroll position headers and container with columnWidth auto', function(assert) {

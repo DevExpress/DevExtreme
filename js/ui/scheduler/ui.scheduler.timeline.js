@@ -164,7 +164,7 @@ var SchedulerTimeline = SchedulerWorkSpace.inherit({
         this._renderDateTimeIndication();
         this._setIndicationUpdateInterval();
 
-        this._$sidebarTable.appendTo(this._sidebarScrollable.content());
+        this._$sidebarTable.appendTo(this._sidebarScrollable.$content());
 
         this._setGroupHeaderCellsHeight();
         this._applyCellTemplates(groupCellTemplates);

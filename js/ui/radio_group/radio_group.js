@@ -269,7 +269,7 @@ var RadioGroup = Editor.inherit({
         $("<div>").addClass(RADIO_BUTTON_ICON_DOT_CLASS).appendTo($radio);
         $radioContainer = $("<div>").append($radio).addClass(RADIO_VALUE_CONTAINER_CLASS);
 
-        e.itemElement.prepend($radioContainer);
+        $(e.itemElement).prepend($radioContainer);
     },
 
     _itemClickHandler: function(e) {

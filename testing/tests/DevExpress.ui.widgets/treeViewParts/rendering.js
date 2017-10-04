@@ -469,8 +469,8 @@ QUnit.test("Render checkbox before itemRendered is fired", function(assert) {
         showCheckBoxesMode: "normal",
         onItemRendered: function(e) {
             i++;
-            assert.equal(e.element.find("." + internals.NODE_CLASS).find(".dx-checkbox").length, i);
-            assert.equal(e.element.find("." + internals.NODE_CLASS + "." + internals.ITEM_WITH_CHECKBOX_CLASS).length, i);
+            assert.equal($(e.element).find("." + internals.NODE_CLASS).find(".dx-checkbox").length, i);
+            assert.equal($(e.element).find("." + internals.NODE_CLASS + "." + internals.ITEM_WITH_CHECKBOX_CLASS).length, i);
         }
     });
 
@@ -804,4 +804,20 @@ QUnit.test("Render Search editor", function(assert) {
     $searchEditor = $treeView.children().first();
     assert.ok($searchEditor.hasClass("dx-treeview-search"), "has search editor");
     assert.strictEqual($searchEditor.dxTextBox("instance").option("value"), "2", "editor value");
+});
+
+QUnit.test("Render Search editor with default options", function(assert) {
+    var searchEditorInstance,
+        treeViewInstance = initTree({
+            items: $.extend(true, [], DATA[1]),
+            keyExpr: "key",
+            searchEnabled: true
+        }).dxTreeView("instance");
+
+    searchEditorInstance = treeViewInstance.$element().children().first().dxTextBox("instance");
+    assert.equal(searchEditorInstance.option("placeholder"), "Search");
+    assert.equal(searchEditorInstance.option("value"), "");
+    assert.equal(searchEditorInstance.option("valueChangeEvent"), "input");
+    assert.equal(searchEditorInstance.option("mode"), "search");
+    assert.equal(searchEditorInstance.option("tabIndex"), 0);
 });

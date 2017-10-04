@@ -492,6 +492,16 @@ var VirtualScrollingRowsViewExtender = (function() {
             }
         },
 
+        updateFreeSpaceRowHeight: function() {
+            var result = this.callBase.apply(this, arguments);
+
+            if(result) {
+                this._updateContentPosition();
+            }
+
+            return result;
+        },
+
         setLoading: function(isLoading, messageText) {
             var that = this,
                 callBase = that.callBase,
@@ -537,7 +547,7 @@ var VirtualScrollingRowsViewExtender = (function() {
             this.callBase.apply(this, arguments);
 
             if(this.option("scrolling.mode") === "virtual") {
-                $content = scrollable ? scrollable.content() : this.element();
+                $content = scrollable ? scrollable.$content() : this.element();
                 this.callBase(widths, $content.children("." + this.addWidgetPrefix(CONTENT_CLASS)).children(":not(." + this.addWidgetPrefix(TABLE_CONTENT_CLASS) + ")"));
             }
         },

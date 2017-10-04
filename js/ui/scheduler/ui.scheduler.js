@@ -1955,7 +1955,7 @@ var Scheduler = Widget.inherit({
     },
 
     _popupContent: function(appointmentData, processTimeZone) {
-        var $popupContent = this._popup.content();
+        var $popupContent = this._popup.$content();
         this._createAppointmentForm(appointmentData, $popupContent, processTimeZone);
 
         return $popupContent;
@@ -2645,7 +2645,7 @@ var Scheduler = Widget.inherit({
                 };
             } else {
                 getGroups = function() {
-                    var apptPosition = appointmentElement.position();
+                    var apptPosition = $(appointmentElement).position();
                     return workSpace.getCellDataByCoordinates(apptPosition).groups;
                 };
 

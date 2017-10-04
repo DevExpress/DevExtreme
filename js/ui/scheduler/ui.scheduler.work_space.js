@@ -4,6 +4,7 @@ var $ = require("../../core/renderer"),
     eventsEngine = require("../../events/core/events_engine"),
     dataUtils = require("../../core/element_data"),
     dateUtils = require("../../core/utils/date"),
+    getPublicElement = require("../../core/utils/dom").getPublicElement,
     extend = require("../../core/utils/extend").extend,
     each = require("../../core/utils/iterator").each,
     messageLocalization = require("../../localization/message"),
@@ -580,7 +581,7 @@ var SchedulerWorkSpace = Widget.inherit({
     },
 
     _createWorkSpaceStaticElements: function() {
-        this._dateTableScrollable.content().append(this._$timePanel, this._$dateTable);
+        this._dateTableScrollable.$content().append(this._$timePanel, this._$dateTable);
         this.$element().append(this._$fixedContainer, this._$headerPanel, this._$allDayContainer, this._$allDayPanel, this._dateTableScrollable.$element());
     },
 
@@ -590,9 +591,9 @@ var SchedulerWorkSpace = Widget.inherit({
         this._createSidebarScrollable();
         this.$element().append(this._dateTableScrollable.$element());
 
-        this._headerScrollable.content().append(this._$headerPanel, this._$allDayContainer, this._$allDayPanel);
-        this._dateTableScrollable.content().append(this._$dateTable);
-        this._sidebarScrollable.content().append(this._$timePanel);
+        this._headerScrollable.$content().append(this._$headerPanel, this._$allDayContainer, this._$allDayPanel);
+        this._dateTableScrollable.$content().append(this._$dateTable);
+        this._sidebarScrollable.$content().append(this._$timePanel);
     },
 
     _createHeaderScrollable: function() {
@@ -820,7 +821,7 @@ var SchedulerWorkSpace = Widget.inherit({
         });
         eventsEngine.on($element, SCHEDULER_CELL_DXCLICK_EVENT_NAME, cellSelector, function(e) {
             var $cell = $(e.target);
-            that._cellClickAction({ jQueryEvent: e, cellElement: $cell, cellData: that.getCellData($cell) });
+            that._cellClickAction({ jQueryEvent: e, cellElement: getPublicElement($cell), cellData: that.getCellData($cell) });
         });
     },
 
@@ -1375,7 +1376,7 @@ var SchedulerWorkSpace = Widget.inherit({
     },
 
     getWorkArea: function() {
-        return this._dateTableScrollable.content();
+        return this._dateTableScrollable.$content();
     },
 
     getScrollable: function() {

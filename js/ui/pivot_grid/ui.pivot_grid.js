@@ -3,6 +3,7 @@
 var $ = require("../../core/renderer"),
     eventsEngine = require("../../events/core/events_engine"),
     registerComponent = require("../../core/component_registrator"),
+    getPublicElement = require("../../core/utils/dom").getPublicElement,
     stringUtils = require("../../core/utils/string"),
     commonUtils = require("../../core/utils/common"),
     each = require("../../core/utils/iterator").each,
@@ -1140,7 +1141,7 @@ var PivotGrid = Widget.inherit({
                 minWidth: fieldChooserOptions.minWidth,
                 minHeight: fieldChooserOptions.minHeight,
                 onResize: function(e) {
-                    e.component.content().dxPivotGridFieldChooser("updateDimensions");
+                    e.component.$content().dxPivotGridFieldChooser("updateDimensions");
                 },
                 onShown: function(e) {
                     that._createComponent(e.component.content(), PivotGridFieldChooser, fieldChooserComponentOptions);
@@ -1149,7 +1150,7 @@ var PivotGrid = Widget.inherit({
 
         if(that._fieldChooserPopup) {
             that._fieldChooserPopup.option(popupOptions);
-            that._fieldChooserPopup.content().dxPivotGridFieldChooser(fieldChooserComponentOptions);
+            that._fieldChooserPopup.$content().dxPivotGridFieldChooser(fieldChooserComponentOptions);
         } else {
             that._fieldChooserPopup = that._createComponent($(DIV).addClass(FIELD_CHOOSER_POPUP_CLASS).appendTo(container), Popup, popupOptions);
         }
@@ -1351,7 +1352,7 @@ var PivotGrid = Widget.inherit({
                 area: $table.data("area"),
                 rowIndex: rowIndex,
                 columnIndex: columnIndex,
-                cellElement: $cellElement,
+                cellElement: getPublicElement($cellElement),
                 cell: cell
             };
         return args;

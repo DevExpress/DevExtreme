@@ -3,6 +3,7 @@
 var $ = require("../../core/renderer"),
     eventsEngine = require("../../events/core/events_engine"),
     commonUtils = require("../../core/utils/common"),
+    getPublicElement = require("../../core/utils/dom").getPublicElement,
     isPlainObject = require("../../core/utils/type").isPlainObject,
     when = require("../../core/utils/deferred").when,
     extend = require("../../core/utils/extend").extend,
@@ -855,7 +856,7 @@ var CollectionWidget = Widget.inherit({
         var renderContentPromise = this._renderItemContent({
             index: index,
             itemData: itemData,
-            container: $itemContent,
+            container: getPublicElement($itemContent),
             contentClass: this._itemContentClass(),
             defaultTemplateName: this.option("itemTemplate")
         });
@@ -869,7 +870,7 @@ var CollectionWidget = Widget.inherit({
                 itemIndex: index
             });
 
-            that._executeItemRenderAction(index, itemData, $itemFrame);
+            that._executeItemRenderAction(index, itemData, getPublicElement($itemFrame));
         });
 
         return $itemFrame;
@@ -901,8 +902,8 @@ var CollectionWidget = Widget.inherit({
     },
 
     _renderItemContentByNode: function(args, $node) {
-        args.container.replaceWith($node);
-        args.container = $node;
+        $(args.container).replaceWith($node);
+        args.container = getPublicElement($node);
         this._addItemContentClasses(args);
 
         return $node;
@@ -914,7 +915,7 @@ var CollectionWidget = Widget.inherit({
             args.contentClass
         ];
 
-        args.container.addClass(classes.join(" "));
+        $(args.container).addClass(classes.join(" "));
     },
 
     _renderItemFrame: function(index, itemData, $container, $itemToReplace) {
@@ -964,7 +965,7 @@ var CollectionWidget = Widget.inherit({
 
     _createItemRenderAction: function() {
         return (this._itemRenderAction = this._createActionByOption("onItemRendered", {
-            element: this.$element(),
+            element: this.element(),
             excludeValidators: ["designMode", "disabled", "readOnly"],
             category: "rendering"
         }));
@@ -1044,7 +1045,7 @@ var CollectionWidget = Widget.inherit({
 
     _extendActionArgs: function($itemElement) {
         return {
-            itemElement: $itemElement,
+            itemElement: getPublicElement($itemElement),
             itemIndex: this._itemElements().index($itemElement),
             itemData: this._getItemData($itemElement)
         };

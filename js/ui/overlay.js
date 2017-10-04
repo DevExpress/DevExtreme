@@ -8,6 +8,7 @@ var $ = require("../core/renderer"),
     viewPortUtils = require("../core/utils/view_port"),
     extend = require("../core/utils/extend").extend,
     inArray = require("../core/utils/array").inArray,
+    getPublicElement = require("../core/utils/dom").getPublicElement,
     viewPortChanged = viewPortUtils.changeCallback,
     hideTopOverlayCallback = require("../mobile/hide_top_overlay").hideCallback,
     positionUtils = require("../animation/position"),
@@ -976,7 +977,7 @@ var Overlay = Widget.inherit({
 
         var contentTemplate = this._getTemplate(this.option("contentTemplate"));
         contentTemplate && contentTemplate.render({
-            container: this.content(),
+            container: this.$content(),
             noModel: true
         });
 
@@ -1056,7 +1057,7 @@ var Overlay = Widget.inherit({
     },
 
     _getDragTarget: function() {
-        return this.content();
+        return this.$content();
     },
 
     _dragStartHandler: function(e) {
@@ -1323,7 +1324,7 @@ var Overlay = Widget.inherit({
 
     _clean: function() {
         if(!this._contentAlreadyRendered) {
-            this.content().empty();
+            this.$content().empty();
         }
 
         this._renderVisibility(false);
@@ -1452,6 +1453,10 @@ var Overlay = Widget.inherit({
         }).bind(this));
     },
 
+    $content: function() {
+        return this._$content;
+    },
+
     /**
     * @name dxOverlaymethods_show
     * @publicName show()
@@ -1476,7 +1481,7 @@ var Overlay = Widget.inherit({
     * @return jQuery
     */
     content: function() {
-        return this._$content;
+        return getPublicElement(this._$content);
     },
 
     /**

@@ -65,6 +65,7 @@ var $ = require("jquery"),
     messageLocalization = require("localization/message"),
     setTemplateEngine = require("ui/set_template_engine"),
     fx = require("animation/fx"),
+    config = require("core/config"),
     ajaxMock = require("../../helpers/ajaxMock.js"),
 
     DX_STATE_HOVER_CLASS = "dx-state-hover",
@@ -411,15 +412,15 @@ QUnit.test("cellClick/cellHoverChanged handler should be executed when define vi
     dataGrid.on("cellClick", function(e) {
         cellClickCount++;
 
-        assert.equal(e.cellElement.get(0).tagName, "TD", "correct cell element tag");
-        assert.equal(e.cellElement.text(), "1", "correct cell content");
+        assert.equal($(e.cellElement).get(0).tagName, "TD", "correct cell element tag");
+        assert.equal($(e.cellElement).text(), "1", "correct cell content");
     });
 
     dataGrid.on("cellHoverChanged", function(e) {
         cellHoverChangedCount++;
 
-        assert.equal(e.cellElement.get(0).tagName, "TD", "correct cell element tag");
-        assert.equal(e.cellElement.text(), "1", "correct cell content");
+        assert.equal($(e.cellElement).get(0).tagName, "TD", "correct cell element tag");
+        assert.equal($(e.cellElement).text(), "1", "correct cell content");
     });
 
     $(dataGrid.$element())
@@ -542,6 +543,41 @@ QUnit.test("Check grouping context menu operability", function(assert) {
     clock.tick(300);
 
     assert.equal(dataGrid.columnOption("field2", "groupIndex"), undefined, "field2 has no groupIndex");
+
+    clock.restore();
+});
+
+QUnit.test("Group panel should set correct 'max-width' after clear grouping", function(assert) {
+    var clock = sinon.useFakeTimers(),
+        dataGrid = $("#dataGrid").dxDataGrid({
+            dataSource: {
+                store: [
+                    { field1: "1", field2: "2", field3: "3", field4: "4", field5: "5" },
+                    { field1: "11", field2: "22", field3: "33", field4: "44", field5: "55" }]
+            },
+            width: 460,
+            groupPanel: {
+                emptyPanelText: "Long long long long long long long long long long long text",
+                visible: true
+            },
+            editing: { allowAdding: true, mode: "batch" },
+            columnChooser: {
+                enabled: true
+            }
+        }).dxDataGrid("instance"),
+        $dataGrid = $(dataGrid.element());
+
+    clock.tick();
+    assert.equal($dataGrid.find(".dx-toolbar-item-invisible").length, 4, "4 toolbar items are hidden, group panel has a long message");
+
+    dataGrid.columnOption("field2", "groupIndex", 0);
+    clock.tick();
+
+    assert.equal($dataGrid.find(".dx-toolbar-item-invisible").length, 0, "all toolbar items are visible, group panel has a group with short name");
+
+    dataGrid.clearGrouping();
+    clock.tick();
+    assert.equal($dataGrid.find(".dx-toolbar-item-invisible").length, 4, "4 toolbar items are hidden after clear grouping");
 
     clock.restore();
 });
@@ -1820,7 +1856,7 @@ QUnit.test("column headers visibility when hide removing row in batch editing mo
             },
             onCellPrepared: function(e) {
                 if(e.rowType === "data" && e.column.command === "edit" && e.row.removed) {
-                    e.cellElement.parent().css({ display: 'none' });
+                    $(e.cellElement).parent().css({ display: 'none' });
                 }
             }
         }),
@@ -3607,7 +3643,7 @@ QUnit.test("row alternation should be correct if virtual scrolling is enabled an
     });
 
     var alternatedRowIndexes = [0, 1, 2, 3, 4, 5].filter(function(index) {
-        return dataGrid.getRowElement(index).hasClass("dx-row-alt");
+        return $(dataGrid.getRowElement(index)).hasClass("dx-row-alt");
     });
 
     //assert
@@ -3836,9 +3872,9 @@ QUnit.test("Toolbar templates should be called when toolbar is attached to dom",
         onToolbarPreparing: function(e) {
             toolbarPreparingCallCount++;
             e.toolbarOptions.items.push({
-                template: function(data, index, $container) {
+                template: function(data, index, container) {
                     toolbarTemplateCallCount++;
-                    assert.ok($container.closest(e.element).length, "toolbar item container is attached to grid element");
+                    assert.ok($(container).closest(e.element).length, "toolbar item container is attached to grid element");
                 }
             });
         },
@@ -3877,6 +3913,51 @@ QUnit.test("Custom toolbar item should be aligned", function(assert) {
     //assert
     assert.equal(toolbarItemOffset, $(dataGrid.$element()).find(".dx-datagrid-search-panel").offset().top, "toolbar sarch panel is aligned");
     assert.equal(toolbarItemOffset, $(dataGrid.$element()).find(".dx-toolbar .dx-datebox").offset().top, "toolbar custom item is aligned");
+});
+
+//T558301
+QUnit.testInActiveWindow("Height virtual table should be updated to show validation message when there is a single row and virtual scrolling is enabled", function(assert) {
+    //arrange
+    var $tableElements,
+        clock = sinon.useFakeTimers(),
+        dataGrid = createDataGrid({
+            loadingTimeout: undefined,
+            dataSource: [{ Test: "" }],
+            editing: {
+                mode: "batch",
+                allowUpdating: true
+            },
+            scrolling: {
+                mode: "virtual"
+            },
+            columns: [{
+                dataField: "Test",
+                validationRules: [{ type: "required" }]
+            }]
+        });
+
+    //assert
+    $tableElements = dataGrid.$element().find(".dx-datagrid-rowsview").find("table");
+    assert.roughEqual($tableElements.eq(0).outerHeight(), 35, 3, "height main table");
+    assert.roughEqual($tableElements.eq(1).outerHeight(), 35, 3, "height virtual table");
+
+    //act
+    dataGrid.editCell(0, 0);
+    clock.tick();
+
+    //assert
+    $tableElements = dataGrid.$element().find(".dx-datagrid-rowsview").find("table");
+    assert.roughEqual($tableElements.eq(0).outerHeight(), 68, 3, "height main table");
+    assert.roughEqual($tableElements.eq(1).outerHeight(), 68, 3, "height virtual table");
+
+    dataGrid.closeEditCell();
+    clock.tick();
+
+    //assert
+    $tableElements = dataGrid.$element().find(".dx-datagrid-rowsview").find("table");
+    assert.roughEqual($tableElements.eq(0).outerHeight(), 35, 3, "height main table");
+    assert.roughEqual($tableElements.eq(1).outerHeight(), 35, 3, "height virtual table");
+    clock.restore();
 });
 
 QUnit.module("Assign options", {
@@ -6114,7 +6195,8 @@ QUnit.test("getRowElement", function(assert) {
         });
 
     //act, assert
-    $rowElement = dataGrid.getRowElement(1);
+    $rowElement = $(dataGrid.getRowElement(1));
+    assert.equal(typeUtils.isRenderer(dataGrid.getRowElement(1)), config().useJQueryRenderer, "rowElement is correct");
     assert.equal($rowElement.length, 1, "count row");
     assert.deepEqual($rowElement[0], $("#dataGrid").find(".dx-datagrid-rowsview").find("tbody > tr")[1], "correct row element");
 });
@@ -6135,7 +6217,7 @@ QUnit.test("getRowElement when there is fixed column", function(assert) {
         });
 
     //act, assert
-    $rowElement = dataGrid.getRowElement(1);
+    $rowElement = $(dataGrid.getRowElement(1));
     assert.equal($rowElement.length, 2, "count row");
     assert.deepEqual($rowElement[0], $("#dataGrid").find(".dx-datagrid-rowsview .dx-datagrid-content").not(".dx-datagrid-content-fixed").find("tbody > tr")[1], "correct row element of the main table");
     assert.deepEqual($rowElement[1], $("#dataGrid").find(".dx-datagrid-rowsview .dx-datagrid-content-fixed").find("tbody > tr")[1], "correct row element of the fixed table");
@@ -6243,28 +6325,28 @@ QUnit.test("Focused cell position has correct value when focus grouping row cell
         rowIndex: 2
     }, "Initial position is OK");
 
-    triggerTabPress(dataGrid.getCellElement(2, 2), true);
+    triggerTabPress($(dataGrid.getCellElement(2, 2)), true);
 
     assert.deepEqual(keyboardNavigationController._focusedCellPosition, {
         columnIndex: 2,
         rowIndex: 1
     }, "Reverse tabbing to second level group OK");
 
-    triggerTabPress(dataGrid.getCellElement(1, 2).parent(), true);
+    triggerTabPress($(dataGrid.getCellElement(1, 2)).parent(), true);
 
     assert.deepEqual(keyboardNavigationController._focusedCellPosition, {
         columnIndex: 2,
         rowIndex: 0
     }, "Reverse tabbing to first level group OK");
 
-    triggerTabPress(dataGrid.getCellElement(0, 1).parent());
+    triggerTabPress($(dataGrid.getCellElement(0, 1)).parent());
 
     assert.deepEqual(keyboardNavigationController._focusedCellPosition, {
         columnIndex: 2,
         rowIndex: 1
     }, "Tabbing to second level group OK, column index saved");
 
-    triggerTabPress(dataGrid.getCellElement(1, 2).parent());
+    triggerTabPress($(dataGrid.getCellElement(1, 2)).parent());
 
     assert.deepEqual(keyboardNavigationController._focusedCellPosition, {
         columnIndex: 2,
@@ -6425,7 +6507,7 @@ QUnit.test("Row heights should be synchronized after expand master detail row wi
     this.clock.tick();
 
     //assert
-    var $rows = dataGrid.getRowElement(1);
+    var $rows = $(dataGrid.getRowElement(1));
 
     assert.equal($rows.length, 2, "two rows: main row + fixed row");
     assert.ok($rows.eq(0).hasClass("dx-master-detail-row"), "first row is master detail");
@@ -6607,21 +6689,21 @@ QUnit.test("Cancel editing should works correctly if editing mode is form and ma
     dataGrid.expandRow(items[0]);
     dataGrid.editRow(0);
 
-    assert.ok(dataGrid.getRowElement(0).hasClass("dx-datagrid-edit-form"), "row 0 is edit form row");
+    assert.ok($(dataGrid.getRowElement(0)).hasClass("dx-datagrid-edit-form"), "row 0 is edit form row");
     assert.ok(dataGrid.getVisibleRows()[0].isEditing, "row 0 isEditing");
 
     //act
     dataGrid.cancelEditData();
 
     //assert
-    assert.ok(dataGrid.getRowElement(0).hasClass("dx-data-row"), "row 0 is data row");
+    assert.ok($(dataGrid.getRowElement(0)).hasClass("dx-data-row"), "row 0 is data row");
     assert.notOk(dataGrid.getVisibleRows()[0].isEditing, "row 0 isEditing");
 
-    assert.ok(dataGrid.getRowElement(1).hasClass("dx-master-detail-row"), "row 1 is master detail row");
-    assert.notOk(dataGrid.getRowElement(1).hasClass("dx-datagrid-edit-form"), "row 1 is not edit form row");
+    assert.ok($(dataGrid.getRowElement(1)).hasClass("dx-master-detail-row"), "row 1 is master detail row");
+    assert.notOk($(dataGrid.getRowElement(1)).hasClass("dx-datagrid-edit-form"), "row 1 is not edit form row");
     assert.notOk(dataGrid.getVisibleRows()[1].isEditing, "row 1 isEditing");
 
-    assert.ok(dataGrid.getRowElement(2).hasClass("dx-data-row"), "row 2 is data row");
+    assert.ok($(dataGrid.getRowElement(2)).hasClass("dx-data-row"), "row 2 is data row");
 });
 
 QUnit.test("KeyboardNavigation 'isValidCell' works well with handling of fixed 'edit' command column", function(assert) {
@@ -7146,7 +7228,7 @@ QUnit.test("Repaint row", function(assert) {
     assert.equal($updatedRowElements.length, 2, "count row");
     assert.ok(!$updatedRowElements.eq(0).is($rowElements.eq(0)), "first row is updated");
     assert.ok($updatedRowElements.eq(1).is($rowElements.eq(1)), "second row isn't updated");
-    assert.strictEqual(dataGrid.getCellElement(0, 0).text(), "test3", "first row - value of the first cell");
+    assert.strictEqual($(dataGrid.getCellElement(0, 0)).text(), "test3", "first row - value of the first cell");
 });
 
 QUnit.test("Repaint rows", function(assert) {
@@ -7177,8 +7259,8 @@ QUnit.test("Repaint rows", function(assert) {
     //assert
     $rowElements = $($(dataGrid.$element()).find(".dx-data-row"));
     assert.equal($rowElements.length, 4, "count row");
-    assert.strictEqual(dataGrid.getCellElement(0, 0).text(), "test1", "first row - value of the first cell");
-    assert.strictEqual(dataGrid.getCellElement(2, 0).text(), "test3", "third row - value of the first cell");
+    assert.strictEqual($(dataGrid.getCellElement(0, 0)).text(), "test1", "first row - value of the first cell");
+    assert.strictEqual($(dataGrid.getCellElement(2, 0)).text(), "test3", "third row - value of the first cell");
 
     //act
     dataGrid.repaintRows([0, 2]);
@@ -7190,8 +7272,8 @@ QUnit.test("Repaint rows", function(assert) {
     assert.ok($updatedRowElements.eq(1).is($rowElements.eq(1)), "second row isn't updated");
     assert.ok(!$updatedRowElements.eq(2).is($rowElements.eq(2)), "third row is updated");
     assert.ok($updatedRowElements.eq(3).is($rowElements.eq(3)), "fourth row isn't updated");
-    assert.strictEqual(dataGrid.getCellElement(0, 0).text(), "test5", "first row - value of the first cell");
-    assert.strictEqual(dataGrid.getCellElement(2, 0).text(), "test6", "third row - value of the first cell");
+    assert.strictEqual($(dataGrid.getCellElement(0, 0)).text(), "test5", "first row - value of the first cell");
+    assert.strictEqual($(dataGrid.getCellElement(2, 0)).text(), "test6", "third row - value of the first cell");
 });
 
 //T443177

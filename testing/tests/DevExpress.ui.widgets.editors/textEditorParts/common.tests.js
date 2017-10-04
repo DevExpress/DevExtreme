@@ -783,21 +783,21 @@ QUnit.test("events work when relevant actions is not set", function(assert) {
 
     textBox.on("keyDown", function(e) {
         assert.equal(e.component, textBox, "event has link on component");
-        assert.equal(e.element.get(0), textBox.$element().get(0), "event has link on element");
+        assert.equal($(e.element).get(0), textBox.$element().get(0), "event has link on element");
         assert.equal(e.jQueryEvent.type, "keydown", "event has related jQueryEvent");
         assert.ok(true, "keyDown was fired");
     });
 
     textBox.on("keyPress", function(e) {
         assert.equal(e.component, textBox, "event has link on component");
-        assert.equal(e.element.get(0), textBox.$element().get(0), "event has link on element");
+        assert.equal($(e.element).get(0), textBox.$element().get(0), "event has link on element");
         assert.equal(e.jQueryEvent.type, "keypress", "event has related jQueryEvent");
         assert.ok(true, "keyPress was fired");
     });
 
     textBox.on("keyUp", function(e) {
         assert.equal(e.component, textBox, "event has link on component");
-        assert.equal(e.element.get(0), textBox.$element().get(0), "event has link on element");
+        assert.equal($(e.element).get(0), textBox.$element().get(0), "event has link on element");
         assert.equal(e.jQueryEvent.type, "keyup", "event has related jQueryEvent");
         assert.ok(true, "keyUp was fired");
     });

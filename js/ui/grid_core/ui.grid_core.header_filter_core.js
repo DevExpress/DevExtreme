@@ -28,7 +28,7 @@ function updateSelectAllState(e, filterValues) {
     if(e.component.option("searchValue")) {
         return;
     }
-    var selectAllCheckBox = e.element.find(".dx-list-select-all-checkbox").data("dxCheckBox");
+    var selectAllCheckBox = $(e.element).find(".dx-list-select-all-checkbox").data("dxCheckBox");
 
     if(selectAllCheckBox && filterValues && filterValues.length) {
         selectAllCheckBox.option("value", undefined);
@@ -161,7 +161,7 @@ exports.HeaderFilterView = modules.View.inherit({
     },
 
     _cleanPopupContent: function() {
-        this._popupContainer && this._popupContainer.content().empty();
+        this._popupContainer && this._popupContainer.$content().empty();
     },
 
     _initializePopupContainer: function(options) {
@@ -217,14 +217,15 @@ exports.HeaderFilterView = modules.View.inherit({
 
     _initializeListContainer: function(options) {
         var that = this,
-            $content = that._popupContainer.content(),
+            $content = that._popupContainer.$content(),
             widgetOptions = {
                 searchEnabled: isSearchEnabled(that, options),
                 dataSource: options.dataSource,
                 onContentReady: function() {
                     that.renderCompleted.fire();
                 },
-                itemTemplate: function(data, _, $element) {
+                itemTemplate: function(data, _, element) {
+                    var $element = $(element);
                     if(options.encodeHtml) {
                         return $element.text(data.text);
                     }

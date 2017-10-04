@@ -457,7 +457,7 @@ QUnit.test("Tooltip should appear if mouse is over arrow icon", function(assert)
     var $tooltip = $(".dx-tooltip");
 
     assert.equal($tooltip.length, 1, "Tooltip has appeared");
-    assert.equal(Tooltip.getInstance($tooltip).content().text(), messageLocalization.format("dxScheduler-editorLabelEndDate") + ": October 12, 2015");
+    assert.equal(Tooltip.getInstance($tooltip).$content().text(), messageLocalization.format("dxScheduler-editorLabelEndDate") + ": October 12, 2015");
 
     $arrowIcon.trigger("dxpointerleave");
     assert.equal($(".dx-tooltip").length, 0, "Tooltip has disappeared");

@@ -12,7 +12,7 @@ QUnit.module("Expanded items", {
             assert.strictEqual(actualArgs.jQueryEvent, expectedArgs.jQueryEvent, "arg is OK");
             assert.deepEqual(actualArgs.itemData, expectedArgs.itemData, "arg is OK");
             assert.deepEqual(actualArgs.node, expectedArgs.node, "arg is OK");
-            assert.deepEqual(actualArgs.itemElement.get(0), expectedArgs.itemElement.get(0), "arg is OK");
+            assert.deepEqual($(actualArgs.itemElement).get(0), expectedArgs.itemElement.get(0), "arg is OK");
         };
         fx.off = true;
         this.clock = sinon.useFakeTimers();

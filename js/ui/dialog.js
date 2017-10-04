@@ -157,7 +157,7 @@ exports.custom = function(options) {
         showCloseButton: options.showCloseButton || false,
         focusStateEnabled: false,
         onContentReady: function(args) {
-            args.component.content()
+            args.component.$content()
                 .addClass(DX_DIALOG_CONTENT_CLASSNAME)
                 .append($message);
         },

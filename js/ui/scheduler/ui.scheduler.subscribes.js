@@ -666,7 +666,7 @@ var subscribes = {
     getTargetedAppointmentData: function(appointmentData, appointmentElement, appointmentIndex) {
         var recurringData = this._getSingleAppointmentData(appointmentData, {
                 skipDateCalculation: true,
-                $appointment: appointmentElement
+                $appointment: $(appointmentElement)
             }),
             result = {};
 

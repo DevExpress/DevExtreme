@@ -5,9 +5,11 @@ var $ = require("../../core/renderer"),
     Guid = require("../../core/guid"),
     registerComponent = require("../../core/component_registrator"),
     commonUtils = require("../../core/utils/common"),
+    domUtils = require("../../core/utils/dom"),
     each = require("../../core/utils/iterator").each,
     isDefined = require("../../core/utils/type").isDefined,
     extend = require("../../core/utils/extend").extend,
+    getPublicElement = require("../../core/utils/dom").getPublicElement,
     errors = require("../widget/ui.errors"),
     positionUtils = require("../../animation/position"),
     getDefaultAlignment = require("../../core/utils/position").getDefaultAlignment,
@@ -370,7 +372,7 @@ var DropDownEditor = TextBox.inherit({
 
         fieldTemplate.render({
             model: data,
-            container: $container
+            container: domUtils.getPublicElement($container)
         });
 
         if(!this._input().length) {
@@ -554,7 +556,7 @@ var DropDownEditor = TextBox.inherit({
         this._contentReadyHandler();
 
         this._popupContentId = "dx-" + new Guid();
-        this.setAria("id", this._popupContentId, this._popup.content());
+        this.setAria("id", this._popupContentId, this._popup.$content());
     },
 
     _contentReadyHandler: commonUtils.noop,
@@ -625,7 +627,7 @@ var DropDownEditor = TextBox.inherit({
 
         if(this._popup && this._popup.option("visible")) {
             var myTop = positionUtils.setup(this.$element()).top,
-                popupTop = positionUtils.setup(this._popup.content()).top;
+                popupTop = positionUtils.setup(this._popup.$content()).top;
 
             positionRequest = (myTop + this.option("popupPosition").offset.v) > popupTop ? "below" : "above";
         }
@@ -640,7 +642,7 @@ var DropDownEditor = TextBox.inherit({
             return;
         }
 
-        var $popupContent = this._popup.content(),
+        var $popupContent = this._popup.$content(),
             templateData = {
                 value: this._fieldRenderData(),
                 component: this
@@ -852,7 +854,7 @@ var DropDownEditor = TextBox.inherit({
     * @return jQuery
     */
     field: function() {
-        return this._input();
+        return getPublicElement(this._input());
     },
 
     /**

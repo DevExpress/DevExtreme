@@ -5,6 +5,8 @@ var pointerMock = require("../../helpers/pointerMock.js"),
 
 var $ = require("jquery"),
     noop = require("core/utils/common").noop,
+    isRenderer = require("core/utils/type").isRenderer,
+    config = require("core/config"),
     SchedulerWorkSpace = require("ui/scheduler/ui.scheduler.work_space"),
     SchedulerResourcesManager = require("ui/scheduler/ui.scheduler.resource_manager"),
     domUtils = require("core/utils/dom"),
@@ -2601,13 +2603,14 @@ QUnit.testStart(function() {
     });
 
     QUnit.test("onCellClick should fires when cell is clicked", function(assert) {
-        assert.expect(2);
+        assert.expect(3);
 
         var $element = $("#scheduler-work-space").dxSchedulerWorkSpaceMonth({
             currentDate: new Date(2015, 9, 1),
             focusStateEnabled: true,
             onCellClick: function(e) {
-                assert.deepEqual(e.cellElement[0], $cell[0], "cell is clicked");
+                assert.equal(isRenderer(e.cellElement), config().useJQueryRenderer, "cell is clicked");
+                assert.deepEqual($(e.cellElement)[0], $cell[0], "cell is clicked");
                 assert.deepEqual(e.cellData, { startDate: new Date(2015, 8, 27), endDate: new Date(2015, 8, 28) }, "cell is clicked");
             }
         });

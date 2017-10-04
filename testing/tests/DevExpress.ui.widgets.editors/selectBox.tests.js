@@ -1106,7 +1106,7 @@ QUnit.test("Field should be updated if fieldTemplate is used", function(assert) 
             { ID: 2, name: 'Second' },
             { ID: 3, name: 'Third' }
         ],
-        fieldTemplate: function(selectedItem, fieldElement) {
+        fieldTemplate: function(selectedItem) {
             return $("<div id='myfield'>").dxTextBox({
                 value: selectedItem ? selectedItem.ID + ' - ' + selectedItem.name : ''
             });
@@ -1940,14 +1940,14 @@ QUnit.test("Filter should be cleared if the 'onCustomItemCreating' deferred is r
 
     keyboard.type("4");
     this.clock.tick(TIME_TO_WAIT);
-    assert.equal(selectBox.content().find(".dx-list-item").length, 0, "filter is applied");
+    assert.equal($(selectBox.content()).find(".dx-list-item").length, 0, "filter is applied");
     keyboard.change();
 
     selectBox.option("opened", true);
 
     assert.equal($selectBox.dxSelectBox("option", "value"), null, "value is reset");
     assert.equal($input.val(), "", "input value is reset after deferred is rejected");
-    assert.equal(selectBox.content().find(".dx-list-item").length, 3, "filter was cleared");
+    assert.equal($(selectBox.content()).find(".dx-list-item").length, 3, "filter was cleared");
 });
 
 QUnit.test("filter should be cleared if all text was removed using backspace", function(assert) {
@@ -1962,7 +1962,7 @@ QUnit.test("filter should be cleared if all text was removed using backspace", f
 
     keyboard.type("456");
     this.clock.tick(TIME_TO_WAIT);
-    assert.equal(selectBox.content().find(".dx-list-item").length, 0, "filter is applied");
+    assert.equal($(selectBox.content()).find(".dx-list-item").length, 0, "filter is applied");
 
     $input.get(0).setSelectionRange(0, 3);
     keyboard.caret({ start: 0, end: 3 });
@@ -1970,7 +1970,7 @@ QUnit.test("filter should be cleared if all text was removed using backspace", f
     this.clock.tick(TIME_TO_WAIT);
 
     assert.equal($input.val(), "", "value was cleared");
-    assert.equal(selectBox.content().find(".dx-list-item").length, 3, "filter was cleared");
+    assert.equal($(selectBox.content()).find(".dx-list-item").length, 3, "filter was cleared");
 });
 
 QUnit.test("search timer should not be cleared when the widget is opening", function(assert) {
@@ -1988,12 +1988,12 @@ QUnit.test("search timer should not be cleared when the widget is opening", func
 
     keyboard.type("4");
     this.clock.tick(100);
-    assert.equal(selectBox.content().find(".dx-list-item").length, 0, "items are filtered");
+    assert.equal($(selectBox.content()).find(".dx-list-item").length, 0, "items are filtered");
 
     keyboard.press("backspace");
     $button.trigger("dxclick");
     this.clock.tick(TIME_TO_WAIT);
-    assert.equal(selectBox.content().find(".dx-list-item").length, 3, "filter was cleared");
+    assert.equal($(selectBox.content()).find(".dx-list-item").length, 3, "filter was cleared");
 });
 
 QUnit.test("Custom value should be selected in list if items were modified on custom item creation", function(assert) {
@@ -2758,7 +2758,7 @@ QUnit.test("the list item value should not be displayed in input after click on 
             var textBox = $("<div>").dxTextBox({
                 value: selectedItem ? selectedItem.id : ''
             });
-            fieldElement.append(textBox);
+            $(fieldElement).append(textBox);
         }
     });
 
@@ -4073,7 +4073,7 @@ QUnit.testInActiveWindow("dxSelectBox should not filter a dataSource when the wi
             acceptCustomValue: true,
             searchEnabled: true,
             onCustomItemCreating: function(e) {
-                e.element.remove();
+                $(e.element).remove();
                 return "";
             }
         }).dxSelectBox("instance"),
@@ -4150,7 +4150,7 @@ QUnit.test("widget disposing in focusOut event handler", function(assert) {
         searchEnabled: true,
         onFocusOut: function(e) {
             focusOutCallCount++;
-            e.element.remove();
+            $(e.element).remove();
         }
     });
 

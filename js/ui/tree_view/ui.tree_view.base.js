@@ -282,14 +282,6 @@ var TreeViewBase = HierarchicalCollectionWidget.inherit({
             */
             rootValue: 0,
 
-            /*
-            component: inheritor
-            element: jQuery.fn.init[1]
-            itemData: Object
-            itemElement: jQuery.fn.init[1]
-            jQueryEvent: jQuery.Event
-            */
-
             focusStateEnabled: false,
 
             /**
@@ -728,7 +720,7 @@ var TreeViewBase = HierarchicalCollectionWidget.inherit({
         }
 
         if(this._scrollableContainer) {
-            return this._scrollableContainer.content().children();
+            return this._scrollableContainer.$content().children();
         }
 
         return $();
@@ -744,7 +736,7 @@ var TreeViewBase = HierarchicalCollectionWidget.inherit({
 
         if(this._isRootLevel(parentId)) {
             if(!this._scrollableContainer) this._renderScrollableContainer();
-            this._scrollableContainer.content().append($container);
+            this._scrollableContainer.$content().append($container);
         }
 
         return $container;
@@ -777,7 +769,7 @@ var TreeViewBase = HierarchicalCollectionWidget.inherit({
         var $nodeContainer = this._renderNodeContainer();
 
         this._renderScrollableContainer();
-        this._scrollableContainer.content().append($nodeContainer);
+        this._scrollableContainer.$content().append($nodeContainer);
 
         if(!this.option("items") || !this.option("items").length) {
             return;
@@ -1307,7 +1299,7 @@ var TreeViewBase = HierarchicalCollectionWidget.inherit({
     },
 
     _changeCheckboxValue: function(e) {
-        var $node = e.element.parent("." + NODE_CLASS),
+        var $node = $(e.element).parent("." + NODE_CLASS),
             $item = $node.children("." + ITEM_CLASS),
             item = this._getItemData($item),
             node = this._getNodeByElement($item),

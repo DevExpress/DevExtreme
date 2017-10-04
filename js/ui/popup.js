@@ -4,6 +4,7 @@ var $ = require("../core/renderer"),
     translator = require("../animation/translator"),
     camelize = require("../core/utils/inflector").camelize,
     noop = require("../core/utils/common").noop,
+    getPublicElement = require("../core/utils/dom").getPublicElement,
     each = require("../core/utils/iterator").each,
     isDefined = require("../core/utils/type").isDefined,
     inArray = require("../core/utils/array").inArray,
@@ -418,7 +419,6 @@ var Popup = Overlay.inherit({
 
         this.$element().addClass(POPUP_CLASS);
         this._wrapper().addClass(POPUP_WRAPPER_CLASS);
-
         this._$popupContent = this._$content
             .wrapInner($("<div>").addClass(POPUP_CONTENT_CLASS))
             .children().eq(0);
@@ -464,7 +464,7 @@ var Popup = Overlay.inherit({
 
         if(showTitle || items.length > 0) {
             this._$title && this._$title.remove();
-            var $title = $("<div>").addClass(POPUP_TITLE_CLASS).insertBefore(this.content());
+            var $title = $("<div>").addClass(POPUP_TITLE_CLASS).insertBefore(this.$content());
             this._$title = this._renderTemplateByType("titleTemplate", items, $title).addClass(POPUP_TITLE_CLASS);
             this._renderDrag();
             this._executeTitleRenderAction(this._$title);
@@ -529,14 +529,14 @@ var Popup = Overlay.inherit({
     },
 
     _getCloseButtonRenderer: function() {
-        return (function(_, __, $container) {
+        return (function(_, __, container) {
             var $button = $("<div>").addClass(POPUP_TITLE_CLOSEBUTTON_CLASS);
             this._createComponent($button, Button, {
                 icon: 'close',
                 onClick: this._createToolbarItemAction(undefined),
                 integrationOptions: {}
             });
-            $container.append($button);
+            $(container).append($button);
         }).bind(this);
     },
 
@@ -603,8 +603,8 @@ var Popup = Overlay.inherit({
         this._toolbarItemClasses.push(itemClass);
 
         return {
-            template: function(_, __, $container) {
-                var $toolbarItem = $("<div>").addClass(itemClass).appendTo($container);
+            template: function(_, __, container) {
+                var $toolbarItem = $("<div>").addClass(itemClass).appendTo(container);
                 that._createComponent($toolbarItem, Button, itemConfig);
             }
         };
@@ -623,7 +623,7 @@ var Popup = Overlay.inherit({
 
         if(items.length) {
             this._$bottom && this._$bottom.remove();
-            var $bottom = $("<div>").addClass(POPUP_BOTTOM_CLASS).insertAfter(this.content());
+            var $bottom = $("<div>").addClass(POPUP_BOTTOM_CLASS).insertAfter(this.$content());
             this._$bottom = this._renderTemplateByType("bottomTemplate", items, $bottom).addClass(POPUP_BOTTOM_CLASS);
             this._toggleClasses();
         } else {
@@ -790,8 +790,12 @@ var Popup = Overlay.inherit({
         return this._$bottom;
     },
 
-    content: function() {
+    $content: function() {
         return this._$popupContent;
+    },
+
+    content: function() {
+        return getPublicElement(this._$popupContent);
     },
 
     overlayContent: function() {

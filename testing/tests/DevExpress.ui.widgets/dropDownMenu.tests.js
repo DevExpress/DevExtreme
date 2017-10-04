@@ -57,7 +57,7 @@ var moduleConfig = function(usePopover) {
 
                 this.popup = this.ddMenu._popup;
                 this.$popup = $(this.popup.$element());
-                this.$popupContent = $(this.popup.content());
+                this.$popupContent = $(this.popup.$content());
 
                 this.list = this.ddMenu._list;
                 this.$list = $(this.list.$element());
@@ -537,7 +537,7 @@ QUnit.test("the 'onItemRendered' option should be proxied to the list", function
         itemRenderedCallbackArgs = itemRenderedCallback.getCall(0).args[0];
 
     assert.equal(itemRenderedCallback.callCount, 2, "onItemRendered was fired");
-    assert.equal(dropDownMenu._list.$element(), itemRenderedCallbackArgs.element, "onItemRendered was fired in the right context");
+    assert.equal(dropDownMenu._list.element(), itemRenderedCallbackArgs.element, "onItemRendered was fired in the right context");
     assert.equal(dropDownMenu._list, itemRenderedCallbackArgs.component, "onItemRendered was fired in the right context");
 });
 
@@ -688,7 +688,7 @@ QUnit.module("keyboard navigation", {
 
         this.popup = this.instance._popup;
         this.$popup = $(this.popup.$element());
-        this.$popupContent = $(this.popup.content());
+        this.$popupContent = $(this.popup.$content());
 
         this.list = this.instance._list;
         this.$list = $(this.list.$element());
@@ -882,7 +882,7 @@ QUnit.test("aria-expanded property", function(assert) {
     instance.open();
     assert.equal($element.attr("aria-expanded"), "true", "expanded after option change");
 
-    var $listItem = $(instance._popup.content().find(".dx-list-item").first());
+    var $listItem = $(instance._popup.$content().find(".dx-list-item").first());
     $($listItem).trigger("dxclick");
     assert.equal($element.attr("aria-expanded"), "false", "collapsed after item click");
 });
