@@ -491,7 +491,7 @@ var stubInvokeMethod = function(instance, options) {
         assert.ok($cell.hasClass("dx-scheduler-header-panel-current-time-cell"), "Cell has specific class");
     });
 
-    QUnit.test("DateTimeIndicator and shader should have correct positions, Day view with groups & intervalCount, rtl mode", function(assert) {
+    QUnit.test("DateTimeIndicator and shader should have correct positions, Day view with intervalCount, rtl mode", function(assert) {
         var workspace = $("#scheduler-work-space-rtl").dxSchedulerWorkSpaceWeek({
             showCurrentTimeIndicator: true,
             currentDate: new Date(2017, 8, 5),
@@ -508,8 +508,8 @@ var stubInvokeMethod = function(instance, options) {
 
         assert.equal($indicator.length, 1, "Indicator count is correct");
         assert.roughEqual($indicator.eq(0).position().left, 706, 1.5, "Indicator left is OK");
-        assert.roughEqual($topShader.position().left, 806, 1.5, "Top indicator has correct left");
-        assert.roughEqual($bottomShader.position().left, 870, 1.5, "Bottom indicator has correct left");
+        assert.roughEqual(parseInt($topShader.css("left")), 706, 1.5, "Top indicator has correct left");
+        assert.roughEqual(parseInt($bottomShader.css("left")), 770, 1.5, "Bottom indicator has correct left");
     });
 })("DateTime indicator on Week View");
 
