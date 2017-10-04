@@ -342,7 +342,7 @@ var TagBox = SelectBox.inherit({
              * @name dxTagBoxOptions_onMultiTagPreparing
              * @publicName onMultiTagPreparing
              * @extends Action
-             * @type_function_param1_field4 multiTagElement:jQuery
+             * @type_function_param1_field4 multiTagElement:Element
              * @type_function_param1_field5 selectedItems:Array<string,number,Object>
              * @type_function_param1_field6 text:string
              * @type_function_param1_field7 cancel:boolean
