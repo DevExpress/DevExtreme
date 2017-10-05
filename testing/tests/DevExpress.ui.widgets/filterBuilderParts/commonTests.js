@@ -252,3 +252,66 @@ QUnit.test("editor field depends on field type", function(assert) {
     assert.ok(contributorValueField.find(".dx-selectbox").dxSelectBox("instance"));
 });
 
+QUnit.test("getAvailableOperations (default)", function(assert) {
+    var operations,
+        element = $("#container").dxFilterBuilder({ fields: fields }),
+        instance = element.dxFilterBuilder("instance");
+
+    operations = instance._getAvailableOperations({});
+
+    assert.strictEqual(operations[0].text, "Contains");
+    assert.strictEqual(operations[0].icon, "contains");
+
+    assert.strictEqual(operations[1].text, "Does not contain");
+    assert.strictEqual(operations[1].icon, "doesnotcontain");
+
+    assert.strictEqual(operations[2].text, "Starts with");
+    assert.strictEqual(operations[2].icon, "startswith");
+
+    assert.strictEqual(operations[3].text, "Ends with");
+    assert.strictEqual(operations[3].icon, "endswith");
+
+    assert.strictEqual(operations[4].text, "Equals");
+    assert.strictEqual(operations[4].icon, "equal");
+
+    assert.strictEqual(operations[5].text, "Does not equal");
+    assert.strictEqual(operations[5].icon, "notequal");
+});
+
+QUnit.test("getAvailableOperations when field with filterOperations", function(assert) {
+    var operations,
+        element = $("#container").dxFilterBuilder({ fields: fields }),
+        instance = element.dxFilterBuilder("instance");
+
+    operations = instance._getAvailableOperations(fields[1]);
+
+    assert.strictEqual(operations[0].text, "Equals");
+    assert.strictEqual(operations[0].icon, "equal");
+
+    assert.strictEqual(operations[1].text, "Does not equal");
+    assert.strictEqual(operations[1].icon, "notequal");
+
+    assert.strictEqual(operations[2].text, "Less than");
+    assert.strictEqual(operations[2].icon, "less");
+
+    assert.strictEqual(operations[3].text, "Greater than");
+    assert.strictEqual(operations[3].icon, "greater");
+
+    assert.strictEqual(operations[4].text, "Less than or equal to");
+    assert.strictEqual(operations[4].icon, "lessorequal");
+
+    assert.strictEqual(operations[5].text, "Greater than or equal to");
+    assert.strictEqual(operations[5].icon, "greaterorequal");
+});
+
+QUnit.test("create condition", function(assert) {
+    var condition,
+        element = $("#container").dxFilterBuilder({ fields: fields }),
+        instance = element.dxFilterBuilder("instance");
+
+    condition = instance._createCondition(fields[0]);
+
+    assert.equal(condition[0], "CompanyName");
+    assert.equal(condition[1], "Contains");
+    assert.equal(condition[2], "");
+});

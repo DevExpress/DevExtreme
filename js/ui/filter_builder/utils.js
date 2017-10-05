@@ -2,8 +2,7 @@
 
 var errors = require("../../data/errors").errors,
     extend = require("../../core/utils/extend").extend,
-    formatHelper = require("../../format_helper"),
-    filterOperationsDictionary = require("./ui.filter_operations_dictionary");
+    formatHelper = require("../../format_helper");
 
 function getGroupCriteria(group) {
     var criteria;
@@ -135,23 +134,6 @@ function isCriteriaContainValueItem(criteria) {
     return false;
 }
 
-function getAvailableOperations(filterOperations) {
-    return filterOperations.map(function(operation) {
-        return {
-            icon: filterOperationsDictionary.getIconByFilterOperation(operation),
-            text: filterOperationsDictionary.getDescriptionByFilterOperation(operation)
-        };
-    });
-}
-
-function getDefaultOperation(field) {
-    if(field.defaultFilterOperation) {
-        return field.defaultFilterOperation;
-    } else {
-        return getAvailableOperations(field.filterOperations)[0].text;
-    }
-}
-
 function removeItem(group, item) {
     var criteria = getGroupCriteria(group),
         index = criteria.indexOf(item);
@@ -174,11 +156,6 @@ function removeItem(group, item) {
         }
     }
     return group;
-}
-
-function createCondition(field) {
-    var availableOperations = getDefaultOperation(field);
-    return [field.dataField, availableOperations, ""];
 }
 
 function createEmptyGroup(value) {
@@ -369,9 +346,7 @@ exports.getPlainItems = getPlainItems;
 exports.setGroupValue = setGroupValue;
 exports.getGroupMenuItem = getGroupMenuItem;
 exports.getGroupValue = getGroupValue;
-exports.getAvailableOperations = getAvailableOperations;
 exports.removeItem = removeItem;
-exports.createCondition = createCondition;
 exports.createEmptyGroup = createEmptyGroup;
 exports.addItem = addItem;
 exports.getField = getField;
@@ -379,5 +354,4 @@ exports.isGroup = isGroup;
 exports.isCondition = isCondition;
 exports.getNormalizedFilter = getNormalizedFilter;
 exports.getGroupCriteria = getGroupCriteria;
-exports.getDefaultOperation = getDefaultOperation;
 exports.getCurrentValueText = getCurrentValueText;

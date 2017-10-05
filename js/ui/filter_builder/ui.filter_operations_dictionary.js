@@ -1,7 +1,5 @@
 "use strict";
 
-var messageLocalization = require("../../localization/message");
-
 var OPERATION_ICONS = {
         "=": "equal",
         "<>": "notequal",
@@ -15,17 +13,19 @@ var OPERATION_ICONS = {
         "endswith": "endswith"
     },
 
-    OPERATION_DESCRIPTORS = {
-        "=": messageLocalization.format("dxFilterBuilder-filterOperationEquals"),
-        "<>": messageLocalization.format("dxFilterBuilder-filterOperationNotEquals"),
-        "<": messageLocalization.format("dxFilterBuilder-filterOperationLess"),
-        "<=": messageLocalization.format("dxFilterBuilder-filterOperationLessOrEquals"),
-        ">": messageLocalization.format("dxFilterBuilder-filterOperationGreater"),
-        ">=": messageLocalization.format("dxFilterBuilder-filterOperationGreaterOrEquals"),
-        "notcontains": messageLocalization.format("dxFilterBuilder-filterOperationNotContains"),
-        "contains": messageLocalization.format("dxFilterBuilder-filterOperationContains"),
-        "startswith": messageLocalization.format("dxFilterBuilder-filterOperationStartsWith"),
-        "endswith": messageLocalization.format("dxFilterBuilder-filterOperationEndsWith")
+    OPERATION_NAME = {
+        "=": "equal",
+        "<>": "notEqual",
+        "<": "lessThan",
+        "<=": "lessThanOrEqual",
+        ">": "greaterThan",
+        ">=": "greaterThanOrEqual",
+        "startswith": "startsWith",
+        "contains": "contains",
+        "notcontains": "notContains",
+        "endswith": "endsWith",
+        "isblank": "isBlank",
+        "isnotblank": "isNotBlank"
     };
 
 module.exports = {
@@ -33,7 +33,7 @@ module.exports = {
         return OPERATION_ICONS[filterOperation];
     },
 
-    getDescriptionByFilterOperation: function(filterOperation) {
-        return OPERATION_DESCRIPTORS[filterOperation];
+    getNameByFilterOperation: function(filterOperation) {
+        return OPERATION_NAME[filterOperation];
     }
 };

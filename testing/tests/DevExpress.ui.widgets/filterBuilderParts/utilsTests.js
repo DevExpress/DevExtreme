@@ -228,17 +228,6 @@ QUnit.test("isCondition", function(assert) {
     assert.ok(!utils.isCondition(["And"]));
 });
 
-QUnit.test("getAvailableOperations", function(assert) {
-    var operations = utils.getAvailableOperations(["=", "<>", "contains"]);
-
-    assert.strictEqual(operations[0].text, "Equals");
-    assert.strictEqual(operations[0].icon, "equal");
-    assert.strictEqual(operations[1].text, "Does not equal");
-    assert.strictEqual(operations[1].icon, "notequal");
-    assert.strictEqual(operations[2].text, "Contains");
-    assert.strictEqual(operations[2].icon, "contains");
-});
-
 QUnit.test("addItem", function(assert) {
     var group = [];
     group = utils.addItem(condition1, group);
@@ -368,13 +357,6 @@ QUnit.test("get current value text", function(assert) {
     };
     value = "MyValue";
     assert.equal(utils.getCurrentValueText(field, value), "MyValueTest");
-});
-
-QUnit.test("create condition", function(assert) {
-    var condition = utils.createCondition(fields[0]);
-    assert.equal(condition[0], "CompanyName");
-    assert.equal(condition[1], "Contains");
-    assert.equal(condition[2], "");
 });
 
 QUnit.test("getPlainItems", function(assert) {
