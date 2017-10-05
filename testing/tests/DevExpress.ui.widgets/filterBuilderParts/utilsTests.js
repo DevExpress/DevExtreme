@@ -477,3 +477,27 @@ QUnit.test("getPlainItems", function(assert) {
         dataType: "object"
     }]);
 });
+
+
+QUnit.test("getCaptionWithParents", function(assert) {
+    var plainField = {
+        caption: "Field3",
+        dataField: "group.group2.field3",
+        dataType: "string",
+        parentId: "group.group2"
+    };
+
+    var plainItems = [{
+        caption: "Group",
+        dataField: "group",
+        dataType: "object"
+    }, {
+        caption: "Group2",
+        dataField: "group.group2",
+        dataType: "object",
+        parentId: "group"
+    }, plainField ];
+
+    assert.equal(utils.getCaptionWithParents(plainField, plainItems), "Group.Group2.Field3");
+});
+
