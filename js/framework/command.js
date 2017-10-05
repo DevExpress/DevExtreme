@@ -25,6 +25,7 @@ require("../integration/knockout");
 /**
 * @name dxcommand
 * @publicName dxCommand
+* @inherits DOMComponent
 * @type object
 * @module framework/command
 * @export default
