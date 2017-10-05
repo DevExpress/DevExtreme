@@ -977,7 +977,7 @@ var Overlay = Widget.inherit({
 
         var contentTemplate = this._getTemplate(this.option("contentTemplate"));
         contentTemplate && contentTemplate.render({
-            container: this.$content(),
+            container: getPublicElement(this.$content()),
             noModel: true
         });
 

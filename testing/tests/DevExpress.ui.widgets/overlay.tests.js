@@ -4,6 +4,8 @@ var $ = require("jquery"),
     fx = require("animation/fx"),
     translator = require("animation/translator"),
     viewPort = require("core/utils/view_port").value,
+    config = require("core/config"),
+    typeUtils = require("core/utils/type"),
     hideTopOverlayCallback = require("mobile/hide_top_overlay").hideCallback,
     positionUtils = require("animation/position"),
     domUtils = require("core/utils/dom"),
@@ -1232,6 +1234,15 @@ QUnit.test("content should be rendered only once after container change", functi
     assert.equal(count, 1);
 });
 
+QUnit.test("contentTemplate should use correct contentElement", function(assert) {
+    $("#overlay").dxOverlay({
+        visible: true,
+        contentTemplate: function(contentElement) {
+            assert.equal(typeUtils.isRenderer(contentElement), config().useJQueryRenderer, "contentElement is correct");
+        }
+    });
+});
+
 QUnit.test("custom content template", function(assert) {
     var $overlay = $("#overlayWithContentTemplate").dxOverlay({ contentTemplate: 'custom', visible: true }),
         $content = $($overlay.dxOverlay("instance").$content());
@@ -1520,7 +1531,7 @@ QUnit.testInActiveWindow("inputs inside should loose focus when overlay is hidde
                 shading: false,
                 visible: true,
                 contentTemplate: function(contentElement) {
-                    return contentElement.append($input);
+                    return $(contentElement).append($input);
                 }
             })
             .dxOverlay("instance");

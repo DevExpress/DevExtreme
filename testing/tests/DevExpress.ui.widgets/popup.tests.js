@@ -996,7 +996,7 @@ QUnit.test("titleTemplate test", function(assert) {
     });
 
     instance.option("titleTemplate", function(titleElement) {
-        assert.equal(titleElement.get(0), $popupContent.find("." + POPUP_TITLE_CLASS).get(0));
+        assert.equal($(titleElement).get(0), $popupContent.find("." + POPUP_TITLE_CLASS).get(0));
 
         var result = "<div class='changed-test-title-renderer'>";
         result += "<h1>Title</h1>";
@@ -1026,7 +1026,7 @@ QUnit.test("'bottomTemplate' options test", function(assert) {
     assert.equal($popupContent.find(toSelector("test-bottom-renderer")).length, 1, "option 'bottomTemplate'  was set successfully");
 
     instance.option("bottomTemplate", function(titleElement) {
-        assert.equal(titleElement.get(0), $popupContent.find("." + POPUP_BOTTOM_CLASS).get(0));
+        assert.equal($(titleElement).get(0), $popupContent.find("." + POPUP_BOTTOM_CLASS).get(0));
 
         var result = "<div class='changed-test-bottom-renderer'>";
         result += "<h1>bottom</h1>";

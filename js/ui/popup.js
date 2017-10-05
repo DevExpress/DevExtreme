@@ -120,7 +120,7 @@ var Popup = Overlay.inherit({
             * @publicName titleTemplate
             * @type template
             * @default "title"
-            * @type_function_param1 titleElement:jQuery
+            * @type_function_param1 titleElement:Element
             * @type_function_return string|Node|jQuery
             */
             titleTemplate: "title",
@@ -494,7 +494,7 @@ var Popup = Overlay.inherit({
             $container.replaceWith($toolbar);
             return $toolbar;
         } else {
-            var $result = template.render({ container: $container });
+            var $result = template.render({ container: getPublicElement($container) });
             if($result.hasClass(TEMPLATE_WRAPPER_CLASS)) {
                 $container.replaceWith($result);
                 $container = $result;

@@ -68,7 +68,7 @@ var appointmentTooltip = {
         var that = this;
 
         this.instance._defaultTemplates["appointmentTooltip"] = new FunctionTemplate(function(options) {
-            var $container = options.container,
+            var $container = $(options.container),
                 $tooltip = that._tooltipContent(appointmentData, singleAppointmentData);
             $tooltip.addClass($container.attr("class"));
             $container.replaceWith($tooltip);
