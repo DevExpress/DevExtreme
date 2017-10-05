@@ -247,6 +247,16 @@
         "dxFilterBuilder-notOr": "Not Or",
         "dxFilterBuilder-addCondition": "Add Condition",
         "dxFilterBuilder-addGroup": "Add Group",
-        "dxFilterBuilder-enterValueText": "<enter a value>"
+        "dxFilterBuilder-enterValueText": "<enter a value>",
+        "dxFilterBuilder-filterOperationEquals": "Equals",
+        "dxFilterBuilder-filterOperationNotEquals": "Does not equal",
+        "dxFilterBuilder-filterOperationLess": "Less than",
+        "dxFilterBuilder-filterOperationLessOrEquals": "Less than or equal to",
+        "dxFilterBuilder-filterOperationGreater": "Greater than",
+        "dxFilterBuilder-filterOperationGreaterOrEquals": "Greater than or equal to",
+        "dxFilterBuilder-filterOperationStartsWith": "Starts with",
+        "dxFilterBuilder-filterOperationContains": "Contains",
+        "dxFilterBuilder-filterOperationNotContains": "Does not contain",
+        "dxFilterBuilder-filterOperationEndsWith": "Ends with"
     }
 }

@@ -26,7 +26,7 @@ var FILTER_BUILDER_CLASS = "dx-filterbuilder",
     FILTER_BUILDER_ITEM_OPERATION_CLASS = "dx-filterbuilder-item-operation",
     FILTER_BUILDER_ITEM_VALUE_CLASS = "dx-filterbuilder-item-value",
     FILTER_BUILDER_ITEM_VALUE_TEXT_CLASS = "dx-filterbuilder-item-value-text",
-    FILTER_BUILDER_POPUP_CLASS = "dx-filter-builder-popup",
+    FILTER_BUILDER_POPUP_CLASS = "dx-filterbuilder-popup",
     ACTIVE_CLASS = "dx-state-active",
 
     ACTIONS = [
@@ -266,8 +266,6 @@ var FilterBuilder = Widget.inherit({
                 rtlEnabled: this.option("rtlEnabled")
             }),
             showPopup = function() {
-                removeMenu();
-                $button.addClass(ACTIVE_CLASS);
                 var popupOptions = {
                     target: $button,
                     onHiding: function(e) {
@@ -283,6 +281,9 @@ var FilterBuilder = Widget.inherit({
                         return $treeView;
                     }
                 };
+
+                removeMenu();
+                $button.addClass(ACTIVE_CLASS);
                 that._createPopup(popupOptions, $button);
             };
         this._subscribeOnClickAndEnterKey($button, showPopup);
@@ -485,7 +486,6 @@ var FilterBuilder = Widget.inherit({
             visible: true,
             focusStateEnabled: false,
             closeOnOutsideClick: true,
-            container: $popup,
             rtlEnabled: this.option("rtlEnabled"),
             shading: false,
             width: "auto",
