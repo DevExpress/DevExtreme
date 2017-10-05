@@ -2,6 +2,7 @@
 
 var Class = require("../../core/class"),
     commonUtils = require("../../core/utils/common"),
+    iteratorUtils = require("../../core/utils/iterator"),
     each = require("../../core/utils/iterator").each,
     typeUtils = require("../../core/utils/type"),
     extend = require("../../core/utils/extend").extend,
@@ -47,6 +48,7 @@ var DataAdapter = Class.inherit({
             rootValue: 0,
             searchValue: "",
             dataType: "tree",
+            searchMode: "contains",
             dataConverter: new HierarchicalDataConverter(),
             onNodeChanged: commonUtils.noop
         };
@@ -419,16 +421,28 @@ var DataAdapter = Class.inherit({
         return !this.options.searchValue.length || !!this._filterDataStructure(this.options.searchValue, [item]).length;
     },
 
+    _createCriteria: function(selector, value, op) {
+        var searchFilter = [];
+        if(!Array.isArray(selector)) {
+            return [selector, op, value];
+        }
+        iteratorUtils.each(selector, function(i, item) {
+            if(searchFilter.length) {
+                searchFilter.push("or");
+            }
+            searchFilter.push([item, op, value]);
+        });
+
+        return searchFilter;
+    },
+
     _filterDataStructure: function(filterValue, dataStructure) {
-        var selector = this.options.searchExpr;
+        var selector = this.options.searchExpr || this.options.dataAccessors.getters.display,
+            criteria = this._createCriteria(selector, filterValue, this.options.searchMode);
 
         dataStructure = dataStructure || this._initialDataStructure;
 
-        if(!selector) {
-            selector = this.options.dataAccessors.getters.display;
-        }
-
-        return query(dataStructure).filter(selector, this.options.searchMode || "contains", filterValue).toArray();
+        return query(dataStructure).filter(criteria).toArray();
     },
 
     search: function(searchValue) {
