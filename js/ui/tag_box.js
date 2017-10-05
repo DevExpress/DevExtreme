@@ -1034,7 +1034,7 @@ var TagBox = SelectBox.inherit({
         dataSource.reload();
     },
 
-    _dataSourceFilterExpr: function(itemData) {
+    _dataSourceFilterExpr: function() {
         var filter = [];
 
         $.each(this._getValue(), (function(index, value) {
