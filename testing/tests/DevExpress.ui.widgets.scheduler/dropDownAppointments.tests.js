@@ -88,7 +88,7 @@ QUnit.test("DropDown menu should have a correct markup", function(assert) {
         $dropDownAppointmentsContent = $button.dxButton("instance").option("template");
 
     assert.equal($dropDownAppointmentsContent.length, 1, "Content is OK");
-    assert.equal($dropDownAppointmentsContent.html().toLowerCase(), "<span>1</span><span>...</span>", "Markup is OK");
+    assert.equal($dropDownAppointmentsContent.html().toLowerCase(), "<span>1 more</span>", "Markup is OK");
 });
 
 QUnit.test("DropDown menu should be rendered on dxclick", function(assert) {
@@ -112,7 +112,7 @@ QUnit.test("DropDown menu should have a correct button template", function(asser
     $buttonTemplate = menu.option("buttonTemplate");
 
     assert.ok($buttonTemplate.hasClass("dx-scheduler-dropdown-appointments-content"), "Template is OK");
-    assert.equal($buttonTemplate.html().toLowerCase(), "<span>1</span><span>...</span>", "Button template is OK");
+    assert.equal($buttonTemplate.html().toLowerCase(), "<span>1 more</span>", "Button template is OK");
 });
 
 
