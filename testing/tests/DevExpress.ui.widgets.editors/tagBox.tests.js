@@ -4024,6 +4024,28 @@ QUnit.test("loadOptions.filter should be a filter expression when key is specifi
     assert.deepEqual(filter, [["!", ["id", 1]]], "filter should be correct");
 });
 
+QUnit.test("loadOptions.filter should be a function when valueExpr is function", function(assert) {
+    var load = sinon.stub().returns([{ id: 1, text: "item 1" }, { id: 2, text: "item 2" }]),
+        $tagBox = $("#tagBox").dxTagBox({
+            dataSource: {
+                load: load
+            },
+            valueExpr: function() {
+                return "id";
+            },
+            displayExpr: "text",
+            opened: true,
+            hideSelectedItems: true
+        }),
+        tagBox = $tagBox.dxTagBox("instance"),
+        $item = $(tagBox._$list.find(".dx-list-item").eq(0));
+
+    $item.trigger("dxclick");
+
+    var filter = load.lastCall.args[0].filter;
+    assert.ok($.isFunction(filter), "filter is function");
+});
+
 QUnit.test("loadOptions.filter should be correct when user filter is also used", function(assert) {
     var load = sinon.stub().returns([{ id: 1, text: "item 1" }, { id: 2, text: "item 2" }]),
         $tagBox = $("#tagBox").dxTagBox({

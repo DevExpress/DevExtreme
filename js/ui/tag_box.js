@@ -7,6 +7,7 @@ var $ = require("../core/renderer"),
     noop = require("../core/utils/common").noop,
     isDefined = require("../core/utils/type").isDefined,
     arrayUtils = require("../core/utils/array"),
+    typeUtils = require("../core/utils/type"),
     iteratorUtils = require("../core/utils/iterator"),
     extend = require("../core/utils/extend").extend,
     messageLocalization = require("../localization/message"),
@@ -1120,7 +1121,9 @@ var TagBox = SelectBox.inherit({
             return;
         }
 
-        if(this._valueGetterExpr() !== "this") {
+        var valueGetterExpr = this._valueGetterExpr();
+
+        if(typeUtils.isString(valueGetterExpr) && valueGetterExpr !== "this") {
             var filter = this._dataSourceFilterExpr();
 
             if(!this._userFilter) {
@@ -1129,9 +1132,8 @@ var TagBox = SelectBox.inherit({
 
             this._userFilter && filter.push(this._userFilter);
 
-            if(filter.length) {
-                dataSource.filter(filter);
-            }
+            filter.length && dataSource.filter(filter);
+
         } else {
             dataSource.filter(this._dataSourceFilterFunction.bind(this));
         }
@@ -1141,7 +1143,6 @@ var TagBox = SelectBox.inherit({
 
     _dataSourceFilterExpr: function(itemData) {
         var filter = [];
-
 
         iteratorUtils.each(this._getValue(), (function(index, value) {
             filter.push(["!", [this._valueGetterExpr(), value]]);
