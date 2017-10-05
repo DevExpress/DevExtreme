@@ -5,6 +5,8 @@ var $ = require("jquery"),
     fx = require("animation/fx"),
     viewPort = require("core/utils/view_port").value,
     pointerMock = require("../../helpers/pointerMock.js"),
+    config = require("core/config"),
+    isRenderer = require("core/utils/type").isRenderer,
     executeAsyncMock = require("../../helpers/executeAsyncMock.js");
 
 require("common.css!");
@@ -960,6 +962,18 @@ QUnit.test("title toolbar with buttons when 'showTitle' is false", function(asse
     assert.equal($title.find(".dx-toolbar-label").length, 0, "toolbar has no text");
 });
 
+QUnit.test("container argument of toolbarItems.template option is correct", function(assert) {
+    this.instance.option({
+        toolbarItems: [
+            {
+                template: function(e, index, container) {
+                    assert.equal(isRenderer(container), config().useJQueryRenderer, "container is correct");
+                }
+            }
+        ]
+    });
+});
+
 
 QUnit.test("dx-popup-fullscreen-width class should be attached when width is equal to screen width", function(assert) {
     this.instance.option("width", function() { return $(window).width(); });
@@ -982,6 +996,8 @@ QUnit.test("titleTemplate test", function(assert) {
                 var result = "<div class='test-title-renderer'>";
                 result += "<h1>Title</h1>";
                 result += "</div>";
+
+                assert.equal(isRenderer(titleElement), config().useJQueryRenderer, "titleElement is correct");
 
                 return result;
             }
