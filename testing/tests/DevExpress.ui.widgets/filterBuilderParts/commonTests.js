@@ -13,6 +13,7 @@ var FILTER_BUILDER_CLASS = "dx-filterbuilder",
     FILTER_BUILDER_ITEM_VALUE_CLASS = "dx-filterbuilder-item-value",
     FILTER_BUILDER_ITEM_VALUE_TEXT_CLASS = "dx-filterbuilder-item-value-text",
     FILTER_BUILDER_GROUP_CONTENT_CLASS = "dx-filterbuilder-group-content",
+    FILTER_BUILDER_GROUP_OPERATION_CLASS = "dx-filterbuilder-group-operation",
     ACTIVE_CLASS = "dx-state-active";
 
 QUnit.module("Rendering");
@@ -117,40 +118,104 @@ QUnit.test("value and operations depend on selected field", function(assert) {
             ],
             fields: fields
         });
-        var fieldButton = container.find("." + FILTER_BUILDER_ITEM_FIELD_CLASS);
-        assert.ok(!fieldButton.hasClass(ACTIVE_CLASS));
-        assert.equal(fieldButton.html(), "Company Name");
+        var $fieldButton = container.find("." + FILTER_BUILDER_ITEM_FIELD_CLASS);
+        assert.ok(!$fieldButton.hasClass(ACTIVE_CLASS));
+        assert.equal($fieldButton.html(), "Company Name");
 
-        var operationButton = container.find("." + FILTER_BUILDER_ITEM_OPERATION_CLASS);
-        assert.equal(operationButton.text(), "=");
+        var $operationButton = container.find("." + FILTER_BUILDER_ITEM_OPERATION_CLASS);
+        assert.equal($operationButton.text(), "=");
 
-        var valueButton = container.find("." + FILTER_BUILDER_ITEM_VALUE_CLASS);
-        assert.equal(valueButton.text(), "K&S Music");
+        var $valueButton = container.find("." + FILTER_BUILDER_ITEM_VALUE_CLASS);
+        assert.equal($valueButton.text(), "K&S Music");
 
         var $menu = container.children(".dx-has-context-menu");
         assert.ok($menu.length === 0);
 
-        fieldButton.click();
-        assert.ok(fieldButton.hasClass(ACTIVE_CLASS));
+        $fieldButton.click();
+        assert.ok($fieldButton.hasClass(ACTIVE_CLASS));
 
         $menu = container.find(".dx-overlay");
         assert.ok($menu.length === 1);
 
-        var $dateMenuItem = $(".dx-treeview-item").eq(2);
-        assert.equal($dateMenuItem.text(), "State");
+        var $menuItem = $(".dx-treeview-item").eq(2);
+        assert.equal($menuItem.text(), "State");
 
-        $dateMenuItem.trigger("dxclick");
-        assert.equal(fieldButton.html(), "State");
+        $menuItem.trigger("dxclick");
+        assert.equal($fieldButton.html(), "State");
 
-        operationButton = container.find("." + FILTER_BUILDER_ITEM_OPERATION_CLASS);
-        assert.equal(operationButton.text(), "contains");
+        $operationButton = container.find("." + FILTER_BUILDER_ITEM_OPERATION_CLASS);
+        assert.equal($operationButton.text(), "contains");
 
-        valueButton = container.find("." + FILTER_BUILDER_ITEM_VALUE_CLASS);
-        assert.equal(valueButton.text(), "<enter a value>");
+        $valueButton = container.find("." + FILTER_BUILDER_ITEM_VALUE_CLASS);
+        assert.equal($valueButton.text(), "<enter a value>");
 
-        assert.ok(!fieldButton.hasClass(ACTIVE_CLASS));
+        assert.ok(!$fieldButton.hasClass(ACTIVE_CLASS));
         $menu = container.children(".dx-overlay");
         assert.ok($menu.length === 0);
+    } finally {
+        fx.off = false;
+    }
+});
+
+QUnit.test("operations were changed after field change", function(assert) {
+    try {
+        fx.off = true;
+
+        var container = $("#container");
+        container.dxFilterBuilder({
+            filter: [
+                ["State", "<>", "K&S Music"]
+            ],
+            fields: fields
+        });
+        var $fieldButton = container.find("." + FILTER_BUILDER_ITEM_FIELD_CLASS);
+
+        var $operationButton = container.find("." + FILTER_BUILDER_ITEM_OPERATION_CLASS);
+        assert.equal($operationButton.text(), "<>");
+
+        $fieldButton.click();
+
+        var $menuItem = $(".dx-treeview-item").eq(5);
+        $menuItem.trigger("dxclick");
+
+        assert.equal($fieldButton.html(), "City");
+        $operationButton = container.find("." + FILTER_BUILDER_ITEM_OPERATION_CLASS);
+        assert.equal($operationButton.text(), "=");
+    } finally {
+        fx.off = false;
+    }
+});
+
+QUnit.test("selected element was changed in menu after click", function(assert) {
+    try {
+        fx.off = true;
+
+        var container = $("#container");
+        container.dxFilterBuilder({
+            filter: [
+                ["State", "<>", "K&S Music"]
+            ],
+            fields: fields
+        });
+
+        var $fieldButton = container.find("." + FILTER_BUILDER_ITEM_FIELD_CLASS);
+        $fieldButton.click();
+        assert.equal($(".dx-state-selected").text(), "State");
+
+        var $menuItem = $(".dx-treeview-item").eq(1);
+        $menuItem.trigger("dxclick");
+        $fieldButton.click();
+        assert.equal($(".dx-state-selected").text(), "Date");
+
+        var $groupButton = container.find("." + FILTER_BUILDER_GROUP_OPERATION_CLASS);
+        $groupButton.click();
+        assert.equal($(".dx-state-selected").text(), "And");
+
+        $menuItem = $(".dx-treeview-item").eq(3);
+        $menuItem.trigger("dxclick");
+        $groupButton.click();
+        assert.equal($(".dx-state-selected").text(), "Not Or");
+
     } finally {
         fx.off = false;
     }

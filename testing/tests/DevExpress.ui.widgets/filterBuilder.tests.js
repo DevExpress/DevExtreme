@@ -37,7 +37,8 @@ window.fields = [{
     format: undefined,
     filterOperations: ["contains", "notcontains", "startswith", "endswith", "=", "<>"],
     defaultFilterOperation: ""
-}, {
+},
+{
     caption: "Zipcode",
     dataField: "Zipcode",
     dataType: "number",
@@ -51,6 +52,14 @@ window.fields = [{
     dataType: "boolean",
     format: undefined,
     filterOperations: [],
+    defaultFilterOperation: ""
+},
+{
+    caption: "City",
+    dataField: "City",
+    dataType: "string",
+    format: undefined,
+    filterOperations: ["=", "<>"],
     defaultFilterOperation: ""
 }];
 

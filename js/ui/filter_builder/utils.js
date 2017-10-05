@@ -140,7 +140,7 @@ function getAvailableOperations(filterOperations) {
         operations.push({ text: item });
     };
 
-    if(filterOperations.length === 0) {
+    if(!filterOperations || filterOperations.length === 0) {
         addItem("=", operations);
         addItem("<>", operations);
     } else {

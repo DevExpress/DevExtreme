@@ -213,15 +213,16 @@ var FilterBuilder = Widget.inherit({
     },
 
     _createGroupOperationButton: function(criteria) {
-        var groupMenuItem = utils.getGroupMenuItem(criteria, this._getGroupOperations()),
+        var groupOperations = this._getGroupOperations(),
+            groupMenuItem = utils.getGroupMenuItem(criteria, groupOperations),
             updateGroupMenuItem = function(component, groupMenuItem) {
                 component.unselectAll();
-                component.selectItem(groupMenuItem.value);
+                component.selectItem(groupMenuItem);
             };
         var $operationButton = this._createButtonWithMenu({
             caption: groupMenuItem.text,
             menu: {
-                items: this._getGroupOperations(),
+                items: groupOperations,
                 displayExpr: "text",
                 keyExpr: "value",
                 onItemClick: function(e) {
@@ -260,6 +261,7 @@ var FilterBuilder = Widget.inherit({
             },
             treeViewOptions = extend(options.menu, {
                 focusStateEnabled: true,
+                selectionMode: "single",
                 onItemClick: menuOnItemClickWrapper(options.menu.onItemClick),
                 rtlEnabled: this.option("rtlEnabled")
             }),
@@ -318,7 +320,7 @@ var FilterBuilder = Widget.inherit({
             items = this.option("allowHierarchicalFields") ? utils.getPlainItems(fields) : fields,
             updateFieldMenuItem = function(component, field) {
                 component.unselectAll();
-                component.selectItem(field.dataField);
+                component.selectItem(field);
             };
 
         var $fieldButton = this._createButtonWithMenu({
@@ -329,14 +331,12 @@ var FilterBuilder = Widget.inherit({
                 keyExpr: "dataField",
                 displayExpr: "caption",
                 onItemClick: function(e) {
-                    if(field.dataType !== e.itemData.dataType
-                        || e.itemData.lookup || field.lookup) {
-                        condition[1] = utils.getDefaultOperation(e.itemData);
-                        condition[2] = null;
+                    condition[1] = utils.getDefaultOperation(e.itemData);
+                    condition[2] = null;
 
-                        $fieldButton.siblings("." + FILTER_BUILDER_ITEM_TEXT_CLASS).remove();
-                        that._createOperationAndValueButtons(condition, e.itemData, $fieldButton.parent());
-                    }
+                    $fieldButton.siblings("." + FILTER_BUILDER_ITEM_TEXT_CLASS).remove();
+                    that._createOperationAndValueButtons(condition, e.itemData, $fieldButton.parent());
+
                     condition[0] = e.itemData.dataField;
                     field = e.itemData;
                     updateFieldMenuItem(e.component, field);
