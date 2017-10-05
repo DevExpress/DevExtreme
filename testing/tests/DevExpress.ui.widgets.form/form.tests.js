@@ -8,6 +8,7 @@ var $ = require("jquery"),
     typeUtils = require("core/utils/type"),
     browser = require("core/utils/browser"),
     domUtils = require("core/utils/dom"),
+    config = require("core/config"),
     internals = require("ui/form/ui.form").__internals;
 
 require("ui/text_area");
@@ -1338,11 +1339,12 @@ QUnit.test("Group template", function(assert) {
                 {
                     itemType: "group",
                     caption: "Bio",
-                    template: function(data, $container) {
+                    template: function(data, container) {
+                        assert.deepEqual(typeUtils.isRenderer(container), config().useJQueryRenderer, "container is correct");
                         $("<div>")
                             .text(data.formData.biography)
                             .addClass("template-biography")
-                            .appendTo($container);
+                            .appendTo(container);
                     }
                 }]
         }),
