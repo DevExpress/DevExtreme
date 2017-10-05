@@ -665,7 +665,7 @@ QUnit.test("Scheduler timeline week header cells should have right width", funct
     this.instance.option({
         currentDate: new Date(2015, 9, 29)
     });
-    var $element = this.instance.$element(),
+    var $element = this.instance.element(),
         $firstRow = $element.find(".dx-scheduler-header-row").first(),
         $lastRow = $element.find(".dx-scheduler-header-row").last(),
         $firstHeaderCell = $firstRow.find(".dx-scheduler-header-panel-cell").eq(0),
