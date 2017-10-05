@@ -997,6 +997,8 @@ var TagBox = SelectBox.inherit({
             return;
         }
 
+        delete this._userFilter;
+
         dataSource.filter(null);
         dataSource.reload();
     },
@@ -1012,11 +1014,37 @@ var TagBox = SelectBox.inherit({
             return;
         }
 
-        dataSource.filter(this._dataSourceFilter.bind(this));
+        var valueGetterExpr = this._valueGetterExpr();
+
+        if(commonUtils.isString(valueGetterExpr) && valueGetterExpr !== "this") {
+            var filter = this._dataSourceFilterExpr();
+
+            if(!this._userFilter) {
+                this._userFilter = dataSource.filter();
+            }
+
+            this._userFilter && filter.push(this._userFilter);
+
+            filter.length && dataSource.filter(filter);
+
+        } else {
+            dataSource.filter(this._dataSourceFilterFunction.bind(this));
+        }
+
         dataSource.reload();
     },
 
-    _dataSourceFilter: function(itemData) {
+    _dataSourceFilterExpr: function(itemData) {
+        var filter = [];
+
+        $.each(this._getValue(), (function(index, value) {
+            filter.push(["!", [this._valueGetterExpr(), value]]);
+        }).bind(this));
+
+        return filter;
+    },
+
+    _dataSourceFilterFunction: function(itemData) {
         var itemValue = this._valueGetter(itemData),
             result = true;
 
