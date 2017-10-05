@@ -318,14 +318,18 @@ var FilterBuilder = Widget.inherit({
     _createFieldButtonWithMenu: function(condition, field) {
         var that = this,
             fields = this.option("fields"),
-            items = this.option("allowHierarchicalFields") ? utils.getPlainItems(fields) : fields,
+            allowHierarchicalFields = this.option("allowHierarchicalFields"),
+            items = allowHierarchicalFields ? utils.getPlainItems(fields) : fields,
+            getFullCaption = function(item, items) {
+                return allowHierarchicalFields ? utils.getCaptionWithParents(item, items) : item.caption;
+            },
             updateFieldMenuItem = function(component, field) {
                 component.unselectAll();
                 component.selectItem(field);
             };
 
         var $fieldButton = this._createButtonWithMenu({
-            caption: field.caption,
+            caption: getFullCaption(field, items),
             menu: {
                 items: items,
                 dataStructure: "plain",
@@ -341,7 +345,8 @@ var FilterBuilder = Widget.inherit({
                     condition[0] = e.itemData.dataField;
                     field = e.itemData;
                     updateFieldMenuItem(e.component, field);
-                    $fieldButton.html(e.itemData.caption);
+                    var caption = getFullCaption(e.itemData, e.component.option("items"));
+                    $fieldButton.html(caption);
                 },
                 onContentReady: function(e) {
                     updateFieldMenuItem(e.component, field);
@@ -466,7 +471,6 @@ var FilterBuilder = Widget.inherit({
 
     _createValueEditor: function(value, field, setValueHandler) {
         var $editor = $("<div>").attr("tabindex", 0);
-        // TODO: it have to be in shared file
         this._editorFactory.createEditor.call(this, $editor, extend({}, field, {
             value: value,
             parentType: "filterRow",

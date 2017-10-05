@@ -314,9 +314,9 @@ function getCurrentValueText(field, value) {
     return valueText;
 }
 
-function checkParentId(plainItems, item) {
+function itemExist(plainItems, parentId) {
     for(var i = 0; i < plainItems.length; i++) {
-        if(plainItems[i].dataField === item.parentId) {
+        if(plainItems[i].dataField === parentId) {
             return true;
         }
     }
@@ -325,9 +325,9 @@ function checkParentId(plainItems, item) {
 
 function pushItemAndCheckParent(originalItems, plainItems, item) {
     var dataField = item.dataField;
-    if(dataField.lastIndexOf(".") !== -1) {
-        item.parentId = dataField.substring(0, dataField.lastIndexOf("."));
-        if(!checkParentId(plainItems, item) && !checkParentId(originalItems, item)) {
+    if(hasParent(dataField)) {
+        item.parentId = getParentIdFromItemDataField(dataField);
+        if(!itemExist(plainItems, item.parentId) && !itemExist(originalItems, item.parentId)) {
             var caption = item.parentId.substring(item.parentId.lastIndexOf(".") + 1);
             pushItemAndCheckParent(originalItems, plainItems, { dataType: "object", dataField: item.parentId, caption: caption });
         }
@@ -344,6 +344,27 @@ function getPlainItems(items) {
     return plainItems;
 }
 
+function hasParent(dataField) {
+    return dataField.lastIndexOf(".") !== -1;
+}
+
+function getParentIdFromItemDataField(dataField) {
+    return dataField.substring(0, dataField.lastIndexOf("."));
+}
+
+function getCaptionWithParents(item, plainItems) {
+    if(hasParent(item.dataField)) {
+        var parentId = getParentIdFromItemDataField(item.dataField);
+        for(var i = 0; i < plainItems.length; i++) {
+            if(plainItems[i].dataField === getParentIdFromItemDataField(item.dataField)) {
+                return getCaptionWithParents(plainItems[i], plainItems) + "." + item.caption;
+            }
+        }
+    }
+    return item.caption;
+}
+
+exports.getCaptionWithParents = getCaptionWithParents;
 exports.getPlainItems = getPlainItems;
 exports.setGroupValue = setGroupValue;
 exports.getGroupMenuItem = getGroupMenuItem;
