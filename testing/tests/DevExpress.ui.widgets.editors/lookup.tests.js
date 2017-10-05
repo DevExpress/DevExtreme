@@ -2392,7 +2392,10 @@ QUnit.test("group options bouncing", function(assert) {
     $title = $title.eq(0);
     assert.equal($.trim($title.text()), "testGroupTemplate", "title text is correct");
 
-    instance.option("groupTemplate", function() { return "test"; });
+    instance.option("groupTemplate", function(itemData, itemIndex, itemElement) {
+        assert.equal(isRenderer(itemElement), config().useJQueryRenderer, "itemElement is correct");
+        return "test";
+    });
 
     $title = $(toSelector(LIST_GROUP_HEADER_CLASS)).eq(0);
     assert.equal($.trim($title.text()), "test", "title text is correct");
