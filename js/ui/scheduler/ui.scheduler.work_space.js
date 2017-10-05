@@ -978,7 +978,7 @@ var SchedulerWorkSpace = Widget.inherit({
                             date: this._getDateByIndex(i)
                         },
                         index: j * repeatCount + i,
-                        container: $cell
+                        container: getPublicElement($cell)
                     }));
                 } else {
                     $cell.text(text);
@@ -1007,7 +1007,7 @@ var SchedulerWorkSpace = Widget.inherit({
         var cellCount = this._getCellCount() * (this._getGroupCount() || 1);
 
         var cellTemplates = this._renderTableBody({
-            container: this._$allDayTable,
+            container: getPublicElement(this._$allDayTable),
             rowCount: 1,
             cellCount: cellCount,
             cellClass: ALL_DAY_TABLE_CELL_CLASS,
@@ -1064,7 +1064,7 @@ var SchedulerWorkSpace = Widget.inherit({
         var rowCount = this._getTimePanelRowCount();
         this._$timePanel.toggleClass(TIME_PANEL_ODD_ROW_COUNT_CLASS, rowCount % 1 > 0);
         this._renderTableBody({
-            container: this._$timePanel,
+            container: getPublicElement(this._$timePanel),
             rowCount: rowCount,
             cellCount: 1,
             cellClass: this._getTimeCellClass.bind(this),
@@ -1122,7 +1122,7 @@ var SchedulerWorkSpace = Widget.inherit({
     _renderDateTable: function() {
         var groupCount = this._getGroupCount();
         this._renderTableBody({
-            container: this._$dateTable,
+            container: getPublicElement(this._$dateTable),
             rowCount: this._getTotalRowCount(groupCount),
             cellCount: this._getTotalCellCount(groupCount),
             cellClass: this._getDateTableCellClass(),

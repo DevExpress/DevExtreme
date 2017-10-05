@@ -3242,7 +3242,8 @@ QUnit.testStart(function() {
             dataSource: [],
             views: [{
                 type: "week",
-                dateCellTemplate: function() {
+                dateCellTemplate: function(item, index, container) {
+                    assert.equal(isRenderer(container), config().useJQueryRenderer, "element is correct");
                     countCallTemplate2++;
                 }
             }],
@@ -3322,7 +3323,8 @@ QUnit.testStart(function() {
             currentDate: new Date(2015, 4, 24),
             views: [{
                 type: "week",
-                appointmentTemplate: function() {
+                appointmentTemplate: function(item, index, container) {
+                    assert.deepEqual(isRenderer(container), config().useJQueryRenderer, "appointmentElement is correct");
                     countCallTemplate2++;
                 }
             }],
@@ -3348,7 +3350,8 @@ QUnit.testStart(function() {
             currentDate: new Date(2015, 4, 24),
             views: [{
                 type: "week",
-                appointmentTooltipTemplate: function() {
+                appointmentTooltipTemplate: function(item, container) {
+                    assert.equal(isRenderer(container), config().useJQueryRenderer, "element is correct");
                     countCallTemplate2++;
                 }
             }],

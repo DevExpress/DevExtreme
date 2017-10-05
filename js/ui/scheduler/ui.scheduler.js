@@ -146,7 +146,7 @@ var Scheduler = Widget.inherit({
                 * @type template
                 * @default "appointmentTooltip"
                 * @type_function_param1 appointmentData:object
-                * @type_function_param2 contentElement:jQuery
+                * @type_function_param2 contentElement:Element
                 * @type_function_return string|jQuery
                 */
 
@@ -156,7 +156,7 @@ var Scheduler = Widget.inherit({
                 * @default null
                 * @type_function_param1 itemData:object
                 * @type_function_param2 itemIndex:number
-                * @type_function_param3 itemElement:jQuery
+                * @type_function_param3 itemElement:Element
                 * @type_function_return string|Node|jQuery
                 */
 
@@ -166,7 +166,7 @@ var Scheduler = Widget.inherit({
                 * @default null
                 * @type_function_param1 itemData:object
                 * @type_function_param2 itemIndex:number
-                * @type_function_param3 itemElement:jQuery
+                * @type_function_param3 itemElement:Element
                 * @type_function_return string|Node|jQuery
                 */
 
@@ -176,7 +176,7 @@ var Scheduler = Widget.inherit({
                 * @default null
                 * @type_function_param1 itemData:object
                 * @type_function_param2 itemIndex:number
-                * @type_function_param3 itemElement:jQuery
+                * @type_function_param3 itemElement:Element
                 * @type_function_return string|Node|jQuery
                 */
 
@@ -186,7 +186,7 @@ var Scheduler = Widget.inherit({
                 * @default null
                 * @type_function_param1 itemData:object
                 * @type_function_param2 itemIndex:number
-                * @type_function_param3 itemElement:jQuery
+                * @type_function_param3 itemElement:Element
                 * @type_function_return string|Node|jQuery
                 */
 
@@ -614,7 +614,7 @@ var Scheduler = Widget.inherit({
                 * @extends Action
                 * @type_function_param1_field4 appointmentData:object
                 * @type_function_param1_field5 targetedAppointmentData:object
-                * @type_function_param1_field6 appointmentElement:jQuery
+                * @type_function_param1_field6 appointmentElement:Element
                 * @action
                 */
             onAppointmentRendered: null,
@@ -626,7 +626,7 @@ var Scheduler = Widget.inherit({
                 * @extends Action
                 * @type_function_param1_field4 appointmentData:object
                 * @type_function_param1_field5 targetedAppointmentData:object
-                * @type_function_param1_field6 appointmentElement:jQuery
+                * @type_function_param1_field6 appointmentElement:Element
                 * @type_function_param1_field7 jQueryEvent:jQueryEvent
                 * @type_function_param1_field8 cancel:Boolean
                 * @action
@@ -640,7 +640,7 @@ var Scheduler = Widget.inherit({
                 * @extends Action
                 * @type_function_param1_field4 appointmentData:object
                 * @type_function_param1_field5 targetedAppointmentData:object
-                * @type_function_param1_field6 appointmentElement:jQuery
+                * @type_function_param1_field6 appointmentElement:Element
                 * @type_function_param1_field7 jQueryEvent:jQueryEvent
                 * @type_function_param1_field8 cancel:Boolean
                 * @action
@@ -653,7 +653,7 @@ var Scheduler = Widget.inherit({
                 * @type function|string
                 * @extends Action
                 * @type_function_param1_field4 cellData:object
-                * @type_function_param1_field5 cellElement:jQuery
+                * @type_function_param1_field5 cellElement:Element
                 * @type_function_param1_field6 jQueryEvent:jQueryEvent
                 * @type_function_param1_field7 cancel:Boolean
                 * @action
@@ -745,7 +745,7 @@ var Scheduler = Widget.inherit({
                 * @type template
                 * @default "appointmentPopup"
                 * @type_function_param1 appointmentData:object
-                * @type_function_param2 contentElement:jQuery
+                * @type_function_param2 contentElement:Element
                 * @type_function_return string|jQuery
                 */
             appointmentPopupTemplate: "appointmentPopup",
@@ -2073,9 +2073,9 @@ var Scheduler = Widget.inherit({
 
         this._defaultTemplates["appointmentPopup"] = new FunctionTemplate(function(options) {
             var $popupContent = that._popupContent(appointmentData, processTimeZone);
-            options.container.append($popupContent);
+            $(options.container).append($popupContent);
 
-            return options.container;
+            return $(options.container);
         });
     },
 
