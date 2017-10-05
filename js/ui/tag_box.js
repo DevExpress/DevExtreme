@@ -3,6 +3,7 @@
 var $ = require("../core/renderer"),
     eventsEngine = require("../events/core/events_engine"),
     dataUtils = require("../core/element_data"),
+    domUtils = require("../core/utils/dom"),
     devices = require("../core/devices"),
     noop = require("../core/utils/common").noop,
     isDefined = require("../core/utils/type").isDefined,
@@ -282,7 +283,7 @@ var TagBox = SelectBox.inherit({
             * @type template
             * @default "tag"
             * @type_function_param1 itemData:object
-            * @type_function_param2 itemElement:jQuery
+            * @type_function_param2 itemElement:Element
             * @type_function_return string|Node|jQuery
             */
             tagTemplate: "tag",
@@ -786,7 +787,7 @@ var TagBox = SelectBox.inherit({
 
         this._tagTemplate.render({
             model: args.text,
-            container: $tag
+            container: domUtils.getPublicElement($tag)
         });
 
         return $tag;
@@ -881,7 +882,7 @@ var TagBox = SelectBox.inherit({
 
         this._tagTemplate.render({
             model: item,
-            container: $tag
+            container: domUtils.getPublicElement($tag)
         });
     },
 

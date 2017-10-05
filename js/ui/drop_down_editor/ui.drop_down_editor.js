@@ -186,7 +186,7 @@ var DropDownEditor = TextBox.inherit({
              * @type_function_param1 buttonData:object
              * @type_function_param1_field1 text:string
              * @type_function_param1_field2 icon:string
-             * @type_function_param2 contentElement:jQuery
+             * @type_function_param2 contentElement:Element
              * @type_function_return string|jQuery
              */
             dropDownButtonTemplate: 'dropDownButton',
@@ -651,7 +651,7 @@ var DropDownEditor = TextBox.inherit({
         $popupContent.empty();
 
         contentTemplate.render({
-            container: $popupContent,
+            container: domUtils.getPublicElement($popupContent),
             model: templateData
         });
     },
