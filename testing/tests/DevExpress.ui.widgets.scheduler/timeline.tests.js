@@ -661,6 +661,19 @@ QUnit.test("Scheduler timeline week view should have right cell & row count is s
     assert.equal($lastRow.find(".dx-scheduler-header-panel-cell").eq(2).text(), dateLocalization.format(new Date(2015, 9, 29, 9), "shorttime"));
 });
 
+QUnit.test("Scheduler timeline week header cells should have right width", function(assert) {
+    this.instance.option({
+        currentDate: new Date(2015, 9, 29)
+    });
+    var $element = this.instance.$element(),
+        $firstRow = $element.find(".dx-scheduler-header-row").first(),
+        $lastRow = $element.find(".dx-scheduler-header-row").last(),
+        $firstHeaderCell = $firstRow.find(".dx-scheduler-header-panel-cell").eq(0),
+        $lastHeaderCell = $lastRow.find(".dx-scheduler-header-panel-cell").eq(0);
+
+    assert.roughEqual($firstHeaderCell.outerWidth(), 48 * $lastHeaderCell.outerWidth(), 1.5, "First row cell has correct width");
+});
+
 QUnit.test("Scheduler timeline week should have rigth first view date", function(assert) {
     this.instance.option({
         currentDate: new Date(2015, 9, 21),
