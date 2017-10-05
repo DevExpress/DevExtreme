@@ -7,7 +7,9 @@ var $ = require("jquery"),
     pointerMock = require("../../../helpers/pointerMock.js"),
     dragEvents = require("events/drag"),
     CustomStore = require("data/custom_store"),
-    dateLocalization = require("localization/date");
+    dateLocalization = require("localization/date"),
+    isRenderer = require("core/utils/type").isRenderer,
+    config = require("core/config");
 
 require("ui/scheduler/ui.scheduler");
 
@@ -672,8 +674,8 @@ QUnit.test("Data cell should has right content when used dataCellTemplate option
         currentView: "week",
         currentDate: new Date(2016, 8, 5),
         firstDayOfWeek: 0,
-        dataCellTemplate: function(itemData, index, $container) {
-            $container.addClass("custom-cell-class");
+        dataCellTemplate: function(itemData, index, container) {
+            $(container).addClass("custom-cell-class");
         }
     });
 
@@ -687,8 +689,8 @@ QUnit.test("Data cell should has right content when dataCellTemplate option was 
         currentView: "week",
         currentDate: new Date(2016, 8, 5),
         firstDayOfWeek: 0,
-        dataCellTemplate: function(itemData, index, $container) {
-            $container.addClass("custom-cell-class");
+        dataCellTemplate: function(itemData, index, container) {
+            $(container).addClass("custom-cell-class");
         }
     });
 
@@ -696,8 +698,8 @@ QUnit.test("Data cell should has right content when dataCellTemplate option was 
 
     assert.ok($element.find(".custom-cell-class").length > 0, "class before option changing is ok");
 
-    this.instance.option("dataCellTemplate", function(itemData, index, $container) {
-        $container.addClass("new-custom-class");
+    this.instance.option("dataCellTemplate", function(itemData, index, container) {
+        $(container).addClass("new-custom-class");
     });
 
     assert.ok($element.find(".new-custom-class").length > 0, "class is ok");
@@ -744,8 +746,8 @@ QUnit.test("dataCellTemplate should take cellElement with correct geometry(T4535
         dataSource: [],
         dataCellTemplate: function(cellData, cellIndex, cellElement) {
             if(!cellData.allDay && !cellIndex) {
-                assert.roughEqual(cellElement.outerWidth(), 85, 1.001, "Data cell width is OK");
-                assert.equal(cellElement.outerHeight(), 50, "Data cell height is OK");
+                assert.roughEqual($(cellElement).outerWidth(), 85, 1.001, "Data cell width is OK");
+                assert.equal($(cellElement).outerHeight(), 50, "Data cell height is OK");
             }
         }
     });
@@ -761,15 +763,15 @@ QUnit.test("dataCellTemplate for all-day panel should take cellElement with corr
         dataSource: [],
         dataCellTemplate: function(cellData, cellIndex, cellElement) {
             if(cellData.allDay && !cellIndex) {
-                assert.roughEqual(cellElement.outerWidth(), 85, 1.001, "Data cell width is OK");
-                assert.roughEqual(cellElement.outerHeight(), 24, 1.001, "Data cell height is OK");
+                assert.roughEqual($(cellElement).outerWidth(), 85, 1.001, "Data cell width is OK");
+                assert.roughEqual($(cellElement).outerHeight(), 24, 1.001, "Data cell height is OK");
             }
         }
     });
 });
 
 QUnit.test("dateCellTemplate should take cellElement with correct geometry(T453520)", function(assert) {
-    assert.expect(2);
+    assert.expect(3);
     this.createInstance({
         currentView: "week",
         views: ["week"],
@@ -778,15 +780,17 @@ QUnit.test("dateCellTemplate should take cellElement with correct geometry(T4535
         dataSource: [],
         dateCellTemplate: function(cellData, cellIndex, cellElement) {
             if(!cellIndex) {
-                assert.roughEqual(cellElement.outerWidth(), 85, 1.001, "Date cell width is OK");
-                assert.equal(cellElement.outerHeight(), 40, "Date cell height is OK");
+                assert.equal(isRenderer(cellElement), config().useJQueryRenderer, "element is correct");
+                assert.roughEqual($(cellElement).outerWidth(), 85, 1.001, "Date cell width is OK");
+                assert.equal($(cellElement).outerHeight(), 40, "Date cell height is OK");
             }
         }
     });
 });
 
 QUnit.test("timeCellTemplate should take cellElement with correct geometry(T453520)", function(assert) {
-    assert.expect(2);
+    assert.expect(3);
+
     this.createInstance({
         currentView: "week",
         views: ["week"],
@@ -795,15 +799,16 @@ QUnit.test("timeCellTemplate should take cellElement with correct geometry(T4535
         dataSource: [],
         timeCellTemplate: function(cellData, cellIndex, cellElement) {
             if(!cellIndex) {
-                assert.equal(cellElement.outerHeight(), 100, "Time cell height is OK");
-                assert.equal(cellElement.outerWidth(), 100, "Time cell width is OK");
+                assert.equal(isRenderer(cellElement), config().useJQueryRenderer, "element is correct");
+                assert.equal($(cellElement).outerHeight(), 100, "Time cell height is OK");
+                assert.equal($(cellElement).outerWidth(), 100, "Time cell width is OK");
             }
         }
     });
 });
 
 QUnit.test("resourceCellTemplate should take cellElement with correct geometry(T453520)", function(assert) {
-    assert.expect(2);
+    assert.expect(3);
     this.createInstance({
         currentView: "week",
         views: ["week"],
@@ -817,7 +822,8 @@ QUnit.test("resourceCellTemplate should take cellElement with correct geometry(T
         }],
         resourceCellTemplate: function(cellData, cellIndex, cellElement) {
             if(!cellIndex) {
-                var $cell = cellElement.parent();
+                assert.equal(isRenderer(cellElement), config().useJQueryRenderer, "element is correct");
+                var $cell = $(cellElement).parent();
                 assert.roughEqual($cell.outerWidth(), 299, 1.001, "Resource cell width is OK");
                 assert.equal($cell.outerHeight(), 30, "Resource cell height is OK");
             }
@@ -840,7 +846,7 @@ QUnit.test("resourceCellTemplate should take cellElement with correct geometry i
         }],
         resourceCellTemplate: function(cellData, cellIndex, cellElement) {
             if(!cellIndex) {
-                var $cell = cellElement.parent();
+                var $cell = $(cellElement).parent();
                 assert.equal($cell.outerWidth(), 99, "Resource cell width is OK");
                 assert.roughEqual($cell.outerHeight(), 275, 1.001, "Resource cell height is OK");
             }
@@ -909,9 +915,9 @@ QUnit.test("resourceCellTemplate should work correct in timeline view", function
                 ]
             }
         ],
-        resourceCellTemplate: function(itemData, index, $container) {
+        resourceCellTemplate: function(itemData, index, container) {
             if(index === 0) {
-                $container.addClass("custom-group-cell-class");
+                $(container).addClass("custom-group-cell-class");
             }
         }
     });
@@ -951,9 +957,9 @@ QUnit.test("resourceCellTemplate should work correct in agenda view", function(a
                 ]
             }
         ],
-        resourceCellTemplate: function(itemData, index, $container) {
+        resourceCellTemplate: function(itemData, index, container) {
             if(index === 0) {
-                $container.addClass("custom-group-cell-class");
+                $(container).addClass("custom-group-cell-class");
             }
 
             return $("<div />").text(itemData.text);
@@ -995,9 +1001,9 @@ QUnit.test("dateCellTemplate should work correct", function(assert) {
                 ]
             }
         ],
-        dateCellTemplate: function(itemData, index, $container) {
+        dateCellTemplate: function(itemData, index, container) {
             if(index === 0) {
-                $container.addClass("custom-group-cell-class");
+                $(container).addClass("custom-group-cell-class");
             }
         }
     });
@@ -1037,9 +1043,9 @@ QUnit.test("dateCellTemplate should work correct in agenda view", function(asser
                 ]
             }
         ],
-        dateCellTemplate: function(itemData, index, $container) {
+        dateCellTemplate: function(itemData, index, container) {
             if(index === 0) {
-                $container.addClass("custom-group-cell-class");
+                $(container).addClass("custom-group-cell-class");
             }
         }
     });

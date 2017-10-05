@@ -2,7 +2,8 @@
 
 var $ = require("../../core/renderer"),
     dataUtils = require("../../core/element_data"),
-    typeUtils = require("../../core/utils/type");
+    typeUtils = require("../../core/utils/type"),
+    getPublicElement = require("../../core/utils/dom").getPublicElement;
 
 var SchedulerTableCreator = {
 
@@ -13,7 +14,7 @@ var SchedulerTableCreator = {
         var tableBody = document.createElement("tbody"),
             templateCallbacks = [];
 
-        options.container.append(tableBody);
+        $(options.container).append(tableBody);
 
         for(var i = 0; i < options.rowCount; i++) {
             var row = document.createElement("tr");
@@ -52,7 +53,7 @@ var SchedulerTableCreator = {
                         model: {
                             text: options.getCellText ? options.getCellText(i, j) : ""
                         },
-                        container: $(td),
+                        container: getPublicElement($(td)),
                         index: i * options.cellCount + j
                     };
 
@@ -313,7 +314,7 @@ var SchedulerTableCreator = {
                 if(cellTemplate && cellTemplate.render) {
                     var templateOptions = {
                         model: items[j],
-                        container: $container,
+                        container: getPublicElement($container),
                         index: i * itemCount + j
                     };
 
