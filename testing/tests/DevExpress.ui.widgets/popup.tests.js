@@ -5,6 +5,8 @@ var $ = require("jquery"),
     fx = require("animation/fx"),
     viewPort = require("core/utils/view_port").value,
     pointerMock = require("../../helpers/pointerMock.js"),
+    config = require("core/config"),
+    isRenderer = require("core/utils/type").isRenderer,
     executeAsyncMock = require("../../helpers/executeAsyncMock.js");
 
 require("common.css!");
@@ -960,6 +962,18 @@ QUnit.test("title toolbar with buttons when 'showTitle' is false", function(asse
     assert.equal($title.find(".dx-toolbar-label").length, 0, "toolbar has no text");
 });
 
+QUnit.test("container argument of toolbarItems.template option is correct", function(assert) {
+    this.instance.option({
+        toolbarItems: [
+            {
+                template: function(e, index, container) {
+                    assert.equal(isRenderer(container), config().useJQueryRenderer, "container is correct");
+                }
+            }
+        ]
+    });
+});
+
 
 QUnit.test("dx-popup-fullscreen-width class should be attached when width is equal to screen width", function(assert) {
     this.instance.option("width", function() { return $(window).width(); });
@@ -974,14 +988,16 @@ QUnit.test("dx-popup-fullscreen-width class should be attached when width is equ
 QUnit.module("templates");
 
 QUnit.test("titleTemplate test", function(assert) {
-    assert.expect(4);
+    assert.expect(5);
 
     var $element = $("#popup").dxPopup({
             visible: true,
-            titleTemplate: function(_, titleElement) {
+            titleTemplate: function(titleElement) {
                 var result = "<div class='test-title-renderer'>";
                 result += "<h1>Title</h1>";
                 result += "</div>";
+
+                assert.equal(isRenderer(titleElement), config().useJQueryRenderer, "titleElement is correct");
 
                 return result;
             }
@@ -996,7 +1012,7 @@ QUnit.test("titleTemplate test", function(assert) {
     });
 
     instance.option("titleTemplate", function(titleElement) {
-        assert.equal(titleElement.get(0), $popupContent.find("." + POPUP_TITLE_CLASS).get(0));
+        assert.equal($(titleElement).get(0), $popupContent.find("." + POPUP_TITLE_CLASS).get(0));
 
         var result = "<div class='changed-test-title-renderer'>";
         result += "<h1>Title</h1>";
@@ -1026,7 +1042,7 @@ QUnit.test("'bottomTemplate' options test", function(assert) {
     assert.equal($popupContent.find(toSelector("test-bottom-renderer")).length, 1, "option 'bottomTemplate'  was set successfully");
 
     instance.option("bottomTemplate", function(titleElement) {
-        assert.equal(titleElement.get(0), $popupContent.find("." + POPUP_BOTTOM_CLASS).get(0));
+        assert.equal($(titleElement).get(0), $popupContent.find("." + POPUP_BOTTOM_CLASS).get(0));
 
         var result = "<div class='changed-test-bottom-renderer'>";
         result += "<h1>bottom</h1>";
