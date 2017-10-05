@@ -1117,12 +1117,31 @@ var TagBox = SelectBox.inherit({
         if(!dataSource) {
             return;
         }
+        if(this._valueGetterExpr() !== "this") {
+            var filter = this._dataSourceFilterExpr();
 
-        dataSource.filter(this._dataSourceFilter.bind(this));
+            if(filter.length) {
+                dataSource.filter(filter);
+            }
+        } else {
+            dataSource.filter(this._dataSourceFilterFunction.bind(this));
+        }
+
         dataSource.reload();
     },
 
-    _dataSourceFilter: function(itemData) {
+    _dataSourceFilterExpr: function(itemData) {
+        var filter = [];
+
+
+        iteratorUtils.each(this._getValue(), (function(index, value) {
+            filter.push("!", [this._valueGetterExpr(), value]);
+        }).bind(this));
+
+        return filter;
+    },
+
+    _dataSourceFilterFunction: function(itemData) {
         var itemValue = this._valueGetter(itemData),
             result = true;
 
@@ -1134,6 +1153,7 @@ var TagBox = SelectBox.inherit({
         }).bind(this));
 
         return result;
+
     },
 
     _applyButtonHandler: function() {
