@@ -651,7 +651,7 @@ var DropDownEditor = TextBox.inherit({
         $popupContent.empty();
 
         contentTemplate.render({
-            container: $popupContent,
+            container: domUtils.getPublicElement($popupContent),
             model: templateData
         });
     },
