@@ -598,7 +598,7 @@ QUnit.test("More than 3 cloned appointments should be grouped", function(assert)
     assert.equal($dropDownMenu.length, 1, "ddAppointment is rendered");
 
     assert.equal(groupedAppointments.length, 8, "DropDown menu has correct items");
-    assert.equal(dropDownMenuText, "8", "DropDown menu has correct text");
+    assert.equal(dropDownMenuText, "8 more", "DropDown menu has correct text");
     assert.roughEqual(dropDownMenu.option("buttonWidth"), 106.5, 1, "DropDownMenu button width is OK");
 });
 
@@ -1618,7 +1618,7 @@ QUnit.test("Full-size appointment count depends on maxAppointmentsPerCell option
     assert.equal($dropDownMenu.length, 1, "ddAppointment is rendered");
 
     assert.equal(groupedAppointments.length, 1, "DropDown menu has correct items");
-    assert.equal(dropDownMenuText, "1", "DropDown menu has correct text");
+    assert.equal(dropDownMenuText, "1 more", "DropDown menu has correct text");
 });
 
 QUnit.test("Full-size appointment count depends on maxAppointmentsPerCell option, 'auto' mode", function(assert) {
@@ -1649,7 +1649,7 @@ QUnit.test("Full-size appointment count depends on maxAppointmentsPerCell option
     assert.roughEqual($appointment.eq(0).outerWidth(), tableCellWidth, 1.5, "appointment is full-size");
     assert.roughEqual($appointment.eq(1).outerWidth(), tableCellWidth, 1.5, "appointment is full-size");
     assert.equal($dropDownMenu.length, 1, "ddAppointment is rendered");
-    assert.equal(dropDownMenuText, "2", "DropDown menu has correct text");
+    assert.equal(dropDownMenuText, "2 more", "DropDown menu has correct text");
 
     this.instance.option("height", 900);
     $appointment = $(this.instance.$element().find(".dx-scheduler-appointment"));
@@ -1684,7 +1684,7 @@ QUnit.test("Full-size appointment count depends on maxAppointmentsPerCell option
         dropDownMenuText = dropDownMenu.option("buttonTemplate").find("span").first().text();
 
     assert.equal($dropDownMenu.length, 1, "ddAppointment is rendered");
-    assert.equal(dropDownMenuText, "4", "DropDown menu has correct text");
+    assert.equal(dropDownMenuText, "4 more", "DropDown menu has correct text");
 });
 
 QUnit.test("Full-size appointment should have correct height, 'auto' mode", function(assert) {
@@ -1789,7 +1789,7 @@ QUnit.test("Full-size appointment count depends on maxAppointmentsPerCell option
     assert.equal($dropDownMenu.length, 1, "ddAppointment is rendered");
 
     assert.equal(groupedAppointments.length, 1, "DropDown menu has correct items");
-    assert.equal(dropDownMenuText, "1", "DropDown menu has correct text");
+    assert.equal(dropDownMenuText, "1 more", "DropDown menu has correct text");
 });
 
 QUnit.test("Full-size appointment count depends on maxAppointmentsPerCell option, Day view, 'auto' mode", function(assert) {
@@ -1832,7 +1832,7 @@ QUnit.test("Full-size appointment count depends on maxAppointmentsPerCell option
     assert.equal($dropDownMenu.length, 1, "ddAppointment is rendered");
 
     assert.equal(groupedAppointments.length, 3, "DropDown menu has correct items");
-    assert.equal(dropDownMenuText, "3", "DropDown menu has correct text");
+    assert.equal(dropDownMenuText, "3 more", "DropDown menu has correct text");
 });
 
 QUnit.test("Appointment should have an unchangeable height, Day view, 'auto' mode", function(assert) {

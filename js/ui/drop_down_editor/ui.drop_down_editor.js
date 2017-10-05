@@ -851,7 +851,7 @@ var DropDownEditor = TextBox.inherit({
     /**
     * @name dxDropDownEditorMethods_field
     * @publicName field()
-    * @return jQuery
+    * @return Element
     */
     field: function() {
         return getPublicElement(this._input());
@@ -860,7 +860,7 @@ var DropDownEditor = TextBox.inherit({
     /**
     * @name dxDropDownEditorMethods_content
     * @publicName content()
-    * @return jQuery
+    * @return Element
     */
     content: function() {
         return this._popup ? this._popup.content() : null;

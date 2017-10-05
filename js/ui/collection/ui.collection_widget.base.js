@@ -130,7 +130,7 @@ var CollectionWidget = Widget.inherit({
             * @default "item"
             * @type_function_param1 itemData:object
             * @type_function_param2 itemIndex:number
-            * @type_function_param3 itemElement:jQuery
+            * @type_function_param3 itemElement:Element
             * @type_function_return string|Node|jQuery
             */
             itemTemplate: "item",
@@ -140,7 +140,7 @@ var CollectionWidget = Widget.inherit({
             * @publicName onItemRendered
             * @extends Action
             * @type_function_param1_field4 itemData:object
-            * @type_function_param1_field5 itemElement:jQuery
+            * @type_function_param1_field5 itemElement:Element
             * @type_function_param1_field6 itemIndex:number
             * @action
             */
@@ -152,7 +152,7 @@ var CollectionWidget = Widget.inherit({
             * @type function|string
             * @extends Action
             * @type_function_param1_field4 itemData:object
-            * @type_function_param1_field5 itemElement:jQuery
+            * @type_function_param1_field5 itemElement:Element
             * @type_function_param1_field6 itemIndex:number
             * @type_function_param1_field7 jQueryEvent:jQueryEvent
             * @action
@@ -164,7 +164,7 @@ var CollectionWidget = Widget.inherit({
             * @publicName onItemHold
             * @extends Action
             * @type_function_param1_field4 itemData:object
-            * @type_function_param1_field5 itemElement:jQuery
+            * @type_function_param1_field5 itemElement:Element
             * @type_function_param1_field6 itemIndex:number
             * @action
             */
@@ -183,7 +183,7 @@ var CollectionWidget = Widget.inherit({
             * @publicName onItemContextMenu
             * @extends Action
             * @type_function_param1_field4 itemData:object
-            * @type_function_param1_field5 itemElement:jQuery
+            * @type_function_param1_field5 itemElement:Element
             * @type_function_param1_field6 itemIndex:number
             * @type_function_param1_field7 jQueryEvent:jQueryEvent
             * @action

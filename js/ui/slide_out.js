@@ -55,7 +55,7 @@ var SlideOut = CollectionWidget.inherit({
             * @default "menuItem"
             * @type_function_param1 itemData:object
             * @type_function_param2 itemIndex:number
-            * @type_function_param3 itemElement:jQuery
+            * @type_function_param3 itemElement:Element
             * @type_function_return string|Node|jQuery
             */
             menuItemTemplate: "menuItem",
@@ -127,7 +127,7 @@ var SlideOut = CollectionWidget.inherit({
             * @publicName contentTemplate
             * @type template
             * @default "content"
-            * @type_function_param1 container:jQuery
+            * @type_function_param1 container:Element
             * @type_function_return string|Node|jQuery
             */
             contentTemplate: "content",
