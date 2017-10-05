@@ -10,8 +10,7 @@ var $ = require("../../core/renderer"),
     utils = require("./utils"),
     TreeView = require("../tree_view"),
     Popup = require("../popup"),
-    EditorFactoryMixin = require("../shared/ui.editor_factory_mixin"),
-    filterOperationsDictionary = require("./ui.filter_operations_dictionary");
+    EditorFactoryMixin = require("../shared/ui.editor_factory_mixin");
 
 var FILTER_BUILDER_CLASS = "dx-filterbuilder",
     FILTER_BUILDER_GROUP_CLASS = "dx-filterbuilder-group",
@@ -30,8 +29,7 @@ var FILTER_BUILDER_CLASS = "dx-filterbuilder",
     FILTER_BUILDER_POPUP_CLASS = "dx-filterbuilder-popup",
     ACTIVE_CLASS = "dx-state-active";
 
-var DEFAULT_DATA_TYPE = "string",
-    ACTIONS = [
+var ACTIONS = [
         "onEditorPreparing", "onEditorPrepared"
     ],
     OPERATORS = {
@@ -39,13 +37,6 @@ var DEFAULT_DATA_TYPE = "string",
         or: "Or",
         notAnd: "!And",
         notOr: "!Or"
-    },
-    DATATYPE_OPERATIONS = {
-        "number": ["=", "<>", "<", ">", "<=", ">=", "isblank", "isnotblank"],
-        "string": ["contains", "notcontains", "startswith", "endswith", "=", "<>", "isblank", "isnotblank"],
-        "date": ["=", "<>", "<", ">", "<=", ">=", "isblank", "isnotblank"],
-        "boolean": ["=", "<>", "isblank", "isnotblank"],
-        "object": ["isblank", "isnotblank"]
     };
 
 var EditorFactory = Class.inherit(EditorFactoryMixin);
@@ -349,7 +340,7 @@ var FilterBuilder = Widget.inherit({
             utils.addItem(newGroup, criteria);
             that._createGroupElement(newGroup, criteria).appendTo($groupContent);
         }, function() {
-            var newCondition = that._createCondition(that.option("fields")[0]);
+            var newCondition = utils.createCondition(that.option("fields")[0]);
             utils.addItem(newCondition, criteria);
             that._createConditionElement(newCondition, criteria).appendTo($groupContent);
         }).appendTo($groupItem);
@@ -436,17 +427,18 @@ var FilterBuilder = Widget.inherit({
     },
 
     _createOperationButtonWithMenu: function(condition, field) {
-        var $operationButton = this._createButtonWithMenu({
-            caption: condition[1],
-            menu: {
-                items: this._getAvailableOperations(field),
-                displayExpr: "text",
-                onItemClick: function(e) {
-                    condition[1] = e.itemData.text;
-                    $operationButton.html(e.itemData.text);
+        var filterOperationDescriptions = this.option("filterOperationDescriptions"),
+            $operationButton = this._createButtonWithMenu({
+                caption: utils.getCaptionByOperation(condition[1], filterOperationDescriptions),
+                menu: {
+                    items: utils.getAvailableOperations(field, filterOperationDescriptions),
+                    displayExpr: "text",
+                    onItemClick: function(e) {
+                        condition[1] = e.itemData.value;
+                        $operationButton.html(e.itemData.text);
+                    }
                 }
-            }
-        }).addClass(FILTER_BUILDER_ITEM_TEXT_CLASS)
+            }).addClass(FILTER_BUILDER_ITEM_TEXT_CLASS)
             .addClass(FILTER_BUILDER_ITEM_OPERATION_CLASS)
             .attr("tabindex", 0);
 
@@ -481,7 +473,7 @@ var FilterBuilder = Widget.inherit({
                 keyExpr: "dataField",
                 displayExpr: "caption",
                 onItemClick: function(e) {
-                    condition[1] = that._getDefaultOperation(e.itemData);
+                    condition[1] = utils.getDefaultOperation(e.itemData);
                     condition[2] = null;
 
                     $fieldButton.siblings("." + FILTER_BUILDER_ITEM_TEXT_CLASS).remove();
@@ -531,34 +523,6 @@ var FilterBuilder = Widget.inherit({
         }
 
         return result;
-    },
-
-    _getAvailableOperations: function(field) {
-        var filterOperationDescriptions = this.option("filterOperationDescriptions"),
-            filterOperations = field.filterOperations || DATATYPE_OPERATIONS[field.dataType || DEFAULT_DATA_TYPE];
-
-        return filterOperations.map(function(operation) {
-            var operationName = filterOperationsDictionary.getNameByFilterOperation(operation);
-
-            return {
-                icon: filterOperationsDictionary.getIconByFilterOperation(operation),
-                text: filterOperationDescriptions[operationName]
-            };
-        });
-    },
-
-    _getDefaultOperation: function(field) {
-        if(field.defaultFilterOperation) {
-            return field.defaultFilterOperation;
-        } else {
-            return this._getAvailableOperations(field)[0].text;
-        }
-    },
-
-    _createCondition: function(field) {
-        var availableOperations = this._getDefaultOperation(field);
-
-        return [field.dataField, availableOperations, ""];
     },
 
     _createRemoveButton: function(handler) {
