@@ -92,6 +92,15 @@ QUnit.test("custom tags rendering", function(assert) {
     assert.equal(tags.length, 2, "tags are rendered");
 });
 
+QUnit.test("tagElement arguments of tagTemplate for custom tags is correct", function(assert) {
+    $("#tagBox").dxTagBox({
+        value: [1, 2],
+        tagTemplate: function(tagData, tagElement) {
+            assert.equal(isRenderer(tagElement), config().useJQueryRenderer, "tagElement is correct");
+        }
+    });
+});
+
 QUnit.test("popup wrapper gets the 'dx-tagbox-popup-wrapper' class", function(assert) {
     $("#tagBox").dxTagBox({
         opened: true
@@ -1098,7 +1107,8 @@ QUnit.test("tag template should have correct arguments", function(assert) {
         value: [items[0]],
         tagTemplate: function(tagData, tagElement) {
             assert.equal(tagData, items[0], "correct data is passed");
-            assert.equal(tagElement.hasClass(TAGBOX_TAG_CLASS), true, "correct element passed");
+            assert.equal($(tagElement).hasClass(TAGBOX_TAG_CLASS), true, "correct element passed");
+            assert.equal(isRenderer(tagElement), config().useJQueryRenderer, "tagElement is correct");
         }
     });
 });
