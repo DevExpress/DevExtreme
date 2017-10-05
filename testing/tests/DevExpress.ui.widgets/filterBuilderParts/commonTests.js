@@ -144,7 +144,7 @@ QUnit.test("value and operations depend on selected field", function(assert) {
         assert.equal($fieldButton.html(), "State");
 
         $operationButton = container.find("." + FILTER_BUILDER_ITEM_OPERATION_CLASS);
-        assert.equal($operationButton.text(), "contains");
+        assert.equal($operationButton.text(), "Contains");
 
         $valueButton = container.find("." + FILTER_BUILDER_ITEM_VALUE_CLASS);
         assert.equal($valueButton.text(), "<enter a value>");
@@ -180,7 +180,7 @@ QUnit.test("operations were changed after field change", function(assert) {
 
         assert.equal($fieldButton.html(), "City");
         $operationButton = container.find("." + FILTER_BUILDER_ITEM_OPERATION_CLASS);
-        assert.equal($operationButton.text(), "=");
+        assert.equal($operationButton.text(), "Equals");
     } finally {
         fx.off = false;
     }

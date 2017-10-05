@@ -2,7 +2,8 @@
 
 var errors = require("../../data/errors").errors,
     extend = require("../../core/utils/extend").extend,
-    formatHelper = require("../../format_helper");
+    formatHelper = require("../../format_helper"),
+    filterOperationsDictionary = require("./ui.filter_operations_dictionary");
 
 function getGroupCriteria(group) {
     var criteria;
@@ -135,20 +136,12 @@ function isCriteriaContainValueItem(criteria) {
 }
 
 function getAvailableOperations(filterOperations) {
-    var operations = [];
-    var addItem = function(item, operations) {
-        operations.push({ text: item });
-    };
-
-    if(!filterOperations || filterOperations.length === 0) {
-        addItem("=", operations);
-        addItem("<>", operations);
-    } else {
-        for(var i = 0; i < filterOperations.length; i++) {
-            addItem(filterOperations[i], operations);
-        }
-    }
-    return operations;
+    return filterOperations.map(function(operation) {
+        return {
+            icon: filterOperationsDictionary.getIconByFilterOperation(operation),
+            text: filterOperationsDictionary.getDescriptionByFilterOperation(operation)
+        };
+    });
 }
 
 function getDefaultOperation(field) {
