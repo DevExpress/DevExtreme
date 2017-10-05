@@ -3741,6 +3741,77 @@ QUnit.test("selectionHandler should call twice on popup opening", function(asser
     assert.ok(selectionChangeHandlerSpy.callCount <= 2, "selection change handler called less than 2 (ListContentReady and SelectAll)");
 });
 
+QUnit.test("loadOptions.filter should be a filter expression when key is specified", function(assert) {
+    var load = sinon.stub().returns([{ id: 1, text: "item 1" }, { id: 2, text: "item 2" }]),
+        $tagBox = $("#tagBox").dxTagBox({
+            dataSource: {
+                load: load
+            },
+            valueExpr: "id",
+            displayExpr: "text",
+            opened: true,
+            hideSelectedItems: true
+        }),
+        tagBox = $tagBox.dxTagBox("instance"),
+        $item = $(tagBox._$list.find(".dx-list-item").eq(0));
+
+    $item.trigger("dxclick");
+
+    var filter = load.lastCall.args[0].filter;
+    assert.ok(Array.isArray(filter), "filter should be an array for serialization");
+    assert.deepEqual(filter, [["!", ["id", 1]]], "filter should be correct");
+});
+
+QUnit.test("loadOptions.filter should be a function when valueExpr is function", function(assert) {
+    var load = sinon.stub().returns([{ id: 1, text: "item 1" }, { id: 2, text: "item 2" }]),
+        $tagBox = $("#tagBox").dxTagBox({
+            dataSource: {
+                load: load
+            },
+            valueExpr: function() {
+                return "id";
+            },
+            displayExpr: "text",
+            opened: true,
+            hideSelectedItems: true
+        }),
+        tagBox = $tagBox.dxTagBox("instance"),
+        $item = $(tagBox._$list.find(".dx-list-item").eq(0));
+
+    $item.trigger("dxclick");
+
+    var filter = load.lastCall.args[0].filter;
+    assert.ok($.isFunction(filter), "filter is function");
+});
+
+QUnit.test("loadOptions.filter should be correct when user filter is also used", function(assert) {
+    var load = sinon.stub().returns([{ id: 1, text: "item 1" }, { id: 2, text: "item 2" }]),
+        $tagBox = $("#tagBox").dxTagBox({
+            dataSource: {
+                load: load,
+                filter: ["id", ">", 0]
+            },
+            valueExpr: "id",
+            displayExpr: "text",
+            opened: true,
+            hideSelectedItems: true
+        }),
+        tagBox = $tagBox.dxTagBox("instance"),
+        $item = $(tagBox._$list.find(".dx-list-item").eq(0));
+
+    $item.trigger("dxclick");
+
+    var filter = load.lastCall.args[0].filter;
+    assert.deepEqual(filter, [["!", ["id", 1]], ["id", ">", 0]], "filter is correct");
+
+    tagBox.option("opened", true);
+    $item = $(tagBox._$list.find(".dx-list-item").eq(1));
+
+    $item.trigger("dxclick");
+    filter = load.lastCall.args[0].filter;
+
+    assert.deepEqual(filter, [["!", ["id", 1]], ["!", ["id", 2]], ["id", ">", 0]], "filter is correct");
+});
 
 QUnit.module("deprecated options");
 
