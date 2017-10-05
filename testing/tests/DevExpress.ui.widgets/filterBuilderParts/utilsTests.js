@@ -231,6 +231,8 @@ QUnit.test("isCondition", function(assert) {
 QUnit.test("getAvailableOperations", function(assert) {
     var operations = utils.getAvailableOperations(["=", "<>", "contains"]);
     assert.equal(operations[2].text, "contains");
+
+    assert.deepEqual(utils.getAvailableOperations(null), [{ "text": "=" }, { "text": "<>" }]);
 });
 
 QUnit.test("addItem", function(assert) {
@@ -471,5 +473,3 @@ QUnit.test("getPlainItems", function(assert) {
         dataType: "object"
     }]);
 });
-
-
