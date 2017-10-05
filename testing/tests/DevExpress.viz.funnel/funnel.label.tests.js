@@ -686,6 +686,152 @@ QUnit.test("Connector strategy. inverted", function(assert) {
     assert.deepEqual(connectorStrategy.prepareLabelPoints.call(label), 	[ [ 14, 14 ], [ 54, 14 ], [ 54, 34 ], [ 14, 34 ]], "prepareLabelPoints");
 });
 
+QUnit.test("Place labels and connector, item border width > 0, horizontalAlignment is left", function(assert) {
+    this.renderer.bBoxTemplate = { width: 100 };
+
+    stubAlgorithm.getFigures.returns([
+        [0.2, 0, 0.8, 0, 1, 0.5, 0, 0.5]
+    ]);
+
+    createFunnel({
+        algorithm: "stub",
+        dataSource: [{ value: 1 }],
+        valueField: "value",
+        item: { border: { visible: true, width: 2 } },
+        label: {
+            visible: true,
+            position: "outside",
+            horizontalAlignment: "left",
+            horizontalOffset: 15,
+            verticalOffset: 30
+        }
+    });
+
+    var label = labelModule.Label.getCall(0).returnValue,
+        connectorStrategy = labelModule.Label.getCall(0).args[0].strategy,
+        figure = label.setFigureToDrawConnector.lastCall.args[0];
+
+    label.getBoundingRect.returns({
+        x: 10,
+        y: 15,
+        height: 20,
+        width: 40
+    });
+
+    assert.deepEqual(label.shift.args[0], [138, 31]);
+    assert.deepEqual(connectorStrategy.findFigurePoint(figure), [259, 1], "figure point");
+});
+
+QUnit.test("Place labels and connector, item border width > 0, horizontalAlignment is right", function(assert) {
+    this.renderer.bBoxTemplate = { width: 100 };
+
+    stubAlgorithm.getFigures.returns([
+        [0.2, 0, 0.8, 0, 1, 0.5, 0, 0.5]
+    ]);
+
+    createFunnel({
+        algorithm: "stub",
+        dataSource: [{ value: 1 }],
+        valueField: "value",
+        item: { border: { visible: true, width: 2 } },
+        label: {
+            visible: true,
+            position: "outside",
+            horizontalAlignment: "right",
+            horizontalOffset: 15,
+            verticalOffset: 30
+        }
+    });
+
+    var label = labelModule.Label.getCall(0).returnValue,
+        connectorStrategy = labelModule.Label.getCall(0).args[0].strategy,
+        figure = label.setFigureToDrawConnector.lastCall.args[0];
+
+    label.getBoundingRect.returns({
+        x: 10,
+        y: 15,
+        height: 20,
+        width: 40
+    });
+
+    assert.deepEqual(label.shift.args[0], [562, 31]);
+    assert.deepEqual(connectorStrategy.findFigurePoint(figure), [541, 1], "figure point");
+});
+
+QUnit.test("Place labels and connector, item border width > 0, horizontalAlignment is left, inverted", function(assert) {
+    this.renderer.bBoxTemplate = { width: 100 };
+
+    stubAlgorithm.getFigures.returns([
+        [0.2, 0, 0.8, 0, 1, 0.5, 0, 0.5]
+    ]);
+
+    createFunnel({
+        algorithm: "stub",
+        dataSource: [{ value: 1 }],
+        valueField: "value",
+        item: { border: { visible: true, width: 2 } },
+        inverted: true,
+        label: {
+            visible: true,
+            position: "outside",
+            horizontalAlignment: "left",
+            horizontalOffset: 15,
+            verticalOffset: 30
+        }
+    });
+
+    var label = labelModule.Label.getCall(0).returnValue,
+        connectorStrategy = labelModule.Label.getCall(0).args[0].strategy,
+        figure = label.setFigureToDrawConnector.lastCall.args[0];
+
+    label.getBoundingRect.returns({
+        x: 10,
+        y: 15,
+        height: 20,
+        width: 40
+    });
+
+    assert.deepEqual(label.shift.args[0], [138, 590]);
+    assert.deepEqual(connectorStrategy.findFigurePoint(figure), [259, 598], "figure point");
+});
+
+QUnit.test("Place labels and connector, item border width > 0, horizontalAlignment is right, inverted", function(assert) {
+    this.renderer.bBoxTemplate = { width: 100 };
+
+    stubAlgorithm.getFigures.returns([
+        [0.2, 0, 0.8, 0, 1, 0.5, 0, 0.5]
+    ]);
+
+    createFunnel({
+        algorithm: "stub",
+        dataSource: [{ value: 1 }],
+        valueField: "value",
+        inverted: true,
+        item: { border: { visible: true, width: 2 } },
+        label: {
+            visible: true,
+            position: "outside",
+            horizontalAlignment: "right",
+            horizontalOffset: 15,
+            verticalOffset: 30
+        }
+    });
+
+    var label = labelModule.Label.getCall(0).returnValue,
+        connectorStrategy = labelModule.Label.getCall(0).args[0].strategy,
+        figure = label.setFigureToDrawConnector.lastCall.args[0];
+
+    label.getBoundingRect.returns({
+        x: 10,
+        y: 15,
+        height: 20,
+        width: 40
+    });
+
+    assert.deepEqual(label.shift.args[0], [562, 590]);
+    assert.deepEqual(connectorStrategy.findFigurePoint(figure), [541, 598], "figure point");
+});
+
 QUnit.test("change label option", function(assert) {
     stubAlgorithm.getFigures.returns([
         [0, 0, 1, 0, 1, 0.5, 0, 0.5]
