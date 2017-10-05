@@ -230,9 +230,13 @@ QUnit.test("isCondition", function(assert) {
 
 QUnit.test("getAvailableOperations", function(assert) {
     var operations = utils.getAvailableOperations(["=", "<>", "contains"]);
-    assert.equal(operations[2].text, "contains");
 
-    assert.deepEqual(utils.getAvailableOperations(null), [{ "text": "=" }, { "text": "<>" }]);
+    assert.strictEqual(operations[0].text, "Equals");
+    assert.strictEqual(operations[0].icon, "equal");
+    assert.strictEqual(operations[1].text, "Does not equal");
+    assert.strictEqual(operations[1].icon, "notequal");
+    assert.strictEqual(operations[2].text, "Contains");
+    assert.strictEqual(operations[2].icon, "contains");
 });
 
 QUnit.test("addItem", function(assert) {
@@ -369,7 +373,7 @@ QUnit.test("get current value text", function(assert) {
 QUnit.test("create condition", function(assert) {
     var condition = utils.createCondition(fields[0]);
     assert.equal(condition[0], "CompanyName");
-    assert.equal(condition[1], "contains");
+    assert.equal(condition[1], "Contains");
     assert.equal(condition[2], "");
 });
 

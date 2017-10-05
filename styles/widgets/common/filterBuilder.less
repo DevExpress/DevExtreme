@@ -1,15 +1,4 @@
 .dx-filterbuilder {
-    .dx-overlay-wrapper .dx-overlay-content{
-        > .dx-popup-content{
-            padding: 5px;
-        }
-    }
-    .dx-treeview .dx-treeview-node {
-        padding-left: 0;
-        .dx-treeview-node-container-opened {
-            margin-left: 15px;
-        }
-    }
     &.dx-rtl {
         .dx-filterbuilder-text, .dx-filterbuilder-action-icon {
             margin-left: 5px;
@@ -35,7 +24,7 @@
             display: inline-block;
             white-space: nowrap;
 
-            > .dx-filter-builder-popup {
+            > .dx-filterbuilder-popup {
                 float: left;
             }
 
@@ -72,6 +61,24 @@
         }
         .dx-filterbuilder-group-content .dx-filterbuilder-group-content {
             padding: 0 26px;
+        }
+    }
+}
+
+.dx-filterbuilder-popup {
+    white-space: nowrap;
+
+    .dx-overlay-content {
+        > .dx-popup-content{
+            padding: 5px;
+        }
+    }
+
+    .dx-treeview .dx-treeview-node {
+        padding-left: 0;
+
+        .dx-treeview-node-container-opened {
+            margin-left: 15px;
         }
     }
 }
