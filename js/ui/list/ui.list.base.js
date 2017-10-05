@@ -285,7 +285,7 @@ var ListBase = CollectionWidget.inherit({
             * @extends Action
             * @type_function_param1_field4 jQueryEvent:jQueryEvent
             * @type_function_param1_field5 itemData:object
-            * @type_function_param1_field6 itemElement:jQuery
+            * @type_function_param1_field6 itemElement:Element
             * @type_function_param1_field7 itemIndex:number | object
             * @type_function_param1_field8 direction:string
             * @action
@@ -305,7 +305,7 @@ var ListBase = CollectionWidget.inherit({
             * @publicName onGroupRendered
             * @extends Action
             * @type_function_param1_field4 groupData:object
-            * @type_function_param1_field5 groupElement:jQuery
+            * @type_function_param1_field5 groupElement:Element
             * @type_function_param1_field6 groupIndex:number
             * @action
             */
@@ -373,7 +373,7 @@ var ListBase = CollectionWidget.inherit({
             * @type function|string
             * @extends Action
             * @type_function_param1_field4 itemData:object
-            * @type_function_param1_field5 itemElement:jQuery
+            * @type_function_param1_field5 itemElement:Element
             * @type_function_param1_field6 itemIndex:number | object
             * @action
             */

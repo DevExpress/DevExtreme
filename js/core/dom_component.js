@@ -309,7 +309,7 @@ var DOMComponent = Component.inherit({
     * @default null
     * @type_function_param1 e:object
     * @type_function_param1_field1 component:object
-    * @type_function_param1_field2 element:jQuery
+    * @type_function_param1_field2 element:Element
     * @type_function_param1_field3 model:object
     **/
     _defaultActionArgs: function() {
@@ -384,7 +384,7 @@ var DOMComponent = Component.inherit({
     /**
     * @name domcomponentmethods_element
     * @publicName element()
-    * @return jQuery
+    * @return Element
     */
     element: function() {
         return getPublicElement(this.$element());
