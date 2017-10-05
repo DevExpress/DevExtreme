@@ -17,7 +17,6 @@ var SchedulerTimelineWeek = SchedulerTimeline.inherit({
         return this.callBase() * this._getWeekDuration();
     },
 
-
     _renderDateHeader: function() {
         var $headerRow = this.callBase(),
             firstViewDate = new Date(this._firstViewDate),
