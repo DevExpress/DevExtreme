@@ -225,6 +225,8 @@
         "dxFilterBuilder-filterOperationStartsWith": "Beginnt mit",
         "dxFilterBuilder-filterOperationContains": "Enthält",
         "dxFilterBuilder-filterOperationNotContains": "Enthält nicht",
-        "dxFilterBuilder-filterOperationEndsWith": "Endet mit"
+        "dxFilterBuilder-filterOperationEndsWith": "Endet mit",
+        "dxFilterBuilder-filterOperationIsBlank": "!TODO!",
+        "dxFilterBuilder-filterOperationIsNotBlank": "!TODO!"
     }
 }

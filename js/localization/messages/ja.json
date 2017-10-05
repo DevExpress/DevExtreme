@@ -225,6 +225,8 @@
         "dxFilterBuilder-filterOperationStartsWith": "指定の値で始まる",
         "dxFilterBuilder-filterOperationContains": "指定の値を含む",
         "dxFilterBuilder-filterOperationNotContains": "指定の値を含まない",
-        "dxFilterBuilder-filterOperationEndsWith": "指定の値で終わる"
+        "dxFilterBuilder-filterOperationEndsWith": "指定の値で終わる",
+        "dxFilterBuilder-filterOperationIsBlank": "!TODO!",
+        "dxFilterBuilder-filterOperationIsNotBlank": "!TODO!"
     }
 }

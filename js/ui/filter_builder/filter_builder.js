@@ -10,7 +10,8 @@ var $ = require("../../core/renderer"),
     utils = require("./utils"),
     TreeView = require("../tree_view"),
     Popup = require("../popup"),
-    EditorFactoryMixin = require("../shared/ui.editor_factory_mixin");
+    EditorFactoryMixin = require("../shared/ui.editor_factory_mixin"),
+    filterOperationsDictionary = require("./ui.filter_operations_dictionary");
 
 var FILTER_BUILDER_CLASS = "dx-filterbuilder",
     FILTER_BUILDER_GROUP_CLASS = "dx-filterbuilder-group",
@@ -27,11 +28,25 @@ var FILTER_BUILDER_CLASS = "dx-filterbuilder",
     FILTER_BUILDER_ITEM_VALUE_CLASS = "dx-filterbuilder-item-value",
     FILTER_BUILDER_ITEM_VALUE_TEXT_CLASS = "dx-filterbuilder-item-value-text",
     FILTER_BUILDER_POPUP_CLASS = "dx-filterbuilder-popup",
-    ACTIVE_CLASS = "dx-state-active",
+    ACTIVE_CLASS = "dx-state-active";
 
+var DEFAULT_DATA_TYPE = "string",
     ACTIONS = [
         "onEditorPreparing", "onEditorPrepared"
-    ];
+    ],
+    OPERATORS = {
+        and: "And",
+        or: "Or",
+        notAnd: "!And",
+        notOr: "!Or"
+    },
+    DATATYPE_OPERATIONS = {
+        "number": ["=", "<>", "<", ">", "<=", ">=", "isblank", "isnotblank"],
+        "string": ["contains", "notcontains", "startswith", "endswith", "=", "<>", "isblank", "isnotblank"],
+        "date": ["=", "<>", "<", ">", "<=", ">=", "isblank", "isnotblank"],
+        "boolean": ["=", "<>", "isblank", "isnotblank"],
+        "object": ["isblank", "isnotblank"]
+    };
 
 var EditorFactory = Class.inherit(EditorFactoryMixin);
 
@@ -98,7 +113,135 @@ var FilterBuilder = Widget.inherit({
              * @publicName allowHierarchicalFields
              * @default false
              */
-            allowHierarchicalFields: false
+            allowHierarchicalFields: false,
+
+            /**
+             * @name dxFilterBuilderOptions_groupOperatorDescriptions
+             * @publicName groupOperatorDescriptions
+             * @type object
+             */
+            groupOperatorDescriptions: {
+                /**
+                 * @name dxFilterBuilderOptions_groupOperatorDescriptions_and
+                 * @publicName and
+                 * @type string
+                 * @default "And"
+                 */
+                and: messageLocalization.format("dxFilterBuilder-and"),
+                /**
+                 * @name dxFilterBuilderOptions_groupOperatorDescriptions_or
+                 * @publicName or
+                 * @type string
+                 * @default "Or"
+                 */
+                or: messageLocalization.format("dxFilterBuilder-or"),
+                /**
+                 * @name dxFilterBuilderOptions_groupOperatorDescriptions_notAnd
+                 * @publicName notAnd
+                 * @type string
+                 * @default "Not And"
+                 */
+                notAnd: messageLocalization.format("dxFilterBuilder-notAnd"),
+                /**
+                 * @name dxFilterBuilderOptions_groupOperatorDescriptions_notOr
+                 * @publicName notOr
+                 * @type string
+                 * @default "Not Or"
+                 */
+                notOr: messageLocalization.format("dxFilterBuilder-notOr"),
+            },
+
+            /**
+             * @name dxFilterBuilderOptions_filterOperationDescriptions
+             * @publicName filterOperationDescriptions
+             * @type object
+             */
+            filterOperationDescriptions: {
+                /**
+                 * @name dxFilterBuilderOptions_filterOperationDescriptions_equal
+                 * @publicName equal
+                 * @type string
+                 * @default "Equals"
+                 */
+                equal: messageLocalization.format("dxFilterBuilder-filterOperationEquals"),
+                /**
+                 * @name dxFilterBuilderOptions_filterOperationDescriptions_notEqual
+                 * @publicName notEqual
+                 * @type string
+                 * @default "Does not equal"
+                 */
+                notEqual: messageLocalization.format("dxFilterBuilder-filterOperationNotEquals"),
+                /**
+                 * @name dxFilterBuilderOptions_filterOperationDescriptions_lessThan
+                 * @publicName lessThan
+                 * @type string
+                 * @default "Less than"
+                 */
+                lessThan: messageLocalization.format("dxFilterBuilder-filterOperationLess"),
+                /**
+                 * @name dxFilterBuilderOptions_filterOperationDescriptions_lessThanOrEqual
+                 * @publicName lessThanOrEqual
+                 * @type string
+                 * @default "Less than or equal to"
+                 */
+                lessThanOrEqual: messageLocalization.format("dxFilterBuilder-filterOperationLessOrEquals"),
+                /**
+                 * @name dxFilterBuilderOptions_filterOperationDescriptions_greaterThan
+                 * @publicName greaterThan
+                 * @type string
+                 * @default "Greater than"
+                 */
+                greaterThan: messageLocalization.format("dxFilterBuilder-filterOperationGreater"),
+                /**
+                 * @name dxFilterBuilderOptions_filterOperationDescriptions_greaterThanOrEqual
+                 * @publicName greaterThanOrEqual
+                 * @type string
+                 * @default "Greater than or equal to"
+                 */
+                greaterThanOrEqual: messageLocalization.format("dxFilterBuilder-filterOperationGreaterOrEquals"),
+                /**
+                 * @name dxFilterBuilderOptions_filterOperationDescriptions_startsWith
+                 * @publicName startsWith
+                 * @type string
+                 * @default "Starts with"
+                 */
+                startsWith: messageLocalization.format("dxFilterBuilder-filterOperationStartsWith"),
+                /**
+                 * @name dxFilterBuilderOptions_filterOperationDescriptions_contains
+                 * @publicName contains
+                 * @type string
+                 * @default "Contains"
+                 */
+                contains: messageLocalization.format("dxFilterBuilder-filterOperationContains"),
+                /**
+                 * @name dxFilterBuilderOptions_filterOperationDescriptions_notContains
+                 * @publicName notContains
+                 * @type string
+                 * @default "Does not contain"
+                 */
+                notContains: messageLocalization.format("dxFilterBuilder-filterOperationNotContains"),
+                /**
+                 * @name dxFilterBuilderOptions_filterOperationDescriptions_endsWith
+                 * @publicName endsWith
+                 * @type string
+                 * @default "Ends with"
+                 */
+                endsWith: messageLocalization.format("dxFilterBuilder-filterOperationEndsWith"),
+                /**
+                 * @name dxFilterBuilderOptions_filterOperationDescriptions_isBlank
+                 * @publicName isBlank
+                 * @type string
+                 * @default "Is blank"
+                 */
+                isBlank: messageLocalization.format("dxFilterBuilder-filterOperationIsBlank"),
+                /**
+                 * @name dxFilterBuilderOptions_filterOperationDescriptions_isNotBlank
+                 * @publicName isNotBlank
+                 * @type string
+                 * @default "Is not blank"
+                 */
+                isNotBlank: messageLocalization.format("dxFilterBuilder-filterOperationIsNotBlank")
+            }
         });
     },
 
@@ -112,6 +255,8 @@ var FilterBuilder = Widget.inherit({
             case "defaultGroupOperation":
             case "filter":
             case "allowHierarchicalFields":
+            case "groupOperatorDescriptions":
+            case "filterOperationDescriptions":
                 this._invalidate();
                 break;
             default:
@@ -204,7 +349,7 @@ var FilterBuilder = Widget.inherit({
             utils.addItem(newGroup, criteria);
             that._createGroupElement(newGroup, criteria).appendTo($groupContent);
         }, function() {
-            var newCondition = utils.createCondition(that.option("fields")[0]);
+            var newCondition = that._createCondition(that.option("fields")[0]);
             utils.addItem(newCondition, criteria);
             that._createConditionElement(newCondition, criteria).appendTo($groupContent);
         }).appendTo($groupItem);
@@ -294,7 +439,7 @@ var FilterBuilder = Widget.inherit({
         var $operationButton = this._createButtonWithMenu({
             caption: condition[1],
             menu: {
-                items: utils.getAvailableOperations(field.filterOperations),
+                items: this._getAvailableOperations(field),
                 displayExpr: "text",
                 onItemClick: function(e) {
                     condition[1] = e.itemData.text;
@@ -336,7 +481,7 @@ var FilterBuilder = Widget.inherit({
                 keyExpr: "dataField",
                 displayExpr: "caption",
                 onItemClick: function(e) {
-                    condition[1] = utils.getDefaultOperation(e.itemData);
+                    condition[1] = that._getDefaultOperation(e.itemData);
                     condition[2] = null;
 
                     $fieldButton.siblings("." + FILTER_BUILDER_ITEM_TEXT_CLASS).remove();
@@ -374,19 +519,46 @@ var FilterBuilder = Widget.inherit({
     },
 
     _getGroupOperations: function() {
-        return [{
-            text: messageLocalization.format("dxFilterBuilder-and"),
-            value: "And"
-        }, {
-            text: messageLocalization.format("dxFilterBuilder-or"),
-            value: "Or"
-        }, {
-            text: messageLocalization.format("dxFilterBuilder-notAnd"),
-            value: "!And"
-        }, {
-            text: messageLocalization.format("dxFilterBuilder-notOr"),
-            value: "!Or"
-        }];
+        var result = [],
+            operatorDescription,
+            groupOperatorDescriptions = this.option("groupOperatorDescriptions");
+
+        for(operatorDescription in groupOperatorDescriptions) {
+            result.push({
+                text: groupOperatorDescriptions[operatorDescription],
+                value: OPERATORS[operatorDescription]
+            });
+        }
+
+        return result;
+    },
+
+    _getAvailableOperations: function(field) {
+        var filterOperationDescriptions = this.option("filterOperationDescriptions"),
+            filterOperations = field.filterOperations || DATATYPE_OPERATIONS[field.dataType || DEFAULT_DATA_TYPE];
+
+        return filterOperations.map(function(operation) {
+            var operationName = filterOperationsDictionary.getNameByFilterOperation(operation);
+
+            return {
+                icon: filterOperationsDictionary.getIconByFilterOperation(operation),
+                text: filterOperationDescriptions[operationName]
+            };
+        });
+    },
+
+    _getDefaultOperation: function(field) {
+        if(field.defaultFilterOperation) {
+            return field.defaultFilterOperation;
+        } else {
+            return this._getAvailableOperations(field)[0].text;
+        }
+    },
+
+    _createCondition: function(field) {
+        var availableOperations = this._getDefaultOperation(field);
+
+        return [field.dataField, availableOperations, ""];
     },
 
     _createRemoveButton: function(handler) {

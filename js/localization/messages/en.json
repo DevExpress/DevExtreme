@@ -257,6 +257,8 @@
         "dxFilterBuilder-filterOperationStartsWith": "Starts with",
         "dxFilterBuilder-filterOperationContains": "Contains",
         "dxFilterBuilder-filterOperationNotContains": "Does not contain",
-        "dxFilterBuilder-filterOperationEndsWith": "Ends with"
+        "dxFilterBuilder-filterOperationEndsWith": "Ends with",
+        "dxFilterBuilder-filterOperationIsBlank": "Is blank",
+        "dxFilterBuilder-filterOperationIsNotBlank": "Is not blank"
     }
 }
