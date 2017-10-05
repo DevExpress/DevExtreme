@@ -2073,7 +2073,7 @@ var Scheduler = Widget.inherit({
 
         this._defaultTemplates["appointmentPopup"] = new FunctionTemplate(function(options) {
             var $popupContent = that._popupContent(appointmentData, processTimeZone);
-            options.container.append($popupContent);
+            $(options.container).append($popupContent);
 
             return options.container;
         });
