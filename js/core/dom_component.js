@@ -412,8 +412,8 @@ DOMComponent.getInstance = function($element) {
 * @name domcomponentmethods_defaultOptions
 * @section uiWidgets
 * @publicName defaultOptions(rule)
-* @param1 rule:object
-* @param1_field1 device:Object|array|function
+* @param1 rule:Object
+* @param1_field1 device:Object|Array<Object>|function
 * @param1_field2 options:Object
 */
 DOMComponent.defaultOptions = function(rule) {

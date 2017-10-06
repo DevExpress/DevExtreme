@@ -675,7 +675,7 @@ dataGridCore.registerModule("export", {
             * @type_function_param1 e:object
             * @type_function_param1_field3 fileName:string
             * @type_function_param1_field4 format:string
-            * @type_function_param1_field5 data:blob
+            * @type_function_param1_field5 data:BLOB
             * @type_function_param1_field6 cancel:boolean
             * @extends Action
             * @action

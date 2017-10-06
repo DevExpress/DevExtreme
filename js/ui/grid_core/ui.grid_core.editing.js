@@ -1673,7 +1673,7 @@ module.exports = {
              * @type function(e)
              * @type_function_param1 e:object
              * @type_function_param1_field4 data:object
-             * @type_function_param1_field5 cancel:boolean|Promise
+             * @type_function_param1_field5 cancel:boolean|Promise<void>
              * @extends Action
              * @action
              */
@@ -1685,7 +1685,7 @@ module.exports = {
              * @type_function_param1 e:object
              * @type_function_param1_field4 data:object
              * @type_function_param1_field5 key:any
-             * @type_function_param1_field6 error:JavaScript Error object
+             * @type_function_param1_field6 error:Error
              * @extends Action
              * @action
              */
@@ -1724,7 +1724,7 @@ module.exports = {
              * @type_function_param1_field4 oldData:object
              * @type_function_param1_field5 newData:object
              * @type_function_param1_field6 key:any
-             * @type_function_param1_field7 cancel:boolean|Promise
+             * @type_function_param1_field7 cancel:boolean|Promise<void>
              * @extends Action
              * @action
              */
@@ -1736,7 +1736,7 @@ module.exports = {
              * @type_function_param1 e:object
              * @type_function_param1_field4 data:object
              * @type_function_param1_field5 key:any
-             * @type_function_param1_field6 error:JavaScript Error object
+             * @type_function_param1_field6 error:Error
              * @extends Action
              * @action
              */
@@ -1748,7 +1748,7 @@ module.exports = {
              * @type_function_param1 e:object
              * @type_function_param1_field4 data:object
              * @type_function_param1_field5 key:any
-             * @type_function_param1_field6 cancel:boolean|Promise
+             * @type_function_param1_field6 cancel:boolean|Promise<void>
              * @extends Action
              * @action
              */
@@ -1760,7 +1760,7 @@ module.exports = {
              * @type_function_param1 e:object
              * @type_function_param1_field4 data:object
              * @type_function_param1_field5 key:any
-             * @type_function_param1_field6 error:JavaScript Error object
+             * @type_function_param1_field6 error:Error
              * @extends Action
              * @action
              */

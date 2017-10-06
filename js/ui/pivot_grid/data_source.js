@@ -616,7 +616,7 @@ module.exports = Class.inherit((function() {
             /**
             * @name PivotGridDataSourceOptions_store
             * @publicName store
-            * @type Store|XmlaStore|Array<Object>|Object
+            * @type Store|StoreOptions|XmlaStore|XmlaStoreOptions|Array<Object>|Object
             */
             /**
             * @name PivotGridDataSourceOptions_store_type

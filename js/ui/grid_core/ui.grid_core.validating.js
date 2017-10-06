@@ -252,7 +252,7 @@ module.exports = {
             * @publicName onRowValidating
             * @type function(e)
             * @type_function_param1 e:object
-            * @type_function_param1_field4 brokenRules:array
+            * @type_function_param1_field4 brokenRules:Array<Object>
             * @type_function_param1_field5 isValid:boolean
             * @type_function_param1_field6 key:any
             * @type_function_param1_field7 newData:object
