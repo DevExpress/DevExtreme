@@ -443,14 +443,16 @@ QUnit.test("getPlainItems", function(assert) {
     }, {
         caption: "Group3",
         dataField: "group3",
-        dataType: "object"
+        dataType: "object",
+        filterOperations: ["isblank", "isnotblank"]
     }];
 
     plainItems = utils.getPlainItems(hierarchicalFields);
     assert.deepEqual(plainItems, [{
         caption: "group",
         dataField: "group",
-        dataType: "object"
+        dataType: "object",
+        filterOperations: ["isblank", "isnotblank"]
     }, {
         caption: "Group Field1",
         dataField: "group.field1",
@@ -460,7 +462,8 @@ QUnit.test("getPlainItems", function(assert) {
         caption: "group2",
         dataField: "group.group2",
         dataType: "object",
-        parentId: "group"
+        parentId: "group",
+        filterOperations: ["isblank", "isnotblank"]
     }, {
         caption: "Group Group2 Field3",
         dataField: "group.group2.field3",
@@ -474,10 +477,10 @@ QUnit.test("getPlainItems", function(assert) {
     }, {
         caption: "Group3",
         dataField: "group3",
-        dataType: "object"
+        dataType: "object",
+        filterOperations: ["isblank", "isnotblank"]
     }]);
 });
-
 
 QUnit.test("getCaptionWithParents", function(assert) {
     var plainField = {
@@ -499,5 +502,12 @@ QUnit.test("getCaptionWithParents", function(assert) {
     }, plainField ];
 
     assert.equal(utils.getCaptionWithParents(plainField, plainItems), "Group.Group2.Field3");
+});
+
+QUnit.test("updateConditionByOperator", function(assert) {
+    assert.deepEqual(utils.updateConditionByOperator(["value", "=", "123"], "isblank"), ["value", "=", null]);
+    assert.deepEqual(utils.updateConditionByOperator(["value", "=", "123"], "isnotblank"), ["value", "<>", null]);
+    assert.deepEqual(utils.updateConditionByOperator(["value", "=", "123"], "<="), ["value", "<=", "123"]);
+    assert.deepEqual(utils.updateConditionByOperator(["value", "=", null], "<="), ["value", "<=", ""]);
 });
 

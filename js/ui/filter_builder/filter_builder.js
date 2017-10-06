@@ -291,13 +291,23 @@ var FilterBuilder = Widget.inherit({
     },
 
     _createOperationButtonWithMenu: function(condition, field) {
+        var that = this;
         var $operationButton = this._createButtonWithMenu({
-            caption: condition[1],
+            caption: utils.getOperatorCaption(condition),
             menu: {
                 items: utils.getAvailableOperations(field.filterOperations),
                 displayExpr: "text",
                 onItemClick: function(e) {
-                    condition[1] = e.itemData.text;
+                    utils.updateConditionByOperator(condition, e.itemData.text);
+                    var valueButton = $operationButton.siblings("." + FILTER_BUILDER_ITEM_VALUE_CLASS);
+                    if(condition[2] !== null) {
+                        if(valueButton.length === 0) {
+                            that._createValueButton(condition, field)
+                                .appendTo($operationButton.parent());
+                        }
+                    } else {
+                        $operationButton.siblings("." + FILTER_BUILDER_ITEM_VALUE_CLASS).remove();
+                    }
                     $operationButton.html(e.itemData.text);
                 }
             }
@@ -311,8 +321,11 @@ var FilterBuilder = Widget.inherit({
     _createOperationAndValueButtons: function(condition, field, $item) {
         this._createOperationButtonWithMenu(condition, field)
             .appendTo($item);
-        this._createValueButton(condition, field)
-            .appendTo($item);
+
+        if(condition[2] !== null) {
+            this._createValueButton(condition, field)
+                .appendTo($item);
+        }
     },
 
     _createFieldButtonWithMenu: function(condition, field) {
@@ -336,16 +349,18 @@ var FilterBuilder = Widget.inherit({
                 keyExpr: "dataField",
                 displayExpr: "caption",
                 onItemClick: function(e) {
-                    condition[1] = utils.getDefaultOperation(e.itemData);
-                    condition[2] = null;
+                    field = e.itemData;
+                    condition[0] = field.dataField;
+                    if(field.dataType === "object") {
+                        condition[2] = null;
+                    }
+                    utils.updateConditionByOperator(condition, utils.getDefaultOperation(field));
 
                     $fieldButton.siblings("." + FILTER_BUILDER_ITEM_TEXT_CLASS).remove();
-                    that._createOperationAndValueButtons(condition, e.itemData, $fieldButton.parent());
+                    that._createOperationAndValueButtons(condition, field, $fieldButton.parent());
 
-                    condition[0] = e.itemData.dataField;
-                    field = e.itemData;
                     updateFieldMenuItem(e.component, field);
-                    var caption = getFullCaption(e.itemData, e.component.option("items"));
+                    var caption = getFullCaption(field, e.component.option("items"));
                     $fieldButton.html(caption);
                 },
                 onContentReady: function(e) {
@@ -369,7 +384,6 @@ var FilterBuilder = Widget.inherit({
         }).appendTo($item);
         this._createFieldButtonWithMenu(condition, field).appendTo($item);
         this._createOperationAndValueButtons(condition, field, $item);
-
         return $item;
     },
 
