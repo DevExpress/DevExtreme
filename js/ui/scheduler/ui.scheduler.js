@@ -2703,8 +2703,8 @@ var Scheduler = Widget.inherit({
         * @name dxSchedulerMethods_showAppointmentPopup
         * @publicName showAppointmentPopup(appointmentData, createNewAppointment, currentAppointmentData)
         * @param1 appointmentData:Object
-        * @param2 createNewAppointment:Boolean
-        * @param3 currentAppointmentData:Object
+        * @param2 createNewAppointment:Boolean|undefined
+        * @param3 currentAppointmentData:Object|undefined
         */
     showAppointmentPopup: function(appointmentData, createNewAppointment, currentAppointmentData) {
         var singleAppointment = !currentAppointmentData && appointmentData.length ?
@@ -2735,7 +2735,7 @@ var Scheduler = Widget.inherit({
         /**
         * @name dxSchedulerMethods_hideAppointmentPopup
         * @publicName hideAppointmentPopup(saveChanges)
-        * @param1 saveChanges:Boolean
+        * @param1 saveChanges:Boolean|undefined
         */
     hideAppointmentPopup: function(saveChanges) {
         if(!this._popup || !this._popup.option("visible")) {
@@ -2754,7 +2754,7 @@ var Scheduler = Widget.inherit({
         * @publicName showAppointmentTooltip(appointmentData, target, currentAppointmentData)
         * @param1 appointmentData:Object
         * @param2 target:string|Node|jQuery
-        * @param3 currentAppointmentData:Object
+        * @param3 currentAppointmentData:Object|undefined
         */
     showAppointmentTooltip: function(appointmentData, target, currentAppointmentData) {
         if(!appointmentData) {
@@ -2777,7 +2777,7 @@ var Scheduler = Widget.inherit({
         * @publicName scrollToTime(hours, minutes, date)
         * @param1 hours:Number
         * @param2 minutes:Number
-        * @param3 date:Date
+        * @param3 date:Date|undefined
         */
     scrollToTime: function(hours, minutes, date) {
         this._workSpace.scrollToTime(hours, minutes, date);

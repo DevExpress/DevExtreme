@@ -527,8 +527,11 @@ declare module DevExpress {
             /** @docid StoreMethods_keyOf */
             keyOf(obj: Object): any;
 
-            /** @docid StoreMethods_load */
-            load(obj?: LoadOptions): JQueryPromise<any[]>;
+            /** @docid StoreMethods_load#load() */
+            load(): JQueryPromise<any[]>;
+            
+            /** @docid StoreMethods_load#load(options) */
+            load(options?: LoadOptions): JQueryPromise<any[]>;
 
             /** @docid StoreMethods_remove */
             remove(key: any): JQueryPromise<any>;

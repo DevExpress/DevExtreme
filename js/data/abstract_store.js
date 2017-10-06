@@ -186,7 +186,11 @@ var Store = Class.inherit({
             throw errorsModule.errors.Error("E4005");
         }
     },
-
+    /**
+    * @name StoreMethods_load
+    * @publicName load()
+    * @return Promise<any>
+    */
     /**
     * @name StoreMethods_load
     * @publicName load(options)
