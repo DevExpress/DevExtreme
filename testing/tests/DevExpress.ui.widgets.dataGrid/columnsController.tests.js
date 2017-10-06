@@ -7766,7 +7766,7 @@ QUnit.test("Band columns of the third level should be added in an correct order"
     assert.strictEqual(visibleColumns[7].caption, "222", "caption of the eighth column");
 });
 
-QUnit.test("isBandColumnsUsed", function(assert) {
+QUnit.test("isBandColumnsUsed should return true when bandcolumns are set", function(assert) {
     //arrange
     this.applyOptions({
         columns: [
@@ -7785,7 +7785,7 @@ QUnit.test("isBandColumnsUsed", function(assert) {
 });
 
 
-QUnit.test("isBandColumnsUsed - false", function(assert) {
+QUnit.test("isBandColumnsUsed should return false when bandcolumns are not set", function(assert) {
     //arrange
     this.applyOptions({
         columns: [
@@ -7795,5 +7795,5 @@ QUnit.test("isBandColumnsUsed - false", function(assert) {
     });
 
     //assert
-    assert.notOk(this.columnsController.isBandColumnsUsed(), "band column is used");
+    assert.notOk(this.columnsController.isBandColumnsUsed(), "band column is not used");
 });
