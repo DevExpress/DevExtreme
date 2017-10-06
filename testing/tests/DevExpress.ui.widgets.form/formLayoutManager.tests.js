@@ -2655,7 +2655,8 @@ QUnit.test("Check template bound to data", function(assert) {
         layoutData: { test: "abc" },
         items: [{
             dataField: "test",
-            template: function(data, $container) {
+            template: function(data, container) {
+                var $container = $(container);
                 $container.append($("<span>").text("Template"));
 
                 data.editorOptions.onValueChanged = function(args) {
