@@ -80,7 +80,8 @@ QUnit.performanceTest("dxScheduler month view should force minimum relayout coun
             views: ["month"],
             currentView: "month",
             currentDate: new Date(2016, 2, 9),
-            dataSource: data
+            dataSource: data,
+            height: 900
         });
     };
 

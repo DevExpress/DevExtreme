@@ -34,6 +34,8 @@ var BaseRenderingStrategy = Class.inherit({
     },
 
     createTaskPositionMap: function(items) {
+        delete this._maxAppointmentCountPerCell;
+
         var length = items.length;
         if(!length) return;
 
@@ -593,23 +595,27 @@ var BaseRenderingStrategy = Class.inherit({
     },
 
     _getMaxAppointmentCountPerCell: function() {
-        var overlappingMode = this.instance.fire("getMaxAppointmentsPerCell"),
-            appointmentCountPerCell;
+        if(!this._maxAppointmentCountPerCell) {
+            var overlappingMode = this.instance.fire("getMaxAppointmentsPerCell"),
+                appointmentCountPerCell;
 
-        if(!overlappingMode) {
-            appointmentCountPerCell = 2;
-        }
-        if(isNumeric(overlappingMode)) {
-            appointmentCountPerCell = overlappingMode;
-        }
-        if(overlappingMode === "auto") {
-            appointmentCountPerCell = this._getDynamicAppointmentCountPerCell();
-        }
-        if(overlappingMode === "unlimited") {
-            appointmentCountPerCell = undefined;
+            if(!overlappingMode) {
+                appointmentCountPerCell = 2;
+            }
+            if(isNumeric(overlappingMode)) {
+                appointmentCountPerCell = overlappingMode;
+            }
+            if(overlappingMode === "auto") {
+                appointmentCountPerCell = this._getDynamicAppointmentCountPerCell();
+            }
+            if(overlappingMode === "unlimited") {
+                appointmentCountPerCell = undefined;
+            }
+
+            this._maxAppointmentCountPerCell = appointmentCountPerCell;
         }
 
-        return appointmentCountPerCell;
+        return this._maxAppointmentCountPerCell;
     },
 
     _getDynamicAppointmentCountPerCell: function() {
