@@ -326,7 +326,7 @@ var ListBase = CollectionWidget.inherit({
             * @default "group"
             * @type_function_param1 groupData:object
             * @type_function_param2 groupIndex:number
-            * @type_function_param3 groupElement:object
+            * @type_function_param3 groupElement:Element
             * @type_function_return string|Node|jQuery
             */
             groupTemplate: "group",

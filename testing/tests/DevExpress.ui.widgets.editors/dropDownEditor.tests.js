@@ -728,8 +728,9 @@ QUnit.test("fieldTemplate as render", function(assert) {
 
 QUnit.test("contentTemplate as render", function(assert) {
     $("#dropDownEditorLazy").dxDropDownEditor({
-        contentTemplate: function(data, $content) {
-            $content.addClass("drop-down-editor-content");
+        contentTemplate: function(data, content) {
+            assert.equal(isRenderer(content), config().useJQueryRenderer, "contentElement is correct");
+            $(content).addClass("drop-down-editor-content");
             return $("<div>").text(data.component.option("value"));
         },
         value: "test",
