@@ -177,7 +177,7 @@ QUnit.test("Hide", function(assert) {
     assert.deepEqual(label._group.stub("attr").lastCall.args[0], { visibility: "hidden" });
 });
 
-QUnit.test("Manual switching Hide/Show", function(assert) {
+QUnit.test("Show hidden label in the correct position (using the 'resolveLabelOverlapping' option) after calling the 'show' method (T561563)", function(assert) {
     var label = this.createLabel();
     label.show();
 
