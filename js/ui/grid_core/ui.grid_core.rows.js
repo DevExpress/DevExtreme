@@ -1210,7 +1210,7 @@ module.exports = {
                         if(!$(row).hasClass(GROUP_ROW_CLASS)) {
                             for(i = 0; i < visibleColumns.length; i++) {
                                 if(commonUtils.isNumeric(columnID) && columnsController.isParentBandColumn(visibleColumns[i].index, columnID) || visibleColumns[i].index === columnIndex) {
-                                    that.getCellElements(rowIndex).eq(i).css({ opacity: value });
+                                    $rows.eq(rowIndex).children().eq(i).css({ opacity: value });
                                     if(!commonUtils.isNumeric(columnID)) {
                                         break;
                                     }
