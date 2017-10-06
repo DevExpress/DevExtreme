@@ -238,9 +238,10 @@ module.exports = {
                         return template;
                     },
 
-                    _cellPrepared: function($cell, options) {
+                    _cellPrepared: function(cell, options) {
                         var that = this,
-                            component = that.component;
+                            component = that.component,
+                            $cell = $(cell);
 
                         that.callBase.apply(that, arguments);
 
