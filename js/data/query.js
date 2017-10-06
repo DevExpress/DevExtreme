@@ -91,8 +91,8 @@ var query = function() {
 /**
 * @name QueryMethods_slice
 * @publicName slice(skip, take)
-* @param1 skip:numeric
-* @param2 take:numeric
+* @param1 skip:number
+* @param2 take:number|undefined
 * @return object
 */
 

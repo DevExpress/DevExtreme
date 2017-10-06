@@ -230,8 +230,8 @@ var Router = Class.inherit({
     * @publicName register(pattern, defaults, constraints)
     * @type method
     * @param1 pattern:string
-    * @param2 defaults:object
-    * @param3 constraints:object
+    * @param2 defaults:object|undefined
+    * @param3 constraints:object|undefined
     */
     register: function(pattern, defaults, constraints) {
         this._registry.push(this._createRoute(pattern, defaults, constraints));
