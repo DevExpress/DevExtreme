@@ -540,6 +540,11 @@ QUnit.test("create condition", function(assert) {
     assert.equal(condition[0], "CompanyName");
     assert.equal(condition[1], "contains");
     assert.equal(condition[2], "");
+
+    condition = utils.createCondition(fields[6]);
+    assert.equal(condition[0], "ObjectField");
+    assert.equal(condition[1], "=");
+    assert.equal(condition[2], null);
 });
 
 QUnit.test("getCaptionWithParents", function(assert) {
@@ -569,5 +574,11 @@ QUnit.test("updateConditionByOperator", function(assert) {
     assert.deepEqual(utils.updateConditionByOperator(["value", "=", "123"], "isnotblank"), ["value", "<>", null]);
     assert.deepEqual(utils.updateConditionByOperator(["value", "=", "123"], "<="), ["value", "<=", "123"]);
     assert.deepEqual(utils.updateConditionByOperator(["value", "=", null], "<="), ["value", "<=", ""]);
+});
+
+QUnit.test("getOperatorValue", function(assert) {
+    assert.deepEqual(utils.getOperatorValue(["value", "=", "123"]), "=");
+    assert.deepEqual(utils.getOperatorValue(["value", "=", null]), "isblank");
+    assert.deepEqual(utils.getOperatorValue(["value", "<>", null]), "isnotblank");
 });
 

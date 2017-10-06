@@ -167,8 +167,7 @@ function getAvailableOperations(field, filterOperationDescriptions) {
 }
 
 function getDefaultOperation(field) {
-    if(field.defaultFilterOperation
-        && (field.filterOperations.indexOf(field.defaultFilterOperation) !== -1)) {
+    if(field.defaultFilterOperation) {
         return field.defaultFilterOperation;
     } else {
         return getFilterOperations(field)[0];
@@ -176,9 +175,11 @@ function getDefaultOperation(field) {
 }
 
 function createCondition(field) {
-    var filterOperation = getDefaultOperation(field);
+    var condition = [field.dataField, "", ""],
+        filterOperation = getDefaultOperation(field);
+    updateConditionByOperator(condition, filterOperation);
 
-    return [field.dataField, filterOperation, ""];
+    return condition;
 }
 
 function removeItem(group, item) {
@@ -409,7 +410,7 @@ function updateConditionByOperator(condition, operator) {
     return condition;
 }
 
-function getOperatorCaption(condition) {
+function getOperatorValue(condition) {
     var caption;
     if(condition[2] === null) {
         if(condition[1] === "=") {
@@ -443,4 +444,4 @@ exports.getDefaultOperation = getDefaultOperation;
 exports.getCurrentValueText = getCurrentValueText;
 exports.getFilterOperations = getFilterOperations;
 exports.getCaptionByOperation = getCaptionByOperation;
-exports.getOperatorCaption = getOperatorCaption;
+exports.getOperatorValue = getOperatorValue;

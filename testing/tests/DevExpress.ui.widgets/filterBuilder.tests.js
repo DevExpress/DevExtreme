@@ -35,7 +35,7 @@ window.fields = [{
     dataField: "State",
     dataType: "string",
     format: undefined,
-    filterOperations: ["contains", "notcontains", "startswith", "endswith", "=", "<>"],
+    filterOperations: ["contains", "notcontains", "startswith", "endswith", "=", "<>", "isblank", "isnotblank"],
     defaultFilterOperation: ""
 },
 {
@@ -60,6 +60,13 @@ window.fields = [{
     dataType: "string",
     format: undefined,
     filterOperations: ["=", "<>"],
+    defaultFilterOperation: ""
+},
+{
+    caption: "Caption of Object Field",
+    dataField: "ObjectField",
+    dataType: "object",
+    filterOperations: ["isblank", "isnotblank"],
     defaultFilterOperation: ""
 }];
 

@@ -251,3 +251,79 @@ QUnit.test("editor field depends on field type", function(assert) {
     contributorValueField.find("." + FILTER_BUILDER_ITEM_VALUE_TEXT_CLASS).click();
     assert.ok(contributorValueField.find(".dx-selectbox").dxSelectBox("instance"));
 });
+
+QUnit.test("hide value field for isblank & isNotBlank", function(assert) {
+    try {
+        fx.off = true;
+
+        var container = $("#container");
+        container.dxFilterBuilder({
+            filter: [
+                ["State", "<>", "K&S Music"]
+            ],
+            fields: fields
+        });
+
+        assert.equal(container.find("." + FILTER_BUILDER_ITEM_VALUE_CLASS).length, 1);
+
+        var $operationButton = container.find("." + FILTER_BUILDER_ITEM_OPERATION_CLASS);
+
+        var clickByButtonAndSelectMenuItem = function($button, menuItemIndex) {
+            $button.click();
+            $(".dx-treeview-item").eq(menuItemIndex).trigger("dxclick");
+        };
+
+        clickByButtonAndSelectMenuItem($operationButton, 6);
+        assert.equal($operationButton.text(), "Is blank");
+        assert.equal(container.find("." + FILTER_BUILDER_ITEM_VALUE_CLASS).length, 0);
+
+        clickByButtonAndSelectMenuItem($operationButton, 5);
+        assert.equal($operationButton.text(), "Does not equal");
+        assert.equal(container.find("." + FILTER_BUILDER_ITEM_VALUE_CLASS).length, 1);
+
+        var $fieldButton = container.find("." + FILTER_BUILDER_ITEM_FIELD_CLASS);
+
+        clickByButtonAndSelectMenuItem($fieldButton, 6);
+        assert.equal($fieldButton.text(), "Caption of Object Field");
+        assert.equal(container.find("." + FILTER_BUILDER_ITEM_VALUE_CLASS).length, 0);
+
+        clickByButtonAndSelectMenuItem($fieldButton, 2);
+        assert.equal($fieldButton.text(), "State");
+        assert.equal(container.find("." + FILTER_BUILDER_ITEM_VALUE_CLASS).length, 1);
+
+        $operationButton = container.find("." + FILTER_BUILDER_ITEM_OPERATION_CLASS);
+        clickByButtonAndSelectMenuItem($operationButton, 7);
+        assert.equal($operationButton.text(), "Is not blank");
+        assert.equal(container.find("." + FILTER_BUILDER_ITEM_VALUE_CLASS).length, 0);
+    } finally {
+        fx.off = false;
+    }
+});
+
+QUnit.test("change operation", function(assert) {
+    try {
+        fx.off = true;
+
+        var container = $("#container");
+        container.dxFilterBuilder({
+            filter: [
+                ["State", "<>", "K&S Music"]
+            ],
+            fields: fields
+        });
+
+        var $operationButton = container.find("." + FILTER_BUILDER_ITEM_OPERATION_CLASS);
+
+        $operationButton.click();
+        $(".dx-treeview-item").eq(1).trigger("dxclick");
+        assert.equal($operationButton.text(), "Does not contain");
+
+        $operationButton.click();
+        $(".dx-treeview-item").eq(2).trigger("dxclick");
+        assert.equal($operationButton.text(), "Starts with");
+
+        assert.equal(container.find("." + FILTER_BUILDER_ITEM_VALUE_CLASS).length, 1);
+    } finally {
+        fx.off = false;
+    }
+});
