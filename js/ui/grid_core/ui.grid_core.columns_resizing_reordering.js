@@ -435,6 +435,8 @@ var DraggingHeaderView = modules.View.inherit({
             return false;
         };
 
+        that._controller.drag(that._dropOptions);
+
         that.element().css({
             textAlign: columnElement && columnElement.css("text-align"),
             height: columnElement && columnElement.height(),
@@ -610,7 +612,8 @@ var ColumnsResizerViewController = modules.ViewController.inherit({
             parentOffset = that._$parentContainer.offset(),
             parentOffsetLeft = parentOffset.left,
             eventData = eventUtils.eventData(e);
-        if(that._isResizing) {
+
+        if(that._isResizing && that._resizingInfo) {
             if(parentOffsetLeft <= eventData.x && (!isNextColumnMode || eventData.x <= parentOffsetLeft + that._$parentContainer.width())) {
                 if(that._updateColumnsWidthIfNeeded(eventData.x)) {
                     var $cell = that._columnHeadersView.getColumnElements().eq(that._resizingInfo.currentColumnIndex);
@@ -1123,12 +1126,27 @@ var DraggingHeaderViewController = modules.ViewController.inherit({
         return this._columnsController.allowMoveColumn(parameters.sourceColumnIndex, parameters.targetColumnIndex, parameters.sourceLocation, parameters.targetLocation);
     },
 
+    drag: function(parameters) {
+        var sourceIndex = parameters.sourceIndex,
+            sourceLocation = parameters.sourceLocation,
+            sourceColumnElement = parameters.sourceColumnElement,
+            headersView = this._columnHeadersView,
+            rowsView = this._rowsView;
+
+        if(sourceColumnElement) {
+            sourceColumnElement.css({ opacity: 0.5 });
+
+            if(sourceLocation === "headers") {
+                headersView && headersView.setRowsOpacity(sourceIndex, 0.5);
+                rowsView && rowsView.setRowsOpacity(sourceIndex, 0.5);
+            }
+        }
+    },
+
     dock: function(parameters) {
         var that = this,
             targetColumnIndex = commonUtils.isObject(parameters.targetColumnIndex) ? parameters.targetColumnIndex.columnIndex : parameters.targetColumnIndex,
             sourceLocation = parameters.sourceLocation,
-            sourceIndex = parameters.sourceIndex,
-            sourceColumnElement = parameters.sourceColumnElement,
             targetLocation = parameters.targetLocation,
             separator = that._getSeparator(targetLocation),
             hasTargetVisibleIndex = targetColumnIndex >= 0;
@@ -1146,15 +1164,6 @@ var DraggingHeaderViewController = modules.ViewController.inherit({
         that._columnHeadersView.element().find("." + HEADER_ROW_CLASS).toggleClass(that.addWidgetPrefix(HEADERS_DROP_HIGHLIGHT_CLASS), sourceLocation !== "headers" && targetLocation === "headers" && !hasTargetVisibleIndex);
 
         if(separator) {
-            if(sourceColumnElement) {
-                sourceColumnElement.css({ opacity: 0.5 });
-
-                if(sourceLocation === "headers") {
-                    that._columnHeadersView.setRowsOpacity(sourceIndex, 0.5);
-                    that._rowsView.setRowsOpacity(sourceIndex, 0.5);
-                }
-            }
-
             if(that.allowDrop(parameters) && hasTargetVisibleIndex) {
                 if(targetLocation === "group" || targetLocation === "columnChooser") {
                     showSeparator();
