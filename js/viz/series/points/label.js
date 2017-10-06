@@ -177,10 +177,13 @@ Label.prototype = {
     },
 
     show: function() {
-        var that = this;
+        var that = this,
+            needToCorrectPosition = !that._group || !that._group.attr("visibility");
         if(that._point.hasValue()) {
             that.draw();
-            that._point.correctLabelPosition(that);
+            if(needToCorrectPosition) {
+                that._point.correctLabelPosition(that);
+            }
         }
     },
 
