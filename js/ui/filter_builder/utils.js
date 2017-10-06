@@ -5,6 +5,15 @@ var errors = require("../../data/errors").errors,
     formatHelper = require("../../format_helper"),
     filterOperationsDictionary = require("./ui.filter_operations_dictionary");
 
+var DEFAULT_DATA_TYPE = "string",
+    DATATYPE_OPERATIONS = {
+        "number": ["=", "<>", "<", ">", "<=", ">=", "isblank", "isnotblank"],
+        "string": ["contains", "notcontains", "startswith", "endswith", "=", "<>", "isblank", "isnotblank"],
+        "date": ["=", "<>", "<", ">", "<=", ">=", "isblank", "isnotblank"],
+        "boolean": ["=", "<>", "isblank", "isnotblank"],
+        "object": ["isblank", "isnotblank"]
+    };
+
 function getGroupCriteria(group) {
     var criteria;
     if(group.length > 1
@@ -135,11 +144,24 @@ function isCriteriaContainValueItem(criteria) {
     return false;
 }
 
-function getAvailableOperations(filterOperations) {
+function getFilterOperations(field) {
+    return field.filterOperations || DATATYPE_OPERATIONS[field.dataType || DEFAULT_DATA_TYPE];
+}
+
+function getCaptionByOperation(operation, filterOperationDescriptions) {
+    var operationName = filterOperationsDictionary.getNameByFilterOperation(operation);
+
+    return filterOperationDescriptions && filterOperationDescriptions[operationName];
+}
+
+function getAvailableOperations(field, filterOperationDescriptions) {
+    var filterOperations = getFilterOperations(field);
+
     return filterOperations.map(function(operation) {
         return {
             icon: filterOperationsDictionary.getIconByFilterOperation(operation),
-            text: filterOperationsDictionary.getDescriptionByFilterOperation(operation)
+            text: getCaptionByOperation(operation, filterOperationDescriptions),
+            value: operation
         };
     });
 }
@@ -149,8 +171,14 @@ function getDefaultOperation(field) {
         && (field.filterOperations.indexOf(field.defaultFilterOperation) !== -1)) {
         return field.defaultFilterOperation;
     } else {
-        return getAvailableOperations(field.filterOperations)[0].text;
+        return getFilterOperations(field)[0];
     }
+}
+
+function createCondition(field) {
+    var filterOperation = getDefaultOperation(field);
+
+    return [field.dataField, filterOperation, ""];
 }
 
 function removeItem(group, item) {
@@ -175,11 +203,6 @@ function removeItem(group, item) {
         }
     }
     return group;
-}
-
-function createCondition(field) {
-    var availableOperations = getDefaultOperation(field);
-    return [field.dataField, availableOperations, ""];
 }
 
 function createEmptyGroup(value) {
@@ -400,7 +423,6 @@ function getOperatorCaption(condition) {
     return caption;
 }
 
-exports.getOperatorCaption = getOperatorCaption;
 exports.updateConditionByOperator = updateConditionByOperator;
 exports.getCaptionWithParents = getCaptionWithParents;
 exports.getPlainItems = getPlainItems;
@@ -419,3 +441,6 @@ exports.getNormalizedFilter = getNormalizedFilter;
 exports.getGroupCriteria = getGroupCriteria;
 exports.getDefaultOperation = getDefaultOperation;
 exports.getCurrentValueText = getCurrentValueText;
+exports.getFilterOperations = getFilterOperations;
+exports.getCaptionByOperation = getCaptionByOperation;
+exports.getOperatorCaption = getOperatorCaption;

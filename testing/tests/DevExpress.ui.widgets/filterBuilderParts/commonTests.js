@@ -60,7 +60,7 @@ QUnit.test("filter Content init", function(assert) {
                 + '<div class=\"dx-filterbuilder-group-item\">'
                     + '<div class=\"dx-filterbuilder-action-icon dx-icon-remove dx-filterbuilder-action\" tabindex=\"0\"></div>'
                     + '<div class=\"dx-filterbuilder-text dx-filterbuilder-item-field\" tabindex=\"0\">Company Name</div>'
-                    + '<div class=\"dx-filterbuilder-text dx-filterbuilder-item-operation\" tabindex=\"0\">=</div>'
+                    + '<div class=\"dx-filterbuilder-text dx-filterbuilder-item-operation\" tabindex=\"0\">Equals</div>'
                     + '<div class=\"dx-filterbuilder-text dx-filterbuilder-item-value\">'
                         + '<div class=\"dx-filterbuilder-item-value-text\" tabindex=\"0\">K&amp;S Music</div>'
                     + '</div>'
@@ -92,15 +92,15 @@ QUnit.test("markup is initialized by filter value", function(assert) {
 
     assert.ok(container.hasClass(FILTER_BUILDER_CLASS));
     assert.equal(container.find("." + FILTER_BUILDER_ITEM_FIELD_CLASS).html(), "Company Name");
-    assert.equal(container.find("." + FILTER_BUILDER_ITEM_OPERATION_CLASS).html(), "=");
+    assert.equal(container.find("." + FILTER_BUILDER_ITEM_OPERATION_CLASS).html(), "Equals");
     assert.equal(container.find("." + FILTER_BUILDER_ITEM_VALUE_TEXT_CLASS).eq(0).text(), "K&S Music");
 
     assert.equal(container.find("." + FILTER_BUILDER_ITEM_FIELD_CLASS).eq(1).html(), "Zipcode");
-    assert.equal(container.find("." + FILTER_BUILDER_ITEM_OPERATION_CLASS).eq(1).html(), "=");
+    assert.equal(container.find("." + FILTER_BUILDER_ITEM_OPERATION_CLASS).eq(1).html(), "Equals");
     assert.equal(container.find("." + FILTER_BUILDER_ITEM_VALUE_TEXT_CLASS).eq(1).html(), "98027");
 
     assert.equal(container.find("." + FILTER_BUILDER_ITEM_FIELD_CLASS).eq(2).html(), "Company Name");
-    assert.equal(container.find("." + FILTER_BUILDER_ITEM_OPERATION_CLASS).eq(2).html(), "=");
+    assert.equal(container.find("." + FILTER_BUILDER_ITEM_OPERATION_CLASS).eq(2).html(), "Equals");
     var rowValue = container.find("." + FILTER_BUILDER_ITEM_VALUE_TEXT_CLASS).eq(2);
     assert.equal(rowValue.text(), "Screen Shop");
     rowValue.click();
@@ -123,7 +123,7 @@ QUnit.test("value and operations depend on selected field", function(assert) {
         assert.equal($fieldButton.html(), "Company Name");
 
         var $operationButton = container.find("." + FILTER_BUILDER_ITEM_OPERATION_CLASS);
-        assert.equal($operationButton.text(), "=");
+        assert.equal($operationButton.text(), "Equals");
 
         var $valueButton = container.find("." + FILTER_BUILDER_ITEM_VALUE_CLASS);
         assert.equal($valueButton.text(), "K&S Music");
@@ -171,7 +171,7 @@ QUnit.test("operations were changed after field change", function(assert) {
         var $fieldButton = container.find("." + FILTER_BUILDER_ITEM_FIELD_CLASS);
 
         var $operationButton = container.find("." + FILTER_BUILDER_ITEM_OPERATION_CLASS);
-        assert.equal($operationButton.text(), "<>");
+        assert.equal($operationButton.text(), "Does not equal");
 
         $fieldButton.click();
 
@@ -251,4 +251,3 @@ QUnit.test("editor field depends on field type", function(assert) {
     contributorValueField.find("." + FILTER_BUILDER_ITEM_VALUE_TEXT_CLASS).click();
     assert.ok(contributorValueField.find(".dx-selectbox").dxSelectBox("instance"));
 });
-

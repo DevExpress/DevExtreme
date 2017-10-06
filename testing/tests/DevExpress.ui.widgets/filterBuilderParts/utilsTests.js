@@ -9,18 +9,32 @@ var condition1 = ["CompanyName", "=", "Super Mart of the West"],
     condition3 = ["CompanyName", "=", "Super Mart of the West3"];
 
 var groupOperations = [{
-    text: "And",
-    value: "And"
-}, {
-    text: "Or",
-    value: "Or"
-}, {
-    text: "Not And",
-    value: "!And"
-}, {
-    text: "Not Or",
-    value: "!Or"
-}];
+        text: "And",
+        value: "And"
+    }, {
+        text: "Or",
+        value: "Or"
+    }, {
+        text: "Not And",
+        value: "!And"
+    }, {
+        text: "Not Or",
+        value: "!Or"
+    }],
+    filterOperationsDescriptions = {
+        equal: "Equals",
+        notEqual: "Does not equal",
+        lessThan: "Less than",
+        lessThanOrEqual: "Less than or equal to",
+        greaterThan: "Greater than",
+        greaterThanOrEqual: "Greater than or equal to",
+        startsWith: "Starts with",
+        contains: "Contains",
+        notContains: "Does not contain",
+        endsWith: "Ends with",
+        isBlank: "Is blank",
+        isNotBlank: "Is not blank"
+    };
 
 QUnit.module("Utils");
 
@@ -228,17 +242,6 @@ QUnit.test("isCondition", function(assert) {
     assert.ok(!utils.isCondition(["And"]));
 });
 
-QUnit.test("getAvailableOperations", function(assert) {
-    var operations = utils.getAvailableOperations(["=", "<>", "contains"]);
-
-    assert.strictEqual(operations[0].text, "Equals");
-    assert.strictEqual(operations[0].icon, "equal");
-    assert.strictEqual(operations[1].text, "Does not equal");
-    assert.strictEqual(operations[1].icon, "notequal");
-    assert.strictEqual(operations[2].text, "Contains");
-    assert.strictEqual(operations[2].icon, "contains");
-});
-
 QUnit.test("addItem", function(assert) {
     var group = [];
     group = utils.addItem(condition1, group);
@@ -370,13 +373,6 @@ QUnit.test("get current value text", function(assert) {
     assert.equal(utils.getCurrentValueText(field, value), "MyValueTest");
 });
 
-QUnit.test("create condition", function(assert) {
-    var condition = utils.createCondition(fields[0]);
-    assert.equal(condition[0], "CompanyName");
-    assert.equal(condition[1], "Contains");
-    assert.equal(condition[2], "");
-});
-
 QUnit.test("getPlainItems", function(assert) {
     var hierarchicalFields = [{
         caption: "Group",
@@ -480,6 +476,70 @@ QUnit.test("getPlainItems", function(assert) {
         dataType: "object",
         filterOperations: ["isblank", "isnotblank"]
     }]);
+});
+
+QUnit.test("getAvailableOperations (default)", function(assert) {
+    var operations = utils.getAvailableOperations({}, filterOperationsDescriptions);
+
+    assert.strictEqual(operations[0].text, "Contains");
+    assert.strictEqual(operations[0].value, "contains");
+    assert.strictEqual(operations[0].icon, "contains");
+
+    assert.strictEqual(operations[1].text, "Does not contain");
+    assert.strictEqual(operations[1].value, "notcontains");
+    assert.strictEqual(operations[1].icon, "doesnotcontain");
+
+    assert.strictEqual(operations[2].text, "Starts with");
+    assert.strictEqual(operations[2].value, "startswith");
+    assert.strictEqual(operations[2].icon, "startswith");
+
+    assert.strictEqual(operations[3].text, "Ends with");
+    assert.strictEqual(operations[3].value, "endswith");
+    assert.strictEqual(operations[3].icon, "endswith");
+
+    assert.strictEqual(operations[4].text, "Equals");
+    assert.strictEqual(operations[4].value, "=");
+    assert.strictEqual(operations[4].icon, "equal");
+
+    assert.strictEqual(operations[5].text, "Does not equal");
+    assert.strictEqual(operations[5].value, "<>");
+    assert.strictEqual(operations[5].icon, "notequal");
+});
+
+QUnit.test("getAvailableOperations when field with filterOperations", function(assert) {
+    var operations = utils.getAvailableOperations(fields[1], filterOperationsDescriptions);
+
+    assert.strictEqual(operations[0].text, "Equals");
+    assert.strictEqual(operations[0].value, "=");
+    assert.strictEqual(operations[0].icon, "equal");
+
+    assert.strictEqual(operations[1].text, "Does not equal");
+    assert.strictEqual(operations[1].value, "<>");
+    assert.strictEqual(operations[1].icon, "notequal");
+
+    assert.strictEqual(operations[2].text, "Less than");
+    assert.strictEqual(operations[2].value, "<");
+    assert.strictEqual(operations[2].icon, "less");
+
+    assert.strictEqual(operations[3].text, "Greater than");
+    assert.strictEqual(operations[3].value, ">");
+    assert.strictEqual(operations[3].icon, "greater");
+
+    assert.strictEqual(operations[4].text, "Less than or equal to");
+    assert.strictEqual(operations[4].value, "<=");
+    assert.strictEqual(operations[4].icon, "lessorequal");
+
+    assert.strictEqual(operations[5].text, "Greater than or equal to");
+    assert.strictEqual(operations[5].value, ">=");
+    assert.strictEqual(operations[5].icon, "greaterorequal");
+});
+
+QUnit.test("create condition", function(assert) {
+    var condition = utils.createCondition(fields[0]);
+
+    assert.equal(condition[0], "CompanyName");
+    assert.equal(condition[1], "contains");
+    assert.equal(condition[2], "");
 });
 
 QUnit.test("getCaptionWithParents", function(assert) {
