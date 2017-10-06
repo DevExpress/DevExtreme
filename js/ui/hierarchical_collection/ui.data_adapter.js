@@ -421,18 +421,16 @@ var DataAdapter = Class.inherit({
         return !this.options.searchValue.length || !!this._filterDataStructure(this.options.searchValue, [item]).length;
     },
 
-    _createCriteria: function(selector, value, op) {
+    _createCriteria: function(selector, value, operation) {
         var searchFilter = [];
         if(!Array.isArray(selector)) {
-            return [selector, op, value];
+            return [selector, operation, value];
         }
         iteratorUtils.each(selector, function(i, item) {
-            if(searchFilter.length) {
-                searchFilter.push("or");
-            }
-            searchFilter.push([item, op, value]);
+            searchFilter.push([item, operation, value], "or");
         });
 
+        searchFilter.pop();
         return searchFilter;
     },
 
