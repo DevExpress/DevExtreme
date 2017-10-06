@@ -25,7 +25,9 @@ QUnit.testStart(function() {
 
 QUnit.performanceTest("dxScheduler should force minimum relayout count on creation", function(assert) {
     var measureFunction = function() {
-        $("#element").dxScheduler({});
+        $("#element").dxScheduler({
+            showCurrentTimeIndicator: false
+        });
     };
 
     assert.measureStyleRecalculation(measureFunction, 8);
@@ -38,7 +40,8 @@ QUnit.performanceTest("dxScheduler day view should force minimum relayout count 
             views: ["day"],
             currentView: "day",
             currentDate: new Date(2016, 2, 9),
-            dataSource: data
+            dataSource: data,
+            showCurrentTimeIndicator: false
         });
     };
 
@@ -52,7 +55,8 @@ QUnit.performanceTest("dxScheduler week view should force minimum relayout count
             views: ["week"],
             currentView: "week",
             currentDate: new Date(2016, 2, 9),
-            dataSource: data
+            dataSource: data,
+            showCurrentTimeIndicator: false
         });
     };
 
@@ -66,7 +70,8 @@ QUnit.performanceTest("dxScheduler workWeek view should force minimum relayout c
             views: ["workWeek"],
             currentView: "workWeek",
             currentDate: new Date(2016, 2, 9),
-            dataSource: data
+            dataSource: data,
+            showCurrentTimeIndicator: false
         });
     };
 
@@ -81,7 +86,8 @@ QUnit.performanceTest("dxScheduler month view should force minimum relayout coun
             currentView: "month",
             currentDate: new Date(2016, 2, 9),
             dataSource: data,
-            height: 900
+            height: 900,
+            showCurrentTimeIndicator: false
         });
     };
 
@@ -95,7 +101,8 @@ QUnit.performanceTest("dxScheduler timelineDay view should force minimum relayou
             views: ["timelineDay"],
             currentView: "timelineDay",
             currentDate: new Date(2016, 2, 9),
-            dataSource: data
+            dataSource: data,
+            showCurrentTimeIndicator: false
         });
     };
 
@@ -109,11 +116,12 @@ QUnit.performanceTest("dxScheduler timelineWeek view should force minimum relayo
             views: ["timelineWeek"],
             currentView: "timelineWeek",
             currentDate: new Date(2016, 2, 9),
-            dataSource: data
+            dataSource: data,
+            showCurrentTimeIndicator: false
         });
     };
 
-    assert.measureStyleRecalculation(measureFunction, 18);
+    assert.measureStyleRecalculation(measureFunction, 19);
 });
 
 QUnit.performanceTest("dxScheduler timelineWorkWeek view should force minimum relayout count on creation with appointments", function(assert) {
@@ -123,11 +131,12 @@ QUnit.performanceTest("dxScheduler timelineWorkWeek view should force minimum re
             views: ["timelineWorkWeek"],
             currentView: "timelineWorkWeek",
             currentDate: new Date(2016, 2, 9),
-            dataSource: data
+            dataSource: data,
+            showCurrentTimeIndicator: false
         });
     };
 
-    assert.measureStyleRecalculation(measureFunction, 18);
+    assert.measureStyleRecalculation(measureFunction, 19);
 });
 
 QUnit.performanceTest("dxScheduler timelineMonth view should force minimum relayout count on creation with appointments", function(assert) {
@@ -137,7 +146,8 @@ QUnit.performanceTest("dxScheduler timelineMonth view should force minimum relay
             views: ["timelineMonth"],
             currentView: "timelineMonth",
             currentDate: new Date(2016, 2, 9),
-            dataSource: data
+            dataSource: data,
+            showCurrentTimeIndicator: false
         });
     };
 
@@ -151,7 +161,8 @@ QUnit.performanceTest("dxScheduler agenda view should force minimum relayout cou
             views: ["agenda"],
             currentView: "agenda",
             currentDate: new Date(2016, 2, 9),
-            dataSource: data
+            dataSource: data,
+            showCurrentTimeIndicator: false
         });
     };
 
@@ -159,7 +170,9 @@ QUnit.performanceTest("dxScheduler agenda view should force minimum relayout cou
 });
 
 QUnit.performanceTest("dxScheduler should not force relayout on dxshown event", function(assert) {
-    $("#element").dxScheduler({});
+    $("#element").dxScheduler({
+        showCurrentTimeIndicator: false
+    });
 
     var measureFunction = function() {
         resizeCallbacks.fire();
