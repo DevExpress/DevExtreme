@@ -379,7 +379,7 @@ function getCaptionWithParents(item, plainItems) {
     if(hasParent(item.dataField)) {
         var parentId = getParentIdFromItemDataField(item.dataField);
         for(var i = 0; i < plainItems.length; i++) {
-            if(plainItems[i].dataField === getParentIdFromItemDataField(item.dataField)) {
+            if(plainItems[i].dataField === parentId) {
                 return getCaptionWithParents(plainItems[i], plainItems) + "." + item.caption;
             }
         }
