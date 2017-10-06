@@ -8,6 +8,11 @@ We use the [Fork-and-Branch workflow](http://blog.scottlowe.org/2015/01/27/using
 
 Make sure that you properly configure your Git [username](https://help.github.com/articles/setting-your-username-in-git) and [email](https://help.github.com/articles/setting-your-email-in-git).
 
+* [Install Required Software](#install-required-software)
+* [Building](#building)
+* [Tests and CI](#tests-and-ci)
+* [Commit Message Guidelines](#commit-message-guidelines)
+
 ## Install Required Software
 
 To set up a build environment, you need the following software installed:
@@ -71,3 +76,23 @@ drone exec --matrix TARGET=test
 We provide configuration YAML files for [Travis CI](https://travis-ci.org/) ([.travis.yml](.travis.yml)) and [Shippable](https://app.shippable.com/) ([shippable.yml](shippable.yml)). Enable one of them for your forked repo (we recommend Travis). 
 
 Please make sure that each pull request passes all automatic checks before submitting it.
+
+## Commit Message Guidelines
+
+We have few rules of formatting commit messages and pull request titles:
+
+- Use the imperative mood in the subject line
+- Capitalize the subject line
+- Do not end the subject line with a period
+- Limit the subject line to 50 characters
+- Separate subject from body with a blank line
+- Wrap the body at 72 characters
+- Use the body to explain what and why vs. how
+- Write the ID fo the issue/ticket in the end of subject line
+- Use **scope**, where it possible (split it by colon) `<Scope>: <Subject>`
+
+Samples:
+
+`Mark dxCommand as DOMComponent child (ID)`
+
+`dxPivotGrid: Add headerFilter option`
