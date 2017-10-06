@@ -190,7 +190,7 @@ var DataSource = Class.inherit({
         /**
         * @name DataSourceOptions_store
         * @publicName store
-        * @type Store|Array<any>|Object
+        * @type Store|StoreOptions|Array<any>|Object|any
         */
         this._store = options.store;
 

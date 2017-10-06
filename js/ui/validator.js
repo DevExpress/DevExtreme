@@ -45,7 +45,7 @@ var Validator = DOMComponent.inherit({
             /**
             * @name dxValidatorOptions_adapter
             * @publicName adapter
-            * @type object
+            * @type Object
             */
             /**
             * @name dxValidatorOptions_adapter_getValue
@@ -82,12 +82,12 @@ var Validator = DOMComponent.inherit({
             * @name dxValidatorOptions_onValidated
             * @publicName onValidated
             * @type function(validatedInfo)
-            * @type_function_param1 validatedInfo:object
+            * @type_function_param1 validatedInfo:Object
             * @type_function_param1_field1 name:string
             * @type_function_param1_field2 isValid:boolean
-            * @type_function_param1_field3 value:object
-            * @type_function_param1_field4 validationRules:array
-            * @type_function_param1_field5 brokenRule:object
+            * @type_function_param1_field3 value:Object
+            * @type_function_param1_field4 validationRules:Array<Object>
+            * @type_function_param1_field5 brokenRule:Object
             * @action
             */
 

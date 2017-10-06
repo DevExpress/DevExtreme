@@ -1317,8 +1317,8 @@ var dxVectorMap = {
     * @type_function_param1 e:object
     * @type_function_param1_field1 component:object
     * @type_function_param1_field2 element:object
-    * @type_function_param1_field3 jQueryEvent:jQuery-event object
-    * @type_function_param1_field4 target:MapLayerElement object
+    * @type_function_param1_field3 jQueryEvent:jQueryEvent
+    * @type_function_param1_field4 target:MapLayerElement
     * @notUsedInTheme
     * @action
     */
@@ -1354,7 +1354,7 @@ var dxVectorMap = {
     * @type_function_param1 e:object
     * @type_function_param1_field1 component:object
     * @type_function_param1_field2 element:object
-    * @type_function_param1_field3 target:MapLayerElement object
+    * @type_function_param1_field3 target:MapLayerElement
     * @notUsedInTheme
     * @action
     */
@@ -1393,8 +1393,8 @@ var dxVectorMap = {
     * @type_function_param1 e:object
     * @type_function_param1_field1 component:object
     * @type_function_param1_field2 element:object
-    * @type_function_param1_field3 jQueryEvent:jQuery-event object
-    * @type_function_param1_field4 target:Marker object
+    * @type_function_param1_field3 jQueryEvent:jQueryEvent
+    * @type_function_param1_field4 target:object
     * @notUsedInTheme
     * @deprecated dxvectormapoptions_onClick
     * @action
@@ -1407,7 +1407,7 @@ var dxVectorMap = {
     * @type_function_param1 e:object
     * @type_function_param1_field1 component:object
     * @type_function_param1_field2 element:object
-    * @type_function_param1_field3 target:Marker object
+    * @type_function_param1_field3 target:object
     * @notUsedInTheme
     * @deprecated dxvectormapoptions_onSelectionChanged
     * @action

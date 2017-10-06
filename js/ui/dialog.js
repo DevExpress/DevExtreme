@@ -95,7 +95,7 @@ exports.title = "";
  * @param1 options:object
  * @param1_field1 title:String
  * @param1_field2 message:String
- * @param1_field3 buttons:array
+ * @param1_field3 buttons:Array<Object>
  * @module ui/dialog
  * @export custom
  */
