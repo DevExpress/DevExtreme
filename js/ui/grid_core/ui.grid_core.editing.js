@@ -1390,8 +1390,9 @@ var EditingController = modules.ViewController.inherit((function() {
             return column.editCellTemplate || getDefaultEditorTemplate(this);
         },
 
-        renderFormEditTemplate: function(detailCellOptions, item, form, $container, isReadOnly) {
+        renderFormEditTemplate: function(detailCellOptions, item, form, container, isReadOnly) {
             var that = this,
+                $container = $(container),
                 column = item.column,
                 rowData = detailCellOptions.row && detailCellOptions.row.data,
                 cellOptions = extend({}, detailCellOptions, {

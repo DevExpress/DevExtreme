@@ -4,6 +4,7 @@ var $ = require("jquery"),
     consoleUtils = require("core/utils/console"),
     responsiveBoxScreenMock = require("../../helpers/responsiveBoxScreenMock.js"),
     internals = require("ui/form/ui.form.layout_manager").__internals,
+    config = require("core/config"),
     typeUtils = require("core/utils/type"),
     createTestObject = function() {
         return {
@@ -2619,8 +2620,10 @@ QUnit.test("Render template", function(assert) {
         layoutData: { test: "abc" },
         items: [{
             dataField: "test",
-            template: function(data, $container) {
-                $container.append($("<span>").text("Template"));
+            template: function(data, container) {
+                assert.deepEqual(typeUtils.isRenderer(container), config().useJQueryRenderer, "container is correct");
+
+                $(container).append($("<span>").text("Template"));
 
                 data.editorOptions.onValueChanged = function(args) {
                     data.component.option("layoutData." + data.dataField, args.value);
@@ -2628,7 +2631,7 @@ QUnit.test("Render template", function(assert) {
 
                 $("<div>")
                     .dxTextArea(data.editorOptions)
-                    .appendTo($container);
+                    .appendTo(container);
             }
         }]
     });
@@ -2652,7 +2655,8 @@ QUnit.test("Check template bound to data", function(assert) {
         layoutData: { test: "abc" },
         items: [{
             dataField: "test",
-            template: function(data, $container) {
+            template: function(data, container) {
+                var $container = $(container);
                 $container.append($("<span>").text("Template"));
 
                 data.editorOptions.onValueChanged = function(args) {
