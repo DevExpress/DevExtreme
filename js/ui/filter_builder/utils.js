@@ -167,7 +167,8 @@ function getAvailableOperations(field, filterOperationDescriptions) {
 }
 
 function getDefaultOperation(field) {
-    if(field.defaultFilterOperation) {
+    if(field.defaultFilterOperation
+        && (field.filterOperations.indexOf(field.defaultFilterOperation) !== -1)) {
         return field.defaultFilterOperation;
     } else {
         return getFilterOperations(field)[0];
@@ -352,7 +353,12 @@ function pushItemAndCheckParent(originalItems, plainItems, item) {
         item.parentId = getParentIdFromItemDataField(dataField);
         if(!itemExist(plainItems, item.parentId) && !itemExist(originalItems, item.parentId)) {
             var caption = item.parentId.substring(item.parentId.lastIndexOf(".") + 1);
-            pushItemAndCheckParent(originalItems, plainItems, { dataType: "object", dataField: item.parentId, caption: caption });
+            pushItemAndCheckParent(originalItems, plainItems, {
+                dataType: "object",
+                dataField: item.parentId,
+                caption: caption,
+                filterOperations: ["isblank", "isnotblank"]
+            });
         }
     }
     plainItems.push(item);
@@ -387,6 +393,38 @@ function getCaptionWithParents(item, plainItems) {
     return item.caption;
 }
 
+function updateConditionByOperator(condition, operator) {
+    if(operator === "isblank") {
+        condition[1] = "=";
+        condition[2] = null;
+    } else if(operator === "isnotblank") {
+        condition[1] = "<>";
+        condition[2] = null;
+    } else {
+        condition[1] = operator;
+        if(condition[2] === null) {
+            condition[2] = "";
+        }
+    }
+    return condition;
+}
+
+function getOperatorCaption(condition) {
+    var caption;
+    if(condition[2] === null) {
+        if(condition[1] === "=") {
+            caption = "isblank";
+        } else {
+            caption = "isnotblank";
+        }
+    } else {
+        caption = condition[1];
+    }
+    return caption;
+}
+
+exports.getOperatorCaption = getOperatorCaption;
+exports.updateConditionByOperator = updateConditionByOperator;
 exports.getCaptionWithParents = getCaptionWithParents;
 exports.getPlainItems = getPlainItems;
 exports.setGroupValue = setGroupValue;
