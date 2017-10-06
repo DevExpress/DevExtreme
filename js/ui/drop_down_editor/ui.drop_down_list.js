@@ -126,7 +126,7 @@ var DropDownList = DropDownEditor.inherit({
             /**
             * @name dxDropDownListOptions_searchExpr
             * @publicName searchExpr
-            * @type getter|Array<string>
+            * @type getter|Array<getter>
             * @default null
             */
             searchExpr: null,

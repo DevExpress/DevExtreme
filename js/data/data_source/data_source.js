@@ -190,7 +190,7 @@ var DataSource = Class.inherit({
         /**
         * @name DataSourceOptions_store
         * @publicName store
-        * @type Store|StoreOptions|Array<any>|Object|any
+        * @type Store|StoreOptions|Array<any>|Object|string|any
         */
         this._store = options.store;
 
@@ -287,7 +287,7 @@ var DataSource = Class.inherit({
         /**
         * @name DataSourceOptions_searchExpr
         * @publicName searchExpr
-        * @type getter|Array<string>
+        * @type getter|Array<getter>
         */
         this._searchExpr = options.searchExpr;
 
@@ -587,12 +587,12 @@ var DataSource = Class.inherit({
     /**
     * @name DataSourceMethods_searchExpr
     * @publicName searchExpr()
-    * @return getter|Array<string>
+    * @return getter|Array<getter>
     */
     /**
     * @name DataSourceMethods_searchExpr
     * @publicName searchExpr(expr)
-    * @param1 expr:getter|Array<string>
+    * @param1 expr:getter|Array<getter>
     */
     searchExpr: function(expr) {
         var argc = arguments.length;

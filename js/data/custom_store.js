@@ -260,7 +260,7 @@ var CustomStore = Store.inherit({
          * @type_function_param1_field8 requireTotalCount:boolean
          * @type_function_param1_field9 searchValue:object
          * @type_function_param1_field10 searchOperation:string
-         * @type_function_param1_field11 searchExpr:getter|Array<string>
+         * @type_function_param1_field11 searchExpr:getter|Array<getter>
          * @type_function_return Promise<any>
          */
         this._loadFunc = options[LOAD];
