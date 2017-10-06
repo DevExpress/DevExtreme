@@ -13,7 +13,9 @@ var $ = require("jquery"),
     DropDownMenu = require("ui/drop_down_menu"),
     executeAsyncMock = require("../../helpers/executeAsyncMock.js"),
     pointerMock = require("../../helpers/pointerMock.js"),
-    keyboardMock = require("../../helpers/keyboardMock.js");
+    keyboardMock = require("../../helpers/keyboardMock.js"),
+    config = require("core/config"),
+    isRenderer = require("core/utils/type").isRenderer;
 
 require("common.css!");
 
@@ -281,7 +283,8 @@ QUnit.test("w/ options - deferRendering", function(assert) {
 QUnit.test("w/ options - itemTemplate", function(assert) {
     this.ddMenu.option({
         items: [0, 1, 2],
-        itemTemplate: function(item) {
+        itemTemplate: function(item, itemIndex, itemElement) {
+            assert.equal(isRenderer(itemElement), config().useJQueryRenderer, "itemElement is correct");
             return "Item" + item;
         }
     });
