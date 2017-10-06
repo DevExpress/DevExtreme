@@ -3637,25 +3637,25 @@ QUnit.module("Keyboard navigation", {
     setupModule: function() {
         this.$dataGrid = $(".dx-datagrid").width(200);
 
-        this.columns = [
+        this.columns = this.columns || [
             { dataField: 'firstName', index: 0, allowEditing: true, allowExporting: true },
             { dataField: 'lastName', index: 1, allowEditing: true, allowExporting: true },
             { dataField: 'fullName', index: 1, allowEditing: true, allowExporting: true }
         ];
 
-        this.items = [
+        this.items = this.items || [
             { firstName: 'Blablablablablablablablablabla', lastName: "Psy", fullName: "Full Name" },
             { firstName: 'Super', lastName: "Star", fullName: "Full Name" }
         ];
 
-        this.options = {
+        this.options = $.extend({
             useKeyboard: true,
             tabIndex: 0,
             editing: {
                 mode: 'batch',
                 allowUpdating: true
             }
-        };
+        }, this.options);
         setupDataGrid(this, $("#container"));
 
         this.gridView.render($("#container"));
@@ -3677,7 +3677,6 @@ QUnit.module("Keyboard navigation", {
 
     beforeEach: function() {
         this.clock = sinon.useFakeTimers();
-        this.setupModule();
     },
 
     afterEach: function() {
@@ -3686,6 +3685,7 @@ QUnit.module("Keyboard navigation", {
 }, function() {
     QUnit.testInActiveWindow("Edit next an adaptive detail item by tab key", function(assert) {
         //arrange
+        this.setupModule();
         this.triggerFormItemClick(0);
 
         //assert
@@ -3704,6 +3704,7 @@ QUnit.module("Keyboard navigation", {
 
     QUnit.testInActiveWindow("Edit previous an adaptive detail item by shift + tab key", function(assert) {
         //arrange
+        this.setupModule();
         this.triggerFormItemClick(1);
 
         //assert
@@ -3722,6 +3723,7 @@ QUnit.module("Keyboard navigation", {
 
     QUnit.testInActiveWindow("Editable cell is closed when focus moving outside detail form", function(assert) {
         //arrange
+        this.setupModule();
         this.triggerFormItemClick(1);
 
         //act
@@ -3740,6 +3742,7 @@ QUnit.module("Keyboard navigation", {
 
     QUnit.testInActiveWindow("Skip hidden column when use a keyboard navigation via 'tab' key", function(assert) {
         //arrange
+        this.setupModule();
         this.editingController.editCell(0, 0);
         this.clock.tick();
 
@@ -3750,5 +3753,32 @@ QUnit.module("Keyboard navigation", {
 
         //assert
         assert.equal(this.getActiveInputElement().val(), "Super");
+    });
+
+    QUnit.testInActiveWindow("Error is not thrown when via keyboard navigation to adaptive form for new row", function(assert) {
+        //arrange
+        this.items = [];
+        this.columns = [
+            { dataField: 'firstName', index: 0, allowEditing: true, width: 200 },
+            { dataField: 'lastName', index: 1, allowEditing: true, width: 200 },
+            { dataField: 'fullName', index: 1, allowEditing: true, width: 200 }
+        ];
+        this.options = {
+            editing: {
+                allowAdding: true,
+                mode: "row"
+            }
+        };
+        this.setupModule();
+        this.editingController.addRow();
+        this.clock.tick();
+
+        //act
+        var e = $.Event('keydown');
+        e.which = 9;
+        this.getActiveInputElement().trigger(e);
+
+        //assert
+        assert.deepEqual(this.keyboardNavigationController._focusedCellPosition, { columnIndex: 0, rowIndex: 0 });
     });
 });
