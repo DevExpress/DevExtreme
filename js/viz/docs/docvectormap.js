@@ -1407,7 +1407,7 @@ var dxVectorMap = {
     * @type_function_param1 e:object
     * @type_function_param1_field1 component:object
     * @type_function_param1_field2 element:object
-    * @type_function_param1_field3 target:object
+    * @type_function_param1_field3 target:markerObjects
     * @notUsedInTheme
     * @deprecated dxvectormapoptions_onSelectionChanged
     * @action
