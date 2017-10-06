@@ -1470,6 +1470,11 @@ module.exports = {
                 getColumns: function() {
                     return this._columns;
                 },
+                isBandColumnsUsed: function() {
+                    return this.getColumns().some(function(column) {
+                        return column.isBand;
+                    });
+                },
                 getGroupColumns: function() {
                     var result = [];
 

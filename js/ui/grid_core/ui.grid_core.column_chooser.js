@@ -18,6 +18,7 @@ var COLUMN_CHOOSER_CLASS = "column-chooser",
     COLUMN_CHOOSER_BUTTON_CLASS = "column-chooser-button",
     NOTOUCH_ACTION_CLASS = "notouch-action",
     COLUMN_CHOOSER_LIST_CLASS = "column-chooser-list",
+    COLUMN_CHOOSER_PLAIN_CLASS = "column-chooser-plain",
     COLUMN_CHOOSER_DRAG_CLASS = "column-chooser-mode-drag",
     COLUMN_CHOOSER_SELECT_CLASS = "column-chooser-mode-select",
     COLUMN_CHOOSER_ICON_NAME = "column-chooser",
@@ -194,6 +195,7 @@ var ColumnChooserView = columnsView.ColumnsView.inherit({
         if(isSelectMode) {
             scrollableInstance = $container.find(".dx-scrollable").data("dxScrollable");
             scrollTop = scrollableInstance && scrollableInstance.scrollTop();
+            !this._columnsController.isBandColumnsUsed() && $container.addClass(this.addWidgetPrefix(COLUMN_CHOOSER_PLAIN_CLASS));
         }
 
         treeViewConfig.onContentReady = function(e) {
