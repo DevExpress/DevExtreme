@@ -2366,6 +2366,47 @@ QUnit.test("Data is updated correctly_T353275", function(assert) {
     assert.equal(form.getEditor("firstName").option("value"), "Test First Name", "value of editor by 'firstName' field");
 });
 
+QUnit.test("tabElement argument of tabTemplate option is correct", function(assert) {
+    var testContainer = $("#form");
+    testContainer.dxForm({
+        formData: {
+            firstName: ""
+        },
+        items: [
+            {
+                itemType: "tabbed",
+                tabs: [
+                    {
+                        items: ["firstName"],
+                        tabTemplate: function(tabData, tabIndex, tabElement) {
+                            assert.equal(typeUtils.isRenderer(tabElement), config().useJQueryRenderer, "tabElement is correct");
+                        }
+                    }]
+            }]
+    });
+});
+
+QUnit.test("tabElement argument of tabs.template option is correct", function(assert) {
+    var testContainer = $("#form");
+    testContainer.dxForm({
+        formData: {
+            firstName: ""
+        },
+        items: [
+            {
+                itemType: "tabbed",
+                tabs: [
+                    {
+                        items: ["firstName"],
+                        template: function(tabData, tabIndex, tabElement) {
+                            assert.equal(typeUtils.isRenderer(tabElement), config().useJQueryRenderer, "tabElement is correct");
+                        }
+                    }]
+            }]
+    });
+});
+
+
 QUnit.test("Update editorOptions of an editor inside the tab", function(assert) {
     //arrange
     var testContainer = $("#form"),
