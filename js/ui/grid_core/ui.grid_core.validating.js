@@ -509,9 +509,8 @@ module.exports = {
                     }
                 },
 
-                showHighlighting: function(cell, skipValidation) {
+                showHighlighting: function($cell, skipValidation) {
                     var isValid = true,
-                        $cell = $(cell),
                         validator;
 
                     if(!skipValidation) {
@@ -711,8 +710,8 @@ module.exports = {
                     this.callBase.apply(this, arguments);
                     this.getController("validating").createValidator(cellOptions, $container.children(".dx-widget"));
                 },
-                _cellPrepared: function(cell, parameters) {
-                    this.getController("validating").createValidator(parameters, $(cell));
+                _cellPrepared: function($cell, parameters) {
+                    this.getController("validating").createValidator(parameters, $cell);
 
                     this.callBase.apply(this, arguments);
                 }

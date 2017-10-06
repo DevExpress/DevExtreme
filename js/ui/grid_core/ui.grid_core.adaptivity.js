@@ -105,8 +105,9 @@ var AdaptiveColumnsController = modules.ViewController.inherit({
             column = item.column,
             editingController = this.getController("editing");
 
-        return function(options, $container) {
+        return function(options, container) {
             var isItemEdited = that._isItemEdited(item),
+                $container = $(container),
                 columnIndex = that._columnsController.getVisibleIndex(column.visibleIndex),
                 templateOptions = extend({}, cellOptions);
 
