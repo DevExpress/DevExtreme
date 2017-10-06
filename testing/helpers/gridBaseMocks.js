@@ -290,6 +290,12 @@ module.exports = function($, gridCore, columnResizingReordering, domUtils, commo
                 return columns;
             },
 
+            isBandColumnsUsed: function() {
+                return this.getColumns().some(function(column) {
+                    return column.isBand;
+                });
+            },
+
             getVisibleIndex: function(index, rowIndex) {
                 var visibleColumn = this.getRowCount() > 1 && typeUtils.isDefined(rowIndex) ? columns[rowIndex] : columns;
 
