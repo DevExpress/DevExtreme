@@ -172,9 +172,7 @@ QUnit.test("update whole value in case when displayFormat contains a stub symbol
     this.keyboard
         .caret({ start: 0, end: 3 })
         .type("23")
-        .input()
         .change();
-
 
     assert.equal(this.input.val(), "$23", "value is correct");
 
@@ -227,28 +225,57 @@ QUnit.skip("displayFormat with escaped symbol", function(assert) {
     assert.equal(this.input.val(), "$#$12", "value is correct");
 });
 
-QUnit.test("commonly used formats", function(assert) {
-    var formats = [
-        { format: '$ #.##', value: 123.456, expected: "$ 123.46" },
-        { format: '#.## р', value: 123.456, expected: "123.46 р" },
-        // { format: '#,##0 р', value: 12345.678, expected: "12,345.678 р" },
-        // { format: '$ #,##0', value: 1234.567, expected: "$ 1,234.567" },
-        { format: '$ #.##;($ #.##)', value: -123.456, expected: "($ 123.46)" },
-        { format: '#.## р;($ #.##) р', value: 123.456, expected: "123.46 р" },
-        // { format: '$ #,##0;($ #,##0)', value: 1234.567, expected: "$ 1,234.567" },
-        // { format: '$ #,##0 mil;($ #,##0 mil)', value: 123.45, expected: "$ 123.450 mil" },
-        { format: '#.##%', value: 123.456, expected: "12345.60%" },
-        { format: '#.00%', value: 123.456, expected: "12345.60%" },
-        // { format: '#,##.00%', value: 123.456, expected: "12,345.60%" },
-        { format: '0#.###', value: 1.234, expected: "01.234" },
-        { format: '0000', value: 123.456, expected: "0123" }
-    ];
+QUnit.test("removing decimal point should not change the value", function(assert) {
+    this.instance.option("value", 123);
+    this.keyboard.caret(3).press("del").input();
+    assert.equal(this.input.val(), "123.00", "value is correct");
+});
 
-    formats.forEach(function(format) {
-        this.instance.option("value", "");
-        this.instance.option("displayFormat", format.format);
-        this.instance.option("value", format.value);
+QUnit.test("pressing float separator should not move the caret", function(assert) {
+    this.instance.option("value", 123);
+    this.keyboard.caret(2).type(".");
 
-        assert.equal(this.input.val(), format.expected, format.format + " with value " + format.value + " is correct");
-    }.bind(this));
+    assert.equal(this.input.val(), "123.00", "value is right");
+    assert.deepEqual(this.keyboard.caret(), { start: 2, end: 2 }, "caret is right");
+
+    this.keyboard.caret(3).type(".");
+    assert.equal(this.input.val(), "123.00", "value is right");
+    assert.deepEqual(this.keyboard.caret(), { start: 4, end: 4 }, "caret was moved to the float part");
+
+});
+
+QUnit.test("incorrect char didn't change an input value", function(assert) {
+    this.instance.option({
+        displayFormat: "#",
+        value: 1234
+    });
+
+    this.keyboard
+        .caret({ start: 1, end: 1 })
+        .type("g")
+        .input();
+
+    assert.equal(this.input.val(), "1234", "value is the same");
+});
+
+QUnit.test("incorrect char didn't change a caret position", function(assert) {
+    this.instance.option("value", 1234);
+
+    this.keyboard
+        .caret({ start: 1, end: 1 })
+        .type("g")
+        .input();
+
+    var caret = this.keyboard.caret();
+
+    assert.equal(caret.start, 1, "start position is the same");
+    assert.equal(caret.end, 1, "end position is the same");
+    assert.equal(this.input.val(), "1234.00", "value is the same");
+});
+
+QUnit.test("changing value to 0 should not clear the input", function(assert) {
+    this.keyboard.type("0").change();
+
+    assert.strictEqual(this.instance.option("value"), 0, "value is correct");
+    assert.equal(this.input.val(), "0", "text is correct");
 });

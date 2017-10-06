@@ -169,6 +169,7 @@ QUnit.test("different positive and negative formatting", function(assert) {
     var formatter = generateNumberFormat("#.000;(#.000)");
 
     assert.strictEqual(formatter(0), "0.000", "format zero");
+    assert.strictEqual(formatter(-0), "(0.000)", "format negative zero");
     assert.strictEqual(formatter(123), "123.000", "format integer");
     assert.strictEqual(formatter(123.57), "123.570", "format float");
     assert.strictEqual(formatter(123.576), "123.576", "format float with 3 digits after point");
@@ -184,11 +185,11 @@ QUnit.test("escaping format", function(assert) {
 QUnit.test("percent formatting", function(assert) {
     var formatter = generateNumberFormat("#.#%;(#.#%)");
 
-    assert.strictEqual(formatter(0), "0%", "format zero");
-    assert.strictEqual(formatter(0.1), "10%", "format less than 100");
+    assert.strictEqual(formatter(0), "0.0%", "format zero");
+    assert.strictEqual(formatter(0.1), "10.0%", "format less than 100");
     assert.strictEqual(formatter(2.578), "257.8%", "format more than 100");
     assert.strictEqual(formatter(2.5785), "257.9%", "rounding percents");
-    assert.strictEqual(formatter(-0.45), "(45%)", "format negative value");
+    assert.strictEqual(formatter(-0.45), "(45.0%)", "format negative value");
 });
 
 QUnit.test("escaped percent formatting", function(assert) {

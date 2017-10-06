@@ -178,7 +178,7 @@ function generateNumberFormatter(format) {
         if(isNaN(value)) return null;
 
         var signParts = getSignParts(format),
-            numberFormat = signParts[value >= 0 ? 0 : 1];
+            numberFormat = signParts[value > 0 || Object.is(value, 0) ? 0 : 1];
 
         if(isPercentFormat(numberFormat)) {
             value = value * 100;
@@ -187,7 +187,7 @@ function generateNumberFormatter(format) {
         var floatParts = numberFormat.split(FLOAT_SEPARATOR),
             maxFloatPrecision = getMaxPrecision(floatParts[1]);
 
-        value = Math.round(value * Math.pow(10, maxFloatPrecision)) / Math.pow(10, maxFloatPrecision);
+        value = value.toFixed(maxFloatPrecision);
 
         var valueIntegerPart = parseInt(Math.abs(value)),
             valueFloatPart = value.toString().split(FLOAT_SEPARATOR)[1],
