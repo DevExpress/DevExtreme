@@ -381,7 +381,6 @@ declare module DevExpress.ui {
 
         /** @docid_ignore dxSchedulerOptions_indicatorTime */
         /** @docid_ignore dxSchedulerOptions_indicatorUpdateInterval */
-        /** @docid_ignore dxSchedulerOptions_shadeUntilNow */
         
         /** @docid dxSchedulerOptions_dateSerializationFormat */
         dateSerializationFormat?: string;
@@ -517,6 +516,8 @@ declare module DevExpress.ui {
         noDataText?: string;
         /** @docid dxSchedulerOptions_showCurrentTimeIndicator */
         showCurrentTimeIndicator?: boolean;
+        /** @docid dxSchedulerOptions_shadeUntilNow */
+        shadeUntilNow?: boolean;
     }
 
     /** @docid dxScheduler */
