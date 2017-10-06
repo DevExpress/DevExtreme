@@ -311,10 +311,10 @@ var PivotGrid = Widget.inherit({
             * @type_function_param1_field7 cellElement:Element
             * @type_function_param1_field8 columnIndex:number
             * @type_function_param1_field9 rowIndex:number
-            * @type_function_param1_field10 dataFields:Array<Object>
-            * @type_function_param1_field11 rowFields:Array<Object>
-            * @type_function_param1_field12 columnFields:Array<Object>
-            * @type_function_param1_field13 field:Object
+            * @type_function_param1_field10 dataFields:Array<PivotGridDataSourceOptions_fields>
+            * @type_function_param1_field11 rowFields:Array<PivotGridDataSourceOptions_fields>
+            * @type_function_param1_field12 columnFields:Array<PivotGridDataSourceOptions_fields>
+            * @type_function_param1_field13 field:PivotGridDataSourceOptions_fields
             * @extends Action
             * @action
             */
@@ -683,9 +683,9 @@ var PivotGrid = Widget.inherit({
             * @type_function_param1_field6 cell:dxPivotGridPivotGridCell
             * @type_function_param1_field7 rowIndex:number
             * @type_function_param1_field8 columnIndex:number
-            * @type_function_param1_field9 columnFields:Array<Object>
-            * @type_function_param1_field10 rowFields:Array<Object>
-            * @type_function_param1_field11 dataFields:Array<Object>
+            * @type_function_param1_field9 columnFields:Array<PivotGridDataSourceOptions_fields>
+            * @type_function_param1_field10 rowFields:Array<PivotGridDataSourceOptions_fields>
+            * @type_function_param1_field11 dataFields:Array<PivotGridDataSourceOptions_fields>
             * @type_function_param1_field12 jQueryEvent:jQueryEvent
             * @type_function_param1_field13 cancel:boolean
             * @extends Action
