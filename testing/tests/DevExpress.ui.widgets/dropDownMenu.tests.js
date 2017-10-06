@@ -305,7 +305,8 @@ QUnit.test("the 'buttonHeight' option should be passed to the menu button", func
 });
 
 QUnit.test("the 'buttonTemplate' option should be passed to the menu button", function(assert) {
-    this.ddMenu.option("buttonTemplate", function() {
+    this.ddMenu.option("buttonTemplate", function(data, container) {
+        assert.equal(isRenderer(container), config().useJQueryRenderer, "container is correct");
         return $("<span class='it-is-button-template'/>");
     });
 
