@@ -177,6 +177,19 @@ QUnit.test("Hide", function(assert) {
     assert.deepEqual(label._group.stub("attr").lastCall.args[0], { visibility: "hidden" });
 });
 
+QUnit.test("Manual switching Hide/Show", function(assert) {
+    var label = this.createLabel();
+    label.show();
+
+    label.hide();
+    label.show();
+
+    assert.equal(label._group.stub("attr").callCount, 5);
+    assert.deepEqual(label._group.stub("attr").getCall(1).args[0], { visibility: "hidden" });
+    assert.deepEqual(label._group.stub("attr").lastCall.args[0], { visibility: "visible" });
+    assert.equal(label._point.correctLabelPosition.callCount, 1);
+});
+
 QUnit.test("Draw label", function(assert) {
     var label = this.createAndDrawLabel();
 
@@ -660,7 +673,7 @@ QUnit.test("Set options on empty text", function(assert) {
     label.setOptions(this.options);
     label.show();
 
-    assert.strictEqual(label._group.stub("attr").callCount, 2);
+    assert.strictEqual(label._group.stub("attr").callCount, 3);
     assert.deepEqual(label._group.stub("attr").lastCall.args[0], { visibility: "hidden" });
 });
 
