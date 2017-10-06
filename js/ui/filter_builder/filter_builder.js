@@ -429,20 +429,20 @@ var FilterBuilder = Widget.inherit({
     _createOperationButtonWithMenu: function(condition, field) {
         var filterOperationDescriptions = this.option("filterOperationDescriptions"),
             $operationButton = this._createButtonWithMenu({
-                caption: utils.getCaptionByOperation(condition[1], filterOperationDescriptions),
+                caption: utils.getCaptionByOperation(utils.getOperatorValue(condition), filterOperationDescriptions),
                 menu: {
                     items: utils.getAvailableOperations(field, filterOperationDescriptions),
                     displayExpr: "text",
                     onItemClick: function(e) {
                         utils.updateConditionByOperator(condition, e.itemData.text);
-                        var valueButton = $operationButton.siblings("." + FILTER_BUILDER_ITEM_VALUE_CLASS);
+                        var hasValueButton = $operationButton.siblings().filter("." + FILTER_BUILDER_ITEM_VALUE_CLASS).length > 0;
                         if(condition[2] !== null) {
-                            if(valueButton.length === 0) {
+                            if(!hasValueButton) {
                                 that._createValueButton(condition, field)
                                 .appendTo($operationButton.parent());
                             }
                         } else {
-                            $operationButton.siblings("." + FILTER_BUILDER_ITEM_VALUE_CLASS).remove();
+                            $operationButton.siblings().filter("." + FILTER_BUILDER_ITEM_VALUE_CLASS).remove();
                         }
                         $operationButton.html(e.itemData.text);
                     }
@@ -492,7 +492,7 @@ var FilterBuilder = Widget.inherit({
                     }
                     utils.updateConditionByOperator(condition, utils.getDefaultOperation(field));
 
-                    $fieldButton.siblings("." + FILTER_BUILDER_ITEM_TEXT_CLASS).remove();
+                    $fieldButton.siblings().filter("." + FILTER_BUILDER_ITEM_TEXT_CLASS).remove();
                     that._createOperationAndValueButtons(condition, field, $fieldButton.parent());
 
                     updateFieldMenuItem(e.component, field);
