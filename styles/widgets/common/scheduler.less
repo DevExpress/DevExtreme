@@ -1,4 +1,5 @@
 @SCHEDULER_DROP_DOWN_APPOINTMENT_HEIGHT: 65px;
+@SCHEDULER_DROP_DOWN_MARGIN: 2px;
 @SCHEDULER_DROP_DOWN_BUTTON_HEIGHT: 20px;
 @SCHEDULER_DROP_DOWN_BUTTON_PADDING: 2px;
 @SCHEDULER_DROP_DOWN_BUTTON_BORDER_WIDTH: 1px;
@@ -21,7 +22,7 @@
     height: @SCHEDULER_DROP_DOWN_BUTTON_HEIGHT;
     text-align: center;
     cursor: pointer;
-    .border-radius(3px);
+    margin: @SCHEDULER_DROP_DOWN_MARGIN 0 0 @SCHEDULER_DROP_DOWN_MARGIN;
 
     .dx-scheduler-dropdown-appointments-content {
         span:last-child {
@@ -36,6 +37,7 @@
     &.dx-button {
         padding: 0;
         max-width: none;
+        .border-radius(@SCHEDULER_DROP_DOWN_BUTTON_HEIGHT);
     }
 }
 
@@ -102,6 +104,10 @@
 }
 
 .dx-rtl {
+    .dx-scheduler-dropdown-appointments {
+        margin: @SCHEDULER_DROP_DOWN_MARGIN @SCHEDULER_DROP_DOWN_MARGIN 0 0;
+    }
+
     .dx-scheduler-dropdown-appointment-info-block {
         margin-left: @SCHEDULER_DROP_DOWN_BUTTON_BLOCK_WIDTH;
         margin-right: auto;
