@@ -2,10 +2,10 @@
 
 var FLOAT_SEPARATOR = ".";
 var GROUP_SEPARATOR = ",";
-function escapeFormat(formatString) {
-    var charsToEscape = /([\\\/\.\*\+\?\|\(\)\[\]\{\}])/g;
+var ESCAPING_CHAR = "'";
 
-    return formatString.replace(charsToEscape, "\\$1");
+function escapeFormat(formatString) {
+    return formatString.replace(/[.*+?^${}()|\[\]\\]/g, "\\$&");
 }
 
 function getGroupSizes(formatString) {
@@ -116,4 +116,90 @@ function generateNumberParser(format) {
     };
 }
 
+var formatRules = {
+    "#": {
+        regexp: "\\d*",
+        empty: ""
+    },
+
+    "0": {
+        regexp: "\\d",
+        empty: "0"
+    }
+};
+
+function getFormatString(format, value) {
+    var stringValue = (value || "").toString(),
+        specialFormatChars = Object.keys(formatRules),
+        isProcessingPrevented = false,
+        resultString = "";
+
+    for(var i = 0; i < format.length; i++) {
+        var formatChar = format.charAt(i);
+
+        if(formatChar === ESCAPING_CHAR) {
+            isProcessingPrevented = !isProcessingPrevented;
+        }
+
+        if(isProcessingPrevented || specialFormatChars.indexOf(formatChar) === -1) {
+            if(formatChar !== ESCAPING_CHAR) resultString += formatChar;
+            stringValue = stringValue.replace(new RegExp("^" + escapeFormat(formatChar)), "");
+            continue;
+        }
+
+        var formatRule = formatRules[formatChar],
+            formatRegExp = new RegExp("^" + formatRule.regexp);
+
+        var matches = stringValue.match(formatRegExp);
+
+        resultString += matches ? matches[0] : formatRule.empty;
+        stringValue = stringValue.replace(formatRegExp, "");
+    }
+
+    return resultString;
+}
+
+function reverseString(str) {
+    return str.toString().split("").reverse().join("");
+}
+
+function isPercentFormat(format) {
+    return format.indexOf("%") !== -1 && !format.match(/'[^']*%[^']*'/g);
+}
+
+function getMaxPrecision(floatFormat) {
+    if(!floatFormat) return 0;
+    return floatFormat.replace(/[^#0]/g, "").length;
+}
+
+function generateNumberFormatter(format) {
+    return function(value) {
+        if(typeof value !== "number") return "";
+
+        var signParts = getSignParts(format),
+            numberFormat = signParts[value >= 0 ? 0 : 1];
+
+        if(isPercentFormat(numberFormat)) {
+            value = value * 100;
+        }
+
+        var floatParts = numberFormat.split(FLOAT_SEPARATOR),
+            maxFloatPrecision = getMaxPrecision(floatParts[1]);
+
+        value = Math.round(value * Math.pow(10, maxFloatPrecision)) / Math.pow(10, maxFloatPrecision);
+
+        var valueIntegerPart = parseInt(Math.abs(value)),
+            valueFloatPart = value.toString().split(FLOAT_SEPARATOR)[1],
+            integerString = reverseString(getFormatString(reverseString(floatParts[0]), reverseString(valueIntegerPart))),
+            floatString = maxFloatPrecision ? getFormatString(floatParts[1], valueFloatPart) : "";
+
+        if(!integerString.match(/\d/)) integerString += "0";
+
+        var formatString = integerString + (floatString.match(/\d/) ? FLOAT_SEPARATOR : "") + floatString;
+
+        return formatString;
+    };
+}
+
 exports.generateNumberParser = generateNumberParser;
+exports.generateNumberFormatter = generateNumberFormatter;
