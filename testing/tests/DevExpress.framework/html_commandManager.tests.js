@@ -15,6 +15,10 @@ var $ = require("jquery"),
 
 require("ui/toolbar");
 
+if(QUnit.urlParams["nojquery"]) {
+    return;
+}
+
 QUnit.testStart(function() {
     var markup = require("./frameworkParts/html_commandManager.markup.html!text");
 
@@ -117,7 +121,7 @@ QUnit.test("Layout commands (with observable) - B231696 - dxCommand does not cha
         containers = manager.findCommandContainers($renderResult);
 
     manager.renderCommandsToContainers(commands, containers).always(function() {
-        var toolbar = $renderResult.find(".toolbar").data("dxToolbar");
+        var toolbar = $renderResult.find(".toolbar").dxToolbar("instance");
         var items = toolbar.option("items");
         assert.equal(items.length, 1);
         assert.equal(items[0].options.text, "initial");

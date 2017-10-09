@@ -1,24 +1,12 @@
 "use strict";
 
-var $ = require("jquery"),
-    compareVersion = require("../../core/utils/version").compare,
-    each = require("../../core/utils/iterator").each,
-    isNumeric = require("../../core/utils/type").isNumeric,
-    registerEvent = require("../../events/core/event_registrator");
-
-var touchPropsToHook = ["pageX", "pageY", "screenX", "screenY", "clientX", "clientY"];
-var touchPropHook = function(name, event) {
-    if(event[name] || !event.touches) {
-        return event[name];
-    }
-
-    var touches = event.touches.length ? event.touches : event.changedTouches;
-    if(!touches.length) {
-        return;
-    }
-
-    return touches[0][name];
-};
+var $ = require("jquery");
+var compareVersion = require("../../core/utils/version").compare;
+var each = require("../../core/utils/iterator").each;
+var isNumeric = require("../../core/utils/type").isNumeric;
+var setEventFixMethod = require("../../events/core/events_engine").setEventFixMethod;
+var registerEvent = require("../../events/core/event_registrator");
+var hookTouchProps = require("../../events/core/hook_touch_props");
 
 if(compareVersion($.fn.jquery, [3]) < 0) {
     var POINTER_TYPE_MAP = {
@@ -62,8 +50,8 @@ if(compareVersion($.fn.jquery, [3]) < 0) {
     each(["touchstart", "touchmove", "touchend", "touchcancel"], function() {
         $.event.fixHooks[this] = {
             filter: function(event, originalEvent) {
-                each(touchPropsToHook, function(_, name) {
-                    event[name] = touchPropHook(name, originalEvent);
+                hookTouchProps(function(name, hook) {
+                    event[name] = hook(originalEvent);
                 });
 
                 return event;
@@ -106,17 +94,9 @@ if(compareVersion($.fn.jquery, [3]) < 0) {
         return fixHook.filter ? fixHook.filter(event, originalEvent) : event;
     };
 
-    exports.copy = function(originalEvent) {
-        return fix($.Event(originalEvent.type, originalEvent), originalEvent);
-    };
+    setEventFixMethod(fix);
 } else {
-    each(touchPropsToHook, function(_, name) {
-        $.event.addProp(name, function(event) {
-            return touchPropHook(name, event);
-        });
+    hookTouchProps(function(name, hook) {
+        $.event.addProp(name, hook);
     });
-
-    exports.copy = function(originalEvent) {
-        return $.Event(originalEvent, originalEvent);
-    };
 }

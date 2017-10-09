@@ -12,7 +12,9 @@ require("ui/pivot_grid/ui.pivot_grid.field_chooser");
 var $ = require("jquery"),
     pointerMock = require("../../helpers/pointerMock.js"),
     domUtils = require("core/utils/dom"),
-    devices = require("core/devices");
+    devices = require("core/devices"),
+    dataUtils = require("core/element_data"),
+    renderer = require("core/renderer");
 
 var createMockDataSource = function(options) {
     $.each(options.fields || [], function(index, field) {
@@ -86,7 +88,7 @@ QUnit.test("Empty options", function(assert) {
     assert.equal($areaFieldsContainers.eq(4).attr("group"), "data", "group 5");
     assert.equal($areaFieldsContainers.eq(4).attr("allow-scrolling"), "true", "group 5 - allow-scrolling");
 
-    var sortable = this.fieldChooser.element().dxSortable("instance");
+    var sortable = this.fieldChooser.$element().dxSortable("instance");
 
     assert.strictEqual(sortable.option("allowDragging"), true, "dragging should be enabled by default");
 });
@@ -673,8 +675,8 @@ QUnit.test("Change filter values for not group field", function(assert) {
     assert.equal(this.$container.find(".dx-header-filter").length, 2, "header filter count");
     assert.equal(this.$container.find(".dx-header-filter-empty").length, 1, "empty header filter count");
     assert.equal(this.$container.find(".dx-header-filter-empty").length, 1, "empty header filter count");
-    assert.equal($scrollableElements.length, 4, "scrollable count");
-    assert.equal(scrollableUpdateCallCount, 4, "scrollable update call count");
+    assert.equal($scrollableElements.length, 5, "scrollable count");
+    assert.equal(scrollableUpdateCallCount, 5, "scrollable update call count");
 });
 
 QUnit.test("T247590. Save tree view scroll position on dataSource changed", function(assert) {
@@ -1130,9 +1132,9 @@ QUnit.test("Dragging Fields", function(assert) {
 
         //assert
 
-        assert.strictEqual($targetGroup.hasClass("dx-drag-target"), !cancelExpected, "target group has target class " + field.data("field").dataField + " " + area);
+        assert.strictEqual($targetGroup.hasClass("dx-drag-target"), !cancelExpected, "target group has target class " + dataUtils.data(field.get(0), "field").dataField + " " + area);
 
-        assert.ok((getBorderColor($targetGroup) === areaBorderColor) && cancelExpected || (getBorderColor($targetGroup) !== areaBorderColor) && !cancelExpected, "target group border color is correct " + field.data("field").dataField + " " + area);
+        assert.ok((getBorderColor($targetGroup) === areaBorderColor) && cancelExpected || (getBorderColor($targetGroup) !== areaBorderColor) && !cancelExpected, "target group border color is correct " + dataUtils.data(field.get(0), "field").dataField + " " + area);
 
         pointer.move(offset.left, offset.top).up();
 
@@ -1142,19 +1144,19 @@ QUnit.test("Dragging Fields", function(assert) {
     assert.ok(true);
     assert.strictEqual(fields.length, 3);
 
-    assert.strictEqual(fields.eq(0).data("field").dataField, "Field1");
+    assert.strictEqual(dataUtils.data(fields.get(0), "field").dataField, "Field1");
     assertDragging(fields.eq(0), "filter", true);
     assertDragging(fields.eq(0), "data", false);
     assertDragging(fields.eq(0), "row", true);
     assertDragging(fields.eq(0), "column", true);
 
-    assert.strictEqual(fields.eq(1).data("field").dataField, "Field2");
+    assert.strictEqual(dataUtils.data(fields.get(1), "field").dataField, "Field2");
     assertDragging(fields.eq(1), "filter", false);
     assertDragging(fields.eq(1), "data", true);
     assertDragging(fields.eq(1), "row", false);
     assertDragging(fields.eq(1), "column", false);
 
-    assert.strictEqual(fields.eq(2).data("field").dataField, "Field3");
+    assert.strictEqual(dataUtils.data(fields.get(2), "field").dataField, "Field3");
     assertDragging(fields.eq(2), "filter", false);
     assertDragging(fields.eq(2), "data", false);
     assertDragging(fields.eq(2), "row", false);
@@ -1195,11 +1197,11 @@ QUnit.test("rtlEnabled assign for all children widgets", function(assert) {
 
     $.each($widgets, function() {
         var $widget = $(this),
-            componentNames = $widget.data("dxComponents");
+            componentNames = dataUtils.data($widget[0], "dxComponents");
 
         $.each(componentNames, function(index, componentName) {
             if(componentName.indexOf("dxPrivateComponent") === -1 && componentName !== "dxToolbar") {
-                assert.ok($widget.data(componentName).option("rtlEnabled"), "rtlEnabled for " + componentName + " assigned");
+                assert.ok(dataUtils.data($widget[0], componentName).option("rtlEnabled"), "rtlEnabled for " + componentName + " assigned");
             }
         });
     });
@@ -1243,7 +1245,7 @@ QUnit.test("Pass allowDragging to sortable", function(assert) {
         allowFieldDragging: false
     });
 
-    var sortable = this.fieldChooser.element().dxSortable("instance");
+    var sortable = this.fieldChooser.$element().dxSortable("instance");
 
     assert.strictEqual(sortable.option("allowDragging"), false, "allowDragging is passed to sortable");
 });
@@ -1255,7 +1257,7 @@ QUnit.test("Change allowDragging at runtime", function(assert) {
     });
     this.fieldChooser.option("allowFieldDragging", true);
 
-    var sortable = this.fieldChooser.element().dxSortable("instance");
+    var sortable = this.fieldChooser.$element().dxSortable("instance");
 
     assert.strictEqual(sortable.option("allowDragging"), true, "allowDragging is passed to sortable");
 });
@@ -1350,9 +1352,9 @@ QUnit.test("change group position", function(assert) {
 
     this.setup(dataSourceOptions);
 
-    changedArgs.sourceElement = this.$container.find(".dx-area-field").eq(2);
+    changedArgs.sourceElement = renderer(this.$container.find(".dx-area-field").eq(2));
 
-    var sortable = this.fieldChooser.element().dxSortable("instance"),
+    var sortable = this.fieldChooser.$element().dxSortable("instance"),
         onChangedHandler = sortable.option("onChanged");
     //act
     onChangedHandler(changedArgs);
@@ -1435,6 +1437,17 @@ QUnit.test("The 'contentReady' event fires after all data is loaded", function(a
     assert.equal(contentReadyHandler.callCount, 1, "'contentReady' has been triggered");
 });
 
+QUnit.test("Enable search", function(assert) {
+    this.setup({}, { allowSearch: true });
+
+    var treeview = this.$container.find(".dx-treeview").dxTreeView("instance");
+    assert.ok(treeview.option("searchEnabled"), "treeview with search");
+
+    this.fieldChooser.option("allowSearch", false);
+    treeview = this.$container.find(".dx-treeview").dxTreeView("instance");
+    assert.ok(!treeview.option("searchEnabled"), "treeview without search");
+});
+
 
 QUnit.module("dxPivotGridFieldChooser context menu", {
     beforeEach: function() {
@@ -1470,7 +1483,7 @@ QUnit.test("render dxContextMenu", function(assert) {
     this.setup(dataSourceOptions);
 
     //assert
-    assert.equal(this.fieldChooser.element().find(".dx-has-context-menu").length, 1, "ContextMenu was created");
+    assert.equal(this.fieldChooser.$element().find(".dx-has-context-menu").length, 1, "ContextMenu was created");
 
 });
 
@@ -1771,7 +1784,7 @@ QUnit.test("change group position", function(assert) {
     };
     this.setup(dataSourceOptions);
 
-    var sortable = this.fieldChooser.element().dxSortable("instance"),
+    var sortable = this.fieldChooser.$element().dxSortable("instance"),
         onChangedHandler = sortable.option("onChanged"),
         changedArgs = {
             sourceElement: this.$container.find(".dx-area-field").eq(2),
@@ -1785,4 +1798,118 @@ QUnit.test("change group position", function(assert) {
     assert.strictEqual(changedArgs.removeSourceElement, false);
     assert.strictEqual(changedArgs.removeTargetElement, true);
     assert.strictEqual(changedArgs.removeSourceClass, false);
+});
+
+QUnit.test("Show search box in headerFilter", function(assert) {
+    var that = this,
+        list,
+        fieldElements,
+        fields = [
+            { caption: "Field 1", area: 'column', index: 0, areaIndex: 0, allowSorting: true, allowFiltering: true }
+        ],
+        dataSourceOptions = {
+            columnFields: fields,
+            fieldValues: [
+                [{ value: 1 }, { value: 2 }, { value: 3 }, { value: 4 }]
+            ]
+        };
+
+    this.setup(dataSourceOptions, {
+        headerFilter: {
+            allowSearch: true
+        }
+    });
+
+    $.each(fields, function(_, field) {
+        that.$container.append(that.fieldChooser.renderField(field));
+    });
+
+    fieldElements = that.$container.find(".dx-area-field");
+
+    //act
+    fieldElements.first().find(".dx-header-filter").trigger("dxclick");
+    this.clock.tick(500);
+
+    //assert
+    list = $(".dx-list").dxList("instance");
+    assert.ok(list.option("searchEnabled"), "list with search bar");
+    assert.equal(list.option("searchExpr"), "text", "expr is correct");
+});
+
+QUnit.test("HeaderFilter should be without search bar when column allowSearch is disabled", function(assert) {
+    var that = this,
+        list,
+        fieldElements,
+        fields = [
+            { caption: "Field 1", area: 'column', index: 0, areaIndex: 0, allowSorting: true, allowFiltering: true,
+                headerFilter: {
+                    allowSearch: false
+                }
+            }
+        ],
+        dataSourceOptions = {
+            columnFields: fields,
+            fieldValues: [
+                [{ value: 1 }, { value: 2 }, { value: 3 }, { value: 4 }]
+            ]
+        };
+
+    this.setup(dataSourceOptions, {
+        headerFilter: {
+            allowSearch: true
+        }
+    });
+
+    $.each(fields, function(_, field) {
+        that.$container.append(that.fieldChooser.renderField(field));
+    });
+
+    fieldElements = that.$container.find(".dx-area-field");
+
+    //act
+    fieldElements.first().find(".dx-header-filter").trigger("dxclick");
+    this.clock.tick(500);
+
+    //assert
+    list = $(".dx-list").dxList("instance");
+    assert.notOk(list.option("searchEnabled"), "list without search bar");
+});
+
+QUnit.test("Search in headerFilter", function(assert) {
+    var that = this,
+        list,
+        $listItems,
+        fieldElements,
+        fields = [
+            { caption: "Field 1", area: 'column', index: 0, areaIndex: 0, allowSorting: true, allowFiltering: true }
+        ],
+        dataSourceOptions = {
+            columnFields: fields,
+            fieldValues: [
+                [{ value: 1, text: "test1" }, { value: 2, text: "test2" }, { value: 3, text: "test3" }, { value: 4, text: "test4" }]
+            ]
+        };
+
+    this.setup(dataSourceOptions, {
+        headerFilter: {
+            allowSearch: true
+        }
+    });
+
+    $.each(fields, function(_, field) {
+        that.$container.append(that.fieldChooser.renderField(field));
+    });
+
+    fieldElements = that.$container.find(".dx-area-field");
+    fieldElements.first().find(".dx-header-filter").trigger("dxclick");
+    this.clock.tick(500);
+
+    //act
+    list = $(".dx-list").dxList("instance");
+    list.option("searchValue", "t2");
+
+    //assert
+    $listItems = list.$element().find(".dx-list-item");
+    assert.strictEqual($listItems.length, 1, "list item's count");
+    assert.strictEqual($listItems.text(), "test2", "correct item's text");
 });

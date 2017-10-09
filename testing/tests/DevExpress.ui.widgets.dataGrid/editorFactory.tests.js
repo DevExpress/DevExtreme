@@ -1,6 +1,7 @@
 "use strict";
 
 var $ = require("jquery");
+var dataUtils = require("core/element_data");
 
 QUnit.testStart(function() {
     var markup =
@@ -222,7 +223,7 @@ if(browser.msie && parseInt(browser.version) === 11) {
         textBox.focus();
         $container.find("input").val("AB");
         $container.find("input").trigger($.Event("keyup"));
-        $(window).focus();
+        $(window).trigger("focus");
 
         this.clock.tick();
 
@@ -256,7 +257,7 @@ QUnit.test("Text editor with set onEditorPreparing", function(assert) {
         parentType: "filterRow"
     });
 
-    textBox = $container.data("dxTextBox");
+    textBox = dataUtils.data($container.get(0), "dxTextBox");
 
     //assert
     assert.equal(this.__actionConfigs.onEditorPreparing.category, "rendering", "onEditorPreparing category");
@@ -277,7 +278,7 @@ QUnit.test("Text editor with set onEditorPreparing", function(assert) {
         parentType: "filterRow"
     });
 
-    textBox = $container.data("dxTextBox");
+    textBox = $container.dxTextBox("instance");
 
     //assert
     assert.ok(textBox, "dxTextBox created");
@@ -305,7 +306,7 @@ QUnit.test("Text editor with set onEditorPrepared", function(assert) {
         parentType: "filterRow"
     });
 
-    textBox = $container.data("dxTextBox");
+    textBox = $container.dxTextBox("instance");
 
     //assert
     assert.equal(this.__actionConfigs.onEditorPrepared.category, "rendering", "onEditorPrepared category");
@@ -410,7 +411,7 @@ QUnit.test('Boolean editor', function(assert) {
 
     //assert
     assert.ok(checkBox, 'dxCheckBox created');
-    assert.ok(checkBox.element().hasClass(DATAGRID_CHECKBOX_SIZE_CLASS), 'checkbox has dx-datagrid-checkbox-size class');
+    assert.ok(checkBox.$element().hasClass(DATAGRID_CHECKBOX_SIZE_CLASS), 'checkbox has dx-datagrid-checkbox-size class');
     assert.equal(checkBox.option('value'), true, 'checkbox editor value');
     assert.ok(checkBox.option('hoverStateEnabled'), 'hover enabled');
     assert.ok(checkBox.option('focusStateEnabled'), 'focus enabled');
@@ -438,7 +439,7 @@ QUnit.test('Boolean editor when inOnForm is true', function(assert) {
 
     //assert
     assert.ok(checkBox, 'dxCheckBox created');
-    assert.notOk(checkBox.element().hasClass(DATAGRID_CHECKBOX_SIZE_CLASS), 'checkbox not have dx-datagrid-checkbox-size class');
+    assert.notOk(checkBox.$element().hasClass(DATAGRID_CHECKBOX_SIZE_CLASS), 'checkbox not have dx-datagrid-checkbox-size class');
 });
 
 QUnit.test('Add custom tabIndex to Boolean editor', function(assert) {
@@ -454,7 +455,7 @@ QUnit.test('Add custom tabIndex to Boolean editor', function(assert) {
     var checkBox = $container.dxCheckBox('instance');
 
     //assert
-    assert.equal(checkBox.element().attr("tabIndex"), "7", "tabIndex attr of checkBox");
+    assert.equal(checkBox.$element().attr("tabIndex"), "7", "tabIndex attr of checkBox");
 });
 
 QUnit.test('Boolean editor with null value should be intermediate', function(assert) {
@@ -516,7 +517,7 @@ QUnit.test("DateTime editor", function(assert) {
     });
 
     //assert
-    editor = $container.data("dxDateBox");
+    editor = $container.dxDateBox("instance");
     assert.ok(editor, "has editor");
     assert.equal(editor.option("type"), "datetime", "editor type");
     assert.equal(editor.option("displayFormat"), "shortDateShortTime", "display format of the editor");
@@ -1239,7 +1240,7 @@ QUnit.module("Focus", {
         var that = this;
 
         that.clock = sinon.useFakeTimers();
-        that.element = function() {
+        that.$element = function() {
             return $("#container");
         };
         that.columns = [
@@ -1456,7 +1457,7 @@ QUnit.testInActiveWindow("Focus on a filtering cell after editing cell in 'batch
         dataSource: [{ name: "Bob", lastName: "Smith", age: 19 }, { name: "Dmitry", lastName: "Semenov", age: 31 }, { name: "George ", lastName: "Bush", age: 51 }]
     };
 
-    that.element = function() {
+    that.$element = function() {
         return $("#qunit-fixture");
     };
 
@@ -1478,7 +1479,7 @@ QUnit.testInActiveWindow("Focus on a filtering cell after editing cell in 'batch
     assert.ok($cell.hasClass("dx-focused"), "focused cell");
 
     //act
-    $testElement.find(".dx-datagrid-filter-row input").eq(1).focus();
+    $testElement.find(".dx-datagrid-filter-row input").eq(1).trigger("focus");
     $testElement.find(".dx-datagrid-filter-row input").eq(1).trigger("dxclick");
     that.clock.tick();
 
@@ -1514,7 +1515,7 @@ QUnit.testInActiveWindow("Focus on dxLookup editor", function(assert) {
         dataSource: [{ name: "Bob" }]
     };
 
-    that.element = function() {
+    that.$element = function() {
         return $("#qunit-fixture");
     };
 
@@ -1559,7 +1560,7 @@ QUnit.testInActiveWindow("Focus on dxTextArea editor", function(assert) {
         dataSource: [{ name: "Bob" }]
     };
 
-    that.element = function() {
+    that.$element = function() {
         return $("#qunit-fixture");
     };
 
@@ -1600,7 +1601,7 @@ if(devices.real().deviceType === "desktop" && browser.msie && parseInt(browser.v
                 position: "absolute"
             }).appendTo("#container");
 
-            this.element = function() {
+            this.$element = function() {
                 return $("#container");
             };
             setupDataGridModules(this, ['editorFactory']);

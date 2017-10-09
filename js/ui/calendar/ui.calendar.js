@@ -169,7 +169,7 @@ var Calendar = Editor.inherit({
             /**
              * @name dxCalendarOptions_disabledDates
              * @publicName disabledDates
-             * @type array|function(data)
+             * @type Array<Date>|function(data)
              * @default null
              * @type_function_param1 data:object
              * @type_function_param1_field1 component:object
@@ -255,7 +255,7 @@ var Calendar = Editor.inherit({
                 if(e.ctrlKey) {
                     this._navigateUp();
                 } else {
-                    if(fx.isAnimating(this._view.element())) {
+                    if(fx.isAnimating(this._view.$element())) {
                         return;
                     }
                     this._moveCurrentDate(-1 * this._view.option("colCount"));
@@ -266,7 +266,7 @@ var Calendar = Editor.inherit({
                 if(e.ctrlKey) {
                     this._navigateDown();
                 } else {
-                    if(fx.isAnimating(this._view.element())) {
+                    if(fx.isAnimating(this._view.$element())) {
                         return;
                     }
                     this._moveCurrentDate(1 * this._view.option("colCount"));
@@ -572,14 +572,14 @@ var Calendar = Editor.inherit({
     },
 
     _focusTarget: function() {
-        return this.element();
+        return this.$element();
     },
 
     _render: function() {
         this._renderSubmitElement();
         this.callBase();
 
-        var $element = this.element();
+        var $element = this.$element();
         $element.addClass(CALENDAR_CLASS);
 
         this._renderBody();
@@ -604,7 +604,7 @@ var Calendar = Editor.inherit({
 
         this._setViewContoured(this.option("currentDate"));
 
-        $element.append(this._navigator.element());
+        $element.append(this._navigator.$element());
     },
 
     _renderBody: function() {
@@ -616,7 +616,7 @@ var Calendar = Editor.inherit({
     },
 
     _renderViews: function() {
-        this.element().addClass(CALENDAR_VIEW_CLASS + "-" + this.option("zoomLevel"));
+        this.$element().addClass(CALENDAR_VIEW_CLASS + "-" + this.option("zoomLevel"));
 
         var currentDate = this.option("currentDate");
 
@@ -679,14 +679,14 @@ var Calendar = Editor.inherit({
     },
 
     _translateViews: function() {
-        translator.move(this._view.element(), { left: 0, top: 0 });
+        translator.move(this._view.$element(), { left: 0, top: 0 });
 
-        this._beforeView && translator.move(this._beforeView.element(), {
+        this._beforeView && translator.move(this._beforeView.$element(), {
             left: this._getViewPosition(-1),
             top: 0
         });
 
-        this._afterView && translator.move(this._afterView.element(), {
+        this._afterView && translator.move(this._afterView.$element(), {
             left: this._getViewPosition(1),
             top: 0
         });
@@ -821,7 +821,7 @@ var Calendar = Editor.inherit({
 
     _renderSwipeable: function() {
         if(!this._swipeable) {
-            this._swipeable = this._createComponent(this.element(), Swipeable, {
+            this._swipeable = this._createComponent(this.$element(), Swipeable, {
                 onStart: this._swipeStartHandler.bind(this),
                 onUpdated: this._swipeUpdateHandler.bind(this),
                 onEnd: this._swipeEndHandler.bind(this),
@@ -881,7 +881,7 @@ var Calendar = Editor.inherit({
 
     _viewWidth: function() {
         if(!this._viewWidthValue) {
-            this._viewWidthValue = this.element().width();
+            this._viewWidthValue = this.$element().width();
         }
 
         return this._viewWidthValue;
@@ -925,23 +925,23 @@ var Calendar = Editor.inherit({
                         this._toTodayView();
                     }).bind(this),
                     integrationOptions: {}
-                }).element()
+                }).$element()
                 .addClass(CALENDAR_TODAY_BUTTON_CLASS);
 
             this._$footer = $("<div>")
                 .addClass(CALENDAR_FOOTER_CLASS)
                 .append($todayButton);
 
-            this.element().append(this._$footer);
+            this.$element().append(this._$footer);
         }
 
-        this.element().toggleClass(CALENDAR_HAS_FOOTER_CLASS, showTodayButton);
+        this.$element().toggleClass(CALENDAR_HAS_FOOTER_CLASS, showTodayButton);
     },
 
     _renderSubmitElement: function() {
         this._$submitElement = $("<input>")
             .attr("type", "hidden")
-            .appendTo(this.element());
+            .appendTo(this.$element());
         this._setSubmitValue(this.option("value"));
     },
 
@@ -955,12 +955,12 @@ var Calendar = Editor.inherit({
     },
 
     _animateShowView: function() {
-        fx.stop(this._view.element(), true);
+        fx.stop(this._view.$element(), true);
         return this._popAnimationView(this._view, POP_ANIMATION_FROM, POP_ANIMATION_TO, ANIMATION_DURATION_SHOW_VIEW).promise();
     },
 
     _popAnimationView: function(view, from, to, duration) {
-        return fx.animate(view.element(), {
+        return fx.animate(view.$element(), {
             type: "pop",
             from: {
                 scale: from,
@@ -979,10 +979,10 @@ var Calendar = Editor.inherit({
             var newView = this._renderSpecificView(value);
 
             if(offset > 0) {
-                this._afterView && this._afterView.element().remove();
+                this._afterView && this._afterView.$element().remove();
                 this._afterView = newView;
             } else {
-                this._beforeView && this._beforeView.element().remove();
+                this._beforeView && this._beforeView.$element().remove();
                 this._beforeView = newView;
             }
 
@@ -1067,14 +1067,14 @@ var Calendar = Editor.inherit({
         var destinationDate = this[viewToCreateKey].option("date");
 
         if(this[viewToRemoveKey]) {
-            this[viewToRemoveKey].element().remove();
+            this[viewToRemoveKey].$element().remove();
         }
 
         if(offset === viewOffset) {
             this[viewToRemoveKey] = this._view;
         } else {
             this[viewToRemoveKey] = this._renderSpecificView(this._getDateByOffset(viewOffset, destinationDate));
-            this._view.element().remove();
+            this._view.$element().remove();
         }
 
         this._view = this[viewToCreateKey];
@@ -1101,9 +1101,9 @@ var Calendar = Editor.inherit({
     },
 
     _disposeViews: function() {
-        this._view.element().remove();
-        this._beforeView && this._beforeView.element().remove();
-        this._afterView && this._afterView.element().remove();
+        this._view.$element().remove();
+        this._beforeView && this._beforeView.$element().remove();
+        this._afterView && this._afterView.$element().remove();
         delete this._view;
         delete this._beforeView;
         delete this._afterView;
@@ -1194,7 +1194,7 @@ var Calendar = Editor.inherit({
                 this._updateCurrentDate(value);
                 break;
             case "zoomLevel":
-                this.element().removeClass(CALENDAR_VIEW_CLASS + "-" + previousValue);
+                this.$element().removeClass(CALENDAR_VIEW_CLASS + "-" + previousValue);
                 this._correctZoomLevel();
                 this._refreshViews();
                 this._renderNavigator();

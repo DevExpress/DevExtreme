@@ -1033,3 +1033,18 @@ QUnit.test("Searching with special symbols should not crash the regular expressi
 
     assert.deepEqual(breakingSymbols, [], "breaking symbols array should be empty");
 });
+
+QUnit.test("searchExpr is array", function(assert) {
+    var items = [
+            { key: 1, text: "Item 1", value: "test 3" },
+            { key: 2, text: "Item 2", value: "test 3" },
+            { key: 3, text: "Item 3", value: "test 1" }],
+        dataAdapter = initDataAdapter({
+            items: items,
+            dataType: "plain",
+            searchExpr: ["value", "text"]
+        }),
+        result = dataAdapter.search("1");
+
+    assert.equal(result.length, 2, "count item");
+});

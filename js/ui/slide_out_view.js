@@ -6,6 +6,7 @@ var $ = require("../core/renderer"),
     fx = require("../animation/fx"),
     clickEvent = require("../events/click"),
     translator = require("../animation/translator"),
+    getPublicElement = require("../core/utils/dom").getPublicElement,
     hideTopOverlayCallback = require("../mobile/hide_top_overlay").hideCallback,
     registerComponent = require("../core/component_registrator"),
     extend = require("../core/utils/extend").extend,
@@ -163,7 +164,7 @@ var SlideOutView = Widget.inherit({
 
     _init: function() {
         this.callBase();
-        this.element().addClass(SLIDEOUTVIEW_CLASS);
+        this.$element().addClass(SLIDEOUTVIEW_CLASS);
 
         this._deferredAnimate = undefined;
         this._initHideTopOverlayHandler();
@@ -211,7 +212,7 @@ var SlideOutView = Widget.inherit({
 
         $wrapper.append(this._$menu);
         $wrapper.append(this._$container);
-        this.element().append($wrapper);
+        this.$element().append($wrapper);
 
         // NOTE: B251455
         eventsEngine.on(this._$container, "MSPointerDown", noop);
@@ -226,7 +227,7 @@ var SlideOutView = Widget.inherit({
     },
 
     _initSwipeHandlers: function() {
-        this._createComponent(this.content(), Swipeable, {
+        this._createComponent($(this.content()), Swipeable, {
             disabled: !this.option("swipeEnabled"),
             elastic: false,
             itemSizeFunc: this._getMenuWidth.bind(this),
@@ -244,7 +245,7 @@ var SlideOutView = Widget.inherit({
     },
 
     _swipeStartHandler: function(e) {
-        animation.complete(this.content());
+        animation.complete($(this.content()));
         var event = e.jQueryEvent,
             menuVisible = this.option("menuVisible"),
             rtl = this._isRightMenuPosition();
@@ -290,9 +291,9 @@ var SlideOutView = Widget.inherit({
 
         if(animate) {
             this._toggleShieldVisibility(true);
-            animation.moveTo(this.content(), pos, this._animationCompleteHandler.bind(this));
+            animation.moveTo($(this.content()), pos, this._animationCompleteHandler.bind(this));
         } else {
-            translator.move(this.content(), { left: pos });
+            translator.move($(this.content()), { left: pos });
         }
     },
 
@@ -303,9 +304,10 @@ var SlideOutView = Widget.inherit({
 
     _getMenuWidth: function() {
         if(!this._menuWidth) {
-            var maxMenuWidth = this.element().width() - this.option("contentOffset");
-            this.menuContent().css("maxWidth", maxMenuWidth < 0 ? 0 : maxMenuWidth);
-            var currentMenuWidth = this.menuContent().width();
+            var maxMenuWidth = this.$element().width() - this.option("contentOffset"),
+                menuContent = $(this.menuContent());
+            menuContent.css("maxWidth", maxMenuWidth < 0 ? 0 : maxMenuWidth);
+            var currentMenuWidth = menuContent.width();
 
             this._menuWidth = Math.min(currentMenuWidth, maxMenuWidth);
         }
@@ -334,7 +336,7 @@ var SlideOutView = Widget.inherit({
     },
 
     _dispose: function() {
-        animation.complete(this.content());
+        animation.complete($(this.content()));
         this._toggleHideMenuCallback(false);
         this.callBase();
     },
@@ -385,25 +387,25 @@ var SlideOutView = Widget.inherit({
     /**
     * @name dxSlideOutViewMethods_menuContent
     * @publicName menuContent()
-    * @return jQuery
+    * @return Element
     */
     menuContent: function() {
-        return this._$menu;
+        return getPublicElement(this._$menu);
     },
 
     /**
     * @name dxSlideOutViewMethods_content
     * @publicName content()
-    * @return jQuery
+    * @return Element
     */
     content: function() {
-        return this._$container;
+        return getPublicElement(this._$container);
     },
 
     /**
     * @name dxSlideOutViewMethods_showMenu
     * @publicName showMenu()
-    * @return Promise
+    * @return Promise<void>
     */
     showMenu: function() {
         return this.toggleMenuVisibility(true);
@@ -412,7 +414,7 @@ var SlideOutView = Widget.inherit({
     /**
     * @name dxSlideOutViewMethods_hideMenu
     * @publicName hideMenu()
-    * @return Promise
+    * @return Promise<void>
     */
     hideMenu: function() {
         return this.toggleMenuVisibility(false);
@@ -421,7 +423,7 @@ var SlideOutView = Widget.inherit({
     /**
     * @name dxSlideOutViewMethods_toggleMenuVisibility
     * @publicName toggleMenuVisibility()
-    * @return Promise
+    * @return Promise<void>
     */
     toggleMenuVisibility: function(showing) {
         showing = showing === undefined ? !this.option("menuVisible") : showing;

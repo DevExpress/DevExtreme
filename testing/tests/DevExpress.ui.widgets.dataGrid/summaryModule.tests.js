@@ -138,7 +138,7 @@ QUnit.test("rowClick event when summary is defined", function(assert) {
 
     //assert
     assert.equal(rowClickArgs.length, 1, "rowClick call count");
-    assert.ok(rowClickArgs[0].rowElement.hasClass("dx-row"), "rowElement is defined");
+    assert.ok($(rowClickArgs[0].rowElement).hasClass("dx-row"), "rowElement is defined");
     assert.equal(rowClickArgs[0].rowType, "totalFooter", "rowType is defined");
     assert.equal(rowClickArgs[0].summaryCells.length, 5, "summaryCells is defined");
     assert.equal(rowClickArgs[0].columns.length, 5, "columns is defined");

@@ -18,7 +18,10 @@ var ColumnHeadersViewSortingExtender = extend({}, sortingMixin, {
             $row = that.callBase(row);
 
         if(row.rowType === "header") {
-            eventsEngine.on($row, eventUtils.addNamespace(clickEvent.name, COLUMN_HEADERS_VIEW_NAMESPACE), "> td", that.createAction(function(e) {
+            eventsEngine.on($row, eventUtils.addNamespace(clickEvent.name, COLUMN_HEADERS_VIEW_NAMESPACE), "td", that.createAction(function(e) {
+                if($(e.jQueryEvent.currentTarget).parent().get(0) !== $row.get(0)) {
+                    return;
+                }
                 var keyName = null,
                     event = e.jQueryEvent,
                     $cellElementFromEvent = $(event.currentTarget),

@@ -4,6 +4,10 @@ var $ = require("jquery"),
     registerComponent = require("core/component_registrator"),
     MarkupComponent = require("framework/html/markup_component").MarkupComponent;
 
+if(QUnit.urlParams["nojquery"]) {
+    return;
+}
+
 var TestMarkupComponent = MarkupComponent.inherit({
     _setDefaultOptions: function() {
         this.callBase();

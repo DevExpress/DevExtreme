@@ -163,7 +163,7 @@ QUnit.testInActiveWindow("needSkipEvent returns true for number input wheel", fu
     try {
         element = $("<input type='number' />")
             .appendTo("#qunit-fixture")
-            .focus();
+            .trigger("focus");
 
         assert.ok(needSkipMouseWheel(element));
     } finally {
@@ -176,7 +176,7 @@ QUnit.testInActiveWindow("needSkipEvent returns true for text input wheel", func
     try {
         element = $("<input type='text' />")
             .appendTo("#qunit-fixture")
-            .focus();
+            .trigger("focus");
 
         assert.ok(!needSkipMouseWheel(element));
     } finally {
@@ -194,7 +194,7 @@ QUnit.testInActiveWindow("needSkipEvent returns true for textarea input wheel", 
     try {
         element = $("<textarea></textarea>")
             .appendTo("#qunit-fixture")
-            .focus();
+            .trigger("focus");
 
         assert.ok(needSkipMouseWheel(element));
     } finally {
@@ -212,7 +212,7 @@ QUnit.testInActiveWindow("needSkipEvent returns true for select input wheel", fu
     try {
         element = $("<select><option /><option /><option /></select>")
             .appendTo("#qunit-fixture")
-            .focus();
+            .trigger("focus");
 
         assert.ok(needSkipMouseWheel(element));
     } finally {
@@ -290,7 +290,7 @@ QUnit.testInActiveWindow("needSkipEvent returns true for focused input click (B2
     try {
         element = $("<input type='text' />")
             .appendTo("#qunit-fixture")
-            .focus();
+            .trigger("focus");
 
         assert.ok(needSkipPointerDown(element));
     } finally {

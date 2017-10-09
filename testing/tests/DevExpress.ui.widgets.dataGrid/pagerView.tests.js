@@ -20,7 +20,8 @@ require("ui/data_grid/ui.data_grid");
 var $ = require("jquery"),
     dataGridMocks = require("../../helpers/dataGridMocks.js"),
     setupDataGridModules = dataGridMocks.setupDataGridModules,
-    MockDataController = dataGridMocks.MockDataController;
+    MockDataController = dataGridMocks.MockDataController,
+    dataUtils = require("core/element_data");
 
 var Pager = require("ui/data_grid/pager");
 
@@ -379,7 +380,7 @@ QUnit.test("isVisible when pageCount > 1 and visible is auto", function(assert) 
     //assert
     assert.equal(this.dataController.pageCount(), 2);
     assert.ok(isVisible);
-    assert.equal(pagerView.element().data("dxPager").option("pagesNavigatorVisible"), "auto", "pagesNavigatorVisible");
+    assert.equal(pagerView.element().dxPager("instance").option("pagesNavigatorVisible"), "auto", "pagesNavigatorVisible");
 });
 
 QUnit.test("isVisible when pageCount == 1 and visible is auto", function(assert) {
@@ -427,7 +428,7 @@ QUnit.test("isVisible when pageCount == 1 and visible is true", function(assert)
     //assert
     assert.equal(this.dataController.pageCount(), 1);
     assert.ok(isVisible);
-    assert.equal(pagerView.element().data("dxPager").option("pagesNavigatorVisible"), true, "pagesNavigatorVisible");
+    assert.equal(pagerView.element().dxPager("instance").option("pagesNavigatorVisible"), true, "pagesNavigatorVisible");
 });
 
 QUnit.test("isVisible when pageCount > 1 and visible is false", function(assert) {
@@ -444,7 +445,7 @@ QUnit.test("isVisible when pageCount > 1 and visible is false", function(assert)
     //assert
     assert.equal(this.dataController.pageCount(), 2);
     assert.ok(!isVisible);
-    assert.equal(pagerView.element().data("dxPager"), undefined, "pager instance");
+    assert.equal(dataUtils.data(pagerView.element().get(0), "dxPager"), undefined, "pager instance");
 });
 
 QUnit.test("isVisible when pageCount == 1 and pageSizes has more 1 items and visible is auto", function(assert) {

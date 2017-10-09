@@ -29,6 +29,12 @@ require("ui/tabs");
 require("ui/text_box");
 require("ui/toolbar");
 
+if(QUnit.urlParams["nojquery"]) {
+    return;
+}
+
+var FILTERING_TIMEOUT = 700;
+
 fx.off = true;
 var ignoreAngularBrowserDeferTimer = function(args) {
     return args.timerType === "timeouts" && (args.callback.toString().indexOf("delete pendingDeferIds[timeoutId];") > -1 || args.callback.toString().indexOf("delete F[c];e(a)}") > -1);
@@ -209,12 +215,12 @@ QUnit.test("dxDataGrid - search with row template should highlight data without 
     assert.equal($($(".mycell")[0]).text(), "text.1");
 
     $(".dx-datagrid-search-panel").dxTextBox("instance").option("value", ".");
-    this.clock.tick();
+    this.clock.tick(FILTERING_TIMEOUT);
 
     assert.equal($($(".mycell")[0]).text(), "text.1");
 });
 
-QUnit.test("dxDataGrid - highlight timer was cleared on disposing (T539633)", function(assert) {
+QUnit.test("dxDataGrid - highlight timer was cleared on disposing for dataGrid with row template (T539633)", function(assert) {
     assert.expect(0);
     this.clock.restore();
 
@@ -232,6 +238,65 @@ QUnit.test("dxDataGrid - highlight timer was cleared on disposing (T539633)", fu
         $scope.gridOptions = {
             dataSource: [{ column1: "text.1" }],
             rowTemplate: $("#gridRow")
+        };
+    };
+
+    initMarkup($markup, controller, this);
+});
+
+QUnit.test("dxDataGrid - search with cell template should highlight data without template (T554034)", function(assert) {
+    var $markup = $(
+        "<div dx-data-grid=\"gridOptions\" dx-item-alias=\"item\">\
+            <div data-options=\"dxTemplate:{ name: 'cellTemplate' }\">\
+                <span class=\"mycell\">{{item.data.column1}}</span>\
+            </div>\
+        </div>"
+    );
+
+    var controller = function($scope) {
+        $scope.gridOptions = {
+            dataSource: [{
+                column1: "text1"
+            }, {
+                column1: "text2"
+            }],
+            columns: [{
+                dataField: "column1",
+                cellTemplate: 'cellTemplate'
+            }],
+            searchPanel: { visible: true }
+        };
+    };
+
+    initMarkup($markup, controller, this);
+    this.clock.tick(30);
+
+    assert.equal($($(".mycell")[0]).text(), "text1");
+
+    $(".dx-datagrid-search-panel").dxTextBox("instance").option("value", "e");
+    this.clock.tick(FILTERING_TIMEOUT);
+
+    assert.equal($($(".mycell")[0]).text(), "text1");
+});
+
+QUnit.test("dxDataGrid - highlight timer was cleared on disposing for dataGrid with cell template (T554034)", function(assert) {
+    assert.expect(0);
+    this.clock.restore();
+
+    var $markup = $(
+        "<div dx-data-grid=\"gridOptions\" dx-item-alias=\"item\">\
+            <div data-options=\"dxTemplate:{ name: 'cellTemplate' }\">\
+                <span class=\"mycell\">{{item.data.column1}}</span>\
+            </div>\
+        </div>"
+    );
+    var controller = function($scope) {
+        $scope.gridOptions = {
+            dataSource: [{ column1: "text1" }],
+            columns: [{
+                dataField: "column1",
+                cellTemplate: 'cellTemplate'
+            }]
         };
     };
 
@@ -1010,7 +1075,7 @@ QUnit.test("Scope for template with 'noModel' option is not destroyed after clea
         _render: function() {
             var content = $("<div />")
                     .addClass("dx-content")
-                    .appendTo(this.element());
+                    .appendTo(this.$element());
 
             this.option("integrationOptions.templates")["template"].render({
                 container: content,
@@ -1030,7 +1095,7 @@ QUnit.test("Scope for template with 'noModel' option is not destroyed after clea
 
     initMarkup($markup, function() {}, this);
 
-    var instance = $markup.data("dxTestContainerNoModel"),
+    var instance = $markup.dxTestContainerNoModel("instance"),
         scope = $markup.scope();
 
     assert.ok(scope.$root);

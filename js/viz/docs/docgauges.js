@@ -25,7 +25,7 @@ var baseGauge = {
         * @type string
         * @default 'top-center'
         * @acceptValues 'top-left' | 'top-center' | 'top-right' | 'bottom-left' | 'bottom-center' | 'bottom-right'
-        * @deprecated
+        * @deprecated BaseWidgetOptions_title_horizontalalignment
         */
         position: undefined
     },
@@ -149,7 +149,7 @@ var baseGauge = {
         * @publicName hideFirstTick
         * @type boolean
         * @default false
-        * @deprecated
+        * @deprecated dxcirculargaugeoptions_scale_label_hideFirstOrLast
         */
         hideFirstTick: undefined,
         /**
@@ -157,7 +157,7 @@ var baseGauge = {
         * @publicName hideLastTick
         * @type boolean
         * @default false
-        * @deprecated
+        * @deprecated dxcirculargaugeoptions_scale_label_hideFirstOrLast
         */
         hideLastTick: undefined,
         /**
@@ -165,7 +165,7 @@ var baseGauge = {
         * @publicName hideFirstLabel
         * @type boolean
         * @default false
-        * @deprecated
+        * @deprecated dxcirculargaugeoptions_scale_label_hideFirstOrLast
         */
         hideFirstLabel: undefined,
         /**
@@ -173,7 +173,7 @@ var baseGauge = {
         * @publicName hideLastLabel
         * @type boolean
         * @default false
-        * @deprecated
+        * @deprecated dxcirculargaugeoptions_scale_label_hideFirstOrLast
         */
         hideLastLabel: undefined,
         /**
@@ -193,7 +193,7 @@ var baseGauge = {
         /**
         * @name basegaugeoptions_scale_customTicks
         * @publicName customTicks
-        * @type array
+        * @type Array<number>
         * @default undefined
         * @notUsedInTheme
         */
@@ -201,7 +201,7 @@ var baseGauge = {
         /**
         * @name basegaugeoptions_scale_customMinorTicks
         * @publicName customMinorTicks
-        * @type array
+        * @type Array<number>
         * @default undefined
         * @notUsedInTheme
         */
@@ -282,7 +282,7 @@ var baseGauge = {
             /**
             * @name basegaugeoptions_scale_majorTick_customTickValues
             * @publicName customTickValues
-            * @type array
+            * @type Array<number>
             * @default []
             * @deprecated basegaugeoptions_scale_customTicks
             * @notUsedInTheme
@@ -373,7 +373,7 @@ var baseGauge = {
             /**
             * @name basegaugeoptions_scale_minorTick_customTickValues
             * @publicName customTickValues
-            * @type array
+            * @type Array<number>
             * @default []
             * @deprecated basegaugeoptions_scale_customMinorTicks
             * @notUsedInTheme
@@ -521,7 +521,7 @@ var baseGauge = {
         /**
         * @name basegaugeoptions_rangeContainer_ranges
         * @publicName ranges
-        * @type array
+        * @type Array<Object>
         * @default []
         * @notUsedInTheme
         */
@@ -599,7 +599,7 @@ var baseGauge = {
     /**
     * @name basegaugeoptions_subvalues
     * @publicName subvalues
-    * @type array
+    * @type Array<number>
     * @default undefined
     * @notUsedInTheme
     */
@@ -619,13 +619,13 @@ var baseGauge = {
     /**
     * @name basegaugemethods_subvalues
     * @publicName subvalues()
-    * @return array
+    * @return Array<number>
     */
     subvalues: function() { },
     /**
     * @name basegaugemethods_subvalues
     * @publicName subvalues(subvalues)
-    * @param1 subvalues:array
+    * @param1 subvalues:Array<number>
     */
     subvalues: function() { }
 };
@@ -951,7 +951,7 @@ var dxBarGauge = {
         * @type string
         * @default 'top-center'
         * @acceptValues 'top-left' | 'top-center' | 'top-right' | 'bottom-left' | 'bottom-center' | 'bottom-right'
-        * @deprecated
+        * @deprecated BaseWidgetOptions_title_horizontalalignment
         */
         position: undefined
     },
@@ -1157,7 +1157,7 @@ var dxBarGauge = {
     /**
     * @name dxbargaugeoptions_values
     * @publicName values
-    * @type array
+    * @type Array<number>
     * @default []
     * @notUsedInTheme
     */
@@ -1165,13 +1165,13 @@ var dxBarGauge = {
     /**
     * @name dxbargaugemethods_values
     * @publicName values()
-    * @return array
+    * @return Array<number>
     */
     values: function() { },
     /**
     * @name dxbargaugemethods_values
     * @publicName values(newValues)
-    * @param1 values:array
+    * @param1 values:Array<number>
     */
     values: function() { },
     /**

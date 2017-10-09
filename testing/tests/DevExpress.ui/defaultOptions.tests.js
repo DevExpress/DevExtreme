@@ -279,6 +279,13 @@ testComponentDefaults(TextEditor,
     }
 );
 
+testComponentDefaults(TextEditor,
+    {},
+    {
+        showMaskMode: "always"
+    }
+);
+
 testComponentDefaults(DropDownEditor,
     [
         { platform: "generic" }

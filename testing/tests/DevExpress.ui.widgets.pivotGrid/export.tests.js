@@ -315,7 +315,7 @@ QUnit.test("Export with empty cellsInfo", function(assert) {
 
 QUnit.test("Context menu with export", function(assert) {
     //act
-    var $dataArea = this.pivotGrid.element().find('.dx-pivotgrid-area-data');
+    var $dataArea = this.pivotGrid.$element().find('.dx-pivotgrid-area-data');
 
     $($dataArea.find('tr').eq(1).find('td').eq(3)).trigger('dxcontextmenu');
 
@@ -329,7 +329,7 @@ QUnit.test("Hide export from the context menu when the export.enabled option is 
     //act
     this.pivotGrid.option("export.enabled", false);
 
-    var $dataArea = this.pivotGrid.element().find('.dx-pivotgrid-area-data');
+    var $dataArea = this.pivotGrid.$element().find('.dx-pivotgrid-area-data');
 
     $($dataArea.find('tr').eq(1).find('td').eq(3)).trigger('dxcontextmenu');
 

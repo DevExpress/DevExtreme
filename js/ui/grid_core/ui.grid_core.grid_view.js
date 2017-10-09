@@ -116,7 +116,7 @@ var ResizingController = modules.ViewController.inherit({
     },
 
     _toggleBestFitMode: function(isBestFit) {
-        var $element = this.component.element();
+        var $element = this.component.$element();
 
         $element.find("." + this.addWidgetPrefix(TABLE_CLASS)).toggleClass(this.addWidgetPrefix(TABLE_FIXED_CLASS), !isBestFit);
 
@@ -224,7 +224,7 @@ var ResizingController = modules.ViewController.inherit({
             hasPercentWidth = false,
             hasAutoWidth = false,
             isColumnWidthsCorrected = false,
-            $element = that.component.element(),
+            $element = that.component.$element(),
             hasWidth = that._hasWidth,
             lastColumnIndex;
 
@@ -368,7 +368,7 @@ var ResizingController = modules.ViewController.inherit({
     */
     updateDimensions: function(checkSize) {
         var that = this,
-            $element = that.component.element(),
+            $element = that.component.$element(),
             maxHeight = parseFloat($element.css("maxHeight")),
             minHeight = parseFloat($element.css("minHeight"));
 
@@ -399,7 +399,7 @@ var ResizingController = modules.ViewController.inherit({
         });
     },
     _checkSize: function(checkSize) {
-        var $rootElement = this.component.element();
+        var $rootElement = this.component.$element();
 
         if(checkSize && (this._lastWidth === $rootElement.width() && this._lastHeight === $rootElement.height() || !$rootElement.is(":visible"))) {
             return false;
@@ -413,7 +413,7 @@ var ResizingController = modules.ViewController.inherit({
             rowsView = that._rowsView,
             columnHeadersView = that._columnHeadersView,
             footerView = that._footerView,
-            $rootElement = that.component.element(),
+            $rootElement = that.component.$element(),
             rootElementHeight = $rootElement && ($rootElement.get(0).clientHeight || $rootElement.height()),
             maxHeightHappened = maxHeight && rootElementHeight >= maxHeight,
             hasHeight = that._hasHeight || maxHeightHappened,
@@ -588,7 +588,6 @@ var GridView = modules.View.inherit({
             $groupElement = that._groupElement || $("<div>").addClass(that.getWidgetContainerClass());
 
         $groupElement.toggleClass(that.addWidgetPrefix(BORDERS_CLASS), !!that.option("showBorders"));
-
         that.component.setAria({
             "role": "application",
             "label": messageLocalization.format(that._getWidgetAriaLabel())

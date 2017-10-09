@@ -86,7 +86,7 @@ QUnit.test("Render context menu", function(assert) {
 
     //assert
     assert.ok(this.contextMenuView.element().dxContextMenu("instance")._initialized, "dxContextMenu initialized");
-    assert.ok(this.contextMenuView.element().dxContextMenu("instance").element().parent().hasClass("dx-datagrid"), "parent context menu");
+    assert.ok(this.contextMenuView.element().dxContextMenu("instance").$element().parent().hasClass("dx-datagrid"), "parent context menu");
     assert.ok(testElement.hasClass("dx-datagrid"), "has class dx-datagrid");
 });
 
@@ -109,10 +109,10 @@ QUnit.test("Show context menu with defined menu items", function(assert) {
     contextMenuInstance = contextMenu.element().dxContextMenu("instance");
 
     //assert
-    assert.ok(contextMenuInstance._overlay.content().find(".dx-submenu").first().is(":visible"), "visible context menu");
-    assert.strictEqual(contextMenuInstance._overlay.content().find("li").first().text(), "asc", "text item");
-    assert.strictEqual(contextMenuInstance._overlay.content().find("li").eq(1).text(), "desc", "text item");
-    assert.strictEqual(contextMenuInstance._overlay.content().find("li").last().text(), "none", "text item");
+    assert.ok(contextMenuInstance._overlay.$content().find(".dx-submenu").first().is(":visible"), "visible context menu");
+    assert.strictEqual(contextMenuInstance._overlay.$content().find("li").first().text(), "asc", "text item");
+    assert.strictEqual(contextMenuInstance._overlay.$content().find("li").eq(1).text(), "desc", "text item");
+    assert.strictEqual(contextMenuInstance._overlay.$content().find("li").last().text(), "none", "text item");
 });
 
 QUnit.test("Not show context menu with undefined menu items", function(assert) {
@@ -161,13 +161,13 @@ QUnit.test("Show context menu when several views", function(assert) {
     contextMenuInstance = contextMenu.element().dxContextMenu("instance");
 
     //assert
-    assert.ok(contextMenuInstance._overlay.content().find(".dx-submenu").first().is(":visible"), "visible context menu");
-    assert.strictEqual(contextMenuInstance._overlay.content().find("li").first().text(), "asc1", "text item");
-    assert.strictEqual(contextMenuInstance._overlay.content().find("li").eq(1).text(), "desc1", "text item");
-    assert.strictEqual(contextMenuInstance._overlay.content().find("li").last().text(), "none1", "text item");
+    assert.ok(contextMenuInstance._overlay.$content().find(".dx-submenu").first().is(":visible"), "visible context menu");
+    assert.strictEqual(contextMenuInstance._overlay.$content().find("li").first().text(), "asc1", "text item");
+    assert.strictEqual(contextMenuInstance._overlay.$content().find("li").eq(1).text(), "desc1", "text item");
+    assert.strictEqual(contextMenuInstance._overlay.$content().find("li").last().text(), "none1", "text item");
 
     //act
-    $(contextMenuInstance._overlay.content().find(".dx-menu-item").first()).trigger("dxclick");
+    $(contextMenuInstance._overlay.$content().find(".dx-menu-item").first()).trigger("dxclick");
 
     //assert
     assert.strictEqual(text, 'asc1', "first item text of first view");
@@ -176,13 +176,13 @@ QUnit.test("Show context menu when several views", function(assert) {
     $("#rows").children().trigger("contextmenu");
 
     //assert
-    assert.ok(contextMenuInstance._overlay.content().find(".dx-submenu").first().is(":visible"), "visible context menu");
-    assert.strictEqual(contextMenuInstance._overlay.content().find("li").first().text(), "asc2", "text item");
-    assert.strictEqual(contextMenuInstance._overlay.content().find("li").eq(1).text(), "desc2", "text item");
-    assert.strictEqual(contextMenuInstance._overlay.content().find("li").last().text(), "none2", "text item");
+    assert.ok(contextMenuInstance._overlay.$content().find(".dx-submenu").first().is(":visible"), "visible context menu");
+    assert.strictEqual(contextMenuInstance._overlay.$content().find("li").first().text(), "asc2", "text item");
+    assert.strictEqual(contextMenuInstance._overlay.$content().find("li").eq(1).text(), "desc2", "text item");
+    assert.strictEqual(contextMenuInstance._overlay.$content().find("li").last().text(), "none2", "text item");
 
     //act
-    $(contextMenuInstance._overlay.content().find(".dx-menu-item").first()).trigger("dxclick");
+    $(contextMenuInstance._overlay.$content().find(".dx-menu-item").first()).trigger("dxclick");
 
     //assert
     assert.strictEqual(text, 'asc2', "first item text of first view");
@@ -279,10 +279,10 @@ QUnit.test("Context menu with option onContextMenuPreparing", function(assert) {
     $($testElement.find("td").eq(3)).trigger("contextmenu");
 
     //assert
-    assert.ok(contextMenuInstance._overlay.content().find(".dx-submenu").first().is(":visible"), "visible context menu");
-    assert.strictEqual(contextMenuInstance._overlay.content().find("li").first().text(), "Test1", "text item");
-    assert.strictEqual(contextMenuInstance._overlay.content().find("li").eq(1).text(), "Test2", "text item");
-    assert.strictEqual(contextMenuInstance._overlay.content().find("li").last().text(), "Test3", "text item");
+    assert.ok(contextMenuInstance._overlay.$content().find(".dx-submenu").first().is(":visible"), "visible context menu");
+    assert.strictEqual(contextMenuInstance._overlay.$content().find("li").first().text(), "Test1", "text item");
+    assert.strictEqual(contextMenuInstance._overlay.$content().find("li").eq(1).text(), "Test2", "text item");
+    assert.strictEqual(contextMenuInstance._overlay.$content().find("li").last().text(), "Test3", "text item");
     assert.strictEqual(contextMenuOptions.rowIndex, 1, "rowIndex");
     assert.strictEqual(contextMenuOptions.row.rowType, "data", "rowType");
     assert.strictEqual(contextMenuOptions.columnIndex, 1, "columnIndex");
@@ -331,10 +331,10 @@ QUnit.test("Context menu with option onContextMenuPreparing when no data and scr
     $($testElement.find(".dx-datagrid-rowsview").first()).trigger("contextmenu");
 
     //assert
-    assert.ok(contextMenuInstance._overlay.content().find(".dx-submenu").first().is(":visible"), "visible context menu");
-    assert.strictEqual(contextMenuInstance._overlay.content().find("li").first().text(), "Test1", "text item");
-    assert.strictEqual(contextMenuInstance._overlay.content().find("li").eq(1).text(), "Test2", "text item");
-    assert.strictEqual(contextMenuInstance._overlay.content().find("li").last().text(), "Test3", "text item");
+    assert.ok(contextMenuInstance._overlay.$content().find(".dx-submenu").first().is(":visible"), "visible context menu");
+    assert.strictEqual(contextMenuInstance._overlay.$content().find("li").first().text(), "Test1", "text item");
+    assert.strictEqual(contextMenuInstance._overlay.$content().find("li").eq(1).text(), "Test2", "text item");
+    assert.strictEqual(contextMenuInstance._overlay.$content().find("li").last().text(), "Test3", "text item");
 });
 
 QUnit.test("Context menu should not be shown without items", function(assert) {
@@ -405,7 +405,7 @@ QUnit.test("Context menu with option onContextMenuPreparing for group row", func
     $($testElement.find("td").eq(1)).trigger("contextmenu");
 
     //assert
-    assert.ok(contextMenuInstance._overlay.content().find(".dx-submenu").first().is(":visible"), "visible context menu");
+    assert.ok(contextMenuInstance._overlay.$content().find(".dx-submenu").first().is(":visible"), "visible context menu");
     assert.strictEqual(contextMenuPreparingArg.rowIndex, 0, "rowIndex");
     assert.strictEqual(contextMenuPreparingArg.row.rowType, "group", "rowType");
     assert.strictEqual(contextMenuPreparingArg.columnIndex, 1, "columnIndex");

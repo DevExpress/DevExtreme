@@ -43,7 +43,7 @@ var moduleConfig = {
         this.clock = sinon.useFakeTimers(new Date().valueOf());
 
         this.$element = $("#dateBox")[widgetName]({ useCalendar: false });
-        this.instance = this.$element.data(widgetName);
+        this.instance = this.$element[widgetName]("instance");
         this.$input = $.proxy(this.instance._input, this.instance);
     },
     afterEach: function() {
@@ -78,9 +78,9 @@ QUnit.test("several editors for same value", function(assert) {
     var $date = $("#dateboxWithDateFormat").find(".dx-texteditor-input"),
         $datetime = $("#dateboxWithDateTimeFormat").find(".dx-texteditor-input"),
         $time = $("#dateboxWithTimeFormat").find(".dx-texteditor-input"),
-        dateMode = $("#dateboxWithDateFormat").dxDateBox().data("dxDateBox").option("mode"),
-        datetimeMode = $("#dateboxWithDateTimeFormat").dxDateBox().data("dxDateBox").option("mode"),
-        timeMode = $("#dateboxWithTimeFormat").dxDateBox().data("dxDateBox").option("mode");
+        dateMode = $("#dateboxWithDateFormat").dxDateBox().dxDateBox("instance").option("mode"),
+        datetimeMode = $("#dateboxWithDateTimeFormat").dxDateBox().dxDateBox("instance").option("mode"),
+        timeMode = $("#dateboxWithTimeFormat").dxDateBox().dxDateBox("instance").option("mode");
 
     assert.equal($date.val(), getExpectedResult(value, dateMode, toStandardDateFormat(value, dateMode)), "'date' format is displayed correctly");
     assert.equal($datetime.val(), getExpectedResult(value, datetimeMode, toStandardDateFormat(value, datetimeMode)), "'datetime' format is displayed correctly");

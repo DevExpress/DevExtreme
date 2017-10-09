@@ -657,13 +657,13 @@ QUnit.test("SearchValue in virtualMode", function(assert) {
             virtualModeEnabled: true,
             searchValue: "a"
         }),
-        $items = treeView.element().find(".dx-treeview-item");
+        $items = treeView.$element().find(".dx-treeview-item");
 
     assert.equal($items.length, 1, "1 item was rendered after filtration");
 
     treeView.expandItem(1);
 
-    $items = treeView.element().find(".dx-treeview-item");
+    $items = treeView.$element().find(".dx-treeview-item");
     assert.equal($items.length, 2, "2 items were rendered after filtration");
 });
 
@@ -693,7 +693,7 @@ QUnit.test("SearchValue should work after sublevels were expanded", function(ass
 
     treeView.option("searchValue", "a");
 
-    var $items = treeView.element().find(".dx-treeview-item");
+    var $items = treeView.$element().find(".dx-treeview-item");
     assert.equal($items.length, 2, "2 items were rendered after filtration");
 });
 
@@ -1052,7 +1052,7 @@ QUnit.test("load indicator should be removed after datasource is loaded even if 
             { id: 11, text: "Item 11", parentId: 1 }
         ],
         onContentReady: function(e) {
-            var $loadIndicator = e.element.find(".dx-treeview-loadindicator");
+            var $loadIndicator = $(e.element).find(".dx-treeview-loadindicator");
             assert.equal($loadIndicator.length, 0, "load indicator should be removed");
         },
         dataStructure: "plain",

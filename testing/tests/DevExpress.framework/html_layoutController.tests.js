@@ -18,6 +18,10 @@ require("spa.css!");
 require("common.css!");
 require("generic_light.css!");
 
+if(QUnit.urlParams["nojquery"]) {
+    return;
+}
+
 QUnit.testStart(function() {
     var markup = require("./frameworkParts/html_layoutController.markup.html!text");
 

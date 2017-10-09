@@ -146,6 +146,13 @@ var NumberBox = TextEditor.inherit({
             */
 
             /**
+            * @name dxNumberBoxOptions_showMaskMode
+            * @publicName showMaskMode
+            * @hidden
+            * @extend_doc
+            */
+
+            /**
             * @name dxNumberBoxOptions_spellcheck
             * @publicName spellcheck
             * @hidden
@@ -186,7 +193,7 @@ var NumberBox = TextEditor.inherit({
         this.callBase();
 
         this.option("isValid") && this._validateValue(this.option("value"));
-        this.element().addClass(WIDGET_CLASS);
+        this.$element().addClass(WIDGET_CLASS);
         this.setAria("role", "spinbutton");
         this._renderMouseWheelHandler();
     },
@@ -194,7 +201,7 @@ var NumberBox = TextEditor.inherit({
     _renderSubmitElement: function() {
         this._$submitElement = $("<input>")
             .attr("type", "hidden")
-            .appendTo(this.element());
+            .appendTo(this.$element());
     },
 
     _setSubmitValue: function(value) {
@@ -310,7 +317,7 @@ var NumberBox = TextEditor.inherit({
     _renderSpinButtons: function() {
         var spinButtonsVisible = this.option("showSpinButtons");
 
-        this.element().toggleClass(SPIN_CLASS, spinButtonsVisible);
+        this.$element().toggleClass(SPIN_CLASS, spinButtonsVisible);
         this._toggleTouchFriendlyClass();
 
         if(!spinButtonsVisible) {
@@ -327,7 +334,7 @@ var NumberBox = TextEditor.inherit({
     },
 
     _toggleTouchFriendlyClass: function() {
-        this.element().toggleClass(SPIN_TOUCH_FRIENDLY_CLASS, this.option("showSpinButtons") && this.option("useLargeSpinButtons"));
+        this.$element().toggleClass(SPIN_TOUCH_FRIENDLY_CLASS, this.option("showSpinButtons") && this.option("useLargeSpinButtons"));
     },
 
     _createSpinButtons: function() {

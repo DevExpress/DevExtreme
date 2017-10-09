@@ -99,7 +99,7 @@ function getItemsOffset($elements, isVertical, $itemsContainer) {
 function getScrollWrapper(scrollable) {
     var timeout = null,
         scrollTop = scrollable.scrollTop(),
-        $element = scrollable.element(),
+        $element = scrollable.$element(),
         top = $element.offset().top,
         height = $element.height(),
         delta = 0;
@@ -233,7 +233,7 @@ var Sortable = DOMComponent.inherit({
 
     _getEventListener: function() {
         var groupSelector = this.option("groupSelector"),
-            element = this.element();
+            element = this.$element();
 
         return groupSelector ? element.find(groupSelector) : element;
     },
@@ -253,7 +253,7 @@ var Sortable = DOMComponent.inherit({
             $targetGroup,
             startPositions,
             sourceGroup,
-            element = that.element(),
+            element = that.$element(),
             $groups,
             scrollWrapper = null,
             targetIndex = -1;
@@ -472,7 +472,7 @@ var Sortable = DOMComponent.inherit({
 
     _render: function() {
         this.callBase();
-        this.element().addClass(SORTABLE_CLASS);
+        this.$element().addClass(SORTABLE_CLASS);
     },
 
     _dispose: function() {

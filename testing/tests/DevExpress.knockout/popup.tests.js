@@ -41,7 +41,7 @@ var POPUP_TITLE_CLASS = "dx-popup-title";
 QUnit.module("rendering", {
     beforeEach: function() {
         this.element = $("#popup").dxPopup();
-        this.instance = this.element.data("dxPopup");
+        this.instance = this.element.dxPopup("instance");
         devices.current("desktop");
     }
 });

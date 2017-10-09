@@ -21,6 +21,10 @@ require("ui/nav_bar");
 require("ui/toolbar");
 require("ui/pivot");
 
+if(QUnit.urlParams["nojquery"]) {
+    return;
+}
+
 QUnit.testStart(function() {
     var markup = require("./frameworkParts/html_widgetCommandAdapters.markup.html!text");
 
@@ -582,7 +586,7 @@ QUnit.test("Toolbar commands", function(assert) {
 
     $button.trigger("dxclick");
     assert.equal(actionLog.length, 1);
-    assert.equal($(actionLog[0].element).data("dxCommand").option("id"), "add");
+    assert.equal($(actionLog[0].element).dxCommand("instance").option("id"), "add");
     assert.ok(actionLog[0].jQueryEvent, "T132769");
 });
 
@@ -745,7 +749,7 @@ QUnit.test("List commands", function(assert) {
 
     $item.trigger("dxclick");
     assert.equal(actionLog.length, 1);
-    var command = $(actionLog[0].element).data("dxCommand");
+    var command = $(actionLog[0].element).dxCommand("instance");
     assert.equal(command.option("id"), "add");
     assert.ok(actionLog[0].jQueryEvent, "T132769");
 
@@ -796,7 +800,7 @@ QUnit.test("List commands with default template", function(assert) {
 
     $item.trigger("dxclick");
     assert.equal(actionLog.length, 1);
-    var command = $(actionLog[0].element).data("dxCommand");
+    var command = $(actionLog[0].element).dxCommand("instance");
     assert.equal(command.option("id"), "add");
     assert.ok(actionLog[0].jQueryEvent, "T132769");
 
@@ -932,7 +936,7 @@ QUnit.test("NavBar commands", function(assert) {
 
     $item.trigger("dxclick");
     assert.equal(actionLog.length, 1);
-    assert.equal($(actionLog[0].element).data("dxCommand").option("id"), "add");
+    assert.equal($(actionLog[0].element).dxCommand("instance").option("id"), "add");
     assert.ok(actionLog[0].jQueryEvent, "T132769");
 });
 
@@ -1004,7 +1008,7 @@ QUnit.test("NavBar listens command options", function(assert) {
         $test = $("#navBar-commands-change-option"),
         $navBar = $test.find(".navBar"),
         navBar = $navBar.dxNavBar("instance"),
-        command = $test.find(".command").data("dxCommand"),
+        command = $test.find(".command").dxCommand("instance"),
         commands = manager.findCommands($test),
         containers = manager.findCommandContainers($test),
         reRenderCount = 0;
@@ -1088,7 +1092,7 @@ QUnit.test("dxPivot is rerendered on command visibility change", function(assert
         $test = $("#pivot-commands-visibility"),
         $pivot = $test.find(".pivot"),
         pivot = $pivot.dxPivot("instance"),
-        command2 = $test.find(".command.c2").data("dxCommand"),
+        command2 = $test.find(".command.c2").dxCommand("instance"),
         commands = manager.findCommands($test),
         containers = manager.findCommandContainers($test);
 

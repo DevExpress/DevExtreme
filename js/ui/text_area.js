@@ -104,12 +104,19 @@ var TextArea = TextBox.inherit({
             * @hidden
             * @extend_doc
             */
+
+            /**
+             * @name dxTextAreaOptions_showMaskMode
+             * @publicName showMaskMode
+             * @hidden
+             * @extend_doc
+             */
         });
     },
 
     _render: function() {
         this.callBase();
-        this.element().addClass(TEXTAREA_CLASS);
+        this.$element().addClass(TEXTAREA_CLASS);
         this.setAria("multiline", "true");
         this._updateInputHeight();
     },
@@ -166,7 +173,7 @@ var TextArea = TextBox.inherit({
             height = this._getOptionValue("height"),
             minHeight = this.option("minHeight"),
             maxHeight = this.option("maxHeight"),
-            $element = this.element();
+            $element = this.$element();
 
         $element.css({
             "minHeight": minHeight !== undefined ? minHeight : "",
@@ -178,7 +185,7 @@ var TextArea = TextBox.inherit({
     },
 
     _resetDimensions: function() {
-        this.element().css({
+        this.$element().css({
             "height": "",
             "minHeight": "",
             "maxHeight": ""

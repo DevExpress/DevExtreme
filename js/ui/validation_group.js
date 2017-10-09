@@ -52,7 +52,7 @@ var ValidationGroup = DOMComponent.inherit({
     },
 
     _render: function() {
-        var $element = this.element();
+        var $element = this.$element();
         $element.addClass(VALIDATION_ENGINE_CLASS);
 
         $element.find(".dx-validator").each(function(_, validatorContainer) {
@@ -93,7 +93,7 @@ var ValidationGroup = DOMComponent.inherit({
 
     _dispose: function() {
         ValidationEngine.removeGroup(this);
-        this.element().removeClass(VALIDATION_ENGINE_CLASS);
+        this.$element().removeClass(VALIDATION_ENGINE_CLASS);
 
         this.callBase();
     }

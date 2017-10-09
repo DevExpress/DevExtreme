@@ -67,9 +67,9 @@ var dxTreeMap = {
     * @publicName layoutAlgorithm
     * @type string | function
     * @type_function_param1 e:object
-    * @type_function_param1_field1 rect:array
+    * @type_function_param1_field1 rect:Array<number>
     * @type_function_param1_field2 sum:number
-    * @type_function_param1_field3 items:array
+    * @type_function_param1_field3 items:Array<any>
     * @default 'squarified'
     * @acceptValues 'squarified' | 'strip' | 'sliceanddice'
     */
@@ -454,7 +454,7 @@ var dxTreeMap = {
         /**
         * @name dxtreemapoptions_colorizer_range
         * @publicName range
-        * @type array
+        * @type Array<number>
         * @default undefined
         */
         range: undefined,
@@ -546,7 +546,7 @@ var dxTreeMap = {
     * @type_function_param1 e:object
     * @type_function_param1_field1 component:object
     * @type_function_param1_field2 element:object
-    * @type_function_param1_field3 jQueryEvent:jQuery-event object
+    * @type_function_param1_field3 jQueryEvent:jQueryEvent
     * @type_function_param1_field4 node:dxtreemapnode
     * @notUsedInTheme
     * @action

@@ -2,6 +2,7 @@
 
 var Class = require("../../core/class"),
     commonUtils = require("../../core/utils/common"),
+    iteratorUtils = require("../../core/utils/iterator"),
     each = require("../../core/utils/iterator").each,
     typeUtils = require("../../core/utils/type"),
     extend = require("../../core/utils/extend").extend,
@@ -47,6 +48,7 @@ var DataAdapter = Class.inherit({
             rootValue: 0,
             searchValue: "",
             dataType: "tree",
+            searchMode: "contains",
             dataConverter: new HierarchicalDataConverter(),
             onNodeChanged: commonUtils.noop
         };
@@ -415,23 +417,35 @@ var DataAdapter = Class.inherit({
         this._expandedNodesKeys = this._updateNodesKeysArray(EXPANDED);
     },
 
-    _filterDataStructure: function(substring) {
-        var matches = [], text,
-            dataStructure = this._initialDataStructure,
-            escaped = commonUtils.escapeRegExp(substring),
-            reg = new RegExp(escaped, 'i');
-
-        for(var i = 0, size = dataStructure.length; i < size; i++) {
-            text = this.options.dataAccessors.getters.display(dataStructure[i]);
-            reg.test(text) && matches.push(dataStructure[i]);
-        }
-
-        return matches;
+    isFiltered: function(item) {
+        return !this.options.searchValue.length || !!this._filterDataStructure(this.options.searchValue, [item]).length;
     },
 
-    search: function(substring) {
+    _createCriteria: function(selector, value, operation) {
+        var searchFilter = [];
+        if(!Array.isArray(selector)) {
+            return [selector, operation, value];
+        }
+        iteratorUtils.each(selector, function(i, item) {
+            searchFilter.push([item, operation, value], "or");
+        });
+
+        searchFilter.pop();
+        return searchFilter;
+    },
+
+    _filterDataStructure: function(filterValue, dataStructure) {
+        var selector = this.options.searchExpr || this.options.dataAccessors.getters.display,
+            criteria = this._createCriteria(selector, filterValue, this.options.searchMode);
+
+        dataStructure = dataStructure || this._initialDataStructure;
+
+        return query(dataStructure).filter(criteria).toArray();
+    },
+
+    search: function(searchValue) {
         var that = this,
-            matches = this._filterDataStructure(substring),
+            matches = this._filterDataStructure(searchValue),
             dataConverter = this.options.dataConverter;
 
         function lookForParents(matches, index) {

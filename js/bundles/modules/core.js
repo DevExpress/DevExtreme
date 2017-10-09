@@ -27,6 +27,7 @@ var animationFrame = require("../../animation/frame");
 /**
  * @name requestAnimationFrame
  * @publicName requestAnimationFrame(callback)
+ * @namespace DevExpress
  * @type method
  * @deprecated utils_requestAnimationFrame
  * @extend_doc
@@ -39,6 +40,7 @@ DevExpress.requestAnimationFrame = function() {
 /**
  * @name cancelAnimationFrame
  * @publicName cancelAnimationFrame(requestID)
+ * @namespace DevExpress
  * @type method
  * @deprecated utils_cancelAnimationFrame
  * @extend_doc
@@ -53,6 +55,7 @@ DevExpress.EventsMixin = require("../../core/events_mixin");
 /**
  * @name utils
  * @publicName utils
+ * @namespace DevExpress
  */
 DevExpress.utils = {};
 
@@ -93,9 +96,10 @@ var config = DevExpress.config = require("../../core/config");
 /**
  * @name rtlEnabled
  * @publicName rtlEnabled
+ * @namespace DevExpress
  * @type boolean
  * @default false
- * @deprecated #config
+ * @deprecated config
  */
 
 Object.defineProperty(DevExpress, 'rtlEnabled', {
@@ -123,7 +127,8 @@ DevExpress.fx = require("../../animation/fx");
 DevExpress.TransitionExecutor = require("../../animation/transition_executor/transition_executor").TransitionExecutor;
 DevExpress.AnimationPresetCollection = require("../../animation/presets/presets").PresetCollection;
 
-module.exports = DevExpress.events = {};
+DevExpress.events = require("../../events");
+
 DevExpress.events.click = require("../../events/click");
 DevExpress.events.utils = require("../../events/utils");
 DevExpress.events.GestureEmitter = require("../../events/gesture/emitter.gesture");

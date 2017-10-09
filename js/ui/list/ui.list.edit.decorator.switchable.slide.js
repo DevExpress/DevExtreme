@@ -79,7 +79,7 @@ registerDecorator(
                     }).bind(this),
                     integrationOptions: {}
                 });
-                $menu.appendTo(this._list.element());
+                $menu.appendTo(this._list.$element());
 
                 var $menuButton = this._renderMenuButton(messageLocalization.format("dxListEditDecorator-more"), (function(e) {
                     e.stopPropagation();
@@ -283,7 +283,7 @@ registerDecorator(
 
         dispose: function() {
             if(this._menu) {
-                this._menu.element().remove();
+                this._menu.$element().remove();
             }
             if(this._$buttonsContainer) {
                 this._$buttonsContainer.remove();

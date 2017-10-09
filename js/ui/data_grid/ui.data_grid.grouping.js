@@ -16,6 +16,7 @@ var $ = require("../../core/renderer"),
 var DATAGRID_GROUP_PANEL_CLASS = "dx-datagrid-group-panel",
     DATAGRID_GROUP_PANEL_MESSAGE_CLASS = "dx-group-panel-message",
     DATAGRID_GROUP_PANEL_ITEM_CLASS = "dx-group-panel-item",
+    DATAGRID_GROUP_PANEL_LABEL_CLASS = "dx-toolbar-label",
     DATAGRID_GROUP_OPENED_CLASS = "dx-datagrid-group-opened",
     DATAGRID_GROUP_CLOSED_CLASS = "dx-datagrid-group-closed",
     DATAGRID_EXPAND_CLASS = "dx-datagrid-expand",
@@ -369,7 +370,7 @@ var GroupingHeaderPanelExtender = (function() {
         _appendGroupingItem: function(items) {
             var that = this,
                 groupPanelRenderedCallback = function(e) {
-                    that._updateGroupPanelContent(e.itemElement.find("." + DATAGRID_GROUP_PANEL_CLASS));
+                    that._updateGroupPanelContent($(e.itemElement).find("." + DATAGRID_GROUP_PANEL_CLASS));
                 };
 
             if(that._isGroupPanelVisible()) {
@@ -447,6 +448,9 @@ var GroupingHeaderPanelExtender = (function() {
                     .addClass(DATAGRID_GROUP_PANEL_MESSAGE_CLASS)
                     .text(groupPanelOptions.emptyPanelText)
                     .appendTo($groupPanel);
+
+                $groupPanel.closest("." + DATAGRID_GROUP_PANEL_LABEL_CLASS).css("maxWidth", "none");
+                that.updateToolbarDimensions();
             }
         },
 
@@ -488,7 +492,7 @@ var GroupingHeaderPanelExtender = (function() {
         getContextMenuItems: function(options) {
             var that = this,
                 contextMenuEnabled = that.option("grouping.contextMenuEnabled"),
-                $groupedColumnElement = options.targetElement.closest("." + DATAGRID_GROUP_PANEL_ITEM_CLASS),
+                $groupedColumnElement = $(options.targetElement).closest("." + DATAGRID_GROUP_PANEL_ITEM_CLASS),
                 items;
 
             if($groupedColumnElement.length) {
@@ -560,7 +564,8 @@ var GroupingRowsViewExtender = (function() {
         _rowClick: function(e) {
             var that = this,
                 expandMode = that.option("grouping.expandMode"),
-                isGroupRowStateChanged = expandMode === "rowClick" && $(e.jQueryEvent.target).closest("." + DATAGRID_GROUP_ROW_CLASS).length,
+                scrollingMode = that.option("scrolling.mode"),
+                isGroupRowStateChanged = scrollingMode !== "infinite" && expandMode === "rowClick" && $(e.jQueryEvent.target).closest("." + DATAGRID_GROUP_ROW_CLASS).length,
                 isExpandButtonClicked = $(e.jQueryEvent.target).closest("." + DATAGRID_EXPAND_CLASS).length;
 
             if(isGroupRowStateChanged || isExpandButtonClicked) {

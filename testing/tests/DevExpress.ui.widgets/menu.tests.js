@@ -189,13 +189,13 @@ QUnit.test("Render items with custom model", function(assert) {
     assert.ok($item1.find("." + DX_MENU_ITEM_POPOUT_CLASS).length, "popout was rendered");
 
     $($item1).trigger("dxclick");
-    submenu = getSubMenuInstance($item1)._overlay.content();
+    submenu = getSubMenuInstance($item1)._overlay.$content();
     $item11 = submenu.find("." + DX_MENU_ITEM_CLASS).eq(0);
     assert.equal($item11.text(), "item 11");
     assert.ok($item11.find("." + DX_MENU_ITEM_POPOUT_CLASS).length, "popout was rendered");
 
     $($item11).trigger("dxclick");
-    submenu = getSubMenuInstance($item1)._overlay.content();
+    submenu = getSubMenuInstance($item1)._overlay.$content();
     $item111 = submenu.find("." + DX_MENU_ITEM_CLASS).eq(1);
     assert.equal($item111.text(), "item 111");
 });
@@ -241,13 +241,13 @@ QUnit.test("Render custom template for submenu items", function(assert) {
                 items: [{ template: "custom" }]
             }]
         }),
-        rootMenuItem = $($menu.dxMenu("instance").element()).find("." + DX_MENU_ITEM_CLASS).eq(0),
+        rootMenuItem = $($menu.dxMenu("instance").$element()).find("." + DX_MENU_ITEM_CLASS).eq(0),
         submenu;
 
     assert.equal($menu.find("." + DX_MENU_ITEM_CLASS).length, 1);
     rootMenuItem.trigger("dxclick");
     submenu = getSubMenuInstance(rootMenuItem);
-    assert.equal($(submenu._overlay.content()).find("." + DX_MENU_ITEM_CLASS).eq(0).text(), "test");
+    assert.equal($(submenu._overlay.$content()).find("." + DX_MENU_ITEM_CLASS).eq(0).text(), "test");
 });
 
 QUnit.test("Render custom template via script (T195165)", function(assert) {
@@ -259,13 +259,13 @@ QUnit.test("Render custom template via script (T195165)", function(assert) {
                     items: [{ selectable: false, disabled: false, template: $("#menuScriptTemplate") }]
                 }]
         }),
-        rootMenuItem = $($menu.dxMenu("instance").element()).find("." + DX_MENU_ITEM_CLASS).eq(0),
+        rootMenuItem = $($menu.dxMenu("instance").$element()).find("." + DX_MENU_ITEM_CLASS).eq(0),
         submenu;
 
     assert.equal($menu.find("." + DX_MENU_ITEM_CLASS).length, 1);
     rootMenuItem.trigger("dxclick");
     submenu = getSubMenuInstance(rootMenuItem);
-    assert.equal($.trim($(submenu._overlay.content()).find("." + DX_MENU_ITEM_CLASS).eq(0).text()), "Menu Test");
+    assert.equal($.trim($(submenu._overlay.$content()).find("." + DX_MENU_ITEM_CLASS).eq(0).text()), "Menu Test");
 });
 
 QUnit.test("Render horizontal menu with default submenuDirection", function(assert) {
@@ -1272,6 +1272,23 @@ QUnit.test("Menu should stop show submenu timeout when another level submenu was
     assert.ok(submenu.isOverlayVisible(), "submenu is still visible");
 });
 
+QUnit.test("click should not be blocked on menu's item", function(assert) {
+    var menu = createMenu({
+            items: [{ text: "Item 1" }]
+        }),
+        $item = $(menu.element).find("." + DX_MENU_ITEM_CLASS).eq(0),
+        clickHandler = sinon.stub();
+
+    try {
+        $(document).on("click", clickHandler);
+        $item.trigger("click");
+
+        assert.equal(clickHandler.callCount, 1, "click was handled");
+    } finally {
+        $(document).off("click");
+    }
+});
+
 
 QUnit.module("keyboard navigation", {
     beforeEach: function() {
@@ -1330,7 +1347,7 @@ QUnit.testInActiveWindow("onItemClick fires when enter pressed", function(assert
 QUnit.test("select item when space pressed", function(assert) {
     //act
     this.menu.instance.focus();
-    keyboardMock(this.menu.instance.element())
+    keyboardMock(this.menu.instance.$element())
         .keyDown("left")
         .keyDown("space");
 
@@ -1364,7 +1381,7 @@ QUnit.test("select item when space pressed on inner level", function(assert) {
         .keyDown("right")
         .keyDown("down");
     this.clock.tick(600);
-    keyboardMock(Submenu.getInstance(instance._visibleSubmenu.element())._itemContainer())
+    keyboardMock(Submenu.getInstance(instance._visibleSubmenu.$element())._itemContainer())
         .keyDown("down")
         .keyDown("down")
         .keyDown("down")
@@ -1394,7 +1411,7 @@ QUnit.testInActiveWindow("When press down arrow key we only show submenu if exis
         .keyDown("down");
 
 
-    submenuKeyboard = keyboardMock(Submenu.getInstance(instance._visibleSubmenu.element())._itemContainer());
+    submenuKeyboard = keyboardMock(Submenu.getInstance(instance._visibleSubmenu.$element())._itemContainer());
 
     submenuKeyboard
         .keyDown("down");
@@ -1429,7 +1446,7 @@ QUnit.testInActiveWindow("When press right arrow key we only show submenu if exi
         .keyDown("right");
 
 
-    submenuKeyboard = keyboardMock(Submenu.getInstance(instance._visibleSubmenu.element())._itemContainer());
+    submenuKeyboard = keyboardMock(Submenu.getInstance(instance._visibleSubmenu.$element())._itemContainer());
     submenuKeyboard
         .keyDown("down");
 
@@ -1463,7 +1480,7 @@ QUnit.test("Correct work of navigation after click", function(assert) {
             .trigger("mouseenter")
             .trigger("dxclick");
 
-        keyboardMock(Submenu.getInstance(instance._visibleSubmenu.element())._itemContainer())
+        keyboardMock(Submenu.getInstance(instance._visibleSubmenu.$element())._itemContainer())
             .keyDown("down")
             .keyDown("down");
 
@@ -1532,7 +1549,7 @@ QUnit.test("down key in submenu can move focus to next item of main menu (vertic
         .keyDown("down")
         .keyDown("right");
 
-    visibleSubmenu = Submenu.getInstance(instance._visibleSubmenu.element());
+    visibleSubmenu = Submenu.getInstance(instance._visibleSubmenu.$element());
 
     keyboardMock(visibleSubmenu._itemContainer())
         .keyDown("down")
@@ -1560,7 +1577,7 @@ QUnit.test("up key in submenu can move focus to previous item of main menu (vert
         .keyDown("down")
         .keyDown("right");
 
-    visibleSubmenu = Submenu.getInstance(instance._visibleSubmenu.element());
+    visibleSubmenu = Submenu.getInstance(instance._visibleSubmenu.$element());
 
     keyboardMock(visibleSubmenu._itemContainer())
         .keyDown("down")
@@ -1585,12 +1602,9 @@ QUnit.test("right key in submenu can move focus to next item of main menu (horiz
         .keyDown("right")
         .keyDown("down");
 
-    visibleSubmenu = Submenu.getInstance(instance._visibleSubmenu.element());
+    visibleSubmenu = Submenu.getInstance(instance._visibleSubmenu.$element());
 
-    $(visibleSubmenu._itemContainer())
-        .trigger(rightKeyKeydown)
-        .trigger(rightKeyKeydown)
-        .trigger(rightKeyKeydown);
+    $(visibleSubmenu._itemContainer()).trigger(rightKeyKeydown);
 
     //assert
     assert.ok(!visibleSubmenu.option("visible"), "submenu is hidden");
@@ -1609,7 +1623,7 @@ QUnit.test("left key in submenu can move focus to previous item of main menu (ho
         .keyDown("right")
         .keyDown("down");
 
-    visibleSubmenu = Submenu.getInstance(instance._visibleSubmenu.element());
+    visibleSubmenu = Submenu.getInstance(instance._visibleSubmenu.$element());
 
     keyboardMock(visibleSubmenu._itemContainer())
         .keyDown("left");
@@ -1637,11 +1651,9 @@ QUnit.test("RTL: left key in submenu can move focus to next item of main menu (h
         .keyDown("left")
         .keyDown("down");
 
-    visibleSubmenu = Submenu.getInstance(instance._visibleSubmenu.element());
+    visibleSubmenu = Submenu.getInstance(instance._visibleSubmenu.$element());
 
     $(visibleSubmenu._itemContainer())
-        .trigger(leftKeyKeydown)
-        .trigger(leftKeyKeydown)
         .trigger(leftKeyKeydown);
 
     //assert
@@ -1663,7 +1675,7 @@ QUnit.test("RTL: right key in submenu can move focus to previous item of main me
         .keyDown("left")
         .keyDown("down");
 
-    visibleSubmenu = Submenu.getInstance(instance._visibleSubmenu.element());
+    visibleSubmenu = Submenu.getInstance(instance._visibleSubmenu.$element());
 
     keyboardMock(visibleSubmenu._itemContainer())
         .keyDown("right");

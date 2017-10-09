@@ -17,6 +17,10 @@ require("angular-route");
 require("ui/list");
 require("ui/button");
 
+if(QUnit.urlParams["nojquery"]) {
+    return;
+}
+
 var FIXTURE_ELEMENT = function() { return $("#qunit-fixture"); };
 
 var ignoreAngularBrowserDeferTimer = function(args) {
@@ -64,7 +68,7 @@ QUnit.test("simple component init", function(assert) {
 
     angular.bootstrap(this.$container, ["testApp"]);
 
-    var instance = $markup.data("dxTest"),
+    var instance = $markup.dxTest("instance"),
         scope = $markup.scope();
 
     assert.equal(instance.option("text"), "my text");
@@ -87,7 +91,7 @@ QUnit.test("component options from scope", function(assert) {
 
     angular.bootstrap(this.$container, ["testApp"]);
 
-    var instance = $markup.data("dxTest"),
+    var instance = $markup.dxTest("instance"),
         scope = $markup.scope();
 
     assert.equal(instance.option("text"), "my text");
@@ -118,7 +122,7 @@ QUnit.test("component option fields from scope", function(assert) {
 
     angular.bootstrap(this.$container, ["testApp"]);
 
-    var instance = $markup.data("dxTest"),
+    var instance = $markup.dxTest("instance"),
         scope = $markup.scope();
 
     assert.equal(instance.option("text"), "my text");
@@ -149,7 +153,7 @@ QUnit.test("component with bindingOptions", function(assert) {
 
     angular.bootstrap(this.$container, ["testApp"]);
 
-    var instance = $markup.data("dxTest"),
+    var instance = $markup.dxTest("instance"),
         scope = $markup.scope();
 
     assert.equal(instance.option("text"), "my text");
@@ -184,7 +188,7 @@ QUnit.test("component with bindingOptions and computed binding", function(assert
 
     angular.bootstrap(this.$container, ["testApp"]);
 
-    var instance = $markup.data("dxTest"),
+    var instance = $markup.dxTest("instance"),
         scope = $markup.scope();
 
     assert.equal(instance.option("text"), "my text");
@@ -211,7 +215,7 @@ QUnit.test("component with bindingOptions for nested option", function(assert) {
 
     angular.bootstrap(this.$container, ["testApp"]);
 
-    var instance = $markup.data("dxTest"),
+    var instance = $markup.dxTest("instance"),
         scope = $markup.scope();
 
     assert.equal(instance.option("obj.text"), "my text");
@@ -242,7 +246,7 @@ QUnit.test("component with bindingOptions from scope", function(assert) {
 
     angular.bootstrap(this.$container, ["testApp"]);
 
-    var instance = $markup.data("dxTest"),
+    var instance = $markup.dxTest("instance"),
         scope = $markup.scope();
 
     assert.equal(instance.option("text"), "my text");
@@ -283,7 +287,7 @@ QUnit.test("component with bindingOptions from scope inside sync action (T302197
 
     angular.bootstrap(this.$container, ["testApp"]);
 
-    var instance = $markup.data("dxTest");
+    var instance = $markup.dxTest("instance");
 
     assert.equal(instance.option("text"), "new text");
 });
@@ -310,7 +314,7 @@ QUnit.test("component with bindingOptions from scope when invalid value for widg
 
     angular.bootstrap(this.$container, ["testApp"]);
 
-    var instance = $markup.data("dxTestWithValidatedOption"),
+    var instance = $markup.dxTestWithValidatedOption("instance"),
         scope = $markup.scope();
 
     assert.equal(scope.width, 10);
@@ -342,7 +346,7 @@ QUnit.test("bindingOptions can be inherited inside options object (T426046)", fu
 
     angular.bootstrap(this.$container, ["testApp"]);
 
-    var instance = $markup.data("dxTest"),
+    var instance = $markup.dxTest("instance"),
         scope = $markup.scope();
 
     assert.equal(instance.option("text"), "my text");
@@ -369,7 +373,7 @@ QUnit.test("bindingOptions fields can be inherited", function(assert) {
 
     angular.bootstrap(this.$container, ["testApp"]);
 
-    var instance = $markup.data("dxTest"),
+    var instance = $markup.dxTest("instance"),
         scope = $markup.scope();
 
     assert.equal(instance.option("text"), "my text");
@@ -466,7 +470,7 @@ QUnit.test("changing a field of bound object changes component option", function
 
     angular.bootstrap(this.$container, ["testApp"]);
 
-    var instance = $markup.data("dxTest"),
+    var instance = $markup.dxTest("instance"),
         scope = $markup.scope();
 
     assert.ok(!optionChanged);
@@ -497,7 +501,7 @@ QUnit.test("binding options with deep=true for array option", function(assert) {
 
     angular.bootstrap(this.$container, ["testApp"]);
 
-    var instance = $markup.data("dxTest"),
+    var instance = $markup.dxTest("instance"),
         scope = $markup.scope();
 
     assert.ok(!optionChanged);
@@ -530,7 +534,7 @@ QUnit.test("binding options with deep=false for array option", function(assert) 
 
     angular.bootstrap(this.$container, ["testApp"]);
 
-    var instance = $markup.data("dxTest"),
+    var instance = $markup.dxTest("instance"),
         scope = $markup.scope();
 
     assert.ok(!optionChanged);
@@ -559,7 +563,7 @@ QUnit.test("binding options with deep=true for not array option", function(asser
 
     angular.bootstrap(this.$container, ["testApp"]);
 
-    var instance = $markup.data("dxTest"),
+    var instance = $markup.dxTest("instance"),
         scope = $markup.scope();
 
     assert.ok(!optionChanged);
@@ -588,7 +592,7 @@ QUnit.test("binding options with deep=false for not array option", function(asse
 
     angular.bootstrap(this.$container, ["testApp"]);
 
-    var instance = $markup.data("dxTest"),
+    var instance = $markup.dxTest("instance"),
         scope = $markup.scope();
 
     instance.on("optionChanged", function() {
@@ -621,7 +625,7 @@ QUnit.test("binding should fired once when option is a plain object", function(a
 
     angular.bootstrap(this.$container, ["testApp"]);
 
-    var instance = $markup.data("dxTest");
+    var instance = $markup.dxTest("instance");
 
     spy.reset();
     instance.option("testOption", { value: 2 });
@@ -652,7 +656,7 @@ QUnit.test("dependence options changed when option is a plain object", function(
 
     angular.bootstrap(this.$container, ["testApp"]);
 
-    var widget = $widget.data("dxTest");
+    var widget = $widget.dxTest("instance");
     widget.option("testOption.value", { value: 2 });
 
     assert.equal(widget.option("testOption.dependenceValue"), 2, "dependence option was changed");
@@ -677,7 +681,7 @@ QUnit.test("option changed fired after value was set in the same value(plain obj
     angular.bootstrap(this.$container, ["testApp"]);
 
     var scope = $markup.scope();
-    var instance = $markup.data("dxTest");
+    var instance = $markup.dxTest("instance");
 
     instance.option("testOption", value);
 
@@ -722,7 +726,7 @@ QUnit.test("Variable from scope not re-assign after change the corresponding wid
     angular.bootstrap(this.$container, ["testApp"]);
 
     var scope = $markup.scope();
-    var instance = $markup.data("dxTest");
+    var instance = $markup.dxTest("instance");
 
     instance.option("option1_widget", 2);
 
@@ -762,7 +766,7 @@ QUnit.test("Lockers works correctly when widget options changed using action (T3
     angular.bootstrap(this.$container, ["testApp"]);
 
     var scope = $markup.scope();
-    var instance = $markup.data("dxMyComponent");
+    var instance = $markup.dxMyComponent("instance");
 
     assert.equal(instance.option("testOption"), true, "binding worked");
 
@@ -797,7 +801,7 @@ QUnit.test("WrappedAction should return function result (T388034)", function(ass
 
     angular.bootstrap(this.$container, ["testApp"]);
 
-    var instance = $markup.data("dxMyComponent");
+    var instance = $markup.dxMyComponent("instance");
 
     var result = instance.emulateAction();
     assert.equal(result, "testText", "action return function result");
@@ -828,7 +832,7 @@ QUnit.test("Empty action doesn't call scope.$apply if config.wrapActionsBeforeEx
         originApply.bind(fn, scope);
     };
 
-    var instance = $markup.data("dxMyComponent");
+    var instance = $markup.dxMyComponent("instance");
     instance._createActionByOption("onTestAction")();
     assert.equal(applyCount, 0);
 
@@ -871,7 +875,7 @@ QUnit.test("The 'release' method shouldn't be called for an unlocked Lock object
 
     angular.bootstrap(this.$container, ["testApp"]);
 
-    var instance = $markup.data("dxMyComponentWithWrappedAction"),
+    var instance = $markup.dxMyComponentWithWrappedAction("instance"),
         scope = $markup.scope();
 
     try {
@@ -922,7 +926,7 @@ QUnit.test("Lockers works correctly for composite option (T382985)", function(as
     angular.bootstrap(this.$container, ["testApp"]);
 
     var scope = $markup.scope();
-    var instance = $markup.data("dxTest");
+    var instance = $markup.dxTest("instance");
 
     scope.$apply(function() {
         scope.testOption.text = "testText";
@@ -958,7 +962,7 @@ QUnit.test("Lockers works correctly for defineProperty (T396622)", function(asse
     angular.bootstrap(this.$container, ["testApp"]);
 
     var scope = $markup.scope();
-    var instance = $markup.data("dxTest");
+    var instance = $markup.dxTest("instance");
 
     assert.equal(instance.option("text"), "test", "binding worked");
     assert.equal(scope.publicText, "test", "binding worked");
@@ -1118,7 +1122,7 @@ QUnit.test("Angular component should have 'templatesRenderAsynchronously' option
 
     angular.bootstrap(this.$container, ["testApp"]);
 
-    var instance = $markup.data("dxTest");
+    var instance = $markup.dxTest("instance");
 
     assert.ok(instance.option("templatesRenderAsynchronously"), "option should exist");
 });
@@ -1138,7 +1142,7 @@ QUnit.test("Angular component should not fire 'triggerResizeEvent' on 'contentRe
 
     angular.bootstrap(this.$container, ["testApp"]);
 
-    var instance = $markup.data("dxTest");
+    var instance = $markup.dxTest("instance");
     instance.fireEvent("contentReady", {});
 
     this.clock.tick();
@@ -1161,7 +1165,7 @@ QUnit.test("options with undefined value should be passed correctly", function(a
 
     angular.bootstrap(this.$container, ["testApp"]);
 
-    var instance = $markup.data("dxTest");
+    var instance = $markup.dxTest("instance");
     assert.equal(instance.option("text"), undefined, "option is passed correctly");
 });
 
@@ -1185,7 +1189,7 @@ QUnit.test("Binding with several nested options with same parent should work cor
 
     angular.bootstrap(this.$container, ["testApp"]);
 
-    var instance = $markup.data("dxTestWithDeprecated"),
+    var instance = $markup.dxTestWithDeprecated("instance"),
         scope = $markup.scope();
 
     scope.$apply(function() {
@@ -1209,7 +1213,7 @@ QUnit.module("nested Widget with templates enabled", {
             _render: function() {
                 var content = $("<div />")
                         .addClass("dx-content")
-                        .appendTo(this.element());
+                        .appendTo(this.$element());
 
                 this.option("integrationOptions.templates")["template"].render({
                     container: content
@@ -1224,7 +1228,7 @@ QUnit.module("nested Widget with templates enabled", {
             _renderContentImpl: noop,
 
             _clean: function() {
-                this.element().empty();
+                this.$element().empty();
             },
 
             _optionChanged: function() {
@@ -1242,13 +1246,13 @@ QUnit.module("nested Widget with templates enabled", {
             },
 
             _render: function() {
-                this.element().append($("<span />").text(this.option("text")));
+                this.$element().append($("<span />").text(this.option("text")));
             },
 
             _renderContentImpl: noop,
 
             _clean: function() {
-                this.element().empty();
+                this.$element().empty();
             },
 
             _optionChanged: function() {
@@ -1323,8 +1327,8 @@ QUnit.test("Dispose nested containers", function(assert) {
 
     angular.bootstrap(this.$container, ["testApp"]);
 
-    var outer = $markup.find(".outer").data("dxTestContainer"),
-        inner = $markup.find(".inner").data("dxTestContainer");
+    var outer = $markup.find(".outer").dxTestContainer("instance"),
+        inner = $markup.find(".inner").dxTestContainer("instance");
 
     var outerDisposed = false,
         innerDisposed = false;
@@ -1337,7 +1341,7 @@ QUnit.test("Dispose nested containers", function(assert) {
         innerDisposed = true;
     });
 
-    outer.element().remove();
+    outer.$element().remove();
     assert.ok(outerDisposed);
     assert.ok(innerDisposed);
 });
@@ -1398,7 +1402,7 @@ QUnit.test("dynamic templates should be supported by angular", function(assert) 
     var TestContainer = Widget.inherit({
         _renderContentImpl: function(template) {
             this._getTemplateByOption("template").render({
-                container: this.element()
+                container: this.$element()
             });
         }
     });
@@ -1461,7 +1465,7 @@ QUnit.test("default NG template is not retrieved for widgets created with angula
             template = template || this.option("integrationOptions.templates").template;
             if(template) {
                 template.render({
-                    container: this.element()
+                    container: this.$element()
                 });
             }
         }
@@ -1478,7 +1482,7 @@ QUnit.test("default NG template is not retrieved for widgets created with angula
     $markup = $("<div dx-test-container-empty></div>").appendTo($container);
     angular.bootstrap($container, ["testApp"]);
 
-    instance = $markup.data("dxTestContainerEmpty");
+    instance = $markup.dxTestContainerEmpty("instance");
     template = instance._getTemplate("test");
     assert.ok((template instanceof NgTemplate), "default NG template is not retrieved");
 
@@ -1486,7 +1490,7 @@ QUnit.test("default NG template is not retrieved for widgets created with angula
     $markup = $("<div></div>")
         .appendTo($container)
         .dxTestContainerEmpty({});
-    instance = $markup.data("dxTestContainerEmpty");
+    instance = $markup.dxTestContainerEmpty("instance");
     template = instance._getTemplate("test");
     assert.ok(!(template instanceof NgTemplate), "default NG template not retrieved");
 });
@@ -1497,7 +1501,7 @@ QUnit.test("retrieving default NG template for collection widgets created with a
             template = template || this.option("integrationOptions.templates").template;
             if(template) {
                 template.render({
-                    container: this.element()
+                    container: this.$element()
                 });
             }
         }
@@ -1514,7 +1518,7 @@ QUnit.test("retrieving default NG template for collection widgets created with a
     $markup = $("<div dx-test-container-empty></div>").appendTo($container);
     angular.bootstrap($container, ["testApp"]);
 
-    instance = $markup.data("dxTestContainerEmpty");
+    instance = $markup.dxTestContainerEmpty("instance");
     template = instance._getTemplate("test");
     assert.ok((template instanceof NgTemplate), "default NG template is not retrieved");
 
@@ -1522,7 +1526,7 @@ QUnit.test("retrieving default NG template for collection widgets created with a
     $markup = $("<div></div>")
         .appendTo($container)
         .dxTestContainerEmpty({});
-    instance = $markup.data("dxTestContainerEmpty");
+    instance = $markup.dxTestContainerEmpty("instance");
     template = instance._getTemplate("test");
     assert.ok(!(template instanceof NgTemplate), "default NG template not retrieved");
 });
@@ -1537,14 +1541,14 @@ QUnit.test("creates anonymous template from its contents", function(assert) {
 
         _render: function() {
             this.option("integrationOptions.templates")["template"].render({
-                container: this.element()
+                container: this.$element()
             });
         },
 
         _renderContentImpl: noop,
 
         _clean: function() {
-            this.element().empty();
+            this.$element().empty();
         }
     });
 
@@ -1570,7 +1574,7 @@ QUnit.test("creates anonymous template from its contents", function(assert) {
 
     angular.bootstrap($container, ["testApp"]);
 
-    var instance = $markup.data("dxTestContainerAnonymousTemplate");
+    var instance = $markup.dxTestContainerAnonymousTemplate("instance");
 
     assert.ok(instance.option("integrationOptions.templates"));
     assert.ok(instance.option("integrationOptions.templates")["template"]);
@@ -1594,14 +1598,14 @@ QUnit.test("correct scope as model for template", function(assert) {
 
         _render: function() {
             this.option("integrationOptions.templates")["template"].render({
-                container: this.element()
+                container: this.$element()
             });
         },
 
         _renderContentImpl: noop,
 
         _clean: function() {
-            this.element().empty();
+            this.$element().empty();
         }
     });
 
@@ -1649,12 +1653,12 @@ QUnit.test("Directive is in DOM on linking (T306481)", function(assert) {
     var TestContainer = Widget.inherit({
         _render: function() {
             this.option("integrationOptions.templates")["template"].render({
-                container: this.element()
+                container: this.$element()
             });
         },
         _renderContentImpl: noop,
         _clean: function() {
-            this.element().empty();
+            this.$element().empty();
         }
     });
 
@@ -1689,7 +1693,7 @@ QUnit.test("Widget options does not override scope properties", function(assert)
             if(template) {
                 template.render({
                     model: { text: "Widget model" },
-                    container: this.element()
+                    container: this.$element()
                 });
             }
         }
@@ -1745,11 +1749,11 @@ var initMarkup = function($markup, controller) {
         },
 
         _render: function() {
-            this.element().append($("<span />").text(this.option("text")));
+            this.$element().append($("<span />").text(this.option("text")));
         },
 
         _clean: function() {
-            this.element().empty();
+            this.$element().empty();
         }
     });
 
@@ -1880,6 +1884,7 @@ QUnit.test("Bootstrap should not fail if container component changes element mar
 });
 
 QUnit.test("Global scope properties are accessible from item template", function(assert) {
+    this.clock = sinon.useFakeTimers();
 
     var controller = function($scope) {
             $scope.collection = [
@@ -1899,8 +1904,12 @@ QUnit.test("Global scope properties are accessible from item template", function
             "</div>"
         ), controller);
 
+    this.clock.tick();
+
     assert.equal($(".item-text", $markup).text(), "Item text");
     assert.equal($(".global-text", $markup).text(), "Global text");
+
+    this.clock.restore();
 });
 
 QUnit.test("binding to circular data (T144697)", function(assert) {
@@ -2085,7 +2094,7 @@ QUnit.test("template.render() - data parameter is Scope", function(assert) {
         _init: function() {
             this.callBase.apply(this, arguments);
 
-            var element = this.element().get(0);
+            var element = this.$element().get(0);
             this.scope = angular.element(element).scope().$new();
             this.scope.text = this.option("text");
         },
@@ -2093,7 +2102,7 @@ QUnit.test("template.render() - data parameter is Scope", function(assert) {
         _render: function() {
             var content = $("<div />")
                     .addClass("dx-content")
-                    .appendTo(this.element());
+                    .appendTo(this.$element());
 
             this.option("integrationOptions.templates")["template"].render({
                 model: this.scope,
@@ -2130,7 +2139,7 @@ QUnit.test("template.render() - data parameter is Scope", function(assert) {
     angular.bootstrap($container, ["testApp"]);
 
     assert.equal($markup.find(".text").text(), "my text");
-    var instance = $markup.data("dxTestContainerScope");
+    var instance = $markup.dxTestContainerScope("instance");
 
     instance.option("text", "new text");
     assert.equal($markup.find(".text").text(), "new text");
@@ -2211,7 +2220,7 @@ QUnit.test("child collection widget should be rendered correctly when template p
     var ChildWidget = Widget.inherit({
         _render: function() {
             this.callBase();
-            this.element().addClass("child-widget");
+            this.$element().addClass("child-widget");
         }
     });
 
@@ -2220,7 +2229,7 @@ QUnit.test("child collection widget should be rendered correctly when template p
     var ParentWidget = Widget.inherit({
         _render: function() {
             this.callBase();
-            var $childWidget = $("<div>").appendTo(this.element());
+            var $childWidget = $("<div>").appendTo(this.$element());
             this._createComponent($childWidget, "dxChildWidget");
         }
     });
@@ -2458,7 +2467,7 @@ QUnit.test("component action created by option calls scope.$apply", function(ass
 
     angular.bootstrap(this.$container, ["testApp"]);
 
-    $markup.data("dxActionTest").triggerByOption();
+    $markup.dxActionTest("instance").triggerByOption();
 
     assert.ok(valueChanged);
 });
@@ -2485,7 +2494,7 @@ QUnit.test("component internal action does not calls scope.$apply", function(ass
 
     angular.bootstrap(this.$container, ["testApp"]);
 
-    $markup.data("dxActionTest").trigger();
+    $markup.dxActionTest("instance").trigger();
 
     assert.ok(!valueChanged);
 });
@@ -2512,7 +2521,7 @@ QUnit.test("component created by option with category 'rendering' does not calls
 
     angular.bootstrap(this.$container, ["testApp"]);
 
-    $markup.data("dxActionTest").triggerByOptionCategoryRendering();
+    $markup.dxActionTest("instance").triggerByOptionCategoryRendering();
 
     assert.ok(!valueChanged);
 });
@@ -2536,7 +2545,7 @@ QUnit.test("change option in component action handler (phase $apply) ", function
 
     angular.bootstrap(this.$container, ["testApp"]);
 
-    $markup.data("dxActionTest").triggerByOption();
+    $markup.dxActionTest("instance").triggerByOption();
 
     assert.equal(scope.vm.value, "new value");
 });
@@ -2550,7 +2559,7 @@ QUnit.test("component action context is component", function(assert) {
     var $markup = $("<div></div>").appendTo(this.$container);
     $markup.dxActionTest({ onHandler: handler });
 
-    var component = $markup.data("dxActionTest");
+    var component = $markup.dxActionTest("instance");
     component.triggerByOption();
 
     assert.equal(context, component);
@@ -2571,7 +2580,7 @@ QUnit.test("Using ng-expressions in dx syntax", function(assert) {
 
     angular.bootstrap(this.$container, ["testApp"]);
 
-    $markup.data("dxActionTest").triggerByOption();
+    $markup.dxActionTest("instance").triggerByOption();
 
     assert.equal(scope.vm.value, "new value");
 });
@@ -2620,7 +2629,7 @@ QUnit.test("Parent directive scope value goes to template component option objec
     angular.bootstrap(this.$container, ["testApp"]);
 
     var $markup = this.$container.children(),
-        instance = $markup.data("dxTemplateComponent"),
+        instance = $markup.dxTemplateComponent("instance"),
         scope = $markup.scope();
 
     assert.equal(instance.option("text"), "my text");
@@ -2649,7 +2658,7 @@ QUnit.test("No watchers on disposing", function(assert) {
     angular.bootstrap(this.$container, ["testApp"]);
 
     var $markup = this.$container.children(),
-        instance = $markup.data("dxTemplateComponent"),
+        instance = $markup.dxTemplateComponent("instance"),
         scope = $markup.scope();
 
     $markup.remove();

@@ -508,7 +508,7 @@ exports.LocalStore = Class.inherit((function() {
             prepareLoadOption(options);
 
             loadDataSource(dataSource, getFieldSelectors(options), options.reload).done(function(data) {
-                when(loadCore(data, options, that._progressChanged)).progress(d.notify).done(d.resolve);
+                when(loadCore(data, options, that._progressChanged)).done(d.resolve);
             }).fail(d.reject);
 
             return d;

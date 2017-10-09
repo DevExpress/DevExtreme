@@ -2,6 +2,8 @@
 
 var $ = require("jquery"),
     noop = require("core/utils/common").noop,
+    isRenderer = require("core/utils/type").isRenderer,
+    config = require("core/config"),
     fx = require("animation/fx"),
     DataSource = require("data/data_source/data_source").DataSource,
     ArrayStore = require("data/array_store"),
@@ -14,7 +16,9 @@ var $ = require("jquery"),
     DOMComponent = require("core/dom_component"),
     holdEvent = require("events/hold"),
     swipeEvents = require("events/swipe"),
-    ScrollView = require("ui/scroll_view");
+    ScrollView = require("ui/scroll_view"),
+    errors = require("ui/widget/ui.errors"),
+    devices = require("core/devices");
 
 var LIST_CLASS = "dx-list",
     LIST_ITEM_CLASS = "dx-list-item",
@@ -31,12 +35,12 @@ var ScrollViewMock = DOMComponent.inherit({
     NAME: "dxScrollView",
 
     _init: function() {
-        var content = this.element().find(".scroll-view-content");
+        var content = this.$element().find(".scroll-view-content");
         if(content.length) {
             this._$scrollViewContent = content;
         } else {
             this._$scrollViewContent = $("<div />").addClass("scroll-view-content");
-            this.element().append(this._$scrollViewContent);
+            this.$element().append(this._$scrollViewContent);
         }
 
         this.callBase();
@@ -70,7 +74,7 @@ var ScrollViewMock = DOMComponent.inherit({
     release: function(hideOrShow) {
         this._history.push(new Date());
         this.toggleLoading(!hideOrShow);
-        $(this.element()).trigger("released");
+        $(this.$element()).trigger("released");
     },
 
     toggleLoading: function(showOrHide) {
@@ -240,7 +244,8 @@ QUnit.test("groupTemplate returning string", function(assert) {
 
         grouped: true,
 
-        groupTemplate: function(group, index) {
+        groupTemplate: function(group, index, itemElement) {
+            assert.equal(isRenderer(itemElement), config().useJQueryRenderer, "itemElement is correct");
             return index + ": " + group.key;
         }
     });
@@ -261,7 +266,8 @@ QUnit.test("groupTemplate returning jquery", function(assert) {
 
         grouped: true,
 
-        groupTemplate: function(group, index) {
+        groupTemplate: function(group, index, element) {
+            assert.equal(isRenderer(element), config().useJQueryRenderer, "element is correct");
             return $("<span />");
         }
     });
@@ -290,8 +296,8 @@ QUnit.test("plain list with nested list should contain correct items", function(
     var $element = $("<div>").appendTo("#qunit-fixture");
     var instance = new List($element, {
         items: [1, 2],
-        itemTemplate: function(data, index, $container) {
-            var $nestedElement = $("<div>").appendTo($container);
+        itemTemplate: function(data, index, container) {
+            var $nestedElement = $("<div>").appendTo(container);
             new List($nestedElement, {
                 items: [1, 2]
             });
@@ -306,8 +312,8 @@ QUnit.test("grouped list with nested list should contain correct items", functio
     var instance = new List($element, {
         grouped: true,
         items: [{ key: 1, items: [1] }, { key: 2, items: [2] }],
-        itemTemplate: function(data, index, $container) {
-            var $nestedElement = $("<div>").appendTo($container);
+        itemTemplate: function(data, index, container) {
+            var $nestedElement = $("<div>").appendTo(container);
             new List($nestedElement, {
                 grouped: true,
                 items: [{ key: 1, items: [1] }, { key: 2, items: [2] }]
@@ -699,7 +705,7 @@ QUnit.test("more button shouldn't disappear after group collapsed with array sto
         instance.collapseGroup(1);
 
         this.clock.tick();
-        assert.ok(instance.element().find(".dx-list-next-button").length, "button was not removed");
+        assert.ok(instance.$element().find(".dx-list-next-button").length, "button was not removed");
     } finally {
         fx.off = false;
     }
@@ -732,7 +738,7 @@ QUnit.test("more button shouldn't disappear after group collapsed with custom st
         instance.collapseGroup(1);
 
         this.clock.tick();
-        assert.ok(instance.element().find(".dx-list-next-button").length, "button was not removed");
+        assert.ok(instance.$element().find(".dx-list-next-button").length, "button was not removed");
     } finally {
         fx.off = false;
     }
@@ -1021,6 +1027,96 @@ QUnit.test("list should be able to change grouped option after dataSource option
     assert.notOk(instance.option("grouped"), "grouped option was changed without exceptions");
 });
 
+QUnit.test("searchEnabled", function(assert) {
+    var $element = $("#list").dxList({
+            dataSource: [1, 2, 3],
+            searchEnabled: true
+        }),
+        instance = $element.dxList("instance");
+
+    instance.option("searchEnabled", false);
+
+    assert.notOk($element.hasClass("dx-list-with-search"), "list without search");
+    assert.notOk($element.find(".dx-list-search").length, "hasn't search editor");
+
+    instance.option("searchEnabled", true);
+
+    assert.ok($element.hasClass("dx-list-with-search"), "list with search");
+    assert.ok($element.children().first().hasClass("dx-list-search"), "has search editor");
+});
+
+QUnit.test("searchValue", function(assert) {
+    var $element = $("#list").dxList({
+            dataSource: [1, 2, 3],
+            searchExpr: "this"
+        }),
+        instance = $element.dxList("instance");
+
+    instance.option("searchValue", 2);
+
+    assert.deepEqual(instance.option("items"), [2], "items");
+    assert.strictEqual(instance.getDataSource().searchValue(), 2, "search value of dataSource");
+});
+
+QUnit.test("searchMode", function(assert) {
+    var $element = $("#list").dxList({
+            dataSource: [1, 21, 3],
+            searchExpr: "this",
+            searchValue: "1"
+        }),
+        instance = $element.dxList("instance");
+
+    assert.deepEqual(instance.option("items"), [1, 21], "items");
+
+    instance.option("searchMode", "startswith");
+
+    assert.deepEqual(instance.option("items"), [1], "items");
+    assert.strictEqual(instance.getDataSource().searchOperation(), "startswith", "search operation of dataSource");
+});
+
+QUnit.test("searchExpr", function(assert) {
+    var $element = $("#list").dxList({
+            dataSource: [
+                { text: "test1", value: "3" },
+                { text: "test2", value: "3" },
+                { text: "test3", value: "2" }
+            ],
+            searchExpr: "text",
+            searchValue: "3"
+        }),
+        instance = $element.dxList("instance");
+
+    assert.deepEqual(instance.option("items"), [{ text: "test3", value: "2" }], "items");
+
+    instance.option("searchExpr", "value");
+
+    assert.deepEqual(instance.option("items"), [{ text: "test1", value: "3" }, { text: "test2", value: "3" }], "items");
+    assert.strictEqual(instance.getDataSource().searchExpr(), "value", "search operation of dataSource");
+});
+
+QUnit.test("searchEditorOptions", function(assert) {
+    var searchEditorInstance,
+        $element = $("#list").dxList({
+            dataSource: [
+                { text: "test1", value: "3" },
+                { text: "test2", value: "3" },
+                { text: "test3", value: "2" }
+            ],
+            searchEnabled: true,
+            searchEditorOptions: {
+                placeholder: "Search"
+            }
+        }),
+        instance = $element.dxList("instance");
+
+    searchEditorInstance = $element.children(".dx-list-search").dxTextBox("instance");
+    assert.strictEqual(searchEditorInstance.option("placeholder"), "Search", "placeholder of the search box");
+
+    instance.option("searchEditorOptions", { placeholder: "Test" });
+
+    assert.strictEqual(searchEditorInstance.option("placeholder"), "Test", "placeholder of the search box");
+});
+
 
 QUnit.module("selection", moduleSetup);
 
@@ -1055,7 +1151,7 @@ QUnit.test("onItemClick should be fired when item is clicked in ungrouped list",
 
     $item.trigger("dxclick");
     assert.ok(actionFired, "action fired");
-    assert.strictEqual($item[0], actionData.itemElement[0], "correct element passed");
+    assert.strictEqual($item[0], $(actionData.itemElement)[0], "correct element passed");
     assert.strictEqual("0", actionData.itemData, "correct element passed");
 });
 
@@ -1088,7 +1184,7 @@ QUnit.test("onItemClick should be fired when item is clicked in grouped list", f
 
     assert.ok(actionFired, "action fired");
 
-    assert.strictEqual($item[0], actionData.itemElement[0], "correct element passed");
+    assert.strictEqual($item[0], $(actionData.itemElement)[0], "correct element passed");
     assert.strictEqual(items[1].items[0], actionData.itemData, "correct element passed");
     assert.strictEqual(0, actionData.itemIndex.item, "correct element itemIndex passed");
     assert.strictEqual(1, actionData.itemIndex.group, "correct groupIndex passed");
@@ -1109,7 +1205,7 @@ QUnit.test("onItemHold should be fired when item is held", function(assert) {
 
     $item.trigger(holdEvent.name);
     assert.ok(actionFired, "action fired");
-    assert.strictEqual($item[0], actionData.itemElement[0], "correct element passed");
+    assert.strictEqual($item[0], $(actionData.itemElement)[0], "correct element passed");
     assert.strictEqual("0", actionData.itemData, "correct element passed");
 });
 
@@ -1131,7 +1227,7 @@ QUnit.test("onItemSwipe should be fired when item is swiped", function(assert) {
         offset: -1
     });
     assert.ok(actionFired, "action fired");
-    assert.strictEqual($item[0], actionData.itemElement[0], "correct element passed");
+    assert.strictEqual($item[0], $(actionData.itemElement)[0], "correct element passed");
     assert.strictEqual("0", actionData.itemData, "correct element passed");
     assert.equal("left", actionData.direction, "correct direction passed");
 
@@ -1176,7 +1272,8 @@ QUnit.test("onGroupRendered should fired with correct params", function(assert) 
         });
 
     assert.equal(groupRendered, 1, "event triggered");
-    assert.strictEqual(eventData.groupElement[0], $list.find(".dx-list-group")[0], "groupElement is correct");
+    assert.strictEqual(isRenderer(eventData.groupElement), config().useJQueryRenderer, "groupElement is correct");
+    assert.strictEqual($(eventData.groupElement)[0], $list.find(".dx-list-group")[0], "groupElement is correct");
     assert.strictEqual(eventData.groupData, items[0], "groupData is correct");
     assert.strictEqual(eventData.groupIndex, 0, "groupIndex is correct");
 });
@@ -1664,7 +1761,7 @@ QUnit.test("infinite loading should not happen if widget element is hidden", fun
             pageSize: 2
         },
         onInitialized: function(e) {
-            e.element.dxScrollView("instance").isFull = function() {
+            $(e.element).dxScrollView("instance").isFull = function() {
                 return false;
             };
         }
@@ -1684,7 +1781,7 @@ QUnit.test("infinite loading should happen when widget element is shown", functi
             pageSize: 2
         },
         onInitialized: function(e) {
-            e.element.dxScrollView("instance").isFull = function() {
+            $(e.element).dxScrollView("instance").isFull = function() {
                 return false;
             };
         }
@@ -1915,7 +2012,7 @@ QUnit.test("list should try to load next page if scrollView is not full after di
         scrollingEnabled: true,
         onInitialized: function(e) {
             var list = e.component,
-                $list = e.element;
+                $list = $(e.element);
 
             $list.dxScrollView("instance").isFull = function() {
                 var height = list.option("height");
@@ -2405,6 +2502,36 @@ QUnit.test("list should attach keyboard events even if focusStateEnabled is fals
     assert.equal(handler.callCount, 1, "keyboardProcessor is attached");
 });
 
+QUnit.testInActiveWindow("First list item should be focused on the 'tab' key press when the search editor is focused", function(assert) {
+    if(devices.real().deviceType !== "desktop") {
+        assert.ok(true, "keyboard navigation is disabled for not desktop devices");
+        return;
+    }
+
+    var $element = $("#list"),
+        instance = $element.dxList({
+            _keyboardProcessor: new KeyboardProcessor({ element: $element }),
+            dataSource: [1, 2, 3],
+            searchEnabled: true
+        }).dxList("instance"),
+        $searchEditor = $element.children(".dx-list-search");
+
+    $searchEditor.find("input").focus();
+    this.clock.tick();
+
+    instance.registerKeyHandler("tab", function(e) {
+        $element.find("[tabIndex]").not(":focus").first().focus();
+    });
+
+    $element.trigger($.Event("keydown", { which: 9 }));
+    this.clock.tick();
+
+    $searchEditor = $element.children(".dx-list-search");
+    assert.ok($element.find(toSelector(LIST_ITEM_CLASS)).first().hasClass("dx-state-focused"), "first list item is focused");
+    assert.ok($element.hasClass("dx-state-focused"), "list is focused");
+    assert.ok($element.find(".dx-scrollview-content").hasClass("dx-state-focused"), "scrollview content is focused");
+});
+
 
 QUnit.module("aria accessibility");
 
@@ -2422,4 +2549,85 @@ QUnit.test("list item role", function(assert) {
     $element.find(".dx-list-item").each(function(i, item) {
         assert.equal($(item).attr("role"), "option", "role for item " + i + " is correct");
     });
+});
+
+QUnit.module("Search");
+
+QUnit.test("Render search editor", function(assert) {
+    var $searchEditor,
+        $element = $("#list").dxList({
+            dataSource: [1, 2, 3],
+            searchEnabled: true,
+            searchValue: "3"
+        });
+
+    $searchEditor = $element.children().first();
+    assert.ok($element.hasClass("dx-list-with-search"), "list with search");
+    assert.ok($searchEditor.hasClass("dx-list-search"), "has search editor");
+    assert.strictEqual($searchEditor.dxTextBox("instance").option("value"), "3", "editor value");
+});
+
+QUnit.test("Search", function(assert) {
+    var searchEditor,
+        $element = $("#list").dxList({
+            dataSource: [1, 2, 3],
+            searchEnabled: true,
+            searchExpr: "this"
+        }),
+        instance = $element.dxList("instance");
+
+    searchEditor = $element.children().first().dxTextBox("instance");
+    searchEditor.option("value", "2");
+
+    assert.deepEqual(instance.option("items"), [2], "items");
+    assert.strictEqual(instance.option("searchValue"), "2", "search value");
+});
+
+QUnit.testInActiveWindow("Focusing widget when there is search editor", function(assert) {
+    var $element = $("#list").dxList({
+            dataSource: [1, 2, 3],
+            searchEnabled: true,
+            searchExpr: "this"
+        }),
+        instance = $element.dxList("instance");
+
+    instance.focus();
+
+    assert.ok($element.children(".dx-list-search").hasClass("dx-state-focused"), "search editor is focused");
+});
+
+QUnit.test("Show warning when dataSource is not specified", function(assert) {
+    var instance = $("#list").dxList({
+            items: [1, 2, 3],
+            searchEnabled: true,
+            searchExpr: "this"
+        }).dxList("instance"),
+        warningHandler = sinon.spy(errors, "log");
+
+    try {
+        instance.option("searchValue", "2");
+
+        assert.equal(warningHandler.callCount, 1, "warning has been called once");
+        assert.equal(warningHandler.getCall(0).args[0], "W1009", "warning has correct error id");
+    } finally {
+        warningHandler.restore();
+    }
+});
+
+QUnit.test("Search when searchMode is specified", function(assert) {
+    var searchEditor,
+        $element = $("#list").dxList({
+            dataSource: [1, 12, 23],
+            searchEnabled: true,
+            searchExpr: "this",
+            searchMode: "startswith"
+        }),
+        instance = $element.dxList("instance");
+
+    searchEditor = $element.children().first().dxTextBox("instance");
+    searchEditor.option("value", "2");
+
+    assert.deepEqual(instance.option("items"), [23], "items");
+    assert.strictEqual(instance.option("searchValue"), "2", "search value");
+    assert.strictEqual(instance.getDataSource().searchOperation(), "startswith", "search operation");
 });

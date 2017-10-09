@@ -139,7 +139,7 @@ var Scroller = Class.inherit({
             visibilityMode: this._visibilityModeNormalize(this._scrollbarVisible),
             expandable: this._scrollByThumb
         });
-        this._$scrollbar = this._scrollbar.element();
+        this._$scrollbar = this._scrollbar.$element();
     },
 
     _visibilityModeNormalize: function(mode) {
@@ -515,7 +515,7 @@ var SimulatedStrategy = Class.inherit({
 
     _init: function(scrollable) {
         this._component = scrollable;
-        this._$element = scrollable.element();
+        this._$element = scrollable.$element();
         this._$container = scrollable._$container;
         this._$wrapper = scrollable._$wrapper;
         this._$content = scrollable._$content;
@@ -902,6 +902,10 @@ var SimulatedStrategy = Class.inherit({
             vertical: verticalScroller && (verticalScroller._minOffset < 0 || bounceEnabled),
             horizontal: horizontalScroller && (horizontalScroller._minOffset < 0 || bounceEnabled)
         };
+    },
+
+    updateBounds: function() {
+        this._scrollers[HORIZONTAL] && this._scrollers[HORIZONTAL]._updateBounds();
     },
 
     scrollBy: function(distance) {

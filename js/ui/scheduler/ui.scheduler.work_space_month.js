@@ -3,7 +3,7 @@
 var $ = require("../../core/renderer"),
     noop = require("../../core/utils/common").noop,
     registerComponent = require("../../core/component_registrator"),
-    SchedulerWorkSpace = require("./ui.scheduler.work_space"),
+    SchedulerWorkSpace = require("./ui.scheduler.work_space.indicator"),
     dateUtils = require("../../core/utils/date"),
     dateLocalization = require("../../localization/date");
 
@@ -182,6 +182,10 @@ var SchedulerWorkSpaceMonth = SchedulerWorkSpace.inherit({
 
     _isOtherMonth: function(cellDate) {
         return !dateUtils.dateInRange(cellDate, this._minVisibleDate, this._maxVisibleDate, "date");
+    },
+
+    needRenderDateTimeIndication: function() {
+        return false;
     },
 
     getCellDuration: function() {

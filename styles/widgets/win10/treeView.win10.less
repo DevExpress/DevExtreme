@@ -16,6 +16,10 @@
 @WIN10_TREEVIEW_LOADINDICATOR_SIZE: @WIN10_TREEVIEW_ARROW_ICON_SIZE + @WIN10_TREEVIEW_PADDING_BASE / 2;
 @WIN10_TREEVIEW_LOADINCICATOR_OFFSET_TOP: @WIN10_TREEVIEW_PADDING_BASE;
 
+@WIN10_TREEVIEW_SEARCH_EDITOR_MARGIN: 3px;
+@WIN10_TREEVIEW_SEARCH_EDITOR_HEIGHT: 32px;
+
+
 .dx-treeview-node-loadindicator {
     top: @WIN10_TREEVIEW_LOADINCICATOR_OFFSET_TOP;
     left: 0;
@@ -25,6 +29,10 @@
 
 .dx-treeview {
     background-color: @WIN10_TREEVIEW_BACKGROUND_COLOR;
+
+    &.dx-treeview-with-search > .dx-scrollable {
+        height: calc(~"100% - "@WIN10_TREEVIEW_SEARCH_EDITOR_HEIGHT + @WIN10_TREEVIEW_SEARCH_EDITOR_MARGIN);
+    }
 
     &.dx-treeview-border-visible {
         border: 1px solid @WIN10_TREEVIEW_BORDER_COLOR;

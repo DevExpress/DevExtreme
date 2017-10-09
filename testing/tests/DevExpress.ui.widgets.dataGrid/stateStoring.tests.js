@@ -1048,7 +1048,7 @@ QUnit.test("Update state when applying header filter", function(assert) {
 
 QUnit.test("Hide loading when dataSource is empty", function(assert) {
     //arrange, act
-    this.element = function() {
+    this.$element = function() {
         return $("#container");
     };
 
@@ -1062,7 +1062,7 @@ QUnit.test("Hide loading when dataSource is empty", function(assert) {
         loadingTimeout: null
     }, true);
 
-    this.gridView.render(this.element());
+    this.gridView.render(this.$element());
     this.clock.tick(200);
 
     //assert
@@ -1071,7 +1071,7 @@ QUnit.test("Hide loading when dataSource is empty", function(assert) {
 
 QUnit.test("Show NoData message when dataSource is empty and state is loaded", function(assert) {
     //arrange, act
-    this.element = function() {
+    this.$element = function() {
         return $("#container");
     };
 
@@ -1085,7 +1085,7 @@ QUnit.test("Show NoData message when dataSource is empty and state is loaded", f
         loadingTimeout: null
     }, true);
 
-    this.gridView.render(this.element());
+    this.gridView.render(this.$element());
     this.clock.tick(200);
 
     //assert

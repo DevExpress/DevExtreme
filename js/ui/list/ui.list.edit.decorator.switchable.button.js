@@ -56,7 +56,7 @@ var SwitchableButtonEditDecorator = SwitchableEditDecorator.inherit({
 
     _animatePrepareDeleteReady: function() {
         var rtl = this._isRtlEnabled(),
-            listWidth = this._list.element().width(),
+            listWidth = this._list.$element().width(),
             buttonWidth = this._buttonWidth(),
             fromValue = rtl ? listWidth : -buttonWidth,
             toValue = rtl ? listWidth - buttonWidth : 0;
@@ -71,7 +71,7 @@ var SwitchableButtonEditDecorator = SwitchableEditDecorator.inherit({
 
     _animateForgetDeleteReady: function() {
         var rtl = this._isRtlEnabled(),
-            listWidth = this._list.element().width(),
+            listWidth = this._list.$element().width(),
             buttonWidth = this._buttonWidth(),
             fromValue = rtl ? listWidth - buttonWidth : 0,
             toValue = rtl ? listWidth : -buttonWidth;

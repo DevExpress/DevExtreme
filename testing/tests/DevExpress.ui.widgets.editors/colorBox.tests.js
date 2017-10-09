@@ -120,7 +120,7 @@ QUnit.test("Render with hex value", function(assert) {
         $input = $colorBox.find("." + COLOR_BOX_INPUT_CLASS);
 
     assert.equal($input.val(), "#000000");
-    $colorBox.data("dxColorBox").option("value", "#ff0000");
+    $colorBox.dxColorBox("instance").option("value", "#ff0000");
     assert.equal($input.val(), "#ff0000");
 });
 
@@ -152,7 +152,7 @@ QUnit.test("If value is set as 'null' color result preview should not have backg
     colorBox.option("value", "#ff0000");
     colorBox.option("value", null);
 
-    assert.ok(!colorBox.element().find(".dx-colorbox-color-result-preview").attr("style"));
+    assert.ok(!colorBox.$element().find(".dx-colorbox-color-result-preview").attr("style"));
 });
 
 
@@ -162,14 +162,14 @@ QUnit.test("If value is set as 'null' color result preview should not have backg
 
     var $overlay = getColorBoxOverlay(),
         $applyButton = $overlay.find(".dx-colorview-buttons-container .dx-colorview-apply-button"),
-        colorBoxInstance = this.element.data("dxColorBox");
+        colorBoxInstance = this.element.dxColorBox("instance");
 
     colorBoxInstance._colorView._currentColor = new Color("#ff0000");
     $($applyButton).trigger("dxclick");
 
     colorBoxInstance.option("value", null);
 
-    assert.ok(!colorBoxInstance.element().find(".dx-colorbox-color-result-preview").attr("style"));
+    assert.ok(!colorBoxInstance.$element().find(".dx-colorbox-color-result-preview").attr("style"));
 });
 
 QUnit.test("If value is not 'null' color result preview should not have a special css class", function(assert) {
@@ -227,7 +227,7 @@ QUnit.test("Click on apply button", function(assert) {
 
     var $overlayContent = getColorBoxOverlayContent(),
         $applyButton = $overlayContent.find(".dx-colorview-buttons-container .dx-colorview-apply-button"),
-        colorBoxInstance = this.element.data("dxColorBox"),
+        colorBoxInstance = this.element.dxColorBox("instance"),
         newColor = "#A600F3".toLowerCase();
 
     colorBoxInstance._colorView.option("value", newColor);
@@ -570,7 +570,7 @@ QUnit.module("keyboard navigation", {
             editAlphaChannel: true,
             focusStateEnabled: true
         });
-        this.instance = this.$element.data("dxColorBox");
+        this.instance = this.$element.dxColorBox("instance");
         this.$input = this.$element.find("." + TEXTEDITOR_INPUT_CLASS);
         this.keyboard = keyboardMock(this.$input);
     },
@@ -705,11 +705,11 @@ QUnit.test("ColorBox opening fine when focusStateEnabled set to false", function
 QUnit.testInActiveWindow("focus policy", function(assert) {
     this.instance.option("opened", true);
     this.keyboard.keyDown("tab");
-    var $inputR = $(this.instance._colorView._rgbInputs[0].element());
+    var $inputR = $(this.instance._colorView._rgbInputs[0].$element());
     assert.ok($inputR.hasClass(STATE_FOCUSED_CLASS), "tab set focus to first input in overlay");
 
-    $(this.instance._colorView.element()).triggerHandler("focus");
-    assert.ok(this.instance.element().hasClass(STATE_FOCUSED_CLASS), "colorView on focus reset focus to element");
+    $(this.instance._colorView.$element()).triggerHandler("focus");
+    assert.ok(this.instance.$element().hasClass(STATE_FOCUSED_CLASS), "colorView on focus reset focus to element");
 });
 
 
@@ -745,7 +745,7 @@ QUnit.test("T196473", function(assert) {
 
     $($applyButton).trigger("dxclick");
 
-    assert.ok(!colorView.element().is(":visible"));
+    assert.ok(!colorView.$element().is(":visible"));
 });
 
 QUnit.test("Value should not be changed by 'down' key when colorbox was opened and closed", function(assert) {
@@ -753,7 +753,7 @@ QUnit.test("Value should not be changed by 'down' key when colorbox was opened a
         value: "#ff0000"
     }).dxColorBox("instance");
 
-    var $input = $(colorBox.element().find("." + TEXTEDITOR_INPUT_CLASS)),
+    var $input = $(colorBox.$element().find("." + TEXTEDITOR_INPUT_CLASS)),
         keyboard = keyboardMock($input);
 
     colorBox.open();
@@ -775,7 +775,7 @@ QUnit.test("Value should not be changed by 'up' key when colorbox was opened and
         value: "#326b8a"
     }).dxColorBox("instance");
 
-    var $input = $(colorBox.element().find("." + TEXTEDITOR_INPUT_CLASS)),
+    var $input = $(colorBox.$element().find("." + TEXTEDITOR_INPUT_CLASS)),
         keyboard = keyboardMock($input);
 
     colorBox.open();

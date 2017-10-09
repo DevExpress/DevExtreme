@@ -37,7 +37,7 @@ var ListStrategy = ToolbarStrategy.inherit({
     },
 
     _menuContainer: function() {
-        return this._listOverlay.content();
+        return this._listOverlay.$content();
     },
 
     _menuButtonOptions: function() {
@@ -55,7 +55,7 @@ var ListStrategy = ToolbarStrategy.inherit({
     },
 
     _renderListOverlay: function() {
-        var $listOverlay = $("<div>").appendTo(this._toolbar.element());
+        var $listOverlay = $("<div>").appendTo(this._toolbar.$element());
         this._listOverlay = this._toolbar._createComponent($listOverlay, Overlay, this._listOverlayConfig());
     },
 
@@ -75,14 +75,14 @@ var ListStrategy = ToolbarStrategy.inherit({
     },
 
     _listOutsideClickHandler: function(e) {
-        if(!$(e.target).closest(this._listOverlay.content()).length) {
+        if(!$(e.target).closest(this._listOverlay.$content()).length) {
             this._toggleMenu(false, true);
         }
     },
 
     _getListHeight: function() {
-        var listHeight = this._listOverlay.content().find(".dx-list").height(),
-            semiHiddenHeight = this._toolbar._$toolbarItemsContainer.height() - this._toolbar.element().height();
+        var listHeight = this._listOverlay.$content().find(".dx-list").height(),
+            semiHiddenHeight = this._toolbar._$toolbarItemsContainer.height() - this._toolbar.$element().height();
 
         return listHeight + semiHiddenHeight;
     },
@@ -112,7 +112,7 @@ var ListStrategy = ToolbarStrategy.inherit({
 
     _renderMenuPosition: function(offset, animate) {
         var pos = this._calculatePixelOffset(offset),
-            element = this._listOverlay.content();
+            element = this._listOverlay.$content();
 
         if(animate) {
             return this._animateMenuToggling(element, pos, this._menuShown);
@@ -138,7 +138,7 @@ var ListStrategy = ToolbarStrategy.inherit({
         this._toggleHideTopOverlayCallback();
 
         this._renderMenuPosition(this._menuShown ? 0 : 1, animate).done((function() {
-            this._toolbar.element().toggleClass(TOOLBAR_LIST_VISIBLE_CLASS, visible);
+            this._toolbar.$element().toggleClass(TOOLBAR_LIST_VISIBLE_CLASS, visible);
         }).bind(this));
     },
 

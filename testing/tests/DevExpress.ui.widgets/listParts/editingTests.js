@@ -988,7 +988,8 @@ QUnit.test("reorderItem should swap items by index", function(assert) {
             grouped: true,
             editEnabled: true
         }),
-        list = $list.dxList("instance");
+        list = $list.dxList("instance"),
+        refreshItemsSpy = sinon.spy(list, "_refreshItemElements");
 
     var groups = function() {
         return $list.find(toSelector(LIST_GROUP_CLASS));
@@ -1003,6 +1004,7 @@ QUnit.test("reorderItem should swap items by index", function(assert) {
     list.reorderItem(this.movedItem, this.destinationItem);
     assert.equal(item01, item(1, 1));
     assert.equal(item11, item(1, 2));
+    assert.equal(refreshItemsSpy.callCount, 1, "Items refresh after reorder");
 });
 
 QUnit.test("reorderItem should swap items by node within one group", function(assert) {

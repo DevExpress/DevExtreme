@@ -8,7 +8,8 @@ var $ = require("jquery"),
     Color = require("color"),
     AgendaAppointmentsStrategy = require("ui/scheduler/ui.scheduler.appointments.strategy.agenda"),
     DataSource = require("data/data_source/data_source").DataSource,
-    CustomStore = require("data/custom_store");
+    CustomStore = require("data/custom_store"),
+    dataUtils = require("core/element_data");
 
 require("ui/scheduler/ui.scheduler");
 
@@ -21,7 +22,7 @@ QUnit.module("Integration: Agenda", {
     beforeEach: function() {
         fx.off = true;
         this.createInstance = function(options) {
-            this.instance = $("#scheduler").dxScheduler(options).dxScheduler("instance");
+            this.instance = $("#scheduler").dxScheduler($.extend(options, { height: 600 })).dxScheduler("instance");
         };
         this.clock = sinon.useFakeTimers();
     },
@@ -37,7 +38,7 @@ QUnit.test("Scheduler should have a right agenda work space", function(assert) {
         currentView: "agenda"
     });
 
-    var $element = this.instance.element();
+    var $element = this.instance.$element();
 
     assert.ok($element.find(".dx-scheduler-work-space").dxSchedulerAgenda("instance"), "Work space is agenda on init");
 });
@@ -110,8 +111,8 @@ QUnit.test("Agenda should contain a right appointment quantity", function(assert
     });
 
     var appointmentCount = 0;
-    this.instance.element().find(".dx-scheduler-appointment").each(function() {
-        var apptData = $(this).data().dxItemData;
+    this.instance.$element().find(".dx-scheduler-appointment").each(function() {
+        var apptData = dataUtils.data($(this).get(0), "dxItemData");
 
         if(!apptData.appointmentData) {
             assert.ok(apptData.startDate);
@@ -142,8 +143,8 @@ QUnit.test("Agenda appointments should have right sortedIndex", function(assert)
     });
 
     var sortedIndex = 0;
-    this.instance.element().find(".dx-scheduler-appointment").each(function(index, appointment) {
-        assert.equal($(appointment).data("dxAppointmentSettings").sortedIndex, sortedIndex++);
+    this.instance.$element().find(".dx-scheduler-appointment").each(function(index, appointment) {
+        assert.equal(dataUtils.data($(appointment).get(0), "dxAppointmentSettings").sortedIndex, sortedIndex++);
     });
 });
 
@@ -157,7 +158,7 @@ QUnit.test("Agenda should contain a right allDay appointment parts", function(as
         ]
     });
 
-    assert.equal(this.instance.element().find(".dx-scheduler-appointment").length, 1, "Appointment count is OK");
+    assert.equal(this.instance.$element().find(".dx-scheduler-appointment").length, 1, "Appointment count is OK");
 });
 
 QUnit.test("Agenda should contain a right quantity of long-appointments", function(assert) {
@@ -170,7 +171,7 @@ QUnit.test("Agenda should contain a right quantity of long-appointments", functi
         ]
     });
 
-    assert.equal(this.instance.element().find(".dx-scheduler-appointment").length, 7, "Appointment count is OK");
+    assert.equal(this.instance.$element().find(".dx-scheduler-appointment").length, 7, "Appointment count is OK");
 });
 
 QUnit.test("Long appointment parts should have a reduced-icon and reduced class", function(assert) {
@@ -183,7 +184,7 @@ QUnit.test("Long appointment parts should have a reduced-icon and reduced class"
         ]
     });
 
-    var $appointments = this.instance.element().find(".dx-scheduler-appointment");
+    var $appointments = this.instance.$element().find(".dx-scheduler-appointment");
 
     assert.ok($appointments.eq(0).hasClass("dx-scheduler-appointment-reduced"), "Appointment part has a reduced-class");
     assert.equal($appointments.eq(0).find(".dx-scheduler-appointment-reduced-icon").length, 1, "Appointment part has a reduced-icon");
@@ -202,7 +203,7 @@ QUnit.test("Long and recurrent appointment parts should not have a reduced-icon 
         ]
     });
 
-    var $appointments = this.instance.element().find(".dx-scheduler-appointment");
+    var $appointments = this.instance.$element().find(".dx-scheduler-appointment");
 
     assert.notOk($appointments.eq(0).hasClass("dx-scheduler-appointment-reduced"), "Appointment part hasn't a reduced-class");
     assert.equal($appointments.eq(0).find(".dx-scheduler-appointment-reduced-icon").length, 0, "Appointment part hasn't a reduced-icon");
@@ -242,7 +243,7 @@ QUnit.test("Particular recurrence appt should have a correct data", function(ass
         assert.equal(singleAppData.startDate.getTime(), expectedDate.getTime(), "Start date is OK");
     });
 
-    this.instance.element().find(".dx-scheduler-appointment").each(function() {
+    this.instance.$element().find(".dx-scheduler-appointment").each(function() {
         var $appt = $(this);
 
         assert.equal($appt.find(".dx-scheduler-appointment-title").text(), "a", "Title is OK");
@@ -297,8 +298,8 @@ QUnit.test("AllDay appointment should have specific content on agenda view", fun
         ]
     });
 
-    var $contentDetails = this.instance.element().find(".dx-scheduler-appointment-content-details"),
-        $appointmentAllDayTitle = this.instance.element().find(".dx-scheduler-appointment").eq(0).find(".dx-scheduler-appointment-content-allday");
+    var $contentDetails = this.instance.$element().find(".dx-scheduler-appointment-content-details"),
+        $appointmentAllDayTitle = this.instance.$element().find(".dx-scheduler-appointment").eq(0).find(".dx-scheduler-appointment-content-allday");
 
     assert.equal($contentDetails.get(0).firstChild, $appointmentAllDayTitle.get(0), "AllDay title is the first element of content");
     assert.equal($appointmentAllDayTitle.length, 1, "Appointment has an allDay title");
@@ -315,11 +316,11 @@ QUnit.test("Appointment parts should have appointmentSettings field", function(a
         ]
     });
 
-    var $appointments = this.instance.element().find(".dx-scheduler-appointment");
+    var $appointments = this.instance.$element().find(".dx-scheduler-appointment");
 
-    assert.ok($appointments.eq(1).data("dxItemData").settings, "Appointment part has special field for settings");
-    assert.equal($appointments.eq(1).data("dxItemData").settings.startDate.getTime(), new Date(2016, 1, 25, 0).getTime(), "Current date of appointment part is OK");
-    assert.deepEqual($appointments.eq(0).data("dxItemData").startDate, $appointments.eq(1).data("dxItemData").startDate, "Appointments data is OK");
+    assert.ok(dataUtils.data($appointments.get(1), "dxItemData").settings, "Appointment part has special field for settings");
+    assert.equal(dataUtils.data($appointments.get(1), "dxItemData").settings.startDate.getTime(), new Date(2016, 1, 25, 0).getTime(), "Current date of appointment part is OK");
+    assert.deepEqual(dataUtils.data($appointments.get(0), "dxItemData").startDate, dataUtils.data($appointments.get(1), "dxItemData").startDate, "Appointments data is OK");
 });
 
 QUnit.test("Agenda should contain a right quantity of recurrence appointments", function(assert) {
@@ -336,8 +337,8 @@ QUnit.test("Agenda should contain a right quantity of recurrence appointments", 
     });
 
     var appointmentCount = 0;
-    this.instance.element().find(".dx-scheduler-appointment").each(function() {
-        var apptData = $(this).data().dxItemData;
+    this.instance.$element().find(".dx-scheduler-appointment").each(function() {
+        var apptData = dataUtils.data($(this)[0], "dxItemData");
 
         if(!apptData.appointmentData) {
             assert.ok(apptData.startDate);
@@ -372,7 +373,7 @@ QUnit.test("Agenda should contain a right quantity of recurrence long appointmen
             }
         ]
     });
-    assert.equal(this.instance.element().find(".dx-scheduler-appointment").length, 4, "Appointment count is OK");
+    assert.equal(this.instance.$element().find(".dx-scheduler-appointment").length, 4, "Appointment count is OK");
 
     this.instance.option({
         currentDate: new Date(2015, 1, 23),
@@ -386,7 +387,7 @@ QUnit.test("Agenda should contain a right quantity of recurrence long appointmen
         ]
     });
 
-    assert.equal(this.instance.element().find(".dx-scheduler-appointment").length, 5, "Appointment count is OK");
+    assert.equal(this.instance.$element().find(".dx-scheduler-appointment").length, 5, "Appointment count is OK");
 });
 
 QUnit.test("Agenda should contain a right quantity of long appointments after changing currentView", function(assert) {
@@ -404,12 +405,12 @@ QUnit.test("Agenda should contain a right quantity of long appointments after ch
             }
         ]
     });
-    assert.equal(this.instance.element().find(".dx-scheduler-appointment").length, 3, "Appointment count is OK");
+    assert.equal(this.instance.$element().find(".dx-scheduler-appointment").length, 3, "Appointment count is OK");
 
     this.instance.option("currentView", "week");
     this.instance.option("currentView", "agenda");
 
-    assert.equal(this.instance.element().find(".dx-scheduler-appointment").length, 3, "Appointment count is OK");
+    assert.equal(this.instance.$element().find(".dx-scheduler-appointment").length, 3, "Appointment count is OK");
 });
 
 QUnit.test("Grouped agenda should contain a right appointment quantity", function(assert) {
@@ -440,7 +441,7 @@ QUnit.test("Grouped agenda should contain a right appointment quantity", functio
             }
         ]
     });
-    assert.equal(this.instance.element().find(".dx-scheduler-appointment").length, 4, "Appointment count is OK");
+    assert.equal(this.instance.$element().find(".dx-scheduler-appointment").length, 4, "Appointment count is OK");
 });
 
 QUnit.test("Grouped agenda should contain a right long-appointment quantity", function(assert) {
@@ -466,7 +467,7 @@ QUnit.test("Grouped agenda should contain a right long-appointment quantity", fu
         ]
     });
 
-    assert.equal(this.instance.element().find(".dx-scheduler-appointment").length, 6, "Appointment count is OK");
+    assert.equal(this.instance.$element().find(".dx-scheduler-appointment").length, 6, "Appointment count is OK");
 });
 
 QUnit.test("Grouped appointments should have a correct color", function(assert) {
@@ -496,7 +497,7 @@ QUnit.test("Grouped appointments should have a correct color", function(assert) 
         ]
     });
 
-    var $appointments = this.instance.element().find(".dx-scheduler-appointment");
+    var $appointments = this.instance.$element().find(".dx-scheduler-appointment");
 
     assert.equal(new Color($appointments.eq(0).css("background-color")).toHex(), "#ff0000", "Appointment color is OK");
     assert.equal(new Color($appointments.eq(1).css("background-color")).toHex(), "#ff0000", "Appointment color is OK");
@@ -529,7 +530,7 @@ QUnit.test("Grouped appointments should be rendered if resources aren't defined"
         ]
     });
 
-    var $appointments = this.instance.element().find(".dx-scheduler-appointment");
+    var $appointments = this.instance.$element().find(".dx-scheduler-appointment");
 
     assert.equal($appointments.length, 2, "Appointments are rendered");
 });
@@ -576,7 +577,7 @@ QUnit.test("Group row count should depend on existing appointment count", functi
         ]
     });
 
-    var $groupTable = this.instance.element().find(".dx-scheduler-group-table"),
+    var $groupTable = this.instance.$element().find(".dx-scheduler-group-table"),
         $rows = $groupTable.find(".dx-scheduler-group-row");
 
     assert.equal($rows.length, 2, "Row count is OK");
@@ -619,7 +620,7 @@ QUnit.test("Group header height should depend on existing appointment count", fu
         ]
     });
 
-    var $groupTable = this.instance.element().find(".dx-scheduler-group-table"),
+    var $groupTable = this.instance.$element().find(".dx-scheduler-group-table"),
         $headers = $groupTable.find(".dx-scheduler-group-header-content");
 
     assert.equal($headers.length, 4, "Header count is OK");
@@ -676,8 +677,8 @@ QUnit.test("Group header should be rendered in right place (T374948)", function(
         label: "Priority"
     }]);
 
-    var $groupTable = instance.element().find(".dx-scheduler-group-table"),
-        $container = instance.element().find(".dx-scheduler-date-table-scrollable .dx-scrollable-content");
+    var $groupTable = instance.$element().find(".dx-scheduler-group-table"),
+        $container = instance.$element().find(".dx-scheduler-date-table-scrollable .dx-scrollable-content");
 
     assert.equal($groupTable.length, 1, "Group table was rendered");
     assert.equal($container.children().get(0), $groupTable.get(0), "Group table was rendered in right place");
@@ -703,7 +704,7 @@ QUnit.test("Row count should be correct if appt ends at 0h 0m 0sec(T378182)", fu
         currentDate: new Date(2016, 5, 12)
     });
 
-    assert.equal(this.instance.element().find(".dx-scheduler-date-table-row").length, 1, "Row count is OK");
+    assert.equal(this.instance.$element().find(".dx-scheduler-date-table-row").length, 1, "Row count is OK");
 });
 
 QUnit.test("Agenda should contain a right appointment sorting", function(assert) {
@@ -721,22 +722,18 @@ QUnit.test("Agenda should contain a right appointment sorting", function(assert)
         ]
     });
 
-    var $appointments = this.instance.element().find(".dx-scheduler-appointment");
+    var $appointments = this.instance.$element().find(".dx-scheduler-appointment");
 
-    assert.equal($appointments.eq(0).data("dxItemData").text, "d"); //24
-    assert.equal($appointments.eq(1).data("dxItemData").text, "a"); //24
-    assert.equal($appointments.eq(2).data("dxItemData").text, "c"); //24
-
-    assert.equal($appointments.eq(3).data("dxItemData").text, "d"); //25
-    assert.equal($appointments.eq(4).data("dxItemData").text, "b"); //25
-
-    assert.equal($appointments.eq(5).data("dxItemData").text, "d"); //26
-    assert.equal($appointments.eq(6).data("dxItemData").text, "e"); //26
-
-    assert.equal($appointments.eq(7).data("dxItemData").text, "e"); //27
-    assert.equal($appointments.eq(8).data("dxItemData").text, "d"); //27
-
-    assert.equal($appointments.eq(9).data("dxItemData").text, "d"); //28
+    assert.equal(dataUtils.data($appointments.get(0), "dxItemData").text, "d"); //24
+    assert.equal(dataUtils.data($appointments.get(1), "dxItemData").text, "a"); //24
+    assert.equal(dataUtils.data($appointments.get(2), "dxItemData").text, "c"); //24
+    assert.equal(dataUtils.data($appointments.get(3), "dxItemData").text, "d"); //25
+    assert.equal(dataUtils.data($appointments.get(4), "dxItemData").text, "b"); //25
+    assert.equal(dataUtils.data($appointments.get(5), "dxItemData").text, "d"); //26
+    assert.equal(dataUtils.data($appointments.get(6), "dxItemData").text, "e"); //26
+    assert.equal(dataUtils.data($appointments.get(7), "dxItemData").text, "e"); //27
+    assert.equal(dataUtils.data($appointments.get(8), "dxItemData").text, "d"); //27
+    assert.equal(dataUtils.data($appointments.get(9), "dxItemData").text, "d"); //28
 });
 
 QUnit.test("Agenda should contain a right appointment sorting after adding of the new appointment", function(assert) {
@@ -752,10 +749,10 @@ QUnit.test("Agenda should contain a right appointment sorting after adding of th
     });
 
     this.instance.addAppointment({ Start: new Date(2016, 1, 25, 1), endDate: new Date(2016, 1, 25, 1, 30), text: "c" });
-    var $appointments = this.instance.element().find(".dx-scheduler-appointment");
-    assert.equal($appointments.eq(0).data("dxItemData").text, "a");
-    assert.equal($appointments.eq(1).data("dxItemData").text, "c");
-    assert.equal($appointments.eq(2).data("dxItemData").text, "b");
+    var $appointments = this.instance.$element().find(".dx-scheduler-appointment");
+    assert.equal(dataUtils.data($appointments.get(0), "dxItemData").text, "a");
+    assert.equal(dataUtils.data($appointments.get(1), "dxItemData").text, "c");
+    assert.equal(dataUtils.data($appointments.get(2), "dxItemData").text, "b");
 });
 
 QUnit.test("Agenda should contain a right appointment sorting after updating of the", function(assert) {
@@ -772,10 +769,10 @@ QUnit.test("Agenda should contain a right appointment sorting after updating of 
     });
 
     this.instance.updateAppointment(items[0], { Start: new Date(2016, 1, 24, 6), endDate: new Date(2016, 1, 24, 9, 30), text: "a" });
-    var $appointments = this.instance.element().find(".dx-scheduler-appointment");
+    var $appointments = this.instance.$element().find(".dx-scheduler-appointment");
 
-    assert.equal($appointments.eq(0).data("dxItemData").text, "a");
-    assert.equal($appointments.eq(1).data("dxItemData").text, "b");
+    assert.equal(dataUtils.data($appointments.get(0), "dxItemData").text, "a");
+    assert.equal(dataUtils.data($appointments.get(1), "dxItemData").text, "b");
 });
 
 QUnit.test("Agenda should contain a right recurrence appointment sorting", function(assert) {
@@ -791,11 +788,11 @@ QUnit.test("Agenda should contain a right recurrence appointment sorting", funct
         ]
     });
 
-    var $appointments = this.instance.element().find(".dx-scheduler-appointment");
+    var $appointments = this.instance.$element().find(".dx-scheduler-appointment");
 
-    assert.equal($appointments.eq(0).data("dxItemData").text, "d"); //24
-    assert.equal($appointments.eq(1).data("dxItemData").text, "f"); //24
-    assert.equal($appointments.eq(2).data("dxItemData").text, "e"); //24
+    assert.equal(dataUtils.data($appointments.get(0), "dxItemData").text, "d"); //24
+    assert.equal(dataUtils.data($appointments.get(1), "dxItemData").text, "f"); //24
+    assert.equal(dataUtils.data($appointments.get(2), "dxItemData").text, "e"); //24
 });
 
 QUnit.test("Long & recurrence appts should be sorted correctly", function(assert) {
@@ -809,7 +806,7 @@ QUnit.test("Long & recurrence appts should be sorted correctly", function(assert
         ]
     });
 
-    var $appointments = this.instance.element().find(".dx-scheduler-appointment"),
+    var $appointments = this.instance.$element().find(".dx-scheduler-appointment"),
         recurrenceApptsIndices = [0, 3, 5, 7, 9, 11, 12],
         longApptsIndices = [1, 2, 4, 6, 8, 10];
 
@@ -839,7 +836,7 @@ QUnit.test("Appointments should have correct width & height", function(assert) {
 
     var agenda = this.instance.getWorkSpace(),
         rowHeight = 77,
-        $element = this.instance.element(),
+        $element = this.instance.$element(),
         timePanelWidth = $element.find(".dx-scheduler-time-panel").outerWidth(),
         expectedWidth = $element.find(".dx-scheduler-date-table").outerWidth() - timePanelWidth,
         agendaStub = sinon.stub(agenda, "_getRowHeight").returns(rowHeight);
@@ -850,7 +847,7 @@ QUnit.test("Appointments should have correct width & height", function(assert) {
             { startDate: new Date(2016, 1, 24, 1), endDate: new Date(2016, 1, 24, 1, 30) }
         ]);
 
-        var $appointments = this.instance.element().find(".dx-scheduler-appointment");
+        var $appointments = this.instance.$element().find(".dx-scheduler-appointment");
 
         assert.roughEqual($appointments.eq(0).outerHeight(), 2.001, rowHeight, "Appointment height is OK");
         assert.equal(parseInt($appointments.eq(0).css("margin-bottom"), 10), 5, "Appointment offset is OK");
@@ -881,7 +878,7 @@ QUnit.test("Grouped appointments should have a right offsets", function(assert) 
         ]
     });
 
-    var $appointments = this.instance.element().find(".dx-scheduler-appointment");
+    var $appointments = this.instance.$element().find(".dx-scheduler-appointment");
 
     assert.equal(parseInt($appointments.eq(0).css("margin-bottom"), 10), 5, "Appointment offset is OK");
     assert.equal(parseInt($appointments.eq(1).css("margin-bottom"), 10), 20, "Appointment offset is OK");
@@ -900,7 +897,7 @@ QUnit.test("Tooltip should appear by appointment click", function(assert) {
         ]
     });
 
-    $(this.instance.element()).find(".dx-scheduler-appointment").trigger("dxclick");
+    $(this.instance.$element()).find(".dx-scheduler-appointment").trigger("dxclick");
 
     this.clock.tick(300);
 
@@ -917,7 +914,7 @@ QUnit.test("Agenda should be rerendered when data source is changed", function(a
         ]
     });
 
-    var $element = this.instance.element();
+    var $element = this.instance.$element();
 
     assert.equal($element.find(".dx-scheduler-date-table-row").length, 1, "Date table rows are OK");
     assert.equal($element.find(".dx-scheduler-time-panel-row").length, 1, "Time panel rows are OK");
@@ -927,7 +924,7 @@ QUnit.test("Agenda should be rerendered when data source is changed", function(a
         endDate: new Date(2016, 1, 25, 1, 30)
     });
 
-    $element = this.instance.element();
+    $element = this.instance.$element();
 
     assert.equal($element.find(".dx-scheduler-date-table-row").length, 2, "Date table rows are OK");
     assert.equal($element.find(".dx-scheduler-time-panel-row").length, 2, "Time panel rows are OK");
@@ -980,7 +977,7 @@ QUnit.test("No Data message should be rendered if agenda is empty", function(ass
         dataSource: []
     });
 
-    var $element = this.instance.element(),
+    var $element = this.instance.$element(),
         $message = $element.find(".dx-scheduler-agenda-nodata");
 
     assert.equal($message.length, 1, "Message was rendered");
@@ -996,7 +993,7 @@ QUnit.test("Custom No Data message should be rendered if agenda is empty", funct
         noDataText: "No data"
     });
 
-    var $element = this.instance.element(),
+    var $element = this.instance.$element(),
         $message = $element.find(".dx-scheduler-agenda-nodata");
 
     assert.equal($message.length, 1, "Message was rendered");
@@ -1029,7 +1026,7 @@ QUnit.test("No Data message should be rendered if agenda is empty, grouped agend
             }]
     });
 
-    var $element = this.instance.element(),
+    var $element = this.instance.$element(),
         $message = $element.find(".dx-scheduler-agenda-nodata");
 
     assert.equal($message.length, 1, "Message was rendered");
@@ -1063,7 +1060,7 @@ QUnit.test("No Data message should not be rendered if one group doesn't have app
             }]
     });
 
-    var $element = this.instance.element(),
+    var $element = this.instance.$element(),
         $message = $element.find(".dx-scheduler-agenda-nodata"),
         $apps = $element.find(".dx-scheduler-appointment");
 
@@ -1083,7 +1080,7 @@ QUnit.test("No Data message should be removed after dataSource changing", functi
             { startDate: new Date(2016, 1, 24, 1), endDate: new Date(2016, 1, 25, 1, 30) }
     ]);
 
-    var $element = this.instance.element(),
+    var $element = this.instance.$element(),
         $message = $element.find(".dx-scheduler-agenda-nodata");
 
     assert.equal($message.length, 0, "Message was remover");
@@ -1107,7 +1104,7 @@ QUnit.test("The timeZone option should be processed correctly", function(assert)
         }]
     });
 
-    var $element = this.instance.element(),
+    var $element = this.instance.$element(),
         $dateTableRows = $element.find(".dx-scheduler-date-table-row"),
         $timePanelRows = $element.find(".dx-scheduler-time-panel-row");
 
@@ -1133,7 +1130,7 @@ QUnit.test("All-day appointment should not be duplicated with custom timezone", 
         }]
     });
 
-    var $appts = this.instance.element().find(".dx-scheduler-appointment");
+    var $appts = this.instance.$element().find(".dx-scheduler-appointment");
 
     assert.equal($appts.length, 1, "Appt count is OK");
 });
@@ -1153,7 +1150,7 @@ QUnit.test("All-day appointment should not be duplicated with custom timezone (T
         }]
     });
 
-    var $appts = this.instance.element().find(".dx-scheduler-appointment");
+    var $appts = this.instance.$element().find(".dx-scheduler-appointment");
 
     assert.equal($appts.length, 1, "Appt count is OK");
 });
@@ -1179,7 +1176,7 @@ QUnit.test("Recurring appointment and timepanel should be rendered correctly if 
         }]
     });
 
-    var $element = this.instance.element();
+    var $element = this.instance.$element();
     var $appts = $element.find(".dx-scheduler-appointment");
     var timePanelDate = $element.find(".dx-scheduler-agenda-date").text();
     var timePanelDayOfWeek = $element.find(".dx-scheduler-agenda-week-day").text();
@@ -1205,7 +1202,7 @@ QUnit.test("Recurring appointment and timepanel should be rendered correctly if 
         }]
     });
 
-    var $element = this.instance.element();
+    var $element = this.instance.$element();
     var $appts = $element.find(".dx-scheduler-appointment");
     var $timePanelDateEl = $element.find(".dx-scheduler-agenda-date");
     var $timePanelDayOfWeekEl = $element.find(".dx-scheduler-agenda-week-day");
@@ -1231,8 +1228,8 @@ QUnit.test("dateCellTemplate should take cellElement with correct geometry (T453
             endDate: new Date(2016, 10, 28, 2)
         }],
         dateCellTemplate: function(cellData, cellIndex, cellElement) {
-            assert.equal(cellElement.outerWidth(), 100, "Date cell width is OK");
-            assert.equal(cellElement.outerHeight(), 80, "Date cell height is OK");
+            assert.equal($(cellElement).outerWidth(), 100, "Date cell width is OK");
+            assert.equal($(cellElement).outerHeight(), 80, "Date cell height is OK");
         }
     });
 });
@@ -1255,8 +1252,8 @@ QUnit.test("resourceCellTemplate should take cellElement with correct geometry (
             owner: 1
         }],
         resourceCellTemplate: function(cellData, cellIndex, cellElement) {
-            assert.equal(cellElement.outerWidth(), 80, "Resource cell width is OK");
-            assert.equal(cellElement.outerHeight(), 80, "Resource cell height is OK");
+            assert.equal($(cellElement).outerWidth(), 80, "Resource cell width is OK");
+            assert.equal($(cellElement).outerHeight(), 80, "Resource cell height is OK");
         }
     });
 });
@@ -1274,22 +1271,22 @@ QUnit.test("Long appointment parts data should be correct", function(assert) {
         ]
     });
 
-    var $appointments = this.instance.element().find(".dx-scheduler-appointment");
+    var $appointments = this.instance.$element().find(".dx-scheduler-appointment");
 
-    assert.equal($appointments.eq(0).data("dxItemData").text, "a");
-    assert.equal($appointments.eq(1).data("dxItemData").text, "a");
-    assert.equal($appointments.eq(2).data("dxItemData").text, "a");
-    assert.equal($appointments.eq(3).data("dxItemData").text, "a");
+    assert.equal(dataUtils.data($appointments.get(0), "dxItemData").text, "a");
+    assert.equal(dataUtils.data($appointments.get(1), "dxItemData").text, "a");
+    assert.equal(dataUtils.data($appointments.get(2), "dxItemData").text, "a");
+    assert.equal(dataUtils.data($appointments.get(3), "dxItemData").text, "a");
 
-    assert.deepEqual($appointments.eq(0).data("dxItemData").Start, new Date(2016, 1, 24, 1)); //first part of long appointment has original startDate
-    assert.deepEqual($appointments.eq(1).data("dxItemData").settings.Start, new Date(2016, 1, 25, 8));
-    assert.deepEqual($appointments.eq(2).data("dxItemData").settings.Start, new Date(2016, 1, 26, 8));
-    assert.deepEqual($appointments.eq(3).data("dxItemData").settings.Start, new Date(2016, 1, 27, 8));
+    assert.deepEqual(dataUtils.data($appointments.get(0), "dxItemData").Start, new Date(2016, 1, 24, 1)); //first part of long appointment has original startDate
+    assert.deepEqual(dataUtils.data($appointments.get(1), "dxItemData").settings.Start, new Date(2016, 1, 25, 8));
+    assert.deepEqual(dataUtils.data($appointments.get(2), "dxItemData").settings.Start, new Date(2016, 1, 26, 8));
+    assert.deepEqual(dataUtils.data($appointments.get(3), "dxItemData").settings.Start, new Date(2016, 1, 27, 8));
 
-    assert.deepEqual($appointments.eq(0).data("dxItemData").endDate, new Date(2016, 1, 27, 11, 30)); //first part of long appointment has original endDate
-    assert.deepEqual($appointments.eq(1).data("dxItemData").settings.endDate, new Date(2016, 1, 25, 20));
-    assert.deepEqual($appointments.eq(2).data("dxItemData").settings.endDate, new Date(2016, 1, 26, 20));
-    assert.deepEqual($appointments.eq(3).data("dxItemData").settings.endDate, new Date(2016, 1, 27, 11, 30));
+    assert.deepEqual(dataUtils.data($appointments.get(0), "dxItemData").endDate, new Date(2016, 1, 27, 11, 30)); //first part of long appointment has original endDate
+    assert.deepEqual(dataUtils.data($appointments.get(1), "dxItemData").settings.endDate, new Date(2016, 1, 25, 20));
+    assert.deepEqual(dataUtils.data($appointments.get(2), "dxItemData").settings.endDate, new Date(2016, 1, 26, 20));
+    assert.deepEqual(dataUtils.data($appointments.get(3), "dxItemData").settings.endDate, new Date(2016, 1, 27, 11, 30));
 });
 
 QUnit.test("Long appointment parts popup should have original data", function(assert) {
@@ -1305,7 +1302,7 @@ QUnit.test("Long appointment parts popup should have original data", function(as
         ]
     });
 
-    var $appointment = $(this.instance.element()).find(".dx-scheduler-appointment").eq(1);
+    var $appointment = $(this.instance.$element()).find(".dx-scheduler-appointment").eq(1);
     $appointment.trigger(dblclickEvent.name);
 
     var detailsForm = this.instance.getAppointmentDetailsForm(),
@@ -1329,13 +1326,13 @@ QUnit.test("Long appointment should be rendered correctly after changing view", 
         ]
     });
 
-    var $appointments = this.instance.element().find(".dx-scheduler-appointment");
+    var $appointments = this.instance.$element().find(".dx-scheduler-appointment");
 
     assert.equal($appointments.length, 4, "appointments are OK");
 
     this.instance.option("currentView", "month");
-    var cellWidth = this.instance.element().find(".dx-scheduler-date-table-cell").eq(0).outerWidth();
-    $appointments = this.instance.element().find(".dx-scheduler-appointment");
+    var cellWidth = this.instance.$element().find(".dx-scheduler-date-table-cell").eq(0).outerWidth();
+    $appointments = this.instance.$element().find(".dx-scheduler-appointment");
 
     assert.equal($appointments.length, 1, "appointment is OK");
     assert.roughEqual($appointments.eq(0).outerWidth(), cellWidth * 4, 1.001, "appointment size is OK");
@@ -1354,7 +1351,7 @@ QUnit.test("Timepanel rows count should be OK for long appointment", function(as
         ]
     });
 
-    var $element = this.instance.element();
+    var $element = this.instance.$element();
 
     assert.equal($element.find(".dx-scheduler-time-panel-row").length, 4, "Time panel rows are OK");
 });
@@ -1372,7 +1369,7 @@ QUnit.test("Long appointment should have a correct template", function(assert) {
         ]
     });
 
-    var $appts = this.instance.element().find(".dx-scheduler-appointment"),
+    var $appts = this.instance.$element().find(".dx-scheduler-appointment"),
         $firstContentDates = $appts.eq(0).find(".dx-scheduler-appointment-content-date"),
         $secondContentDates = $appts.eq(1).find(".dx-scheduler-appointment-content-date"),
         $lastContentDates = $appts.last().find(".dx-scheduler-appointment-content-date");
@@ -1415,7 +1412,7 @@ QUnit.test("Agenda should contain a right appointment quantity after dataSource 
     this.clock.tick(100);
     dataSource.load();
     this.clock.tick(100);
-    assert.equal(this.instance.element().find(".dx-scheduler-appointment").length, 1, "Appointment count is OK");
+    assert.equal(this.instance.$element().find(".dx-scheduler-appointment").length, 1, "Appointment count is OK");
 });
 
 QUnit.test("Appointments should be rendered correctly if agenda view is set as object", function(assert) {
@@ -1431,7 +1428,7 @@ QUnit.test("Appointments should be rendered correctly if agenda view is set as o
         ]
     });
 
-    var $appointments = this.instance.element().find(".dx-scheduler-appointment");
+    var $appointments = this.instance.$element().find(".dx-scheduler-appointment");
 
     assert.equal($appointments.length, 4, "appointments are OK");
     assert.equal($appointments.first().position().top, 0, "appointment position is OK");

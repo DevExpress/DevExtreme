@@ -28,6 +28,10 @@
     }
 }(this, function($, dxCommand, layoutHelper, NavbarLayoutController, themes, viewPort) {
 
+    if(QUnit.urlParams["nojquery"]) {
+        return;
+    }
+
     includeLayout("Navbar");
 
     QUnit.testStart(function() {

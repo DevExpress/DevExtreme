@@ -64,7 +64,7 @@ var TimeView = Editor.inherit({
     _init: function() {
         this.callBase();
 
-        this.element().addClass(TIMEVIEW_CLASS);
+        this.$element().addClass(TIMEVIEW_CLASS);
     },
 
     _render: function() {
@@ -75,7 +75,7 @@ var TimeView = Editor.inherit({
     },
 
     _renderBox: function() {
-        var $box = $("<div>").appendTo(this.element()),
+        var $box = $("<div>").appendTo(this.$element()),
             items = [];
 
         if(this.option("_showClock")) {
@@ -102,10 +102,11 @@ var TimeView = Editor.inherit({
         });
     },
 
-    _renderClock: function(_, __, $container) {
+    _renderClock: function(_, __, container) {
         this._$hourArrow = $("<div>").addClass(TIMEVIEW_HOURARROW_CLASS);
         this._$minuteArrow = $("<div>").addClass(TIMEVIEW_MINUTEARROW_CLASS);
 
+        var $container = $(container);
         $container.addClass(TIMEVIEW_CLOCK_CLASS)
             .append(this._$hourArrow)
             .append(this._$minuteArrow);
@@ -127,7 +128,7 @@ var TimeView = Editor.inherit({
             ratio: 0,
             shrink: 0,
             baseSize: "auto",
-            template: (function() { return this._hourBox.element(); }).bind(this)
+            template: (function() { return this._hourBox.$element(); }).bind(this)
         }, {
             ratio: 0,
             shrink: 0,
@@ -137,7 +138,7 @@ var TimeView = Editor.inherit({
             ratio: 0,
             shrink: 0,
             baseSize: "auto",
-            template: (function() { return this._minuteBox.element(); }).bind(this)
+            template: (function() { return this._minuteBox.$element(); }).bind(this)
         }];
 
         if(is12HourFormat) {
@@ -145,7 +146,7 @@ var TimeView = Editor.inherit({
                 ratio: 0,
                 shrink: 0,
                 baseSize: "auto",
-                template: (function() { return this._format12.element(); }).bind(this)
+                template: (function() { return this._format12.$element(); }).bind(this)
             });
         }
 
@@ -167,7 +168,7 @@ var TimeView = Editor.inherit({
             align: "center",
             crossAlign: "center",
             items: this._getBoxItems(is12HourFormat)
-        }).element();
+        }).$element();
     },
 
     _createHourBox: function() {

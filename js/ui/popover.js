@@ -344,7 +344,7 @@ var Popover = Popup.inherit({
         this._renderArrow();
         this._timeouts = {};
 
-        this.element().addClass(POPOVER_CLASS);
+        this.$element().addClass(POPOVER_CLASS);
         this._wrapper().addClass(POPOVER_WRAPPER_CLASS);
     },
 
@@ -658,7 +658,7 @@ var Popover = Popup.inherit({
     * @name dxPopoverMethods_show
     * @publicName show(target)
     * @param1 target:string|Node|jQuery
-    * @return Promise
+    * @return Promise<void>
     */
     show: function(target) {
         if(target) {

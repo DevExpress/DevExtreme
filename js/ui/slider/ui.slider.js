@@ -29,6 +29,12 @@ var SLIDER_CLASS = "dx-slider",
     SLIDER_LABEL_POSITION_CLASS_PREFIX = "dx-slider-label-position-",
     SLIDER_TOOLTIP_POSITION_CLASS_PREFIX = "dx-slider-tooltip-position-";
 
+/**
+* @name dxSliderBase
+* @publicName dxSliderBase
+* @inherits dxTrackBar
+* @hidden
+*/
 var Slider = TrackBar.inherit({
 
     _activeStateUnit: SLIDER_HANDLE_SELECTOR,
@@ -108,34 +114,6 @@ var Slider = TrackBar.inherit({
 
     _getDefaultOptions: function() {
         return extend(this.callBase(), {
-
-            /**
-             * @name dxSliderOptions_hoverStateEnabled
-             * @publicName hoverStateEnabled
-             * @type boolean
-             * @default true
-             * @extend_doc
-             */
-            hoverStateEnabled: true,
-
-            /**
-            * @name dxSliderOptions_activeStateEnabled
-            * @publicName activeStateEnabled
-            * @type boolean
-            * @default true
-            * @extend_doc
-            */
-
-            activeStateEnabled: true,
-
-            /**
-            * @name dxSliderOptions_step
-            * @publicName step
-            * @type number
-            * @default 1
-            */
-            step: 1,
-
             /**
             * @name dxSliderOptions_value
             * @publicName value
@@ -145,7 +123,34 @@ var Slider = TrackBar.inherit({
             value: 50,
 
             /**
-            * @name dxSliderOptions_showRange
+             * @name dxSliderBaseOptions_hoverStateEnabled
+             * @publicName hoverStateEnabled
+             * @type boolean
+             * @default true
+             * @extend_doc
+             */
+            hoverStateEnabled: true,
+
+            /**
+            * @name dxSliderBaseOptions_activeStateEnabled
+            * @publicName activeStateEnabled
+            * @type boolean
+            * @default true
+            * @extend_doc
+            */
+
+            activeStateEnabled: true,
+
+            /**
+            * @name dxSliderBaseOptions_step
+            * @publicName step
+            * @type number
+            * @default 1
+            */
+            step: 1,
+
+            /**
+            * @name dxSliderBaseOptions_showRange
             * @publicName showRange
             * @type boolean
             * @default true
@@ -153,13 +158,13 @@ var Slider = TrackBar.inherit({
             showRange: true,
 
             /**
-            * @name dxSliderOptions_tooltip
+            * @name dxSliderBaseOptions_tooltip
             * @publicName tooltip
             * @type object
             */
             tooltip: {
                 /**
-                * @name dxSliderOptions_tooltip_enabled
+                * @name dxSliderBaseOptions_tooltip_enabled
                 * @publicName enabled
                 * @type boolean
                 * @default false
@@ -167,7 +172,7 @@ var Slider = TrackBar.inherit({
                 enabled: false,
 
                 /**
-                * @name dxSliderOptions_tooltip_format
+                * @name dxSliderBaseOptions_tooltip_format
                 * @publicName format
                 * @type format
                 * @default function(value) { return value }
@@ -177,7 +182,7 @@ var Slider = TrackBar.inherit({
                 },
 
                 /**
-                * @name dxSliderOptions_tooltip_position
+                * @name dxSliderBaseOptions_tooltip_position
                 * @publicName position
                 * @type string
                 * @acceptValues 'top'|'bottom'
@@ -186,7 +191,7 @@ var Slider = TrackBar.inherit({
                 position: "top",
 
                 /**
-                * @name dxSliderOptions_tooltip_showMode
+                * @name dxSliderBaseOptions_tooltip_showMode
                 * @publicName showMode
                 * @type string
                 * @acceptValues 'onHover'|'always'
@@ -196,13 +201,13 @@ var Slider = TrackBar.inherit({
             },
 
             /**
-            * @name dxSliderOptions_label
+            * @name dxSliderBaseOptions_label
             * @publicName label
             * @type object
             */
             label: {
                 /**
-                * @name dxSliderOptions_label_visible
+                * @name dxSliderBaseOptions_label_visible
                 * @publicName visible
                 * @type boolean
                 * @default false
@@ -210,7 +215,7 @@ var Slider = TrackBar.inherit({
                 visible: false,
 
                 /**
-                * @name dxSliderOptions_label_position
+                * @name dxSliderBaseOptions_label_position
                 * @publicName position
                 * @type string
                 * @acceptValues 'top'|'bottom'
@@ -219,7 +224,7 @@ var Slider = TrackBar.inherit({
                 position: "bottom",
 
                 /**
-                * @name dxSliderOptions_label_format
+                * @name dxSliderBaseOptions_label_format
                 * @publicName format
                 * @type format
                 * @default function(value) { return value }
@@ -230,7 +235,7 @@ var Slider = TrackBar.inherit({
             },
 
             /**
-           * @name dxSliderOptions_keyStep
+           * @name dxSliderBaseOptions_keyStep
            * @publicName keyStep
            * @type number
            * @default 1
@@ -240,7 +245,7 @@ var Slider = TrackBar.inherit({
             useInkRipple: false
 
             /**
-            * @name dxSliderOptions_name
+            * @name dxSliderBaseOptions_name
             * @publicName name
             * @type string
             * @hidden false
@@ -257,7 +262,7 @@ var Slider = TrackBar.inherit({
                 },
                 options: {
                     /**
-                    * @name dxSliderOptions_focusStateEnabled
+                    * @name dxSliderBaseOptions_focusStateEnabled
                     * @publicName focusStateEnabled
                     * @custom_default_for_generic true
                     * @extend_doc
@@ -277,7 +282,7 @@ var Slider = TrackBar.inherit({
     },
 
     _render: function() {
-        this.element().addClass(SLIDER_CLASS);
+        this.$element().addClass(SLIDER_CLASS);
         this._renderSubmitElement();
 
         this.callBase();
@@ -293,7 +298,7 @@ var Slider = TrackBar.inherit({
     _renderSubmitElement: function() {
         this._$submitElement = $("<input>")
             .attr("type", "hidden")
-            .appendTo(this.element());
+            .appendTo(this.$element());
     },
 
     _getSubmitElement: function() {
@@ -373,7 +378,7 @@ var Slider = TrackBar.inherit({
             tooltipEnabled = this.option("tooltip.enabled"),
             tooltipPosition = this.option("tooltip.position");
 
-        this.element()
+        this.$element()
             .toggleClass(SLIDER_TOOLTIP_POSITION_CLASS_PREFIX + "bottom", tooltipEnabled && tooltipPosition === "bottom")
             .toggleClass(SLIDER_TOOLTIP_POSITION_CLASS_PREFIX + "top", tooltipEnabled && tooltipPosition === "top");
 
@@ -383,7 +388,7 @@ var Slider = TrackBar.inherit({
             tooltipPosition: tooltipPosition,
             tooltipFormat: format,
             tooltipShowMode: this.option("tooltip.showMode"),
-            tooltipFitIn: this.element()
+            tooltipFitIn: this.$element()
         });
 
         return $handle;
@@ -422,7 +427,7 @@ var Slider = TrackBar.inherit({
     },
 
     _renderLabels: function() {
-        this.element()
+        this.$element()
             .removeClass(SLIDER_LABEL_POSITION_CLASS_PREFIX + "bottom")
             .removeClass(SLIDER_LABEL_POSITION_CLASS_PREFIX + "top");
 
@@ -448,7 +453,7 @@ var Slider = TrackBar.inherit({
 
             this._$maxLabel.html(numberLocalization.format(max, labelFormat));
 
-            this.element().addClass(SLIDER_LABEL_POSITION_CLASS_PREFIX + position);
+            this.$element().addClass(SLIDER_LABEL_POSITION_CLASS_PREFIX + position);
 
         } else {
             if(this._$minLabel) {
@@ -475,7 +480,7 @@ var Slider = TrackBar.inherit({
         var pointerDownEventName = eventUtils.addNamespace(pointerEvents.down, this.NAME);
         var clickEventName = eventUtils.addNamespace(clickEvent.name, this.NAME);
         var startAction = this._createAction(this._startHandler.bind(this));
-        var $element = this.element();
+        var $element = this.$element();
 
         eventsEngine.off($element, pointerDownEventName);
         eventsEngine.on($element, pointerDownEventName, function(e) {
@@ -518,7 +523,7 @@ var Slider = TrackBar.inherit({
         e.jQueryEvent.maxLeftOffset = rtlEnabled ? endOffset : startOffset;
         e.jQueryEvent.maxRightOffset = rtlEnabled ? startOffset : endOffset;
 
-        this._itemWidthRatio = this.element().width() / this._swipePixelRatio();
+        this._itemWidthRatio = this.$element().width() / this._swipePixelRatio();
 
         this._needPreventAnimation = true;
     },
@@ -652,7 +657,7 @@ var Slider = TrackBar.inherit({
                 this.callBase(args);
                 this._renderHandle();
                 this._repaintHandle();
-                domUtils.triggerShownEvent(this.element()); // TODO: move firing dxshown event to Widget
+                domUtils.triggerShownEvent(this.$element()); // TODO: move firing dxshown event to Widget
                 break;
             case "min":
             case "max":

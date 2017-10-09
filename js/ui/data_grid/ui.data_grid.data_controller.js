@@ -16,7 +16,7 @@ gridCore.registerModule("data", {
     /**
     * @name dxDataGridOptions_keyExpr
     * @publicName keyExpr
-    * @type string|array
+    * @type string|Array<string>
     * @default undefined
     */
     defaultOptions: dataControllerModule.defaultOptions,

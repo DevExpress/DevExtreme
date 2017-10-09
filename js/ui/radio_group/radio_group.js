@@ -47,7 +47,7 @@ var RadioCollection = CollectionWidget.inherit({
     },
 
     _focusTarget: function() {
-        return this.element().parent();
+        return this.$element().parent();
     },
 
     _keyboardEventBindingTarget: function() {
@@ -172,7 +172,7 @@ var RadioGroup = Editor.inherit({
     },
 
     _render: function() {
-        this.element().addClass(RADIO_GROUP_CLASS);
+        this.$element().addClass(RADIO_GROUP_CLASS);
         this._renderSubmitElement();
         this._renderRadios();
         this.setAria("role", "radiogroup");
@@ -216,7 +216,7 @@ var RadioGroup = Editor.inherit({
     _renderFocusState: noop,
 
     _renderRadios: function() {
-        var $radios = $("<div>").appendTo(this.element());
+        var $radios = $("<div>").appendTo(this.$element());
 
         this._radios = this._createComponent($radios, RadioCollection, {
             dataSource: this._dataSource,
@@ -237,7 +237,7 @@ var RadioGroup = Editor.inherit({
     _renderSubmitElement: function() {
         this._$submitElement = $("<input>")
             .attr("type", "hidden")
-            .appendTo(this.element());
+            .appendTo(this.$element());
         this._setSubmitValue();
     },
 
@@ -269,7 +269,7 @@ var RadioGroup = Editor.inherit({
         $("<div>").addClass(RADIO_BUTTON_ICON_DOT_CLASS).appendTo($radio);
         $radioContainer = $("<div>").append($radio).addClass(RADIO_VALUE_CONTAINER_CLASS);
 
-        e.itemElement.prepend($radioContainer);
+        $(e.itemElement).prepend($radioContainer);
     },
 
     _itemClickHandler: function(e) {
@@ -292,8 +292,8 @@ var RadioGroup = Editor.inherit({
 
     _renderLayout: function() {
         var layout = this.option("layout");
-        this.element().toggleClass(RADIO_GROUP_VERTICAL_CLASS, layout === "vertical");
-        this.element().toggleClass(RADIO_GROUP_HORIZONTAL_CLASS, layout === "horizontal");
+        this.$element().toggleClass(RADIO_GROUP_VERTICAL_CLASS, layout === "vertical");
+        this.$element().toggleClass(RADIO_GROUP_HORIZONTAL_CLASS, layout === "horizontal");
     },
 
     _refreshSelected: function() {
@@ -318,7 +318,7 @@ var RadioGroup = Editor.inherit({
     },
 
     _getAriaTarget: function() {
-        return this.element();
+        return this.$element();
     },
 
     _setCollectionWidgetOption: function() {

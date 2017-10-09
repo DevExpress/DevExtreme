@@ -89,6 +89,21 @@ QUnit.test("lazy rendering: not render overlay on init", function(assert) {
     assert.ok($itemsContainer.length, "overlay is defined");
 });
 
+QUnit.test("item click should not prevent document click handler", function(assert) {
+    var instance = new ContextMenu(this.$element, {
+            items: [{ text: "a" }]
+        }),
+        documentClickHandler = sinon.stub();
+
+    $(document).on("click", documentClickHandler);
+    instance.show();
+    var $items = instance.itemsContainer().find("." + DX_MENU_ITEM_CLASS);
+    $($items.eq(0)).trigger("click");
+
+    assert.equal(documentClickHandler.callCount, 1, "click was not prevented");
+    $(document).off("click");
+});
+
 QUnit.test("context menu items with submenu should have 'has-submenu' class", function(assert) {
     var instance = new ContextMenu(this.$element, {
             items: [{ text: "item1", items: [{ text: "item11" }] }],
@@ -1064,7 +1079,7 @@ QUnit.test("onItemContextMenu option when context menu initially hidden", functi
     $($items.eq(0)).trigger("dxcontextmenu");
 
     assert.equal(fired, 1, "event fired only in action");
-    assert.strictEqual(args.itemElement[0], $items[0], "item element is correct");
+    assert.strictEqual($(args.itemElement)[0], $items[0], "item element is correct");
     assert.equal(args.itemData.text, "1", "item data is correct");
 });
 
@@ -1208,7 +1223,7 @@ QUnit.test("context menu should hide after click on item without children", func
     assert.notOk(instance.option("visible"), "menu was hidden");
 });
 
-QUnit.test("сontext menu should not hide after click when item.closeMenuOnClick is false", function(assert) {
+QUnit.test("context menu should not hide after click when item.closeMenuOnClick is false", function(assert) {
     var instance = new ContextMenu(this.$element, {
             items: [{ text: "a", closeMenuOnClick: false }],
             visible: true

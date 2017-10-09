@@ -174,8 +174,10 @@ module.exports = Class.inherit({
             itemIndexStep,
             index,
             keyOf = this.options.keyOf,
-            key = keyOf(items[this._focusedItemIndex].data),
-            isFocusedItemSelected = items[this._focusedItemIndex] && this.isItemSelected(key);
+            focusedItem = items[this._focusedItemIndex],
+            focusedData = this.options.getItemData(focusedItem),
+            focusedKey = keyOf(focusedData),
+            isFocusedItemSelected = focusedItem && this.isItemSelected(focusedKey);
 
         if(!isDefined(this._shiftFocusedItemIndex)) {
             this._shiftFocusedItemIndex = this._focusedItemIndex;
@@ -208,10 +210,8 @@ module.exports = Class.inherit({
             }
         }
 
-        if(this.isDataItem(items[this._focusedItemIndex]) && !isFocusedItemSelected) {
-            data = this.options.getItemData(items[index]);
-            itemKey = keyOf(data);
-            this._addSelectedItem(data, itemKey);
+        if(this.isDataItem(focusedItem) && !isFocusedItemSelected) {
+            this._addSelectedItem(focusedData, focusedKey);
             isSelectedItemsChanged = true;
         }
 

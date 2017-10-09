@@ -3,6 +3,7 @@
 /**
 * @name animationPresets
 * @publicName animationPresets
+* @namespace DevExpress
 * @module animation/presets
 * @export default
 */

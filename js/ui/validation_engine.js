@@ -38,19 +38,19 @@ var RequiredRuleValidator = BaseRuleValidator.inherit({
     NAME: "required",
 
     /**
-     * @name requiredRuleOptions_type
+     * @name requiredRule_type
      * @publicName type
      * @type string
      * @acceptValues 'required'
      */
     /**
-     * @name requiredRuleOptions_trim
+     * @name requiredRule_trim
      * @publicName trim
      * @type boolean
      * @default true
      */
     /**
-     * @name requiredRuleOptions_message
+     * @name requiredRule_message
      * @publicName message
      * @type string
      * @default 'Required'
@@ -73,13 +73,13 @@ var NumericRuleValidator = BaseRuleValidator.inherit({
     NAME: "numeric",
 
     /**
-     * @name numericRuleOptions_type
+     * @name numericRule_type
      * @publicName type
      * @type string
      * @acceptValues 'numeric'
      */
     /**
-     * @name numericRuleOptions_message
+     * @name numericRule_message
      * @publicName message
      * @type string
      * @default 'Value should be a number'
@@ -101,29 +101,29 @@ var RangeRuleValidator = BaseRuleValidator.inherit({
     NAME: "range",
 
     /**
-     * @name rangeRuleOptions_type
+     * @name rangeRule_type
      * @publicName type
      * @type string
      * @acceptValues 'range'
      */
     /**
-     * @name rangeRuleOptions_min
+     * @name rangeRule_min
      * @publicName min
      * @type datetime|number
      */
     /**
-     * @name rangeRuleOptions_max
+     * @name rangeRule_max
      * @publicName max
      * @type datetime|number
      */
     /**
-     * @name rangeRuleOptions_message
+     * @name rangeRule_message
      * @publicName message
      * @type string
      * @default 'Value is out of range'
      */
     /**
-     * @name rangeRuleOptions_reevaluate
+     * @name rangeRule_reevaluate
      * @publicName reevaluate
      * @type boolean
      * @default false
@@ -163,29 +163,29 @@ var StringLengthRuleValidator = BaseRuleValidator.inherit({
     NAME: "stringLength",
 
     /**
-     * @name stringLengthRuleOptions_type
+     * @name stringLengthRule_type
      * @publicName type
      * @type string
      * @acceptValues 'stringLength'
      */
     /**
-     * @name stringLengthRuleOptions_min
+     * @name stringLengthRule_min
      * @publicName min
      * @type number
      */
     /**
-     * @name stringLengthRuleOptions_max
+     * @name stringLengthRule_max
      * @publicName max
      * @type number
      */
     /**
-     * @name stringLengthRuleOptions_trim
+     * @name stringLengthRule_trim
      * @publicName trim
      * @type boolean
      * @default true
      */
     /**
-     * @name stringLengthRuleOptions_message
+     * @name stringLengthRule_message
      * @publicName message
      * @type string
      * @default 'The length of the value is not correct'
@@ -205,16 +205,16 @@ var CustomRuleValidator = BaseRuleValidator.inherit({
     NAME: "custom",
 
     /**
-     * @name customRuleOptions_type
+     * @name customRule_type
      * @publicName type
      * @type string
      * @acceptValues 'custom'
      */
     /**
-     * @name customRuleOptions_validationCallback
+     * @name customRule_validationCallback
      * @publicName validationCallback
      * @type function
-     * @type_function_return true|false
+     * @type_function_return boolean
      * @type_function_param1 options:object
      * @type_function_param1_field1 value:string|number
      * @type_function_param1_field2 rule:object
@@ -222,13 +222,13 @@ var CustomRuleValidator = BaseRuleValidator.inherit({
      * @type_function_param1_field4 data:object
      */
     /**
-     * @name customRuleOptions_message
+     * @name customRule_message
      * @publicName message
      * @type string
      * @default 'Value is invalid'
      */
     /**
-     * @name customRuleOptions_reevaluate
+     * @name customRule_reevaluate
      * @publicName reevaluate
      * @type boolean
      * @default false
@@ -255,32 +255,32 @@ var CompareRuleValidator = BaseRuleValidator.inherit({
     NAME: "compare",
 
     /**
-     * @name compareRuleOptions_type
+     * @name compareRule_type
      * @publicName type
      * @type string
      * @acceptValues 'compare'
      */
     /**
-     * @name compareRuleOptions_comparisonTarget
+     * @name compareRule_comparisonTarget
      * @publicName comparisonTarget
      * @type function
      * @type_function_return object
      */
     /**
-     * @name compareRuleOptions_comparisonType
+     * @name compareRule_comparisonType
      * @publicName comparisonType
      * @type string
      * @default '=='
      * @acceptValues '=='|'!='|'==='|'!=='|'>'|'>='|'<'|'<='
      */
     /**
-     * @name compareRuleOptions_message
+     * @name compareRule_message
      * @publicName message
      * @type string
      * @default 'Values do not match'
      */
     /**
-     * @name compareRuleOptions_reevaluate
+     * @name compareRule_reevaluate
      * @publicName reevaluate
      * @type boolean
      * @default true
@@ -321,18 +321,18 @@ var PatternRuleValidator = BaseRuleValidator.inherit({
     NAME: "pattern",
 
     /**
-     * @name patternRuleOptions_type
+     * @name patternRule_type
      * @publicName type
      * @type string
      * @acceptValues 'pattern'
      */
     /**
-     * @name patternRuleOptions_pattern
+     * @name patternRule_pattern
      * @publicName pattern
      * @type regexp|string
      */
     /**
-     * @name patternRuleOptions_message
+     * @name patternRule_message
      * @publicName message
      * @type string
      * @default 'Value does not match pattern'
@@ -353,13 +353,13 @@ var EmailRuleValidator = BaseRuleValidator.inherit({
     NAME: "email",
 
     /**
-     * @name emailRuleOptions_type
+     * @name emailRule_type
      * @publicName type
      * @type string
      * @acceptValues 'email'
      */
     /**
-     * @name emailRuleOptions_message
+     * @name emailRule_message
      * @publicName message
      * @type string
      * @default 'Email is invalid'
@@ -486,6 +486,7 @@ var GroupConfig = Class.inherit({
  * @name validationEngine
  * @section Core
  * @publicName validationEngine
+ * @namespace DevExpress
  * @module ui/validation_engine
  * @export default
  */

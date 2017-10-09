@@ -203,14 +203,14 @@ var LoadPanel = Overlay.inherit({
     _render: function() {
         this.callBase();
 
-        this.element().addClass(LOADPANEL_CLASS);
+        this.$element().addClass(LOADPANEL_CLASS);
         this._wrapper().addClass(LOADPANEL_WRAPPER_CLASS);
     },
 
     _renderContentImpl: function() {
         this.callBase();
 
-        this.content().addClass(LOADPANEL_CONTENT_CLASS);
+        this.$content().addClass(LOADPANEL_CONTENT_CLASS);
 
         this._$contentWrapper = $("<div>").addClass(LOADPANEL_CONTENT_WRAPPER_CLASS);
         this._$contentWrapper.appendTo(this._$content);
@@ -280,12 +280,12 @@ var LoadPanel = Overlay.inherit({
     },
 
     _cleanPreviousContent: function() {
-        this.content().find("." + LOADPANEL_MESSAGE_CLASS).remove();
-        this.content().find("." + LOADPANEL_INDICATOR_CLASS).remove();
+        this.$content().find("." + LOADPANEL_MESSAGE_CLASS).remove();
+        this.$content().find("." + LOADPANEL_INDICATOR_CLASS).remove();
     },
 
     _togglePaneVisible: function() {
-        this.content().toggleClass(LOADPANEL_PANE_HIDDEN_CLASS, !this.option("showPane"));
+        this.$content().toggleClass(LOADPANEL_PANE_HIDDEN_CLASS, !this.option("showPane"));
     },
 
     _optionChanged: function(args) {

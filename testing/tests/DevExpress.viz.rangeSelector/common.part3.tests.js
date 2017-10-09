@@ -1114,6 +1114,21 @@ QUnit.test("range container canvas with set indents & sliderMarker.placeholderSi
     assert.deepEqual(this.rangeView.update.lastCall.args[2], { left: 10, top: 20, width: 285, height: 24, right: 0, bottom: 0 });
 });
 
+QUnit.test("T556656. range container canvas with set indents. width is 0", function(assert) {
+    this.createWidget({
+        size: { height: 20 },
+        margin: {
+            top: 10,
+            bottom: 15
+        },
+        indent: {
+            left: 10,
+            right: 15
+        }
+    });
+    assert.deepEqual(this.rangeView.update.lastCall.args[2], { left: 10, top: 0, width: 11, height: 24, right: 0, bottom: 0 });
+});
+
 QUnit.test("range container canvas with set sliderMarker.placeHolderHeight", function(assert) {
     this.createWidget({
         sliderMarker: {
@@ -1412,7 +1427,7 @@ QUnit.test("Render. Container size is changed - redraw widget", function(assert)
     var spy = sinon.spy(),
         widget = this.createWidget({ onDrawn: spy });
 
-    widget.element().height(widget.element().height() + 1);
+    widget.$element().height(widget.$element().height() + 1);
     spy.reset();
     widget.render();
 

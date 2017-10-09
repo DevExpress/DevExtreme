@@ -314,7 +314,7 @@ var SchedulerAppointments = CollectionWidget.inherit({
 
     _init: function() {
         this.callBase();
-        this.element().addClass(COMPONENT_CLASS);
+        this.$element().addClass(COMPONENT_CLASS);
         this._preventSingleAppointmentClick = false;
     },
 
@@ -558,7 +558,7 @@ var SchedulerAppointments = CollectionWidget.inherit({
             onResizeStart: (function(e) {
                 this._$currentAppointment = $(e.element);
                 this._initialSize = { width: e.width, height: e.height };
-                this._initialCoordinates = translator.locate(e.element);
+                this._initialCoordinates = translator.locate(this._$currentAppointment);
             }).bind(this),
             onResizeEnd: (function(e) {
                 if(this._escPressed) {
@@ -572,7 +572,7 @@ var SchedulerAppointments = CollectionWidget.inherit({
     },
 
     _calculateResizableArea: function(itemSetting, appointmentData) {
-        var area = this.element().closest(".dx-scrollable-content"),
+        var area = this.$element().closest(".dx-scrollable-content"),
             allDay = itemSetting.allDay;
 
         this.notifyObserver("getResizableAppointmentArea", {
@@ -592,7 +592,8 @@ var SchedulerAppointments = CollectionWidget.inherit({
     },
 
     _resizeEndHandler: function(e) {
-        var itemData = this._getItemData(e.element),
+        var $element = $(e.element),
+            itemData = this._getItemData($element),
             startDate = this.invoke("getStartDate", itemData, true),
             endDate = this.invoke("getEndDate", itemData);
 
@@ -608,7 +609,7 @@ var SchedulerAppointments = CollectionWidget.inherit({
         this.notifyObserver("updateAppointmentAfterResize", {
             target: itemData,
             data: data,
-            $appointment: e.element
+            $appointment: $element
         });
     },
 
@@ -711,8 +712,8 @@ var SchedulerAppointments = CollectionWidget.inherit({
         var that = this,
             $fixedContainer = this.option("fixedContainer"),
             draggableArea,
-            correctCoordinates = function($element, isFixedContainer) {
-                var coordinates = translator.locate($element);
+            correctCoordinates = function(element, isFixedContainer) {
+                var coordinates = translator.locate($(element));
 
                 that.notifyObserver("correctAppointmentCoordinates", {
                     coordinates: coordinates,
@@ -750,7 +751,7 @@ var SchedulerAppointments = CollectionWidget.inherit({
 
                 that._$currentAppointment = $(args.element);
                 that._initialSize = { width: args.width, height: args.height };
-                that._initialCoordinates = translator.locate(args.element);
+                that._initialCoordinates = translator.locate(that._$currentAppointment);
             },
             onDrag: function(args) {
                 correctCoordinates(args.element);
@@ -779,7 +780,6 @@ var SchedulerAppointments = CollectionWidget.inherit({
                 result = offset;
             }
         });
-
         return result;
     },
 
@@ -793,12 +793,13 @@ var SchedulerAppointments = CollectionWidget.inherit({
     },
 
     _dragEndHandler: function(e) {
-        var itemData = this._getItemData(e.element),
+        var $element = $(e.element),
+            itemData = this._getItemData($element),
             coordinates = this._initialCoordinates;
 
         this.notifyObserver("updateAppointmentAfterDrag", {
             data: itemData,
-            $appointment: e.element,
+            $appointment: $element,
             coordinates: coordinates
         });
     },
@@ -821,6 +822,7 @@ var SchedulerAppointments = CollectionWidget.inherit({
             };
         }
 
+        appointmentData.settings = [appointmentSetting];
         this._virtualAppointments[virtualGroupIndex].items.data.push(appointmentData);
         this._virtualAppointments[virtualGroupIndex].items.colors.push(color);
 
@@ -845,7 +847,7 @@ var SchedulerAppointments = CollectionWidget.inherit({
             var virtualGroup = this._virtualAppointments[groupIndex],
                 virtualItems = virtualGroup.items,
                 virtualCoordinates = virtualGroup.coordinates,
-                $container = virtualGroup.isAllDay ? this.option("allDayContainer") : this.element(),
+                $container = virtualGroup.isAllDay ? this.option("allDayContainer") : this.$element(),
                 left = virtualCoordinates.left;
 
             this.notifyObserver("renderDropDownAppointments", {
@@ -986,7 +988,7 @@ var SchedulerAppointments = CollectionWidget.inherit({
 
     updateDraggablesBoundOffsets: function() {
         if(this.option("allowDrag")) {
-            this.element().find("." + APPOINTMENT_ITEM_CLASS).each((function(_, appointmentElement) {
+            this.$element().find("." + APPOINTMENT_ITEM_CLASS).each((function(_, appointmentElement) {
                 var $appointment = $(appointmentElement),
                     appointmentData = this._getItemData($appointment);
 

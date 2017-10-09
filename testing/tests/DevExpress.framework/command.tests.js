@@ -4,6 +4,10 @@ var $ = require("jquery");
 
 require("bundles/modules/framework");
 
+if(QUnit.urlParams["nojquery"]) {
+    return;
+}
+
 QUnit.testStart(function() {
     var markup = '<div id="command"></div>';
 
@@ -16,7 +20,7 @@ QUnit.test("execute test", function(assert) {
         onExecute: function() {
             executed = true;
         }
-    }).data("dxCommand");
+    }).dxCommand("instance");
 
     command.execute();
     assert.equal(true, executed, "disabled");

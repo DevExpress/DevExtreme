@@ -86,8 +86,8 @@ QUnit.test("'correctAppointmentCoordinates' should correct appointment coordinat
         }
     });
 
-    var allDayPanelHeight = this.instance.element().find(".dx-scheduler-all-day-table-cell").eq(0).outerHeight(),
-        headerPanelHeight = this.instance.element().find(".dx-scheduler-header-panel").outerHeight(true);
+    var allDayPanelHeight = this.instance.$element().find(".dx-scheduler-all-day-table-cell").eq(0).outerHeight(),
+        headerPanelHeight = this.instance.$element().find(".dx-scheduler-header-panel").outerHeight(true);
 
     assert.roughEqual(updatedCoordinates.top, coordinates.top + allDayPanelHeight + headerPanelHeight, 2, "new top is correct");
     assert.equal(updatedCoordinates.left, 0, "new left is correct");
@@ -105,7 +105,7 @@ QUnit.test("'correctAppointmentCoordinates' should correct appointment coordinat
         },
         updatedCoordinates;
 
-    var headerPanelHeight = this.instance.element().find(".dx-scheduler-header-panel").outerHeight(true);
+    var headerPanelHeight = this.instance.$element().find(".dx-scheduler-header-panel").outerHeight(true);
 
     this.instance.fire("correctAppointmentCoordinates", {
         coordinates: coordinates,
@@ -139,7 +139,7 @@ QUnit.test("'correctAppointmentCoordinates' should correct appointment coordinat
         }
     });
 
-    var headerPanelHeight = this.instance.element().find(".dx-scheduler-header-panel").outerHeight(true);
+    var headerPanelHeight = this.instance.$element().find(".dx-scheduler-header-panel").outerHeight(true);
 
     assert.roughEqual(updatedCoordinates.top, coordinates.top + headerPanelHeight, 2, "new top is correct");
     assert.equal(updatedCoordinates.left, coordinates.left, "new left is correct");
@@ -156,7 +156,7 @@ QUnit.test("'getDraggableAppointmentArea' should return workSpace date table scr
         }
     });
 
-    assert.deepEqual(draggableArea.get(0), this.instance.element().find(".dx-scheduler-date-table-scrollable .dx-scrollable-container").get(0), "Draggable area is OK");
+    assert.deepEqual(draggableArea.get(0), this.instance.$element().find(".dx-scheduler-date-table-scrollable .dx-scrollable-container").get(0), "Draggable area is OK");
 });
 
 QUnit.test("'needCoordinates' should return workSpace date table scrollable", function(assert) {
@@ -295,7 +295,7 @@ QUnit.test("Long appointment in Timeline view should have right left coordinate"
         currentDate: new Date(2015, 2, 3)
     });
 
-    var $expectedCell = this.instance.element().find(".dx-scheduler-date-table-cell").eq(1),
+    var $expectedCell = this.instance.$element().find(".dx-scheduler-date-table-cell").eq(1),
         expectedLeftCoordinate = $expectedCell.position().left;
 
     this.instance.fire("needCoordinates", {
@@ -404,7 +404,7 @@ QUnit.test("'showAddAppointmentPopup' should update appointment data if there is
 QUnit.test("'appointmentFocused' should fire restoreScrollTop", function(assert) {
     this.createInstance();
 
-    var workspace = this.instance.element().find(".dx-scheduler-work-space").dxSchedulerWorkSpaceDay("instance"),
+    var workspace = this.instance.$element().find(".dx-scheduler-work-space").dxSchedulerWorkSpaceDay("instance"),
         restoreScrollTopStub = sinon.stub(workspace, "restoreScrollTop");
 
     this.instance.fire("appointmentFocused");
@@ -1026,6 +1026,38 @@ QUnit.test("Agenda row count calculation with recurrence appointments", function
     }
 });
 
+QUnit.test("Agenda row count calculation with wrong endDate appointments", function(assert) {
+    this.createInstance({
+        views: ["agenda"],
+        currentView: "agenda"
+    });
+    var instance = this.instance,
+        endViewDateStub = sinon.stub(instance, "getEndViewDate").returns(new Date(2016, 1, 5, 23, 59)),
+        startViewDateStub = sinon.stub(instance, "getStartViewDate").returns(new Date(2016, 1, 1));
+
+    try {
+        instance._reloadDataSource = function() {
+            this._dataSourceLoadedCallback.fireWith(this, [[
+                { startDate: new Date(2016, 1, 2), endDate: new Date(2016, 1, 2, 0, 30) },
+                { startDate: new Date(2016, 1, 3, 3, 30), endDate: new Date(2016, 1, 3) },
+                { startDate: new Date(2016, 1, 4), endDate: new Date(2016, 1, 4, 0, 30) }
+            ]]);
+        };
+
+        instance.fire("getAgendaRows", {
+            agendaDuration: 5,
+            currentDate: new Date(2016, 1, 1)
+        }).done(function(rows) {
+            assert.deepEqual(rows, [[0, 1, 1, 1, 0]], "Rows are OK");
+        });
+
+        instance._reloadDataSource();
+    } finally {
+        endViewDateStub.restore();
+        startViewDateStub.restore();
+    }
+});
+
 QUnit.test("Agenda row count calculation with long appointments", function(assert) {
     this.createInstance({
         views: ["agenda"],
@@ -1159,7 +1191,7 @@ QUnit.test("'getHeaderHeight' should return correct value", function(assert) {
     assert.equal(headerHeight, 56, "Header height is OK");
 });
 
-QUnit.test("'getMaxAppointmentsPerCell' should return correct value in accordance with view configuration", function(assert) {
+QUnit.test("'getMaxAppointmentsPerCell' should return correct value in accordance with scheduler configuration", function(assert) {
     this.createInstance({
         views: [{
             name: "DAY",
@@ -1167,8 +1199,7 @@ QUnit.test("'getMaxAppointmentsPerCell' should return correct value in accordanc
             maxAppointmentsPerCell: 5
         }, {
             name: "WEEK",
-            type: "week",
-            maxAppointmentsPerCell: "none"
+            type: "week"
         }],
         currentView: "DAY",
         dataSource: [{ startDate: new Date(2016, 2, 1, 1), endDate: new Date(2016, 2, 1, 2) }]
@@ -1182,5 +1213,31 @@ QUnit.test("'getMaxAppointmentsPerCell' should return correct value in accordanc
 
     countPerCell = this.instance.fire("getMaxAppointmentsPerCell");
 
-    assert.equal(countPerCell, "none", "overlappingMode is OK");
+    assert.equal(countPerCell, "auto", "overlappingMode is OK");
+});
+
+QUnit.test("'getMaxAppointmentsPerCell' should return correct value in accordance with view configuration", function(assert) {
+    this.createInstance({
+        views: [{
+            name: "DAY",
+            type: "day",
+            maxAppointmentsPerCell: 5
+        }, {
+            name: "WEEK",
+            type: "week",
+            maxAppointmentsPerCell: "unlimited"
+        }],
+        currentView: "DAY",
+        dataSource: [{ startDate: new Date(2016, 2, 1, 1), endDate: new Date(2016, 2, 1, 2) }]
+    });
+
+    var countPerCell = this.instance.fire("getMaxAppointmentsPerCell");
+
+    assert.equal(countPerCell, 5, "overlappingMode is OK");
+
+    this.instance.option("currentView", "WEEK");
+
+    countPerCell = this.instance.fire("getMaxAppointmentsPerCell");
+
+    assert.equal(countPerCell, "unlimited", "overlappingMode is OK");
 });

@@ -37,7 +37,8 @@ var $ = require("jquery"),
     setupDataGridModules = dataGridMocks.setupDataGridModules,
     MockDataController = dataGridMocks.MockDataController,
     MockColumnsController = dataGridMocks.MockColumnsController,
-    MockEditingController = dataGridMocks.MockEditingController;
+    MockEditingController = dataGridMocks.MockEditingController,
+    fx = require("animation/fx");
 
 
 var gridCore = require("ui/data_grid/ui.data_grid.core"),
@@ -776,12 +777,12 @@ function getJQueryEvent(options) {
                     return function(e) {
                         return action.execute.call(action, $.extend(e, {
                             component: that,
-                            element: that.component.element()
+                            element: that.component.$element()
                         }));
                     };
                 },
 
-                element: function() {
+                $element: function() {
                     return $("#container");
                 },
 
@@ -2871,7 +2872,7 @@ function getJQueryEvent(options) {
             that.component = {
                 NAME: "dxDataGrid",
 
-                element: function() {
+                $element: function() {
                     return $("#container");
                 },
 
@@ -5300,7 +5301,7 @@ function getJQueryEvent(options) {
                 new MockDraggingPanel({
                     $element: $('<div/>'),
                     columnElements: $("#itemsContainerVertical").children(),
-                    columns: [{ allowHiding: true, allowReordering: true }, { allowHiding: true, allowReordering: true }],
+                    columns: [{ dataField: "Test1", allowHiding: true, allowReordering: true }, { dataField: "Test2", allowHiding: true, allowReordering: true }],
                     offset: {
                         left: -9900,
                         right: -9700,
@@ -6055,5 +6056,61 @@ function getJQueryEvent(options) {
 
         //assert
         assert.ok(!handlerSpy.called, "getColumns was not called");
+    });
+
+    QUnit.test('Check indices after search and drag', function(assert) {
+        try {
+            fx.off = true;
+            var $testElement = $('#container'),
+                treeViewInstance,
+                $item,
+                dropParameters;
+
+            this.controller.drop = function(parameters) {
+                dropParameters = parameters;
+            };
+            this.controller._rowsView = {};
+            this.controller._rowsView.setRowsOpacity = function() { };
+            this.controller._columnHeadersView.element = function() { return $('<div />'); };
+            this.options.columnChooser.allowSearch = true;
+            this.columnsController.getChooserColumns = function() {
+                return [{ caption: "Test1", index: 5, allowHiding: true, allowReordering: true }, { caption: "Test2", index: 7, allowHiding: true, allowReordering: true }];
+            };
+
+            this.draggingHeaderView.render($testElement);
+            this.blockSeparatorView.render($testElement);
+            this.headerPanel.render($testElement);
+            this.columnChooserView.render($testElement);
+
+            this.showColumnChooser();
+            treeViewInstance = $(".dx-datagrid-column-chooser-list").dxTreeView("instance");
+            treeViewInstance.option("searchValue", "2");
+
+            $item = $(treeViewInstance.element()).find(".dx-treeview-item");
+
+            //assert
+            assert.ok($item.hasClass("dx-datagrid-drag-action"), "item is draggable");
+
+            //act
+            $item.trigger($.Event({
+                type: dragEvents.start,
+                pageX: $item.offset().left,
+                pageY: $item.offset().top,
+                preventDefault: function() { }
+            }));
+            $item.trigger($.Event({
+                type: dragEvents.move,
+                pageX: $item.offset().left + 10,
+                pageY: $item.offset().top + 10,
+                preventDefault: function() { }
+            }));
+            $item.trigger(dragEvents.end);
+
+            //assert
+            assert.deepEqual(dropParameters.sourceColumnIndex, { columnIndex: 1, rowIndex: 0 }, 'sourceColumnIndex');
+            assert.strictEqual(dropParameters.sourceIndex, 7, 'sourceIndex');
+        } finally {
+            fx.off = false;
+        }
     });
 })();

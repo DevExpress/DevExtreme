@@ -92,7 +92,7 @@ var TextEditorBase = Editor.inherit({
             /**
             * @name dxTextEditorOptions_value
             * @publicName value
-            * @type string
+            * @type any
             * @default ""
             */
             value: "",
@@ -294,11 +294,11 @@ var TextEditorBase = Editor.inherit({
     },
 
     _input: function() {
-        return this.element().find(TEXTEDITOR_INPUT_SELECTOR).first();
+        return this.$element().find(TEXTEDITOR_INPUT_SELECTOR).first();
     },
 
     _inputWrapper: function() {
-        return this.element();
+        return this.$element();
     },
 
     _buttonsContainer: function() {
@@ -310,7 +310,7 @@ var TextEditorBase = Editor.inherit({
     },
 
     _render: function() {
-        this.element().addClass(TEXTEDITOR_CLASS);
+        this.$element().addClass(TEXTEDITOR_CLASS);
 
         this._renderInput();
         this._renderInputType();
@@ -329,7 +329,7 @@ var TextEditorBase = Editor.inherit({
         $("<div>").addClass(TEXTEDITOR_CONTAINER_CLASS)
             .append(this._createInput())
             .append($("<div>").addClass(TEXTEDITOR_BUTTONS_CONTAINER_CLASS))
-            .appendTo(this.element());
+            .appendTo(this.$element());
     },
 
     _createInput: function() {
@@ -392,7 +392,7 @@ var TextEditorBase = Editor.inherit({
     },
 
     _toggleEmptiness: function(isEmpty) {
-        this.element().toggleClass(TEXTEDITOR_EMPTY_INPUT_CLASS, isEmpty);
+        this.$element().toggleClass(TEXTEDITOR_EMPTY_INPUT_CLASS, isEmpty);
         this._togglePlaceholder(isEmpty);
     },
 
@@ -480,10 +480,10 @@ var TextEditorBase = Editor.inherit({
     _renderClearButton: function() {
         var clearButtonVisibility = this._clearButtonVisibility();
 
-        this.element().toggleClass(TEXTEDITOR_SHOW_CLEAR_BUTTON_CLASS, clearButtonVisibility);
+        this.$element().toggleClass(TEXTEDITOR_SHOW_CLEAR_BUTTON_CLASS, clearButtonVisibility);
 
         if(clearButtonVisibility) {
-            if(!this._$clearButton || this._$clearButton && !this._$clearButton.closest(this.element()).length) {
+            if(!this._$clearButton || this._$clearButton && !this._$clearButton.closest(this.$element()).length) {
                 this._$clearButton = this._createClearButton();
             }
             this._$clearButton.prependTo(this._buttonsContainer());
@@ -589,7 +589,7 @@ var TextEditorBase = Editor.inherit({
     },
 
     _focusClassTarget: function() {
-        return this.element();
+        return this.$element();
     },
 
     _toggleFocusClass: function(isFocused, $element) {
@@ -597,7 +597,7 @@ var TextEditorBase = Editor.inherit({
     },
 
     _hasFocusClass: function(element) {
-        return this.callBase($(element || this.element()));
+        return this.callBase($(element || this.$element()));
     },
 
     _renderEmptinessEvent: function() {

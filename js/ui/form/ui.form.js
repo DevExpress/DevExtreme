@@ -158,7 +158,7 @@ var Form = Widget.inherit({
              * @name dxFormOptions_customizeItem
              * @publicName customizeItem
              * @type function
-             * @type_function_param1 item:Form item
+             * @type_function_param1 item:dxFormSimpleItem|dxFormGroupItem|dxFormTabbedItem|dxFormEmptyItem
              */
             customizeItem: null,
             /**
@@ -242,7 +242,7 @@ var Form = Widget.inherit({
             /**
              * @name dxFormOptions_items
              * @publicName items
-             * @type array
+             * @type Array<dxFormSimpleItem,dxFormGroupItem,dxFormTabbedItem,dxFormEmptyItem>
              * @default undefined
              */
             items: undefined,
@@ -275,122 +275,122 @@ var Form = Widget.inherit({
             * @type object
             */
             /**
-             * @name dxFormSimpleItemOptions_dataField
+             * @name dxFormSimpleItem_dataField
              * @publicName dataField
              * @type string
              * @default undefined
              */
             /**
-             * @name dxFormSimpleItemOptions_name
+             * @name dxFormSimpleItem_name
              * @publicName name
              * @type string
              * @default undefined
              */
             /**
-             * @name dxFormSimpleItemOptions_editorType
+             * @name dxFormSimpleItem_editorType
              * @publicName editorType
              * @type string
              * @acceptValues 'dxTextBox'|'dxNumberBox'|'dxDateBox'|'dxCheckBox'|'dxSwitch'|'dxSelectBox'|'dxLookup'|'dxTagBox'|'dxTextArea'|'dxColorBox'|'dxCalendar'|'dxAutocomplete'|'dxRadioGroup'|'dxSlider'|'dxDropDownBox'
              */
             /**
-             * @name dxFormSimpleItemOptions_editorOptions
+             * @name dxFormSimpleItem_editorOptions
              * @publicName editorOptions
              * @type object
              * @default undefined
              */
             /**
-             * @name dxFormSimpleItemOptions_colSpan
+             * @name dxFormSimpleItem_colSpan
              * @publicName colSpan
              * @type number
              * @default undefined
              */
             /**
-             * @name dxFormSimpleItemOptions_itemType
+             * @name dxFormSimpleItem_itemType
              * @publicName itemType
              * @type string
              * @acceptValues 'simple'|'group'|'tabbed'|'empty'
              * @default "simple"
              */
             /**
-             * @name dxFormSimpleItemOptions_visible
+             * @name dxFormSimpleItem_visible
              * @publicName visible
              * @type boolean
              * @default true
              */
             /**
-             * @name dxFormSimpleItemOptions_cssClass
+             * @name dxFormSimpleItem_cssClass
              * @publicName cssClass
              * @type string
              * @default undefined
              */
             /**
-             * @name dxFormSimpleItemOptions_visibleIndex
+             * @name dxFormSimpleItem_visibleIndex
              * @publicName visibleIndex
              * @type number
              * @default undefined
              */
             /**
-             * @name dxFormSimpleItemOptions_template
+             * @name dxFormSimpleItem_template
              * @publicName template
              * @type template
              * @type_function_param1 data:object
-             * @type_function_param2 itemElement:object
+             * @type_function_param2 itemElement:Element
              * @type_function_return string|Node|jQuery
              */
             /**
-             * @name dxFormSimpleItemOptions_label
+             * @name dxFormSimpleItem_label
              * @publicName label
              * @type object
              * @default undefined
              */
             /**
-             * @name dxFormSimpleItemOptions_label_text
+             * @name dxFormSimpleItem_label_text
              * @publicName text
              * @type string
              * @default undefined
              */
             /**
-             * @name dxFormSimpleItemOptions_label_visible
+             * @name dxFormSimpleItem_label_visible
              * @publicName visible
              * @type boolean
              * @default true
              */
             /**
-             * @name dxFormSimpleItemOptions_label_showColon
+             * @name dxFormSimpleItem_label_showColon
              * @publicName showColon
              * @type boolean
              * @default from showColonAfterLabel
              */
             /**
-             * @name dxFormSimpleItemOptions_label_location
+             * @name dxFormSimpleItem_label_location
              * @publicName location
              * @type string
              * @default "left"
              * @acceptValues 'left'|'right'|'top'
              */
             /**
-             * @name dxFormSimpleItemOptions_label_alignment
+             * @name dxFormSimpleItem_label_alignment
              * @publicName alignment
              * @type string
              * @default "left"
              * @acceptValues 'left'|'right'|'center'
              */
             /**
-             * @name dxFormSimpleItemOptions_helpText
+             * @name dxFormSimpleItem_helpText
              * @publicName helpText
              * @type string
              * @default undefined
              */
             /**
-             * @name dxFormSimpleItemOptions_isRequired
+             * @name dxFormSimpleItem_isRequired
              * @publicName isRequired
              * @type boolean
              * @default undefined
              */
             /**
-             * @name dxFormSimpleItemOptions_validationRules
+             * @name dxFormSimpleItem_validationRules
              * @publicName validationRules
-             * @type array
+             * @type Array<RequiredRule,NumericRule,RangeRule,StringLengthRule,CustomRule,CompareRule,PatternRule,EmailRule>
              * @default undefined
              */
             /**
@@ -400,73 +400,73 @@ var Form = Widget.inherit({
             * @type object
             */
             /**
-             * @name dxFormGroupItemOptions_caption
+             * @name dxFormGroupItem_caption
              * @publicName caption
              * @type string
              * @default undefined
              */
             /**
-             * @name dxFormGroupItemOptions_colCount
+             * @name dxFormGroupItem_colCount
              * @publicName colCount
              * @type number
              * @default 1
              */
             /**
-             * @name dxFormGroupItemOptions_colCountByScreen
+             * @name dxFormGroupItem_colCountByScreen
              * @publicName colCountByScreen
              * @extends ColCountResponsibleType
              * @inherits ColCountResponsible
              * @default undefined
              */
             /**
-             * @name dxFormGroupItemOptions_itemType
+             * @name dxFormGroupItem_itemType
              * @publicName itemType
              * @type string
              * @acceptValues 'simple'|'group'|'tabbed'|'empty'
              * @default "simple"
              */
             /**
-             * @name dxFormGroupItemOptions_colSpan
+             * @name dxFormGroupItem_colSpan
              * @publicName colSpan
              * @type number
              * @default undefined
              */
             /**
-             * @name dxFormGroupItemOptions_visible
+             * @name dxFormGroupItem_visible
              * @publicName visible
              * @type boolean
              * @default true
              */
             /**
-             * @name dxFormGroupItemOptions_cssClass
+             * @name dxFormGroupItem_cssClass
              * @publicName cssClass
              * @type string
              * @default undefined
              */
             /**
-             * @name dxFormGroupItemOptions_visibleIndex
+             * @name dxFormGroupItem_visibleIndex
              * @publicName visibleIndex
              * @type number
              * @default undefined
              */
             /**
-             * @name dxFormGroupItemOptions_alignItemLabels
+             * @name dxFormGroupItem_alignItemLabels
              * @publicName alignItemLabels
              * @type boolean
              * @default true
              */
             /**
-             * @name dxFormGroupItemOptions_template
+             * @name dxFormGroupItem_template
              * @publicName template
              * @type template
              * @type_function_param1 data:object
-             * @type_function_param2 itemElement:object
+             * @type_function_param2 itemElement:Element
              * @type_function_return string|Node|jQuery
              */
             /**
-             * @name dxFormGroupItemOptions_items
+             * @name dxFormGroupItem_items
              * @publicName items
-             * @type array
+             * @type Array<dxFormSimpleItem,dxFormGroupItem,dxFormTabbedItem,dxFormEmptyItem>
              * @default undefined
              */
             /**
@@ -476,113 +476,113 @@ var Form = Widget.inherit({
             * @type object
             */
             /**
-             * @name dxFormTabbedItemOptions_visible
+             * @name dxFormTabbedItem_visible
              * @publicName visible
              * @type boolean
              * @default true
              */
             /**
-             * @name dxFormTabbedItemOptions_itemType
+             * @name dxFormTabbedItem_itemType
              * @publicName itemType
              * @type string
              * @acceptValues 'simple'|'group'|'tabbed'|'empty'
              * @default "simple"
              */
             /**
-             * @name dxFormTabbedItemOptions_cssClass
+             * @name dxFormTabbedItem_cssClass
              * @publicName cssClass
              * @type string
              * @default undefined
              */
             /**
-             * @name dxFormTabbedItemOptions_visibleIndex
+             * @name dxFormTabbedItem_visibleIndex
              * @publicName visibleIndex
              * @type number
              * @default undefined
              */
             /**
-             * @name dxFormTabbedItemOptions_tabPanelOptions
+             * @name dxFormTabbedItem_tabPanelOptions
              * @publicName tabPanelOptions
-             * @type TabPanel options
+             * @type dxTabPanelOptions
              * @default undefined
              */
             /**
-             * @name dxFormTabbedItemOptions_colSpan
+             * @name dxFormTabbedItem_colSpan
              * @publicName colSpan
              * @type number
              * @default undefined
              */
             /**
-             * @name dxFormTabbedItemOptions_tabs
+             * @name dxFormTabbedItem_tabs
              * @publicName tabs
-             * @type array
+             * @type Array<Object>
              * @default undefined
              */
             /**
-             * @name dxFormTabbedItemOptions_tabs_alignItemLabels
+             * @name dxFormTabbedItem_tabs_alignItemLabels
              * @publicName alignItemLabels
              * @type boolean
              * @default true
              */
             /**
-             * @name dxFormTabbedItemOptions_tabs_title
+             * @name dxFormTabbedItem_tabs_title
              * @publicName title
              * @type string
              * @default undefined
              */
             /**
-             * @name dxFormTabbedItemOptions_tabs_colCount
+             * @name dxFormTabbedItem_tabs_colCount
              * @publicName colCount
              * @type number
              * @default 1
              */
             /**
-             * @name dxFormTabbedItemOptions_tabs_colCountByScreen
+             * @name dxFormTabbedItem_tabs_colCountByScreen
              * @publicName colCountByScreen
              * @extends ColCountResponsibleType
              * @inherits ColCountResponsible
              * @default undefined
             */
             /**
-             * @name dxFormTabbedItemOptions_tabs_items
+             * @name dxFormTabbedItem_tabs_items
              * @publicName items
-             * @type array
+             * @type Array<dxFormSimpleItem,dxFormGroupItem,dxFormTabbedItem,dxFormEmptyItem>
              * @default undefined
              */
             /**
-             * @name dxFormTabbedItemOptions_tabs_badge
+             * @name dxFormTabbedItem_tabs_badge
              * @publicName badge
              * @type string
              * @default undefined
              */
             /**
-             * @name dxFormTabbedItemOptions_tabs_disabled
+             * @name dxFormTabbedItem_tabs_disabled
              * @publicName disabled
              * @type boolean
              * @default false
              */
             /**
-             * @name dxFormTabbedItemOptions_tabs_icon
+             * @name dxFormTabbedItem_tabs_icon
              * @publicName icon
              * @type string
              * @default undefined
              */
             /**
-             * @name dxFormTabbedItemOptions_tabs_tabTemplate
+             * @name dxFormTabbedItem_tabs_tabTemplate
              * @publicName tabTemplate
              * @type template
              * @type_function_param1 tabData:object
              * @type_function_param2 tabIndex:number
-             * @type_function_param3 tabElement:object
+             * @type_function_param3 tabElement:Element
              * @default undefined
              */
             /**
-             * @name dxFormTabbedItemOptions_tabs_template
+             * @name dxFormTabbedItem_tabs_template
              * @publicName template
              * @type template
              * @type_function_param1 tabData:object
              * @type_function_param2 tabIndex:number
-             * @type_function_param3 tabElement:object
+             * @type_function_param3 tabElement:Element
              * @default undefined
              */
             /**
@@ -592,38 +592,38 @@ var Form = Widget.inherit({
             * @type object
             */
             /**
-             * @name dxFormEmptyItemOptions_name
+             * @name dxFormEmptyItem_name
              * @publicName name
              * @type string
              * @default undefined
              */
             /**
-             * @name dxFormEmptyItemOptions_colSpan
+             * @name dxFormEmptyItem_colSpan
              * @publicName colSpan
              * @type number
              * @default undefined
              */
             /**
-             * @name dxFormEmptyItemOptions_itemType
+             * @name dxFormEmptyItem_itemType
              * @publicName itemType
              * @type string
              * @acceptValues 'simple'|'group'|'tabbed'|'empty'
              * @default "simple"
              */
             /**
-             * @name dxFormEmptyItemOptions_visible
+             * @name dxFormEmptyItem_visible
              * @publicName visible
              * @type boolean
              * @default true
              */
             /**
-             * @name dxFormEmptyItemOptions_cssClass
+             * @name dxFormEmptyItem_cssClass
              * @publicName cssClass
              * @type string
              * @default undefined
              */
             /**
-             * @name dxFormEmptyItemOptions_visibleIndex
+             * @name dxFormEmptyItem_visibleIndex
              * @publicName visibleIndex
              * @type number
              * @default undefined
@@ -749,7 +749,7 @@ var Form = Widget.inherit({
         if(alignItemLabelsInAllGroups) {
             this._applyLabelsWidthWithNestedGroups($container, colCount, excludeTabbed);
         } else {
-            var $groups = this.element().find("." + FORM_GROUP_CLASS),
+            var $groups = this.$element().find("." + FORM_GROUP_CLASS),
                 i;
             for(i = 0; i < $groups.length; i++) {
                 this._applyLabelsWidth($groups.eq(i), excludeTabbed);
@@ -797,7 +797,7 @@ var Form = Widget.inherit({
         this._clearCachedInstances();
 
         this.callBase();
-        this.element().addClass(FORM_CLASS);
+        this.$element().addClass(FORM_CLASS);
         this._attachSyncSubscriptions();
 
         this._cachedScreenFactor = windowUtils.getCurrentScreenFactor(this.option("screenByWidth"));
@@ -810,7 +810,7 @@ var Form = Widget.inherit({
 
     _alignLabels: function(layoutManager, inOneColumn) {
         this._alignLabelsInColumn({
-            $container: this.element(),
+            $container: this.$element(),
             layoutManager: layoutManager,
             excludeTabbed: true,
             items: this.option("items"),
@@ -827,7 +827,7 @@ var Form = Widget.inherit({
 
     _renderContentImpl: function() {
         this.callBase();
-        this.setAria("role", "form", this.element());
+        this.setAria("role", "form", this.$element());
 
         if(this.option("scrollingEnabled")) {
             this._renderScrollable();
@@ -839,7 +839,7 @@ var Form = Widget.inherit({
 
     _renderScrollable: function() {
         var useNativeScrolling = this.option("useNativeScrolling");
-        this._scrollable = new Scrollable(this.element(), {
+        this._scrollable = new Scrollable(this.$element(), {
             useNative: !!useNativeScrolling,
             useSimulatedScrollbar: !useNativeScrolling,
             useKeyboard: false,
@@ -849,11 +849,11 @@ var Form = Widget.inherit({
     },
 
     _getContent: function() {
-        return this.option("scrollingEnabled") ? this._scrollable.content() : this.element();
+        return this.option("scrollingEnabled") ? this._scrollable.$content() : this.$element();
     },
 
     _renderValidationSummary: function() {
-        var $validationSummary = this.element().find("." + FORM_VALIDATION_SUMMARY);
+        var $validationSummary = this.$element().find("." + FORM_VALIDATION_SUMMARY);
 
         if($validationSummary.length > 0) {
             $validationSummary.remove();
@@ -952,7 +952,7 @@ var Form = Widget.inherit({
                 that._alignLabels.bind(that)(that._rootLayoutManager, inOneColumn);
             },
             onContentReady: function(e) {
-                that._alignLabels(e.component, e.component.isLayoutChanged());
+                that._alignLabels(e.component, e.component.isSingleColumnMode());
             }
         });
     },
@@ -965,8 +965,9 @@ var Form = Widget.inherit({
                 onItemRendered: function(args) {
                     domUtils.triggerShownEvent(args.itemElement);
                 },
-                itemTemplate: function(itemData, e, $container) {
+                itemTemplate: function(itemData, e, container) {
                     var layoutManager,
+                        $container = $(container),
                         alignItemLabels = utils.ensureDefined(itemData.alignItemLabels, true);
 
                     layoutManager = that._renderLayoutManager(itemData.items, $container, {
@@ -990,7 +991,7 @@ var Form = Widget.inherit({
                             $container: $container,
                             layoutManager: layoutManager,
                             items: itemData.items,
-                            inOneColumn: layoutManager.isLayoutChanged()
+                            inOneColumn: layoutManager.isSingleColumnMode()
                         });
                     }
                 }
@@ -1026,7 +1027,7 @@ var Form = Widget.inherit({
             };
             item.groupContentTemplate.render({
                 model: data,
-                container: $groupContent
+                container: domUtils.getPublicElement($groupContent)
             });
         } else {
             layoutManager = this._renderLayoutManager(item.items, $groupContent, {
@@ -1090,7 +1091,7 @@ var Form = Widget.inherit({
                         that._triggerOnFieldDataChanged(args);
                     }
                 },
-                validationBoundary: that.option("scrollingEnabled") ? that.element() : undefined
+                validationBoundary: that.option("scrollingEnabled") ? that.$element() : undefined
             };
 
         return extend(baseConfig, {
@@ -1145,7 +1146,7 @@ var Form = Widget.inherit({
                             that._isDataUpdating = false;
                         }
 
-                        if(args.name === "readOnly") {
+                        if(args.name === "readOnly" || args.name === "disabled") {
                             layoutManager.option(optionFullName, args.value);
                         }
                     });
@@ -1202,13 +1203,13 @@ var Form = Widget.inherit({
             case "width":
                 this.callBase(args);
                 this._rootLayoutManager.option(args.name, args.value);
-                this._alignLabels(this._rootLayoutManager, this._rootLayoutManager.isLayoutChanged());
+                this._alignLabels(this._rootLayoutManager, this._rootLayoutManager.isSingleColumnMode());
                 break;
             case "visible":
                 this.callBase(args);
 
                 if(args.value) {
-                    domUtils.triggerShownEvent(this.element());
+                    domUtils.triggerShownEvent(this.$element());
                 }
                 break;
             default:
@@ -1503,7 +1504,7 @@ var Form = Widget.inherit({
     _refresh: function() {
         var editorSelector = "." + FOCUSED_STATE_CLASS + " input, ." + FOCUSED_STATE_CLASS + " textarea";
 
-        eventsEngine.trigger(this.element().find(editorSelector), "change");
+        eventsEngine.trigger(this.$element().find(editorSelector), "change");
 
         this.callBase();
     },
@@ -1540,7 +1541,7 @@ var Form = Widget.inherit({
     },
 
     _focusTarget: function() {
-        return this.element().find("." + FIELD_ITEM_CONTENT_CLASS + " [tabindex]").first();
+        return this.$element().find("." + FIELD_ITEM_CONTENT_CLASS + " [tabindex]").first();
     },
 
     _visibilityChanged: function(visible) {
@@ -1576,7 +1577,7 @@ var Form = Widget.inherit({
      * @name dxFormMethods_getEditor
      * @publicName getEditor(field)
      * @param1 field:string
-     * @return object
+     * @return any
      */
     getEditor: function(field) {
         return this._editorInstancesByField[field];
@@ -1585,7 +1586,7 @@ var Form = Widget.inherit({
     /**
      * @name dxFormMethods_updateDimensions
      * @publicName updateDimensions()
-     * @return Promise
+     * @return Promise<void>
      */
     updateDimensions: function() {
         var that = this,

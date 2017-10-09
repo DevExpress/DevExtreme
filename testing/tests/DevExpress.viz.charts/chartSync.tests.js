@@ -977,6 +977,28 @@ var environment = {
         assert.ok(argAxis === chart._argumentAxes[0], "Arg axis should not be recreated");
     });
 
+    QUnit.test("T552944. Update series family and option that recreates series - series families are processed first", function(assert) {
+        //arrange
+        var chart = this.createChart({
+                equalBarWidth: false,
+                dataSource: [{ arg: 1, val: 1 }],
+                series: { type: "line" }
+            }),
+            series = chart.getAllSeries();
+
+        seriesMockData.series.push(new MockSeries({ points: getPoints(DEFAULT_ANIMATION_LIMIT - 1) }));
+
+        //act
+        this.themeManager.getOptions.withArgs("equalBarWidth").returns(true);
+
+        chart.option({
+            palette: ["green"],
+            equalBarWidth: true
+        });
+        //assert
+        assert.ok(chart.getAllSeries() !== series, "series recreated");
+    });
+
     QUnit.test("MinBubbleSize updating", function(assert) {
         //arrange
         var chart = this.createChart({
@@ -1715,18 +1737,18 @@ var environment = {
     QUnit.test("event contextmenu on div element", function(assert) {
         var chart = this.createChart();
 
-        $(chart.element()).trigger(new $.Event("contextmenu"));
+        $(chart.$element()).trigger(new $.Event("contextmenu"));
 
-        assert.ok(chart.element());
+        assert.ok(chart.$element());
         assert.equal(chart.eventType, "contextmenu");
     });
 
     QUnit.test("event MSHoldVisual on div element", function(assert) {
         var chart = this.createChart();
 
-        $(chart.element()).trigger(new $.Event("MSHoldVisual"));
+        $(chart.$element()).trigger(new $.Event("MSHoldVisual"));
 
-        assert.ok(chart.element());
+        assert.ok(chart.$element());
         assert.equal(chart.eventType, "MSHoldVisual");
     });
 }());

@@ -17,7 +17,8 @@ var $ = require("jquery"),
     config = require("core/config"),
     viewPort = require("core/utils/view_port").value,
     pointerMock = require("../../helpers/pointerMock.js"),
-    keyboardMock = require("../../helpers/keyboardMock.js");
+    keyboardMock = require("../../helpers/keyboardMock.js"),
+    isRenderer = require("core/utils/type").isRenderer;
 
 require("common.css!");
 
@@ -83,6 +84,9 @@ QUnit.testStart(function() {
             <div class="content1" style="height: 100px; width: 100px;"></div>\
             <div class="content2"></div>\
         </div>\
+        <div id="scrollableVary" style="height: auto">\
+            <div class="content3" style="height: 100px; width: 100px;"></div>\
+        </div>\
         <div id="scrollableNeighbour"></div>\
         <div id="scrollable1" style="height: 100px;">\
             <div id="scrollable2" style="height: 50px;">\
@@ -115,9 +119,9 @@ QUnit.test("scrollable - root element should has 'dx-scrollable-customizable-scr
     var scrollable = new Scrollable($("#scrollable"));
 
     if(devices.real().deviceType !== "desktop" || navigator.platform.indexOf('Mac') > -1 && browser.webkit) {
-        assert.notOk(scrollable.element().hasClass("dx-scrollable-customizable-scrollbars"), "root element hasn't 'dx-scrollable-customizable-scrollbars' class");
+        assert.notOk(scrollable.$element().hasClass("dx-scrollable-customizable-scrollbars"), "root element hasn't 'dx-scrollable-customizable-scrollbars' class");
     } else {
-        assert.ok(scrollable.element().hasClass("dx-scrollable-customizable-scrollbars"), "root element has 'dx-scrollable-customizable-scrollbars' class");
+        assert.ok(scrollable.$element().hasClass("dx-scrollable-customizable-scrollbars"), "root element has 'dx-scrollable-customizable-scrollbars' class");
     }
 });
 
@@ -142,7 +146,22 @@ QUnit.test("rtlEnabled scrolls to very right position", function(assert) {
     });
 
     var scrollable = $scrollable.dxScrollable("instance");
-    var veryRightPosition = scrollable.content().width() - $scrollable.width();
+    var veryRightPosition = scrollable.$content().width() - $scrollable.width();
+
+    assert.equal(scrollable.scrollLeft(), veryRightPosition, "scrolled to very right position");
+});
+
+QUnit.test("rtlEnabled scrolls to very right position after changing the size of the scrollable (T544872)", function(assert) {
+    var $scrollable = $("#scrollableVary").dxScrollable({
+        direction: "horizontal",
+        rtlEnabled: true,
+        width: 50,
+        height: 50,
+        useNative: false
+    });
+
+    var scrollable = $scrollable.dxScrollable("instance");
+    var veryRightPosition = scrollable.$content().width() - $scrollable.width();
 
     assert.equal(scrollable.scrollLeft(), veryRightPosition, "scrolled to very right position");
 });
@@ -160,7 +179,7 @@ QUnit.test("rtlEnabled scrolls to very right position after shown event", functi
     $wrapper.show();
     domUtils.triggerShownEvent($wrapper);
     var scrollable = $scrollable.dxScrollable("instance");
-    var veryRightPosition = scrollable.content().width() - $scrollable.width();
+    var veryRightPosition = scrollable.$content().width() - $scrollable.width();
 
     assert.equal(scrollable.scrollLeft(), veryRightPosition, "scrolled to very right position");
 });
@@ -322,7 +341,7 @@ QUnit.test("set actions by option", function(assert) {
             useNative: false,
             inertiaEnabled: false
         }),
-        instance = $scrollable.data("dxScrollable");
+        instance = $scrollable.dxScrollable("instance");
 
     instance.option("onStart", function(assert) { start++; });
     instance.option("onScroll", function(assert) { scroll++; });
@@ -1776,7 +1795,7 @@ QUnit.test("container size should be rounded to prevent unexpected scrollbar app
         contentSize: 101
     });
 
-    assert.ok(scrollbar.element().is(":hidden"), "scrollbar is not visible");
+    assert.ok(scrollbar.$element().is(":hidden"), "scrollbar is not visible");
 });
 
 QUnit.test("content size should be rounded to prevent unexpected scrollbar appearance", function(assert) {
@@ -1785,7 +1804,7 @@ QUnit.test("content size should be rounded to prevent unexpected scrollbar appea
         contentSize: 100.4
     });
 
-    assert.ok(scrollbar.element().is(":hidden"), "scrollbar is not visible");
+    assert.ok(scrollbar.$element().is(":hidden"), "scrollbar is not visible");
 });
 
 QUnit.module("api", moduleConfig);
@@ -1852,7 +1871,10 @@ QUnit.test("content", function(assert) {
     var $scrollable = $("#scrollable").dxScrollable({
         useNative: false
     });
-    assert.ok($scrollable.dxScrollable("instance").content().hasClass(SCROLLABLE_CONTENT_CLASS), "returns content");
+    var content = $scrollable.dxScrollable("instance").content();
+
+    assert.equal(isRenderer(content), config().useJQueryRenderer, "content is correct");
+    assert.ok($(content).hasClass(SCROLLABLE_CONTENT_CLASS), "returns content");
 });
 
 QUnit.test("scrollBy with plain object", function(assert) {
@@ -3392,7 +3414,7 @@ QUnit.test("scrollbar is visible for parent scrollable after mouse leave for chi
     $childrenContainer.trigger($.Event("mouseenter", { originalEvent: { target: $childrenContainer.get(0) } }));
 
     var childrenScrollbar = Scrollbar.getInstance($childScrollable.find("." + SCROLLABLE_SCROLLBAR_CLASS));
-    var parentScrollbar = Scrollbar.getInstance($scrollable.find("." + SCROLLABLE_SCROLLBAR_CLASS).not(childrenScrollbar.element()));
+    var parentScrollbar = Scrollbar.getInstance($scrollable.find("." + SCROLLABLE_SCROLLBAR_CLASS).not(childrenScrollbar.$element()));
 
     assert.equal(parentScrollbar.option("visible"), false, "parent scrollbar is hidden");
     assert.equal(childrenScrollbar.option("visible"), true, "children scrollbar is visible");
@@ -3428,7 +3450,7 @@ QUnit.test("scrollbar is visible for parent scrollable after start", function(as
     $childrenContainer.trigger($.Event("mouseleave", { originalEvent: { target: $childrenContainer.get(0) } }));
 
     var childrenScrollbar = Scrollbar.getInstance($childScrollable.find("." + SCROLLABLE_SCROLLBAR_CLASS));
-    var parentScrollbar = Scrollbar.getInstance($scrollable.find("." + SCROLLABLE_SCROLLBAR_CLASS).not(childrenScrollbar.element()));
+    var parentScrollbar = Scrollbar.getInstance($scrollable.find("." + SCROLLABLE_SCROLLBAR_CLASS).not(childrenScrollbar.$element()));
 
     assert.equal(parentScrollbar.option("visible"), false, "parent scrollbar is hidden");
     assert.equal(childrenScrollbar.option("visible"), true, "children scrollbar is visible");

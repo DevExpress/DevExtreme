@@ -161,7 +161,7 @@ var Switch = Editor.inherit({
         this._renderContainers();
         this.option("useInkRipple") && this._renderInkRipple();
 
-        this.element()
+        this.$element()
             .addClass(SWITCH_CLASS)
             .append(this._$switchWrapper);
 
@@ -226,7 +226,7 @@ var Switch = Editor.inherit({
     },
 
     _renderSwipeable: function() {
-        this._createComponent(this.element(), Swipeable, {
+        this._createComponent(this.$element(), Swipeable, {
             elastic: false,
             immediate: true,
             onStart: this._swipeStartHandler.bind(this),
@@ -239,7 +239,7 @@ var Switch = Editor.inherit({
     _renderSubmitElement: function() {
         this._$submitElement = $("<input>")
                 .attr("type", "hidden")
-                .appendTo(this.element());
+                .appendTo(this.$element());
     },
 
     _getSubmitElement: function() {
@@ -315,7 +315,7 @@ var Switch = Editor.inherit({
 
     _renderClick: function() {
         var eventName = eventUtils.addNamespace(clickEvent.name, this.NAME);
-        var $element = this.element();
+        var $element = this.$element();
         this._clickAction = this._createAction(this._clickHandler.bind(this));
 
         eventsEngine.off($element, eventName);
@@ -379,7 +379,7 @@ var Switch = Editor.inherit({
 
         this._feedbackDeferred = new Deferred();
         feedbackEvents.lock(this._feedbackDeferred);
-        this._toggleActiveState(this.element(), this.option("activeStateEnabled"));
+        this._toggleActiveState(this.$element(), this.option("activeStateEnabled"));
     },
 
     _swipeUpdateHandler: function(e) {
@@ -401,7 +401,7 @@ var Switch = Editor.inherit({
                 var pos = that.option("value") + offsetDirection * e.jQueryEvent.targetOffset;
                 that.option("value", Boolean(pos));
                 that._feedbackDeferred.resolve();
-                that._toggleActiveState(that.element(), false);
+                that._toggleActiveState(that.$element(), false);
             }
         });
     },
@@ -412,7 +412,7 @@ var Switch = Editor.inherit({
         var val = this.option("value");
         this._renderPosition(val, 0);
 
-        this.element().toggleClass(SWITCH_ON_VALUE_CLASS, val);
+        this.$element().toggleClass(SWITCH_ON_VALUE_CLASS, val);
         this._$submitElement.val(val);
         this.setAria({
             "pressed": val,

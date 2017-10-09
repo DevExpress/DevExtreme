@@ -8,7 +8,8 @@ var $ = require("jquery"),
     Widget = require("ui/widget/ui.widget"),
     KoTemplate = require("integration/knockout/template"),
     CollectionWidget = require("ui/collection/ui.collection_widget.edit"),
-    config = require("core/config");
+    config = require("core/config"),
+    dataUtils = require("core/element_data");
 
 require("ui/select_box");
 require("ui/lookup");
@@ -78,7 +79,7 @@ QUnit.module(
 
             ko.applyBindings(vm, markup[0]);
 
-            var instance = markup.data("dxTest");
+            var instance = markup.dxTest("instance");
 
             assert.equal(instance.option("text"), "my text");
 
@@ -313,7 +314,7 @@ QUnit.module(
             };
 
             ko.applyBindings(vm, markup[0]);
-            var instance = markup.data("dxTest");
+            var instance = markup.dxTest("instance");
 
             assert.equal(instance.option("text"), 1);
 
@@ -333,7 +334,7 @@ QUnit.module(
             var markup = $("<div></div>").attr("data-bind", "dxTest: x").appendTo(FIXTURE_ELEMENT);
             ko.applyBindings(vm, markup[0]);
 
-            var instance = markup.data("dxTest");
+            var instance = markup.dxTest("instance");
 
             vm.x().text("new text");
             assert.equal(instance.option("text"), "new text");
@@ -350,7 +351,7 @@ QUnit.module(
 
             var markup = $("<div></div>").attr("data-bind", "dxTest: { array: array, obj: obj }").appendTo(FIXTURE_ELEMENT);
             ko.applyBindings(vm, markup[0]);
-            var instance = markup.data("dxTest");
+            var instance = markup.dxTest("instance");
 
             instance.option("obj", { a: 1 });
             assert.deepEqual(instance.option("obj"), { a: 1 });
@@ -363,8 +364,8 @@ QUnit.module(
 
             ko.applyBindings({}, markup[0]);
 
-            assert.equal(child1.data("dxTest").option("text"), 1);
-            assert.equal(child2.data("dxTest").option("text"), 2);
+            assert.equal(child1.dxTest("instance").option("text"), 1);
+            assert.equal(child2.dxTest("instance").option("text"), 2);
         });
 
         QUnit.test("model property name is not necessarily equal component option name, regression case", function(assert) {
@@ -378,7 +379,7 @@ QUnit.module(
 
             ko.applyBindings(vm, markup[0]);
 
-            var instance = markup.data("dxTest");
+            var instance = markup.dxTest("instance");
 
             instance.option("text", "changed");
             assert.equal(vm.textInModel(), "changed");
@@ -395,7 +396,7 @@ QUnit.module(
 
             ko.applyBindings(vm, markup[0]);
 
-            assert.equal(markup.data("dxTest").option("text"), "value");
+            assert.equal(markup.dxTest("instance").option("text"), "value");
 
             markup
                 .remove()
@@ -403,7 +404,7 @@ QUnit.module(
             ko.applyBindings(vm, markup[0]);
             vm.text("new value");
 
-            assert.equal(markup.data("dxTest").option("text"), "new value");
+            assert.equal(markup.dxTest("instance").option("text"), "new value");
         });
 
         QUnit.test("remove all subscription after widget was removed", function(assert) {
@@ -494,7 +495,7 @@ QUnit.module(
 
             ko.applyBindings(vm, markup.get(0));
 
-            var component = markup.data("dxTest");
+            var component = markup.dxTest("instance");
 
             var renderCount = 0;
             component._render = function() {
@@ -514,7 +515,7 @@ QUnit.module(
             var markup = $("<div><div />").attr("data-bind", "dxTest: { checked: observable }").appendTo(FIXTURE_ELEMENT),
                 vm = { observable: ko.observable(false) };
             ko.applyBindings(vm, markup.get(0));
-            markup.data("dxTest").option("value", true);
+            markup.dxTest("instance").option("value", true);
             assert.strictEqual(vm.observable(), true);
         });
 
@@ -551,7 +552,7 @@ QUnit.module(
 
             vm.point(vm.points()[0]);
 
-            var component = markup.data("dxTest");
+            var component = markup.dxTest("instance");
             component.option("option1", 10);
 
             assert.equal(vm.point().x(), 10);
@@ -728,7 +729,7 @@ QUnit.module(
                 _render: function() {
                     var content = $("<div />")
                         .addClass("dx-content")
-                        .appendTo(this.element());
+                        .appendTo(this.$element());
 
                     this.option("integrationOptions.templates")["template"].render({
                         container: content
@@ -743,7 +744,7 @@ QUnit.module(
                 _renderContentImpl: noop,
 
                 _clean: function() {
-                    this.element().empty();
+                    this.$element().empty();
                 },
 
                 _optionChanged: function() {
@@ -761,11 +762,11 @@ QUnit.module(
                 },
 
                 _render: function() {
-                    this.element().append($("<span />").text(this.option("text")));
+                    this.$element().append($("<span />").text(this.option("text")));
                 },
 
                 _clean: function() {
-                    this.element().empty();
+                    this.$element().empty();
                 },
 
                 _optionChanged: function() {
@@ -878,7 +879,7 @@ QUnit.module("Widget & CollectionWidget with templates enabled", function() {
     var TestContainer = Widget.inherit({
         _renderContentImpl: function() {
             if(this.option("integrationOptions.templates").template) {
-                this.option("integrationOptions.templates").template.render({ container: this.element() });
+                this.option("integrationOptions.templates").template.render({ container: this.$element() });
             }
         }
     });
@@ -900,14 +901,14 @@ QUnit.module("Widget & CollectionWidget with templates enabled", function() {
             // knockout scenario
             markup = $("<div data-bind='dxTestContainer: { }'></div>").appendTo(FIXTURE_ELEMENT);
             ko.applyBindings({}, markup.get(0));
-            instance = markup.data("dxTestContainer");
+            instance = markup.dxTestContainer("instance");
             template = instance._getTemplate("test");
             assert.ok((template instanceof KoTemplate), "default Ko template not retrieved");
 
             // jquery scenario
             markup = $("<div></div>").appendTo(FIXTURE_ELEMENT)
                 .dxTestContainer({});
-            instance = markup.data("dxTestContainer");
+            instance = markup.dxTestContainer("instance");
             template = instance._getTemplate("test");
             assert.ok(!(template instanceof KoTemplate), "default Ko template is not retrieved");
 
@@ -920,7 +921,7 @@ QUnit.module("Widget & CollectionWidget with templates enabled", function() {
         var TestContainer = CollectionWidget.inherit({
             _renderContentImpl: function() {
                 if(this.option("integrationOptions.templates").template) {
-                    this.option("integrationOptions.templates").template.render({ container: this.element() });
+                    this.option("integrationOptions.templates").template.render({ container: this.$element() });
                 }
             }
         });
@@ -935,14 +936,14 @@ QUnit.module("Widget & CollectionWidget with templates enabled", function() {
             // knockout scenario
             markup = $("<div data-bind='dxTestContainer: { }'></div>").appendTo(FIXTURE_ELEMENT);
             ko.applyBindings({}, markup.get(0));
-            instance = markup.data("dxTestContainer");
+            instance = markup.dxTestContainer("instance");
             template = instance._getTemplate("test");
             assert.ok(template instanceof KoTemplate, "default Ko template retrieved");
 
             // jquery scenario
             markup = $("<div></div>").appendTo(FIXTURE_ELEMENT)
                 .dxTestContainer({});
-            instance = markup.data("dxTestContainer");
+            instance = markup.dxTestContainer("instance");
             template = instance._getTemplate("test");
             assert.ok(!(template instanceof KoTemplate), "default Ko template not retrieved");
 
@@ -960,13 +961,13 @@ QUnit.module("Widget & CollectionWidget with templates enabled", function() {
             },
 
             _render: function() {
-                this.option("integrationOptions.templates")["template"].render({ container: this.element() });
+                this.option("integrationOptions.templates")["template"].render({ container: this.$element() });
             },
 
             _renderContentImpl: noop,
 
             _clean: function() {
-                this.element().empty();
+                this.$element().empty();
             }
         });
 
@@ -987,7 +988,7 @@ QUnit.module("Widget & CollectionWidget with templates enabled", function() {
 
             ko.applyBindings(vm, markup[0]);
 
-            var instance = markup.data("dxTestContainer");
+            var instance = markup.dxTestContainer("instance");
 
             assert.ok(instance.option("integrationOptions.templates"));
             assert.ok(instance.option("integrationOptions.templates")["template"]);
@@ -1018,7 +1019,7 @@ QUnit.module("Widget & CollectionWidget with templates enabled", function() {
                 $.each(that.option("items"), function(index, item) {
                     that.option("integrationOptions.templates")["itemTemplate"].render({
                         model: item,
-                        container: that.element()
+                        container: that.$element()
                     });
                 });
             },
@@ -1026,7 +1027,7 @@ QUnit.module("Widget & CollectionWidget with templates enabled", function() {
             _renderContentImpl: noop,
 
             _clean: function() {
-                this.element().empty();
+                this.$element().empty();
             }
         });
 
@@ -1158,8 +1159,8 @@ QUnit.module(
 
                     ko.applyBindings({}, $component.get(0));
 
-                    var component = $component.data("dxTestComponent"),
-                        innerComponent = $innerComponent.data("dxTestComponent");
+                    var component = $component.dxTestComponent("instance"),
+                        innerComponent = $innerComponent.dxTestComponent("instance");
 
                     removeFunc($component);
 
@@ -1260,7 +1261,7 @@ QUnit.module(
             var markup = $("<div></div>").appendTo(FIXTURE_ELEMENT);
             markup.dxTest({ onHandler: handler });
 
-            var component = markup.data("dxTest");
+            var component = markup.dxTest("instance");
             component.trigger();
 
             assert.equal(context, component);
@@ -1277,7 +1278,7 @@ QUnit.module(
 
             ko.applyBindings(vm, markup[0]);
 
-            markup.data("dxTest").trigger();
+            markup.dxTest("instance").trigger();
 
             assert.equal(context, vm);
         });
@@ -1297,7 +1298,7 @@ QUnit.module(
 
             ko.applyBindings(vm, $("#aggregatedModelComponentActionContext").get(0));
 
-            $("#aggregatedModelComponentActionContext .test").data("dxTest").trigger();
+            dataUtils.data($("#aggregatedModelComponentActionContext .test").get(0), "dxTest").trigger();
 
             assert.equal(context, subVM);
         });
@@ -1311,7 +1312,7 @@ QUnit.module("Template w/o ko scenario", function() {
         var TestContainer = Widget.inherit({
             _renderContentImpl: function() {
                 if(this.option("integrationOptions.templates").template) {
-                    this.option("integrationOptions.templates").template.render({ container: this.element() });
+                    this.option("integrationOptions.templates").template.render({ container: this.$element() });
                 }
             },
             _optionChanged: function() {

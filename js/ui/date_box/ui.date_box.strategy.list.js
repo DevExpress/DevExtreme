@@ -62,9 +62,13 @@ var ListStrategy = DateBoxStrategy.inherit({
         return result;
     },
 
+    useCurrentDateByDefault: function() {
+        return true;
+    },
+
     _getPopupWidth: function() {
         var device = devices.current(),
-            result = this.dateBox.element().outerWidth();
+            result = this.dateBox.$element().outerWidth();
 
         if(device.platform === "android") {
             result += 32;
@@ -270,7 +274,7 @@ var ListStrategy = DateBoxStrategy.inherit({
     _updatePopupHeight: function() {
         this.dateBox._setPopupOption("height", "auto");
 
-        var popupHeight = this._widget.element().outerHeight();
+        var popupHeight = this._widget.$element().outerHeight();
         var maxHeight = $(window).height() * 0.45;
         this.dateBox._setPopupOption("height", Math.min(popupHeight, maxHeight));
         this.dateBox._timeList && this.dateBox._timeList.updateDimensions();

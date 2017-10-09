@@ -21,6 +21,7 @@ var definitionSources = [
     'viz-core',
     'viz-charts',
     'viz-gauges',
+    'viz-funnel',
     'viz-rangeselector',
     'viz-vectormap',
     'viz-sparklines',

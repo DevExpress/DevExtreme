@@ -176,6 +176,30 @@ QUnit.test("Data source with negative values", function(assert) {
     assert.equal(spy.getCall(0).args[0].target.text, "Inconsistent dataSource");
 });
 
+QUnit.test("Pass dataItem to funnel item", function(assert) {
+    stubAlgorithm.normalizeValues.returns([1]);
+    stubAlgorithm.getFigures.returns([
+        [1]
+    ]);
+
+    var dataSource = [{ val: 1, value: 5, argument: "One", color: "red" }],
+        funnel = createFunnel({
+            algorithm: "stub",
+            dataSource: dataSource,
+            valueField: "value",
+            argumentField: "argument",
+            colorField: "color"
+        });
+
+    funnel.option({
+        valueField: "val"
+    });
+
+    var items = funnel.getAllItems();
+
+    assert.deepEqual(items[0].data, dataSource[0]);
+});
+
 QUnit.module("Drawing", $.extend({}, environment, {
     beforeEach: function() {
         environment.beforeEach.call(this);
@@ -349,8 +373,8 @@ QUnit.test("Update value field", function(assert) {
 
     var items = funnel.getAllItems();
 
-    assert.equal(items[0].data.value, 1);
-    assert.equal(items[0].data.argument, "One");
+    assert.equal(items[0].value, 1);
+    assert.equal(items[0].argument, "One");
     assert.equal(items[0].color, "red");
 });
 
@@ -374,8 +398,8 @@ QUnit.test("Update argument field", function(assert) {
 
     var items = funnel.getAllItems();
 
-    assert.equal(items[0].data.value, 1);
-    assert.equal(items[0].data.argument, "Two");
+    assert.equal(items[0].value, 1);
+    assert.equal(items[0].argument, "Two");
     assert.equal(items[0].color, "red");
 });
 

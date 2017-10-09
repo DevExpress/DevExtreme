@@ -3,6 +3,7 @@
 var $ = require("../../core/renderer"),
     eventsEngine = require("../../events/core/events_engine"),
     noop = require("../../core/utils/common").noop,
+    getPublicElement = require("../../core/utils/dom").getPublicElement,
     typeUtils = require("../../core/utils/type"),
     isWrapped = require("../../core/utils/variable_wrapper").isWrapped,
     compileGetter = require("../../core/utils/data").compileGetter,
@@ -13,6 +14,7 @@ var $ = require("../../core/renderer"),
     positionUtils = require("../../animation/position"),
     eventUtils = require("../../events/utils"),
     clickEvent = require("../../events/click"),
+    contextMenuEvent = require("../../events/contextmenu"),
     pointerEvents = require("../../events/pointer"),
     normalizeDataSourceOptions = require("../../data/data_source/data_source").normalizeDataSourceOptions,
     addNamespace = eventUtils.addNamespace;
@@ -34,7 +36,6 @@ var CHECKBOX_SIZE_CLASS = "checkbox-size",
     FOCUSED_ELEMENT_CLASS = "dx-focused",
     POINTER_EVENTS_TARGET_CLASS = "dx-pointer-events-target",
     POINTER_EVENTS_NONE_CLASS = "dx-pointer-events-none",
-    EDITORS_INPUT_SELECTOR = "input:not([type='hidden'])",
     FOCUSED_ELEMENT_SELECTOR = "td[tabindex]:focus, input:focus, textarea:focus, .dx-lookup-field:focus",
     DX_HIDDEN = "dx-hidden",
     TAB_KEY = 9;
@@ -242,21 +243,22 @@ var EditorFactoryController = modules.ViewController.inherit((function() {
     };
 
     var createEditorCore = function(that, options) {
-        if(options.editorName && options.editorOptions && options.editorElement[options.editorName]) {
+        var $editorElement = $(options.editorElement);
+        if(options.editorName && options.editorOptions && $editorElement[options.editorName]) {
             if(options.editorName === "dxCheckBox") {
                 if(!options.isOnForm) {
-                    options.editorElement.addClass(that.addWidgetPrefix(CHECKBOX_SIZE_CLASS));
-                    options.editorElement.parent().addClass(EDITOR_INLINE_BLOCK);
+                    $editorElement.addClass(that.addWidgetPrefix(CHECKBOX_SIZE_CLASS));
+                    $editorElement.parent().addClass(EDITOR_INLINE_BLOCK);
                 }
                 if(options.command || options.editorOptions.readOnly) {
-                    options.editorElement.parent().addClass(CELL_FOCUS_DISABLED_CLASS);
+                    $editorElement.parent().addClass(CELL_FOCUS_DISABLED_CLASS);
                 }
             }
 
-            that._createComponent(options.editorElement, options.editorName, options.editorOptions);
+            that._createComponent($editorElement, options.editorName, options.editorOptions);
 
             if(options.editorName === "dxTextBox") {
-                options.editorElement.dxTextBox("instance").registerKeyHandler("enter", noop);
+                $editorElement.dxTextBox("instance").registerKeyHandler("enter", noop);
             }
         }
     };
@@ -272,7 +274,7 @@ var EditorFactoryController = modules.ViewController.inherit((function() {
 
         _updateFocusCore: function() {
             var $focus = this._$focusedElement,
-                $dataGridElement = this.component && this.component.element(),
+                $dataGridElement = this.component && this.component.$element(),
                 $focusCell,
                 hideBorders;
 
@@ -403,7 +405,7 @@ var EditorFactoryController = modules.ViewController.inherit((function() {
 
         _attachContainerEventHandlers: function() {
             var that = this,
-                $container = that.component && that.component.element(),
+                $container = that.component && that.component.$element(),
                 isIE10OrLower = browser.msie && parseInt(browser.version) < 11;
 
             if($container) {
@@ -414,8 +416,8 @@ var EditorFactoryController = modules.ViewController.inherit((function() {
                     }
                 });
 
-                //T112103, T110581, T174768
-                isIE10OrLower && eventsEngine.on($container, [pointerEvents.down, pointerEvents.move, pointerEvents.up, clickEvent.name].join(" "), "." + POINTER_EVENTS_TARGET_CLASS, that._focusOverlayEventProxy.bind(that));
+                //T112103, T110581, T174768, T551322
+                isIE10OrLower && eventsEngine.on($container, [pointerEvents.down, pointerEvents.move, pointerEvents.up, clickEvent.name, contextMenuEvent.name].join(" "), "." + POINTER_EVENTS_TARGET_CLASS, that._focusOverlayEventProxy.bind(that));
             }
         },
 
@@ -423,8 +425,7 @@ var EditorFactoryController = modules.ViewController.inherit((function() {
             var $target = $(e.target),
                 $currentTarget = $(e.currentTarget),
                 element,
-                needProxy = $target.hasClass(POINTER_EVENTS_TARGET_CLASS) || $target.hasClass(POINTER_EVENTS_NONE_CLASS),
-                $focusedElement = this._$focusedElement;
+                needProxy = $target.hasClass(POINTER_EVENTS_TARGET_CLASS) || $target.hasClass(POINTER_EVENTS_NONE_CLASS);
 
             if(!needProxy || $currentTarget.hasClass(DX_HIDDEN)) return;
 
@@ -441,7 +442,9 @@ var EditorFactoryController = modules.ViewController.inherit((function() {
 
             $currentTarget.removeClass(DX_HIDDEN);
 
-            $focusedElement && eventsEngine.trigger($focusedElement.find(EDITORS_INPUT_SELECTOR), "focus");
+            if(e.type === clickEvent.name && element.tagName === "INPUT") {
+                eventsEngine.trigger($(element), "focus");
+            }
         },
 
         dispose: function() {
@@ -452,7 +455,7 @@ var EditorFactoryController = modules.ViewController.inherit((function() {
 
         createEditor: function($container, options) {
             options.cancel = false;
-            options.editorElement = $container;
+            options.editorElement = getPublicElement($container);
 
             if(!typeUtils.isDefined(options.tabIndex)) {
                 options.tabIndex = this.option("tabIndex");

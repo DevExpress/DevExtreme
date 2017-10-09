@@ -10,7 +10,7 @@ var matches = Element.prototype.matches ||
         var items = (this.document || this.ownerDocument).querySelectorAll(selector);
 
         for(var i = 0; i < items.length; i++) {
-            if(items === this) {
+            if(items[i] === this) {
                 return true;
             }
         }

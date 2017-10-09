@@ -27,7 +27,7 @@ var NativeStrategy = Class.inherit({
 
     _init: function(scrollable) {
         this._component = scrollable;
-        this._$element = scrollable.element();
+        this._$element = scrollable.$element();
         this._$container = scrollable._$container;
         this._$content = scrollable._$content;
 
@@ -56,6 +56,8 @@ var NativeStrategy = Class.inherit({
             this._renderScrollbars();
         }
     },
+
+    updateBounds: noop,
 
     _renderPushBackOffset: function() {
         var pushBackValue = this.option("pushBackValue");
@@ -224,8 +226,8 @@ var NativeStrategy = Class.inherit({
             width: this._$container.width()
         };
         this._componentContentSize = {
-            height: this._component.content().height(),
-            width: this._component.content().width()
+            height: this._component.$content().height(),
+            width: this._component.$content().width()
         };
         this._contentSize = {
             height: this._$content.height(),
@@ -270,7 +272,7 @@ var NativeStrategy = Class.inherit({
 
     _removeScrollbars: function() {
         this._eachScrollbar(function(scrollbar) {
-            scrollbar.element().remove();
+            scrollbar.$element().remove();
         });
     },
 

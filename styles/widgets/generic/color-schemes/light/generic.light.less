@@ -101,7 +101,7 @@
 */
 @base-icon-color: @base-text-color;
 
-@base-inverted-text-color: @base-bg;
+@base-inverted-text-color: #fff;
 @base-inverted-icon-color: @base-inverted-text-color;
 
 /**
@@ -1820,6 +1820,13 @@
 */
 @SCHEDULER_WORKSPACE_ACCENT_COLOR: @base-accent;
 
+/**
+* @name 65. Date-time indicator color
+* @type color
+* @group scheduler
+*/
+@SCHEDULER_TIME_INDICATOR_COLOR: lighten(@SCHEDULER_APPOINTMENT_BASE_COLOR, 15%);
+
 @scheduler-popup-title-bg: @SCHEDULER_WORKSPACE_BACKGROUND_COLOR;
 
 @SCHEDULER_WORKSPACE_MONTH_TEXT_COLOR: lighten(@base-text-color, 38.5%);
@@ -1844,6 +1851,7 @@
 @scheduler-recurence-editor-border-color: darken(@base-element-bg, 5%);
 @SCHEDULER_OTHER_MONTH_CELL_OPACITY: .5;
 @SCHEDULER_FILL_FOCUSED_APPOINTMENT: false;
+@SCHEDULER_TIME_INDICATOR_BACKGROUND_COLOR: rgba(51, 51, 51, 0.04);
 
 //SlideOutView
 @slideoutview-content-border-color: fade(@base-border-color, 50%);

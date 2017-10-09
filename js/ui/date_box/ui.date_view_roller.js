@@ -59,7 +59,7 @@ var DateViewRoller = Scrollable.inherit({
     _render: function() {
         this.callBase();
 
-        this.element().addClass(DATEVIEW_ROLLER_CLASS);
+        this.$element().addClass(DATEVIEW_ROLLER_CLASS);
 
         this._renderContainerClick();
         this._renderItems();
@@ -158,8 +158,8 @@ var DateViewRoller = Scrollable.inherit({
         var itemSelector = this._getItemSelector(),
             eventName = eventUtils.addNamespace(clickEvent.name, this.NAME);
 
-        eventsEngine.off(this.element(), eventName, itemSelector);
-        eventsEngine.on(this.element(), eventName, itemSelector, this._itemClickHandler.bind(this));
+        eventsEngine.off(this.$element(), eventName, itemSelector);
+        eventsEngine.on(this.$element(), eventName, itemSelector, this._itemClickHandler.bind(this));
     },
 
     _getItemSelector: function() {
@@ -175,7 +175,7 @@ var DateViewRoller = Scrollable.inherit({
     },
 
     _itemElements: function() {
-        return this.element().find(this._getItemSelector());
+        return this.$element().find(this._getItemSelector());
     },
 
     _renderActiveStateItem: function() {
@@ -242,7 +242,7 @@ var DateViewRoller = Scrollable.inherit({
     },
 
     _toggleActive: function(state) {
-        this.element().toggleClass(DATEVIEW_ROLLER_ACTIVE_CLASS, state);
+        this.$element().toggleClass(DATEVIEW_ROLLER_ACTIVE_CLASS, state);
     },
 
     _isVisible: function() {
@@ -267,7 +267,7 @@ var DateViewRoller = Scrollable.inherit({
     },
 
     toggleActiveState: function(state) {
-        this.element().toggleClass(DATEVIEW_ROLLER_CURRENT_CLASS, state);
+        this.$element().toggleClass(DATEVIEW_ROLLER_CURRENT_CLASS, state);
     },
 
     _refreshSelectedIndex: function() {

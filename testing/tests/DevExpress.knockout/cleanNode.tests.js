@@ -1,14 +1,15 @@
 "use strict";
 
-var $ = require("jquery"),
-    ko = require("knockout");
-
 require("integration/knockout");
+
+var $ = require("jquery"),
+    ko = require("knockout"),
+    dataUtils = require("core/element_data").getDataStrategy();
 
 var FIXTURE_ELEMENT = $("#qunit-fixture");
 
 var setTestData = function($element) {
-    $element.data("__test_key__", { key: "value" });
+    dataUtils.data($element.get(0), "__test_key__", { key: "value" });
     ko.utils.domData.set($element.get(0), "__test_key__", { key: "value " });
 };
 
@@ -17,7 +18,7 @@ var hasKOTestData = function($element) {
 };
 
 var hasJQueryTestData = function($element) {
-    return $element.data("__test_key__");
+    return dataUtils.data($element.get(0), "__test_key__");
 };
 
 var checkHasNoTestData = function($element, assert) {
@@ -93,13 +94,14 @@ if($.fn.jquery[0] !== "1") {
         ).appendTo(this.$element);
 
         markup.find("*").addBack().each(function() {
-            $(this).data("dxTestData", true);
+            dataUtils.data(this, "dxTestData", true);
             ko.utils.domData.set(this, "dxTestData", true);
         });
 
         var cleanDataLog = [],
-            originalCleanData = $.cleanData;
-        $.cleanData = function(nodes) {
+            originalCleanData = dataUtils.cleanData;
+
+        dataUtils.cleanData = function(nodes) {
             cleanDataLog.push.apply(cleanDataLog, nodes);
             return originalCleanData.apply(this, arguments);
         };
@@ -112,7 +114,6 @@ if($.fn.jquery[0] !== "1") {
         };
 
         ko.removeNode(markup.get(0));
-
         assert.equal(cleanDataLog.length, 4, "$.cleanData should be called 4 times for each node");
         assert.equal(domDataClearLog.length, 4, "ko.utils.domData.clear should be called 4 times once for each node");
 
@@ -138,13 +139,13 @@ if($.fn.jquery[0] !== "1") {
         ).appendTo(this.$element);
 
         markup.find("*").addBack().each(function() {
-            $(this).data("dxTestData", true);
+            dataUtils.data($(this)[0], "dxTestData", true);
             ko.utils.domData.set(this, "dxTestData", true);
         });
 
         var cleanDataLog = [],
-            originalCleanData = $.cleanData;
-        $.cleanData = function(nodes) {
+            originalCleanData = dataUtils.cleanData;
+        dataUtils.cleanData = function(nodes) {
             cleanDataLog.push.apply(cleanDataLog, nodes);
             return originalCleanData.apply(this, arguments);
         };
@@ -162,7 +163,7 @@ if($.fn.jquery[0] !== "1") {
         assert.equal(domDataClearLog.length, 4, "ko.utils.domData.clear should be called 4 times once for each node");
 
         markup.find("*").addBack().each(function() {
-            assert.ok(!$(this).data("dxTestData"));
+            assert.ok(!dataUtils.data($(this)[0], "dxTestData"));
             assert.ok(!ko.utils.domData.get(this, "dxTestData"));
             assert.ok(!("cleanedByKo" in $(this).get(0)));
             assert.ok(!("cleanedByJquery" in $(this).get(0)));

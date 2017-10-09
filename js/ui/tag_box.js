@@ -3,10 +3,12 @@
 var $ = require("../core/renderer"),
     eventsEngine = require("../events/core/events_engine"),
     dataUtils = require("../core/element_data"),
+    domUtils = require("../core/utils/dom"),
     devices = require("../core/devices"),
     noop = require("../core/utils/common").noop,
     isDefined = require("../core/utils/type").isDefined,
     arrayUtils = require("../core/utils/array"),
+    typeUtils = require("../core/utils/type"),
     iteratorUtils = require("../core/utils/iterator"),
     extend = require("../core/utils/extend").extend,
     messageLocalization = require("../localization/message"),
@@ -152,7 +154,8 @@ var TagBox = SelectBox.inherit({
     },
 
     _isCaretAtTheStart: function() {
-        return caret(this._input()).start === 0;
+        var position = caret(this._input());
+        return position.start === 0 && position.end === 0;
     },
 
     _moveTagFocus: function(direction, clearOnBoundary) {
@@ -268,7 +271,7 @@ var TagBox = SelectBox.inherit({
             /**
             * @name dxTagBoxOptions_value
             * @publicName value
-            * @type array
+            * @type Array<string,number,Object>
             */
             value: [],
 
@@ -280,7 +283,7 @@ var TagBox = SelectBox.inherit({
             * @type template
             * @default "tag"
             * @type_function_param1 itemData:object
-            * @type_function_param2 itemElement:jQuery
+            * @type_function_param2 itemElement:Element
             * @type_function_return string|Node|jQuery
             */
             tagTemplate: "tag",
@@ -298,7 +301,7 @@ var TagBox = SelectBox.inherit({
             /**
             * @name dxTagBoxOptions_selectedItems
             * @publicName selectedItems
-            * @type array
+            * @type Array<string,number,Object>
             * @readonly
             */
             selectedItems: [],
@@ -341,8 +344,8 @@ var TagBox = SelectBox.inherit({
              * @name dxTagBoxOptions_onMultiTagPreparing
              * @publicName onMultiTagPreparing
              * @extends Action
-             * @type_function_param1_field4 multiTagElement:jQuery
-             * @type_function_param1_field5 selectedItems:array
+             * @type_function_param1_field4 multiTagElement:Element
+             * @type_function_param1_field5 selectedItems:Array<string,number,Object>
              * @type_function_param1_field6 text:string
              * @type_function_param1_field7 cancel:boolean
              * @action
@@ -369,8 +372,8 @@ var TagBox = SelectBox.inherit({
             * @name dxTagBoxOptions_onSelectionChanged
             * @publicName onSelectionChanged
             * @extends Action
-            * @type_function_param1_field4 addedItems:array
-            * @type_function_param1_field5 removedItems:array
+            * @type_function_param1_field4 addedItems:Array<string,number,Object>
+            * @type_function_param1_field5 removedItems:Array<string,number,Object>
             * @action
             */
 
@@ -519,7 +522,7 @@ var TagBox = SelectBox.inherit({
         this._$submitElement = $("<select>")
             .attr("multiple", "multiple")
             .css("display", "none")
-            .appendTo(this.element());
+            .appendTo(this.$element());
     },
 
     _setSubmitValue: function() {
@@ -544,7 +547,7 @@ var TagBox = SelectBox.inherit({
 
         var isSingleLineMode = !this.option("multiline");
 
-        this.element()
+        this.$element()
             .addClass(TAGBOX_CLASS)
             .toggleClass(TAGBOX_ONLY_SELECT_CLASS, !(this.option("searchEnabled") || this.option("acceptCustomValue")))
             .toggleClass(TAGBOX_SINGLE_LINE_CLASS, isSingleLineMode);
@@ -571,7 +574,7 @@ var TagBox = SelectBox.inherit({
     _renderField: function() {
         var isDefaultFieldTemplate = !isDefined(this.option("fieldTemplate"));
 
-        this.element()
+        this.$element()
             .toggleClass(TAGBOX_DEFAULT_FIELD_TEMPLATE_CLASS, isDefaultFieldTemplate)
             .toggleClass(TAGBOX_CUSTOM_FIELD_TEMPLATE_CLASS, !isDefaultFieldTemplate);
 
@@ -592,7 +595,7 @@ var TagBox = SelectBox.inherit({
     _renderTagRemoveAction: function() {
         var tagRemoveAction = this._createAction(this._removeTagHandler.bind(this));
         var eventName = eventUtils.addNamespace(clickEvent.name, "dxTagBoxTagRemove");
-        var $container = this.element().find("." + TEXTEDITOR_CONTAINER_CLASS);
+        var $container = this.$element().find("." + TEXTEDITOR_CONTAINER_CLASS);
 
         eventsEngine.off($container, eventName);
         eventsEngine.on($container, eventName, "." + TAGBOX_TAG_REMOVE_BUTTON_CLASS, function(e) {
@@ -604,7 +607,7 @@ var TagBox = SelectBox.inherit({
 
     _renderSingleLineScroll: function() {
         var mouseWheelEvent = eventUtils.addNamespace("dxmousewheel", this.NAME),
-            $element = this.element(),
+            $element = this.$element(),
             isMultiline = this.option("multiline");
 
         eventsEngine.off($element, mouseWheelEvent);
@@ -695,7 +698,7 @@ var TagBox = SelectBox.inherit({
             return;
         }
 
-        var $selectAllCheckBox = this._list.element().find("." + LIST_SELECT_ALL_CHECKBOX_CLASS),
+        var $selectAllCheckBox = this._list.$element().find("." + LIST_SELECT_ALL_CHECKBOX_CLASS),
             selectAllCheckbox = $selectAllCheckBox.dxCheckBox("instance");
 
         selectAllCheckbox.registerKeyHandler("tab", this._popupElementTabHandler.bind(this));
@@ -721,7 +724,7 @@ var TagBox = SelectBox.inherit({
     },
 
     _renderMultiSelect: function() {
-        this._$tagsContainer = this.element()
+        this._$tagsContainer = this.$element()
             .find("." + TEXTEDITOR_CONTAINER_CLASS)
             .addClass(TAGBOX_TAG_CONTAINER_CLASS)
             .addClass(NATIVE_CLICK_CLASS);
@@ -784,7 +787,7 @@ var TagBox = SelectBox.inherit({
 
         this._tagTemplate.render({
             model: args.text,
-            container: $tag
+            container: domUtils.getPublicElement($tag)
         });
 
         return $tag;
@@ -861,7 +864,7 @@ var TagBox = SelectBox.inherit({
     },
 
     _refreshTagElements: function() {
-        this._tagElementsCache = this.element().find("." + TAGBOX_TAG_CLASS);
+        this._tagElementsCache = this.$element().find("." + TAGBOX_TAG_CLASS);
     },
 
     _tagElements: function() {
@@ -879,7 +882,7 @@ var TagBox = SelectBox.inherit({
 
         this._tagTemplate.render({
             model: item,
-            container: $tag
+            container: domUtils.getPublicElement($tag)
         });
     },
 
@@ -1077,7 +1080,7 @@ var TagBox = SelectBox.inherit({
     },
 
     _updateWidgetHeight: function() {
-        var element = this.element(),
+        var element = this.$element(),
             originalHeight = element.height();
 
         this._renderInputSize();
@@ -1102,6 +1105,8 @@ var TagBox = SelectBox.inherit({
             return;
         }
 
+        delete this._userFilter;
+
         dataSource.filter(null);
         dataSource.reload();
     },
@@ -1117,11 +1122,37 @@ var TagBox = SelectBox.inherit({
             return;
         }
 
-        dataSource.filter(this._dataSourceFilter.bind(this));
+        var valueGetterExpr = this._valueGetterExpr();
+
+        if(typeUtils.isString(valueGetterExpr) && valueGetterExpr !== "this") {
+            var filter = this._dataSourceFilterExpr();
+
+            if(!this._userFilter) {
+                this._userFilter = dataSource.filter();
+            }
+
+            this._userFilter && filter.push(this._userFilter);
+
+            filter.length && dataSource.filter(filter);
+
+        } else {
+            dataSource.filter(this._dataSourceFilterFunction.bind(this));
+        }
+
         dataSource.reload();
     },
 
-    _dataSourceFilter: function(itemData) {
+    _dataSourceFilterExpr: function() {
+        var filter = [];
+
+        iteratorUtils.each(this._getValue(), (function(index, value) {
+            filter.push(["!", [this._valueGetterExpr(), value]]);
+        }).bind(this));
+
+        return filter;
+    },
+
+    _dataSourceFilterFunction: function(itemData) {
         var itemValue = this._valueGetter(itemData),
             result = true;
 
@@ -1133,6 +1164,7 @@ var TagBox = SelectBox.inherit({
         }).bind(this));
 
         return result;
+
     },
 
     _applyButtonHandler: function() {
@@ -1221,7 +1253,7 @@ var TagBox = SelectBox.inherit({
                 });
                 break;
             case "multiline":
-                this.element().toggleClass(TAGBOX_SINGLE_LINE_CLASS, !args.value);
+                this.$element().toggleClass(TAGBOX_SINGLE_LINE_CLASS, !args.value);
                 this._renderSingleLineScroll();
                 break;
             default:

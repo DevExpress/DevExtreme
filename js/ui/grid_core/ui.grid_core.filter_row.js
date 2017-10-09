@@ -173,7 +173,7 @@ var ColumnHeadersViewFilterRowExtender = (function() {
             if(gridCoreUtils.checkChanges(optionNames, ["filterValue", "bufferedFilterValue", "selectedFilterOperation", "bufferedSelectedFilterOperation"]) && e.columnIndex !== undefined) {
                 visibleIndex = that._columnsController.getVisibleIndex(e.columnIndex);
                 column = that._columnsController.columnOption(e.columnIndex);
-                $cell = that.getCellElement(that.element().find("." + that.addWidgetPrefix(FILTER_ROW_CLASS)).index(), visibleIndex) || $();
+                $cell = that._getCellElement(that.element().find("." + that.addWidgetPrefix(FILTER_ROW_CLASS)).index(), visibleIndex) || $();
                 $editorContainer = $cell.find("." + EDITOR_CONTAINER_CLASS).first();
 
                 if(optionNames.filterValue || optionNames.bufferedFilterValue) {
@@ -181,7 +181,7 @@ var ColumnHeadersViewFilterRowExtender = (function() {
 
                     overlayInstance = $cell.find("." + that.addWidgetPrefix(FILTER_RANGE_OVERLAY_CLASS)).data("dxOverlay");
                     if(overlayInstance) {
-                        $editorRangeElements = overlayInstance.content().find("." + EDITOR_CONTAINER_CLASS);
+                        $editorRangeElements = overlayInstance.$content().find("." + EDITOR_CONTAINER_CLASS);
 
                         that._updateEditorValue(column, $editorRangeElements.first());
                         that._updateEditorValue(column, $editorRangeElements.last());
@@ -290,10 +290,10 @@ var ColumnHeadersViewFilterRowExtender = (function() {
                         }
                     });
 
-                    return contentElement.addClass(that.getWidgetContainerClass());
+                    return $(contentElement).addClass(that.getWidgetContainerClass());
                 },
                 onShown: function(e) {
-                    var $editor = e.component.content().find("." + EDITOR_CONTAINER_CLASS).first();
+                    var $editor = e.component.$content().find("." + EDITOR_CONTAINER_CLASS).first();
 
                     eventsEngine.trigger($editor.find(EDITORS_INPUT_SELECTOR), "focus");
                 },
@@ -525,8 +525,10 @@ var ColumnHeadersViewFilterRowExtender = (function() {
                     that.getController("editorFactory").loseFocus();
                 },
                 onSubmenuHiding: function() {
+                    var menu = Menu.getInstance($menu);
+
                     eventsEngine.trigger($menu, "blur");
-                    Menu.getInstance($menu).option("focusedElement", null);
+                    menu && menu.option("focusedElement", null);
                     isCellWasFocused && that._focusEditor($editorContainer);
                 },
                 rtlEnabled: that.option("rtlEnabled")
@@ -835,7 +837,7 @@ module.exports = {
                             cellIndex = overlayInstance.element().closest("td").index();
 
                             if(cellIndex === that._targetPoint.columnIndex || cellIndex === that._targetPoint.columnIndex + 1) {
-                                overlayInstance.content().hide();
+                                overlayInstance.$content().hide();
                             }
                         }
                     }
@@ -852,7 +854,7 @@ module.exports = {
                         if(overlayInstance) {
                             $cell = overlayInstance.element().closest("td");
                             that._columnHeadersView._updateFilterRangeOverlay({ width: $cell.outerWidth(true) + CORRECT_FILTER_RANGE_OVERLAY_WIDTH });
-                            overlayInstance.content().show();
+                            overlayInstance.$content().show();
                         }
                     }
 
@@ -881,7 +883,7 @@ module.exports = {
                                 return column.bufferedFilterValue !== undefined;
                             }).length,
                             onInitialized = function(e) {
-                                e.element.addClass(that._getToolbarButtonClass(APPLY_BUTTON_CLASS));
+                                $(e.element).addClass(that._getToolbarButtonClass(APPLY_BUTTON_CLASS));
                             },
                             onClickHandler = function() {
                                 that._applyFilterViewController.applyFilter();

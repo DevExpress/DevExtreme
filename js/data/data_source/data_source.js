@@ -31,15 +31,15 @@ function OperationManager() {
 }
 
 OperationManager.prototype.constructor = OperationManager;
-OperationManager.prototype.add = function addOperation(deferred) {
+OperationManager.prototype.add = function(deferred) {
     this._counter += 1;
     this._deferreds[this._counter] = deferred;
     return this._counter;
 };
-OperationManager.prototype.remove = function removeOperation(operationId) {
+OperationManager.prototype.remove = function(operationId) {
     return delete this._deferreds[operationId];
 };
-OperationManager.prototype.cancel = function cancelOperation(operationId) {
+OperationManager.prototype.cancel = function(operationId) {
     if(operationId in this._deferreds) {
         this._deferreds[operationId].reject(CANCELED_TOKEN);
         return true;
@@ -47,8 +47,12 @@ OperationManager.prototype.cancel = function cancelOperation(operationId) {
 
     return false;
 };
-
-var operationManager = new OperationManager();
+OperationManager.prototype.cancelAll = function() {
+    while(this._counter > -1) {
+        this.cancel(this._counter);
+        this._counter--;
+    }
+};
 
 function isPending(deferred) {
     return deferred.state() === "pending";
@@ -186,7 +190,7 @@ var DataSource = Class.inherit({
         /**
         * @name DataSourceOptions_store
         * @publicName store
-        * @type Store|Array|Object
+        * @type Store|StoreOptions|Array<any>|any
         */
         this._store = options.store;
 
@@ -217,7 +221,7 @@ var DataSource = Class.inherit({
         /**
         * @name DataSourceOptions_expand
         * @publicName expand
-        * @type Array|String
+        * @type Array<string>|string
         */
 
         /**
@@ -246,8 +250,8 @@ var DataSource = Class.inherit({
         * @name DataSourceOptions_postProcess
         * @publicName postProcess
         * @type function
-        * @type_function_param1 data:array
-        * @type_function_return array
+        * @type_function_param1 data:Array<any>
+        * @type_function_return Array<any>
         */
         this._postProcessFunc = options.postProcess;
 
@@ -283,7 +287,7 @@ var DataSource = Class.inherit({
         /**
         * @name DataSourceOptions_searchExpr
         * @publicName searchExpr
-        * @type getter|array
+        * @type getter|Array<getter>
         */
         this._searchExpr = options.searchExpr;
 
@@ -333,6 +337,7 @@ var DataSource = Class.inherit({
                 }
             });
 
+        this._operationManager = new OperationManager();
         this._init();
     },
 
@@ -361,6 +366,8 @@ var DataSource = Class.inherit({
         if(this._delayedLoadTask) {
             this._delayedLoadTask.abort();
         }
+
+        this._operationManager.cancelAll();
 
         this._disposed = true;
     },
@@ -392,7 +399,7 @@ var DataSource = Class.inherit({
     /**
     * @name DataSourceMethods_items
     * @publicName items()
-    * @return array
+    * @return Array<any>
     */
     items: function() {
         return this._items;
@@ -580,12 +587,12 @@ var DataSource = Class.inherit({
     /**
     * @name DataSourceMethods_searchExpr
     * @publicName searchExpr()
-    * @return getter|array
+    * @return getter|Array<getter>
     */
     /**
     * @name DataSourceMethods_searchExpr
     * @publicName searchExpr(expr)
-    * @param1 expr:getter|array
+    * @param1 expr:getter|Array<getter>
     */
     searchExpr: function(expr) {
         var argc = arguments.length;
@@ -758,7 +765,7 @@ var DataSource = Class.inherit({
     /**
     * @name DataSourceMethods_load
     * @publicName load()
-    * @return Promise
+    * @return Promise<any>
     */
     load: function() {
         var that = this,
@@ -800,12 +807,12 @@ var DataSource = Class.inherit({
     },
 
     _createLoadOperation: function(deferred) {
-        var id = operationManager.add(deferred),
+        var id = this._operationManager.add(deferred),
             options = this._createStoreLoadOptions();
 
         deferred.always(function() {
-            operationManager.remove(id);
-        });
+            this._operationManager.remove(id);
+        }.bind(this));
 
         return {
             operationId: id,
@@ -816,7 +823,7 @@ var DataSource = Class.inherit({
     /**
      * @name DataSourceMethods_reload
      * @publicName reload()
-     * @return Promise
+     * @return Promise<any>
      */
     reload: function() {
         var store = this.store();
@@ -834,7 +841,7 @@ var DataSource = Class.inherit({
      * @return boolean
      */
     cancel: function(operationId) {
-        return operationManager.cancel(operationId);
+        return this._operationManager.cancel(operationId);
     },
 
     _addSearchOptions: function(storeLoadOptions) {

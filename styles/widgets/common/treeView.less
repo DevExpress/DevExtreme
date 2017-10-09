@@ -1,3 +1,5 @@
+@TREEVIEW_SEARCHBOX_MARGIN_BOTTOM: 5px;
+
 .dx-treeview-loadindicator-wrapper {
     text-align: center;
 }
@@ -6,12 +8,20 @@
     position: absolute;
 }
 
+.dx-treeview-search {
+    margin-bottom: @TREEVIEW_SEARCHBOX_MARGIN_BOTTOM;
+}
+
 .dx-treeview {
     height: 100%;
 
     @TREE_VIEW_ICON_SIZE: 24px;
 
     :focus {
+        outline: none;
+    }
+
+    .dx-scrollable:focus {
         outline: none;
     }
 
@@ -87,7 +97,6 @@
     }
 
     &.dx-rtl {
-
         .dx-treeview-node-container {
 
             &:first-child {

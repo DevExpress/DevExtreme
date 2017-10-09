@@ -116,7 +116,7 @@ var DateViewStrategy = DateBoxStrategy.inherit({
     _renderWidget: function() {
         if(support.inputType(this.dateBox.option("mode")) && this.dateBox._isNativeType() || this.dateBox.option("readOnly")) {
             if(this._widget) {
-                this._widget.element().remove();
+                this._widget.$element().remove();
                 this._widget = null;
             }
 
@@ -128,11 +128,11 @@ var DateViewStrategy = DateBoxStrategy.inherit({
         if(this._widget) {
             this._widget.option(this._getWidgetOptions());
         } else {
-            var element = $("<div>").appendTo(popup.content());
+            var element = $("<div>").appendTo(popup.$content());
             this._widget = this._createWidget(element);
         }
 
-        this._widget.element().appendTo(this._getWidgetContainer());
+        this._widget.$element().appendTo(this._getWidgetContainer());
     },
 
     _getWidgetName: function() {

@@ -30,6 +30,13 @@ var TextBox = TextEditor.inherit({
     _getDefaultOptions: function() {
         return extend(this.callBase(), {
             /**
+            * @name dxTextBoxOptions_value
+            * @publicName value
+            * @type string
+            * @default ""
+            */
+            value: "",
+            /**
             * @name dxTextBoxOptions_mode
             * @publicName mode
             * @type string
@@ -51,7 +58,7 @@ var TextBox = TextEditor.inherit({
     _render: function() {
         this.callBase();
 
-        this.element().addClass(TEXTBOX_CLASS);
+        this.$element().addClass(TEXTBOX_CLASS);
         this.setAria("role", "textbox");
 
         this._renderMaxLengthHandlers();

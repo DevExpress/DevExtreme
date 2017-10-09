@@ -766,3 +766,33 @@ QUnit.test("treeview should not lose focus when parent item is disabled (T303800
     $focusedNode = $treeView.find(".dx-treeview-node[data-item-id='21']");
     assert.ok($focusedNode.hasClass("dx-state-focused"), "item was focused");
 });
+
+QUnit.testInActiveWindow("First list item should be focused on the 'tab' key press when the search editor is focused", function(assert) {
+    if(devices.real().deviceType !== "desktop") {
+        assert.ok(true, "keyboard navigation is disabled for not desktop devices");
+        return;
+    }
+
+    var $treeView = initTree({
+            items: $.extend(true, [], DATA[1]),
+            keyExpr: "key",
+            searchEnabled: true
+        }),
+        $searchEditor = $treeView.children(".dx-treeview-search");
+
+    $searchEditor.find("input").focus();
+    this.clock.tick();
+
+    $searchEditor.on("keydown", function(e) {
+        if(e.which === 9) {
+            $treeView.find("[tabIndex]").not(":focus").first().focus();
+        }
+    });
+
+    $searchEditor.trigger($.Event("keydown", { which: 9 }));
+    this.clock.tick();
+
+    assert.ok($treeView.find("." + internals.NODE_CLASS).first().hasClass("dx-state-focused"), "first node is focused");
+    assert.ok($treeView.hasClass("dx-state-focused"), "treeview is focused");
+    assert.ok($treeView.children(".dx-scrollable").hasClass("dx-state-focused"), "scrollable is focused");
+});

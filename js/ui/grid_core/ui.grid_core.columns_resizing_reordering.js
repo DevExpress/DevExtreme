@@ -92,7 +92,7 @@ var TrackerView = modules.View.inherit({
     },
 
     hide: function() {
-        this.element().hide();
+        this.element() && this.element().hide();
     },
 
     setHeight: function(value) {
@@ -497,7 +497,7 @@ var DraggingHeaderView = modules.View.inherit({
                 rowIndex = targetLocation === "headers" ? that._dragOptions.rowIndex : undefined,
                 sourceColumn = that._dragOptions.sourceColumn,
                 columnElements = targetDraggingPanel.getColumnElements(rowIndex, sourceColumn && sourceColumn.ownerBand) || [],
-                pointsByColumns = controller._generatePointsByColumns(extend({}, that._dragOptions, {
+                pointsByColumns = targetLocation === "columnChooser" ? [] : controller._generatePointsByColumns(extend({}, that._dragOptions, {
                     targetDraggingPanel: targetDraggingPanel,
                     columns: targetDraggingPanel.getColumns(rowIndex),
                     columnElements: columnElements,
@@ -884,7 +884,7 @@ var ColumnsResizerViewController = modules.ViewController.inherit({
         that._rowsView = that.getView("rowsView");
         that._columnsController = that.getController("columns");
         that._tablePositionController = that.getController("tablePosition");
-        that._$parentContainer = that._columnsSeparatorView.component.element();
+        that._$parentContainer = that._columnsSeparatorView.component.$element();
 
         that._subscribeToCallback(that._columnHeadersView.renderCompleted, generatePointsByColumnsHandler);
         that._subscribeToCallback(that._columnHeadersView.resizeCompleted, generatePointsByColumnsHandler);
@@ -1027,10 +1027,14 @@ var DraggingHeaderViewController = modules.ViewController.inherit({
                     rowCount = draggingPanel.getRowCount ? draggingPanel.getRowCount() : 1,
                     nameDraggingPanel = draggingPanel.getName(),
                     subscribeToEvents = function(index, columnElement) {
+                        if(!columnElement) {
+                            return;
+                        }
+
                         var $columnElement = $(columnElement),
                             column = columns[index];
 
-                        if(draggingPanel.allowDragging(columns[index], nameDraggingPanel, draggingPanels)) {
+                        if(draggingPanel.allowDragging(column, nameDraggingPanel, draggingPanels)) {
                             $columnElement.addClass(that.addWidgetPrefix(HEADERS_DRAG_ACTION_CLASS));
                             eventsEngine.on($columnElement, addNamespace(dragEvents.start, MODULE_NAMESPACE), that.createAction(function(args) {
                                 var e = args.jQueryEvent,

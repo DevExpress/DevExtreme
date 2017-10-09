@@ -3,6 +3,7 @@
 var $ = require("../core/renderer"),
     eventsEngine = require("../events/core/events_engine"),
     errors = require("../core/errors"),
+    getPublicElement = require("../core/utils/dom").getPublicElement,
     extend = require("../core/utils/extend").extend,
     typeUtils = require("../core/utils/type"),
     iteratorUtils = require("../core/utils/iterator"),
@@ -38,14 +39,14 @@ var RELATIVE_VALUE_REGEX = /^([+-])=(.*)/i,
 * @name animationConfig_start
 * @publicName start
 * @type function
-* @type_function_param1 $element:jQuery
+* @type_function_param1 $element:Element
 * @type_function_param2 config:object
 */
 /**
 * @name animationConfig_complete
 * @publicName complete
 * @type function
-* @type_function_param1 $element:jQuery
+* @type_function_param1 $element:Element
 * @type_function_param2 config:object
 */
 /**
@@ -675,7 +676,8 @@ var setupAnimationOnElement = function() {
     animation.strategy.initAnimation($element, config);
 
     if(config.start) {
-        config.start.apply(this, [$element, config]);
+        var element = getPublicElement($element);
+        config.start.apply(this, [element, config]);
     }
 };
 
@@ -685,7 +687,8 @@ var onElementAnimationComplete = function(animation) {
 
     $element.removeData(ANIM_DATA_KEY);
     if(config.complete) {
-        config.complete.apply(this, [$element, config]);
+        var element = getPublicElement($element);
+        config.complete.apply(this, [element, config]);
     }
     animation.deferred.resolveWith(this, [$element, config]);
 };
@@ -882,6 +885,7 @@ var stop = function(element, jumpToEnd) {
 * @publicName fx
 * @section utils
 * @module animation/fx
+* @namespace DevExpress
 * @export default
 */
 var fx = {
