@@ -125,7 +125,7 @@ var HorizontalMonthRenderingStrategy = HorizontalMonthLineAppointmentsStrategy.i
 
     getCompactAppointmentGroupMaxWidth: function() {
         return this.getDefaultCellWidth() - MONTH_DROPDOWN_APPOINTMENT_RIGHT_OFFSET;
-    },
+    }
 });
 
 module.exports = HorizontalMonthRenderingStrategy;
