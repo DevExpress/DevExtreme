@@ -145,7 +145,7 @@ QUnit.test("float with precision formatting", function(assert) {
     var formatter = generateNumberFormat("#.00");
 
     assert.strictEqual(formatter(null), "", "format an empty value");
-    assert.strictEqual(formatter(NaN), null, "NaN value should not be formatted");
+    assert.strictEqual(formatter(NaN), "", "NaN value should not be formatted");
     assert.strictEqual(formatter(0), "0.00", "format zero");
     assert.strictEqual(formatter(123), "123.00", "format integer");
     assert.strictEqual(formatter(123.05), "123.05", "format rounded float with zero");

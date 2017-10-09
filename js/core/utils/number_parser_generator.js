@@ -174,11 +174,10 @@ function getMaxPrecision(floatFormat) {
 
 function generateNumberFormatter(format) {
     return function(value) {
-        if(typeof value !== "number") return "";
-        if(isNaN(value)) return null;
+        if(typeof value !== "number" || isNaN(value)) return "";
 
         var signParts = getSignParts(format),
-            numberFormat = signParts[value > 0 || Object.is(value, 0) ? 0 : 1];
+            numberFormat = signParts[value > 0 || 1 / value === Infinity ? 0 : 1];
 
         if(isPercentFormat(numberFormat)) {
             value = value * 100;
