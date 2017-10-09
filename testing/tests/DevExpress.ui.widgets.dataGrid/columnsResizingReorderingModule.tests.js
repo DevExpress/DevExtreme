@@ -6092,8 +6092,18 @@ function getJQueryEvent(options) {
             assert.ok($item.hasClass("dx-datagrid-drag-action"), "item is draggable");
 
             //act
-            $item.trigger(dragEvents.start);
-            $item.trigger(dragEvents.move);
+            $item.trigger($.Event({
+                type: dragEvents.start,
+                pageX: $item.offset().left,
+                pageY: $item.offset().top,
+                preventDefault: function() { }
+            }));
+            $item.trigger($.Event({
+                type: dragEvents.move,
+                pageX: $item.offset().left + 10,
+                pageY: $item.offset().top + 10,
+                preventDefault: function() { }
+            }));
             $item.trigger(dragEvents.end);
 
             //assert
