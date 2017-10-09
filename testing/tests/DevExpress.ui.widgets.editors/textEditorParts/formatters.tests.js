@@ -228,6 +228,7 @@ QUnit.skip("displayFormat with escaped symbol", function(assert) {
 QUnit.test("removing decimal point should not change the value", function(assert) {
     this.instance.option("value", 123);
     this.keyboard.caret(3).press("del").input();
+
     assert.equal(this.input.val(), "123.00", "value is correct");
 });
 
@@ -278,4 +279,19 @@ QUnit.test("changing value to 0 should not clear the input", function(assert) {
 
     assert.strictEqual(this.instance.option("value"), 0, "value is correct");
     assert.equal(this.input.val(), "0", "text is correct");
+});
+
+QUnit.test("input should have type 'tel' to show numeric keyboard on mobiles", function(assert) {
+    assert.equal(this.input.prop("type"), "tel", "attribute is correct");
+});
+
+QUnit.test("removing first stub symbol should not clear the value", function(assert) {
+    this.instance.option({
+        displayFormat: "$ #",
+        value: 123
+    });
+
+    this.keyboard.caret(1).press("backspace").input();
+
+    assert.equal(this.input.val(), "$ 123", "value is correct");
 });

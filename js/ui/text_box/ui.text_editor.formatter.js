@@ -21,6 +21,12 @@ var TextEditorFormatter = TextEditorBase.inherit({
         });
     },
 
+    _getDefaultOptions: function() {
+        return extend(this.callBase(), {
+            mode: "tel"
+        });
+    },
+
     _keyboardHandler: function(e) {
         this._lastKey = e.originalEvent.key;
 
@@ -70,28 +76,24 @@ var TextEditorFormatter = TextEditorBase.inherit({
         eventsEngine.on($input, eventUtils.addNamespace("input", MASK_FORMATTER_NAMESPACE), this._formatValue.bind(this));
     },
 
-    _normalizeCaret: function(caret) {
-        var delta = 0,
+    _normalizeCaret: function(caret, _delta) {
+        var delta = _delta || 0,
             text = this._input().val();
 
-        switch(this._lastKey) {
-            case "Backspace":
-
-                break;
-            case "Delete":
-                delta = 1;
-                break;
-            case FLOAT_SEPARATOR:
-                if(text.charAt(caret.end) !== FLOAT_SEPARATOR) {
-                    delta = -1;
-                }
-                break;
-            default:
-                var formattedFloat = this._getFormattedFloat(this._input().val());
-                if(formattedFloat !== null) {
-                    delta = this._getStubCountBeforePosition();
-                }
-                break;
+        if(_delta === undefined) {
+            switch(this._lastKey) {
+                case FLOAT_SEPARATOR:
+                    if(text.charAt(caret.end) !== FLOAT_SEPARATOR) {
+                        delta = -1;
+                    }
+                    break;
+                default:
+                    var formattedFloat = this._getFormattedFloat(this._input().val());
+                    if(formattedFloat !== null) {
+                        delta = this._getStubCountBeforeCaret();
+                    }
+                    break;
+            }
         }
 
         return {
@@ -100,7 +102,7 @@ var TextEditorFormatter = TextEditorBase.inherit({
         };
     },
 
-    _getStubCountBeforePosition: function() {
+    _getStubCountBeforeCaret: function() {
         var format = this.option("displayFormat"),
             escapedRegExp = new RegExp("^('[^']+')([#0])"),
             stubRegexp = new RegExp("^([^0#]+)[0#]"),
@@ -138,7 +140,7 @@ var TextEditorFormatter = TextEditorBase.inherit({
     },
 
     _getFormattedFloat: function(text) {
-        return this._escapedFormatter(parseFloat(text));
+        return this._escapedFormatter(+text);
     },
 
     _normalizeFormattedValue: function() {
@@ -180,18 +182,17 @@ var TextEditorFormatter = TextEditorBase.inherit({
         return this._input().val().replace(regexp, "");
     },
 
-    _applyValue: function(value, forced) {
+    _applyValue: function(value, forced, delta) {
         if(!this.option("displayFormat")) return;
 
         if(Object.is(this._parsedValue, value) && !forced) {
             return;
         }
 
-        var caret = this._caret();
+        var caret = this._normalizeCaret(this._caret(), delta);
 
         if(value === null && !forced) {
             this._normalizeFormattedValue();
-            caret = this._normalizeCaret(caret);
 
             if(!this._formattedValue) {
                 value = parseFloat(this._getClearValue());
@@ -225,6 +226,12 @@ var TextEditorFormatter = TextEditorBase.inherit({
         }
 
         var parsedValue = this._parser(text);
+
+        if((this._lastKey === "Delete" || this._lastKey === "Backspace") && parsedValue > this._parsedValue) {
+            var caretDelta = this._lastKey === "Delete" ? 1 : 0;
+            this._applyValue(this._parsedValue, true, caretDelta);
+            return;
+        }
 
         this._applyValue(parsedValue);
     },
