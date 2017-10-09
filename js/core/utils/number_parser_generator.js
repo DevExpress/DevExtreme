@@ -178,7 +178,7 @@ function generateNumberFormatter(format) {
             minFloatPrecision = getRequiredDigitCount(floatFormatParts[1]),
             maxFloatPrecision = minFloatPrecision + getNonRequiredDigitCount(floatFormatParts[1]),
             minIntegerPrecision = getRequiredDigitCount(floatFormatParts[0]),
-            maxIntegerPrecision = getNonRequiredDigitCount(floatFormatParts[0]) ? 0 : minIntegerPrecision;
+            maxIntegerPrecision = getNonRequiredDigitCount(floatFormatParts[0]) ? undefined : minIntegerPrecision;
 
         var valueParts = value.toFixed(maxFloatPrecision).split(".");
 
