@@ -89,10 +89,10 @@ We have a few rules of formatting commit messages and pull request titles:
 - Wrap the body at 72 characters
 - Use the body to explain what and why vs how
 - Write the ID of the issue/ticket at the end of the subject line
-- Use **scope** where possible (split it with a colon) `<Scope>: <Subject> (<ID>)`
 
 Samples:
 
-`Mark dxCommand as DOMComponent child (ID)`
+- `Mark dxCommand as DOMComponent child (ID)`
+- `Add namespace to doc comments`
+- `Fix editorFactory tests in IE`
 
-`dxPivotGrid: Add headerFilter option`
