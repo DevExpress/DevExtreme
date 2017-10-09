@@ -25,7 +25,8 @@ var COLUMNS_SEPARATOR_CLASS = "columns-separator",
     MODULE_NAMESPACE = "dxDataGridResizingReordering",
 
     COLUMNS_SEPARATOR_TOUCH_TRACKER_WIDTH = 10,
-    DRAGGING_DELTA = 5;
+    DRAGGING_DELTA = 5,
+    COLUMN_OPACITY = 0.5;
 
 var allowResizing = function(that) {
     return that.option("allowColumnResizing") || that.getController("columns").isColumnOptionUsed("allowResizing");
@@ -1134,11 +1135,11 @@ var DraggingHeaderViewController = modules.ViewController.inherit({
             rowsView = this._rowsView;
 
         if(sourceColumnElement) {
-            sourceColumnElement.css({ opacity: 0.5 });
+            sourceColumnElement.css({ opacity: COLUMN_OPACITY });
 
             if(sourceLocation === "headers") {
-                headersView && headersView.setRowsOpacity(sourceIndex, 0.5);
-                rowsView && rowsView.setRowsOpacity(sourceIndex, 0.5);
+                headersView && headersView.setRowsOpacity(sourceIndex, COLUMN_OPACITY);
+                rowsView && rowsView.setRowsOpacity(sourceIndex, COLUMN_OPACITY);
             }
         }
     },
