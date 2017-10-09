@@ -23,7 +23,7 @@ To set up a build environment, you need the following software installed:
 
 ## Building
 
-Install packages using the following command: 
+Install packages using the following command:
 
     npm install
 
@@ -38,7 +38,7 @@ Build results are stored in the "artifacts" directory.
 
 ## Tests and CI
 
-We conduct extensive in-house testing of DevExtreme on different browsers, mobile devices, functional tests for demos, etc. However, we only share some of them on GitHub: linters and automated tests for Google Chrome. 
+We conduct extensive in-house testing of DevExtreme on different browsers, mobile devices, functional tests for demos, etc. However, we only share some of them on GitHub: linters and automated tests for Google Chrome.
 
 Tests are in the [testing](testing) directory, and you can execute them are described below:
 
@@ -73,23 +73,23 @@ drone exec --matrix TARGET=test
 
 ### In a Cloud CI
 
-We provide configuration YAML files for [Travis CI](https://travis-ci.org/) ([.travis.yml](.travis.yml)) and [Shippable](https://app.shippable.com/) ([shippable.yml](shippable.yml)). Enable one of them for your forked repo (we recommend Travis). 
+We provide configuration YAML files for [Travis CI](https://travis-ci.org/) ([.travis.yml](.travis.yml)) and [Shippable](https://app.shippable.com/) ([shippable.yml](shippable.yml)). Enable one of them for your forked repo (we recommend Travis).
 
 Please make sure that each pull request passes all automatic checks before submitting it.
 
 ## Commit Message Guidelines
 
-We have few rules of formatting commit messages and pull request titles:
+We have a few rules of formatting commit messages and pull request titles:
 
 - Use the imperative mood in the subject line
 - Capitalize the subject line
 - Do not end the subject line with a period
 - Limit the subject line to 50 characters
-- Separate subject from body with a blank line
+- Separate the subject from the body with a blank line
 - Wrap the body at 72 characters
-- Use the body to explain what and why vs. how
-- Write the ID fo the issue/ticket in the end of subject line
-- Use **scope**, where it possible (split it by colon) `<Scope>: <Subject>`
+- Use the body to explain what and why vs how
+- Write the ID of the issue/ticket at the end of the subject line
+- Use **scope** where possible (split it with a colon) `<Scope>: <Subject> (<ID>)`
 
 Samples:
 
