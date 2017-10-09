@@ -393,6 +393,7 @@ QUnit.test("More than 3 small appointments should be grouped", function(assert) 
             currentDate: new Date(2015, 1, 9),
             currentView: "month",
             height: 500,
+            width: 600,
             dataSource: items
         }
     );
@@ -599,7 +600,7 @@ QUnit.test("More than 3 cloned appointments should be grouped", function(assert)
 
     assert.equal(groupedAppointments.length, 8, "DropDown menu has correct items");
     assert.equal(dropDownMenuText, "8 more", "DropDown menu has correct text");
-    assert.roughEqual(dropDownMenu.option("buttonWidth"), 106.5, 1, "DropDownMenu button width is OK");
+    assert.roughEqual(dropDownMenu.option("buttonWidth"), 116, 1, "DropDownMenu button width is OK");
 });
 
 QUnit.test("Grouped appointments schould have correct colors", function(assert) {
@@ -654,12 +655,12 @@ QUnit.test("Grouped appointments should be reinitialized if datasource is change
             currentDate: new Date(2015, 1, 9),
             currentView: "month",
             height: 500,
+            width: 600,
             dataSource: items
         }
     );
     items.push({ text: "a", startDate: new Date(2015, 1, 9), endDate: new Date(2015, 1, 9, 1) });
     this.instance.option("dataSource", items);
-
     var $dropDownMenu = $(this.instance.$element().find(".dx-scheduler-dropdown-appointments"));
 
     assert.equal($dropDownMenu.length, 1, "DropDown appointments are refreshed");
