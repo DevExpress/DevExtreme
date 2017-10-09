@@ -140,7 +140,7 @@ var BaseWidget = {
     /**
     * @name BaseWidgetMethods_getSize
     * @publicName getSize()
-    * @return object
+    * @return BaseWidgetOptions_size
     */
     getSize: function() { },
     /**
