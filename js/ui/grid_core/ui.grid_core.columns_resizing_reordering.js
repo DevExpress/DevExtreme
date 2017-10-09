@@ -497,7 +497,7 @@ var DraggingHeaderView = modules.View.inherit({
                 rowIndex = targetLocation === "headers" ? that._dragOptions.rowIndex : undefined,
                 sourceColumn = that._dragOptions.sourceColumn,
                 columnElements = targetDraggingPanel.getColumnElements(rowIndex, sourceColumn && sourceColumn.ownerBand) || [],
-                pointsByColumns = controller._generatePointsByColumns(extend({}, that._dragOptions, {
+                pointsByColumns = targetLocation === "columnChooser" ? [] : controller._generatePointsByColumns(extend({}, that._dragOptions, {
                     targetDraggingPanel: targetDraggingPanel,
                     columns: targetDraggingPanel.getColumns(rowIndex),
                     columnElements: columnElements,
