@@ -917,6 +917,26 @@ module.exports = {
                     return parameters;
                 },
 
+                _setRowOpacityCore: function($rows, visibleColumns, columnIndex, value) {
+                    var columnsController = this._columnsController,
+                        columns = columnsController.getColumns(),
+                        column = columns && columns[columnIndex],
+                        columnID = column && column.isBand && column.index;
+
+                    $.each($rows, function(rowIndex, row) {
+                        if(!$(row).hasClass(GROUP_ROW_CLASS)) {
+                            for(var i = 0; i < visibleColumns.length; i++) {
+                                if(commonUtils.isNumeric(columnID) && columnsController.isParentBandColumn(visibleColumns[i].index, columnID) || visibleColumns[i].index === columnIndex) {
+                                    $rows.eq(rowIndex).children().eq(i).css({ opacity: value });
+                                    if(!commonUtils.isNumeric(columnID)) {
+                                        break;
+                                    }
+                                }
+                            }
+                        }
+                    });
+                },
+
                 renderNoDataText: gridCoreUtils.renderNoDataText,
 
                 getCellOptions: function(rowIndex, columnIdentifier) {
@@ -1197,27 +1217,8 @@ module.exports = {
                 },
 
                 setRowsOpacity: function(columnIndex, value) {
-                    var that = this,
-                        i,
-                        columnsController = that._columnsController,
-                        visibleColumns = that.getColumns(),
-                        columns = columnsController.getColumns(),
-                        column = columns && columns[columnIndex],
-                        columnID = column && column.isBand && column.index,
-                        $rows = that._getRowElements().not("." + GROUP_ROW_CLASS) || [];
-
-                    $.each($rows, function(rowIndex, row) {
-                        if(!$(row).hasClass(GROUP_ROW_CLASS)) {
-                            for(i = 0; i < visibleColumns.length; i++) {
-                                if(commonUtils.isNumeric(columnID) && columnsController.isParentBandColumn(visibleColumns[i].index, columnID) || visibleColumns[i].index === columnIndex) {
-                                    $rows.eq(rowIndex).children().eq(i).css({ opacity: value });
-                                    if(!commonUtils.isNumeric(columnID)) {
-                                        break;
-                                    }
-                                }
-                            }
-                        }
-                    });
+                    var $rows = this._getRowElements().not("." + GROUP_ROW_CLASS) || [];
+                    this._setRowOpacityCore($rows, this.getColumns(), columnIndex, value);
                 },
 
                 _getCellElementsCore: function(rowIndex) {

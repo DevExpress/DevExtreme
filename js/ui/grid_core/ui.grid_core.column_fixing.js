@@ -625,6 +625,13 @@ var RowsViewFixedColumnsExtender = extend({}, baseFixedColumns, {
         }
     },
 
+    setRowsOpacity: function(columnIndex, value) {
+        this.callBase(columnIndex, value);
+
+        var $rows = this._getRowElements(this._fixedTableElement);
+        this._setRowOpacityCore($rows, this.getFixedColumns(), columnIndex, value);
+    },
+
     optionChanged: function(args) {
         var that = this;
 
