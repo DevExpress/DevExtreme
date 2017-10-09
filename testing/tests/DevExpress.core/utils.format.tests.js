@@ -71,6 +71,16 @@ QUnit.test("integer format parser with group separator", function(assert) {
     assert.strictEqual(parser("12,345,678"), 12345678, "parse number with 8 digits with 2 separators");
 });
 
+QUnit.test("integer format parser with complex groups", function(assert) {
+    var parser = generateNumberParser("#,##,##0");
+
+    assert.strictEqual(parser("0"), 0, "parse zero number with 1 digits");
+    assert.strictEqual(parser("123"), 123, "parse number with 3 digits");
+    assert.strictEqual(parser("1234"), null, "parse number with 4 digits without group separator");
+    assert.strictEqual(parser("1,234"), 1234, "parse number with 4 digits with group separator");
+    assert.strictEqual(parser("12,34,567"), 1234567, "parse number with 7 digits with 2 group separators");
+});
+
 QUnit.test("float parser with non-required digits", function(assert) {
     var parser = generateNumberParser("#.##");
 
@@ -198,4 +208,20 @@ QUnit.test("escaped percent formatting", function(assert) {
 
     formatter = generateNumberFormat("#.#'x % x'");
     assert.strictEqual(formatter(0.5), "0.5x % x", "percent with text was escaped");
+});
+
+QUnit.test("simple group", function(assert) {
+    var formatter = generateNumberFormat("#,##0");
+
+    assert.strictEqual(formatter(123), "123", "format integer without groups");
+    assert.strictEqual(formatter(1234), "1,234", "format integer with 1 group");
+    assert.strictEqual(formatter(123456789), "123,456,789", "format integer with 2 groups");
+});
+
+QUnit.test("complex group", function(assert) {
+    var formatter = generateNumberFormat("#,##,##0");
+
+    assert.strictEqual(formatter(123), "123", "format integer without groups");
+    assert.strictEqual(formatter(1234), "1,234", "format integer with 1 group");
+    assert.strictEqual(formatter(123456789), "12,34,56,789", "format integer with 3 groups");
 });

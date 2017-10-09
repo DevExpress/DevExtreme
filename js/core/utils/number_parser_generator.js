@@ -147,13 +147,30 @@ function normalizeValueString(valuePart, minDigitCount, maxDigitCount) {
     return valuePart;
 }
 
+function applyGroups(valueString, groupSizes) {
+    if(!groupSizes.length) return valueString;
+
+    var groups = [],
+        index = 0;
+
+    while(valueString) {
+        var groupSize = groupSizes[index];
+        groups.push(valueString.slice(0, groupSize));
+        valueString = valueString.slice(groupSize);
+        if(index < groupSizes.length - 1) {
+            index++;
+        }
+    }
+    return groups.join(GROUP_SEPARATOR);
+}
+
 function formatNumberPart(format, valueString, minDigitCount, maxDigitCount) {
     return format.split(ESCAPING_CHAR).map(function(formatPart, escapeIndex) {
         var isEscape = escapeIndex % 2;
         if(!formatPart && isEscape) {
             return ESCAPING_CHAR;
         }
-        return isEscape ? formatPart : formatPart.replace(/[#0]+/, valueString);
+        return isEscape ? formatPart : formatPart.replace(/[,#0]+/, valueString);
     }).join("");
 }
 
@@ -178,13 +195,14 @@ function generateNumberFormatter(format) {
             minFloatPrecision = getRequiredDigitCount(floatFormatParts[1]),
             maxFloatPrecision = minFloatPrecision + getNonRequiredDigitCount(floatFormatParts[1]),
             minIntegerPrecision = getRequiredDigitCount(floatFormatParts[0]),
-            maxIntegerPrecision = getNonRequiredDigitCount(floatFormatParts[0]) ? undefined : minIntegerPrecision;
+            maxIntegerPrecision = getNonRequiredDigitCount(floatFormatParts[0]) ? undefined : minIntegerPrecision,
+            groupSizes = getGroupSizes(floatFormatParts[0]).reverse();
 
         var valueParts = value.toFixed(maxFloatPrecision).split(".");
 
         var valueIntegerPart = normalizeValueString(valueParts[0], minIntegerPrecision, maxIntegerPrecision),
             valueFloatPart = normalizeValueString(valueParts[1], minFloatPrecision, maxFloatPrecision),
-            integerString = reverseString(formatNumberPart(reverseString(floatFormatParts[0]), reverseString(valueIntegerPart))),
+            integerString = reverseString(formatNumberPart(reverseString(floatFormatParts[0]), applyGroups(reverseString(valueIntegerPart), groupSizes))),
             floatString = maxFloatPrecision ? formatNumberPart(floatFormatParts[1], valueFloatPart) : "";
 
         if(!integerString.match(/\d/)) integerString += "0";
