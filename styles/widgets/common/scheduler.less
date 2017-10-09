@@ -25,10 +25,13 @@
     margin: @SCHEDULER_DROP_DOWN_MARGIN 0 0 @SCHEDULER_DROP_DOWN_MARGIN;
 
     .dx-scheduler-dropdown-appointments-content {
+        .dx-overflow();
+        margin: 0 2* @SCHEDULER_DROP_DOWN_MARGIN;
+
         span:last-child {
             display: inline-block;
             vertical-align: middle;
-            line-height: @SCHEDULER_DROP_DOWN_BUTTON_HEIGHT / 2;
+            line-height: @SCHEDULER_DROP_DOWN_BUTTON_HEIGHT / 1.5;
             height: @SCHEDULER_DROP_DOWN_BUTTON_HEIGHT;
             padding-left: 2px;
         }
