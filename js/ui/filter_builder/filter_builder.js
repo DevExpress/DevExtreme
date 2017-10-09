@@ -469,41 +469,42 @@ var FilterBuilder = Widget.inherit({
         var that = this,
             fields = this.option("fields"),
             allowHierarchicalFields = this.option("allowHierarchicalFields"),
-            items = allowHierarchicalFields ? utils.getPlainItems(fields) : fields,
+            items = utils.getItems(fields, allowHierarchicalFields),
+            item = utils.getField(field.dataField, items),
             getFullCaption = function(item, items) {
                 return allowHierarchicalFields ? utils.getCaptionWithParents(item, items) : item.caption;
             },
             updateFieldMenuItem = function(component, field) {
                 component.unselectAll();
-                component.selectItem(field);
+                component.selectItem(item);
             };
 
         var $fieldButton = this._createButtonWithMenu({
-            caption: getFullCaption(field, items),
+            caption: getFullCaption(item, items),
             menu: {
                 items: items,
                 dataStructure: "plain",
                 keyExpr: "dataField",
                 displayExpr: "caption",
                 onItemClick: function(e) {
-                    field = e.itemData;
-                    condition[0] = field.dataField;
-                    if(field.dataType === "object") {
+                    item = e.itemData;
+                    condition[0] = item.dataField;
+                    if(item.dataType === "object") {
                         condition[2] = null;
                     } else {
                         condition[2] = "";
                     }
-                    utils.updateConditionByOperator(condition, utils.getDefaultOperation(field));
+                    utils.updateConditionByOperator(condition, utils.getDefaultOperation(item));
 
                     $fieldButton.siblings().filter("." + FILTER_BUILDER_ITEM_TEXT_CLASS).remove();
-                    that._createOperationAndValueButtons(condition, field, $fieldButton.parent());
+                    that._createOperationAndValueButtons(condition, item, $fieldButton.parent());
 
-                    updateFieldMenuItem(e.component, field);
-                    var caption = getFullCaption(field, e.component.option("items"));
+                    updateFieldMenuItem(e.component, item);
+                    var caption = getFullCaption(item, e.component.option("items"));
                     $fieldButton.html(caption);
                 },
                 onContentReady: function(e) {
-                    updateFieldMenuItem(e.component, field);
+                    updateFieldMenuItem(e.component, item);
                 }
             }
         }).addClass(FILTER_BUILDER_ITEM_TEXT_CLASS)

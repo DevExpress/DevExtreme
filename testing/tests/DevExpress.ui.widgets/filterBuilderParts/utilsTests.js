@@ -373,51 +373,75 @@ QUnit.test("get current value text", function(assert) {
     assert.equal(utils.getCurrentValueText(field, value), "MyValueTest");
 });
 
-QUnit.test("getPlainItems", function(assert) {
+QUnit.test("getItems", function(assert) {
+    var fields = [{
+        dataField: "field1",
+        dataType: "string"
+    }, {
+        dataField: "field2",
+        dataType: "string"
+    }, {
+        dataField: "group.field3",
+        dataType: "string"
+    }];
+
+    var items = utils.getItems(fields);
+
+    assert.deepEqual(items, [{
+        caption: "Field 1",
+        dataField: "field1",
+        dataType: "string"
+    }, {
+        caption: "Field 2",
+        dataField: "field2",
+        dataType: "string"
+    }, {
+        caption: "Group.Field 3",
+        dataField: "group.field3",
+        dataType: "string"
+    }]);
+});
+
+QUnit.test("getItems when allowHierarchicalFields is true", function(assert) {
     var hierarchicalFields = [{
-        caption: "Group",
         dataField: "group",
         dataType: "object"
     }, {
-        caption: "Group Field1",
         dataField: "group.field1",
         dataType: "string"
     }, {
-        caption: "Group Group2",
         dataField: "group.group2",
         dataType: "object"
     }, {
-        caption: "Group Group2 Field2",
         dataField: "group.group2.field2",
         dataType: "string"
     }, {
-        caption: "Group Group2 Field3",
         dataField: "group.group2.field3",
         dataType: "string"
     }];
 
-    var plainItems = utils.getPlainItems(hierarchicalFields);
+    var plainItems = utils.getItems(hierarchicalFields, true);
     assert.deepEqual(plainItems, [{
         caption: "Group",
         dataField: "group",
         dataType: "object"
     }, {
-        caption: "Group Field1",
+        caption: "Field 1",
         dataField: "group.field1",
         dataType: "string",
         parentId: "group"
     }, {
-        caption: "Group Group2",
+        caption: "Group 2",
         dataField: "group.group2",
         dataType: "object",
         parentId: "group"
     }, {
-        caption: "Group Group2 Field2",
+        caption: "Field 2",
         dataField: "group.group2.field2",
         dataType: "string",
         parentId: "group.group2"
     }, {
-        caption: "Group Group2 Field3",
+        caption: "Field 3",
         dataField: "group.group2.field3",
         dataType: "string",
         parentId: "group.group2"
@@ -425,53 +449,49 @@ QUnit.test("getPlainItems", function(assert) {
 
 
     hierarchicalFields = [{
-        caption: "Group Field1",
         dataField: "group.field1",
         dataType: "string"
     }, {
-        caption: "Group Group2 Field3",
         dataField: "group.group2.field3",
         dataType: "string"
     }, {
-        caption: "Group3 Field4",
         dataField: "group3.field4",
         dataType: "string"
     }, {
-        caption: "Group3",
         dataField: "group3",
         dataType: "object",
         filterOperations: ["isblank", "isnotblank"]
     }];
 
-    plainItems = utils.getPlainItems(hierarchicalFields);
+    plainItems = utils.getItems(hierarchicalFields, true);
     assert.deepEqual(plainItems, [{
-        caption: "group",
+        caption: "Group",
         dataField: "group",
         dataType: "object",
         filterOperations: ["isblank", "isnotblank"]
     }, {
-        caption: "Group Field1",
+        caption: "Field 1",
         dataField: "group.field1",
         dataType: "string",
         parentId: "group"
     }, {
-        caption: "group2",
+        caption: "Group 2",
         dataField: "group.group2",
         dataType: "object",
         parentId: "group",
         filterOperations: ["isblank", "isnotblank"]
     }, {
-        caption: "Group Group2 Field3",
+        caption: "Field 3",
         dataField: "group.group2.field3",
         dataType: "string",
         parentId: "group.group2"
     }, {
-        caption: "Group3 Field4",
+        caption: "Field 4",
         dataField: "group3.field4",
         dataType: "string",
         parentId: "group3"
     }, {
-        caption: "Group3",
+        caption: "Group 3",
         dataField: "group3",
         dataType: "object",
         filterOperations: ["isblank", "isnotblank"]
