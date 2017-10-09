@@ -82,8 +82,7 @@
 @SCHEDULER_TIME_INDICATOR_SHADOW_COLOR: rgba(255, 255, 255, 0.10);
 @SCHEDULER_TIME_INDICATOR_SHADOW: 0 1px 0 0px @SCHEDULER_TIME_INDICATOR_SHADOW_COLOR;
 @SCHEDULER_TIME_INDICATOR_TEXT_SHADOW: @SCHEDULER_TIME_INDICATOR_SHADOW_COLOR 1px 0px 0px;
-@SCHEDULER_HEADER_PANEL_CURRENT_TIME_BOX_SHADOW: inset 0px -2px 0px 0px @SCHEDULER_TIME_INDICATOR_COLOR;
-@SCHEDULER_TIME_PANEL_CURRENT_TIME_BOX_SHADOW: inset -2px 0px 0px 0px @SCHEDULER_TIME_INDICATOR_COLOR;
+@SCHEDULER_CURRENT_TIME_CELL_BORDER_SIZE: 2px;
 
 .dx-scheduler-pseudo-cell {
     &:before {
@@ -454,8 +453,16 @@
 }
 
 .dx-scheduler-header-panel-cell.dx-scheduler-header-panel-current-time-cell {
-    .box-shadow(@SCHEDULER_HEADER_PANEL_CURRENT_TIME_BOX_SHADOW);
     color: @SCHEDULER_APPOINTMENT_BASE_COLOR;
+    &:before {
+            position: absolute;
+            bottom: 0;
+            right: 0;
+            width: 100%;
+            height: @SCHEDULER_CURRENT_TIME_CELL_BORDER_SIZE;
+            content: '';
+            background-color: @SCHEDULER_TIME_INDICATOR_COLOR;
+        }
 }
 
 .dx-scheduler-date-time-shader-all-day {
@@ -1284,6 +1291,7 @@
 }
 
 .dx-scheduler-header-panel-cell {
+    position: relative;
     border-left: @SCHEDULER_BASE_BORDER;
     border-right: @SCHEDULER_BASE_BORDER;
     color: @SCHEDULER_PANEL_TEXT_COLOR;
@@ -1408,8 +1416,16 @@
     }
 
     &.dx-scheduler-time-panel-current-time-cell {
-        .box-shadow(@SCHEDULER_TIME_PANEL_CURRENT_TIME_BOX_SHADOW);
         color: @SCHEDULER_APPOINTMENT_BASE_COLOR;
+        &:before {
+            position: absolute;
+            top: 0;
+            right: 0;
+            width: @SCHEDULER_CURRENT_TIME_CELL_BORDER_SIZE;
+            height: inherit;
+            content: '';
+            background-color: @SCHEDULER_TIME_INDICATOR_COLOR;
+        }
     }
 }
 
