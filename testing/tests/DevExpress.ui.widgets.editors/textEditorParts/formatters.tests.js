@@ -295,3 +295,17 @@ QUnit.test("removing first stub symbol should not clear the value", function(ass
 
     assert.equal(this.input.val(), "$ 123", "value is correct");
 });
+
+QUnit.test("revert sign should lead to revert value of the editor on change", function(assert) {
+    this.instance.option("value", 123);
+    this.keyboard.type("-");
+
+    assert.equal(this.instance.option("value"), -123, "value is correct");
+});
+
+QUnit.test("removing a char should work correctly with negative value", function(assert) {
+    this.instance.option("value", -123.45);
+    this.keyboard.caret(7).press("backspace").input();
+
+    assert.equal(this.input.val(), "-123.40", "value is correct");
+});

@@ -212,7 +212,7 @@ var TextEditorFormatter = TextEditorBase.inherit({
 
     _revertSign: function() {
         var newValue = -1 * ensureDefined(this._parsedValue, null);
-        this._applyValue(newValue);
+        this.option("value", newValue);
     },
 
     _formatValue: function() {
@@ -227,7 +227,7 @@ var TextEditorFormatter = TextEditorBase.inherit({
 
         var parsedValue = this._parser(text);
 
-        if((this._lastKey === "Delete" || this._lastKey === "Backspace") && parsedValue > this._parsedValue) {
+        if((this._lastKey === "Delete" || this._lastKey === "Backspace") && Math.abs(parsedValue) > Math.abs(this._parsedValue)) {
             var caretDelta = this._lastKey === "Delete" ? 1 : 0;
             this._applyValue(this._parsedValue, true, caretDelta);
             return;
