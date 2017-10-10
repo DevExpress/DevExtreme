@@ -24,12 +24,7 @@ function getIntegerPartRegExp(formatString) {
     result = result.replace(/0/g, "\\d");
 
     if(formatString.indexOf("#" + GROUP_SEPARATOR) >= 0 && groupSizes.length) {
-        var firstGroupSize = groupSizes[0],
-            lastGroupSize = groupSizes[groupSizes.length - 1];
-
-        result = result.replace(new RegExp("[#\\" + GROUP_SEPARATOR + "]+"),
-            "([1-9]\\d{0," + (firstGroupSize - 1) + "},)(\\d{" + firstGroupSize + "},)*\\d{" +
-            lastGroupSize + "}|([1-9]\\d{0," + (lastGroupSize - 1 - requiredDigitCount) + "})?");
+        result = result.replace(new RegExp("[#\\" + GROUP_SEPARATOR + "]+"), "([1-9][\\d\\" + GROUP_SEPARATOR + "]*)?" + (requiredDigitCount ? "" : "|[0]"));
     } else {
         result = result.replace(/#+/g, "(([1-9]\\d*)?" + (requiredDigitCount ? ")" : "|[0])"));
     }
