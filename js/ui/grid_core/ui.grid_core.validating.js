@@ -158,9 +158,8 @@ var ValidatingController = modules.Controller.inherit((function() {
             });
         },
 
-        createValidator: function(parameters, container) {
+        createValidator: function(parameters, $container) {
             var that = this,
-                $container = container ? $(container) : container,
                 editingController = that._editingController,
                 column = parameters.column,
                 editData,

@@ -2112,9 +2112,8 @@ module.exports = {
                         that.callBase(e);
                     }
                 },
-                _cellPrepared: function(cell, parameters) {
+                _cellPrepared: function($cell, parameters) {
                     var columnIndex = parameters.columnIndex,
-                        $cell = $(cell),
                         editingController = this._editingController,
                         isCommandCell = !!parameters.column.command,
                         isEditableCell = parameters.setValue,

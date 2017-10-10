@@ -698,9 +698,8 @@ module.exports = {
                     var that = this;
 
                     if(column.command === "select") {
-                        return function(cell, options) {
-                            var column = options.column,
-                                $cell = $(cell);
+                        return function($cell, options) {
+                            var column = options.column;
 
                             if(column.command === "select") {
                                 $cell.addClass(EDITOR_CELL_CLASS);
@@ -779,9 +778,8 @@ module.exports = {
                     }
                 },
 
-                renderSelectCheckBoxContainer: function(column, container, options) {
+                renderSelectCheckBoxContainer: function(column, $container, options) {
                     if(options.rowType === "data" && !options.row.inserted) {
-                        var $container = $(container);
                         $container.addClass(EDITOR_CELL_CLASS);
                         this._attachCheckBoxClickEvent($container);
 

@@ -592,8 +592,7 @@ var GroupingRowsViewExtender = (function() {
             if(options.column.command === "expand") {
                 return {
                     allowRenderToDetachedContainer: true,
-                    render: function(container, options) {
-                        var $container = $(container);
+                    render: function($container, options) {
                         if(typeUtils.isDefined(options.value) && !(options.data && options.data.isContinuation) && !options.row.inserted) {
                             $container
                                 .addClass(DATAGRID_EXPAND_CLASS)
