@@ -620,16 +620,6 @@ module.exports = {
                     });
                 },
 
-                pageIndex: function(value) {
-                    var that = this,
-                        dataSource = that._dataSource;
-
-                    if(dataSource && value && dataSource.pageIndex() !== value) {
-                        that.getController("selection").focusedItemIndex(-1);
-                    }
-                    return that.callBase(value);
-                },
-
                 _processDataItem: function(item, options) {
                     var that = this,
                         selectionController = that.getController("selection"),
@@ -659,6 +649,14 @@ module.exports = {
                     }).fail(d.reject);
 
                     return d.promise();
+                },
+
+                _handleDataChanged: function(e) {
+                    this.callBase.apply(this, arguments);
+
+                    if(!e || e.changeType === "refresh") {
+                        this.getController("selection").focusedItemIndex(-1);
+                    }
                 }
             },
             contextMenu: {
