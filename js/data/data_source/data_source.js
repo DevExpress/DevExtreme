@@ -175,7 +175,24 @@ function mapDataRespectingGrouping(items, mapper, groupInfo) {
 }
 
 var DataSource = Class.inherit({
-
+    /**
+    * @name DataSourceMethods_ctor
+    * @publicName ctor(url)
+    * @param1 url:string
+    * @hidden
+    */
+    /**
+    * @name DataSourceMethods_ctor
+    * @publicName ctor(data)
+    * @param1 data:Array<any>
+    * @hidden
+    */
+    /**
+    * @name DataSourceMethods_ctor
+    * @publicName ctor(options)
+    * @param1 options:CustomStoreOptions|DataSourceOptions
+    * @hidden
+    */
     ctor: function(options) {
         var that = this;
         options = normalizeDataSourceOptions(options);

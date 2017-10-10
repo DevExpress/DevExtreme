@@ -1,12 +1,14 @@
 /**
 * @name viz
 * @publicName viz
+* @namespace DevExpress
 */
 var staticMethods = {
     /**
     * @name vizmethods_currentTheme
     * @publicName currentTheme(theme)
     * @param1 theme:string
+    * @static
     * @module viz/themes
     * @export currentTheme
     */
@@ -15,6 +17,7 @@ var staticMethods = {
     * @publicName currentTheme(platform, colorScheme)
     * @param1 platform:string
     * @param2 colorScheme:string
+    * @static
     * @module viz/themes
     * @export currentTheme
     */
@@ -24,6 +27,7 @@ var staticMethods = {
     * @publicName registerTheme(customTheme, baseTheme)
     * @param1 customTheme:object
     * @param2 baseTheme:string
+    * @static
     * @module viz/themes
     * @export registerTheme
     */
@@ -31,6 +35,7 @@ var staticMethods = {
     /**
     * @name vizmethods_refreshTheme
     * @publicName refreshTheme()
+    * @static
     * @module viz/themes
     * @export refreshTheme
     */
@@ -49,6 +54,7 @@ var staticMethods = {
     * @param2_field7 onExporting:function(e)
     * @param2_field8 onExported:function
     * @param2_field9 onFileSaving:function(e)
+    * @static
     * @module viz/export
     * @export exportFromMarkup
     */
@@ -58,6 +64,7 @@ var staticMethods = {
     * @publicName getMarkup(widgetInstances)
     * @param1 widgetInstances:Array<Object>
     * @return string
+    * @static
     * @module viz/export
     * @export getMarkup
     */
@@ -66,6 +73,7 @@ var staticMethods = {
     * @name vizmethods_currentPalette
     * @publicName currentPalette(paletteName)
     * @param1 paletteName:string
+    * @static
     * @module viz/palette
     * @export currentPalette
     */
@@ -75,6 +83,7 @@ var staticMethods = {
     * @publicName getPalette(paletteName)
     * @param1 paletteName:string
     * @return object
+    * @static
     * @module viz/palette
     * @export getPalette
     */
@@ -84,6 +93,7 @@ var staticMethods = {
     * @publicName registerPalette(paletteName, palette)
     * @param1 paletteName:string
     * @param2 palette:object
+    * @static
     * @module viz/palette
     * @export registerPalette
     */
@@ -91,6 +101,7 @@ var staticMethods = {
     /**
     * @name vizmethods_refreshPaths
     * @publicName refreshPaths()
+    * @static
     * @module viz/utils
     * @export refreshPaths
     */
@@ -99,6 +110,8 @@ var staticMethods = {
     * @name viz_core
     * @publicName core
     * @deprecated viz
+    * @namespace DevExpress.viz
+    * @static
     */
     core: {
         /**
@@ -106,6 +119,7 @@ var staticMethods = {
         * @publicName currentTheme(theme)
         * @param1 theme:string
         * @deprecated vizmethods_currentTheme
+        * @static
         */
         /**
         * @name viz_coremethods_currentTheme
@@ -113,6 +127,7 @@ var staticMethods = {
         * @param1 platform:string
         * @param2 colorScheme:string
         * @deprecated vizmethods_currentTheme
+        * @static
         */
         currentTheme: function() { },
         /**
@@ -121,6 +136,7 @@ var staticMethods = {
         * @param1 customTheme:object
         * @param2 baseTheme:string
         * @deprecated vizmethods_registerTheme
+        * @static
         */
         registerTheme: function() { },
         /**
@@ -128,6 +144,7 @@ var staticMethods = {
         * @publicName currentPalette(paletteName)
         * @param1 paletteName:string
         * @deprecated vizmethods_currentPalette
+        * @static
         */
         currentPalette: function() { },
         /**
@@ -136,6 +153,7 @@ var staticMethods = {
         * @param1 paletteName:string
         * @return object
         * @deprecated vizmethods_getPalette
+        * @static
         */
         getPalette: function() { },
         /**
@@ -144,36 +162,44 @@ var staticMethods = {
         * @param1 paletteName:string
         * @param2 palette:object
         * @deprecated vizmethods_registerPalette
+        * @static
         */
         registerPalette: function() { }
     },
     /**
     * @name viz_map
     * @publicName map
+    * @static
     */
     map: {
         /**
         * @name viz_mapmethods_projection
         * @publicName projection(data)
-        * @return object
         * @param1 data:object
         * @param1_field1 to:function(coordinates)
         * @param1_field2 from:function(coordinates)
-        * @param1_field3 aspectRatio:number
+        * @param1_field3 aspectRatio:number        
+        * @return object
+        * @static
+        * @namespace DevExpress.viz.map
         * @module viz/vector_map/projection
         * @export projection
         */
         /**
         * @name viz_mapmethods_projection_get
         * @publicName get(name)
-        * @return object
         * @param1 name:string
+        * @return object
+        * @namespace DevExpress.viz.map.projection
+        * @static
         */
         /**
         * @name viz_mapmethods_projection_add
         * @publicName add(name, projection)
         * @param1 name:string
         * @param2 projection:object
+        * @namespace DevExpress.viz.map.projection
+        * @static
         */
     }
 };

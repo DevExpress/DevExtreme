@@ -8,6 +8,12 @@
 */
 var dxTreeMap = {
     /**
+    * @name dxtreemap_options
+    * @publicName Options
+    * @namespace DevExpress.viz.treeMap
+    * @hidden
+    */        
+    /**
     * @name dxtreemapoptions_margin
     * @publicName margin
     * @hidden
