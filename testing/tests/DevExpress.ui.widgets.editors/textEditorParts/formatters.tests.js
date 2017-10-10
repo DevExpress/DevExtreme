@@ -226,10 +226,10 @@ QUnit.skip("displayFormat with escaped symbol", function(assert) {
 });
 
 QUnit.test("removing decimal point should not change the value", function(assert) {
-    this.instance.option("value", 123);
+    this.instance.option("value", 123.45);
     this.keyboard.caret(3).press("del").input();
 
-    assert.equal(this.input.val(), "123.00", "value is correct");
+    assert.equal(this.input.val(), "123.50", "value is correct");
 });
 
 QUnit.test("pressing float separator should not move the caret", function(assert) {

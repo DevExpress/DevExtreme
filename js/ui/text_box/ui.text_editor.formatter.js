@@ -78,6 +78,14 @@ var TextEditorFormatter = TextEditorBase.inherit({
         }
 
         if(this._isStubSymbol(this._lastKey)) {
+            var text = this._input().val(),
+                caret = this._caret(),
+                nextChar = text.charAt(caret.end);
+
+            if(nextChar === this._lastKey) {
+                this._moveCaret(1);
+            }
+
             e.originalEvent.preventDefault();
         }
 
@@ -172,7 +180,7 @@ var TextEditorFormatter = TextEditorBase.inherit({
     },
 
     _isStubSymbol: function(char) {
-        return new RegExp("^[^0-9" + this._escapeRegExpSpecial(FLOAT_SEPARATOR) + "]$").test(char);
+        return new RegExp("^[^0-9]$").test(char);
     },
 
     _escapeRegExpSpecial: function(formatString) {
@@ -274,12 +282,6 @@ var TextEditorFormatter = TextEditorBase.inherit({
         }
 
         var parsedValue = this._parser(text);
-
-        if((this._lastKey === "Delete" || this._lastKey === "Backspace") && Math.abs(parsedValue) > Math.abs(this._parsedValue)) {
-            var caretDelta = this._lastKey === "Delete" ? 1 : 0;
-            this._applyValue(this._parsedValue, true, caretDelta);
-            return;
-        }
 
         this._applyValue(parsedValue);
     },
