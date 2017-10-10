@@ -9,6 +9,7 @@
 * @name localization_locale
 * @publicName locale()
 * @return string
+* @static
 * @module localization
 * @export locale
 */
@@ -17,6 +18,7 @@
 * @name localization_locale
 * @publicName locale(locale)
 * @param1 locale:string
+* @static
 * @module localization
 * @export locale
 */
@@ -26,6 +28,7 @@ exports.locale = require("./localization/core").locale;
 * @name localization_loadMessages
 * @publicName loadMessages()
 * @param1 messages:object
+* @static
 * @module localization
 * @export loadMessages
 */

@@ -87,7 +87,13 @@ var DOMComponent = Component.inherit({
             integrationOptions: {}
         });
     },
-
+    /**
+    * @name DOMComponentMethods_ctor
+    * @publicName ctor(element,options)
+    * @param1 element:Element
+    * @param2 options:DOMComponentOptions|undefined
+    * @hidden
+    */
     ctor: function(element, options) {
         this._$element = $(element);
         publicComponentUtils.attachInstanceToElement(this._$element, this, this._dispose);
@@ -410,6 +416,7 @@ DOMComponent.getInstance = function($element) {
 
 /**
 * @name domcomponentmethods_defaultOptions
+* @static
 * @section uiWidgets
 * @publicName defaultOptions(rule)
 * @param1 rule:Object
