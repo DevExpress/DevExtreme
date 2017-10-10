@@ -3178,6 +3178,7 @@ function getJQueryEvent(options) {
         //act
         this.createDraggingHeaderViewController();
         draggingHeader = new TestDraggingHeader(this.component);
+        draggingHeader.init();
         draggingHeader.render(testElement);
         draggingHeader.dragHeader({
             columnElement: $('<td />', {
@@ -3213,6 +3214,7 @@ function getJQueryEvent(options) {
         //act
         this.createDraggingHeaderViewController();
         draggingHeader = new TestDraggingHeader(this.component);
+        draggingHeader.init();
         draggingHeader.render(testElement);
         draggingHeader.dragHeader({
             columnElement: $('<td />', {
@@ -4269,6 +4271,58 @@ function getJQueryEvent(options) {
         assert.equal(moveHeaderDataSelfArgs.length, 2);
         assert.ok(moveHeaderDataSelfArgs[0] === controller1._draggingHeaderView);
         assert.ok(moveHeaderDataSelfArgs[1] === controller2._draggingHeaderView);
+    });
+
+    QUnit.test("setRowsOpacity method of views should called only once for begin dragging", function(assert) {
+        //arrange
+        var testElement = $('#container'),
+            rowsView = new RowsView(this.component),
+            columnHeadersView = new ColumnHeadersView(this.component),
+            draggingHeader;
+
+        //act
+        var controller = this.createDraggingHeaderViewController();
+        controller._rowsView = rowsView;
+        controller._columnHeadersView = columnHeadersView;
+
+        draggingHeader = new TestDraggingHeader(this.component);
+        draggingHeader.init();
+        draggingHeader._rowsView = rowsView;
+        draggingHeader._columnHeadersView = columnHeadersView;
+        draggingHeader.render(testElement);
+
+        sinon.stub(rowsView, "setRowsOpacity");
+        sinon.stub(columnHeadersView, "setRowsOpacity");
+
+        draggingHeader.dragHeader({
+            columnElement: $('<td />', {
+                css: {
+                    textAlign: 'left',
+                    width: '100px',
+                    height: '50px'
+                }
+            }),
+            sourceLocation: "headers",
+            sourceColumn: {
+                caption: "TestDrag"
+            }
+        });
+        draggingHeader.moveHeader({
+            jQueryEvent: {
+                data: {
+                    that: draggingHeader,
+                    rootElement: testElement
+                },
+                preventDefault: function() { },
+                pageX: -9900,
+                pageY: 55,
+                type: 'mouse'
+            }
+        });
+
+        //assert
+        assert.ok(rowsView.setRowsOpacity.calledOnce, "setRowsOpacity of RowsView method should is called once");
+        assert.ok(columnHeadersView.setRowsOpacity.calledOnce, "setRowsOpacity of ColumnHeadersView method should is called once");
     });
 }());
 
