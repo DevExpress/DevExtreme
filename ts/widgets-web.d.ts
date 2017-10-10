@@ -2840,7 +2840,106 @@ declare module DevExpress.ui {
         getDataSource(): DevExpress.data.PivotGridDataSource;
     }
 
+    export interface dxFilterBuilderField {
+        /** @docid_ignore dxFilterBuilderOptions_fields_defaultFilterOperation */
+
+        /** @docid dxFilterBuilderOptions_fields_caption */
+        caption?: string;
+
+        /** @docid dxFilterBuilderOptions_fields_dataField */
+        dataField?: string;
+
+        /** @docid dxFilterBuilderOptions_fields_dataType */
+        dataType?: string;
+
+        /** @docid dxFilterBuilderOptions_fields_format */
+        format?: any;
+
+        /** @docid dxFilterBuilderOptions_fields_trueText */
+        trueText?: string;
+
+        /** @docid dxFilterBuilderOptions_fields_falseText */
+        falseText?: string;
+
+        /** @docid dxFilterBuilderOptions_fields_lookup */
+        lookup?: {
+            /** @docid dxFilterBuilderOptions_fields_lookup_allowClearing */
+            allowClearing?: boolean;
+
+            /** @docid dxFilterBuilderOptions_fields_lookup_dataSource */
+            dataSource?: any;
+
+            /** @docid dxFilterBuilderOptions_fields_lookup_displayExpr */
+            displayExpr?: any;
+
+            /** @docid dxFilterBuilderOptions_fields_lookup_valueExpr */
+            valueExpr?: string;
+        };
+
+        /** @docid dxFilterBuilderOptions_fields_filterOperations */
+        filterOperations?: Array<string>;
+
+        /** @docid dxFilterBuilderOptions_fields_customizeText */
+        customizeText?: (fieldInfo: { value: any; valueText: string; }) => string;
+    }
+
     export interface dxFilterBuilderOptions extends WidgetOptions {
+        /** @docid_ignore dxFilterBuilderOptions_defaultGroupOperation */
+
+        /** @docid dxFilterBuilderOptions_value */
+        value?: Array<any>;
+
+        /** @docid dxFilterBuilderOptions_allowHierarchicalFields */
+        allowHierarchicalFields?: boolean;
+
+        /** @docid dxFilterBuilderOptions_fields*/
+        fields?: Array<dxFilterBuilderField>;
+
+        /** @docid dxFilterBuilderOptions_groupOperationDescriptions */
+        groupOperationDescriptions?: {
+            /** @docid dxFilterBuilderOptions_groupOperationDescriptions_and */
+            and?: string;
+            /** @docid dxFilterBuilderOptions_groupOperationDescriptions_or */
+            or?: string;
+            /** @docid dxFilterBuilderOptions_groupOperationDescriptions_notAnd */
+            notAnd?: string;
+            /** @docid dxFilterBuilderOptions_groupOperationDescriptions_notOr */
+            notOr?: string;
+        };
+
+        /** @docid dxFilterBuilderOptions_filterOperationDescriptions */
+        filterOperationDescriptions?: {
+            /** @docid dxFilterBuilderOptions_filterOperationDescriptions_equal */
+            equal?: string;
+            /** @docid dxFilterBuilderOptions_filterOperationDescriptions_notEqual */
+            notEqual?: string;
+            /** @docid dxFilterBuilderOptions_filterOperationDescriptions_lessThan */
+            lessThan?: string;
+            /** @docid dxFilterBuilderOptions_filterOperationDescriptions_lessThanOrEqual */
+            lessThanOrEqual?: string;
+            /** @docid dxFilterBuilderOptions_filterOperationDescriptions_greaterThan */
+            greaterThan?: string;
+            /** @docid dxFilterBuilderOptions_filterOperationDescriptions_greaterThanOrEqual */
+            greaterThanOrEqual?: string;
+            /** @docid dxFilterBuilderOptions_filterOperationDescriptions_startsWith */
+            startsWith?: string;
+            /** @docid dxFilterBuilderOptions_filterOperationDescriptions_contains */
+            contains?: string;
+            /** @docid dxFilterBuilderOptions_filterOperationDescriptions_notContains */
+            notContains?: string;
+            /** @docid dxFilterBuilderOptions_filterOperationDescriptions_endsWith */
+            endsWith?: string;
+            /** @docid dxFilterBuilderOptions_filterOperationDescriptions_isBlank */
+            isBlank?: string;
+            /** @docid dxFilterBuilderOptions_filterOperationDescriptions_isNotBlank */
+            isNotBlank?: string;
+        };
+
+        /** @docid dxFilterBuilderOptions_onEditorPrepared */
+        onEditorPrepared?: (e: Object) => void;
+
+        /** @docid dxFilterBuilderOptions_onEditorPreparing */
+        onEditorPreparing?: (e: Object) => void;
     }
 
     /** @docid dxfilterbuilder */

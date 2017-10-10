@@ -363,8 +363,7 @@ function getCurrentValueText(field, value) {
         valueText = formatHelper.format(value, field.format);
     }
     if(field.customizeText) {
-        valueText = field.customizeText({
-            field: field,
+        valueText = field.customizeText.call(field, {
             value: value,
             valueText: valueText
         });

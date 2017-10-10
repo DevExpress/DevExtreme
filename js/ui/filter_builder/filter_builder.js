@@ -81,13 +81,125 @@ var FilterBuilder = Widget.inherit({
             /**
             * @name dxFilterBuilderOptions_fields
             * @publicName fields
+            * @type Array<Object>
             * @default []
             */
             fields: [],
 
             /**
+            * @name dxFilterBuilderOptions_fields_caption
+            * @publicName caption
+            * @type string
+            * @default undefined
+            */
+
+            /**
+            * @name dxFilterBuilderOptions_fields_dataField
+            * @publicName dataField
+            * @type string
+            * @default undefined
+            */
+
+            /**
+             * @name dxFilterBuilderOptions_fields_dataType
+             * @publicName dataType
+             * @type string
+             * @default "string"
+             * @acceptValues "string" | "number" | "date" | "boolean" | "object"
+             */
+
+            /**
+             * @name dxFilterBuilderOptions_fields_format
+             * @publicName format
+             * @type format
+             * @default ""
+             */
+
+            /**
+             * @name dxFilterBuilderOptions_fields_trueText
+             * @publicName trueText
+             * @type string
+             * @default "true"
+             */
+
+            /**
+             * @name dxFilterBuilderOptions_fields_falseText
+             * @publicName falseText
+             * @type string
+             * @default "false"
+             */
+
+            /**
+             * @name dxFilterBuilderOptions_fields_lookup
+             * @publicName lookup
+             * @type object
+             * @default undefined
+             */
+
+            /**
+             * @name dxFilterBuilderOptions_fields_lookup_dataSource
+             * @publicName dataSource
+             * @type array|DataSourceOptions|function(options)
+             * @type_function_param1 options:object
+             * @type_function_param1_field1 data:object
+             * @type_function_param1_field2 key:any
+             * @type_function_return array|DataSourceOptions
+             * @default undefined
+             */
+
+            /**
+             * @name dxFilterBuilderOptions_fields_lookup_valueExpr
+             * @publicName valueExpr
+             * @type string
+             * @default undefined
+             */
+
+            /**
+             * @name dxFilterBuilderOptions_fields_lookup_displayExpr
+             * @publicName displayExpr
+             * @type string|function(data)
+             * @type_function_param1 data:object
+             * @default undefined
+             */
+
+            /**
+             * @name dxFilterBuilderOptions_fields_lookup_allowClearing
+             * @publicName allowClearing
+             * @type boolean
+             * @default false
+             */
+
+            /**
+             * @name dxFilterBuilderOptions_fields_defaultFilterOperation
+             * @publicName defaultFilterOperation
+             * @type string
+             * @acceptValues "=" | "<>" | "<" | "<=" | ">" | ">=" | "notcontains" | "contains" | "startswith" | "endswith" | "isblank" | "isnotblank"
+             * @default
+             * @hidden
+             */
+
+            /**
+             * @name dxFilterBuilderOptions_fields_filterOperations
+             * @publicName filterOperations
+             * @type Array<string>
+             * @acceptValues "=" | "<>" | "<" | "<=" | ">" | ">=" | "notcontains" | "contains" | "startswith" | "endswith" | "isblank" | "isnotblank"
+             * @default undefined
+             */
+
+            /**
+             * @name dxFilterBuilderOptions_fields_customizeText
+             * @publicName customizeText
+             * @type function(fieldInfo)
+             * @type_function_param1 fieldInfo:object
+             * @type_function_param1_field1 value:string|number|date
+             * @type_function_param1_field2 valueText:string
+             * @type_function_return string
+             */
+
+            /**
             * @name dxFilterBuilderOptions_defaultGroupOperation
             * @publicName defaultGroupOperation
+            * @type string
             * @default "And"
             * @hidden
             */
@@ -96,6 +208,7 @@ var FilterBuilder = Widget.inherit({
             /**
              * @name dxFilterBuilderOptions_value
              * @publicName value
+             * @type array
              * @default null
              */
             value: null,
@@ -103,6 +216,7 @@ var FilterBuilder = Widget.inherit({
             /**
              * @name dxFilterBuilderOptions_allowHierarchicalFields
              * @publicName allowHierarchicalFields
+             * @type boolean
              * @default false
              */
             allowHierarchicalFields: false,
