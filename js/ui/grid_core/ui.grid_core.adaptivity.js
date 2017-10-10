@@ -469,8 +469,9 @@ var AdaptiveColumnsController = modules.ViewController.inherit({
         }
     },
 
-    createFormByHiddenColumns: function($container, options) {
+    createFormByHiddenColumns: function(container, options) {
         var that = this,
+            $container = $(container),
             userFormOptions = {
                 items: that._getFormItemsByHiddenColumns(that._hiddenColumns),
                 formID: "dx-" + new Guid()

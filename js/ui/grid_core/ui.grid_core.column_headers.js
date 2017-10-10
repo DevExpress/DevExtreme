@@ -87,8 +87,9 @@ module.exports = {
                         template;
 
                     if(column.command) {
-                        template = function($container, options) {
-                            var column = options.column;
+                        template = function(container, options) {
+                            var column = options.column,
+                                $container = $(container);
 
                             $container.html("&nbsp;");
                             $container.addClass(column.cssClass);

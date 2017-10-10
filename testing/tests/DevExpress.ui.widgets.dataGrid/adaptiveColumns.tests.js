@@ -20,6 +20,8 @@ var $ = require("jquery"),
     dataGridMocks = require("../../helpers/dataGridMocks.js"),
     CLICK_NAMESPACE = "dxclick.dxDataGridAdaptivity",
     eventsEngine = require("events/core/events_engine"),
+    typeUtils = require("core/utils/type"),
+    config = require("core/config"),
     renderer = require("core/renderer");
 
 function setupDataGrid(that, $dataGridContainer) {
@@ -701,9 +703,10 @@ QUnit.test("Show the form with cellTemplate when an adaptive row is expanded", f
             dataField: 'lastName',
             index: 1,
             allowEditing: true,
-            cellTemplate: function($container, data) {
+            cellTemplate: function(container, data) {
+                assert.equal(typeUtils.isRenderer(container), config().useJQueryRenderer, "cellElement is correct");
                 _column = data.column;
-                $container.text(data.value + " template");
+                $(container).text(data.value + " template");
             }
         }
     ];
@@ -1302,7 +1305,7 @@ QUnit.test("Cell of master detail is not hidden when first column of data grid i
     this.options.masterDetail = {
         enabled: true,
         template: function(container) {
-            $("<span/>").appendTo(container);
+            $("<span/>").appendTo($(container));
         }
     };
     this.rowsView.render($("#container"));

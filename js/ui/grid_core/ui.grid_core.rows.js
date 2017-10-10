@@ -261,7 +261,7 @@ module.exports = {
              * @name dxDataGridOptions_rowTemplate
              * @publicName rowTemplate
              * @type template
-             * @type_function_param1 rowElement:jQuery
+             * @type_function_param1 rowElement:Element
              * @type_function_param2 rowInfo:object
              */
             rowTemplate: null,
@@ -413,13 +413,13 @@ module.exports = {
                     switch(column.command) {
                         case "empty":
                             return function(container) {
-                                container.html("&nbsp;");
+                                $(container).html("&nbsp;");
                             };
                         default:
                             return function($container, options) {
                                 var isDataTextEmpty = stringUtils.isEmpty(options.text) && options.rowType === "data",
                                     text = isDataTextEmpty ? "&nbsp;" : options.text,
-                                    container = $container.get(0);
+                                    container = $($container).get(0);
 
                                 if(column.encodeHtml && !isDataTextEmpty) {
                                     container.textContent = text;
@@ -437,7 +437,7 @@ module.exports = {
                     return function($container, options) {
                         var data = options.data,
                             text = options.column.caption + ": " + options.text,
-                            container = $container.get(0);
+                            container = $($container).get(0);
 
                         if(options.summaryItems && options.summaryItems.length) {
                             text += " " + gridCoreUtils.getGroupRowSummaryText(options.summaryItems, summaryTexts);
@@ -453,7 +453,7 @@ module.exports = {
                             }
                         }
 
-                        $container.addClass(GROUP_CELL_CLASS);
+                        $($container).addClass(GROUP_CELL_CLASS);
 
                         if(column.encodeHtml) {
                             container.textContent = text;

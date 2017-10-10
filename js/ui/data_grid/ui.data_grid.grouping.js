@@ -593,18 +593,19 @@ var GroupingRowsViewExtender = (function() {
                 return {
                     allowRenderToDetachedContainer: true,
                     render: function(container, options) {
+                        var $container = $(container);
                         if(typeUtils.isDefined(options.value) && !(options.data && options.data.isContinuation) && !options.row.inserted) {
-                            container
+                            $container
                                 .addClass(DATAGRID_EXPAND_CLASS)
                                 .addClass(DATAGRID_SELECTION_DISABLED_CLASS);
 
                             $("<div>")
                                 .addClass(options.value ? DATAGRID_GROUP_OPENED_CLASS : DATAGRID_GROUP_CLOSED_CLASS)
-                                .appendTo(container);
+                                .appendTo($container);
 
                             that.setAria("label",
                                 options.value ? that.localize("dxDataGrid-ariaCollapse") : that.localize("dxDataGrid-ariaExpand"),
-                                container);
+                                $container);
                         }
                     }
                 };

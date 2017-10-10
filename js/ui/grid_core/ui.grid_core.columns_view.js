@@ -274,7 +274,7 @@ exports.ColumnsView = modules.View.inherit(columnStateMixin).inherit({
         } else if(typeUtils.isFunction(template)) {
             renderingTemplate = {
                 render: function(options) {
-                    var renderedTemplate = template(options.container, options.model);
+                    var renderedTemplate = template(getPublicElement(options.container), options.model);
                     if(renderedTemplate && (renderedTemplate.nodeType || typeUtils.isRenderer(renderedTemplate))) {
                         options.container.append(renderedTemplate);
                     }

@@ -52,7 +52,8 @@ module.exports = {
         return $indicatorsContainer.css("float", options.showColumnLines && !ignoreIndicatorAlignment ? indicatorAlignment : null);
     },
 
-    _getIndicatorContainer: function($cell) {
+    _getIndicatorContainer: function(cell) {
+        var $cell = $(cell);
         return $cell && $cell.find("." + COLUMN_INDICATORS_CLASS);
     },
 

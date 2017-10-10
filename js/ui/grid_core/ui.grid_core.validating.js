@@ -158,8 +158,9 @@ var ValidatingController = modules.Controller.inherit((function() {
             });
         },
 
-        createValidator: function(parameters, $container) {
+        createValidator: function(parameters, container) {
             var that = this,
+                $container = container ? $(container) : container,
                 editingController = that._editingController,
                 column = parameters.column,
                 editData,
@@ -210,6 +211,7 @@ var ValidatingController = modules.Controller.inherit((function() {
                 editData = editingController._editData[editIndex];
 
                 var useDefaultValidator = $container && $container.hasClass("dx-widget");
+
                 var validator = new Validator($container || {}, {
                     name: column.caption,
                     validationRules: extend(true, [], column.validationRules),

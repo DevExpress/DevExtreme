@@ -1515,17 +1515,19 @@ var EditingController = modules.ViewController.inherit((function() {
                 template = column.editCellTemplate || getDefaultEditorTemplate(that);
             } else if(column.command === "edit" && options.rowType === "data") {
                 template = function(container, options) {
-                    container.css("text-align", "center");
+                    var $container = $(container);
+
+                    $container.css("text-align", "center");
                     options.rtlEnabled = that.option("rtlEnabled");
 
                     editingOptions = that.option("editing") || {};
                     editingTexts = editingOptions.texts || {};
 
                     if(options.row && options.row.rowIndex === that._getVisibleEditRowIndex() && isRowMode) {
-                        that._createLink(container, editingTexts.saveRowChanges, "saveEditData", options, "dx-link-save");
-                        that._createLink(container, editingTexts.cancelRowChanges, "cancelEditData", options, "dx-link-cancel");
+                        that._createLink($container, editingTexts.saveRowChanges, "saveEditData", options, "dx-link-save");
+                        that._createLink($container, editingTexts.cancelRowChanges, "cancelEditData", options, "dx-link-cancel");
                     } else {
-                        that._createEditingLinks(container, options, editingOptions, isRowMode);
+                        that._createEditingLinks($container, options, editingOptions, isRowMode);
                     }
                 };
             } else if(column.command === "detail" && options.rowType === "detail" && isRowEditing) {
@@ -2110,8 +2112,9 @@ module.exports = {
                         that.callBase(e);
                     }
                 },
-                _cellPrepared: function($cell, parameters) {
+                _cellPrepared: function(cell, parameters) {
                     var columnIndex = parameters.columnIndex,
+                        $cell = $(cell),
                         editingController = this._editingController,
                         isCommandCell = !!parameters.column.command,
                         isEditableCell = parameters.setValue,

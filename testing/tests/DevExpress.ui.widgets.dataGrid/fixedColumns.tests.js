@@ -467,8 +467,8 @@ QUnit.test("Draw fixed table for rowsView with master detail", function(assert) 
     that.setupDataGrid();
     that.option("masterDetail", {
         enabled: true,
-        template: function($container, options) {
-            $container.text("Test");
+        template: function(container, options) {
+            $(container).text("Test");
         }
     });
 
@@ -505,8 +505,8 @@ QUnit.test("Draw fixed table inside master detail", function(assert) {
     that.setupDataGrid();
     that.option("masterDetail", {
         enabled: true,
-        template: function($container, options) {
-            $container.append($("<table/>").addClass("dx-pointer-events-none"));
+        template: function(container, options) {
+            $(container).append($("<table/>").addClass("dx-pointer-events-none"));
         }
     });
 
@@ -1070,8 +1070,8 @@ QUnit.test("Hover on detail grid when hoverStateEnabled true", function(assert) 
 
     that.option("masterDetail", {
         enabled: true,
-        template: function($container, options) {
-            $container.append($("<div>").addClass("dx-row dx-data-row").text("Test"));
+        template: function(container, options) {
+            $(container).append($("<div>").addClass("dx-row dx-data-row").text("Test"));
         }
     });
 
@@ -1203,8 +1203,8 @@ QUnit.test("Synchronize rows for fixed table with master detail", function(asser
     that.option("wordWrapEnabled", true);
     that.option("masterDetail", {
         enabled: true,
-        template: function($container, options) {
-            $container.append($("<div/>", { height: 100 }).text("Test"));
+        template: function(container, options) {
+            $(container).append($("<div/>", { height: 100 }).text("Test"));
         }
     });
     that.rowsView.render($testElement);
@@ -1230,9 +1230,9 @@ QUnit.test("Synchronize rows with floating-point height", function(assert) {
         $fixTable,
         $testElement = $("#container");
 
-    that.columns[1].headerCellTemplate = function($container, options) {
-        $container.text(options.column.caption);
-        $container.append($("<div/>", { css: { height: 19 } }));
+    that.columns[1].headerCellTemplate = function(container, options) {
+        $(container).text(options.column.caption);
+        $(container).append($("<div/>", { css: { height: 19 } }));
     };
     that.setupDataGrid();
     that.columnHeadersView.render($testElement);

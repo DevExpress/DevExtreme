@@ -39,7 +39,7 @@ module.exports = {
                  * @name dxDataGridOptions_masterDetail_template
                  * @publicName template
                  * @type template
-                 * @type_function_param1 detailElement:jQuery
+                 * @type_function_param1 detailElement:Element
                  * @type_function_param2 detailInfo:object
                  * @type_function_param2_field1 key:any
                  * @type_function_param2_field2 data:object
@@ -238,8 +238,9 @@ module.exports = {
                         return template;
                     },
 
-                    _cellPrepared: function($cell, options) {
+                    _cellPrepared: function(cell, options) {
                         var that = this,
+                            $cell = $(cell),
                             component = that.component;
 
                         that.callBase.apply(that, arguments);

@@ -24,8 +24,9 @@ var DATAGRID_TOTAL_FOOTER_CLASS = "dx-datagrid-total-footer",
 
     DATAGRID_GROUP_FOOTER_ROW_TYPE = "groupFooter";
 
-var renderSummaryCell = function($cell, options) {
+var renderSummaryCell = function(cell, options) {
         var i,
+            $cell = $(cell),
             column = options.column,
             summaryItems = options.summaryItems,
             summaryItem,
