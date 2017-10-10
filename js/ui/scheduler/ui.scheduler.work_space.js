@@ -367,7 +367,7 @@ var SchedulerWorkSpace = Widget.inherit({
             allowMultipleCellSelection: true,
             indicatorTime: new Date(),
             indicatorUpdateInterval: 5 * toMs("minute"),
-            shadeUntilNow: true
+            shadeUntilCurrentTime: true
         });
     },
 

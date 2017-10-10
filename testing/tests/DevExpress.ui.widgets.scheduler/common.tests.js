@@ -1103,27 +1103,27 @@ QUnit.testStart(function() {
         assert.equal(workSpaceWeek.option("indicatorUpdateInterval"), 3000, "workspace has correct indicatorUpdateInterval");
     });
 
-    QUnit.test("shadeUntilNow should have right default", function(assert) {
+    QUnit.test("shadeUntilCurrentTime should have right default", function(assert) {
         this.createInstance({
             currentView: "week"
         });
 
-        assert.equal(this.instance.option("shadeUntilNow"), false, "workspace has correct shadeUntilNow");
+        assert.equal(this.instance.option("shadeUntilCurrentTime"), false, "workspace has correct shadeUntilCurrentTime");
     });
 
-    QUnit.test("shadeUntilNow option should be passed to workSpace", function(assert) {
+    QUnit.test("shadeUntilCurrentTime option should be passed to workSpace", function(assert) {
         this.createInstance({
             currentView: "week",
-            shadeUntilNow: false
+            shadeUntilCurrentTime: false
         });
 
         var workSpaceWeek = this.instance.getWorkSpace();
 
-        assert.equal(workSpaceWeek.option("shadeUntilNow"), false, "workspace has correct shadeUntilNow");
+        assert.equal(workSpaceWeek.option("shadeUntilCurrentTime"), false, "workspace has correct shadeUntilCurrentTime");
 
-        this.instance.option("shadeUntilNow", true);
+        this.instance.option("shadeUntilCurrentTime", true);
 
-        assert.equal(workSpaceWeek.option("shadeUntilNow"), true, "workspace has correct shadeUntilNow");
+        assert.equal(workSpaceWeek.option("shadeUntilCurrentTime"), true, "workspace has correct shadeUntilCurrentTime");
     });
 
     QUnit.test("appointments should be repainted after scheduler dimensions changing", function(assert) {

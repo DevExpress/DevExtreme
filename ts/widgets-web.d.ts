@@ -516,8 +516,8 @@ declare module DevExpress.ui {
         noDataText?: string;
         /** @docid dxSchedulerOptions_showCurrentTimeIndicator */
         showCurrentTimeIndicator?: boolean;
-        /** @docid dxSchedulerOptions_shadeUntilNow */
-        shadeUntilNow?: boolean;
+        /** @docid dxSchedulerOptions_shadeUntilCurrentTime */
+        shadeUntilCurrentTime?: boolean;
     }
 
     /** @docid dxScheduler */

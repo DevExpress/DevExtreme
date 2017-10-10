@@ -169,7 +169,7 @@ var stubInvokeMethod = function(instance, options) {
     QUnit.test("DateTimeIndicator should have correct positions, Day view with groups without shader", function(assert) {
         this.instance.option({
             indicatorTime: new Date(2017, 8, 5, 12, 45),
-            shadeUntilNow: false
+            shadeUntilCurrentTime: false
         });
 
         this.instance.option("groups", [{ name: "a", items: [{ id: 1, text: "a.1" }, { id: 2, text: "a.2" }] }]);
@@ -188,14 +188,14 @@ var stubInvokeMethod = function(instance, options) {
     QUnit.test("Shader should be rendered if needed, Day view", function(assert) {
         this.instance.option({
             indicatorTime: new Date(2017, 8, 5, 12, 45),
-            shadeUntilNow: false
+            shadeUntilCurrentTime: false
         });
 
         var $element = this.instance.$element();
 
         assert.equal($element.find("." + SCHEDULER_DATE_TIME_SHADER_CLASS).length, 0, "Shader wasn't rendered");
 
-        this.instance.option("shadeUntilNow", true);
+        this.instance.option("shadeUntilCurrentTime", true);
         $element = this.instance.$element();
 
         assert.equal($element.find("." + SCHEDULER_DATE_TIME_SHADER_CLASS).length, 1, "Shader was rendered");
