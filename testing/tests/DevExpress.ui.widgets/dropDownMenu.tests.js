@@ -464,6 +464,21 @@ QUnit.test("popupHeight/popupWidth test", function(assert) {
     assert.equal(popover.option("width"), 50, "popover width is right");
 });
 
+QUnit.test("maxHeight test", function(assert) {
+    var $dropDownMenu = $("#dropDownMenu").dxDropDownMenu({
+        popupMaxHeight: 300,
+        opened: true
+    });
+
+    var popover = $dropDownMenu.find(".dx-popover").dxPopover("instance");
+
+    assert.equal(popover.option("maxHeight"), 300, "popover height is right");
+
+    $dropDownMenu.dxDropDownMenu("option", "popupMaxHeight", 400);
+
+    assert.equal(popover.option("maxHeight"), 400, "popover height is right");
+});
+
 QUnit.test("usePopover sets current target", function(assert) {
     $("#dropDownMenu").dxDropDownMenu({
         usePopover: true,
