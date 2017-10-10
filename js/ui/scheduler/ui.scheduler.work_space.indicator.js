@@ -39,19 +39,19 @@ var SchedulerWorkSpaceIndicator = SchedulerWorkSpace.inherit({
             if(this.option("showCurrentTimeIndicator") && this._needRenderDateTimeIndicator()) {
                 var groupCount = isVertical && this._getGroupCount() || 1,
                     $container = this._dateTableScrollable.$content(),
-                    width = this.getIndicationWidth(0),
                     height = this.getIndicationHeight(),
                     rtlOffset = this._getRtlOffset(this.getCellWidth());
 
                 if(height > 0) {
-                    this._renderIndicator(width, height, rtlOffset, $container, groupCount);
+                    this._renderIndicator(height, rtlOffset, $container, groupCount);
                 }
             }
         }
     },
 
-    _renderIndicator: function(width, height, rtlOffset, $container, groupCount) {
+    _renderIndicator: function(height, rtlOffset, $container, groupCount) {
         for(var i = 0; i < groupCount; i++) {
+            var width = this.getIndicationWidth(i);
             var $indicator = this._createIndicator($container);
             var offset = this._getCellCount() * this._getRoundedCellWidth(i) * i + (width - this.getCellWidth());
 
@@ -95,14 +95,14 @@ var SchedulerWorkSpaceIndicator = SchedulerWorkSpace.inherit({
         return true;
     },
 
-    getIndicationWidth: function(i) {
+    getIndicationWidth: function(groupIndex) {
         var today = this._getToday(),
             firstViewDate = new Date(this._firstViewDate),
             maxWidth = this.getCellWidth() * this._getCellCount();
 
         var timeDiff = today.getTime() - firstViewDate.getTime(),
             difference = Math.ceil(timeDiff / toMs("day")),
-            width = difference * this._getRoundedCellWidth(i, difference);
+            width = difference * this._getRoundedCellWidth(groupIndex, difference);
 
         return maxWidth < width ? maxWidth : width;
     },
