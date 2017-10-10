@@ -62,7 +62,8 @@
 @SCHEDULER_GROUPED_APPOINTMENT_MONTH_TEXT_SIZE: 12px;
 
 @SCHEDULER_BASE_BORDER: 1px solid @SCHEDULER_BASE_BORDER_COLOR;
-@SCHEDULER_TRANSPARENT_BORDER: 1px solid transparent;
+@SCHEDULER_TRANSPARENT_TOP_BORDER: 1px solid transparent;
+@SCHEDULER_TRANSPARENT_SIDE_BORDER: 2px solid transparent;
 @SCHEDULER_ACCENT_BORDER: 1px solid @SCHEDULER_ACCENT_BORDER_COLOR;
 
 @SCHEDULER_RECURRENCE_ICON_OFFSET: 7px;
@@ -900,7 +901,7 @@
         .dx-scheduler-sidebar-scrollable .dx-scrollable-content,
         .dx-scheduler-group-table {
             height: auto;
-            border-top: @SCHEDULER_TRANSPARENT_BORDER;
+            border-top: @SCHEDULER_TRANSPARENT_TOP_BORDER;
         }
 
         .dx-scheduler-date-table .dx-scheduler-date-table-row:first-child {
@@ -1488,8 +1489,9 @@
 }
 
 .dx-scheduler-appointment {
-    border-top: @SCHEDULER_TRANSPARENT_BORDER;
-    border-left: @SCHEDULER_TRANSPARENT_BORDER;
+    border-top: @SCHEDULER_TRANSPARENT_TOP_BORDER;
+    border-left: @SCHEDULER_TRANSPARENT_SIDE_BORDER;
+    border-right: @SCHEDULER_TRANSPARENT_SIDE_BORDER;
     background-clip: padding-box;
     position: absolute;
     cursor: default;
