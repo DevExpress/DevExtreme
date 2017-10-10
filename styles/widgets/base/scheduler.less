@@ -578,8 +578,11 @@
     }
 
     .dx-scheduler-header-panel-cell.dx-scheduler-header-panel-current-time-cell {
-        border-bottom: 2px solid @SCHEDULER_APPOINTMENT_BASE_COLOR;
+        border-bottom: 2px solid @SCHEDULER_TIME_INDICATOR_COLOR;
         .box-shadow(none);
+        &:before {
+            content: none;
+        }
     }
 }
 

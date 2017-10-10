@@ -162,7 +162,7 @@ var stubInvokeMethod = function(instance, options) {
         assert.equal($indicators.length, 2, "Indicator count is correct");
         assert.equal($indicators.eq(0).position().left, 0);
         assert.equal($indicators.eq(0).position().top, 9.5 * cellHeight);
-        assert.equal($indicators.eq(1).position().left, this.instance._getRoundedCellWidth());
+        assert.equal($indicators.eq(1).position().left, this.instance._getRoundedCellWidth(1));
         assert.equal($indicators.eq(1).position().top, 9.5 * cellHeight);
     });
 
@@ -181,7 +181,7 @@ var stubInvokeMethod = function(instance, options) {
         assert.equal($indicators.length, 2, "Indicator count is correct");
         assert.equal($indicators.eq(0).position().left, 0);
         assert.equal($indicators.eq(0).position().top, 9.5 * cellHeight);
-        assert.equal($indicators.eq(1).position().left, this.instance._getRoundedCellWidth());
+        assert.equal($indicators.eq(1).position().left, this.instance._getRoundedCellWidth(1));
         assert.equal($indicators.eq(1).position().top, 9.5 * cellHeight);
     });
 
@@ -322,10 +322,10 @@ var stubInvokeMethod = function(instance, options) {
         assert.roughEqual($shader.outerWidth(), 6 * cellWidth, 5, "Indicator has correct width");
         assert.roughEqual($firstTopShader.outerWidth(), 2 * cellWidth, 1, "Top indicator has correct width");
         assert.roughEqual($firstBottomShader.outerWidth(), cellWidth, 1, "Bottom indicator has correct width");
-        assert.roughEqual($firstAllDayShader.outerWidth(), 2 * cellWidth, 1, "AllDay indicator has correct width");
-        assert.roughEqual($secondTopShader.outerWidth(), 2 * cellWidth, 1, "Top indicator has correct width");
-        assert.roughEqual($secondBottomShader.outerWidth(), cellWidth, 1, "Bottom indicator has correct width");
-        assert.roughEqual($secondAllDayShader.outerWidth(), 2 * cellWidth, 1, "AllDay indicator has correct width");
+        assert.roughEqual($firstAllDayShader.outerWidth(), 2 * cellWidth, 2.5, "AllDay indicator has correct width");
+        assert.roughEqual($secondTopShader.outerWidth(), 2 * cellWidth, 2.5, "Top indicator has correct width");
+        assert.roughEqual($secondBottomShader.outerWidth(), cellWidth, 2.5, "Bottom indicator has correct width");
+        assert.roughEqual($secondAllDayShader.outerWidth(), 2 * cellWidth, 2.5, "AllDay indicator has correct width");
     });
 
     QUnit.test("Shader should be rendered correctly, Day view with crossScrollingEnabled", function(assert) {
