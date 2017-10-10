@@ -62,12 +62,11 @@ QUnit.test("integer format parser with group separator", function(assert) {
     assert.strictEqual(parser("000"), null, "parse zero number with 3 digits");
     assert.strictEqual(parser("123"), 123, "parse number with 3 digits");
     assert.strictEqual(parser("012"), null, "parse number with 3 digits with leading zero");
-    assert.strictEqual(parser("1234"), null, "parse number with 4 digits without separator");
+    assert.strictEqual(parser("1234"), 1234, "parse number with 4 digits without separator");
     assert.strictEqual(parser("1,234"), 1234, "parse number with 4 digits with separator");
     assert.strictEqual(parser("01,234"), null, "parse number with 5 digits with separator with leading zero");
     assert.strictEqual(parser("1 234"), null, "parse number with 4 digits with wrong separator");
-    assert.strictEqual(parser("12,34"), null, "parse number with 4 digits with wrong separator position");
-    assert.strictEqual(parser("12,34"), null, "parse number with 4 digits with wrong separator position");
+    assert.strictEqual(parser("12,34"), 1234, "parse number with 4 digits with wrong separator position");
     assert.strictEqual(parser("12,345,678"), 12345678, "parse number with 8 digits with 2 separators");
 });
 
@@ -76,7 +75,7 @@ QUnit.test("integer format parser with complex groups", function(assert) {
 
     assert.strictEqual(parser("0"), 0, "parse zero number with 1 digits");
     assert.strictEqual(parser("123"), 123, "parse number with 3 digits");
-    assert.strictEqual(parser("1234"), null, "parse number with 4 digits without group separator");
+    assert.strictEqual(parser("1234"), 1234, "parse number with 4 digits without group separator");
     assert.strictEqual(parser("1,234"), 1234, "parse number with 4 digits with group separator");
     assert.strictEqual(parser("12,34,567"), 1234567, "parse number with 7 digits with 2 group separators");
 });
