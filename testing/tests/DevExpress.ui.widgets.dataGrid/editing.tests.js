@@ -9075,6 +9075,42 @@ QUnit.testInActiveWindow("Batch edit mode - Validation message should be shown w
     assert.ok(cells.eq(0).hasClass("dx-datagrid-invalid"), "validation border should be shown");
 });
 
+QUnit.testInActiveWindow("Show validation message for CheckBox editor", function(assert) {
+    //arrange
+    var rowsView = this.rowsView,
+        testElement = $('#container');
+
+    this.applyOptions({
+        editing: {
+            mode: "row"
+        },
+        columns: [{
+            dataField: 'isActive',
+            validationRules: [{
+                type: "required"
+            }]
+        }, "name"],
+        dataSource: {
+            asyncLoadEnabled: false,
+            store: [
+                { isActive: true, name: 'Alex' },
+                { isActive: true, name: 'Dan' }
+            ],
+            paginate: true
+        }
+    });
+
+    rowsView.render(testElement);
+
+    //act
+    this.editingController.editRow(0);
+    testElement.find(".dx-checkbox").first().trigger("dxclick");
+    this.clock.tick();
+
+    //assert
+    assert.equal(testElement.find(".dx-invalid-message.dx-overlay").length, 1, "validation message should be shown");
+});
+
 QUnit.module('Editing with real dataController with grouping, masterDetail', {
     beforeEach: function() {
         this.array = [
