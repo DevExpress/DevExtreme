@@ -917,7 +917,7 @@ module.exports = {
                     return parameters;
                 },
 
-                _setRowOpacityCore: function($rows, visibleColumns, columnIndex, value) {
+                _setRowsOpacityCore: function($rows, visibleColumns, columnIndex, value) {
                     var columnsController = this._columnsController,
                         columns = columnsController.getColumns(),
                         column = columns && columns[columnIndex],
@@ -1218,7 +1218,7 @@ module.exports = {
 
                 setRowsOpacity: function(columnIndex, value) {
                     var $rows = this._getRowElements().not("." + GROUP_ROW_CLASS) || [];
-                    this._setRowOpacityCore($rows, this.getColumns(), columnIndex, value);
+                    this._setRowsOpacityCore($rows, this.getColumns(), columnIndex, value);
                 },
 
                 _getCellElementsCore: function(rowIndex) {
