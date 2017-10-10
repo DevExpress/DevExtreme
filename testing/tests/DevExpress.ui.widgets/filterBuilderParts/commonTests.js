@@ -36,20 +36,20 @@ QUnit.test("markup init", function(assert) {
     assert.equal(element.parent().html(), etalon);
 });
 
-QUnit.test("create filterbuilder by different filter values", function(assert) {
+QUnit.test("create filterbuilder by different value values", function(assert) {
     var element = $("#container").dxFilterBuilder({ fields: fields });
     var instance = element.dxFilterBuilder("instance");
-    instance.option("filter", null);
+    instance.option("value", null);
     assert.ok(instance);
-    instance.option("filter", []);
+    instance.option("value", []);
     assert.ok(instance);
-    instance.option("filter", ["Or"]);
+    instance.option("value", ["Or"]);
     assert.ok(instance);
-    instance.option("filter", ["CompanyName", "=", "K&S Music"]);
+    instance.option("value", ["CompanyName", "=", "K&S Music"]);
     assert.ok(instance);
-    instance.option("filter", [["CompanyName", "=", "K&S Music"], ["CompanyName", "=", "K&S Music"]]);
+    instance.option("value", [["CompanyName", "=", "K&S Music"], ["CompanyName", "=", "K&S Music"]]);
     assert.ok(instance);
-    instance.option("filter", [[["CompanyName", "=", "K&S Music"], "Or"], "And"]);
+    instance.option("value", [[["CompanyName", "=", "K&S Music"], "Or"], "And"]);
     assert.ok(instance);
 });
 
@@ -79,14 +79,14 @@ QUnit.test("filter Content init", function(assert) {
         fields: fields
     });
     var instance = element.dxFilterBuilder("instance");
-    instance.option("filter", [[["CompanyName", "=", "K&S Music"], "Or"], "And"]);
+    instance.option("value", [[["CompanyName", "=", "K&S Music"], "Or"], "And"]);
     assert.equal(element.find("." + FILTER_BUILDER_GROUP_CONTENT_CLASS).html(), etalon);
 });
 
 QUnit.test("markup is initialized by filter value", function(assert) {
     var container = $("#container");
     container.dxFilterBuilder({
-        filter: [
+        value: [
             ["CompanyName", "=", "K&S Music"],
             "Or",
             ["Zipcode", "=", "98027"],
@@ -119,7 +119,7 @@ QUnit.test("value and operations depend on selected field", function(assert) {
 
         var container = $("#container");
         container.dxFilterBuilder({
-            filter: [
+            value: [
                 ["CompanyName", "=", "K&S Music"]
             ],
             fields: fields
@@ -169,7 +169,7 @@ QUnit.test("operations were changed after field change", function(assert) {
 
         var container = $("#container");
         container.dxFilterBuilder({
-            filter: [
+            value: [
                 ["State", "<>", "K&S Music"]
             ],
             fields: fields
@@ -198,7 +198,7 @@ QUnit.test("selected element was changed in menu after click", function(assert) 
 
         var container = $("#container");
         container.dxFilterBuilder({
-            filter: [
+            value: [
                 ["State", "<>", "K&S Music"]
             ],
             fields: fields
@@ -230,7 +230,7 @@ QUnit.test("selected element was changed in menu after click", function(assert) 
 QUnit.test("editor field depends on field type", function(assert) {
     var container = $("#container");
     container.dxFilterBuilder({
-        filter: [
+        value: [
             ["CompanyName", "=", "K&S Music"],
             "Or",
             ["Zipcode", "=", "98027"],
@@ -264,7 +264,7 @@ QUnit.test("hide value field for isblank & isNotBlank", function(assert) {
 
         var container = $("#container");
         container.dxFilterBuilder({
-            filter: [
+            value: [
                 ["State", "<>", "K&S Music"]
             ],
             fields: fields
@@ -312,7 +312,7 @@ QUnit.test("change operation", function(assert) {
 
         var container = $("#container");
         container.dxFilterBuilder({
-            filter: [
+            value: [
                 ["State", "<>", "K&S Music"]
             ],
             fields: fields
@@ -340,7 +340,7 @@ QUnit.test("change value", function(assert) {
 
         var container = $("#container");
         var instance = container.dxFilterBuilder({
-            filter: ["State", "<>", "K&S Music"],
+            value: ["State", "<>", "K&S Music"],
             fields: fields
         }).dxFilterBuilder("instance");
 
@@ -356,18 +356,18 @@ QUnit.test("change value", function(assert) {
         $input.trigger("blur");
         assert.ok(!$input.is(":focus"));
         assert.deepEqual(instance._model, [["State", "<>", "Test"]]);
-        assert.deepEqual(instance.option("filter"), ["State", "<>", "Test"]);
+        assert.deepEqual(instance.option("value"), ["State", "<>", "Test"]);
 
         $("." + FILTER_BUILDER_IMAGE_ADD_CLASS).click();
         var $menuItem = $(".dx-treeview-item").eq(1);
         $menuItem.trigger("dxclick");
         assert.deepEqual(instance._model, [["State", "<>", "Test"], ["CompanyName", "contains", ""]]);
-        assert.deepEqual(instance.option("filter"), [["State", "<>", "Test"], ["CompanyName", "contains", ""]]);
+        assert.deepEqual(instance.option("value"), [["State", "<>", "Test"], ["CompanyName", "contains", ""]]);
 
         $("." + FILTER_BUILDER_IMAGE_REMOVE_CLASS).eq(1).click();
         assert.deepEqual(instance._model, [["State", "<>", "Test"]]);
-        assert.deepEqual(instance.option("filter"), ["State", "<>", "Test"]);
-        assert.equal(instance.option("filter"), instance._model[0]);
+        assert.deepEqual(instance.option("value"), ["State", "<>", "Test"]);
+        assert.equal(instance.option("value"), instance._model[0]);
     } finally {
         fx.off = false;
     }

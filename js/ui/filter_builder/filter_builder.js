@@ -89,11 +89,12 @@ var FilterBuilder = Widget.inherit({
             * @name dxFilterBuilderOptions_defaultGroupOperation
             * @publicName defaultGroupOperation
             * @default "And"
+            * @hidden
             */
             defaultGroupOperation: "And",
 
             /**
-             * @name dxFilterBuilderOptions_filter
+             * @name dxFilterBuilderOptions_value
              * @publicName value
              * @default null
              */
@@ -107,34 +108,34 @@ var FilterBuilder = Widget.inherit({
             allowHierarchicalFields: false,
 
             /**
-             * @name dxFilterBuilderOptions_groupOperatorDescriptions
-             * @publicName groupOperatorDescriptions
+             * @name dxFilterBuilderOptions_groupOperationDescriptions
+             * @publicName groupOperationDescriptions
              * @type object
              */
-            groupOperatorDescriptions: {
+            groupOperationDescriptions: {
                 /**
-                 * @name dxFilterBuilderOptions_groupOperatorDescriptions_and
+                 * @name dxFilterBuilderOptions_groupOperationDescriptions_and
                  * @publicName and
                  * @type string
                  * @default "And"
                  */
                 and: messageLocalization.format("dxFilterBuilder-and"),
                 /**
-                 * @name dxFilterBuilderOptions_groupOperatorDescriptions_or
+                 * @name dxFilterBuilderOptions_groupOperationDescriptions_or
                  * @publicName or
                  * @type string
                  * @default "Or"
                  */
                 or: messageLocalization.format("dxFilterBuilder-or"),
                 /**
-                 * @name dxFilterBuilderOptions_groupOperatorDescriptions_notAnd
+                 * @name dxFilterBuilderOptions_groupOperationDescriptions_notAnd
                  * @publicName notAnd
                  * @type string
                  * @default "Not And"
                  */
                 notAnd: messageLocalization.format("dxFilterBuilder-notAnd"),
                 /**
-                 * @name dxFilterBuilderOptions_groupOperatorDescriptions_notOr
+                 * @name dxFilterBuilderOptions_groupOperationDescriptions_notOr
                  * @publicName notOr
                  * @type string
                  * @default "Not Or"
@@ -246,7 +247,7 @@ var FilterBuilder = Widget.inherit({
             case "defaultGroupOperation":
             case "value":
             case "allowHierarchicalFields":
-            case "groupOperatorDescriptions":
+            case "groupOperationDescriptions":
             case "filterOperationDescriptions":
                 this._invalidate();
                 break;
@@ -441,12 +442,12 @@ var FilterBuilder = Widget.inherit({
     _createOperationButtonWithMenu: function(condition, field) {
         var filterOperationDescriptions = this.option("filterOperationDescriptions"),
             $operationButton = this._createButtonWithMenu({
-                caption: utils.getCaptionByOperation(utils.getOperatorValue(condition), filterOperationDescriptions),
+                caption: utils.getCaptionByOperation(utils.getOperationValue(condition), filterOperationDescriptions),
                 menu: {
                     items: utils.getAvailableOperations(field, filterOperationDescriptions),
                     displayExpr: "text",
                     onItemClick: function(e) {
-                        utils.updateConditionByOperator(condition, e.itemData.text);
+                        utils.updateConditionByOperation(condition, e.itemData.value);
                         var hasValueButton = $operationButton.siblings().filter("." + FILTER_BUILDER_ITEM_VALUE_CLASS).length > 0;
                         if(condition[2] !== null) {
                             if(!hasValueButton) {
@@ -503,7 +504,7 @@ var FilterBuilder = Widget.inherit({
                     if(item.dataType === "object") {
                         condition[2] = null;
                     }
-                    utils.updateConditionByOperator(condition, utils.getDefaultOperation(item));
+                    utils.updateConditionByOperation(condition, utils.getDefaultOperation(item));
 
                     $fieldButton.siblings().filter("." + FILTER_BUILDER_ITEM_TEXT_CLASS).remove();
                     that._createOperationAndValueButtons(condition, item, $fieldButton.parent());
@@ -541,11 +542,11 @@ var FilterBuilder = Widget.inherit({
     _getGroupOperations: function() {
         var result = [],
             operatorDescription,
-            groupOperatorDescriptions = this.option("groupOperatorDescriptions");
+            groupOperationDescriptions = this.option("groupOperationDescriptions");
 
-        for(operatorDescription in groupOperatorDescriptions) {
+        for(operatorDescription in groupOperationDescriptions) {
             result.push({
-                text: groupOperatorDescriptions[operatorDescription],
+                text: groupOperationDescriptions[operatorDescription],
                 value: OPERATORS[operatorDescription]
             });
         }

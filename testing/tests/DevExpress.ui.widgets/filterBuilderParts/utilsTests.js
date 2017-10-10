@@ -575,17 +575,17 @@ QUnit.test("getCaptionWithParents", function(assert) {
     assert.equal(utils.getCaptionWithParents(plainField, plainItems), "Group.Group2.Field3");
 });
 
-QUnit.test("updateConditionByOperator", function(assert) {
-    assert.deepEqual(utils.updateConditionByOperator(["value", "=", "123"], "isblank"), ["value", "=", null]);
-    assert.deepEqual(utils.updateConditionByOperator(["value", "=", "123"], "isnotblank"), ["value", "<>", null]);
-    assert.deepEqual(utils.updateConditionByOperator(["value", "=", "123"], "<="), ["value", "<=", "123"]);
-    assert.deepEqual(utils.updateConditionByOperator(["value", "=", null], "<="), ["value", "<=", ""]);
+QUnit.test("updateConditionByOperation", function(assert) {
+    assert.deepEqual(utils.updateConditionByOperation(["value", "=", "123"], "isblank"), ["value", "=", null]);
+    assert.deepEqual(utils.updateConditionByOperation(["value", "=", "123"], "isnotblank"), ["value", "<>", null]);
+    assert.deepEqual(utils.updateConditionByOperation(["value", "=", "123"], "<="), ["value", "<=", "123"]);
+    assert.deepEqual(utils.updateConditionByOperation(["value", "=", null], "<="), ["value", "<=", ""]);
 });
 
-QUnit.test("getOperatorValue", function(assert) {
-    assert.deepEqual(utils.getOperatorValue(["value", "=", "123"]), "=");
-    assert.deepEqual(utils.getOperatorValue(["value", "=", null]), "isblank");
-    assert.deepEqual(utils.getOperatorValue(["value", "<>", null]), "isnotblank");
+QUnit.test("getOperationValue", function(assert) {
+    assert.deepEqual(utils.getOperationValue(["value", "=", "123"]), "=");
+    assert.deepEqual(utils.getOperationValue(["value", "=", null]), "isblank");
+    assert.deepEqual(utils.getOperationValue(["value", "<>", null]), "isnotblank");
 });
 
 QUnit.test("copyGroup", function(assert) {
