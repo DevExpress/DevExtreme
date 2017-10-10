@@ -1045,9 +1045,9 @@ QUnit.test("T560045 - ignore next link when $top is specified", function(assert)
 QUnit.test("Lift functional select after slice", function(assert) {
     var done = assert.async();
 
-    $.mockjax({
+    ajaxMock.setup({
         url: "/",
-        response: function(bag) {
+        callback: function(bag) {
             assert.equal(bag.data.$top, 20);
             this.responseText = [];
         }
