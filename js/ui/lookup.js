@@ -99,7 +99,7 @@ var Lookup = DropDownList.inherit({
             * @publicName titleTemplate
             * @type template
             * @default "title"
-            * @type_function_param1 titleElement:jQuery
+            * @type_function_param1 titleElement:Element
             * @type_function_return string|Node|jQuery
             */
             titleTemplate: "title",
@@ -108,7 +108,7 @@ var Lookup = DropDownList.inherit({
             * @name dxLookupOptions_onTitleRendered
             * @publicName onTitleRendered
             * @extends Action
-            * @type_function_param1_field1 titleElement:jQuery
+            * @type_function_param1_field1 titleElement:Element
             * @action
             */
             onTitleRendered: null,
