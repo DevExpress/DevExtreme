@@ -340,6 +340,7 @@ declare module DevExpress.viz.map {
         sizeGroupingField?: string;
     }
 
+    /** @docid dxvectormap_options */
     export interface dxVectorMapOptions extends viz.core.BaseWidgetOptions, viz.core.RedrawOnResizeOptions, viz.core.TitleOptions, viz.core.LoadingIndicatorOptions, viz.core.ExportOptions {
         /** @docid_ignore dxvectormapoptions_margin */
 
