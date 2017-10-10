@@ -604,3 +604,26 @@ QUnit.test("copyGroup", function(assert) {
     assert.equal(group[2][1][2], newGroup[2][1][2]);
 });
 
+QUnit.test("convertToInnerStructure", function(assert) {
+    var model = utils.convertToInnerStructure(null);
+    assert.deepEqual(model, []);
+
+    model = utils.convertToInnerStructure([]);
+    assert.deepEqual(model, []);
+
+    model = utils.convertToInnerStructure(condition1);
+    assert.deepEqual(model, [condition1]);
+    assert.equal(model[0], condition1);
+
+    model = utils.convertToInnerStructure(["!", condition1]);
+    assert.deepEqual(model, ["!", [condition1]]);
+    assert.equal(model[1][0], condition1);
+
+    var filter = [condition1, "Or", condition2];
+    model = utils.convertToInnerStructure(filter);
+    assert.notEqual(model, filter);
+    assert.deepEqual(model, filter);
+    assert.equal(model[0], filter[0]);
+    assert.equal(model[2], filter[2]);
+});
+

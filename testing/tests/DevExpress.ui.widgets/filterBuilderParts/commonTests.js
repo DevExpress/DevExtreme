@@ -45,6 +45,10 @@ QUnit.test("create filterbuilder by different value values", function(assert) {
     assert.ok(instance);
     instance.option("value", ["Or"]);
     assert.ok(instance);
+    instance.option("value", ["!", [["CompanyName", "=", "DevExpress"], ["CompanyName", "=", "DevExpress"]]]);
+    assert.ok(instance);
+    instance.option("value", ["!", ["CompanyName", "=", "DevExpress"]]);
+    assert.ok(instance);
     instance.option("value", ["CompanyName", "=", "K&S Music"]);
     assert.ok(instance);
     instance.option("value", [["CompanyName", "=", "K&S Music"], ["CompanyName", "=", "K&S Music"]]);
