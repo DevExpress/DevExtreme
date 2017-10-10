@@ -32,7 +32,7 @@ var SchedulerWorkSpaceIndicator = SchedulerWorkSpace.inherit({
         if(this.needRenderDateTimeIndication()) {
             var isVertical = this._isVerticalShader();
 
-            if(this.option("shadeUntilNow")) {
+            if(this.option("shadeUntilCurrentTime")) {
                 this._shader.render(this);
             }
 
@@ -217,7 +217,7 @@ var SchedulerWorkSpaceIndicator = SchedulerWorkSpace.inherit({
                 this.callBase(args);
                 this._refreshDateTimeIndication();
                 break;
-            case "shadeUntilNow":
+            case "shadeUntilCurrentTime":
                 this._refreshDateTimeIndication();
                 break;
             default:
@@ -230,7 +230,7 @@ var SchedulerWorkSpaceIndicator = SchedulerWorkSpace.inherit({
             showCurrentTimeIndicator: true,
             indicatorTime: new Date(),
             indicatorUpdateInterval: 5 * toMs("minute"),
-            shadeUntilNow: true
+            shadeUntilCurrentTime: true
         });
     }
 });
