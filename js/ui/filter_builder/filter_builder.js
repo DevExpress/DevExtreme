@@ -409,12 +409,7 @@ var FilterBuilder = Widget.inherit({
     },
 
     _renderContentImpl: function() {
-        var value = this.option("value");
-        if(utils.isCondition(value)) {
-            this._model = [value];
-        } else {
-            this._model = value || [];
-        }
+        this._model = utils.convertToInnerStructure(this.option("value"));
         this._createGroupElementByCriteria(this._model)
             .appendTo(this.element());
     },

@@ -15,12 +15,16 @@ var DEFAULT_DATA_TYPE = "string",
         "object": ["isblank", "isnotblank"]
     };
 
+function isNegationGroup(group) {
+    return group
+    && group.length > 1
+    && group[0] === "!"
+    && !isCondition(group);
+}
+
 function getGroupCriteria(group) {
     var criteria;
-    if(group.length > 1
-        && group[0] === "!"
-        && !isCondition(group)
-    ) {
+    if(isNegationGroup(group)) {
         criteria = group[1];
     } else {
         criteria = group;
@@ -29,10 +33,7 @@ function getGroupCriteria(group) {
 }
 
 function setGroupCriteria(group, criteria) {
-    if(group.length > 1
-        && group[0] === "!"
-        && !isCondition(group)
-    ) {
+    if(isNegationGroup(group)) {
         group[1] = criteria;
     } else {
         group = criteria;
@@ -43,9 +44,6 @@ function setGroupCriteria(group, criteria) {
 function convertGroupToNewStructure(group, value) {
     var isNegationValue = function(value) {
             return value.indexOf("!") !== -1;
-        },
-        isNegationGroup = function(group) {
-            return group.length > 1 && group[0] === "!";
         },
         convertGroupToNegationGroup = function(group) {
             var criteria = [];
@@ -309,6 +307,26 @@ function removeAndOperationFromGroup(group) {
     }
 }
 
+function convertToInnerStructure(value) {
+    var model;
+    if(!value) {
+        model = [];
+    } else if(isCondition(value)) {
+        model = [value];
+    } else if(isNegationGroup(value)) {
+        model = [];
+        model[0] = value[0];
+        if(isCondition(value[1])) {
+            model[1] = [value[1]];
+        } else {
+            model[1] = value[1];
+        }
+    } else {
+        model = copyGroup(value);
+    }
+    return model;
+}
+
 function getNormalizedFilter(group) {
     var criteria = getGroupCriteria(group),
         i;
@@ -511,6 +529,7 @@ exports.isGroup = isGroup;
 exports.isCondition = isCondition;
 exports.getNormalizedFilter = getNormalizedFilter;
 exports.getGroupCriteria = getGroupCriteria;
+exports.convertToInnerStructure = convertToInnerStructure;
 exports.getDefaultOperation = getDefaultOperation;
 exports.getCurrentValueText = getCurrentValueText;
 exports.getFilterOperations = getFilterOperations;
