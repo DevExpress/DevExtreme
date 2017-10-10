@@ -11,6 +11,10 @@ var $ = require("jquery"),
 require("ui/tag_box");
 require("integration/angular");
 
+if(QUnit.urlParams["nojquery"]) {
+    return;
+}
+
 var ignoreAngularBrowserDeferTimer = function(args) {
     return args.timerType === "timeouts" && (args.callback.toString().indexOf("delete pendingDeferIds[timeoutId];") > -1 || args.callback.toString().indexOf("delete F[c];e(a)}") > -1);
 };
@@ -292,4 +296,26 @@ QUnit.test("editor without ng model should not fail", function(assert) {
     this.app.controller("my-controller", noop);
 
     angular.bootstrap(this.$container, ["app"]);
+});
+
+QUnit.test("editor with ng model and bindingOptions should not fail (T540101)", function(assert) {
+    assert.expect(0);
+
+    var $markup = $("<div></div>")
+        .attr("dx-editor", "editorOptions")
+        .attr("ng-model", "value")
+        .appendTo(this.$controller);
+
+    this.app.controller("my-controller", ["$scope", function($scope) {
+        $scope.value;
+        $scope.editorOptions = {
+            bindingOptions: {
+                value: "value"
+            }
+        };
+    }]);
+
+    angular.bootstrap(this.$container, ["app"]);
+
+    $markup.dxEditor("instance").option("value", 123);
 });

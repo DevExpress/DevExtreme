@@ -142,7 +142,6 @@ var Toast = Overlay.inherit({
             /**
             * @name dxToastOptions_width
             * @publicName width
-            * @type number|string|function
             * @default function() {return $(window).width() * 0.8 }
             * @extend_doc
             */
@@ -150,7 +149,6 @@ var Toast = Overlay.inherit({
             /**
             * @name dxToastOptions_height
             * @publicName height
-            * @type number|string|function
             * @default 'auto'
             * @extend_doc
             */
@@ -351,13 +349,13 @@ var Toast = Overlay.inherit({
             this._message = $("<div>")
                 .addClass(TOAST_MESSAGE_CLASS)
                 .text(this.option("message"))
-                .appendTo(this.content());
+                .appendTo(this.$content());
         }
 
         this.setAria("role", "alert", this._message);
 
         if(inArray(this.option("type").toLowerCase(), toastTypes) > -1) {
-            this.content().prepend($("<div>").addClass(TOAST_ICON_CLASS));
+            this.$content().prepend($("<div>").addClass(TOAST_ICON_CLASS));
         }
 
         this.callBase();
@@ -366,10 +364,10 @@ var Toast = Overlay.inherit({
     _render: function() {
         this.callBase();
 
-        this.element().addClass(TOAST_CLASS);
+        this.$element().addClass(TOAST_CLASS);
         this._wrapper().addClass(TOAST_WRAPPER_CLASS);
         this._$content.addClass(TOAST_CLASS_PREFIX + String(this.option("type")).toLowerCase());
-        this.content().addClass(TOAST_CONTENT_CLASS);
+        this.$content().addClass(TOAST_CONTENT_CLASS);
 
         this._toggleCloseEvents("Swipe");
         this._toggleCloseEvents("Click");

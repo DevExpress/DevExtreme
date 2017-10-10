@@ -215,7 +215,7 @@ var MultiView = CollectionWidget.inherit({
     _init: function() {
         this.callBase.apply(this, arguments);
 
-        var $element = this.element();
+        var $element = this.$element();
 
         $element.addClass(MULTIVIEW_CLASS);
 
@@ -334,7 +334,7 @@ var MultiView = CollectionWidget.inherit({
     },
 
     _initSwipeable: function() {
-        this._createComponent(this.element(), Swipeable, {
+        this._createComponent(this.$element(), Swipeable, {
             disabled: !this.option("swipeEnabled"),
             elastic: false,
             itemSizeFunc: this._itemWidth.bind(this),
@@ -438,7 +438,7 @@ var MultiView = CollectionWidget.inherit({
             case "animationEnabled":
                 break;
             case "swipeEnabled":
-                Swipeable.getInstance(this.element()).option("disabled", !value);
+                Swipeable.getInstance(this.$element()).option("disabled", !value);
                 break;
             case "deferRendering":
                 this._invalidate();

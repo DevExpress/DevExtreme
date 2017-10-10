@@ -659,7 +659,30 @@ QUnit.test("show mask on focus only", function(assert) {
     $input.blur();
     assert.equal(textEditor.option("text"), "", "editor is empty");
     assert.equal($input.val(), "", "input is empty");
+});
 
+QUnit.test("show mask on focus only with useMaskedValue and stub symbols", function(assert) {
+    var $textEditor = $("#texteditor").dxTextEditor({
+            mask: "0-0",
+            useMaskedValue: true,
+            showMaskMode: "onFocus"
+        }),
+        textEditor = $textEditor.dxTextEditor("instance"),
+        $input = $textEditor.find(".dx-texteditor-input"),
+        keyboard = keyboardMock($input, true);
+
+    assert.equal(textEditor.option("text"), "", "editor is empty");
+    assert.equal($input.val(), "", "input is empty");
+
+    $input.focus();
+    this.clock.tick();
+    assert.equal(textEditor.option("text"), "_-_", "editor is not empty");
+    assert.equal($input.val(), "_-_", "input is not empty");
+    assert.deepEqual(keyboard.caret(), { start: 0, end: 0 }, "caret position is on the start");
+
+    $input.blur();
+    assert.equal(textEditor.option("text"), "", "editor is empty");
+    assert.equal($input.val(), "", "input is empty");
 });
 
 QUnit.test("change mask visibility", function(assert) {
@@ -756,7 +779,10 @@ QUnit.testInActiveWindow("caret should be at the last symbol when input is incom
     var $input = $textEditor.find(".dx-texteditor-input");
     var keyboard = keyboardMock($input, true);
 
+    $input.focus();
+    this.clock.tick();
     keyboard.type("1");
+
     $input.blur();
     $input.focus();
     this.clock.tick();
@@ -1080,22 +1106,30 @@ QUnit.test("mask should not be crushed after set in mask option empty value in c
 QUnit.module("clear button");
 
 QUnit.test("mask should be displayed instead of empty string after clear button click", function(assert) {
-    var $textEditor = $("#texteditor").dxTextEditor({
-            mask: "999",
-            showClearButton: true,
-            focusStateEnabled: true
-        }),
-        instance = $textEditor.dxTextEditor("instance"),
-        $input = $textEditor.find(".dx-texteditor-input"),
-        $clearButton = $textEditor.find(".dx-clear-button-area");
+    var clock = sinon.useFakeTimers();
 
-    caretWorkaround($input);
+    try {
+        var $textEditor = $("#texteditor").dxTextEditor({
+                mask: "999",
+                showClearButton: true,
+                focusStateEnabled: true
+            }),
+            instance = $textEditor.dxTextEditor("instance"),
+            $input = $textEditor.find(".dx-texteditor-input"),
+            $clearButton = $textEditor.find(".dx-clear-button-area");
 
-    $input.trigger("focus");
-    $clearButton.trigger("dxclick");
+        caretWorkaround($input);
 
-    assert.equal(instance.option("text"), "___", "option 'text' has mask as value");
-    assert.equal($input.val(), "___", "input has mask as value");
+        $input.trigger("focus");
+        clock.tick();
+
+        $clearButton.trigger("dxclick");
+
+        assert.equal(instance.option("text"), "___", "option 'text' has mask as value");
+        assert.equal($input.val(), "___", "input has mask as value");
+    } finally {
+        clock.restore();
+    }
 });
 
 QUnit.test("clear button click should not lead to error when value is empty", function(assert) {
@@ -1702,7 +1736,7 @@ QUnit.test("Render a hidden input when mask option is set via api", function(ass
         name: "number"
     });
 
-    $textEditor.data("dxTextEditor").option("mask", "+1 (00) 00-00");
+    $textEditor.dxTextEditor("instance").option("mask", "+1 (00) 00-00");
 
     var $visibleInput = $textEditor.find(".dx-texteditor-input"),
         $hiddenInput = $textEditor.find("input[type=hidden]");
@@ -1788,7 +1822,7 @@ QUnit.test("Name attr of hidden input is changed when name option of editor is c
         mask: "+1 (000) 0000000"
     });
 
-    $textEditor.data("dxTextEditor").option("name", "Editor with mask");
+    $textEditor.dxTextEditor("instance").option("name", "Editor with mask");
 
     var $hiddenInput = $textEditor.find("input[type=hidden]");
     assert.equal($hiddenInput.attr("name"), "Editor with mask", "name of hidden input");

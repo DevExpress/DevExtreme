@@ -391,7 +391,7 @@ QUnit.test("Reset editor's value when the formData option is empty object", func
         vm = new viewModel();
 
     ko.applyBindings(vm, $form.get(0));
-    form = $form.data("dxForm");
+    form = $form.dxForm("instance");
 
     //act
     vm.formData({});
@@ -438,7 +438,7 @@ QUnit.test("Editor doesn't update the field data if it's already up to date", fu
     var $form = $("#formWithItems");
 
     ko.applyBindings(viewModel, $form.get(0));
-    var formInstance = $form.data("dxForm");
+    var formInstance = $form.dxForm("instance");
 
     //act
     var editor = formInstance.getEditor("testObj");

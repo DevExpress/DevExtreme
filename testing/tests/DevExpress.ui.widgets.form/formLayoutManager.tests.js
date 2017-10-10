@@ -4,6 +4,7 @@ var $ = require("jquery"),
     consoleUtils = require("core/utils/console"),
     responsiveBoxScreenMock = require("../../helpers/responsiveBoxScreenMock.js"),
     internals = require("ui/form/ui.form.layout_manager").__internals,
+    config = require("core/config"),
     typeUtils = require("core/utils/type"),
     createTestObject = function() {
         return {
@@ -345,7 +346,7 @@ QUnit.test("Layout strategy when flex is not supported", function(assert) {
         }
         ],
         $testContainer = $("#container").dxLayoutManager(),
-        layoutManager = $testContainer.data("dxLayoutManager");
+        layoutManager = $testContainer.dxLayoutManager("instance");
 
     //act
     layoutManager._hasBrowserFlex = function() {
@@ -384,7 +385,7 @@ QUnit.test("Layout strategy when flex is supported", function(assert) {
         }
         ],
         $testContainer = $("#container").dxLayoutManager(),
-        layoutManager = $testContainer.data("dxLayoutManager");
+        layoutManager = $testContainer.dxLayoutManager("instance");
 
     //act
     layoutManager._hasBrowserFlex = function() {
@@ -449,7 +450,7 @@ QUnit.test("Check label alignment classes when browser is not supported flex", f
         }
         ],
         $testContainer = $("#container").dxLayoutManager(),
-        layoutManager = $testContainer.data("dxLayoutManager"),
+        layoutManager = $testContainer.dxLayoutManager("instance"),
         $items;
 
     //act
@@ -493,7 +494,7 @@ QUnit.test("Check label alignment classes when browser is supported flex", funct
         }
         ],
         $testContainer = $("#container").dxLayoutManager(),
-        layoutManager = $testContainer.data("dxLayoutManager"),
+        layoutManager = $testContainer.dxLayoutManager("instance"),
         $items;
 
     //act
@@ -1033,7 +1034,7 @@ QUnit.test("Generate items from layoutData", function(assert) {
             price: 1200,
             birthDate: new Date()
         }
-    }).data("dxLayoutManager");
+    }).dxLayoutManager("instance");
 
     //assert
     assert.deepEqual(layoutManager._items, [
@@ -1075,7 +1076,7 @@ QUnit.test("Generate items from layoutData with unacceptable data", function(ass
             name: "John",
             wrongField: function() {}
         }
-    }).data("dxLayoutManager");
+    }).dxLayoutManager("instance");
 
     //assert
     assert.deepEqual(layoutManager._items, [
@@ -1108,7 +1109,7 @@ QUnit.test("Generate items from layoutData and items", function(assert) {
                 editorType: "dxTextArea"
             }
         ]
-    }).data("dxLayoutManager");
+    }).dxLayoutManager("instance");
 
     //assert
     assert.deepEqual(layoutManager._items, [
@@ -1160,7 +1161,7 @@ QUnit.test("Check data when generate items from layoutData and items with initia
                 editorOptions: { value: "Test" }
             }
         ]
-    }).data("dxLayoutManager");
+    }).dxLayoutManager("instance");
 
     //assert
     assert.deepEqual(
@@ -1220,7 +1221,7 @@ QUnit.test("Generate items after change 'layoutData' option", function(assert) {
             price: 1200,
             birthDate: new Date()
         }
-    }).data("dxLayoutManager");
+    }).dxLayoutManager("instance");
 
     //act
     layoutManager.option("layoutData", {
@@ -1272,10 +1273,10 @@ QUnit.test("Set values from layoutData", function(assert) {
     $editors = $testContainer.find(".dx-texteditor, .dx-checkbox");
 
     //assert
-    assert.equal($editors.eq(0).data("dxTextBox").option("value"), "Patti", "1 editor");
-    assert.equal($editors.eq(1).data("dxCheckBox").option("value"), true, "2 editor");
-    assert.equal($editors.eq(2).data("dxNumberBox").option("value"), 1200, "3 editor");
-    assert.deepEqual($editors.eq(3).data("dxDateBox").option("value"), new Date("10/10/2010"), "4 editor");
+    assert.equal($editors.eq(0).dxTextBox("instance").option("value"), "Patti", "1 editor");
+    assert.equal($editors.eq(1).dxCheckBox("instance").option("value"), true, "2 editor");
+    assert.equal($editors.eq(2).dxNumberBox("instance").option("value"), 1200, "3 editor");
+    assert.deepEqual($editors.eq(3).dxDateBox("instance").option("value"), new Date("10/10/2010"), "4 editor");
 });
 
 QUnit.test("Set value via editor options", function(assert) {
@@ -1302,7 +1303,7 @@ QUnit.test("Set value via editor options", function(assert) {
     $editors = $testContainer.find(".dx-texteditor, .dx-checkbox");
 
     //assert
-    assert.equal($editors.eq(2).data("dxNumberBox").option("value"), 34);
+    assert.equal($editors.eq(2).dxNumberBox("instance").option("value"), 34);
 });
 
 QUnit.test("Change item.visible on customizeItem works correct", function(assert) {
@@ -1357,7 +1358,7 @@ QUnit.test("CustomizeItem work well after option change", function(assert) {
     $editors = $testContainer.find(".dx-texteditor, .dx-checkbox");
 
     //assert
-    assert.equal($editors.eq(2).data("dxNumberBox").option("value"), 34);
+    assert.equal($editors.eq(2).dxNumberBox("instance").option("value"), 34);
 });
 
 QUnit.test("Get value from editor", function(assert) {
@@ -1385,14 +1386,14 @@ QUnit.test("Get value from editor", function(assert) {
                 editorType: "dxDateBox"
             }
         ]
-    }).data("dxLayoutManager");
+    }).dxLayoutManager("instance");
 
     //act
     $editors = $testContainer.find(".dx-texteditor, .dx-checkbox");
     $editors.eq(0).dxTextBox("instance").option("value", "Fillip");
-    $editors.eq(1).data("dxCheckBox").option("value", true);
-    $editors.eq(2).data("dxNumberBox").option("value", 7);
-    $editors.eq(3).data("dxDateBox").option("value", "10/10/2001");
+    $editors.eq(1).dxCheckBox("instance").option("value", true);
+    $editors.eq(2).dxNumberBox("instance").option("value", 7);
+    $editors.eq(3).dxDateBox("instance").option("value", "10/10/2001");
 
     //assert
     assert.deepEqual(layoutManager.option("layoutData"), {
@@ -1425,9 +1426,9 @@ QUnit.test("Editors with object value correctly work with values from data", fun
                 }
             }
         ]
-    }).data("dxLayoutManager");
+    }).dxLayoutManager("instance");
 
-    var lookupCurrentItemText = layoutManager.element().find(".dx-lookup-field").text();
+    var lookupCurrentItemText = layoutManager.$element().find(".dx-lookup-field").text();
 
     //assert
     assert.equal(lookupCurrentItemText, "test2", "lookup has correct current item");
@@ -1451,7 +1452,7 @@ QUnit.test("Change a layoutData object", function(assert) {
                 item.editorType = "dxSwitch";
             }
         }
-    }).data("dxLayoutManager");
+    }).dxLayoutManager("instance");
 
     //act
     layoutManager.option("layoutData", {
@@ -1464,10 +1465,10 @@ QUnit.test("Change a layoutData object", function(assert) {
     $editors = $testContainer.find(".dx-texteditor, .dx-switch");
 
     //assert
-    assert.equal($editors.eq(0).data("dxTextBox").option("value"), "Vadim");
-    assert.equal($editors.eq(1).data("dxSwitch").option("value"), false);
-    assert.equal($editors.eq(2).data("dxNumberBox").option("value"), 450);
-    assert.deepEqual($editors.eq(3).data("dxDateBox").option("value"), new Date("1/1/2001"));
+    assert.equal($editors.eq(0).dxTextBox("instance").option("value"), "Vadim");
+    assert.equal($editors.eq(1).dxSwitch("instance").option("value"), false);
+    assert.equal($editors.eq(2).dxNumberBox("instance").option("value"), 450);
+    assert.deepEqual($editors.eq(3).dxDateBox("instance").option("value"), new Date("1/1/2001"));
 });
 
 QUnit.test("A layoutData object change at changing widget from items option", function(assert) {
@@ -1483,7 +1484,7 @@ QUnit.test("A layoutData object change at changing widget from items option", fu
             birthDate: new Date("10/10/2010")
         },
         items: [{ dataField: "subscribe", editorType: "dxCheckBox" }]
-    }).data("dxLayoutManager");
+    }).dxLayoutManager("instance");
 
     //act
     $testContainer.find(".dx-checkbox").dxCheckBox("instance").option("value", true);
@@ -1514,7 +1515,7 @@ QUnit.test("A layoutData is not changed when dataField is undefined_T310737", fu
             {
                 editorType: "dxTextBox"
             }]
-    }).data("dxLayoutManager");
+    }).dxLayoutManager("instance");
 
     var $textBoxes = $testContainer.find(".dx-textbox"),
         textBoxes = [];
@@ -1554,10 +1555,10 @@ QUnit.test("Set 'disabled' option to layoutManager and check internal element st
     $editors = $testContainer.find(".dx-texteditor, .dx-checkbox");
 
     //assert
-    assert.equal($editors.eq(0).data("dxTextBox").option("disabled"), true);
-    assert.equal($editors.eq(1).data("dxCheckBox").option("disabled"), true);
-    assert.equal($editors.eq(2).data("dxNumberBox").option("disabled"), true);
-    assert.equal($editors.eq(3).data("dxDateBox").option("disabled"), true);
+    assert.equal($editors.eq(0).dxTextBox("instance").option("disabled"), true);
+    assert.equal($editors.eq(1).dxCheckBox("instance").option("disabled"), true);
+    assert.equal($editors.eq(2).dxNumberBox("instance").option("disabled"), true);
+    assert.equal($editors.eq(3).dxDateBox("instance").option("disabled"), true);
 });
 
 QUnit.test("Label creates when item has no name but has 'label.text' option", function(assert) {
@@ -1977,7 +1978,7 @@ QUnit.test("Set value to the dxTagBox editor from data option", function(assert)
         }
     }).dxLayoutManager("instance");
 
-    tagBox = $testContainer.find(".dx-tagbox").first().data("dxTagBox");
+    tagBox = $testContainer.find(".dx-tagbox").first().dxTagBox("instance");
 
     //assert
     assert.deepEqual(tagBox.option("value"), ["HD Video Player", "SuperLCD 70"]);
@@ -2009,7 +2010,7 @@ QUnit.test("Set default value to the dxTagBox editor when dataField is not conta
         }]
     });
 
-    tagBox = $testContainer.find(".dx-tagbox").first().data("dxTagBox");
+    tagBox = $testContainer.find(".dx-tagbox").first().dxTagBox("instance");
 
     //assert
     assert.deepEqual(tagBox.option("value"), []);
@@ -2044,7 +2045,7 @@ QUnit.test("Update value in dxTagBox editor when data option is changed", functi
     //act
     layoutManager.updateData("simpleProducts", ["SuperLED 50", "SuperLCD 70", "SuperLCD 55"]);
 
-    tagBox = $testContainer.find(".dx-tagbox").first().data("dxTagBox");
+    tagBox = $testContainer.find(".dx-tagbox").first().dxTagBox("instance");
 
     //assert
     assert.deepEqual(tagBox.option("value"), ["SuperLED 50", "SuperLCD 70", "SuperLCD 55"]);
@@ -2078,7 +2079,7 @@ QUnit.test("Update data option of layout manager when value is changed in the dx
     }).dxLayoutManager("instance");
 
     //act
-    tagBox = $testContainer.find(".dx-tagbox").first().data("dxTagBox");
+    tagBox = $testContainer.find(".dx-tagbox").first().dxTagBox("instance");
     tagBox.option("value", ["SuperLCD 42", "SuperPlasma 50"]);
 
     //assert
@@ -2139,11 +2140,11 @@ QUnit.test("onEditorEnterKey", function(assert) {
         onEditorEnterKey: function(args) {
             testArgs = args;
         }
-    }).data("dxLayoutManager");
+    }).dxLayoutManager("instance");
 
     //act
     editor = layoutManager.getEditor("profession");
-    triggerKeyUp(editor.element(), 13);
+    triggerKeyUp(editor.$element(), 13);
 
     //assert
     assert.notEqual(testArgs.component, undefined, "component");
@@ -2154,7 +2155,7 @@ QUnit.test("onEditorEnterKey", function(assert) {
 
     //act
     editor = layoutManager.getEditor("name");
-    triggerKeyUp(editor.element(), 13);
+    triggerKeyUp(editor.$element(), 13);
 
     //assert
     assert.notEqual(testArgs.component, undefined, "component");
@@ -2173,7 +2174,7 @@ QUnit.test("Render layoutManager with 2 columns", function(assert) {
             layoutData: createTestObject(),
             colCount: 2,
             height: 800
-        }).data("dxLayoutManager"),
+        }).dxLayoutManager("instance"),
         responsiveBox = $("#container").find(".dx-responsivebox").dxResponsiveBox("instance"),
         boxItems = responsiveBox.option("items");
 
@@ -2229,7 +2230,7 @@ QUnit.test("Check that layoutManager create correct rows count", function(assert
         layoutData: createTestObject(),
         colCount: 2,
         height: 800
-    }).data("dxLayoutManager");
+    }).dxLayoutManager("instance");
 
     //assert
     assert.equal(layoutManager._getRowsCount(), 6, "11 items / 2 columns = 6 rows");
@@ -2274,7 +2275,7 @@ QUnit.test("Prepare items for col span", function(assert) {
                     default:
                 }
             }
-        }).data("dxLayoutManager"),
+        }).dxLayoutManager("instance"),
         items = layoutManager._items;
 
 
@@ -2317,9 +2318,9 @@ QUnit.test("Generate layout items for col span", function(assert) {
                     break;
             }
         }
-    }).data("dxLayoutManager");
+    }).dxLayoutManager("instance");
 
-    var responsiveBox = $(".dx-responsivebox").data("dxResponsiveBox"),
+    var responsiveBox = $(".dx-responsivebox").dxResponsiveBox("instance"),
         items = responsiveBox.option("items");
 
 
@@ -2363,7 +2364,7 @@ QUnit.test("Prepare items for col span when labelLocation is 'top' (T307223)", f
                     default:
                 }
             }
-        }).data("dxLayoutManager"),
+        }).dxLayoutManager("instance"),
         items = layoutManager._items;
 
 
@@ -2406,9 +2407,9 @@ QUnit.test("Generate rows ratio for col span", function(assert) {
                     break;
             }
         }
-    }).data("dxLayoutManager");
+    }).dxLayoutManager("instance");
 
-    var responsiveBox = $(".dx-responsivebox").data("dxResponsiveBox"),
+    var responsiveBox = $(".dx-responsivebox").dxResponsiveBox("instance"),
         rows = responsiveBox.option("rows");
 
 
@@ -2619,8 +2620,10 @@ QUnit.test("Render template", function(assert) {
         layoutData: { test: "abc" },
         items: [{
             dataField: "test",
-            template: function(data, $container) {
-                $container.append($("<span>").text("Template"));
+            template: function(data, container) {
+                assert.deepEqual(typeUtils.isRenderer(container), config().useJQueryRenderer, "container is correct");
+
+                $(container).append($("<span>").text("Template"));
 
                 data.editorOptions.onValueChanged = function(args) {
                     data.component.option("layoutData." + data.dataField, args.value);
@@ -2628,7 +2631,7 @@ QUnit.test("Render template", function(assert) {
 
                 $("<div>")
                     .dxTextArea(data.editorOptions)
-                    .appendTo($container);
+                    .appendTo(container);
             }
         }]
     });
@@ -2652,7 +2655,8 @@ QUnit.test("Check template bound to data", function(assert) {
         layoutData: { test: "abc" },
         items: [{
             dataField: "test",
-            template: function(data, $container) {
+            template: function(data, container) {
+                var $container = $(container);
                 $container.append($("<span>").text("Template"));
 
                 data.editorOptions.onValueChanged = function(args) {

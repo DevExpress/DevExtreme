@@ -675,7 +675,7 @@ dataGridCore.registerModule("export", {
             * @type_function_param1 e:object
             * @type_function_param1_field3 fileName:string
             * @type_function_param1_field4 format:string
-            * @type_function_param1_field5 data:blob
+            * @type_function_param1_field5 data:BLOB
             * @type_function_param1_field6 cancel:boolean
             * @extends Action
             * @action
@@ -692,8 +692,8 @@ dataGridCore.registerModule("export", {
              * @name dxDataGridOptions_customizeExportData
              * @publicName customizeExportData
              * @type function(columns, rows)
-             * @type_function_param1 columns:array
-             * @type_function_param2 rows:array
+             * @type_function_param1 columns:Array<dxDataGridOptions_columns>
+             * @type_function_param2 rows:Array<dxDataGridRowObject>
              */
         };
     },
@@ -731,12 +731,13 @@ dataGridCore.registerModule("export", {
 
                         if(exportOptions.allowExportSelectedData) {
                             exportItems.push({
-                                template: function(data, index, $container) {
+                                template: function(data, index, container) {
+                                    var $container = $(container);
                                     that._renderButton(data, $container);
                                     that._renderExportMenu($container);
                                 },
-                                menuItemTemplate: function(data, index, $container) {
-                                    that._renderList(data, $container);
+                                menuItemTemplate: function(data, index, container) {
+                                    that._renderList(data, $(container));
                                 },
                                 name: "exportButton",
                                 allowExportSelected: true,
@@ -747,11 +748,11 @@ dataGridCore.registerModule("export", {
 
                         } else {
                             exportItems.push({
-                                template: function(data, index, $container) {
-                                    that._renderButton(data, $container);
+                                template: function(data, index, container) {
+                                    that._renderButton(data, $(container));
                                 },
-                                menuItemTemplate: function(data, index, $container) {
-                                    that._renderButton(data, $container, true);
+                                menuItemTemplate: function(data, index, container) {
+                                    that._renderButton(data, $(container), true);
                                 },
                                 name: "exportButton",
                                 location: "after",
@@ -803,13 +804,13 @@ dataGridCore.registerModule("export", {
                                 .parent().addClass("dx-toolbar-menu-custom dx-toolbar-hidden-button");
                         },
                         items = [{
-                            template: function(data, index, $container) {
-                                renderFakeButton(data, $container, DATAGRID_EXPORT_EXCEL_ICON);
+                            template: function(data, index, container) {
+                                renderFakeButton(data, $(container), DATAGRID_EXPORT_EXCEL_ICON);
                             },
                             text: texts.exportAll
                         }, {
-                            template: function(data, index, $container) {
-                                renderFakeButton(data, $container, DATAGRID_EXPORT_SELECTED_ICON);
+                            template: function(data, index, container) {
+                                renderFakeButton(data, $(container), DATAGRID_EXPORT_SELECTED_ICON);
                             },
                             text: texts.exportSelectedRows,
                             exportSelected: true

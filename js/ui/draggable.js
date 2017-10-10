@@ -48,7 +48,7 @@ var Draggable = DOMComponent.inherit({
             return;
         }
 
-        var $element = this.element().css("position", "absolute"),
+        var $element = this.$element().css("position", "absolute"),
             eventHandlers = {},
             allowMoveByClick = this.option("allowMoveByClick");
 
@@ -68,12 +68,12 @@ var Draggable = DOMComponent.inherit({
     },
 
     _detachEventHandlers: function() {
-        eventsEngine.off(this.element(), "." + DRAGGABLE);
+        eventsEngine.off(this.$element(), "." + DRAGGABLE);
         eventsEngine.off(this._getArea(), "." + DRAGGABLE);
     },
 
     _move: function(position) {
-        translator.move(this.element(), position);
+        translator.move(this.$element(), position);
     },
 
     _pointerDownHandler: function(e) {
@@ -86,11 +86,11 @@ var Draggable = DOMComponent.inherit({
             position = {};
 
         if(direction === "horizontal" || direction === "both") {
-            position.left = e.pageX - this.element().width() / 2 - areaOffset.left;
+            position.left = e.pageX - this.$element().width() / 2 - areaOffset.left;
         }
 
         if(direction === "vertical" || direction === "both") {
-            position.top = e.pageY - this.element().height() / 2 - areaOffset.top;
+            position.top = e.pageY - this.$element().height() / 2 - areaOffset.top;
         }
 
         this._move(position);
@@ -99,7 +99,7 @@ var Draggable = DOMComponent.inherit({
     },
 
     _dragStartHandler: function(e) {
-        var $element = this.element();
+        var $element = this.$element();
         if($element.is(".dx-state-disabled, .dx-state-disabled *")) {
             e.cancel = true;
             return;
@@ -136,7 +136,7 @@ var Draggable = DOMComponent.inherit({
     },
 
     _toggleDraggingClass: function(value) {
-        this.element().toggleClass(DRAGGABLE_DRAGGING_CLASS, value);
+        this.$element().toggleClass(DRAGGABLE_DRAGGING_CLASS, value);
     },
 
     _getBoundOffset: function() {
@@ -181,7 +181,7 @@ var Draggable = DOMComponent.inherit({
 
     _render: function() {
         this.callBase();
-        this.element().addClass(DRAGGABLE_CLASS);
+        this.$element().addClass(DRAGGABLE_CLASS);
     },
 
     _optionChanged: function(args) {

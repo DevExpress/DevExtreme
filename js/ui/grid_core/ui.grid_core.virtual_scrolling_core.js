@@ -34,11 +34,10 @@ exports.subscribeToExternalScrollers = function($element, scrollChangedHandler, 
         scrollableArray = [],
         scrollToArray = [],
         disposeArray = [];
-
     $targetElement = $targetElement || $element;
 
     function getElementOffset(scrollable) {
-        var $scrollableElement = scrollable.element ? scrollable.element() : scrollable,
+        var $scrollableElement = scrollable.element ? scrollable.$element() : scrollable,
             scrollableOffset = positionUtils.offset($scrollableElement);
 
         if(!scrollableOffset) {

@@ -106,7 +106,7 @@ QUnit.test("onItemSelectionChanged should use correct set of arguments when item
 
     assert.deepEqual(args.itemData, items[0], "itemData is correct");
     assert.strictEqual(args.component, instance, "component is correct");
-    assert.ok(args.element.hasClass("dx-treeview"), "element is correct");
+    assert.ok($(args.element).hasClass("dx-treeview"), "element is correct");
     assert.strictEqual(args.model, undefined, "model is not defined in jquery approach");
     assert.deepEqual(args.node, nodes[0], "node is correct");
     assert.strictEqual(args.jQueryEvent, undefined, "jquery event is not defined when api used");
@@ -131,7 +131,7 @@ QUnit.test("onItemSelectionChanged should use correct set of arguments without c
 
     assert.deepEqual(args.itemData, items[0], "itemData is correct");
     assert.strictEqual(args.component, instance, "component is correct");
-    assert.ok(args.element.hasClass("dx-treeview"), "element is correct");
+    assert.ok($(args.element).hasClass("dx-treeview"), "element is correct");
     assert.strictEqual(args.model, undefined, "model is not defined in jquery approach");
     assert.deepEqual(args.node, nodes[0], "node is correct");
     assert.deepEqual(args.jQueryEvent.target, $item.get(0), "jquery event has correct target");
@@ -522,7 +522,7 @@ QUnit.test("T184799: expand item", function(assert) {
             onItemExpanded: handler
         }).dxTreeView("instance");
 
-        var $rootItem = $(treeView.element()).find("." + internals.ITEM_CLASS).eq(0);
+        var $rootItem = $(treeView.$element()).find("." + internals.ITEM_CLASS).eq(0);
 
         $rootItem.trigger(dblclickEvent.name);
         this.clock.tick(0);
@@ -537,7 +537,7 @@ QUnit.test("T184799: expand item", function(assert) {
         assert.ok(args.node.expanded);
         assert.equal(args.itemData.text, "Item 1");
         assert.equal(args.node.text, "Item 1");
-        assert.equal(treeView.element().find("." + internals.ITEM_CLASS).length, 3);
+        assert.equal(treeView.$element().find("." + internals.ITEM_CLASS).length, 3);
     }
 });
 
@@ -629,7 +629,7 @@ QUnit.test("T184799: collapse item", function(assert) {
             onItemCollapsed: handler
         }).dxTreeView("instance");
 
-        var $rootItem = $(treeView.element()).find("." + internals.ITEM_CLASS).eq(0);
+        var $rootItem = $(treeView.$element()).find("." + internals.ITEM_CLASS).eq(0);
 
         $rootItem.trigger(dblclickEvent.name);
 
@@ -643,7 +643,7 @@ QUnit.test("T184799: collapse item", function(assert) {
         assert.ok(!args.node.expanded);
         assert.equal(args.itemData.text, "Item 1");
         assert.equal(args.node.text, "Item 1");
-        assert.equal(treeView.element().find("." + internals.ITEM_CLASS).length, 3);
+        assert.equal(treeView.$element().find("." + internals.ITEM_CLASS).length, 3);
     }
 });
 
@@ -799,4 +799,18 @@ QUnit.test("Fire contentReady event if new dataSource is empty", function(assert
     }).dxTreeView("instance");
 
     assert.ok(contentReadyHandler.calledOnce);
+});
+
+QUnit.test("Fire contentReady event when search", function(assert) {
+    var contentReadyHandler = sinon.spy(),
+        instance = initTree({
+            items: $.extend(true, [], DATA[0]),
+            onContentReady: contentReadyHandler
+        }).dxTreeView("instance");
+
+    assert.strictEqual(contentReadyHandler.callCount, 1, "onContentReady was first time");
+
+    instance.option("searchValue", "2");
+
+    assert.strictEqual(contentReadyHandler.callCount, 2, "onContentReady was second time");
 });

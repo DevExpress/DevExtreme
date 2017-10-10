@@ -27,6 +27,10 @@
     }
 }(this, function($, dxCommand, fx, SlideOutController, layoutHelper) {
 
+    if(QUnit.urlParams["nojquery"]) {
+        return;
+    }
+
     includeLayout("SlideOut");
 
     QUnit.testStart(function() {
@@ -270,7 +274,7 @@
                 slideOut.on("optionChanged", function(args) {
                     assert.equal(args.name, "menuVisible");
                     assert.equal(args.value, false);
-                    assert.equal(slideOut.element().find(".layout-header .dx-toolbar-center .dx-toolbar-label .dx-item-content div").text(), "test title");
+                    assert.equal(slideOut.$element().find(".layout-header .dx-toolbar-center .dx-toolbar-label .dx-item-content div").text(), "test title");
                 });
 
                 layoutController.showView({
@@ -399,7 +403,7 @@
             var slideOut = layoutController.slideOut;
             slideOut.option("selectedIndex", 0);
 
-            assert.ok(slideOut.element().find(".dx-slideout-item").length === 0, "there is no any slideOut item");
+            assert.ok(slideOut.$element().find(".dx-slideout-item").length === 0, "there is no any slideOut item");
 
             done();
         });

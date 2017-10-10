@@ -139,7 +139,7 @@ var Scroller = Class.inherit({
             visibilityMode: this._visibilityModeNormalize(this._scrollbarVisible),
             expandable: this._scrollByThumb
         });
-        this._$scrollbar = this._scrollbar.element();
+        this._$scrollbar = this._scrollbar.$element();
     },
 
     _visibilityModeNormalize: function(mode) {
@@ -515,7 +515,7 @@ var SimulatedStrategy = Class.inherit({
 
     _init: function(scrollable) {
         this._component = scrollable;
-        this._$element = scrollable.element();
+        this._$element = scrollable.$element();
         this._$container = scrollable._$container;
         this._$wrapper = scrollable._$wrapper;
         this._$content = scrollable._$content;

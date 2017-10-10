@@ -3,6 +3,7 @@
 (function(factory) {
     if(typeof define === 'function' && define.amd) {
         define(function(require, exports, module) {
+            require("integration/jquery"),
             require("ui/validator");
             require("ui/validation_summary");
             require("ui/text_box");
@@ -22,6 +23,10 @@
         );
     }
 }(function($, setTemplateEngine, aspnet) {
+
+    if(QUnit.urlParams["nojquery"]) {
+        return;
+    }
 
     QUnit.module(
         "Client Validation",
@@ -62,7 +67,7 @@
 
                 var summary = $("#summary").dxValidationSummary("instance"),
                     item = summary.option("items")[0],
-                    editor = item.validator.element().dxTextBox("instance");
+                    editor = item.validator.$element().dxTextBox("instance");
 
                 assert.equal(summary.option("items").length, 1, "item count is OK");
                 assert.equal(item.text, "Server exception", "text of first item is OK");

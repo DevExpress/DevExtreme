@@ -4,7 +4,8 @@ var $ = require("jquery"),
     Editor = require("ui/editor/editor"),
     Class = require("core/class"),
     ValidationEngine = require("ui/validation_engine"),
-    hoverEvents = require("events/hover");
+    hoverEvents = require("events/hover"),
+    dataUtils = require("core/element_data");
 
 require("common.css!");
 
@@ -221,7 +222,7 @@ var Fixture = Class.inherit({
                 hoverStateEnabled: true,
                 readOnly: true
             }),
-            $editor = editor.element();
+            $editor = editor.$element();
 
         $($editor).trigger(hoverEvents.start);
         assert.ok($editor.hasClass("dx-state-hover"), "there is hover class");
@@ -235,7 +236,7 @@ var Fixture = Class.inherit({
             this.$element = $("<div>").appendTo("body");
             this.EditorInheritor = Editor.inherit({
                 _render: function() {
-                    this._$submitElement = $("<input type='hidden'>").appendTo(this.element());
+                    this._$submitElement = $("<input type='hidden'>").appendTo(this.$element());
                     this.callBase();
                 },
                 _getSubmitElement: function() {
@@ -308,7 +309,7 @@ var Fixture = Class.inherit({
     QUnit.test("Container has dx-editor data mark", function(assert) {
         var editor = this.fixture.createEditor();
 
-        assert.strictEqual(this.fixture.$element.data("dx-validation-target"), editor, "Editor was saved");
+        assert.strictEqual(dataUtils.data(this.fixture.$element[0], "dx-validation-target"), editor, "Editor was saved");
     });
 })("Validation");
 
@@ -340,7 +341,7 @@ var Fixture = Class.inherit({
 
         //assert
         assert.ok(editor, "Editor should be created");
-        assert.ok(editor.element().hasClass(INVALID_VALIDATION_CLASS), "Editor main element should be marked as invalid");
+        assert.ok(editor.$element().hasClass(INVALID_VALIDATION_CLASS), "Editor main element should be marked as invalid");
     });
 
 
@@ -360,7 +361,7 @@ var Fixture = Class.inherit({
         });
 
         //assert
-        assert.ok(editor.element().hasClass(INVALID_VALIDATION_CLASS), "Editor main element should be marked as invalid");
+        assert.ok(editor.$element().hasClass(INVALID_VALIDATION_CLASS), "Editor main element should be marked as invalid");
     });
 
 
@@ -379,7 +380,7 @@ var Fixture = Class.inherit({
         assert.ok(editor._$validationMessage.hasClass("dx-invalid-message"), "Tooltip should be marked with auto");
         assert.ok(editor._$validationMessage.hasClass("dx-invalid-message-auto"), "Tooltip should be marked with auto");
         assert.ok(!editor._$validationMessage.hasClass("dx-invalid-message-always"), "Tooltip should not be marked with always");
-        assert.equal(editor._$validationMessage.dxOverlay("instance").content().text(), message, "Correct message should be set");
+        assert.equal(editor._$validationMessage.dxOverlay("instance").$content().text(), message, "Correct message should be set");
     });
 
     QUnit.test("Widget message (tooltip) should be created and always shown", function(assert) {
@@ -710,17 +711,17 @@ QUnit.module("aria accessibility", {
 QUnit.test("readonly state", function(assert) {
     var editor = this.fixture.createEditor({ readOnly: true });
 
-    assert.equal(editor.element().attr("aria-readonly"), "true", "aria-readonly is correct");
+    assert.equal(editor.$element().attr("aria-readonly"), "true", "aria-readonly is correct");
 
     editor.option("readOnly", false);
-    assert.equal(editor.element().attr("aria-readonly"), undefined, "aria-readonly does not exist in not readonly state");
+    assert.equal(editor.$element().attr("aria-readonly"), undefined, "aria-readonly does not exist in not readonly state");
 });
 
 QUnit.test("invalid state", function(assert) {
     var editor = this.fixture.createEditor({ isValid: false });
 
-    assert.equal(editor.element().attr("aria-invalid"), "true", "aria-invalid is correct");
+    assert.equal(editor.$element().attr("aria-invalid"), "true", "aria-invalid is correct");
 
     editor.option("isValid", true);
-    assert.equal(editor.element().attr("aria-invalid"), undefined, "aria-invalid does not exist in valid state");
+    assert.equal(editor.$element().attr("aria-invalid"), undefined, "aria-invalid does not exist in valid state");
 });

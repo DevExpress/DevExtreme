@@ -1225,6 +1225,26 @@ QUnit.test("collapseRow when autoExpandAll", function(assert) {
     assert.strictEqual(items[0].isExpanded, false, "item 1 is not expanded");
 });
 
+//T554475
+QUnit.test("refresh after collapseRow when autoExpandAll", function(assert) {
+    //arrange
+    this.setupTreeList({
+        autoExpandAll: true,
+        dataSource: this.items
+    });
+
+    this.collapseRow(1);
+
+    //act
+    this.refresh();
+
+    //assert
+    var items = this.dataController.items();
+    assert.strictEqual(items.length, 4, "all items are visible");
+    assert.strictEqual(items[0].data.name, "Name 3", "item 1 name value");
+    assert.strictEqual(items[0].isExpanded, false, "item 1 is not expanded");
+});
+
 QUnit.test("Initial load when dataSource has filter and filterMode is standard", function(assert) {
     //arrange, act
     var loadingArgs = [];

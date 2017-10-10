@@ -131,14 +131,21 @@ var FieldChooser = BaseFieldChooser.inherit({
             * @publicName onContextMenuPreparing
             * @type function(e)
             * @type_function_param1 e:object
-            * @type_function_param1_field4 items:array
+            * @type_function_param1_field4 items:Array<Object>
             * @type_function_param1_field5 area:string
-            * @type_function_param1_field6 field:object
+            * @type_function_param1_field6 field:PivotGridDataSourceOptions_fields
             * @type_function_param1_field7 jQueryEvent:jQueryEvent
             * @extends Action
             * @action
             */
             onContextMenuPreparing: null,
+            /**
+            * @name dxPivotGridFieldChooserOptions_allowSearch
+            * @publicName allowSearch
+            * @type boolean
+            * @default false
+            */
+            allowSearch: false,
             /**
              * @name dxPivotGridFieldChooserOptions_texts
              * @publicName texts
@@ -181,6 +188,52 @@ var FieldChooser = BaseFieldChooser.inherit({
                  */
                 allFields: messageLocalization.format("dxPivotGrid-allFields")
             }
+            /**
+             * @name dxPivotGridFieldChooserOptions_headerFilter
+             * @publicName headerFilter
+             * @type object
+             */
+            /**
+             * @name dxPivotGridFieldChooserOptions_headerFilter_width
+             * @publicName width
+             * @type number
+             * @default 252
+             */
+            /**
+             * @name dxPivotGridFieldChooserOptions_headerFilter_height
+             * @publicName height
+             * @type number
+             * @default 325
+             */
+            /**
+             * @name dxPivotGridFieldChooserOptions_headerFilter_allowSearch
+             * @publicName allowSearch
+             * @type boolean
+             * @default undefined
+             */
+            /**
+             * @name dxPivotGridFieldChooserOptions_headerFilter_texts
+             * @publicName texts
+             * @type object
+             */
+            /**
+             * @name dxPivotGridFieldChooserOptions_headerFilter_texts_emptyValue
+             * @publicName emptyValue
+             * @type string
+             * @default "(Blanks)"
+             */
+            /**
+             * @name dxPivotGridFieldChooserOptions_headerFilter_texts_ok
+             * @publicName ok
+             * @type string
+             * @default "Ok"
+             */
+            /**
+             * @name dxPivotGridFieldChooserOptions_headerFilter_texts_cancel
+             * @publicName cancel
+             * @type string
+             * @default "Cancel"
+             */
         });
     },
 
@@ -238,6 +291,7 @@ var FieldChooser = BaseFieldChooser.inherit({
                 break;
             case "layout":
             case "texts":
+            case "allowSearch":
                 that._invalidate();
                 break;
             case "onContextMenuPreparing":
@@ -249,12 +303,12 @@ var FieldChooser = BaseFieldChooser.inherit({
     },
 
     _clean: function() {
-        this.element().children("." + FIELDCHOOSER_CONTAINER_CLASS).remove();
+        this.$element().children("." + FIELDCHOOSER_CONTAINER_CLASS).remove();
     },
 
     _renderContentImpl: function() {
         var that = this,
-            element = this.element(),
+            element = this.$element(),
             $container = $(DIV).addClass(FIELDCHOOSER_CONTAINER_CLASS).appendTo(element),
             layout = that.option("layout"),
             $col1,
@@ -335,10 +389,10 @@ var FieldChooser = BaseFieldChooser.inherit({
 
     _renderContextMenu: function() {
         var that = this,
-            $container = that.element();
+            $container = that.$element();
 
         if(that._contextMenu) {
-            that._contextMenu.element().remove();
+            that._contextMenu.$element().remove();
         }
 
         that._contextMenu = that._createComponent($(DIV).appendTo($container), ContextMenu, {
@@ -458,6 +512,7 @@ var FieldChooser = BaseFieldChooser.inherit({
             treeView = that._createComponent(container, TreeView, {
                 dataSource: that._createFieldsDataSource(dataSource),
                 showCheckBoxesMode: 'normal',
+                searchEnabled: that.option("allowSearch"),
                 itemTemplate: function(itemData, itemIndex, itemElement) {
                     if(itemData.icon) {
                         iconUtils.getImageContainer(itemData.icon).appendTo(itemElement);
@@ -489,7 +544,6 @@ var FieldChooser = BaseFieldChooser.inherit({
                         area;
 
                     if(data.items) {
-
                         if(data.selected) {
                             treeView.unselectItem(data);
                             return;
@@ -620,7 +674,7 @@ var FieldChooser = BaseFieldChooser.inherit({
     * @publicName updateDimensions()
     */
     updateDimensions: function() {
-        var $element = this.element(),
+        var $element = this.$element(),
             $container = $element.children(".dx-pivotgridfieldchooser-container"),
             $cols = $element.find(".dx-col"),
             $areaElements = $element.find(".dx-area-fields"),

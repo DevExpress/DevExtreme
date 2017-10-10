@@ -1,7 +1,9 @@
 "use strict";
 
+var $ = require("jquery");
 var ajax = require("core/utils/ajax");
 var browser = require("core/utils/browser");
+var compareVersion = require("core/utils/version").compare;
 require("integration/jquery/ajax");
 
 QUnit.module("sendRequest", {
@@ -388,7 +390,13 @@ QUnit.test("Send data with request (cached resources)", function(assert) {
             dataType: testData[i].dataType,
             contentType: testData[i].contentType
         });
-
+        //https://github.com/jquery/jquery/issues/2658
+        if(compareVersion($.fn.jquery, [3], 1) < 0) {
+            if(testData[i].requestBody) {
+                testData[i].requestBody = testData[i].requestBody.replace("%20", "+");
+            }
+            testData[i].url = testData[i].url.replace("%20", "+");
+        }
         assert.equal(this.requests[i].url, testData[i].url, "url for element " + i + " from test data");
         assert.equal(this.requests[i].requestBody, testData[i].requestBody, "requestBody for element " + i + " from test data");
     }
@@ -588,6 +596,11 @@ QUnit.test("Handle error", function(assert) {
 });
 
 QUnit.test("Script request (cross domain)", function(assert) {
+
+    if(!compareVersion($.fn.jquery, [1], 1)) {
+        assert.expect(0);
+        return;
+    }
 
     var wrongRemoteUrl = "http://somefakedomain1221.com/json-url",
         fail = assert.async(),

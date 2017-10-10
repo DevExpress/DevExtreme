@@ -11,7 +11,9 @@ var $ = require("jquery"),
     DataSource = require("data/data_source/data_source").DataSource,
     fx = require("animation/fx"),
     browser = require("core/utils/browser"),
-    dataQuery = require("data/query");
+    dataQuery = require("data/query"),
+    isRenderer = require("core/utils/type").isRenderer,
+    config = require("core/config");
 
 require("common.css!");
 
@@ -88,6 +90,15 @@ QUnit.test("custom tags rendering", function(assert) {
 
     var tags = $element.find("." + TAGBOX_TAG_CONTENT_CLASS);
     assert.equal(tags.length, 2, "tags are rendered");
+});
+
+QUnit.test("tagElement arguments of tagTemplate for custom tags is correct", function(assert) {
+    $("#tagBox").dxTagBox({
+        value: [1, 2],
+        tagTemplate: function(tagData, tagElement) {
+            assert.equal(isRenderer(tagElement), config().useJQueryRenderer, "tagElement is correct");
+        }
+    });
 });
 
 QUnit.test("popup wrapper gets the 'dx-tagbox-popup-wrapper' class", function(assert) {
@@ -1096,7 +1107,8 @@ QUnit.test("tag template should have correct arguments", function(assert) {
         value: [items[0]],
         tagTemplate: function(tagData, tagElement) {
             assert.equal(tagData, items[0], "correct data is passed");
-            assert.equal(tagElement.hasClass(TAGBOX_TAG_CLASS), true, "correct element passed");
+            assert.equal($(tagElement).hasClass(TAGBOX_TAG_CLASS), true, "correct element passed");
+            assert.equal(isRenderer(tagElement), config().useJQueryRenderer, "tagElement is correct");
         }
     });
 });
@@ -1124,7 +1136,7 @@ QUnit.test("value should be correct if the default tag template is used and the 
             opened: true
         }),
         instance = $element.dxTagBox("instance"),
-        $list = instance._list.element();
+        $list = instance._list.$element();
 
     $($list.find(".dx-list-item").eq(0)).trigger("dxclick");
     assert.deepEqual(instance.option("value"), [items[0]], "the 'value' option is correct");
@@ -1140,7 +1152,7 @@ QUnit.test("selected list items should be correct if the default tag template is
             opened: true
         }),
         list = $element.dxTagBox("instance")._list,
-        $list = list.element();
+        $list = list.$element();
 
     $($list.find(".dx-list-item").eq(0)).trigger("dxclick");
     assert.deepEqual(list.option("selectedItems"), [items[0]], "the 'selectedItems' list option is correct");
@@ -1382,7 +1394,7 @@ QUnit.module("keyboard navigation", {
         this.$element = $("<div>")
             .appendTo("#qunit-fixture")
             .dxTagBox(options);
-        this.instance = this.$element.data("dxTagBox");
+        this.instance = this.$element.dxTagBox("instance");
         this.$input = this.$element.find("." + TEXTBOX_CLASS);
         this.keyboard = keyboardMock(this.$input);
     },
@@ -1992,6 +2004,21 @@ QUnit.test("the focused tag should be removed after pressing the 'backspace' key
 
     var value = this.instance.option("value");
     assert.deepEqual(value, expectedValue, "the widget's value is correct");
+});
+
+QUnit.test("backspace should remove selected search text but not tag if any text is selected", function(assert) {
+    this.reinit({
+        items: ["item 1", "item 2"],
+        value: ["item 1"],
+        focusStateEnabled: true,
+        searchEnabled: true
+    });
+
+    this.$input.val("item");
+    this.keyboard.caret({ start: 0, end: 4 });
+    this.keyboard.press("backspace");
+
+    assert.equal(this.instance.option("value"), "item 1", "tag was not removed");
 });
 
 QUnit.test("the focused tag should be removed after pressing the 'delete' key", function(assert) {
@@ -2752,7 +2779,7 @@ QUnit.test("filter should be reset after the search value clearing (T385456)", f
         .type(items[0][0])
         .press("backspace");
 
-    var $listItems = instance._list.element().find(".dx-list-item");
+    var $listItems = instance._list.$element().find(".dx-list-item");
     assert.equal($listItems.length, items.length, "list items count is correct");
 });
 
@@ -2818,11 +2845,12 @@ QUnit.test("popup changes its position when field height changed", function(asse
 
     var initialHeight = $tagBox.height();
     var $selectAllItem = $(".dx-list-select-all"),
-        popupContentTop = tagBox.content().offset().top;
+        popupContent = $(tagBox.content()),
+        popupContentTop = popupContent.offset().top;
 
     $($selectAllItem).trigger("dxclick");
 
-    assert.roughEqual(tagBox.content().offset().top, popupContentTop - initialHeight + $tagBox.height(), 1, "selectAll moved");
+    assert.roughEqual(popupContent.offset().top, popupContentTop - initialHeight + $tagBox.height(), 1, "selectAll moved");
 });
 
 QUnit.test("refresh popup size after dataSource loaded", function(assert) {
@@ -2970,7 +2998,7 @@ QUnit.test("selected items should be correct if the list item is selected", func
             value: [items[0]],
             opened: true
         }).dxTagBox("instance"),
-        $listItems = tagBox._list.element().find(".dx-list-item");
+        $listItems = tagBox._list.$element().find(".dx-list-item");
 
     $($listItems.eq(1)).trigger("dxclick");
     assert.deepEqual(tagBox.option("selectedItems"), [items[0], items[1]], "the 'selectedItems' option value is correct");
@@ -2983,7 +3011,7 @@ QUnit.test("selected items should be correct if the list item is unselected", fu
             value: items,
             opened: true
         }).dxTagBox("instance"),
-        $listItems = tagBox._list.element().find(".dx-list-item");
+        $listItems = tagBox._list.$element().find(".dx-list-item");
 
     $($listItems.eq(0)).trigger("dxclick");
     assert.deepEqual(tagBox.option("selectedItems"), [items[1], items[2]], "the 'selectedItems' option value is correct");
@@ -3000,7 +3028,7 @@ QUnit.test("the 'onSelectionChanged' action should contain correct 'addedItems' 
             opened: true,
             onSelectionChanged: spy
         }).dxTagBox("instance"),
-        $listItems = tagBox._list.element().find(".dx-list-item");
+        $listItems = tagBox._list.$element().find(".dx-list-item");
 
     $($listItems.eq(0)).trigger("dxclick");
     assert.deepEqual(spy.args[1][0].addedItems, [items[0]], "first item is in the 'addedItems' argument");
@@ -3021,7 +3049,7 @@ QUnit.test("the 'onSelectionChanged' action should contain correct 'removedItems
             opened: true,
             onSelectionChanged: spy
         }).dxTagBox("instance"),
-        $listItems = tagBox._list.element().find(".dx-list-item");
+        $listItems = tagBox._list.$element().find(".dx-list-item");
 
     $($listItems.eq(0)).trigger("dxclick");
     assert.deepEqual(spy.args[1][0].removedItems, [items[0]], "first item is in the 'removedItems' argument");
@@ -3059,7 +3087,9 @@ QUnit.test("the 'fieldTemplate' has correct arguments", function(assert) {
         tagBox = $("#tagBox").dxTagBox({
             dataSource: [1, 2, 3],
             value: [1],
-            fieldTemplate: function(selectedItems) {
+            fieldTemplate: function(selectedItems, fieldElement) {
+                assert.equal(isRenderer(fieldElement), config().useJQueryRenderer, "fieldElement is correct");
+
                 args.push(selectedItems);
                 return $("<div>").dxTextBox();
             }
@@ -3119,13 +3149,13 @@ QUnit.test("value should be cleared after deselect all items if fieldTemplate an
             opened: true,
             value: [1],
             searchEnabled: true,
-            fieldTemplate: function(itemData, $container) {
+            fieldTemplate: function(itemData, container) {
                 var $textBox = $("<div>").dxTextBox();
 
                 itemData = Array.isArray(itemData) ? itemData : [itemData];
                 $field.text(itemData[0] || "");
 
-                $container.append($field).append($textBox);
+                $(container).append($field).append($textBox);
             }
         }),
         $items = $("." + LIST_ITEM_CLASS);
@@ -3270,7 +3300,7 @@ QUnit.test("list items selection should not be reset after next page loading", f
     });
 
     var list = this.getListInstance(),
-        $list = list.element(),
+        $list = list.$element(),
         $listItems = this.$listItems;
 
     $($listItems.eq(0)).trigger("dxclick");
@@ -3404,7 +3434,7 @@ QUnit.module("the 'onSelectAllValueChanged' option", {
 });
 
 QUnit.test("the 'onSelectAllValueChanged' option behavior", function(assert) {
-    var $selectAllCheckbox = this.instance._list.element().find(".dx-list-select-all-checkbox");
+    var $selectAllCheckbox = this.instance._list.$element().find(".dx-list-select-all-checkbox");
 
     $($selectAllCheckbox).trigger("dxclick");
     assert.ok(this.spy.args[this.spy.args.length - 1][0].value, "all items are selected");
@@ -3414,7 +3444,7 @@ QUnit.test("the 'onSelectAllValueChanged' option behavior", function(assert) {
 });
 
 QUnit.test("the 'onSelectAllValueChanged' action is fired only one time if all items are selected", function(assert) {
-    var $list = this.instance._list.element();
+    var $list = this.instance._list.$element();
     $($list.find(".dx-list-select-all-checkbox")).trigger("dxclick");
     assert.equal(this.spy.callCount, 1, "count is correct");
 });
@@ -3425,13 +3455,13 @@ QUnit.test("the 'onSelectAllValueChanged' action is fired only one time if all i
         value: this.items.slice()
     });
 
-    var $list = this.instance._list.element();
+    var $list = this.instance._list.$element();
     $($list.find(".dx-list-select-all-checkbox")).trigger("dxclick");
     assert.equal(this.spy.callCount, 1, "count is correct");
 });
 
 QUnit.test("the 'onSelectAllValueChanged' action is fired only one time if one item is selected", function(assert) {
-    var $list = this.instance._list.element();
+    var $list = this.instance._list.$element();
     $($list.find(".dx-list-item").eq(0)).trigger("dxclick");
     assert.equal(this.spy.callCount, 1, "count is correct");
 });
@@ -3442,7 +3472,7 @@ QUnit.test("the 'onSelectAllValueChanged' action is fired only one time if one i
         value: this.items.splice()
     });
 
-    var $list = this.instance._list.element();
+    var $list = this.instance._list.$element();
     $($list.find(".dx-list-item").eq(0)).trigger("dxclick");
     assert.equal(this.spy.callCount, 1, "count is correct");
 });
@@ -3601,7 +3631,7 @@ QUnit.test("list should save it's scroll position after value changed", function
         showSelectionControls: true
     });
 
-    var $content = this.instance.content(),
+    var $content = $(this.instance.content()),
         $list = $content.find("." + LIST_CLASS),
         list = $list.dxList("instance"),
         scrollView = $list.dxScrollView("instance");
@@ -3987,6 +4017,77 @@ QUnit.test("selectionHandler should call twice on popup opening", function(asser
     assert.ok(selectionChangeHandlerSpy.callCount <= 2, "selection change handler called less than 2 (ListContentReady and SelectAll)");
 });
 
+QUnit.test("loadOptions.filter should be a filter expression when key is specified", function(assert) {
+    var load = sinon.stub().returns([{ id: 1, text: "item 1" }, { id: 2, text: "item 2" }]),
+        $tagBox = $("#tagBox").dxTagBox({
+            dataSource: {
+                load: load
+            },
+            valueExpr: "id",
+            displayExpr: "text",
+            opened: true,
+            hideSelectedItems: true
+        }),
+        tagBox = $tagBox.dxTagBox("instance"),
+        $item = $(tagBox._$list.find(".dx-list-item").eq(0));
+
+    $item.trigger("dxclick");
+
+    var filter = load.lastCall.args[0].filter;
+    assert.ok(Array.isArray(filter), "filter should be an array for serialization");
+    assert.deepEqual(filter, [["!", ["id", 1]]], "filter should be correct");
+});
+
+QUnit.test("loadOptions.filter should be a function when valueExpr is function", function(assert) {
+    var load = sinon.stub().returns([{ id: 1, text: "item 1" }, { id: 2, text: "item 2" }]),
+        $tagBox = $("#tagBox").dxTagBox({
+            dataSource: {
+                load: load
+            },
+            valueExpr: function() {
+                return "id";
+            },
+            displayExpr: "text",
+            opened: true,
+            hideSelectedItems: true
+        }),
+        tagBox = $tagBox.dxTagBox("instance"),
+        $item = $(tagBox._$list.find(".dx-list-item").eq(0));
+
+    $item.trigger("dxclick");
+
+    var filter = load.lastCall.args[0].filter;
+    assert.ok($.isFunction(filter), "filter is function");
+});
+
+QUnit.test("loadOptions.filter should be correct when user filter is also used", function(assert) {
+    var load = sinon.stub().returns([{ id: 1, text: "item 1" }, { id: 2, text: "item 2" }]),
+        $tagBox = $("#tagBox").dxTagBox({
+            dataSource: {
+                load: load,
+                filter: ["id", ">", 0]
+            },
+            valueExpr: "id",
+            displayExpr: "text",
+            opened: true,
+            hideSelectedItems: true
+        }),
+        tagBox = $tagBox.dxTagBox("instance"),
+        $item = $(tagBox._$list.find(".dx-list-item").eq(0));
+
+    $item.trigger("dxclick");
+
+    var filter = load.lastCall.args[0].filter;
+    assert.deepEqual(filter, [["!", ["id", 1]], ["id", ">", 0]], "filter is correct");
+
+    tagBox.option("opened", true);
+    $item = $(tagBox._$list.find(".dx-list-item").eq(1));
+
+    $item.trigger("dxclick");
+    filter = load.lastCall.args[0].filter;
+
+    assert.deepEqual(filter, [["!", ["id", 1]], ["!", ["id", 2]], ["id", ">", 0]], "filter is correct");
+});
 
 QUnit.module("deprecated options");
 
@@ -4108,7 +4209,7 @@ QUnit.test("T403756 - dxTagBox treats removing a dxTagBox item for the first tim
     this.clock.tick();
     assert.equal(tagBox.option("selectedItems").length, 2, "selectedItems contains all selected values");
 
-    var $container = tagBox.element().find("." + TAGBOX_TAG_CONTAINER_CLASS);
+    var $container = tagBox.$element().find("." + TAGBOX_TAG_CONTAINER_CLASS);
     var $tagRemoveButtons = $container.find("." + TAGBOX_TAG_REMOVE_BUTTON_CLASS);
 
     tagBox.option("onSelectionChanged", function(e) {

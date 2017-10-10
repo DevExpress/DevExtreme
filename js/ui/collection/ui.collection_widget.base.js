@@ -3,6 +3,7 @@
 var $ = require("../../core/renderer"),
     eventsEngine = require("../../events/core/events_engine"),
     commonUtils = require("../../core/utils/common"),
+    getPublicElement = require("../../core/utils/dom").getPublicElement,
     isPlainObject = require("../../core/utils/type").isPlainObject,
     when = require("../../core/utils/deferred").when,
     extend = require("../../core/utils/extend").extend,
@@ -118,7 +119,7 @@ var CollectionWidget = Widget.inherit({
             /**
             * @name CollectionWidgetOptions_items
             * @publicName items
-            * @type array
+            * @type Array<string,CollectionWidgetItemTemplate>
             */
             items: [],
 
@@ -129,7 +130,7 @@ var CollectionWidget = Widget.inherit({
             * @default "item"
             * @type_function_param1 itemData:object
             * @type_function_param2 itemIndex:number
-            * @type_function_param3 itemElement:jQuery
+            * @type_function_param3 itemElement:Element
             * @type_function_return string|Node|jQuery
             */
             itemTemplate: "item",
@@ -139,7 +140,7 @@ var CollectionWidget = Widget.inherit({
             * @publicName onItemRendered
             * @extends Action
             * @type_function_param1_field4 itemData:object
-            * @type_function_param1_field5 itemElement:jQuery
+            * @type_function_param1_field5 itemElement:Element
             * @type_function_param1_field6 itemIndex:number
             * @action
             */
@@ -151,7 +152,7 @@ var CollectionWidget = Widget.inherit({
             * @type function|string
             * @extends Action
             * @type_function_param1_field4 itemData:object
-            * @type_function_param1_field5 itemElement:jQuery
+            * @type_function_param1_field5 itemElement:Element
             * @type_function_param1_field6 itemIndex:number
             * @type_function_param1_field7 jQueryEvent:jQueryEvent
             * @action
@@ -163,7 +164,7 @@ var CollectionWidget = Widget.inherit({
             * @publicName onItemHold
             * @extends Action
             * @type_function_param1_field4 itemData:object
-            * @type_function_param1_field5 itemElement:jQuery
+            * @type_function_param1_field5 itemElement:Element
             * @type_function_param1_field6 itemIndex:number
             * @action
             */
@@ -182,7 +183,7 @@ var CollectionWidget = Widget.inherit({
             * @publicName onItemContextMenu
             * @extends Action
             * @type_function_param1_field4 itemData:object
-            * @type_function_param1_field5 itemElement:jQuery
+            * @type_function_param1_field5 itemElement:Element
             * @type_function_param1_field6 itemIndex:number
             * @type_function_param1_field7 jQueryEvent:jQueryEvent
             * @action
@@ -202,7 +203,7 @@ var CollectionWidget = Widget.inherit({
             /**
             * @name CollectionWidgetOptions_datasource
             * @publicName dataSource
-            * @type string|array|DataSource|DataSource configuration
+            * @type string|Array<string,CollectionWidgetItemTemplate>|DataSource|DataSourceOptions
             * @default null
             */
             dataSource: null,
@@ -295,7 +296,7 @@ var CollectionWidget = Widget.inherit({
     },
 
     _initItemsFromMarkup: function() {
-        var $items = this.element().contents().filter(ITEMS_SELECTOR);
+        var $items = this.$element().contents().filter(ITEMS_SELECTOR);
         if(!$items.length || this.option("items").length) {
             return;
         }
@@ -323,7 +324,7 @@ var CollectionWidget = Widget.inherit({
 
         $item.detach().clone()
             .attr("data-options", templateOptions)
-            .data("options", templateOptions).appendTo(this.element());
+            .data("options", templateOptions).appendTo(this.$element());
 
         return templateId;
     },
@@ -337,7 +338,7 @@ var CollectionWidget = Widget.inherit({
     },
 
     _focusTarget: function() {
-        return this.element();
+        return this.$element();
     },
 
     _focusInHandler: function(e) {
@@ -657,7 +658,7 @@ var CollectionWidget = Widget.inherit({
     },
 
     _itemContainer: function() {
-        return this.element();
+        return this.$element();
     },
 
     _itemClass: function() {
@@ -697,7 +698,7 @@ var CollectionWidget = Widget.inherit({
 
         this.callBase();
 
-        this.element().addClass(COLLECTION_CLASS);
+        this.$element().addClass(COLLECTION_CLASS);
 
         this._attachClickEvent();
         this._attachHoldEvent();
@@ -855,7 +856,7 @@ var CollectionWidget = Widget.inherit({
         var renderContentPromise = this._renderItemContent({
             index: index,
             itemData: itemData,
-            container: $itemContent,
+            container: getPublicElement($itemContent),
             contentClass: this._itemContentClass(),
             defaultTemplateName: this.option("itemTemplate")
         });
@@ -869,7 +870,7 @@ var CollectionWidget = Widget.inherit({
                 itemIndex: index
             });
 
-            that._executeItemRenderAction(index, itemData, $itemFrame);
+            that._executeItemRenderAction(index, itemData, getPublicElement($itemFrame));
         });
 
         return $itemFrame;
@@ -901,8 +902,8 @@ var CollectionWidget = Widget.inherit({
     },
 
     _renderItemContentByNode: function(args, $node) {
-        args.container.replaceWith($node);
-        args.container = $node;
+        $(args.container).replaceWith($node);
+        args.container = getPublicElement($node);
         this._addItemContentClasses(args);
 
         return $node;
@@ -914,7 +915,7 @@ var CollectionWidget = Widget.inherit({
             args.contentClass
         ];
 
-        args.container.addClass(classes.join(" "));
+        $(args.container).addClass(classes.join(" "));
     },
 
     _renderItemFrame: function(index, itemData, $container, $itemToReplace) {
@@ -1012,7 +1013,7 @@ var CollectionWidget = Widget.inherit({
                 .html(noDataText);
             this.setAria("label", noDataText);
         }
-        this.element().toggleClass(EMPTY_COLLECTION, !hideNoData);
+        this.$element().toggleClass(EMPTY_COLLECTION, !hideNoData);
     },
 
     _itemJQueryEventHandler: function(jQueryEvent, handlerOptionName, actionArgs, actionConfig) {
@@ -1044,7 +1045,7 @@ var CollectionWidget = Widget.inherit({
 
     _extendActionArgs: function($itemElement) {
         return {
-            itemElement: $itemElement,
+            itemElement: getPublicElement($itemElement),
             itemIndex: this._itemElements().index($itemElement),
             itemData: this._getItemData($itemElement)
         };
@@ -1075,7 +1076,7 @@ var CollectionWidget = Widget.inherit({
     /**
     * @name CollectionWidgetmethods_itemElements
     * @publicName itemElements()
-    * @return array
+    * @return Array<Node>
     * @hidden
     */
     itemElements: function() {

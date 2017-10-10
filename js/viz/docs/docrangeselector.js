@@ -408,7 +408,7 @@ var dxRangeSelector = {
         /**
         * @name dxrangeselectoroptions_scale_categories
         * @publicName categories
-        * @type array
+        * @type Array<number,string,Date>
         */
         categories: []
     },
@@ -453,7 +453,7 @@ var dxRangeSelector = {
         * @publicName padding
         * @type number
         * @default 6
-        * @deprecated
+        * @deprecated dxrangeselectoroptions_slidermarker_paddingleftright
         */
         padding: 6,
         /**
@@ -489,7 +489,7 @@ var dxRangeSelector = {
         * @publicName placeholderSize
         * @type number|object
         * @default undefined
-        * @deprecated
+        * @deprecated dxrangeselectoroptions_slidermarker_placeholderHeight
         */
         placeholderSize: {
             /**
@@ -626,7 +626,7 @@ var dxRangeSelector = {
     * @name dxrangeselectoroptions_selectedrange
     * @publicName selectedRange
     * @type object
-    * @deprecated
+    * @deprecated dxrangeselectoroptions_value
     */
     selectedRange: {
         /**
@@ -647,7 +647,7 @@ var dxRangeSelector = {
     /**
     *@name dxrangeselectoroptions_value
     * @publicName value
-    * @type array
+    * @type Array<number,string,Date>
     * @notUsedInTheme
     */
     value: [undefined, undefined],
@@ -728,7 +728,7 @@ var dxRangeSelector = {
         * @type string
         * @default 'onMovingComplete'
         * @acceptValues 'onMovingComplete' | 'onMoving'
-        * @deprecated
+        * @deprecated dxrangeselectoroptions_behavior_callvaluechanged
         */
         callSelectedRangeChanged: "onMovingComplete",
         /**
@@ -912,7 +912,7 @@ var dxRangeSelector = {
         /**
         * @name dxrangeselectoroptions_chart_series
         * @publicName series
-        * @type object|array
+        * @type Object|Array<Object>
         * @default undefined
         * @notUsedInTheme
         */
@@ -968,7 +968,7 @@ var dxRangeSelector = {
     * @type_function_param1_field3 startValue:Date|Number
     * @type_function_param1_field4 endValue:Date|Number
     * @default null
-    * @deprecated
+    * @deprecated dxrangeselectoroptions_onvaluechanged
     * @notUsedInTheme
     * @action
     */
@@ -980,8 +980,8 @@ var dxRangeSelector = {
     * @type_function_param1 e:object
     * @type_function_param1_field1 component:object
     * @type_function_param1_field2 element:object
-    * @type_function_param1_field3 value:array
-    * @type_function_param1_field4 previousValue:array
+    * @type_function_param1_field3 value:Array<number,string,Date>
+    * @type_function_param1_field4 previousValue:Array<number,string,Date>
     * @default null
     * @notUsedInTheme
     * @action
@@ -1013,7 +1013,7 @@ var dxRangeSelector = {
         * @publicName customizeSeries
         * @type function(seriesName)
         * @type_function_param1 seriesName:any
-        * @type_function_return Series configuration
+        * @type_function_return dxChartOptions_series
         */
         customizeSeries: function() { }
     },
@@ -1021,7 +1021,7 @@ var dxRangeSelector = {
     * @name dxrangeselectormethods_getSelectedRange
     * @publicName getSelectedRange()
     * @return object
-    * @deprecated
+    * @deprecated dxrangeselectormethods_getValue
     */
     getSelectedRange: function() { },
     /**
@@ -1030,19 +1030,19 @@ var dxRangeSelector = {
     * @param1 selectedRange:object
     * @param1_field1 startValue:Date|Number|String
     * @param1_field2 endValue:Date|Number|String
-    * @deprecated
+    * @deprecated dxrangeselectormethods_setValue
     */
     setSelectedRange: function() { },
     /**
     * @name dxrangeselectormethods_setValue
     * @publicName setValue(value)
-    * @param1 value:array
+    * @param1 value:Array<number,string,Date>
     */
     setValue: function() { },
     /**
     * @name dxrangeselectormethods_getValue
     * @publicName getValue()
-    * @return array
+    * @return Array<number,string,Date>
     */
     getValue: function() { },
     /**

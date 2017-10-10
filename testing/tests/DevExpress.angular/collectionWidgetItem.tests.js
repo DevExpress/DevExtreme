@@ -9,6 +9,10 @@ var registerComponent = require("core/component_registrator"),
 
 require("integration/angular");
 
+if(QUnit.urlParams["nojquery"]) {
+    return;
+}
+
 QUnit.module("CollectionWidgetItem", {
     beforeEach: function() {
         var TestCollectionItem = this.TestCollectionItem = CollectionWidgetItem.inherit({
@@ -157,7 +161,7 @@ QUnit.test("onItemRendered event should have a completely rendered itemElement",
     this.testApp.controller("my-controller", function($scope) {
         $scope.items = [{ text: "test" }];
         $scope.onItemRendered = function(e) {
-            itemElementText = e.itemElement.text();
+            itemElementText = $(e.itemElement).text();
         };
     });
 

@@ -57,6 +57,7 @@ if(nativeRequest && !nativeCancel) {
  * @type method
  * @param1 callback:function
  * @return number
+ * @namespace DevExpress.utils
  * @module animation/frame
  * @export request
  */
@@ -67,6 +68,7 @@ exports.requestAnimationFrame = request.bind(window);
  * @publicName cancelAnimationFrame(requestID)
  * @type method
  * @param1 requestID:number
+ * @namespace DevExpress.utils
  * @module animation/frame
  * @export cancel
  */

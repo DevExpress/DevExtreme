@@ -159,7 +159,7 @@ QUnit.test("Wide rival appointments should not have specific class", function(as
     this.items = items;
     this.instance.option("items", items);
 
-    var $appointment = this.instance.element().find(".dx-scheduler-appointment");
+    var $appointment = this.instance.$element().find(".dx-scheduler-appointment");
     assert.ok(!$appointment.eq(0).hasClass("dx-scheduler-appointment-empty"), "appointment has not the class");
     assert.ok(!$appointment.eq(1).hasClass("dx-scheduler-appointment-empty"), "appointment has not the class");
 });
@@ -187,7 +187,7 @@ QUnit.test("Narrow rival appointments should have specific class", function(asse
     this.items = items;
     this.instance.option("items", items);
 
-    var $appointment = this.instance.element().find(".dx-scheduler-appointment");
+    var $appointment = this.instance.$element().find(".dx-scheduler-appointment");
     assert.ok($appointment.eq(0).hasClass("dx-scheduler-appointment-empty"), "appointment has the class");
     assert.ok($appointment.eq(1).hasClass("dx-scheduler-appointment-empty"), "appointment has the class");
 });
@@ -224,7 +224,7 @@ QUnit.test("Scheduler appointments should be rendered in right containers", func
     this.items = items;
     this.instance.option("items", items);
 
-    assert.equal(this.instance.element().find(".dx-scheduler-appointment").length, 1, "dxSchedulerAppointments has 1 item");
+    assert.equal(this.instance.$element().find(".dx-scheduler-appointment").length, 1, "dxSchedulerAppointments has 1 item");
     assert.equal($("#allDayContainer .dx-scheduler-appointment").length, 1, "allDayContainer has 1 item");
 });
 

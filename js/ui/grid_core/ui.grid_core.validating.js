@@ -252,7 +252,7 @@ module.exports = {
             * @publicName onRowValidating
             * @type function(e)
             * @type_function_param1 e:object
-            * @type_function_param1_field4 brokenRules:array
+            * @type_function_param1_field4 brokenRules:Array<Object>
             * @type_function_param1_field5 isValid:boolean
             * @type_function_param1_field6 key:any
             * @type_function_param1_field7 newData:object
@@ -460,7 +460,7 @@ module.exports = {
 
                 _beforeEditCell: function(rowIndex, columnIndex, item) {
                     var result = this.callBase(rowIndex, columnIndex, item),
-                        $cell = this.component.getCellElement(rowIndex, columnIndex),
+                        $cell = this._rowsView._getCellElement(rowIndex, columnIndex),
                         validator = $cell && $cell.data("dxValidator"),
                         value = validator && validator.option("adapter").getValue();
 
@@ -553,7 +553,7 @@ module.exports = {
                                             onClick: function() {
                                                 that._editingController.cancelEditData();
                                             }
-                                        })).element();
+                                        })).$element();
                                 },
                                 position: {
                                     my: "left top",
@@ -570,7 +570,7 @@ module.exports = {
                     var that = this,
                         needRepaint,
                         $highlightContainer = $cell.find("." + CELL_HIGHLIGHT_OUTLINE),
-                        isOverlayVisible = $cell.find(".dx-dropdowneditor-overlay:visible").length,
+                        isOverlayVisible = $cell.find(".dx-dropdowneditor-overlay").is(":visible"),
                         myPosition = isOverlayVisible ? "top right" : "top " + alignment,
                         atPosition = isOverlayVisible ? "top left" : "bottom " + alignment;
 
@@ -604,7 +604,7 @@ module.exports = {
                                     }
                                 }
 
-                                that._shiftValidationMessageIfNeed(e.component.content(), revertTooltip && revertTooltip.content(), $cell);
+                                that._shiftValidationMessageIfNeed(e.component.$content(), revertTooltip && revertTooltip.$content(), $cell);
                             }
                         });
                 },

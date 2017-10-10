@@ -1,6 +1,8 @@
 "use strict";
 
 var $ = require("jquery"),
+    renderer = require("core/renderer"),
+    eventsEngine = require("events/core/events_engine"),
     fx = require("animation/fx"),
     translator = require("animation/translator"),
     animationFrame = require("animation/frame"),
@@ -169,7 +171,7 @@ QUnit.test("animation from", function(assert) {
 QUnit.test("isAnimating func", function(assert) {
     assert.expect(1);
 
-    var $element = $("#test");
+    var $element = renderer("#test");
 
     this.animate($element, {
         to: { left: 1000 },
@@ -312,7 +314,7 @@ QUnit.test("off flag, complete callback", function(assert) {
         assert.equal(called, 1);
 
         assert.equal(args.length, 2);
-        assert.strictEqual(args[0].get(0), element.get(0));
+        assert.strictEqual($(args[0]).get(0), element.get(0));
         assert.ok($.isPlainObject(args[1]));
     } finally {
         fx.off = false;
@@ -617,7 +619,7 @@ if(support.transition) {
     QUnit.test("isAnimating func", function(assert) {
         assert.expect(1);
 
-        var $element = $("#test");
+        var $element = renderer("#test");
 
         this.animate($element, {
             to: { left: 1000 },
@@ -740,7 +742,7 @@ if(support.transition) {
             assert.equal(called, 1);
 
             assert.equal(args.length, 2);
-            assert.strictEqual(args[0].get(0), element.get(0));
+            assert.strictEqual($(args[0]).get(0), element.get(0));
             assert.ok($.isPlainObject(args[1]));
         } finally {
             fx.off = false;
@@ -892,15 +894,15 @@ if(support.transition) {
         function eventUsedTimes(sinonSpy, eventName) {
             var result = 0;
             for(var i = 0; i < sinonSpy.callCount; i++) {
-                if(sinonSpy.getCall(i).args[0] === eventName) {
+                if(sinonSpy.getCall(i).args[1] === eventName) {
                     result++;
                 }
             }
             return result;
         }
 
-        sinon.spy($.prototype, "on");
-        sinon.spy($.prototype, "off");
+        sinon.spy(eventsEngine, "on");
+        sinon.spy(eventsEngine, "off");
 
         var animation = fx.createAnimation($test, {
                 type: 'slide',
@@ -915,16 +917,16 @@ if(support.transition) {
             .done(function() {
                 assert.fail("Should be rejected when the element is removed from DOM");
             }).fail(function() {
-                assert.equal(eventUsedTimes($.prototype.on, testedEventName), 1);
-                assert.equal(eventUsedTimes($.prototype.off, testedEventName), 2);
+                assert.equal(eventUsedTimes(eventsEngine.on, testedEventName), 1);
+                assert.equal(eventUsedTimes(eventsEngine.off, testedEventName), 2);
             }).always(function() {
-                $.prototype.on.restore();
-                $.prototype.off.restore();
+                eventsEngine.on.restore();
+                eventsEngine.off.restore();
                 done();
             });
 
-        assert.equal(eventUsedTimes($.prototype.on, testedEventName), 1);
-        assert.equal(eventUsedTimes($.prototype.off, testedEventName), 1);
+        assert.equal(eventUsedTimes(eventsEngine.on, testedEventName), 1);
+        assert.equal(eventUsedTimes(eventsEngine.off, testedEventName), 1);
         $test.remove();
     });
 
@@ -938,15 +940,15 @@ if(support.transition) {
         function eventUsedTimes(sinonSpy, eventName) {
             var result = 0;
             for(var i = 0; i < sinonSpy.callCount; i++) {
-                if(sinonSpy.getCall(i).args[0] === eventName) {
+                if(sinonSpy.getCall(i).args[1] === eventName) {
                     result++;
                 }
             }
             return result;
         }
 
-        sinon.spy($.prototype, "on");
-        sinon.spy($.prototype, "off");
+        sinon.spy(eventsEngine, "on");
+        sinon.spy(eventsEngine, "off");
 
         var animation = fx.createAnimation($test, {
                 type: 'slide',
@@ -959,13 +961,13 @@ if(support.transition) {
         animation.setup();
         result = animation.start()
             .done(function() {
-                assert.equal(eventUsedTimes($.prototype.on, testedEventName), 1);
-                assert.equal(eventUsedTimes($.prototype.off, testedEventName), 2);
+                assert.equal(eventUsedTimes(eventsEngine.on, testedEventName), 1);
+                assert.equal(eventUsedTimes(eventsEngine.off, testedEventName), 2);
             }).fail(function() {
                 assert.fail("animation.start() deferred shouldn't fail");
             }).always(function() {
-                $.prototype.on.restore();
-                $.prototype.off.restore();
+                eventsEngine.on.restore();
+                eventsEngine.off.restore();
                 done();
             });
     });
@@ -1060,11 +1062,11 @@ QUnit.test("fadeIn", function(assert) {
     fx.animate($element, {
         type: "fadeIn",
         duration: 100,
-        start: function() {
-            assert.equal($element.css("opacity"), 0.5, "starts from elements opacity");
+        start: function($element) {
+            assert.equal($($element).css("opacity"), 0.5, "starts from elements opacity");
         },
         complete: function() {
-            assert.strictEqual($element.css("opacity"), "1");
+            assert.strictEqual($($element).css("opacity"), "1");
             done();
         }
     });

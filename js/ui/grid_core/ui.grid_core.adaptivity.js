@@ -57,20 +57,30 @@ var AdaptiveColumnsController = modules.ViewController.inherit({
         return row && row.modifiedValues && typeUtils.isDefined(row.modifiedValues[columnIndex]);
     },
 
-    _renderFormViewTemplate: function(item, cellOptions, $container) {
+    _renderFormViewTemplate: function(item, cellOptions, container) {
         var that = this,
+            $container = $(container),
             column = item.column,
             cellValue = column.calculateCellValue(cellOptions.data),
+            focusAction = that.createAction(function() {
+                eventsEngine.trigger($container, clickEvent.name);
+            }),
             cellText;
 
         cellValue = gridCoreUtils.getDisplayValue(column, cellValue, cellOptions.data, cellOptions.rowType);
         cellText = gridCoreUtils.formatValue(cellValue, column);
 
+        if(column.allowEditing && that.option("useKeyboard")) {
+            $container.attr("tabIndex", that.option("tabIndex"));
+            eventsEngine.off($container, "focus", focusAction);
+            eventsEngine.on($container, "focus", focusAction);
+        }
+
         if(column.cellTemplate) {
             var templateOptions = extend({}, cellOptions, { value: cellValue, text: cellText, column: column });
             that._rowsView.renderTemplate($container, column.cellTemplate, templateOptions, !!$container.closest(document).length);
         } else {
-            var container = $container.get(0);
+            container = $container.get(0);
             if(column.encodeHtml) {
                 container.textContent = cellText;
             } else {
@@ -95,8 +105,9 @@ var AdaptiveColumnsController = modules.ViewController.inherit({
             column = item.column,
             editingController = this.getController("editing");
 
-        return function(options, $container) {
+        return function(options, container) {
             var isItemEdited = that._isItemEdited(item),
+                $container = $(container),
                 columnIndex = that._columnsController.getVisibleIndex(column.visibleIndex),
                 templateOptions = extend({}, cellOptions);
 
@@ -193,7 +204,7 @@ var AdaptiveColumnsController = modules.ViewController.inherit({
             partialWidth = options.containerWidth * parseFloat(options.columnWidth) / 100,
             resultWidth = options.columnsCanFit && (partialWidth < options.bestFitWidth) ? options.bestFitWidth : partialWidth;
 
-        return columnFitted ? this.component.element().width() * parseFloat(options.columnWidth) / 100 : resultWidth;
+        return columnFitted ? this.component.$element().width() * parseFloat(options.columnWidth) / 100 : resultWidth;
     },
 
     _getNotTruncatedColumnWidth: function(column, containerWidth, contentColumns, columnsCanFit) {
@@ -345,11 +356,12 @@ var AdaptiveColumnsController = modules.ViewController.inherit({
 
         if(view && view.isVisible() && column) {
             rowsCount = view.getRowsCount();
+            var $rowElements = view._getRowElements();
             for(rowIndex = 0; rowIndex < rowsCount; rowIndex++) {
                 if(rowIndex !== editFormRowIndex || viewName !== ROWS_VIEW) {
                     currentVisibleIndex = viewName === COLUMN_HEADERS_VIEW ? this._columnsController.getVisibleIndex(column.index, rowIndex) : visibleIndex;
                     if(currentVisibleIndex >= 0) {
-                        $cellElement = view.getCellElements(rowIndex).eq(currentVisibleIndex);
+                        $cellElement = $rowElements.eq(rowIndex).children().eq(currentVisibleIndex);
                         this._isCellValid($cellElement) && $cellElement.addClass(cssClassName);
                     }
                 }
@@ -380,7 +392,7 @@ var AdaptiveColumnsController = modules.ViewController.inherit({
         if(that._isVisibleColumnsValid(visibleColumns) && hiddenQueue.length) {
             var totalWidth = 0,
                 percentWidths,
-                $rootElement = that.component.element(),
+                $rootElement = that.component.$element(),
                 rootElementWidth = $rootElement.width() - that._getCommandColumnsWidth(),
                 contentColumns = visibleColumns.filter(function(item) {
                     return !item.command;
@@ -677,7 +689,7 @@ module.exports = {
 
                 _getColumnIndexByElementCore: function($element) {
                     var $itemContent = $element.closest("." + FORM_ITEM_CONTENT_CLASS);
-                    if($itemContent.length && $itemContent.closest(this.component.element()).length) {
+                    if($itemContent.length && $itemContent.closest(this.component.$element()).length) {
                         var formItem = $itemContent.length ? $itemContent.first().data("dx-form-item") : null;
                         return formItem && formItem.column && this._columnsController.getVisibleIndex(formItem.column.index);
                     } else {
@@ -690,7 +702,7 @@ module.exports = {
                     this._adaptiveColumnsController.applyStylesForHiddenColumns(this);
                 },
 
-                getCellElement: function(rowIndex, columnIdentifier) {
+                _getCellElement: function(rowIndex, columnIdentifier) {
                     var item = this._dataController.items()[rowIndex];
 
                     if(item && item.rowType === ADAPTIVE_ROW_TYPE) {
@@ -997,6 +1009,23 @@ module.exports = {
             columns: {
                 _isColumnVisible: function(column) {
                     return this.callBase(column) && !column.adaptiveHidden;
+                }
+            },
+            keyboardNavigation: {
+                _isCellValid: function(cell) {
+                    return this.callBase(cell) && !cell.hasClass(this.addWidgetPrefix(HIDDEN_COLUMN_CLASS));
+                },
+
+                _processNextCellInMasterDetail: function(nextCell) {
+                    this.callBase(nextCell);
+
+                    if(!this._isInsideEditForm(nextCell) && nextCell) {
+                        var focusHandler = function() {
+                            eventsEngine.off(nextCell, "focus", focusHandler);
+                            eventsEngine.trigger(nextCell, "dxclick");
+                        };
+                        eventsEngine.on(nextCell, "focus", focusHandler);
+                    }
                 }
             }
         }

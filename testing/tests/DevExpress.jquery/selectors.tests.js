@@ -2,7 +2,9 @@
 
 var $ = require("jquery");
 
-
+if(QUnit.urlParams["nojquery"]) {
+    return;
+}
 
 QUnit.testStart(function() {
     var markup =

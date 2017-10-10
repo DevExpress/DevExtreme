@@ -3,7 +3,7 @@
 /**
 * @name Utils_compileGetter
 * @publicName compileGetter(expr)
-* @param1 expr:string|array
+* @param1 expr:string|Array<string>
 * @return function
 * @module utils
 * @export compileGetter
@@ -12,7 +12,7 @@ exports.compileGetter = require("./core/utils/data").compileGetter;
 /**
 * @name Utils_compileSetter
 * @publicName compileSetter(expr)
-* @param1 expr:string|array
+* @param1 expr:string|Array<string>
 * @return function
 * @module utils
 * @export compileSetter

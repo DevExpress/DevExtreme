@@ -1,12 +1,15 @@
 "use strict";
 
 var $ = require("jquery"),
+    eventsEngine = require("events/core/events_engine"),
     renderer = require("core/renderer"),
     fx = require("animation/fx"),
     pointerMock = require("../../../helpers/pointerMock.js"),
     dragEvents = require("events/drag"),
     CustomStore = require("data/custom_store"),
-    dateLocalization = require("localization/date");
+    dateLocalization = require("localization/date"),
+    isRenderer = require("core/utils/type").isRenderer,
+    config = require("core/config");
 
 require("ui/scheduler/ui.scheduler");
 
@@ -14,7 +17,7 @@ QUnit.module("Integration: Work space", {
     beforeEach: function() {
         fx.off = true;
         this.createInstance = function(options) {
-            this.instance = $("#scheduler").dxScheduler(options).dxScheduler("instance");
+            this.instance = $("#scheduler").dxScheduler($.extend(options, { maxAppointmentsPerCell: null })).dxScheduler("instance");
         };
     },
     afterEach: function() {
@@ -27,7 +30,7 @@ QUnit.test("Scheduler should have a right work space", function(assert) {
         views: ["day", "week"],
         currentView: "day"
     });
-    var $element = this.instance.element();
+    var $element = this.instance.$element();
 
     assert.ok($element.find(".dx-scheduler-work-space").dxSchedulerWorkSpaceDay("instance"), "Work space is day on init");
 
@@ -40,7 +43,7 @@ QUnit.test("Work space should have correct currentDate option", function(assert)
     this.createInstance({
         currentDate: new Date(2015, 0, 28)
     });
-    var $element = this.instance.element();
+    var $element = this.instance.$element();
 
     assert.deepEqual($element.find(".dx-scheduler-work-space").dxSchedulerWorkSpaceDay("instance").option("currentDate"), new Date(2015, 0, 28), "Work space has a right currentDate option");
 
@@ -54,7 +57,7 @@ QUnit.test("Work space should have correct min option", function(assert) {
     this.createInstance({
         min: new Date(2015, 0, 28)
     });
-    var $element = this.instance.element();
+    var $element = this.instance.$element();
 
     assert.deepEqual($element.find(".dx-scheduler-work-space").dxSchedulerWorkSpaceDay("instance").option("min"), new Date(2015, 0, 28), "Work space has a right currentDate option");
 
@@ -67,7 +70,7 @@ QUnit.test("Work space should have correct max option", function(assert) {
     this.createInstance({
         max: new Date(2015, 0, 28)
     });
-    var $element = this.instance.element();
+    var $element = this.instance.$element();
 
     assert.deepEqual($element.find(".dx-scheduler-work-space").dxSchedulerWorkSpaceDay("instance").option("max"), new Date(2015, 0, 28), "Work space has a right currentDate option");
 
@@ -81,7 +84,7 @@ QUnit.test("Work space should have correct firstDayOfWeek option", function(asse
         currentView: "week",
         firstDayOfWeek: 2
     });
-    var $element = this.instance.element();
+    var $element = this.instance.$element();
 
     assert.deepEqual($element.find(".dx-scheduler-work-space").dxSchedulerWorkSpaceWeek("instance").option("firstDayOfWeek"), 2, "Work space has a right first day of week");
 
@@ -97,7 +100,7 @@ QUnit.test("Scheduler work space should have a single type class", function(asse
         views: ["day", "week", "workWeek", "month"]
     });
 
-    var $element = this.instance.element();
+    var $element = this.instance.$element();
 
     var check = function(className) {
         var checked = true;
@@ -133,8 +136,8 @@ QUnit.test("Scheduler work space should have a single type class", function(asse
 QUnit.test("Pointer down on workspace cell should focus cell", function(assert) {
     this.createInstance({ currentDate: new Date(2015, 1, 10) });
 
-    var $firstCell = $(this.instance.element()).find(".dx-scheduler-date-table td").eq(0),
-        $otherCell = $(this.instance.element()).find(".dx-scheduler-date-table td").eq(1);
+    var $firstCell = $(this.instance.$element()).find(".dx-scheduler-date-table td").eq(0),
+        $otherCell = $(this.instance.$element()).find(".dx-scheduler-date-table td").eq(1);
 
     $firstCell.trigger("dxpointerdown");
 
@@ -153,7 +156,7 @@ QUnit.test("Double click on workspace cell should call scheduler.showAppointment
     this.instance.showAppointmentPopup = spy;
     try {
 
-        pointerMock(this.instance.element().find(".dx-scheduler-all-day-table-cell").first()).start().click().click();
+        pointerMock(this.instance.$element().find(".dx-scheduler-all-day-table-cell").first()).start().click().click();
 
         assert.ok(spy.calledOnce, "showAppointmentPopup is called");
         assert.deepEqual(spy.getCall(0).args[0], {
@@ -163,7 +166,7 @@ QUnit.test("Double click on workspace cell should call scheduler.showAppointment
         }, "showAppointmentPopup has a right arguments");
         assert.ok(spy.calledOn(this.instance), "showAppointmentPopup has a right context");
 
-        pointerMock(this.instance.element().find(".dx-scheduler-date-table-cell").eq(3)).start().click().click();
+        pointerMock(this.instance.$element().find(".dx-scheduler-date-table-cell").eq(3)).start().click().click();
         assert.deepEqual(spy.getCall(1).args[0], {
             startDate: new Date(2015, 1, 10, 1, 30),
             endDate: new Date(2015, 1, 10, 2, 0),
@@ -182,7 +185,7 @@ QUnit.test("Double click on works space cell should call scheduler.showAppointme
     this.instance.showAppointmentPopup = spy;
     try {
 
-        pointerMock(this.instance.element().find(".dx-scheduler-date-table-cell").eq(22)).start().click().click();
+        pointerMock(this.instance.$element().find(".dx-scheduler-date-table-cell").eq(22)).start().click().click();
         assert.deepEqual(spy.getCall(0).args[0], {
             startDate: new Date(2015, 1, 10, 1, 30),
             endDate: new Date(2015, 1, 10, 2, 0),
@@ -201,7 +204,7 @@ QUnit.test("Double click on work space cell should call scheduler.showAppointmen
     this.instance.showAppointmentPopup = spy;
     try {
 
-        pointerMock(this.instance.element().find(".dx-scheduler-date-table-cell").eq(22)).start().click().click();
+        pointerMock(this.instance.$element().find(".dx-scheduler-date-table-cell").eq(22)).start().click().click();
         assert.deepEqual(spy.getCall(0).args[0], {
             startDate: new Date(2015, 1, 17),
             endDate: new Date(2015, 1, 18)
@@ -232,7 +235,7 @@ QUnit.test("scheduler.showAppointmentPopup method should have resource arg if th
     var showAppointmentPopup = this.instance.showAppointmentPopup;
     this.instance.showAppointmentPopup = spy;
     try {
-        pointerMock(this.instance.element().find(".dx-scheduler-date-table-cell").eq(24)).start().click().click();
+        pointerMock(this.instance.$element().find(".dx-scheduler-date-table-cell").eq(24)).start().click().click();
         assert.deepEqual(spy.getCall(0).args[0], {
             startDate: new Date(2015, 1, 12, 0, 30),
             endDate: new Date(2015, 1, 12, 1),
@@ -266,7 +269,7 @@ QUnit.test("scheduler.showAppointmentPopup method should have resource arg if th
     this.instance.showAppointmentPopup = spy;
     try {
 
-        pointerMock(this.instance.element().find(".dx-scheduler-date-table-cell").eq(22)).start().click().click();
+        pointerMock(this.instance.$element().find(".dx-scheduler-date-table-cell").eq(22)).start().click().click();
         assert.deepEqual(spy.getCall(0).args[0], {
             startDate: new Date(2015, 1, 3),
             endDate: new Date(2015, 1, 4),
@@ -300,7 +303,7 @@ QUnit.test("WorkSpace should have a correct 'groups' option", function(assert) {
         ]
     });
 
-    var workSpace = this.instance.element().find(".dx-scheduler-work-space").dxSchedulerWorkSpaceDay("instance");
+    var workSpace = this.instance.$element().find(".dx-scheduler-work-space").dxSchedulerWorkSpaceDay("instance");
 
     assert.deepEqual(workSpace.option("groups"),
         [
@@ -340,7 +343,7 @@ QUnit.test("WorkSpace should have a correct 'startDayHour' option", function(ass
         startDayHour: 1
     });
 
-    var workSpace = this.instance.element().find(".dx-scheduler-work-space").dxSchedulerWorkSpaceDay("instance");
+    var workSpace = this.instance.$element().find(".dx-scheduler-work-space").dxSchedulerWorkSpaceDay("instance");
 
     assert.equal(workSpace.option("startDayHour"), 1, "Start day hour is OK on init");
 
@@ -353,7 +356,7 @@ QUnit.test("WorkSpace should have a correct 'endDayHour' option", function(asser
         endDayHour: 10
     });
 
-    var workSpace = this.instance.element().find(".dx-scheduler-work-space").dxSchedulerWorkSpaceDay("instance");
+    var workSpace = this.instance.$element().find(".dx-scheduler-work-space").dxSchedulerWorkSpaceDay("instance");
 
     assert.equal(workSpace.option("endDayHour"), 10, "End day hour is OK on init");
 
@@ -362,32 +365,59 @@ QUnit.test("WorkSpace should have a correct 'endDayHour' option", function(asser
 });
 
 QUnit.test("drop and dragenter handlers should be different for date table and allDay table, T245137", function(assert) {
+    var originalEventsEngineOn = eventsEngine.on;
+    var guid = 0;
+    var log = {};
+
+    log[dragEvents.drop] = {};
+    log[dragEvents.enter] = {};
+
+
+    eventsEngine.on = function($element, eventName) {
+        var logByEvent = log[eventName.split(".")[0]];
+
+        if(!logByEvent) {
+            return;
+        }
+
+        if($element.hasClass("dx-scheduler-date-table")) {
+            logByEvent["dateTable"] = guid++;
+        }
+        if($element.hasClass("dx-scheduler-all-day-table")) {
+            logByEvent["allDayTable"] = guid++;
+        }
+    };
+
     this.createInstance();
 
-    var $workSpace = this.instance.element().find(".dx-scheduler-work-space"),
-        $dateTable = $workSpace.find(".dx-scheduler-date-table"),
-        $allDayTable = $workSpace.find(".dx-scheduler-all-day-table");
+    assert.ok(log[dragEvents.drop].allDayTable > log[dragEvents.drop].dateTable, "AllDay drop handler was created after dateTable drop handler");
+    assert.ok(log[dragEvents.enter].allDayTable > log[dragEvents.enter].dateTable, "AllDay dragenter handler was created after dateTable dragenter handler");
 
-    var allDayDropHandler = $._data($allDayTable[0], "events")[dragEvents.drop],
-        dateTableDropHandler = $._data($dateTable[0], "events")[dragEvents.drop],
-        allDayDragEnterHandler = $._data($allDayTable[0], "events")[dragEvents.enter],
-        dateTableDragEnterHandler = $._data($dateTable[0], "events")[dragEvents.enter];
-
-    assert.ok(allDayDropHandler[0].guid > dateTableDropHandler[0].guid, "AllDay drop handler was created after dateTable drop handler");
-    assert.ok(allDayDragEnterHandler[0].guid > dateTableDragEnterHandler[0].guid, "AllDay dragenter handler was created after dateTable dragenter handler");
+    eventsEngine.on = originalEventsEngineOn;
 });
 
 QUnit.test("event handlers should be reattached after changing allDayExpanded", function(assert) {
+    var originalEventsEngineOn = eventsEngine.on;
+    var dateTableDropSubscriptionLog = [];
+
+    eventsEngine.on = function($element, eventName) {
+        eventName = eventName.split(".")[0];
+
+        if(eventName === dragEvents.drop && $element.hasClass("dx-scheduler-date-table")) {
+            dateTableDropSubscriptionLog.push(arguments);
+        }
+    };
+
+
     this.createInstance();
 
-    var $workSpace = this.instance.element().find(".dx-scheduler-work-space"),
-        $dateTable = $workSpace.find(".dx-scheduler-date-table");
-
-    var dropHandlerGuid = $._data($dateTable[0], "events")[dragEvents.drop][0].guid;
+    var previousSubscriptionsLength = dateTableDropSubscriptionLog.length;
 
     this.instance.getWorkSpace().option("allDayExpanded", true);
 
-    assert.ok($._data($dateTable[0], "events")[dragEvents.drop][0].guid !== dropHandlerGuid, "Events were reattached");
+    assert.ok(dateTableDropSubscriptionLog.length > previousSubscriptionsLength, "Events were reattached");
+
+    eventsEngine.on = originalEventsEngineOn;
 });
 
 QUnit.test("Work space should have right all-day-collapsed class on init", function(assert) {
@@ -401,7 +431,7 @@ QUnit.test("Work space should have right all-day-collapsed class on init", funct
             endDate: new Date(2015, 1, 9, 8),
         }]
     });
-    var $element = this.instance.element(),
+    var $element = this.instance.$element(),
         $workSpace = $element.find(".dx-scheduler-work-space");
 
     assert.ok($workSpace.hasClass("dx-scheduler-work-space-all-day-collapsed"), "Work-space has right class");
@@ -420,7 +450,7 @@ QUnit.test("Work space should have right showAllDayPanel option value", function
     this.createInstance({
         showAllDayPanel: false
     });
-    var $element = this.instance.element(),
+    var $element = this.instance.$element(),
         $workSpace = $element.find(".dx-scheduler-work-space");
 
     assert.deepEqual($workSpace.dxSchedulerWorkSpaceDay("instance").option("showAllDayPanel"), false, "Work space has a right allDay visibility");
@@ -443,7 +473,7 @@ QUnit.test("Work space 'allDayExpanded' option value when 'showAllDayPanel' = tr
         }]
     });
 
-    var $element = this.instance.element();
+    var $element = this.instance.$element();
 
     assert.deepEqual($element.find(".dx-scheduler-work-space").dxSchedulerWorkSpaceWeek("instance").option("allDayExpanded"), true, "Work space has a right allDay visibility");
 
@@ -470,7 +500,7 @@ QUnit.test("Work space 'allDayExpanded' option value should be correct after cha
         }]
     });
 
-    var $element = this.instance.element();
+    var $element = this.instance.$element();
 
     this.instance.option("currentView", "day");
     assert.deepEqual($element.find(".dx-scheduler-work-space").dxSchedulerWorkSpaceDay("instance").option("allDayExpanded"), false, "Work space has a right allDay visibility");
@@ -492,7 +522,7 @@ QUnit.test("Work space 'allDayExpanded' option value should be correct after cha
         }]
     });
 
-    var $element = this.instance.element();
+    var $element = this.instance.$element();
 
     assert.deepEqual($element.find(".dx-scheduler-work-space").dxSchedulerWorkSpaceDay("instance").option("allDayExpanded"), true, "Work space has a right allDay visibility");
 
@@ -516,7 +546,7 @@ QUnit.test("Work space 'allDayExpanded' option value should be correct after del
 
     this.instance.deleteAppointment(appointment);
 
-    assert.deepEqual(this.instance.element().find(".dx-scheduler-work-space").dxSchedulerWorkSpaceWeek("instance").option("allDayExpanded"), false, "Work space has correct allDay visibility");
+    assert.deepEqual(this.instance.$element().find(".dx-scheduler-work-space").dxSchedulerWorkSpaceWeek("instance").option("allDayExpanded"), false, "Work space has correct allDay visibility");
 });
 
 QUnit.test("Work space 'allDayExpanded' option should depend on client-side filtered appointments", function(assert) {
@@ -538,7 +568,7 @@ QUnit.test("Work space 'allDayExpanded' option should depend on client-side filt
         dataSource: [appointment]
     });
 
-    assert.deepEqual(this.instance.element().find(".dx-scheduler-work-space").dxSchedulerWorkSpaceDay("instance").option("allDayExpanded"), false, "Work space has correct allDay visibility");
+    assert.deepEqual(this.instance.$element().find(".dx-scheduler-work-space").dxSchedulerWorkSpaceDay("instance").option("allDayExpanded"), false, "Work space has correct allDay visibility");
 });
 
 QUnit.test("Cell data should be applied when resources are loaded", function(assert) {
@@ -562,7 +592,7 @@ QUnit.test("Cell data should be applied when resources are loaded", function(ass
         ],
         dataSource: [],
         onContentReady: function(e) {
-            var groups = e.component.element().find(".dx-scheduler-date-table-cell").data("dxCellData").groups;
+            var groups = e.component.$element().find(".dx-scheduler-date-table-cell").data("dxCellData").groups;
             assert.deepEqual(groups, { owner: 1 });
             done();
         }
@@ -624,7 +654,7 @@ QUnit.test("Appointments in month view should be sorted same as in all-day secti
         currentView: "week"
     });
 
-    var allDayAppointments = this.instance.element().find(".dx-scheduler-appointment"),
+    var allDayAppointments = this.instance.$element().find(".dx-scheduler-appointment"),
         i;
 
     for(i = 0; i < 3; i++) {
@@ -633,7 +663,7 @@ QUnit.test("Appointments in month view should be sorted same as in all-day secti
 
     this.instance.option("currentView", "month");
 
-    var monthAppointments = this.instance.element().find(".dx-scheduler-appointment");
+    var monthAppointments = this.instance.$element().find(".dx-scheduler-appointment");
     for(i = 0; i < 3; i++) {
         assert.deepEqual(monthAppointments.eq(i).data("dxItemData"), items[i], "Order is right");
     }
@@ -644,12 +674,12 @@ QUnit.test("Data cell should has right content when used dataCellTemplate option
         currentView: "week",
         currentDate: new Date(2016, 8, 5),
         firstDayOfWeek: 0,
-        dataCellTemplate: function(itemData, index, $container) {
-            $container.addClass("custom-cell-class");
+        dataCellTemplate: function(itemData, index, container) {
+            $(container).addClass("custom-cell-class");
         }
     });
 
-    var $element = this.instance.element();
+    var $element = this.instance.$element();
 
     assert.ok($element.find(".custom-cell-class").length > 0, "class is ok");
 });
@@ -659,17 +689,17 @@ QUnit.test("Data cell should has right content when dataCellTemplate option was 
         currentView: "week",
         currentDate: new Date(2016, 8, 5),
         firstDayOfWeek: 0,
-        dataCellTemplate: function(itemData, index, $container) {
-            $container.addClass("custom-cell-class");
+        dataCellTemplate: function(itemData, index, container) {
+            $(container).addClass("custom-cell-class");
         }
     });
 
-    var $element = this.instance.element();
+    var $element = this.instance.$element();
 
     assert.ok($element.find(".custom-cell-class").length > 0, "class before option changing is ok");
 
-    this.instance.option("dataCellTemplate", function(itemData, index, $container) {
-        $container.addClass("new-custom-class");
+    this.instance.option("dataCellTemplate", function(itemData, index, container) {
+        $(container).addClass("new-custom-class");
     });
 
     assert.ok($element.find(".new-custom-class").length > 0, "class is ok");
@@ -716,8 +746,8 @@ QUnit.test("dataCellTemplate should take cellElement with correct geometry(T4535
         dataSource: [],
         dataCellTemplate: function(cellData, cellIndex, cellElement) {
             if(!cellData.allDay && !cellIndex) {
-                assert.roughEqual(cellElement.outerWidth(), 85, 1.001, "Data cell width is OK");
-                assert.equal(cellElement.outerHeight(), 50, "Data cell height is OK");
+                assert.roughEqual($(cellElement).outerWidth(), 85, 1.001, "Data cell width is OK");
+                assert.equal($(cellElement).outerHeight(), 50, "Data cell height is OK");
             }
         }
     });
@@ -733,15 +763,15 @@ QUnit.test("dataCellTemplate for all-day panel should take cellElement with corr
         dataSource: [],
         dataCellTemplate: function(cellData, cellIndex, cellElement) {
             if(cellData.allDay && !cellIndex) {
-                assert.roughEqual(cellElement.outerWidth(), 85, 1.001, "Data cell width is OK");
-                assert.roughEqual(cellElement.outerHeight(), 24, 1.001, "Data cell height is OK");
+                assert.roughEqual($(cellElement).outerWidth(), 85, 1.001, "Data cell width is OK");
+                assert.roughEqual($(cellElement).outerHeight(), 24, 1.001, "Data cell height is OK");
             }
         }
     });
 });
 
 QUnit.test("dateCellTemplate should take cellElement with correct geometry(T453520)", function(assert) {
-    assert.expect(2);
+    assert.expect(3);
     this.createInstance({
         currentView: "week",
         views: ["week"],
@@ -750,15 +780,17 @@ QUnit.test("dateCellTemplate should take cellElement with correct geometry(T4535
         dataSource: [],
         dateCellTemplate: function(cellData, cellIndex, cellElement) {
             if(!cellIndex) {
-                assert.roughEqual(cellElement.outerWidth(), 85, 1.001, "Date cell width is OK");
-                assert.equal(cellElement.outerHeight(), 40, "Date cell height is OK");
+                assert.equal(isRenderer(cellElement), config().useJQueryRenderer, "element is correct");
+                assert.roughEqual($(cellElement).outerWidth(), 85, 1.001, "Date cell width is OK");
+                assert.equal($(cellElement).outerHeight(), 40, "Date cell height is OK");
             }
         }
     });
 });
 
 QUnit.test("timeCellTemplate should take cellElement with correct geometry(T453520)", function(assert) {
-    assert.expect(2);
+    assert.expect(3);
+
     this.createInstance({
         currentView: "week",
         views: ["week"],
@@ -767,15 +799,16 @@ QUnit.test("timeCellTemplate should take cellElement with correct geometry(T4535
         dataSource: [],
         timeCellTemplate: function(cellData, cellIndex, cellElement) {
             if(!cellIndex) {
-                assert.equal(cellElement.outerHeight(), 100, "Time cell height is OK");
-                assert.equal(cellElement.outerWidth(), 100, "Time cell width is OK");
+                assert.equal(isRenderer(cellElement), config().useJQueryRenderer, "element is correct");
+                assert.equal($(cellElement).outerHeight(), 100, "Time cell height is OK");
+                assert.equal($(cellElement).outerWidth(), 100, "Time cell width is OK");
             }
         }
     });
 });
 
 QUnit.test("resourceCellTemplate should take cellElement with correct geometry(T453520)", function(assert) {
-    assert.expect(2);
+    assert.expect(3);
     this.createInstance({
         currentView: "week",
         views: ["week"],
@@ -789,7 +822,8 @@ QUnit.test("resourceCellTemplate should take cellElement with correct geometry(T
         }],
         resourceCellTemplate: function(cellData, cellIndex, cellElement) {
             if(!cellIndex) {
-                var $cell = cellElement.parent();
+                assert.equal(isRenderer(cellElement), config().useJQueryRenderer, "element is correct");
+                var $cell = $(cellElement).parent();
                 assert.roughEqual($cell.outerWidth(), 299, 1.001, "Resource cell width is OK");
                 assert.equal($cell.outerHeight(), 30, "Resource cell height is OK");
             }
@@ -812,7 +846,7 @@ QUnit.test("resourceCellTemplate should take cellElement with correct geometry i
         }],
         resourceCellTemplate: function(cellData, cellIndex, cellElement) {
             if(!cellIndex) {
-                var $cell = cellElement.parent();
+                var $cell = $(cellElement).parent();
                 assert.equal($cell.outerWidth(), 99, "Resource cell width is OK");
                 assert.roughEqual($cell.outerHeight(), 275, 1.001, "Resource cell height is OK");
             }
@@ -881,15 +915,15 @@ QUnit.test("resourceCellTemplate should work correct in timeline view", function
                 ]
             }
         ],
-        resourceCellTemplate: function(itemData, index, $container) {
+        resourceCellTemplate: function(itemData, index, container) {
             if(index === 0) {
-                $container.addClass("custom-group-cell-class");
+                $(container).addClass("custom-group-cell-class");
             }
         }
     });
 
-    var $cell1 = this.instance.element().find(".dx-scheduler-group-header-content").eq(0),
-        $cell2 = this.instance.element().find(".dx-scheduler-group-header-content").eq(1);
+    var $cell1 = this.instance.$element().find(".dx-scheduler-group-header-content").eq(0),
+        $cell2 = this.instance.$element().find(".dx-scheduler-group-header-content").eq(1);
 
     assert.ok($cell1.hasClass("custom-group-cell-class"), "first cell has right class");
     assert.notOk($cell2.hasClass("custom-group-cell-class"), "second cell has no class");
@@ -923,17 +957,17 @@ QUnit.test("resourceCellTemplate should work correct in agenda view", function(a
                 ]
             }
         ],
-        resourceCellTemplate: function(itemData, index, $container) {
+        resourceCellTemplate: function(itemData, index, container) {
             if(index === 0) {
-                $container.addClass("custom-group-cell-class");
+                $(container).addClass("custom-group-cell-class");
             }
 
             return $("<div />").text(itemData.text);
         }
     });
 
-    var $cell1 = this.instance.element().find(".dx-scheduler-group-header-content").eq(0),
-        $cell2 = this.instance.element().find(".dx-scheduler-group-header-content").eq(1);
+    var $cell1 = this.instance.$element().find(".dx-scheduler-group-header-content").eq(0),
+        $cell2 = this.instance.$element().find(".dx-scheduler-group-header-content").eq(1);
 
     assert.ok($cell1.hasClass("custom-group-cell-class"), "first cell has right class");
     assert.notOk($cell2.hasClass("custom-group-cell-class"), "second cell has no class");
@@ -967,15 +1001,15 @@ QUnit.test("dateCellTemplate should work correct", function(assert) {
                 ]
             }
         ],
-        dateCellTemplate: function(itemData, index, $container) {
+        dateCellTemplate: function(itemData, index, container) {
             if(index === 0) {
-                $container.addClass("custom-group-cell-class");
+                $(container).addClass("custom-group-cell-class");
             }
         }
     });
 
-    var $cell1 = this.instance.element().find(".dx-scheduler-header-panel-cell").eq(0),
-        $cell2 = this.instance.element().find(".dx-scheduler-header-panel-cell").eq(1);
+    var $cell1 = this.instance.$element().find(".dx-scheduler-header-panel-cell").eq(0),
+        $cell2 = this.instance.$element().find(".dx-scheduler-header-panel-cell").eq(1);
 
     assert.ok($cell1.hasClass("custom-group-cell-class"), "first cell has right class");
     assert.notOk($cell2.hasClass("custom-group-cell-class"), "second cell has no class");
@@ -1009,15 +1043,15 @@ QUnit.test("dateCellTemplate should work correct in agenda view", function(asser
                 ]
             }
         ],
-        dateCellTemplate: function(itemData, index, $container) {
+        dateCellTemplate: function(itemData, index, container) {
             if(index === 0) {
-                $container.addClass("custom-group-cell-class");
+                $(container).addClass("custom-group-cell-class");
             }
         }
     });
 
-    var $cell1 = this.instance.element().find(".dx-scheduler-time-panel-cell").eq(0),
-        $cell2 = this.instance.element().find(".dx-scheduler-time-panel-cell").eq(1);
+    var $cell1 = this.instance.$element().find(".dx-scheduler-time-panel-cell").eq(0),
+        $cell2 = this.instance.$element().find(".dx-scheduler-time-panel-cell").eq(1);
 
     assert.ok($cell1.hasClass("custom-group-cell-class"), "first cell has right class");
     assert.notOk($cell2.hasClass("custom-group-cell-class"), "second cell has no class");
@@ -1142,10 +1176,10 @@ QUnit.test("workSpace recalculation after render cellTemplates", function(assert
         }
     });
 
-    var schedulerHeaderHeight = parseInt(this.instance.element().find(".dx-scheduler-header").outerHeight(true), 10),
-        schedulerHeaderPanelHeight = parseInt(this.instance.element().find(".dx-scheduler-header-panel").outerHeight(true), 10),
-        $allDayTitle = this.instance.element().find(".dx-scheduler-all-day-title"),
-        $dateTableScrollable = this.instance.element().find(".dx-scheduler-date-table-scrollable");
+    var schedulerHeaderHeight = parseInt(this.instance.$element().find(".dx-scheduler-header").outerHeight(true), 10),
+        schedulerHeaderPanelHeight = parseInt(this.instance.$element().find(".dx-scheduler-header-panel").outerHeight(true), 10),
+        $allDayTitle = this.instance.$element().find(".dx-scheduler-all-day-title"),
+        $dateTableScrollable = this.instance.$element().find(".dx-scheduler-date-table-scrollable");
 
     assert.equal(parseInt($allDayTitle.css("top"), 10), schedulerHeaderHeight + schedulerHeaderPanelHeight, "All day title element top value");
     assert.equal(parseInt($dateTableScrollable.css("padding-bottom"), 10), schedulerHeaderPanelHeight, "dateTableScrollable element padding bottom");
@@ -1179,15 +1213,21 @@ QUnit.test("WorkSpace recalculation works fine after render resourceCellTemplate
         }
     });
 
-    var schedulerHeaderHeight = parseInt(this.instance.element().find(".dx-scheduler-header").outerHeight(true), 10),
-        schedulerHeaderPanelHeight = parseInt(this.instance.element().find(".dx-scheduler-header-panel").outerHeight(true), 10),
-        $allDayTitle = this.instance.element().find(".dx-scheduler-all-day-title"),
-        $dateTableScrollable = this.instance.element().find(".dx-scheduler-date-table-scrollable"),
-        allDayPanelHeight = this.instance._workSpace.getAllDayHeight();
+    var schedulerHeaderHeight = parseInt(this.instance.$element().find(".dx-scheduler-header").outerHeight(true), 10),
+        schedulerHeaderPanelHeight = parseInt(this.instance.$element().find(".dx-scheduler-header-panel").outerHeight(true), 10),
+        $allDayTitle = this.instance.$element().find(".dx-scheduler-all-day-title"),
+        $dateTableScrollable = this.instance.$element().find(".dx-scheduler-date-table-scrollable"),
+        allDayPanelHeight = this.instance._workSpace.getAllDayHeight(),
+        $sidebarScrollable = this.instance.$element().find(".dx-scheduler-sidebar-scrollable"),
+        $headerScrollable = this.instance.$element().find(".dx-scheduler-header-scrollable");
 
     assert.equal(parseInt($allDayTitle.css("top"), 10), schedulerHeaderHeight + schedulerHeaderPanelHeight, "All day title element top value");
     assert.roughEqual(parseInt($dateTableScrollable.css("padding-bottom"), 10), schedulerHeaderPanelHeight + allDayPanelHeight, 1, "dateTableScrollable element padding bottom");
     assert.roughEqual(parseInt($dateTableScrollable.css("margin-bottom"), 10), -1 * (schedulerHeaderPanelHeight + allDayPanelHeight), 1, "dateTableScrollable element margin bottom");
+
+    assert.roughEqual(parseInt($sidebarScrollable.css("padding-bottom"), 10), schedulerHeaderPanelHeight + allDayPanelHeight, 1, "sidebarScrollable element padding bottom");
+    assert.roughEqual(parseInt($sidebarScrollable.css("margin-bottom"), 10), -1 * (schedulerHeaderPanelHeight + allDayPanelHeight), 1, "sidebarScrollable element margin bottom");
+    assert.roughEqual($headerScrollable.outerHeight(), schedulerHeaderPanelHeight + allDayPanelHeight, 1, "headerScrollable height is correct");
 });
 
 QUnit.test("WorkSpace recalculation works fine after render dateCellTemplate if workspace has allDay appointment", function(assert) {
@@ -1207,10 +1247,10 @@ QUnit.test("WorkSpace recalculation works fine after render dateCellTemplate if 
         }
     });
 
-    var schedulerHeaderHeight = parseInt(this.instance.element().find(".dx-scheduler-header").outerHeight(true), 10),
-        schedulerHeaderPanelHeight = parseInt(this.instance.element().find(".dx-scheduler-header-panel").outerHeight(true), 10),
-        $allDayTitle = this.instance.element().find(".dx-scheduler-all-day-title"),
-        $dateTableScrollable = this.instance.element().find(".dx-scheduler-date-table-scrollable"),
+    var schedulerHeaderHeight = parseInt(this.instance.$element().find(".dx-scheduler-header").outerHeight(true), 10),
+        schedulerHeaderPanelHeight = parseInt(this.instance.$element().find(".dx-scheduler-header-panel").outerHeight(true), 10),
+        $allDayTitle = this.instance.$element().find(".dx-scheduler-all-day-title"),
+        $dateTableScrollable = this.instance.$element().find(".dx-scheduler-date-table-scrollable"),
         allDayPanelHeight = this.instance._workSpace.getAllDayHeight();
 
     assert.equal(parseInt($allDayTitle.css("top"), 10), schedulerHeaderHeight + schedulerHeaderPanelHeight, "All day title element top value");
@@ -1231,7 +1271,7 @@ QUnit.test("Timepanel text should be calculated correctly if DST makes sense (T4
         height: 600
     });
 
-    var $cells = this.instance.element().find(".dx-scheduler-time-panel-cell div");
+    var $cells = this.instance.$element().find(".dx-scheduler-time-panel-cell div");
 
     assert.equal($cells.eq(0).text(), dateLocalization.format(new Date(2016, 10, 6, 1), "shorttime"), "Cell text is OK");
     assert.equal($cells.eq(1).text(), dateLocalization.format(new Date(2016, 10, 6, 2), "shorttime"), "Cell text is OK");
@@ -1274,8 +1314,8 @@ QUnit.test("ScrollTo of dateTable scrollable shouldn't be called when dateTable 
         height: 500
     });
 
-    var headerScrollable = this.instance.element().find(".dx-scheduler-header-scrollable").dxScrollable("instance"),
-        dateTableScrollable = this.instance.element().find(".dx-scheduler-date-table-scrollable").dxScrollable("instance"),
+    var headerScrollable = this.instance.$element().find(".dx-scheduler-header-scrollable").dxScrollable("instance"),
+        dateTableScrollable = this.instance.$element().find(".dx-scheduler-date-table-scrollable").dxScrollable("instance"),
         headerScrollToSpy = sinon.spy(headerScrollable, "scrollTo"),
         dateTableScrollToSpy = sinon.spy(dateTableScrollable, "scrollTo");
 
@@ -1293,8 +1333,8 @@ QUnit.test("ScrollTo of dateTable & header scrollable should are called when hea
         height: 500
     });
 
-    var headerScrollable = this.instance.element().find(".dx-scheduler-header-scrollable").dxScrollable("instance"),
-        dateTableScrollable = this.instance.element().find(".dx-scheduler-date-table-scrollable").dxScrollable("instance"),
+    var headerScrollable = this.instance.$element().find(".dx-scheduler-header-scrollable").dxScrollable("instance"),
+        dateTableScrollable = this.instance.$element().find(".dx-scheduler-date-table-scrollable").dxScrollable("instance"),
         headerScrollToSpy = sinon.spy(headerScrollable, "scrollTo"),
         dateTableScrollToSpy = sinon.spy(dateTableScrollable, "scrollTo");
 
@@ -1313,8 +1353,8 @@ QUnit.test("ScrollTo of sidebar scrollable shouldn't be called when sidebar scro
         height: 500
     });
 
-    var sideBarScrollable = this.instance.element().find(".dx-scheduler-sidebar-scrollable").dxScrollable("instance"),
-        dateTableScrollable = this.instance.element().find(".dx-scheduler-date-table-scrollable").dxScrollable("instance"),
+    var sideBarScrollable = this.instance.$element().find(".dx-scheduler-sidebar-scrollable").dxScrollable("instance"),
+        dateTableScrollable = this.instance.$element().find(".dx-scheduler-date-table-scrollable").dxScrollable("instance"),
         sideBarScrollToSpy = sinon.spy(sideBarScrollable, "scrollTo"),
         dateTableScrollToSpy = sinon.spy(dateTableScrollable, "scrollTo");
 

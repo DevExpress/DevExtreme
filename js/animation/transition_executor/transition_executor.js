@@ -163,7 +163,7 @@ var TransitionExecutor = Class.inherit({
     /**
     * @name TransitionExecutorMethods_start
     * @publicName start()
-    * @return Promise
+    * @return Promise<void>
     */
     start: function() {
         var that = this,

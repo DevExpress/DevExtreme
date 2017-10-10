@@ -4,9 +4,10 @@ var $ = require("../../core/renderer"),
     noop = require("../../core/utils/common").noop,
     extend = require("../../core/utils/extend").extend,
     registerComponent = require("../../core/component_registrator"),
-    SchedulerWorkSpace = require("./ui.scheduler.work_space"),
+    SchedulerWorkSpace = require("./ui.scheduler.work_space.indicator"),
     dateUtils = require("../../core/utils/date"),
-    tableCreator = require("./ui.scheduler.table_creator");
+    tableCreator = require("./ui.scheduler.table_creator"),
+    HorizontalShader = require("./ui.scheduler.currentTimeShader.horizontal");
 
 var TIMELINE_CLASS = "dx-scheduler-timeline",
     GROUP_TABLE_CLASS = "dx-scheduler-group-table",
@@ -21,7 +22,7 @@ var HORIZONTAL = "horizontal",
 var SchedulerTimeline = SchedulerWorkSpace.inherit({
     _init: function() {
         this.callBase();
-        this.element().addClass(TIMELINE_CLASS);
+        this.$element().addClass(TIMELINE_CLASS);
         this._$sidebarTable = $("<table>")
             .addClass(GROUP_TABLE_CLASS);
     },
@@ -108,7 +109,7 @@ var SchedulerTimeline = SchedulerWorkSpace.inherit({
             return this._$dateTable.outerHeight();
         }
 
-        return this.element().outerHeight();
+        return this.$element().outerHeight();
     },
 
     _dateTableScrollableConfig: function() {
@@ -159,10 +160,59 @@ var SchedulerTimeline = SchedulerWorkSpace.inherit({
         this._renderTimePanel();
         this._renderDateTable();
 
-        this._$sidebarTable.appendTo(this._sidebarScrollable.content());
+        this._shader = new HorizontalShader();
+        this._renderDateTimeIndication();
+        this._setIndicationUpdateInterval();
+
+        this._$sidebarTable.appendTo(this._sidebarScrollable.$content());
 
         this._setGroupHeaderCellsHeight();
         this._applyCellTemplates(groupCellTemplates);
+    },
+
+    getIndicationWidth: function() {
+        var today = this._getToday(),
+            cellWidth = this.getCellWidth(),
+            date = this._getIndicationFirstViewDate(),
+            hiddenInterval = this._getHiddenInterval(),
+            timeDiff = today.getTime() - date.getTime();
+
+        var differenceInDays = Math.ceil(timeDiff / toMs("day")) - 1,
+            duration = timeDiff - differenceInDays * hiddenInterval,
+            cellCount = duration / this.getCellDuration();
+
+        return cellCount * cellWidth;
+    },
+
+    _renderIndicator: function(width, height, rtlOffset, $container) {
+        var $indicator = this._createIndicator($container);
+        $indicator.height($container.outerHeight());
+        $indicator.css("left", rtlOffset ? rtlOffset - width : width);
+    },
+
+    _isVerticalShader: function() {
+        return false;
+    },
+
+    _isCurrentTimeHeaderCell: function(headerIndex) {
+        var result = false;
+
+        if(this.option("showCurrentTimeIndicator") && this._needRenderDateTimeIndicator()) {
+            var date = this._getDateByIndex(headerIndex);
+
+            var now = this._getToday();
+            date = new Date(date);
+
+            if(dateUtils.sameDate(now, date)) {
+                var startCellDate = new Date(date),
+                    endCellDate = new Date(date);
+                endCellDate = endCellDate.setMilliseconds(date.getMilliseconds() + this.getCellDuration());
+
+                result = dateUtils.dateInRange(now, startCellDate, endCellDate);
+            }
+        }
+
+        return result;
     },
 
     _cleanView: function() {
@@ -193,7 +243,7 @@ var SchedulerTimeline = SchedulerWorkSpace.inherit({
 
     _getWorkSpaceMinHeight: function() {
         var minHeight = this._getWorkSpaceHeight(),
-            workspaceContainerHeight = this.element().outerHeight(true) - this.getHeaderPanelHeight();
+            workspaceContainerHeight = this.$element().outerHeight(true) - this.getHeaderPanelHeight();
 
         if(minHeight < workspaceContainerHeight) {
             minHeight = workspaceContainerHeight;
@@ -234,11 +284,11 @@ var SchedulerTimeline = SchedulerWorkSpace.inherit({
     },
 
     _detachGroupCountAttr: function() {
-        this.element().removeAttr(TIMELINE_GROUPED_ATTR);
+        this.$element().removeAttr(TIMELINE_GROUPED_ATTR);
     },
 
     _attachGroupCountAttr: function() {
-        this.element().attr(TIMELINE_GROUPED_ATTR, this.option("groups").length);
+        this.$element().attr(TIMELINE_GROUPED_ATTR, this.option("groups").length);
     },
 
     _getCellCoordinatesByIndex: function(index) {
@@ -274,6 +324,10 @@ var SchedulerTimeline = SchedulerWorkSpace.inherit({
 
     _getGroupIndexByCell: function($cell) {
         return $cell.parent().index();
+    },
+
+    _getIndicationFirstViewDate: function() {
+        return new Date(this._firstViewDate);
     },
 
     _getIntervalBetween: function(currentDate, allDay) {
@@ -341,7 +395,7 @@ var SchedulerTimeline = SchedulerWorkSpace.inherit({
         var isRtl = this.option("rtlEnabled");
 
         var result = {},
-            $scrollable = this.getScrollable().element(),
+            $scrollable = this.getScrollable().$element(),
             cellWidth = this.getCellWidth(),
             scrollableOffset = isRtl ? (this.getScrollableOuterWidth() - this.getScrollableScrollLeft()) : this.getScrollableScrollLeft(),
             scrolledCellCount = scrollableOffset / cellWidth,

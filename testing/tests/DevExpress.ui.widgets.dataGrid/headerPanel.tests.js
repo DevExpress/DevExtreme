@@ -694,14 +694,14 @@ QUnit.test("Add button via the onToolbarPreparing option when there is column ch
         assert.equal(e.toolbarOptions.items[0].name, "columnChooserButton", "has column chooser button");
 
         e.toolbarOptions.items.push({
-            template: function(data, index, $container) {
+            template: function(data, index, container) {
                 $("<div/>")
                     .addClass("custom-button")
                     .dxButton({
                         text: "Custom Button",
                         width: 50
                     })
-                    .appendTo($container);
+                    .appendTo(container);
             },
             location: "before",
             locateInMenu: "auto"

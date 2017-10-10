@@ -7,13 +7,40 @@ var registerComponent = require("../../core/component_registrator"),
 var TIMELINE_CLASS = "dx-scheduler-timeline-month",
     DAY_IN_MILLISECONDS = 86400000;
 
+var toMs = dateUtils.dateToMilliseconds;
+
 var SchedulerTimelineMonth = SchedulerTimeline.inherit({
+
+    _renderView: function() {
+        this.callBase();
+
+        this._updateScrollable();
+    },
+
+    _updateScrollable: function() {
+        this._dateTableScrollable.update();
+        this._headerScrollable.update();
+        this._sidebarScrollable.update();
+    },
+
     _getElementClass: function() {
         return TIMELINE_CLASS;
     },
 
     _getDateHeaderTemplate: function() {
         return this.option("dateCellTemplate");
+    },
+
+    _getHiddenInterval: function() {
+        return 0;
+    },
+
+    _getIndicationFirstViewDate: function() {
+        return dateUtils.trimTime(new Date(this._firstViewDate));
+    },
+
+    getCellDuration: function() {
+        return toMs("day");
     },
 
     _getCellCount: function() {

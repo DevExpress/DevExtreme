@@ -5,6 +5,7 @@ var $ = require("../../core/renderer"),
     Guid = require("../../core/guid"),
     registerComponent = require("../../core/component_registrator"),
     typeUtils = require("../../core/utils/type"),
+    domUtils = require("../../core/utils/dom"),
     isWrapped = require("../../core/utils/variable_wrapper").isWrapped,
     isWritableWrapped = require("../../core/utils/variable_wrapper").isWritableWrapped,
     unwrap = require("../../core/utils/variable_wrapper").unwrap,
@@ -46,6 +47,7 @@ var FORM_EDITOR_BY_DEFAULT = "dxTextBox",
     FIELD_ITEM_CONTENT_LOCATION_CLASS = "dx-field-item-content-location-",
     FIELD_ITEM_CONTENT_WRAPPER_CLASS = "dx-field-item-content-wrapper",
     FIELD_ITEM_HELP_TEXT_CLASS = "dx-field-item-help-text",
+    SINGLE_COLUMN_ITEM_CONTENT = "dx-single-column-item-content",
 
     LABEL_HORIZONTAL_ALIGNMENT_CLASS = "dx-label-h-align",
     LABEL_VERTICAL_ALIGNMENT_CLASS = "dx-label-v-align",
@@ -288,7 +290,7 @@ var LayoutManager = Widget.inherit({
 
     _render: function() {
         this._clearEditorInstances();
-        this.element().addClass(FORM_LAYOUT_MANAGER_CLASS);
+        this.$element().addClass(FORM_LAYOUT_MANAGER_CLASS);
 
         this.callBase();
     },
@@ -311,7 +313,7 @@ var LayoutManager = Widget.inherit({
 
         if(that._items && that._items.length) {
             var colCount = that._getColCount(),
-                $container = $("<div>").appendTo(that.element()),
+                $container = $("<div>").appendTo(that.$element()),
                 layoutItems;
 
             that._prepareItemsWithMerging(colCount);
@@ -350,28 +352,31 @@ var LayoutManager = Widget.inherit({
             _layoutStrategy: that._hasBrowserFlex() ? LAYOUT_STRATEGY_FLEX : LAYOUT_STRATEGY_FALLBACK,
             onLayoutChanged: function() {
                 var onLayoutChanged = that.option("onLayoutChanged"),
-                    isLayoutChanged = that.isLayoutChanged();
+                    isSingleColumnMode = that.isSingleColumnMode();
 
                 if(onLayoutChanged) {
-                    that.element().toggleClass(LAYOUT_MANAGER_ONE_COLUMN, isLayoutChanged);
-                    onLayoutChanged(isLayoutChanged);
+                    that.$element().toggleClass(LAYOUT_MANAGER_ONE_COLUMN, isSingleColumnMode);
+                    onLayoutChanged(isSingleColumnMode);
                 }
             },
             onContentReady: function(e) {
                 if(that.option("onLayoutChanged")) {
-                    that.element().toggleClass(LAYOUT_MANAGER_ONE_COLUMN, that.isLayoutChanged(e.component));
+                    that.$element().toggleClass(LAYOUT_MANAGER_ONE_COLUMN, that.isSingleColumnMode(e.component));
                 }
                 that._fireContentReadyAction();
             },
-            itemTemplate: function(e, itemData, $itemElement) {
+            itemTemplate: function(e, itemData, itemElement) {
                 if(!e.location) {
                     return;
                 }
-                var itemRenderedCountInPreviousRows = e.location.row * colCount,
+                var $itemElement = $(itemElement),
+                    itemRenderedCountInPreviousRows = e.location.row * colCount,
                     item = that._items[e.location.col + itemRenderedCountInPreviousRows],
                     $fieldItem = $("<div>")
                         .addClass(item.cssClass)
                         .appendTo($itemElement);
+
+                $itemElement.toggleClass(SINGLE_COLUMN_ITEM_CONTENT, that.isSingleColumnMode(this));
 
                 if(e.location.row === 0) {
                     $fieldItem.addClass(LAYOUT_MANAGER_FIRST_ROW_CLASS);
@@ -415,7 +420,7 @@ var LayoutManager = Widget.inherit({
 
     _getMaxColCount: function() {
         var minColWidth = this.option("minColWidth"),
-            width = this.element().width(),
+            width = this.$element().width(),
             itemsCount = this._items.length,
             maxColCount = Math.floor(width / minColWidth) || 1;
 
@@ -753,7 +758,7 @@ var LayoutManager = Widget.inherit({
 
             template.render({
                 model: data,
-                container: $container
+                container: domUtils.getPublicElement($container)
             });
         } else {
             var $editor = $("<div>").appendTo($container);
@@ -1080,7 +1085,7 @@ var LayoutManager = Widget.inherit({
         return this._editorInstancesByField[field];
     },
 
-    isLayoutChanged: function(component) {
+    isSingleColumnMode: function(component) {
         var responsiveBox = this._responsiveBox || component;
         if(responsiveBox) {
             return responsiveBox.option("currentScreenFactor") === responsiveBox.option("singleColumnScreen");

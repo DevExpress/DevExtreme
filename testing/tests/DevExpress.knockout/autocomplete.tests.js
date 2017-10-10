@@ -25,7 +25,7 @@ QUnit.test("autocomplete should delegate templates to child widgets (T131530)", 
     ko.applyBindings({}, $autocomplete.get(0));
 
     var autocomplete = $autocomplete.dxAutocomplete("instance"),
-        popupContent = autocomplete._popup.content(),
+        popupContent = autocomplete._popup.$content(),
         $input = $autocomplete.find("." + TEXTEDITOR_INPUT_CLASS),
         kb = keyboardMock($input);
 

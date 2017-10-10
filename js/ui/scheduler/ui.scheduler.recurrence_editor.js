@@ -155,13 +155,13 @@ var SchedulerRecurrenceEditor = Editor.inherit({
     _render: function() {
         this.callBase();
 
-        this.element().addClass(RECURRENCE_EDITOR);
+        this.$element().addClass(RECURRENCE_EDITOR);
 
         this._renderSwitch();
 
         this._$container = $("<div>")
             .addClass(RECURRENCE_EDITOR_CONTAINER)
-            .appendTo(this.element());
+            .appendTo(this.$element());
 
         this._renderEditors();
         this._renderContainerVisibility(!!this.option("value"));
@@ -170,7 +170,7 @@ var SchedulerRecurrenceEditor = Editor.inherit({
     _renderSwitch: function() {
         var $switchEditor = $("<div>")
             .addClass(SWITCH_EDITOR)
-            .appendTo(this.element());
+            .appendTo(this.$element());
 
         this._switchEditor = this._createComponent($switchEditor, Switch, {
             value: !!this.option("value"),
@@ -820,7 +820,7 @@ var SchedulerRecurrenceEditor = Editor.inherit({
     },
 
     _changeRepeatTypeLabel: function() {
-        var $labels = this.element().find("." + REPEAT_TYPE_EDITOR + LABEL_POSTFIX);
+        var $labels = this.$element().find("." + REPEAT_TYPE_EDITOR + LABEL_POSTFIX);
 
         if(!$labels.length) {
             return;
@@ -887,7 +887,7 @@ var SchedulerRecurrenceEditor = Editor.inherit({
     },
 
     toggle: function() {
-        eventsEngine.trigger(this._switchEditor.element(), clickEvent.name);
+        eventsEngine.trigger(this._switchEditor.$element(), clickEvent.name);
     },
 
     setAria: function() {

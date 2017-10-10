@@ -33,8 +33,9 @@ var KNOWN_UA_TABLE = {
 /**
 * @name device
 * @section commonObjectStructures
-* @publicName device
+* @publicName Device
 * @type object
+* @namespace DevExpress
 * @module core/devices
 * @export default
 */
@@ -56,7 +57,7 @@ var DEFAULT_DEVICE = {
     /**
     * @name device_version
     * @publicName version
-    * @type array
+    * @type Array<number>
     */
     version: [],
     /**
@@ -184,7 +185,7 @@ var Devices = Class.inherit({
     /**
     * @name devicesevents_orientationChanged
     * @publicName orientationChanged
-    * @type EVENT
+    * @type classEventType
     * @type_function_param1 e:object
     * @type_function_param1_field1 orientation:String
     */

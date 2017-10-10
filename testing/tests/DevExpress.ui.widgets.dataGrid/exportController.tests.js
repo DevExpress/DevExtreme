@@ -2468,7 +2468,7 @@ QUnit.test("Show the export to excel button and a context menu via an option", f
         $exportMenu,
         $exportButton;
 
-    this.element = function() {
+    this.$element = function() {
         return $container;
     };
 
@@ -2504,7 +2504,7 @@ QUnit.test("Context menu is removed when the allowExportSelectedData option is c
     var $container = $("#container"),
         $exportMenu;
 
-    this.element = function() {
+    this.$element = function() {
         return $container;
     };
 
@@ -2618,7 +2618,7 @@ QUnit.test("The export context menu is shown", function(assert) {
         $exportMenu,
         $exportButton;
 
-    this.element = function() {
+    this.$element = function() {
         return $container;
     };
 
@@ -2646,7 +2646,7 @@ QUnit.test("Export context menu items", function(assert) {
         menuItems,
         $exportButton;
 
-    this.element = function() {
+    this.$element = function() {
         return $container;
     };
 
@@ -2679,7 +2679,7 @@ QUnit.test("Context menu is hidden when item with export format is clicked", fun
     var $container = $("#container"),
         $menuItems;
 
-    this.element = function() {
+    this.$element = function() {
         return $container;
     };
 
@@ -2692,7 +2692,7 @@ QUnit.test("Context menu is hidden when item with export format is clicked", fun
     this.exportController.exportToExcel = noop;
     menuInstance.option("animation", false);
 
-    $menuItems = $(menuInstance.element().find(".dx-menu-item"));
+    $menuItems = $(menuInstance.$element().find(".dx-menu-item"));
     $($menuItems.first()).trigger("dxclick");
 
     assert.ok(!menuInstance.option("visible"), "menu is hidden");
@@ -2710,7 +2710,7 @@ QUnit.test("Context menu is hidden when item with export selected is clicked", f
     var $container = $("#container"),
         $menuItems;
 
-    this.element = function() {
+    this.$element = function() {
         return $container;
     };
 
@@ -2723,7 +2723,7 @@ QUnit.test("Context menu is hidden when item with export selected is clicked", f
     this.exportController.exportToExcel = noop;
     menuInstance.option("animation", false);
 
-    $menuItems = $(menuInstance.element().find(".dx-menu-item"));
+    $menuItems = $(menuInstance.$element().find(".dx-menu-item"));
     $($menuItems.eq(1)).trigger("dxclick");
 
     assert.ok(!menuInstance.option("visible"), "menu is hidden");
@@ -2755,7 +2755,7 @@ QUnit.test("Export to Excel button call`s exportTo when the button text is local
         _exportToExcel,
         exportToCalled = false;
 
-    this.element = function() {
+    this.$element = function() {
         return $container;
     };
 

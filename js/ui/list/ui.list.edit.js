@@ -11,14 +11,6 @@ var $ = require("../../core/renderer"),
 var LIST_ITEM_SELECTED_CLASS = "dx-list-item-selected",
     LIST_ITEM_RESPONSE_WAIT_CLASS = "dx-list-item-response-wait";
 
-/**
-* @name dxList
-* @publicName dxList
-* @type object
-* @inherits CollectionWidget
-* @groupName Collection Widgets
-*/
-
 var ListEdit = ListBase.inherit({
     _supportedKeys: function() {
         var that = this,
@@ -120,7 +112,7 @@ var ListEdit = ListBase.inherit({
             /**
             * @name dxListOptions_menuItems
             * @publicName menuItems
-            * @type Array
+            * @type Array<Object>
             * @default []
             */
             /**
@@ -176,7 +168,7 @@ var ListEdit = ListBase.inherit({
             * @publicName onItemDeleting
             * @extends Action
             * @type_function_param1_field4 itemData:object
-            * @type_function_param1_field5 itemElement:jQuery
+            * @type_function_param1_field5 itemElement:Element
             * @type_function_param1_field6 itemIndex:number | object
             * @type_function_param1_field7 cancel:boolean | Promise
             * @action
@@ -189,7 +181,7 @@ var ListEdit = ListBase.inherit({
             * @publicName onItemDeleted
             * @extends Action
             * @type_function_param1_field4 itemData:object
-            * @type_function_param1_field5 itemElement:jQuery
+            * @type_function_param1_field5 itemElement:Element
             * @type_function_param1_field6 itemIndex:number | object
             * @action
             * @hidden false
@@ -200,7 +192,7 @@ var ListEdit = ListBase.inherit({
             * @publicName onItemReordered
             * @extends Action
             * @type_function_param1_field4 itemData:object
-            * @type_function_param1_field5 itemElement:jQuery
+            * @type_function_param1_field5 itemElement:Element
             * @type_function_param1_field6 itemIndex:number | object
             * @type_function_param1_field7 fromIndex:number
             * @type_function_param1_field8 toIndex:number
@@ -478,13 +470,13 @@ var ListEdit = ListBase.inherit({
     * @name dxListMethods_deleteItem
     * @publicName deleteItem(itemElement)
     * @param1 itemElement:Node
-    * @return Promise
+    * @return Promise<void>
     */
     /**
     * @name dxListMethods_deleteItem
     * @publicName deleteItem(itemIndex)
     * @param1 itemIndex:Number|Object
-    * @return Promise
+    * @return Promise<void>
     */
 
     /**
@@ -527,14 +519,14 @@ var ListEdit = ListBase.inherit({
     * @publicName reorderItem(itemElement, toItemElement)
     * @param1 itemElement:Node
     * @param2 toItemElement:Node
-    * @return Promise
+    * @return Promise<void>
     */
     /**
     * @name dxListMethods_reorderItem
     * @publicName reorderItem(itemIndex, toItemIndex)
     * @param1 itemIndex:Number|Object
     * @param2 toItemIndex:Number|Object
-    * @return Promise
+    * @return Promise<void>
     */
 });
 

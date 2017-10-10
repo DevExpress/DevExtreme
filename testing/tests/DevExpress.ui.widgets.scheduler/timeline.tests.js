@@ -16,7 +16,8 @@ var $ = require("jquery"),
     domUtils = require("core/utils/dom"),
     dateLocalization = require("localization/date"),
     resizeCallbacks = require("core/utils/window").resizeCallbacks,
-    dateUtils = require("core/utils/date");
+    dateUtils = require("core/utils/date"),
+    dataUtils = require("core/element_data");
 
 QUnit.testStart(function() {
     $("#qunit-fixture").html('<div id="scheduler-timeline"></div>\
@@ -75,44 +76,44 @@ QUnit.test("Scheduler timeline should be initialized", function(assert) {
 });
 
 QUnit.test("Scheduler timeline should have a right css class", function(assert) {
-    var $element = this.instance.element();
+    var $element = this.instance.$element();
     assert.ok($element.hasClass("dx-scheduler-timeline"), "dxSchedulerTimeline has 'dx-scheduler-timeline' css class");
 });
 
 QUnit.test("Two scrollable elements should be rendered", function(assert) {
-    var $dateTableScrollable = this.instance.element().find(".dx-scheduler-date-table-scrollable"),
-        $headerScrollable = this.instance.element().find(".dx-scheduler-header-scrollable");
+    var $dateTableScrollable = this.instance.$element().find(".dx-scheduler-date-table-scrollable"),
+        $headerScrollable = this.instance.$element().find(".dx-scheduler-header-scrollable");
 
 
     assert.equal($dateTableScrollable.length, 1, "Date table scrollable was rendered");
-    assert.ok($dateTableScrollable.data("dxScrollable"), "Date table scrollable is instance of dxScrollable");
+    assert.ok($dateTableScrollable.dxScrollable("instance"), "Date table scrollable is instance of dxScrollable");
 
     assert.equal($headerScrollable.length, 1, "Header scrollable was rendered");
-    assert.ok($headerScrollable.data("dxScrollable"), "Header scrollable is instance of dxScrollable");
+    assert.ok($headerScrollable.dxScrollable("instance"), "Header scrollable is instance of dxScrollable");
 });
 
 QUnit.test("Both scrollable elements should be rendered if crossScrollingEnabled=true", function(assert) {
     this.instance.option("crossScrollingEnabled", true);
-    assert.ok(this.instance.element().hasClass("dx-scheduler-work-space-both-scrollbar"), "CSS class is OK");
+    assert.ok(this.instance.$element().hasClass("dx-scheduler-work-space-both-scrollbar"), "CSS class is OK");
     this.instance.option("crossScrollingEnabled", false);
-    assert.notOk(this.instance.element().hasClass("dx-scheduler-work-space-both-scrollbar"), "CSS class is OK");
+    assert.notOk(this.instance.$element().hasClass("dx-scheduler-work-space-both-scrollbar"), "CSS class is OK");
 });
 
 QUnit.test("Date table scrollable should have right config", function(assert) {
-    var dateTableScrollable = this.instance.element().find(".dx-scheduler-date-table-scrollable").dxScrollable("instance");
+    var dateTableScrollable = this.instance.$element().find(".dx-scheduler-date-table-scrollable").dxScrollable("instance");
 
     assert.equal(dateTableScrollable.option("direction"), "horizontal", "Direction is OK");
 });
 
 QUnit.test("Date table scrollable should have right config for crossScrolling", function(assert) {
     this.instance.option("crossScrollingEnabled", true);
-    var dateTableScrollable = this.instance.element().find(".dx-scheduler-date-table-scrollable").dxScrollable("instance");
+    var dateTableScrollable = this.instance.$element().find(".dx-scheduler-date-table-scrollable").dxScrollable("instance");
 
     assert.equal(dateTableScrollable.option("direction"), "both", "Direction is OK");
 });
 
 QUnit.test("Header scrollable should update position if date scrollable position is changed to right", function(assert) {
-    var $element = this.instance.element(),
+    var $element = this.instance.$element(),
         headerScrollable = $element.find(".dx-scheduler-header-scrollable").dxScrollable("instance"),
         dateTableScrollable = $element.find(".dx-scheduler-date-table-scrollable").dxScrollable("instance");
 
@@ -125,7 +126,7 @@ QUnit.test("Header scrollable should update position if date scrollable position
 });
 
 QUnit.test("Header scrollable shouldn't update position if date scrollable position is changed to bottom", function(assert) {
-    var $element = this.instance.element(),
+    var $element = this.instance.$element(),
         headerScrollable = $element.find(".dx-scheduler-header-scrollable").dxScrollable("instance"),
         dateTableScrollable = $element.find(".dx-scheduler-date-table-scrollable").dxScrollable("instance");
 
@@ -145,7 +146,7 @@ QUnit.test("Sidebar scrollable should update position if date scrollable positio
         groups: [{ name: "one", items: [{ id: 1, text: "a" }, { id: 2, text: "b" }, { id: 3, text: "c" }, { id: 4, text: "d" }] }]
     });
 
-    var $element = this.instance.element(),
+    var $element = this.instance.$element(),
         groupPanelScrollable = $element.find(".dx-scheduler-sidebar-scrollable").dxScrollable("instance"),
         dateTableScrollable = $element.find(".dx-scheduler-date-table-scrollable").dxScrollable("instance");
 
@@ -165,7 +166,7 @@ QUnit.test("Date table scrollable should update position if sidebar position is 
         groups: [{ name: "one", items: [{ id: 1, text: "a" }, { id: 2, text: "b" }, { id: 3, text: "c" }, { id: 4, text: "d" }] }]
     });
 
-    var $element = this.instance.element(),
+    var $element = this.instance.$element(),
         groupPanelScrollable = $element.find(".dx-scheduler-sidebar-scrollable").dxScrollable("instance"),
         dateTableScrollable = $element.find(".dx-scheduler-date-table-scrollable").dxScrollable("instance");
 
@@ -178,7 +179,7 @@ QUnit.test("Date table scrollable should update position if sidebar position is 
 });
 
 QUnit.test("Date table scrollable should update position if header scrollable position is changed", function(assert) {
-    var $element = this.instance.element(),
+    var $element = this.instance.$element(),
         headerScrollable = $element.find(".dx-scheduler-header-scrollable").dxScrollable("instance"),
         dateTableScrollable = $element.find(".dx-scheduler-date-table-scrollable").dxScrollable("instance");
 
@@ -191,7 +192,7 @@ QUnit.test("Date table scrollable should update position if header scrollable po
 });
 
 QUnit.test("Sidebar should be hidden in simple mode", function(assert) {
-    var $element = this.instance.element();
+    var $element = this.instance.$element();
 
     var $sidebar = $element.find(".dx-scheduler-sidebar-scrollable");
 
@@ -199,7 +200,7 @@ QUnit.test("Sidebar should be hidden in simple mode", function(assert) {
 });
 
 QUnit.test("Sidebar should be visible in grouped mode", function(assert) {
-    var $element = this.instance.element();
+    var $element = this.instance.$element();
 
     this.instance.option("groups", [{ name: "one", items: [{ id: 1, text: "a" }, { id: 2, text: "b" }] }]);
     var $sidebar = $element.find(".dx-scheduler-sidebar-scrollable");
@@ -208,7 +209,7 @@ QUnit.test("Sidebar should be visible in grouped mode", function(assert) {
 });
 
 QUnit.test("Fixed appointments container should have correct left", function(assert) {
-    var $element = this.instance.element();
+    var $element = this.instance.$element();
 
     this.instance.option("groups", [
         { name: "one", items: [{ id: 1, text: "a" }, { id: 2, text: "b" }] },
@@ -222,7 +223,7 @@ QUnit.test("Fixed appointments container should have correct left", function(ass
 });
 
 QUnit.test("Sidebar should contain group table in grouped mode", function(assert) {
-    var $element = this.instance.element();
+    var $element = this.instance.$element();
 
     this.instance.option("groups", [{ name: "one", items: [{ id: 1, text: "a" }, { id: 2, text: "b" }] }]);
     var $groupTable = $element.find(".dx-scheduler-sidebar-scrollable .dx-scheduler-group-table");
@@ -231,7 +232,7 @@ QUnit.test("Sidebar should contain group table in grouped mode", function(assert
 });
 
 QUnit.test("Header panel should not contain group rows in grouped mode", function(assert) {
-    var $element = this.instance.element();
+    var $element = this.instance.$element();
 
     this.instance.option("groups", [{ name: "one", items: [{ id: 1, text: "a" }, { id: 2, text: "b" }] }]);
     var $groupRows = $element.find(".dx-scheduler-header-panel .dx-scheduler-group-row");
@@ -240,7 +241,7 @@ QUnit.test("Header panel should not contain group rows in grouped mode", functio
 });
 
 QUnit.test("Group table cells should have correct height", function(assert) {
-    var $element = this.instance.element();
+    var $element = this.instance.$element();
 
     this.instance.option("groups", [
         { name: "one", items: [{ id: 1, text: "a" }, { id: 2, text: "b" }] },
@@ -256,7 +257,7 @@ QUnit.test("Group table cells should have correct height", function(assert) {
 });
 
 QUnit.test("Group table should contain right rows and cells count", function(assert) {
-    var $element = this.instance.element();
+    var $element = this.instance.$element();
 
     this.instance.option("groups", [
         { name: "one", items: [{ id: 1, text: "a" }, { id: 2, text: "b" }] },
@@ -287,7 +288,7 @@ QUnit.test("Group table should contain right rows and cells count", function(ass
 });
 
 QUnit.test("Timeline should have the right 'dx-group-column-count' attr depend on group count", function(assert) {
-    var $element = this.instance.element();
+    var $element = this.instance.$element();
 
     this.instance.option("groups", [
         { name: "one", items: [{ id: 1, text: "a" }, { id: 2, text: "b" }] },
@@ -310,7 +311,7 @@ QUnit.test("the 'getCoordinatesByDate' method should return right coordinates", 
     });
 
     var coordinates = this.instance.getCoordinatesByDate(new Date(2015, 10, 16, 10, 30), 0, false);
-    var $expectedCell = this.instance.element()
+    var $expectedCell = this.instance.$element()
         .find(".dx-scheduler-date-table-cell").eq(1),
         expectedPositionLeft = $expectedCell.position().left + 0.5 * $expectedCell.outerWidth();
 
@@ -328,7 +329,7 @@ QUnit.test("the 'getCoordinatesByDate' method should return right coordinates fo
     });
 
     var coordinates = this.instance.getCoordinatesByDate(new Date(2015, 10, 16, 10, 30), 0, false);
-    var $expectedCell = this.instance.element()
+    var $expectedCell = this.instance.$element()
         .find(".dx-scheduler-date-table-cell").eq(1);
 
     var expectedPositionLeft = $expectedCell.position().left + $expectedCell.outerWidth() - 0.5 * $expectedCell.outerWidth();
@@ -349,7 +350,7 @@ QUnit.test("the 'getCoordinatesByDate' method should return right coordinates fo
         ]);
 
         var coordinates = instance.getCoordinatesByDate(new Date(2015, 9, 28, 1), 1);
-        var expectedPosition = instance.element()
+        var expectedPosition = instance.$element()
             .find(".dx-scheduler-date-table-row").eq(1)
             .find(".dx-scheduler-date-table-cell").eq(2)
             .position();
@@ -363,7 +364,7 @@ QUnit.test("the 'getCoordinatesByDate' method should return right coordinates fo
 
 
 QUnit.test("the 'getCellIndexByCoordinates' method should return right coordinates", function(assert) {
-    var cellWidth = this.instance.element().find(".dx-scheduler-date-table-cell").eq(0).outerWidth();
+    var cellWidth = this.instance.$element().find(".dx-scheduler-date-table-cell").eq(0).outerWidth();
     var cellIndex = this.instance.getCellIndexByCoordinates({ left: cellWidth * 15, top: 1 });
 
     assert.equal(cellIndex, 15, "Cell index is OK");
@@ -408,8 +409,8 @@ QUnit.test("Ensure cell min height is equal to cell height(T389468)", function(a
 
     try {
         this.instance.option("currentDate", new Date(2010, 10, 10));
-        var height = this.instance.element().find(".dx-scheduler-group-header-content").eq(0).outerHeight(),
-            expectedHeight = this.instance.element().find(".dx-scheduler-date-table-cell").first().outerHeight() - 1;
+        var height = this.instance.$element().find(".dx-scheduler-group-header-content").eq(0).outerHeight(),
+            expectedHeight = this.instance.$element().find(".dx-scheduler-date-table-cell").first().outerHeight() - 1;
 
         assert.roughEqual(height, expectedHeight, 2.001, "Group cell height is OK");
 
@@ -430,13 +431,13 @@ QUnit.test("Scheduler timeline day should be initialized", function(assert) {
 });
 
 QUnit.test("Scheduler timeline day should have a right css class", function(assert) {
-    var $element = this.instance.element();
+    var $element = this.instance.$element();
     assert.ok($element.hasClass("dx-scheduler-timeline"), "dxSchedulerTimelineDay has 'dx-scheduler-timeline' css class");
     assert.ok($element.hasClass("dx-scheduler-timeline-day"), "dxSchedulerTimelineDay has 'dx-scheduler-timeline' css class");
 });
 
 QUnit.test("Scheduler timeline day view should have right cell & row count", function(assert) {
-    var $element = this.instance.element();
+    var $element = this.instance.$element();
 
 
     assert.equal($element.find(".dx-scheduler-date-table-row").length, 1, "Date table has 1 rows");
@@ -462,21 +463,21 @@ QUnit.test("Each cell of scheduler timeline day should contain rigth jQuery dxCe
         hoursInterval: 1
     });
 
-    var $cells = this.instance.element().find("." + CELL_CLASS);
+    var $cells = this.instance.$element().find("." + CELL_CLASS);
 
-    assert.deepEqual($cells.eq(0).data("dxCellData"), {
+    assert.deepEqual(dataUtils.data($cells.get(0), "dxCellData"), {
         startDate: new Date(2015, 9, 21, 5),
         endDate: new Date(2015, 9, 21, 6),
         allDay: false
     }, "data of first cell is rigth");
 
-    assert.deepEqual($cells.eq(5).data("dxCellData"), {
+    assert.deepEqual(dataUtils.data($cells.get(5), "dxCellData"), {
         startDate: new Date(2015, 9, 21, 10),
         endDate: new Date(2015, 9, 21, 11),
         allDay: false
     }, "data of 5th cell is rigth");
 
-    assert.deepEqual($cells.eq(10).data("dxCellData"), {
+    assert.deepEqual(dataUtils.data($cells.get(10), "dxCellData"), {
         startDate: new Date(2015, 9, 21, 15),
         endDate: new Date(2015, 9, 21, 16),
         allDay: false
@@ -496,9 +497,9 @@ QUnit.test("Each cell of grouped scheduler timeline day should contain rigth jQu
         ]
     });
 
-    var $cells = this.instance.element().find(".dx-scheduler-date-table-row").eq(2).find("." + CELL_CLASS);
+    var $cells = this.instance.$element().find(".dx-scheduler-date-table-row").eq(2).find("." + CELL_CLASS);
 
-    assert.deepEqual($cells.eq(0).data("dxCellData"), {
+    assert.deepEqual(dataUtils.data($cells.get(0), "dxCellData"), {
         startDate: new Date(2015, 9, 21, 5),
         endDate: new Date(2015, 9, 21, 6),
         allDay: false,
@@ -508,7 +509,7 @@ QUnit.test("Each cell of grouped scheduler timeline day should contain rigth jQu
         }
     }, "data of first cell is rigth");
 
-    assert.deepEqual($cells.eq(5).data("dxCellData"), {
+    assert.deepEqual(dataUtils.data($cells.get(5), "dxCellData"), {
         startDate: new Date(2015, 9, 21, 10),
         endDate: new Date(2015, 9, 21, 11),
         allDay: false,
@@ -518,7 +519,7 @@ QUnit.test("Each cell of grouped scheduler timeline day should contain rigth jQu
         }
     }, "data of 5th cell is rigth");
 
-    assert.deepEqual($cells.eq(10).data("dxCellData"), {
+    assert.deepEqual(dataUtils.data($cells.get(10), "dxCellData"), {
         startDate: new Date(2015, 9, 21, 15),
         endDate: new Date(2015, 9, 21, 16),
         allDay: false,
@@ -533,11 +534,11 @@ QUnit.test("Header panel should have right quantity of cells", function(assert) 
     this.instance.option({
         currentDate: new Date(2015, 9, 21, 0, 0)
     });
-    checkHeaderCells(this.instance.element(), assert);
+    checkHeaderCells(this.instance.$element(), assert);
 });
 
 QUnit.test("Date table should have right quantity of cells", function(assert) {
-    var $element = this.instance.element();
+    var $element = this.instance.$element();
 
     this.instance.option("groups", [{ name: "one", items: [{ id: 1, text: "a" }, { id: 2, text: "b" }] }]);
     var $rows = $element.find(".dx-scheduler-date-table-row");
@@ -556,7 +557,7 @@ QUnit.test("Get visible bounds", function(assert) {
 
     var scrollable = this.instance.getScrollable();
 
-    domUtils.triggerShownEvent(this.instance.element());
+    domUtils.triggerShownEvent(this.instance.$element());
 
     scrollable.scrollBy(0);
 
@@ -575,7 +576,7 @@ QUnit.test("Get visible bounds if scroll position is not null", function(assert)
 
     var scrollable = this.instance.getScrollable();
 
-    domUtils.triggerShownEvent(this.instance.element());
+    domUtils.triggerShownEvent(this.instance.$element());
 
     scrollable.scrollBy(1000);
 
@@ -595,7 +596,7 @@ QUnit.test("Get visible bounds if hoursInterval is set", function(assert) {
 
     var scrollable = this.instance.getScrollable();
 
-    domUtils.triggerShownEvent(this.instance.element());
+    domUtils.triggerShownEvent(this.instance.$element());
 
     scrollable.scrollBy(1000);
 
@@ -628,13 +629,13 @@ QUnit.test("Scheduler timeline week should be initialized", function(assert) {
 });
 
 QUnit.test("Scheduler timeline week should have a right css class", function(assert) {
-    var $element = this.instance.element();
+    var $element = this.instance.$element();
     assert.ok($element.hasClass("dx-scheduler-timeline"), "dxSchedulerTimelineWeek has 'dx-scheduler-timeline' css class");
     assert.ok($element.hasClass("dx-scheduler-timeline-week"), "dxSchedulerTimelineWeek has 'dx-scheduler-timeline' css class");
 });
 
 QUnit.test("Scheduler timeline week view should have right cell & row count", function(assert) {
-    var $element = this.instance.element();
+    var $element = this.instance.$element();
 
 
     assert.equal($element.find(".dx-scheduler-date-table-row").length, 1, "Date table has 1 rows");
@@ -650,7 +651,7 @@ QUnit.test("Scheduler timeline week view should have right cell & row count is s
             { name: "one", items: [{ id: 1, text: "a" }, { id: 2, text: "b" }] }
         ]
     });
-    var $element = this.instance.element(),
+    var $element = this.instance.$element(),
         $lastRow = $element.find(".dx-scheduler-header-row").last();
 
 
@@ -659,6 +660,19 @@ QUnit.test("Scheduler timeline week view should have right cell & row count is s
     assert.equal($lastRow.find(".dx-scheduler-header-panel-cell").length, 14, "Header row has 14 cells");
 
     assert.equal($lastRow.find(".dx-scheduler-header-panel-cell").eq(2).text(), dateLocalization.format(new Date(2015, 9, 29, 9), "shorttime"));
+});
+
+QUnit.test("Scheduler timeline week header cells should have right width", function(assert) {
+    this.instance.option({
+        currentDate: new Date(2015, 9, 29)
+    });
+    var $element = this.instance.$element(),
+        $firstRow = $element.find(".dx-scheduler-header-row").first(),
+        $lastRow = $element.find(".dx-scheduler-header-row").last(),
+        $firstHeaderCell = $firstRow.find(".dx-scheduler-header-panel-cell").eq(0),
+        $lastHeaderCell = $lastRow.find(".dx-scheduler-header-panel-cell").eq(0);
+
+    assert.roughEqual($firstHeaderCell.outerWidth(), 48 * $lastHeaderCell.outerWidth(), 1.5, "First row cell has correct width");
 });
 
 QUnit.test("Scheduler timeline week should have rigth first view date", function(assert) {
@@ -679,7 +693,7 @@ QUnit.test("Scheduler timeline week should contain two rows in header panel", fu
         endDayHour: 5
     });
 
-    var $rows = this.instance.element().find(".dx-scheduler-header-row"),
+    var $rows = this.instance.$element().find(".dx-scheduler-header-row"),
         $firstRowCells = $rows.first().find(".dx-scheduler-header-panel-cell"),
         startDate = 26;
 
@@ -702,7 +716,7 @@ QUnit.test("The part of long appointment should have right coordinates on curren
         hoursInterval: 0.5
     });
     var coordinates = this.instance.getCoordinatesByDate(new Date(2015, 2, 1, 0, 30), 0, false);
-    var $expectedCell = this.instance.element().find(".dx-scheduler-date-table-cell").eq(108);
+    var $expectedCell = this.instance.$element().find(".dx-scheduler-date-table-cell").eq(108);
 
     var expectedPositionLeft = $expectedCell.position().left;
 
@@ -719,7 +733,7 @@ QUnit.test("The part of long appointment should have right coordinates on curren
         hoursInterval: 0.5
     });
     var coordinates = this.instance.getCoordinatesByDate(new Date(2015, 1, 28, 10, 30), 0, false);
-    var $expectedCell = this.instance.element().find(".dx-scheduler-date-table-cell").eq(108);
+    var $expectedCell = this.instance.$element().find(".dx-scheduler-date-table-cell").eq(108);
 
     var expectedPositionLeft = $expectedCell.position().left;
 
@@ -736,7 +750,7 @@ QUnit.test("The part of long appointment should have right coordinates on curren
         hoursInterval: 0.5
     });
     var coordinates = this.instance.getCoordinatesByDate(new Date(2015, 2, 1, 4, 30), 0, false);
-    var $expectedCell = this.instance.element().find(".dx-scheduler-date-table-cell").eq(115);
+    var $expectedCell = this.instance.$element().find(".dx-scheduler-date-table-cell").eq(115);
 
     var expectedPositionLeft = $expectedCell.position().left;
 
@@ -745,7 +759,7 @@ QUnit.test("The part of long appointment should have right coordinates on curren
 });
 
 QUnit.test("Timeline should find cell coordinates by date depend on start/end day hour & cellDuration", function(assert) {
-    var $element = this.instance.element();
+    var $element = this.instance.$element();
 
     this.instance.option({
         currentDate: new Date(2015, 2, 1),
@@ -771,7 +785,7 @@ QUnit.test("Get visible bounds for timelineWeek on init", function(assert) {
 
     var scrollable = this.instance.getScrollable();
 
-    domUtils.triggerShownEvent(this.instance.element());
+    domUtils.triggerShownEvent(this.instance.$element());
 
     scrollable.scrollBy(0);
 
@@ -790,7 +804,7 @@ QUnit.test("Get visible bounds for timelineWeek", function(assert) {
     });
     var scrollable = this.instance.getScrollable();
 
-    domUtils.triggerShownEvent(this.instance.element());
+    domUtils.triggerShownEvent(this.instance.$element());
 
     scrollable.scrollBy(10600);
 
@@ -811,7 +825,7 @@ QUnit.test("Get visible bounds for timelineWeek, rtl mode", function(assert) {
 
     var scrollable = instance.getScrollable();
 
-    domUtils.triggerShownEvent(instance.element());
+    domUtils.triggerShownEvent(instance.$element());
 
     scrollable.scrollBy(-10600);
 
@@ -833,13 +847,13 @@ QUnit.test("Scheduler timeline work week should be initialized", function(assert
 });
 
 QUnit.test("Scheduler timeline work week should have a right css class", function(assert) {
-    var $element = this.instance.element();
+    var $element = this.instance.$element();
     assert.ok($element.hasClass("dx-scheduler-timeline"), "dxSchedulerTimelineWorkWeek has 'dx-scheduler-timeline' css class");
     assert.ok($element.hasClass("dx-scheduler-timeline-work-week"), "dxSchedulerTimelineWorkWeek has 'dx-scheduler-timeline-work-week' css class");
 });
 
 QUnit.test("Scheduler timeline work week view should have right cell & row count", function(assert) {
-    var $element = this.instance.element();
+    var $element = this.instance.$element();
 
 
     assert.equal($element.find(".dx-scheduler-date-table-row").length, 1, "Date table has 1 rows");
@@ -864,7 +878,7 @@ QUnit.test("Scheduler timeline workweek should contain two rows in header panel"
         endDayHour: 5
     });
 
-    var $rows = this.instance.element().find(".dx-scheduler-header-row"),
+    var $rows = this.instance.$element().find(".dx-scheduler-header-row"),
         $firstRowCells = $rows.first().find("th"),
         startDate = 26;
 
@@ -879,7 +893,7 @@ QUnit.test("Scheduler timeline workweek should contain two rows in header panel"
 });
 
 QUnit.test("Scheduler timeline workweek view should be correct, if currentDate is Monday, but firstDayOfWeek = 0", function(assert) {
-    var $element = this.instance.element();
+    var $element = this.instance.$element();
 
     this.instance.option("firstDayOfWeek", 0);
     this.instance.option("currentDate", new Date(2015, 4, 25));
@@ -903,13 +917,13 @@ QUnit.test("Scheduler timeline month should be initialized", function(assert) {
 });
 
 QUnit.test("Scheduler timeline month should have a right css class", function(assert) {
-    var $element = this.instance.element();
+    var $element = this.instance.$element();
     assert.ok($element.hasClass("dx-scheduler-timeline"), "dxSchedulerTimelineMonth has 'dx-scheduler-timeline' css class");
     assert.ok($element.hasClass("dx-scheduler-timeline-month"), "dxSchedulerTimelineMonth has 'dx-scheduler-timeline' css class");
 });
 
 QUnit.test("Scheduler timeline month view should have right cell & row count", function(assert) {
-    var $element = this.instance.element();
+    var $element = this.instance.$element();
 
     assert.equal($element.find(".dx-scheduler-date-table-row").length, 1, "Date table has 1 rows");
     assert.equal($element.find(".dx-scheduler-date-table-cell").length, 31, "Date table has 240 cells");
@@ -919,7 +933,7 @@ QUnit.test("Scheduler timeline month header panel should have right quantity of 
     this.instance.option({
         currentDate: new Date(2015, 8, 21)
     });
-    var $element = this.instance.element();
+    var $element = this.instance.$element();
 
     assert.equal($element.find(".dx-scheduler-header-panel-cell").length, 30, "Time panel has a right count of cells");
     $element.find(".dx-scheduler-header-panel-cell").each(function(index) {
@@ -954,10 +968,10 @@ QUnit.test("Each cell of scheduler timeline month should contain rigth jQuery dx
         firstDayOfWeek: 1
     });
 
-    var $cells = this.instance.element().find("." + CELL_CLASS);
+    var $cells = this.instance.$element().find("." + CELL_CLASS);
 
     $cells.each(function(index) {
-        assert.deepEqual($(this).data("dxCellData"), {
+        assert.deepEqual(dataUtils.data($(this)[0], "dxCellData"), {
             startDate: new Date(2015, 3, 1 + index, 1),
             endDate: new Date(2015, 3, 1 + index, 10),
             allDay: false
@@ -982,8 +996,25 @@ QUnit.test("Cells should have right date", function(assert) {
         endDayHour: 20
     });
 
-    var $cells = this.instance.element().find("." + CELL_CLASS);
-    assert.deepEqual($cells.eq(25).data("dxCellData").startDate, new Date(2016, 3, 26, 8), "Date is OK");
+    var $cells = this.instance.$element().find("." + CELL_CLASS);
+    assert.deepEqual(dataUtils.data($cells.get(25), "dxCellData").startDate, new Date(2016, 3, 26, 8), "Date is OK");
+});
+
+QUnit.test("Scrollables should be updated after currentDate changing", function(assert) {
+    this.instance.option({
+        currentDate: new Date(2017, 1, 15)
+    });
+
+    var scrollable = this.instance.$element().find(".dx-scheduler-date-table-scrollable").dxScrollable("instance"),
+        updateSpy = sinon.spy(scrollable, "update");
+
+    try {
+        this.instance.option("currentDate", new Date(2017, 2, 15));
+
+        assert.ok(updateSpy.calledOnce, "update was called");
+    } finally {
+        scrollable.update.restore();
+    }
 });
 
 QUnit.module("Timeline Keyboard Navigation", {
@@ -1005,8 +1036,8 @@ QUnit.test("Timeline should select/unselect cells with shift & arrows", function
         groups: [{ name: "one", items: [{ id: 1, text: "a" }, { id: 2, text: "b" }, { id: 3, text: "c" }] }]
     });
 
-    var $element = this.instance.element(),
-        $cells = this.instance.element().find("." + CELL_CLASS),
+    var $element = this.instance.$element(),
+        $cells = this.instance.$element().find("." + CELL_CLASS),
         keyboard = keyboardMock($element);
 
     pointerMock($cells.eq(2)).start().click();
@@ -1036,7 +1067,7 @@ QUnit.test("Timeline should select/unselect cells with mouse", function(assert) 
         groups: [{ name: "one", items: [{ id: 1, text: "a" }, { id: 2, text: "b" }] }]
     });
 
-    var $element = this.instance.element(),
+    var $element = this.instance.$element(),
         cells = $element.find("." + CELL_CLASS),
         $table = $element.find(".dx-scheduler-date-table");
 
@@ -1059,12 +1090,12 @@ QUnit.module("TimelineDay with intervalCount", {
 QUnit.test("TimelineDay has right intervalCount of cells with view option intervalCount", function(assert) {
     this.instance.option("intervalCount", 2);
 
-    var cells = this.instance.element().find(".dx-scheduler-date-table-cell");
+    var cells = this.instance.$element().find(".dx-scheduler-date-table-cell");
     assert.equal(cells.length, this.instance._getCellCountInDay() * 2, "view has right cell count");
 
     this.instance.option("intervalCount", 4);
 
-    cells = this.instance.element().find(".dx-scheduler-date-table-cell");
+    cells = this.instance.$element().find(".dx-scheduler-date-table-cell");
     assert.equal(cells.length, this.instance._getCellCountInDay() * 4, "view has right cell count");
 });
 
@@ -1072,8 +1103,8 @@ QUnit.test("TimelineDay Day view cells have right cellData with view option inte
     this.instance.option("intervalCount", 2);
     this.instance.option("currentDate", new Date(2017, 5, 29));
 
-    var firstCellData = this.instance.element().find(".dx-scheduler-date-table-cell").eq(0).data("dxCellData"),
-        secondCellData = this.instance.element().find(".dx-scheduler-date-table-cell").eq(95).data("dxCellData");
+    var firstCellData = dataUtils.data(this.instance.$element().find(".dx-scheduler-date-table-cell").get(0), "dxCellData"),
+        secondCellData = dataUtils.data(this.instance.$element().find(".dx-scheduler-date-table-cell").get(95), "dxCellData");
 
     assert.deepEqual(firstCellData.startDate, new Date(2017, 5, 29, 0), "cell has right startDate");
     assert.deepEqual(firstCellData.endDate, new Date(2017, 5, 29, 0, 30), "cell has right endtDate");
@@ -1104,12 +1135,12 @@ QUnit.module("TimelineWeek with intervalCount", {
 QUnit.test("TimelineWeek has right count of cells with view option intervalCount", function(assert) {
     this.instance.option("intervalCount", 2);
 
-    var cells = this.instance.element().find(".dx-scheduler-date-table-cell");
+    var cells = this.instance.$element().find(".dx-scheduler-date-table-cell");
     assert.equal(cells.length, this.instance._getCellCountInDay() * 7 * 2, "view has right cell count");
 
     this.instance.option("intervalCount", 4);
 
-    cells = this.instance.element().find(".dx-scheduler-date-table-cell");
+    cells = this.instance.$element().find(".dx-scheduler-date-table-cell");
     assert.equal(cells.length, this.instance._getCellCountInDay() * 7 * 4, "view has right cell count");
 });
 
@@ -1117,8 +1148,8 @@ QUnit.test("TimelineWeek view cells have right cellData with view option interva
     this.instance.option("intervalCount", 2);
     this.instance.option("currentDate", new Date(2017, 5, 29));
 
-    var firstCellData = this.instance.element().find(".dx-scheduler-date-table-cell").eq(7 * 48).data("dxCellData"),
-        secondCellData = this.instance.element().find(".dx-scheduler-date-table-cell").eq(2 * 7 * 48 - 1).data("dxCellData");
+    var firstCellData = dataUtils.data(this.instance.$element().find(".dx-scheduler-date-table-cell").get(7 * 48), "dxCellData"),
+        secondCellData = dataUtils.data(this.instance.$element().find(".dx-scheduler-date-table-cell").get(2 * 7 * 48 - 1), "dxCellData");
 
     assert.deepEqual(firstCellData.startDate, new Date(2017, 6, 2, 0), "cell has right startDate");
     assert.deepEqual(firstCellData.endDate, new Date(2017, 6, 2, 0, 30), "cell has right endtDate");
@@ -1142,7 +1173,7 @@ QUnit.test("TimelineWeek view should contain right header if intervalCount=3", f
     this.instance.option("currentDate", new Date(2017, 5, 26));
     this.instance.option("intervalCount", 3);
 
-    var $element = this.instance.element(),
+    var $element = this.instance.$element(),
         $firstRow = $element.find(".dx-scheduler-header-row").first();
 
     assert.equal($firstRow.find(".dx-scheduler-header-panel-cell").length, 21, "Header row has 21 cells");
@@ -1160,12 +1191,12 @@ QUnit.module("TimelineWorkWeek with intervalCount", {
 QUnit.test("TimelineWorkWeek has right count of cells with view option intervalCount", function(assert) {
     this.instance.option("intervalCount", 2);
 
-    var cells = this.instance.element().find(".dx-scheduler-date-table-cell");
+    var cells = this.instance.$element().find(".dx-scheduler-date-table-cell");
     assert.equal(cells.length, this.instance._getCellCountInDay() * 5 * 2, "view has right cell count");
 
     this.instance.option("intervalCount", 4);
 
-    cells = this.instance.element().find(".dx-scheduler-date-table-cell");
+    cells = this.instance.$element().find(".dx-scheduler-date-table-cell");
     assert.equal(cells.length, this.instance._getCellCountInDay() * 5 * 4, "view has right cell count");
 });
 
@@ -1177,7 +1208,7 @@ QUnit.test("'getCoordinatesByDate' should return right coordinates with view opt
         endDayHour: 20
     });
 
-    var $element = this.instance.element();
+    var $element = this.instance.$element();
 
     var coords = this.instance.getCoordinatesByDate(new Date(2017, 6, 6, 12, 0), 0, false),
         targetCellPosition = $element.find(".dx-scheduler-date-table tbody td").eq(200).position();
@@ -1190,8 +1221,8 @@ QUnit.test("TimelineWorkWeek view cells have right cellData with view option int
     this.instance.option("intervalCount", 2);
     this.instance.option("currentDate", new Date(2017, 5, 29));
 
-    var firstCellData = this.instance.element().find(".dx-scheduler-date-table-cell").eq(5 * 48).data("dxCellData"),
-        secondCellData = this.instance.element().find(".dx-scheduler-date-table-cell").eq(2 * 5 * 48 - 1).data("dxCellData");
+    var firstCellData = dataUtils.data(this.instance.$element().find(".dx-scheduler-date-table-cell").get(5 * 48), "dxCellData"),
+        secondCellData = dataUtils.data(this.instance.$element().find(".dx-scheduler-date-table-cell").get(2 * 5 * 48 - 1), "dxCellData");
 
     assert.deepEqual(firstCellData.startDate, new Date(2017, 6, 3, 0), "cell has right startDate");
     assert.deepEqual(firstCellData.endDate, new Date(2017, 6, 3, 0, 30), "cell has right endtDate");
@@ -1215,7 +1246,7 @@ QUnit.test("TimelineWorkWeek view should contain right header if intervalCount=3
     this.instance.option("currentDate", new Date(2017, 5, 26));
     this.instance.option("intervalCount", 3);
 
-    var $element = this.instance.element(),
+    var $element = this.instance.$element(),
         $firstRow = $element.find(".dx-scheduler-header-row").first(),
         $headerCells = $firstRow.find(".dx-scheduler-header-panel-cell");
 
@@ -1237,12 +1268,12 @@ QUnit.module("TimelineMonth with intervalCount", {
 QUnit.test("TimelineMonth has right count of cells with view option intervalCount", function(assert) {
     this.instance.option("intervalCount", 2);
 
-    var cells = this.instance.element().find(".dx-scheduler-date-table-cell");
+    var cells = this.instance.$element().find(".dx-scheduler-date-table-cell");
     assert.equal(cells.length, 61, "view has right cell count");
 
     this.instance.option("intervalCount", 4);
 
-    cells = this.instance.element().find(".dx-scheduler-date-table-cell");
+    cells = this.instance.$element().find(".dx-scheduler-date-table-cell");
     assert.equal(cells.length, 123, "view has right cell count");
 });
 
@@ -1250,8 +1281,8 @@ QUnit.test("TimelineMonth view cells have right cellData with view option interv
     this.instance.option("intervalCount", 2);
     this.instance.option("currentDate", new Date(2017, 5, 29));
 
-    var firstCellData = this.instance.element().find(".dx-scheduler-date-table-cell").eq(0).data("dxCellData"),
-        secondCellData = this.instance.element().find(".dx-scheduler-date-table-cell").last().data("dxCellData");
+    var firstCellData = dataUtils.data(this.instance.$element().find(".dx-scheduler-date-table-cell").get(0), "dxCellData"),
+        secondCellData = dataUtils.data(this.instance.$element().find(".dx-scheduler-date-table-cell").last().get(0), "dxCellData");
 
     assert.deepEqual(firstCellData.startDate, new Date(2017, 5, 1, 0), "cell has right startDate");
     assert.deepEqual(firstCellData.endDate, new Date(2017, 5, 2, 0), "cell has right endtDate");
@@ -1265,8 +1296,8 @@ QUnit.test("Get date range", function(assert) {
     this.instance.option("intervalCount", 2);
     this.instance.option("firstDayOfWeek", 1);
 
-    assert.deepEqual(this.instance.getDateRange(), [new Date(2017, 5, 1), new Date(2017, 6, 31, 0, 29)], "Range is OK");
+    assert.deepEqual(this.instance.getDateRange(), [new Date(2017, 5, 1), new Date(2017, 6, 31, 23, 59)], "Range is OK");
 
     this.instance.option("intervalCount", 4);
-    assert.deepEqual(this.instance.getDateRange(), [new Date(2017, 5, 1), new Date(2017, 8, 30, 0, 29)], "Range is OK");
+    assert.deepEqual(this.instance.getDateRange(), [new Date(2017, 5, 1), new Date(2017, 8, 30, 23, 59)], "Range is OK");
 });

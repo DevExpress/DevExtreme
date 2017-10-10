@@ -3,6 +3,10 @@
 var $ = require("jquery"),
     CommandMapping = require("framework/command_mapping");
 
+if(QUnit.urlParams["nojquery"]) {
+    return;
+}
+
 QUnit.module("commandMapping");
 
 QUnit.test("mapCommands", function(assert) {

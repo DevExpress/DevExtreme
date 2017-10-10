@@ -35,6 +35,15 @@ if(!WeakMap) {
             }
             return true;
         };
+
+        this.delete = function(key) {
+            var index = inArray(key, keys);
+            if(index === -1) {
+                return;
+            }
+            keys.splice(index, 1);
+            values.splice(index, 1);
+        };
     };
 }
 

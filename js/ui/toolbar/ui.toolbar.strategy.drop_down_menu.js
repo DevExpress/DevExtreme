@@ -5,6 +5,8 @@ var extend = require("../../core/utils/extend").extend,
     ToolbarMenu = require("./ui.toolbar.menu"),
     DropDownMenu = require("../drop_down_menu");
 
+var MENU_INVISIBLE_CLASS = "dx-state-invisible";
+
 var DropDownMenuStrategy = ToolbarStrategy.inherit({
 
     NAME: "dropDownMenu",
@@ -56,7 +58,7 @@ var DropDownMenuStrategy = ToolbarStrategy.inherit({
             return;
         }
 
-        this._menuContainer().toggleClass("dx-state-invisible", !value);
+        this._menuContainer().toggleClass(MENU_INVISIBLE_CLASS, !value);
     },
 
     _menuContainer: function() {

@@ -469,8 +469,8 @@ QUnit.test("Render checkbox before itemRendered is fired", function(assert) {
         showCheckBoxesMode: "normal",
         onItemRendered: function(e) {
             i++;
-            assert.equal(e.element.find("." + internals.NODE_CLASS).find(".dx-checkbox").length, i);
-            assert.equal(e.element.find("." + internals.NODE_CLASS + "." + internals.ITEM_WITH_CHECKBOX_CLASS).length, i);
+            assert.equal($(e.element).find("." + internals.NODE_CLASS).find(".dx-checkbox").length, i);
+            assert.equal($(e.element).find("." + internals.NODE_CLASS + "." + internals.ITEM_WITH_CHECKBOX_CLASS).length, i);
         }
     });
 
@@ -635,7 +635,7 @@ QUnit.test("Repaint treeView on every dataSource modified - insert", function(as
             dataSource: dataSource,
             dataStructure: "plain"
         }).dxTreeView("instance"),
-        toggleIcon = $(treeView.element()).find("." + internals.TOGGLE_ITEM_VISIBILITY_CLASS).eq(1),
+        toggleIcon = $(treeView.$element()).find("." + internals.TOGGLE_ITEM_VISIBILITY_CLASS).eq(1),
         items;
 
     dataSource.store().insert({
@@ -645,7 +645,7 @@ QUnit.test("Repaint treeView on every dataSource modified - insert", function(as
     });
 
     toggleIcon.trigger("dxclick");
-    items = $(treeView.element()).find("." + internals.ITEM_CLASS);
+    items = $(treeView.$element()).find("." + internals.ITEM_CLASS);
     assert.equal(items.length, 4);
 
     dataSource.store().insert({
@@ -654,11 +654,11 @@ QUnit.test("Repaint treeView on every dataSource modified - insert", function(as
         parentId: 0
     });
 
-    items = $(treeView.element()).find("." + internals.ITEM_CLASS);
+    items = $(treeView.$element()).find("." + internals.ITEM_CLASS);
     assert.equal(items.length, 5);
 
     treeView.option("searchValue", "Item 2");
-    items = $(treeView.element()).find("." + internals.ITEM_CLASS);
+    items = $(treeView.$element()).find("." + internals.ITEM_CLASS);
     assert.equal(items.length, 5);
 
     dataSource.store().insert({
@@ -667,7 +667,7 @@ QUnit.test("Repaint treeView on every dataSource modified - insert", function(as
         parentId: 0
     });
 
-    items = $(treeView.element()).find("." + internals.ITEM_CLASS);
+    items = $(treeView.$element()).find("." + internals.ITEM_CLASS);
     assert.equal(items.length, 5);
 });
 
@@ -715,27 +715,27 @@ QUnit.test("Repaint treeView on every dataSource modified - remove", function(as
             dataSource: dataSource,
             dataStructure: "plain"
         }).dxTreeView("instance"),
-        toggleIcon = $(treeView.element()).find("." + internals.TOGGLE_ITEM_VISIBILITY_CLASS),
+        toggleIcon = $(treeView.$element()).find("." + internals.TOGGLE_ITEM_VISIBILITY_CLASS),
         items;
 
     toggleIcon.eq(0).trigger("dxclick");
 
     toggleIcon.eq(1).trigger("dxclick");
 
-    toggleIcon = $(treeView.element()).find("." + internals.TOGGLE_ITEM_VISIBILITY_CLASS);
+    toggleIcon = $(treeView.$element()).find("." + internals.TOGGLE_ITEM_VISIBILITY_CLASS);
     toggleIcon.eq(1).trigger("dxclick");
 
-    items = $(treeView.element()).find("." + internals.ITEM_CLASS);
+    items = $(treeView.$element()).find("." + internals.ITEM_CLASS);
     assert.equal(items.length, 6);
 
     dataSource.store().remove(4);
 
-    items = $(treeView.element()).find("." + internals.ITEM_CLASS);
+    items = $(treeView.$element()).find("." + internals.ITEM_CLASS);
     assert.equal(items.length, 5);
 
     dataSource.store().remove(1);
 
-    items = $(treeView.element()).find("." + internals.ITEM_CLASS);
+    items = $(treeView.$element()).find("." + internals.ITEM_CLASS);
     assert.equal(items.length, 2);
     assert.equal(treeView.option("items").length, 2);
 });
@@ -790,4 +790,34 @@ QUnit.test("TreeView with empty dataSource should updates after item inserted in
     dataSource.load();
 
     assert.equal(treeView.option("items").length, 1, "item was inserted");
+});
+
+QUnit.test("Render Search editor", function(assert) {
+    var $searchEditor,
+        $treeView = initTree({
+            items: $.extend(true, [], DATA[1]),
+            keyExpr: "key",
+            searchEnabled: true,
+            searchValue: "2"
+        });
+
+    $searchEditor = $treeView.children().first();
+    assert.ok($searchEditor.hasClass("dx-treeview-search"), "has search editor");
+    assert.strictEqual($searchEditor.dxTextBox("instance").option("value"), "2", "editor value");
+});
+
+QUnit.test("Render Search editor with default options", function(assert) {
+    var searchEditorInstance,
+        treeViewInstance = initTree({
+            items: $.extend(true, [], DATA[1]),
+            keyExpr: "key",
+            searchEnabled: true
+        }).dxTreeView("instance");
+
+    searchEditorInstance = treeViewInstance.$element().children().first().dxTextBox("instance");
+    assert.equal(searchEditorInstance.option("placeholder"), "Search");
+    assert.equal(searchEditorInstance.option("value"), "");
+    assert.equal(searchEditorInstance.option("valueChangeEvent"), "input");
+    assert.equal(searchEditorInstance.option("mode"), "search");
+    assert.equal(searchEditorInstance.option("tabIndex"), 0);
 });

@@ -107,7 +107,7 @@ var TreeList = Widget.inherit({
     },
 
     _renderContentImpl: function() {
-        var $element = this.element().addClass(TREELIST_CLASS);
+        var $element = this.$element().addClass(TREELIST_CLASS);
 
         this.getView("gridView").render($element);
     },

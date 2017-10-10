@@ -66,14 +66,14 @@ var CollectionWidget = BaseCollectionWidget.inherit({
             /**
             * @name CollectionWidgetOptions_selectedItems
             * @publicName selectedItems
-            * @type array
+            * @type Array<any>
             */
             selectedItems: [],
 
             /**
              * @name CollectionWidgetOptions_selectedItemKeys
              * @publicName selectedItemKeys
-             * @type array
+             * @type Array<any>
              */
             selectedItemKeys: [],
 
@@ -108,8 +108,8 @@ var CollectionWidget = BaseCollectionWidget.inherit({
             * @name CollectionWidgetOptions_onSelectionChanged
             * @publicName onSelectionChanged
             * @extends Action
-            * @type_function_param1_field4 addedItems:array
-            * @type_function_param1_field5 removedItems:array
+            * @type_function_param1_field4 addedItems:array<any>
+            * @type_function_param1_field5 removedItems:array<any>
             * @action
             */
             onSelectionChanged: null,
@@ -119,7 +119,7 @@ var CollectionWidget = BaseCollectionWidget.inherit({
             * @publicName onItemReordered
             * @extends Action
             * @type_function_param1_field4 itemData:object
-            * @type_function_param1_field5 itemElement:jQuery
+            * @type_function_param1_field5 itemElement:Element
             * @type_function_param1_field6 itemIndex:number | object
             * @type_function_param1_field7 fromIndex:number
             * @type_function_param1_field8 toIndex:number
@@ -133,7 +133,7 @@ var CollectionWidget = BaseCollectionWidget.inherit({
             * @publicName onItemDeleting
             * @extends Action
             * @type_function_param1_field4 itemData:object
-            * @type_function_param1_field5 itemElement:jQuery
+            * @type_function_param1_field5 itemElement:Element
             * @type_function_param1_field6 itemIndex:number | object
             * @type_function_param1_field7 cancel:boolean | Promise
             * @action
@@ -146,7 +146,7 @@ var CollectionWidget = BaseCollectionWidget.inherit({
             * @publicName onItemDeleted
             * @extends Action
             * @type_function_param1_field4 itemData:object
-            * @type_function_param1_field5 itemElement:jQuery
+            * @type_function_param1_field5 itemElement:Element
             * @type_function_param1_field6 itemIndex:number | object
             * @action
             * @hidden
@@ -586,6 +586,10 @@ var CollectionWidget = BaseCollectionWidget.inherit({
                     this._invalidate();
                 }
                 break;
+            case "dataSource":
+                this.option("selectedItemKeys", []);
+                this.callBase(args);
+                break;
             case "selectedIndex":
             case "selectedItem":
             case "selectedItems":
@@ -789,7 +793,7 @@ var CollectionWidget = BaseCollectionWidget.inherit({
     * @name CollectionWidgetMethods_deleteItem
     * @publicName deleteItem(itemElement)
     * @param1 itemElement:Node
-    * @return Promise
+    * @return Promise<void>
     * @hidden
     */
     deleteItem: function(itemElement) {
@@ -839,7 +843,7 @@ var CollectionWidget = BaseCollectionWidget.inherit({
     * @publicName reorderItem(itemElement, toItemElement)
     * @param1 itemElement:Node
     * @param2 toItemElement:Node
-    * @return Promise
+    * @return Promise<void>
     * @hidden
     */
     reorderItem: function(itemElement, toItemElement) {

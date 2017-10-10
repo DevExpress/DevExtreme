@@ -8,6 +8,10 @@ var $ = require("jquery"),
 
 require("integration/angular");
 
+if(QUnit.urlParams["nojquery"]) {
+    return;
+}
+
 QUnit.module("custom events with Ng approach", {
     beforeEach: function() {
         this.$fixtureElement = $("<div/>").attr("ng-app", "testApp").appendTo("#qunit-fixture");

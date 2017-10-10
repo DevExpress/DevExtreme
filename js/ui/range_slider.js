@@ -18,7 +18,7 @@ var RANGE_SLIDER_CLASS = "dx-rangeslider",
 * @name dxRangeSlider
 * @isEditor
 * @publicName dxRangeSlider
-* @inherits dxSlider
+* @inherits dxSliderBase
 * @groupName Editors
 * @module ui/range_slider
 * @export default
@@ -127,7 +127,7 @@ var RangeSlider = Slider.inherit({
 
             /**
             * @name dxRangeSliderOptions_value
-            * @type array
+            * @type Array<number>
             * @publicName value
             * @default [40, 60]
             * @extend_doc
@@ -170,7 +170,7 @@ var RangeSlider = Slider.inherit({
     },
 
     _renderSubmitElement: function() {
-        var $element = this.element();
+        var $element = this.$element();
 
         this._$submitStartElement = $("<input>")
             .attr("type", "hidden")
@@ -197,7 +197,7 @@ var RangeSlider = Slider.inherit({
 
     _render: function() {
         this.callBase();
-        this.element().addClass(RANGE_SLIDER_CLASS);
+        this.$element().addClass(RANGE_SLIDER_CLASS);
 
         this._callHandlerMethod("repaint");
     },

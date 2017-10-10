@@ -38,7 +38,7 @@ QUnit.test("Incorrect recurrence rule should not be applied", function(assert) {
 
     this.createInstance({ currentDate: new Date(2015, 1, 9), dataSource: data, currentView: "week" });
 
-    assert.equal(this.instance.element().find(".dx-scheduler-appointment").length, 1, "dxSchedulerAppointments has only one item");
+    assert.equal(this.instance.$element().find(".dx-scheduler-appointment").length, 1, "dxSchedulerAppointments has only one item");
 });
 
 QUnit.test("Appointment with incorrect recurrence rule should not have specific class", function(assert) {
@@ -50,7 +50,7 @@ QUnit.test("Appointment with incorrect recurrence rule should not have specific 
 
     this.createInstance({ currentDate: new Date(2015, 1, 9), dataSource: data, currentView: "week" });
 
-    var $appointment = this.instance.element().find(".dx-scheduler-appointment").eq(0);
+    var $appointment = this.instance.$element().find(".dx-scheduler-appointment").eq(0);
 
     assert.notOk($appointment.hasClass("dx-scheduler-appointment-recurrence"), "Appointment has not specific class");
 });
@@ -64,7 +64,7 @@ QUnit.test("Recurrence rule with incorrect ruleName should not be applied ", fun
 
     this.createInstance({ currentDate: new Date(2015, 1, 9), dataSource: data, currentView: "week" });
 
-    assert.equal(this.instance.element().find(".dx-scheduler-appointment").length, 1, "dxSchedulerAppointments has only one item");
+    assert.equal(this.instance.$element().find(".dx-scheduler-appointment").length, 1, "dxSchedulerAppointments has only one item");
 });
 
 QUnit.test("Confirmation dialog should not be shown if rrule is invalid", function(assert) {
@@ -86,9 +86,9 @@ QUnit.test("Confirmation dialog should not be shown if rrule is invalid", functi
         firstDayOfWeek: 1
     });
 
-    $(this.instance.element()).find(".dx-scheduler-appointment").eq(0).trigger(dragEvents.start);
-    $(this.instance.element()).find(".dx-scheduler-date-table-cell").eq(5).trigger(dragEvents.enter);
-    $(this.instance.element()).find(".dx-scheduler-appointment").eq(0).trigger(dragEvents.end);
+    $(this.instance.$element()).find(".dx-scheduler-appointment").eq(0).trigger(dragEvents.start);
+    $(this.instance.$element()).find(".dx-scheduler-date-table-cell").eq(5).trigger(dragEvents.enter);
+    $(this.instance.$element()).find(".dx-scheduler-appointment").eq(0).trigger(dragEvents.end);
 
     assert.notOk($(".dx-dialog.dx-overlay-modal").length, "Dialog was not shown");
 });

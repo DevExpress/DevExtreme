@@ -116,7 +116,7 @@ var Tabs = CollectionWidget.inherit({
             /**
             * @name dxTabsOptions_selectedItems
             * @publicName selectedItems
-            * @type array
+            * @type Array<string,number,Object>
             */
 
             /**
@@ -142,7 +142,7 @@ var Tabs = CollectionWidget.inherit({
             * @name dxTabsItemTemplate_iconSrc
             * @publicName iconSrc
             * @type String
-            * @deprecated
+            * @deprecated dxTabsItemTemplate_icon
             */
             /**
             * @name dxTabsItemTemplate_badge
@@ -202,7 +202,7 @@ var Tabs = CollectionWidget.inherit({
 
         this.setAria("role", "tablist");
 
-        this.element().addClass(TABS_CLASS);
+        this.$element().addClass(TABS_CLASS);
 
         this._renderMultiple();
 
@@ -258,7 +258,7 @@ var Tabs = CollectionWidget.inherit({
     },
 
     _renderScrolling: function() {
-        this.element().removeClass(TABS_EXPANDED_CLASS);
+        this.$element().removeClass(TABS_EXPANDED_CLASS);
 
         if(this._allowScrolling()) {
             if(!this._scrollable) {
@@ -278,7 +278,7 @@ var Tabs = CollectionWidget.inherit({
         if(!this._allowScrolling()) {
             this._cleanScrolling();
 
-            this.element()
+            this.$element()
                 .removeClass(TABS_NAV_BUTTONS_CLASS)
                 .addClass(TABS_EXPANDED_CLASS);
         }
@@ -287,8 +287,8 @@ var Tabs = CollectionWidget.inherit({
     _cleanNavButtons: function() {
         if(!this._leftButton || !this._rightButton) return;
 
-        this._leftButton.element().remove();
-        this._rightButton.element().remove();
+        this._leftButton.$element().remove();
+        this._rightButton.$element().remove();
         this._leftButton = null;
         this._rightButton = null;
     },
@@ -296,10 +296,10 @@ var Tabs = CollectionWidget.inherit({
     _cleanScrolling: function() {
         if(!this._scrollable) return;
 
-        this._scrollable.content().children("." + TABS_WRAPPER_CLASS)
+        this._scrollable.$content().children("." + TABS_WRAPPER_CLASS)
             .appendTo(this._itemContainer());
 
-        this._scrollable.element().remove();
+        this._scrollable.$element().remove();
         this._scrollable = null;
 
         this._cleanNavButtons();
@@ -335,11 +335,11 @@ var Tabs = CollectionWidget.inherit({
     },
 
     _renderWrapper: function() {
-        this.element().wrapInner($("<div>").addClass(TABS_WRAPPER_CLASS));
+        this.$element().wrapInner($("<div>").addClass(TABS_WRAPPER_CLASS));
     },
 
     _renderScrollable: function() {
-        var $itemContainer = this.element().wrapInner($("<div>").addClass(TABS_SCROLLABLE_CLASS)).children();
+        var $itemContainer = this.$element().wrapInner($("<div>").addClass(TABS_SCROLLABLE_CLASS)).children();
 
         this._scrollable = this._createComponent($itemContainer, Scrollable, {
             direction: "horizontal",
@@ -350,7 +350,7 @@ var Tabs = CollectionWidget.inherit({
             onScroll: this._updateNavButtonsVisibility.bind(this)
         });
 
-        this.element().append(this._scrollable.element());
+        this.$element().append(this._scrollable.$element());
     },
 
     _scrollToItem: function(itemData) {
@@ -370,25 +370,25 @@ var Tabs = CollectionWidget.inherit({
             tabItemsWidth += $(tabItem).outerWidth(true);
         });
         // NOTE: "-1" is a hack fix for IE (T190044)
-        return tabItemsWidth - 1 > this.element().width();
+        return tabItemsWidth - 1 > this.$element().width();
     },
 
     _renderNavButtons: function() {
-        this.element().toggleClass(TABS_NAV_BUTTONS_CLASS, this.option("showNavButtons"));
+        this.$element().toggleClass(TABS_NAV_BUTTONS_CLASS, this.option("showNavButtons"));
 
         if(!this.option("showNavButtons")) return;
 
         this._leftButton = this._createNavButton(-TAB_OFFSET, "chevronprev");
 
-        var $leftButton = this._leftButton.element();
+        var $leftButton = this._leftButton.$element();
         $leftButton.addClass(TABS_LEFT_NAV_BUTTON_CLASS);
-        this.element().prepend($leftButton);
+        this.$element().prepend($leftButton);
 
         this._rightButton = this._createNavButton(TAB_OFFSET, "chevronnext");
 
-        var $rightButton = this._rightButton.element();
+        var $rightButton = this._rightButton.$element();
         $rightButton.addClass(TABS_RIGHT_NAV_BUTTON_CLASS);
-        this.element().append($rightButton);
+        this.$element().append($rightButton);
     },
 
     _updateNavButtonsVisibility: function() {
@@ -423,7 +423,7 @@ var Tabs = CollectionWidget.inherit({
             integrationOptions: {}
         });
 
-        var $navButton = navButton.element();
+        var $navButton = navButton.$element();
 
         eventsEngine.on($navButton, holdEventName, { timeout: FEEDBACK_SCROLL_TIMEOUT }, (function(e) { holdAction({ jQueryEvent: e }); }).bind(this));
         eventsEngine.on($navButton, pointerUpEventName, function() {

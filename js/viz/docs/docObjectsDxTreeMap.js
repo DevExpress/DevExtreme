@@ -36,13 +36,13 @@ var Node = {
     /**
     * @name dxtreemapnodemethods_getallchildren
     * @publicName getAllChildren()
-    * @return array
+    * @return Array<dxtreemapnode>
     */
     getAllChildren: undefined,
     /**
     * @name dxtreemapnodemethods_getallnodes
     * @publicName getAllNodes()
-    * @return array
+    * @return Array<dxtreemapnode>
     */
     getAllNodes: undefined,
     /**

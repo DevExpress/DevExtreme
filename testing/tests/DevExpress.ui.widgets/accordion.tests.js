@@ -3,6 +3,8 @@
 var $ = require("jquery"),
     Accordion = require("ui/accordion"),
     domUtils = require("core/utils/dom"),
+    isRenderer = require("core/utils/type").isRenderer,
+    config = require("core/config"),
     fx = require("animation/fx"),
     holdEvent = require("events/hold"),
     DataSource = require("data/data_source/data_source").DataSource,
@@ -201,13 +203,13 @@ QUnit.test("Widget should be rerendered on the 'deferRendering' option change", 
     assert.equal(renderCount, prevRenderCount + 1, "widget was rerendered one time on option changed");
 });
 
-QUnit.test("onContentReady action should bе fired after opened item was rendered", function(assert) {
+QUnit.test("onContentReady action should be fired after opened item was rendered", function(assert) {
     var count = 0;
     this.$element.dxAccordion({
         items: this.items,
         selectedIndex: 0,
         onContentReady: function(e) {
-            assert.equal(e.element.find(".dx-accordion-item-body").length, 1, "item is opened");
+            assert.equal($(e.element).find(".dx-accordion-item-body").length, 1, "item is opened");
             count++;
         }
     }).dxAccordion("instance");
@@ -240,7 +242,7 @@ QUnit.test("nested widget rendering", function(assert) {
         items: this.items,
         itemTemplate: function() {
             nested = new Accordion($("<div>"), { items: that.items, selectedIndex: 0 });
-            return nested.element();
+            return nested.$element();
         }
     });
 
@@ -723,6 +725,7 @@ QUnit.test("itemTemplate option changed (function)", function(assert) {
     }).dxAccordion("instance");
 
     instance.option("itemTemplate", function(itemData, itemIndex, itemElement) {
+        assert.equal(isRenderer(itemElement), config().useJQueryRenderer, "element is correct");
         return $("<div>")
             .addClass("item-content-render-changed")
             .text("Changed: " + itemData.text);

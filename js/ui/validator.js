@@ -27,7 +27,7 @@ var Validator = DOMComponent.inherit({
             /**
             * @name dxValidatorOptions_validationRules
             * @publicName validationRules
-            * @type array
+            * @type Array<RequiredRule,NumericRule,RangeRule,StringLengthRule,CustomRule,CompareRule,PatternRule,EmailRule>
             */
             validationRules: []
             /**
@@ -45,7 +45,7 @@ var Validator = DOMComponent.inherit({
             /**
             * @name dxValidatorOptions_adapter
             * @publicName adapter
-            * @type object
+            * @type Object
             */
             /**
             * @name dxValidatorOptions_adapter_getValue
@@ -55,7 +55,7 @@ var Validator = DOMComponent.inherit({
             /**
             * @name dxValidatorOptions_adapter_validationRequestsCallbacks
             * @publicName validationRequestsCallbacks
-            * @type jquery.callbacks
+            * @type Array<function> | jquery.callbacks
             */
             /**
             * @name dxValidatorOptions_adapter_applyValidationResults
@@ -82,12 +82,12 @@ var Validator = DOMComponent.inherit({
             * @name dxValidatorOptions_onValidated
             * @publicName onValidated
             * @type function(validatedInfo)
-            * @type_function_param1 selectedRowsInfo:object
+            * @type_function_param1 validatedInfo:Object
             * @type_function_param1_field1 name:string
             * @type_function_param1_field2 isValid:boolean
-            * @type_function_param1_field3 value:object
-            * @type_function_param1_field4 validationRules:array
-            * @type_function_param1_field5 brokenRule:object
+            * @type_function_param1_field3 value:Object
+            * @type_function_param1_field4 validationRules:Array<Object>
+            * @type_function_param1_field5 brokenRule:Object
             * @action
             */
 
@@ -158,7 +158,7 @@ var Validator = DOMComponent.inherit({
 
     _initAdapter: function() {
         var that = this,
-            element = that.element()[0],
+            element = that.$element()[0],
             dxStandardEditor = dataUtils.data(element, "dx-validation-target"),
             adapter = that.option("adapter");
         if(!adapter) {
@@ -175,15 +175,24 @@ var Validator = DOMComponent.inherit({
             throw errors.Error("E0120");
         }
 
-        if(adapter.validationRequestsCallbacks) {
-            adapter.validationRequestsCallbacks.add(function() {
-                that.validate();
-            });
+        var callbacks = adapter.validationRequestsCallbacks;
+
+        if(callbacks) {
+            if(Array.isArray(callbacks)) {
+                callbacks.push(function() {
+                    that.validate();
+                });
+            } else {
+                errors.log("W0014", "validationRequestsCallbacks", "jQuery.Callbacks", "17.2", "Use the array instead");
+                callbacks.add(function() {
+                    that.validate();
+                });
+            }
         }
     },
 
     _render: function() {
-        this.element().addClass(VALIDATOR_CLASS);
+        this.$element().addClass(VALIDATOR_CLASS);
         this.callBase();
     },
 

@@ -1508,7 +1508,7 @@ registerTheme({
         },
         tooltip: {
             customizeTooltip: function(info) {
-                return { text: info.item.data.argument + " " + info.valueText };
+                return { text: info.item.argument + " " + info.valueText };
             }
         },
         inverted: false,
@@ -1522,7 +1522,7 @@ registerTheme({
             verticalOffset: 0,
             showForZeroValues: false,
             customizeText: function(info) {
-                return info.item.data.argument + " " + info.valueText;
+                return info.item.argument + " " + info.valueText;
             },
             position: "columns",
             font: {

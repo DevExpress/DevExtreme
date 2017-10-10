@@ -3,6 +3,7 @@
 var $ = require("../../core/renderer"),
     eventsEngine = require("../../events/core/events_engine"),
     errors = require("../errors"),
+    config = require("../config"),
     inArray = require("./array").inArray,
     typeUtils = require("./type"),
     isDefined = typeUtils.isDefined,
@@ -169,18 +170,11 @@ var contains = function(container, element) {
     return container.nodeType === Node.DOCUMENT_NODE ? container.body.contains(element) : container.contains(element);
 };
 
-exports.ready = function(callback) {
-    //NOTE: we can't use document.readyState === "interactive" because of ie9/ie10 support
-    if(document.readyState === "complete" || (document.readyState !== "loading" && !document.documentElement.doScroll)) {
-        callback();
-        return;
+var getPublicElement = function($element) {
+    if(config().useJQueryRenderer) {
+        return $element;
     }
-
-    var loadedCallback = function() {
-        callback();
-        document.removeEventListener("DOMContentLoaded", loadedCallback);
-    };
-    document.addEventListener("DOMContentLoaded", loadedCallback);
+    return $element && $element.get(0);
 };
 
 exports.resetActiveElement = resetActiveElement;
@@ -197,3 +191,4 @@ exports.closestCommonParent = closestCommonParent;
 exports.clipboardText = clipboardText;
 exports.toggleAttr = toggleAttr;
 exports.contains = contains;
+exports.getPublicElement = getPublicElement;

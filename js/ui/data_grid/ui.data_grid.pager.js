@@ -165,7 +165,7 @@ gridCore.registerModule("pager", {
                 /**
                  * @name dxDataGridOptions_pager_allowedPageSizes
                  * @publicName allowedPageSizes
-                 * @type array|string
+                 * @type Array<number>|string
                  * @default "auto"
                  * @acceptValues "auto"
                 */

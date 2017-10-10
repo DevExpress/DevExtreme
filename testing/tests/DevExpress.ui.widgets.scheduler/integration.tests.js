@@ -26,3 +26,4 @@ require("./integrationParts/workSpace.tests.js");
 require("./integrationParts/recurrenceRuleValidation.tests.js");
 require("./integrationParts/timeline.tests.js");
 require("./integrationParts/agenda.tests.js");
+require("./integrationParts/draggingFromTooltip.tests.js");

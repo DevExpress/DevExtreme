@@ -3,7 +3,9 @@
 var $ = require("jquery"),
     ValidationEngine = require("ui/validation_engine"),
     Validator = require("ui/validator"),
-    keyboardMock = require("../../helpers/keyboardMock.js");
+    keyboardMock = require("../../helpers/keyboardMock.js"),
+    isRenderer = require("core/utils/type").isRenderer,
+    config = require("core/config");
 
 require("ui/button");
 require("common.css!");
@@ -111,7 +113,7 @@ QUnit.test("icon", function(assert) {
 
     assert.ok(element.find(".dx-icon").hasClass("dx-icon-back"), "class was added");
 
-    element.data("dxButton").option("icon", "success");
+    element.dxButton("instance").option("icon", "success");
     assert.ok(element.find(".dx-icon").hasClass("dx-icon-success"), "class set with option");
     assert.ok(element.hasClass(BUTTON_HAS_ICON_CLASS), "button with icon has icon class");
     assert.ok(!element.hasClass(BUTTON_HAS_TEXT_CLASS, "button with icon only has not text class"));
@@ -124,7 +126,7 @@ QUnit.test("icon as path", function(assert) {
 
     assert.ok(element.find("img[src='../../testing/content/add.png']").length, "icon was added by src");
 
-    element.data("dxButton").option("icon", "../../testing/content/plus.png");
+    element.dxButton("instance").option("icon", "../../testing/content/plus.png");
     assert.ok(element.find("img[src='../../testing/content/plus.png']").length, "icon was changed correctly");
 });
 
@@ -135,7 +137,7 @@ QUnit.test("icon as external lib class", function(assert) {
 
     assert.ok(element.find(".fa.fa-icon").length, "icon was added by fa class");
 
-    element.data("dxButton").option("icon", "fa-new-icon fa");
+    element.dxButton("instance").option("icon", "fa-new-icon fa");
     assert.ok(element.find(".fa-new-icon.fa").length, "icon was changed correctly");
 });
 
@@ -149,6 +151,15 @@ QUnit.test("dxButton with anonymous template", function(assert) {
     var $button = $("#buttonWithAnonymousTemplate").dxButton();
 
     assert.equal($.trim($button.text()), "test", "anonymous template rendered");
+});
+
+QUnit.test("dxButton with template as function", function(assert) {
+    $("#button").dxButton({
+        template: function(data, container) {
+            assert.equal(isRenderer(container), config().useJQueryRenderer, "container is correct");
+            return $("<div>");
+        }
+    });
 });
 
 QUnit.test("T355000 - the 'onContentReady' action should be fired after widget is rendered entirely", function(assert) {
@@ -190,7 +201,7 @@ QUnit.test("T355000 - the 'onContentReady' action should be fired after widget i
 
     $("#button").dxButton($.extend({}, buttonConfig, {
         onContentReady: function(e) {
-            assert.ok(areElementsEqual($firstButton, e.element), "rendered widget and widget with fired action are equals");
+            assert.ok(areElementsEqual($firstButton, $(e.element)), "rendered widget and widget with fired action are equals");
         }
     }));
 });
@@ -199,7 +210,7 @@ QUnit.test("T355000 - the 'onContentReady' action should be fired after widget i
 QUnit.module("options changed callbacks", {
     beforeEach: function() {
         this.element = $("#button").dxButton();
-        this.instance = this.element.data("dxButton");
+        this.instance = this.element.dxButton("instance");
     }
 });
 
@@ -259,7 +270,7 @@ QUnit.test("T325811 - 'text' option change should not lead to widget clearing", 
 QUnit.module("regressions", {
     beforeEach: function() {
         this.element = $("#button").dxButton();
-        this.instance = this.element.data("dxButton");
+        this.instance = this.element.dxButton("instance");
     }
 });
 
@@ -290,7 +301,7 @@ QUnit.test("inkRipple should be removed when widget is removed", function(assert
     $("#inkButton").dxButton({
         useInkRipple: true,
         onClick: function(e) {
-            var $element = $(e.component.element());
+            var $element = $(e.component.$element());
             $element.triggerHandler({ type: 'dxremove' });
             $element.trigger("dxinactive");
             assert.ok(true, "no exceptions");

@@ -28,7 +28,7 @@ QUnit.module("Rendering", {
     beforeEach: function() {
         this.component = {
             option: sinon.stub(),
-            element: function() {
+            $element: function() {
                 return $("<div>").dxPivotGridFieldChooserBase();
             }
         };
@@ -213,8 +213,8 @@ QUnit.test("Render hamburger button", function (assert) {
 
     assert.strictEqual(rows.length, 1);
     assert.strictEqual(rows[0].cells.length, 1);
-    assert.ok($(rows[0].cells[0]).children(0).data("dxButton"));
-    var popup = this.area.tableElement().find(".dx-fields-area-popup").data("dxPopup");
+    assert.ok($(rows[0].cells[0]).children(0).dxButton("instance"));
+    var popup = this.area.tableElement().find(".dx-fields-area-popup").dxPopup("instance");
 
     assert.ok(popup);
     assert.ok(!popup.option("visible"));
@@ -223,10 +223,10 @@ QUnit.test("Render hamburger button", function (assert) {
 
 QUnit.test("Show popup with fields", function (assert) {
     this.renderArea();
-    var button = $(this.area.tableElement()[0].rows[0].cells[0]).children(0).data("dxButton");
+    var button = $(this.area.tableElement()[0].rows[0].cells[0]).children(0).dxButton("instance");
 
     button.element().trigger("dxclick");
-    var popup = this.area.tableElement().find(".dx-fields-area-popup").data("dxPopup");
+    var popup = this.area.tableElement().find(".dx-fields-area-popup").dxPopup("instance");
 
     assert.ok(popup);
     assert.ok(popup.option("visible"));

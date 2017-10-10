@@ -170,7 +170,7 @@ initRender.prototype.toggleClass = function(className, value) {
     var isInner = methodName.indexOf("inner") === 0;
 
     initRender.prototype[methodName] = function(value) {
-        if(this.length > 1) {
+        if(this.length > 1 && arguments.length > 0) {
             return repeatMethod.call(this, methodName, arguments);
         }
 
@@ -405,26 +405,12 @@ initRender.prototype.replaceWith = function(element) {
     return element;
 };
 
-var cleanData = function(node, cleanSelf) {
-    if(!(node instanceof Element)) {
-        return;
-    }
-
-    var childNodes = node.getElementsByTagName("*");
-
-    dataUtils.cleanData(childNodes);
-
-    if(cleanSelf) {
-        dataUtils.cleanData([node]);
-    }
-};
-
 initRender.prototype.remove = function() {
     if(this.length > 1) {
         return repeatMethod.call(this, "remove", arguments);
     }
 
-    cleanData(this[0], true);
+    dataUtils.cleanDataRecursive(this[0], true);
     rendererStrategy.removeElement(this[0]);
 
     return this;
@@ -445,7 +431,7 @@ initRender.prototype.empty = function() {
         return repeatMethod.call(this, "empty", arguments);
     }
 
-    cleanData(this[0]);
+    dataUtils.cleanDataRecursive(this[0]);
     rendererStrategy.setText(this[0], "");
 
     return this;
@@ -469,7 +455,7 @@ initRender.prototype.text = function(text) {
         return result;
     }
 
-    cleanData(this[0], false);
+    dataUtils.cleanDataRecursive(this[0], false);
     rendererStrategy.setText(this[0], typeUtils.isDefined(text) ? text : "");
 
     return this;

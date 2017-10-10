@@ -465,7 +465,7 @@ QUnit.test("Editor's validators request should not be mixed with another editors
                 type: "required"
             }]
         },
-        editor1.element()
+        editor1.$element()
     );
 
     var editor2 = this.fixture.createEditor({
@@ -480,7 +480,7 @@ QUnit.test("Editor's validators request should not be mixed with another editors
                 type: "required"
             }]
         },
-        editor2.element()
+        editor2.$element()
     );
 
     //act
@@ -641,4 +641,26 @@ QUnit.test("Validation happens on firing callback, result are applied through cu
     assert.ok(adapter.getValue.calledOnce, "Value should be requested");
     assert.ok(validatedHandler.calledOnce, "Validated handler should be called");
     assert.ok(adapter.applyValidationResults.calledOnce, "ApplyValidationResults function should be called");
+});
+
+QUnit.test("Validation happens on firing callback when validationRequestsCallbacks is array", function(assert) {
+    var that = this,
+        adapter = {
+            getValue: sinon.stub(),
+            validationRequestsCallbacks: []
+        };
+
+    that.fixture.createValidator({
+        adapter: adapter,
+        validationRules: [{
+            type: "required"
+        }]
+    });
+
+    adapter.getValue.returns("123");
+    adapter.validationRequestsCallbacks.forEach(function(item) {
+        item();
+    });
+
+    assert.ok(adapter.getValue.calledOnce, "Value should be requested");
 });

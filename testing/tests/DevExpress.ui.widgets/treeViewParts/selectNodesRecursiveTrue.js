@@ -101,7 +101,7 @@ QUnit.test("Toggle node selected class", function(assert) {
             items: data,
             showCheckBoxesMode: "normal"
         }).dxTreeView("instance"),
-        $treeView = treeView.element(),
+        $treeView = treeView.$element(),
         $selectedItems = $treeView.find(".dx-state-selected"),
         checkboxes = $treeView.find(".dx-checkbox");
 

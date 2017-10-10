@@ -344,7 +344,7 @@ QUnit.test("items with auto baseSize should have size of content", function(asse
         width: boxSize,
         onItemRendered: function(args) {
             var $content = $("<div>").width(50);
-            args.itemElement.children().append($content);
+            $(args.itemElement).children().append($content);
         }
     });
 
@@ -368,7 +368,7 @@ QUnit.test("items should have baseSize 0 by default", function(assert) {
         width: boxSize,
         onItemRendered: function(args) {
             var $content = $("<div>").width(itemWidth);
-            args.itemElement.children().append($content);
+            $(args.itemElement).children().append($content);
             itemWidth += 50;
         }
     });

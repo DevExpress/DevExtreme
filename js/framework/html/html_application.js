@@ -31,6 +31,7 @@ var VIEW_PORT_CLASSNAME = "dx-viewport",
 * @publicName HtmlApplication
 * @type object
 * @inherits EventsMixin
+* @namespace DevExpress.framework.html
 * @module framework/html/html_application
 * @export default
 */
@@ -59,7 +60,7 @@ var HtmlApplication = Application.inherit({
     /**
     * @name HtmlApplicationoptions_navigation
     * @publicName navigation
-    * @type array
+    * @type Array<dxCommand,dxCommandOptions>
     */
     /**
     * @name HtmlApplicationoptions_mode
@@ -71,7 +72,7 @@ var HtmlApplication = Application.inherit({
     /**
     * @name HtmlApplicationoptions_layoutSet
     * @publicName layoutSet
-    * @type string|array
+    * @type string|Array<Object>
     * @default undefined
     */
     /**
@@ -235,7 +236,7 @@ var HtmlApplication = Application.inherit({
     /**
     * @name HtmlApplicationmethods_createNavigation
     * @publicName createNavigation(navigationConfig)
-    * @param1 navigationConfig:Array
+    * @param1 navigationConfig:Array<Object>
     */
     /**
     * @name HtmlApplicationmethods_navigate
@@ -271,12 +272,12 @@ var HtmlApplication = Application.inherit({
     /**
     * @name HtmlApplicationevents_initialized
     * @publicName initialized
-    * @type EVENT
+    * @type classEventType
     */
     /**
     * @name HtmlApplicationevents_navigatingBack
     * @publicName navigatingBack
-    * @type EVENT
+    * @type classEventType
     * @type_function_param1 e:object
     * @type_function_param1_field1 cancel:Boolean
     * @type_function_param1_field2 isHardwareButton:Boolean
@@ -284,7 +285,7 @@ var HtmlApplication = Application.inherit({
     /**
     * @name HtmlApplicationevents_navigating
     * @publicName navigating
-    * @type EVENT
+    * @type classEventType
     * @type_function_param1 e:object
     * @type_function_param1_field1 currentUri:string
     * @type_function_param1_field2 uri:string
@@ -294,28 +295,28 @@ var HtmlApplication = Application.inherit({
     /**
     * @name HtmlApplicationevents_beforeViewSetup
     * @publicName beforeViewSetup
-    * @type EVENT
+    * @type classEventType
     * @type_function_param1 e:object
     * @type_function_param1_field1 viewInfo:object
     */
     /**
     * @name HtmlApplicationevents_afterViewSetup
     * @publicName afterViewSetup
-    * @type EVENT
+    * @type classEventType
     * @type_function_param1 e:object
     * @type_function_param1_field1 viewInfo:object
     */
     /**
     * @name HtmlApplicationevents_viewRendered
     * @publicName viewRendered
-    * @type EVENT
+    * @type classEventType
     * @type_function_param1 e:object
     * @type_function_param1_field1 viewInfo:object
     */
     /**
     * @name HtmlApplicationevents_viewShowing
     * @publicName viewShowing
-    * @type EVENT
+    * @type classEventType
     * @type_function_param1 e:object
     * @type_function_param1_field1 viewInfo:object
     * @type_function_param1_field2 direction:string
@@ -323,7 +324,7 @@ var HtmlApplication = Application.inherit({
     /**
     * @name HtmlApplicationevents_viewShown
     * @publicName viewShown
-    * @type EVENT
+    * @type classEventType
     * @type_function_param1 e:object
     * @type_function_param1_field1 viewInfo:object
     * @type_function_param1_field2 direction:string
@@ -331,37 +332,37 @@ var HtmlApplication = Application.inherit({
     /**
     * @name HtmlApplicationevents_viewHidden
     * @publicName viewHidden
-    * @type EVENT
+    * @type classEventType
     * @type_function_param1 e:object
     * @type_function_param1_field1 viewInfo:object
     */
     /**
     * @name HtmlApplicationevents_viewDisposing
     * @publicName viewDisposing
-    * @type EVENT
+    * @type classEventType
     * @type_function_param1 e:object
     * @type_function_param1_field1 viewInfo:object
     */
     /**
     * @name HtmlApplicationevents_viewDisposed
     * @publicName viewDisposed
-    * @type EVENT
+    * @type classEventType
     * @type_function_param1 e:object
     * @type_function_param1_field1 viewInfo:object
     */
     /**
     * @name HtmlApplicationevents_resolveLayoutController
     * @publicName resolveLayoutController
-    * @type EVENT
+    * @type classEventType
     * @type_function_param1 e:object
     * @type_function_param1_field1 viewInfo:object
     * @type_function_param1_field2 layoutController:object
-    * @type_function_param1_field3 availableLayoutControllers:array
+    * @type_function_param1_field3 availableLayoutControllers:Array<Object>
     */
     /**
     * @name HtmlApplicationevents_resolveViewCacheKey
     * @publicName resolveViewCacheKey
-    * @type EVENT
+    * @type classEventType
     * @type_function_param1 e:object
     * @type_function_param1_field1 key:string
     * @type_function_param1_field2 navigationItem:object
@@ -380,7 +381,7 @@ var HtmlApplication = Application.inherit({
     /**
      * @name HtmlApplicationfields_navigation
      * @publicName navigation
-     * @type array
+     * @type Array<dxCommand>
      */
     /**
      * @name HtmlApplicationFields_stateManager
@@ -717,7 +718,7 @@ var HtmlApplication = Application.inherit({
     * @name HtmlApplicationmethods_loadTemplates
     * @publicName loadTemplates(source)
     * @param1 source:string|jQuery
-    * @return Promise
+    * @return Promise<void>
     */
     loadTemplates: function(source) {
         return this.viewEngine.loadTemplates(source);

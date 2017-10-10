@@ -97,7 +97,7 @@ var Pager = Widget.inherit({
     },
 
     _toggleVisibility: function(value) {
-        var $element = this.element();
+        var $element = this.$element();
         if($element) {
             $element.css("display", value ? "" : "none");
         }
@@ -362,7 +362,7 @@ var Pager = Widget.inherit({
         var that = this,
             lightModeEnabled = that.option("lightModeEnabled"),
             pagesNavigatorVisible = that.option("pagesNavigatorVisible"),
-            $element = that.element();
+            $element = that.$element();
 
         that._$pagesChooser && that._$pagesChooser.remove();
 
@@ -472,7 +472,7 @@ var Pager = Widget.inherit({
             pageSizes = that.option("pageSizes"),
             showPageSizes = that.option("showPageSizes"),
             pagesSizesLength = pageSizes && pageSizes.length,
-            $element = that.element();
+            $element = that.$element();
 
         if(!showPageSizes || !pagesSizesLength) {
             return;
@@ -536,7 +536,7 @@ var Pager = Widget.inherit({
     },
 
     _renderContentImpl: function() {
-        this.element()
+        this.$element()
             .addClass(PAGER_CLASS)
             .toggleClass(LIGHT_MODE_CLASS, this.option("lightModeEnabled"));
 
@@ -580,7 +580,7 @@ var Pager = Widget.inherit({
         } else {
             this._pageIndexEditor && this._pageIndexEditor.option({
                 value: pageIndex,
-                width: this._calculateLightPagesWidth(this._pageIndexEditor.element(), pageCount)
+                width: this._calculateLightPagesWidth(this._pageIndexEditor.$element(), pageCount)
             });
         }
 
@@ -602,8 +602,8 @@ var Pager = Widget.inherit({
     },
 
     _updateButtonsState: function(pageIndex) {
-        var nextButton = this.element().find("." + PAGER_NEXT_BUTTON_CLASS),
-            prevButton = this.element().find("." + PAGER_PREV_BUTTON_CLASS);
+        var nextButton = this.$element().find("." + PAGER_NEXT_BUTTON_CLASS),
+            prevButton = this.$element().find("." + PAGER_PREV_BUTTON_CLASS);
 
         nextButton.toggleClass(PAGER_BUTTON_DISABLE_CLASS, this._isPageIndexInvalid("next", pageIndex));
         prevButton.toggleClass(PAGER_BUTTON_DISABLE_CLASS, this._isPageIndexInvalid("prev", pageIndex));
@@ -668,7 +668,7 @@ var Pager = Widget.inherit({
 
     _updateLightMode: commonUtils.deferUpdater(function() {
         var that = this,
-            width = this.element().width(),
+            width = this.$element().width(),
             infoWidth = typeUtils.isDefined(this._infoWidth) ? this._infoWidth : 0;
 
         commonUtils.deferRender(function() {
@@ -704,7 +704,7 @@ var Pager = Widget.inherit({
     },
 
     getHeight: function() {
-        return this.option("visible") ? this.element().outerHeight() : 0;
+        return this.option("visible") ? this.$element().outerHeight() : 0;
     }
 });
 

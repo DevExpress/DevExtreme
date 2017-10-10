@@ -59,7 +59,7 @@ QUnit.test("init", function(assert) {
         ]
     });
 
-    var tabsInstance = tabsElement.data("dxTabs"),
+    var tabsInstance = tabsElement.dxTabs("instance"),
         tabElements = tabsInstance._itemElements();
 
     assert.equal(tabsInstance.option("selectedIndex"), -1);
@@ -81,7 +81,7 @@ QUnit.test("mouseup switch selected tab", function(assert) {
             { text: "2" }
             ]
         }),
-        tabsInstance = tabsElement.data("dxTabs");
+        tabsInstance = tabsElement.dxTabs("instance");
 
     $.each(tabsInstance.option("items"), function(clickedTabIndex) {
         var tabs = $(tabsInstance._itemElements());
@@ -106,7 +106,7 @@ QUnit.test("repeated click doesn't change selected tab state", function(assert) 
             { text: "2" }
             ]
         }),
-        tabsInstance = tabsElement.data("dxTabs");
+        tabsInstance = tabsElement.dxTabs("instance");
 
     var tabElements = $(tabsInstance._itemElements()),
         tabElement = tabElements.eq(1);
@@ -132,7 +132,7 @@ QUnit.test("disabled tab can't be selected by click", function(assert) {
             { text: "3" }
             ]
         }),
-        tabsInstance = tabsElement.data("dxTabs");
+        tabsInstance = tabsElement.dxTabs("instance");
 
     var tabElements = $(tabsInstance._itemElements());
 
@@ -158,7 +158,7 @@ QUnit.test("design mode", function(assert) {
             ]
         });
 
-        var tabsInstance = tabsElement.data("dxTabs"),
+        var tabsInstance = tabsElement.dxTabs("instance"),
             $tabItems = $(tabsInstance._itemElements());
 
         $tabItems.eq(1).click();
@@ -173,7 +173,7 @@ QUnit.test("regression: wrong selectedIndex in tab mouseup handler", function(as
 
     var tabsEl = $("#tabs").dxTabs({
         onSelectionChanged: function() {
-            selectedIndex = tabsEl.data("dxTabs").option("selectedIndex");
+            selectedIndex = tabsEl.dxTabs("instance").option("selectedIndex");
         },
         items: [
             { text: "0" },
@@ -191,7 +191,7 @@ QUnit.test("select action should not be triggered when disabled item is disabled
 
     var tabsEl = $("#tabs").dxTabs({
         onSelectionChanged: function(e) {
-            selectedIndex = tabsEl.data("dxTabs").option("selectedIndex");
+            selectedIndex = tabsEl.dxTabs("instance").option("selectedIndex");
         },
         items: [
             { text: "0" },

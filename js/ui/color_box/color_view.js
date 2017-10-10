@@ -256,7 +256,7 @@ var ColorView = Editor.inherit({
 
     _render: function() {
         this.callBase();
-        this.element().addClass(COLOR_VIEW_CLASS);
+        this.$element().addClass(COLOR_VIEW_CLASS);
         this._renderColorPickerContainer();
     },
 
@@ -281,7 +281,7 @@ var ColorView = Editor.inherit({
     },
 
     _renderColorPickerContainer: function() {
-        var $parent = this.element();
+        var $parent = this.$element();
         this._$colorPickerContainer = $("<div>").addClass(COLOR_VIEW_CONTAINER_CLASS)
             .appendTo($parent);
 

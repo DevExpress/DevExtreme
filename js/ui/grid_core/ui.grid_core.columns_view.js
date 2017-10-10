@@ -6,12 +6,15 @@ var $ = require("../../core/renderer"),
     clickEvent = require("../../events/click"),
     browser = require("../../core/utils/browser"),
     commonUtils = require("../../core/utils/common"),
+    config = require("../../core/config"),
+    getPublicElement = require("../../core/utils/dom").getPublicElement,
     typeUtils = require("../../core/utils/type"),
     iteratorUtils = require("../../core/utils/iterator"),
     extend = require("../../core/utils/extend").extend,
     getDefaultAlignment = require("../../core/utils/position").getDefaultAlignment,
     devices = require("../../core/devices"),
     modules = require("./ui.grid_core.modules"),
+    getPublicElement = require("../../core/utils/dom").getPublicElement,
     gridCoreUtils = require("./ui.grid_core.utils"),
     columnStateMixin = require("./ui.grid_core.column_state_mixin"),
     noop = commonUtils.noop;
@@ -168,13 +171,13 @@ exports.ColumnsView = modules.View.inherit(columnStateMixin).inherit({
                 resultOptions;
 
             resultOptions = extend({}, options, {
-                cellElement: $cell,
+                cellElement: getPublicElement($cell),
                 jQueryEvent: event,
                 eventType: event.type
             });
 
             if($fieldItemContent.length) {
-                formItemOptions = $fieldItemContent.data("dxFormItem");
+                formItemOptions = $fieldItemContent.data("dx-form-item");
                 if(formItemOptions.column) {
                     resultOptions.column = formItemOptions.column;
                     resultOptions.columnIndex = that._columnsController.getVisibleIndex(resultOptions.column.index);
@@ -202,7 +205,7 @@ exports.ColumnsView = modules.View.inherit(columnStateMixin).inherit({
                 e.rowIndex = that.getRowIndex(jQueryEvent.currentTarget);
 
                 if(e.rowIndex >= 0) {
-                    e.rowElement = $(jQueryEvent.currentTarget);
+                    e.rowElement = getPublicElement($(jQueryEvent.currentTarget));
                     e.columns = that.getColumns();
                     that._rowClick(e);
                 }
@@ -433,15 +436,15 @@ exports.ColumnsView = modules.View.inherit(columnStateMixin).inherit({
         };
     },
 
-    _cellPrepared: function($cell, options) {
-        options.cellElement = $cell;
+    _cellPrepared: function(cell, options) {
+        options.cellElement = getPublicElement($(cell));
         this.executeAction("onCellPrepared", options);
     },
 
     _rowPrepared: function($row, options) {
         dataUtils.data($row.get(0), "options", options);
 
-        options.rowElement = $row;
+        options.rowElement = getPublicElement($row);
         this.executeAction("onRowPrepared", options);
     },
 
@@ -643,21 +646,7 @@ exports.ColumnsView = modules.View.inherit(columnStateMixin).inherit({
         return $row.children();
     },
 
-    /**
-     * @name GridBaseMethods_getCellElement
-     * @publicName getCellElement(rowIndex, visibleColumnIndex)
-     * @param1 rowIndex:number
-     * @param2 visibleColumnIndex:number
-     * @return jQuery|undefined
-     */
-    /**
-     * @name GridBaseMethods_getCellElement
-     * @publicName getCellElement(rowIndex, dataField)
-     * @param1 rowIndex:number
-     * @param2 dataField:string
-     * @return jQuery|undefined
-     */
-    getCellElement: function(rowIndex, columnIdentifier) {
+    _getCellElement: function(rowIndex, columnIdentifier) {
         var that = this,
             $cell,
             $cells = that.getCellElements(rowIndex),
@@ -672,13 +661,7 @@ exports.ColumnsView = modules.View.inherit(columnStateMixin).inherit({
         }
     },
 
-    /**
-     * @name GridBaseMethods_getRowElement
-     * @publicName getRowElement(rowIndex)
-     * @param1 rowIndex:number
-     * @return jQuery|undefined
-     */
-    getRowElement: function(rowIndex) {
+    _getRowElement: function(rowIndex) {
         var that = this,
             $rowElement = $(),
             $tableElements = that.getTableElements();
@@ -690,6 +673,44 @@ exports.ColumnsView = modules.View.inherit(columnStateMixin).inherit({
         if($rowElement.length) {
             return $rowElement;
         }
+    },
+
+    /**
+     * @name GridBaseMethods_getCellElement
+     * @publicName getCellElement(rowIndex, visibleColumnIndex)
+     * @param1 rowIndex:number
+     * @param2 visibleColumnIndex:number
+     * @return Element|undefined
+     */
+    /**
+     * @name GridBaseMethods_getCellElement
+     * @publicName getCellElement(rowIndex, dataField)
+     * @param1 rowIndex:number
+     * @param2 dataField:string
+     * @return Element|undefined
+     */
+    getCellElement: function(rowIndex, columnIdentifier) {
+        return getPublicElement(this._getCellElement(rowIndex, columnIdentifier));
+    },
+
+    /**
+     * @name GridBaseMethods_getRowElement
+     * @publicName getRowElement(rowIndex)
+     * @param1 rowIndex:number
+     * @return Element|undefined
+     */
+    getRowElement: function(rowIndex) {
+        var $rows = this._getRowElement(rowIndex),
+            elements = [];
+
+        if($rows && !config().useJQueryRenderer) {
+            for(var i = 0; i < $rows.length; i++) {
+                elements.push($rows[i]);
+            }
+        } else {
+            elements = $rows;
+        }
+        return elements;
     },
 
     _getVisibleColumnIndex: function($cells, rowIndex, columnIdentifier) {

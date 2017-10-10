@@ -31,7 +31,7 @@ var ToolbarBase = CollectionWidget.inherit({
     * @name dxToolbarItemTemplate_widget
     * @publicName widget
     * @type String
-    * @acceptValues 'dxButton'|'dxTabs'|'dxCheckBox'|'dxSelectBox'|'dxTextBox'|'dxAutocomplete'|'dxDateBox'|'dxMenu'|'dxDropDownMenu'
+    * @acceptValues 'dxButton'|'dxTabs'|'dxCheckBox'|'dxSelectBox'|'dxTextBox'|'dxAutocomplete'|'dxDateBox'|'dxMenu'
     */
     /**
     * @name dxToolbarItemTemplate_options
@@ -104,13 +104,13 @@ var ToolbarBase = CollectionWidget.inherit({
     },
 
     _renderToolbar: function() {
-        this.element()
+        this.$element()
             .addClass(TOOLBAR_CLASS)
             .toggleClass(TOOLBAR_BOTTOM_CLASS, this.option("renderAs") === "bottomToolbar");
 
         this._$toolbarItemsContainer = $("<div>")
             .addClass(TOOLBAR_ITEMS_CONTAINER_CLASS)
-            .appendTo(this.element());
+            .appendTo(this.$element());
     },
 
     _renderSections: function() {
@@ -129,7 +129,7 @@ var ToolbarBase = CollectionWidget.inherit({
     },
 
     _arrangeItems: function(elementWidth) {
-        elementWidth = elementWidth || this.element().width();
+        elementWidth = elementWidth || this.$element().width();
 
         this._$centerSection.css({
             margin: "0 auto",
@@ -222,7 +222,7 @@ var ToolbarBase = CollectionWidget.inherit({
     _renderContentImpl: function() {
         var items = this._getToolbarItems();
 
-        this.element().toggleClass(TOOLBAR_MINI_CLASS, items.length === 0);
+        this.$element().toggleClass(TOOLBAR_MINI_CLASS, items.length === 0);
 
         if(this._renderedItemsCount) {
             this._renderItems(items.slice(this._renderedItemsCount));
@@ -235,7 +235,7 @@ var ToolbarBase = CollectionWidget.inherit({
 
     _clean: function() {
         this._$toolbarItemsContainer.children().empty();
-        this.element().empty();
+        this.$element().empty();
     },
 
     _visibilityChanged: function(visible) {
@@ -245,7 +245,7 @@ var ToolbarBase = CollectionWidget.inherit({
     },
 
     _isVisible: function() {
-        return this.element().width() > 0 && this.element().height() > 0;
+        return this.$element().width() > 0 && this.$element().height() > 0;
     },
 
     _getIndexByItem: function(item) {

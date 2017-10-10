@@ -60,7 +60,7 @@ var ArrayStore = Store.inherit({
         /**
          * @name ArrayStoreOptions_data
          * @publicName data
-         * @type array
+         * @type Array<any>
          */
         this._array = initialArray || [];
     },

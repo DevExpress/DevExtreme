@@ -4,6 +4,10 @@ var browserAdapters = require("framework/browser_adapters"),
     frameworkMocks = require("../../helpers/frameworkMocks.js"),
     ROOT_PAGE_URL = "__root__";
 
+if(QUnit.urlParams["nojquery"]) {
+    return;
+}
+
 function performTest(options) {
     QUnit.module(options.adapterName);
 

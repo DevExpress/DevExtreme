@@ -48,7 +48,7 @@ var NavBar = Tabs.inherit({
     _render: function() {
         this.callBase();
 
-        this.element().addClass(NAVBAR_CLASS);
+        this.$element().addClass(NAVBAR_CLASS);
     },
 
     _postprocessRenderItem: function(args) {

@@ -53,25 +53,25 @@ QUnit.test("Timezone editor should be initialized", function(assert) {
     this.createInstance();
     assert.ok(this.instance instanceof TimezoneEditor, "dxSchedulerTimezoneEditor was initialized");
 
-    assert.ok(this.instance.element().hasClass("dx-timezone-editor"));
+    assert.ok(this.instance.$element().hasClass("dx-timezone-editor"));
 });
 
 QUnit.test("Timezone editor should contain tz display name selectbox", function(assert) {
     this.createInstance();
-    var $tzDisplayNameSelectBox = this.instance.element().find(".dx-timezone-display-name");
+    var $tzDisplayNameSelectBox = this.instance.$element().find(".dx-timezone-display-name");
 
     assert.equal($tzDisplayNameSelectBox.length, 1, "Display name editor is rendered");
-    assert.ok($tzDisplayNameSelectBox.data("dxSelectBox"), "Display name editor is selectbox");
+    assert.ok($tzDisplayNameSelectBox.dxSelectBox("instance"), "Display name editor is selectbox");
 });
 
 QUnit.test("Timezone editor should contain iana id selectbox", function(assert) {
     this.createInstance();
 
-    var $tzIdSelectBox = this.instance.element().find(".dx-timezone-iana-id"),
+    var $tzIdSelectBox = this.instance.$element().find(".dx-timezone-iana-id"),
         tzIdSelectBox = $tzIdSelectBox.dxSelectBox("instance");
 
     assert.equal($tzIdSelectBox.length, 1, "Tz id editor is rendered");
-    assert.ok($tzIdSelectBox.data("dxSelectBox"), "Tz id editor is selectbox");
+    assert.ok($tzIdSelectBox.dxSelectBox("instance"), "Tz id editor is selectbox");
 
     assert.equal(tzIdSelectBox.option("valueExpr"), "id", "Value expr is OK");
     assert.equal(tzIdSelectBox.option("displayExpr"), "displayName", "Display expr is OK");
@@ -83,13 +83,13 @@ QUnit.module("Data processing", {
         this.createInstance = $.proxy(createEditor, this);
 
         this.getDisplayNameEditor = function() {
-            return this.instance.element()
+            return this.instance.$element()
                 .find(".dx-timezone-display-name")
                 .dxSelectBox("instance");
         };
 
         this.getIdEditor = function() {
-            return this.instance.element()
+            return this.instance.$element()
                 .find(".dx-timezone-iana-id")
                 .dxSelectBox("instance");
         };

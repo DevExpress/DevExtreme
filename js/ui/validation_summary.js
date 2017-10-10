@@ -312,7 +312,7 @@ var ValidationSummary = CollectionWidget.inherit({
     },
 
     _render: function() {
-        this.element().addClass(VALIDATION_SUMMARY_CLASS);
+        this.$element().addClass(VALIDATION_SUMMARY_CLASS);
         this.callBase();
     },
 

@@ -48,7 +48,7 @@ var PullDownNativeScrollViewStrategy = NativeStrategy.inherit({
     _renderPullDown: function() {
         var $image = $("<div>").addClass(SCROLLVIEW_PULLDOWN_IMAGE_CLASS),
             $loadContainer = $("<div>").addClass(SCROLLVIEW_PULLDOWN_INDICATOR_CLASS),
-            $loadIndicator = new LoadIndicator($("<div>")).element(),
+            $loadIndicator = new LoadIndicator($("<div>")).$element(),
             $text = this._$pullDownText = $("<div>").addClass(SCROLLVIEW_PULLDOWN_TEXT_CLASS);
 
         this._$pullingDownText = $("<div>").text(this.option("pullingDownText")).appendTo($text);
