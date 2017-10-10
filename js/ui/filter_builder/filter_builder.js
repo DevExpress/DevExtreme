@@ -95,9 +95,9 @@ var FilterBuilder = Widget.inherit({
             /**
              * @name dxFilterBuilderOptions_filter
              * @publicName filter
-             * @default []
+             * @default null
              */
-            filter: [],
+            filter: null,
 
             /**
              * @name dxFilterBuilderOptions_allowHierarchicalFields
@@ -255,9 +255,11 @@ var FilterBuilder = Widget.inherit({
         }
     },
 
-    getNormalizedFilter: function() {
-        var normalizedFilter = extend(true, [], this.option("filter"));
-        return utils.getNormalizedFilter(normalizedFilter);
+    _model: null,
+
+    _updateFilter: function() {
+        var filter = utils.copyGroup(this._model);
+        this._options.filter = utils.getNormalizedFilter(filter);
     },
 
     _init: function() {
@@ -292,8 +294,14 @@ var FilterBuilder = Widget.inherit({
     },
 
     _renderContentImpl: function() {
-        this._createGroupElementByCriteria(this.option("filter"))
-            .appendTo(this.$element());
+        var filter = this.option("filter");
+        if(utils.isCondition(filter)) {
+            this._model = [filter];
+        } else {
+            this._model = filter || [];
+        }
+        this._createGroupElementByCriteria(this._model)
+            .appendTo(this.element());
     },
 
     _createConditionElement: function(condition, parent) {
@@ -330,6 +338,7 @@ var FilterBuilder = Widget.inherit({
             this._createRemoveButton(function() {
                 utils.removeItem(parent, criteria);
                 $group.remove();
+                that._updateFilter();
             }).appendTo($groupItem);
         }
 
@@ -343,13 +352,15 @@ var FilterBuilder = Widget.inherit({
             var newCondition = utils.createCondition(that.option("fields")[0]);
             utils.addItem(newCondition, criteria);
             that._createConditionElement(newCondition, criteria).appendTo($groupContent);
+            that._updateFilter();
         }).appendTo($groupItem);
 
         return $group;
     },
 
     _createGroupOperationButton: function(criteria) {
-        var groupOperations = this._getGroupOperations(),
+        var that = this,
+            groupOperations = this._getGroupOperations(),
             groupMenuItem = utils.getGroupMenuItem(criteria, groupOperations),
             updateGroupMenuItem = function(component, groupMenuItem) {
                 component.unselectAll();
@@ -366,6 +377,7 @@ var FilterBuilder = Widget.inherit({
                     groupMenuItem = e.itemData;
                     updateGroupMenuItem(e.component, groupMenuItem);
                     $operationButton.html(e.itemData.text);
+                    that._updateFilter();
                     // EVENT: groupValueChanged(e = {newValue, ?oldValue?})
                 },
                 onContentReady: function(e) {
@@ -512,12 +524,14 @@ var FilterBuilder = Widget.inherit({
     },
 
     _createConditionItem: function(condition, parent) {
-        var $item = $("<div>").addClass(FILTER_BUILDER_GROUP_ITEM_CLASS),
+        var that = this,
+            $item = $("<div>").addClass(FILTER_BUILDER_GROUP_ITEM_CLASS),
             field = utils.getField(condition[0], this.option("fields"));
 
         this._createRemoveButton(function() {
             utils.removeItem(parent, condition);
             $item.remove();
+            that._updateFilter();
         }).appendTo($item);
         this._createFieldButtonWithMenu(condition, field).appendTo($item);
         this._createOperationAndValueButtons(condition, field, $item);

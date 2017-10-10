@@ -28,6 +28,18 @@ function getGroupCriteria(group) {
     return criteria;
 }
 
+function setGroupCriteria(group, criteria) {
+    if(group.length > 1
+        && group[0] === "!"
+        && !isCondition(group)
+    ) {
+        group[1] = criteria;
+    } else {
+        group = criteria;
+    }
+    return group;
+}
+
 function convertGroupToNewStructure(group, value) {
     var isNegationValue = function(value) {
             return value.indexOf("!") !== -1;
@@ -79,15 +91,19 @@ function setGroupValue(group, value) {
             }
         },
         addValueToCriteria = function(criteria, value) {
-            var oldCriteria = [];
-            for(i = 0; i < criteria.length; i++) {
-                oldCriteria.push(criteria[i]);
-            }
-            criteria.length = 0;
-            for(i = 0; i < oldCriteria.length; i++) {
-                criteria.push(oldCriteria[i]);
-                if(i !== oldCriteria.length - 1) {
-                    criteria.push(value);
+            if(criteria.length === 0) {
+                criteria.push(value);
+            } else {
+                var oldCriteria = [];
+                for(i = 0; i < criteria.length; i++) {
+                    oldCriteria.push(criteria[i]);
+                }
+                criteria.length = 0;
+                for(i = 0; i < oldCriteria.length; i++) {
+                    criteria.push(oldCriteria[i]);
+                    if(i !== oldCriteria.length - 1) {
+                        criteria.push(value);
+                    }
                 }
             }
         };
@@ -281,6 +297,18 @@ function isCondition(item) {
     return isCondition;
 }
 
+function removeAndOperatorFromGroup(group) {
+    var itemsForRemove = [];
+    for(var i = 0; i < group.length; i++) {
+        if(group[i] === "And") {
+            itemsForRemove.push(group[i]);
+        }
+    }
+    for(i = 0; i < itemsForRemove.length; i++) {
+        group.splice(group.indexOf(itemsForRemove[i]), 1);
+    }
+}
+
 function getNormalizedFilter(group) {
     var criteria = getGroupCriteria(group),
         i;
@@ -289,15 +317,19 @@ function getNormalizedFilter(group) {
         return null;
     }
 
+    var itemsForRemove = [];
     for(i = 0; i < criteria.length; i++) {
         if(isGroup(criteria[i])) {
             var normalizedGroupValue = getNormalizedFilter(criteria[i]);
             if(normalizedGroupValue) {
                 criteria[i] = normalizedGroupValue;
             } else {
-                removeItem(criteria, criteria[i]);
+                itemsForRemove.push(criteria[i]);
             }
         }
+    }
+    for(i = 0; i < itemsForRemove.length; i++) {
+        removeItem(criteria, itemsForRemove[i]);
     }
 
     var groupValue = getGroupValue(criteria);
@@ -311,11 +343,11 @@ function getNormalizedFilter(group) {
     }
 
     if(criteria.length === 1) {
-        var groupOperation = criteria[0];
-        criteria.splice(0, 1);
-        for(i = 0; i < groupOperation.length; i++) {
-            criteria.push(groupOperation[i]);
-        }
+        group = setGroupCriteria(group, criteria[0]);
+    }
+
+    if(isGroup(criteria)) {
+        removeAndOperatorFromGroup(criteria);
     }
 
     return group;
@@ -450,7 +482,19 @@ function getOperatorValue(condition) {
     return caption;
 }
 
-exports.getOperatorCaption = getOperatorCaption;
+function copyGroup(group) {
+    var result = [];
+    for(var i = 0; i < group.length; i++) {
+        var item = group[i];
+        if(isGroup(item)) {
+            result.push(copyGroup(item));
+        } else {
+            result.push(item);
+        }
+    }
+    return result;
+}
+
 exports.updateConditionByOperator = updateConditionByOperator;
 exports.getCaptionWithParents = getCaptionWithParents;
 exports.getItems = getItems;
@@ -459,6 +503,7 @@ exports.getGroupMenuItem = getGroupMenuItem;
 exports.getGroupValue = getGroupValue;
 exports.getAvailableOperations = getAvailableOperations;
 exports.removeItem = removeItem;
+exports.copyGroup = copyGroup;
 exports.createCondition = createCondition;
 exports.createEmptyGroup = createEmptyGroup;
 exports.addItem = addItem;

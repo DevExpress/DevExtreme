@@ -5,7 +5,7 @@
 var utils = require("ui/filter_builder/utils");
 
 var condition1 = ["CompanyName", "=", "Super Mart of the West"],
-    condition2 = ["CompanyName", "=", "Super Mart of the West2"],
+    condition2 = ["CompanyName", "=", "And"],
     condition3 = ["CompanyName", "=", "Super Mart of the West3"];
 
 var groupOperations = [{
@@ -91,50 +91,26 @@ QUnit.test("getGroupMenuItem", function(assert) {
 });
 
 QUnit.test("setGroupValue", function(assert) {
-    var group = [
-        condition1,
-        "And",
-        condition2,
-        "And",
-        condition3
-    ];
+    var group = [condition1, "And", condition2, "And", condition3];
     group = utils.setGroupValue(group, "Or");
-    // assert
-    assert.equal(group[0], condition1);
-    assert.equal(group[1], "Or");
-    assert.equal(group[2], condition2);
-    assert.equal(group[3], "Or");
-    assert.equal(group[4], condition3);
+    assert.deepEqual(group, [condition1, "Or", condition2, "Or", condition3]);
 
     group = utils.setGroupValue(group, "!Or");
-    // assert
-    assert.equal(group[0], "!");
-    assert.equal(group.length, 2);
-    assert.equal(group[1][0], condition1);
-    assert.equal(group[1][1], "Or");
-    assert.equal(group[1].length, 5);
+    assert.deepEqual(group, ["!", [condition1, "Or", condition2, "Or", condition3]]);
 
     group = utils.setGroupValue(group, "And");
-    // assert
-    assert.equal(group[0], condition1);
-    assert.equal(group[1], "And");
-    assert.equal(group[2], condition2);
-    assert.equal(group[3], "And");
-    assert.equal(group[4], condition3);
-    assert.equal(group.length, 5);
+    assert.deepEqual(group, [condition1, "And", condition2, "And", condition3]);
 
-    group = [
-        condition1,
-        condition2
-    ];
+    group = [condition1, condition2];
     group = utils.setGroupValue(group, "!Or");
-    // assert
-    assert.equal(group[0], "!");
-    assert.equal(group.length, 2);
-    assert.equal(group[1][0], condition1);
-    assert.equal(group[1][1], "Or");
-    assert.equal(group[1][2], condition2);
-    assert.equal(group[1].length, 3);
+    assert.deepEqual(group, ["!", [condition1, "Or", condition2]]);
+
+    group = [];
+    group = utils.setGroupValue(group, "!Or");
+    assert.deepEqual(group, ["!", ["Or"]]);
+
+    group = utils.setGroupValue(group, "And");
+    assert.deepEqual(group, ["And"]);
 });
 
 QUnit.test("removeItem", function(assert) {
@@ -284,6 +260,11 @@ QUnit.test("addItem", function(assert) {
     assert.equal(group.length, 2);
     assert.equal(group[1][2], condition3);
     assert.equal(group[1].length, 3);
+
+    var innerGroup = ["And"];
+    group = [condition1, innerGroup];
+    utils.addItem(condition2, innerGroup);
+    assert.deepEqual(group, [condition1, [condition2, "And"]]);
 });
 
 QUnit.test("get normalized filter", function(assert) {
@@ -297,42 +278,47 @@ QUnit.test("get normalized filter", function(assert) {
 
     group = [condition1, "And"];
     group = utils.getNormalizedFilter(group);
-    assert.equal(group[0], condition1[0]);
-    assert.equal(group[1], condition1[1]);
-    assert.equal(group[2], condition1[2]);
-    assert.equal(group.length, 3);
+    assert.equal(group, condition1);
+
+    group = [[condition1]];
+    group = utils.getNormalizedFilter(group);
+    assert.equal(group, condition1);
 
     group = [condition1, "And", [condition2, "And"]];
     group = utils.getNormalizedFilter(group);
     assert.equal(group[0], condition1);
-    assert.equal(group[1], "And");
-    assert.equal(group[2][0], condition2[0]);
-    assert.equal(group[2][1], condition2[1]);
-    assert.equal(group[2][2], condition2[2]);
-    assert.equal(group.length, 3);
+    assert.equal(group[1], condition2);
+
+    group = [condition1, "Or", [condition2, "Or"]];
+    group = utils.getNormalizedFilter(group);
+    assert.deepEqual(group, [condition1, "Or", condition2]);
 
     group = [condition1, "And", condition2, "And", ["And"]];
     group = utils.getNormalizedFilter(group);
+    assert.deepEqual(group, [condition1, condition2]);
+
+    group = [condition1, "And", condition2, "And", ["And"], "And", ["And"], "And", ["And"], "And", ["And"]];
+    group = utils.getNormalizedFilter(group);
+    assert.deepEqual(group, [condition1, condition2]);
     assert.equal(group[0], condition1);
-    assert.equal(group[1], "And");
-    assert.equal(group[2], condition2);
-    assert.equal(group.length, 3);
 
     group = [condition1, "And", ["And"]];
     group = utils.getNormalizedFilter(group);
-    assert.equal(group[0], condition1[0]);
-    assert.equal(group[1], condition1[1]);
-    assert.equal(group[2], condition1[2]);
-    assert.equal(group.length, 3);
+    assert.deepEqual(group, condition1);
 
     group = ["!", [condition1, "And", ["And"]]];
     group = utils.getNormalizedFilter(group);
-    assert.equal(group[0], "!");
-    assert.equal(group.length, 2);
-    assert.equal(group[1][0], condition1[0]);
-    assert.equal(group[1][1], condition1[1]);
-    assert.equal(group[1][2], condition1[2]);
-    assert.equal(group[1].length, 3);
+    assert.deepEqual(group, ["!", condition1]);
+
+    group = ["!", [condition1, "And", condition2]];
+    group = utils.getNormalizedFilter(group);
+    assert.deepEqual(group, ["!", [condition1, condition2]]);
+    assert.equal(group[1][0], condition1);
+
+    group = [[condition1, "And", condition2], [condition3, "And", condition2]];
+    group = utils.getNormalizedFilter(group);
+    assert.deepEqual(group, [[condition1, condition2], [condition3, condition2]]);
+    assert.equal(group[1][0], condition3);
 });
 
 QUnit.test("get group value", function(assert) {
@@ -600,5 +586,21 @@ QUnit.test("getOperatorValue", function(assert) {
     assert.deepEqual(utils.getOperatorValue(["value", "=", "123"]), "=");
     assert.deepEqual(utils.getOperatorValue(["value", "=", null]), "isblank");
     assert.deepEqual(utils.getOperatorValue(["value", "<>", null]), "isnotblank");
+});
+
+QUnit.test("copyGroup", function(assert) {
+    var group = [
+        condition1, condition2,
+        ["!", [condition2, "Or", condition3]]
+    ];
+    var newGroup = utils.copyGroup(group);
+    assert.notEqual(group, newGroup);
+    assert.equal(group[0], newGroup[0]);
+    assert.equal(group[1], newGroup[1]);
+    assert.notEqual(group[2], newGroup[2]);
+    assert.notEqual(group[2][1], newGroup[2][1]);
+    assert.equal(group[2][1][0], newGroup[2][1][0]);
+    assert.equal(group[2][1][1], newGroup[2][1][1]);
+    assert.equal(group[2][1][2], newGroup[2][1][2]);
 });
 
