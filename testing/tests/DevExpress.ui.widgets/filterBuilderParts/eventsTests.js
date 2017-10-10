@@ -19,7 +19,7 @@ QUnit.test("onEditorPreparing", function(assert) {
         companyNameValueField;
 
     container.dxFilterBuilder({
-        filter: [
+        value: [
             ["CompanyName", "=", "DevExpress"]
         ],
         fields: fields,
@@ -46,7 +46,7 @@ QUnit.test("onEditorPrepared", function(assert) {
         companyNameValueField;
 
     container.dxFilterBuilder({
-        filter: [
+        value: [
             ["CompanyName", "=", "DevExpress"]
         ],
         fields: fields,

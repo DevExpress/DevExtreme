@@ -194,7 +194,7 @@ function getDefaultOperation(field) {
 function createCondition(field) {
     var condition = [field.dataField, "", ""],
         filterOperation = getDefaultOperation(field);
-    updateConditionByOperator(condition, filterOperation);
+    updateConditionByOperation(condition, filterOperation);
 
     return condition;
 }
@@ -297,7 +297,7 @@ function isCondition(item) {
     return isCondition;
 }
 
-function removeAndOperatorFromGroup(group) {
+function removeAndOperationFromGroup(group) {
     var itemsForRemove = [];
     for(var i = 0; i < group.length; i++) {
         if(group[i] === "And") {
@@ -347,7 +347,7 @@ function getNormalizedFilter(group) {
     }
 
     if(isGroup(criteria)) {
-        removeAndOperatorFromGroup(criteria);
+        removeAndOperationFromGroup(criteria);
     }
 
     return group;
@@ -452,15 +452,15 @@ function getCaptionWithParents(item, plainItems) {
     return item.caption;
 }
 
-function updateConditionByOperator(condition, operator) {
-    if(operator === "isblank") {
+function updateConditionByOperation(condition, operation) {
+    if(operation === "isblank") {
         condition[1] = "=";
         condition[2] = null;
-    } else if(operator === "isnotblank") {
+    } else if(operation === "isnotblank") {
         condition[1] = "<>";
         condition[2] = null;
     } else {
-        condition[1] = operator;
+        condition[1] = operation;
         if(condition[2] === null) {
             condition[2] = "";
         }
@@ -468,7 +468,7 @@ function updateConditionByOperator(condition, operator) {
     return condition;
 }
 
-function getOperatorValue(condition) {
+function getOperationValue(condition) {
     var caption;
     if(condition[2] === null) {
         if(condition[1] === "=") {
@@ -495,7 +495,7 @@ function copyGroup(group) {
     return result;
 }
 
-exports.updateConditionByOperator = updateConditionByOperator;
+exports.updateConditionByOperation = updateConditionByOperation;
 exports.getCaptionWithParents = getCaptionWithParents;
 exports.getItems = getItems;
 exports.setGroupValue = setGroupValue;
@@ -516,4 +516,4 @@ exports.getDefaultOperation = getDefaultOperation;
 exports.getCurrentValueText = getCurrentValueText;
 exports.getFilterOperations = getFilterOperations;
 exports.getCaptionByOperation = getCaptionByOperation;
-exports.getOperatorValue = getOperatorValue;
+exports.getOperationValue = getOperationValue;
