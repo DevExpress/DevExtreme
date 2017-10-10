@@ -9,7 +9,9 @@ var eventsEngine = require("../../events/core/events_engine"),
     eventUtils = require("../../events/utils");
 
 var MASK_FORMATTER_NAMESPACE = "dxMaskFormatter",
-    FLOAT_SEPARATOR = ".";
+    FLOAT_SEPARATOR = ".",
+    FORWARD_DIRECTION = 1,
+    BACKWARD_DIRECTION = -1;
 
 var TextEditorFormatter = TextEditorBase.inherit({
 
@@ -27,8 +29,53 @@ var TextEditorFormatter = TextEditorBase.inherit({
         });
     },
 
+    _getRemovingDirection: function() {
+        if(this._lastKey === "Backspace") {
+            return -1;
+        } else if(this._lastKey === "Delete") {
+            return 1;
+        } else {
+            return 0;
+        }
+    },
+
+    _getRemovingText: function(direction) {
+        var caret = this._caret(),
+            text = this._input().val(),
+            start = caret.start,
+            end = caret.end;
+
+        if(start === end) {
+            if(direction === BACKWARD_DIRECTION) {
+                start--;
+            } else if(direction === FORWARD_DIRECTION) {
+                end++;
+            }
+        }
+
+        return text.slice(start, end);
+    },
+
+    _moveCaret: function(offset) {
+        if(!offset) return;
+
+        var caret = this._caret();
+
+        this._caret({
+            start: caret.start + offset,
+            end: caret.end + offset
+        });
+    },
+
     _keyboardHandler: function(e) {
         this._lastKey = e.originalEvent.key;
+
+        var removingDirection = this._getRemovingDirection(),
+            removingText = this._getRemovingText(removingDirection);
+
+        if(this._isStubSymbol(removingText)) {
+            this._moveCaret(removingDirection);
+        }
 
         if(this._isStubSymbol(this._lastKey)) {
             e.originalEvent.preventDefault();
@@ -245,7 +292,7 @@ var TextEditorFormatter = TextEditorBase.inherit({
     _valueChangeEventHandler: function(e) {
         if(this.option("displayFormat")) {
             this.callBase(e, this._parser(this._input().val()));
-            this._formatValue();
+            this._applyValue(this.option("value"), true);
         } else {
             this.callBase(e);
         }

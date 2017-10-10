@@ -278,7 +278,7 @@ QUnit.test("changing value to 0 should not clear the input", function(assert) {
     this.keyboard.type("0").change();
 
     assert.strictEqual(this.instance.option("value"), 0, "value is correct");
-    assert.equal(this.input.val(), "0", "text is correct");
+    assert.equal(this.input.val(), "0.00", "text is correct");
 });
 
 QUnit.test("input should have type 'tel' to show numeric keyboard on mobiles", function(assert) {
@@ -318,3 +318,23 @@ QUnit.test("changing of displayFormat option should reformat the input", functio
     assert.equal(this.input.val(), "50%", "text was reformatted");
     assert.equal(this.instance.option("value"), 0.5, "value was not changed");
 });
+
+QUnit.test("percent format should work properly on value change", function(assert) {
+    this.instance.option("displayFormat", "#%");
+    this.keyboard.type("45").change();
+
+    assert.equal(this.input.val(), "45%", "text is correct");
+    assert.equal(this.instance.option("value"), 0.45, "value is correct");
+});
+
+QUnit.test("removing a stub using backspace should remove previous char", function(assert) {
+    this.instance.option("displayFormat", "#%");
+    this.instance.option("value", 1.23);
+
+    assert.equal(this.input.val(), "123%", "initial value is correct");
+    this.keyboard.caret(4).press("backspace").input().change();
+
+    assert.equal(this.input.val(), "12%", "text is correct");
+    assert.equal(this.instance.option("value"), 0.12, "value is correct");
+});
+
