@@ -13,6 +13,8 @@ var FILTER_BUILDER_CLASS = "dx-filterbuilder",
     FILTER_BUILDER_ITEM_VALUE_CLASS = "dx-filterbuilder-item-value",
     FILTER_BUILDER_ITEM_VALUE_TEXT_CLASS = "dx-filterbuilder-item-value-text",
     FILTER_BUILDER_GROUP_CONTENT_CLASS = "dx-filterbuilder-group-content",
+    FILTER_BUILDER_IMAGE_ADD_CLASS = "dx-icon-plus",
+    FILTER_BUILDER_IMAGE_REMOVE_CLASS = "dx-icon-remove",
     FILTER_BUILDER_GROUP_OPERATION_CLASS = "dx-filterbuilder-group-operation",
     ACTIVE_CLASS = "dx-state-active";
 
@@ -37,9 +39,13 @@ QUnit.test("markup init", function(assert) {
 QUnit.test("create filterbuilder by different filter values", function(assert) {
     var element = $("#container").dxFilterBuilder({ fields: fields });
     var instance = element.dxFilterBuilder("instance");
+    instance.option("filter", null);
+    assert.ok(instance);
     instance.option("filter", []);
     assert.ok(instance);
     instance.option("filter", ["Or"]);
+    assert.ok(instance);
+    instance.option("filter", ["CompanyName", "=", "K&S Music"]);
     assert.ok(instance);
     instance.option("filter", [["CompanyName", "=", "K&S Music"], ["CompanyName", "=", "K&S Music"]]);
     assert.ok(instance);
@@ -323,6 +329,45 @@ QUnit.test("change operation", function(assert) {
         assert.equal($operationButton.text(), "Starts with");
 
         assert.equal(container.find("." + FILTER_BUILDER_ITEM_VALUE_CLASS).length, 1);
+    } finally {
+        fx.off = false;
+    }
+});
+
+QUnit.test("change value", function(assert) {
+    try {
+        fx.off = true;
+
+        var container = $("#container");
+        var instance = container.dxFilterBuilder({
+            filter: ["State", "<>", "K&S Music"],
+            fields: fields
+        }).dxFilterBuilder("instance");
+
+        var $valueButton = container.find("." + FILTER_BUILDER_ITEM_VALUE_TEXT_CLASS);
+        $valueButton.click();
+
+        var $textBoxContainer = container.find("." + FILTER_BUILDER_ITEM_VALUE_CLASS + " .dx-textbox"),
+            textBoxInstance = $textBoxContainer.dxTextBox("instance"),
+            $input = $textBoxContainer.find("input");
+        assert.ok($input.is(":focus"));
+
+        textBoxInstance.option("value", "Test");
+        $input.trigger("blur");
+        assert.ok(!$input.is(":focus"));
+        assert.deepEqual(instance._model, [["State", "<>", "Test"]]);
+        assert.deepEqual(instance.option("filter"), ["State", "<>", "Test"]);
+
+        $("." + FILTER_BUILDER_IMAGE_ADD_CLASS).click();
+        var $menuItem = $(".dx-treeview-item").eq(1);
+        $menuItem.trigger("dxclick");
+        assert.deepEqual(instance._model, [["State", "<>", "Test"], ["CompanyName", "contains", ""]]);
+        assert.deepEqual(instance.option("filter"), [["State", "<>", "Test"], ["CompanyName", "contains", ""]]);
+
+        $("." + FILTER_BUILDER_IMAGE_REMOVE_CLASS).eq(1).click();
+        assert.deepEqual(instance._model, [["State", "<>", "Test"]]);
+        assert.deepEqual(instance.option("filter"), ["State", "<>", "Test"]);
+        assert.equal(instance.option("filter"), instance._model[0]);
     } finally {
         fx.off = false;
     }
