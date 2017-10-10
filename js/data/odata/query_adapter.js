@@ -362,7 +362,29 @@ var createODataQueryAdapter = function(queryOptions) {
         return result;
     };
 
+    function tryLiftSelect(tasks) {
+        var selectIndex = -1;
+        for(var i = 0; i < tasks.length; i++) {
+            if(tasks[i].name === "select") {
+                selectIndex = i;
+                break;
+            }
+        }
+
+        if(selectIndex < 0 || !isFunction(tasks[selectIndex].args[0])) return;
+
+        var nextTask = tasks[1 + selectIndex];
+        if(!nextTask || nextTask.name !== "slice") return;
+
+        tasks[1 + selectIndex] = tasks[selectIndex];
+        tasks[selectIndex] = nextTask;
+    }
+
     return {
+
+        optimize: function(tasks) {
+            tryLiftSelect(tasks);
+        },
 
         exec: function(url) {
             return odataUtils.sendRequest(_oDataVersion,

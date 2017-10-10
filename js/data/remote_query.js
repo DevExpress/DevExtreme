@@ -74,6 +74,9 @@ var remoteQueryImpl = function(url, queryOptions, tasks) {
 
             _taskQueue = [].concat(tasks).concat(executorTask);
 
+            var optimize = _adapter.optimize;
+            if(optimize) optimize(_taskQueue);
+
             while(_taskQueue.length) {
                 _currentTask = _taskQueue[0];
 

@@ -1066,6 +1066,24 @@ QUnit.test("T560045 - ignore next link when $top is specified", function(assert)
         });
 });
 
+QUnit.test("Lift functional select after slice", function(assert) {
+    var done = assert.async();
+
+    $.mockjax({
+        url: "/",
+        response: function(bag) {
+            assert.equal(bag.data.$top, 20);
+            this.responseText = [];
+        }
+    });
+
+    QUERY("/")
+        .select(function(i) { return 2 * i; })
+        .slice(0, 20)
+        .enumerate()
+        .done(done);
+});
+
 QUnit.module("Switching to array mode", moduleWithMockConfig);
 QUnit.test("sort by function", function(assert) {
     assert.expect(1);
