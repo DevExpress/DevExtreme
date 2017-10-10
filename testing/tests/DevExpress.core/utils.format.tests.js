@@ -150,6 +150,30 @@ QUnit.test("percent format parsing", function(assert) {
 
 QUnit.module("number formatter");
 
+QUnit.test("integer with non-required digits", function(assert) {
+    var formatter = generateNumberFormat("#");
+
+    assert.strictEqual(formatter(null), "", "format an empty value");
+    assert.strictEqual(formatter(NaN), "", "NaN value should not be formatted");
+    assert.strictEqual(formatter(0), "", "format zero");
+    assert.strictEqual(formatter(10), "10", "format integer wkth zero at the end");
+    assert.strictEqual(formatter(123), "123", "format integer");
+    assert.strictEqual(formatter(123456), "123456", "format large integer");
+    assert.strictEqual(formatter(1E20), "100000000000000000000", "format very large integer");
+});
+
+QUnit.test("integer with required digits", function(assert) {
+    var formatter = generateNumberFormat("000");
+
+    assert.strictEqual(formatter(null), "", "format an empty value");
+    assert.strictEqual(formatter(NaN), "", "NaN value should not be formatted");
+    assert.strictEqual(formatter(0), "000", "format zero");
+    assert.strictEqual(formatter(1), "001", "format integer with 1 digit");
+    assert.strictEqual(formatter(10), "010", "format integer with zero at the end");
+    assert.strictEqual(formatter(123), "123", "format integer");
+    assert.strictEqual(formatter(123456), "456", "format large integer");
+});
+
 QUnit.test("float with precision formatting", function(assert) {
     var formatter = generateNumberFormat("#.00");
 
