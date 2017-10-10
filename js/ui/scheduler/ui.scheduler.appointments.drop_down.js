@@ -110,7 +110,8 @@ var dropDownAppointments = Class.inherit({
             this.instance._createComponent($menu, DropDownMenu, {
                 buttonIcon: null,
                 usePopover: true,
-                popupHeight: 200,
+                popupHeight: "auto",
+                popupMaxHeight: 200,
                 items: items.data,
                 buttonTemplate: this._createButtonTemplate(items.data.length),
                 buttonWidth: config.buttonWidth,
