@@ -15,6 +15,7 @@ var $ = require("jquery"),
     pointerMock = require("../../helpers/pointerMock.js"),
     keyboardMock = require("../../helpers/keyboardMock.js"),
     config = require("core/config"),
+    isRenderer = require("core/utils/type").isRenderer,
     browser = require("core/utils/browser"),
     dateSerialization = require("core/utils/date_serialization"),
     dataUtils = require("core/element_data");
@@ -1635,6 +1636,7 @@ QUnit.test("correct data should be passed to cellTemplate", function(assert) {
 
     this.reinit({
         cellTemplate: function(itemData, itemIndex, itemElement) {
+            assert.equal(isRenderer(itemElement), config().useJQueryRenderer, "itemElement is correct");
             if(!data) {
                 data = itemData;
             }
