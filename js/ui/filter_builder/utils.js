@@ -3,6 +3,7 @@
 var errors = require("../../data/errors").errors,
     extend = require("../../core/utils/extend").extend,
     formatHelper = require("../../format_helper"),
+    inflector = require("../../core/utils/inflector"),
     filterOperationsDictionary = require("./ui.filter_operations_dictionary");
 
 var DEFAULT_DATA_TYPE = "string",
@@ -385,11 +386,10 @@ function pushItemAndCheckParent(originalItems, plainItems, item) {
     if(hasParent(dataField)) {
         item.parentId = getParentIdFromItemDataField(dataField);
         if(!itemExist(plainItems, item.parentId) && !itemExist(originalItems, item.parentId)) {
-            var caption = item.parentId.substring(item.parentId.lastIndexOf(".") + 1);
             pushItemAndCheckParent(originalItems, plainItems, {
                 dataType: "object",
                 dataField: item.parentId,
-                caption: caption,
+                caption: generateCaptionByDataField(item.parentId, true),
                 filterOperations: ["isblank", "isnotblank"]
             });
         }
@@ -397,13 +397,39 @@ function pushItemAndCheckParent(originalItems, plainItems, item) {
     plainItems.push(item);
 }
 
-function getPlainItems(items) {
-    var plainItems = [];
-    for(var i = 0; i < items.length; i++) {
-        var item = extend(true, {}, items[i]);
-        pushItemAndCheckParent(items, plainItems, item);
+function generateCaptionByDataField(dataField, allowHierarchicalFields) {
+    var caption = "";
+
+    if(allowHierarchicalFields) {
+        dataField = dataField.substring(dataField.lastIndexOf(".") + 1);
+    } else if(hasParent(dataField)) {
+        dataField.split(".").forEach(function(field, index, arr) {
+            caption += inflector.captionize(field);
+            if(index !== (arr.length - 1)) {
+                caption += ".";
+            }
+        });
+
+        return caption;
     }
-    return plainItems;
+
+    return inflector.captionize(dataField);
+}
+
+function getItems(fields, allowHierarchicalFields) {
+    var items = [];
+
+    for(var i = 0; i < fields.length; i++) {
+        var item = extend(true, { caption: generateCaptionByDataField(fields[i].dataField, allowHierarchicalFields) }, fields[i]);
+
+        if(allowHierarchicalFields) {
+            pushItemAndCheckParent(fields, items, item);
+        } else {
+            items.push(item);
+        }
+    }
+
+    return items;
 }
 
 function hasParent(dataField) {
@@ -471,7 +497,7 @@ function copyGroup(group) {
 
 exports.updateConditionByOperator = updateConditionByOperator;
 exports.getCaptionWithParents = getCaptionWithParents;
-exports.getPlainItems = getPlainItems;
+exports.getItems = getItems;
 exports.setGroupValue = setGroupValue;
 exports.getGroupMenuItem = getGroupMenuItem;
 exports.getGroupValue = getGroupValue;
