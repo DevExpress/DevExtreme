@@ -31,7 +31,7 @@ function getIntegerPartRegExp(formatString) {
             "([1-9]\\d{0," + (firstGroupSize - 1) + "},)(\\d{" + firstGroupSize + "},)*\\d{" +
             lastGroupSize + "}|([1-9]\\d{0," + (lastGroupSize - 1 - requiredDigitCount) + "})?");
     } else {
-        result = result.replace(/#+/g, "([1-9]\\d*)?" + (requiredDigitCount ? "" : "|[0]"));
+        result = result.replace(/#+/g, "(([1-9]\\d*)?" + (requiredDigitCount ? ")" : "|[0])"));
     }
     return result;
 }
