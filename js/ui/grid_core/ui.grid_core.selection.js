@@ -778,13 +778,13 @@ module.exports = {
                     }
                 },
 
-                renderSelectCheckBoxContainer: function(column, container, options) {
+                renderSelectCheckBoxContainer: function(column, $container, options) {
                     if(options.rowType === "data" && !options.row.inserted) {
-                        container.addClass(EDITOR_CELL_CLASS);
-                        this._attachCheckBoxClickEvent(container);
+                        $container.addClass(EDITOR_CELL_CLASS);
+                        this._attachCheckBoxClickEvent($container);
 
-                        this.setAria("label", messageLocalization.format("dxDataGrid-ariaSelectRow"), container);
-                        this._renderSelectCheckBox(container, options.value, column);
+                        this.setAria("label", messageLocalization.format("dxDataGrid-ariaSelectRow"), $container);
+                        this._renderSelectCheckBox($container, options.value, column);
                     }
                 },
 

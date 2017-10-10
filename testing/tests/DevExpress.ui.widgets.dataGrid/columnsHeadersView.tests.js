@@ -1471,7 +1471,7 @@ QUnit.test('Custom function headerCellTemplate for column', function(assert) {
         { caption: 'Column 2' },
         {
             caption: 'Column 3', headerCellTemplate: function(container, options) {
-                container.text('Test');
+                $(container).text('Test');
                 headerCellTemplateOptions = options;
             }
         }
