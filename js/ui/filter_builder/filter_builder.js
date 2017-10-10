@@ -94,10 +94,10 @@ var FilterBuilder = Widget.inherit({
 
             /**
              * @name dxFilterBuilderOptions_filter
-             * @publicName filter
+             * @publicName value
              * @default null
              */
-            filter: null,
+            value: null,
 
             /**
              * @name dxFilterBuilderOptions_allowHierarchicalFields
@@ -244,7 +244,7 @@ var FilterBuilder = Widget.inherit({
                 break;
             case "fields":
             case "defaultGroupOperation":
-            case "filter":
+            case "value":
             case "allowHierarchicalFields":
             case "groupOperatorDescriptions":
             case "filterOperationDescriptions":
@@ -258,8 +258,8 @@ var FilterBuilder = Widget.inherit({
     _model: null,
 
     _updateFilter: function() {
-        var filter = utils.copyGroup(this._model);
-        this._options.filter = utils.getNormalizedFilter(filter);
+        var value = utils.copyGroup(this._model);
+        this._options.value = utils.getNormalizedFilter(value);
     },
 
     _init: function() {
@@ -294,11 +294,11 @@ var FilterBuilder = Widget.inherit({
     },
 
     _renderContentImpl: function() {
-        var filter = this.option("filter");
-        if(utils.isCondition(filter)) {
-            this._model = [filter];
+        var value = this.option("value");
+        if(utils.isCondition(value)) {
+            this._model = [value];
         } else {
-            this._model = filter || [];
+            this._model = value || [];
         }
         this._createGroupElementByCriteria(this._model)
             .appendTo(this.element());
