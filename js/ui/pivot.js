@@ -107,7 +107,7 @@ var Pivot = CollectionWidget.inherit({
             * @default "title"
             * @type_function_param1 itemData:object
             * @type_function_param2 itemIndex:number
-            * @type_function_param3 itemElement:jQuery
+            * @type_function_param3 itemElement:Element
             * @type_function_return string|Node|jQuery
             */
             itemTitleTemplate: "title",
@@ -117,7 +117,7 @@ var Pivot = CollectionWidget.inherit({
             * @publicName contentTemplate
             * @type template
             * @default "content"
-            * @type_function_param1 container:jQuery
+            * @type_function_param1 container:Element
             * @type_function_return string|Node|jQuery
             */
             contentTemplate: "content",
@@ -311,7 +311,7 @@ var Pivot = CollectionWidget.inherit({
         }
 
         this._getTemplateByOption("contentTemplate").render({
-            container: this._$itemWrapper
+            container: domUtils.getPublicElement(this._$itemWrapper)
         });
         this._singleContent = !this._$itemWrapper.is(":empty");
     },
