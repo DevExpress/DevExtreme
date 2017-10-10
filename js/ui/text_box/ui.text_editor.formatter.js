@@ -88,8 +88,8 @@ var TextEditorFormatter = TextEditorBase.inherit({
                     }
                     break;
                 default:
-                    var formattedFloat = this._getFormattedFloat(this._input().val());
-                    if(formattedFloat !== null) {
+                    var parsedValue = this._lightParse(this._input().val());
+                    if(parsedValue !== null) {
                         delta = this._getStubCountBeforeCaret();
                     }
                     break;
@@ -139,8 +139,9 @@ var TextEditorFormatter = TextEditorBase.inherit({
             .replace("|", "%");
     },
 
-    _getFormattedFloat: function(text) {
-        return this._escapedFormatter(+text);
+    _lightParse: function(text) {
+        var value = +text;
+        return isNaN(value) ? null : value;
     },
 
     _normalizeFormattedValue: function() {
@@ -166,9 +167,9 @@ var TextEditorFormatter = TextEditorBase.inherit({
         }
 
         if(this._formattedValue !== resultValue) {
-            var formattedResult = this._getFormattedFloat(resultValue);
-            if(formattedResult !== null) {
-                resultValue = formattedResult;
+            var parsedValue = this._lightParse(resultValue);
+            if(parsedValue !== null) {
+                resultValue = this._escapedFormatter(parsedValue);
             }
         }
 
@@ -261,7 +262,7 @@ var TextEditorFormatter = TextEditorBase.inherit({
         switch(args.name) {
             case "displayFormat":
                 this._renderFormatter();
-                this._formatValue();
+                this._applyValue(this.option("value"), true);
                 break;
             default:
                 this.callBase(args);

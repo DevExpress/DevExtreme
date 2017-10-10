@@ -309,3 +309,12 @@ QUnit.test("removing a char should work correctly with negative value", function
 
     assert.equal(this.input.val(), "-123.40", "value is correct");
 });
+
+QUnit.test("changing of displayFormat option should reformat the input", function(assert) {
+    this.instance.option("value", 0.5);
+    assert.equal(this.input.val(), "0.50", "text is correct");
+
+    this.instance.option("displayFormat", "#%");
+    assert.equal(this.input.val(), "50%", "text was reformatted");
+    assert.equal(this.instance.option("value"), 0.5, "value was not changed");
+});
