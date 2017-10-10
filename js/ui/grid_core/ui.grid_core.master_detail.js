@@ -230,7 +230,7 @@ module.exports = {
                             template;
 
                         if(column.command === "detail" && !isEditRow) {
-                            template = that.option("masterDetail.template") || that._getDefaultTemplate(column);
+                            template = that.option("masterDetail.template") || { allowRenderToDetachedContainer: false, render: that._getDefaultTemplate(column) };
                         } else {
                             template = that.callBase.apply(that, arguments);
                         }
