@@ -74,6 +74,25 @@ QUnit.test("input should have correct type", function(assert) {
     assert.equal($element.find("." + INPUT_CLASS).prop("type"), checkInput("number") ? instance.option("mode") : "text");
 });
 
+QUnit.test("input should have correct type when useMaskBehavior is enabled", function(assert) {
+    var realDevice = sinon.stub(devices, "real").returns("ios");
+
+    try {
+        var $element = $("#numberbox").dxNumberBox({
+                useMaskBehavior: true,
+                displayFormat: "#"
+            }),
+            instance = $element.dxNumberBox("instance");
+
+        assert.equal($element.find("." + INPUT_CLASS).prop("type"), "tel", "input has tel type");
+
+        instance.option("mode", "number");
+        assert.equal($element.find("." + INPUT_CLASS).prop("type"), "tel", "user can not set number type with mask");
+    } finally {
+        realDevice.restore();
+    }
+});
+
 QUnit.test("init with options", function(assert) {
     assert.expect(2);
 

@@ -108,7 +108,23 @@ var NumberBox = TextEditor.inherit({
              * @type string
              * @default "Value must be a number"
              */
-            invalidValueMessage: messageLocalization.format("dxNumberBox-invalidValueMessage")
+            invalidValueMessage: messageLocalization.format("dxNumberBox-invalidValueMessage"),
+
+            /**
+             * @name dxNumberBoxOptions_useMaskBehavior
+             * @publicName useMaskBehavior
+             * @type boolean
+             * @default false
+             */
+            useMaskBehavior: false,
+
+            /**
+             * @name dxNumberBoxOptions_displayFormat
+             * @publicName displayFormat
+             * @type String
+             * @default null
+             */
+            displayFormat: null,
 
             /**
             * @name dxNumberBoxOptions_mask
@@ -161,6 +177,10 @@ var NumberBox = TextEditor.inherit({
         });
     },
 
+    _useMaskBehavior: function() {
+        return !!this.option("displayFormat") && this.option("useMaskBehavior");
+    },
+
     _defaultOptionsRules: function() {
         return this.callBase().concat([
             {
@@ -196,6 +216,17 @@ var NumberBox = TextEditor.inherit({
         this.$element().addClass(WIDGET_CLASS);
         this.setAria("role", "spinbutton");
         this._renderMouseWheelHandler();
+    },
+
+    _renderInputType: function() {
+        var isDefaultMode = this.option("mode") === "number",
+            isMobile = devices.real().platform !== "generic";
+
+        if(this._useMaskBehavior() && isDefaultMode && isMobile) {
+            this._setInputType("tel");
+        } else {
+            this.callBase();
+        }
     },
 
     _renderSubmitElement: function() {
