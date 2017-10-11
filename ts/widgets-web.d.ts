@@ -2955,7 +2955,7 @@ declare module DevExpress.ui {
             displayExpr?: any;
 
             /** @docid dxFilterBuilderOptions_fields_lookup_valueExpr */
-            valueExpr?: string;
+            valueExpr?: any;
         };
 
         /** @docid dxFilterBuilderOptions_fields_filterOperations */
@@ -2969,7 +2969,7 @@ declare module DevExpress.ui {
         /** @docid_ignore dxFilterBuilderOptions_defaultGroupOperation */
 
         /** @docid dxFilterBuilderOptions_value */
-        value?: Array<any>;
+        value?: Object;
 
         /** @docid dxFilterBuilderOptions_allowHierarchicalFields */
         allowHierarchicalFields?: boolean;

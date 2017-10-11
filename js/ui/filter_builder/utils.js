@@ -23,13 +23,7 @@ function isNegationGroup(group) {
 }
 
 function getGroupCriteria(group) {
-    var criteria;
-    if(isNegationGroup(group)) {
-        criteria = group[1];
-    } else {
-        criteria = group;
-    }
-    return criteria;
+    return isNegationGroup(group) ? group[1] : group;
 }
 
 function setGroupCriteria(group, criteria) {
@@ -46,30 +40,22 @@ function convertGroupToNewStructure(group, value) {
             return value.indexOf("!") !== -1;
         },
         convertGroupToNegationGroup = function(group) {
-            var criteria = [];
-            for(var i = 0; i < group.length; i++) {
-                criteria.push(group[i]);
-            }
+            var criteria = group.slice(0);
             group.length = 0;
-            group.push("!");
-            group.push(criteria);
+            group.push("!", criteria);
         },
         convertNegationGroupToGroup = function(group) {
             var criteria = getGroupCriteria(group);
             group.length = 0;
-            for(var i = 0; i < criteria.length; i++) {
-                group.push(criteria[i]);
-            }
+            [].push.apply(group, criteria);
         };
 
     if(isNegationValue(value)) {
         if(!isNegationGroup(group)) {
             convertGroupToNegationGroup(group);
         }
-    } else {
-        if(isNegationGroup(group)) {
-            convertNegationGroupToGroup(group);
-        }
+    } else if(isNegationGroup(group)) {
+        convertNegationGroupToGroup(group);
     }
 }
 
@@ -92,10 +78,7 @@ function setGroupValue(group, value) {
             if(criteria.length === 0) {
                 criteria.push(value);
             } else {
-                var oldCriteria = [];
-                for(i = 0; i < criteria.length; i++) {
-                    oldCriteria.push(criteria[i]);
-                }
+                var oldCriteria = criteria.slice(0);
                 criteria.length = 0;
                 for(i = 0; i < oldCriteria.length; i++) {
                     criteria.push(oldCriteria[i]);
@@ -118,12 +101,10 @@ function setGroupValue(group, value) {
 
 function getGroupMenuItem(group, availableGroups) {
     var groupValue = getGroupValue(group);
-    for(var i = 0; i < availableGroups.length; i++) {
-        var item = availableGroups[i];
-        if(item.value === groupValue) {
-            return item;
-        }
-    }
+
+    return availableGroups.filter(function(item) {
+        return item.value === groupValue;
+    })[0];
 }
 
 function getGroupValue(group) {
@@ -149,13 +130,9 @@ function getGroupValue(group) {
 }
 
 function isCriteriaContainValueItem(criteria) {
-    for(var i = 0; i < criteria.length; i++) {
-        var item = criteria[i];
-        if(!Array.isArray(item)) {
-            return true;
-        }
-    }
-    return false;
+    return criteria.some(function(item) {
+        return !Array.isArray(item);
+    });
 }
 
 function getFilterOperations(field) {
@@ -190,16 +167,13 @@ function getAvailableOperations(field, filterOperationDescriptions) {
 }
 
 function getDefaultOperation(field) {
-    if(field.defaultFilterOperation) {
-        return field.defaultFilterOperation;
-    } else {
-        return getFilterOperations(field)[0];
-    }
+    return field.defaultFilterOperation || getFilterOperations(field)[0];
 }
 
 function createCondition(field) {
     var condition = [field.dataField, "", ""],
         filterOperation = getDefaultOperation(field);
+
     updateConditionByOperation(condition, filterOperation);
 
     return condition;
@@ -210,6 +184,7 @@ function removeItem(group, item) {
         index = criteria.indexOf(item);
 
     criteria.splice(index, 1);
+
     if(criteria.length > 2) {
         var lastIndex = criteria.length - 1;
         if(index > lastIndex) {
@@ -230,33 +205,19 @@ function removeItem(group, item) {
 }
 
 function createEmptyGroup(value) {
-    var group;
-    if(value.indexOf("!") !== -1) {
-        value = value.substring(4);
-        group = ["!", [value]];
-    } else {
-        group = [value];
-    }
-
-    return group;
+    return value.indexOf("not") !== -1 ? ["!", [value.substring(3)]] : [value];
 }
 
 function addItem(item, group) {
     var criteria = getGroupCriteria(group),
         groupValue = getGroupValue(criteria);
+
     if(criteria.length === 0) {
-        criteria.push(item);
-        criteria.push(groupValue);
+        criteria.push(item, groupValue);
     } else {
         var lastItemIsGroupOperation = criteria[criteria.length - 1] === groupValue;
         if(lastItemIsGroupOperation) {
-            if(criteria.length === 1) {
-                criteria.splice(0, 1);
-                criteria.push(item);
-                criteria.push(groupValue);
-            } else {
-                criteria.push(item);
-            }
+            criteria[criteria.length === 1 ? "unshift" : "push"](item);
         } else {
             if(isCriteriaContainValueItem(criteria)) {
                 criteria.push(groupValue);
@@ -276,62 +237,45 @@ function getField(dataField, fields) {
     throw new errors.Error("E1047", dataField);
 }
 
-function isGroup(item) {
-    var isGroup = Array.isArray(item) && item.length === 1;
-    if(!isGroup) {
-        for(var i = 0; i < item.length; i++) {
-            if(Array.isArray(item[i])) {
-                isGroup = true;
-                break;
-            }
-        }
+function isGroup(criteria) {
+    if(!Array.isArray(criteria)) {
+        return false;
     }
-    return isGroup;
+
+    return criteria.length === 1 || criteria.some(function(item) {
+        return Array.isArray(item);
+    });
 }
 
-function isCondition(item) {
-    var isCondition = Array.isArray(item) && item.length > 1;
-    if(isCondition) {
-        for(var i = 0; i < item.length; i++) {
-            if(Array.isArray(item[i])) {
-                isCondition = false;
-                break;
-            }
-        }
+function isCondition(criteria) {
+    if(!Array.isArray(criteria)) {
+        return false;
     }
-    return isCondition;
+
+    return criteria.length > 1 && !criteria.some(function(item) {
+        return Array.isArray(item);
+    });
 }
 
 function removeAndOperationFromGroup(group) {
-    var itemsForRemove = [];
-    for(var i = 0; i < group.length; i++) {
-        if(group[i] === "And") {
-            itemsForRemove.push(group[i]);
-        }
-    }
-    for(i = 0; i < itemsForRemove.length; i++) {
-        group.splice(group.indexOf(itemsForRemove[i]), 1);
+    var index = group.indexOf("And");
+    while(index !== -1) {
+        group.splice(index, 1);
+        index = group.indexOf("And");
     }
 }
 
 function convertToInnerStructure(value) {
-    var model;
     if(!value) {
-        model = [];
-    } else if(isCondition(value)) {
-        model = [value];
-    } else if(isNegationGroup(value)) {
-        model = [];
-        model[0] = value[0];
-        if(isCondition(value[1])) {
-            model[1] = [value[1]];
-        } else {
-            model[1] = value[1];
-        }
-    } else {
-        model = copyGroup(value);
+        return [];
     }
-    return model;
+    if(isCondition(value)) {
+        return [value];
+    }
+    if(isNegationGroup(value)) {
+        return ["!", isCondition(value[1]) ? [value[1]] : value[1]];
+    }
+    return copyGroup(value);
 }
 
 function getNormalizedFilter(group) {
@@ -369,9 +313,7 @@ function getNormalizedFilter(group) {
 
     if(criteria.length === 1) {
         group = setGroupCriteria(group, criteria[0]);
-    }
-
-    if(isGroup(criteria)) {
+    } else if(isGroup(criteria)) {
         removeAndOperationFromGroup(criteria);
     }
 
@@ -397,12 +339,7 @@ function getCurrentValueText(field, value) {
 }
 
 function itemExists(plainItems, parentId) {
-    for(var i = 0; i < plainItems.length; i++) {
-        if(plainItems[i].dataField === parentId) {
-            return true;
-        }
-    }
-    return false;
+    return plainItems.some(function(item) { return item.dataField === parentId; });
 }
 
 function pushItemAndCheckParent(originalItems, plainItems, item) {

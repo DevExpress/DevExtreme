@@ -140,18 +140,18 @@ var FilterBuilder = Widget.inherit({
             /**
              * @name dxFilterBuilderOptions_fields_lookup_dataSource
              * @publicName dataSource
-             * @type array|DataSourceOptions|function(options)
+             * @type Array<any>|DataSourceOptions|function(options)
              * @type_function_param1 options:object
              * @type_function_param1_field1 data:object
              * @type_function_param1_field2 key:any
-             * @type_function_return array|DataSourceOptions
+             * @type_function_return Array<any>|DataSourceOptions
              * @default undefined
              */
 
             /**
              * @name dxFilterBuilderOptions_fields_lookup_valueExpr
              * @publicName valueExpr
-             * @type string
+             * @type string|function(data)
              * @default undefined
              */
 
@@ -209,7 +209,7 @@ var FilterBuilder = Widget.inherit({
             /**
              * @name dxFilterBuilderOptions_value
              * @publicName value
-             * @type array
+             * @type Filter expression
              * @default null
              */
             value: null,
@@ -610,11 +610,7 @@ var FilterBuilder = Widget.inherit({
                 onItemClick: function(e) {
                     item = e.itemData;
                     condition[0] = item.dataField;
-                    if(item.dataType === "object") {
-                        condition[2] = null;
-                    } else {
-                        condition[2] = "";
-                    }
+                    condition[2] = item.dataType === "object" ? null : "";
                     utils.updateConditionByOperation(condition, utils.getDefaultOperation(item));
 
                     $fieldButton.siblings().filter("." + FILTER_BUILDER_ITEM_TEXT_CLASS).remove();
@@ -696,51 +692,50 @@ var FilterBuilder = Widget.inherit({
             .attr("tabindex", 0);
     },
 
-    _createValueButton: function(item, field) {
+    _createValueText: function(item, field, $container) {
         var that = this,
-            $valueButton = $("<div>")
-                .addClass(FILTER_BUILDER_ITEM_TEXT_CLASS)
-                .addClass(FILTER_BUILDER_ITEM_VALUE_CLASS);
-
-        var createValueText = function(item, field, $container) {
-            var valueText = utils.getCurrentValueText(field, item[2]) || messageLocalization.format("dxFilterBuilder-enterValueText");
-
-            var $text = $("<div>")
+            valueText = utils.getCurrentValueText(field, item[2]) || messageLocalization.format("dxFilterBuilder-enterValueText"),
+            $text = $("<div>")
                 .addClass(FILTER_BUILDER_ITEM_VALUE_TEXT_CLASS)
                 .attr("tabindex", 0)
                 .text(valueText)
                 .appendTo($container);
 
-            that._subscribeOnClickAndEnterKey($text, function() {
+        that._subscribeOnClickAndEnterKey($text, function() {
+            $container.empty();
+            var value = item[2];
+            var $editor = that._createValueEditor(item[2], field, function(data) {
+                value = data;
+            }).appendTo($container);
+            eventsEngine.trigger($editor.find("input"), "focus");
+
+            eventsEngine.on($editor, "focusout", function(e) {
                 $container.empty();
-                var value = item[2];
-                var $editor = that._createValueEditor(item[2], field, function(data) {
-                    value = data;
-                }).appendTo($container);
-                eventsEngine.trigger($editor.find("input"), "focus");
-
-                eventsEngine.on($editor, "focusout", function(e) {
+                item[2] = value;
+                that._createValueText(item, field, $container);
+            });
+            eventsEngine.on($editor, "keyup", function(e) {
+                if(e.keyCode === 13 || e.keyCode === 27) {
+                    eventsEngine.off($editor, "focusout");
                     $container.empty();
-                    item[2] = value;
-                    createValueText(item, field, $container);
-                });
-                eventsEngine.on($editor, "keyup", function(e) {
-                    if(e.keyCode === 13 || e.keyCode === 27) {
-                        eventsEngine.off($editor, "focusout");
-                        $container.empty();
-                        if(e.keyCode === 13) {
-                            item[2] = value;
-                        }
-                        var $newTextElement = createValueText(item, field, $container);
-                        eventsEngine.trigger($newTextElement, "focus");
+                    if(e.keyCode === 13) {
+                        item[2] = value;
                     }
-                });
-            }, "keyup");
+                    var $newTextElement = that._createValueText(item, field, $container);
+                    eventsEngine.trigger($newTextElement, "focus");
+                }
+            });
+        }, "keyup");
 
-            return $text;
-        };
+        return $text;
+    },
 
-        createValueText(item, field, $valueButton);
+    _createValueButton: function(item, field) {
+        var $valueButton = $("<div>")
+                .addClass(FILTER_BUILDER_ITEM_TEXT_CLASS)
+                .addClass(FILTER_BUILDER_ITEM_VALUE_CLASS);
+
+        this._createValueText(item, field, $valueButton);
         return $valueButton;
     },
 

@@ -637,4 +637,9 @@ QUnit.module("Utils", function() {
         }];
         assert.deepEqual(utils.getOperationFromAvailable("=", availableOperations), equalsOperation);
     });
+
+    QUnit.test("createEmptyGroup", function(assert) {
+        assert.deepEqual(utils.createEmptyGroup("And"), ["And"]);
+        assert.deepEqual(utils.createEmptyGroup("notAnd"), ["!", ["And"]]);
+    });
 });
