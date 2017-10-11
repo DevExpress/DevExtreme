@@ -249,15 +249,11 @@ var numberLocalization = dependencyInjector({
             errors.log("W0011");
         }
 
-        var decimalIndex = text.indexOf(config().decimalSeparator);
+        var textParts = text.split(config().decimalSeparator);
 
-        text = text.replace(new RegExp("^\\D+|" + escapeRegExp(config().groupSeparator) + "+", "g"), "");
+        textParts[0] = textParts[0].replace(new RegExp("^\\D+|" + escapeRegExp(config().groupSeparator) + "+", "g"), "");
 
-        if(decimalIndex >= 0) {
-            text = text.substr(0, decimalIndex) + "." + text.substr(decimalIndex + 1);
-        }
-
-        return parseFloat(text);
+        return parseFloat(textParts[0] + (textParts[1] ? "." + textParts[1] : ""));
     }
 });
 
