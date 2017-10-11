@@ -221,7 +221,7 @@ function handleTooltipDocumentTouchEnd() {
     }
 }
 
-eventsEngine.on(window.document, {
+eventsEngine.subscribeGlobal(window.document, {
     'touchstart.gauge-tooltip': handleTooltipDocumentTouchStart,
     'touchend.gauge-tooltip': handleTooltipDocumentTouchEnd
 });

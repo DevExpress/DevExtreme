@@ -1070,8 +1070,9 @@ require("common.css!");
         if(name === "jquery") {
             element = element.get(0);
         }
-        dataUtils.data(element, "key", "value");
+
         QUnit.test("dynamically created " + name + " template should save data associated with it", function(assert) {
+            dataUtils.data(element, "key", "value");
             var testContainer = new TestContainer("#container", {
                     template: function() {
                         return element;

@@ -6,7 +6,7 @@ var deferredUtils = require("../../core/utils/deferred");
 var useJQueryRenderer = require("../../core/config")().useJQueryRenderer;
 var compareVersion = require("../../core/utils/version").compare;
 
-if(useJQueryRenderer) {
+if(jQuery && useJQueryRenderer) {
     var strategy = { Deferred: Deferred };
 
     strategy.when = compareVersion(jQuery.fn.jquery, [3]) < 0

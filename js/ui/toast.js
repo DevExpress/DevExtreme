@@ -36,7 +36,7 @@ var TOAST_CLASS = "dx-toast",
         "left": { my: "center left", at: "center left", of: null, offset: "0 0" }
     };
 
-eventsEngine.on(document, pointerEvents.down, function(e) {
+eventsEngine.subscribeGlobal(document, pointerEvents.down, function(e) {
     for(var i = TOAST_STACK.length - 1; i >= 0; i--) {
         if(!TOAST_STACK[i]._proxiedDocumentDownHandler(e)) {
             return;

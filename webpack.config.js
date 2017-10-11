@@ -9,9 +9,8 @@ module.exports = {
         devtoolFallbackModuleFilenameTemplate: "devextreme:///[resource-path]?[hash]"
     },
     externals: {
-        // Required
-        'jquery': 'jQuery',
         // Optional (calling through window to skip error on script load)
+        'jquery': 'window.jQuery',
         'jszip': 'window.JSZip',
         'knockout': 'window.ko',
         'angular': 'window.angular',

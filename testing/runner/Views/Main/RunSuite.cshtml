@@ -245,12 +245,25 @@
             });
         });
 
-        Promise.all([
-            SystemJS.import("@Url.Content(Model.ScriptVirtualPath)"),
-            SystemJS.import("@Url.Content("~/testing/helpers/jQueryEventsPatch.js")"),
-            SystemJS.import("@Url.Content("~/testing/helpers/dataPatch.js")"),
-            new Promise(function(resolve) { jQuery(resolve); })
-        ]).then(function() {
+
+        var useJQuery = window.DevExpress.config.useJQueryRenderer;
+
+        SystemJS.import("@Url.Content(Model.ScriptVirtualPath)")
+        .then(function() {
+            var imports = [ new Promise(function(resolve) {
+                jQuery && jQuery(resolve) || resolve();
+            }) ];
+
+            if(useJQuery) {
+                imports.push(SystemJS.import("@Url.Content("~/js/integration/jquery.js")"));
+            } else {
+                imports.push(SystemJS.import("@Url.Content("~/testing/helpers/jQueryEventsPatch.js")"));
+                imports.push(SystemJS.import("@Url.Content("~/testing/helpers/dataPatch.js")"));
+                imports.push(SystemJS.import("@Url.Content("~/js/integration/jquery/component_registrator.js")"));
+            }
+
+            return Promise.all(imports);
+        }).then(function() {
             QUnit.start();
         }).catch(function (err) {
             QUnit.start();
@@ -258,6 +271,7 @@
                 throw err;
              });
         });
+
 
     })();
 </script>

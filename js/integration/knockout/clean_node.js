@@ -1,16 +1,14 @@
 "use strict";
 
-var dataUtilsStrategy = require("../../core/element_data").getDataStrategy(),
+var elementData = require("../../core/element_data"),
+    afterCleanData = elementData.afterCleanData,
     jQuery = require("jquery"),
     ko = require("knockout"),
     compareVersion = require("../../core/utils/version").compare,
     useJQueryRenderer = require("../../core/config")().useJQueryRenderer;
 
 if(!useJQueryRenderer || (jQuery && compareVersion(jQuery.fn.jquery, [2, 0]) >= 0)) {
-    var cleanData = dataUtilsStrategy.cleanData;
-    dataUtilsStrategy.cleanData = function(nodes) {
-        var result = cleanData(nodes);
-
+    afterCleanData(function(nodes) {
         for(var i = 0; i < nodes.length; i++) {
             nodes[i].cleanedByJquery = true;
         }
@@ -25,14 +23,12 @@ if(!useJQueryRenderer || (jQuery && compareVersion(jQuery.fn.jquery, [2, 0]) >= 
         for(i = 0; i < nodes.length; i++) {
             delete nodes[i].cleanedByJquery;
         }
-
-        return result;
-    };
+    });
 
     ko.utils.domNodeDisposal.cleanExternalData = function(node) {
         node.cleanedByKo = true;
         if(!node.cleanedByJquery) {
-            dataUtilsStrategy.cleanData([node]);
+            elementData.cleanData([node]);
         }
     };
 

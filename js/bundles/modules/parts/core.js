@@ -12,6 +12,7 @@ DevExpress.framework = require("../../../bundles/modules/framework");
 
 /* Integrations (dx.module-core.js) */
 
+require("../../../integration/jquery");
 require("../../../integration/angular");
 require("../../../integration/knockout");
 

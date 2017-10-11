@@ -4,6 +4,6 @@ var jquery = require("jquery"),
     dataUtils = require("../../core/element_data"),
     useJQueryRenderer = require("../../core/config")().useJQueryRenderer;
 
-if(useJQueryRenderer) {
+if(jquery && useJQueryRenderer) {
     dataUtils.setDataStrategy(jquery);
 }

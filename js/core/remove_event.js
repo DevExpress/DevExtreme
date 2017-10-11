@@ -1,15 +1,14 @@
 "use strict";
 
 var $ = require("./renderer");
-var dataUtilsStrategy = require("./element_data").getDataStrategy();
+var beforeCleanData = require("./element_data").beforeCleanData;
 var eventsEngine = require("../events/core/events_engine");
 var registerEvent = require("../events/core/event_registrator");
-var cleanData = dataUtilsStrategy.cleanData;
 
 var eventName = "dxremove";
 var eventPropName = "dxRemoveEvent";
 
-dataUtilsStrategy.cleanData = function(elements) {
+beforeCleanData(function(elements) {
     elements = [].slice.call(elements);
     for(var i = 0; i < elements.length; i++) {
         var $element = $(elements[i]);
@@ -18,9 +17,7 @@ dataUtilsStrategy.cleanData = function(elements) {
             eventsEngine.triggerHandler($element, eventName);
         }
     }
-
-    return cleanData(elements);
-};
+});
 
 registerEvent(eventName, {
     noBubble: true,

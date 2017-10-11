@@ -82,7 +82,7 @@ var getElement = function(value) {
     return value && $(value.target || value);
 };
 
-eventsEngine.on(document, pointerEvents.down, function(e) {
+eventsEngine.subscribeGlobal(document, pointerEvents.down, function(e) {
     for(var i = OVERLAY_STACK.length - 1; i >= 0; i--) {
         if(!OVERLAY_STACK[i]._proxiedDocumentDownHandler(e)) {
             return;

@@ -193,6 +193,10 @@
     var isMsEdge = "CollectGarbage" in window && !("ActiveXObject" in window);
 
     QUnit.testDone(function(options) {
+        if(!jQuery) {
+            return;
+        }
+
         if(isMsEdge) {
             jQuery("#qunit-fixture input[type=date]").attr("type", "hidden");
         }
@@ -509,6 +513,10 @@
     });
 
     QUnit.testDone(function(args) {
+        if(!jQuery) {
+            return;
+        }
+
         if(suppressLogOnTest()) {
             return;
         }

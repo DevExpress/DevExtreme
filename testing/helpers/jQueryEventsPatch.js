@@ -4,14 +4,14 @@
 
 var eventsEngine = require("events/core/events_engine");
 
-if(!QUnit.urlParams["nojquery"]) {
-    return;
-}
-
 var originalJQueryEvent = jQuery.Event;
 var originalJQueryMethods = {};
 
 QUnit.testStart(function() {
+    if(!jQuery) {
+        return;
+    }
+
     jQuery.Event = function() {
         return eventsEngine.Event.apply(this, arguments);
     };
@@ -45,6 +45,10 @@ QUnit.testStart(function() {
 });
 
 QUnit.testDone(function() {
+    if(!jQuery) {
+        return;
+    }
+
     jQuery.Event = originalJQueryEvent;
     jQuery.fn.extend(originalJQueryMethods);
 });

@@ -850,6 +850,23 @@ module.exports = {
         renderer = strategy;
     },
     get: function() {
-        return renderer;
+        var result = function() {
+            return renderer.apply(this, arguments);
+        };
+
+        Object.defineProperty(result, "fn", {
+            enumerable: true,
+            configurable: true,
+
+            get: function() {
+                return renderer.fn;
+            },
+
+            set: function(value) {
+                renderer.fn = value;
+            }
+        });
+
+        return result;
     }
 };

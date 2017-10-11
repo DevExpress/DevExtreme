@@ -5,7 +5,7 @@ var eventsEngine = require("../../events/core/events_engine");
 var useJQueryRenderer = require("../../core/config")().useJQueryRenderer;
 var registerEventCallbacks = require("../../events/core/event_registrator_callbacks");
 
-if(useJQueryRenderer) {
+if($ && useJQueryRenderer) {
     registerEventCallbacks.add(function(name, eventObject) {
         $.event.special[name] = eventObject;
     });
