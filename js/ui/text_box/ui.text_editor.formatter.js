@@ -68,6 +68,11 @@ var TextEditorFormatter = TextEditorBase.inherit({
     },
 
     _keyboardHandler: function(e) {
+        if(e.ctrl) {
+            this.callBase(e);
+            return;
+        }
+
         this._lastKey = e.originalEvent.key;
 
         var removingDirection = this._getRemovingDirection(),
@@ -86,7 +91,9 @@ var TextEditorFormatter = TextEditorBase.inherit({
                 this._moveCaret(1);
             }
 
-            e.originalEvent.preventDefault();
+            if(this._lastKey !== FLOAT_SEPARATOR || text.indexOf(FLOAT_SEPARATOR) >= 0) {
+                e.originalEvent.preventDefault();
+            }
         }
 
         this.callBase(e);
@@ -107,7 +114,6 @@ var TextEditorFormatter = TextEditorBase.inherit({
     },
 
     _renderFormatter: function() {
-
         this._clearCache();
 
         var displayFormat = this.option("displayFormat");
@@ -131,24 +137,12 @@ var TextEditorFormatter = TextEditorBase.inherit({
         eventsEngine.on($input, eventUtils.addNamespace("input", MASK_FORMATTER_NAMESPACE), this._formatValue.bind(this));
     },
 
-    _normalizeCaret: function(caret, _delta) {
-        var delta = _delta || 0,
-            text = this._input().val();
+    _normalizeCaret: function(caret) {
+        var delta = 0,
+            parsedValue = this._lightParse(this._input().val());
 
-        if(_delta === undefined) {
-            switch(this._lastKey) {
-                case FLOAT_SEPARATOR:
-                    if(text.charAt(caret.end) !== FLOAT_SEPARATOR) {
-                        delta = -1;
-                    }
-                    break;
-                default:
-                    var parsedValue = this._lightParse(this._input().val());
-                    if(parsedValue !== null) {
-                        delta = this._getStubCountBeforeCaret();
-                    }
-                    break;
-            }
+        if(parsedValue !== null) {
+            delta = this._getStubCountBeforeCaret();
         }
 
         return {
@@ -206,10 +200,9 @@ var TextEditorFormatter = TextEditorBase.inherit({
 
         switch(this._lastKey) {
             case "Backspace":
-                resultValue = text.slice(0, caret.start) + "0" + text.slice(caret.end);
-                break;
             case "Delete":
-                resultValue = text.slice(0, caret.end - 1) + "0" + text.slice(caret.end);
+                resultValue = text.slice(0, caret.start) + "0" + text.slice(caret.end);
+                this._moveCaret(1);
                 break;
             case FLOAT_SEPARATOR:
                 if(text.charAt(caret.end) !== FLOAT_SEPARATOR) {
@@ -238,14 +231,14 @@ var TextEditorFormatter = TextEditorBase.inherit({
         return this._input().val().replace(regexp, "");
     },
 
-    _applyValue: function(value, forced, delta) {
+    _applyValue: function(value, forced) {
         if(!this.option("displayFormat")) return;
 
         if(Object.is(this._parsedValue, value) && !forced) {
             return;
         }
 
-        var caret = this._normalizeCaret(this._caret(), delta);
+        var caret = this._normalizeCaret(this._caret());
 
         if(value === null && !forced) {
             this._normalizeFormattedValue();

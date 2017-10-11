@@ -9,7 +9,7 @@ require("ui/text_box/ui.text_editor");
 QUnit.module("displayFormat option", {
     beforeEach: function() {
         this.$element = $("#texteditor").dxTextEditor({
-            displayFormat: "#.##"
+            displayFormat: "#0.##"
         });
         this.input = this.$element.find(".dx-texteditor-input");
         this.instance = this.$element.dxTextEditor("instance");
@@ -79,14 +79,14 @@ QUnit.skip("removing required symbol should try replace it to 0", function(asser
         value: 123.456
     });
 
-    this.keyboard.caret(2).press("del").input();
-    assert.equal(this.input.val(), "12.456", "it is possible to remove a char");
+    this.keyboard.caret(3).press("del").input();
+    assert.equal(this.input.val(), "12.056", "it is possible to remove float separator");
 
     this.keyboard.press("del").input();
-    assert.equal(this.input.val(), "12.056", "it is impossible to remove a point");
+    assert.equal(this.input.val(), "12.006", "remove next char");
 
     this.keyboard.press("del").input();
-    assert.equal(this.input.val(), "12.006", "char was replaced to 0");
+    assert.equal(this.input.val(), "12.000", "remove last char");
 });
 
 QUnit.test("pressing '-' button should revert the number", function(assert) {
@@ -229,18 +229,18 @@ QUnit.test("removing decimal point should not change the value", function(assert
     this.instance.option("value", 123.45);
     this.keyboard.caret(3).press("del").input();
 
-    assert.equal(this.input.val(), "123.50", "value is correct");
+    assert.equal(this.input.val(), "123.5", "value is correct");
 });
 
 QUnit.test("pressing float separator should not move the caret", function(assert) {
-    this.instance.option("value", 123);
+    this.instance.option("value", 123.45);
     this.keyboard.caret(2).type(".");
 
-    assert.equal(this.input.val(), "123.00", "value is right");
-    assert.deepEqual(this.keyboard.caret(), { start: 2, end: 2 }, "caret is right");
+    assert.equal(this.input.val(), "123.45", "value is right");
+    assert.deepEqual(this.keyboard.caret(), { start: 2, end: 2 }, "caret was not moved");
 
     this.keyboard.caret(3).type(".");
-    assert.equal(this.input.val(), "123.00", "value is right");
+    assert.equal(this.input.val(), "123.45", "value is right");
     assert.deepEqual(this.keyboard.caret(), { start: 4, end: 4 }, "caret was moved to the float part");
 
 });
@@ -271,14 +271,14 @@ QUnit.test("incorrect char didn't change a caret position", function(assert) {
 
     assert.equal(caret.start, 1, "start position is the same");
     assert.equal(caret.end, 1, "end position is the same");
-    assert.equal(this.input.val(), "1234.00", "value is the same");
+    assert.equal(this.input.val(), "1234", "value is the same");
 });
 
 QUnit.test("changing value to 0 should not clear the input", function(assert) {
     this.keyboard.type("0").change();
 
     assert.strictEqual(this.instance.option("value"), 0, "value is correct");
-    assert.equal(this.input.val(), "0.00", "text is correct");
+    assert.equal(this.input.val(), "0", "text is correct");
 });
 
 QUnit.test("input should have type 'tel' to show numeric keyboard on mobiles", function(assert) {
@@ -307,12 +307,12 @@ QUnit.test("removing a char should work correctly with negative value", function
     this.instance.option("value", -123.45);
     this.keyboard.caret(7).press("backspace").input();
 
-    assert.equal(this.input.val(), "-123.40", "value is correct");
+    assert.equal(this.input.val(), "-123.4", "value is correct");
 });
 
 QUnit.test("changing of displayFormat option should reformat the input", function(assert) {
     this.instance.option("value", 0.5);
-    assert.equal(this.input.val(), "0.50", "text is correct");
+    assert.equal(this.input.val(), "0.5", "text is correct");
 
     this.instance.option("displayFormat", "#%");
     assert.equal(this.input.val(), "50%", "text was reformatted");
