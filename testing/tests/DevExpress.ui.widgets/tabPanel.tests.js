@@ -558,10 +558,10 @@ QUnit.test("tabs focusedElement dependence on tabPanels focusedElement", functio
     $(toSelector(MULTIVIEW_ITEM_CLASS)).eq(1).trigger("dxpointerdown");
     this.clock.tick();
 
-    var multiViewFocusedIndex = this.instance.option("focusedElement").index();
+    var multiViewFocusedIndex = this.instance._getFocusedElementOption().index();
 
     assert.equal(multiViewFocusedIndex, 1, "second multiView element has been focused");
-    assert.equal(multiViewFocusedIndex, this.tabs.option("focusedElement").index(), "tabs focused element is equal multiView focused element");
+    assert.equal(multiViewFocusedIndex, this.tabs._getFocusedElementOption().index(), "tabs focused element is equal multiView focused element");
 });
 
 QUnit.test("tabPanels focusedElement dependence on tabs focusedElement", function(assert) {
@@ -571,10 +571,10 @@ QUnit.test("tabPanels focusedElement dependence on tabs focusedElement", functio
     $(toSelector(TABS_ITEM_CLASS)).eq(1).trigger("dxpointerdown");
     this.clock.tick();
 
-    var tabsFocusedIndex = this.instance.option("focusedElement").index();
+    var tabsFocusedIndex = this.instance._getFocusedElementOption().index();
 
     assert.equal(tabsFocusedIndex, 1, "second tabs element has been focused");
-    assert.equal(tabsFocusedIndex, this.instance.option("focusedElement").index(), "multiView focused element is equal tabs focused element");
+    assert.equal(tabsFocusedIndex, this.instance._getFocusedElementOption().index(), "multiView focused element is equal tabs focused element");
 });
 
 QUnit.test("tabs focusedElement lose focused class", function(assert) {
@@ -603,7 +603,7 @@ QUnit.test("tabpanel should NOT have aria-activedescendant", function(assert) {
 
     assert.equal($element.attr("aria-activedescendant"), undefined, "aria-activedescendant does not exist");
 
-    instance.option("focusedElement", $element.find(".dx-item:eq(1)"));
+    instance._setFocusedElementOption($element.find(".dx-item:eq(1)"));
     assert.equal($element.attr("aria-activedescendant"), undefined, "aria-activedescendant does not exist after selection update");
 });
 

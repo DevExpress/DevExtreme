@@ -51,14 +51,14 @@ var ListBase = CollectionWidget.inherit({
 
         var moveFocusPerPage = function(direction) {
             var $item = getEdgeVisibleItem(direction),
-                isFocusedItem = $item.is(that.option("focusedElement"));
+                isFocusedItem = $item.is(that._getFocusedElementOption());
 
             if(isFocusedItem) {
                 scrollListTo($item, direction);
                 $item = getEdgeVisibleItem(direction);
             }
 
-            that.option("focusedElement", $item);
+            that._setFocusedElementOption($item);
             that.scrollToItem($item);
         };
 
@@ -66,7 +66,7 @@ var ListBase = CollectionWidget.inherit({
             var scrollTop = that.scrollTop(),
                 containerHeight = that.$element().height();
 
-            var $item = that.option("focusedElement"),
+            var $item = that._getFocusedElementOption(),
                 isItemVisible = true;
 
             if(!$item) {
@@ -759,7 +759,7 @@ var ListBase = CollectionWidget.inherit({
                     var $group = $(e.jQueryEvent.currentTarget).parent();
                     this._collapseGroupHandler($group);
                     if(this.option("focusStateEnabled")) {
-                        this.option("focusedElement", $group.find("." + LIST_ITEM_CLASS).eq(0));
+                        this._setFocusedElementOption($group.find("." + LIST_ITEM_CLASS).eq(0));
                     }
                 }).bind(this), {
                     validatingTargetName: "element"
@@ -966,7 +966,7 @@ var ListBase = CollectionWidget.inherit({
     _moveFocus: function() {
         this.callBase.apply(this, arguments);
 
-        this.scrollToItem(this.option("focusedElement"));
+        this.scrollToItem(this._getFocusedElementOption());
     },
 
     _refresh: function() {

@@ -23,7 +23,7 @@ var AUTOCOMPLETE_CLASS = "dx-autocomplete",
 var Autocomplete = DropDownList.inherit({
 
     _supportedKeys: function() {
-        var item = this._list ? this._list.option("focusedElement") : null,
+        var item = this._list ? this._list._getFocusedElementOption() : null,
             parent = this.callBase();
 
         return extend({}, parent, {
@@ -251,7 +251,7 @@ var Autocomplete = DropDownList.inherit({
 
     _clearFocusedItem: function() {
         if(this._list) {
-            this._list.option("focusedElement", null);
+            this._list._setFocusedElementOption(null);
             this._list.option("selectedIndex", -1);
         }
     },

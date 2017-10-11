@@ -864,7 +864,7 @@ QUnit.test("aria-activedescendant on widget should point to focused list item", 
         list = $element.find(".dx-list").dxList("instance");
 
     instance.open();
-    list.option("focusedElement", $listItem);
+    list._setFocusedElementOption($listItem);
 
     assert.notEqual($element.attr("aria-activedescendant"), undefined);
     assert.equal($element.attr("aria-activedescendant"), $listItem.attr("id"));

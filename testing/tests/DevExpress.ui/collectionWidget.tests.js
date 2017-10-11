@@ -1346,10 +1346,10 @@ QUnit.test("focused item should be changed asynchronous (T400886)", function(ass
         $item = $items.first();
 
     $item.trigger("dxpointerdown");
-    assert.equal(instance.option("focusedElement"), null, "focus isn't set");
+    assert.equal(instance._getFocusedElementOption(), null, "focus isn't set");
 
     this.clock.tick();
-    assert.equal(instance.option("focusedElement").get(0), $item.get(0), "focus set after timeout");
+    assert.equal(instance._getFocusedElementOption().get(0), $item.get(0), "focus set after timeout");
 });
 
 QUnit.testInActiveWindow("focused item should be changed synchronous with widget focus (T427152)", function(assert) {
@@ -1363,7 +1363,7 @@ QUnit.testInActiveWindow("focused item should be changed synchronous with widget
 
     $item.trigger("dxpointerdown");
     instance.focus();
-    assert.equal(instance.option("focusedElement").get(0), $item.get(0), "focus isn't set");
+    assert.equal(instance._getFocusedElementOption().get(0), $item.get(0), "focus isn't set");
 });
 
 QUnit.test("focused item should not be changed if pointerdown prevented (T400886)", function(assert) {
@@ -1379,7 +1379,7 @@ QUnit.test("focused item should not be changed if pointerdown prevented (T400886
     $item.trigger(event);
     event.preventDefault();
     this.clock.tick();
-    assert.equal(instance.option("focusedElement"), null, "focus isn't set");
+    assert.equal(instance._getFocusedElementOption(), null, "focus isn't set");
 });
 
 QUnit.test("selectOnFocus test for widget with disabled items", function(assert) {
@@ -1495,7 +1495,7 @@ QUnit.test("focusedElement is set for item when nested element selected by dxpoi
 
     $item.trigger($.Event("dxpointerdown", { target: $item.find("span").get(0) }));
     this.clock.tick();
-    assert.equal(instance.option("focusedElement").get(0), $item.get(0), "focus set to first item");
+    assert.equal(instance._getFocusedElementOption().get(0), $item.get(0), "focus set to first item");
 });
 
 QUnit.test("dx-state-focused is not set for item when it is not closest focused target by focusin", function(assert) {
@@ -1566,7 +1566,7 @@ QUnit.test("item is focused after setting focusedElement option", function(asser
 
     assert.ok(!$item.hasClass(FOCUSED_ITEM_CLASS), "item is not focused");
 
-    instance.option("focusedElement", $item);
+    instance._setFocusedElementOption($item);
 
     assert.ok($item.hasClass(FOCUSED_ITEM_CLASS), "item is focused after setting focusedItem option");
 });
@@ -1728,7 +1728,7 @@ QUnit.test("aria-activedescendant should be refreshed when focused item changed"
     };
 
     try {
-        widget.option("focusedElement", $item);
+        widget._setFocusedElementOption($item);
     } finally {
         widget._refreshActiveDescendant = spy;
     }
@@ -1780,13 +1780,13 @@ QUnit.test("onFocusedItemChanged option on init", function(assert) {
         $item0 = $($element).find(".dx-item:eq(0)"),
         $item1 = $($element).find(".dx-item:eq(1)");
 
-    instance.option("focusedElement", $item0);
+    instance._setFocusedElementOption($item0);
 
     instance.option("onFocusedItemChanged", function() {
         assert.ok(true, "onFocusedItemChanged, defined on option change was triggered");
     });
 
-    instance.option("focusedElement", $item1);
+    instance._setFocusedElementOption($item1);
 });
 
 QUnit.test("getDataSource. dataSource is not defined", function(assert) {

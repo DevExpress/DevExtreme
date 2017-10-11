@@ -796,7 +796,7 @@ var Lookup = DropDownList.inherit({
                 this._searchCanceled();
                 this._searchDataSource();
             }
-            this._list && this._list.option("focusedElement", null);
+            this._list && this._list._setFocusedElementOption(null);
         }
 
         this._attachSearchChildProcessor();
@@ -1008,7 +1008,7 @@ var Lookup = DropDownList.inherit({
     },
 
     _selectListItemHandler: function(e) {
-        var $itemElement = this._list.option("focusedElement");
+        var $itemElement = this._list._getFocusedElementOption();
 
         if(!$itemElement) {
             return;

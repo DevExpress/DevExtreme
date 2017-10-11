@@ -1010,7 +1010,7 @@ QUnit.test("input's aria-activedescendant attribute should point to the focused 
         $input = $dropDownList.find("input"),
         $item = $list.find(".dx-list-item:eq(1)");
 
-    list.option("focusedElement", $item);
+    list._setFocusedElementOption($item);
 
     assert.notEqual($input.attr("aria-activedescendant"), undefined, "aria-activedescendant exists");
     assert.equal($input.attr("aria-activedescendant"), $item.attr("id"), "aria-activedescendant and id of the focused item are equals");

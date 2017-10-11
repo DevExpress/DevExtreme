@@ -959,7 +959,7 @@ var Gallery = CollectionWidget.inherit({
         this._userInteraction = true;
 
         var selectedItem = this.itemElements().filter("." + GALLERY_ITEM_SELECTED_CLASS);
-        this.option("focusedElement", selectedItem);
+        this._setFocusedElementOption(selectedItem);
         this._userInteraction = false;
     },
 
@@ -1061,7 +1061,7 @@ var Gallery = CollectionWidget.inherit({
 
         this.callBase.apply(this, arguments);
 
-        var index = this.itemElements().index(this.option("focusedElement"));
+        var index = this.itemElements().index(this._getFocusedElementOption());
         this.goToItem(index, this.option("animationEnabled"));
     },
 

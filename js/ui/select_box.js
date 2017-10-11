@@ -346,7 +346,7 @@ var SelectBox = DropDownList.inherit({
 
     _focusListElement: function(element) {
         this._preventInputValueRender = true;
-        this._list.option("focusedElement", element);
+        this._list._setFocusedElementOption(element);
         delete this._preventInputValueRender;
     },
 
@@ -486,7 +486,7 @@ var SelectBox = DropDownList.inherit({
         }
 
         var list = e.component,
-            focusedElement = list.option("focusedElement"),
+            focusedElement = list._getFocusedElementOption(),
             focusedItem = list._getItemData(focusedElement);
 
         this._updateField(focusedItem);
@@ -592,7 +592,7 @@ var SelectBox = DropDownList.inherit({
     },
 
     _fieldRenderData: function() {
-        var $listFocused = this._list && this._list.option("focusedElement");
+        var $listFocused = this._list && this._list._getFocusedElementOption();
 
         if($listFocused) {
             return this._list._getItemData($listFocused);

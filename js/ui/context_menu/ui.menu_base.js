@@ -344,7 +344,7 @@ var MenuBase = HierarchicalCollectionWidget.inherit({
 
     _supportedKeys: function() {
         var selectItem = function() {
-            var $item = this.option("focusedElement");
+            var $item = this._getFocusedElementOption();
 
             if(!$item || !this._isSelectionEnabled()) {
                 return;

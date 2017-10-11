@@ -449,7 +449,7 @@ var TileView = CollectionWidget.inherit({
 
         var horizontalDirection = this.option("direction") === "horizontal",
             cells = this._cells,
-            index = this.option("focusedElement").index(),
+            index = this._getFocusedElementOption().index(),
             targetCol = this._itemsPositions[index].left,
             targetRow = this._itemsPositions[index].top;
 
@@ -512,7 +512,7 @@ var TileView = CollectionWidget.inherit({
         }
 
         var $newTarget = this._itemElements().eq(newTargetIndex);
-        this.option("focusedElement", $newTarget);
+        this._setFocusedElementOption($newTarget);
         this._scrollToItem($newTarget);
     },
 

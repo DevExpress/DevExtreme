@@ -110,7 +110,7 @@ var SchedulerAppointments = CollectionWidget.inherit({
         clearTimeout(this._appointmentFocusedTimeout);
         this.callBase.apply(this, arguments);
         this._$currentAppointment = $(e.target);
-        this.option("focusedElement", $(e.target));
+        this._setFocusedElementOption($(e.target));
         var that = this;
 
         this._appointmentFocusedTimeout = setTimeout(function() {
@@ -125,7 +125,7 @@ var SchedulerAppointments = CollectionWidget.inherit({
     _focusOutHandler: function() {
         var $appointment = this._getAppointmentByIndex(0);
 
-        this.option("focusedElement", $appointment);
+        this._setFocusedElementOption($appointment);
         this.callBase.apply(this, arguments);
     },
 
@@ -1020,8 +1020,8 @@ var SchedulerAppointments = CollectionWidget.inherit({
     focus: function() {
         var $appointment = this._$currentAppointment;
         if($appointment) {
-            this.option("focusedElement", $appointment);
-            eventsEngine.trigger(this.option("focusedElement"), "focus");
+            this._setFocusedElementOption($appointment);
+            eventsEngine.trigger(this._getFocusedElementOption(), "focus");
         }
     },
 

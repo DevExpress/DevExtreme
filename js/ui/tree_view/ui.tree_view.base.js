@@ -45,7 +45,7 @@ var TreeViewBase = HierarchicalCollectionWidget.inherit({
 
     _supportedKeys: function(e) {
         var click = function(e) {
-            var $itemElement = this.option("focusedElement");
+            var $itemElement = this._getFocusedElementOption();
 
             if(!$itemElement) {
                 return;
@@ -58,7 +58,7 @@ var TreeViewBase = HierarchicalCollectionWidget.inherit({
 
         var select = function(e) {
             e.preventDefault();
-            this._changeCheckBoxState(this.option("focusedElement"));
+            this._changeCheckBoxState(this._getFocusedElementOption());
         };
 
         var toggleExpandedNestedItems = function(state, e) {
@@ -68,7 +68,7 @@ var TreeViewBase = HierarchicalCollectionWidget.inherit({
 
             e.preventDefault();
 
-            var $rootElement = this.option("focusedElement");
+            var $rootElement = this._getFocusedElementOption();
 
             if(!$rootElement) {
                 return;
@@ -1478,18 +1478,18 @@ var TreeViewBase = HierarchicalCollectionWidget.inherit({
 
         that._updateFocusState(e, true);
 
-        if(that.option("focusedElement")) {
+        if(that._getFocusedElementOption()) {
             clearTimeout(that._setFocusedItemTimeout);
 
             that._setFocusedItemTimeout = setTimeout(function() {
-                that._setFocusedItem(that.option("focusedElement"));
+                that._setFocusedItem(that._getFocusedElementOption());
             });
 
             return;
         }
 
         var $activeItem = that._getActiveItem();
-        that.option("focusedElement", $activeItem.closest("." + NODE_CLASS));
+        that._setFocusedElementOption($activeItem.closest("." + NODE_CLASS));
     },
 
     _setFocusedItem: function($target) {
@@ -1516,7 +1516,7 @@ var TreeViewBase = HierarchicalCollectionWidget.inherit({
         }
 
         var itemElement = $target.hasClass(DISABLED_STATE_CLASS) ? null : $target;
-        this.option("focusedElement", itemElement);
+        this._setFocusedElementOption(itemElement);
     },
 
     _findNonDisabledNodes: function($nodes) {
@@ -1547,7 +1547,7 @@ var TreeViewBase = HierarchicalCollectionWidget.inherit({
             case FOCUS_UP:
                 var $prevItem = this._prevItem($items);
 
-                this.option("focusedElement", $prevItem);
+                this._setFocusedElementOption($prevItem);
                 if(e.shiftKey && this._showCheckboxes()) {
                     this._updateItemSelection(true, $prevItem.find("." + ITEM_CLASS).get(0));
                 }
@@ -1555,7 +1555,7 @@ var TreeViewBase = HierarchicalCollectionWidget.inherit({
             case FOCUS_DOWN:
                 var $nextItem = this._nextItem($items);
 
-                this.option("focusedElement", $nextItem);
+                this._setFocusedElementOption($nextItem);
                 if(e.shiftKey && this._showCheckboxes()) {
                     this._updateItemSelection(true, $nextItem.find("." + ITEM_CLASS).get(0));
                 }
@@ -1567,7 +1567,7 @@ var TreeViewBase = HierarchicalCollectionWidget.inherit({
                     this._updateSelectionToFirstItem($items, $items.index(this._prevItem($items)));
                 }
 
-                this.option("focusedElement", $firstItem);
+                this._setFocusedElementOption($firstItem);
                 break;
             case FOCUS_LAST:
                 var $lastItem = $items.last();
@@ -1576,7 +1576,7 @@ var TreeViewBase = HierarchicalCollectionWidget.inherit({
                     this._updateSelectionToLastItem($items, $items.index(this._nextItem($items)));
                 }
 
-                this.option("focusedElement", $lastItem);
+                this._setFocusedElementOption($lastItem);
                 break;
             case FOCUS_RIGHT:
                 this._expandFocusedContainer();
@@ -1597,7 +1597,7 @@ var TreeViewBase = HierarchicalCollectionWidget.inherit({
     },
 
     _expandFocusedContainer: function() {
-        var $focusedNode = this.option("focusedElement");
+        var $focusedNode = this._getFocusedElementOption();
         if(!$focusedNode || $focusedNode.hasClass(IS_LEAF)) {
             return;
         }
@@ -1605,7 +1605,7 @@ var TreeViewBase = HierarchicalCollectionWidget.inherit({
         var $node = $focusedNode.find("." + NODE_CONTAINER_CLASS).eq(0);
 
         if($node.hasClass(OPENED_NODE_CONTAINER_CLASS)) {
-            this.option("focusedElement", this._nextItem(this._findNonDisabledNodes(this._nodeElements())));
+            this._setFocusedElementOption(this._nextItem(this._findNonDisabledNodes(this._nodeElements())));
             return;
         }
 
@@ -1622,7 +1622,7 @@ var TreeViewBase = HierarchicalCollectionWidget.inherit({
     },
 
     _collapseFocusedContainer: function() {
-        var $focusedNode = this.option("focusedElement");
+        var $focusedNode = this._getFocusedElementOption();
 
         if(!$focusedNode) {
             return;
@@ -1635,7 +1635,7 @@ var TreeViewBase = HierarchicalCollectionWidget.inherit({
             this._toggleExpandedState(node, false);
         } else {
             var collapsedNode = this._getClosestNonDisabledNode($focusedNode);
-            collapsedNode.length && this.option("focusedElement", collapsedNode);
+            collapsedNode.length && this._setFocusedElementOption(collapsedNode);
         }
     },
 

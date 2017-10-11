@@ -386,7 +386,7 @@ var MultiView = CollectionWidget.inherit({
             this.option("selectedIndex", this._normalizeIndex(this.option("selectedIndex") - targetOffset));
             //TODO: change focusedElement on focusedItem
             var $selectedElement = this.itemElements().filter(".dx-item-selected");
-            this.option("focusStateEnabled") && this.option("focusedElement", $selectedElement);
+            this.option("focusStateEnabled") && this._setFocusedElementOption($selectedElement);
         } else {
             this._animateItemContainer(0, noop);
         }

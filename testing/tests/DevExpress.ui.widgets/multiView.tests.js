@@ -194,7 +194,7 @@ QUnit.test("pointerdown should not affect to parent multiview (T306118)", functi
 
     $($outerItemElements.eq(0)).trigger($.Event("dxpointerdown", { target: $innerSecondItem }));
 
-    assert.equal(outerMultiView.option("focusedElement").get(0), $outerItemElements.get(0), "focusedElement was not changed if event's target is not part of the widget");
+    assert.equal(outerMultiView._getFocusedElementOption().get(0), $outerItemElements.get(0), "focusedElement was not changed if event's target is not part of the widget");
 });
 
 
@@ -949,7 +949,7 @@ QUnit.test("selected item should have unique id", function(assert) {
     assert.equal($item1.attr("id"), undefined, "unselected item has no id");
 
     instance.option("selectedIndex", 1);
-    instance.option("focusedElement", $item1);
+    instance._setFocusedElementOption($item1);
 
     assert.equal($item1.attr("id"), id, "selected 2nd item has correct id");
     assert.equal($item0.attr("id"), undefined, "unselected item has no id");

@@ -1309,7 +1309,7 @@ QUnit.test("First item should not get focus after menu shown", function(assert) 
     instance.show();
 
     assert.equal(focusedElementChangeCount, 0, "focusedElement should not be changed");
-    assert.equal(instance.option("focusedElement"), null, "focusedElement should be cleared");
+    assert.equal(instance._getFocusedElementOption(), null, "focusedElement should be cleared");
     assert.equal(instance.itemsContainer().find("." + DX_STATE_FOCUSED_CLASS).length, 0, "there are no focused elements in ui");
 });
 
@@ -1647,7 +1647,7 @@ QUnit.test("end key work only in current submenu", function(assert) {
         .keyDown("down")
         .keyDown("end");
 
-    assert.equal(instance.option("focusedElement").text(), "item 23", "focus on last item of current submenu");
+    assert.equal(instance._getFocusedElementOption().text(), "item 23", "focus on last item of current submenu");
 });
 
 QUnit.test("home key work only in current submenu", function(assert) {
@@ -1669,7 +1669,7 @@ QUnit.test("home key work only in current submenu", function(assert) {
         .keyDown("down")
         .keyDown("home");
 
-    assert.equal(instance.option("focusedElement").text(), "item 21", "focus on first item of current submenu");
+    assert.equal(instance._getFocusedElementOption().text(), "item 21", "focus on first item of current submenu");
 });
 
 QUnit.test("down key work only in current submenu", function(assert) {
@@ -1693,7 +1693,7 @@ QUnit.test("down key work only in current submenu", function(assert) {
         .keyDown("down")
         .keyDown("down");
 
-    assert.equal(instance.option("focusedElement").text(), "item 22", "focus on first item of current submenu");
+    assert.equal(instance._getFocusedElementOption().text(), "item 22", "focus on first item of current submenu");
 });
 
 QUnit.test("up key work only in current submenu", function(assert) {
@@ -1717,7 +1717,7 @@ QUnit.test("up key work only in current submenu", function(assert) {
         .keyDown("up")
         .keyDown("up");
 
-    assert.equal(instance.option("focusedElement").text(), "item 23", "focus on first item of current submenu");
+    assert.equal(instance._getFocusedElementOption().text(), "item 23", "focus on first item of current submenu");
 });
 
 QUnit.test("left arrow key should not close context menu", function(assert) {
@@ -1945,5 +1945,5 @@ function getVisibleSubmenuCount(instance) {
 }
 
 function getFocusedItemText(instance) {
-    return instance.option("focusedElement").children("." + DX_MENU_ITEM_CONTENT_CLASS).text();
+    return instance._getFocusedElementOption().children("." + DX_MENU_ITEM_CONTENT_CLASS).text();
 }

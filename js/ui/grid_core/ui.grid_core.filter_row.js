@@ -528,7 +528,7 @@ var ColumnHeadersViewFilterRowExtender = (function() {
                     var menu = Menu.getInstance($menu);
 
                     eventsEngine.trigger($menu, "blur");
-                    menu && menu.option("focusedElement", null);
+                    menu && menu._setFocusedElementOption(null);
                     isCellWasFocused && that._focusEditor($editorContainer);
                 },
                 rtlEnabled: that.option("rtlEnabled")

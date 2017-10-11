@@ -19,7 +19,7 @@ var ListEdit = ListBase.inherit({
         var deleteFocusedItem = function(e) {
             if(that.option("allowItemDeleting")) {
                 e.preventDefault();
-                that.deleteItem(that.option("focusedElement"));
+                that.deleteItem(that._getFocusedElementOption());
             }
         };
 
@@ -27,11 +27,11 @@ var ListEdit = ListBase.inherit({
             if(e.shiftKey && that.option("allowItemReordering")) {
                 e.preventDefault();
 
-                var focusedItemIndex = that._editStrategy.getNormalizedIndex(that.option("focusedElement")),
+                var focusedItemIndex = that._editStrategy.getNormalizedIndex(that._getFocusedElementOption()),
                     $prevItem = that._editStrategy.getItemElement(focusedItemIndex - 1);
 
-                that.reorderItem(that.option("focusedElement"), $prevItem);
-                that.scrollToItem(that.option("focusedElement"));
+                that.reorderItem(that._getFocusedElementOption(), $prevItem);
+                that.scrollToItem(that._getFocusedElementOption());
             } else {
                 parent.upArrow(e);
             }
@@ -41,11 +41,11 @@ var ListEdit = ListBase.inherit({
             if(e.shiftKey && that.option("allowItemReordering")) {
                 e.preventDefault();
 
-                var focusedItemIndex = that._editStrategy.getNormalizedIndex(that.option("focusedElement")),
+                var focusedItemIndex = that._editStrategy.getNormalizedIndex(that._getFocusedElementOption()),
                     $nextItem = that._editStrategy.getItemElement(focusedItemIndex + 1);
 
-                that.reorderItem(that.option("focusedElement"), $nextItem);
-                that.scrollToItem(that.option("focusedElement"));
+                that.reorderItem(that._getFocusedElementOption(), $nextItem);
+                that.scrollToItem(that._getFocusedElementOption());
             } else {
                 parent.downArrow(e);
             }

@@ -100,7 +100,7 @@ var TagBox = SelectBox.inherit({
                 delete this._preserveFocusedTag;
             },
             enter: function(e) {
-                var isListItemFocused = this._list && this._list.option("focusedElement") !== null,
+                var isListItemFocused = this._list && this._list._getFocusedElementOption() !== null,
                     isCustomItem = this.option("acceptCustomValue") && !isListItemFocused;
 
                 if(isCustomItem) {

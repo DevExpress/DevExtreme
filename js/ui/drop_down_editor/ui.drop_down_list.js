@@ -43,7 +43,7 @@ var DropDownList = DropDownEditor.inherit({
         return extend({}, parent, {
             tab: function() {
                 if(this.option("opened") && this.option("applyValueMode") === "instantly") {
-                    var $focusedItem = this._list.option("focusedElement");
+                    var $focusedItem = this._list._getFocusedElementOption();
                     $focusedItem && this._setSelectedElement($focusedItem);
                 } else {
                     eventsEngine.trigger(this._focusTarget(), "focusout");
@@ -458,7 +458,7 @@ var DropDownList = DropDownEditor.inherit({
             return;
         }
 
-        this._list.option("focusedElement", null);
+        this._list._setFocusedElementOption(null);
     },
 
     _isSelectedValue: function(value) {
