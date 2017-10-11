@@ -204,11 +204,6 @@ var TextEditorFormatter = TextEditorBase.inherit({
                 resultValue = text.slice(0, caret.start) + "0" + text.slice(caret.end);
                 this._moveCaret(1);
                 break;
-            case FLOAT_SEPARATOR:
-                if(text.charAt(caret.end) !== FLOAT_SEPARATOR) {
-                    return;
-                }
-                break;
             default:
                 resultValue = text.slice(0, caret.start) + text.slice(caret.start + 1);
                 break;
@@ -226,11 +221,6 @@ var TextEditorFormatter = TextEditorBase.inherit({
         }
     },
 
-    _getClearValue: function() {
-        var regexp = new RegExp("[^0-9" + this._escapeRegExpSpecial(FLOAT_SEPARATOR) + "]", "g");
-        return this._input().val().replace(regexp, "");
-    },
-
     _applyValue: function(value, forced) {
         if(!this.option("displayFormat")) return;
 
@@ -238,13 +228,12 @@ var TextEditorFormatter = TextEditorBase.inherit({
             return;
         }
 
-        var caret = this._normalizeCaret(this._caret());
-
         if(value === null && !forced) {
             this._normalizeFormattedValue();
+            var caret = this._normalizeCaret(this._caret());
 
             if(!this._formattedValue) {
-                value = parseFloat(this._getClearValue());
+                value = this._lightParse(this._input().val());
             } else {
                 this._input().val(this._formattedValue);
                 this._caret(caret);
@@ -256,7 +245,7 @@ var TextEditorFormatter = TextEditorBase.inherit({
         this._formattedValue = this._formatter(value);
         this._input().val(this._formattedValue);
 
-        this._caret(caret);
+        this._caret(this._normalizeCaret(this._caret()));
     },
 
     _revertSign: function() {

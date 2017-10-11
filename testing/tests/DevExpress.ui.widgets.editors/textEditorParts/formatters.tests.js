@@ -79,14 +79,14 @@ QUnit.skip("removing required symbol should try replace it to 0", function(asser
         value: 123.456
     });
 
-    this.keyboard.caret(3).press("del").input();
-    assert.equal(this.input.val(), "12.056", "it is possible to remove float separator");
+    this.keyboard.caret(2).press("del").input();
+    assert.equal(this.input.val(), "12.456", "remove before point");
 
     this.keyboard.press("del").input();
-    assert.equal(this.input.val(), "12.006", "remove next char");
+    assert.equal(this.input.val(), "12.056", "remove point");
 
     this.keyboard.press("del").input();
-    assert.equal(this.input.val(), "12.000", "remove last char");
+    assert.equal(this.input.val(), "12.006", "remove after point");
 });
 
 QUnit.test("pressing '-' button should revert the number", function(assert) {
@@ -219,7 +219,6 @@ QUnit.skip("displayFormat with escaped symbol", function(assert) {
 
     this.keyboard
         .type("12")
-        .input()
         .change();
 
     assert.equal(this.input.val(), "$#$12", "value is correct");
