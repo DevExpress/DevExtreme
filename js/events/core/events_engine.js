@@ -535,15 +535,6 @@ var getHandler = function(methodName) {
     };
 };
 
-var fixMethod = function(e) { return e; };
-var setEventFixMethod = function(func) {
-    fixMethod = func;
-};
-
-var copyEvent = function(originalEvent) {
-    return fixMethod(eventsEngine.Event(originalEvent, originalEvent), originalEvent);
-};
-
 var beforeSetStrategy = Callbacks();
 var afterSetStrategy = Callbacks();
 
@@ -577,10 +568,7 @@ var result = {
         beforeSetStrategy.fire();
         eventsEngine = engine;
         afterSetStrategy.fire();
-    },
-    // TODO: Move to event/utils after getting rid of circular dependency
-    setEventFixMethod: setEventFixMethod,
-    copy: copyEvent
+    }
 };
 
 result.Event.prototype = eventsEngine.Event.prototype;

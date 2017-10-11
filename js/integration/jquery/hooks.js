@@ -4,7 +4,7 @@ var $ = require("jquery");
 var compareVersion = require("../../core/utils/version").compare;
 var each = require("../../core/utils/iterator").each;
 var isNumeric = require("../../core/utils/type").isNumeric;
-var setEventFixMethod = require("../../events/core/events_engine").setEventFixMethod;
+var setEventFixMethod = require("../../events/utils").setEventFixMethod;
 var registerEvent = require("../../events/core/event_registrator");
 var hookTouchProps = require("../../events/core/hook_touch_props");
 
