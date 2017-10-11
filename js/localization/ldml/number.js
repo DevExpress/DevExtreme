@@ -1,11 +1,9 @@
 "use strict";
 
-var DEFAULT_CONFIG = { groupSeparator: ",", decimalSeparator: "." };
-var ESCAPING_CHAR = "'";
+var escapeRegExp = require("../../core/utils/common").escapeRegExp;
 
-function escapeFormat(formatString) {
-    return formatString.replace(/[.*+?^${}()|\[\]\\]/g, "\\$&");
-}
+var DEFAULT_CONFIG = { groupSeparator: ",", decimalSeparator: "." },
+    ESCAPING_CHAR = "'";
 
 function getGroupSizes(formatString, groupSeparator) {
     return formatString.split(",").slice(1).map(function(str) {
@@ -14,7 +12,7 @@ function getGroupSizes(formatString, groupSeparator) {
 }
 
 function getIntegerPartRegExp(formatString, groupSeparator) {
-    var result = escapeFormat(formatString);
+    var result = escapeRegExp(formatString);
     result = result.replace(new RegExp("([0#,]+)"), "($1)");
 
     var groupSizes = getGroupSizes(formatString);
@@ -32,9 +30,9 @@ function getIntegerPartRegExp(formatString, groupSeparator) {
 function getFloatPartRegExp(formatString, decimalSeparator) {
     if(!formatString) return "()";
 
-    var result = escapeFormat(decimalSeparator + formatString);
-    result = result.replace(new RegExp("^(" + escapeFormat(escapeFormat(decimalSeparator)) + "0[0#]*)"), "($1)");
-    result = result.replace(new RegExp("^(" + escapeFormat(escapeFormat(decimalSeparator)) + "[0#]*)"), "($1)?");
+    var result = escapeRegExp(decimalSeparator + formatString);
+    result = result.replace(new RegExp("^(" + escapeRegExp(escapeRegExp(decimalSeparator)) + "0[0#]*)"), "($1)");
+    result = result.replace(new RegExp("^(" + escapeRegExp(escapeRegExp(decimalSeparator)) + "[0#]*)"), "($1)?");
     result = result.replace(/0/g, "\\d");
     result = result.replace(/#/g, "\\d?");
     return result;
@@ -66,7 +64,7 @@ function isPercentFormat(format) {
     return format.slice(-1) === "%";
 }
 
-function generateNumberParser(format, config) {
+function getParser(format, config) {
     config = config || DEFAULT_CONFIG;
 
     return function(text) {
@@ -86,7 +84,7 @@ function generateNumberParser(format, config) {
             isNegative = parseResult[signPartResultCount + 2],
             integerResultIndex = isNegative ? signPartResultCount + 2 : 2,
             floatResultIndex = integerResultIndex + signPartResultCount - 1,
-            integerPart = parseResult[integerResultIndex].replace(new RegExp(escapeFormat(config.groupSeparator), "g"), ""),
+            integerPart = parseResult[integerResultIndex].replace(new RegExp(escapeRegExp(config.groupSeparator), "g"), ""),
             floatPart = parseResult[floatResultIndex];
 
         var value = parseInt(integerPart) || 0;
@@ -174,7 +172,7 @@ function formatNumberPart(format, valueString, minDigitCount, maxDigitCount) {
     }).join("");
 }
 
-function generateNumberFormatter(format, config) {
+function getFormatter(format, config) {
     config = config || DEFAULT_CONFIG;
 
     return function(value) {
@@ -216,5 +214,5 @@ function generateNumberFormatter(format, config) {
     };
 }
 
-exports.generateNumberParser = generateNumberParser;
-exports.generateNumberFormatter = generateNumberFormatter;
+exports.getParser = getParser;
+exports.getFormatter = getFormatter;

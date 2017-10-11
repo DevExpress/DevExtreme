@@ -652,6 +652,35 @@ QUnit.test("parse with custom separators", function(assert) {
     }
 });
 
+QUnit.test("parse with LDML format", function(assert) {
+    assert.equal(numberLocalization.parse("1.2", "#"), null);
+    assert.equal(numberLocalization.parse("1.2", "#.##"), 1.2);
+    assert.equal(numberLocalization.parse("123", "$ #"), null);
+    assert.equal(numberLocalization.parse("$ 123", "$ #"), 123);
+});
+
+QUnit.test("parse with LDML format and with custom separators", function(assert) {
+    var oldDecimalSeparator = config().decimalSeparator,
+        oldGroupSeparator = config().groupSeparator;
+
+    config({
+        decimalSeparator: ",",
+        groupSeparator: " "
+    });
+
+    try {
+        assert.equal(numberLocalization.parse("1.2", "#.##"), null);
+        assert.equal(numberLocalization.parse("1,2", "#.##"), 1.2);
+        assert.equal(numberLocalization.parse("1,234", "#,###"), null);
+        assert.equal(numberLocalization.parse("1 234", "#,###"), 1234);
+    } finally {
+        config({
+            decimalSeparator: oldDecimalSeparator,
+            groupSeparator: oldGroupSeparator
+        });
+    }
+});
+
 QUnit.test("parse: test starts with not digit symbols", function(assert) {
     assert.equal(numberLocalization.parse("$ 1.2"), 1.2);
     assert.equal(numberLocalization.parse("1.2 руб."), 1.2);
@@ -722,6 +751,30 @@ QUnit.test("customize group and decimal separators using config", function(asser
     }
 });
 
+QUnit.test('format as LDML pattern', function(assert) {
+    assert.equal(numberLocalization.format(12345.67, "#,##0.00 РУБ"), '12,345.67 РУБ');
+    assert.equal(numberLocalization.format(-12345.67, "#.#;(#.#)"), '(12345.7)');
+});
+
+QUnit.test("format as LDML pattern with custom separators", function(assert) {
+    var oldDecimalSeparator = config().decimalSeparator,
+        oldGroupSeparator = config().groupSeparator;
+
+    config({
+        decimalSeparator: ",",
+        groupSeparator: " "
+    });
+
+    try {
+        assert.equal(numberLocalization.format(12345.67, "#,##0.00 РУБ"), '12 345,67 РУБ');
+        assert.equal(numberLocalization.format(-12345.67, "#.#;(#.#)"), '(12345,7)');
+    } finally {
+        config({
+            decimalSeparator: oldDecimalSeparator,
+            groupSeparator: oldGroupSeparator
+        });
+    }
+});
 
 QUnit.module("Localization currency");
 

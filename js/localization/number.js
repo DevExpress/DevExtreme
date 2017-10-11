@@ -5,6 +5,7 @@ var dependencyInjector = require("../core/utils/dependency_injector"),
     each = require("../core/utils/iterator").each,
     isPlainObject = require("../core/utils/type").isPlainObject,
     escapeRegExp = require("../core/utils/common").escapeRegExp,
+    ldmlNumber = require("./ldml/number"),
     config = require("../core/config"),
     errors = require("../core/errors");
 
@@ -39,7 +40,7 @@ var numberLocalization = dependencyInjector({
 
         if(!formatType || typeof formatType !== 'string') return;
 
-        formatList = formatType.split(' ');
+        formatList = formatType.toLowerCase().split(' ');
         each(formatList, function(index, value) {
             if(inArray(value, NUMERIC_FORMATS) > -1) {
                 formatObject.formatType = value;
@@ -196,10 +197,6 @@ var numberLocalization = dependencyInjector({
             };
         }
 
-        if(format.type) {
-            format.type = format.type.toLowerCase();
-        }
-
         return format;
     },
 
@@ -227,7 +224,7 @@ var numberLocalization = dependencyInjector({
         var numberConfig = this._parseNumberFormatString(format.type);
 
         if(!numberConfig) {
-            return;
+            return ldmlNumber.getFormatter(format.type, config())(value);
         }
 
         return this._formatNumber(value, numberConfig, format);
@@ -240,6 +237,10 @@ var numberLocalization = dependencyInjector({
 
         if(format && format.parser) {
             return format.parser(text);
+        }
+
+        if(typeof format === "string") {
+            return ldmlNumber.getParser(format, config())(text);
         }
 
         if(format) {
