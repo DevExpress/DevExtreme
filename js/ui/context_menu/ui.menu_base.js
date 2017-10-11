@@ -763,6 +763,10 @@ var MenuBase = HierarchicalCollectionWidget.inherit({
             case "useInkRipple":
                 this._invalidate();
                 break;
+            case "items":
+                this.option("focusedElement", null);
+                this.callBase(args);
+                break;
             default:
                 this.callBase(args);
         }
