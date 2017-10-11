@@ -9,7 +9,11 @@ require("common.css!");
 
 GoogleProvider.remapConstant("http://fakeUrl");
 
-var clock = sinon.useFakeTimers();
+QUnit.module("elementsOnRefresh", {
+    beforeEach: function() {
+        this.clock = sinon.useFakeTimers();
+    }
+});
 
 $.each(DevExpress.ui, function(componentName) {
     if($.fn[componentName] && memoryLeaksHelper.componentCanBeTriviallyInstantiated(componentName)) {
@@ -19,12 +23,12 @@ $.each(DevExpress.ui, function(componentName) {
                 originalDomElements,
                 newDomElements;
 
-            clock.tick(0);
+            this.clock.tick(0);
             originalDomElements = memoryLeaksHelper.getAllPossibleEventTargets();
 
             component._refresh();
 
-            clock.tick(0);
+            this.clock.tick(0);
             newDomElements = memoryLeaksHelper.getAllPossibleEventTargets();
             if(newDomElements.length === originalDomElements.length) {
                 assert.ok(true, "After an option changes and causes re-rendering, no additional dom elements must be created");

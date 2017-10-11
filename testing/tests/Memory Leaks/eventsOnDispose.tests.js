@@ -8,7 +8,11 @@ require("bundles/modules/parts/widgets-all");
 
 GoogleProvider.remapConstant("http://fakeUrl");
 
-var clock = sinon.useFakeTimers();
+QUnit.module("eventsOnDispose", {
+    beforeEach: function() {
+        this.clock = sinon.useFakeTimers();
+    }
+});
 
 $.each(DevExpress.ui, function(componentName) {
     if($.fn[componentName] && memoryLeaksHelper.componentCanBeTriviallyInstantiated(componentName)) {
@@ -26,7 +30,7 @@ $.each(DevExpress.ui, function(componentName) {
 
                 $(testNode)[componentName](memoryLeaksHelper.getComponentOptions(componentName))[componentName]("instance"),
 
-                clock.tick(0);
+                this.clock.tick(0);
                 memoryLeaksHelper.destroyTestNode(testNode);
                 newEventSubscriptions = memoryLeaksHelper.getAllEventSubscriptions();
                 assert.deepEqual(newEventSubscriptions, originalEventSubscriptions, "After a component is disposed, additional event subscriptions must be removed");
