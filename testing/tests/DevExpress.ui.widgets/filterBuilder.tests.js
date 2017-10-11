@@ -51,7 +51,6 @@ window.fields = [{
     dataField: "Contributor",
     dataType: "boolean",
     format: undefined,
-    filterOperations: [],
     defaultFilterOperation: ""
 },
 {

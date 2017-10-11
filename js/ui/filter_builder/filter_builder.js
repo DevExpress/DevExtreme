@@ -8,6 +8,7 @@ var $ = require("../../core/renderer"),
     extend = require("../../core/utils/extend").extend,
     messageLocalization = require("../../localization/message"),
     utils = require("./utils"),
+    ContextMenu = require("../context_menu"),
     TreeView = require("../tree_view"),
     Popup = require("../popup"),
     EditorFactoryMixin = require("../shared/ui.editor_factory_mixin");
@@ -26,7 +27,7 @@ var FILTER_BUILDER_CLASS = "dx-filterbuilder",
     FILTER_BUILDER_ITEM_OPERATION_CLASS = "dx-filterbuilder-item-operation",
     FILTER_BUILDER_ITEM_VALUE_CLASS = "dx-filterbuilder-item-value",
     FILTER_BUILDER_ITEM_VALUE_TEXT_CLASS = "dx-filterbuilder-item-value-text",
-    FILTER_BUILDER_POPUP_CLASS = "dx-filterbuilder-popup",
+    FILTER_BUILDER_OVERLAY_CLASS = "dx-filterbuilder-overlay",
     ACTIVE_CLASS = "dx-state-active";
 
 var ACTIONS = [
@@ -468,14 +469,11 @@ var FilterBuilder = Widget.inherit({
         return $group;
     },
 
+
     _createGroupOperationButton: function(criteria) {
         var that = this,
             groupOperations = this._getGroupOperations(),
-            groupMenuItem = utils.getGroupMenuItem(criteria, groupOperations),
-            updateGroupMenuItem = function(component, groupMenuItem) {
-                component.unselectAll();
-                component.selectItem(groupMenuItem);
-            };
+            groupMenuItem = utils.getGroupMenuItem(criteria, groupOperations);
         var $operationButton = this._createButtonWithMenu({
             caption: groupMenuItem.text,
             menu: {
@@ -485,13 +483,12 @@ var FilterBuilder = Widget.inherit({
                 onItemClick: function(e) {
                     utils.setGroupValue(criteria, e.itemData.value);
                     groupMenuItem = e.itemData;
-                    updateGroupMenuItem(e.component, groupMenuItem);
                     $operationButton.html(e.itemData.text);
                     that._updateFilter();
                     // EVENT: groupValueChanged(e = {newValue, ?oldValue?})
                 },
                 onContentReady: function(e) {
-                    updateGroupMenuItem(e.component, groupMenuItem);
+                    e.component.selectItem(groupMenuItem);
                 }
             }
         }).addClass(FILTER_BUILDER_ITEM_TEXT_CLASS)
@@ -502,72 +499,79 @@ var FilterBuilder = Widget.inherit({
 
     _createButtonWithMenu: function(options) {
         var that = this,
-            $button = $("<div>").text(options.caption),
             removeMenu = function() {
                 that.element().find("." + ACTIVE_CLASS).removeClass(ACTIVE_CLASS);
+                that.element().find(".dx-has-context-menu").remove();
                 that.element().find(".dx-overlay .dx-treeview").remove();
                 that.element().find(".dx-overlay").remove();
             },
+            rtlEnabled = this.option("rtlEnabled"),
             menuOnItemClickWrapper = function(handler) {
                 return function(e) {
                     handler(e);
                     removeMenu();
                     if(e.jQueryEvent.type === "keydown") {
-                        eventsEngine.trigger($button, "focus");
+                        eventsEngine.trigger(options.menu.target, "focus");
                     }
                 };
             },
-            treeViewOptions = extend(options.menu, {
-                focusStateEnabled: true,
-                selectionMode: "single",
-                onItemClick: menuOnItemClickWrapper(options.menu.onItemClick),
-                rtlEnabled: this.option("rtlEnabled")
-            }),
-            showPopup = function() {
-                var popupOptions = {
-                    target: $button,
-                    onHiding: function(e) {
-                        $button.removeClass(ACTIVE_CLASS);
-                    },
-                    onHidden: function() {
-                        removeMenu();
-                    },
-                    rtlEnabled: treeViewOptions.rtlEnabled,
-                    contentTemplate: function(contentElement) {
-                        var $treeView = $("<div>");
-                        that._createComponent($treeView, TreeView, treeViewOptions);
-                        return $treeView;
-                    }
-                };
+            position = rtlEnabled ? "right" : "left",
+            $button = $("<div>").text(options.caption);
 
+        extend(options.menu, {
+            focusStateEnabled: true,
+            selectionMode: "single",
+            onItemClick: menuOnItemClickWrapper(options.menu.onItemClick),
+            onHiding: function(e) {
+                $button.removeClass(ACTIVE_CLASS);
+            },
+            position: { my: position + " top", at: position + " bottom", offset: "0 1" },
+            animation: { show: { type: 'fade', from: 1, to: 1, delay: 0 }, hide: { type: 'fade', from: 0, to: 0, delay: 0 } },
+            onHidden: function() {
                 removeMenu();
-                $button.addClass(ACTIVE_CLASS);
-                that._createPopup(popupOptions, $button);
-            };
-        this._subscribeOnClickAndEnterKey($button, showPopup);
+            },
+            cssClass: FILTER_BUILDER_OVERLAY_CLASS,
+            target: $button,
+            rtlEnabled: rtlEnabled
+        });
+        this._subscribeOnClickAndEnterKey($button, function() {
+            removeMenu();
+            if(options.menu.treeViewEnabled) {
+                that._createPopupWithTreeView(options, that.element());
+            } else {
+                that._createContextMenu(options.menu)
+                    .appendTo(that.element())
+                    .dxContextMenu("show");
+            }
+            $button.addClass(ACTIVE_CLASS);
+        });
         return $button;
     },
 
     _createOperationButtonWithMenu: function(condition, field) {
         var that = this,
-            filterOperationDescriptions = this.option("filterOperationDescriptions"),
+            availableOperations = utils.getAvailableOperations(field, this.option("filterOperationDescriptions")),
+            currentOperation = utils.getOperationFromAvailable(utils.getOperationValue(condition), availableOperations),
             $operationButton = this._createButtonWithMenu({
-                caption: utils.getCaptionByOperation(utils.getOperationValue(condition), filterOperationDescriptions),
+                caption: currentOperation.text,
                 menu: {
-                    items: utils.getAvailableOperations(field, filterOperationDescriptions),
+                    items: availableOperations,
                     displayExpr: "text",
+                    onContentReady: function(e) {
+                        e.component.selectItem(currentOperation);
+                    },
                     onItemClick: function(e) {
-                        utils.updateConditionByOperation(condition, e.itemData.value);
-                        var hasValueButton = $operationButton.siblings().filter("." + FILTER_BUILDER_ITEM_VALUE_CLASS).length > 0;
+                        currentOperation = e.itemData;
+                        utils.updateConditionByOperation(condition, currentOperation.value);
                         if(condition[2] !== null) {
-                            if(!hasValueButton) {
+                            if($operationButton.siblings().filter("." + FILTER_BUILDER_ITEM_VALUE_CLASS).length === 0) {
                                 that._createValueButton(condition, field)
                                     .appendTo($operationButton.parent());
                             }
                         } else {
                             $operationButton.siblings().filter("." + FILTER_BUILDER_ITEM_VALUE_CLASS).remove();
                         }
-                        $operationButton.html(e.itemData.text);
+                        $operationButton.html(currentOperation.text);
                     }
                 }
             }).addClass(FILTER_BUILDER_ITEM_TEXT_CLASS)
@@ -595,10 +599,6 @@ var FilterBuilder = Widget.inherit({
             item = utils.getField(field.dataField, items),
             getFullCaption = function(item, items) {
                 return allowHierarchicalFields ? utils.getCaptionWithParents(item, items) : item.caption;
-            },
-            updateFieldMenuItem = function(component, field) {
-                component.unselectAll();
-                component.selectItem(item);
             };
 
         var $fieldButton = this._createButtonWithMenu({
@@ -608,6 +608,7 @@ var FilterBuilder = Widget.inherit({
                 dataStructure: "plain",
                 keyExpr: "dataField",
                 displayExpr: "caption",
+                treeViewEnabled: allowHierarchicalFields,
                 onItemClick: function(e) {
                     item = e.itemData;
                     condition[0] = item.dataField;
@@ -621,12 +622,11 @@ var FilterBuilder = Widget.inherit({
                     $fieldButton.siblings().filter("." + FILTER_BUILDER_ITEM_TEXT_CLASS).remove();
                     that._createOperationAndValueButtons(condition, item, $fieldButton.parent());
 
-                    updateFieldMenuItem(e.component, item);
                     var caption = getFullCaption(item, e.component.option("items"));
                     $fieldButton.html(caption);
                 },
                 onContentReady: function(e) {
-                    updateFieldMenuItem(e.component, item);
+                    e.component.selectItem(item);
                 }
             }
         }).addClass(FILTER_BUILDER_ITEM_TEXT_CLASS)
@@ -757,27 +757,37 @@ var FilterBuilder = Widget.inherit({
         return $editor;
     },
 
-    _createPopup: function(options, $button) {
-        var $popup = $("<div>")
-                .addClass(FILTER_BUILDER_POPUP_CLASS)
-                .insertAfter($button),
-            position = options.rtlEnabled ? "right" : "left";
-
-        this._createComponent($popup, Popup, extend({
+    _createPopupWithTreeView: function(options, $container) {
+        var that = this,
+            $popup = $("<div>")
+                .addClass(options.menu.cssClass).appendTo($container);
+        this._createComponent($popup, Popup, {
+            target: options.menu.target,
+            onHiding: options.menu.onHiding,
+            onHidden: options.menu.onHidden,
+            rtlEnabled: options.menu.rtlEnabled,
+            position: options.menu.position,
+            animation: options.menu.animation,
+            contentTemplate: function(contentElement) {
+                var $menuContainer = $("<div>");
+                that._createComponent($menuContainer, TreeView, options.menu);
+                return $menuContainer;
+            },
             visible: true,
             focusStateEnabled: false,
             closeOnOutsideClick: true,
-            rtlEnabled: this.option("rtlEnabled"),
             shading: false,
             width: "auto",
             height: "auto",
             showTitle: false,
-            deferRendering: false,
-            position: { my: position + " top", at: position + " bottom", offset: "0 1" },
-            animation: { show: { type: 'fade', from: 1, to: 1, delay: 0 }, hide: { type: 'fade', from: 0, to: 0, delay: 0 } }
-        }, options));
+            deferRendering: false
+        });
+    },
 
-        return $popup;
+    _createContextMenu: function(options) {
+        var $container = $("<div>");
+        this._createComponent($container, ContextMenu, options);
+        return $container;
     },
 
     _subscribeOnClickAndEnterKey: function($button, handler, keyEvent) {
