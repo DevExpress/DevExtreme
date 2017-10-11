@@ -147,7 +147,7 @@ var numberLocalization = dependencyInjector({
     _addGroupSeparators: function(value) {
         var parts = value.toString().split(".");
 
-        return parts[0].replace(/\B(?=(\d{3})+(?!\d))/g, config().groupSeparator) + (parts[1] ? "." + parts[1] : "");
+        return parts[0].replace(/\B(?=(\d{3})+(?!\d))/g, config().groupSeparator) + (parts[1] ? config().decimalSeparator + parts[1] : "");
     },
 
     _formatNumberCore: function(value, format, formatConfig) {
@@ -173,13 +173,15 @@ var numberLocalization = dependencyInjector({
 
         if(format !== "decimal") {
             value = this._addGroupSeparators(value);
+        } else {
+            value = value.toString().replace(".", config().decimalSeparator);
         }
 
         if(format === "percent") {
             value += "%";
         }
 
-        return value.toString().replace(".", config().decimalSeparator);
+        return value;
     },
 
     _normalizeFormat: function(format) {
@@ -247,9 +249,13 @@ var numberLocalization = dependencyInjector({
             errors.log("W0011");
         }
 
-        text = text
-            .replace(new RegExp(escapeRegExp(config().decimalSeparator), "g"), ".")
-            .replace(new RegExp("^\\D+|" + escapeRegExp(config().groupSeparator) + "+", "g"), "");
+        var decimalIndex = text.indexOf(config().decimalSeparator);
+
+        text = text.replace(new RegExp("^\\D+|" + escapeRegExp(config().groupSeparator) + "+", "g"), "");
+
+        if(decimalIndex >= 0) {
+            text = text.substr(0, decimalIndex) + "." + text.substr(decimalIndex + 1);
+        }
 
         return parseFloat(text);
     }

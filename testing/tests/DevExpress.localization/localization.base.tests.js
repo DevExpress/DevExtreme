@@ -634,21 +634,24 @@ QUnit.test("parse: base", function(assert) {
 
 QUnit.test("parse with custom separators", function(assert) {
     var oldDecimalSeparator = config().decimalSeparator,
-        oldGroupSeparator = config().groupSeparator;
+        oldGroupSeparator = config().groupSeparator,
+        oldLocale = localization.locale();
 
     config({
         decimalSeparator: ",",
-        groupSeparator: " "
+        groupSeparator: "."
     });
+    localization.locale("de");
 
     try {
         assert.equal(numberLocalization.parse("1,2"), 1.2);
-        assert.equal(numberLocalization.parse("12 000"), 12000);
+        assert.equal(numberLocalization.parse("12.000"), 12000);
     } finally {
         config({
             decimalSeparator: oldDecimalSeparator,
             groupSeparator: oldGroupSeparator
         });
+        localization.locale(oldLocale);
     }
 });
 
@@ -729,25 +732,27 @@ QUnit.test('format as function', function(assert) {
     assert.equal(numberLocalization.format(437, { formatter: function(value) { return "!" + value; } }), '!437');
 });
 
-QUnit.test("customize group and decimal separators using config", function(assert) {
+QUnit.test("custom group and decimal separators", function(assert) {
     var oldDecimalSeparator = config().decimalSeparator,
-        oldGroupSeparator = config().groupSeparator;
+        oldGroupSeparator = config().groupSeparator,
+        oldLocale = localization.locale();
 
     config({
         decimalSeparator: ",",
-        groupSeparator: " "
+        groupSeparator: "."
     });
+    localization.locale("de");
 
     try {
         assert.equal(numberLocalization.format(1.1, { type: "fixedPoint", precision: 2 }), "1,10");
-        assert.equal(numberLocalization.format(1234567, "fixedPoint"), "1 234 567");
-        assert.equal(numberLocalization.format(1234567.89, { type: "fixedPoint", precision: 2 }), "1 234 567,89");
-        assert.equal(numberLocalization.format(1234567.89, { type: "currency", precision: 2 }), "$1 234 567,89");
+        assert.equal(numberLocalization.format(1234567, "fixedPoint"), "1.234.567");
+        assert.equal(numberLocalization.format(1234567.89, { type: "fixedPoint", precision: 2 }), "1.234.567,89");
     } finally {
         config({
             decimalSeparator: oldDecimalSeparator,
             groupSeparator: oldGroupSeparator
         });
+        localization.locale(oldLocale);
     }
 });
 
