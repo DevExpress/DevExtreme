@@ -22,7 +22,7 @@ QUnit.module("number parser");
 QUnit.test("integer format parser with non-required digits", function(assert) {
     var parser = generateNumberParser("#");
 
-    assert.strictEqual(parser("0"), 0, "parse zero number");
+    assert.strictEqual(parser("0"), null, "parse zero number");
     assert.strictEqual(parser("00"), null, "parse zero number with 2 digits");
     assert.strictEqual(parser("123"), 123, "parse small number");
     assert.strictEqual(parser("123456789"), 123456789, "parse large number");
@@ -83,12 +83,12 @@ QUnit.test("integer format parser with complex groups", function(assert) {
 QUnit.test("float parser with non-required digits", function(assert) {
     var parser = generateNumberParser("#.##");
 
-    assert.strictEqual(parser("0"), 0, "parse zero number");
-    assert.strictEqual(parser("0."), 0, "parse zero with point");
-    assert.strictEqual(parser("0.1"), 0.1, "parse zero with 1 fraction digit");
+    assert.strictEqual(parser("0"), null, "parse zero number");
+    assert.strictEqual(parser("."), 0, "parse zero with point");
+    assert.strictEqual(parser(".1"), 0.1, "parse zero with 1 fraction digit");
 
-    assert.strictEqual(parser("0.12"), 0.12, "parse zero with 2 fraction digit");
-    assert.strictEqual(parser("0.123"), null, "parse zero with 3 fraction digit");
+    assert.strictEqual(parser(".12"), 0.12, "parse zero with 2 fraction digit");
+    assert.strictEqual(parser(".123"), null, "parse zero with 3 fraction digit");
     assert.strictEqual(parser("123"), 123, "parse small number");
     assert.strictEqual(parser("123456789"), 123456789, "parse large number");
     assert.strictEqual(parser("-123"), -123, "parse negative number");
@@ -99,19 +99,19 @@ QUnit.test("float parser with non-required digits", function(assert) {
 });
 
 QUnit.test("float parser with required digits", function(assert) {
-    var parser = generateNumberParser("#.00");
+    var parser = generateNumberParser("#0.00");
 
     assert.strictEqual(parser("0"), null, "parse zero number");
     assert.strictEqual(parser("0.00"), 0, "parse zero with 2 float digits");
     assert.strictEqual(parser("0.12"), 0.12, "parse number with 2 fraction digit");
     assert.strictEqual(parser("0.123"), null, "parse number with 3 fraction digit");
-    assert.strictEqual(parser(".12"), 0.12, "parse number without leading zero and with 2 fraction digit");
+    assert.strictEqual(parser(".12"), null, "parse number without leading zero and with 2 fraction digit");
     assert.strictEqual(parser("123.45"), 123.45, "parse number with integer part and with 2 fraction digit");
     assert.strictEqual(parser("123..45"), null, "value with extra points should be invalid");
 });
 
 QUnit.test("float parser with required and non-required digits", function(assert) {
-    var parser = generateNumberParser("#.0##");
+    var parser = generateNumberParser("#0.0##");
 
     assert.strictEqual(parser("0"), null, "parse zero number");
     assert.strictEqual(parser("0.0"), 0, "parse zero with 1 float digits");
@@ -119,12 +119,12 @@ QUnit.test("float parser with required and non-required digits", function(assert
     assert.strictEqual(parser("0.12"), 0.12, "parse number with 2 fraction digit");
     assert.strictEqual(parser("0.123"), 0.123, "parse number with 3 fraction digit");
     assert.strictEqual(parser("0.1234"), null, "parse number with 4 fraction digit");
-    assert.strictEqual(parser(".12"), 0.12, "parse number without leading zero and with 2 fraction digit");
+    assert.strictEqual(parser(".12"), null, "parse number without leading zero and with 2 fraction digit");
     assert.strictEqual(parser("123.45"), 123.45, "parse number with integer part and with 2 fraction digit");
 });
 
 QUnit.test("different positive and negative parsing", function(assert) {
-    var parser = generateNumberParser("#.##;(#.##)");
+    var parser = generateNumberParser("#0.##;(#0.##)");
 
     assert.strictEqual(parser("0"), 0, "parse zero number");
     assert.strictEqual(parser("(5)"), -5, "parse negative integer");
@@ -161,12 +161,37 @@ QUnit.test("percent format without float part parsing", function(assert) {
 
 QUnit.module("number formatter");
 
+QUnit.test("integer with non-required digits", function(assert) {
+    var formatter = generateNumberFormat("#");
+
+    assert.strictEqual(formatter(null), "", "format an empty value");
+    assert.strictEqual(formatter(NaN), "", "NaN value should not be formatted");
+    assert.strictEqual(formatter(0), "", "format zero");
+    assert.strictEqual(formatter(10), "10", "format integer wkth zero at the end");
+    assert.strictEqual(formatter(123), "123", "format integer");
+    assert.strictEqual(formatter(123456), "123456", "format large integer");
+    assert.strictEqual(formatter(1E20), "100000000000000000000", "format very large integer");
+});
+
+QUnit.test("integer with required digits", function(assert) {
+    var formatter = generateNumberFormat("000");
+
+    assert.strictEqual(formatter(null), "", "format an empty value");
+    assert.strictEqual(formatter(NaN), "", "NaN value should not be formatted");
+    assert.strictEqual(formatter(0), "000", "format zero");
+    assert.strictEqual(formatter(1), "001", "format integer with 1 digit");
+    assert.strictEqual(formatter(10), "010", "format integer with zero at the end");
+    assert.strictEqual(formatter(123), "123", "format integer");
+    assert.strictEqual(formatter(123456), "456", "format large integer");
+});
+
 QUnit.test("float with precision formatting", function(assert) {
     var formatter = generateNumberFormat("#.00");
 
     assert.strictEqual(formatter(null), "", "format an empty value");
     assert.strictEqual(formatter(NaN), "", "NaN value should not be formatted");
-    assert.strictEqual(formatter(0), "0.00", "format zero");
+    assert.strictEqual(formatter(0), ".00", "format zero");
+    assert.strictEqual(formatter(0.123), ".12", "format value without integer");
     assert.strictEqual(formatter(123), "123.00", "format integer");
     assert.strictEqual(formatter(123.05), "123.05", "format rounded float with zero");
     assert.strictEqual(formatter(123.5), "123.50", "format rounded float");
@@ -176,17 +201,25 @@ QUnit.test("float with precision formatting", function(assert) {
     assert.strictEqual(formatter(-123.57), "-123.57", "format negative float");
 });
 
-QUnit.test("test different formats", function(assert) {
+QUnit.test("float with precision formatting and required integer digit", function(assert) {
     var formatter = generateNumberFormat("#0.00");
 
     assert.strictEqual(formatter(5), "5.00", "format integer");
-    assert.strictEqual(formatter(0.1), "0.10", "format float");
-    assert.strictEqual(formatter(15.15), "15.15", "format float with 2 digits after point");
-    assert.strictEqual(formatter(-15.15), "-15.15", "format negative float");
+    assert.strictEqual(formatter(0), "0.00", "format zero");
+    assert.strictEqual(formatter(0.123), "0.12", "format float");
+});
+
+QUnit.test("float with required an non-required digits in float part", function(assert) {
+    var formatter = generateNumberFormat("#0.0#");
+
+    assert.strictEqual(formatter(1), "1.0", "format integer");
+    assert.strictEqual(formatter(1.2), "1.2", "format float with 1 digit");
+    assert.strictEqual(formatter(1.23), "1.23", "format float with 2 digits");
+    assert.strictEqual(formatter(1.239), "1.24", "format float with 3 digits and rounding");
 });
 
 QUnit.test("different positive and negative formatting", function(assert) {
-    var formatter = generateNumberFormat("#.000;(#.000)");
+    var formatter = generateNumberFormat("#0.000;(#0.000)");
 
     assert.strictEqual(formatter(0), "0.000", "format zero");
     assert.strictEqual(formatter(-0), "(0.000)", "format negative zero");
@@ -202,21 +235,21 @@ QUnit.test("escaping format", function(assert) {
     assert.strictEqual(formatter(15), "15x #0% x", "special chars was escaped");
 });
 
-QUnit.test("percent formatting", function(assert) {
-    var formatter = generateNumberFormat("#.#%;(#.#%)");
+QUnit.test("percent formatting with leading zero", function(assert) {
+    var formatter = generateNumberFormat("#0.#%;(#0.#%)");
 
-    assert.strictEqual(formatter(0), "0.0%", "format zero");
-    assert.strictEqual(formatter(0.1), "10.0%", "format less than 100");
+    assert.strictEqual(formatter(0), "0%", "format zero");
+    assert.strictEqual(formatter(0.1), "10%", "format less than 100");
     assert.strictEqual(formatter(2.578), "257.8%", "format more than 100");
     assert.strictEqual(formatter(2.5785), "257.9%", "rounding percents");
-    assert.strictEqual(formatter(-0.45), "(45.0%)", "format negative value");
+    assert.strictEqual(formatter(-0.45), "(45%)", "format negative value");
 });
 
 QUnit.test("escaped percent formatting", function(assert) {
-    var formatter = generateNumberFormat("#.#'%'");
+    var formatter = generateNumberFormat("#0.#'%'");
     assert.strictEqual(formatter(0.5), "0.5%", "percent was escaped");
 
-    formatter = generateNumberFormat("#.#'x % x'");
+    formatter = generateNumberFormat("#0.#'x % x'");
     assert.strictEqual(formatter(0.5), "0.5x % x", "percent with text was escaped");
 });
 

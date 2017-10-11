@@ -18,15 +18,14 @@ function getIntegerPartRegExp(formatString) {
     var result = escapeFormat(formatString);
     result = result.replace(new RegExp("([0#\\" + GROUP_SEPARATOR + "]+)$"), "($1)");
 
-    var groupSizes = getGroupSizes(formatString),
-        requiredDigitCount = formatString.split("0").length - 1;
+    var groupSizes = getGroupSizes(formatString);
 
     result = result.replace(/0/g, "\\d");
 
     if(formatString.indexOf("#" + GROUP_SEPARATOR) >= 0 && groupSizes.length) {
-        result = result.replace(new RegExp("[#\\" + GROUP_SEPARATOR + "]+"), "([1-9][\\d\\" + GROUP_SEPARATOR + "]*)?" + (requiredDigitCount ? "" : "|[0]"));
+        result = result.replace(new RegExp("[#\\" + GROUP_SEPARATOR + "]+"), "([1-9][\\d\\" + GROUP_SEPARATOR + "]*)?");
     } else {
-        result = result.replace(/#+/g, "(([1-9]\\d*)?" + (requiredDigitCount ? ")" : "|[0])"));
+        result = result.replace(/#+/g, "([1-9]\\d*)?");
     }
     return result;
 }
@@ -136,9 +135,14 @@ function normalizeValueString(valuePart, minDigitCount, maxDigitCount) {
         valuePart = valuePart.substr(0, maxDigitCount);
     }
 
+    while(valuePart.length > minDigitCount && valuePart.slice(-1) === "0") {
+        valuePart = valuePart.substr(0, valuePart.length - 1);
+    }
+
     while(valuePart.length < minDigitCount) {
         valuePart += "0";
     }
+
     return valuePart;
 }
 
@@ -195,12 +199,10 @@ function generateNumberFormatter(format) {
 
         var valueParts = value.toFixed(maxFloatPrecision).split(".");
 
-        var valueIntegerPart = normalizeValueString(valueParts[0], minIntegerPrecision, maxIntegerPrecision),
+        var valueIntegerPart = normalizeValueString(reverseString(valueParts[0]), minIntegerPrecision, maxIntegerPrecision),
             valueFloatPart = normalizeValueString(valueParts[1], minFloatPrecision, maxFloatPrecision),
-            integerString = reverseString(formatNumberPart(reverseString(floatFormatParts[0]), applyGroups(reverseString(valueIntegerPart), groupSizes))),
+            integerString = reverseString(formatNumberPart(reverseString(floatFormatParts[0]), applyGroups(valueIntegerPart, groupSizes))),
             floatString = maxFloatPrecision ? formatNumberPart(floatFormatParts[1], valueFloatPart) : "";
-
-        if(!integerString.match(/\d/)) integerString += "0";
 
         var result = integerString + (floatString.match(/\d/) ? FLOAT_SEPARATOR : "") + floatString;
 
