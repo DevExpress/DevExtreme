@@ -627,3 +627,17 @@ QUnit.test("convertToInnerStructure", function(assert) {
     assert.equal(model[2], filter[2]);
 });
 
+QUnit.test("getOperationFromAvailable", function(assert) {
+    var equalsOperation = {
+        value: "=",
+        text: "Equals"
+    };
+    var availableOperations = [equalsOperation, {
+        value: "<>",
+        text: "Does not equal"
+    }];
+    assert.deepEqual(utils.getOperationFromAvailable("=", availableOperations), equalsOperation);
+});
+
+
+

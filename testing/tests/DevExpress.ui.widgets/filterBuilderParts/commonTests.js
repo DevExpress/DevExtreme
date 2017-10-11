@@ -18,6 +18,11 @@ var FILTER_BUILDER_CLASS = "dx-filterbuilder",
     FILTER_BUILDER_GROUP_OPERATION_CLASS = "dx-filterbuilder-group-operation",
     ACTIVE_CLASS = "dx-state-active";
 
+var clickByButtonAndSelectMenuItem = function($button, menuItemIndex) {
+    $button.click();
+    $(".dx-menu-item-text").eq(menuItemIndex).trigger("dxclick");
+};
+
 QUnit.module("Rendering");
 
 QUnit.test("markup init", function(assert) {
@@ -123,6 +128,7 @@ QUnit.test("value and operations depend on selected field", function(assert) {
 
         var container = $("#container");
         container.dxFilterBuilder({
+            allowHierarchicalFields: true,
             value: [
                 ["CompanyName", "=", "K&S Music"]
             ],
@@ -173,6 +179,7 @@ QUnit.test("operations were changed after field change", function(assert) {
 
         var container = $("#container");
         container.dxFilterBuilder({
+            allowHierarchicalFields: true,
             value: [
                 ["State", "<>", "K&S Music"]
             ],
@@ -210,21 +217,30 @@ QUnit.test("selected element was changed in menu after click", function(assert) 
 
         var $fieldButton = container.find("." + FILTER_BUILDER_ITEM_FIELD_CLASS);
         $fieldButton.click();
-        assert.equal($(".dx-state-selected").text(), "State");
+        assert.equal($(".dx-menu-item-selected").text(), "State");
 
-        var $menuItem = $(".dx-treeview-item").eq(1);
+        var $menuItem = $(".dx-menu-item-text").eq(1);
         $menuItem.trigger("dxclick");
         $fieldButton.click();
-        assert.equal($(".dx-state-selected").text(), "Date");
+        assert.equal($(".dx-menu-item-selected").text(), "Date");
 
         var $groupButton = container.find("." + FILTER_BUILDER_GROUP_OPERATION_CLASS);
         $groupButton.click();
-        assert.equal($(".dx-state-selected").text(), "And");
+        assert.equal($(".dx-menu-item-selected").text(), "And");
 
-        $menuItem = $(".dx-treeview-item").eq(3);
+        $menuItem = $(".dx-menu-item-text").eq(3);
         $menuItem.trigger("dxclick");
         $groupButton.click();
-        assert.equal($(".dx-state-selected").text(), "Not Or");
+        assert.equal($(".dx-menu-item-selected").text(), "Not Or");
+
+        var $operationButton = container.find("." + FILTER_BUILDER_ITEM_OPERATION_CLASS);
+        $operationButton.click();
+        assert.equal($(".dx-menu-item-selected").text(), "Equals");
+
+        $menuItem = $(".dx-menu-item-text").eq(3);
+        $menuItem.trigger("dxclick");
+        $operationButton.click();
+        assert.equal($(".dx-menu-item-selected").text(), "Greater than");
 
     } finally {
         fx.off = false;
@@ -234,6 +250,7 @@ QUnit.test("selected element was changed in menu after click", function(assert) 
 QUnit.test("editor field depends on field type", function(assert) {
     var container = $("#container");
     container.dxFilterBuilder({
+        allowHierarchicalFields: true,
         value: [
             ["CompanyName", "=", "K&S Music"],
             "Or",
@@ -278,11 +295,6 @@ QUnit.test("hide value field for isblank & isNotBlank", function(assert) {
 
         var $operationButton = container.find("." + FILTER_BUILDER_ITEM_OPERATION_CLASS);
 
-        var clickByButtonAndSelectMenuItem = function($button, menuItemIndex) {
-            $button.click();
-            $(".dx-treeview-item").eq(menuItemIndex).trigger("dxclick");
-        };
-
         clickByButtonAndSelectMenuItem($operationButton, 6);
         assert.equal($operationButton.text(), "Is blank");
         assert.equal(container.find("." + FILTER_BUILDER_ITEM_VALUE_CLASS).length, 0);
@@ -316,6 +328,7 @@ QUnit.test("change operation", function(assert) {
 
         var container = $("#container");
         container.dxFilterBuilder({
+            allowHierarchicalFields: true,
             value: [
                 ["State", "<>", "K&S Music"]
             ],
@@ -324,12 +337,10 @@ QUnit.test("change operation", function(assert) {
 
         var $operationButton = container.find("." + FILTER_BUILDER_ITEM_OPERATION_CLASS);
 
-        $operationButton.click();
-        $(".dx-treeview-item").eq(1).trigger("dxclick");
+        clickByButtonAndSelectMenuItem($operationButton, 1);
         assert.equal($operationButton.text(), "Does not contain");
 
-        $operationButton.click();
-        $(".dx-treeview-item").eq(2).trigger("dxclick");
+        clickByButtonAndSelectMenuItem($operationButton, 2);
         assert.equal($operationButton.text(), "Starts with");
 
         assert.equal(container.find("." + FILTER_BUILDER_ITEM_VALUE_CLASS).length, 1);
@@ -344,6 +355,7 @@ QUnit.test("change value", function(assert) {
 
         var container = $("#container");
         var instance = container.dxFilterBuilder({
+            allowHierarchicalFields: true,
             value: ["State", "<>", "K&S Music"],
             fields: fields
         }).dxFilterBuilder("instance");
@@ -362,9 +374,7 @@ QUnit.test("change value", function(assert) {
         assert.deepEqual(instance._model, [["State", "<>", "Test"]]);
         assert.deepEqual(instance.option("value"), ["State", "<>", "Test"]);
 
-        $("." + FILTER_BUILDER_IMAGE_ADD_CLASS).click();
-        var $menuItem = $(".dx-treeview-item").eq(1);
-        $menuItem.trigger("dxclick");
+        clickByButtonAndSelectMenuItem($("." + FILTER_BUILDER_IMAGE_ADD_CLASS), 1);
         assert.deepEqual(instance._model, [["State", "<>", "Test"], ["CompanyName", "contains", ""]]);
         assert.deepEqual(instance.option("value"), [["State", "<>", "Test"], ["CompanyName", "contains", ""]]);
 

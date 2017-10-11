@@ -169,6 +169,16 @@ function getCaptionByOperation(operation, filterOperationDescriptions) {
     return filterOperationDescriptions && filterOperationDescriptions[operationName];
 }
 
+function getOperationFromAvailable(operation, availableOperations) {
+    for(var i = 0; i < availableOperations.length; i++) {
+        if(availableOperations[i].value === operation) {
+            return availableOperations[i];
+        }
+    }
+    //TODO
+    throw "Operation " + operation + " was not found";
+}
+
 function getAvailableOperations(field, filterOperationDescriptions) {
     var filterOperations = getFilterOperations(field);
 
@@ -512,6 +522,7 @@ function copyGroup(group) {
     return result;
 }
 
+exports.getOperationFromAvailable = getOperationFromAvailable;
 exports.updateConditionByOperation = updateConditionByOperation;
 exports.getCaptionWithParents = getCaptionWithParents;
 exports.getItems = getItems;

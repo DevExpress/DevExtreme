@@ -24,7 +24,7 @@
             display: inline-block;
             white-space: nowrap;
 
-            > .dx-filterbuilder-popup {
+            > .dx-filterbuilder-overlay {
                 float: left;
             }
 
@@ -65,7 +65,7 @@
     }
 }
 
-.dx-filterbuilder-popup {
+.dx-filterbuilder-overlay {
     white-space: nowrap;
 
     .dx-rtl {
@@ -78,9 +78,10 @@
         }
     }
 
-    .dx-overlay-content {
-        > .dx-popup-content{
-            padding: 5px;
+    .dx-overlay-content.dx-popup-normal {
+        border-radius: 0;
+        > .dx-popup-content {
+            padding: 0;
         }
     }
 
