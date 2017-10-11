@@ -344,7 +344,7 @@ var Popover = Popup.inherit({
         this._renderArrow();
         this._timeouts = {};
 
-        this.element().addClass(POPOVER_CLASS);
+        this.$element().addClass(POPOVER_CLASS);
         this._wrapper().addClass(POPOVER_WRAPPER_CLASS);
     },
 

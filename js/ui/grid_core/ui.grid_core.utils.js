@@ -242,7 +242,7 @@ module.exports = (function() {
             var that = this,
                 loadPanelOptions;
 
-            that._loadPanel && that._loadPanel.element().remove();
+            that._loadPanel && that._loadPanel.$element().remove();
             loadPanelOptions = that.option("loadPanel");
 
             if(loadPanelOptions && (loadPanelOptions.enabled === "auto" ? !isLocalStore : loadPanelOptions.enabled)) {

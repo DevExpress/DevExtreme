@@ -7,6 +7,7 @@ var $ = require("../../core/renderer"),
     commonUtils = require("../../core/utils/common"),
     typeUtils = require("../../core/utils/type"),
     extend = require("../../core/utils/extend").extend,
+    getPublicElement = require("../../core/utils/dom").getPublicElement,
     devices = require("../../core/devices"),
     registerComponent = require("../../core/component_registrator"),
     DOMComponent = require("../../core/dom_component"),
@@ -247,7 +248,7 @@ var Scrollable = DOMComponent.inherit({
     },
 
     _initMarkup: function() {
-        var $element = this.element().addClass(SCROLLABLE_CLASS),
+        var $element = this.$element().addClass(SCROLLABLE_CLASS),
             $container = this._$container = $("<div>").addClass(SCROLLABLE_CONTAINER_CLASS),
             $wrapper = this._$wrapper = $("<div>").addClass(SCROLLABLE_WRAPPER_CLASS),
             $content = this._$content = $("<div>").addClass(SCROLLABLE_CONTENT_CLASS);
@@ -273,7 +274,7 @@ var Scrollable = DOMComponent.inherit({
         // NOTE: Customize native scrollbars for dashboard team
 
         if(devices.real().deviceType === "desktop" && !(navigator.platform.indexOf('Mac') > -1 && browser['webkit'])) {
-            this.element().addClass("dx-scrollable-customizable-scrollbars");
+            this.$element().addClass("dx-scrollable-customizable-scrollbars");
         }
     },
 
@@ -347,7 +348,7 @@ var Scrollable = DOMComponent.inherit({
     },
 
     _renderDisabledState: function() {
-        this.element().toggleClass(SCROLLABLE_DISABLED_CLASS, this.option("disabled"));
+        this.$element().toggleClass(SCROLLABLE_DISABLED_CLASS, this.option("disabled"));
 
         if(this.option("disabled")) {
             this._lock();
@@ -357,7 +358,7 @@ var Scrollable = DOMComponent.inherit({
     },
 
     _renderDirection: function() {
-        this.element()
+        this.$element()
             .removeClass("dx-scrollable-" + HORIZONTAL)
             .removeClass("dx-scrollable-" + VERTICAL)
             .removeClass("dx-scrollable-" + BOTH)
@@ -367,7 +368,7 @@ var Scrollable = DOMComponent.inherit({
     _renderStrategy: function() {
         this._createStrategy();
         this._strategy.render();
-        this.element().data(SCROLLABLE_STRATEGY, this._strategy);
+        this.$element().data(SCROLLABLE_STRATEGY, this._strategy);
     },
 
     _createStrategy: function() {
@@ -511,13 +512,17 @@ var Scrollable = DOMComponent.inherit({
         return this._$container;
     },
 
+    $content: function() {
+        return this._$content;
+    },
+
     /**
     * @name dxscrollablemethods_content
     * @publicName content()
-    * @return jQuery
+    * @return Element
     */
     content: function() {
-        return this._$content;
+        return getPublicElement(this._$content);
     },
 
     /**
@@ -566,7 +571,7 @@ var Scrollable = DOMComponent.inherit({
     * @return numeric
     */
     scrollHeight: function() {
-        return this.content().outerHeight() - 2 * this._strategy.verticalOffset();
+        return this.$content().outerHeight() - 2 * this._strategy.verticalOffset();
     },
 
     /**
@@ -584,7 +589,7 @@ var Scrollable = DOMComponent.inherit({
     * @return numeric
     */
     scrollWidth: function() {
-        return this.content().outerWidth();
+        return this.$content().outerWidth();
     },
 
     /**
@@ -656,7 +661,7 @@ var Scrollable = DOMComponent.inherit({
     scrollToElement: function(element, offset) {
         offset = offset || {};
         var $element = $(element);
-        var elementInsideContent = this.content().find(element).length;
+        var elementInsideContent = this.$content().find(element).length;
         var elementIsInsideContent = ($element.parents("." + SCROLLABLE_CLASS).length - $element.parents("." + SCROLLABLE_CONTENT_CLASS).length) === 0;
         if(!elementInsideContent || !elementIsInsideContent) {
             return;
@@ -706,7 +711,7 @@ var Scrollable = DOMComponent.inherit({
     },
 
     _hasScrollContent: function($element) {
-        var $content = this.content();
+        var $content = this.$content();
         return $element.closest($content).length && !$element.is($content);
     },
 

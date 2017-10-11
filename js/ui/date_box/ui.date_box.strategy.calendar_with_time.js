@@ -104,7 +104,7 @@ var CalendarWithTimeStrategy = CalendarStrategy.inherit({
         this.callBase();
         this._currentAdaptiveMode = this._isShrinkView();
 
-        var $popupContent = this._getPopup().content();
+        var $popupContent = this._getPopup().$content();
 
         this._box = this.dateBox._createComponent($("<div>").appendTo($popupContent), Box, {
             direction: "row",
@@ -115,11 +115,11 @@ var CalendarWithTimeStrategy = CalendarStrategy.inherit({
 
                 switch(data.name) {
                     case "calendar":
-                        $container.append(this._widget.element());
-                        if(this._isShrinkView()) $container.append(this._timeView.element());
+                        $container.append(this._widget.$element());
+                        if(this._isShrinkView()) $container.append(this._timeView.$element());
                         break;
                     case "time":
-                        $container.append(this._timeView.element());
+                        $container.append(this._timeView.$element());
                         break;
                 }
 
@@ -135,9 +135,9 @@ var CalendarWithTimeStrategy = CalendarStrategy.inherit({
             result = extend(calendarPopupConfig, {
                 onShowing: (function() {
                     if(this._box.option("_layoutStrategy") === "fallback") {
-                        var clockMinWidth = this._getPopup().content().find(".dx-timeview-clock").css("minWidth");
+                        var clockMinWidth = this._getPopup().$content().find(".dx-timeview-clock").css("minWidth");
 
-                        this._timeView.element().css("width", clockMinWidth);
+                        this._timeView.$element().css("width", clockMinWidth);
                     }
                 }).bind(this),
             });
@@ -146,7 +146,7 @@ var CalendarWithTimeStrategy = CalendarStrategy.inherit({
     },
 
     getFirstPopupElement: function() {
-        return this._timeView._hourBox.element().find("input");
+        return this._timeView._hourBox.$element().find("input");
     },
 
     _attachTabHandler: function() {

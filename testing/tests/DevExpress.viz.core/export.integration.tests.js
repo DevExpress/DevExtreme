@@ -51,7 +51,7 @@ QUnit.test('Export method. Defined options', function(assert) {
             onFileSaving: fileSavingStub
         });
 
-    widget.element().css("background-color", "#ff0000");
+    widget.$element().css("background-color", "#ff0000");
 
     //act
     widget.exportTo("testName", "jpeg");
@@ -92,7 +92,7 @@ QUnit.test('Export method. PNG format', function(assert) {
             onFileSaving: fileSavingStub
         });
 
-    widget.element().css("background-color", "#ff0000");
+    widget.$element().css("background-color", "#ff0000");
 
     //act
     widget.exportTo("testName", "png");
@@ -118,7 +118,7 @@ QUnit.test('Export method. JPEG format', function(assert) {
             onFileSaving: fileSavingStub
         });
 
-    widget.element().css("background-color", "#ff0000");
+    widget.$element().css("background-color", "#ff0000");
 
     //act
     widget.exportTo("testName", "jpeg");
@@ -144,7 +144,7 @@ QUnit.test('Export method. GIF format', function(assert) {
             onFileSaving: fileSavingStub
         });
 
-    widget.element().css("background-color", "#ff0000");
+    widget.$element().css("background-color", "#ff0000");
 
     //act
     widget.exportTo("testName", "gif");
@@ -170,7 +170,7 @@ QUnit.test('Export method. SVG format', function(assert) {
             onFileSaving: fileSavingStub
         });
 
-    widget.element().css("background-color", "#ff0000");
+    widget.$element().css("background-color", "#ff0000");
 
     //act
     widget.exportTo("testName", "svg");
@@ -196,7 +196,7 @@ QUnit.test('Export method. PDF format', function(assert) {
             onFileSaving: fileSavingStub
         });
 
-    widget.element().css("background-color", "#ff0000");
+    widget.$element().css("background-color", "#ff0000");
 
     //act
     widget.exportTo("testName", "pdf");
@@ -222,7 +222,7 @@ QUnit.test('Export method. invalid format', function(assert) {
             onFileSaving: fileSavingStub
         });
 
-    widget.element().css("background-color", "#ff0000");
+    widget.$element().css("background-color", "#ff0000");
 
     //act
     widget.exportTo("testName", "abc");
@@ -238,7 +238,7 @@ QUnit.test('Export method. Undefined options', function(assert) {
     var exportFunc = clientExporter.export,
         widget = this.createWidget();
 
-    widget.element().css("background-color", "rgba(0, 0, 0, 0)");
+    widget.$element().css("background-color", "rgba(0, 0, 0, 0)");
 
     //act
     widget.exportTo();

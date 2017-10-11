@@ -86,8 +86,8 @@ QUnit.test("'correctAppointmentCoordinates' should correct appointment coordinat
         }
     });
 
-    var allDayPanelHeight = this.instance.element().find(".dx-scheduler-all-day-table-cell").eq(0).outerHeight(),
-        headerPanelHeight = this.instance.element().find(".dx-scheduler-header-panel").outerHeight(true);
+    var allDayPanelHeight = this.instance.$element().find(".dx-scheduler-all-day-table-cell").eq(0).outerHeight(),
+        headerPanelHeight = this.instance.$element().find(".dx-scheduler-header-panel").outerHeight(true);
 
     assert.roughEqual(updatedCoordinates.top, coordinates.top + allDayPanelHeight + headerPanelHeight, 2, "new top is correct");
     assert.equal(updatedCoordinates.left, 0, "new left is correct");
@@ -105,7 +105,7 @@ QUnit.test("'correctAppointmentCoordinates' should correct appointment coordinat
         },
         updatedCoordinates;
 
-    var headerPanelHeight = this.instance.element().find(".dx-scheduler-header-panel").outerHeight(true);
+    var headerPanelHeight = this.instance.$element().find(".dx-scheduler-header-panel").outerHeight(true);
 
     this.instance.fire("correctAppointmentCoordinates", {
         coordinates: coordinates,
@@ -139,7 +139,7 @@ QUnit.test("'correctAppointmentCoordinates' should correct appointment coordinat
         }
     });
 
-    var headerPanelHeight = this.instance.element().find(".dx-scheduler-header-panel").outerHeight(true);
+    var headerPanelHeight = this.instance.$element().find(".dx-scheduler-header-panel").outerHeight(true);
 
     assert.roughEqual(updatedCoordinates.top, coordinates.top + headerPanelHeight, 2, "new top is correct");
     assert.equal(updatedCoordinates.left, coordinates.left, "new left is correct");
@@ -156,7 +156,7 @@ QUnit.test("'getDraggableAppointmentArea' should return workSpace date table scr
         }
     });
 
-    assert.deepEqual(draggableArea.get(0), this.instance.element().find(".dx-scheduler-date-table-scrollable .dx-scrollable-container").get(0), "Draggable area is OK");
+    assert.deepEqual(draggableArea.get(0), this.instance.$element().find(".dx-scheduler-date-table-scrollable .dx-scrollable-container").get(0), "Draggable area is OK");
 });
 
 QUnit.test("'needCoordinates' should return workSpace date table scrollable", function(assert) {
@@ -295,7 +295,7 @@ QUnit.test("Long appointment in Timeline view should have right left coordinate"
         currentDate: new Date(2015, 2, 3)
     });
 
-    var $expectedCell = this.instance.element().find(".dx-scheduler-date-table-cell").eq(1),
+    var $expectedCell = this.instance.$element().find(".dx-scheduler-date-table-cell").eq(1),
         expectedLeftCoordinate = $expectedCell.position().left;
 
     this.instance.fire("needCoordinates", {
@@ -404,7 +404,7 @@ QUnit.test("'showAddAppointmentPopup' should update appointment data if there is
 QUnit.test("'appointmentFocused' should fire restoreScrollTop", function(assert) {
     this.createInstance();
 
-    var workspace = this.instance.element().find(".dx-scheduler-work-space").dxSchedulerWorkSpaceDay("instance"),
+    var workspace = this.instance.$element().find(".dx-scheduler-work-space").dxSchedulerWorkSpaceDay("instance"),
         restoreScrollTopStub = sinon.stub(workspace, "restoreScrollTop");
 
     this.instance.fire("appointmentFocused");

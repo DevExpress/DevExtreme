@@ -1,6 +1,7 @@
 "use strict";
 
 var $ = require("../core/renderer"),
+    getPublicElement = require("../core/utils/dom").getPublicElement,
     noop = require("../core/utils/common").noop,
     isDefined = require("../core/utils/type").isDefined,
     registerComponent = require("../core/component_registrator"),
@@ -54,7 +55,7 @@ var SlideOut = CollectionWidget.inherit({
             * @default "menuItem"
             * @type_function_param1 itemData:object
             * @type_function_param2 itemIndex:number
-            * @type_function_param3 itemElement:jQuery
+            * @type_function_param3 itemElement:Element
             * @type_function_return string|Node|jQuery
             */
             menuItemTemplate: "menuItem",
@@ -126,7 +127,7 @@ var SlideOut = CollectionWidget.inherit({
             * @publicName contentTemplate
             * @type template
             * @default "content"
-            * @type_function_param1 container:jQuery
+            * @type_function_param1 container:Element
             * @type_function_return string|Node|jQuery
             */
             contentTemplate: "content",
@@ -196,13 +197,13 @@ var SlideOut = CollectionWidget.inherit({
     },
 
     _itemContainer: function() {
-        return this._slideOutView.content();
+        return $(this._slideOutView.content());
     },
 
     _init: function() {
         this._selectedItemContentRendered = false;
         this.callBase();
-        this.element().addClass(SLIDEOUT_CLASS);
+        this.$element().addClass(SLIDEOUT_CLASS);
         this._initSlideOutView();
     },
 
@@ -233,7 +234,7 @@ var SlideOut = CollectionWidget.inherit({
     },
 
     _initSlideOutView: function() {
-        this._slideOutView = this._createComponent(this.element(), SlideOutView, {
+        this._slideOutView = this._createComponent(this.$element(), SlideOutView, {
             integrationOptions: {},
             menuVisible: this.option("menuVisible"),
             swipeEnabled: this.option("swipeEnabled"),
@@ -259,7 +260,7 @@ var SlideOut = CollectionWidget.inherit({
     },
 
     _renderList: function() {
-        var $list = this._list && this._list.element() || $("<div>").addClass(SLIDEOUT_MENU).appendTo(this._slideOutView.menuContent());
+        var $list = this._list && this._list.$element() || $("<div>").addClass(SLIDEOUT_MENU).appendTo($(this._slideOutView.menuContent()));
 
         this._renderItemClickAction();
 
@@ -290,7 +291,7 @@ var SlideOut = CollectionWidget.inherit({
     },
 
     _listItemClickHandler: function(e) {
-        var selectedIndex = this._list.element().find(".dx-list-item").index(e.itemElement);
+        var selectedIndex = this._list.$element().find(".dx-list-item").index(e.itemElement);
         this.option("selectedIndex", selectedIndex);
         this._itemClickAction(e);
     },
@@ -302,7 +303,7 @@ var SlideOut = CollectionWidget.inherit({
 
         var itemsLength = this._itemContainer().html().length;
         this._getTemplateByOption("contentTemplate").render({
-            container: this._itemContainer()
+            container: getPublicElement(this._itemContainer())
         });
         this._singleContent = this._itemContainer().html().length !== itemsLength;
     },

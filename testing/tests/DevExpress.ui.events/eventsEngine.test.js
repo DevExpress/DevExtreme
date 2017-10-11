@@ -361,3 +361,25 @@ QUnit.test("nativeEvents should work for window", function(assert) {
     assert.equal(focusCount, 1, "focus called once");
 });
 
+QUnit.module("Memory");
+
+QUnit.test("removing subscriptions should remove data from elementDataMap", function(assert) {
+    var div = document.createElement("div");
+
+    eventsEngine.on(div, "testEvent", function() {});
+    eventsEngine.off(div);
+
+    assert.notOk(eventsEngine.elementDataMap.has(div));
+});
+
+QUnit.test("removing subscriptions should not remove data from elementDataMap if some handlers left", function(assert) {
+    var div = document.createElement("div");
+
+    eventsEngine.on(div, "testEvent.ns", function() {});
+    eventsEngine.on(div, "testEvent.anotherNs", function() {});
+
+    var hasData = eventsEngine.elementDataMap.has(div);
+    eventsEngine.off(div, ".anotherNs");
+
+    assert.equal(eventsEngine.elementDataMap.has(div), hasData);
+});

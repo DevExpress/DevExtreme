@@ -57,7 +57,7 @@ function createGridView(options, userOptions) {
             }
         });
 
-    this.element = function() {
+    this.$element = function() {
         return $("#container");
     };
 
@@ -452,7 +452,7 @@ function createGridView(options, userOptions) {
             pointsByColumns;
 
         //act
-        this.element = function() {
+        this.$element = function() {
             return testElement;
         };
         gridView = this.createGridView(defaultOptions, { commonColumnSettings: { allowResizing: true } });
@@ -1363,8 +1363,8 @@ function createGridView(options, userOptions) {
                 { caption: 'Column 1', width: '120px' },
                     {
                         caption: 'Column 2', width: '130px', cellTemplate: function(container, options) {
-                            container.append('<div style="width: 130px" />');
-                            container.css('padding', 0);
+                            $(container).append('<div style="width: 130px" />');
+                            $(container).css('padding', 0);
                         }
                     }, { caption: 'Big Big Big Column Title' }, { caption: 'Column 4' }]),
                 dataController: new MockDataController({
@@ -1419,8 +1419,8 @@ function createGridView(options, userOptions) {
         gridView.resize();
 
         //assert
-        scrollable = $testElement.find(".dx-datagrid-rowsview").data("dxScrollable");
-        assert.strictEqual(scrollable.content()[0].style.width, "", "no width in scrollable content");
+        scrollable = $testElement.find(".dx-datagrid-rowsview").dxScrollable("instance");
+        assert.strictEqual(scrollable.$content()[0].style.width, "", "no width in scrollable content");
     });
 
     QUnit.test('Scrollable content without width when there is no horizontal scrollbar', function(assert) {
@@ -1444,8 +1444,9 @@ function createGridView(options, userOptions) {
         gridView.resize();
 
         //assert
-        scrollable = $testElement.find(".dx-datagrid-rowsview").data("dxScrollable");
-        assert.strictEqual(scrollable.content()[0].style.width, "", "width of the scrollable content");
+
+        scrollable = $testElement.find(".dx-datagrid-rowsview").dxScrollable("instance");
+        assert.strictEqual(scrollable.$content()[0].style.width, "", "width of the scrollable content");
     });
 
     QUnit.test('Scroll position headers and container with columnWidth auto', function(assert) {

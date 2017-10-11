@@ -41,6 +41,7 @@ var hideCallback = (function() {
  * @publicName hideTopOverlay()
  * @return Boolean
  * @module mobile/hide_top_overlay
+ * @namespace DevExpress
  * @export default
  */
 module.exports = function() {

@@ -334,7 +334,7 @@ var Form = Widget.inherit({
              * @publicName template
              * @type template
              * @type_function_param1 data:object
-             * @type_function_param2 itemElement:object
+             * @type_function_param2 itemElement:Element
              * @type_function_return string|Node|jQuery
              */
             /**
@@ -460,7 +460,7 @@ var Form = Widget.inherit({
              * @publicName template
              * @type template
              * @type_function_param1 data:object
-             * @type_function_param2 itemElement:object
+             * @type_function_param2 itemElement:Element
              * @type_function_return string|Node|jQuery
              */
             /**
@@ -573,7 +573,7 @@ var Form = Widget.inherit({
              * @type template
              * @type_function_param1 tabData:object
              * @type_function_param2 tabIndex:number
-             * @type_function_param3 tabElement:object
+             * @type_function_param3 tabElement:Element
              * @default undefined
              */
             /**
@@ -582,7 +582,7 @@ var Form = Widget.inherit({
              * @type template
              * @type_function_param1 tabData:object
              * @type_function_param2 tabIndex:number
-             * @type_function_param3 tabElement:object
+             * @type_function_param3 tabElement:Element
              * @default undefined
              */
             /**
@@ -749,7 +749,7 @@ var Form = Widget.inherit({
         if(alignItemLabelsInAllGroups) {
             this._applyLabelsWidthWithNestedGroups($container, colCount, excludeTabbed);
         } else {
-            var $groups = this.element().find("." + FORM_GROUP_CLASS),
+            var $groups = this.$element().find("." + FORM_GROUP_CLASS),
                 i;
             for(i = 0; i < $groups.length; i++) {
                 this._applyLabelsWidth($groups.eq(i), excludeTabbed);
@@ -797,7 +797,7 @@ var Form = Widget.inherit({
         this._clearCachedInstances();
 
         this.callBase();
-        this.element().addClass(FORM_CLASS);
+        this.$element().addClass(FORM_CLASS);
         this._attachSyncSubscriptions();
 
         this._cachedScreenFactor = windowUtils.getCurrentScreenFactor(this.option("screenByWidth"));
@@ -810,7 +810,7 @@ var Form = Widget.inherit({
 
     _alignLabels: function(layoutManager, inOneColumn) {
         this._alignLabelsInColumn({
-            $container: this.element(),
+            $container: this.$element(),
             layoutManager: layoutManager,
             excludeTabbed: true,
             items: this.option("items"),
@@ -827,7 +827,7 @@ var Form = Widget.inherit({
 
     _renderContentImpl: function() {
         this.callBase();
-        this.setAria("role", "form", this.element());
+        this.setAria("role", "form", this.$element());
 
         if(this.option("scrollingEnabled")) {
             this._renderScrollable();
@@ -839,7 +839,7 @@ var Form = Widget.inherit({
 
     _renderScrollable: function() {
         var useNativeScrolling = this.option("useNativeScrolling");
-        this._scrollable = new Scrollable(this.element(), {
+        this._scrollable = new Scrollable(this.$element(), {
             useNative: !!useNativeScrolling,
             useSimulatedScrollbar: !useNativeScrolling,
             useKeyboard: false,
@@ -849,11 +849,11 @@ var Form = Widget.inherit({
     },
 
     _getContent: function() {
-        return this.option("scrollingEnabled") ? this._scrollable.content() : this.element();
+        return this.option("scrollingEnabled") ? this._scrollable.$content() : this.$element();
     },
 
     _renderValidationSummary: function() {
-        var $validationSummary = this.element().find("." + FORM_VALIDATION_SUMMARY);
+        var $validationSummary = this.$element().find("." + FORM_VALIDATION_SUMMARY);
 
         if($validationSummary.length > 0) {
             $validationSummary.remove();
@@ -965,8 +965,9 @@ var Form = Widget.inherit({
                 onItemRendered: function(args) {
                     domUtils.triggerShownEvent(args.itemElement);
                 },
-                itemTemplate: function(itemData, e, $container) {
+                itemTemplate: function(itemData, e, container) {
                     var layoutManager,
+                        $container = $(container),
                         alignItemLabels = utils.ensureDefined(itemData.alignItemLabels, true);
 
                     layoutManager = that._renderLayoutManager(itemData.items, $container, {
@@ -1026,7 +1027,7 @@ var Form = Widget.inherit({
             };
             item.groupContentTemplate.render({
                 model: data,
-                container: $groupContent
+                container: domUtils.getPublicElement($groupContent)
             });
         } else {
             layoutManager = this._renderLayoutManager(item.items, $groupContent, {
@@ -1090,7 +1091,7 @@ var Form = Widget.inherit({
                         that._triggerOnFieldDataChanged(args);
                     }
                 },
-                validationBoundary: that.option("scrollingEnabled") ? that.element() : undefined
+                validationBoundary: that.option("scrollingEnabled") ? that.$element() : undefined
             };
 
         return extend(baseConfig, {
@@ -1208,7 +1209,7 @@ var Form = Widget.inherit({
                 this.callBase(args);
 
                 if(args.value) {
-                    domUtils.triggerShownEvent(this.element());
+                    domUtils.triggerShownEvent(this.$element());
                 }
                 break;
             default:
@@ -1503,7 +1504,7 @@ var Form = Widget.inherit({
     _refresh: function() {
         var editorSelector = "." + FOCUSED_STATE_CLASS + " input, ." + FOCUSED_STATE_CLASS + " textarea";
 
-        eventsEngine.trigger(this.element().find(editorSelector), "change");
+        eventsEngine.trigger(this.$element().find(editorSelector), "change");
 
         this.callBase();
     },
@@ -1540,7 +1541,7 @@ var Form = Widget.inherit({
     },
 
     _focusTarget: function() {
-        return this.element().find("." + FIELD_ITEM_CONTENT_CLASS + " [tabindex]").first();
+        return this.$element().find("." + FIELD_ITEM_CONTENT_CLASS + " [tabindex]").first();
     },
 
     _visibilityChanged: function(visible) {

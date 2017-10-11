@@ -282,7 +282,7 @@ var Slider = TrackBar.inherit({
     },
 
     _render: function() {
-        this.element().addClass(SLIDER_CLASS);
+        this.$element().addClass(SLIDER_CLASS);
         this._renderSubmitElement();
 
         this.callBase();
@@ -298,7 +298,7 @@ var Slider = TrackBar.inherit({
     _renderSubmitElement: function() {
         this._$submitElement = $("<input>")
             .attr("type", "hidden")
-            .appendTo(this.element());
+            .appendTo(this.$element());
     },
 
     _getSubmitElement: function() {
@@ -378,7 +378,7 @@ var Slider = TrackBar.inherit({
             tooltipEnabled = this.option("tooltip.enabled"),
             tooltipPosition = this.option("tooltip.position");
 
-        this.element()
+        this.$element()
             .toggleClass(SLIDER_TOOLTIP_POSITION_CLASS_PREFIX + "bottom", tooltipEnabled && tooltipPosition === "bottom")
             .toggleClass(SLIDER_TOOLTIP_POSITION_CLASS_PREFIX + "top", tooltipEnabled && tooltipPosition === "top");
 
@@ -388,7 +388,7 @@ var Slider = TrackBar.inherit({
             tooltipPosition: tooltipPosition,
             tooltipFormat: format,
             tooltipShowMode: this.option("tooltip.showMode"),
-            tooltipFitIn: this.element()
+            tooltipFitIn: this.$element()
         });
 
         return $handle;
@@ -427,7 +427,7 @@ var Slider = TrackBar.inherit({
     },
 
     _renderLabels: function() {
-        this.element()
+        this.$element()
             .removeClass(SLIDER_LABEL_POSITION_CLASS_PREFIX + "bottom")
             .removeClass(SLIDER_LABEL_POSITION_CLASS_PREFIX + "top");
 
@@ -453,7 +453,7 @@ var Slider = TrackBar.inherit({
 
             this._$maxLabel.html(numberLocalization.format(max, labelFormat));
 
-            this.element().addClass(SLIDER_LABEL_POSITION_CLASS_PREFIX + position);
+            this.$element().addClass(SLIDER_LABEL_POSITION_CLASS_PREFIX + position);
 
         } else {
             if(this._$minLabel) {
@@ -480,7 +480,7 @@ var Slider = TrackBar.inherit({
         var pointerDownEventName = eventUtils.addNamespace(pointerEvents.down, this.NAME);
         var clickEventName = eventUtils.addNamespace(clickEvent.name, this.NAME);
         var startAction = this._createAction(this._startHandler.bind(this));
-        var $element = this.element();
+        var $element = this.$element();
 
         eventsEngine.off($element, pointerDownEventName);
         eventsEngine.on($element, pointerDownEventName, function(e) {
@@ -523,7 +523,7 @@ var Slider = TrackBar.inherit({
         e.jQueryEvent.maxLeftOffset = rtlEnabled ? endOffset : startOffset;
         e.jQueryEvent.maxRightOffset = rtlEnabled ? startOffset : endOffset;
 
-        this._itemWidthRatio = this.element().width() / this._swipePixelRatio();
+        this._itemWidthRatio = this.$element().width() / this._swipePixelRatio();
 
         this._needPreventAnimation = true;
     },
@@ -657,7 +657,7 @@ var Slider = TrackBar.inherit({
                 this.callBase(args);
                 this._renderHandle();
                 this._repaintHandle();
-                domUtils.triggerShownEvent(this.element()); // TODO: move firing dxshown event to Widget
+                domUtils.triggerShownEvent(this.$element()); // TODO: move firing dxshown event to Widget
                 break;
             case "min":
             case "max":

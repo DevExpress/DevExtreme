@@ -107,7 +107,7 @@ var Pivot = CollectionWidget.inherit({
             * @default "title"
             * @type_function_param1 itemData:object
             * @type_function_param2 itemIndex:number
-            * @type_function_param3 itemElement:jQuery
+            * @type_function_param3 itemElement:Element
             * @type_function_return string|Node|jQuery
             */
             itemTitleTemplate: "title",
@@ -117,7 +117,7 @@ var Pivot = CollectionWidget.inherit({
             * @publicName contentTemplate
             * @type template
             * @default "content"
-            * @type_function_param1 container:jQuery
+            * @type_function_param1 container:Element
             * @type_function_return string|Node|jQuery
             */
             contentTemplate: "content",
@@ -213,7 +213,7 @@ var Pivot = CollectionWidget.inherit({
 
     _elementWidth: function() {
         if(!this._elementWidthCache) {
-            this._elementWidthCache = this.element().width();
+            this._elementWidthCache = this.$element().width();
         }
 
         return this._elementWidthCache;
@@ -226,7 +226,7 @@ var Pivot = CollectionWidget.inherit({
     _init: function() {
         this.callBase();
 
-        this.element().addClass(PIVOT_CLASS);
+        this.$element().addClass(PIVOT_CLASS);
 
         this._initWrapper();
 
@@ -251,7 +251,7 @@ var Pivot = CollectionWidget.inherit({
     _initWrapper: function() {
         this._$wrapper = $("<div>")
             .addClass(PIVOT_WRAPPER_CLASS)
-            .appendTo(this.element());
+            .appendTo(this.$element());
     },
 
     _initItemContainer: function() {
@@ -311,7 +311,7 @@ var Pivot = CollectionWidget.inherit({
         }
 
         this._getTemplateByOption("contentTemplate").render({
-            container: this._$itemWrapper
+            container: domUtils.getPublicElement(this._$itemWrapper)
         });
         this._singleContent = !this._$itemWrapper.is(":empty");
     },
@@ -319,7 +319,7 @@ var Pivot = CollectionWidget.inherit({
     _renderDimensions: function() {
         this.callBase();
 
-        this.element().toggleClass(PIVOT_AUTOHEIGHT_CLASS, this.option("height") === "auto");
+        this.$element().toggleClass(PIVOT_AUTOHEIGHT_CLASS, this.option("height") === "auto");
     },
 
     _visibilityChanged: function(visible) {
@@ -384,7 +384,7 @@ var Pivot = CollectionWidget.inherit({
     },
 
     _initSwipeHandlers: function() {
-        var $element = this.element();
+        var $element = this.$element();
 
         eventsEngine.on($element, eventUtils.addNamespace(swipeEvents.start, this.NAME), {
             itemSizeFunc: this._elementWidth.bind(this)

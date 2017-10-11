@@ -1,10 +1,12 @@
 "use strict";
 
+require("integration/knockout");
+
 var $ = require("jquery"),
-    ko = require("knockout");
+    ko = require("knockout"),
+    dataUtils = require("core/element_data");
 
 require("ui/defer_rendering");
-require("integration/knockout");
 
 QUnit.testStart(function() {
     var markup =
@@ -34,7 +36,7 @@ QUnit.test("render with the 'with' binding", function(assert) {
     ko.applyBindings(vm, $test.get(0));
 
     assert.equal($test.find(".item1").text(), "initial");
-    var render = $test.find(".dx-pending-rendering").data("dx-render-delegate");
+    var render = dataUtils.data($test.find(".dx-pending-rendering").get(0), "dx-render-delegate");
     render().done(function() {
         assert.equal($test.find(".item1").text(), "content");
         done();

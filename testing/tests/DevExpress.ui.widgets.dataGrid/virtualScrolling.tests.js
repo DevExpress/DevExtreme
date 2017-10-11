@@ -9,6 +9,7 @@ var $ = require("jquery"),
     VirtualScrollController = virtualScrollingCore.VirtualScrollController,
     browser = require("core/utils/browser"),
     devices = require("core/devices"),
+    renderer = require("core/renderer"),
     mockComponent = {
         option: sinon.stub()
     },
@@ -625,7 +626,7 @@ QUnit.test("dxScrollable scroll event", function(assert) {
 
     $("<div>").height(300).appendTo(this.$fixtureElement);
 
-    var $element = $("<div>").height(40000).appendTo(this.$fixtureElement),
+    var $element = renderer("<div>").height(40000).appendTo(this.$fixtureElement),
         scrollable = this.$fixtureElement.height(10000).dxScrollable({}).dxScrollable("instance");
 
     this.scrollController.subscribeToWindowScrollEvents($element);
@@ -722,7 +723,7 @@ QUnit.test("ScrollTo when dxScrollable scroll", function(assert) {
 
     $("<div>").height(300).appendTo(this.$fixtureElement);
 
-    var $element = $("<div>").height(40000).appendTo(this.$fixtureElement),
+    var $element = renderer("<div>").height(40000).appendTo(this.$fixtureElement),
         scrollable = this.$fixtureElement.height(10000).dxScrollable({}).dxScrollable("instance");
 
     this.scrollController.subscribeToWindowScrollEvents($element);

@@ -24,7 +24,7 @@ QUnit.module("Integration: Base", {
 
 QUnit.test("Scheduler should have a header", function(assert) {
     this.createInstance();
-    assert.equal(this.instance.element().find(".dx-scheduler-header").length, 1, "Scheduler has the header");
+    assert.equal(this.instance.$element().find(".dx-scheduler-header").length, 1, "Scheduler has the header");
 });
 
 QUnit.test("Header should be initialized with correct views and currentView options", function(assert) {
@@ -32,7 +32,7 @@ QUnit.test("Header should be initialized with correct views and currentView opti
         views: ["day", "week"],
         currentView: "week"
     });
-    var $element = this.instance.element();
+    var $element = this.instance.$element();
     assert.deepEqual($element.find(".dx-scheduler-header").dxSchedulerHeader("instance").option("views"), ["day", "week"], "Scheduler header has a correct views option");
     assert.equal($element.find(".dx-scheduler-header").dxSchedulerHeader("instance").option("currentView"), "week", "Scheduler header has a correct current view");
 });
@@ -43,7 +43,7 @@ QUnit.test("Header should be initialized with correct 'width' option", function(
         currentView: "week",
         width: 700
     });
-    var $element = this.instance.element(),
+    var $element = this.instance.$element(),
         header = $element.find(".dx-scheduler-header").dxSchedulerHeader("instance");
 
     assert.equal(header.option("width"), 700, "Header has a right width");
@@ -58,7 +58,7 @@ QUnit.test("Header should be initialized with correct useDropDownViewSwitcher op
     this.createInstance({
         useDropDownViewSwitcher: true
     });
-    var $element = this.instance.element();
+    var $element = this.instance.$element();
     assert.strictEqual($element.find(".dx-scheduler-header").dxSchedulerHeader("instance").option("useDropDownViewSwitcher"), true, "Scheduler header has a correct useDropDownViewSwitcher option");
 
     this.instance.option("useDropDownViewSwitcher", false);
@@ -68,18 +68,18 @@ QUnit.test("Header should be initialized with correct useDropDownViewSwitcher op
 
 QUnit.test("Scheduler should have a work space", function(assert) {
     this.createInstance();
-    assert.equal(this.instance.element().find(".dx-scheduler-work-space").length, 1, "Scheduler has the work space");
+    assert.equal(this.instance.$element().find(".dx-scheduler-work-space").length, 1, "Scheduler has the work space");
 });
 
 QUnit.test("Scheduler should have a tasks", function(assert) {
     this.createInstance();
-    assert.equal(this.instance.element().find(".dx-scheduler-scrollable-appointments").length, 1, "Scheduler has tasks");
+    assert.equal(this.instance.$element().find(".dx-scheduler-scrollable-appointments").length, 1, "Scheduler has tasks");
 });
 
 QUnit.test("Scheduler should handle events from units", function(assert) {
     this.createInstance();
     var checkSchedulerUnit = function(selector, unitName) {
-        var unit = this.instance.element().find(selector)[unitName]("instance");
+        var unit = this.instance.$element().find(selector)[unitName]("instance");
 
         var spy = sinon.spy(noop);
 
@@ -103,7 +103,7 @@ QUnit.test("Scheduler should handle events from units", function(assert) {
 
 QUnit.test("Scheduler should throw an error if event is not added to subscribes", function(assert) {
     this.createInstance();
-    var unit = this.instance.element().find(".dx-scheduler-header").dxSchedulerHeader("instance");
+    var unit = this.instance.$element().find(".dx-scheduler-header").dxSchedulerHeader("instance");
 
     assert.throws(
         function() {

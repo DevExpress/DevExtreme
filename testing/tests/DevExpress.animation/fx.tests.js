@@ -1,6 +1,7 @@
 "use strict";
 
 var $ = require("jquery"),
+    renderer = require("core/renderer"),
     eventsEngine = require("events/core/events_engine"),
     fx = require("animation/fx"),
     translator = require("animation/translator"),
@@ -170,7 +171,7 @@ QUnit.test("animation from", function(assert) {
 QUnit.test("isAnimating func", function(assert) {
     assert.expect(1);
 
-    var $element = $("#test");
+    var $element = renderer("#test");
 
     this.animate($element, {
         to: { left: 1000 },
@@ -313,7 +314,7 @@ QUnit.test("off flag, complete callback", function(assert) {
         assert.equal(called, 1);
 
         assert.equal(args.length, 2);
-        assert.strictEqual(args[0].get(0), element.get(0));
+        assert.strictEqual($(args[0]).get(0), element.get(0));
         assert.ok($.isPlainObject(args[1]));
     } finally {
         fx.off = false;
@@ -618,7 +619,7 @@ if(support.transition) {
     QUnit.test("isAnimating func", function(assert) {
         assert.expect(1);
 
-        var $element = $("#test");
+        var $element = renderer("#test");
 
         this.animate($element, {
             to: { left: 1000 },
@@ -741,7 +742,7 @@ if(support.transition) {
             assert.equal(called, 1);
 
             assert.equal(args.length, 2);
-            assert.strictEqual(args[0].get(0), element.get(0));
+            assert.strictEqual($(args[0]).get(0), element.get(0));
             assert.ok($.isPlainObject(args[1]));
         } finally {
             fx.off = false;
@@ -1061,11 +1062,11 @@ QUnit.test("fadeIn", function(assert) {
     fx.animate($element, {
         type: "fadeIn",
         duration: 100,
-        start: function() {
-            assert.equal($element.css("opacity"), 0.5, "starts from elements opacity");
+        start: function($element) {
+            assert.equal($($element).css("opacity"), 0.5, "starts from elements opacity");
         },
         complete: function() {
-            assert.strictEqual($element.css("opacity"), "1");
+            assert.strictEqual($($element).css("opacity"), "1");
             done();
         }
     });

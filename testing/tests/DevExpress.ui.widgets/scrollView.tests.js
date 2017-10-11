@@ -113,8 +113,8 @@ QUnit.test("dxLoadIndicator was created", function(assert) {
         $loadIndicatorTop = $topPocket.find(".dx-loadindicator"),
         $loadIndicatorBottom = $bottomPocket.find(".dx-loadindicator");
 
-    var top = $loadIndicatorTop.data("dxLoadIndicator"),
-        bottom = $loadIndicatorBottom.data("dxLoadIndicator");
+    var top = $loadIndicatorTop.dxLoadIndicator("instance"),
+        bottom = $loadIndicatorBottom.dxLoadIndicator("instance");
 
     assert.notEqual(top, null, "dxLoadIndicator was created");
     assert.notEqual(bottom, null, "dxLoadIndicator was created");
@@ -1535,7 +1535,7 @@ QUnit.test("scrollTop should be greater than 0 on init for prevent WebView bounc
         refreshStrategy: "pullDown"
     }).dxScrollView("instance");
 
-    var $container = $(scrollView.element().find("." + SCROLLABLE_CONTAINER_CLASS));
+    var $container = $(scrollView.$element().find("." + SCROLLABLE_CONTAINER_CLASS));
 
     assert.equal($container.scrollTop(), 1, "real scrollTop is greater than 0");
 });
@@ -1546,7 +1546,7 @@ QUnit.test("scrollTop should be greater than 0 after scroll event for prevent We
         refreshStrategy: "pullDown"
     }).dxScrollView("instance");
 
-    var $container = $(scrollView.element().find("." + SCROLLABLE_CONTAINER_CLASS));
+    var $container = $(scrollView.$element().find("." + SCROLLABLE_CONTAINER_CLASS));
 
     scrollView.scrollTo({ y: 10 });
     $($container).trigger("scroll");
@@ -2188,7 +2188,7 @@ QUnit.test("onReachBottom", function(assert) {
         }
     }).dxScrollView("instance");
 
-    var $container = scrollView.element().find("." + SCROLLABLE_CONTAINER_CLASS);
+    var $container = scrollView.$element().find("." + SCROLLABLE_CONTAINER_CLASS);
 
     $container.scrollTop($container.prop("scrollHeight") - $container.prop("clientHeight"));
     $($container).trigger("scroll");

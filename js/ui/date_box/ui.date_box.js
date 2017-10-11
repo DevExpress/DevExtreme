@@ -171,7 +171,7 @@ var DateBox = DropDownEditor.inherit({
             * @publicName useCalendar
             * @type boolean
             * @default false
-            * @deprecated
+            * @deprecated dxDateBoxOptions_pickerType
             */
             useCalendar: false,
 
@@ -227,7 +227,7 @@ var DateBox = DropDownEditor.inherit({
             * @publicName useNative
             * @type boolean
             * @default true
-            * @deprecated
+            * @deprecated dxDateBoxOptions_pickerType
             */
             useNative: true,
 
@@ -491,7 +491,7 @@ var DateBox = DropDownEditor.inherit({
     },
 
     _render: function() {
-        this.element().addClass(DATEBOX_CLASS);
+        this.$element().addClass(DATEBOX_CLASS);
 
         this._refreshFormatClass();
         this._refreshPickerTypeClass();
@@ -504,11 +504,11 @@ var DateBox = DropDownEditor.inherit({
 
     _renderDimensions: function() {
         this.callBase();
-        this.element().toggleClass(DX_AUTO_WIDTH_CLASS, !this.option("width"));
+        this.$element().toggleClass(DX_AUTO_WIDTH_CLASS, !this.option("width"));
     },
 
     _refreshFormatClass: function() {
-        var $element = this.element();
+        var $element = this.$element();
 
         each(TYPE, function(_, item) {
             $element.removeClass(DATEBOX_CLASS + "-" + item);
@@ -518,7 +518,7 @@ var DateBox = DropDownEditor.inherit({
     },
 
     _refreshPickerTypeClass: function() {
-        var $element = this.element();
+        var $element = this.$element();
 
         each(PICKER_TYPE, function(_, item) {
             $element.removeClass(DATEBOX_CLASS + "-" + item);
@@ -530,7 +530,7 @@ var DateBox = DropDownEditor.inherit({
     _renderSubmitElement: function() {
         this._$submitElement = $("<input>")
             .attr("type", "hidden")
-            .appendTo(this.element());
+            .appendTo(this.$element());
     },
 
     _getSubmitElement: function() {
@@ -538,7 +538,7 @@ var DateBox = DropDownEditor.inherit({
     },
 
     _updateSize: function() {
-        var $element = this.element(),
+        var $element = this.$element(),
             widthOption = this.option("width"),
             isWidthSet = typeUtils.isDefined(widthOption) || (isRealWidthSet($element) && !this._isSizeUpdatable),
             isElementVisible = $element.is(":visible"),
@@ -554,7 +554,7 @@ var DateBox = DropDownEditor.inherit({
             format = this._strategy.getDisplayFormat(this.option("displayFormat")),
             longestValue = dateLocalization.format(uiDateUtils.getLongestDate(format, dateLocalization.getMonthNames(), dateLocalization.getDayNames()), format);
 
-        $element.width(calculateWidth(longestValue, $input, this.element()));
+        $element.width(calculateWidth(longestValue, $input, this.$element()));
         this._isSizeUpdatable = true;
     },
 
@@ -581,7 +581,7 @@ var DateBox = DropDownEditor.inherit({
             return;
         }
 
-        var $element = this.element();
+        var $element = this.$element();
         var classPostfixes = extend({}, TYPE, PICKER_TYPE);
 
         each(classPostfixes, (function(_, item) {

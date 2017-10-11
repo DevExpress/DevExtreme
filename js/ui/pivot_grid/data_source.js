@@ -599,6 +599,7 @@ module.exports = Class.inherit((function() {
     * @publicName PivotGridDataSource
     * @type object
     * @inherits EventsMixin
+    * @namespace DevExpress.data
     * @module ui/pivot_grid/data_source
     * @export default
     */
@@ -615,7 +616,7 @@ module.exports = Class.inherit((function() {
             /**
             * @name PivotGridDataSourceOptions_store
             * @publicName store
-            * @type Store|XmlaStore|Array<Object>|Object
+            * @type Store|StoreOptions|XmlaStore|XmlaStoreOptions|Array<Object>|Object
             */
             /**
             * @name PivotGridDataSourceOptions_store_type
@@ -693,6 +694,7 @@ module.exports = Class.inherit((function() {
             /**
             * @name PivotGridDataSourceOptions_fields
             * @publicName fields
+            * @namespace DevExpress.data
             * @type Array<Object>
             * @default undefined
             */
@@ -956,6 +958,29 @@ module.exports = Class.inherit((function() {
             /**
             * @name PivotGridDataSourceOptions_fields_showValues
             * @publicName showValues
+            * @type boolean
+            * @default undefined
+            */
+            /**
+            * @name PivotGridDataSourceOptions_fields_headerFilter
+            * @publicName headerFilter
+            * @type object
+            */
+            /**
+            * @name PivotGridDataSourceOptions_fields_headerFilter_width
+            * @publicName width
+            * @type number
+            * @default undefined
+            */
+            /**
+            * @name PivotGridDataSourceOptions_fields_headerFilter_height
+            * @publicName height
+            * @type number
+            * @default undefined
+            */
+            /**
+            * @name PivotGridDataSourceOptions_fields_headerFilter_allowSearch
+            * @publicName allowSearch
             * @type boolean
             * @default undefined
             */

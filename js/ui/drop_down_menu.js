@@ -19,7 +19,8 @@ var DROP_DOWN_MENU_CLASS = "dx-dropdownmenu",
 
 var POPUP_OPTION_MAP = {
     "popupWidth": "width",
-    "popupHeight": "height"
+    "popupHeight": "height",
+    "popupMaxHeight": "maxHeight"
 };
 
 var BUTTON_OPTION_MAP = {
@@ -82,7 +83,7 @@ var DropDownMenu = Widget.inherit({
             * @type function|string
             * @extends Action
             * @type_function_param1_field4 itemData:object
-            * @type_function_param1_field5 itemElement:jQuery
+            * @type_function_param1_field5 itemElement:Element
             * @type_function_param1_field6 itemIndex:number
             * @action
             */
@@ -103,7 +104,7 @@ var DropDownMenu = Widget.inherit({
             * @default "item"
             * @type_function_param1 itemData:object
             * @type_function_param2 itemIndex:number
-            * @type_function_param3 itemElement:object
+            * @type_function_param3 itemElement:Element
             * @type_function_return string|Node|jQuery
             */
             itemTemplate: "item",
@@ -200,7 +201,8 @@ var DropDownMenu = Widget.inherit({
             popupPosition: { my: "top center", at: "bottom center", collision: "fit flip", offset: { v: 1 } },
             popupAnimation: undefined,
             onItemRendered: null,
-            menuWidget: List
+            menuWidget: List,
+            popupMaxHeight: undefined
         });
     },
 
@@ -276,7 +278,7 @@ var DropDownMenu = Widget.inherit({
     _init: function() {
         this.callBase();
 
-        this.element().addClass(DROP_DOWN_MENU_CLASS);
+        this.$element().addClass(DROP_DOWN_MENU_CLASS);
         this._initDataSource();
         this._initItemClickAction();
         this._initButtonClickAction();
@@ -318,13 +320,13 @@ var DropDownMenu = Widget.inherit({
         this._cleanFocusState();
 
         if(this._popup) {
-            this._popup.element().remove();
+            this._popup.$element().remove();
             delete this._$popup;
         }
     },
 
     _renderButton: function() {
-        var $button = this.element().addClass(DROP_DOWN_MENU_BUTTON_CLASS),
+        var $button = this.$element().addClass(DROP_DOWN_MENU_BUTTON_CLASS),
             config = this._buttonOptions();
 
         this._button = this._createComponent($button, Button, config);
@@ -361,7 +363,7 @@ var DropDownMenu = Widget.inherit({
             return;
         }
 
-        var $popup = this._$popup = $("<div>").appendTo(this.element()),
+        var $popup = this._$popup = $("<div>").appendTo(this.$element()),
             config = this._popupOptions();
 
         this._popup = this._createComponent($popup, Popover, config); // TODO: Circular dep
@@ -386,9 +388,10 @@ var DropDownMenu = Widget.inherit({
                     this.option("opened", args.value);
                 }
             }).bind(this),
-            target: this.element(),
+            target: this.$element(),
             height: this.option("popupHeight"),
-            width: this.option("popupWidth")
+            width: this.option("popupWidth"),
+            maxHeight: this.option("popupMaxHeight")
         };
     },
 
@@ -398,7 +401,7 @@ var DropDownMenu = Widget.inherit({
     },
 
     _renderList: function(instance) {
-        var $content = instance.content(),
+        var $content = instance.$content(),
             listConfig = this._listOptions();
 
         $content.addClass(DROP_DOWN_MENU_LIST_CLASS);
@@ -407,7 +410,7 @@ var DropDownMenu = Widget.inherit({
 
         //todo: replace with option
         this._list._getAriaTarget = (function() {
-            return this.element();
+            return this.$element();
         }).bind(this);
 
         this._setListDataSource();
@@ -499,6 +502,7 @@ var DropDownMenu = Widget.inherit({
                 break;
             case "popupWidth":
             case "popupHeight":
+            case "popupMaxHeight":
                 this._popup.option(POPUP_OPTION_MAP[name], value);
                 break;
             case "usePopover":

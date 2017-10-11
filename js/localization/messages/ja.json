@@ -195,6 +195,7 @@
         "dxScheduler-confirmRecurrenceEditOccurrence": "予定を編集",
         "dxScheduler-confirmRecurrenceDeleteOccurrence": "予定を削除",
         "dxScheduler-noTimezoneTitle": "時間帯なし",
+        "dxScheduler-moreAppointments": "その他 {0} つ選択",
         "dxCalendar-todayButtonText": "今日",
         "dxCalendar-ariaWidgetName": "カレンダー",
         "dxColorView-ariaRed": "赤",

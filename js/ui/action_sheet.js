@@ -236,7 +236,7 @@ var ActionSheet = CollectionWidget.inherit({
 
         this._defaultTemplates["item"] = new BindableTemplate(function($container, data) {
             var button = new Button($("<div>"), extend({ onClick: data && data.click }, data));
-            $container.append(button.element());
+            $container.append(button.$element());
         }, ["disabled", "icon", "text", "type", "onClick", "click"], this.option("integrationOptions.watchMethod"));
     },
 
@@ -257,7 +257,7 @@ var ActionSheet = CollectionWidget.inherit({
     _renderDimensions: noop,
 
     _render: function() {
-        this.element().addClass(ACTION_SHEET_CLASS);
+        this.$element().addClass(ACTION_SHEET_CLASS);
         this._createItemContainer();
         this._renderPopup();
     },
@@ -272,7 +272,7 @@ var ActionSheet = CollectionWidget.inherit({
     },
 
     _renderPopup: function() {
-        this._$popup = $("<div>").appendTo(this.element());
+        this._$popup = $("<div>").appendTo(this.$element());
         this._isPopoverMode() ? this._createPopover() : this._createPopup();
         this._renderPopupTitle();
         this._mapPopupOption("visible");
@@ -378,7 +378,7 @@ var ActionSheet = CollectionWidget.inherit({
     },
 
     _popupContentReadyAction: function() {
-        this._popup.content().append(this._$itemContainer);
+        this._popup.$content().append(this._$itemContainer);
         this._attachClickEvent();
         this._attachHoldEvent();
         this._renderContent();
@@ -399,7 +399,7 @@ var ActionSheet = CollectionWidget.inherit({
                 that = this;
 
             this._$cancelButton = $("<div>").addClass(ACTION_SHEET_CANCEL_BUTTON_CLASS)
-                .appendTo(this._popup.content());
+                .appendTo(this._popup.$content());
             this._createComponent(this._$cancelButton, Button, {
                 disabled: false,
                 text: this.option("cancelText"),

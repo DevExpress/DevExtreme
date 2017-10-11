@@ -35,7 +35,7 @@ var TabPanel = MultiView.inherit({
             * @default "title"
             * @type_function_param1 itemData:object
             * @type_function_param2 itemIndex:number
-            * @type_function_param3 itemElement:jQuery
+            * @type_function_param3 itemElement:Element
             * @type_function_return string|Node|jQuery
             */
             itemTitleTemplate: "title",
@@ -79,7 +79,7 @@ var TabPanel = MultiView.inherit({
             * @extends Action
             * @type function|string
             * @type_function_param1_field4 itemData:object
-            * @type_function_param1_field5 itemElement:jQuery
+            * @type_function_param1_field5 itemElement:Element
             * @action
             */
             onTitleClick: null,
@@ -89,7 +89,7 @@ var TabPanel = MultiView.inherit({
             * @publicName onTitleHold
             * @extends Action
             * @type_function_param1_field4 itemData:object
-            * @type_function_param1_field5 itemElement:jQuery
+            * @type_function_param1_field5 itemElement:Element
             * @action
             */
             onTitleHold: null,
@@ -99,7 +99,7 @@ var TabPanel = MultiView.inherit({
             * @publicName onTitleRendered
             * @extends Action
             * @type_function_param1_field4 itemData:object
-            * @type_function_param1_field5 itemElement:jQuery
+            * @type_function_param1_field5 itemElement:Element
             * @action
             */
             onTitleRendered: null
@@ -131,7 +131,7 @@ var TabPanel = MultiView.inherit({
             * @name dxTabPanelItemTemplate_iconSrc
             * @publicName iconSrc
             * @type String
-            * @deprecated
+            * @deprecated dxTabPanelItemTemplate_icon
             */
             /**
             * @name dxTabPanelItemTemplate_badge
@@ -192,7 +192,7 @@ var TabPanel = MultiView.inherit({
     _init: function() {
         this.callBase();
 
-        this.element().addClass(TABPANEL_CLASS);
+        this.$element().addClass(TABPANEL_CLASS);
 
         this.setAria("role", "tabpanel");
     },
@@ -253,7 +253,7 @@ var TabPanel = MultiView.inherit({
             return;
         }
 
-        var $element = this.element();
+        var $element = this.$element();
 
         this._$tabContainer = $("<div>")
             .addClass(TABPANEL_TABS_CLASS)

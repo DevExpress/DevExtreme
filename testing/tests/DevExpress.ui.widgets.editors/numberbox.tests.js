@@ -96,7 +96,7 @@ QUnit.test("typing value by keyboard update 'value' option", function(assert) {
         valueChangeEvent: "change"
     });
 
-    var instance = element.data("dxNumberBox"),
+    var instance = element.dxNumberBox("instance"),
         $input = element.find("." + INPUT_CLASS),
         keyboard = keyboardMock($input);
 
@@ -118,7 +118,7 @@ QUnit.test("validate value on focusout", function(assert) {
         valueChangeEvent: "change"
     });
 
-    var instance = element.data("dxNumberBox"),
+    var instance = element.dxNumberBox("instance"),
         $input = element.find("." + INPUT_CLASS),
         keyboard = keyboardMock($input);
 
@@ -141,7 +141,7 @@ QUnit.test("trigger invalid event", function(assert) {
         valueChangeEvent: "change"
     });
 
-    var instance = element.data("dxNumberBox"),
+    var instance = element.dxNumberBox("instance"),
         $input = element.find("." + INPUT_CLASS),
         keyboard = keyboardMock($input);
 
@@ -162,7 +162,7 @@ QUnit.test("validate value on keyup", function(assert) {
         valueChangeEvent: "keyup"
     });
 
-    var instance = element.data("dxNumberBox"),
+    var instance = element.dxNumberBox("instance"),
         $input = element.find("." + INPUT_CLASS),
         keyboard = keyboardMock($input);
 
@@ -212,7 +212,7 @@ QUnit.test("validate 'plus' char typing", function(assert) {
         valueChangeEvent: "change"
     });
 
-    var instance = element.data("dxNumberBox"),
+    var instance = element.dxNumberBox("instance"),
         $input = element.find("." + INPUT_CLASS),
         keyboard = keyboardMock($input);
 
@@ -240,7 +240,7 @@ QUnit.test("validate 'minus' char typing", function(assert) {
         valueChangeEvent: "change"
     });
 
-    var instance = element.data("dxNumberBox"),
+    var instance = element.dxNumberBox("instance"),
         $input = element.find("." + INPUT_CLASS),
         keyboard = keyboardMock($input);
 
@@ -287,7 +287,7 @@ QUnit.test("regression test. Change value used option", function(assert) {
         value: 100
     });
 
-    var instance = element.data("dxNumberBox"),
+    var instance = element.dxNumberBox("instance"),
         $input = element.find("." + INPUT_CLASS);
     instance.option("value", 200);
 
@@ -850,7 +850,7 @@ QUnit.test("value should be updated when it was incomplete", function(assert) {
 QUnit.module("options changed callbacks", {
     beforeEach: function() {
         this.element = $("#numberbox");
-        this.instance = this.element.dxNumberBox().data("dxNumberBox");
+        this.instance = this.element.dxNumberBox().dxNumberBox("instance");
     }
 });
 
@@ -1335,7 +1335,7 @@ QUnit.test("onValueChanged option should get jQuery event as a parameter when up
 QUnit.module("regressions", {
     beforeEach: function() {
         this.element = $("#numberbox").dxNumberBox();
-        this.instance = this.element.data("dxNumberBox");
+        this.instance = this.element.dxNumberBox("instance");
     }
 });
 
@@ -1345,7 +1345,7 @@ QUnit.test("B230398", function(assert) {
     var element = $("#numberbox").dxNumberBox({ value: "", placeholder: "auto" }),
         $input = element.find("." + INPUT_CLASS),
         keyboard = keyboardMock($input),
-        instance = element.data("dxNumberBox");
+        instance = element.dxNumberBox("instance");
 
     assert.equal(instance.option("value"), "");
 
@@ -1613,7 +1613,7 @@ QUnit.test("control keys test", function(assert) {
         value: 100
     });
 
-    var instance = element.data("dxNumberBox"),
+    var instance = element.dxNumberBox("instance"),
         $input = element.find("." + INPUT_CLASS),
         keyboard = keyboardMock($input);
 
@@ -1641,7 +1641,7 @@ QUnit.test("it is impossible to change value by keyboard in readonly editor", fu
         value: 100
     });
 
-    var instance = element.data("dxNumberBox"),
+    var instance = element.dxNumberBox("instance"),
         $input = element.find("." + INPUT_CLASS),
         keyboard = keyboardMock($input);
 

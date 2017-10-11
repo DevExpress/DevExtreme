@@ -28,6 +28,7 @@ if(window && window.DevExpress && window.DevExpress.config) {
  * @publicName config()
  * @type method
  * @return object
+ * @namespace DevExpress
  * @module core/config
  * @export default
  */
@@ -35,6 +36,7 @@ if(window && window.DevExpress && window.DevExpress.config) {
  * @name config
  * @publicName config(config)
  * @param1 config:object
+ * @namespace DevExpress
  * @module core/config
  * @export default
  */

@@ -195,6 +195,7 @@
         "dxScheduler-confirmRecurrenceEditOccurrence": "Termin bearbeiten",
         "dxScheduler-confirmRecurrenceDeleteOccurrence": "Termin löschen",
         "dxScheduler-noTimezoneTitle": "Keine Zeitzone",
+        "dxScheduler-moreAppointments": "{0} weitere",
         "dxCalendar-todayButtonText": "Heute",
         "dxCalendar-ariaWidgetName": "Kalendar",
         "dxColorView-ariaRed": "Rot",

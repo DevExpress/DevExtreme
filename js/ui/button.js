@@ -3,6 +3,7 @@
 var $ = require("../core/renderer"),
     eventsEngine = require("../events/core/events_engine"),
     iconUtils = require("../core/utils/icon"),
+    domUtils = require("../core/utils/dom"),
     devices = require("../core/devices"),
     registerComponent = require("../core/component_registrator"),
     extend = require("../core/utils/extend").extend,
@@ -136,7 +137,7 @@ var Button = Widget.inherit({
             * @type_function_param1 buttonData:object
             * @type_function_param1_field1 text:string
             * @type_function_param1_field2 icon:string
-            * @type_function_param2 contentElement:jQuery
+            * @type_function_param2 contentElement:Element
             * @type_function_return string|jQuery
             */
             template: "content",
@@ -206,12 +207,12 @@ var Button = Widget.inherit({
                 $iconElement = iconUtils.getImageContainer(data && data.icon),
                 $textContainer = data && data.text ? $("<span>").text(data.text).addClass(BUTTON_TEXT_CLASS) : undefined;
 
-            options.container.append($iconElement).append($textContainer);
+            $(options.container).append($iconElement).append($textContainer);
         }, this);
     },
 
     _render: function() {
-        this.element().addClass(BUTTON_CLASS);
+        this.$element().addClass(BUTTON_CLASS);
         this._renderType();
 
         this.option("useInkRipple") && this._renderInkRipple();
@@ -258,7 +259,7 @@ var Button = Widget.inherit({
     },
 
     _renderContentImpl: function() {
-        var $element = this.element(),
+        var $element = this.$element(),
             data = this._getContentData();
 
         if(this._$content) {
@@ -276,7 +277,7 @@ var Button = Widget.inherit({
         var template = this._getTemplateByOption("template"),
             $result = template.render({
                 model: data,
-                container: this._$content
+                container: domUtils.getPublicElement(this._$content)
             });
 
         if($result.hasClass(TEMPLATE_WRAPPER_CLASS)) {
@@ -341,8 +342,8 @@ var Button = Widget.inherit({
 
         this._clickAction = this._createActionByOption("onClick", actionConfig);
 
-        eventsEngine.off(this.element(), eventName);
-        eventsEngine.on(this.element(), eventName, function(e) {
+        eventsEngine.off(this.$element(), eventName);
+        eventsEngine.on(this.$element(), eventName, function(e) {
             that._executeClickAction(e);
         });
     },
@@ -372,18 +373,18 @@ var Button = Widget.inherit({
     _renderType: function() {
         var type = this.option("type");
         if(type) {
-            this.element().addClass("dx-button-" + type);
+            this.$element().addClass("dx-button-" + type);
         }
     },
 
     _refreshType: function(prevType) {
         var type = this.option("type");
 
-        prevType && this.element()
+        prevType && this.$element()
             .removeClass("dx-button-" + prevType)
             .addClass("dx-button-" + type);
 
-        if(!this.element().hasClass(BUTTON_HAS_ICON_CLASS) && type === "back") {
+        if(!this.$element().hasClass(BUTTON_HAS_ICON_CLASS) && type === "back") {
             this._renderContentImpl();
         }
     },

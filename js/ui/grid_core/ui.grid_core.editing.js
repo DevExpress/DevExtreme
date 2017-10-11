@@ -222,7 +222,7 @@ var EditingController = modules.ViewController.inherit((function() {
         },
 
         getFirstEditableCellInRow: function(rowIndex) {
-            return this.getView("rowsView").getCellElement(rowIndex ? rowIndex : 0, this.getFirstEditableColumnIndex());
+            return this.getView("rowsView")._getCellElement(rowIndex ? rowIndex : 0, this.getFirstEditableColumnIndex());
         },
 
         getFocusedCellInRow: function(rowIndex) {
@@ -308,7 +308,7 @@ var EditingController = modules.ViewController.inherit((function() {
                 popupVisible = this._editPopup && this._editPopup.option("visible");
 
             if(editMode === EDIT_MODE_POPUP && popupVisible) {
-                return this._editPopup.content();
+                return this._editPopup.$content();
             }
         },
 
@@ -420,7 +420,7 @@ var EditingController = modules.ViewController.inherit((function() {
         /**
          * @name dxDataGridMethods_insertRow
          * @publicName insertRow()
-         * @deprecated
+         * @deprecated dxDataGridMethods_addRow
          */
         insertRow: function() {
             errors.log("W0002", "dxDataGrid", "insertRow", "15.2", "Use the 'addRow' method instead");
@@ -628,13 +628,13 @@ var EditingController = modules.ViewController.inherit((function() {
 
             if(!that._editPopup) {
                 var $popupContainer = $("<div>")
-                        .appendTo(that.component.element())
+                        .appendTo(that.component.$element())
                         .addClass(that.addWidgetPrefix(EDIT_POPUP_CLASS));
 
                 that._editPopup = that._createComponent($popupContainer, Popup, {});
                 that._editPopup.on("hidden", that._getEditPopupHiddenHandler());
                 that._editPopup.on("shown", function(e) {
-                    eventsEngine.trigger(e.component.content().find(FOCUSABLE_ELEMENT_SELECTOR).first(), "focus");
+                    eventsEngine.trigger(e.component.$content().find(FOCUSABLE_ELEMENT_SELECTOR).first(), "focus");
                 });
             }
 
@@ -777,7 +777,7 @@ var EditingController = modules.ViewController.inherit((function() {
             }
 
             //TODO no focus border when call editCell via API
-            var $cell = rowsView && rowsView.getCellElement(that._getVisibleEditRowIndex(), that._editColumnIndex); //T319885
+            var $cell = rowsView && rowsView._getCellElement(that._getVisibleEditRowIndex(), that._editColumnIndex); //T319885
             if($cell && !$cell.find(":focus").length) {
                 that._focusEditingCell(function() {
                     that._editCellInProgress = false;
@@ -818,7 +818,7 @@ var EditingController = modules.ViewController.inherit((function() {
             var that = this,
                 rowsView = that.getView("rowsView");
 
-            $editCell = $editCell || rowsView && rowsView.getCellElement(that._getVisibleEditRowIndex(), that._editColumnIndex);
+            $editCell = $editCell || rowsView && rowsView._getCellElement(that._getVisibleEditRowIndex(), that._editColumnIndex);
             that._delayedInputFocus($editCell, beforeFocusCallback, callBeforeFocusCallbackAlways);
         },
 
@@ -827,7 +827,7 @@ var EditingController = modules.ViewController.inherit((function() {
          * @name dxDataGridMethods_removeRow
          * @publicName removeRow(rowIndex)
          * @param1 rowIndex:number
-         * @deprecated
+         * @deprecated GridBaseMethods_deleteRow
          */
         removeRow: function(rowIndex) {
             errors.log("W0002", "dxDataGrid", "removeRow", "15.2", "Use the 'deleteRow' method instead");
@@ -1294,7 +1294,7 @@ var EditingController = modules.ViewController.inherit((function() {
                 newData = {},
                 oldData = options.data,
                 rowKey = options.key,
-                $cellElement = options.cellElement,
+                $cellElement = $(options.cellElement),
                 editMode = getEditMode(that),
                 params;
 
@@ -1354,14 +1354,14 @@ var EditingController = modules.ViewController.inherit((function() {
 
             if(rowIndex >= 0 && this._editForm) {
                 if(!forceUpdateRow) {
-                    $focusedItemElement = this._editForm.element().find(".dx-state-focused");
+                    $focusedItemElement = this._editForm.$element().find(".dx-state-focused");
                     columnIndex = rowsView.getCellIndex($focusedItemElement, rowIndex);
                 }
 
                 this._editForm.repaint();
 
                 if(columnIndex >= 0) {
-                    $focusedItemElement = rowsView.getCellElement(rowIndex, columnIndex);
+                    $focusedItemElement = rowsView._getCellElement(rowIndex, columnIndex);
                     this._delayedInputFocus($focusedItemElement);
                 }
             }
@@ -1390,8 +1390,9 @@ var EditingController = modules.ViewController.inherit((function() {
             return column.editCellTemplate || getDefaultEditorTemplate(this);
         },
 
-        renderFormEditTemplate: function(detailCellOptions, item, form, $container, isReadOnly) {
+        renderFormEditTemplate: function(detailCellOptions, item, form, container, isReadOnly) {
             var that = this,
+                $container = $(container),
                 column = item.column,
                 rowData = detailCellOptions.row && detailCellOptions.row.data,
                 cellOptions = extend({}, detailCellOptions, {
@@ -1515,17 +1516,19 @@ var EditingController = modules.ViewController.inherit((function() {
                 template = column.editCellTemplate || getDefaultEditorTemplate(that);
             } else if(column.command === "edit" && options.rowType === "data") {
                 template = function(container, options) {
-                    container.css("text-align", "center");
+                    var $container = $(container);
+
+                    $container.css("text-align", "center");
                     options.rtlEnabled = that.option("rtlEnabled");
 
                     editingOptions = that.option("editing") || {};
                     editingTexts = editingOptions.texts || {};
 
                     if(options.row && options.row.rowIndex === that._getVisibleEditRowIndex() && isRowMode) {
-                        that._createLink(container, editingTexts.saveRowChanges, "saveEditData", options, "dx-link-save");
-                        that._createLink(container, editingTexts.cancelRowChanges, "cancelEditData", options, "dx-link-cancel");
+                        that._createLink($container, editingTexts.saveRowChanges, "saveEditData", options, "dx-link-save");
+                        that._createLink($container, editingTexts.cancelRowChanges, "cancelEditData", options, "dx-link-cancel");
                     } else {
-                        that._createEditingLinks(container, options, editingOptions, isRowMode);
+                        that._createEditingLinks($container, options, editingOptions, isRowMode);
                     }
                 };
             } else if(column.command === "detail" && options.rowType === "detail" && isRowEditing) {
@@ -1588,7 +1591,7 @@ var EditingController = modules.ViewController.inherit((function() {
             var prepareButtonItem = function(name, methodName, sortIndex) {
                 var className = classNameButtonByNames[name],
                     onInitialized = function(e) {
-                        e.element.addClass(headerPanel._getToolbarButtonClass(EDIT_BUTTON_CLASS + " " + that.addWidgetPrefix(className) + "-button"));
+                        $(e.element).addClass(headerPanel._getToolbarButtonClass(EDIT_BUTTON_CLASS + " " + that.addWidgetPrefix(className) + "-button"));
                     },
                     hintText = titleButtonTextByClassNames[name],
                     isButtonDisabled = (className === "save" || className === "cancel") && !that.hasChanges();
@@ -1673,7 +1676,7 @@ module.exports = {
              * @type function(e)
              * @type_function_param1 e:object
              * @type_function_param1_field4 data:object
-             * @type_function_param1_field5 cancel:boolean|Promise
+             * @type_function_param1_field5 cancel:boolean|Promise<void>
              * @extends Action
              * @action
              */
@@ -1685,7 +1688,7 @@ module.exports = {
              * @type_function_param1 e:object
              * @type_function_param1_field4 data:object
              * @type_function_param1_field5 key:any
-             * @type_function_param1_field6 error:JavaScript Error object
+             * @type_function_param1_field6 error:Error
              * @extends Action
              * @action
              */
@@ -1724,7 +1727,7 @@ module.exports = {
              * @type_function_param1_field4 oldData:object
              * @type_function_param1_field5 newData:object
              * @type_function_param1_field6 key:any
-             * @type_function_param1_field7 cancel:boolean|Promise
+             * @type_function_param1_field7 cancel:boolean|Promise<void>
              * @extends Action
              * @action
              */
@@ -1736,7 +1739,7 @@ module.exports = {
              * @type_function_param1 e:object
              * @type_function_param1_field4 data:object
              * @type_function_param1_field5 key:any
-             * @type_function_param1_field6 error:JavaScript Error object
+             * @type_function_param1_field6 error:Error
              * @extends Action
              * @action
              */
@@ -1748,7 +1751,7 @@ module.exports = {
              * @type_function_param1 e:object
              * @type_function_param1_field4 data:object
              * @type_function_param1_field5 key:any
-             * @type_function_param1_field6 cancel:boolean|Promise
+             * @type_function_param1_field6 cancel:boolean|Promise<void>
              * @extends Action
              * @action
              */
@@ -1760,7 +1763,7 @@ module.exports = {
              * @type_function_param1 e:object
              * @type_function_param1_field4 data:object
              * @type_function_param1_field5 key:any
-             * @type_function_param1_field6 error:JavaScript Error object
+             * @type_function_param1_field6 error:Error
              * @extends Action
              * @action
              */
@@ -1975,7 +1978,7 @@ module.exports = {
                         editFormRowIndex = editingController.getEditFormRowIndex();
 
                     if(editFormRowIndex === rowIndex && $cellElements && editForm) {
-                        return editForm.element().find("." + this.addWidgetPrefix(EDIT_FORM_ITEM_CLASS) + ", ." + BUTTON_CLASS);
+                        return editForm.$element().find("." + this.addWidgetPrefix(EDIT_FORM_ITEM_CLASS) + ", ." + BUTTON_CLASS);
                     }
 
                     return $cellElements;

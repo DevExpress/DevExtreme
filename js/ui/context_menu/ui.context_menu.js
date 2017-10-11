@@ -222,7 +222,7 @@ var ContextMenu = MenuBase.inherit((function() {
         _focusInHandler: noop,
 
         _itemContainer: function() {
-            return this._overlay ? this._overlay.content() : $();
+            return this._overlay ? this._overlay.$content() : $();
         },
 
         _eventBindingTarget: function() {
@@ -230,7 +230,7 @@ var ContextMenu = MenuBase.inherit((function() {
         },
 
         itemsContainer: function() {
-            return this._overlay ? this._overlay.content() : undefined;
+            return this._overlay ? this._overlay.$content() : undefined;
         },
 
         _supportedKeys: function() {
@@ -326,7 +326,7 @@ var ContextMenu = MenuBase.inherit((function() {
         },
 
         _getAriaTarget: function() {
-            return this.element();
+            return this.$element();
         },
 
         _refreshActiveDescendant: function() {
@@ -336,8 +336,8 @@ var ContextMenu = MenuBase.inherit((function() {
 
             var id = this.getFocusedItemId();
 
-            this.setAria("activedescendant", "", this._overlay.content());
-            this.setAria("activedescendant", id, this._overlay.content());
+            this.setAria("activedescendant", "", this._overlay.$content());
+            this.setAria("activedescendant", id, this._overlay.$content());
         },
 
         _hideSubmenuHandler: function() {
@@ -375,7 +375,7 @@ var ContextMenu = MenuBase.inherit((function() {
 
         _clean: function() {
             if(this._overlay) {
-                this._overlay.element().remove();
+                this._overlay.$element().remove();
                 this._overlay = null;
             }
             this._detachShowContextMenuEvents(this._getTarget());
@@ -383,7 +383,7 @@ var ContextMenu = MenuBase.inherit((function() {
         },
 
         _render: function() {
-            this.element()
+            this.$element()
                 .addClass(DX_HAS_CONTEXT_MENU_CLASS);
 
             this.callBase();
@@ -407,7 +407,7 @@ var ContextMenu = MenuBase.inherit((function() {
 
             this._overlay = this._createComponent($overlayElement.appendTo(this._$element), Overlay, overlayOptions);
 
-            $overlayContent = this._overlay.content();
+            $overlayContent = this._overlay.$content();
             $overlayContent.addClass(DX_CONTEXT_MENU_CLASS);
 
             this._addCustomCssClass($overlayContent);
@@ -594,7 +594,7 @@ var ContextMenu = MenuBase.inherit((function() {
             $activeItemContainer = this._getActiveItemsContainer(e.target);
             $itemContainers = this._getItemsContainers();
             $clickedItem = this._searchActiveItem(e.target);
-            $rootItem = this.element().parents("." + DX_MENU_ITEM_CLASS);
+            $rootItem = this.$element().parents("." + DX_MENU_ITEM_CLASS);
             isRootItemClicked = $clickedItem[0] === $rootItem[0] && $clickedItem.length && $rootItem.length;
             isInnerOverlayClicked = this._isIncludeOverlay($activeItemContainer, $itemContainers) && $clickedItem.length;
 
@@ -759,7 +759,7 @@ var ContextMenu = MenuBase.inherit((function() {
         _updateSubmenuVisibilityOnClick: function(actionArgs) {
             if(!actionArgs.args.length) return;
 
-            var $itemElement = actionArgs.args[0].itemElement,
+            var $itemElement = $(actionArgs.args[0].itemElement),
                 itemData = actionArgs.args[0].itemData,
                 node = this._dataAdapter.getNodeByItem(itemData);
 
@@ -836,7 +836,7 @@ var ContextMenu = MenuBase.inherit((function() {
         _hideAllShownSubmenus: function() {
             var that = this,
                 shownSubmenus = extend([], that._shownSubmenus),
-                $expandedItems = this._overlay.content().find("." + DX_MENU_ITEM_EXPANDED_CLASS);
+                $expandedItems = this._overlay.$content().find("." + DX_MENU_ITEM_EXPANDED_CLASS);
 
             $expandedItems.removeClass(DX_MENU_ITEM_EXPANDED_CLASS);
 
@@ -902,7 +902,7 @@ var ContextMenu = MenuBase.inherit((function() {
             if(position) {
                 if(!this._overlay) {
                     this._renderContextMenuOverlay();
-                    this._overlay.content().addClass(this._widgetClass());
+                    this._overlay.$content().addClass(this._widgetClass());
                     this._renderFocusState();
                     this._attachHoverEvents();
                     this._attachClickEvent();
@@ -914,7 +914,7 @@ var ContextMenu = MenuBase.inherit((function() {
                 promise = this._overlay.show();
 
                 var id = "dx-" + new Guid();
-                this._overlay.content().attr({ "id": id, role: "menu" });
+                this._overlay.$content().attr({ "id": id, role: "menu" });
                 this.setAria("owns", id);
             }
 
@@ -962,7 +962,7 @@ var ContextMenu = MenuBase.inherit((function() {
             var promise;
 
             if(this._overlay) {
-                this._overlay.content().removeAttr("id");
+                this._overlay.$content().removeAttr("id");
                 promise = this._overlay.hide();
                 this._setOptionSilent("visible", false);
             }

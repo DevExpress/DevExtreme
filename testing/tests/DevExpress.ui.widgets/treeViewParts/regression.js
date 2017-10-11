@@ -17,9 +17,9 @@ QUnit.test("Widget should work right if item is class instance", function(assert
         displayExpr: "name"
     }).dxTreeView("instance");
 
-    assert.equal(treeView.element().find(".dx-item span").eq(0).text(), "Alex");
-    assert.equal(treeView.element().find(".dx-item span").eq(1).text(), "Jack");
-    assert.equal(treeView.element().find(".dx-item span").eq(2).text(), "John");
+    assert.equal(treeView.$element().find(".dx-item span").eq(0).text(), "Alex");
+    assert.equal(treeView.$element().find(".dx-item span").eq(1).text(), "Jack");
+    assert.equal(treeView.$element().find(".dx-item span").eq(2).text(), "John");
 });
 
 QUnit.test("'No data' text should be rendered if tree view has no items", function(assert) {
@@ -27,16 +27,16 @@ QUnit.test("'No data' text should be rendered if tree view has no items", functi
         items: []
     }).dxTreeView("instance");
 
-    assert.ok(treeView.element().hasClass("dx-empty-collection"));
-    assert.equal(treeView.element().find(".dx-empty-message").length, 1);
+    assert.ok(treeView.$element().hasClass("dx-empty-collection"));
+    assert.equal(treeView.$element().find(".dx-empty-message").length, 1);
 
     treeView.option("items", [{ text: "Item 1" }]);
-    assert.ok(!treeView.element().hasClass("dx-empty-collection"));
-    assert.equal(treeView.element().find(".dx-empty-message").length, 0);
+    assert.ok(!treeView.$element().hasClass("dx-empty-collection"));
+    assert.equal(treeView.$element().find(".dx-empty-message").length, 0);
 
     treeView.option("items", []);
-    assert.ok(treeView.element().hasClass("dx-empty-collection"));
-    assert.equal(treeView.element().find(".dx-empty-message").length, 1);
+    assert.ok(treeView.$element().hasClass("dx-empty-collection"));
+    assert.equal(treeView.$element().find(".dx-empty-message").length, 1);
 });
 
 QUnit.test("T217916: dxTreeView does not render a node if ID is less than ParentID", function(assert) {
@@ -51,5 +51,5 @@ QUnit.test("T217916: dxTreeView does not render a node if ID is less than Parent
 
     }).dxTreeView("instance");
 
-    assert.equal(treeView.element().find("." + internals.ITEM_CLASS).length, 4);
+    assert.equal(treeView.$element().find("." + internals.ITEM_CLASS).length, 4);
 });

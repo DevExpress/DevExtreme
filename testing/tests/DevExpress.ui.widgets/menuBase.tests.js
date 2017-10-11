@@ -46,7 +46,7 @@ var TestComponent = MenuBase.inherit({
         return "123";
     },
     _itemContainer: function() {
-        return this.element();
+        return this.$element();
     }
 });
 
@@ -679,7 +679,7 @@ QUnit.test("onSelectionChanged should have correct API (T311914)", function(asse
             selectionByClick: true,
             onSelectionChanged: function(e) {
                 assert.equal(e.component, this, "e.component should be an instance of menu");
-                assert.ok(e.element.get(0).nodeType, "e.element should be jquery object");
+                assert.ok($(e.element).get(0).nodeType, "e.element should be dom node or jquery object");
                 assert.ok($.isArray(e.addedItems), "e.addedItems should be array");
                 assert.ok($.isArray(e.removedItems), "e.removedItems should be array");
             }

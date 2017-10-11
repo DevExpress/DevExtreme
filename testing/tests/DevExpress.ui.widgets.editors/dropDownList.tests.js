@@ -11,6 +11,8 @@ var $ = require("jquery"),
     keyboardMock = require("../../helpers/keyboardMock.js"),
     browser = require("core/utils/browser"),
     fx = require("animation/fx"),
+    isRenderer = require("core/utils/type").isRenderer,
+    config = require("core/config"),
     ajaxMock = require("../../helpers/ajaxMock.js");
 
 require("ui/drop_down_editor/ui.drop_down_list");
@@ -47,7 +49,7 @@ QUnit.module("focus policy", {
             focusStateEnabled: true,
             dataSource: ["item 1", "item 2", "item 3"]
         });
-        this.instance = this.$element.data("dxDropDownList");
+        this.instance = this.$element.dxDropDownList("instance");
         this.$input = this.$element.find("." + TEXTEDITOR_INPUT_CLASS);
         this.keyboard = keyboardMock(this.$input);
     },
@@ -77,7 +79,7 @@ QUnit.test("popup should not focus when we selecting an item", function(assert) 
     assert.expect(1);
 
     this.instance.option("opened", true);
-    var popupContent = $(this.instance._popup.content()),
+    var popupContent = $(this.instance._popup.$content()),
         isDefaultPrevented = false;
 
     popupContent.on("mousedown", function(e) {
@@ -131,7 +133,7 @@ QUnit.module("keyboard navigation", {
             dataSource: ["item 1", "item 2", "item 3"],
             applyValueMode: "instantly"
         });
-        this.instance = this.$element.data("dxDropDownList");
+        this.instance = this.$element.dxDropDownList("instance");
         this.$input = this.$element.find("." + TEXTEDITOR_INPUT_CLASS);
         this.popup = this.instance._popup;
         this.$list = this.instance._$list;
@@ -949,7 +951,7 @@ QUnit.test("onItemClick action", function(assert) {
     var $listItem = instance._$list.find(LIST_ITEM_SELECTOR).eq(1);
 
     instance.option("onItemClick", function(e) {
-        assert.deepEqual(e.itemElement[0], $listItem[0], "itemElement is correct");
+        assert.deepEqual($(e.itemElement)[0], $listItem[0], "itemElement is correct");
         assert.strictEqual(e.itemData, items[1], "itemData is correct");
         assert.strictEqual(e.itemIndex, 1, "itemIndex is correct");
     });
@@ -1068,6 +1070,18 @@ QUnit.test("groupTemplate option", function(assert) {
     assert.strictEqual(list.option("groupTemplate"), groupTemplate2, "groupTemplate has been passed on option changing");
 });
 
+QUnit.test("itemElement argument of groupTemplate option is correct", function(assert) {
+    $("#dropDownList").dxDropDownList({
+        dataSource: this.dataSource,
+        opened: true,
+        grouped: true,
+        groupTemplate: function(itemData, itemIndex, itemElement) {
+            assert.equal(isRenderer(itemElement), config().useJQueryRenderer, "itemElement is correct");
+            return $("<div>");
+        }
+    }).dxDropDownList("instance");
+});
+
 QUnit.test("selectedItem for grouped dropdownlist", function(assert) {
     var dropDownList = $("#dropDownList").dxDropDownList({
         dataSource: this.dataSource,
@@ -1148,7 +1162,7 @@ QUnit.module(
 
             window
                 .waitFor(function() {
-                    var popup = $("#test-drop-down").dxDropDownList("instance")._popup.content(),
+                    var popup = $("#test-drop-down").dxDropDownList("instance")._popup.$content(),
                         items = popup.find(".dx-list-item");
 
                     return items.length === 1 && $(items[0]).text() === "z";

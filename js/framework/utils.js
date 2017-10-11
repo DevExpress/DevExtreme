@@ -29,7 +29,7 @@ var prepareCommandToReplace = function(targetCommand, commandsToMerge) {
         }
 
         if(needToReplace) {
-            targetCommand.element().remove();
+            targetCommand.$element().remove();
             return false;
         }
     });

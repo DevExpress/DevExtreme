@@ -88,7 +88,7 @@ QUnit.test("scrollView size updated on onContentReady (B253584)", function(asser
             paginate: false
         },
         onContentReady: function(e) {
-            scrollView = e.element.dxScrollView("instance");
+            scrollView = $(e.element).dxScrollView("instance");
             scrollView.scrollTo(itemHeight);
         }
     };

@@ -405,14 +405,14 @@ var FilterBuilder = Widget.inherit({
     },
 
     _render: function() {
-        this.element().addClass(FILTER_BUILDER_CLASS);
+        this.$element().addClass(FILTER_BUILDER_CLASS);
         this.callBase();
     },
 
     _renderContentImpl: function() {
         this._model = utils.convertToInnerStructure(this.option("value"));
         this._createGroupElementByCriteria(this._model)
-            .appendTo(this.element());
+            .appendTo(this.$element());
     },
 
     _createConditionElement: function(condition, parent) {
@@ -500,10 +500,10 @@ var FilterBuilder = Widget.inherit({
     _createButtonWithMenu: function(options) {
         var that = this,
             removeMenu = function() {
-                that.element().find("." + ACTIVE_CLASS).removeClass(ACTIVE_CLASS);
-                that.element().find(".dx-has-context-menu").remove();
-                that.element().find(".dx-overlay .dx-treeview").remove();
-                that.element().find(".dx-overlay").remove();
+                that.$element().find("." + ACTIVE_CLASS).removeClass(ACTIVE_CLASS);
+                that.$element().find(".dx-has-context-menu").remove();
+                that.$element().find(".dx-overlay .dx-treeview").remove();
+                that.$element().find(".dx-overlay").remove();
             },
             rtlEnabled = this.option("rtlEnabled"),
             menuOnItemClickWrapper = function(handler) {
@@ -537,10 +537,10 @@ var FilterBuilder = Widget.inherit({
         this._subscribeOnClickAndEnterKey($button, function() {
             removeMenu();
             if(options.menu.treeViewEnabled) {
-                that._createPopupWithTreeView(options, that.element());
+                that._createPopupWithTreeView(options, that.$element());
             } else {
                 that._createContextMenu(options.menu)
-                    .appendTo(that.element())
+                    .appendTo(that.$element())
                     .dxContextMenu("show");
             }
             $button.addClass(ACTIVE_CLASS);
@@ -565,8 +565,7 @@ var FilterBuilder = Widget.inherit({
                         utils.updateConditionByOperation(condition, currentOperation.value);
                         if(condition[2] !== null) {
                             if($operationButton.siblings().filter("." + FILTER_BUILDER_ITEM_VALUE_CLASS).length === 0) {
-                                that._createValueButton(condition, field)
-                                    .appendTo($operationButton.parent());
+                                that._createValueButton(condition, field).appendTo($operationButton.parent());
                             }
                         } else {
                             $operationButton.siblings().filter("." + FILTER_BUILDER_ITEM_VALUE_CLASS).remove();

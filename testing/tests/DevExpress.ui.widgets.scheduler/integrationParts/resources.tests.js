@@ -250,10 +250,10 @@ QUnit.test("Appointments should be repainted if 'groups' option is changed", fun
         }]
     });
 
-    assert.equal(this.instance.element().find(".dx-scheduler-appointment").length, 4, "Appointments are OK");
+    assert.equal(this.instance.$element().find(".dx-scheduler-appointment").length, 4, "Appointments are OK");
 
     this.instance.option("groups", ["ownerId"]);
-    assert.equal(this.instance.element().find(".dx-scheduler-appointment").length, 2, "Appointments are OK");
+    assert.equal(this.instance.$element().find(".dx-scheduler-appointment").length, 2, "Appointments are OK");
 });
 
 QUnit.test("Resources should be loaded only once to calculate appts color", function(assert) {
@@ -326,7 +326,7 @@ QUnit.test("Paint appts if groups array don't contain all resources", function(a
         }]
     });
 
-    var $appointments = this.instance.element().find(".dx-scheduler-appointment");
+    var $appointments = this.instance.$element().find(".dx-scheduler-appointment");
 
     assert.equal(new Color($appointments.eq(0).css("background-color")).toHex(), "#ff0000", "Color is OK");
     assert.equal(new Color($appointments.eq(1).css("background-color")).toHex(), "#0000ff", "Color is OK");
@@ -415,6 +415,6 @@ QUnit.test("Appointment should have correct color after resources option changin
             ]
         }]);
 
-    var $appointments = this.instance.element().find(".dx-scheduler-appointment");
+    var $appointments = this.instance.$element().find(".dx-scheduler-appointment");
     assert.equal(new Color($appointments.eq(0).css("background-color")).toHex(), "#ff0000", "Color is OK");
 });

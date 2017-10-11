@@ -17,7 +17,7 @@ var removeLoadPanel = function() {
     if(!loading) {
         return;
     }
-    loading.element().remove();
+    loading.$element().remove();
     loading = null;
 };
 

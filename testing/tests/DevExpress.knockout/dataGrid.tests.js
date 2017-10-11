@@ -262,7 +262,7 @@ QUnit.test('Two-way binding', function(assert) {
     var dataGrid = this.createDataGrid();
 
     //assert
-    var $rows = $(dataGrid.element().find(".dx-data-row"));
+    var $rows = $(dataGrid.$element().find(".dx-data-row"));
     assert.equal($rows.length, 2, "row count");
     assert.equal($rows.eq(0).children().eq(0).text(), "1");
     assert.equal($rows.eq(1).children().eq(0).text(), "3");
@@ -271,7 +271,7 @@ QUnit.test('Two-way binding', function(assert) {
     data[0].field1(666);
 
     //assert
-    $rows = $(dataGrid.element().find(".dx-data-row"));
+    $rows = $(dataGrid.$element().find(".dx-data-row"));
     assert.equal($rows.length, 2, "row count");
     assert.equal($rows.eq(0).children().eq(0).text(), "666");
     assert.equal($rows.eq(1).children().eq(0).text(), "3");
@@ -291,7 +291,7 @@ QUnit.test('Two-way binding disabled', function(assert) {
     var dataGrid = this.createDataGrid();
 
     //assert
-    var $rows = $(dataGrid.element().find(".dx-data-row"));
+    var $rows = $(dataGrid.$element().find(".dx-data-row"));
     assert.equal($rows.length, 2, "row count");
     assert.equal($rows.eq(0).children().eq(0).text(), "1");
     assert.equal($rows.eq(1).children().eq(0).text(), "3");
@@ -300,7 +300,7 @@ QUnit.test('Two-way binding disabled', function(assert) {
     data[0].field1(666);
 
     //assert
-    $rows = $(dataGrid.element().find(".dx-data-row"));
+    $rows = $(dataGrid.$element().find(".dx-data-row"));
     assert.equal($rows.length, 2, "row count");
     assert.equal($rows.eq(0).children().eq(0).text(), "1");
     assert.equal($rows.eq(1).children().eq(0).text(), "3");
@@ -316,7 +316,7 @@ QUnit.test('$root model in rowTemplate', function(assert) {
     };
 
     var dataGrid = this.createDataGrid();
-    var $rows = $(dataGrid.element().find(".test-row"));
+    var $rows = $(dataGrid.$element().find(".test-row"));
 
     //act
     $rows.eq(1).click();

@@ -53,7 +53,7 @@ var TreeViewSearch = TreeViewBase.inherit(extend({}, searchBoxMixin, { _dataSour
     },
 
     _repaintContainer: function() {
-        var $container = this.element().find("." + NODE_CONTAINER_CLASS).first();
+        var $container = this.$element().find("." + NODE_CONTAINER_CLASS).first();
 
         if($container) {
             $container.empty();
@@ -64,14 +64,14 @@ var TreeViewSearch = TreeViewBase.inherit(extend({}, searchBoxMixin, { _dataSour
 
     _focusTarget: function() {
         if(this.option("searchEnabled")) {
-            return this._scrollableContainer.element();
+            return this._scrollableContainer.$element();
         }
 
         return this.callBase();
     },
 
     _addWidgetClass: function() {
-        this.element().addClass(this._widgetClass());
+        this.$element().addClass(this._widgetClass());
     },
 
     _clean: function() {

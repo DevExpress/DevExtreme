@@ -22,7 +22,7 @@ var EDITOR_INLINE_BLOCK = "dx-editor-inline-block",
     UPDATE_FOCUS_EVENTS = addNamespace([pointerEvents.down, "focusin", clickEvent.name].join(" "), MODULE_NAMESPACE),
     POINTER_EVENTS_TARGET_CLASS = "dx-pointer-events-target",
     POINTER_EVENTS_NONE_CLASS = "dx-pointer-events-none",
-    FOCUSED_ELEMENT_SELECTOR = "td[tabindex]:focus, input:focus, textarea:focus, .dx-lookup-field:focus",
+    FOCUSED_ELEMENT_SELECTOR = "td[tabindex]:focus, input:focus, textarea:focus, .dx-lookup-field:focus, .dx-checkbox:focus",
     DX_HIDDEN = "dx-hidden",
     TAB_KEY = 9;
 
@@ -38,7 +38,7 @@ var EditorFactory = modules.ViewController.inherit({
 
     _updateFocusCore: function() {
         var $focus = this._$focusedElement,
-            $dataGridElement = this.component && this.component.element(),
+            $dataGridElement = this.component && this.component.$element(),
             $focusCell,
             hideBorders;
 
@@ -169,7 +169,7 @@ var EditorFactory = modules.ViewController.inherit({
 
     _attachContainerEventHandlers: function() {
         var that = this,
-            $container = that.component && that.component.element(),
+            $container = that.component && that.component.$element(),
             isIE10OrLower = browser.msie && parseInt(browser.version) < 11;
 
         if($container) {
@@ -234,7 +234,7 @@ module.exports = {
               * @type_function_param1_field9 disabled:boolean
               * @type_function_param1_field10 rtlEnabled:boolean
               * @type_function_param1_field11 cancel:boolean
-              * @type_function_param1_field12 editorElement:jQuery
+              * @type_function_param1_field12 editorElement:Element
               * @type_function_param1_field13 readOnly:boolean
               * @type_function_param1_field14 editorName:string
               * @type_function_param1_field15 editorOptions:object
@@ -257,7 +257,7 @@ module.exports = {
               * @type_function_param1_field9 disabled:boolean
               * @type_function_param1_field10 rtlEnabled:boolean
               * @type_function_param1_field11 cancel:boolean
-              * @type_function_param1_field12 editorElement:jQuery
+              * @type_function_param1_field12 editorElement:Element
               * @type_function_param1_field13 readOnly:boolean
               * @type_function_param1_field14 editorName:string
               * @type_function_param1_field15 editorOptions:object
@@ -279,7 +279,7 @@ module.exports = {
               * @type_function_param1_field8 width:number
               * @type_function_param1_field9 disabled:boolean
               * @type_function_param1_field10 rtlEnabled:boolean
-              * @type_function_param1_field11 editorElement:jQuery
+              * @type_function_param1_field11 editorElement:Element
               * @type_function_param1_field12 readOnly:boolean
               * @type_function_param1_field13 dataField:string
               * @type_function_param1_field14 row:dxDataGridRowObject
@@ -299,7 +299,7 @@ module.exports = {
               * @type_function_param1_field8 width:number
               * @type_function_param1_field9 disabled:boolean
               * @type_function_param1_field10 rtlEnabled:boolean
-              * @type_function_param1_field11 editorElement:jQuery
+              * @type_function_param1_field11 editorElement:Element
               * @type_function_param1_field12 readOnly:boolean
               * @type_function_param1_field13 dataField:string
               * @type_function_param1_field14 row:dxTreeListRowObject

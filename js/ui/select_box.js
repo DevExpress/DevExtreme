@@ -148,7 +148,7 @@ var SelectBox = DropDownList.inherit({
             * @type template
             * @default null
             * @type_function_param1 selectedItem:object
-            * @type_function_param2 fieldElement:jQuery
+            * @type_function_param2 fieldElement:Element
             * @type_function_return string|Node|jQuery
             */
             fieldTemplate: null,
@@ -258,7 +258,7 @@ var SelectBox = DropDownList.inherit({
     _render: function() {
         this._renderSubmitElement();
         this.callBase();
-        this.element().addClass(SELECTBOX_CLASS);
+        this.$element().addClass(SELECTBOX_CLASS);
         this.option("useInkRipple") && this._renderInkRipple();
         this._renderTooltip();
         this._$container.addClass(SELECTBOX_CONTAINER_CLASS);
@@ -267,7 +267,7 @@ var SelectBox = DropDownList.inherit({
     _renderSubmitElement: function() {
         this._$submitElement = $("<input>")
             .attr("type", "hidden")
-            .appendTo(this.element());
+            .appendTo(this.$element());
     },
 
     _renderInkRipple: function() {
@@ -295,7 +295,7 @@ var SelectBox = DropDownList.inherit({
 
     _createPopup: function() {
         this.callBase();
-        this._popup.element().addClass(SELECTBOX_POPUP_CLASS);
+        this._popup.$element().addClass(SELECTBOX_POPUP_CLASS);
     },
 
     _popupWrapperClass: function() {
@@ -543,7 +543,7 @@ var SelectBox = DropDownList.inherit({
 
     _renderTooltip: function() {
         if(this.option("tooltipEnabled")) {
-            this.element().attr("title", this.option("displayValue"));
+            this.$element().attr("title", this.option("displayValue"));
         }
     },
 

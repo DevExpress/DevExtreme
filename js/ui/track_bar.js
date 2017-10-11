@@ -41,7 +41,7 @@ var TrackBar = Editor.inherit({
     },
 
     _render: function() {
-        this.element().addClass(TRACKBAR_CLASS);
+        this.$element().addClass(TRACKBAR_CLASS);
         this._renderWrapper();
         this._renderContainer();
         this._renderRange();
@@ -54,7 +54,7 @@ var TrackBar = Editor.inherit({
     _renderWrapper: function() {
         this._$wrapper = $("<div>")
             .addClass(TRACKBAR_WRAPPER_CLASS)
-            .appendTo(this.element());
+            .appendTo(this.$element());
     },
 
     _renderContainer: function() {

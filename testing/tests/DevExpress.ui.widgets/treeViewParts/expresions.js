@@ -41,9 +41,9 @@ QUnit.test("T202554: dxTreeView - The selectedExpr option does not link the chec
         showCheckboxesMode: "normal"
     }).dxTreeView("instance");
 
-    assert.strictEqual(treeView.element().find(".dx-checkbox").eq(0).dxCheckBox("instance").option("value"), undefined);
-    assert.strictEqual(treeView.element().find(".dx-checkbox").eq(1).dxCheckBox("instance").option("value"), true);
-    assert.strictEqual(treeView.element().find(".dx-checkbox").eq(2).dxCheckBox("instance").option("value"), false);
+    assert.strictEqual(treeView.$element().find(".dx-checkbox").eq(0).dxCheckBox("instance").option("value"), undefined);
+    assert.strictEqual(treeView.$element().find(".dx-checkbox").eq(1).dxCheckBox("instance").option("value"), true);
+    assert.strictEqual(treeView.$element().find(".dx-checkbox").eq(2).dxCheckBox("instance").option("value"), false);
 });
 
 QUnit.test("Expressions should be reinitialized if *expr option was changed", function(assert) {
@@ -84,11 +84,11 @@ QUnit.test("displayExpr should be updated correctly in runtime", function(assert
         ]
     }).dxTreeView("instance");
 
-    assert.equal(treeView.element().find("." + internals.ITEM_CLASS + " span").text(), "John");
+    assert.equal(treeView.$element().find("." + internals.ITEM_CLASS + " span").text(), "John");
 
     treeView.option("displayExpr", "lastName");
 
-    assert.equal(treeView.element().find("." + internals.ITEM_CLASS + " span").text(), "Smith");
+    assert.equal(treeView.$element().find("." + internals.ITEM_CLASS + " span").text(), "Smith");
 });
 
 QUnit.test("VirtualMode: Only root nodes should be rendered in virtualMode with parentIdExpr", function(assert) {

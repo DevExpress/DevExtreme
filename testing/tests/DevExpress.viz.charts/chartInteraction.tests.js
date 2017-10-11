@@ -503,3 +503,107 @@ QUnit.test("onPointhoverChanged on hover second", function(assert) {
     //assert
     assert.strictEqual(pointHover.getCall(0).args[0].target, this.chart.getAllSeries()[0].getAllPoints()[0]);
 });
+
+QUnit.module("axis grids hidding", {
+    createChart: function(options) {
+        return $("#chart").dxChart(options).dxChart("instance");
+    }
+});
+
+QUnit.test("hide grids for first stub axis", function(assert) {
+    //act
+    var chart = this.createChart({
+        dataSource: [{ arg: 1, val: 1 }],
+        series: [{ axis: "a1" }, { argumentField: "argumentField" }],
+        valueAxis: [{
+            name: "stubAxis",
+            grid: {
+                visible: true
+            },
+            minorGrid: {
+                visible: true
+            }
+        }, {
+            name: "a1",
+            grid: {
+                visible: true
+            },
+            minorGrid: {
+                visible: true
+            }
+        }]
+    });
+    var verticalAxes = chart._valueAxes;
+
+    assert.equal(verticalAxes.length, 2, "chart shoul has two value axis");
+    assert.equal(verticalAxes[0].getOptions().grid.visible, false, "first axis grid isn't visible");
+    assert.equal(verticalAxes[0].getOptions().minorGrid.visible, false, "first axis grid isn't visible");
+
+    assert.equal(verticalAxes[1].getOptions().grid.visible, true, "second axis grid visible");
+    assert.equal(verticalAxes[1].getOptions().minorGrid.visible, true, "second axis grid visible");
+});
+
+QUnit.test("hide grids for second axis", function(assert) {
+    //act
+    var chart = this.createChart({
+        dataSource: [{ arg: 1, val: 1 }],
+        series: [{ axis: "a1" }, { axis: "a2" }],
+        valueAxis: [{
+            name: "a2",
+            grid: {
+                visible: true
+            },
+            minorGrid: {
+                visible: true
+            }
+        }, {
+            name: "a1",
+            grid: {
+                visible: true
+            },
+            minorGrid: {
+                visible: true
+            }
+        }]
+    });
+    var verticalAxes = chart._valueAxes;
+
+    assert.equal(verticalAxes.length, 2, "chart must have two value axis");
+    assert.equal(verticalAxes[0].getOptions().grid.visible, true, "first axis grid visible");
+    assert.equal(verticalAxes[0].getOptions().minorGrid.visible, true, "first axis grid visible");
+
+    assert.equal(verticalAxes[1].getOptions().grid.visible, false, "second axis grid isn't visible");
+    assert.equal(verticalAxes[1].getOptions().minorGrid.visible, false, "second axis grid isn't visible");
+});
+
+QUnit.test("two stub axis", function(assert) {
+    //act
+    var chart = this.createChart({
+        dataSource: [{ arg: 1, val: 1 }],
+        series: [{ argumentField: "a1" }, { argumentField: "a1" }],
+        valueAxis: [{
+            grid: {
+                visible: true
+            },
+            minorGrid: {
+                visible: true
+            }
+        }, {
+            grid: {
+                visible: true
+            },
+            minorGrid: {
+                visible: true
+            }
+        }]
+    });
+
+    var verticalAxes = chart._valueAxes;
+
+    assert.equal(verticalAxes.length, 2, "chart must have two value axis");
+    assert.equal(verticalAxes[0].getOptions().grid.visible, true, "first axis grid visible");
+    assert.equal(verticalAxes[0].getOptions().minorGrid.visible, true, "first axis grid visible");
+
+    assert.equal(verticalAxes[1].getOptions().grid.visible, false, "second axis grid isn't visible");
+    assert.equal(verticalAxes[1].getOptions().minorGrid.visible, false, "second axis grid isn't visible");
+});

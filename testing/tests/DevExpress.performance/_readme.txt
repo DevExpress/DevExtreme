@@ -9,6 +9,6 @@
 2) Необходимо в браузере разрешить Cross Domain Request
 
 Удобнее всего сделать это расширением
-https://chrome.google.com/webstore/detail/cors-toggle/omcncfnpmcabckcddookmnajignpffnh?utm_source=chrome-app-launcher-info-dialog
+https://chrome.google.com/webstore/detail/cors-toggle/jioikioepegflmdnbocfhgmpmopmjkim
 
 3) Запустить тесты

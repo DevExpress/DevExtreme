@@ -111,7 +111,7 @@ var TestComponent = CollectionWidget.inherit({
     },
 
     _itemContainer: function() {
-        return this.element();
+        return this.$element();
     }
 
 });
@@ -290,7 +290,7 @@ QUnit.test("define items in markup", function(assert) {
     var $component = $("#container-with-items-in-markup");
     ko.applyBindings({}, $component.get(0));
 
-    var component = $component.data("dxTestComponent");
+    var component = $component.dxTestComponent("instance");
     var expectedItems = [
         { text: '1' },
         { text: '2' },
@@ -308,7 +308,7 @@ QUnit.test("items in markup with templates", function(assert) {
     var $component = $("#container-with-items-with-template");
     ko.applyBindings({}, $component.get(0));
 
-    var component = $component.data("dxTestComponent");
+    var component = $component.dxTestComponent("instance");
     var items = component.option("items");
     assert.equal(items.length, 2, "2 items fetched");
     assert.ok(items[0].template, "template defined");
@@ -334,7 +334,7 @@ QUnit.test("option items has higher priority than items in markup", function(ass
 
     ko.applyBindings({ items: items }, $component.get(0));
 
-    var component = $component.data("dxTestComponent");
+    var component = $component.dxTestComponent("instance");
 
     assert.equal(component.option("items"), items, "items replaced");
 });
