@@ -9,58 +9,58 @@ var FILTER_BUILDER_ITEM_VALUE_CLASS = "dx-filterbuilder-item-value",
 
 require("ui/filter_builder/filter_builder");
 
-QUnit.module("Events");
+QUnit.module("Events", function() {
+    QUnit.test("onEditorPreparing", function(assert) {
+        //arrange
+        var args,
+            spy = sinon.spy(),
+            container = $("#container"),
+            companyNameValueField;
 
-QUnit.test("onEditorPreparing", function(assert) {
-    //arrange
-    var args,
-        spy = sinon.spy(),
-        container = $("#container"),
-        companyNameValueField;
+        container.dxFilterBuilder({
+            value: [
+                ["CompanyName", "=", "DevExpress"]
+            ],
+            fields: fields,
+            onEditorPreparing: spy
+        });
 
-    container.dxFilterBuilder({
-        value: [
-            ["CompanyName", "=", "DevExpress"]
-        ],
-        fields: fields,
-        onEditorPreparing: spy
+        //act
+        companyNameValueField = $("." + FILTER_BUILDER_ITEM_VALUE_CLASS).eq(0);
+        companyNameValueField.find("." + FILTER_BUILDER_ITEM_VALUE_TEXT_CLASS).click();
+
+        //assert
+        args = spy.args[0][0];
+        assert.strictEqual(spy.callCount, 1, "onEditorPreparing is called");
+        assert.strictEqual(args.dataField, "CompanyName", "args -> dataField");
+        assert.strictEqual(args.value, "DevExpress", "args -> value");
+        assert.deepEqual(args.component, container.dxFilterBuilder("instance"), "args -> component");
     });
 
-    //act
-    companyNameValueField = $("." + FILTER_BUILDER_ITEM_VALUE_CLASS).eq(0);
-    companyNameValueField.find("." + FILTER_BUILDER_ITEM_VALUE_TEXT_CLASS).click();
+    QUnit.test("onEditorPrepared", function(assert) {
+        //arrange
+        var args,
+            spy = sinon.spy(),
+            container = $("#container"),
+            companyNameValueField;
 
-    //assert
-    args = spy.args[0][0];
-    assert.strictEqual(spy.callCount, 1, "onEditorPreparing is called");
-    assert.strictEqual(args.dataField, "CompanyName", "args -> dataField");
-    assert.strictEqual(args.value, "DevExpress", "args -> value");
-    assert.deepEqual(args.component, container.dxFilterBuilder("instance"), "args -> component");
-});
+        container.dxFilterBuilder({
+            value: [
+                ["CompanyName", "=", "DevExpress"]
+            ],
+            fields: fields,
+            onEditorPrepared: spy
+        });
 
-QUnit.test("onEditorPrepared", function(assert) {
-    //arrange
-    var args,
-        spy = sinon.spy(),
-        container = $("#container"),
-        companyNameValueField;
+        //act
+        companyNameValueField = $("." + FILTER_BUILDER_ITEM_VALUE_CLASS).eq(0);
+        companyNameValueField.find("." + FILTER_BUILDER_ITEM_VALUE_TEXT_CLASS).click();
 
-    container.dxFilterBuilder({
-        value: [
-            ["CompanyName", "=", "DevExpress"]
-        ],
-        fields: fields,
-        onEditorPrepared: spy
+        //assert
+        args = spy.args[0][0];
+        assert.strictEqual(spy.callCount, 1, "onEditorPrepared is called");
+        assert.strictEqual(args.dataField, "CompanyName", "args -> dataField");
+        assert.strictEqual(args.value, "DevExpress", "args -> value");
+        assert.deepEqual(args.component, container.dxFilterBuilder("instance"), "args -> component");
     });
-
-    //act
-    companyNameValueField = $("." + FILTER_BUILDER_ITEM_VALUE_CLASS).eq(0);
-    companyNameValueField.find("." + FILTER_BUILDER_ITEM_VALUE_TEXT_CLASS).click();
-
-    //assert
-    args = spy.args[0][0];
-    assert.strictEqual(spy.callCount, 1, "onEditorPrepared is called");
-    assert.strictEqual(args.dataField, "CompanyName", "args -> dataField");
-    assert.strictEqual(args.value, "DevExpress", "args -> value");
-    assert.deepEqual(args.component, container.dxFilterBuilder("instance"), "args -> component");
 });

@@ -485,7 +485,6 @@ var FilterBuilder = Widget.inherit({
                     groupMenuItem = e.itemData;
                     $operationButton.html(e.itemData.text);
                     that._updateFilter();
-                    // EVENT: groupValueChanged(e = {newValue, ?oldValue?})
                 },
                 onContentReady: function(e) {
                     e.component.selectItem(groupMenuItem);

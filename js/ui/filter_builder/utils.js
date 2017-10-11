@@ -124,7 +124,6 @@ function getGroupMenuItem(group, availableGroups) {
             return item;
         }
     }
-    //TODO: group item wasn't found
 }
 
 function getGroupValue(group) {
@@ -175,8 +174,7 @@ function getOperationFromAvailable(operation, availableOperations) {
             return availableOperations[i];
         }
     }
-    //TODO
-    throw "Operation " + operation + " was not found";
+    throw new errors.Error("E1048", operation);
 }
 
 function getAvailableOperations(field, filterOperationDescriptions) {
@@ -275,8 +273,7 @@ function getField(dataField, fields) {
             return fields[i];
         }
     }
-    //TODO: move it to ../../data/errors
-    throw "Field \"" + dataField + "\" has not found";
+    throw new errors.Error("E1047", dataField);
 }
 
 function isGroup(item) {
@@ -399,7 +396,7 @@ function getCurrentValueText(field, value) {
     return valueText;
 }
 
-function itemExist(plainItems, parentId) {
+function itemExists(plainItems, parentId) {
     for(var i = 0; i < plainItems.length; i++) {
         if(plainItems[i].dataField === parentId) {
             return true;
@@ -412,7 +409,7 @@ function pushItemAndCheckParent(originalItems, plainItems, item) {
     var dataField = item.dataField;
     if(hasParent(dataField)) {
         item.parentId = getParentIdFromItemDataField(dataField);
-        if(!itemExist(plainItems, item.parentId) && !itemExist(originalItems, item.parentId)) {
+        if(!itemExists(plainItems, item.parentId) && !itemExists(originalItems, item.parentId)) {
             pushItemAndCheckParent(originalItems, plainItems, {
                 dataType: "object",
                 dataField: item.parentId,
