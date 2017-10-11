@@ -8,7 +8,8 @@ var $ = require("../../core/renderer"),
     toMs = dateUtils.dateToMilliseconds;
 
 var SCHEDULER_DATE_TIME_INDICATOR_CLASS = "dx-scheduler-date-time-indicator",
-    TIME_PANEL_CURRENT_TIME_CELL_CLASS = "dx-scheduler-time-panel-current-time-cell";
+    TIME_PANEL_CURRENT_TIME_CELL_CLASS = "dx-scheduler-time-panel-current-time-cell",
+    HEADER_CURRENT_TIME_CELL_CLASS = "dx-scheduler-header-panel-current-time-cell";
 
 var SchedulerWorkSpaceIndicator = SchedulerWorkSpace.inherit({
     _getToday: function() {
@@ -173,12 +174,35 @@ var SchedulerWorkSpaceIndicator = SchedulerWorkSpace.inherit({
         }
     },
 
+    _isCurrentTimeHeaderCell: function(headerIndex) {
+        var result = false;
+
+        if(this.option("showCurrentTimeIndicator") && this._needRenderDateTimeIndicator()) {
+            var date = this._getDateByIndex(headerIndex),
+                now = this.option("indicatorTime") || new Date();
+
+            result = dateUtils.sameDate(date, now);
+        }
+
+        return result;
+    },
+
     _getTimeCellClass: function(i) {
         var startViewDate = this._getTimeCellDate(i),
             cellClass = this.callBase(i);
 
         if(this._isCurrentTime(startViewDate)) {
             return cellClass + " " + TIME_PANEL_CURRENT_TIME_CELL_CLASS;
+        }
+
+        return cellClass;
+    },
+
+    _getHeaderPanelCellClass: function(i) {
+        var cellClass = this.callBase(i);
+
+        if(this._isCurrentTimeHeaderCell(i)) {
+            return cellClass + " " + HEADER_CURRENT_TIME_CELL_CLASS;
         }
 
         return cellClass;
