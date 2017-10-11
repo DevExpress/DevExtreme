@@ -1976,6 +1976,7 @@ declare module DevExpress.viz.charts {
         percentPrecision?: number;
     }
 
+    /** @docid basechart_options */
     export interface BaseChartOptions<TPoint> extends viz.core.BaseWidgetOptions, viz.core.MarginOptions, viz.core.RedrawOnResizeOptions, viz.core.TitleOptions, viz.core.LoadingIndicatorOptions, viz.core.ExportOptions {
         /** @docid basechartoptions_adaptiveLayout */
         adaptiveLayout?: {
@@ -2225,7 +2226,7 @@ declare module DevExpress.viz.charts {
         /** @docid dxchartoptions_tooltip_shared */
         shared?: boolean;
     }
-
+    /** @docid dxchart_options */
     export interface dxChartOptions extends AdvancedOptions<ChartPoint, ChartSeries> {
         /** @docid dxchartoptions_synchronizemultiaxes */
         synchronizeMultiAxes?: boolean;
@@ -2421,6 +2422,7 @@ declare module DevExpress.viz.charts {
 
     }
 
+    /** @docid dxpolarchart_options */
     export interface dxPolarChartOptions extends AdvancedOptions<PolarPoint, PolarSeries> {
         /** @docid dxpolarchartoptions_adaptiveLayout */
         adaptiveLayout?: {
@@ -2473,6 +2475,7 @@ declare module DevExpress.viz.charts {
         customizeText?: (pointInfo: { pointName: any; pointIndex: number; pointColor: string; }) => string;
     }
 
+    /** @docid dxpiechart_options */
     export interface dxPieChartOptions extends BaseChartOptions<PiePoint> {
         /** @docid dxpiechartoptions_adaptiveLayout */
         adaptiveLayout?: {

@@ -341,6 +341,7 @@ declare module DevExpress.viz.gauges {
         }) => void;
     }
 
+    /** @docid basegauge_options */
     export interface BaseGaugeOptions extends viz.core.BaseWidgetOptions, SharedGaugeOptions {
         /** @docid basegaugeoptions_containerBackgroundColor */
         containerBackgroundColor?: string;
@@ -433,6 +434,7 @@ declare module DevExpress.viz.gauges {
         verticalOrientation?: string;
     }
 
+    /** @docid dxlineargauge_options */
     export interface dxLinearGaugeOptions extends BaseGaugeOptions {
         /** @docid dxlineargaugeoptions_geometry */
         geometry?: {
@@ -476,6 +478,7 @@ declare module DevExpress.viz.gauges {
         orientation?: string;
     }
 
+    /** @docid dxcirculargauge_options */
     export interface dxCircularGaugeOptions extends BaseGaugeOptions {
         /** @docid dxcirculargaugeoptions_geometry */
         geometry?: {
@@ -495,6 +498,7 @@ declare module DevExpress.viz.gauges {
 
     // dxBarGauge
 
+    /** @docid dxbargauge_options */
     export interface dxBarGaugeOptions extends viz.core.BaseWidgetOptions, SharedGaugeOptions {
         /** @docid dxbargaugeoptions_backgroundColor */
         backgroundColor?: string;
