@@ -137,6 +137,15 @@ QUnit.test("different positive and negative parsing", function(assert) {
 });
 
 QUnit.test("percent format parsing", function(assert) {
+    var parser = generateNumberParser("#0%");
+
+    assert.strictEqual(parser("0%"), 0, "zero value");
+    assert.strictEqual(parser("1%"), 0.01, "1 value");
+    assert.strictEqual(parser("10%"), 0.1, "10 value");
+    assert.strictEqual(parser("100%"), 1, "100 value");
+});
+
+QUnit.test("percent format parsing with float part", function(assert) {
     var parser = generateNumberParser("#.0#%");
 
     assert.strictEqual(parser("10.15%"), 0.1015, "parse float number with 2 digits");
@@ -146,7 +155,6 @@ QUnit.test("percent format parsing", function(assert) {
     assert.strictEqual(parser("-10.0%"), -0.1, "parse negative float number with 1 digit");
     assert.strictEqual(parser("-10%"), null, "negative value without float part should be incorrect");
 });
-
 
 QUnit.module("number formatter");
 

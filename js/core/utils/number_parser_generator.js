@@ -16,7 +16,7 @@ function getGroupSizes(formatString) {
 
 function getIntegerPartRegExp(formatString) {
     var result = escapeFormat(formatString);
-    result = result.replace(new RegExp("([0#\\" + GROUP_SEPARATOR + "]+)$"), "($1)");
+    result = result.replace(new RegExp("([0#\\" + GROUP_SEPARATOR + "]+)"), "($1)");
 
     var groupSizes = getGroupSizes(formatString);
 
