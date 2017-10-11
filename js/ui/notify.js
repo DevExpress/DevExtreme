@@ -19,7 +19,7 @@ var notify = function(message, /* optional */ type, displayTime) {
         type: type,
         displayTime: displayTime,
         onHidden: function(args) {
-            args.element.remove();
+            $(args.element).remove();
 
             new Action(userHiddenAction, {
                 context: args.model
@@ -33,17 +33,21 @@ var notify = function(message, /* optional */ type, displayTime) {
 
 /**
  * @name ui_notify
+ * @static
  * @publicName notify(message,type,displayTime)
  * @param1 message:string
- * @param2 type:string
- * @param3 displayTime:integer
+ * @param2 type:string|undefined
+ * @param3 displayTime:integer|undefined
  * @module ui/notify
  * @export default
  */
 /**
  * @name ui_notify
- * @publicName notify(options)
+ * @static
+ * @publicName notify(options,type,displayTime)
  * @param1 options:object
+ * @param2 type:string|undefined
+ * @param3 displayTime:integer|undefined
  * @module ui/notify
  * @export default
  */

@@ -104,13 +104,13 @@ QUnit.module("Keyboard navigation", {
                         return $($row.find("td")[cellPosition.columnIndex]);
                     },
                     focus: function() {
-                        this.element().focus();
+                        this.$element().focus();
                     },
                     getRowIndex: function($row) {
                         return $row.length && $row[0].rowIndex;
                     },
                     getRowsCount: function() {
-                        return this.element().find("tr").length;
+                        return this.$element().find("tr").length;
                     },
                     getCellIndex: function($cell) {
                         var cellIndex = $cell.length ? $cell[0].cellIndex : -1;
@@ -155,7 +155,7 @@ QUnit.module("Keyboard navigation", {
                 columnHeadersView: new View("columnHeadersView")
             },
             setAria: function(name, value, $target) {
-                $target = $target || that.element();
+                $target = $target || that.$element();
                 if(!$target) return;
                 domUtils.toggleAttr($target, "aria-" + name, value);
             },
@@ -173,7 +173,7 @@ QUnit.module("Keyboard navigation", {
             _createAction: function(handler) {
                 return handler;
             },
-            element: function() {
+            $element: function() {
                 return $("#container").parent();
             },
 
@@ -898,7 +898,7 @@ function setupModules(that, modulesOptions) {
         editing: {}
     });
 
-    that.element = function() {
+    that.$element = function() {
         return $("#container");
     };
     that.selectionOptions = {};
@@ -1223,7 +1223,7 @@ QUnit.testInActiveWindow("Up arrow for master detail", function (assert) {
 
 QUnit.testInActiveWindow("Update focus when row is editing with form_T306378", function(assert) {
     //arrange
-    this.element = function() {
+    this.$element = function() {
         return $("#container");
     };
 
@@ -2529,7 +2529,7 @@ QUnit.test("Get a valid index of cell on tab key_T259896", function(assert) {
             allowEditing: true,
             editCellTemplate: function(container, options) {
                 var table = $('<table><tr><td><div class="txt"></div></td><td><div class="btn"></div></td></tr></table>');
-                table.appendTo(container);
+                table.appendTo($(container));
             }
         },
         {
@@ -2674,7 +2674,7 @@ if(device.deviceType === "desktop") {
             isStoreUpdated,
             $input;
 
-        this.element = function() {
+        this.$element = function() {
             return $container;
         };
 
@@ -2728,7 +2728,7 @@ if(device.deviceType === "desktop") {
 
         var $container = $("#container");
 
-        this.element = function() {
+        this.$element = function() {
             return $container;
         };
 
@@ -3127,7 +3127,7 @@ QUnit.testInActiveWindow("Do not prevent default on 'tab' if the current cell is
 //T381273
 QUnit.testInActiveWindow("closeEditCell and reset focus on 'tab' if the current cell is the last editable cell and contains editor", function(assert) {
 
-    this.element = function() {
+    this.$element = function() {
         return $("#container");
     };
 
@@ -3174,7 +3174,7 @@ QUnit.testInActiveWindow("closeEditCell and reset focus on 'tab' if the current 
 //T381273
 QUnit.testInActiveWindow("closeEditCell and reset focus on 'tab' if the current cell is the last and contains editor", function(assert) {
 
-    this.element = function() {
+    this.$element = function() {
         return $("#container");
     };
 
@@ -4505,7 +4505,7 @@ QUnit.module("Rows view", {
 
             var mockDataGrid = {
                 options: this.options,
-                element: function() {
+                $element: function() {
                     return $(".dx-datagrid").parent();
                 }
             };
@@ -4640,9 +4640,9 @@ QUnit.testInActiveWindow("Reset focused cell when click on expand column of mast
     //assert
     assert.ok(!keyboardNavigationController._isNeedFocus, "is key down");
     assert.deepEqual(keyboardNavigationController._focusedCellPosition, { columnIndex: 0, rowIndex: 0 }, "focusedCellPosition is empty");
-    assert.strictEqual(rowsView.getCellElement(0, 0).attr("tabIndex"), undefined, "expand cell not have tab index");
+    assert.strictEqual($(rowsView.getCellElement(0, 0)).attr("tabIndex"), undefined, "expand cell not have tab index");
     assert.strictEqual(rowsView.element().attr("tabIndex"), "0", "rowsView has tabIndex");
-    assert.ok(!rowsView.getCellElement(0, 0).hasClass("dx-focused"), "expand cell is not focused");
+    assert.ok(!$(rowsView.getCellElement(0, 0)).hasClass("dx-focused"), "expand cell is not focused");
     assert.ok(!this.dataGrid.editorFactoryController.focus(), "no focus overlay");
 });
 
@@ -4720,6 +4720,5 @@ QUnit.test("Apply custom tabIndex to rows view on click", function(assert) {
     //act
     rowsView.render(testElement);
     $(rowsView.element().find("td").first()).trigger(CLICK_EVENT);
-
     assert.equal(rowsView.element().attr("tabIndex"), 5, "tabIndex of rowsView");
 });

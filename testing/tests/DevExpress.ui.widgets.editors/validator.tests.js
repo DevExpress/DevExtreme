@@ -465,7 +465,7 @@ QUnit.test("Editor's validators request should not be mixed with another editors
                 type: "required"
             }]
         },
-        editor1.element()
+        editor1.$element()
     );
 
     var editor2 = this.fixture.createEditor({
@@ -480,7 +480,7 @@ QUnit.test("Editor's validators request should not be mixed with another editors
                 type: "required"
             }]
         },
-        editor2.element()
+        editor2.$element()
     );
 
     //act

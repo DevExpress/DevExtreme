@@ -290,6 +290,12 @@ module.exports = function($, gridCore, columnResizingReordering, domUtils, commo
                 return columns;
             },
 
+            isBandColumnsUsed: function() {
+                return this.getColumns().some(function(column) {
+                    return column.isBand;
+                });
+            },
+
             getVisibleIndex: function(index, rowIndex) {
                 var visibleColumn = this.getRowCount() > 1 && typeUtils.isDefined(rowIndex) ? columns[rowIndex] : columns;
 
@@ -701,7 +707,7 @@ module.exports = function($, gridCore, columnResizingReordering, domUtils, commo
             element: getElement,
 
             component: {
-                element: getElement
+                $element: getElement
             },
 
             init: commonUtils.noop,
@@ -923,7 +929,7 @@ module.exports = function($, gridCore, columnResizingReordering, domUtils, commo
             return handler;
         };
 
-        that.element = that.element || function() { };
+        that.$element = that.$element || function() { };
 
         that.on = commonUtils.noop;
 

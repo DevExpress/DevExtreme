@@ -1019,6 +1019,47 @@ QUnit.test("$skiptoken support", function(assert) {
         .always(done);
 });
 
+QUnit.test("T560045 - ignore next link when $top is specified", function(assert) {
+    var done = assert.async(),
+        urlPrefix = "https://graph.microsoft.com/v1.0/me/messages";
+
+    ajaxMock.setup({
+        url: urlPrefix,
+        callback: function(bag) {
+            this.responseText = {
+                "@odata.nextLink": urlPrefix + "?$top=1&$skip=" + (bag.data.$top + bag.data.$skip),
+                "value": [ 1 ]
+            };
+        }
+    });
+
+    QUERY(urlPrefix)
+        .slice(400, 1)
+        .enumerate()
+        .done(function(r) {
+            assert.equal(r.length, 1);
+            done();
+        });
+});
+
+QUnit.test("Lift functional select after slice", function(assert) {
+    var done = assert.async();
+
+    ajaxMock.setup({
+        url: "/",
+        callback: function(bag) {
+            assert.equal(bag.data.$top, 20);
+            this.responseText = [];
+        }
+    });
+
+    QUERY("/")
+        .select(function(i) { return 2 * i; })
+        .slice(0, 20)
+        .enumerate()
+        .done(done);
+});
+
 QUnit.module("Switching to array mode", moduleWithMockConfig);
 QUnit.test("sort by function", function(assert) {
     assert.expect(1);

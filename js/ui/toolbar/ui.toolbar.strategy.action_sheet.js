@@ -25,7 +25,7 @@ var ActionSheetStrategy = ToolbarStrategy.inherit({
     },
 
     _menuContainer: function() {
-        return this._toolbar.element();
+        return this._toolbar.$element();
     },
 
     _widgetOptions: function() {

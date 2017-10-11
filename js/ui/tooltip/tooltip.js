@@ -64,7 +64,7 @@ var Tooltip = Popover.inherit({
     },
 
     _render: function() {
-        this.element().addClass(TOOLTIP_CLASS);
+        this.$element().addClass(TOOLTIP_CLASS);
         this._wrapper().addClass(TOOLTIP_WRAPPER_CLASS);
         this.callBase();
     },

@@ -45,6 +45,10 @@ Item.prototype = {
         return states[this.code];
     },
 
+    getNormalStyle: function() {
+        return this.states.normal;
+    },
+
     setHover: function() {
         this.hover(true);
     },

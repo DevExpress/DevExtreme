@@ -47,7 +47,7 @@ QUnit.module("general", moduleConfig);
 QUnit.test("render", function(assert) {
     this.instance.show();
 
-    var $content = this.instance.content();
+    var $content = this.instance.$content();
 
     assert.ok(this.$element.hasClass(TOAST_CLASS));
     assert.ok($content.parent().hasClass(TOAST_WRAPPER_CLASS));
@@ -58,7 +58,7 @@ QUnit.test("render", function(assert) {
 });
 
 QUnit.test("default template", function(assert) {
-    var $content = this.instance.content();
+    var $content = this.instance.$content();
 
     this.instance.option({
         message: "test42",
@@ -82,7 +82,7 @@ QUnit.test("position", function(assert) {
     fx.off = true;
     this.instance.show();
 
-    var $content = this.instance.content();
+    var $content = this.instance.$content();
     assert.roughEqual($content.offset().top + $content.outerHeight(), $(window).height(), 1.01);
 });
 
@@ -152,7 +152,7 @@ QUnit.test("show/hide", function(assert) {
     });
 
     instance.show().done(function() {
-        assert.ok(instance.content().is(":visible"));
+        assert.ok(instance.$content().is(":visible"));
     });
 });
 
@@ -165,7 +165,7 @@ QUnit.test("change message in runtime", function(assert) {
     this.instance.option({ message: "test43" });
     this.instance.show();
 
-    assert.equal(this.instance.content().text(), "test43");
+    assert.equal(this.instance.$content().text(), "test43");
 });
 
 QUnit.test("B238416", function(assert) {
@@ -187,7 +187,7 @@ QUnit.test("B238416", function(assert) {
     });
 
     instance.show().done(function() {
-        var $content = instance.content();
+        var $content = instance.$content();
 
         assert.equal($content.css("opacity"), "1");
 
@@ -247,7 +247,7 @@ QUnit.test("it should be possible to select a message in the toast by the mouse"
             shading: true,
             visible: true
         }),
-        $shader = $toast.dxToast("content").closest(".dx-overlay-shader");
+        $shader = $toast.dxToast("$content").closest(".dx-overlay-shader");
 
     $($shader).on("dxdrag", function(e) {
         assert.equal(e.isDefaultPrevented(), false, "touchmove is not prevented");
@@ -282,7 +282,7 @@ QUnit.test("toast should have base z-index greater than overlay", function(asser
     Toast.baseZIndex(10000);
 
     var $toast = $("#toast").dxToast({ visible: true }),
-        $content = $toast.dxToast("instance").content();
+        $content = $toast.dxToast("instance").$content();
 
     assert.equal($content.css("z-index"), 18001, "toast's z-index is correct");
 });
@@ -331,7 +331,7 @@ QUnit.test("aria role", function(assert) {
 
     instance.show();
 
-    var $message = instance.content().find("." + TOAST_MESSAGE_CLASS);
+    var $message = instance.$content().find("." + TOAST_MESSAGE_CLASS);
 
     assert.equal($message.attr("role"), "alert", "role for toast message is correct");
 });

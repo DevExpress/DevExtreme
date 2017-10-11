@@ -173,7 +173,7 @@ QUnit.test("Scheduler appointments should be initialized", function(assert) {
 });
 
 QUnit.test("Scheduler appointments should have a right css class", function(assert) {
-    var $element = this.instance.element();
+    var $element = this.instance.$element();
 
     assert.ok($element.hasClass("dx-scheduler-scrollable-appointments"), "dxSchedulerAppointments has 'dx-scheduler-scrollable-appointments' css class");
 });
@@ -191,7 +191,7 @@ QUnit.test("startDate should be preprocessed before rendering", function(assert)
         }
     ]);
 
-    assert.equal(this.instance.element().find(".dx-scheduler-appointment").data("dxItemData").startDate, 1429688467740);
+    assert.equal(this.instance.$element().find(".dx-scheduler-appointment").data("dxItemData").startDate, 1429688467740);
 });
 
 QUnit.test("Scheduler appointment should have appointment title", function(assert) {
@@ -208,7 +208,7 @@ QUnit.test("Scheduler appointment should have appointment title", function(asser
         }
     ]);
 
-    assert.equal(this.instance.element().find(".dx-scheduler-appointment").attr("title"), this.instance.option("items")[0].text, "title is right");
+    assert.equal(this.instance.$element().find(".dx-scheduler-appointment").attr("title"), this.instance.option("items")[0].text, "title is right");
 });
 
 QUnit.test("Scheduler appointments should have a right item count", function(assert) {
@@ -229,7 +229,7 @@ QUnit.test("Scheduler appointments should have a right item count", function(ass
         }
     ]);
 
-    assert.equal(this.instance.element().find(".dx-scheduler-appointment").length, 2, "dxSchedulerAppointments has two items");
+    assert.equal(this.instance.$element().find(".dx-scheduler-appointment").length, 2, "dxSchedulerAppointments has two items");
 });
 
 QUnit.test("Scheduler appointments with recurrenceRule should have a specific class", function(assert) {
@@ -245,7 +245,7 @@ QUnit.test("Scheduler appointments with recurrenceRule should have a specific cl
         }
     ]);
 
-    assert.equal(this.instance.element().find(".dx-scheduler-appointment-recurrence").length, 1, "dxSchedulerAppointments has two items");
+    assert.equal(this.instance.$element().find(".dx-scheduler-appointment-recurrence").length, 1, "dxSchedulerAppointments has two items");
 });
 
 QUnit.test("Scheduler appointments should have a correct height", function(assert) {
@@ -265,7 +265,7 @@ QUnit.test("Scheduler appointments should have a correct height", function(asser
         }
     ]);
 
-    var $appointment = this.instance.element().find(".dx-scheduler-appointment");
+    var $appointment = this.instance.$element().find(".dx-scheduler-appointment");
 
     assert.equal($appointment.outerHeight(), 40, "Appointment has a right height");
 });
@@ -288,14 +288,14 @@ QUnit.test("Scheduler appointment should be resizable", function(assert) {
         }
     ]);
 
-    var $appointment = this.instance.element().find(".dx-scheduler-appointment"),
+    var $appointment = this.instance.$element().find(".dx-scheduler-appointment"),
         resizableInstance = $appointment.dxResizable("instance");
 
     assert.ok(resizableInstance instanceof Resizable, "Appointment is instance of dxResizable");
     assert.equal(resizableInstance.option("handles"), "top bottom", "Appointment can resize only vertical");
     assert.equal(resizableInstance.option("step"), this.height, "Resizable has a right step");
     assert.equal(resizableInstance.option("minHeight"), this.height, "Resizable has a right minHeight");
-    assert.deepEqual(resizableInstance.option("area"), this.instance.element().closest(".dx-scrollable-content"), "Resizable area is scrollable content");
+    assert.deepEqual(resizableInstance.option("area"), this.instance.$element().closest(".dx-scrollable-content"), "Resizable area is scrollable content");
 });
 
 
@@ -314,7 +314,7 @@ QUnit.test("Scheduler appointment should not be resizable if allowResize is fals
         }
     ]);
 
-    var $appointment = this.instance.element().find(".dx-scheduler-appointment");
+    var $appointment = this.instance.$element().find(".dx-scheduler-appointment");
 
     assert.notOk($appointment.data("dxResizable"), "Appointment is not dxResizable");
 });
@@ -335,7 +335,7 @@ QUnit.test("All-day appointment should not be resizable if current view is 'day'
         }
     ]);
 
-    var $appointment = this.instance.element().find(".dx-scheduler-appointment").first();
+    var $appointment = this.instance.$element().find(".dx-scheduler-appointment").first();
 
     assert.notOk($appointment.hasClass("dx-resizable"), "Appointment is not resizable");
 });
@@ -361,9 +361,9 @@ QUnit.test("moveAppointmentBack should affect on appointment only first time", f
         focusStateEnabled: true
     });
 
-    var $appointment = this.instance.element().find(".dx-scheduler-appointment");
+    var $appointment = this.instance.$element().find(".dx-scheduler-appointment");
 
-    var pointer = pointerMock(this.instance.element().find(".dx-resizable-handle-bottom")).start();
+    var pointer = pointerMock(this.instance.$element().find(".dx-resizable-handle-bottom")).start();
     pointer.dragStart();
 
     var coordinates = {
@@ -403,11 +403,11 @@ QUnit.test("Appointment should not be changed while resize when 'esc' key was pr
 
     this.instance.notifyObserver = updateSpy;
 
-    var $appointment = this.instance.element().find(".dx-scheduler-appointment"),
+    var $appointment = this.instance.$element().find(".dx-scheduler-appointment"),
         keyboard = keyboardMock($appointment);
 
 
-    var pointer = pointerMock(this.instance.element().find(".dx-resizable-handle-bottom")).start();
+    var pointer = pointerMock(this.instance.$element().find(".dx-resizable-handle-bottom")).start();
     pointer.dragStart().drag(0, 40);
     keyboard.keyDown("esc");
     pointer.dragEnd();
@@ -435,11 +435,11 @@ QUnit.test("Appointment should not be changed while resize when 'esc' key was pr
 
     this.instance.option({ focusStateEnabled: true });
 
-    var $appointment = this.instance.element().find(".dx-scheduler-appointment"),
+    var $appointment = this.instance.$element().find(".dx-scheduler-appointment"),
         initialWidth = $appointment.width(),
         initialHeight = $appointment.height(),
         keyboard = keyboardMock($appointment),
-        pointer = pointerMock(this.instance.element().find(".dx-resizable-handle-bottom")).start();
+        pointer = pointerMock(this.instance.$element().find(".dx-resizable-handle-bottom")).start();
 
     pointer.dragStart().drag(0, 40);
     keyboard.keyDown("esc");
@@ -461,7 +461,7 @@ QUnit.test("Scheduler appointment should be draggable", function(assert) {
 
     this.initItems([item]);
 
-    var $appointment = this.instance.element().find(".dx-scheduler-appointment"),
+    var $appointment = this.instance.$element().find(".dx-scheduler-appointment"),
         draggableInstance = $appointment.dxDraggable("instance");
 
     assert.ok(draggableInstance instanceof Draggable, "Appointment is instance of dxDraggable");
@@ -480,7 +480,7 @@ QUnit.test("Scheduler appointment should not be draggable if allowDrag is false"
     this.initItems([item]);
     this.instance.option({ allowDrag: false });
 
-    var $appointment = this.instance.element().find(".dx-scheduler-appointment");
+    var $appointment = this.instance.$element().find(".dx-scheduler-appointment");
 
     assert.notOk($appointment.data("dxDraggable"), "Appointment is not dxDraggable");
 });
@@ -500,7 +500,7 @@ QUnit.test("Drag event should not contain maxBottomOffset & maxRightOffset", fun
         items: [item]
     });
 
-    var $appointment = this.instance.element().find(".dx-scheduler-appointment"),
+    var $appointment = this.instance.$element().find(".dx-scheduler-appointment"),
         pointer = pointerMock($appointment).start();
 
     $($appointment).on(dragEvents.start, function(e) {
@@ -554,7 +554,7 @@ QUnit.test("Drag event should not contain maxBottomOffset & maxLeftOffset for RT
         rtlEnabled: true,
         items: [item]
     });
-    var $appointment = this.instance.element().find(".dx-scheduler-appointment"),
+    var $appointment = this.instance.$element().find(".dx-scheduler-appointment"),
         pointer = pointerMock($appointment).start();
 
     $($appointment).on(dragEvents.start, function(e) {
@@ -586,7 +586,7 @@ QUnit.test("Appointment coordinates should be corrected during drag", function(a
 
     this.instance.notifyObserver = updateSpy;
 
-    var $appointment = this.instance.element().find(".dx-scheduler-appointment"),
+    var $appointment = this.instance.$element().find(".dx-scheduler-appointment"),
         pointer = pointerMock($appointment).start();
 
     pointer.dragStart().drag(0, 60);
@@ -619,7 +619,7 @@ QUnit.test("Appointment coordinates should be corrected on dragend", function(as
 
     this.instance.notifyObserver = updateSpy;
 
-    var $appointment = this.instance.element().find(".dx-scheduler-appointment"),
+    var $appointment = this.instance.$element().find(".dx-scheduler-appointment"),
         pointer = pointerMock($appointment).start();
 
     pointer.dragStart().drag(0, 60).dragEnd();
@@ -652,7 +652,7 @@ QUnit.test("Start & end date of appointment should be changed when drag is finis
 
     this.instance.notifyObserver = updateSpy;
 
-    var $appointment = this.instance.element().find(".dx-scheduler-appointment"),
+    var $appointment = this.instance.$element().find(".dx-scheduler-appointment"),
         pointer = pointerMock($appointment).start();
 
     pointer.dragStart().drag(0, 60).dragEnd();
@@ -682,7 +682,7 @@ QUnit.test("Appointment tooltip should be hidden when drag is started", function
 
     this.instance.notifyObserver = updateSpy;
 
-    var $appointment = this.instance.element().find(".dx-scheduler-appointment"),
+    var $appointment = this.instance.$element().find(".dx-scheduler-appointment"),
         pointer = pointerMock($appointment).start();
 
     pointer.dragStart().drag(0, 60);
@@ -708,7 +708,7 @@ QUnit.test("Appointment should be placed in fixed container on drag-start", func
         focusStateEnabled: true
     });
 
-    var $appointment = this.instance.element().find(".dx-scheduler-appointment"),
+    var $appointment = this.instance.$element().find(".dx-scheduler-appointment"),
         pointer = pointerMock($appointment).start();
 
     pointer.dragStart().drag(0, 60);
@@ -737,7 +737,7 @@ QUnit.test("Appointment should be rendered a many times if coordinates array con
         items: [item]
     });
 
-    var $appointment = this.instance.element().find(".dx-scheduler-appointment");
+    var $appointment = this.instance.$element().find(".dx-scheduler-appointment");
 
     assert.equal($appointment.length, 3, "All appointments are rendered");
     assert.deepEqual(translator.locate($appointment.eq(0)), { top: 0, left: 0 }, "appointment is rendered in right place");
@@ -765,11 +765,11 @@ QUnit.test("Draggable clone should be correct", function(assert) {
         items: [item]
     });
 
-    var $secondAppointment = this.instance.element().find(".dx-scheduler-appointment").eq(1),
+    var $secondAppointment = this.instance.$element().find(".dx-scheduler-appointment").eq(1),
         pointer = pointerMock($secondAppointment).start();
 
     $secondAppointment.dxDraggable("instance").option("onDrag", function(e) {
-        assert.deepEqual(arguments[0].element.get(0), $secondAppointment.get(0), "draggable element is right");
+        assert.deepEqual($(arguments[0].element).get(0), $secondAppointment.get(0), "draggable element is right");
     });
 
     pointer.dragStart().drag(0, 60).dragEnd();
@@ -813,7 +813,7 @@ QUnit.test("Scheduler appointment should have aria-role 'button'", function(asse
 
     this.instance.option("items", [item]);
 
-    var $appointment = this.instance.element().find(".dx-scheduler-appointment");
+    var $appointment = this.instance.$element().find(".dx-scheduler-appointment");
 
     assert.equal($appointment.attr("role"), "button", "role is right");
 });
@@ -986,7 +986,7 @@ QUnit.test("onAppointmentDblClick should fires when item is dbl clicked", functi
         currentView: "month",
         currentDate: new Date(2015, 2, 9),
         onAppointmentDblClick: function(e) {
-            assert.deepEqual(e.appointmentElement[0], $item[0], "appointmentElement is correct");
+            assert.deepEqual($(e.appointmentElement)[0], $item[0], "appointmentElement is correct");
             assert.deepEqual(e.appointmentData, items[0].itemData, "appointmentData is correct");
         }
     });
@@ -1314,10 +1314,10 @@ QUnit.test("Default behavior of tab button should be prevented for apps", functi
         focusStateEnabled: true
     });
 
-    var $appointments = this.instance.element().find(".dx-scheduler-appointment"),
+    var $appointments = this.instance.$element().find(".dx-scheduler-appointment"),
         keyboard = keyboardMock($appointments.eq(0));
 
-    $(this.instance.element()).on("keydown", function(e) {
+    $(this.instance.$element()).on("keydown", function(e) {
         assert.ok(e.isDefaultPrevented(), "default tab prevented");
     });
 
@@ -1356,10 +1356,10 @@ QUnit.test("Focus shouldn't be prevent when first appointment is reached in back
         focusStateEnabled: true
     });
 
-    var $appointments = this.instance.element().find(".dx-scheduler-appointment"),
+    var $appointments = this.instance.$element().find(".dx-scheduler-appointment"),
         keyboard = keyboardMock($appointments.eq(0));
 
-    $(this.instance.element()).on("keydown", function(e) {
+    $(this.instance.$element()).on("keydown", function(e) {
         assert.notOk(e.isDefaultPrevented(), "default tab isn't prevented");
     });
 

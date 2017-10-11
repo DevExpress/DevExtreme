@@ -8,6 +8,12 @@
 */
 var dxTreeMap = {
     /**
+    * @name dxtreemap_options
+    * @publicName Options
+    * @namespace DevExpress.viz.treeMap
+    * @hidden
+    */        
+    /**
     * @name dxtreemapoptions_margin
     * @publicName margin
     * @hidden
@@ -546,7 +552,7 @@ var dxTreeMap = {
     * @type_function_param1 e:object
     * @type_function_param1_field1 component:object
     * @type_function_param1_field2 element:object
-    * @type_function_param1_field3 jQueryEvent:jQuery-event object
+    * @type_function_param1_field3 jQueryEvent:jQueryEvent
     * @type_function_param1_field4 node:dxtreemapnode
     * @notUsedInTheme
     * @action

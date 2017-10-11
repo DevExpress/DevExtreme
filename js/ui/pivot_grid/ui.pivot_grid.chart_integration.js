@@ -286,7 +286,7 @@ function getChartInstance(chartElement) {
 }
 
 function removeBinding(chart) {
-    var unbind = chart.element().data(UNBIND_KEY);
+    var unbind = chart.$element().data(UNBIND_KEY);
     unbind && unbind();
 }
 
@@ -328,14 +328,14 @@ module.exports = {
         updateChart();
 
         disposeBinding = function() {
-            chart.element().removeData(UNBIND_KEY);
+            chart.$element().removeData(UNBIND_KEY);
             that.off("changed", updateChart);
         };
 
         chart.on("disposing", disposeBinding);
         this.on("disposing", disposeBinding);
 
-        chart.element().data(UNBIND_KEY, disposeBinding);
+        chart.$element().data(UNBIND_KEY, disposeBinding);
 
         return disposeBinding;
     }

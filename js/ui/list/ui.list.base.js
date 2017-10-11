@@ -4,6 +4,7 @@ var $ = require("../../core/renderer"),
     eventsEngine = require("../../events/core/events_engine"),
     commonUtils = require("../../core/utils/common"),
     typeUtils = require("../../core/utils/type"),
+    getPublicElement = require("../../core/utils/dom").getPublicElement,
     each = require("../../core/utils/iterator").each,
     compileGetter = require("../../core/utils/data").compileGetter,
     extend = require("../../core/utils/extend").extend,
@@ -63,7 +64,7 @@ var ListBase = CollectionWidget.inherit({
 
         var getEdgeVisibleItem = function(direction) {
             var scrollTop = that.scrollTop(),
-                containerHeight = that.element().height();
+                containerHeight = that.$element().height();
 
             var $item = that.option("focusedElement"),
                 isItemVisible = true;
@@ -94,7 +95,7 @@ var ListBase = CollectionWidget.inherit({
             var resultPosition = $item.position().top;
 
             if(direction === "prev") {
-                resultPosition = $item.position().top - that.element().height() + $item.outerHeight();
+                resultPosition = $item.position().top - that.$element().height() + $item.outerHeight();
             }
 
             that.scrollTo(resultPosition);
@@ -284,7 +285,7 @@ var ListBase = CollectionWidget.inherit({
             * @extends Action
             * @type_function_param1_field4 jQueryEvent:jQueryEvent
             * @type_function_param1_field5 itemData:object
-            * @type_function_param1_field6 itemElement:jQuery
+            * @type_function_param1_field6 itemElement:Element
             * @type_function_param1_field7 itemIndex:number | object
             * @type_function_param1_field8 direction:string
             * @action
@@ -304,7 +305,7 @@ var ListBase = CollectionWidget.inherit({
             * @publicName onGroupRendered
             * @extends Action
             * @type_function_param1_field4 groupData:object
-            * @type_function_param1_field5 groupElement:jQuery
+            * @type_function_param1_field5 groupElement:Element
             * @type_function_param1_field6 groupIndex:number
             * @action
             */
@@ -325,7 +326,7 @@ var ListBase = CollectionWidget.inherit({
             * @default "group"
             * @type_function_param1 groupData:object
             * @type_function_param2 groupIndex:number
-            * @type_function_param3 groupElement:object
+            * @type_function_param3 groupElement:Element
             * @type_function_return string|Node|jQuery
             */
             groupTemplate: "group",
@@ -372,7 +373,7 @@ var ListBase = CollectionWidget.inherit({
             * @type function|string
             * @extends Action
             * @type_function_param1_field4 itemData:object
-            * @type_function_param1_field5 itemElement:jQuery
+            * @type_function_param1_field5 itemElement:Element
             * @type_function_param1_field6 itemIndex:number | object
             * @action
             */
@@ -554,7 +555,7 @@ var ListBase = CollectionWidget.inherit({
 
     _init: function() {
         this.callBase();
-        this._$container = this.element();
+        this._$container = this.$element();
 
         this._initScrollView();
 
@@ -586,7 +587,7 @@ var ListBase = CollectionWidget.inherit({
             autoPagingEnabled = scrollingEnabled && commonUtils.ensureDefined(this.option("autoPagingEnabled"), this.option("pageLoadMode") === "scrollBottom") && !!this._dataSource;
         this._resumeDeprecatedWarnings();
 
-        this._scrollView = this._createComponent(this.element(), ScrollView, {
+        this._scrollView = this._createComponent(this.$element(), ScrollView, {
             disabled: this.option("disabled") || !scrollingEnabled,
             onScroll: this._scrollHandler.bind(this),
             onPullDown: pullRefreshEnabled ? this._pullDownHandler.bind(this) : null,
@@ -712,7 +713,7 @@ var ListBase = CollectionWidget.inherit({
     },
 
     _infiniteDataLoading: function() {
-        var isElementVisible = this.element().is(":visible");
+        var isElementVisible = this.$element().is(":visible");
 
         if(isElementVisible && !this._scrollViewIsFull() && !this._isDataSourceLoading() && !this._isLastPage()) {
             clearTimeout(this._loadNextPageTimer);
@@ -746,7 +747,7 @@ var ListBase = CollectionWidget.inherit({
     _attachGroupCollapseEvent: function() {
         var eventName = eventUtils.addNamespace(clickEvent.name, this.NAME),
             selector = "." + LIST_GROUP_HEADER_CLASS,
-            $element = this.element(),
+            $element = this.$element(),
             collapsibleGroups = this.option("collapsibleGroups");
 
         $element.toggleClass(LIST_COLLAPSIBLE_GROUPS_CLASS, collapsibleGroups);
@@ -805,7 +806,7 @@ var ListBase = CollectionWidget.inherit({
     _render: function() {
         this._itemElementsCache = $();
 
-        this.element().addClass(LIST_CLASS);
+        this.$element().addClass(LIST_CLASS);
         this.callBase();
 
         this.option("useInkRipple") && this._renderInkRipple();
@@ -880,7 +881,7 @@ var ListBase = CollectionWidget.inherit({
             renderArgs = {
                 index: index,
                 itemData: group,
-                container: $groupHeaderElement
+                container: getPublicElement($groupHeaderElement)
             };
 
         this._createItemByTemplate(groupTemplate, renderArgs);
@@ -896,7 +897,7 @@ var ListBase = CollectionWidget.inherit({
         }).bind(this));
 
         this._groupRenderAction({
-            groupElement: $groupElement,
+            groupElement: getPublicElement($groupElement),
             groupIndex: index,
             groupData: group
         });
@@ -930,7 +931,7 @@ var ListBase = CollectionWidget.inherit({
         var dataSource = this._dataSource,
             $nextButton = this._getNextButton();
 
-        this.element().toggleClass(LIST_HAS_NEXT_CLASS, value);
+        this.$element().toggleClass(LIST_HAS_NEXT_CLASS, value);
 
         if(value && dataSource && dataSource.isLoaded()) {
             $nextButton.appendTo(this._itemContainer());

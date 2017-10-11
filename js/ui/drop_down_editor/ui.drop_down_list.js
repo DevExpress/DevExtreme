@@ -126,7 +126,7 @@ var DropDownList = DropDownEditor.inherit({
             /**
             * @name dxDropDownListOptions_searchExpr
             * @publicName searchExpr
-            * @type getter|Array<string>
+            * @type getter|Array<getter>
             * @default null
             */
             searchExpr: null,
@@ -208,7 +208,7 @@ var DropDownList = DropDownEditor.inherit({
             * @default "group"
             * @type_function_param1 itemData:object
             * @type_function_param2 itemIndex:number
-            * @type_function_param3 itemElement:jQuery
+            * @type_function_param3 itemElement:Element
             * @type_function_return string|Node|jQuery
             */
             groupTemplate: "group",
@@ -376,7 +376,7 @@ var DropDownList = DropDownEditor.inherit({
         this.callBase();
         this._popup._wrapper().addClass(this._popupWrapperClass());
 
-        var $popupContent = this._popup.content();
+        var $popupContent = this._popup.$content();
         eventsEngine.off($popupContent, "mousedown");
         eventsEngine.on($popupContent, "mousedown", this._preventFocusOnPopup.bind(this));
     },
@@ -510,10 +510,10 @@ var DropDownList = DropDownEditor.inherit({
             templatesRenderAsynchronously: false,
             width: this.option("width"),
             onShowing: function() {
-                that.element().addClass(SKIP_GESTURE_EVENT_CLASS);
+                that.$element().addClass(SKIP_GESTURE_EVENT_CLASS);
             },
             onHidden: function() {
-                that.element().removeClass(SKIP_GESTURE_EVENT_CLASS);
+                that.$element().removeClass(SKIP_GESTURE_EVENT_CLASS);
             },
             height: "auto",
             maxHeight: this._getMaxHeight.bind(this)
@@ -541,7 +541,7 @@ var DropDownList = DropDownEditor.inherit({
         this._listId = "dx-" + new Guid()._value;
 
         var $list = this._$list = $("<div>").attr("id", this._listId)
-            .appendTo(this._popup.content());
+            .appendTo(this._popup.$content());
 
         this._list = this._createComponent($list, List, this._listConfig());
 
@@ -782,7 +782,7 @@ var DropDownList = DropDownEditor.inherit({
     },
 
     _updatePopupWidth: function() {
-        this._setPopupOption("width", this.element().outerWidth() + this.option("popupWidthExtension"));
+        this._setPopupOption("width", this.$element().outerWidth() + this.option("popupWidthExtension"));
     },
 
     _needPopupRepaint: function() {
@@ -807,7 +807,7 @@ var DropDownList = DropDownEditor.inherit({
     },
 
     _getMaxHeight: function() {
-        var $element = this.element(),
+        var $element = this.$element(),
             offset = $element.offset(),
             windowHeight = $(window).height(),
             maxHeight = Math.max(offset.top, windowHeight - offset.top - $element.outerHeight());

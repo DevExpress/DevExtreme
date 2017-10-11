@@ -236,7 +236,7 @@ var DataGrid = Widget.inherit({
     },
 
     _renderContentImpl: function() {
-        this.getView("gridView").render(this.element());
+        this.getView("gridView").render(this.$element());
     },
 
     _renderContent: function() {

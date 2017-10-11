@@ -183,11 +183,11 @@ module.exports = {
             * @publicName onRowClick
             * @type function(e)|string
             * @type_function_param1 e:object
-            * @type_function_param1_field4 jQueryEvent:jQuery-event object
+            * @type_function_param1_field4 jQueryEvent:jQueryEvent
             * @type_function_param1_field5 data:object
             * @type_function_param1_field6 key:any
-            * @type_function_param1_field7 values:array
-            * @type_function_param1_field8 columns:array
+            * @type_function_param1_field7 values:Array<Object>
+            * @type_function_param1_field8 columns:Array<Object>
             * @type_function_param1_field9 rowIndex:number
             * @type_function_param1_field10 rowType:string
             * @type_function_param1_field11 isSelected:boolean
@@ -203,11 +203,11 @@ module.exports = {
             * @publicName onRowClick
             * @type function(e)|string
             * @type_function_param1 e:object
-            * @type_function_param1_field4 jQueryEvent:jQuery-event object
+            * @type_function_param1_field4 jQueryEvent:jQueryEvent
             * @type_function_param1_field5 data:object
             * @type_function_param1_field6 key:any
-            * @type_function_param1_field7 values:array
-            * @type_function_param1_field8 columns:array
+            * @type_function_param1_field7 values:Array<Object>
+            * @type_function_param1_field8 columns:Array<Object>
             * @type_function_param1_field9 rowIndex:number
             * @type_function_param1_field10 rowType:string
             * @type_function_param1_field11 isSelected:boolean
@@ -222,7 +222,7 @@ module.exports = {
             * @publicName onCellClick
             * @type function(e)|string
             * @type_function_param1 e:object
-            * @type_function_param1_field4 jQueryEvent:jQuery-event object
+            * @type_function_param1_field4 jQueryEvent:jQueryEvent
             * @type_function_param1_field5 data:object
             * @type_function_param1_field6 key:any
             * @type_function_param1_field7 value:any
@@ -242,7 +242,7 @@ module.exports = {
             * @publicName onCellClick
             * @type function(e)|string
             * @type_function_param1 e:object
-            * @type_function_param1_field4 jQueryEvent:jQuery-event object
+            * @type_function_param1_field4 jQueryEvent:jQueryEvent
             * @type_function_param1_field5 data:object
             * @type_function_param1_field6 key:any
             * @type_function_param1_field7 value:any
@@ -261,7 +261,7 @@ module.exports = {
              * @name dxDataGridOptions_rowTemplate
              * @publicName rowTemplate
              * @type template
-             * @type_function_param1 rowElement:jQuery
+             * @type_function_param1 rowElement:Element
              * @type_function_param2 rowInfo:object
              */
             rowTemplate: null,
@@ -356,8 +356,8 @@ module.exports = {
              * @type_function_param1 e:object
              * @type_function_param1_field4 data:object
              * @type_function_param1_field5 key:any
-             * @type_function_param1_field6 values:any
-             * @type_function_param1_field7 columns:array
+             * @type_function_param1_field6 values:Array<Object>
+             * @type_function_param1_field7 columns:Array<Object>
              * @type_function_param1_field8 rowIndex:number
              * @type_function_param1_field9 rowType:string
              * @type_function_param1_field10 groupIndex:number
@@ -374,8 +374,8 @@ module.exports = {
              * @type_function_param1 e:object
              * @type_function_param1_field4 data:object
              * @type_function_param1_field5 key:any
-             * @type_function_param1_field6 values:any
-             * @type_function_param1_field7 columns:array
+             * @type_function_param1_field6 values:Array<Object>
+             * @type_function_param1_field7 columns:Array<Object>
              * @type_function_param1_field8 rowIndex:number
              * @type_function_param1_field9 rowType:string
              * @type_function_param1_field10 isSelected:boolean
@@ -694,7 +694,7 @@ module.exports = {
 
                     if($content) {
                         if(scrollable) {
-                            $content = scrollable.content();
+                            $content = scrollable.$content();
                         }
                         return $content.children().first();
                     }
@@ -858,7 +858,7 @@ module.exports = {
                     var $table = this.callBase.apply(this, arguments);
 
                     if(this.option("rowTemplate")) {
-                        $table.appendTo(this.component.element());
+                        $table.appendTo(this.component.$element());
                     }
 
                     return $table;
@@ -918,6 +918,26 @@ module.exports = {
                     }
 
                     return parameters;
+                },
+
+                _setRowsOpacityCore: function($rows, visibleColumns, columnIndex, value) {
+                    var columnsController = this._columnsController,
+                        columns = columnsController.getColumns(),
+                        column = columns && columns[columnIndex],
+                        columnID = column && column.isBand && column.index;
+
+                    each($rows, function(rowIndex, row) {
+                        if(!$(row).hasClass(GROUP_ROW_CLASS)) {
+                            for(var i = 0; i < visibleColumns.length; i++) {
+                                if(typeUtils.isNumeric(columnID) && columnsController.isParentBandColumn(visibleColumns[i].index, columnID) || visibleColumns[i].index === columnIndex) {
+                                    $rows.eq(rowIndex).children().eq(i).css({ opacity: value });
+                                    if(!typeUtils.isNumeric(columnID)) {
+                                        break;
+                                    }
+                                }
+                            }
+                        }
+                    });
                 },
 
                 renderNoDataText: gridCoreUtils.renderNoDataText,
@@ -1200,27 +1220,8 @@ module.exports = {
                 },
 
                 setRowsOpacity: function(columnIndex, value) {
-                    var that = this,
-                        i,
-                        columnsController = that._columnsController,
-                        visibleColumns = that.getColumns(),
-                        columns = columnsController.getColumns(),
-                        column = columns && columns[columnIndex],
-                        columnID = column && column.isBand && column.index,
-                        $rows = that._getRowElements().not("." + GROUP_ROW_CLASS) || [];
-
-                    each($rows, function(rowIndex, row) {
-                        if(!$(row).hasClass(GROUP_ROW_CLASS)) {
-                            for(i = 0; i < visibleColumns.length; i++) {
-                                if(typeUtils.isNumeric(columnID) && columnsController.isParentBandColumn(visibleColumns[i].index, columnID) || visibleColumns[i].index === columnIndex) {
-                                    that.getCellElements(rowIndex).eq(i).css({ opacity: value });
-                                    if(!typeUtils.isNumeric(columnID)) {
-                                        break;
-                                    }
-                                }
-                            }
-                        }
-                    });
+                    var $rows = this._getRowElements().not("." + GROUP_ROW_CLASS) || [];
+                    this._setRowsOpacityCore($rows, this.getColumns(), columnIndex, value);
                 },
 
                 _getCellElementsCore: function(rowIndex) {

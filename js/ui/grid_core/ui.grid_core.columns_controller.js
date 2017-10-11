@@ -363,28 +363,28 @@ module.exports = {
              * @name GridBaseOptions_columns_cellTemplate
              * @publicName cellTemplate
              * @type template
-             * @type_function_param1 cellElement:jQuery
+             * @type_function_param1 cellElement:Element
              * @type_function_param2 cellInfo:object
              */
             /**
              * @name GridBaseOptions_columns_headerCellTemplate
              * @publicName headerCellTemplate
              * @type template
-             * @type_function_param1 columnHeader:jQuery
+             * @type_function_param1 columnHeader:Element
              * @type_function_param2 headerInfo:object
              */
             /**
              * @name GridBaseOptions_columns_editCellTemplate
              * @publicName editCellTemplate
              * @type template
-             * @type_function_param1 cellElement:jQuery
+             * @type_function_param1 cellElement:Element
              * @type_function_param2 cellInfo:object
              */
             /**
              * @name dxDataGridOptions_columns_groupCellTemplate
              * @publicName groupCellTemplate
              * @type template
-             * @type_function_param1 cellElement:jQuery
+             * @type_function_param1 cellElement:Element
              * @type_function_param2 cellInfo:object
              */
             /**
@@ -542,6 +542,24 @@ module.exports = {
              * @type string|number
              * @default undefined
              * @acceptValues 'year' | 'month' | 'day' | 'quarter' | 'hour' | 'minute' | 'second'
+             */
+            /**
+             * @name GridBaseOptions_columns_headerFilter_allowSearch
+             * @publicName allowSearch
+             * @type boolean
+             * @default false
+             */
+            /**
+             * @name GridBaseOptions_columns_headerFilter_width
+             * @publicName width
+             * @type number
+             * @default undefined
+             */
+            /**
+             * @name GridBaseOptions_columns_headerFilter_height
+             * @publicName height
+             * @type number
+             * @default undefined
              */
             /**
              * @name GridBaseOptions_columns_editorOptions
@@ -1451,6 +1469,11 @@ module.exports = {
                 },
                 getColumns: function() {
                     return this._columns;
+                },
+                isBandColumnsUsed: function() {
+                    return this.getColumns().some(function(column) {
+                        return column.isBand;
+                    });
                 },
                 getGroupColumns: function() {
                     var result = [];

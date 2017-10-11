@@ -1274,39 +1274,6 @@ QUnit.test("dxChart with two value axis check default names", function(assert) {
     assert.equal(verticalAxes[1].getOptions().name, "defaultAxisName1");
 });
 
-QUnit.test("Hide second axis grid ", function(assert) {
-    //act
-    var chart = this.createChart({
-        valueAxis: [{
-            grid: {
-                visible: true
-            },
-            minorGrid: {
-                visible: true
-            }
-        }, {
-            grid: {
-                visible: true
-            },
-            minorGrid: {
-                visible: true
-            }
-        }]
-    });
-
-
-    //assert
-
-    assert.ok(chart._valueAxes);
-    var verticalAxes = chart._valueAxes;
-
-    assert.equal(verticalAxes.length, 2, "chart must have two value axis");
-    assert.equal(verticalAxes[0].getOptions().grid.visible, true, "first axis grid visible");
-    assert.equal(verticalAxes[1].getOptions().grid.visible, false, "second axis grid was killed");
-
-    assert.equal(verticalAxes[0].getOptions().minorGrid.visible, true, "first axis grid visible");
-    assert.equal(verticalAxes[1].getOptions().minorGrid.visible, false, "second axis grid was killed");
-});
 
 QUnit.test("Show all axis grid for not synchronizeMultiAxes", function(assert) {
     //act
@@ -1339,81 +1306,6 @@ QUnit.test("Show all axis grid for not synchronizeMultiAxes", function(assert) {
 
     assert.equal(verticalAxes[0].getOptions().minorGrid.visible, true, "first axis grid visible");
     assert.equal(verticalAxes[1].getOptions().minorGrid.visible, true, "second axis grid was not killed");
-});
-
-QUnit.test("Show first visible axis grid", function(assert) {
-    //act
-    var chart = this.createChart({
-        valueAxis: [{
-            grid: {
-                visible: false
-            },
-            minorGrid: {
-                visible: false
-            }
-        }, {
-            min: 0,
-            max: 30,
-            grid: {
-                visible: true
-            },
-            minorGrid: {
-                visible: true
-            }
-        }]
-    });
-
-    //assert
-    assert.ok(chart._valueAxes);
-    var verticalAxes = chart._valueAxes;
-
-    assert.equal(verticalAxes.length, 2, "chart must have two value axis");
-    assert.equal(verticalAxes[0].getOptions().grid.visible, false, "first axis grid visible");
-    assert.equal(verticalAxes[1].getOptions().grid.visible, true, "second axis grid was killed");
-
-    assert.equal(verticalAxes[0].getOptions().minorGrid.visible, false, "first axis grid visible");
-    assert.equal(verticalAxes[1].getOptions().minorGrid.visible, true, "second axis grid was killed");
-});
-
-QUnit.test("Show first visible axis grid. Three axis", function(assert) {
-    //act
-    var chart = this.createChart({
-        valueAxis: [{
-            grid: {
-                visible: false
-            },
-            minorGrid: {
-                visible: false
-            }
-        }, {
-            grid: {
-                visible: true
-            },
-            minorGrid: {
-                visible: true
-            }
-        }, {
-            grid: {
-                visible: true
-            },
-            minorGrid: {
-                visible: true
-            }
-        }]
-    });
-
-    //assert
-    assert.ok(chart._valueAxes);
-    var verticalAxes = chart._valueAxes;
-
-    assert.equal(verticalAxes.length, 3, "chart must have three value axis");
-    assert.equal(verticalAxes[0].getOptions().grid.visible, false, "first axis grid visible");
-    assert.equal(verticalAxes[1].getOptions().grid.visible, true, "second axis grid was killed");
-    assert.equal(verticalAxes[2].getOptions().grid.visible, false, "second axis grid was killed");
-
-    assert.equal(verticalAxes[0].getOptions().minorGrid.visible, false, "first axis grid visible");
-    assert.equal(verticalAxes[1].getOptions().minorGrid.visible, true, "second axis grid was killed");
-    assert.equal(verticalAxes[2].getOptions().minorGrid.visible, false, "second axis grid was killed");
 });
 
 QUnit.test("dxChart with two Series on one pane and different value axis", function(assert) {

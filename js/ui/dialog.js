@@ -86,6 +86,7 @@ exports.title = "";
 /**
  * @name ui_dialog
  * @publicName dialog
+ * @namespace DevExpress.ui
  */
 
 /**
@@ -95,7 +96,8 @@ exports.title = "";
  * @param1 options:object
  * @param1_field1 title:String
  * @param1_field2 message:String
- * @param1_field3 buttons:array
+ * @param1_field3 buttons:Array<Object>
+ * @static
  * @module ui/dialog
  * @export custom
  */
@@ -157,7 +159,7 @@ exports.custom = function(options) {
         showCloseButton: options.showCloseButton || false,
         focusStateEnabled: false,
         onContentReady: function(args) {
-            args.component.content()
+            args.component.$content()
                 .addClass(DX_DIALOG_CONTENT_CLASSNAME)
                 .append($message);
         },
@@ -221,7 +223,7 @@ exports.custom = function(options) {
     function hide(value) {
         deferred.resolve(value);
         popupInstance.hide().done(function() {
-            popupInstance.element().remove();
+            popupInstance.$element().remove();
         });
     }
 
@@ -238,6 +240,7 @@ exports.custom = function(options) {
  * @param1 message:string
  * @param2 title:string
  * @return Promise<void>
+ * @static
  * @module ui/dialog
  * @export alert
  */
@@ -259,6 +262,7 @@ exports.alert = function(message, title, showTitle) {
  * @param1 message:string
  * @param2 title:string
  * @return Promise<boolean>
+ * @static
  * @module ui/dialog
  * @export confirm
  */

@@ -8,6 +8,7 @@ var $ = require("../core/renderer"),
     viewPortUtils = require("../core/utils/view_port"),
     extend = require("../core/utils/extend").extend,
     inArray = require("../core/utils/array").inArray,
+    getPublicElement = require("../core/utils/dom").getPublicElement,
     viewPortChanged = viewPortUtils.changeCallback,
     hideTopOverlayCallback = require("../mobile/hide_top_overlay").hideCallback,
     positionUtils = require("../animation/position"),
@@ -330,7 +331,7 @@ var Overlay = Widget.inherit({
             * @publicName contentTemplate
             * @type template
             * @default "content"
-            * @type_function_param1 contentElement:jQuery
+            * @type_function_param1 contentElement:Element
             * @type_function_return string|jQuery
             */
             contentTemplate: "content",
@@ -441,7 +442,7 @@ var Overlay = Widget.inherit({
         this._$wrapper = $("<div>").addClass(OVERLAY_WRAPPER_CLASS);
         this._$content = $("<div>").addClass(OVERLAY_CONTENT_CLASS);
 
-        var $element = this.element();
+        var $element = this.$element();
         this._$wrapper.addClass($element.attr("class"));
         $element.addClass(OVERLAY_CLASS);
 
@@ -495,7 +496,7 @@ var Overlay = Widget.inherit({
     _initContainer: function(container) {
         container = container === undefined ? viewPortUtils.value() : container;
 
-        var $element = this.element(),
+        var $element = this.$element(),
             $container = $element.closest(container);
 
         if(!$container.length) {
@@ -922,7 +923,7 @@ var Overlay = Widget.inherit({
     _render: function() {
         this.callBase();
 
-        this._$content.appendTo(this.element());
+        this._$content.appendTo(this.$element());
         this._renderVisibilityAnimate(this.option("visible"));
     },
 
@@ -952,7 +953,7 @@ var Overlay = Widget.inherit({
             return this._parentHidden;
         }
 
-        var $parent = this.element().parent();
+        var $parent = this.$element().parent();
 
         if($parent.is(":visible")) {
             return false;
@@ -971,12 +972,12 @@ var Overlay = Widget.inherit({
     },
 
     _renderContentImpl: function() {
-        var $element = this.element();
+        var $element = this.$element();
         this._$content.appendTo($element);
 
         var contentTemplate = this._getTemplate(this.option("contentTemplate"));
         contentTemplate && contentTemplate.render({
-            container: this.content(),
+            container: getPublicElement(this.$content()),
             noModel: true
         });
 
@@ -1056,7 +1057,7 @@ var Overlay = Widget.inherit({
     },
 
     _getDragTarget: function() {
-        return this.content();
+        return this.$content();
     },
 
     _dragStartHandler: function(e) {
@@ -1149,7 +1150,7 @@ var Overlay = Widget.inherit({
     },
 
     _moveFromContainer: function() {
-        this._$content.appendTo(this.element());
+        this._$content.appendTo(this.$element());
 
         this._detachWrapperToContainer();
     },
@@ -1165,7 +1166,7 @@ var Overlay = Widget.inherit({
     },
 
     _attachWrapperToContainer: function() {
-        var $element = this.element();
+        var $element = this.$element();
 
         if(this._$container && this._$container[0] !== $element.parent()[0]) {
             this._$wrapper.appendTo(this._$container);
@@ -1323,7 +1324,7 @@ var Overlay = Widget.inherit({
 
     _clean: function() {
         if(!this._contentAlreadyRendered) {
-            this.content().empty();
+            this.$content().empty();
         }
 
         this._renderVisibility(false);
@@ -1452,6 +1453,10 @@ var Overlay = Widget.inherit({
         }).bind(this));
     },
 
+    $content: function() {
+        return this._$content;
+    },
+
     /**
     * @name dxOverlaymethods_show
     * @publicName show()
@@ -1473,10 +1478,10 @@ var Overlay = Widget.inherit({
     /**
     * @name dxOverlaymethods_content
     * @publicName content()
-    * @return jQuery
+    * @return Element
     */
     content: function() {
-        return this._$content;
+        return getPublicElement(this._$content);
     },
 
     /**
@@ -1497,6 +1502,8 @@ var Overlay = Widget.inherit({
 * @name ui_dxOverlayMethods_baseZIndex
 * @publicName baseZIndex(zIndex)
 * @param1 zIndex:number
+* @namespace DevExpress.ui.dxOverlay
+* @static
 */
 Overlay.baseZIndex = function(zIndex) {
     FIRST_Z_INDEX = zIndex;

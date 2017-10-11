@@ -35,6 +35,7 @@ var KNOWN_UA_TABLE = {
 * @section commonObjectStructures
 * @publicName Device
 * @type object
+* @namespace DevExpress
 * @module core/devices
 * @export default
 */
@@ -184,9 +185,16 @@ var Devices = Class.inherit({
     /**
     * @name devicesevents_orientationChanged
     * @publicName orientationChanged
-    * @type EVENT
+    * @type classEventType
     * @type_function_param1 e:object
     * @type_function_param1_field1 orientation:String
+    */
+    /**
+    * @name DevicesMethods_ctor
+    * @publicName ctor(options)
+    * @param1 options:object
+    * @param1_field1 window:Window
+    * @hidden
     */
     ctor: function(options) {
         this._window = options && options.window || window;

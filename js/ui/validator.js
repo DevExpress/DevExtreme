@@ -3,7 +3,6 @@
 var dataUtils = require("../core/element_data"),
     Callbacks = require("../core/utils/callbacks"),
     errors = require("./widget/ui.errors"),
-    logger = require("../core/utils/console").logger,
     DOMComponent = require("../core/dom_component"),
     extend = require("../core/utils/extend").extend,
     map = require("../core/utils/iterator").map,
@@ -46,7 +45,7 @@ var Validator = DOMComponent.inherit({
             /**
             * @name dxValidatorOptions_adapter
             * @publicName adapter
-            * @type object
+            * @type Object
             */
             /**
             * @name dxValidatorOptions_adapter_getValue
@@ -83,12 +82,12 @@ var Validator = DOMComponent.inherit({
             * @name dxValidatorOptions_onValidated
             * @publicName onValidated
             * @type function(validatedInfo)
-            * @type_function_param1 validatedInfo:object
+            * @type_function_param1 validatedInfo:Object
             * @type_function_param1_field1 name:string
             * @type_function_param1_field2 isValid:boolean
-            * @type_function_param1_field3 value:object
-            * @type_function_param1_field4 validationRules:array
-            * @type_function_param1_field5 brokenRule:object
+            * @type_function_param1_field3 value:Object
+            * @type_function_param1_field4 validationRules:Array<Object>
+            * @type_function_param1_field5 brokenRule:Object
             * @action
             */
 
@@ -159,7 +158,7 @@ var Validator = DOMComponent.inherit({
 
     _initAdapter: function() {
         var that = this,
-            element = that.element()[0],
+            element = that.$element()[0],
             dxStandardEditor = dataUtils.data(element, "dx-validation-target"),
             adapter = that.option("adapter");
         if(!adapter) {
@@ -184,7 +183,7 @@ var Validator = DOMComponent.inherit({
                     that.validate();
                 });
             } else {
-                logger.warn("Specifying the validationRequestsCallbacks option with jQuery.Callbacks are now deprecated. Instead, use the array.");
+                errors.log("W0014", "validationRequestsCallbacks", "jQuery.Callbacks", "17.2", "Use the array instead");
                 callbacks.add(function() {
                     that.validate();
                 });
@@ -193,7 +192,7 @@ var Validator = DOMComponent.inherit({
     },
 
     _render: function() {
-        this.element().addClass(VALIDATOR_CLASS);
+        this.$element().addClass(VALIDATOR_CLASS);
         this.callBase();
     },
 

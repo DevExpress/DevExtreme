@@ -37,18 +37,18 @@ QUnit.test("Scheduler appointment should be initialized", function(assert) {
 });
 
 QUnit.test("Scheduler appointment has css-class 'dx-scheduler-appointment-compact'", function(assert) {
-    assert.notOk(this.instance.element().hasClass("dx-scheduler-appointment-compact"), "appointment doesn't have css-class");
+    assert.notOk(this.instance.$element().hasClass("dx-scheduler-appointment-compact"), "appointment doesn't have css-class");
 
     this.instance.option("isCompact", true);
-    assert.ok(this.instance.element().hasClass("dx-scheduler-appointment-compact"), "appointment has right class");
+    assert.ok(this.instance.$element().hasClass("dx-scheduler-appointment-compact"), "appointment has right class");
 });
 
 QUnit.test("Scheduler appointment has right direction css-class", function(assert) {
-    assert.notOk(this.instance.element().hasClass("dx-scheduler-appointment-horizontal"), "appointment doesn't have css-class");
-    assert.ok(this.instance.element().hasClass("dx-scheduler-appointment-vertical"), "appointment has right class");
+    assert.notOk(this.instance.$element().hasClass("dx-scheduler-appointment-horizontal"), "appointment doesn't have css-class");
+    assert.ok(this.instance.$element().hasClass("dx-scheduler-appointment-vertical"), "appointment has right class");
 
     this.instance.option("direction", "horizontal");
-    assert.ok(this.instance.element().hasClass("dx-scheduler-appointment-horizontal"), "appointment has right class");
+    assert.ok(this.instance.$element().hasClass("dx-scheduler-appointment-horizontal"), "appointment has right class");
 });
 
 QUnit.test("Scheduler appointment has right resizable config for vertical direction", function(assert) {
@@ -57,9 +57,9 @@ QUnit.test("Scheduler appointment has right resizable config for vertical direct
         cellHeight: 20
     });
 
-    assert.ok(this.instance.element().dxResizable, "appointment has right class");
+    assert.ok(this.instance.$element().dxResizable, "appointment has right class");
 
-    var resizableInstance = this.instance.element().dxResizable("instance");
+    var resizableInstance = this.instance.$element().dxResizable("instance");
 
     assert.equal(resizableInstance.option("handles"), "top bottom", "Appointment can resize only horizontal");
     assert.equal(resizableInstance.option("step"), this.cellHeight, "Resizable has a right step");
@@ -73,9 +73,9 @@ QUnit.test("Scheduler appointment has right resizable config for horizontal dire
         cellWidth: 25
     });
 
-    assert.ok(this.instance.element().dxResizable, "appointment has right class");
+    assert.ok(this.instance.$element().dxResizable, "appointment has right class");
 
-    var resizableInstance = this.instance.element().dxResizable("instance");
+    var resizableInstance = this.instance.$element().dxResizable("instance");
 
     assert.equal(resizableInstance.option("handles"), "left right", "Appointment can resize only horizontal");
     assert.equal(resizableInstance.option("step"), this.cellWidth, "Resizable has a right step");
@@ -91,7 +91,7 @@ QUnit.test("Scheduler appointment has right resizing handles, horizontal directi
         reduced: "head"
     });
 
-    var resizableInstance = this.instance.element().dxResizable("instance");
+    var resizableInstance = this.instance.$element().dxResizable("instance");
 
     assert.equal(resizableInstance.option("handles"), "left", "Appointment has right resizing handle");
 
@@ -111,7 +111,7 @@ QUnit.test("Scheduler appointment has right resizing handles, horizontal directi
         reduced: "head"
     });
 
-    var resizableInstance = this.instance.element().dxResizable("instance");
+    var resizableInstance = this.instance.$element().dxResizable("instance");
 
     assert.equal(resizableInstance.option("handles"), "right", "Appointment has right resizing handle");
 

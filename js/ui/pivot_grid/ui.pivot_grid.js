@@ -3,6 +3,7 @@
 var $ = require("../../core/renderer"),
     eventsEngine = require("../../events/core/events_engine"),
     registerComponent = require("../../core/component_registrator"),
+    getPublicElement = require("../../core/utils/dom").getPublicElement,
     stringUtils = require("../../core/utils/string"),
     commonUtils = require("../../core/utils/common"),
     each = require("../../core/utils/iterator").each,
@@ -228,12 +229,12 @@ var PivotGrid = Widget.inherit({
                  */
                 enabled: true,
                 /**
-                 * @name dxPivotGridOptions_fieldChooser_searchEnabled
-                 * @publicName searchEnabled
+                 * @name dxPivotGridOptions_fieldChooser_allowSearch
+                 * @publicName allowSearch
                  * @type boolean
                  * @default false
                  */
-                searchEnabled: false,
+                allowSearch: false,
                 /**
                  * @name dxPivotGridOptions_fieldChooser_layout
                  * @publicName layout
@@ -303,17 +304,17 @@ var PivotGrid = Widget.inherit({
             * @name dxPivotGridOptions_onContextMenuPreparing
             * @publicName onContextMenuPreparing
             * @type function(e)
-            * @type_function_param1 e:object
-            * @type_function_param1_field4 items:array
+            * @type_function_param1 e:Object
+            * @type_function_param1_field4 items:Array<Object>
             * @type_function_param1_field5 area:string
-            * @type_function_param1_field6 cell:PivotGridCell
-            * @type_function_param1_field7 cellElement:jQuery
+            * @type_function_param1_field6 cell:dxPivotGridPivotGridCell
+            * @type_function_param1_field7 cellElement:Element
             * @type_function_param1_field8 columnIndex:number
             * @type_function_param1_field9 rowIndex:number
-            * @type_function_param1_field10 dataFields:array
-            * @type_function_param1_field11 rowFields:array
-            * @type_function_param1_field12 columnFields:array
-            * @type_function_param1_field13 field:object
+            * @type_function_param1_field10 dataFields:Array<PivotGridDataSourceOptions_fields>
+            * @type_function_param1_field11 rowFields:Array<PivotGridDataSourceOptions_fields>
+            * @type_function_param1_field12 columnFields:Array<PivotGridDataSourceOptions_fields>
+            * @type_function_param1_field13 field:PivotGridDataSourceOptions_fields
             * @extends Action
             * @action
             */
@@ -676,15 +677,15 @@ var PivotGrid = Widget.inherit({
             * @name dxPivotGridOptions_onCellClick
             * @publicName onCellClick
             * @type function(e)
-            * @type_function_param1 e:object
+            * @type_function_param1 e:Object
             * @type_function_param1_field4 area:string
-            * @type_function_param1_field5 cellElement:jQuery
-            * @type_function_param1_field6 cell:PivotGridCell
+            * @type_function_param1_field5 cellElement:Element
+            * @type_function_param1_field6 cell:dxPivotGridPivotGridCell
             * @type_function_param1_field7 rowIndex:number
             * @type_function_param1_field8 columnIndex:number
-            * @type_function_param1_field9 columnFields:Array
-            * @type_function_param1_field10 rowFields:Array
-            * @type_function_param1_field11 dataFields:Array
+            * @type_function_param1_field9 columnFields:Array<PivotGridDataSourceOptions_fields>
+            * @type_function_param1_field10 rowFields:Array<PivotGridDataSourceOptions_fields>
+            * @type_function_param1_field11 dataFields:Array<PivotGridDataSourceOptions_fields>
             * @type_function_param1_field12 jQueryEvent:jQueryEvent
             * @type_function_param1_field13 cancel:boolean
             * @extends Action
@@ -697,8 +698,8 @@ var PivotGrid = Widget.inherit({
             * @type function(e)
             * @type_function_param1 e:object
             * @type_function_param1_field4 area:string
-            * @type_function_param1_field5 cellElement:jQuery
-            * @type_function_param1_field6 cell:PivotGridCell
+            * @type_function_param1_field5 cellElement:Element
+            * @type_function_param1_field6 cell:dxPivotGridPivotGridCell
             * @type_function_param1_field7 rowIndex:number
             * @type_function_param1_field8 columnIndex:number
             * @extends Action
@@ -796,12 +797,68 @@ var PivotGrid = Widget.inherit({
             * @type_function_param1 e:object
             * @type_function_param1_field3 fileName:string
             * @type_function_param1_field4 format:string
-            * @type_function_param1_field5 data:blob
+            * @type_function_param1_field5 data:BLOB
             * @type_function_param1_field6 cancel:boolean
             * @extends Action
             * @action
             */
-            onFileSaving: null
+            onFileSaving: null,
+            /**
+             * @name dxPivotGridOptions_headerFilter
+             * @publicName headerFilter
+             * @type object
+             */
+            headerFilter: {
+                /**
+                 * @name dxPivotGridOptions_headerFilter_width
+                 * @publicName width
+                 * @type number
+                 * @default 252
+                 */
+                width: 252,
+                /**
+                 * @name dxPivotGridOptions_headerFilter_height
+                 * @publicName height
+                 * @type number
+                 * @default 325
+                 */
+                height: 325,
+                /**
+                 * @name dxPivotGridOptions_headerFilter_allowSearch
+                 * @publicName allowSearch
+                 * @type boolean
+                 * @default false
+                 */
+                allowSearch: false,
+                /**
+                 * @name dxPivotGridOptions_headerFilter_texts
+                 * @publicName texts
+                 * @type object
+                 */
+                texts: {
+                    /**
+                     * @name dxPivotGridOptions_headerFilter_texts_emptyValue
+                     * @publicName emptyValue
+                     * @type string
+                     * @default "(Blanks)"
+                     */
+                    emptyValue: messageLocalization.format("dxDataGrid-headerFilterEmptyValue"),
+                    /**
+                     * @name dxPivotGridOptions_headerFilter_texts_ok
+                     * @publicName ok
+                     * @type string
+                     * @default "Ok"
+                     */
+                    ok: messageLocalization.format("dxDataGrid-headerFilterOK"),
+                    /**
+                     * @name dxPivotGridOptions_headerFilter_texts_cancel
+                     * @publicName cancel
+                     * @type string
+                     * @default "Cancel"
+                     */
+                    cancel: messageLocalization.format("dxDataGrid-headerFilterCancel")
+                }
+            }
         });
     },
 
@@ -949,7 +1006,7 @@ var PivotGrid = Widget.inherit({
                 that.callBase(args);
                 that._renderFieldChooser();
                 that._renderContextMenu();
-                that._renderLoadPanel(that._dataArea.groupElement(), that.element());
+                that._renderLoadPanel(that._dataArea.groupElement(), that.$element());
                 that._invalidate();
                 break;
             case "export":
@@ -970,11 +1027,15 @@ var PivotGrid = Widget.inherit({
                 that._renderDescriptionArea();
                 break;
             case "loadPanel":
-                that._renderLoadPanel(that._dataArea.groupElement(), that.element());
+                that._renderLoadPanel(that._dataArea.groupElement(), that.$element());
                 that._invalidate();
                 break;
             case "fieldPanel":
                 that._renderDescriptionArea();
+                that._invalidate();
+                break;
+            case "headerFilter":
+                that._renderFieldChooser();
                 that._invalidate();
                 break;
             case "showBorders":
@@ -1065,9 +1126,10 @@ var PivotGrid = Widget.inherit({
                 layout: fieldChooserOptions.layout,
                 texts: fieldChooserOptions.texts || {},
                 dataSource: that.getDataSource(),
-                searchEnabled: fieldChooserOptions.searchEnabled,
+                allowSearch: fieldChooserOptions.allowSearch,
                 width: undefined,
-                height: undefined
+                height: undefined,
+                headerFilter: that.option("headerFilter")
             },
             popupOptions = {
                 shading: false,
@@ -1079,7 +1141,7 @@ var PivotGrid = Widget.inherit({
                 minWidth: fieldChooserOptions.minWidth,
                 minHeight: fieldChooserOptions.minHeight,
                 onResize: function(e) {
-                    e.component.content().dxPivotGridFieldChooser("updateDimensions");
+                    e.component.$content().dxPivotGridFieldChooser("updateDimensions");
                 },
                 onShown: function(e) {
                     that._createComponent(e.component.content(), PivotGridFieldChooser, fieldChooserComponentOptions);
@@ -1088,7 +1150,7 @@ var PivotGrid = Widget.inherit({
 
         if(that._fieldChooserPopup) {
             that._fieldChooserPopup.option(popupOptions);
-            that._fieldChooserPopup.content().dxPivotGridFieldChooser(fieldChooserComponentOptions);
+            that._fieldChooserPopup.$content().dxPivotGridFieldChooser(fieldChooserComponentOptions);
         } else {
             that._fieldChooserPopup = that._createComponent($(DIV).addClass(FIELD_CHOOSER_POPUP_CLASS).appendTo(container), Popup, popupOptions);
         }
@@ -1099,7 +1161,7 @@ var PivotGrid = Widget.inherit({
             $container = that._pivotGridContainer;
 
         if(that._contextMenu) {
-            that._contextMenu.element().remove();
+            that._contextMenu.$element().remove();
         }
 
         that._contextMenu = that._createComponent($(DIV).appendTo($container), ContextMenu, {
@@ -1132,7 +1194,7 @@ var PivotGrid = Widget.inherit({
                 params.itemData.onItemClick && params.itemData.onItemClick(params);
             },
             cssClass: PIVOTGRID_CLASS,
-            target: that.element()
+            target: that.$element()
         });
     },
 
@@ -1290,7 +1352,7 @@ var PivotGrid = Widget.inherit({
                 area: $table.data("area"),
                 rowIndex: rowIndex,
                 columnIndex: columnIndex,
-                cellElement: $cellElement,
+                cellElement: getPublicElement($cellElement),
                 cell: cell
             };
         return args;
@@ -1345,17 +1407,17 @@ var PivotGrid = Widget.inherit({
         if(loadPanelVisible && !isLoading) {
             that._hideLoadingTimeoutID = setTimeout(function() {
                 that._loadPanel.option("visible", false);
-                that.element().removeClass(OVERFLOW_HIDDEN_CLASS);
+                that.$element().removeClass(OVERFLOW_HIDDEN_CLASS);
             });
         } else {
             that._loadPanel.option("visible", isLoading);
-            that.element().toggleClass(OVERFLOW_HIDDEN_CLASS, !isLoading);
+            that.$element().toggleClass(OVERFLOW_HIDDEN_CLASS, !isLoading);
         }
     },
 
     _renderDescriptionArea: function() {
         var that = this,
-            $element = that.element(),
+            $element = that.$element(),
             $descriptionCell = $element.find("." + DESCRIPTION_AREA_CELL_CLASS),
             $toolbarContainer = $(DIV).addClass("dx-pivotgrid-toolbar"),
             fieldPanel = that.option("fieldPanel"),
@@ -1377,7 +1439,7 @@ var PivotGrid = Widget.inherit({
 
         $descriptionCell.toggleClass("dx-pivotgrid-background", fieldPanel.visible && (fieldPanel.showDataFields || fieldPanel.showColumnFields || fieldPanel.showRowFields));
 
-        that.element().find(".dx-pivotgrid-toolbar").remove();
+        that.$element().find(".dx-pivotgrid-toolbar").remove();
 
         $toolbarContainer.prependTo($targetContainer);
 
@@ -1410,7 +1472,7 @@ var PivotGrid = Widget.inherit({
 
     _detectHasContainerHeight: function() {
         var that = this,
-            element = that.element(),
+            element = that.$element(),
             testElement;
 
         if(isDefined(that._hasHeight) || element.is(":hidden")) {
@@ -1442,7 +1504,7 @@ var PivotGrid = Widget.inherit({
         that._dataFields = that._dataFields || new FieldsArea(that, "data");
         that._dataFields.render(dataHeaderContainer, dataSource.getAreaFields("data"));
 
-        that.element().dxPivotGridFieldChooserBase("instance").renderSortable();
+        that.$element().dxPivotGridFieldChooserBase("instance").renderSortable();
     },
 
     _createTableElement: function() {
@@ -1503,7 +1565,7 @@ var PivotGrid = Widget.inherit({
         tableElement = !isFirstDrawing && that._tableElement();
 
         if(!tableElement) {
-            that.element().addClass(PIVOTGRID_CLASS)
+            that.$element().addClass(PIVOTGRID_CLASS)
                 .addClass(ROW_LINES_CLASS)
                 .addClass(FIELDS_CONTAINER_CLASS);
 
@@ -1545,18 +1607,19 @@ var PivotGrid = Widget.inherit({
                 .appendTo(tableElement);
 
             that._pivotGridContainer.append(tableElement);
-            that.element().append(that._pivotGridContainer);
+            that.$element().append(that._pivotGridContainer);
 
             if(that.option("rowHeaderLayout") === "tree") {
                 rowsAreaElement.addClass("dx-area-tree-view");
             }
         }
 
-        that.element().addClass(OVERFLOW_HIDDEN_CLASS);
+        that.$element().addClass(OVERFLOW_HIDDEN_CLASS);
 
-        that._createComponent(that.element(), PivotGridFieldChooserBase, {
+        that._createComponent(that.$element(), PivotGridFieldChooserBase, {
             dataSource: that.getDataSource(),
-            allowFieldDragging: that.option("fieldPanel.allowFieldDragging")
+            allowFieldDragging: that.option("fieldPanel.allowFieldDragging"),
+            headerFilter: that.option("headerFilter")
         });
 
         dataArea = that._renderDataArea(dataAreaElement);
@@ -1566,7 +1629,7 @@ var PivotGrid = Widget.inherit({
         dataArea.tableElement().prepend(columnsArea.headElement());
 
         if(isFirstDrawing) {
-            that._renderLoadPanel(dataArea.groupElement().parent(), that.element());
+            that._renderLoadPanel(dataArea.groupElement().parent(), that.$element());
             that._renderDescriptionArea();
 
             rowsArea.processScroll();
@@ -1647,7 +1710,7 @@ var PivotGrid = Widget.inherit({
     },
 
     _tableElement: function() {
-        return this.element().find('table').first();
+        return this.$element().find('table').first();
     },
 
     addWidgetPrefix: function(className) {
@@ -1745,7 +1808,7 @@ var PivotGrid = Widget.inherit({
 
             if(that._hasHeight) {
                 bordersWidth = getCommonBorderWidth([columnAreaCell, dataAreaCell, tableElement, tableElement.find(".dx-column-header"), filterHeaderCell], "height");
-                groupHeight = that.element().height() - filterHeaderCell.height() - tableElement.find(".dx-data-header").height() - (Math.max(dataArea.headElement().height(), columnAreaCell.height(), descriptionCellHeight) + bordersWidth);
+                groupHeight = that.$element().height() - filterHeaderCell.height() - tableElement.find(".dx-data-header").height() - (Math.max(dataArea.headElement().height(), columnAreaCell.height(), descriptionCellHeight) + bordersWidth);
             }
 
             totalWidth = dataArea.tableElement().width();
@@ -1754,7 +1817,7 @@ var PivotGrid = Widget.inherit({
 
             rowsAreaWidth = getArraySum(rowsAreaColumnWidths);
 
-            elementWidth = that.element().width();
+            elementWidth = that.$element().width();
 
             bordersWidth = getCommonBorderWidth([rowAreaCell, dataAreaCell, tableElement], "width");
             groupWidth = elementWidth - rowsAreaWidth - bordersWidth;
@@ -1806,8 +1869,8 @@ var PivotGrid = Widget.inherit({
                 rowAreaCell.toggleClass(BOTTOM_BORDER_CLASS, !hasRowsScroll);
 
                 //T317921
-                if(!that._hasHeight && (elementWidth !== that.element().width())) {
-                    var diff = elementWidth - that.element().width();
+                if(!that._hasHeight && (elementWidth !== that.$element().width())) {
+                    var diff = elementWidth - that.$element().width();
                     if(!hasColumnsScroll) {
                         adjustSizeArray(resultWidths, diff);
                         columnsArea.setColumnsWidth(resultWidths);

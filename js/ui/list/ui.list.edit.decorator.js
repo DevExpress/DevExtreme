@@ -29,7 +29,7 @@ var EditDecorator = Class.inherit({
         var swipeConfig = {
             itemSizeFunc: (function() {
                 if(this._clearSwipeCache) {
-                    this._itemWidthCache = this._list.element().width();
+                    this._itemWidthCache = this._list.$element().width();
                     this._clearSwipeCache = false;
                 }
                 return this._itemWidthCache;

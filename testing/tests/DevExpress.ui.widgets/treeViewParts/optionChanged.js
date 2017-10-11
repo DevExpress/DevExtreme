@@ -47,10 +47,10 @@ QUnit.test("showCheckBoxes", function(assert) {
     }).dxTreeView("instance");
 
     treeView.option("showCheckBoxesMode", "normal");
-    assert.equal(treeView.element().find(".dx-checkbox").length, 6);
+    assert.equal(treeView.$element().find(".dx-checkbox").length, 6);
 
     treeView.option("showCheckBoxesMode", "none");
-    assert.equal(treeView.element().find(".dx-checkbox").length, 0);
+    assert.equal(treeView.$element().find(".dx-checkbox").length, 0);
 });
 
 QUnit.test("searchValue from empty to value", function(assert) {
@@ -60,12 +60,12 @@ QUnit.test("searchValue from empty to value", function(assert) {
     var treeView = initTree({
             items: data,
         }).dxTreeView("instance"),
-        $items = $(treeView.element()).find(".dx-treeview-item");
+        $items = $(treeView.$element()).find(".dx-treeview-item");
 
     assert.equal($items.length, 6, "6 items were rendered");
 
     treeView.option("searchValue", "2");
-    $items = $(treeView.element()).find(".dx-treeview-item");
+    $items = $(treeView.$element()).find(".dx-treeview-item");
 
     assert.equal($items.length, 4, "4 items were rendered after filtration");
 });
@@ -78,12 +78,12 @@ QUnit.test("searchValue from value to empty", function(assert) {
             items: data,
             searchValue: "2"
         }).dxTreeView("instance"),
-        $items = $(treeView.element()).find(".dx-treeview-item");
+        $items = $(treeView.$element()).find(".dx-treeview-item");
 
     assert.equal($items.length, 4, "4 items were rendered");
 
     treeView.option("searchValue", "");
-    $items = $(treeView.element()).find(".dx-treeview-item");
+    $items = $(treeView.$element()).find(".dx-treeview-item");
 
     assert.equal($items.length, 6, "6 items were rendered after filtration");
 });
@@ -97,8 +97,8 @@ QUnit.test("searchValue from value to empty - update selection", function(assert
             showCheckBoxesMode: "normal",
             searchValue: "2"
         }).dxTreeView("instance"),
-        $items = $(treeView.element()).find(".dx-treeview-item"),
-        $checkboxes = $(treeView.element()).find(".dx-checkbox");
+        $items = $(treeView.$element()).find(".dx-treeview-item"),
+        $checkboxes = $(treeView.$element()).find(".dx-checkbox");
 
     assert.equal($items.length, 4, "4 items were rendered");
     $checkboxes.eq(2).trigger("dxclick");
@@ -109,7 +109,7 @@ QUnit.test("searchValue from value to empty - update selection", function(assert
 
     treeView.option("searchValue", "");
 
-    $checkboxes = $(treeView.element()).find(".dx-checkbox");
+    $checkboxes = $(treeView.$element()).find(".dx-checkbox");
     assert.equal($checkboxes.eq(0).dxCheckBox("instance").option("value"), undefined);
     assert.equal($checkboxes.eq(1).dxCheckBox("instance").option("value"), false);
     assert.equal($checkboxes.eq(2).dxCheckBox("instance").option("value"), undefined);
@@ -117,7 +117,7 @@ QUnit.test("searchValue from value to empty - update selection", function(assert
     assert.equal($checkboxes.eq(4).dxCheckBox("instance").option("value"), true);
     assert.equal($checkboxes.eq(5).dxCheckBox("instance").option("value"), false);
 
-    $items = $(treeView.element()).find(".dx-treeview-item");
+    $items = $(treeView.$element()).find(".dx-treeview-item");
 
     assert.equal($items.length, 6, "6 items were rendered after filtration");
 });
@@ -130,8 +130,8 @@ QUnit.test("searchValue - cut value - update selection", function(assert) {
             showCheckBoxesMode: "normal",
             searchValue: "item 1"
         }).dxTreeView("instance"),
-        $items = $(treeView.element()).find(".dx-treeview-item"),
-        $checkboxes = $(treeView.element()).find(".dx-checkbox");
+        $items = $(treeView.$element()).find(".dx-treeview-item"),
+        $checkboxes = $(treeView.$element()).find(".dx-checkbox");
 
     assert.equal($items.length, 6, "6 items were rendered");
     $checkboxes.eq(2).trigger("dxclick");
@@ -142,7 +142,7 @@ QUnit.test("searchValue - cut value - update selection", function(assert) {
 
     treeView.option("searchValue", "item");
 
-    $checkboxes = $(treeView.element()).find(".dx-checkbox");
+    $checkboxes = $(treeView.$element()).find(".dx-checkbox");
     assert.equal($checkboxes.eq(0).dxCheckBox("instance").option("value"), undefined);
     assert.equal($checkboxes.eq(1).dxCheckBox("instance").option("value"), undefined);
     assert.equal($checkboxes.eq(2).dxCheckBox("instance").option("value"), true);
@@ -152,7 +152,7 @@ QUnit.test("searchValue - cut value - update selection", function(assert) {
     assert.equal($checkboxes.eq(6).dxCheckBox("instance").option("value"), false);
     assert.equal($checkboxes.eq(7).dxCheckBox("instance").option("value"), false);
 
-    $items = $(treeView.element()).find(".dx-treeview-item");
+    $items = $(treeView.$element()).find(".dx-treeview-item");
 
     assert.equal($items.length, 8, "8 items were rendered after filtration");
 });
@@ -175,34 +175,34 @@ QUnit.test("searchValue with the same text in items", function(assert) {
         $checkboxes;
 
     treeView.option("searchValue", "25");
-    $checkboxes = $(treeView.element()).find(".dx-checkbox");
+    $checkboxes = $(treeView.$element()).find(".dx-checkbox");
     $checkboxes.eq(1).trigger("dxclick");
 
     assert.equal($checkboxes.eq(0).dxCheckBox("instance").option("value"), true);
     assert.equal($checkboxes.eq(1).dxCheckBox("instance").option("value"), true);
 
     treeView.option("searchValue", "");
-    $checkboxes = $(treeView.element()).find(".dx-checkbox");
+    $checkboxes = $(treeView.$element()).find(".dx-checkbox");
     assert.equal($checkboxes.eq(0).dxCheckBox("instance").option("value"), false);
     assert.equal($checkboxes.eq(1).dxCheckBox("instance").option("value"), undefined);
     assert.equal($checkboxes.eq(2).dxCheckBox("instance").option("value"), true);
     assert.equal($checkboxes.eq(3).dxCheckBox("instance").option("value"), false);
 
     treeView.option("searchValue", "5");
-    $checkboxes = $(treeView.element()).find(".dx-checkbox");
+    $checkboxes = $(treeView.$element()).find(".dx-checkbox");
     assert.equal($checkboxes.eq(0).dxCheckBox("instance").option("value"), false);
     assert.equal($checkboxes.eq(1).dxCheckBox("instance").option("value"), false);
     assert.equal($checkboxes.eq(2).dxCheckBox("instance").option("value"), true);
     assert.equal($checkboxes.eq(3).dxCheckBox("instance").option("value"), true);
 
     treeView.option("searchValue", "55");
-    $checkboxes = $(treeView.element()).find(".dx-checkbox");
+    $checkboxes = $(treeView.$element()).find(".dx-checkbox");
     $checkboxes.eq(1).trigger("dxclick");
     assert.equal($checkboxes.eq(0).dxCheckBox("instance").option("value"), true);
     assert.equal($checkboxes.eq(1).dxCheckBox("instance").option("value"), true);
 
     treeView.option("searchValue", "");
-    $checkboxes = $(treeView.element()).find(".dx-checkbox");
+    $checkboxes = $(treeView.$element()).find(".dx-checkbox");
     assert.equal($checkboxes.eq(0).dxCheckBox("instance").option("value"), undefined);
     assert.equal($checkboxes.eq(1).dxCheckBox("instance").option("value"), false);
     assert.equal($checkboxes.eq(2).dxCheckBox("instance").option("value"), true);

@@ -195,6 +195,7 @@
         "dxScheduler-confirmRecurrenceEditOccurrence": "Только это событие",
         "dxScheduler-confirmRecurrenceDeleteOccurrence": "Только это событие",
         "dxScheduler-noTimezoneTitle": "Часовой пояс не выбран",
+        "dxScheduler-moreAppointments": "и еще {0}",
         "dxCalendar-todayButtonText": "Сегодня",
         "dxCalendar-ariaWidgetName": "Календарь",
         "dxColorView-ariaRed": "Красный",

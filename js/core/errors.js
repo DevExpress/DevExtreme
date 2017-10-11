@@ -268,5 +268,11 @@ module.exports = errorUtils({
     * @name Errors and Warnings_W0013
     * @publicName W0013
     */
-    W0013: "'{0}' file is deprecated in {1}. {2}"
+    W0013: "'{0}' file is deprecated in {1}. {2}",
+
+    /**
+    * @name Errors and Warnings_W0014
+    * @publicName W0014
+    */
+    W0014: "{0} - '{1}' type is deprecated in {2}. {3}"
 });

@@ -39,7 +39,7 @@ module.exports = {
                  * @name dxDataGridOptions_masterDetail_template
                  * @publicName template
                  * @type template
-                 * @type_function_param1 detailElement:jQuery
+                 * @type_function_param1 detailElement:Element
                  * @type_function_param2 detailInfo:object
                  * @type_function_param2_field1 key:any
                  * @type_function_param2_field2 data:object
@@ -230,7 +230,7 @@ module.exports = {
                             template;
 
                         if(column.command === "detail" && !isEditRow) {
-                            template = that.option("masterDetail.template") || that._getDefaultTemplate(column);
+                            template = that.option("masterDetail.template") || { allowRenderToDetachedContainer: false, render: that._getDefaultTemplate(column) };
                         } else {
                             template = that.callBase.apply(that, arguments);
                         }
@@ -250,7 +250,7 @@ module.exports = {
 
                                 if(dataGrid) {
                                     dataGrid.on("contentReady", function() {
-                                        var $rows = component.getRowElement(options.rowIndex);
+                                        var $rows = $(component.getRowElement(options.rowIndex));
                                         if($rows && $rows.length === 2 && $rows.eq(0).height() !== $rows.eq(1).height()) {
                                             component.updateDimensions();
                                         }

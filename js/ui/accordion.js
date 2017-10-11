@@ -6,6 +6,7 @@ var $ = require("../core/renderer"),
     clickEvent = require("../events/click"),
     devices = require("../core/devices"),
     extend = require("../core/utils/extend").extend,
+    getPublicElement = require("../core/utils/dom").getPublicElement,
     iteratorUtils = require("../core/utils/iterator"),
     isPlainObject = require("../core/utils/type").isPlainObject,
     registerComponent = require("../core/component_registrator"),
@@ -67,7 +68,7 @@ var Accordion = CollectionWidget.inherit({
             * @default "title"
             * @type_function_param1 itemData:object
             * @type_function_param2 itemIndex:number
-            * @type_function_param3 itemElement:jQuery
+            * @type_function_param3 itemElement:Element
             * @type_function_return string|Node|jQuery
             */
             itemTitleTemplate: "title",
@@ -78,7 +79,7 @@ var Accordion = CollectionWidget.inherit({
             * @type function|string
             * @extends Action
             * @type_function_param1_field4 itemData:object
-            * @type_function_param1_field5 itemElement:jQuery
+            * @type_function_param1_field5 itemElement:Element
             * @type_function_param1_field6 itemIndex:number
             * @action
             */
@@ -131,7 +132,7 @@ var Accordion = CollectionWidget.inherit({
             * @default "item"
             * @type_function_param1 itemData:object
             * @type_function_param2 itemIndex:number
-            * @type_function_param3 itemElement:object
+            * @type_function_param3 itemElement:Element
             * @type_function_return string|Node|jQuery
             */
 
@@ -153,7 +154,7 @@ var Accordion = CollectionWidget.inherit({
             * @name dxAccordionItemTemplate_iconSrc
             * @publicName iconSrc
             * @type String
-            * @deprecated
+            * @deprecated dxAccordionItemTemplate_icon
             */
         });
     },
@@ -188,7 +189,7 @@ var Accordion = CollectionWidget.inherit({
         this.option("selectionRequired", !this.option("collapsible"));
         this.option("selectionMode", this.option("multiple") ? "multiple" : "single");
 
-        var $element = this.element();
+        var $element = this.$element();
         $element.addClass(ACCORDION_CLASS);
 
         this._$container = $("<div>").addClass(ACCORDION_WRAPPER_CLASS);
@@ -269,7 +270,7 @@ var Accordion = CollectionWidget.inherit({
     },
 
     _renderItemContent: function(args) {
-        var $itemTitle = this.callBase(extend({}, args, {
+        var itemTitle = this.callBase(extend({}, args, {
             contentClass: ACCORDION_ITEM_TITLE_CLASS,
             templateProperty: "titleTemplate",
             defaultTemplateName: this.option("itemTitleTemplate")
@@ -284,7 +285,7 @@ var Accordion = CollectionWidget.inherit({
 
         deferred.done(this.callBase.bind(this, extend({}, args, {
             contentClass: ACCORDION_ITEM_BODY_CLASS,
-            container: $("<div>").appendTo($itemTitle.parent())
+            container: getPublicElement($("<div>").appendTo($(itemTitle).parent()))
         })));
     },
 
@@ -416,7 +417,7 @@ var Accordion = CollectionWidget.inherit({
             itemsHeight += $(title).outerHeight();
         });
 
-        return this.element().height() - itemsHeight;
+        return this.$element().height() - itemsHeight;
     },
 
     _visibilityChanged: function(visible) {

@@ -174,7 +174,7 @@ var Autocomplete = DropDownList.inherit({
 
     _render: function() {
         this.callBase();
-        this.element().addClass(AUTOCOMPLETE_CLASS);
+        this.$element().addClass(AUTOCOMPLETE_CLASS);
         this.setAria("autocomplete", "inline");
     },
 
@@ -194,7 +194,7 @@ var Autocomplete = DropDownList.inherit({
     _popupConfig: function() {
         return extend(this.callBase(), {
             closeOnOutsideClick: (function(e) {
-                return !$(e.target).closest(this.element()).length;
+                return !$(e.target).closest(this.$element()).length;
             }).bind(this)
         });
     },

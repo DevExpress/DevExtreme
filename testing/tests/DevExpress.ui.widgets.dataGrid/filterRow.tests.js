@@ -271,6 +271,42 @@ QUnit.test('Change operation via operation chooser', function(assert) {
     });
 });
 
+//T557200
+QUnit.test('Repaint view on change operation via operation chooser', function(assert) {
+    //arrange
+    var that = this,
+        testElement = $('#container'),
+        filterMenu,
+        filterMenuItems,
+        rootMenuItem;
+
+    $.extend(this.columns, [{ caption: 'Column 1', allowFiltering: true, filterOperations: ['=', '<>'], index: 0 }, { caption: 'Column 2', allowFiltering: true, index: 1 }, { caption: 'Column 3', index: 2 }]);
+
+    this.columnHeadersView.render(testElement);
+
+    filterMenu = $(this.columnHeadersView.element()).find('.dx-menu');
+    rootMenuItem = filterMenu.find(".dx-menu-item");
+    $(rootMenuItem).trigger("dxclick");
+    filterMenuItems = $("#qunit-fixture").find('.dx-overlay-content').first().find('li');
+
+    var oldColumnOption = this.columnsController.columnOption,
+        isViewRepainted = false;
+
+    this.columnsController.columnOption = function(columnIndex, options) {
+        oldColumnOption.apply(this, arguments);
+        if(options && options.selectedFilterOperation) {
+            that.columnHeadersView.render();
+            isViewRepainted = true;
+        }
+    };
+
+    //act
+    filterMenuItems.find('.dx-menu-item').eq(1).trigger('dxclick');
+
+    //assert
+    assert.ok(isViewRepainted, "view is repainted without exceptions");
+});
+
 QUnit.test('Reset operation via operation chooser', function(assert) {
     //arrange
     var testElement = $('#container'),
@@ -700,7 +736,7 @@ QUnit.test("update filter value for array column with dxTagBox", function(assert
     this.columnHeadersView.render(testElement);
 
     //act
-    testElement.find(".dx-tagbox").first().data("dxTagBox").option("value", [1, 2, 3]);
+    testElement.find(".dx-tagbox").first().dxTagBox("instance").option("value", [1, 2, 3]);
 
 
     //assert
@@ -719,7 +755,7 @@ QUnit.test("update filter value for array column with dxTagBox", function(assert
     });
 
     assert.equal(testElement.find(".dx-tagbox").length, 1);
-    assert.deepEqual(testElement.find(".dx-tagbox").data("dxTagBox").option("value"), [1, 2, 3]);
+    assert.deepEqual(testElement.find(".dx-tagbox").dxTagBox("instance").option("value"), [1, 2, 3]);
 });
 
 //B254521
@@ -2007,7 +2043,7 @@ QUnit.test("Reset an invalid value of filter row for the DateBox editor", functi
 
     //assert
     assert.equal($resetMenuItem.text(), "My Reset");
-    var dateBox = $(".dx-datebox").data("dxDateBox");
+    var dateBox = $(".dx-datebox").dxDateBox("instance");
     assert.ok(!dateBox.option("text"), "text option");
     assert.ok(dateBox.option("isValid"), "isValid option");
 });

@@ -227,7 +227,7 @@ var ResponsiveBox = CollectionWidget.inherit({
 
     _render: function() {
         this.callBase();
-        this.element().addClass(RESPONSIVE_BOX_CLASS);
+        this.$element().addClass(RESPONSIVE_BOX_CLASS);
 
         // NOTE: Fallback box strategy
         this._updateRootBox();
@@ -259,14 +259,14 @@ var ResponsiveBox = CollectionWidget.inherit({
 
         this._removeScreenSizeClass();
 
-        this.element().addClass(SCREEN_SIZE_CLASS_PREFIX + currentScreen);
+        this.$element().addClass(SCREEN_SIZE_CLASS_PREFIX + currentScreen);
         this.option("currentScreenFactor", currentScreen);
     },
 
     _removeScreenSizeClass: function() {
         var currentScreenFactor = this.option("currentScreenFactor");
 
-        currentScreenFactor && this.element().removeClass(SCREEN_SIZE_CLASS_PREFIX + currentScreenFactor);
+        currentScreenFactor && this.$element().removeClass(SCREEN_SIZE_CLASS_PREFIX + currentScreenFactor);
     },
 
     _prepareGrid: function() {

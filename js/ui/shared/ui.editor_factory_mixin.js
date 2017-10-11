@@ -1,12 +1,14 @@
 "use strict";
 
-var noop = require("../../core/utils/common").noop,
+var $ = require("../../core/renderer"),
+    noop = require("../../core/utils/common").noop,
     typeUtils = require("../../core/utils/type"),
     isWrapped = require("../../core/utils/variable_wrapper").isWrapped,
     compileGetter = require("../../core/utils/data").compileGetter,
     browser = require("../../core/utils/browser"),
     extend = require("../../core/utils/extend").extend,
     devices = require("../../core/devices"),
+    getPublicElement = require("../../core/utils/dom").getPublicElement,
     normalizeDataSourceOptions = require("../../data/data_source/data_source").normalizeDataSourceOptions;
 
 require("../text_box");
@@ -219,28 +221,29 @@ var EditorFactoryMixin = (function() {
     };
 
     var createEditorCore = function(that, options) {
-        if(options.editorName && options.editorOptions && options.editorElement[options.editorName]) {
+        var $editorElement = $(options.editorElement);
+        if(options.editorName && options.editorOptions && $editorElement[options.editorName]) {
             if(options.editorName === "dxCheckBox") {
                 if(!options.isOnForm) {
-                    options.editorElement.addClass(that.addWidgetPrefix(CHECKBOX_SIZE_CLASS));
-                    options.editorElement.parent().addClass(EDITOR_INLINE_BLOCK);
+                    $editorElement.addClass(that.addWidgetPrefix(CHECKBOX_SIZE_CLASS));
+                    $editorElement.parent().addClass(EDITOR_INLINE_BLOCK);
                 }
                 if(options.command || options.editorOptions.readOnly) {
-                    options.editorElement.parent().addClass(CELL_FOCUS_DISABLED_CLASS);
+                    $editorElement.parent().addClass(CELL_FOCUS_DISABLED_CLASS);
                 }
             }
 
-            that._createComponent(options.editorElement, options.editorName, options.editorOptions);
+            that._createComponent($editorElement, options.editorName, options.editorOptions);
 
             if(options.editorName === "dxTextBox") {
-                options.editorElement.dxTextBox("instance").registerKeyHandler("enter", noop);
+                $editorElement.dxTextBox("instance").registerKeyHandler("enter", noop);
             }
         }
     };
     return {
         createEditor: function($container, options) {
             options.cancel = false;
-            options.editorElement = $container;
+            options.editorElement = getPublicElement($container);
 
             if(!typeUtils.isDefined(options.tabIndex)) {
                 options.tabIndex = this.option("tabIndex");

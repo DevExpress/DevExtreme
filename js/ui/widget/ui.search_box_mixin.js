@@ -29,7 +29,7 @@ module.exports = {
             /**
             * @name SearchBoxMixinOptions_searchExpr
             * @publicName searchExpr
-            * @type getter|Array<string>
+            * @type getter|Array<getter>
             * @default null
             */
             searchExpr: null,
@@ -75,7 +75,7 @@ module.exports = {
 
     _renderSearch: function() {
         var editorOptions,
-            $element = this.element(),
+            $element = this.$element(),
             searchEnabled = this.option("searchEnabled"),
             searchBoxClassName = this._addWidgetPrefix("search"),
             rootElementClassName = this._addWidgetPrefix("with-search");
@@ -112,7 +112,7 @@ module.exports = {
             placeholder: messageLocalization.format("Search"),
             tabIndex: that.option("tabIndex"),
             value: that.option("searchValue"),
-            valueChangeEvent: "keyup",
+            valueChangeEvent: "input",
             onValueChanged: function(e) {
                 that.option("searchValue", e.value);
             }
@@ -120,7 +120,7 @@ module.exports = {
     },
 
     _getAriaTarget: function() {
-        return this.element();
+        return this.$element();
     },
 
     _focusTarget: function() {
@@ -133,7 +133,7 @@ module.exports = {
 
     _updateFocusState: function(e, isFocused) {
         if(this.option("searchEnabled")) {
-            this._toggleFocusClass(isFocused, this.element());
+            this._toggleFocusClass(isFocused, this.$element());
         }
         this.callBase(e, isFocused);
     },

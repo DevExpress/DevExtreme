@@ -275,7 +275,7 @@ QUnit.test("active roller class", function(assert) {
         pointer.start().down().move(0, -20).up();
 
         assert.equal(datePickerElement.find("." + DATEVIEW_ROLLER_CURRENT_CLASS).length, 1, "active roller [" + type + "] only one");
-        assert.ok(this.element().hasClass(DATEVIEW_ROLLER_CURRENT_CLASS), "this roller [" + type + "] is active");
+        assert.ok(this.$element().hasClass(DATEVIEW_ROLLER_CURRENT_CLASS), "this roller [" + type + "] is active");
         clock.tick(400);
     });
 });

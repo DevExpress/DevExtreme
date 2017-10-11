@@ -125,7 +125,7 @@
         var items = [];
 
         iteratorUtils.each(validators, function(_, validator) {
-            var widget = validator.element().data("dx-validation-target");
+            var widget = validator.$element().data("dx-validation-target");
             if(widget && $.inArray(widget.option("name"), editorNames) > -1) {
                 items.push({
                     text: widget.option("validationError.message"),

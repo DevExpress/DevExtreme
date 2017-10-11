@@ -3,6 +3,7 @@
 var $ = require("../../core/renderer"),
     eventsEngine = require("../../events/core/events_engine"),
     dataUtils = require("../../core/element_data"),
+    domUtils = require("../../core/utils/dom"),
     Widget = require("../widget/ui.widget"),
     dateUtils = require("../../core/utils/date"),
     extend = require("../../core/utils/extend").extend,
@@ -64,7 +65,7 @@ var BaseView = Widget.inherit({
 
     _renderImpl: function() {
         this._$table = $("<table>");
-        this.element().append(this._$table);
+        this.$element().append(this._$table);
 
         this._createDisabledDatesHandler();
         this._renderBody();
@@ -129,7 +130,7 @@ var BaseView = Widget.inherit({
                         date: cellDate,
                         view: that._getViewName()
                     },
-                    container: $cell,
+                    container: domUtils.getPublicElement($cell),
                     index: cellIndex
                 });
             } else {

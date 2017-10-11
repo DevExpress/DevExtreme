@@ -109,7 +109,7 @@ var TreeViewBase = HierarchicalCollectionWidget.inherit({
     },
 
     _getNodeElement: function(node) {
-        return this.element().find("[" + DATA_ITEM_ID + "='" + commonUtils.normalizeKey(node.internalFields.key) + "']");
+        return this.$element().find("[" + DATA_ITEM_ID + "='" + commonUtils.normalizeKey(node.internalFields.key) + "']");
     },
 
     _activeStateUnit: "." + ITEM_CLASS,
@@ -236,7 +236,7 @@ var TreeViewBase = HierarchicalCollectionWidget.inherit({
             * @publicName onItemExpanded
             * @extends Action
             * @type_function_param1_field4 itemData:object
-            * @type_function_param1_field5 itemElement:jQuery
+            * @type_function_param1_field5 itemElement:Element
             * @type_function_param1_field6 itemIndex:Number
             * @type_function_param1_field7 jQueryEvent:jQueryEvent
             * @type_function_param1_field8 node:dxtreeviewnode
@@ -249,7 +249,7 @@ var TreeViewBase = HierarchicalCollectionWidget.inherit({
             * @publicName onItemCollapsed
             * @extends Action
             * @type_function_param1_field4 itemData:object
-            * @type_function_param1_field5 itemElement:jQuery
+            * @type_function_param1_field5 itemElement:Element
             * @type_function_param1_field6 itemIndex:Number
             * @type_function_param1_field7 jQueryEvent:jQueryEvent
             * @type_function_param1_field8 node:dxtreeviewnode
@@ -281,14 +281,6 @@ var TreeViewBase = HierarchicalCollectionWidget.inherit({
             * @default 0
             */
             rootValue: 0,
-
-            /*
-            component: inheritor
-            element: jQuery.fn.init[1]
-            itemData: Object
-            itemElement: jQuery.fn.init[1]
-            jQueryEvent: jQuery.Event
-            */
 
             focusStateEnabled: false,
 
@@ -395,7 +387,7 @@ var TreeViewBase = HierarchicalCollectionWidget.inherit({
             * @name dxTreeViewItemTemplate_iconSrc
             * @publicName iconSrc
             * @type String
-            * @deprecated
+            * @deprecated dxTreeViewItemTemplate_icon
             */
             /**
             * @name dxTreeViewItemTemplate_items
@@ -426,7 +418,7 @@ var TreeViewBase = HierarchicalCollectionWidget.inherit({
             * @publicName showCheckBoxes
             * @type boolean
             * @default false
-            * @deprecated
+            * @deprecated dxTreeViewOptions_showCheckBoxesMode
             */
             "showCheckBoxes": { since: "15.2", message: "use 'showCheckBoxesMode' option instead" },
 
@@ -435,7 +427,7 @@ var TreeViewBase = HierarchicalCollectionWidget.inherit({
              * @publicName selectAllEnabled
              * @type boolean
              * @default false
-             * @deprecated
+            * @deprecated dxTreeViewOptions_showCheckBoxesMode
              */
             "selectAllEnabled": { since: "15.2", message: "use 'showCheckBoxesMode' option instead" },
 
@@ -728,7 +720,7 @@ var TreeViewBase = HierarchicalCollectionWidget.inherit({
         }
 
         if(this._scrollableContainer) {
-            return this._scrollableContainer.content().children();
+            return this._scrollableContainer.$content().children();
         }
 
         return $();
@@ -744,7 +736,7 @@ var TreeViewBase = HierarchicalCollectionWidget.inherit({
 
         if(this._isRootLevel(parentId)) {
             if(!this._scrollableContainer) this._renderScrollableContainer();
-            this._scrollableContainer.content().append($container);
+            this._scrollableContainer.$content().append($container);
         }
 
         return $container;
@@ -777,7 +769,7 @@ var TreeViewBase = HierarchicalCollectionWidget.inherit({
         var $nodeContainer = this._renderNodeContainer();
 
         this._renderScrollableContainer();
-        this._scrollableContainer.content().append($nodeContainer);
+        this._scrollableContainer.$content().append($nodeContainer);
 
         if(!this.option("items") || !this.option("items").length) {
             return;
@@ -808,7 +800,7 @@ var TreeViewBase = HierarchicalCollectionWidget.inherit({
     },
 
     _renderScrollableContainer: function() {
-        this._scrollableContainer = this._createComponent($("<div>").appendTo(this.element()), Scrollable, {
+        this._scrollableContainer = this._createComponent($("<div>").appendTo(this.$element()), Scrollable, {
             direction: this.option("scrollDirection"),
             useKeyboard: false
         });
@@ -1061,7 +1053,7 @@ var TreeViewBase = HierarchicalCollectionWidget.inherit({
             return;
         }
 
-        this._createComponent($("<div>").addClass(NODE_LOAD_INDICATOR_CLASS), LoadIndicator, {}).element().appendTo($node);
+        this._createComponent($("<div>").addClass(NODE_LOAD_INDICATOR_CLASS), LoadIndicator, {}).$element().appendTo($node);
         $icon.hide();
     },
 
@@ -1242,7 +1234,7 @@ var TreeViewBase = HierarchicalCollectionWidget.inherit({
     },
 
     _renderSelectAllItem: function($container) {
-        $container = $container || this.element().find("." + NODE_CONTAINER_CLASS).first();
+        $container = $container || this.$element().find("." + NODE_CONTAINER_CLASS).first();
 
         this._$selectAllItem = $("<div>").addClass(SELECT_ALL_ITEM_CLASS);
 
@@ -1307,7 +1299,7 @@ var TreeViewBase = HierarchicalCollectionWidget.inherit({
     },
 
     _changeCheckboxValue: function(e) {
-        var $node = e.element.parent("." + NODE_CLASS),
+        var $node = $(e.element).parent("." + NODE_CLASS),
             $item = $node.children("." + ITEM_CLASS),
             item = this._getItemData($item),
             node = this._getNodeByElement($item),
@@ -1541,7 +1533,7 @@ var TreeViewBase = HierarchicalCollectionWidget.inherit({
             FOCUS_LEFT = this.option("rtlEnabled") ? "right" : "left",
             FOCUS_RIGHT = this.option("rtlEnabled") ? "left" : "right";
 
-        this.element().find("." + NODE_CONTAINER_CLASS).each(function() {
+        this.$element().find("." + NODE_CONTAINER_CLASS).each(function() {
             fx.stop(this, true);
         });
 
@@ -1599,7 +1591,7 @@ var TreeViewBase = HierarchicalCollectionWidget.inherit({
     },
 
     _nodeElements: function() {
-        return this.element()
+        return this.$element()
             .find("." + NODE_CLASS)
             .not(":hidden");
     },

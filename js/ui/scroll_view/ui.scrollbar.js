@@ -53,18 +53,18 @@ var Scrollbar = Widget.inherit({
         this._attachPointerDownHandler();
         this.option("hoverStateEnabled", this._isHoverMode());
 
-        this.element().toggleClass(HOVER_ENABLED_STATE, this.option("hoverStateEnabled"));
+        this.$element().toggleClass(HOVER_ENABLED_STATE, this.option("hoverStateEnabled"));
     },
 
     _renderThumb: function() {
         this._$thumb = $("<div>").addClass(SCROLLABLE_SCROLL_CLASS);
         $("<div>").addClass(SCROLLABLE_SCROLL_CONTENT_CLASS).appendTo(this._$thumb);
 
-        this.element().addClass(SCROLLABLE_SCROLLBAR_CLASS).append(this._$thumb);
+        this.$element().addClass(SCROLLABLE_SCROLLBAR_CLASS).append(this._$thumb);
     },
 
     isThumb: function($element) {
-        return !!this.element().find($element).length;
+        return !!this.$element().find($element).length;
     },
 
     _isHoverMode: function() {
@@ -74,7 +74,7 @@ var Scrollbar = Widget.inherit({
 
     _renderDirection: function() {
         var direction = this.option("direction");
-        this.element().addClass("dx-scrollbar-" + direction);
+        this.$element().addClass("dx-scrollbar-" + direction);
         this._dimension = direction === HORIZONTAL ? "width" : "height";
         this._prop = direction === HORIZONTAL ? "left" : "top";
     },
@@ -84,12 +84,12 @@ var Scrollbar = Widget.inherit({
     },
 
     feedbackOn: function() {
-        this.element().addClass(SCROLLABLE_SCROLLBAR_ACTIVE_CLASS);
+        this.$element().addClass(SCROLLABLE_SCROLLBAR_ACTIVE_CLASS);
         activeScrollbar = this;
     },
 
     feedbackOff: function() {
-        this.element().removeClass(SCROLLABLE_SCROLLBAR_ACTIVE_CLASS);
+        this.$element().removeClass(SCROLLABLE_SCROLLBAR_ACTIVE_CLASS);
         activeScrollbar = null;
     },
 
@@ -171,7 +171,7 @@ var Scrollbar = Widget.inherit({
         this._thumbRatio = (containerSize - thumbSize) / (contentSize - containerSize);
 
         this.option(this._dimension, thumbSize);
-        this.element().css("display", this._needScrollbar() ? "" : "none");
+        this.$element().css("display", this._needScrollbar() ? "" : "none");
     },
 
     _isHidden: function() {

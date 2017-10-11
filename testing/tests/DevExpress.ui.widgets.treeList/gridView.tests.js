@@ -42,7 +42,7 @@ function createGridView(options, userOptions) {
             }
         });
 
-    this.element = function() {
+    this.$element = function() {
         return $("#treeList");
     };
 

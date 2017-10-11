@@ -62,7 +62,7 @@ QUnit.test("visible changes visibility option", function(assert) {
         visible: false
     });
 
-    var loadIndicator = $indicator.data("dxLoadIndicator");
+    var loadIndicator = $indicator.dxLoadIndicator("instance");
 
     assert.ok($indicator.is(":hidden"));
 
@@ -113,7 +113,7 @@ QUnit.test("LoadIndicator with custom indicator", function(assert) {
             indicatorSrc: url
         }),
         $wrapper = element.find("." + LOADINDICATOR_WRAPPER);
-    var instance = $("#loadIndicator").dxLoadIndicator().data("dxLoadIndicator");
+    var instance = $("#loadIndicator").dxLoadIndicator().dxLoadIndicator("instance");
     assert.ok(isIdenticalNamesInUrl($wrapper.css("background-image"), url), "custom indicator installed successfully as image");
     instance.option("indicatorSrc", "");
     assert.ok($wrapper.css("background-image") !== "", "custom indicator changed successfully as image");

@@ -24,7 +24,7 @@ QUnit.test("Scheduler should have a right timeline work space", function(assert)
         views: ["timelineDay", "timelineWeek", "timelineWorkWeek", "timelineMonth"],
         currentView: "timelineDay"
     });
-    var $element = this.instance.element();
+    var $element = this.instance.$element();
 
     assert.ok($element.find(".dx-scheduler-work-space").dxSchedulerTimelineDay("instance"), "Work space is timelineDay on init");
 
@@ -49,7 +49,7 @@ QUnit.test("Scheduler should not update scroll position if appointment is visibl
     });
 
     var appointment = { startDate: new Date(2015, 1, 9), endDate: new Date(2015, 1, 9, 1), text: "caption" },
-        workSpace = this.instance.element().find(".dx-scheduler-work-space").dxSchedulerTimelineDay("instance"),
+        workSpace = this.instance.$element().find(".dx-scheduler-work-space").dxSchedulerTimelineDay("instance"),
         scrollToTimeSpy = sinon.spy(workSpace, "scrollToTime");
 
     try {
@@ -75,11 +75,11 @@ QUnit.test("Scheduler should not update scroll position if appointment is visibl
         cellDuration: 120
     });
 
-    var scrollable = this.instance.element().find(".dx-scheduler-date-table-scrollable").dxScrollable("instance");
+    var scrollable = this.instance.$element().find(".dx-scheduler-date-table-scrollable").dxScrollable("instance");
     scrollable.scrollTo({ left: 10000 });
 
     var appointment = { startDate: new Date(2015, 2, 6, 6), endDate: new Date(2015, 2, 6, 8), text: "caption" },
-        workSpace = this.instance.element().find(".dx-scheduler-work-space").dxSchedulerTimelineWeek("instance"),
+        workSpace = this.instance.$element().find(".dx-scheduler-work-space").dxSchedulerTimelineWeek("instance"),
         scrollToTimeSpy = sinon.spy(workSpace, "scrollToTime");
 
     try {
@@ -105,11 +105,11 @@ QUnit.test("Scheduler should update scroll position if appointment is not visibl
         cellDuration: 120
     });
 
-    var scrollable = this.instance.element().find(".dx-scheduler-date-table-scrollable").dxScrollable("instance");
+    var scrollable = this.instance.$element().find(".dx-scheduler-date-table-scrollable").dxScrollable("instance");
     scrollable.scrollTo({ left: 2000 });
 
     var appointment = { startDate: new Date(2015, 2, 6, 6), endDate: new Date(2015, 2, 6, 8), text: "caption" },
-        workSpace = this.instance.element().find(".dx-scheduler-work-space").dxSchedulerTimelineWeek("instance"),
+        workSpace = this.instance.$element().find(".dx-scheduler-work-space").dxSchedulerTimelineWeek("instance"),
         scrollToTimeSpy = sinon.spy(workSpace, "scrollToTime");
 
     try {
@@ -135,11 +135,11 @@ QUnit.test("Scheduler should not update scroll position if appointment is visibl
         cellDuration: 120
     });
 
-    var scrollable = this.instance.element().find(".dx-scheduler-date-table-scrollable").dxScrollable("instance");
+    var scrollable = this.instance.$element().find(".dx-scheduler-date-table-scrollable").dxScrollable("instance");
     scrollable.scrollTo({ left: 12000 });
 
     var appointment = { startDate: new Date(2015, 2, 29, 6), endDate: new Date(2015, 2, 29, 8), text: "caption" },
-        workSpace = this.instance.element().find(".dx-scheduler-work-space").dxSchedulerTimelineMonth("instance"),
+        workSpace = this.instance.$element().find(".dx-scheduler-work-space").dxSchedulerTimelineMonth("instance"),
         scrollToTimeSpy = sinon.spy(workSpace, "scrollToTime");
 
     try {
@@ -165,11 +165,11 @@ QUnit.test("Scheduler should update scroll position if appointment is not visibl
         cellDuration: 120
     });
 
-    var scrollable = this.instance.element().find(".dx-scheduler-date-table-scrollable").dxScrollable("instance");
+    var scrollable = this.instance.$element().find(".dx-scheduler-date-table-scrollable").dxScrollable("instance");
     scrollable.scrollTo({ left: 1000 });
 
     var appointment = { startDate: new Date(2015, 2, 29, 6), endDate: new Date(2015, 2, 29, 8), text: "caption" },
-        workSpace = this.instance.element().find(".dx-scheduler-work-space").dxSchedulerTimelineMonth("instance"),
+        workSpace = this.instance.$element().find(".dx-scheduler-work-space").dxSchedulerTimelineMonth("instance"),
         scrollToTimeSpy = sinon.spy(workSpace, "scrollToTime");
 
     try {
@@ -242,7 +242,7 @@ QUnit.test("Appointments should have a right order on timeline month(lots of app
         width: 800
     });
 
-    var $appointments = this.instance.element().find(".dx-scheduler-appointment");
+    var $appointments = this.instance.$element().find(".dx-scheduler-appointment");
 
     assert.roughEqual(translator.locate($appointments.eq(0)).top, 0, 2.001, "Appointment position is OK");
     assert.roughEqual(translator.locate($appointments.eq(1)).top, 100, 2.001, "Appointment position is OK");
@@ -270,7 +270,7 @@ QUnit.test("Appointments should have a right order on timeline month", function(
         width: 800
     });
 
-    var $appointments = this.instance.element().find(".dx-scheduler-appointment");
+    var $appointments = this.instance.$element().find(".dx-scheduler-appointment");
 
     assert.equal($appointments.eq(0).data("dxItemData").text, "b", "Appointment data is OK");
     assert.equal($appointments.eq(1).data("dxItemData").text, "a", "Appointment data is OK");

@@ -382,7 +382,7 @@ QUnit.test("arrow bottom left position", function(assert) {
                 height: 70,
                 position: { at: "bottom left", my: "top left" }
             }),
-            $content = popover.content();
+            $content = popover.$content();
 
         var $arrow = wrapper().find("." + POPOVER_ARROW_CLASS),
             arrowOffsetTop = $target.offset().top + $target.height(),
@@ -407,7 +407,7 @@ QUnit.test("arrow right top position", function(assert) {
                 visible: true,
                 position: { at: "right top", my: "left top" }
             }),
-            $content = popover.content();
+            $content = popover.$content();
 
         var $arrow = wrapper().find("." + POPOVER_ARROW_CLASS),
             arrowOffsetTop = Math.round($content.offset().top + ($content.outerHeight() - $arrow.height()) / 2),
@@ -760,7 +760,7 @@ QUnit.test("content must not overlap bottom buttons (B252748)", function(assert)
                 height: 100,
                 width: 50
             }),
-            $popoverContent = popover.content(),
+            $popoverContent = popover.$content(),
             $popoverBottom = popover.bottomToolbar();
 
         popover.show().done(function() {
@@ -788,7 +788,7 @@ QUnit.test("content must not overlap bottom toolbar after popover size change", 
                 }
             }),
             $overlayContent = $(".dx-overlay-content"),
-            $popoverContent = popover.content(),
+            $popoverContent = popover.$content(),
             $popoverBottom = $popover.find(".dx-popup-bottom");
 
         $where.css("top", $(window).height() - $where.height() - $overlayContent.height());
@@ -1393,7 +1393,7 @@ QUnit.test("popover should be visible on start when visible and deferRendering i
 
     try {
         var popover = new Popover($("#what"), { visible: false, deferRendering: false });
-        assert.ok(popover.content().is(":hidden"));
+        assert.ok(popover.$content().is(":hidden"));
     } finally {
         fixtures.collisionTopLeft.drop();
     }
@@ -1586,7 +1586,7 @@ QUnit.test("popover content height is not reduced when fit is allowed", function
         var elements = getElementsPositionAndSize($popover, $target),
             content = elements.content;
 
-        var $popupContent = popover.content();
+        var $popupContent = popover.$content();
         assert.equal(content.height, contentSize + $popupContent.outerHeight() - $popupContent.height(), "content shrunk to available space by height");
     } finally {
         fixtures.customBoundary.drop();

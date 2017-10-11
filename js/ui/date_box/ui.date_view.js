@@ -70,14 +70,14 @@ var DateView = Editor.inherit({
 
     _render: function() {
         this.callBase();
-        this.element().addClass(DATEVIEW_CLASS);
+        this.$element().addClass(DATEVIEW_CLASS);
         this._toggleFormatClasses(this.option("type"));
     },
 
     _toggleFormatClasses: function(currentFormat, previousFormat) {
-        this.element().addClass(DATEVIEW_CLASS + "-" + currentFormat);
+        this.$element().addClass(DATEVIEW_CLASS + "-" + currentFormat);
 
-        previousFormat && this.element().removeClass(DATEVIEW_CLASS + "-" + previousFormat);
+        previousFormat && this.$element().removeClass(DATEVIEW_CLASS + "-" + previousFormat);
     },
 
     _wrapper: function() {
@@ -87,7 +87,7 @@ var DateView = Editor.inherit({
     _renderContentImpl: function() {
         this._$wrapper = $("<div>").addClass(DATEVIEW_WRAPPER_CLASS);
         this._renderRollers();
-        this._$wrapper.appendTo(this.element());
+        this._$wrapper.appendTo(this.$element());
     },
 
     _renderRollers: function() {

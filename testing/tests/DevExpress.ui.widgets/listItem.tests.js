@@ -17,7 +17,7 @@ QUnit.test("showChevron should be rendered correctly by default", function(asser
     var $chevronContainer = $item.children("." + LIST_ITEM_CHEVRON_CONTAINER_CLASS);
     assert.ok(!$chevronContainer.length);
 
-    widget.element().remove(); // NOTE: strange fix timers
+    widget.$element().remove(); // NOTE: strange fix timers
 });
 
 QUnit.test("showChevron should be rendered correctly with value = true", function(assert) {
@@ -31,7 +31,7 @@ QUnit.test("showChevron should be rendered correctly with value = true", functio
     assert.ok($chevronContainer.hasClass(LIST_ITEM_CHEVRON_CONTAINER_CLASS), "container created correctly");
     assert.ok($chevron.hasClass(LIST_ITEM_CHEVRON_CLASS), "chevron created correctly");
 
-    widget.element().remove(); // NOTE: strange fix timers
+    widget.$element().remove(); // NOTE: strange fix timers
 });
 
 QUnit.test("showChevron should be rendered correctly after value changed", function(assert) {
@@ -45,7 +45,7 @@ QUnit.test("showChevron should be rendered correctly after value changed", funct
     var $chevronContainer = $item.children("." + LIST_ITEM_CHEVRON_CONTAINER_CLASS);
     assert.ok(!$chevronContainer.length);
 
-    widget.element().remove(); // NOTE: strange fix timers
+    widget.$element().remove(); // NOTE: strange fix timers
 });
 
 
@@ -64,7 +64,7 @@ QUnit.test("badge should be rendered correctly by default", function(assert) {
     var $badgeContainer = $item.children("." + LIST_ITEM_CHEVRON_CONTAINER_CLASS);
     assert.ok(!$badgeContainer.length);
 
-    widget.element().remove(); // NOTE: strange fix timers
+    widget.$element().remove(); // NOTE: strange fix timers
 });
 
 QUnit.test("badge should be rendered correctly with value = true", function(assert) {
@@ -81,7 +81,7 @@ QUnit.test("badge should be rendered correctly with value = true", function(asse
     assert.ok($badge.hasClass(BADGE_CLASS), "badge created correctly");
     assert.equal($badge.text(), "5", "badge has correct text");
 
-    widget.element().remove(); // NOTE: strange fix timers
+    widget.$element().remove(); // NOTE: strange fix timers
 });
 
 QUnit.test("badge should be rendered correctly after value changed", function(assert) {
@@ -95,7 +95,7 @@ QUnit.test("badge should be rendered correctly after value changed", function(as
     var $badgeContainer = $item.children("." + LIST_ITEM_CHEVRON_CONTAINER_CLASS);
     assert.ok(!$badgeContainer.length);
 
-    widget.element().remove(); // NOTE: strange fix timers
+    widget.$element().remove(); // NOTE: strange fix timers
 });
 
 QUnit.test("badge should be rendered correctly after value changed with enabled chevron", function(assert) {
@@ -109,5 +109,5 @@ QUnit.test("badge should be rendered correctly after value changed with enabled 
     var $badgeContainer = $item.children().eq(-2);
     assert.ok($badgeContainer.hasClass(LIST_ITEM_BADGE_CONTAINER_CLASS));
 
-    widget.element().remove(); // NOTE: strange fix timers
+    widget.$element().remove(); // NOTE: strange fix timers
 });

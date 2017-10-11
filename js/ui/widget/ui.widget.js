@@ -269,7 +269,7 @@ var Widget = DOMComponent.inherit({
 
     _extractTemplates: function() {
         var templates = this.option("integrationOptions.templates"),
-            templateElements = this.element().contents().filter(TEMPLATE_SELECTOR);
+            templateElements = this.$element().contents().filter(TEMPLATE_SELECTOR);
 
         var templatesMap = {};
 
@@ -314,7 +314,7 @@ var Widget = DOMComponent.inherit({
     _extractAnonymousTemplate: function() {
         var templates = this.option("integrationOptions.templates"),
             anonymousTemplateName = this._getAnonymousTemplateName(),
-            $anonymousTemplate = this.element().contents().detach();
+            $anonymousTemplate = this.$element().contents().detach();
 
         var $notJunkTemplateContent = $anonymousTemplate.filter(function(_, element) {
                 var isTextNode = element.nodeType === TEXT_NODE,
@@ -455,7 +455,7 @@ var Widget = DOMComponent.inherit({
     },
 
     _render: function() {
-        this.element().addClass(WIDGET_CLASS);
+        this.$element().addClass(WIDGET_CLASS);
         this.callBase();
 
         this._toggleDisabledState(this.option("disabled"));
@@ -470,7 +470,7 @@ var Widget = DOMComponent.inherit({
     },
 
     _renderHint: function() {
-        domUtils.toggleAttr(this.element(), "title", this.option("hint"));
+        domUtils.toggleAttr(this.$element(), "title", this.option("hint"));
     },
 
     _renderContent: function() {
@@ -500,11 +500,11 @@ var Widget = DOMComponent.inherit({
         this._cleanFocusState();
 
         this.callBase();
-        this.element().empty();
+        this.$element().empty();
     },
 
     _toggleVisibility: function(visible) {
-        this.element().toggleClass(INVISIBLE_STATE_CLASS, !visible);
+        this.$element().toggleClass(INVISIBLE_STATE_CLASS, !visible);
         this.setAria("hidden", !visible || undefined);
     },
 
@@ -537,7 +537,7 @@ var Widget = DOMComponent.inherit({
     },
 
     _eventBindingTarget: function() {
-        return this.element();
+        return this.$element();
     },
 
     _focusTarget: function() {
@@ -704,8 +704,7 @@ var Widget = DOMComponent.inherit({
         if(that.option("hoverStateEnabled")) {
             var startAction = new Action(function(args) {
                 that._hoverStartHandler(args.event);
-                var $target = args.element;
-                that._refreshHoveredElement($target);
+                that._refreshHoveredElement($(args.element));
             }, {
                 excludeValidators: ["readOnly"]
             });
@@ -744,7 +743,7 @@ var Widget = DOMComponent.inherit({
 
         if(that.option("activeStateEnabled")) {
             var feedbackActionHandler = function(args) {
-                var $element = args.element,
+                var $element = $(args.element),
                     value = args.value,
                     jQueryEvent = args.jQueryEvent;
 
@@ -794,7 +793,7 @@ var Widget = DOMComponent.inherit({
     },
 
     _toggleDisabledState: function(value) {
-        this.element().toggleClass(DISABLED_STATE_CLASS, Boolean(value));
+        this.$element().toggleClass(DISABLED_STATE_CLASS, Boolean(value));
         this._toggleHoverClass(!value);
         this.setAria("disabled", value || undefined);
     },

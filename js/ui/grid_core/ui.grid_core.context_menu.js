@@ -1,6 +1,7 @@
 "use strict";
 
 var $ = require("../../core/renderer"),
+    getPublicElement = require("../../core/utils/dom").getPublicElement,
     noop = require("../../core/utils/common").noop,
     each = require("../../core/utils/iterator").each,
     modules = require("./ui.grid_core.modules"),
@@ -50,7 +51,7 @@ var ContextMenuController = modules.ViewController.inherit({
                 rowOptions = $targetRowElement.data("options");
                 options = {
                     jQueryEvent: jQueryEvent,
-                    targetElement: $targetElement,
+                    targetElement: getPublicElement($targetElement),
                     target: viewName[this],
                     rowIndex: rowIndex,
                     row: view._getRows()[rowIndex],
@@ -98,7 +99,7 @@ var ContextMenuView = modules.View.inherit({
                 },
 
                 cssClass: that.getWidgetContainerClass(),
-                target: that.component.element()
+                target: that.component.$element()
             });
     }
 });
@@ -110,12 +111,12 @@ module.exports = {
              * @name dxDataGridOptions_onContextMenuPreparing
              * @publicName onContextMenuPreparing
              * @type function(e)
-             * @type_function_param1 e:object
-             * @type_function_param1_field4 items:array
+             * @type_function_param1 e:Object
+             * @type_function_param1_field4 items:Array<Object>
              * @type_function_param1_field5 target:string
-             * @type_function_param1_field6 targetElement:jQuery
+             * @type_function_param1_field6 targetElement:Element
              * @type_function_param1_field7 columnIndex:number
-             * @type_function_param1_field8 column:object
+             * @type_function_param1_field8 column:Object
              * @type_function_param1_field9 rowIndex:number
              * @type_function_param1_field10 row:dxDataGridRowObject
              * @extends Action
@@ -125,12 +126,12 @@ module.exports = {
              * @name dxTreeListOptions_onContextMenuPreparing
              * @publicName onContextMenuPreparing
              * @type function(e)
-             * @type_function_param1 e:object
-             * @type_function_param1_field4 items:array
+             * @type_function_param1 e:Object
+             * @type_function_param1_field4 items:Array<Object>
              * @type_function_param1_field5 target:string
-             * @type_function_param1_field6 targetElement:jQuery
+             * @type_function_param1_field6 targetElement:Element
              * @type_function_param1_field7 columnIndex:number
-             * @type_function_param1_field8 column:object
+             * @type_function_param1_field8 column:Object
              * @type_function_param1_field9 rowIndex:number
              * @type_function_param1_field10 row:dxTreeListRowObject
              * @extends Action

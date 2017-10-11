@@ -18,23 +18,27 @@ require("ui/data_grid/ui.data_grid");
 var $ = require("jquery"),
     noop = require("core/utils/common").noop,
     dataGridMocks = require("../../helpers/dataGridMocks.js"),
-    CLICK_NAMESPACE = "dxclick.dxDataGridAdaptivity";
+    CLICK_NAMESPACE = "dxclick.dxDataGridAdaptivity",
+    eventsEngine = require("events/core/events_engine"),
+    typeUtils = require("core/utils/type"),
+    config = require("core/config"),
+    renderer = require("core/renderer");
 
-function setupDataGrid(that) {
-    that.element = function() {
-        return $(".dx-datagrid");
+function setupDataGrid(that, $dataGridContainer) {
+    that.$element = function() {
+        return $dataGridContainer ? $dataGridContainer : renderer(".dx-datagrid");
     };
 
     if(that.columns !== null) {
         that.columns = that.columns || [
-                { dataField: 'firstName', index: 0, allowEditing: true, allowExporting: true },
-                { dataField: 'lastName', index: 1, allowEditing: true, allowExporting: true }
+            { dataField: 'firstName', index: 0, allowEditing: true, allowExporting: true },
+            { dataField: 'lastName', index: 1, allowEditing: true, allowExporting: true }
         ];
     }
 
     that.items = that.items || [
-            { firstName: 'Blablablablablablablablablabla', lastName: "Psy" },
-            { firstName: 'Super', lastName: "Star" }
+        { firstName: 'Blablablablablablablablablabla', lastName: "Psy" },
+        { firstName: 'Super', lastName: "Star" }
     ];
 
     that.options = $.extend({}, {
@@ -51,7 +55,7 @@ function setupDataGrid(that) {
     };
 
     dataGridMocks.setupDataGridModules(that, ['data', 'gridView', 'columns', 'columnHeaders', 'rows', 'editing', 'validating',
-        'virtualScrolling', 'editorFactory', 'grouping', 'masterDetail', 'export', 'adaptivity', 'columnsResizingReordering', 'summary', 'gridView'], that.setupOptions);
+        'virtualScrolling', 'editorFactory', 'grouping', 'masterDetail', 'export', 'adaptivity', 'columnsResizingReordering', 'keyboardNavigation', 'summary', 'gridView'], that.setupOptions);
 }
 
 QUnit.module("AdaptiveColumns", {
@@ -451,7 +455,7 @@ QUnit.test("Show the form when an adaptive row is expanded", function(assert) {
     $(".dx-data-row .dx-datagrid-adaptive-more").first().trigger("dxclick");
 
     //assert
-    var form = $(".dx-master-detail-row .dx-form").data("dxForm");
+    var form = $(".dx-master-detail-row .dx-form").dxForm("instance");
     assert.ok(form !== undefined, "form is initialized");
     assert.equal(form.option("items")[0].column.dataField, "lastName", "dataField of column");
     assert.equal(form.option("items")[0].dataField, "lastName", "dataField of item");
@@ -699,9 +703,10 @@ QUnit.test("Show the form with cellTemplate when an adaptive row is expanded", f
             dataField: 'lastName',
             index: 1,
             allowEditing: true,
-            cellTemplate: function($container, data) {
+            cellTemplate: function(container, data) {
+                assert.equal(typeUtils.isRenderer(container), config().useJQueryRenderer, "cellElement is correct");
                 _column = data.column;
-                $container.text(data.value + " template");
+                $(container).text(data.value + " template");
             }
         }
     ];
@@ -716,7 +721,7 @@ QUnit.test("Show the form with cellTemplate when an adaptive row is expanded", f
     $(".dx-data-row .dx-datagrid-adaptive-more").first().trigger("dxclick");
 
     //assert
-    var form = $(".dx-master-detail-row .dx-form").data("dxForm");
+    var form = $(".dx-master-detail-row .dx-form").dxForm("instance");
     assert.ok(form !== undefined, "form is initialized");
     assert.equal(form.option("items")[0].column.dataField, "lastName", "dataField of column");
     assert.equal(form.option("items")[0].dataField, "lastName", "dataField of item");
@@ -1070,7 +1075,7 @@ QUnit.test("ShowEditorAlways option for form's item", function(assert) {
 
     //assert
     var $editors = $(".dx-form .dx-texteditor"),
-        editor = $editors.first().data("dxTextBox");
+        editor = $editors.first().dxTextBox("instance");
 
     assert.equal($editors.length, 1, "editors count");
     assert.equal(editor.option("value"), "Psy", "editor's value");
@@ -1300,7 +1305,7 @@ QUnit.test("Cell of master detail is not hidden when first column of data grid i
     this.options.masterDetail = {
         enabled: true,
         template: function(container) {
-            $("<span/>").appendTo(container);
+            $("<span/>").appendTo($(container));
         }
     };
     this.rowsView.render($("#container"));
@@ -1483,6 +1488,19 @@ QUnit.test("Apply a hidden css class on cell prepared event of rows view", funct
 
     assert.ok(checkAdaptiveWidth(col.style.width));
     assert.ok($cells.eq(1).hasClass("dx-datagrid-hidden-column"));
+});
+
+QUnit.test("Row elements are should get only once when CSS for hidden column is applied", function(assert) {
+    //arrange, act
+    $(".dx-datagrid").width(200);
+    setupDataGrid(this);
+    this.rowsView.render($("#container"));
+    sinon.spy(this.rowsView, "_getRowElements");
+    this.resizingController.updateDimensions();
+    this.clock.tick();
+
+    //assert
+    assert.ok(this.rowsView._getRowElements.calledOnce);
 });
 
 QUnit.module("API", {
@@ -1729,13 +1747,13 @@ QUnit.test("Edit form. Check that adaptive form is hidden", function(assert) {
     this.adaptiveColumnsController.expandAdaptiveDetailRow(this.items[0]);
     this.clock.tick();
 
-    var adaptiveDetailForm = $(".dx-adaptive-detail-row .dx-form").data("dxForm");
+    var adaptiveDetailForm = $(".dx-adaptive-detail-row .dx-form").dxForm("instance");
     assert.ok(adaptiveDetailForm !== undefined, "adaptive detail form is initialized");
 
     this.editingController.editRow(0);
     this.clock.tick();
 
-    adaptiveDetailForm = $(".dx-adaptive-detail-row .dx-form").data("dxForm");
+    adaptiveDetailForm = $(".dx-adaptive-detail-row .dx-form").dxForm("instance");
     assert.ok(adaptiveDetailForm === undefined, "adaptive detail form is not initialized");
 });
 
@@ -1839,7 +1857,7 @@ QUnit.test("Edit row", function(assert) {
     this.editingController.editRow(0);
 
     //assert
-    var form = $(".dx-master-detail-row .dx-form").data("dxForm"),
+    var form = $(".dx-master-detail-row .dx-form").dxForm("instance"),
         $editors = $(".dx-texteditor"),
         editor1 = $editors.eq(0).dxTextBox("instance"),
         editor2 = $editors.eq(2).dxTextBox("instance");
@@ -1854,7 +1872,7 @@ QUnit.test("Edit row", function(assert) {
     this.editingController.saveEditData();
 
     //assert
-    form = $(".dx-master-detail-row .dx-form").data("dxForm");
+    form = $(".dx-master-detail-row .dx-form").dxForm("instance");
     $editors = $(".dx-texteditor");
 
     assert.ok(form === undefined, "form is not initialized");
@@ -1964,7 +1982,7 @@ QUnit.test("Edit row. Check repeat edit", function(assert) {
     this.editingController.editRow(0);
 
     //assert
-    form = $(".dx-master-detail-row .dx-form").data("dxForm");
+    form = $(".dx-master-detail-row .dx-form").dxForm("instance");
     $editors = $(".dx-texteditor");
 
     assert.ok(form !== undefined, "form is initialized");
@@ -2027,7 +2045,7 @@ QUnit.test("Edit row. Editor is not rendered inside the form widget when clicked
     this.adaptiveColumnsController.expandAdaptiveDetailRow(this.items[0]);
 
     var $itemContent = $(".dx-field-item-content"),
-        form = $(".dx-master-detail-row .dx-form").data("dxForm");
+        form = $(".dx-master-detail-row .dx-form").dxForm("instance");
 
     $($itemContent).trigger("dxclick");
 
@@ -2106,7 +2124,7 @@ QUnit.test("Check 'onAdaptiveDetailRowPreparing' action", function(assert) {
     this.adaptiveColumnsController.expandAdaptiveDetailRow(this.items[0]);
 
     var $itemContent = $(".dx-field-item-content"),
-        form = $(".dx-master-detail-row .dx-form").data("dxForm");
+        form = $(".dx-master-detail-row .dx-form").dxForm("instance");
 
     $($itemContent).trigger("dxclick");
 
@@ -2139,7 +2157,7 @@ QUnit.test("Edit row. Editors are rendered inside the form widget when the adapt
     this.adaptiveColumnsController.expandAdaptiveDetailRow(this.items[0]);
     this.editingController.editRow(0);
 
-    var form = $(".dx-master-detail-row .dx-form").data("dxForm");
+    var form = $(".dx-master-detail-row .dx-form").dxForm("instance");
 
     //assert
     assert.ok(form !== undefined, "form is initialized");
@@ -2281,7 +2299,7 @@ QUnit.test("Edit row. The adaptive detail row is collapsed when an other row is 
 
     assert.equal($form.length, 1, "form element");
     assert.equal($editors.length, 1, "editor's count");
-    assert.equal($editors.eq(0).data("dxTextBox").option("value"), "Star", "editor's value");
+    assert.equal($editors.eq(0).dxTextBox("instance").option("value"), "Star", "editor's value");
 });
 
 QUnit.test("Edit row. Expand the adaptive detail row when an other row is edited", function(assert) {
@@ -2342,7 +2360,7 @@ QUnit.test("Edit row. ShowEditorAlways option for form's item", function(assert)
 
     //assert
     var $editors = $(".dx-form .dx-texteditor"),
-        editor = $editors.first().data("dxTextBox");
+        editor = $editors.first().dxTextBox("instance");
 
     assert.equal($editors.length, 1, "editors count");
     assert.ok(!editor.option("readOnly"), "editor has not readOnly mode");
@@ -2850,7 +2868,7 @@ QUnit.test("Edit batch. ShowEditorAlways option for form's item", function(asser
 
     //assert
     var $editors = $(".dx-form .dx-texteditor"),
-        editor = $editors.first().data("dxTextBox");
+        editor = $editors.first().dxTextBox("instance");
 
     assert.equal($editors.length, 1, "editors count");
     assert.ok(!editor.option("readOnly"), "editor has not readOnly mode");
@@ -3127,7 +3145,7 @@ QUnit.test("Create new row is the batch mode. Save new values", function(assert)
     $($itemsContent.first()).trigger("dxclick");
 
     editors = $(".dx-adaptive-detail-row .dx-texteditor");
-    editors.first().data("dxTextBox").option("value", "12test");
+    editors.first().dxTextBox("instance").option("value", "12test");
     this.editingController.saveEditData();
 
     //assert
@@ -3160,7 +3178,7 @@ QUnit.test("Create new row is the batch mode. Cancel new values", function(asser
     $($itemsContent.first()).trigger("dxclick");
 
     editors = $(".dx-texteditor");
-    editors.first().data("dxTextBox").option("value", "12test");
+    editors.first().dxTextBox("instance").option("value", "12test");
     this.editingController.cancelEditData();
 
     //assert
@@ -3226,7 +3244,7 @@ QUnit.test("Create new row is the cell mode. Save new values", function(assert) 
     assert.equal(editors.length, 1, "editor's count");
 
     //act
-    editors.first().data("dxTextBox").option("value", "12test");
+    editors.first().dxTextBox("instance").option("value", "12test");
     $(document).trigger("dxclick");
     this.clock.tick();
 
@@ -3616,4 +3634,154 @@ QUnit.testInActiveWindow("Cell edit mode. Validation works only for editable for
 
     //assert
     assert.ok(!$itemsContent.first().hasClass("dx-datagrid-invalid"), "invalid style should not be applied");
+});
+
+QUnit.module("Keyboard navigation", {
+    setupModule: function() {
+        this.$dataGrid = $(".dx-datagrid").width(200);
+
+        this.columns = this.columns || [
+            { dataField: 'firstName', index: 0, allowEditing: true, allowExporting: true },
+            { dataField: 'lastName', index: 1, allowEditing: true, allowExporting: true },
+            { dataField: 'fullName', index: 1, allowEditing: true, allowExporting: true }
+        ];
+
+        this.items = this.items || [
+            { firstName: 'Blablablablablablablablablabla', lastName: "Psy", fullName: "Full Name" },
+            { firstName: 'Super', lastName: "Star", fullName: "Full Name" }
+        ];
+
+        this.options = $.extend({
+            useKeyboard: true,
+            tabIndex: 0,
+            editing: {
+                mode: 'batch',
+                allowUpdating: true
+            }
+        }, this.options);
+        setupDataGrid(this, $("#container"));
+
+        this.gridView.render($("#container"));
+        this.adaptiveColumnsController.updateHidingQueue(this.columnsController.getColumns());
+        this.resizingController.updateDimensions();
+        this.clock.tick();
+
+        this.adaptiveColumnsController.expandAdaptiveDetailRow(this.items[0]);
+    },
+
+    getActiveInputElement: function() {
+        return this.$dataGrid.find("input");
+    },
+
+    triggerFormItemClick: function(index) {
+        $(".dx-field-item-content").eq(index).trigger("dxclick");
+        this.clock.tick();
+    },
+
+    beforeEach: function() {
+        this.clock = sinon.useFakeTimers();
+    },
+
+    afterEach: function() {
+        this.clock.restore();
+    }
+}, function() {
+    QUnit.testInActiveWindow("Edit next an adaptive detail item by tab key", function(assert) {
+        //arrange
+        this.setupModule();
+        this.triggerFormItemClick(0);
+
+        //assert
+        var $nextItemContent = this.getActiveInputElement().closest(".dx-item").next().find(".dx-field-item-content");
+        assert.equal($nextItemContent.text(), "Full Name", "next item text");
+        assert.equal($nextItemContent.attr("tabindex"), 0, "next item has tabindex");
+
+        //act
+        eventsEngine.triggerHandler($nextItemContent, "focus");
+        this.clock.tick();
+
+        //assert
+        var $input = this.getActiveInputElement();
+        assert.equal($input.val(), "Full Name", "current input is correct");
+    });
+
+    QUnit.testInActiveWindow("Edit previous an adaptive detail item by shift + tab key", function(assert) {
+        //arrange
+        this.setupModule();
+        this.triggerFormItemClick(1);
+
+        //assert
+        var $nextItemContent = this.getActiveInputElement().closest(".dx-item").prev().find(".dx-field-item-content");
+        assert.equal($nextItemContent.text(), "Psy", "next item text");
+        assert.equal($nextItemContent.attr("tabindex"), 0, "next item has tabindex");
+
+        //act
+        eventsEngine.triggerHandler($nextItemContent, "focus");
+        this.clock.tick();
+
+        //assert
+        var $input = this.getActiveInputElement();
+        assert.equal($input.val(), "Psy", "current input is correct");
+    });
+
+    QUnit.testInActiveWindow("Editable cell is closed when focus moving outside detail form", function(assert) {
+        //arrange
+        this.setupModule();
+        this.triggerFormItemClick(1);
+
+        //act
+        var e = $.Event('keydown');
+        e.which = 9;
+        this.getActiveInputElement().trigger(e);
+        this.clock.tick();
+
+        var $cell = this.$dataGrid.find("td:not([class])").eq(1);
+        eventsEngine.triggerHandler($cell, "focus");
+        this.clock.tick();
+
+        var $input = this.getActiveInputElement();
+        assert.equal($input.val(), "Super", "current input is correct");
+    });
+
+    QUnit.testInActiveWindow("Skip hidden column when use a keyboard navigation via 'tab' key", function(assert) {
+        //arrange
+        this.setupModule();
+        this.editingController.editCell(0, 0);
+        this.clock.tick();
+
+        //act
+        var e = $.Event('keydown');
+        e.which = 9;
+        this.getActiveInputElement().trigger(e);
+
+        //assert
+        assert.equal(this.getActiveInputElement().val(), "Super");
+    });
+
+    QUnit.testInActiveWindow("Error is not thrown when via keyboard navigation to adaptive form for new row", function(assert) {
+        //arrange
+        this.items = [];
+        this.columns = [
+            { dataField: 'firstName', index: 0, allowEditing: true, width: 200 },
+            { dataField: 'lastName', index: 1, allowEditing: true, width: 200 },
+            { dataField: 'fullName', index: 1, allowEditing: true, width: 200 }
+        ];
+        this.options = {
+            editing: {
+                allowAdding: true,
+                mode: "row"
+            }
+        };
+        this.setupModule();
+        this.editingController.addRow();
+        this.clock.tick();
+
+        //act
+        var e = $.Event('keydown');
+        e.which = 9;
+        this.getActiveInputElement().trigger(e);
+
+        //assert
+        assert.deepEqual(this.keyboardNavigationController._focusedCellPosition, { columnIndex: 0, rowIndex: 0 });
+    });
 });

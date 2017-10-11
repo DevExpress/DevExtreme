@@ -8,6 +8,7 @@ var $ = require("jquery"),
     typeUtils = require("core/utils/type"),
     browser = require("core/utils/browser"),
     domUtils = require("core/utils/dom"),
+    config = require("core/config"),
     internals = require("ui/form/ui.form").__internals;
 
 require("ui/text_area");
@@ -29,7 +30,7 @@ QUnit.test("Invalidate after option changed", function(assert) {
     //arrange
     var testingOptions = ["formData", "items", "colCount", "onFieldDataChanged", "labelLocation",
             "alignItemLabels", "showColonAfterLabel", "customizeItem", "minColWidth", "alignItemLabelsInAllGroups", "onEditorEnterKey", "scrollingEnabled", "formID"],
-        form = $("#form").dxForm().data("dxForm"),
+        form = $("#form").dxForm().dxForm("instance"),
         i,
         invalidateStub = sinon.stub(form, "_invalidate");
 
@@ -65,7 +66,7 @@ QUnit.test("Invalidate is not called when formData is changed and items option i
                     editorType: "dxTextBox"
                 }
             ]
-        }).data("dxForm"), invalidateStub = sinon.stub(form, "_invalidate");
+        }).dxForm("instance"), invalidateStub = sinon.stub(form, "_invalidate");
 
     //act
     form.option("formData", {
@@ -157,7 +158,7 @@ QUnit.test("Check root layout width on init", function(assert) {
         rootLayoutManager = instance._rootLayoutManager;
 
     //assert
-    assert.equal(rootLayoutManager.element().width(), 100, "Correct width");
+    assert.equal(rootLayoutManager.$element().width(), 100, "Correct width");
 });
 
 QUnit.test("Check root layout width on option change", function(assert) {
@@ -375,7 +376,7 @@ QUnit.test("Customize item event", function(assert) {
             }
         });
 
-    var items = $formContainer.find("." + internals.FORM_LAYOUT_MANAGER_CLASS).first().data("dxLayoutManager")._items,
+    var items = $formContainer.find("." + internals.FORM_LAYOUT_MANAGER_CLASS).first().dxLayoutManager("instance")._items,
         visibleItems = $formContainer.find("." + internals.FIELD_ITEM_CLASS + ":visible");
 
     //assert
@@ -474,7 +475,7 @@ QUnit.test("Update of editor's value when formOption is changed and items is def
 
     form = $testContainer.dxForm({
         items: ["name", "lastName"]
-    }).data("dxForm");
+    }).dxForm("instance");
 
     sinon.spy(form._rootLayoutManager, "_invalidate");
 
@@ -503,7 +504,7 @@ QUnit.test("Change editor value after formOption is changed and items is defined
     form = $testContainer.dxForm({
         formData: { pirateName: "Blackbeard", type: "captain", isSought: true },
         items: ["pirateName", "type", "isSought"]
-    }).data("dxForm");
+    }).dxForm("instance");
 
     //act
     form.option("formData", {
@@ -673,7 +674,7 @@ QUnit.test("alignItemLabels option for not grouping", function(assert) {
     var $formContainer = $("#form").dxForm({
             formData: { name: "Test", lastName: "surname" }
         }),
-        $layoutManager = $formContainer.find("." + internals.FORM_LAYOUT_MANAGER_CLASS).first().data("dxLayoutManager");
+        $layoutManager = $formContainer.find("." + internals.FORM_LAYOUT_MANAGER_CLASS).first().dxLayoutManager("instance");
 
     //assert
     assert.equal($layoutManager.option("alignItemLabels"), true);
@@ -749,7 +750,7 @@ QUnit.test("Default validation group", function(assert) {
     });
 
     //assert
-    var validator = $formContainer.find(".dx-validator").data("dxValidator");
+    var validator = $formContainer.find(".dx-validator").dxValidator("instance");
     assert.equal(validator.option("validationGroup"), $formContainer.dxForm("instance"));
 });
 
@@ -766,7 +767,7 @@ QUnit.test("Set external validation group name", function(assert) {
     });
 
     //assert
-    var validator = $formContainer.find(".dx-validator").data("dxValidator");
+    var validator = $formContainer.find(".dx-validator").dxValidator("instance");
     assert.equal(validator.option("validationGroup"), "Test Validation Group");
 });
 
@@ -787,7 +788,7 @@ QUnit.test("Show validation summary", function(assert) {
         $summaryContents;
 
     //act
-    $formContainer.data("dxForm").validate();
+    $formContainer.dxForm("instance").validate();
     $summaryContents = $formContainer.find(".dx-validationsummary-item-content");
 
     //assert
@@ -809,12 +810,12 @@ QUnit.test("Show validation summary with a custom validation group", function(as
     });
 
     //act
-    $formContainer.data("dxForm").validate();
+    $formContainer.dxForm("instance").validate();
 
     //assert
     var $validationSummary = $formContainer.find(".dx-validationsummary");
     assert.equal($validationSummary.length, 1);
-    assert.equal($validationSummary.data("dxValidationSummary").option("validationGroup"), "Custom validation group", "validation group");
+    assert.equal($validationSummary.dxValidationSummary("instance").option("validationGroup"), "Custom validation group", "validation group");
 });
 
 QUnit.test("Show validation summary via option method", function(assert) {
@@ -830,7 +831,7 @@ QUnit.test("Show validation summary via option method", function(assert) {
     });
 
     //act
-    $formContainer.data("dxForm").option("showValidationSummary", true);
+    $formContainer.dxForm("instance").option("showValidationSummary", true);
 
     //assert
     assert.equal($formContainer.find(".dx-validationsummary").length, 1);
@@ -849,7 +850,7 @@ QUnit.test("Hide validation summary via option method", function(assert) {
     });
 
     //act
-    $formContainer.data("dxForm").option("showValidationSummary", false);
+    $formContainer.dxForm("instance").option("showValidationSummary", false);
 
     //assert
     assert.equal($formContainer.find("form .dx-validationsummary").length, 0);
@@ -860,11 +861,11 @@ QUnit.test("The dxForm is not rendered correctly when colCount is zero", functio
     var form = $("#form").dxForm({
         formData: { name: "Batman" },
         colCount: 0
-    }).data("dxForm");
+    }).dxForm("instance");
 
     //assert
     assert.equal(form.getEditor("name").option("value"), "Batman");
-    assert.equal(form.element().find("." + internals.FORM_FIELD_ITEM_COL_CLASS + "0").length, 1);
+    assert.equal(form.$element().find("." + internals.FORM_FIELD_ITEM_COL_CLASS + "0").length, 1);
 
     //act
     form.option("colCount", 1);
@@ -872,7 +873,7 @@ QUnit.test("The dxForm is not rendered correctly when colCount is zero", functio
 
     //assert
     assert.equal(form.getEditor("name").option("value"), "Batman");
-    assert.equal(form.element().find("." + internals.FORM_FIELD_ITEM_COL_CLASS + "0").length, 1);
+    assert.equal(form.$element().find("." + internals.FORM_FIELD_ITEM_COL_CLASS + "0").length, 1);
 });
 
 QUnit.test("Invalid field name when item is defined not as string and not as object", function(assert) {
@@ -880,10 +881,10 @@ QUnit.test("Invalid field name when item is defined not as string and not as obj
     var form = $("#form").dxForm({
         formData: { name: "Batman", lastName: "Klark" },
         items: [1, "lastName"]
-    }).data("dxForm");
+    }).dxForm("instance");
 
     //assert
-    assert.equal(form.element().find("." + internals.FIELD_ITEM_CLASS).length, 1, "items count");
+    assert.equal(form.$element().find("." + internals.FIELD_ITEM_CLASS).length, 1, "items count");
     assert.equal(form.getEditor("name"), undefined, "editor by name field");
     assert.equal(form.getEditor("lastName").option("value"), "Klark", "editor by lastName field");
 });
@@ -948,14 +949,14 @@ QUnit.test("Validation boundary for editors when scrolling is enabled_T306331", 
                 }]
             }
         ]
-    }).data("dxForm");
+    }).dxForm("instance");
 
     //act
     form.validate();
 
     //assert
-    assert.equal(form.getEditor("id").option("validationBoundary"), form.element());
-    assert.equal(form.getEditor("name").option("validationBoundary"), form.element());
+    assert.equal(form.getEditor("id").option("validationBoundary"), form.$element());
+    assert.equal(form.getEditor("name").option("validationBoundary"), form.$element());
 });
 
 QUnit.test("Validation boundary for editors when scrolling is disabled_T306331", function(assert) {
@@ -973,7 +974,7 @@ QUnit.test("Validation boundary for editors when scrolling is disabled_T306331",
                 }]
             }
         ]
-    }).data("dxForm");
+    }).dxForm("instance");
 
     //act
     form.validate();
@@ -987,10 +988,10 @@ QUnit.test("dxshown event fire when visible option changed to true", function(as
     //arrange
     var form = $("#form").dxForm({
             formData: { id: 1 }
-        }).data("dxForm"),
+        }).dxForm("instance"),
         dxShownEventCounter = 0;
 
-    $(form.element())
+    $(form.$element())
         .find(".dx-visibility-change-handler")
         .first()
         .on("dxshown", function() {
@@ -1020,7 +1021,7 @@ QUnit.test("Reset editor's value when the formData option is empty object", func
                     value: e.value
                 });
             }
-        }).data("dxForm");
+        }).dxForm("instance");
 
         //act
     form.option("formData", {});
@@ -1041,7 +1042,7 @@ QUnit.test("Reset editor's value when the formData option is null", function(ass
             room: 1
         },
         items: ["name", "room"]
-    }).data("dxForm");
+    }).dxForm("instance");
 
         //act
     form.option("formData", null);
@@ -1059,7 +1060,7 @@ QUnit.test("Reset editor's value when the formData option is undefined", functio
             room: 1
         },
         items: ["name", "room"]
-    }).data("dxForm");
+    }).dxForm("instance");
 
         //act
     form.option("formData", undefined);
@@ -1077,7 +1078,7 @@ QUnit.test("Reset editor's value with validation", function(assert) {
             lastName: "John"
         },
         items: ["name", { dataField: "lastName", isRequired: true }]
-    }).data("dxForm");
+    }).dxForm("instance");
 
         //act
     form.option("formData", undefined);
@@ -1086,7 +1087,7 @@ QUnit.test("Reset editor's value with validation", function(assert) {
     assert.equal(form.getEditor("name").option("value"), "", "editor for the name dataField");
     assert.equal(form.getEditor("lastName").option("value"), "", "editor for the lastName dataField");
 
-    assert.ok(!form.getEditor("lastName").element().hasClass("dx-invalid"), "not invalid css class");
+    assert.ok(!form.getEditor("lastName").$element().hasClass("dx-invalid"), "not invalid css class");
     assert.ok(form.getEditor("lastName").option("isValid"), "isValid");
 });
 
@@ -1096,7 +1097,7 @@ QUnit.test("The 'dataField' option of a simple item should affect the editorOpti
             firstName: "Mike"
         },
         items: [{ dataField: "firstName" }]
-    }).data("dxForm");
+    }).dxForm("instance");
 
     assert.equal(form.getEditor("firstName").option("name"), "firstName", "Editor name is OK");
 });
@@ -1107,7 +1108,7 @@ QUnit.test("The 'dataField' option of a simple item should not affect existing e
             firstName: "Mike"
         },
         items: [{ dataField: "firstName", editorOptions: { name: "UserName" } }]
-    }).data("dxForm");
+    }).dxForm("instance");
 
     assert.equal(form.getEditor("firstName").option("name"), "UserName", "Editor name is OK");
 });
@@ -1257,9 +1258,9 @@ QUnit.test("ColCount for groups", function(assert) {
 
     //assert
     assert.equal($layoutManagers.length, 3);
-    assert.equal($layoutManagers.eq(0).data("dxLayoutManager").option("colCount"), 3, "colCount from 1 layout manager");
-    assert.equal($layoutManagers.eq(1).data("dxLayoutManager").option("colCount"), 1, "colCount from 2 layout manager");
-    assert.equal($layoutManagers.eq(2).data("dxLayoutManager").option("colCount"), 2, "colCount from 3 layout manager");
+    assert.equal($layoutManagers.eq(0).dxLayoutManager("instance").option("colCount"), 3, "colCount from 1 layout manager");
+    assert.equal($layoutManagers.eq(1).dxLayoutManager("instance").option("colCount"), 1, "colCount from 2 layout manager");
+    assert.equal($layoutManagers.eq(2).dxLayoutManager("instance").option("colCount"), 2, "colCount from 3 layout manager");
 });
 
 QUnit.test("Caption of group", function(assert) {
@@ -1338,11 +1339,12 @@ QUnit.test("Group template", function(assert) {
                 {
                     itemType: "group",
                     caption: "Bio",
-                    template: function(data, $container) {
+                    template: function(data, container) {
+                        assert.deepEqual(typeUtils.isRenderer(container), config().useJQueryRenderer, "container is correct");
                         $("<div>")
                             .text(data.formData.biography)
                             .addClass("template-biography")
-                            .appendTo($container);
+                            .appendTo(container);
                     }
                 }]
         }),
@@ -1415,7 +1417,7 @@ QUnit.test("Recursive grouping", function(assert) {
                         }]
                 }
             ]
-        }).data("dxForm"),
+        }).dxForm("instance"),
         template = $("<div/>"),
         items = form._testResultItems;
 
@@ -1491,7 +1493,7 @@ QUnit.test("Hide nested group item", function(assert) {
                 }
             ]
         }),
-        form = $formContainer.data("dxForm");
+        form = $formContainer.dxForm("instance");
 
         //act
     var $formGroups = $formContainer.find("." + internals.FORM_GROUP_CLASS);
@@ -1571,7 +1573,7 @@ QUnit.test("Align labels in column", function(assert) {
                     default:
                 }
             }
-        }).data("dxForm");
+        }).dxForm("instance");
 
     var $col1 = $(".dx-col-0"),
         $col2 = $(".dx-col-1"),
@@ -1617,7 +1619,7 @@ QUnit.test("Align labels in column when labels text is identical", function(asse
     var testContainer = $("#form"),
         form = testContainer.dxForm({
             formData: { TestBool: true, ShipName: "Test" }
-        }).data("dxForm");
+        }).dxForm("instance");
 
     var $col1 = $(".dx-col-0"),
         $maxLabelWidth = getLabelWidth(testContainer, form, "Ship Name:"),
@@ -1638,7 +1640,7 @@ QUnit.test("Disable alignItemLabels", function(assert) {
     testContainer.dxForm({
         formData: { TestBool: true, ShipName: "Test" },
         alignItemLabels: false
-    }).data("dxForm");
+    }).dxForm("instance");
 
     var $labelTexts = $("." + internals.FIELD_ITEM_LABEL_CONTENT_CLASS);
 
@@ -1663,7 +1665,7 @@ QUnit.test("Disable alignItemLabels in group", function(assert) {
                 items: ["Name", "LastName"]
             }
         ]
-    }).data("dxForm");
+    }).dxForm("instance");
 
     var $groups = $("." + internals.FORM_GROUP_CLASS),
         $labelTexts = $groups.eq(0).find("." + internals.FIELD_ITEM_LABEL_CONTENT_CLASS);
@@ -1714,7 +1716,7 @@ QUnit.test("Align labels in column when alignItemLabelsInAllGroups is enabled", 
                     colCount: 2,
                     items: ["address.room", "address.house"]
                 }]
-        }).data("dxForm"),
+        }).dxForm("instance"),
         labelWidth,
         textWidth,
         $groups,
@@ -1796,7 +1798,7 @@ QUnit.test("Align labels in column when alignItemLabelsInAllGroups is disabled",
                     colCount: 2,
                     items: ["address.room", "address.house"]
                 }]
-        }).data("dxForm"),
+        }).dxForm("instance"),
         $groups;
 
     //assert
@@ -1863,7 +1865,7 @@ QUnit.test("Align labels when layout is changed in responsive box_T306106", func
                     default:
                 }
             }
-        }).data("dxForm");
+        }).dxForm("instance");
 
     var $labelsContent = testContainer.find("." + internals.FIELD_ITEM_LABEL_CONTENT_CLASS),
         $maxLabelWidth = getLabelWidth(testContainer, form, "First Name:"),
@@ -1908,7 +1910,7 @@ QUnit.test("Align labels when layout is changed when small window size by defaul
                     default:
                 }
             }
-        }).data("dxForm");
+        }).dxForm("instance");
 
     var $labelsContent = testContainer.find("." + internals.FIELD_ITEM_LABEL_CONTENT_CLASS),
         $maxLabelWidth = getLabelWidth(testContainer, form, "First Name:"),
@@ -2043,7 +2045,7 @@ QUnit.test("Render tabs with groups", function(assert) {
     assert.equal($groups.eq(1).find("." + internals.FIELD_ITEM_CLASS).length, 2, "group 2");
 
     //act
-    testContainer.find(".dx-tabpanel").data("dxTabPanel").option("selectedIndex", 1);
+    testContainer.find(".dx-tabpanel").dxTabPanel("instance").option("selectedIndex", 1);
     $groups = testContainer.find(".dx-item-selected " + "." + internals.FORM_GROUP_CLASS);
     assert.equal($groups.eq(0).find("." + internals.FIELD_ITEM_CLASS).length, 2, "group 1");
 
@@ -2092,7 +2094,7 @@ QUnit.test("Render tabs when formData is changed", function(assert) {
                             }]
                         }]
                 }]
-        }).data("dxForm"),
+        }).dxForm("instance"),
         $groups = testContainer.find(".dx-item-selected " + "." + internals.FORM_GROUP_CLASS);
 
     //act
@@ -2117,7 +2119,7 @@ QUnit.test("Render tabs when formData is changed", function(assert) {
     assert.equal($groups.eq(1).find("." + internals.FIELD_ITEM_CLASS).length, 2, "group 2");
 
     //act
-    testContainer.find(".dx-tabpanel").data("dxTabPanel").option("selectedIndex", 1);
+    testContainer.find(".dx-tabpanel").dxTabPanel("instance").option("selectedIndex", 1);
     this.clock.tick();
     $groups = testContainer.find(".dx-item-selected " + "." + internals.FORM_GROUP_CLASS);
 
@@ -2161,7 +2163,7 @@ QUnit.test("Check align labels", function(assert) {
                             items: ["firstName", "lastName"]
                         }]
                 }]
-        }).data("dxForm"),
+        }).dxForm("instance"),
         $labelTexts,
         labelWidth,
         $layoutManager,
@@ -2182,7 +2184,7 @@ QUnit.test("Check align labels", function(assert) {
     assert.roughEqual($labelTexts.eq(1).width(), labelWidth, 1, "tab 1 col 2");
 
     //act
-    testContainer.find(".dx-tabpanel").data("dxTabPanel").option("selectedIndex", 1);
+    testContainer.find(".dx-tabpanel").dxTabPanel("instance").option("selectedIndex", 1);
     this.clock.tick();
 
     //assert
@@ -2234,7 +2236,7 @@ QUnit.test("Check align labels when layout is changed by default_T306106", funct
                             items: ["firstName", "lastName"]
                         }]
                 }]
-        }).data("dxForm"),
+        }).dxForm("instance"),
         labelWidth,
         labelContentWidth,
         $labelsContent,
@@ -2253,7 +2255,7 @@ QUnit.test("Check align labels when layout is changed by default_T306106", funct
     }
 
     //act
-    testContainer.find(".dx-tabpanel").data("dxTabPanel").option("selectedIndex", 1);
+    testContainer.find(".dx-tabpanel").dxTabPanel("instance").option("selectedIndex", 1);
     this.clock.tick();
 
     //assert
@@ -2303,7 +2305,7 @@ QUnit.test("Check align labels when layout is changed_T306106", function(assert)
                             items: ["firstName", "lastName"]
                         }]
                 }]
-        }).data("dxForm"),
+        }).dxForm("instance"),
         labelWidth,
         labelContentWidth,
         $labelsContent,
@@ -2325,7 +2327,7 @@ QUnit.test("Check align labels when layout is changed_T306106", function(assert)
     }
 
     //act
-    testContainer.find(".dx-tabpanel").data("dxTabPanel").option("selectedIndex", 1);
+    testContainer.find(".dx-tabpanel").dxTabPanel("instance").option("selectedIndex", 1);
     this.clock.tick();
 
     //assert
@@ -2355,7 +2357,7 @@ QUnit.test("Data is updated correctly_T353275", function(assert) {
                             items: ["firstName"]
                         }]
                 }]
-        }).data("dxForm");
+        }).dxForm("instance");
 
     //act
     form.updateData("firstName", "Test First Name");
@@ -2363,6 +2365,47 @@ QUnit.test("Data is updated correctly_T353275", function(assert) {
     //assert
     assert.equal(form.getEditor("firstName").option("value"), "Test First Name", "value of editor by 'firstName' field");
 });
+
+QUnit.test("tabElement argument of tabTemplate option is correct", function(assert) {
+    var testContainer = $("#form");
+    testContainer.dxForm({
+        formData: {
+            firstName: ""
+        },
+        items: [
+            {
+                itemType: "tabbed",
+                tabs: [
+                    {
+                        items: ["firstName"],
+                        tabTemplate: function(tabData, tabIndex, tabElement) {
+                            assert.equal(typeUtils.isRenderer(tabElement), config().useJQueryRenderer, "tabElement is correct");
+                        }
+                    }]
+            }]
+    });
+});
+
+QUnit.test("tabElement argument of tabs.template option is correct", function(assert) {
+    var testContainer = $("#form");
+    testContainer.dxForm({
+        formData: {
+            firstName: ""
+        },
+        items: [
+            {
+                itemType: "tabbed",
+                tabs: [
+                    {
+                        items: ["firstName"],
+                        template: function(tabData, tabIndex, tabElement) {
+                            assert.equal(typeUtils.isRenderer(tabElement), config().useJQueryRenderer, "tabElement is correct");
+                        }
+                    }]
+            }]
+    });
+});
+
 
 QUnit.test("Update editorOptions of an editor inside the tab", function(assert) {
     //arrange
@@ -2382,7 +2425,7 @@ QUnit.test("Update editorOptions of an editor inside the tab", function(assert) 
                     }]
                 }]
             }]
-        }).data("dxForm");
+        }).dxForm("instance");
 
     assert.equal(form.getEditor("firstName").option("disabled"), true, "initial state: editor is disabled");
 
@@ -2561,11 +2604,11 @@ QUnit.test("Check component instance onEditorEnterKey", function(assert) {
         onEditorEnterKey: function(args) {
             testArgs = args;
         }
-    }).data("dxForm");
+    }).dxForm("instance");
 
     //act
     editor = form.getEditor("work");
-    triggerKeyUp(editor.element(), 13);
+    triggerKeyUp(editor.$element(), 13);
 
     //assert
     assert.notEqual(testArgs.component, undefined, "component");
@@ -2815,15 +2858,15 @@ QUnit.test("Validate via validation rules", function(assert) {
                 item.validationRules = [{ type: "required" }];
             }
         }
-    }).data("dxForm");
+    }).dxForm("instance");
 
     //act
     form.validate();
 
     //assert
-    assert.equal(form.element().find(".dx-invalid").length, 2, "invalid editors count");
-    assert.equal(form.element().find(".dx-invalid [id=" + getID(form, "name") + "]").length, 1, "invalid name editor");
-    assert.equal(form.element().find(".dx-invalid [id=" + getID(form, "firstName") + "]").length, 1, "invalid firstName editor");
+    assert.equal(form.$element().find(".dx-invalid").length, 2, "invalid editors count");
+    assert.equal(form.$element().find(".dx-invalid [id=" + getID(form, "name") + "]").length, 1, "invalid name editor");
+    assert.equal(form.$element().find(".dx-invalid [id=" + getID(form, "firstName") + "]").length, 1, "invalid firstName editor");
 });
 
 QUnit.test("Validate with a custom validation group", function(assert) {
@@ -2840,15 +2883,15 @@ QUnit.test("Validate with a custom validation group", function(assert) {
                 item.validationRules = [{ type: "required" }];
             }
         }
-    }).data("dxForm");
+    }).dxForm("instance");
 
     //act
     form.validate();
 
     //assert
-    assert.equal(form.element().find(".dx-invalid").length, 2, "invalid editors count");
-    assert.equal(form.element().find(".dx-invalid [id=" + getID(form, "name") + "]").length, 1, "invalid name editor");
-    assert.equal(form.element().find(".dx-invalid [id=" + getID(form, "firstName") + "]").length, 1, "invalid firstName editor");
+    assert.equal(form.$element().find(".dx-invalid").length, 2, "invalid editors count");
+    assert.equal(form.$element().find(".dx-invalid [id=" + getID(form, "name") + "]").length, 1, "invalid name editor");
+    assert.equal(form.$element().find(".dx-invalid [id=" + getID(form, "firstName") + "]").length, 1, "invalid firstName editor");
 });
 
 QUnit.test("Validate form when several forms are rendered", function(assert) {
@@ -2864,7 +2907,7 @@ QUnit.test("Validate form when several forms are rendered", function(assert) {
                     item.validationRules = [{ type: "required" }];
                 }
             }
-        }).data("dxForm"),
+        }).dxForm("instance"),
         form2 = $("#form2").dxForm({
             formData: {
                 name2: "",
@@ -2876,19 +2919,19 @@ QUnit.test("Validate form when several forms are rendered", function(assert) {
                     item.validationRules = [{ type: "required" }];
                 }
             }
-        }).data("dxForm");
+        }).dxForm("instance");
 
     //act
     form1.validate();
 
     //assert
-    assert.equal(form1.element().find(".dx-invalid").length, 2, "invalid editors count");
-    assert.equal(form1.element().find(".dx-invalid [id=" + getID(form1, "name") + "]").length, 1, "invalid name editor");
-    assert.equal(form1.element().find(".dx-invalid [id=" + getID(form1, "firstName") + "]").length, 1, "invalid firstName editor");
+    assert.equal(form1.$element().find(".dx-invalid").length, 2, "invalid editors count");
+    assert.equal(form1.$element().find(".dx-invalid [id=" + getID(form1, "name") + "]").length, 1, "invalid name editor");
+    assert.equal(form1.$element().find(".dx-invalid [id=" + getID(form1, "firstName") + "]").length, 1, "invalid firstName editor");
 
-    assert.equal(form2.element().find(".dx-invalid").length, 0, "invalid editors count");
-    assert.equal(form2.element().find(".dx-invalid [id=" + getID(form2, "name2") + "]").length, 0, "invalid name editor");
-    assert.equal(form2.element().find(".dx-invalid [id=" + getID(form2, "firstName2") + "]").length, 0, "invalid firstName editor");
+    assert.equal(form2.$element().find(".dx-invalid").length, 0, "invalid editors count");
+    assert.equal(form2.$element().find(".dx-invalid [id=" + getID(form2, "name2") + "]").length, 0, "invalid name editor");
+    assert.equal(form2.$element().find(".dx-invalid [id=" + getID(form2, "firstName2") + "]").length, 0, "invalid firstName editor");
 });
 
 QUnit.test("Validate via 'isRequired' item option", function(assert) {
@@ -2907,17 +2950,17 @@ QUnit.test("Validate via 'isRequired' item option", function(assert) {
                 item.label = { text: "Middle name" };
             }
         }
-    }).data("dxForm");
+    }).dxForm("instance");
 
     //act
     form.validate();
 
     //assert
-    assert.equal(form.element().find(".dx-invalid").length, 2, "invalid editors count");
-    assert.equal(form.element().find(".dx-invalid [id=" + getID(form, "name") + "]").length, 1, "invalid name editor");
-    assert.equal(form.element().find(".dx-invalid-message").first().text(), "Middle name is required", "Message contains the custom label name of validated field by default");
-    assert.equal(form.element().find(".dx-invalid [id=" + getID(form, "firstName") + "]").length, 1, "invalid firstName editor");
-    assert.equal(form.element().find(".dx-invalid-message").last().text(), "First Name is required", "Message contains the name of validated field by default if label isn't defined");
+    assert.equal(form.$element().find(".dx-invalid").length, 2, "invalid editors count");
+    assert.equal(form.$element().find(".dx-invalid [id=" + getID(form, "name") + "]").length, 1, "invalid name editor");
+    assert.equal(form.$element().find(".dx-invalid-message").first().text(), "Middle name is required", "Message contains the custom label name of validated field by default");
+    assert.equal(form.$element().find(".dx-invalid [id=" + getID(form, "firstName") + "]").length, 1, "invalid firstName editor");
+    assert.equal(form.$element().find(".dx-invalid-message").last().text(), "First Name is required", "Message contains the name of validated field by default if label isn't defined");
 });
 
 QUnit.test("Validate via validationRules when rules and 'isRequired' item option are both defined", function(assert) {
@@ -2932,14 +2975,14 @@ QUnit.test("Validate via validationRules when rules and 'isRequired' item option
             item.isRequired = true;
             item.validationRules = [{ type: 'stringLength', max: 3 }];
         }
-    }).data("dxForm");
+    }).dxForm("instance");
 
     //act
     form.validate();
 
     //assert
-    assert.equal(form.element().find(".dx-invalid").length, 1, "invalid editors count");
-    assert.equal(form.element().find(".dx-invalid [id=" + getID(form, "lastName") + "]").length, 1, "invalid lastName editor");
+    assert.equal(form.$element().find(".dx-invalid").length, 1, "invalid editors count");
+    assert.equal(form.$element().find(".dx-invalid [id=" + getID(form, "lastName") + "]").length, 1, "invalid lastName editor");
 });
 
 QUnit.test("Reset validation summary when values are reset in form", function(assert) {
@@ -2954,7 +2997,7 @@ QUnit.test("Reset validation summary when values are reset in form", function(as
         customizeItem: function(item) {
             item.isRequired = true;
         }
-    }).data("dxForm");
+    }).dxForm("instance");
 
     //act
     form.validate();
@@ -2975,7 +3018,7 @@ QUnit.test("Changing an editor options of an any item does not invalidate whole 
                 { dataField: "firstName", editorType: "dxTextBox", editorOption: { width: 100, height: 20 } },
                 { dataField: "lastName", editorType: "dxTextBox", editorOption: { width: 100, height: 20 } }
             ]
-        }).data("dxForm"),
+        }).dxForm("instance"),
         formInvalidateSpy = sinon.spy(form, "_invalidate");
 
     //act
@@ -3010,7 +3053,7 @@ QUnit.test("Changing editorOptions of subitem change editor options (T316522)", 
                 ]
             }
         ]
-    }).data("dxForm");
+    }).dxForm("instance");
 
     //act
     form.option("items[0].items[0].items[1].editorOptions", { width: 80, height: 40 });
@@ -3032,7 +3075,7 @@ QUnit.test("Reset editor's value", function(assert) {
             isDeveloper: true
         },
         items: ["name", "lastName", "room", "isDeveloper"]
-    }).data("dxForm");
+    }).dxForm("instance");
 
         //act
     form.resetValues();
@@ -3080,7 +3123,7 @@ QUnit.test("One column screen should be customizable with screenByWidth option o
             colCount: 2,
             screenByWidth: function() { return "md"; },
             items: ["name", "lastName", "room", "isDeveloper"]
-        }).data("dxForm");
+        }).dxForm("instance");
 
 
     assert.equal($form.find(".dx-single-column-item-content").length, 0, "There are no single column items");
@@ -3140,7 +3183,7 @@ QUnit.test("Form should repaint once when screen factor changed", function(asser
             },
             screenByWidth: function() { return screen; },
             items: ["name", "lastName", "sex", "room", "isDeveloper"]
-        }).data("dxForm"),
+        }).dxForm("instance"),
         refreshStub = sinon.stub(form, "_refresh");
 
     //act
@@ -3167,7 +3210,7 @@ QUnit.test("Form doesn't redraw layout when colCount doesn't changed", function(
                     value: "Test"
                 }
             }]
-        }).data("dxForm");
+        }).dxForm("instance");
 
     //act
     form.getEditor("test").option("value", "Changed");
@@ -3197,7 +3240,7 @@ QUnit.test("Form doesn't redraw layout when colCount doesn't changed and colCoun
                     value: "Test"
                 }
             }]
-        }).data("dxForm");
+        }).dxForm("instance");
 
     //act
     form.getEditor("test").option("value", "Changed");
@@ -3393,7 +3436,7 @@ QUnit.test("Form refreshes only one time on dimension changed with group layout"
                     { name: "test3", editorType: "dxTextBox" }
                 ]
             }]
-        }).data("dxForm");
+        }).dxForm("instance");
 
     var refreshSpy = sinon.spy(form, "_refresh");
 
@@ -3421,7 +3464,7 @@ QUnit.test("Form redraw layout when colCount is 'auto' and an calculated colCoun
                 name: "test2",
                 editorType: "dxTextBox"
             }]
-        }).data("dxForm");
+        }).dxForm("instance");
 
     var refreshSpy = sinon.spy(form, "_refresh");
 

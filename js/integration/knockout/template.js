@@ -51,7 +51,7 @@ var KoTemplate = TemplateBase.inherit({
     },
 
     _renderCore: function(options) {
-        var model = this._prepareDataForContainer(options.model, options.container);
+        var model = this._prepareDataForContainer(options.model, $(options.container));
 
         if(typeUtils.isDefined(options.index)) {
             model.$index = options.index;

@@ -403,7 +403,7 @@ var subscribes = {
     },
 
     updateResizableArea: function() {
-        var $allResizableElements = this.element().find(".dx-scheduler-appointment.dx-resizable");
+        var $allResizableElements = this.$element().find(".dx-scheduler-appointment.dx-resizable");
 
         var horizontalResizables = grep($allResizableElements, function(el) {
             var $el = $(el),
@@ -666,7 +666,7 @@ var subscribes = {
     getTargetedAppointmentData: function(appointmentData, appointmentElement, appointmentIndex) {
         var recurringData = this._getSingleAppointmentData(appointmentData, {
                 skipDateCalculation: true,
-                $appointment: appointmentElement
+                $appointment: $(appointmentElement)
             }),
             result = {};
 

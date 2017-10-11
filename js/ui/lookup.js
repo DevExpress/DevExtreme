@@ -4,6 +4,7 @@ var $ = require("../core/renderer"),
     eventsEngine = require("../events/core/events_engine"),
     support = require("../core/utils/support"),
     commonUtils = require("../core/utils/common"),
+    domUtils = require("../core/utils/dom"),
     typeUtils = require("../core/utils/type"),
     each = require("../core/utils/iterator").each,
     extend = require("../core/utils/extend").extend,
@@ -67,6 +68,7 @@ var Lookup = DropDownList.inherit({
         extend(this._deprecatedOptions, {
             /**
             * @name dxLookupOptions_showNextButton
+            * @type boolean
             * @publicName showNextButton
             * @deprecated #pageLoadMode
             */
@@ -97,7 +99,7 @@ var Lookup = DropDownList.inherit({
             * @publicName titleTemplate
             * @type template
             * @default "title"
-            * @type_function_param1 titleElement:jQuery
+            * @type_function_param1 titleElement:Element
             * @type_function_return string|Node|jQuery
             */
             titleTemplate: "title",
@@ -106,7 +108,7 @@ var Lookup = DropDownList.inherit({
             * @name dxLookupOptions_onTitleRendered
             * @publicName onTitleRendered
             * @extends Action
-            * @type_function_param1_field1 titleElement:jQuery
+            * @type_function_param1_field1 titleElement:Element
             * @action
             */
             onTitleRendered: null,
@@ -342,14 +344,6 @@ var Lookup = DropDownList.inherit({
             pageLoadMode: "scrollBottom",
 
             /**
-            * @name dxLookupOptions_showNextButton
-            * @publicName showNextButton
-            * @type boolean
-            * @default undefined
-            */
-            showNextButton: undefined,
-
-            /**
             * @name dxLookupOptions_nextButtonText
             * @publicName nextButtonText
             * @type string
@@ -372,7 +366,7 @@ var Lookup = DropDownList.inherit({
             * @default "group"
             * @type_function_param1 itemData:object
             * @type_function_param2 itemIndex:number
-            * @type_function_param3 itemElement:jQuery
+            * @type_function_param3 itemElement:Element
             * @type_function_return string|Node|jQuery
             */
             groupTemplate: "group",
@@ -420,7 +414,7 @@ var Lookup = DropDownList.inherit({
             * @type template
             * @default null
             * @type_function_param1 selectedItem:object
-            * @type_function_param2 fieldElement:object
+            * @type_function_param2 fieldElement:Element
             * @type_function_return string|Node|jQuery
             */
 
@@ -686,14 +680,14 @@ var Lookup = DropDownList.inherit({
     },
 
     _inputWrapper: function() {
-        return this.element().find("." + LOOKUP_FIELD_WRAPPER_CLASS);
+        return this.$element().find("." + LOOKUP_FIELD_WRAPPER_CLASS);
     },
 
     _render: function() {
         this._renderSubmitElement();
         this.callBase();
 
-        this.element()
+        this.$element()
             .addClass(LOOKUP_CLASS)
             .toggleClass(LOOKUP_POPOVER_MODE, this.option("usePopover"));
     },
@@ -701,7 +695,7 @@ var Lookup = DropDownList.inherit({
     _renderSubmitElement: function() {
         this._$submitElement = $("<input>")
             .attr("type", "hidden")
-            .appendTo(this.element());
+            .appendTo(this.$element());
     },
 
     _getSubmitElement: function() {
@@ -729,7 +723,7 @@ var Lookup = DropDownList.inherit({
         this._$fieldWrapper = $("<div>").addClass(LOOKUP_FIELD_WRAPPER_CLASS)
             .append(this._$field)
             .append($arrow)
-            .appendTo(this.element());
+            .appendTo(this.$element());
 
         this.option("useInkRipple") && this._renderInkRipple();
     },
@@ -766,7 +760,7 @@ var Lookup = DropDownList.inherit({
         }
 
         this._$field.text(this.option("displayValue") || this.option("placeholder"));
-        this.element().toggleClass(LOOKUP_EMPTY_CLASS, !this.option("selectedItem"));
+        this.$element().toggleClass(LOOKUP_EMPTY_CLASS, !this.option("selectedItem"));
     },
 
     _renderFieldTemplate: function(template) {
@@ -774,7 +768,7 @@ var Lookup = DropDownList.inherit({
         var data = this._fieldRenderData();
         template.render({
             model: data,
-            container: this._$field
+            container: domUtils.getPublicElement(this._$field)
         });
     },
 
@@ -789,9 +783,9 @@ var Lookup = DropDownList.inherit({
             validationError = this.option("validationError");
             if(validationError && validationError.message) {
                 this._$popupValidationMessage.text(validationError.message);
-                this._popup.content().addClass(LOOKUP_POPUP_INVALID_CLASS);
+                this._popup.$content().addClass(LOOKUP_POPUP_INVALID_CLASS);
             } else {
-                this._popup.content().removeClass(LOOKUP_POPUP_INVALID_CLASS);
+                this._popup.$content().removeClass(LOOKUP_POPUP_INVALID_CLASS);
             }
         }
 
@@ -827,11 +821,11 @@ var Lookup = DropDownList.inherit({
         this._popup = this._createComponent(this._$popup, Popover, extend(this._popupConfig(), {
             showEvent: null,
             hideEvent: null,
-            target: this.element(),
+            target: this.$element(),
             fullScreen: false,
             shading: false,
             closeOnTargetScroll: true,
-            width: this._isInitialOptionValue("popupWidth") ? (function() { return this.element().outerWidth(); }).bind(this) : this._popupConfig().width
+            width: this._isInitialOptionValue("popupWidth") ? (function() { return this.$element().outerWidth(); }).bind(this) : this._popupConfig().width
         }));
 
         this._popup.on({
@@ -946,7 +940,7 @@ var Lookup = DropDownList.inherit({
 
     _dimensionChanged: function() {
         if(this.option("usePopover") && !this.option("popupWidth")) {
-            this.option("popupWidth", this.element().width());
+            this.option("popupWidth", this.$element().width());
         }
 
         this.callBase();
@@ -962,7 +956,7 @@ var Lookup = DropDownList.inherit({
 
     _renderPopupContent: function() {
         if(this._popup.NAME === "dxPopup") {
-            this._$popupValidationMessage = $("<div>").addClass(LOOKUP_POPUP_VALIDATION_MESSAGE).appendTo(this._popup.content());
+            this._$popupValidationMessage = $("<div>").addClass(LOOKUP_POPUP_VALIDATION_MESSAGE).appendTo(this._popup.$content());
         }
         this.callBase();
         this._renderSearch();
@@ -1170,7 +1164,7 @@ var Lookup = DropDownList.inherit({
     },
 
     _renderPlaceholder: function() {
-        if(this.element().find("input").length === 0) {
+        if(this.$element().find("input").length === 0) {
             return;
         }
 

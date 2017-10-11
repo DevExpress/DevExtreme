@@ -3,6 +3,7 @@
 /**
 * @name TransitionExecutor
 * @publicName TransitionExecutor
+* @namespace DevExpress
 * @module animation/transition_executor
 * @export default
 */

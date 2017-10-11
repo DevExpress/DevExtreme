@@ -74,6 +74,16 @@
 @SCHEDULER_SMALL_SIZE_FACTOR: 0.5;
 @SCHEDULER_SMALL_FONT_SIZE: 14px;
 
+@SCHEDULER_TIME_INDICATOR_FONT_SIZE: 30px;
+@SCHEDULER_TIME_INDICATOR_SIZE: 1px;
+@SCHEDULER_TIME_INDICATOR_TOP: -15px;
+@SCHEDULER_TIME_INDICATOR_LEFT: -12px;
+
+@SCHEDULER_TIME_INDICATOR_SHADOW_COLOR: rgba(255, 255, 255, 0.10);
+@SCHEDULER_TIME_INDICATOR_SHADOW: 0 1px 0 0px @SCHEDULER_TIME_INDICATOR_SHADOW_COLOR;
+@SCHEDULER_TIME_INDICATOR_TEXT_SHADOW: @SCHEDULER_TIME_INDICATOR_SHADOW_COLOR 1px 0px 0px;
+@SCHEDULER_CURRENT_TIME_CELL_BORDER_SIZE: 2px;
+
 .dx-scheduler-pseudo-cell {
     &:before {
         content: "";
@@ -440,6 +450,140 @@
 
 .dx-scheduler-appointment-content-allday {
     display: none;
+}
+
+.dx-scheduler-header-panel-cell.dx-scheduler-header-panel-current-time-cell {
+    color: @SCHEDULER_APPOINTMENT_BASE_COLOR;
+    &:before {
+            position: absolute;
+            bottom: 0;
+            right: 0;
+            width: 100%;
+            height: @SCHEDULER_CURRENT_TIME_CELL_BORDER_SIZE;
+            content: '';
+            background-color: @SCHEDULER_TIME_INDICATOR_COLOR;
+        }
+}
+
+.dx-scheduler-date-time-shader-all-day {
+    margin-left: @SCHEDULER_LEFT_COLUMN_WIDTH;
+    width: 100%;
+    background-color: @SCHEDULER_TIME_INDICATOR_BACKGROUND_COLOR;
+    position: absolute;
+    pointer-events: none;
+}
+
+.dx-scheduler-date-time-indicator {
+        background-color:  @SCHEDULER_TIME_INDICATOR_COLOR;
+        position: absolute;
+        .box-shadow(@SCHEDULER_TIME_INDICATOR_SHADOW);
+
+        &:before {
+            font-size: @SCHEDULER_TIME_INDICATOR_FONT_SIZE;
+            color: @SCHEDULER_TIME_INDICATOR_COLOR;
+            position: absolute;
+            z-index: 1000;
+            margin-top: @SCHEDULER_TIME_INDICATOR_TOP;
+            margin-left: @SCHEDULER_TIME_INDICATOR_LEFT;
+            .text-shadow(@SCHEDULER_TIME_INDICATOR_TEXT_SHADOW);
+        }
+}
+
+.dx-scheduler-work-space-week, 
+.dx-scheduler-work-space-work-week,
+.dx-scheduler-work-space-day {
+    .dx-scheduler-date-time-indicator {
+        margin-left: @SCHEDULER_LEFT_COLUMN_WIDTH;
+        height: @SCHEDULER_TIME_INDICATOR_SIZE;
+        .dx-icon-spinright;
+    }
+
+    .dx-scheduler-date-time-shader{
+        margin-left: @SCHEDULER_LEFT_COLUMN_WIDTH;
+    }
+
+    .dx-scheduler-date-time-shader-top,
+    .dx-scheduler-date-time-shader-bottom {
+         &:before {
+             width: inherit;
+             height: inherit;
+             content: "";
+             left: inherit;
+             position: absolute;
+             margin-left: @SCHEDULER_LEFT_COLUMN_WIDTH;
+             background-color:  @SCHEDULER_TIME_INDICATOR_BACKGROUND_COLOR;
+             pointer-events: none;
+         }
+    }
+
+    &.dx-scheduler-work-space-both-scrollbar {
+        .dx-scheduler-date-time-shader,
+        .dx-scheduler-date-time-indicator,
+        .dx-scheduler-date-time-shader-all-day {
+            margin-left: 0;
+        }
+
+        .dx-scheduler-date-time-shader-top,
+        .dx-scheduler-date-time-shader-bottom {
+            &:before {
+                margin-left: 0;
+            }
+        }
+
+    }
+
+    &.dx-rtl {
+        .dx-scheduler-date-time-indicator {
+            margin-left: 0;
+            .dx-icon-spinleft;
+
+             &:before {
+                margin-right: @SCHEDULER_TIME_INDICATOR_LEFT;
+            }
+        }
+
+        .dx-scheduler-date-time-shader-top,
+        .dx-scheduler-date-time-shader-bottom {
+            &:before {
+                margin-left: 0;
+            }
+        }
+    }
+}
+
+.dx-scheduler-timeline {
+    .dx-scheduler-date-time-indicator {
+        width: @SCHEDULER_TIME_INDICATOR_SIZE;
+        top: 0;
+        .dx-icon-spindown;
+
+        &:before {
+            margin-left: @SCHEDULER_TIME_INDICATOR_TOP;
+            margin-top: @SCHEDULER_TIME_INDICATOR_LEFT;
+        }
+    }
+    .dx-scheduler-date-time-shader{
+        height: 100%;
+
+
+        &:before {
+            width: inherit;
+            height: 100%;
+            content: "";
+            left: 0;
+            position: absolute;
+            background-color:  @SCHEDULER_TIME_INDICATOR_BACKGROUND_COLOR;
+            pointer-events: none;
+        }
+    }
+
+    .dx-scheduler-header-panel-cell.dx-scheduler-header-panel-current-time-cell {
+        border-bottom: 2px solid @SCHEDULER_TIME_INDICATOR_COLOR;
+        .box-shadow(none);
+        &:before {
+            content: none;
+        }
+    }
 }
 
 .dx-scheduler-work-space {
@@ -823,6 +967,11 @@
         .dx-scheduler-header-row .dx-scheduler-header-panel-cell {
             &:first-child {
                 border-left: none;
+                
+                .dx-rtl & {
+                    border-right: none;
+                    border-left: @SCHEDULER_BASE_BORDER;
+                }
             }
         }
 
@@ -1150,6 +1299,7 @@
 }
 
 .dx-scheduler-header-panel-cell {
+    position: relative;
     border-left: @SCHEDULER_BASE_BORDER;
     border-right: @SCHEDULER_BASE_BORDER;
     color: @SCHEDULER_PANEL_TEXT_COLOR;
@@ -1272,6 +1422,19 @@
         left: 0;
         background-color: @SCHEDULER_TIME_PANEL_BACKGROUND_COLOR;
     }
+
+    &.dx-scheduler-time-panel-current-time-cell {
+        color: @SCHEDULER_APPOINTMENT_BASE_COLOR;
+        &:before {
+            position: absolute;
+            top: 0;
+            right: 0;
+            width: @SCHEDULER_CURRENT_TIME_CELL_BORDER_SIZE;
+            height: inherit;
+            content: '';
+            background-color: @SCHEDULER_TIME_INDICATOR_COLOR;
+        }
+    }
 }
 
 .dx-scheduler-date-table {
@@ -1327,6 +1490,7 @@
 
 .dx-scheduler-scrollable-appointments {
     position: absolute;
+    top: 0;
 }
 
 .dx-scheduler-appointment {
@@ -1953,6 +2117,11 @@
 }
 
 .dx-rtl {
+    .dx-scheduler-date-time-shader-all-day {
+        margin-left: 0;
+        margin-right: @SCHEDULER_LEFT_COLUMN_WIDTH;
+    }
+
     .dx-scheduler-navigator {
         float: right;
         padding-left: 0;

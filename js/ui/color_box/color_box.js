@@ -125,7 +125,7 @@ var ColorBox = DropDownEditor.inherit({
              * @type template
              * @default null
              * @type_function_param1 value:string
-             * @type_function_param2 fieldElement:jQuery
+             * @type_function_param2 fieldElement:Element
              * @type_function_return string|Node|jQuery
              */
             fieldTemplate: null,
@@ -214,7 +214,7 @@ var ColorBox = DropDownEditor.inherit({
     _createColorView: function() {
         this._popup.overlayContent().addClass(COLOR_BOX_OVERLAY_CLASS);
 
-        var $colorView = $("<div>").appendTo(this._popup.content());
+        var $colorView = $("<div>").appendTo(this._popup.$content());
 
         this._colorView = this._createComponent($colorView, ColorView, this._colorViewConfig());
 
@@ -329,7 +329,7 @@ var ColorBox = DropDownEditor.inherit({
 
     _render: function() {
         this.callBase();
-        this.element().addClass(COLOR_BOX_CLASS);
+        this.$element().addClass(COLOR_BOX_CLASS);
     },
 
     _renderInput: function() {
@@ -340,8 +340,8 @@ var ColorBox = DropDownEditor.inherit({
     },
 
     _renderColorPreview: function() {
-        this.element().wrapInner($("<div>").addClass(COLOR_BOX_INPUT_CONTAINER_CLASS));
-        this._$colorBoxInputContainer = this.element().children().eq(0);
+        this.$element().wrapInner($("<div>").addClass(COLOR_BOX_INPUT_CONTAINER_CLASS));
+        this._$colorBoxInputContainer = this.$element().children().eq(0);
 
         this._$colorResultPreview = $("<div>")
             .addClass(COLOR_BOX_COLOR_RESULT_PREVIEW_CLASS)
