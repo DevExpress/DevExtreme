@@ -5,6 +5,7 @@ var $ = require("jquery"),
     dateLocalization = require("localization/date"),
     messageLocalization = require("localization/message"),
     localization = require("localization"),
+    config = require("core/config"),
     logger = require("core/utils/console").logger;
 
 var generateExpectedDate = require("../../helpers/dateHelper.js").generateDate;
@@ -631,6 +632,26 @@ QUnit.test("parse: base", function(assert) {
     assert.equal(numberLocalization.parse("12,000"), 12000);
 });
 
+QUnit.test("parse with custom separators", function(assert) {
+    var oldDecimalSeparator = config().decimalSeparator,
+        oldGroupSeparator = config().groupSeparator;
+
+    config({
+        decimalSeparator: ",",
+        groupSeparator: " "
+    });
+
+    try {
+        assert.equal(numberLocalization.parse("1,2"), 1.2);
+        assert.equal(numberLocalization.parse("12 000"), 12000);
+    } finally {
+        config({
+            decimalSeparator: oldDecimalSeparator,
+            groupSeparator: oldGroupSeparator
+        });
+    }
+});
+
 QUnit.test("parse: test starts with not digit symbols", function(assert) {
     assert.equal(numberLocalization.parse("$ 1.2"), 1.2);
     assert.equal(numberLocalization.parse("1.2 руб."), 1.2);
@@ -678,6 +699,29 @@ QUnit.test('format as function', function(assert) {
     assert.equal(numberLocalization.format(437, function(value) { return "!" + value; }), '!437');
     assert.equal(numberLocalization.format(437, { formatter: function(value) { return "!" + value; } }), '!437');
 });
+
+QUnit.test("customize group and decimal separators using config", function(assert) {
+    var oldDecimalSeparator = config().decimalSeparator,
+        oldGroupSeparator = config().groupSeparator;
+
+    config({
+        decimalSeparator: ",",
+        groupSeparator: " "
+    });
+
+    try {
+        assert.equal(numberLocalization.format(1.1, { type: "fixedPoint", precision: 2 }), "1,10");
+        assert.equal(numberLocalization.format(1234567, "fixedPoint"), "1 234 567");
+        assert.equal(numberLocalization.format(1234567.89, { type: "fixedPoint", precision: 2 }), "1 234 567,89");
+        assert.equal(numberLocalization.format(1234567.89, { type: "currency", precision: 2 }), "$1 234 567,89");
+    } finally {
+        config({
+            decimalSeparator: oldDecimalSeparator,
+            groupSeparator: oldGroupSeparator
+        });
+    }
+});
+
 
 QUnit.module("Localization currency");
 

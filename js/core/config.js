@@ -6,6 +6,8 @@ var config = {
     defaultCurrency: "USD",
     designMode: false,
     serverDecimalSeparator: ".",
+    decimalSeparator: ".",
+    groupSeparator: ",",
     forceIsoDateParsing: true,
     wrapActionsBeforeExecute: true,
     useJQueryRenderer: true

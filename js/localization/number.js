@@ -4,6 +4,8 @@ var dependencyInjector = require("../core/utils/dependency_injector"),
     inArray = require("../core/utils/array").inArray,
     each = require("../core/utils/iterator").each,
     isPlainObject = require("../core/utils/type").isPlainObject,
+    escapeRegExp = require("../core/utils/common").escapeRegExp,
+    config = require("../core/config"),
     errors = require("../core/errors");
 
 var MAX_LARGE_NUMBER_POWER = 4,
@@ -144,7 +146,7 @@ var numberLocalization = dependencyInjector({
     _addGroupSeparators: function(value) {
         var parts = value.toString().split(".");
 
-        return parts[0].replace(/\B(?=(\d{3})+(?!\d))/g, ",") + (parts[1] ? "." + parts[1] : "");
+        return parts[0].replace(/\B(?=(\d{3})+(?!\d))/g, config().groupSeparator) + (parts[1] ? "." + parts[1] : "");
     },
 
     _formatNumberCore: function(value, format, formatConfig) {
@@ -176,7 +178,7 @@ var numberLocalization = dependencyInjector({
             value += "%";
         }
 
-        return value.toString();
+        return value.toString().replace(".", config().decimalSeparator);
     },
 
     _normalizeFormat: function(format) {
@@ -244,7 +246,11 @@ var numberLocalization = dependencyInjector({
             errors.log("W0011");
         }
 
-        return parseFloat(text.replace(/^\D+|,+/g, ""));
+        text = text
+            .replace(new RegExp(escapeRegExp(config().decimalSeparator), "g"), ".")
+            .replace(new RegExp("^\\D+|" + escapeRegExp(config().groupSeparator) + "+", "g"), "");
+
+        return parseFloat(text);
     }
 });
 
