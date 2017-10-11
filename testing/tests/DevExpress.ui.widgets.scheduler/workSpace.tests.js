@@ -112,6 +112,16 @@ QUnit.testStart(function() {
         assert.notOk($element.hasClass("dx-scheduler-work-space-count"), "dxSchedulerWorkSpace has 'dx-scheduler-workspace' css class");
     });
 
+    QUnit.test("Scheduler workspace with intervalCount should have a right attribute", function(assert) {
+        this.instance.option("intervalCount", 3);
+        var $element = this.instance.$element();
+        assert.equal($element.attr("dx-interval-count"), 3, "'dx-interval-count' is right");
+
+        this.instance.option("intervalCount", 1);
+        $element = this.instance.$element();
+        assert.notOk($element.attr("dx-interval-count"), "'dx-interval-count' is right");
+    });
+
     QUnit.test("Scheduler workspace should contain time panel, header panel, allday panel and content", function(assert) {
         var $element = this.instance.$element();
 

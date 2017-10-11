@@ -33,6 +33,7 @@ var COMPONENT_CLASS = "dx-scheduler-work-space",
     WORKSPACE_WITH_OVERLAPPING_CLASS = "dx-scheduler-work-space-overlapping",
 
     WORKSPACE_GROUPED_ATTR = "dx-group-row-count",
+    WORKSPACE_INTERVAL_COUNT_ATTR = "dx-interval-count",
 
     TIME_PANEL_CLASS = "dx-scheduler-time-panel",
     TIME_PANEL_CELL_CLASS = "dx-scheduler-time-panel-cell",
@@ -449,7 +450,22 @@ var SchedulerWorkSpace = Widget.inherit({
     },
 
     _toggleWorkSpaceCountClass: function() {
-        this.$element().toggleClass(WORKSPACE_WITH_COUNT_CLASS, this._isWorkSpaceWithCount());
+        var isWorkspaceWithCount = this._isWorkSpaceWithCount();
+
+        this.$element().toggleClass(WORKSPACE_WITH_COUNT_CLASS, isWorkspaceWithCount);
+        if(isWorkspaceWithCount) {
+            this._attachIntervalCountAttr(this.option("intervalCount"));
+        } else {
+            this._detachIntervalCountAttr();
+        }
+    },
+
+    _detachIntervalCountAttr: function() {
+        this.$element().removeAttr(WORKSPACE_INTERVAL_COUNT_ATTR);
+    },
+
+    _attachIntervalCountAttr: function(intervalCount) {
+        this.$element().attr(WORKSPACE_INTERVAL_COUNT_ATTR, intervalCount);
     },
 
     _isWorkSpaceWithCount: function() {
