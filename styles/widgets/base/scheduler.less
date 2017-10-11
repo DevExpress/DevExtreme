@@ -1912,10 +1912,25 @@
 
         .dx-scheduler-dropdown-appointments-content {
             color: @SCHEDULER_APPOINTMENT_TEXT_COLOR;
+            opacity: .99;
         }
 
         .dx-button-content {
             line-height: inherit;
+            }
+        }
+
+    &.dx-button.dx-state-hover {
+        &:before {
+            pointer-events: none;
+            content: "";
+            position: absolute;
+            top: 0;
+            left: 0;
+            right: 0;
+            bottom: 0;
+            background-color: @SCHEDULER_APPOINTMENT_START_COLOR;
+            opacity: .98;
         }
     }
 }
