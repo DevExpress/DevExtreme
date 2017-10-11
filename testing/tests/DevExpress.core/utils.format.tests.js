@@ -156,6 +156,15 @@ QUnit.test("percent format parsing with float part", function(assert) {
     assert.strictEqual(parser("-10%"), null, "negative value without float part should be incorrect");
 });
 
+QUnit.test("format parser with custom separators", function(assert) {
+    var parser = generateNumberParser("#,##0.00", { groupSeparator: " ", decimalSeparator: "," });
+
+    assert.strictEqual(parser("1.23"), null, "parse number with wrong decimal separator");
+    assert.strictEqual(parser("1,23"), 1.23, "parse number with correct decimal separator");
+    assert.strictEqual(parser("1.234,56"), null, "parse number with wrong group separator");
+    assert.strictEqual(parser("1 234,56"), 1234.56, "parse number with correct group separator");
+});
+
 QUnit.module("number formatter");
 
 QUnit.test("integer with non-required digits", function(assert) {
@@ -264,4 +273,13 @@ QUnit.test("complex group", function(assert) {
     assert.strictEqual(formatter(123), "123", "format integer without groups");
     assert.strictEqual(formatter(1234), "1,234", "format integer with 1 group");
     assert.strictEqual(formatter(123456789), "12,34,56,789", "format integer with 3 groups");
+});
+
+QUnit.test("custom separators", function(assert) {
+    var formatter = generateNumberFormat("#,##0.##", { groupSeparator: " ", decimalSeparator: "," });
+
+    assert.strictEqual(formatter(0), "0", "number without separators");
+    assert.strictEqual(formatter(0.12), "0,12", "number with decimal separator");
+    assert.strictEqual(formatter(1234), "1 234", "number with group separator");
+    assert.strictEqual(formatter(1234.567), "1 234,57", "number with group and decimal separator");
 });
