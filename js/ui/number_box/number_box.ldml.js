@@ -1,7 +1,6 @@
 "use strict";
 
 var eventsEngine = require("../../events/core/events_engine"),
-    caret = require("../text_box/utils.caret"),
     extend = require("../../core/utils/extend").extend,
     devices = require("../../core/devices"),
     ensureDefined = require("../../core/utils/common").ensureDefined,
@@ -138,12 +137,6 @@ var NumberBoxLdml = NumberBoxBase.inherit({
         this._renderFormatter();
     },
 
-    _clearCache: function() {
-        delete this._formattedValue;
-        delete this._lastKey;
-        delete this._parsedValue;
-    },
-
     _renderFormatter: function() {
         this._clearCache();
         this._detachFormatterEvents();
@@ -247,8 +240,12 @@ var NumberBoxLdml = NumberBoxBase.inherit({
         }
     },
 
+    _isEqual: function(value1, value2) {
+        return value1 === value2 && 1 / (value1 * value2) !== -Infinity;
+    },
+
     _applyValue: function(value, forced) {
-        if(Object.is(this._parsedValue, value) && !forced) {
+        if(this._isEqual(this._parsedValue, value) && !forced) {
             return;
         }
 
@@ -317,13 +314,6 @@ var NumberBoxLdml = NumberBoxBase.inherit({
         }
     },
 
-    _caret: function(position) {
-        if(!arguments.length) {
-            return caret(this._input());
-        }
-        caret(this._input(), position);
-    },
-
     _optionChanged: function(args) {
         switch(args.name) {
             case "displayFormat":
@@ -334,6 +324,12 @@ var NumberBoxLdml = NumberBoxBase.inherit({
             default:
                 this.callBase(args);
         }
+    },
+
+    _clearCache: function() {
+        delete this._formattedValue;
+        delete this._lastKey;
+        delete this._parsedValue;
     },
 
     _clean: function() {
