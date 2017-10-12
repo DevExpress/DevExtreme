@@ -10,8 +10,9 @@ var eventsEngine = require("../../events/core/events_engine"),
 
 var NUMBER_FORMATTER_NAMESPACE = "dxNumberFormatter",
     FLOAT_SEPARATOR = ".",
-    FORWARD_DIRECTION = 1,
-    BACKWARD_DIRECTION = -1;
+    BACKSPACE_KEY = "Backspace",
+    DELETE_KEY = "Delete",
+    FORWARD_DIRECTION = 1;
 
 var NumberBoxLdml = NumberBoxBase.inherit({
 
@@ -61,9 +62,9 @@ var NumberBoxLdml = NumberBoxBase.inherit({
     },
 
     _getRemovingDirection: function() {
-        if(this._lastKey === "Backspace") {
+        if(this._lastKey === BACKSPACE_KEY) {
             return -1;
-        } else if(this._lastKey === "Delete") {
+        } else if(this._lastKey === DELETE_KEY) {
             return 1;
         } else {
             return 0;
@@ -76,12 +77,8 @@ var NumberBoxLdml = NumberBoxBase.inherit({
             start = caret.start,
             end = caret.end;
 
-        if(start === end) {
-            if(direction === BACKWARD_DIRECTION) {
-                start--;
-            } else if(direction === FORWARD_DIRECTION) {
-                end++;
-            }
+        if(start === end && direction) {
+            direction === FORWARD_DIRECTION ? end++ : start--;
         }
 
         return text.slice(start, end);
@@ -218,8 +215,8 @@ var NumberBoxLdml = NumberBoxBase.inherit({
             resultValue = text;
 
         switch(this._lastKey) {
-            case "Backspace":
-            case "Delete":
+            case BACKSPACE_KEY:
+            case DELETE_KEY:
                 resultValue = text.slice(0, caret.start) + "0" + text.slice(caret.end);
                 this._moveCaret(1);
                 break;
@@ -241,7 +238,8 @@ var NumberBoxLdml = NumberBoxBase.inherit({
     },
 
     _isEqual: function(value1, value2) {
-        return value1 === value2 && 1 / (value1 * value2) !== -Infinity;
+        var containsNegativeZero = 1 / (value1 * value2) === -Infinity;
+        return value1 === value2 && !containsNegativeZero;
     },
 
     _applyValue: function(value, forced) {
@@ -297,21 +295,21 @@ var NumberBoxLdml = NumberBoxBase.inherit({
 
     _normalizeText: function() {
         if(!this._useMaskBehavior()) return this.callBase();
+
         return this._input().val();
     },
 
     _parseValue: function(text) {
         if(!this._useMaskBehavior()) return this.callBase(text);
+
         return this.callBase(number.parse(text, this.option("displayFormat")));
     },
 
     _valueChangeEventHandler: function(e) {
-        if(this._useMaskBehavior()) {
-            this.callBase(e, number.parse(this._input().val(), this.option("displayFormat")));
-            this._applyValue(this.option("value"), true);
-        } else {
-            this.callBase(e);
-        }
+        if(!this._useMaskBehavior()) return this.callBase(e);
+
+        this.callBase(e, number.parse(this._input().val(), this.option("displayFormat")));
+        this._applyValue(this.option("value"), true);
     },
 
     _optionChanged: function(args) {
@@ -336,7 +334,6 @@ var NumberBoxLdml = NumberBoxBase.inherit({
         this._clearCache();
         this.callBase();
     }
-
 });
 
 module.exports = NumberBoxLdml;
