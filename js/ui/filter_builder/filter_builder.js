@@ -541,6 +541,10 @@ var FilterBuilder = Widget.inherit({
         return $button;
     },
 
+    _hasValueButton: function(condition) {
+        return condition[2] !== null && condition[1] !== null;
+    },
+
     _createOperationButtonWithMenu: function(condition, field) {
         var that = this,
             availableOperations = utils.getAvailableOperations(field, this.option("filterOperationDescriptions")),
@@ -556,7 +560,7 @@ var FilterBuilder = Widget.inherit({
                     onItemClick: function(e) {
                         currentOperation = e.itemData;
                         utils.updateConditionByOperation(condition, currentOperation.value);
-                        if(condition[2] !== null) {
+                        if(that._hasValueButton(condition)) {
                             if($operationButton.siblings().filter("." + FILTER_BUILDER_ITEM_VALUE_CLASS).length === 0) {
                                 that._createValueButton(condition, field).appendTo($operationButton.parent());
                             }
@@ -577,7 +581,7 @@ var FilterBuilder = Widget.inherit({
         this._createOperationButtonWithMenu(condition, field)
             .appendTo($item);
 
-        if(condition[2] !== null) {
+        if(this._hasValueButton(condition)) {
             this._createValueButton(condition, field)
                 .appendTo($item);
         }
@@ -688,7 +692,10 @@ var FilterBuilder = Widget.inherit({
 
     _createValueText: function(item, field, $container) {
         var that = this,
-            valueText = utils.getCurrentValueText(field, item[2]) || messageLocalization.format("dxFilterBuilder-enterValueText"),
+            getValueIndex = function() {
+                return item.length - 1;
+            },
+            valueText = utils.getCurrentValueText(field, item[getValueIndex()]) || messageLocalization.format("dxFilterBuilder-enterValueText"),
             $text = $("<div>")
                 .addClass(FILTER_BUILDER_ITEM_VALUE_TEXT_CLASS)
                 .attr("tabindex", 0)
@@ -697,15 +704,16 @@ var FilterBuilder = Widget.inherit({
 
         that._subscribeOnClickAndEnterKey($text, function() {
             $container.empty();
-            var value = item[2];
-            var $editor = that._createValueEditor(item[2], field, function(data) {
-                value = data;
-            }).appendTo($container);
+            var value = item[getValueIndex()],
+                $editor = that._createValueEditor(value, field, function(data) {
+                    value = data;
+                }).appendTo($container);
+
             eventsEngine.trigger($editor.find("input"), "focus");
 
             eventsEngine.on($editor, "focusout", function(e) {
                 $container.empty();
-                item[2] = value;
+                item[getValueIndex()] = value;
                 that._createValueText(item, field, $container);
             });
             eventsEngine.on($editor, "keyup", function(e) {
@@ -713,7 +721,7 @@ var FilterBuilder = Widget.inherit({
                     eventsEngine.off($editor, "focusout");
                     $container.empty();
                     if(e.keyCode === 13) {
-                        item[2] = value;
+                        item[getValueIndex()] = value;
                     }
                     var $newTextElement = that._createValueText(item, field, $container);
                     eventsEngine.trigger($newTextElement, "focus");
