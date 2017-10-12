@@ -788,6 +788,8 @@ QUnit.test("format as LDML pattern with custom separators", function(assert) {
     try {
         assert.equal(numberLocalization.format(12345.67, "#,##0.00 РУБ"), '12\xa0345,67 РУБ');
         assert.equal(numberLocalization.format(-12345.67, "#.#;(#.#)"), '(12345,7)');
+        assert.equal(numberLocalization.getDecimalSeparator(), ",");
+        assert.equal(numberLocalization.getThousandsSeparator(), "\xa0");
     } finally {
         config({
             decimalSeparator: oldDecimalSeparator,
