@@ -156,7 +156,12 @@ var Component = Class.inherit({
     _getOptionsByReference: function() {
         return this._optionsByReference;
     },
-
+    /**
+    * @name ComponentMethods_ctor
+    * @publicName ctor(options)
+    * @param1 options:ComponentOptions|undefined
+    * @hidden
+    */
     ctor: function(options) {
         this.NAME = publicComponentUtils.name(this.constructor);
 

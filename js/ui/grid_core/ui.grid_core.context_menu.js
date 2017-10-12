@@ -114,7 +114,7 @@ module.exports = {
              * @type_function_param1 e:Object
              * @type_function_param1_field4 items:Array<Object>
              * @type_function_param1_field5 target:string
-             * @type_function_param1_field6 targetElement:jQuery
+             * @type_function_param1_field6 targetElement:Element
              * @type_function_param1_field7 columnIndex:number
              * @type_function_param1_field8 column:Object
              * @type_function_param1_field9 rowIndex:number
@@ -129,7 +129,7 @@ module.exports = {
              * @type_function_param1 e:Object
              * @type_function_param1_field4 items:Array<Object>
              * @type_function_param1_field5 target:string
-             * @type_function_param1_field6 targetElement:jQuery
+             * @type_function_param1_field6 targetElement:Element
              * @type_function_param1_field7 columnIndex:number
              * @type_function_param1_field8 column:Object
              * @type_function_param1_field9 rowIndex:number

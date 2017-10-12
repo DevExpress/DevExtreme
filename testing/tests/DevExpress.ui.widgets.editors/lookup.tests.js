@@ -2172,6 +2172,7 @@ QUnit.test("custom titleTemplate option", function(assert) {
 QUnit.test("custom titleTemplate option is set correctly on init", function(assert) {
     var $lookup = $("#lookupOptions").dxLookup({
             titleTemplate: function(titleElement) {
+                assert.equal(isRenderer(titleElement), config().useJQueryRenderer, "titleElement is correct");
                 var result = "<div class='test-title-renderer'>";
                 result += "<h1>Title</h1>";
                 result += "</div>";

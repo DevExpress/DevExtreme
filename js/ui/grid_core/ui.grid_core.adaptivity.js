@@ -470,8 +470,9 @@ var AdaptiveColumnsController = modules.ViewController.inherit({
         }
     },
 
-    createFormByHiddenColumns: function($container, options) {
+    createFormByHiddenColumns: function(container, options) {
         var that = this,
+            $container = $(container),
             userFormOptions = {
                 items: that._getFormItemsByHiddenColumns(that._hiddenColumns),
                 formID: "dx-" + new Guid()
@@ -667,12 +668,12 @@ module.exports = {
                             eventsEngine.on($adaptiveColumnButton, eventUtils.addNamespace(clickEvent.name, ADAPTIVE_NAMESPACE), that.createAction(function() {
                                 that._adaptiveColumnsController.toggleExpandAdaptiveDetailRow(options.key);
                             }));
-                            $adaptiveColumnButton.appendTo(container);
+                            $adaptiveColumnButton.appendTo($(container));
                         };
                     }
                     if(options.rowType === ADAPTIVE_ROW_TYPE && column.command === "detail") {
                         return function(container, options) {
-                            that._adaptiveColumnsController.createFormByHiddenColumns(container, options);
+                            that._adaptiveColumnsController.createFormByHiddenColumns($(container), options);
                         };
                     }
                     return that.callBase(options);

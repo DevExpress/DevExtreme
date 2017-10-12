@@ -519,7 +519,7 @@ var KeyboardNavigationController = core.ViewController.inherit({
                 this._updateFocusedCellPosition(this._getCellElementFromTarget(eventTarget));
                 $cell = this._getNextCell(direction);
 
-                if(this._handleTabKeyOnMasterDetailCell($cell, direction)) {
+                if(!$cell || this._handleTabKeyOnMasterDetailCell($cell, direction)) {
                     return;
                 }
 

@@ -285,6 +285,7 @@ declare module DevExpress {
     }
 
     export class Devices implements EventsMixin<Devices> {
+        /** @docid DevicesMethods_ctor */
         constructor(options: { window: Window });
 
         /** @docid devicesmethods_current#current(deviceName) */
@@ -367,6 +368,7 @@ declare module DevExpress {
 
     /** @docid component */
     export class Component implements EventsMixin<Component> {
+        /** @docid ComponentMethods_ctor */
         constructor(options?: ComponentOptions)
 
         /** @docid componentmethods_beginupdate#beginUpdate() */
@@ -425,6 +427,7 @@ declare module DevExpress {
 
     /** @docid domcomponent */
     export class DOMComponent extends Component {
+        /** @docid DOMComponentMethods_ctor */
         constructor(element: JQuery, options?: DOMComponentOptions);
         constructor(element: HTMLElement, options?: DOMComponentOptions);
 
@@ -709,8 +712,11 @@ declare module DevExpress {
 
         /** @docid DataSource */
         export class DataSource implements EventsMixin<DataSource> {
+            /** @docid DataSourceMethods_ctor#ctor(url) */      
             constructor(url: string);
+            /** @docid DataSourceMethods_ctor#ctor(data) */
             constructor(data: Array<any>);
+            /** @docid DataSourceMethods_ctor#ctor(options) */    
             constructor(options: CustomStoreOptions);
             constructor(options: DataSourceOptions);
 
@@ -1360,10 +1366,10 @@ declare module DevExpress {
         };
 
         /** @docid ui_notify#notify(message,type,displayTime) */
-        export function notify(message: any, type: string, displayTime: number): void;
+        export function notify(message: string, type?: string, displayTime?: number): void;
 
-        /** @docid ui_notify#notify(options) */
-        export function notify(options: Object): void;
+        /** @docid ui_notify#notify(options,type,displayTime) */
+        export function notify(options: Object, type?: string, displayTime?: number): void;
 
         /** @docid ui_themes */
         export var themes: {

@@ -10,6 +10,7 @@ var $ = require("jquery"),
     PivotTabs = require("ui/pivot/ui.pivot_tabs"),
     Pivot = require("ui/pivot"),
     config = require("core/config"),
+    isRenderer = require("core/utils/type").isRenderer,
     pointerMock = require("../../helpers/pointerMock.js");
 
 require("common.css!");
@@ -260,7 +261,8 @@ QUnit.test("items should be cached", function(assert) {
     var $pivot = $("#pivot").dxPivot({
             selectedIndex: 0,
             items: [{ title: "all", text: "all content" }, { title: "unread", text: "unread content" }],
-            itemTemplate: function() {
+            itemTemplate: function(itemData, itemIndex, itemElement) {
+                assert.equal(isRenderer(itemElement), config().useJQueryRenderer, "itemElement is correct");
                 renderCount++;
             }
         }),
@@ -374,7 +376,8 @@ QUnit.test("content should be rendered from content template if specified", func
     var $pivot = $("#pivot").dxPivot({
             selectedIndex: 0,
             items: [{ title: "all", text: "all content" }, { title: "unread", text: "unread content" }],
-            contentTemplate: function() {
+            contentTemplate: function(container) {
+                assert.equal(isRenderer(container), config().useJQueryRenderer, "container is correct");
                 return "<div>content</div>";
             }
         }),
@@ -430,6 +433,38 @@ QUnit.test("content should be rerendered if content template changed", function(
 
     pivot.option("contentTemplate", function() { return null; }); // TODO: may be null?
     assert.equal($itemWrapper.text(), "all content", "content rendered");
+});
+
+
+QUnit.module("item title template", {
+    beforeEach: function() {
+        fx.off = true;
+    },
+    afterEach: function() {
+        fx.off = false;
+    }
+});
+
+QUnit.test("itemTitleTemplate should have correct arguments", function(assert) {
+    $("#pivot").dxPivot({
+        items: [{ title: "all", text: "all content" }],
+        itemTitleTemplate: function(itemData, itemIndex, itemElement) {
+            assert.equal(isRenderer(itemElement), config().useJQueryRenderer, "itemElement is correct");
+            return 1;
+        }
+    });
+});
+
+QUnit.test("titleTemplate for item should have correct arguments", function(assert) {
+    $("#pivot").dxPivot({
+        items: [{
+            titleTemplate: function(itemData, itemIndex, itemElement) {
+                assert.equal(isRenderer(itemElement), config().useJQueryRenderer, "itemElement is correct");
+                return "all";
+            },
+            text: "all content"
+        }]
+    });
 });
 
 

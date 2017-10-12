@@ -1363,8 +1363,8 @@ function createGridView(options, userOptions) {
                 { caption: 'Column 1', width: '120px' },
                     {
                         caption: 'Column 2', width: '130px', cellTemplate: function(container, options) {
-                            container.append('<div style="width: 130px" />');
-                            container.css('padding', 0);
+                            $(container).append('<div style="width: 130px" />');
+                            $(container).css('padding', 0);
                         }
                     }, { caption: 'Big Big Big Column Title' }, { caption: 'Column 4' }]),
                 dataController: new MockDataController({

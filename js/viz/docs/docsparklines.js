@@ -7,6 +7,12 @@
 */
 var BaseSparkline = {
     /**
+    * @name basesparkline_options
+    * @publicName Options
+    * @namespace DevExpress.viz.sparklines
+    * @hidden
+    */        
+    /**
     * @name basesparklineoptions_redrawOnResize
     * @publicName redrawOnResize
     * @hidden
@@ -125,6 +131,12 @@ var BaseSparkline = {
 * @export default
 */
 var dxSparkline = {
+    /**
+    * @name dxsparkline_options
+    * @publicName Options
+    * @namespace DevExpress.viz.sparklines
+    * @hidden
+    */       
     /**
    * @name dxsparklineoptions_datasource
    * @publicName dataSource
@@ -297,6 +309,12 @@ var dxSparkline = {
 * @export default
 */
 var dxBullet = {
+    /**
+    * @name dxbullet_options
+    * @publicName Options
+    * @namespace DevExpress.viz.sparklines
+    * @hidden
+    */       
     /**
     * @name dxbulletoptions_value
     * @publicName value

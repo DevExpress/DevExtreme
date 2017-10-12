@@ -8,6 +8,12 @@
 */
 var dxChart = {
     /**
+    * @name dxchart_options
+    * @publicName Options
+    * @namespace DevExpress.viz.charts
+    * @hidden
+    */    
+    /**
     * @name dxchartoptions_seriestemplate
     * @publicName seriesTemplate
     * @type object
@@ -2267,6 +2273,12 @@ var dxChart = {
 */
 var dxPieChart = {
     /**
+    * @name dxpiechart_options
+    * @publicName Options
+    * @namespace DevExpress.viz.charts
+    * @hidden
+    */        
+    /**
     * @name dxpiechartoptions_seriestemplate
     * @publicName seriesTemplate
     * @type object
@@ -2479,6 +2491,12 @@ var dxPieChart = {
 * @export default
 */
 var dxPolarChart = {
+    /**
+    * @name dxpolarchart_options
+    * @publicName Options
+    * @namespace DevExpress.viz.charts
+    * @hidden
+    */   
     /**
     * @name dxpolarchartoptions_seriestemplate
     * @publicName seriesTemplate
@@ -3660,7 +3678,12 @@ var dxPolarChart = {
 * @inherits BaseWidget
 */
 var BaseChart = {
-
+    /**
+    * @name basechart_options
+    * @publicName Options
+    * @namespace DevExpress.viz.charts
+    * @hidden
+    */   
     /**
     * @name basechartoptions_ondone
     * @publicName onDone
