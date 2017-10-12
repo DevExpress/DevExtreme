@@ -1,13 +1,13 @@
 "use strict";
 
-var generateNumberParser = require("core/utils/number_parser_generator").generateNumberParser;
-var generateNumberFormat = require("core/utils/number_parser_generator").generateNumberFormatter;
-var generateDateParser = require("core/utils/date_parser_generator").generateDateParser;
+var getNumberParser = require("localization/ldml/number").getParser;
+var getNumberFormatter = require("localization/ldml/number").getFormatter;
+var getDateParser = require("localization/ldml/date.parser").getParser;
 
 QUnit.module("date parser");
 
 QUnit.test("parse dd/MM/yyyy format", function(assert) {
-    var parser = generateDateParser("dd/MM/yyyy"),
+    var parser = getDateParser("dd/MM/yyyy"),
         date = new Date(2017, 8, 22);
 
     assert.deepEqual(parser("22/09/2017"), date, "parse correct date string");
@@ -20,7 +20,7 @@ QUnit.test("parse dd/MM/yyyy format", function(assert) {
 QUnit.module("number parser");
 
 QUnit.test("integer format parser with non-required digits", function(assert) {
-    var parser = generateNumberParser("#");
+    var parser = getNumberParser("#");
 
     assert.strictEqual(parser("0"), null, "parse zero number");
     assert.strictEqual(parser("00"), null, "parse zero number with 2 digits");
@@ -35,7 +35,7 @@ QUnit.test("integer format parser with non-required digits", function(assert) {
 });
 
 QUnit.test("integer format parser with required digits", function(assert) {
-    var parser = generateNumberParser("000");
+    var parser = getNumberParser("000");
 
     assert.strictEqual(parser("0"), null, "parse zero number with 1 digits");
     assert.strictEqual(parser("000"), 0, "parse zero number with 3 digits");
@@ -45,7 +45,7 @@ QUnit.test("integer format parser with required digits", function(assert) {
 });
 
 QUnit.test("integer format parser with required and non-required digits", function(assert) {
-    var parser = generateNumberParser("#000");
+    var parser = getNumberParser("#000");
 
     assert.strictEqual(parser("0"), null, "parse zero number with 1 digits");
     assert.strictEqual(parser("000"), 0, "parse zero number with 3 digits");
@@ -56,7 +56,7 @@ QUnit.test("integer format parser with required and non-required digits", functi
 });
 
 QUnit.test("integer format parser with group separator", function(assert) {
-    var parser = generateNumberParser("#,##0");
+    var parser = getNumberParser("#,##0");
 
     assert.strictEqual(parser("0"), 0, "parse zero number with 1 digits");
     assert.strictEqual(parser("000"), null, "parse zero number with 3 digits");
@@ -71,7 +71,7 @@ QUnit.test("integer format parser with group separator", function(assert) {
 });
 
 QUnit.test("integer format parser with complex groups", function(assert) {
-    var parser = generateNumberParser("#,##,##0");
+    var parser = getNumberParser("#,##,##0");
 
     assert.strictEqual(parser("0"), 0, "parse zero number with 1 digits");
     assert.strictEqual(parser("123"), 123, "parse number with 3 digits");
@@ -81,7 +81,7 @@ QUnit.test("integer format parser with complex groups", function(assert) {
 });
 
 QUnit.test("float parser with non-required digits", function(assert) {
-    var parser = generateNumberParser("#.##");
+    var parser = getNumberParser("#.##");
 
     assert.strictEqual(parser("0"), null, "parse zero number");
     assert.strictEqual(parser("."), 0, "parse zero with point");
@@ -99,7 +99,7 @@ QUnit.test("float parser with non-required digits", function(assert) {
 });
 
 QUnit.test("float parser with required digits", function(assert) {
-    var parser = generateNumberParser("#0.00");
+    var parser = getNumberParser("#0.00");
 
     assert.strictEqual(parser("0"), null, "parse zero number");
     assert.strictEqual(parser("0.00"), 0, "parse zero with 2 float digits");
@@ -111,7 +111,7 @@ QUnit.test("float parser with required digits", function(assert) {
 });
 
 QUnit.test("float parser with required and non-required digits", function(assert) {
-    var parser = generateNumberParser("#0.0##");
+    var parser = getNumberParser("#0.0##");
 
     assert.strictEqual(parser("0"), null, "parse zero number");
     assert.strictEqual(parser("0.0"), 0, "parse zero with 1 float digits");
@@ -124,7 +124,7 @@ QUnit.test("float parser with required and non-required digits", function(assert
 });
 
 QUnit.test("different positive and negative parsing", function(assert) {
-    var parser = generateNumberParser("#0.##;(#0.##)");
+    var parser = getNumberParser("#0.##;(#0.##)");
 
     assert.strictEqual(parser("0"), 0, "parse zero number");
     assert.strictEqual(parser("(5)"), -5, "parse negative integer");
@@ -137,7 +137,7 @@ QUnit.test("different positive and negative parsing", function(assert) {
 });
 
 QUnit.test("percent format parsing", function(assert) {
-    var parser = generateNumberParser("#0%");
+    var parser = getNumberParser("#0%");
 
     assert.strictEqual(parser("0%"), 0, "zero value");
     assert.strictEqual(parser("1%"), 0.01, "1 value");
@@ -146,7 +146,7 @@ QUnit.test("percent format parsing", function(assert) {
 });
 
 QUnit.test("percent format parsing with float part", function(assert) {
-    var parser = generateNumberParser("#.0#%");
+    var parser = getNumberParser("#.0#%");
 
     assert.strictEqual(parser("10.15%"), 0.1015, "parse float number with 2 digits");
     assert.strictEqual(parser("10.0%"), 0.1, "parse float number with 1 digit");
@@ -156,10 +156,19 @@ QUnit.test("percent format parsing with float part", function(assert) {
     assert.strictEqual(parser("-10%"), null, "negative value without float part should be incorrect");
 });
 
+QUnit.test("format parser with custom separators", function(assert) {
+    var parser = getNumberParser("#,##0.00", { groupSeparator: " ", decimalSeparator: "," });
+
+    assert.strictEqual(parser("1.23"), null, "parse number with wrong decimal separator");
+    assert.strictEqual(parser("1,23"), 1.23, "parse number with correct decimal separator");
+    assert.strictEqual(parser("1.234,56"), null, "parse number with wrong group separator");
+    assert.strictEqual(parser("1 234,56"), 1234.56, "parse number with correct group separator");
+});
+
 QUnit.module("number formatter");
 
 QUnit.test("integer with non-required digits", function(assert) {
-    var formatter = generateNumberFormat("#");
+    var formatter = getNumberFormatter("#");
 
     assert.strictEqual(formatter(null), "", "format an empty value");
     assert.strictEqual(formatter(NaN), "", "NaN value should not be formatted");
@@ -171,7 +180,7 @@ QUnit.test("integer with non-required digits", function(assert) {
 });
 
 QUnit.test("integer with required digits", function(assert) {
-    var formatter = generateNumberFormat("000");
+    var formatter = getNumberFormatter("000");
 
     assert.strictEqual(formatter(null), "", "format an empty value");
     assert.strictEqual(formatter(NaN), "", "NaN value should not be formatted");
@@ -183,7 +192,7 @@ QUnit.test("integer with required digits", function(assert) {
 });
 
 QUnit.test("float with precision formatting", function(assert) {
-    var formatter = generateNumberFormat("#.00");
+    var formatter = getNumberFormatter("#.00");
 
     assert.strictEqual(formatter(null), "", "format an empty value");
     assert.strictEqual(formatter(NaN), "", "NaN value should not be formatted");
@@ -199,7 +208,7 @@ QUnit.test("float with precision formatting", function(assert) {
 });
 
 QUnit.test("float with precision formatting and required integer digit", function(assert) {
-    var formatter = generateNumberFormat("#0.00");
+    var formatter = getNumberFormatter("#0.00");
 
     assert.strictEqual(formatter(5), "5.00", "format integer");
     assert.strictEqual(formatter(0), "0.00", "format zero");
@@ -207,7 +216,7 @@ QUnit.test("float with precision formatting and required integer digit", functio
 });
 
 QUnit.test("float with required an non-required digits in float part", function(assert) {
-    var formatter = generateNumberFormat("#0.0#");
+    var formatter = getNumberFormatter("#0.0#");
 
     assert.strictEqual(formatter(1), "1.0", "format integer");
     assert.strictEqual(formatter(1.2), "1.2", "format float with 1 digit");
@@ -216,7 +225,7 @@ QUnit.test("float with required an non-required digits in float part", function(
 });
 
 QUnit.test("different positive and negative formatting", function(assert) {
-    var formatter = generateNumberFormat("#0.000;(#0.000)");
+    var formatter = getNumberFormatter("#0.000;(#0.000)");
 
     assert.strictEqual(formatter(0), "0.000", "format zero");
     assert.strictEqual(formatter(-0), "(0.000)", "format negative zero");
@@ -227,13 +236,13 @@ QUnit.test("different positive and negative formatting", function(assert) {
 });
 
 QUnit.test("escaping format", function(assert) {
-    var formatter = generateNumberFormat("#'x #0% x'");
+    var formatter = getNumberFormatter("#'x #0% x'");
 
     assert.strictEqual(formatter(15), "15x #0% x", "special chars was escaped");
 });
 
 QUnit.test("percent formatting with leading zero", function(assert) {
-    var formatter = generateNumberFormat("#0.#%;(#0.#%)");
+    var formatter = getNumberFormatter("#0.#%;(#0.#%)");
 
     assert.strictEqual(formatter(0), "0%", "format zero");
     assert.strictEqual(formatter(0.1), "10%", "format less than 100");
@@ -243,15 +252,15 @@ QUnit.test("percent formatting with leading zero", function(assert) {
 });
 
 QUnit.test("escaped percent formatting", function(assert) {
-    var formatter = generateNumberFormat("#0.#'%'");
+    var formatter = getNumberFormatter("#0.#'%'");
     assert.strictEqual(formatter(0.5), "0.5%", "percent was escaped");
 
-    formatter = generateNumberFormat("#0.#'x % x'");
+    formatter = getNumberFormatter("#0.#'x % x'");
     assert.strictEqual(formatter(0.5), "0.5x % x", "percent with text was escaped");
 });
 
 QUnit.test("simple group", function(assert) {
-    var formatter = generateNumberFormat("#,##0");
+    var formatter = getNumberFormatter("#,##0");
 
     assert.strictEqual(formatter(123), "123", "format integer without groups");
     assert.strictEqual(formatter(1234), "1,234", "format integer with 1 group");
@@ -259,9 +268,18 @@ QUnit.test("simple group", function(assert) {
 });
 
 QUnit.test("complex group", function(assert) {
-    var formatter = generateNumberFormat("#,##,##0");
+    var formatter = getNumberFormatter("#,##,##0");
 
     assert.strictEqual(formatter(123), "123", "format integer without groups");
     assert.strictEqual(formatter(1234), "1,234", "format integer with 1 group");
     assert.strictEqual(formatter(123456789), "12,34,56,789", "format integer with 3 groups");
+});
+
+QUnit.test("custom separators", function(assert) {
+    var formatter = getNumberFormatter("#,##0.##", { groupSeparator: " ", decimalSeparator: "," });
+
+    assert.strictEqual(formatter(0), "0", "number without separators");
+    assert.strictEqual(formatter(0.12), "0,12", "number with decimal separator");
+    assert.strictEqual(formatter(1234), "1 234", "number with group separator");
+    assert.strictEqual(formatter(1234.567), "1 234,57", "number with group and decimal separator");
 });

@@ -138,7 +138,7 @@ var escapeChars = function(pattern, defaultPattern, processedIndexes, patternPos
     return pattern;
 };
 
-var generateDateFormat = function(format) {
+var getFormat = function(format) {
     var processedIndexes = [],
         defaultPattern = formatValue(new Date(2009, 8, 8, 6, 5, 4), format),
         patternPositions = defaultPattern.split("").map(function(_, index) { return index; }),
@@ -166,4 +166,4 @@ var generateDateFormat = function(format) {
     return result;
 };
 
-exports.generateDateFormat = generateDateFormat;
+exports.getFormat = getFormat;

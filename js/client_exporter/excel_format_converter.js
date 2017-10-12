@@ -4,7 +4,7 @@ var typeUtils = require("../core/utils/type"),
     stringUtils = require("../core/utils/string"),
     numberFormatter = require("../localization/number"),
     dateLocalization = require("../localization/date"),
-    generateDateFormat = require("../core/utils/date_format_generator").generateDateFormat,
+    getDateLDMLFormat = require("../localization/ldml/date.format").getFormat,
     getLanguageID = require("../localization/language_codes").getLanguageId,
     UNSUPPORTED_FORMAT_MAPPING = {
         quarter: "shortDate",
@@ -84,7 +84,7 @@ var excelFormatConverter = module.exports = {
 
         var that = this,
             formattedValue = (dateLocalization.format(new Date(2009, 8, 8, 6, 5, 4), format) || "").toString(),
-            result = generateDateFormat(format);
+            result = getDateLDMLFormat(format);
 
         result = that._convertDateFormatToOpenXml(result);
         result = that._getLanguageInfo(formattedValue) + result;

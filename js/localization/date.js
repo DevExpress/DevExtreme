@@ -5,7 +5,8 @@ var dependencyInjector = require("../core/utils/dependency_injector"),
     iteratorUtils = require("../core/utils/iterator"),
     inArray = require("../core/utils/array").inArray,
     dateParts = require("../core/utils/date_parts"),
-    serializeDate = require("../core/utils/date_serialization").serializeDate,
+    getLDMLDateFormatter = require("./ldml/date.formatter").getFormatter,
+    getLDMLDateParser = require("./ldml/date.parser").getParser,
     errors = require("../core/errors");
 
 require("./core");
@@ -34,205 +35,10 @@ var FORMATS_TO_PATTERN_MAP = {
     "datetime-local": "yyyy-MM-ddTHH':'mm':'ss"
 };
 
-var parseTime = function(text) {
-    var now = new Date(),
-        parts = text.split(" "),
-        time = parts[0].split(":"),
-
-        hours = Number(time[0]),
-        minutes = Number(time[1]),
-        second = Number(time[2]) || 0,
-
-        pm = /^pm$/i.test(parts[1]),
-
-        isValid = second < 60 && minutes < 60 && hours > 0 && hours < 13;
-
-    if(!isValid) {
-        return null;
-    }
-
-    if(!pm && hours === 12) {
-        hours = 0;
-    }
-
-    if(pm && hours !== 12) {
-        hours += 12;
-    }
-
-    return new Date(now.getFullYear(), now.getMonth(), now.getDate(), hours, minutes, second);
-};
-
-var removeTimezoneOffset = function(date) {
-    return new Date(date.valueOf() + date.getTimezoneOffset() * 60 * 1000);
-};
-
 var months = ["January", "February", "March", "April", "May", "June", "July", "August", "September", "October", "November", "December"],
     days = ["Sunday", "Monday", "Tuesday", "Wednesday", "Thursday", "Friday", "Saturday"],
     periods = ["AM", "PM"],
     quarters = ["Q1", "Q2", "Q3", "Q4"];
-
-// TODO: find best solution for parsing without timezone
-var parseWithoutTimezone = function(text) {
-    if(text.slice(-1) !== "Z") {
-        text += "Z";
-    }
-    return removeTimezoneOffset(new Date(text));
-};
-
-var PARSERS = {
-    "day": function(text) {
-        var now = new Date();
-        return new Date(now.getFullYear(), now.getMonth(), Number(text));
-    },
-
-    "hour": function(text) {
-        var now = new Date();
-        return new Date(now.getFullYear(), now.getMonth(), now.getDate(), Number(text));
-    },
-
-    "minute": function(text) {
-        var now = new Date();
-        return new Date(now.getFullYear(), now.getMonth(), now.getDate(), now.getHours(), Number(text));
-    },
-
-    "month": function(text) {
-        return new Date(new Date().getFullYear(), inArray(text, months));
-    },
-
-    "monthandday": function(text) {
-        var parts = text.split(" "),
-            result = PARSERS.month(parts[0]);
-
-        result.setDate(Number(parts[1]));
-
-        return result;
-    },
-
-    "monthandyear": function(text) {
-        var parts = text.split(" "),
-            result = PARSERS.month(parts[0]);
-
-        result.setYear(Number(parts[1]));
-
-        return result;
-    },
-
-    "year": function(text) {
-        var date = new Date(new Date(0));
-        date.setUTCFullYear(Number(text));
-
-        return removeTimezoneOffset(date);
-    },
-    "second": function(text) {
-        var now = new Date();
-        return new Date(now.getFullYear(), now.getMonth(), now.getDate(), now.getHours(), now.getMinutes(), Number(text));
-    },
-
-    "shortyear": function(text) {
-        var MAX_YEAR_IN_XXI_CENTURY = 36;
-        var year = Number(text);
-
-        if(year > MAX_YEAR_IN_XXI_CENTURY) {
-            year += 1900;
-        } else {
-            year += 2000;
-        }
-
-        return PARSERS.year(year);
-    },
-    "longdatelongtime": function(text) {
-        return new Date(text);
-    },
-    "shortdateshorttime": function(text) {
-        return new Date(text);
-    },
-    "longdate": function(text) {
-        return new Date(text);
-    },
-    "shortdate": function(text) {
-        if(!/^(0?[1-9]|1[012])\/(0?[1-9]|[12][0-9]|3[01])\/\d{1,4}/.test(text)) {
-            return;
-        }
-        var parts = text.split("/");
-
-        var date = new Date(Number(parts[2]), Number(parts[0]) - 1, Number(parts[1]));
-
-        if(parts[2].length < 3) {
-            date.setFullYear(Number(parts[2]), Number(parts[0]) - 1, Number(parts[1]));
-        }
-
-        return date;
-    },
-
-    "longtime": function(text) {
-        return parseTime(text);
-    },
-
-    "shorttime": function(text) {
-        return parseTime(text);
-    },
-
-    "millisecond": function(text) {
-        return new Date(Number(text));
-    },
-    "yyyy MMMM d": function(text) {
-        var parts = text.split(" ");
-        if(parts.length !== 3) {
-            return;
-        }
-
-        return new Date(Number(parts[0]), inArray(parts[1], months), Number(parts[2]));
-    },
-    "HH:mm": function(text) {
-        var parts = text.split(":");
-        return new Date(0, 0, 0, Number(parts[0]), Number(parts[1]), 0, 0);
-    },
-    "yyyy-MM-ddTHH:mm:ssZ": parseWithoutTimezone,
-    "yyyy-MM-ddTHH:mmZ": parseWithoutTimezone,
-    "datetime-local": parseWithoutTimezone,
-    "mediumdatemediumtime": function(text) {
-        var parts = text.split(", "),
-            dateParts = parts[0].split(" "),
-            timeParts = parts[1].split(" ");
-
-        var amPm = timeParts.length === 2
-            ? timeParts.pop()
-            : undefined;
-
-        var result = PARSERS.month(dateParts[0]);
-        result.setDate(Number(dateParts[1]));
-
-        timeParts = timeParts[0].split(":");
-        var hours = Number(timeParts[0]);
-
-        switch(String(amPm).toLowerCase()) {
-            case "am":
-                hours = hours === 12 ? 0 : hours;
-                break;
-
-            case "pm":
-                hours = hours === 12 ? 12 : hours + 12;
-                break;
-
-            default: break;
-        }
-
-        result.setHours(hours);
-        result.setMinutes(Number(timeParts[1]));
-
-        return result;
-    }
-};
-
-// generating pattern aliases
-iteratorUtils.each(FORMATS_TO_PATTERN_MAP, function(key, value) {
-    value = value.replace(/'/g, "");
-    PARSERS[value] = PARSERS[key];
-});
-
-var getByFormat = function(obj, format) {
-    return isString(format) && (obj[format.toLowerCase()] || obj[format.replace(/'/g, "")]);
-};
 
 // TODO: optimize
 var cutCaptions = function(captions, format) {
@@ -334,7 +140,7 @@ var dateLocalization = dependencyInjector({
             format = format.type || format;
             if(isString(format)) {
                 format = FORMATS_TO_PATTERN_MAP[format.toLowerCase()] || format;
-                return serializeDate(date, format);
+                return getLDMLDateFormatter(format)(date);
             }
         }
 
@@ -347,8 +153,7 @@ var dateLocalization = dependencyInjector({
     },
 
     parse: function(text, format) {
-        var result,
-            parser;
+        var result;
 
         if(!text) {
             return;
@@ -366,16 +171,13 @@ var dateLocalization = dependencyInjector({
             format = format.type;
         }
 
-        if(format && typeof (format) !== "function") {
-            parser = getByFormat(PARSERS, format);
+        if(typeof format === "string") {
+            format = FORMATS_TO_PATTERN_MAP[format.toLowerCase()] || format;
+            return getLDMLDateParser(format)(text);
         }
 
-        if(parser) {
-            result = parser(text);
-        } else {
-            errors.log("W0012");
-            result = new Date(text);
-        }
+        errors.log("W0012");
+        result = new Date(text);
 
         if(!result || isNaN(result.getTime())) {
             return;

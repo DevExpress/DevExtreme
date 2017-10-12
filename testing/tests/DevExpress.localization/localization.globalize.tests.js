@@ -25,6 +25,7 @@ SystemJS.config({
 
 define(function(require, exports, module) {
     require("../../helpers/l10n/cldrNumberDataRu.js");
+    require("../../helpers/l10n/cldrNumberDataDe.js");
     require("../../helpers/l10n/cldrCalendarDataRu.js");
     require("../../helpers/l10n/cldrCurrencyDataRu.js");
     require("../../helpers/l10n/cldrCurrencyDataEn.js");

@@ -1,50 +1,47 @@
 "use strict";
 
-var FLOAT_SEPARATOR = ".";
-var GROUP_SEPARATOR = ",";
-var ESCAPING_CHAR = "'";
+var escapeRegExp = require("../../core/utils/common").escapeRegExp;
 
-function escapeFormat(formatString) {
-    return formatString.replace(/[.*+?^${}()|\[\]\\]/g, "\\$&");
-}
+var DEFAULT_CONFIG = { groupSeparator: ",", decimalSeparator: "." },
+    ESCAPING_CHAR = "'";
 
-function getGroupSizes(formatString) {
-    return formatString.split(GROUP_SEPARATOR).slice(1).map(function(str) {
+function getGroupSizes(formatString, groupSeparator) {
+    return formatString.split(",").slice(1).map(function(str) {
         return str.length;
     });
 }
 
-function getIntegerPartRegExp(formatString) {
-    var result = escapeFormat(formatString);
-    result = result.replace(new RegExp("([0#\\" + GROUP_SEPARATOR + "]+)"), "($1)");
+function getIntegerPartRegExp(formatString, groupSeparator) {
+    var result = escapeRegExp(formatString);
+    result = result.replace(new RegExp("([0#,]+)"), "($1)");
 
     var groupSizes = getGroupSizes(formatString);
 
     result = result.replace(/0/g, "\\d");
 
-    if(formatString.indexOf("#" + GROUP_SEPARATOR) >= 0 && groupSizes.length) {
-        result = result.replace(new RegExp("[#\\" + GROUP_SEPARATOR + "]+"), "([1-9][\\d\\" + GROUP_SEPARATOR + "]*)?");
+    if(formatString.indexOf("#,") >= 0 && groupSizes.length) {
+        result = result.replace(new RegExp("[#,]+"), "([1-9][\\d\\" + groupSeparator + "]*)?");
     } else {
         result = result.replace(/#+/g, "([1-9]\\d*)?");
     }
     return result;
 }
 
-function getFloatPartRegExp(formatString) {
+function getFloatPartRegExp(formatString, decimalSeparator) {
     if(!formatString) return "()";
 
-    var result = escapeFormat(FLOAT_SEPARATOR + formatString);
-    result = result.replace(new RegExp("^(\\\\" + FLOAT_SEPARATOR + "0[0#]*)"), "($1)");
-    result = result.replace(new RegExp("^(\\\\" + FLOAT_SEPARATOR + "[0#]*)"), "($1)?");
+    var result = escapeRegExp(decimalSeparator + formatString);
+    result = result.replace(new RegExp("^(" + escapeRegExp(escapeRegExp(decimalSeparator)) + "0[0#]*)"), "($1)");
+    result = result.replace(new RegExp("^(" + escapeRegExp(escapeRegExp(decimalSeparator)) + "[0#]*)"), "($1)?");
     result = result.replace(/0/g, "\\d");
     result = result.replace(/#/g, "\\d?");
     return result;
 }
 
-function getRegExp(formatString) {
-    var floatParts = formatString.split(FLOAT_SEPARATOR),
-        integerRegexp = getIntegerPartRegExp(floatParts[0]),
-        floatRegExp = getFloatPartRegExp(floatParts[1]);
+function getRegExp(config, formatString) {
+    var floatParts = formatString.split("."),
+        integerRegexp = getIntegerPartRegExp(floatParts[0], config.groupSeparator),
+        floatRegExp = getFloatPartRegExp(floatParts[1], config.decimalSeparator);
 
     return integerRegexp + floatRegExp;
 }
@@ -67,14 +64,16 @@ function isPercentFormat(format) {
     return format.slice(-1) === "%";
 }
 
-function generateNumberParser(format) {
+function getParser(format, config) {
+    config = config || DEFAULT_CONFIG;
+
     return function(text) {
         if(!checkParserArguments(format, text)) {
             return null;
         }
 
         var signParts = getSignParts(format),
-            regExpText = signParts.map(getRegExp).join("|"),
+            regExpText = signParts.map(getRegExp.bind(null, config)).join("|"),
             parseResult = new RegExp("^(" + regExpText + ")$").exec(text);
 
         if(!parseResult) {
@@ -85,7 +84,7 @@ function generateNumberParser(format) {
             isNegative = parseResult[signPartResultCount + 2],
             integerResultIndex = isNegative ? signPartResultCount + 2 : 2,
             floatResultIndex = integerResultIndex + signPartResultCount - 1,
-            integerPart = parseResult[integerResultIndex].replace(new RegExp(GROUP_SEPARATOR, "g"), ""),
+            integerPart = parseResult[integerResultIndex].replace(new RegExp(escapeRegExp(config.groupSeparator), "g"), ""),
             floatPart = parseResult[floatResultIndex];
 
         var value = parseInt(integerPart) || 0;
@@ -95,7 +94,7 @@ function generateNumberParser(format) {
         }
 
         if(floatPart) {
-            value += parseFloat(floatPart) || 0;
+            value += parseFloat(floatPart.replace(config.decimalSeparator, ".")) || 0;
         }
 
         if(isNegative) {
@@ -146,7 +145,7 @@ function normalizeValueString(valuePart, minDigitCount, maxDigitCount) {
     return valuePart;
 }
 
-function applyGroups(valueString, groupSizes) {
+function applyGroups(valueString, groupSizes, groupSeparator) {
     if(!groupSizes.length) return valueString;
 
     var groups = [],
@@ -160,7 +159,7 @@ function applyGroups(valueString, groupSizes) {
             index++;
         }
     }
-    return groups.join(GROUP_SEPARATOR);
+    return groups.join(groupSeparator);
 }
 
 function formatNumberPart(format, valueString, minDigitCount, maxDigitCount) {
@@ -173,7 +172,9 @@ function formatNumberPart(format, valueString, minDigitCount, maxDigitCount) {
     }).join("");
 }
 
-function generateNumberFormatter(format) {
+function getFormatter(format, config) {
+    config = config || DEFAULT_CONFIG;
+
     return function(value) {
         if(typeof value !== "number" || isNaN(value)) return "";
 
@@ -190,7 +191,7 @@ function generateNumberFormatter(format) {
             value = -value;
         }
 
-        var floatFormatParts = numberFormat.split(FLOAT_SEPARATOR),
+        var floatFormatParts = numberFormat.split("."),
             minFloatPrecision = getRequiredDigitCount(floatFormatParts[1]),
             maxFloatPrecision = minFloatPrecision + getNonRequiredDigitCount(floatFormatParts[1]),
             minIntegerPrecision = getRequiredDigitCount(floatFormatParts[0]),
@@ -200,15 +201,18 @@ function generateNumberFormatter(format) {
         var valueParts = value.toFixed(maxFloatPrecision).split(".");
 
         var valueIntegerPart = normalizeValueString(reverseString(valueParts[0]), minIntegerPrecision, maxIntegerPrecision),
-            valueFloatPart = normalizeValueString(valueParts[1], minFloatPrecision, maxFloatPrecision),
-            integerString = reverseString(formatNumberPart(reverseString(floatFormatParts[0]), applyGroups(valueIntegerPart, groupSizes))),
+            valueFloatPart = normalizeValueString(valueParts[1], minFloatPrecision, maxFloatPrecision);
+
+        valueIntegerPart = applyGroups(valueIntegerPart, groupSizes, config.groupSeparator);
+
+        var integerString = reverseString(formatNumberPart(reverseString(floatFormatParts[0]), valueIntegerPart)),
             floatString = maxFloatPrecision ? formatNumberPart(floatFormatParts[1], valueFloatPart) : "";
 
-        var result = integerString + (floatString.match(/\d/) ? FLOAT_SEPARATOR : "") + floatString;
+        var result = integerString + (floatString.match(/\d/) ? config.decimalSeparator : "") + floatString;
 
         return result;
     };
 }
 
-exports.generateNumberParser = generateNumberParser;
-exports.generateNumberFormatter = generateNumberFormatter;
+exports.getParser = getParser;
+exports.getFormatter = getFormatter;

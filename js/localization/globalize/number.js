@@ -249,8 +249,8 @@ if(Globalize && Globalize.formatNumber) {
                 return;
             }
 
-            if(format && format.parser) {
-                return format.parser(text);
+            if(format && (format.parser || typeof format === "string")) {
+                return this.callBase.apply(this, arguments);
             }
 
             if(format) {
