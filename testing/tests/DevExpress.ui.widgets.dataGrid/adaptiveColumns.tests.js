@@ -704,7 +704,7 @@ QUnit.test("Show the form with cellTemplate when an adaptive row is expanded", f
             index: 1,
             allowEditing: true,
             cellTemplate: function(container, data) {
-                assert.equal(typeUtils.isRenderer(container), config().useJQueryRenderer, "cellElement is correct");
+                assert.equal(typeUtils.isRenderer(container), config().useJQuery, "cellElement is correct");
                 _column = data.column;
                 $(container).text(data.value + " template");
             }

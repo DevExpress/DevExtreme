@@ -985,7 +985,7 @@ QUnit.test("get element", function(assert) {
     var element = $("#component").TestComponent(),
         instance = dataUtils.data(element[0], "TestComponent");
 
-    if(config().useJQueryRenderer) {
+    if(config().useJQuery) {
         assert.deepEqual(instance.element()[0], $("#component")[0]);
     } else {
         assert.equal(instance.element(), $("#component").get(0));

@@ -2621,7 +2621,7 @@ QUnit.test("Render template", function(assert) {
         items: [{
             dataField: "test",
             template: function(data, container) {
-                assert.deepEqual(typeUtils.isRenderer(container), config().useJQueryRenderer, "container is correct");
+                assert.deepEqual(typeUtils.isRenderer(container), config().useJQuery, "container is correct");
 
                 $(container).append($("<span>").text("Template"));
 

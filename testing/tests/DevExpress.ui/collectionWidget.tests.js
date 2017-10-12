@@ -159,7 +159,7 @@ QUnit.test("custom render func, returns jquery", function(assert) {
             testProp: 5
         }],
         itemTemplate: function(item, index, itemElement) {
-            assert.equal(isRenderer(itemElement), config().useJQueryRenderer, "itemElemenet is correct");
+            assert.equal(isRenderer(itemElement), config().useJQuery, "itemElemenet is correct");
             $(itemElement).append($("<span />").html("Text is: " + String(item.testProp) + ";"));
         }
     });
@@ -636,7 +636,7 @@ QUnit.test("onItemClick should be fired when item is clicked", function(assert) 
 
     $item.trigger("dxclick");
     assert.ok(actionFired, "action fired");
-    assert.equal(isRenderer(actionData.itemElement), config().useJQueryRenderer, "correct element passed");
+    assert.equal(isRenderer(actionData.itemElement), config().useJQuery, "correct element passed");
     assert.strictEqual($(actionData.itemElement)[0], $item[0], "correct element passed");
     assert.strictEqual(actionData.itemData, "1", "correct element passed");
     assert.strictEqual(actionData.itemIndex, 1, "correct element itemIndex passed");

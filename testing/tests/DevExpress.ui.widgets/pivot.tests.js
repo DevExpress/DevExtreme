@@ -262,7 +262,7 @@ QUnit.test("items should be cached", function(assert) {
             selectedIndex: 0,
             items: [{ title: "all", text: "all content" }, { title: "unread", text: "unread content" }],
             itemTemplate: function(itemData, itemIndex, itemElement) {
-                assert.equal(isRenderer(itemElement), config().useJQueryRenderer, "itemElement is correct");
+                assert.equal(isRenderer(itemElement), config().useJQuery, "itemElement is correct");
                 renderCount++;
             }
         }),
@@ -377,7 +377,7 @@ QUnit.test("content should be rendered from content template if specified", func
             selectedIndex: 0,
             items: [{ title: "all", text: "all content" }, { title: "unread", text: "unread content" }],
             contentTemplate: function(container) {
-                assert.equal(isRenderer(container), config().useJQueryRenderer, "container is correct");
+                assert.equal(isRenderer(container), config().useJQuery, "container is correct");
                 return "<div>content</div>";
             }
         }),
@@ -449,7 +449,7 @@ QUnit.test("itemTitleTemplate should have correct arguments", function(assert) {
     $("#pivot").dxPivot({
         items: [{ title: "all", text: "all content" }],
         itemTitleTemplate: function(itemData, itemIndex, itemElement) {
-            assert.equal(isRenderer(itemElement), config().useJQueryRenderer, "itemElement is correct");
+            assert.equal(isRenderer(itemElement), config().useJQuery, "itemElement is correct");
             return 1;
         }
     });
@@ -459,7 +459,7 @@ QUnit.test("titleTemplate for item should have correct arguments", function(asse
     $("#pivot").dxPivot({
         items: [{
             titleTemplate: function(itemData, itemIndex, itemElement) {
-                assert.equal(isRenderer(itemElement), config().useJQueryRenderer, "itemElement is correct");
+                assert.equal(isRenderer(itemElement), config().useJQuery, "itemElement is correct");
                 return "all";
             },
             text: "all content"

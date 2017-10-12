@@ -2,7 +2,7 @@
 
 window.DevExpress = window.DevExpress || {};
 window.DevExpress.config = {
-    useJQueryRenderer: false
+    useJQuery: false
 };
 
 define(function(require) {
@@ -14,7 +14,7 @@ define(function(require) {
         var originalConfig = config();
 
         try {
-            assert.strictEqual(originalConfig.useJQueryRenderer, false);
+            assert.strictEqual(originalConfig.useJQuery, false);
         } finally {
             config(originalConfig);
         }

@@ -1616,7 +1616,7 @@ QUnit.test("onCellPrepared - header with sorting and headerFilter", function(ass
         resultOptions = options;
 
         //assert
-        assert.equal(typeUtils.isRenderer(options.cellElement), config().useJQueryRenderer, "has header filter");
+        assert.equal(typeUtils.isRenderer(options.cellElement), config().useJQuery, "has header filter");
         assert.ok($(options.cellElement).find(".dx-header-filter").length, "has header filter");
         assert.ok($(options.cellElement).find(".dx-sort-up").length, "has sort");
     };

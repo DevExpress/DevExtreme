@@ -1873,7 +1873,7 @@ QUnit.test("content", function(assert) {
     });
     var content = $scrollable.dxScrollable("instance").content();
 
-    assert.equal(isRenderer(content), config().useJQueryRenderer, "content is correct");
+    assert.equal(isRenderer(content), config().useJQuery, "content is correct");
     assert.ok($(content).hasClass(SCROLLABLE_CONTENT_CLASS), "returns content");
 });
 

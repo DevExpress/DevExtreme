@@ -284,7 +284,7 @@ QUnit.test("w/ options - itemTemplate", function(assert) {
     this.ddMenu.option({
         items: [0, 1, 2],
         itemTemplate: function(item, itemIndex, itemElement) {
-            assert.equal(isRenderer(itemElement), config().useJQueryRenderer, "itemElement is correct");
+            assert.equal(isRenderer(itemElement), config().useJQuery, "itemElement is correct");
             return "Item" + item;
         }
     });
@@ -306,7 +306,7 @@ QUnit.test("the 'buttonHeight' option should be passed to the menu button", func
 
 QUnit.test("the 'buttonTemplate' option should be passed to the menu button", function(assert) {
     this.ddMenu.option("buttonTemplate", function(data, container) {
-        assert.equal(isRenderer(container), config().useJQueryRenderer, "container is correct");
+        assert.equal(isRenderer(container), config().useJQuery, "container is correct");
         return $("<span class='it-is-button-template'/>");
     });
 

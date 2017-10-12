@@ -1238,7 +1238,7 @@ QUnit.test("contentTemplate should use correct contentElement", function(assert)
     $("#overlay").dxOverlay({
         visible: true,
         contentTemplate: function(contentElement) {
-            assert.equal(typeUtils.isRenderer(contentElement), config().useJQueryRenderer, "contentElement is correct");
+            assert.equal(typeUtils.isRenderer(contentElement), config().useJQuery, "contentElement is correct");
         }
     });
 });

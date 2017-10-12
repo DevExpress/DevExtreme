@@ -973,7 +973,7 @@ QUnit.test("onCellPrepared event", function(assert) {
     //assert
     assert.equal(cellPreparedArgs.length, 3, 'cellPreparedArgs count');
 
-    assert.equal(isRenderer(cellPreparedArgs.row.cellElement), config().useJQueryRenderer, "row area cellElement");
+    assert.equal(isRenderer(cellPreparedArgs.row.cellElement), config().useJQuery, "row area cellElement");
     assert.strictEqual($(cellPreparedArgs.row.cellElement).text(), "B", "row area cellElement");
     assert.strictEqual(cellPreparedArgs.row.element, pivotGrid.element(), "element");
     assert.strictEqual(cellPreparedArgs.row.component, pivotGrid, "component");

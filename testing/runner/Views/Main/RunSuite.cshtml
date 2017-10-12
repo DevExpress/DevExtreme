@@ -132,7 +132,7 @@
             window.DevExpress = window.DevExpress || {};
 
             window.DevExpress.config = {
-                useJQueryRenderer: !@Html.Raw(Json.Serialize(Model.NoJQuery))
+                useJQuery: !@Html.Raw(Json.Serialize(Model.NoJQuery))
             };
             var jqueryVersion = '@(Model.JQueryVersion != null ? Model.JQueryVersion.ToString().ToLowerInvariant() : "default")';
             var jqueryIncludeStrings = {
@@ -246,7 +246,7 @@
         });
 
 
-        var useJQuery = window.DevExpress.config.useJQueryRenderer;
+        var useJQuery = window.DevExpress.config.useJQuery;
 
         SystemJS.import("@Url.Content(Model.ScriptVirtualPath)")
         .then(function() {

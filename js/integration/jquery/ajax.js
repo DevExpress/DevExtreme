@@ -2,8 +2,8 @@
 
 var jquery = require("jquery"),
     ajax = require("../../core/utils/ajax"),
-    useJQueryRenderer = require("../../core/config")().useJQueryRenderer;
+    useJQuery = require("../../core/config")().useJQuery;
 
-if(useJQueryRenderer) {
+if(useJQuery) {
     ajax.setStrategy(jquery.ajax);
 }

@@ -118,10 +118,10 @@ QUnit.test("templates should be dom nodes without jQuery", function(assert) {
     assert.expect(2);
     $("#contentTemplate").dxSlideOutView({
         menuTemplate: function(element) {
-            assert.equal(typeUtils.isRenderer(element), config().useJQueryRenderer, "element is correct");
+            assert.equal(typeUtils.isRenderer(element), config().useJQuery, "element is correct");
         },
         contentTemplate: function(element) {
-            assert.equal(typeUtils.isRenderer(element), config().useJQueryRenderer, "element is correct");
+            assert.equal(typeUtils.isRenderer(element), config().useJQuery, "element is correct");
         }
     });
 });
@@ -160,7 +160,7 @@ QUnit.test("menuContent() function", function(assert) {
     var $element = $("#slideOutView").dxSlideOutView({}),
         instance = $element.dxSlideOutView("instance"),
         $menu = $element.find("." + SLIDEOUTVIEW_MENU_CONTENT_CLASS).eq(0);
-    assert.equal(typeUtils.isRenderer(instance.menuContent()), config().useJQueryRenderer, "menu element");
+    assert.equal(typeUtils.isRenderer(instance.menuContent()), config().useJQuery, "menu element");
     assert.equal($menu.get(0), $(instance.menuContent()).get(0), "menuContent function return correct DOMNode");
 });
 

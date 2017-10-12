@@ -8,7 +8,7 @@ var config = {
     serverDecimalSeparator: ".",
     forceIsoDateParsing: true,
     wrapActionsBeforeExecute: true,
-    useJQueryRenderer: true
+    useJQuery: true
 };
 
 var configMethod = function() {

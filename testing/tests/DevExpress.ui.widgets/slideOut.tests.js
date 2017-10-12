@@ -268,7 +268,7 @@ QUnit.test("grouped list should change it's selection after selectedItem option 
 QUnit.test("menu item itemTemplate (dataSource)", function(assert) {
     this.$element.dxSlideOut({
         menuItemTemplate: function(item, index, element) {
-            assert.equal(typeUtils.isRenderer(element), config().useJQueryRenderer, "element is correct");
+            assert.equal(typeUtils.isRenderer(element), config().useJQuery, "element is correct");
             return index + ": " + item.text;
         },
         dataSource: [
@@ -408,7 +408,7 @@ QUnit.test("menuGroupTemplate option", function(assert) {
     assert.equal($groupHeader.text(), "Group 1", "correct group name");
 
     instance.option("menuGroupTemplate", function(item, index, element) {
-        assert.equal(typeUtils.isRenderer(element), config().useJQueryRenderer, "element is correct");
+        assert.equal(typeUtils.isRenderer(element), config().useJQuery, "element is correct");
         return "new template";
     });
 
@@ -783,7 +783,7 @@ QUnit.test("content should be rendered from content template if specified", func
             selectedIndex: 0,
             items: [{ text: "all content" }, { text: "unread content" }],
             contentTemplate: function(element) {
-                assert.equal(typeUtils.isRenderer(element), config().useJQueryRenderer, "element is correct");
+                assert.equal(typeUtils.isRenderer(element), config().useJQuery, "element is correct");
                 return "<div>content</div>";
             }
         }),

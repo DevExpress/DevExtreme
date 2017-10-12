@@ -1076,7 +1076,7 @@ QUnit.test("itemElement argument of groupTemplate option is correct", function(a
         opened: true,
         grouped: true,
         groupTemplate: function(itemData, itemIndex, itemElement) {
-            assert.equal(isRenderer(itemElement), config().useJQueryRenderer, "itemElement is correct");
+            assert.equal(isRenderer(itemElement), config().useJQuery, "itemElement is correct");
             return $("<div>");
         }
     }).dxDropDownList("instance");

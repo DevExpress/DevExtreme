@@ -703,7 +703,7 @@ exports.ColumnsView = modules.View.inherit(columnStateMixin).inherit({
         var $rows = this._getRowElement(rowIndex),
             elements = [];
 
-        if($rows && !config().useJQueryRenderer) {
+        if($rows && !config().useJQuery) {
             for(var i = 0; i < $rows.length; i++) {
                 elements.push($rows[i]);
             }

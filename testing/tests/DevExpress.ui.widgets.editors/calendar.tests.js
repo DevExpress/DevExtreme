@@ -1636,7 +1636,7 @@ QUnit.test("correct data should be passed to cellTemplate", function(assert) {
 
     this.reinit({
         cellTemplate: function(itemData, itemIndex, itemElement) {
-            assert.equal(isRenderer(itemElement), config().useJQueryRenderer, "itemElement is correct");
+            assert.equal(isRenderer(itemElement), config().useJQuery, "itemElement is correct");
             if(!data) {
                 data = itemData;
             }
