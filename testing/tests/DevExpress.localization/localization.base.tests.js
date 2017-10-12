@@ -262,6 +262,16 @@ QUnit.test("object syntax", function(assert) {
     assert.equal(dateLocalization.format(new Date(2015, 2, 2, 3, 4, 5, 6), { type: "longdate" }), "Monday, March 2, 2015");
 });
 
+QUnit.test("format with LDML pattern", function(assert) {
+    assert.equal(dateLocalization.format(new Date(2015, 2, 2, 3, 4, 5, 6), "dd/MM/yyyy HH:mm:ss"), "02/03/2015 03:04:05");
+    assert.equal(dateLocalization.format(new Date(2015, 2, 2, 3, 4, 5, 6), "d MMMM yyyy"), "2 March 2015");
+});
+
+QUnit.test("parse with LDML pattern", function(assert) {
+    assert.deepEqual(dateLocalization.parse("02/03/2015 03:04:05", "dd/MM/yyyy HH:mm:ss"), new Date(2015, 2, 2, 3, 4, 5));
+    assert.deepEqual(dateLocalization.parse("2 March 2015", "d MMMM yyyy"), new Date(2015, 2, 2));
+});
+
 QUnit.test("parse", function(assert) {
     var originalLoggerWarn = logger.warn;
     var warnLog = [];
