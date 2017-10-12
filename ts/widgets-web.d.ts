@@ -2923,45 +2923,45 @@ declare module DevExpress.ui {
     }
 
     export interface dxFilterBuilderField {
-        /** @docid_ignore dxFilterBuilderOptions_fields_defaultFilterOperation */
+        /** @docid_ignore dxFilterBuilderField_defaultFilterOperation */
 
-        /** @docid dxFilterBuilderOptions_fields_caption */
+        /** @docid dxFilterBuilderField_caption */
         caption?: string;
 
-        /** @docid dxFilterBuilderOptions_fields_dataField */
+        /** @docid dxFilterBuilderField_dataField */
         dataField?: string;
 
-        /** @docid dxFilterBuilderOptions_fields_dataType */
+        /** @docid dxFilterBuilderField_dataType */
         dataType?: string;
 
-        /** @docid dxFilterBuilderOptions_fields_format */
+        /** @docid dxFilterBuilderField_format */
         format?: any;
 
-        /** @docid dxFilterBuilderOptions_fields_trueText */
+        /** @docid dxFilterBuilderField_trueText */
         trueText?: string;
 
-        /** @docid dxFilterBuilderOptions_fields_falseText */
+        /** @docid dxFilterBuilderField_falseText */
         falseText?: string;
 
-        /** @docid dxFilterBuilderOptions_fields_lookup */
+        /** @docid dxFilterBuilderField_lookup */
         lookup?: {
-            /** @docid dxFilterBuilderOptions_fields_lookup_allowClearing */
+            /** @docid dxFilterBuilderField_lookup_allowClearing */
             allowClearing?: boolean;
 
-            /** @docid dxFilterBuilderOptions_fields_lookup_dataSource */
+            /** @docid dxFilterBuilderField_lookup_dataSource */
             dataSource?: any;
 
-            /** @docid dxFilterBuilderOptions_fields_lookup_displayExpr */
+            /** @docid dxFilterBuilderField_lookup_displayExpr */
             displayExpr?: any;
 
-            /** @docid dxFilterBuilderOptions_fields_lookup_valueExpr */
+            /** @docid dxFilterBuilderField_lookup_valueExpr */
             valueExpr?: any;
         };
 
-        /** @docid dxFilterBuilderOptions_fields_filterOperations */
+        /** @docid dxFilterBuilderField_filterOperations */
         filterOperations?: Array<string>;
 
-        /** @docid dxFilterBuilderOptions_fields_customizeText */
+        /** @docid dxFilterBuilderField_customizeText */
         customizeText?: (fieldInfo: { value: any; valueText: string; }) => string;
     }
 
