@@ -1,5 +1,7 @@
 "use strict";
 
+var escapeRegExp = require("../../core/utils/common").escapeRegExp;
+
 var FORMAT_TYPES = {
     "3": "abbreviated",
     "4": "wide",
@@ -136,10 +138,6 @@ var getSameCharCount = function(text, index) {
     } while(text[index] === char);
 
     return count;
-};
-
-var escapeRegExp = function(str) {
-    return str.replace(/[[\]{}()*+?.\\^$|\s]/g, "\\$&");
 };
 
 var createPattern = function(char, count) {
