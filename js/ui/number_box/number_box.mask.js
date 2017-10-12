@@ -22,9 +22,10 @@ var NumberBoxMask = NumberBoxBase.inherit({
              * @name dxNumberBoxOptions_useMaskBehavior
              * @publicName useMaskBehavior
              * @type boolean
-             * @default false
+             * @default true
+             * @hidden
              */
-            useMaskBehavior: false,
+            useMaskBehavior: true,
 
             /**
              * @name dxNumberBoxOptions_displayFormat
