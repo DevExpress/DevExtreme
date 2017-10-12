@@ -6,7 +6,9 @@ var $ = require("../../core/renderer"),
     registerComponent = require("../../core/component_registrator"),
     noop = require("../../core/utils/common").noop,
     typeUtils = require("../../core/utils/type"),
-    contains = require("../../core/utils/dom").contains,
+    domUtils = require("../../core/utils/dom"),
+    contains = domUtils.contains,
+    getPublicElement = domUtils.getPublicElement,
     each = require("../../core/utils/iterator").each,
     inArray = require("../../core/utils/array").inArray,
     extend = require("../../core/utils/extend").extend,
@@ -521,9 +523,9 @@ var ContextMenu = MenuBase.inherit((function() {
         _renderSubmenuItems: function(node, $itemFrame) {
             this._renderItems(this._getChildNodes(node), $itemFrame);
             this._actions.onSubmenuCreated({
-                itemElement: $itemFrame,
+                itemElement: getPublicElement($itemFrame),
                 itemData: node.internalFields.item,
-                submenuElement: $itemFrame.children("." + DX_SUBMENU_CLASS)
+                submenuElement: getPublicElement($itemFrame.children("." + DX_SUBMENU_CLASS))
             });
         },
 

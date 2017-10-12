@@ -503,9 +503,9 @@ var Popup = Overlay.inherit({
         }
     },
 
-    _executeTitleRenderAction: function(titleElement) {
+    _executeTitleRenderAction: function($titleElement) {
         this._getTitleRenderAction()({
-            titleElement: titleElement
+            titleElement: getPublicElement($titleElement)
         });
     },
 
