@@ -1,39 +1,42 @@
 "use strict";
 
 var $ = require("jquery"),
-    numberParserGenerator = require("core/utils/number_parser_generator"),
+    number = require("localization/number"),
     keyboardMock = require("../../../helpers/keyboardMock.js");
 
 require("ui/text_box/ui.text_editor");
 
 QUnit.module("displayFormat option", {
     beforeEach: function() {
-        this.$element = $("#texteditor").dxTextEditor({
-            displayFormat: "#0.##"
+        this.$element = $("#numberbox").dxNumberBox({
+            displayFormat: "#0.##",
+            useMaskBehavior: true
         });
         this.input = this.$element.find(".dx-texteditor-input");
-        this.instance = this.$element.dxTextEditor("instance");
+        this.instance = this.$element.dxNumberBox("instance");
         this.keyboard = keyboardMock(this.input, true);
     }
 });
 
 QUnit.test("empty value should not be formatted", function(assert) {
+    this.instance.option("value", "");
     assert.equal(this.input.val(), "", "value is empty");
 });
 
 QUnit.test("parser should work with strict formats", function(assert) {
+    this.instance.option("value", "");
     this.instance.option("displayFormat", "#0.00");
 
-    this.keyboard.type("1").input();
+    this.keyboard.type("1");
     assert.equal(this.input.val(), "1.00", "1 typed");
 
-    this.keyboard.type("2").input();
+    this.keyboard.type("2");
     assert.equal(this.input.val(), "12.00", "2 typed");
 
-    this.keyboard.type(".4").input();
+    this.keyboard.type(".4");
     assert.equal(this.input.val(), "12.40", ".4 typed");
 
-    this.keyboard.type("5").input();
+    this.keyboard.type("5");
     assert.equal(this.input.val(), "12.45", "5 typed");
 });
 
@@ -58,7 +61,7 @@ QUnit.test("typing a symbol should insert or replace a value", function(assert) 
 });
 
 QUnit.test("parser should be refreshed when displayFormat option changed", function(assert) {
-    var parserGeneratorMock = sinon.spy(numberParserGenerator, "generateNumberParser");
+    var parserMock = sinon.spy(number, "parse");
 
     try {
         this.instance.option({
@@ -66,10 +69,10 @@ QUnit.test("parser should be refreshed when displayFormat option changed", funct
             value: 123.45
         });
 
-        assert.equal(parserGeneratorMock.callCount, 1, "parser was refreshed once");
-        assert.equal(parserGeneratorMock.getCall(0).args[0], "#.00", "parser was refreshed with correct argument");
+        assert.equal(parserMock.callCount, 1, "parser was refreshed once");
+        assert.equal(parserMock.getCall(0).args[1], "#.00", "parser was refreshed with correct argument");
     } finally {
-        parserGeneratorMock.restore();
+        parserMock.restore();
     }
 });
 
@@ -95,10 +98,10 @@ QUnit.test("pressing '-' button should revert the number", function(assert) {
         value: 123.456
     });
 
-    this.keyboard.press("-");
+    this.keyboard.keyDown(109);
     assert.equal(this.input.val(), "-123.456", "value is correct");
 
-    this.keyboard.caret(2).press("-");
+    this.keyboard.caret(2).keyDown(109);
     assert.equal(this.input.val(), "123.456", "value is correct");
 });
 
@@ -212,7 +215,7 @@ QUnit.test("remove stub symbol", function(assert) {
 });
 
 QUnit.skip("displayFormat with escaped symbol", function(assert) {
-    //parser should work with escaping
+    //todo: built-in localization bug: parser should work with escaped strings
     this.instance.option({
         displayFormat: "$'#'$#"
     });
@@ -280,10 +283,6 @@ QUnit.test("changing value to 0 should not clear the input", function(assert) {
     assert.equal(this.input.val(), "0", "text is correct");
 });
 
-QUnit.test("input should have type 'tel' to show numeric keyboard on mobiles", function(assert) {
-    assert.equal(this.input.prop("type"), "tel", "attribute is correct");
-});
-
 QUnit.test("removing first stub symbol should not clear the value", function(assert) {
     this.instance.option({
         displayFormat: "$ #",
@@ -297,7 +296,7 @@ QUnit.test("removing first stub symbol should not clear the value", function(ass
 
 QUnit.test("revert sign should lead to revert value of the editor on change", function(assert) {
     this.instance.option("value", 123);
-    this.keyboard.type("-");
+    this.keyboard.keyDown(109);
 
     assert.equal(this.instance.option("value"), -123, "value is correct");
 });
@@ -319,7 +318,8 @@ QUnit.test("changing of displayFormat option should reformat the input", functio
 });
 
 QUnit.test("percent format should work properly on value change", function(assert) {
-    this.instance.option("displayFormat", "#%");
+    this.instance.option("value", "");
+    this.instance.option("displayFormat", "#0%");
     this.keyboard.type("45").change();
 
     assert.equal(this.input.val(), "45%", "text is correct");

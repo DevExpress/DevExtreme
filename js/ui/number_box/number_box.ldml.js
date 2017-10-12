@@ -1,21 +1,44 @@
 "use strict";
 
 var eventsEngine = require("../../events/core/events_engine"),
-    caret = require("./utils.caret"),
+    caret = require("../text_box/utils.caret"),
     extend = require("../../core/utils/extend").extend,
+    devices = require("../../core/devices"),
     ensureDefined = require("../../core/utils/common").ensureDefined,
-    numberParserGenerator = require("../../core/utils/number_parser_generator"),
-    TextEditorBase = require("./ui.text_editor.base"),
+    number = require("../../localization/number"),
+    NumberBoxBase = require("./number_box.base"),
     eventUtils = require("../../events/utils");
 
-var MASK_FORMATTER_NAMESPACE = "dxMaskFormatter",
+var NUMBER_FORMATTER_NAMESPACE = "dxNumberFormatter",
     FLOAT_SEPARATOR = ".",
     FORWARD_DIRECTION = 1,
     BACKWARD_DIRECTION = -1;
 
-var TextEditorFormatter = TextEditorBase.inherit({
+var NumberBoxLdml = NumberBoxBase.inherit({
+
+    _getDefaultOptions: function() {
+        return extend(this.callBase(), {
+            /**
+             * @name dxNumberBoxOptions_useMaskBehavior
+             * @publicName useMaskBehavior
+             * @type boolean
+             * @default false
+             */
+            useMaskBehavior: false,
+
+            /**
+             * @name dxNumberBoxOptions_displayFormat
+             * @publicName displayFormat
+             * @type String
+             * @default null
+             */
+            displayFormat: null,
+        });
+    },
 
     _supportedKeys: function() {
+        if(!this._useMaskBehavior()) return this.callBase();
+
         var that = this;
 
         return extend(this.callBase(), {
@@ -23,10 +46,19 @@ var TextEditorFormatter = TextEditorBase.inherit({
         });
     },
 
-    _getDefaultOptions: function() {
-        return extend(this.callBase(), {
-            mode: "tel"
-        });
+    _useMaskBehavior: function() {
+        return !!this.option("displayFormat") && this.option("useMaskBehavior");
+    },
+
+    _renderInputType: function() {
+        var isDefaultMode = this.option("mode") === "number",
+            isMobile = devices.real().platform !== "generic";
+
+        if(this._useMaskBehavior() && isDefaultMode && isMobile) {
+            this._setInputType("tel");
+        } else {
+            this.callBase();
+        }
     },
 
     _getRemovingDirection: function() {
@@ -68,6 +100,8 @@ var TextEditorFormatter = TextEditorBase.inherit({
     },
 
     _keyboardHandler: function(e) {
+        if(!this._useMaskBehavior()) return this.callBase(e);
+
         if(e.ctrl) {
             this.callBase(e);
             return;
@@ -105,9 +139,6 @@ var TextEditorFormatter = TextEditorBase.inherit({
     },
 
     _clearCache: function() {
-        delete this._formatter;
-        delete this._escapedFormatter;
-        delete this._parser;
         delete this._formattedValue;
         delete this._lastKey;
         delete this._parsedValue;
@@ -115,26 +146,19 @@ var TextEditorFormatter = TextEditorBase.inherit({
 
     _renderFormatter: function() {
         this._clearCache();
-
-        var displayFormat = this.option("displayFormat");
-        if(!displayFormat) return;
-
-        this._formatter = numberParserGenerator.generateNumberFormatter(displayFormat);
-        this._escapedFormatter = numberParserGenerator.generateNumberFormatter(this._escapePercentFormat(displayFormat));
-        this._parser = numberParserGenerator.generateNumberParser(displayFormat);
-
         this._detachFormatterEvents();
-        this._attachFormatterEvents();
+
+        if(this._useMaskBehavior()) {
+            this._attachFormatterEvents();
+        }
     },
 
     _detachFormatterEvents: function() {
-        eventsEngine.off(this._input(), "." + MASK_FORMATTER_NAMESPACE);
+        eventsEngine.off(this._input(), "." + NUMBER_FORMATTER_NAMESPACE);
     },
 
     _attachFormatterEvents: function() {
-        var $input = this._input();
-
-        eventsEngine.on($input, eventUtils.addNamespace("input", MASK_FORMATTER_NAMESPACE), this._formatValue.bind(this));
+        eventsEngine.on(this._input(), eventUtils.addNamespace("input", NUMBER_FORMATTER_NAMESPACE), this._formatValue.bind(this));
     },
 
     _normalizeCaret: function(caret) {
@@ -142,7 +166,7 @@ var TextEditorFormatter = TextEditorBase.inherit({
             parsedValue = this._lightParse(this._input().val());
 
         if(parsedValue !== null) {
-            delta = this._getStubCountBeforeCaret();
+            delta = this._getStubCount();
         }
 
         return {
@@ -151,7 +175,13 @@ var TextEditorFormatter = TextEditorBase.inherit({
         };
     },
 
-    _getStubCountBeforeCaret: function() {
+    _forceRefreshInputValue: function() {
+        if(!this._useMaskBehavior()) {
+            return this.callBase();
+        }
+    },
+
+    _getStubCount: function() {
         var format = this.option("displayFormat"),
             escapedRegExp = new RegExp("^('[^']+')([#0])"),
             stubRegexp = new RegExp("^([^0#]+)[0#]"),
@@ -175,10 +205,6 @@ var TextEditorFormatter = TextEditorBase.inherit({
 
     _isStubSymbol: function(char) {
         return new RegExp("^[^0-9]$").test(char);
-    },
-
-    _escapeRegExpSpecial: function(formatString) {
-        return formatString.replace(/[.*+?^${}()|\[\]\\]/g, "\\$&");
     },
 
     _escapePercentFormat: function(format) {
@@ -212,18 +238,16 @@ var TextEditorFormatter = TextEditorBase.inherit({
         if(this._formattedValue !== resultValue) {
             var parsedValue = this._lightParse(resultValue);
             if(parsedValue !== null) {
-                resultValue = this._escapedFormatter(parsedValue);
+                resultValue = number.format(parsedValue, this._escapePercentFormat(this.option("displayFormat")));
             }
         }
 
-        if(this._parser(resultValue) !== null) {
+        if(number.parse(resultValue, this.option("displayFormat")) !== null) {
             this._formattedValue = resultValue;
         }
     },
 
     _applyValue: function(value, forced) {
-        if(!this.option("displayFormat")) return;
-
         if(Object.is(this._parsedValue, value) && !forced) {
             return;
         }
@@ -242,7 +266,7 @@ var TextEditorFormatter = TextEditorBase.inherit({
         }
 
         this._parsedValue = value;
-        this._formattedValue = this._formatter(value);
+        this._formattedValue = number.format(value, this.option("displayFormat"));
         this._input().val(this._formattedValue);
 
         this._caret(this._normalizeCaret(this._caret()));
@@ -254,8 +278,6 @@ var TextEditorFormatter = TextEditorBase.inherit({
     },
 
     _formatValue: function() {
-        if(!this.option("displayFormat")) return;
-
         var text = this._input().val();
 
         if(!text.length) {
@@ -263,19 +285,32 @@ var TextEditorFormatter = TextEditorBase.inherit({
             return;
         }
 
-        var parsedValue = this._parser(text);
+        var parsedValue = number.parse(text, this.option("displayFormat"));
 
         this._applyValue(parsedValue);
     },
 
     _renderValue: function() {
         this.callBase();
-        this._applyValue(ensureDefined(this.option("value"), ""));
+
+        if(this._useMaskBehavior()) {
+            this._applyValue(ensureDefined(this.option("value"), ""));
+        }
+    },
+
+    _normalizeText: function() {
+        if(!this._useMaskBehavior()) return this.callBase();
+        return this._input().val();
+    },
+
+    _parseValue: function(text) {
+        if(!this._useMaskBehavior()) return this.callBase(text);
+        return this.callBase(number.parse(text, this.option("displayFormat")));
     },
 
     _valueChangeEventHandler: function(e) {
-        if(this.option("displayFormat")) {
-            this.callBase(e, this._parser(this._input().val()));
+        if(this._useMaskBehavior()) {
+            this.callBase(e, number.parse(this._input().val(), this.option("displayFormat")));
             this._applyValue(this.option("value"), true);
         } else {
             this.callBase(e);
@@ -292,6 +327,7 @@ var TextEditorFormatter = TextEditorBase.inherit({
     _optionChanged: function(args) {
         switch(args.name) {
             case "displayFormat":
+            case "useMaskBehavior":
                 this._renderFormatter();
                 this._applyValue(this.option("value"), true);
                 break;
@@ -307,4 +343,4 @@ var TextEditorFormatter = TextEditorBase.inherit({
 
 });
 
-module.exports = TextEditorFormatter;
+module.exports = NumberBoxLdml;

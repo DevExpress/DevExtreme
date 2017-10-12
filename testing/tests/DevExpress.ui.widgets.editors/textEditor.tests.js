@@ -12,4 +12,3 @@ QUnit.testStart(function() {
 
 require("./textEditorParts/common.tests.js");
 require("./textEditorParts/mask.tests.js");
-require("./textEditorParts/formatters.tests.js");
