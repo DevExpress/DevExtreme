@@ -6,6 +6,7 @@ var dependencyInjector = require("../core/utils/dependency_injector"),
     inArray = require("../core/utils/array").inArray,
     getLDMLDateFormatter = require("./ldml/date.formatter").getFormatter,
     getLDMLDateParser = require("./ldml/date.parser").getParser,
+    defaultDateNames = require("./default_date_names"),
     errors = require("../core/errors");
 
 require("./core");
@@ -32,24 +33,6 @@ var FORMATS_TO_PATTERN_MAP = {
     "second": "ss",
     "millisecond": "SSS",
     "datetime-local": "yyyy-MM-ddTHH':'mm':'ss"
-};
-
-var months = ["January", "February", "March", "April", "May", "June", "July", "August", "September", "October", "November", "December"],
-    days = ["Sunday", "Monday", "Tuesday", "Wednesday", "Thursday", "Friday", "Saturday"],
-    periods = ["AM", "PM"],
-    quarters = ["Q1", "Q2", "Q3", "Q4"];
-
-// TODO: optimize
-var cutCaptions = function(captions, format) {
-    var lengthByFormat = {
-        abbreviated: 3,
-        short: 2,
-        narrow: 1
-    };
-
-    return iteratorUtils.map(captions, function(caption) {
-        return caption.substr(0, lengthByFormat[format]);
-    });
 };
 
 var possiblePartPatterns = {
@@ -91,16 +74,16 @@ var dateLocalization = dependencyInjector({
         return result;
     },
     getMonthNames: function(format) {
-        return cutCaptions(months, format);
+        return defaultDateNames.getMonthNames(format);
     },
     getDayNames: function(format) {
-        return cutCaptions(days, format);
+        return defaultDateNames.getDayNames(format);
     },
     getQuarterNames: function(format) {
-        return quarters;
+        return defaultDateNames.getQuarterNames(format);
     },
     getPeriodNames: function(format) {
-        return periods;
+        return defaultDateNames.getPeriodNames(format);
     },
     getTimeSeparator: function() {
         return ":";
