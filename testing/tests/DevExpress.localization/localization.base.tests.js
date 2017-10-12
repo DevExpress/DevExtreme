@@ -429,8 +429,8 @@ QUnit.test("parse", function(assert) {
 
 QUnit.test("parse with shortDate format (T478962, T511282)", function(assert) {
     assert.equal(dateLocalization.parse("2/20/2015", "shortDate"), String(new Date(2015, 1, 20)));
-    //assert.equal(dateLocalization.parse("02/20/2015", "shortDate"), String(new Date(2015, 1, 20)));
-    //assert.equal(dateLocalization.parse("02/02/2015", "shortDate"), String(new Date(2015, 1, 2)));
+    assert.equal(dateLocalization.parse("02/20/2015", "shortDate"), String(new Date(2015, 1, 20)));
+    assert.equal(dateLocalization.parse("02/02/2015", "shortDate"), String(new Date(2015, 1, 2)));
     assert.equal(dateLocalization.parse("2/2/2015", "shortDate"), String(new Date(2015, 1, 2)));
     assert.equal(dateLocalization.parse("1/1/99", "shortDate"), String(new Date(new Date(99, 0, 1).setFullYear(99))));
     assert.equal(dateLocalization.parse("2/20/1", "shortDate"), String(new Date(new Date(1, 1, 20).setFullYear(1))));

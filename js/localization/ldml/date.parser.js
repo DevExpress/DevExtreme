@@ -16,19 +16,19 @@ var PATTERN_REGEXPS = {
         if(count > 2) {
             return dateParts.getMonthNames(FORMAT_TYPES[count], "format").join("|");
         }
-        return (count === 1 ? "" : "0") + "[1-9]|1[012]";
+        return "0?[1-9]|1[012]";
     },
     L: function(count) {
         if(count > 2) {
             return dateParts.getMonthNames(FORMAT_TYPES[count], "standalone").join("|");
         }
-        return (count === 1 ? "" : "0") + "[1-9]|1[012]";
+        return "0?[1-9]|1[012]";
     },
     Q: function(count) {
         if(count > 2) {
             return dateParts.getQuarterNames(FORMAT_TYPES[count], "format").join("|");
         }
-        return (count === 1 ? "" : "0") + "[1-4]";
+        return "0?[1-4]";
     },
     E: function(count) {
         return dateParts.getDayNames(FORMAT_TYPES[count < 3 ? 3 : count], "format").join("|");
@@ -37,22 +37,22 @@ var PATTERN_REGEXPS = {
         return dateParts.getPeriodNames(FORMAT_TYPES[count < 3 ? 3 : count], "format").join("|");
     },
     d: function(count) {
-        return (count === 1 ? "" : "0") + "[1-9]|[12][0-9]|3[01]";
+        return "0?[1-9]|[12][0-9]|3[01]";
     },
     H: function(count) {
-        return (count === 1 ? "" : "0") + "[1-9]|1[0-9]|2[0-3]";
+        return "0?[0-9]|1[0-9]|2[0-3]";
     },
     h: function(count) {
-        return (count === 1 ? "" : "0") + "[1-9]|1[012]";
+        return "0?[1-9]|1[012]";
     },
     m: function(count) {
-        return (count === 1 ? "" : "0") + "[1-9]|[1-5][0-9]";
+        return "0?[0-9]|[1-5][0-9]";
     },
     s: function(count) {
-        return (count === 1 ? "" : "0") + "[1-9]|[1-5][0-9]";
+        return "0?[0-9]|[1-5][0-9]";
     },
     S: function(count) {
-        return "[0-9]{" + count + "}";
+        return "[0-9]{1," + count + "}";
     }
 };
 
@@ -141,7 +141,7 @@ var getSameCharCount = function(text, index) {
 };
 
 var escapeRegExp = function(str) {
-    return str.replace(/[\-\[\]\/\{\}\(\)\*\+\?\.\\\^\$\|]/g, "\\$&");
+    return str.replace(/[[\]{}()*+?.\\^$|\s]/g, "\\$&");
 };
 
 var createPattern = function(char, count) {
