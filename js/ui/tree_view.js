@@ -1262,7 +1262,7 @@ var TreeView = HierarchicalCollectionWidget.inherit({
     },
 
     _renderContent: function() {
-        this._renderEmptyMessage();
+        this._renderEmptyMessage(this._dataAdapter.getRootNodes());
 
         var items = this.option("items");
         if(items && items.length) {
