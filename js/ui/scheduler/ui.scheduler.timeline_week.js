@@ -58,7 +58,7 @@ var SchedulerTimelineWeek = SchedulerTimeline.inherit({
         this.callBase();
         var cellWidth = this.getCellWidth(),
             minWidth = this._getWorkSpaceMinWidth(),
-            $headerCells = this.element().find("." + HEADER_ROW_CLASS).last().find("th");
+            $headerCells = this.$element().find("." + HEADER_ROW_CLASS).last().find("th");
 
         var width = cellWidth * $headerCells.length;
 
