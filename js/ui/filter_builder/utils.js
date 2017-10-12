@@ -12,6 +12,7 @@ var DEFAULT_DATA_TYPE = "string",
         "number": ["=", "<>", "<", ">", "<=", ">=", "isblank", "isnotblank"],
         "string": ["contains", "notcontains", "startswith", "endswith", "=", "<>", "isblank", "isnotblank"],
         "date": ["=", "<>", "<", ">", "<=", ">=", "isblank", "isnotblank"],
+        "datetime": ["=", "<>", "<", ">", "<=", ">=", "isblank", "isnotblank"],
         "boolean": ["=", "<>", "isblank", "isnotblank"],
         "object": ["isblank", "isnotblank"]
     };

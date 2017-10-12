@@ -106,7 +106,7 @@ var FilterBuilder = Widget.inherit({
              * @publicName dataType
              * @type string
              * @default "string"
-             * @acceptValues "string" | "number" | "date" | "boolean" | "object"
+             * @acceptValues "string" | "number" | "date" | "datetime" | "boolean" | "object"
              */
 
             /**

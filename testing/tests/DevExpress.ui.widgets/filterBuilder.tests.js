@@ -67,6 +67,14 @@ window.fields = [{
     dataType: "object",
     filterOperations: ["isblank", "isnotblank"],
     defaultFilterOperation: ""
+},
+{
+    caption: "DateTime",
+    dataField: "DateTime",
+    dataType: "datetime",
+    format: "shortDate",
+    filterOperations: ["=", "<>", "<", ">", "<=", ">="],
+    defaultFilterOperation: ""
 }];
 
 QUnit.testStart(function() {
