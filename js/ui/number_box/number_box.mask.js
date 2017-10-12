@@ -33,7 +33,7 @@ var NumberBoxMask = NumberBoxBase.inherit({
              * @type String
              * @default null
              */
-            displayFormat: null,
+            displayFormat: null
         });
     },
 
