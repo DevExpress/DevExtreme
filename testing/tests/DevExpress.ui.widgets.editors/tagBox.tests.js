@@ -636,7 +636,7 @@ QUnit.test("onMultitagPreparing option", function(assert) {
             maxDisplayedTags: 2,
             onMultiTagPreparing: function(e) {
                 assert.equal(e.component.NAME, "dxTagBox", "component is correct");
-                assert.equal(isRenderer(e.multiTagElement), config().useJQueryRenderer, "tagElement is correct");
+                assert.equal(isRenderer(e.multiTagElement), config().useJQuery, "tagElement is correct");
                 assert.ok($(e.multiTagElement).hasClass(TAGBOX_MULTI_TAG_CLASS), "element is correct");
                 assert.deepEqual(e.selectedItems, [1, 2, 4], "selectedItems are correct");
                 e.text = "custom text";
