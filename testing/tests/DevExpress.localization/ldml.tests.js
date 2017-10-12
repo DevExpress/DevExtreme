@@ -11,9 +11,9 @@ QUnit.test("parse dd/MM/yyyy format", function(assert) {
         date = new Date(2017, 8, 22);
 
     assert.deepEqual(parser("22/09/2017"), date, "parse correct date string");
+    assert.deepEqual(parser("22/9/2017"), date, "parse with short month");
     assert.deepEqual(parser(""), null, "parse empty string");
     assert.deepEqual(parser("22:09:2017"), null, "parse with wrong separators");
-    assert.deepEqual(parser("22/9/2017"), null, "parse with wrong short month");
     assert.deepEqual(parser("09/22/2017"), null, "parse with switched month and day");
 });
 
