@@ -54,6 +54,21 @@ var SchedulerTimelineWeek = SchedulerTimeline.inherit({
         $headerRow.before($row);
     },
 
+    _setTableSizes: function() {
+        this.callBase();
+        var cellWidth = this.getCellWidth(),
+            minWidth = this._getWorkSpaceMinWidth(),
+            $headerCells = this.element().find("." + HEADER_ROW_CLASS).last().find("th");
+
+        var width = cellWidth * $headerCells.length;
+
+        if(width < minWidth) {
+            width = minWidth;
+        }
+
+        this._$headerPanel.width(width);
+    },
+
     _getHeaderPanelCellWidth: function($headerRow) {
         return $headerRow.children().first().outerWidth();
     },
