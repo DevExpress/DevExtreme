@@ -5,7 +5,7 @@ var Class = require("../../core/class"),
     extend = require("../../core/utils/extend").extend,
     each = require("../../core/utils/iterator").each,
     formatHelper = require("../../format_helper"),
-    localizationNumber = require("../../localization/number"),
+    numberLocalization = require("../../localization/number"),
     clientExporter = require("../../client_exporter"),
     excelExporter = clientExporter.excel,
     DEFAULT_DATA_TYPE = "string",
@@ -111,7 +111,7 @@ function getCellDataType(field) {
     }
 
     if(field.format) {
-        if(localizationNumber.parse(formatHelper.format(1, field.format)) === 1) {
+        if(numberLocalization.parse(formatHelper.format(1, field.format)) === 1) {
             return "number";
         }
         if(formatHelper.format(new Date(), field.format)) {
