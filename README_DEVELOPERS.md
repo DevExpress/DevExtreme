@@ -8,11 +8,6 @@ We use the [Fork-and-Branch workflow](http://blog.scottlowe.org/2015/01/27/using
 
 Make sure that you properly configure your Git [username](https://help.github.com/articles/setting-your-username-in-git) and [email](https://help.github.com/articles/setting-your-email-in-git).
 
-* [Install Required Software](#install-required-software)
-* [Building](#building)
-* [Tests and CI](#tests-and-ci)
-* [Commit Message Guidelines](#commit-message-guidelines)
-
 ## Install Required Software
 
 To set up a build environment, you need the following software installed:
