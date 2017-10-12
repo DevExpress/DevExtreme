@@ -2,13 +2,11 @@
 
 /* global fields */
 
-var $ = require("jquery"),
-    fx = require("animation/fx");
+var $ = require("jquery");
 
 require("ui/filter_builder/filter_builder");
 
-var FILTER_BUILDER_CLASS = "dx-filterbuilder",
-    FILTER_BUILDER_ITEM_FIELD_CLASS = "dx-filterbuilder-item-field",
+var FILTER_BUILDER_ITEM_FIELD_CLASS = "dx-filterbuilder-item-field",
     FILTER_BUILDER_ITEM_OPERATION_CLASS = "dx-filterbuilder-item-operation",
     FILTER_BUILDER_ITEM_VALUE_CLASS = "dx-filterbuilder-item-value",
     FILTER_BUILDER_ITEM_VALUE_TEXT_CLASS = "dx-filterbuilder-item-value-text",
@@ -41,27 +39,26 @@ QUnit.module("Rendering", function() {
     });
 
     QUnit.test("filterbuilder is created by different values", function(assert) {
-        var element = $("#container").dxFilterBuilder({ fields: fields });
-        var instance = element.dxFilterBuilder("instance");
-        instance.option("value", null);
-        assert.ok(instance);
-        instance.option("value", []);
-        assert.ok(instance);
-        instance.option("value", ["Or"]);
-        assert.ok(instance);
-        instance.option("value", ["!", [["CompanyName", "=", "DevExpress"], ["CompanyName", "=", "DevExpress"]]]);
-        assert.ok(instance);
-        instance.option("value", ["!", ["CompanyName", "=", "DevExpress"]]);
-        assert.ok(instance);
-        instance.option("value", ["CompanyName", "=", "K&S Music"]);
-        assert.ok(instance);
-        instance.option("value", [["CompanyName", "=", "K&S Music"], ["CompanyName", "=", "K&S Music"]]);
-        assert.ok(instance);
-        instance.option("value", [[["CompanyName", "=", "K&S Music"], "Or"], "And"]);
-        assert.ok(instance);
+        var instance = $("#container").dxFilterBuilder({
+            fields: fields
+        }).dxFilterBuilder("instance");
+
+        try {
+            instance.option("value", null);
+            instance.option("value", []);
+            instance.option("value", ["Or"]);
+            instance.option("value", ["!", [["CompanyName", "=", "DevExpress"], ["CompanyName", "=", "DevExpress"]]]);
+            instance.option("value", ["!", ["CompanyName", "=", "DevExpress"]]);
+            instance.option("value", ["CompanyName", "=", "K&S Music"]);
+            instance.option("value", [["CompanyName", "=", "K&S Music"], ["CompanyName", "=", "K&S Music"]]);
+            instance.option("value", [[["CompanyName", "=", "K&S Music"], "Or"], "And"]);
+            assert.ok(true, "all values were approved");
+        } catch(e) {
+            assert.ok(false, e);
+        }
     });
 
-    QUnit.test("filter Content init", function(assert) {
+    QUnit.test("filter Content init by one condition", function(assert) {
         var etalon =
         '<div class=\"dx-filterbuilder-group\">'
             + '<div class=\"dx-filterbuilder-group-item\">'
@@ -84,305 +81,357 @@ QUnit.module("Rendering", function() {
         + '</div>';
 
         var element = $("#container").dxFilterBuilder({
-            fields: fields
+            fields: fields,
+            value: [[["CompanyName", "=", "K&S Music"], "Or"], "And"]
         });
-        var instance = element.dxFilterBuilder("instance");
-        instance.option("value", [[["CompanyName", "=", "K&S Music"], "Or"], "And"]);
         assert.equal(element.find("." + FILTER_BUILDER_GROUP_CONTENT_CLASS).html(), etalon);
     });
 
-    QUnit.test("markup is initialized by filter value", function(assert) {
-        var container = $("#container");
-        container.dxFilterBuilder({
-            value: [
-                ["CompanyName", "=", "K&S Music"],
-                "Or",
-                ["Zipcode", "=", "98027"],
-                "Or",
-                ["CompanyName", "=", "Screen Shop"]
-            ],
-            fields: fields
+    QUnit.test("filter Content init by several conditions", function(assert) {
+        var etalon =
+                '<div class="dx-filterbuilder-group">'
+                    + '<div class=\"dx-filterbuilder-group-item\">'
+                        + '<div class=\"dx-filterbuilder-action-icon dx-icon-remove dx-filterbuilder-action\" tabindex=\"0\"></div>'
+                        + '<div class=\"dx-filterbuilder-text dx-filterbuilder-item-field\" tabindex=\"0\">Company Name</div>'
+                        + '<div class=\"dx-filterbuilder-text dx-filterbuilder-item-operation\" tabindex=\"0\">Equals</div>'
+                        + '<div class=\"dx-filterbuilder-text dx-filterbuilder-item-value\">'
+                            + '<div class=\"dx-filterbuilder-item-value-text\" tabindex=\"0\">K&amp;S Music</div>'
+                        + '</div>'
+                    + '</div>'
+                + '</div>'
+                + '<div class="dx-filterbuilder-group">'
+                    + '<div class=\"dx-filterbuilder-group-item\">'
+                        + '<div class=\"dx-filterbuilder-action-icon dx-icon-remove dx-filterbuilder-action\" tabindex=\"0\"></div>'
+                        + '<div class=\"dx-filterbuilder-text dx-filterbuilder-item-field\" tabindex=\"0\">Zipcode</div>'
+                        + '<div class=\"dx-filterbuilder-text dx-filterbuilder-item-operation\" tabindex=\"0\">Equals</div>'
+                        + '<div class=\"dx-filterbuilder-text dx-filterbuilder-item-value\">'
+                            + '<div class=\"dx-filterbuilder-item-value-text\" tabindex=\"0\">98027</div>'
+                        + '</div>'
+                    + '</div>'
+                + '</div>';
+
+        var element = $("#container").dxFilterBuilder({
+            fields: fields,
+            value: [["CompanyName", "=", "K&S Music"], "Or", ["Zipcode", "=", "98027"]]
         });
-
-        assert.ok(container.hasClass(FILTER_BUILDER_CLASS));
-        assert.equal(container.find("." + FILTER_BUILDER_ITEM_FIELD_CLASS).html(), "Company Name");
-        assert.equal(container.find("." + FILTER_BUILDER_ITEM_OPERATION_CLASS).html(), "Equals");
-        assert.equal(container.find("." + FILTER_BUILDER_ITEM_VALUE_TEXT_CLASS).eq(0).text(), "K&S Music");
-
-        assert.equal(container.find("." + FILTER_BUILDER_ITEM_FIELD_CLASS).eq(1).html(), "Zipcode");
-        assert.equal(container.find("." + FILTER_BUILDER_ITEM_OPERATION_CLASS).eq(1).html(), "Equals");
-        assert.equal(container.find("." + FILTER_BUILDER_ITEM_VALUE_TEXT_CLASS).eq(1).html(), "98027");
-
-        assert.equal(container.find("." + FILTER_BUILDER_ITEM_FIELD_CLASS).eq(2).html(), "Company Name");
-        assert.equal(container.find("." + FILTER_BUILDER_ITEM_OPERATION_CLASS).eq(2).html(), "Equals");
-        var rowValue = container.find("." + FILTER_BUILDER_ITEM_VALUE_TEXT_CLASS).eq(2);
-        assert.equal(rowValue.text(), "Screen Shop");
-        rowValue.click();
-        assert.ok($("." + FILTER_BUILDER_ITEM_VALUE_CLASS + " .dx-selectbox").dxSelectBox("instance"));
+        assert.equal(element.find("." + FILTER_BUILDER_GROUP_CONTENT_CLASS).html(), etalon);
     });
 
     QUnit.test("value and operations depend on selected field", function(assert) {
-        try {
-            fx.off = true;
-
-            var container = $("#container");
-            container.dxFilterBuilder({
-                allowHierarchicalFields: true,
-                value: [
-                    ["CompanyName", "=", "K&S Music"]
-                ],
-                fields: fields
-            });
-            var $fieldButton = container.find("." + FILTER_BUILDER_ITEM_FIELD_CLASS);
-            assert.ok(!$fieldButton.hasClass(ACTIVE_CLASS));
-            assert.equal($fieldButton.html(), "Company Name");
-
-            var $operationButton = container.find("." + FILTER_BUILDER_ITEM_OPERATION_CLASS);
-            assert.equal($operationButton.text(), "Equals");
-
-            var $valueButton = container.find("." + FILTER_BUILDER_ITEM_VALUE_CLASS);
-            assert.equal($valueButton.text(), "K&S Music");
-
-            var $menu = container.children(".dx-has-context-menu");
-            assert.ok($menu.length === 0);
-
-            $fieldButton.click();
-            assert.ok($fieldButton.hasClass(ACTIVE_CLASS));
-
-            $menu = container.find(".dx-overlay");
-            assert.ok($menu.length === 1);
-
-            var $menuItem = $(".dx-treeview-item").eq(2);
-            assert.equal($menuItem.text(), "State");
-
-            $menuItem.trigger("dxclick");
-            assert.equal($fieldButton.html(), "State");
-
-            $operationButton = container.find("." + FILTER_BUILDER_ITEM_OPERATION_CLASS);
-            assert.equal($operationButton.text(), "Contains");
-
-            $valueButton = container.find("." + FILTER_BUILDER_ITEM_VALUE_CLASS);
-            assert.equal($valueButton.text(), "<enter a value>");
-
-            assert.ok(!$fieldButton.hasClass(ACTIVE_CLASS));
-            $menu = container.children(".dx-overlay");
-            assert.ok($menu.length === 0);
-        } finally {
-            fx.off = false;
-        }
-    });
-
-    QUnit.test("operations are changed after field change", function(assert) {
-        try {
-            fx.off = true;
-
-            var container = $("#container");
-            container.dxFilterBuilder({
-                allowHierarchicalFields: true,
-                value: [
-                    ["State", "<>", "K&S Music"]
-                ],
-                fields: fields
-            });
-            var $fieldButton = container.find("." + FILTER_BUILDER_ITEM_FIELD_CLASS);
-
-            var $operationButton = container.find("." + FILTER_BUILDER_ITEM_OPERATION_CLASS);
-            assert.equal($operationButton.text(), "Does not equal");
-
-            $fieldButton.click();
-
-            var $menuItem = $(".dx-treeview-item").eq(5);
-            $menuItem.trigger("dxclick");
-
-            assert.equal($fieldButton.html(), "City");
-            $operationButton = container.find("." + FILTER_BUILDER_ITEM_OPERATION_CLASS);
-            assert.equal($operationButton.text(), "Equals");
-        } finally {
-            fx.off = false;
-        }
-    });
-
-    QUnit.test("selected element is changed in menu after click", function(assert) {
-        try {
-            fx.off = true;
-
-            var container = $("#container");
-            container.dxFilterBuilder({
-                value: [
-                    ["State", "<>", "K&S Music"]
-                ],
-                fields: fields
-            });
-
-            var $fieldButton = container.find("." + FILTER_BUILDER_ITEM_FIELD_CLASS);
-            $fieldButton.click();
-            assert.equal($(".dx-menu-item-selected").text(), "State");
-
-            var $menuItem = $(".dx-menu-item-text").eq(1);
-            $menuItem.trigger("dxclick");
-            $fieldButton.click();
-            assert.equal($(".dx-menu-item-selected").text(), "Date");
-
-            var $groupButton = container.find("." + FILTER_BUILDER_GROUP_OPERATION_CLASS);
-            $groupButton.click();
-            assert.equal($(".dx-menu-item-selected").text(), "And");
-
-            $menuItem = $(".dx-menu-item-text").eq(3);
-            $menuItem.trigger("dxclick");
-            $groupButton.click();
-            assert.equal($(".dx-menu-item-selected").text(), "Not Or");
-
-            var $operationButton = container.find("." + FILTER_BUILDER_ITEM_OPERATION_CLASS);
-            $operationButton.click();
-            assert.equal($(".dx-menu-item-selected").text(), "Equals");
-
-            $menuItem = $(".dx-menu-item-text").eq(3);
-            $menuItem.trigger("dxclick");
-            $operationButton.click();
-            assert.equal($(".dx-menu-item-selected").text(), "Greater than");
-
-        } finally {
-            fx.off = false;
-        }
-    });
-
-    QUnit.test("editor field depends on field type", function(assert) {
         var container = $("#container");
+
         container.dxFilterBuilder({
             allowHierarchicalFields: true,
             value: [
-                ["CompanyName", "=", "K&S Music"],
-                "Or",
-                ["Zipcode", "=", "98027"],
-                "Or",
-                ["Date", "=", ""],
-                "Or",
-                ["Contributor", "=", ""]
+                ["CompanyName", "=", "K&S Music"]
             ],
             fields: fields
         });
-        var companyNameValueField = $("." + FILTER_BUILDER_ITEM_VALUE_CLASS).eq(0);
-        companyNameValueField.find("." + FILTER_BUILDER_ITEM_VALUE_TEXT_CLASS).click();
-        assert.ok(companyNameValueField.find(".dx-selectbox").dxSelectBox("instance"));
 
-        var zipCodeValueField = $("." + FILTER_BUILDER_ITEM_VALUE_CLASS).eq(1);
-        zipCodeValueField.find("." + FILTER_BUILDER_ITEM_VALUE_TEXT_CLASS).click();
-        assert.ok(zipCodeValueField.find(".dx-numberbox").dxNumberBox("instance"));
+        var $fieldButton = container.find("." + FILTER_BUILDER_ITEM_FIELD_CLASS);
+        $fieldButton.click();
+        assert.ok($fieldButton.hasClass(ACTIVE_CLASS));
 
-        var dateValueField = $("." + FILTER_BUILDER_ITEM_VALUE_CLASS).eq(2);
-        dateValueField.find("." + FILTER_BUILDER_ITEM_VALUE_TEXT_CLASS).click();
-        assert.ok(dateValueField.find(".dx-datebox").dxDateBox("instance"));
+        var $menu = container.find(".dx-overlay");
+        assert.ok($menu.length === 1);
 
-        var contributorValueField = $("." + FILTER_BUILDER_ITEM_VALUE_CLASS).eq(3);
-        contributorValueField.find("." + FILTER_BUILDER_ITEM_VALUE_TEXT_CLASS).click();
-        assert.ok(contributorValueField.find(".dx-selectbox").dxSelectBox("instance"));
+        var $menuItem = $(".dx-treeview-item").eq(2);
+        assert.equal($menuItem.text(), "State");
+        $menuItem.trigger("dxclick");
+        assert.equal($fieldButton.html(), "State");
+        assert.ok(!$fieldButton.hasClass(ACTIVE_CLASS));
+        assert.equal(container.find("." + FILTER_BUILDER_ITEM_OPERATION_CLASS).text(), "Contains");
+        assert.equal(container.find("." + FILTER_BUILDER_ITEM_VALUE_CLASS).text(), "<enter a value>");
+
+        $menu = container.find(".dx-overlay");
+        assert.ok($menu.length === 0);
+    });
+
+    QUnit.test("operations are changed after field change", function(assert) {
+        var container = $("#container");
+
+        container.dxFilterBuilder({
+            allowHierarchicalFields: true,
+            value: [
+                ["State", "<>", "K&S Music"]
+            ],
+            fields: fields
+        });
+
+        assert.equal(container.find("." + FILTER_BUILDER_ITEM_OPERATION_CLASS).text(), "Does not equal");
+
+        var $fieldButton = container.find("." + FILTER_BUILDER_ITEM_FIELD_CLASS);
+        $fieldButton.click();
+
+        var $menuItem = $(".dx-treeview-item").eq(5);
+        $menuItem.trigger("dxclick");
+
+        assert.equal($fieldButton.html(), "City");
+        assert.equal(container.find("." + FILTER_BUILDER_ITEM_OPERATION_CLASS).text(), "Equals");
+    });
+
+    QUnit.test("selected element must change in field menu after click", function(assert) {
+        var container = $("#container");
+
+        container.dxFilterBuilder({
+            value: [
+                ["State", "<>", "K&S Music"]
+            ],
+            fields: fields
+        });
+
+        var $fieldButton = container.find("." + FILTER_BUILDER_ITEM_FIELD_CLASS);
+        $fieldButton.click();
+
+        assert.equal($(".dx-menu-item-selected").text(), "State");
+
+        var $menuItem = $(".dx-menu-item-text").eq(1);
+        $menuItem.trigger("dxclick");
+
+        $fieldButton.click();
+        assert.equal($(".dx-menu-item-selected").text(), "Date");
+    });
+
+    QUnit.test("selected element must change in group operation menu after click", function(assert) {
+        var container = $("#container");
+
+        container.dxFilterBuilder({
+            value: [
+                ["State", "<>", "K&S Music"]
+            ],
+            fields: fields
+        });
+
+        var $groupButton = container.find("." + FILTER_BUILDER_GROUP_OPERATION_CLASS);
+        $groupButton.click();
+
+        assert.equal($(".dx-menu-item-selected").text(), "And");
+
+        var $menuItem = $(".dx-menu-item-text").eq(3);
+        $menuItem.trigger("dxclick");
+
+        $groupButton.click();
+        assert.equal($(".dx-menu-item-selected").text(), "Not Or");
+    });
+
+    QUnit.test("selected element must change in filter operation menu after click", function(assert) {
+        var container = $("#container");
+
+        container.dxFilterBuilder({
+            value: [
+                ["Date", "=", ""]
+            ],
+            fields: fields
+        });
+
+        var $operationButton = container.find("." + FILTER_BUILDER_ITEM_OPERATION_CLASS);
+        $operationButton.click();
+
+        assert.equal($(".dx-menu-item-selected").text(), "Equals");
+
+        var $menuItem = $(".dx-menu-item-text").eq(3);
+        $menuItem.trigger("dxclick");
+
+        assert.equal(container.find("." + FILTER_BUILDER_ITEM_VALUE_CLASS).length, 1);
+
+        $operationButton.click();
+        assert.equal($(".dx-menu-item-selected").text(), "Greater than");
     });
 
     QUnit.test("hide value field for isblank & isNotBlank", function(assert) {
-        try {
-            fx.off = true;
+        var container = $("#container");
 
-            var container = $("#container");
-            container.dxFilterBuilder({
-                value: [
-                    ["State", "<>", "K&S Music"]
-                ],
-                fields: fields
-            });
+        container.dxFilterBuilder({
+            value: [
+                ["State", "<>", "K&S Music"]
+            ],
+            fields: fields
+        });
 
-            assert.equal(container.find("." + FILTER_BUILDER_ITEM_VALUE_CLASS).length, 1);
+        assert.equal(container.find("." + FILTER_BUILDER_ITEM_VALUE_CLASS).length, 1);
 
-            var $operationButton = container.find("." + FILTER_BUILDER_ITEM_OPERATION_CLASS);
+        // for is blank
+        var $operationButton = container.find("." + FILTER_BUILDER_ITEM_OPERATION_CLASS);
 
-            clickByButtonAndSelectMenuItem($operationButton, 6);
-            assert.equal($operationButton.text(), "Is blank");
-            assert.equal(container.find("." + FILTER_BUILDER_ITEM_VALUE_CLASS).length, 0);
+        clickByButtonAndSelectMenuItem($operationButton, 6);
+        assert.equal($operationButton.text(), "Is blank");
+        assert.equal(container.find("." + FILTER_BUILDER_ITEM_VALUE_CLASS).length, 0);
 
-            clickByButtonAndSelectMenuItem($operationButton, 5);
-            assert.equal($operationButton.text(), "Does not equal");
-            assert.equal(container.find("." + FILTER_BUILDER_ITEM_VALUE_CLASS).length, 1);
+        clickByButtonAndSelectMenuItem($operationButton, 5);
+        assert.equal($operationButton.text(), "Does not equal");
+        assert.equal(container.find("." + FILTER_BUILDER_ITEM_VALUE_CLASS).length, 1);
 
-            var $fieldButton = container.find("." + FILTER_BUILDER_ITEM_FIELD_CLASS);
+        // for is not blank
+        clickByButtonAndSelectMenuItem($operationButton, 7);
+        assert.equal($operationButton.text(), "Is not blank");
+        assert.equal(container.find("." + FILTER_BUILDER_ITEM_VALUE_CLASS).length, 0);
 
-            clickByButtonAndSelectMenuItem($fieldButton, 6);
-            assert.equal($fieldButton.text(), "Caption of Object Field");
-            assert.equal(container.find("." + FILTER_BUILDER_ITEM_VALUE_CLASS).length, 0);
-
-            clickByButtonAndSelectMenuItem($fieldButton, 2);
-            assert.equal($fieldButton.text(), "State");
-            assert.equal(container.find("." + FILTER_BUILDER_ITEM_VALUE_CLASS).length, 1);
-
-            $operationButton = container.find("." + FILTER_BUILDER_ITEM_OPERATION_CLASS);
-            clickByButtonAndSelectMenuItem($operationButton, 7);
-            assert.equal($operationButton.text(), "Is not blank");
-            assert.equal(container.find("." + FILTER_BUILDER_ITEM_VALUE_CLASS).length, 0);
-        } finally {
-            fx.off = false;
-        }
+        clickByButtonAndSelectMenuItem($operationButton, 4);
+        assert.equal($operationButton.text(), "Equals");
+        assert.equal(container.find("." + FILTER_BUILDER_ITEM_VALUE_CLASS).length, 1);
     });
 
-    QUnit.test("change operation", function(assert) {
-        try {
-            fx.off = true;
+    QUnit.test("hide filter value for field with object dataType", function(assert) {
+        var container = $("#container");
 
-            var container = $("#container");
-            container.dxFilterBuilder({
-                allowHierarchicalFields: true,
-                value: [
-                    ["State", "<>", "K&S Music"]
-                ],
-                fields: fields
-            });
+        container.dxFilterBuilder({
+            value: [
+                ["State", "<>", "K&S Music"]
+            ],
+            fields: fields
+        });
 
-            var $operationButton = container.find("." + FILTER_BUILDER_ITEM_OPERATION_CLASS);
+        var $fieldButton = container.find("." + FILTER_BUILDER_ITEM_FIELD_CLASS);
 
-            clickByButtonAndSelectMenuItem($operationButton, 1);
-            assert.equal($operationButton.text(), "Does not contain");
+        clickByButtonAndSelectMenuItem($fieldButton, 6);
+        assert.equal($fieldButton.text(), "Caption of Object Field");
+        assert.equal(container.find("." + FILTER_BUILDER_ITEM_VALUE_CLASS).length, 0);
 
-            clickByButtonAndSelectMenuItem($operationButton, 2);
-            assert.equal($operationButton.text(), "Starts with");
-
-            assert.equal(container.find("." + FILTER_BUILDER_ITEM_VALUE_CLASS).length, 1);
-        } finally {
-            fx.off = false;
-        }
+        clickByButtonAndSelectMenuItem($fieldButton, 2);
+        assert.equal($fieldButton.text(), "State");
+        assert.equal(container.find("." + FILTER_BUILDER_ITEM_VALUE_CLASS).length, 1);
     });
 
-    QUnit.testInActiveWindow("change value", function(assert) {
-        try {
-            fx.off = true;
-
-            var container = $("#container");
-            var instance = container.dxFilterBuilder({
+    QUnit.testInActiveWindow("change filter value", function(assert) {
+        var container = $("#container"),
+            instance = container.dxFilterBuilder({
                 allowHierarchicalFields: true,
                 value: ["State", "<>", "K&S Music"],
                 fields: fields
             }).dxFilterBuilder("instance");
 
-            var $valueButton = container.find("." + FILTER_BUILDER_ITEM_VALUE_TEXT_CLASS);
-            $valueButton.click();
+        var $valueButton = container.find("." + FILTER_BUILDER_ITEM_VALUE_TEXT_CLASS);
+        $valueButton.click();
 
-            var $textBoxContainer = container.find("." + FILTER_BUILDER_ITEM_VALUE_CLASS + " .dx-textbox"),
-                textBoxInstance = $textBoxContainer.dxTextBox("instance"),
-                $input = $textBoxContainer.find("input");
-            assert.ok($input.is(":focus"));
+        var $textBoxContainer = container.find("." + FILTER_BUILDER_ITEM_VALUE_CLASS + " .dx-textbox"),
+            textBoxInstance = $textBoxContainer.dxTextBox("instance"),
+            $input = $textBoxContainer.find("input");
+        assert.ok($input.is(":focus"));
 
-            textBoxInstance.option("value", "Test");
-            $input.trigger("blur");
-            assert.ok(!$input.is(":focus"));
-            assert.deepEqual(instance._model, [["State", "<>", "Test"]]);
-            assert.deepEqual(instance.option("value"), ["State", "<>", "Test"]);
+        textBoxInstance.option("value", "Test");
+        $input.trigger("blur");
+        assert.notOk(container.find("input").length, "hasn't input");
+        assert.deepEqual(instance._model, [["State", "<>", "Test"]]);
+        assert.deepEqual(instance.option("value"), ["State", "<>", "Test"]);
+    });
 
-            clickByButtonAndSelectMenuItem($("." + FILTER_BUILDER_IMAGE_ADD_CLASS), 1);
-            assert.deepEqual(instance._model, [["State", "<>", "Test"], ["CompanyName", "contains", ""]]);
-            assert.deepEqual(instance.option("value"), [["State", "<>", "Test"], ["CompanyName", "contains", ""]]);
+    QUnit.test("Add and remove condition", function(assert) {
+        var container = $("#container"),
+            instance = container.dxFilterBuilder({
+                allowHierarchicalFields: true,
+                value: ["State", "<>", "Test"],
+                fields: fields
+            }).dxFilterBuilder("instance");
 
-            $("." + FILTER_BUILDER_IMAGE_REMOVE_CLASS).eq(1).click();
-            assert.deepEqual(instance._model, [["State", "<>", "Test"]]);
-            assert.deepEqual(instance.option("value"), ["State", "<>", "Test"]);
-            assert.equal(instance.option("value"), instance._model[0]);
-        } finally {
-            fx.off = false;
-        }
+        clickByButtonAndSelectMenuItem($("." + FILTER_BUILDER_IMAGE_ADD_CLASS), 1);
+        assert.deepEqual(instance._model, [["State", "<>", "Test"], ["CompanyName", "contains", ""]]);
+        assert.deepEqual(instance.option("value"), [["State", "<>", "Test"], ["CompanyName", "contains", ""]]);
+
+        $("." + FILTER_BUILDER_IMAGE_REMOVE_CLASS).eq(1).click();
+        assert.deepEqual(instance._model, [["State", "<>", "Test"]]);
+        assert.deepEqual(instance.option("value"), ["State", "<>", "Test"]);
+        assert.equal(instance.option("value"), instance._model[0]);
+    });
+
+    QUnit.test("Add and remove group", function(assert) {
+        var container = $("#container"),
+            instance = container.dxFilterBuilder({
+                allowHierarchicalFields: true,
+                value: ["State", "<>", "Test"],
+                fields: fields
+            }).dxFilterBuilder("instance");
+
+        clickByButtonAndSelectMenuItem($("." + FILTER_BUILDER_IMAGE_ADD_CLASS), 0);
+        assert.deepEqual(instance._model, [["State", "<>", "Test"], ["And"]]);
+        assert.deepEqual(instance.option("value"), ["State", "<>", "Test"]);
+
+        $("." + FILTER_BUILDER_IMAGE_REMOVE_CLASS).eq(1).click();
+        assert.deepEqual(instance._model, [["State", "<>", "Test"]]);
+        assert.deepEqual(instance.option("value"), ["State", "<>", "Test"]);
+        assert.equal(instance.option("value"), instance._model[0]);
+    });
+});
+
+QUnit.module("Create editor by field dataType", function() {
+    QUnit.test("number", function(assert) {
+        var container = $("#container");
+
+        container.dxFilterBuilder({
+            allowHierarchicalFields: true,
+            value: ["Zipcode", "=", 98027],
+            fields: fields
+        });
+        var valueField = $("." + FILTER_BUILDER_ITEM_VALUE_CLASS).eq(0);
+        valueField.find("." + FILTER_BUILDER_ITEM_VALUE_TEXT_CLASS).click();
+        assert.ok(valueField.find(".dx-numberbox").dxNumberBox("instance"));
+    });
+
+    QUnit.test("string", function(assert) {
+        var container = $("#container");
+
+        container.dxFilterBuilder({
+            allowHierarchicalFields: true,
+            value: ["State", "=", "Test"],
+            fields: fields
+        });
+
+        var valueField = $("." + FILTER_BUILDER_ITEM_VALUE_CLASS).eq(0);
+        valueField.find("." + FILTER_BUILDER_ITEM_VALUE_TEXT_CLASS).click();
+        assert.ok(valueField.find(".dx-textbox").dxTextBox("instance"));
+    });
+
+    QUnit.test("date", function(assert) {
+        var container = $("#container");
+
+        container.dxFilterBuilder({
+            allowHierarchicalFields: true,
+            value: ["Date", "=", new Date()],
+            fields: fields
+        });
+
+        var valueField = $("." + FILTER_BUILDER_ITEM_VALUE_CLASS).eq(0);
+        valueField.find("." + FILTER_BUILDER_ITEM_VALUE_TEXT_CLASS).click();
+        assert.ok(valueField.find(".dx-datebox").dxDateBox("instance"));
+    });
+
+    QUnit.test("boolean", function(assert) {
+        var container = $("#container");
+
+        container.dxFilterBuilder({
+            allowHierarchicalFields: true,
+            value: ["Contributor", "=", false],
+            fields: fields
+        });
+
+        var valueField = $("." + FILTER_BUILDER_ITEM_VALUE_CLASS).eq(0);
+        valueField.find("." + FILTER_BUILDER_ITEM_VALUE_TEXT_CLASS).click();
+        assert.ok(valueField.find(".dx-selectbox").dxSelectBox("instance"));
+    });
+
+    QUnit.test("object", function(assert) {
+        var container = $("#container");
+
+        container.dxFilterBuilder({
+            allowHierarchicalFields: true,
+            value: ["ObjectField", "=", null],
+            fields: fields
+        });
+
+        var valueField = $("." + FILTER_BUILDER_ITEM_VALUE_CLASS).eq(0);
+        assert.notOk(valueField.length);
+    });
+
+    QUnit.test("field with lookup", function(assert) {
+        var container = $("#container");
+
+        container.dxFilterBuilder({
+            allowHierarchicalFields: true,
+            value: ["CompanyName", "=", "Test"],
+            fields: fields
+        });
+
+        var valueField = $("." + FILTER_BUILDER_ITEM_VALUE_CLASS).eq(0);
+        valueField.find("." + FILTER_BUILDER_ITEM_VALUE_TEXT_CLASS).click();
+        assert.ok(valueField.find(".dx-selectbox").dxSelectBox("instance"));
     });
 });
