@@ -996,11 +996,9 @@ var CollectionWidget = Widget.inherit({
     },
 
     _renderEmptyMessage: function(items) {
+        items = items || this.option("items");
         var noDataText = this.option("noDataText"),
-            hideNoData;
-
-        items = items || this.option("items"),
-        hideNoData = !noDataText || (items && items.length) || this._isDataSourceLoading();
+            hideNoData = !noDataText || (items && items.length) || this._isDataSourceLoading();
 
         if(hideNoData && this._$noData) {
             this._$noData.remove();

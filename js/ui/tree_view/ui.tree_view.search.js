@@ -56,7 +56,7 @@ var TreeViewSearch = TreeViewBase.inherit(extend({}, searchBoxMixin, { _dataSour
         var $container = this.$element().find("." + NODE_CONTAINER_CLASS).first(),
             rootNodes;
 
-        if($container) {
+        if($container.length) {
             $container.empty();
             rootNodes = this._dataAdapter.getRootNodes();
             this._renderEmptyMessage(rootNodes);
