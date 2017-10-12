@@ -447,11 +447,7 @@ function copyGroup(group) {
     var result = [];
     for(var i = 0; i < group.length; i++) {
         var item = group[i];
-        if(isGroup(item)) {
-            result.push(copyGroup(item));
-        } else {
-            result.push(item);
-        }
+        result.push(isGroup(item) ? copyGroup(item) : item);
     }
     return result;
 }
