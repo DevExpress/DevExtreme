@@ -16,4 +16,4 @@ QUnit.testStart(function() {
 });
 
 require("./numberBoxParts/common.tests.js");
-require("./numberBoxParts/ldml.tests.js");
+require("./numberBoxParts/mask.tests.js");

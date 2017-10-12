@@ -14,7 +14,7 @@ var NUMBER_FORMATTER_NAMESPACE = "dxNumberFormatter",
     DELETE_KEY = "Delete",
     FORWARD_DIRECTION = 1;
 
-var NumberBoxLdml = NumberBoxBase.inherit({
+var NumberBoxMask = NumberBoxBase.inherit({
 
     _getDefaultOptions: function() {
         return extend(this.callBase(), {
@@ -336,4 +336,4 @@ var NumberBoxLdml = NumberBoxBase.inherit({
     }
 });
 
-module.exports = NumberBoxLdml;
+module.exports = NumberBoxMask;

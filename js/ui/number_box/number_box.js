@@ -1,8 +1,8 @@
 "use strict";
 
 var registerComponent = require("../../core/component_registrator"),
-    NumberBoxLdml = require("./number_box.ldml");
+    NumberBoxMask = require("./number_box.mask");
 
-registerComponent("dxNumberBox", NumberBoxLdml);
+registerComponent("dxNumberBox", NumberBoxMask);
 
-module.exports = NumberBoxLdml;
+module.exports = NumberBoxMask;
