@@ -75,7 +75,7 @@ var Submenu = ContextMenu.inherit({
         });
         this.callBase($rootItem);
         this._actions.onShown({
-            rootItem: $rootItem,
+            rootItem: getPublicElement($rootItem),
             submenu: this
         });
     },

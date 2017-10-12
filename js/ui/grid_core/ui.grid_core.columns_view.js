@@ -697,7 +697,7 @@ exports.ColumnsView = modules.View.inherit(columnStateMixin).inherit({
      * @name GridBaseMethods_getRowElement
      * @publicName getRowElement(rowIndex)
      * @param1 rowIndex:number
-     * @return Element|undefined
+     * @return Array<Node>|jQuery|undefined
      */
     getRowElement: function(rowIndex) {
         var $rows = this._getRowElement(rowIndex),

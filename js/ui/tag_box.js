@@ -3,7 +3,7 @@
 var $ = require("../core/renderer"),
     eventsEngine = require("../events/core/events_engine"),
     dataUtils = require("../core/element_data"),
-    domUtils = require("../core/utils/dom"),
+    getPublicElement = require("../core/utils/dom").getPublicElement,
     devices = require("../core/devices"),
     noop = require("../core/utils/common").noop,
     isDefined = require("../core/utils/type").isDefined,
@@ -772,7 +772,7 @@ var TagBox = SelectBox.inherit({
                 .addClass(TAGBOX_MULTI_TAG_CLASS);
 
         var args = {
-            multiTagElement: $tag,
+            multiTagElement: getPublicElement($tag),
             selectedItems: this.option("selectedItems")
         };
 
@@ -787,7 +787,7 @@ var TagBox = SelectBox.inherit({
 
         this._tagTemplate.render({
             model: args.text,
-            container: domUtils.getPublicElement($tag)
+            container: getPublicElement($tag)
         });
 
         return $tag;
@@ -882,7 +882,7 @@ var TagBox = SelectBox.inherit({
 
         this._tagTemplate.render({
             model: item,
-            container: domUtils.getPublicElement($tag)
+            container: getPublicElement($tag)
         });
     },
 

@@ -45,7 +45,7 @@ declare module DevExpress.viz.funnel {
         /** @docid dxfunnelItemmethods_showtooltip */
         showTooltip(): void;
     }
-
+    /** @docid dxfunnel_options */
     export interface dxFunnelOptions extends viz.core.BaseWidgetOptions, viz.core.RedrawOnResizeOptions, viz.core.TitleOptions, viz.core.LoadingIndicatorOptions, viz.core.ExportOptions {
         /** @docid dxfunneloptions_adaptivelayout */
         adaptiveLayout?: {

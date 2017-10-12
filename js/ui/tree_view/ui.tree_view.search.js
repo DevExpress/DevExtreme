@@ -53,11 +53,14 @@ var TreeViewSearch = TreeViewBase.inherit(extend({}, searchBoxMixin, { _dataSour
     },
 
     _repaintContainer: function() {
-        var $container = this.$element().find("." + NODE_CONTAINER_CLASS).first();
+        var $container = this.$element().find("." + NODE_CONTAINER_CLASS).first(),
+            rootNodes;
 
-        if($container) {
+        if($container.length) {
             $container.empty();
-            this._renderItems($container, this._dataAdapter.getRootNodes());
+            rootNodes = this._dataAdapter.getRootNodes();
+            this._renderEmptyMessage(rootNodes);
+            this._renderItems($container, rootNodes);
             this._fireContentReadyAction();
         }
     },

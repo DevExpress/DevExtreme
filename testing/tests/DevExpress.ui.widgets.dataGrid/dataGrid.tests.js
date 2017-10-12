@@ -1830,6 +1830,42 @@ QUnit.test("width should be auto if minWidth is assigned to another column", fun
     assert.strictEqual($cols[2].style.width, "auto", "width is auto");
 });
 
+QUnit.test("Apply minWidth when columns have 'auto' width but the last column hasn't width", function(assert) {
+    //arrange
+    $("#container").width(200);
+
+    $("#dataGrid").dxDataGrid({
+        loadingTimeout: undefined,
+        dataSource: [{
+            firstName: "First Name",
+            lastName: "Last Name",
+            description: "The DataGrid is a widget that represents data from a local or remote source in the form of a grid."
+        }],
+        columns: [
+            {
+                dataField: "firstName",
+                width: "auto"
+            }, {
+                dataField: "lastName",
+                width: "auto"
+            }, {
+                dataField: "description",
+                minWidth: 20
+            }
+        ]
+    });
+
+    var $colGroups = $(".dx-datagrid colgroup");
+    assert.strictEqual($colGroups.length, 2);
+
+    for(var i = 0; i < $colGroups.length; i++) {
+        var $cols = $colGroups.eq(i).find("col");
+
+        assert.strictEqual($cols.length, 3);
+        assert.strictEqual($cols[2].style.width, "20px", "minWidth is applied");
+    }
+});
+
 QUnit.test("Horizontal scrollbar is not displayed when columns width has float value", function(assert) {
     //arrange, act
     var $dataGrid = $("#dataGrid").dxDataGrid({

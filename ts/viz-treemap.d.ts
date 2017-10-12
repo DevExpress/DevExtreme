@@ -1,4 +1,5 @@
 declare module DevExpress.viz.treeMap {
+    /** @docid dxtreemap_options */
     export interface dxTreeMapOptions extends viz.core.BaseWidgetOptions, viz.core.RedrawOnResizeOptions, viz.core.TitleOptions, viz.core.LoadingIndicatorOptions, viz.core.ExportOptions {
         /** @docid_ignore dxtreemapoptions_margin */
 

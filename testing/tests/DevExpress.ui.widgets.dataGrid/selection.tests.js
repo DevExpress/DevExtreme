@@ -1880,6 +1880,57 @@ QUnit.test("changeRowSelection with shift key. Change shift selection from up to
     assert.ok(this.dataController.items()[4].isSelected);
 });
 
+//T547950
+QUnit.test("changeRowSelection with shift key after filtering", function(assert) {
+    //arrange
+    this.applyOptions({
+        selection: {
+            mode: "multiple",
+            showCheckBoxesMode: "always"
+        }
+    });
+
+    this.dataController.filter(["age", "<", 18]);
+
+    //assert
+    assert.strictEqual(this.dataController.items().length, 3, "item count");
+
+    this.selectionController.changeItemSelection(1);
+    this.dataController.clearFilter("dataSource");
+
+    //assert
+    assert.strictEqual(this.dataController.items().length, 7, "item count");
+
+    //act
+    this.selectionController.changeItemSelection(5, { shift: true });
+
+    //assert
+    assert.deepEqual(this.selectionController.getSelectedRowKeys(), [2, 6], "selectedRowKeys");
+});
+
+//T547950
+QUnit.test("focusedItemIndex should be reset to -1 after change page index", function(assert) {
+    //arrange
+    this.applyOptions({
+        selection: {
+            mode: "multiple",
+            showCheckBoxesMode: "always"
+        }
+    });
+    this.pageSize(3);
+
+    this.selectionController.changeItemSelection(1);
+
+    //assert
+    assert.strictEqual(this.selectionController.focusedItemIndex(), 1, "focusedItemIndex");
+
+    //act
+    this.pageIndex(1);
+
+    //assert
+    assert.strictEqual(this.selectionController.focusedItemIndex(), -1, "focusedItemIndex");
+});
+
 QUnit.test("Rise events on changeRowSelection", function(assert) {
     var selectionChangedCount = 0;
 
