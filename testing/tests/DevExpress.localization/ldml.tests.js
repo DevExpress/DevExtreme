@@ -2,7 +2,7 @@
 
 var getNumberParser = require("localization/ldml/number").getParser;
 var getNumberFormatter = require("localization/ldml/number").getFormatter;
-var getDateParser = require("core/utils/date_parser_generator").generateDateParser;
+var getDateParser = require("localization/ldml/date.parser").getParser;
 
 QUnit.module("date parser");
 

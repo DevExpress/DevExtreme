@@ -1,6 +1,6 @@
 "use strict";
 
-var dateParts = require("./date_parts");
+var dateParts = require("../../core/utils/date_parts");
 
 var FORMAT_TYPES = {
     "3": "abbreviated",
@@ -170,7 +170,7 @@ var setPatternPart = function(date, pattern, text) {
     }
 };
 
-var generateDateParser = function(format) {
+var getParser = function(format) {
     var regExpInfo = getRegExpInfo(format);
 
     return function(text) {
@@ -189,4 +189,4 @@ var generateDateParser = function(format) {
     };
 };
 
-exports.generateDateParser = generateDateParser;
+exports.getParser = getParser;
