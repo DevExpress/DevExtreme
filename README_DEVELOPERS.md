@@ -83,7 +83,7 @@ We have a few rules of formatting commit messages and pull request titles. This 
 - Separate the subject from the body with a blank line
 - Wrap the body at 72 characters
 - Use the body to explain what and why vs how
-- Write the ID of the issue/ticket at the end of the subject line
+- Write the ID of the issue/ticket at the end of the subject line (this applies to the ID unbound to the context of commit message)
 
 Samples:
 
