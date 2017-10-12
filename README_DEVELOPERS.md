@@ -74,7 +74,7 @@ Please make sure that each pull request passes all automatic checks before submi
 
 ## Commit Message Guidelines
 
-We have a few rules of formatting commit messages and pull request titles:
+We have a few rules of formatting commit messages and pull request titles. This list based on the [article by Chris Beams](https://chris.beams.io/posts/git-commit/):
 
 - Use the imperative mood in the subject line
 - Capitalize the subject line
