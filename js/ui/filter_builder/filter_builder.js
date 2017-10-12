@@ -50,13 +50,13 @@ var FilterBuilder = Widget.inherit({
               * @publicName onEditorPreparing
               * @type function(e)
               * @type_function_param1 e:object
-              * @type_function_param1_field1 value:any
-              * @type_function_param1_field2 setValue(newValue):any
-              * @type_function_param1_field3 cancel:boolean
-              * @type_function_param1_field4 editorElement:jQuery
-              * @type_function_param1_field6 editorName:string
-              * @type_function_param1_field7 editorOptions:object
-              * @type_function_param1_field8 dataField:string
+              * @type_function_param1_field4 value:any
+              * @type_function_param1_field5 setValue(newValue):any
+              * @type_function_param1_field6 cancel:boolean
+              * @type_function_param1_field7 editorElement:jQuery
+              * @type_function_param1_field8 editorName:string
+              * @type_function_param1_field9 editorOptions:object
+              * @type_function_param1_field10 dataField:string
               * @extends Action
               * @action
              */
@@ -67,13 +67,13 @@ var FilterBuilder = Widget.inherit({
               * @publicName onEditorPrepared
               * @type function(e)
               * @type_function_param1 e:object
-              * @type_function_param1_field1 value:any
-              * @type_function_param1_field2 setValue(newValue):any
-              * @type_function_param1_field3 cancel:boolean
-              * @type_function_param1_field4 editorElement:jQuery
-              * @type_function_param1_field6 editorName:string
-              * @type_function_param1_field7 editorOptions:object
-              * @type_function_param1_field8 dataField:string
+              * @type_function_param1_field4 value:any
+              * @type_function_param1_field5 setValue(newValue):any
+              * @type_function_param1_field6 cancel:boolean
+              * @type_function_param1_field7 editorElement:jQuery
+              * @type_function_param1_field8 editorName:string
+              * @type_function_param1_field9 editorOptions:object
+              * @type_function_param1_field10 dataField:string
               * @extends Action
               * @action
              */
@@ -82,27 +82,27 @@ var FilterBuilder = Widget.inherit({
             /**
             * @name dxFilterBuilderOptions_fields
             * @publicName fields
-            * @type Array<Object>
+            * @type Array<dxFilterBuilderField>
             * @default []
             */
             fields: [],
 
             /**
-            * @name dxFilterBuilderOptions_fields_caption
+            * @name dxFilterBuilderField_caption
             * @publicName caption
             * @type string
             * @default undefined
             */
 
             /**
-            * @name dxFilterBuilderOptions_fields_dataField
+            * @name dxFilterBuilderField_dataField
             * @publicName dataField
             * @type string
             * @default undefined
             */
 
             /**
-             * @name dxFilterBuilderOptions_fields_dataType
+             * @name dxFilterBuilderField_dataType
              * @publicName dataType
              * @type string
              * @default "string"
@@ -110,53 +110,49 @@ var FilterBuilder = Widget.inherit({
              */
 
             /**
-             * @name dxFilterBuilderOptions_fields_format
+             * @name dxFilterBuilderField_format
              * @publicName format
              * @type format
              * @default ""
              */
 
             /**
-             * @name dxFilterBuilderOptions_fields_trueText
+             * @name dxFilterBuilderField_trueText
              * @publicName trueText
              * @type string
              * @default "true"
              */
 
             /**
-             * @name dxFilterBuilderOptions_fields_falseText
+             * @name dxFilterBuilderField_falseText
              * @publicName falseText
              * @type string
              * @default "false"
              */
 
             /**
-             * @name dxFilterBuilderOptions_fields_lookup
+             * @name dxFilterBuilderField_lookup
              * @publicName lookup
              * @type object
              * @default undefined
              */
 
             /**
-             * @name dxFilterBuilderOptions_fields_lookup_dataSource
+             * @name dxFilterBuilderField_lookup_dataSource
              * @publicName dataSource
-             * @type Array<any>|DataSourceOptions|function(options)
-             * @type_function_param1 options:object
-             * @type_function_param1_field1 data:object
-             * @type_function_param1_field2 key:any
-             * @type_function_return Array<any>|DataSourceOptions
+             * @type Array<any>|DataSourceOptions
              * @default undefined
              */
 
             /**
-             * @name dxFilterBuilderOptions_fields_lookup_valueExpr
+             * @name dxFilterBuilderField_lookup_valueExpr
              * @publicName valueExpr
              * @type string|function(data)
              * @default undefined
              */
 
             /**
-             * @name dxFilterBuilderOptions_fields_lookup_displayExpr
+             * @name dxFilterBuilderField_lookup_displayExpr
              * @publicName displayExpr
              * @type string|function(data)
              * @type_function_param1 data:object
@@ -164,14 +160,14 @@ var FilterBuilder = Widget.inherit({
              */
 
             /**
-             * @name dxFilterBuilderOptions_fields_lookup_allowClearing
+             * @name dxFilterBuilderField_lookup_allowClearing
              * @publicName allowClearing
              * @type boolean
              * @default false
              */
 
             /**
-             * @name dxFilterBuilderOptions_fields_defaultFilterOperation
+             * @name dxFilterBuilderField_defaultFilterOperation
              * @publicName defaultFilterOperation
              * @type string
              * @acceptValues "=" | "<>" | "<" | "<=" | ">" | ">=" | "notcontains" | "contains" | "startswith" | "endswith" | "isblank" | "isnotblank"
@@ -180,7 +176,7 @@ var FilterBuilder = Widget.inherit({
              */
 
             /**
-             * @name dxFilterBuilderOptions_fields_filterOperations
+             * @name dxFilterBuilderField_filterOperations
              * @publicName filterOperations
              * @type Array<string>
              * @acceptValues "=" | "<>" | "<" | "<=" | ">" | ">=" | "notcontains" | "contains" | "startswith" | "endswith" | "isblank" | "isnotblank"
@@ -188,7 +184,7 @@ var FilterBuilder = Widget.inherit({
              */
 
             /**
-             * @name dxFilterBuilderOptions_fields_customizeText
+             * @name dxFilterBuilderField_customizeText
              * @publicName customizeText
              * @type function(fieldInfo)
              * @type_function_param1 fieldInfo:object
@@ -371,14 +367,13 @@ var FilterBuilder = Widget.inherit({
         }
     },
 
-    _model: null,
-
     _updateFilter: function() {
         var value = utils.copyGroup(this._model);
         this._options.value = utils.getNormalizedFilter(value);
     },
 
     _init: function() {
+        this._model = null;
         this._initEditorFactory();
         this._initActions();
         this.callBase();
@@ -469,30 +464,29 @@ var FilterBuilder = Widget.inherit({
         return $group;
     },
 
-
     _createGroupOperationButton: function(criteria) {
         var that = this,
             groupOperations = this._getGroupOperations(),
-            groupMenuItem = utils.getGroupMenuItem(criteria, groupOperations);
-        var $operationButton = this._createButtonWithMenu({
-            caption: groupMenuItem.text,
-            menu: {
-                items: groupOperations,
-                displayExpr: "text",
-                keyExpr: "value",
-                onItemClick: function(e) {
-                    utils.setGroupValue(criteria, e.itemData.value);
-                    groupMenuItem = e.itemData;
-                    $operationButton.html(e.itemData.text);
-                    that._updateFilter();
-                },
-                onContentReady: function(e) {
-                    e.component.selectItem(groupMenuItem);
+            groupMenuItem = utils.getGroupMenuItem(criteria, groupOperations),
+            $operationButton = this._createButtonWithMenu({
+                caption: groupMenuItem.text,
+                menu: {
+                    items: groupOperations,
+                    displayExpr: "text",
+                    keyExpr: "value",
+                    onItemClick: function(e) {
+                        utils.setGroupValue(criteria, e.itemData.value);
+                        groupMenuItem = e.itemData;
+                        $operationButton.html(e.itemData.text);
+                        that._updateFilter();
+                    },
+                    onContentReady: function(e) {
+                        e.component.selectItem(groupMenuItem);
+                    }
                 }
-            }
-        }).addClass(FILTER_BUILDER_ITEM_TEXT_CLASS)
-            .addClass(FILTER_BUILDER_GROUP_OPERATION_CLASS)
-            .attr("tabindex", 0);
+            }).addClass(FILTER_BUILDER_ITEM_TEXT_CLASS)
+                .addClass(FILTER_BUILDER_GROUP_OPERATION_CLASS)
+                .attr("tabindex", 0);
         return $operationButton;
     },
 
@@ -573,8 +567,8 @@ var FilterBuilder = Widget.inherit({
                     }
                 }
             }).addClass(FILTER_BUILDER_ITEM_TEXT_CLASS)
-            .addClass(FILTER_BUILDER_ITEM_OPERATION_CLASS)
-            .attr("tabindex", 0);
+                .addClass(FILTER_BUILDER_ITEM_OPERATION_CLASS)
+                .attr("tabindex", 0);
 
         return $operationButton;
     },

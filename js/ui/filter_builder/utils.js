@@ -1,6 +1,7 @@
 "use strict";
 
-var errors = require("../../data/errors").errors,
+var dataErrors = require("../../data/errors").errors,
+    errors = require("../widget/ui.errors"),
     extend = require("../../core/utils/extend").extend,
     formatHelper = require("../../format_helper"),
     inflector = require("../../core/utils/inflector"),
@@ -115,7 +116,7 @@ function getGroupValue(group) {
         var item = criteria[i];
         if(!Array.isArray(item)) {
             if(value && value !== item) {
-                throw new errors.Error("E4019");
+                throw new dataErrors.Error("E4019");
             }
             value = item;
         }
