@@ -157,7 +157,7 @@ QUnit.test("percent format parsing with float part", function(assert) {
 });
 
 QUnit.test("format parser with custom separators", function(assert) {
-    var parser = getNumberParser("#,##0.00", { groupSeparator: " ", decimalSeparator: "," });
+    var parser = getNumberParser("#,##0.00", { thousandsSeparator: " ", decimalSeparator: "," });
 
     assert.strictEqual(parser("1.23"), null, "parse number with wrong decimal separator");
     assert.strictEqual(parser("1,23"), 1.23, "parse number with correct decimal separator");
@@ -276,7 +276,7 @@ QUnit.test("complex group", function(assert) {
 });
 
 QUnit.test("custom separators", function(assert) {
-    var formatter = getNumberFormatter("#,##0.##", { groupSeparator: " ", decimalSeparator: "," });
+    var formatter = getNumberFormatter("#,##0.##", { thousandsSeparator: " ", decimalSeparator: "," });
 
     assert.strictEqual(formatter(0), "0", "number without separators");
     assert.strictEqual(formatter(0.12), "0,12", "number with decimal separator");

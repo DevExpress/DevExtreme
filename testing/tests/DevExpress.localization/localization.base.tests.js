@@ -634,12 +634,12 @@ QUnit.test("parse: base", function(assert) {
 
 QUnit.test("parse with custom separators", function(assert) {
     var oldDecimalSeparator = config().decimalSeparator,
-        oldGroupSeparator = config().groupSeparator,
+        oldThousandsSeparator = config().thousandsSeparator,
         oldLocale = localization.locale();
 
     config({
         decimalSeparator: ",",
-        groupSeparator: "."
+        thousandsSeparator: "."
     });
     localization.locale("de");
 
@@ -649,7 +649,7 @@ QUnit.test("parse with custom separators", function(assert) {
     } finally {
         config({
             decimalSeparator: oldDecimalSeparator,
-            groupSeparator: oldGroupSeparator
+            thousandsSeparator: oldThousandsSeparator
         });
         localization.locale(oldLocale);
     }
@@ -664,11 +664,11 @@ QUnit.test("parse with LDML format", function(assert) {
 
 QUnit.test("parse with LDML format and with custom separators", function(assert) {
     var oldDecimalSeparator = config().decimalSeparator,
-        oldGroupSeparator = config().groupSeparator;
+        oldThousandsSeparator = config().thousandsSeparator;
 
     config({
         decimalSeparator: ",",
-        groupSeparator: " "
+        thousandsSeparator: " "
     });
 
     try {
@@ -679,7 +679,7 @@ QUnit.test("parse with LDML format and with custom separators", function(assert)
     } finally {
         config({
             decimalSeparator: oldDecimalSeparator,
-            groupSeparator: oldGroupSeparator
+            thousandsSeparator: oldThousandsSeparator
         });
     }
 });
@@ -734,12 +734,12 @@ QUnit.test('format as function', function(assert) {
 
 QUnit.test("custom group and decimal separators", function(assert) {
     var oldDecimalSeparator = config().decimalSeparator,
-        oldGroupSeparator = config().groupSeparator,
+        oldThousandsSeparator = config().thousandsSeparator,
         oldLocale = localization.locale();
 
     config({
         decimalSeparator: ",",
-        groupSeparator: "."
+        thousandsSeparator: "."
     });
     localization.locale("de");
 
@@ -750,7 +750,7 @@ QUnit.test("custom group and decimal separators", function(assert) {
     } finally {
         config({
             decimalSeparator: oldDecimalSeparator,
-            groupSeparator: oldGroupSeparator
+            thousandsSeparator: oldThousandsSeparator
         });
         localization.locale(oldLocale);
     }
@@ -763,11 +763,11 @@ QUnit.test('format as LDML pattern', function(assert) {
 
 QUnit.test("format as LDML pattern with custom separators", function(assert) {
     var oldDecimalSeparator = config().decimalSeparator,
-        oldGroupSeparator = config().groupSeparator;
+        oldThousandsSeparator = config().thousandsSeparator;
 
     config({
         decimalSeparator: ",",
-        groupSeparator: " "
+        thousandsSeparator: " "
     });
 
     try {
@@ -776,7 +776,7 @@ QUnit.test("format as LDML pattern with custom separators", function(assert) {
     } finally {
         config({
             decimalSeparator: oldDecimalSeparator,
-            groupSeparator: oldGroupSeparator
+            thousandsSeparator: oldThousandsSeparator
         });
     }
 });

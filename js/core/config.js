@@ -7,7 +7,7 @@ var config = {
     designMode: false,
     serverDecimalSeparator: ".",
     decimalSeparator: ".",
-    groupSeparator: ",",
+    thousandsSeparator: ",",
     forceIsoDateParsing: true,
     wrapActionsBeforeExecute: true,
     useJQueryRenderer: true

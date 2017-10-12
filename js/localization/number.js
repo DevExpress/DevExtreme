@@ -147,7 +147,7 @@ var numberLocalization = dependencyInjector({
     _addGroupSeparators: function(value) {
         var parts = value.toString().split(".");
 
-        return parts[0].replace(/\B(?=(\d{3})+(?!\d))/g, config().groupSeparator) + (parts[1] ? config().decimalSeparator + parts[1] : "");
+        return parts[0].replace(/\B(?=(\d{3})+(?!\d))/g, config().thousandsSeparator) + (parts[1] ? config().decimalSeparator + parts[1] : "");
     },
 
     _formatNumberCore: function(value, format, formatConfig) {
@@ -251,7 +251,7 @@ var numberLocalization = dependencyInjector({
 
         var textParts = text.split(config().decimalSeparator);
 
-        textParts[0] = textParts[0].replace(new RegExp("^\\D+|" + escapeRegExp(config().groupSeparator) + "+", "g"), "");
+        textParts[0] = textParts[0].replace(new RegExp("^\\D+|" + escapeRegExp(config().thousandsSeparator) + "+", "g"), "");
 
         return parseFloat(textParts[0] + (textParts[1] ? "." + textParts[1] : ""));
     }
