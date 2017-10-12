@@ -4,7 +4,6 @@ var dependencyInjector = require("../core/utils/dependency_injector"),
     isString = require("../core/utils/type").isString,
     iteratorUtils = require("../core/utils/iterator"),
     inArray = require("../core/utils/array").inArray,
-    dateParts = require("../core/utils/date_parts"),
     getLDMLDateFormatter = require("./ldml/date.formatter").getFormatter,
     getLDMLDateParser = require("./ldml/date.parser").getParser,
     errors = require("../core/errors");
@@ -94,7 +93,6 @@ var dateLocalization = dependencyInjector({
     getMonthNames: function(format) {
         return cutCaptions(months, format);
     },
-
     getDayNames: function(format) {
         return cutCaptions(days, format);
     },
@@ -140,7 +138,7 @@ var dateLocalization = dependencyInjector({
             format = format.type || format;
             if(isString(format)) {
                 format = FORMATS_TO_PATTERN_MAP[format.toLowerCase()] || format;
-                return getLDMLDateFormatter(format)(date);
+                return getLDMLDateFormatter(format, this)(date);
             }
         }
 
@@ -173,7 +171,7 @@ var dateLocalization = dependencyInjector({
 
         if(typeof format === "string") {
             format = FORMATS_TO_PATTERN_MAP[format.toLowerCase()] || format;
-            return getLDMLDateParser(format)(text);
+            return getLDMLDateParser(format, this)(text);
         }
 
         errors.log("W0012");
@@ -189,12 +187,6 @@ var dateLocalization = dependencyInjector({
     firstDayOfWeekIndex: function() {
         return 0;
     }
-});
-
-Object.keys(dateParts).forEach(function(methodName) {
-    dateParts[methodName] = function() {
-        return dateLocalization[methodName].apply(this, arguments);
-    };
 });
 
 module.exports = dateLocalization;

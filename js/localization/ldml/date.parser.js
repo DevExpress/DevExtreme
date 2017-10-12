@@ -1,7 +1,5 @@
 "use strict";
 
-var dateParts = require("../../core/utils/date_parts");
-
 var FORMAT_TYPES = {
     "3": "abbreviated",
     "4": "wide",
@@ -12,28 +10,28 @@ var PATTERN_REGEXPS = {
     y: function(count) {
         return "[0-9]{" + count + ",}";
     },
-    M: function(count) {
+    M: function(count, dateParts) {
         if(count > 2) {
             return dateParts.getMonthNames(FORMAT_TYPES[count], "format").join("|");
         }
         return "0?[1-9]|1[012]";
     },
-    L: function(count) {
+    L: function(count, dateParts) {
         if(count > 2) {
             return dateParts.getMonthNames(FORMAT_TYPES[count], "standalone").join("|");
         }
         return "0?[1-9]|1[012]";
     },
-    Q: function(count) {
+    Q: function(count, dateParts) {
         if(count > 2) {
             return dateParts.getQuarterNames(FORMAT_TYPES[count], "format").join("|");
         }
         return "0?[1-4]";
     },
-    E: function(count) {
+    E: function(count, dateParts) {
         return dateParts.getDayNames(FORMAT_TYPES[count < 3 ? 3 : count], "format").join("|");
     },
-    a: function(count) {
+    a: function(count, dateParts) {
         return dateParts.getPeriodNames(FORMAT_TYPES[count < 3 ? 3 : count], "format").join("|");
     },
     d: function(count) {
@@ -66,28 +64,28 @@ var PATTERN_PARSERS = {
         }
         return year;
     },
-    M: function(text, count) {
+    M: function(text, count, dateParts) {
         if(count > 2) {
             return dateParts.getMonthNames(FORMAT_TYPES[count], "format").indexOf(text);
         }
         return parseNumber(text) - 1;
     },
-    L: function(text, count) {
+    L: function(text, count, dateParts) {
         if(count > 2) {
             return dateParts.getMonthNames(FORMAT_TYPES[count], "standalone").indexOf(text);
         }
         return parseNumber(text) - 1;
     },
-    Q: function(text, count) {
+    Q: function(text, count, dateParts) {
         if(count > 2) {
             return dateParts.getQuarterNames(FORMAT_TYPES[count], "format").indexOf(text);
         }
         return parseNumber(text) - 1;
     },
-    E: function(text, count) {
+    E: function(text, count, dateParts) {
         return dateParts.getDayNames(FORMAT_TYPES[count < 3 ? 3 : count], "format").indexOf(text);
     },
-    a: function(text, count) {
+    a: function(text, count, dateParts) {
         return dateParts.getPeriodNames(FORMAT_TYPES[count < 3 ? 3 : count], "format").indexOf(text);
     },
     d: parseNumber,
@@ -152,7 +150,7 @@ var createPattern = function(char, count) {
     return result;
 };
 
-var getRegExpInfo = function(format) {
+var getRegExpInfo = function(format, dateParts) {
     var regexpText = "",
         isEscaping,
         patterns = [];
@@ -176,7 +174,7 @@ var getRegExpInfo = function(format) {
                 pattern = createPattern(char, count);
 
             patterns.push(pattern);
-            regexpText += "(" + regexpPart(count) + ")";
+            regexpText += "(" + regexpPart(count, dateParts) + ")";
             i += count - 1;
         } else {
             regexpText += char;
@@ -188,13 +186,13 @@ var getRegExpInfo = function(format) {
     };
 };
 
-var setPatternPart = function(date, pattern, text) {
+var setPatternPart = function(date, pattern, text, dateParts) {
     var patternChar = pattern[0],
         partSetter = PATTERN_SETTERS[patternChar],
         partParser = PATTERN_PARSERS[patternChar];
 
     if(partSetter && partParser) {
-        var value = partParser(text, pattern.length);
+        var value = partParser(text, pattern.length, dateParts);
         if(date[partSetter]) {
             date[partSetter](value);
         } else {
@@ -203,8 +201,8 @@ var setPatternPart = function(date, pattern, text) {
     }
 };
 
-var getParser = function(format) {
-    var regExpInfo = getRegExpInfo(format);
+var getParser = function(format, dateParts) {
+    var regExpInfo = getRegExpInfo(format, dateParts);
 
     return function(text) {
         var regExpResult = regExpInfo.regexp.exec(text);
@@ -216,7 +214,7 @@ var getParser = function(format) {
 
             regExpInfo.patterns.forEach(function(pattern, index) {
                 var partText = regExpResult[index + 1];
-                setPatternPart(date, pattern, partText);
+                setPatternPart(date, pattern, partText, dateParts);
                 pattern = pattern[0];
                 if(pattern === "H") pattern = "h";
                 var patternIndex = PATTERNS.indexOf(pattern) - 1;
