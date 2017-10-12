@@ -3,9 +3,10 @@
 var jQuery = require("jquery");
 var compareVersions = require("../core/utils/version").compare;
 var errors = require("../core/utils/error");
+var useJQuery = require("../core/config")().useJQuery;
 
 // Check availability in global environment
-if(jQuery) {
+if(jQuery && useJQuery) {
     if(compareVersions(jQuery.fn.jquery, [1, 10]) < 0) {
         throw errors.Error("E0012");
     }

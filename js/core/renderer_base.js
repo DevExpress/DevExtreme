@@ -1,7 +1,7 @@
 "use strict";
 
 var dataUtils = require("./element_data");
-var rendererStrategy = require("./native_renderer_strategy");
+var domAdapter = require("./dom_adapter");
 var typeUtils = require("./utils/type");
 var styleUtils = require("./utils/style");
 var sizeUtils = require("./utils/size");
@@ -27,7 +27,7 @@ var initRender = function(selector, context) {
         }
 
         if(selector[0] === "<") {
-            this[0] = rendererStrategy.createElement(selector.slice(1, -1), undefined, context);
+            this[0] = domAdapter.createElement(selector.slice(1, -1), undefined, context);
             this.length = 1;
             return this;
         }
@@ -59,9 +59,9 @@ var repeatMethod = function(methodName, args) {
 
 var setAttributeValue = function(element, attrName, value) {
     if(value !== undefined && value !== null) {
-        rendererStrategy.setAttribute(element, attrName, value);
+        domAdapter.setAttribute(element, attrName, value);
     } else {
-        rendererStrategy.removeAttribute(element, attrName);
+        domAdapter.removeAttribute(element, attrName);
     }
 };
 
@@ -107,7 +107,7 @@ initRender.prototype.attr = function(attrName, value) {
 };
 
 initRender.prototype.removeAttr = function(attrName) {
-    this[0] && rendererStrategy.removeAttribute(this[0], attrName);
+    this[0] && domAdapter.removeAttribute(this[0], attrName);
     return this;
 };
 
@@ -120,7 +120,7 @@ initRender.prototype.prop = function(propName, value) {
             this.prop(key, propName[key]);
         }
     } else {
-        rendererStrategy.setProperty(this[0], propName, value);
+        domAdapter.setProperty(this[0], propName, value);
     }
 
     return this;
@@ -158,7 +158,7 @@ initRender.prototype.toggleClass = function(className, value) {
 
     var classNames = className.split(" ");
     for(var i = 0; i < classNames.length; i++) {
-        rendererStrategy.setClass(this[0], classNames[i], value);
+        domAdapter.setClass(this[0], classNames[i], value);
     }
     return this;
 };
@@ -215,7 +215,7 @@ initRender.prototype.toggleClass = function(className, value) {
         }
         value += typeUtils.isNumeric(value) ? "px" : "";
 
-        rendererStrategy.setStyle(element, propName, value);
+        domAdapter.setStyle(element, propName, value);
 
         return this;
     };
@@ -254,7 +254,7 @@ var appendElements = function(element, nextSibling) {
         if(wrapTR && container.tBodies.length) {
             container = container.tBodies[0];
         }
-        rendererStrategy.insertElement(container, item.nodeType ? item : item[0], nextSibling);
+        domAdapter.insertElement(container, item.nodeType ? item : item[0], nextSibling);
     }
 };
 
@@ -330,7 +330,7 @@ initRender.prototype.append = function(element) {
 initRender.prototype.prependTo = function(element) {
     element = renderer(element);
     if(element[0]) {
-        rendererStrategy.insertElement(element[0], this[0], element[0].firstChild);
+        domAdapter.insertElement(element[0], this[0], element[0].firstChild);
     }
 
     return this;
@@ -341,34 +341,34 @@ initRender.prototype.appendTo = function(element) {
         return repeatMethod.call(this, "appendTo", arguments);
     }
 
-    rendererStrategy.insertElement(renderer(element)[0], this[0]);
+    domAdapter.insertElement(renderer(element)[0], this[0]);
     return this;
 };
 
 initRender.prototype.insertBefore = function(element) {
     if(element && element[0]) {
-        rendererStrategy.insertElement(element[0].parentNode, this[0], element[0]);
+        domAdapter.insertElement(element[0].parentNode, this[0], element[0]);
     }
     return this;
 };
 
 initRender.prototype.insertAfter = function(element) {
     if(element && element[0]) {
-        rendererStrategy.insertElement(element[0].parentNode, this[0], element[0].nextSibling);
+        domAdapter.insertElement(element[0].parentNode, this[0], element[0].nextSibling);
     }
     return this;
 };
 
 initRender.prototype.before = function(element) {
     if(this[0]) {
-        rendererStrategy.insertElement(this[0].parentNode, element[0], this[0]);
+        domAdapter.insertElement(this[0].parentNode, element[0], this[0]);
     }
     return this;
 };
 
 initRender.prototype.after = function(element) {
     if(this[0]) {
-        rendererStrategy.insertElement(this[0].parentNode, element[0], this[0].nextSibling);
+        domAdapter.insertElement(this[0].parentNode, element[0], this[0].nextSibling);
     }
     return this;
 };
@@ -411,7 +411,7 @@ initRender.prototype.remove = function() {
     }
 
     dataUtils.cleanDataRecursive(this[0], true);
-    rendererStrategy.removeElement(this[0]);
+    domAdapter.removeElement(this[0]);
 
     return this;
 };
@@ -421,7 +421,7 @@ initRender.prototype.detach = function() {
         return repeatMethod.call(this, "detach", arguments);
     }
 
-    rendererStrategy.removeElement(this[0]);
+    domAdapter.removeElement(this[0]);
 
     return this;
 };
@@ -432,7 +432,7 @@ initRender.prototype.empty = function() {
     }
 
     dataUtils.cleanDataRecursive(this[0]);
-    rendererStrategy.setText(this[0], "");
+    domAdapter.setText(this[0], "");
 
     return this;
 };
@@ -456,7 +456,7 @@ initRender.prototype.text = function(text) {
     }
 
     dataUtils.cleanDataRecursive(this[0], false);
-    rendererStrategy.setText(this[0], typeUtils.isDefined(text) ? text : "");
+    domAdapter.setText(this[0], typeUtils.isDefined(text) ? text : "");
 
     return this;
 };
@@ -845,28 +845,28 @@ initRender.prototype.removeData = function(key) {
     return this;
 };
 
+var rendererWrapper = function() {
+    return renderer.apply(this, arguments);
+};
+
+Object.defineProperty(rendererWrapper, "fn", {
+    enumerable: true,
+    configurable: true,
+
+    get: function() {
+        return renderer.fn;
+    },
+
+    set: function(value) {
+        renderer.fn = value;
+    }
+});
+
 module.exports = {
     set: function(strategy) {
         renderer = strategy;
     },
     get: function() {
-        var result = function() {
-            return renderer.apply(this, arguments);
-        };
-
-        Object.defineProperty(result, "fn", {
-            enumerable: true,
-            configurable: true,
-
-            get: function() {
-                return renderer.fn;
-            },
-
-            set: function(value) {
-                renderer.fn = value;
-            }
-        });
-
-        return result;
+        return rendererWrapper;
     }
 };

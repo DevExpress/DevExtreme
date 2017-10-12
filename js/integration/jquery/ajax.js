@@ -1,9 +1,9 @@
 'use strict';
 
-var jquery = require("jquery"),
+var jQuery = require("jquery"),
     ajax = require("../../core/utils/ajax"),
     useJQuery = require("../../core/config")().useJQuery;
 
-if(useJQuery) {
-    ajax.setStrategy(jquery.ajax);
+if(jQuery && useJQuery) {
+    ajax.setStrategy(jQuery.ajax);
 }

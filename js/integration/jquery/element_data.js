@@ -1,9 +1,9 @@
 'use strict';
 
-var jquery = require("jquery"),
+var jQuery = require("jquery"),
     dataUtils = require("../../core/element_data"),
     useJQuery = require("../../core/config")().useJQuery;
 
-if(jquery && useJQuery) {
-    dataUtils.setDataStrategy(jquery);
+if(jQuery && useJQuery) {
+    dataUtils.setDataStrategy(jQuery);
 }

@@ -1,6 +1,7 @@
 "use strict";
 
-var $ = require("jquery");
+var jQuery = require("jquery");
+var useJQuery = require("../../core/config")().useJQuery;
 var compareVersion = require("../../core/utils/version").compare;
 var each = require("../../core/utils/iterator").each;
 var isNumeric = require("../../core/utils/type").isNumeric;
@@ -8,8 +9,8 @@ var setEventFixMethod = require("../../events/utils").setEventFixMethod;
 var registerEvent = require("../../events/core/event_registrator");
 var hookTouchProps = require("../../events/core/hook_touch_props");
 
-if($) {
-    if(compareVersion($.fn.jquery, [3]) < 0) {
+if(jQuery && useJQuery) {
+    if(compareVersion(jQuery.fn.jquery, [3]) < 0) {
         var POINTER_TYPE_MAP = {
             2: "touch",
             3: "pen",
@@ -20,7 +21,7 @@ if($) {
             "MSPointerDown", "MSPointerMove", "MSPointerUp", "MSPointerCancel", "MSPointerOver", "MSPointerOut", "mouseenter", "mouseleave",
             "pointerdown", "pointermove", "pointerup", "pointercancel", "pointerover", "pointerout", "pointerenter", "pointerleave"
         ], function() {
-            $.event.fixHooks[this] = {
+            jQuery.event.fixHooks[this] = {
                 filter: function(event, originalEvent) {
                     var pointerType = originalEvent.pointerType;
 
@@ -30,7 +31,7 @@ if($) {
 
                     return event;
                 },
-                props: $.event.mouseHooks.props.concat([
+                props: jQuery.event.mouseHooks.props.concat([
                     "pointerId",
                     "pointerType",
                     "originalTarget",
@@ -49,7 +50,7 @@ if($) {
         });
 
         each(["touchstart", "touchmove", "touchend", "touchcancel"], function() {
-            $.event.fixHooks[this] = {
+            jQuery.event.fixHooks[this] = {
                 filter: function(event, originalEvent) {
                     hookTouchProps(function(name, hook) {
                         event[name] = hook(originalEvent);
@@ -58,7 +59,7 @@ if($) {
                     return event;
                 },
 
-                props: $.event.mouseHooks.props.concat([
+                props: jQuery.event.mouseHooks.props.concat([
                     "touches",
                     "changedTouches",
                     "targetTouches",
@@ -71,20 +72,20 @@ if($) {
             };
         });
 
-        $.event.fixHooks["wheel"] = $.event.mouseHooks;
+        jQuery.event.fixHooks["wheel"] = jQuery.event.mouseHooks;
 
         var DX_EVENT_HOOKS = {
-            props: $.event.mouseHooks.props.concat(["pointerType", "pointerId", "pointers"])
+            props: jQuery.event.mouseHooks.props.concat(["pointerType", "pointerId", "pointers"])
         };
 
         registerEvent.callbacks.add(function(name) {
-            $.event.fixHooks[name] = DX_EVENT_HOOKS;
+            jQuery.event.fixHooks[name] = DX_EVENT_HOOKS;
         });
 
         var fix = function(event, originalEvent) {
-            var fixHook = $.event.fixHooks[originalEvent.type] || $.event.mouseHooks;
+            var fixHook = jQuery.event.fixHooks[originalEvent.type] || jQuery.event.mouseHooks;
 
-            var props = fixHook.props ? $.event.props.concat(fixHook.props) : $.event.props,
+            var props = fixHook.props ? jQuery.event.props.concat(fixHook.props) : jQuery.event.props,
                 propIndex = props.length;
 
             while(propIndex--) {
@@ -98,7 +99,7 @@ if($) {
         setEventFixMethod(fix);
     } else {
         hookTouchProps(function(name, hook) {
-            $.event.addProp(name, hook);
+            jQuery.event.addProp(name, hook);
         });
     }
 }
