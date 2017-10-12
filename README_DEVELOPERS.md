@@ -87,7 +87,7 @@ We have a few rules of formatting commit messages and pull request titles. This 
 
 Samples:
 
-- `Mark dxCommand as DOMComponent child (ID)`
-- `Add namespace to doc comments`
+- `Mark dxCommand as DOMComponent child (TXXXXX)`
+- `Add namespace to doc comments (#XXXX)`
 - `Fix editorFactory tests in IE`
 
