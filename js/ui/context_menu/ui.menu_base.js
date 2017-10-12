@@ -347,6 +347,12 @@ var MenuBase = HierarchicalCollectionWidget.inherit({
         return this._itemContainer();
     },
 
+    _clean: function() {
+        this.option("focusedElement", null);
+
+        this.callBase();
+    },
+
     _supportedKeys: function() {
         var selectItem = function() {
             var $item = this.option("focusedElement");
@@ -762,10 +768,6 @@ var MenuBase = HierarchicalCollectionWidget.inherit({
             case "animation":
             case "useInkRipple":
                 this._invalidate();
-                break;
-            case "items":
-                this.option("focusedElement", null);
-                this.callBase(args);
                 break;
             default:
                 this.callBase(args);
