@@ -10,11 +10,17 @@ var FORMAT_TYPES = {
 
 var PATTERN_REGEXPS = {
     y: function(count) {
-        return "[0-9]{" + count + "}";
+        return "[0-9]{" + count + ",}";
     },
     M: function(count) {
         if(count > 2) {
             return dateParts.getMonthNames(FORMAT_TYPES[count], "format").join("|");
+        }
+        return (count === 1 ? "" : "0") + "[1-9]|1[012]";
+    },
+    L: function(count) {
+        if(count > 2) {
+            return dateParts.getMonthNames(FORMAT_TYPES[count], "standalone").join("|");
         }
         return (count === 1 ? "" : "0") + "[1-9]|1[012]";
     },
@@ -66,6 +72,12 @@ var PATTERN_PARSERS = {
         }
         return parseNumber(text) - 1;
     },
+    L: function(text, count) {
+        if(count > 2) {
+            return dateParts.getMonthNames(FORMAT_TYPES[count], "standalone").indexOf(text);
+        }
+        return parseNumber(text) - 1;
+    },
     Q: function(text, count) {
         if(count > 2) {
             return dateParts.getQuarterNames(FORMAT_TYPES[count], "format").indexOf(text);
@@ -94,11 +106,19 @@ var PATTERN_PARSERS = {
     }
 };
 
+var PATTERNS = ["y", "M", "d", "h", "m", "s", "S"];
+
 var PATTERN_SETTERS = {
     y: "setFullYear",
     M: "setMonth",
-    a: function(text, count) {
-        //return dateParts.getPeriodNames(FORMAT_TYPES[count < 3 ? 3 : count], "format").indexOf(text);
+    L: "setMonth",
+    a: function(date, value) {
+        var hours = date.getHours();
+        if(!value && hours === 12) {
+            date.setHours(0);
+        } else if(value && hours !== 12) {
+            date.setHours(hours + 12);
+        }
     },
     d: "setDate",
     H: "setHours",
@@ -134,15 +154,24 @@ var createPattern = function(char, count) {
 
 var getRegExpInfo = function(format) {
     var regexpText = "",
+        isEscaping,
         patterns = [];
 
     format = escapeRegExp(format);
 
     for(var i = 0; i < format.length; i++) {
         var char = format[i],
+            isEscapeChar = char === "'",
             regexpPart = PATTERN_REGEXPS[char];
 
-        if(regexpPart) {
+        if(isEscapeChar) {
+            isEscaping = !isEscaping;
+            if(format[i - 1] !== "'") {
+                continue;
+            }
+        }
+
+        if(regexpPart && !isEscaping) {
             var count = getSameCharCount(format, i),
                 pattern = createPattern(char, count);
 
@@ -150,7 +179,7 @@ var getRegExpInfo = function(format) {
             regexpText += "(" + regexpPart(count) + ")";
             i += count - 1;
         } else {
-            regexpText += format[i];
+            regexpText += char;
         }
     }
     return {
@@ -166,7 +195,11 @@ var setPatternPart = function(date, pattern, text) {
 
     if(partSetter && partParser) {
         var value = partParser(text, pattern.length);
-        date[partSetter](value);
+        if(date[partSetter]) {
+            date[partSetter](value);
+        } else {
+            partSetter(date, value);
+        }
     }
 };
 
@@ -177,10 +210,27 @@ var getParser = function(format) {
         var regExpResult = regExpInfo.regexp.exec(text);
 
         if(regExpResult) {
-            var date = new Date(new Date().getFullYear(), 0, 1);
+            var now = new Date(),
+                date = new Date(now.getFullYear(), 0, 1),
+                assignedPatterns = ["y"];
+
             regExpInfo.patterns.forEach(function(pattern, index) {
                 var partText = regExpResult[index + 1];
                 setPatternPart(date, pattern, partText);
+                pattern = pattern[0];
+                if(pattern === "H") pattern = "h";
+                var patternIndex = PATTERNS.indexOf(pattern) - 1;
+                while(patternIndex >= 0) {
+                    assignedPatterns.push(pattern);
+                    pattern = PATTERNS[patternIndex];
+                    if(assignedPatterns.indexOf(pattern) < 0) {
+                        var setterName = PATTERN_SETTERS[pattern],
+                            getterName = "g" + setterName.substr(1);
+
+                        date[setterName](now[getterName]());
+                    }
+                    patternIndex--;
+                }
             });
             return date;
         }
