@@ -416,6 +416,10 @@ function getCaptionWithParents(item, plainItems) {
     return item.caption;
 }
 
+function isShortCondition(condition) {
+    return condition.length < 3;
+}
+
 function updateConditionByOperation(condition, operation) {
     if(operation === "isblank") {
         condition[1] = "=";
@@ -424,10 +428,12 @@ function updateConditionByOperation(condition, operation) {
         condition[1] = "<>";
         condition[2] = null;
     } else {
-        condition[1] = operation;
         if(condition[2] === null) {
             condition[2] = "";
+        } else if(isShortCondition(condition)) {
+            condition[2] = condition[1] || "";
         }
+        condition[1] = operation;
     }
     return condition;
 }
@@ -439,6 +445,12 @@ function getOperationValue(condition) {
             caption = "isblank";
         } else {
             caption = "isnotblank";
+        }
+    } else if(isShortCondition(condition)) {
+        if(condition[1] === null) {
+            caption = "isblank";
+        } else {
+            caption = "=";
         }
     } else {
         caption = condition[1];
