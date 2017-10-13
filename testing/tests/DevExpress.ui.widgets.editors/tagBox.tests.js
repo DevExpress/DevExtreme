@@ -11,7 +11,9 @@ var $ = require("jquery"),
     DataSource = require("data/data_source/data_source").DataSource,
     fx = require("animation/fx"),
     browser = require("core/utils/browser"),
-    dataQuery = require("data/query");
+    dataQuery = require("data/query"),
+    isRenderer = require("core/utils/type").isRenderer,
+    config = require("core/config");
 
 require("common.css!");
 
@@ -88,6 +90,15 @@ QUnit.test("custom tags rendering", function(assert) {
 
     var tags = $element.find("." + TAGBOX_TAG_CONTENT_CLASS);
     assert.equal(tags.length, 2, "tags are rendered");
+});
+
+QUnit.test("tagElement arguments of tagTemplate for custom tags is correct", function(assert) {
+    $("#tagBox").dxTagBox({
+        value: [1, 2],
+        tagTemplate: function(tagData, tagElement) {
+            assert.equal(isRenderer(tagElement), config().useJQueryRenderer, "tagElement is correct");
+        }
+    });
 });
 
 QUnit.test("popup wrapper gets the 'dx-tagbox-popup-wrapper' class", function(assert) {
@@ -617,7 +628,7 @@ QUnit.test("multitag should be rendered always when maxDisplayedTags is 0", func
 });
 
 QUnit.test("onMultitagPreparing option", function(assert) {
-    assert.expect(4);
+    assert.expect(5);
 
     var $tagBox = $("#tagBox").dxTagBox({
             items: [1, 2, 3, 4],
@@ -625,7 +636,8 @@ QUnit.test("onMultitagPreparing option", function(assert) {
             maxDisplayedTags: 2,
             onMultiTagPreparing: function(e) {
                 assert.equal(e.component.NAME, "dxTagBox", "component is correct");
-                assert.ok(e.multiTagElement.hasClass(TAGBOX_MULTI_TAG_CLASS), "element is correct");
+                assert.equal(isRenderer(e.multiTagElement), config().useJQueryRenderer, "tagElement is correct");
+                assert.ok($(e.multiTagElement).hasClass(TAGBOX_MULTI_TAG_CLASS), "element is correct");
                 assert.deepEqual(e.selectedItems, [1, 2, 4], "selectedItems are correct");
                 e.text = "custom text";
             }
@@ -640,7 +652,7 @@ QUnit.test("onMultitagPreparing option change", function(assert) {
 
     var onMultiTagPreparing = function(e) {
         assert.equal(e.component.NAME, "dxTagBox", "component is correct");
-        assert.ok(e.multiTagElement.hasClass(TAGBOX_MULTI_TAG_CLASS), "element is correct");
+        assert.ok($(e.multiTagElement).hasClass(TAGBOX_MULTI_TAG_CLASS), "element is correct");
         assert.deepEqual(e.selectedItems, [1, 2, 4], "selectedItems are correct");
         e.text = "custom text";
     };
@@ -1096,7 +1108,8 @@ QUnit.test("tag template should have correct arguments", function(assert) {
         value: [items[0]],
         tagTemplate: function(tagData, tagElement) {
             assert.equal(tagData, items[0], "correct data is passed");
-            assert.equal(tagElement.hasClass(TAGBOX_TAG_CLASS), true, "correct element passed");
+            assert.equal($(tagElement).hasClass(TAGBOX_TAG_CLASS), true, "correct element passed");
+            assert.equal(isRenderer(tagElement), config().useJQueryRenderer, "tagElement is correct");
         }
     });
 });
@@ -3075,7 +3088,9 @@ QUnit.test("the 'fieldTemplate' has correct arguments", function(assert) {
         tagBox = $("#tagBox").dxTagBox({
             dataSource: [1, 2, 3],
             value: [1],
-            fieldTemplate: function(selectedItems) {
+            fieldTemplate: function(selectedItems, fieldElement) {
+                assert.equal(isRenderer(fieldElement), config().useJQueryRenderer, "fieldElement is correct");
+
                 args.push(selectedItems);
                 return $("<div>").dxTextBox();
             }
@@ -4003,6 +4018,77 @@ QUnit.test("selectionHandler should call twice on popup opening", function(asser
     assert.ok(selectionChangeHandlerSpy.callCount <= 2, "selection change handler called less than 2 (ListContentReady and SelectAll)");
 });
 
+QUnit.test("loadOptions.filter should be a filter expression when key is specified", function(assert) {
+    var load = sinon.stub().returns([{ id: 1, text: "item 1" }, { id: 2, text: "item 2" }]),
+        $tagBox = $("#tagBox").dxTagBox({
+            dataSource: {
+                load: load
+            },
+            valueExpr: "id",
+            displayExpr: "text",
+            opened: true,
+            hideSelectedItems: true
+        }),
+        tagBox = $tagBox.dxTagBox("instance"),
+        $item = $(tagBox._$list.find(".dx-list-item").eq(0));
+
+    $item.trigger("dxclick");
+
+    var filter = load.lastCall.args[0].filter;
+    assert.ok(Array.isArray(filter), "filter should be an array for serialization");
+    assert.deepEqual(filter, [["!", ["id", 1]]], "filter should be correct");
+});
+
+QUnit.test("loadOptions.filter should be a function when valueExpr is function", function(assert) {
+    var load = sinon.stub().returns([{ id: 1, text: "item 1" }, { id: 2, text: "item 2" }]),
+        $tagBox = $("#tagBox").dxTagBox({
+            dataSource: {
+                load: load
+            },
+            valueExpr: function() {
+                return "id";
+            },
+            displayExpr: "text",
+            opened: true,
+            hideSelectedItems: true
+        }),
+        tagBox = $tagBox.dxTagBox("instance"),
+        $item = $(tagBox._$list.find(".dx-list-item").eq(0));
+
+    $item.trigger("dxclick");
+
+    var filter = load.lastCall.args[0].filter;
+    assert.ok($.isFunction(filter), "filter is function");
+});
+
+QUnit.test("loadOptions.filter should be correct when user filter is also used", function(assert) {
+    var load = sinon.stub().returns([{ id: 1, text: "item 1" }, { id: 2, text: "item 2" }]),
+        $tagBox = $("#tagBox").dxTagBox({
+            dataSource: {
+                load: load,
+                filter: ["id", ">", 0]
+            },
+            valueExpr: "id",
+            displayExpr: "text",
+            opened: true,
+            hideSelectedItems: true
+        }),
+        tagBox = $tagBox.dxTagBox("instance"),
+        $item = $(tagBox._$list.find(".dx-list-item").eq(0));
+
+    $item.trigger("dxclick");
+
+    var filter = load.lastCall.args[0].filter;
+    assert.deepEqual(filter, [["!", ["id", 1]], ["id", ">", 0]], "filter is correct");
+
+    tagBox.option("opened", true);
+    $item = $(tagBox._$list.find(".dx-list-item").eq(1));
+
+    $item.trigger("dxclick");
+    filter = load.lastCall.args[0].filter;
+
+    assert.deepEqual(filter, [["!", ["id", 1]], ["!", ["id", 2]], ["id", ">", 0]], "filter is correct");
+});
 
 QUnit.module("deprecated options");
 

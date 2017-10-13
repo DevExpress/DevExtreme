@@ -175,7 +175,24 @@ function mapDataRespectingGrouping(items, mapper, groupInfo) {
 }
 
 var DataSource = Class.inherit({
-
+    /**
+    * @name DataSourceMethods_ctor
+    * @publicName ctor(url)
+    * @param1 url:string
+    * @hidden
+    */
+    /**
+    * @name DataSourceMethods_ctor
+    * @publicName ctor(data)
+    * @param1 data:Array<any>
+    * @hidden
+    */
+    /**
+    * @name DataSourceMethods_ctor
+    * @publicName ctor(options)
+    * @param1 options:CustomStoreOptions|DataSourceOptions
+    * @hidden
+    */
     ctor: function(options) {
         var that = this;
         options = normalizeDataSourceOptions(options);
@@ -190,7 +207,7 @@ var DataSource = Class.inherit({
         /**
         * @name DataSourceOptions_store
         * @publicName store
-        * @type Store|Array<any>|Object
+        * @type Store|StoreOptions|Array<any>|any
         */
         this._store = options.store;
 
@@ -287,7 +304,7 @@ var DataSource = Class.inherit({
         /**
         * @name DataSourceOptions_searchExpr
         * @publicName searchExpr
-        * @type getter|Array<string>
+        * @type getter|Array<getter>
         */
         this._searchExpr = options.searchExpr;
 
@@ -587,12 +604,12 @@ var DataSource = Class.inherit({
     /**
     * @name DataSourceMethods_searchExpr
     * @publicName searchExpr()
-    * @return getter|Array<string>
+    * @return getter|Array<getter>
     */
     /**
     * @name DataSourceMethods_searchExpr
     * @publicName searchExpr(expr)
-    * @param1 expr:getter|Array<string>
+    * @param1 expr:getter|Array<getter>
     */
     searchExpr: function(expr) {
         var argc = arguments.length;

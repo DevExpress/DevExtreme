@@ -12,7 +12,8 @@ var queryImpl = {
 * @name Utils_query
 * @publicName query(array)
 * @param1 array:Array<any>
-* @return object
+* @return Query
+* @namespace DevExpress.data
 * @module data/query
 * @export default
 */
@@ -21,7 +22,8 @@ var queryImpl = {
 * @publicName query(url, queryOptions)
 * @param1 url:string
 * @param2 queryOptions:object
-* @return object
+* @return Query
+* @namespace DevExpress.data
 * @module data/query
 * @export default
 */
@@ -51,63 +53,63 @@ var query = function() {
 * @name QueryMethods_sortBy
 * @publicName sortBy(getter)
 * @param1 getter:object
-* @return object
+* @return Query
 */
 /**
 * @name QueryMethods_sortBy
 * @publicName sortBy(getter, desc)
 * @param1 getter:object
 * @param2 desc:boolean
-* @return object
+* @return Query
 */
 
 /**
 * @name QueryMethods_thenBy
 * @publicName thenBy(getter)
 * @param1 getter:object
-* @return object
+* @return Query
 */
 /**
 * @name QueryMethods_thenBy
 * @publicName thenBy(getter, desc)
 * @param1 getter:object
 * @param2 desc:boolean
-* @return object
+* @return Query
 */
 
 /**
 * @name QueryMethods_filter
 * @publicName filter(criteria)
 * @param1 criteria:Array<any>
-* @return object
+* @return Query
 */
 /**
 * @name QueryMethods_filter
 * @publicName filter(predicate)
 * @param1 predicate:function
-* @return object
+* @return Query
 */
 
 /**
 * @name QueryMethods_slice
 * @publicName slice(skip, take)
-* @param1 skip:numeric
-* @param2 take:numeric
-* @return object
+* @param1 skip:number
+* @param2 take:number|undefined
+* @return Query
 */
 
 /**
 * @name QueryMethods_select
 * @publicName select(getter)
 * @param1 getter:object
-* @return object
+* @return Query
 */
 
 /**
 * @name QueryMethods_groupBy
 * @publicName groupBy(getter)
 * @param1 getter:object
-* @return object
+* @return Query
 */
 
 /**

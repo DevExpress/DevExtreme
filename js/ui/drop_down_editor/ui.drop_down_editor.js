@@ -186,7 +186,7 @@ var DropDownEditor = TextBox.inherit({
              * @type_function_param1 buttonData:object
              * @type_function_param1_field1 text:string
              * @type_function_param1_field2 icon:string
-             * @type_function_param2 contentElement:jQuery
+             * @type_function_param2 contentElement:Element
              * @type_function_return string|jQuery
              */
             dropDownButtonTemplate: 'dropDownButton',
@@ -431,7 +431,7 @@ var DropDownEditor = TextBox.inherit({
 
         this._defaultTemplates['dropDownButton'] = new FunctionTemplate(function(options) {
             var $icon = $("<div>").addClass(DROP_DOWN_EDITOR_BUTTON_ICON);
-            options.container.append($icon);
+            $(options.container).append($icon);
         }, this);
     },
 
@@ -651,7 +651,7 @@ var DropDownEditor = TextBox.inherit({
         $popupContent.empty();
 
         contentTemplate.render({
-            container: $popupContent,
+            container: domUtils.getPublicElement($popupContent),
             model: templateData
         });
     },
@@ -851,7 +851,7 @@ var DropDownEditor = TextBox.inherit({
     /**
     * @name dxDropDownEditorMethods_field
     * @publicName field()
-    * @return jQuery
+    * @return Element
     */
     field: function() {
         return getPublicElement(this._input());
@@ -860,7 +860,7 @@ var DropDownEditor = TextBox.inherit({
     /**
     * @name dxDropDownEditorMethods_content
     * @publicName content()
-    * @return jQuery
+    * @return Element
     */
     content: function() {
         return this._popup ? this._popup.content() : null;

@@ -387,7 +387,7 @@ var SlideOutView = Widget.inherit({
     /**
     * @name dxSlideOutViewMethods_menuContent
     * @publicName menuContent()
-    * @return jQuery
+    * @return Element
     */
     menuContent: function() {
         return getPublicElement(this._$menu);
@@ -396,7 +396,7 @@ var SlideOutView = Widget.inherit({
     /**
     * @name dxSlideOutViewMethods_content
     * @publicName content()
-    * @return jQuery
+    * @return Element
     */
     content: function() {
         return getPublicElement(this._$container);

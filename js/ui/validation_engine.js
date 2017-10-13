@@ -486,6 +486,7 @@ var GroupConfig = Class.inherit({
  * @name validationEngine
  * @section Core
  * @publicName validationEngine
+ * @namespace DevExpress
  * @module ui/validation_engine
  * @export default
  */

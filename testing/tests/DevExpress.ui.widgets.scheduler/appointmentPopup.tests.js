@@ -19,7 +19,8 @@ QUnit.testStart(function() {
 var moduleOptions = {
     beforeEach: function() {
         this.instance = $("#scheduler").dxScheduler({
-            dataSource: []
+            dataSource: [],
+            maxAppointmentsPerCell: null
         }).dxScheduler("instance");
         fx.off = true;
         this.tasks = [

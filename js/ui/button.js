@@ -3,6 +3,7 @@
 var $ = require("../core/renderer"),
     eventsEngine = require("../events/core/events_engine"),
     iconUtils = require("../core/utils/icon"),
+    domUtils = require("../core/utils/dom"),
     devices = require("../core/devices"),
     registerComponent = require("../core/component_registrator"),
     extend = require("../core/utils/extend").extend,
@@ -136,7 +137,7 @@ var Button = Widget.inherit({
             * @type_function_param1 buttonData:object
             * @type_function_param1_field1 text:string
             * @type_function_param1_field2 icon:string
-            * @type_function_param2 contentElement:jQuery
+            * @type_function_param2 contentElement:Element
             * @type_function_return string|jQuery
             */
             template: "content",
@@ -206,7 +207,7 @@ var Button = Widget.inherit({
                 $iconElement = iconUtils.getImageContainer(data && data.icon),
                 $textContainer = data && data.text ? $("<span>").text(data.text).addClass(BUTTON_TEXT_CLASS) : undefined;
 
-            options.container.append($iconElement).append($textContainer);
+            $(options.container).append($iconElement).append($textContainer);
         }, this);
     },
 
@@ -276,7 +277,7 @@ var Button = Widget.inherit({
         var template = this._getTemplateByOption("template"),
             $result = template.render({
                 model: data,
-                container: this._$content
+                container: domUtils.getPublicElement(this._$content)
             });
 
         if($result.hasClass(TEMPLATE_WRAPPER_CLASS)) {

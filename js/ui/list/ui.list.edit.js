@@ -168,7 +168,7 @@ var ListEdit = ListBase.inherit({
             * @publicName onItemDeleting
             * @extends Action
             * @type_function_param1_field4 itemData:object
-            * @type_function_param1_field5 itemElement:jQuery
+            * @type_function_param1_field5 itemElement:Element
             * @type_function_param1_field6 itemIndex:number | object
             * @type_function_param1_field7 cancel:boolean | Promise
             * @action
@@ -181,7 +181,7 @@ var ListEdit = ListBase.inherit({
             * @publicName onItemDeleted
             * @extends Action
             * @type_function_param1_field4 itemData:object
-            * @type_function_param1_field5 itemElement:jQuery
+            * @type_function_param1_field5 itemElement:Element
             * @type_function_param1_field6 itemIndex:number | object
             * @action
             * @hidden false
@@ -192,7 +192,7 @@ var ListEdit = ListBase.inherit({
             * @publicName onItemReordered
             * @extends Action
             * @type_function_param1_field4 itemData:object
-            * @type_function_param1_field5 itemElement:jQuery
+            * @type_function_param1_field5 itemElement:Element
             * @type_function_param1_field6 itemIndex:number | object
             * @type_function_param1_field7 fromIndex:number
             * @type_function_param1_field8 toIndex:number

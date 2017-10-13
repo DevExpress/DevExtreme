@@ -229,7 +229,9 @@ QUnit.testStart(function() {
 
     QUnit.module("Methods", {
         beforeEach: function() {
-            this.instance = $("#scheduler").dxScheduler().dxScheduler("instance");
+            this.instance = $("#scheduler").dxScheduler({
+                showCurrentTimeIndicator: false
+            }).dxScheduler("instance");
             this.clock = sinon.useFakeTimers();
 
             fx.off = true;
@@ -1040,6 +1042,88 @@ QUnit.testStart(function() {
         this.createInstance();
 
         assert.equal(this.instance.option("showAllDayPanel"), true, "showAllDayPanel option value is right on init");
+    });
+
+    QUnit.test("showCurrentTimeIndicator should have right default", function(assert) {
+        this.createInstance();
+
+        assert.equal(this.instance.option("showCurrentTimeIndicator"), true, "showCurrentTimeIndicator option value is right on init");
+    });
+
+    QUnit.test("showCurrentTimeIndicator option should be passed to workSpace", function(assert) {
+        this.createInstance({
+            currentView: "week",
+            showCurrentTimeIndicator: false
+        });
+
+        var workSpaceWeek = this.instance.getWorkSpace();
+
+        assert.equal(workSpaceWeek.option("showCurrentTimeIndicator"), false, "workspace has correct showCurrentTimeIndicator");
+
+        this.instance.option("showCurrentTimeIndicator", true);
+
+        assert.equal(workSpaceWeek.option("showCurrentTimeIndicator"), true, "workspace has correct showCurrentTimeIndicator");
+    });
+
+    QUnit.test("indicatorTime option should be passed to workSpace", function(assert) {
+        this.createInstance({
+            currentView: "week",
+            indicatorTime: new Date(2017, 8, 19)
+        });
+
+        var workSpaceWeek = this.instance.getWorkSpace();
+
+        assert.deepEqual(workSpaceWeek.option("indicatorTime"), new Date(2017, 8, 19), "workspace has correct indicatorTime");
+
+        this.instance.option("indicatorTime", new Date(2017, 8, 20));
+
+        assert.deepEqual(workSpaceWeek.option("indicatorTime"), new Date(2017, 8, 20), "workspace has correct indicatorTime");
+    });
+
+    QUnit.test("indicatorUpdateInterval should have right default", function(assert) {
+        this.createInstance({
+            currentView: "week"
+        });
+
+        assert.equal(this.instance.option("indicatorUpdateInterval"), 300000, "workspace has correct indicatorUpdateInterval");
+    });
+
+    QUnit.test("indicatorUpdateInterval option should be passed to workSpace", function(assert) {
+        this.createInstance({
+            currentView: "week",
+            indicatorUpdateInterval: 2000
+        });
+
+        var workSpaceWeek = this.instance.getWorkSpace();
+
+        assert.equal(workSpaceWeek.option("indicatorUpdateInterval"), 2000, "workspace has correct indicatorUpdateInterval");
+
+        this.instance.option("indicatorUpdateInterval", 3000);
+
+        assert.equal(workSpaceWeek.option("indicatorUpdateInterval"), 3000, "workspace has correct indicatorUpdateInterval");
+    });
+
+    QUnit.test("shadeUntilCurrentTime should have right default", function(assert) {
+        this.createInstance({
+            currentView: "week"
+        });
+
+        assert.equal(this.instance.option("shadeUntilCurrentTime"), false, "workspace has correct shadeUntilCurrentTime");
+    });
+
+    QUnit.test("shadeUntilCurrentTime option should be passed to workSpace", function(assert) {
+        this.createInstance({
+            currentView: "week",
+            shadeUntilCurrentTime: false
+        });
+
+        var workSpaceWeek = this.instance.getWorkSpace();
+
+        assert.equal(workSpaceWeek.option("shadeUntilCurrentTime"), false, "workspace has correct shadeUntilCurrentTime");
+
+        this.instance.option("shadeUntilCurrentTime", true);
+
+        assert.equal(workSpaceWeek.option("shadeUntilCurrentTime"), true, "workspace has correct shadeUntilCurrentTime");
     });
 
     QUnit.test("appointments should be repainted after scheduler dimensions changing", function(assert) {
@@ -2085,6 +2169,7 @@ QUnit.testStart(function() {
                 }],
             }),
             views: ["month"],
+            maxAppointmentsPerCell: null,
             currentView: "month",
             onAppointmentRendered: function(args) {
                 assert.equal($(args.appointmentElement).find(".dx-scheduler-appointment-reduced-icon").length, 1, "Appointment reduced icon is applied");
@@ -2128,6 +2213,7 @@ QUnit.testStart(function() {
                 }],
             }),
             views: ["month"],
+            maxAppointmentsPerCell: null,
             currentView: "month",
             onAppointmentRendered: function(args) {
                 assert.ok(true, "Appointment was rendered");
@@ -2228,6 +2314,7 @@ QUnit.testStart(function() {
             }),
             views: ["month"],
             currentView: "month",
+            maxAppointmentsPerCell: null,
             currentDate: new Date(2015, 2, 9),
             onAppointmentClick: function(e) {
                 assert.deepEqual(isRenderer(e.appointmentElement), config().useJQueryRenderer, "appointmentElement is correct");
@@ -2639,7 +2726,9 @@ QUnit.testStart(function() {
 
     QUnit.module("Loading", {
         beforeEach: function() {
-            this.instance = $("#scheduler").dxScheduler().dxScheduler("instance");
+            this.instance = $("#scheduler").dxScheduler({
+                showCurrentTimeIndicator: false
+            }).dxScheduler("instance");
             this.clock = sinon.useFakeTimers();
             this.instance.option({
                 currentView: "day",
@@ -3153,7 +3242,8 @@ QUnit.testStart(function() {
             dataSource: [],
             views: [{
                 type: "week",
-                dateCellTemplate: function() {
+                dateCellTemplate: function(item, index, container) {
+                    assert.equal(isRenderer(container), config().useJQueryRenderer, "element is correct");
                     countCallTemplate2++;
                 }
             }],
@@ -3233,7 +3323,8 @@ QUnit.testStart(function() {
             currentDate: new Date(2015, 4, 24),
             views: [{
                 type: "week",
-                appointmentTemplate: function() {
+                appointmentTemplate: function(item, index, container) {
+                    assert.deepEqual(isRenderer(container), config().useJQueryRenderer, "appointmentElement is correct");
                     countCallTemplate2++;
                 }
             }],
@@ -3259,7 +3350,8 @@ QUnit.testStart(function() {
             currentDate: new Date(2015, 4, 24),
             views: [{
                 type: "week",
-                appointmentTooltipTemplate: function() {
+                appointmentTooltipTemplate: function(item, container) {
+                    assert.equal(isRenderer(container), config().useJQueryRenderer, "element is correct");
                     countCallTemplate2++;
                 }
             }],

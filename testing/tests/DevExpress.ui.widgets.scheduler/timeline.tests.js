@@ -662,6 +662,38 @@ QUnit.test("Scheduler timeline week view should have right cell & row count is s
     assert.equal($lastRow.find(".dx-scheduler-header-panel-cell").eq(2).text(), dateLocalization.format(new Date(2015, 9, 29, 9), "shorttime"));
 });
 
+QUnit.test("Scheduler timeline week header cells should have right width", function(assert) {
+    this.instance.option({
+        currentDate: new Date(2015, 9, 29)
+    });
+    var $element = this.instance.$element(),
+        $firstRow = $element.find(".dx-scheduler-header-row").first(),
+        $lastRow = $element.find(".dx-scheduler-header-row").last(),
+        $firstHeaderCell = $firstRow.find(".dx-scheduler-header-panel-cell").eq(0),
+        $lastHeaderCell = $lastRow.find(".dx-scheduler-header-panel-cell").eq(0);
+
+    assert.roughEqual($firstHeaderCell.outerWidth(), 48 * $lastHeaderCell.outerWidth(), 1.5, "First row cell has correct width");
+});
+
+QUnit.test("Scheduler timeline week header cells should have right width if crossScrollingEnabled = true", function(assert) {
+    this.instance.option({
+        currentDate: new Date(2015, 9, 29),
+        crossScrollingEnabled: true
+    });
+
+    resizeCallbacks.fire();
+
+    var $element = this.instance.$element(),
+        $firstRow = $element.find(".dx-scheduler-header-row").first(),
+        $lastRow = $element.find(".dx-scheduler-header-row").last(),
+        $firstHeaderCell = $firstRow.find(".dx-scheduler-header-panel-cell").eq(0),
+        $lastHeaderCell = $lastRow.find(".dx-scheduler-header-panel-cell").eq(0),
+        $dateTableCell = $element.find(".dx-scheduler-date-table-cell").eq(0);
+
+    assert.roughEqual($firstHeaderCell.outerWidth(), 48 * $lastHeaderCell.outerWidth(), 1.5, "First row cell has correct width");
+    assert.roughEqual($lastHeaderCell.outerWidth(), $dateTableCell.outerWidth(), 1.5, "Last row cell has correct width");
+});
+
 QUnit.test("Scheduler timeline week should have rigth first view date", function(assert) {
     this.instance.option({
         currentDate: new Date(2015, 9, 21),
@@ -1283,8 +1315,8 @@ QUnit.test("Get date range", function(assert) {
     this.instance.option("intervalCount", 2);
     this.instance.option("firstDayOfWeek", 1);
 
-    assert.deepEqual(this.instance.getDateRange(), [new Date(2017, 5, 1), new Date(2017, 6, 31, 0, 29)], "Range is OK");
+    assert.deepEqual(this.instance.getDateRange(), [new Date(2017, 5, 1), new Date(2017, 6, 31, 23, 59)], "Range is OK");
 
     this.instance.option("intervalCount", 4);
-    assert.deepEqual(this.instance.getDateRange(), [new Date(2017, 5, 1), new Date(2017, 8, 30, 0, 29)], "Range is OK");
+    assert.deepEqual(this.instance.getDateRange(), [new Date(2017, 5, 1), new Date(2017, 8, 30, 23, 59)], "Range is OK");
 });

@@ -13,6 +13,7 @@ declare module DevExpress.viz.sparklines {
         verticalAlignment?: string;
     }
 
+    /** @docid basesparkline_options */
     export interface BaseSparklineOptions extends viz.core.BaseWidgetOptions, viz.core.MarginOptions {
         /** @docid_ignore basesparklineoptions_redrawOnResize */
         /** @docid_ignore basesparklineoptions_title */
@@ -42,6 +43,7 @@ declare module DevExpress.viz.sparklines {
     export class BaseSparkline extends viz.core.BaseWidget {
     }
 
+    /** @docid dxbullet_options */
     export interface dxBulletOptions extends BaseSparklineOptions {
         /** @docid dxbulletoptions_color */
         color?: string;
@@ -71,6 +73,7 @@ declare module DevExpress.viz.sparklines {
         value?: number;
     }
 
+    /** @docid dxsparkline_options */
     export interface dxSparklineOptions extends BaseSparklineOptions {
         /** @docid dxsparklineoptions_argumentfield */
         argumentField?: string;

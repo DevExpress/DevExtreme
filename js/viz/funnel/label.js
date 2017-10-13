@@ -30,44 +30,44 @@ function correctYForInverted(y, bBox, inverted) {
     return inverted ? y - bBox.height : y;
 }
 
-function getOutsideRightLabelPosition(item, bBox, options, inverted) {
+function getOutsideRightLabelPosition(coords, bBox, options, inverted) {
     return {
-        x: item.coords[2] + options.horizontalOffset + OUTSIDE_LABEL_INDENT,
-        y: correctYForInverted(item.coords[3] + options.verticalOffset, bBox, inverted)
+        x: coords[2] + options.horizontalOffset + OUTSIDE_LABEL_INDENT,
+        y: correctYForInverted(coords[3] + options.verticalOffset, bBox, inverted)
     };
 }
 
-function getOutsideLeftLabelPosition(item, bBox, options, inverted) {
+function getOutsideLeftLabelPosition(coords, bBox, options, inverted) {
     return {
-        x: item.coords[0] - bBox.width - options.horizontalOffset - OUTSIDE_LABEL_INDENT,
-        y: correctYForInverted(item.coords[1] + options.verticalOffset, bBox, inverted)
+        x: coords[0] - bBox.width - options.horizontalOffset - OUTSIDE_LABEL_INDENT,
+        y: correctYForInverted(coords[1] + options.verticalOffset, bBox, inverted)
     };
 }
 
-function getInsideLabelPosition(item, bBox, options) {
-    var width = item.coords[2] - item.coords[0],
-        height = item.coords[7] - item.coords[1];
+function getInsideLabelPosition(coords, bBox, options) {
+    var width = coords[2] - coords[0],
+        height = coords[7] - coords[1];
 
     return {
-        x: item.coords[0] + width / 2 + options.horizontalOffset - bBox.width / 2,
-        y: item.coords[1] + options.verticalOffset + height / 2 - bBox.height / 2
+        x: coords[0] + width / 2 + options.horizontalOffset - bBox.width / 2,
+        y: coords[1] + options.verticalOffset + height / 2 - bBox.height / 2
     };
 }
 
 function getColumnLabelRightPosition(labelRect, rect, textAlignment) {
-    return function(item, bBox, options, inverted) {
+    return function(coords, bBox, options, inverted) {
         return {
             x: textAlignment === "left" ? rect[2] + options.horizontalOffset + COLUMNS_LABEL_INDENT : labelRect[2] - bBox.width,
-            y: correctYForInverted(item.coords[3] + options.verticalOffset, bBox, inverted)
+            y: correctYForInverted(coords[3] + options.verticalOffset, bBox, inverted)
         };
     };
 }
 
 function getColumnLabelLeftPosition(labelRect, rect, textAlignment) {
-    return function(item, bBox, options, inverted) {
+    return function(coords, bBox, options, inverted) {
         return {
             x: textAlignment === "left" ? labelRect[0] : rect[0] - bBox.width - options.horizontalOffset - COLUMNS_LABEL_INDENT,
-            y: correctYForInverted(item.coords[3] + options.verticalOffset, bBox, inverted)
+            y: correctYForInverted(coords[3] + options.verticalOffset, bBox, inverted)
         };
     };
 }
@@ -232,7 +232,19 @@ exports.plugin = {
             that._labels.forEach(function(label, index) {
                 var item = that._items[index],
                     bBox,
-                    pos;
+                    pos,
+                    borderWidth = item.getNormalStyle()["stroke-width"],
+                    halfBorderWidth = inverted ? borderWidth / 2 : -borderWidth / 2,
+                    coords = halfBorderWidth ? item.coords.map(function(coord, index) {
+                        if(index === 1 || index === 3) {
+                            return coord - halfBorderWidth;
+                        } else if(index === 2) {
+                            return coord - borderWidth;
+                        } else if(index === 0) {
+                            return coord + borderWidth;
+                        }
+                        return coord;
+                    }) : item.coords;
                 if(!options.showForZeroValues && item.value === 0) {
                     label.hide();
                     return;
@@ -243,9 +255,9 @@ exports.plugin = {
                 }
 
                 bBox = label.getBoundingRect();
-                pos = correctLabelPosition(getCoords(item, bBox, options, inverted), bBox, that._labelRect);
+                pos = correctLabelPosition(getCoords(coords, bBox, options, inverted), bBox, that._labelRect);
 
-                label.setFigureToDrawConnector(item.coords);
+                label.setFigureToDrawConnector(coords);
                 label.shift(pos.x, pos.y);
             });
         }

@@ -1826,6 +1826,13 @@
 */
 @SCHEDULER_WORKSPACE_ACCENT_COLOR: @base-accent;
 
+/**
+* @name 65. Date-time indicator color
+* @type color
+* @group scheduler
+*/
+@SCHEDULER_TIME_INDICATOR_COLOR: lighten(@SCHEDULER_APPOINTMENT_BASE_COLOR, 15%);
+
 @scheduler-popup-title-bg: @SCHEDULER_WORKSPACE_BACKGROUND_COLOR;
 
 @SCHEDULER_WORKSPACE_MONTH_TEXT_COLOR: lighten(@base-text-color, 38.5%);
@@ -1850,6 +1857,8 @@
 @scheduler-recurence-editor-border-color: darken(@base-element-bg, 5%);
 @SCHEDULER_OTHER_MONTH_CELL_OPACITY: .5;
 @SCHEDULER_FILL_FOCUSED_APPOINTMENT: false;
+@SCHEDULER_TIME_INDICATOR_BACKGROUND_COLOR: rgba(222, 222, 222, 0.07);
+@SCHEDULER_FIRST_MONTH_CELL_BACKGROUND_COLOR: fadeout(@SCHEDULER_APPOINTMENT_BASE_COLOR, 85%);
 
 //SlideOutView
 @slideoutview-content-border-color: fade(@base-border-color, 50%);

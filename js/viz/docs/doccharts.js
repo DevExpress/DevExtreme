@@ -8,6 +8,12 @@
 */
 var dxChart = {
     /**
+    * @name dxchart_options
+    * @publicName Options
+    * @namespace DevExpress.viz.charts
+    * @hidden
+    */    
+    /**
     * @name dxchartoptions_seriestemplate
     * @publicName seriesTemplate
     * @type object
@@ -62,7 +68,7 @@ var dxChart = {
     * @type_function_param1_field1 component:object
     * @type_function_param1_field2 element:object
     * @type_function_param1_field3 jQueryEvent:jQuery.Event
-    * @type_function_param1_field4 target:Series
+    * @type_function_param1_field4 target:chartSeriesObject
     * @notUsedInTheme
     * @action
     */
@@ -75,7 +81,7 @@ var dxChart = {
     * @type_function_param1_field1 component:object
     * @type_function_param1_field2 element:object
     * @type_function_param1_field3 jQueryEvent:jQuery.Event
-    * @type_function_param1_field4 target:series
+    * @type_function_param1_field4 target:chartSeriesObject
     * @notUsedInTheme
     * @action
     */
@@ -615,7 +621,7 @@ var dxChart = {
             * @type_function_param1 info:object
             * @type_function_param1_field1 value:Date|Number|string
             * @type_function_param1_field2 valueText:string
-            * @type_function_param1_field3 point:Point
+            * @type_function_param1_field3 point:chartPointObject
             * @type_function_return string
             * @notUsedInTheme
             */
@@ -744,7 +750,7 @@ var dxChart = {
                 * @type_function_param1 info:object
                 * @type_function_param1_field1 value:Date|Number|string
                 * @type_function_param1_field2 valueText:string
-                * @type_function_param1_field3 point:Point
+                * @type_function_param1_field3 point:chartPointObject
                 * @type_function_return string
                 * @notUsedInTheme
                 */
@@ -874,7 +880,7 @@ var dxChart = {
                 * @type_function_param1 info:object
                 * @type_function_param1_field1 value:Date|Number|string
                 * @type_function_param1_field2 valueText:string
-                * @type_function_param1_field3 point:Point
+                * @type_function_param1_field3 point:chartPointObject
                 * @type_function_return string
                 * @notUsedInTheme
                 */
@@ -2156,7 +2162,7 @@ var dxChart = {
     * @type_function_param1 e:object
     * @type_function_param1_field1 component:object
     * @type_function_param1_field2 element:object
-    * @type_function_param1_field3 target:Series
+    * @type_function_param1_field3 target:chartSeriesObject
     * @notUsedInTheme
     * @action
     */
@@ -2168,7 +2174,7 @@ var dxChart = {
     * @type_function_param1 e:object
     * @type_function_param1_field1 component:object
     * @type_function_param1_field2 element:object
-    * @type_function_param1_field3 target:Series
+    * @type_function_param1_field3 target:chartSeriesObject
     * @notUsedInTheme
     * @action
     */
@@ -2266,6 +2272,12 @@ var dxChart = {
 * @export default
 */
 var dxPieChart = {
+    /**
+    * @name dxpiechart_options
+    * @publicName Options
+    * @namespace DevExpress.viz.charts
+    * @hidden
+    */        
     /**
     * @name dxpiechartoptions_seriestemplate
     * @publicName seriesTemplate
@@ -2480,6 +2492,12 @@ var dxPieChart = {
 */
 var dxPolarChart = {
     /**
+    * @name dxpolarchart_options
+    * @publicName Options
+    * @namespace DevExpress.viz.charts
+    * @hidden
+    */   
+    /**
     * @name dxpolarchartoptions_seriestemplate
     * @publicName seriesTemplate
     * @type object
@@ -2541,7 +2559,7 @@ var dxPolarChart = {
     * @type_function_param1_field1 component:object
     * @type_function_param1_field2 element:object
     * @type_function_param1_field3 jQueryEvent:jQuery.Event
-    * @type_function_param1_field4 target:Series
+    * @type_function_param1_field4 target:polarChartSeriesObject
     * @notUsedInTheme
     * @action
     */
@@ -2554,7 +2572,7 @@ var dxPolarChart = {
     * @type_function_param1_field1 component:object
     * @type_function_param1_field2 element:object
     * @type_function_param1_field3 jQueryEvent:jQuery.Event
-    * @type_function_param1_field4 target:series
+    * @type_function_param1_field4 target:polarChartSeriesObject
     * @notUsedInTheme
     * @action
     */
@@ -3600,7 +3618,7 @@ var dxPolarChart = {
     * @type_function_param1 e:object
     * @type_function_param1_field1 component:object
     * @type_function_param1_field2 element:object
-    * @type_function_param1_field3 target:Series
+    * @type_function_param1_field3 target:polarChartSeriesObject
     * @notUsedInTheme
     * @action
     */
@@ -3612,7 +3630,7 @@ var dxPolarChart = {
     * @type_function_param1 e:object
     * @type_function_param1_field1 component:object
     * @type_function_param1_field2 element:object
-    * @type_function_param1_field3 target:Series
+    * @type_function_param1_field3 target:polarChartSeriesObject
     * @notUsedInTheme
     * @action
     */
@@ -3660,7 +3678,12 @@ var dxPolarChart = {
 * @inherits BaseWidget
 */
 var BaseChart = {
-
+    /**
+    * @name basechart_options
+    * @publicName Options
+    * @namespace DevExpress.viz.charts
+    * @hidden
+    */   
     /**
     * @name basechartoptions_ondone
     * @publicName onDone
@@ -3679,7 +3702,7 @@ var BaseChart = {
     * @type_function_param1 e:object
     * @type_function_param1_field1 component:object
     * @type_function_param1_field2 element:object
-    * @type_function_param1_field3 target:Point
+    * @type_function_param1_field3 target:basePointObject
     * @notUsedInTheme
     * @action
     */
@@ -3691,7 +3714,7 @@ var BaseChart = {
     * @type_function_param1 e:object
     * @type_function_param1_field1 component:object
     * @type_function_param1_field2 element:object
-    * @type_function_param1_field3 target:Point
+    * @type_function_param1_field3 target:basePointObject
     * @notUsedInTheme
     * @action
     */
@@ -3785,7 +3808,7 @@ var BaseChart = {
     * @type_function_param1_field1 component:object
     * @type_function_param1_field2 element:object
     * @type_function_param1_field3 jQueryEvent:jQuery.Event
-    * @type_function_param1_field4 target:Point
+    * @type_function_param1_field4 target:basePointObject
     * @notUsedInTheme
     * @action
     */
@@ -3797,7 +3820,7 @@ var BaseChart = {
     * @type_function_param1 e:object
     * @type_function_param1_field1 component:object
     * @type_function_param1_field2 element:object
-    * @type_function_param1_field3 target:Point
+    * @type_function_param1_field3 target:basePointObject
     * @notUsedInTheme
     * @action
     */
@@ -3809,7 +3832,7 @@ var BaseChart = {
     * @type_function_param1 e:object
     * @type_function_param1_field1 component:object
     * @type_function_param1_field2 element:object
-    * @type_function_param1_field3 target:Point
+    * @type_function_param1_field3 target:basePointObject
     * @notUsedInTheme
     * @action
     */

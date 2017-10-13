@@ -3,7 +3,9 @@
 var $ = require("jquery"),
     ValidationEngine = require("ui/validation_engine"),
     Validator = require("ui/validator"),
-    keyboardMock = require("../../helpers/keyboardMock.js");
+    keyboardMock = require("../../helpers/keyboardMock.js"),
+    isRenderer = require("core/utils/type").isRenderer,
+    config = require("core/config");
 
 require("ui/button");
 require("common.css!");
@@ -149,6 +151,15 @@ QUnit.test("dxButton with anonymous template", function(assert) {
     var $button = $("#buttonWithAnonymousTemplate").dxButton();
 
     assert.equal($.trim($button.text()), "test", "anonymous template rendered");
+});
+
+QUnit.test("dxButton with template as function", function(assert) {
+    $("#button").dxButton({
+        template: function(data, container) {
+            assert.equal(isRenderer(container), config().useJQueryRenderer, "container is correct");
+            return $("<div>");
+        }
+    });
 });
 
 QUnit.test("T355000 - the 'onContentReady' action should be fired after widget is rendered entirely", function(assert) {

@@ -77,7 +77,7 @@ var dropTargetRegistration = {
 * @publicName dxdragenter
 * @type eventType
 * @type_function_param1 event:jQuery.Event
-* @type_function_param1_field1 draggingElement:Element
+* @type_function_param1_field1 draggingElement:Node
 * @module events/drag
 */
 /**
@@ -85,7 +85,7 @@ var dropTargetRegistration = {
 * @publicName dxdrop
 * @type eventType
 * @type_function_param1 event:jQuery.Event
-* @type_function_param1_field1 draggingElement:Element
+* @type_function_param1_field1 draggingElement:Node
 * @module events/drag
 */
 /**
@@ -93,7 +93,7 @@ var dropTargetRegistration = {
 * @publicName dxdragleave
 * @type eventType
 * @type_function_param1 event:jQuery.Event
-* @type_function_param1_field1 draggingElement:Element
+* @type_function_param1_field1 draggingElement:Node
 * @module events/drag
 */
 

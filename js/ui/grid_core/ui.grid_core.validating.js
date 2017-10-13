@@ -210,6 +210,7 @@ var ValidatingController = modules.Controller.inherit((function() {
                 editData = editingController._editData[editIndex];
 
                 var useDefaultValidator = $container && $container.hasClass("dx-widget");
+
                 var validator = new Validator($container || {}, {
                     name: column.caption,
                     validationRules: extend(true, [], column.validationRules),
@@ -252,7 +253,7 @@ module.exports = {
             * @publicName onRowValidating
             * @type function(e)
             * @type_function_param1 e:object
-            * @type_function_param1_field4 brokenRules:array
+            * @type_function_param1_field4 brokenRules:Array<Object>
             * @type_function_param1_field5 isValid:boolean
             * @type_function_param1_field6 key:any
             * @type_function_param1_field7 newData:object

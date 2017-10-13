@@ -20,6 +20,8 @@ var $ = require("jquery"),
     dataGridMocks = require("../../helpers/dataGridMocks.js"),
     CLICK_NAMESPACE = "dxclick.dxDataGridAdaptivity",
     eventsEngine = require("events/core/events_engine"),
+    typeUtils = require("core/utils/type"),
+    config = require("core/config"),
     renderer = require("core/renderer");
 
 function setupDataGrid(that, $dataGridContainer) {
@@ -701,9 +703,10 @@ QUnit.test("Show the form with cellTemplate when an adaptive row is expanded", f
             dataField: 'lastName',
             index: 1,
             allowEditing: true,
-            cellTemplate: function($container, data) {
+            cellTemplate: function(container, data) {
+                assert.equal(typeUtils.isRenderer(container), config().useJQueryRenderer, "cellElement is correct");
                 _column = data.column;
-                $container.text(data.value + " template");
+                $(container).text(data.value + " template");
             }
         }
     ];
@@ -1302,7 +1305,7 @@ QUnit.test("Cell of master detail is not hidden when first column of data grid i
     this.options.masterDetail = {
         enabled: true,
         template: function(container) {
-            $("<span/>").appendTo(container);
+            $("<span/>").appendTo($(container));
         }
     };
     this.rowsView.render($("#container"));
@@ -1485,6 +1488,19 @@ QUnit.test("Apply a hidden css class on cell prepared event of rows view", funct
 
     assert.ok(checkAdaptiveWidth(col.style.width));
     assert.ok($cells.eq(1).hasClass("dx-datagrid-hidden-column"));
+});
+
+QUnit.test("Row elements are should get only once when CSS for hidden column is applied", function(assert) {
+    //arrange, act
+    $(".dx-datagrid").width(200);
+    setupDataGrid(this);
+    this.rowsView.render($("#container"));
+    sinon.spy(this.rowsView, "_getRowElements");
+    this.resizingController.updateDimensions();
+    this.clock.tick();
+
+    //assert
+    assert.ok(this.rowsView._getRowElements.calledOnce);
 });
 
 QUnit.module("API", {
@@ -3624,25 +3640,25 @@ QUnit.module("Keyboard navigation", {
     setupModule: function() {
         this.$dataGrid = $(".dx-datagrid").width(200);
 
-        this.columns = [
+        this.columns = this.columns || [
             { dataField: 'firstName', index: 0, allowEditing: true, allowExporting: true },
             { dataField: 'lastName', index: 1, allowEditing: true, allowExporting: true },
             { dataField: 'fullName', index: 1, allowEditing: true, allowExporting: true }
         ];
 
-        this.items = [
+        this.items = this.items || [
             { firstName: 'Blablablablablablablablablabla', lastName: "Psy", fullName: "Full Name" },
             { firstName: 'Super', lastName: "Star", fullName: "Full Name" }
         ];
 
-        this.options = {
+        this.options = $.extend({
             useKeyboard: true,
             tabIndex: 0,
             editing: {
                 mode: 'batch',
                 allowUpdating: true
             }
-        };
+        }, this.options);
         setupDataGrid(this, $("#container"));
 
         this.gridView.render($("#container"));
@@ -3664,7 +3680,6 @@ QUnit.module("Keyboard navigation", {
 
     beforeEach: function() {
         this.clock = sinon.useFakeTimers();
-        this.setupModule();
     },
 
     afterEach: function() {
@@ -3673,6 +3688,7 @@ QUnit.module("Keyboard navigation", {
 }, function() {
     QUnit.testInActiveWindow("Edit next an adaptive detail item by tab key", function(assert) {
         //arrange
+        this.setupModule();
         this.triggerFormItemClick(0);
 
         //assert
@@ -3691,6 +3707,7 @@ QUnit.module("Keyboard navigation", {
 
     QUnit.testInActiveWindow("Edit previous an adaptive detail item by shift + tab key", function(assert) {
         //arrange
+        this.setupModule();
         this.triggerFormItemClick(1);
 
         //assert
@@ -3709,6 +3726,7 @@ QUnit.module("Keyboard navigation", {
 
     QUnit.testInActiveWindow("Editable cell is closed when focus moving outside detail form", function(assert) {
         //arrange
+        this.setupModule();
         this.triggerFormItemClick(1);
 
         //act
@@ -3727,6 +3745,7 @@ QUnit.module("Keyboard navigation", {
 
     QUnit.testInActiveWindow("Skip hidden column when use a keyboard navigation via 'tab' key", function(assert) {
         //arrange
+        this.setupModule();
         this.editingController.editCell(0, 0);
         this.clock.tick();
 
@@ -3737,5 +3756,32 @@ QUnit.module("Keyboard navigation", {
 
         //assert
         assert.equal(this.getActiveInputElement().val(), "Super");
+    });
+
+    QUnit.testInActiveWindow("Error is not thrown when via keyboard navigation to adaptive form for new row", function(assert) {
+        //arrange
+        this.items = [];
+        this.columns = [
+            { dataField: 'firstName', index: 0, allowEditing: true, width: 200 },
+            { dataField: 'lastName', index: 1, allowEditing: true, width: 200 },
+            { dataField: 'fullName', index: 1, allowEditing: true, width: 200 }
+        ];
+        this.options = {
+            editing: {
+                allowAdding: true,
+                mode: "row"
+            }
+        };
+        this.setupModule();
+        this.editingController.addRow();
+        this.clock.tick();
+
+        //act
+        var e = $.Event('keydown');
+        e.which = 9;
+        this.getActiveInputElement().trigger(e);
+
+        //assert
+        assert.deepEqual(this.keyboardNavigationController._focusedCellPosition, { columnIndex: 0, rowIndex: 0 });
     });
 });

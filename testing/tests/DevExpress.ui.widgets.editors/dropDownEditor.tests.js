@@ -568,7 +568,9 @@ QUnit.testInActiveWindow("Focus policy with field template", function(assert) {
 });
 
 QUnit.test("Drop button template should be rendered correctly", function(assert) {
-    var buttonTemplate = function() {
+    var buttonTemplate = function(buttonData, contentElement) {
+        assert.equal(isRenderer(contentElement), config().useJQueryRenderer, "contentElement is correct");
+
         return "<div>Template</div>";
     };
 
@@ -726,8 +728,9 @@ QUnit.test("fieldTemplate as render", function(assert) {
 
 QUnit.test("contentTemplate as render", function(assert) {
     $("#dropDownEditorLazy").dxDropDownEditor({
-        contentTemplate: function(data, $content) {
-            $content.addClass("drop-down-editor-content");
+        contentTemplate: function(data, content) {
+            assert.equal(isRenderer(content), config().useJQueryRenderer, "contentElement is correct");
+            $(content).addClass("drop-down-editor-content");
             return $("<div>").text(data.component.option("value"));
         },
         value: "test",

@@ -222,6 +222,7 @@
         "dxScheduler-confirmRecurrenceDeleteOccurrence": "Delete appointment",
 
         "dxScheduler-noTimezoneTitle": "No timezone",
+        "dxScheduler-moreAppointments": "{0} more",
 
         "dxCalendar-todayButtonText": "Today",
         "dxCalendar-ariaWidgetName": "Calendar",

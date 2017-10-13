@@ -148,7 +148,7 @@ var SelectBox = DropDownList.inherit({
             * @type template
             * @default null
             * @type_function_param1 selectedItem:object
-            * @type_function_param2 fieldElement:jQuery
+            * @type_function_param2 fieldElement:Element
             * @type_function_return string|Node|jQuery
             */
             fieldTemplate: null,

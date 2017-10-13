@@ -5,7 +5,9 @@ var $ = require("jquery"),
     keyboardMock = require("../../helpers/keyboardMock.js"),
     fx = require("animation/fx"),
     CustomStore = require("data/custom_store"),
-    DropDownBox = require("ui/drop_down_box");
+    DropDownBox = require("ui/drop_down_box"),
+    isRenderer = require("core/utils/type").isRenderer,
+    config = require("core/config");
 
 require("common.css!");
 
@@ -145,14 +147,16 @@ QUnit.test("value clearing", function(assert) {
 });
 
 QUnit.test("content template should work", function(assert) {
-    assert.expect(3);
+    assert.expect(4);
 
     var instance = new DropDownBox(this.$element, {
         items: this.simpleItems,
         opened: true,
-        contentTemplate: function(e) {
+        contentTemplate: function(e, contentElement) {
             assert.strictEqual(e.component.NAME, "dxDropDownBox", "component is correct");
             assert.equal(e.value, 1, "value is correct");
+            assert.equal(isRenderer(contentElement), config().useJQueryRenderer, "contentElement is correct");
+
             return "Test content";
         },
         valueExpr: "id",
@@ -161,6 +165,20 @@ QUnit.test("content template should work", function(assert) {
     });
 
     assert.equal($(instance.content()).text(), "Test content", "content template has been rendered");
+});
+
+QUnit.test("field template should work", function(assert) {
+    new DropDownBox(this.$element, {
+        items: this.simpleItems,
+        opened: true,
+        fieldTemplate: function(value, fieldElement) {
+            assert.equal(isRenderer(fieldElement), config().useJQueryRenderer, "fieldElement is correct");
+            return $("<div>").dxTextBox({ value: 1 });
+        },
+        valueExpr: "id",
+        displayExpr: "name",
+        value: 1
+    });
 });
 
 QUnit.test("popup and editor width should be equal", function(assert) {
@@ -483,8 +501,8 @@ QUnit.testInActiveWindow("first focusable element inside of content should get f
         instance = new DropDownBox(this.$element, {
             opened: true,
             focusStateEnabled: true,
-            contentTemplate: function(component, $content) {
-                $content.append($input1, $input2);
+            contentTemplate: function(component, content) {
+                $(content).append($input1, $input2);
             }
         }),
         $input = this.$element.find("." + DX_TEXTEDITOR_INPUT_CLASS),
@@ -503,8 +521,8 @@ QUnit.testInActiveWindow("last focusable element inside of content should get fo
         instance = new DropDownBox(this.$element, {
             opened: true,
             focusStateEnabled: true,
-            contentTemplate: function(component, $content) {
-                $content.append($input1, $input2);
+            contentTemplate: function(component, content) {
+                $(content).append($input1, $input2);
             }
         }),
         $input = this.$element.find("." + DX_TEXTEDITOR_INPUT_CLASS),
@@ -522,8 +540,8 @@ QUnit.testInActiveWindow("widget should be closed after tab pressing on the last
         instance = new DropDownBox(this.$element, {
             focusStateEnabled: true,
             opened: true,
-            contentTemplate: function(component, $content) {
-                $content.append($input1, $input2);
+            contentTemplate: function(component, content) {
+                $(content).append($input1, $input2);
             }
         }),
         keyboard = keyboardMock($input2);
@@ -540,8 +558,8 @@ QUnit.testInActiveWindow("input should get focused when shift+tab pressed on fir
         instance = new DropDownBox(this.$element, {
             focusStateEnabled: true,
             opened: true,
-            contentTemplate: function(component, $content) {
-                $content.append($input1, $input2);
+            contentTemplate: function(component, content) {
+                $(content).append($input1, $input2);
             }
         }),
         event = $.Event("keydown", { which: TAB_KEY_CODE, shiftKey: true });
@@ -558,8 +576,8 @@ QUnit.testInActiveWindow("inner input should be focused after popup opening", fu
         $input = $("<input>", { id: "input1", type: "text" }).on("focusin", inputFocusedHandler),
         instance = new DropDownBox(this.$element, {
             focusStateEnabled: true,
-            contentTemplate: function(component, $content) {
-                $content.append($input);
+            contentTemplate: function(component, content) {
+                $(content).append($input);
             }
         });
 

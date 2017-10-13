@@ -1390,8 +1390,9 @@ var EditingController = modules.ViewController.inherit((function() {
             return column.editCellTemplate || getDefaultEditorTemplate(this);
         },
 
-        renderFormEditTemplate: function(detailCellOptions, item, form, $container, isReadOnly) {
+        renderFormEditTemplate: function(detailCellOptions, item, form, container, isReadOnly) {
             var that = this,
+                $container = $(container),
                 column = item.column,
                 rowData = detailCellOptions.row && detailCellOptions.row.data,
                 cellOptions = extend({}, detailCellOptions, {
@@ -1515,17 +1516,19 @@ var EditingController = modules.ViewController.inherit((function() {
                 template = column.editCellTemplate || getDefaultEditorTemplate(that);
             } else if(column.command === "edit" && options.rowType === "data") {
                 template = function(container, options) {
-                    container.css("text-align", "center");
+                    var $container = $(container);
+
+                    $container.css("text-align", "center");
                     options.rtlEnabled = that.option("rtlEnabled");
 
                     editingOptions = that.option("editing") || {};
                     editingTexts = editingOptions.texts || {};
 
                     if(options.row && options.row.rowIndex === that._getVisibleEditRowIndex() && isRowMode) {
-                        that._createLink(container, editingTexts.saveRowChanges, "saveEditData", options, "dx-link-save");
-                        that._createLink(container, editingTexts.cancelRowChanges, "cancelEditData", options, "dx-link-cancel");
+                        that._createLink($container, editingTexts.saveRowChanges, "saveEditData", options, "dx-link-save");
+                        that._createLink($container, editingTexts.cancelRowChanges, "cancelEditData", options, "dx-link-cancel");
                     } else {
-                        that._createEditingLinks(container, options, editingOptions, isRowMode);
+                        that._createEditingLinks($container, options, editingOptions, isRowMode);
                     }
                 };
             } else if(column.command === "detail" && options.rowType === "detail" && isRowEditing) {
@@ -1673,7 +1676,7 @@ module.exports = {
              * @type function(e)
              * @type_function_param1 e:object
              * @type_function_param1_field4 data:object
-             * @type_function_param1_field5 cancel:boolean|Promise
+             * @type_function_param1_field5 cancel:boolean|Promise<void>
              * @extends Action
              * @action
              */
@@ -1685,7 +1688,7 @@ module.exports = {
              * @type_function_param1 e:object
              * @type_function_param1_field4 data:object
              * @type_function_param1_field5 key:any
-             * @type_function_param1_field6 error:JavaScript Error object
+             * @type_function_param1_field6 error:Error
              * @extends Action
              * @action
              */
@@ -1724,7 +1727,7 @@ module.exports = {
              * @type_function_param1_field4 oldData:object
              * @type_function_param1_field5 newData:object
              * @type_function_param1_field6 key:any
-             * @type_function_param1_field7 cancel:boolean|Promise
+             * @type_function_param1_field7 cancel:boolean|Promise<void>
              * @extends Action
              * @action
              */
@@ -1736,7 +1739,7 @@ module.exports = {
              * @type_function_param1 e:object
              * @type_function_param1_field4 data:object
              * @type_function_param1_field5 key:any
-             * @type_function_param1_field6 error:JavaScript Error object
+             * @type_function_param1_field6 error:Error
              * @extends Action
              * @action
              */
@@ -1748,7 +1751,7 @@ module.exports = {
              * @type_function_param1 e:object
              * @type_function_param1_field4 data:object
              * @type_function_param1_field5 key:any
-             * @type_function_param1_field6 cancel:boolean|Promise
+             * @type_function_param1_field6 cancel:boolean|Promise<void>
              * @extends Action
              * @action
              */
@@ -1760,7 +1763,7 @@ module.exports = {
              * @type_function_param1 e:object
              * @type_function_param1_field4 data:object
              * @type_function_param1_field5 key:any
-             * @type_function_param1_field6 error:JavaScript Error object
+             * @type_function_param1_field6 error:Error
              * @extends Action
              * @action
              */

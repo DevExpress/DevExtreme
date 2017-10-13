@@ -274,7 +274,7 @@ exports.ColumnsView = modules.View.inherit(columnStateMixin).inherit({
         } else if(typeUtils.isFunction(template)) {
             renderingTemplate = {
                 render: function(options) {
-                    var renderedTemplate = template(options.container, options.model);
+                    var renderedTemplate = template(getPublicElement(options.container), options.model);
                     if(renderedTemplate && (renderedTemplate.nodeType || typeUtils.isRenderer(renderedTemplate))) {
                         options.container.append(renderedTemplate);
                     }
@@ -680,14 +680,14 @@ exports.ColumnsView = modules.View.inherit(columnStateMixin).inherit({
      * @publicName getCellElement(rowIndex, visibleColumnIndex)
      * @param1 rowIndex:number
      * @param2 visibleColumnIndex:number
-     * @return jQuery|undefined
+     * @return Element|undefined
      */
     /**
      * @name GridBaseMethods_getCellElement
      * @publicName getCellElement(rowIndex, dataField)
      * @param1 rowIndex:number
      * @param2 dataField:string
-     * @return jQuery|undefined
+     * @return Element|undefined
      */
     getCellElement: function(rowIndex, columnIdentifier) {
         return getPublicElement(this._getCellElement(rowIndex, columnIdentifier));
@@ -697,7 +697,7 @@ exports.ColumnsView = modules.View.inherit(columnStateMixin).inherit({
      * @name GridBaseMethods_getRowElement
      * @publicName getRowElement(rowIndex)
      * @param1 rowIndex:number
-     * @return jQuery|undefined
+     * @return Array<Node>|jQuery|undefined
      */
     getRowElement: function(rowIndex) {
         var $rows = this._getRowElement(rowIndex),

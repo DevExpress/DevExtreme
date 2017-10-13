@@ -741,7 +741,10 @@ QUnit.test("dataGrid first data rendering", function(assert) {
     $("#dataGrid").height(400);
     var templatesRenderedCount = 0;
     $("#dataGrid").dxDataGrid({
-        columns: [{ dataField: "field1", cellTemplate: function() { templatesRenderedCount++; } }],
+        columns: [{ dataField: "field1", cellTemplate: function(cellElement) {
+            assert.equal(typeUtils.isRenderer(cellElement), config().useJQueryRenderer, "cellElement is correct");
+            templatesRenderedCount++;
+        } }],
         loadingTimeout: undefined,
         dataSource: {
             store: [{ field1: "1", field2: "2" }, { field1: "3", field2: "4" }],
@@ -756,7 +759,10 @@ QUnit.test("headerCellTemplate when no dataSource", function(assert) {
     var templatesRenderedCount = 0;
     //act
     var $element = $("#dataGrid").dxDataGrid({
-        columns: [{ dataField: "field1", headerCellTemplate: function(container) { container.addClass("field1-header"); templatesRenderedCount++; } }]
+        columns: [{ dataField: "field1", headerCellTemplate: function(container) {
+            assert.equal(typeUtils.isRenderer(container), config().useJQueryRenderer, "headerCellElement is correct");
+            $(container).addClass("field1-header"); templatesRenderedCount++;
+        } }]
     });
 
     //assert
@@ -1822,6 +1828,42 @@ QUnit.test("width should be auto if minWidth is assigned to another column", fun
     assert.strictEqual($cols[0].style.width, "80px", "width is applied because width < minWidth");
     assert.strictEqual($cols[1].style.width, "auto", "width is auto");
     assert.strictEqual($cols[2].style.width, "auto", "width is auto");
+});
+
+QUnit.test("Apply minWidth when columns have 'auto' width but the last column hasn't width", function(assert) {
+    //arrange
+    $("#container").width(200);
+
+    $("#dataGrid").dxDataGrid({
+        loadingTimeout: undefined,
+        dataSource: [{
+            firstName: "First Name",
+            lastName: "Last Name",
+            description: "The DataGrid is a widget that represents data from a local or remote source in the form of a grid."
+        }],
+        columns: [
+            {
+                dataField: "firstName",
+                width: "auto"
+            }, {
+                dataField: "lastName",
+                width: "auto"
+            }, {
+                dataField: "description",
+                minWidth: 20
+            }
+        ]
+    });
+
+    var $colGroups = $(".dx-datagrid colgroup");
+    assert.strictEqual($colGroups.length, 2);
+
+    for(var i = 0; i < $colGroups.length; i++) {
+        var $cols = $colGroups.eq(i).find("col");
+
+        assert.strictEqual($cols.length, 3);
+        assert.strictEqual($cols[2].style.width, "20px", "minWidth is applied");
+    }
 });
 
 QUnit.test("Horizontal scrollbar is not displayed when columns width has float value", function(assert) {
@@ -5441,8 +5483,8 @@ QUnit.test("insert row when master detail autoExpandAll is active", function(ass
             masterDetail: {
                 enabled: true,
                 autoExpandAll: true,
-                template: function($container, options) {
-                    $container.append($("<div>detail</div>"));
+                template: function(container, options) {
+                    $(container).append($("<div>detail</div>"));
                 }
             }
         }),
@@ -5542,20 +5584,23 @@ QUnit.test("CellTemplate and master-detail template cells has correct text-align
             },
             columns: [{
                 cellTemplate: function(container, options) {
-                    container.height(100);
+                    var $container = $(container);
+                    $container.height(100);
                     $('<div />').dxButton({
                         text: "cell template"
-                    }).appendTo(container);
+                    }).appendTo($container);
                 }
             }, "field1", "field2"],
             masterDetail: {
                 enabled: true,
                 autoExpandAll: true,
                 template: function(container, options) {
-                    container.height(100);
+                    assert.equal(typeUtils.isRenderer(container), config().useJQueryRenderer, "container is correct");
+                    var $container = $(container);
+                    $container.height(100);
                     $('<div />').dxButton({
                         text: "master-detail template"
-                    }).appendTo(container);
+                    }).appendTo($container);
                 }
 
             }
@@ -7522,6 +7567,17 @@ QUnit.test("Setting rowTemplate via dxTemplate", function(assert) {
     assert.strictEqual($(dataGrid.$element()).find("[data-options]").length, 0, "no elements with data-options attribute");
 });
 
+QUnit.test("rowElement argument of rowTemplate option is correct", function(assert) {
+    //arrange, act
+    createDataGrid({
+        rowTemplate: function(rowElement) {
+            assert.equal(typeUtils.isRenderer(rowElement), config().useJQueryRenderer, "rowElement is correct");
+        },
+        dataSource: [{ column1: "test1", column2: "test2" }],
+        columns: [{ dataField: "column1" }, { dataField: "column2" }]
+    });
+});
+
 //T484419
 QUnit.test("rowTemplate via dxTemplate should works with masterDetail template", function(assert) {
     //arrange, act
@@ -7601,11 +7657,11 @@ QUnit.test("Check table params without columnWidth auto", function(assert) {
         ],
         columns: [{
             dataField: "firstField", cellTemplate: function(container, options) {
-                container.append($("<div>"));
+                $(container).append($("<div>"));
             }
         }, {
             dataField: "lastField", cellTemplate: function(container, options) {
-                container.append($("<div>", { css: { width: 150 } }));
+                $(container).append($("<div>", { css: { width: 150 } }));
             }
         }],
         columnWidth: undefined
@@ -7628,11 +7684,11 @@ QUnit.test("Check table params with columnWidth auto", function(assert) {
         dataSource: dataSource,
         columns: [{
             dataField: "firstField", cellTemplate: function(container, options) {
-                container.append($("<div>"));
+                $(container).append($("<div>"));
             }
         }, {
             dataField: "lastField", cellTemplate: function(container, options) {
-                container.append($("<div>", { css: { width: 200 } }));
+                $(container).append($("<div>", { css: { width: 200 } }));
             }
         }],
         columnAutoWidth: true
@@ -7655,11 +7711,11 @@ QUnit.test("Check table params with set width", function(assert) {
         dataSource: dataSource,
         columns: [{
             dataField: "firstField", width: "120px", cellTemplate: function(container, options) {
-                container.append($("<div>"));
+                $(container).append($("<div>"));
             }
         }, {
             dataField: "lastField", cellTemplate: function(container, options) {
-                container.append($("<div>", { css: { width: 200 } }));
+                $(container).append($("<div>", { css: { width: 200 } }));
             }
         }],
         columnAutoWidth: true

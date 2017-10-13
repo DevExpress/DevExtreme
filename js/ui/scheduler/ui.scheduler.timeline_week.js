@@ -6,8 +6,7 @@ var $ = require("../../core/renderer"),
 
 var TIMELINE_CLASS = "dx-scheduler-timeline-week",
     HEADER_PANEL_CELL_CLASS = "dx-scheduler-header-panel-cell",
-    HEADER_ROW_CLASS = "dx-scheduler-header-row",
-    CELL_WIDTH = 200;
+    HEADER_ROW_CLASS = "dx-scheduler-header-row";
 
 var SchedulerTimelineWeek = SchedulerTimeline.inherit({
     _getElementClass: function() {
@@ -18,14 +17,13 @@ var SchedulerTimelineWeek = SchedulerTimeline.inherit({
         return this.callBase() * this._getWeekDuration();
     },
 
-
     _renderDateHeader: function() {
         var $headerRow = this.callBase(),
             firstViewDate = new Date(this._firstViewDate),
             $cells = [],
             colspan = this._getCellCountInDay(),
             cellTemplate = this.option("dateCellTemplate"),
-            headerCellWidth = colspan * CELL_WIDTH;
+            headerCellWidth = colspan * this._getHeaderPanelCellWidth($headerRow);
 
         for(var i = 0; i < this._getWeekDuration() * this.option("intervalCount"); i++) {
             var $th = $("<th>"),
@@ -54,6 +52,25 @@ var SchedulerTimelineWeek = SchedulerTimeline.inherit({
 
         var $row = $("<tr>").addClass(HEADER_ROW_CLASS).append($cells);
         $headerRow.before($row);
+    },
+
+    _setTableSizes: function() {
+        this.callBase();
+        var cellWidth = this.getCellWidth(),
+            minWidth = this._getWorkSpaceMinWidth(),
+            $headerCells = this.$element().find("." + HEADER_ROW_CLASS).last().find("th");
+
+        var width = cellWidth * $headerCells.length;
+
+        if(width < minWidth) {
+            width = minWidth;
+        }
+
+        this._$headerPanel.width(width);
+    },
+
+    _getHeaderPanelCellWidth: function($headerRow) {
+        return $headerRow.children().first().outerWidth();
     },
 
     _getWeekDuration: function() {

@@ -244,7 +244,8 @@ QUnit.test("groupTemplate returning string", function(assert) {
 
         grouped: true,
 
-        groupTemplate: function(group, index) {
+        groupTemplate: function(group, index, itemElement) {
+            assert.equal(isRenderer(itemElement), config().useJQueryRenderer, "itemElement is correct");
             return index + ": " + group.key;
         }
     });

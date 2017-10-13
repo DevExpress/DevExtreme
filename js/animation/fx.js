@@ -39,14 +39,14 @@ var RELATIVE_VALUE_REGEX = /^([+-])=(.*)/i,
 * @name animationConfig_start
 * @publicName start
 * @type function
-* @type_function_param1 $element:jQuery
+* @type_function_param1 $element:Element
 * @type_function_param2 config:object
 */
 /**
 * @name animationConfig_complete
 * @publicName complete
 * @type function
-* @type_function_param1 $element:jQuery
+* @type_function_param1 $element:Element
 * @type_function_param2 config:object
 */
 /**
@@ -885,6 +885,7 @@ var stop = function(element, jumpToEnd) {
 * @publicName fx
 * @section utils
 * @module animation/fx
+* @namespace DevExpress
 * @export default
 */
 var fx = {

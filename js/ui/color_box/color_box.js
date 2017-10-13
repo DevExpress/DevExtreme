@@ -125,7 +125,7 @@ var ColorBox = DropDownEditor.inherit({
              * @type template
              * @default null
              * @type_function_param1 value:string
-             * @type_function_param2 fieldElement:jQuery
+             * @type_function_param2 fieldElement:Element
              * @type_function_return string|Node|jQuery
              */
             fieldTemplate: null,

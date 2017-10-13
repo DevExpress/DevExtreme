@@ -2529,7 +2529,7 @@ QUnit.test("Get a valid index of cell on tab key_T259896", function(assert) {
             allowEditing: true,
             editCellTemplate: function(container, options) {
                 var table = $('<table><tr><td><div class="txt"></div></td><td><div class="btn"></div></td></tr></table>');
-                table.appendTo(container);
+                table.appendTo($(container));
             }
         },
         {

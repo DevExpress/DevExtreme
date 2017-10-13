@@ -120,7 +120,7 @@ var Popup = Overlay.inherit({
             * @publicName titleTemplate
             * @type template
             * @default "title"
-            * @type_function_param1 titleElement:jQuery
+            * @type_function_param1 titleElement:Element
             * @type_function_return string|Node|jQuery
             */
             titleTemplate: "title",
@@ -129,7 +129,7 @@ var Popup = Overlay.inherit({
             * @name dxPopupOptions_onTitleRendered
             * @publicName onTitleRendered
             * @extends Action
-            * @type_function_param1_field1 titleElement:jQuery
+            * @type_function_param1_field1 titleElement:Element
             * @action
             */
             onTitleRendered: null,
@@ -494,7 +494,7 @@ var Popup = Overlay.inherit({
             $container.replaceWith($toolbar);
             return $toolbar;
         } else {
-            var $result = template.render({ container: $container });
+            var $result = template.render({ container: getPublicElement($container) });
             if($result.hasClass(TEMPLATE_WRAPPER_CLASS)) {
                 $container.replaceWith($result);
                 $container = $result;
@@ -503,9 +503,9 @@ var Popup = Overlay.inherit({
         }
     },
 
-    _executeTitleRenderAction: function(titleElement) {
+    _executeTitleRenderAction: function($titleElement) {
         this._getTitleRenderAction()({
-            titleElement: titleElement
+            titleElement: getPublicElement($titleElement)
         });
     },
 
@@ -515,7 +515,7 @@ var Popup = Overlay.inherit({
 
     _createTitleRenderAction: function() {
         return (this._titleRenderAction = this._createActionByOption("onTitleRendered", {
-            element: this.$element(),
+            element: this.element(),
             excludeValidators: ["designMode", "disabled", "readOnly"]
         }));
     },

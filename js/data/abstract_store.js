@@ -53,7 +53,7 @@ var Store = Class.inherit({
                  * @type_function_param1_field7 userData:object
                  * @type_function_param1_field8 searchValue:object
                  * @type_function_param1_field9 searchOperation:string
-                 * @type_function_param1_field10 searchExpr:getter|Array<string>
+                 * @type_function_param1_field10 searchExpr:getter|Array<getter>
                  * @action
                  */
                 "onLoading",
@@ -186,7 +186,11 @@ var Store = Class.inherit({
             throw errorsModule.errors.Error("E4005");
         }
     },
-
+    /**
+    * @name StoreMethods_load
+    * @publicName load()
+    * @return Promise<any>
+    */
     /**
     * @name StoreMethods_load
     * @publicName load(options)

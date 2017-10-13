@@ -14,7 +14,6 @@ var $ = require("../../core/renderer"),
     abstract = Widget.abstract,
     noop = require("../../core/utils/common").noop,
     isDefined = require("../../core/utils/type").isDefined,
-    registerComponent = require("../../core/component_registrator"),
     publisherMixin = require("./ui.scheduler.publisher_mixin"),
     eventUtils = require("../../events/utils"),
     pointerEvents = require("../../events/pointer"),
@@ -22,7 +21,8 @@ var $ = require("../../core/renderer"),
     clickEvent = require("../../events/click"),
     dragEvents = require("../../events/drag"),
     Scrollable = require("../scroll_view/ui.scrollable"),
-    tableCreator = require("./ui.scheduler.table_creator");
+    tableCreator = require("./ui.scheduler.table_creator"),
+    VerticalShader = require("./ui.scheduler.currentTimeShader.vertical");
 
 var COMPONENT_CLASS = "dx-scheduler-work-space",
     GROUPED_WORKSPACE_CLASS = "dx-scheduler-work-space-grouped",
@@ -363,7 +363,10 @@ var SchedulerWorkSpace = Widget.inherit({
             timeCellTemplate: null,
             resourceCellTemplate: null,
             dateCellTemplate: null,
-            allowMultipleCellSelection: true
+            allowMultipleCellSelection: true,
+            indicatorTime: new Date(),
+            indicatorUpdateInterval: 5 * toMs("minute"),
+            shadeUntilCurrentTime: true
         });
     },
 
@@ -739,7 +742,15 @@ var SchedulerWorkSpace = Widget.inherit({
         this._renderAllDayPanel();
 
         this._renderDateTable();
+
+        this._shader = new VerticalShader();
+        this._renderDateTimeIndication();
+
+        this._setIndicationUpdateInterval();
     },
+
+    _renderDateTimeIndication: noop,
+    _setIndicationUpdateInterval: noop,
 
     _setFirstViewDate: function() {
         this._firstViewDate = dateUtils.getFirstWeekDate(this._getViewStartByOptions(), this._firstDayOfWeek() || dateLocalization.firstDayOfWeekIndex());
@@ -956,7 +967,7 @@ var SchedulerWorkSpace = Widget.inherit({
             for(var i = 0; i < count; i++) {
                 var text = this._getHeaderText(i),
                     $cell = $("<th>")
-                            .addClass(HEADER_PANEL_CELL_CLASS)
+                            .addClass(this._getHeaderPanelCellClass(i))
                             .attr("title", text);
 
                 if(cellTemplate && cellTemplate.render) {
@@ -966,7 +977,7 @@ var SchedulerWorkSpace = Widget.inherit({
                             date: this._getDateByIndex(i)
                         },
                         index: j * repeatCount + i,
-                        container: $cell
+                        container: getPublicElement($cell)
                     }));
                 } else {
                     $cell.text(text);
@@ -983,6 +994,10 @@ var SchedulerWorkSpace = Widget.inherit({
         return $headerRow;
     },
 
+    _getHeaderPanelCellClass: function() {
+        return HEADER_PANEL_CELL_CLASS;
+    },
+
     _calculateHeaderCellRepeatCount: function() {
         return this._getGroupCount() || 1;
     },
@@ -991,10 +1006,10 @@ var SchedulerWorkSpace = Widget.inherit({
         var cellCount = this._getCellCount() * (this._getGroupCount() || 1);
 
         var cellTemplates = this._renderTableBody({
-            container: this._$allDayTable,
+            container: getPublicElement(this._$allDayTable),
             rowCount: 1,
             cellCount: cellCount,
-            cellClass: ALL_DAY_TABLE_CELL_CLASS,
+            cellClass: this._getAllDayPanelCellClass.bind(this),
             rowClass: ALL_DAY_TABLE_ROW_CLASS,
             cellTemplate: this.option("dataCellTemplate"),
             getCellData: this._getAllDayCellData.bind(this)
@@ -1002,6 +1017,10 @@ var SchedulerWorkSpace = Widget.inherit({
 
         this._toggleAllDayVisibility();
         this._applyCellTemplates(cellTemplates);
+    },
+
+    _getAllDayPanelCellClass: function() {
+        return ALL_DAY_TABLE_CELL_CLASS;
     },
 
     _getAllDayCellData: function(cell, rowIndex, cellIndex) {
@@ -1048,10 +1067,10 @@ var SchedulerWorkSpace = Widget.inherit({
         var rowCount = this._getTimePanelRowCount();
         this._$timePanel.toggleClass(TIME_PANEL_ODD_ROW_COUNT_CLASS, rowCount % 1 > 0);
         this._renderTableBody({
-            container: this._$timePanel,
+            container: getPublicElement(this._$timePanel),
             rowCount: rowCount,
             cellCount: 1,
-            cellClass: TIME_PANEL_CELL_CLASS,
+            cellClass: this._getTimeCellClass.bind(this),
             rowClass: TIME_PANEL_ROW_CLASS,
             cellTemplate: this.option("timeCellTemplate"),
             getCellText: this._getTimeText.bind(this)
@@ -1070,23 +1089,33 @@ var SchedulerWorkSpace = Widget.inherit({
         return this.option("endDayHour") - this.option("startDayHour");
     },
 
+    _getTimeCellClass: function(i) {
+        return TIME_PANEL_CELL_CLASS;
+    },
+
     _getTimeText: function(i) {
         // T410490: incorrectly displaying time slots on Linux
+        var startViewDate = this._getTimeCellDate(i);
+
+        return dateLocalization.format(startViewDate, "shorttime");
+    },
+
+    _getTimeCellDate: function(i) {
         var startViewDate = new Date(this.getStartViewDate()),
             timeCellDuration = this.getCellDuration() * 2;
 
         startViewDate.setMilliseconds(startViewDate.getMilliseconds() + timeCellDuration * i);
 
-        return dateLocalization.format(startViewDate, "shorttime");
+        return startViewDate;
     },
 
     _renderDateTable: function() {
         var groupCount = this._getGroupCount();
         this._renderTableBody({
-            container: this._$dateTable,
+            container: getPublicElement(this._$dateTable),
             rowCount: this._getTotalRowCount(groupCount),
             cellCount: this._getTotalCellCount(groupCount),
-            cellClass: this._getDateTableCellClass(),
+            cellClass: this._getDateTableCellClass.bind(this),
             rowClass: this._getDateTableRowClass(),
             cellTemplate: this.option("dataCellTemplate"),
             getCellData: this._getCellData.bind(this)
@@ -1329,6 +1358,7 @@ var SchedulerWorkSpace = Widget.inherit({
         this._cleanAllowedPositions();
         this._$thead.empty();
         this._$dateTable.empty();
+        this._shader && this._shader.clean();
         this._$timePanel.empty();
         this._$allDayTable.empty();
         delete this._hiddenInterval;
@@ -1918,7 +1948,5 @@ var SchedulerWorkSpace = Widget.inherit({
     }
 
 }).include(publisherMixin);
-
-registerComponent("dxSchedulerWorkSpace", SchedulerWorkSpace);
 
 module.exports = SchedulerWorkSpace;

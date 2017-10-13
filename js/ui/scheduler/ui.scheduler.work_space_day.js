@@ -1,9 +1,10 @@
 "use strict";
 
 var registerComponent = require("../../core/component_registrator"),
-    SchedulerWorkSpace = require("./ui.scheduler.work_space");
+    SchedulerWorkSpace = require("./ui.scheduler.work_space.indicator");
 
-var DAY_CLASS = "dx-scheduler-work-space-day";
+var DAY_CLASS = "dx-scheduler-work-space-day",
+    LAST_GROUP_CELL_CLASS = "dx-scheduler-last-group-cell";
 
 var SchedulerWorkSpaceDay = SchedulerWorkSpace.inherit({
     _getElementClass: function() {
@@ -59,8 +60,33 @@ var SchedulerWorkSpaceDay = SchedulerWorkSpace.inherit({
         }
 
         return this._$focusedCell;
-    }
+    },
 
+    _getDateTableCellClass: function(i, j) {
+        var cellClass = this.callBase(i);
+
+        return this._addLastGroupCellClass(cellClass, j + 1);
+    },
+
+    _getAllDayPanelCellClass: function(i, j) {
+        var cellClass = this.callBase(i);
+
+        return this._addLastGroupCellClass(cellClass, j + 1);
+    },
+
+    _getHeaderPanelCellClass: function(i) {
+        var cellClass = this.callBase(i);
+
+        return this._addLastGroupCellClass(cellClass, i + 1);
+    },
+
+    _addLastGroupCellClass: function(cellClass, index) {
+        if(this._isWorkSpaceWithCount() && (index % this.option("intervalCount")) === 0) {
+            return cellClass + " " + LAST_GROUP_CELL_CLASS;
+        }
+
+        return cellClass;
+    }
 });
 
 registerComponent("dxSchedulerWorkSpaceDay", SchedulerWorkSpaceDay);

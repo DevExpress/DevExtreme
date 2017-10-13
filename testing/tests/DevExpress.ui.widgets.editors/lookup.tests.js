@@ -14,7 +14,9 @@ var $ = require("jquery"),
     CustomStore = require("data/custom_store"),
     Query = require("data/query"),
     fx = require("animation/fx"),
-    dataUtils = require("core/element_data");
+    dataUtils = require("core/element_data"),
+    isRenderer = require("core/utils/type").isRenderer,
+    config = require("core/config");
 
 require("common.css!");
 require("generic_light.css!");
@@ -2026,7 +2028,9 @@ QUnit.test("Placeholder should be rendered if fieldTemplate defined with 'input'
 
     var $element = $("#lookupWithFieldTemplate").dxLookup({
         fieldTemplate: function(data, element) {
-            element.append($("<div>").dxTextBox({}));
+            assert.equal(isRenderer(element), config().useJQueryRenderer, "element is correct");
+
+            $(element).append($("<div>").dxTextBox({}));
         },
         placeholder: placeholderText
     });
@@ -2168,6 +2172,7 @@ QUnit.test("custom titleTemplate option", function(assert) {
 QUnit.test("custom titleTemplate option is set correctly on init", function(assert) {
     var $lookup = $("#lookupOptions").dxLookup({
             titleTemplate: function(titleElement) {
+                assert.equal(isRenderer(titleElement), config().useJQueryRenderer, "titleElement is correct");
                 var result = "<div class='test-title-renderer'>";
                 result += "<h1>Title</h1>";
                 result += "</div>";
@@ -2388,7 +2393,10 @@ QUnit.test("group options bouncing", function(assert) {
     $title = $title.eq(0);
     assert.equal($.trim($title.text()), "testGroupTemplate", "title text is correct");
 
-    instance.option("groupTemplate", function() { return "test"; });
+    instance.option("groupTemplate", function(itemData, itemIndex, itemElement) {
+        assert.equal(isRenderer(itemElement), config().useJQueryRenderer, "itemElement is correct");
+        return "test";
+    });
 
     $title = $(toSelector(LIST_GROUP_HEADER_CLASS)).eq(0);
     assert.equal($.trim($title.text()), "test", "title text is correct");

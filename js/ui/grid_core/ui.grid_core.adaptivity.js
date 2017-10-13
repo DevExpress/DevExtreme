@@ -105,8 +105,9 @@ var AdaptiveColumnsController = modules.ViewController.inherit({
             column = item.column,
             editingController = this.getController("editing");
 
-        return function(options, $container) {
+        return function(options, container) {
             var isItemEdited = that._isItemEdited(item),
+                $container = $(container),
                 columnIndex = that._columnsController.getVisibleIndex(column.visibleIndex),
                 templateOptions = extend({}, cellOptions);
 
@@ -355,11 +356,12 @@ var AdaptiveColumnsController = modules.ViewController.inherit({
 
         if(view && view.isVisible() && column) {
             rowsCount = view.getRowsCount();
+            var $rowElements = view._getRowElements();
             for(rowIndex = 0; rowIndex < rowsCount; rowIndex++) {
                 if(rowIndex !== editFormRowIndex || viewName !== ROWS_VIEW) {
                     currentVisibleIndex = viewName === COLUMN_HEADERS_VIEW ? this._columnsController.getVisibleIndex(column.index, rowIndex) : visibleIndex;
                     if(currentVisibleIndex >= 0) {
-                        $cellElement = view.getCellElements(rowIndex).eq(currentVisibleIndex);
+                        $cellElement = $rowElements.eq(rowIndex).children().eq(currentVisibleIndex);
                         this._isCellValid($cellElement) && $cellElement.addClass(cssClassName);
                     }
                 }
@@ -468,8 +470,9 @@ var AdaptiveColumnsController = modules.ViewController.inherit({
         }
     },
 
-    createFormByHiddenColumns: function($container, options) {
+    createFormByHiddenColumns: function(container, options) {
         var that = this,
+            $container = $(container),
             userFormOptions = {
                 items: that._getFormItemsByHiddenColumns(that._hiddenColumns),
                 formID: "dx-" + new Guid()
@@ -665,12 +668,12 @@ module.exports = {
                             eventsEngine.on($adaptiveColumnButton, eventUtils.addNamespace(clickEvent.name, ADAPTIVE_NAMESPACE), that.createAction(function() {
                                 that._adaptiveColumnsController.toggleExpandAdaptiveDetailRow(options.key);
                             }));
-                            $adaptiveColumnButton.appendTo(container);
+                            $adaptiveColumnButton.appendTo($(container));
                         };
                     }
                     if(options.rowType === ADAPTIVE_ROW_TYPE && column.command === "detail") {
                         return function(container, options) {
-                            that._adaptiveColumnsController.createFormByHiddenColumns(container, options);
+                            that._adaptiveColumnsController.createFormByHiddenColumns($(container), options);
                         };
                     }
                     return that.callBase(options);

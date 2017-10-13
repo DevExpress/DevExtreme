@@ -3,6 +3,7 @@
 var $ = require("../../core/renderer"),
     noop = require("../../core/utils/common").noop,
     each = require("../../core/utils/iterator").each,
+    getPublicElement = require("../../core/utils/dom").getPublicElement,
     registerComponent = require("../../core/component_registrator"),
     SchedulerWorkSpace = require("./ui.scheduler.work_space"),
     extend = require("../../core/utils/extend").extend,
@@ -247,7 +248,7 @@ var SchedulerAgenda = SchedulerWorkSpace.inherit({
                             color: data.color,
                             text: cellText.textContent
                         },
-                        container: $(container),
+                        container: getPublicElement($(container)),
                         index: index
                     }));
 
@@ -298,7 +299,7 @@ var SchedulerAgenda = SchedulerWorkSpace.inherit({
 
     _renderDateTable: function() {
         this._renderTableBody({
-            container: this._$dateTable,
+            container: getPublicElement(this._$dateTable),
             rowClass: this._getDateTableRowClass(),
             cellClass: this._getDateTableCellClass()
         });
@@ -307,6 +308,10 @@ var SchedulerAgenda = SchedulerWorkSpace.inherit({
     _attachTablesEvents: noop,
     _attachEvents: noop,
     _cleanCellDataCache: noop,
+
+    needRenderDateTimeIndication: function() {
+        return false;
+    },
 
     _prepareCellTemplateOptions: function(text, date, rowIndex, $cell) {
         var groupsOpt = this.option("groups"),
@@ -324,7 +329,7 @@ var SchedulerAgenda = SchedulerWorkSpace.inherit({
                 date: date,
                 groups: groups
             },
-            container: $cell,
+            container: getPublicElement($cell),
             index: rowIndex
         };
     },
@@ -380,7 +385,7 @@ var SchedulerAgenda = SchedulerWorkSpace.inherit({
             this._setLastRowClass();
         }
 
-        options.container.append($("<tbody>").append(this._$rows));
+        $(options.container).append($("<tbody>").append(this._$rows));
         this._applyCellTemplates(cellTemplates);
     },
 
@@ -394,7 +399,7 @@ var SchedulerAgenda = SchedulerWorkSpace.inherit({
 
     _renderTimePanel: function() {
         this._renderTableBody({
-            container: this._$timePanel,
+            container: getPublicElement(this._$timePanel),
             rowCount: this._getTimePanelRowCount(),
             cellCount: 1,
             rowClass: TIME_PANEL_ROW_CLASS,

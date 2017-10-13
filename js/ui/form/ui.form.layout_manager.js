@@ -5,6 +5,7 @@ var $ = require("../../core/renderer"),
     Guid = require("../../core/guid"),
     registerComponent = require("../../core/component_registrator"),
     typeUtils = require("../../core/utils/type"),
+    domUtils = require("../../core/utils/dom"),
     isWrapped = require("../../core/utils/variable_wrapper").isWrapped,
     isWritableWrapped = require("../../core/utils/variable_wrapper").isWritableWrapped,
     unwrap = require("../../core/utils/variable_wrapper").unwrap,
@@ -757,7 +758,7 @@ var LayoutManager = Widget.inherit({
 
             template.render({
                 model: data,
-                container: $container
+                container: domUtils.getPublicElement($container)
             });
         } else {
             var $editor = $("<div>").appendTo($container);

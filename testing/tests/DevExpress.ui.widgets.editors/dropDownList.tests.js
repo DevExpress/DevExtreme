@@ -11,6 +11,8 @@ var $ = require("jquery"),
     keyboardMock = require("../../helpers/keyboardMock.js"),
     browser = require("core/utils/browser"),
     fx = require("animation/fx"),
+    isRenderer = require("core/utils/type").isRenderer,
+    config = require("core/config"),
     ajaxMock = require("../../helpers/ajaxMock.js");
 
 require("ui/drop_down_editor/ui.drop_down_list");
@@ -1066,6 +1068,18 @@ QUnit.test("groupTemplate option", function(assert) {
     dropDownList.option("groupTemplate", groupTemplate2);
 
     assert.strictEqual(list.option("groupTemplate"), groupTemplate2, "groupTemplate has been passed on option changing");
+});
+
+QUnit.test("itemElement argument of groupTemplate option is correct", function(assert) {
+    $("#dropDownList").dxDropDownList({
+        dataSource: this.dataSource,
+        opened: true,
+        grouped: true,
+        groupTemplate: function(itemData, itemIndex, itemElement) {
+            assert.equal(isRenderer(itemElement), config().useJQueryRenderer, "itemElement is correct");
+            return $("<div>");
+        }
+    }).dxDropDownList("instance");
 });
 
 QUnit.test("selectedItem for grouped dropdownlist", function(assert) {

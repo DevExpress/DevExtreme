@@ -285,6 +285,7 @@ declare module DevExpress {
     }
 
     export class Devices implements EventsMixin<Devices> {
+        /** @docid DevicesMethods_ctor */
         constructor(options: { window: Window });
 
         /** @docid devicesmethods_current#current(deviceName) */
@@ -367,6 +368,7 @@ declare module DevExpress {
 
     /** @docid component */
     export class Component implements EventsMixin<Component> {
+        /** @docid ComponentMethods_ctor */
         constructor(options?: ComponentOptions)
 
         /** @docid componentmethods_beginupdate#beginUpdate() */
@@ -425,6 +427,7 @@ declare module DevExpress {
 
     /** @docid domcomponent */
     export class DOMComponent extends Component {
+        /** @docid DOMComponentMethods_ctor */
         constructor(element: JQuery, options?: DOMComponentOptions);
         constructor(element: HTMLElement, options?: DOMComponentOptions);
 
@@ -527,8 +530,11 @@ declare module DevExpress {
             /** @docid StoreMethods_keyOf */
             keyOf(obj: Object): any;
 
-            /** @docid StoreMethods_load */
-            load(obj?: LoadOptions): JQueryPromise<any[]>;
+            /** @docid StoreMethods_load#load() */
+            load(): JQueryPromise<any[]>;
+            
+            /** @docid StoreMethods_load#load(options) */
+            load(options?: LoadOptions): JQueryPromise<any[]>;
 
             /** @docid StoreMethods_remove */
             remove(key: any): JQueryPromise<any>;
@@ -706,8 +712,11 @@ declare module DevExpress {
 
         /** @docid DataSource */
         export class DataSource implements EventsMixin<DataSource> {
+            /** @docid DataSourceMethods_ctor#ctor(url) */      
             constructor(url: string);
+            /** @docid DataSourceMethods_ctor#ctor(data) */
             constructor(data: Array<any>);
+            /** @docid DataSourceMethods_ctor#ctor(options) */    
             constructor(options: CustomStoreOptions);
             constructor(options: DataSourceOptions);
 
@@ -1084,6 +1093,28 @@ declare module DevExpress {
         export function loadMessages(messages: any): void;
     }
 
+    /** @docid_ignore events */
+    /** @docid_ignore events_on */
+    /** @docid_ignore events_one */
+    /** @docid_ignore events_off */
+    /** @docid_ignore events_trigger */
+    /** @docid_ignore events_triggerHandler */
+    /** @docid_ignore eventsHandler */
+    /** @docid_ignore dxEvent */
+    /** @docid_ignore dxEventFields_isPropagationStopped */
+    /** @docid_ignore dxEventFields_stopPropagation */
+    /** @docid_ignore dxEventFields_isImmediatePropagationStopped */
+    /** @docid_ignore dxEventFields_stopImmediatePropagation */
+    /** @docid_ignore dxEventFields_isDefaultPrevented */
+    /** @docid_ignore dxEventFields_preventDefault */
+    /** @docid_ignore dxEventFields_target */
+    /** @docid_ignore dxEventFields_currentTarget */
+    /** @docid_ignore dxEventFields_delegateTarget */
+    /** @docid_ignore dxEventFields_data */
+    /** @docid_ignore event */
+
+    /** @docid_ignore Element */
+
     /** @docid ui */
     export module ui {
         /** @docid_ignore dxTemplate */
@@ -1335,10 +1366,10 @@ declare module DevExpress {
         };
 
         /** @docid ui_notify#notify(message,type,displayTime) */
-        export function notify(message: any, type: string, displayTime: number): void;
+        export function notify(message: string, type?: string, displayTime?: number): void;
 
-        /** @docid ui_notify#notify(options) */
-        export function notify(options: Object): void;
+        /** @docid ui_notify#notify(options,type,displayTime) */
+        export function notify(options: Object, type?: string, displayTime?: number): void;
 
         /** @docid ui_themes */
         export var themes: {

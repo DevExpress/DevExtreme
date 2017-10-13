@@ -4,6 +4,7 @@ var $ = require("../core/renderer"),
     eventsEngine = require("../events/core/events_engine"),
     support = require("../core/utils/support"),
     commonUtils = require("../core/utils/common"),
+    domUtils = require("../core/utils/dom"),
     typeUtils = require("../core/utils/type"),
     each = require("../core/utils/iterator").each,
     extend = require("../core/utils/extend").extend,
@@ -98,7 +99,7 @@ var Lookup = DropDownList.inherit({
             * @publicName titleTemplate
             * @type template
             * @default "title"
-            * @type_function_param1 titleElement:jQuery
+            * @type_function_param1 titleElement:Element
             * @type_function_return string|Node|jQuery
             */
             titleTemplate: "title",
@@ -107,7 +108,7 @@ var Lookup = DropDownList.inherit({
             * @name dxLookupOptions_onTitleRendered
             * @publicName onTitleRendered
             * @extends Action
-            * @type_function_param1_field1 titleElement:jQuery
+            * @type_function_param1_field1 titleElement:Element
             * @action
             */
             onTitleRendered: null,
@@ -365,7 +366,7 @@ var Lookup = DropDownList.inherit({
             * @default "group"
             * @type_function_param1 itemData:object
             * @type_function_param2 itemIndex:number
-            * @type_function_param3 itemElement:jQuery
+            * @type_function_param3 itemElement:Element
             * @type_function_return string|Node|jQuery
             */
             groupTemplate: "group",
@@ -413,7 +414,7 @@ var Lookup = DropDownList.inherit({
             * @type template
             * @default null
             * @type_function_param1 selectedItem:object
-            * @type_function_param2 fieldElement:object
+            * @type_function_param2 fieldElement:Element
             * @type_function_return string|Node|jQuery
             */
 
@@ -767,7 +768,7 @@ var Lookup = DropDownList.inherit({
         var data = this._fieldRenderData();
         template.render({
             model: data,
-            container: this._$field
+            container: domUtils.getPublicElement(this._$field)
         });
     },
 

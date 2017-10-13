@@ -331,7 +331,7 @@ var Overlay = Widget.inherit({
             * @publicName contentTemplate
             * @type template
             * @default "content"
-            * @type_function_param1 contentElement:jQuery
+            * @type_function_param1 contentElement:Element
             * @type_function_return string|jQuery
             */
             contentTemplate: "content",
@@ -977,7 +977,7 @@ var Overlay = Widget.inherit({
 
         var contentTemplate = this._getTemplate(this.option("contentTemplate"));
         contentTemplate && contentTemplate.render({
-            container: this.$content(),
+            container: getPublicElement(this.$content()),
             noModel: true
         });
 
@@ -1478,7 +1478,7 @@ var Overlay = Widget.inherit({
     /**
     * @name dxOverlaymethods_content
     * @publicName content()
-    * @return jQuery
+    * @return Element
     */
     content: function() {
         return getPublicElement(this._$content);
@@ -1502,6 +1502,8 @@ var Overlay = Widget.inherit({
 * @name ui_dxOverlayMethods_baseZIndex
 * @publicName baseZIndex(zIndex)
 * @param1 zIndex:number
+* @namespace DevExpress.ui.dxOverlay
+* @static
 */
 Overlay.baseZIndex = function(zIndex) {
     FIRST_Z_INDEX = zIndex;

@@ -8,7 +8,8 @@ var $ = require("../../core/renderer"),
     eventUtils = require("../../events/utils"),
     eventsEngine = require("../../events/core/events_engine"),
     Button = require("../button"),
-    DropDownMenu = require("../drop_down_menu");
+    DropDownMenu = require("../drop_down_menu"),
+    messageLocalization = require("../../localization/message");
 
 var DROPDOWN_APPOINTMENTS_CLASS = "dx-scheduler-dropdown-appointments",
     DROPDOWN_APPOINTMENTS_CONTENT_CLASS = "dx-scheduler-dropdown-appointments-content",
@@ -85,7 +86,7 @@ var dropDownAppointments = Class.inherit({
 
     _createButtonTemplate: function(appointmentCount) {
         return $("<div>").append(
-            [$("<span>").text(appointmentCount), $("<span>").text("...")]
+            [$("<span>").text(messageLocalization.getFormatter("dxScheduler-moreAppointments")(appointmentCount))]
         ).addClass(DROPDOWN_APPOINTMENTS_CONTENT_CLASS);
     },
 
@@ -109,7 +110,8 @@ var dropDownAppointments = Class.inherit({
             this.instance._createComponent($menu, DropDownMenu, {
                 buttonIcon: null,
                 usePopover: true,
-                popupHeight: 200,
+                popupHeight: "auto",
+                popupMaxHeight: 200,
                 items: items.data,
                 buttonTemplate: this._createButtonTemplate(items.data.length),
                 buttonWidth: config.buttonWidth,

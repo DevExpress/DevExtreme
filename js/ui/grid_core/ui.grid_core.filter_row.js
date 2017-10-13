@@ -290,7 +290,7 @@ var ColumnHeadersViewFilterRowExtender = (function() {
                         }
                     });
 
-                    return contentElement.addClass(that.getWidgetContainerClass());
+                    return $(contentElement).addClass(that.getWidgetContainerClass());
                 },
                 onShown: function(e) {
                     var $editor = e.component.$content().find("." + EDITOR_CONTAINER_CLASS).first();

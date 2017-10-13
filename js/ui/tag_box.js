@@ -3,10 +3,12 @@
 var $ = require("../core/renderer"),
     eventsEngine = require("../events/core/events_engine"),
     dataUtils = require("../core/element_data"),
+    getPublicElement = require("../core/utils/dom").getPublicElement,
     devices = require("../core/devices"),
     noop = require("../core/utils/common").noop,
     isDefined = require("../core/utils/type").isDefined,
     arrayUtils = require("../core/utils/array"),
+    typeUtils = require("../core/utils/type"),
     iteratorUtils = require("../core/utils/iterator"),
     extend = require("../core/utils/extend").extend,
     messageLocalization = require("../localization/message"),
@@ -281,7 +283,7 @@ var TagBox = SelectBox.inherit({
             * @type template
             * @default "tag"
             * @type_function_param1 itemData:object
-            * @type_function_param2 itemElement:jQuery
+            * @type_function_param2 itemElement:Element
             * @type_function_return string|Node|jQuery
             */
             tagTemplate: "tag",
@@ -342,7 +344,7 @@ var TagBox = SelectBox.inherit({
              * @name dxTagBoxOptions_onMultiTagPreparing
              * @publicName onMultiTagPreparing
              * @extends Action
-             * @type_function_param1_field4 multiTagElement:jQuery
+             * @type_function_param1_field4 multiTagElement:Element
              * @type_function_param1_field5 selectedItems:Array<string,number,Object>
              * @type_function_param1_field6 text:string
              * @type_function_param1_field7 cancel:boolean
@@ -770,7 +772,7 @@ var TagBox = SelectBox.inherit({
                 .addClass(TAGBOX_MULTI_TAG_CLASS);
 
         var args = {
-            multiTagElement: $tag,
+            multiTagElement: getPublicElement($tag),
             selectedItems: this.option("selectedItems")
         };
 
@@ -785,7 +787,7 @@ var TagBox = SelectBox.inherit({
 
         this._tagTemplate.render({
             model: args.text,
-            container: $tag
+            container: getPublicElement($tag)
         });
 
         return $tag;
@@ -880,7 +882,7 @@ var TagBox = SelectBox.inherit({
 
         this._tagTemplate.render({
             model: item,
-            container: $tag
+            container: getPublicElement($tag)
         });
     },
 
@@ -1103,6 +1105,8 @@ var TagBox = SelectBox.inherit({
             return;
         }
 
+        delete this._userFilter;
+
         dataSource.filter(null);
         dataSource.reload();
     },
@@ -1118,11 +1122,37 @@ var TagBox = SelectBox.inherit({
             return;
         }
 
-        dataSource.filter(this._dataSourceFilter.bind(this));
+        var valueGetterExpr = this._valueGetterExpr();
+
+        if(typeUtils.isString(valueGetterExpr) && valueGetterExpr !== "this") {
+            var filter = this._dataSourceFilterExpr();
+
+            if(!this._userFilter) {
+                this._userFilter = dataSource.filter();
+            }
+
+            this._userFilter && filter.push(this._userFilter);
+
+            filter.length && dataSource.filter(filter);
+
+        } else {
+            dataSource.filter(this._dataSourceFilterFunction.bind(this));
+        }
+
         dataSource.reload();
     },
 
-    _dataSourceFilter: function(itemData) {
+    _dataSourceFilterExpr: function() {
+        var filter = [];
+
+        iteratorUtils.each(this._getValue(), (function(index, value) {
+            filter.push(["!", [this._valueGetterExpr(), value]]);
+        }).bind(this));
+
+        return filter;
+    },
+
+    _dataSourceFilterFunction: function(itemData) {
         var itemValue = this._valueGetter(itemData),
             result = true;
 
@@ -1134,6 +1164,7 @@ var TagBox = SelectBox.inherit({
         }).bind(this));
 
         return result;
+
     },
 
     _applyButtonHandler: function() {
