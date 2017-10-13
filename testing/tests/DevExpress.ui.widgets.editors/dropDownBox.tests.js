@@ -250,6 +250,31 @@ QUnit.test("text option should follow the displayValue option", function(assert)
     assert.equal(instance.option("text"), "test", "text option has been changed");
 });
 
+QUnit.test("displayValue option should be correct after value option changed, acceptCustomValue = true", function(assert) {
+    var instance = new DropDownBox(this.$element,
+        {
+            acceptCustomValue: true,
+            dataSource: ["1", "2", "3"],
+            value: "1"
+        }
+    );
+    instance.option("value", "12");
+
+    assert.equal(instance.option("displayValue"), "12", "displayValue option has been changed");
+});
+
+QUnit.test("displayValue option should be correct after value option changed, acceptCustomValue = true, initial value = null", function(assert) {
+    var instance = new DropDownBox(this.$element,
+        {
+            acceptCustomValue: true,
+            dataSource: ["1", "2", "3"],
+            value: null
+        }
+    );
+    instance.option("value", "12");
+
+    assert.equal(instance.option("displayValue"), "12", "displayValue option has been changed");
+});
 
 QUnit.module("popup options", moduleConfig);
 
