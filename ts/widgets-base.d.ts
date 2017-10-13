@@ -425,9 +425,9 @@ declare module DevExpress.ui {
 
         /** @docid dxTextBoxOptions_mode */
         mode?: string;
-        
+
         /** @docid dxTextBoxOptions_value */
-        value?: string;        
+        value?: string;
     }
 
     /** @docid dxTextbox */
@@ -1051,6 +1051,9 @@ declare module DevExpress.ui {
 
         /** @docid dxNumberBoxOptions_mode */
         mode?: string;
+
+        /** @docid dxNumberBoxOptions_displayFormat */
+        mode?: boolean;
 
         /** @docid dxNumberBoxOptions_invalidValueMessage */
         invalidValueMessage?: string;

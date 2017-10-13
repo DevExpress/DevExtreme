@@ -18,13 +18,7 @@ var NumberBoxMask = NumberBoxBase.inherit({
 
     _getDefaultOptions: function() {
         return extend(this.callBase(), {
-            /**
-             * @name dxNumberBoxOptions_useMaskBehavior
-             * @publicName useMaskBehavior
-             * @type boolean
-             * @default true
-             * @hidden
-             */
+
             useMaskBehavior: true,
 
             /**
