@@ -195,7 +195,7 @@ QUnit.test("pointerdown should not affect to parent multiview (T306118)", functi
 
     $($outerItemElements.eq(0)).trigger($.Event("dxpointerdown", { target: $innerSecondItem }));
 
-    assert.equal(outerMultiView._getFocusedElementOption().get(0), $outerItemElements.get(0), "focusedElement was not changed if event's target is not part of the widget");
+    assert.equal($(outerMultiView.option("focusedElement")).get(0), $outerItemElements.get(0), "focusedElement was not changed if event's target is not part of the widget");
 });
 
 

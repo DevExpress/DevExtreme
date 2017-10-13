@@ -559,10 +559,10 @@ QUnit.test("tabs focusedElement dependence on tabPanels focusedElement", functio
     $(toSelector(MULTIVIEW_ITEM_CLASS)).eq(1).trigger("dxpointerdown");
     this.clock.tick();
 
-    var multiViewFocusedIndex = this.instance._getFocusedElementOption().index();
+    var multiViewFocusedIndex = $(this.instance.option("focusedElement")).index();
 
     assert.equal(multiViewFocusedIndex, 1, "second multiView element has been focused");
-    assert.equal(multiViewFocusedIndex, this.tabs._getFocusedElementOption().index(), "tabs focused element is equal multiView focused element");
+    assert.equal(multiViewFocusedIndex, $(this.tabs.option("focusedElement")).index(), "tabs focused element is equal multiView focused element");
 });
 
 QUnit.test("tabPanels focusedElement dependence on tabs focusedElement", function(assert) {
@@ -572,10 +572,10 @@ QUnit.test("tabPanels focusedElement dependence on tabs focusedElement", functio
     $(toSelector(TABS_ITEM_CLASS)).eq(1).trigger("dxpointerdown");
     this.clock.tick();
 
-    var tabsFocusedIndex = this.instance._getFocusedElementOption().index();
+    var tabsFocusedIndex = $(this.instance.option("focusedElement")).index();
 
     assert.equal(tabsFocusedIndex, 1, "second tabs element has been focused");
-    assert.equal(tabsFocusedIndex, this.instance._getFocusedElementOption().index(), "multiView focused element is equal tabs focused element");
+    assert.equal(tabsFocusedIndex, $(this.instance.option("focusedElement")).index(), "multiView focused element is equal tabs focused element");
 });
 
 QUnit.test("tabs focusedElement lose focused class", function(assert) {

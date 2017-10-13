@@ -23,8 +23,10 @@ var AUTOCOMPLETE_CLASS = "dx-autocomplete",
 var Autocomplete = DropDownList.inherit({
 
     _supportedKeys: function() {
-        var item = this._list ? this._list._getFocusedElementOption() : null,
+        var item = this._list ? $(this._list.option("focusedElement")) : null,
             parent = this.callBase();
+
+        item = item && $(item);
 
         return extend({}, parent, {
             upArrow: function(e) {

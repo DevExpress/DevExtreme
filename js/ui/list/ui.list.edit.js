@@ -19,7 +19,7 @@ var ListEdit = ListBase.inherit({
         var deleteFocusedItem = function(e) {
             if(that.option("allowItemDeleting")) {
                 e.preventDefault();
-                that.deleteItem(that._getFocusedElementOption());
+                that.deleteItem($(that.option("focusedElement")));
             }
         };
 
@@ -27,11 +27,11 @@ var ListEdit = ListBase.inherit({
             if(e.shiftKey && that.option("allowItemReordering")) {
                 e.preventDefault();
 
-                var focusedItemIndex = that._editStrategy.getNormalizedIndex(that._getFocusedElementOption()),
+                var focusedItemIndex = that._editStrategy.getNormalizedIndex($(that.option("focusedElement"))),
                     $prevItem = that._editStrategy.getItemElement(focusedItemIndex - 1);
 
-                that.reorderItem(that._getFocusedElementOption(), $prevItem);
-                that.scrollToItem(that._getFocusedElementOption());
+                that.reorderItem($(that.option("focusedElement")), $prevItem);
+                that.scrollToItem($(that.option("focusedElement")));
             } else {
                 parent.upArrow(e);
             }
@@ -41,11 +41,11 @@ var ListEdit = ListBase.inherit({
             if(e.shiftKey && that.option("allowItemReordering")) {
                 e.preventDefault();
 
-                var focusedItemIndex = that._editStrategy.getNormalizedIndex(that._getFocusedElementOption()),
+                var focusedItemIndex = that._editStrategy.getNormalizedIndex($(that.option("focusedElement"))),
                     $nextItem = that._editStrategy.getItemElement(focusedItemIndex + 1);
 
-                that.reorderItem(that._getFocusedElementOption(), $nextItem);
-                that.scrollToItem(that._getFocusedElementOption());
+                that.reorderItem($(that.option("focusedElement")), $nextItem);
+                that.scrollToItem($(that.option("focusedElement")));
             } else {
                 parent.downArrow(e);
             }

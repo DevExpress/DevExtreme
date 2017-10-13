@@ -1062,7 +1062,7 @@ var Gallery = CollectionWidget.inherit({
 
         this.callBase.apply(this, arguments);
 
-        var index = this.itemElements().index(this._getFocusedElementOption());
+        var index = this.itemElements().index($(this.option("focusedElement")));
         this.goToItem(index, this.option("animationEnabled"));
     },
 

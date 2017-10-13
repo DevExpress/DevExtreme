@@ -42,7 +42,7 @@ var DropDownMenu = Widget.inherit({
     _supportedKeys: function() {
         var extension = {};
 
-        if(!this.option("opened") || !this._list._getFocusedElementOption()) {
+        if(!this.option("opened") || !this._list.option("focusedElement")) {
             extension = this._button._supportedKeys();
         }
 

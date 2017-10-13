@@ -1095,10 +1095,10 @@ QUnit.testInActiveWindow("Focused element should be changed on focusin", functio
     });
     var $appointments = $(".dx-scheduler-appointment");
     $appointments.get(0).focus();
-    assert.deepEqual($appointments.get(0), this.instance._getFocusedElementOption().get(0), "right element is focused");
+    assert.deepEqual($appointments.get(0), $(this.instance.option("focusedElement")).get(0), "right element is focused");
 
     $appointments.get(1).focus();
-    assert.deepEqual($appointments.get(1), this.instance._getFocusedElementOption().get(0), "right element is focused");
+    assert.deepEqual($appointments.get(1), $(this.instance.option("focusedElement")).get(0), "right element is focused");
 });
 
 QUnit.test("Appointment popup should be opened after enter key press", function(assert) {
@@ -1268,7 +1268,7 @@ QUnit.test("Focus method should call focus on appointment", function(assert) {
 
     $($appointment).trigger("focusin");
 
-    var focusedElement = this.instance._getFocusedElementOption().get(0);
+    var focusedElement = $(this.instance.option("focusedElement")).get(0);
     var focusSpy = sinon.spy(eventsEngine, "trigger").withArgs(sinon.match(function($element) {
         return ($element.get && $element.get(0) || $element) === focusedElement;
     }), "focus");

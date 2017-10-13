@@ -51,7 +51,7 @@ var ListBase = CollectionWidget.inherit({
 
         var moveFocusPerPage = function(direction) {
             var $item = getEdgeVisibleItem(direction),
-                isFocusedItem = $item.is(that._getFocusedElementOption());
+                isFocusedItem = $item.is(that.option("focusedElement"));
 
             if(isFocusedItem) {
                 scrollListTo($item, direction);
@@ -66,10 +66,10 @@ var ListBase = CollectionWidget.inherit({
             var scrollTop = that.scrollTop(),
                 containerHeight = that.$element().height();
 
-            var $item = that._getFocusedElementOption(),
+            var $item = $(that.option("focusedElement")),
                 isItemVisible = true;
 
-            if(!$item) {
+            if(!$item.length) {
                 return $();
             }
 
@@ -966,7 +966,7 @@ var ListBase = CollectionWidget.inherit({
     _moveFocus: function() {
         this.callBase.apply(this, arguments);
 
-        this.scrollToItem(this._getFocusedElementOption());
+        this.scrollToItem($(this.option("focusedElement")));
     },
 
     _refresh: function() {

@@ -46,9 +46,9 @@ var TreeViewBase = HierarchicalCollectionWidget.inherit({
 
     _supportedKeys: function(e) {
         var click = function(e) {
-            var $itemElement = this._getFocusedElementOption();
+            var $itemElement = $(this.option("focusedElement"));
 
-            if(!$itemElement) {
+            if(!$itemElement.length) {
                 return;
             }
 
@@ -59,7 +59,7 @@ var TreeViewBase = HierarchicalCollectionWidget.inherit({
 
         var select = function(e) {
             e.preventDefault();
-            this._changeCheckBoxState(this._getFocusedElementOption());
+            this._changeCheckBoxState($(this.option("focusedElement")));
         };
 
         var toggleExpandedNestedItems = function(state, e) {
@@ -69,9 +69,9 @@ var TreeViewBase = HierarchicalCollectionWidget.inherit({
 
             e.preventDefault();
 
-            var $rootElement = this._getFocusedElementOption();
+            var $rootElement = $(this.option("focusedElement"));
 
-            if(!$rootElement) {
+            if(!$rootElement.length) {
                 return;
             }
 
@@ -1479,11 +1479,11 @@ var TreeViewBase = HierarchicalCollectionWidget.inherit({
 
         that._updateFocusState(e, true);
 
-        if(that._getFocusedElementOption()) {
+        if(that.option("focusedElement")) {
             clearTimeout(that._setFocusedItemTimeout);
 
             that._setFocusedItemTimeout = setTimeout(function() {
-                that._setFocusedItem(that._getFocusedElementOption());
+                that._setFocusedItem($(that.option("focusedElement")));
             });
 
             return;
@@ -1598,8 +1598,8 @@ var TreeViewBase = HierarchicalCollectionWidget.inherit({
     },
 
     _expandFocusedContainer: function() {
-        var $focusedNode = this._getFocusedElementOption();
-        if(!$focusedNode || $focusedNode.hasClass(IS_LEAF)) {
+        var $focusedNode = $(this.option("focusedElement"));
+        if(!$focusedNode.length || $focusedNode.hasClass(IS_LEAF)) {
             return;
         }
 
@@ -1623,9 +1623,9 @@ var TreeViewBase = HierarchicalCollectionWidget.inherit({
     },
 
     _collapseFocusedContainer: function() {
-        var $focusedNode = this._getFocusedElementOption();
+        var $focusedNode = $(this.option("focusedElement"));
 
-        if(!$focusedNode) {
+        if(!$focusedNode.length) {
             return;
         }
 

@@ -1022,7 +1022,7 @@ var SchedulerAppointments = CollectionWidget.inherit({
         var $appointment = this._$currentAppointment;
         if($appointment) {
             this.option("focusedElement", getPublicElement($appointment));
-            eventsEngine.trigger(this._getFocusedElementOption(), "focus");
+            eventsEngine.trigger($(this.option("focusedElement")), "focus");
         }
     },
 

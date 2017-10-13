@@ -1347,10 +1347,10 @@ QUnit.test("focused item should be changed asynchronous (T400886)", function(ass
         $item = $items.first();
 
     $item.trigger("dxpointerdown");
-    assert.equal(instance._getFocusedElementOption(), null, "focus isn't set");
+    assert.equal(instance.option("focusedElement"), null, "focus isn't set");
 
     this.clock.tick();
-    assert.equal(instance._getFocusedElementOption().get(0), $item.get(0), "focus set after timeout");
+    assert.equal($(instance.option("focusedElement")).get(0), $item.get(0), "focus set after timeout");
 });
 
 QUnit.testInActiveWindow("focused item should be changed synchronous with widget focus (T427152)", function(assert) {
@@ -1364,7 +1364,7 @@ QUnit.testInActiveWindow("focused item should be changed synchronous with widget
 
     $item.trigger("dxpointerdown");
     instance.focus();
-    assert.equal(instance._getFocusedElementOption().get(0), $item.get(0), "focus isn't set");
+    assert.equal($(instance.option("focusedElement")).get(0), $item.get(0), "focus isn't set");
 });
 
 QUnit.test("focused item should not be changed if pointerdown prevented (T400886)", function(assert) {
@@ -1380,7 +1380,7 @@ QUnit.test("focused item should not be changed if pointerdown prevented (T400886
     $item.trigger(event);
     event.preventDefault();
     this.clock.tick();
-    assert.equal(instance._getFocusedElementOption(), null, "focus isn't set");
+    assert.equal(instance.option("focusedElement"), null, "focus isn't set");
 });
 
 QUnit.test("selectOnFocus test for widget with disabled items", function(assert) {
@@ -1496,7 +1496,7 @@ QUnit.test("focusedElement is set for item when nested element selected by dxpoi
 
     $item.trigger($.Event("dxpointerdown", { target: $item.find("span").get(0) }));
     this.clock.tick();
-    assert.equal(instance._getFocusedElementOption().get(0), $item.get(0), "focus set to first item");
+    assert.equal($(instance.option("focusedElement")).get(0), $item.get(0), "focus set to first item");
 });
 
 QUnit.test("dx-state-focused is not set for item when it is not closest focused target by focusin", function(assert) {

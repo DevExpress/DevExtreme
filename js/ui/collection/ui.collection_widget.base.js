@@ -64,9 +64,9 @@ var CollectionWidget = Widget.inherit({
 
     _supportedKeys: function() {
         var enter = function(e) {
-                var $itemElement = this._getFocusedElementOption();
+                var $itemElement = $(this.option("focusedElement"));
 
-                if(!$itemElement) {
+                if(!$itemElement.length) {
                     return;
                 }
 
@@ -341,11 +341,6 @@ var CollectionWidget = Widget.inherit({
         return this.$element();
     },
 
-    _getFocusedElementOption: function() {
-        var element = this.option("focusedElement");
-        return element && $(element);
-    },
-
     _focusInHandler: function(e) {
         this.callBase.apply(this, arguments);
 
@@ -353,8 +348,8 @@ var CollectionWidget = Widget.inherit({
             return;
         }
 
-        var $focusedElement = this._getFocusedElementOption();
-        if($focusedElement && $focusedElement.length) {
+        var $focusedElement = $(this.option("focusedElement"));
+        if($focusedElement.length) {
             this._setFocusedItem($focusedElement);
         } else {
             var $activeItem = this._getActiveItem();
@@ -367,16 +362,16 @@ var CollectionWidget = Widget.inherit({
     _focusOutHandler: function() {
         this.callBase.apply(this, arguments);
 
-        var $target = this._getFocusedElementOption();
-        if($target) {
+        var $target = $(this.option("focusedElement"));
+        if($target.length) {
             this._toggleFocusClass(false, $target);
         }
     },
 
     _getActiveItem: function(last) {
-        var $focusedElement = this._getFocusedElementOption();
+        var $focusedElement = $(this.option("focusedElement"));
 
-        if($focusedElement && $focusedElement.length) {
+        if($focusedElement.length) {
             return $focusedElement;
         }
 

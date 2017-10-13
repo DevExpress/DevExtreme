@@ -1,6 +1,7 @@
 "use strict";
 
-var devices = require("../core/devices"),
+var $ = require("../core/renderer"),
+    devices = require("../core/devices"),
     registerComponent = require("../core/component_registrator"),
     inflector = require("../core/utils/inflector"),
     iteratorUtils = require("../core/utils/iterator"),
@@ -450,7 +451,7 @@ var TileView = CollectionWidget.inherit({
 
         var horizontalDirection = this.option("direction") === "horizontal",
             cells = this._cells,
-            index = this._getFocusedElementOption().index(),
+            index = $(this.option("focusedElement")).index(),
             targetCol = this._itemsPositions[index].left,
             targetRow = this._itemsPositions[index].top;
 

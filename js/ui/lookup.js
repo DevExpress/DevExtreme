@@ -1008,9 +1008,9 @@ var Lookup = DropDownList.inherit({
     },
 
     _selectListItemHandler: function(e) {
-        var $itemElement = this._list._getFocusedElementOption();
+        var $itemElement = $(this._list.option("focusedElement"));
 
-        if(!$itemElement) {
+        if(!$itemElement.length) {
             return;
         }
 

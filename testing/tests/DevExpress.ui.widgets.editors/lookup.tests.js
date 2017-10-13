@@ -2560,7 +2560,7 @@ QUnit.testInActiveWindow("T338144 - focused element should not be reset after po
     $($listItems.eq(1)).trigger("dxclick");
     instance.open();
 
-    assert.equal(list._getFocusedElementOption().text(), $listItems.eq(1).text(), "clicked item is focused after popup is reopened");
+    assert.equal($(list.option("focusedElement")).text(), $listItems.eq(1).text(), "clicked item is focused after popup is reopened");
 });
 
 QUnit.test("field method returning overlay content", function(assert) {

@@ -236,11 +236,11 @@ var ContextMenu = MenuBase.inherit((function() {
 
         _supportedKeys: function() {
             var selectItem = function() {
-                var $item = this._getFocusedElementOption();
+                var $item = $(this.option("focusedElement"));
 
                 this.hide();
 
-                if(!$item || !this._isSelectionEnabled()) {
+                if(!$item.length || !this._isSelectionEnabled()) {
                     return;
                 }
 
@@ -271,8 +271,8 @@ var ContextMenu = MenuBase.inherit((function() {
                 $oldTarget = this._getActiveItem(true),
                 $newTarget,
                 $hoveredItem = this.itemsContainer().find(".dx-state-hover"),
-                $focusedItem = this._getFocusedElementOption(),
-                $activeItemHighlighted = !!($focusedItem || $hoveredItem.length);
+                $focusedItem = $(this.option("focusedElement")),
+                $activeItemHighlighted = !!($focusedItem.length || $hoveredItem.length);
 
             switch(location) {
                 case FOCUS_UP:

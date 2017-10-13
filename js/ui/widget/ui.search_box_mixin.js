@@ -160,7 +160,7 @@ module.exports = {
     },
 
     focus: function() {
-        if(!this._getFocusedElementOption() && this.option("searchEnabled")) {
+        if(!this.option("focusedElement") && this.option("searchEnabled")) {
             this._searchEditor && this._searchEditor.focus();
             return;
         }
