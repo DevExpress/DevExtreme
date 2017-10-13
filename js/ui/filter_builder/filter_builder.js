@@ -503,7 +503,7 @@ var FilterBuilder = Widget.inherit({
                 return function(e) {
                     handler(e);
                     removeMenu();
-                    if(e.jQueryEvent.type === "keydown") {
+                    if(e.event.type === "keydown") {
                         eventsEngine.trigger(options.menu.target, "focus");
                     }
                 };
