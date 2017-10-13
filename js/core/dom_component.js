@@ -410,6 +410,14 @@ var DOMComponent = Component.inherit({
 
 });
 
+/**
+* @name domcomponentmethods_getInstance
+* @static
+* @section uiWidgets
+* @publicName getInstance(element)
+* @param1 element:Element
+* @return object
+*/
 DOMComponent.getInstance = function($element) {
     return publicComponentUtils.getInstanceByElement($($element), this);
 };
