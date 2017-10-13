@@ -34,7 +34,7 @@ var EditorFactoryMixin = (function() {
     };
 
     var checkEnterBug = function() {
-        return (browser.msie && parseInt(browser.version) <= 11) || devices.real().ios;//T344096, T249363, T314719 rid of after fix https://connect.microsoft.com/IE/feedback/details/1552272/
+        return (browser.msie && parseInt(browser.version) <= 11) || devices.real().ios;// Workaround for T344096, T249363, T314719, caused by https://connect.microsoft.com/IE/feedback/details/1552272/
     };
 
     var getTextEditorConfig = function(options) {
