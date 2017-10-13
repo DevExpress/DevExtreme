@@ -9,7 +9,8 @@ var $ = require("../../core/renderer"),
     inArray = require("../../core/utils/array").inArray,
     extend = require("../../core/utils/extend").extend,
     each = require("../../core/utils/iterator").each,
-    messageLocalization = require("../../localization/message"),
+    localization = require("../../localization"),
+    messageLocalization = localization.message,
     TextEditorBase = require("./ui.text_editor.base"),
     MaskRules = require("./ui.text_editor.mask.rule"),
     eventUtils = require("../../events/utils");
@@ -343,7 +344,6 @@ var TextEditorMask = TextEditorBase.inherit({
         }
 
         this._saveValueChangeEvent(e);
-
         this.option("value", this._convertToValue().replace(/\s+$/, ""));
     },
 
