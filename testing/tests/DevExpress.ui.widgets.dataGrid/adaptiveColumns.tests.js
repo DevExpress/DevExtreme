@@ -3634,6 +3634,49 @@ QUnit.module("Validation", {
         //assert
         assert.ok(!$itemsContent.first().hasClass("dx-datagrid-invalid"), "invalid style should not be applied");
     });
+
+    QUnit.test("The onRowValidating event is not called twice if isValid is set to 'false'", function(assert) {
+        //arrange
+        $(".dx-datagrid").width(800);
+
+        var rowValidatingCounter = 0;
+
+        this.options = {
+            columns: [
+                { dataField: 'firstName', index: 0, allowEditing: true },
+                { dataField: 'lastName', index: 1, allowEditing: true, validationRules: [{ type: "required" }] }
+            ],
+            editing: {
+                mode: 'batch',
+                allowUpdating: true
+            },
+            dataSource: {
+                asyncLoadEnabled: false,
+                store: [{
+                    firstName: 'Test First Name',
+                    lastName: "Test Last Name"
+                }]
+            },
+            onRowValidating: function(e) {
+                rowValidatingCounter++;
+                e.isValid = false;
+            }
+        };
+        setupDataGrid(this);
+        this.rowsView.render($("#container"));
+
+        //act
+        this.editingController.editCell(0, 0);
+
+        $("input")
+            .val("new value")
+            .change();
+
+        this.editingController.saveEditData();
+
+        //assert
+        assert.equal(rowValidatingCounter, 1, "onRowValidating event should thrown once");
+    });
 });
 
 QUnit.module("Keyboard navigation", {
