@@ -26,17 +26,17 @@ var ListBottomStrategy = ListStrategy.inherit({
     },
 
     _swipeStartHandler: function(e) {
-        e.jQueryEvent.maxTopOffset = this._menuShown ? 0 : 1;
-        e.jQueryEvent.maxBottomOffset = this._menuShown ? 1 : 0;
+        e.event.maxTopOffset = this._menuShown ? 0 : 1;
+        e.event.maxBottomOffset = this._menuShown ? 1 : 0;
     },
 
     _swipeUpdateHandler: function(e) {
-        var offset = this._menuShown ? e.jQueryEvent.offset : 1 + e.jQueryEvent.offset;
+        var offset = this._menuShown ? e.event.offset : 1 + e.event.offset;
         this._renderMenuPosition(offset, false);
     },
 
     _swipeEndHandler: function(e) {
-        var targetOffset = e.jQueryEvent.targetOffset;
+        var targetOffset = e.event.targetOffset;
 
         targetOffset -= this._menuShown - 1;
         this._toggleMenu(targetOffset === 0, true);

@@ -16,7 +16,7 @@ var $ = require("jquery"),
         assert.ok(e.itemData);
         assert.ok(e.itemElement);
         assert.ok(typeUtils.isDefined(e.itemIndex));
-        assert.ok(e.jQueryEvent);
+        assert.ok(e.event);
         assert.ok(e.node);
     };
 
@@ -109,7 +109,7 @@ QUnit.test("onItemSelectionChanged should use correct set of arguments when item
     assert.ok($(args.element).hasClass("dx-treeview"), "element is correct");
     assert.strictEqual(args.model, undefined, "model is not defined in jquery approach");
     assert.deepEqual(args.node, nodes[0], "node is correct");
-    assert.strictEqual(args.jQueryEvent, undefined, "jquery event is not defined when api used");
+    assert.strictEqual(args.event, undefined, "jquery event is not defined when api used");
 });
 
 QUnit.test("onItemSelectionChanged should use correct set of arguments without checkboxes", function(assert) {
@@ -134,7 +134,7 @@ QUnit.test("onItemSelectionChanged should use correct set of arguments without c
     assert.ok($(args.element).hasClass("dx-treeview"), "element is correct");
     assert.strictEqual(args.model, undefined, "model is not defined in jquery approach");
     assert.deepEqual(args.node, nodes[0], "node is correct");
-    assert.deepEqual(args.jQueryEvent.target, $item.get(0), "jquery event has correct target");
+    assert.deepEqual(args.event.target, $item.get(0), "jquery event has correct target");
 });
 
 QUnit.test("'onSelectionChanged' should be fired when item is selected", function(assert) {

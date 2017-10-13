@@ -393,7 +393,7 @@ var SchedulerAppointments = CollectionWidget.inherit({
     _itemClickHandler: function(e) {
         this.callBase(e, {}, {
             afterExecute: (function(e) {
-                this._processItemClick(e.args[0].jQueryEvent);
+                this._processItemClick(e.args[0].event);
             }).bind(this)
         });
     },
@@ -453,9 +453,9 @@ var SchedulerAppointments = CollectionWidget.inherit({
 
         eventsEngine.off(itemContainer, DBLCLICK_EVENT_NAME, itemSelector);
         eventsEngine.on(itemContainer, DBLCLICK_EVENT_NAME, itemSelector, function(e) {
-            that._itemJQueryEventHandler(e, "onAppointmentDblClick", {}, {
+            that._itemDXEventHandler(e, "onAppointmentDblClick", {}, {
                 afterExecute: function(e) {
-                    that._dblClickHandler(e.args[0].jQueryEvent);
+                    that._dblClickHandler(e.args[0].event);
                 }
             });
         });
@@ -562,7 +562,7 @@ var SchedulerAppointments = CollectionWidget.inherit({
             }).bind(this),
             onResizeEnd: (function(e) {
                 if(this._escPressed) {
-                    e.jQueryEvent.cancel = true;
+                    e.event.cancel = true;
                     return;
                 }
 
@@ -742,7 +742,7 @@ var SchedulerAppointments = CollectionWidget.inherit({
             boundOffset: that._calculateBoundOffset(),
             immediate: false,
             onDragStart: function(args) {
-                var e = args.jQueryEvent;
+                var e = args.event;
 
                 that._skipDraggableRestriction(e);
 
@@ -761,7 +761,7 @@ var SchedulerAppointments = CollectionWidget.inherit({
                 var $container = that._getAppointmentContainer(allDay);
                 $container.append($appointment);
                 if(this._escPressed) {
-                    args.jQueryEvent.cancel = true;
+                    args.event.cancel = true;
                     return;
                 }
 
@@ -862,7 +862,7 @@ var SchedulerAppointments = CollectionWidget.inherit({
                 buttonWidth: buttonWidth,
                 onAppointmentClick: function(args) {
                     var mappedAppointmentFields = that._mapAppointmentFields(args);
-                    that._itemJQueryEventHandler(args.jQueryEvent, "onItemClick", mappedAppointmentFields);
+                    that._itemDXEventHandler(args.event, "onItemClick", mappedAppointmentFields);
                 }
             });
         }).bind(this));

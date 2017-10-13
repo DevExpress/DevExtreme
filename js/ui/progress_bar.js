@@ -59,7 +59,7 @@ var ProgressBar = TrackBar.inherit({
             * @name dxProgressBarOptions_onComplete
             * @publicName onComplete
             * @extends Action
-            * @type_function_param1_field4 jQueryEvent:jQueryEvent
+            * @type_function_param1_field4 jQueryEvent:jQuery.Event
             * @action
             */
             onComplete: null,

@@ -76,7 +76,7 @@ $.each(DRAGGABLE_ACTION_TO_EVENT_MAP, function(callbackName, eventName) {
         assert.strictEqual(context, draggable, "context equals to component");
         assert.strictEqual(arg.component, draggable);
         assert.strictEqual($(arg.element)[0], this.$element[0]);
-        assert.equal(arg.jQueryEvent.type, eventName);
+        assert.equal(arg.event.type, eventName);
     };
 
     QUnit.test("'" + callbackName + "' callback fired", function(assert) {

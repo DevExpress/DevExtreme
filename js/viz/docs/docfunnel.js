@@ -776,7 +776,7 @@ var dxFunnel = {
     * @type_function_param1 e:object
     * @type_function_param1_field1 component:object
     * @type_function_param1_field2 element:object
-    * @type_function_param1_field3 jQueryEvent:jQueryEvent
+    * @type_function_param1_field3 jQueryEvent:jQuery.Event
     * @type_function_param1_field4 item:dxfunnelItem
     * @notUsedInTheme
     * @action
@@ -789,7 +789,7 @@ var dxFunnel = {
     * @type_function_param1 e:object
     * @type_function_param1_field1 component:object
     * @type_function_param1_field2 element:object
-    * @type_function_param1_field3 jQueryEvent:jQueryEvent
+    * @type_function_param1_field3 jQueryEvent:jQuery.Event
     * @type_function_param1_field4 item:dxfunnelItem
     * @notUsedInTheme
     * @action

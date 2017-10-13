@@ -134,7 +134,7 @@ var DropDownMenu = Widget.inherit({
             * @publicName onButtonClick
             * @type function|string
             * @extends Action
-            * @type_function_param1_field4 jQueryEvent:jQueryEvent
+            * @type_function_param1_field4 jQueryEvent:jQuery.Event
             * @action
             */
             onButtonClick: null,

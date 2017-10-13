@@ -57,14 +57,14 @@ var SpinButton = Widget.inherit({
         eventsEngine.on(this.$element(), holdEvent.name, (function() {
             this._feedBackDeferred = new Deferred();
             feedbackEvents.lock(this._feedBackDeferred);
-            this._spinChangeHandler({ jQueryEvent: e });
-            this._holdTimer = setInterval(this._spinChangeHandler, SPIN_HOLD_DELAY, { jQueryEvent: e });
+            this._spinChangeHandler({ event: e });
+            this._holdTimer = setInterval(this._spinChangeHandler, SPIN_HOLD_DELAY, { event: e });
         }).bind(this));
 
         eventsEngine.on(document, POINTERUP_EVENT_NAME, this._clearTimer.bind(this));
         eventsEngine.on(document, POINTERCANCEL_EVENT_NAME, this._clearTimer.bind(this));
 
-        this._spinChangeHandler({ jQueryEvent: e });
+        this._spinChangeHandler({ event: e });
     },
 
     _dispose: function() {

@@ -487,7 +487,7 @@ var DropDownEditor = TextBox.inherit({
     },
 
     _executeOpenAction: function(e) {
-        this._openOnFieldClickAction({ jQueryEvent: e });
+        this._openOnFieldClickAction({ event: e });
     },
 
     _keyboardEventBindingTarget: function() {

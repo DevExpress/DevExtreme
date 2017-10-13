@@ -308,7 +308,7 @@ var Lookup = DropDownList.inherit({
             * @name dxLookupOptions_onScroll
             * @publicName onScroll
             * @extends Action
-            * @type_function_param1_field4 jQueryEvent:jQueryEvent
+            * @type_function_param1_field4 jQueryEvent:jQuery.Event
             * @type_function_param1_field5 scrollOffset:object
             * @type_function_param1_field6 reachedLeft:boolean
             * @type_function_param1_field7 reachedRight:boolean
@@ -404,7 +404,7 @@ var Lookup = DropDownList.inherit({
             * @extends Action
             * @type_function_param1_field4 value:object
             * @type_function_param1_field5 previousValue:object
-            * @type_function_param1_field6 jQueryEvent:jQueryEvent
+            * @type_function_param1_field6 jQueryEvent:jQuery.Event
             * @action
             */
 
@@ -715,7 +715,7 @@ var Lookup = DropDownList.inherit({
 
         this._$field = $("<div>").addClass(LOOKUP_FIELD_CLASS);
         eventsEngine.on(this._$field, eventUtils.addNamespace(clickEvent.name, this.NAME), function(e) {
-            fieldClickAction({ jQueryEvent: e });
+            fieldClickAction({ event: e });
         });
 
         var $arrow = $("<div>").addClass(LOOKUP_ARROW_CLASS);
@@ -741,7 +741,7 @@ var Lookup = DropDownList.inherit({
 
         var config = {
             element: this._inputWrapper(),
-            jQueryEvent: e
+            event: e
         };
 
         if(value) {
@@ -1122,7 +1122,7 @@ var Lookup = DropDownList.inherit({
     },
 
     _listItemClickHandler: function(e) {
-        this._selectListItem(e.itemData, e.jQueryEvent.currentTarget);
+        this._selectListItem(e.itemData, e.event.currentTarget);
     },
 
     _selectListItem: function(itemData, target) {

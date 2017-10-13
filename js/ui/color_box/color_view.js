@@ -231,7 +231,7 @@ var ColorView = Editor.inherit({
     _fireEnterKeyPressed: function(e) {
         if(!this._onEnterKeyPressedAction) return;
         this._onEnterKeyPressedAction({
-            jQueryEvent: e
+            event: e
         });
     },
 

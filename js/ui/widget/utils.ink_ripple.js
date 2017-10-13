@@ -72,7 +72,7 @@ var getWaveStyleConfig = function(args, config) {
         left = (elementWidth - waveSize) / 2;
         top = (elementHeight - waveSize) / 2;
     } else {
-        var event = config.jQueryEvent,
+        var event = config.event,
             position = config.element.offset(),
             x = event.pageX - position.left,
             y = event.pageY - position.top;

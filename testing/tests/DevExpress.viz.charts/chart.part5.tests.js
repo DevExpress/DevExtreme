@@ -1277,7 +1277,7 @@ QUnit.test("chart events", function(assert) {
         chart,
         target = { isTarget: true },
         event = { isEvent: true },
-        targetArg = { target: target, jQueryEvent: event, argument: "argument" };
+        targetArg = { target: target, event: event, argument: "argument" };
 
     $.each(OldEventsName, function(oldName, newName) {
         events[newName] = sinon.stub();
@@ -1292,7 +1292,7 @@ QUnit.test("chart events", function(assert) {
     $.each(events, function(eventName, callBack) {
         assert.strictEqual(callBack.callCount, 1, eventName + " callback called");
         assert.strictEqual(callBack.lastCall.args[0].target, target, eventName + " target is correct");
-        assert.strictEqual(callBack.lastCall.args[0].jQueryEvent, event, eventName + " event is correct");
+        assert.strictEqual(callBack.lastCall.args[0].event, event, eventName + " event is correct");
         assert.strictEqual(callBack.lastCall.args[0].argument, "argument", eventName + " argument is correct");
     });
 });

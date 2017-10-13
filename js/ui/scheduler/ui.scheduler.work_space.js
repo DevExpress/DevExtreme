@@ -801,7 +801,7 @@ var SchedulerWorkSpace = Widget.inherit({
     _attachEvents: function() {
         var that = this;
         var pointerDownAction = this._createAction(function(e) {
-            that._pointerDownHandler(e.jQueryEvent);
+            that._pointerDownHandler(e.event);
         });
 
         this._createCellClickAction();
@@ -816,11 +816,11 @@ var SchedulerWorkSpace = Widget.inherit({
                 e.preventDefault();
                 return;
             }
-            pointerDownAction({ jQueryEvent: e });
+            pointerDownAction({ event: e });
         });
         eventsEngine.on($element, SCHEDULER_CELL_DXCLICK_EVENT_NAME, cellSelector, function(e) {
             var $cell = $(e.target);
-            that._cellClickAction({ jQueryEvent: e, cellElement: getPublicElement($cell), cellData: that.getCellData($cell) });
+            that._cellClickAction({ event: e, cellElement: getPublicElement($cell), cellData: that.getCellData($cell) });
         });
     },
 
@@ -828,7 +828,7 @@ var SchedulerWorkSpace = Widget.inherit({
         var that = this;
         this._cellClickAction = this._createActionByOption("onCellClick", {
             afterExecute: function(e) {
-                that._clickHandler(e.args[0].jQueryEvent);
+                that._clickHandler(e.args[0].event);
             }
         });
     },

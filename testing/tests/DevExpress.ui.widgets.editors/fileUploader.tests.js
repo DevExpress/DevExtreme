@@ -1428,7 +1428,7 @@ QUnit.test("the 'onProgress' option event fields", function(assert) {
 
     assert.equal(args.segmentSize, stepSize, "segment size is correct");
     assert.equal(args.bytesLoaded, stepSize, "bytes loaded size is correct");
-    assert.equal(args.bytesTotal, args.jQueryEvent.total, "bytes total size is correct");
+    assert.equal(args.bytesTotal, args.event.total, "bytes total size is correct");
     assert.ok(args.bytesTotal, "bytes total is defined");
 
     this.clock.tick(this.xhrMock.PROGRESS_INTERVAL);
@@ -1436,7 +1436,7 @@ QUnit.test("the 'onProgress' option event fields", function(assert) {
 
     assert.equal(args.segmentSize, stepSize, "segment size is correct after progress interval");
     assert.equal(args.bytesLoaded, 2 * stepSize, "bytes loaded size is correct after progress interval");
-    assert.equal(args.bytesTotal, args.jQueryEvent.total, "bytes total size is correct");
+    assert.equal(args.bytesTotal, args.event.total, "bytes total size is correct");
     assert.ok(args.bytesTotal, "bytes total is defined");
 });
 

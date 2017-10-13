@@ -22,13 +22,13 @@ var ContextMenuController = modules.ViewController.inherit({
         this.createAction("onContextMenuPreparing");
     },
 
-    getContextMenuItems: function(jQueryEvent) {
-        if(!jQueryEvent) {
+    getContextMenuItems: function(dxEvent) {
+        if(!dxEvent) {
             return false;
         }
 
         var that = this,
-            $targetElement = $(jQueryEvent.target),
+            $targetElement = $(dxEvent.target),
             view,
             options,
             rowIndex,
@@ -50,7 +50,7 @@ var ContextMenuController = modules.ViewController.inherit({
                 columnIndex = $targetCellElement[0] && $targetCellElement[0].cellIndex;
                 rowOptions = $targetRowElement.data("options");
                 options = {
-                    jQueryEvent: jQueryEvent,
+                    event: dxEvent,
                     targetElement: getPublicElement($targetElement),
                     target: viewName[this],
                     rowIndex: rowIndex,
@@ -83,7 +83,7 @@ var ContextMenuView = modules.View.inherit({
         this._createComponent(that.element().addClass(CONTEXT_MENU),
             ContextMenu, {
                 onPositioning: function(actionArgs) {
-                    var event = actionArgs.jQueryEvent,
+                    var event = actionArgs.event,
                         contextMenuInstance = actionArgs.component,
                         items = that.getController("contextMenu").getContextMenuItems(event);
 
