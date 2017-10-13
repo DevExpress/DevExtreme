@@ -396,6 +396,10 @@ var ContextMenu = MenuBase.inherit((function() {
             this._attachShowContextMenuEvents();
         },
 
+        _attachKeyboardEvents: function() {
+            !this._keyboardProcessor && this._focusTarget().length && this.callBase();
+        },
+
         _renderContextMenuOverlay: function() {
             if(this._overlay) {
                 return;
