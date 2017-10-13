@@ -991,3 +991,15 @@ QUnit.test("get element", function(assert) {
         assert.equal(instance.element(), $("#component").get(0));
     }
 });
+
+QUnit.test("getInstance method", function(assert) {
+    var $element = $("#component");
+    var instance = new this.TestComponent($element);
+    var AnotherComponent = DOMComponent.inherit();
+
+    assert.equal(this.TestComponent.getInstance($element), instance);
+    assert.equal(this.TestComponent.getInstance($element.get(0)), instance);
+
+    assert.notEqual(AnotherComponent.getInstance($element), instance);
+    assert.notEqual(AnotherComponent.getInstance($element.get(0)), instance);
+});
