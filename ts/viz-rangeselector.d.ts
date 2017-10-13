@@ -3,7 +3,7 @@
 /// <reference path="viz-core.d.ts" />
 
 declare module DevExpress.viz.rangeSelector {
-
+    /** @docid dxrangeselector_options */
     export interface dxRangeSelectorOptions extends viz.core.BaseWidgetOptions, viz.core.MarginOptions, viz.core.RedrawOnResizeOptions, viz.core.TitleOptions, viz.core.LoadingIndicatorOptions, viz.core.ExportOptions {
         /** @docid_ignore dxrangeselectoroptions_tooltip */
 

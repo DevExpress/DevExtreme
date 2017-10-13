@@ -558,12 +558,12 @@ var Scheduler = Widget.inherit({
             showCurrentTimeIndicator: true,
 
                 /**
-                * @name dxSchedulerOptions_shadeUntilNow
-                * @publicName shadeUntilNow
+                * @name dxSchedulerOptions_shadeUntilCurrentTime
+                * @publicName shadeUntilCurrentTime
                 * @type boolean
                 * @default false
                 */
-            shadeUntilNow: false,
+            shadeUntilCurrentTime: false,
 
                 /**
                 * @hidden
@@ -1243,7 +1243,7 @@ var Scheduler = Widget.inherit({
             case "showCurrentTimeIndicator":
             case "indicatorTime":
             case "indicatorUpdateInterval":
-            case "shadeUntilNow":
+            case "shadeUntilCurrentTime":
                 this._updateOption("workSpace", name, value);
                 break;
             case "appointmentTooltipTemplate":
@@ -1852,7 +1852,7 @@ var Scheduler = Widget.inherit({
             showCurrentTimeIndicator: this.option("showCurrentTimeIndicator"),
             indicatorTime: this.option("indicatorTime"),
             indicatorUpdateInterval: this.option("indicatorUpdateInterval"),
-            shadeUntilNow: this.option("shadeUntilNow"),
+            shadeUntilCurrentTime: this.option("shadeUntilCurrentTime"),
             allDayExpanded: this._appointments.option("items"),
             crossScrollingEnabled: this.option("crossScrollingEnabled"),
             dataCellTemplate: this.option("dataCellTemplate"),

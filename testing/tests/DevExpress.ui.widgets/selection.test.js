@@ -864,6 +864,70 @@ QUnit.test("selection module should support object returned by load method", fun
     assert.equal(selectionChangedHandler.callCount, 1, "selectionChanged should be fired");
 });
 
+//T547950
+QUnit.test("focusedItemIndex should be reset to -1 after select all", function(assert) {
+    var dataSource = createDataSource(this.data, { key: "id" }),
+        selection = new Selection({
+            key: function() {
+                var store = dataSource.store();
+                return store.key();
+            },
+            keyOf: function(item) {
+                var store = dataSource.store();
+                return store.keyOf(item);
+            },
+            dataFields: function() {
+                return dataSource.select();
+            },
+            plainItems: function() {
+                return dataSource.items();
+            },
+            load: function(options) {
+                return dataSource.store().load(options);
+            }
+        });
+
+    selection.changeItemSelection(1);
+
+    assert.strictEqual(selection._focusedItemIndex, 1, "focusedItemIndex");
+
+    selection.selectAll();
+
+    assert.strictEqual(selection._focusedItemIndex, -1, "focusedItemIndex");
+});
+
+//T547950
+QUnit.test("focusedItemIndex should be reset to -1 after deselect all", function(assert) {
+    var dataSource = createDataSource(this.data, { key: "id" }),
+        selection = new Selection({
+            key: function() {
+                var store = dataSource.store();
+                return store.key();
+            },
+            keyOf: function(item) {
+                var store = dataSource.store();
+                return store.keyOf(item);
+            },
+            dataFields: function() {
+                return dataSource.select();
+            },
+            plainItems: function() {
+                return dataSource.items();
+            },
+            load: function(options) {
+                return dataSource.store().load(options);
+            }
+        });
+
+    selection.changeItemSelection(1);
+
+    assert.strictEqual(selection._focusedItemIndex, 1, "focusedItemIndex");
+
+    selection.deselectAll();
+
+    assert.strictEqual(selection._focusedItemIndex, -1, "focusedItemIndex");
+});
+
 
 var createDeferredSelection = function(data, options, dataSource) {
     return new Selection($.extend({

@@ -8,6 +8,12 @@
 */
 var dxFunnel = {
     /**
+    * @name dxfunnel_options
+    * @publicName Options
+    * @namespace DevExpress.viz.funnel
+    * @hidden
+    */       
+    /**
     * @name dxfunneloptions_adaptivelayout
     * @publicName adaptiveLayout
     * @type object

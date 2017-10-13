@@ -823,7 +823,7 @@ QUnit.test("if value isn't specified then current day is default for an editor w
     });
 
     $(this.$input())
-        .val("1:1:16")
+        .val("1:1:16 AM")
         .trigger("change");
 
     var value = this.instance.option("value"),
@@ -843,7 +843,7 @@ QUnit.test("mergeDates must merge seconds when type is 'time'", function(assert)
     });
 
     $(this.$input())
-        .val("1:1:16")
+        .val("1:1:16 AM")
         .trigger("change");
 
     var date = new Date(2000, 6, 31, 1, 1, 16);
@@ -853,7 +853,7 @@ QUnit.test("mergeDates must merge seconds when type is 'time'", function(assert)
 QUnit.test("mergeDates must merge milliseconds when type is 'time'", function(assert) {
     this.instance.option({
         type: "time",
-        value: new Date(1),
+        value: new Date(2000, 6, 31, 1, 1, 1),
         pickerType: "list",
         displayFormat: "millisecond"
     });
@@ -862,7 +862,8 @@ QUnit.test("mergeDates must merge milliseconds when type is 'time'", function(as
         .val("16")
         .trigger("change");
 
-    var date = new Date(16);
+    var now = new Date();
+    var date = new Date(2000, 6, 31, now.getHours(), now.getMinutes(), now.getSeconds(), 16);
     assert.deepEqual(this.instance.option("value"), date);
 });
 

@@ -1502,6 +1502,8 @@ var Overlay = Widget.inherit({
 * @name ui_dxOverlayMethods_baseZIndex
 * @publicName baseZIndex(zIndex)
 * @param1 zIndex:number
+* @namespace DevExpress.ui.dxOverlay
+* @static
 */
 Overlay.baseZIndex = function(zIndex) {
     FIRST_Z_INDEX = zIndex;

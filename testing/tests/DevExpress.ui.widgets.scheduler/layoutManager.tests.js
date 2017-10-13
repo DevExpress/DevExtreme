@@ -600,7 +600,7 @@ QUnit.test("More than 3 cloned appointments should be grouped", function(assert)
 
     assert.equal(groupedAppointments.length, 8, "DropDown menu has correct items");
     assert.equal(dropDownMenuText, "8 more", "DropDown menu has correct text");
-    assert.roughEqual(dropDownMenu.option("buttonWidth"), 116, 1, "DropDownMenu button width is OK");
+    assert.roughEqual(dropDownMenu.option("buttonWidth"), 106, 1, "DropDownMenu button width is OK");
 });
 
 QUnit.test("Grouped appointments schould have correct colors", function(assert) {

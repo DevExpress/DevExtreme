@@ -342,6 +342,12 @@ var MenuBase = HierarchicalCollectionWidget.inherit({
         return this._itemContainer();
     },
 
+    _clean: function() {
+        this.option("focusedElement", null);
+
+        this.callBase();
+    },
+
     _supportedKeys: function() {
         var selectItem = function() {
             var $item = this.option("focusedElement");

@@ -262,6 +262,16 @@ QUnit.test("object syntax", function(assert) {
     assert.equal(dateLocalization.format(new Date(2015, 2, 2, 3, 4, 5, 6), { type: "longdate" }), "Monday, March 2, 2015");
 });
 
+QUnit.test("format with LDML pattern", function(assert) {
+    assert.equal(dateLocalization.format(new Date(2015, 2, 2, 3, 4, 5, 6), "dd/MM/yyyy HH:mm:ss"), "02/03/2015 03:04:05");
+    assert.equal(dateLocalization.format(new Date(2015, 2, 2, 3, 4, 5, 6), "d MMMM yyyy"), "2 March 2015");
+});
+
+QUnit.test("parse with LDML pattern", function(assert) {
+    assert.deepEqual(dateLocalization.parse("02/03/2015 03:04:05", "dd/MM/yyyy HH:mm:ss"), new Date(2015, 2, 2, 3, 4, 5));
+    assert.deepEqual(dateLocalization.parse("2 March 2015", "d MMMM yyyy"), new Date(2015, 2, 2));
+});
+
 QUnit.test("parse", function(assert) {
     var originalLoggerWarn = logger.warn;
     var warnLog = [];
@@ -429,8 +439,8 @@ QUnit.test("parse", function(assert) {
 
 QUnit.test("parse with shortDate format (T478962, T511282)", function(assert) {
     assert.equal(dateLocalization.parse("2/20/2015", "shortDate"), String(new Date(2015, 1, 20)));
-    //assert.equal(dateLocalization.parse("02/20/2015", "shortDate"), String(new Date(2015, 1, 20)));
-    //assert.equal(dateLocalization.parse("02/02/2015", "shortDate"), String(new Date(2015, 1, 2)));
+    assert.equal(dateLocalization.parse("02/20/2015", "shortDate"), String(new Date(2015, 1, 20)));
+    assert.equal(dateLocalization.parse("02/02/2015", "shortDate"), String(new Date(2015, 1, 2)));
     assert.equal(dateLocalization.parse("2/2/2015", "shortDate"), String(new Date(2015, 1, 2)));
     assert.equal(dateLocalization.parse("1/1/99", "shortDate"), String(new Date(new Date(99, 0, 1).setFullYear(99))));
     assert.equal(dateLocalization.parse("2/20/1", "shortDate"), String(new Date(new Date(1, 1, 20).setFullYear(1))));
@@ -634,12 +644,12 @@ QUnit.test("parse: base", function(assert) {
 
 QUnit.test("parse with custom separators", function(assert) {
     var oldDecimalSeparator = config().decimalSeparator,
-        oldGroupSeparator = config().groupSeparator,
+        oldThousandsSeparator = config().thousandsSeparator,
         oldLocale = localization.locale();
 
     config({
         decimalSeparator: ",",
-        groupSeparator: "."
+        thousandsSeparator: "."
     });
     localization.locale("de");
 
@@ -649,7 +659,7 @@ QUnit.test("parse with custom separators", function(assert) {
     } finally {
         config({
             decimalSeparator: oldDecimalSeparator,
-            groupSeparator: oldGroupSeparator
+            thousandsSeparator: oldThousandsSeparator
         });
         localization.locale(oldLocale);
     }
@@ -664,23 +674,26 @@ QUnit.test("parse with LDML format", function(assert) {
 
 QUnit.test("parse with LDML format and with custom separators", function(assert) {
     var oldDecimalSeparator = config().decimalSeparator,
-        oldGroupSeparator = config().groupSeparator;
+        oldThousandsSeparator = config().thousandsSeparator,
+        oldLocale = localization.locale();
 
     config({
         decimalSeparator: ",",
-        groupSeparator: " "
+        thousandsSeparator: "\xa0"
     });
+    localization.locale("ru");
 
     try {
         assert.equal(numberLocalization.parse("1.2", "#.##"), null);
         assert.equal(numberLocalization.parse("1,2", "#.##"), 1.2);
         assert.equal(numberLocalization.parse("1,234", "#,###"), null);
-        assert.equal(numberLocalization.parse("1 234", "#,###"), 1234);
+        assert.equal(numberLocalization.parse("1\xa0234", "#,###"), 1234);
     } finally {
         config({
             decimalSeparator: oldDecimalSeparator,
-            groupSeparator: oldGroupSeparator
+            thousandsSeparator: oldThousandsSeparator
         });
+        localization.locale(oldLocale);
     }
 });
 
@@ -734,12 +747,12 @@ QUnit.test('format as function', function(assert) {
 
 QUnit.test("custom group and decimal separators", function(assert) {
     var oldDecimalSeparator = config().decimalSeparator,
-        oldGroupSeparator = config().groupSeparator,
+        oldThousandsSeparator = config().thousandsSeparator,
         oldLocale = localization.locale();
 
     config({
         decimalSeparator: ",",
-        groupSeparator: "."
+        thousandsSeparator: "."
     });
     localization.locale("de");
 
@@ -750,7 +763,7 @@ QUnit.test("custom group and decimal separators", function(assert) {
     } finally {
         config({
             decimalSeparator: oldDecimalSeparator,
-            groupSeparator: oldGroupSeparator
+            thousandsSeparator: oldThousandsSeparator
         });
         localization.locale(oldLocale);
     }
@@ -763,21 +776,26 @@ QUnit.test('format as LDML pattern', function(assert) {
 
 QUnit.test("format as LDML pattern with custom separators", function(assert) {
     var oldDecimalSeparator = config().decimalSeparator,
-        oldGroupSeparator = config().groupSeparator;
+        oldThousandsSeparator = config().thousandsSeparator,
+        oldLocale = localization.locale();
 
     config({
         decimalSeparator: ",",
-        groupSeparator: " "
+        thousandsSeparator: "\xa0"
     });
+    localization.locale("ru");
 
     try {
-        assert.equal(numberLocalization.format(12345.67, "#,##0.00 РУБ"), '12 345,67 РУБ');
+        assert.equal(numberLocalization.format(12345.67, "#,##0.00 РУБ"), '12\xa0345,67 РУБ');
         assert.equal(numberLocalization.format(-12345.67, "#.#;(#.#)"), '(12345,7)');
+        assert.equal(numberLocalization.getDecimalSeparator(), ",");
+        assert.equal(numberLocalization.getThousandsSeparator(), "\xa0");
     } finally {
         config({
             decimalSeparator: oldDecimalSeparator,
-            groupSeparator: oldGroupSeparator
+            thousandsSeparator: oldThousandsSeparator
         });
+        localization.locale(oldLocale);
     }
 });
 

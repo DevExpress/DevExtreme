@@ -395,4 +395,11 @@ define(function(require, exports, module) {
             Globalize.locale("en");
         }
     });
+
+    QUnit.test("getDecimalSeparator and getThousandsSeparator in RU locale", function(assert) {
+        Globalize.locale("ru");
+        assert.equal(numberLocalization.getDecimalSeparator(), ",");
+        assert.equal(numberLocalization.getThousandsSeparator(), "\xa0");
+        Globalize.locale("en");
+    });
 });

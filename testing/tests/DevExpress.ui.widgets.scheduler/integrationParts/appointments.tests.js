@@ -3440,7 +3440,7 @@ QUnit.test("DropDown appointment button should have correct coordinates: rtl mod
         buttonCoordinates = translator.locate($dropDownButton),
         $relatedCell = this.instance.$element().find(".dx-scheduler-date-table-cell").eq(9),
         expectedCoordinates = $relatedCell.position(),
-        rtlOffset = $relatedCell.outerWidth() - 26;
+        rtlOffset = $relatedCell.outerWidth() - 36;
 
     assert.equal($dropDownButton.length, 1, "DropDown button is rendered");
     assert.roughEqual(buttonCoordinates.left, expectedCoordinates.left + rtlOffset, 1.001, "Left coordinate is OK");

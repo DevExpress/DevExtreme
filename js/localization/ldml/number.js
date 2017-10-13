@@ -2,16 +2,16 @@
 
 var escapeRegExp = require("../../core/utils/common").escapeRegExp;
 
-var DEFAULT_CONFIG = { groupSeparator: ",", decimalSeparator: "." },
+var DEFAULT_CONFIG = { thousandsSeparator: ",", decimalSeparator: "." },
     ESCAPING_CHAR = "'";
 
-function getGroupSizes(formatString, groupSeparator) {
+function getGroupSizes(formatString) {
     return formatString.split(",").slice(1).map(function(str) {
         return str.length;
     });
 }
 
-function getIntegerPartRegExp(formatString, groupSeparator) {
+function getIntegerPartRegExp(formatString, thousandsSeparator) {
     var result = escapeRegExp(formatString);
     result = result.replace(new RegExp("([0#,]+)"), "($1)");
 
@@ -20,7 +20,7 @@ function getIntegerPartRegExp(formatString, groupSeparator) {
     result = result.replace(/0/g, "\\d");
 
     if(formatString.indexOf("#,") >= 0 && groupSizes.length) {
-        result = result.replace(new RegExp("[#,]+"), "([1-9][\\d\\" + groupSeparator + "]*)?");
+        result = result.replace(new RegExp("[#,]+"), "([1-9][\\d\\" + thousandsSeparator + "]*)?");
     } else {
         result = result.replace(/#+/g, "([1-9]\\d*)?");
     }
@@ -40,7 +40,7 @@ function getFloatPartRegExp(formatString, decimalSeparator) {
 
 function getRegExp(config, formatString) {
     var floatParts = formatString.split("."),
-        integerRegexp = getIntegerPartRegExp(floatParts[0], config.groupSeparator),
+        integerRegexp = getIntegerPartRegExp(floatParts[0], config.thousandsSeparator),
         floatRegExp = getFloatPartRegExp(floatParts[1], config.decimalSeparator);
 
     return integerRegexp + floatRegExp;
@@ -84,7 +84,7 @@ function getParser(format, config) {
             isNegative = parseResult[signPartResultCount + 2],
             integerResultIndex = isNegative ? signPartResultCount + 2 : 2,
             floatResultIndex = integerResultIndex + signPartResultCount - 1,
-            integerPart = parseResult[integerResultIndex].replace(new RegExp(escapeRegExp(config.groupSeparator), "g"), ""),
+            integerPart = parseResult[integerResultIndex].replace(new RegExp(escapeRegExp(config.thousandsSeparator), "g"), ""),
             floatPart = parseResult[floatResultIndex];
 
         var value = parseInt(integerPart) || 0;
@@ -145,7 +145,7 @@ function normalizeValueString(valuePart, minDigitCount, maxDigitCount) {
     return valuePart;
 }
 
-function applyGroups(valueString, groupSizes, groupSeparator) {
+function applyGroups(valueString, groupSizes, thousandsSeparator) {
     if(!groupSizes.length) return valueString;
 
     var groups = [],
@@ -159,7 +159,7 @@ function applyGroups(valueString, groupSizes, groupSeparator) {
             index++;
         }
     }
-    return groups.join(groupSeparator);
+    return groups.join(thousandsSeparator);
 }
 
 function formatNumberPart(format, valueString, minDigitCount, maxDigitCount) {
@@ -203,7 +203,7 @@ function getFormatter(format, config) {
         var valueIntegerPart = normalizeValueString(reverseString(valueParts[0]), minIntegerPrecision, maxIntegerPrecision),
             valueFloatPart = normalizeValueString(valueParts[1], minFloatPrecision, maxFloatPrecision);
 
-        valueIntegerPart = applyGroups(valueIntegerPart, groupSizes, config.groupSeparator);
+        valueIntegerPart = applyGroups(valueIntegerPart, groupSizes, config.thousandsSeparator);
 
         var integerString = reverseString(formatNumberPart(reverseString(floatFormatParts[0]), valueIntegerPart)),
             floatString = maxFloatPrecision ? formatNumberPart(floatFormatParts[1], valueFloatPart) : "";

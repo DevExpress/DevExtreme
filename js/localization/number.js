@@ -147,7 +147,7 @@ var numberLocalization = dependencyInjector({
     _addGroupSeparators: function(value) {
         var parts = value.toString().split(".");
 
-        return parts[0].replace(/\B(?=(\d{3})+(?!\d))/g, config().groupSeparator) + (parts[1] ? config().decimalSeparator + parts[1] : "");
+        return parts[0].replace(/\B(?=(\d{3})+(?!\d))/g, config().thousandsSeparator) + (parts[1] ? config().decimalSeparator + parts[1] : "");
     },
 
     _formatNumberCore: function(value, format, formatConfig) {
@@ -202,6 +202,21 @@ var numberLocalization = dependencyInjector({
         return format;
     },
 
+    _getSeparators: function() {
+        return {
+            decimalSeparator: this.getDecimalSeparator(),
+            thousandsSeparator: this.getThousandsSeparator()
+        };
+    },
+
+    getThousandsSeparator: function() {
+        return this.format(1000, "fixedPoint")[1];
+    },
+
+    getDecimalSeparator: function() {
+        return this.format(1.2, { type: "fixedPoint", precision: 1 })[1];
+    },
+
     format: function(value, format) {
         if(typeof value !== "number") {
             return value;
@@ -226,7 +241,7 @@ var numberLocalization = dependencyInjector({
         var numberConfig = this._parseNumberFormatString(format.type);
 
         if(!numberConfig) {
-            return ldmlNumber.getFormatter(format.type, config())(value);
+            return ldmlNumber.getFormatter(format.type, this._getSeparators())(value);
         }
 
         return this._formatNumber(value, numberConfig, format);
@@ -242,7 +257,7 @@ var numberLocalization = dependencyInjector({
         }
 
         if(typeof format === "string") {
-            return ldmlNumber.getParser(format, config())(text);
+            return ldmlNumber.getParser(format, this._getSeparators())(text);
         }
 
         if(format) {
@@ -251,7 +266,7 @@ var numberLocalization = dependencyInjector({
 
         var textParts = text.split(config().decimalSeparator);
 
-        textParts[0] = textParts[0].replace(new RegExp("^\\D+|" + escapeRegExp(config().groupSeparator) + "+", "g"), "");
+        textParts[0] = textParts[0].replace(new RegExp("^\\D+|" + escapeRegExp(config().thousandsSeparator) + "+", "g"), "");
 
         return parseFloat(textParts[0] + (textParts[1] ? "." + textParts[1] : ""));
     }

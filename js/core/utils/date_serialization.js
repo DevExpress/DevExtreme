@@ -2,6 +2,7 @@
 
 var config = require("../config"),
     getLDMLFormatter = require("../../localization/ldml/date.formatter").getFormatter,
+    defaultDateNames = require("../../localization/default_date_names"),
     typeUtils = require("./type"),
     isString = typeUtils.isString,
     isDate = typeUtils.isDate,
@@ -130,7 +131,7 @@ var serializeDate = function(value, serializationFormat) {
         return value && value.valueOf ? value.valueOf() : null;
     }
 
-    return getLDMLFormatter(serializationFormat)(value);
+    return getLDMLFormatter(serializationFormat, defaultDateNames)(value);
 };
 
 var getDateSerializationFormat = function(value) {

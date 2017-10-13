@@ -988,7 +988,7 @@ QUnit.test("dx-popup-fullscreen-width class should be attached when width is equ
 QUnit.module("templates");
 
 QUnit.test("titleTemplate test", function(assert) {
-    assert.expect(5);
+    assert.expect(6);
 
     var $element = $("#popup").dxPopup({
             visible: true,
@@ -1008,6 +1008,7 @@ QUnit.test("titleTemplate test", function(assert) {
     assert.equal($popupContent.find(toSelector("test-title-renderer")).length, 1, "option 'titleTemplate'  was set successfully");
 
     instance.option("onTitleRendered", function(e) {
+        assert.equal(e.element, e.component.element(), "element is correct");
         assert.ok(true, "option 'onTitleRendered' successfully passed to the popup widget raised on titleTemplate");
     });
 

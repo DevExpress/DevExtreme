@@ -1,7 +1,5 @@
 "use strict";
 
-var dateParts = require("../../core/utils/date_parts");
-
 function leftPad(text, length) {
     while(text.length < length) {
         text = "0" + text;
@@ -23,7 +21,7 @@ var LDML_FORMATTERS = {
         }
         return leftPad(year.toString(), count);
     },
-    M: function(date, count, useUtc) {
+    M: function(date, count, useUtc, dateParts) {
         var month = date[useUtc ? "getUTCMonth" : "getMonth"]();
         var formatType = FORMAT_TYPES[count];
         if(formatType) {
@@ -31,7 +29,7 @@ var LDML_FORMATTERS = {
         }
         return leftPad((month + 1).toString(), Math.min(count, 2));
     },
-    L: function(date, count, useUtc) {
+    L: function(date, count, useUtc, dateParts) {
         var month = date[useUtc ? "getUTCMonth" : "getMonth"]();
         var formatType = FORMAT_TYPES[count];
         if(formatType) {
@@ -39,7 +37,7 @@ var LDML_FORMATTERS = {
         }
         return leftPad((month + 1).toString(), Math.min(count, 2));
     },
-    Q: function(date, count, useUtc) {
+    Q: function(date, count, useUtc, dateParts) {
         var month = date[useUtc ? "getUTCMonth" : "getMonth"]();
         var quarter = Math.floor(month / 3);
         var formatType = FORMAT_TYPES[count];
@@ -48,12 +46,12 @@ var LDML_FORMATTERS = {
         }
         return leftPad((quarter + 1).toString(), Math.min(count, 2));
     },
-    E: function(date, count, useUtc) {
+    E: function(date, count, useUtc, dateParts) {
         var day = date[useUtc ? "getUTCDay" : "getDay"]();
         var formatType = FORMAT_TYPES[count < 3 ? 3 : count];
         return dateParts.getDayNames(formatType)[day];
     },
-    a: function(date, count, useUtc) {
+    a: function(date, count, useUtc, dateParts) {
         var hours = date[useUtc ? "getUTCHours" : "getHours"](),
             period = hours < 12 ? 0 : 1,
             formatType = FORMAT_TYPES[count];
@@ -100,7 +98,7 @@ var LDML_FORMATTERS = {
     }
 };
 
-var getFormatter = function(format) {
+var getFormatter = function(format, dateParts) {
     return function(date) {
         var charIndex,
             formatter,
@@ -125,7 +123,7 @@ var getFormatter = function(format) {
 
             if(!isCurrentCharEqualsNext) {
                 if(formatter && !isEscaping) {
-                    result += formatter(date, charCount, useUtc);
+                    result += formatter(date, charCount, useUtc, dateParts);
                 }
                 charCount = 0;
             }

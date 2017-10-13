@@ -8,6 +8,12 @@
 */
 var dxVectorMap = {
     /**
+    * @name dxvectormap_options
+    * @publicName Options
+    * @namespace DevExpress.viz.map
+    * @hidden
+    */      
+    /**
     * @name dxvectormapoptions_margin
     * @publicName margin
     * @hidden
