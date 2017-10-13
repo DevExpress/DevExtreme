@@ -381,7 +381,8 @@ QUnit.module("Create editor by field dataType", function() {
     });
 
     QUnit.test("date", function(assert) {
-        var container = $("#container");
+        var container = $("#container"),
+            dateBoxInstance;
 
         container.dxFilterBuilder({
             allowHierarchicalFields: true,
@@ -391,7 +392,24 @@ QUnit.module("Create editor by field dataType", function() {
 
         var valueField = $("." + FILTER_BUILDER_ITEM_VALUE_CLASS).eq(0);
         valueField.find("." + FILTER_BUILDER_ITEM_VALUE_TEXT_CLASS).click();
-        assert.ok(valueField.find(".dx-datebox").dxDateBox("instance"));
+        dateBoxInstance = valueField.find(".dx-datebox").dxDateBox("instance");
+        assert.strictEqual(dateBoxInstance.option("type"), "date");
+    });
+
+    QUnit.test("datetime", function(assert) {
+        var container = $("#container"),
+            dateBoxInstance;
+
+        container.dxFilterBuilder({
+            allowHierarchicalFields: true,
+            value: ["DateTime", "=", new Date()],
+            fields: fields
+        });
+
+        var valueField = $("." + FILTER_BUILDER_ITEM_VALUE_CLASS).eq(0);
+        valueField.find("." + FILTER_BUILDER_ITEM_VALUE_TEXT_CLASS).click();
+        dateBoxInstance = valueField.find(".dx-datebox").dxDateBox("instance");
+        assert.strictEqual(dateBoxInstance.option("type"), "datetime");
     });
 
     QUnit.test("boolean", function(assert) {
