@@ -198,7 +198,8 @@ namespace StyleCompiler
                 "timeView",
                 "scheduler",
                 "form",
-                "spa"
+                "spa",
+                "filterBuilder"
             });
 
             // Non-themeable components that have only common styles

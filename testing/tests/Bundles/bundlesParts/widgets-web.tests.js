@@ -12,7 +12,8 @@ QUnit.test("widgets-web", function(assert) {
         "dxPivotGrid",
         "dxPivotGridFieldChooser",
         "dxScheduler",
-        "dxTreeView"
+        "dxTreeView",
+        "dxFilterBuilder"
     ], function(_, namespace) {
         assert.ok(DevExpress.ui[namespace], "DevExpress.ui." + namespace + " present");
     });

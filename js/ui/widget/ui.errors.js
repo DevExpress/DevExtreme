@@ -228,6 +228,18 @@ module.exports = errorUtils(errors.ERROR_MESSAGES, {
     E1046: "The '{0}' key field is not found in data objects",
 
     /**
+    * @name Errors and Warnings_E1047
+    * @publicName E1047
+    */
+    E1047: "The \"{0}\" field is not found in the fields array",
+
+    /**
+    * @name Errors and Warnings_E1048
+    * @publicName E1048
+    */
+    E1048: "The \"{0}\" operation is not found in the filterOperations array",
+
+    /**
     * @name Errors and Warnings_W1001
     * @publicName W1001
     */

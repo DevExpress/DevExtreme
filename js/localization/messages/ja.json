@@ -208,6 +208,25 @@
         "dxTagBox-moreSelected": "その他 {0} つ選択",
         "vizExport-printingButtonText": "印刷",
         "vizExport-titleMenuText": "エクスポート / 印刷",
-        "vizExport-exportButtonText": "{0} ファイル"
+        "vizExport-exportButtonText": "{0} ファイル",
+        "dxFilterBuilder-and": "!TODO!",
+        "dxFilterBuilder-or": "!TODO!",
+        "dxFilterBuilder-notAnd": "!TODO!",
+        "dxFilterBuilder-notOr": "!TODO!",
+        "dxFilterBuilder-addCondition": "!TODO!",
+        "dxFilterBuilder-addGroup": "!TODO!",
+        "dxFilterBuilder-enterValueText": "!TODO!",
+        "dxFilterBuilder-filterOperationEquals": "指定の値に等しい",
+        "dxFilterBuilder-filterOperationNotEquals": "指定の値に等しくない",
+        "dxFilterBuilder-filterOperationLess": "指定の値より小さい",
+        "dxFilterBuilder-filterOperationLessOrEquals": "指定の値以下",
+        "dxFilterBuilder-filterOperationGreater": "指定の値より大きい",
+        "dxFilterBuilder-filterOperationGreaterOrEquals": "指定の値以上",
+        "dxFilterBuilder-filterOperationStartsWith": "指定の値で始まる",
+        "dxFilterBuilder-filterOperationContains": "指定の値を含む",
+        "dxFilterBuilder-filterOperationNotContains": "指定の値を含まない",
+        "dxFilterBuilder-filterOperationEndsWith": "指定の値で終わる",
+        "dxFilterBuilder-filterOperationIsBlank": "!TODO!",
+        "dxFilterBuilder-filterOperationIsNotBlank": "!TODO!"
     }
 }

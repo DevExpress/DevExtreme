@@ -46,7 +46,7 @@ module.exports = {
     },
 
     setClass: function(element, className, isAdd) {
-        if(element.nodeType) {
+        if(element.nodeType === 1) {
             if(element.classList) {
                 if(isAdd) {
                     element.classList.add(className);

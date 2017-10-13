@@ -116,7 +116,7 @@ QUnit.test("serialization ISO8601 dates", function(assert) {
     assert.equal(dateSerialization.serializeDate(date, "yyyy-MM-ddTHH:mm:ss"), "2015-04-05T06:07:25", "(+3:00) yyyy-MM-ddTHH:mm:ss");
     assert.equal(dateSerialization.serializeDate(date, "yyyy-MM-ddTHH:mm:ss.S"), "2015-04-05T06:07:25.1", "(+3:00) yyyy-MM-ddTHH:mm:ss.S");
     assert.equal(dateSerialization.serializeDate(date, "yyyy-MM-ddTHH:mm:ss.SSS"), "2015-04-05T06:07:25.125", "(+3:00) yyyy-MM-ddTHH:mm:ss.SSS");
-    assert.equal(dateSerialization.serializeDate(date, "yy-M-dTH:m:s"), "2015-4-5T6:7:25", "(+3:00) yy-M-dTH:m:s");
+    assert.equal(dateSerialization.serializeDate(date, "yy-M-dTH:m:s"), "15-4-5T6:7:25", "(+3:00) yy-M-dTH:m:s");
     assert.equal(dateSerialization.serializeDate(date, "y 'year' M 'month' d 'day'"), "2015 year 4 month 5 day", "(+3:00) y 'year' M 'month'd 'day'");
 
     assert.equal(dateSerialization.serializeDate(new Date(Date.UTC(2015, 3, 5, 6, 7, 25, 125)), "yyyy-MM-ddTHH:mm:ssZ"), "2015-04-05T06:07:25Z", "(+3:00) yyyy-MM-ddTHH:mm:ssZ");
@@ -145,6 +145,29 @@ QUnit.test("serialization ISO8601 dates", function(assert) {
     assert.equal(dateSerialization.serializeDate(date, "XX"), "Z", "(0) XX");
     assert.equal(dateSerialization.serializeDate(date, "xxx"), "+00:00", "(0) xxx");
     assert.equal(dateSerialization.serializeDate(date, "XXX"), "Z", "(0) XXX");
+});
+
+QUnit.test("serialization LDML dates", function(assert) {
+    var date = new Date(2015, 3, 5, 6, 7, 25, 125);
+    var datePm = new Date(2015, 3, 5, 18, 7, 25, 125);
+    var dateMidday = new Date(2015, 3, 5, 12);
+
+    assert.equal(dateSerialization.serializeDate(date, "d/M/yyyy"), "5/4/2015", "date with numeric one letter month and date");
+    assert.equal(dateSerialization.serializeDate(date, "dd/MM/yyyy"), "05/04/2015", "date with numeric two letter month and date");
+    assert.equal(dateSerialization.serializeDate(date, "d MMM yyyy"), "5 Apr 2015", "date with short month");
+    assert.equal(dateSerialization.serializeDate(date, "d MMMM yyyy"), "5 April 2015", "date with long month");
+    assert.equal(dateSerialization.serializeDate(date, "E d MMM yyyy"), "Sun 5 Apr 2015", "date with day of week");
+    assert.equal(dateSerialization.serializeDate(date, "yyyy Q"), "2015 2", "date with numeric quarter");
+    assert.equal(dateSerialization.serializeDate(date, "yyyy QQQ"), "2015 Q2", "date with short quarter");
+
+    assert.equal(dateSerialization.serializeDate(date, "H:mm"), "6:07", "time with one letter hours");
+    assert.equal(dateSerialization.serializeDate(date, "HH:mm"), "06:07", "time with two letter hours AM");
+    assert.equal(dateSerialization.serializeDate(datePm, "HH:mm"), "18:07", "time with two letter hours PM");
+    assert.equal(dateSerialization.serializeDate(date, "h:mm a"), "6:07 AM", "time with 12 hours format AM");
+    assert.equal(dateSerialization.serializeDate(datePm, "h:mm a"), "6:07 PM", "time with 12 hours format PM");
+    assert.equal(dateSerialization.serializeDate(dateMidday, "h:mm a"), "12:00 PM", "time with 12 hours format Midday");
+
+    assert.equal(dateSerialization.serializeDate(date, "H:mm:ss.SSS"), "6:07:25.125", "time with seconds and millisecond");
 });
 
 QUnit.test("get serialization format for ISO8601 dates", function(assert) {

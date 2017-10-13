@@ -162,7 +162,7 @@ var stubInvokeMethod = function(instance, options) {
         assert.equal($indicators.length, 2, "Indicator count is correct");
         assert.equal($indicators.eq(0).position().left, 0);
         assert.equal($indicators.eq(0).position().top, 9.5 * cellHeight);
-        assert.equal($indicators.eq(1).position().left, this.instance._getRoundedCellWidth(1));
+        assert.equal($indicators.eq(1).position().left, this.instance._getRoundedCellWidth(1) + 1);
         assert.equal($indicators.eq(1).position().top, 9.5 * cellHeight);
     });
 
@@ -181,7 +181,7 @@ var stubInvokeMethod = function(instance, options) {
         assert.equal($indicators.length, 2, "Indicator count is correct");
         assert.equal($indicators.eq(0).position().left, 0);
         assert.equal($indicators.eq(0).position().top, 9.5 * cellHeight);
-        assert.equal($indicators.eq(1).position().left, this.instance._getRoundedCellWidth(1));
+        assert.equal($indicators.eq(1).position().left, this.instance._getRoundedCellWidth(1) + 1);
         assert.equal($indicators.eq(1).position().top, 9.5 * cellHeight);
     });
 
