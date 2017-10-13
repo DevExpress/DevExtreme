@@ -86,7 +86,11 @@ var FilterBuilder = Widget.inherit({
             * @default []
             */
             fields: [],
-
+            /**
+            * @name dxFilterBuilderField
+            * @publicName dxFilterBuilderField
+            * @type object
+            */
             /**
             * @name dxFilterBuilderField_caption
             * @publicName caption
