@@ -1647,7 +1647,7 @@ QUnit.test("end key work only in current submenu", function(assert) {
         .keyDown("down")
         .keyDown("end");
 
-    assert.equal(instance._getFocusedElementOption().text(), "item 23", "focus on last item of current submenu");
+    assert.equal($(instance.option("focusedElement")).text(), "item 23", "focus on last item of current submenu");
 });
 
 QUnit.test("home key work only in current submenu", function(assert) {
@@ -1669,7 +1669,7 @@ QUnit.test("home key work only in current submenu", function(assert) {
         .keyDown("down")
         .keyDown("home");
 
-    assert.equal(instance._getFocusedElementOption().text(), "item 21", "focus on first item of current submenu");
+    assert.equal($(instance.option("focusedElement")).text(), "item 21", "focus on first item of current submenu");
 });
 
 QUnit.test("down key work only in current submenu", function(assert) {
@@ -1693,7 +1693,7 @@ QUnit.test("down key work only in current submenu", function(assert) {
         .keyDown("down")
         .keyDown("down");
 
-    assert.equal(instance._getFocusedElementOption().text(), "item 22", "focus on first item of current submenu");
+    assert.equal($(instance.option("focusedElement")).text(), "item 22", "focus on first item of current submenu");
 });
 
 QUnit.test("up key work only in current submenu", function(assert) {
@@ -1717,7 +1717,7 @@ QUnit.test("up key work only in current submenu", function(assert) {
         .keyDown("up")
         .keyDown("up");
 
-    assert.equal(instance._getFocusedElementOption().text(), "item 23", "focus on first item of current submenu");
+    assert.equal($(instance.option("focusedElement")).text(), "item 23", "focus on first item of current submenu");
 });
 
 QUnit.test("left arrow key should not close context menu", function(assert) {
@@ -1945,5 +1945,5 @@ function getVisibleSubmenuCount(instance) {
 }
 
 function getFocusedItemText(instance) {
-    return instance._getFocusedElementOption().children("." + DX_MENU_ITEM_CONTENT_CLASS).text();
+    return $(instance.option("focusedElement")).children("." + DX_MENU_ITEM_CONTENT_CLASS).text();
 }
