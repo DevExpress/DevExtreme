@@ -2921,7 +2921,8 @@ declare module DevExpress.ui {
         /** @docid dxPivotGridFieldChooserMethods_getDataSource */
         getDataSource(): DevExpress.data.PivotGridDataSource;
     }
-
+    
+    /** @docid dxFilterBuilderField */
     export interface dxFilterBuilderField {
         /** @docid_ignore dxFilterBuilderField_defaultFilterOperation */
 
