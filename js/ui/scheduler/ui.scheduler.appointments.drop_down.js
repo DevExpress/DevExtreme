@@ -132,7 +132,7 @@ var dropDownAppointments = Class.inherit({
                     var $item = args.itemElement,
                         itemData = args.itemData;
 
-                    eventsEngine.on($item, DRAG_START_EVENT_NAME, that._dragStartHandler.bind(that, $item, itemData, itemData.settings));
+                    eventsEngine.on($item, DRAG_START_EVENT_NAME, that._dragStartHandler.bind(that, $item, itemData, itemData.settings, $menu));
 
                     eventsEngine.on($item, DRAG_UPDATE_EVENT_NAME, (function(e) {
                         DropDownMenu.getInstance($menu).close();
@@ -148,7 +148,7 @@ var dropDownAppointments = Class.inherit({
         }
     },
 
-    _dragStartHandler: function($item, itemData, settings, e) {
+    _dragStartHandler: function($item, itemData, settings, $menu, e) {
         var appointmentInstance = this.instance.getAppointmentsInstance(),
             appointmentIndex = appointmentInstance.option("items").length;
 
@@ -172,7 +172,15 @@ var dropDownAppointments = Class.inherit({
 
         this._$draggedItem = $items.length > 1 ? this._getRecurrencePart($items, itemData.settings[0].startDate) : $items[0];
 
-        this._startPosition = translator.locate(this._$draggedItem);
+        var menuPosition = translator.locate($menu),
+            itemPosition = translator.locate(this._$draggedItem);
+
+        this._startPosition = {
+            top: itemPosition.top,
+            left: menuPosition.left
+        };
+
+        translator.move(this._$draggedItem, this._startPosition);
         eventsEngine.trigger(this._$draggedItem, "dxdragstart");
     },
 
