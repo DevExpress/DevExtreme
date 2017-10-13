@@ -4308,7 +4308,7 @@ function getEvent(options) {
             }
         });
         draggingHeader.moveHeader({
-            jQueryEvent: {
+            event: {
                 data: {
                     that: draggingHeader,
                     rootElement: testElement
