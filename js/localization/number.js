@@ -4,6 +4,9 @@ var dependencyInjector = require("../core/utils/dependency_injector"),
     inArray = require("../core/utils/array").inArray,
     each = require("../core/utils/iterator").each,
     isPlainObject = require("../core/utils/type").isPlainObject,
+    escapeRegExp = require("../core/utils/common").escapeRegExp,
+    ldmlNumber = require("./ldml/number"),
+    config = require("../core/config"),
     errors = require("../core/errors");
 
 var MAX_LARGE_NUMBER_POWER = 4,
@@ -37,7 +40,7 @@ var numberLocalization = dependencyInjector({
 
         if(!formatType || typeof formatType !== 'string') return;
 
-        formatList = formatType.split(' ');
+        formatList = formatType.toLowerCase().split(' ');
         each(formatList, function(index, value) {
             if(inArray(value, NUMERIC_FORMATS) > -1) {
                 formatObject.formatType = value;
@@ -144,7 +147,7 @@ var numberLocalization = dependencyInjector({
     _addGroupSeparators: function(value) {
         var parts = value.toString().split(".");
 
-        return parts[0].replace(/\B(?=(\d{3})+(?!\d))/g, ",") + (parts[1] ? "." + parts[1] : "");
+        return parts[0].replace(/\B(?=(\d{3})+(?!\d))/g, config().thousandsSeparator) + (parts[1] ? config().decimalSeparator + parts[1] : "");
     },
 
     _formatNumberCore: function(value, format, formatConfig) {
@@ -170,13 +173,15 @@ var numberLocalization = dependencyInjector({
 
         if(format !== "decimal") {
             value = this._addGroupSeparators(value);
+        } else {
+            value = value.toString().replace(".", config().decimalSeparator);
         }
 
         if(format === "percent") {
             value += "%";
         }
 
-        return value.toString();
+        return value;
     },
 
     _normalizeFormat: function(format) {
@@ -194,11 +199,22 @@ var numberLocalization = dependencyInjector({
             };
         }
 
-        if(format.type) {
-            format.type = format.type.toLowerCase();
-        }
-
         return format;
+    },
+
+    _getSeparators: function() {
+        return {
+            decimalSeparator: this.getDecimalSeparator(),
+            thousandsSeparator: this.getThousandsSeparator()
+        };
+    },
+
+    getThousandsSeparator: function() {
+        return this.format(1000, "fixedPoint")[1];
+    },
+
+    getDecimalSeparator: function() {
+        return this.format(1.2, { type: "fixedPoint", precision: 1 })[1];
     },
 
     format: function(value, format) {
@@ -225,7 +241,7 @@ var numberLocalization = dependencyInjector({
         var numberConfig = this._parseNumberFormatString(format.type);
 
         if(!numberConfig) {
-            return;
+            return ldmlNumber.getFormatter(format.type, this._getSeparators())(value);
         }
 
         return this._formatNumber(value, numberConfig, format);
@@ -240,11 +256,19 @@ var numberLocalization = dependencyInjector({
             return format.parser(text);
         }
 
+        if(typeof format === "string") {
+            return ldmlNumber.getParser(format, this._getSeparators())(text);
+        }
+
         if(format) {
             errors.log("W0011");
         }
 
-        return parseFloat(text.replace(/^\D+|,+/g, ""));
+        var textParts = text.split(config().decimalSeparator);
+
+        textParts[0] = textParts[0].replace(new RegExp("^\\D+|" + escapeRegExp(config().thousandsSeparator) + "+", "g"), "");
+
+        return parseFloat(textParts[0] + (textParts[1] ? "." + textParts[1] : ""));
     }
 });
 

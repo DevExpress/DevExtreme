@@ -30,7 +30,7 @@ var SchedulerTableCreator = {
 
                 if(options.cellClass) {
                     if(typeUtils.isFunction(options.cellClass)) {
-                        td.className = options.cellClass(i);
+                        td.className = options.cellClass(i, j);
                     } else {
                         td.className = options.cellClass;
                     }
