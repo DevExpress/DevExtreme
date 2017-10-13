@@ -171,15 +171,16 @@ var contains = function(container, element) {
 };
 
 var getPublicElement = function($element) {
-    if(elementStrategy) {
-        return elementStrategy($element);
-    }
-    return $element && $element.get(0);
+    return elementStrategy($element);
 };
 
 var setPublicElementWrapper = function(value) {
     elementStrategy = value;
 };
+
+setPublicElementWrapper(function(element) {
+    return element && element.get(0);
+});
 
 exports.setPublicElementWrapper = setPublicElementWrapper;
 exports.resetActiveElement = resetActiveElement;
