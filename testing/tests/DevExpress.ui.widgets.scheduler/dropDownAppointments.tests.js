@@ -166,7 +166,7 @@ QUnit.test("DropDown appointments should have a left border", function(assert) {
     var $dropDownAppointment = $(".dx-dropdownmenu-list .dx-scheduler-dropdown-appointment").first(),
         borderWidth = parseInt($dropDownAppointment.css("border-left-width"), 10);
 
-    assert.equal(borderWidth, 3, "Border is OK");
+    assert.equal(borderWidth, 5, "Border is OK");
 });
 
 QUnit.test("DropDown appointments should have a right border in rtl mode", function(assert) {

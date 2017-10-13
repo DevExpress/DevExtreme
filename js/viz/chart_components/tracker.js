@@ -280,7 +280,7 @@ var baseTrackerPrototype = {
         var eventTrigger = this._eventTrigger;
 
         eventTrigger(LEGEND_CLICK, eventArgs, function() {
-            !eventCanceled(eventArgs.jQueryEvent, eventArgs.target) && eventTrigger(elementClick, eventArgs);
+            !eventCanceled(eventArgs.event, eventArgs.target) && eventTrigger(elementClick, eventArgs);
         });
     },
 
@@ -442,7 +442,7 @@ var baseTrackerPrototype = {
         } else if(axis && axis.coordsIn(x, y)) {
             var argument = getData(e, ARG_DATA);
             if(isDefined(argument)) {
-                that._eventTrigger("argumentAxisClick", { argument: argument, jQueryEvent: e });
+                that._eventTrigger("argumentAxisClick", { argument: argument, event: e });
             }
         } else if(series) {
             point = point || series.getPointByCoord(x, y);
@@ -450,7 +450,7 @@ var baseTrackerPrototype = {
             if(point) {
                 that._pointClick(point, e);
             } else {
-                getData(e, SERIES_DATA) && that._eventTrigger(SERIES_CLICK, { target: series, jQueryEvent: e });
+                getData(e, SERIES_DATA) && that._eventTrigger(SERIES_CLICK, { target: series, event: e });
             }
         }
     },
@@ -474,8 +474,8 @@ extend(ChartTracker.prototype, baseTrackerPrototype, {
             eventTrigger = that._eventTrigger,
             series = point.series;
 
-        eventTrigger(POINT_CLICK, { target: point, jQueryEvent: event }, function() {
-            !eventCanceled(event, series) && eventTrigger(SERIES_CLICK, { target: series, jQueryEvent: event });
+        eventTrigger(POINT_CLICK, { target: point, event: event }, function() {
+            !eventCanceled(event, series) && eventTrigger(SERIES_CLICK, { target: series, event: event });
         });
     },
     ///#DEBUG
@@ -773,7 +773,7 @@ extend(ChartTracker.prototype, baseTrackerPrototype, {
 
     _legendClick: function(item, e) {
         var series = this._storedSeries[item.id];
-        this._triggerLegendClick({ target: series, jQueryEvent: e }, SERIES_CLICK);
+        this._triggerLegendClick({ target: series, event: e }, SERIES_CLICK);
     },
 
     _hoverLegendItem: function(x, y) {
@@ -818,11 +818,11 @@ extend(PieTracker.prototype, baseTrackerPrototype, {
             points.push.apply(points, s.getPointsByKeys(item.argument, item.id));
         });
 
-        that._eventTrigger(LEGEND_CLICK, { target: item.argument, points: points, jQueryEvent: e });
+        that._eventTrigger(LEGEND_CLICK, { target: item.argument, points: points, event: e });
     },
 
     _pointClick: function(point, e) {
-        this._eventTrigger(POINT_CLICK, { target: point, jQueryEvent: e });
+        this._eventTrigger(POINT_CLICK, { target: point, event: e });
     },
 
     _hoverLegendItem: function(x, y) {

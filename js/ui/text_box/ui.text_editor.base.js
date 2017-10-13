@@ -141,7 +141,7 @@ var TextEditorBase = Editor.inherit({
             * @name dxTextEditorOptions_onFocusIn
             * @publicName onFocusIn
             * @extends Action
-            * @type_function_param1_field4 jQueryEvent:jQueryEvent
+            * @type_function_param1_field4 jQueryEvent:jQuery.Event
             * @action
             */
             onFocusIn: null,
@@ -150,7 +150,7 @@ var TextEditorBase = Editor.inherit({
             * @name dxTextEditorOptions_onFocusOut
             * @publicName onFocusOut
             * @extends Action
-            * @type_function_param1_field4 jQueryEvent:jQueryEvent
+            * @type_function_param1_field4 jQueryEvent:jQuery.Event
             * @action
             */
             onFocusOut: null,
@@ -159,7 +159,7 @@ var TextEditorBase = Editor.inherit({
             * @name dxTextEditorOptions_onKeyDown
             * @publicName onKeyDown
             * @extends Action
-            * @type_function_param1_field4 jQueryEvent:jQueryEvent
+            * @type_function_param1_field4 jQueryEvent:jQuery.Event
             * @default null
             * @action
             */
@@ -169,7 +169,7 @@ var TextEditorBase = Editor.inherit({
             * @name dxTextEditorOptions_onKeyPress
             * @publicName onKeyPress
             * @extends Action
-            * @type_function_param1_field4 jQueryEvent:jQueryEvent
+            * @type_function_param1_field4 jQueryEvent:jQuery.Event
             * @action
             */
             onKeyPress: null,
@@ -178,7 +178,7 @@ var TextEditorBase = Editor.inherit({
             * @name dxTextEditorOptions_onKeyUp
             * @publicName onKeyUp
             * @extends Action
-            * @type_function_param1_field4 jQueryEvent:jQueryEvent
+            * @type_function_param1_field4 jQueryEvent:jQuery.Event
             * @action
             */
             onKeyUp: null,
@@ -187,7 +187,7 @@ var TextEditorBase = Editor.inherit({
             * @name dxTextEditorOptions_onChange
             * @publicName onChange
             * @extends Action
-            * @type_function_param1_field4 jQueryEvent:jQueryEvent
+            * @type_function_param1_field4 jQueryEvent:jQuery.Event
             * @action
             */
             onChange: null,
@@ -196,7 +196,7 @@ var TextEditorBase = Editor.inherit({
             * @name dxTextEditorOptions_onInput
             * @publicName onInput
             * @extends Action
-            * @type_function_param1_field4 jQueryEvent:jQueryEvent
+            * @type_function_param1_field4 jQueryEvent:jQuery.Event
             * @action
             */
             onInput: null,
@@ -205,7 +205,7 @@ var TextEditorBase = Editor.inherit({
             * @name dxTextEditorOptions_onCut
             * @publicName onCut
             * @extends Action
-            * @type_function_param1_field4 jQueryEvent:jQueryEvent
+            * @type_function_param1_field4 jQueryEvent:jQuery.Event
             * @action
             */
             onCut: null,
@@ -214,7 +214,7 @@ var TextEditorBase = Editor.inherit({
             * @name dxTextEditorOptions_onCopy
             * @publicName onCopy
             * @extends Action
-            * @type_function_param1_field4 jQueryEvent:jQueryEvent
+            * @type_function_param1_field4 jQueryEvent:jQuery.Event
             * @action
             */
             onCopy: null,
@@ -223,7 +223,7 @@ var TextEditorBase = Editor.inherit({
             * @name dxTextEditorOptions_onPaste
             * @publicName onPaste
             * @extends Action
-            * @type_function_param1_field4 jQueryEvent:jQueryEvent
+            * @type_function_param1_field4 jQueryEvent:jQuery.Event
             * @action
             */
             onPaste: null,
@@ -232,7 +232,7 @@ var TextEditorBase = Editor.inherit({
             * @name dxTextEditorOptions_onEnterKey
             * @publicName onEnterKey
             * @extends Action
-            * @type_function_param1_field4 jQueryEvent:jQueryEvent
+            * @type_function_param1_field4 jQueryEvent:jQuery.Event
             * @action
             */
             onEnterKey: null,
@@ -538,7 +538,7 @@ var TextEditorBase = Editor.inherit({
                         return;
                     }
 
-                    action({ jQueryEvent: e });
+                    action({ event: e });
                 });
             }
         });
@@ -634,7 +634,7 @@ var TextEditorBase = Editor.inherit({
 
         if(e.which === 13) {
             this._enterKeyAction({
-                jQueryEvent: e
+                event: e
             });
         }
     },

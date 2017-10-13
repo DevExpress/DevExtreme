@@ -2,8 +2,11 @@
 
 var $ = require("jquery"),
     noop = require("core/utils/common").noop,
+    errors = require("core/errors"),
     Action = require("core/action"),
     config = require("core/config");
+
+var noJquery = QUnit.urlParams["nojquery"];
 
 QUnit.testStart(function() {
     var markup =
@@ -252,7 +255,7 @@ QUnit.test("ui interaction validator should prevent all action handlers by valid
     });
 
     action.execute({
-        jQueryEvent: $.Event("click", { target: $(".dx-state-disabled .dx-click-target").get(0) }),
+        event: $.Event("click", { target: $(".dx-state-disabled .dx-click-target").get(0) }),
         customElement: $(".dx-state-disabled")
     });
 
@@ -267,13 +270,66 @@ QUnit.test("ui interaction validator should prevent all ui action handlers by 'd
     var action = new Action(handlerSpy);
 
     action.execute({
-        jQueryEvent: $.Event("click", { target: $targetElement.get(0) }),
+        event: $.Event("click", { target: $targetElement.get(0) }),
         element: $targetElement
     });
 
     assert.ok(!handlerSpy.called);
 });
 
+QUnit.test("Action argument should contain both Event and jQueryEvent field or none of them", function(assert) {
+    var eventMock = {};
+
+    new Action(function(e) {
+        assert.notOk(e.event);
+        assert.notOk(e.jQueryEvent);
+    }).execute({});
+
+    new Action(function(e) {
+        assert.ok(e.event);
+        assert.ok(noJquery || e.jQueryEvent);
+    }).execute({ event: eventMock });
+
+    assert.throws(function() {
+        new Action(noop).execute({ jQueryEvent: eventMock });
+    }, /The jQueryEvent field is deprecated\. Please, use the `event` field instead/);
+});
+
+QUnit.test("Working with jQueryEvent field should throw warning", function(assert) {
+    var eventMock = {};
+    var expectedWarning = ["W0003", "Handler argument", "jQueryEvent", "17.2", "Use the 'event' field instead"];
+    var originalLog = errors.log;
+    var log = [];
+
+    errors.log = function() {
+        log.push($.makeArray(arguments));
+    };
+
+    new Action(function(e) {
+        e.jQueryEvent;
+    }).execute({ event: eventMock });
+
+    if(noJquery) {
+        assert.equal(log.length, 0);
+    } else {
+        assert.equal(log.length, 1);
+        assert.deepEqual(log[0], expectedWarning);
+    }
+
+    new Action(function(e) {
+        e.jQueryEvent = {};
+    }).execute({ event: eventMock });
+
+
+    if(noJquery) {
+        assert.equal(log.length, 0);
+    } else {
+        assert.equal(log.length, 2);
+        assert.deepEqual(log[1], expectedWarning);
+    }
+
+    errors.log = originalLog;
+});
 
 QUnit.module("excludeValidators", {
     beforeEach: function() {

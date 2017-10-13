@@ -1323,7 +1323,7 @@ var dxVectorMap = {
     * @type_function_param1 e:object
     * @type_function_param1_field1 component:object
     * @type_function_param1_field2 element:object
-    * @type_function_param1_field3 jQueryEvent:jQueryEvent
+    * @type_function_param1_field3 jQueryEvent:jQuery.Event
     * @type_function_param1_field4 target:MapLayerElement
     * @notUsedInTheme
     * @action
@@ -1372,7 +1372,7 @@ var dxVectorMap = {
     * @type_function_param1 e:object
     * @type_function_param1_field1 component:object
     * @type_function_param1_field2 element:object
-    * @type_function_param1_field3 jQueryEvent:jQueryEvent
+    * @type_function_param1_field3 jQueryEvent:jQuery.Event
     * @type_function_param1_field4 target:areaObjects
     * @notUsedInTheme
     * @deprecated dxvectormapoptions_onClick
@@ -1399,7 +1399,7 @@ var dxVectorMap = {
     * @type_function_param1 e:object
     * @type_function_param1_field1 component:object
     * @type_function_param1_field2 element:object
-    * @type_function_param1_field3 jQueryEvent:jQueryEvent
+    * @type_function_param1_field3 jQueryEvent:jQuery.Event
     * @type_function_param1_field4 target:markerObjects
     * @notUsedInTheme
     * @deprecated dxvectormapoptions_onClick

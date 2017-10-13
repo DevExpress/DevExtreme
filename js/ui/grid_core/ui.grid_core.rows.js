@@ -183,7 +183,7 @@ module.exports = {
             * @publicName onRowClick
             * @type function(e)|string
             * @type_function_param1 e:object
-            * @type_function_param1_field4 jQueryEvent:jQueryEvent
+            * @type_function_param1_field4 jQueryEvent:jQuery.Event
             * @type_function_param1_field5 data:object
             * @type_function_param1_field6 key:any
             * @type_function_param1_field7 values:Array<Object>
@@ -203,7 +203,7 @@ module.exports = {
             * @publicName onRowClick
             * @type function(e)|string
             * @type_function_param1 e:object
-            * @type_function_param1_field4 jQueryEvent:jQueryEvent
+            * @type_function_param1_field4 jQueryEvent:jQuery.Event
             * @type_function_param1_field5 data:object
             * @type_function_param1_field6 key:any
             * @type_function_param1_field7 values:Array<Object>
@@ -222,7 +222,7 @@ module.exports = {
             * @publicName onCellClick
             * @type function(e)|string
             * @type_function_param1 e:object
-            * @type_function_param1_field4 jQueryEvent:jQueryEvent
+            * @type_function_param1_field4 jQueryEvent:jQuery.Event
             * @type_function_param1_field5 data:object
             * @type_function_param1_field6 key:any
             * @type_function_param1_field7 value:any
@@ -242,7 +242,7 @@ module.exports = {
             * @publicName onCellClick
             * @type function(e)|string
             * @type_function_param1 e:object
-            * @type_function_param1_field4 jQueryEvent:jQueryEvent
+            * @type_function_param1_field4 jQueryEvent:jQuery.Event
             * @type_function_param1_field5 data:object
             * @type_function_param1_field6 key:any
             * @type_function_param1_field7 value:any
@@ -564,7 +564,7 @@ module.exports = {
                 _handleScroll: function(e) {
                     var that = this;
 
-                    that._isScrollByEvent = !!e.jQueryEvent;
+                    that._isScrollByEvent = !!e.event;
                     that._scrollTop = e.scrollOffset.top;
                     that._scrollLeft = e.scrollOffset.left;
                     that.scrollChanged.fire(e.scrollOffset, that.name);

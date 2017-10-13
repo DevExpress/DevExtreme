@@ -155,11 +155,11 @@ var Fixture = Class.inherit({
         assert.ok(editor._keyboardProcessor, "keyboardProcessor is defined");
     });
 
-    QUnit.test("If _valueChangeEventInstance is present, the onValueChanged must receive it as a jQueryEvent argument; and then _valueChangeEventInstance must be reset", function(assert) {
+    QUnit.test("If _valueChangeEventInstance is present, the onValueChanged must receive it as a Event argument; and then _valueChangeEventInstance must be reset", function(assert) {
         var newValue = "new",
             _valueChangeEventInstance = "something",
             onValueChanged = function(options) {
-                assert.strictEqual(options.jQueryEvent, _valueChangeEventInstance, "jQueryEvent is ok");
+                assert.strictEqual(options.event, _valueChangeEventInstance, "Event is ok");
             };
 
         var editor = this.fixture.createEditor();

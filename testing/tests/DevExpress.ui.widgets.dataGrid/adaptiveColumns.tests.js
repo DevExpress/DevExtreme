@@ -1017,7 +1017,7 @@ QUnit.test("Resize column when hidden columns are located in the middle ", funct
     this.columnsResizerController._targetPoint = { columnIndex: 0 };
     this.columnsResizerController._setupResizingInfo(-9900);
     this.columnsResizerController._moveSeparator({
-        jQueryEvent: {
+        event: {
             data: this.columnsResizerController,
             type: 'mousemove',
             pageX: -9840,

@@ -55,7 +55,7 @@ var EditorFactoryMixin = (function() {
 
                 window.clearTimeout(data.valueChangeTimeout);
 
-                if(e.jQueryEvent && e.jQueryEvent.type === "keyup" && !options.updateValueImmediately) {
+                if(e.event && e.event.type === "keyup" && !options.updateValueImmediately) {
                     if(options.parentType === "filterRow" || options.parentType === "searchPanel") {
                         sharedData.valueChangeTimeout = data.valueChangeTimeout = window.setTimeout(function() {
                             updateValue(e, data.valueChangeTimeout !== sharedData.valueChangeTimeout);
@@ -74,7 +74,7 @@ var EditorFactoryMixin = (function() {
                 }
             },
             onKeyDown: function(e) {
-                if(isEnterBug && isValueChanged && e.jQueryEvent.keyCode === 13) {
+                if(isEnterBug && isValueChanged && e.event.keyCode === 13) {
                     isValueChanged = false;
                     options.setValue(e.component.option("value"));
                 }
@@ -92,7 +92,7 @@ var EditorFactoryMixin = (function() {
                 options.setValue(args.value);
             },
             onKeyDown: function(e) {
-                if(checkEnterBug() && e.jQueryEvent.keyCode === 13) {
+                if(checkEnterBug() && e.event.keyCode === 13) {
                     e.component.blur();
                     e.component.focus();
                 }

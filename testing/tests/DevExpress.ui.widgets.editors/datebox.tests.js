@@ -1862,7 +1862,7 @@ QUnit.test("ValueChanged action should have jQuery event as a parameter when val
     $(".dx-calendar-cell").eq(0).trigger("dxclick");
 
     assert.deepEqual(this.fixture.dateBox.option("value"), new Date(2015, 10, 29), "value has been changed");
-    assert.ok(valueChangedHandler.getCall(0).args[0].jQueryEvent, "jQueryEvent is defined");
+    assert.ok(valueChangedHandler.getCall(0).args[0].event, "Event is defined");
 });
 
 QUnit.test("valueChangeEvent cache should be cleared after the value changing", function(assert) {
@@ -1877,8 +1877,8 @@ QUnit.test("valueChangeEvent cache should be cleared after the value changing", 
     this.fixture.dateBox.option("value", new Date());
 
     assert.equal(valueChangedHandler.callCount, 2, "valueChangeEventHandler was called 2 times");
-    assert.ok(valueChangedHandler.getCall(0).args[0].jQueryEvent, "jqueryEvent exists in first call via user interaction");
-    assert.notOk(valueChangedHandler.getCall(1).args[0].jQueryEvent, "jqueryEvent does not exist in second call via api");
+    assert.ok(valueChangedHandler.getCall(0).args[0].event, "Event exists in first call via user interaction");
+    assert.notOk(valueChangedHandler.getCall(1).args[0].event, "Event does not exist in second call via api");
 });
 
 QUnit.test("dateBox's 'min' and 'max' options equal to undefined (T171537)", function(assert) {
@@ -3136,7 +3136,7 @@ QUnit.test("apply contoured date on enter for date and datetime mode", function(
     assert.equal(selectedDate.getDate(), 1, "day is right");
 });
 
-QUnit.testInActiveWindow("valueChangeEvent should have jQueryEvent when enter key was pressed", function(assert) {
+QUnit.testInActiveWindow("valueChangeEvent should have Event when enter key was pressed", function(assert) {
     var $dateBox;
 
     try {
@@ -3155,7 +3155,7 @@ QUnit.testInActiveWindow("valueChangeEvent should have jQueryEvent when enter ke
         $input.focusin();
         kb.press("enter");
 
-        assert.ok(valueChangedHandler.getCall(0).args[0].jQueryEvent, "jqueryEvent exists");
+        assert.ok(valueChangedHandler.getCall(0).args[0].event, "Event exists");
     } finally {
         $dateBox.remove();
     }

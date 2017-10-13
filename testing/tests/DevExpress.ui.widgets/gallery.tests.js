@@ -140,7 +140,7 @@ QUnit.test("click triggers user handler", function(assert) {
     $gallery.find("." + GALLERY_ITEM_CLASS).eq(0).trigger("dxclick");
     assert.ok(clicked);
 
-    assert.ok(clickEventArgs.jQueryEvent);
+    assert.ok(clickEventArgs.event);
     assert.equal(clickEventArgs.itemData, $gallery.dxGallery("instance").option("items")[0]);
 });
 

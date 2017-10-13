@@ -86,7 +86,11 @@ var FilterBuilder = Widget.inherit({
             * @default []
             */
             fields: [],
-
+            /**
+            * @name dxFilterBuilderField
+            * @publicName dxFilterBuilderField
+            * @type object
+            */
             /**
             * @name dxFilterBuilderField_caption
             * @publicName caption
@@ -106,7 +110,7 @@ var FilterBuilder = Widget.inherit({
              * @publicName dataType
              * @type string
              * @default "string"
-             * @acceptValues "string" | "number" | "date" | "boolean" | "object"
+             * @acceptValues "string" | "number" | "date" | "datetime" | "boolean" | "object"
              */
 
             /**
@@ -503,7 +507,7 @@ var FilterBuilder = Widget.inherit({
                 return function(e) {
                     handler(e);
                     removeMenu();
-                    if(e.jQueryEvent.type === "keydown") {
+                    if(e.event.type === "keydown") {
                         eventsEngine.trigger(options.menu.target, "focus");
                     }
                 };

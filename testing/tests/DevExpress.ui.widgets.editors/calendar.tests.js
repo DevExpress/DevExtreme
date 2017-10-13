@@ -958,7 +958,7 @@ QUnit.test("pressing enter should change value", function(assert) {
     });
 });
 
-QUnit.test("jQueryEvent should be passed to the valueChanged action after selecting a cell via the keyboard", function(assert) {
+QUnit.test("Event should be passed to the valueChanged action after selecting a cell via the keyboard", function(assert) {
     var keyboard = keyboardMock(this.$element),
         valueChangedHandler = sinon.stub();
 
@@ -970,7 +970,7 @@ QUnit.test("jQueryEvent should be passed to the valueChanged action after select
     keyboard.press("enter");
 
     var params = valueChangedHandler.getCall(1).args[0];
-    assert.ok(params.jQueryEvent, "jQueryEvent should be passed");
+    assert.ok(params.event, "Event should be passed");
     assert.ok(params.component, "Component should be passed");
     assert.ok(params.element, "Element should be passed");
 });
@@ -1519,12 +1519,12 @@ QUnit.test("onCellClick return not 'undefined' after click on cell", function(as
 
     var params = clickHandler.getCall(0).args[0];
     assert.ok(params, "Event params should be passed");
-    assert.ok(params.jQueryEvent, "jQueryEvent should be passed");
+    assert.ok(params.event, "Event should be passed");
     assert.ok(params.component, "Component should be passed");
     assert.ok(params.element, "Element should be passed");
 });
 
-QUnit.test("jQueryEvent should be passed to the valueChanged action after click on a cell", function(assert) {
+QUnit.test("Event should be passed to the valueChanged action after click on a cell", function(assert) {
     var valueChangedHandler = sinon.stub();
 
     this.reinit({
@@ -1537,7 +1537,7 @@ QUnit.test("jQueryEvent should be passed to the valueChanged action after click 
     $($cell).trigger("dxclick");
 
     var params = valueChangedHandler.getCall(0).args[0];
-    assert.ok(params.jQueryEvent, "jQueryEvent should be passed");
+    assert.ok(params.event, "Event should be passed");
     assert.ok(params.component, "Component should be passed");
     assert.ok(params.element, "Element should be passed");
 });

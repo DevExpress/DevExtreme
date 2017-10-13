@@ -236,7 +236,7 @@ var ListBase = CollectionWidget.inherit({
             * @name dxListOptions_onScroll
             * @publicName onScroll
             * @extends Action
-            * @type_function_param1_field4 jQueryEvent:jQueryEvent
+            * @type_function_param1_field4 jQueryEvent:jQuery.Event
             * @type_function_param1_field5 scrollOffset:object
             * @type_function_param1_field6 reachedLeft:boolean
             * @type_function_param1_field7 reachedRight:boolean
@@ -283,7 +283,7 @@ var ListBase = CollectionWidget.inherit({
             * @name dxListOptions_onItemSwipe
             * @publicName onItemSwipe
             * @extends Action
-            * @type_function_param1_field4 jQueryEvent:jQueryEvent
+            * @type_function_param1_field4 jQueryEvent:jQuery.Event
             * @type_function_param1_field5 itemData:object
             * @type_function_param1_field6 itemElement:Element
             * @type_function_param1_field7 itemIndex:number | object
@@ -756,7 +756,7 @@ var ListBase = CollectionWidget.inherit({
         if(collapsibleGroups) {
             eventsEngine.on($element, eventName, selector, (function(e) {
                 this._createAction((function(e) {
-                    var $group = $(e.jQueryEvent.currentTarget).parent();
+                    var $group = $(e.event.currentTarget).parent();
                     this._collapseGroupHandler($group);
                     if(this.option("focusStateEnabled")) {
                         this.option("focusedElement", $group.find("." + LIST_ITEM_CLASS).eq(0));
@@ -764,7 +764,7 @@ var ListBase = CollectionWidget.inherit({
                 }).bind(this), {
                     validatingTargetName: "element"
                 })({
-                    jQueryEvent: e
+                    event: e
                 });
             }).bind(this));
         }
@@ -825,7 +825,7 @@ var ListBase = CollectionWidget.inherit({
 
         var config = {
             element: $element,
-            jQueryEvent: e
+            event: e
         };
 
         if(value) {
@@ -851,7 +851,7 @@ var ListBase = CollectionWidget.inherit({
     },
 
     _itemSwipeEndHandler: function(e) {
-        this._itemJQueryEventHandler(e, "onItemSwipe", {
+        this._itemDXEventHandler(e, "onItemSwipe", {
             direction: e.offset < 0 ? "left" : "right"
         });
     },

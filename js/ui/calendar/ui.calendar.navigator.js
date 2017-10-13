@@ -52,7 +52,7 @@ var Navigator = Widget.inherit({
             Button, {
                 focusStateEnabled: false,
                 icon: "chevronleft",
-                onClick: function(e) { that._clickAction({ direction: -direction, jQueryEvent: e }); },
+                onClick: function(e) { that._clickAction({ direction: -direction, event: e }); },
                 integrationOptions: {}
             });
 
@@ -64,7 +64,7 @@ var Navigator = Widget.inherit({
             Button, {
                 focusStateEnabled: false,
                 icon: "chevronright",
-                onClick: function(e) { that._clickAction({ direction: direction, jQueryEvent: e }); },
+                onClick: function(e) { that._clickAction({ direction: direction, event: e }); },
                 integrationOptions: {}
             });
 
@@ -75,7 +75,7 @@ var Navigator = Widget.inherit({
         this._caption = this._createComponent($("<a>").addClass(CALENDAR_NAVIGATOR_CAPTION_BUTTON_CLASS),
             Button, {
                 focusStateEnabled: false,
-                onClick: function(e) { that._captionClickAction({ jQueryEvent: e }); },
+                onClick: function(e) { that._captionClickAction({ event: e }); },
                 integrationOptions: {}
             });
 

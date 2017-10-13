@@ -65,7 +65,7 @@ var EditorFactory = modules.ViewController.inherit({
 
     _updateFocus: function(e) {
         var that = this,
-            isFocusOverlay = e && e.jQueryEvent && $(e.jQueryEvent.target).hasClass(that.addWidgetPrefix(FOCUS_OVERLAY_CLASS));
+            isFocusOverlay = e && e.event && $(e.event.target).hasClass(that.addWidgetPrefix(FOCUS_OVERLAY_CLASS));
 
         that._isFocusOverlay = that._isFocusOverlay || isFocusOverlay;
 

@@ -360,7 +360,7 @@ var Map = Widget.inherit({
             * @type function|string
             * @extends Action
             * @type_function_param1_field4 location:object
-            * @type_function_param1_field5 jQueryEvent:jQueryEvent
+            * @type_function_param1_field5 jQueryEvent:jQuery.Event
             * @action
             */
             onClick: null

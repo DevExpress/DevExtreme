@@ -745,17 +745,11 @@ QUnit.module("Formatting", function() {
             value = true;
         assert.equal(utils.getCurrentValueText(field, value), "true");
 
-        field = { dataType: "boolean", falseText: "False Text" };
         value = false;
-        assert.equal(utils.getCurrentValueText(field, value), "False Text");
+        assert.equal(utils.getCurrentValueText(field, value), "false");
 
-        field = {
-            customizeText: function(conditionInfo) {
-                return conditionInfo.valueText + "Test";
-            }
-        };
-        value = "MyValue";
-        assert.equal(utils.getCurrentValueText(field, value), "MyValueTest");
+        field.falseText = "False Text";
+        assert.equal(utils.getCurrentValueText(field, value), "False Text");
     });
 
     QUnit.test("customizeText", function(assert) {
