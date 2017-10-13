@@ -177,11 +177,11 @@ var getPublicElement = function($element) {
     return $element && $element.get(0);
 };
 
-var setElementStrategy = function(value) {
+var setPublicElementWrapper = function(value) {
     elementStrategy = value;
 };
 
-exports.setElementStrategy = setElementStrategy;
+exports.setPublicElementWrapper = setPublicElementWrapper;
 exports.resetActiveElement = resetActiveElement;
 exports.createMarkupFromString = createMarkupFromString;
 exports.triggerShownEvent = triggerVisibilityChangeEvent("dxshown");
