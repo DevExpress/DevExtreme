@@ -966,7 +966,7 @@ var ListBase = CollectionWidget.inherit({
     _moveFocus: function() {
         this.callBase.apply(this, arguments);
 
-        this.scrollToItem($(this.option("focusedElement")));
+        this.scrollToItem(this.option("focusedElement"));
     },
 
     _refresh: function() {
