@@ -24,6 +24,7 @@ var NUMBERBOX_CLASS = "dx-numberbox",
 
     ACTIVE_STATE_CLASS = "dx-state-active";
 
+
 QUnit.module("basics");
 
 QUnit.test("markup init", function(assert) {
@@ -253,7 +254,7 @@ QUnit.test("jQuery event should be specified on value change when value is not v
         value: 1,
         valueChangeEvent: "keyup",
         onValueChanged: function(e) {
-            assert.ok(e.jQueryEvent, "jQuery event specified");
+            assert.ok(e.event, "jQuery event specified");
         }
     });
 
@@ -638,6 +639,7 @@ QUnit.test("The widget should be invalid if isValid option is false on init but 
     assert.ok($numberBox.hasClass(INVALID_CLASS), "widget is invalid");
 });
 
+
 QUnit.module("submit element");
 
 QUnit.test("a hidden input should be rendered", function(assert) {
@@ -685,6 +687,7 @@ QUnit.test("the hidden input should use the decimal separator specified in DevEx
     }
 });
 
+
 QUnit.module("the 'name' option");
 
 QUnit.test("hidden input should get the 'name' attribute", function(assert) {
@@ -707,6 +710,7 @@ QUnit.test("editor input should not get the 'name' attribute", function(assert) 
 
     assert.notOk(input.hasAttribute("name"), "edior input does not have the 'name' attribute");
 });
+
 
 QUnit.module("input value updating");
 
@@ -1251,7 +1255,7 @@ QUnit.test("onValueChanged option should get jQuery event as a parameter when sp
     this.instance.option({
         showSpinButtons: true,
         onValueChanged: function(e) {
-            jQueryEvent = e.jQueryEvent;
+            jQueryEvent = e.event;
         }
     });
 
@@ -1276,7 +1280,7 @@ QUnit.testInActiveWindow("onValueChanged option should get jQuery event as a par
     this.instance.option({
         showSpinButtons: true,
         onValueChanged: function(e) {
-            jQueryEvent = e.jQueryEvent;
+            jQueryEvent = e.event;
         }
     });
 
@@ -1299,7 +1303,7 @@ QUnit.test("onValueChanged option should get jQuery event as a parameter when up
     this.instance.option({
         showSpinButtons: true,
         onValueChanged: function(e) {
-            jQueryEvent = e.jQueryEvent;
+            jQueryEvent = e.event;
         }
     });
 
