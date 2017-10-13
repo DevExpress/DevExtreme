@@ -984,11 +984,11 @@ var CollectionWidget = Widget.inherit({
     },
 
     _createItemByTemplate: function(itemTemplate, renderArgs) {
-        return itemTemplate.render({
+        return $(itemTemplate.render({
             model: renderArgs.itemData,
             container: renderArgs.container,
             index: renderArgs.index
-        });
+        }));
     },
 
     _emptyMessageContainer: function() {
