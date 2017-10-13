@@ -1000,6 +1000,6 @@ QUnit.test("getInstance method", function(assert) {
     assert.equal(this.TestComponent.getInstance($element), instance);
     assert.equal(this.TestComponent.getInstance($element.get(0)), instance);
 
-    assert.notEqual(AnotherComponent.getInstance($element), instance);
-    assert.notEqual(AnotherComponent.getInstance($element.get(0)), instance);
+    assert.strictEqual(AnotherComponent.getInstance($element), undefined);
+    assert.strictEqual(AnotherComponent.getInstance($element.get(0)), undefined);
 });

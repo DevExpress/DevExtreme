@@ -418,8 +418,8 @@ var DOMComponent = Component.inherit({
 * @param1 element:Element
 * @return object
 */
-DOMComponent.getInstance = function($element) {
-    return publicComponentUtils.getInstanceByElement($($element), this);
+DOMComponent.getInstance = function(element) {
+    return publicComponentUtils.getInstanceByElement($(element), this);
 };
 
 /**
