@@ -168,6 +168,35 @@ QUnit.test("custom render func, returns jquery", function(assert) {
     assert.equal($.trim(element.text()), "Text is: 3;Text is: 4;Text is: 5;");
 });
 
+QUnit.test("custom render func, returns dom node", function(assert) {
+    var element = this.element;
+    new TestComponent("#cmp", {
+        integrationOptions: {
+            templates: {
+                "item": {
+                    render: function(args) {
+                        var $element = $("<span>")
+                            .addClass("dx-template-wrapper")
+                            .text("Text is: " + String(args.model.testProp) + ";");
+
+                        return $element.get(0);
+                    }
+                }
+            }
+        },
+        items: [{
+            testProp: 3
+        }, {
+            testProp: 4
+        }, {
+            testProp: 5
+        }]
+    });
+
+    assert.equal(element.find(".item").length, 3);
+    assert.equal($.trim(element.text()), "Text is: 3;Text is: 4;Text is: 5;");
+});
+
 QUnit.test("custom render func, returns string", function(assert) {
     var element = this.element;
 
