@@ -5,6 +5,7 @@ var dataErrors = require("../../data/errors").errors,
     extend = require("../../core/utils/extend").extend,
     formatHelper = require("../../format_helper"),
     inflector = require("../../core/utils/inflector"),
+    messageLocalization = require("../../localization/message"),
     filterOperationsDictionary = require("./ui.filter_operations_dictionary");
 
 var DEFAULT_DATA_TYPE = "string",
@@ -324,9 +325,9 @@ function getNormalizedFilter(group) {
 function getCurrentValueText(field, value) {
     var valueText;
     if(value === true) {
-        valueText = field.trueText || "true";
+        valueText = field.trueText || messageLocalization.format("dxDataGrid-trueText");
     } else if(value === false) {
-        valueText = field.falseText || "false";
+        valueText = field.falseText || messageLocalization.format("dxDataGrid-falseText");
     } else {
         valueText = formatHelper.format(value, field.format);
     }
