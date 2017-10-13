@@ -1053,7 +1053,7 @@ declare module DevExpress.ui {
         mode?: string;
 
         /** @docid dxNumberBoxOptions_displayFormat */
-        mode?: boolean;
+        displayFormat?: string;
 
         /** @docid dxNumberBoxOptions_invalidValueMessage */
         invalidValueMessage?: string;

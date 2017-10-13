@@ -349,3 +349,7 @@ QUnit.test("removing a stub using backspace should remove previous char", functi
     assert.equal(this.instance.option("value"), 0.12, "value is correct");
 });
 
+QUnit.test("ctrl+v should not be prevented", function(assert) {
+    this.keyboard.keyDown("v", { ctrlKey: true });
+    assert.strictEqual(this.keyboard.event.isDefaultPrevented(), false, "keydown event is not prevented");
+});
