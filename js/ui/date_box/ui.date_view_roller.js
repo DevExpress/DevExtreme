@@ -85,7 +85,7 @@ var DateViewRoller = Scrollable.inherit({
 
         eventsEngine.off(this._$container, eventName);
         eventsEngine.on(this._$container, eventName, function(e) {
-            clickAction({ jQueryEvent: e });
+            clickAction({ event: e });
         });
     },
 
@@ -253,7 +253,7 @@ var DateViewRoller = Scrollable.inherit({
         this._selectedIndexChanged({
             value: value,
             previousValue: previousValue,
-            jQueryEvent: undefined
+            event: undefined
         });
     },
 

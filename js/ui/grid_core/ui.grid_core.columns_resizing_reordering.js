@@ -454,7 +454,7 @@ var DraggingHeaderView = modules.View.inherit({
     },
 
     moveHeader: function(args) {
-        var e = args.jQueryEvent,
+        var e = args.event,
             that = e.data.that,
             newLeft,
             newTop,
@@ -539,7 +539,7 @@ var DraggingHeaderView = modules.View.inherit({
     },
 
     dropHeader: function(args) {
-        var e = args.jQueryEvent,
+        var e = args.event,
             that = e.data.that,
             controller = that._controller;
 
@@ -609,7 +609,7 @@ var ColumnsResizerViewController = modules.ViewController.inherit({
     },
 
     _moveSeparator: function(args) {
-        var e = args.jQueryEvent,
+        var e = args.event,
             that = e.data,
             columnsSeparatorWidth = that._columnsSeparatorView.width(),
             columnsSeparatorOffset = that._columnsSeparatorView.element().offset(),
@@ -658,7 +658,7 @@ var ColumnsResizerViewController = modules.ViewController.inherit({
     },
 
     _endResizing: function(args) {
-        var e = args.jQueryEvent,
+        var e = args.event,
             that = e.data;
 
         if(that._isResizing) {
@@ -695,7 +695,7 @@ var ColumnsResizerViewController = modules.ViewController.inherit({
     },
 
     _startResizing: function(args) {
-        var e = args.jQueryEvent,
+        var e = args.event,
             that = e.data,
             eventData = eventUtils.eventData(e),
             editingController = that.getController("editing"),
@@ -1041,7 +1041,7 @@ var DraggingHeaderViewController = modules.ViewController.inherit({
                         if(draggingPanel.allowDragging(column, nameDraggingPanel, draggingPanels)) {
                             $columnElement.addClass(that.addWidgetPrefix(HEADERS_DRAG_ACTION_CLASS));
                             eventsEngine.on($columnElement, addNamespace(dragEvents.start, MODULE_NAMESPACE), that.createAction(function(args) {
-                                var e = args.jQueryEvent,
+                                var e = args.event,
                                     eventData = eventUtils.eventData(e);
 
                                 draggingHeader.dragHeader({

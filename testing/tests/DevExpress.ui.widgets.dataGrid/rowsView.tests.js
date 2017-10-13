@@ -1805,7 +1805,7 @@ QUnit.test('onRowClick event handling', function(assert) {
     assert.equal(rowClickArgs.rowIndex, 1, "rowIndex");
     assert.strictEqual(rowClickArgs.rowType, "data", "rowType");
     assert.deepEqual(rowClickArgs.values, ["test2", 2, "2/02/2002"], "values");
-    assert.strictEqual(rowClickArgs.jQueryEvent.type, "dxclick", "jQueryEvent type");
+    assert.strictEqual(rowClickArgs.event.type, "dxclick", "Event type");
 });
 
 QUnit.test('onCellClick event handling', function(assert) {
@@ -1829,8 +1829,8 @@ QUnit.test('onCellClick event handling', function(assert) {
     //assert
     assert.equal(typeUtils.isRenderer(cellClickArgs.cellElement), config().useJQuery, "cellElement is correct");
     assert.deepEqual($(cellClickArgs.cellElement)[0], cells[0], 'Container');
-    assert.ok(cellClickArgs.jQueryEvent, 'jQueryEvent');
-    assert.deepEqual(cellClickArgs.jQueryEvent.target, cells[0], 'jQueryEvent.target');
+    assert.ok(cellClickArgs.event, 'event');
+    assert.deepEqual(cellClickArgs.event.target, cells[0], 'event.target');
     assert.strictEqual(cellClickArgs.value, 'test1', 'value');
     assert.strictEqual(cellClickArgs.text, 'test1', 'text');
     assert.strictEqual(cellClickArgs.isEditing, false, 'isEditing');
@@ -2911,7 +2911,7 @@ QUnit.test('Show master detail with native checkbox', function(assert) {
 
     //assert
     assert.ok(rowClickArgs, 'onRowClick called');
-    assert.equal(rowClickArgs.jQueryEvent.isDefaultPrevented(), false, 'Default is not prevented');
+    assert.equal(rowClickArgs.event.isDefaultPrevented(), false, 'Default is not prevented');
 });
 
 QUnit.test("Show rowlines for master detail", function(assert) {
@@ -3964,9 +3964,9 @@ QUnit.test("onCellHoverChanged event handling", function(assert) {
 
     //assert
     assert.deepEqual($(onCellHoverChanged.cellElement)[0], cells[0], "Container");
-    assert.ok(onCellHoverChanged.jQueryEvent, "jQueryEvent");
+    assert.ok(onCellHoverChanged.event, "Event");
     assert.strictEqual(onCellHoverChanged.eventType, "mouseover", "eventType");
-    assert.deepEqual(onCellHoverChanged.jQueryEvent.target, cells[0], "jQueryEvent.target");
+    assert.deepEqual(onCellHoverChanged.event.target, cells[0], "Event.target");
     assert.strictEqual(onCellHoverChanged.key, "Alex", "key");
     assert.deepEqual(onCellHoverChanged.data, { "age": 15, "name": "Alex" }, "data");
     assert.deepEqual(onCellHoverChanged.column, this.columnsController.getVisibleColumns()[0], "column");

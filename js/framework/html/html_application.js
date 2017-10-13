@@ -516,8 +516,8 @@ var HtmlApplication = Application.inherit({
     },
 
     _getTargetNode: function(viewInfo) {
-        var jQueryEvent = (viewInfo.navigateOptions || {}).jQueryEvent;
-        return jQueryEvent ? $(jQueryEvent.target) : undefined;
+        var dxEvent = (viewInfo.navigateOptions || {}).event;
+        return dxEvent ? $(dxEvent.target) : undefined;
     },
 
     _activateLayoutController: function(layoutController, targetNode, direction) {

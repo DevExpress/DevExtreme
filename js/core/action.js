@@ -4,7 +4,8 @@ var $ = require("./renderer"),
     config = require("./config"),
     typeUtils = require("./utils/type"),
     each = require("./utils/iterator").each,
-    Class = require("./class");
+    Class = require("./class"),
+    errors = require("./errors");
 
 var Action = Class.inherit({
 
@@ -39,6 +40,27 @@ var Action = Class.inherit({
         var beforeExecute = this._beforeExecute,
             afterExecute = this._afterExecute;
 
+        var argsBag = e.args[0] || {};
+
+        ///#DEBUG
+        if(argsBag.jQueryEvent && !argsBag.event) {
+            throw "The jQueryEvent field is deprecated. Please, use the `event` field instead";
+        }
+        ///#ENDDEBUG
+
+        if(argsBag.event && config().useJQueryRenderer) {
+            Object.defineProperty(argsBag, 'jQueryEvent', {
+                get: function() {
+                    errors.log("W0003", "Handler argument", "jQueryEvent", "17.2", "Use the 'event' field instead");
+                    return argsBag.event;
+                },
+                set: function(value) {
+                    errors.log("W0003", "Handler argument", "jQueryEvent", "17.2", "Use the 'event' field instead");
+                    argsBag.event = value;
+                }
+            });
+        }
+
         if(!this._validateAction(e)) {
             return;
         }
@@ -51,8 +73,7 @@ var Action = Class.inherit({
 
         var result = this._executeAction(e);
 
-        var argsBag = e.args[0];
-        if(argsBag && argsBag.cancel) {
+        if(argsBag.cancel) {
             return;
         }
 

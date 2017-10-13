@@ -5,6 +5,7 @@ var $ = require("jquery"),
     dateLocalization = require("localization/date"),
     messageLocalization = require("localization/message"),
     localization = require("localization"),
+    config = require("core/config"),
     logger = require("core/utils/console").logger;
 
 var generateExpectedDate = require("../../helpers/dateHelper.js").generateDate;
@@ -259,6 +260,16 @@ QUnit.test("format", function(assert) {
 
 QUnit.test("object syntax", function(assert) {
     assert.equal(dateLocalization.format(new Date(2015, 2, 2, 3, 4, 5, 6), { type: "longdate" }), "Monday, March 2, 2015");
+});
+
+QUnit.test("format with LDML pattern", function(assert) {
+    assert.equal(dateLocalization.format(new Date(2015, 2, 2, 3, 4, 5, 6), "dd/MM/yyyy HH:mm:ss"), "02/03/2015 03:04:05");
+    assert.equal(dateLocalization.format(new Date(2015, 2, 2, 3, 4, 5, 6), "d MMMM yyyy"), "2 March 2015");
+});
+
+QUnit.test("parse with LDML pattern", function(assert) {
+    assert.deepEqual(dateLocalization.parse("02/03/2015 03:04:05", "dd/MM/yyyy HH:mm:ss"), new Date(2015, 2, 2, 3, 4, 5));
+    assert.deepEqual(dateLocalization.parse("2 March 2015", "d MMMM yyyy"), new Date(2015, 2, 2));
 });
 
 QUnit.test("parse", function(assert) {
@@ -631,6 +642,61 @@ QUnit.test("parse: base", function(assert) {
     assert.equal(numberLocalization.parse("12,000"), 12000);
 });
 
+QUnit.test("parse with custom separators", function(assert) {
+    var oldDecimalSeparator = config().decimalSeparator,
+        oldThousandsSeparator = config().thousandsSeparator,
+        oldLocale = localization.locale();
+
+    config({
+        decimalSeparator: ",",
+        thousandsSeparator: "."
+    });
+    localization.locale("de");
+
+    try {
+        assert.equal(numberLocalization.parse("1,2"), 1.2);
+        assert.equal(numberLocalization.parse("12.000"), 12000);
+    } finally {
+        config({
+            decimalSeparator: oldDecimalSeparator,
+            thousandsSeparator: oldThousandsSeparator
+        });
+        localization.locale(oldLocale);
+    }
+});
+
+QUnit.test("parse with LDML format", function(assert) {
+    assert.equal(numberLocalization.parse("1.2", "#"), null);
+    assert.equal(numberLocalization.parse("1.2", "#.##"), 1.2);
+    assert.equal(numberLocalization.parse("123", "$ #"), null);
+    assert.equal(numberLocalization.parse("$ 123", "$ #"), 123);
+});
+
+QUnit.test("parse with LDML format and with custom separators", function(assert) {
+    var oldDecimalSeparator = config().decimalSeparator,
+        oldThousandsSeparator = config().thousandsSeparator,
+        oldLocale = localization.locale();
+
+    config({
+        decimalSeparator: ",",
+        thousandsSeparator: "\xa0"
+    });
+    localization.locale("ru");
+
+    try {
+        assert.equal(numberLocalization.parse("1.2", "#.##"), null);
+        assert.equal(numberLocalization.parse("1,2", "#.##"), 1.2);
+        assert.equal(numberLocalization.parse("1,234", "#,###"), null);
+        assert.equal(numberLocalization.parse("1\xa0234", "#,###"), 1234);
+    } finally {
+        config({
+            decimalSeparator: oldDecimalSeparator,
+            thousandsSeparator: oldThousandsSeparator
+        });
+        localization.locale(oldLocale);
+    }
+});
+
 QUnit.test("parse: test starts with not digit symbols", function(assert) {
     assert.equal(numberLocalization.parse("$ 1.2"), 1.2);
     assert.equal(numberLocalization.parse("1.2 руб."), 1.2);
@@ -677,6 +743,60 @@ QUnit.test('Decimal numeric formats', function(assert) {
 QUnit.test('format as function', function(assert) {
     assert.equal(numberLocalization.format(437, function(value) { return "!" + value; }), '!437');
     assert.equal(numberLocalization.format(437, { formatter: function(value) { return "!" + value; } }), '!437');
+});
+
+QUnit.test("custom group and decimal separators", function(assert) {
+    var oldDecimalSeparator = config().decimalSeparator,
+        oldThousandsSeparator = config().thousandsSeparator,
+        oldLocale = localization.locale();
+
+    config({
+        decimalSeparator: ",",
+        thousandsSeparator: "."
+    });
+    localization.locale("de");
+
+    try {
+        assert.equal(numberLocalization.format(1.1, { type: "fixedPoint", precision: 2 }), "1,10");
+        assert.equal(numberLocalization.format(1234567, "fixedPoint"), "1.234.567");
+        assert.equal(numberLocalization.format(1234567.89, { type: "fixedPoint", precision: 2 }), "1.234.567,89");
+    } finally {
+        config({
+            decimalSeparator: oldDecimalSeparator,
+            thousandsSeparator: oldThousandsSeparator
+        });
+        localization.locale(oldLocale);
+    }
+});
+
+QUnit.test('format as LDML pattern', function(assert) {
+    assert.equal(numberLocalization.format(12345.67, "#,##0.00 РУБ"), '12,345.67 РУБ');
+    assert.equal(numberLocalization.format(-12345.67, "#.#;(#.#)"), '(12345.7)');
+});
+
+QUnit.test("format as LDML pattern with custom separators", function(assert) {
+    var oldDecimalSeparator = config().decimalSeparator,
+        oldThousandsSeparator = config().thousandsSeparator,
+        oldLocale = localization.locale();
+
+    config({
+        decimalSeparator: ",",
+        thousandsSeparator: "\xa0"
+    });
+    localization.locale("ru");
+
+    try {
+        assert.equal(numberLocalization.format(12345.67, "#,##0.00 РУБ"), '12\xa0345,67 РУБ');
+        assert.equal(numberLocalization.format(-12345.67, "#.#;(#.#)"), '(12345,7)');
+        assert.equal(numberLocalization.getDecimalSeparator(), ",");
+        assert.equal(numberLocalization.getThousandsSeparator(), "\xa0");
+    } finally {
+        config({
+            decimalSeparator: oldDecimalSeparator,
+            thousandsSeparator: oldThousandsSeparator
+        });
+        localization.locale(oldLocale);
+    }
 });
 
 QUnit.module("Localization currency");

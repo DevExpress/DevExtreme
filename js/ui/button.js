@@ -82,7 +82,7 @@ var Button = Widget.inherit({
             * @publicName onClick
             * @type function|string
             * @extends Action
-            * @type_function_param1_field4 jQueryEvent:jQueryEvent
+            * @type_function_param1_field4 jQueryEvent:jQuery.Event
             * @type_function_param1_field5 validationGroup:object
             * @action
             */
@@ -248,7 +248,7 @@ var Button = Widget.inherit({
 
         var config = {
             element: this._$content,
-            jQueryEvent: e
+            event: e
         };
 
         if(value) {
@@ -293,7 +293,7 @@ var Button = Widget.inherit({
 
     _renderSubmitInput: function() {
         var submitAction = this._createAction(function(args) {
-            var e = args.jQueryEvent,
+            var e = args.event,
                 validationGroup = ValidationEngine.getGroupConfig(args.component._findGroup());
 
             if(validationGroup && !validationGroup.validate().isValid) {
@@ -308,7 +308,7 @@ var Button = Widget.inherit({
             .appendTo(this._$content);
 
         eventsEngine.on(this._$submitInput, "click", function(e) {
-            submitAction({ jQueryEvent: e });
+            submitAction({ event: e });
         });
     },
 
@@ -349,7 +349,7 @@ var Button = Widget.inherit({
     },
 
     _executeClickAction: function(e) {
-        this._clickAction({ jQueryEvent: e, validationGroup: ValidationEngine.getGroupConfig(this._findGroup()) });
+        this._clickAction({ event: e, validationGroup: ValidationEngine.getGroupConfig(this._findGroup()) });
     },
 
     _updateAriaLabel: function() {

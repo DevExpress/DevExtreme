@@ -948,7 +948,7 @@ QUnit.test('Edit cell on row click when a table is contained inside a cell', fun
     //act
     this.rowsView._rowClick({
         rowIndex: 0,
-        jQueryEvent: {
+        event: {
             target: testElement.find(".txt").first()
         }
     });

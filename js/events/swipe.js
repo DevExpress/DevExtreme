@@ -169,7 +169,7 @@ var SwipeEmitter = GestureEmitter.inherit({
  * @name ui events_dxswipestart
  * @publicName dxswipestart
  * @type eventType
- * @type_function_param1 event:jQuery.event
+ * @type_function_param1 event:jQuery.Event
  * @type_function_param1_field1 cancel:boolean
  * @module events/swipe
 */
@@ -177,7 +177,7 @@ var SwipeEmitter = GestureEmitter.inherit({
   * @name ui events_dxswipe
   * @publicName dxswipe
   * @type eventType
-  * @type_function_param1 event:jQuery.event
+  * @type_function_param1 event:jQuery.Event
   * @type_function_param1_field1 offset:number
   * @type_function_param1_field2 cancel:boolean
   * @module events/swipe
@@ -186,7 +186,7 @@ var SwipeEmitter = GestureEmitter.inherit({
   * @name ui events_dxswipeend
   * @publicName dxswipeend
   * @type eventType
-  * @type_function_param1 event:jQuery.event
+  * @type_function_param1 event:jQuery.Event
   * @type_function_param1_field1 offset:number
   * @type_function_param1_field2 targetOffset:number
   * @module events/swipe

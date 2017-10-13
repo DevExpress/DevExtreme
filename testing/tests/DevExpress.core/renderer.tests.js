@@ -147,3 +147,17 @@ QUnit.test("Set value", function(assert) {
     var returnValue = element.css("height", "25px");
     assert.equal(returnValue, element, "Return element itself for empty element");
 });
+
+QUnit.module("addClass method");
+
+
+QUnit.test("class should be set for only an element node", function(assert) {
+    var element = renderer("<div>"),
+        textNodeElement = renderer(document.createTextNode('text'));
+
+    element.addClass("someClass");
+    textNodeElement.addClass("someClass");
+
+    assert.ok(element.hasClass("someClass"));
+    assert.notOk(textNodeElement.hasClass("someClass"));
+});

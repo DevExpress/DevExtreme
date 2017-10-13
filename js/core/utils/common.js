@@ -286,7 +286,7 @@ var getKeyHash = function(key) {
 };
 
 var escapeRegExp = function(string) {
-    return string.replace(/[-[\]{}()*+?.,\\^$|#\s]/g, "\\$&");
+    return string.replace(/[[\]{}()*+?.\\^$|\s]/g, "\\$&");
 };
 
 var applyServerDecimalSeparator = function(value) {

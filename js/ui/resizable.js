@@ -104,7 +104,7 @@ var Resizable = DOMComponent.inherit({
             * @name dxResizableOptions_onResizeStart
             * @publicName onResizeStart
             * @extends Action
-            * @type_function_param1_field4 jQueryEvent:jQueryEvent
+            * @type_function_param1_field4 jQueryEvent:jQuery.Event
             * @type_function_param1_field5 width:number
             * @type_function_param1_field6 height:number
             * @action
@@ -115,7 +115,7 @@ var Resizable = DOMComponent.inherit({
             * @name dxResizableOptions_onResize
             * @publicName onResize
             * @extends Action
-            * @type_function_param1_field4 jQueryEvent:jQueryEvent
+            * @type_function_param1_field4 jQueryEvent:jQuery.Event
             * @type_function_param1_field5 width:number
             * @type_function_param1_field6 height:number
             * @action
@@ -126,7 +126,7 @@ var Resizable = DOMComponent.inherit({
             * @name dxResizableOptions_onResizeEnd
             * @publicName onResizeEnd
             * @extends Action
-            * @type_function_param1_field4 jQueryEvent:jQueryEvent
+            * @type_function_param1_field4 jQueryEvent:jQuery.Event
             * @type_function_param1_field5 width:number
             * @type_function_param1_field6 height:number
             * @action
@@ -218,7 +218,7 @@ var Resizable = DOMComponent.inherit({
         this._renderDragOffsets(e);
 
         this._resizeStartAction({
-            jQueryEvent: e,
+            event: e,
             width: this._elementSize.width,
             height: this._elementSize.height,
             handles: this._movingSides
@@ -279,7 +279,7 @@ var Resizable = DOMComponent.inherit({
         });
 
         this._resizeAction({
-            jQueryEvent: e,
+            event: e,
             width: this.option("width") || width,
             height: this.option("height") || height,
             handles: this._movingSides
@@ -424,7 +424,7 @@ var Resizable = DOMComponent.inherit({
         var $element = this.$element();
 
         this._resizeEndAction({
-            jQueryEvent: e,
+            event: e,
             width: $element.outerWidth(),
             height: $element.outerHeight(),
             handles: this._movingSides

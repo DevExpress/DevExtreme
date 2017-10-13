@@ -897,9 +897,9 @@ var DateBox = DropDownEditor.inherit({
         return dateSerialization.getDateSerializationFormat(value);
     },
 
-    dateValue: function(value, jQueryEvent) {
-        if(this._isValueChanged(value) && jQueryEvent) {
-            this._saveValueChangeEvent(jQueryEvent);
+    dateValue: function(value, dxEvent) {
+        if(this._isValueChanged(value) && dxEvent) {
+            this._saveValueChangeEvent(dxEvent);
         }
 
         return this.dateOption("value", value);

@@ -1,6 +1,8 @@
 "use strict";
 
 var config = require("../config"),
+    getLDMLFormatter = require("../../localization/ldml/date.formatter").getFormatter,
+    defaultDateNames = require("../../localization/default_date_names"),
     typeUtils = require("./type"),
     isString = typeUtils.isString,
     isDate = typeUtils.isDate,
@@ -13,98 +15,6 @@ var NUMBER_SERIALIZATION_FORMAT = "number",
 var ISO8601_PATTERN = /^(\d{4,})(-)?(\d{2})(-)?(\d{2})(?:T(\d{2})(:)?(\d{2})?(:)?(\d{2}(?:\.(\d{1,3})\d*)?)?)?(Z|([\+\-])(\d{2})(:)?(\d{2})?)?$/;
 var ISO8601_TIME_PATTERN = /^(\d{2}):(\d{2})(:(\d{2}))?$/;
 var ISO8601_PATTERN_PARTS = ["", "yyyy", "", "MM", "", "dd", "THH", "", "mm", "", "ss", ".SSS"];
-
-function leftPad(text, length) {
-    while(text.length < length) {
-        text = "0" + text;
-    }
-    return text;
-}
-
-var LDML_FORMATTERS = {
-    y: function(date, count, useUtc) {
-        return leftPad(date[useUtc ? "getUTCFullYear" : "getFullYear"]().toString(), count);
-    },
-    M: function(date, count, useUtc) {
-        return leftPad((date[useUtc ? "getUTCMonth" : "getMonth"]() + 1).toString(), Math.min(count, 2));
-    },
-    d: function(date, count, useUtc) {
-        return leftPad(date[useUtc ? "getUTCDate" : "getDate"]().toString(), Math.min(count, 2));
-    },
-    H: function(date, count, useUtc) {
-        return leftPad(date[useUtc ? "getUTCHours" : "getHours"]().toString(), Math.min(count, 2));
-    },
-    m: function(date, count, useUtc) {
-        return leftPad(date[useUtc ? "getUTCMinutes" : "getMinutes"]().toString(), Math.min(count, 2));
-    },
-    s: function(date, count, useUtc) {
-        return leftPad(date[useUtc ? "getUTCSeconds" : "getSeconds"]().toString(), Math.min(count, 2));
-    },
-    S: function(date, count, useUtc) {
-        return leftPad(date[useUtc ? "getUTCMilliseconds" : "getMilliseconds"]().toString(), 3).substr(0, count);
-    },
-    x: function(date, count, useUtc) {
-        var timezoneOffset = useUtc ? 0 : date.getTimezoneOffset(),
-            signPart = timezoneOffset > 0 ? "-" : "+",
-            timezoneOffsetAbs = Math.abs(timezoneOffset),
-            hours = Math.floor(timezoneOffsetAbs / 60),
-            minutes = timezoneOffsetAbs % 60,
-            hoursPart = leftPad(hours.toString(), 2),
-            minutesPart = leftPad(minutes.toString(), 2);
-
-        return signPart + hoursPart + (count >= 3 ? ":" : "") + (count > 1 || minutes ? minutesPart : "");
-    },
-    X: function(date, count, useUtc) {
-        if(useUtc || !date.getTimezoneOffset()) {
-            return "Z";
-        }
-        return LDML_FORMATTERS.x(date, count, useUtc);
-    },
-    Z: function(date, count, useUtc) {
-        return LDML_FORMATTERS.X(date, count >= 5 ? 3 : 2, useUtc);
-    },
-};
-
-var formatDate = function(date, format) {
-    var charIndex,
-        formatter,
-        char,
-        charCount = 0,
-        separator = "'",
-        isEscaping = false,
-        isCurrentCharEqualsNext,
-        result = "";
-
-    if(!date) return null;
-
-    if(!format) return date;
-
-    var useUtc = format[format.length - 1] === "Z" || format.slice(-3) === "'Z'";
-
-    for(charIndex = 0; charIndex < format.length; charIndex++) {
-        char = format[charIndex];
-        formatter = LDML_FORMATTERS[char];
-        isCurrentCharEqualsNext = char === format[charIndex + 1];
-        charCount++;
-
-        if(!isCurrentCharEqualsNext) {
-            if(formatter && !isEscaping) {
-                result += formatter(date, charCount, useUtc);
-            }
-            charCount = 0;
-        }
-
-        if(char === separator && !isCurrentCharEqualsNext) {
-            isEscaping = !isEscaping;
-        } else if(isEscaping || !formatter) {
-            result += char;
-        }
-        if(char === separator && isCurrentCharEqualsNext) {
-            charIndex++;
-        }
-    }
-    return result;
-};
 
 var dateParser = function(text, skipISO8601Parsing) {
     var result;
@@ -221,7 +131,7 @@ var serializeDate = function(value, serializationFormat) {
         return value && value.valueOf ? value.valueOf() : null;
     }
 
-    return formatDate(value, serializationFormat);
+    return getLDMLFormatter(serializationFormat, defaultDateNames)(value);
 };
 
 var getDateSerializationFormat = function(value) {

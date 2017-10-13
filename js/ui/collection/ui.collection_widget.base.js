@@ -154,7 +154,7 @@ var CollectionWidget = Widget.inherit({
             * @type_function_param1_field4 itemData:object
             * @type_function_param1_field5 itemElement:Element
             * @type_function_param1_field6 itemIndex:number
-            * @type_function_param1_field7 jQueryEvent:jQueryEvent
+            * @type_function_param1_field7 jQueryEvent:jQuery.Event
             * @action
             */
             onItemClick: null,
@@ -185,7 +185,7 @@ var CollectionWidget = Widget.inherit({
             * @type_function_param1_field4 itemData:object
             * @type_function_param1_field5 itemElement:Element
             * @type_function_param1_field6 itemIndex:number
-            * @type_function_param1_field7 jQueryEvent:jQueryEvent
+            * @type_function_param1_field7 jQueryEvent:jQuery.Event
             * @action
             */
             onItemContextMenu: null,
@@ -728,7 +728,7 @@ var CollectionWidget = Widget.inherit({
     },
 
     _itemClickHandler: function(e, args, config) {
-        this._itemJQueryEventHandler(e, "onItemClick", args, config);
+        this._itemDXEventHandler(e, "onItemClick", args, config);
     },
 
     _itemPointerDownHandler: function(e) {
@@ -799,7 +799,7 @@ var CollectionWidget = Widget.inherit({
 
     _itemHoldHandler: function(e) {
         if(this._shouldFireHoldEvent()) {
-            this._itemJQueryEventHandler(e, "onItemHold");
+            this._itemDXEventHandler(e, "onItemHold");
         } else {
             e.cancel = true;
         }
@@ -820,7 +820,7 @@ var CollectionWidget = Widget.inherit({
 
     _itemContextMenuHandler: function(e) {
         if(this._shouldFireContextMenuEvent()) {
-            this._itemJQueryEventHandler(e, "onItemContextMenu");
+            this._itemDXEventHandler(e, "onItemContextMenu");
         } else {
             e.cancel = true;
         }
@@ -883,7 +883,7 @@ var CollectionWidget = Widget.inherit({
 
         eventsEngine.on($itemElement, clickEvent.name, (function(e) {
             this._itemEventHandlerByHandler($itemElement, itemData.onClick, {
-                jQueryEvent: e
+                event: e
             });
         }).bind(this));
     },
@@ -1016,9 +1016,9 @@ var CollectionWidget = Widget.inherit({
         this.$element().toggleClass(EMPTY_COLLECTION, !hideNoData);
     },
 
-    _itemJQueryEventHandler: function(jQueryEvent, handlerOptionName, actionArgs, actionConfig) {
-        this._itemEventHandler(jQueryEvent.target, handlerOptionName, extend(actionArgs, {
-            jQueryEvent: jQueryEvent
+    _itemDXEventHandler: function(dxEvent, handlerOptionName, actionArgs, actionConfig) {
+        this._itemEventHandler(dxEvent.target, handlerOptionName, extend(actionArgs, {
+            event: dxEvent
         }), actionConfig);
     },
 

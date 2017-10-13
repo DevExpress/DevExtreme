@@ -587,7 +587,7 @@ QUnit.test("Toolbar commands", function(assert) {
     $button.trigger("dxclick");
     assert.equal(actionLog.length, 1);
     assert.equal($(actionLog[0].element).dxCommand("instance").option("id"), "add");
-    assert.ok(actionLog[0].jQueryEvent, "T132769");
+    assert.ok(actionLog[0].event, "T132769");
 });
 
 QUnit.test("Apply default options from command container for toolbar", function(assert) {
@@ -751,7 +751,7 @@ QUnit.test("List commands", function(assert) {
     assert.equal(actionLog.length, 1);
     var command = $(actionLog[0].element).dxCommand("instance");
     assert.equal(command.option("id"), "add");
-    assert.ok(actionLog[0].jQueryEvent, "T132769");
+    assert.ok(actionLog[0].event, "T132769");
 
     command.option("disabled", true);
     $list = $test.find(".list");
@@ -802,7 +802,7 @@ QUnit.test("List commands with default template", function(assert) {
     assert.equal(actionLog.length, 1);
     var command = $(actionLog[0].element).dxCommand("instance");
     assert.equal(command.option("id"), "add");
-    assert.ok(actionLog[0].jQueryEvent, "T132769");
+    assert.ok(actionLog[0].event, "T132769");
 
     command.option("disabled", true);
     $list = $test.find(".list");
@@ -937,7 +937,7 @@ QUnit.test("NavBar commands", function(assert) {
     $item.trigger("dxclick");
     assert.equal(actionLog.length, 1);
     assert.equal($(actionLog[0].element).dxCommand("instance").option("id"), "add");
-    assert.ok(actionLog[0].jQueryEvent, "T132769");
+    assert.ok(actionLog[0].event, "T132769");
 });
 
 QUnit.test("Apply default options from command container for navbar", function(assert) {

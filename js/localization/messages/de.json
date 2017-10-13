@@ -208,6 +208,25 @@
         "dxTagBox-moreSelected": "{0} weitere",
         "vizExport-printingButtonText": "Drucken",
         "vizExport-titleMenuText": "Export/Druck",
-        "vizExport-exportButtonText": "{0}-Datei"
+        "vizExport-exportButtonText": "{0}-Datei",
+        "dxFilterBuilder-and": "!TODO!",
+        "dxFilterBuilder-or": "!TODO!",
+        "dxFilterBuilder-notAnd": "!TODO!",
+        "dxFilterBuilder-notOr": "!TODO!",
+        "dxFilterBuilder-addCondition": "!TODO!",
+        "dxFilterBuilder-addGroup": "!TODO!",
+        "dxFilterBuilder-enterValueText": "!TODO!",
+        "dxFilterBuilder-filterOperationEquals": "Ist gleich",
+        "dxFilterBuilder-filterOperationNotEquals": "Ist nicht gleich",
+        "dxFilterBuilder-filterOperationLess": "Kleiner als",
+        "dxFilterBuilder-filterOperationLessOrEquals": "Kleiner oder gleich",
+        "dxFilterBuilder-filterOperationGreater": "Größer als",
+        "dxFilterBuilder-filterOperationGreaterOrEquals": "Größer oder gleich",
+        "dxFilterBuilder-filterOperationStartsWith": "Beginnt mit",
+        "dxFilterBuilder-filterOperationContains": "Enthält",
+        "dxFilterBuilder-filterOperationNotContains": "Enthält nicht",
+        "dxFilterBuilder-filterOperationEndsWith": "Endet mit",
+        "dxFilterBuilder-filterOperationIsBlank": "!TODO!",
+        "dxFilterBuilder-filterOperationIsNotBlank": "!TODO!"
     }
 }

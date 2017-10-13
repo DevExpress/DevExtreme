@@ -133,7 +133,7 @@ var EditingController = modules.ViewController.inherit((function() {
                 that.createAction("onRowRemoved", { excludeValidators: ["disabled", "readOnly"] });
 
                 that._saveEditorHandler = that.createAction(function(e) {
-                    var event = e.jQueryEvent,
+                    var event = e.event,
                         isEditorPopup,
                         isDomElement,
                         isFocusOverlay,
@@ -1546,7 +1546,7 @@ var EditingController = modules.ViewController.inherit((function() {
                 .text(text);
 
             eventsEngine.on($link, addNamespace(clickEvent.name, EDITING_NAMESPACE), that.createAction(function(params) {
-                var e = params.jQueryEvent;
+                var e = params.event;
 
                 e.stopPropagation();
                 setTimeout(function() {
@@ -2100,7 +2100,7 @@ module.exports = {
                 _rowClick: function(e) {
                     var that = this,
                         editingController = that._editingController,
-                        $targetElement = $(e.jQueryEvent.target),
+                        $targetElement = $(e.event.target),
                         columnIndex = that._getColumnIndexByElement($targetElement),
                         row = that._dataController.items()[e.rowIndex],
                         allowUpdating = that.option("editing.allowUpdating") || row && row.inserted,
