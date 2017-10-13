@@ -6,6 +6,8 @@ var $ = require("jquery"),
 
 require("ui/text_box/ui.text_editor");
 
+var INPUT_CLASS = "dx-texteditor-input";
+
 QUnit.module("displayFormat option", {
     beforeEach: function() {
         this.$element = $("#numberbox").dxNumberBox({
@@ -16,6 +18,20 @@ QUnit.module("displayFormat option", {
         this.instance = this.$element.dxNumberBox("instance");
         this.keyboard = keyboardMock(this.input, true);
     }
+});
+
+QUnit.test("number type of input is not supported with masks", function(assert) {
+    var $element = $("#numberbox").dxNumberBox({
+            useMaskBehavior: true,
+            displayFormat: "#",
+            mode: "number"
+        }),
+        instance = $element.dxNumberBox("instance");
+
+    assert.equal($element.find("." + INPUT_CLASS).prop("type"), "tel", "input has tel type");
+
+    instance.option("mode", "number");
+    assert.equal($element.find("." + INPUT_CLASS).prop("type"), "tel", "user can not set number type with mask");
 });
 
 QUnit.test("empty value should not be formatted", function(assert) {

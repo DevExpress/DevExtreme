@@ -2,7 +2,6 @@
 
 var eventsEngine = require("../../events/core/events_engine"),
     extend = require("../../core/utils/extend").extend,
-    devices = require("../../core/devices"),
     ensureDefined = require("../../core/utils/common").ensureDefined,
     number = require("../../localization/number"),
     NumberBoxBase = require("./number_box.base"),
@@ -48,10 +47,9 @@ var NumberBoxMask = NumberBoxBase.inherit({
     },
 
     _renderInputType: function() {
-        var isDefaultMode = this.option("mode") === "number",
-            isMobile = devices.real().platform !== "generic";
+        var isNumberType = this.option("mode") === "number";
 
-        if(this._useMaskBehavior() && isDefaultMode && isMobile) {
+        if(this._useMaskBehavior() && isNumberType) {
             this._setInputType("tel");
         } else {
             this.callBase();
