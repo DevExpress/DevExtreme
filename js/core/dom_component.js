@@ -36,6 +36,11 @@ var DOMComponent = Component.inherit({
             /**
             * @name domcomponentoptions_onOptionChanged
             * @publicName onOptionChanged
+            * @type function
+            * @type_function_param1 e:object
+            * @type_function_param1_field4 name:string
+            * @type_function_param1_field5 fullName:string
+            * @type_function_param1_field6 value:any
             * @action
             * @extends Action
             * @extend_doc
