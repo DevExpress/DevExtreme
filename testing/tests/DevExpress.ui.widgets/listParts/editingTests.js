@@ -4,6 +4,7 @@ var $ = require("jquery"),
     executeAsyncMock = require("../../../helpers/executeAsyncMock.js"),
     keyboardMock = require("../../../helpers/keyboardMock.js"),
     DataSource = require("data/data_source/data_source").DataSource,
+    getPublicElement = require("core/utils/dom").getPublicElement,
     ArrayStore = require("data/array_store");
 
 require("ui/list");
@@ -230,7 +231,7 @@ QUnit.test("item deletion by keyboard", function(assert) {
     assert.deepEqual(list.option("items"), items, "deletion by keyboard is impossible if 'allowItemDeleting' = false ");
 
     list.option("allowItemDeleting", true);
-    list._setFocusedElementOption($list.find("." + LIST_ITEM_CLASS).eq(1));
+    list.option("focusedElement", getPublicElement($list.find("." + LIST_ITEM_CLASS).eq(1)));
 
     keyboard.keyDown("del");
 

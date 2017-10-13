@@ -118,7 +118,7 @@ var ListStrategy = DateBoxStrategy.inherit({
             return;
         }
 
-        this._widget._setFocusedElementOption(null);
+        this._widget.option("focusedElement", null);
 
         this._setSelectedItemsByValue();
         if(this._widget.option("templatesRenderAsynchronously")) {

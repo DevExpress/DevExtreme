@@ -9,6 +9,7 @@ var $ = require("../../core/renderer"),
     extend = require("../../core/utils/extend").extend,
     inArray = require("../../core/utils/array").inArray,
     each = require("../../core/utils/iterator").each,
+    getPublicElement = require("../../core/utils/dom").getPublicElement,
     CheckBox = require("../check_box"),
     HierarchicalCollectionWidget = require("../hierarchical_collection/ui.hierarchical_collection_widget"),
     eventUtils = require("../../events/utils"),
@@ -1489,7 +1490,7 @@ var TreeViewBase = HierarchicalCollectionWidget.inherit({
         }
 
         var $activeItem = that._getActiveItem();
-        that._setFocusedElementOption($activeItem.closest("." + NODE_CLASS));
+        that.option("focusedElement", getPublicElement($activeItem.closest("." + NODE_CLASS)));
     },
 
     _setFocusedItem: function($target) {
@@ -1516,7 +1517,7 @@ var TreeViewBase = HierarchicalCollectionWidget.inherit({
         }
 
         var itemElement = $target.hasClass(DISABLED_STATE_CLASS) ? null : $target;
-        this._setFocusedElementOption(itemElement);
+        this.option("focusedElement", getPublicElement(itemElement));
     },
 
     _findNonDisabledNodes: function($nodes) {
@@ -1547,7 +1548,7 @@ var TreeViewBase = HierarchicalCollectionWidget.inherit({
             case FOCUS_UP:
                 var $prevItem = this._prevItem($items);
 
-                this._setFocusedElementOption($prevItem);
+                this.option("focusedElement", getPublicElement($prevItem));
                 if(e.shiftKey && this._showCheckboxes()) {
                     this._updateItemSelection(true, $prevItem.find("." + ITEM_CLASS).get(0));
                 }
@@ -1555,7 +1556,7 @@ var TreeViewBase = HierarchicalCollectionWidget.inherit({
             case FOCUS_DOWN:
                 var $nextItem = this._nextItem($items);
 
-                this._setFocusedElementOption($nextItem);
+                this.option("focusedElement", getPublicElement($nextItem));
                 if(e.shiftKey && this._showCheckboxes()) {
                     this._updateItemSelection(true, $nextItem.find("." + ITEM_CLASS).get(0));
                 }
@@ -1567,7 +1568,7 @@ var TreeViewBase = HierarchicalCollectionWidget.inherit({
                     this._updateSelectionToFirstItem($items, $items.index(this._prevItem($items)));
                 }
 
-                this._setFocusedElementOption($firstItem);
+                this.option("focusedElement", getPublicElement($firstItem));
                 break;
             case FOCUS_LAST:
                 var $lastItem = $items.last();
@@ -1576,7 +1577,7 @@ var TreeViewBase = HierarchicalCollectionWidget.inherit({
                     this._updateSelectionToLastItem($items, $items.index(this._nextItem($items)));
                 }
 
-                this._setFocusedElementOption($lastItem);
+                this.option("focusedElement", getPublicElement($lastItem));
                 break;
             case FOCUS_RIGHT:
                 this._expandFocusedContainer();
@@ -1605,7 +1606,7 @@ var TreeViewBase = HierarchicalCollectionWidget.inherit({
         var $node = $focusedNode.find("." + NODE_CONTAINER_CLASS).eq(0);
 
         if($node.hasClass(OPENED_NODE_CONTAINER_CLASS)) {
-            this._setFocusedElementOption(this._nextItem(this._findNonDisabledNodes(this._nodeElements())));
+            this.option("focusedElement", getPublicElement(this._nextItem(this._findNonDisabledNodes(this._nodeElements()))));
             return;
         }
 
@@ -1635,7 +1636,7 @@ var TreeViewBase = HierarchicalCollectionWidget.inherit({
             this._toggleExpandedState(node, false);
         } else {
             var collapsedNode = this._getClosestNonDisabledNode($focusedNode);
-            collapsedNode.length && this._setFocusedElementOption(collapsedNode);
+            collapsedNode.length && this.option("focusedElement", getPublicElement(collapsedNode));
         }
     },
 

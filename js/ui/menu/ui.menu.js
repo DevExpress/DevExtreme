@@ -269,7 +269,7 @@ var Menu = MenuBase.inherit({
         }
 
         if($newTarget && $newTarget.length !== 0) {
-            this._setFocusedElementOption($newTarget);
+            this.option("focusedElement", getPublicElement($newTarget));
         }
     },
 
@@ -603,7 +603,7 @@ var Menu = MenuBase.inherit({
 
         this._hideSubmenu(this._visibleSubmenu);
         this.focus();
-        this._setFocusedElementOption($newItem);
+        this.option("focusedElement", getPublicElement($newItem));
     },
 
     _nestedItemOnSelectionChangedHandler: function(args) {
@@ -801,7 +801,7 @@ var Menu = MenuBase.inherit({
             $closestItem = $target.closest(this._itemElements());
 
         if($closestItem.hasClass("dx-menu-item-has-submenu")) {
-            this._setFocusedElementOption(null);
+            this.option("focusedElement", null);
             return;
         }
 

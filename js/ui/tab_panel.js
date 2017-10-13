@@ -323,7 +323,7 @@ var TabPanel = MultiView.inherit({
                 if(name === "focusedElement") {
                     var id = value ? value.index() : value;
                     var newItem = value ? this._itemElements().eq(id) : value;
-                    this._setFocusedElementOption(newItem);
+                    this.option("focusedElement", getPublicElement(newItem));
                 }
             }).bind(this),
             onFocusIn: (function(args) { this._focusInHandler(args.jQueryEvent); }).bind(this),

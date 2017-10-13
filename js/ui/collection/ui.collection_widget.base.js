@@ -341,10 +341,6 @@ var CollectionWidget = Widget.inherit({
         return this.$element();
     },
 
-    _setFocusedElementOption: function($element) {
-        this.option("focusedElement", getPublicElement($element));
-    },
-
     _getFocusedElementOption: function() {
         var element = this.option("focusedElement");
         return element && $(element);
@@ -363,7 +359,7 @@ var CollectionWidget = Widget.inherit({
         } else {
             var $activeItem = this._getActiveItem();
             if($activeItem.length) {
-                this._setFocusedElementOption($activeItem);
+                this.option("focusedElement", getPublicElement($activeItem));
             }
         }
     },
@@ -431,7 +427,7 @@ var CollectionWidget = Widget.inherit({
         }
 
         if($newTarget.length !== 0) {
-            this._setFocusedElementOption($newTarget);
+            this.option("focusedElement", getPublicElement($newTarget));
         }
     },
 
@@ -759,7 +755,7 @@ var CollectionWidget = Widget.inherit({
                 $closestFocusable = this._closestFocusable($target);
 
             if($closestItem.length && inArray($closestFocusable.get(0), this._focusTarget()) !== -1) {
-                this._setFocusedElementOption($closestItem);
+                this.option("focusedElement", getPublicElement($closestItem));
             }
         }.bind(this);
 

@@ -58,7 +58,7 @@ var ListBase = CollectionWidget.inherit({
                 $item = getEdgeVisibleItem(direction);
             }
 
-            that._setFocusedElementOption($item);
+            that.option("focusedElement", getPublicElement($item));
             that.scrollToItem($item);
         };
 
@@ -759,7 +759,7 @@ var ListBase = CollectionWidget.inherit({
                     var $group = $(e.jQueryEvent.currentTarget).parent();
                     this._collapseGroupHandler($group);
                     if(this.option("focusStateEnabled")) {
-                        this._setFocusedElementOption($group.find("." + LIST_ITEM_CLASS).eq(0));
+                        this.option("focusedElement", getPublicElement($group.find("." + LIST_ITEM_CLASS).eq(0)));
                     }
                 }).bind(this), {
                     validatingTargetName: "element"

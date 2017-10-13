@@ -2,6 +2,7 @@
 
 var $ = require("jquery"),
     noop = require("core/utils/common").noop,
+    getPublicElement = require("core/utils/dom").getPublicElement,
     DataSource = require("data/data_source/data_source").DataSource,
     ArrayStore = require("data/array_store"),
     devices = require("core/devices"),
@@ -864,7 +865,7 @@ QUnit.test("aria-activedescendant on widget should point to focused list item", 
         list = $element.find(".dx-list").dxList("instance");
 
     instance.open();
-    list._setFocusedElementOption($listItem);
+    list.option("focusedElement", getPublicElement($listItem));
 
     assert.notEqual($element.attr("aria-activedescendant"), undefined);
     assert.equal($element.attr("aria-activedescendant"), $listItem.attr("id"));

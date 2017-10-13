@@ -5,6 +5,7 @@ var $ = require("jquery"),
     translator = require("animation/translator"),
     domUtils = require("core/utils/dom"),
     devices = require("core/devices"),
+    getPublicElement = domUtils.getPublicElement,
     animation = require("ui/multi_view").animation,
     pointerMock = require("../../helpers/pointerMock.js"),
     keyboardMock = require("../../helpers/keyboardMock.js");
@@ -949,7 +950,7 @@ QUnit.test("selected item should have unique id", function(assert) {
     assert.equal($item1.attr("id"), undefined, "unselected item has no id");
 
     instance.option("selectedIndex", 1);
-    instance._setFocusedElementOption($item1);
+    instance.option("focusedElement", getPublicElement($item1));
 
     assert.equal($item1.attr("id"), id, "selected 2nd item has correct id");
     assert.equal($item0.attr("id"), undefined, "unselected item has no id");

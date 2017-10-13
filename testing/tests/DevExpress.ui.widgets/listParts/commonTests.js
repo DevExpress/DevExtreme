@@ -2,6 +2,7 @@
 
 var $ = require("jquery"),
     noop = require("core/utils/common").noop,
+    getPublicElement = require("core/utils/dom").getPublicElement,
     isRenderer = require("core/utils/type").isRenderer,
     config = require("core/config"),
     fx = require("animation/fx"),
@@ -2416,7 +2417,7 @@ QUnit.test("list scroll to hidden focused item after press pageDown", function(a
 
     $element.trigger("focusin");
     instance.option("height", itemHeight * 3);
-    instance._setFocusedElementOption($items.eq(3));
+    instance.option("focusedElement", getPublicElement($items.eq(3)));
     instance.scrollToItem($items.first());
 
     assert.roughEqual(instance.scrollTop(), 0, 1.0001, "list is not scrolled");
@@ -2442,7 +2443,7 @@ QUnit.test("list scroll to focused item after press pageUp", function(assert) {
 
     $element.trigger("focusin");
     instance.option("height", itemHeight * 3);
-    instance._setFocusedElementOption($items.last());
+    instance.option("focusedElement", getPublicElement($items.last()));
     instance.scrollToItem($items.last());
 
     keyboard.keyDown("pageUp");
@@ -2476,7 +2477,7 @@ QUnit.test("list scroll to hidden focused item after press pageUp", function(ass
 
     $element.trigger("focusin");
     instance.option("height", itemHeight * 3);
-    instance._setFocusedElementOption($items.eq(3));
+    instance.option("focusedElement", getPublicElement($items.eq(3)));
     instance.scrollToItem($items.last());
 
     assert.roughEqual(instance.scrollTop(), itemHeight * 4, 1.0001, "list is not scrolled");

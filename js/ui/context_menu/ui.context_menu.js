@@ -10,6 +10,7 @@ var $ = require("../../core/renderer"),
     each = require("../../core/utils/iterator").each,
     inArray = require("../../core/utils/array").inArray,
     extend = require("../../core/utils/extend").extend,
+    getPublicElement = require("../../core/utils/extend").getPublicElement,
     fx = require("../../animation/fx"),
     positionUtils = require("../../animation/position"),
     devices = require("../../core/devices"),
@@ -305,7 +306,7 @@ var ContextMenu = MenuBase.inherit((function() {
             }
 
             if($newTarget.length !== 0) {
-                this._setFocusedElementOption($newTarget);
+                this.option("focusedElement", getPublicElement($newTarget));
             }
         },
 

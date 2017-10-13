@@ -458,7 +458,7 @@ var DropDownList = DropDownEditor.inherit({
             return;
         }
 
-        this._list._setFocusedElementOption(null);
+        this._list.option("focusedElement", null);
     },
 
     _isSelectedValue: function(value) {

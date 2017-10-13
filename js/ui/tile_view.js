@@ -6,6 +6,7 @@ var devices = require("../core/devices"),
     iteratorUtils = require("../core/utils/iterator"),
     isDefined = require("../core/utils/type").isDefined,
     extend = require("../core/utils/extend").extend,
+    getPublicElement = require("../core/utils/dom").getPublicElement,
     ScrollView = require("./scroll_view"),
     CollectionWidget = require("./collection/ui.collection_widget.edit");
 
@@ -512,7 +513,7 @@ var TileView = CollectionWidget.inherit({
         }
 
         var $newTarget = this._itemElements().eq(newTargetIndex);
-        this._setFocusedElementOption($newTarget);
+        this.option("focusedElement", getPublicElement($newTarget));
         this._scrollToItem($newTarget);
     },
 
