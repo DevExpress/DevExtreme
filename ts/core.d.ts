@@ -442,6 +442,9 @@ declare module DevExpress {
             device?: any;
             options?: any;
         }): void;
+
+        /** @docid domcomponentmethods_getInstance */
+        static getInstance(element: JQuery): Object;
     }
 
     export module data {
@@ -532,7 +535,7 @@ declare module DevExpress {
 
             /** @docid StoreMethods_load#load() */
             load(): JQueryPromise<any[]>;
-            
+
             /** @docid StoreMethods_load#load(options) */
             load(options?: LoadOptions): JQueryPromise<any[]>;
 
@@ -712,11 +715,11 @@ declare module DevExpress {
 
         /** @docid DataSource */
         export class DataSource implements EventsMixin<DataSource> {
-            /** @docid DataSourceMethods_ctor#ctor(url) */      
+            /** @docid DataSourceMethods_ctor#ctor(url) */
             constructor(url: string);
             /** @docid DataSourceMethods_ctor#ctor(data) */
             constructor(data: Array<any>);
-            /** @docid DataSourceMethods_ctor#ctor(options) */    
+            /** @docid DataSourceMethods_ctor#ctor(options) */
             constructor(options: CustomStoreOptions);
             constructor(options: DataSourceOptions);
 
