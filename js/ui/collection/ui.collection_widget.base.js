@@ -465,7 +465,7 @@ var CollectionWidget = Widget.inherit({
 
     _removeFocusedItem: function(target) {
         var $target = $(target);
-        if($target && $target.length) {
+        if($target.length) {
             this._toggleFocusClass(false, $target);
             $target.removeAttr("id");
         }
