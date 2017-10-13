@@ -171,7 +171,7 @@ var contains = function(container, element) {
 };
 
 var getPublicElement = function($element) {
-    if(config().useJQueryRenderer) {
+    if(config().useJQuery) {
         return $element;
     }
     return $element && $element.get(0);

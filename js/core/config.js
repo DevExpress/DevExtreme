@@ -10,7 +10,7 @@ var config = {
     thousandsSeparator: ",",
     forceIsoDateParsing: true,
     wrapActionsBeforeExecute: true,
-    useJQueryRenderer: true
+    useJQuery: true
 };
 
 var configMethod = function() {

@@ -156,7 +156,7 @@ QUnit.test("dxButton with anonymous template", function(assert) {
 QUnit.test("dxButton with template as function", function(assert) {
     $("#button").dxButton({
         template: function(data, container) {
-            assert.equal(isRenderer(container), config().useJQueryRenderer, "container is correct");
+            assert.equal(isRenderer(container), config().useJQuery, "container is correct");
             return $("<div>");
         }
     });

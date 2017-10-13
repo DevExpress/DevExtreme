@@ -1512,7 +1512,7 @@ QUnit.testInActiveWindow("Focus on dxLookup editor", function(assert) {
             allowUpdating: true
         },
         columns: [{ allowEditing: true, dataField: "name", editCellTemplate: function(container, options) {
-            assert.equal(typeUtils.isRenderer(container), config().useJQueryRenderer, "editCellElement is correct");
+            assert.equal(typeUtils.isRenderer(container), config().useJQuery, "editCellElement is correct");
             $("<div>").appendTo($(container)).dxLookup({});
         } }],
         dataSource: [{ name: "Bob" }]

@@ -7,12 +7,13 @@ var $ = require("../../core/renderer"),
 var resizeCallbacks = (function() {
     var prevSize,
         callbacks = Callbacks(),
-        jqWindow = $(window),
         resizeEventHandlerAttached = false,
         originalCallbacksAdd = callbacks.add,
         originalCallbacksRemove = callbacks.remove;
 
     var formatSize = function() {
+        var jqWindow = $(window);
+
         return {
             width: jqWindow.width(),
             height: jqWindow.height()
@@ -42,8 +43,10 @@ var resizeCallbacks = (function() {
 
     callbacks.add = function() {
         var result = originalCallbacksAdd.apply(callbacks, arguments);
+        var jqWindow = $(window);
+
         if(!resizeEventHandlerAttached && callbacks.has()) {
-            eventsEngine.on(jqWindow, "resize", handleResize);
+            eventsEngine.subscribeGlobal(jqWindow, "resize", handleResize);
             resizeEventHandlerAttached = true;
         }
         return result;
@@ -51,6 +54,8 @@ var resizeCallbacks = (function() {
 
     callbacks.remove = function() {
         var result = originalCallbacksRemove.apply(callbacks, arguments);
+        var jqWindow = $(window);
+
         if(!callbacks.has() && resizeEventHandlerAttached) {
             eventsEngine.off(jqWindow, "resize", handleResize);
             resizeEventHandlerAttached = false;

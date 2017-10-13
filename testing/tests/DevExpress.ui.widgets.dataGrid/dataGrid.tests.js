@@ -742,7 +742,7 @@ QUnit.test("dataGrid first data rendering", function(assert) {
     var templatesRenderedCount = 0;
     $("#dataGrid").dxDataGrid({
         columns: [{ dataField: "field1", cellTemplate: function(cellElement) {
-            assert.equal(typeUtils.isRenderer(cellElement), config().useJQueryRenderer, "cellElement is correct");
+            assert.equal(typeUtils.isRenderer(cellElement), config().useJQuery, "cellElement is correct");
             templatesRenderedCount++;
         } }],
         loadingTimeout: undefined,
@@ -760,7 +760,7 @@ QUnit.test("headerCellTemplate when no dataSource", function(assert) {
     //act
     var $element = $("#dataGrid").dxDataGrid({
         columns: [{ dataField: "field1", headerCellTemplate: function(container) {
-            assert.equal(typeUtils.isRenderer(container), config().useJQueryRenderer, "headerCellElement is correct");
+            assert.equal(typeUtils.isRenderer(container), config().useJQuery, "headerCellElement is correct");
             $(container).addClass("field1-header"); templatesRenderedCount++;
         } }]
     });
@@ -5595,7 +5595,7 @@ QUnit.test("CellTemplate and master-detail template cells has correct text-align
                 enabled: true,
                 autoExpandAll: true,
                 template: function(container, options) {
-                    assert.equal(typeUtils.isRenderer(container), config().useJQueryRenderer, "container is correct");
+                    assert.equal(typeUtils.isRenderer(container), config().useJQuery, "container is correct");
                     var $container = $(container);
                     $container.height(100);
                     $('<div />').dxButton({
@@ -6241,7 +6241,7 @@ QUnit.test("getRowElement", function(assert) {
 
     //act, assert
     $rowElement = $(dataGrid.getRowElement(1));
-    assert.equal(typeUtils.isRenderer(dataGrid.getRowElement(1)), config().useJQueryRenderer, "rowElement is correct");
+    assert.equal(typeUtils.isRenderer(dataGrid.getRowElement(1)), config().useJQuery, "rowElement is correct");
     assert.equal($rowElement.length, 1, "count row");
     assert.deepEqual($rowElement[0], $("#dataGrid").find(".dx-datagrid-rowsview").find("tbody > tr")[1], "correct row element");
 });
@@ -7571,7 +7571,7 @@ QUnit.test("rowElement argument of rowTemplate option is correct", function(asse
     //arrange, act
     createDataGrid({
         rowTemplate: function(rowElement) {
-            assert.equal(typeUtils.isRenderer(rowElement), config().useJQueryRenderer, "rowElement is correct");
+            assert.equal(typeUtils.isRenderer(rowElement), config().useJQuery, "rowElement is correct");
         },
         dataSource: [{ column1: "test1", column2: "test2" }],
         columns: [{ dataField: "column1" }, { dataField: "column2" }]

@@ -10473,7 +10473,7 @@ QUnit.test("getCellElement", function(assert) {
     //assert
     $editorElements = $testElement.find(".dx-datagrid-edit-form-item");
     assert.equal($editorElements.length, 5, "count editor of the form");
-    assert.equal(typeUtils.isRenderer(that.getCellElement(1, 0)), config().useJQueryRenderer, "getCellElement is correct");
+    assert.equal(typeUtils.isRenderer(that.getCellElement(1, 0)), config().useJQuery, "getCellElement is correct");
     assert.deepEqual($(that.getCellElement(1, 0))[0], $editorElements[0], "first editor");
     assert.deepEqual($(that.getCellElement(1, "age"))[0], $editorElements[1], "second editor");
 });

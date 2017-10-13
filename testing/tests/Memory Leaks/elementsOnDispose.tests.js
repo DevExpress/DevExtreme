@@ -8,8 +8,11 @@ require("bundles/modules/parts/widgets-all");
 
 GoogleProvider.remapConstant("http://fakeUrl");
 
-var clock = sinon.useFakeTimers();
-
+QUnit.module("elementsOnDispose", {
+    beforeEach: function() {
+        this.clock = sinon.useFakeTimers();
+    }
+});
 
 $.each(DevExpress.ui, function(componentName) {
     if($.fn[componentName] && memoryLeaksHelper.componentCanBeTriviallyInstantiated(componentName)) {
@@ -28,7 +31,7 @@ $.each(DevExpress.ui, function(componentName) {
                     errorMessage;
 
                 $(testNode)[componentName](memoryLeaksHelper.getComponentOptions(componentName))[componentName]("instance");
-                clock.tick(0);
+                this.clock.tick(0);
                 memoryLeaksHelper.destroyTestNode(testNode);
                 newDomElements = memoryLeaksHelper.getAllPossibleEventTargets();
                 if(newDomElements.length === originalDomElements.length) {

@@ -226,7 +226,7 @@ var Scrollbar = Widget.inherit({
 
 var activeScrollbar = null;
 
-eventsEngine.on(document, eventUtils.addNamespace(pointerEvents.up, SCROLLBAR), function() {
+eventsEngine.subscribeGlobal(document, eventUtils.addNamespace(pointerEvents.up, SCROLLBAR), function() {
     if(activeScrollbar) {
         activeScrollbar.feedbackOff();
     }

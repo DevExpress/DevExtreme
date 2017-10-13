@@ -1,9 +1,9 @@
 "use strict";
 
 var registerEventCallbacks = require("./event_registrator_callbacks");
-var dataUtilsStrategy = require("../../core/element_data").getDataStrategy();
 var extend = require("../../core/utils/extend").extend;
 var typeUtils = require("../../core/utils/type");
+var Callbacks = require("../../core/utils/callbacks");
 var isWindow = typeUtils.isWindow;
 var isFunction = typeUtils.isFunction;
 var matches = require("../../core/polyfills/matches");
@@ -509,44 +509,34 @@ var addProperty = function(propName, hook, eventInstance) {
 
 hookTouchProps(addProperty);
 
-var cleanData = dataUtilsStrategy.cleanData;
-dataUtilsStrategy.cleanData = function(nodes) {
-    for(var i = 0; i < nodes.length; i++) {
-        eventsEngine.off(nodes[i]);
+var applyForEach = function(args, method) {
+    var element = args[0];
+
+    if(!element) {
+        return;
     }
 
-    return cleanData(nodes);
+    if(element.nodeType || isWindow(element)) {
+        method.apply(eventsEngine, args);
+    } else if(element.each) {
+        var itemArgs = Array.prototype.slice.call(args, 0);
+
+        element.each(function() {
+            itemArgs[0] = this;
+            applyForEach(itemArgs, method);
+        });
+    }
 };
+
 
 var getHandler = function(methodName) {
-    var result = function(element) {
-        if(!element) {
-            return;
-        }
-
-        if(element.nodeType || isWindow(element)) {
-            eventsEngine[methodName].apply(eventsEngine, arguments);
-        } else if(element.each) {
-            var itemArgs = Array.prototype.slice.call(arguments, 0);
-
-            element.each(function() {
-                itemArgs[0] = this;
-                result.apply(result, itemArgs);
-            });
-        }
+    return function() {
+        applyForEach(arguments, eventsEngine[methodName]);
     };
-
-    return result;
 };
 
-var fixMethod = function(e) { return e; };
-var setEventFixMethod = function(func) {
-    fixMethod = func;
-};
-
-var copyEvent = function(originalEvent) {
-    return fixMethod(eventsEngine.Event(originalEvent, originalEvent), originalEvent);
-};
+var beforeSetStrategy = Callbacks();
+var afterSetStrategy = Callbacks();
 
 var result = {
     on: getHandler("on"),
@@ -557,12 +547,28 @@ var result = {
     Event: function() {
         return eventsEngine.Event.apply(eventsEngine, arguments);
     },
-    set: function(engine) {
-        eventsEngine = engine;
+    subscribeGlobal: function() {
+        applyForEach(arguments, normalizeOnArguments(function() {
+            var args = arguments;
+
+            result.on.apply(this, args);
+
+            beforeSetStrategy.add(function() {
+                var offArgs = Array.prototype.slice.call(args, 0);
+                offArgs.splice(3, 1);
+                result.off.apply(this, offArgs);
+            });
+
+            afterSetStrategy.add(function() {
+                result.on.apply(this, args);
+            });
+        }));
     },
-    // TODO: Move to event/utils after getting rid of circular dependency
-    setEventFixMethod: setEventFixMethod,
-    copy: copyEvent
+    set: function(engine) {
+        beforeSetStrategy.fire();
+        eventsEngine = engine;
+        afterSetStrategy.fire();
+    }
 };
 
 result.Event.prototype = eventsEngine.Event.prototype;

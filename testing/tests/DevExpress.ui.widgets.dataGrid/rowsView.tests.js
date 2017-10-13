@@ -1797,7 +1797,7 @@ QUnit.test('onRowClick event handling', function(assert) {
     rows.eq(1).trigger("dxclick");
 
     //assert
-    assert.equal(typeUtils.isRenderer(rowClickArgs.rowElement), config().useJQueryRenderer, "row element");
+    assert.equal(typeUtils.isRenderer(rowClickArgs.rowElement), config().useJQuery, "row element");
     assert.deepEqual($(rowClickArgs.rowElement)[0], rows[1], "row element");
     assert.deepEqual(rowClickArgs.data, { name: 'test2', id: 2, date: new Date(2002, 1, 2) });
     assert.equal(rowClickArgs.columns.length, 3, "count columns");
@@ -1827,7 +1827,7 @@ QUnit.test('onCellClick event handling', function(assert) {
     cells.eq(0).trigger("dxclick");
 
     //assert
-    assert.equal(typeUtils.isRenderer(cellClickArgs.cellElement), config().useJQueryRenderer, "cellElement is correct");
+    assert.equal(typeUtils.isRenderer(cellClickArgs.cellElement), config().useJQuery, "cellElement is correct");
     assert.deepEqual($(cellClickArgs.cellElement)[0], cells[0], 'Container');
     assert.ok(cellClickArgs.event, 'event');
     assert.deepEqual(cellClickArgs.event.target, cells[0], 'event.target');
@@ -2390,7 +2390,7 @@ QUnit.test('Group template', function(assert) {
             command: 'expand',
             groupIndex: 0, caption: 'column 1', allowCollapsing: true,
             groupCellTemplate: function(container, options) {
-                assert.equal(typeUtils.isRenderer(container), config().useJQueryRenderer, "rowElement is correct");
+                assert.equal(typeUtils.isRenderer(container), config().useJQuery, "rowElement is correct");
                 $('<div />')
                     .text(options.column.caption + " - " + options.text + ' (Count - ' + options.data.items.length + ')')
                     .appendTo(container);
@@ -3382,7 +3382,7 @@ QUnit.test("Rows with option onRowPrepared", function(assert) {
     //assert
     assert.equal(this.dataGrid.__actionConfigs.onRowPrepared.category, "rendering", "onRowPrepared category");
     assert.equal(countCallRowPrepared, 3, "countCallRowPrepared");
-    assert.equal(typeUtils.isRenderer(resultOptions.rowElement), config().useJQueryRenderer, "correct row element");
+    assert.equal(typeUtils.isRenderer(resultOptions.rowElement), config().useJQuery, "correct row element");
     assert.ok(dataUtils.data($(resultOptions.rowElement).get(0), "options"), "has row options");
     assert.equal(resultOptions.columns.length, 3, "count columns");
     assert.equal(resultOptions.rowIndex, 1, "rowIndex");

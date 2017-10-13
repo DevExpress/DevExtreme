@@ -3,6 +3,8 @@
 SystemJS.config({
     meta: {
         "/testing/*": { format: "global" },
+        "/testing/helpers/jQueryEventsPatch.js": { format: "system" },
+        "/testing/helpers/dataPatch.js": { format: "system" },
         "/js/aspnet.js": { format: "global" }
     }
 });

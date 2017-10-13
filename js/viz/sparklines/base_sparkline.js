@@ -304,7 +304,7 @@ var touchEvents = {
     "touchstart.sparkline-tooltip": touchStartTooltipProcessing
 };
 
-eventsEngine.on(document, {
+eventsEngine.subscribeGlobal(document, {
     "pointerdown.sparkline-tooltip": function() {
         isPointerDownCalled = true;
         touchStartDocumentProcessing();

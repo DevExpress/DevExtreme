@@ -2609,7 +2609,7 @@ QUnit.testStart(function() {
             currentDate: new Date(2015, 9, 1),
             focusStateEnabled: true,
             onCellClick: function(e) {
-                assert.equal(isRenderer(e.cellElement), config().useJQueryRenderer, "cell is clicked");
+                assert.equal(isRenderer(e.cellElement), config().useJQuery, "cell is clicked");
                 assert.deepEqual($(e.cellElement)[0], $cell[0], "cell is clicked");
                 assert.deepEqual(e.cellData, { startDate: new Date(2015, 8, 27), endDate: new Date(2015, 8, 28) }, "cell is clicked");
             }

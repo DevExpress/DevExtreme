@@ -1089,7 +1089,7 @@ QUnit.test("the 'fieldTemplate' function should be called only once on init and 
     var instance = $("#selectBoxWithItemTemplate").dxSelectBox({
         items: [1, 2],
         fieldTemplate: function(value, element) {
-            assert.equal(isRenderer(element), config().useJQueryRenderer, "element is correct");
+            assert.equal(isRenderer(element), config().useJQuery, "element is correct");
 
             callCount++;
             return $("<div>").dxTextBox();

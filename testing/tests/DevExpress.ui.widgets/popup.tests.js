@@ -967,7 +967,7 @@ QUnit.test("container argument of toolbarItems.template option is correct", func
         toolbarItems: [
             {
                 template: function(e, index, container) {
-                    assert.equal(isRenderer(container), config().useJQueryRenderer, "container is correct");
+                    assert.equal(isRenderer(container), config().useJQuery, "container is correct");
                 }
             }
         ]
@@ -997,7 +997,7 @@ QUnit.test("titleTemplate test", function(assert) {
                 result += "<h1>Title</h1>";
                 result += "</div>";
 
-                assert.equal(isRenderer(titleElement), config().useJQueryRenderer, "titleElement is correct");
+                assert.equal(isRenderer(titleElement), config().useJQuery, "titleElement is correct");
 
                 return result;
             }

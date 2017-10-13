@@ -96,7 +96,7 @@ QUnit.test("tagElement arguments of tagTemplate for custom tags is correct", fun
     $("#tagBox").dxTagBox({
         value: [1, 2],
         tagTemplate: function(tagData, tagElement) {
-            assert.equal(isRenderer(tagElement), config().useJQueryRenderer, "tagElement is correct");
+            assert.equal(isRenderer(tagElement), config().useJQuery, "tagElement is correct");
         }
     });
 });
@@ -636,7 +636,7 @@ QUnit.test("onMultitagPreparing option", function(assert) {
             maxDisplayedTags: 2,
             onMultiTagPreparing: function(e) {
                 assert.equal(e.component.NAME, "dxTagBox", "component is correct");
-                assert.equal(isRenderer(e.multiTagElement), config().useJQueryRenderer, "tagElement is correct");
+                assert.equal(isRenderer(e.multiTagElement), config().useJQuery, "tagElement is correct");
                 assert.ok($(e.multiTagElement).hasClass(TAGBOX_MULTI_TAG_CLASS), "element is correct");
                 assert.deepEqual(e.selectedItems, [1, 2, 4], "selectedItems are correct");
                 e.text = "custom text";
@@ -1109,7 +1109,7 @@ QUnit.test("tag template should have correct arguments", function(assert) {
         tagTemplate: function(tagData, tagElement) {
             assert.equal(tagData, items[0], "correct data is passed");
             assert.equal($(tagElement).hasClass(TAGBOX_TAG_CLASS), true, "correct element passed");
-            assert.equal(isRenderer(tagElement), config().useJQueryRenderer, "tagElement is correct");
+            assert.equal(isRenderer(tagElement), config().useJQuery, "tagElement is correct");
         }
     });
 });
@@ -3089,7 +3089,7 @@ QUnit.test("the 'fieldTemplate' has correct arguments", function(assert) {
             dataSource: [1, 2, 3],
             value: [1],
             fieldTemplate: function(selectedItems, fieldElement) {
-                assert.equal(isRenderer(fieldElement), config().useJQueryRenderer, "fieldElement is correct");
+                assert.equal(isRenderer(fieldElement), config().useJQuery, "fieldElement is correct");
 
                 args.push(selectedItems);
                 return $("<div>").dxTextBox();
