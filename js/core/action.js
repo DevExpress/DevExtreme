@@ -43,12 +43,12 @@ var Action = Class.inherit({
         var argsBag = e.args[0] || {};
 
         ///#DEBUG
-        if(argsBag.jQueryEvent && !argsBag.event) {
+        if("jQueryEvent" in argsBag && !argsBag.event) {
             throw "The jQueryEvent field is deprecated. Please, use the `event` field instead";
         }
         ///#ENDDEBUG
 
-        if(argsBag.event && config().useJQueryRenderer) {
+        if(!("jQueryEvent" in argsBag) && argsBag.event && config().useJQueryRenderer) {
             Object.defineProperty(argsBag, 'jQueryEvent', {
                 get: function() {
                     errors.log("W0003", "Handler argument", "jQueryEvent", "17.2", "Use the 'event' field instead");
