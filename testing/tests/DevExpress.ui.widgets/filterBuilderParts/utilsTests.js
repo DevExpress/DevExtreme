@@ -144,8 +144,9 @@ QUnit.module("Utils", function() {
     QUnit.test("isCondition", function(assert) {
         assert.ok(utils.isCondition(["Column1", "=", "value"]));
         assert.ok(utils.isCondition(["Column1", "="]));
-        assert.ok(!utils.isCondition([[], "And", []]));
-        assert.ok(!utils.isCondition(["And"]));
+        assert.notOk(utils.isCondition([[], "And", []]));
+        assert.notOk(utils.isCondition(["And"]));
+        assert.notOk(utils.isCondition("And"));
     });
 
     QUnit.test("get group value", function(assert) {
@@ -377,11 +378,15 @@ QUnit.module("Utils", function() {
         assert.deepEqual(utils.updateConditionByOperation(["value", "=", "123"], "isnotblank"), ["value", "<>", null]);
         assert.deepEqual(utils.updateConditionByOperation(["value", "=", "123"], "<="), ["value", "<=", "123"]);
         assert.deepEqual(utils.updateConditionByOperation(["value", "=", null], "<="), ["value", "<=", ""]);
+        assert.deepEqual(utils.updateConditionByOperation(["value", null], "<="), ["value", "<=", ""]);
+        assert.deepEqual(utils.updateConditionByOperation(["value", "Test"], "<="), ["value", "<=", "Test"]);
+        assert.deepEqual(utils.updateConditionByOperation(["value", "Test"], "isblank"), ["value", "=", null]);
     });
 
     QUnit.test("getOperationValue", function(assert) {
         assert.deepEqual(utils.getOperationValue(["value", "=", "123"]), "=");
         assert.deepEqual(utils.getOperationValue(["value", "=", null]), "isblank");
+        assert.deepEqual(utils.getOperationValue(["value", null]), "isblank");
         assert.deepEqual(utils.getOperationValue(["value", "<>", null]), "isnotblank");
     });
 
@@ -622,6 +627,12 @@ QUnit.module("Convert to inner structure", function() {
         assert.equal(model[0], condition1);
     });
 
+    QUnit.test("from short condition", function(assert) {
+        var shortCondition = ["CompanyName", "DevExpress"],
+            model = utils.convertToInnerStructure(shortCondition);
+        assert.deepEqual(model, [shortCondition]);
+    });
+
     QUnit.test("from negative group with one condition", function(assert) {
         var model = utils.convertToInnerStructure(["!", condition1]);
         assert.deepEqual(model, ["!", [condition1]]);
@@ -655,6 +666,12 @@ QUnit.module("Filter normalization", function() {
         var group = [condition1, "And"];
 
         assert.equal(utils.getNormalizedFilter(group), condition1);
+    });
+
+    QUnit.test("get normalized filter from group with short condition", function(assert) {
+        var group = [["CompanyName", "DevExpress"]];
+
+        assert.equal(utils.getNormalizedFilter(group), group[0]);
     });
 
     QUnit.test("get normalized filter from inner group with one condition", function(assert) {

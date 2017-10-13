@@ -50,6 +50,7 @@ QUnit.module("Rendering", function() {
             instance.option("value", ["!", [["CompanyName", "=", "DevExpress"], ["CompanyName", "=", "DevExpress"]]]);
             instance.option("value", ["!", ["CompanyName", "=", "DevExpress"]]);
             instance.option("value", ["CompanyName", "=", "K&S Music"]);
+            instance.option("value", ["CompanyName", "K&S Music"]);
             instance.option("value", [["CompanyName", "=", "K&S Music"], ["CompanyName", "=", "K&S Music"]]);
             instance.option("value", [[["CompanyName", "=", "K&S Music"], "Or"], "And"]);
             assert.ok(true, "all values were approved");
@@ -451,5 +452,60 @@ QUnit.module("Create editor by field dataType", function() {
         var valueField = $("." + FILTER_BUILDER_ITEM_VALUE_CLASS).eq(0);
         valueField.find("." + FILTER_BUILDER_ITEM_VALUE_TEXT_CLASS).click();
         assert.ok(valueField.find(".dx-selectbox").dxSelectBox("instance"));
+    });
+});
+
+QUnit.module("Short condition", function() {
+    QUnit.test("check value field", function(assert) {
+        var container = $("#container");
+
+        container.dxFilterBuilder({
+            value: ["CompanyName", "K&S Music"],
+            fields: fields
+        });
+
+        assert.equal(container.find("." + FILTER_BUILDER_ITEM_VALUE_TEXT_CLASS).text(), "K&S Music");
+    });
+
+    QUnit.test("check value input", function(assert) {
+        var container = $("#container");
+
+        container.dxFilterBuilder({
+            value: ["CompanyName", "K&S Music"],
+            fields: fields
+        });
+
+        container.find("." + FILTER_BUILDER_ITEM_VALUE_TEXT_CLASS).click();
+
+        assert.equal(container.find("input").val(), "K&S Music");
+    });
+
+    QUnit.test("check value field after change of operation field", function(assert) {
+        var container = $("#container"),
+            instance = container.dxFilterBuilder({
+                value: ["CompanyName", "K&S Music"],
+                fields: fields
+            }).dxFilterBuilder("instance");
+
+        container.find("." + FILTER_BUILDER_ITEM_OPERATION_CLASS).click();
+        $(".dx-menu-item-text").eq(3).trigger("dxclick");
+
+        assert.equal(container.find("." + FILTER_BUILDER_ITEM_VALUE_TEXT_CLASS).text(), "K&S Music");
+        assert.deepEqual(instance.option("value"), ["CompanyName", "endswith", "K&S Music"]);
+    });
+
+    QUnit.test("check value input after change of operation field", function(assert) {
+        var container = $("#container");
+
+        container.dxFilterBuilder({
+            value: ["CompanyName", "K&S Music"],
+            fields: fields
+        });
+
+        container.find("." + FILTER_BUILDER_ITEM_OPERATION_CLASS).click();
+        $(".dx-menu-item-text").eq(3).trigger("dxclick");
+        container.find("." + FILTER_BUILDER_ITEM_VALUE_TEXT_CLASS).click();
+
+        assert.equal(container.find("input").val(), "K&S Music");
     });
 });
