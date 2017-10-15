@@ -9,6 +9,7 @@
     @GRID_COMMAND_ADAPTIVE_COLUMN_WIDTH: 21px;
     @GRID_COLUMN_HEADER_INDICATOR_WIDTH: 14px;
     @GRID_TEXT_CONTENT_MARGIN: 3px;
+    @GRID_TREEVIEW_SEARCH_MARGIN: 10px;
 
     .dx-@{widgetName}-checkbox-size {
         vertical-align: middle;
@@ -202,6 +203,10 @@
         }
 
         &.dx-@{widgetName}-column-chooser-mode-drag {
+            .dx-treeview-search {
+                margin-bottom: @GRID_TREEVIEW_SEARCH_MARGIN;
+            }
+
             .dx-treeview-node-container:first-child > .dx-treeview-node-is-leaf {
                 padding: 0px;
             }
