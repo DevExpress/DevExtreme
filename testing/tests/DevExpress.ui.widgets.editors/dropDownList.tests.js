@@ -81,7 +81,7 @@ QUnit.test("popup should not focus when we selecting an item", function(assert) 
     this.instance.option("opened", true);
 
     var mouseDownStub = sinon.stub(),
-        $popupContent = this.instance._popup.$content();
+        $popupContent = $(this.instance._popup.$content());
 
     $popupContent
         .on("mousedown", mouseDownStub)
