@@ -1,7 +1,7 @@
 "use strict";
 
 define(function(require) {
-    require("/js/bundles/dx.all.js");
+    require("/js/bundles/dx.mobile.js");
 
     QUnit.module("config.useJQuery");
 
