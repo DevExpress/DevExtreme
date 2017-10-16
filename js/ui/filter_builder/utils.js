@@ -211,6 +211,20 @@ function createEmptyGroup(value) {
     return value.indexOf("not") !== -1 ? ["!", [value.substring(3)]] : [value];
 }
 
+function isEmptyGroup(group) {
+    var criteria = getGroupCriteria(group);
+
+    if(isCondition(criteria)) {
+        return false;
+    }
+
+    var hasConditions = criteria.some(function(item) {
+        return isCondition(item);
+    });
+
+    return !hasConditions;
+}
+
 function addItem(item, group) {
     var criteria = getGroupCriteria(group),
         groupValue = getGroupValue(criteria);
@@ -467,6 +481,7 @@ function copyGroup(group) {
     return result;
 }
 
+exports.isEmptyGroup = isEmptyGroup;
 exports.getOperationFromAvailable = getOperationFromAvailable;
 exports.updateConditionByOperation = updateConditionByOperation;
 exports.getCaptionWithParents = getCaptionWithParents;

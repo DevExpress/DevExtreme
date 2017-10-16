@@ -373,11 +373,15 @@ var FilterBuilder = Widget.inherit({
                 break;
             case "fields":
             case "defaultGroupOperation":
-            case "value":
             case "allowHierarchicalFields":
             case "groupOperationDescriptions":
             case "filterOperationDescriptions":
                 this._invalidate();
+                break;
+            case "value":
+                if(!this._disableInvalidateForValue) {
+                    this._invalidate();
+                }
                 break;
             default:
                 this.callBase(args);
@@ -385,8 +389,10 @@ var FilterBuilder = Widget.inherit({
     },
 
     _updateFilter: function() {
+        this._disableInvalidateForValue = true;
         var value = utils.copyGroup(this._model);
-        this._options.value = utils.getNormalizedFilter(value);
+        this.option("value", extend(true, [], utils.getNormalizedFilter(value)));
+        this._disableInvalidateForValue = false;
     },
 
     _init: function() {
@@ -422,7 +428,7 @@ var FilterBuilder = Widget.inherit({
     },
 
     _renderContentImpl: function() {
-        this._model = utils.convertToInnerStructure(this.option("value"));
+        this._model = extend(true, [], utils.convertToInnerStructure(this.option("value")));
         this._createGroupElementByCriteria(this._model)
             .appendTo(this.$element());
     },
@@ -461,7 +467,9 @@ var FilterBuilder = Widget.inherit({
             this._createRemoveButton(function() {
                 utils.removeItem(parent, criteria);
                 $group.remove();
-                that._updateFilter();
+                if(!utils.isEmptyGroup(criteria)) {
+                    that._updateFilter();
+                }
             }).appendTo($groupItem);
         }
 
@@ -492,10 +500,12 @@ var FilterBuilder = Widget.inherit({
                     displayExpr: "text",
                     keyExpr: "value",
                     onItemClick: function(e) {
-                        utils.setGroupValue(criteria, e.itemData.value);
-                        groupMenuItem = e.itemData;
-                        $operationButton.html(e.itemData.text);
-                        that._updateFilter();
+                        if(groupMenuItem !== e.itemData) {
+                            utils.setGroupValue(criteria, e.itemData.value);
+                            $operationButton.html(e.itemData.text);
+                            groupMenuItem = e.itemData;
+                            that._updateFilter();
+                        }
                     },
                     onContentReady: function(e) {
                         e.component.selectItem(groupMenuItem);
@@ -575,16 +585,19 @@ var FilterBuilder = Widget.inherit({
                         e.component.selectItem(currentOperation);
                     },
                     onItemClick: function(e) {
-                        currentOperation = e.itemData;
-                        utils.updateConditionByOperation(condition, currentOperation.value);
-                        if(that._hasValueButton(condition)) {
-                            if($operationButton.siblings().filter("." + FILTER_BUILDER_ITEM_VALUE_CLASS).length === 0) {
-                                that._createValueButton(condition, field).appendTo($operationButton.parent());
+                        if(currentOperation !== e.itemData) {
+                            currentOperation = e.itemData;
+                            utils.updateConditionByOperation(condition, currentOperation.value);
+                            if(that._hasValueButton(condition)) {
+                                if($operationButton.siblings().filter("." + FILTER_BUILDER_ITEM_VALUE_CLASS).length === 0) {
+                                    that._createValueButton(condition, field).appendTo($operationButton.parent());
+                                }
+                            } else {
+                                $operationButton.siblings().filter("." + FILTER_BUILDER_ITEM_VALUE_CLASS).remove();
                             }
-                        } else {
-                            $operationButton.siblings().filter("." + FILTER_BUILDER_ITEM_VALUE_CLASS).remove();
+                            $operationButton.html(currentOperation.text);
+                            that._updateFilter();
                         }
-                        $operationButton.html(currentOperation.text);
                     }
                 }
             }).addClass(FILTER_BUILDER_ITEM_TEXT_CLASS)
@@ -623,16 +636,19 @@ var FilterBuilder = Widget.inherit({
                 displayExpr: "caption",
                 treeViewEnabled: allowHierarchicalFields,
                 onItemClick: function(e) {
-                    item = e.itemData;
-                    condition[0] = item.dataField;
-                    condition[2] = item.dataType === "object" ? null : "";
-                    utils.updateConditionByOperation(condition, utils.getDefaultOperation(item));
+                    if(item !== e.itemData) {
+                        item = e.itemData;
+                        condition[0] = item.dataField;
+                        condition[2] = item.dataType === "object" ? null : "";
+                        utils.updateConditionByOperation(condition, utils.getDefaultOperation(item));
 
-                    $fieldButton.siblings().filter("." + FILTER_BUILDER_ITEM_TEXT_CLASS).remove();
-                    that._createOperationAndValueButtons(condition, item, $fieldButton.parent());
+                        $fieldButton.siblings().filter("." + FILTER_BUILDER_ITEM_TEXT_CLASS).remove();
+                        that._createOperationAndValueButtons(condition, item, $fieldButton.parent());
 
-                    var caption = getFullCaption(item, e.component.option("items"));
-                    $fieldButton.html(caption);
+                        var caption = getFullCaption(item, e.component.option("items"));
+                        $fieldButton.html(caption);
+                        that._updateFilter();
+                    }
                 },
                 onContentReady: function(e) {
                     e.component.selectItem(item);
@@ -709,10 +725,8 @@ var FilterBuilder = Widget.inherit({
 
     _createValueText: function(item, field, $container) {
         var that = this,
-            getValueIndex = function() {
-                return item.length - 1;
-            },
-            valueText = utils.getCurrentValueText(field, item[getValueIndex()]) || messageLocalization.format("dxFilterBuilder-enterValueText"),
+            valueIndex = item.length - 1,
+            valueText = utils.getCurrentValueText(field, item[valueIndex]) || messageLocalization.format("dxFilterBuilder-enterValueText"),
             $text = $("<div>")
                 .addClass(FILTER_BUILDER_ITEM_VALUE_TEXT_CLASS)
                 .attr("tabindex", 0)
@@ -720,37 +734,62 @@ var FilterBuilder = Widget.inherit({
                 .appendTo($container);
 
         that._subscribeOnClickAndEnterKey($text, function() {
-            $container.empty();
-            var value = item[getValueIndex()];
-
-            that._createValueEditor($container, field, {
-                value: value,
-                filterOperation: utils.getOperationValue(item),
-                setValue: function(data) {
-                    value = data;
-                }
-            });
-
-            eventsEngine.trigger($container.find("input"), "focus");
-            eventsEngine.on($container, "focusout", function(e) {
-                $container.empty();
-                item[getValueIndex()] = value;
-                that._createValueText(item, field, $container);
-            });
-            eventsEngine.on($container, "keyup", function(e) {
-                if(e.keyCode === 13 || e.keyCode === 27) {
-                    eventsEngine.off($container, "focusout");
-                    $container.empty();
-                    if(e.keyCode === 13) {
-                        item[getValueIndex()] = value;
-                    }
-                    var $newTextElement = that._createValueText(item, field, $container);
-                    eventsEngine.trigger($newTextElement, "focus");
-                }
-            });
+            that._createValueEditorWithEvents(item, field, $container);
         }, "keyup");
 
         return $text;
+    },
+
+    _createValueEditorWithEvents: function(item, field, $container) {
+        var that = this,
+            valueIndex = item.length - 1,
+            value = item[valueIndex],
+            disableEvents = function() {
+                eventsEngine.off($container, "focusout");
+                eventsEngine.off($container, "keyup");
+            },
+            updateValue = function(value, callback) {
+                if(item[valueIndex] !== value) {
+                    item[valueIndex] = value;
+                    callback();
+                    that._updateFilter();
+                }
+            };
+
+        $container.empty();
+        that._createValueEditor($container, field, {
+            value: value,
+            filterOperation: utils.getOperationValue(item),
+            setValue: function(data) {
+                value = data;
+            }
+        });
+
+        eventsEngine.trigger($container.find("input"), "focus");
+        eventsEngine.on($container, "focusout", function(e) {
+            disableEvents();
+            $container.empty();
+            updateValue(value, function() {
+                that._createValueText(item, field, $container);
+            });
+        });
+        eventsEngine.on($container, "keyup", function(e) {
+            if(e.keyCode === 13 || e.keyCode === 27) {
+                disableEvents();
+                $container.empty();
+
+                var createValueText = function() {
+                    var $newTextElement = that._createValueText(item, field, $container);
+                    eventsEngine.trigger($newTextElement, "focus");
+                };
+
+                if(e.keyCode === 13) {
+                    updateValue(value, createValueText);
+                } else {
+                    createValueText();
+                }
+            }
+        });
     },
 
     _createValueButton: function(item, field) {
