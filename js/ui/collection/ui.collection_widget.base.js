@@ -229,7 +229,7 @@ var CollectionWidget = Widget.inherit({
             /**
             * @name CollectionWidgetOptions_focusedElement
             * @publicName focusedElement
-            * @type Node|jQuery
+            * @type Element
             * @default null
             * @hidden
             * @extend_doc
