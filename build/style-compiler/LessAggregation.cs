@@ -210,7 +210,7 @@ namespace StyleCompiler
 
                     foreach (var colorSchemeName in theme.ColorSchemeNames)
                     {
-                        if (distribution.ExcludedColorSchemes != null && Array.IndexOf(distribution.ExcludedColorSchemes, colorSchemeName) >= 0)
+                        if (distribution.ExcludedColorSchemes != null && distribution.ExcludedColorSchemes.Contains(colorSchemeName))
                             continue;
 
                         foreach (var sizeSchemeName in EnumerateSizeSchemes(distributionName, themeName))
