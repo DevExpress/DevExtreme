@@ -450,7 +450,7 @@ QUnit.test("arrow_down/arrow_up/enter provide item navigation and selection", fu
 
     var $lastScrolledItem = $();
     instance._list.scrollToItem = function($item) {
-        $lastScrolledItem = $item;
+        $lastScrolledItem = $($item);
     };
     this.$input.focusin();
     keyboard.keyDown(KEY_ENTER);
