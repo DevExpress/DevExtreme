@@ -20,7 +20,7 @@ function getIntegerPartRegExp(formatString, thousandsSeparator) {
     result = result.replace(/0/g, "\\d");
 
     if(formatString.indexOf("#,") >= 0 && groupSizes.length) {
-        result = result.replace(new RegExp("[#,]+"), "([1-9][\\d\\" + thousandsSeparator + "]*)?");
+        result = result.replace(new RegExp("[#,]+"), "([" + thousandsSeparator + "]*[1-9][\\d\\" + thousandsSeparator + "]*)?");
     } else {
         result = result.replace(/#+/g, "([1-9]\\d*)?");
     }
