@@ -16,6 +16,10 @@ var DEFAULT_DATA_TYPE = "string",
         "datetime": ["=", "<>", "<", ">", "<=", ">=", "isblank", "isnotblank"],
         "boolean": ["=", "<>", "isblank", "isnotblank"],
         "object": ["isblank", "isnotblank"]
+    },
+    DEFAULT_FORMAT = {
+        "date": "shortDate",
+        "datetime": "shortDateShortTime"
     };
 
 function isNegationGroup(group) {
@@ -323,6 +327,10 @@ function getNormalizedFilter(group) {
     return group;
 }
 
+function getFieldFormat(field) {
+    return field.format || DEFAULT_FORMAT[field.dataType];
+}
+
 function getCurrentValueText(field, value) {
     var valueText;
     if(value === true) {
@@ -330,7 +338,7 @@ function getCurrentValueText(field, value) {
     } else if(value === false) {
         valueText = field.falseText || messageLocalization.format("dxDataGrid-falseText");
     } else {
-        valueText = formatHelper.format(value, field.format);
+        valueText = formatHelper.format(value, getFieldFormat(field));
     }
     if(field.customizeText) {
         valueText = field.customizeText.call(field, {
