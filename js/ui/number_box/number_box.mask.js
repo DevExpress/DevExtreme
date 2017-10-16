@@ -242,7 +242,7 @@ var NumberBoxMask = NumberBoxBase.inherit({
     },
 
     _applyValue: function(value, forced) {
-        if(this._isEqual(this._parsedValue, value) && !forced) {
+        if(!this._useMaskBehavior() || this._isEqual(this._parsedValue, value) && !forced) {
             return;
         }
 
