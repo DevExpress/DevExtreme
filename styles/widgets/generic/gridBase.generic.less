@@ -12,6 +12,7 @@
     @GENERIC_GRID_BASE_COMMAND_EXPAND_COLUMN_WIDTH: 30px;
     @GENERIC_GRID_BASE_CHECKBOX_FONTSIZE: 12px;
     @GENERIC_GRID_BASE_ADAPTIVE_TEXT_PADDING: 8px;
+    @GENERIC_GRID_BASE_TREEVIEW_SEARCH_MARGIN: 10px;
 }
 
 .dx-size-compact() {
@@ -28,6 +29,7 @@
     @GENERIC_GRID_BASE_COMMAND_EXPAND_COLUMN_WIDTH: 15px;
     @GENERIC_GRID_BASE_CHECKBOX_FONTSIZE: 10px;
     @GENERIC_GRID_BASE_ADAPTIVE_TEXT_PADDING: 6px;
+    @GENERIC_GRID_BASE_TREEVIEW_SEARCH_MARGIN: 5px;
 }
 
 .grid-base(@widgetName) {
@@ -331,11 +333,13 @@
             .dx-popup-content {
                 padding: @GENERIC_GRID_BASE_COLUMN_CHOOSER_PADDINGS;
 
+                .dx-treeview-search {
+                    margin-bottom: @GENERIC_GRID_BASE_TREEVIEW_SEARCH_MARGIN;
+                }
+
                 .dx-treeview-node {
                     padding-left: 20px;
                 }
-
-
             }
         }
 
