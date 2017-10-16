@@ -18,6 +18,7 @@ if(jQuery && useJQuery) {
     require("./jquery/events");
     require("./jquery/easing");
     require("./jquery/element_data");
+    require("./jquery/element");
     require("./jquery/component_registrator");
     require("./jquery/ajax");
 }
