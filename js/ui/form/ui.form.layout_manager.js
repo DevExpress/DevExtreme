@@ -102,6 +102,12 @@ var LayoutManager = Widget.inherit({
         this._initDataAndItems(this.option("layoutData"));
     },
 
+    _dispose: function() {
+        this.callBase();
+
+        this._cleanItemWatchers();
+    },
+
     _initDataAndItems: function(initialData) {
         this._syncDataWithItems();
         this._updateItems(initialData);
@@ -287,7 +293,6 @@ var LayoutManager = Widget.inherit({
 
     _render: function() {
         this._clearEditorInstances();
-        this._cleanItemWatchers();
 
         this.element().addClass(FORM_LAYOUT_MANAGER_CLASS);
 
