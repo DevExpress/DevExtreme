@@ -2551,6 +2551,24 @@ QUnit.test("Change minColWidth when colCount is auto", function(assert) {
     invalidateStub.restore();
 });
 
+QUnit.test("Clear item watchers after disposing", function(assert) {
+     //arrange
+    var $testContainer = $("#container").width(450);
+
+    $testContainer.dxLayoutManager({
+        layoutData: { test1: "abc", test2: "qwe", test3: "xyz" }
+    });
+
+    //act
+    var instance = $testContainer.dxLayoutManager("instance"),
+        cleanWatcherStub = sinon.stub(instance, "_cleanItemWatchers");
+
+    instance.$element().remove();
+    assert.equal(cleanWatcherStub.callCount, 1, "_cleanItemWatchers is fired");
+
+    cleanWatcherStub.restore();
+});
+
 QUnit.test("Render validate", function(assert) {
     //arrange, act
     var $container = $("#container");
