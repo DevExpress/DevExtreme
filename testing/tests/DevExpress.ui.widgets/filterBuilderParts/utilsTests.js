@@ -778,4 +778,18 @@ QUnit.module("Formatting", function() {
             value = "MyValue";
         assert.equal(utils.getCurrentValueText(field, value), "MyValueTest");
     });
+
+    QUnit.test("default format for date", function(assert) {
+        var field = { dataType: "date" },
+            value = new Date(2017, 8, 5, 12, 30, 0);
+
+        assert.equal(utils.getCurrentValueText(field, value), "9/5/2017");
+    });
+
+    QUnit.test("default format for datetime", function(assert) {
+        var field = { dataType: "datetime" },
+            value = new Date(2017, 8, 5, 12, 30, 0);
+
+        assert.equal(utils.getCurrentValueText(field, value), "9/5/2017, 12:30 PM");
+    });
 });
