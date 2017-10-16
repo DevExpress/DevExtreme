@@ -2555,9 +2555,7 @@ QUnit.test("Clear item watchers after disposing", function(assert) {
     var $testContainer = $("#container").width(450);
 
     $testContainer.dxLayoutManager({
-        layoutData: { test1: "abc", test2: "qwe", test3: "xyz" },
-        colCount: 1,
-        minColWidth: 200
+        layoutData: { test1: "abc", test2: "qwe", test3: "xyz" }
     });
 
     //act
