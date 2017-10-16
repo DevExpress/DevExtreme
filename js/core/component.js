@@ -198,12 +198,8 @@ var Component = Class.inherit({
         oldValue = coreDataUtils.toComparable(oldValue, true);
         newValue = coreDataUtils.toComparable(newValue, true);
 
-        if(oldValue && newValue) {
-            if(typeUtils.isRenderer(oldValue) && typeUtils.isRenderer(newValue)) {
-                return newValue.is(oldValue);
-            } else if(oldValue instanceof HTMLElement && newValue instanceof HTMLElement) {
-                return oldValue === newValue;
-            }
+        if(oldValue && newValue && typeUtils.isRenderer(oldValue) && typeUtils.isRenderer(newValue)) {
+            return newValue.is(oldValue);
         }
 
         var oldValueIsNaN = oldValue !== oldValue,
@@ -212,7 +208,7 @@ var Component = Class.inherit({
             return true;
         }
 
-        if(oldValue === null || typeof oldValue !== "object") {
+        if(oldValue === null || typeof oldValue !== "object" || oldValue instanceof HTMLElement) {
             return oldValue === newValue;
         }
 
