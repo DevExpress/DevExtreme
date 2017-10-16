@@ -26,6 +26,7 @@ var cachedSetters = {};
 * @inherits EventsMixin
 * @module core/component
 * @export default
+* @namespace DevExpress
 * @hidden
 */
 var Component = Class.inherit({
