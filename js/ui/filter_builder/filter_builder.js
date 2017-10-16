@@ -197,6 +197,19 @@ var FilterBuilder = Widget.inherit({
              * @type_function_return string
              */
 
+             /**
+             * @name dxFilterBuilderField_valueEditorTemplate
+             * @publicName valueEditorTemplate
+             * @type template
+             * @type_function_param1 conditionInfo:object
+             * @type_function_param1_field1 value:string|number|date
+             * @type_function_param1_field2 filterOperation:string
+             * @type_function_param1_field3 field:dxFilterBuilderField
+             * @type_function_param1_field4 setValue:function
+             * @type_function_param2 container:Element
+             * @type_function_return string|Node|jQuery
+             */
+
             /**
             * @name dxFilterBuilderOptions_defaultGroupOperation
             * @publicName defaultGroupOperation
@@ -708,21 +721,25 @@ var FilterBuilder = Widget.inherit({
 
         that._subscribeOnClickAndEnterKey($text, function() {
             $container.empty();
-            var value = item[getValueIndex()],
-                $editor = that._createValueEditor(value, field, function(data) {
+            var value = item[getValueIndex()];
+
+            that._createValueEditor($container, field, {
+                value: value,
+                filterOperation: utils.getOperationValue(item),
+                setValue: function(data) {
                     value = data;
-                }).appendTo($container);
+                }
+            });
 
-            eventsEngine.trigger($editor.find("input"), "focus");
-
-            eventsEngine.on($editor, "focusout", function(e) {
+            eventsEngine.trigger($container.find("input"), "focus");
+            eventsEngine.on($container, "focusout", function(e) {
                 $container.empty();
                 item[getValueIndex()] = value;
                 that._createValueText(item, field, $container);
             });
-            eventsEngine.on($editor, "keyup", function(e) {
+            eventsEngine.on($container, "keyup", function(e) {
                 if(e.keyCode === 13 || e.keyCode === 27) {
-                    eventsEngine.off($editor, "focusout");
+                    eventsEngine.off($container, "focusout");
                     $container.empty();
                     if(e.keyCode === 13) {
                         item[getValueIndex()] = value;
@@ -745,15 +762,21 @@ var FilterBuilder = Widget.inherit({
         return $valueButton;
     },
 
-    _createValueEditor: function(value, field, setValueHandler) {
-        var $editor = $("<div>").attr("tabindex", 0);
-        this._editorFactory.createEditor.call(this, $editor, extend({}, field, {
-            value: value,
-            parentType: "filterRow",
-            setValue: setValueHandler,
-            lookup: field.lookup
-        }));
-        return $editor;
+    _createValueEditor: function($container, field, options) {
+        if(field.valueEditorTemplate) {
+            var template = this._getTemplate(field.valueEditorTemplate);
+
+            template.render({
+                model: extend({ field: field }, options),
+                container: $container
+            });
+        } else {
+            var $editor = $("<div>").attr("tabindex", 0).appendTo($container);
+            this._editorFactory.createEditor.call(this, $editor, extend({}, field, options, {
+                parentType: "filterRow",
+                lookup: field.lookup
+            }));
+        }
     },
 
     _createPopupWithTreeView: function(options, $container) {

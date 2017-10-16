@@ -316,6 +316,39 @@ QUnit.module("Rendering", function() {
         assert.deepEqual(instance.option("value"), ["State", "<>", "Test"]);
     });
 
+    QUnit.testInActiveWindow("change filter value when specified valueEditorTemplate", function(assert) {
+        var container = $("#container"),
+            instance = container.dxFilterBuilder({
+                value: ["Field", "=", "Test1"],
+                fields: [{
+                    dataField: "Field",
+                    valueEditorTemplate: function(options, $container) {
+                        $("<input/>").val(options.val).on("change", function(e) {
+                            options.setValue($(e.currentTarget).val());
+                        }).appendTo($container);
+                    }
+                }]
+            }).dxFilterBuilder("instance");
+
+        var $valueButton = container.find("." + FILTER_BUILDER_ITEM_VALUE_TEXT_CLASS);
+        assert.strictEqual($valueButton.text(), "Test1", "filter value");
+
+        $valueButton.click();
+
+        var $input = container.find("input");
+        assert.ok($input.is(":focus"));
+
+        $input.val("Test2");
+        $input.trigger("change");
+        $input.trigger("blur");
+
+        $valueButton = container.find("." + FILTER_BUILDER_ITEM_VALUE_TEXT_CLASS);
+        assert.strictEqual($valueButton.text(), "Test2", "filter value");
+        assert.deepEqual(instance._model, [["Field", "=", "Test2"]]);
+        assert.deepEqual(instance.option("value"), ["Field", "=", "Test2"]);
+        assert.notOk(container.find("input").length, "hasn't input");
+    });
+
     QUnit.test("Add and remove condition", function(assert) {
         var container = $("#container"),
             instance = container.dxFilterBuilder({
@@ -452,6 +485,34 @@ QUnit.module("Create editor by field dataType", function() {
         var valueField = $("." + FILTER_BUILDER_ITEM_VALUE_CLASS).eq(0);
         valueField.find("." + FILTER_BUILDER_ITEM_VALUE_TEXT_CLASS).click();
         assert.ok(valueField.find(".dx-selectbox").dxSelectBox("instance"));
+    });
+
+    QUnit.test("valueEditorTemplate", function(assert) {
+        var args,
+            fields = [{
+                dataField: "Field",
+                valueEditorTemplate: function(options, $container) {
+                    args = options;
+
+                    return $("<input/>").addClass("my-editor");
+                }
+            }];
+
+        $("#container").dxFilterBuilder({
+            value: [
+                ["Field", "=", "value"]
+            ],
+            fields: fields
+        });
+
+        var valueField = $("." + FILTER_BUILDER_ITEM_VALUE_CLASS).eq(0);
+        valueField.find("." + FILTER_BUILDER_ITEM_VALUE_TEXT_CLASS).click();
+        assert.ok(valueField.find("input").hasClass("my-editor"));
+
+        assert.strictEqual(args.value, "value", "filter value");
+        assert.strictEqual(args.filterOperation, "=", "filter operation");
+        assert.deepEqual(args.field, fields[0], "field");
+        assert.ok(args.setValue, "has setValue");
     });
 });
 

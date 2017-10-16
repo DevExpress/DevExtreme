@@ -2964,6 +2964,9 @@ declare module DevExpress.ui {
 
         /** @docid dxFilterBuilderField_customizeText */
         customizeText?: (fieldInfo: { value: any; valueText: string; }) => string;
+
+        /** @docid dxFilterBuilderField_valueEditorTemplate */
+        valueEditorTemplate?: any;
     }
 
     export interface dxFilterBuilderOptions extends WidgetOptions {
