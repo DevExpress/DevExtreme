@@ -12,6 +12,7 @@ QUnit.module("displayFormat option", {
     beforeEach: function() {
         this.$element = $("#numberbox").dxNumberBox({
             displayFormat: "#0.##",
+            value: "",
             useMaskBehavior: true
         });
         this.input = this.$element.find(".dx-texteditor-input");
