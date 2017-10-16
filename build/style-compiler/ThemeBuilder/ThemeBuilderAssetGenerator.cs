@@ -21,6 +21,10 @@ namespace StyleCompiler.ThemeBuilder
         readonly static ThemeId[] THEMES = new ThemeId[] {
             new ThemeId(LessRegistry.THEME_GENERIC, LessRegistry.COLOR_SCHEME_LIGHT),
             new ThemeId(LessRegistry.THEME_GENERIC, LessRegistry.COLOR_SCHEME_DARK),
+            new ThemeId(LessRegistry.THEME_GENERIC, LessRegistry.COLOR_SCHEME_CARMINE),
+            new ThemeId(LessRegistry.THEME_GENERIC, LessRegistry.COLOR_SCHEME_DARKMOON),
+            new ThemeId(LessRegistry.THEME_GENERIC, LessRegistry.COLOR_SCHEME_SOFTBLUE),
+            new ThemeId(LessRegistry.THEME_GENERIC, LessRegistry.COLOR_SCHEME_DARKVIOLET),
             new ThemeId(LessRegistry.THEME_GENERIC, LessRegistry.COLOR_SCHEME_LIGHT, LessRegistry.SIZE_SCHEME_COMPACT),
             new ThemeId(LessRegistry.THEME_GENERIC, LessRegistry.COLOR_SCHEME_DARK, LessRegistry.SIZE_SCHEME_COMPACT),
             new ThemeId(LessRegistry.THEME_IOS7, LessRegistry.COLOR_SCHEME_DEFAULT),
