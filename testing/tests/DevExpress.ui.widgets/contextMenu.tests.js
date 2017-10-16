@@ -1200,6 +1200,8 @@ QUnit.test("items change should clear focused item", function(assert) {
 });
 
 QUnit.test("items changed should not break keyboard navigation", function(assert) {
+    if(!isDeviceDesktop(assert)) return;
+
     var instance = new ContextMenu(this.$element, {});
     instance.option({ visible: true, items: [{ text: "1" }, { text: "2" }] });
 
