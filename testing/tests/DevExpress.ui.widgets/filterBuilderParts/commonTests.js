@@ -133,8 +133,7 @@ QUnit.module("Rendering", function() {
         $fieldButton.click();
         assert.ok($fieldButton.hasClass(ACTIVE_CLASS));
 
-        var $menu = container.find(".dx-overlay");
-        assert.ok($menu.length === 1);
+        assert.ok($(".dx-filterbuilder-fields").length > 0);
 
         var $menuItem = $(".dx-treeview-item").eq(2);
         assert.equal($menuItem.text(), "State");
@@ -143,9 +142,7 @@ QUnit.module("Rendering", function() {
         assert.ok(!$fieldButton.hasClass(ACTIVE_CLASS));
         assert.equal(container.find("." + FILTER_BUILDER_ITEM_OPERATION_CLASS).text(), "Contains");
         assert.equal(container.find("." + FILTER_BUILDER_ITEM_VALUE_CLASS).text(), "<enter a value>");
-
-        $menu = container.find(".dx-overlay");
-        assert.ok($menu.length === 0);
+        assert.ok($(".dx-filterbuilder-fields").length === 0);
     });
 
     QUnit.test("operations are changed after field change", function(assert) {
@@ -206,10 +203,13 @@ QUnit.module("Rendering", function() {
         var $groupButton = container.find("." + FILTER_BUILDER_GROUP_OPERATION_CLASS);
         $groupButton.click();
 
+        assert.ok($(".dx-filterbuilder-group-operations").length > 0);
         assert.equal($(".dx-menu-item-selected").text(), "And");
 
         var $menuItem = $(".dx-menu-item-text").eq(3);
         $menuItem.trigger("dxclick");
+
+        assert.ok($(".dx-filterbuilder-group-operations").length === 0);
 
         $groupButton.click();
         assert.equal($(".dx-menu-item-selected").text(), "Not Or");
@@ -228,11 +228,13 @@ QUnit.module("Rendering", function() {
         var $operationButton = container.find("." + FILTER_BUILDER_ITEM_OPERATION_CLASS);
         $operationButton.click();
 
+        assert.ok($(".dx-filterbuilder-operations").length > 0);
         assert.equal($(".dx-menu-item-selected").text(), "Equals");
 
         var $menuItem = $(".dx-menu-item-text").eq(3);
         $menuItem.trigger("dxclick");
 
+        assert.ok($(".dx-filterbuilder-operations").length === 0);
         assert.equal(container.find("." + FILTER_BUILDER_ITEM_VALUE_CLASS).length, 1);
 
         $operationButton.click();
@@ -357,7 +359,13 @@ QUnit.module("Rendering", function() {
                 fields: fields
             }).dxFilterBuilder("instance");
 
-        clickByButtonAndSelectMenuItem($("." + FILTER_BUILDER_IMAGE_ADD_CLASS), 1);
+        $("." + FILTER_BUILDER_IMAGE_ADD_CLASS).click();
+
+        assert.ok($(".dx-filterbuilder-add-condition").length > 0);
+
+        $(".dx-menu-item-text").eq(1).trigger("dxclick");
+
+        assert.ok($(".dx-filterbuilder-add-condition").length === 0);
         assert.deepEqual(instance._model, [["State", "<>", "Test"], ["CompanyName", "contains", ""]]);
         assert.deepEqual(instance.option("value"), [["State", "<>", "Test"], ["CompanyName", "contains", ""]]);
 
