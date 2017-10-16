@@ -578,7 +578,7 @@ QUnit.module("on value changed", function() {
             textBoxInstance = $textBoxContainer.dxTextBox("instance");
         textBoxInstance.option("value", "Test");
         $textBoxContainer.find("input").trigger(event);
-    }
+    };
 
     QUnit.test("add/remove empty group", function(assert) {
         var container = $("#container"),
