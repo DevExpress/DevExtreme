@@ -76,16 +76,19 @@ QUnit.test("focus removed from list on type some text", function(assert) {
 });
 
 QUnit.test("popup should not focus when we selecting an item", function(assert) {
-    assert.expect(1);
+    assert.expect(2);
 
     this.instance.option("opened", true);
-    this
-        .instance
-        ._popup
-        .$content()
+
+    var mouseDownStub = sinon.stub(),
+        $popupContent = this.instance._popup.$content();
+
+    $popupContent
+        .on("mousedown", mouseDownStub)
         .trigger("mousedown")
         .trigger("mouseup");
 
+    assert.notOk(mouseDownStub.getCall(0).args[0].isDefaultPrevented(), "mousedown isn't prevented");
     assert.ok(this.$element.hasClass(STATE_FOCUSED_CLASS), "element save focused state after click on popup content");
 });
 
