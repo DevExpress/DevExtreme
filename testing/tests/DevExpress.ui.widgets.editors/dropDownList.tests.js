@@ -142,13 +142,14 @@ QUnit.module("keyboard navigation", {
     }
 });
 
-QUnit.test("focusout should be not be fired on input element", function(assert) {
+QUnit.test("focusout should not be fired on input element", function(assert) {
     var onFocusOutStub = sinon.stub();
     this.instance.option("onFocusOut", onFocusOutStub);
 
     this.$element.focusin();
     this.keyboard.keyDown("tab");
-    assert.equal(onFocusOutStub.callCount, 0, "onFocusOut isn't fired");
+
+    assert.equal(onFocusOutStub.callCount, 0, "onFocusOut wasn't fired");
 });
 
 QUnit.testInActiveWindow("popup hides on tab", function(assert) {
