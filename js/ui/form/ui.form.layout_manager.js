@@ -293,7 +293,6 @@ var LayoutManager = Widget.inherit({
 
     _render: function() {
         this._clearEditorInstances();
-
         this.element().addClass(FORM_LAYOUT_MANAGER_CLASS);
 
         this.callBase();
