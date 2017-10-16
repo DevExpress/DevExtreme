@@ -79,16 +79,14 @@ QUnit.test("popup should not focus when we selecting an item", function(assert) 
     assert.expect(1);
 
     this.instance.option("opened", true);
-    var popupContent = $(this.instance._popup.$content()),
-        isDefaultPrevented = false;
+    this
+        .instance
+        ._popup
+        .$content()
+        .trigger("mousedown")
+        .trigger("mouseup");
 
-    popupContent.on("mousedown", function(e) {
-        isDefaultPrevented = e.isDefaultPrevented();
-    });
-
-    popupContent.trigger("mousedown");
-
-    assert.ok(isDefaultPrevented === devices.real().generic, "input save focus on overlay pointerdown by preventing blur");
+    assert.ok(this.$element.hasClass(STATE_FOCUSED_CLASS), "element save focused state after click on popup content");
 });
 
 QUnit.test("hover and focus states for list should be initially disabled on mobile devices only", function(assert) {

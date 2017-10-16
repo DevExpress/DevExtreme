@@ -366,9 +366,9 @@ var DropDownList = DropDownEditor.inherit({
         eventsEngine.on(this._input(), "input", this._setFocusPolicy.bind(this));
     },
 
-    _preventFocusOnPopup: function(e) {
+    _saveFocusOnWidget: function(e) {
         if(this._list && this._list.initialOption("focusStateEnabled")) {
-            e.preventDefault();
+            this.focus();
         }
     },
 
@@ -377,8 +377,8 @@ var DropDownList = DropDownEditor.inherit({
         this._popup._wrapper().addClass(this._popupWrapperClass());
 
         var $popupContent = this._popup.$content();
-        eventsEngine.off($popupContent, "mousedown");
-        eventsEngine.on($popupContent, "mousedown", this._preventFocusOnPopup.bind(this));
+        eventsEngine.off($popupContent, "mouseup");
+        eventsEngine.on($popupContent, "mouseup", this._saveFocusOnWidget.bind(this));
     },
 
     _popupWrapperClass: function() {
