@@ -3,6 +3,7 @@
 /**
 * @name positionConfig
 * @publicName positionConfig
+* @namespace DevExpress
 * @type object
 */
 

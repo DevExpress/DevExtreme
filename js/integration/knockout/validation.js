@@ -59,6 +59,7 @@ ko.extenders.dxValidator = function(target, option) {
 * @name validationEngineMethods_registerModelForValidation
 * @publicName registerModelForValidation(model)
 * @param1 model:object
+* @namespace DevExpress
 */
 ValidationEngine.registerModelForValidation = function(model) {
     each(model, function(name, member) {
@@ -72,6 +73,7 @@ ValidationEngine.registerModelForValidation = function(model) {
 * @name validationEngineMethods_unregisterModelForValidation
 * @publicName unregisterModelForValidation(model)
 * @param1 model:object
+* @namespace DevExpress
 */
 ValidationEngine.unregisterModelForValidation = function(model) {
     each(model, function(name, member) {
@@ -86,5 +88,6 @@ ValidationEngine.unregisterModelForValidation = function(model) {
 * @publicName validateModel(model)
 * @param1 model:object
 * @return object
+* @namespace DevExpress
 */
 ValidationEngine.validateModel = ValidationEngine.validateGroup;

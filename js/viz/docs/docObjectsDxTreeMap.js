@@ -1,122 +1,122 @@
 /**
-* @name dxtreemapnode
+* @name dxTreeMapNode
 * @publicName Node
 */
 var Node = {
     /**
-    * @name dxtreemapnodefields_level
+    * @name dxTreeMapNodefields_level
     * @publicName level
     * @type number
     */
     level: undefined,
     /**
-    * @name dxtreemapnodefields_index
+    * @name dxTreeMapNodefields_index
     * @publicName index
     * @type number
     */
     index: undefined,
     /**
-    * @name dxtreemapnodefields_data
+    * @name dxTreeMapNodefields_data
     * @publicName data
     * @type object
     */
     data: undefined,
     /**
-    * @name dxtreemapnodemethods_getparent
+    * @name dxTreeMapNodemethods_getparent
     * @publicName getParent()
-    * @return dxtreemapnode
+    * @return dxTreeMapNode
     */
     getParent: undefined,
     /**
-    * @name dxtreemapnodemethods_getchildrencount
+    * @name dxTreeMapNodemethods_getchildrencount
     * @publicName getChildrenCount()
     * @return number
     */
     getChildrenCount: undefined,
     /**
-    * @name dxtreemapnodemethods_getallchildren
+    * @name dxTreeMapNodemethods_getallchildren
     * @publicName getAllChildren()
-    * @return Array<dxtreemapnode>
+    * @return Array<dxTreeMapNode>
     */
     getAllChildren: undefined,
     /**
-    * @name dxtreemapnodemethods_getallnodes
+    * @name dxTreeMapNodemethods_getallnodes
     * @publicName getAllNodes()
-    * @return Array<dxtreemapnode>
+    * @return Array<dxTreeMapNode>
     */
     getAllNodes: undefined,
     /**
-    * @name dxtreemapnodemethods_getchild
+    * @name dxTreeMapNodemethods_getchild
     * @publicName getChild(index)
     * @param1 index:number
-    * @return dxtreemapnode
+    * @return dxTreeMapNode
     */
     getChild: undefined,
     /**
-    * @name dxtreemapnodemethods_value
+    * @name dxTreeMapNodemethods_value
     * @publicName value()
     * @return number
     */
     value: undefined,
     /**
-    * @name dxtreemapnodemethods_label
+    * @name dxTreeMapNodemethods_label
     * @publicName label()
     * @return string
     */
     /**
-    * @name dxtreemapnodemethods_label
+    * @name dxTreeMapNodemethods_label
     * @publicName label(label)
     * @param1 label:string
     */
     label: undefined,
     /**
-    * @name dxtreemapnodemethods_customize
+    * @name dxTreeMapNodemethods_customize
     * @publicName customize(options)
     * @param1 options:object
     */
     customize: undefined,
     /**
-    * @name dxtreemapnodemethods_resetcustomization
+    * @name dxTreeMapNodemethods_resetcustomization
     * @publicName resetCustomization()
     */
     resetCustomization: undefined,
     /**
-    * @name dxtreemapnodemethods_isleaf
+    * @name dxTreeMapNodemethods_isleaf
     * @publicName isLeaf()
     * @return boolean
     */
     isLeaf: undefined,
     /**
-    * @name dxtreemapnodemethods_isactive
+    * @name dxTreeMapNodemethods_isactive
     * @publicName isActive()
     * @return boolean
     */
     isActive: undefined,
     /**
-    * @name dxtreemapnodemethods_ishovered
+    * @name dxTreeMapNodemethods_ishovered
     * @publicName isHovered()
     * @return boolean
     */
     isHovered: undefined,
     /**
-    * @name dxtreemapnodemethods_select
+    * @name dxTreeMapNodemethods_select
     * @publicName select(state)
     * @param1 state:boolean
     */
     select: undefined,
     /**
-    * @name dxtreemapnodemethods_isselected
+    * @name dxTreeMapNodemethods_isselected
     * @publicName isSelected()
     * @return boolean
     */
     isSelected: undefined,
     /**
-    * @name dxtreemapnodemethods_showtooltip
+    * @name dxTreeMapNodemethods_showtooltip
     * @publicName showTooltip()
     */
     showTooltip: undefined,
     /**
-    * @name dxtreemapnodemethods_drilldown
+    * @name dxTreeMapNodemethods_drilldown
     * @publicName drillDown()
     */
     drillDown: undefined

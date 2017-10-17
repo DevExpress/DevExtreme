@@ -26,6 +26,7 @@ var RTL_DIRECTION_CLASS = "dx-rtl",
  * @publicName DOMComponent
  * @type object
  * @inherits Component
+ * @namespace DevExpress
  * @module core/dom_component
  * @export default
  * @hidden
