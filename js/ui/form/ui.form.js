@@ -723,9 +723,9 @@ var Form = Widget.inherit({
         }
     },
 
-    _applyLabelsWidth: function($container, excludeTabbed, inOneColumn) {
-        var colCount = inOneColumn ? 1 : this._getColCount($container),
-            applyLabelsOptions = {
+    _applyLabelsWidth: function($container, excludeTabbed, inOneColumn, colCount) {
+        colCount = inOneColumn ? 1 : colCount || this._getColCount($container);
+        var applyLabelsOptions = {
                 excludeTabbed: excludeTabbed,
                 inOneColumn: inOneColumn
             },
@@ -787,7 +787,7 @@ var Form = Widget.inherit({
             if(this._checkGrouping(options.items)) {
                 this._applyLabelsWidthWithGroups(options.$container, options.layoutManager._getColCount(), options.excludeTabbed);
             } else {
-                this._applyLabelsWidth(options.$container, options.excludeTabbed);
+                this._applyLabelsWidth(options.$container, options.excludeTabbed, false, options.layoutManager._getColCount());
             }
         }
         this._removeHiddenElement();
