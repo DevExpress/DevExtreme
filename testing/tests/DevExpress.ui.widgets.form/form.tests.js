@@ -1851,7 +1851,7 @@ QUnit.test("Align labels in columns when there are rows", function(assert) {
 
     var $col1 = $(".dx-col-0"),
         $col2 = $(".dx-col-2"),
-        $maxLabelWidth = getLabelWidth(testContainer, form, "Field three: "),
+        $maxLabelWidth = getLabelWidth(testContainer, form, "Field three:"),
         i,
         labelWidth;
 
@@ -1862,7 +1862,7 @@ QUnit.test("Align labels in columns when there are rows", function(assert) {
         assert.roughEqual(labelWidth, $maxLabelWidth, 1, "col0 item " + i);
     }
 
-    $maxLabelWidth = getLabelWidth(testContainer, form, "Field four: ");
+    $maxLabelWidth = getLabelWidth(testContainer, form, "Field four:");
     for(i = 0; i < 2; i++) {
         labelWidth = $col2.eq(i).find("." + internals.FIELD_ITEM_LABEL_CONTENT_CLASS).first().width();
 
