@@ -83,10 +83,11 @@ var deviceDependentOptions = function() {
 };
 
 /**
-* @name dxscrollable
+* @name dxScrollable
 * @publicName dxScrollable
 * @type object
 * @inherits DOMComponent
+* @namespace DevExpress.ui
 * @hidden
 */
 var Scrollable = DOMComponent.inherit({
@@ -517,7 +518,7 @@ var Scrollable = DOMComponent.inherit({
     },
 
     /**
-    * @name dxscrollablemethods_content
+    * @name dxScrollablemethods_content
     * @publicName content()
     * @return Element
     */
@@ -526,7 +527,7 @@ var Scrollable = DOMComponent.inherit({
     },
 
     /**
-    * @name dxscrollablemethods_scrollOffset
+    * @name dxScrollablemethods_scrollOffset
     * @publicName scrollOffset()
     * @return object
     */
@@ -539,7 +540,7 @@ var Scrollable = DOMComponent.inherit({
     },
 
     /**
-    * @name dxscrollablemethods_scrollTop
+    * @name dxScrollablemethods_scrollTop
     * @publicName scrollTop()
     * @return numeric
     */
@@ -548,7 +549,7 @@ var Scrollable = DOMComponent.inherit({
     },
 
     /**
-    * @name dxscrollablemethods_scrollLeft
+    * @name dxScrollablemethods_scrollLeft
     * @publicName scrollLeft()
     * @return numeric
     */
@@ -557,7 +558,7 @@ var Scrollable = DOMComponent.inherit({
     },
 
     /**
-    * @name dxscrollablemethods_clientHeight
+    * @name dxScrollablemethods_clientHeight
     * @publicName clientHeight()
     * @return numeric
     */
@@ -566,7 +567,7 @@ var Scrollable = DOMComponent.inherit({
     },
 
     /**
-    * @name dxscrollablemethods_scrollHeight
+    * @name dxScrollablemethods_scrollHeight
     * @publicName scrollHeight()
     * @return numeric
     */
@@ -575,7 +576,7 @@ var Scrollable = DOMComponent.inherit({
     },
 
     /**
-    * @name dxscrollablemethods_clientWidth
+    * @name dxScrollablemethods_clientWidth
     * @publicName clientWidth()
     * @return numeric
     */
@@ -584,7 +585,7 @@ var Scrollable = DOMComponent.inherit({
     },
 
     /**
-    * @name dxscrollablemethods_scrollWidth
+    * @name dxScrollablemethods_scrollWidth
     * @publicName scrollWidth()
     * @return numeric
     */
@@ -593,7 +594,7 @@ var Scrollable = DOMComponent.inherit({
     },
 
     /**
-    * @name dxscrollablemethods_update
+    * @name dxScrollablemethods_update
     * @publicName update()
     */
     update: function() {
@@ -604,12 +605,12 @@ var Scrollable = DOMComponent.inherit({
     },
 
     /**
-    * @name dxscrollablemethods_scrollBy
+    * @name dxScrollablemethods_scrollBy
     * @publicName scrollBy(distance)
     * @param1 distance:numeric
     */
     /**
-    * @name dxscrollablemethods_scrollBy
+    * @name dxScrollablemethods_scrollBy
     * @publicName scrollBy(distanceObject)
     * @param1 distanceObject:object
     */
@@ -625,12 +626,12 @@ var Scrollable = DOMComponent.inherit({
     },
 
     /**
-    * @name dxscrollablemethods_scrollTo
+    * @name dxScrollablemethods_scrollTo
     * @publicName scrollTo(targetLocation)
     * @param1 targetLocation:numeric
     */
     /**
-    * @name dxscrollablemethods_scrollTo
+    * @name dxScrollablemethods_scrollTo
     * @publicName scrollTo(targetLocationObject)
     * @param1 targetLocation:object
     */
@@ -654,7 +655,7 @@ var Scrollable = DOMComponent.inherit({
     },
 
     /**
-    * @name dxscrollablemethods_scrollToElement
+    * @name dxScrollablemethods_scrollToElement
     * @publicName scrollToElement(targetLocation)
     * @param1 element:Node|jQuery
     */
