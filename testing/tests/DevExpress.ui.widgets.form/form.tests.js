@@ -1848,7 +1848,7 @@ QUnit.test("Align labels in columns when there are rows", function(assert) {
                 }
             }
             ]
-        }).data("dxForm");
+        }).dxForm("instance");
 
     var $col1 = $(".dx-col-0"),
         $col2 = $(".dx-col-2"),
