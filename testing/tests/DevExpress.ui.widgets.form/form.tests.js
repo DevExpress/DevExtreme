@@ -1809,6 +1809,68 @@ QUnit.test("Align labels in column when alignItemLabelsInAllGroups is disabled",
     assert.notEqual(findLabelTextsInColumn($groups.eq(0), 0).eq(0).width(), findLabelTextsInColumn($groups.eq(1), 0).eq(0).width(), "compare group1 with group2");
 });
 
+QUnit.test("Align labels in columns when there are rows", function(assert) {
+    //arrange, act
+    var testContainer = $("#form"),
+        form = testContainer.dxForm({
+            formData: this.testObject,
+            colCount: 4,
+            items: [{
+                name: "fieldFirstValue",
+                colSpan: 2,
+                editorType: "dxTextBox",
+                label: {
+                    text: "Field 1"
+                }
+            },
+            {
+                name: "fieldSecondValue",
+                colSpan: 2,
+                editorType: "dxTextBox",
+                label: {
+                    text: "Field 2"
+                }
+            },
+            {
+                name: "fieldThirdValue",
+                colSpan: 2,
+                editorType: "dxTextBox",
+                label: {
+                    text: "Field three"
+                }
+            },
+            {
+                name: "fieldFourthValue",
+                colSpan: 2,
+                editorType: "dxTextBox",
+                label: {
+                    text: "Field four"
+                }
+            }
+            ]
+        }).data("dxForm");
+
+    var $col1 = $(".dx-col-0"),
+        $col2 = $(".dx-col-2"),
+        $maxLabelWidth = getLabelWidth(testContainer, form, "Field three: "),
+        i,
+        labelWidth;
+
+    //assert
+    for(i = 0; i < 2; i++) {
+        labelWidth = $col1.eq(i).find("." + internals.FIELD_ITEM_LABEL_CONTENT_CLASS).first().width();
+
+        assert.roughEqual(labelWidth, $maxLabelWidth, 1, "col0 item " + i);
+    }
+
+    $maxLabelWidth = getLabelWidth(testContainer, form, "Field four: ");
+    for(i = 0; i < 2; i++) {
+        labelWidth = $col2.eq(i).find("." + internals.FIELD_ITEM_LABEL_CONTENT_CLASS).first().width();
+
+        assert.roughEqual(labelWidth, $maxLabelWidth, 1, "col2 item " + i);
+    }
+});
+
 QUnit.test("Change option after group rendered (check for cycling template render)", function(assert) {
     //arrange
     var $formContainer = $("#form").dxForm({

@@ -643,15 +643,16 @@ var Form = Widget.inherit({
     _getColCount: function($element) {
         var index = 0,
             isColsExist = true,
+            colCountByOption = this.option("colCount"),
             $cols;
 
         while(isColsExist) {
             $cols = $element.find("." + FORM_FIELD_ITEM_COL_CLASS + index);
             if(!$cols.length) {
-                isColsExist = false;
-            } else {
-                index++;
+                isColsExist = index < colCountByOption;
             }
+
+            index++;
         }
         return index;
     },
