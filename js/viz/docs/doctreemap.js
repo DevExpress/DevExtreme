@@ -516,7 +516,7 @@ var dxTreeMap = {
         * @type_function_param1 info:object
         * @type_function_param1_field1 value:Number
         * @type_function_param1_field2 valueText:string
-        * @type_function_param1_field3 node:dxtreemapnode
+        * @type_function_param1_field3 node:dxTreeMapNode
         * @type_function_return object
         */
         customizeTooltip: undefined
@@ -528,7 +528,7 @@ var dxTreeMap = {
     * @type_function_param1 e:object
     * @type_function_param1_field1 component:object
     * @type_function_param1_field2 element:object
-    * @type_function_param1_field3 root:dxtreemapnode
+    * @type_function_param1_field3 root:dxTreeMapNode
     * @notUsedInTheme
     * @action
     */
@@ -540,7 +540,7 @@ var dxTreeMap = {
     * @type_function_param1 e:object
     * @type_function_param1_field1 component:object
     * @type_function_param1_field2 element:object
-    * @type_function_param1_field3 node:dxtreemapnode
+    * @type_function_param1_field3 node:dxTreeMapNode
     * @notUsedInTheme
     * @action
     */
@@ -553,7 +553,7 @@ var dxTreeMap = {
     * @type_function_param1_field1 component:object
     * @type_function_param1_field2 element:object
     * @type_function_param1_field3 jQueryEvent:jQuery.Event
-    * @type_function_param1_field4 node:dxtreemapnode
+    * @type_function_param1_field4 node:dxTreeMapNode
     * @notUsedInTheme
     * @action
     */
@@ -565,7 +565,7 @@ var dxTreeMap = {
     * @type_function_param1 e:object
     * @type_function_param1_field1 component:object
     * @type_function_param1_field2 element:object
-    * @type_function_param1_field3 node:dxtreemapnode
+    * @type_function_param1_field3 node:dxTreeMapNode
     * @notUsedInTheme
     * @action
     */
@@ -577,7 +577,7 @@ var dxTreeMap = {
     * @type_function_param1 e:object
     * @type_function_param1_field1 component:object
     * @type_function_param1_field2 element:object
-    * @type_function_param1_field3 node:dxtreemapnode
+    * @type_function_param1_field3 node:dxTreeMapNode
     * @notUsedInTheme
     * @action
     */
@@ -589,7 +589,7 @@ var dxTreeMap = {
     * @type_function_param1 e:object
     * @type_function_param1_field1 component:object
     * @type_function_param1_field2 element:object
-    * @type_function_param1_field3 node:dxtreemapnode
+    * @type_function_param1_field3 node:dxTreeMapNode
     * @notUsedInTheme
     * @action
     */
@@ -597,7 +597,7 @@ var dxTreeMap = {
     /**
     * @name dxtreemapmethods_getrootnode
     * @publicName getRootNode()
-    * @return dxtreemapnode
+    * @return dxTreeMapNode
     */
     getRootNode: function() { },
     /**
@@ -623,7 +623,7 @@ var dxTreeMap = {
     /**
     * @name dxtreemapmethods_getcurrentnode
     * @publicName getCurrentNode()
-    * @return dxtreemapnode
+    * @return dxTreeMapNode
     */
     getCurrentNode: function() { },
     /**
