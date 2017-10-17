@@ -290,13 +290,16 @@ function convertToInnerStructure(value) {
     if(!value) {
         return [];
     }
+
+    value = extend(true, [], value);
+
     if(isCondition(value)) {
         return [value];
     }
     if(isNegationGroup(value)) {
         return ["!", isCondition(value[1]) ? [value[1]] : value[1]];
     }
-    return copyGroup(value);
+    return value;
 }
 
 function getNormalizedFilter(group) {
@@ -480,15 +483,6 @@ function getOperationValue(condition) {
     return caption;
 }
 
-function copyGroup(group) {
-    var result = [];
-    for(var i = 0; i < group.length; i++) {
-        var item = group[i];
-        result.push(isGroup(item) ? copyGroup(item) : item);
-    }
-    return result;
-}
-
 exports.isEmptyGroup = isEmptyGroup;
 exports.getOperationFromAvailable = getOperationFromAvailable;
 exports.updateConditionByOperation = updateConditionByOperation;
@@ -499,7 +493,6 @@ exports.getGroupMenuItem = getGroupMenuItem;
 exports.getGroupValue = getGroupValue;
 exports.getAvailableOperations = getAvailableOperations;
 exports.removeItem = removeItem;
-exports.copyGroup = copyGroup;
 exports.createCondition = createCondition;
 exports.createEmptyGroup = createEmptyGroup;
 exports.addItem = addItem;

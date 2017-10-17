@@ -394,8 +394,8 @@ var FilterBuilder = Widget.inherit({
 
     _updateFilter: function() {
         this._disableInvalidateForValue = true;
-        var value = utils.copyGroup(this._model);
-        this.option("value", extend(true, [], utils.getNormalizedFilter(value)));
+        var value = extend(true, [], this._model);
+        this.option("value", utils.getNormalizedFilter(value));
         this._disableInvalidateForValue = false;
     },
 
@@ -432,7 +432,7 @@ var FilterBuilder = Widget.inherit({
     },
 
     _renderContentImpl: function() {
-        this._model = extend(true, [], utils.convertToInnerStructure(this.option("value")));
+        this._model = utils.convertToInnerStructure(this.option("value"));
         this._createGroupElementByCriteria(this._model)
             .appendTo(this.$element());
     },

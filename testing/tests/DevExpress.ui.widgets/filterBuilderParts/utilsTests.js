@@ -404,22 +404,6 @@ QUnit.module("Utils", function() {
         assert.deepEqual(utils.getOperationValue(["value", "<>", null]), "isnotblank");
     });
 
-    QUnit.test("copyGroup", function(assert) {
-        var group = [
-            condition1, condition2,
-            ["!", [condition2, "Or", condition3]]
-        ];
-        var newGroup = utils.copyGroup(group);
-        assert.notEqual(group, newGroup);
-        assert.equal(group[0], newGroup[0]);
-        assert.equal(group[1], newGroup[1]);
-        assert.notEqual(group[2], newGroup[2]);
-        assert.notEqual(group[2][1], newGroup[2][1]);
-        assert.equal(group[2][1][0], newGroup[2][1][0]);
-        assert.equal(group[2][1][1], newGroup[2][1][1]);
-        assert.equal(group[2][1][2], newGroup[2][1][2]);
-    });
-
     QUnit.test("getOperationFromAvailable", function(assert) {
         var equalsOperation = {
                 value: "=",
@@ -638,7 +622,7 @@ QUnit.module("Convert to inner structure", function() {
     QUnit.test("from condition", function(assert) {
         var model = utils.convertToInnerStructure(condition1);
         assert.deepEqual(model, [condition1]);
-        assert.equal(model[0], condition1);
+        assert.notEqual(model[0], condition1);
     });
 
     QUnit.test("from short condition", function(assert) {
@@ -650,7 +634,7 @@ QUnit.module("Convert to inner structure", function() {
     QUnit.test("from negative group with one condition", function(assert) {
         var model = utils.convertToInnerStructure(["!", condition1]);
         assert.deepEqual(model, ["!", [condition1]]);
-        assert.equal(model[1][0], condition1);
+        assert.notEqual(model[1][0], condition1);
     });
 
     QUnit.test("from group with several conditions", function(assert) {
@@ -658,8 +642,8 @@ QUnit.module("Convert to inner structure", function() {
             model = utils.convertToInnerStructure(filter);
         assert.notEqual(model, filter);
         assert.deepEqual(model, filter);
-        assert.equal(model[0], filter[0]);
-        assert.equal(model[2], filter[2]);
+        assert.notEqual(model[0], filter[0]);
+        assert.notEqual(model[2], filter[2]);
     });
 });
 
