@@ -42,8 +42,6 @@ var DropDownList = DropDownEditor.inherit({
                 if(this.option("opened") && this.option("applyValueMode") === "instantly") {
                     var $focusedItem = this._list.option("focusedElement");
                     $focusedItem && this._setSelectedElement($focusedItem);
-                } else {
-                    this._focusTarget().focusout();
                 }
 
                 parent.tab.apply(this, arguments);
