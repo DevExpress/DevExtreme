@@ -640,16 +640,15 @@ var Form = Widget.inherit({
     _getColCount: function($element) {
         var index = 0,
             isColsExist = true,
-            colCountByOption = this.option("colCount"),
             $cols;
 
         while(isColsExist) {
             $cols = $element.find("." + FORM_FIELD_ITEM_COL_CLASS + index);
             if(!$cols.length) {
-                isColsExist = index < colCountByOption;
+                isColsExist = false;
+            } else {
+                index++;
             }
-
-            index++;
         }
         return index;
     },
@@ -721,9 +720,9 @@ var Form = Widget.inherit({
         }
     },
 
-    _applyLabelsWidth: function($container, excludeTabbed, inOneColumn) {
-        var colCount = inOneColumn ? 1 : this._getColCount($container),
-            applyLabelsOptions = {
+    _applyLabelsWidth: function($container, excludeTabbed, inOneColumn, colCount) {
+        colCount = inOneColumn ? 1 : colCount || this._getColCount($container);
+        var applyLabelsOptions = {
                 excludeTabbed: excludeTabbed,
                 inOneColumn: inOneColumn
             },
@@ -785,7 +784,7 @@ var Form = Widget.inherit({
             if(this._checkGrouping(options.items)) {
                 this._applyLabelsWidthWithGroups(options.$container, options.layoutManager._getColCount(), options.excludeTabbed);
             } else {
-                this._applyLabelsWidth(options.$container, options.excludeTabbed);
+                this._applyLabelsWidth(options.$container, options.excludeTabbed, false, options.layoutManager._getColCount());
             }
         }
         this._removeHiddenElement();
