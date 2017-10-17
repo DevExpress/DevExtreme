@@ -9,8 +9,6 @@ var eventsEngine = require("../../events/core/events_engine"),
 
 var NUMBER_FORMATTER_NAMESPACE = "dxNumberFormatter",
     FLOAT_SEPARATOR = ".",
-    BACKSPACE_KEY = "Backspace",
-    DELETE_KEY = "Delete",
     FORWARD_DIRECTION = 1;
 
 var NumberBoxMask = NumberBoxBase.inherit({
@@ -28,6 +26,14 @@ var NumberBoxMask = NumberBoxBase.inherit({
              */
             displayFormat: null
         });
+    },
+
+    _isDeleteKey: function() {
+        return this._lastKey === "Delete" || this._lastKey === "Del";
+    },
+
+    _isBackspaceKey: function() {
+        return this._lastKey === "Backspace";
     },
 
     _supportedKeys: function() {
@@ -57,9 +63,9 @@ var NumberBoxMask = NumberBoxBase.inherit({
     },
 
     _getRemovingDirection: function() {
-        if(this._lastKey === BACKSPACE_KEY) {
+        if(this._isBackspaceKey()) {
             return -1;
-        } else if(this._lastKey === DELETE_KEY) {
+        } else if(this._isDeleteKey()) {
             return 1;
         } else {
             return 0;
@@ -213,15 +219,11 @@ var NumberBoxMask = NumberBoxBase.inherit({
             text = this._input().val(),
             resultValue = text;
 
-        switch(this._lastKey) {
-            case BACKSPACE_KEY:
-            case DELETE_KEY:
-                resultValue = text.slice(0, caret.start) + "0" + text.slice(caret.end);
-                this._moveCaret(1);
-                break;
-            default:
-                resultValue = text.slice(0, caret.start) + text.slice(caret.start + 1);
-                break;
+        if(this._isBackspaceKey() || this._isDeleteKey()) {
+            resultValue = text.slice(0, caret.start) + "0" + text.slice(caret.end);
+            this._moveCaret(1);
+        } else {
+            resultValue = text.slice(0, caret.start) + text.slice(caret.start + 1);
         }
 
         if(this._formattedValue !== resultValue) {
