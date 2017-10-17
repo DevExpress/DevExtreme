@@ -322,8 +322,8 @@ var KeyboardNavigationController = core.ViewController.inherit({
                     eventsEngine.trigger($target, "blur");
                     eventsEngine.trigger($target, "focus");
                     this._editingController.closeEditCell();
+                    eventArgs.originalEvent.preventDefault();
                 }
-                eventArgs.originalEvent.preventDefault();
             } else {
                 var column = this._columnsController.getVisibleColumns()[this._focusedCellPosition.columnIndex];
 
