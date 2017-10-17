@@ -22,3 +22,12 @@ QUnit.test("css transition timing func parsing", function(assert) {
     assert.equal(getEasing("cubicbezier_0p19_1_0p22_1")(0.344, 860, 0, 1, 2500).toFixed(3), 0.924);
     assert.equal(getEasing("cubicbezier_0p19_1_0p22_1")(0.9864, 2466, 0, 1, 2500).toFixed(3), 1);
 });
+
+QUnit.test("Fallback 'linear' easing should be added in `easing` object", function(assert) {
+    var convert = easing.convertTransitionTimingFuncToEasing,
+        getEasing = easing.getEasing;
+
+    var easingName = convert("swing");
+    assert.equal(easingName, "linear");
+    assert.equal(typeof getEasing(easingName), "function");
+});
