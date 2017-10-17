@@ -119,7 +119,7 @@ var CollectionWidget = Widget.inherit({
             /**
             * @name CollectionWidgetOptions_items
             * @publicName items
-            * @type Array<string,CollectionWidgetItemTemplate>
+            * @type Array<string, object>
             */
             items: [],
 
