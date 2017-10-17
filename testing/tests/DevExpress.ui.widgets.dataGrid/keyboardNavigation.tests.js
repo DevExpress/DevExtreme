@@ -2705,11 +2705,13 @@ if(device.deviceType === "desktop") {
         keyboardMock($container.find("input").eq(1)).keyDown("enter");
 
         //act
-        $($input).trigger('change');
+        var event = $.Event('change');
+        $($input).trigger(event);
 
         this.clock.tick();
 
         //assert
+        assert.strictEqual(event.isDefaultPrevented(), false, "default is not prevented");
         assert.ok(isStoreUpdated);
         assert.equal(this.editingController._editRowIndex, -1, "row is editing");
         assert.ok(!this.keyboardNavigationController._isEditing);
