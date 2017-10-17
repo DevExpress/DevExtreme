@@ -72,22 +72,18 @@ We provide configuration YAML files for [Travis CI](https://travis-ci.org/) ([.t
 
 Please make sure that each pull request passes all automatic checks before submitting it.
 
-## Commit Message Guidelines
-
-We have a few rules of formatting commit messages and pull request titles. This list based on the [article by Chris Beams](https://chris.beams.io/posts/git-commit/):
+## Commit Message & Pull Request Title Guidelines
 
 - Use the imperative mood in the subject line
 - Capitalize the subject line
 - Do not end the subject line with a period
 - Limit the subject line to 50 characters
-- Separate the subject from the body with a blank line
-- Wrap the body at 72 characters
-- Use the body to explain what and why vs how
-- Write the ID of the issue/ticket at the end of the subject line (this applies to the ID unbound to the context of commit message)
+- If applicable, include an issue ID to the subject line. Feel free to use [GitHub keywords](https://help.github.com/articles/closing-issues-using-keywords/) to automatically close related issues
+- Optionally, put any additional details, references, examples, etc to the commit message body or a PR description
 
 Samples:
 
 - `Mark dxCommand as DOMComponent child (TXXXXX)`
-- `Add namespace to doc comments (#XXXX)`
+- `Refactor ContextMenu after fix of T560055`
+- `Add namespace to doc comments (resolves #XXXX)`
 - `Fix editorFactory tests in IE`
-
