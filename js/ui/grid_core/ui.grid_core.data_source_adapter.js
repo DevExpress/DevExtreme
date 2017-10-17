@@ -114,6 +114,10 @@ module.exports = gridCore.Controller.inherit((function() {
                 that._hasLastPage = that._isLastPage;
             }
         },
+        resetCache: function() {
+            this._cachedStoreData = undefined;
+            this._cachedPagingData = undefined;
+        },
         _customizeRemoteOperations: function(options, isReload, operationTypes) {
             var that = this,
                 cachedStoreData = that._cachedStoreData,
