@@ -3038,7 +3038,7 @@ QUnit.test("editorOptions correctly updates in case when only item name is defin
                 ]
             }
         ]
-    }).data("dxForm");
+    }).dxForm("instance");
 
     var invalidateSpy = sinon.spy(form, "_invalidate");
 
@@ -3068,7 +3068,7 @@ QUnit.test("widget invalidates in case we cannot change an editor options", func
                 ]
             }
         ]
-    }).data("dxForm");
+    }).dxForm("instance");
 
     var invalidateSpy = sinon.spy(form, "_invalidate");
 
