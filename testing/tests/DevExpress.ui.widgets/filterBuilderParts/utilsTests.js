@@ -141,6 +141,20 @@ QUnit.module("Utils", function() {
         assert.ok(utils.isGroup(["And"]));
     });
 
+    QUnit.test("isEmptyGroup", function(assert) {
+        assert.ok(utils.isEmptyGroup([]));
+        assert.ok(utils.isEmptyGroup(["And"]));
+        assert.ok(utils.isEmptyGroup([[], "And", []]));
+        assert.notOk(utils.isEmptyGroup(["CompanyName", "=", "DevExpress"]));
+        assert.notOk(utils.isEmptyGroup([["CompanyName", "=", "DevExpress"]]));
+        assert.notOk(utils.isEmptyGroup([["CompanyName", "=", "DevExpress"], "and", ["CompanyName", "=", "DevExpress"]]));
+
+
+        assert.ok(utils.isEmptyGroup(["!", []]));
+        assert.ok(utils.isEmptyGroup(["!", ["And"]]));
+        assert.notOk(utils.isEmptyGroup(["!", ["CompanyName", "=", "DevExpress"]]));
+    });
+
     QUnit.test("isCondition", function(assert) {
         assert.ok(utils.isCondition(["Column1", "=", "value"]));
         assert.ok(utils.isCondition(["Column1", "="]));

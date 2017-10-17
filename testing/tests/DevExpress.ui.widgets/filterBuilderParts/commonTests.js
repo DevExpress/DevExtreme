@@ -375,7 +375,7 @@ QUnit.module("Rendering", function() {
         $("." + FILTER_BUILDER_IMAGE_REMOVE_CLASS).eq(1).click();
         assert.deepEqual(instance._model, [["State", "<>", "Test"]]);
         assert.deepEqual(instance.option("value"), ["State", "<>", "Test"]);
-        assert.equal(instance.option("value"), instance._model[0]);
+        assert.notEqual(instance.option("value"), instance._model[0]);
     });
 
     QUnit.test("Add and remove group", function(assert) {
@@ -393,7 +393,7 @@ QUnit.module("Rendering", function() {
         $("." + FILTER_BUILDER_IMAGE_REMOVE_CLASS).eq(1).click();
         assert.deepEqual(instance._model, [["State", "<>", "Test"]]);
         assert.deepEqual(instance.option("value"), ["State", "<>", "Test"]);
-        assert.equal(instance.option("value"), instance._model[0]);
+        assert.notEqual(instance.option("value"), instance._model[0]);
     });
 });
 
@@ -579,5 +579,174 @@ QUnit.module("Short condition", function() {
         container.find("." + FILTER_BUILDER_ITEM_VALUE_TEXT_CLASS).click();
 
         assert.equal(container.find("input").val(), "K&S Music");
+    });
+});
+
+QUnit.module("on value changed", function() {
+    var changeValueAndTriggerEvent = function(container, newValue, event) {
+        container.find("." + FILTER_BUILDER_ITEM_VALUE_TEXT_CLASS).click();
+        var $textBoxContainer = container.find("." + FILTER_BUILDER_ITEM_VALUE_CLASS + " .dx-textbox"),
+            textBoxInstance = $textBoxContainer.dxTextBox("instance");
+        textBoxInstance.option("value", "Test");
+        $textBoxContainer.find("input").trigger(event);
+    };
+
+    QUnit.test("add/remove empty group", function(assert) {
+        var container = $("#container"),
+            value = [["CompanyName", "K&S Music"]],
+            instance = container.dxFilterBuilder({
+                value: value,
+                fields: fields
+            }).dxFilterBuilder("instance");
+
+        // add empty group
+        value = instance.option("value");
+        clickByButtonAndSelectMenuItem($("." + FILTER_BUILDER_IMAGE_ADD_CLASS).eq(1), 0);
+        assert.equal(instance.option("value"), value);
+
+        // remove empty group
+        value = instance.option("value");
+        clickByButtonAndSelectMenuItem($("." + FILTER_BUILDER_IMAGE_REMOVE_CLASS).eq(2), 0);
+        assert.equal(instance.option("value"), value);
+
+    });
+
+    QUnit.test("add/remove group with condition", function(assert) {
+        var container = $("#container"),
+            value = [["CompanyName", "K&S Music"]],
+            instance = container.dxFilterBuilder({
+                value: value,
+                fields: fields
+            }).dxFilterBuilder("instance");
+
+        // add group
+        value = instance.option("value");
+        clickByButtonAndSelectMenuItem($("." + FILTER_BUILDER_IMAGE_ADD_CLASS), 0);
+        assert.equal(instance.option("value"), value);
+
+        // add inner condition
+        value = instance.option("value");
+        clickByButtonAndSelectMenuItem($("." + FILTER_BUILDER_IMAGE_ADD_CLASS).eq(1), 1);
+        assert.notEqual(instance.option("value"), value);
+
+        //remove group
+        value = instance.option("value");
+        clickByButtonAndSelectMenuItem($("." + FILTER_BUILDER_IMAGE_REMOVE_CLASS).eq(1), 0);
+        assert.notEqual(instance.option("value"), value);
+
+    });
+
+    QUnit.test("add/remove conditions", function(assert) {
+        var container = $("#container"),
+            value = [["CompanyName", "K&S Music"]],
+            instance = container.dxFilterBuilder({
+                value: value,
+                fields: fields
+            }).dxFilterBuilder("instance");
+
+        // add condition
+        clickByButtonAndSelectMenuItem($("." + FILTER_BUILDER_IMAGE_ADD_CLASS), 1);
+
+        assert.notEqual(instance.option("value"), value);
+
+        //remove condition
+        value = instance.option("value");
+        clickByButtonAndSelectMenuItem($("." + FILTER_BUILDER_IMAGE_REMOVE_CLASS).eq(1), 0);
+
+        assert.notEqual(instance.option("value"), value);
+    });
+
+    QUnit.test("change condition field", function(assert) {
+        var container = $("#container"),
+            value = [["CompanyName", "K&S Music"]],
+            instance = container.dxFilterBuilder({
+                value: value,
+                fields: fields
+            }).dxFilterBuilder("instance");
+
+        clickByButtonAndSelectMenuItem($("." + FILTER_BUILDER_ITEM_FIELD_CLASS), 2);
+
+        assert.notEqual(instance.option("value"), value);
+
+        value = instance.option("value");
+        clickByButtonAndSelectMenuItem($("." + FILTER_BUILDER_ITEM_FIELD_CLASS), 2);
+
+        assert.equal(instance.option("value"), value);
+    });
+
+    QUnit.test("change condition operation", function(assert) {
+        var container = $("#container"),
+            value = [["CompanyName", "K&S Music"]],
+            instance = container.dxFilterBuilder({
+                value: value,
+                fields: fields
+            }).dxFilterBuilder("instance");
+
+        clickByButtonAndSelectMenuItem($("." + FILTER_BUILDER_ITEM_OPERATION_CLASS), 2);
+
+        assert.notEqual(instance.option("value"), value);
+
+        value = instance.option("value");
+        clickByButtonAndSelectMenuItem($("." + FILTER_BUILDER_ITEM_OPERATION_CLASS), 2);
+
+        assert.equal(instance.option("value"), value);
+    });
+
+    QUnit.testInActiveWindow("change condition value by focusout", function(assert) {
+        var container = $("#container"),
+            value = [["State", "=", ""]],
+            instance = container.dxFilterBuilder({
+                value: value,
+                fields: fields
+            }).dxFilterBuilder("instance");
+
+        changeValueAndTriggerEvent(container, "Test", "blur");
+
+        assert.notEqual(instance.option("value"), value);
+        assert.equal(container.find("." + FILTER_BUILDER_ITEM_VALUE_TEXT_CLASS).length, 1);
+
+        value = instance.option("value");
+
+        changeValueAndTriggerEvent(container, "Test", "blur");
+
+        assert.equal(instance.option("value"), value);
+        assert.equal(container.find("." + FILTER_BUILDER_ITEM_VALUE_TEXT_CLASS).length, 1);
+    });
+
+    QUnit.test("condition isn't changed after escape click", function(assert) {
+        var container = $("#container"),
+            value = [["State", "=", ""]],
+            instance = container.dxFilterBuilder({
+                value: value,
+                fields: fields
+            }).dxFilterBuilder("instance");
+
+        container.find("." + FILTER_BUILDER_ITEM_VALUE_TEXT_CLASS).click();
+
+        changeValueAndTriggerEvent(container, "Test", $.Event("keyup", { keyCode: 27 }));
+
+        assert.equal(instance.option("value"), value);
+        assert.equal(container.find("." + FILTER_BUILDER_ITEM_VALUE_TEXT_CLASS).length, 1);
+    });
+
+    QUnit.test("change condition value by enter click", function(assert) {
+        var container = $("#container"),
+            value = [["State", "=", ""]],
+            instance = container.dxFilterBuilder({
+                value: value,
+                fields: fields
+            }).dxFilterBuilder("instance");
+
+        changeValueAndTriggerEvent(container, "Test", $.Event("keyup", { keyCode: 13 }));
+
+        assert.notEqual(instance.option("value"), value);
+        assert.equal(container.find("." + FILTER_BUILDER_ITEM_VALUE_TEXT_CLASS).length, 1);
+
+        value = instance.option("value");
+
+        changeValueAndTriggerEvent(container, "Test", $.Event("keyup", { keyCode: 13 }));
+
+        assert.equal(instance.option("value"), value);
+        assert.equal(container.find("." + FILTER_BUILDER_ITEM_VALUE_TEXT_CLASS).length, 1);
     });
 });
