@@ -10,7 +10,6 @@ var $ = require("jquery"),
     ArrayStore = require("data/array_store"),
     setTemplateEngine = require("ui/set_template_engine"),
     support = require("core/utils/support"),
-    getPublicElement = require("core/utils/dom").getPublicElement,
     holdEvent = require("events/hold"),
     CollectionWidget = require("ui/collection/ui.collection_widget.edit"),
     List = require("ui/list"),
@@ -1567,7 +1566,7 @@ QUnit.test("item is focused after setting focusedElement option", function(asser
 
     assert.ok(!$item.hasClass(FOCUSED_ITEM_CLASS), "item is not focused");
 
-    instance.option("focusedElement", getPublicElement($item));
+    instance.option("focusedElement", $item);
 
     assert.ok($item.hasClass(FOCUSED_ITEM_CLASS), "item is focused after setting focusedItem option");
 });
@@ -1729,7 +1728,7 @@ QUnit.test("aria-activedescendant should be refreshed when focused item changed"
     };
 
     try {
-        widget.option("focusedElement", getPublicElement($item));
+        widget.option("focusedElement", $item);
     } finally {
         widget._refreshActiveDescendant = spy;
     }
@@ -1781,13 +1780,13 @@ QUnit.test("onFocusedItemChanged option on init", function(assert) {
         $item0 = $($element).find(".dx-item:eq(0)"),
         $item1 = $($element).find(".dx-item:eq(1)");
 
-    instance.option("focusedElement", getPublicElement($item0));
+    instance.option("focusedElement", $item0);
 
     instance.option("onFocusedItemChanged", function() {
         assert.ok(true, "onFocusedItemChanged, defined on option change was triggered");
     });
 
-    instance.option("focusedElement", getPublicElement($item1));
+    instance.option("focusedElement", $item1);
 });
 
 QUnit.test("getDataSource. dataSource is not defined", function(assert) {

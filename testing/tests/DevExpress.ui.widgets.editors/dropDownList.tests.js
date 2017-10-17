@@ -10,7 +10,6 @@ var $ = require("jquery"),
     CustomStore = require("data/custom_store"),
     keyboardMock = require("../../helpers/keyboardMock.js"),
     browser = require("core/utils/browser"),
-    getPublicElement = require("core/utils/dom").getPublicElement,
     fx = require("animation/fx"),
     isRenderer = require("core/utils/type").isRenderer,
     config = require("core/config"),
@@ -1011,7 +1010,7 @@ QUnit.test("input's aria-activedescendant attribute should point to the focused 
         $input = $dropDownList.find("input"),
         $item = $list.find(".dx-list-item:eq(1)");
 
-    list.option("focusedElement", getPublicElement($item));
+    list.option("focusedElement", $item);
 
     assert.notEqual($input.attr("aria-activedescendant"), undefined, "aria-activedescendant exists");
     assert.equal($input.attr("aria-activedescendant"), $item.attr("id"), "aria-activedescendant and id of the focused item are equals");

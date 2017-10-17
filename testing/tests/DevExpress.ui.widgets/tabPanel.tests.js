@@ -4,7 +4,6 @@ var $ = require("jquery"),
     fx = require("animation/fx"),
     support = require("core/utils/support"),
     domUtils = require("core/utils/dom"),
-    getPublicElement = domUtils.getPublicElement,
     TabPanel = require("ui/tab_panel"),
     pointerMock = require("../../helpers/pointerMock.js"),
     keyboardMock = require("../../helpers/keyboardMock.js");
@@ -604,7 +603,7 @@ QUnit.test("tabpanel should NOT have aria-activedescendant", function(assert) {
 
     assert.equal($element.attr("aria-activedescendant"), undefined, "aria-activedescendant does not exist");
 
-    instance.option("focusedElement", getPublicElement($element.find(".dx-item:eq(1)")));
+    instance.option("focusedElement", $element.find(".dx-item:eq(1)"));
     assert.equal($element.attr("aria-activedescendant"), undefined, "aria-activedescendant does not exist after selection update");
 });
 
