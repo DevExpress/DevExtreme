@@ -128,7 +128,7 @@ function getGroupValue(group) {
         }
     }
     if(!value) {
-        value = "And";
+        value = "and";
     }
     if(criteria !== group) {
         value = "!" + value;
@@ -212,7 +212,7 @@ function removeItem(group, item) {
 }
 
 function createEmptyGroup(value) {
-    return value.indexOf("not") !== -1 ? ["!", [value.substring(3)]] : [value];
+    return value.indexOf("not") !== -1 ? ["!", [value.substring(3).toLowerCase()]] : [value];
 }
 
 function isEmptyGroup(group) {
@@ -279,14 +279,25 @@ function isCondition(criteria) {
 }
 
 function removeAndOperationFromGroup(group) {
-    var index = group.indexOf("And");
+    var index = group.indexOf("and");
     while(index !== -1) {
         group.splice(index, 1);
-        index = group.indexOf("And");
+        index = group.indexOf("and");
     }
 }
 
 function convertToInnerStructure(value) {
+    var toLowerCaseGroup = function(group) {
+        for(var i = 0; i < group.length; i++) {
+            if(isGroup(group[i])) {
+                toLowerCaseGroup(group[i]);
+            } else if(!Array.isArray(group[i])) {
+                group[i] = group[i].toLowerCase();
+            }
+        }
+        return group;
+    };
+
     if(!value) {
         return [];
     }
@@ -297,9 +308,9 @@ function convertToInnerStructure(value) {
         return [value];
     }
     if(isNegationGroup(value)) {
-        return ["!", isCondition(value[1]) ? [value[1]] : value[1]];
+        return ["!", isCondition(value[1]) ? [value[1]] : toLowerCaseGroup(value[1])];
     }
-    return value;
+    return toLowerCaseGroup(value);
 }
 
 function getNormalizedFilter(group) {

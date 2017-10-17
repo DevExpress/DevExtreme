@@ -38,10 +38,10 @@ var ACTIONS = [
         "onEditorPreparing", "onEditorPrepared"
     ],
     OPERATORS = {
-        and: "And",
-        or: "Or",
-        notAnd: "!And",
-        notOr: "!Or"
+        and: "and",
+        or: "or",
+        notAnd: "!and",
+        notOr: "!or"
     };
 
 var EditorFactory = Class.inherit(EditorFactoryMixin);
@@ -218,10 +218,10 @@ var FilterBuilder = Widget.inherit({
             * @name dxFilterBuilderOptions_defaultGroupOperation
             * @publicName defaultGroupOperation
             * @type string
-            * @default "And"
+            * @default "and"
             * @hidden
             */
-            defaultGroupOperation: "And",
+            defaultGroupOperation: "and",
 
             /**
              * @name dxFilterBuilderOptions_value
