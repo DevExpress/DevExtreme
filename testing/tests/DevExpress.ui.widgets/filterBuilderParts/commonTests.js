@@ -707,12 +707,14 @@ QUnit.module("on value changed", function() {
         changeValueAndTriggerEvent(container, "Test", "blur");
 
         assert.notEqual(instance.option("value"), value);
+        assert.equal(container.find("." + FILTER_BUILDER_ITEM_VALUE_TEXT_CLASS).length, 1);
 
         value = instance.option("value");
 
         changeValueAndTriggerEvent(container, "Test", "blur");
 
         assert.equal(instance.option("value"), value);
+        assert.equal(container.find("." + FILTER_BUILDER_ITEM_VALUE_TEXT_CLASS).length, 1);
     });
 
     QUnit.test("condition isn't changed after escape click", function(assert) {
@@ -728,6 +730,7 @@ QUnit.module("on value changed", function() {
         changeValueAndTriggerEvent(container, "Test", $.Event("keyup", { keyCode: 27 }));
 
         assert.equal(instance.option("value"), value);
+        assert.equal(container.find("." + FILTER_BUILDER_ITEM_VALUE_TEXT_CLASS).length, 1);
     });
 
     QUnit.test("change condition value by enter click", function(assert) {
@@ -741,11 +744,13 @@ QUnit.module("on value changed", function() {
         changeValueAndTriggerEvent(container, "Test", $.Event("keyup", { keyCode: 13 }));
 
         assert.notEqual(instance.option("value"), value);
+        assert.equal(container.find("." + FILTER_BUILDER_ITEM_VALUE_TEXT_CLASS).length, 1);
 
         value = instance.option("value");
 
         changeValueAndTriggerEvent(container, "Test", $.Event("keyup", { keyCode: 13 }));
 
         assert.equal(instance.option("value"), value);
+        assert.equal(container.find("." + FILTER_BUILDER_ITEM_VALUE_TEXT_CLASS).length, 1);
     });
 });

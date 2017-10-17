@@ -757,9 +757,12 @@ var FilterBuilder = Widget.inherit({
                 eventsEngine.off($container, "keyup");
             },
             updateValue = function(value, callback) {
-                if(item[valueIndex] !== value) {
+                var areValuesDifferent = item[valueIndex] !== value;
+                if(areValuesDifferent) {
                     item[valueIndex] = value;
-                    callback();
+                }
+                callback();
+                if(areValuesDifferent) {
                     that._updateFilter();
                 }
             };
