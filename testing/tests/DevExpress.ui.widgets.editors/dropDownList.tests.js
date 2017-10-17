@@ -73,8 +73,7 @@ QUnit.test("focus removed from list on type some text", function(assert) {
     assert.ok(!$firstItem.hasClass(STATE_FOCUSED_CLASS), "first list element is not focused");
 });
 
-QUnit.test("popup should not focus when we selecting an item", function(assert) {
-    assert.expect(2);
+QUnit.testInActiveWindow("popup should not focus when we selecting an item", function(assert) {
 
     this.instance.option("opened", true);
     var popupContent = this.instance._popup.content(),
@@ -87,7 +86,10 @@ QUnit.test("popup should not focus when we selecting an item", function(assert) 
         .trigger("mouseup");
 
     assert.notOk(mouseDownStub.getCall(0).args[0].isDefaultPrevented(), "mousedown isn't prevented");
-    assert.ok(this.$element.hasClass(STATE_FOCUSED_CLASS), "element save focused state after click on popup content");
+
+    if(devices.real().deviceType === "desktop") {
+        assert.ok(this.$element.hasClass(STATE_FOCUSED_CLASS), "element save focused state after click on popup content");
+    }
 });
 
 QUnit.test("hover and focus states for list should be initially disabled on mobile devices only", function(assert) {
