@@ -18,7 +18,7 @@ To set up a build environment, you need the following software installed:
 
 ## Building
 
-Install packages using the following command: 
+Install packages using the following command:
 
     npm install
 
@@ -33,7 +33,7 @@ Build results are stored in the "artifacts" directory.
 
 ## Tests and CI
 
-We conduct extensive in-house testing of DevExtreme on different browsers, mobile devices, functional tests for demos, etc. However, we only share some of them on GitHub: linters and automated tests for Google Chrome. 
+We conduct extensive in-house testing of DevExtreme on different browsers, mobile devices, functional tests for demos, etc. However, we only share some of them on GitHub: linters and automated tests for Google Chrome.
 
 Tests are in the [testing](testing) directory, and you can execute them are described below:
 
@@ -68,6 +68,22 @@ drone exec --matrix TARGET=test
 
 ### In a Cloud CI
 
-We provide configuration YAML files for [Travis CI](https://travis-ci.org/) ([.travis.yml](.travis.yml)) and [Shippable](https://app.shippable.com/) ([shippable.yml](shippable.yml)). Enable one of them for your forked repo (we recommend Travis). 
+We provide configuration YAML files for [Travis CI](https://travis-ci.org/) ([.travis.yml](.travis.yml)) and [Shippable](https://app.shippable.com/) ([shippable.yml](shippable.yml)). Enable one of them for your forked repo (we recommend Travis).
 
 Please make sure that each pull request passes all automatic checks before submitting it.
+
+## Commit Message & Pull Request Title Guidelines
+
+- Use the imperative mood in the subject line
+- Capitalize the subject line
+- Do not end the subject line with a period
+- Limit the subject line to 50 characters
+- If applicable, include an issue ID to the subject line. Feel free to use [GitHub keywords](https://help.github.com/articles/closing-issues-using-keywords/) to close the related issues automatically
+- Optionally, put any additional details, references, examples, etc. in the commit message body or PR description
+
+Examples:
+
+- `Mark dxCommand as DOMComponent child (TXXXXX)`
+- `Refactor ContextMenu after T560055 fix`
+- `Add namespace to doc comments (resolves #XXXX)`
+- `Fix editorFactory tests in IE`
