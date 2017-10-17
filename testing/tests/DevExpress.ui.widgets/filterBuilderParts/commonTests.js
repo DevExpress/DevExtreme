@@ -664,14 +664,12 @@ QUnit.module("on value changed", function() {
                 fields: fields
             }).dxFilterBuilder("instance");
 
-        container.find("." + FILTER_BUILDER_ITEM_FIELD_CLASS).click();
-        $(".dx-menu-item-text").eq(2).trigger("dxclick");
+        clickByButtonAndSelectMenuItem($("." + FILTER_BUILDER_ITEM_FIELD_CLASS), 2);
 
         assert.notEqual(instance.option("value"), value);
 
         value = instance.option("value");
-        container.find("." + FILTER_BUILDER_ITEM_FIELD_CLASS).click();
-        $(".dx-menu-item-text").eq(2).trigger("dxclick");
+        clickByButtonAndSelectMenuItem($("." + FILTER_BUILDER_ITEM_FIELD_CLASS), 2);
 
         assert.equal(instance.option("value"), value);
     });
@@ -684,14 +682,12 @@ QUnit.module("on value changed", function() {
                 fields: fields
             }).dxFilterBuilder("instance");
 
-        container.find("." + FILTER_BUILDER_ITEM_OPERATION_CLASS).click();
-        $(".dx-menu-item-text").eq(2).trigger("dxclick");
+        clickByButtonAndSelectMenuItem($("." + FILTER_BUILDER_ITEM_OPERATION_CLASS), 2);
 
         assert.notEqual(instance.option("value"), value);
 
         value = instance.option("value");
-        container.find("." + FILTER_BUILDER_ITEM_OPERATION_CLASS).click();
-        $(".dx-menu-item-text").eq(2).trigger("dxclick");
+        clickByButtonAndSelectMenuItem($("." + FILTER_BUILDER_ITEM_OPERATION_CLASS), 2);
 
         assert.equal(instance.option("value"), value);
     });
