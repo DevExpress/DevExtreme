@@ -246,9 +246,11 @@ var NumberBoxMask = NumberBoxBase.inherit({
             return;
         }
 
+        var caret = this._caret();
+
         if(value === null && !forced) {
             this._normalizeFormattedValue();
-            var caret = this._normalizeCaret(this._caret());
+            caret = this._normalizeCaret(this._caret());
 
             if(!this._formattedValue) {
                 value = this._lightParse(this._input().val());
@@ -263,7 +265,7 @@ var NumberBoxMask = NumberBoxBase.inherit({
         this._formattedValue = number.format(value, this.option("displayFormat"));
         this._input().val(this._formattedValue);
 
-        this._caret(this._normalizeCaret(this._caret()));
+        this._caret(this._normalizeCaret(caret));
     },
 
     _revertSign: function() {

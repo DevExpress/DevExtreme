@@ -64,6 +64,7 @@ QUnit.test("integer format parser with group separator", function(assert) {
     assert.strictEqual(parser("012"), null, "parse number with 3 digits with leading zero");
     assert.strictEqual(parser("1234"), 1234, "parse number with 4 digits without separator");
     assert.strictEqual(parser("1,234"), 1234, "parse number with 4 digits with separator");
+    assert.strictEqual(parser(",234"), 234, "parse number with comma at start position");
     assert.strictEqual(parser("01,234"), null, "parse number with 5 digits with separator with leading zero");
     assert.strictEqual(parser("1 234"), null, "parse number with 4 digits with wrong separator");
     assert.strictEqual(parser("12,34"), 1234, "parse number with 4 digits with wrong separator position");

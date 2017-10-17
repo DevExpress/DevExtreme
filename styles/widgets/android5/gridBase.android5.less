@@ -8,6 +8,7 @@
     @GRID_BASE_REVERT_BUTTON_SIZE: 30px;
     @GRID_BASE_ADAPTIVE_TEXT_PADDING: 11px;
     @GRID_BASE_DATA_MODIFIED_COLOR: "@{widgetName}-data-modified-color";
+    @GRID_BASE_TREEVIEW_SEARCH_MARGIN: 5px;
 
 
     .dx-@{widgetName}-checkbox-size {
@@ -253,6 +254,10 @@
             .dx-popup-content {
                 padding-right: 24px;
                 padding-left: 24px;
+
+                .dx-treeview-search {
+                    margin-bottom: @GRID_BASE_TREEVIEW_SEARCH_MARGIN;
+                }
             }
         }
 

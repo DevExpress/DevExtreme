@@ -28,6 +28,10 @@ var FILTER_BUILDER_CLASS = "dx-filterbuilder",
     FILTER_BUILDER_ITEM_VALUE_CLASS = "dx-filterbuilder-item-value",
     FILTER_BUILDER_ITEM_VALUE_TEXT_CLASS = "dx-filterbuilder-item-value-text",
     FILTER_BUILDER_OVERLAY_CLASS = "dx-filterbuilder-overlay",
+    FILTER_BUILDER_FILTER_OPERATIONS_CLASS = "dx-filterbuilder-operations",
+    FILTER_BUILDER_GROUP_OPERATIONS_CLASS = "dx-filterbuilder-group-operations",
+    FILTER_BUILDER_FIELDS_CLASS = "dx-filterbuilder-fields",
+    FILTER_BUILDER_ADD_CONDITION_CLASS = "dx-filterbuilder-add-condition",
     ACTIVE_CLASS = "dx-state-active";
 
 var ACTIONS = [
@@ -509,7 +513,8 @@ var FilterBuilder = Widget.inherit({
                     },
                     onContentReady: function(e) {
                         e.component.selectItem(groupMenuItem);
-                    }
+                    },
+                    cssClass: FILTER_BUILDER_GROUP_OPERATIONS_CLASS
                 }
             }).addClass(FILTER_BUILDER_ITEM_TEXT_CLASS)
                 .addClass(FILTER_BUILDER_GROUP_OPERATION_CLASS)
@@ -550,7 +555,7 @@ var FilterBuilder = Widget.inherit({
             onHidden: function() {
                 removeMenu();
             },
-            cssClass: FILTER_BUILDER_OVERLAY_CLASS,
+            cssClass: FILTER_BUILDER_OVERLAY_CLASS + " " + options.menu.cssClass,
             target: $button,
             rtlEnabled: rtlEnabled
         });
@@ -598,7 +603,8 @@ var FilterBuilder = Widget.inherit({
                             $operationButton.html(currentOperation.text);
                             that._updateFilter();
                         }
-                    }
+                    },
+                    cssClass: FILTER_BUILDER_FILTER_OPERATIONS_CLASS
                 }
             }).addClass(FILTER_BUILDER_ITEM_TEXT_CLASS)
                 .addClass(FILTER_BUILDER_ITEM_OPERATION_CLASS)
@@ -652,7 +658,8 @@ var FilterBuilder = Widget.inherit({
                 },
                 onContentReady: function(e) {
                     e.component.selectItem(item);
-                }
+                },
+                cssClass: FILTER_BUILDER_FIELDS_CLASS
             }
         }).addClass(FILTER_BUILDER_ITEM_TEXT_CLASS)
             .addClass(FILTER_BUILDER_ITEM_FIELD_CLASS)
@@ -715,7 +722,8 @@ var FilterBuilder = Widget.inherit({
                 displayExpr: "caption",
                 onItemClick: function(e) {
                     e.itemData.click();
-                }
+                },
+                cssClass: FILTER_BUILDER_ADD_CONDITION_CLASS
             }
         }).addClass(FILTER_BUILDER_IMAGE_CLASS)
             .addClass(FILTER_BUILDER_IMAGE_ADD_CLASS)

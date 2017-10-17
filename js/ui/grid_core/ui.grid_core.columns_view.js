@@ -6,7 +6,6 @@ var $ = require("../../core/renderer"),
     clickEvent = require("../../events/click"),
     browser = require("../../core/utils/browser"),
     commonUtils = require("../../core/utils/common"),
-    config = require("../../core/config"),
     getPublicElement = require("../../core/utils/dom").getPublicElement,
     typeUtils = require("../../core/utils/type"),
     iteratorUtils = require("../../core/utils/iterator"),
@@ -14,7 +13,6 @@ var $ = require("../../core/renderer"),
     getDefaultAlignment = require("../../core/utils/position").getDefaultAlignment,
     devices = require("../../core/devices"),
     modules = require("./ui.grid_core.modules"),
-    getPublicElement = require("../../core/utils/dom").getPublicElement,
     gridCoreUtils = require("./ui.grid_core.utils"),
     columnStateMixin = require("./ui.grid_core.column_state_mixin"),
     noop = commonUtils.noop;
@@ -703,7 +701,7 @@ exports.ColumnsView = modules.View.inherit(columnStateMixin).inherit({
         var $rows = this._getRowElement(rowIndex),
             elements = [];
 
-        if($rows && !config().useJQuery) {
+        if($rows && !getPublicElement($rows).get) {
             for(var i = 0; i < $rows.length; i++) {
                 elements.push($rows[i]);
             }

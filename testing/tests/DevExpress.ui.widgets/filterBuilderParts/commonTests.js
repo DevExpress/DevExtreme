@@ -23,19 +23,20 @@ var clickByButtonAndSelectMenuItem = function($button, menuItemIndex) {
 
 QUnit.module("Rendering", function() {
     QUnit.test("markup init", function(assert) {
-        var etalon =
-        '<div id="container" class="dx-filterbuilder dx-widget">'
-            + '<div class="dx-filterbuilder-group">'
-                + '<div class="dx-filterbuilder-group-item">'
-                    + '<div class="dx-filterbuilder-text dx-filterbuilder-group-operation" tabindex="0">And</div>'
-                    + '<div class="dx-filterbuilder-action-icon dx-icon-plus dx-filterbuilder-action" tabindex="0"></div>'
+        var $etalon = $("<div/>").html(
+            '<div id="container" class="dx-filterbuilder dx-widget">'
+                + '<div class="dx-filterbuilder-group">'
+                    + '<div class="dx-filterbuilder-group-item">'
+                        + '<div class="dx-filterbuilder-text dx-filterbuilder-group-operation" tabindex="0">And</div>'
+                        + '<div class="dx-filterbuilder-action-icon dx-icon-plus dx-filterbuilder-action" tabindex="0"></div>'
+                    + '</div>'
+                    + '<div class="dx-filterbuilder-group-content"></div>'
                 + '</div>'
-                + '<div class="dx-filterbuilder-group-content"></div>'
             + '</div>'
-        + '</div>';
+        );
 
         var element = $("#container").dxFilterBuilder();
-        assert.equal(element.parent().html(), etalon);
+        assert.equal(element.parent().html(), $etalon.html());
     });
 
     QUnit.test("filterbuilder is created by different values", function(assert) {
@@ -60,62 +61,64 @@ QUnit.module("Rendering", function() {
     });
 
     QUnit.test("filter Content init by one condition", function(assert) {
-        var etalon =
-        '<div class=\"dx-filterbuilder-group\">'
-            + '<div class=\"dx-filterbuilder-group-item\">'
-                + '<div class=\"dx-filterbuilder-action-icon dx-icon-remove dx-filterbuilder-action\" tabindex=\"0\"></div>'
-                + '<div class="dx-filterbuilder-text dx-filterbuilder-group-operation" tabindex="0">Or</div>'
-                + '<div class="dx-filterbuilder-action-icon dx-icon-plus dx-filterbuilder-action" tabindex="0"></div>'
-            + '</div>'
-            + '<div class="dx-filterbuilder-group-content">'
-                + '<div class="dx-filterbuilder-group">'
-                    + '<div class=\"dx-filterbuilder-group-item\">'
-                        + '<div class=\"dx-filterbuilder-action-icon dx-icon-remove dx-filterbuilder-action\" tabindex=\"0\"></div>'
-                        + '<div class=\"dx-filterbuilder-text dx-filterbuilder-item-field\" tabindex=\"0\">Company Name</div>'
-                        + '<div class=\"dx-filterbuilder-text dx-filterbuilder-item-operation\" tabindex=\"0\">Equals</div>'
-                        + '<div class=\"dx-filterbuilder-text dx-filterbuilder-item-value\">'
-                            + '<div class=\"dx-filterbuilder-item-value-text\" tabindex=\"0\">K&amp;S Music</div>'
+        var $etalon = $("<div/>").html(
+            '<div class=\"dx-filterbuilder-group\">'
+                + '<div class=\"dx-filterbuilder-group-item\">'
+                    + '<div class=\"dx-filterbuilder-action-icon dx-icon-remove dx-filterbuilder-action\" tabindex=\"0\"></div>'
+                    + '<div class="dx-filterbuilder-text dx-filterbuilder-group-operation" tabindex="0">Or</div>'
+                    + '<div class="dx-filterbuilder-action-icon dx-icon-plus dx-filterbuilder-action" tabindex="0"></div>'
+                + '</div>'
+                + '<div class="dx-filterbuilder-group-content">'
+                    + '<div class="dx-filterbuilder-group">'
+                        + '<div class=\"dx-filterbuilder-group-item\">'
+                            + '<div class=\"dx-filterbuilder-action-icon dx-icon-remove dx-filterbuilder-action\" tabindex=\"0\"></div>'
+                            + '<div class=\"dx-filterbuilder-text dx-filterbuilder-item-field\" tabindex=\"0\">Company Name</div>'
+                            + '<div class=\"dx-filterbuilder-text dx-filterbuilder-item-operation\" tabindex=\"0\">Equals</div>'
+                            + '<div class=\"dx-filterbuilder-text dx-filterbuilder-item-value\">'
+                                + '<div class=\"dx-filterbuilder-item-value-text\" tabindex=\"0\">K&amp;S Music</div>'
+                            + '</div>'
                         + '</div>'
                     + '</div>'
                 + '</div>'
             + '</div>'
-        + '</div>';
+        );
 
         var element = $("#container").dxFilterBuilder({
             fields: fields,
             value: [[["CompanyName", "=", "K&S Music"], "Or"], "And"]
         });
-        assert.equal(element.find("." + FILTER_BUILDER_GROUP_CONTENT_CLASS).html(), etalon);
+        assert.equal(element.find("." + FILTER_BUILDER_GROUP_CONTENT_CLASS).html(), $etalon.html());
     });
 
     QUnit.test("filter Content init by several conditions", function(assert) {
-        var etalon =
-                '<div class="dx-filterbuilder-group">'
-                    + '<div class=\"dx-filterbuilder-group-item\">'
-                        + '<div class=\"dx-filterbuilder-action-icon dx-icon-remove dx-filterbuilder-action\" tabindex=\"0\"></div>'
-                        + '<div class=\"dx-filterbuilder-text dx-filterbuilder-item-field\" tabindex=\"0\">Company Name</div>'
-                        + '<div class=\"dx-filterbuilder-text dx-filterbuilder-item-operation\" tabindex=\"0\">Equals</div>'
-                        + '<div class=\"dx-filterbuilder-text dx-filterbuilder-item-value\">'
-                            + '<div class=\"dx-filterbuilder-item-value-text\" tabindex=\"0\">K&amp;S Music</div>'
-                        + '</div>'
+        var $etalon = $("<div/>").html(
+            '<div class="dx-filterbuilder-group">'
+                + '<div class=\"dx-filterbuilder-group-item\">'
+                    + '<div class=\"dx-filterbuilder-action-icon dx-icon-remove dx-filterbuilder-action\" tabindex=\"0\"></div>'
+                    + '<div class=\"dx-filterbuilder-text dx-filterbuilder-item-field\" tabindex=\"0\">Company Name</div>'
+                    + '<div class=\"dx-filterbuilder-text dx-filterbuilder-item-operation\" tabindex=\"0\">Equals</div>'
+                    + '<div class=\"dx-filterbuilder-text dx-filterbuilder-item-value\">'
+                        + '<div class=\"dx-filterbuilder-item-value-text\" tabindex=\"0\">K&amp;S Music</div>'
                     + '</div>'
                 + '</div>'
-                + '<div class="dx-filterbuilder-group">'
-                    + '<div class=\"dx-filterbuilder-group-item\">'
-                        + '<div class=\"dx-filterbuilder-action-icon dx-icon-remove dx-filterbuilder-action\" tabindex=\"0\"></div>'
-                        + '<div class=\"dx-filterbuilder-text dx-filterbuilder-item-field\" tabindex=\"0\">Zipcode</div>'
-                        + '<div class=\"dx-filterbuilder-text dx-filterbuilder-item-operation\" tabindex=\"0\">Equals</div>'
-                        + '<div class=\"dx-filterbuilder-text dx-filterbuilder-item-value\">'
-                            + '<div class=\"dx-filterbuilder-item-value-text\" tabindex=\"0\">98027</div>'
-                        + '</div>'
+            + '</div>'
+            + '<div class="dx-filterbuilder-group">'
+                + '<div class=\"dx-filterbuilder-group-item\">'
+                    + '<div class=\"dx-filterbuilder-action-icon dx-icon-remove dx-filterbuilder-action\" tabindex=\"0\"></div>'
+                    + '<div class=\"dx-filterbuilder-text dx-filterbuilder-item-field\" tabindex=\"0\">Zipcode</div>'
+                    + '<div class=\"dx-filterbuilder-text dx-filterbuilder-item-operation\" tabindex=\"0\">Equals</div>'
+                    + '<div class=\"dx-filterbuilder-text dx-filterbuilder-item-value\">'
+                        + '<div class=\"dx-filterbuilder-item-value-text\" tabindex=\"0\">98027</div>'
                     + '</div>'
-                + '</div>';
+                + '</div>'
+            + '</div>'
+        );
 
         var element = $("#container").dxFilterBuilder({
             fields: fields,
             value: [["CompanyName", "=", "K&S Music"], "Or", ["Zipcode", "=", "98027"]]
         });
-        assert.equal(element.find("." + FILTER_BUILDER_GROUP_CONTENT_CLASS).html(), etalon);
+        assert.equal(element.find("." + FILTER_BUILDER_GROUP_CONTENT_CLASS).html(), $etalon.html());
     });
 
     QUnit.test("value and operations depend on selected field", function(assert) {
@@ -133,8 +136,7 @@ QUnit.module("Rendering", function() {
         $fieldButton.click();
         assert.ok($fieldButton.hasClass(ACTIVE_CLASS));
 
-        var $menu = container.find(".dx-overlay");
-        assert.ok($menu.length === 1);
+        assert.ok($(".dx-filterbuilder-fields").length > 0);
 
         var $menuItem = $(".dx-treeview-item").eq(2);
         assert.equal($menuItem.text(), "State");
@@ -143,9 +145,7 @@ QUnit.module("Rendering", function() {
         assert.ok(!$fieldButton.hasClass(ACTIVE_CLASS));
         assert.equal(container.find("." + FILTER_BUILDER_ITEM_OPERATION_CLASS).text(), "Contains");
         assert.equal(container.find("." + FILTER_BUILDER_ITEM_VALUE_CLASS).text(), "<enter a value>");
-
-        $menu = container.find(".dx-overlay");
-        assert.ok($menu.length === 0);
+        assert.ok($(".dx-filterbuilder-fields").length === 0);
     });
 
     QUnit.test("operations are changed after field change", function(assert) {
@@ -206,10 +206,13 @@ QUnit.module("Rendering", function() {
         var $groupButton = container.find("." + FILTER_BUILDER_GROUP_OPERATION_CLASS);
         $groupButton.click();
 
+        assert.ok($(".dx-filterbuilder-group-operations").length > 0);
         assert.equal($(".dx-menu-item-selected").text(), "And");
 
         var $menuItem = $(".dx-menu-item-text").eq(3);
         $menuItem.trigger("dxclick");
+
+        assert.ok($(".dx-filterbuilder-group-operations").length === 0);
 
         $groupButton.click();
         assert.equal($(".dx-menu-item-selected").text(), "Not Or");
@@ -228,11 +231,13 @@ QUnit.module("Rendering", function() {
         var $operationButton = container.find("." + FILTER_BUILDER_ITEM_OPERATION_CLASS);
         $operationButton.click();
 
+        assert.ok($(".dx-filterbuilder-operations").length > 0);
         assert.equal($(".dx-menu-item-selected").text(), "Equals");
 
         var $menuItem = $(".dx-menu-item-text").eq(3);
         $menuItem.trigger("dxclick");
 
+        assert.ok($(".dx-filterbuilder-operations").length === 0);
         assert.equal(container.find("." + FILTER_BUILDER_ITEM_VALUE_CLASS).length, 1);
 
         $operationButton.click();
@@ -357,7 +362,13 @@ QUnit.module("Rendering", function() {
                 fields: fields
             }).dxFilterBuilder("instance");
 
-        clickByButtonAndSelectMenuItem($("." + FILTER_BUILDER_IMAGE_ADD_CLASS), 1);
+        $("." + FILTER_BUILDER_IMAGE_ADD_CLASS).click();
+
+        assert.ok($(".dx-filterbuilder-add-condition").length > 0);
+
+        $(".dx-menu-item-text").eq(1).trigger("dxclick");
+
+        assert.ok($(".dx-filterbuilder-add-condition").length === 0);
         assert.deepEqual(instance._model, [["State", "<>", "Test"], ["CompanyName", "contains", ""]]);
         assert.deepEqual(instance.option("value"), [["State", "<>", "Test"], ["CompanyName", "contains", ""]]);
 
