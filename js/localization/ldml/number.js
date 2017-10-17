@@ -3,7 +3,8 @@
 var escapeRegExp = require("../../core/utils/common").escapeRegExp;
 
 var DEFAULT_CONFIG = { thousandsSeparator: ",", decimalSeparator: "." },
-    ESCAPING_CHAR = "'";
+    ESCAPING_CHAR = "'",
+    MAX_SAFE_INTEGER = Number.MAX_SAFE_INTEGER || Math.pow(2, 53) - 1;
 
 function getGroupSizes(formatString) {
     return formatString.split(",").slice(1).map(function(str) {
@@ -89,7 +90,7 @@ function getParser(format, config) {
 
         var value = parseInt(integerPart) || 0;
 
-        if(value > Number.MAX_SAFE_INTEGER) {
+        if(value > MAX_SAFE_INTEGER) {
             return null;
         }
 
