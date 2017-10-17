@@ -78,12 +78,12 @@ Please make sure that each pull request passes all automatic checks before submi
 - Capitalize the subject line
 - Do not end the subject line with a period
 - Limit the subject line to 50 characters
-- If applicable, include an issue ID to the subject line. Feel free to use [GitHub keywords](https://help.github.com/articles/closing-issues-using-keywords/) to automatically close related issues
-- Optionally, put any additional details, references, examples, etc to the commit message body or a PR description
+- If applicable, include an issue ID to the subject line. Feel free to use [GitHub keywords](https://help.github.com/articles/closing-issues-using-keywords/) to close the related issues automatically
+- Optionally, put any additional details, references, examples, etc. in the commit message body or PR description
 
-Samples:
+Examples:
 
 - `Mark dxCommand as DOMComponent child (TXXXXX)`
-- `Refactor ContextMenu after fix of T560055`
+- `Refactor ContextMenu after T560055 fix`
 - `Add namespace to doc comments (resolves #XXXX)`
 - `Fix editorFactory tests in IE`
