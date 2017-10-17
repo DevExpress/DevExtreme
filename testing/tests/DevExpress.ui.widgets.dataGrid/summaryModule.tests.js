@@ -215,7 +215,7 @@ QUnit.test("Repeated rendering", function(assert) {
     assert.equal($(".dx-datagrid-summary-item").length, 5, "summary elements");
 });
 
-QUnit.test("View is rendered when changed event of dataController is occurred", function(assert) {
+QUnit.test("View is rendered when changed event with changeType 'refresh' of dataController is occurred", function(assert) {
     //arrange
     var summaryCount = { summaryType: "count", value: 100 },
         footerView = this.createFooterView(getFooterOptions({
@@ -242,8 +242,51 @@ QUnit.test("View is rendered when changed event of dataController is occurred", 
     assert.equal($summary.eq(0).text(), "Count: 21");
 });
 
+//T563460
+QUnit.test("View is rendered when changed event with changeType 'append' of dataController is occurred", function(assert) {
+    //arrange
+    var summaryCount = { summaryType: "count", value: 100 },
+        footerView = this.createFooterView(getFooterOptions({
+            0: [
+                summaryCount
+            ]
+        }, 5)),
+        $summary,
+        $container = $("#container");
+
+    //act
+    footerView.render($container);
+    summaryCount.value = 21;
+    this.dataController.changed.fire({ changeType: "append" });
+
+    //assert
+    $summary = $(".dx-datagrid-summary-item");
+    assert.equal($summary.eq(0).text(), "Count: 21");
+});
+
+QUnit.test("View is rendered when changed event with changeType 'prepend' of dataController is occurred", function(assert) {
+    //arrange
+    var summaryCount = { summaryType: "count", value: 100 },
+        footerView = this.createFooterView(getFooterOptions({
+            0: [
+                summaryCount
+            ]
+        }, 5)),
+        $summary,
+        $container = $("#container");
+
+    //act
+    footerView.render($container);
+    summaryCount.value = 21;
+    this.dataController.changed.fire({ changeType: "prepend" });
+
+    //assert
+    $summary = $(".dx-datagrid-summary-item");
+    assert.equal($summary.eq(0).text(), "Count: 21");
+});
+
 //T246726
-QUnit.test("View is not rendered when changed event of dataController is occurred", function(assert) {
+QUnit.test("View is not rendered when changed event with changeType 'update' of dataController is occurred", function(assert) {
     //arrange
     var summaryCount = { summaryType: "count", value: 100 },
         footerView = this.createFooterView(getFooterOptions({
