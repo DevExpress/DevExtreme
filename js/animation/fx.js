@@ -33,6 +33,7 @@ var RELATIVE_VALUE_REGEX = /^([+-])=(.*)/i,
 /**
 * @name animationConfig
 * @publicName animationConfig
+* @namespace DevExpress
 * @type object
 */
 /**
