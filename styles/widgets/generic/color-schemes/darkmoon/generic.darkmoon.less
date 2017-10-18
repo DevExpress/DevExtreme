@@ -1835,7 +1835,9 @@
 * @type color
 * @group scheduler
 */
-@SCHEDULER_TIME_INDICATOR_COLOR: lighten(@base-accent, 15%);
+@SCHEDULER_CURRENT_TIME_CELL_COLOR: @base-accent;
+
+@SCHEDULER_TIME_INDICATOR_COLOR: lighten(@SCHEDULER_CURRENT_TIME_CELL_COLOR, 15%);
 
 @scheduler-popup-title-bg: @SCHEDULER_WORKSPACE_BACKGROUND_COLOR;
 
