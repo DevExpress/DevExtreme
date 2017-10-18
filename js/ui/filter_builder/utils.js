@@ -286,18 +286,18 @@ function removeAndOperationFromGroup(group) {
     }
 }
 
-function convertToInnerStructure(value) {
-    var toLowerCaseGroup = function(group) {
-        for(var i = 0; i < group.length; i++) {
-            if(isGroup(group[i])) {
-                toLowerCaseGroup(group[i]);
-            } else if(!Array.isArray(group[i])) {
-                group[i] = group[i].toLowerCase();
-            }
+function toLowerCaseGroup(group) {
+    for(var i = 0; i < group.length; i++) {
+        if(isGroup(group[i])) {
+            toLowerCaseGroup(group[i]);
+        } else if(!Array.isArray(group[i])) {
+            group[i] = group[i].toLowerCase();
         }
-        return group;
-    };
+    }
+    return group;
+}
 
+function convertToInnerStructure(value) {
     if(!value) {
         return [];
     }
