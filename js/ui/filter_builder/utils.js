@@ -128,7 +128,7 @@ function getGroupValue(group) {
         }
     }
     if(!value) {
-        value = "And";
+        value = "and";
     }
     if(criteria !== group) {
         value = "!" + value;
@@ -212,7 +212,7 @@ function removeItem(group, item) {
 }
 
 function createEmptyGroup(value) {
-    return value.indexOf("not") !== -1 ? ["!", [value.substring(3)]] : [value];
+    return value.indexOf("not") !== -1 ? ["!", [value.substring(3).toLowerCase()]] : [value];
 }
 
 function isEmptyGroup(group) {
@@ -279,24 +279,38 @@ function isCondition(criteria) {
 }
 
 function removeAndOperationFromGroup(group) {
-    var index = group.indexOf("And");
+    var index = group.indexOf("and");
     while(index !== -1) {
         group.splice(index, 1);
-        index = group.indexOf("And");
+        index = group.indexOf("and");
     }
+}
+
+function toLowerCaseGroup(group) {
+    for(var i = 0; i < group.length; i++) {
+        if(isGroup(group[i])) {
+            toLowerCaseGroup(group[i]);
+        } else if(!Array.isArray(group[i])) {
+            group[i] = group[i].toLowerCase();
+        }
+    }
+    return group;
 }
 
 function convertToInnerStructure(value) {
     if(!value) {
         return [];
     }
+
+    value = extend(true, [], value);
+
     if(isCondition(value)) {
         return [value];
     }
     if(isNegationGroup(value)) {
-        return ["!", isCondition(value[1]) ? [value[1]] : value[1]];
+        return ["!", isCondition(value[1]) ? [value[1]] : toLowerCaseGroup(value[1])];
     }
-    return copyGroup(value);
+    return toLowerCaseGroup(value);
 }
 
 function getNormalizedFilter(group) {
@@ -480,15 +494,6 @@ function getOperationValue(condition) {
     return caption;
 }
 
-function copyGroup(group) {
-    var result = [];
-    for(var i = 0; i < group.length; i++) {
-        var item = group[i];
-        result.push(isGroup(item) ? copyGroup(item) : item);
-    }
-    return result;
-}
-
 exports.isEmptyGroup = isEmptyGroup;
 exports.getOperationFromAvailable = getOperationFromAvailable;
 exports.updateConditionByOperation = updateConditionByOperation;
@@ -499,7 +504,6 @@ exports.getGroupMenuItem = getGroupMenuItem;
 exports.getGroupValue = getGroupValue;
 exports.getAvailableOperations = getAvailableOperations;
 exports.removeItem = removeItem;
-exports.copyGroup = copyGroup;
 exports.createCondition = createCondition;
 exports.createEmptyGroup = createEmptyGroup;
 exports.addItem = addItem;

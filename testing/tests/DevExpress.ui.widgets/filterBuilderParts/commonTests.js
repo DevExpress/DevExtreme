@@ -116,7 +116,7 @@ QUnit.module("Rendering", function() {
 
         var element = $("#container").dxFilterBuilder({
             fields: fields,
-            value: [["CompanyName", "=", "K&S Music"], "Or", ["Zipcode", "=", "98027"]]
+            value: [["CompanyName", "=", "K&S Music"], "or", ["Zipcode", "=", "98027"]]
         });
         assert.equal(element.find("." + FILTER_BUILDER_GROUP_CONTENT_CLASS).html(), $etalon.html());
     });
@@ -387,7 +387,7 @@ QUnit.module("Rendering", function() {
             }).dxFilterBuilder("instance");
 
         clickByButtonAndSelectMenuItem($("." + FILTER_BUILDER_IMAGE_ADD_CLASS), 0);
-        assert.deepEqual(instance._model, [["State", "<>", "Test"], ["And"]]);
+        assert.deepEqual(instance._model, [["State", "<>", "Test"], ["and"]]);
         assert.deepEqual(instance.option("value"), ["State", "<>", "Test"]);
 
         $("." + FILTER_BUILDER_IMAGE_REMOVE_CLASS).eq(1).click();
