@@ -182,7 +182,6 @@ var SchedulerWorkSpaceIndicator = SchedulerWorkSpace.inherit({
                 endCellDate = new Date(date);
 
             if(dateUtils.sameDate(today, date)) {
-                startCellDate = startCellDate.setMilliseconds(date.getMilliseconds() - this.getCellDuration());
                 endCellDate = endCellDate.setMilliseconds(date.getMilliseconds() + this.getCellDuration());
 
                 result = dateUtils.dateInRange(today, startCellDate, endCellDate);

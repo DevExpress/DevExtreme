@@ -1372,18 +1372,11 @@
     float: left;
     width: @SCHEDULER_LEFT_COLUMN_WIDTH;
     border-collapse: collapse;
-    margin-top: -@SCHEDULER_WORKSPACE_DATE_TABLE_CELL_HEIGHT;
     font-size: @SCHEDULER_WORKSPACE_INFO_FONT_SIZE;
 
     .dx-scheduler-small & {
         width: @SCHEDULER_LEFT_COLUMN_WIDTH * @SCHEDULER_SMALL_SIZE_FACTOR;
         font-size: @SCHEDULER_SMALL_FONT_SIZE;
-    }
-
-    tbody:after {
-        content: '';
-        height: @SCHEDULER_WORKSPACE_DATE_TABLE_CELL_HEIGHT;
-        display: table-cell;
     }
 }
 
@@ -1405,25 +1398,46 @@
     position: relative;
     width: 100%;
     text-align: center;
-    height: @SCHEDULER_WORKSPACE_DATE_TABLE_CELL_HEIGHT * 2;
+    height: @SCHEDULER_WORKSPACE_DATE_TABLE_CELL_HEIGHT;
     padding-left: @SCHEDULER_TIMEPANEL_CELL_OFFSET;
-
+    
+    > div{
+        position: absolute;
+        top: -13px;
+    }
+    
     .dx-scheduler-small & {
         padding-left: 0;
     }
 
     .dx-scheduler-time-panel-row:first-child & {
-        padding-top: 35px;
+        > div{
+            top: 0px;
+        }
     }
 
-    &:after {
-        position: absolute;
-        bottom: -1px;
-        width: 50%;
-        height: 1px;
-        content: '';
-        left: 0;
-        background-color: @SCHEDULER_TIME_PANEL_BACKGROUND_COLOR;
+    .dx-scheduler-time-panel-row:nth-child(2n) & {
+         &:after {
+            position: absolute;
+            bottom: -1px;
+            width: 100%;
+            height: 1px;
+            content: '';
+            left: 0;
+            background-color: @SCHEDULER_TIME_PANEL_BACKGROUND_COLOR;
+        }
+    }
+
+    .dx-scheduler-time-panel-row:nth-child(odd) & {
+         &:after {
+            position: absolute;
+            bottom: -1px;
+            width: 50%;
+            height: 1px;
+            content: '';
+            left: 0;
+            background-color: @SCHEDULER_TIME_PANEL_BACKGROUND_COLOR;
+        }
     }
 
     &.dx-scheduler-time-panel-current-time-cell {

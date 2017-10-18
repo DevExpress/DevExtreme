@@ -1078,7 +1078,7 @@ var SchedulerWorkSpace = Widget.inherit({
     },
 
     _getTimePanelRowCount: function() {
-        return 0.5 * this._getCellCountInDay();
+        return this._getCellCountInDay();
     },
 
     _getCellCountInDay: function() {
@@ -1096,13 +1096,15 @@ var SchedulerWorkSpace = Widget.inherit({
     _getTimeText: function(i) {
         // T410490: incorrectly displaying time slots on Linux
         var startViewDate = this._getTimeCellDate(i);
-
-        return dateLocalization.format(startViewDate, "shorttime");
+        if(i % 2 === 0) {
+            return dateLocalization.format(startViewDate, "shorttime");
+        }
+        return "";
     },
 
     _getTimeCellDate: function(i) {
         var startViewDate = new Date(this.getStartViewDate()),
-            timeCellDuration = this.getCellDuration() * 2;
+            timeCellDuration = this.getCellDuration();
 
         startViewDate.setMilliseconds(startViewDate.getMilliseconds() + timeCellDuration * i);
 
