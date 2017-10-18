@@ -61,8 +61,11 @@ var convertTransitionTimingFuncToEasing = function(cssTransitionEasing) {
     cssTransitionEasing = TransitionTimingFuncMap[cssTransitionEasing] || cssTransitionEasing;
 
     var coeffs = cssTransitionEasing.match(CSS_TRANSITION_EASING_REGEX);
+    var forceName;
+
     if(!coeffs) {
-        return "linear";
+        forceName = "linear";
+        coeffs = TransitionTimingFuncMap[forceName].match(CSS_TRANSITION_EASING_REGEX);
     }
 
     coeffs = coeffs.slice(1, 5);
@@ -70,7 +73,7 @@ var convertTransitionTimingFuncToEasing = function(cssTransitionEasing) {
         coeffs[i] = parseFloat(coeffs[i]);
     }
 
-    var easingName = "cubicbezier_" + coeffs.join("_").replace(/\./g, "p");
+    var easingName = forceName || "cubicbezier_" + coeffs.join("_").replace(/\./g, "p");
 
     if(!isFunction(easing[easingName])) {
         easing[easingName] = function(x, t, b, c, d) {
