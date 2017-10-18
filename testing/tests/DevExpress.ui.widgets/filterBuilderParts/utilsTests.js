@@ -392,15 +392,11 @@ QUnit.module("Utils", function() {
         assert.deepEqual(utils.updateConditionByOperation(["value", "=", "123"], "isnotblank"), ["value", "<>", null]);
         assert.deepEqual(utils.updateConditionByOperation(["value", "=", "123"], "<="), ["value", "<=", "123"]);
         assert.deepEqual(utils.updateConditionByOperation(["value", "=", null], "<="), ["value", "<=", ""]);
-        assert.deepEqual(utils.updateConditionByOperation(["value", null], "<="), ["value", "<=", ""]);
-        assert.deepEqual(utils.updateConditionByOperation(["value", "Test"], "<="), ["value", "<=", "Test"]);
-        assert.deepEqual(utils.updateConditionByOperation(["value", "Test"], "isblank"), ["value", "=", null]);
     });
 
     QUnit.test("getOperationValue", function(assert) {
         assert.deepEqual(utils.getOperationValue(["value", "=", "123"]), "=");
         assert.deepEqual(utils.getOperationValue(["value", "=", null]), "isblank");
-        assert.deepEqual(utils.getOperationValue(["value", null]), "isblank");
         assert.deepEqual(utils.getOperationValue(["value", "<>", null]), "isnotblank");
     });
 
@@ -628,7 +624,7 @@ QUnit.module("Convert to inner structure", function() {
     QUnit.test("from short condition", function(assert) {
         var shortCondition = ["CompanyName", "DevExpress"],
             model = utils.convertToInnerStructure(shortCondition);
-        assert.deepEqual(model, [shortCondition]);
+        assert.deepEqual(model, [["CompanyName", "=", "DevExpress"]]);
     });
 
     QUnit.test("from negative group with one condition", function(assert) {
@@ -644,6 +640,19 @@ QUnit.module("Convert to inner structure", function() {
         assert.deepEqual(model, filter);
         assert.notEqual(model[0], filter[0]);
         assert.notEqual(model[2], filter[2]);
+    });
+
+    QUnit.test("from group with several short conditions", function(assert) {
+        var filter = [["CompanyName", "DevExpress"], ["CompanyName", "DevExpress"], ["!", ["CompanyName", "DevExpress"]]],
+            model = utils.convertToInnerStructure(filter);
+
+        assert.deepEqual(model, [
+            ["CompanyName", "=", "DevExpress"],
+            ["CompanyName", "=", "DevExpress"],
+            ["!",
+                ["CompanyName", "=", "DevExpress"]
+            ]
+        ]);
     });
 
     QUnit.test("check lowercase group", function(assert) {

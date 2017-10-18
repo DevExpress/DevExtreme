@@ -574,7 +574,7 @@ var FilterBuilder = Widget.inherit({
     },
 
     _hasValueButton: function(condition) {
-        return condition[2] !== null && condition[1] !== null;
+        return condition[2] !== null;
     },
 
     _createOperationButtonWithMenu: function(condition, field) {
@@ -733,8 +733,7 @@ var FilterBuilder = Widget.inherit({
 
     _createValueText: function(item, field, $container) {
         var that = this,
-            valueIndex = item.length - 1,
-            valueText = utils.getCurrentValueText(field, item[valueIndex]) || messageLocalization.format("dxFilterBuilder-enterValueText"),
+            valueText = utils.getCurrentValueText(field, item[2]) || messageLocalization.format("dxFilterBuilder-enterValueText"),
             $text = $("<div>")
                 .addClass(FILTER_BUILDER_ITEM_VALUE_TEXT_CLASS)
                 .attr("tabindex", 0)
@@ -750,16 +749,15 @@ var FilterBuilder = Widget.inherit({
 
     _createValueEditorWithEvents: function(item, field, $container) {
         var that = this,
-            valueIndex = item.length - 1,
-            value = item[valueIndex],
+            value = item[2],
             disableEvents = function() {
                 eventsEngine.off($container, "focusout");
                 eventsEngine.off($container, "keyup");
             },
             updateValue = function(value, callback) {
-                var areValuesDifferent = item[valueIndex] !== value;
+                var areValuesDifferent = item[2] !== value;
                 if(areValuesDifferent) {
-                    item[valueIndex] = value;
+                    item[2] = value;
                 }
                 callback();
                 if(areValuesDifferent) {

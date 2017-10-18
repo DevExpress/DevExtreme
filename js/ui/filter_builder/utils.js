@@ -286,15 +286,25 @@ function removeAndOperationFromGroup(group) {
     }
 }
 
-function toLowerCaseGroup(group) {
+function convertToInnerGroup(group) {
     for(var i = 0; i < group.length; i++) {
         if(isGroup(group[i])) {
-            toLowerCaseGroup(group[i]);
+            convertToInnerGroup(group[i]);
+        } else if(isCondition(group[i])) {
+            convertToInnerCondition(group[i]);
         } else if(!Array.isArray(group[i])) {
             group[i] = group[i].toLowerCase();
         }
     }
     return group;
+}
+
+function convertToInnerCondition(condition) {
+    if(condition.length < 3) {
+        condition[2] = condition[1];
+        condition[1] = "=";
+    }
+    return condition;
 }
 
 function convertToInnerStructure(value) {
@@ -305,12 +315,12 @@ function convertToInnerStructure(value) {
     value = extend(true, [], value);
 
     if(isCondition(value)) {
-        return [value];
+        return [convertToInnerCondition(value)];
     }
     if(isNegationGroup(value)) {
-        return ["!", isCondition(value[1]) ? [value[1]] : toLowerCaseGroup(value[1])];
+        return ["!", isCondition(value[1]) ? [convertToInnerCondition(value[1])] : convertToInnerGroup(value[1])];
     }
-    return toLowerCaseGroup(value);
+    return convertToInnerGroup(value);
 }
 
 function getNormalizedFilter(group) {
@@ -452,10 +462,6 @@ function getCaptionWithParents(item, plainItems) {
     return item.caption;
 }
 
-function isShortCondition(condition) {
-    return condition.length < 3;
-}
-
 function updateConditionByOperation(condition, operation) {
     if(operation === "isblank") {
         condition[1] = "=";
@@ -466,8 +472,6 @@ function updateConditionByOperation(condition, operation) {
     } else {
         if(condition[2] === null) {
             condition[2] = "";
-        } else if(isShortCondition(condition)) {
-            condition[2] = condition[1] || "";
         }
         condition[1] = operation;
     }
@@ -481,12 +485,6 @@ function getOperationValue(condition) {
             caption = "isblank";
         } else {
             caption = "isnotblank";
-        }
-    } else if(isShortCondition(condition)) {
-        if(condition[1] === null) {
-            caption = "isblank";
-        } else {
-            caption = "=";
         }
     } else {
         caption = condition[1];
