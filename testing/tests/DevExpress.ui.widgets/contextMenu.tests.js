@@ -1195,7 +1195,7 @@ QUnit.test("items change should clear focused item", function(assert) {
         .keyDown("down")
         .keyDown("enter");
 
-    assert.equal(instance.option("focusedElement").length, 1, "focused element is set");
+    assert.equal($(instance.option("focusedElement")).length, 1, "focused element is set");
 
     instance.option("items", items2);
     assert.notOk(instance.option("focusedElement"), "focused element is cleaned");
@@ -1211,7 +1211,7 @@ QUnit.test("items changed should not break keyboard navigation", function(assert
     keyboardMock(overlay)
         .keyDown("down");
 
-    assert.equal(instance.option("focusedElement").text(), "1", "focused element is correct");
+    assert.equal($(instance.option("focusedElement")).text(), "1", "focused element is correct");
 });
 
 
