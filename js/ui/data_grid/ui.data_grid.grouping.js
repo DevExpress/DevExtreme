@@ -122,7 +122,7 @@ var GroupingDataSourceAdapterExtender = (function() {
                 }
             }
         },
-        _customizeRemoteOperations: function(options) {
+        _customizeRemoteOperations: function(options, isReload, operationTypes) {
             var remoteOperations = options.remoteOperations;
 
             if(options.storeLoadOptions.group) {
@@ -135,7 +135,10 @@ var GroupingDataSourceAdapterExtender = (function() {
                 if(!remoteOperations.grouping && (!remoteOperations.sorting || !remoteOperations.filtering || options.isCustomLoading || this._hasGroupLevelsExpandState(options.storeLoadOptions.group, false))) {
                     remoteOperations.paging = false;
                 }
+            } else if(!options.isCustomLoading && remoteOperations.paging && operationTypes.grouping) {
+                this.resetCache();
             }
+
             this.callBase.apply(this, arguments);
         },
         _handleDataLoading: function(options) {
