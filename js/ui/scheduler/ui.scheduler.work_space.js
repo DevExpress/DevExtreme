@@ -1065,7 +1065,7 @@ var SchedulerWorkSpace = Widget.inherit({
 
     _renderTimePanel: function() {
         var rowCount = this._getTimePanelRowCount();
-        this._$timePanel.toggleClass(TIME_PANEL_ODD_ROW_COUNT_CLASS, rowCount % 1 > 0);
+        this._$timePanel.toggleClass(TIME_PANEL_ODD_ROW_COUNT_CLASS, rowCount % 2 > 0);
         this._renderTableBody({
             container: getPublicElement(this._$timePanel),
             rowCount: rowCount,
