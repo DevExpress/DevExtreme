@@ -158,7 +158,6 @@ var stubInvokeMethod = function(instance, options) {
         var $element = this.instance.$element(),
             $indicators = $element.find("." + SCHEDULER_DATE_TIME_INDICATOR_CLASS),
             cellHeight = this.instance.$element().find(".dx-scheduler-date-table-cell").eq(0).outerHeight();
-
         assert.equal($indicators.length, 2, "Indicator count is correct");
         assert.equal($indicators.eq(0).position().left, 0);
         assert.equal($indicators.eq(0).position().top, 9.5 * cellHeight);
@@ -262,12 +261,12 @@ var stubInvokeMethod = function(instance, options) {
             $shader = $element.find("." + SCHEDULER_DATE_TIME_SHADER_CLASS),
             cellHeight = this.instance.$element().find(".dx-scheduler-date-table-cell").eq(0).outerHeight();
 
-        assert.roughEqual($shader.outerHeight(), 20 * cellHeight, 1, "Indicator has correct height");
+        assert.roughEqual($shader.outerHeight(), 20 * cellHeight, 1.5, "Indicator has correct height");
 
         this.instance.option("endDayHour", 24);
 
         $shader = $element.find("." + SCHEDULER_DATE_TIME_SHADER_CLASS);
-        assert.roughEqual($shader.outerHeight(), 23.5 * cellHeight, 1, "Indicator has correct height");
+        assert.roughEqual($shader.outerHeight(), 23.5 * cellHeight, 1.5, "Indicator has correct height");
     });
 
     QUnit.test("Shader should have correct height & width, Day view with intervalCount", function(assert) {
@@ -286,7 +285,7 @@ var stubInvokeMethod = function(instance, options) {
 
         assert.roughEqual($shader.outerHeight(), 9.5 * cellHeight, 1, "Indicator has correct height");
         assert.roughEqual($topShader.outerHeight(), 9.5 * cellHeight, 1, "Top indicator has correct height");
-        assert.roughEqual($bottomShader.outerHeight(), 22.5 * cellHeight, 1, "Bottom indicator has correct height");
+        assert.roughEqual($bottomShader.outerHeight(), 22.5 * cellHeight, 1.5, "Bottom indicator has correct height");
 
         assert.roughEqual($shader.outerWidth(), 3 * cellWidth, 2, "Indicator has correct width");
         assert.roughEqual($topShader.outerWidth(), 2 * cellWidth, 1, "Top indicator has correct width");
@@ -315,9 +314,9 @@ var stubInvokeMethod = function(instance, options) {
 
         assert.roughEqual($shader.outerHeight(), 9.5 * cellHeight, 1, "Indicator has correct height");
         assert.roughEqual($firstTopShader.outerHeight(), 9.5 * cellHeight, 1, "Top indicator has correct height");
-        assert.roughEqual($firstBottomShader.outerHeight(), 22.5 * cellHeight, 1, "Bottom indicator has correct height");
+        assert.roughEqual($firstBottomShader.outerHeight(), 22.5 * cellHeight, 1.5, "Bottom indicator has correct height");
         assert.roughEqual($secondTopShader.outerHeight(), 9.5 * cellHeight, 1, "Top indicator has correct height");
-        assert.roughEqual($secondBottomShader.outerHeight(), 22.5 * cellHeight, 1, "Bottom indicator has correct height");
+        assert.roughEqual($secondBottomShader.outerHeight(), 22.5 * cellHeight, 1.5, "Bottom indicator has correct height");
 
         assert.roughEqual($shader.outerWidth(), 6 * cellWidth, 5, "Indicator has correct width");
         assert.roughEqual($firstTopShader.outerWidth(), 2 * cellWidth, 1, "Top indicator has correct width");
@@ -348,7 +347,7 @@ var stubInvokeMethod = function(instance, options) {
         });
 
         var $element = this.instance.$element(),
-            $cell = $element.find(".dx-scheduler-time-panel-cell").eq(5);
+            $cell = $element.find(".dx-scheduler-time-panel-cell").eq(9);
 
         assert.ok($cell.hasClass("dx-scheduler-time-panel-current-time-cell"), "Cell has specific class");
     });
@@ -360,7 +359,7 @@ var stubInvokeMethod = function(instance, options) {
         });
 
         var $element = this.instance.$element(),
-            $cell = $element.find(".dx-scheduler-time-panel-cell").eq(5);
+            $cell = $element.find(".dx-scheduler-time-panel-cell").eq(9);
 
         assert.ok($cell.hasClass("dx-scheduler-time-panel-current-time-cell"), "Cell has specific class");
     });
@@ -437,7 +436,7 @@ var stubInvokeMethod = function(instance, options) {
 
         assert.roughEqual($shader.outerHeight(), 9.5 * cellHeight, 1, "Indicator has correct height");
         assert.roughEqual($topShader.outerHeight(), 9.5 * cellHeight, 1, "Top indicator has correct height");
-        assert.roughEqual($bottomShader.outerHeight(), 22.5 * cellHeight, 1, "Bottom indicator has correct height");
+        assert.roughEqual($bottomShader.outerHeight(), 22.5 * cellHeight, 1.5, "Bottom indicator has correct height");
 
         assert.roughEqual($shader.outerWidth(), 898, 1, "Indicator has correct width");
         assert.roughEqual($topShader.outerWidth(), 4 * cellWidth, 1, "Top indicator has correct width");
@@ -453,7 +452,7 @@ var stubInvokeMethod = function(instance, options) {
         var $element = this.instance.$element(),
             $shader = $element.find("." + SCHEDULER_DATE_TIME_SHADER_CLASS);
 
-        assert.roughEqual($shader.outerHeight(), 1000, 1, "Indicator has correct height");
+        assert.roughEqual($shader.outerHeight(), 1000, 1.5, "Indicator has correct height");
     });
 
     QUnit.test("Shader should be rendered for 'overdue' views", function(assert) {
@@ -466,7 +465,7 @@ var stubInvokeMethod = function(instance, options) {
         var $element = this.instance.$element(),
             $shader = $element.find("." + SCHEDULER_DATE_TIME_SHADER_CLASS);
 
-        assert.roughEqual($shader.outerHeight(), 1000, 1, "Indicator has correct height");
+        assert.roughEqual($shader.outerHeight(), 1000, 1.5, "Indicator has correct height");
     });
 
     QUnit.test("TimePanel currentTime cell should have specific class, Week view", function(assert) {
@@ -475,7 +474,7 @@ var stubInvokeMethod = function(instance, options) {
         });
 
         var $element = this.instance.$element(),
-            $cell = $element.find(".dx-scheduler-time-panel-cell").eq(5);
+            $cell = $element.find(".dx-scheduler-time-panel-cell").eq(9);
 
         assert.ok($cell.hasClass("dx-scheduler-time-panel-current-time-cell"), "Cell has specific class");
     });
