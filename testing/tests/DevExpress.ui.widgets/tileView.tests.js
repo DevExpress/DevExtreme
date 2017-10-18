@@ -547,13 +547,11 @@ $.each(configs, function(direction, config) {
 
         var $element = this.$element;
         var keyboard = this.keyboard;
-        var instance = $("#widget").dxTileView("instance");
 
         $element.find(TILEVIEW_ITEM_SELECTOR).eq(testConfig.start).trigger("dxpointerdown");
         this.clock.tick();
         keyboard.keyDown("left");
 
-        assert.equal(isRenderer(instance.option("focusedElement")), globalConfig().useJQuery, "focusedElement is correct");
         assert.ok($element.find(TILEVIEW_ITEM_SELECTOR).eq(testConfig.end).hasClass("dx-state-focused"), "left element obtained dx-state-focused after press left arrow");
     });
 
@@ -565,13 +563,11 @@ $.each(configs, function(direction, config) {
 
         var $element = this.$element;
         var keyboard = this.keyboard;
-        var instance = $("#widget").dxTileView("instance");
 
         $element.find(TILEVIEW_ITEM_SELECTOR).eq(testConfig.start).trigger("dxpointerdown");
         this.clock.tick();
         keyboard.keyDown("down");
 
-        assert.equal(isRenderer(instance.option("focusedElement")), globalConfig().useJQuery, "focusedElement is correct");
         assert.ok($element.find(TILEVIEW_ITEM_SELECTOR).eq(testConfig.end).hasClass("dx-state-focused"), "down element obtained dx-state-focused after press down arrow");
     });
 
@@ -583,13 +579,11 @@ $.each(configs, function(direction, config) {
 
         var $element = this.$element;
         var keyboard = this.keyboard;
-        var instance = $("#widget").dxTileView("instance");
 
         $element.find(TILEVIEW_ITEM_SELECTOR).eq(testConfig.start).trigger("dxpointerdown");
         this.clock.tick();
         keyboard.keyDown("pageDown");
 
-        assert.equal(isRenderer(instance.option("focusedElement")), globalConfig().useJQuery, "focusedElement is correct");
         assert.ok($element.find(TILEVIEW_ITEM_SELECTOR).eq(testConfig.end).hasClass("dx-state-focused"), "pageDown element obtained dx-state-focused after press pageDown arrow");
     });
 
