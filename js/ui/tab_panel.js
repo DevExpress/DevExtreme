@@ -80,7 +80,7 @@ var TabPanel = MultiView.inherit({
             * @extends Action
             * @type function|string
             * @type_function_param1_field4 itemData:object
-            * @type_function_param1_field5 itemElement:jQuery
+            * @type_function_param1_field5 itemElement:Element
             * @action
             */
             onTitleClick: null,
@@ -90,7 +90,7 @@ var TabPanel = MultiView.inherit({
             * @publicName onTitleHold
             * @extends Action
             * @type_function_param1_field4 itemData:object
-            * @type_function_param1_field5 itemElement:jQuery
+            * @type_function_param1_field5 itemElement:Element
             * @action
             */
             onTitleHold: null,
@@ -100,7 +100,7 @@ var TabPanel = MultiView.inherit({
             * @publicName onTitleRendered
             * @extends Action
             * @type_function_param1_field4 itemData:object
-            * @type_function_param1_field5 itemElement:jQuery
+            * @type_function_param1_field5 itemElement:Element
             * @action
             */
             onTitleRendered: null
@@ -326,8 +326,8 @@ var TabPanel = MultiView.inherit({
                     this.option("focusedElement", getPublicElement(newItem));
                 }
             }).bind(this),
-            onFocusIn: (function(args) { this._focusInHandler(args.jQueryEvent); }).bind(this),
-            onFocusOut: (function(args) { this._focusOutHandler(args.jQueryEvent); }).bind(this)
+            onFocusIn: (function(args) { this._focusInHandler(args.event); }).bind(this),
+            onFocusOut: (function(args) { this._focusOutHandler(args.event); }).bind(this)
         };
     },
 

@@ -1103,27 +1103,27 @@ QUnit.testStart(function() {
         assert.equal(workSpaceWeek.option("indicatorUpdateInterval"), 3000, "workspace has correct indicatorUpdateInterval");
     });
 
-    QUnit.test("shadeUntilNow should have right default", function(assert) {
+    QUnit.test("shadeUntilCurrentTime should have right default", function(assert) {
         this.createInstance({
             currentView: "week"
         });
 
-        assert.equal(this.instance.option("shadeUntilNow"), false, "workspace has correct shadeUntilNow");
+        assert.equal(this.instance.option("shadeUntilCurrentTime"), false, "workspace has correct shadeUntilCurrentTime");
     });
 
-    QUnit.test("shadeUntilNow option should be passed to workSpace", function(assert) {
+    QUnit.test("shadeUntilCurrentTime option should be passed to workSpace", function(assert) {
         this.createInstance({
             currentView: "week",
-            shadeUntilNow: false
+            shadeUntilCurrentTime: false
         });
 
         var workSpaceWeek = this.instance.getWorkSpace();
 
-        assert.equal(workSpaceWeek.option("shadeUntilNow"), false, "workspace has correct shadeUntilNow");
+        assert.equal(workSpaceWeek.option("shadeUntilCurrentTime"), false, "workspace has correct shadeUntilCurrentTime");
 
-        this.instance.option("shadeUntilNow", true);
+        this.instance.option("shadeUntilCurrentTime", true);
 
-        assert.equal(workSpaceWeek.option("shadeUntilNow"), true, "workspace has correct shadeUntilNow");
+        assert.equal(workSpaceWeek.option("shadeUntilCurrentTime"), true, "workspace has correct shadeUntilCurrentTime");
     });
 
     QUnit.test("appointments should be repainted after scheduler dimensions changing", function(assert) {
@@ -2317,7 +2317,7 @@ QUnit.testStart(function() {
             maxAppointmentsPerCell: null,
             currentDate: new Date(2015, 2, 9),
             onAppointmentClick: function(e) {
-                assert.deepEqual(isRenderer(e.appointmentElement), config().useJQueryRenderer, "appointmentElement is correct");
+                assert.deepEqual(isRenderer(e.appointmentElement), config().useJQuery, "appointmentElement is correct");
                 assert.deepEqual($(e.appointmentElement)[0], $item[0], "appointmentElement is correct");
                 assert.strictEqual(e.appointmentData, items[0], "appointmentData is correct");
             }
@@ -3243,7 +3243,7 @@ QUnit.testStart(function() {
             views: [{
                 type: "week",
                 dateCellTemplate: function(item, index, container) {
-                    assert.equal(isRenderer(container), config().useJQueryRenderer, "element is correct");
+                    assert.equal(isRenderer(container), config().useJQuery, "element is correct");
                     countCallTemplate2++;
                 }
             }],
@@ -3324,7 +3324,7 @@ QUnit.testStart(function() {
             views: [{
                 type: "week",
                 appointmentTemplate: function(item, index, container) {
-                    assert.deepEqual(isRenderer(container), config().useJQueryRenderer, "appointmentElement is correct");
+                    assert.deepEqual(isRenderer(container), config().useJQuery, "appointmentElement is correct");
                     countCallTemplate2++;
                 }
             }],
@@ -3351,7 +3351,7 @@ QUnit.testStart(function() {
             views: [{
                 type: "week",
                 appointmentTooltipTemplate: function(item, container) {
-                    assert.equal(isRenderer(container), config().useJQueryRenderer, "element is correct");
+                    assert.equal(isRenderer(container), config().useJQuery, "element is correct");
                     countCallTemplate2++;
                 }
             }],

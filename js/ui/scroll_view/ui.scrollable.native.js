@@ -130,7 +130,7 @@ var NativeStrategy = Class.inherit({
     _createActionArgs: function() {
         var location = this.location();
         return {
-            jQueryEvent: this._eventForUserAction,
+            event: this._eventForUserAction,
             scrollOffset: {
                 top: -location.top,
                 left: -location.left

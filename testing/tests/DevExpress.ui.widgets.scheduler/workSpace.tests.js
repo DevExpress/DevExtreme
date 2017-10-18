@@ -2609,7 +2609,7 @@ QUnit.testStart(function() {
             currentDate: new Date(2015, 9, 1),
             focusStateEnabled: true,
             onCellClick: function(e) {
-                assert.equal(isRenderer(e.cellElement), config().useJQueryRenderer, "cell is clicked");
+                assert.equal(isRenderer(e.cellElement), config().useJQuery, "cell is clicked");
                 assert.deepEqual($(e.cellElement)[0], $cell[0], "cell is clicked");
                 assert.deepEqual(e.cellData, { startDate: new Date(2015, 8, 27), endDate: new Date(2015, 8, 28) }, "cell is clicked");
             }
@@ -2958,6 +2958,35 @@ QUnit.testStart(function() {
 
         cells = this.instance.$element().find(".dx-scheduler-date-table-cell");
         assert.equal(cells.length, this.instance._getCellCountInDay() * 4, "view has right cell count");
+    });
+
+    QUnit.test("WorkSpace Day view cells should have right class when intervalCount and groups", function(assert) {
+        this.instance.option("intervalCount", 3);
+        this.instance.option("groups", [{ name: "a", items: [{ id: 1, text: "a.1" }, { id: 2, text: "a.2" }] }]);
+
+        this.instance.$element().find(".dx-scheduler-date-table-cell").each(function(index) {
+            if((index + 1) % 3 === 0) {
+                assert.ok($(this).hasClass("dx-scheduler-last-group-cell"), "Date table cell has last-group class");
+            } else {
+                assert.notOk($(this).hasClass("dx-scheduler-last-group-cell"), "Date tale cell hasn't last-group class");
+            }
+        });
+
+        this.instance.$element().find(".dx-scheduler-all-day-table-cell").each(function(index) {
+            if((index + 1) % 3 === 0) {
+                assert.ok($(this).hasClass("dx-scheduler-last-group-cell"), "AllDay panel cell has last-group class");
+            } else {
+                assert.notOk($(this).hasClass("dx-scheduler-last-group-cell"), "AllDay panel cell hasn't last-group class");
+            }
+        });
+
+        this.instance.$element().find(".dx-scheduler-header-panel-cell").each(function(index) {
+            if((index + 1) % 3 === 0) {
+                assert.ok($(this).hasClass("dx-scheduler-last-group-cell"), "Header panel cell has last-group class");
+            } else {
+                assert.notOk($(this).hasClass("dx-scheduler-last-group-cell"), "Header panel cell hasn't last-group class");
+            }
+        });
     });
 
     QUnit.test("WorkSpace Day view cells have right cellData with view option intervalCount=2", function(assert) {

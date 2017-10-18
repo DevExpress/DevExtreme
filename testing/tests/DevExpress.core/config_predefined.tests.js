@@ -1,23 +1,15 @@
 "use strict";
 
-window.DevExpress = window.DevExpress || {};
-window.DevExpress.config = {
-    useJQueryRenderer: false
-};
+var config = require("core/config");
 
-define(function(require) {
-    var config = require("core/config");
+QUnit.module("predefined config");
 
-    QUnit.module("predefined config");
+QUnit.test("Get default value from DevExpress.config object", function(assert) {
+    var originalConfig = config();
 
-    QUnit.test("Get default value from DevExpress.config object", function(assert) {
-        var originalConfig = config();
-
-        try {
-            assert.strictEqual(originalConfig.useJQueryRenderer, false);
-        } finally {
-            config(originalConfig);
-        }
-    });
-
+    try {
+        assert.strictEqual(originalConfig.useJQuery, !QUnit.urlParams["nojquery"]);
+    } finally {
+        config(originalConfig);
+    }
 });

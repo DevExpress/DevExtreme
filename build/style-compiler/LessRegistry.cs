@@ -40,7 +40,12 @@ namespace StyleCompiler
             COLOR_SCHEME_WHITE = "white",
             COLOR_SCHEME_LIGHT = "light",
             COLOR_SCHEME_DARK = "dark",
-            COLOR_SCHEME_CONTRAST = "contrast";
+            COLOR_SCHEME_CONTRAST = "contrast",
+
+            COLOR_SCHEME_CARMINE = "carmine",
+            COLOR_SCHEME_DARKMOON = "darkmoon",
+            COLOR_SCHEME_SOFTBLUE = "softblue",
+            COLOR_SCHEME_DARKVIOLET = "darkviolet";
 
         public const string
             SIZE_SCHEME_DEFAULT = "default",
@@ -75,7 +80,7 @@ namespace StyleCompiler
                     LicenseInfo = EULA_DEVEXTREME,
                     Modules = new[] { MODULE_TMP_WIDGETS_FOR_EXPORTER, MODULE_TMP_EXPORTER },
                     SupportedThemes = new[] { THEME_GENERIC },
-
+                    ExcludedColorSchemes = new[] { COLOR_SCHEME_CARMINE, COLOR_SCHEME_DARKMOON, COLOR_SCHEME_SOFTBLUE, COLOR_SCHEME_DARKVIOLET },
                     SupportedSizeSchemes = new Dictionary<string,string[]> {
                         { THEME_GENERIC, new[] { SIZE_SCHEME_DEFAULT } }
                     }
@@ -102,7 +107,7 @@ namespace StyleCompiler
             new KnownThemeInfo {
                 Name = THEME_GENERIC,
                 PublicName = string.Empty,
-                ColorSchemeNames = new[] { COLOR_SCHEME_LIGHT, COLOR_SCHEME_DARK, COLOR_SCHEME_CONTRAST }
+                ColorSchemeNames = new[] { COLOR_SCHEME_LIGHT, COLOR_SCHEME_DARK, COLOR_SCHEME_CARMINE, COLOR_SCHEME_DARKMOON, COLOR_SCHEME_SOFTBLUE, COLOR_SCHEME_DARKVIOLET, COLOR_SCHEME_CONTRAST }
             },
             new KnownThemeInfo {
                 Name = THEME_WIN10,
@@ -198,7 +203,8 @@ namespace StyleCompiler
                 "timeView",
                 "scheduler",
                 "form",
-                "spa"
+                "spa",
+                "filterBuilder"
             });
 
             // Non-themeable components that have only common styles
@@ -312,6 +318,7 @@ namespace StyleCompiler
             public string LicenseInfo = "For internal use only";
             public string[] Modules;
             public string[] SupportedThemes;
+            public string[] ExcludedColorSchemes;
             public Dictionary<string, string[]> SupportedSizeSchemes;
             public bool ForceCommonsInExternalFiles = false;
             public bool UseCommonPostfix = true;

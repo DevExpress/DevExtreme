@@ -110,8 +110,16 @@ var needSkipEvent = function(e) {
 };
 
 
+var fixMethod = function(e) { return e; };
+var setEventFixMethod = function(func) {
+    fixMethod = func;
+};
+var copyEvent = function(originalEvent) {
+    return fixMethod(eventsEngine.Event(originalEvent, originalEvent), originalEvent);
+};
+
 var createEvent = function(originalEvent, args) {
-    var event = eventsEngine.copy(originalEvent);
+    var event = copyEvent(originalEvent);
 
     if(args) {
         extend(event, args);
@@ -164,5 +172,6 @@ module.exports = {
     createEvent: createEvent,
     fireEvent: fireEvent,
 
-    addNamespace: addNamespace
+    addNamespace: addNamespace,
+    setEventFixMethod: setEventFixMethod
 };

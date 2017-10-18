@@ -1340,7 +1340,7 @@ QUnit.test("Group template", function(assert) {
                     itemType: "group",
                     caption: "Bio",
                     template: function(data, container) {
-                        assert.deepEqual(typeUtils.isRenderer(container), config().useJQueryRenderer, "container is correct");
+                        assert.deepEqual(typeUtils.isRenderer(container), config().useJQuery, "container is correct");
                         $("<div>")
                             .text(data.formData.biography)
                             .addClass("template-biography")
@@ -1807,6 +1807,68 @@ QUnit.test("Align labels in column when alignItemLabelsInAllGroups is disabled",
 
     $groups = form._getGroupElementsInColumn(testContainer, 1);
     assert.notEqual(findLabelTextsInColumn($groups.eq(0), 0).eq(0).width(), findLabelTextsInColumn($groups.eq(1), 0).eq(0).width(), "compare group1 with group2");
+});
+
+QUnit.test("Align labels in columns when there are rows", function(assert) {
+    //arrange, act
+    var testContainer = $("#form"),
+        form = testContainer.dxForm({
+            formData: this.testObject,
+            colCount: 4,
+            items: [{
+                name: "fieldFirstValue",
+                colSpan: 2,
+                editorType: "dxTextBox",
+                label: {
+                    text: "Field 1"
+                }
+            },
+            {
+                name: "fieldSecondValue",
+                colSpan: 2,
+                editorType: "dxTextBox",
+                label: {
+                    text: "Field 2"
+                }
+            },
+            {
+                name: "fieldThirdValue",
+                colSpan: 2,
+                editorType: "dxTextBox",
+                label: {
+                    text: "Field three"
+                }
+            },
+            {
+                name: "fieldFourthValue",
+                colSpan: 2,
+                editorType: "dxTextBox",
+                label: {
+                    text: "Field four"
+                }
+            }
+            ]
+        }).dxForm("instance");
+
+    var $col1 = $(".dx-col-0"),
+        $col2 = $(".dx-col-2"),
+        $maxLabelWidth = getLabelWidth(testContainer, form, "Field three:"),
+        i,
+        labelWidth;
+
+    //assert
+    for(i = 0; i < 2; i++) {
+        labelWidth = $col1.eq(i).find("." + internals.FIELD_ITEM_LABEL_CONTENT_CLASS).first().width();
+
+        assert.roughEqual(labelWidth, $maxLabelWidth, 1, "col0 item " + i);
+    }
+
+    $maxLabelWidth = getLabelWidth(testContainer, form, "Field four:");
+    for(i = 0; i < 2; i++) {
+        labelWidth = $col2.eq(i).find("." + internals.FIELD_ITEM_LABEL_CONTENT_CLASS).first().width();
+
+        assert.roughEqual(labelWidth, $maxLabelWidth, 1, "col2 item " + i);
+    }
 });
 
 QUnit.test("Change option after group rendered (check for cycling template render)", function(assert) {
@@ -2379,7 +2441,7 @@ QUnit.test("tabElement argument of tabTemplate option is correct", function(asse
                     {
                         items: ["firstName"],
                         tabTemplate: function(tabData, tabIndex, tabElement) {
-                            assert.equal(typeUtils.isRenderer(tabElement), config().useJQueryRenderer, "tabElement is correct");
+                            assert.equal(typeUtils.isRenderer(tabElement), config().useJQuery, "tabElement is correct");
                         }
                     }]
             }]
@@ -2399,7 +2461,7 @@ QUnit.test("tabElement argument of tabs.template option is correct", function(as
                     {
                         items: ["firstName"],
                         template: function(tabData, tabIndex, tabElement) {
-                            assert.equal(typeUtils.isRenderer(tabElement), config().useJQueryRenderer, "tabElement is correct");
+                            assert.equal(typeUtils.isRenderer(tabElement), config().useJQuery, "tabElement is correct");
                         }
                     }]
             }]
@@ -2613,7 +2675,7 @@ QUnit.test("Check component instance onEditorEnterKey", function(assert) {
     //assert
     assert.notEqual(testArgs.component, undefined, "component");
     assert.notEqual(testArgs.element, undefined, "element");
-    assert.notEqual(testArgs.jQueryEvent, undefined, "jQueryEvent");
+    assert.notEqual(testArgs.event, undefined, "Event");
     assert.equal(testArgs.dataField, "work", "dataField");
     assert.equal(testArgs.component.NAME, "dxForm", "correct component");
 });
@@ -3063,6 +3125,62 @@ QUnit.test("Changing editorOptions of subitem change editor options (T316522)", 
 
     assert.equal(secondEditor.option("width"), 80, "Correct width");
     assert.equal(secondEditor.option("height"), 40, "Correct height");
+});
+
+QUnit.test("editorOptions correctly updates in case when only item name is defined", function(assert) {
+    //arrange
+    var form = $("#form").dxForm({
+        items: [
+            {
+                itemType: "group", items: [
+                    {
+                        itemType: "group", items: [
+                                { name: "firstName", editorType: "dxTextBox", editorOptions: { width: 100, height: 20 } },
+                                { name: "lastName", editorType: "dxTextBox", editorOptions: { width: 100, height: 20 } }
+                        ]
+                    }
+                ]
+            }
+        ]
+    }).dxForm("instance");
+
+    var invalidateSpy = sinon.spy(form, "_invalidate");
+
+    //act
+    form.option("items[0].items[0].items[1].editorOptions", { width: 80, height: 40 });
+
+    //assert
+    var secondEditor = $("#form .dx-textbox").last().dxTextBox("instance");
+
+    assert.equal(invalidateSpy.callCount, 0, "dxForm wasn't invalidated");
+    assert.equal(secondEditor.option("width"), 80, "Correct width");
+    assert.equal(secondEditor.option("height"), 40, "Correct height");
+});
+
+QUnit.test("widget invalidates in case we cannot change an editor options", function(assert) {
+    //arrange
+    var form = $("#form").dxForm({
+        items: [
+            {
+                itemType: "group", items: [
+                    {
+                        itemType: "group", items: [
+                                { editorType: "dxTextBox", editorOptions: { width: 100, height: 20 } },
+                                { editorType: "dxTextBox", editorOptions: { width: 100, height: 20 } }
+                        ]
+                    }
+                ]
+            }
+        ]
+    }).dxForm("instance");
+
+    var invalidateSpy = sinon.spy(form, "_invalidate");
+
+    //act
+    form.option("items[0].items[0].items[1].editorOptions", { width: 80, height: 40 });
+
+    //assert
+    assert.equal(invalidateSpy.callCount, 1, "dxForm invalidated");
 });
 
 QUnit.test("Reset editor's value", function(assert) {

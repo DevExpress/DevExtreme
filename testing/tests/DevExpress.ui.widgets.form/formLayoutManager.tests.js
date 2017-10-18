@@ -2149,7 +2149,7 @@ QUnit.test("onEditorEnterKey", function(assert) {
     //assert
     assert.notEqual(testArgs.component, undefined, "component");
     assert.notEqual(testArgs.element, undefined, "element");
-    assert.notEqual(testArgs.jQueryEvent, undefined, "jQueryEvent");
+    assert.notEqual(testArgs.event, undefined, "Event");
     assert.equal(testArgs.dataField, "profession", "dataField");
     assert.equal(testArgs.component.NAME, "dxLayoutManager", "correct component");
 
@@ -2160,7 +2160,7 @@ QUnit.test("onEditorEnterKey", function(assert) {
     //assert
     assert.notEqual(testArgs.component, undefined, "component");
     assert.notEqual(testArgs.element, undefined, "element");
-    assert.notEqual(testArgs.jQueryEvent, undefined, "jQueryEvent");
+    assert.notEqual(testArgs.event, undefined, "Event");
     assert.equal(testArgs.dataField, "name", "dataField");
 });
 
@@ -2551,6 +2551,24 @@ QUnit.test("Change minColWidth when colCount is auto", function(assert) {
     invalidateStub.restore();
 });
 
+QUnit.test("Clear item watchers after disposing", function(assert) {
+     //arrange
+    var $testContainer = $("#container").width(450);
+
+    $testContainer.dxLayoutManager({
+        layoutData: { test1: "abc", test2: "qwe", test3: "xyz" }
+    });
+
+    //act
+    var instance = $testContainer.dxLayoutManager("instance"),
+        cleanWatcherStub = sinon.stub(instance, "_cleanItemWatchers");
+
+    instance.$element().remove();
+    assert.equal(cleanWatcherStub.callCount, 1, "_cleanItemWatchers is fired");
+
+    cleanWatcherStub.restore();
+});
+
 QUnit.test("Render validate", function(assert) {
     //arrange, act
     var $container = $("#container");
@@ -2621,7 +2639,7 @@ QUnit.test("Render template", function(assert) {
         items: [{
             dataField: "test",
             template: function(data, container) {
-                assert.deepEqual(typeUtils.isRenderer(container), config().useJQueryRenderer, "container is correct");
+                assert.deepEqual(typeUtils.isRenderer(container), config().useJQuery, "container is correct");
 
                 $(container).append($("<span>").text("Template"));
 

@@ -159,9 +159,38 @@ QUnit.test("custom render func, returns jquery", function(assert) {
             testProp: 5
         }],
         itemTemplate: function(item, index, itemElement) {
-            assert.equal(isRenderer(itemElement), config().useJQueryRenderer, "itemElemenet is correct");
+            assert.equal(isRenderer(itemElement), config().useJQuery, "itemElemenet is correct");
             $(itemElement).append($("<span />").html("Text is: " + String(item.testProp) + ";"));
         }
+    });
+
+    assert.equal(element.find(".item").length, 3);
+    assert.equal($.trim(element.text()), "Text is: 3;Text is: 4;Text is: 5;");
+});
+
+QUnit.test("custom render func, returns dom node", function(assert) {
+    var element = this.element;
+    new TestComponent("#cmp", {
+        integrationOptions: {
+            templates: {
+                "item": {
+                    render: function(args) {
+                        var $element = $("<span>")
+                            .addClass("dx-template-wrapper")
+                            .text("Text is: " + String(args.model.testProp) + ";");
+
+                        return $element.get(0);
+                    }
+                }
+            }
+        },
+        items: [{
+            testProp: 3
+        }, {
+            testProp: 4
+        }, {
+            testProp: 5
+        }]
     });
 
     assert.equal(element.find(".item").length, 3);
@@ -636,7 +665,7 @@ QUnit.test("onItemClick should be fired when item is clicked", function(assert) 
 
     $item.trigger("dxclick");
     assert.ok(actionFired, "action fired");
-    assert.equal(isRenderer(actionData.itemElement), config().useJQueryRenderer, "correct element passed");
+    assert.equal(isRenderer(actionData.itemElement), config().useJQuery, "correct element passed");
     assert.strictEqual($(actionData.itemElement)[0], $item[0], "correct element passed");
     assert.strictEqual(actionData.itemData, "1", "correct element passed");
     assert.strictEqual(actionData.itemIndex, 1, "correct element itemIndex passed");
@@ -926,7 +955,7 @@ QUnit.test("onClick option in item", function(assert) {
     assert.equal(args.component, component, "component provided");
     assert.equal(args.itemData, item, "item data provided");
     assert.equal(args.itemIndex, 0, "item index provided");
-    assert.ok(args.jQueryEvent, "jQuery event provided");
+    assert.ok(args.event, "jQuery event provided");
     assert.ok(args.itemElement, "item element provided");
 });
 
@@ -1041,7 +1070,7 @@ QUnit.test("default page scroll should be prevented for space key", function(ass
         focusStateEnabled: true,
         items: ["0"],
         onItemClick: function(args) {
-            assert.ok(args.jQueryEvent.isDefaultPrevented(), "default scroll is prevented");
+            assert.ok(args.event.isDefaultPrevented(), "default scroll is prevented");
         }
     });
 

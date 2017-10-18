@@ -8,6 +8,7 @@
     @GRID_BASE_COMMAND_EDIT_COLUMN_WIDTH: 100px;
     @GRID_BASE_ADAPTIVE_TEXT_PADDING: 8px;
     @GRID_BASE_CHECKBOX_ICON_SIZE: 20px;
+    @GRID_BASE_TREEVIEW_SEARCH_MARGIN: 10px;
 
     .dx-@{widgetName}-checkbox-size {
         .dx-checkbox-icon {
@@ -262,9 +263,21 @@
     }
 
     .dx-@{widgetName}-column-chooser {
+        &.dx-@{widgetName}-column-chooser-mode-drag {
+            .dx-treeview-search {
+                margin-bottom: @GRID_BASE_TREEVIEW_SEARCH_MARGIN;
+            }
+        }
+
         &.dx-@{widgetName}-column-chooser-mode-select {
             .dx-popup-content {
                 padding: 10px;
+            }
+        }
+
+        &.dx-@{widgetName}-column-chooser-mode-drag {
+            .dx-popup-content {
+                padding: 20px;
             }
         }
 

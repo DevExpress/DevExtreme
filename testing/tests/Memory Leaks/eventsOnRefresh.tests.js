@@ -9,7 +9,11 @@ require("common.css!");
 
 GoogleProvider.remapConstant("http://fakeUrl");
 
-var clock = sinon.useFakeTimers();
+QUnit.module("eventsOnRefresh", {
+    beforeEach: function() {
+        this.clock = sinon.useFakeTimers();
+    }
+});
 
 $.each(DevExpress.ui, function(componentName) {
     if($.fn[componentName] && memoryLeaksHelper.componentCanBeTriviallyInstantiated(componentName)) {
@@ -19,11 +23,11 @@ $.each(DevExpress.ui, function(componentName) {
                 originalEventSubscriptions,
                 newEventSubscriptions;
 
-            clock.tick(0);
+            this.clock.tick(0);
             originalEventSubscriptions = memoryLeaksHelper.getAllEventSubscriptions();
 
             component._refresh();
-            clock.tick(0);
+            this.clock.tick(0);
             newEventSubscriptions = memoryLeaksHelper.getAllEventSubscriptions();
 
             assert.deepEqual(newEventSubscriptions, originalEventSubscriptions, "After an option changes and causes re-rendering, no additional event subscriptions must be created");

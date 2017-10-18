@@ -2,6 +2,30 @@
 
 declare module DevExpress {
 
+    /** @docid globalConfig */
+    export interface GlobalConfguration {
+        /** @docid globalConfig_rtlEnabled */
+        rtlEnabled?: boolean;
+
+        /** @docid globalConfig_defaultCurrency */
+        defaultCurrency?: String;
+
+        /** @docid globalConfig_serverDecimalSeparator */
+        serverDecimalSeparator?: String;
+
+        /** @docid globalConfig_decimalSeparator */
+        decimalSeparator?: String;
+
+        /** @docid globalConfig_thousandsSeparator */
+        thousandsSeparator?: String;
+
+        /** @docid globalConfig_forceIsoDateParsing */
+        forceIsoDateParsing?: boolean;
+
+        /** @docid globalConfig_useJQuery */
+        useJQuery?: boolean;
+    }
+
     /** @docid format */
     export interface Format {
         /** @docid format_type */
@@ -143,7 +167,7 @@ declare module DevExpress {
     export function config(): Object;
 
     /** @docid config#config(config) */
-    export function config(config: Object): void;
+    export function config(config: GlobalConfguration): void;
 
     /** @docid registerComponent#registerComponent(name,componentClass) */
     export function registerComponent(name: string, componentClass: Object): void;
@@ -285,6 +309,7 @@ declare module DevExpress {
     }
 
     export class Devices implements EventsMixin<Devices> {
+        /** @docid DevicesMethods_ctor */
         constructor(options: { window: Window });
 
         /** @docid devicesmethods_current#current(deviceName) */
@@ -367,6 +392,7 @@ declare module DevExpress {
 
     /** @docid component */
     export class Component implements EventsMixin<Component> {
+        /** @docid ComponentMethods_ctor */
         constructor(options?: ComponentOptions)
 
         /** @docid componentmethods_beginupdate#beginUpdate() */
@@ -425,6 +451,7 @@ declare module DevExpress {
 
     /** @docid domcomponent */
     export class DOMComponent extends Component {
+        /** @docid DOMComponentMethods_ctor */
         constructor(element: JQuery, options?: DOMComponentOptions);
         constructor(element: HTMLElement, options?: DOMComponentOptions);
 
@@ -439,6 +466,9 @@ declare module DevExpress {
             device?: any;
             options?: any;
         }): void;
+
+        /** @docid domcomponentmethods_getInstance */
+        static getInstance(element: JQuery): Object;
     }
 
     export module data {
@@ -529,7 +559,7 @@ declare module DevExpress {
 
             /** @docid StoreMethods_load#load() */
             load(): JQueryPromise<any[]>;
-            
+
             /** @docid StoreMethods_load#load(options) */
             load(options?: LoadOptions): JQueryPromise<any[]>;
 
@@ -709,8 +739,11 @@ declare module DevExpress {
 
         /** @docid DataSource */
         export class DataSource implements EventsMixin<DataSource> {
+            /** @docid DataSourceMethods_ctor#ctor(url) */
             constructor(url: string);
+            /** @docid DataSourceMethods_ctor#ctor(data) */
             constructor(data: Array<any>);
+            /** @docid DataSourceMethods_ctor#ctor(options) */
             constructor(options: CustomStoreOptions);
             constructor(options: DataSourceOptions);
 
@@ -1360,10 +1393,10 @@ declare module DevExpress {
         };
 
         /** @docid ui_notify#notify(message,type,displayTime) */
-        export function notify(message: any, type: string, displayTime: number): void;
+        export function notify(message: string, type?: string, displayTime?: number): void;
 
-        /** @docid ui_notify#notify(options) */
-        export function notify(options: Object): void;
+        /** @docid ui_notify#notify(options,type,displayTime) */
+        export function notify(options: Object, type?: string, displayTime?: number): void;
 
         /** @docid ui_themes */
         export var themes: {

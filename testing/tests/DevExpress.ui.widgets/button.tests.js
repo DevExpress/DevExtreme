@@ -156,7 +156,7 @@ QUnit.test("dxButton with anonymous template", function(assert) {
 QUnit.test("dxButton with template as function", function(assert) {
     $("#button").dxButton({
         template: function(data, container) {
-            assert.equal(isRenderer(container), config().useJQueryRenderer, "container is correct");
+            assert.equal(isRenderer(container), config().useJQuery, "container is correct");
             return $("<div>");
         }
     });
@@ -233,7 +233,7 @@ QUnit.test("onClick", function(assert) {
     assert.ok(clickHandler.calledOnce, "Handler should be called");
     var params = clickHandler.getCall(0).args[0];
     assert.ok(params, "Event params should be passed");
-    assert.ok(params.jQueryEvent, "jQueryEvent should be passed");
+    assert.ok(params.event, "Event should be passed");
     assert.ok(params.validationGroup, "validationGroup should be passed");
 });
 
@@ -379,7 +379,7 @@ QUnit.test("arguments on key press", function(assert) {
 
     var params = clickHandler.getCall(0).args[0];
     assert.ok(params, "Event params should be passed");
-    assert.ok(params.jQueryEvent, "jQueryEvent should be passed");
+    assert.ok(params.event, "Event should be passed");
     assert.ok(params.validationGroup, "validationGroup should be passed");
 });
 

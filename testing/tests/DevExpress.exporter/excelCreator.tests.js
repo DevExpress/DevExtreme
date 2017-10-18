@@ -50,7 +50,7 @@ QUnit.test("Date format converting when format is custom", function(assert) {
     var excelFormat = excelCreator.formatConverter.convertFormat('dd/MMM/yyyy', null, "date");
 
     //assert
-    assert.strictEqual(excelFormat, undefined, "no excel format for custom date format");
+    assert.strictEqual(excelFormat, "[$-9]dd\\/MMM\\/yyyy", "excel format for custom date format");
 });
 
 //T476869

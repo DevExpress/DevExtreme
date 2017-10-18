@@ -134,7 +134,7 @@ var FieldChooser = BaseFieldChooser.inherit({
             * @type_function_param1_field4 items:Array<Object>
             * @type_function_param1_field5 area:string
             * @type_function_param1_field6 field:PivotGridDataSourceOptions_fields
-            * @type_function_param1_field7 jQueryEvent:jQueryEvent
+            * @type_function_param1_field7 jQueryEvent:jQuery.Event
             * @extends Action
             * @action
             */
@@ -364,9 +364,9 @@ var FieldChooser = BaseFieldChooser.inherit({
         }
     },
 
-    _getContextMenuArgs: function(jQueryEvent) {
-        var targetFieldElement = $(jQueryEvent.target).closest(".dx-area-field"),
-            targetGroupElement = $(jQueryEvent.target).closest(".dx-area-fields"),
+    _getContextMenuArgs: function(dxEvent) {
+        var targetFieldElement = $(dxEvent.target).closest(".dx-area-field"),
+            targetGroupElement = $(dxEvent.target).closest(".dx-area-fields"),
             field,
             area;
 
@@ -380,7 +380,7 @@ var FieldChooser = BaseFieldChooser.inherit({
         }
 
         return {
-            jQueryEvent: jQueryEvent,
+            event: dxEvent,
             field: field,
             area: area,
             items: []
@@ -397,7 +397,7 @@ var FieldChooser = BaseFieldChooser.inherit({
 
         that._contextMenu = that._createComponent($(DIV).appendTo($container), ContextMenu, {
             onPositioning: function(actionArgs) {
-                var event = actionArgs.jQueryEvent,
+                var event = actionArgs.event,
                     args;
 
                 if(!event) {

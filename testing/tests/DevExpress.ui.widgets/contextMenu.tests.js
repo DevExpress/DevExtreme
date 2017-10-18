@@ -246,6 +246,11 @@ QUnit.test("event handlers should be bound for detached target", function(assert
     assert.ok(contextMenu.option("visible"), "context menu is shown after detached target been attached");
 });
 
+QUnit.test("not create keyboardProcessor on rendering", function(assert) {
+    var instance = new ContextMenu(this.$element, {});
+
+    assert.notOk(instance._keyboardProcessor, "keyboard processor is undefined");
+});
 
 QUnit.module("Showing and hiding context menu", moduleConfig);
 
@@ -1180,6 +1185,35 @@ QUnit.test("showEvent set only as delay", function(assert) {
     this.clock.tick(500);
     assert.ok(instance.option("visible"), "context menu was shown");
 });
+
+QUnit.test("items change should clear focused item", function(assert) {
+    var items1 = [{ text: "item 1" }, { text: "item 2" }],
+        items2 = [{ text: "item 3" }, { text: "item 4" }],
+        instance = new ContextMenu(this.$element, { items: items1, focusStateEnabled: true, visible: true });
+
+    keyboardMock(instance.itemsContainer())
+        .keyDown("down")
+        .keyDown("enter");
+
+    assert.equal(instance.option("focusedElement").length, 1, "focused element is set");
+
+    instance.option("items", items2);
+    assert.notOk(instance.option("focusedElement"), "focused element is cleaned");
+});
+
+QUnit.test("items changed should not break keyboard navigation", function(assert) {
+    if(!isDeviceDesktop(assert)) return;
+
+    var instance = new ContextMenu(this.$element, {});
+    instance.option({ visible: true, items: [{ text: "1" }, { text: "2" }] });
+
+    var overlay = instance.itemsContainer();
+    keyboardMock(overlay)
+        .keyDown("down");
+
+    assert.equal(instance.option("focusedElement").text(), "1", "focused element is correct");
+});
+
 
 QUnit.module("Public api", moduleConfig);
 

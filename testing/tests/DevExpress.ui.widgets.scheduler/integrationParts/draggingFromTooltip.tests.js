@@ -62,6 +62,26 @@ QUnit.test("Phantom appointment should be rendered after tooltip item dragStart"
     assert.ok(renderStub.calledOnce, "Item was rendered");
 });
 
+QUnit.test("Phantom appointment position should be correctled after dragStart", function(assert) {
+    this.createInstance();
+
+    var $dropDown = this.instance.$element().find(".dx-scheduler-dropdown-appointments"),
+        dropDown = $dropDown.dxDropDownMenu("instance");
+
+    dropDown.open();
+    var $ddAppointment = $(dropDown._list.$element().find(".dx-list-item").eq(0));
+
+    var pointer = pointerMock($ddAppointment).start().dragStart(),
+        $phantomAppointment = this.instance.$element().find(".dx-scheduler-appointment").eq(0),
+        phantomPosition = translator.locate($phantomAppointment),
+        menuPosition = translator.locate($dropDown);
+
+    assert.roughEqual(phantomPosition.left, menuPosition.left, 1.5, "Phantom left is OK");
+
+    pointer.dragEnd();
+});
+
+
 QUnit.test("Phantom appointment should have correct appointmentData", function(assert) {
     this.createInstance();
 

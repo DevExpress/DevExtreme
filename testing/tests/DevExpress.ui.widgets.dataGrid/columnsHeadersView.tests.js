@@ -1471,7 +1471,7 @@ QUnit.test('Custom function headerCellTemplate for column', function(assert) {
         { caption: 'Column 2' },
         {
             caption: 'Column 3', headerCellTemplate: function(container, options) {
-                container.text('Test');
+                $(container).text('Test');
                 headerCellTemplateOptions = options;
             }
         }
@@ -1616,7 +1616,7 @@ QUnit.test("onCellPrepared - header with sorting and headerFilter", function(ass
         resultOptions = options;
 
         //assert
-        assert.equal(typeUtils.isRenderer(options.cellElement), config().useJQueryRenderer, "has header filter");
+        assert.equal(typeUtils.isRenderer(options.cellElement), config().useJQuery, "has header filter");
         assert.ok($(options.cellElement).find(".dx-header-filter").length, "has header filter");
         assert.ok($(options.cellElement).find(".dx-sort-up").length, "has sort");
     };

@@ -315,18 +315,21 @@ devices.changed.add(function() {
 /**
  * @name ui_themes
  * @publicName themes
+ * @namespace DevExpress.ui
  * @module ui/themes
  * @export default
  */
 /**
  * @name ui_themesmethods_current
  * @publicName current()
+ * @static
  * @return string
  */
 /**
  * @name ui_themesmethods_current
  * @publicName current(themeName)
  * @param1 themeName:string
+ * @static
  */
 exports.current = current;
 

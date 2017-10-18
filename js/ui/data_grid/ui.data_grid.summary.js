@@ -24,8 +24,9 @@ var DATAGRID_TOTAL_FOOTER_CLASS = "dx-datagrid-total-footer",
 
     DATAGRID_GROUP_FOOTER_ROW_TYPE = "groupFooter";
 
-var renderSummaryCell = function($cell, options) {
+var renderSummaryCell = function(cell, options) {
         var i,
+            $cell = $(cell),
             column = options.column,
             summaryItems = options.summaryItems,
             summaryItem,
@@ -104,7 +105,8 @@ exports.FooterView = columnsView.ColumnsView.inherit((function() {
         },
 
         _handleDataChanged: function(e) {
-            if(e.changeType === "refresh") {
+            var changeType = e.changeType;
+            if(changeType === "refresh" || changeType === "append" || changeType === "prepend") {
                 this.render();
             }
         },

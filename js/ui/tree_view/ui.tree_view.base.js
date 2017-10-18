@@ -239,7 +239,7 @@ var TreeViewBase = HierarchicalCollectionWidget.inherit({
             * @type_function_param1_field4 itemData:object
             * @type_function_param1_field5 itemElement:Element
             * @type_function_param1_field6 itemIndex:Number
-            * @type_function_param1_field7 jQueryEvent:jQueryEvent
+            * @type_function_param1_field7 jQueryEvent:jQuery.Event
             * @type_function_param1_field8 node:dxtreeviewnode
             * @action
             */
@@ -252,7 +252,7 @@ var TreeViewBase = HierarchicalCollectionWidget.inherit({
             * @type_function_param1_field4 itemData:object
             * @type_function_param1_field5 itemElement:Element
             * @type_function_param1_field6 itemIndex:Number
-            * @type_function_param1_field7 jQueryEvent:jQueryEvent
+            * @type_function_param1_field7 jQueryEvent:jQuery.Event
             * @type_function_param1_field8 node:dxtreeviewnode
             * @action
             */
@@ -1200,10 +1200,10 @@ var TreeViewBase = HierarchicalCollectionWidget.inherit({
         }
 
         if(typeUtils.isDefined(e)) {
-            this._itemJQueryEventHandler(e, optionName, { node: this._dataAdapter.getPublicNode(node) });
+            this._itemDXEventHandler(e, optionName, { node: this._dataAdapter.getPublicNode(node) });
         } else {
             target = this._getNodeElement(node);
-            this._itemEventHandler(target, optionName, { jQueryEvent: e, node: this._dataAdapter.getPublicNode(node) });
+            this._itemEventHandler(target, optionName, { event: e, node: this._dataAdapter.getPublicNode(node) });
         }
     },
 
@@ -1224,7 +1224,7 @@ var TreeViewBase = HierarchicalCollectionWidget.inherit({
     },
 
     _renderContent: function() {
-        this._renderEmptyMessage();
+        this._renderEmptyMessage(this._dataAdapter.getRootNodes());
 
         var items = this.option("items");
         if(items && items.length) {
@@ -1310,7 +1310,7 @@ var TreeViewBase = HierarchicalCollectionWidget.inherit({
             return;
         }
 
-        this._updateItemSelection(value, item, e.jQueryEvent);
+        this._updateItemSelection(value, item, e.event);
     },
 
     _isSingleSelection: function() {
@@ -1321,7 +1321,7 @@ var TreeViewBase = HierarchicalCollectionWidget.inherit({
         return this.option("selectNodesRecursive") && this.option("selectionMode") !== "single";
     },
 
-    _updateItemSelection: function(value, itemElement, jQueryEvent) {
+    _updateItemSelection: function(value, itemElement, dxEvent) {
         var node = this._getNode(itemElement);
 
         if(!node || node.internalFields.selected === value) {
@@ -1335,8 +1335,8 @@ var TreeViewBase = HierarchicalCollectionWidget.inherit({
         this._dataAdapter.toggleSelection(node.internalFields.key, value);
         this._updateItemsUI();
 
-        var initiator = jQueryEvent || this._findItemElementByItem(node.internalFields.item),
-            handler = jQueryEvent ? this._itemJQueryEventHandler : this._itemEventHandler;
+        var initiator = dxEvent || this._findItemElementByItem(node.internalFields.item),
+            handler = dxEvent ? this._itemDXEventHandler : this._itemEventHandler;
 
         handler.call(this, initiator, "onItemSelectionChanged", {
             node: this._dataAdapter.getPublicNode(node),
@@ -1413,7 +1413,7 @@ var TreeViewBase = HierarchicalCollectionWidget.inherit({
     _createEventHandler: function(eventName, e) {
         var node = this._getNodeByElement(e.currentTarget);
 
-        this._itemJQueryEventHandler(e, eventName, { node: this._dataAdapter.getPublicNode(node) });
+        this._itemDXEventHandler(e, eventName, { node: this._dataAdapter.getPublicNode(node) });
     },
 
     _itemClass: function() {
@@ -1446,7 +1446,7 @@ var TreeViewBase = HierarchicalCollectionWidget.inherit({
         var itemData = this._getItemData($item),
             node = this._getNodeByElement($item);
 
-        this._itemJQueryEventHandler(e, "onItemClick", { node: this._dataAdapter.getPublicNode(node) });
+        this._itemDXEventHandler(e, "onItemClick", { node: this._dataAdapter.getPublicNode(node) });
 
         if(this.option("selectByClick")) {
             this._updateItemSelection(!node.internalFields.selected, itemData, e);

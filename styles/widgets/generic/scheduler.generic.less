@@ -8,12 +8,14 @@
     @GENERIC_SCHEDULER_NAVIGATION_BUTTONS_PADDING: 6px;
 
     @GENERIC_SCHEDULER_APPOINTMENT_MONTH_TEXT_SIZE: 13px;
-    @GENERIC_SCHEDULER_WORKSPACE_INFO_TEXT_SIZE: 20px;
+    @GENERIC_SCHEDULER_WORKSPACE_INFO_TEXT_SIZE: 16px;
     @GENERIC_SCHEDULER_ALL_DAY_TITLE_FONT_SIZE: 14px;
 
     @GENERIC_SCHEDULER_AGENDA_APPOINTMENT_FONT_SIZE: 16px;
     @GENERIC_SCHEDULER_GROUP_HEADER_AGENDA_FONT_SIZE: 18px;
     @GENERIC_SCHEDULER_GROUP_HEADER_TABLE_CELL_WIDTH: 80px;
+    @GENERIC_SCHEDULER_APPOINTMENT_TRANSPARENT_LEFT_BORDER: 3px solid transparent;
+    @GENERIC_SCHEDULER_APPOINTMENT_TRANSPARENT_RIGHT_BORDER: 2px solid transparent;
 }
 
 .dx-size-compact() {
@@ -26,12 +28,14 @@
     @GENERIC_SCHEDULER_NAVIGATION_BUTTONS_PADDING: 4px;
 
     @GENERIC_SCHEDULER_APPOINTMENT_MONTH_TEXT_SIZE: 11px;
-    @GENERIC_SCHEDULER_WORKSPACE_INFO_TEXT_SIZE: 16px;
+    @GENERIC_SCHEDULER_WORKSPACE_INFO_TEXT_SIZE: 14px;
     @GENERIC_SCHEDULER_ALL_DAY_TITLE_FONT_SIZE: 11px;
 
     @GENERIC_SCHEDULER_AGENDA_APPOINTMENT_FONT_SIZE: 14px;
     @GENERIC_SCHEDULER_GROUP_HEADER_AGENDA_FONT_SIZE: 14px;
     @GENERIC_SCHEDULER_GROUP_HEADER_TABLE_CELL_WIDTH: 60px;
+    @GENERIC_SCHEDULER_APPOINTMENT_TRANSPARENT_LEFT_BORDER: 2px solid transparent;
+    @GENERIC_SCHEDULER_APPOINTMENT_TRANSPARENT_RIGHT_BORDER: 1px solid transparent;
 }
 
 @GENERIC_SCHEDULER_ALL_DAY_TABLE_CELL_HEIGHT: @GENERIC_SCHEDULER_WORKSPACE_DATE_TABLE_CELL_HEIGHT * 1.5;
@@ -441,7 +445,8 @@
 .dx-scheduler-work-space-grouped.dx-scheduler-work-space-work-week .dx-scheduler-date-table-cell:nth-child(5n+5),
 .dx-scheduler-work-space-grouped.dx-scheduler-work-space-work-week .dx-scheduler-all-day-table-cell:nth-child(5n+5),
 .dx-scheduler-work-space-grouped.dx-scheduler-work-space-work-week th:nth-child(5n+5),
-.dx-scheduler-work-space-grouped:not(.dx-scheduler-agenda) .dx-scheduler-group-row th {
+.dx-scheduler-work-space-grouped:not(.dx-scheduler-agenda) .dx-scheduler-group-row th,
+.dx-scheduler-last-group-cell {
     border-right: 1px solid @scheduler-group-separator-border-color;
 
         &:last-child {
@@ -459,6 +464,9 @@
 }
 
 .dx-scheduler-appointment {
+    border-left: @GENERIC_SCHEDULER_APPOINTMENT_TRANSPARENT_LEFT_BORDER;
+    border-right: @GENERIC_SCHEDULER_APPOINTMENT_TRANSPARENT_RIGHT_BORDER;
+
     &.dx-state-focused {
         color: @scheduler-appointment-focus-color;
     }

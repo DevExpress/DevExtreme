@@ -155,7 +155,7 @@ QUnit.test("content template should work", function(assert) {
         contentTemplate: function(e, contentElement) {
             assert.strictEqual(e.component.NAME, "dxDropDownBox", "component is correct");
             assert.equal(e.value, 1, "value is correct");
-            assert.equal(isRenderer(contentElement), config().useJQueryRenderer, "contentElement is correct");
+            assert.equal(isRenderer(contentElement), config().useJQuery, "contentElement is correct");
 
             return "Test content";
         },
@@ -172,7 +172,7 @@ QUnit.test("field template should work", function(assert) {
         items: this.simpleItems,
         opened: true,
         fieldTemplate: function(value, fieldElement) {
-            assert.equal(isRenderer(fieldElement), config().useJQueryRenderer, "fieldElement is correct");
+            assert.equal(isRenderer(fieldElement), config().useJQuery, "fieldElement is correct");
             return $("<div>").dxTextBox({ value: 1 });
         },
         valueExpr: "id",
@@ -268,6 +268,31 @@ QUnit.test("text option should follow the displayValue option", function(assert)
     assert.equal(instance.option("text"), "test", "text option has been changed");
 });
 
+QUnit.test("displayValue option should be correct after value option changed, acceptCustomValue = true", function(assert) {
+    var instance = new DropDownBox(this.$element,
+        {
+            acceptCustomValue: true,
+            dataSource: ["1", "2", "3"],
+            value: "1"
+        }
+    );
+    instance.option("value", "12");
+
+    assert.equal(instance.option("displayValue"), "12", "displayValue option has been changed");
+});
+
+QUnit.test("displayValue option should be correct after value option changed, acceptCustomValue = true, initial value = null", function(assert) {
+    var instance = new DropDownBox(this.$element,
+        {
+            acceptCustomValue: true,
+            dataSource: ["1", "2", "3"],
+            value: null
+        }
+    );
+    instance.option("value", "12");
+
+    assert.equal(instance.option("displayValue"), "12", "displayValue option has been changed");
+});
 
 QUnit.module("popup options", moduleConfig);
 

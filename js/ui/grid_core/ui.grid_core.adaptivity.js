@@ -470,8 +470,9 @@ var AdaptiveColumnsController = modules.ViewController.inherit({
         }
     },
 
-    createFormByHiddenColumns: function($container, options) {
+    createFormByHiddenColumns: function(container, options) {
         var that = this,
+            $container = $(container),
             userFormOptions = {
                 items: that._getFormItemsByHiddenColumns(that._hiddenColumns),
                 formID: "dx-" + new Guid()
@@ -667,12 +668,12 @@ module.exports = {
                             eventsEngine.on($adaptiveColumnButton, eventUtils.addNamespace(clickEvent.name, ADAPTIVE_NAMESPACE), that.createAction(function() {
                                 that._adaptiveColumnsController.toggleExpandAdaptiveDetailRow(options.key);
                             }));
-                            $adaptiveColumnButton.appendTo(container);
+                            $adaptiveColumnButton.appendTo($(container));
                         };
                     }
                     if(options.rowType === ADAPTIVE_ROW_TYPE && column.command === "detail") {
                         return function(container, options) {
-                            that._adaptiveColumnsController.createFormByHiddenColumns(container, options);
+                            that._adaptiveColumnsController.createFormByHiddenColumns($(container), options);
                         };
                     }
                     return that.callBase(options);
@@ -762,6 +763,10 @@ module.exports = {
                 }
             },
             editing: {
+                _isRowEditMode: function() {
+                    return this.getEditMode() === EDIT_MODE_ROW;
+                },
+
                 _getFormEditItemTemplate: function(cellOptions, column) {
                     if(this.getEditMode() !== EDIT_MODE_ROW && cellOptions.rowType === "detailAdaptive") {
                         cellOptions.columnIndex = this._columnsController.getVisibleIndex(column.index);
@@ -812,7 +817,7 @@ module.exports = {
                 },
 
                 _collapseAdaptiveDetailRow: function() {
-                    if(this.getEditMode() === EDIT_MODE_ROW && this._isForceRowAdaptiveExpand) {
+                    if(this._isRowEditMode() && this._isForceRowAdaptiveExpand) {
                         this._adaptiveController.collapseAdaptiveDetailRow();
                         this._isForceRowAdaptiveExpand = false;
                     }
@@ -826,7 +831,8 @@ module.exports = {
 
                 _afterSaveEditData: function() {
                     this.callBase();
-                    if(this.getController("validating").validate(true)) {
+                    if(this._isRowEditMode() && this._adaptiveController.hasHiddenColumns()
+                        && this.getController("validating").validate(true)) {
                         this._cancelEditAdaptiveDetailRow();
                     }
                 },

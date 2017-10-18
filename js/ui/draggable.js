@@ -95,7 +95,7 @@ var Draggable = DOMComponent.inherit({
 
         this._move(position);
 
-        this._getAction("onDrag")({ jQueryEvent: e });
+        this._getAction("onDrag")({ event: e });
     },
 
     _dragStartHandler: function(e) {
@@ -127,7 +127,7 @@ var Draggable = DOMComponent.inherit({
         e.maxTopOffset = startOffset.top - boundOffset.top;
         e.maxBottomOffset = areaHeight - startOffset.top - elementHeight - boundOffset.bottom;
 
-        this._getAction("onDragStart")({ jQueryEvent: e });
+        this._getAction("onDragStart")({ event: e });
     },
 
     _getAreaOffset: function($area) {
@@ -166,13 +166,13 @@ var Draggable = DOMComponent.inherit({
             top: startPosition.top + offset.y
         });
 
-        this._getAction("onDrag")({ jQueryEvent: e });
+        this._getAction("onDrag")({ event: e });
     },
 
     _dragEndHandler: function(e) {
         this._toggleDraggingClass(false);
 
-        this._getAction("onDragEnd")({ jQueryEvent: e });
+        this._getAction("onDragEnd")({ event: e });
     },
 
     _getAction: function(name) {

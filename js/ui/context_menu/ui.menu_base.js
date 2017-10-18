@@ -342,6 +342,12 @@ var MenuBase = HierarchicalCollectionWidget.inherit({
         return this._itemContainer();
     },
 
+    _clean: function() {
+        this.option("focusedElement", null);
+
+        this.callBase();
+    },
+
     _supportedKeys: function() {
         var selectItem = function() {
             var $item = $(this.option("focusedElement"));
@@ -452,7 +458,7 @@ var MenuBase = HierarchicalCollectionWidget.inherit({
 
         var config = {
             element: $element,
-            jQueryEvent: e
+            event: e
         };
 
         if(value) {
@@ -681,7 +687,7 @@ var MenuBase = HierarchicalCollectionWidget.inherit({
     _itemClickHandler: function(e) {
         if(e._skipHandling) return;
         var itemClickActionHandler = this._createAction(this._updateSubmenuVisibilityOnClick.bind(this));
-        this._itemJQueryEventHandler(e, "onItemClick", {}, { afterExecute: itemClickActionHandler.bind(this) });
+        this._itemDXEventHandler(e, "onItemClick", {}, { afterExecute: itemClickActionHandler.bind(this) });
         e._skipHandling = true;
     },
 

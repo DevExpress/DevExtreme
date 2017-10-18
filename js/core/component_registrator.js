@@ -11,6 +11,7 @@ var publicComponentUtils = require("./utils/public_component");
  * @param1 name:string
  * @param2 componentClass:object
  * @module core/component_registrator
+ * @namespace DevExpress
  * @hidden
  */
 /**
@@ -20,6 +21,7 @@ var publicComponentUtils = require("./utils/public_component");
  * @param2 namespace:object
  * @param3 componentClass:object
  * @module core/component_registrator
+ * @namespace DevExpress
  * @hidden
  */
 var registerComponent = function(name, namespace, componentClass) {

@@ -47,7 +47,8 @@ var DateBoxStrategy = Class.inherit({
     },
 
     getParsedText: function(text, format) {
-        return dateLocalization.parse(text, format);
+        var value = dateLocalization.parse(text, format);
+        return value ? value : dateLocalization.parse(text);
     },
 
     renderInputMinMax: noop,

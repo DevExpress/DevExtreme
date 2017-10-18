@@ -615,7 +615,7 @@ QUnit.test("Highlight searchText with rowTemplate", function(assert) {
     this.options.rowTemplate = function(container, options) {
         var data = options.data;
 
-        container.append("<tr class='dx-row'><td>" + data.name + "</td><td>" + data.id + "</td></tr>");
+        $(container).append("<tr class='dx-row'><td>" + data.name + "</td><td>" + data.id + "</td></tr>");
     };
 
     //act
@@ -644,7 +644,7 @@ QUnit.test("Highlight searchText with rowTemplate not replace tagName", function
     this.options.rowTemplate = function(container, options) {
         var data = options.data;
 
-        container.append("<tr class='dx-row'><td>" + data.name + "</td><td>" + data.id + "</td><td>" + data.date + "</td></tr>");
+        $(container).append("<tr class='dx-row'><td>" + data.name + "</td><td>" + data.id + "</td><td>" + data.date + "</td></tr>");
     };
 
     //act
@@ -672,7 +672,7 @@ QUnit.test("Highlight searchText with rowTemplate not replace class", function(a
     this.options.rowTemplate = function(container, options) {
         var data = options.data;
 
-        container.append("<tr class='dx-row dx-test'><td>" + data.name + "</td><td>" + data.id + "</td></tr>");
+        $(container).append("<tr class='dx-row dx-test'><td>" + data.name + "</td><td>" + data.id + "</td></tr>");
     };
 
     //act
@@ -1227,12 +1227,13 @@ QUnit.test('Custom function template for column', function(assert) {
         dataController = new MockDataController({ items: rows }),
         rowsView = this.createRowsView(rows, dataController, [{
             cellTemplate: function(container, options) {
+                var $container = $(container);
                 $('<div class="customTemplate" />')
                     .css('background-color', options.value ? 'red' : 'blue')
-                    .appendTo(container);
+                    .appendTo($container);
 
                 //T234340
-                assert.ok(!!container.closest(document).length, "cell is attached to dom");
+                assert.ok(!!$container.closest(document).length, "cell is attached to dom");
             }
         }]),
         testElement = $('#container'),
@@ -1479,7 +1480,7 @@ QUnit.test('Custom extern row template', function(assert) {
         testElement = $('#container');
 
     this.options.rowTemplate = function(container, options) {
-        container.append('<tr' + (options.isSelected ? ' class="dx-selection"' : '') + '><td>Custom Template - ' + options.values[0] + '</td></tr>');
+        $(container).append('<tr' + (options.isSelected ? ' class="dx-selection"' : '') + '><td>Custom Template - ' + options.values[0] + '</td></tr>');
     };
 
     //act
@@ -1796,7 +1797,7 @@ QUnit.test('onRowClick event handling', function(assert) {
     rows.eq(1).trigger("dxclick");
 
     //assert
-    assert.equal(typeUtils.isRenderer(rowClickArgs.rowElement), config().useJQueryRenderer, "row element");
+    assert.equal(typeUtils.isRenderer(rowClickArgs.rowElement), config().useJQuery, "row element");
     assert.deepEqual($(rowClickArgs.rowElement)[0], rows[1], "row element");
     assert.deepEqual(rowClickArgs.data, { name: 'test2', id: 2, date: new Date(2002, 1, 2) });
     assert.equal(rowClickArgs.columns.length, 3, "count columns");
@@ -1804,7 +1805,7 @@ QUnit.test('onRowClick event handling', function(assert) {
     assert.equal(rowClickArgs.rowIndex, 1, "rowIndex");
     assert.strictEqual(rowClickArgs.rowType, "data", "rowType");
     assert.deepEqual(rowClickArgs.values, ["test2", 2, "2/02/2002"], "values");
-    assert.strictEqual(rowClickArgs.jQueryEvent.type, "dxclick", "jQueryEvent type");
+    assert.strictEqual(rowClickArgs.event.type, "dxclick", "Event type");
 });
 
 QUnit.test('onCellClick event handling', function(assert) {
@@ -1826,10 +1827,10 @@ QUnit.test('onCellClick event handling', function(assert) {
     cells.eq(0).trigger("dxclick");
 
     //assert
-    assert.equal(typeUtils.isRenderer(cellClickArgs.cellElement), config().useJQueryRenderer, "cellElement is correct");
+    assert.equal(typeUtils.isRenderer(cellClickArgs.cellElement), config().useJQuery, "cellElement is correct");
     assert.deepEqual($(cellClickArgs.cellElement)[0], cells[0], 'Container');
-    assert.ok(cellClickArgs.jQueryEvent, 'jQueryEvent');
-    assert.deepEqual(cellClickArgs.jQueryEvent.target, cells[0], 'jQueryEvent.target');
+    assert.ok(cellClickArgs.event, 'event');
+    assert.deepEqual(cellClickArgs.event.target, cells[0], 'event.target');
     assert.strictEqual(cellClickArgs.value, 'test1', 'value');
     assert.strictEqual(cellClickArgs.text, 'test1', 'text');
     assert.strictEqual(cellClickArgs.isEditing, false, 'isEditing');
@@ -2389,6 +2390,7 @@ QUnit.test('Group template', function(assert) {
             command: 'expand',
             groupIndex: 0, caption: 'column 1', allowCollapsing: true,
             groupCellTemplate: function(container, options) {
+                assert.equal(typeUtils.isRenderer(container), config().useJQuery, "rowElement is correct");
                 $('<div />')
                     .text(options.column.caption + " - " + options.text + ' (Count - ' + options.data.items.length + ')')
                     .appendTo(container);
@@ -2613,8 +2615,8 @@ QUnit.test('Show master detail', function(assert) {
 
     this.options.masterDetail = {
         enabled: true,
-        template: function($container, options) {
-            $container.text(options.data.detailInfo);
+        template: function(container, options) {
+            $(container).text(options.data.detailInfo);
         }
     };
 
@@ -2693,8 +2695,8 @@ QUnit.test('_getRowElements return right set of elements when using masterDetail
 
     this.options.masterDetail = {
         enabled: true,
-        template: function($container, options) {
-            $container.dxDataGrid({
+        template: function(container, options) {
+            $(container).dxDataGrid({
                 loadingTimeout: 0,
                 columns: ['name'],
                 dataSource: [{ name: 'test1' }, { name: 'test2' }]
@@ -2725,8 +2727,8 @@ QUnit.test('Show grouped columns and master detail', function(assert) {
 
     this.options.masterDetail = {
         enabled: true,
-        template: function($container, options) {
-            $container.text(options.data.detailInfo);
+        template: function(container, options) {
+            $(container).text(options.data.detailInfo);
         }
     };
 
@@ -2775,8 +2777,8 @@ QUnit.test('Show grouped columns and master detail', function(assert) {
     };
     this.options.masterDetail = {
         enabled: true,
-        template: function($container, options) {
-            $container.text(options.data.detailInfo);
+        template: function(container, options) {
+            $(container).text(options.data.detailInfo);
         }
     };
 
@@ -2894,8 +2896,8 @@ QUnit.test('Show master detail with native checkbox', function(assert) {
 
     this.options.masterDetail = {
         enabled: true,
-        template: function($container, options) {
-            $container.html('<div><input class="native-checkbox" type="checkbox" /></div>');
+        template: function(container, options) {
+            $(container).html('<div><input class="native-checkbox" type="checkbox" /></div>');
         }
     };
 
@@ -2909,7 +2911,7 @@ QUnit.test('Show master detail with native checkbox', function(assert) {
 
     //assert
     assert.ok(rowClickArgs, 'onRowClick called');
-    assert.equal(rowClickArgs.jQueryEvent.isDefaultPrevented(), false, 'Default is not prevented');
+    assert.equal(rowClickArgs.event.isDefaultPrevented(), false, 'Default is not prevented');
 });
 
 QUnit.test("Show rowlines for master detail", function(assert) {
@@ -3380,7 +3382,7 @@ QUnit.test("Rows with option onRowPrepared", function(assert) {
     //assert
     assert.equal(this.dataGrid.__actionConfigs.onRowPrepared.category, "rendering", "onRowPrepared category");
     assert.equal(countCallRowPrepared, 3, "countCallRowPrepared");
-    assert.equal(typeUtils.isRenderer(resultOptions.rowElement), config().useJQueryRenderer, "correct row element");
+    assert.equal(typeUtils.isRenderer(resultOptions.rowElement), config().useJQuery, "correct row element");
     assert.ok(dataUtils.data($(resultOptions.rowElement).get(0), "options"), "has row options");
     assert.equal(resultOptions.columns.length, 3, "count columns");
     assert.equal(resultOptions.rowIndex, 1, "rowIndex");
@@ -3846,7 +3848,7 @@ QUnit.test("Render free space row with rowTemplate", function(assert) {
 
     this.options.rowTemplate = function(container, options) {
         var data = options.data;
-        container.append("<tbody><tr class='dx-row'><td>" + data.name + "</td><td>" + data.id + "</td></tr></tbody>");
+        $(container).append("<tbody><tr class='dx-row'><td>" + data.name + "</td><td>" + data.id + "</td></tr></tbody>");
     };
 
     //act
@@ -3880,6 +3882,21 @@ QUnit.test("Calculate widths when there is only group rows", function(assert) {
     //assert
     $tableElement = $testElement.find("table");
     assert.deepEqual(rowsView.getColumnWidths(), [30, 100, 100], "calculate widths");
+});
+
+QUnit.test("GetRowsElements method is called once when opacity is applied to rows", function(assert) {
+    //arrange
+    var rowsView = this.createRowsView(this.items);
+
+    rowsView.render($("#container"));
+
+    sinon.spy(rowsView, "_getRowElements");
+
+    //act
+    rowsView.setRowsOpacity(0, 0.01);
+
+    //assert
+    assert.ok(rowsView._getRowElements.calledOnce, "GetRowsElements method should called once");
 });
 
 QUnit.module('Rows view with real dataController and columnController', {
@@ -3947,9 +3964,9 @@ QUnit.test("onCellHoverChanged event handling", function(assert) {
 
     //assert
     assert.deepEqual($(onCellHoverChanged.cellElement)[0], cells[0], "Container");
-    assert.ok(onCellHoverChanged.jQueryEvent, "jQueryEvent");
+    assert.ok(onCellHoverChanged.event, "Event");
     assert.strictEqual(onCellHoverChanged.eventType, "mouseover", "eventType");
-    assert.deepEqual(onCellHoverChanged.jQueryEvent.target, cells[0], "jQueryEvent.target");
+    assert.deepEqual(onCellHoverChanged.event.target, cells[0], "Event.target");
     assert.strictEqual(onCellHoverChanged.key, "Alex", "key");
     assert.deepEqual(onCellHoverChanged.data, { "age": 15, "name": "Alex" }, "data");
     assert.deepEqual(onCellHoverChanged.column, this.columnsController.getVisibleColumns()[0], "column");
@@ -5576,7 +5593,7 @@ QUnit.test('Render rows at end when virtual scrolling enabled and rowTemplate is
                 "</tr>" +
             "</tbody>";
 
-        container.append(markup);
+        $(container).append(markup);
     };
 
     rowsView.render(testElement);

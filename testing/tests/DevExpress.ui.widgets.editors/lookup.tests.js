@@ -2028,7 +2028,7 @@ QUnit.test("Placeholder should be rendered if fieldTemplate defined with 'input'
 
     var $element = $("#lookupWithFieldTemplate").dxLookup({
         fieldTemplate: function(data, element) {
-            assert.equal(isRenderer(element), config().useJQueryRenderer, "element is correct");
+            assert.equal(isRenderer(element), config().useJQuery, "element is correct");
 
             $(element).append($("<div>").dxTextBox({}));
         },
@@ -2172,7 +2172,7 @@ QUnit.test("custom titleTemplate option", function(assert) {
 QUnit.test("custom titleTemplate option is set correctly on init", function(assert) {
     var $lookup = $("#lookupOptions").dxLookup({
             titleTemplate: function(titleElement) {
-                assert.equal(isRenderer(titleElement), config().useJQueryRenderer, "titleElement is correct");
+                assert.equal(isRenderer(titleElement), config().useJQuery, "titleElement is correct");
                 var result = "<div class='test-title-renderer'>";
                 result += "<h1>Title</h1>";
                 result += "</div>";
@@ -2394,7 +2394,7 @@ QUnit.test("group options bouncing", function(assert) {
     assert.equal($.trim($title.text()), "testGroupTemplate", "title text is correct");
 
     instance.option("groupTemplate", function(itemData, itemIndex, itemElement) {
-        assert.equal(isRenderer(itemElement), config().useJQueryRenderer, "itemElement is correct");
+        assert.equal(isRenderer(itemElement), config().useJQuery, "itemElement is correct");
         return "test";
     });
 

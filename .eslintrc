@@ -123,6 +123,7 @@
                     webkit,
                     webpack,
                     xmla,       // XML for Analysis
+                    ldml,       // LOCALE DATA MARKUP LANGUAGE
 
                     accessor,
                     accessors,

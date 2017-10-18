@@ -2461,7 +2461,7 @@ QUnit.test("Key down event - default key handler is canceled", function(assert) 
     //assert
     assert.deepEqual(keyDownInfo, {
         handled: true,
-        jQueryEvent: {
+        event: {
             isDefaultPrevented: commonUtils.noop,
             stopPropagation: commonUtils.noop
         }
@@ -2499,7 +2499,7 @@ QUnit.test("Key down event", function(assert) {
     //assert
     assert.deepEqual(keyDownInfo, {
         handled: false,
-        jQueryEvent: {
+        event: {
             isDefaultPrevented: commonUtils.noop,
             stopPropagation: commonUtils.noop
         }
@@ -2529,7 +2529,7 @@ QUnit.test("Get a valid index of cell on tab key_T259896", function(assert) {
             allowEditing: true,
             editCellTemplate: function(container, options) {
                 var table = $('<table><tr><td><div class="txt"></div></td><td><div class="btn"></div></td></tr></table>');
-                table.appendTo(container);
+                table.appendTo($(container));
             }
         },
         {
@@ -2705,11 +2705,13 @@ if(device.deviceType === "desktop") {
         keyboardMock($container.find("input").eq(1)).keyDown("enter");
 
         //act
-        $($input).trigger('change');
+        var event = $.Event('change');
+        $($input).trigger(event);
 
         this.clock.tick();
 
         //assert
+        assert.strictEqual(event.isDefaultPrevented(), false, "default is not prevented");
         assert.ok(isStoreUpdated);
         assert.equal(this.editingController._editRowIndex, -1, "row is editing");
         assert.ok(!this.keyboardNavigationController._isEditing);

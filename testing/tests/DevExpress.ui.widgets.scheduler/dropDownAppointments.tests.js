@@ -102,6 +102,17 @@ QUnit.test("DropDown menu should be rendered on dxclick", function(assert) {
     assert.ok(menu.option("opened"), "Menu is opened");
 });
 
+QUnit.test("DropDown menu should have correct popup size", function(assert) {
+    var $dropDownMenu = this.renderDropDownAppointmentsContainer(),
+        menu;
+
+    $($dropDownMenu).trigger("dxclick");
+    menu = $dropDownMenu.dxDropDownMenu("instance");
+
+    assert.equal(menu.option("popupHeight"), "auto", "Popup has correct height");
+    assert.equal(menu.option("popupMaxHeight"), 200, "Popup has correct maxHeight");
+});
+
 QUnit.test("DropDown menu should have a correct button template", function(assert) {
     var $dropDownMenu = this.renderDropDownAppointmentsContainer(),
         menu,
@@ -155,7 +166,7 @@ QUnit.test("DropDown appointments should have a left border", function(assert) {
     var $dropDownAppointment = $(".dx-dropdownmenu-list .dx-scheduler-dropdown-appointment").first(),
         borderWidth = parseInt($dropDownAppointment.css("border-left-width"), 10);
 
-    assert.equal(borderWidth, 3, "Border is OK");
+    assert.equal(borderWidth, 5, "Border is OK");
 });
 
 QUnit.test("DropDown appointments should have a right border in rtl mode", function(assert) {

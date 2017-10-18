@@ -122,7 +122,7 @@ var GroupingDataSourceAdapterExtender = (function() {
                 }
             }
         },
-        _customizeRemoteOperations: function(options) {
+        _customizeRemoteOperations: function(options, isReload, operationTypes) {
             var remoteOperations = options.remoteOperations;
 
             if(options.storeLoadOptions.group) {
@@ -135,7 +135,10 @@ var GroupingDataSourceAdapterExtender = (function() {
                 if(!remoteOperations.grouping && (!remoteOperations.sorting || !remoteOperations.filtering || options.isCustomLoading || this._hasGroupLevelsExpandState(options.storeLoadOptions.group, false))) {
                     remoteOperations.paging = false;
                 }
+            } else if(!options.isCustomLoading && remoteOperations.paging && operationTypes.grouping) {
+                this.resetCache();
             }
+
             this.callBase.apply(this, arguments);
         },
         _handleDataLoading: function(options) {
@@ -565,8 +568,8 @@ var GroupingRowsViewExtender = (function() {
             var that = this,
                 expandMode = that.option("grouping.expandMode"),
                 scrollingMode = that.option("scrolling.mode"),
-                isGroupRowStateChanged = scrollingMode !== "infinite" && expandMode === "rowClick" && $(e.jQueryEvent.target).closest("." + DATAGRID_GROUP_ROW_CLASS).length,
-                isExpandButtonClicked = $(e.jQueryEvent.target).closest("." + DATAGRID_EXPAND_CLASS).length;
+                isGroupRowStateChanged = scrollingMode !== "infinite" && expandMode === "rowClick" && $(e.event.target).closest("." + DATAGRID_GROUP_ROW_CLASS).length,
+                isExpandButtonClicked = $(e.event.target).closest("." + DATAGRID_EXPAND_CLASS).length;
 
             if(isGroupRowStateChanged || isExpandButtonClicked) {
                 that._changeGroupRowState(e);
@@ -581,7 +584,7 @@ var GroupingRowsViewExtender = (function() {
 
             if(row.rowType !== "detail") {
                 dataController.changeRowExpand(row.key);
-                e.jQueryEvent.preventDefault();
+                e.event.preventDefault();
                 e.handled = true;
             }
         },
@@ -592,19 +595,19 @@ var GroupingRowsViewExtender = (function() {
             if(options.column.command === "expand") {
                 return {
                     allowRenderToDetachedContainer: true,
-                    render: function(container, options) {
+                    render: function($container, options) {
                         if(typeUtils.isDefined(options.value) && !(options.data && options.data.isContinuation) && !options.row.inserted) {
-                            container
+                            $container
                                 .addClass(DATAGRID_EXPAND_CLASS)
                                 .addClass(DATAGRID_SELECTION_DISABLED_CLASS);
 
                             $("<div>")
                                 .addClass(options.value ? DATAGRID_GROUP_OPENED_CLASS : DATAGRID_GROUP_CLOSED_CLASS)
-                                .appendTo(container);
+                                .appendTo($container);
 
                             that.setAria("label",
                                 options.value ? that.localize("dxDataGrid-ariaCollapse") : that.localize("dxDataGrid-ariaExpand"),
-                                container);
+                                $container);
                         }
                     }
                 };

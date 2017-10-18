@@ -55,7 +55,6 @@ var COMPONENT_CLASS = "dx-scheduler-work-space",
     HEADER_PANEL_CLASS = "dx-scheduler-header-panel",
     HEADER_PANEL_CELL_CLASS = "dx-scheduler-header-panel-cell",
     HEADER_ROW_CLASS = "dx-scheduler-header-row",
-    HEADER_CURRENT_TIME_CELL_CLASS = "dx-scheduler-header-panel-current-time-cell",
     GROUP_ROW_CLASS = "dx-scheduler-group-row",
     GROUP_HEADER_CLASS = "dx-scheduler-group-header",
     GROUP_HEADER_CONTENT_CLASS = "dx-scheduler-group-header-content",
@@ -367,7 +366,7 @@ var SchedulerWorkSpace = Widget.inherit({
             allowMultipleCellSelection: true,
             indicatorTime: new Date(),
             indicatorUpdateInterval: 5 * toMs("minute"),
-            shadeUntilNow: true
+            shadeUntilCurrentTime: true
         });
     },
 
@@ -802,7 +801,7 @@ var SchedulerWorkSpace = Widget.inherit({
     _attachEvents: function() {
         var that = this;
         var pointerDownAction = this._createAction(function(e) {
-            that._pointerDownHandler(e.jQueryEvent);
+            that._pointerDownHandler(e.event);
         });
 
         this._createCellClickAction();
@@ -817,11 +816,11 @@ var SchedulerWorkSpace = Widget.inherit({
                 e.preventDefault();
                 return;
             }
-            pointerDownAction({ jQueryEvent: e });
+            pointerDownAction({ event: e });
         });
         eventsEngine.on($element, SCHEDULER_CELL_DXCLICK_EVENT_NAME, cellSelector, function(e) {
             var $cell = $(e.target);
-            that._cellClickAction({ jQueryEvent: e, cellElement: getPublicElement($cell), cellData: that.getCellData($cell) });
+            that._cellClickAction({ event: e, cellElement: getPublicElement($cell), cellData: that.getCellData($cell) });
         });
     },
 
@@ -829,7 +828,7 @@ var SchedulerWorkSpace = Widget.inherit({
         var that = this;
         this._cellClickAction = this._createActionByOption("onCellClick", {
             afterExecute: function(e) {
-                that._clickHandler(e.args[0].jQueryEvent);
+                that._clickHandler(e.args[0].event);
             }
         });
     },
@@ -968,7 +967,7 @@ var SchedulerWorkSpace = Widget.inherit({
             for(var i = 0; i < count; i++) {
                 var text = this._getHeaderText(i),
                     $cell = $("<th>")
-                            .addClass(HEADER_PANEL_CELL_CLASS)
+                            .addClass(this._getHeaderPanelCellClass(i))
                             .attr("title", text);
 
                 if(cellTemplate && cellTemplate.render) {
@@ -984,10 +983,6 @@ var SchedulerWorkSpace = Widget.inherit({
                     $cell.text(text);
                 }
 
-                if(this._isCurrentTimeHeaderCell(i)) {
-                    $($cell).addClass(HEADER_CURRENT_TIME_CELL_CLASS);
-                }
-
                 $headerRow.append($cell);
             }
         }
@@ -997,6 +992,10 @@ var SchedulerWorkSpace = Widget.inherit({
         this._applyCellTemplates(templateCallbacks);
 
         return $headerRow;
+    },
+
+    _getHeaderPanelCellClass: function() {
+        return HEADER_PANEL_CELL_CLASS;
     },
 
     _calculateHeaderCellRepeatCount: function() {
@@ -1010,7 +1009,7 @@ var SchedulerWorkSpace = Widget.inherit({
             container: getPublicElement(this._$allDayTable),
             rowCount: 1,
             cellCount: cellCount,
-            cellClass: ALL_DAY_TABLE_CELL_CLASS,
+            cellClass: this._getAllDayPanelCellClass.bind(this),
             rowClass: ALL_DAY_TABLE_ROW_CLASS,
             cellTemplate: this.option("dataCellTemplate"),
             getCellData: this._getAllDayCellData.bind(this)
@@ -1018,6 +1017,10 @@ var SchedulerWorkSpace = Widget.inherit({
 
         this._toggleAllDayVisibility();
         this._applyCellTemplates(cellTemplates);
+    },
+
+    _getAllDayPanelCellClass: function() {
+        return ALL_DAY_TABLE_CELL_CLASS;
     },
 
     _getAllDayCellData: function(cell, rowIndex, cellIndex) {
@@ -1106,26 +1109,13 @@ var SchedulerWorkSpace = Widget.inherit({
         return startViewDate;
     },
 
-    _isCurrentTimeHeaderCell: function(headerIndex) {
-        var result = false;
-
-        if(this.option("showCurrentTimeIndicator") && this._needRenderDateTimeIndicator()) {
-            var date = this._getDateByIndex(headerIndex),
-                now = this.option("indicatorTime") || new Date();
-
-            result = dateUtils.sameDate(date, now);
-        }
-
-        return result;
-    },
-
     _renderDateTable: function() {
         var groupCount = this._getGroupCount();
         this._renderTableBody({
             container: getPublicElement(this._$dateTable),
             rowCount: this._getTotalRowCount(groupCount),
             cellCount: this._getTotalCellCount(groupCount),
-            cellClass: this._getDateTableCellClass(),
+            cellClass: this._getDateTableCellClass.bind(this),
             rowClass: this._getDateTableRowClass(),
             cellTemplate: this.option("dataCellTemplate"),
             getCellData: this._getCellData.bind(this)

@@ -82,7 +82,7 @@ var getElement = function(value) {
     return value && $(value.target || value);
 };
 
-eventsEngine.on(document, pointerEvents.down, function(e) {
+eventsEngine.subscribeGlobal(document, pointerEvents.down, function(e) {
     for(var i = OVERLAY_STACK.length - 1; i >= 0; i--) {
         if(!OVERLAY_STACK[i]._proxiedDocumentDownHandler(e)) {
             return;
@@ -280,7 +280,7 @@ var Overlay = Widget.inherit({
             * @publicName closeOnOutsideClick
             * @type boolean|function
             * @default false
-            * @type_function_param1 event:jQueryEvent
+            * @type_function_param1 event:jQuery.Event
             * @type_function_return Boolean
             */
             closeOnOutsideClick: false,
@@ -1502,6 +1502,8 @@ var Overlay = Widget.inherit({
 * @name ui_dxOverlayMethods_baseZIndex
 * @publicName baseZIndex(zIndex)
 * @param1 zIndex:number
+* @namespace DevExpress.ui.dxOverlay
+* @static
 */
 Overlay.baseZIndex = function(zIndex) {
     FIRST_Z_INDEX = zIndex;

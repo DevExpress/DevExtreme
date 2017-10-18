@@ -985,9 +985,21 @@ QUnit.test("get element", function(assert) {
     var element = $("#component").TestComponent(),
         instance = dataUtils.data(element[0], "TestComponent");
 
-    if(config().useJQueryRenderer) {
+    if(config().useJQuery) {
         assert.deepEqual(instance.element()[0], $("#component")[0]);
     } else {
         assert.equal(instance.element(), $("#component").get(0));
     }
+});
+
+QUnit.test("getInstance method", function(assert) {
+    var $element = $("#component");
+    var instance = new this.TestComponent($element);
+    var AnotherComponent = DOMComponent.inherit();
+
+    assert.equal(this.TestComponent.getInstance($element), instance);
+    assert.equal(this.TestComponent.getInstance($element.get(0)), instance);
+
+    assert.strictEqual(AnotherComponent.getInstance($element), undefined);
+    assert.strictEqual(AnotherComponent.getInstance($element.get(0)), undefined);
 });

@@ -129,7 +129,7 @@ var Popup = Overlay.inherit({
             * @name dxPopupOptions_onTitleRendered
             * @publicName onTitleRendered
             * @extends Action
-            * @type_function_param1_field1 titleElement:jQuery
+            * @type_function_param1_field1 titleElement:Element
             * @action
             */
             onTitleRendered: null,
@@ -503,9 +503,9 @@ var Popup = Overlay.inherit({
         }
     },
 
-    _executeTitleRenderAction: function(titleElement) {
+    _executeTitleRenderAction: function($titleElement) {
         this._getTitleRenderAction()({
-            titleElement: titleElement
+            titleElement: getPublicElement($titleElement)
         });
     },
 
@@ -515,7 +515,7 @@ var Popup = Overlay.inherit({
 
     _createTitleRenderAction: function() {
         return (this._titleRenderAction = this._createActionByOption("onTitleRendered", {
-            element: this.$element(),
+            element: this.element(),
             excludeValidators: ["designMode", "disabled", "readOnly"]
         }));
     },

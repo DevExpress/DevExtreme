@@ -4,7 +4,7 @@ require("integration/knockout");
 
 var $ = require("jquery"),
     ko = require("knockout"),
-    dataUtils = require("core/element_data").getDataStrategy();
+    dataUtils = require("core/element_data");
 
 var FIXTURE_ELEMENT = $("#qunit-fixture");
 
@@ -99,9 +99,10 @@ if($.fn.jquery[0] !== "1") {
         });
 
         var cleanDataLog = [],
-            originalCleanData = dataUtils.cleanData;
+            dataUtilsStrategy = dataUtils.getDataStrategy(),
+            originalCleanData = dataUtilsStrategy.cleanData;
 
-        dataUtils.cleanData = function(nodes) {
+        dataUtilsStrategy.cleanData = function(nodes) {
             cleanDataLog.push.apply(cleanDataLog, nodes);
             return originalCleanData.apply(this, arguments);
         };
@@ -124,7 +125,7 @@ if($.fn.jquery[0] !== "1") {
             assert.ok(!("cleanedByJquery" in $(this).get(0)));
         });
 
-        $.cleanData = originalCleanData;
+        dataUtilsStrategy.cleanData = originalCleanData;
         ko.utils.domData.clear = originalDomDataClear;
     });
 
@@ -144,8 +145,10 @@ if($.fn.jquery[0] !== "1") {
         });
 
         var cleanDataLog = [],
-            originalCleanData = dataUtils.cleanData;
-        dataUtils.cleanData = function(nodes) {
+            dataUtilsStrategy = dataUtils.getDataStrategy(),
+            originalCleanData = dataUtilsStrategy.cleanData;
+
+        dataUtilsStrategy.cleanData = function(nodes) {
             cleanDataLog.push.apply(cleanDataLog, nodes);
             return originalCleanData.apply(this, arguments);
         };
@@ -169,7 +172,7 @@ if($.fn.jquery[0] !== "1") {
             assert.ok(!("cleanedByJquery" in $(this).get(0)));
         });
 
-        $.cleanData = originalCleanData;
+        dataUtilsStrategy.cleanData = originalCleanData;
         ko.utils.domData.clear = originalDomDataClear;
     });
 }

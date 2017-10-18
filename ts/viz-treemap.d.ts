@@ -1,4 +1,5 @@
 declare module DevExpress.viz.treeMap {
+    /** @docid dxtreemap_options */
     export interface dxTreeMapOptions extends viz.core.BaseWidgetOptions, viz.core.RedrawOnResizeOptions, viz.core.TitleOptions, viz.core.LoadingIndicatorOptions, viz.core.ExportOptions {
         /** @docid_ignore dxtreemapoptions_margin */
 
@@ -233,67 +234,67 @@ declare module DevExpress.viz.treeMap {
         }) => void;
     }
 
-    /** @docid dxtreemapnode */
+    /** @docid dxTreeMapNode */
     export interface TreeMapNode {
 
-        /** @docid dxtreemapnodefields_level */
+        /** @docid dxTreeMapNodefields_level */
         level: number;
 
-        /** @docid dxtreemapnodefields_index */
+        /** @docid dxTreeMapNodefields_index */
         index: number;
 
-        /** @docid dxtreemapnodefields_data */
+        /** @docid dxTreeMapNodefields_data */
         data: Object;
 
-        /** @docid dxtreemapnodemethods_getparent */
+        /** @docid dxTreeMapNodemethods_getparent */
         getParent(): TreeMapNode;
 
-        /** @docid dxtreemapnodemethods_getchildrencount */
+        /** @docid dxTreeMapNodemethods_getchildrencount */
         getChildrenCount(): number;
 
-        /** @docid dxtreemapnodemethods_getallchildren */
+        /** @docid dxTreeMapNodemethods_getallchildren */
         getAllChildren(): Array<TreeMapNode>;
 
-        /** @docid dxtreemapnodemethods_getallnodes */
+        /** @docid dxTreeMapNodemethods_getallnodes */
         getAllNodes(): Array<TreeMapNode>;
 
-        /** @docid dxtreemapnodemethods_getchild */
+        /** @docid dxTreeMapNodemethods_getchild */
         getChild(index: number): TreeMapNode;
 
-        /** @docid dxtreemapnodemethods_value */
+        /** @docid dxTreeMapNodemethods_value */
         value(): number;
 
-        /** @docid dxtreemapnodemethods_label#label() */
+        /** @docid dxTreeMapNodemethods_label#label() */
         label(): string;
 
-        /** @docid dxtreemapnodemethods_label#label(label) */
+        /** @docid dxTreeMapNodemethods_label#label(label) */
         label(label: string): void;
 
-        /** @docid dxtreemapnodemethods_customize */
+        /** @docid dxTreeMapNodemethods_customize */
         customize(options: any): void;
 
-        /** @docid dxtreemapnodemethods_resetcustomization */
+        /** @docid dxTreeMapNodemethods_resetcustomization */
         resetCustomization(): void;
 
-        /** @docid dxtreemapnodemethods_ishovered */
+        /** @docid dxTreeMapNodemethods_ishovered */
         isHovered(): boolean;
 
-        /** @docid dxtreemapnodemethods_select */
+        /** @docid dxTreeMapNodemethods_select */
         select(state: boolean): void;
 
-        /** @docid dxtreemapnodemethods_isselected */
+        /** @docid dxTreeMapNodemethods_isselected */
         isSelected(): boolean;
 
-        /** @docid dxtreemapnodemethods_isleaf */
+        /** @docid dxTreeMapNodemethods_isleaf */
         isLeaf(): boolean;
 
-        /** @docid dxtreemapnodemethods_isactive */
+        /** @docid dxTreeMapNodemethods_isactive */
         isActive(): boolean;
 
-        /** @docid dxtreemapnodemethods_showtooltip */
+        /** @docid dxTreeMapNodemethods_showtooltip */
         showTooltip(): void;
 
-        /** @docid dxtreemapnodemethods_drilldown */
+        /** @docid dxTreeMapNodemethods_drilldown */
         drillDown(): void;
     }
 }

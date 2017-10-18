@@ -499,12 +499,14 @@ var ValidationEngine = {
     * @publicName getGroupConfig(group)
     * @param1 group:string|object
     * @return object
+    * @static
     */
     /**
     * @name validationEngineMethods_getGroupConfig
     * @section Core
     * @publicName getGroupConfig()
     * @return object
+    * @static
     */
     getGroupConfig: function(group) {
         var result = commonUtils.grep(this.groups, function(config) {
@@ -635,12 +637,14 @@ var ValidationEngine = {
     * @publicName validateGroup(group)
     * @param1 group:string|object
     * @return object
+    * @static
     */
     /**
     * @name validationEngineMethods_validateGroup
     * @section Core
     * @publicName validateGroup()
     * @return object
+    * @static
     */
     validateGroup: function(group) {
         var groupConfig = ValidationEngine.getGroupConfig(group);
@@ -657,11 +661,13 @@ var ValidationEngine = {
     * @section Core
     * @publicName resetGroup(group)
     * @param1 group:string|object
+    * @static
     */
     /**
     * @name validationEngineMethods_resetGroup
     * @section Core
     * @publicName resetGroup()
+    * @static
     */
     resetGroup: function(group) {
         var groupConfig = ValidationEngine.getGroupConfig(group);

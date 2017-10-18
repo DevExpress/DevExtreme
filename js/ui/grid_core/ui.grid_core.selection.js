@@ -26,10 +26,10 @@ var EDITOR_CELL_CLASS = "dx-editor-cell",
 var SHOW_CHECKBOXES_MODE = "selection.showCheckBoxesMode",
     SELECTION_MODE = "selection.mode";
 
-var processLongTap = function(that, jQueryEvent) {
+var processLongTap = function(that, dxEvent) {
     var selectionController = that.getController("selection"),
         rowsView = that.getView("rowsView"),
-        $row = $(jQueryEvent.target).closest("." + DATA_ROW_CLASS),
+        $row = $(dxEvent.target).closest("." + DATA_ROW_CLASS),
         rowIndex = rowsView.getRowIndex($row);
 
     if(rowIndex < 0) return;
@@ -620,16 +620,6 @@ module.exports = {
                     });
                 },
 
-                pageIndex: function(value) {
-                    var that = this,
-                        dataSource = that._dataSource;
-
-                    if(dataSource && value && dataSource.pageIndex() !== value) {
-                        that.getController("selection").focusedItemIndex(-1);
-                    }
-                    return that.callBase(value);
-                },
-
                 _processDataItem: function(item, options) {
                     var that = this,
                         selectionController = that.getController("selection"),
@@ -659,15 +649,23 @@ module.exports = {
                     }).fail(d.reject);
 
                     return d.promise();
+                },
+
+                _handleDataChanged: function(e) {
+                    this.callBase.apply(this, arguments);
+
+                    if(!e || e.changeType === "refresh") {
+                        this.getController("selection").focusedItemIndex(-1);
+                    }
                 }
             },
             contextMenu: {
                 _contextMenuPrepared: function(options) {
-                    var jQueryEvent = options.jQueryEvent;
+                    var dxEvent = options.event;
 
-                    if(jQueryEvent.originalEvent && jQueryEvent.originalEvent.type !== "dxhold" || options.items && options.items.length > 0) return;
+                    if(dxEvent.originalEvent && dxEvent.originalEvent.type !== "dxhold" || options.items && options.items.length > 0) return;
 
-                    processLongTap(this, jQueryEvent);
+                    processLongTap(this, dxEvent);
                 }
             }
         },
@@ -736,7 +734,7 @@ module.exports = {
                             var allowSelectAll = that.option("selection.allowSelectAll");
                             e.component.option("visible", allowSelectAll || e.component.option("value") !== false);
 
-                            if(!e.jQueryEvent || selectionController.isSelectAll() === value) {
+                            if(!e.event || selectionController.isSelectAll() === value) {
                                 return;
                             }
 
@@ -746,7 +744,7 @@ module.exports = {
                                 e.value ? selectionController.selectAll() : selectionController.deselectAll();
                             }
 
-                            e.jQueryEvent.preventDefault();
+                            e.event.preventDefault();
                         }
                     }));
 
@@ -755,7 +753,7 @@ module.exports = {
 
                 _attachSelectAllCheckBoxClickEvent: function($element) {
                     eventsEngine.on($element, clickEvent.name, this.createAction(function(e) {
-                        var event = e.jQueryEvent;
+                        var event = e.event;
 
                         if(!$(event.target).closest("." + SELECT_CHECKBOX_CLASS).length) {
                             eventsEngine.trigger($(event.currentTarget).children(), clickEvent.name);
@@ -778,13 +776,13 @@ module.exports = {
                     }
                 },
 
-                renderSelectCheckBoxContainer: function(column, container, options) {
+                renderSelectCheckBoxContainer: function(column, $container, options) {
                     if(options.rowType === "data" && !options.row.inserted) {
-                        container.addClass(EDITOR_CELL_CLASS);
-                        this._attachCheckBoxClickEvent(container);
+                        $container.addClass(EDITOR_CELL_CLASS);
+                        this._attachCheckBoxClickEvent($container);
 
-                        this.setAria("label", messageLocalization.format("dxDataGrid-ariaSelectRow"), container);
-                        this._renderSelectCheckBox(container, options.value, column);
+                        this.setAria("label", messageLocalization.format("dxDataGrid-ariaSelectRow"), $container);
+                        this._renderSelectCheckBox($container, options.value, column);
                     }
                 },
 
@@ -799,7 +797,7 @@ module.exports = {
                         value: value,
                         tabIndex: -1,
                         setValue: function(value, e) {
-                            if(e && e.jQueryEvent && e.jQueryEvent.type === "keydown") {
+                            if(e && e.event && e.event.type === "keydown") {
                                 eventsEngine.trigger(container, clickEvent.name, e);
                             }
                         }
@@ -811,7 +809,7 @@ module.exports = {
                 _attachCheckBoxClickEvent: function($element) {
                     eventsEngine.on($element, clickEvent.name, this.createAction(function(e) {
                         var selectionController = this.getController("selection"),
-                            event = e.jQueryEvent,
+                            event = e.event,
                             rowIndex = this.getRowIndex($(event.currentTarget).closest("." + ROW_CLASS));
 
                         if(rowIndex >= 0) {
@@ -868,13 +866,13 @@ module.exports = {
                         if(that.option(SHOW_CHECKBOXES_MODE) === "onLongTap" || !support.touch) {
                             //TODO Not working timeout by hold when it is larger than other timeouts by hold
                             eventsEngine.on($table, eventUtils.addNamespace(holdEvent.name, "dxDataGridRowsView"), "." + DATA_ROW_CLASS, that.createAction(function(e) {
-                                processLongTap(that.component, e.jQueryEvent);
+                                processLongTap(that.component, e.event);
 
-                                e.jQueryEvent.stopPropagation();
+                                e.event.stopPropagation();
                             }));
                         }
                         eventsEngine.on($table, "mousedown selectstart", that.createAction(function(e) {
-                            var event = e.jQueryEvent;
+                            var event = e.event;
 
                             if(event.shiftKey) {
                                 event.preventDefault();
@@ -902,16 +900,16 @@ module.exports = {
 
                 _rowClick: function(e) {
                     var that = this,
-                        jQueryEvent = e.jQueryEvent,
-                        isSelectionDisabled = $(jQueryEvent.target).closest("." + SELECTION_DISABLED_CLASS).length;
+                        dxEvent = e.event,
+                        isSelectionDisabled = $(dxEvent.target).closest("." + SELECTION_DISABLED_CLASS).length;
 
-                    if(!that.isClickableElement($(jQueryEvent.target))) {
+                    if(!that.isClickableElement($(dxEvent.target))) {
                         if(!isSelectionDisabled && (that.option(SELECTION_MODE) !== "multiple" || that.option(SHOW_CHECKBOXES_MODE) !== "always")) {
                             if(that.getController("selection").changeItemSelection(e.rowIndex, {
-                                control: jQueryEvent.ctrlKey || jQueryEvent.metaKey,
-                                shift: jQueryEvent.shiftKey
+                                control: dxEvent.ctrlKey || dxEvent.metaKey,
+                                shift: dxEvent.shiftKey
                             })) {
-                                jQueryEvent.preventDefault();
+                                dxEvent.preventDefault();
                                 e.handled = true;
                             }
                         }

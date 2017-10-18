@@ -78,7 +78,7 @@ var POPOVER_CLASS = "dx-popover",
         }).bind(that), { validatingTargetName: "target" });
 
         handler = function(e) {
-            action({ jQueryEvent: e, target: $(e.currentTarget) });
+            action({ event: e, target: $(e.currentTarget) });
         };
 
         if(target.jquery || target.nodeType || typeUtils.isWindow(target)) {

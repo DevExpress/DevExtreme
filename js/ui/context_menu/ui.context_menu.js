@@ -6,7 +6,9 @@ var $ = require("../../core/renderer"),
     registerComponent = require("../../core/component_registrator"),
     noop = require("../../core/utils/common").noop,
     typeUtils = require("../../core/utils/type"),
-    contains = require("../../core/utils/dom").contains,
+    domUtils = require("../../core/utils/dom"),
+    contains = domUtils.contains,
+    getPublicElement = domUtils.getPublicElement,
     each = require("../../core/utils/iterator").each,
     inArray = require("../../core/utils/array").inArray,
     extend = require("../../core/utils/extend").extend,
@@ -93,7 +95,7 @@ var ContextMenu = MenuBase.inherit((function() {
                 * @publicName closeOnOutsideClick
                 * @type boolean|function
                 * @default true
-                * @type_function_param1 event:jQueryEvent
+                * @type_function_param1 event:jQuery.Event
                 * @type_function_return Boolean
                 */
                 closeOnOutsideClick: true,
@@ -150,7 +152,7 @@ var ContextMenu = MenuBase.inherit((function() {
                 * @name dxContextMenuOptions_onPositioning
                 * @publicName onPositioning
                 * @extends Action
-                * @type_function_param1_field4 jQueryEvent:jQueryEvent
+                * @type_function_param1_field4 jQueryEvent:jQuery.Event
                 * @type_function_param1_field5 position:position
                 * @action
                 */
@@ -397,6 +399,10 @@ var ContextMenu = MenuBase.inherit((function() {
             this._attachShowContextMenuEvents();
         },
 
+        _attachKeyboardEvents: function() {
+            !this._keyboardProcessor && this._focusTarget().length && this.callBase();
+        },
+
         _renderContextMenuOverlay: function() {
             if(this._overlay) {
                 return;
@@ -463,15 +469,15 @@ var ContextMenu = MenuBase.inherit((function() {
 
                 if(delay) {
                     setTimeout(function() {
-                        that._show(e.jQueryEvent);
+                        that._show(e.event);
                     }, delay);
                 } else {
-                    that._show(e.jQueryEvent);
+                    that._show(e.event);
                 }
             }).bind(that), { validatingTargetName: "target" });
 
             handler = function(e) {
-                contextMenuAction({ jQueryEvent: e, target: $(e.currentTarget) });
+                contextMenuAction({ event: e, target: $(e.currentTarget) });
             };
 
             contextMenuAction = that._createAction(contextMenuAction);
@@ -522,9 +528,9 @@ var ContextMenu = MenuBase.inherit((function() {
         _renderSubmenuItems: function(node, $itemFrame) {
             this._renderItems(this._getChildNodes(node), $itemFrame);
             this._actions.onSubmenuCreated({
-                itemElement: $itemFrame,
+                itemElement: getPublicElement($itemFrame),
                 itemData: node.internalFields.item,
-                submenuElement: $itemFrame.children("." + DX_SUBMENU_CLASS)
+                submenuElement: getPublicElement($itemFrame.children("." + DX_SUBMENU_CLASS))
             });
         },
 
@@ -942,7 +948,7 @@ var ContextMenu = MenuBase.inherit((function() {
 
             actionArgs = {
                 position: position,
-                jQueryEvent: jQEvent
+                event: jQEvent
             };
 
             positioningAction(actionArgs);
@@ -950,8 +956,8 @@ var ContextMenu = MenuBase.inherit((function() {
             if(actionArgs.cancel) {
                 position = null;
             } else {
-                if(actionArgs.jQueryEvent) {
-                    actionArgs.jQueryEvent.cancel = true;
+                if(actionArgs.event) {
+                    actionArgs.event.cancel = true;
                     jQEvent.preventDefault();
                 }
             }

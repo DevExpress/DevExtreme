@@ -516,8 +516,8 @@ declare module DevExpress.ui {
         noDataText?: string;
         /** @docid dxSchedulerOptions_showCurrentTimeIndicator */
         showCurrentTimeIndicator?: boolean;
-        /** @docid dxSchedulerOptions_shadeUntilNow */
-        shadeUntilNow?: boolean;
+        /** @docid dxSchedulerOptions_shadeUntilCurrentTime */
+        shadeUntilCurrentTime?: boolean;
     }
 
     /** @docid dxScheduler */
@@ -2920,6 +2920,118 @@ declare module DevExpress.ui {
 
         /** @docid dxPivotGridFieldChooserMethods_getDataSource */
         getDataSource(): DevExpress.data.PivotGridDataSource;
+    }
+    
+    /** @docid dxFilterBuilderField */
+    export interface dxFilterBuilderField {
+        /** @docid_ignore dxFilterBuilderField_defaultFilterOperation */
+
+        /** @docid dxFilterBuilderField_caption */
+        caption?: string;
+
+        /** @docid dxFilterBuilderField_dataField */
+        dataField?: string;
+
+        /** @docid dxFilterBuilderField_dataType */
+        dataType?: string;
+
+        /** @docid dxFilterBuilderField_format */
+        format?: any;
+
+        /** @docid dxFilterBuilderField_trueText */
+        trueText?: string;
+
+        /** @docid dxFilterBuilderField_falseText */
+        falseText?: string;
+
+        /** @docid dxFilterBuilderField_lookup */
+        lookup?: {
+            /** @docid dxFilterBuilderField_lookup_allowClearing */
+            allowClearing?: boolean;
+
+            /** @docid dxFilterBuilderField_lookup_dataSource */
+            dataSource?: any;
+
+            /** @docid dxFilterBuilderField_lookup_displayExpr */
+            displayExpr?: any;
+
+            /** @docid dxFilterBuilderField_lookup_valueExpr */
+            valueExpr?: any;
+        };
+
+        /** @docid dxFilterBuilderField_filterOperations */
+        filterOperations?: Array<string>;
+
+        /** @docid dxFilterBuilderField_customizeText */
+        customizeText?: (fieldInfo: { value: any; valueText: string; }) => string;
+
+        /** @docid dxFilterBuilderField_valueEditorTemplate */
+        valueEditorTemplate?: any;
+    }
+
+    export interface dxFilterBuilderOptions extends WidgetOptions {
+        /** @docid_ignore dxFilterBuilderOptions_defaultGroupOperation */
+
+        /** @docid dxFilterBuilderOptions_value */
+        value?: Object;
+
+        /** @docid dxFilterBuilderOptions_allowHierarchicalFields */
+        allowHierarchicalFields?: boolean;
+
+        /** @docid dxFilterBuilderOptions_fields*/
+        fields?: Array<dxFilterBuilderField>;
+
+        /** @docid dxFilterBuilderOptions_groupOperationDescriptions */
+        groupOperationDescriptions?: {
+            /** @docid dxFilterBuilderOptions_groupOperationDescriptions_and */
+            and?: string;
+            /** @docid dxFilterBuilderOptions_groupOperationDescriptions_or */
+            or?: string;
+            /** @docid dxFilterBuilderOptions_groupOperationDescriptions_notAnd */
+            notAnd?: string;
+            /** @docid dxFilterBuilderOptions_groupOperationDescriptions_notOr */
+            notOr?: string;
+        };
+
+        /** @docid dxFilterBuilderOptions_filterOperationDescriptions */
+        filterOperationDescriptions?: {
+            /** @docid dxFilterBuilderOptions_filterOperationDescriptions_equal */
+            equal?: string;
+            /** @docid dxFilterBuilderOptions_filterOperationDescriptions_notEqual */
+            notEqual?: string;
+            /** @docid dxFilterBuilderOptions_filterOperationDescriptions_lessThan */
+            lessThan?: string;
+            /** @docid dxFilterBuilderOptions_filterOperationDescriptions_lessThanOrEqual */
+            lessThanOrEqual?: string;
+            /** @docid dxFilterBuilderOptions_filterOperationDescriptions_greaterThan */
+            greaterThan?: string;
+            /** @docid dxFilterBuilderOptions_filterOperationDescriptions_greaterThanOrEqual */
+            greaterThanOrEqual?: string;
+            /** @docid dxFilterBuilderOptions_filterOperationDescriptions_startsWith */
+            startsWith?: string;
+            /** @docid dxFilterBuilderOptions_filterOperationDescriptions_contains */
+            contains?: string;
+            /** @docid dxFilterBuilderOptions_filterOperationDescriptions_notContains */
+            notContains?: string;
+            /** @docid dxFilterBuilderOptions_filterOperationDescriptions_endsWith */
+            endsWith?: string;
+            /** @docid dxFilterBuilderOptions_filterOperationDescriptions_isBlank */
+            isBlank?: string;
+            /** @docid dxFilterBuilderOptions_filterOperationDescriptions_isNotBlank */
+            isNotBlank?: string;
+        };
+
+        /** @docid dxFilterBuilderOptions_onEditorPrepared */
+        onEditorPrepared?: (e: Object) => void;
+
+        /** @docid dxFilterBuilderOptions_onEditorPreparing */
+        onEditorPreparing?: (e: Object) => void;
+    }
+
+    /** @docid dxfilterbuilder */
+    export class dxFilterBuilder extends Widget {
+        constructor(element: JQuery, options?: dxFilterBuilderOptions);
+        constructor(element: Element, options?: dxFilterBuilderOptions);
     }
 
 }

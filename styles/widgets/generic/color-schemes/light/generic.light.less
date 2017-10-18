@@ -1852,6 +1852,7 @@
 @SCHEDULER_OTHER_MONTH_CELL_OPACITY: .5;
 @SCHEDULER_FILL_FOCUSED_APPOINTMENT: false;
 @SCHEDULER_TIME_INDICATOR_BACKGROUND_COLOR: rgba(51, 51, 51, 0.04);
+@SCHEDULER_FIRST_MONTH_CELL_BACKGROUND_COLOR: fadeout(@SCHEDULER_APPOINTMENT_BASE_COLOR, 85%);
 
 //SlideOutView
 @slideoutview-content-border-color: fade(@base-border-color, 50%);
@@ -2198,3 +2199,34 @@
 
 @fieldset-field-label-color: @base-label-color;
 @fieldset-field-value-invalid-color: @base-invalid-color;
+
+// FilterBuilder
+@filterbuilder-bg: @base-bg;
+@filterbuilder-plus-icon-color: fade(@base-success, 30%);
+@filterbuilder-plus-icon-hover-color: fade(@base-success, 50%);
+@filterbuilder-plus-icon-focus-color: @base-success;
+
+@filterbuilder-remove-icon-color: fade(@base-danger, 30%);
+@filterbuilder-remove-icon-hover-color: fade(@base-danger, 50%);
+@filterbuilder-remove-icon-focus-color: @base-danger;
+
+@filterbuilder-group-operation-color: @filterbuilder-remove-icon-color;
+@filterbuilder-group-operation-hover-color: @filterbuilder-remove-icon-hover-color;
+@filterbuilder-group-operation-focus-color: @filterbuilder-remove-icon-focus-color;
+
+@filterbuilder-item-field-color: fade(@base-accent, 30%);
+@filterbuilder-item-field-hover-color: fade(@base-accent, 50%);
+@filterbuilder-item-field-focus-color: @base-accent;
+
+@filterbuilder-item-operator-color: @filterbuilder-plus-icon-color;
+@filterbuilder-item-operator-hover-color: @filterbuilder-plus-icon-hover-color;
+@filterbuilder-item-operator-focus-color: @filterbuilder-plus-icon-focus-color;
+
+@filterbuilder-item-value-focus-color: @base-border-color;
+@filterbuilder-item-value-color: fade(@filterbuilder-item-value-focus-color, 50%);
+@filterbuilder-item-value-hover-color: fade(@filterbuilder-item-value-focus-color, 50%);
+
+@filterbuilder-text-focus-color: #FFF;
+@filterbuilder-text-color: @base-text-color;
+
+@filterbuilder-menu-icon-color: lighten(@base-icon-color, 33.7%);

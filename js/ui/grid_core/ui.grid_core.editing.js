@@ -133,7 +133,7 @@ var EditingController = modules.ViewController.inherit((function() {
                 that.createAction("onRowRemoved", { excludeValidators: ["disabled", "readOnly"] });
 
                 that._saveEditorHandler = that.createAction(function(e) {
-                    var event = e.jQueryEvent,
+                    var event = e.event,
                         isEditorPopup,
                         isDomElement,
                         isFocusOverlay,
@@ -1516,17 +1516,19 @@ var EditingController = modules.ViewController.inherit((function() {
                 template = column.editCellTemplate || getDefaultEditorTemplate(that);
             } else if(column.command === "edit" && options.rowType === "data") {
                 template = function(container, options) {
-                    container.css("text-align", "center");
+                    var $container = $(container);
+
+                    $container.css("text-align", "center");
                     options.rtlEnabled = that.option("rtlEnabled");
 
                     editingOptions = that.option("editing") || {};
                     editingTexts = editingOptions.texts || {};
 
                     if(options.row && options.row.rowIndex === that._getVisibleEditRowIndex() && isRowMode) {
-                        that._createLink(container, editingTexts.saveRowChanges, "saveEditData", options, "dx-link-save");
-                        that._createLink(container, editingTexts.cancelRowChanges, "cancelEditData", options, "dx-link-cancel");
+                        that._createLink($container, editingTexts.saveRowChanges, "saveEditData", options, "dx-link-save");
+                        that._createLink($container, editingTexts.cancelRowChanges, "cancelEditData", options, "dx-link-cancel");
                     } else {
-                        that._createEditingLinks(container, options, editingOptions, isRowMode);
+                        that._createEditingLinks($container, options, editingOptions, isRowMode);
                     }
                 };
             } else if(column.command === "detail" && options.rowType === "detail" && isRowEditing) {
@@ -1544,7 +1546,7 @@ var EditingController = modules.ViewController.inherit((function() {
                 .text(text);
 
             eventsEngine.on($link, addNamespace(clickEvent.name, EDITING_NAMESPACE), that.createAction(function(params) {
-                var e = params.jQueryEvent;
+                var e = params.event;
 
                 e.stopPropagation();
                 setTimeout(function() {
@@ -2098,7 +2100,7 @@ module.exports = {
                 _rowClick: function(e) {
                     var that = this,
                         editingController = that._editingController,
-                        $targetElement = $(e.jQueryEvent.target),
+                        $targetElement = $(e.event.target),
                         columnIndex = that._getColumnIndexByElement($targetElement),
                         row = that._dataController.items()[e.rowIndex],
                         allowUpdating = that.option("editing.allowUpdating") || row && row.inserted,

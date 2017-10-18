@@ -43,6 +43,8 @@ var pointerMock = require("../../helpers/pointerMock.js"),
     devices = require("core/devices"),
     SelectBox = require("ui/select_box"),
     dataGridMocks = require("../../helpers/dataGridMocks.js"),
+    config = require("core/config"),
+    typeUtils = require("core/utils/type"),
     MockColumnsController = dataGridMocks.MockColumnsController,
     MockDataController = dataGridMocks.MockDataController,
     setupDataGridModules = dataGridMocks.setupDataGridModules;
@@ -1510,7 +1512,8 @@ QUnit.testInActiveWindow("Focus on dxLookup editor", function(assert) {
             allowUpdating: true
         },
         columns: [{ allowEditing: true, dataField: "name", editCellTemplate: function(container, options) {
-            $("<div>").appendTo(container).dxLookup({});
+            assert.equal(typeUtils.isRenderer(container), config().useJQuery, "editCellElement is correct");
+            $("<div>").appendTo($(container)).dxLookup({});
         } }],
         dataSource: [{ name: "Bob" }]
     };

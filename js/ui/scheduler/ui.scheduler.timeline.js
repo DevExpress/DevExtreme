@@ -184,7 +184,8 @@ var SchedulerTimeline = SchedulerWorkSpace.inherit({
         return cellCount * cellWidth;
     },
 
-    _renderIndicator: function(width, height, rtlOffset, $container) {
+    _renderIndicator: function(height, rtlOffset, $container) {
+        var width = this.getIndicationWidth();
         var $indicator = this._createIndicator($container);
         $indicator.height($container.outerHeight());
         $indicator.css("left", rtlOffset ? rtlOffset - width : width);

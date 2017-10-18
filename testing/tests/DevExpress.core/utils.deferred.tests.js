@@ -4,6 +4,10 @@ var isFunction = require("core/utils/type").isFunction,
     deferredUtils = require("core/utils/deferred"),
     Deferred = deferredUtils.Deferred;
 
+if(!QUnit.urlParams["nojquery"]) {
+    return;
+}
+
 QUnit.module("when");
 
 QUnit.test("when should be resolved synchronously", function(assert) {

@@ -3,12 +3,12 @@
 var $ = require("../../core/renderer"),
     eventsEngine = require("../../events/core/events_engine"),
     errors = require("../errors"),
-    config = require("../config"),
     inArray = require("./array").inArray,
     typeUtils = require("./type"),
     isDefined = typeUtils.isDefined,
     isRenderer = typeUtils.isRenderer,
-    htmlParser = require("../../core/utils/html_parser");
+    htmlParser = require("../../core/utils/html_parser"),
+    elementStrategy;
 
 var resetActiveElement = function() {
     var activeElement = document.activeElement;
@@ -171,12 +171,18 @@ var contains = function(container, element) {
 };
 
 var getPublicElement = function($element) {
-    if(config().useJQueryRenderer) {
-        return $element;
-    }
-    return $element && $element.get(0);
+    return elementStrategy($element);
 };
 
+var setPublicElementWrapper = function(value) {
+    elementStrategy = value;
+};
+
+setPublicElementWrapper(function(element) {
+    return element && element.get(0);
+});
+
+exports.setPublicElementWrapper = setPublicElementWrapper;
 exports.resetActiveElement = resetActiveElement;
 exports.createMarkupFromString = createMarkupFromString;
 exports.triggerShownEvent = triggerVisibilityChangeEvent("dxshown");

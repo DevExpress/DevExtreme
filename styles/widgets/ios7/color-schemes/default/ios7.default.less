@@ -1065,13 +1065,14 @@
 
 @SCHEDULER_TIME_PANEL_BACKGROUND_COLOR: white;
 
-@SCHEDULER_WORKSPACE_ACTIVE_CELL_COLOR: @SCHEDULER_ACCENT_BORDER_COLOR ;
-@SCHEDULER_WORKSPACE_HOVERED_CELL_COLOR: @SCHEDULER_BASE_BORDER_COLOR ;
+@SCHEDULER_WORKSPACE_ACTIVE_CELL_COLOR: @SCHEDULER_ACCENT_BORDER_COLOR;
+@SCHEDULER_WORKSPACE_HOVERED_CELL_COLOR: @SCHEDULER_BASE_BORDER_COLOR;
 
 @IOS7_SCHEDULER_HEADER_BACKGROUND_COLOR: #f5f5f5;
 @SCHEDULER_OTHER_MONTH_CELL_OPACITY: .5;
 @SCHEDULER_FILL_FOCUSED_APPOINTMENT: false;
 @SCHEDULER_TIME_INDICATOR_BACKGROUND_COLOR: lighten(@SCHEDULER_BASE_BORDER_COLOR, 9%);
+@SCHEDULER_FIRST_MONTH_CELL_BACKGROUND_COLOR: fadeout(@SCHEDULER_APPOINTMENT_BASE_COLOR, 85%);
 
 //Menu
 /**
@@ -1180,3 +1181,35 @@
 */
 @IOS7_SPLIT_LAYOUT_MASTER_PANE_SPLITTER_COLOR: #c8c8c8;
 @datagrid-master-detail-cell-background-color: #FAFAFA;
+
+// FilterBuilder
+@filterbuilder-bg: @IOS7_BACKGROUND;
+@filterbuilder-plus-icon-color: #B1D4A9;
+@filterbuilder-plus-icon-hover-color: darken(@filterbuilder-plus-icon-color, 10%);
+@filterbuilder-plus-icon-focus-color: darken(@filterbuilder-plus-icon-color, 20%);
+
+@filterbuilder-remove-icon-color: #F9B7B7;
+@filterbuilder-remove-icon-hover-color: darken(@filterbuilder-remove-icon-color, 10%);
+@filterbuilder-remove-icon-focus-color: darken(@filterbuilder-remove-icon-color, 20%);
+
+@filterbuilder-group-operation-color: #F9B7B7;
+@filterbuilder-group-operation-hover-color: darken(@filterbuilder-group-operation-color, 10%);
+@filterbuilder-group-operation-focus-color: darken(@filterbuilder-group-operation-color, 20%);
+
+@filterbuilder-item-field-color: #D0E9FF;
+@filterbuilder-item-field-hover-color: darken(@filterbuilder-item-field-color, 10%);
+@filterbuilder-item-field-focus-color: darken(@filterbuilder-item-field-color, 20%);
+
+@filterbuilder-item-operator-color: #C9EBC1;
+@filterbuilder-item-operator-hover-color: darken(@filterbuilder-item-operator-color, 10%);
+@filterbuilder-item-operator-focus-color: darken(@filterbuilder-item-operator-color, 20%);
+
+@filterbuilder-item-value-color: #EEE;
+@filterbuilder-item-value-hover-color: darken(@filterbuilder-item-value-color, 10%);
+@filterbuilder-item-value-focus-color: darken(@filterbuilder-item-value-color, 20%);
+
+
+@filterbuilder-text-focus-color: #FFF;
+@filterbuilder-text-color: @IOS7_FONT_COLOR;
+
+@filterbuilder-menu-icon-color: #898989;

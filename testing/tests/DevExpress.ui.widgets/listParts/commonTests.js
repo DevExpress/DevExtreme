@@ -245,7 +245,7 @@ QUnit.test("groupTemplate returning string", function(assert) {
         grouped: true,
 
         groupTemplate: function(group, index, itemElement) {
-            assert.equal(isRenderer(itemElement), config().useJQueryRenderer, "itemElement is correct");
+            assert.equal(isRenderer(itemElement), config().useJQuery, "itemElement is correct");
             return index + ": " + group.key;
         }
     });
@@ -267,7 +267,7 @@ QUnit.test("groupTemplate returning jquery", function(assert) {
         grouped: true,
 
         groupTemplate: function(group, index, element) {
-            assert.equal(isRenderer(element), config().useJQueryRenderer, "element is correct");
+            assert.equal(isRenderer(element), config().useJQuery, "element is correct");
             return $("<span />");
         }
     });
@@ -1275,7 +1275,7 @@ QUnit.test("onGroupRendered should fired with correct params", function(assert) 
         });
 
     assert.equal(groupRendered, 1, "event triggered");
-    assert.strictEqual(isRenderer(eventData.groupElement), config().useJQueryRenderer, "groupElement is correct");
+    assert.strictEqual(isRenderer(eventData.groupElement), config().useJQuery, "groupElement is correct");
     assert.strictEqual($(eventData.groupElement)[0], $list.find(".dx-list-group")[0], "groupElement is correct");
     assert.strictEqual(eventData.groupData, items[0], "groupData is correct");
     assert.strictEqual(eventData.groupIndex, 0, "groupIndex is correct");

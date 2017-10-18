@@ -1,6 +1,8 @@
 "use strict";
 
-var jquery = require("jquery"),
+var jQuery = require("jquery"),
     easing = require("../../animation/easing");
 
-easing.setEasing(jquery.easing);
+if(jQuery) {
+    easing.setEasing(jQuery.easing);
+}

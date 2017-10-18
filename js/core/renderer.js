@@ -1,7 +1,6 @@
 "use strict";
 
 var rendererBase = require("./renderer_base");
-require("../integration/jquery");
 
 /**
 * @name Element

@@ -723,9 +723,9 @@ var Form = Widget.inherit({
         }
     },
 
-    _applyLabelsWidth: function($container, excludeTabbed, inOneColumn) {
-        var colCount = inOneColumn ? 1 : this._getColCount($container),
-            applyLabelsOptions = {
+    _applyLabelsWidth: function($container, excludeTabbed, inOneColumn, colCount) {
+        colCount = inOneColumn ? 1 : colCount || this._getColCount($container);
+        var applyLabelsOptions = {
                 excludeTabbed: excludeTabbed,
                 inOneColumn: inOneColumn
             },
@@ -787,7 +787,7 @@ var Form = Widget.inherit({
             if(this._checkGrouping(options.items)) {
                 this._applyLabelsWidthWithGroups(options.$container, options.layoutManager._getColCount(), options.excludeTabbed);
             } else {
-                this._applyLabelsWidth(options.$container, options.excludeTabbed);
+                this._applyLabelsWidth(options.$container, options.excludeTabbed, false, options.layoutManager._getColCount());
             }
         }
         this._removeHiddenElement();
@@ -1242,20 +1242,19 @@ var Form = Widget.inherit({
             case "items":
                 var itemPath = this._getItemPath(nameParts),
                     instance,
-                    items,
-                    name,
                     item = this.option(itemPath);
 
                 if(args.fullName.search("editorOptions") !== -1) {
-                    instance = this.getEditor(item.dataField);
+                    instance = this.getEditor(item.dataField) || this.getEditor(item.name);
                     instance && instance.option(item.editorOptions);
-                } else {
-                    if(item) {
-                        name = args.fullName.replace(itemPath + ".", "");
-                        this._changeItemOption(item, name, args.value);
-                        items = this._generateItemsFromData(this.option("items"));
-                        this.option("items", items);
-                    }
+                }
+
+                if(!instance && item) {
+                    var name = args.fullName.replace(itemPath + ".", ""),
+                        items;
+                    this._changeItemOption(item, name, args.value);
+                    items = this._generateItemsFromData(this.option("items"));
+                    this.option("items", items);
                 }
 
                 break;

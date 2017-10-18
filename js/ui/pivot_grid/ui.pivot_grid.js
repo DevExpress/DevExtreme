@@ -686,7 +686,7 @@ var PivotGrid = Widget.inherit({
             * @type_function_param1_field9 columnFields:Array<PivotGridDataSourceOptions_fields>
             * @type_function_param1_field10 rowFields:Array<PivotGridDataSourceOptions_fields>
             * @type_function_param1_field11 dataFields:Array<PivotGridDataSourceOptions_fields>
-            * @type_function_param1_field12 jQueryEvent:jQueryEvent
+            * @type_function_param1_field12 jQueryEvent:jQuery.Event
             * @type_function_param1_field13 cancel:boolean
             * @extends Action
             * @action
@@ -1166,7 +1166,7 @@ var PivotGrid = Widget.inherit({
 
         that._contextMenu = that._createComponent($(DIV).appendTo($container), ContextMenu, {
             onPositioning: function(actionArgs) {
-                var event = actionArgs.jQueryEvent,
+                var event = actionArgs.event,
                     targetElement,
                     args,
                     items;
@@ -1316,14 +1316,14 @@ var PivotGrid = Widget.inherit({
         }
     },
 
-    _createEventArgs: function(targetElement, jQueryEvent) {
+    _createEventArgs: function(targetElement, dxEvent) {
         var that = this,
             dataSource = that.getDataSource(),
             args = {
                 rowFields: dataSource.getAreaFields("row"),
                 columnFields: dataSource.getAreaFields("column"),
                 dataFields: dataSource.getAreaFields("data"),
-                jQueryEvent: jQueryEvent
+                event: dxEvent
             };
 
         if(clickedOnFieldsArea($(targetElement))) {

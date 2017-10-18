@@ -11,9 +11,6 @@
   "dependencies": {
     "jszip": "^2.0.0 || ^3.0.0"
   },
-  "peerDependencies": {
-    "jquery": "^2.0.0 || ^3.0.0"
-  },
   "devDependencies": {
     "@types/jquery": "^2.0.34",
     "bootstrap": "^3.3.7",

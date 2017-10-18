@@ -284,7 +284,7 @@ QUnit.test("w/ options - itemTemplate", function(assert) {
     this.ddMenu.option({
         items: [0, 1, 2],
         itemTemplate: function(item, itemIndex, itemElement) {
-            assert.equal(isRenderer(itemElement), config().useJQueryRenderer, "itemElement is correct");
+            assert.equal(isRenderer(itemElement), config().useJQuery, "itemElement is correct");
             return "Item" + item;
         }
     });
@@ -306,7 +306,7 @@ QUnit.test("the 'buttonHeight' option should be passed to the menu button", func
 
 QUnit.test("the 'buttonTemplate' option should be passed to the menu button", function(assert) {
     this.ddMenu.option("buttonTemplate", function(data, container) {
-        assert.equal(isRenderer(container), config().useJQueryRenderer, "container is correct");
+        assert.equal(isRenderer(container), config().useJQuery, "container is correct");
         return $("<span class='it-is-button-template'/>");
     });
 
@@ -462,6 +462,21 @@ QUnit.test("popupHeight/popupWidth test", function(assert) {
 
     assert.equal(popover.option("height"), 100, "popover height is right");
     assert.equal(popover.option("width"), 50, "popover width is right");
+});
+
+QUnit.test("maxHeight test", function(assert) {
+    var $dropDownMenu = $("#dropDownMenu").dxDropDownMenu({
+        popupMaxHeight: 300,
+        opened: true
+    });
+
+    var popover = $dropDownMenu.find(".dx-popover").dxPopover("instance");
+
+    assert.equal(popover.option("maxHeight"), 300, "popover height is right");
+
+    $dropDownMenu.dxDropDownMenu("option", "popupMaxHeight", 400);
+
+    assert.equal(popover.option("maxHeight"), 400, "popover height is right");
 });
 
 QUnit.test("usePopover sets current target", function(assert) {

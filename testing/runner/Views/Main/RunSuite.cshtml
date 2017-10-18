@@ -132,7 +132,7 @@
             window.DevExpress = window.DevExpress || {};
 
             window.DevExpress.config = {
-                useJQueryRenderer: !@Html.Raw(Json.Serialize(Model.NoJQuery))
+                useJQuery: !@Html.Raw(Json.Serialize(Model.NoJQuery))
             };
             var jqueryVersion = '@(Model.JQueryVersion != null ? Model.JQueryVersion.ToString().ToLowerInvariant() : "default")';
             var jqueryIncludeStrings = {
@@ -245,14 +245,28 @@
             });
         });
 
-        Promise.all([
-            SystemJS.import("@Url.Content(Model.ScriptVirtualPath)"),
-            SystemJS.import("@Url.Content("~/testing/helpers/jQueryEventsPatch.js")"),
-            SystemJS.import("@Url.Content("~/testing/helpers/dataPatch.js")"),
-            new Promise(function(resolve) { jQuery(resolve); })
-        ]).then(function() {
+        var useJQuery = window.DevExpress.config.useJQuery;
+
+        var imports = [ new Promise(function(resolve) {
+            jQuery(resolve);
+        }) ];
+
+        if(useJQuery) {
+            imports.push(SystemJS.import("@Url.Content("~/js/integration/jquery.js")"));
+        } else {
+            imports.push(SystemJS.import("@Url.Content("~/testing/helpers/jQueryEventsPatch.js")"));
+            imports.push(SystemJS.import("@Url.Content("~/testing/helpers/dataPatch.js")"));
+            imports.push(SystemJS.import("@Url.Content("~/js/integration/jquery/component_registrator.js")"));
+        }
+
+        Promise.all(imports)
+        .then(function() {
+            return SystemJS.import("@Url.Content(Model.ScriptVirtualPath)");
+        })
+        .then(function() {
             QUnit.start();
-        }).catch(function (err) {
+        })
+        .catch(function (err) {
             QUnit.start();
             QUnit.test("load failed", function(assert) {
                 throw err;

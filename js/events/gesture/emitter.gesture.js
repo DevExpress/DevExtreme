@@ -47,7 +47,7 @@ var gestureCover = (function() {
         .addClass(GESTURE_COVER_CLASS)
         .css("pointerEvents", "none");
 
-    eventsEngine.on($cover, "dxmousewheel", function(e) {
+    eventsEngine.subscribeGlobal($cover, "dxmousewheel", function(e) {
         e.preventDefault();
     });
 

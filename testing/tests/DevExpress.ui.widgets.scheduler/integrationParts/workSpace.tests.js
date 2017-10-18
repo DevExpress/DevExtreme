@@ -780,7 +780,7 @@ QUnit.test("dateCellTemplate should take cellElement with correct geometry(T4535
         dataSource: [],
         dateCellTemplate: function(cellData, cellIndex, cellElement) {
             if(!cellIndex) {
-                assert.equal(isRenderer(cellElement), config().useJQueryRenderer, "element is correct");
+                assert.equal(isRenderer(cellElement), config().useJQuery, "element is correct");
                 assert.roughEqual($(cellElement).outerWidth(), 85, 1.001, "Date cell width is OK");
                 assert.equal($(cellElement).outerHeight(), 40, "Date cell height is OK");
             }
@@ -799,7 +799,7 @@ QUnit.test("timeCellTemplate should take cellElement with correct geometry(T4535
         dataSource: [],
         timeCellTemplate: function(cellData, cellIndex, cellElement) {
             if(!cellIndex) {
-                assert.equal(isRenderer(cellElement), config().useJQueryRenderer, "element is correct");
+                assert.equal(isRenderer(cellElement), config().useJQuery, "element is correct");
                 assert.equal($(cellElement).outerHeight(), 100, "Time cell height is OK");
                 assert.equal($(cellElement).outerWidth(), 100, "Time cell width is OK");
             }
@@ -822,7 +822,7 @@ QUnit.test("resourceCellTemplate should take cellElement with correct geometry(T
         }],
         resourceCellTemplate: function(cellData, cellIndex, cellElement) {
             if(!cellIndex) {
-                assert.equal(isRenderer(cellElement), config().useJQueryRenderer, "element is correct");
+                assert.equal(isRenderer(cellElement), config().useJQuery, "element is correct");
                 var $cell = $(cellElement).parent();
                 assert.roughEqual($cell.outerWidth(), 299, 1.001, "Resource cell width is OK");
                 assert.equal($cell.outerHeight(), 30, "Resource cell height is OK");

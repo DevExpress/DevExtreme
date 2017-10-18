@@ -2,14 +2,14 @@
 
 var $ = require("jquery");
 var deferredUtils = require("core/utils/deferred");
-var useJQueryRenderer = require("core/config")().useJQueryRenderer;
+var useJQuery = require("core/config")().useJQuery;
 
 require("integration/jquery");
 
 QUnit.module("jQuery strategy");
 
-QUnit.test("jQuery strategy should be used if useJQueryRenderer flag was set", function(assert) {
-    if(!useJQueryRenderer) {
+QUnit.test("jQuery strategy should be used if useJQuery flag was set", function(assert) {
+    if(!useJQuery) {
         assert.expect(0);
         return;
     }

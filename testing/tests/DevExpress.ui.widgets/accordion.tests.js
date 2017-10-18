@@ -725,7 +725,7 @@ QUnit.test("itemTemplate option changed (function)", function(assert) {
     }).dxAccordion("instance");
 
     instance.option("itemTemplate", function(itemData, itemIndex, itemElement) {
-        assert.equal(isRenderer(itemElement), config().useJQueryRenderer, "element is correct");
+        assert.equal(isRenderer(itemElement), config().useJQuery, "element is correct");
         return $("<div>")
             .addClass("item-content-render-changed")
             .text("Changed: " + itemData.text);

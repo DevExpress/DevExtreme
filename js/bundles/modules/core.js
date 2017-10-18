@@ -93,6 +93,9 @@ DevExpress.formatHelper = require("../../format_helper");
 
 var config = DevExpress.config = require("../../core/config");
 
+var jquery = require("jquery");
+config({ "useJQuery": config().useJQuery && !!jquery });
+
 /**
  * @name rtlEnabled
  * @publicName rtlEnabled

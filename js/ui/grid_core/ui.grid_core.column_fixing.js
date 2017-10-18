@@ -460,7 +460,7 @@ var RowsViewFixedColumnsExtender = extend({}, baseFixedColumns, {
         var that = this,
             attachHoverEvent = function($table) {
                 eventsEngine.on($table, "mouseover mouseout", ".dx-data-row", that.createAction(function(args) {
-                    var event = args.jQueryEvent,
+                    var event = args.event,
                         rowIndex = that.getRowIndex($(event.target).closest(".dx-row")),
                         isHover = event.type === "mouseover";
 
@@ -626,6 +626,13 @@ var RowsViewFixedColumnsExtender = extend({}, baseFixedColumns, {
         if(this.option("hoverStateEnabled") && this._isFixedColumns) {
             this._attachHoverEvents();
         }
+    },
+
+    setRowsOpacity: function(columnIndex, value) {
+        this.callBase(columnIndex, value);
+
+        var $rows = this._getRowElements(this._fixedTableElement);
+        this._setRowsOpacityCore($rows, this.getFixedColumns(), columnIndex, value);
     },
 
     optionChanged: function(args) {

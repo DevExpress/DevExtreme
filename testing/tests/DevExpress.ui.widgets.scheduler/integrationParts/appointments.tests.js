@@ -3440,7 +3440,7 @@ QUnit.test("DropDown appointment button should have correct coordinates: rtl mod
         buttonCoordinates = translator.locate($dropDownButton),
         $relatedCell = this.instance.$element().find(".dx-scheduler-date-table-cell").eq(9),
         expectedCoordinates = $relatedCell.position(),
-        rtlOffset = $relatedCell.outerWidth() - 26;
+        rtlOffset = $relatedCell.outerWidth() - 36;
 
     assert.equal($dropDownButton.length, 1, "DropDown button is rendered");
     assert.roughEqual(buttonCoordinates.left, expectedCoordinates.left + rtlOffset, 1.001, "Left coordinate is OK");
@@ -3492,7 +3492,7 @@ QUnit.test("DropDown appointment should raise the onAppointmentClick event", fun
             assert.equal(args.element, instance.element(), "dxScheduler element is 'element'");
             assert.deepEqual(args.appointmentData, appointments[4], "Appointment data is OK");
             assert.equal($(args.appointmentElement).get(0), dropDown._list.$element().find(".dx-list-item").eq(2).get(0), "Appointment element is OK");
-            assert.ok(args.jQueryEvent instanceof $.Event, "jQueryEvent is OK");
+            assert.ok(args.event instanceof $.Event, "Event is OK");
 
             assert.strictEqual(args.itemData, undefined);
             assert.strictEqual(args.itemElement, undefined);

@@ -35,11 +35,11 @@ declare module DevExpress.viz.core {
         * @docid dxPolarChartSeriesTypes_CommonPolarChartSeries_point_hoverstyle_border_color
         * @docid dxPolarChartSeriesTypes_CommonPolarChartSeries_point_selectionstyle_border_color
         * @docid dxPolarChartSeriesTypes_CommonPolarChartSeries_selectionstyle_border_color
-        * @docid dxfunneloptions_label_border_color
-        * @docid dxfunneloptions_legend_border_color
-        * @docid dxfunneloptions_item_border_color
-        * @docid dxfunneloptions_item_hoverstyle_border_color
-        * @docid dxfunneloptions_item_selectionstyle_border_color
+        * @docid dxFunneloptions_label_border_color
+        * @docid dxFunneloptions_legend_border_color
+        * @docid dxFunneloptions_item_border_color
+        * @docid dxFunneloptions_item_hoverstyle_border_color
+        * @docid dxFunneloptions_item_selectionstyle_border_color
         */
         color?: string;
 
@@ -71,11 +71,11 @@ declare module DevExpress.viz.core {
         * @docid dxPolarChartSeriesTypes_CommonPolarChartSeries_point_hoverstyle_border_visible
         * @docid dxPolarChartSeriesTypes_CommonPolarChartSeries_point_selectionstyle_border_visible
         * @docid dxPolarChartSeriesTypes_CommonPolarChartSeries_selectionstyle_border_visible
-        * @docid dxfunneloptions_label_border_visible
-        * @docid dxfunneloptions_legend_border_visible
-        * @docid dxfunneloptions_item_border_visible
-        * @docid dxfunneloptions_item_hoverstyle_border_visible
-        * @docid dxfunneloptions_item_selectionstyle_border_visible
+        * @docid dxFunneloptions_label_border_visible
+        * @docid dxFunneloptions_legend_border_visible
+        * @docid dxFunneloptions_item_border_visible
+        * @docid dxFunneloptions_item_hoverstyle_border_visible
+        * @docid dxFunneloptions_item_selectionstyle_border_visible
         */
         visible?: boolean;
 
@@ -104,11 +104,11 @@ declare module DevExpress.viz.core {
         * @docid dxPolarChartSeriesTypes_CommonPolarChartSeries_point_hoverstyle_border_width
         * @docid dxPolarChartSeriesTypes_CommonPolarChartSeries_point_selectionstyle_border_width
         * @docid dxPolarChartSeriesTypes_CommonPolarChartSeries_selectionstyle_border_width
-        * @docid dxfunneloptions_label_border_width
-        * @docid dxfunneloptions_legend_border_width
-        * @docid dxfunneloptions_item_border_width
-        * @docid dxfunneloptions_item_hoverstyle_border_width
-        * @docid dxfunneloptions_item_selectionstyle_border_width
+        * @docid dxFunneloptions_label_border_width
+        * @docid dxFunneloptions_legend_border_width
+        * @docid dxFunneloptions_item_border_width
+        * @docid dxFunneloptions_item_hoverstyle_border_width
+        * @docid dxFunneloptions_item_selectionstyle_border_width
         */
         width?: number;
     }
@@ -134,8 +134,8 @@ declare module DevExpress.viz.core {
         * @docid dxPieChartSeriesTypes_CommonPieChartSeries_border_dashstyle
         * @docid dxPieChartSeriesTypes_CommonPieChartSeries_hoverstyle_border_dashstyle
         * @docid dxPieChartSeriesTypes_CommonPieChartSeries_selectionstyle_border_dashstyle
-        * @docid dxfunneloptions_label_border_dashstyle
-        * @docid dxfunneloptions_legend_border_dashstyle
+        * @docid dxFunneloptions_label_border_dashstyle
+        * @docid dxFunneloptions_legend_border_dashstyle
         */
         dashStyle?: string;
     }
@@ -148,7 +148,7 @@ declare module DevExpress.viz.core {
         * @docid BaseWidgetOptions_tooltip_border_opacity
         * @docid dxchartoptions_crosshair_horizontalline_opacity
         * @docid dxchartoptions_crosshair_verticalline_opacity
-        * @docid dxfunneloptions_legend_border_opacity
+        * @docid dxFunneloptions_legend_border_opacity
         */
         opacity?: number;
     }
@@ -182,8 +182,8 @@ declare module DevExpress.viz.core {
           * @docid dxPolarChartSeriesTypes_CommonPolarChartSeries_selectionstyle_hatching_direction
           * @docid dxChartSeriesTypes_candlestickseries_hoverstyle_hatching_direction
           * @docid dxChartSeriesTypes_candlestickseries_selectionstyle_hatching_direction
-          * @docid dxfunneloptions_item_hoverstyle_hatching_direction
-          * @docid dxfunneloptions_item_selectionstyle_hatching_direction
+          * @docid dxFunneloptions_item_hoverstyle_hatching_direction
+          * @docid dxFunneloptions_item_selectionstyle_hatching_direction
           */
         direction?: string;
 
@@ -194,8 +194,8 @@ declare module DevExpress.viz.core {
           * @docid dxPieChartSeriesTypes_CommonPieChartSeries_selectionstyle_hatching_opacity
           * @docid dxPolarChartSeriesTypes_CommonPolarChartSeries_hoverstyle_hatching_opacity
           * @docid dxPolarChartSeriesTypes_CommonPolarChartSeries_selectionstyle_hatching_opacity
-          * @docid dxfunneloptions_item_hoverstyle_hatching_opacity
-          * @docid dxfunneloptions_item_selectionstyle_hatching_opacity
+          * @docid dxFunneloptions_item_hoverstyle_hatching_opacity
+          * @docid dxFunneloptions_item_selectionstyle_hatching_opacity
           */
         opacity?: number;
 
@@ -206,8 +206,8 @@ declare module DevExpress.viz.core {
           * @docid dxPieChartSeriesTypes_CommonPieChartSeries_selectionstyle_hatching_step
           * @docid dxPolarChartSeriesTypes_CommonPolarChartSeries_hoverstyle_hatching_step
           * @docid dxPolarChartSeriesTypes_CommonPolarChartSeries_selectionstyle_hatching_step
-          * @docid dxfunneloptions_item_hoverstyle_hatching_step
-          * @docid dxfunneloptions_item_selectionstyle_hatching_step
+          * @docid dxFunneloptions_item_hoverstyle_hatching_step
+          * @docid dxFunneloptions_item_selectionstyle_hatching_step
           */
         step?: number;
 
@@ -218,8 +218,8 @@ declare module DevExpress.viz.core {
           * @docid dxPieChartSeriesTypes_CommonPieChartSeries_selectionstyle_hatching_width
           * @docid dxPolarChartSeriesTypes_CommonPolarChartSeries_hoverstyle_hatching_width
           * @docid dxPolarChartSeriesTypes_CommonPolarChartSeries_selectionstyle_hatching_width
-          * @docid dxfunneloptions_item_hoverstyle_hatching_width
-          * @docid dxfunneloptions_item_selectionstyle_hatching_width
+          * @docid dxFunneloptions_item_hoverstyle_hatching_width
+          * @docid dxFunneloptions_item_selectionstyle_hatching_width
           */
         width?: number;
     }
@@ -230,7 +230,7 @@ declare module DevExpress.viz.core {
         * @docid basechartoptions_legend_margin_bottom
         * @docid BaseWidgetOptions_title_margin_bottom
         * @docid dxvectormapoptions_legends_margin_bottom
-        * @docid dxfunneloptions_legend_margin_bottom
+        * @docid dxFunneloptions_legend_margin_bottom
         */
         bottom?: number;
 
@@ -239,7 +239,7 @@ declare module DevExpress.viz.core {
         * @docid basechartoptions_legend_margin_left
         * @docid BaseWidgetOptions_title_margin_left
         * @docid dxvectormapoptions_legends_margin_left
-        * @docid dxfunneloptions_legend_margin_left
+        * @docid dxFunneloptions_legend_margin_left
         */
         left?: number;
 
@@ -248,7 +248,7 @@ declare module DevExpress.viz.core {
         * @docid basechartoptions_legend_margin_right
         * @docid BaseWidgetOptions_title_margin_right
         * @docid dxvectormapoptions_legends_margin_right
-        * @docid dxfunneloptions_legend_margin_right
+        * @docid dxFunneloptions_legend_margin_right
         */
         right?: number;
 
@@ -257,7 +257,7 @@ declare module DevExpress.viz.core {
         * @docid basechartoptions_legend_margin_top
         * @docid BaseWidgetOptions_title_margin_top
         * @docid dxvectormapoptions_legends_margin_top
-        * @docid dxfunneloptions_legend_margin_top
+        * @docid dxFunneloptions_legend_margin_top
         */
         top?: number;
     }
@@ -375,7 +375,7 @@ declare module DevExpress.viz.core {
           * @docid basesparklineoptions_tooltip_customizetooltip
           * @docid dxvectormapoptions_tooltip_customizetooltip
           * @docid dxtreemapoptions_tooltip_customizetooltip
-          * @docid dxfunneloptions_tooltip_customizetooltip
+          * @docid dxFunneloptions_tooltip_customizetooltip
           */
         customizeTooltip?: (arg: any) => {
             color?: string;
@@ -467,7 +467,7 @@ declare module DevExpress.viz.core {
         /**
         * @docid basechartoptions_legend_border_cornerradius
         * @docid dxvectormapoptions_legends_border_cornerradius
-        * @docid dxfunneloptions_legend_border_cornerradius
+        * @docid dxFunneloptions_legend_border_cornerradius
         */
         cornerRadius?: number;
     }
@@ -476,119 +476,119 @@ declare module DevExpress.viz.core {
         /**
         * @docid basechartoptions_legend_backgroundcolor
         * @docid dxvectormapoptions_legends_backgroundcolor
-        * @docid dxfunneloptions_legend_backgroundcolor
+        * @docid dxFunneloptions_legend_backgroundcolor
         */
         backgroundColor?: string;
 
         /**
         * @docid basechartoptions_legend_border
         * @docid dxvectormapoptions_legends_border
-        * @docid dxfunneloptions_legend_border
+        * @docid dxFunneloptions_legend_border
         */
         border?: viz.core.LegendBorder;
 
         /**
         * @docid basechartoptions_legend_columncount
         * @docid dxvectormapoptions_legends_columncount
-        * @docid dxfunneloptions_legend_columncount
+        * @docid dxFunneloptions_legend_columncount
         */
         columnCount?: number;
 
         /**
         * @docid basechartoptions_legend_columnitemspacing
         * @docid dxvectormapoptions_legends_columnitemspacing
-        * @docid dxfunneloptions_legend_columnitemspacing
+        * @docid dxFunneloptions_legend_columnitemspacing
         */
         columnItemSpacing?: number;
 
         /**
         * @docid basechartoptions_legend_font
         * @docid dxvectormapoptions_legends_font
-        * @docid dxfunneloptions_legend_font
+        * @docid dxFunneloptions_legend_font
         */
         font?: viz.core.Font;
 
         /**
         * @docid basechartoptions_legend_horizontalalignment
         * @docid dxvectormapoptions_legends_horizontalalignment
-        * @docid dxfunneloptions_legend_horizontalalignment
+        * @docid dxFunneloptions_legend_horizontalalignment
         */
         horizontalAlignment?: string;
 
         /**
         * @docid basechartoptions_legend_itemsalignment
         * @docid dxvectormapoptions_legends_itemsalignment
-        * @docid dxfunneloptions_legend_itemsalignment
+        * @docid dxFunneloptions_legend_itemsalignment
         */
         itemsAlignment?: string;
 
         /**
         * @docid basechartoptions_legend_itemtextposition
         * @docid dxvectormapoptions_legends_itemtextposition
-        * @docid dxfunneloptions_legend_itemtextposition
+        * @docid dxFunneloptions_legend_itemtextposition
         */
         itemTextPosition?: string;
 
         /**
         * @docid basechartoptions_legend_margin
         * @docid dxvectormapoptions_legends_margin
-        * @docid dxfunneloptions_legend_margin
+        * @docid dxFunneloptions_legend_margin
         */
         margin?: viz.core.Margins;
 
         /**
         * @docid basechartoptions_legend_markersize
         * @docid dxvectormapoptions_legends_markerSize
-        * @docid dxfunneloptions_legend_markersize
+        * @docid dxFunneloptions_legend_markersize
         */
         markerSize?: number;
 
         /**
         * @docid basechartoptions_legend_orientation
         * @docid dxvectormapoptions_legends_orientation
-        * @docid dxfunneloptions_legend_orientation
+        * @docid dxFunneloptions_legend_orientation
         */
         orientation?: string;
 
         /**
         * @docid basechartoptions_legend_paddingleftright
         * @docid dxvectormapoptions_legends_paddingleftright
-        * @docid dxfunneloptions_legend_paddingleftright
+        * @docid dxFunneloptions_legend_paddingleftright
         */
         paddingLeftRight?: number;
 
         /**
         * @docid basechartoptions_legend_paddingtopbottom
         * @docid dxvectormapoptions_legends_paddingtopbottom
-        * @docid dxfunneloptions_legend_paddingtopbottom
+        * @docid dxFunneloptions_legend_paddingtopbottom
         */
         paddingTopBottom?: number;
 
         /**
         * @docid basechartoptions_legend_rowcount
         * @docid dxvectormapoptions_legends_rowcount
-        * @docid dxfunneloptions_legend_rowcount
+        * @docid dxFunneloptions_legend_rowcount
         */
         rowCount?: number;
 
         /**
         * @docid basechartoptions_legend_rowitemspacing
         * @docid dxvectormapoptions_legends_rowitemspacing
-        * @docid dxfunneloptions_legend_rowitemspacing
+        * @docid dxFunneloptions_legend_rowitemspacing
         */
         rowItemSpacing?: number;
 
         /**
         * @docid basechartoptions_legend_verticalalignment
         * @docid dxvectormapoptions_legends_verticalalignment
-        * @docid dxfunneloptions_legend_verticalalignment
+        * @docid dxFunneloptions_legend_verticalalignment
         */
         verticalAlignment?: string;
 
         /**
         * @docid basechartoptions_legend_visible
         * @docid dxvectormapoptions_legends_visible
-        * @docid dxfunneloptions_legend_visible
+        * @docid dxFunneloptions_legend_visible
         */
         visible?: boolean;
     }

@@ -6,7 +6,6 @@ var $ = require("../../core/renderer"),
     clickEvent = require("../../events/click"),
     browser = require("../../core/utils/browser"),
     commonUtils = require("../../core/utils/common"),
-    config = require("../../core/config"),
     getPublicElement = require("../../core/utils/dom").getPublicElement,
     typeUtils = require("../../core/utils/type"),
     iteratorUtils = require("../../core/utils/iterator"),
@@ -14,7 +13,6 @@ var $ = require("../../core/renderer"),
     getDefaultAlignment = require("../../core/utils/position").getDefaultAlignment,
     devices = require("../../core/devices"),
     modules = require("./ui.grid_core.modules"),
-    getPublicElement = require("../../core/utils/dom").getPublicElement,
     gridCoreUtils = require("./ui.grid_core.utils"),
     columnStateMixin = require("./ui.grid_core.column_state_mixin"),
     noop = commonUtils.noop;
@@ -133,7 +131,7 @@ exports.ColumnsView = modules.View.inherit(columnStateMixin).inherit({
 
         if(that.option("cellHintEnabled")) {
             eventsEngine.on($table, "mousemove", ".dx-row > td", this.createAction(function(args) {
-                var e = args.jQueryEvent,
+                var e = args.event,
                     $element = $(e.target),
                     $cell = $(e.currentTarget),
                     $row = $cell.parent(),
@@ -172,7 +170,7 @@ exports.ColumnsView = modules.View.inherit(columnStateMixin).inherit({
 
             resultOptions = extend({}, options, {
                 cellElement: getPublicElement($cell),
-                jQueryEvent: event,
+                event: event,
                 eventType: event.type
             });
 
@@ -199,13 +197,13 @@ exports.ColumnsView = modules.View.inherit(columnStateMixin).inherit({
         });
 
         eventsEngine.on($table, clickEvent.name, ".dx-row", { useNative: that._isNativeClick() }, that.createAction(function(e) {
-            var jQueryEvent = e.jQueryEvent;
+            var dxEvent = e.event;
 
-            if(!$(jQueryEvent.target).closest("a").length) {
-                e.rowIndex = that.getRowIndex(jQueryEvent.currentTarget);
+            if(!$(dxEvent.target).closest("a").length) {
+                e.rowIndex = that.getRowIndex(dxEvent.currentTarget);
 
                 if(e.rowIndex >= 0) {
-                    e.rowElement = getPublicElement($(jQueryEvent.currentTarget));
+                    e.rowElement = getPublicElement($(dxEvent.currentTarget));
                     e.columns = that.getColumns();
                     that._rowClick(e);
                 }
@@ -274,7 +272,7 @@ exports.ColumnsView = modules.View.inherit(columnStateMixin).inherit({
         } else if(typeUtils.isFunction(template)) {
             renderingTemplate = {
                 render: function(options) {
-                    var renderedTemplate = template(options.container, options.model);
+                    var renderedTemplate = template(getPublicElement(options.container), options.model);
                     if(renderedTemplate && (renderedTemplate.nodeType || typeUtils.isRenderer(renderedTemplate))) {
                         options.container.append(renderedTemplate);
                     }
@@ -697,13 +695,13 @@ exports.ColumnsView = modules.View.inherit(columnStateMixin).inherit({
      * @name GridBaseMethods_getRowElement
      * @publicName getRowElement(rowIndex)
      * @param1 rowIndex:number
-     * @return Element|undefined
+     * @return Array<Node>|jQuery|undefined
      */
     getRowElement: function(rowIndex) {
         var $rows = this._getRowElement(rowIndex),
             elements = [];
 
-        if($rows && !config().useJQueryRenderer) {
+        if($rows && !getPublicElement($rows).get) {
             for(var i = 0; i < $rows.length; i++) {
                 elements.push($rows[i]);
             }

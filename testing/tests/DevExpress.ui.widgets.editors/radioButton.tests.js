@@ -84,7 +84,7 @@ QUnit.test("value should be changed by clicking", function(assert) {
 
     var $radioButton = $("#radioButton").dxRadioButton({
             onValueChanged: function(e) {
-                assert.ok(e.jQueryEvent, "event present");
+                assert.ok(e.event, "event present");
             }
         }),
         radioButton = $("#radioButton").dxRadioButton("instance");

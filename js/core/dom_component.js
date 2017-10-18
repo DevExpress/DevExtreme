@@ -26,6 +26,7 @@ var RTL_DIRECTION_CLASS = "dx-rtl",
  * @publicName DOMComponent
  * @type object
  * @inherits Component
+ * @namespace DevExpress
  * @module core/dom_component
  * @export default
  * @hidden
@@ -36,6 +37,11 @@ var DOMComponent = Component.inherit({
             /**
             * @name domcomponentoptions_onOptionChanged
             * @publicName onOptionChanged
+            * @type function
+            * @type_function_param1 e:object
+            * @type_function_param1_field4 name:string
+            * @type_function_param1_field5 fullName:string
+            * @type_function_param1_field6 value:any
             * @action
             * @extends Action
             * @extend_doc
@@ -87,7 +93,13 @@ var DOMComponent = Component.inherit({
             integrationOptions: {}
         });
     },
-
+    /**
+    * @name DOMComponentMethods_ctor
+    * @publicName ctor(element,options)
+    * @param1 element:Element
+    * @param2 options:DOMComponentOptions|undefined
+    * @hidden
+    */
     ctor: function(element, options) {
         this._$element = $(element);
         publicComponentUtils.attachInstanceToElement(this._$element, this, this._dispose);
@@ -404,12 +416,21 @@ var DOMComponent = Component.inherit({
 
 });
 
-DOMComponent.getInstance = function($element) {
-    return publicComponentUtils.getInstanceByElement($($element), this);
+/**
+* @name domcomponentmethods_getInstance
+* @static
+* @section uiWidgets
+* @publicName getInstance(element)
+* @param1 element:Element
+* @return object
+*/
+DOMComponent.getInstance = function(element) {
+    return publicComponentUtils.getInstanceByElement($(element), this);
 };
 
 /**
 * @name domcomponentmethods_defaultOptions
+* @static
 * @section uiWidgets
 * @publicName defaultOptions(rule)
 * @param1 rule:Object

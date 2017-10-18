@@ -19,9 +19,9 @@ var VerticalCurrentTimeShader = Shader.inherit({
         if(shaderHeight > 0) {
             this._$shader.height(shaderHeight);
 
-            var shaderWidth = this._workspace.getIndicationWidth();
             var groupCount = this._workspace._getGroupCount() || 1;
             for(var i = 0; i < groupCount; i++) {
+                var shaderWidth = this._workspace.getIndicationWidth(i);
                 this._renderTopShader(this._$shader, shaderHeight, shaderWidth, i);
 
                 this._renderBottomShader(this._$shader, maxHeight - shaderHeight, shaderWidth, i);
@@ -62,7 +62,7 @@ var VerticalCurrentTimeShader = Shader.inherit({
     },
 
     _getShaderOffset: function(i, width) {
-        var offset = this._workspace._getCellCount() * this._workspace._getRoundedCellWidth() * i;
+        var offset = this._workspace._getCellCount() * this._workspace._getRoundedCellWidth(i - 1) * i;
         return this._workspace.option("rtlEnabled") ? this._$container.outerWidth() - offset - this._workspace.getTimePanelWidth() - width : offset;
     },
 

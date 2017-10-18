@@ -7,7 +7,7 @@ var noop = require("../../core/utils/common").noop,
 var MONTH_APPOINTMENT_HEIGHT_RATIO = 0.6,
     MONTH_APPOINTMENT_MIN_OFFSET = 26,
     MONTH_APPOINTMENT_MAX_OFFSET = 30,
-    MONTH_DROPDOWN_APPOINTMENT_RIGHT_OFFSET = 26;
+    MONTH_DROPDOWN_APPOINTMENT_RIGHT_OFFSET = 36;
 
 var HorizontalMonthRenderingStrategy = HorizontalMonthLineAppointmentsStrategy.inherit({
 

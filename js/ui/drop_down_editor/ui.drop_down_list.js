@@ -45,8 +45,6 @@ var DropDownList = DropDownEditor.inherit({
                 if(this.option("opened") && this.option("applyValueMode") === "instantly") {
                     var $focusedItem = $(this._list.option("focusedElement"));
                     $focusedItem.length && this._setSelectedElement($focusedItem);
-                } else {
-                    eventsEngine.trigger(this._focusTarget(), "focusout");
                 }
 
                 parent.tab.apply(this, arguments);
@@ -226,7 +224,7 @@ var DropDownList = DropDownEditor.inherit({
             * @extends Action
             * @type_function_param1_field4 value:object
             * @type_function_param1_field5 previousValue:object
-            * @type_function_param1_field6 jQueryEvent:jQueryEvent
+            * @type_function_param1_field6 jQueryEvent:jQuery.Event
             * @action
             */
 
@@ -366,9 +364,9 @@ var DropDownList = DropDownEditor.inherit({
         eventsEngine.on(this._input(), "input", this._setFocusPolicy.bind(this));
     },
 
-    _preventFocusOnPopup: function(e) {
+    _saveFocusOnWidget: function(e) {
         if(this._list && this._list.initialOption("focusStateEnabled")) {
-            e.preventDefault();
+            this.focus();
         }
     },
 
@@ -377,8 +375,8 @@ var DropDownList = DropDownEditor.inherit({
         this._popup._wrapper().addClass(this._popupWrapperClass());
 
         var $popupContent = this._popup.$content();
-        eventsEngine.off($popupContent, "mousedown");
-        eventsEngine.on($popupContent, "mousedown", this._preventFocusOnPopup.bind(this));
+        eventsEngine.off($popupContent, "mouseup");
+        eventsEngine.on($popupContent, "mouseup", this._saveFocusOnWidget.bind(this));
     },
 
     _popupWrapperClass: function() {

@@ -425,9 +425,9 @@ declare module DevExpress.ui {
 
         /** @docid dxTextBoxOptions_mode */
         mode?: string;
-        
+
         /** @docid dxTextBoxOptions_value */
-        value?: string;        
+        value?: string;
     }
 
     /** @docid dxTextbox */
@@ -698,51 +698,51 @@ declare module DevExpress.ui {
         scrollByThumb?: boolean;
     }
 
-    /** @docid dxscrollable */
+    /** @docid dxScrollable */
     export class dxScrollable extends DOMComponent {
         constructor(element: JQuery, options?: dxScrollableOptions);
         constructor(element: Element, options?: dxScrollableOptions);
 
-        /** @docid dxscrollablemethods_clientHeight */
+        /** @docid dxScrollablemethods_clientHeight */
         clientHeight(): number;
 
-        /** @docid dxscrollablemethods_clientWidth */
+        /** @docid dxScrollablemethods_clientWidth */
         clientWidth(): number;
 
-        /** @docid dxscrollablemethods_content */
+        /** @docid dxScrollablemethods_content */
         content(): JQuery;
 
-        /** @docid dxscrollablemethods_scrollBy#scrollBy(distance) */
+        /** @docid dxScrollablemethods_scrollBy#scrollBy(distance) */
         scrollBy(distance: number): void;
 
-        /** @docid dxscrollablemethods_scrollBy#scrollBy(distanceObject) */
+        /** @docid dxScrollablemethods_scrollBy#scrollBy(distanceObject) */
         scrollBy(distanceObject: dxScrollableLocation): void;
 
-        /** @docid dxscrollablemethods_scrollHeight */
+        /** @docid dxScrollablemethods_scrollHeight */
         scrollHeight(): number;
 
-        /** @docid dxscrollablemethods_scrollLeft */
+        /** @docid dxScrollablemethods_scrollLeft */
         scrollLeft(): number;
 
-        /** @docid dxscrollablemethods_scrollOffset */
+        /** @docid dxScrollablemethods_scrollOffset */
         scrollOffset(): dxScrollableLocation;
 
-        /** @docid dxscrollablemethods_scrollTo#scrollTo(targetLocation) */
+        /** @docid dxScrollablemethods_scrollTo#scrollTo(targetLocation) */
         scrollTo(targetLocation: number): void;
 
-        /** @docid dxscrollablemethods_scrollTo#scrollTo(targetLocationObject) */
+        /** @docid dxScrollablemethods_scrollTo#scrollTo(targetLocationObject) */
         scrollTo(targetLocation: dxScrollableLocation): void;
 
-        /** @docid dxscrollablemethods_scrollToElement */
+        /** @docid dxScrollablemethods_scrollToElement */
         scrollToElement(element: Element): void;
 
-        /** @docid dxscrollablemethods_scrollTop */
+        /** @docid dxScrollablemethods_scrollTop */
         scrollTop(): number;
 
-        /** @docid dxscrollablemethods_scrollWidth */
+        /** @docid dxScrollablemethods_scrollWidth */
         scrollWidth(): number;
 
-        /** @docid dxscrollablemethods_update */
+        /** @docid dxScrollablemethods_update */
         update(): void;
     }
 
@@ -1051,6 +1051,9 @@ declare module DevExpress.ui {
 
         /** @docid dxNumberBoxOptions_mode */
         mode?: string;
+
+        /** @docid dxNumberBoxOptions_displayFormat */
+        displayFormat?: string;
 
         /** @docid dxNumberBoxOptions_invalidValueMessage */
         invalidValueMessage?: string;

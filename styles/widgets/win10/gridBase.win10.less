@@ -7,6 +7,7 @@
     @GRID_BASE_CONTEXT_MENU_SORT_ICON_SIZE: 18px;
     @GRID_BASE_ADAPTIVE_TEXT_PADDING: 9px;
     @GRID_BASE_DATA_INVALID_COLOR: "@{widgetName}-data-invalid-color";
+    @GRID_BASE_TREEVIEW_SEARCH_MARGIN: 10px;
 
     .dx-@{widgetName}-checkbox-size {
         &.dx-focused {
@@ -275,6 +276,12 @@
                     position: static;
                     margin: 0 auto;
                 }
+            }
+        }
+
+        &.dx-@{widgetName}-column-chooser-mode-drag {
+            .dx-treeview-search {
+                margin-bottom: @GRID_BASE_TREEVIEW_SEARCH_MARGIN;
             }
         }
 

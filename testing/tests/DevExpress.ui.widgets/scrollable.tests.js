@@ -1873,7 +1873,7 @@ QUnit.test("content", function(assert) {
     });
     var content = $scrollable.dxScrollable("instance").content();
 
-    assert.equal(isRenderer(content), config().useJQueryRenderer, "content is correct");
+    assert.equal(isRenderer(content), config().useJQuery, "content is correct");
     assert.ok($(content).hasClass(SCROLLABLE_CONTENT_CLASS), "returns content");
 });
 
@@ -2114,7 +2114,7 @@ QUnit.test("event arguments", function(assert) {
         useNative: false,
         inertiaEnabled: false,
         onScroll: function(e) {
-            assert.notEqual(e.jQueryEvent, undefined, "jQueryEvent passed");
+            assert.notEqual(e.event, undefined, "Event passed");
             assert.deepEqual(e.scrollOffset, { top: 10, left: undefined }, "scrollOffset passed");
             assert.equal(e.reachedLeft, undefined, "reachedLeft passed");
             assert.equal(e.reachedRight, undefined, "reachedRight passed");
