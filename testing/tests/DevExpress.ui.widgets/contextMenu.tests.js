@@ -1638,7 +1638,7 @@ QUnit.test("when press right arrow key we only show submenu if exist", function(
         .keyDown("down")
         .keyDown("right");
 
-    assert.equal(isRenderer(instance.option("focusedElement")), config().useJQueryRenderer, "focusedElement is correct");
+    assert.equal(isRenderer(instance.option("focusedElement")), config().useJQuery, "focusedElement is correct");
     assert.equal(getFocusedItemText(instance), "item 21", "focus on first item of second submenu");
     assert.equal(getVisibleSubmenuCount(instance), 2, "we see two submenus");
 

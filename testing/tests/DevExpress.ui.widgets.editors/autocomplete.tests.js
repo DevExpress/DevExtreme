@@ -491,7 +491,7 @@ QUnit.test("arrow_down/arrow_up/enter provide item navigation and selection", fu
 
 
     $selectedItem = $list.find(FOCUSED_STATE_SELECTOR);
-    assert.equal(isRenderer(instance._list.option("focusedElement")), config().useJQueryRenderer, "focusedElement is correct");
+    assert.equal(isRenderer(instance._list.option("focusedElement")), config().useJQuery, "focusedElement is correct");
     assert.equal($selectedItem.text(), "item 2", "when we 6 times press 'key_down', we select 'item 2'");
     assert.equal($lastScrolledItem.text(), "item 2", "when we 6 times press 'key_down', we scroll to 'item 2'");
 
@@ -501,7 +501,7 @@ QUnit.test("arrow_down/arrow_up/enter provide item navigation and selection", fu
         .keyDown(KEY_UP);
 
     $selectedItem = $list.find(FOCUSED_STATE_SELECTOR);
-    assert.equal(isRenderer(instance._list.option("focusedElement")), config().useJQueryRenderer, "focusedElement is correct");
+    assert.equal(isRenderer(instance._list.option("focusedElement")), config().useJQuery, "focusedElement is correct");
     assert.equal($selectedItem.text(), "item 3", "when we 2 times press 'key_up', we select 'item 3'");
     assert.equal($lastScrolledItem.text(), "item 3", "when we 2 times press 'key_up', we scroll to 'item 3'");
 

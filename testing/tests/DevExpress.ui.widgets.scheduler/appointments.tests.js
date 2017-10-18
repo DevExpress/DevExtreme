@@ -1097,7 +1097,7 @@ QUnit.testInActiveWindow("Focused element should be changed on focusin", functio
     });
     var $appointments = $(".dx-scheduler-appointment");
     $appointments.get(0).focus();
-    assert.equal(isRenderer(this.instance.option("focusedElement")), config().useJQueryRenderer, "focusedElement is correct");
+    assert.equal(isRenderer(this.instance.option("focusedElement")), config().useJQuery, "focusedElement is correct");
     assert.deepEqual($appointments.get(0), $(this.instance.option("focusedElement")).get(0), "right element is focused");
 
     $appointments.get(1).focus();
@@ -1273,7 +1273,7 @@ QUnit.test("Focus method should call focus on appointment", function(assert) {
 
     var focusedElement = $(this.instance.option("focusedElement")).get(0);
     var focusSpy = sinon.spy(eventsEngine, "trigger").withArgs(sinon.match(function($element) {
-        return config().useJQueryRenderer ? $element.get(0) === focusedElement : $element === focusedElement;
+        return config().useJQuery ? $element.get(0) === focusedElement : $element === focusedElement;
     }), "focus");
     var appointmentFocusedStub = sinon.stub(this.instance, "notifyObserver").withArgs("appointmentFocused");
 

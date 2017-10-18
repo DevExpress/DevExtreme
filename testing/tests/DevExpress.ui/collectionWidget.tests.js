@@ -1097,7 +1097,7 @@ QUnit.test("focused item changed after press right/left arrows", function(assert
     keyboard.keyDown("right");
 
     $item = $item.next();
-    assert.equal(isRenderer(instance.option("focusedElement")), config().useJQueryRenderer, "focusedElement is correct");
+    assert.equal(isRenderer(instance.option("focusedElement")), config().useJQuery, "focusedElement is correct");
     assert.ok($item.hasClass(FOCUSED_ITEM_CLASS), "press right arrow on item change focused item on next");
 
     keyboard.keyDown("left");

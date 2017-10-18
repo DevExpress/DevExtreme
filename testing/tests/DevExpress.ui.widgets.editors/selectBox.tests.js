@@ -539,7 +539,7 @@ QUnit.test("list item obtained focus only after press on control key", function(
 
     keyboardMock($input).press("down");
     var $firstItemList = $(".dx-list-item").eq(0);
-    assert.equal(isRenderer(selectBox._list.option("focusedElement")), config().useJQueryRenderer, "focusedElement is correct");
+    assert.equal(isRenderer(selectBox._list.option("focusedElement")), config().useJQuery, "focusedElement is correct");
     assert.ok($firstItemList.hasClass("dx-state-focused"), "first list item obtained focus");
 });
 

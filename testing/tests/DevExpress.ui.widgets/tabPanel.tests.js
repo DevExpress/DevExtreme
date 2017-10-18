@@ -562,8 +562,8 @@ QUnit.test("tabs focusedElement dependence on tabPanels focusedElement", functio
 
     var multiViewFocusedIndex = $(this.instance.option("focusedElement")).index();
 
-    assert.equal(isRenderer(this.instance.option("focusedElement")), config().useJQueryRenderer, "focusedElement is correct");
-    assert.equal(isRenderer(this.tabs.option("focusedElement")), config().useJQueryRenderer, "focusedElement is correct");
+    assert.equal(isRenderer(this.instance.option("focusedElement")), config().useJQuery, "focusedElement is correct");
+    assert.equal(isRenderer(this.tabs.option("focusedElement")), config().useJQuery, "focusedElement is correct");
     assert.equal(multiViewFocusedIndex, 1, "second multiView element has been focused");
     assert.equal(multiViewFocusedIndex, $(this.tabs.option("focusedElement")).index(), "tabs focused element is equal multiView focused element");
 });
@@ -577,7 +577,7 @@ QUnit.test("tabPanels focusedElement dependence on tabs focusedElement", functio
 
     var tabsFocusedIndex = $(this.instance.option("focusedElement")).index();
 
-    assert.equal(isRenderer(this.instance.option("focusedElement")), config().useJQueryRenderer, "focusedElement is correct");
+    assert.equal(isRenderer(this.instance.option("focusedElement")), config().useJQuery, "focusedElement is correct");
     assert.equal(tabsFocusedIndex, 1, "second tabs element has been focused");
     assert.equal(tabsFocusedIndex, $(this.instance.option("focusedElement")).index(), "multiView focused element is equal tabs focused element");
 });

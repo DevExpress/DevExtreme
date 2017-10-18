@@ -1995,7 +1995,7 @@ QUnit.test("focused item changed after press right/left arrows", function(assert
 
     this.keyboard.keyDown("right");
 
-    assert.equal(isRenderer(this.instance.option("focusedElement")), config().useJQueryRenderer, "focusedElement is correct");
+    assert.equal(isRenderer(this.instance.option("focusedElement")), config().useJQuery, "focusedElement is correct");
     assert.ok($galleryItems.eq(1).hasClass("dx-state-focused"), "selectedItem has focusedState class");
 
     this.keyboard.keyDown("left");

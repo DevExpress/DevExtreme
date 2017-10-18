@@ -33,7 +33,7 @@ QUnit.test("node is focused after focusing on element", function(assert) {
 
     $treeView.focusin();
 
-    assert.equal(isRenderer(instance.option("focusedElement")), config().useJQueryRenderer, "focusedElement is correct");
+    assert.equal(isRenderer(instance.option("focusedElement")), config().useJQuery, "focusedElement is correct");
     assert.ok($firstNode.hasClass("dx-state-focused"), "item was focused ");
 }),
 
@@ -53,12 +53,12 @@ QUnit.test("down arrow move focus to the next element", function(assert) {
 
     $firstItem.trigger("dxpointerdown");
 
-    assert.equal(isRenderer(instance.option("focusedElement")), config().useJQueryRenderer, "focusedElement is correct");
+    assert.equal(isRenderer(instance.option("focusedElement")), config().useJQuery, "focusedElement is correct");
     assert.ok($firstNode.hasClass("dx-state-focused"), "item was focused ");
 
     keyboard.keyDown("down");
 
-    assert.equal(isRenderer(instance.option("focusedElement")), config().useJQueryRenderer, "focusedElement is correct");
+    assert.equal(isRenderer(instance.option("focusedElement")), config().useJQuery, "focusedElement is correct");
     assert.ok($secondNode.hasClass("dx-state-focused"), "next item was focused after 'down' was pressed");
 }),
 
@@ -106,7 +106,7 @@ QUnit.test("'home' key pressing move focus to the first element", function(asser
 
     keyboard.keyDown("home");
 
-    assert.equal(isRenderer(instance.option("focusedElement")), config().useJQueryRenderer, "focusedElement is correct");
+    assert.equal(isRenderer(instance.option("focusedElement")), config().useJQuery, "focusedElement is correct");
     assert.ok($secondNode.hasClass("dx-state-focused"), "first item was focused after 'home' was pressed");
 }),
 
@@ -163,7 +163,7 @@ QUnit.test("'end' key pressing move focus to the last element", function(assert)
 
     keyboard.keyDown("end");
 
-    assert.equal(isRenderer(instance.option("focusedElement")), config().useJQueryRenderer, "focusedElement is correct");
+    assert.equal(isRenderer(instance.option("focusedElement")), config().useJQuery, "focusedElement is correct");
     assert.ok($secondNode.hasClass("dx-state-focused"), "last item was focused after 'end' was pressed");
 }),
 
@@ -343,12 +343,12 @@ QUnit.test("left/right arrow collapse/expand node-container", function(assert) {
     $treeView.focusin();
     $parentItem.trigger("dxpointerdown");
     keyboard.keyDown("right");
-    assert.equal(isRenderer(instance.option("focusedElement")), config().useJQueryRenderer, "focusedElement is correct");
+    assert.equal(isRenderer(instance.option("focusedElement")), config().useJQuery, "focusedElement is correct");
     assert.ok($treeView.find("." + internals.NODE_CLASS).eq(1).is(":visible"), "child item not hidden");
     assert.ok($iconItem.hasClass("dx-treeview-toggle-item-visibility-opened"), "icon item indicate opened state");
 
     keyboard.keyDown("left");
-    assert.equal(isRenderer(instance.option("focusedElement")), config().useJQueryRenderer, "focusedElement is correct");
+    assert.equal(isRenderer(instance.option("focusedElement")), config().useJQuery, "focusedElement is correct");
     assert.ok($treeView.find("." + internals.NODE_CLASS).eq(1).is(":hidden"), "child item is hidden");
     assert.ok(!$iconItem.hasClass("dx-treeview-toggle-item-visibility-opened"), "icon item indicate closed state");
 }),

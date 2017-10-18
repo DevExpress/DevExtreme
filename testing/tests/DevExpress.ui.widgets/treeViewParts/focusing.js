@@ -28,7 +28,7 @@ QUnit.testInActiveWindow("item should have focus-state class after click on it",
 
     $item.trigger("dxpointerdown");
 
-    assert.equal(isRenderer(treeView.option("focusedElement")), config().useJQueryRenderer, "focusedElement is correct");
+    assert.equal(isRenderer(treeView.option("focusedElement")), config().useJQuery, "focusedElement is correct");
     assert.ok($node.hasClass("dx-state-focused"), "focus state was toggle after click");
 });
 

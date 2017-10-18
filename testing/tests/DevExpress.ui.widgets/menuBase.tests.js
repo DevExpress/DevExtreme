@@ -754,7 +754,7 @@ QUnit.test("select item when space pressed", function(assert) {
         .keyDown("down")
         .keyDown("space");
 
-    assert.equal(isRenderer(menuBase.instance.option("focusedElement")), config().useJQueryRenderer, "focusedElement is correct");
+    assert.equal(isRenderer(menuBase.instance.option("focusedElement")), config().useJQuery, "focusedElement is correct");
     assert.equal(menuBase.instance.option("selectedItem").text, "item2", "correct item is selected");
 });
 
