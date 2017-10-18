@@ -1606,7 +1606,8 @@ var TreeViewBase = HierarchicalCollectionWidget.inherit({
         var $node = $focusedNode.find("." + NODE_CONTAINER_CLASS).eq(0);
 
         if($node.hasClass(OPENED_NODE_CONTAINER_CLASS)) {
-            this.option("focusedElement", getPublicElement(this._nextItem(this._findNonDisabledNodes(this._nodeElements()))));
+            var $nextItem = this._nextItem(this._findNonDisabledNodes(this._nodeElements()));
+            this.option("focusedElement", getPublicElement($nextItem));
             return;
         }
 
