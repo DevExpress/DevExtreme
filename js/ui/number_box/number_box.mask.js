@@ -19,12 +19,12 @@ var NumberBoxMask = NumberBoxBase.inherit({
             useMaskBehavior: true,
 
             /**
-             * @name dxNumberBoxOptions_displayFormat
-             * @publicName displayFormat
+             * @name dxNumberBoxOptions_format
+             * @publicName format
              * @type String
              * @default null
              */
-            displayFormat: null
+            format: null
         });
     },
 
@@ -49,7 +49,7 @@ var NumberBoxMask = NumberBoxBase.inherit({
     },
 
     _useMaskBehavior: function() {
-        return !!this.option("displayFormat") && this.option("useMaskBehavior");
+        return !!this.option("format") && this.option("useMaskBehavior");
     },
 
     _renderInputType: function() {
@@ -177,7 +177,7 @@ var NumberBoxMask = NumberBoxBase.inherit({
     },
 
     _getStubCount: function() {
-        var format = this.option("displayFormat"),
+        var format = this.option("format"),
             escapedRegExp = new RegExp("^('[^']+')([#0])"),
             stubRegexp = new RegExp("^([^0#]+)[0#]"),
             escapedMatches = format.match(escapedRegExp),
@@ -229,11 +229,11 @@ var NumberBoxMask = NumberBoxBase.inherit({
         if(this._formattedValue !== resultValue) {
             var parsedValue = this._lightParse(resultValue);
             if(parsedValue !== null) {
-                resultValue = number.format(parsedValue, this._escapePercentFormat(this.option("displayFormat")));
+                resultValue = number.format(parsedValue, this._escapePercentFormat(this.option("format")));
             }
         }
 
-        if(number.parse(resultValue, this.option("displayFormat")) !== null) {
+        if(number.parse(resultValue, this.option("format")) !== null) {
             this._formattedValue = resultValue;
         }
     },
@@ -264,7 +264,7 @@ var NumberBoxMask = NumberBoxBase.inherit({
         }
 
         this._parsedValue = value;
-        this._formattedValue = number.format(value, this.option("displayFormat"));
+        this._formattedValue = number.format(value, this.option("format"));
         this._input().val(this._formattedValue);
 
         this._caret(this._normalizeCaret(caret));
@@ -283,7 +283,7 @@ var NumberBoxMask = NumberBoxBase.inherit({
             return;
         }
 
-        var parsedValue = number.parse(text, this.option("displayFormat"));
+        var parsedValue = number.parse(text, this.option("format"));
 
         this._applyValue(parsedValue);
     },
@@ -309,7 +309,7 @@ var NumberBoxMask = NumberBoxBase.inherit({
             return this.callBase(text);
         }
 
-        return this.callBase(number.parse(text, this.option("displayFormat")));
+        return this.callBase(number.parse(text, this.option("format")));
     },
 
     _valueChangeEventHandler: function(e) {
@@ -317,13 +317,13 @@ var NumberBoxMask = NumberBoxBase.inherit({
             return this.callBase(e);
         }
 
-        this.callBase(e, number.parse(this._input().val(), this.option("displayFormat")));
+        this.callBase(e, number.parse(this._input().val(), this.option("format")));
         this._applyValue(this.option("value"), true);
     },
 
     _optionChanged: function(args) {
         switch(args.name) {
-            case "displayFormat":
+            case "format":
             case "useMaskBehavior":
                 this._renderFormatter();
                 this._applyValue(this.option("value"), true);

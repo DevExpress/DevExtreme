@@ -8,10 +8,10 @@ require("ui/text_box/ui.text_editor");
 
 var INPUT_CLASS = "dx-texteditor-input";
 
-QUnit.module("displayFormat option", {
+QUnit.module("format option", {
     beforeEach: function() {
         this.$element = $("#numberbox").dxNumberBox({
-            displayFormat: "#0.##",
+            format: "#0.##",
             value: "",
             useMaskBehavior: true
         });
@@ -24,7 +24,7 @@ QUnit.module("displayFormat option", {
 QUnit.test("number type of input is not supported with masks", function(assert) {
     var $element = $("#numberbox").dxNumberBox({
             useMaskBehavior: true,
-            displayFormat: "#",
+            format: "#",
             mode: "number"
         }),
         instance = $element.dxNumberBox("instance");
@@ -42,7 +42,7 @@ QUnit.test("empty value should not be formatted", function(assert) {
 
 QUnit.test("parser should work with strict formats", function(assert) {
     this.instance.option("value", "");
-    this.instance.option("displayFormat", "#0.00");
+    this.instance.option("format", "#0.00");
 
     this.keyboard.type("1");
     assert.equal(this.input.val(), "1.00", "1 typed");
@@ -77,12 +77,12 @@ QUnit.test("typing a symbol should insert or replace a value", function(assert) 
     assert.equal(this.input.val(), "1273.89", "value is correct");
 });
 
-QUnit.test("parser should be refreshed when displayFormat option changed", function(assert) {
+QUnit.test("parser should be refreshed when format option changed", function(assert) {
     var parserMock = sinon.spy(number, "parse");
 
     try {
         this.instance.option({
-            displayFormat: "#.00",
+            format: "#.00",
             value: 123.45
         });
 
@@ -95,7 +95,7 @@ QUnit.test("parser should be refreshed when displayFormat option changed", funct
 
 QUnit.skip("removing required symbol should try replace it to 0", function(assert) {
     this.instance.option({
-        displayFormat: "#.000",
+        format: "#.000",
         value: 123.456
     });
 
@@ -111,7 +111,7 @@ QUnit.skip("removing required symbol should try replace it to 0", function(asser
 
 QUnit.test("pressing '-' button should revert the number", function(assert) {
     this.instance.option({
-        displayFormat: "#.000",
+        format: "#.000",
         value: 123.456
     });
 
@@ -124,7 +124,7 @@ QUnit.test("pressing '-' button should revert the number", function(assert) {
 
 QUnit.test("clear input value should clear a formatted value", function(assert) {
     this.instance.option({
-        displayFormat: "#.000",
+        format: "#.000",
         value: 123
     });
 
@@ -139,7 +139,7 @@ QUnit.test("clear input value should clear a formatted value", function(assert) 
 
 QUnit.test("new value should correctly apply after clear an old one", function(assert) {
     this.instance.option({
-        displayFormat: "#.000",
+        format: "#.000",
         value: 123
     });
 
@@ -155,7 +155,7 @@ QUnit.test("new value should correctly apply after clear an old one", function(a
 
 QUnit.test("replace all text should work correctly", function(assert) {
     this.instance.option({
-        displayFormat: "#.000",
+        format: "#.000",
         value: 123
     });
 
@@ -168,9 +168,9 @@ QUnit.test("replace all text should work correctly", function(assert) {
     assert.equal(this.input.val(), "4.000", "value is correct");
 });
 
-QUnit.test("displayFormat with stub symbol", function(assert) {
+QUnit.test("format with stub symbol", function(assert) {
     this.instance.option({
-        displayFormat: "$#"
+        format: "$#"
     });
 
     this.keyboard
@@ -181,9 +181,9 @@ QUnit.test("displayFormat with stub symbol", function(assert) {
     assert.equal(this.input.val(), "$12", "value is correct");
 });
 
-QUnit.test("update whole value in case when displayFormat contains a stub symbols", function(assert) {
+QUnit.test("update whole value in case when format contains a stub symbols", function(assert) {
     this.instance.option({
-        displayFormat: "$#",
+        format: "$#",
         value: 1
     });
 
@@ -196,9 +196,9 @@ QUnit.test("update whole value in case when displayFormat contains a stub symbol
 
 });
 
-QUnit.test("displayFormat with several stub symbols", function(assert) {
+QUnit.test("format with several stub symbols", function(assert) {
     this.instance.option({
-        displayFormat: "$$#",
+        format: "$$#",
         value: 1
     });
 
@@ -214,7 +214,7 @@ QUnit.test("displayFormat with several stub symbols", function(assert) {
 
 QUnit.test("remove stub symbol", function(assert) {
     this.instance.option({
-        displayFormat: "$$#",
+        format: "$$#",
         value: 1
     });
 
@@ -227,10 +227,10 @@ QUnit.test("remove stub symbol", function(assert) {
 
 });
 
-QUnit.skip("displayFormat with escaped symbol", function(assert) {
+QUnit.skip("format with escaped symbol", function(assert) {
     //todo: built-in localization bug: parser should work with escaped strings
     this.instance.option({
-        displayFormat: "$'#'$#"
+        format: "$'#'$#"
     });
 
     this.keyboard
@@ -262,7 +262,7 @@ QUnit.test("pressing float separator should not move the caret", function(assert
 
 QUnit.test("incorrect char didn't change an input value", function(assert) {
     this.instance.option({
-        displayFormat: "#",
+        format: "#",
         value: 1234
     });
 
@@ -298,7 +298,7 @@ QUnit.test("changing value to 0 should not clear the input", function(assert) {
 
 QUnit.test("removing first stub symbol should not clear the value", function(assert) {
     this.instance.option({
-        displayFormat: "$ #",
+        format: "$ #",
         value: 123
     });
 
@@ -321,18 +321,18 @@ QUnit.test("removing a char should work correctly with negative value", function
     assert.equal(this.input.val(), "-123.4", "value is correct");
 });
 
-QUnit.test("changing of displayFormat option should reformat the input", function(assert) {
+QUnit.test("changing of format option should reformat the input", function(assert) {
     this.instance.option("value", 0.5);
     assert.equal(this.input.val(), "0.5", "text is correct");
 
-    this.instance.option("displayFormat", "#%");
+    this.instance.option("format", "#%");
     assert.equal(this.input.val(), "50%", "text was reformatted");
     assert.equal(this.instance.option("value"), 0.5, "value was not changed");
 });
 
 QUnit.test("percent format should work properly on value change", function(assert) {
     this.instance.option("value", "");
-    this.instance.option("displayFormat", "#0%");
+    this.instance.option("format", "#0%");
     this.keyboard.type("45").change();
 
     assert.equal(this.input.val(), "45%", "text is correct");
@@ -340,7 +340,7 @@ QUnit.test("percent format should work properly on value change", function(asser
 });
 
 QUnit.test("removing a stub using backspace should remove previous char", function(assert) {
-    this.instance.option("displayFormat", "#%");
+    this.instance.option("format", "#%");
     this.instance.option("value", 1.23);
 
     assert.equal(this.input.val(), "123%", "initial value is correct");
