@@ -2,6 +2,30 @@
 
 declare module DevExpress {
 
+    /** @docid globalConfig */
+    export interface GlobalConfguration {
+        /** @docid globalConfig_rtlEnabled */
+        rtlEnabled?: boolean;
+
+        /** @docid globalConfig_defaultCurrency */
+        defaultCurrency?: String;
+
+        /** @docid globalConfig_serverDecimalSeparator */
+        serverDecimalSeparator?: String;
+
+        /** @docid globalConfig_decimalSeparator */
+        decimalSeparator?: String;
+
+        /** @docid globalConfig_thousandsSeparator */
+        thousandsSeparator?: String;
+
+        /** @docid globalConfig_forceIsoDateParsing */
+        forceIsoDateParsing?: boolean;
+
+        /** @docid globalConfig_useJQuery */
+        useJQuery?: boolean;
+    }
+
     /** @docid format */
     export interface Format {
         /** @docid format_type */
@@ -143,7 +167,7 @@ declare module DevExpress {
     export function config(): Object;
 
     /** @docid config#config(config) */
-    export function config(config: Object): void;
+    export function config(config: GlobalConfguration): void;
 
     /** @docid registerComponent#registerComponent(name,componentClass) */
     export function registerComponent(name: string, componentClass: Object): void;
