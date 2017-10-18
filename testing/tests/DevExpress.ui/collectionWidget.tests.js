@@ -1052,11 +1052,11 @@ QUnit.test("default page scroll should be prevented for space key", function(ass
 }),
 
 QUnit.test("focused item changed after press right/left arrows", function(assert) {
-    assert.expect(2);
+    assert.expect(3);
 
     var $element = $("#cmp");
 
-    new TestComponent($element, {
+    var instance = new TestComponent($element, {
         focusStateEnabled: true,
         items: [0, 1, 2, 3, 4]
     });
@@ -1068,6 +1068,7 @@ QUnit.test("focused item changed after press right/left arrows", function(assert
     keyboard.keyDown("right");
 
     $item = $item.next();
+    assert.equal(isRenderer(instance.option("focusedElement")), config().useJQueryRenderer, "focusedElement is correct");
     assert.ok($item.hasClass(FOCUSED_ITEM_CLASS), "press right arrow on item change focused item on next");
 
     keyboard.keyDown("left");

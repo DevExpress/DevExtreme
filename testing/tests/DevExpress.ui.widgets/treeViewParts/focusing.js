@@ -4,6 +4,8 @@
 
 var $ = require("jquery"),
     noop = require("core/utils/common").noop,
+    isRenderer = require("core/utils/type").isRenderer,
+    config = require("core/config"),
     devices = require("core/devices");
 
 var NODE_CLASS = "dx-treeview-node",
@@ -22,8 +24,11 @@ QUnit.testInActiveWindow("item should have focus-state class after click on it",
         $item = $treeView.find("." + internals.ITEM_CLASS).eq(0),
         $node = $treeView.find("." + internals.NODE_CLASS).eq(0);
 
+    var treeView = $treeView.dxTreeView("instance");
+
     $item.trigger("dxpointerdown");
 
+    assert.equal(isRenderer(treeView.option("focusedElement")), config().useJQueryRenderer, "focusedElement is correct");
     assert.ok($node.hasClass("dx-state-focused"), "focus state was toggle after click");
 });
 

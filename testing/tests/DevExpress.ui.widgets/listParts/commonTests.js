@@ -353,10 +353,13 @@ QUnit.test("focus should move to first group's item when group expands", functio
         $headers = $element.find(toSelector(LIST_GROUP_HEADER_CLASS)),
         $items = $element.find(toSelector(LIST_ITEM_CLASS));
 
+    var instance = $element.dxList("instance");
+
     $element.trigger("focusin");
 
     $headers.eq(1).trigger("dxclick");
     $headers.eq(1).trigger("dxclick");
+    assert.equal(isRenderer(instance.option("focusedElement")), config().useJQueryRenderer, "focusedElement is correct");
     assert.ok($items.eq(2).hasClass("dx-state-focused"), "first item of the second group is focused");
     assert.notOk($items.eq(0).hasClass("dx-state-focused"), "first item of the first group lost focus");
 });
@@ -2301,7 +2304,7 @@ QUnit.module("keyboard navigation", {
 });
 
 QUnit.test("list scroll to focused item after press up/down arrows", function(assert) {
-    assert.expect(2);
+    assert.expect(3);
 
     var $element = $("#list").dxList({
             focusStateEnabled: true,
@@ -2316,6 +2319,7 @@ QUnit.test("list scroll to focused item after press up/down arrows", function(as
     instance.option("height", itemHeight * 3);
 
     keyboard.keyDown("down");
+    assert.equal(isRenderer(instance.option("focusedElement")), config().useJQueryRenderer, "focusedElement is correct");
     assert.equal(instance.scrollTop(), itemHeight, "item scrolled to visible area at bottom when down arrow were pressed");
 
     $item = $element.find(toSelector(LIST_ITEM_CLASS)).eq(1);
@@ -2347,7 +2351,7 @@ QUnit.test("list does not scroll to item after click on it", function(assert) {
 });
 
 QUnit.test("list scroll to focused item after press home/end", function(assert) {
-    assert.expect(2);
+    assert.expect(4);
 
     var $element = $("#list").dxList({
             focusStateEnabled: true,
@@ -2363,9 +2367,11 @@ QUnit.test("list scroll to focused item after press home/end", function(assert) 
     instance.option("height", itemHeight * 3);
 
     keyboard.keyDown("end");
+    assert.equal(isRenderer(instance.option("focusedElement")), config().useJQueryRenderer, "focusedElement is correct");
     assert.roughEqual(instance.scrollTop(), itemHeight * 2, 1.0001, "item scrolled to visible area at bottom end arrow were pressed");
 
     keyboard.keyDown("home");
+    assert.equal(isRenderer(instance.option("focusedElement")), config().useJQueryRenderer, "focusedElement is correct");
     assert.equal(instance.scrollTop(), 0, "item scrolled to visible area at top when home were pressed");
 });
 

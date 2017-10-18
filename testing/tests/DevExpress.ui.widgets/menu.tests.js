@@ -4,6 +4,8 @@ var $ = require("jquery"),
     devices = require("core/devices"),
     fx = require("animation/fx"),
     viewPort = require("core/utils/view_port").value,
+    isRenderer = require("core/utils/type").isRenderer,
+    config = require("core/config"),
     Submenu = require("ui/menu/ui.submenu"),
     resizeCallbacks = require("core/utils/window").resizeCallbacks,
     Menu = require("ui/menu/ui.menu"),
@@ -1352,6 +1354,7 @@ QUnit.test("select item when space pressed", function(assert) {
         .keyDown("space");
 
     //assert
+    assert.equal(isRenderer(this.menu.instance.option("focusedElement")), config().useJQueryRenderer, "focusedElement is correct");
     assert.equal(this.menu.instance.option("selectedItem").text, "item3", "correct item is selected");
 });
 
@@ -1388,6 +1391,7 @@ QUnit.test("select item when space pressed on inner level", function(assert) {
         .keyDown("space");
 
     //assert
+    assert.equal(isRenderer(this.menu.instance.option("focusedElement")), config().useJQueryRenderer, "focusedElement is correct");
     assert.equal(this.menu.instance.option("selectedItem").text, "item2-3", "correct item is selected");
 });
 

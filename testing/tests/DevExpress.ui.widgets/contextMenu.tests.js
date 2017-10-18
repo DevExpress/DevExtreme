@@ -6,6 +6,8 @@ var $ = require("jquery"),
     ContextMenu = require("ui/context_menu"),
     eventUtils = require("events/utils"),
     contextMenuEvent = require("events/contextmenu"),
+    isRenderer = require("core/utils/type").isRenderer,
+    config = require("core/config"),
     keyboardMock = require("../../helpers/keyboardMock.js");
 
 require("ui/button");
@@ -1602,6 +1604,7 @@ QUnit.test("when press right arrow key we only show submenu if exist", function(
         .keyDown("down")
         .keyDown("right");
 
+    assert.equal(isRenderer(instance.option("focusedElement")), config().useJQueryRenderer, "focusedElement is correct");
     assert.equal(getFocusedItemText(instance), "item 21", "focus on first item of second submenu");
     assert.equal(getVisibleSubmenuCount(instance), 2, "we see two submenus");
 

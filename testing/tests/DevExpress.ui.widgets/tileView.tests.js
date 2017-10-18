@@ -2,7 +2,9 @@
 
 var $ = require("jquery"),
     DataSource = require("data/data_source/data_source").DataSource,
-    keyboardMock = require("../../helpers/keyboardMock.js");
+    keyboardMock = require("../../helpers/keyboardMock.js"),
+    isRenderer = require("core/utils/type").isRenderer,
+    globalConfig = require("core/config");
 
 require("ui/tile_view");
 require("common.css!");
@@ -525,13 +527,15 @@ $.each(configs, function(direction, config) {
             "vertical": { start: 1, end: 2 }
         })[direction];
 
-        var $element = this.$element,
-            keyboard = this.keyboard;
+        var $element = this.$element;
+        var keyboard = this.keyboard;
+        var instance = $("#widget").dxTileView("instance");
 
         $element.find(TILEVIEW_ITEM_SELECTOR).eq(testConfig.start).trigger("dxpointerdown");
         this.clock.tick();
         keyboard.keyDown("right");
 
+        assert.equal(isRenderer(instance.option("focusedElement")), globalConfig().useJQueryRenderer, "focusedElement is correct");
         assert.ok($element.find(TILEVIEW_ITEM_SELECTOR).eq(testConfig.end).hasClass("dx-state-focused"), "right element obtained dx-state-focused after press right arrow");
     });
 
@@ -541,13 +545,15 @@ $.each(configs, function(direction, config) {
             "vertical": { start: 3, end: 1 }
         })[direction];
 
-        var $element = this.$element,
-            keyboard = this.keyboard;
+        var $element = this.$element;
+        var keyboard = this.keyboard;
+        var instance = $("#widget").dxTileView("instance");
 
         $element.find(TILEVIEW_ITEM_SELECTOR).eq(testConfig.start).trigger("dxpointerdown");
         this.clock.tick();
         keyboard.keyDown("left");
 
+        assert.equal(isRenderer(instance.option("focusedElement")), globalConfig().useJQueryRenderer, "focusedElement is correct");
         assert.ok($element.find(TILEVIEW_ITEM_SELECTOR).eq(testConfig.end).hasClass("dx-state-focused"), "left element obtained dx-state-focused after press left arrow");
     });
 
@@ -557,13 +563,15 @@ $.each(configs, function(direction, config) {
             "vertical": { start: 3, end: 5 }
         })[direction];
 
-        var $element = this.$element,
-            keyboard = this.keyboard;
+        var $element = this.$element;
+        var keyboard = this.keyboard;
+        var instance = $("#widget").dxTileView("instance");
 
         $element.find(TILEVIEW_ITEM_SELECTOR).eq(testConfig.start).trigger("dxpointerdown");
         this.clock.tick();
         keyboard.keyDown("down");
 
+        assert.equal(isRenderer(instance.option("focusedElement")), globalConfig().useJQueryRenderer, "focusedElement is correct");
         assert.ok($element.find(TILEVIEW_ITEM_SELECTOR).eq(testConfig.end).hasClass("dx-state-focused"), "down element obtained dx-state-focused after press down arrow");
     });
 
@@ -573,13 +581,15 @@ $.each(configs, function(direction, config) {
             "vertical": { start: 3, end: 5 }
         })[direction];
 
-        var $element = this.$element,
-            keyboard = this.keyboard;
+        var $element = this.$element;
+        var keyboard = this.keyboard;
+        var instance = $("#widget").dxTileView("instance");
 
         $element.find(TILEVIEW_ITEM_SELECTOR).eq(testConfig.start).trigger("dxpointerdown");
         this.clock.tick();
         keyboard.keyDown("pageDown");
 
+        assert.equal(isRenderer(instance.option("focusedElement")), globalConfig().useJQueryRenderer, "focusedElement is correct");
         assert.ok($element.find(TILEVIEW_ITEM_SELECTOR).eq(testConfig.end).hasClass("dx-state-focused"), "pageDown element obtained dx-state-focused after press pageDown arrow");
     });
 

@@ -877,6 +877,23 @@ QUnit.test("changing value to NaN does not call optionChanged twice", function(a
     assert.equal(called, 1, "NaN handled once");
 });
 
+QUnit.test("DOM Element comparing by link", function(assert) {
+    var called = 0,
+        element = document.createElement("div"),
+        instance = new TestComponent({
+            option1: element,
+            onOptionChanged: function(args) {
+                called++;
+            }
+        }),
+        newElement = document.createElement("div");
+
+    instance.option("option1", element);
+    instance.option("option1", newElement);
+
+    assert.equal(called, 1, "DOM Element compared by link");
+});
+
 QUnit.test("_optionChanging is called before inner _options object is changed", function(assert) {
     var instance = new TestComponent({
         option1: 1

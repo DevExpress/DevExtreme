@@ -2,6 +2,8 @@
 
 var $ = require("jquery"),
     devices = require("core/devices"),
+    isRenderer = require("core/utils/type").isRenderer,
+    config = require("core/config"),
     MenuBase = require("ui/context_menu/ui.menu_base"),
     keyboardMock = require("../../helpers/keyboardMock.js");
 
@@ -735,7 +737,7 @@ QUnit.test('Prevent selection', function(assert) {
 QUnit.module('Keyboard navigation');
 
 QUnit.test("select item when space pressed", function(assert) {
-    assert.expect(2);
+    assert.expect(3);
 
     var menuBase = createMenu({
         selectionMode: 'single',
@@ -752,6 +754,7 @@ QUnit.test("select item when space pressed", function(assert) {
         .keyDown("down")
         .keyDown("space");
 
+    assert.equal(isRenderer(menuBase.instance.option("focusedElement")), config().useJQueryRenderer, "focusedElement is correct");
     assert.equal(menuBase.instance.option("selectedItem").text, "item2", "correct item is selected");
 });
 
