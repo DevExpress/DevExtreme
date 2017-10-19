@@ -7,6 +7,6 @@ define(function(require) {
 
     QUnit.test("config value useJQuery should be false if jquery is not included", function(assert) {
         var config = DevExpress.config;
-        assert.equal(config().useJQuery, false);
+        assert.equal(!!config().useJQuery, false);
     });
 });

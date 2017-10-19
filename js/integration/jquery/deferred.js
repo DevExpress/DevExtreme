@@ -2,10 +2,10 @@
 
 var jQuery = require("jquery");
 var deferredUtils = require("../../core/utils/deferred");
-var useJQuery = require("../../core/config")().useJQuery;
+var useJQuery = require("./use_jquery")();
 var compareVersion = require("../../core/utils/version").compare;
 
-if(jQuery && useJQuery) {
+if(useJQuery) {
     var Deferred = jQuery.Deferred;
     var strategy = { Deferred: Deferred };
 
