@@ -656,6 +656,26 @@ QUnit.module("on value changed", function() {
         assert.notEqual(instance.option("value"), value);
     });
 
+    QUnit.test("add/remove not valid conditions", function(assert) {
+        var container = $("#container"),
+            value = [["Zipcode", ""]],
+            instance = container.dxFilterBuilder({
+                value: value,
+                fields: [fields[3]]
+            }).dxFilterBuilder("instance");
+
+        // add condition
+        clickByButtonAndSelectMenuItem($("." + FILTER_BUILDER_IMAGE_ADD_CLASS), 1);
+
+        assert.equal(instance.option("value"), value);
+
+        //remove condition
+        value = instance.option("value");
+        clickByButtonAndSelectMenuItem($("." + FILTER_BUILDER_IMAGE_REMOVE_CLASS).eq(1), 0);
+
+        assert.equal(instance.option("value"), value);
+    });
+
     QUnit.test("change condition field", function(assert) {
         var container = $("#container"),
             value = [["CompanyName", "K&S Music"]],

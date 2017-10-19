@@ -323,7 +323,7 @@ function convertToInnerStructure(value) {
     return convertToInnerGroup(value);
 }
 
-function getNormalizedFilter(group) {
+function getNormalizedFilter(group, fields) {
     var criteria = getGroupCriteria(group),
         i;
 
@@ -334,10 +334,15 @@ function getNormalizedFilter(group) {
     var itemsForRemove = [];
     for(i = 0; i < criteria.length; i++) {
         if(isGroup(criteria[i])) {
-            var normalizedGroupValue = getNormalizedFilter(criteria[i]);
+            var normalizedGroupValue = getNormalizedFilter(criteria[i], fields);
             if(normalizedGroupValue) {
                 criteria[i] = normalizedGroupValue;
             } else {
+                itemsForRemove.push(criteria[i]);
+            }
+        } else if(isCondition(criteria[i])) {
+            var field = getField(criteria[i][0], fields);
+            if(!isValidCondition(criteria[i], field)) {
                 itemsForRemove.push(criteria[i]);
             }
         }
@@ -492,6 +497,14 @@ function getOperationValue(condition) {
     return caption;
 }
 
+function isValidCondition(condition, field) {
+    if(field.dataType !== "string") {
+        return condition[2] !== "";
+    }
+    return true;
+}
+
+exports.isValidCondition = isValidCondition;
 exports.isEmptyGroup = isEmptyGroup;
 exports.getOperationFromAvailable = getOperationFromAvailable;
 exports.updateConditionByOperation = updateConditionByOperation;

@@ -417,6 +417,12 @@ QUnit.module("Utils", function() {
         assert.deepEqual(utils.createEmptyGroup("and"), ["and"]);
         assert.deepEqual(utils.createEmptyGroup("notAnd"), ["!", ["and"]]);
     });
+
+    QUnit.test("isValidCondition", function(assert) {
+        assert.ok(utils.isValidCondition(["ZipCode", "=", 1], fields[3]));
+        assert.ok(utils.isValidCondition(["ZipCode", "=", null], fields[3]));
+        assert.notOk(utils.isValidCondition(["ZipCode", "=", ""], fields[3]));
+    });
 });
 
 QUnit.module("Add item", function() {
@@ -666,53 +672,53 @@ QUnit.module("Filter normalization", function() {
     QUnit.test("get normalized filter from empty group", function(assert) {
         var group = [];
 
-        assert.equal(utils.getNormalizedFilter(group), null);
+        assert.equal(utils.getNormalizedFilter(group, fields), null);
     });
 
     QUnit.test("get normalized filter from group without conditions", function(assert) {
         var group = ["and"];
 
-        assert.equal(utils.getNormalizedFilter(group), null);
+        assert.equal(utils.getNormalizedFilter(group, fields), null);
     });
 
     QUnit.test("get normalized filter from group with condition", function(assert) {
         var group = [condition1, "and"];
 
-        assert.equal(utils.getNormalizedFilter(group), condition1);
+        assert.equal(utils.getNormalizedFilter(group, fields), condition1);
     });
 
     QUnit.test("get normalized filter from group with short condition", function(assert) {
         var group = [["CompanyName", "DevExpress"]];
 
-        assert.equal(utils.getNormalizedFilter(group), group[0]);
+        assert.equal(utils.getNormalizedFilter(group, fields), group[0]);
     });
 
     QUnit.test("get normalized filter from inner group with one condition", function(assert) {
         var group = [[condition1]];
 
-        assert.equal(utils.getNormalizedFilter(group), condition1);
+        assert.equal(utils.getNormalizedFilter(group, fields), condition1);
     });
 
     QUnit.test("get normalized filter from group with inner group", function(assert) {
         var group = [condition1, "and", [condition2, "and"]];
 
-        group = utils.getNormalizedFilter(group);
+        group = utils.getNormalizedFilter(group, fields);
 
         assert.equal(group[0], condition1);
         assert.equal(group[1], condition2);
 
         group = [condition1, "or", [condition2, "or"]];
-        group = utils.getNormalizedFilter(group);
+        group = utils.getNormalizedFilter(group, fields);
 
         assert.deepEqual(group, [condition1, "or", condition2]);
 
         group = [condition1, "and", condition2, "and", ["and"]];
-        group = utils.getNormalizedFilter(group);
+        group = utils.getNormalizedFilter(group, fields);
 
         assert.deepEqual(group, [condition1, condition2]);
 
         group = [condition1, "and", ["and"]];
-        group = utils.getNormalizedFilter(group);
+        group = utils.getNormalizedFilter(group, fields);
 
         assert.deepEqual(group, condition1);
     });
@@ -720,7 +726,7 @@ QUnit.module("Filter normalization", function() {
     QUnit.test("get normalized filter from group with many inner groups", function(assert) {
         var group = [condition1, "and", condition2, "and", ["and"], "and", ["and"], "and", ["and"], "and", ["and"]];
 
-        group = utils.getNormalizedFilter(group);
+        group = utils.getNormalizedFilter(group, fields);
 
         assert.deepEqual(group, [condition1, condition2]);
         assert.equal(group[0], condition1);
@@ -729,21 +735,30 @@ QUnit.module("Filter normalization", function() {
     QUnit.test("get normalized filter from negative group", function(assert) {
         var group = ["!", [condition1, "and", ["and"]]];
 
-        group = utils.getNormalizedFilter(group);
+        group = utils.getNormalizedFilter(group, fields);
 
         assert.deepEqual(group, ["!", condition1]);
 
         group = ["!", [condition1, "and", condition2]];
-        group = utils.getNormalizedFilter(group);
+        group = utils.getNormalizedFilter(group, fields);
 
         assert.deepEqual(group, ["!", [condition1, condition2]]);
         assert.equal(group[1][0], condition1);
     });
 
+    QUnit.test("get normalized filter from group which contains not valid conditions", function(assert) {
+        var notValidCondition = ["Zipcode", "=", ""],
+            group = [notValidCondition, [notValidCondition, "and", condition2], ["!", [condition3, "and", notValidCondition]]];
+
+        group = utils.getNormalizedFilter(group, fields);
+
+        assert.deepEqual(group, [condition2, ["!", condition3]]);
+    });
+
     QUnit.test("get normalized filter from normalized group which contains not normalized groups", function(assert) {
         var group = [[condition1, "and", condition2], [condition3, "and", condition2]];
 
-        group = utils.getNormalizedFilter(group);
+        group = utils.getNormalizedFilter(group, fields);
 
         assert.deepEqual(group, [[condition1, condition2], [condition3, condition2]]);
         assert.equal(group[1][0], condition3);

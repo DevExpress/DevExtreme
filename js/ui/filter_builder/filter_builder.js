@@ -395,7 +395,7 @@ var FilterBuilder = Widget.inherit({
     _updateFilter: function() {
         this._disableInvalidateForValue = true;
         var value = extend(true, [], this._model);
-        this.option("value", utils.getNormalizedFilter(value));
+        this.option("value", utils.getNormalizedFilter(value, this.option("fields")));
         this._disableInvalidateForValue = false;
     },
 
@@ -484,10 +484,13 @@ var FilterBuilder = Widget.inherit({
             utils.addItem(newGroup, criteria);
             that._createGroupElement(newGroup, criteria).appendTo($groupContent);
         }, function() {
-            var newCondition = utils.createCondition(that.option("fields")[0]);
+            var field = that.option("fields")[0],
+                newCondition = utils.createCondition(field);
             utils.addItem(newCondition, criteria);
             that._createConditionElement(newCondition, criteria).appendTo($groupContent);
-            that._updateFilter();
+            if(utils.isValidCondition(newCondition, field)) {
+                that._updateFilter();
+            }
         }).appendTo($groupItem);
 
         return $group;
@@ -676,7 +679,9 @@ var FilterBuilder = Widget.inherit({
         this._createRemoveButton(function() {
             utils.removeItem(parent, condition);
             $item.remove();
-            that._updateFilter();
+            if(utils.isValidCondition(condition, field)) {
+                that._updateFilter();
+            }
         }).appendTo($item);
         this._createFieldButtonWithMenu(condition, field).appendTo($item);
         this._createOperationAndValueButtons(condition, field, $item);
@@ -770,7 +775,7 @@ var FilterBuilder = Widget.inherit({
             value: value,
             filterOperation: utils.getOperationValue(item),
             setValue: function(data) {
-                value = data;
+                value = data || "";
             }
         });
 
