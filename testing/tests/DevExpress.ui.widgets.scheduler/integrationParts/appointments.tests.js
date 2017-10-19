@@ -4689,11 +4689,10 @@ QUnit.test("The second appointment in recurring series in Month view should have
         views: ["month"],
         currentView: "month"
     });
+    var $appointments = this.instance.$element().find(".dx-scheduler-appointment"),
+        cellWidth = this.instance.$element().find(".dx-scheduler-date-table-cell").outerWidth();
 
-    var $appointments = this.instance.element().find(".dx-scheduler-appointment"),
-        cellWidth = this.instance.element().find(".dx-scheduler-date-table-cell").outerWidth();
-
-    assert.equal($appointments.eq(1).width(), cellWidth * 2 - 1, "2d appt has correct width");
+    assert.equal($appointments.eq(1).outerWidth(), cellWidth * 2, "2d appt has correct width");
 });
 
 QUnit.test("Reduced reccuring appt should have right left position in first column in Month view", function(assert) {
@@ -4709,8 +4708,8 @@ QUnit.test("Reduced reccuring appt should have right left position in first colu
         currentView: "month"
     });
 
-    var $appointment = this.instance.element().find(".dx-scheduler-appointment"),
-        $reducedAppointment = this.instance.element().find(".dx-scheduler-appointment-reduced"),
+    var $appointment = this.instance.$element().find(".dx-scheduler-appointment"),
+        $reducedAppointment = this.instance.$element().find(".dx-scheduler-appointment-reduced"),
         compactClass = "dx-scheduler-appointment-compact";
 
     assert.equal($reducedAppointment.eq(1).position().left, 0, "first appt has right left position");
@@ -4741,10 +4740,10 @@ QUnit.test("Reduced reccuring appt should have right left position in first colu
         ]
     });
 
-    var $appointment = this.instance.element().find(".dx-scheduler-appointment"),
-        $reducedAppointment = this.instance.element().find(".dx-scheduler-appointment-reduced"),
+    var $appointment = this.instance.$element().find(".dx-scheduler-appointment"),
+        $reducedAppointment = this.instance.$element().find(".dx-scheduler-appointment-reduced"),
         compactClass = "dx-scheduler-appointment-compact",
-        cellWidth = this.instance.element().find(".dx-scheduler-date-table-cell").outerWidth();
+        cellWidth = this.instance.$element().find(".dx-scheduler-date-table-cell").outerWidth();
 
     assert.equal($reducedAppointment.eq(1).position().left, cellWidth * 7, "first appt in 2d group has right left position");
     assert.notOk($appointment.eq(7).hasClass(compactClass), "appt isn't compact");
