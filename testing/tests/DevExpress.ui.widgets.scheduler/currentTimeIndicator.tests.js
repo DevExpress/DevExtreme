@@ -477,13 +477,17 @@ var stubInvokeMethod = function(instance, options) {
 
     QUnit.test("TimePanel currentTime cell should have specific class, Week view", function(assert) {
         this.instance.option({
-            indicatorTime: new Date(2017, 8, 6, 12, 45)
+            indicatorTime: new Date(2017, 8, 6, 12, 30)
         });
 
         var $element = this.instance.$element(),
-            $cell = $element.find(".dx-scheduler-time-panel-cell").eq(9);
+            $firstCell = $element.find(".dx-scheduler-time-panel-cell").eq(8),
+            $secondCell = $element.find(".dx-scheduler-time-panel-cell").eq(9),
+            $thirdCell = $element.find(".dx-scheduler-time-panel-cell").eq(10);
 
-        assert.ok($cell.hasClass("dx-scheduler-time-panel-current-time-cell"), "Cell has specific class");
+        assert.ok($firstCell.hasClass("dx-scheduler-time-panel-current-time-cell"), "Cell has specific class");
+        assert.ok($secondCell.hasClass("dx-scheduler-time-panel-current-time-cell"), "Cell has specific class");
+        assert.notOk($thirdCell.hasClass("dx-scheduler-time-panel-current-time-cell"), "Cell hasn't specific class");
     });
 
     QUnit.test("DateHeader currentTime cell should have specific class, Week view", function(assert) {
