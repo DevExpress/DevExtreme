@@ -1,3 +1,3 @@
 "use strict";
 
-window.jQuery = false;
+window.jQuery = module.exports = undefined;
