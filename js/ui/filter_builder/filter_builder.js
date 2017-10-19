@@ -395,7 +395,7 @@ var FilterBuilder = Widget.inherit({
     _updateFilter: function() {
         this._disableInvalidateForValue = true;
         var value = extend(true, [], this._model);
-        this.option("value", utils.getNormalizedFilter(value));
+        this.option("value", utils.getNormalizedFilter(value, this.option("fields")));
         this._disableInvalidateForValue = false;
     },
 
@@ -484,10 +484,13 @@ var FilterBuilder = Widget.inherit({
             utils.addItem(newGroup, criteria);
             that._createGroupElement(newGroup, criteria).appendTo($groupContent);
         }, function() {
-            var newCondition = utils.createCondition(that.option("fields")[0]);
+            var field = that.option("fields")[0],
+                newCondition = utils.createCondition(field);
             utils.addItem(newCondition, criteria);
             that._createConditionElement(newCondition, criteria).appendTo($groupContent);
-            that._updateFilter();
+            if(utils.isValidCondition(newCondition, field)) {
+                that._updateFilter();
+            }
         }).appendTo($groupItem);
 
         return $group;
@@ -574,7 +577,7 @@ var FilterBuilder = Widget.inherit({
     },
 
     _hasValueButton: function(condition) {
-        return condition[2] !== null && condition[1] !== null;
+        return condition[2] !== null;
     },
 
     _createOperationButtonWithMenu: function(condition, field) {
@@ -676,7 +679,9 @@ var FilterBuilder = Widget.inherit({
         this._createRemoveButton(function() {
             utils.removeItem(parent, condition);
             $item.remove();
-            that._updateFilter();
+            if(utils.isValidCondition(condition, field)) {
+                that._updateFilter();
+            }
         }).appendTo($item);
         this._createFieldButtonWithMenu(condition, field).appendTo($item);
         this._createOperationAndValueButtons(condition, field, $item);
@@ -733,8 +738,7 @@ var FilterBuilder = Widget.inherit({
 
     _createValueText: function(item, field, $container) {
         var that = this,
-            valueIndex = item.length - 1,
-            valueText = utils.getCurrentValueText(field, item[valueIndex]) || messageLocalization.format("dxFilterBuilder-enterValueText"),
+            valueText = utils.getCurrentValueText(field, item[2]) || messageLocalization.format("dxFilterBuilder-enterValueText"),
             $text = $("<div>")
                 .addClass(FILTER_BUILDER_ITEM_VALUE_TEXT_CLASS)
                 .attr("tabindex", 0)
@@ -750,16 +754,15 @@ var FilterBuilder = Widget.inherit({
 
     _createValueEditorWithEvents: function(item, field, $container) {
         var that = this,
-            valueIndex = item.length - 1,
-            value = item[valueIndex],
+            value = item[2],
             disableEvents = function() {
                 eventsEngine.off($container, "focusout");
                 eventsEngine.off($container, "keyup");
             },
             updateValue = function(value, callback) {
-                var areValuesDifferent = item[valueIndex] !== value;
+                var areValuesDifferent = item[2] !== value;
                 if(areValuesDifferent) {
-                    item[valueIndex] = value;
+                    item[2] = value;
                 }
                 callback();
                 if(areValuesDifferent) {
@@ -772,7 +775,7 @@ var FilterBuilder = Widget.inherit({
             value: value,
             filterOperation: utils.getOperationValue(item),
             setValue: function(data) {
-                value = data;
+                value = data || "";
             }
         });
 
