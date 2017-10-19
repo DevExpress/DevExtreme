@@ -4676,3 +4676,76 @@ QUnit.test("Scheduler should add only one appointment at multiple 'done' button 
 
     assert.equal($appointments.length, 1, "right appointment quantity");
 });
+
+QUnit.test("The second appointment in recurring series in Month view should have correct width", function(assert) {
+    this.createInstance({
+        dataSource: [{
+            text: "Appointment 1",
+            startDate: new Date(2017, 9, 17, 9),
+            endDate: new Date(2017, 9, 18, 10),
+            recurrenceRule: "FREQ=WEEKLY;BYDAY=SU,MO,TU,WE,TH,FR,SA"
+        }],
+        currentDate: new Date(2017, 9, 17),
+        views: ["month"],
+        currentView: "month"
+    });
+
+    var $appointments = this.instance.element().find(".dx-scheduler-appointment"),
+        cellWidth = this.instance.element().find(".dx-scheduler-date-table-cell").outerWidth();
+
+    assert.equal($appointments.eq(1).width(), cellWidth * 2 - 1, "2d appt has correct width");
+});
+
+QUnit.test("Reduced reccuring appt should have right left position in first column in Month view", function(assert) {
+    this.createInstance({
+        dataSource: [{
+            text: "Appointment 1",
+            startDate: new Date(2017, 9, 17, 9),
+            endDate: new Date(2017, 9, 18, 10),
+            recurrenceRule: "FREQ=WEEKLY;BYDAY=SU,MO,TU,WE,TH,FR,SA"
+        }],
+        currentDate: new Date(2017, 9, 17),
+        views: ["month"],
+        currentView: "month"
+    });
+
+    var $appointment = this.instance.element().find(".dx-scheduler-appointment"),
+        $reducedAppointment = this.instance.element().find(".dx-scheduler-appointment-reduced"),
+        compactClass = "dx-scheduler-appointment-compact";
+
+    assert.equal($reducedAppointment.eq(1).position().left, 0, "first appt has right left position");
+    assert.notOk($appointment.eq(7).hasClass(compactClass), "next appt isn't compact");
+});
+
+QUnit.test("Reduced reccuring appt should have right left position in first column in grouped Month view", function(assert) {
+    this.createInstance({
+        dataSource: [{
+            text: "Appointment 1",
+            startDate: new Date(2017, 9, 17, 9),
+            endDate: new Date(2017, 9, 18, 10),
+            recurrenceRule: "FREQ=WEEKLY;BYDAY=SU,MO,TU,WE,TH,FR,SA",
+            ownerId: 2
+        }],
+        currentDate: new Date(2017, 9, 17),
+        views: ["month"],
+        currentView: "month",
+        groups: ["ownerId"],
+        resources: [
+            {
+                field: "ownerId",
+                dataSource: [
+                    { id: 1, text: "one" },
+                    { id: 2, text: "two" }
+                ]
+            }
+        ]
+    });
+
+    var $appointment = this.instance.element().find(".dx-scheduler-appointment"),
+        $reducedAppointment = this.instance.element().find(".dx-scheduler-appointment-reduced"),
+        compactClass = "dx-scheduler-appointment-compact",
+        cellWidth = this.instance.element().find(".dx-scheduler-date-table-cell").outerWidth();
+
+    assert.equal($reducedAppointment.eq(1).position().left, cellWidth * 7, "first appt in 2d group has right left position");
+    assert.notOk($appointment.eq(7).hasClass(compactClass), "appt isn't compact");
+});
