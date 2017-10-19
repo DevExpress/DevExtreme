@@ -1025,6 +1025,6 @@ QUnit.test("Reduced reccuring appt should have right left position in first colu
         compactClass = "dx-scheduler-appointment-compact",
         cellWidth = this.instance.$element().find(".dx-scheduler-date-table-cell").outerWidth();
 
-    assert.equal($reducedAppointment.eq(1).position().left, cellWidth * 7, "first appt in 2d group has right left position");
+    assert.roughEqual($reducedAppointment.eq(1).position().left, cellWidth * 7, 1.001, "first appt in 2d group has right left position");
     assert.notOk($appointment.eq(7).hasClass(compactClass), "appt isn't compact");
 });
