@@ -317,13 +317,14 @@ var TabPanel = MultiView.inherit({
             loopItemFocus: this.option("loop"),
             selectionRequired: true,
             onOptionChanged: (function(args) {
-                var name = args.name,
-                    value = $(args.value);
-
-                if(name === "focusedElement") {
-                    var id = value ? value.index() : value;
-                    var newItem = value ? this._itemElements().eq(id) : value;
-                    this.option("focusedElement", getPublicElement(newItem));
+                if(args.name === "focusedElement") {
+                    if(args.value) {
+                        var $value = $(args.value);
+                        var newItem = this._itemElements().eq($value.index());
+                        this.option("focusedElement", getPublicElement(newItem));
+                    } else {
+                        this.option("focusedElement", args.value);
+                    }
                 }
             }).bind(this),
             onFocusIn: (function(args) { this._focusInHandler(args.event); }).bind(this),
