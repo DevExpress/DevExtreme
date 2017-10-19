@@ -969,8 +969,8 @@ QUnit.test("The second appointment in recurring series in Week view should have 
         currentView: "week"
     });
 
-    var $appointments = this.instance.element().find(".dx-scheduler-appointment"),
-        cellWidth = this.instance.element().find(".dx-scheduler-date-table-cell").outerWidth();
+    var $appointments = this.instance.$element().find(".dx-scheduler-appointment"),
+        cellWidth = this.instance.$element().find(".dx-scheduler-date-table-cell").outerWidth();
 
     assert.equal($appointments.eq(1).outerWidth(), cellWidth * 2, "2d appt has correct width");
 });
