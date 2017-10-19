@@ -162,6 +162,26 @@ QUnit.test("dxButton with template as function", function(assert) {
     });
 });
 
+QUnit.test("dxButton should render custom template with render function that returns dom node", function(assert) {
+    var $element = $("#button").dxButton({
+        integrationOptions: {
+            templates: {
+                "content": {
+                    render: function(args) {
+                        var $element = $("<span>")
+                            .addClass("dx-template-wrapper")
+                            .text("button text");
+
+                        return $element.get(0);
+                    }
+                }
+            }
+        }
+    });
+
+    assert.equal($element.text(), "button text", "container is correct");
+});
+
 QUnit.test("T355000 - the 'onContentReady' action should be fired after widget is rendered entirely", function(assert) {
     var buttonConfig = {
         text: "Test button",
