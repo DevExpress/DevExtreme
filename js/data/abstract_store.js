@@ -43,17 +43,7 @@ var Store = Class.inherit({
                  * @name StoreOptions_onLoading
                  * @publicName onLoading
                  * @type function
-                 * @type_function_param1 loadOptions:object
-                 * @type_function_param1_field1 filter:object
-                 * @type_function_param1_field2 sort:object
-                 * @type_function_param1_field3 select:object
-                 * @type_function_param1_field4 group:object
-                 * @type_function_param1_field5 skip:number
-                 * @type_function_param1_field6 take:number
-                 * @type_function_param1_field7 userData:object
-                 * @type_function_param1_field8 searchValue:object
-                 * @type_function_param1_field9 searchOperation:string
-                 * @type_function_param1_field10 searchExpr:getter|Array<getter>
+                 * @type_function_param1 loadOptions:LoadOptions
                  * @action
                  */
                 "onLoading",
@@ -194,14 +184,7 @@ var Store = Class.inherit({
     /**
     * @name StoreMethods_load
     * @publicName load(options)
-    * @param1 options:object
-    * @param1_field1 filter:object
-    * @param1_field2 sort:object
-    * @param1_field3 select:object
-    * @param1_field4 group:object
-    * @param1_field5 skip:number
-    * @param1_field6 take:number
-    * @param1_field7 userData:object
+    * @param1 options:LoadOptions
     * @return Promise<any>
     */
     load: function(options) {
