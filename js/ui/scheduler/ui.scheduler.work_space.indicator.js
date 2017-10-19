@@ -99,8 +99,11 @@ var SchedulerWorkSpaceIndicator = SchedulerWorkSpace.inherit({
     getIndicationWidth: function(groupIndex) {
         var maxWidth = this.getCellWidth() * this._getCellCount();
 
-        var difference = this._getIndicatorDuration(),
-            width = difference * this._getRoundedCellWidth(groupIndex, groupIndex * this._getCellCount(), difference);
+        var difference = this._getIndicatorDuration();
+        if(difference > this._getCellCount()) {
+            difference = this._getCellCount();
+        }
+        var width = difference * this._getRoundedCellWidth(groupIndex, groupIndex * this._getCellCount(), difference);
 
         return maxWidth < width ? maxWidth : width;
     },

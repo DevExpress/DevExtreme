@@ -452,7 +452,7 @@ var stubInvokeMethod = function(instance, options) {
         var $element = this.instance.$element(),
             $shader = $element.find("." + SCHEDULER_DATE_TIME_SHADER_CLASS);
 
-        assert.roughEqual($shader.outerHeight(), 1000, 1.5, "Indicator has correct height");
+        assert.roughEqual($shader.outerHeight(), 1000, 1.5, "Shader has correct height");
     });
 
     QUnit.test("Shader should be rendered for 'overdue' views", function(assert) {
@@ -463,9 +463,16 @@ var stubInvokeMethod = function(instance, options) {
         });
 
         var $element = this.instance.$element(),
-            $shader = $element.find("." + SCHEDULER_DATE_TIME_SHADER_CLASS);
+            $shader = $element.find("." + SCHEDULER_DATE_TIME_SHADER_CLASS),
+            $topShader = $element.find("." + SCHEDULER_DATE_TIME_SHADER_TOP_CLASS),
+            $bottomShader = $element.find("." + SCHEDULER_DATE_TIME_SHADER_BOTTOM_CLASS);
 
-        assert.roughEqual($shader.outerHeight(), 1000, 1.5, "Indicator has correct height");
+        assert.roughEqual($shader.outerHeight(), 1000, 1.5, "Shader has correct height");
+
+        assert.roughEqual($topShader.outerWidth(), 896, 1.5, "TopShader has correct width");
+        assert.roughEqual($topShader.outerHeight(), 1000, 1.5, "TopShader has correct height");
+
+        assert.roughEqual($bottomShader.outerHeight(), 0, 1.5, "BottomShader has correct height");
     });
 
     QUnit.test("TimePanel currentTime cell should have specific class, Week view", function(assert) {
