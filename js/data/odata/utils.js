@@ -548,11 +548,12 @@ var keyConverters = {
 };
 
 var convertPrimitiveValue = function(type, value) {
+    if(value === null) return null;
     var converter = keyConverters[type];
     if(!converter) {
         throw errors.Error("E4014", type);
     }
-    return value !== null ? converter(value) : value;
+    return converter(value);
 };
 
 exports.sendRequest = sendRequest;
