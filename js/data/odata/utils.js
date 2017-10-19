@@ -552,7 +552,7 @@ var convertPrimitiveValue = function(type, value) {
     if(!converter) {
         throw errors.Error("E4014", type);
     }
-    return converter(value);
+    return value !== null ? converter(value) : value;
 };
 
 exports.sendRequest = sendRequest;
