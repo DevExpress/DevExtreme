@@ -1,11 +1,5 @@
 "use strict";
 
-SystemJS.config({
-    map: {
-        jquery: '/testing/helpers/noJQuery.js'
-    }
-});
-
 define(function(require) {
     require("/js/bundles/dx.mobile.js");
 

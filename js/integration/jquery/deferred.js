@@ -1,12 +1,12 @@
 'use strict';
 
 var jQuery = require("jquery");
-var Deferred = jQuery.Deferred;
 var deferredUtils = require("../../core/utils/deferred");
 var useJQuery = require("../../core/config")().useJQuery;
 var compareVersion = require("../../core/utils/version").compare;
 
 if(jQuery && useJQuery) {
+    var Deferred = jQuery.Deferred;
     var strategy = { Deferred: Deferred };
 
     strategy.when = compareVersion(jQuery.fn.jquery, [3]) < 0
