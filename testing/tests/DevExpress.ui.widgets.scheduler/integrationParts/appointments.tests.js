@@ -4676,3 +4676,4 @@ QUnit.test("Scheduler should add only one appointment at multiple 'done' button 
 
     assert.equal($appointments.length, 1, "right appointment quantity");
 });
+
