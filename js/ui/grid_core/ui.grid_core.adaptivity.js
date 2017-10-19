@@ -464,9 +464,9 @@ var AdaptiveColumnsController = modules.ViewController.inherit({
         }
     },
 
-    toggleExpandAdaptiveDetailRow: function(key) {
+    toggleExpandAdaptiveDetailRow: function(key, alwaysExpanded) {
         if(!(this.isFormEditMode() && this._editingController.isEditing())) {
-            this.getController("data").toggleExpandAdaptiveDetailRow(key);
+            this.getController("data").toggleExpandAdaptiveDetailRow(key, alwaysExpanded);
         }
     },
 
@@ -810,8 +810,9 @@ module.exports = {
 
                 _afterInsertRow: function(options) {
                     this.callBase(options);
+
                     if(this._adaptiveController.hasHiddenColumns()) {
-                        this._adaptiveController.expandAdaptiveDetailRow(options.key);
+                        this._adaptiveController.toggleExpandAdaptiveDetailRow(options.key, this.isRowEditMode());
                         this._isForceRowAdaptiveExpand = true;
                     }
                 },
@@ -972,13 +973,13 @@ module.exports = {
                     }
                 },
 
-                toggleExpandAdaptiveDetailRow: function(key) {
+                toggleExpandAdaptiveDetailRow: function(key, alwaysExpanded) {
                     var that = this;
 
                     var oldExpandRowIndex = gridCoreUtils.getIndexByKey(that._adaptiveExpandedKey, that._items);
                     var newExpandRowIndex = gridCoreUtils.getIndexByKey(key, that._items);
 
-                    if(oldExpandRowIndex >= 0 && oldExpandRowIndex === newExpandRowIndex) {
+                    if(oldExpandRowIndex >= 0 && oldExpandRowIndex === newExpandRowIndex && !alwaysExpanded) {
                         key = undefined;
                         newExpandRowIndex = -1;
                     }
