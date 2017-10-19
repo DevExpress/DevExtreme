@@ -321,6 +321,24 @@ QUnit.module("Rendering", function() {
         assert.deepEqual(instance.option("value"), ["State", "<>", "Test"]);
     });
 
+    QUnit.testInActiveWindow("check default value for number", function(assert) {
+        var container = $("#container"),
+            instance = container.dxFilterBuilder({
+                allowHierarchicalFields: true,
+                value: ["Zipcode", "<>", 123],
+                fields: fields
+            }).dxFilterBuilder("instance");
+
+        container.find("." + FILTER_BUILDER_ITEM_VALUE_TEXT_CLASS).click();
+
+        var $editorContainer = container.find("." + FILTER_BUILDER_ITEM_VALUE_CLASS + " > div"),
+            editorInstance = $editorContainer.dxNumberBox("instance"),
+            $input = $editorContainer.find("input");
+        editorInstance.option("value", 0);
+        $input.trigger("blur");
+        assert.deepEqual(instance.option("value"), ["Zipcode", "<>", 0]);
+    });
+
     QUnit.testInActiveWindow("change filter value when specified editorTemplate", function(assert) {
         var container = $("#container"),
             instance = container.dxFilterBuilder({
