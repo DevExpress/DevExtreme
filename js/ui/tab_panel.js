@@ -320,8 +320,8 @@ var TabPanel = MultiView.inherit({
                 if(args.name === "focusedElement") {
                     if(args.value) {
                         var $value = $(args.value);
-                        var newItem = this._itemElements().eq($value.index());
-                        this.option("focusedElement", getPublicElement(newItem));
+                        var $newItem = this._itemElements().eq($value.index());
+                        this.option("focusedElement", getPublicElement($newItem));
                     } else {
                         this.option("focusedElement", args.value);
                     }
