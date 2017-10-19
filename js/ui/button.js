@@ -275,10 +275,10 @@ var Button = Widget.inherit({
             .toggleClass(BUTTON_HAS_TEXT_CLASS, !!data.text);
 
         var template = this._getTemplateByOption("template"),
-            $result = template.render({
+            $result = $(template.render({
                 model: data,
                 container: domUtils.getPublicElement(this._$content)
-            });
+            }));
 
         if($result.hasClass(TEMPLATE_WRAPPER_CLASS)) {
             this._$content.replaceWith($result);
