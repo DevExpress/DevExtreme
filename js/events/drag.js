@@ -76,7 +76,7 @@ var dropTargetRegistration = {
 * @name ui events_dxdragenter
 * @publicName dxdragenter
 * @type eventType
-* @type_function_param1 event:jQuery.Event
+* @type_function_param1 event:event
 * @type_function_param1_field1 draggingElement:Node
 * @module events/drag
 */
@@ -84,7 +84,7 @@ var dropTargetRegistration = {
 * @name ui events_dxdrop
 * @publicName dxdrop
 * @type eventType
-* @type_function_param1 event:jQuery.Event
+* @type_function_param1 event:event
 * @type_function_param1_field1 draggingElement:Node
 * @module events/drag
 */
@@ -92,7 +92,7 @@ var dropTargetRegistration = {
 * @name ui events_dxdragleave
 * @publicName dxdragleave
 * @type eventType
-* @type_function_param1 event:jQuery.Event
+* @type_function_param1 event:event
 * @type_function_param1_field1 draggingElement:Node
 * @module events/drag
 */
@@ -311,7 +311,7 @@ var DragEmitter = GestureEmitter.inherit({
  * @name ui events_dxdragstart
  * @publicName dxdragstart
  * @type eventType
- * @type_function_param1 event:jQuery.Event
+ * @type_function_param1 event:event
  * @type_function_param1_field1 cancel:boolean
  * @module events/drag
 */
@@ -319,7 +319,7 @@ var DragEmitter = GestureEmitter.inherit({
   * @name ui events_dxdrag
   * @publicName dxdrag
   * @type eventType
-  * @type_function_param1 event:jQuery.Event
+  * @type_function_param1 event:event
   * @type_function_param1_field1 offset:number
   * @type_function_param1_field2 cancel:boolean
   * @module events/drag
@@ -328,7 +328,7 @@ var DragEmitter = GestureEmitter.inherit({
   * @name ui events_dxdragend
   * @publicName dxdragend
   * @type eventType
-  * @type_function_param1 event:jQuery.Event
+  * @type_function_param1 event:event
   * @type_function_param1_field1 offset:number
   * @type_function_param1_field2 cancel:boolean
   * @module events/drag
