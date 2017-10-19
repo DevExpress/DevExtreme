@@ -775,7 +775,7 @@ var FilterBuilder = Widget.inherit({
             value: value,
             filterOperation: utils.getOperationValue(item),
             setValue: function(data) {
-                value = data || "";
+                value = data === null ? "" : data;
             }
         });
 
