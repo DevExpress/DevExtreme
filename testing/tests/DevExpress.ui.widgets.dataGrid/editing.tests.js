@@ -2602,7 +2602,7 @@ QUnit.module('Editing with real dataController', {
             }
         };
 
-        setupDataGridModules(this, ['data', 'columns', 'rows', 'masterDetail', 'editing', 'editorFactory', 'selection', 'headerPanel', 'columnFixing', 'validating'], {
+        setupDataGridModules(this, ['data', 'columns', 'rows', 'gridView', 'masterDetail', 'editing', 'editorFactory', 'selection', 'headerPanel', 'columnFixing', 'validating'], {
             initViews: true
         });
 
@@ -5582,6 +5582,37 @@ QUnit.test("Batch mode - Correct insert row index for a new row when a previous 
     var items = this.dataController.items();
     assert.ok(items[0].inserted, "first row is inserted");
     assert.ok(items[1].inserted, "second row is inserted");
+});
+
+QUnit.test("Restore a height of rowsView when editing is canceled with empty data", function(assert) {
+    //arrange
+    var testElement = $('#container');
+
+    this.options.editing = {
+        allowAdding: true,
+        allowUpdating: true,
+        allowDeleting: true,
+        mode: 'row'
+    };
+    this.options.noDataText = "No Data";
+    this.options.dataSource = [];
+    this.element = function() {
+        return testElement;
+    };
+    this.dataController.init();
+
+    this.gridView.render(testElement);
+    this.resizingController.updateDimensions();
+    this.clock.tick();
+
+    var rowsViewHeight = $(".dx-datagrid-rowsview").height();
+
+    //act
+    this.addRow();
+    this.cancelEditData();
+
+    //assert
+    assert.equal($(".dx-datagrid-rowsview").height(), rowsViewHeight, "height of rows view is not changed");
 });
 
 if(device.ios || device.android) {
