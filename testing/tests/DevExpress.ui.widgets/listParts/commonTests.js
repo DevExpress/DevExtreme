@@ -2304,7 +2304,7 @@ QUnit.module("keyboard navigation", {
 });
 
 QUnit.test("list scroll to focused item after press up/down arrows", function(assert) {
-    assert.expect(3);
+    assert.expect(2);
 
     var $element = $("#list").dxList({
             focusStateEnabled: true,
@@ -2319,7 +2319,6 @@ QUnit.test("list scroll to focused item after press up/down arrows", function(as
     instance.option("height", itemHeight * 3);
 
     keyboard.keyDown("down");
-    assert.equal(isRenderer(instance.option("focusedElement")), config().useJQuery, "focusedElement is correct");
     assert.equal(instance.scrollTop(), itemHeight, "item scrolled to visible area at bottom when down arrow were pressed");
 
     $item = $element.find(toSelector(LIST_ITEM_CLASS)).eq(1);
@@ -2351,7 +2350,7 @@ QUnit.test("list does not scroll to item after click on it", function(assert) {
 });
 
 QUnit.test("list scroll to focused item after press home/end", function(assert) {
-    assert.expect(4);
+    assert.expect(2);
 
     var $element = $("#list").dxList({
             focusStateEnabled: true,
@@ -2367,16 +2366,14 @@ QUnit.test("list scroll to focused item after press home/end", function(assert) 
     instance.option("height", itemHeight * 3);
 
     keyboard.keyDown("end");
-    assert.equal(isRenderer(instance.option("focusedElement")), config().useJQuery, "focusedElement is correct");
     assert.roughEqual(instance.scrollTop(), itemHeight * 2, 1.0001, "item scrolled to visible area at bottom end arrow were pressed");
 
     keyboard.keyDown("home");
-    assert.equal(isRenderer(instance.option("focusedElement")), config().useJQuery, "focusedElement is correct");
     assert.equal(instance.scrollTop(), 0, "item scrolled to visible area at top when home were pressed");
 });
 
 QUnit.test("list scroll to focused item after press pageDown", function(assert) {
-    assert.expect(6);
+    assert.expect(7);
 
     var $element = $("#list").dxList({
             focusStateEnabled: true,
@@ -2393,6 +2390,7 @@ QUnit.test("list scroll to focused item after press pageDown", function(assert) 
 
     keyboard.keyDown("pageDown");
 
+    assert.equal(isRenderer(instance.option("focusedElement")), config().useJQuery, "focusedElement is correct");
     assert.roughEqual(instance.scrollTop(), 0, 1.0001, "list is not scrolled, when focusedItem is not last visible item on this page");
     assert.ok($items.eq(2).hasClass("dx-state-focused"), "focused item change to last visible item on this page");
 

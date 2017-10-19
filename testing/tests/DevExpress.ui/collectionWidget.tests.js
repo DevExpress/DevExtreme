@@ -1511,7 +1511,7 @@ QUnit.test("dx-state-focused is not set for item when it is not closest focused 
 });
 
 QUnit.test("focusedElement is set for item when nested element selected by dxpoinerdown", function(assert) {
-    assert.expect(1);
+    assert.expect(2);
 
     var $element = $("#cmp"),
         instance = new TestComponent($element, {
@@ -1525,6 +1525,7 @@ QUnit.test("focusedElement is set for item when nested element selected by dxpoi
 
     $item.trigger($.Event("dxpointerdown", { target: $item.find("span").get(0) }));
     this.clock.tick();
+    assert.equal(isRenderer(instance.option("focusedElement")), config().useJQuery, "focusedElement is correct");
     assert.equal($(instance.option("focusedElement")).get(0), $item.get(0), "focus set to first item");
 });
 
@@ -1621,11 +1622,11 @@ QUnit.test("first item  should be focused after setting focusedElement option to
 });
 
 QUnit.test("item is focused after focusing on element", function(assert) {
-    assert.expect(1);
+    assert.expect(2);
 
     var $element = $("#cmp");
 
-    new TestComponent($element, {
+    var instance = new TestComponent($element, {
         focusStateEnabled: true,
         items: ["0", "1"]
     });
@@ -1634,6 +1635,7 @@ QUnit.test("item is focused after focusing on element", function(assert) {
 
     $element.focusin();
 
+    assert.equal(isRenderer(instance.option("focusedElement")), config().useJQuery, "focusedElement is correct");
     assert.ok($item.hasClass(FOCUSED_ITEM_CLASS), "item is focused");
 });
 
