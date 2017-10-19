@@ -321,13 +321,13 @@ QUnit.module("Rendering", function() {
         assert.deepEqual(instance.option("value"), ["State", "<>", "Test"]);
     });
 
-    QUnit.testInActiveWindow("change filter value when specified valueEditorTemplate", function(assert) {
+    QUnit.testInActiveWindow("change filter value when specified editorTemplate", function(assert) {
         var container = $("#container"),
             instance = container.dxFilterBuilder({
                 value: ["Field", "=", "Test1"],
                 fields: [{
                     dataField: "Field",
-                    valueEditorTemplate: function(options, $container) {
+                    editorTemplate: function(options, $container) {
                         $("<input/>").val(options.val).on("change", function(e) {
                             options.setValue($(e.currentTarget).val());
                         }).appendTo($container);
@@ -498,11 +498,11 @@ QUnit.module("Create editor by field dataType", function() {
         assert.ok(valueField.find(".dx-selectbox").dxSelectBox("instance"));
     });
 
-    QUnit.test("valueEditorTemplate", function(assert) {
+    QUnit.test("editorTemplate", function(assert) {
         var args,
             fields = [{
                 dataField: "Field",
-                valueEditorTemplate: function(options, $container) {
+                editorTemplate: function(options, $container) {
                     args = options;
 
                     return $("<input/>").addClass("my-editor");

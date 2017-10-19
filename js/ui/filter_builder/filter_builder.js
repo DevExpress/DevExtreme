@@ -202,8 +202,8 @@ var FilterBuilder = Widget.inherit({
              */
 
              /**
-             * @name dxFilterBuilderField_valueEditorTemplate
-             * @publicName valueEditorTemplate
+             * @name dxFilterBuilderField_editorTemplate
+             * @publicName editorTemplate
              * @type template
              * @type_function_param1 conditionInfo:object
              * @type_function_param1_field1 value:string|number|date
@@ -813,8 +813,8 @@ var FilterBuilder = Widget.inherit({
     },
 
     _createValueEditor: function($container, field, options) {
-        if(field.valueEditorTemplate) {
-            var template = this._getTemplate(field.valueEditorTemplate);
+        if(field.editorTemplate) {
+            var template = this._getTemplate(field.editorTemplate);
 
             template.render({
                 model: extend({ field: field }, options),
