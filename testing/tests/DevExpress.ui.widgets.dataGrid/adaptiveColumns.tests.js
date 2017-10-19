@@ -3277,7 +3277,7 @@ QUnit.test("Not collapse adaptive detail form when other row is deleted", functi
     this.editingController.addRow();
     this.editingController.addRow();
     this.editingController.addRow();
-    this.editingController.deleteRow(1);
+    this.editingController.deleteRow(2);
 
     //assert
     assert.equal($(".dx-adaptive-detail-row").length, 1, "adaptive detail form should be removed");
@@ -3313,6 +3313,44 @@ QUnit.test("Collapse adaptive detail form when single row is deleted", function(
 
     //assert
     assert.equal($(".dx-adaptive-detail-row").length, 0, "adaptive detail form should be removed");
+});
+
+//T565727
+QUnit.test("Edit row. Re-render adaptive detail after re-inserting row", function(assert) {
+    //arrange
+    $(".dx-datagrid").width(400);
+
+    var args = [];
+
+    this.options = {
+        editing: {
+            mode: 'row',
+            allowUpdating: true,
+            allowAdding: true
+        },
+        onRowPrepared: function(e) {
+            if(e.inserted) {
+                args.push(e);
+            }
+        }
+    };
+    setupDataGrid(this);
+    this.rowsView.render($("#container"));
+    this.resizingController.updateDimensions();
+
+    this.editingController.addRow();
+
+    //assert
+    assert.strictEqual(args.length, 2, "onRowPrepared call count");
+    assert.strictEqual(args[0].rowType, "data", "data row");
+    assert.strictEqual(args[1].rowType, "detailAdaptive", "adaptive detail row");
+
+    //act
+    this.editingController.addRow();
+
+    assert.strictEqual(args.length, 4, "onRowPrepared call count");
+    assert.strictEqual(args[2].rowType, "data", "data row");
+    assert.strictEqual(args[3].rowType, "detailAdaptive", "adaptive detail row");
 });
 
 QUnit.module("Validation", {
