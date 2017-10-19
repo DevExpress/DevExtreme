@@ -8,6 +8,7 @@ var $ = require("../core/renderer"),
     MultiView = require("./multi_view"),
     Tabs = require("./tabs"),
     iconUtils = require("../core/utils/icon"),
+    getPublicElement = require("../core/utils/dom").getPublicElement,
     BindableTemplate = require("./widget/bindable_template");
 
 var TABPANEL_CLASS = "dx-tabpanel",
@@ -317,12 +318,12 @@ var TabPanel = MultiView.inherit({
             selectionRequired: true,
             onOptionChanged: (function(args) {
                 var name = args.name,
-                    value = args.value;
+                    value = $(args.value);
 
                 if(name === "focusedElement") {
                     var id = value ? value.index() : value;
                     var newItem = value ? this._itemElements().eq(id) : value;
-                    this.option("focusedElement", newItem);
+                    this.option("focusedElement", getPublicElement(newItem));
                 }
             }).bind(this),
             onFocusIn: (function(args) { this._focusInHandler(args.event); }).bind(this),
@@ -385,9 +386,9 @@ var TabPanel = MultiView.inherit({
                 this._setTabsOption(fullName, value);
                 break;
             case "focusedElement":
-                var id = value ? value.index() : value;
+                var id = value ? $(value).index() : value;
                 var newItem = value ? this._tabs._itemElements().eq(id) : value;
-                this._setTabsOption("focusedElement", newItem);
+                this._setTabsOption("focusedElement", getPublicElement(newItem));
                 this.callBase(args);
                 this._tabs.focus();
                 break;

@@ -532,12 +532,14 @@ QUnit.test("list item obtained focus only after press on control key", function(
         opened: true,
         focusStateEnabled: true
     });
+    var selectBox = $("#selectBox").dxSelectBox("instance");
 
     this.clock.tick(TIME_TO_WAIT);
     var $input = $selectBox.find(".dx-texteditor-input");
 
     keyboardMock($input).press("down");
     var $firstItemList = $(".dx-list-item").eq(0);
+    assert.equal(isRenderer(selectBox._list.option("focusedElement")), config().useJQuery, "focusedElement is correct");
     assert.ok($firstItemList.hasClass("dx-state-focused"), "first list item obtained focus");
 });
 

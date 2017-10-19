@@ -8,7 +8,9 @@ var $ = require("jquery"),
     ArrayStore = require("data/array_store"),
     executeAsyncMock = require("../../helpers/executeAsyncMock.js"),
     pointerMock = require("../../helpers/pointerMock.js"),
-    keyboardMock = require("../../helpers/keyboardMock.js");
+    keyboardMock = require("../../helpers/keyboardMock.js"),
+    isRenderer = require("core/utils/type").isRenderer,
+    config = require("core/config");
 
 require("common.css!");
 require("ui/select_box");
@@ -450,7 +452,7 @@ QUnit.test("arrow_down/arrow_up/enter provide item navigation and selection", fu
 
     var $lastScrolledItem = $();
     instance._list.scrollToItem = function($item) {
-        $lastScrolledItem = $item;
+        $lastScrolledItem = $($item);
     };
     this.$input.focusin();
     keyboard.keyDown(KEY_ENTER);
@@ -489,6 +491,7 @@ QUnit.test("arrow_down/arrow_up/enter provide item navigation and selection", fu
 
 
     $selectedItem = $list.find(FOCUSED_STATE_SELECTOR);
+    assert.equal(isRenderer(instance._list.option("focusedElement")), config().useJQuery, "focusedElement is correct");
     assert.equal($selectedItem.text(), "item 2", "when we 6 times press 'key_down', we select 'item 2'");
     assert.equal($lastScrolledItem.text(), "item 2", "when we 6 times press 'key_down', we scroll to 'item 2'");
 
@@ -498,6 +501,7 @@ QUnit.test("arrow_down/arrow_up/enter provide item navigation and selection", fu
         .keyDown(KEY_UP);
 
     $selectedItem = $list.find(FOCUSED_STATE_SELECTOR);
+    assert.equal(isRenderer(instance._list.option("focusedElement")), config().useJQuery, "focusedElement is correct");
     assert.equal($selectedItem.text(), "item 3", "when we 2 times press 'key_up', we select 'item 3'");
     assert.equal($lastScrolledItem.text(), "item 3", "when we 2 times press 'key_up', we scroll to 'item 3'");
 

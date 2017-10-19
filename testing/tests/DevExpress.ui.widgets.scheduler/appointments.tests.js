@@ -15,6 +15,8 @@ var $ = require("jquery"),
     commonUtils = require("core/utils/common"),
     typeUtils = require("core/utils/type"),
     dateUtils = require("core/utils/date"),
+    isRenderer = require("core/utils/type").isRenderer,
+    config = require("core/config"),
     compileGetter = dataCoreUtils.compileGetter,
     compileSetter = dataCoreUtils.compileSetter,
     Draggable = require("ui/draggable"),
@@ -1095,10 +1097,11 @@ QUnit.testInActiveWindow("Focused element should be changed on focusin", functio
     });
     var $appointments = $(".dx-scheduler-appointment");
     $appointments.get(0).focus();
-    assert.deepEqual($appointments.get(0), this.instance.option("focusedElement").get(0), "right element is focused");
+    assert.equal(isRenderer(this.instance.option("focusedElement")), config().useJQuery, "focusedElement is correct");
+    assert.deepEqual($appointments.get(0), $(this.instance.option("focusedElement")).get(0), "right element is focused");
 
     $appointments.get(1).focus();
-    assert.deepEqual($appointments.get(1), this.instance.option("focusedElement").get(0), "right element is focused");
+    assert.deepEqual($appointments.get(1), $(this.instance.option("focusedElement")).get(0), "right element is focused");
 });
 
 QUnit.test("Appointment popup should be opened after enter key press", function(assert) {
@@ -1268,9 +1271,9 @@ QUnit.test("Focus method should call focus on appointment", function(assert) {
 
     $($appointment).trigger("focusin");
 
-    var focusedElement = this.instance.option("focusedElement").get(0);
+    var focusedElement = $(this.instance.option("focusedElement")).get(0);
     var focusSpy = sinon.spy(eventsEngine, "trigger").withArgs(sinon.match(function($element) {
-        return ($element.get && $element.get(0) || $element) === focusedElement;
+        return config().useJQuery ? $element.get(0) === focusedElement : $element === focusedElement;
     }), "focus");
     var appointmentFocusedStub = sinon.stub(this.instance, "notifyObserver").withArgs("appointmentFocused");
 

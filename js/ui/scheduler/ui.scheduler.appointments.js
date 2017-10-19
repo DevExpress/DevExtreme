@@ -11,6 +11,7 @@ var $ = require("../../core/renderer"),
     objectUtils = require("../../core/utils/object"),
     arrayUtils = require("../../core/utils/array"),
     extend = require("../../core/utils/extend").extend,
+    getPublicElement = require("../../core/utils/dom").getPublicElement,
     recurrenceUtils = require("./utils.recurrence"),
     registerComponent = require("../../core/component_registrator"),
     publisherMixin = require("./ui.scheduler.publisher_mixin"),
@@ -110,7 +111,7 @@ var SchedulerAppointments = CollectionWidget.inherit({
         clearTimeout(this._appointmentFocusedTimeout);
         this.callBase.apply(this, arguments);
         this._$currentAppointment = $(e.target);
-        this.option("focusedElement", $(e.target));
+        this.option("focusedElement", getPublicElement($(e.target)));
         var that = this;
 
         this._appointmentFocusedTimeout = setTimeout(function() {
@@ -125,7 +126,7 @@ var SchedulerAppointments = CollectionWidget.inherit({
     _focusOutHandler: function() {
         var $appointment = this._getAppointmentByIndex(0);
 
-        this.option("focusedElement", $appointment);
+        this.option("focusedElement", getPublicElement($appointment));
         this.callBase.apply(this, arguments);
     },
 
@@ -1020,7 +1021,7 @@ var SchedulerAppointments = CollectionWidget.inherit({
     focus: function() {
         var $appointment = this._$currentAppointment;
         if($appointment) {
-            this.option("focusedElement", $appointment);
+            this.option("focusedElement", getPublicElement($appointment));
             eventsEngine.trigger(this.option("focusedElement"), "focus");
         }
     },
