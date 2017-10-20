@@ -1,7 +1,6 @@
 "use strict";
 
-var dateLocalization = require("../../localization/date"),
-    FORMAT_SEPARATORS = " .,:;/\\<>()-",
+var FORMAT_SEPARATORS = " .,:;/\\<>()-",
     ARABIC_ZERO_CODE = 1632;
 
 var checkDigit = function(char) {
@@ -10,13 +9,12 @@ var checkDigit = function(char) {
     return (char >= "0" && char <= "9") || (code >= ARABIC_ZERO_CODE && code < ARABIC_ZERO_CODE + 10);
 };
 
-var getDifference = function(defaultPattern, patterns, processedIndexes) {
+var getDifference = function(defaultPattern, patterns, processedIndexes, isDigit) {
     var i = 0,
-        result = [],
-        isDigit;
+        result = [];
 
     var patternsFilter = function(pattern) {
-        return defaultPattern[i] !== pattern[i];
+        return defaultPattern[i] !== pattern[i] && (isDigit === undefined || checkDigit(defaultPattern[i]) === isDigit);
     };
 
     if(!Array.isArray(patterns)) {
@@ -98,13 +96,13 @@ var replaceChars = function(pattern, indexes, char, patternPositions) {
     return pattern;
 };
 
-var formatValue = function(value, format) {
+var formatValue = function(value, formatter) {
     if(Array.isArray(value)) {
         return value.map(function(value) {
-            return (dateLocalization.format(value, format) || "").toString();
+            return (formatter(value) || "").toString();
         });
     }
-    return (dateLocalization.format(value, format) || "").toString();
+    return (formatter(value) || "").toString();
 };
 
 var ESCAPE_CHARS_REGEXP = /[a-zA-Z]/g;
@@ -138,16 +136,18 @@ var escapeChars = function(pattern, defaultPattern, processedIndexes, patternPos
     return pattern;
 };
 
-var getFormat = function(format) {
+var getFormat = function(formatter) {
     var processedIndexes = [],
-        defaultPattern = formatValue(new Date(2009, 8, 8, 6, 5, 4), format),
+        defaultPattern = formatValue(new Date(2009, 8, 8, 6, 5, 4), formatter),
         patternPositions = defaultPattern.split("").map(function(_, index) { return index; }),
         result = defaultPattern,
         datePatterns = [
+            { date: new Date(2009, 8, 8, 6, 5, 4, 100), pattern: "S" },
             { date: new Date(2009, 8, 8, 6, 5, 2), pattern: "s" },
             { date: new Date(2009, 8, 8, 6, 2, 4), pattern: "m" },
-            { date: new Date(2009, 8, 8, 2, 5, 4), pattern: "H" },
-            { date: new Date(2009, 8, 8, 18, 5, 4), pattern: "a" },
+            { date: new Date(2009, 8, 8, 18, 5, 4), pattern: "H", isDigit: true },
+            { date: new Date(2009, 8, 8, 2, 5, 4), pattern: "h", isDigit: true },
+            { date: new Date(2009, 8, 8, 18, 5, 4), pattern: "a", isDigit: false },
             { date: new Date(2009, 8, 1, 6, 5, 4), pattern: "d" },
             { date: [new Date(2009, 8, 2, 6, 5, 4), new Date(2009, 8, 3, 6, 5, 4), new Date(2009, 8, 4, 6, 5, 4)], pattern: "E" },
             { date: new Date(2009, 9, 6, 6, 5, 4), pattern: "M" },
@@ -156,14 +156,16 @@ var getFormat = function(format) {
     if(!result) return;
 
     datePatterns.forEach(function(test) {
-        var diff = getDifference(defaultPattern, formatValue(test.date, format), processedIndexes);
+        var diff = getDifference(defaultPattern, formatValue(test.date, formatter), processedIndexes, test.isDigit);
 
         result = replaceChars(result, diff, test.pattern, patternPositions);
     });
 
     result = escapeChars(result, defaultPattern, processedIndexes, patternPositions);
 
-    return result;
+    if(processedIndexes.length) {
+        return result;
+    }
 };
 
 exports.getFormat = getFormat;
