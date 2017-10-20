@@ -98,7 +98,7 @@ var SelectBox = DropDownList.inherit({
             },
             escape: function() {
                 parent.escape.apply(this, arguments);
-                if(!this._isEditable()) {
+                if(!this._isEditable() && this._list) {
                     this._focusListElement(null);
                     this._updateField(this.option("selectedItem"));
                 }
