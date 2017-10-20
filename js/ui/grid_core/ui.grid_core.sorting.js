@@ -145,7 +145,7 @@ module.exports = {
              */
             sorting: {
                 /**
-                 * @name GridBaseOptions_sorting_sortingMode
+                 * @name GridBaseOptions_sorting_mode
                  * @publicName mode
                  * @type string
                  * @acceptValues "none" | "single" | "multiple"

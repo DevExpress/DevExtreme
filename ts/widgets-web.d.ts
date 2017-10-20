@@ -2009,7 +2009,7 @@ declare module DevExpress.ui {
             /** @docid GridBaseOptions_sorting_descendingText */
             descendingText?: string;
 
-            /** @docid GridBaseOptions_sorting_sortingMode */
+            /** @docid GridBaseOptions_sorting_mode */
             mode?: string;
         };
 
