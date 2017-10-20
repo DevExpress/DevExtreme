@@ -156,11 +156,12 @@
                 }
             }
 
-            window.DevExpress = window.DevExpress || {};
-
-            window.DevExpress.config = {
-                useJQuery: !@Html.Raw(Json.Serialize(Model.NoJQuery))
-            };
+            if(@Html.Raw(Json.Serialize(Model.NoJQuery))) {
+                window.DevExpress = window.DevExpress || {};
+                window.DevExpress.config = {
+                    useJQuery: false
+                };
+            }
 
             SystemJS.config({
                 baseURL: '@Url.Content("~/js")',

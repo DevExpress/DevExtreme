@@ -2,10 +2,10 @@
 
 var jQuery = require("jquery");
 var eventsEngine = require("../../events/core/events_engine");
-var useJQuery = require("../../core/config")().useJQuery;
+var useJQuery = require("./use_jquery")();
 var registerEventCallbacks = require("../../events/core/event_registrator_callbacks");
 
-if(jQuery && useJQuery) {
+if(useJQuery) {
     registerEventCallbacks.add(function(name, eventObject) {
         jQuery.event.special[name] = eventObject;
     });
