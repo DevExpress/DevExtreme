@@ -494,7 +494,10 @@ Axis.prototype = {
 
     _getStripPos: function(startValue, endValue, canvasStart, canvasEnd, range) {
         var isContinuous = !!(range.minVisible || range.maxVisible),
-            categories = range.categories || [],
+            categories = (range.categories || []).reduce(function(result, cat) {
+                result.push(cat.valueOf());
+                return result;
+            }, []),
             start,
             end,
             swap,
@@ -504,8 +507,8 @@ Axis.prototype = {
 
         if(!isContinuous) {
             if(_isDefined(startValue) && _isDefined(endValue)) {
-                startCategoryIndex = inArray(startValue, categories);
-                endCategoryIndex = inArray(endValue, categories);
+                startCategoryIndex = inArray(startValue.valueOf(), categories);
+                endCategoryIndex = inArray(endValue.valueOf(), categories);
                 if(startCategoryIndex === -1 || endCategoryIndex === -1) {
                     return { from: 0, to: 0 };
                 }
