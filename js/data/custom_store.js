@@ -253,14 +253,19 @@ function runRawLoadWithKey(pendingDeferred, store, key) {
  * @type object
  */
  /**
+ * @name LoadOptions_expand
+ * @publicName expand
+ * @type object
+ */
+ /**
  * @name LoadOptions_requireTotalCount
- * @publicName userData
+ * @publicName requireTotalCount
  * @type boolean
  */
  /**
  * @name LoadOptions_searchValue
  * @publicName searchValue
- * @type object
+ * @type any
  */
  /**
  * @name LoadOptions_searchOperation

@@ -52,7 +52,7 @@ var Component = Class.inherit({
             * @publicName onInitialized
             * @type function
             * @type_function_param1 e:object
-            * @type_function_param1_field1 component:object
+            * @type_function_param1_field1 component:Component
             * @type_function_param1_field2 element:jQuery
             * @default null
             * @action
@@ -63,7 +63,7 @@ var Component = Class.inherit({
             * @publicName onOptionChanged
             * @type function
             * @type_function_param1 e:object
-            * @type_function_param1_field1 component:object
+            * @type_function_param1_field1 component:Component
             * @type_function_param1_field4 name:string
             * @type_function_param1_field5 fullName:string
             * @type_function_param1_field6 value:any
@@ -76,7 +76,7 @@ var Component = Class.inherit({
             * @publicName onDisposing
             * @type function
             * @type_function_param1 e:object
-            * @type_function_param1_field1 component:object
+            * @type_function_param1_field1 component:Component
             * @default null
             * @action
             */
@@ -261,7 +261,7 @@ var Component = Class.inherit({
     /**
      * @name componentmethods_instance
      * @publicName instance()
-     * @return object
+     * @return Component
      */
     instance: function() {
         return this;
