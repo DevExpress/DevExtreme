@@ -16,7 +16,7 @@ var VerticalCurrentTimeShader = Shader.inherit({
             shaderHeight = maxHeight;
         }
 
-        if(shaderHeight > 0) {
+        if(shaderHeight >= 0) {
             this._$shader.height(shaderHeight);
 
             var groupCount = this._workspace._getGroupCount() || 1;
