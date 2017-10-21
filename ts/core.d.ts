@@ -646,6 +646,9 @@ declare module DevExpress {
         }
 
         //T184606
+        interface Promise {
+            then(doneFn?: any, failFn?: any, progressFn?: any): Promise;
+        }
 
         export interface CustomStoreOptions extends StoreOptions {
             /** @docid CustomStoreOptions_useDefaultSearch */
