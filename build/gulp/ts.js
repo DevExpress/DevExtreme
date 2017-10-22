@@ -26,7 +26,7 @@ var definitionSources = [
     'viz-vectormap',
     'viz-sparklines',
     'viz-treemap'
-].map(i => './ts/' + i + '.d.ts');
+].map(i => './ts/legacy/' + i + '.d.ts');
 
 var OUTPUT_DIR = 'artifacts/ts';
 var MODULES = require('./modules_metadata.json');
@@ -60,6 +60,18 @@ var generateJQueryAugmentation = exports.generateJQueryAugmentation = function(e
 };
 
 gulp.task('ts-sources', function() {
+
+    return merge(
+        gulp.src('./ts/vendor/*').pipe(gulp.dest(OUTPUT_DIR)),
+        gulp
+            .src('./ts/dx.all.d.ts')
+            .pipe(headerPipes.bangLicense())
+            .pipe(gulp.dest(OUTPUT_DIR))
+    );
+});
+
+
+gulp.task('ts-sources-legacy', function() {
     var jQueryAugmentation = MODULES.map(function(moduleMeta) {
         return Object.keys(moduleMeta.exports || []).map(function(name) {
             return generateJQueryAugmentation(name, moduleMeta.exports[name]);
