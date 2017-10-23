@@ -106,7 +106,7 @@
   {
     "name": "data/utils",
     "exports": {
-      "base64_encode": "data.base64_encode"
+      "base64_encode": "data.base64encode"
     }
   },
   {
