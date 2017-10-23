@@ -470,7 +470,7 @@ declare module DevExpress {
         }): void;
 
         /** @docid domcomponentmethods_getInstance */
-        static getInstance(element: JQuery): Object;
+        static getInstance(element: JQuery): DOMComponent;
     }
 
     export module data {
