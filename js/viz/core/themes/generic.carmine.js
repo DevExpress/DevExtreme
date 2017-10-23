@@ -5,7 +5,7 @@ var themeModule = require("../../themes"),
 
     BACKGROUND_COLOR = "#fff",
     TITLE_COLOR = "#333",
-    SUBTITLE_COLOR = TITLE_COLOR,
+    SUBTITLE_COLOR = "#8899a8",
     TEXT_COLOR = "#707070",
     BORDER_COLOR = "#dee1e3";
 
