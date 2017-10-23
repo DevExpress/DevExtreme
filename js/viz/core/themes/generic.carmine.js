@@ -18,12 +18,44 @@ registerTheme({
     secondaryTitleColor: SUBTITLE_COLOR,
     axisColor: BORDER_COLOR,
     axisLabelColor: TEXT_COLOR,
+    "export": {
+        backgroundColor: BACKGROUND_COLOR,
+        font: {
+            color: TITLE_COLOR
+        },
+        button: {
+            "default": {
+                color: TITLE_COLOR,
+                borderColor: "#b1b7bd",
+                backgroundColor: BACKGROUND_COLOR
+            },
+            hover: {
+                color: TITLE_COLOR,
+                borderColor: "#b1b7bd",
+                backgroundColor: "#faf2f0"
+            },
+            focus: {
+                color: TITLE_COLOR,
+                borderColor: "#6d7781",
+                backgroundColor: "#faf2f0"
+            },
+            active: {
+                color: TITLE_COLOR,
+                borderColor: "#6d7781",
+                backgroundColor: "#f5e7e4"
+            }
+        }
+    },
     legend: {
         font: {
             color: TEXT_COLOR
         }
     },
     tooltip: {
+        color: BACKGROUND_COLOR,
+        border: {
+            color: BORDER_COLOR
+        },
         font: {
             color: TITLE_COLOR
         }
