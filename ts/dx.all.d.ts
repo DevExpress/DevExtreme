@@ -1,3 +1,4 @@
+/* #StartGlobalDeclaration */
 interface JQuery {
 }
 interface JQueryPromise<T> {
@@ -7,6 +8,9 @@ interface JQueryCallback {
 interface JQueryEventObject {
     cancel?: boolean;
 }
+interface Promise<T> {
+}
+/* #EndGlobalDeclaration */
 interface JQuery {
     dxAccordion(): JQuery;
     dxAccordion(options: "instance"): DevExpress.ui.dxAccordion;
@@ -623,11 +627,11 @@ declare module DevExpress {
     export var rtlEnabled: boolean;
     export interface ComponentOptions {
         /** A handler for the disposing event. Executed when the widget is removed from the DOM using the remove(), empty(), or html() jQuery methods only. */
-        onDisposing?: ((e: { component?: any }) => any);
+        onDisposing?: ((e: { component?: Component }) => any);
         /** A handler for the initialized event. Executed only once, after the widget is initialized. */
-        onInitialized?: ((e: { component?: any, element?: JQuery }) => any);
+        onInitialized?: ((e: { component?: Component, element?: JQuery }) => any);
         /** A handler for the optionChanged event. Executed after an option of the widget is changed. */
-        onOptionChanged?: ((e: { component?: any, name?: string, fullName?: string, value?: any }) => any);
+        onOptionChanged?: ((e: { component?: Component, name?: string, fullName?: string, value?: any }) => any);
     }
     /** A base class for all components and widgets. */
     export class Component {
@@ -637,7 +641,7 @@ declare module DevExpress {
         /** Refreshes the widget after a call of the beginUpdate() method. */
         endUpdate(): void;
         /** Returns this widget's instance. Use it to access other methods of the widget. */
-        instance(): any;
+        instance(): Component;
         /** Detaches all event handlers from the specified event. */
         off(eventName: string): any;
         /** Detaches a particular event handler from the specified event. */
@@ -698,6 +702,27 @@ declare module DevExpress {
         /** Indicates whether or not the device platform is Windows. */
         win?: boolean;
     }
+    /** An object that serves as a namespace for the methods and events specifying information on the current device. */
+    export class DevicesObject {
+        constructor(options: { window?: Window });
+        /** Returns information about the current device. */
+        current(): Device;
+        /** Overrides actual device information to force the application to operate as if it was running on a specified device. */
+        current(deviceName: string | Device): void;
+        /** Detaches all event handlers from the specified event. */
+        off(eventName: string): any;
+        /** Detaches a particular event handler from the specified event. */
+        off(eventName: string, eventHandler: Function): any;
+        /** Subscribes to a specified event. */
+        on(eventName: string, eventHandler: Function): any;
+        /** Subscribes to the specified events. */
+        on(events: any): any;
+        /** Returns the current device orientation. */
+        orientation(): string;
+        /** Returns real information about the current device regardless of the value passed to the devices.current(deviceName) method. */
+        real(): Device;
+    }
+    export var devices: DevicesObject;
     export interface DOMComponentOptions extends ComponentOptions {
         /** Specifies the attributes to be attached to the widget's root element. */
         elementAttr?: any;
@@ -720,7 +745,7 @@ declare module DevExpress {
         dispose(): void;
         /** Gets the root element of the widget. */
         element(): DevExpress.core.Element;
-        static getInstance(element: DevExpress.core.Element): any;
+        static getInstance(element: DevExpress.core.Element): DOMComponent;
     }
     /** An object used to manage OData endpoints in your application. */
     export class EndpointSelector {
@@ -827,7 +852,7 @@ declare module DevExpress.data {
         /** A handler for the loaded event. */
         onLoaded?: ((result: Array<any>) => any);
         /** A handler for the loading event. */
-        onLoading?: ((loadOptions: { filter?: any, sort?: any, select?: any, group?: any, skip?: number, take?: number, userData?: any, searchValue?: any, searchOperation?: string, searchExpr?: Function | Array<Function> }) => any);
+        onLoading?: ((loadOptions: LoadOptions) => any);
         /** A handler for the modified event. */
         onModified?: Function;
         /** A handler for the modifying event. */
@@ -854,7 +879,7 @@ declare module DevExpress.data {
         keyOf(obj: any): any;
         load(): Promise<any> & JQueryPromise<any>;
         /** Starts loading data. */
-        load(options: { filter?: any, sort?: any, select?: any, group?: any, skip?: number, take?: number, userData?: any }): Promise<any> & JQueryPromise<any>;
+        load(options: LoadOptions): Promise<any> & JQueryPromise<any>;
         /** Detaches all event handlers from the specified event. */
         off(eventName: string): any;
         /** Detaches a particular event handler from the specified event. */
@@ -882,6 +907,20 @@ declare module DevExpress.data {
         /** Creates the Query object for the underlying array. */
         createQuery(): any;
     }
+    export interface LoadOptions {
+        expand?: any;
+        filter?: any;
+        group?: any;
+        requireTotalCount?: boolean;
+        searchExpr?: Function | Array<Function>;
+        searchOperation?: string;
+        searchValue?: any;
+        select?: any;
+        skip?: number;
+        sort?: any;
+        take?: number;
+        userData?: any;
+    }
     export interface CustomStoreOptions extends StoreOptions {
         /** The user implementation of the byKey(key, extraOptions) method. */
         byKey?: ((key: any | string | number) => Promise<any> | JQueryPromise<any>);
@@ -890,7 +929,7 @@ declare module DevExpress.data {
         /** The user implementation of the insert(values) method. */
         insert?: ((values: any) => Promise<any> | JQueryPromise<any>);
         /** The user implementation of the load(options) method. */
-        load?: ((options: { filter?: any, sort?: any, select?: any, group?: any, skip?: number, take?: number, userData?: any, requireTotalCount?: boolean, searchValue?: any, searchOperation?: string, searchExpr?: Function | Array<Function> }) => Promise<any> | JQueryPromise<any>);
+        load?: ((options: LoadOptions) => Promise<any> | JQueryPromise<any>);
         /** Specifies how data returned by the load function is treated. */
         loadMode?: string;
         /** The user implementation of the remove(key) method. */
@@ -1321,6 +1360,8 @@ declare module DevExpress.data {
     export class XmlaStore {
         constructor(options?: XmlaStoreOptions)
     }
+    /** The global data layer error handler. */
+    export function errorHandler(e: Error): void;
     /** Creates a Query instance. */
     export function query(array: Array<any>): Query;
     /** Creates a Query instance for accessing the remote service specified by a URL. */
@@ -1410,26 +1451,6 @@ declare module DevExpress.data {
     }
 }
 declare module DevExpress.core {
-    /** An object that serves as a namespace for the methods and events specifying information on the current device. */
-    export class devices {
-        constructor(options: { window?: Window });
-        /** Returns information about the current device. */
-        current(): Device;
-        /** Overrides actual device information to force the application to operate as if it was running on a specified device. */
-        current(deviceName: string | Device): void;
-        /** Detaches all event handlers from the specified event. */
-        off(eventName: string): any;
-        /** Detaches a particular event handler from the specified event. */
-        off(eventName: string, eventHandler: Function): any;
-        /** Subscribes to a specified event. */
-        on(eventName: string, eventHandler: Function): any;
-        /** Subscribes to the specified events. */
-        on(events: any): any;
-        /** Returns the current device orientation. */
-        orientation(): string;
-        /** Returns real information about the current device regardless of the value passed to the devices.current(deviceName) method. */
-        real(): Device;
-    }
     /** A mixin that provides a capability to fire and subscribe to events. */
     export class EventsMixin {
         /** Detaches all event handlers from the specified event. */
@@ -1833,7 +1854,7 @@ declare module DevExpress.ui {
         activeStateEnabled?: boolean;
         /** The template to be used for rendering calendar cells. */
         cellTemplate?: template;
-        /** Specifies the serialization format for a date-time value. */
+        /** Specifies the date-time value serialization format. Use it only if you do not specify the value at design time. */
         dateSerializationFormat?: string;
         /** Specifies dates to be disabled. */
         disabledDates?: Array<Date> | ((data: { component?: any, date?: Date, view?: string }) => boolean);
@@ -1965,7 +1986,7 @@ declare module DevExpress.ui {
         columns?: Array<GridBaseColumn>;
         /** Specifies the origin of data for the widget. */
         dataSource?: string | Array<any> | DevExpress.data.DataSource | DevExpress.data.DataSourceOptions;
-        /** Specifies the serialization format for date-time values. */
+        /** Specifies date-time values' serialization format. Use it only if you do not specify the dataSource at design time. */
         dateSerializationFormat?: string;
         /** Overriden. */
         editing?: GridBaseEditing;
@@ -2032,7 +2053,7 @@ declare module DevExpress.ui {
         /** Specifies whether horizontal lines that separate one row from another are visible. */
         showRowLines?: boolean;
         /** Configures runtime sorting. */
-        sorting?: { sortingMode?: string, ascendingText?: string, descendingText?: string, clearText?: string };
+        sorting?: { mode?: string, ascendingText?: string, descendingText?: string, clearText?: string };
         /** Specifies whether to enable two-way data binding. */
         twoWayBindingEnabled?: boolean;
         /** Specifies whether text that does not fit into a column should be wrapped. */
@@ -2499,7 +2520,7 @@ declare module DevExpress.ui {
         cancelButtonText?: string;
         /** Specifies the message displayed if the specified date is later than the max value or earlier than the min value. */
         dateOutOfRangeMessage?: string;
-        /** Specifies the serialization format for a date-time value. */
+        /** Specifies the date-time value serialization format. Use it only if you do not specify the value at design time. */
         dateSerializationFormat?: string;
         /** Specifies dates to be disabled. Applies only if pickerType is "calendar". */
         disabledDates?: Array<Date> | ((data: { component?: any, date?: Date, view?: string }) => boolean);
@@ -3652,7 +3673,7 @@ declare module DevExpress.ui {
         dataSource?: string | Array<dxSchedulerAppointmentTemplate> | DevExpress.data.DataSource | DevExpress.data.DataSourceOptions;
         /** The template used for rendering day scale items. */
         dateCellTemplate?: template;
-        /** Specifies the serialization format for date-time values. */
+        /** Specifies the date-time values' serialization format. Use it only if you do not specify the dataSource at design time. */
         dateSerializationFormat?: string;
         /** Specifies the name of the data source item field whose value holds the description of the corresponding appointment. */
         descriptionExpr?: string;
@@ -6971,9 +6992,15 @@ declare module DevExpress.viz {
         static registerTheme(customTheme: any, baseTheme: string): void;
     }
 }
+declare module DevExpress.data.utils {
+    /** Compiles a getter function from the getter expression. */
+    export function compileGetter(expr: string | Array<string>): Function;
+    /** Compiles a setter function from the setter expression. */
+    export function compileSetter(expr: string | Array<string>): Function;
+}
 declare module DevExpress.data.utils.odata {
     /** Holds key value converters for OData. */
-    export var odatakeyConverters: any;
+    export var keyConverters: any;
 }
 declare module DevExpress.utils {
     /** Requests that the browser call a specified function to update animation before the next repaint. */
