@@ -59,6 +59,23 @@ var palettes = {
         simpleSet: ["#d1a1d1", "#eeacc5", "#7b5685", "#7e7cad", "#a13d73", "#5b41ab", "#e287e2", "#689cc1"],
         indicatingSet: ["#d8e2f6", "#d0b2da", "#d56a8a"],
         gradientSet: ["#eeacc5", "#7b5685"]
+    },
+
+    //generic color schemes related palettes
+    "carmine": {
+        simpleSet: ["#f05946", "#55bf61", "#fcc441", "#bf5865", "#c9d175", "#575c98", "#66a7b1", "#f06589"]
+    },
+    "darkmoon": {
+        simpleSet: ["#3debd3", "#ffc675", "#59d880", "#eb7d9b", "#2e9286", "#8c96e1", "#58a85c", "#5f8bce"]
+    },
+    "softblue": {
+        simpleSet: ["#7ab8eb", "#7ac97a", "#f0b868", "#d96864", "#6480c9", "#4db7be", "#4b7a77", "#7d66b0"]
+    },
+    "darkviolet": {
+        simpleSet: ["#9c63ff", "#f883ff", "#4151c9", "#479fd1", "#a200d1", "#156ee4", "#b155ff", "#63aa63"]
+    },
+    "greenmist": {
+        simpleSet: ["#3cbab2", "#69c338", "#317a71", "#deb355", "#e16e7c", "#23678a", "#b7b267", "#626ba5"]
     }
 };
 

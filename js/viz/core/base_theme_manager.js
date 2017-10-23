@@ -18,6 +18,11 @@ var Class = require("../../core/class"),
 require("./themes/generic.light");
 require("./themes/generic.dark");
 require("./themes/generic.contrast");
+require("./themes/generic.carmine");
+require("./themes/generic.darkmoon");
+require("./themes/generic.softblue");
+require("./themes/generic.darkviolet");
+require("./themes/generic.greenmist");
 require("./themes/ios");
 require("./themes/android");
 require("./themes/win");
