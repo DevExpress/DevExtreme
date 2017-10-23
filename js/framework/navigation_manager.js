@@ -73,33 +73,26 @@ var HistoryBasedNavigationManager = Class.inherit({
         this._currentItem = item;
     },
 
-    navigate: function(uri, options) {
+   navigate: function(uri, options) {
         options = options || {};
-
-        var that = this,
+        var args, that = this,
             isFirstNavigate = !that._currentItem,
-            currentItem = (that._currentItem || {}),
-            targetItem = (options.item || {}),
+            currentItem = that._currentItem || {},
+            targetItem = options.item || {},
             currentUri = currentItem.uri,
             currentKey = currentItem.key,
-            targetKey = targetItem.key,
-            args;
-
-        if(uri === undefined) {
-            uri = that._navigationDevice.getUri();
+            targetKey = targetItem.key;
+        if(void 0 === uri) {
+            uri = that._navigationDevice.getUri()
         }
-
         if(/^_back$/.test(uri)) {
             that.back();
-            return;
+            return
         }
-
-        options = extend(that._getDefaultOptions(), options || {});
-
+        options = $.extend(that._getDefaultOptions(), options || {});
         if(isFirstNavigate) {
-            options.target = NAVIGATION_TARGETS.current;
+            options.target = NAVIGATION_TARGETS.current
         }
-
         args = {
             currentUri: currentUri,
             uri: uri,
@@ -107,29 +100,45 @@ var HistoryBasedNavigationManager = Class.inherit({
             navigateWhen: [],
             options: options
         };
-
-        that.fireEvent("navigating", [args]);
-        uri = args.uri;
-
-        if(args.cancel || currentUri === uri && (targetKey === undefined || targetKey === currentKey) && !that._forceNavigate) {
-            that._cancelNavigation(args);
-        } else {
-            that._forceNavigate = false;
+        that.fireEvent("prepareToNavigate", [args]);
+        if(args.navigateWhen.length !== 0) {
             when.apply($, args.navigateWhen).done(function() {
+                that.fireEvent("navigating", [args]);
+                uri = args.uri;
+                if(args.cancel || currentUri === uri && (void 0 === targetKey || targetKey === currentKey) && !that._forceNavigate) {
+                    that._cancelNavigation(args)
+                } else {
+                    that._forceNavigate = false;
+                    commonUtils.executeAsync(function() {
+                        that._updateHistory(uri, options);
+                        that.fireEvent("navigated", [{
+                            uri: uri,
+                            previousUri: currentUri,
+                            options: options,
+                            item: that._currentItem
+                        }])
+                    })
+                }
+            });
+        } else {
+            that.fireEvent("navigating", [args]);
+            uri = args.uri;
+            if(args.cancel || currentUri === uri && (void 0 === targetKey || targetKey === currentKey) && !that._forceNavigate) {
+                that._cancelNavigation(args)
+            } else {
+                that._forceNavigate = false;
                 commonUtils.executeAsync(function() {
                     that._updateHistory(uri, options);
-
                     that.fireEvent("navigated", [{
                         uri: uri,
                         previousUri: currentUri,
                         options: options,
                         item: that._currentItem
-                    }]);
-                });
-            });
+                    }])
+                })
+            }
         }
     },
-
     back: function() {
         return this._navigationDevice.back();
     },
