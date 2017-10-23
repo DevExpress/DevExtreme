@@ -1788,7 +1788,7 @@ QUnit.test("Non-grid-aligned appointments should be resized correctly, when endD
 
     var cellHeight = this.instance.element().find(".dx-scheduler-date-table-cell").eq(0).outerHeight();
 
-    var pointer = pointerMock(this.instance$element().find(".dx-resizable-handle-bottom").eq(0)).start();
+    var pointer = pointerMock(this.instance.element().find(".dx-resizable-handle-bottom").eq(0)).start();
     pointer.dragStart().drag(0, cellHeight).dragEnd();
 
     assert.deepEqual(this.instance.option("dataSource")[0].endDate, new Date(2015, 1, 9, 15), "End date is OK");
