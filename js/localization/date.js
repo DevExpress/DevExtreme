@@ -158,7 +158,9 @@ var dateLocalization = dependencyInjector({
             formatter = function(value) {
                 return that.format(value, format);
             };
-            ldmlFormat = getLDMLDateFormat(formatter);
+            try {
+                ldmlFormat = getLDMLDateFormat(formatter);
+            } catch(e) {}
         }
 
         if(ldmlFormat) {
