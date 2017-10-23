@@ -139,10 +139,8 @@ gulp.task('npm-dts-generator', function() {
     return merge(
         gulp.src('artifacts/ts/dx.all.d.ts')
             .pipe(replace('/*!', '/**'))
-            .pipe(footer(`declare global {\n` +
-                `    interface JQueryCallback{}\n` +
-                `    interface JQueryPromise<T>{}\n` +
-            `}`))
+            .pipe(replace(/\/\*\s*#StartGlobalDeclaration\s*\*\//g, 'declare global {'))
+            .pipe(replace(/\/\*\s*#EndGlobalDeclaration\s*\*\//g, '}'))
             .pipe(footer('\nexport default DevExpress;'))
             .pipe(gulp.dest(path.join(context.RESULT_NPM_PATH, 'bundles'))),
 

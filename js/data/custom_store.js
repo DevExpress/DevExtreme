@@ -207,6 +207,78 @@ function runRawLoadWithKey(pendingDeferred, store, key) {
 }
 
 /**
+ * @name LoadOptions
+ * @publicName LoadOptions
+ * @namespace DevExpress.data
+ * @type object
+ */
+/**
+ * @name LoadOptions_filter
+ * @publicName filter
+ * @type object
+ */
+ /**
+ * @name LoadOptions_sort
+ * @publicName sort
+ * @type object
+ */
+ /**
+ * @name LoadOptions_select
+ * @publicName select
+ * @type object
+ */
+/**
+ * @name LoadOptions_group
+ * @publicName group
+ * @type object
+ */
+ /**
+ * @name LoadOptions_skip
+ * @publicName skip
+ * @type number
+ */
+ /**
+ * @name LoadOptions_skip
+ * @publicName skip
+ * @type number
+ */
+ /**
+ * @name LoadOptions_take
+ * @publicName take
+ * @type number
+ */
+ /**
+ * @name LoadOptions_userData
+ * @publicName userData
+ * @type object
+ */
+ /**
+ * @name LoadOptions_expand
+ * @publicName expand
+ * @type object
+ */
+ /**
+ * @name LoadOptions_requireTotalCount
+ * @publicName requireTotalCount
+ * @type boolean
+ */
+ /**
+ * @name LoadOptions_searchValue
+ * @publicName searchValue
+ * @type any
+ */
+ /**
+ * @name LoadOptions_searchOperation
+ * @publicName searchOperation
+ * @type string
+ */
+ /**
+ * @name LoadOptions_searchExpr
+ * @publicName searchExpr
+ * @type getter|Array<getter>
+ */
+
+/**
 * @name CustomStore
 * @publicName CustomStore
 * @inherits Store
@@ -249,18 +321,7 @@ var CustomStore = Store.inherit({
          * @name CustomStoreOptions_load
          * @publicName load
          * @type function
-         * @type_function_param1 options:object
-         * @type_function_param1_field1 filter:object
-         * @type_function_param1_field2 sort:object
-         * @type_function_param1_field3 select:object
-         * @type_function_param1_field4 group:object
-         * @type_function_param1_field5 skip:number
-         * @type_function_param1_field6 take:number
-         * @type_function_param1_field7 userData:object
-         * @type_function_param1_field8 requireTotalCount:boolean
-         * @type_function_param1_field9 searchValue:object
-         * @type_function_param1_field10 searchOperation:string
-         * @type_function_param1_field11 searchExpr:getter|Array<getter>
+         * @type_function_param1 options:LoadOptions
          * @type_function_return Promise<any>
          */
         this._loadFunc = options[LOAD];

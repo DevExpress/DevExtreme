@@ -308,23 +308,25 @@ declare module DevExpress {
         grade?: string;
     }
 
+
+    /** @docid DevicesObject */
     export class Devices implements EventsMixin<Devices> {
-        /** @docid DevicesMethods_ctor */
+        /** @docid DevicesObjectMethods_ctor */
         constructor(options: { window: Window });
 
-        /** @docid devicesmethods_current#current(deviceName) */
+        /** @docid DevicesObjectmethods_current#current(deviceName) */
         current(deviceName: any): void;
 
-        /** @docid devicesmethods_current#current() */
+        /** @docid DevicesObjectmethods_current#current() */
         current(): Device;
 
-        /** @docid devicesevents_orientationChanged */
+        /** @docid DevicesObjectevents_orientationChanged */
         orientationChanged: JQueryCallback;
 
-        /** @docid devicesmethods_orientation */
+        /** @docid DevicesObjectmethods_orientation */
         orientation(): string;
 
-        /** @docid devicesmethods_real */
+        /** @docid DevicesObjectmethods_real */
         real(): Device;
 
         on(eventName: "orientationChanged", eventHandler: (e: { orientation: string }) => void): Devices;
@@ -468,7 +470,7 @@ declare module DevExpress {
         }): void;
 
         /** @docid domcomponentmethods_getInstance */
-        static getInstance(element: JQuery): Object;
+        static getInstance(element: JQuery): DOMComponent;
     }
 
     export module data {
@@ -515,18 +517,31 @@ declare module DevExpress {
             key?: any;
         }
 
+        /** @docid LoadOptions */
         export interface LoadOptions {
+            /** @docid LoadOptions_searchValue */
             searchValue?: any;
+            /** @docid LoadOptions_searchExpr */
             searchExpr?: any;
+            /** @docid LoadOptions_searchOperation */
             searchOperation?: string;
+            /** @docid LoadOptions_filter */
             filter?: Object;
+            /** @docid LoadOptions_sort */
             sort?: Object;
+            /** @docid LoadOptions_select */
             select?: Object;
+            /** @docid LoadOptions_expand */
             expand?: Object;
+            /** @docid LoadOptions_group */
             group?: Object;
+            /** @docid LoadOptions_skip */
             skip?: number;
+            /** @docid LoadOptions_take */
             take?: number;
+            /** @docid LoadOptions_userData */
             userData?: Object;
+            /** @docid LoadOptions_requireTotalCount */
             requireTotalCount?: boolean;
         }
 

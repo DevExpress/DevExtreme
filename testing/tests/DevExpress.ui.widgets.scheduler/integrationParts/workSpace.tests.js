@@ -800,7 +800,7 @@ QUnit.test("timeCellTemplate should take cellElement with correct geometry(T4535
         timeCellTemplate: function(cellData, cellIndex, cellElement) {
             if(!cellIndex) {
                 assert.equal(isRenderer(cellElement), config().useJQuery, "element is correct");
-                assert.equal($(cellElement).outerHeight(), 100, "Time cell height is OK");
+                assert.equal($(cellElement).outerHeight(), 50, "Time cell height is OK");
                 assert.equal($(cellElement).outerWidth(), 100, "Time cell width is OK");
             }
         }
@@ -862,7 +862,7 @@ QUnit.test("timeCellTemplate should have correct options", function(assert) {
         currentDate: new Date(2016, 8, 5),
         firstDayOfWeek: 0,
         timeCellTemplate: function(itemData, index, $container) {
-            if(index === 3) {
+            if(index === 6) {
                 templateOptions = itemData;
             }
         }
@@ -1274,7 +1274,7 @@ QUnit.test("Timepanel text should be calculated correctly if DST makes sense (T4
     var $cells = this.instance.$element().find(".dx-scheduler-time-panel-cell div");
 
     assert.equal($cells.eq(0).text(), dateLocalization.format(new Date(2016, 10, 6, 1), "shorttime"), "Cell text is OK");
-    assert.equal($cells.eq(1).text(), dateLocalization.format(new Date(2016, 10, 6, 2), "shorttime"), "Cell text is OK");
+    assert.equal($cells.eq(2).text(), dateLocalization.format(new Date(2016, 10, 6, 2), "shorttime"), "Cell text is OK");
 });
 
 QUnit.test("Tables should take css class after width calculation(T491453)", function(assert) {

@@ -53,12 +53,8 @@
 
 @SCHEDULER_FIRST_OF_MONTH_BORDER: 1px solid @SCHEDULER_FIRST_MONTH_BORDER_COLOR;
 
-.dx-scheduler-time-panel {
-    margin-top: -@GENERIC_SCHEDULER_WORKSPACE_DATE_TABLE_CELL_HEIGHT;
-}
-
 .dx-scheduler-time-panel-cell {
-    height: @GENERIC_SCHEDULER_WORKSPACE_DATE_TABLE_CELL_HEIGHT * 2;
+    height: @GENERIC_SCHEDULER_WORKSPACE_DATE_TABLE_CELL_HEIGHT;
 }
 
 .dx-scheduler-date-table-cell {
@@ -110,7 +106,7 @@
 }
 
 .dx-scheduler-work-space-day {
-    .dx-scheduler-scrollable-offset-mixin(@GENERIC_SCHEDULER_HEADER_PANEL_TOP_GAP, @GENERIC_SCHEDULER_ALL_DAY_TABLE_CELL_HEIGHT, @GENERIC_SCHEDULER_COLLAPSED_ALL_DAY_TABLE_CELL_HEIGHT);
+    .dx-scheduler-scrollable-offset-mixin(0, @GENERIC_SCHEDULER_ALL_DAY_TABLE_CELL_HEIGHT, @GENERIC_SCHEDULER_COLLAPSED_ALL_DAY_TABLE_CELL_HEIGHT);
     
     &:not(.dx-scheduler-work-space-grouped) {
         .dx-scheduler-all-day-title {

@@ -100,7 +100,6 @@ var ODataStore = Store.inherit({
         /**
          * @name ODataStoreOptions_onLoading
          * @publicName onLoading
-         * @type_function_param1_field8 requireTotalCount:boolean
          * @action
          * @extend_doc
          */
