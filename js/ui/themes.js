@@ -167,7 +167,7 @@ function init(options) {
 function current(options) {
     if(!arguments.length) {
         currentThemeName = currentThemeName || readThemeMarker();
-        return currentThemeName || readThemeMarker();
+        return currentThemeName;
     }
 
     detachCssClasses(viewPort());
