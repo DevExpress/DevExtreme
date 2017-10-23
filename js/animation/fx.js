@@ -897,7 +897,7 @@ var fx = {
     * @publicName animate(element, config)
     * @param1 element:Node
     * @param2 config:animationConfig
-    * @return object
+    * @return Promise<void>
     */
     animate: animate,
     createAnimation: createAnimation,
