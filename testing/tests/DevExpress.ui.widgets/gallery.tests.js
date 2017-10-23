@@ -7,6 +7,8 @@ var $ = require("jquery"),
     fx = require("animation/fx"),
     animationFrame = require("animation/frame"),
     resizeCallbacks = require("core/utils/window").resizeCallbacks,
+    isRenderer = require("core/utils/type").isRenderer,
+    config = require("core/config"),
     executeAsyncMock = require("../../helpers/executeAsyncMock.js"),
     pointerMock = require("../../helpers/pointerMock.js"),
     keyboardMock = require("../../helpers/keyboardMock.js");
@@ -1993,6 +1995,7 @@ QUnit.test("focused item changed after press right/left arrows", function(assert
 
     this.keyboard.keyDown("right");
 
+    assert.equal(isRenderer(this.instance.option("focusedElement")), config().useJQuery, "focusedElement is correct");
     assert.ok($galleryItems.eq(1).hasClass("dx-state-focused"), "selectedItem has focusedState class");
 
     this.keyboard.keyDown("left");

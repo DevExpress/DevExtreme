@@ -10,6 +10,7 @@ var $ = require("../core/renderer"),
     inArray = require("../core/utils/array").inArray,
     each = require("../core/utils/iterator").each,
     deferredUtils = require("../core/utils/deferred"),
+    getPublicElement = require("../core/utils/dom").getPublicElement,
     Deferred = deferredUtils.Deferred,
     errors = require("../core/errors"),
     inkRipple = require("./widget/utils.ink_ripple"),
@@ -105,7 +106,7 @@ var SelectBox = DropDownList.inherit({
             },
             escape: function() {
                 parent.escape.apply(this, arguments);
-                if(!this._isEditable()) {
+                if(!this._isEditable() && this._list) {
                     this._focusListElement(null);
                     this._updateField(this.option("selectedItem"));
                 }
@@ -346,7 +347,7 @@ var SelectBox = DropDownList.inherit({
 
     _focusListElement: function(element) {
         this._preventInputValueRender = true;
-        this._list.option("focusedElement", element);
+        this._list.option("focusedElement", getPublicElement(element));
         delete this._preventInputValueRender;
     },
 
@@ -486,7 +487,7 @@ var SelectBox = DropDownList.inherit({
         }
 
         var list = e.component,
-            focusedElement = list.option("focusedElement"),
+            focusedElement = $(list.option("focusedElement")),
             focusedItem = list._getItemData(focusedElement);
 
         this._updateField(focusedItem);
@@ -592,9 +593,9 @@ var SelectBox = DropDownList.inherit({
     },
 
     _fieldRenderData: function() {
-        var $listFocused = this._list && this._list.option("focusedElement");
+        var $listFocused = this._list && $(this._list.option("focusedElement"));
 
-        if($listFocused) {
+        if($listFocused && $listFocused.length) {
             return this._list._getItemData($listFocused);
         }
 

@@ -64,9 +64,9 @@ var CollectionWidget = Widget.inherit({
 
     _supportedKeys: function() {
         var enter = function(e) {
-                var $itemElement = this.option("focusedElement");
+                var $itemElement = $(this.option("focusedElement"));
 
-                if(!$itemElement) {
+                if(!$itemElement.length) {
                     return;
                 }
 
@@ -229,7 +229,7 @@ var CollectionWidget = Widget.inherit({
             /**
             * @name CollectionWidgetOptions_focusedElement
             * @publicName focusedElement
-            * @type jQuery
+            * @type Element
             * @default null
             * @hidden
             * @extend_doc
@@ -348,13 +348,13 @@ var CollectionWidget = Widget.inherit({
             return;
         }
 
-        var $focusedElement = this.option("focusedElement");
-        if($focusedElement && $focusedElement.length) {
+        var $focusedElement = $(this.option("focusedElement"));
+        if($focusedElement.length) {
             this._setFocusedItem($focusedElement);
         } else {
             var $activeItem = this._getActiveItem();
             if($activeItem.length) {
-                this.option("focusedElement", $activeItem);
+                this.option("focusedElement", getPublicElement($activeItem));
             }
         }
     },
@@ -362,16 +362,16 @@ var CollectionWidget = Widget.inherit({
     _focusOutHandler: function() {
         this.callBase.apply(this, arguments);
 
-        var $target = this.option("focusedElement");
-        if($target) {
+        var $target = $(this.option("focusedElement"));
+        if($target.length) {
             this._toggleFocusClass(false, $target);
         }
     },
 
     _getActiveItem: function(last) {
-        var $focusedElement = this.option("focusedElement");
+        var $focusedElement = $(this.option("focusedElement"));
 
-        if($focusedElement && $focusedElement.length) {
+        if($focusedElement.length) {
             return $focusedElement;
         }
 
@@ -422,7 +422,7 @@ var CollectionWidget = Widget.inherit({
         }
 
         if($newTarget.length !== 0) {
-            this.option("focusedElement", $newTarget);
+            this.option("focusedElement", getPublicElement($newTarget));
         }
     },
 
@@ -463,8 +463,9 @@ var CollectionWidget = Widget.inherit({
         this.selectItem($target);
     },
 
-    _removeFocusedItem: function($target) {
-        if($target && $target.length) {
+    _removeFocusedItem: function(target) {
+        var $target = $(target);
+        if($target.length) {
             this._toggleFocusClass(false, $target);
             $target.removeAttr("id");
         }
@@ -575,7 +576,7 @@ var CollectionWidget = Widget.inherit({
                 break;
             case "focusedElement":
                 this._removeFocusedItem(args.previousValue);
-                this._setFocusedItem(args.value);
+                this._setFocusedItem($(args.value));
                 break;
             case "visibleExpr":
             case "disabledExpr":
@@ -749,7 +750,7 @@ var CollectionWidget = Widget.inherit({
                 $closestFocusable = this._closestFocusable($target);
 
             if($closestItem.length && inArray($closestFocusable.get(0), this._focusTarget()) !== -1) {
-                this.option("focusedElement", $closestItem);
+                this.option("focusedElement", getPublicElement($closestItem));
             }
         }.bind(this);
 
@@ -893,7 +894,7 @@ var CollectionWidget = Widget.inherit({
         var itemTemplate = this._getTemplate(itemTemplateName);
 
         this._addItemContentClasses(args);
-        var $templateResult = this._createItemByTemplate(itemTemplate, args);
+        var $templateResult = $(this._createItemByTemplate(itemTemplate, args));
         if(!$templateResult.hasClass(TEMPLATE_WRAPPER_CLASS)) {
             return args.container;
         }
@@ -984,11 +985,11 @@ var CollectionWidget = Widget.inherit({
     },
 
     _createItemByTemplate: function(itemTemplate, renderArgs) {
-        return $(itemTemplate.render({
+        return itemTemplate.render({
             model: renderArgs.itemData,
             container: renderArgs.container,
             index: renderArgs.index
-        }));
+        });
     },
 
     _emptyMessageContainer: function() {

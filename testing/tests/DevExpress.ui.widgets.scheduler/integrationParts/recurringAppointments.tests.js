@@ -956,6 +956,25 @@ QUnit.test("The second appointment in recurring series in Month view should have
     assert.equal($appointments.eq(1).outerWidth(), cellWidth * 2, "2d appt has correct width");
 });
 
+QUnit.test("The second appointment in recurring series in Week view should have correct width", function(assert) {
+    this.createInstance({
+        dataSource: [{
+            text: "Appointment 1",
+            startDate: new Date(2017, 9, 17, 9),
+            endDate: new Date(2017, 9, 18, 10),
+            recurrenceRule: "FREQ=WEEKLY;BYDAY=SU,MO,TU,WE,TH,FR,SA"
+        }],
+        currentDate: new Date(2017, 9, 17),
+        views: ["week"],
+        currentView: "week"
+    });
+
+    var $appointments = this.instance.$element().find(".dx-scheduler-appointment"),
+        cellWidth = this.instance.$element().find(".dx-scheduler-date-table-cell").outerWidth();
+
+    assert.roughEqual($appointments.eq(1).outerWidth(), cellWidth * 2, 1.001, "2d appt has correct width");
+});
+
 QUnit.test("Reduced reccuring appt should have right left position in first column in Month view", function(assert) {
     this.createInstance({
         dataSource: [{
@@ -1006,6 +1025,6 @@ QUnit.test("Reduced reccuring appt should have right left position in first colu
         compactClass = "dx-scheduler-appointment-compact",
         cellWidth = this.instance.$element().find(".dx-scheduler-date-table-cell").outerWidth();
 
-    assert.equal($reducedAppointment.eq(1).position().left, cellWidth * 7, "first appt in 2d group has right left position");
+    assert.roughEqual($reducedAppointment.eq(1).position().left, cellWidth * 7, 1.001, "first appt in 2d group has right left position");
     assert.notOk($appointment.eq(7).hasClass(compactClass), "appt isn't compact");
 });

@@ -1,13 +1,12 @@
 "use strict";
 
-var jQuery = require("jquery");
 var setPublicElementWrapper = require("../../core/utils/dom").setPublicElementWrapper;
-var useJQuery = require("../../core/config")().useJQuery;
+var useJQuery = require("./use_jquery")();
 
 var getPublicElement = function($element) {
     return $element;
 };
 
-if(jQuery && useJQuery) {
+if(useJQuery) {
     setPublicElementWrapper(getPublicElement);
 }

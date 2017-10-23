@@ -532,12 +532,14 @@ QUnit.test("list item obtained focus only after press on control key", function(
         opened: true,
         focusStateEnabled: true
     });
+    var selectBox = $("#selectBox").dxSelectBox("instance");
 
     this.clock.tick(TIME_TO_WAIT);
     var $input = $selectBox.find(".dx-texteditor-input");
 
     keyboardMock($input).press("down");
     var $firstItemList = $(".dx-list-item").eq(0);
+    assert.equal(isRenderer(selectBox._list.option("focusedElement")), config().useJQuery, "focusedElement is correct");
     assert.ok($firstItemList.hasClass("dx-state-focused"), "first list item obtained focus");
 });
 
@@ -3423,6 +3425,22 @@ QUnit.test("Enter and escape key press does not prevent default when popup is no
     keyboard.keyDown("esc");
 
     assert.equal(prevented, 0, "defaults has not prevented on enter and escape keys");
+});
+
+QUnit.test("Escape key press does not throw any errors when popup is not opened", function(assert) {
+    var $element = $("#selectBox").dxSelectBox({
+            items: [0, 1, 2],
+            value: 1,
+            focusStateEnabled: true,
+            deferRendering: true,
+            opened: false
+        }),
+        $input = $element.find("." + TEXTEDITOR_INPUT_CLASS),
+        keyboard = keyboardMock($input);
+
+    keyboard.keyDown("esc");
+
+    assert.ok(true, "SelectBox works correctly");
 });
 
 QUnit.test("T243237: dxSelectBox keyboard navigation: up arrow can not circulate through the values, as down arrow", function(assert) {

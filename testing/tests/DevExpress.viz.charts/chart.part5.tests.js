@@ -204,6 +204,47 @@ QUnit.test("MultiAxis chart", function(assert) {
     assert.deepEqual(series2.getValueAxis().zoom.lastCall.args, [5, 12], "axis 2 viewport");
 });
 
+QUnit.test("Zoom all argument axis", function(assert) {
+    var series1 = new MockSeries({}),
+        series2 = new MockSeries({});
+
+    series1.getViewport.returns({
+        min: 8,
+        max: 15
+    });
+
+    series2.getViewport.returns({
+        min: 5,
+        max: 12
+    });
+
+    seriesMockData.series.push(series1, series2);
+
+    var chart = this.createChart({
+        series: [{
+            type: "line",
+            pane: "p1"
+        }, {
+            pane: "p2",
+            type: "line"
+        }],
+        panes: [{
+            name: "p1"
+        }, {
+            name: "p2"
+        }]
+    });
+    //act
+    chart.zoomArgument(10, 50);
+    //assert
+
+    assert.deepEqual(chart._argumentAxes[0].zoom.lastCall.args, [10, 50, undefined]);
+    assert.deepEqual(chart._argumentAxes[1].zoom.lastCall.args, [10, 50, undefined]);
+    assert.deepEqual(series1.getValueAxis().zoom.lastCall.args, [8, 15], "axis 1 viewport");
+    assert.deepEqual(series2.getValueAxis().zoom.lastCall.args, [5, 12], "axis 2 viewport");
+});
+
+
 QUnit.test("chart with single value with aggregation. Adjust on zoom = true", function(assert) {
     var series1 = new MockSeries({});
 

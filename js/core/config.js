@@ -60,7 +60,7 @@ var config = {
     * @publicName useJQuery
     * @type boolean
     */
-    useJQuery: true
+    useJQuery: undefined
 };
 
 var configMethod = function() {

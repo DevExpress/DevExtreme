@@ -116,7 +116,7 @@ var SchedulerWorkSpaceIndicator = SchedulerWorkSpace.inherit({
         var today = this._getToday(),
             firstViewDate = new Date(this._firstViewDate);
 
-        var timeDiff = today.getTime() - firstViewDate.getTime();
+        var timeDiff = today.getTime() - firstViewDate.getTime() + 1;
 
         return Math.ceil(timeDiff / toMs("day"));
     },
@@ -150,7 +150,7 @@ var SchedulerWorkSpaceIndicator = SchedulerWorkSpace.inherit({
             date = new Date(this._firstViewDate);
 
         if(this._needRenderDateTimeIndicator()) {
-            date.setDate(today.getDate());
+            date.setFullYear(today.getFullYear(), today.getMonth(), today.getDate());
         }
 
         var duration = today.getTime() - date.getTime(),

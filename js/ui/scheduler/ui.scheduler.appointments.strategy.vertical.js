@@ -41,7 +41,8 @@ var VerticalRenderingStrategy = BaseAppointmentsStrategy.inherit({
     },
 
     _getItemPosition: function(item) {
-        var allDay = this.isAllDay(item);
+        var allDay = this.isAllDay(item),
+            isRecurring = !!item.recurrenceRule;
 
         if(allDay) {
             return this.callBase(item);
@@ -52,7 +53,7 @@ var VerticalRenderingStrategy = BaseAppointmentsStrategy.inherit({
 
         for(var j = 0; j < position.length; j++) {
             var height = this.calculateAppointmentHeight(item, position[j]),
-                width = this.calculateAppointmentWidth(item, position[j]),
+                width = this.calculateAppointmentWidth(item, position[j], isRecurring),
                 resultHeight = height,
                 appointmentReduced = null,
                 multiDaysAppointmentParts = [],
@@ -170,13 +171,13 @@ var VerticalRenderingStrategy = BaseAppointmentsStrategy.inherit({
         return (this._defaultWidth - WEEK_APPOINTMENT_DEFAULT_OFFSET) || this.getAppointmentMinSize();
     },
 
-    calculateAppointmentWidth: function(appointment, position) {
+    calculateAppointmentWidth: function(appointment, position, isRecurring) {
         if(!this.isAllDay(appointment)) {
             return 0;
         }
 
         var startDate = new Date(this._startDate(appointment, false, position)),
-            endDate = this._endDate(appointment, position),
+            endDate = this._endDate(appointment, position, isRecurring),
             cellWidth = this._defaultWidth || this.getAppointmentMinSize();
 
         startDate = dateUtils.trimTime(startDate);

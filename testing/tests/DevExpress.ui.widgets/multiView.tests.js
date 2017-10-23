@@ -5,6 +5,8 @@ var $ = require("jquery"),
     translator = require("animation/translator"),
     domUtils = require("core/utils/dom"),
     devices = require("core/devices"),
+    isRenderer = require("core/utils/type").isRenderer,
+    config = require("core/config"),
     animation = require("ui/multi_view").animation,
     pointerMock = require("../../helpers/pointerMock.js"),
     keyboardMock = require("../../helpers/keyboardMock.js");
@@ -194,7 +196,7 @@ QUnit.test("pointerdown should not affect to parent multiview (T306118)", functi
 
     $($outerItemElements.eq(0)).trigger($.Event("dxpointerdown", { target: $innerSecondItem }));
 
-    assert.equal(outerMultiView.option("focusedElement").get(0), $outerItemElements.get(0), "focusedElement was not changed if event's target is not part of the widget");
+    assert.equal($(outerMultiView.option("focusedElement")).get(0), $outerItemElements.get(0), "focusedElement was not changed if event's target is not part of the widget");
 });
 
 
@@ -868,6 +870,7 @@ QUnit.test("selected item should have focus after swipe", function(assert) {
         $item1 = $(multiView.itemElements()).eq(1);
 
     pointerMock($multiView).start().swipeStart().swipe(-0.5).swipeEnd(-1);
+    assert.equal(isRenderer(multiView.option("focusedElement")), config().useJQuery, "focusedElement is correct");
     assert.ok($item1.hasClass("dx-state-focused"), "item obtained focus after swipe");
     assert.equal(this.capturedAnimations[0].end, -800, "animated correctly");
 });

@@ -770,16 +770,17 @@ QUnit.test("Values are converted according to 'fieldTypes' property", function(a
     QUERY("odata.org", {
         fieldTypes: {
             id1: "Int64",
-            name: "String"
+            name: "String",
+            total: "Decimal" //T566307
         }
     })
-        .filter([["id1", "=", 123], "and", ["id2", "=", 456], "and", ["name", "=", 789]])
+        .filter([["id1", "=", 123], "and", ["id2", "=", 456], "and", ["name", "=", 789], "and", ["total", "=", null]])
         .enumerate()
         .fail(function() {
             assert.ok(false, MUST_NOT_REACH_MESSAGE);
         })
         .done(function(r) {
-            assert.equal(r[0].data["$filter"], "(id1 eq 123L) and (id2 eq 456) and (name eq '789')");
+            assert.equal(r[0].data["$filter"], "(id1 eq 123L) and (id2 eq 456) and (name eq '789') and (total eq null)");
         })
         .always(done);
 });

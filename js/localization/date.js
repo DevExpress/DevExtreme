@@ -5,6 +5,7 @@ var dependencyInjector = require("../core/utils/dependency_injector"),
     iteratorUtils = require("../core/utils/iterator"),
     inArray = require("../core/utils/array").inArray,
     getLDMLDateFormatter = require("./ldml/date.formatter").getFormatter,
+    getLDMLDateFormat = require("./ldml/date.format").getFormat,
     getLDMLDateParser = require("./ldml/date.parser").getParser,
     defaultDateNames = require("./default_date_names"),
     errors = require("../core/errors");
@@ -134,7 +135,10 @@ var dateLocalization = dependencyInjector({
     },
 
     parse: function(text, format) {
-        var result;
+        var that = this,
+            result,
+            ldmlFormat,
+            formatter;
 
         if(!text) {
             return;
@@ -148,13 +152,17 @@ var dateLocalization = dependencyInjector({
             return format.parser(text);
         }
 
-        if(format.type || format.formatter) {
-            format = format.type;
+        if(typeof format === "string" && !FORMATS_TO_PATTERN_MAP[format.toLowerCase()]) {
+            ldmlFormat = format;
+        } else {
+            formatter = function(value) {
+                return that.format(value, format);
+            };
+            ldmlFormat = getLDMLDateFormat(formatter);
         }
 
-        if(typeof format === "string") {
-            format = FORMATS_TO_PATTERN_MAP[format.toLowerCase()] || format;
-            return getLDMLDateParser(format, this)(text);
+        if(ldmlFormat) {
+            return getLDMLDateParser(ldmlFormat, this)(text);
         }
 
         errors.log("W0012");

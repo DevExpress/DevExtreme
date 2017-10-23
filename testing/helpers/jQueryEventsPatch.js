@@ -4,13 +4,15 @@
 
 var eventsEngine = require("events/core/events_engine");
 
-var originalJQueryEvent = jQuery.Event;
+var originalJQueryEvent;
 var originalJQueryMethods = {};
 
 QUnit.testStart(function() {
     if(!jQuery) {
         return;
     }
+
+    originalJQueryEvent = jQuery.Event;
 
     jQuery.Event = function() {
         return eventsEngine.Event.apply(this, arguments);

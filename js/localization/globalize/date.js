@@ -740,6 +740,12 @@ if(Globalize && Globalize.formatDate) {
 
             if(!format || typeof (format) === "function" || isObject(format) && !this._isAcceptableFormat(format)) {
                 if(format) {
+                    try {
+                        var parsedValue = this.callBase(text, format);
+                        if(parsedValue) {
+                            return parsedValue;
+                        }
+                    } catch(e) {}
                     errors.log("W0012");
                 }
 

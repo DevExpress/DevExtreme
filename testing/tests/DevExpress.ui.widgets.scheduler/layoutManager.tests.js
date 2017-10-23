@@ -1545,13 +1545,13 @@ QUnit.testInActiveWindow("Apps should be focused in right order", function(asser
 
     var keyboard = keyboardMock($appointments.eq(0));
     keyboard.keyDown("tab");
-    assert.deepEqual($appointments.get(1), apptInstance.option("focusedElement").get(0), "app 1 in focus");
+    assert.deepEqual($appointments.get(1), $(apptInstance.option("focusedElement")).get(0), "app 1 in focus");
 
     keyboard.keyDown("tab");
-    assert.deepEqual($appointments.get(2), apptInstance.option("focusedElement").get(0), "app 0 in focus");
+    assert.deepEqual($appointments.get(2), $(apptInstance.option("focusedElement")).get(0), "app 0 in focus");
 
     keyboard.keyDown("tab");
-    assert.deepEqual($appointments.get(3), apptInstance.option("focusedElement").get(0), "app 3 in focus");
+    assert.deepEqual($appointments.get(3), $(apptInstance.option("focusedElement")).get(0), "app 3 in focus");
 });
 
 QUnit.testInActiveWindow("Apps should be focused in back order while press shift+tab", function(assert) {
@@ -1573,13 +1573,13 @@ QUnit.testInActiveWindow("Apps should be focused in back order while press shift
     this.clock.tick();
 
     keyboard.keyDown("tab", { shiftKey: true });
-    assert.deepEqual($appointments.get(2), apptInstance.option("focusedElement").get(0), "app 1 in focus");
+    assert.deepEqual($appointments.get(2), $(apptInstance.option("focusedElement")).get(0), "app 1 in focus");
 
     keyboard.keyDown("tab", { shiftKey: true });
-    assert.deepEqual($appointments.get(1), apptInstance.option("focusedElement").get(0), "app 1 in focus");
+    assert.deepEqual($appointments.get(1), $(apptInstance.option("focusedElement")).get(0), "app 1 in focus");
 
     keyboard.keyDown("tab", { shiftKey: true });
-    assert.deepEqual($appointments.get(0), apptInstance.option("focusedElement").get(0), "app 1 in focus");
+    assert.deepEqual($appointments.get(0), $(apptInstance.option("focusedElement")).get(0), "app 1 in focus");
 });
 
 QUnit.module("Appointment overlapping", moduleOptions);
