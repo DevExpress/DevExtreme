@@ -326,3 +326,71 @@ QUnit.test('$root model in rowTemplate', function(assert) {
     assert.ok(this.viewModel.rowClick.calledOnce, "rowClick called once");
     assert.equal(this.viewModel.rowClick.getCall(0).args[0].data.id, 2, "rowClick args");
 });
+
+QUnit.module("Editing", {
+    beforeEach: function() {
+        this.clock = sinon.useFakeTimers();
+
+        this.array = ko.observableArray([]);
+        this.array.push({
+            FirstName: ko.observable("Jon"),
+            LastName: ko.observable("Smith")
+        });
+        this.editing = {
+            mode: "row",
+            allowUpdating: true,
+            allowAdding: true,
+            allowDeleting: true
+        };
+
+        this.viewModel = {
+            gridOptions: {
+                dataSource: this.array,
+                editing: this.editing
+            }
+        };
+        this.createDataGrid = function() {
+            ko.applyBindings(this.viewModel, $("#landOfKO").get(0));
+
+            var dataGrid = $("#dataGridKO").dxDataGrid("instance");
+            this.clock.tick(500);
+            return dataGrid;
+        };
+    },
+    afterEach: function() {
+        this.clock.restore();
+    }
+}, function() {
+    //T566012
+    QUnit.test("Row mode: DataSource fields should be not changed when editing row", function(assert) {
+        //arrange
+        var $input,
+            dataGrid = this.createDataGrid();
+
+        dataGrid.editRow(0);
+        $input = dataGrid.element().find(".dx-datagrid-rowsview .dx-editor-cell input").first();
+
+        //assert
+        assert.strictEqual($input.length, 1, "has input");
+
+        //act
+        $input.val("Test");
+        $input.trigger("change");
+
+        //assert
+        assert.strictEqual(this.array()[0].FirstName(), "Jon", "first name has not changed");
+    });
+
+    //T566012
+    QUnit.test("Batch mode: DataSource fields should be not changed when editing row", function(assert) {
+        //arrange
+        this.editing.mode = "batch";
+        var dataGrid = this.createDataGrid();
+
+        //act
+        dataGrid.cellValue(0, 0, "Test");
+
+        //assert
+        assert.strictEqual(this.array()[0].FirstName(), "Jon", "first name has not changed");
+    });
+});
