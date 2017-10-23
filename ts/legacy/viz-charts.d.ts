@@ -1,4 +1,3 @@
-/// <reference path="vendor/jquery.d.ts" />
 /// <reference path="core.d.ts" />
 /// <reference path="viz-core.d.ts" />
 
