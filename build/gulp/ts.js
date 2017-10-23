@@ -3,7 +3,6 @@
 "use strict";
 
 var gulp = require('gulp');
-var merge = require('merge-stream');
 var concat = require('gulp-concat');
 var replace = require('gulp-replace');
 var file = require('gulp-file');
@@ -59,16 +58,16 @@ var generateJQueryAugmentation = exports.generateJQueryAugmentation = function(e
            `}\n`;
 };
 
-gulp.task('ts-sources', function() {
-    return merge(
-        gulp.src('./ts/vendor/*').pipe(gulp.dest(OUTPUT_DIR)),
-        gulp
-            .src('./ts/dx.all.d.ts')
-            .pipe(headerPipes.bangLicense())
-            .pipe(gulp.dest(OUTPUT_DIR))
-    );
+gulp.task('ts-vendor', function() {
+    return gulp.src('./ts/vendor/*')
+        .pipe(gulp.dest(OUTPUT_DIR));
 });
 
+gulp.task('ts-sources', function() {
+    return gulp.src('./ts/dx.all.d.ts')
+        .pipe(headerPipes.bangLicense())
+        .pipe(gulp.dest(OUTPUT_DIR));
+});
 
 gulp.task('ts-sources-legacy', function() {
     var jQueryAugmentation = MODULES.map(function(moduleMeta) {
@@ -77,17 +76,13 @@ gulp.task('ts-sources-legacy', function() {
         }).join('');
     }).join('\n');
 
-    return merge(
-        gulp.src('./ts/vendor/*').pipe(gulp.dest(OUTPUT_DIR)),
-        gulp
-            .src(definitionSources)
-            .pipe(file('jquery-augmentation.d.ts', jQueryAugmentation))
-            .pipe(concat('dx.all.legacy.d.ts'))
-            .pipe(replace(/\/\/[^\r\n]+/g, ''))
-            .pipe(replace(/^\s*[\r\n]+/gm, ''))
-            .pipe(headerPipes.bangLicense())
-            .pipe(gulp.dest(OUTPUT_DIR))
-    );
+    return gulp.src(definitionSources)
+        .pipe(file('jquery-augmentation.d.ts', jQueryAugmentation))
+        .pipe(concat('dx.all.legacy.d.ts'))
+        .pipe(replace(/\/\/[^\r\n]+/g, ''))
+        .pipe(replace(/^\s*[\r\n]+/gm, ''))
+        .pipe(headerPipes.bangLicense())
+        .pipe(gulp.dest(OUTPUT_DIR));
 });
 
 gulp.task('ts-check', ['ts-sources'], function() {
@@ -112,6 +107,7 @@ gulp.task('ts-check', ['ts-sources'], function() {
 
 gulp.task('ts', function(callback) {
     return runSequence(
+        'ts-vendor',
         'ts-sources',
         'ts-sources-legacy',
         'ts-check',
