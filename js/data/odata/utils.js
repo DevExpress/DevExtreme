@@ -548,6 +548,7 @@ var keyConverters = {
 };
 
 var convertPrimitiveValue = function(type, value) {
+    if(value === null) return null;
     var converter = keyConverters[type];
     if(!converter) {
         throw errors.Error("E4014", type);

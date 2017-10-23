@@ -8,6 +8,7 @@ var $ = require("../core/renderer"),
     noop = require("../core/utils/common").noop,
     isDefined = require("../core/utils/type").isDefined,
     devices = require("../core/devices"),
+    getPublicElement = require("../core/utils/dom").getPublicElement,
     registerComponent = require("../core/component_registrator"),
     CollectionWidget = require("./collection/ui.collection_widget.edit"),
     Swipeable = require("../events/gesture/swipeable"),
@@ -386,7 +387,7 @@ var MultiView = CollectionWidget.inherit({
             this.option("selectedIndex", this._normalizeIndex(this.option("selectedIndex") - targetOffset));
             //TODO: change focusedElement on focusedItem
             var $selectedElement = this.itemElements().filter(".dx-item-selected");
-            this.option("focusStateEnabled") && this.option("focusedElement", $selectedElement);
+            this.option("focusStateEnabled") && this.option("focusedElement", getPublicElement($selectedElement));
         } else {
             this._animateItemContainer(0, noop);
         }

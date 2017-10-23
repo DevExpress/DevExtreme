@@ -1242,20 +1242,19 @@ var Form = Widget.inherit({
             case "items":
                 var itemPath = this._getItemPath(nameParts),
                     instance,
-                    items,
-                    name,
                     item = this.option(itemPath);
 
                 if(args.fullName.search("editorOptions") !== -1) {
-                    instance = this.getEditor(item.dataField);
+                    instance = this.getEditor(item.dataField) || this.getEditor(item.name);
                     instance && instance.option(item.editorOptions);
-                } else {
-                    if(item) {
-                        name = args.fullName.replace(itemPath + ".", "");
-                        this._changeItemOption(item, name, args.value);
-                        items = this._generateItemsFromData(this.option("items"));
-                        this.option("items", items);
-                    }
+                }
+
+                if(!instance && item) {
+                    var name = args.fullName.replace(itemPath + ".", ""),
+                        items;
+                    this._changeItemOption(item, name, args.value);
+                    items = this._generateItemsFromData(this.option("items"));
+                    this.option("items", items);
                 }
 
                 break;

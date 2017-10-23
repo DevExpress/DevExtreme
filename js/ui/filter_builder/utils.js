@@ -128,7 +128,7 @@ function getGroupValue(group) {
         }
     }
     if(!value) {
-        value = "And";
+        value = "and";
     }
     if(criteria !== group) {
         value = "!" + value;
@@ -212,7 +212,7 @@ function removeItem(group, item) {
 }
 
 function createEmptyGroup(value) {
-    return value.indexOf("not") !== -1 ? ["!", [value.substring(3)]] : [value];
+    return value.indexOf("not") !== -1 ? ["!", [value.substring(3).toLowerCase()]] : [value];
 }
 
 function isEmptyGroup(group) {
@@ -279,27 +279,51 @@ function isCondition(criteria) {
 }
 
 function removeAndOperationFromGroup(group) {
-    var index = group.indexOf("And");
+    var index = group.indexOf("and");
     while(index !== -1) {
         group.splice(index, 1);
-        index = group.indexOf("And");
+        index = group.indexOf("and");
     }
+}
+
+function convertToInnerGroup(group) {
+    for(var i = 0; i < group.length; i++) {
+        if(isGroup(group[i])) {
+            convertToInnerGroup(group[i]);
+        } else if(isCondition(group[i])) {
+            convertToInnerCondition(group[i]);
+        } else if(!Array.isArray(group[i])) {
+            group[i] = group[i].toLowerCase();
+        }
+    }
+    return group;
+}
+
+function convertToInnerCondition(condition) {
+    if(condition.length < 3) {
+        condition[2] = condition[1];
+        condition[1] = "=";
+    }
+    return condition;
 }
 
 function convertToInnerStructure(value) {
     if(!value) {
         return [];
     }
+
+    value = extend(true, [], value);
+
     if(isCondition(value)) {
-        return [value];
+        return [convertToInnerCondition(value)];
     }
     if(isNegationGroup(value)) {
-        return ["!", isCondition(value[1]) ? [value[1]] : value[1]];
+        return ["!", isCondition(value[1]) ? [convertToInnerCondition(value[1])] : convertToInnerGroup(value[1])];
     }
-    return copyGroup(value);
+    return convertToInnerGroup(value);
 }
 
-function getNormalizedFilter(group) {
+function getNormalizedFilter(group, fields) {
     var criteria = getGroupCriteria(group),
         i;
 
@@ -310,10 +334,15 @@ function getNormalizedFilter(group) {
     var itemsForRemove = [];
     for(i = 0; i < criteria.length; i++) {
         if(isGroup(criteria[i])) {
-            var normalizedGroupValue = getNormalizedFilter(criteria[i]);
+            var normalizedGroupValue = getNormalizedFilter(criteria[i], fields);
             if(normalizedGroupValue) {
                 criteria[i] = normalizedGroupValue;
             } else {
+                itemsForRemove.push(criteria[i]);
+            }
+        } else if(isCondition(criteria[i])) {
+            var field = getField(criteria[i][0], fields);
+            if(!isValidCondition(criteria[i], field)) {
                 itemsForRemove.push(criteria[i]);
             }
         }
@@ -438,10 +467,6 @@ function getCaptionWithParents(item, plainItems) {
     return item.caption;
 }
 
-function isShortCondition(condition) {
-    return condition.length < 3;
-}
-
 function updateConditionByOperation(condition, operation) {
     if(operation === "isblank") {
         condition[1] = "=";
@@ -452,8 +477,6 @@ function updateConditionByOperation(condition, operation) {
     } else {
         if(condition[2] === null) {
             condition[2] = "";
-        } else if(isShortCondition(condition)) {
-            condition[2] = condition[1] || "";
         }
         condition[1] = operation;
     }
@@ -468,27 +491,20 @@ function getOperationValue(condition) {
         } else {
             caption = "isnotblank";
         }
-    } else if(isShortCondition(condition)) {
-        if(condition[1] === null) {
-            caption = "isblank";
-        } else {
-            caption = "=";
-        }
     } else {
         caption = condition[1];
     }
     return caption;
 }
 
-function copyGroup(group) {
-    var result = [];
-    for(var i = 0; i < group.length; i++) {
-        var item = group[i];
-        result.push(isGroup(item) ? copyGroup(item) : item);
+function isValidCondition(condition, field) {
+    if(field.dataType !== "string") {
+        return condition[2] !== "";
     }
-    return result;
+    return true;
 }
 
+exports.isValidCondition = isValidCondition;
 exports.isEmptyGroup = isEmptyGroup;
 exports.getOperationFromAvailable = getOperationFromAvailable;
 exports.updateConditionByOperation = updateConditionByOperation;
@@ -499,7 +515,6 @@ exports.getGroupMenuItem = getGroupMenuItem;
 exports.getGroupValue = getGroupValue;
 exports.getAvailableOperations = getAvailableOperations;
 exports.removeItem = removeItem;
-exports.copyGroup = copyGroup;
 exports.createCondition = createCondition;
 exports.createEmptyGroup = createEmptyGroup;
 exports.addItem = addItem;

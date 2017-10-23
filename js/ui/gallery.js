@@ -6,6 +6,7 @@ var $ = require("../core/renderer"),
     commonUtils = require("../core/utils/common"),
     typeUtils = require("../core/utils/type"),
     extend = require("../core/utils/extend").extend,
+    getPublicElement = require("../core/utils/dom").getPublicElement,
     fx = require("../animation/fx"),
     clickEvent = require("../events/click"),
     translator = require("../animation/translator"),
@@ -959,7 +960,7 @@ var Gallery = CollectionWidget.inherit({
         this._userInteraction = true;
 
         var selectedItem = this.itemElements().filter("." + GALLERY_ITEM_SELECTED_CLASS);
-        this.option("focusedElement", selectedItem);
+        this.option("focusedElement", getPublicElement(selectedItem));
         this._userInteraction = false;
     },
 
@@ -1061,7 +1062,7 @@ var Gallery = CollectionWidget.inherit({
 
         this.callBase.apply(this, arguments);
 
-        var index = this.itemElements().index(this.option("focusedElement"));
+        var index = this.itemElements().index($(this.option("focusedElement")));
         this.goToItem(index, this.option("animationEnabled"));
     },
 

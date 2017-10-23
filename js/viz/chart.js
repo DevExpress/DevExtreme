@@ -1095,7 +1095,10 @@ var dxChart = AdvancedChart.inherit({
             that._eventTrigger("zoomStart");
         }
 
-        zoomArg = that._argumentAxes[0].zoom(min, max, gesturesUsed);
+        that._argumentAxes.forEach(function(axis) {
+            zoomArg = axis.zoom(min, max, gesturesUsed);
+        });
+
         that._zoomMinArg = zoomArg.min;
         that._zoomMaxArg = zoomArg.max;
         that._notApplyMargins = gesturesUsed; //TODO

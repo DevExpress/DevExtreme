@@ -2526,7 +2526,7 @@ QUnit.test("tagBox set focused class with searchEnabled after press 'delete' key
     keyboard
         .press("down");
 
-    var $focusedItemList = tagBox._list.option("focusedElement");
+    var $focusedItemList = $(tagBox._list.option("focusedElement"));
     assert.ok($focusedItemList.hasClass(FOCUSED_CLASS), "list item obtained focus");
 
     keyboard

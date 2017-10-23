@@ -89,11 +89,12 @@ var BaseRenderingStrategy = Class.inherit({
         var position = this._getAppointmentCoordinates(item),
             allDay = this.isAllDay(item),
             result = [],
-            startDate = new Date(this.instance.fire("getField", "startDate", item));
+            startDate = new Date(this.instance.fire("getField", "startDate", item)),
+            isRecurring = !!item.recurrenceRule;
 
         for(var j = 0; j < position.length; j++) {
             var height = this.calculateAppointmentHeight(item, position[j]),
-                width = this.calculateAppointmentWidth(item, position[j]),
+                width = this.calculateAppointmentWidth(item, position[j], isRecurring),
                 resultWidth = width,
                 appointmentReduced = null,
                 multiWeekAppointmentParts = [],
@@ -122,7 +123,7 @@ var BaseRenderingStrategy = Class.inherit({
                         sourceAppointmentWidth: width,
                         reducedWidth: resultWidth,
                         height: height
-                    }, position[j], startDate, j);
+                    }, position[j], startDate);
 
 
                     if(this._isRtl()) {
@@ -430,14 +431,14 @@ var BaseRenderingStrategy = Class.inherit({
         return startDate;
     },
 
-    _endDate: function(appointment, position) {
+    _endDate: function(appointment, position, isRecurring) {
         var endDate = this.instance._getEndDate(appointment),
             realStartDate = this._startDate(appointment, true),
             viewStartDate = this._startDate(appointment, false, position);
 
         endDate = this._checkWrongEndDate(appointment, realStartDate, endDate);
 
-        if(viewStartDate.getTime() >= endDate.getTime()) {
+        if(viewStartDate.getTime() >= endDate.getTime() || isRecurring) {
             var recurrencePartStartDate = position ? position.startDate : realStartDate,
                 fullDuration = endDate.getTime() - realStartDate.getTime();
 

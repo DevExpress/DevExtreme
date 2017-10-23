@@ -269,7 +269,7 @@ var Menu = MenuBase.inherit({
         }
 
         if($newTarget && $newTarget.length !== 0) {
-            this.option("focusedElement", $newTarget);
+            this.option("focusedElement", getPublicElement($newTarget));
         }
     },
 
@@ -603,7 +603,7 @@ var Menu = MenuBase.inherit({
 
         this._hideSubmenu(this._visibleSubmenu);
         this.focus();
-        this.option("focusedElement", $newItem);
+        this.option("focusedElement", getPublicElement($newItem));
     },
 
     _nestedItemOnSelectionChangedHandler: function(args) {

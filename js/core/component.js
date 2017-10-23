@@ -214,7 +214,7 @@ var Component = Class.inherit({
             return true;
         }
 
-        if(oldValue === null || typeof oldValue !== "object") {
+        if(oldValue === null || typeof oldValue !== "object" || oldValue instanceof HTMLElement) {
             return oldValue === newValue;
         }
 

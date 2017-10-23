@@ -26,6 +26,8 @@ var Autocomplete = DropDownList.inherit({
         var item = this._list ? this._list.option("focusedElement") : null,
             parent = this.callBase();
 
+        item = item && $(item);
+
         return extend({}, parent, {
             upArrow: function(e) {
                 e.preventDefault();

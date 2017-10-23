@@ -43,8 +43,8 @@ window.fields = [{
     dataField: "Zipcode",
     dataType: "number",
     format: undefined,
-    filterOperations: ["contains", "notcontains", "startswith", "endswith", "=", "<>"],
-    defaultFilterOperation: ["=", "<>", "<", ">", "<=", ">="]
+    filterOperations: ["=", "<>", "<", ">", "<=", ">="],
+    defaultFilterOperation: "="
 },
 {
     caption: "Contributor",

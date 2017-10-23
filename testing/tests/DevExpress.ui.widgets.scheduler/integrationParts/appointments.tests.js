@@ -4048,6 +4048,44 @@ QUnit.test("Appointment should be rendered correctly with expressions on custom 
     assert.equal($appointment.find(".custom-title").text(), "abc", "Text is correct on init");
 });
 
+QUnit.test("dxScheduler should render custom appointment template with render function that returns dom node", function(assert) {
+
+    var startDate = new Date(2015, 1, 4, 1),
+        endDate = new Date(2015, 1, 4, 2);
+    var appointment = {
+        Start: startDate.getTime(),
+        End: endDate.getTime(),
+        Text: "abc"
+    };
+
+    this.createInstance({
+        currentDate: new Date(2015, 1, 4),
+        dataSource: [appointment],
+        startDateExpr: "Start",
+        endDateExpr: "End",
+        textExpr: "Text",
+        appointmentTemplate: "appointmentTemplate",
+        integrationOptions: {
+            templates: {
+                "appointmentTemplate": {
+                    render: function(args) {
+                        var $element = $("<span>")
+                            .addClass("dx-template-wrapper")
+                            .text("text");
+
+                        return $element.get(0);
+                    }
+                }
+            }
+        }
+    });
+
+    var $appointment = $(this.instance.$element()).find(".dx-scheduler-appointment").eq(0);
+
+    assert.equal($appointment.text(), "text", "container is correct");
+});
+
+
 QUnit.test("Appointment should have right position, if it's startDate time less than startDayHour option value", function(assert) {
     var appointment = {
         startDate: new Date(2016, 2, 1, 2),
@@ -4676,3 +4714,4 @@ QUnit.test("Scheduler should add only one appointment at multiple 'done' button 
 
     assert.equal($appointments.length, 1, "right appointment quantity");
 });
+

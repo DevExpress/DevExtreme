@@ -4,12 +4,14 @@
 
 var dataStrategy = require("core/element_data");
 
-var originalCleanData = jQuery.cleanData;
+var originalCleanData;
 
 QUnit.testStart(function() {
     if(!jQuery) {
         return;
     }
+
+    originalCleanData = jQuery.cleanData;
 
     jQuery.cleanData = function() {
         dataStrategy.cleanData.apply(this, arguments);

@@ -6,6 +6,8 @@ var $ = require("jquery"),
     ContextMenu = require("ui/context_menu"),
     eventUtils = require("events/utils"),
     contextMenuEvent = require("events/contextmenu"),
+    isRenderer = require("core/utils/type").isRenderer,
+    config = require("core/config"),
     keyboardMock = require("../../helpers/keyboardMock.js");
 
 require("ui/button");
@@ -1193,7 +1195,7 @@ QUnit.test("items change should clear focused item", function(assert) {
         .keyDown("down")
         .keyDown("enter");
 
-    assert.equal(instance.option("focusedElement").length, 1, "focused element is set");
+    assert.equal($(instance.option("focusedElement")).length, 1, "focused element is set");
 
     instance.option("items", items2);
     assert.notOk(instance.option("focusedElement"), "focused element is cleaned");
@@ -1209,7 +1211,7 @@ QUnit.test("items changed should not break keyboard navigation", function(assert
     keyboardMock(overlay)
         .keyDown("down");
 
-    assert.equal(instance.option("focusedElement").text(), "1", "focused element is correct");
+    assert.equal($(instance.option("focusedElement")).text(), "1", "focused element is correct");
 });
 
 
@@ -1636,6 +1638,7 @@ QUnit.test("when press right arrow key we only show submenu if exist", function(
         .keyDown("down")
         .keyDown("right");
 
+    assert.equal(isRenderer(instance.option("focusedElement")), config().useJQuery, "focusedElement is correct");
     assert.equal(getFocusedItemText(instance), "item 21", "focus on first item of second submenu");
     assert.equal(getVisibleSubmenuCount(instance), 2, "we see two submenus");
 
@@ -1681,7 +1684,7 @@ QUnit.test("end key work only in current submenu", function(assert) {
         .keyDown("down")
         .keyDown("end");
 
-    assert.equal(instance.option("focusedElement").text(), "item 23", "focus on last item of current submenu");
+    assert.equal($(instance.option("focusedElement")).text(), "item 23", "focus on last item of current submenu");
 });
 
 QUnit.test("home key work only in current submenu", function(assert) {
@@ -1703,7 +1706,7 @@ QUnit.test("home key work only in current submenu", function(assert) {
         .keyDown("down")
         .keyDown("home");
 
-    assert.equal(instance.option("focusedElement").text(), "item 21", "focus on first item of current submenu");
+    assert.equal($(instance.option("focusedElement")).text(), "item 21", "focus on first item of current submenu");
 });
 
 QUnit.test("down key work only in current submenu", function(assert) {
@@ -1727,7 +1730,7 @@ QUnit.test("down key work only in current submenu", function(assert) {
         .keyDown("down")
         .keyDown("down");
 
-    assert.equal(instance.option("focusedElement").text(), "item 22", "focus on first item of current submenu");
+    assert.equal($(instance.option("focusedElement")).text(), "item 22", "focus on first item of current submenu");
 });
 
 QUnit.test("up key work only in current submenu", function(assert) {
@@ -1751,7 +1754,7 @@ QUnit.test("up key work only in current submenu", function(assert) {
         .keyDown("up")
         .keyDown("up");
 
-    assert.equal(instance.option("focusedElement").text(), "item 23", "focus on first item of current submenu");
+    assert.equal($(instance.option("focusedElement")).text(), "item 23", "focus on first item of current submenu");
 });
 
 QUnit.test("left arrow key should not close context menu", function(assert) {
@@ -1979,5 +1982,5 @@ function getVisibleSubmenuCount(instance) {
 }
 
 function getFocusedItemText(instance) {
-    return instance.option("focusedElement").children("." + DX_MENU_ITEM_CONTENT_CLASS).text();
+    return $(instance.option("focusedElement")).children("." + DX_MENU_ITEM_CONTENT_CLASS).text();
 }
