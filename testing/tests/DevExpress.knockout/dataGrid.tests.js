@@ -362,7 +362,7 @@ QUnit.module("Editing", {
     }
 }, function() {
     //T566012
-    QUnit.test("Row mode: DataSource fields should be not changed when editing row", function(assert) {
+    QUnit.test("Row mode: DataSource fields should not be changed when editing row", function(assert) {
         //arrange
         var $input,
             dataGrid = this.createDataGrid();
@@ -382,7 +382,7 @@ QUnit.module("Editing", {
     });
 
     //T566012
-    QUnit.test("Batch mode: DataSource fields should be not changed when editing row", function(assert) {
+    QUnit.test("Batch mode: DataSource fields should not be changed when editing cell", function(assert) {
         //arrange
         this.editing.mode = "batch";
         var dataGrid = this.createDataGrid();
