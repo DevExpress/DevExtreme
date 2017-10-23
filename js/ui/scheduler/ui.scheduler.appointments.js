@@ -644,6 +644,7 @@ var SchedulerAppointments = CollectionWidget.inherit({
             maxDate = new Date(endDate);
 
         maxDate.setHours(endDayHour);
+        maxDate.setMinutes(0);
 
         if(result > maxDate.getTime()) {
             var tailOfCurrentDay = maxDate.getTime() - endDate.getTime(),
@@ -667,6 +668,7 @@ var SchedulerAppointments = CollectionWidget.inherit({
             minDate = new Date(startDate);
 
         minDate.setHours(startDayHour);
+        minDate.setMinutes(0);
 
         if(result < minDate.getTime()) {
             var tailOfCurrentDay = startDate.getTime() - minDate.getTime(),
