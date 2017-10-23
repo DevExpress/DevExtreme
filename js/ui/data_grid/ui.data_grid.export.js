@@ -781,7 +781,7 @@ dataGridCore.registerModule("export", {
                             .appendTo($container);
 
                     if(withText) {
-                        var wrapperNode = $("<div").addClass(TOOLBAR_ITEM_AUTO_HIDE_CLASS);
+                        var wrapperNode = $("<div>").addClass(TOOLBAR_ITEM_AUTO_HIDE_CLASS);
                         $container
                             .wrapInner(wrapperNode)
                             .parent()
