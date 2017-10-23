@@ -61,6 +61,11 @@ var FilterBuilder = Widget.inherit({
               * @type_function_param1_field8 editorName:string
               * @type_function_param1_field9 editorOptions:object
               * @type_function_param1_field10 dataField:string
+              * @type_function_param1_field11 updateValueTimeout:number
+              * @type_function_param1_field12 width:number
+              * @type_function_param1_field13 readOnly:boolean
+              * @type_function_param1_field14 disabled:boolean
+              * @type_function_param1_field15 rtlEnabled:boolean
               * @extends Action
               * @action
              */
@@ -73,11 +78,14 @@ var FilterBuilder = Widget.inherit({
               * @type_function_param1 e:object
               * @type_function_param1_field4 value:any
               * @type_function_param1_field5 setValue(newValue):any
-              * @type_function_param1_field6 cancel:boolean
-              * @type_function_param1_field7 editorElement:jQuery
-              * @type_function_param1_field8 editorName:string
-              * @type_function_param1_field9 editorOptions:object
-              * @type_function_param1_field10 dataField:string
+              * @type_function_param1_field6 editorElement:jQuery
+              * @type_function_param1_field7 editorName:string
+              * @type_function_param1_field8 dataField:string
+              * @type_function_param1_field9 updateValueTimeout:number
+              * @type_function_param1_field10 width:number
+              * @type_function_param1_field11 readOnly:boolean
+              * @type_function_param1_field12 disabled:boolean
+              * @type_function_param1_field13 rtlEnabled:boolean
               * @extends Action
               * @action
              */
