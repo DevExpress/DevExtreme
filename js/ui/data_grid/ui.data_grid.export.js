@@ -24,6 +24,12 @@ var DATAGRID_EXPORT_MENU_CLASS = "dx-datagrid-export-menu",
     DATAGRID_EXPORT_EXCEL_ICON = "exportxlsx",
     DATAGRID_EXPORT_SELECTED_ICON = "exportselected",
     DATAGRID_EXPORT_EXCEL_BUTTON_ICON = "export-excel-button",
+
+    TOOLBAR_ITEM_AUTO_HIDE_CLASS = "dx-toolbar-item-auto-hide",
+    TOOLBAR_HIDDEN_BUTTON_CLASS = "dx-toolbar-hidden-button",
+
+    BUTTON_CLASS = "dx-button",
+
     DATA_STYLE_OFFSET = 3;
 
 exports.DataProvider = Class.inherit({
@@ -775,10 +781,11 @@ dataGridCore.registerModule("export", {
                             .appendTo($container);
 
                     if(withText) {
+                        var wrapperNode = $("<div>").addClass(TOOLBAR_ITEM_AUTO_HIDE_CLASS);
                         $container
-                            .wrapInner("<div class='dx-toolbar-item-auto-hide'></div>")
+                            .wrapInner(wrapperNode)
                             .parent()
-                            .addClass("dx-toolbar-menu-action dx-toolbar-menu-button dx-toolbar-hidden-button");
+                            .addClass("dx-toolbar-menu-action dx-toolbar-menu-button " + TOOLBAR_HIDDEN_BUTTON_CLASS);
                         buttonOptions.text = buttonOptions.hint;
                     }
 
@@ -792,25 +799,14 @@ dataGridCore.registerModule("export", {
                 _renderList: function(data, $container) {
                     var that = this,
                         texts = that.option("export.texts"),
-                        renderFakeButton = function(data, $container, iconName) {
-                            var $icon = $("<div>").addClass("dx-icon dx-icon-" + iconName),
-                                $text = $("<span class='dx-button-text'/>").text(data.text),
-                                $content = $("<div class='dx-button-content' />").append($icon).append($text),
-                                $button = $("<div class='dx-button dx-button-has-text dx-button-has-icon dx-datagrid-toolbar-button'>").append($content),
-                                $toolbarItem = $("<div class ='dx-toolbar-item-auto-hide' />").append($button);
-
-                            $container
-                                .append($toolbarItem)
-                                .parent().addClass("dx-toolbar-menu-custom dx-toolbar-hidden-button");
-                        },
                         items = [{
                             template: function(data, index, container) {
-                                renderFakeButton(data, $(container), DATAGRID_EXPORT_EXCEL_ICON);
+                                that._renderFakeButton(data, $(container), DATAGRID_EXPORT_EXCEL_ICON);
                             },
                             text: texts.exportAll
                         }, {
                             template: function(data, index, container) {
-                                renderFakeButton(data, $(container), DATAGRID_EXPORT_SELECTED_ICON);
+                                that._renderFakeButton(data, $(container), DATAGRID_EXPORT_SELECTED_ICON);
                             },
                             text: texts.exportSelectedRows,
                             exportSelected: true
@@ -827,7 +823,29 @@ dataGridCore.registerModule("export", {
                             scrollingEnabled: false
                         }
                     );
+                },
 
+                _renderFakeButton: function(data, $container, iconName) {
+                    var $icon = $("<div>")
+                            .addClass("dx-icon dx-icon-" + iconName),
+                        $text = $("<span>")
+                            .addClass("dx-button-text")
+                            .text(data.text),
+                        $content = $("<div>")
+                            .addClass("dx-button-content")
+                            .append($icon)
+                            .append($text),
+                        $button = $("<div>")
+                            .addClass(BUTTON_CLASS + " dx-button-has-text dx-button-has-icon dx-datagrid-toolbar-button")
+                            .append($content),
+                        $toolbarItem = $("<div>")
+                            .addClass(TOOLBAR_ITEM_AUTO_HIDE_CLASS)
+                            .append($button);
+
+                    $container
+                        .append($toolbarItem)
+                        .parent()
+                        .addClass("dx-toolbar-menu-custom " + TOOLBAR_HIDDEN_BUTTON_CLASS);
                 },
 
                 _correctItemsPosition: function(items) {
@@ -838,7 +856,7 @@ dataGridCore.registerModule("export", {
 
                 _renderExportMenu: function($buttonContainer) {
                     var that = this,
-                        $button = $buttonContainer.find(".dx-button"),
+                        $button = $buttonContainer.find("." + BUTTON_CLASS),
                         texts = that.option("export.texts"),
                         menuItems = [
                             {

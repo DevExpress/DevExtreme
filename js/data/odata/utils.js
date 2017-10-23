@@ -497,7 +497,7 @@ var serializeKey = function(key, protocolVersion) {
 };
 
 /**
-* @name Utils_odatakeyConverters
+* @name Utils_keyConverters
 * @publicName odata.keyConverters
 * @type object
 * @namespace DevExpress.data.utils.odata
@@ -548,6 +548,7 @@ var keyConverters = {
 };
 
 var convertPrimitiveValue = function(type, value) {
+    if(value === null) return null;
     var converter = keyConverters[type];
     if(!converter) {
         throw errors.Error("E4014", type);

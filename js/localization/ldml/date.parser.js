@@ -10,7 +10,7 @@ var FORMAT_TYPES = {
 
 var PATTERN_REGEXPS = {
     y: function(count) {
-        return "[0-9]{" + count + ",}";
+        return "[0-9]+";
     },
     M: function(count, dateParts) {
         if(count > 2) {

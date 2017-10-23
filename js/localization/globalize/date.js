@@ -567,8 +567,7 @@ var Globalize = require("globalize"),
     dateLocalization = require("../date"),
     isObject = require("../../core/utils/type").isObject,
     inArray = require("../../core/utils/array").inArray,
-    iteratorUtils = require("../../core/utils/iterator"),
-    errors = require("../../core/errors");
+    iteratorUtils = require("../../core/utils/iterator");
 
 if(Globalize && Globalize.formatDate) {
 
@@ -740,7 +739,10 @@ if(Globalize && Globalize.formatDate) {
 
             if(!format || typeof (format) === "function" || isObject(format) && !this._isAcceptableFormat(format)) {
                 if(format) {
-                    errors.log("W0012");
+                    var parsedValue = this.callBase(text, format);
+                    if(parsedValue) {
+                        return parsedValue;
+                    }
                 }
 
                 return Globalize.parseDate(text);

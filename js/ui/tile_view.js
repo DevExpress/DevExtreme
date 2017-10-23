@@ -1,11 +1,13 @@
 "use strict";
 
-var devices = require("../core/devices"),
+var $ = require("../core/renderer"),
+    devices = require("../core/devices"),
     registerComponent = require("../core/component_registrator"),
     inflector = require("../core/utils/inflector"),
     iteratorUtils = require("../core/utils/iterator"),
     isDefined = require("../core/utils/type").isDefined,
     extend = require("../core/utils/extend").extend,
+    getPublicElement = require("../core/utils/dom").getPublicElement,
     ScrollView = require("./scroll_view"),
     CollectionWidget = require("./collection/ui.collection_widget.edit");
 
@@ -449,7 +451,7 @@ var TileView = CollectionWidget.inherit({
 
         var horizontalDirection = this.option("direction") === "horizontal",
             cells = this._cells,
-            index = this.option("focusedElement").index(),
+            index = $(this.option("focusedElement")).index(),
             targetCol = this._itemsPositions[index].left,
             targetRow = this._itemsPositions[index].top;
 
@@ -512,7 +514,7 @@ var TileView = CollectionWidget.inherit({
         }
 
         var $newTarget = this._itemElements().eq(newTargetIndex);
-        this.option("focusedElement", $newTarget);
+        this.option("focusedElement", getPublicElement($newTarget));
         this._scrollToItem($newTarget);
     },
 

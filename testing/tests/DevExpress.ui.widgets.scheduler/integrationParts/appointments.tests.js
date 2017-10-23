@@ -1755,6 +1755,46 @@ QUnit.test("Non-grid-aligned appointments should be resized correctly", function
     assert.deepEqual(this.instance.option("dataSource")[0].endDate, new Date(2015, 1, 9, 2), "End date is OK");
 });
 
+QUnit.test("Non-grid-aligned appointments should be resized correctly, when startDayHour is set", function(assert) {
+    this.createInstance({
+        currentDate: new Date(2015, 1, 9),
+        editing: true,
+        startDayHour: 9,
+        dataSource: [{
+            text: "a",
+            startDate: new Date(2015, 1, 9, 10, 25),
+            endDate: new Date(2015, 1, 9, 11)
+        }]
+    });
+
+    var cellHeight = this.instance.$element().find(".dx-scheduler-date-table-cell").eq(0).outerHeight();
+
+    var pointer = pointerMock(this.instance.$element().find(".dx-resizable-handle-top").eq(0)).start();
+    pointer.dragStart().drag(0, -3 * cellHeight).dragEnd();
+
+    assert.deepEqual(this.instance.option("dataSource")[0].startDate, new Date(2015, 1, 9, 9), "Start date is OK");
+});
+
+QUnit.test("Non-grid-aligned appointments should be resized correctly, when endDayHour is set", function(assert) {
+    this.createInstance({
+        currentDate: new Date(2015, 1, 9),
+        editing: true,
+        endDayHour: 15,
+        dataSource: [{
+            text: "a",
+            startDate: new Date(2015, 1, 9, 13),
+            endDate: new Date(2015, 1, 9, 14, 25)
+        }]
+    });
+
+    var cellHeight = this.instance.$element().find(".dx-scheduler-date-table-cell").eq(0).outerHeight();
+
+    var pointer = pointerMock(this.instance.$element().find(".dx-resizable-handle-bottom").eq(0)).start();
+    pointer.dragStart().drag(0, cellHeight).dragEnd();
+
+    assert.deepEqual(this.instance.option("dataSource")[0].endDate, new Date(2015, 1, 9, 15), "End date is OK");
+});
+
 QUnit.test("Appointment with custom timezone should be resized correctly(T390801)", function(assert) {
     var tzOffsetStub = sinon.stub(subscribes, "getClientTimezoneOffset").returns(-10800000);
 
@@ -4048,6 +4088,44 @@ QUnit.test("Appointment should be rendered correctly with expressions on custom 
     assert.equal($appointment.find(".custom-title").text(), "abc", "Text is correct on init");
 });
 
+QUnit.test("dxScheduler should render custom appointment template with render function that returns dom node", function(assert) {
+
+    var startDate = new Date(2015, 1, 4, 1),
+        endDate = new Date(2015, 1, 4, 2);
+    var appointment = {
+        Start: startDate.getTime(),
+        End: endDate.getTime(),
+        Text: "abc"
+    };
+
+    this.createInstance({
+        currentDate: new Date(2015, 1, 4),
+        dataSource: [appointment],
+        startDateExpr: "Start",
+        endDateExpr: "End",
+        textExpr: "Text",
+        appointmentTemplate: "appointmentTemplate",
+        integrationOptions: {
+            templates: {
+                "appointmentTemplate": {
+                    render: function(args) {
+                        var $element = $("<span>")
+                            .addClass("dx-template-wrapper")
+                            .text("text");
+
+                        return $element.get(0);
+                    }
+                }
+            }
+        }
+    });
+
+    var $appointment = $(this.instance.$element()).find(".dx-scheduler-appointment").eq(0);
+
+    assert.equal($appointment.text(), "text", "container is correct");
+});
+
+
 QUnit.test("Appointment should have right position, if it's startDate time less than startDayHour option value", function(assert) {
     var appointment = {
         startDate: new Date(2016, 2, 1, 2),
@@ -4676,3 +4754,4 @@ QUnit.test("Scheduler should add only one appointment at multiple 'done' button 
 
     assert.equal($appointments.length, 1, "right appointment quantity");
 });
+

@@ -3127,6 +3127,62 @@ QUnit.test("Changing editorOptions of subitem change editor options (T316522)", 
     assert.equal(secondEditor.option("height"), 40, "Correct height");
 });
 
+QUnit.test("editorOptions correctly updates in case when only item name is defined", function(assert) {
+    //arrange
+    var form = $("#form").dxForm({
+        items: [
+            {
+                itemType: "group", items: [
+                    {
+                        itemType: "group", items: [
+                                { name: "firstName", editorType: "dxTextBox", editorOptions: { width: 100, height: 20 } },
+                                { name: "lastName", editorType: "dxTextBox", editorOptions: { width: 100, height: 20 } }
+                        ]
+                    }
+                ]
+            }
+        ]
+    }).dxForm("instance");
+
+    var invalidateSpy = sinon.spy(form, "_invalidate");
+
+    //act
+    form.option("items[0].items[0].items[1].editorOptions", { width: 80, height: 40 });
+
+    //assert
+    var secondEditor = $("#form .dx-textbox").last().dxTextBox("instance");
+
+    assert.equal(invalidateSpy.callCount, 0, "dxForm wasn't invalidated");
+    assert.equal(secondEditor.option("width"), 80, "Correct width");
+    assert.equal(secondEditor.option("height"), 40, "Correct height");
+});
+
+QUnit.test("widget invalidates in case we cannot change an editor options", function(assert) {
+    //arrange
+    var form = $("#form").dxForm({
+        items: [
+            {
+                itemType: "group", items: [
+                    {
+                        itemType: "group", items: [
+                                { editorType: "dxTextBox", editorOptions: { width: 100, height: 20 } },
+                                { editorType: "dxTextBox", editorOptions: { width: 100, height: 20 } }
+                        ]
+                    }
+                ]
+            }
+        ]
+    }).dxForm("instance");
+
+    var invalidateSpy = sinon.spy(form, "_invalidate");
+
+    //act
+    form.option("items[0].items[0].items[1].editorOptions", { width: 80, height: 40 });
+
+    //assert
+    assert.equal(invalidateSpy.callCount, 1, "dxForm invalidated");
+});
+
 QUnit.test("Reset editor's value", function(assert) {
         //arrange
     var form = $("#form").dxForm({

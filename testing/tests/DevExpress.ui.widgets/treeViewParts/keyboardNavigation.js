@@ -6,7 +6,9 @@ var $ = require("jquery"),
     noop = require("core/utils/common").noop,
     fx = require("animation/fx"),
     devices = require("core/devices"),
-    keyboardMock = require("../../../helpers/keyboardMock.js");
+    keyboardMock = require("../../../helpers/keyboardMock.js"),
+    isRenderer = require("core/utils/type").isRenderer,
+    config = require("core/config");
 
 QUnit.module("keyboard navigation", {
     beforeEach: function() {
@@ -27,8 +29,11 @@ QUnit.test("node is focused after focusing on element", function(assert) {
         }),
         $firstNode = $treeView.find("." + internals.NODE_CLASS).eq(0);
 
+    var instance = $treeView.dxTreeView("instance");
+
     $treeView.focusin();
 
+    assert.equal(isRenderer(instance.option("focusedElement")), config().useJQuery, "focusedElement is correct");
     assert.ok($firstNode.hasClass("dx-state-focused"), "item was focused ");
 }),
 
@@ -44,12 +49,16 @@ QUnit.test("down arrow move focus to the next element", function(assert) {
         $firstNode = $treeView.find("." + internals.NODE_CLASS).eq(1),
         $secondNode = $treeView.find("." + internals.NODE_CLASS).eq(2);
 
+    var instance = $treeView.dxTreeView("instance");
+
     $firstItem.trigger("dxpointerdown");
 
+    assert.equal(isRenderer(instance.option("focusedElement")), config().useJQuery, "focusedElement is correct");
     assert.ok($firstNode.hasClass("dx-state-focused"), "item was focused ");
 
     keyboard.keyDown("down");
 
+    assert.equal(isRenderer(instance.option("focusedElement")), config().useJQuery, "focusedElement is correct");
     assert.ok($secondNode.hasClass("dx-state-focused"), "next item was focused after 'down' was pressed");
 }),
 
@@ -89,12 +98,15 @@ QUnit.test("'home' key pressing move focus to the first element", function(asser
         $firstNode = $treeView.find("." + internals.NODE_CLASS).eq(2),
         $secondNode = $treeView.find("." + internals.NODE_CLASS).eq(0);
 
+    var instance = $treeView.dxTreeView("instance");
+
     $firstItem.trigger("dxpointerdown");
 
     assert.ok($firstNode.hasClass("dx-state-focused"), "item was focused ");
 
     keyboard.keyDown("home");
 
+    assert.equal(isRenderer(instance.option("focusedElement")), config().useJQuery, "focusedElement is correct");
     assert.ok($secondNode.hasClass("dx-state-focused"), "first item was focused after 'home' was pressed");
 }),
 
@@ -143,12 +155,15 @@ QUnit.test("'end' key pressing move focus to the last element", function(assert)
         $firstNode = $treeView.find("." + internals.NODE_CLASS).eq(0),
         $secondNode = $treeView.find("." + internals.NODE_CLASS).eq(2);
 
+    var instance = $treeView.dxTreeView("instance");
+
     $firstItem.trigger("dxpointerdown");
 
     assert.ok($firstNode.hasClass("dx-state-focused"), "item was focused ");
 
     keyboard.keyDown("end");
 
+    assert.equal(isRenderer(instance.option("focusedElement")), config().useJQuery, "focusedElement is correct");
     assert.ok($secondNode.hasClass("dx-state-focused"), "last item was focused after 'end' was pressed");
 }),
 
@@ -323,13 +338,17 @@ QUnit.test("left/right arrow collapse/expand node-container", function(assert) {
         $parentItem = $treeView.find("." + internals.ITEM_CLASS).eq(0),
         $iconItem = $parentItem.parent().find("." + internals.TOGGLE_ITEM_VISIBILITY_CLASS).eq(0);
 
+    var instance = $treeView.dxTreeView("instance");
+
     $treeView.focusin();
     $parentItem.trigger("dxpointerdown");
     keyboard.keyDown("right");
+    assert.equal(isRenderer(instance.option("focusedElement")), config().useJQuery, "focusedElement is correct");
     assert.ok($treeView.find("." + internals.NODE_CLASS).eq(1).is(":visible"), "child item not hidden");
     assert.ok($iconItem.hasClass("dx-treeview-toggle-item-visibility-opened"), "icon item indicate opened state");
 
     keyboard.keyDown("left");
+    assert.equal(isRenderer(instance.option("focusedElement")), config().useJQuery, "focusedElement is correct");
     assert.ok($treeView.find("." + internals.NODE_CLASS).eq(1).is(":hidden"), "child item is hidden");
     assert.ok(!$iconItem.hasClass("dx-treeview-toggle-item-visibility-opened"), "icon item indicate closed state");
 }),

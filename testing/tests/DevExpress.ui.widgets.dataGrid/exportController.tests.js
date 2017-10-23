@@ -2318,6 +2318,74 @@ QUnit.test("Search panel should be replaced after export button", function(asser
     assert.equal($toolbarItems.eq(3).find(".dx-datagrid-search-panel").length, 1);
 });
 
+QUnit.test("Export's menu buttons has a correct markup", function(assert) {
+    //arrange
+    this.setupModules({
+        "export": {
+            enabled: true
+        },
+        columnChooser: {
+            enabled: true
+        },
+        searchPanel: {
+            visible: true
+        },
+        groupPanel: {
+            visible: true
+        }
+    }, true);
+
+    //act
+    var $container = $("#container").width(100),
+        renderButtonSpy = sinon.spy(this.headerPanel, "_renderButton"),
+        checkingSelector = ".dx-toolbar-item-auto-hide > .dx-button";
+
+    this.headerPanel.render($container);
+    $container.find(".dx-toolbar-menu-container .dx-dropdownmenu-button").trigger("dxclick");
+
+    assert.equal(renderButtonSpy.callCount, 2);
+    assert.equal(renderButtonSpy.getCall(1).args[1].find(checkingSelector).length, 1);
+});
+
+QUnit.test("Export's fake menu buttons has a correct markup", function(assert) {
+    //arrange
+    this.setupModules({
+        "export": {
+            enabled: true,
+            allowExportSelectedData: true
+        },
+        columnChooser: {
+            enabled: true
+        },
+        searchPanel: {
+            visible: true
+        },
+        groupPanel: {
+            visible: true
+        }
+    }, true);
+
+    var checkingSelector = ".dx-toolbar-item-auto-hide > .dx-button.dx-button-has-text.dx-button-has-icon." +
+        "dx-datagrid-toolbar-button > .dx-button-content > .dx-icon + .dx-button-text";
+
+    //act
+    var $container = $("#container").width(100),
+        renderFakeButtonSpy = sinon.spy(this.headerPanel, "_renderFakeButton");
+
+    this.headerPanel.render($container);
+
+    $container.find(".dx-toolbar-menu-container .dx-dropdownmenu-button").trigger("dxclick");
+
+    //assert
+    assert.equal(renderFakeButtonSpy.callCount, 2);
+
+    var $firstItem = renderFakeButtonSpy.getCall(0).args[1],
+        $secondItem = renderFakeButtonSpy.getCall(1).args[1];
+
+    assert.equal($firstItem.find(checkingSelector.replace("dx-icon", "dx-icon.dx-icon-exportxlsx")).length, 1);
+    assert.equal($secondItem.find(checkingSelector.replace("dx-icon", "dx-icon.dx-icon-exportselected")).length, 1);
+});
+
 QUnit.test("The export button is not shown", function(assert) {
     //arrange
     this.setupModules({

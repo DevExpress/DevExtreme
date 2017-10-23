@@ -30,14 +30,19 @@ var CELL_CLASS = "dx-scheduler-date-table-cell",
 var checkRowsAndCells = function($element, assert, interval, start) {
     interval = interval || 0.5;
     start = start || 0;
-    var cellCount = (12 - start / (interval * 2)) / interval,
-        cellDuration = 3600000 * interval * 2;
+    var cellCount = (24 - start) / interval,
+        cellDuration = 3600000 * interval;
 
     assert.equal($element.find(".dx-scheduler-time-panel-row").length, cellCount, "Time panel has a right count of rows");
     assert.equal($element.find(".dx-scheduler-time-panel-cell").length, cellCount, "Time panel has a right count of cells");
 
     $element.find(".dx-scheduler-time-panel-cell").each(function(index) {
-        var time = dateLocalization.format(new Date(new Date(1970, 0).getTime() + cellDuration * index + start * 3600000), "shorttime");
+        var time;
+        if(index % 2 === 0) {
+            time = dateLocalization.format(new Date(new Date(1970, 0).getTime() + cellDuration * index + start * 3600000), "shorttime");
+        } else {
+            time = "";
+        }
         assert.equal($(this).text(), time, "Time is OK");
     });
 };
@@ -538,7 +543,7 @@ QUnit.testStart(function() {
         checkRowsAndCells(this.instance.$element(), assert);
     });
 
-    QUnit.test("Time panel should have 11 rows and 11 cells for hoursInterval = 1 & startDayHour = 2", function(assert) {
+    QUnit.test("Time panel should have 22 rows and 22 cells for hoursInterval = 1 & startDayHour = 2", function(assert) {
         this.instance.option({
             hoursInterval: 1,
             startDayHour: 2

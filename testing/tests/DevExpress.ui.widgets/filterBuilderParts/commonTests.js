@@ -116,7 +116,7 @@ QUnit.module("Rendering", function() {
 
         var element = $("#container").dxFilterBuilder({
             fields: fields,
-            value: [["CompanyName", "=", "K&S Music"], "Or", ["Zipcode", "=", "98027"]]
+            value: [["CompanyName", "=", "K&S Music"], "or", ["Zipcode", "=", "98027"]]
         });
         assert.equal(element.find("." + FILTER_BUILDER_GROUP_CONTENT_CLASS).html(), $etalon.html());
     });
@@ -321,13 +321,31 @@ QUnit.module("Rendering", function() {
         assert.deepEqual(instance.option("value"), ["State", "<>", "Test"]);
     });
 
-    QUnit.testInActiveWindow("change filter value when specified valueEditorTemplate", function(assert) {
+    QUnit.testInActiveWindow("check default value for number", function(assert) {
+        var container = $("#container"),
+            instance = container.dxFilterBuilder({
+                allowHierarchicalFields: true,
+                value: ["Zipcode", "<>", 123],
+                fields: fields
+            }).dxFilterBuilder("instance");
+
+        container.find("." + FILTER_BUILDER_ITEM_VALUE_TEXT_CLASS).click();
+
+        var $editorContainer = container.find("." + FILTER_BUILDER_ITEM_VALUE_CLASS + " > div"),
+            editorInstance = $editorContainer.dxNumberBox("instance"),
+            $input = $editorContainer.find("input");
+        editorInstance.option("value", 0);
+        $input.trigger("blur");
+        assert.deepEqual(instance.option("value"), ["Zipcode", "<>", 0]);
+    });
+
+    QUnit.testInActiveWindow("change filter value when specified editorTemplate", function(assert) {
         var container = $("#container"),
             instance = container.dxFilterBuilder({
                 value: ["Field", "=", "Test1"],
                 fields: [{
                     dataField: "Field",
-                    valueEditorTemplate: function(options, $container) {
+                    editorTemplate: function(options, $container) {
                         $("<input/>").val(options.val).on("change", function(e) {
                             options.setValue($(e.currentTarget).val());
                         }).appendTo($container);
@@ -387,7 +405,7 @@ QUnit.module("Rendering", function() {
             }).dxFilterBuilder("instance");
 
         clickByButtonAndSelectMenuItem($("." + FILTER_BUILDER_IMAGE_ADD_CLASS), 0);
-        assert.deepEqual(instance._model, [["State", "<>", "Test"], ["And"]]);
+        assert.deepEqual(instance._model, [["State", "<>", "Test"], ["and"]]);
         assert.deepEqual(instance.option("value"), ["State", "<>", "Test"]);
 
         $("." + FILTER_BUILDER_IMAGE_REMOVE_CLASS).eq(1).click();
@@ -498,11 +516,11 @@ QUnit.module("Create editor by field dataType", function() {
         assert.ok(valueField.find(".dx-selectbox").dxSelectBox("instance"));
     });
 
-    QUnit.test("valueEditorTemplate", function(assert) {
+    QUnit.test("editorTemplate", function(assert) {
         var args,
             fields = [{
                 dataField: "Field",
-                valueEditorTemplate: function(options, $container) {
+                editorTemplate: function(options, $container) {
                     args = options;
 
                     return $("<input/>").addClass("my-editor");
@@ -654,6 +672,26 @@ QUnit.module("on value changed", function() {
         clickByButtonAndSelectMenuItem($("." + FILTER_BUILDER_IMAGE_REMOVE_CLASS).eq(1), 0);
 
         assert.notEqual(instance.option("value"), value);
+    });
+
+    QUnit.test("add/remove not valid conditions", function(assert) {
+        var container = $("#container"),
+            value = [["Zipcode", ""]],
+            instance = container.dxFilterBuilder({
+                value: value,
+                fields: [fields[3]]
+            }).dxFilterBuilder("instance");
+
+        // add condition
+        clickByButtonAndSelectMenuItem($("." + FILTER_BUILDER_IMAGE_ADD_CLASS), 1);
+
+        assert.equal(instance.option("value"), value);
+
+        //remove condition
+        value = instance.option("value");
+        clickByButtonAndSelectMenuItem($("." + FILTER_BUILDER_IMAGE_REMOVE_CLASS).eq(1), 0);
+
+        assert.equal(instance.option("value"), value);
     });
 
     QUnit.test("change condition field", function(assert) {

@@ -99,8 +99,11 @@ var SchedulerWorkSpaceIndicator = SchedulerWorkSpace.inherit({
     getIndicationWidth: function(groupIndex) {
         var maxWidth = this.getCellWidth() * this._getCellCount();
 
-        var difference = this._getIndicatorDuration(),
-            width = difference * this._getRoundedCellWidth(groupIndex, groupIndex * this._getCellCount(), difference);
+        var difference = this._getIndicatorDuration();
+        if(difference > this._getCellCount()) {
+            difference = this._getCellCount();
+        }
+        var width = difference * this._getRoundedCellWidth(groupIndex, groupIndex * this._getCellCount(), difference);
 
         return maxWidth < width ? maxWidth : width;
     },
@@ -116,7 +119,7 @@ var SchedulerWorkSpaceIndicator = SchedulerWorkSpace.inherit({
         var today = this._getToday(),
             firstViewDate = new Date(this._firstViewDate);
 
-        var timeDiff = today.getTime() - firstViewDate.getTime();
+        var timeDiff = today.getTime() - firstViewDate.getTime() + 1;
 
         return Math.ceil(timeDiff / toMs("day"));
     },
@@ -150,7 +153,7 @@ var SchedulerWorkSpaceIndicator = SchedulerWorkSpace.inherit({
             date = new Date(this._firstViewDate);
 
         if(this._needRenderDateTimeIndicator()) {
-            date.setDate(today.getDate());
+            date.setFullYear(today.getFullYear(), today.getMonth(), today.getDate());
         }
 
         var duration = today.getTime() - date.getTime(),
@@ -182,7 +185,7 @@ var SchedulerWorkSpaceIndicator = SchedulerWorkSpace.inherit({
                 endCellDate = new Date(date);
 
             if(dateUtils.sameDate(today, date)) {
-                startCellDate = startCellDate.setMilliseconds(date.getMilliseconds() - this.getCellDuration());
+                startCellDate = startCellDate.setMilliseconds(date.getMilliseconds() - this.getCellDuration() + 1);
                 endCellDate = endCellDate.setMilliseconds(date.getMilliseconds() + this.getCellDuration());
 
                 result = dateUtils.dateInRange(today, startCellDate, endCellDate);

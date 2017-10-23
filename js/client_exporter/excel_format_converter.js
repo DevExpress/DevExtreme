@@ -84,7 +84,9 @@ var excelFormatConverter = module.exports = {
 
         var that = this,
             formattedValue = (dateLocalization.format(new Date(2009, 8, 8, 6, 5, 4), format) || "").toString(),
-            result = getDateLDMLFormat(format);
+            result = getDateLDMLFormat(function(value) {
+                return dateLocalization.format(value, format);
+            });
 
         result = that._convertDateFormatToOpenXml(result);
         result = that._getLanguageInfo(formattedValue) + result;

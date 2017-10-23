@@ -178,21 +178,22 @@ var uaParsers = {
 };
 
 /**
- * @name devices
+ * @name DevicesObject
  * @section Utils
  * @publicName devices
  * @inherits EventsMixin
+ * @namespace DevExpress
  */
 var Devices = Class.inherit({
     /**
-    * @name devicesevents_orientationChanged
+    * @name DevicesObjectevents_orientationChanged
     * @publicName orientationChanged
     * @type classEventType
     * @type_function_param1 e:object
     * @type_function_param1_field1 orientation:String
     */
     /**
-    * @name DevicesMethods_ctor
+    * @name DevicesObjectMethods_ctor
     * @publicName ctor(options)
     * @param1 options:object
     * @param1_field1 window:Window
@@ -218,12 +219,12 @@ var Devices = Class.inherit({
         resizeCallbacks.add(this._recalculateOrientation.bind(this));
     },
     /**
-    * @name devicesmethods_current
+    * @name DevicesObjectmethods_current
     * @publicName current()
     * @return Device
     */
     /**
-    * @name devicesmethods_current
+    * @name DevicesObjectmethods_current
     * @publicName current(deviceName)
     * @param1 deviceName:string|Device
     */
@@ -261,7 +262,7 @@ var Devices = Class.inherit({
     },
 
     /**
-    * @name devicesmethods_real
+    * @name DevicesObjectmethods_real
     * @publicName real()
     * @return Device
     */
@@ -277,7 +278,7 @@ var Devices = Class.inherit({
     },
 
     /**
-     * @name devicesmethods_orientation
+     * @name DevicesObjectmethods_orientation
      * @publicName orientation()
      * @return String
      */
@@ -490,5 +491,12 @@ function themeNameFromDevice(device) {
     return themeName;
 }
 
+/**
+ * @name devices
+ * @publicName devices
+ * @type DevicesObject
+ * @namespace DevExpress
+ * @hidden
+ */
 module.exports = devices;
 module.exports.themeNameFromDevice = themeNameFromDevice;

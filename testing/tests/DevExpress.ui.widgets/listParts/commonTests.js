@@ -353,10 +353,13 @@ QUnit.test("focus should move to first group's item when group expands", functio
         $headers = $element.find(toSelector(LIST_GROUP_HEADER_CLASS)),
         $items = $element.find(toSelector(LIST_ITEM_CLASS));
 
+    var instance = $element.dxList("instance");
+
     $element.trigger("focusin");
 
     $headers.eq(1).trigger("dxclick");
     $headers.eq(1).trigger("dxclick");
+    assert.equal(isRenderer(instance.option("focusedElement")), config().useJQuery, "focusedElement is correct");
     assert.ok($items.eq(2).hasClass("dx-state-focused"), "first item of the second group is focused");
     assert.notOk($items.eq(0).hasClass("dx-state-focused"), "first item of the first group lost focus");
 });
@@ -2370,7 +2373,7 @@ QUnit.test("list scroll to focused item after press home/end", function(assert) 
 });
 
 QUnit.test("list scroll to focused item after press pageDown", function(assert) {
-    assert.expect(6);
+    assert.expect(7);
 
     var $element = $("#list").dxList({
             focusStateEnabled: true,
@@ -2387,6 +2390,7 @@ QUnit.test("list scroll to focused item after press pageDown", function(assert) 
 
     keyboard.keyDown("pageDown");
 
+    assert.equal(isRenderer(instance.option("focusedElement")), config().useJQuery, "focusedElement is correct");
     assert.roughEqual(instance.scrollTop(), 0, 1.0001, "list is not scrolled, when focusedItem is not last visible item on this page");
     assert.ok($items.eq(2).hasClass("dx-state-focused"), "focused item change to last visible item on this page");
 

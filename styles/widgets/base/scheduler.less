@@ -454,7 +454,7 @@
 }
 
 .dx-scheduler-header-panel-cell.dx-scheduler-header-panel-current-time-cell {
-    color: @SCHEDULER_APPOINTMENT_BASE_COLOR;
+    color: @SCHEDULER_CURRENT_TIME_CELL_COLOR;
     &:before {
             position: absolute;
             bottom: 0;
@@ -1372,62 +1372,55 @@
     float: left;
     width: @SCHEDULER_LEFT_COLUMN_WIDTH;
     border-collapse: collapse;
-    margin-top: -@SCHEDULER_WORKSPACE_DATE_TABLE_CELL_HEIGHT;
     font-size: @SCHEDULER_WORKSPACE_INFO_FONT_SIZE;
 
     .dx-scheduler-small & {
         width: @SCHEDULER_LEFT_COLUMN_WIDTH * @SCHEDULER_SMALL_SIZE_FACTOR;
         font-size: @SCHEDULER_SMALL_FONT_SIZE;
     }
-
-    tbody:after {
-        content: '';
-        height: @SCHEDULER_WORKSPACE_DATE_TABLE_CELL_HEIGHT;
-        display: table-cell;
-    }
-}
-
-.dx-scheduler-time-panel-odd-row-count {
-    .dx-scheduler-time-panel-row:last-child {
-        .dx-scheduler-time-panel-cell {
-            border-bottom: none;
-        }
-    }
-
-    tbody:after {
-        content: none;
-    }
 }
 
 .dx-scheduler-time-panel-cell {
     color: @SCHEDULER_PANEL_TEXT_COLOR;
-    border-bottom: @SCHEDULER_BASE_BORDER;
     position: relative;
     width: 100%;
     text-align: center;
-    height: @SCHEDULER_WORKSPACE_DATE_TABLE_CELL_HEIGHT * 2;
+    vertical-align: top;
+    height: @SCHEDULER_WORKSPACE_DATE_TABLE_CELL_HEIGHT;
     padding-left: @SCHEDULER_TIMEPANEL_CELL_OFFSET;
-
+    
+    > div{
+        margin-top: -13px;
+    }
+    
     .dx-scheduler-small & {
         padding-left: 0;
     }
 
     .dx-scheduler-time-panel-row:first-child & {
-        padding-top: 35px;
+        > div{
+            margin-top: 0px;
+        }
     }
 
-    &:after {
-        position: absolute;
-        bottom: -1px;
-        width: 50%;
-        height: 1px;
-        content: '';
-        left: 0;
-        background-color: @SCHEDULER_TIME_PANEL_BACKGROUND_COLOR;
+     &:after {
+            position: absolute;
+            bottom: -1px;
+            width: 10%;
+            height: 1px;
+            content: '';
+            right: 0;
+            background-color: @SCHEDULER_BASE_BORDER_COLOR;
+    }
+
+    .dx-scheduler-time-panel-row:nth-child(2n) & {
+         &:after {
+            background-color: @SCHEDULER_ACCENT_BORDER_COLOR;
+        }
     }
 
     &.dx-scheduler-time-panel-current-time-cell {
-        color: @SCHEDULER_APPOINTMENT_BASE_COLOR;
+        color: @SCHEDULER_CURRENT_TIME_CELL_COLOR;
         &:before {
             position: absolute;
             top: 0;
@@ -1436,6 +1429,14 @@
             height: inherit;
             content: '';
             background-color: @SCHEDULER_TIME_INDICATOR_COLOR;
+        }
+    }
+}
+
+.dx-scheduler-time-panel-odd-row-count {
+    .dx-scheduler-time-panel-row:nth-child(2n) .dx-scheduler-time-panel-cell {
+         &:after {
+            background-color: @SCHEDULER_BASE_BORDER_COLOR;
         }
     }
 }

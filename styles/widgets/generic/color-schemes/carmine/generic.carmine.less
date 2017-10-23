@@ -1828,15 +1828,15 @@
 * @type color
 * @group scheduler
 */
-@SCHEDULER_TIME_INDICATOR_COLOR: lighten(@SCHEDULER_APPOINTMENT_BASE_COLOR, 15%);
+@SCHEDULER_CURRENT_TIME_CELL_COLOR: @base-accent;
+
+@SCHEDULER_TIME_INDICATOR_COLOR: lighten(@SCHEDULER_CURRENT_TIME_CELL_COLOR, 15%);
 
 @scheduler-popup-title-bg: @SCHEDULER_WORKSPACE_BACKGROUND_COLOR;
 
 @SCHEDULER_WORKSPACE_MONTH_TEXT_COLOR: lighten(@base-text-color, 38.5%);
 
 @scheduler-dropdown-appointment-date-color: lighten(@base-text-color, 38.5%);
-
-@SCHEDULER_TIME_PANEL_BACKGROUND_COLOR: @SCHEDULER_WORKSPACE_BACKGROUND_COLOR;
 
 @SCHEDULER_WORKSPACE_ACTIVE_CELL_COLOR: @SCHEDULER_ACCENT_BORDER_COLOR;
 @SCHEDULER_WORKSPACE_HOVERED_CELL_COLOR: @SCHEDULER_WORKSPACE_MONTH_TEXT_COLOR;
@@ -1847,7 +1847,7 @@
 @scheduler-alldaypanel-bg: @base-element-bg;
 
 @scheduler-recurence-editor-bg: @base-element-bg;
-@scheduler-tab-selected-bg: @SCHEDULER_TIME_PANEL_BACKGROUND_COLOR;
+@scheduler-tab-selected-bg: @base-bg;
 @scheduler-tab-selected-before-bg: @scheduler-tab-selected-bg;
 
 @scheduler-tab-focused-border-color: @base-accent;

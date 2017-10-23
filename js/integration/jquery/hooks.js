@@ -1,7 +1,7 @@
 "use strict";
 
 var jQuery = require("jquery");
-var useJQuery = require("../../core/config")().useJQuery;
+var useJQuery = require("./use_jquery")();
 var compareVersion = require("../../core/utils/version").compare;
 var each = require("../../core/utils/iterator").each;
 var isNumeric = require("../../core/utils/type").isNumeric;
@@ -9,7 +9,7 @@ var setEventFixMethod = require("../../events/utils").setEventFixMethod;
 var registerEvent = require("../../events/core/event_registrator");
 var hookTouchProps = require("../../events/core/hook_touch_props");
 
-if(jQuery && useJQuery) {
+if(useJQuery) {
     if(compareVersion(jQuery.fn.jquery, [3]) < 0) {
         var POINTER_TYPE_MAP = {
             2: "touch",

@@ -1,4 +1,31 @@
 @model RunSuiteViewModel
+@{
+    var isNoJQueryTest = Model.ScriptVirtualPath.Contains("nojquery");
+    var isBundledTest = Model.ScriptVirtualPath.Contains("bundled");
+
+    string GetJQueryUrl() {
+        if(isNoJQueryTest)
+            return Url.Content("~/testing/helpers/noJQuery.js");
+
+        switch(Model.JQueryVersion) {
+            case "1": return Url.Content("~/vendor/jquery/jquery-1.12.3.js");
+            case "2": return Url.Content("~/vendor/jquery/jquery-2.2.3.js");
+        }
+        return Url.Content("~/vendor/jquery/jquery-3.1.0.js");
+    }
+
+    IEnumerable<string> GetJQueryIntegrationImports() {
+        if(!isBundledTest) {
+            if(!Model.NoJQuery && !isNoJQueryTest) {
+                yield return Url.Content("~/js/integration/jquery.js");
+            } else {
+                yield return Url.Content("~/testing/helpers/jQueryEventsPatch.js");
+                yield return Url.Content("~/testing/helpers/dataPatch.js");
+                yield return Url.Content("~/js/integration/jquery/component_registrator.js");
+            }
+        }
+    }
+}
 <!DOCTYPE html>
 <head>
     <meta http-equiv="X-UA-Compatible" content="IE=@Model.IEMode">
@@ -129,24 +156,20 @@
                 }
             }
 
-            window.DevExpress = window.DevExpress || {};
+            if(@Html.Raw(Json.Serialize(Model.NoJQuery))) {
+                window.DevExpress = window.DevExpress || {};
+                window.DevExpress.config = {
+                    useJQuery: false
+                };
+            }
 
-            window.DevExpress.config = {
-                useJQuery: !@Html.Raw(Json.Serialize(Model.NoJQuery))
-            };
-            var jqueryVersion = '@(Model.JQueryVersion != null ? Model.JQueryVersion.ToString().ToLowerInvariant() : "default")';
-            var jqueryIncludeStrings = {
-                "1": '@Url.Content("~/vendor/jquery/jquery-1.12.3.js")',
-                "2": '@Url.Content("~/vendor/jquery/jquery-2.2.3.js")',
-                "default": '@Url.Content("~/vendor/jquery/jquery-3.1.0.js")'
-            };
             SystemJS.config({
                 baseURL: '@Url.Content("~/js")',
                 map: {
                     // Deps
                     'globalize': '@Url.Content("~/vendor/globalize/globalize")',
                     'cldr': '@Url.Content("~/vendor/cldr/cldr")',
-                    'jquery': jqueryIncludeStrings[jqueryVersion],
+                    'jquery': '@GetJQueryUrl()',
                     'knockout': '@Url.Content("~/vendor/knockout/knockout-3.4.0.debug.js")',
                     'angular': '@Url.Content("~/vendor/angular-1.5/angular.js")',
                     'angular-route': '@Url.Content("~/vendor/angular-1.5/angular-route.js")',
@@ -245,19 +268,15 @@
             });
         });
 
-        var useJQuery = window.DevExpress.config.useJQuery;
+        var integrationImportPaths = @Html.Raw(Json.Serialize(GetJQueryIntegrationImports()));
 
-        var imports = [ new Promise(function(resolve) {
+        var imports = integrationImportPaths.map(function(importPath) {
+            return SystemJS.import(importPath);
+        });
+
+        imports.push(new Promise(function(resolve) {
             jQuery(resolve);
-        }) ];
-
-        if(useJQuery) {
-            imports.push(SystemJS.import("@Url.Content("~/js/integration/jquery.js")"));
-        } else {
-            imports.push(SystemJS.import("@Url.Content("~/testing/helpers/jQueryEventsPatch.js")"));
-            imports.push(SystemJS.import("@Url.Content("~/testing/helpers/dataPatch.js")"));
-            imports.push(SystemJS.import("@Url.Content("~/js/integration/jquery/component_registrator.js")"));
-        }
+        }));
 
         Promise.all(imports)
         .then(function() {

@@ -1052,8 +1052,8 @@ declare module DevExpress.ui {
         /** @docid dxNumberBoxOptions_mode */
         mode?: string;
 
-        /** @docid dxNumberBoxOptions_displayFormat */
-        displayFormat?: string;
+        /** @docid dxNumberBoxOptions_format */
+        format?: string;
 
         /** @docid dxNumberBoxOptions_invalidValueMessage */
         invalidValueMessage?: string;

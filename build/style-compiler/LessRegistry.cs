@@ -45,7 +45,8 @@ namespace StyleCompiler
             COLOR_SCHEME_CARMINE = "carmine",
             COLOR_SCHEME_DARKMOON = "darkmoon",
             COLOR_SCHEME_SOFTBLUE = "softblue",
-            COLOR_SCHEME_DARKVIOLET = "darkviolet";
+            COLOR_SCHEME_DARKVIOLET = "darkviolet",
+            COLOR_SCHEME_GREENMIST = "greenmist";
 
         public const string
             SIZE_SCHEME_DEFAULT = "default",
@@ -80,7 +81,7 @@ namespace StyleCompiler
                     LicenseInfo = EULA_DEVEXTREME,
                     Modules = new[] { MODULE_TMP_WIDGETS_FOR_EXPORTER, MODULE_TMP_EXPORTER },
                     SupportedThemes = new[] { THEME_GENERIC },
-                    ExcludedColorSchemes = new[] { COLOR_SCHEME_CARMINE, COLOR_SCHEME_DARKMOON, COLOR_SCHEME_SOFTBLUE, COLOR_SCHEME_DARKVIOLET },
+                    ExcludedColorSchemes = new[] { COLOR_SCHEME_CARMINE, COLOR_SCHEME_DARKMOON, COLOR_SCHEME_SOFTBLUE, COLOR_SCHEME_DARKVIOLET, COLOR_SCHEME_GREENMIST },
                     SupportedSizeSchemes = new Dictionary<string,string[]> {
                         { THEME_GENERIC, new[] { SIZE_SCHEME_DEFAULT } }
                     }
@@ -107,7 +108,7 @@ namespace StyleCompiler
             new KnownThemeInfo {
                 Name = THEME_GENERIC,
                 PublicName = string.Empty,
-                ColorSchemeNames = new[] { COLOR_SCHEME_LIGHT, COLOR_SCHEME_DARK, COLOR_SCHEME_CARMINE, COLOR_SCHEME_DARKMOON, COLOR_SCHEME_SOFTBLUE, COLOR_SCHEME_DARKVIOLET, COLOR_SCHEME_CONTRAST }
+                ColorSchemeNames = new[] { COLOR_SCHEME_LIGHT, COLOR_SCHEME_DARK, COLOR_SCHEME_CARMINE, COLOR_SCHEME_DARKMOON, COLOR_SCHEME_SOFTBLUE, COLOR_SCHEME_DARKVIOLET, COLOR_SCHEME_GREENMIST, COLOR_SCHEME_CONTRAST }
             },
             new KnownThemeInfo {
                 Name = THEME_WIN10,

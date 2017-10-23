@@ -2009,7 +2009,7 @@ declare module DevExpress.ui {
             /** @docid GridBaseOptions_sorting_descendingText */
             descendingText?: string;
 
-            /** @docid GridBaseOptions_sorting_sortingMode */
+            /** @docid GridBaseOptions_sorting_mode */
             mode?: string;
         };
 
@@ -2965,8 +2965,8 @@ declare module DevExpress.ui {
         /** @docid dxFilterBuilderField_customizeText */
         customizeText?: (fieldInfo: { value: any; valueText: string; }) => string;
 
-        /** @docid dxFilterBuilderField_valueEditorTemplate */
-        valueEditorTemplate?: any;
+        /** @docid dxFilterBuilderField_editorTemplate */
+        editorTemplate?: any;
     }
 
     export interface dxFilterBuilderOptions extends WidgetOptions {
