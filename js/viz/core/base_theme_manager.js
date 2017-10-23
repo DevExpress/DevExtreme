@@ -15,10 +15,12 @@ var Class = require("../../core/class"),
     _each = each;
 
 //register themes
-require("./default");
-require("./ios");
-require("./android");
-require("./win");
+require("./themes/generic.light");
+require("./themes/generic.dark");
+require("./themes/generic.contrast");
+require("./themes/ios");
+require("./themes/android");
+require("./themes/win");
 
 function getThemePart(theme, path) {
     var _theme = theme;

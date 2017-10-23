@@ -1,6 +1,6 @@
 "use strict";
 
-var themeModule = require("../themes"),
+var themeModule = require("../../themes"),
     registerTheme = themeModule.registerTheme,
     registerThemeSchemeAlias = themeModule.registerThemeSchemeAlias,
     BLACK = "#000000",
