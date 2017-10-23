@@ -60,7 +60,6 @@ var generateJQueryAugmentation = exports.generateJQueryAugmentation = function(e
 };
 
 gulp.task('ts-sources', function() {
-
     return merge(
         gulp.src('./ts/vendor/*').pipe(gulp.dest(OUTPUT_DIR)),
         gulp
@@ -83,7 +82,7 @@ gulp.task('ts-sources-legacy', function() {
         gulp
             .src(definitionSources)
             .pipe(file('jquery-augmentation.d.ts', jQueryAugmentation))
-            .pipe(concat('dx.all.d.ts'))
+            .pipe(concat('dx.all.legacy.d.ts'))
             .pipe(replace(/\/\/[^\r\n]+/g, ''))
             .pipe(replace(/^\s*[\r\n]+/gm, ''))
             .pipe(headerPipes.bangLicense())
@@ -114,6 +113,7 @@ gulp.task('ts-check', ['ts-sources'], function() {
 gulp.task('ts', function(callback) {
     return runSequence(
         'ts-sources',
+        'ts-sources-legacy',
         'ts-check',
         callback);
 });
