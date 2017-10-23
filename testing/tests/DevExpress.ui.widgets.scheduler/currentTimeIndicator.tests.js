@@ -512,7 +512,7 @@ var stubInvokeMethod = function(instance, options) {
 
         assert.roughEqual($shader.outerHeight(), 1000, 1.5, "Shader has correct height");
 
-        assert.roughEqual($topShader.outerWidth(), 896, 1.5, "TopShader has correct width");
+        assert.roughEqual($topShader.outerWidth(), 896, 2, "TopShader has correct width");
         assert.roughEqual($topShader.outerHeight(), 1000, 1.5, "TopShader has correct height");
 
         assert.roughEqual($bottomShader.outerHeight(), 0, 1.5, "BottomShader has correct height");
