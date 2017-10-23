@@ -554,7 +554,7 @@ if(device.deviceType !== "desktop") {
 
         this.setTestElement(testElement);
 
-        themes.current(themes.themeNameFromDevice(device));
+        themes.current(devices.themeNameFromDevice(device));
 
         //act
         this.renderColumnChooser();

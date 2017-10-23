@@ -3,11 +3,8 @@
 var $ = require("../core/renderer"),
     errors = require("./widget/ui.errors"),
     domUtils = require("../core/utils/dom"),
-    ready = require("../core/utils/ready"),
     each = require("../core/utils/iterator").each,
-    devices = require("../core/devices"),
     viewPortUtils = require("../core/utils/view_port"),
-    themeReadyCallback = require("./themes_callback"),
     viewPort = viewPortUtils.value,
     viewPortChanged = viewPortUtils.changeCallback;
 
@@ -170,7 +167,7 @@ function init(options) {
 function current(options) {
     if(!arguments.length) {
         currentThemeName = currentThemeName || readThemeMarker();
-        return currentThemeName;
+        return currentThemeName || readThemeMarker();
     }
 
     detachCssClasses(viewPort());
@@ -180,15 +177,10 @@ function current(options) {
         options = { theme: options };
     }
 
-    var isAutoInit = options._autoInit,
-        loadCallback = options.loadCallback,
-        currentThemeData;
+    var loadCallback = options.loadCallback;
+    var currentThemeData;
 
     currentThemeName = options.theme || currentThemeName;
-    if(isAutoInit && !currentThemeName) {
-        currentThemeName = themeNameFromDevice(devices.current());
-    }
-
     currentThemeName = resolveFullThemeName(currentThemeName);
 
     if(currentThemeName) {
@@ -210,7 +202,7 @@ function current(options) {
             }
         }
     } else {
-        if(isAutoInit) {
+        if(options._autoInit) {
             if(loadCallback) {
                 loadCallback();
             }
@@ -220,25 +212,6 @@ function current(options) {
     }
 
     attachCssClasses(viewPortUtils.originalViewPort(), currentThemeName);
-}
-
-function themeNameFromDevice(device) {
-    var themeName = device.platform;
-    var majorVersion = device.version && device.version[0];
-
-    switch(themeName) {
-        case "ios":
-            themeName += "7";
-            break;
-        case "android":
-            themeName += "5";
-            break;
-        case "win":
-            themeName += (majorVersion && majorVersion === 8) ? "8" : "10";
-            break;
-    }
-
-    return themeName;
 }
 
 function getCssClasses(themeName) {
@@ -290,26 +263,15 @@ function detachCssClasses(element) {
     $(element).removeClass(themeClasses);
 }
 
-init({
-    _autoInit: true,
-    loadCallback: function() {
-        themeReadyCallback.fire();
-    }
-});
-
-ready(function() {
+function checkThemeLinks() {
     if($(DX_LINK_SELECTOR, context).length) {
         throw errors.Error("E0022");
     }
-});
+}
 
 viewPortChanged.add(function(viewPort, prevViewPort) {
     detachCssClasses(prevViewPort);
     attachCssClasses(viewPort);
-});
-
-devices.changed.add(function() {
-    init({ _autoInit: true });
 });
 
 /**
@@ -338,7 +300,7 @@ exports.init = init;
 exports.attachCssClasses = attachCssClasses;
 exports.detachCssClasses = detachCssClasses;
 
-exports.themeNameFromDevice = themeNameFromDevice;
+exports.checkThemeLinks = checkThemeLinks;
 exports.waitForThemeLoad = waitForThemeLoad;
 
 exports.resetTheme = function() {

@@ -6,7 +6,9 @@ var $ = require("../core/renderer"),
     each = require("./utils/iterator").each,
     Class = require("./class"),
     errors = require("./errors"),
-    Callbacks = require("./utils/callbacks"),
+    themes = require("../ui/themes"),
+    themeReadyCallback = require("../ui/themes_callback"),
+    ready = require("./utils/ready"),
     resizeCallbacks = require("./utils/window").resizeCallbacks,
     EventsMixin = require("./events_mixin"),
     SessionStorage = require("./utils/storage").sessionStorage,
@@ -203,7 +205,15 @@ var Devices = Class.inherit({
         this._currentDevice = undefined;
         this._currentOrientation = undefined;
 
-        this.changed = Callbacks();
+        themes.init({
+            theme: themeNameFromDevice(this.current()),
+            _autoInit: true,
+            loadCallback: function() {
+                themeReadyCallback.fire();
+            }
+        });
+        ready(themes.checkThemeLinks);
+
         this._recalculateOrientation();
         resizeCallbacks.add(this._recalculateOrientation.bind(this));
     },
@@ -221,7 +231,7 @@ var Devices = Class.inherit({
         if(deviceOrName) {
             this._currentDevice = this._getDevice(deviceOrName);
             this._forced = true;
-            this.changed.fire();
+            themes.init({ theme: themeNameFromDevice(this.current()), _autoInit: true });
 
             if(this._currentDevice.platform === "win" && this._currentDevice.version[0] === 8) {
                 errors.log("W0010", "the 'win8' theme", "16.1", "Use the 'win10' theme instead.");
@@ -461,4 +471,24 @@ if(!devices.isForced() && devices.current().platform === "win") {
     devices.current({ version: [10] });
 }
 
+function themeNameFromDevice(device) {
+    var themeName = device.platform;
+    var majorVersion = device.version && device.version[0];
+
+    switch(themeName) {
+        case "ios":
+            themeName += "7";
+            break;
+        case "android":
+            themeName += "5";
+            break;
+        case "win":
+            themeName += (majorVersion && majorVersion === 8) ? "8" : "10";
+            break;
+    }
+
+    return themeName;
+}
+
 module.exports = devices;
+module.exports.themeNameFromDevice = themeNameFromDevice;
