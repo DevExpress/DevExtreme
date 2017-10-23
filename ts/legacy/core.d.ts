@@ -1,4 +1,4 @@
-/// <reference path="vendor/jquery.d.ts" />
+/// <reference path="../vendor/jquery.d.ts" />
 
 declare module DevExpress {
 
@@ -1109,7 +1109,7 @@ declare module DevExpress {
             export function compileSetter(expr: any): Function;
 
             export module odata {
-                /** @docid Utils_odatakeyConverters */
+                /** @docid Utils_keyConverters */
                 export module keyConverters {
                     export function String(value: any): string;
                     export function Int32(value: any): number;
