@@ -131,7 +131,7 @@ var SchedulerWorkSpaceIndicator = SchedulerWorkSpace.inherit({
 
         var $row = this.$element().find("." + this._getDateTableRowClass()).eq(0),
             width = 0,
-            $cells = $row.find("." + this._getDateTableCellClass()),
+            $cells = $row.find("." + this._getDateTableCellSelector()),
             totalCellCount = this._getCellCount() * groupIndex;
 
         cellCount = cellCount || this._getCellCount();

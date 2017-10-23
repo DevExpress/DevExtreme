@@ -52,6 +52,9 @@ var COMPONENT_CLASS = "dx-scheduler-work-space",
 
     WORKSPACE_WITH_MOUSE_SELECTION_CLASS = "dx-scheduler-work-space-mouse-selection",
 
+    HORIZONTAL_SIZES_CLASS = "dx-scheduler-cell-sizes-horizontal",
+    VERTICAL_SIZES_CLASS = "dx-scheduler-cell-sizes-vertical",
+
     HEADER_PANEL_CLASS = "dx-scheduler-header-panel",
     HEADER_PANEL_CELL_CLASS = "dx-scheduler-header-panel-cell",
     HEADER_ROW_CLASS = "dx-scheduler-header-row",
@@ -144,7 +147,7 @@ var SchedulerWorkSpace = Widget.inherit({
 
     _getFocusedCell: function() {
         return this._$focusedCell ||
-            this._$dateTable.find("." + this._getDateTableCellClass()).eq(0);
+            this._$dateTable.find("." + this._getDateTableCellSelector()).eq(0);
     },
 
     _getCellFromNextRow: function(direction) {
@@ -484,8 +487,13 @@ var SchedulerWorkSpace = Widget.inherit({
     },
 
     _getDateTableCellClass: function() {
+        return DATE_TABLE_CELL_CLASS + " " + HORIZONTAL_SIZES_CLASS + " " + VERTICAL_SIZES_CLASS;
+    },
+
+    _getDateTableCellSelector: function() {
         return DATE_TABLE_CELL_CLASS;
     },
+
 
     _getGroupRowClass: function() {
         return GROUP_ROW_CLASS;
@@ -806,7 +814,7 @@ var SchedulerWorkSpace = Widget.inherit({
 
         this._createCellClickAction();
 
-        var cellSelector = "." + this._getDateTableCellClass() + ",." + ALL_DAY_TABLE_CELL_CLASS;
+        var cellSelector = "." + this._getDateTableCellSelector() + ",." + ALL_DAY_TABLE_CELL_CLASS;
         var $element = this.$element();
 
         eventsEngine.off($element, SCHEDULER_WORKSPACE_DXPOINTERDOWN_EVENT_NAME);
@@ -845,7 +853,7 @@ var SchedulerWorkSpace = Widget.inherit({
     _pointerDownHandler: function(e) {
         var $target = $(e.target);
 
-        if(!$target.hasClass(this._getDateTableCellClass()) && !$target.hasClass(ALL_DAY_TABLE_CELL_CLASS)) {
+        if(!$target.hasClass(this._getDateTableCellSelector()) && !$target.hasClass(ALL_DAY_TABLE_CELL_CLASS)) {
             this._isCellClick = false;
             return;
         }
@@ -995,7 +1003,7 @@ var SchedulerWorkSpace = Widget.inherit({
     },
 
     _getHeaderPanelCellClass: function() {
-        return HEADER_PANEL_CELL_CLASS;
+        return HEADER_PANEL_CELL_CLASS + " " + HORIZONTAL_SIZES_CLASS;
     },
 
     _calculateHeaderCellRepeatCount: function() {
@@ -1020,7 +1028,7 @@ var SchedulerWorkSpace = Widget.inherit({
     },
 
     _getAllDayPanelCellClass: function() {
-        return ALL_DAY_TABLE_CELL_CLASS;
+        return ALL_DAY_TABLE_CELL_CLASS + " " + HORIZONTAL_SIZES_CLASS;
     },
 
     _getAllDayCellData: function(cell, rowIndex, cellIndex) {
@@ -1090,7 +1098,7 @@ var SchedulerWorkSpace = Widget.inherit({
     },
 
     _getTimeCellClass: function(i) {
-        return TIME_PANEL_CELL_CLASS;
+        return TIME_PANEL_CELL_CLASS + " " + VERTICAL_SIZES_CLASS;
     },
 
     _getTimeText: function(i) {
@@ -1520,7 +1528,7 @@ var SchedulerWorkSpace = Widget.inherit({
     },
 
     _getCells: function(allDay) {
-        var cellClass = allDay ? ALL_DAY_TABLE_CELL_CLASS : this._getDateTableCellClass();
+        var cellClass = allDay ? ALL_DAY_TABLE_CELL_CLASS : this._getDateTableCellSelector();
         return this.$element().find("." + cellClass);
     },
 
@@ -1930,7 +1938,7 @@ var SchedulerWorkSpace = Widget.inherit({
         this.$element()
             .find("." + this._getDateTableRowClass())
             .first()
-            .find("." + this._getDateTableCellClass()).each(function(index) {
+            .find("." + this._getDateTableCellSelector()).each(function(index) {
                 if(index < startIndex || index > endIndex) {
                     return true;
                 }
