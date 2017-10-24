@@ -1073,6 +1073,7 @@ SvgElement.prototype = {
             fixFuncIri(that, "clip-path");
             fixFuncIri(that, "filter");
         };
+        that._fixFuncIri.renderer = that.renderer;
         fixFuncIriCallbacks.add(that._fixFuncIri);
         that._addFixIRICallback = function() {};
     },
@@ -1554,6 +1555,8 @@ Renderer.prototype = {
         that._defs.dispose();
         that._animationController.dispose();
 
+        fixFuncIriCallbacks.removeByRenderer(that);
+
         for(key in that) {
             that[key] = null;
         }
@@ -1835,6 +1838,9 @@ var fixFuncIriCallbacks = (function() {
         },
         remove: function(fn) {
             callbacks = callbacks.filter(function(el) { return el !== fn; });
+        },
+        removeByRenderer: function(renderer) {
+            callbacks = callbacks.filter(function(el) { return el.renderer !== renderer; });
         },
         fire: function() {
             callbacks.forEach(function(fn) { fn(); });
