@@ -104,6 +104,7 @@ exports.DataController = dataControllerModule.controllers.data.inherit((function
          * @name dxTreeListMethods_expandRow
          * @publicName expandRow(key)
          * @param1 key:any
+         * @return Promise<any>
          */
         expandRow: function(key) {
             if(!this.isRowExpanded(key)) {
@@ -116,6 +117,7 @@ exports.DataController = dataControllerModule.controllers.data.inherit((function
          * @name dxTreeListMethods_collapseRow
          * @publicName collapseRow(key)
          * @param1 key:any
+         * @return Promise<any>
          */
         collapseRow: function(key) {
             if(this.isRowExpanded(key)) {
