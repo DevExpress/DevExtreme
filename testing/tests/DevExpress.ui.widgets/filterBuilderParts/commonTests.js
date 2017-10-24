@@ -335,10 +335,12 @@ QUnit.module("Rendering", function() {
         var $input = $container.find("." + FILTER_BUILDER_ITEM_VALUE_CLASS).find("input");
         assert.ok($input.is(":focus"));
 
-        $(".dx-dropdowneditor-button").click();
+        var selectBoxInstance = $container.find(".dx-selectbox").dxSelectBox("instance");
+        selectBoxInstance.open();
         $(".dx-list-item").eq(2).trigger("dxclick");
+        assert.ok($input.is(":focus"));
 
-        $input.trigger("blur");
+        selectBoxInstance.blur();
         assert.notOk($container.find("input").length, "hasn't input");
         assert.deepEqual(instance.option("value"), ["CompanyName", "<>", "Super Mart of the West"]);
 

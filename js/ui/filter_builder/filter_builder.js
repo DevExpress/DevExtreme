@@ -785,7 +785,7 @@ var FilterBuilder = Widget.inherit({
         eventsEngine.on($container, "focusout", function(e) {
             that._removeFocusOutAndKeyUpEvents($container);
             // TODO: remove it after fix T566807
-            if(false && $container.find(".dx-selectbox").length > 0) {
+            if($container.find(".dx-selectbox").length > 0) {
                 var $hoveredItem = $(".dx-selectbox-popup-wrapper .dx-state-hover");
                 if($hoveredItem.length > 0) {
                     eventsEngine.trigger($hoveredItem, "click");
