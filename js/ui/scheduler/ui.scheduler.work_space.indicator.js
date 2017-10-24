@@ -4,7 +4,6 @@ var $ = require("../../core/renderer"),
     SchedulerWorkSpace = require("./ui.scheduler.work_space"),
     registerComponent = require("../../core/component_registrator"),
     dateUtils = require("../../core/utils/date"),
-    typeUtils = require("../../core/utils/type"),
     extend = require("../../core/utils/extend").extend,
     toMs = dateUtils.dateToMilliseconds;
 
@@ -54,7 +53,7 @@ var SchedulerWorkSpaceIndicator = SchedulerWorkSpace.inherit({
     _renderIndicator: function(height, rtlOffset, $container, groupCount) {
         for(var i = 0; i < groupCount; i++) {
             var $indicator = this._createIndicator($container);
-            var offset = this._getCellCount() * this._getRoundedCellWidth(i - 1, 0) * i + this.getIndicatorOffset(i) + i;
+            var offset = this._getCellCount() * this.getRoundedCellWidth(i - 1, 0) * i + this.getIndicatorOffset(i) + i;
 
             $indicator.width(this.getCellWidth());
             $indicator.css("left", rtlOffset ? rtlOffset - offset : offset);
@@ -103,14 +102,14 @@ var SchedulerWorkSpaceIndicator = SchedulerWorkSpace.inherit({
         if(difference > this._getCellCount()) {
             difference = this._getCellCount();
         }
-        var width = difference * this._getRoundedCellWidth(groupIndex, groupIndex * this._getCellCount(), difference);
+        var width = difference * this.getRoundedCellWidth(groupIndex, groupIndex * this._getCellCount(), difference);
 
         return maxWidth < width ? maxWidth : width;
     },
 
     getIndicatorOffset: function(groupIndex) {
         var difference = this._getIndicatorDuration() - 1,
-            offset = difference * this._getRoundedCellWidth(groupIndex, groupIndex * this._getCellCount(), difference);
+            offset = difference * this.getRoundedCellWidth(groupIndex, groupIndex * this._getCellCount(), difference);
 
         return offset;
     },
@@ -122,29 +121,6 @@ var SchedulerWorkSpaceIndicator = SchedulerWorkSpace.inherit({
         var timeDiff = today.getTime() - firstViewDate.getTime() + 1;
 
         return Math.ceil(timeDiff / toMs("day"));
-    },
-
-    _getRoundedCellWidth: function(groupIndex, startIndex, cellCount) {
-        if(groupIndex < 0) {
-            return 0;
-        }
-
-        var $row = this.$element().find("." + this._getDateTableRowClass()).eq(0),
-            width = 0,
-            $cells = $row.find("." + this._getDateTableCellSelector()),
-            totalCellCount = this._getCellCount() * groupIndex;
-
-        cellCount = cellCount || this._getCellCount();
-
-        if(!typeUtils.isDefined(startIndex)) {
-            startIndex = totalCellCount;
-        }
-
-        for(var i = startIndex; i < totalCellCount + cellCount; i++) {
-            width = width + $($cells).eq(i).outerWidth();
-        }
-
-        return width / (totalCellCount + cellCount - startIndex);
     },
 
     getIndicationHeight: function() {
