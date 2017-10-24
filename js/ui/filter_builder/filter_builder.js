@@ -755,6 +755,7 @@ var FilterBuilder = Widget.inherit({
     _createValueEditorWithEvents: function(item, field, $container) {
         var that = this,
             value = item[2],
+            isSelectBox = false,
             disableEvents = function() {
                 eventsEngine.off($container, "focusout");
                 eventsEngine.off($container, "keyup");
@@ -776,11 +777,27 @@ var FilterBuilder = Widget.inherit({
             filterOperation: utils.getOperationValue(item),
             setValue: function(data) {
                 value = data === null ? "" : data;
+            },
+            editorOptions: {
+                onInitialized: function(e) {
+                    isSelectBox = e.component.NAME === "dxSelectBox";
+                }
             }
         });
 
         eventsEngine.trigger($container.find("input"), "focus");
-        eventsEngine.on($container, "focusout", function(e) {
+        eventsEngine.on($container, "focusout", function() {
+            if(isSelectBox) {
+                var $hoveredItem = $(".dx-selectbox-popup-wrapper .dx-state-hover");
+                if($hoveredItem.length > 0) {
+                    eventsEngine.trigger($hoveredItem, "click");
+                } else {
+                    var $activeItem = $(".dx-selectbox-popup-wrapper .dx-state-active");
+                    if($activeItem.length > 0) {
+                        eventsEngine.trigger($activeItem, "click");
+                    }
+                }
+            }
             disableEvents();
             $container.empty();
             updateValue(value, function() {
