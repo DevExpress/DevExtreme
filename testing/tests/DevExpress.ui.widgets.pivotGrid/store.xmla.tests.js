@@ -94,6 +94,7 @@ var $ = require("jquery"),
         beforeEach: function() {
             var that = this;
             sinon.spy(errors, "log");
+            sinon.spy(errors, "Error");
 
             testEnvironment.beforeEach.call(that);
             that.sendDeferred = $.Deferred();
@@ -105,6 +106,7 @@ var $ = require("jquery"),
         afterEach: function() {
             this.sendRequest.restore();
             errors.log.restore();
+            errors.Error.restore();
             //testEnvironment.afterEach.call(this);
         },
         dataSource: testEnvironment.dataSource,
@@ -3624,6 +3626,20 @@ QUnit.test("Differrent errors in defferent cells", function(assert) {
         assert.deepEqual(errors.log.getCall(1).args, ["W4002", "Read access to the cell is denied."]);
     }).fail(function() {
         assert.ok(false);
+    });
+});
+
+QUnit.test("Throw error when unexpected response", function(assert) {
+    this.sendDeferred.resolve("");
+    this.store.load({
+        columns: [],
+        rows: [],
+        values: []
+    }).done(function(data) {
+        assert.ok(false);
+    }).fail(function() {
+        assert.equal(errors.Error.lastCall.args[0], "E4023");
+        assert.equal(errors.Error.lastCall.args[1], "");
     });
 });
 
