@@ -4,7 +4,7 @@ var $ = require("jquery"),
     PivotGridDataSource = require("ui/pivot_grid/data_source"),
     executeAsyncMock = require("../../helpers/executeAsyncMock.js");
 
-require("viz/core/default"); //remove
+require("viz/core/themes/generic.light"); //remove
 
 /* global orders */
 require("../../../testing/content/orders.js");
