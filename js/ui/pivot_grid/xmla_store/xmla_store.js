@@ -52,6 +52,10 @@ exports.XmlaStore = Class.inherit((function() {
             var xml;
             try {
                 xml = $.parseXML(text);
+
+                if(!xml || xml.getElementsByTagName("parsererror").length) {
+                    throw new errors.Error("E4023", text);
+                }
             } catch(e) {
                 deferred.reject({
                     statusText: e.message,
