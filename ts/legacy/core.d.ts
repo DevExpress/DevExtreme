@@ -1155,7 +1155,7 @@ declare module DevExpress {
     /** @docid_ignore dxEventFields_data */
     /** @docid_ignore event */
 
-    /** @docid_ignore Element */
+    /** @docid_ignore dxElement */
 
     /** @docid ui */
     export module ui {

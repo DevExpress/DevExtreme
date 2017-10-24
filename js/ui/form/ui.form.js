@@ -334,7 +334,7 @@ var Form = Widget.inherit({
              * @publicName template
              * @type template
              * @type_function_param1 data:object
-             * @type_function_param2 itemElement:Element
+             * @type_function_param2 itemElement:dxElement
              * @type_function_return string|Node|jQuery
              */
             /**
@@ -460,7 +460,7 @@ var Form = Widget.inherit({
              * @publicName template
              * @type template
              * @type_function_param1 data:object
-             * @type_function_param2 itemElement:Element
+             * @type_function_param2 itemElement:dxElement
              * @type_function_return string|Node|jQuery
              */
             /**
@@ -573,7 +573,7 @@ var Form = Widget.inherit({
              * @type template
              * @type_function_param1 tabData:object
              * @type_function_param2 tabIndex:number
-             * @type_function_param3 tabElement:Element
+             * @type_function_param3 tabElement:dxElement
              * @default undefined
              */
             /**
@@ -582,7 +582,7 @@ var Form = Widget.inherit({
              * @type template
              * @type_function_param1 tabData:object
              * @type_function_param2 tabIndex:number
-             * @type_function_param3 tabElement:Element
+             * @type_function_param3 tabElement:dxElement
              * @default undefined
              */
             /**
