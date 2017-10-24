@@ -469,7 +469,8 @@ QUnit.test("Load Field Values", function(assert) {
             }
         ],
         rows: [],
-        filters: []
+        filters: [],
+        skipValues: true
     }], "load args");
 
     assert.deepEqual(fieldValues, loadResult.columns);
@@ -626,6 +627,7 @@ QUnit.test("Load Field Values for group", function(assert) {
                 customizeText: customize2
             }
         ],
+        skipValues: true,
         rows: [],
         filters: []
     }], "load args");
