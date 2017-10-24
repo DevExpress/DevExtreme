@@ -9,7 +9,6 @@ var eventsEngine = require("../../events/core/events_engine"),
 
 var NUMBER_FORMATTER_NAMESPACE = "dxNumberFormatter",
     STUB_CHAR_REG_EXP = "[^0-9]",
-    FLOAT_SEPARATOR = ".",
     MOVE_FORWARD = 1,
     MOVE_BACKWARD = -1;
 
@@ -72,11 +71,11 @@ var NumberBoxMask = NumberBoxBase.inherit({
         var text = this._input().val(),
             index = start || (direction > 0 ? 0 : text.length);
 
-        if(direction < 0) {
+        if(direction === MOVE_BACKWARD) {
             index--;
         }
 
-        while(this._isStub(text.charAt(index)) && text.charAt(index) !== FLOAT_SEPARATOR) {
+        while(this._isStub(text.charAt(index)) && text.charAt(index) !== number.getDecimalSeparator()) {
             index += direction;
         }
 
@@ -131,7 +130,7 @@ var NumberBoxMask = NumberBoxBase.inherit({
 
         if(this._isStub(char)) {
             e.preventDefault();
-            if(char === FLOAT_SEPARATOR) {
+            if(char === number.getDecimalSeparator()) {
                 this._moveCaret(this._isDeleteKey(e.key) ? 1 : -1);
             }
             return;
@@ -156,23 +155,36 @@ var NumberBoxMask = NumberBoxBase.inherit({
         return this.option("format");
     },
 
-    _tryInsert: function(text, selection, char) {
-        var format = this._getFormatPattern(),
-            textBefore = text.slice(0, selection.start),
+    _getEditedText: function(text, selection, char) {
+        var textBefore = text.slice(0, selection.start),
             textAfter = text.slice(selection.end),
-            inserted = textBefore + char + textAfter;
+            edited = textBefore + char + textAfter;
 
-        return number.parse(inserted, format);
+        return edited;
+    },
+
+    _tryInsert: function(text, selection, char) {
+        var format = this._getFormatPattern();
+        return number.parse(this._getEditedText(text, selection, char), format);
     },
 
     _tryReplace: function(text, selection, char) {
         var format = this._getFormatPattern(),
-            textBefore = text.slice(0, selection.start),
-            textAfter = text.slice(selection.start === selection.end ? selection.end + 1 : selection.end),
+            start = selection.start,
+            end = selection.start === selection.end ? selection.end + 1 : selection.end,
             replacement = selection.start === selection.end ? char : "0",
-            replaced = textBefore + replacement + textAfter;
+            replaced = this._getEditedText(text, { start: start, end: end }, replacement);
 
         return number.parse(replaced, format);
+    },
+
+    _tryRemoveLeadingZeros: function(text, selection, char) {
+        var format = this._getFormatPattern(),
+            inserted = this._getEditedText(text, selection, char),
+            regExp = new RegExp("^(" + STUB_CHAR_REG_EXP + "+)(0+)", "g"),
+            cleared = inserted.replace(regExp, "$1");
+
+        return number.parse(cleared, format);
     },
 
     _tryLightParse: function(text, selection, char) {
@@ -188,7 +200,10 @@ var NumberBoxMask = NumberBoxBase.inherit({
         var inserted = this._tryInsert(text, selection, char),
             replaced = this._tryReplace(text, selection, char),
             lightParsed = this._tryLightParse(text, selection, char),
-            value = ensureDefined(inserted, ensureDefined(replaced, lightParsed));
+            noLeadingZeros = this._tryRemoveLeadingZeros(text, selection, char),
+            value = ensureDefined(inserted,
+                ensureDefined(replaced, ensureDefined(lightParsed, noLeadingZeros))
+            );
 
         if(value === lightParsed) {
             this._formattedValue = "";
@@ -319,7 +334,7 @@ var NumberBoxMask = NumberBoxBase.inherit({
 
     _isStub: function(str, isString) {
         var stubRegExp = new RegExp("^" + STUB_CHAR_REG_EXP + "+$", "g");
-        return stubRegExp.test(str) && (isString || str.length === 1);
+        return stubRegExp.test(str) && (isString || this._isChar(str));
     },
 
     _escapePercentFormat: function(format) {
@@ -353,7 +368,7 @@ var NumberBoxMask = NumberBoxBase.inherit({
     _formatValue: function() {
         var text = this._input().val();
 
-        if(text.endsWith(FLOAT_SEPARATOR)) {
+        if(text.endsWith(number.getDecimalSeparator())) {
             return;
         }
 

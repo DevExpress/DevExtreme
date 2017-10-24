@@ -371,3 +371,14 @@ QUnit.test("caret moving by arrow should be prevented if there are no digits aft
 
     assert.ok(this.keyboard.event.isDefaultPrevented(), "moving has been prevented");
 });
+
+QUnit.test("leading zeros should be parsed", function(assert) {
+    this.instance.option("format", "$ #0");
+    this.instance.option("value", 0);
+
+    assert.equal(this.input.val(), "$ 0", "value is correct");
+
+    this.keyboard.caret(3).type("1");
+
+    assert.equal(this.input.val(), "$ 1", "value is correct");
+});
