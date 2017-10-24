@@ -10,7 +10,9 @@ var OPERATION_ICONS = {
         "notcontains": "doesnotcontain",
         "contains": "contains",
         "startswith": "startswith",
-        "endswith": "endswith"
+        "endswith": "endswith",
+        "isblank": "isblank",
+        "isnotblank": "isnotblank"
     },
 
     OPERATION_NAME = {
