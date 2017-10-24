@@ -745,7 +745,7 @@ var FilterBuilder = Widget.inherit({
                 .text(valueText)
                 .appendTo($container);
 
-        that._subscribeOnClickAndEnterKey($text, function(e) {
+        that._subscribeOnClickAndEnterKey($text, function() {
             that._createValueEditorWithEvents(item, field, $container);
         }, "keyup");
 
