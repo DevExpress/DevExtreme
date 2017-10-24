@@ -22,6 +22,8 @@ var context,
     currentThemeName,
     pendingThemeName;
 
+var timerId;
+
 var THEME_MARKER_PREFIX = "dx.";
 
 function readThemeMarker() {
@@ -47,15 +49,16 @@ function readThemeMarker() {
 // FYI
 // http://stackoverflow.com/q/2635814
 // http://stackoverflow.com/a/3078636
-function waitForThemeLoad(themeName, callback) {
-    var timerId,
-        waitStartTime;
+function waitForThemeLoad(themeName) {
+    var waitStartTime;
 
     pendingThemeName = themeName;
 
     function handleLoaded() {
         pendingThemeName = null;
-        callback();
+
+        themeReadyCallback.fire();
+        themeReadyCallback.empty();
     }
 
     if(isPendingThemeLoaded()) {
@@ -72,6 +75,8 @@ function waitForThemeLoad(themeName, callback) {
 
             if(isLoaded || isTimeout) {
                 clearInterval(timerId);
+                timerId = undefined;
+
                 handleLoaded();
             }
         }, 10);
@@ -195,6 +200,10 @@ function current(options) {
         currentThemeData = knownThemes[currentThemeName];
     }
 
+    if(loadCallback) {
+        themeReadyCallback.add(loadCallback);
+    }
+
     if(currentThemeData) {
         // NOTE:
         // 1. <link> element re-creation leads to incorrect CSS rules priority in Internet Explorer (T246821).
@@ -202,8 +211,8 @@ function current(options) {
         // 3. This hack leads Internet Explorer crashing after icon font has been implemented.
         //    $activeThemeLink.removeAttr("href"); // this is for IE, to stop loading prev CSS
         $activeThemeLink.attr("href", knownThemes[currentThemeName].url);
-        if(loadCallback) {
-            waitForThemeLoad(currentThemeName, loadCallback);
+        if((!themeReadyCallback.isEmpty() || options._forceTimeout) && !timerId) {
+            waitForThemeLoad(currentThemeName);
         } else {
             if(pendingThemeName) {
                 pendingThemeName = currentThemeName;
@@ -211,9 +220,8 @@ function current(options) {
         }
     } else {
         if(isAutoInit) {
-            if(loadCallback) {
-                loadCallback();
-            }
+            themeReadyCallback.fire();
+            themeReadyCallback.empty();
         } else {
             throw errors.Error("E0021", currentThemeName);
         }
@@ -292,10 +300,12 @@ function detachCssClasses(element) {
 
 init({
     _autoInit: true,
-    loadCallback: function() {
-        themeReadyCallback.fire();
-    }
+    _forceTimeout: true
 });
+
+function themeReady(callback) {
+    themeReadyCallback.add(callback);
+}
 
 ready(function() {
     if($(DX_LINK_SELECTOR, context).length) {
@@ -332,6 +342,14 @@ devices.changed.add(function() {
  * @static
  */
 exports.current = current;
+
+/**
+ * @name ui_themesmethods_ready
+ * @publicName ready(callback)
+ * @param1 callback:function
+ * @static
+ */
+exports.ready = themeReady;
 
 exports.init = init;
 

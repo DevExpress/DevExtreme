@@ -251,6 +251,24 @@ require("style-compiler-test-server/known-css-files");
         assert.equal(realStylesheets.attr("href"), "style2.css");
     });
 
+    QUnit.test("method themes.ready calls a callback function after themes loading", function(assert) {
+        var done = assert.async();
+
+        var url = ROOT_URL + "testing/helpers/themeMarker.css";
+        this.writeToFrame("<link rel=dx-theme data-theme='myPlatform.theme1' href='style1.css' />");
+        this.writeToFrame("<link rel=dx-theme data-theme='sampleTheme.sampleColorScheme' href='" + url + "' />");
+
+        themes.init({ theme: "myPlatform.theme1", context: this.frameDoc() });
+
+        themes.ready(function() {
+            assert.equal(themes.current(), "sampleTheme.sampleColorScheme");
+
+            done();
+        });
+
+        themes.current("sampleTheme.sampleColorScheme");
+    });
+
     QUnit.test("default theme is first if not specified", function(assert) {
         //arrange
         this.writeToFrame("<link rel='dx-theme' href='style1.css' data-theme='myPlatform.theme1' />");
@@ -320,12 +338,14 @@ require("style-compiler-test-server/known-css-files");
 
     QUnit.test("current theme name when theme included as simple stylesheet", function(assert) {
         var done = assert.async();
+        themes.ready(done);
+
         var url = ROOT_URL + "testing/helpers/themeMarker.css";
         themes.init({ context: this.frameDoc(), _autoInit: true });
         this.writeToFrame("<link rel=stylesheet href='" + url + "' />");
 
         assert.expect(0);
-        themes.waitForThemeLoad("sampleTheme.sampleColorScheme", done);
+        themes.waitForThemeLoad("sampleTheme.sampleColorScheme");
     });
 
     QUnit.test("current theme name read once", function(assert) {

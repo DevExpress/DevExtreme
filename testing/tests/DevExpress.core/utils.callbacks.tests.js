@@ -184,6 +184,15 @@ QUnit.test("Remove all of the Callbacks from a list", function(assert) {
     assert.ok(!this.Callbacks.has(callBack2), "not has callBack2");
 });
 
+QUnit.test("isEmpty method", function(assert) {
+    var callBack1 = function() { };
+
+    assert.ok(this.Callbacks.isEmpty(), "not has callBacks");
+
+    this.Callbacks.add(callBack1);
+    assert.ok(!this.Callbacks.isEmpty(), "has callBack");
+});
+
 QUnit.test("Base strategy", function(assert) {
     //arrange
     var that = this,
