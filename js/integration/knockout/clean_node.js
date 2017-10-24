@@ -43,7 +43,7 @@ patchCleanData();
 
 strategyChanging.add(function(strategy) {
     var isJQuery = !!strategy.fn;
-    if(isJQuery && compareVersion(strategy.fn.jquery, [2, 0]) >= 0) {
+    if(isJQuery && compareVersion(strategy.fn.jquery, [2, 0]) < 0) {
         restoreOriginCleanData();
     }
 });
