@@ -1,7 +1,6 @@
 "use strict";
 
 var $ = require("jquery"),
-    number = require("localization/number"),
     keyboardMock = require("../../../helpers/keyboardMock.js");
 
 require("ui/text_box/ui.text_editor");
@@ -77,20 +76,12 @@ QUnit.test("typing a symbol should insert or replace a value", function(assert) 
     assert.equal(this.input.val(), "1273.89", "value is correct");
 });
 
-QUnit.test("parser should be refreshed when format option changed", function(assert) {
-    var parserMock = sinon.spy(number, "parse");
+QUnit.test("value should be reformatted when format option changed", function(assert) {
+    this.instance.option("value", 123);
+    assert.equal(this.input.val(), "123", "value is correct");
 
-    try {
-        this.instance.option({
-            format: "#.00",
-            value: 123.45
-        });
-
-        assert.equal(parserMock.callCount, 1, "parser was refreshed once");
-        assert.equal(parserMock.getCall(0).args[1], "#.00", "parser was refreshed with correct argument");
-    } finally {
-        parserMock.restore();
-    }
+    this.instance.option("format", "#.00");
+    assert.equal(this.input.val(), "123.00", "value was reformatted");
 });
 
 QUnit.skip("removing required symbol should try replace it to 0", function(assert) {
@@ -244,7 +235,7 @@ QUnit.test("removing decimal point should not change the value", function(assert
     this.instance.option("value", 123.45);
     this.keyboard.caret(3).press("del").input();
 
-    assert.equal(this.input.val(), "123.5", "value is correct");
+    assert.equal(this.input.val(), "123.45", "value is correct");
 });
 
 QUnit.test("pressing float separator should not move the caret", function(assert) {
@@ -316,7 +307,7 @@ QUnit.test("revert sign should lead to revert value of the editor on change", fu
 
 QUnit.test("removing a char should work correctly with negative value", function(assert) {
     this.instance.option("value", -123.45);
-    this.keyboard.caret(7).press("backspace").input();
+    this.keyboard.caret(7).press("backspace");
 
     assert.equal(this.input.val(), "-123.4", "value is correct");
 });
@@ -339,18 +330,44 @@ QUnit.test("percent format should work properly on value change", function(asser
     assert.equal(this.instance.option("value"), 0.45, "value is correct");
 });
 
-QUnit.test("removing a stub using backspace should remove previous char", function(assert) {
+QUnit.test("removing a stub should not work", function(assert) {
     this.instance.option("format", "#%");
     this.instance.option("value", 1.23);
 
     assert.equal(this.input.val(), "123%", "initial value is correct");
     this.keyboard.caret(4).press("backspace").input().change();
 
-    assert.equal(this.input.val(), "12%", "text is correct");
-    assert.equal(this.instance.option("value"), 0.12, "value is correct");
+    assert.equal(this.input.val(), "123%", "text is correct");
+    assert.equal(this.instance.option("value"), 1.23, "value is correct");
 });
 
 QUnit.test("ctrl+v should not be prevented", function(assert) {
     this.keyboard.keyDown("v", { ctrlKey: true });
     assert.strictEqual(this.keyboard.event.isDefaultPrevented(), false, "keydown event is not prevented");
+});
+
+QUnit.test("caret should be placed before first non stub on click", function(assert) {
+    this.instance.option("format", "$ #");
+    this.instance.option("value", 1);
+
+    this.keyboard.caret(0);
+    this.input.trigger("dxclick");
+    assert.deepEqual(this.keyboard.caret(), { start: 2, end: 2 }, "caret was adjusted on click");
+});
+
+QUnit.test("caret should be placed after first non stub char before the caret when there are stubs only after the caret", function(assert) {
+    this.instance.option("format", "#р");
+    this.instance.option("value", 150);
+
+    this.keyboard.caret(4);
+    this.input.trigger("dxclick");
+    assert.deepEqual(this.keyboard.caret(), { start: 3, end: 3 }, "caret was adjusted on click");
+});
+
+QUnit.test("caret moving by arrow should be prevented if there are no digits after the caret", function(assert) {
+    this.instance.option("format", "#р");
+    this.instance.option("value", 150);
+    this.keyboard.caret(3).press("right");
+
+    assert.deepEqual(this.keyboard.caret(), { start: 3, end: 3 }, "caret was not moved");
 });
