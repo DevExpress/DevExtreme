@@ -36,7 +36,7 @@ var BaseWidget = {
     * @pseudo CommonVizPalette
     * @type Array<string>|string
     * @default "Default"
-    * @acceptValues "Default" | "Soft Pastel" | "Harmony Light" | "Pastel" | "Bright" | "Soft" | "Ocean" | "Vintage" | "Violet"
+    * @acceptValues "Default" | "Soft Pastel" | "Harmony Light" | "Pastel" | "Bright" | "Soft" | "Ocean" | "Vintage" | "Violet" | "Carmine" | "DarkMoon" | "SoftBlue" | "DarkViolet" | "GreenMist"
     */
 
     /**
