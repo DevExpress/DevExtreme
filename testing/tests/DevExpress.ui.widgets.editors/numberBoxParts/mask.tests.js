@@ -367,7 +367,7 @@ QUnit.test("caret should be placed after first non stub char before the caret wh
 QUnit.test("caret moving by arrow should be prevented if there are no digits after the caret", function(assert) {
     this.instance.option("format", "#р");
     this.instance.option("value", 150);
-    this.keyboard.caret(3).press("right");
+    this.keyboard.caret(3).keyDown("right");
 
-    assert.deepEqual(this.keyboard.caret(), { start: 3, end: 3 }, "caret was not moved");
+    assert.ok(this.keyboard.event.isDefaultPrevented(), "moving has been prevented");
 });

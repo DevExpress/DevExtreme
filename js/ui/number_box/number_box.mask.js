@@ -233,7 +233,7 @@ var NumberBoxMask = NumberBoxBase.inherit({
     },
 
     _isChar: function(str) {
-        return str.length === 1;
+        return typeof str === "string" && str.length === 1;
     },
 
     _moveCaret: function(offset) {
