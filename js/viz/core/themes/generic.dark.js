@@ -202,7 +202,7 @@ registerTheme({
     funnel: {
         item: {
             border: {
-                color: "#494949"
+                color: "#2a2a2a"
             }
         }
     }

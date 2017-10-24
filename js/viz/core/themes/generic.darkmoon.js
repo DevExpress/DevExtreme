@@ -79,4 +79,11 @@ registerTheme({
     barGauge: {
         backgroundColor: "#445066"
     },
+    funnel: {
+        item: {
+            border: {
+                color: BACKGROUND_COLOR
+            }
+        }
+    }
 }, "generic.dark");

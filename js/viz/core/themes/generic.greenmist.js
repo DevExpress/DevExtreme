@@ -75,5 +75,12 @@ registerTheme({
                 color: BORDER_COLOR
             }
         }
+    },
+    funnel: {
+        item: {
+            border: {
+                color: BACKGROUND_COLOR
+            }
+        }
     }
 }, "generic.light");
