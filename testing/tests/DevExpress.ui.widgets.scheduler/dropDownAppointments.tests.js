@@ -32,6 +32,9 @@ QUnit.module("Common", {
                 if(options === "rtlEnabled") {
                     return that.rtlEnabled;
                 }
+                if(options === "dropDownAppointmentTemplate") {
+                    return "dropDownAppointment";
+                }
                 return this.callBase(options);
             },
             fire: noop,
