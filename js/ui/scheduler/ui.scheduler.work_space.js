@@ -1065,6 +1065,14 @@ var SchedulerWorkSpace = Widget.inherit({
 
     _changeAllDayVisibility: function() {
         this.$element().toggleClass(WORKSPACE_WITH_COLLAPSED_ALL_DAY_CLASS, !this.option("allDayExpanded") && this.option("showAllDayPanel"));
+        this._updateScrollable();
+    },
+
+    _updateScrollable: function() {
+        this._dateTableScrollable.update();
+
+        this._headerScrollable && this._headerScrollable.update();
+        this._sidebarScrollable && this._sidebarScrollable.update();
     },
 
     _renderTimePanel: function() {
