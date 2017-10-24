@@ -62,7 +62,7 @@ var VerticalCurrentTimeShader = Shader.inherit({
     },
 
     _getShaderOffset: function(i, width) {
-        var offset = this._workspace._getCellCount() * this._workspace._getRoundedCellWidth(i - 1) * i;
+        var offset = this._workspace._getCellCount() * this._workspace.getRoundedCellWidth(i - 1) * i;
         return this._workspace.option("rtlEnabled") ? this._$container.outerWidth() - offset - this._workspace.getTimePanelWidth() - width : offset;
     },
 

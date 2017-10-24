@@ -4,6 +4,7 @@ var $ = require("../../core/renderer"),
     eventsEngine = require("../../events/core/events_engine"),
     dataUtils = require("../../core/element_data"),
     dateUtils = require("../../core/utils/date"),
+    typeUtils = require("../../core/utils/type"),
     getPublicElement = require("../../core/utils/dom").getPublicElement,
     extend = require("../../core/utils/extend").extend,
     each = require("../../core/utils/iterator").each,
@@ -51,6 +52,9 @@ var COMPONENT_CLASS = "dx-scheduler-work-space",
     WORKSPACE_WITH_COLLAPSED_ALL_DAY_CLASS = "dx-scheduler-work-space-all-day-collapsed",
 
     WORKSPACE_WITH_MOUSE_SELECTION_CLASS = "dx-scheduler-work-space-mouse-selection",
+
+    HORIZONTAL_SIZES_CLASS = "dx-scheduler-cell-sizes-horizontal",
+    VERTICAL_SIZES_CLASS = "dx-scheduler-cell-sizes-vertical",
 
     HEADER_PANEL_CLASS = "dx-scheduler-header-panel",
     HEADER_PANEL_CELL_CLASS = "dx-scheduler-header-panel-cell",
@@ -144,7 +148,7 @@ var SchedulerWorkSpace = Widget.inherit({
 
     _getFocusedCell: function() {
         return this._$focusedCell ||
-            this._$dateTable.find("." + this._getDateTableCellClass()).eq(0);
+            this._$dateTable.find("." + DATE_TABLE_CELL_CLASS).eq(0);
     },
 
     _getCellFromNextRow: function(direction) {
@@ -484,7 +488,7 @@ var SchedulerWorkSpace = Widget.inherit({
     },
 
     _getDateTableCellClass: function() {
-        return DATE_TABLE_CELL_CLASS;
+        return DATE_TABLE_CELL_CLASS + " " + HORIZONTAL_SIZES_CLASS + " " + VERTICAL_SIZES_CLASS;
     },
 
     _getGroupRowClass: function() {
@@ -806,7 +810,7 @@ var SchedulerWorkSpace = Widget.inherit({
 
         this._createCellClickAction();
 
-        var cellSelector = "." + this._getDateTableCellClass() + ",." + ALL_DAY_TABLE_CELL_CLASS;
+        var cellSelector = "." + DATE_TABLE_CELL_CLASS + ",." + ALL_DAY_TABLE_CELL_CLASS;
         var $element = this.$element();
 
         eventsEngine.off($element, SCHEDULER_WORKSPACE_DXPOINTERDOWN_EVENT_NAME);
@@ -845,7 +849,7 @@ var SchedulerWorkSpace = Widget.inherit({
     _pointerDownHandler: function(e) {
         var $target = $(e.target);
 
-        if(!$target.hasClass(this._getDateTableCellClass()) && !$target.hasClass(ALL_DAY_TABLE_CELL_CLASS)) {
+        if(!$target.hasClass(DATE_TABLE_CELL_CLASS) && !$target.hasClass(ALL_DAY_TABLE_CELL_CLASS)) {
             this._isCellClick = false;
             return;
         }
@@ -995,7 +999,7 @@ var SchedulerWorkSpace = Widget.inherit({
     },
 
     _getHeaderPanelCellClass: function() {
-        return HEADER_PANEL_CELL_CLASS;
+        return HEADER_PANEL_CELL_CLASS + " " + HORIZONTAL_SIZES_CLASS;
     },
 
     _calculateHeaderCellRepeatCount: function() {
@@ -1020,7 +1024,7 @@ var SchedulerWorkSpace = Widget.inherit({
     },
 
     _getAllDayPanelCellClass: function() {
-        return ALL_DAY_TABLE_CELL_CLASS;
+        return ALL_DAY_TABLE_CELL_CLASS + " " + HORIZONTAL_SIZES_CLASS;
     },
 
     _getAllDayCellData: function(cell, rowIndex, cellIndex) {
@@ -1090,7 +1094,7 @@ var SchedulerWorkSpace = Widget.inherit({
     },
 
     _getTimeCellClass: function(i) {
-        return TIME_PANEL_CELL_CLASS;
+        return TIME_PANEL_CELL_CLASS + " " + VERTICAL_SIZES_CLASS;
     },
 
     _getTimeText: function(i) {
@@ -1520,7 +1524,7 @@ var SchedulerWorkSpace = Widget.inherit({
     },
 
     _getCells: function(allDay) {
-        var cellClass = allDay ? ALL_DAY_TABLE_CELL_CLASS : this._getDateTableCellClass();
+        var cellClass = allDay ? ALL_DAY_TABLE_CELL_CLASS : DATE_TABLE_CELL_CLASS;
         return this.$element().find("." + cellClass);
     },
 
@@ -1710,6 +1714,29 @@ var SchedulerWorkSpace = Widget.inherit({
 
     getCellWidth: function() {
         return this._getCells().first().outerWidth();
+    },
+
+    getRoundedCellWidth: function(groupIndex, startIndex, cellCount) {
+        if(groupIndex < 0) {
+            return 0;
+        }
+
+        var $row = this.$element().find("." + this._getDateTableRowClass()).eq(0),
+            width = 0,
+            $cells = $row.find("." + DATE_TABLE_CELL_CLASS),
+            totalCellCount = this._getCellCount() * groupIndex;
+
+        cellCount = cellCount || this._getCellCount();
+
+        if(!typeUtils.isDefined(startIndex)) {
+            startIndex = totalCellCount;
+        }
+
+        for(var i = startIndex; i < totalCellCount + cellCount; i++) {
+            width = width + $($cells).eq(i).outerWidth();
+        }
+
+        return width / (totalCellCount + cellCount - startIndex);
     },
 
     getCellHeight: function() {
@@ -1930,7 +1957,7 @@ var SchedulerWorkSpace = Widget.inherit({
         this.$element()
             .find("." + this._getDateTableRowClass())
             .first()
-            .find("." + this._getDateTableCellClass()).each(function(index) {
+            .find("." + DATE_TABLE_CELL_CLASS).each(function(index) {
                 if(index < startIndex || index > endIndex) {
                     return true;
                 }

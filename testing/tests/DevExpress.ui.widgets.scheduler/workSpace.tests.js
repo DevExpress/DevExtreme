@@ -24,6 +24,8 @@ require("ui/scheduler/ui.scheduler.work_space_work_week");
 require("ui/scheduler/ui.scheduler.work_space_month");
 
 var CELL_CLASS = "dx-scheduler-date-table-cell",
+    HORIZONTAL_SIZES_CLASS = "dx-scheduler-cell-sizes-horizontal",
+    VERTICAL_SIZES_CLASS = "dx-scheduler-cell-sizes-vertical",
     DROPPABLE_CELL_CLASS = "dx-scheduler-date-table-droppable-cell",
     ALL_DAY_TABLE_CELL_CLASS = "dx-scheduler-all-day-table-cell";
 
@@ -218,6 +220,7 @@ QUnit.testStart(function() {
 
         assert.ok($row.hasClass("dx-scheduler-time-panel-row"), "Css class of row is correct");
         assert.ok($cell.hasClass("dx-scheduler-time-panel-cell"), "Css class of cell is correct");
+        assert.ok($cell.hasClass(VERTICAL_SIZES_CLASS), "Css class of cell is correct");
     });
 
 
@@ -441,6 +444,24 @@ QUnit.testStart(function() {
         assert.ok($element.hasClass("dx-scheduler-work-space-day"), "dxSchedulerWorkSpaceDay has 'dx-scheduler-workspace-day' css class");
     });
 
+    QUnit.test("Date table cells should have a special css classes", function(assert) {
+        var $element = this.instance.$element(),
+            classes = $element.find(".dx-scheduler-date-table td").attr("class").split(" ");
+
+        assert.ok($.inArray(CELL_CLASS, classes) > -1, "Cell has a css class");
+        assert.ok($.inArray(HORIZONTAL_SIZES_CLASS, classes) > -1, "Cell has a css class");
+        assert.ok($.inArray(VERTICAL_SIZES_CLASS, classes) > -1, "Cell has a css class");
+    });
+
+    QUnit.test("Date table allDay cells should have a special css classes", function(assert) {
+        var $element = this.instance.$element(),
+            classes = $element.find(".dx-scheduler-all-day-table td").attr("class").split(" ");
+
+        assert.ok($.inArray(ALL_DAY_TABLE_CELL_CLASS, classes) > -1, "Cell has a css class");
+        assert.ok($.inArray(HORIZONTAL_SIZES_CLASS, classes) > -1, "Cell has a css class");
+        assert.notOk($.inArray(VERTICAL_SIZES_CLASS, classes) > -1, "Cell hasn't a css class");
+    });
+
     QUnit.test("Scheduler all day panel should contain one row", function(assert) {
         this.instance.option("showAllDayPanel", true);
 
@@ -493,13 +514,6 @@ QUnit.testStart(function() {
         });
 
         assert.equal(cellCounter, 48, "Each row has a two cells");
-    });
-
-    QUnit.test("Date table cells should have a special css class", function(assert) {
-        var $element = this.instance.$element(),
-            classes = $element.find(".dx-scheduler-date-table td").attr("class").split(" ");
-
-        assert.ok($.inArray(CELL_CLASS, classes) > -1, "Cell has a css class");
     });
 
     QUnit.test("Grouped cells should have a right group field in dxCellData", function(assert) {
@@ -755,6 +769,15 @@ QUnit.testStart(function() {
         var $element = this.instance.$element();
 
         assert.ok($element.hasClass("dx-scheduler-work-space-week"), "dxSchedulerWorkSpaceWeek has 'dx-scheduler-workspace-week' css class");
+    });
+
+    QUnit.test("Header cells should have a special css classes", function(assert) {
+        var $element = this.instance.$element(),
+            classes = $element.find(".dx-scheduler-header-panel th").attr("class").split(" ");
+
+        assert.ok($.inArray("dx-scheduler-header-panel-cell", classes) > -1, "Cell has a css class");
+        assert.ok($.inArray(HORIZONTAL_SIZES_CLASS, classes) > -1, "Cell has a css class");
+        assert.notOk($.inArray(VERTICAL_SIZES_CLASS, classes) > -1, "Cell hasn't a css class");
     });
 
     QUnit.test("Scheduler all day panel should contain one row & 7 cells", function(assert) {
@@ -2977,7 +3000,7 @@ QUnit.testStart(function() {
             }
         });
 
-        this.instance.$element().find(".dx-scheduler-all-day-table-cell").each(function(index) {
+        this.instance.$element().find(ALL_DAY_TABLE_CELL_CLASS).each(function(index) {
             if((index + 1) % 3 === 0) {
                 assert.ok($(this).hasClass("dx-scheduler-last-group-cell"), "AllDay panel cell has last-group class");
             } else {
