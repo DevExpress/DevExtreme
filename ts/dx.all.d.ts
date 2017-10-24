@@ -731,7 +731,7 @@ declare module DevExpress {
         /** A handler for the disposing event. Executed when the widget is removed from the DOM using the remove(), empty(), or html() jQuery methods only. */
         onDisposing?: ((e: { component?: any, element?: DevExpress.core.Element, model?: any }) => any);
         /** A handler for the optionChanged event. Executed after an option of the widget is changed. */
-        onOptionChanged?: ((e: { name?: string, fullName?: string, value?: any }) => any);
+        onOptionChanged?: ((e: { component?: any, element?: Element, model?: any, name?: string, fullName?: string, value?: any }) => any);
         /** Switches the widget to a right-to-left representation. */
         rtlEnabled?: boolean;
         /** Specifies the widget's width. */
@@ -2005,35 +2005,35 @@ declare module DevExpress.ui {
         /** A handler for the dataErrorOccurred event. Executed when an error occurs in the data source. */
         onDataErrorOccurred?: ((e: { component?: any, element?: DevExpress.core.Element, model?: any }) => any);
         /** A handler for the initNewRow event. Executed before a new row is added to the widget. */
-        onInitNewRow?: ((e: { data?: any }) => any);
+        onInitNewRow?: ((e: { component?: any, element?: Element, model?: any, data?: any }) => any);
         /** A handler for the keyDown event. Executed when the widget is in focus and a key has been pressed down. */
-        onKeyDown?: ((e: { jQueryEvent?: JQueryEventObject, handled?: boolean }) => any);
+        onKeyDown?: ((e: { component?: any, element?: Element, model?: any, jQueryEvent?: JQueryEventObject, handled?: boolean }) => any);
         /** A handler for the rowCollapsed event. Executed after a row is collapsed. */
-        onRowCollapsed?: ((e: { key?: any }) => any);
+        onRowCollapsed?: ((e: { component?: any, element?: Element, model?: any, key?: any }) => any);
         /** A handler for the rowCollapsing event. Executed before a row is collapsed. */
-        onRowCollapsing?: ((e: { key?: any, cancel?: boolean }) => any);
+        onRowCollapsing?: ((e: { component?: any, element?: Element, model?: any, key?: any, cancel?: boolean }) => any);
         /** A handler for the rowExpanded event. Executed after a row is expanded. */
-        onRowExpanded?: ((e: { key?: any }) => any);
+        onRowExpanded?: ((e: { component?: any, element?: Element, model?: any, key?: any }) => any);
         /** A handler for the rowExpanding event. Executed before a row is expanded. */
-        onRowExpanding?: ((e: { key?: any, cancel?: boolean }) => any);
+        onRowExpanding?: ((e: { component?: any, element?: Element, model?: any, key?: any, cancel?: boolean }) => any);
         /** A handler for the rowInserted event. Executed after a new row has been inserted into the data source. */
-        onRowInserted?: ((e: { data?: any, key?: any, error?: Error }) => any);
+        onRowInserted?: ((e: { component?: any, element?: Element, model?: any, data?: any, key?: any, error?: Error }) => any);
         /** A handler for the rowInserting event. Executed before a new row is inserted into the data source. */
-        onRowInserting?: ((e: { data?: any, cancel?: boolean | Promise<void> | JQueryPromise<void> }) => any);
+        onRowInserting?: ((e: { component?: any, element?: Element, model?: any, data?: any, cancel?: boolean | Promise<void> | JQueryPromise<void> }) => any);
         /** A handler for the rowRemoved event. Executed after a row has been removed from the data source. */
-        onRowRemoved?: ((e: { data?: any, key?: any, error?: Error }) => any);
+        onRowRemoved?: ((e: { component?: any, element?: Element, model?: any, data?: any, key?: any, error?: Error }) => any);
         /** A handler for the rowRemoving event. Executed before a row is removed from the data source. */
-        onRowRemoving?: ((e: { data?: any, key?: any, cancel?: boolean | Promise<void> | JQueryPromise<void> }) => any);
+        onRowRemoving?: ((e: { component?: any, element?: Element, model?: any, data?: any, key?: any, cancel?: boolean | Promise<void> | JQueryPromise<void> }) => any);
         /** A handler for the rowUpdated event. Executed after a row has been updated in the data source. */
-        onRowUpdated?: ((e: { data?: any, key?: any, error?: Error }) => any);
+        onRowUpdated?: ((e: { component?: any, element?: Element, model?: any, data?: any, key?: any, error?: Error }) => any);
         /** A handler for the rowUpdating event. Executed before a row is updated in the data source. */
-        onRowUpdating?: ((e: { oldData?: any, newData?: any, key?: any, cancel?: boolean | Promise<void> | JQueryPromise<void> }) => any);
+        onRowUpdating?: ((e: { component?: any, element?: Element, model?: any, oldData?: any, newData?: any, key?: any, cancel?: boolean | Promise<void> | JQueryPromise<void> }) => any);
         /** A handler for the rowValidating event. Executed after cells in a row are validated against validation rules. */
-        onRowValidating?: ((e: { brokenRules?: Array<any>, isValid?: boolean, key?: any, newData?: any, oldData?: any, errorText?: string }) => any);
+        onRowValidating?: ((e: { component?: any, element?: Element, model?: any, brokenRules?: Array<any>, isValid?: boolean, key?: any, newData?: any, oldData?: any, errorText?: string }) => any);
         /** A handler for the selectionChanged event. Executed after selecting a row or clearing its selection. */
-        onSelectionChanged?: ((e: { currentSelectedRowKeys?: Array<any>, currentDeselectedRowKeys?: Array<any>, selectedRowKeys?: Array<any>, selectedRowsData?: Array<any> }) => any);
+        onSelectionChanged?: ((e: { component?: any, element?: Element, model?: any, currentSelectedRowKeys?: Array<any>, currentDeselectedRowKeys?: Array<any>, selectedRowKeys?: Array<any>, selectedRowsData?: Array<any> }) => any);
         /** A handler for the toolbarPreparing event. Executed before the toolbar is created. */
-        onToolbarPreparing?: ((e: { toolbarOptions?: any }) => any);
+        onToolbarPreparing?: ((e: { component?: any, element?: Element, model?: any, toolbarOptions?: any }) => any);
         /** Specifies whether rows should be shaded differently. */
         rowAlternationEnabled?: boolean;
         /** Overridden. A configuration object specifying scrolling options. */
@@ -2362,31 +2362,31 @@ declare module DevExpress.ui {
         /** Allows you to build a master-detail interface in the grid. */
         masterDetail?: { enabled?: boolean, autoExpandAll?: boolean, template?: template };
         /** A handler for the cellClick event. */
-        onCellClick?: ((e: { jQueryEvent?: JQueryEventObject, data?: any, key?: any, value?: any, displayValue?: string, text?: string, columnIndex?: number, column?: any, rowIndex?: number, rowType?: string, cellElement?: JQuery, row?: dxDataGridRowObject }) => any) | string;
+        onCellClick?: ((e: { component?: any, element?: DevExpress.core.Element, model?: any, jQueryEvent?: JQueryEventObject, data?: any, key?: any, value?: any, displayValue?: string, text?: string, columnIndex?: number, column?: any, rowIndex?: number, rowType?: string, cellElement?: JQuery, row?: dxDataGridRowObject }) => any) | string;
         /** A handler for the cellHoverChanged event. */
-        onCellHoverChanged?: ((e: { eventType?: string, data?: any, key?: any, value?: any, text?: string, displayValue?: string, columnIndex?: number, rowIndex?: number, column?: any, rowType?: string, cellElement?: JQuery, row?: dxDataGridRowObject }) => any);
+        onCellHoverChanged?: ((e: { component?: any, element?: DevExpress.core.Element, model?: any, eventType?: string, data?: any, key?: any, value?: any, text?: string, displayValue?: string, columnIndex?: number, rowIndex?: number, column?: any, rowType?: string, cellElement?: JQuery, row?: dxDataGridRowObject }) => any);
         /** A handler for the cellPrepared event. */
-        onCellPrepared?: ((e: { data?: any, key?: any, value?: any, displayValue?: string, text?: string, columnIndex?: number, column?: any, rowIndex?: number, rowType?: string, row?: dxDataGridRowObject, isSelected?: boolean, isExpanded?: boolean, cellElement?: JQuery }) => any);
+        onCellPrepared?: ((e: { component?: any, element?: DevExpress.core.Element, model?: any, data?: any, key?: any, value?: any, displayValue?: string, text?: string, columnIndex?: number, column?: any, rowIndex?: number, rowType?: string, row?: dxDataGridRowObject, isSelected?: boolean, isExpanded?: boolean, cellElement?: JQuery }) => any);
         /** A handler for the contentReady event. Executed when the widget's content is ready. This handler may be executed multiple times during the widget's lifetime depending on the number of times its content changes. */
         onContentReady?: ((e: { component?: any, element?: DevExpress.core.Element, model?: any }) => any);
         /** A handler for the contextMenuPreparing event. */
-        onContextMenuPreparing?: ((e: { items?: Array<any>, target?: string, targetElement?: DevExpress.core.Element, columnIndex?: number, column?: any, rowIndex?: number, row?: dxDataGridRowObject }) => any);
+        onContextMenuPreparing?: ((e: { component?: any, element?: DevExpress.core.Element, model?: any, items?: Array<any>, target?: string, targetElement?: DevExpress.core.Element, columnIndex?: number, column?: any, rowIndex?: number, row?: dxDataGridRowObject }) => any);
         /** A handler for the editingStart event. */
-        onEditingStart?: ((e: { data?: any, key?: any, cancel?: boolean, column?: any }) => any);
+        onEditingStart?: ((e: { component?: any, element?: Element, model?: any, data?: any, key?: any, cancel?: boolean, column?: any }) => any);
         /** A handler for the editorPrepared event. */
-        onEditorPrepared?: ((options: { parentType?: string, value?: any, setValue?: any, updateValueTimeout?: number, width?: number, disabled?: boolean, rtlEnabled?: boolean, editorElement?: DevExpress.core.Element, readOnly?: boolean, dataField?: string, row?: dxDataGridRowObject }) => any);
+        onEditorPrepared?: ((options: { component?: any, element?: DevExpress.core.Element, model?: any, parentType?: string, value?: any, setValue?: any, updateValueTimeout?: number, width?: number, disabled?: boolean, rtlEnabled?: boolean, editorElement?: DevExpress.core.Element, readOnly?: boolean, dataField?: string, row?: dxDataGridRowObject }) => any);
         /** A handler for the editorPreparing event. */
-        onEditorPreparing?: ((e: { parentType?: string, value?: any, setValue?: any, updateValueTimeout?: number, width?: number, disabled?: boolean, rtlEnabled?: boolean, cancel?: boolean, editorElement?: DevExpress.core.Element, readOnly?: boolean, editorName?: string, editorOptions?: any, dataField?: string, row?: dxDataGridRowObject }) => any);
+        onEditorPreparing?: ((e: { component?: any, element?: DevExpress.core.Element, model?: any, parentType?: string, value?: any, setValue?: any, updateValueTimeout?: number, width?: number, disabled?: boolean, rtlEnabled?: boolean, cancel?: boolean, editorElement?: DevExpress.core.Element, readOnly?: boolean, editorName?: string, editorOptions?: any, dataField?: string, row?: dxDataGridRowObject }) => any);
         /** A handler for the exported event. */
         onExported?: ((e: any) => any);
         /** A handler for the exporting event. */
-        onExporting?: ((e: { fileName?: string, cancel?: boolean }) => any);
+        onExporting?: ((e: { component?: any, element?: Element, model?: any, fileName?: string, cancel?: boolean }) => any);
         /** A handler for the fileSaving event. */
-        onFileSaving?: ((e: { fileName?: string, format?: string, data?: Blob, cancel?: boolean }) => any);
+        onFileSaving?: ((e: { component?: any, element?: Element, model?: any, fileName?: string, format?: string, data?: Blob, cancel?: boolean }) => any);
         /** A handler for the rowClick event. */
-        onRowClick?: ((e: { jQueryEvent?: JQueryEventObject, data?: any, key?: any, values?: Array<any>, columns?: Array<any>, rowIndex?: number, rowType?: string, isSelected?: boolean, isExpanded?: boolean, groupIndex?: number, rowElement?: JQuery, handled?: boolean }) => any) | string;
+        onRowClick?: ((e: { component?: any, element?: Element, model?: any, jQueryEvent?: JQueryEventObject, data?: any, key?: any, values?: Array<any>, columns?: Array<any>, rowIndex?: number, rowType?: string, isSelected?: boolean, isExpanded?: boolean, groupIndex?: number, rowElement?: JQuery, handled?: boolean }) => any) | string;
         /** A handler for the rowPrepared event. */
-        onRowPrepared?: ((e: { data?: any, key?: any, values?: Array<any>, columns?: Array<any>, rowIndex?: number, rowType?: string, groupIndex?: number, isSelected?: boolean, isExpanded?: boolean, rowElement?: JQuery }) => any);
+        onRowPrepared?: ((e: { component?: any, element?: Element, model?: any, data?: any, key?: any, values?: Array<any>, columns?: Array<any>, rowIndex?: number, rowType?: string, groupIndex?: number, isSelected?: boolean, isExpanded?: boolean, rowElement?: JQuery }) => any);
         /** Specifies the options of a grid pager. */
         pager?: { visible?: string | boolean, showPageSizeSelector?: boolean, allowedPageSizes?: Array<number> | string, showNavigationButtons?: boolean, showInfo?: boolean, infoText?: string };
         /** Specifies paging options. */
@@ -2702,8 +2702,8 @@ declare module DevExpress.ui {
         fields?: Array<dxFilterBuilderField>;
         filterOperationDescriptions?: { equal?: string, notEqual?: string, lessThan?: string, lessThanOrEqual?: string, greaterThan?: string, greaterThanOrEqual?: string, startsWith?: string, contains?: string, notContains?: string, endsWith?: string, isBlank?: string, isNotBlank?: string };
         groupOperationDescriptions?: { and?: string, or?: string, notAnd?: string, notOr?: string };
-        onEditorPrepared?: ((e: { value?: any, setValue?: any, cancel?: boolean, editorElement?: JQuery, editorName?: string, editorOptions?: any, dataField?: string }) => any);
-        onEditorPreparing?: ((e: { value?: any, setValue?: any, cancel?: boolean, editorElement?: JQuery, editorName?: string, editorOptions?: any, dataField?: string }) => any);
+        onEditorPrepared?: ((e: { component?: any, element?: Element, model?: any, value?: any, setValue?: any, cancel?: boolean, editorElement?: JQuery, editorName?: string, editorOptions?: any, dataField?: string }) => any);
+        onEditorPreparing?: ((e: { component?: any, element?: Element, model?: any, value?: any, setValue?: any, cancel?: boolean, editorElement?: JQuery, editorName?: string, editorOptions?: any, dataField?: string }) => any);
         value?: string | Array<any>;
     }
     export class dxFilterBuilder extends Widget {
@@ -3367,19 +3367,19 @@ declare module DevExpress.ui {
         /** Specifies options configuring the load panel. */
         loadPanel?: { enabled?: boolean, text?: string, width?: number, height?: number, showIndicator?: boolean, indicatorSrc?: string, showPane?: boolean };
         /** A handler for the cellClick event. */
-        onCellClick?: ((e: { area?: string, cellElement?: DevExpress.core.Element, cell?: dxPivotGridPivotGridCell, rowIndex?: number, columnIndex?: number, columnFields?: Array<DevExpress.data.PivotGridDataSourceFields>, rowFields?: Array<DevExpress.data.PivotGridDataSourceFields>, dataFields?: Array<DevExpress.data.PivotGridDataSourceFields>, jQueryEvent?: JQueryEventObject, cancel?: boolean }) => any);
+        onCellClick?: ((e: { component?: any, element?: DevExpress.core.Element, model?: any, area?: string, cellElement?: DevExpress.core.Element, cell?: dxPivotGridPivotGridCell, rowIndex?: number, columnIndex?: number, columnFields?: Array<DevExpress.data.PivotGridDataSourceFields>, rowFields?: Array<DevExpress.data.PivotGridDataSourceFields>, dataFields?: Array<DevExpress.data.PivotGridDataSourceFields>, jQueryEvent?: JQueryEventObject, cancel?: boolean }) => any);
         /** A handler for the cellPrepared event. */
-        onCellPrepared?: ((e: { area?: string, cellElement?: DevExpress.core.Element, cell?: dxPivotGridPivotGridCell, rowIndex?: number, columnIndex?: number }) => any);
+        onCellPrepared?: ((e: { component?: any, element?: DevExpress.core.Element, model?: any, area?: string, cellElement?: DevExpress.core.Element, cell?: dxPivotGridPivotGridCell, rowIndex?: number, columnIndex?: number }) => any);
         /** A handler for the contentReady event. Executed when the widget's content is ready. This handler may be executed multiple times during the widget's lifetime depending on the number of times its content changes. */
         onContentReady?: ((e: { component?: any, element?: DevExpress.core.Element, model?: any }) => any);
         /** A handler for the contextMenuPreparing event. */
-        onContextMenuPreparing?: ((e: { items?: Array<any>, area?: string, cell?: dxPivotGridPivotGridCell, cellElement?: DevExpress.core.Element, columnIndex?: number, rowIndex?: number, dataFields?: Array<DevExpress.data.PivotGridDataSourceFields>, rowFields?: Array<DevExpress.data.PivotGridDataSourceFields>, columnFields?: Array<DevExpress.data.PivotGridDataSourceFields>, field?: DevExpress.data.PivotGridDataSourceFields }) => any);
+        onContextMenuPreparing?: ((e: { component?: any, element?: DevExpress.core.Element, model?: any, items?: Array<any>, area?: string, cell?: dxPivotGridPivotGridCell, cellElement?: DevExpress.core.Element, columnIndex?: number, rowIndex?: number, dataFields?: Array<DevExpress.data.PivotGridDataSourceFields>, rowFields?: Array<DevExpress.data.PivotGridDataSourceFields>, columnFields?: Array<DevExpress.data.PivotGridDataSourceFields>, field?: DevExpress.data.PivotGridDataSourceFields }) => any);
         /** A handler for the exported event. */
         onExported?: ((e: any) => any);
         /** A handler for the exporting event. */
-        onExporting?: ((e: { fileName?: string, cancel?: boolean }) => any);
+        onExporting?: ((e: { component?: any, element?: Element, model?: any, fileName?: string, cancel?: boolean }) => any);
         /** A handler for the fileSaving event. */
-        onFileSaving?: ((e: { fileName?: string, format?: string, data?: Blob, cancel?: boolean }) => any);
+        onFileSaving?: ((e: { component?: any, element?: Element, model?: any, fileName?: string, format?: string, data?: Blob, cancel?: boolean }) => any);
         /** Specifies the layout of items in the row header. */
         rowHeaderLayout?: string;
         /** A configuration object specifying scrolling options. */
@@ -3433,7 +3433,7 @@ declare module DevExpress.ui {
         /** A handler for the contentReady event. Executed when the widget's content is ready. This handler may be executed multiple times during the widget's lifetime depending on the number of times its content changes. */
         onContentReady?: ((e: { component?: any, element?: DevExpress.core.Element, model?: any }) => any);
         /** A handler for the contextMenuPreparing event. */
-        onContextMenuPreparing?: ((e: { items?: Array<any>, area?: string, field?: DevExpress.data.PivotGridDataSourceFields, jQueryEvent?: JQueryEventObject }) => any);
+        onContextMenuPreparing?: ((e: { component?: any, element?: DevExpress.core.Element, model?: any, items?: Array<any>, area?: string, field?: DevExpress.data.PivotGridDataSourceFields, jQueryEvent?: JQueryEventObject }) => any);
         /** Strings that can be changed or localized in the PivotGridFieldChooser widget. */
         texts?: { columnFields?: string, rowFields?: string, dataFields?: string, filterFields?: string, allFields?: string };
     }
@@ -4192,27 +4192,27 @@ declare module DevExpress.ui {
         /** Specifies which data field provides keys for nodes. */
         keyExpr?: string | Function;
         /** A handler for the cellClick event. Executed after a user clicks a cell. */
-        onCellClick?: ((e: { jQueryEvent?: JQueryEventObject, data?: any, key?: any, value?: any, displayValue?: string, text?: string, columnIndex?: number, column?: any, rowIndex?: number, rowType?: string, cellElement?: JQuery, row?: dxTreeListRowObject }) => any) | string;
+        onCellClick?: ((e: { component?: any, element?: DevExpress.core.Element, model?: any, jQueryEvent?: JQueryEventObject, data?: any, key?: any, value?: any, displayValue?: string, text?: string, columnIndex?: number, column?: any, rowIndex?: number, rowType?: string, cellElement?: JQuery, row?: dxTreeListRowObject }) => any) | string;
         /** A handler for the cellHoverChanged event. Executed after the pointer enters or leaves a cell. */
-        onCellHoverChanged?: ((e: { eventType?: string, data?: any, key?: any, value?: any, text?: string, displayValue?: string, columnIndex?: number, rowIndex?: number, column?: any, rowType?: string, cellElement?: JQuery, row?: dxTreeListRowObject }) => any);
+        onCellHoverChanged?: ((e: { component?: any, element?: DevExpress.core.Element, model?: any, eventType?: string, data?: any, key?: any, value?: any, text?: string, displayValue?: string, columnIndex?: number, rowIndex?: number, column?: any, rowType?: string, cellElement?: JQuery, row?: dxTreeListRowObject }) => any);
         /** A handler for the cellPrepared event. Executed after the widget creates a cell. */
-        onCellPrepared?: ((e: { data?: any, key?: any, value?: any, displayValue?: string, text?: string, columnIndex?: number, column?: any, rowIndex?: number, rowType?: string, row?: dxTreeListRowObject, isSelected?: boolean, isExpanded?: boolean, cellElement?: JQuery }) => any);
+        onCellPrepared?: ((e: { component?: any, element?: DevExpress.core.Element, model?: any, data?: any, key?: any, value?: any, displayValue?: string, text?: string, columnIndex?: number, column?: any, rowIndex?: number, rowType?: string, row?: dxTreeListRowObject, isSelected?: boolean, isExpanded?: boolean, cellElement?: JQuery }) => any);
         /** A handler for the contentReady event. Executed when the widget's content is ready. */
         onContentReady?: ((e: { component?: any, element?: DevExpress.core.Element, model?: any }) => any);
         /** A handler for the contextMenuPreparing event. Executed before a context menu is rendered. */
-        onContextMenuPreparing?: ((e: { items?: Array<any>, target?: string, targetElement?: DevExpress.core.Element, columnIndex?: number, column?: any, rowIndex?: number, row?: dxTreeListRowObject }) => any);
+        onContextMenuPreparing?: ((e: { component?: any, element?: DevExpress.core.Element, model?: any, items?: Array<any>, target?: string, targetElement?: DevExpress.core.Element, columnIndex?: number, column?: any, rowIndex?: number, row?: dxTreeListRowObject }) => any);
         /** A handler for editingStart. Executed before a cell or row switches to the editing state. */
-        onEditingStart?: ((e: { data?: any, key?: any, cancel?: boolean, column?: any }) => any);
+        onEditingStart?: ((e: { component?: any, element?: Element, model?: any, data?: any, key?: any, cancel?: boolean, column?: any }) => any);
         /** A handler for the editorPrepared event. Executed after an editor is created. */
-        onEditorPrepared?: ((options: { parentType?: string, value?: any, setValue?: any, updateValueTimeout?: number, width?: number, disabled?: boolean, rtlEnabled?: boolean, editorElement?: DevExpress.core.Element, readOnly?: boolean, dataField?: string, row?: dxTreeListRowObject }) => any);
+        onEditorPrepared?: ((options: { component?: any, element?: DevExpress.core.Element, model?: any, parentType?: string, value?: any, setValue?: any, updateValueTimeout?: number, width?: number, disabled?: boolean, rtlEnabled?: boolean, editorElement?: DevExpress.core.Element, readOnly?: boolean, dataField?: string, row?: dxTreeListRowObject }) => any);
         /** A handler for the editorPreparing event. Executed before an editor is created. */
-        onEditorPreparing?: ((e: { parentType?: string, value?: any, setValue?: any, updateValueTimeout?: number, width?: number, disabled?: boolean, rtlEnabled?: boolean, cancel?: boolean, editorElement?: DevExpress.core.Element, readOnly?: boolean, editorName?: string, editorOptions?: any, dataField?: string, row?: dxTreeListRowObject }) => any);
+        onEditorPreparing?: ((e: { component?: any, element?: DevExpress.core.Element, model?: any, parentType?: string, value?: any, setValue?: any, updateValueTimeout?: number, width?: number, disabled?: boolean, rtlEnabled?: boolean, cancel?: boolean, editorElement?: DevExpress.core.Element, readOnly?: boolean, editorName?: string, editorOptions?: any, dataField?: string, row?: dxTreeListRowObject }) => any);
         /** A handler for the nodesInitialized event. Executed after all nodes in the widget are initialized. */
-        onNodesInitialized?: ((e: { root?: dxTreeListNode }) => any);
+        onNodesInitialized?: ((e: { component?: any, element?: DevExpress.core.Element, model?: any, root?: dxTreeListNode }) => any);
         /** A handler for the rowClick event. Executed when a user clicks a row. */
-        onRowClick?: ((e: { jQueryEvent?: JQueryEventObject, data?: any, key?: any, values?: Array<any>, columns?: Array<any>, rowIndex?: number, rowType?: string, isSelected?: boolean, isExpanded?: boolean, rowElement?: JQuery, handled?: boolean }) => any) | string;
+        onRowClick?: ((e: { component?: any, element?: Element, model?: any, jQueryEvent?: JQueryEventObject, data?: any, key?: any, values?: Array<any>, columns?: Array<any>, rowIndex?: number, rowType?: string, isSelected?: boolean, isExpanded?: boolean, rowElement?: JQuery, handled?: boolean }) => any) | string;
         /** A handler for the rowPrepared event. Executed after the widget creates a row. */
-        onRowPrepared?: ((e: { data?: any, key?: any, values?: Array<any>, columns?: Array<any>, rowIndex?: number, rowType?: string, isSelected?: boolean, isExpanded?: boolean, rowElement?: JQuery }) => any);
+        onRowPrepared?: ((e: { component?: any, element?: Element, model?: any, data?: any, key?: any, values?: Array<any>, columns?: Array<any>, rowIndex?: number, rowType?: string, isSelected?: boolean, isExpanded?: boolean, rowElement?: JQuery }) => any);
         /** Specifies which data field provides parent keys. */
         parentIdExpr?: string | Function;
         /** Specifies what operations are performed on the server. */
@@ -5308,9 +5308,9 @@ declare module DevExpress.viz {
         /** A handler for the exported event. Executed after data from the widget is exported. */
         onExported?: ((e: any) => any);
         /** A handler for the exporting event. Executed before data from the widget is exported. */
-        onExporting?: ((e: { fileName?: string, cancel?: boolean, format?: string }) => any);
+        onExporting?: ((e: { component?: any, element?: Element, model?: any, fileName?: string, cancel?: boolean, format?: string }) => any);
         /** A handler for the fileSaving event. Executed before a file with exported data is saved on the user's local storage. */
-        onFileSaving?: ((e: { fileName?: string, format?: string, data?: Blob, cancel?: boolean }) => any);
+        onFileSaving?: ((e: { component?: any, element?: Element, model?: any, fileName?: string, format?: string, data?: Blob, cancel?: boolean }) => any);
         /** A handler for the incidentOccurred event. Executed when an error or warning appears in the widget. */
         onIncidentOccurred?: ((e: { component?: any, element?: any, target?: any }) => any);
         /** Notifies the widget that it is embedded into an HTML page that uses a tag modifying the path. */
