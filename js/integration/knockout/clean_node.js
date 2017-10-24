@@ -4,10 +4,9 @@ var elementData = require("../../core/element_data"),
     afterCleanData = elementData.afterCleanData,
     jQuery = require("jquery"),
     ko = require("knockout"),
-    compareVersion = require("../../core/utils/version").compare,
-    useJQuery = require("../../core/config")().useJQuery;
+    compareVersion = require("../../core/utils/version").compare;
 
-if(!useJQuery || (jQuery && compareVersion(jQuery.fn.jquery, [2, 0]) >= 0)) {
+if(jQuery && compareVersion(jQuery.fn.jquery, [2, 0]) >= 0) {
     afterCleanData(function(nodes) {
         for(var i = 0; i < nodes.length; i++) {
             nodes[i].cleanedByJquery = true;
