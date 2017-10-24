@@ -1100,7 +1100,7 @@ QUnit.test("During indents estimation, format scale labels the same way the axis
     this.createWidget({
         scale: {
             startValue: 1,
-            endValue: 10,
+            endValue: 10.5,
             tickInterval: 1.5,
             label: {
                 visible: true
@@ -1109,7 +1109,7 @@ QUnit.test("During indents estimation, format scale labels the same way the axis
     });
 
     assert.strictEqual(this.renderer.text.getCall(1).args[0], "1.0");
-    assert.strictEqual(this.renderer.text.getCall(2).args[0], "10.0");
+    assert.strictEqual(this.renderer.text.getCall(2).args[0], "10.5");
 });
 
 QUnit.test("rangeContainer canvas if sliderMarker placeholderSize is defined", function(assert) {

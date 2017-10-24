@@ -6621,10 +6621,12 @@ QUnit.test("Vertical axis. End value > start value", function(assert) {
 
 QUnit.test("Strips on categories", function(assert) {
     //arrange
-    var renderer = this.renderer;
+    var renderer = this.renderer,
+        categories = ["one", "two", "three"];
     this.createAxis();
     this.updateOptions({
         isHorizontal: true,
+        categories: categories,
         strips: [{
             startValue: "two",
             endValue: "three",
@@ -6632,10 +6634,7 @@ QUnit.test("Strips on categories", function(assert) {
         }]
     });
 
-    this.translator.stub("getBusinessRange").returns({
-        addRange: sinon.stub(),
-        categories: ["one", "two", "three"]
-    });
+    this.axis.setBusinessRange({ categories: categories });
     this.translator.stub("translate").withArgs("two", -1).returns(20);
     this.translator.stub("translate").withArgs("three", 1).returns(40);
     this.axis.parser = function(value) {
@@ -6651,10 +6650,12 @@ QUnit.test("Strips on categories", function(assert) {
 
 QUnit.test("Strips on categories, startValue > endValue", function(assert) {
     //arrange
-    var renderer = this.renderer;
+    var renderer = this.renderer,
+        categories = ["one", "two", "three"];
     this.createAxis();
     this.updateOptions({
         isHorizontal: true,
+        categories: categories,
         strips: [{
             startValue: "three",
             endValue: "two",
@@ -6662,10 +6663,7 @@ QUnit.test("Strips on categories, startValue > endValue", function(assert) {
         }]
     });
 
-    this.translator.stub("getBusinessRange").returns({
-        addRange: sinon.stub(),
-        categories: ["one", "two", "three"]
-    });
+    this.axis.setBusinessRange({ categories: categories });
     this.translator.stub("translate").withArgs("two", -1).returns(20);
     this.translator.stub("translate").withArgs("three", 1).returns(40);
     this.axis.parser = function(value) {
@@ -6681,10 +6679,12 @@ QUnit.test("Strips on categories, startValue > endValue", function(assert) {
 
 QUnit.test("Strips on categories, no such categories - strip is not drawn", function(assert) {
     //arrange
-    var renderer = this.renderer;
+    var renderer = this.renderer,
+        categories = ["one", "two", "three"];
     this.createAxis();
     this.updateOptions({
         isHorizontal: true,
+        categories: categories,
         strips: [{
             startValue: "some1",
             endValue: "some2",
@@ -6692,10 +6692,7 @@ QUnit.test("Strips on categories, no such categories - strip is not drawn", func
         }]
     });
 
-    this.translator.stub("getBusinessRange").returns({
-        addRange: sinon.stub(),
-        categories: ["one", "two", "three"]
-    });
+    this.axis.setBusinessRange({ categories: categories });
     this.translator.stub("translate").withArgs("two", -1).returns(20);
     this.translator.stub("translate").withArgs("three", 1).returns(40);
     this.axis.parser = function(value) {
@@ -6710,10 +6707,12 @@ QUnit.test("Strips on categories, no such categories - strip is not drawn", func
 
 QUnit.test("Strips on categories, datetime type", function(assert) {
     //arrange
-    var renderer = this.renderer;
+    var renderer = this.renderer,
+        categories = [new Date(2017, 4, 5), new Date(2017, 4, 7)];
     this.createAxis();
     this.updateOptions({
         isHorizontal: true,
+        categories: categories,
         strips: [{
             startValue: new Date(2017, 4, 5),
             endValue: new Date(2017, 4, 7),
@@ -6721,10 +6720,7 @@ QUnit.test("Strips on categories, datetime type", function(assert) {
         }]
     });
 
-    this.translator.stub("getBusinessRange").returns({
-        addRange: sinon.stub(),
-        categories: [new Date(2017, 4, 5), new Date(2017, 4, 7)]
-    });
+    this.axis.setBusinessRange({ categories: categories });
     this.translator.stub("translate").withArgs(new Date(2017, 4, 5), -1).returns(20);
     this.translator.stub("translate").withArgs(new Date(2017, 4, 7), 1).returns(40);
     this.axis.parser = function(value) {
