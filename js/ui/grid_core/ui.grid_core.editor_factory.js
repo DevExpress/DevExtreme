@@ -234,7 +234,7 @@ module.exports = {
               * @type_function_param1_field9 disabled:boolean
               * @type_function_param1_field10 rtlEnabled:boolean
               * @type_function_param1_field11 cancel:boolean
-              * @type_function_param1_field12 editorElement:Element
+              * @type_function_param1_field12 editorElement:dxElement
               * @type_function_param1_field13 readOnly:boolean
               * @type_function_param1_field14 editorName:string
               * @type_function_param1_field15 editorOptions:object
@@ -257,7 +257,7 @@ module.exports = {
               * @type_function_param1_field9 disabled:boolean
               * @type_function_param1_field10 rtlEnabled:boolean
               * @type_function_param1_field11 cancel:boolean
-              * @type_function_param1_field12 editorElement:Element
+              * @type_function_param1_field12 editorElement:dxElement
               * @type_function_param1_field13 readOnly:boolean
               * @type_function_param1_field14 editorName:string
               * @type_function_param1_field15 editorOptions:object
@@ -279,7 +279,7 @@ module.exports = {
               * @type_function_param1_field8 width:number
               * @type_function_param1_field9 disabled:boolean
               * @type_function_param1_field10 rtlEnabled:boolean
-              * @type_function_param1_field11 editorElement:Element
+              * @type_function_param1_field11 editorElement:dxElement
               * @type_function_param1_field12 readOnly:boolean
               * @type_function_param1_field13 dataField:string
               * @type_function_param1_field14 row:dxDataGridRowObject
@@ -299,7 +299,7 @@ module.exports = {
               * @type_function_param1_field8 width:number
               * @type_function_param1_field9 disabled:boolean
               * @type_function_param1_field10 rtlEnabled:boolean
-              * @type_function_param1_field11 editorElement:Element
+              * @type_function_param1_field11 editorElement:dxElement
               * @type_function_param1_field12 readOnly:boolean
               * @type_function_param1_field13 dataField:string
               * @type_function_param1_field14 row:dxTreeListRowObject

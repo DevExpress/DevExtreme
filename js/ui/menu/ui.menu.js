@@ -129,7 +129,7 @@ var Menu = MenuBase.inherit({
             * @name dxMenuOptions_onSubmenuShowing
             * @publicName onSubmenuShowing
             * @extends Action
-            * @type_function_param1_field4 rootItem:Element
+            * @type_function_param1_field4 rootItem:dxElement
             * @action
             */
             onSubmenuShowing: null,
@@ -138,7 +138,7 @@ var Menu = MenuBase.inherit({
             * @name dxMenuOptions_onSubmenuShown
             * @publicName onSubmenuShown
             * @extends Action
-            * @type_function_param1_field4 rootItem:Element
+            * @type_function_param1_field4 rootItem:dxElement
             * @action
             */
             onSubmenuShown: null,
@@ -147,7 +147,7 @@ var Menu = MenuBase.inherit({
             * @name dxMenuOptions_onSubmenuHiding
             * @publicName onSubmenuHiding
             * @extends Action
-            * @type_function_param1_field4 rootItem:Element
+            * @type_function_param1_field4 rootItem:dxElement
             * @type_function_param1_field5 cancel:boolean
             * @action
             */
@@ -157,7 +157,7 @@ var Menu = MenuBase.inherit({
             * @name dxMenuOptions_onSubmenuHidden
             * @publicName onSubmenuHidden
             * @extends Action
-            * @type_function_param1_field4 rootItem:Element
+            * @type_function_param1_field4 rootItem:dxElement
             * @action
             */
             onSubmenuHidden: null,

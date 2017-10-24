@@ -363,28 +363,28 @@ module.exports = {
              * @name GridBaseOptions_columns_cellTemplate
              * @publicName cellTemplate
              * @type template
-             * @type_function_param1 cellElement:Element
+             * @type_function_param1 cellElement:dxElement
              * @type_function_param2 cellInfo:object
              */
             /**
              * @name GridBaseOptions_columns_headerCellTemplate
              * @publicName headerCellTemplate
              * @type template
-             * @type_function_param1 columnHeader:Element
+             * @type_function_param1 columnHeader:dxElement
              * @type_function_param2 headerInfo:object
              */
             /**
              * @name GridBaseOptions_columns_editCellTemplate
              * @publicName editCellTemplate
              * @type template
-             * @type_function_param1 cellElement:Element
+             * @type_function_param1 cellElement:dxElement
              * @type_function_param2 cellInfo:object
              */
             /**
              * @name dxDataGridOptions_columns_groupCellTemplate
              * @publicName groupCellTemplate
              * @type template
-             * @type_function_param1 cellElement:Element
+             * @type_function_param1 cellElement:dxElement
              * @type_function_param2 cellInfo:object
              */
             /**
