@@ -753,8 +753,9 @@ var FilterBuilder = Widget.inherit({
                 .text(valueText)
                 .appendTo($container);
 
-        that._subscribeOnClickAndEnterKey($text, function() {
+        that._subscribeOnClickAndEnterKey($text, function(e) {
             that._createValueEditorWithEvents(item, field, $container);
+            e.stopPropagation();
         }, "keyup");
 
         return $text;
@@ -877,7 +878,7 @@ var FilterBuilder = Widget.inherit({
         eventsEngine.on($button, "click", handler);
         eventsEngine.on($button, keyEvent || "keydown", function(e) {
             if(e.keyCode === 13) {
-                handler();
+                handler(e);
             }
         });
     }
