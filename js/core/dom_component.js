@@ -96,7 +96,7 @@ var DOMComponent = Component.inherit({
     /**
     * @name DOMComponentMethods_ctor
     * @publicName ctor(element,options)
-    * @param1 element:Element
+    * @param1 element:dxElement
     * @param2 options:DOMComponentOptions|undefined
     * @hidden
     */
@@ -321,7 +321,7 @@ var DOMComponent = Component.inherit({
     * @default null
     * @type_function_param1 e:object
     * @type_function_param1_field1 component:object
-    * @type_function_param1_field2 element:Element
+    * @type_function_param1_field2 element:dxElement
     * @type_function_param1_field3 model:object
     **/
     _defaultActionArgs: function() {
@@ -396,7 +396,7 @@ var DOMComponent = Component.inherit({
     /**
     * @name domcomponentmethods_element
     * @publicName element()
-    * @return Element
+    * @return dxElement
     */
     element: function() {
         return getPublicElement(this.$element());
@@ -421,7 +421,7 @@ var DOMComponent = Component.inherit({
 * @static
 * @section uiWidgets
 * @publicName getInstance(element)
-* @param1 element:Element
+* @param1 element:dxElement
 * @return DOMComponent
 */
 DOMComponent.getInstance = function(element) {

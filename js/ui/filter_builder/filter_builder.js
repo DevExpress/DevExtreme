@@ -210,7 +210,7 @@ var FilterBuilder = Widget.inherit({
              * @type_function_param1_field2 filterOperation:string
              * @type_function_param1_field3 field:dxFilterBuilderField
              * @type_function_param1_field4 setValue:function
-             * @type_function_param2 container:Element
+             * @type_function_param2 container:dxElement
              * @type_function_return string|Node|jQuery
              */
 
