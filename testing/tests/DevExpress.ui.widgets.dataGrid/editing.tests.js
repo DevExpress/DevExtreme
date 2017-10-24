@@ -10173,6 +10173,71 @@ QUnit.test("Custom items", function(assert) {
     assert.ok(!formItems[2].template, "form item 2 have no template");
 });
 
+//T558721
+QUnit.test("Custom item with dataField that equals to band caption", function(assert) {
+    var that = this,
+        testElement = $('#container');
+
+    that.options.columns = [{
+        caption: "room",
+        columns: [{ dataField: "room" }]
+    }];
+
+    that.options.editing = {
+        mode: "form",
+        allowUpdating: true,
+        form: {
+            items: [{
+                dataField: "room"
+            }]
+        }
+    };
+
+    that.setupModules(that);
+
+    that.rowsView.render(testElement);
+
+    //act
+    that.editRow(0);
+
+    //assert
+    var formItems = testElement.find(".dx-form").dxForm("instance")._testResultItems;
+
+    assert.equal(formItems.length, 1, "form item count");
+    assert.equal(formItems[0].column.dataField, "room", "form item 0 column dataField");
+});
+
+QUnit.test("Custom item with name", function(assert) {
+    var that = this,
+        testElement = $('#container');
+
+    that.options.columns[3].name = "test";
+
+    that.options.editing = {
+        mode: "form",
+        allowUpdating: true,
+        form: {
+            items: [{
+                name: "test"
+            }]
+        }
+    };
+
+    that.setupModules(that);
+
+    that.rowsView.render(testElement);
+
+    //act
+    that.editRow(0);
+
+    //assert
+    var formItems = testElement.find(".dx-form").dxForm("instance")._testResultItems;
+
+    assert.equal(formItems.length, 1, "form item count");
+    assert.equal(formItems[0].column.dataField, "phone", "form item 0 column dataField");
+    assert.equal(formItems[0].column.name, "test", "form item 0 column name");
+});
+
 QUnit.test("Save and cancel buttons", function(assert) {
     this.setupModules(this);
 
