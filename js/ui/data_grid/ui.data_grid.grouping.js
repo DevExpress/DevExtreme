@@ -284,6 +284,8 @@ var GroupingDataControllerExtender = (function() {
                     that.executeAction(expanded ? "onRowCollapsed" : "onRowExpanded", args);
                 });
             }
+
+            return $.Deferred().resolve();
         },
         _changeRowExpandCore: function(key) {
             var that = this,
@@ -314,6 +316,7 @@ var GroupingDataControllerExtender = (function() {
          * @name dxDataGridMethods_expandRow
          * @publicName expandRow(key)
          * @param1 key:any
+         * @return Promise
          */
         expandRow: function(key) {
             if(!this.isRowExpanded(key)) {
@@ -325,6 +328,7 @@ var GroupingDataControllerExtender = (function() {
          * @name dxDataGridMethods_collapseRow
          * @publicName collapseRow(key)
          * @param1 key:any
+         * @return Promise
          */
         collapseRow: function(key) {
             if(this.isRowExpanded(key)) {

@@ -2382,10 +2382,10 @@ declare module DevExpress.ui {
         isRowExpanded(key: any): boolean;
 
         /** @docid dxTreeListMethods_expandRow */
-        expandRow(key: any): void;
+        expandRow(key: any): JQueryPromise<any>;
 
         /** @docid dxTreeListMethods_collapseRow */
-        collapseRow(key: any): void;
+        collapseRow(key: any): JQueryPromise<any>;
 
         /** @docid dxTreeListMethods_getSelectedRowsData */
         getSelectedRowsData(): Array<any>;
@@ -2440,10 +2440,10 @@ declare module DevExpress.ui {
         isRowExpanded(key: any): boolean;
 
         /** @docid dxDataGridMethods_expandRow */
-        expandRow(key: any): void;
+        expandRow(key: any): JQueryPromise<any>;
 
         /** @docid dxDataGridMethods_collapseRow */
-        collapseRow(key: any): void;
+        collapseRow(key: any): JQueryPromise<any>;
 
         /** @docid dxDataGridMethods_insertRow */
         insertRow(): void;
