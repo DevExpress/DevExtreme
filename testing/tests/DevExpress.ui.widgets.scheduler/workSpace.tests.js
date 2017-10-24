@@ -211,6 +211,15 @@ QUnit.testStart(function() {
         assert.ok($element.find(".dx-scheduler-date-table").parent().hasClass("dx-scrollable-content"), "Scrollable contains date table");
     });
 
+    QUnit.test("Scheduler workspace scrollables should be updated after allDayExpanded option changed", function(assert) {
+        this.instance.option("allDayExpanded", false);
+        var stub = sinon.stub(this.instance, "_updateScrollable");
+
+        this.instance.option("allDayExpanded", true);
+
+        assert.ok(stub.calledOnce, "Scrollables were updated");
+    });
+
     QUnit.test("Time panel cells and rows should have special css classes", function(assert) {
         var $element = this.instance.$element(),
             $row = $element.find(".dx-scheduler-time-panel tr").first(),
