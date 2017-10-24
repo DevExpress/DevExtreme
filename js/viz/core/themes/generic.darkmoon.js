@@ -75,5 +75,8 @@ registerTheme({
                 color: BORDER_COLOR
             }
         }
-    }
+    },
+    barGauge: {
+        backgroundColor: "#445066"
+    },
 }, "generic.dark");

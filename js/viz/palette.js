@@ -68,9 +68,9 @@ var palettes = {
         gradientSet: ["#fb7764", "#73d47f"]
     },
     "darkmoon": {
-        simpleSet: ["#3debd3", "#ffd990", "#75e89a", "#f998b3", "#4aaaa0", "#a5aef1"],
+        simpleSet: ["#4ddac1", "#f4c99a", "#80dd9b", "#f998b3", "#4aaaa0", "#a5aef1"],
         indicatingSet: ["#59d8a4", "#f0ad4e", "#f9517e"],
-        gradientSet: ["#3debd3", "#ffd990"]
+        gradientSet: ["#4ddac1", "#f4c99a"]
     },
     "softblue": {
         simpleSet: ["#7ab8eb", "#97da97", "#facb86", "#e78683", "#839bda", "#4db7be"],
