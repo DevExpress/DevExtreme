@@ -59,6 +59,7 @@ var config = {
     * @name globalConfig_useJQuery
     * @publicName useJQuery
     * @type boolean
+    * @hidden
     */
     useJQuery: undefined
 };

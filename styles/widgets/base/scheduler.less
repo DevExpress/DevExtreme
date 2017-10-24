@@ -10,7 +10,7 @@
 
 @SCHEDULER_SWITCHER_TAB_WIDTH: 100px;
 
-@SCHEDULER_TIMEPANEL_CELL_OFFSET: 10px;
+@SCHEDULER_TIMEPANEL_CELL_OFFSET: 20px;
 
 @SCHEDULER_WORKSPACE_INFO_FONT_SIZE: 20px;
 
@@ -1047,7 +1047,7 @@
     }
 }
 
-.dx-scheduler-work-space-day:not(.dx-scheduler-work-space-count) {
+.dx-scheduler-work-space-day:not(.dx-scheduler-work-space-count):not(.dx-scheduler-work-space-grouped)  {
     .dx-scheduler-header-panel-cell,
     .dx-scheduler-date-table-cell,
     .dx-scheduler-all-day-table-cell {
@@ -1384,13 +1384,13 @@
     color: @SCHEDULER_PANEL_TEXT_COLOR;
     position: relative;
     width: 100%;
-    text-align: center;
+    text-align: right;
     vertical-align: top;
     height: @SCHEDULER_WORKSPACE_DATE_TABLE_CELL_HEIGHT;
-    padding-left: @SCHEDULER_TIMEPANEL_CELL_OFFSET;
+    padding-right: @SCHEDULER_TIMEPANEL_CELL_OFFSET;
     
     > div{
-        margin-top: -13px;
+        margin-top: -12px;
     }
     
     .dx-scheduler-small & {
@@ -2000,7 +2000,7 @@
         }
     }
 
-    .dx-scheduler-time-panel tbody:after {
+    .dx-scheduler-time-panel-cell:after {
         display: none;
     }
 
@@ -2181,8 +2181,9 @@
     }
 
     .dx-scheduler-time-panel-cell {
-        padding-left: 0;
-        padding-right: @SCHEDULER_TIMEPANEL_CELL_OFFSET;
+        text-align: left;
+        padding-left: @SCHEDULER_TIMEPANEL_CELL_OFFSET;
+        padding-right: 0;
 
         &:after {
             right: 0;

@@ -81,7 +81,7 @@ var SchedulerWorkSpaceDay = SchedulerWorkSpace.inherit({
     },
 
     _addLastGroupCellClass: function(cellClass, index) {
-        if(this._isWorkSpaceWithCount() && (index % this.option("intervalCount")) === 0) {
+        if(index % this.option("intervalCount") === 0) {
             return cellClass + " " + LAST_GROUP_CELL_CLASS;
         }
 
