@@ -68,10 +68,6 @@ Callback.prototype.empty = function(fn) {
     return this;
 };
 
-Callback.prototype.isEmpty = function() {
-    return !this._list.length;
-};
-
 Callback.prototype.fireWith = function(context, args) {
     var queue = this._queue;
 
