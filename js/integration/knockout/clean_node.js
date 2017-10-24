@@ -2,12 +2,13 @@
 
 var elementData = require("../../core/element_data"),
     afterCleanData = elementData.afterCleanData,
-    jQuery = require("jquery"),
+    strategyChanging = elementData.strategyChanging,
     ko = require("knockout"),
-    compareVersion = require("../../core/utils/version").compare,
-    useJQuery = require("../../core/config")().useJQuery;
+    compareVersion = require("../../core/utils/version").compare;
 
-if(!useJQuery || (jQuery && compareVersion(jQuery.fn.jquery, [2, 0]) >= 0)) {
+var originalKOCleanExternalData = ko.utils.domNodeDisposal.cleanExternalData;
+
+var patchCleanData = function() {
     afterCleanData(function(nodes) {
         for(var i = 0; i < nodes.length; i++) {
             nodes[i].cleanedByJquery = true;
@@ -31,5 +32,18 @@ if(!useJQuery || (jQuery && compareVersion(jQuery.fn.jquery, [2, 0]) >= 0)) {
             elementData.cleanData([node]);
         }
     };
+};
 
-}
+var restoreOriginCleanData = function() {
+    afterCleanData(function() {});
+    ko.utils.domNodeDisposal.cleanExternalData = originalKOCleanExternalData;
+};
+
+patchCleanData();
+
+strategyChanging.add(function(strategy) {
+    var isJQuery = !!strategy.fn;
+    if(isJQuery && compareVersion(strategy.fn.jquery, [2, 0]) >= 0) {
+        restoreOriginCleanData();
+    }
+});
