@@ -426,7 +426,7 @@ QUnit.module("Rendering", function() {
         $valueButton.trigger($.Event("keyup", { keyCode: 13 }));
 
         assert.notOk(container.find("." + FILTER_BUILDER_ITEM_VALUE_TEXT_CLASS).length);
-        assert.ok(container.find(".dx-texteditor"));
+        assert.ok(container.find(".dx-texteditor").length);
     });
 });
 
