@@ -771,6 +771,23 @@ QUnit.test("T321308: dxPivotGrid with XMLA store - uncaught exception occurs whe
         .always(done);
 });
 
+QUnit.test("T566739. Get All field values without load values", function(assert) {
+    var done = assert.async();
+    this.store.load({
+        columns: [{ dataField: "[Product].[Category]" }],
+        rows: [],
+        values: [
+            { dataField: "[Measures].[Internet Order Count]", caption: 'Data1' },
+            { dataField: "[Measures].[Growth in Customer Base]", caption: 'Data2' },
+            { dataField: "[Measures].[Customer Count]", caption: 'Data3' }
+        ],
+        skipValues: true
+    }).done(function(data) {
+        assert.deepEqual(data.columns, CATEGORIES_DATA_WITH_COMPONENTS);
+    }).fail(getFailCallBack(assert))
+        .always(done);
+});
+
 QUnit.module("Hierarchies", testEnvironment);
 
 QUnit.test("Load from hierachy", function(assert) {
@@ -3654,7 +3671,23 @@ QUnit.test("No LocaleIdentifier in query if unknown locale is set", function(ass
     } finally {
         localization.locale(locale);
     }
+});
 
+QUnit.test("T566739. Do not generate CrossJoin in select statement if skipValues is set to true", function(assert) {
+    this.store.load({
+        columns: [{ dataField: "[Product].[Category]" }],
+        rows: [],
+        values: [
+            { dataField: "[Measures].[Internet Order Count]", caption: 'Data1' },
+            { dataField: "[Measures].[Growth in Customer Base]", caption: 'Data2' },
+            { dataField: "[Measures].[Customer Count]", caption: 'Data3' }
+        ],
+        skipValues: true
+    });
+
+    var select = this.getQuery();
+
+    assert.ok(select.indexOf("SELECT [DX_columns] DIMENSION PROPERTIES PARENT_UNIQUE_NAME,") !== -1);
 });
 
 

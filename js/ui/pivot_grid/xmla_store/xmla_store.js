@@ -232,7 +232,7 @@ exports.XmlaStore = Class.inherit((function() {
             result.push(declare(union(crossJoins), withArray, "[" + "DX_" + axisName + "]"));
         }
 
-        if(axisName === "columns" && cells.length) {
+        if(axisName === "columns" && cells.length && !options.skipValues) {
             result.push(cellsString);
         }
 
@@ -320,7 +320,7 @@ exports.XmlaStore = Class.inherit((function() {
             axisStrings = [],
             dataFields = prepareDataFields(withArray, values);
 
-        parseOptions.measureCount = values.length;
+        parseOptions.measureCount = options.skipValues ? 1 : values.length;
         parseOptions.visibleLevels = {};
 
         if(options.headerName && options.path) {
@@ -396,7 +396,7 @@ exports.XmlaStore = Class.inherit((function() {
         return getNodeText(getFirstChild(node, childTagName));
     }
 
-    function parseAxes(xml) {
+    function parseAxes(xml, skipValues) {
         var axes = [];
 
         each(xml.getElementsByTagName("Axis"), function(_, axisElement) {
@@ -414,7 +414,7 @@ exports.XmlaStore = Class.inherit((function() {
                         levelSum = 0,
                         members = [],
                         level,
-                        membersCount = tupleMembers.length - 1,
+                        membersCount = skipValues ? tupleMembers.length : tupleMembers.length - 1,
                         isAxisWithMeasure = axes.length === 1,
                         i;
 
@@ -680,7 +680,7 @@ exports.XmlaStore = Class.inherit((function() {
 
             measureCount = parseOptions.measureCount;
 
-        axes = parseAxes(xml);
+        axes = parseAxes(xml, parseOptions.skipValues);
 
         dataSource.grandTotalColumnIndex = fillDataSourceAxes(dataSource.columns, axes[0], measureCount, parseOptions.visibleLevels);
 
@@ -856,7 +856,9 @@ exports.XmlaStore = Class.inherit((function() {
         load: function(options) {
             var result = $.Deferred(),
                 storeOptions = this._options,
-                parseOptions = {},
+                parseOptions = {
+                    skipValues: options.skipValues
+                },
                 mdxString = generateMDX(options, storeOptions.cube, parseOptions);
 
             if(mdxString) {
