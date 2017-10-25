@@ -69,6 +69,11 @@ module.exports = errorUtils(errors.ERROR_MESSAGES, {
     */
     E2203: "The range you are trying to set is invalid",
     /**
+    * @name Errors and Warnings_e2204
+    * @publicName E2204
+    */
+    E2204: "The value field \"{0}\" is absent in the data source or all its values are negative",
+    /**
     * @name Errors and Warnings_w2002
     * @publicName W2002
     */
@@ -117,10 +122,5 @@ module.exports = errorUtils(errors.ERROR_MESSAGES, {
     * @name Errors and Warnings_w2301
     * @publicName W2301
     */
-    W2301: "Invalid value range",
-    /**
-     * @name Errors and Warnings_W2302
-     * @publicName W2302
-     */
-    W2302: "Inconsistent dataSource"
+    W2301: "Invalid value range"
 });

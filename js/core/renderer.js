@@ -3,7 +3,7 @@
 var rendererBase = require("./renderer_base");
 
 /**
-* @name Element
+* @name dxElement
 * @publicName Element
 * @type Node|jQuery
 * @hidden

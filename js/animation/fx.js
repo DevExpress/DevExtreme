@@ -40,14 +40,14 @@ var RELATIVE_VALUE_REGEX = /^([+-])=(.*)/i,
 * @name animationConfig_start
 * @publicName start
 * @type function
-* @type_function_param1 $element:Element
+* @type_function_param1 $element:dxElement
 * @type_function_param2 config:object
 */
 /**
 * @name animationConfig_complete
 * @publicName complete
 * @type function
-* @type_function_param1 $element:Element
+* @type_function_param1 $element:dxElement
 * @type_function_param2 config:object
 */
 /**

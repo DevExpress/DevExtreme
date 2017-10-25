@@ -331,7 +331,7 @@ var Overlay = Widget.inherit({
             * @publicName contentTemplate
             * @type template
             * @default "content"
-            * @type_function_param1 contentElement:Element
+            * @type_function_param1 contentElement:dxElement
             * @type_function_return string|jQuery
             */
             contentTemplate: "content",
@@ -1478,7 +1478,7 @@ var Overlay = Widget.inherit({
     /**
     * @name dxOverlaymethods_content
     * @publicName content()
-    * @return Element
+    * @return dxElement
     */
     content: function() {
         return getPublicElement(this._$content);

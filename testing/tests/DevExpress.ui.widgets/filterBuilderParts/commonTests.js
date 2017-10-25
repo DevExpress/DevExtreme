@@ -321,6 +321,31 @@ QUnit.module("Rendering", function() {
         assert.deepEqual(instance.option("value"), ["State", "<>", "Test"]);
     });
 
+    QUnit.testInActiveWindow("change filter value in selectbox", function(assert) {
+        var $container = $("#container"),
+            instance = $container.dxFilterBuilder({
+                allowHierarchicalFields: true,
+                value: ["CompanyName", "<>", "KS Music"],
+                fields: fields
+            }).dxFilterBuilder("instance");
+
+        var $valueButton = $container.find("." + FILTER_BUILDER_ITEM_VALUE_TEXT_CLASS);
+        $valueButton.click();
+
+        var $input = $container.find("." + FILTER_BUILDER_ITEM_VALUE_CLASS).find("input");
+        assert.ok($input.is(":focus"));
+
+        var selectBoxInstance = $container.find(".dx-selectbox").dxSelectBox("instance");
+        selectBoxInstance.open();
+        $(".dx-list-item").eq(2).trigger("dxclick");
+        assert.ok($input.is(":focus"));
+
+        selectBoxInstance.blur();
+        assert.notOk($container.find("input").length, "hasn't input");
+        assert.deepEqual(instance.option("value"), ["CompanyName", "<>", "Super Mart of the West"]);
+
+    });
+
     QUnit.testInActiveWindow("check default value for number", function(assert) {
         var container = $("#container"),
             instance = container.dxFilterBuilder({

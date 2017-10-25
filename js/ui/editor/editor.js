@@ -61,7 +61,7 @@ var Editor = Widget.inherit({
             */
             name: "",
 
-                /**
+            /**
             * @name EditorOptions_onValueChanged
             * @publicName onValueChanged
             * @extends Action

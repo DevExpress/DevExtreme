@@ -678,14 +678,14 @@ exports.ColumnsView = modules.View.inherit(columnStateMixin).inherit({
      * @publicName getCellElement(rowIndex, visibleColumnIndex)
      * @param1 rowIndex:number
      * @param2 visibleColumnIndex:number
-     * @return Element|undefined
+     * @return dxElement|undefined
      */
     /**
      * @name GridBaseMethods_getCellElement
      * @publicName getCellElement(rowIndex, dataField)
      * @param1 rowIndex:number
      * @param2 dataField:string
-     * @return Element|undefined
+     * @return dxElement|undefined
      */
     getCellElement: function(rowIndex, columnIdentifier) {
         return getPublicElement(this._getCellElement(rowIndex, columnIdentifier));

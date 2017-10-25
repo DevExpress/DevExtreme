@@ -218,7 +218,7 @@ var FilterBuilder = Widget.inherit({
              * @type_function_param1_field2 filterOperation:string
              * @type_function_param1_field3 field:dxFilterBuilderField
              * @type_function_param1_field4 setValue:function
-             * @type_function_param2 container:Element
+             * @type_function_param2 container:dxElement
              * @type_function_return string|Node|jQuery
              */
 
@@ -761,23 +761,25 @@ var FilterBuilder = Widget.inherit({
         return $text;
     },
 
+    _updateConditionValue: function(item, value, callback) {
+        var areValuesDifferent = item[2] !== value;
+        if(areValuesDifferent) {
+            item[2] = value;
+        }
+        callback();
+        if(areValuesDifferent) {
+            this._updateFilter();
+        }
+    },
+
+    _removeFocusOutAndKeyUpEvents: function($container) {
+        eventsEngine.off($container, "focusout");
+        eventsEngine.off($container, "keyup");
+    },
+
     _createValueEditorWithEvents: function(item, field, $container) {
         var that = this,
-            value = item[2],
-            disableEvents = function() {
-                eventsEngine.off($container, "focusout");
-                eventsEngine.off($container, "keyup");
-            },
-            updateValue = function(value, callback) {
-                var areValuesDifferent = item[2] !== value;
-                if(areValuesDifferent) {
-                    item[2] = value;
-                }
-                callback();
-                if(areValuesDifferent) {
-                    that._updateFilter();
-                }
-            };
+            value = item[2];
 
         $container.empty();
         that._createValueEditor($container, field, {
@@ -790,15 +792,28 @@ var FilterBuilder = Widget.inherit({
 
         eventsEngine.trigger($container.find("input"), "focus");
         eventsEngine.on($container, "focusout", function(e) {
-            disableEvents();
+            that._removeFocusOutAndKeyUpEvents($container);
+            // TODO: remove it after fix T566807
+            if($container.find(".dx-selectbox").length > 0) {
+                var $hoveredItem = $(".dx-selectbox-popup-wrapper .dx-state-hover");
+                if($hoveredItem.length > 0) {
+                    eventsEngine.trigger($hoveredItem, "click");
+                } else {
+                    var $activeItem = $(".dx-selectbox-popup-wrapper .dx-state-active");
+                    if($activeItem.length > 0) {
+                        eventsEngine.trigger($activeItem, "click");
+                    }
+                }
+            }
+
             $container.empty();
-            updateValue(value, function() {
+            that._updateConditionValue(item, value, function() {
                 that._createValueText(item, field, $container);
             });
         });
         eventsEngine.on($container, "keyup", function(e) {
             if(e.keyCode === 13 || e.keyCode === 27) {
-                disableEvents();
+                that._removeFocusOutAndKeyUpEvents($container);
                 $container.empty();
 
                 var createValueText = function() {
@@ -807,7 +822,7 @@ var FilterBuilder = Widget.inherit({
                 };
 
                 if(e.keyCode === 13) {
-                    updateValue(value, createValueText);
+                    that._updateConditionValue(item, value, createValueText);
                 } else {
                     createValueText();
                 }
