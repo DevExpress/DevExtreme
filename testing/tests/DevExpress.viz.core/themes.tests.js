@@ -3,10 +3,11 @@
 var $ = require("jquery"),
     themeModule = require("viz/themes");
 
-require("viz/core/default");
-require("viz/core/ios");
-require("viz/core/android");
-require("viz/core/win");
+require("viz/core/themes/generic.light");
+require("viz/core/themes/generic.dark");
+require("viz/core/themes/ios");
+require("viz/core/themes/android");
+require("viz/core/themes/win");
 
 QUnit.moduleStart(function() {
     $.each([
