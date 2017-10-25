@@ -104,7 +104,7 @@ var dropDownAppointments = Class.inherit({
         if(!DropDownMenu.getInstance($menu)) {
             this._initDynamicTemplate(items);
 
-            var template = this.instance._getTemplateByOption("dropDownAppointmentTemplate");
+            var template = this.instance._getAppointmentTemplate("dropDownAppointmentTemplate");
 
             this.instance._createComponent($menu, DropDownMenu, {
                 buttonIcon: null,
@@ -128,9 +128,9 @@ var dropDownAppointments = Class.inherit({
                 focusStateEnabled: false,
                 itemTemplate: new FunctionTemplate(function(options) {
                     return template.render({
-                        appointmentData: options.model,
+                        model: options.model,
                         index: options.index,
-                        appointmentElement: options.container
+                        container: options.container
                     });
                 }),
                 onItemRendered: function(args) {
@@ -225,7 +225,7 @@ var dropDownAppointments = Class.inherit({
         var that = this;
 
         this.instance._defaultTemplates["dropDownAppointment"] = new FunctionTemplate(function(options) {
-            return that._createDropDownAppointmentTemplate(options.appointmentData, $(options.appointmentElement), items.colors[options.index]);
+            return that._createDropDownAppointmentTemplate(options.model, $(options.container), items.colors[options.index]);
         });
     },
 

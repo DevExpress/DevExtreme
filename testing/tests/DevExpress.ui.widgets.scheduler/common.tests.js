@@ -3338,6 +3338,47 @@ QUnit.testStart(function() {
         assert.notEqual(countCallTemplate2, 0, "count call second template");
     });
 
+    QUnit.test("Scheduler should have specific dropDownAppointmentTemplate setting of the view", function(assert) {
+        var countCallTemplate1 = 0,
+            countCallTemplate2 = 0;
+
+        this.createInstance({
+            dataSource: [{
+                startDate: new Date(2015, 4, 24, 9, 10),
+                endDate: new Date(2015, 4, 24, 11, 1),
+                allDay: true,
+                text: "Task 1"
+            }, {
+                startDate: new Date(2015, 4, 24, 9, 10),
+                endDate: new Date(2015, 4, 24, 11, 1),
+                allDay: true,
+                text: "Task 2"
+            }, {
+                startDate: new Date(2015, 4, 24, 9, 10),
+                endDate: new Date(2015, 4, 24, 11, 1),
+                allDay: true,
+                text: "Task 3"
+            }],
+            currentDate: new Date(2015, 4, 24),
+            views: [{
+                type: "month",
+                dropDownAppointmentTemplate: function(item, index, container) {
+                    assert.deepEqual(isRenderer(container), config().useJQuery, "appointmentElement is correct");
+                    countCallTemplate2++;
+                }
+            }],
+            dropDownAppointmentTemplate: function() {
+                countCallTemplate1++;
+            },
+            currentView: "month"
+        });
+
+        $(".dx-scheduler-dropdown-appointments").dxDropDownMenu("instance").open();
+
+        assert.equal(countCallTemplate1, 0, "count call first template");
+        assert.notEqual(countCallTemplate2, 0, "count call second template");
+    });
+
     QUnit.test("Scheduler should have specific appointmentTooltipTemplate setting of the view", function(assert) {
         var countCallTemplate1 = 0,
             countCallTemplate2 = 0;

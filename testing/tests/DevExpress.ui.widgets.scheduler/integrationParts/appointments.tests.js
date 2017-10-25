@@ -33,7 +33,7 @@ QUnit.module("Integration: Appointments", {
     beforeEach: function() {
         fx.off = true;
         this.createInstance = function(options) {
-            this.instance = $("#scheduler").dxScheduler($.extend(options, { maxAppointmentsPerCell: null })).dxScheduler("instance");
+            this.instance = $("#scheduler").dxScheduler($.extend(options, { maxAppointmentsPerCell: options && options.maxAppointmentsPerCell || null })).dxScheduler("instance");
         };
         this.getAppointmentColor = function($task, checkedProperty) {
             checkedProperty = checkedProperty || "background-color";
@@ -4088,6 +4088,46 @@ QUnit.test("Appointment should be rendered correctly with expressions on custom 
     assert.equal($appointment.find(".custom-title").text(), "abc", "Text is correct on init");
 });
 
+QUnit.test("DropDown appointment should be rendered correctly with expressions on custom template", function(assert) {
+    var startDate = new Date(2015, 1, 4, 1),
+        endDate = new Date(2015, 1, 4, 2);
+    var appointments = [{
+        Start: startDate.getTime(),
+        End: endDate.getTime(),
+        Text: "Item 1"
+    }, {
+        Start: startDate.getTime(),
+        End: endDate.getTime(),
+        Text: "Item 2"
+    }, {
+        Start: startDate.getTime(),
+        End: endDate.getTime(),
+        Text: "Item 3"
+    }];
+
+    this.createInstance({
+        currentDate: new Date(2015, 1, 4),
+        views: ["month"],
+        currentView: "month",
+        firstDayOfWeek: 1,
+        dataSource: appointments,
+        startDateExpr: "Start",
+        endDateExpr: "End",
+        textExpr: "Text",
+        height: 500,
+        maxAppointmentsPerCell: "auto",
+        dropDownAppointmentTemplate: function(data) {
+            return "<div class='custom-title'>" + data.Text + "</div>";
+        }
+    });
+
+    $(".dx-scheduler-dropdown-appointments").dxDropDownMenu("instance").open();
+
+    var $appointment = $(".dx-dropdownmenu-list .dx-item").first();
+
+    assert.equal($appointment.find(".custom-title").text(), "Item 2", "Text is correct on init");
+});
+
 QUnit.test("dxScheduler should render custom appointment template with render function that returns dom node", function(assert) {
 
     var startDate = new Date(2015, 1, 4, 1),
@@ -4125,6 +4165,55 @@ QUnit.test("dxScheduler should render custom appointment template with render fu
     assert.equal($appointment.text(), "text", "container is correct");
 });
 
+QUnit.test("dxScheduler should render dropDownAppointment appointment template with render function that returns dom node", function(assert) {
+    var startDate = new Date(2015, 1, 4, 1),
+        endDate = new Date(2015, 1, 4, 2);
+    var appointments = [{
+        Start: startDate.getTime(),
+        End: endDate.getTime(),
+        Text: "Item 1"
+    }, {
+        Start: startDate.getTime(),
+        End: endDate.getTime(),
+        Text: "Item 2"
+    }, {
+        Start: startDate.getTime(),
+        End: endDate.getTime(),
+        Text: "Item 3"
+    }];
+
+    this.createInstance({
+        currentDate: new Date(2015, 1, 4),
+        views: ["month"],
+        currentView: "month",
+        firstDayOfWeek: 1,
+        dataSource: appointments,
+        startDateExpr: "Start",
+        endDateExpr: "End",
+        textExpr: "Text",
+        height: 500,
+        maxAppointmentsPerCell: "auto",
+        dropDownAppointmentTemplate: "dropDownAppointmentTemplate",
+        integrationOptions: {
+            templates: {
+                "dropDownAppointmentTemplate": {
+                    render: function(args) {
+                        var $element = $("<span>")
+                            .addClass("dx-template-wrapper")
+                            .text("text");
+
+                        return $element.get(0);
+                    }
+                }
+            }
+        }
+    });
+
+    $(".dx-scheduler-dropdown-appointments").dxDropDownMenu("instance").open();
+    var $appointment = $(".dx-dropdownmenu-list .dx-item").first();
+
+    assert.equal($appointment.text(), "text", "Text is correct on init");
+});
 
 QUnit.test("Appointment should have right position, if it's startDate time less than startDayHour option value", function(assert) {
     var appointment = {
