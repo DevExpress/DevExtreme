@@ -753,9 +753,8 @@ var FilterBuilder = Widget.inherit({
                 .text(valueText)
                 .appendTo($container);
 
-        that._subscribeOnClickAndEnterKey($text, function(e) {
+        that._subscribeOnClickAndEnterKey($text, function() {
             that._createValueEditorWithEvents(item, field, $container);
-            e.stopPropagation();
         }, "keyup");
 
         return $text;
@@ -772,17 +771,12 @@ var FilterBuilder = Widget.inherit({
         }
     },
 
-    _removeFocusOutAndKeyUpEvents: function($container) {
-        eventsEngine.off($container, "focusout");
-        eventsEngine.off($container, "keyup");
-    },
-
     _createValueEditorWithEvents: function(item, field, $container) {
         var that = this,
             value = item[2];
 
         $container.empty();
-        that._createValueEditor($container, field, {
+        var $editor = that._createValueEditor($container, field, {
             value: value,
             filterOperation: utils.getOperationValue(item),
             setValue: function(data) {
@@ -790,9 +784,8 @@ var FilterBuilder = Widget.inherit({
             }
         });
 
-        eventsEngine.trigger($container.find("input"), "focus");
-        eventsEngine.on($container, "focusout", function(e) {
-            that._removeFocusOutAndKeyUpEvents($container);
+        eventsEngine.trigger($editor.find("input"), "focus");
+        eventsEngine.on($editor, "focusout", function(e) {
             // TODO: remove it after fix T566807
             if($container.find(".dx-selectbox").length > 0) {
                 var $hoveredItem = $(".dx-selectbox-popup-wrapper .dx-state-hover");
@@ -811,9 +804,9 @@ var FilterBuilder = Widget.inherit({
                 that._createValueText(item, field, $container);
             });
         });
-        eventsEngine.on($container, "keyup", function(e) {
+        eventsEngine.on($editor, "keyup", function(e) {
             if(e.keyCode === 13 || e.keyCode === 27) {
-                that._removeFocusOutAndKeyUpEvents($container);
+                eventsEngine.off($editor, "focusout");
                 $container.empty();
 
                 var createValueText = function() {
@@ -840,20 +833,21 @@ var FilterBuilder = Widget.inherit({
     },
 
     _createValueEditor: function($container, field, options) {
+        var $editor = $("<div>").attr("tabindex", 0).appendTo($container);
         if(field.editorTemplate) {
             var template = this._getTemplate(field.editorTemplate);
 
             template.render({
                 model: extend({ field: field }, options),
-                container: $container
+                container: $editor
             });
         } else {
-            var $editor = $("<div>").attr("tabindex", 0).appendTo($container);
             this._editorFactory.createEditor.call(this, $editor, extend({}, field, options, {
                 parentType: "filterRow",
                 lookup: field.lookup
             }));
         }
+        return $editor;
     },
 
     _createPopupWithTreeView: function(options, $container) {
@@ -893,7 +887,7 @@ var FilterBuilder = Widget.inherit({
         eventsEngine.on($button, "click", handler);
         eventsEngine.on($button, keyEvent || "keydown", function(e) {
             if(e.keyCode === 13) {
-                handler(e);
+                handler();
             }
         });
     }
