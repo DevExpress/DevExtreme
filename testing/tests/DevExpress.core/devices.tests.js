@@ -569,3 +569,48 @@ QUnit.test("force device replace only needed option", function(assert) {
 
     assert.equal(devices.current().deviceType, 'tablet', "deviceType was not overridden");
 });
+
+
+QUnit.test("themeNameFromDevice for iOS", function(assert) {
+    var themeNameFromDevice = devices.themeNameFromDevice;
+
+    assert.equal("ios7", themeNameFromDevice({ platform: "ios", version: [1] }));
+    assert.equal("ios7", themeNameFromDevice({ platform: "ios", version: [99] }));
+    assert.equal("ios7", themeNameFromDevice({ platform: "ios" }));
+});
+
+QUnit.test("themeNameFromDevice for Android", function(assert) {
+    var themeNameFromDevice = devices.themeNameFromDevice;
+
+    assert.equal("android5", themeNameFromDevice({ platform: "android", version: [1] }));
+    assert.equal("android5", themeNameFromDevice({ platform: "android", version: [4, 4] }));
+    assert.equal("android5", themeNameFromDevice({ platform: "android", version: [99] }));
+    assert.equal("android5", themeNameFromDevice({ platform: "android" }));
+});
+
+QUnit.test("themeNameFromDevice for Windows Phone", function(assert) {
+    var themeNameFromDevice = devices.themeNameFromDevice;
+    var origIsSimulator = devices.isSimulator;
+    var origIsForced = devices.isForced;
+
+    try {
+        assert.equal("win10", themeNameFromDevice({ platform: "win", version: [1] }));
+        assert.equal("win8", themeNameFromDevice({ platform: "win", version: [8] }));
+        assert.equal("win8", themeNameFromDevice({ platform: "win", version: [8, 1] }));
+        assert.equal("win10", themeNameFromDevice({ platform: "win", version: [99] }));
+        assert.equal("win10", themeNameFromDevice({ platform: "win" }));
+
+        devices.isForced = function() { return true; };
+        assert.equal("win8", themeNameFromDevice({ platform: "win", version: [8] }));
+        assert.equal("win8", themeNameFromDevice({ platform: "win", version: [8, 1] }));
+        assert.equal("win10", themeNameFromDevice({ platform: "win", version: [99] }));
+
+        devices.isSimulator = function() { return true; };
+        assert.equal("win8", themeNameFromDevice({ platform: "win", version: [8] }));
+        assert.equal("win8", themeNameFromDevice({ platform: "win", version: [8, 1] }));
+        assert.equal("win10", themeNameFromDevice({ platform: "win", version: [99] }));
+    } finally {
+        devices.isForced = origIsForced;
+        devices.isSimulator = origIsSimulator;
+    }
+});

@@ -187,7 +187,11 @@ require("style-compiler-test-server/known-css-files");
     QUnit.test("should not add additional link if no dx-theme found", function(assert) {
         //arrange
         //act
-        themes.init({ _autoInit: true, context: this.frameDoc() });
+        themes.init({
+            theme: devices.themeNameFromDevice(devices.current()),
+            _autoInit: true,
+            context: this.frameDoc()
+        });
         //assert
         var realStylesheets = this.getFrameStyleLinks();
         assert.equal(realStylesheets.length, 0, "No stylesheets should be added");
@@ -321,7 +325,11 @@ require("style-compiler-test-server/known-css-files");
     QUnit.test("current theme name when theme included as simple stylesheet", function(assert) {
         var done = assert.async();
         var url = ROOT_URL + "testing/helpers/themeMarker.css";
-        themes.init({ context: this.frameDoc(), _autoInit: true });
+        themes.init({
+            theme: devices.themeNameFromDevice(devices.current()),
+            context: this.frameDoc(),
+            _autoInit: true
+        });
         this.writeToFrame("<link rel=stylesheet href='" + url + "' />");
 
         assert.expect(0);
@@ -393,7 +401,11 @@ require("style-compiler-test-server/known-css-files");
     });
 
     QUnit.test("current theme name is null if without any links", function(assert) {
-        themes.init({ context: this.frameDoc(), _autoInit: true });
+        themes.init({
+            theme: devices.themeNameFromDevice(devices.current()),
+            context: this.frameDoc(),
+            _autoInit: true
+        });
         assert.strictEqual(themes.current(), null);
     });
 
@@ -461,50 +473,6 @@ require("style-compiler-test-server/known-css-files");
         themes.detachCssClasses(element);
 
         assert.equal(element.className, "", "attached classes was removed");
-    });
-
-    QUnit.test("themeNameFromDevice for iOS", function(assert) {
-        var themeNameFromDevice = themes.themeNameFromDevice;
-
-        assert.equal("ios7", themeNameFromDevice({ platform: "ios", version: [1] }));
-        assert.equal("ios7", themeNameFromDevice({ platform: "ios", version: [99] }));
-        assert.equal("ios7", themeNameFromDevice({ platform: "ios" }));
-    });
-
-    QUnit.test("themeNameFromDevice for Android", function(assert) {
-        var themeNameFromDevice = themes.themeNameFromDevice;
-
-        assert.equal("android5", themeNameFromDevice({ platform: "android", version: [1] }));
-        assert.equal("android5", themeNameFromDevice({ platform: "android", version: [4, 4] }));
-        assert.equal("android5", themeNameFromDevice({ platform: "android", version: [99] }));
-        assert.equal("android5", themeNameFromDevice({ platform: "android" }));
-    });
-
-    QUnit.test("themeNameFromDevice for Windows Phone", function(assert) {
-        var themeNameFromDevice = themes.themeNameFromDevice;
-        var origIsSimulator = devices.isSimulator;
-        var origIsForced = devices.isForced;
-
-        try {
-            assert.equal("win10", themeNameFromDevice({ platform: "win", version: [1] }));
-            assert.equal("win8", themeNameFromDevice({ platform: "win", version: [8] }));
-            assert.equal("win8", themeNameFromDevice({ platform: "win", version: [8, 1] }));
-            assert.equal("win10", themeNameFromDevice({ platform: "win", version: [99] }));
-            assert.equal("win10", themeNameFromDevice({ platform: "win" }));
-
-            devices.isForced = function() { return true; };
-            assert.equal("win8", themeNameFromDevice({ platform: "win", version: [8] }));
-            assert.equal("win8", themeNameFromDevice({ platform: "win", version: [8, 1] }));
-            assert.equal("win10", themeNameFromDevice({ platform: "win", version: [99] }));
-
-            devices.isSimulator = function() { return true; };
-            assert.equal("win8", themeNameFromDevice({ platform: "win", version: [8] }));
-            assert.equal("win8", themeNameFromDevice({ platform: "win", version: [8, 1] }));
-            assert.equal("win10", themeNameFromDevice({ platform: "win", version: [99] }));
-        } finally {
-            devices.isForced = origIsForced;
-            devices.isSimulator = origIsSimulator;
-        }
     });
 
 })();
