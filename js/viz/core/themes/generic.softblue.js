@@ -11,7 +11,7 @@ var themeModule = require("../../themes"),
 
 registerTheme({
     name: "generic.softblue",
-    defaultPalette: "SoftBlue",
+    defaultPalette: "Soft Blue",
 
     backgroundColor: BACKGROUND_COLOR,
     primaryTitleColor: TITLE_COLOR,

@@ -11,7 +11,7 @@ var themeModule = require("../../themes"),
 
 registerTheme({
     name: "generic.greenmist",
-    defaultPalette: "GreenMist",
+    defaultPalette: "Green Mist",
 
     backgroundColor: BACKGROUND_COLOR,
     primaryTitleColor: TITLE_COLOR,

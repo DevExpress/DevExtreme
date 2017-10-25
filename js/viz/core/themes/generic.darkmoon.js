@@ -11,7 +11,7 @@ var themeModule = require("../../themes"),
 
 registerTheme({
     name: "generic.darkmoon",
-    defaultPalette: "DarkMoon",
+    defaultPalette: "Dark Moon",
 
     backgroundColor: BACKGROUND_COLOR,
     primaryTitleColor: TITLE_COLOR,
