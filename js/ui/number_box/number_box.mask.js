@@ -83,7 +83,7 @@ var NumberBoxMask = NumberBoxBase.inherit({
     },
 
     _moveCaretToBoundary: function(direction, e) {
-        if(!this._useMaskBehavior()) {
+        if(!this._useMaskBehavior() || e.shiftKey) {
             return;
         }
 
@@ -120,11 +120,11 @@ var NumberBoxMask = NumberBoxBase.inherit({
             start = caret.start,
             end = caret.end;
 
-        if(caret.start !== caret.end) {
-            return;
-        }
+        this._lastKey = e.key;
 
-        this._isDeleteKey(e.key) ? end++ : start--;
+        if(caret.start === caret.end) {
+            this._isDeleteKey(e.key) ? end++ : start--;
+        }
 
         var char = text.slice(start, end);
 
@@ -181,7 +181,7 @@ var NumberBoxMask = NumberBoxBase.inherit({
     _tryRemoveLeadingZeros: function(text, selection, char) {
         var format = this._getFormatPattern(),
             inserted = this._getEditedText(text, selection, char),
-            regExp = new RegExp("^(" + STUB_CHAR_REG_EXP + "+)(0+)", "g"),
+            regExp = new RegExp("^(" + STUB_CHAR_REG_EXP + "*)(0+)", "g"),
             cleared = inserted.replace(regExp, "$1");
 
         return number.parse(cleared, format);
@@ -366,9 +366,10 @@ var NumberBoxMask = NumberBoxBase.inherit({
     },
 
     _formatValue: function() {
-        var text = this._input().val();
+        var text = this._input().val(),
+            decimalSeparator = number.getDecimalSeparator();
 
-        if(text.endsWith(number.getDecimalSeparator())) {
+        if(text.endsWith(decimalSeparator) && this._lastKey === decimalSeparator) {
             return;
         }
 
@@ -378,9 +379,10 @@ var NumberBoxMask = NumberBoxBase.inherit({
 
         var format = this._getFormatPattern(),
             caret = this._caret(),
-            formatted = number.format(this._parsedValue, format);
+            formatted = number.format(this._parsedValue, format),
+            shouldMoveCaret = this._isDeleteKey(this._lastKey) && text.length === formatted.length;
 
-        this._setInputText(formatted, caret.start);
+        this._setInputText(formatted, shouldMoveCaret ? caret.start + 1 : caret.start);
     },
 
     _renderValue: function() {
