@@ -32,22 +32,28 @@ QUnit.module("Common", {
                 if(options === "rtlEnabled") {
                     return that.rtlEnabled;
                 }
+                if(options === "dropDownAppointmentTemplate") {
+                    return "dropDownAppointment";
+                }
                 return this.callBase(options);
+            },
+            _getAppointmentTemplate: function(template) {
+                return this._getTemplateByOption(template);
             },
             fire: noop,
             deleteAppointment: noop,
             showAppointmentPopup: noop
         }))($("<div>"));
 
-        this.renderDropDownAppointmentsContainer = function(items) {
+        this.renderDropDownAppointmentsContainer = function(items, options) {
             items = items || { data: [{ text: "a", startDate: new Date(2015, 1, 1) }], colors: [] };
-            return $(new DropDownAppointments().render({
+            return $(new DropDownAppointments().render($.extend(options, {
                 $container: $("#ddAppointments"),
                 coordinates: { top: 0, left: 0 },
                 items: items,
                 buttonWidth: this.buttonWidth,
                 buttonColor: this.color
-            }, this.widgetMock));
+            }), this.widgetMock));
         };
     },
     afterEach: function() {

@@ -142,6 +142,16 @@ var Scheduler = Widget.inherit({
                 */
 
                 /**
+                * @pseudo DropDownAppointmentTemplate
+                * @type template
+                * @default "dropDownAppointment"
+                * @type_function_param1 itemData:object
+                * @type_function_param2 itemIndex:number
+                * @type_function_param3 itemElement:Element
+                * @type_function_return string|Node|jQuery
+                */
+
+                /**
                 * @pseudo AppointmentTooltipTemplate
                 * @type template
                 * @default "appointmentTooltip"
@@ -270,6 +280,12 @@ var Scheduler = Widget.inherit({
                 * @name dxSchedulerOptions_views_appointmentTemplate
                 * @publicName appointmentTemplate
                 * @extends AppointmentTemplate
+                */
+
+                /**
+                * @name dxSchedulerOptions_views_dropDownAppointmentTemplate
+                * @publicName dropDownAppointmentTemplate
+                * @extends DropDownAppointmentTemplate
                 */
 
                 /**
@@ -453,6 +469,13 @@ var Scheduler = Widget.inherit({
                 * @extends AppointmentTemplate
                 */
             appointmentTemplate: "item",
+
+            /**
+                * @name dxSchedulerOptions_dropDownAppointmentTemplate
+                * @publicName dropDownAppointmentTemplate
+                * @extends DropDownAppointmentTemplate
+                */
+            dropDownAppointmentTemplate: "dropDownAppointment",
 
                 /**
                 * @name dxSchedulerOptions_dataCellTemplate
@@ -1251,6 +1274,7 @@ var Scheduler = Widget.inherit({
             case "recurrenceEditMode":
             case "remoteFiltering":
             case "timeZone":
+            case "dropDownAppointmentTemplate":
                 this.repaint();
                 break;
             case "dateSerializationFormat":
@@ -1480,6 +1504,7 @@ var Scheduler = Widget.inherit({
 
         this._defaultTemplates["appointmentTooltip"] = new EmptyTemplate(this);
         this._defaultTemplates["appointmentPopup"] = new EmptyTemplate(this);
+        this._defaultTemplates["dropDownAppointment"] = new EmptyTemplate(this);
     },
 
     _initAppointmentTemplate: function() {

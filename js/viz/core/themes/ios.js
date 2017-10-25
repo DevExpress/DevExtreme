@@ -1,6 +1,6 @@
 "use strict";
 
-var themeModule = require("../themes"),
+var themeModule = require("../../themes"),
     IOS7_DEFAULT = "ios7.default",
     SECONDARY_TEXT_COLOR = "#767676",
     BORDER_COLOR = "#d3d3d3",

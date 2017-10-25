@@ -59,6 +59,33 @@ var palettes = {
         simpleSet: ["#d1a1d1", "#eeacc5", "#7b5685", "#7e7cad", "#a13d73", "#5b41ab", "#e287e2", "#689cc1"],
         indicatingSet: ["#d8e2f6", "#d0b2da", "#d56a8a"],
         gradientSet: ["#eeacc5", "#7b5685"]
+    },
+
+    //generic color schemes related palettes
+    "carmine": {
+        simpleSet: ["#fb7764", "#73d47f", "#fed85e", "#d47683", "#dde392", "#757ab2"],
+        indicatingSet: ["#5cb85c", "#f0ad4e", "#d9534f"],
+        gradientSet: ["#fb7764", "#73d47f"]
+    },
+    "darkmoon": {
+        simpleSet: ["#4ddac1", "#f4c99a", "#80dd9b", "#f998b3", "#4aaaa0", "#a5aef1"],
+        indicatingSet: ["#59d8a4", "#f0ad4e", "#f9517e"],
+        gradientSet: ["#4ddac1", "#f4c99a"]
+    },
+    "softblue": {
+        simpleSet: ["#7ab8eb", "#97da97", "#facb86", "#e78683", "#839bda", "#4db7be"],
+        indicatingSet: ["#5cb85c", "#f0ad4e", "#d9534f"],
+        gradientSet: ["#7ab8eb", "#97da97"]
+    },
+    "darkviolet": {
+        simpleSet: ["#9c63ff", "#64c064", "#eead51", "#d2504b", "#4b6bbf", "#2da7b0"],
+        indicatingSet: ["#5cb85c", "#f0ad4e", "#d9534f"],
+        gradientSet: ["#9c63ff", "#64c064"]
+    },
+    "greenmist": {
+        simpleSet: ["#3cbab2", "#8ed962", "#5b9d95", "#efcc7c", "#f1929f", "#4d8dab"],
+        indicatingSet: ["#72d63c", "#ffc852", "#f74a5e"],
+        gradientSet: ["#3cbab2", "#8ed962"]
     }
 };
 

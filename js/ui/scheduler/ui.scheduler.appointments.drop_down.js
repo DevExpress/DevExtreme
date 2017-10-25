@@ -9,6 +9,7 @@ var $ = require("../../core/renderer"),
     eventsEngine = require("../../events/core/events_engine"),
     Button = require("../button"),
     DropDownMenu = require("../drop_down_menu"),
+    FunctionTemplate = require("../widget/function_template"),
     messageLocalization = require("../../localization/message");
 
 var DROPDOWN_APPOINTMENTS_CLASS = "dx-scheduler-dropdown-appointments",
@@ -98,14 +99,12 @@ var dropDownAppointments = Class.inherit({
         var $menu = config.$element,
             items = config.items,
             onAppointmentClick = config.onAppointmentClick,
-            itemTemplate,
             that = this;
 
         if(!DropDownMenu.getInstance($menu)) {
+            this._initDynamicTemplate(items);
 
-            itemTemplate = (function(appointmentData, index, appointmentElement) {
-                this._createDropDownAppointmentTemplate(appointmentData, $(appointmentElement), items.colors[index]);
-            }).bind(this);
+            var template = this.instance._getAppointmentTemplate("dropDownAppointmentTemplate");
 
             this.instance._createComponent($menu, DropDownMenu, {
                 buttonIcon: null,
@@ -127,7 +126,13 @@ var dropDownAppointments = Class.inherit({
                 },
                 activeStateEnabled: false,
                 focusStateEnabled: false,
-                itemTemplate: itemTemplate,
+                itemTemplate: new FunctionTemplate(function(options) {
+                    return template.render({
+                        model: options.model,
+                        index: options.index,
+                        container: options.container
+                    });
+                }),
                 onItemRendered: function(args) {
                     var $item = args.itemElement,
                         itemData = args.itemData;
@@ -216,6 +221,14 @@ var dropDownAppointments = Class.inherit({
         return result;
     },
 
+    _initDynamicTemplate: function(items) {
+        var that = this;
+
+        this.instance._defaultTemplates["dropDownAppointment"] = new FunctionTemplate(function(options) {
+            return that._createDropDownAppointmentTemplate(options.model, $(options.container), items.colors[options.index]);
+        });
+    },
+
     _createDropDownAppointmentTemplate: function(appointmentData, appointmentElement, color) {
         var dateString = "",
             appointmentMarkup = [],
@@ -257,6 +270,8 @@ var dropDownAppointments = Class.inherit({
         appointmentMarkup.push(this._createButtons(appointmentData));
 
         appointmentElement.append(appointmentMarkup);
+
+        return appointmentElement;
     },
 
     _createButtons: function(appointmentData) {
