@@ -49,6 +49,8 @@ var DOMComponent = Component.inherit({
             /**
             * @name domcomponentoptions_onDisposing
             * @publicName onDisposing
+            * @type function
+            * @type_function_param1 e:object
             * @action
             * @extends Action
             * @extend_doc

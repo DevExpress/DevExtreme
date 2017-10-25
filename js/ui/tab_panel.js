@@ -78,7 +78,8 @@ var TabPanel = MultiView.inherit({
             * @name dxTabPanelOptions_onTitleClick
             * @publicName onTitleClick
             * @extends Action
-            * @type function|string
+            * @type function(e)|string
+            * @type_function_param1 e:object
             * @type_function_param1_field4 itemData:object
             * @type_function_param1_field5 itemElement:dxElement
             * @action
@@ -89,6 +90,8 @@ var TabPanel = MultiView.inherit({
             * @name dxTabPanelOptions_onTitleHold
             * @publicName onTitleHold
             * @extends Action
+            * @type function(e)
+            * @type_function_param1 e:object
             * @type_function_param1_field4 itemData:object
             * @type_function_param1_field5 itemElement:dxElement
             * @action
@@ -99,6 +102,8 @@ var TabPanel = MultiView.inherit({
             * @name dxTabPanelOptions_onTitleRendered
             * @publicName onTitleRendered
             * @extends Action
+            * @type function(e)
+            * @type_function_param1 e:object
             * @type_function_param1_field4 itemData:object
             * @type_function_param1_field5 itemElement:dxElement
             * @action

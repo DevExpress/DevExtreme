@@ -313,6 +313,8 @@ var Overlay = Widget.inherit({
             * @name dxOverlayOptions_onHiding
             * @publicName onHiding
             * @extends Action
+            * @type function(e)
+            * @type_function_param1 e:object
             * @type_function_param1_field4 cancel:boolean
             * @action
             */

@@ -612,6 +612,8 @@ var Scheduler = Widget.inherit({
                 * @name dxSchedulerOptions_onAppointmentRendered
                 * @publicName onAppointmentRendered
                 * @extends Action
+                * @type function(e)
+                * @type_function_param1 e:object
                 * @type_function_param1_field4 appointmentData:object
                 * @type_function_param1_field5 targetedAppointmentData:object
                 * @type_function_param1_field6 appointmentElement:dxElement
@@ -622,8 +624,9 @@ var Scheduler = Widget.inherit({
                 /**
                 * @name dxSchedulerOptions_onAppointmentClick
                 * @publicName onAppointmentClick
-                * @type function|string
+                * @type function(e)|string
                 * @extends Action
+                * @type_function_param1 e:object
                 * @type_function_param1_field4 appointmentData:object
                 * @type_function_param1_field5 targetedAppointmentData:object
                 * @type_function_param1_field6 appointmentElement:dxElement
@@ -636,8 +639,9 @@ var Scheduler = Widget.inherit({
                 /**
                 * @name dxSchedulerOptions_onAppointmentDblClick
                 * @publicName onAppointmentDblClick
-                * @type function|string
+                * @type function(e)|string
                 * @extends Action
+                * @type_function_param1 e:object
                 * @type_function_param1_field4 appointmentData:object
                 * @type_function_param1_field5 targetedAppointmentData:object
                 * @type_function_param1_field6 appointmentElement:dxElement
@@ -650,8 +654,9 @@ var Scheduler = Widget.inherit({
                 /**
                 * @name dxSchedulerOptions_onCellClick
                 * @publicName onCellClick
-                * @type function|string
+                * @type function(e)|string
                 * @extends Action
+                * @type_function_param1 e:object
                 * @type_function_param1_field4 cellData:object
                 * @type_function_param1_field5 cellElement:dxElement
                 * @type_function_param1_field6 jQueryEvent:jQuery.Event
@@ -664,8 +669,10 @@ var Scheduler = Widget.inherit({
                 * @name dxSchedulerOptions_onAppointmentAdding
                 * @publicName onAppointmentAdding
                 * @extends Action
+                * @type function(e)
+                * @type_function_param1 e:object
                 * @type_function_param1_field4 appointmentData:Object
-                * @type_function_param1_field5 cancel:Boolean|Promise
+                * @type_function_param1_field5 cancel:Boolean|Promise<Boolean>
                 * @action
                 */
             onAppointmentAdding: null,
@@ -674,8 +681,10 @@ var Scheduler = Widget.inherit({
                 * @name dxSchedulerOptions_onAppointmentAdded
                 * @publicName onAppointmentAdded
                 * @extends Action
+                * @type function(e)
+                * @type_function_param1 e:object
                 * @type_function_param1_field4 appointmentData:Object
-                * @type_function_param1_field5 error:JavaScript Error object
+                * @type_function_param1_field5 error:Error
                 * @action
                 */
             onAppointmentAdded: null,
@@ -684,9 +693,11 @@ var Scheduler = Widget.inherit({
                 * @name dxSchedulerOptions_onAppointmentUpdating
                 * @publicName onAppointmentUpdating
                 * @extends Action
+                * @type function(e)
+                * @type_function_param1 e:object
                 * @type_function_param1_field4 oldData:Object
                 * @type_function_param1_field5 newData:Object
-                * @type_function_param1_field6 cancel:Boolean|Promise
+                * @type_function_param1_field6 cancel:Boolean|Promise<Boolean>
                 * @action
                 */
             onAppointmentUpdating: null,
@@ -695,8 +706,10 @@ var Scheduler = Widget.inherit({
                 * @name dxSchedulerOptions_onAppointmentUpdated
                 * @publicName onAppointmentUpdated
                 * @extends Action
+                * @type function(e)
+                * @type_function_param1 e:object
                 * @type_function_param1_field4 appointmentData:Object
-                * @type_function_param1_field5 error:JavaScript Error object
+                * @type_function_param1_field5 error:Error
                 * @action
                 */
             onAppointmentUpdated: null,
@@ -705,8 +718,10 @@ var Scheduler = Widget.inherit({
                 * @name dxSchedulerOptions_onAppointmentDeleting
                 * @publicName onAppointmentDeleting
                 * @extends Action
+                * @type function(e)
+                * @type_function_param1 e:object
                 * @type_function_param1_field4 appointmentData:Object
-                * @type_function_param1_field5 cancel:Boolean|Promise
+                * @type_function_param1_field5 cancel:Boolean|Promise<Boolean>
                 * @action
                 */
             onAppointmentDeleting: null,
@@ -715,8 +730,10 @@ var Scheduler = Widget.inherit({
                 * @name dxSchedulerOptions_onAppointmentDeleted
                 * @publicName onAppointmentDeleted
                 * @extends Action
+                * @type function(e)
+                * @type_function_param1 e:object
                 * @type_function_param1_field4 appointmentData:Object
-                * @type_function_param1_field5 error:JavaScript Error object
+                * @type_function_param1_field5 error:Error
                 * @action
                 */
             onAppointmentDeleted: null,
@@ -725,8 +742,10 @@ var Scheduler = Widget.inherit({
                 * @name dxSchedulerOptions_onAppointmentFormCreated
                 * @publicName onAppointmentFormCreated
                 * @extends Action
+                * @type function(e)
+                * @type_function_param1 e:object
                 * @type_function_param1_field4 appointmentData:object
-                * @type_function_param1_field5 form:Object
+                * @type_function_param1_field5 form:dxForm
                 * @action
                */
             onAppointmentFormCreated: null,

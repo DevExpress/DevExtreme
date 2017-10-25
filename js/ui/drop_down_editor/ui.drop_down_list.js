@@ -167,6 +167,8 @@ var DropDownList = DropDownEditor.inherit({
             * @name dxDropDownListOptions_onSelectionChanged
             * @publicName onSelectionChanged
             * @extends Action
+            * @type function(e)
+            * @type_function_param1 e:object
             * @type_function_param1_field4 selectedItem:object
             * @action
             */
@@ -176,6 +178,8 @@ var DropDownList = DropDownEditor.inherit({
             * @name dxDropDownListOptions_onItemClick
             * @publicName onItemClick
             * @extends Action
+            * @type function(e)
+            * @type_function_param1 e:object
             * @type_function_param1_field4 itemData:object
             * @type_function_param1_field5 itemElement:object
             * @type_function_param1_field6 itemIndex:number | object
@@ -222,6 +226,8 @@ var DropDownList = DropDownEditor.inherit({
             * @name dxDropDownListOptions_onValueChanged
             * @publicName onValueChanged
             * @extends Action
+            * @type function(e)
+            * @type_function_param1 e:object
             * @type_function_param1_field4 value:object
             * @type_function_param1_field5 previousValue:object
             * @type_function_param1_field6 jQueryEvent:jQuery.Event

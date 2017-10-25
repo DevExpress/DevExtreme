@@ -76,8 +76,9 @@ var Accordion = CollectionWidget.inherit({
             /**
             * @name dxAccordionOptions_onItemTitleClick
             * @publicName onItemTitleClick
-            * @type function|string
+            * @type function(e)|string
             * @extends Action
+            * @type_function_param1 e:object
             * @type_function_param1_field4 itemData:object
             * @type_function_param1_field5 itemElement:dxElement
             * @type_function_param1_field6 itemIndex:number

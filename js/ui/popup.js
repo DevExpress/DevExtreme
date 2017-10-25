@@ -129,6 +129,8 @@ var Popup = Overlay.inherit({
             * @name dxPopupOptions_onTitleRendered
             * @publicName onTitleRendered
             * @extends Action
+            * @type function(e)
+            * @type_function_param1 e:object
             * @type_function_param1_field1 titleElement:dxElement
             * @action
             */

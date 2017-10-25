@@ -149,6 +149,8 @@ var Form = Widget.inherit({
              * @name dxFormOptions_onFieldDataChanged
              * @publicName onFieldDataChanged
              * @extends Action
+             * @type function(e)
+             * @type_function_param1 e:object
              * @type_function_param1_field4 dataField:string
              * @type_function_param1_field5 value:object
              * @action
@@ -165,6 +167,8 @@ var Form = Widget.inherit({
              * @name dxFormOptions_onEditorEnterKey
              * @publicName onEditorEnterKey
              * @extends Action
+             * @type function(e)
+             * @type_function_param1 e:object
              * @type_function_param1_field4 dataField:string
              * @action
              */

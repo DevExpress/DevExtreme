@@ -139,6 +139,8 @@ var CollectionWidget = Widget.inherit({
             * @name CollectionWidgetOptions_onItemRendered
             * @publicName onItemRendered
             * @extends Action
+            * @type function(e)
+            * @type_function_param1 e:object
             * @type_function_param1_field4 itemData:object
             * @type_function_param1_field5 itemElement:dxElement
             * @type_function_param1_field6 itemIndex:number
@@ -149,8 +151,9 @@ var CollectionWidget = Widget.inherit({
             /**
             * @name CollectionWidgetOptions_onItemClick
             * @publicName onItemClick
-            * @type function|string
+            * @type function(e)|string
             * @extends Action
+            * @type_function_param1 e:object
             * @type_function_param1_field4 itemData:object
             * @type_function_param1_field5 itemElement:dxElement
             * @type_function_param1_field6 itemIndex:number
@@ -163,6 +166,8 @@ var CollectionWidget = Widget.inherit({
             * @name CollectionWidgetOptions_onItemHold
             * @publicName onItemHold
             * @extends Action
+            * @type function(e)
+            * @type_function_param1 e:object
             * @type_function_param1_field4 itemData:object
             * @type_function_param1_field5 itemElement:dxElement
             * @type_function_param1_field6 itemIndex:number
@@ -182,6 +187,8 @@ var CollectionWidget = Widget.inherit({
             * @name CollectionWidgetOptions_onItemContextMenu
             * @publicName onItemContextMenu
             * @extends Action
+            * @type function(e)
+            * @type_function_param1 e:object
             * @type_function_param1_field4 itemData:object
             * @type_function_param1_field5 itemElement:dxElement
             * @type_function_param1_field6 itemIndex:number
