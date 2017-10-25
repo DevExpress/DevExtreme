@@ -11,7 +11,7 @@ var themeModule = require("../../themes"),
 
 registerTheme({
     name: "generic.darkviolet",
-    defaultPalette: "DarkViolet",
+    defaultPalette: "Dark Violet",
 
     backgroundColor: BACKGROUND_COLOR,
     primaryTitleColor: TITLE_COLOR,
