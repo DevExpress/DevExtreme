@@ -175,7 +175,7 @@ QUnit.test("should take into consideration borders and paddings if box-sizing is
 
     $element.height(80);
 
-    assert.equal($element.css("height"), "94px");
+    assert.equal($element.get(0).style.height, "94px");
 });
 
 QUnit.test("shouldn't take into consideration borders and paddings if box-sizing isn't border-box)", function(assert) {
@@ -187,7 +187,7 @@ QUnit.test("shouldn't take into consideration borders and paddings if box-sizing
 
     $element.height(80);
 
-    assert.equal($element.css("height"), "80px");
+    assert.equal($element.get(0).style.height, "80px");
 });
 
 QUnit.test("outerHeight shouldn't take into consideration borders and paddings if box-sizing is border-box)", function(assert) {
@@ -200,7 +200,7 @@ QUnit.test("outerHeight shouldn't take into consideration borders and paddings i
 
     $element.outerHeight(80);
 
-    assert.equal($element.css("height"), "80px");
+    assert.equal($element.get(0).style.height, "80px");
 });
 
 QUnit.test("outerHeight shouldn take into consideration borders and paddings if box-sizing isn't border-box)", function(assert) {
@@ -212,7 +212,7 @@ QUnit.test("outerHeight shouldn take into consideration borders and paddings if 
 
     $element.outerHeight(80);
 
-    assert.equal($element.css("height"), "66px");
+    assert.equal($element.get(0).style.height, "66px");
 });
 
 QUnit.test("innerHeight shouldn't take into consideration borders and paddings if box-sizing is border-box)", function(assert) {
@@ -225,7 +225,7 @@ QUnit.test("innerHeight shouldn't take into consideration borders and paddings i
 
     $element.innerHeight(80);
 
-    assert.equal($element.css("height"), "88px");
+    assert.equal($element.get(0).style.height, "88px");
 });
 
 QUnit.test("innerHeight shouldn take into consideration borders and paddings if box-sizing isn't border-box)", function(assert) {
@@ -237,5 +237,5 @@ QUnit.test("innerHeight shouldn take into consideration borders and paddings if 
 
     $element.innerHeight(80);
 
-    assert.equal($element.css("height"), "74px");
+    assert.equal($element.get(0).style.height, "74px");
 });
