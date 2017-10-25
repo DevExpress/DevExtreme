@@ -62,17 +62,6 @@ var getSize = function(element, name, include) {
     return result;
 };
 
-var getBorderAdjustment = function(element, name) {
-    var elementStyles = window.getComputedStyle(element);
-
-    if(elementStyles.boxSizing === "border-box") {
-        return 0;
-    }
-
-    return name === "width" ?
-        getSizeByStyles(elementStyles, ["borderLeftWidth", "borderRightWidth"]) :
-        getSizeByStyles(elementStyles, ["borderTopWidth", "borderBottomWidth"]);
-};
 
 exports.getSize = getSize;
-exports.getBorderAdjustment = getBorderAdjustment;
+exports.getElementBoxParams = getElementBoxParams;
