@@ -6,8 +6,8 @@ var $ = require("jquery"),
     ResourceManager = require("ui/scheduler/ui.scheduler.resource_manager");
 
 var DATE_TABLE_CELL_CLASS = "dx-scheduler-date-table-cell";
-var formatWeekday = function(date) {
-    return dateLocalization.getDayNames("abbreviated")[date.getDay()];
+var formatDateAndWeekday = function(date) {
+    return date.getDate() + " " + dateLocalization.getDayNames("abbreviated")[date.getDay()];
 };
 
 QUnit.testStart(function() {
@@ -132,17 +132,10 @@ QUnit.test("Agenda time panel should contain right text inside cells", function(
 
     var $cells = this.instance.$element().find(".dx-scheduler-time-panel-cell");
 
-    assert.equal($cells.eq(0).find(".dx-scheduler-agenda-date").text(), dateLocalization.format(new Date(2016, 1, 17), "d"));
-    assert.equal($cells.eq(0).find(".dx-scheduler-agenda-week-day").text(), dateLocalization.format(new Date(2016, 1, 17), formatWeekday));
-
-    assert.equal($cells.eq(1).find(".dx-scheduler-agenda-date").text(), dateLocalization.format(new Date(2016, 1, 19), "d"));
-    assert.equal($cells.eq(1).find(".dx-scheduler-agenda-week-day").text(), dateLocalization.format(new Date(2016, 1, 19), formatWeekday));
-
-    assert.equal($cells.eq(2).find(".dx-scheduler-agenda-date").text(), dateLocalization.format(new Date(2016, 1, 22), "d"));
-    assert.equal($cells.eq(2).find(".dx-scheduler-agenda-week-day").text(), dateLocalization.format(new Date(2016, 1, 22), formatWeekday));
-
-    assert.equal($cells.eq(3).find(".dx-scheduler-agenda-date").text(), dateLocalization.format(new Date(2016, 1, 23), "d"));
-    assert.equal($cells.eq(3).find(".dx-scheduler-agenda-week-day").text(), dateLocalization.format(new Date(2016, 1, 23), formatWeekday));
+    assert.equal($cells.eq(0).text(), dateLocalization.format(new Date(2016, 1, 17), formatDateAndWeekday));
+    assert.equal($cells.eq(1).text(), dateLocalization.format(new Date(2016, 1, 19), formatDateAndWeekday));
+    assert.equal($cells.eq(2).text(), dateLocalization.format(new Date(2016, 1, 22), formatDateAndWeekday));
+    assert.equal($cells.eq(3).text(), dateLocalization.format(new Date(2016, 1, 23), formatDateAndWeekday));
 });
 
 QUnit.test("Agenda date table should contain rows & cells", function(assert) {

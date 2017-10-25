@@ -12,7 +12,6 @@ var $ = require("../../core/renderer"),
 
 var AGENDA_CLASS = "dx-scheduler-agenda",
     AGENDA_DATE_CLASS = "dx-scheduler-agenda-date",
-    AGENDA_WEEK_DAY_CLASS = "dx-scheduler-agenda-week-day",
     GROUP_TABLE_CLASS = "dx-scheduler-group-table",
 
     AGENDA_GROUPED_ATTR = "dx-group-column-count",
@@ -360,10 +359,7 @@ var SchedulerAgenda = SchedulerWorkSpace.inherit({
                     cellTemplates.push(cellTemplateOpt.render.bind(cellTemplateOpt, templateOptions));
                 } else {
                     if(cellDateNumber && cellDayName) {
-                        $td.append([
-                            $("<span>").addClass(AGENDA_DATE_CLASS).text(cellDateNumber),
-                            $("<span>").addClass(AGENDA_WEEK_DAY_CLASS).text(cellDayName)
-                        ]);
+                        $td.addClass(AGENDA_DATE_CLASS).text(cellDateNumber + " " + cellDayName);
                     }
                 }
 
