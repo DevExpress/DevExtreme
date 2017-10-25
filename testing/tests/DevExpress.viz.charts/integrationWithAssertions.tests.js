@@ -374,6 +374,24 @@ QUnit.test("Chart was rendered with series template & dataSource = null", functi
     assert.ok(drawn.called);
 });
 
+QUnit.test("Ticks calculation after resize", function(assert) {
+    var container = this.$container.width(300).height(150),
+        chart = this.createChart({
+            animation: {
+                enabled: false
+            },
+            dataSource: [{ arg: 1, val: 1 }, { arg: 2, val: 2 }],
+            series: [ { type: "bar" }]
+        });
+
+    container.width(100).height(100);
+    chart.render();
+    container.width(300).height(150);
+    chart.render();
+
+    assert.deepEqual(chart._argumentAxes[0].getTicksValues().majorTicksValues, [1, 1.5, 2]);
+});
+
 QUnit.module("B237847. Groups and classes", moduleSetup);
 
 QUnit.test("dxChart groups and classes", function(assert) {

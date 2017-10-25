@@ -644,9 +644,10 @@ module.exports = {
         },
 
         estimateMargins: function(canvas) {
-            var tickInterval = this._createTicksAndLabelFormat(canvas).tickInterval;
-
             var that = this,
+                ticksData = this._createTicksAndLabelFormat(canvas),
+                ticks = ticksData.ticks,
+                tickInterval = ticksData.tickInterval,
                 options = this._options,
                 constantLineOptions = (options.constantLines || []).filter(function(options) {
                     that._checkAlignmentConstantLineLabels(options.label);
@@ -654,8 +655,8 @@ module.exports = {
                 }),
                 rootElement = that._renderer.root,
                 businessRange = that._translator.getBusinessRange(),
-                labelIsVisible = options.label.visible && !businessRange.stubData,
-                labelValue = labelIsVisible && that.formatLabel(businessRange.axisType === "discrete" ? businessRange.categories[0] : businessRange.maxVisible, options.label, undefined, undefined, tickInterval),
+                labelIsVisible = options.label.visible && !businessRange.stubData && ticks.length,
+                labelValue = labelIsVisible && that.formatLabel(ticks[ticks.length - 1], options.label, undefined, undefined, tickInterval, ticks),
                 labelElement = labelIsVisible && that._renderer.text(labelValue, 0, 0)
                     .css(that._textFontStyles)
                     .attr(that._textOptions)

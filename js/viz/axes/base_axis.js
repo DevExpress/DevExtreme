@@ -659,14 +659,14 @@ Axis.prototype = {
         that._axisStripLabelGroup && that._axisStripLabelGroup.clear();
     },
 
-    _getLabelFormatObject: function(value, labelOptions, range, point, tickInterval) {
+    _getLabelFormatObject: function(value, labelOptions, range, point, tickInterval, ticks) {
         range = range || this._getViewportRange();
 
         var formatObject = {
             value: value,
             valueText: _format(value, {
                 labelOptions: labelOptions,
-                ticks: convertTicksToValues(this._majorTicks),
+                ticks: ticks || convertTicksToValues(this._majorTicks),
                 tickInterval: isDefined(tickInterval) ? tickInterval : this._tickInterval,
                 dataType: this._options.dataType,
                 type: this._options.type,
@@ -687,8 +687,8 @@ Axis.prototype = {
         return formatObject;
     },
 
-    formatLabel: function(value, labelOptions, range, point, tickInterval) {
-        var formatObject = this._getLabelFormatObject(value, labelOptions, range, point, tickInterval);
+    formatLabel: function(value, labelOptions, range, point, tickInterval, ticks) {
+        var formatObject = this._getLabelFormatObject(value, labelOptions, range, point, tickInterval, ticks);
 
         return isFunction(labelOptions.customizeText) ? labelOptions.customizeText.call(formatObject, formatObject) : formatObject.valueText;
     },
@@ -1501,13 +1501,13 @@ Axis.prototype = {
         }
         viewportRange = that._getViewportRange();
         maxText = ticks.reduce(function(prevLabel, tick, index) {
-            var label = that.formatLabel(tick, options.label, viewportRange, undefined, tickInterval);
+            var label = that.formatLabel(tick, options.label, viewportRange, undefined, tickInterval, ticks);
             if(prevLabel.length < label.length) {
                 return label;
             } else {
                 return prevLabel;
             }
-        }, that.formatLabel(ticks[0], options.label, viewportRange, undefined, tickInterval));
+        }, that.formatLabel(ticks[0], options.label, viewportRange, undefined, tickInterval, ticks));
 
         text = that._renderer.text(maxText, 0, 0).css(that._textFontStyles).attr(that._textOptions).append(that._renderer.root);
         box = text.getBBox();

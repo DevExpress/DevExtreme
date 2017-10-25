@@ -639,7 +639,7 @@ QUnit.test("Datetime, no custom format - use auto format based on estimated tick
 
     axis.measureLabels(this.canvas);
 
-    assert.strictEqual(this.renderer.text.getCall(0).args[0], "September");
+    assert.strictEqual(this.renderer.text.getCall(0).args[0], "August 2010");
 });
 
 QUnit.test("Datetime, custom format - use provided format", function(assert) {
@@ -2045,45 +2045,7 @@ QUnit.module("Estimate size", $.extend({}, environment2DTranslator, {
     }
 }));
 
-QUnit.test("Estimate margins creates text element with maxValue and remove it", function(assert) {
-    var axis = this.createSimpleAxis({
-        isHorizontal: true,
-        label: {
-            font: {
-                weight: "bold"
-            },
-            format: {
-                type: "currency"
-            },
-            opacity: 0.3,
-            alignment: "center",
-            visible: true
-        }
-    });
-
-    axis.estimateMargins(this.canvas);
-
-    assert.strictEqual(this.renderer.text.callCount, 1);
-    assert.deepEqual(this.renderer.text.getCall(0).args, ["$1,000", 0, 0], "cteate text args");
-
-    var textElement = this.renderer.text.getCall(0).returnValue;
-    assert.deepEqual(textElement.attr.lastCall.args[0], {
-        opacity: 0.3,
-        align: "center"
-    }, "lebel settings");
-
-    assert.deepEqual(textElement.css.lastCall.args[0], {
-        "font-weight": "bold"
-    }, "lebel style");
-
-    assert.strictEqual(textElement.append.lastCall.args[0], this.renderer.root, "element appended");
-
-    assert.strictEqual(textElement.remove.callCount, 1, "element removed");
-});
-
-QUnit.test("Estimate margins creates text element with first category", function(assert) {
-    this.range.axisType = "discrete";
-
+QUnit.test("no estimate margins without ticks", function(assert) {
     var axis = this.createSimpleAxis({
         isHorizontal: true,
         type: "discrete",
@@ -2095,8 +2057,7 @@ QUnit.test("Estimate margins creates text element with first category", function
 
     axis.estimateMargins(this.canvas);
 
-    assert.strictEqual(this.renderer.text.callCount, 1);
-    assert.deepEqual(this.renderer.text.getCall(0).args, ["cat1", 0, 0], "cteate text args");
+    assert.strictEqual(this.renderer.stub("text").called, false);
 });
 
 QUnit.test("Estimate left/right margin. Visible labels", function(assert) {
@@ -2113,6 +2074,7 @@ QUnit.test("Estimate left/right margin. Visible labels", function(assert) {
 });
 
 QUnit.test("Estimate top/bottom margin. Bottom axis", function(assert) {
+    this.generatedTicks = ["c1", "c2", "c3", "c4"];
     var axis = this.createSimpleAxis({
         isHorizontal: true,
         label: {
@@ -2128,6 +2090,7 @@ QUnit.test("Estimate top/bottom margin. Bottom axis", function(assert) {
 });
 
 QUnit.test("Estimate top/bottom margin. Top axis", function(assert) {
+    this.generatedTicks = ["c1", "c2", "c3", "c4"];
     var axis = this.createSimpleAxis({
         isHorizontal: true,
         position: "top",
@@ -2168,6 +2131,7 @@ QUnit.test("Estimate left/right margin. Invisible labels", function(assert) {
 });
 
 QUnit.test("Estimate draws title text and remove it", function(assert) {
+    this.generatedTicks = ["c1", "c2", "c3", "c4"];
     var axis = this.createSimpleAxis({
         isHorizontal: true,
         label: {
@@ -2203,6 +2167,7 @@ QUnit.test("Estimate draws title text and remove it", function(assert) {
 });
 
 QUnit.test("Estimate top/bottom margin. Axis with title", function(assert) {
+    this.generatedTicks = ["c1", "c2", "c3", "c4"];
     var axis = this.createSimpleAxis({
         isHorizontal: true,
         label: {
@@ -2226,6 +2191,7 @@ QUnit.test("Estimate top/bottom margin. Axis with title", function(assert) {
 });
 
 QUnit.test("Estimate margin. Staggered labels", function(assert) {
+    this.generatedTicks = ["c1", "c2", "c3", "c4"];
     var axis = this.createSimpleAxis({
         isHorizontal: true,
         label: {
@@ -2242,6 +2208,7 @@ QUnit.test("Estimate margin. Staggered labels", function(assert) {
 });
 
 QUnit.test("Estimate margin. Overlapping mode stagger", function(assert) {
+    this.generatedTicks = ["c1", "c2", "c3", "c4"];
     var axis = this.createSimpleAxis({
         isHorizontal: true,
         label: {
@@ -2258,6 +2225,7 @@ QUnit.test("Estimate margin. Overlapping mode stagger", function(assert) {
 });
 
 QUnit.test("Estimate margin. Rotated labels", function(assert) {
+    this.generatedTicks = ["c1", "c2", "c3", "c4"];
     var axis = this.createSimpleAxis({
         isHorizontal: true,
         label: {
@@ -2274,6 +2242,7 @@ QUnit.test("Estimate margin. Rotated labels", function(assert) {
 });
 
 QUnit.test("Estimate margin. Overlapping mode is rotate", function(assert) {
+    this.generatedTicks = ["c1", "c2", "c3", "c4"];
     var axis = this.createSimpleAxis({
         isHorizontal: true,
         label: {
@@ -2290,6 +2259,7 @@ QUnit.test("Estimate margin. Overlapping mode is rotate", function(assert) {
 });
 
 QUnit.test("Estimate margin. Overlapping mode is rotate, drawing type is stagger", function(assert) {
+    this.generatedTicks = ["c1", "c2", "c3", "c4"];
     var axis = this.createSimpleAxis({
         isHorizontal: true,
         label: {
@@ -2308,6 +2278,7 @@ QUnit.test("Estimate margin. Overlapping mode is rotate, drawing type is stagger
 
 
 QUnit.test("Estimate margin. Overlapping mode is stagger, drawing type is rotate", function(assert) {
+    this.generatedTicks = ["c1", "c2", "c3", "c4"];
     var axis = this.createSimpleAxis({
         isHorizontal: true,
         label: {
@@ -2326,6 +2297,7 @@ QUnit.test("Estimate margin. Overlapping mode is stagger, drawing type is rotate
 });
 
 QUnit.test("Estimate margin. Overlapping mode is rotate, drawing type is stagger", function(assert) {
+    this.generatedTicks = ["c1", "c2", "c3", "c4"];
     var axis = this.createSimpleAxis({
         isHorizontal: true,
         label: {
@@ -2520,6 +2492,7 @@ QUnit.test("Label is wider than constant line label - get label as margin", func
 });
 
 QUnit.test("Constant line label is wider than label - get constant line label as margin", function(assert) {
+    this.generatedTicks = ["c1", "c2", "c3", "c4"];
     var axis = this.createSimpleAxis({
         isHorizontal: true,
         position: "bottom",
