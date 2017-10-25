@@ -737,13 +737,13 @@ declare module DevExpress {
     }
     /** A base class for all components. */
     export class DOMComponent extends Component {
-        constructor(element: DevExpress.core.dxElement, options?: DOMComponentOptions);
+        constructor(element: Element | JQuery, options?: DOMComponentOptions);
         /** Specifies the device-dependent default configuration options for this component. */
         static defaultOptions(rule: { device?: any | Array<any> | Function, options?: any }): void;
         dispose(): void;
         /** Gets the root element of the widget. */
         element(): DevExpress.core.dxElement;
-        static getInstance(element: DevExpress.core.dxElement): DOMComponent;
+        static getInstance(element: Element | JQuery): DOMComponent;
     }
     /** An object used to manage OData endpoints in your application. */
     export class EndpointSelector {
