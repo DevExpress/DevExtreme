@@ -332,6 +332,9 @@ declare module DevExpress.ui {
         /** @docid dxSchedulerOptions_views_appointmentTemplate */
         appointmentTemplate?: any;
 
+        /** @docid dxSchedulerOptions_views_dropDownAppointmentTemplate */
+        dropDownAppointmentTemplate?: any;
+
         /** @docid dxSchedulerOptions_views_appointmentTooltipTemplate */
         appointmentTooltipTemplate?: any;
 
@@ -362,6 +365,20 @@ declare module DevExpress.ui {
         /** @docid_ignore dxSchedulerAppointmentTemplate_template */
         /** @docid_ignore dxSchedulerAppointmentTemplate_startDateTimeZone */
         /** @docid_ignore dxSchedulerAppointmentTemplate_endDateTimeZone */
+
+        /** @docid_ignore dxSchedulerDropDownAppointmentTemplate_text */
+        /** @docid_ignore dxSchedulerDropDownAppointmentTemplate_startDate */
+        /** @docid_ignore dxSchedulerDropDownAppointmentTemplate_endDate */
+        /** @docid_ignore dxSchedulerDropDownAppointmentTemplate_description */
+        /** @docid_ignore dxSchedulerDropDownAppointmentTemplate_recurrenceRule */
+        /** @docid_ignore dxSchedulerDropDownAppointmentTemplate_recurrenceException */
+        /** @docid_ignore dxSchedulerDropDownAppointmentTemplate_allDay */
+        /** @docid_ignore dxSchedulerDropDownAppointmentTemplate_html */
+        /** @docid_ignore dxSchedulerDropDownAppointmentTemplate_disabled */
+        /** @docid_ignore dxSchedulerDropDownAppointmentTemplate_visible */
+        /** @docid_ignore dxSchedulerDropDownAppointmentTemplate_template */
+        /** @docid_ignore dxSchedulerDropDownAppointmentTemplate_startDateTimeZone */
+        /** @docid_ignore dxSchedulerDropDownAppointmentTemplate_endDateTimeZone */
 
         /** @docid_ignore dxSchedulerAppointmentTooltipTemplate_text */
         /** @docid_ignore dxSchedulerAppointmentTooltipTemplate_startDate */
@@ -398,6 +415,8 @@ declare module DevExpress.ui {
         firstDayOfWeek?: number;
         /** @docid dxSchedulerOptions_appointmentTemplate */
         appointmentTemplate?: any;
+        /** @docid dxSchedulerOptions_dropDownAppointmentTemplate */
+        dropDownAppointmentTemplate?: any;
         /** @docid dxSchedulerOptions_appointmentTooltipTemplate */
         appointmentTooltipTemplate?: any;
         /** @docid dxSchedulerOptions_dataCellTemplate */
