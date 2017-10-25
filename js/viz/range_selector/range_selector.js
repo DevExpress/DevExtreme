@@ -972,7 +972,6 @@ var dxRangeSelector = require("../core/base_widget").inherit({
         var that = this,
             minorTickInterval = tickIntervalsInfo.minorTickInterval,
             tickInterval = tickIntervalsInfo.tickInterval,
-            interval,
             endValue = scaleOptions.endValue,
             startValue = scaleOptions.startValue,
             sliderMarkerOptions = that._getOption(SLIDER_MARKER),
@@ -990,22 +989,12 @@ var dxRangeSelector = require("../core/base_widget").inherit({
                 };
             }
             if(isValueTypeDatetime && !isTypeDiscrete) {
-                if(_isDefined(minorTickInterval) && minorTickInterval !== 0) {
-                    if(dateUtils.getDateUnitInterval(minorTickInterval) === dateUtils.getDateUnitInterval(tickInterval)) {
-                        interval = dateUtils.getPrevDateUnit(minorTickInterval);
-                    } else {
-                        interval = minorTickInterval;
-                    }
-                } else {
-                    interval = tickInterval;
-                }
-
                 if(!scaleOptions.marker.visible) {
                     if(_isDefined(startValue) && _isDefined(endValue)) {
-                        sliderMarkerOptions.format = formatHelper.getDateFormatByTickInterval(startValue, endValue, interval);
+                        sliderMarkerOptions.format = formatHelper.getDateFormatByTickInterval(startValue, endValue, _isDefined(minorTickInterval) && minorTickInterval !== 0 ? minorTickInterval : tickInterval);
                     }
                 } else {
-                    sliderMarkerOptions.format = dateUtils.getDateFormatByTickInterval(interval);
+                    sliderMarkerOptions.format = dateUtils.getDateFormatByTickInterval(_isDefined(minorTickInterval) && minorTickInterval !== 0 ? minorTickInterval : tickInterval);
                 }
             }
             // T347293

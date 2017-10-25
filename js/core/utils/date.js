@@ -71,13 +71,6 @@ var getNextDateUnit = function(unit, withWeeks) {
     }
 };
 
-var getPrevDateUnit = function(unit, withWeeks) {
-    var interval = getDateUnitInterval(unit),
-        idx = dateUnitIntervals.indexOf(interval);
-
-    return idx > 0 ? dateUnitIntervals[idx - 1] : interval;
-};
-
 var convertMillisecondsToDateUnits = function(value) {
     var i,
         dateUnitCount,
@@ -584,7 +577,6 @@ var dateUtils = {
     convertMillisecondsToDateUnits: convertMillisecondsToDateUnits,
     dateToMilliseconds: dateToMilliseconds,
     getNextDateUnit: getNextDateUnit,
-    getPrevDateUnit: getPrevDateUnit,
     convertDateUnitToMilliseconds: convertDateUnitToMilliseconds,
     getDateUnitInterval: getDateUnitInterval,
     getDateFormatByTickInterval: getDateFormatByTickInterval,   // T375972
