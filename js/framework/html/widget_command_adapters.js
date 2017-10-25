@@ -75,8 +75,8 @@ var WidgetAdapterBase = Class.inherit({
     _onWidgetItemRendered: function(e) {
         if(e.itemData.isJustAdded && e.itemData.command && e.itemData.command.option("visible") && this._commandRenderedAnimation) {
             this._transitionExecutor.enter(e.itemElement, this._commandRenderedAnimation);
-            delete e.itemData.isJustAdded;
         }
+        delete e.itemData.isJustAdded;
     },
     _onWidgetContentReady: function(e) {
         this.animationDeferred = this._transitionExecutor.start();
