@@ -96,7 +96,7 @@ var DOMComponent = Component.inherit({
     /**
     * @name DOMComponentMethods_ctor
     * @publicName ctor(element,options)
-    * @param1 element:dxElement
+    * @param1 element:Node|JQuery
     * @param2 options:DOMComponentOptions|undefined
     * @hidden
     */
@@ -421,7 +421,7 @@ var DOMComponent = Component.inherit({
 * @static
 * @section uiWidgets
 * @publicName getInstance(element)
-* @param1 element:dxElement
+* @param1 element:Node|JQuery
 * @return DOMComponent
 */
 DOMComponent.getInstance = function(element) {
