@@ -2,12 +2,12 @@
 
 var WeakMap = require("./polyfills/weak_map");
 var eventsEngine = require("../events/core/events_engine");
-var Callbacks = require("./utils/callbacks");
+var MemorizedCallbacks = require("./memorized_callbacks");
 
 var dataMap = new WeakMap();
 var strategy;
 
-var strategyChanging = Callbacks();
+var strategyChanging = new MemorizedCallbacks();
 var beforeCleanData = function() {};
 var afterCleanData = function() {};
 
