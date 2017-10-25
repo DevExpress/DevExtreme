@@ -188,7 +188,7 @@
 
 @texteditor-color: @base-text-color;
 @texteditor-disabled-opacity: .5;
-@texteditor-readonly-border-color: lighten(@texteditor-border-color, 9%);
+@texteditor-readonly-border-color: fade(@texteditor-border-color, 50%);
 
 /**
 * @name 60. Placeholder text color
@@ -197,7 +197,7 @@
 */
 @texteditor-placeholder-color: lighten(@base-label-color, 16%); // #728e94 => #a1b1b5
 
-@texteditor-button-clear-icon-color: lighten(@texteditor-color, 40%);
+@texteditor-button-clear-icon-color: @base-icon-color;
 
 @texteditor-invalid-focused-border-color: @base-invalid-color;
 @texteditor-invalid-faded-border-color: @base-invalid-faded-border-color;
@@ -993,8 +993,8 @@
 * @type color
 * @group scrollview
 */
-@scrollable-scroll-bg: @base-accent;
-@scrollable-scroll-active-bg: darken(@scrollable-bg, 25%);
+@scrollable-scroll-bg: fade(@base-accent, 80%);
+@scrollable-scroll-active-bg: @base-accent;
 @scrollable-scroll-shadow-color: transparent;
 
 @scrollable-scrollbar-bg: transparent;
