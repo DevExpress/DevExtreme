@@ -835,9 +835,8 @@ QUnit.module(
 
             assert.equal(vm.text.getSubscriptionsCount(), 1);
 
-            templateContent
-                .data("dxTestKey", 123)
-                .removeData("dxTestKey");
+            templateContent.data("dxTestKey", 123);
+            dataUtils.removeData(templateContent, "dxTestKey");
 
             assert.equal(vm.text.getSubscriptionsCount(), 1);
         });
