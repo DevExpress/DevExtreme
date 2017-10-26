@@ -338,13 +338,13 @@ require("style-compiler-test-server/known-css-files");
 
     QUnit.test("current theme name when theme included as simple stylesheet", function(assert) {
         var done = assert.async();
-        themes.ready(done);
 
         var url = ROOT_URL + "testing/helpers/themeMarker.css";
         themes.init({ context: this.frameDoc(), _autoInit: true });
         this.writeToFrame("<link rel=stylesheet href='" + url + "' />");
 
         assert.expect(0);
+        themes.ready(done);
         themes.waitForThemeLoad("sampleTheme.sampleColorScheme");
     });
 
