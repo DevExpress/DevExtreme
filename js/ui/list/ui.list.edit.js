@@ -126,7 +126,7 @@ var ListEdit = ListBase.inherit({
             * @name dxListOptions_menuItems_action
             * @publicName action
             * @type function
-            * @type_function_param1 itemElement:jQuery
+            * @type_function_param1 itemElement:dxElement
             * @type_function_param2 itemData:object
             */
             menuItems: [],

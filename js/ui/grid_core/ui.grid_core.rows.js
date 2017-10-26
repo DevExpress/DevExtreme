@@ -49,7 +49,7 @@ module.exports = {
             * @type_function_param1_field11 rowIndex:number
             * @type_function_param1_field12 column:object
             * @type_function_param1_field13 rowType:string
-            * @type_function_param1_field14 cellElement:jQuery
+            * @type_function_param1_field14 cellElement:dxElement
             * @type_function_param1_field15 row:dxDataGridRowObject
             * @extends Action
             * @action
@@ -69,7 +69,7 @@ module.exports = {
             * @type_function_param1_field11 rowIndex:number
             * @type_function_param1_field12 column:object
             * @type_function_param1_field13 rowType:string
-            * @type_function_param1_field14 cellElement:jQuery
+            * @type_function_param1_field14 cellElement:dxElement
             * @type_function_param1_field15 row:dxTreeListRowObject
             * @extends Action
             * @action
@@ -193,7 +193,7 @@ module.exports = {
             * @type_function_param1_field11 isSelected:boolean
             * @type_function_param1_field12 isExpanded:boolean
             * @type_function_param1_field13 groupIndex:number
-            * @type_function_param1_field14 rowElement:jQuery
+            * @type_function_param1_field14 rowElement:dxElement
             * @type_function_param1_field15 handled:boolean
             * @extends Action
             * @action
@@ -212,7 +212,7 @@ module.exports = {
             * @type_function_param1_field10 rowType:string
             * @type_function_param1_field11 isSelected:boolean
             * @type_function_param1_field12 isExpanded:boolean
-            * @type_function_param1_field13 rowElement:jQuery
+            * @type_function_param1_field13 rowElement:dxElement
             * @type_function_param1_field14 handled:boolean
             * @extends Action
             * @action
@@ -232,7 +232,7 @@ module.exports = {
             * @type_function_param1_field11 column:object
             * @type_function_param1_field12 rowIndex:number
             * @type_function_param1_field13 rowType:string
-            * @type_function_param1_field14 cellElement:jQuery
+            * @type_function_param1_field14 cellElement:dxElement
             * @type_function_param1_field15 row:dxDataGridRowObject
             * @extends Action
             * @action
@@ -252,7 +252,7 @@ module.exports = {
             * @type_function_param1_field11 column:object
             * @type_function_param1_field12 rowIndex:number
             * @type_function_param1_field13 rowType:string
-            * @type_function_param1_field14 cellElement:jQuery
+            * @type_function_param1_field14 cellElement:dxElement
             * @type_function_param1_field15 row:dxTreeListRowObject
             * @extends Action
             * @action
@@ -324,7 +324,7 @@ module.exports = {
              * @type_function_param1_field13 row:dxDataGridRowObject
              * @type_function_param1_field14 isSelected:boolean
              * @type_function_param1_field15 isExpanded:boolean
-             * @type_function_param1_field16 cellElement:jQuery
+             * @type_function_param1_field16 cellElement:dxElement
              * @extends Action
              * @action
              */
@@ -345,7 +345,7 @@ module.exports = {
              * @type_function_param1_field13 row:dxTreeListRowObject
              * @type_function_param1_field14 isSelected:boolean
              * @type_function_param1_field15 isExpanded:boolean
-             * @type_function_param1_field16 cellElement:jQuery
+             * @type_function_param1_field16 cellElement:dxElement
              * @extends Action
              * @action
              */
@@ -363,7 +363,7 @@ module.exports = {
              * @type_function_param1_field10 groupIndex:number
              * @type_function_param1_field11 isSelected:boolean
              * @type_function_param1_field12 isExpanded:boolean
-             * @type_function_param1_field13 rowElement:jQuery
+             * @type_function_param1_field13 rowElement:dxElement
              * @extends Action
              * @action
              */
@@ -380,7 +380,7 @@ module.exports = {
              * @type_function_param1_field9 rowType:string
              * @type_function_param1_field10 isSelected:boolean
              * @type_function_param1_field11 isExpanded:boolean
-             * @type_function_param1_field12 rowElement:jQuery
+             * @type_function_param1_field12 rowElement:dxElement
              * @extends Action
              * @action
              */
