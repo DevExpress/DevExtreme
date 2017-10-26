@@ -1641,29 +1641,6 @@ QUnit.test("Logarithmic axis. marginOptions.size - correctly apply margins", fun
     });
 });
 
-//TODO is it something real?
-QUnit.test("Calculate margins if there is categories as empty array", function(assert) {
-    this.testMargins(assert, {
-        options: {
-            valueMarginsEnabled: true,
-            minValueMargin: 0.1,
-            maxValueMargin: 0.2
-        },
-        range: {
-            min: 100,
-            max: 200,
-            categories: []
-        },
-        ticks: [100, 200],
-        expectedRange: {
-            min: 90,
-            max: 220,
-            minVisible: 90,
-            maxVisible: 220
-        }
-    });
-});
-
 QUnit.test("DateTime axis - calculate margins and provide correct data type", function(assert) {
     this.testMargins(assert, {
         options: {
