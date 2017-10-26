@@ -343,6 +343,7 @@ QUnit.test("Change row expand state on row click", function(assert) {
             columns: ["field1", "field2"],
             loadingTimeout: undefined,
             onRowPrepared: function(args) {
+                assert.equal(typeUtils.isRenderer(args.rowElement), config().useJQuery, "rowElement is correct");
                 if(args.rowType === 'group') {
                     if(isRowClicked) {
                         assert.ok(!args.component.isRowExpanded(args.key), "after click on group row it's closed");
@@ -1350,6 +1351,7 @@ QUnit.test("Get correct column and column index in the onCellHoverChanged event 
             dataSource: dataSource,
             columns: ["firstName", "lastName"],
             onCellHoverChanged: function(e) {
+                assert.equal(typeUtils.isRenderer(e.cellElement), config().useJQuery, "cellElement is correct");
                 eventArgs.push({
                     column: e.column,
                     columnIndex: e.columnIndex
@@ -1388,6 +1390,7 @@ QUnit.test("Get correct column and column index in the onCellClick event when ev
             dataSource: dataSource,
             columns: ["firstName", "lastName"],
             onCellClick: function(e) {
+                assert.equal(typeUtils.isRenderer(e.cellElement), config().useJQuery, "cellElement is correct");
                 column = e.column;
                 columnIndex = e.columnIndex;
             }
@@ -1897,6 +1900,7 @@ QUnit.test("column headers visibility when hide removing row in batch editing mo
                 allowDeleting: true
             },
             onCellPrepared: function(e) {
+                assert.equal(typeUtils.isRenderer(e.cellElement), config().useJQuery, "cellElement is correct");
                 if(e.rowType === "data" && e.column.command === "edit" && e.row.removed) {
                     $(e.cellElement).parent().css({ display: 'none' });
                 }

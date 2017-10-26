@@ -57,7 +57,7 @@ var FilterBuilder = Widget.inherit({
               * @type_function_param1_field4 value:any
               * @type_function_param1_field5 setValue(newValue):any
               * @type_function_param1_field6 cancel:boolean
-              * @type_function_param1_field7 editorElement:jQuery
+              * @type_function_param1_field7 editorElement:dxElement
               * @type_function_param1_field8 editorName:string
               * @type_function_param1_field9 editorOptions:object
               * @type_function_param1_field10 dataField:string
@@ -78,7 +78,7 @@ var FilterBuilder = Widget.inherit({
               * @type_function_param1 e:object
               * @type_function_param1_field4 value:any
               * @type_function_param1_field5 setValue(newValue):any
-              * @type_function_param1_field6 editorElement:jQuery
+              * @type_function_param1_field6 editorElement:dxElement
               * @type_function_param1_field7 editorName:string
               * @type_function_param1_field8 dataField:string
               * @type_function_param1_field9 updateValueTimeout:number

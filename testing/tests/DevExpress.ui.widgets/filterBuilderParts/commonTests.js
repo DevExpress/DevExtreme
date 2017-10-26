@@ -2,7 +2,9 @@
 
 /* global fields */
 
-var $ = require("jquery");
+var $ = require("jquery"),
+    isRenderer = require("core/utils/type").isRenderer,
+    config = require("core/config");
 
 require("ui/filter_builder/filter_builder");
 
@@ -146,6 +148,25 @@ QUnit.module("Rendering", function() {
         assert.equal(container.find("." + FILTER_BUILDER_ITEM_OPERATION_CLASS).text(), "Contains");
         assert.equal(container.find("." + FILTER_BUILDER_ITEM_VALUE_CLASS).text(), "<enter a value>");
         assert.ok($(".dx-filterbuilder-fields").length === 0);
+    });
+
+    QUnit.test("editorElement argument of onEditorPreparing option is correct", function(assert) {
+        var container = $("#container"),
+            companyNameValueField;
+
+        container.dxFilterBuilder({
+            value: [
+                ["CompanyName", "=", "DevExpress"]
+            ],
+            onEditorPreparing: function(e) {
+                assert.equal(isRenderer(e.editorElement), config().useJQuery, "editorElement is correct");
+            },
+            fields: fields
+        });
+
+        //act
+        companyNameValueField = $("." + FILTER_BUILDER_ITEM_VALUE_CLASS).eq(0);
+        companyNameValueField.find("." + FILTER_BUILDER_ITEM_VALUE_TEXT_CLASS).click();
     });
 
     QUnit.test("operations are changed after field change", function(assert) {
