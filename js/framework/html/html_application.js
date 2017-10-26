@@ -240,6 +240,11 @@ var HtmlApplication = Application.inherit({
     */
     /**
     * @name HtmlApplicationmethods_navigate
+    * @publicName navigate(uri)
+    * @param1 uri:string|object|undefined
+    */
+    /**
+    * @name HtmlApplicationmethods_navigate
     * @publicName navigate(uri, options)
     * @param1 uri:string|object
     * @param2 options:object

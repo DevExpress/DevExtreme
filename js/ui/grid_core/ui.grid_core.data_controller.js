@@ -38,7 +38,9 @@ module.exports = {
              * @name GridBaseOptions_onDataErrorOccurred
              * @publicName onDataErrorOccurred
              * @extends Action
-             * @type_function_param1_field4 error:JavaScript Error object
+             * @type function(e)
+             * @type_function_param1 e:object
+             * @type_function_param1_field4 error:Error
              * @action
             */
             onDataErrorOccurred: null,

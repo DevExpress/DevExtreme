@@ -108,6 +108,8 @@ var Lookup = DropDownList.inherit({
             * @name dxLookupOptions_onTitleRendered
             * @publicName onTitleRendered
             * @extends Action
+            * @type function(e)
+            * @type_function_param1 e:object
             * @type_function_param1_field1 titleElement:dxElement
             * @action
             */
@@ -308,6 +310,8 @@ var Lookup = DropDownList.inherit({
             * @name dxLookupOptions_onScroll
             * @publicName onScroll
             * @extends Action
+            * @type function(e)
+            * @type_function_param1 e:object
             * @type_function_param1_field4 jQueryEvent:jQuery.Event
             * @type_function_param1_field5 scrollOffset:object
             * @type_function_param1_field6 reachedLeft:boolean
@@ -402,6 +406,8 @@ var Lookup = DropDownList.inherit({
             * @name dxLookupOptions_onValueChanged
             * @publicName onValueChanged
             * @extends Action
+            * @type function(e)
+            * @type_function_param1 e:object
             * @type_function_param1_field4 value:object
             * @type_function_param1_field5 previousValue:object
             * @type_function_param1_field6 jQueryEvent:jQuery.Event

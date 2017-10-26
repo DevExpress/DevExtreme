@@ -108,6 +108,8 @@ var CollectionWidget = BaseCollectionWidget.inherit({
             * @name CollectionWidgetOptions_onSelectionChanged
             * @publicName onSelectionChanged
             * @extends Action
+            * @type function(e)
+            * @type_function_param1 e:object
             * @type_function_param1_field4 addedItems:array<any>
             * @type_function_param1_field5 removedItems:array<any>
             * @action
@@ -118,6 +120,8 @@ var CollectionWidget = BaseCollectionWidget.inherit({
             * @name CollectionWidgetOptions_onItemReordered
             * @publicName onItemReordered
             * @extends Action
+            * @type function(e)
+            * @type_function_param1 e:object
             * @type_function_param1_field4 itemData:object
             * @type_function_param1_field5 itemElement:dxElement
             * @type_function_param1_field6 itemIndex:number | object
@@ -132,10 +136,12 @@ var CollectionWidget = BaseCollectionWidget.inherit({
             * @name CollectionWidgetOptions_onItemDeleting
             * @publicName onItemDeleting
             * @extends Action
+            * @type function(e)
+            * @type_function_param1 e:object
             * @type_function_param1_field4 itemData:object
             * @type_function_param1_field5 itemElement:dxElement
             * @type_function_param1_field6 itemIndex:number | object
-            * @type_function_param1_field7 cancel:boolean | Promise
+            * @type_function_param1_field7 cancel:boolean | Promise<void>
             * @action
             * @hidden
             */
@@ -145,6 +151,8 @@ var CollectionWidget = BaseCollectionWidget.inherit({
             * @name CollectionWidgetOptions_onItemDeleted
             * @publicName onItemDeleted
             * @extends Action
+            * @type function(e)
+            * @type_function_param1 e:object
             * @type_function_param1_field4 itemData:object
             * @type_function_param1_field5 itemElement:dxElement
             * @type_function_param1_field6 itemIndex:number | object

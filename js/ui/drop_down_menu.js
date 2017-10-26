@@ -80,8 +80,9 @@ var DropDownMenu = Widget.inherit({
             /**
             * @name dxDropDownMenuOptions_onItemClick
             * @publicName onItemClick
-            * @type function|string
+            * @type function(e)|string
             * @extends Action
+            * @type_function_param1 e:object
             * @type_function_param1_field4 itemData:object
             * @type_function_param1_field5 itemElement:dxElement
             * @type_function_param1_field6 itemIndex:number
@@ -132,8 +133,9 @@ var DropDownMenu = Widget.inherit({
             /**
             * @name dxDropDownMenuOptions_onButtonClick
             * @publicName onButtonClick
-            * @type function|string
+            * @type function(e)|string
             * @extends Action
+            * @type_function_param1 e:object
             * @type_function_param1_field4 jQueryEvent:jQuery.Event
             * @action
             */

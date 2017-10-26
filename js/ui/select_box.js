@@ -174,8 +174,10 @@ var SelectBox = DropDownList.inherit({
             * @name dxSelectBoxOptions_onCustomItemCreating
             * @publicName onCustomItemCreating
             * @extends Action
+            * @type function(e)
+            * @type_function_param1 e:object
             * @type_function_param1_field4 text:string
-            * @type_function_return object|Promise
+            * @type_function_return object|Promise<object>
             * @action
             */
             onCustomItemCreating: function(e) {
