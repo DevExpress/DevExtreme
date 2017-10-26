@@ -25,7 +25,7 @@ var EVENTS = [
     "Change", "Cut", "Copy", "Paste", "Input"
 ];
 
-var setCaretForEdge15 = function($input) {
+var caretWorkaround = function($input) {
     //NOTE: We desided to return to this problem when the Edge will update to the 17 version
     //Edge 15 or 16 sets caret to the end of the mask editor when iframe is used and focus was triggered by focus() method
     var isEdge15_16 = browser.msie && browser.version >= 15 && browser.version < 17;
@@ -957,7 +957,7 @@ QUnit.test("TextEditor with mask option should firing the 'onChange' event", fun
         $input = $textEditor.find("input"),
         keyboard = keyboardMock($input);
 
-    setCaretForEdge15($input);
+    caretWorkaround($input);
 
     $input.triggerHandler("focus");
     keyboard.type("123").press("enter");
