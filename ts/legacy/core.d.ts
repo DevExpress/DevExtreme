@@ -1420,6 +1420,9 @@ declare module DevExpress {
 
             /** @docid ui_themesmethods_current#current(themeName) */
             current(themeName: string): void;
+            
+            /** @docid ui_themesmethods_ready */
+            ready(callback: Function): void;
         };
 
         /** @docid ui_setTemplateEngine#setTemplateEngine(name) */
