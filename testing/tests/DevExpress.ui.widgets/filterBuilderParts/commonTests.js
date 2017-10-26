@@ -438,6 +438,21 @@ QUnit.module("Rendering", function() {
         assert.deepEqual(instance.option("value"), ["State", "<>", "Test"]);
         assert.notEqual(instance.option("value"), instance._model[0]);
     });
+
+    QUnit.test("show editor on keyup event", function(assert) {
+        var container = $("#container");
+
+        container.dxFilterBuilder({
+            value: ["Zipcode", "<>", 123],
+            fields: fields
+        });
+
+        var $valueButton = container.find("." + FILTER_BUILDER_ITEM_VALUE_TEXT_CLASS);
+        $valueButton.trigger($.Event("keyup", { keyCode: 13 }));
+
+        assert.notOk(container.find("." + FILTER_BUILDER_ITEM_VALUE_TEXT_CLASS).length);
+        assert.ok(container.find(".dx-texteditor").length);
+    });
 });
 
 QUnit.module("Create editor by field dataType", function() {
