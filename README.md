@@ -1,6 +1,6 @@
 # DevExtreme
 
-[![Build Status](https://travis-ci.org/DevExpress/DevExtreme.svg?branch=17_1)](https://travis-ci.org/DevExpress/DevExtreme)
+[![Build Status](https://travis-ci.org/DevExpress/DevExtreme.svg?branch=17_2)](https://travis-ci.org/DevExpress/DevExtreme)
 
 Voted the best cross-platform component suite containing everything you need to create responsive web apps for touch devices and traditional desktops: data grid, interactive charts, data editors, navigation and multi-purpose widgets that are designed to look great and provide powerful functionality in any browser.
 
