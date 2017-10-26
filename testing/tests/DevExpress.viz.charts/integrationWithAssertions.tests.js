@@ -381,7 +381,10 @@ QUnit.test("Ticks calculation after resize", function(assert) {
                 enabled: false
             },
             dataSource: [{ arg: 1, val: 1 }, { arg: 2, val: 2 }],
-            series: [ { type: "bar" }]
+            series: [ { type: "bar" }],
+            legend: {
+                visible: false
+            }
         });
 
     container.width(100).height(100);
