@@ -1136,11 +1136,11 @@ declare module DevExpress {
     }
 
     /** @docid_ignore events */
-    /** @docid_ignore events_on */
-    /** @docid_ignore events_one */
-    /** @docid_ignore events_off */
-    /** @docid_ignore events_trigger */
-    /** @docid_ignore events_triggerHandler */
+    /** @docid_ignore eventsMethods_on */
+    /** @docid_ignore eventsMethods_one */
+    /** @docid_ignore eventsMethods_off */
+    /** @docid_ignore eventsMethods_trigger */
+    /** @docid_ignore eventsMethods_triggerHandler */
     /** @docid_ignore eventsHandler */
     /** @docid_ignore dxEvent */
     /** @docid_ignore dxEventFields_isPropagationStopped */
