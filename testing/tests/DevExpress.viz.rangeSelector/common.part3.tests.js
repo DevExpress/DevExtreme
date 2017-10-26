@@ -1111,6 +1111,22 @@ QUnit.test("range container canvas with no indents. scale's labels half width as
     assert.deepEqual(this.rangeView.update.lastCall.args[2], { left: 10, top: 0, width: 290, height: 24, right: 0, bottom: 0 });
 });
 
+QUnit.test("Indents with logarithmic scale", function(assert) {
+    this.createWidget({
+        scale: {
+            startValue: 1024,
+            endValue: 4096,
+            type: "logarithmic",
+            logarithmBase: 2,
+            label: {
+                visible: true
+            }
+        }
+    });
+
+    assert.strictEqual(this.renderer.text.getCall(1).args[0], "1024");
+});
+
 QUnit.test("During indents estimation, format scale labels the same way the axis formats its labels", function(assert) {
     this.createWidget({
         scale: {

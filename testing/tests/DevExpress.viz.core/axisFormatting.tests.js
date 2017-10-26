@@ -210,12 +210,25 @@ QUnit.test("format float number. tickInterval = 2.5", function(assert) {
 QUnit.test("formatting logarithmic ticks", function(assert) {
     this.testFormat(assert, {
         type: "logarithmic",
+        logarithmBase: 10,
         argumentType: "numeric",
         label: {
             visible: true
         }
     }, [0.00001, 0.0001, 0.001, 0.01, 0.1, 0, 1, 10, 100, 1000, 10000, 1e18 ], 1,
     [ "1E-5", "0.0001", "0.001", "0.01", "0.1", "0", "1", "10", "100", "1K", "10K", "1E+18"]);
+});
+
+QUnit.test("No formats for logarithmic ticks with logarithmBase !== 0", function(assert) {
+    this.testFormat(assert, {
+        logarithmBase: 2,
+        type: "logarithmic",
+        argumentType: "numeric",
+        label: {
+            visible: true
+        }
+    }, [512, 1024, 2048, 4096], 1,
+        ["512", "1024", "2048", "4096"]);
 });
 
 QUnit.test("Label's hint - use auto formatter", function(assert) {

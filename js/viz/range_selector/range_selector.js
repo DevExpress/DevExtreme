@@ -59,7 +59,7 @@ function calculateMarkerHeight(renderer, value, sliderMarkerOptions) {
 }
 
 function calculateScaleLabelHalfWidth(renderer, value, scaleOptions, tickIntervalsInfo) {
-    var formattedText = commonModule.formatValue(value, scaleOptions.label, tickIntervalsInfo, scaleOptions.valueType, scaleOptions.type),
+    var formattedText = commonModule.formatValue(value, scaleOptions.label, tickIntervalsInfo, scaleOptions.valueType, scaleOptions.type, scaleOptions.logarithmBase),
         textBBox = getTextBBox(renderer, formattedText, scaleOptions.label.font);
 
     return _ceil(textBBox.width / 2);

@@ -151,9 +151,10 @@ function smartFormatter(tick, options) {
         ticks = options.ticks,
         log10Tick,
         prevDateIndex,
-        nextDateIndex;
+        nextDateIndex,
+        isLogarithmic = options.type === "logarithmic";
 
-    if(!isDefined(format) && isDefined(tickInterval) && options.type !== "discrete" && tick !== 0) {
+    if(!isDefined(format) && isDefined(tickInterval) && options.type !== "discrete" && tick !== 0 && (options.logarithmBase === 10 || !isLogarithmic)) {
         if(options.dataType !== "datetime") {
             if(ticks.length && ticks.indexOf(tick) === -1) {
                 indexOfTick = getTransitionTickIndex(ticks, tick);
@@ -162,7 +163,7 @@ function smartFormatter(tick, options) {
 
             separatedTickInterval = tickInterval.toString().split(".");
 
-            if(options.type === "logarithmic") {
+            if(isLogarithmic) {
                 log10Tick = log10(abs(tick));
                 if(log10Tick > 0) {
                     typeFormat = formats[floor(log10Tick / 3)] || EXPONENTIAL;

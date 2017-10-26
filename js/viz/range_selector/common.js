@@ -19,7 +19,7 @@ var consts = {
     pointerSize: POINTER_SIZE
 };
 
-var formatValue = function(value, formatOptions, tickIntervalsInfo, valueType, type) {
+var formatValue = function(value, formatOptions, tickIntervalsInfo, valueType, type, logarithmBase) {
     var formatObject = {
         value: value,
         valueText: _format(value, {
@@ -27,7 +27,8 @@ var formatValue = function(value, formatOptions, tickIntervalsInfo, valueType, t
             ticks: tickIntervalsInfo ? tickIntervalsInfo.ticks : [],
             tickInterval: tickIntervalsInfo ? tickIntervalsInfo.tickInterval : undefined,
             dataType: valueType,
-            type: type
+            type: type,
+            logarithmBase: logarithmBase
         })
     };
     return String(isFunction(formatOptions.customizeText) ? formatOptions.customizeText.call(formatObject, formatObject) : formatObject.valueText);
