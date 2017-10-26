@@ -55,6 +55,7 @@ var createPoint = function() {
     var stub = sinon.createStubInstance(pointModule.Point);
     stub.argument = 1;
     stub.hasValue.returns(true);
+    stub.hasCoords.returns(true);
     stub.isInVisibleArea.returns(true);
 
     stub._options = {};//see T243839
@@ -75,6 +76,7 @@ var environment = {
             stub.argument = 1;
             stub.getMarkerCoords.returns({ x: 1, y: 2, width: 20, height: 10 });
             stub.hasValue.returns(true);
+            stub.hasCoords.returns(true);
             stub.isInVisibleArea.returns(true);
             stub.draw.reset();
             stub.animate.reset();

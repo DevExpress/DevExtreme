@@ -14,13 +14,13 @@ module.exports = {
         if(isDefined(specialValue)) {
             return specialValue;
         }
-        return numericTranslator.translate.call(that, getLog(bp, that._businessRange.base));
+        if(that._isValueOutOfCanvas(getLog(bp, that._businessRange.base))) {
+            return null;
+        }
+        return that.to(bp);
     },
 
-    untranslate: function() {
-        var result = numericTranslator.untranslate.apply(this, arguments);
-        return result === null ? result : raiseTo(result, this._businessRange.base);
-    },
+    untranslate: numericTranslator.untranslate,
 
     getInterval: numericTranslator.getInterval,
 
@@ -53,7 +53,8 @@ module.exports = {
     },
 
     from: function(position) {
-        return raiseTo(numericTranslator.from.call(this, position), this._businessRange.base);
+        var result = numericTranslator.from.call(this, position);
+        return result !== null ? raiseTo(result, this._businessRange.base) : result;
     },
 
     _add: function(value, diff, dir) {

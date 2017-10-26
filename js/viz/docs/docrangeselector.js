@@ -87,6 +87,70 @@ var dxRangeSelector = {
         */
         minorTickInterval: {},
         /**
+        * @name dxrangeselectoroptions_scale_breaks
+        * @publicName breaks
+        * @type Array<ScaleBreak>
+        * @default undefined
+        */
+        breaks: undefined,
+        /**
+        * @name dxrangeselectoroptions_scale_workdaysonly
+        * @publicName workdaysOnly
+        * @type boolean
+        * @default false
+        */
+        workdaysOnly: false,
+        /**
+        * @name dxrangeselectoroptions_scale_workweek
+        * @publicName workWeek
+        * @type Array<number>
+        * @default [1, 2, 3, 4, 5]
+        */
+        workWeek: [1, 2, 3, 4, 5],
+        /**
+        * @name dxrangeselectoroptions_scale_holidays
+        * @publicName holidays
+        * @type Array<Date, string>| Array<number>
+        * @default undefined
+        */
+        holidays: undefined,
+        /**
+        * @name dxrangeselectoroptions_scale_singleworkdays
+        * @publicName singleWorkdays
+        * @type Array<Date, string> | Array<number>
+        * @default undefined
+        */
+        singleWorkdays: undefined,
+        /**
+        * @name dxrangeselectoroptions_scale_breakStyle
+        * @publicName breakStyle
+        * @type object
+        */
+        breakStyle: {
+            /**
+            * @name dxrangeselectoroptions_scale_breakStyle_width
+            * @publicName width
+            * @type number
+            * @default 5
+            */
+            width: 5,
+            /**
+            * @name dxrangeselectoroptions_scale_breakStyle_color
+            * @publicName color
+            * @type string
+            * @default "#ababab"
+            */
+            color: "#ababab",
+            /**
+            * @name dxrangeselectoroptions_scale_breakStyle_line
+            * @publicName line
+            * @type string
+            * @default "waved"
+            * @acceptValues 'waved'| 'straight'
+            */
+            line: "waved"
+        },
+        /**
         * @name dxrangeselectoroptions_scale_majortickinterval
         * @publicName majorTickInterval
         * @type number|object|string

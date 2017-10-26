@@ -429,7 +429,10 @@ var dxChart = AdvancedChart.inherit({
     },
 
     _prepareAxisOptions: function(typeSelector, userOptions, rotated) {
-        return { isHorizontal: (typeSelector === "argumentAxis") !== rotated };
+        return {
+            isHorizontal: (typeSelector === "argumentAxis") !== rotated,
+            containerColor: this._themeManager.getOptions("containerBackgroundColor")
+        };
     },
 
     _checkPaneName: function(seriesTheme) {
@@ -657,6 +660,9 @@ var dxChart = AdvancedChart.inherit({
         if(!drawOptions.adjustAxes) {
             drawAxesWithTicks(verticalAxes, !rotated && synchronizeMultiAxes, panesCanvases, panesBorderOptions);
             drawAxesWithTicks(horizontalAxes, rotated && synchronizeMultiAxes, panesCanvases, panesBorderOptions);
+            that._valueAxes.forEach(function(axis) {
+                axis.drawScaleBreaks();
+            });
             return;
         }
 

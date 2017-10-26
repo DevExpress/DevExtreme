@@ -135,6 +135,24 @@ declare module DevExpress.viz.rangeSelector {
             /** @docid dxrangeselectoroptions_scale_endvalue */
             endValue?: any;
 
+            /** @docid dxrangeselectoroptions_scale_breaks */
+            breaks?: Array<any>;
+
+            /** @docid dxrangeselectoroptions_scale_workdaysonly */
+            workdaysOnly?: boolean;
+
+            /** @docid dxrangeselectoroptions_scale_workweek */
+            workWeek?: Array<number>;
+
+            /** @docid dxrangeselectoroptions_scale_holidays */
+            holidays?: any;
+
+            /** @docid dxrangeselectoroptions_scale_singleworkdays */
+            singleWorkdays?: any;
+
+             /** @docid dxrangeselectoroptions_scale_breakStyle */
+            breakStyle?: viz.core.BreakStyle;
+
             /** @docid dxrangeselectoroptions_scale_label */
             label?: {
 

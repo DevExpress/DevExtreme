@@ -93,6 +93,60 @@ QUnit.test("Translation", function(assert) {
     assert.equal(point.lowY, 111);
 });
 
+QUnit.test("hasCoords returns true if point has x, lowY, highY", function(assert) {
+    this.setTranslators();
+
+    var point = createPoint(this.series, { argument: 1, openValue: 3, closeValue: 2, highValue: 4, lowValue: 1 }, this.opt);
+
+    point.translate();
+
+    assert.ok(point.hasCoords());
+});
+
+QUnit.test("hasCoords returns false if point does not have x", function(assert) {
+    this.setTranslators();
+    this.translators.arg = new MockTranslator({
+        translate: { 1: null }
+    });
+    var point = createPoint(this.series, { argument: 1, openValue: 3, closeValue: 2, highValue: 4, lowValue: 1 }, this.opt);
+
+    point.translate();
+    assert.ok(!point.hasCoords());
+});
+
+QUnit.test("hasCoords returns false if point does not have lowY", function(assert) {
+    this.setTranslators();
+    this.translators.val = new MockTranslator({
+        translate: { 1: null, 2: 2, 3: 3, 4: 4 }
+    });
+    var point = createPoint(this.series, { argument: 1, openValue: 3, closeValue: 2, highValue: 4, lowValue: 1 }, this.opt);
+
+    point.translate();
+    assert.ok(!point.hasCoords());
+});
+
+QUnit.test("hasCoords returns false if point does not have highY", function(assert) {
+    this.setTranslators();
+    this.translators.val = new MockTranslator({
+        translate: { 1: 1, 2: 2, 3: 3, 4: null }
+    });
+    var point = createPoint(this.series, { argument: 1, openValue: 3, closeValue: 2, highValue: 4, lowValue: 1 }, this.opt);
+
+    point.translate();
+    assert.ok(!point.hasCoords());
+});
+
+QUnit.test("hasCoords returns true if point does not have closeY or openY", function(assert) {
+    this.setTranslators();
+    this.translators.val = new MockTranslator({
+        translate: { 1: 1, 2: null, 3: null, 4: 4 }
+    });
+    var point = createPoint(this.series, { argument: 1, openValue: 3, closeValue: 2, highValue: 4, lowValue: 1 }, this.opt);
+
+    point.translate();
+    assert.ok(point.hasCoords());
+});
+
 QUnit.test("getCrosshairData", function(assert) {
     this.series.axis = "valueAxisName";
     this.setTranslators();

@@ -87,6 +87,7 @@ var createPoint = function() {
     stub.argument = 1;
     stub.hasValue.returns(true);
     stub.isInVisibleArea.returns(true);
+    stub.hasCoords.returns(true);
     stub.getCoords.withArgs(true).returns({ x: 0, y: 0 });
     stub.getDefaultCoords.returns({ x: 0, y: 0 });
     return stub;
@@ -103,6 +104,7 @@ var environmentWithSinonStubPoint = {
             stub.angle = -data.argument;
             stub.radius = data.value;
             stub.hasValue.returns(true);
+            stub.hasCoords.returns(true);
             stub.isInVisibleArea.returns(true);
             stub.draw.reset();
             stub.animate.reset();

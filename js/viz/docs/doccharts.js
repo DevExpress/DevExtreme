@@ -1009,6 +1009,42 @@ var dxChart = {
         */
         placeholderSize: null,
         /**
+        * @name dxchartoptions_commonaxissettings_breaks
+        * @publicName breaks
+        * @type Array<ScaleBreak>
+        * @default undefined
+        */
+        breaks: undefined,
+        /**
+        * @name dxchartoptions_commonaxissettings_breakStyle
+        * @publicName breakStyle
+        * @type object
+        */
+        breakStyle: {
+            /**
+            * @name dxchartoptions_commonaxissettings_breakStyle_width
+            * @publicName width
+            * @type number
+            * @default 5
+            */
+            width: 5,
+            /**
+            * @name dxchartoptions_commonaxissettings_breakStyle_color
+            * @publicName color
+            * @type string
+            * @default "#ababab"
+            */
+            color: "#ababab",
+            /**
+            * @name dxchartoptions_commonaxissettings_breakStyle_line
+            * @publicName line
+            * @type string
+            * @default "waved"
+            * @acceptValues 'waved'| 'straight'
+            */
+            line: "waved"
+        },
+        /**
         * @name dxchartoptions_commonaxissettings_label
         * @publicName label
         * @type object
@@ -1626,6 +1662,34 @@ var dxChart = {
             text: undefined
         },
         /**
+        * @name dxchartoptions_argumentaxis_workdaysonly
+        * @publicName workdaysOnly
+        * @type boolean
+        * @default false
+        */
+        workdaysOnly: false,
+        /**
+        * @name dxchartoptions_argumentaxis_workweek
+        * @publicName workWeek
+        * @type Array<number>
+        * @default [1, 2, 3, 4, 5]
+        */
+        workWeek: [1, 2, 3, 4, 5],
+        /**
+        * @name dxchartoptions_argumentaxis_holidays
+        * @publicName holidays
+        * @type Array<Date, string>| Array<number>
+        * @default undefined
+        */
+        holidays: undefined,
+        /**
+        * @name dxchartoptions_argumentaxis_singleworkdays
+        * @publicName singleWorkdays
+        * @type Array<Date, string>| Array<number>
+        * @default undefined
+        */
+        singleWorkdays: undefined,
+        /**
         * @name dxchartoptions_argumentaxis_label
         * @publicName label
         * @type object
@@ -1901,6 +1965,20 @@ var dxChart = {
         * @default undefined
         */
         minorTickCount: undefined,
+        /**
+        * @name dxchartoptions_valueaxis_autobreaksenabled
+        * @publicName autoBreaksEnabled
+        * @type boolean
+        * @default false
+        */
+        autoBreaksEnabled: false,
+        /**
+        * @name dxchartoptions_valueaxis_maxautobreakcount
+        * @publicName maxAutoBreakCount
+        * @type numeric
+        * @default undefined
+        */
+        maxAutoBreakCount: undefined,
         /**
         * @name dxchartoptions_valueaxis_title
         * @publicName title

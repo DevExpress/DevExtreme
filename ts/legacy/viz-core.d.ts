@@ -472,6 +472,26 @@ declare module DevExpress.viz.core {
         cornerRadius?: number;
     }
 
+    export interface BreakStyle {
+
+        /**
+        * @docid dxchartoptions_commonaxissettings_breakStyle_width
+        * @docid dxrangeselectoroptions_scale_breakStyle_width
+        */
+        width?: number;
+        /**
+        * @docid dxrangeselectoroptions_scale_breakStyle_color
+        * @docid dxchartoptions_commonaxissettings_breakStyle_color
+        */
+        color?: string;
+
+        /**
+        * @docid dxchartoptions_commonaxissettings_breakStyle_line
+        * @docid dxrangeselectoroptions_scale_breakStyle_line
+        */
+        line?: string;
+    }
+
     export interface BaseLegend {
         /**
         * @docid basechartoptions_legend_backgroundcolor

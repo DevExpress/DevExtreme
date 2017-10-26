@@ -843,6 +843,9 @@
             hasValue: function() {
                 return this.value !== null && this.minValue !== null && this.highValue !== null && this.lowValue !== null;
             },
+            hasCoords: function() {
+                return true;
+            },
             getDefaultCoords: function() {
                 return $.extend({ defaultCoords: true }, this);
             },
@@ -880,7 +883,8 @@
                 };
             },
             setHole: function() { },
-            resetHoles: function() { }
+            resetHoles: function() { },
+            setInvisibility: sinon.spy()
         });
 
 
@@ -900,6 +904,7 @@
 
                 this._axisElementsGroup =
                 this._constantLinesGroup =
+                this._scaleBreaksGroup =
                 this._renderer =
                 this._labelAxesGroup =
                 this._orthogonalTranslator =
@@ -927,6 +932,8 @@
             updateSize: sinon.stub(),
 
             setBusinessRange: sinon.stub(),
+
+            setGroupSeries: sinon.stub(),
 
             restoreBusinessRange: sinon.stub(),
 
@@ -989,6 +996,7 @@
             _stripsGroup: renderOptions.stripsGroup,
             _labelAxesGroup: renderOptions.labelAxesGroup,
             _constantLinesGroup: renderOptions.constantLinesGroup,
+            _scaleBreaksGroup: renderOptions.scaleBreaksGroup,
             axesContainerGroup: renderOptions.axesContainerGroup,
             gridGroup: renderOptions.gridGroup,
             isArgumentAxis: renderOptions.isArgumentAxis,
@@ -1012,6 +1020,7 @@
             resetZoom: function() {
 
             },
+            drawScaleBreaks: sinon.spy(),
             resetTypes: sinon.spy(),
             setMarginOptions: sinon.spy()
         };

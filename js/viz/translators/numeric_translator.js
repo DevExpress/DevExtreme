@@ -6,29 +6,27 @@ var isDefined = require("../../core/utils/type").isDefined,
 module.exports = {
     translate: function(bp) {
         var that = this,
-            canvasOptions = that._canvasOptions,
-            doubleError = canvasOptions.rangeDoubleError,
             specialValue = that.translateSpecialCase(bp);
 
         if(isDefined(specialValue)) {
             return specialValue;
         }
 
-        if(isNaN(bp) || bp.valueOf() + doubleError < canvasOptions.rangeMin || bp.valueOf() - doubleError > canvasOptions.rangeMax) {
+        if(that._isValueOutOfCanvas(bp)) {
             return null;
         }
-        return that._conversionValue(that._calculateProjection((bp - canvasOptions.rangeMinVisible) * canvasOptions.ratioOfCanvasRange));
+        return that.to(bp);
     },
 
-    untranslate: function(pos, _directionOffset, enableOutOfCanvas) {
-        var canvasOptions = this._canvasOptions,
+    untranslate: function(pos, _, enableOutOfCanvas) {
+        var that = this,
+            canvasOptions = that._canvasOptions,
             startPoint = canvasOptions.startPoint;
 
         if((!enableOutOfCanvas && (pos < startPoint || pos > canvasOptions.endPoint)) || !isDefined(canvasOptions.rangeMin) || !isDefined(canvasOptions.rangeMax)) {
             return null;
         }
-
-        return (this._calculateUnProjection((pos - startPoint) / canvasOptions.ratioOfCanvasRange));
+        return that.from(pos);
     },
 
     getInterval: function() {
@@ -93,20 +91,68 @@ module.exports = {
     // dxRangeSelector
 
     isValid: function(value) {
-        var co = this._canvasOptions;
-        return value !== null && !isNaN(value) && value.valueOf() + co.rangeDoubleError >= co.rangeMin && value.valueOf() - co.rangeDoubleError <= co.rangeMax;
+        var that = this,
+            co = that._canvasOptions,
+            breaks = that._breaks,
+            prop;
+
+        if(breaks !== undefined) {
+            prop = that._checkValueAboutBreaks(breaks, value, "trFrom", "trTo", that._checkingMethodsAboutBreaks[0]);
+        }
+
+        return value !== null &&
+            !isNaN(value) &&
+            value.valueOf() + co.rangeDoubleError >= co.rangeMin &&
+            value.valueOf() - co.rangeDoubleError <= co.rangeMax &&
+            (!prop || !prop.inBreak);
     },
 
     parse: function(value) {
         return Number(value);
     },
 
-    to: function(value) {
-        return this._conversionValue(this._calculateProjection((value - this._canvasOptions.rangeMinVisible) * this._canvasOptions.ratioOfCanvasRange));
+    to: function(bp) {
+        var that = this,
+            canvasOptions = that._canvasOptions,
+            breaks = that._breaks,
+            prop = { length: 0 },
+            commonBreakSize = 0;
+
+        if(breaks !== undefined) {
+            prop = that._checkValueAboutBreaks(breaks, bp, "trFrom", "trTo", that._checkingMethodsAboutBreaks[0]);
+            commonBreakSize = isDefined(prop.breaksSize) ? prop.breaksSize : 0;
+        }
+        if(prop.inBreak === true) {
+            return null;
+        }
+        return that._conversionValue(that._calculateProjection((bp - canvasOptions.rangeMinVisible - prop.length) *
+            canvasOptions.ratioOfCanvasRange + commonBreakSize));
     },
 
-    from: function(position) {
-        return (this._calculateUnProjection((position - this._canvasOptions.startPoint) / this._canvasOptions.ratioOfCanvasRange));
+    from: function(pos, direction) {
+        var that = this,
+            breaks = that._breaks,
+            prop = { length: 0 },
+            canvasOptions = that._canvasOptions,
+            startPoint = canvasOptions.startPoint,
+            commonBreakSize = 0;
+
+        if(breaks !== undefined) {
+            prop = that._checkValueAboutBreaks(breaks, pos, "start", "end", that._checkingMethodsAboutBreaks[1]);
+            commonBreakSize = isDefined(prop.breaksSize) ? prop.breaksSize : 0;
+        }
+
+        if(prop.inBreak === true) {
+            if(direction > 0) {
+                return prop.break.to;
+            } else if(direction < 0) {
+                return prop.break.from;
+            } else {
+                return null;
+            }
+        }
+
+        return this._calculateUnProjection((pos - startPoint - commonBreakSize) / canvasOptions.ratioOfCanvasRange + prop.length);
     },
 
     _add: function(value, diff, coeff) {

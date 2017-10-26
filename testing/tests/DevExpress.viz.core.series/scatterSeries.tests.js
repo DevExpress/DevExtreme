@@ -59,6 +59,7 @@ var createPoint = function() {
     var stub = sinon.createStubInstance(pointModule.Point);
     stub.argument = 1;
     stub.hasValue.returns(true);
+    stub.hasCoords.returns(true);
     stub.isInVisibleArea.returns(true);
     stub._label = sinon.createStubInstance(labelModule.Label);
     return stub;

@@ -7,7 +7,6 @@ var extend = require("../../../core/utils/extend").extend,
     _math = Math,
     _floor = _math.floor,
     _abs = _math.abs,
-    _min = _math.min,
 
     symbolPoint = require("./symbol_point"),
 
@@ -235,6 +234,9 @@ module.exports = _extend({}, symbolPoint, {
     },
 
     _truncateCoord: function(coord, minBounce, maxBounce) {
+        if(coord === null) {
+            return coord;
+        }
         if(coord < minBounce) {
             return minBounce;
         }
@@ -264,41 +266,37 @@ module.exports = _extend({}, symbolPoint, {
             argVisibleArea = argTranslator.getCanvasVisibleArea(),
             valVisibleArea = valTranslator.getCanvasVisibleArea(),
             arg,
-            minArg,
             val,
             minVal;
 
-        arg = minArg = argTranslator.translate(that.argument) + (that[argAxis + "Correction"] || 0);
+        arg = argTranslator.translate(that.argument);
+
+        that[argAxis] = arg = arg === null ? arg : arg + (that[argAxis + "Correction"] || 0);
+
         val = valTranslator.translate(that.value);
         minVal = valTranslator.translate(that.minValue);
 
-        if(val === null) {
-            val = minVal;
-        }
         that["v" + valAxis] = val;
         that["v" + argAxis] = arg + that[argIntervalName] / 2;
-
-        that[valIntervalName] = _abs(val - minVal);
-
-        that._calculateVisibility(rotated ? _min(val, minVal) : _min(arg, minArg), rotated ? _min(arg, minArg) : _min(val, minVal), that.width, that.height);
 
         val = that._truncateCoord(val, valVisibleArea.min, valVisibleArea.max);
         minVal = that._truncateCoord(minVal, valVisibleArea.min, valVisibleArea.max);
 
-        that[argAxis] = arg;
-        that["min" + argAxis.toUpperCase()] = minArg;
-
         that[valIntervalName] = _abs(val - minVal);
-        that[valAxis] = _min(val, minVal) + (that[valAxis + "Correction"] || 0);
-        that["min" + valAxis.toUpperCase()] = minVal + (that[valAxis + "Correction"] || 0);
+
+        val = val < minVal ? val : minVal;
+
+        that._calculateVisibility(rotated ? val : arg, rotated ? arg : val, that.width, that.height);
+
+        that[valAxis] = val === null ? val : val + (that[valAxis + "Correction"] || 0);
+        that["min" + valAxis.toUpperCase()] = minVal === null ? minVal : minVal + (that[valAxis + "Correction"] || 0);
         that["default" + valAxis.toUpperCase()] = valTranslator.translate(CANVAS_POSITION_DEFAULT);
         that._translateErrorBars(argVisibleArea);
 
-        if(that.inVisibleArea) {
+        if(that.inVisibleArea && that[argAxis] !== null) {
             if(that[argAxis] < argVisibleArea.min) {
                 that[argIntervalName] = that[argIntervalName] - (argVisibleArea.min - that[argAxis]);
                 that[argAxis] = argVisibleArea.min;
-                that["min" + argAxis.toUpperCase()] = argVisibleArea.min;
             }
 
             if(that[argAxis] + that[argIntervalName] > argVisibleArea.max) {

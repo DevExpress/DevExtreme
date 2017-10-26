@@ -106,6 +106,11 @@ registerTheme({
         },
         scrollBar: {
             color: WHITE
+        },
+        commonAxisSettings: {
+            breakStyle: {
+                color: "#cf00d7"
+            }
         }
     },
     pie: {
@@ -186,6 +191,9 @@ registerTheme({
             },
             minorTick: {
                 opacity: 0.12
+            },
+            breakStyle: {
+                color: "#cf00d7"
             }
         },
         selectedRangeColor: CONTRAST_ACTIVE,

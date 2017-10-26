@@ -3,6 +3,35 @@
 var $ = require("jquery"),
     translator2DModule = require("viz/translators/translator2d");
 
+function prepareScaleBreaks(array, breakSize) {
+    var breaks = [],
+        lastBreak,
+        i;
+    for(i = 0; i < array.length; i++) {
+        lastBreak = breaks[breaks.length - 1];
+        if(lastBreak) {
+            breaks.push({
+                from: array[i].from,
+                to: array[i].to,
+                cumulativeWidth: !array[i].gapSize ? breakSize + lastBreak.cumulativeWidth : lastBreak.cumulativeWidth
+            });
+        } else {
+            breaks.push({
+                from: array[i].from,
+                to: array[i].to,
+                cumulativeWidth: !array[i].gapSize ? breakSize : 0
+            });
+        }
+    }
+    return breaks;
+}
+
+function createTranslatorWithScaleBreaks(options) {
+    var breakSize = options.breakSize || 20,
+        breaks = prepareScaleBreaks(options.breaks || [{ from: 150, to: 200 }, { from: 350, to: 370 }, { from: 590, to: 650 }], breakSize);
+    return this.createTranslator({ min: options.min || 100, max: options.max || 700, breaks: breaks, invert: options.invert }, null, { breaksSize: breakSize });
+}
+
 var canvasTemplate = {
         width: 610,
         height: 400,
@@ -44,10 +73,9 @@ var environment = {
     _createTranslator: function(range, canvas, options) {
         return new translator2DModule.Translator2D(range, canvas, options);
     },
-    createTranslator: function(range) {
-        return this._createTranslator($.extend({ axisType: 'continuous', dataType: 'numeric', interval: 1, invert: false }, range),
-            { width: 2000, height: 2000, left: 500, top: 500, right: 500, bottom: 500 },
-            { isHorizontal: true });
+    createTranslator: function(range, canvas, options) {
+        return this._createTranslator($.extend({ axisType: 'continuous', dataType: 'numeric' }, range),
+            canvas || { width: 2000, height: 2000, left: 500, top: 500, right: 500, bottom: 500 }, $.extend({}, { isHorizontal: true, breaksSize: 0 }, options));
     }
 };
 
@@ -58,7 +86,7 @@ QUnit.test('Create vertical translator', function(assert) {
         canvas = $.extend({}, canvasTemplate),
         translator;
 
-    translator = new translator2DModule.Translator2D(range, canvas);
+    translator = this.createTranslator(range, canvas, { isHorizontal: false });
 
     assert.ok(translator);
     assert.deepEqual(translator._canvas, { width: 610, height: 400, left: 70, top: 10, right: 30, bottom: 60 });
@@ -87,7 +115,7 @@ QUnit.test('Create horizontal translator', function(assert) {
         canvas = $.extend({}, canvasTemplate),
         translator;
 
-    translator = new translator2DModule.Translator2D(range, canvas, optionsHorizontal);
+    translator = this.createTranslator(range, canvas, optionsHorizontal);
 
     assert.ok(translator);
     assert.deepEqual(translator._canvas, { width: 610, height: 400, left: 70, top: 10, right: 30, bottom: 60 });
@@ -116,7 +144,7 @@ QUnit.test('Create numeric translator', function(assert) {
         canvas = $.extend({}, canvasTemplate),
         translator;
 
-    translator = new translator2DModule.Translator2D(range, canvas);
+    translator = this.createTranslator(range, canvas);
 
     assert.ok(translator);
     assert.deepEqual(translator._canvas, { width: 610, height: 400, left: 70, top: 10, right: 30, bottom: 60 });
@@ -138,7 +166,7 @@ QUnit.test('Create numeric translator when business range delta = 0, Min = max =
         canvas = $.extend({}, canvasTemplate),
         translator;
 
-    translator = new translator2DModule.Translator2D(range, canvas);
+    translator = this.createTranslator(range, canvas);
 
     assert.ok(translator);
     assert.equal(translator._canvasOptions.rangeMin, 99, 'range min is correct');
@@ -160,7 +188,7 @@ QUnit.test('Create numeric translator when business range delta = 0, Min = max =
         canvas = $.extend({}, canvasTemplate),
         translator;
 
-    translator = new translator2DModule.Translator2D(range, canvas);
+    translator = this.createTranslator(range, canvas);
 
     assert.ok(translator);
     assert.equal(translator._canvasOptions.rangeMin, 0, 'range min is correct');
@@ -182,7 +210,7 @@ QUnit.test('Create numeric translator when business range delta = 0, min < minVi
         canvas = $.extend({}, canvasTemplate),
         translator;
 
-    translator = new translator2DModule.Translator2D(range, canvas);
+    translator = this.createTranslator(range, canvas);
 
     assert.ok(translator);
     assert.equal(translator._canvasOptions.rangeMin, 10, 'range min is correct');
@@ -204,7 +232,7 @@ QUnit.test('Create numeric translator when business range delta = 0, min < minVi
         canvas = $.extend({}, canvasTemplate),
         translator;
 
-    translator = new translator2DModule.Translator2D(range, canvas);
+    translator = this.createTranslator(range, canvas);
 
     assert.ok(translator);
     assert.equal(translator._canvasOptions.rangeMin, -10, 'range min is correct');
@@ -226,7 +254,7 @@ QUnit.test('Create numeric translator when business range delta = 0, min = minVi
         canvas = $.extend({}, canvasTemplate),
         translator;
 
-    translator = new translator2DModule.Translator2D(range, canvas);
+    translator = this.createTranslator(range, canvas);
 
     assert.ok(translator);
     assert.equal(translator._canvasOptions.rangeMin, 10, 'range min is correct');
@@ -248,7 +276,7 @@ QUnit.test('Create numeric translator when business range delta = 0, min < minVi
         canvas = $.extend({}, canvasTemplate),
         translator;
 
-    translator = new translator2DModule.Translator2D(range, canvas);
+    translator = this.createTranslator(range, canvas);
 
     assert.ok(translator);
     assert.equal(translator._canvasOptions.rangeMin, 10, 'range min is correct');
@@ -262,7 +290,7 @@ QUnit.test('Create datetime translator', function(assert) {
         canvas = $.extend({}, canvasTemplate),
         translator;
 
-    translator = new translator2DModule.Translator2D(range, canvas);
+    translator = this.createTranslator(range, canvas);
 
     assert.ok(translator);
     assert.deepEqual(translator._canvas, { width: 610, height: 400, left: 70, top: 10, right: 30, bottom: 60 });
@@ -287,7 +315,7 @@ QUnit.test('Create datetime translator when business range delta = 0. min = minV
         canvas = $.extend({}, canvasTemplate),
         translator;
 
-    translator = new translator2DModule.Translator2D(range, canvas);
+    translator = this.createTranslator(range, canvas);
 
     assert.ok(translator);
     assert.equal(translator._canvasOptions.rangeMin.valueOf(), new Date(2000, 1, 1).valueOf() - correction, 'range min is correct');
@@ -310,7 +338,7 @@ QUnit.test('Create datetime translator when business range delta = 0. min < minV
         canvas = $.extend({}, canvasTemplate),
         translator;
 
-    translator = new translator2DModule.Translator2D(range, canvas);
+    translator = this.createTranslator(range, canvas);
 
     assert.ok(translator);
     assert.equal(translator._canvasOptions.rangeMin.valueOf(), new Date(1990, 1, 1).valueOf(), 'range min is correct');
@@ -333,7 +361,7 @@ QUnit.test('Create datetime translator when business range delta = 0. min = minV
         canvas = $.extend({}, canvasTemplate),
         translator;
 
-    translator = new translator2DModule.Translator2D(range, canvas);
+    translator = this.createTranslator(range, canvas);
 
     assert.ok(translator);
     assert.equal(translator._canvasOptions.rangeMin.valueOf(), new Date(2000, 1, 1).valueOf(), 'range min is correct');
@@ -356,7 +384,7 @@ QUnit.test('Create datetime translator when business range delta = 0. min < minV
         canvas = $.extend({}, canvasTemplate),
         translator;
 
-    translator = new translator2DModule.Translator2D(range, canvas);
+    translator = this.createTranslator(range, canvas);
 
     assert.ok(translator);
     assert.equal(translator._canvasOptions.rangeMin.valueOf(), new Date(1990, 1, 1).valueOf(), 'range min is correct');
@@ -370,7 +398,7 @@ QUnit.test('Create discrete translator (Stick = false, invert = false)', functio
         canvas = $.extend({}, canvasTemplate),
         translator;
 
-    translator = new translator2DModule.Translator2D(range, canvas, $.extend({ stick: false }, optionsHorizontal));
+    translator = this.createTranslator(range, canvas, $.extend({ stick: false }, optionsHorizontal));
 
     assert.ok(translator);
     assert.deepEqual(translator._canvas, { width: 610, height: 400, left: 70, top: 10, right: 30, bottom: 60 });
@@ -395,7 +423,7 @@ QUnit.test('Create discrete translator (Stick = true, invert = true)', function(
         canvas = $.extend({}, canvasTemplate),
         translator;
 
-    translator = new translator2DModule.Translator2D(range, canvas, $.extend({ stick: true }, optionsHorizontal));
+    translator = this.createTranslator(range, canvas, $.extend({ stick: true }, optionsHorizontal));
 
     assert.equal(translator._canvasOptions.interval, 170);
     assert.deepEqual(translator._categoriesToPoints, {
@@ -410,7 +438,7 @@ QUnit.test('Create discrete translator (Stick = true, addSpiderCategory = true)'
     var canvas = $.extend({}, canvasTemplate),
         translator;
 
-    translator = new translator2DModule.Translator2D(discreteRange, canvas, $.extend({ addSpiderCategory: true, stick: true }, optionsHorizontal));
+    translator = this.createTranslator(discreteRange, canvas, $.extend({ stick: false }, optionsHorizontal));
 
     assert.equal(translator._canvasOptions.interval, 127.5);
     assert.deepEqual(translator._categoriesToPoints, {
@@ -427,7 +455,7 @@ QUnit.test('Can create Discrete translator without categories. B253644', functio
         translator;
     range.categories = null;
 
-    translator = new translator2DModule.Translator2D(range, canvas, $.extend({ stick: true }, optionsHorizontal));
+    translator = this.createTranslator(range, canvas, $.extend({ stick: false }, optionsHorizontal));
 
     assert.ok(translator);
     assert.ok($.isFunction(translator.translate));
@@ -443,7 +471,7 @@ QUnit.test('Create logarithmic translator', function(assert) {
         canvas = $.extend({}, canvasTemplate),
         translator;
 
-    translator = new translator2DModule.Translator2D(range, canvas);
+    translator = this.createTranslator(range, canvas, { isHorizontal: false });
 
     assert.ok(translator);
     assert.deepEqual(translator._canvas, { width: 610, height: 400, left: 70, top: 10, right: 30, bottom: 60 });
@@ -468,7 +496,7 @@ QUnit.test('Create logarithmic translator. Min = max = minVisible = maxVisible =
         canvas = $.extend({}, canvasTemplate),
         translator;
 
-    translator = new translator2DModule.Translator2D(range, canvas);
+    translator = this.createTranslator(range, canvas, { isHorizontal: false });
 
     assert.ok(translator);
     assert.deepEqual(translator._canvas, { width: 610, height: 400, left: 70, top: 10, right: 30, bottom: 60 });
@@ -493,7 +521,7 @@ QUnit.test('Create logarithmic translator. Base = 2', function(assert) {
         canvas = $.extend({}, canvasTemplate),
         translator;
 
-    translator = new translator2DModule.Translator2D(range, canvas);
+    translator = this.createTranslator(range, canvas, { isHorizontal: false });
 
     assert.ok(translator);
     assert.deepEqual(translator._canvas, { width: 610, height: 400, left: 70, top: 10, right: 30, bottom: 60 });
@@ -672,7 +700,7 @@ QUnit.test('Translate. Negative values. Invert = true', function(assert) {
 QUnit.test('Translate. not round values', function(assert) {
     var translator = this._createTranslator($.extend({ axisType: 'continuous', dataType: 'numeric', interval: 1, invert: false }, { min: 200, max: 700 }),
             { width: 2000, height: 2000, left: 500, top: 500, right: 500, bottom: 500 },
-            { isHorizontal: true, conversionValue: function(value) { return value; } });
+            { isHorizontal: true, breaksSize: 0, conversionValue: function(value) { return value; } });
 
     assert.equal(translator.translate(322.33), 744.66, 'value should not be rounded');
 });
@@ -680,7 +708,7 @@ QUnit.test('Translate. not round values', function(assert) {
 QUnit.test("translate. conversion is not a function", function(assert) {
     var translator = this._createTranslator($.extend({ axisType: 'continuous', dataType: 'numeric', interval: 1, invert: false }, { min: 200, max: 700 }),
             { width: 2000, height: 2000, left: 500, top: 500, right: 500, bottom: 500 },
-            { isHorizontal: true, conversionValue: "" });
+            { isHorizontal: true, breaksSize: 0, conversionValue: "" });
 
     assert.equal(translator.translate(322.33), 745, 'value should rounded');
 });
@@ -745,6 +773,115 @@ QUnit.test('Untranslate. T176895. Range min/max are undefined', function(assert)
     assert.equal(translator.untranslate(1000), null);
 });
 
+QUnit.test('Translate. Scale breaks is empty array', function(assert) {
+    var translator = createTranslatorWithScaleBreaks.call(this, { min: 200, max: 700, breaks: [] });
+
+    assert.equal(translator.translate(300), 700, 'BP inside range');
+    assert.equal(translator.translate(200), 500, 'BP on the min');
+    assert.equal(translator.translate(700), 1500, 'BP on the max');
+});
+
+QUnit.test('Translate. Update translator with business range with empty scale breaks', function(assert) {
+    var translator = createTranslatorWithScaleBreaks.call(this, {
+        min: 200, max: 700
+    });
+
+    translator.updateBusinessRange({ min: 200, max: 700, breaks: [] });
+
+    assert.strictEqual(translator.translate(450), 1000);
+});
+
+QUnit.test("Translate. Scale breaks. Values out of the breaks and should be traslated", function(assert) {
+    var translator = createTranslatorWithScaleBreaks.call(this, {});
+
+    assert.strictEqual(translator.translate(100), 500);
+    assert.strictEqual(translator.translate(149), 598);
+    assert.strictEqual(translator.translate(200), 620);
+    assert.strictEqual(translator.translate(300), 820);
+    assert.strictEqual(translator.translate(450), 1100);
+    assert.strictEqual(translator.translate(700), 1500);
+});
+
+QUnit.test("Translate. Scale breaks. Values inside the breaks and shouldn't be translated", function(assert) {
+    var translator = createTranslatorWithScaleBreaks.call(this, {});
+
+    assert.strictEqual(translator.translate(150), null);
+    assert.strictEqual(translator.translate(160), null);
+    assert.strictEqual(translator.translate(360), null);
+    assert.strictEqual(translator.translate(620), null);
+});
+
+QUnit.test("isValid. Scale breaks.Values inside of the breaks should be not valid", function(assert) {
+    var breaks = [{ from: 150, to: 200 }, { from: 350, to: 370 }, { from: 590, to: 650 }],
+        translator = this.createTranslator({ min: 100, max: 700, breaks: breaks }, null, { breaksSize: 20 });
+
+    assert.strictEqual(translator.isValid(150), false);
+    assert.strictEqual(translator.isValid(120), true);
+});
+
+QUnit.test("Translate. Scale breaks. Inverted axis", function(assert) {
+    var translator = createTranslatorWithScaleBreaks.call(this, {
+        invert: true
+    });
+
+    assert.strictEqual(translator.translate(100), 1500);
+    assert.strictEqual(translator.translate(450), 900);
+    assert.strictEqual(translator.translate(700), 500);
+});
+
+QUnit.test("Untranslate. Scale breaks. Values not on the breaks and should be untranslated", function(assert) {
+    var translator = createTranslatorWithScaleBreaks.call(this, {});
+
+    assert.strictEqual(translator.untranslate(500), 100);
+    assert.strictEqual(translator.untranslate(820), 300);
+    assert.strictEqual(translator.untranslate(1100), 450);
+    assert.strictEqual(translator.untranslate(1500), 700);
+});
+
+QUnit.test("Untranslate. Scale breaks. Values on the breaks and should not be untranslated", function(assert) {
+    var translator = createTranslatorWithScaleBreaks.call(this, {});
+
+    assert.strictEqual(translator.untranslate(610), null);
+    assert.strictEqual(translator.untranslate(1390), null);
+});
+
+QUnit.test("Untranslate. Scale breaks. Values on the breaks and should be untranslated to left side of break if direction<0", function(assert) {
+    var translator = createTranslatorWithScaleBreaks.call(this, {});
+
+    assert.strictEqual(translator.from(610, -1), 150);
+    assert.strictEqual(translator.from(1390, -1), 590);
+});
+
+QUnit.test("Untranslate. Scale breaks. Values on the breaks and should be untranslated to right side of break if direction>0", function(assert) {
+    var translator = createTranslatorWithScaleBreaks.call(this, {});
+
+    assert.strictEqual(translator.from(610, 1), 200);
+    assert.strictEqual(translator.from(1390, 1), 650);
+});
+
+QUnit.test("Untranslate. Scale breaks. Inverted axis. Values on the breaks and should be untranslated", function(assert) {
+    var translator = createTranslatorWithScaleBreaks.call(this, {
+        invert: true
+    });
+
+    assert.strictEqual(translator.untranslate(500), 700);
+    assert.strictEqual(translator.untranslate(600), 650);
+    assert.strictEqual(translator.untranslate(700), 550);
+    assert.strictEqual(translator.untranslate(820), 490);
+    assert.strictEqual(translator.untranslate(1180), 300);
+    assert.strictEqual(translator.untranslate(1500), 100);
+});
+
+QUnit.test("Untranslate. Scale breaks. Inverted axis. Values on the breaks and should not be untranslated", function(assert) {
+    var translator = createTranslatorWithScaleBreaks.call(this, {
+        invert: true
+    });
+
+    assert.strictEqual(translator.untranslate(402), null);
+    assert.strictEqual(translator.untranslate(1062), null);
+    assert.strictEqual(translator.untranslate(1382), null);
+});
+
 QUnit.test('GetInterval', function(assert) {
     var translator = this.createTranslator({ min: 200, max: 700, interval: 10.55 });
 
@@ -767,10 +904,10 @@ QUnit.test("isValid", function(assert) {
 
 QUnit.module('Datetime translator', {
     beforeEach: function() {
-        this.createTranslator = function(range) {
+        this.createTranslator = function(range, _, options) {
             return new translator2DModule.Translator2D($.extend({ axisType: 'continuous', dataType: 'datetime', interval: 1, invert: false }, range),
                 { width: 2000, height: 2000, left: 500, top: 500, right: 500, bottom: 500 },
-                { isHorizontal: true });
+                $.extend({}, { isHorizontal: true, breaksSize: 0 }, options));
         };
     }
 });
@@ -826,6 +963,31 @@ QUnit.test('Untranslate. Invert = true', function(assert) {
     assert.deepEqual(translator.untranslate(1000), new Date(2012, 8, 1, 12), 'Coord inside range');
 });
 
+QUnit.test("Untranslate. With scale breaks. Values not in the breaks and translated. Mix scale breaks and gaps(weekends)", function(assert) {
+    var translator = createTranslatorWithScaleBreaks.call(this, {
+        min: new Date(2012, 8, 1), max: new Date(2012, 8, 2),
+        breaks: [
+            { from: new Date(2012, 8, 1, 10), to: new Date(2012, 8, 1, 11) },
+            { from: new Date(2012, 8, 1, 20), to: new Date(2012, 8, 1, 21), gapSize: "some size" },
+            { from: new Date(2012, 8, 1, 22), to: new Date(2012, 8, 1, 23) }
+        ]
+    });
+
+    assert.deepEqual(translator.untranslate(500), new Date(2012, 8, 1));
+    assert.deepEqual(translator.untranslate(1160), new Date(2012, 8, 1, 15));
+    assert.deepEqual(translator.untranslate(1400), new Date(2012, 8, 1, 21, 15));
+    assert.deepEqual(translator.untranslate(1500), new Date(2012, 8, 2));
+});
+
+QUnit.test("Untranslate. With scale breaks. Value in the scale break and shouldn't translated", function(assert) {
+    var translator = createTranslatorWithScaleBreaks.call(this, {
+        min: new Date(2012, 8, 1), max: new Date(2012, 8, 2),
+        breaks: [{ from: new Date(2012, 8, 1, 10), to: new Date(2012, 8, 1, 11) }, { from: new Date(2012, 8, 1, 20), to: new Date(2012, 8, 1, 21) }]
+    });
+
+    assert.deepEqual(translator.untranslate(950), null);
+});
+
 QUnit.test('GetInterval', function(assert) {
     var translator = this.createTranslator({ min: new Date(2012, 8, 1), max: new Date(2012, 8, 2), interval: 1000 * 60 * 60 });
 
@@ -840,10 +1002,10 @@ QUnit.test('GetInterval when interval is 0', function(assert) {
 
 QUnit.module('Logarithmic translator', {
     beforeEach: function() {
-        this.createTranslator = function(range) {
+        this.createTranslator = function(range, _, options) {
             return new translator2DModule.Translator2D($.extend({ axisType: 'logarithmic', dataType: 'numeric', interval: 1, invert: false, base: 10 }, range),
                 { width: 2000, height: 2000, left: 500, top: 500, right: 500, bottom: 500 },
-                { isHorizontal: true });
+                $.extend({}, { isHorizontal: true, breaksSize: 0 }, options));
         };
     }
 });
@@ -953,6 +1115,57 @@ QUnit.test('Untranslate. Small numbers. Invert = true', function(assert) {
     assert.roughEqual(translator.untranslate(500), 0.01, doubleDelta * 0.01, 'Coord on the min');
     assert.roughEqual(translator.untranslate(1500), 0.0001, doubleDelta * 0.0001, 'Coord on the max');
     assert.roughEqual(translator.untranslate(1000), 0.001, doubleDelta * 0.001, 'Coord inside range');
+});
+
+QUnit.test("Translate. Scale breaks. Values inside of the breaks and should be translated", function(assert) {
+    var translator = createTranslatorWithScaleBreaks.call(this, {
+        min: 0.0001, max: 1000000,
+        breaks: [{ from: 0.001, to: 0.1 }, { from: 100, to: 10000 }],
+        breakSize: 50
+    });
+
+    assert.strictEqual(translator.translate(0.0001), 500);
+    assert.strictEqual(translator.translate(1), 850);
+    assert.strictEqual(translator.translate(10), 1000);
+    assert.strictEqual(translator.translate(100000), 1350);
+    assert.strictEqual(translator.translate(1000000), 1500);
+});
+
+QUnit.test("Translate. Scale breaks. Values out of the breaks and shouldn't be translated", function(assert) {
+    var translator = createTranslatorWithScaleBreaks.call(this, {
+        min: 0.0001, max: 1000000,
+        breaks: [{ from: 0.001, to: 0.1 }, { from: 100, to: 10000 }],
+        breakSize: 50
+    });
+
+    assert.strictEqual(translator.translate(0.01), null);
+    assert.strictEqual(translator.translate(1000), null);
+});
+
+QUnit.test("Untranslate. Scale breaks. Values not on the breaks and should be untranslated", function(assert) {
+    var translator = createTranslatorWithScaleBreaks.call(this, {
+            min: 0.0001, max: 1000000,
+            breaks: [{ from: 0.001, to: 0.1 }, { from: 100, to: 10000 }],
+            breakSize: 50
+        }),
+        doubleDelta = 0.00001;
+
+    assert.roughEqual(translator.untranslate(500), 0.0001, doubleDelta);
+    assert.roughEqual(translator.untranslate(850), 1, doubleDelta);
+    assert.roughEqual(translator.untranslate(1000), 10, doubleDelta);
+    assert.roughEqual(translator.untranslate(1350), 100000, doubleDelta);
+    assert.roughEqual(translator.untranslate(1500), 1000000, doubleDelta);
+});
+
+QUnit.test("Untranslate. Scale breaks. Values on the breaks and should not be untranslated", function(assert) {
+    var translator = createTranslatorWithScaleBreaks.call(this, {
+        min: 0.0001, max: 1000000,
+        breaks: [{ from: 0.001, to: 0.1 }, { from: 100, to: 10000 }],
+        breakSize: 50
+    });
+
+    assert.strictEqual(translator.untranslate(670), null);
+    assert.strictEqual(translator.untranslate(1170), null);
 });
 
 QUnit.test('GetInterval', function(assert) {
@@ -1858,7 +2071,7 @@ QUnit.module('Translate special cases', {
         this.createTranslator = function(range, options) {
             return new translator2DModule.Translator2D(range,
                 { width: 2000, height: 2000, left: 500, top: 500, right: 500, bottom: 500 },
-                $.extend({ isHorizontal: true }, options));
+                $.extend({ isHorizontal: true, breaksSize: 0 }, options));
         };
     }
 });
@@ -1965,7 +2178,7 @@ QUnit.test('scroll', function(assert) {
         translator,
         zoom;
 
-    translator = new translator2DModule.Translator2D(range, canvas, optionsHorizontal);
+    translator = new translator2DModule.Translator2D(range, canvas, { isHorizontal: true, breaksSize: 0 });
 
     assert.ok(translator);
 
@@ -2022,7 +2235,7 @@ QUnit.test('scroll. Logarithmic axis', function(assert) {
         translator,
         zoom;
 
-    translator = new translator2DModule.Translator2D(range, canvas, optionsHorizontal);
+    translator = new translator2DModule.Translator2D(range, canvas, { isHorizontal: true, breaksSize: 0 });
 
     assert.ok(translator);
 
@@ -2072,7 +2285,7 @@ QUnit.test('scroll. Canvas start point is zero', function(assert) {
         translator,
         zoom;
 
-    translator = new translator2DModule.Translator2D(range, canvas, optionsHorizontal);
+    translator = new translator2DModule.Translator2D(range, canvas, { isHorizontal: true, breaksSize: 0 });
 
     assert.ok(translator);
 
@@ -2098,7 +2311,7 @@ QUnit.test('scroll inverted range', function(assert) {
         translator,
         zoom;
 
-    translator = new translator2DModule.Translator2D(range, canvas, optionsHorizontal);
+    translator = new translator2DModule.Translator2D(range, canvas, { isHorizontal: true, breaksSize: 0 });
 
     assert.ok(translator);
 
@@ -2156,7 +2369,7 @@ QUnit.test('scale without scroll', function(assert) {
         translator,
         zoom;
 
-    translator = new translator2DModule.Translator2D(range, canvas, optionsHorizontal);
+    translator = new translator2DModule.Translator2D(range, canvas, { isHorizontal: true, breaksSize: 0 });
 
     assert.ok(translator);
     assert.equal(translator._canvasOptions.rangeMin, 0);

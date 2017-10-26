@@ -2500,3 +2500,103 @@ QUnit.test("Discrete data", function(assert) {
     assert.equal(rangeData.min, undefined, "min Y");
     assert.equal(rangeData.max, undefined, "max Y");
 });
+
+QUnit.module("Get points in viewport", {
+    beforeEach: function() {
+        var argumentViewPort,
+            valueViewPort;
+        this.zoomArgument = function(min, max) {
+            argumentViewPort = { min: min, max: max };
+        };
+        this.zoomValue = function(min, max) {
+            valueViewPort = { min: min, max: max };
+        };
+        this.argumentAxis = {
+            getViewport: function() {
+                return argumentViewPort;
+            }
+        };
+        this.valueAxis = {
+            getViewport: function() {
+                return valueViewPort;
+            }
+        };
+    }
+});
+
+QUnit.test("Simple series with zoom. Do not include value of edge points if they out of the valueAxis range", function(assert) {
+    var data = [
+            { arg: 1, val: 10 },
+            { arg: 2, val: 20 },
+            { arg: 3, val: 30 },
+            { arg: 4, val: 40 },
+            { arg: 5, val: 50 },
+            { arg: 6, val: 80 },
+            { arg: 7, val: 70 }
+        ],
+        series = createSeries({ type: "line", argumentAxisType: "continuous" }, { argumentAxis: this.argumentAxis, valueAxis: this.valueAxis });
+
+    series.updateData(data);
+
+    this.zoomArgument(2, 5.5);
+    this.zoomValue(35, 70);
+
+    assert.deepEqual(series.getPointsInViewPort(), [40, 50, 35, 70]);
+});
+
+QUnit.test("Include value of edge points that out of argument viewport but they are in valueAxis viewport", function(assert) {
+    var data = [
+            { arg: 1, val: 10 },
+            { arg: 2, val: 44 },
+            { arg: 3, val: 30 },
+            { arg: 4, val: 40 },
+            { arg: 5, val: 50 },
+            { arg: 6, val: 60 },
+            { arg: 7, val: 70 }
+        ],
+        series = createSeries({ type: "line", argumentAxisType: "continuous" }, { argumentAxis: this.argumentAxis, valueAxis: this.valueAxis });
+
+    series.updateData(data);
+
+    this.zoomArgument(2.5, 5.5);
+    this.zoomValue(25, 70);
+
+    assert.deepEqual(series.getPointsInViewPort(), [44, 30, 40, 50, 60, 25, 70]);
+});
+
+QUnit.test("Simple series without zoom", function(assert) {
+    var data = [
+        { arg: 1, val: 10 },
+        { arg: 2, val: 20 },
+        { arg: 3, val: 30 },
+        { arg: 4, val: 40 },
+        { arg: 5, val: 50 },
+        { arg: 6, val: 60 },
+        { arg: 7, val: 70 }
+        ],
+        series = createSeries({ type: "line", argumentAxisType: "continuous" }, { argumentAxis: this.argumentAxis, valueAxis: this.valueAxis });
+
+    series.updateData(data);
+
+    assert.deepEqual(series.getPointsInViewPort(), [10, 20, 30, 40, 50, 60, 70]);
+});
+
+QUnit.test("Range series", function(assert) {
+    var data = [
+            { arg: 1, val1: 10, val2: 25 },
+            { arg: 2, val1: 20, val2: 35 },
+            { arg: 3, val1: 30, val2: 45 },
+            { arg: 4, val1: 40, val2: 55 },
+            { arg: 5, val1: 50, val2: 65 },
+            { arg: 6, val1: 60, val2: 75 },
+            { arg: 7, val1: 70, val2: 85 }
+        ],
+        series = createSeries({ type: "rangebar", argumentAxisType: "continuous" }, { argumentAxis: this.argumentAxis, valueAxis: this.valueAxis });
+
+    series.updateData(data);
+
+    this.zoomArgument(2, 5.5);
+    this.zoomValue(25, 55);
+
+    assert.deepEqual(series.getPointsInViewPort(), [25, 35, 30, 45, 40, 55, 50, 25, 55]);
+});

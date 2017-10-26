@@ -478,7 +478,7 @@ function updateScaleOptions(scaleOptions, seriesDataSource, translatorRange, tic
     }
 }
 
-function prepareScaleOptions(scaleOption, seriesDataSource, incidentOccurred) {
+function prepareScaleOptions(scaleOption, seriesDataSource, incidentOccurred, containerColor) {
     var parsedValue = 0,
         valueType = parseUtils.correctValueType(_normalizeEnum(scaleOption.valueType)),
         parser,
@@ -508,6 +508,8 @@ function prepareScaleOptions(scaleOption, seriesDataSource, incidentOccurred) {
         scaleOption.type = DISCRETE;
         valueType = STRING;
     }
+
+    scaleOption.containerColor = containerColor;
 
     scaleOption.valueType = valueType;
     scaleOption.dataType = valueType;
@@ -638,6 +640,7 @@ var dxRangeSelector = require("../core/base_widget").inherit({
             rangeViewGroup,
             slidersGroup,
             scaleGroup,
+            scaleBreaksGroup,
             trackersGroup;
 
         // TODO: Move it to the SlidersEventManager
@@ -651,11 +654,13 @@ var dxRangeSelector = require("../core/base_widget").inherit({
         rangeViewGroup = renderer.g().attr({ "class": "dxrs-view" }).append(root);
         slidersGroup = renderer.g().attr({ "class": "dxrs-slidersContainer", "clip-path": that._clipRect.id }).append(root);
         scaleGroup = renderer.g().attr({ "class": "dxrs-scale", "clip-path": that._clipRect.id }).append(root);
+        scaleBreaksGroup = renderer.g().attr({ "class": "dxrs-scale-breaks" }).append(root);
         trackersGroup = renderer.g().attr({ "class": "dxrs-trackers" }).append(root);
 
         that._axis = new AxisWrapper({
             renderer: renderer,
             root: scaleGroup,
+            scaleBreaksGroup: scaleBreaksGroup,
             updateSelectedRange: function(range) { that.setValue(parseSelectedRange(range)); },
             incidentOccurred: that._incidentOccurred
         });
@@ -864,7 +869,7 @@ var dxRangeSelector = require("../core/base_widget").inherit({
             chartOptions = that.option("chart"),
             seriesDataSource = that._createSeriesDataSource(chartOptions),
             isCompactMode = !((seriesDataSource && seriesDataSource.isShowChart()) || that.option("background.image.url")),
-            scaleOptions = prepareScaleOptions(that._getOption("scale"), seriesDataSource, that._incidentOccurred),
+            scaleOptions = prepareScaleOptions(that._getOption("scale"), seriesDataSource, that._incidentOccurred, this._getOption("containerBackgroundColor", true)),
             argTranslatorRange = calculateTranslatorRange(seriesDataSource, scaleOptions),
             tickIntervalsInfo = updateTickIntervals(scaleOptions, canvas.width, that._incidentOccurred, argTranslatorRange),
             sliderMarkerOptions,
@@ -1097,6 +1102,7 @@ function AxisWrapper(params) {
     this._axis = new axisModule.Axis({
         renderer: params.renderer,
         axesContainerGroup: params.root,
+        scaleBreaksGroup: params.scaleBreaksGroup,
         incidentOccurred: params.incidentOccurred,
         // TODO: These dependencies should be statically resolved (not for every new instance)
         axisType: "xyAxes",
@@ -1133,6 +1139,7 @@ AxisWrapper.prototype = {
             // TODO: Check who is responsible for destroying events
             createDateMarkersEvent(options, axis.getMarkerTrackers(), this._updateSelectedRangeCallback);
         }
+        axis.drawScaleBreaks({ start: canvas.top, end: canvas.top + canvas.height });
     },
 
     getFullTicks: function() {

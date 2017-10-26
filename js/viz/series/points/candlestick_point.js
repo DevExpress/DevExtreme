@@ -1,12 +1,8 @@
 "use strict";
 
-var isNumeric = require("../../../core/utils/type").isNumeric,
-    extend = require("../../../core/utils/extend").extend,
+var _extend = require("../../../core/utils/extend").extend,
     symbolPoint = require("./symbol_point"),
     barPoint = require("./bar_point"),
-
-    _isNumeric = isNumeric,
-    _extend = extend,
 
     _math = Math,
     _abs = _math.abs,
@@ -17,13 +13,14 @@ var isNumeric = require("../../../core/utils/type").isNumeric,
     DEFAULT_FINANCIAL_TRACKER_MARGIN = 2;
 
 module.exports = _extend({}, barPoint, {
-    _getContinuousPoints: function(minValueName, maxValueName) {
+    _getContinuousPoints: function(openCoord, closeCoord) {
         var that = this,
             x = that.x,
             createPoint = that._options.rotated ? function(x, y) { return [y, x]; } : function(x, y) { return [x, y]; },
             width = that.width,
-            min = that[minValueName],
-            max = that[maxValueName],
+            highCoord = that.highY,
+            max = _abs(highCoord - openCoord) < _abs(highCoord - closeCoord) ? openCoord : closeCoord,
+            min = max === closeCoord ? openCoord : closeCoord,
             points;
 
         if(min === max) {
@@ -49,7 +46,7 @@ module.exports = _extend({}, barPoint, {
         return points;
     },
 
-    _getCategoryPoints: function(y) {
+    _getCrockPoints: function(y) {
         var that = this,
             x = that.x,
             createPoint = that._options.rotated ? function(x, y) { return [y, x]; } : function(x, y) { return [x, y]; };
@@ -65,20 +62,16 @@ module.exports = _extend({}, barPoint, {
     _getPoints: function() {
         var that = this,
             points,
-            minValueName,
-            maxValueName,
-            openValue = that.openValue,
-            closeValue = that.closeValue;
+            closeCoord = that.closeY,
+            openCoord = that.openY;
 
-        if(_isNumeric(openValue) && _isNumeric(closeValue)) {
-            minValueName = openValue > closeValue ? "closeY" : "openY";
-            maxValueName = openValue > closeValue ? "openY" : "closeY";
-            points = that._getContinuousPoints(minValueName, maxValueName);
+        if(closeCoord !== null && openCoord !== null) {
+            points = that._getContinuousPoints(openCoord, closeCoord);
         } else {
-            if(openValue === closeValue) {
+            if(openCoord === closeCoord) {
                 points = [that.x, that.highY, that.x, that.lowY];
             } else {
-                points = that._getCategoryPoints(_isNumeric(openValue) ? that.openY : that.closeY);
+                points = that._getCrockPoints(openCoord !== null ? openCoord : closeCoord);
             }
         }
 
@@ -228,13 +221,18 @@ module.exports = _extend({}, barPoint, {
         return this.highValue !== null && this.lowValue !== null;
     },
 
+    hasCoords: function() {
+        return this.x !== null && this.lowY !== null && this.highY !== null;
+    },
+
     _translate: function() {
         var that = this,
             rotated = that._options.rotated,
             valTranslator = that._getValTranslator(),
-            centerValue;
+            centerValue,
+            x = that._getArgTranslator().translate(that.argument);
 
-        that.vx = that.vy = that.x = that._getArgTranslator().translate(that.argument) + (that.xCorrection || 0);
+        that.vx = that.vy = that.x = x === null ? x : x + (that.xCorrection || 0);
         that.openY = that.openValue !== null ? valTranslator.translate(that.openValue) : null;
         that.highY = valTranslator.translate(that.highValue);
         that.lowY = valTranslator.translate(that.lowValue);

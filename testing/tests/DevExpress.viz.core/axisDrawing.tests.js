@@ -52,7 +52,8 @@ var environment = {
                 return {
                     ticks: that.generatedTicks || [],
                     minorTicks: that.generatedMinorTicks || [],
-                    tickInterval: that.generatedTickInterval
+                    tickInterval: that.generatedTickInterval,
+                    breaks: arguments[7]
                 };
             };
         });
@@ -66,7 +67,8 @@ var environment = {
             labelAxesGroup = this.renderer.g(),
             constantLinesGroup = this.renderer.g(),
             axesContainerGroup = this.renderer.g(),
-            gridGroup = this.renderer.g();
+            gridGroup = this.renderer.g(),
+            scaleBreaksGroup = this.renderer.g();
 
         this.renderer.g.reset();
 
@@ -76,11 +78,28 @@ var environment = {
             labelAxesGroup: labelAxesGroup,
             constantLinesGroup: constantLinesGroup,
             axesContainerGroup: axesContainerGroup,
+            scaleBreaksGroup: scaleBreaksGroup,
             gridGroup: gridGroup,
             axisType: "xyAxes",
             drawingType: "linear",
             isArgumentAxis: true
         }, options));
+    },
+    createAxisWithBreaks: function(options, group) {
+        var scaleBreaksGroup = this.renderer.g();
+        this.createAxis({ scaleBreaksGroup: group || scaleBreaksGroup });
+        this.updateOptions($.extend({
+            isHorizontal: false,
+            containerColor: "#ffffff",
+            breaks: [[10, 20]],
+            breakStyle: {
+                color: "black",
+                line: "waved",
+                width: 10
+            }
+        }, options));
+        this.axis.setBusinessRange({ min: 0, max: 30 });
+        this.axis.draw(this.zeroMarginCanvas);
     },
     afterEach: function() {
         translator2DModule.Translator2D.restore();
@@ -8642,4 +8661,315 @@ QUnit.test("Update strip labels coords", function(assert) {
 
     assert.deepEqual(renderer.text.getCall(0).returnValue.attr.lastCall.args, [{ x: 20 + 10, y: 30 }]);
     assert.deepEqual(renderer.text.getCall(1).returnValue.attr.lastCall.args, [{ x: 60 + 15, y: 30 }]);
+});
+
+
+QUnit.module("Scale breaks drawing", $.extend({}, environment, {
+    beforeEach: function() {
+        environment.beforeEach.call(this);
+        this.renderer.linePattern = sinon.stub().returns({ id: "scaleBreak_id", size: 6, dispose: sinon.stub() });
+    }
+}));
+
+QUnit.test("Drawing scale breaks for value axis", function(assert) {
+    //arrange
+    var scaleBreaksGroup = this.renderer.g();
+    this.createAxisWithBreaks({}, scaleBreaksGroup);
+
+    //act
+    this.translator.stub("translate").withArgs(20).returns(20);
+    this.translator.stub("isInverted").returns(true);
+    this.axis.updateSize(this.canvas);
+
+    //assert
+    assert.ok(this.renderer.linePattern.called);
+    assert.deepEqual(this.renderer.linePattern.lastCall.args[0], {
+        borderColor: "black",
+        canvasLength: 80,
+        color: "#ffffff",
+        isHorizontal: false,
+        isWaved: true,
+        size: 10
+    }, "pattern was created");
+
+    assert.equal(this.renderer.rect.callCount, 1);
+    assert.ok(scaleBreaksGroup.clear.called);
+    assert.deepEqual(this.renderer.rect.lastCall.args, [10, 20, 80, 6]);
+    assert.deepEqual(this.renderer.rect.lastCall.returnValue.attr.args[0][0], { fill: "scaleBreak_id" });
+    assert.equal(this.renderer.rect.lastCall.returnValue.append.args[0][0], scaleBreaksGroup);
+});
+
+QUnit.test("Drawing scale breaks using drawScaleBreaks method", function(assert) {
+    //arrange
+    var scaleBreaksGroup = this.renderer.g();
+    this.createAxisWithBreaks({}, scaleBreaksGroup);
+
+    this.translator.stub("translate").withArgs(20).returns(20);
+    this.translator.stub("isInverted").returns(true);
+    this.axis.draw(this.canvas);
+
+    //act
+    this.axis.drawScaleBreaks();
+    //assert
+    assert.ok(this.renderer.linePattern.called);
+    assert.deepEqual(this.renderer.linePattern.lastCall.args[0], {
+        borderColor: "black",
+        canvasLength: 80,
+        color: "#ffffff",
+        isHorizontal: false,
+        isWaved: true,
+        size: 10
+    }, "pattern was created");
+
+    assert.equal(this.renderer.rect.callCount, 1);
+    assert.deepEqual(this.renderer.rect.lastCall.args, [10, 20, 80, 6]);
+    assert.deepEqual(this.renderer.rect.lastCall.returnValue.attr.args[0][0], { fill: "scaleBreak_id" });
+    assert.equal(this.renderer.rect.lastCall.returnValue.append.args[0][0], scaleBreaksGroup);
+});
+
+QUnit.test("Drawing scale with custom canvas", function(assert) {
+    //arrange
+    var scaleBreaksGroup = this.renderer.g();
+    this.createAxisWithBreaks({}, scaleBreaksGroup);
+
+    this.translator.stub("translate").withArgs(20).returns(20);
+    this.translator.stub("isInverted").returns(true);
+    this.axis.draw(this.canvas);
+
+    //act
+    this.axis.drawScaleBreaks({
+        start: 30,
+        end: 90
+    });
+    //assert
+    assert.ok(this.renderer.linePattern.called);
+    assert.deepEqual(this.renderer.linePattern.lastCall.args[0], {
+        borderColor: "black",
+        canvasLength: 60,
+        color: "#ffffff",
+        isHorizontal: false,
+        isWaved: true,
+        size: 10
+    }, "pattern was created");
+
+    assert.equal(this.renderer.rect.callCount, 1);
+    assert.deepEqual(this.renderer.rect.lastCall.args, [30, 20, 60, 6]);
+    assert.deepEqual(this.renderer.rect.lastCall.returnValue.attr.args[0][0], { fill: "scaleBreak_id" });
+    assert.equal(this.renderer.rect.lastCall.returnValue.append.args[0][0], scaleBreaksGroup);
+});
+
+QUnit.test("Drawing scale breaks for value axis, chart is rotated", function(assert) {
+    //arrange
+    this.createAxisWithBreaks({ isHorizontal: true });
+    this.translator.stub("isInverted").returns(false);
+
+    //act
+    this.translator.stub("translate").withArgs(20).returns(20);
+    this.axis.updateSize(this.canvas);
+
+    //assert
+    assert.deepEqual(this.renderer.rect.lastCall.args, [12, 30, 6, 40]);
+});
+
+QUnit.test("Drawing scale breaks for value axis, axis is visible, position is left", function(assert) {
+    //arrange
+    this.createAxisWithBreaks({
+        visible: true,
+        position: "left"
+    });
+
+    //act
+    this.translator.stub("translate").withArgs(20).returns(20);
+    this.translator.stub("isInverted").returns(true);
+    this.axis.updateSize(this.canvas);
+
+    //assert
+    assert.deepEqual(this.renderer.rect.lastCall.args, [7, 20, 83, 6]);
+});
+
+QUnit.test("Drawing scale breaks for value axis, axis is visible, position is right", function(assert) {
+    //arrange
+    this.createAxisWithBreaks({
+        visible: true,
+        position: "right"
+    });
+
+    //act
+    this.translator.stub("translate").withArgs(20).returns(20);
+    this.translator.stub("isInverted").returns(true);
+    this.axis.updateSize(this.canvas);
+
+    //assert
+    assert.deepEqual(this.renderer.rect.lastCall.args, [10, 20, 83, 6]);
+});
+
+QUnit.test("Drawing scale breaks for value axis, chart is rotated, axis is visible, position is top", function(assert) {
+    //arrange
+    this.createAxisWithBreaks({
+        isHorizontal: true,
+        visible: true,
+        position: "top"
+    });
+
+    //act
+    this.translator.stub("translate").withArgs(20).returns(20);
+    this.translator.stub("isInverted").returns(false);
+    this.axis.updateSize(this.canvas);
+
+    //assert
+    assert.deepEqual(this.renderer.rect.lastCall.args, [12, 27, 6, 43]);
+});
+
+QUnit.test("Drawing scale breaks for value axis, chart is rotated, axis is visible, position is bottom", function(assert) {
+    //arrange
+    this.createAxisWithBreaks({
+        isHorizontal: true,
+        visible: true,
+        position: "bottom"
+    });
+
+    //act
+    this.translator.stub("translate").withArgs(20).returns(20);
+    this.translator.stub("isInverted").returns(false);
+    this.axis.updateSize(this.canvas);
+
+    //assert
+    assert.deepEqual(this.renderer.rect.lastCall.args, [12, 30, 6, 43]);
+});
+
+QUnit.test("The scale break shouldn't created without breaks", function(assert) {
+    //arrange
+    this.createAxis();
+    this.updateOptions({
+        isHorizontal: false,
+        breakStyle: {
+            color: "black",
+            line: "waved",
+            width: 10
+        }
+    });
+    this.axis.setBusinessRange({ min: 0, max: 30 });
+    this.axis.draw(this.zeroMarginCanvas);
+
+    //act
+    this.translator.stub("translate").withArgs(20).returns(20);
+    this.axis.updateSize(this.canvas);
+
+    //assert
+    assert.ok(!this.renderer.linePattern.called);
+    assert.ok(!this.renderer.rect.called);
+});
+
+QUnit.test("The scale break shouldn't created if break is out of the range", function(assert) {
+    //arrange
+    this.createAxisWithBreaks({
+        breaks: [[50, 60]]
+    });
+
+    //act
+    this.translator.stub("translate").withArgs(20).returns(20);
+    this.axis.updateSize(this.canvas);
+
+    //assert
+    assert.ok(!this.renderer.linePattern.called);
+    assert.ok(!this.renderer.rect.called);
+});
+
+QUnit.test("Style 'straight' of the scale break", function(assert) {
+    //arrange
+    this.createAxisWithBreaks({
+        breakStyle: {
+            line: "straight"
+        }
+    });
+
+    //act
+    this.translator.stub("translate").withArgs(20).returns(20);
+    this.translator.stub("isInverted").returns(true);
+    this.axis.updateSize(this.canvas);
+
+    //assert
+    assert.ok(this.renderer.linePattern.called);
+    assert.deepEqual(this.renderer.linePattern.lastCall.args[0].isWaved, false);
+});
+
+QUnit.test("Style 'straight' set with upper case", function(assert) {
+    //arrange
+    this.createAxisWithBreaks({
+        breakStyle: {
+            line: "StraIght"
+        }
+    });
+
+    //act
+    this.translator.stub("translate").withArgs(20).returns(20);
+    this.translator.stub("isInverted").returns(true);
+    this.axis.updateSize(this.canvas);
+
+    //assert
+    assert.ok(this.renderer.linePattern.called);
+    assert.deepEqual(this.renderer.linePattern.lastCall.args[0].isWaved, false);
+});
+
+QUnit.test("Invalid style, 'waved' style should be by default", function(assert) {
+    //arrange
+    this.createAxisWithBreaks({
+        breakStyle: {
+            line: "style"
+        }
+    });
+
+    //act
+    this.translator.stub("translate").withArgs(20).returns(20);
+    this.translator.stub("isInverted").returns(true);
+    this.axis.updateSize(this.canvas);
+
+    //assert
+    assert.ok(this.renderer.linePattern.called);
+    assert.deepEqual(this.renderer.linePattern.lastCall.args[0].isWaved, true);
+});
+
+QUnit.test("Creation breaks several times, breaks should be disposed", function(assert) {
+    //arrange
+    this.createAxisWithBreaks();
+
+    //act
+    this.translator.stub("translate").withArgs(20).returns(20);
+    this.translator.stub("isInverted").returns(true);
+
+    this.axis.updateSize(this.canvas);
+    this.axis.updateSize(this.canvas);
+    this.axis.updateSize(this.canvas);
+    this.axis.updateSize(this.canvas);
+
+    //assert
+    assert.ok(this.renderer.linePattern.returnValues[0].dispose.called);
+    assert.ok(this.renderer.linePattern.returnValues[1].dispose.called);
+    assert.ok(this.renderer.linePattern.returnValues[2].dispose.called);
+    assert.ok(this.renderer.linePattern.returnValues[3].dispose.called);
+});
+
+QUnit.test("Datetime. Drawing user breaks with generated workday breaks. Should drawn only user scale break", function(assert) {
+    this.createAxis({ scaleBreaksGroup: this.renderer.g() });
+    this.updateOptions({
+        isHorizontal: false,
+        isArgumentAxis: true,
+        containerColor: "#ffffff",
+        workdaysOnly: true,
+        argumentType: "datetime",
+        workWeek: [1, 2, 3, 4, 5],
+        breaks: [[new Date(2017, 10, 7), new Date(2017, 10, 8) ]],
+        breakStyle: {
+            color: "black",
+            line: "waved",
+            width: 10
+        }
+    });
+    this.axis.setBusinessRange({ min: new Date(2017, 10, 6), max: new Date(2017, 10, 15) });
+    this.axis.draw(this.zeroMarginCanvas);
+
+    //act
+    this.axis.updateSize(this.canvas);
+
+    assert.equal(this.renderer.rect.callCount, 1);
 });
