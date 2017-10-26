@@ -99,7 +99,7 @@ var Lookup = DropDownList.inherit({
             * @publicName titleTemplate
             * @type template
             * @default "title"
-            * @type_function_param1 titleElement:Element
+            * @type_function_param1 titleElement:dxElement
             * @type_function_return string|Node|jQuery
             */
             titleTemplate: "title",
@@ -108,7 +108,9 @@ var Lookup = DropDownList.inherit({
             * @name dxLookupOptions_onTitleRendered
             * @publicName onTitleRendered
             * @extends Action
-            * @type_function_param1_field1 titleElement:Element
+            * @type function(e)
+            * @type_function_param1 e:object
+            * @type_function_param1_field1 titleElement:dxElement
             * @action
             */
             onTitleRendered: null,
@@ -308,12 +310,15 @@ var Lookup = DropDownList.inherit({
             * @name dxLookupOptions_onScroll
             * @publicName onScroll
             * @extends Action
+            * @type function(e)
+            * @type_function_param1 e:object
             * @type_function_param1_field4 jQueryEvent:jQuery.Event
-            * @type_function_param1_field5 scrollOffset:object
-            * @type_function_param1_field6 reachedLeft:boolean
-            * @type_function_param1_field7 reachedRight:boolean
-            * @type_function_param1_field8 reachedTop:boolean
-            * @type_function_param1_field9 reachedBottom:boolean
+            * @type_function_param1_field5 event:event
+            * @type_function_param1_field6 scrollOffset:object
+            * @type_function_param1_field7 reachedLeft:boolean
+            * @type_function_param1_field8 reachedRight:boolean
+            * @type_function_param1_field9 reachedTop:boolean
+            * @type_function_param1_field10 reachedBottom:boolean
             * @action
             */
             onScroll: null,
@@ -366,7 +371,7 @@ var Lookup = DropDownList.inherit({
             * @default "group"
             * @type_function_param1 itemData:object
             * @type_function_param2 itemIndex:number
-            * @type_function_param3 itemElement:Element
+            * @type_function_param3 itemElement:dxElement
             * @type_function_return string|Node|jQuery
             */
             groupTemplate: "group",
@@ -402,9 +407,12 @@ var Lookup = DropDownList.inherit({
             * @name dxLookupOptions_onValueChanged
             * @publicName onValueChanged
             * @extends Action
+            * @type function(e)
+            * @type_function_param1 e:object
             * @type_function_param1_field4 value:object
             * @type_function_param1_field5 previousValue:object
             * @type_function_param1_field6 jQueryEvent:jQuery.Event
+            * @type_function_param1_field7 event:event
             * @action
             */
 
@@ -414,7 +422,7 @@ var Lookup = DropDownList.inherit({
             * @type template
             * @default null
             * @type_function_param1 selectedItem:object
-            * @type_function_param2 fieldElement:Element
+            * @type_function_param2 fieldElement:dxElement
             * @type_function_return string|Node|jQuery
             */
 

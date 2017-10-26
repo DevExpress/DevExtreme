@@ -22,6 +22,28 @@ function prepareAxis(axisOptions) {
     return _isArray(axisOptions) ? axisOptions.length === 0 ? [{}] : axisOptions : [axisOptions];
 }
 
+function mergeMarginOptions(opt1, opt2) {
+    return {
+        checkInterval: opt1.checkInterval || opt2.checkInterval,
+        size: Math.max(opt1.size || 0, opt2.size || 0),
+        percentStick: opt1.percentStick || opt2.percentStick
+    };
+}
+
+function processBubbleMargin(opt, bubbleSize) {
+    if(opt.processBubbleSize) {
+        opt.size = bubbleSize;
+    }
+    return opt;
+}
+
+function estimateBubbleSize(size, panesCount, maxSize, rotated) {
+    var width = rotated ? size.width / panesCount : size.width,
+        height = rotated ? size.height : size.height / panesCount;
+
+    return Math.min(width, height) * maxSize;
+}
+
 var AdvancedChart = BaseChart.inherit({
     _dispose: function() {
         var that = this,
@@ -174,13 +196,6 @@ var AdvancedChart = BaseChart.inherit({
         disposeObjectsInArray.call(that, "_valueAxes");
     },
 
-    _drawAxes: function(drawOptions, panesBorderOptions) {
-        this._restoreOriginalBusinessRange();
-        this._prepareAxesAndDraw(drawOptions, panesBorderOptions);
-    },
-
-    _restoreOriginalBusinessRange: _noop,
-
     _appendAdditionalSeriesGroups: function() {
         this._crosshairCursorGroup.linkAppend();
         //this._legendGroup.linkAppend();
@@ -295,6 +310,7 @@ var AdvancedChart = BaseChart.inherit({
         that._axesGroup.linkAppend();
         that._constantLinesGroup.linkAppend();
         that._labelAxesGroup.linkAppend();
+        that._scaleBreaksGroup.linkAppend();
     },
 
     _populateBusinessRange: function() {
@@ -303,13 +319,21 @@ var AdvancedChart = BaseChart.inherit({
             rotated = that._isRotated(),
             argAxes = that._argumentAxes,
             argRange = new rangeModule.Range({ rotated: !!rotated }),
-            groupsData = that._groupsData;
+            argumentMarginOptions = {},
+            bubbleSize = estimateBubbleSize(that.getSize(), that.panes.length, that._themeManager.getOptions("maxBubbleSize"), that._isRotated()),
+            groupsData = that._groupsData,
+            countAxesPerPane;
 
         that.businessRanges = null;
 
         _each(argAxes, function(_, axis) {
             argRange.addRange(axis.getRangeData());
         });
+
+        countAxesPerPane = that._valueAxes.reduce(function(prev, axis) {
+            prev[axis.pane] = (prev[axis.pane] || 0) + 1;
+            return prev;
+        }, {});
 
         that._valueAxes.forEach(function(valueAxis) {
             var groupRange = new rangeModule.Range({
@@ -320,15 +344,19 @@ var AdvancedChart = BaseChart.inherit({
                 groupAxisRange = valueAxis.getRangeData(),
                 groupSeries = that.series.filter(function(series) {
                     return series.getValueAxis() === valueAxis;
-                });
+                }),
+                marginOptions = {};
 
             groupRange.addRange(groupAxisRange);
 
             groupSeries.forEach(function(series) {
-                var seriesRange = series.getRangeData();
+                var seriesRange = series.getRangeData(),
+                    seriesMarginOptions = processBubbleMargin(series.getMarginOptions(), bubbleSize);
 
                 groupRange.addRange(seriesRange.val);
                 argRange.addRange(seriesRange.arg);
+                marginOptions = mergeMarginOptions(marginOptions, seriesMarginOptions);
+                argumentMarginOptions = mergeMarginOptions(argumentMarginOptions, seriesMarginOptions);
             });
 
             if(!groupRange.isDefined()) {
@@ -338,9 +366,10 @@ var AdvancedChart = BaseChart.inherit({
             if(valueAxis.getOptions().showZero) {
                 groupRange.correctValueZeroLevel();
             }
-            groupRange.checkZeroStick();
 
-            valueAxis.setBusinessRange(groupRange);
+            valueAxis.setGroupSeries(groupSeries);
+            valueAxis.setBusinessRange(groupRange, countAxesPerPane[valueAxis.pane] > 1);
+            valueAxis.setMarginOptions(marginOptions);
 
             businessRanges.push({ val: groupRange, arg: argRange });
         });
@@ -351,9 +380,9 @@ var AdvancedChart = BaseChart.inherit({
             argRange.setStubData(argAxes[0].getOptions().argumentType);
         }
 
-
         that._argumentAxes.forEach(function(a) {
             a.setBusinessRange(argRange);
+            a.setMarginOptions(argumentMarginOptions);
         });
 
         that.businessRanges = businessRanges;
@@ -426,8 +455,10 @@ var AdvancedChart = BaseChart.inherit({
                 stripsGroup: that._stripsGroup,
                 labelAxesGroup: that._labelAxesGroup,
                 constantLinesGroup: that._constantLinesGroup,
+                scaleBreaksGroup: that._scaleBreaksGroup,
                 axesContainerGroup: that._axesGroup,
-                gridGroup: that._gridGroup
+                gridGroup: that._gridGroup,
+                isArgumentAxis: typeSelector === "argumentAxis"
             }, that._getAxisRenderingOptions(typeSelector)),
             axis,
             preparedUserOptions = that._prepareStripsAndConstantLines(typeSelector, userOptions, rotated),

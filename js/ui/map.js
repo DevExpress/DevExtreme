@@ -229,6 +229,8 @@ var Map = Widget.inherit({
             * @name dxMapOptions_onMarkerAdded
             * @publicName onMarkerAdded
             * @extends Action
+            * @type function(e)
+            * @type_function_param1 e:object
             * @type_function_param1_field4 options:object
             * @type_function_param1_field5 originalMarker:object
             * @action
@@ -239,6 +241,8 @@ var Map = Widget.inherit({
             * @name dxMapOptions_onMarkerRemoved
             * @publicName onMarkerRemoved
             * @extends Action
+            * @type function(e)
+            * @type_function_param1 e:object
             * @type_function_param1_field4 options:object
             * @action
             */
@@ -287,6 +291,8 @@ var Map = Widget.inherit({
             * @name dxMapOptions_onRouteAdded
             * @publicName onRouteAdded
             * @extends Action
+            * @type function(e)
+            * @type_function_param1 e:object
             * @type_function_param1_field4 options:object
             * @type_function_param1_field5 originalRoute:object
             * @action
@@ -297,6 +303,8 @@ var Map = Widget.inherit({
             * @name dxMapOptions_onRouteRemoved
             * @publicName onRouteRemoved
             * @extends Action
+            * @type function(e)
+            * @type_function_param1 e:object
             * @type_function_param1_field4 options:object
             * @action
             */
@@ -346,6 +354,8 @@ var Map = Widget.inherit({
             * @name dxMapOptions_onReady
             * @publicName onReady
             * @extends Action
+            * @type function(e)
+            * @type_function_param1 e:object
             * @type_function_param1_field4 originalMap:object
             * @action
             */
@@ -357,10 +367,12 @@ var Map = Widget.inherit({
             /**
             * @name dxMapOptions_onClick
             * @publicName onClick
-            * @type function|string
+            * @type function(e)|string
             * @extends Action
+            * @type_function_param1 e:object
             * @type_function_param1_field4 location:object
             * @type_function_param1_field5 jQueryEvent:jQuery.Event
+            * @type_function_param1_field6 event:event
             * @action
             */
             onClick: null

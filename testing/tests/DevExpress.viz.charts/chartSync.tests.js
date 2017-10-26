@@ -1160,6 +1160,7 @@ var environment = {
         assert.ok(chart._crosshairCursorGroup.linkRemove.called, "crosshair group should be detached");
         assert.ok(chart._crosshairCursorGroup.stub("clear").called, "crosshair should be cleared");
         assert.ok(chart._crosshairCursorGroup.linkAppend.called, "crosshair group should be added to root");
+        assert.ok(chart._scaleBreaksGroup.linkAppend.called, "scalebreaks group should be added to root");
 
         withNewData && assert.ok(getTrackerStub().stub("update").called, "Tracker should be initialized");
         options.noTrackerUpdateCheck || assert.ok(getTrackerStub().stub("update").called, "Tracker should be prepared");
@@ -1648,6 +1649,7 @@ var environment = {
         mockObjectDispose("_crosshair");
         mockObjectDispose("_scrollGroup");
         mockObjectDispose("_backgroundRect");
+        mockObjectDispose("_scaleBreaksGroup");
 
         //act
         this.$container.remove();
@@ -1708,6 +1710,8 @@ var environment = {
         assert.strictEqual(chart._labelsGroup, null, "labels group is null");
         assert.ok(chart._crosshairCursorGroupDisposed, "_crossHairCursorGroup");
         assert.strictEqual(chart._crosshairCursorGroup, null, "crosshair cursor group is null");
+        assert.ok(chart._scaleBreaksGroupDisposed, "_scaleBreaksGroup");
+        assert.strictEqual(chart._scaleBreaksGroup, null, "scalebreaks group is null");
 
         assert.deepEqual(loadIndicator.dispose.lastCall.args, [], "load indicator dispose args");
         assert.strictEqual(chart._loadingIndicator, null, "load indicator is null");
@@ -1798,6 +1802,9 @@ function resetMocksInChart(chart) {
     chart._crosshairCursorGroup.stub("linkAppend").reset();
     chart._crosshairCursorGroup.stub("linkRemove").reset();
     chart._crosshairCursorGroup.stub("clear").reset();
+    chart._scaleBreaksGroup.stub("linkAppend").reset();
+    chart._scaleBreaksGroup.stub("linkRemove").reset();
+    chart._scaleBreaksGroup.stub("clear").reset();
 
     chart.canvasClipRect && chart.canvasClipRect.stub("remove").reset();
     chart.canvasClipRect && chart.canvasClipRect.stub("clear").reset();

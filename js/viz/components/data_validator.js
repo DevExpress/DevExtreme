@@ -444,7 +444,7 @@ function checkAxisType(groupsData, incidentOccurred) {
         group.valueAxisType = group.valueAxisType || valueAxisType;
         if(group.valueAxis) {
             group.valueAxis.setTypes(group.valueAxisType, group.valueType, VALUE_TYPE);
-            group.valueAxis.validate(false);
+            group.valueAxis.validate();
         }
     });
 
@@ -452,7 +452,7 @@ function checkAxisType(groupsData, incidentOccurred) {
     if(groupsData.argumentAxes) {
         groupsData.argumentAxes.forEach(function(axis) {
             axis.setTypes(groupsData.argumentAxisType, groupsData.argumentType, ARGUMENT_TYPE);
-            axis.validate(true);
+            axis.validate();
         });
     }
 }

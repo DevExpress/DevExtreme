@@ -84,8 +84,9 @@ var ActionSheet = CollectionWidget.inherit({
             /**
             * @name dxActionSheetOptions_onCancelClick
             * @publicName onCancelClick
-            * @type function|string
+            * @type function(e)|string
             * @extends Action
+            * @type_function_param1 e:object
             * @type_function_param1_field4 cancel:boolean
             * @action
             */
@@ -192,9 +193,11 @@ var ActionSheet = CollectionWidget.inherit({
             /**
             * @name dxActionSheetItemTemplate_onClick
             * @publicName onClick
-            * @type function|string
+            * @type function(e)|string
             * @extends Action
+            * @type_function_param1 e:object
             * @type_function_param1_field4 jQueryEvent:jQuery.Event
+            * @type_function_param1_field5 event:event
             */
             /**
             * @name dxActionSheetItemTemplate_icon

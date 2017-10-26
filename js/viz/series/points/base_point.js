@@ -409,6 +409,7 @@ Point.prototype = {
     hasValue: function() {
         return this.value !== null && this.minValue !== null;
     },
+    hasCoords: _noop,
     correctPosition: _noop,
     correctRadius: _noop,
     correctLabelRadius: _noop,

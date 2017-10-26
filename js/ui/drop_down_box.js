@@ -5,7 +5,7 @@ var DropDownEditor = require("./drop_down_editor/ui.drop_down_editor"),
     commonUtils = require("../core/utils/common"),
     map = require("../core/utils/iterator").map,
     isDefined = require("../core/utils/type").isDefined,
-    selectors = require("./widget/jquery.selectors"),
+    selectors = require("./widget/selectors"),
     KeyboardProcessor = require("./widget/ui.keyboard_processor"),
     deferredUtils = require("../core/utils/deferred"),
     when = deferredUtils.when,
@@ -82,7 +82,7 @@ var DropDownBox = DropDownEditor.inherit({
              * @type template
              * @default null
              * @type_function_param1 templateData:object
-             * @type_function_param2 contentElement:Element
+             * @type_function_param2 contentElement:dxElement
              * @type_function_return string|Node|jQuery
              */
             contentTemplate: null,
@@ -101,7 +101,7 @@ var DropDownBox = DropDownEditor.inherit({
              * @type template
              * @default null
              * @type_function_param1 value:object
-             * @type_function_param2 fieldElement:Element
+             * @type_function_param2 fieldElement:dxElement
              * @type_function_return string|Node|jQuery
              */
 

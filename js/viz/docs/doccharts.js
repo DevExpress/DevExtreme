@@ -12,7 +12,7 @@ var dxChart = {
     * @publicName Options
     * @namespace DevExpress.viz.charts
     * @hidden
-    */    
+    */
     /**
     * @name dxchartoptions_seriestemplate
     * @publicName seriesTemplate
@@ -68,7 +68,8 @@ var dxChart = {
     * @type_function_param1_field1 component:object
     * @type_function_param1_field2 element:object
     * @type_function_param1_field3 jQueryEvent:jQuery.Event
-    * @type_function_param1_field4 target:chartSeriesObject
+    * @type_function_param1_field4 event:event
+    * @type_function_param1_field5 target:chartSeriesObject
     * @notUsedInTheme
     * @action
     */
@@ -81,7 +82,8 @@ var dxChart = {
     * @type_function_param1_field1 component:object
     * @type_function_param1_field2 element:object
     * @type_function_param1_field3 jQueryEvent:jQuery.Event
-    * @type_function_param1_field4 target:chartSeriesObject
+    * @type_function_param1_field4 event:event
+    * @type_function_param1_field5 target:chartSeriesObject
     * @notUsedInTheme
     * @action
     */
@@ -897,7 +899,8 @@ var dxChart = {
     * @type_function_param1_field1 component:object
     * @type_function_param1_field2 element:object
     * @type_function_param1_field3 jQueryEvent:jQuery.Event
-    * @type_function_param1_field4 argument:Date|Number|string
+    * @type_function_param1_field4 event:event
+    * @type_function_param1_field5 argument:Date|Number|string
     * @notUsedInTheme
     * @action
     */
@@ -959,6 +962,7 @@ var dxChart = {
         * @publicName setTicksAtUnitBeginning
         * @type boolean
         * @default true
+        * @deprecated
         */
         setTicksAtUnitBeginning: true,
         /**
@@ -1004,6 +1008,42 @@ var dxChart = {
         * @default null
         */
         placeholderSize: null,
+        /**
+        * @name dxchartoptions_commonaxissettings_breaks
+        * @publicName breaks
+        * @type Array<ScaleBreak>
+        * @default undefined
+        */
+        breaks: undefined,
+        /**
+        * @name dxchartoptions_commonaxissettings_breakStyle
+        * @publicName breakStyle
+        * @type object
+        */
+        breakStyle: {
+            /**
+            * @name dxchartoptions_commonaxissettings_breakStyle_width
+            * @publicName width
+            * @type number
+            * @default 5
+            */
+            width: 5,
+            /**
+            * @name dxchartoptions_commonaxissettings_breakStyle_color
+            * @publicName color
+            * @type string
+            * @default "#ababab"
+            */
+            color: "#ababab",
+            /**
+            * @name dxchartoptions_commonaxissettings_breakStyle_line
+            * @publicName line
+            * @type string
+            * @default "waved"
+            * @acceptValues 'waved'| 'straight'
+            */
+            line: "waved"
+        },
         /**
         * @name dxchartoptions_commonaxissettings_label
         * @publicName label
@@ -1563,7 +1603,21 @@ var dxChart = {
         * @type boolean
         * @default false
         */
-        inverted: false
+        inverted: false,
+        /**
+        * @name dxchartoptions_commonaxissettings_allowdecimals
+        * @publicName allowDecimals
+        * @type boolean
+        * @default undefined
+        */
+        allowDecimals: undefined,
+        /**
+        * @name dxchartoptions_commonaxissettings_endontick
+        * @publicName endOnTick
+        * @type boolean
+        * @default undefined
+        */
+        endOnTick: undefined
     },
     /**
     * @name dxchartoptions_argumentaxis
@@ -1607,6 +1661,34 @@ var dxChart = {
             */
             text: undefined
         },
+        /**
+        * @name dxchartoptions_argumentaxis_workdaysonly
+        * @publicName workdaysOnly
+        * @type boolean
+        * @default false
+        */
+        workdaysOnly: false,
+        /**
+        * @name dxchartoptions_argumentaxis_workweek
+        * @publicName workWeek
+        * @type Array<number>
+        * @default [1, 2, 3, 4, 5]
+        */
+        workWeek: [1, 2, 3, 4, 5],
+        /**
+        * @name dxchartoptions_argumentaxis_holidays
+        * @publicName holidays
+        * @type Array<Date, string>| Array<number>
+        * @default undefined
+        */
+        holidays: undefined,
+        /**
+        * @name dxchartoptions_argumentaxis_singleworkdays
+        * @publicName singleWorkdays
+        * @type Array<Date, string>| Array<number>
+        * @default undefined
+        */
+        singleWorkdays: undefined,
         /**
         * @name dxchartoptions_argumentaxis_label
         * @publicName label
@@ -1793,9 +1875,9 @@ var dxChart = {
         * @name dxchartoptions_argumentaxis_axisdivisionfactor
         * @publicName axisDivisionFactor
         * @type number
-        * @default 50
+        * @default 70
         */
-        axisDivisionFactor: 50,
+        axisDivisionFactor: 70,
         /**
         * @name dxchartoptions_argumentaxis_categories
         * @publicName categories
@@ -1883,6 +1965,20 @@ var dxChart = {
         * @default undefined
         */
         minorTickCount: undefined,
+        /**
+        * @name dxchartoptions_valueaxis_autobreaksenabled
+        * @publicName autoBreaksEnabled
+        * @type boolean
+        * @default false
+        */
+        autoBreaksEnabled: false,
+        /**
+        * @name dxchartoptions_valueaxis_maxautobreakcount
+        * @publicName maxAutoBreakCount
+        * @type numeric
+        * @default undefined
+        */
+        maxAutoBreakCount: undefined,
         /**
         * @name dxchartoptions_valueaxis_title
         * @publicName title
@@ -2091,9 +2187,9 @@ var dxChart = {
         * @name dxchartoptions_valueaxis_axisdivisionfactor
         * @publicName axisDivisionFactor
         * @type number
-        * @default 30
+        * @default 40
         */
-        axisDivisionFactor: 30,
+        axisDivisionFactor: 40,
         /**
         * @name dxchartoptions_valueaxis_categories
         * @publicName categories
@@ -2129,7 +2225,14 @@ var dxChart = {
         * @type string
         * @default undefined
         */
-        pane: undefined
+        pane: undefined,
+        /**
+        * @name dxchartoptions_valueaxis_endontick
+        * @publicName endOnTick
+        * @type boolean
+        * @default true
+        */
+        endOnTick: true
     },
     /**
     * @name dxchartoptions_tooltip
@@ -2277,7 +2380,7 @@ var dxPieChart = {
     * @publicName Options
     * @namespace DevExpress.viz.charts
     * @hidden
-    */        
+    */
     /**
     * @name dxpiechartoptions_seriestemplate
     * @publicName seriesTemplate
@@ -2467,8 +2570,9 @@ var dxPieChart = {
     * @type_function_param1_field1 component:object
     * @type_function_param1_field2 element:object
     * @type_function_param1_field3 jQueryEvent:jQuery.Event
-    * @type_function_param1_field4 target:String|Number
-    * @type_function_param1_field5 points:Array<Object>
+    * @type_function_param1_field4 event:event
+    * @type_function_param1_field5 target:String|Number
+    * @type_function_param1_field6 points:Array<Object>
     * @notUsedInTheme
     * @action
     */
@@ -2496,7 +2600,7 @@ var dxPolarChart = {
     * @publicName Options
     * @namespace DevExpress.viz.charts
     * @hidden
-    */   
+    */
     /**
     * @name dxpolarchartoptions_seriestemplate
     * @publicName seriesTemplate
@@ -2559,7 +2663,8 @@ var dxPolarChart = {
     * @type_function_param1_field1 component:object
     * @type_function_param1_field2 element:object
     * @type_function_param1_field3 jQueryEvent:jQuery.Event
-    * @type_function_param1_field4 target:polarChartSeriesObject
+    * @type_function_param1_field4 event:event
+    * @type_function_param1_field5 target:polarChartSeriesObject
     * @notUsedInTheme
     * @action
     */
@@ -2572,7 +2677,8 @@ var dxPolarChart = {
     * @type_function_param1_field1 component:object
     * @type_function_param1_field2 element:object
     * @type_function_param1_field3 jQueryEvent:jQuery.Event
-    * @type_function_param1_field4 target:polarChartSeriesObject
+    * @type_function_param1_field4 event:event
+    * @type_function_param1_field5 target:polarChartSeriesObject
     * @notUsedInTheme
     * @action
     */
@@ -2690,8 +2796,9 @@ var dxPolarChart = {
     * @type_function_param1_field1 component:object
     * @type_function_param1_field2 element:object
     * @type_function_param1_field3 jQueryEvent:jQuery.Event
-    * @type_function_param1_field4 target:object
-    * @type_function_param1_field5 argument:Date|Number|string
+    * @type_function_param1_field4 event:event
+    * @type_function_param1_field5 target:object
+    * @type_function_param1_field6 argument:Date|Number|string
     * @notUsedInTheme
     * @action
     */
@@ -2745,6 +2852,7 @@ var dxPolarChart = {
         * @publicName setTicksAtUnitBeginning
         * @type boolean
         * @default true
+        * @deprecated
         */
         setTicksAtUnitBeginning: true,
         /**
@@ -3157,6 +3265,20 @@ var dxPolarChart = {
         * @default false
         */
         inverted: false,
+        /**
+        * @name dxpolarchartoptions_commonaxissettings_allowdecimals
+        * @publicName allowDecimals
+        * @type boolean
+        * @default undefined
+        */
+        allowDecimals: undefined,
+        /**
+        * @name dxpolarchartoptions_commonaxissettings_endontick
+        * @publicName endOnTick
+        * @type boolean
+        * @default undefined
+        */
+        endOnTick: undefined
     },
     /**
     * @name dxpolarchartoptions_argumentaxis
@@ -3683,7 +3805,7 @@ var BaseChart = {
     * @publicName Options
     * @namespace DevExpress.viz.charts
     * @hidden
-    */   
+    */
     /**
     * @name basechartoptions_ondone
     * @publicName onDone
@@ -3808,7 +3930,8 @@ var BaseChart = {
     * @type_function_param1_field1 component:object
     * @type_function_param1_field2 element:object
     * @type_function_param1_field3 jQueryEvent:jQuery.Event
-    * @type_function_param1_field4 target:basePointObject
+    * @type_function_param1_field4 event:event
+    * @type_function_param1_field5 target:basePointObject
     * @notUsedInTheme
     * @action
     */

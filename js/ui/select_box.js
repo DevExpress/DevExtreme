@@ -149,7 +149,7 @@ var SelectBox = DropDownList.inherit({
             * @type template
             * @default null
             * @type_function_param1 selectedItem:object
-            * @type_function_param2 fieldElement:Element
+            * @type_function_param2 fieldElement:dxElement
             * @type_function_return string|Node|jQuery
             */
             fieldTemplate: null,
@@ -174,8 +174,10 @@ var SelectBox = DropDownList.inherit({
             * @name dxSelectBoxOptions_onCustomItemCreating
             * @publicName onCustomItemCreating
             * @extends Action
+            * @type function(e)
+            * @type_function_param1 e:object
             * @type_function_param1_field4 text:string
-            * @type_function_return object|Promise
+            * @type_function_return object|Promise<object>
             * @action
             */
             onCustomItemCreating: function(e) {

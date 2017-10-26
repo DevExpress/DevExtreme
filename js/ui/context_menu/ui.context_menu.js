@@ -116,6 +116,8 @@ var ContextMenu = MenuBase.inherit((function() {
                 * @name dxContextMenuOptions_onShowing
                 * @publicName onShowing
                 * @extends Action
+                * @type function(e)
+                * @type_function_param1 e:object
                 * @type_function_param1_field4 cancel:boolean
                 * @action
                 */
@@ -135,6 +137,8 @@ var ContextMenu = MenuBase.inherit((function() {
                 * @name dxContextMenuOptions_onHiding
                 * @publicName onHiding
                 * @extends Action
+                * @type function(e)
+                * @type_function_param1 e:object
                 * @type_function_param1_field4 cancel:boolean
                 * @action
                 */
@@ -152,8 +156,11 @@ var ContextMenu = MenuBase.inherit((function() {
                 * @name dxContextMenuOptions_onPositioning
                 * @publicName onPositioning
                 * @extends Action
+                * @type function(e)
+                * @type_function_param1 e:object
                 * @type_function_param1_field4 jQueryEvent:jQuery.Event
-                * @type_function_param1_field5 position:position
+                * @type_function_param1_field5 event:event
+                * @type_function_param1_field6 position:positionConfig
                 * @action
                 */
                 onPositioning: null,

@@ -8,13 +8,6 @@ var WHITE = "#ffffff",
     RED = "#ff0000",
     PRIMARY_TITLE_COLOR = "#232323",
     SECONDARY_TITLE_COLOR = "#767676",
-    CONTRAST_ACTIVE = "#cf00da",
-    MARKER_COLOR = "#f8ca00",
-    TARGET_COLOR = "#8e8e8e",
-    POSITIVE_COLOR = "#b8b8b8",
-    LINE_COLOR = "#c7c7c7",
-    AREA_LAYER_COLOR = "#686868",
-    RANGE_COLOR = "#b5b5b5",
 
     NONE = "none",
     SOLID = "solid",
@@ -26,7 +19,7 @@ var WHITE = "#ffffff",
     INSIDE = "inside",
     OUTSIDE = "outside",
 
-    themeModule = require("../themes"),
+    themeModule = require("../../themes"),
     registerTheme = themeModule.registerTheme,
     registerThemeAlias = themeModule.registerThemeAlias;
 
@@ -236,7 +229,6 @@ registerTheme({
     },
     "chart:common:axis": {
         visible: false,
-        setTicksAtUnitBeginning: true,
         valueMarginsEnabled: true,
         placeholderSize: null,
         logarithmBase: 10,
@@ -616,6 +608,7 @@ registerTheme({
         commonAxisSettings: {
             multipleAxesSpacing: 5,
             forceUserTickInterval: false,
+            breakStyle: { width: 5, color: "#ababab", line: "waved" },
             label: {
                 displayMode: "standard",
                 overlappingBehavior: "hide",
@@ -634,7 +627,7 @@ registerTheme({
         },
         horizontalAxis: {
             position: BOTTOM,
-            axisDivisionFactor: 50,
+            axisDivisionFactor: 70,
             label: {
                 rotationAngle: 90,
                 staggeringSpacing: 5,
@@ -656,7 +649,7 @@ registerTheme({
         },
         verticalAxis: {
             position: LEFT,
-            axisDivisionFactor: 30,
+            axisDivisionFactor: 40,
             label: {
                 alignment: RIGHT
             },
@@ -674,11 +667,16 @@ registerTheme({
             },
             constantLines: []
         },
-        argumentAxis: {},
+        argumentAxis: {
+            workWeek: [1, 2, 3, 4, 5]
+        },
         valueAxis: {
+            endOnTick: true,
             grid: {
                 visible: true
-            }
+            },
+            autoBreaksEnabled: false,
+            maxAutoBreakCount: undefined
         },
         commonPaneSettings: {
             backgroundColor: NONE,
@@ -1001,12 +999,12 @@ registerTheme({
     },
     rangeSelector: {
         scale: {
+            valueMarginsEnabled: true,
             width: 1,
             color: BLACK,
             opacity: 0.1,
             showCustomBoundaryTicks: true,
             showMinorTicks: true, //DEPRECATED IN 15_2
-            setTicksAtUnitBeginning: true,
             label: {
                 overlappingBehavior: "hide",
                 alignment: "center",
@@ -1041,7 +1039,9 @@ registerTheme({
                 textTopIndent: 11,
                 label: {}
             },
-            logarithmBase: 10
+            logarithmBase: 10,
+            workWeek: [1, 2, 3, 4, 5],
+            breakStyle: { width: 5, color: "#ababab", line: "waved" }
         },
         selectedRangeColor: "#606060",
         sliderMarker: {
@@ -1543,474 +1543,7 @@ registerTheme({
     }
 });
 
-registerTheme({
-    name: "generic.dark",
-    font: {
-        color: "#808080"
-    },
-    backgroundColor: "#2a2a2a",
-    primaryTitleColor: "#dedede",
-    secondaryTitleColor: "#a3a3a3",
-    axisColor: "#555555",
-    axisLabelColor: "#a3a3a3",
-    "export": {
-        backgroundColor: "#2a2a2a",
-        font: {
-            color: "#dbdbdb"
-        },
-        button: {
-            "default": {
-                color: "#dedede",
-                borderColor: "#4d4d4d",
-                backgroundColor: "#2e2e2e"
-            },
-            hover: {
-                color: "#dedede",
-                borderColor: "#6c6c6c",
-                backgroundColor: "#444"
-            },
-            focus: {
-                color: "#dedede",
-                borderColor: "#8d8d8d",
-                backgroundColor: "#444444"
-            },
-            active: {
-                color: "#dedede",
-                borderColor: "#8d8d8d",
-                backgroundColor: "#555555"
-            }
-        },
-        shadowColor: "#292929"
-    },
-    tooltip: {
-        color: SOME_GREY,
-        border: {
-            color: "#494949"
-        },
-        font: {
-            color: "#929292"
-        }
-    },
-    "chart:common": {
-        commonSeriesSettings: {
-            label: {
-                border: {
-                    color: "#494949"
-                }
-            },
-            valueErrorBar: {
-                color: WHITE
-            }
-        }
-    },
-    "chart:common:axis": {
-        constantLineStyle: {
-            color: WHITE
-        }
-    },
-    chart: {
-        commonPaneSettings: {
-            border: {
-                color: "#494949"
-            }
-        }
-    },
-    gauge: {
-        rangeContainer: {
-            backgroundColor: RANGE_COLOR
-        },
-        valueIndicators: {
-            _default: {
-                color: RANGE_COLOR
-            },
-            "rangebar": {
-                color: "#84788b"
-            },
-            "twocolorneedle": {
-                secondColor: "#ba544d"
-            },
-            "trianglemarker": {
-                color: "#b7918f"
-            },
-            "textcloud": {
-                color: "#ba544d"
-            }
-        }
-    },
-    barGauge: {
-        backgroundColor: "#3c3c3c"
-    },
-    rangeSelector: {
-        scale: {
-            tick: {
-                color: WHITE,
-                opacity: 0.32
-            },
-            minorTick: {
-                color: WHITE,
-                opacity: 0.1
-            }
-        },
-        selectedRangeColor: RANGE_COLOR,
-        sliderMarker: {
-            color: RANGE_COLOR,
-            font: {
-                color: GREY_GREEN
-            }
-        },
-        sliderHandle: {
-            color: WHITE,
-            opacity: 0.2
-        },
-        shutter: {
-            color: SOME_GREY,
-            opacity: 0.9
-        }
-    },
-    map: {
-        background: {
-            borderColor: "#3f3f3f"
-        },
-        layer: {
-            label: {
-                stroke: BLACK,
-                font: {
-                    color: WHITE
-                }
-            }
-        },
-        "layer:area": {
-            borderColor: GREY_GREEN,
-            color: AREA_LAYER_COLOR,
-            hoveredBorderColor: WHITE,
-            selectedBorderColor: WHITE
-        },
-        "layer:line": {
-            color: "#c77244",
-            hoveredColor: "#ff5d04",
-            selectedColor: "#ff784f"
-        },
-        "layer:marker:bubble": {
-            hoveredBorderColor: WHITE,
-            selectedBorderColor: WHITE
-        },
-        "layer:marker:pie": {
-            hoveredBorderColor: WHITE,
-            selectedBorderColor: WHITE
-        },
-        legend: {
-            border: {
-                color: "#3f3f3f"
-            },
-            font: {
-                color: WHITE
-            }
-        },
-        controlBar: {
-            borderColor: LINE_COLOR,
-            color: GREY_GREEN
-        }
-    },
-    treeMap: {
-        group: {
-            color: "#4c4c4c"
-        }
-    },
-    sparkline: {
-        lineColor: LINE_COLOR,
-        firstLastColor: LINE_COLOR,
-        barPositiveColor: POSITIVE_COLOR,
-        barNegativeColor: TARGET_COLOR,
-        winColor: POSITIVE_COLOR,
-        lossColor: TARGET_COLOR,
-        pointColor: GREY_GREEN
-    },
-    bullet: {
-        targetColor: TARGET_COLOR
-    },
-    funnel: {
-        item: {
-            border: {
-                color: "#494949"
-            }
-        }
-    }
-}, "generic.light");
-
-registerTheme({
-    name: "generic.contrast",
-    defaultPalette: "Bright",
-    //CONTRAST_ACTIVE
-    font: {
-        color: WHITE
-    },
-    backgroundColor: BLACK,
-    primaryTitleColor: WHITE,
-    secondaryTitleColor: WHITE,
-    axisColor: WHITE,
-    axisLabelColor: WHITE,
-    "export": {
-        backgroundColor: BLACK,
-        font: {
-            color: WHITE
-        },
-        button: {
-            "default": {
-                color: WHITE,
-                borderColor: WHITE,
-                backgroundColor: BLACK
-            },
-            hover: {
-                color: WHITE,
-                borderColor: WHITE,
-                backgroundColor: "#cf00d7"
-            },
-            focus: {
-                color: WHITE,
-                borderColor: "#cf00d7",
-                backgroundColor: BLACK
-            },
-            active: {
-                color: BLACK,
-                borderColor: WHITE,
-                backgroundColor: WHITE
-            }
-        },
-        borderColor: WHITE,
-        menuButtonColor: BLACK,
-        activeBackgroundColor: WHITE,
-        activeColor: BLACK,
-        selectedBorderColor: CONTRAST_ACTIVE,
-        selectedColor: CONTRAST_ACTIVE,
-        shadowColor: "none"
-    },
-    tooltip: {
-        border: {
-            color: WHITE
-        },
-        font: {
-            color: WHITE
-        },
-        color: BLACK
-    },
-    "chart:common": {
-        commonSeriesSettings: {
-            valueErrorBar: {
-                color: WHITE
-            },
-            hoverStyle: {
-                hatching: {
-                    opacity: 0.5
-                }
-            },
-            selectionStyle: {
-                hatching: {
-                    opacity: 0.35
-                }
-            },
-            label: {
-                font: {
-                    color: WHITE
-                },
-                border: {
-                    color: WHITE
-                }
-            }
-        }
-    },
-    "chart:common:axis": {
-        constantLineStyle: {
-            color: WHITE
-        }
-    },
-    chart: {
-        commonSeriesSettings: {
-        },
-        commonPaneSettings: {
-            backgroundColor: BLACK,
-            border: {
-                color: WHITE
-            }
-        },
-        scrollBar: {
-            color: WHITE
-        }
-    },
-    pie: {
-        commonSeriesSettings: {
-            pie: {
-                hoverStyle: {
-                    hatching: {
-                        opacity: 0.5
-                    }
-                },
-                selectionStyle: {
-                    hatching: {
-                        opacity: 0.35
-                    }
-                }
-            },
-            doughnut: {
-                hoverStyle: {
-                    hatching: {
-                        opacity: 0.5
-                    }
-                },
-                selectionStyle: {
-                    hatching: {
-                        opacity: 0.35
-                    }
-                }
-            },
-            donut: {
-                hoverStyle: {
-                    hatching: {
-                        opacity: 0.5
-                    }
-                },
-                selectionStyle: {
-                    hatching: {
-                        opacity: 0.35
-                    }
-                }
-            }
-        }
-    },
-    gauge: {
-        rangeContainer: {
-            backgroundColor: WHITE
-        },
-        valueIndicators: {
-            _default: {
-                color: WHITE
-            },
-            "rangebar": {
-                color: WHITE,
-                backgroundColor: BLACK
-            },
-            "twocolorneedle": {
-                secondColor: WHITE
-            },
-            "trianglemarker": {
-                color: WHITE
-            },
-            "textcloud": {
-                color: WHITE,
-                text: {
-                    font: {
-                        color: BLACK
-                    }
-                }
-            }
-        }
-    },
-    barGauge: {
-        backgroundColor: "#3c3c3c"
-    },
-    rangeSelector: {
-        scale: {
-            tick: {
-                opacity: 0.4
-            },
-            minorTick: {
-                opacity: 0.12
-            }
-        },
-        selectedRangeColor: CONTRAST_ACTIVE,
-        sliderMarker: {
-            color: CONTRAST_ACTIVE
-        },
-        sliderHandle: {
-            color: CONTRAST_ACTIVE,
-            opacity: 1
-        },
-        shutter: {
-            opacity: 0.75
-        },
-        background: {
-            color: BLACK
-        }
-    },
-    map: {
-        background: {
-            borderColor: WHITE
-        },
-        layer: {
-            label: {
-                stroke: BLACK,
-                font: {
-                    color: WHITE
-                }
-            }
-        },
-        "layer:area": {
-            borderColor: BLACK,
-            color: AREA_LAYER_COLOR,
-            hoveredBorderColor: WHITE,
-            selectedBorderColor: WHITE,
-            label: {
-                font: {
-                    opacity: 1
-                }
-            }
-        },
-        "layer:line": {
-            color: "#267cff",
-            hoveredColor: "#f613ff",
-            selectedColor: WHITE
-        },
-        "layer:marker:dot": {
-            borderColor: BLACK,
-            color: MARKER_COLOR,
-            backColor: BLACK,
-            backOpacity: 0.32
-        },
-        "layer:marker:bubble": {
-            color: MARKER_COLOR,
-            hoveredBorderColor: WHITE,
-            selectedBorderColor: WHITE
-        },
-        "layer:marker:pie": {
-            hoveredBorderColor: WHITE,
-            selectedBorderColor: WHITE
-        },
-        legend: {
-            markerColor: MARKER_COLOR
-        },
-        controlBar: {
-            borderColor: WHITE,
-            color: BLACK,
-            opacity: 0.3
-        }
-    },
-    treeMap: {
-        tile: {
-            color: "#70c92f"
-        },
-        group: {
-            color: "#797979"
-        }
-    },
-    sparkline: {
-        pointColor: BLACK
-    },
-    bullet: {
-    },
-    polar: {
-        commonSeriesSettings: {
-        }
-    },
-    funnel: {
-        label: {
-            connector: {
-                opacity: 1
-            }
-        }
-    }
-}, "generic.light");
-
 themeModule.currentTheme("generic.light");
 
 // DEPRECATED_15_1 / "desktop" name
 registerThemeAlias("desktop.light", "generic.light");
-registerThemeAlias("desktop.dark", "generic.dark");

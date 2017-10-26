@@ -215,7 +215,7 @@ var NumberBoxBase = TextEditor.inherit({
     _keyPressHandler: function(e) {
         this.callBase(e);
 
-        var ch = String.fromCharCode(e.which),
+        var ch = e.key || String.fromCharCode(e.which),
             validCharRegExp = /[\d.,eE\-+]/,
             isInputCharValid = validCharRegExp.test(ch);
 

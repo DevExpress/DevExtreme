@@ -236,12 +236,15 @@ var ListBase = CollectionWidget.inherit({
             * @name dxListOptions_onScroll
             * @publicName onScroll
             * @extends Action
+            * @type function(e)
+            * @type_function_param1 e:object
             * @type_function_param1_field4 jQueryEvent:jQuery.Event
-            * @type_function_param1_field5 scrollOffset:object
-            * @type_function_param1_field6 reachedLeft:boolean
-            * @type_function_param1_field7 reachedRight:boolean
-            * @type_function_param1_field8 reachedTop:boolean
-            * @type_function_param1_field9 reachedBottom:boolean
+            * @type_function_param1_field5 event:event
+            * @type_function_param1_field6 scrollOffset:object
+            * @type_function_param1_field7 reachedLeft:boolean
+            * @type_function_param1_field8 reachedRight:boolean
+            * @type_function_param1_field9 reachedTop:boolean
+            * @type_function_param1_field10 reachedBottom:boolean
             * @action
             */
             onScroll: null,
@@ -283,11 +286,14 @@ var ListBase = CollectionWidget.inherit({
             * @name dxListOptions_onItemSwipe
             * @publicName onItemSwipe
             * @extends Action
+            * @type function(e)
+            * @type_function_param1 e:object
             * @type_function_param1_field4 jQueryEvent:jQuery.Event
-            * @type_function_param1_field5 itemData:object
-            * @type_function_param1_field6 itemElement:Element
-            * @type_function_param1_field7 itemIndex:number | object
-            * @type_function_param1_field8 direction:string
+            * @type_function_param1_field5 event:event
+            * @type_function_param1_field6 itemData:object
+            * @type_function_param1_field7 itemElement:dxElement
+            * @type_function_param1_field8 itemIndex:number | object
+            * @type_function_param1_field9 direction:string
             * @action
             */
             onItemSwipe: null,
@@ -304,8 +310,10 @@ var ListBase = CollectionWidget.inherit({
             * @name dxListOptions_onGroupRendered
             * @publicName onGroupRendered
             * @extends Action
+            * @type function(e)
+            * @type_function_param1 e:object
             * @type_function_param1_field4 groupData:object
-            * @type_function_param1_field5 groupElement:Element
+            * @type_function_param1_field5 groupElement:dxElement
             * @type_function_param1_field6 groupIndex:number
             * @action
             */
@@ -326,7 +334,7 @@ var ListBase = CollectionWidget.inherit({
             * @default "group"
             * @type_function_param1 groupData:object
             * @type_function_param2 groupIndex:number
-            * @type_function_param3 groupElement:Element
+            * @type_function_param3 groupElement:dxElement
             * @type_function_return string|Node|jQuery
             */
             groupTemplate: "group",
@@ -370,10 +378,11 @@ var ListBase = CollectionWidget.inherit({
             /**
             * @name dxListOptions_onItemClick
             * @publicName onItemClick
-            * @type function|string
+            * @type function(e)|string
             * @extends Action
+            * @type_function_param1 e:object
             * @type_function_param1_field4 itemData:object
-            * @type_function_param1_field5 itemElement:Element
+            * @type_function_param1_field5 itemElement:dxElement
             * @type_function_param1_field6 itemIndex:number | object
             * @action
             */
@@ -382,6 +391,8 @@ var ListBase = CollectionWidget.inherit({
             * @name dxListOptions_onItemContextMenu
             * @publicName onItemContextMenu
             * @extends Action
+            * @type function(e)
+            * @type_function_param1 e:object
             * @type_function_param1_field6 itemIndex:number | object
             * @action
             * @extend_doc
@@ -391,6 +402,8 @@ var ListBase = CollectionWidget.inherit({
             * @name dxListOptions_onItemHold
             * @publicName onItemHold
             * @extends Action
+            * @type function(e)
+            * @type_function_param1 e:object
             * @type_function_param1_field6 itemIndex:number | object
             * @action
             * @extend_doc

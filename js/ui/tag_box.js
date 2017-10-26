@@ -283,7 +283,7 @@ var TagBox = SelectBox.inherit({
             * @type template
             * @default "tag"
             * @type_function_param1 itemData:object
-            * @type_function_param2 itemElement:Element
+            * @type_function_param2 itemElement:dxElement
             * @type_function_return string|Node|jQuery
             */
             tagTemplate: "tag",
@@ -319,6 +319,8 @@ var TagBox = SelectBox.inherit({
             * @name dxTagBoxOptions_onSelectAllValueChanged
             * @publicName onSelectAllValueChanged
             * @extends Action
+            * @type function(e)
+            * @type_function_param1 e:object
             * @type_function_param1_field4 value:boolean
             * @action
             */
@@ -341,15 +343,17 @@ var TagBox = SelectBox.inherit({
             showMultiTagOnly: true,
 
             /**
-             * @name dxTagBoxOptions_onMultiTagPreparing
-             * @publicName onMultiTagPreparing
-             * @extends Action
-             * @type_function_param1_field4 multiTagElement:Element
-             * @type_function_param1_field5 selectedItems:Array<string,number,Object>
-             * @type_function_param1_field6 text:string
-             * @type_function_param1_field7 cancel:boolean
-             * @action
-             */
+            * @name dxTagBoxOptions_onMultiTagPreparing
+            * @publicName onMultiTagPreparing
+            * @extends Action
+            * @type function(e)
+            * @type_function_param1 e:object
+            * @type_function_param1_field4 multiTagElement:dxElement
+            * @type_function_param1_field5 selectedItems:Array<string,number,Object>
+            * @type_function_param1_field6 text:string
+            * @type_function_param1_field7 cancel:boolean
+            * @action
+            */
             onMultiTagPreparing: null,
 
             /**
@@ -372,6 +376,8 @@ var TagBox = SelectBox.inherit({
             * @name dxTagBoxOptions_onSelectionChanged
             * @publicName onSelectionChanged
             * @extends Action
+            * @type function(e)
+            * @type_function_param1 e:object
             * @type_function_param1_field4 addedItems:Array<string,number,Object>
             * @type_function_param1_field5 removedItems:Array<string,number,Object>
             * @action

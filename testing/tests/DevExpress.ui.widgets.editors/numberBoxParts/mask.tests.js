@@ -1,14 +1,13 @@
 "use strict";
 
 var $ = require("jquery"),
-    number = require("localization/number"),
     keyboardMock = require("../../../helpers/keyboardMock.js");
 
 require("ui/text_box/ui.text_editor");
 
 var INPUT_CLASS = "dx-texteditor-input";
 
-QUnit.module("format option", {
+var moduleConfig = {
     beforeEach: function() {
         this.$element = $("#numberbox").dxNumberBox({
             format: "#0.##",
@@ -19,7 +18,9 @@ QUnit.module("format option", {
         this.instance = this.$element.dxNumberBox("instance");
         this.keyboard = keyboardMock(this.input, true);
     }
-});
+};
+
+QUnit.module("format option", moduleConfig);
 
 QUnit.test("number type of input is not supported with masks", function(assert) {
     var $element = $("#numberbox").dxNumberBox({
@@ -77,20 +78,12 @@ QUnit.test("typing a symbol should insert or replace a value", function(assert) 
     assert.equal(this.input.val(), "1273.89", "value is correct");
 });
 
-QUnit.test("parser should be refreshed when format option changed", function(assert) {
-    var parserMock = sinon.spy(number, "parse");
+QUnit.test("value should be reformatted when format option changed", function(assert) {
+    this.instance.option("value", 123);
+    assert.equal(this.input.val(), "123", "value is correct");
 
-    try {
-        this.instance.option({
-            format: "#.00",
-            value: 123.45
-        });
-
-        assert.equal(parserMock.callCount, 1, "parser was refreshed once");
-        assert.equal(parserMock.getCall(0).args[1], "#.00", "parser was refreshed with correct argument");
-    } finally {
-        parserMock.restore();
-    }
+    this.instance.option("format", "#.00");
+    assert.equal(this.input.val(), "123.00", "value was reformatted");
 });
 
 QUnit.skip("removing required symbol should try replace it to 0", function(assert) {
@@ -109,7 +102,7 @@ QUnit.skip("removing required symbol should try replace it to 0", function(asser
     assert.equal(this.input.val(), "12.006", "remove after point");
 });
 
-QUnit.test("pressing '-' button should revert the number", function(assert) {
+QUnit.test("pressing NumPad '-' button should revert the number", function(assert) {
     this.instance.option({
         format: "#.000",
         value: 123.456
@@ -117,9 +110,26 @@ QUnit.test("pressing '-' button should revert the number", function(assert) {
 
     this.keyboard.keyDown(109);
     assert.equal(this.input.val(), "-123.456", "value is correct");
+    assert.equal(this.instance.option("value"), -123.456, "value is correct");
 
     this.keyboard.caret(2).keyDown(109);
     assert.equal(this.input.val(), "123.456", "value is correct");
+    assert.equal(this.instance.option("value"), 123.456, "value is correct");
+});
+
+QUnit.test("pressing '-' button should revert the number", function(assert) {
+    this.instance.option({
+        format: "#.000",
+        value: 123.456
+    });
+
+    this.keyboard.keyDown(189);
+    assert.equal(this.input.val(), "-123.456", "value is correct");
+    assert.equal(this.instance.option("value"), -123.456, "value is correct");
+
+    this.keyboard.caret(2).keyDown(189);
+    assert.equal(this.input.val(), "123.456", "value is correct");
+    assert.equal(this.instance.option("value"), 123.456, "value is correct");
 });
 
 QUnit.test("clear input value should clear a formatted value", function(assert) {
@@ -244,7 +254,7 @@ QUnit.test("removing decimal point should not change the value", function(assert
     this.instance.option("value", 123.45);
     this.keyboard.caret(3).press("del").input();
 
-    assert.equal(this.input.val(), "123.5", "value is correct");
+    assert.equal(this.input.val(), "123.45", "value is correct");
 });
 
 QUnit.test("pressing float separator should not move the caret", function(assert) {
@@ -307,16 +317,9 @@ QUnit.test("removing first stub symbol should not clear the value", function(ass
     assert.equal(this.input.val(), "$ 123", "value is correct");
 });
 
-QUnit.test("revert sign should lead to revert value of the editor on change", function(assert) {
-    this.instance.option("value", 123);
-    this.keyboard.keyDown(109);
-
-    assert.equal(this.instance.option("value"), -123, "value is correct");
-});
-
 QUnit.test("removing a char should work correctly with negative value", function(assert) {
     this.instance.option("value", -123.45);
-    this.keyboard.caret(7).press("backspace").input();
+    this.keyboard.caret(6).press("del");
 
     assert.equal(this.input.val(), "-123.4", "value is correct");
 });
@@ -339,18 +342,243 @@ QUnit.test("percent format should work properly on value change", function(asser
     assert.equal(this.instance.option("value"), 0.45, "value is correct");
 });
 
-QUnit.test("removing a stub using backspace should remove previous char", function(assert) {
+QUnit.test("removing a stub should not work", function(assert) {
     this.instance.option("format", "#%");
     this.instance.option("value", 1.23);
 
     assert.equal(this.input.val(), "123%", "initial value is correct");
     this.keyboard.caret(4).press("backspace").input().change();
 
-    assert.equal(this.input.val(), "12%", "text is correct");
-    assert.equal(this.instance.option("value"), 0.12, "value is correct");
+    assert.equal(this.input.val(), "123%", "text is correct");
+    assert.equal(this.instance.option("value"), 1.23, "value is correct");
 });
 
 QUnit.test("ctrl+v should not be prevented", function(assert) {
     this.keyboard.keyDown("v", { ctrlKey: true });
     assert.strictEqual(this.keyboard.event.isDefaultPrevented(), false, "keydown event is not prevented");
+});
+
+QUnit.test("leading zeros should be parsed", function(assert) {
+    this.instance.option("format", "$ #0");
+    this.instance.option("value", 0);
+
+    assert.equal(this.input.val(), "$ 0", "value is correct");
+
+    this.keyboard.caret(3).type("1");
+
+    assert.equal(this.input.val(), "$ 1", "value is correct");
+});
+
+QUnit.test("leading zeros without stubs should be parsed", function(assert) {
+    this.instance.option("format", "#0$");
+    this.instance.option("value", 0);
+
+    assert.equal(this.input.val(), "0$", "value is correct");
+
+    this.keyboard.caret(1).type("1");
+
+    assert.equal(this.input.val(), "1$", "value is correct");
+});
+
+QUnit.test("incomplete enter should not be prevented when there are stubs after the caret", function(assert) {
+    this.instance.option({
+        format: "#0.## kg",
+        value: 123
+    });
+
+    this.keyboard.caret(3).type(".45");
+
+    assert.equal(this.input.val(), "123.45 kg", "value is correct");
+});
+
+
+QUnit.module("format: removing", moduleConfig);
+
+QUnit.test("delete key should remove a char", function(assert) {
+    this.instance.option({
+        format: "#0.00",
+        value: 123.45
+    });
+
+    this.keyboard.caret(2).press("del").input("del");
+    assert.equal(this.input.val(), "12.45", "value is correct");
+});
+
+QUnit.test("delete key should not remove a point", function(assert) {
+    this.instance.option({
+        format: "#0.00",
+        value: 123.45
+    });
+
+    this.keyboard.caret(3).keyDown("del");
+    assert.equal(this.input.val(), "123.45", "value is correct");
+    assert.deepEqual(this.keyboard.caret(), { start: 4, end: 4 }, "caret is good");
+    assert.ok(this.keyboard.event.isDefaultPrevented(), "event was prevented");
+});
+
+QUnit.test("delete key should not remove a stub", function(assert) {
+    this.instance.option({
+        format: "$ #0.00",
+        value: 123.45
+    });
+
+    this.keyboard.caret(0).keyDown("del");
+    assert.equal(this.input.val(), "$ 123.45", "value is correct");
+    assert.ok(this.keyboard.event.isDefaultPrevented(), "event was prevented");
+});
+
+QUnit.test("delete key should replace required char to 0", function(assert) {
+    this.instance.option({
+        format: "#0.00",
+        value: 123.45
+    });
+
+    this.keyboard.caret(4).keyDown("del").input("del");
+    assert.notOk(this.keyboard.event.isDefaultPrevented(), "event was not prevented");
+    assert.equal(this.input.val(), "123.05", "value is correct");
+    assert.deepEqual(this.keyboard.caret(), { start: 5, end: 5 }, "caret is good");
+});
+
+QUnit.test("delete key should replace required chars in selection to 0", function(assert) {
+    this.instance.option({
+        format: "#0.00",
+        value: 123.45
+    });
+
+    this.keyboard.caret({ start: 2, end: 6 }).press("del").input("del");
+    assert.notOk(this.keyboard.event.isDefaultPrevented(), "event was not prevented");
+    assert.equal(this.input.val(), "12.00", "value is correct");
+    assert.deepEqual(this.keyboard.caret(), { start: 2, end: 2 }, "caret is good");
+});
+
+QUnit.test("backspace key should remove a char", function(assert) {
+    this.instance.option({
+        format: "#0.00",
+        value: 123.45
+    });
+
+    this.keyboard.caret(2).press("backspace").input("backspace");
+    assert.equal(this.input.val(), "13.45", "value is correct");
+});
+
+QUnit.test("backspace key should not remove a point", function(assert) {
+    this.instance.option({
+        format: "#0.00",
+        value: 123.45
+    });
+
+    this.keyboard.caret(4).keyDown("backspace");
+    assert.equal(this.input.val(), "123.45", "value is correct");
+    assert.deepEqual(this.keyboard.caret(), { start: 3, end: 3 }, "caret is good");
+    assert.ok(this.keyboard.event.isDefaultPrevented(), "event was prevented");
+});
+
+QUnit.test("backspace key should replace required char to 0", function(assert) {
+    this.instance.option({
+        format: "#0.00",
+        value: 123.45
+    });
+
+    this.keyboard.caret(5).press("backspace").input("backspace");
+    assert.ok(this.keyboard.event.isDefaultPrevented(), "event was not prevented");
+    assert.equal(this.input.val(), "123.05", "value is correct");
+    assert.deepEqual(this.keyboard.caret(), { start: 4, end: 4 }, "caret is good");
+});
+
+QUnit.test("backspace key should not remove a stub", function(assert) {
+    this.instance.option({
+        format: "$ #0.00",
+        value: 123.45
+    });
+
+    this.keyboard.caret(2).keyDown("backspace");
+    assert.equal(this.input.val(), "$ 123.45", "value is correct");
+    assert.ok(this.keyboard.event.isDefaultPrevented(), "event was prevented");
+});
+
+QUnit.module("format: caret boundaries", moduleConfig);
+
+QUnit.test("right arrow limitation", function(assert) {
+    this.instance.option({
+        format: "#d",
+        value: 1
+    });
+
+    assert.equal(this.input.val(), "1d", "text is correct");
+
+    this.keyboard.caret(1).keyDown("right");
+    assert.ok(this.keyboard.event.isDefaultPrevented(), "event is prevented");
+});
+
+QUnit.test("left arrow limitation", function(assert) {
+    this.instance.option({
+        format: "$#",
+        value: 1
+    });
+
+    assert.equal(this.input.val(), "$1", "text is correct");
+
+    this.keyboard.caret(1).keyDown("left");
+    assert.ok(this.keyboard.event.isDefaultPrevented(), "event is prevented");
+});
+
+QUnit.test("home button limitation", function(assert) {
+    this.instance.option({
+        format: "$#",
+        value: 1
+    });
+
+    assert.equal(this.input.val(), "$1", "text is correct");
+
+    this.keyboard.caret(2).keyDown("home");
+    assert.deepEqual(this.keyboard.caret(), { start: 1, end: 1 }, "caret is on the boundary");
+});
+
+QUnit.test("end button limitation", function(assert) {
+    this.instance.option({
+        format: "#d",
+        value: 1
+    });
+
+    assert.equal(this.input.val(), "1d", "text is correct");
+
+    this.keyboard.caret(0).keyDown("end");
+    assert.deepEqual(this.keyboard.caret(), { start: 1, end: 1 }, "caret is on the boundary");
+});
+
+QUnit.test("shift+home and shift+end should have default behavior", function(assert) {
+    this.keyboard.keyDown("home", { shiftKey: true });
+    assert.strictEqual(this.keyboard.event.isDefaultPrevented(), false);
+
+    this.keyboard.keyDown("end", { shiftKey: true });
+    assert.strictEqual(this.keyboard.event.isDefaultPrevented(), false);
+});
+
+QUnit.test("ctrl+a should have default behavior", function(assert) {
+    this.keyboard.keyDown("a", { ctrlKey: true });
+    assert.deepEqual(this.keyboard.event.isDefaultPrevented(), false);
+});
+
+QUnit.test("moving caret to closest non stub - forward direction", function(assert) {
+    this.instance.option({
+        format: "$ #",
+        value: 1
+    });
+
+    this.keyboard.caret(0);
+    this.input.trigger("dxclick");
+
+    assert.deepEqual(this.keyboard.caret(), { start: 2, end: 2 }, "caret was adjusted");
+});
+
+QUnit.test("moving caret to closest non stub - backward direction", function(assert) {
+    this.instance.option({
+        format: "#d",
+        value: 1
+    });
+
+    this.keyboard.caret(2);
+    this.input.trigger("dxclick");
+
+    assert.deepEqual(this.keyboard.caret(), { start: 1, end: 1 }, "caret was adjusted");
 });

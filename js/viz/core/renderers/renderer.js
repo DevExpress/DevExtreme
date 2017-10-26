@@ -23,7 +23,11 @@ var $ = require("../../../core/renderer"),
     PI_DIV_180 = mathPI / 180,
     _parseInt = parseInt,
     SHARPING_CORRECTION = 0.5,
-    ARC_COORD_PREC = 5;
+    ARC_COORD_PREC = 5,
+    WAVED_LINE_LENGTH = 24,
+    WAVED_LINE_TOP = 0,
+    WAVED_LINE_CENTER = 2,
+    WAVED_LINE_BOTTOM = 4;
 
 var pxAddingExceptions = {
     "column-count": true,
@@ -1073,6 +1077,7 @@ SvgElement.prototype = {
             fixFuncIri(that, "clip-path");
             fixFuncIri(that, "filter");
         };
+        that._fixFuncIri.renderer = that.renderer;
         fixFuncIriCallbacks.add(that._fixFuncIri);
         that._addFixIRICallback = function() {};
     },
@@ -1554,6 +1559,8 @@ Renderer.prototype = {
         that._defs.dispose();
         that._animationController.dispose();
 
+        fixFuncIriCallbacks.removeByRenderer(that);
+
         for(key in that) {
             that[key] = null;
         }
@@ -1668,6 +1675,73 @@ Renderer.prototype = {
         ///#ENDDEBUG
 
         return pattern;
+    },
+
+    _getPointsWithYOffset: function(points, offset) {
+        return points.map(function(point, index) {
+            if(index % 2 !== 0) {
+                return point + offset;
+            }
+            return point;
+        });
+    },
+
+    linePattern: function(options) {
+        var that = this,
+            id = getNextDefsSvgId(),
+            size = options.size,
+            strokeWidth = 1,
+            attr = {
+                "stroke-width": strokeWidth,
+                stroke: options.borderColor,
+                sharp: !options.isWaved ? options.isHorizontal ? "h" : "v" : undefined
+            },
+            elements = [],
+            lineParams = options.isWaved ? {
+                points: [0, 2,
+                    WAVED_LINE_LENGTH / 4, WAVED_LINE_TOP,
+                    WAVED_LINE_LENGTH / 4, WAVED_LINE_TOP,
+                    WAVED_LINE_LENGTH / 2, WAVED_LINE_CENTER,
+                    3 * WAVED_LINE_LENGTH / 4, WAVED_LINE_BOTTOM,
+                    3 * WAVED_LINE_LENGTH / 4, WAVED_LINE_BOTTOM,
+                    WAVED_LINE_LENGTH, WAVED_LINE_CENTER],
+                type: "bezier",
+                width: WAVED_LINE_LENGTH / options.canvasLength,
+                maxSize: WAVED_LINE_BOTTOM + size
+            } : {
+                points: [0, 0, size, 0],
+                type: "line",
+                width: size / options.canvasLength,
+                maxSize: size
+            },
+            line = that._createElement("pattern", {
+                id: id,
+                width: options.isHorizontal ? 1 : lineParams.width,
+                height: options.isHorizontal ? lineParams.width : 1
+            }).append(that._defs);
+
+        elements.push(that.path(that._getPointsWithYOffset(lineParams.points, size / 2), lineParams.type)
+            .attr({ stroke: options.color, "stroke-width": size, "stroke-linecap": "round" }));
+        elements.push(that.path(that._getPointsWithYOffset(lineParams.points, 0), lineParams.type).attr(attr));
+        elements.push(that.path(that._getPointsWithYOffset(lineParams.points, size), lineParams.type).attr(attr));
+
+        if(options.isHorizontal) {
+            elements.forEach(function(element) {
+                element.rotate(90, lineParams.maxSize / 2, lineParams.maxSize / 2);
+            });
+        }
+        elements.forEach(function(element) {
+            element.append(line);
+        });
+
+        line.id = id;
+        line.size = lineParams.maxSize + strokeWidth * 2;
+
+        ///#DEBUG
+        line.elements = elements;
+        ///#ENDDEBUG
+
+        return line;
     },
 
     //appended automatically
@@ -1835,6 +1909,9 @@ var fixFuncIriCallbacks = (function() {
         },
         remove: function(fn) {
             callbacks = callbacks.filter(function(el) { return el !== fn; });
+        },
+        removeByRenderer: function(renderer) {
+            callbacks = callbacks.filter(function(el) { return el.renderer !== renderer; });
         },
         fire: function() {
             callbacks.forEach(function(fn) { fn(); });

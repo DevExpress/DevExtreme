@@ -186,7 +186,7 @@ var DropDownEditor = TextBox.inherit({
              * @type_function_param1 buttonData:object
              * @type_function_param1_field1 text:string
              * @type_function_param1_field2 icon:string
-             * @type_function_param2 contentElement:Element
+             * @type_function_param2 contentElement:dxElement
              * @type_function_return string|jQuery
              */
             dropDownButtonTemplate: 'dropDownButton',
@@ -598,7 +598,7 @@ var DropDownEditor = TextBox.inherit({
     },
 
     _popupPositionedHandler: function(e) {
-        this._popup.overlayContent().toggleClass(DROP_DOWN_EDITOR_OVERLAY_FLIPPED, e.position.v.flip);
+        e.position && this._popup.overlayContent().toggleClass(DROP_DOWN_EDITOR_OVERLAY_FLIPPED, e.position.v.flip);
     },
 
     _popupShowingHandler: commonUtils.noop,
@@ -851,7 +851,7 @@ var DropDownEditor = TextBox.inherit({
     /**
     * @name dxDropDownEditorMethods_field
     * @publicName field()
-    * @return Element
+    * @return dxElement
     */
     field: function() {
         return getPublicElement(this._input());
@@ -860,7 +860,7 @@ var DropDownEditor = TextBox.inherit({
     /**
     * @name dxDropDownEditorMethods_content
     * @publicName content()
-    * @return Element
+    * @return dxElement
     */
     content: function() {
         return this._popup ? this._popup.content() : null;

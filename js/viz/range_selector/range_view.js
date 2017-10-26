@@ -7,21 +7,19 @@ function drawSeriesView(root, seriesDataSource, translator, canvas, isAnimationE
         ii = seriesList.length,
         valueAxis;
 
-    seriesDataSource.adjustSeriesDimensions();
-
     if(!seriesList.length) {
         return;
     }
 
     valueAxis = seriesList[0].getValueAxis();
-    valueAxis.setBusinessRange(seriesDataSource.getBoundRange().val);
 
-    //TODO looks wrong
     valueAxis.updateCanvas({
         top: canvas.top,
         bottom: 0,
         height: canvas.height + canvas.top
     });
+    seriesDataSource.adjustSeriesDimensions();
+    valueAxis.setBusinessRange(seriesDataSource.getBoundRange().val);
 
     for(i = 0; i < ii; ++i) {
         series = seriesList[i];

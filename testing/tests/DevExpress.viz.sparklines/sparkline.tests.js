@@ -1521,6 +1521,22 @@ QUnit.begin(function() {
         assert.deepEqual(translator2DModule.Translator2D.secondCall.args[2], { isHorizontal: false });
     });
 
+    QUnit.test('Pas stick = false to translator for bar', function(assert) {
+        this.createSparkline({ type: "bar", dataSource: [1] });
+
+        var argTranslator = translator2DModule.Translator2D.getCall(0).returnValue;
+
+        assert.strictEqual(argTranslator.update.lastCall.args[2].stick, false);
+    });
+
+    QUnit.test('Pas stick = true to translator for non-bar', function(assert) {
+        this.createSparkline({ type: "line", dataSource: [1] });
+
+        var argTranslator = translator2DModule.Translator2D.getCall(0).returnValue;
+
+        assert.strictEqual(argTranslator.update.lastCall.args[2].stick, true);
+    });
+
     QUnit.test('Create line series with default options', function(assert) {
         this.createSparkline({
             dataSource: [4, 4, 8, 7, 9, 5, 4, 6, 1, 2, 3, 0, 5, 6, 4, 8, 9, 5, 6, 1, 2, 3, 4, 5, 6, 8, 4, 6]

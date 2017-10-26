@@ -52,6 +52,7 @@ var createPoint = function() {
     var stub = sinon.createStubInstance(pointModule.Point);
     stub.argument = 1;
     stub.hasValue.returns(true);
+    stub.hasCoords.returns(true);
     stub.isInVisibleArea.returns(true);
 
     stub._options = {};//see T243839
@@ -132,6 +133,15 @@ QUnit.test("Creation with errorBars", function(assert) {
     assert.equal(this.createPoint.firstCall.args[1].size, 5, "Size should be correct");
     assert.strictEqual(this.createPoint.firstCall.args[1].lowError, undefined, "lowError not passed");
     assert.strictEqual(this.createPoint.firstCall.args[1].highError, undefined, "highError not passed");
+});
+
+QUnit.test("getMarginOptions", function(assert) {
+    var series = createSeries({ type: "bubble" });
+
+    assert.deepEqual(series.getMarginOptions(), {
+        processBubbleSize: true,
+        percentStick: false
+    });
 });
 
 QUnit.module("Bubble series. Draw", {

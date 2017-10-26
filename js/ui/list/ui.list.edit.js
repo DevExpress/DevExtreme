@@ -95,6 +95,8 @@ var ListEdit = ListBase.inherit({
             * @name dxListOptions_onSelectAllValueChanged
             * @publicName onSelectAllValueChanged
             * @extends Action
+            * @type function(e)
+            * @type_function_param1 e:object
             * @type_function_param1_field4 value:boolean
             * @action
             */
@@ -124,7 +126,7 @@ var ListEdit = ListBase.inherit({
             * @name dxListOptions_menuItems_action
             * @publicName action
             * @type function
-            * @type_function_param1 itemElement:jQuery
+            * @type_function_param1 itemElement:dxElement
             * @type_function_param2 itemData:object
             */
             menuItems: [],
@@ -167,10 +169,12 @@ var ListEdit = ListBase.inherit({
             * @name dxListOptions_onItemDeleting
             * @publicName onItemDeleting
             * @extends Action
+            * @type function(e)
+            * @type_function_param1 e:object
             * @type_function_param1_field4 itemData:object
-            * @type_function_param1_field5 itemElement:Element
+            * @type_function_param1_field5 itemElement:dxElement
             * @type_function_param1_field6 itemIndex:number | object
-            * @type_function_param1_field7 cancel:boolean | Promise
+            * @type_function_param1_field7 cancel:boolean | Promise<void>
             * @action
             * @hidden false
             * @extend_doc
@@ -180,8 +184,10 @@ var ListEdit = ListBase.inherit({
             * @name dxListOptions_onItemDeleted
             * @publicName onItemDeleted
             * @extends Action
+            * @type function(e)
+            * @type_function_param1 e:object
             * @type_function_param1_field4 itemData:object
-            * @type_function_param1_field5 itemElement:Element
+            * @type_function_param1_field5 itemElement:dxElement
             * @type_function_param1_field6 itemIndex:number | object
             * @action
             * @hidden false
@@ -191,8 +197,10 @@ var ListEdit = ListBase.inherit({
             * @name dxListOptions_onItemReordered
             * @publicName onItemReordered
             * @extends Action
+            * @type function(e)
+            * @type_function_param1 e:object
             * @type_function_param1_field4 itemData:object
-            * @type_function_param1_field5 itemElement:Element
+            * @type_function_param1_field5 itemElement:dxElement
             * @type_function_param1_field6 itemIndex:number | object
             * @type_function_param1_field7 fromIndex:number
             * @type_function_param1_field8 toIndex:number

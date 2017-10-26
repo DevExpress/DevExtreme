@@ -36,7 +36,7 @@ var BaseWidget = {
     * @pseudo CommonVizPalette
     * @type Array<string>|string
     * @default "Default"
-    * @acceptValues "Default" | "Soft Pastel" | "Harmony Light" | "Pastel" | "Bright" | "Soft" | "Ocean" | "Vintage" | "Violet"
+    * @acceptValues "Default" | "Soft Pastel" | "Harmony Light" | "Pastel" | "Bright" | "Soft" | "Ocean" | "Vintage" | "Violet" | "Carmine" | "Dark Moon" | "Soft Blue" | "Dark Violet" | "Green Mist"
     */
 
     /**
@@ -206,7 +206,7 @@ var BaseWidget = {
     * @publicName theme
     * @type string
     * @default 'generic.light'
-    * @acceptValues 'generic.light'|'generic.dark'|'generic.contrast'|'android5.light'|'ios7.default'|'win10.black'|'win10.white'
+    * @acceptValues 'generic.light'|'generic.dark'|'generic.contrast'|'generic.carmine'|'generic.darkmoon'|'generic.softblue'|'generic.darkviolet'|'generic.greenmist'|'android5.light'|'ios7.default'|'win10.black'|'win10.white'
     * @deprecatedAcceptValues 'win8.black'|'win8.white'
     */
     theme: 'generic.light',

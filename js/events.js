@@ -11,7 +11,7 @@ var eventsEngine = require("./events/core/events_engine");
 * @name eventsHandler
 * @publicName handler(event, extraParameters)
 * @type function
-* @param1 element:jQuery
+* @param1 element:dxElement
 * @param2 extraParameters:object
 * @return boolean
 */
@@ -20,7 +20,7 @@ var eventsEngine = require("./events/core/events_engine");
 * @name events_on
 * @publicName on(element, eventName, selector, data, handler)
 * @type function
-* @param1 element:jQuery
+* @param1 element:dxElement
 * @param2 eventName:string
 * @param3 selector:string
 * @param4 data:object
@@ -35,7 +35,7 @@ exports.on = eventsEngine.on;
 * @name events_one
 * @publicName one(element, eventName, selector, data, handler)
 * @type function
-* @param1 element:jQuery
+* @param1 element:dxElement
 * @param2 eventName:string
 * @param3 selector:string
 * @param4 data:object
@@ -50,7 +50,7 @@ exports.one = eventsEngine.one;
 * @name events_off
 * @publicName off(element, eventName, selector, handler)
 * @type function
-* @param1 element:jQuery
+* @param1 element:dxElement
 * @param2 eventName:string
 * @param3 selector:string
 * @param4 handler:eventsHandler
@@ -64,7 +64,7 @@ exports.off = eventsEngine.off;
 * @name events_trigger
 * @publicName trigger(element, event, extraParameters)
 * @type function
-* @param1 element:jQuery
+* @param1 element:dxElement
 * @param2 event:string|event
 * @param3 extraParameters:object
 * @module events
@@ -77,7 +77,7 @@ exports.trigger = eventsEngine.trigger;
 * @name events_triggerHandler
 * @publicName triggerHandler(element, event, extraParameters)
 * @type function
-* @param1 element:jQuery
+* @param1 element:dxElement
 * @param2 event:string|event
 * @param3 extraParameters:object
 * @module events
@@ -159,7 +159,6 @@ exports.triggerHandler = eventsEngine.triggerHandler;
 * @name event
 * @publicName event
 * @type dxEvent|jQuery.Event
-* @return dxEvent
 * @hidden
 */
 

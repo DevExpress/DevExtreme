@@ -1155,7 +1155,7 @@ declare module DevExpress {
     /** @docid_ignore dxEventFields_data */
     /** @docid_ignore event */
 
-    /** @docid_ignore Element */
+    /** @docid_ignore dxElement */
 
     /** @docid ui */
     export module ui {
@@ -1420,6 +1420,9 @@ declare module DevExpress {
 
             /** @docid ui_themesmethods_current#current(themeName) */
             current(themeName: string): void;
+            
+            /** @docid ui_themesmethods_ready */
+            ready(callback: Function): void;
         };
 
         /** @docid ui_setTemplateEngine#setTemplateEngine(name) */

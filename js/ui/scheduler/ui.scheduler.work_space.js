@@ -398,6 +398,7 @@ var SchedulerWorkSpace = Widget.inherit({
                 this.notifyObserver("allDayPanelToggled");
                 this._attachTablesEvents();
                 this.headerPanelOffsetRecalculate();
+                this._updateScrollable();
                 break;
             case "onCellClick":
                 this._createCellClickAction();
@@ -1061,11 +1062,12 @@ var SchedulerWorkSpace = Widget.inherit({
         this.$element().toggleClass(WORKSPACE_WITH_ALL_DAY_CLASS, showAllDayPanel);
 
         this._changeAllDayVisibility();
+
+        showAllDayPanel && this._updateScrollable();
     },
 
     _changeAllDayVisibility: function() {
         this.$element().toggleClass(WORKSPACE_WITH_COLLAPSED_ALL_DAY_CLASS, !this.option("allDayExpanded") && this.option("showAllDayPanel"));
-        this._updateScrollable();
     },
 
     _updateScrollable: function() {

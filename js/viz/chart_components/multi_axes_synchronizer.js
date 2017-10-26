@@ -4,10 +4,8 @@ var debug = require("../../core/utils/console").debug,
     typeUtils = require("../../core/utils/type"),
     _each = require("../../core/utils/iterator").each,
     vizUtils = require("../core/utils"),
-    _adjustValue = vizUtils.adjustValue,
-    _applyPrecisionByMinDelta = vizUtils.applyPrecisionByMinDelta,
     _isDefined = typeUtils.isDefined,
-
+    adjust = require("../../core/utils/math").adjust,
     _math = Math,
     _floor = _math.floor,
     _max = _math.max,
@@ -60,7 +58,7 @@ var logConverter = {
         return _math.pow(base, tickInterval);
     },
 
-    adjustValue: _adjustValue
+    adjustValue: adjust
 };
 
 var convertAxisInfo = function(axisInfo, converter) {
@@ -114,7 +112,7 @@ var populateAxesInfo = function(axes) {
             !axis.getTranslator().getBusinessRange().stubData
         ) {
             businessRange = axis.getTranslator().getBusinessRange();
-            tickInterval = axis._tickManager.getTickInterval();
+            tickInterval = axis._tickInterval;
             minValue = businessRange.minVisible;
             maxValue = businessRange.maxVisible;
             synchronizedValue = options.synchronizedValue;
@@ -181,11 +179,11 @@ var updateTickValues = function(axesInfo) {
                 additionalStartTicksCount = _floor((ticksCount - tickValues.length) / 2);
 
                 while(additionalStartTicksCount > 0 && (tickValues[0] !== 0)) {
-                    tickValues.unshift(_applyPrecisionByMinDelta(tickValues[0], tickInterval, tickValues[0] - tickInterval));
+                    tickValues.unshift(adjust(tickValues[0] - tickInterval));
                     additionalStartTicksCount--;
                 }
                 while(tickValues.length < ticksCount) {
-                    tickValues.push(_applyPrecisionByMinDelta(tickValues[0], tickInterval, tickValues[tickValues.length - 1] + tickInterval));
+                    tickValues.push(adjust(tickValues[tickValues.length - 1] + tickInterval));
                 }
                 axisInfo.tickInterval = tickInterval / ticksMultiplier;
             }
@@ -268,8 +266,8 @@ var correctMinMaxValuesByPaddings = function(axesInfo, paddings) {
         info.minValue -= paddings[inverted ? "end" : "start"] * range;
         info.maxValue += paddings[inverted ? "start" : "end"] * range;
         if(range > MIN_RANGE_FOR_ADJUST_BOUNDS) {
-            info.minValue = _math.min(info.minValue, _adjustValue(info.minValue));
-            info.maxValue = _max(info.maxValue, _adjustValue(info.maxValue));
+            info.minValue = _math.min(info.minValue, adjust(info.minValue));
+            info.maxValue = _max(info.maxValue, adjust(info.maxValue));
         }
     });
 };
@@ -290,11 +288,11 @@ var updateTickValuesIfSynchronizedValueUsed = function(axesInfo) {
 
         if(hasSynchronizedValue && tickInterval) {
             while(tickValues[0] - tickInterval >= minValue) {
-                tickValues.unshift(_adjustValue(tickValues[0] - tickInterval));
+                tickValues.unshift(adjust(tickValues[0] - tickInterval));
             }
             lastTickValue = tickValues[tickValues.length - 1];
             while((lastTickValue = lastTickValue + tickInterval) <= maxValue) {
-                tickValues.push(typeUtils.isExponential(lastTickValue) ? _adjustValue(lastTickValue) : _applyPrecisionByMinDelta(minValue, tickInterval, lastTickValue));
+                tickValues.push(typeUtils.isExponential(lastTickValue) ? adjust(lastTickValue) : adjust(lastTickValue));
             }
         }
         while(tickValues[0] < minValue) {

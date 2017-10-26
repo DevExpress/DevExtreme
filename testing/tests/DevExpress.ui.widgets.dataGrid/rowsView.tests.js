@@ -976,6 +976,7 @@ QUnit.test('Click on row call changeItemSelection', function(assert) {
     var dataController = new MockDataController({ items: this.items }),
         rowsView = this.createRowsView(this.items, dataController, null, false, {
             onRowClick: function(e) {
+                assert.equal(typeUtils.isRenderer(e.rowElement), config().useJQuery, "rowElement is correct");
                 rowClickArgs.push(e);
             }
         }),

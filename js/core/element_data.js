@@ -2,14 +2,18 @@
 
 var WeakMap = require("./polyfills/weak_map");
 var eventsEngine = require("../events/core/events_engine");
+var MemorizedCallbacks = require("./memorized_callbacks");
 
 var dataMap = new WeakMap();
 var strategy;
 
+var strategyChanging = new MemorizedCallbacks();
 var beforeCleanData = function() {};
 var afterCleanData = function() {};
 
 var setDataStrategy = exports.setDataStrategy = function(value) {
+    strategyChanging.fire(value);
+
     strategy = value;
 
     var cleanData = strategy.cleanData;
@@ -77,6 +81,8 @@ exports.getDataStrategy = function() {
 exports.data = function() {
     return strategy.data.apply(this, arguments);
 };
+
+exports.strategyChanging = strategyChanging;
 
 exports.beforeCleanData = function(callback) {
     beforeCleanData = callback;

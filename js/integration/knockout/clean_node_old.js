@@ -1,11 +1,10 @@
 "use strict";
 
-var jQuery = require("jquery"),
-    ko = require("knockout"),
-    compareVersion = require("../../core/utils/version").compare;
+var ko = require("knockout"),
+    compareVersion = require("../../core/utils/version").compare,
+    strategyChanging = require("../../core/element_data").strategyChanging;
 
-if(jQuery && compareVersion(jQuery.fn.jquery, [2, 0]) < 0) {
-
+var patchCleanData = function(jQuery) {
     var cleanKoData = function(element, andSelf) {
         var cleanNode = function() {
             ko.cleanNode(this);
@@ -54,4 +53,12 @@ if(jQuery && compareVersion(jQuery.fn.jquery, [2, 0]) < 0) {
 
         return result;
     };
-}
+};
+
+strategyChanging.add(function(strategy) {
+    var isJQuery = !!strategy.fn;
+
+    if(isJQuery && compareVersion(strategy.fn.jquery, [2, 0]) < 0) {
+        patchCleanData(strategy);
+    }
+});

@@ -105,8 +105,9 @@ var Resizable = DOMComponent.inherit({
             * @publicName onResizeStart
             * @extends Action
             * @type_function_param1_field4 jQueryEvent:jQuery.Event
-            * @type_function_param1_field5 width:number
-            * @type_function_param1_field6 height:number
+            * @type_function_param1_field5 event:event
+            * @type_function_param1_field6 width:number
+            * @type_function_param1_field7 height:number
             * @action
             */
             onResizeStart: null,
@@ -115,9 +116,12 @@ var Resizable = DOMComponent.inherit({
             * @name dxResizableOptions_onResize
             * @publicName onResize
             * @extends Action
+            * @type function(e)
+            * @type_function_param1 e:object
             * @type_function_param1_field4 jQueryEvent:jQuery.Event
-            * @type_function_param1_field5 width:number
-            * @type_function_param1_field6 height:number
+            * @type_function_param1_field5 event:event
+            * @type_function_param1_field6 width:number
+            * @type_function_param1_field7 height:number
             * @action
             */
             onResize: null,
@@ -126,9 +130,12 @@ var Resizable = DOMComponent.inherit({
             * @name dxResizableOptions_onResizeEnd
             * @publicName onResizeEnd
             * @extends Action
+            * @type function(e)
+            * @type_function_param1 e:object
             * @type_function_param1_field4 jQueryEvent:jQuery.Event
-            * @type_function_param1_field5 width:number
-            * @type_function_param1_field6 height:number
+            * @type_function_param1_field5 event:event
+            * @type_function_param1_field6 width:number
+            * @type_function_param1_field7 height:number
             * @action
             */
             onResizeEnd: null

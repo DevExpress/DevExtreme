@@ -146,6 +146,14 @@ var TestPointerElement = TestElement.inherit({
             rangeModule.Range.reset();
         }
     };
+    var canvas = {
+        left: 0,
+        right: 0,
+        top: 0,
+        bottom: 0,
+        width: 800,
+        height: 600
+    };
 
     QUnit.module("General", environment);
 
@@ -158,14 +166,7 @@ var TestPointerElement = TestElement.inherit({
         assert.strictEqual(rendererModule.Renderer.firstCall.args[0]["cssClass"], "dxg dxg-circular-gauge", "root class");
 
         assert.deepEqual(scale.setBusinessRange.lastCall.args[0], range, "range for scale");
-        assert.deepEqual(scale.draw.getCall(0).args[0], {
-            left: 0,
-            right: 0,
-            top: 0,
-            bottom: 0,
-            width: 800,
-            height: 600
-        }, "canvas for scale");
+        assert.deepEqual(scale.draw.getCall(0).args[0], canvas, "canvas for scale");
 
         assert.deepEqual(scale.updateOptions.getCall(0).args[0].startAngle, -135, "start angle");
         assert.deepEqual(scale.updateOptions.getCall(0).args[0].endAngle, 135, "end angle");
@@ -311,6 +312,8 @@ var TestPointerElement = TestElement.inherit({
                 assert.deepEqual(scale.shift.getCall(0).args, [{ right: expected.x - 100, bottom: expected.y - 100 }], "shift scale");
                 assert.equal(scale.draw.callCount, 2, "draw scale");
                 assert.equal(scale.measureLabels.callCount, 2, "measure labels of scale");
+                assert.deepEqual(scale.measureLabels.getCall(0).args[0], canvas);
+                assert.deepEqual(scale.measureLabels.getCall(1).args[0], canvas);
                 assert.deepEqual(scale.draw.lastCall.args[0], {
                     width: expected.radius * 2,
                     height: expected.radius * 2
@@ -518,17 +521,16 @@ var TestPointerElement = TestElement.inherit({
         assert.deepEqual(scale.shift.getCall(1).args, [{ right: expected.x - 100, bottom: expected.y - 100 }], "shift scale");
         assert.equal(scale.draw.callCount, 6, "draw scale");
         assert.equal(scale.measureLabels.callCount, 6, "measure labels of scale");
+        assert.deepEqual(scale.measureLabels.getCall(0).args[0], canvas);
+        assert.deepEqual(scale.measureLabels.getCall(1).args[0], canvas);
+        assert.deepEqual(scale.measureLabels.getCall(2).args[0], canvas);
+        assert.deepEqual(scale.measureLabels.getCall(3).args[0], canvas);
+        assert.deepEqual(scale.measureLabels.getCall(4).args[0], canvas);
+        assert.deepEqual(scale.measureLabels.getCall(5).args[0], canvas);
         assert.deepEqual(scale.draw.getCall(1).args[0], {
             width: expected.radius * 2,
             height: expected.radius * 2
         }, "new radius");
-        assert.deepEqual(gauge._canvas, {
-            bottom: 0,
-            height: 600,
-            left: 0,
-            right: 0,
-            top: 0,
-            width: 800
-        }, "gauge canvas is not changed");
+        assert.deepEqual(gauge._canvas, canvas, "gauge canvas is not changed");
     });
 })();

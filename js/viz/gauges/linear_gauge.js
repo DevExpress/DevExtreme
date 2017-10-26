@@ -35,7 +35,7 @@ var dxLinearGauge = dxGauge.inherit({
     _updateScaleTickIndent: function(scaleOptions) {
         var indentFromTick = scaleOptions.label.indentFromTick,
             length = scaleOptions.tick.length,
-            textParams = this._scale.measureLabels(),
+            textParams = this._scale.measureLabels(extend({}, this._canvas)),
             verticalTextCorrection = scaleOptions.isHorizontal ? textParams.height + textParams.y : 0,
             isIndentPositive = indentFromTick > 0,
             orientation,

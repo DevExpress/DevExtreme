@@ -50,6 +50,38 @@ function valuesIsDefinedAndEqual(val1, val2) {
     return isDefined(val1) && isDefined(val2) && val1.valueOf() === val2.valueOf();
 }
 
+function prepareBreaks(breaks, range) {
+    var transform = range.axisType === 'logarithmic' ? function(value) {
+            return getLog(value, range.base);
+        } : function(value) {
+            return value;
+        },
+        array = [],
+        br,
+        transformFrom,
+        transformTo,
+        i,
+        length = breaks.length,
+        sum = 0;
+
+    for(i = 0; i < length; i++) {
+        br = breaks[i];
+        transformFrom = transform(br.from);
+        transformTo = transform(br.to);
+        sum += transformTo - transformFrom;
+        array.push({
+            trFrom: transformFrom,
+            trTo: transformTo,
+            from: br.from,
+            to: br.to,
+            length: sum,
+            cumulativeWidth: br.cumulativeWidth
+        });
+    }
+
+    return array;
+}
+
 function getCanvasBounds(range) {
     var min = range.min,
         max = range.max,
@@ -100,6 +132,41 @@ function getCanvasBounds(range) {
     return { base: base, rangeMin: min, rangeMax: max, rangeMinVisible: minVisible, rangeMaxVisible: maxVisible };
 }
 
+function getCheckingMethodsAboutBreaks(inverted) {
+    return {
+        isStartSide: !inverted ? function(pos, breaks, start, end) {
+            return pos < breaks[0][start];
+        } : function(pos, breaks, start, end) {
+            return pos <= breaks[breaks.length - 1][end];
+        },
+        isEndSide: !inverted ? function(pos, breaks, start, end) {
+            return pos >= breaks[breaks.length - 1][end];
+        } : function(pos, breaks, start, end) {
+            return pos > breaks[0][start];
+        },
+        isInBreak: !inverted ? function(pos, br, start, end) {
+            return pos >= br[start] && pos < br[end];
+        } : function(pos, br, start, end) {
+            return pos > br[end] && pos <= br[start];
+        },
+        isBetweenBreaks: !inverted ? function(pos, br, prevBreak, start, end) {
+            return pos < br[start] && pos >= prevBreak[end];
+        } : function(pos, br, prevBreak, start, end) {
+            return pos >= br[end] && pos < prevBreak[start];
+        },
+        getLength: !inverted ? function(br) {
+            return br.length;
+        } : function(br, lastBreak) {
+            return lastBreak.length - br.length;
+        },
+        getBreaksSize: !inverted ? function(br) {
+            return br.cumulativeWidth;
+        } : function(br, lastBreak) {
+            return lastBreak.cumulativeWidth - br.cumulativeWidth;
+        }
+    };
+}
+
 exports.Translator2D = _Translator2d = function(businessRange, canvas, options) {
     this.update(businessRange, canvas, options);
 };
@@ -109,12 +176,13 @@ _Translator2d.prototype = {
     reinit: function() {
         //TODO: parseInt canvas
         var that = this,
+            options = that._options,
             range = that._businessRange,
             categories = range.categories || [],
             script = {},
             canvasOptions = that._prepareCanvasOptions(),
             visibleCategories = vizUtils.getCategoriesInfo(categories, range.minVisible, range.maxVisible).categories,
-            categoriesLength = (visibleCategories || categories).length;
+            categoriesLength = visibleCategories.length;
 
         switch(range.axisType) {
             case "logarithmic":
@@ -122,14 +190,14 @@ _Translator2d.prototype = {
                 break;
             case "semidiscrete":
                 script = intervalTranslator;
-                canvasOptions.ratioOfCanvasRange = canvasOptions.canvasLength / (addInterval(canvasOptions.rangeMaxVisible, that._options.interval) - canvasOptions.rangeMinVisible);
+                canvasOptions.ratioOfCanvasRange = canvasOptions.canvasLength / (addInterval(canvasOptions.rangeMaxVisible, options.interval) - canvasOptions.rangeMinVisible);
                 break;
             case "discrete":
                 script = categoryTranslator;
                 that._categories = categories;
-                canvasOptions.interval = that._getDiscreteInterval(range.addSpiderCategory ? categoriesLength + 1 : categoriesLength, canvasOptions);
+                canvasOptions.interval = that._getDiscreteInterval(options.addSpiderCategory ? categoriesLength + 1 : categoriesLength, canvasOptions);
                 that._categoriesToPoints = makeCategoriesToPoints(categories, canvasOptions.invert);
-                if(visibleCategories && categoriesLength) {
+                if(categoriesLength) {
                     canvasOptions.startPointIndex = that._categoriesToPoints[visibleCategories[0].valueOf()];
                     that.visibleCategories = visibleCategories;
                 }
@@ -143,13 +211,70 @@ _Translator2d.prototype = {
         }
 
         extend(that, script);
-        that._conversionValue = that._options.conversionValue ? function(value) { return value; } : function(value) { return Math.round(value); };
+        that._conversionValue = options.conversionValue ? function(value) { return value; } : function(value) { return Math.round(value); };
 
         that._calculateSpecialValues();
+        that._checkingMethodsAboutBreaks = [
+            getCheckingMethodsAboutBreaks(false),
+            getCheckingMethodsAboutBreaks(that.isInverted())
+        ];
+        that._translateBreaks();
+    },
+
+    _translateBreaks: function() {
+        var breaks = this._breaks,
+            size = this._options.breaksSize,
+            i,
+            b,
+            end,
+            length;
+        if(breaks === undefined) {
+            return;
+        }
+        for(i = 0, length = breaks.length; i < length; i++) {
+            b = breaks[i];
+            end = this.translate(b.to);
+            b.end = end;
+            b.start = !b.gapSize ? (!this.isInverted() ? end - size : end + size) : end;
+        }
+    },
+
+    _checkValueAboutBreaks: function(breaks, pos, start, end, methods) {
+        var i,
+            length,
+            prop = { length: 0, breaksSize: undefined, inBreak: false },
+            br,
+            prevBreak,
+            lastBreak = breaks[breaks.length - 1];
+
+        if(methods.isStartSide(pos, breaks, start, end)) {
+            return prop;
+        } else if(methods.isEndSide(pos, breaks, start, end)) {
+            return { length: lastBreak.length, breaksSize: lastBreak.cumulativeWidth, inBreak: false };
+        }
+
+        for(i = 0, length = breaks.length; i < length; i++) {
+            br = breaks[i];
+            prevBreak = breaks[i - 1];
+            if(methods.isInBreak(pos, br, start, end)) {
+                prop.inBreak = true;
+                prop.break = br;
+                break;
+            }
+            if(prevBreak && methods.isBetweenBreaks(pos, br, prevBreak, start, end)) {
+                prop = { length: methods.getLength(prevBreak, lastBreak), breaksSize: methods.getBreaksSize(prevBreak, lastBreak), inBreak: false };
+                break;
+            }
+        }
+        return prop;
+    },
+
+    isInverted: function() {
+        return !(this._options.isHorizontal ^ this._businessRange.invert);
     },
 
     _getDiscreteInterval: function(categoriesLength, canvasOptions) {
-        var correctedCategoriesCount = categoriesLength - (this._businessRange.stick ? 1 : 0);
+        var correctedCategoriesCount = categoriesLength - (this._options.stick ? 1 : 0);
         return correctedCategoriesCount > 0 ? canvasOptions.canvasLength / correctedCategoriesCount : canvasOptions.canvasLength;
     },
 
@@ -158,7 +283,8 @@ _Translator2d.prototype = {
             businessRange = that._businessRange,
             canvasOptions = that._canvasOptions = getCanvasBounds(businessRange),
             length,
-            canvas = that._canvas;
+            canvas = that._canvas,
+            breaks = that._breaks;
 
         if(that._options.isHorizontal) {
             canvasOptions.startPoint = canvas.left;
@@ -176,6 +302,11 @@ _Translator2d.prototype = {
         canvasOptions.rangeDoubleError = Math.pow(10, getPower(canvasOptions.rangeMax - canvasOptions.rangeMin) - getPower(length) - 2); //B253861
         canvasOptions.ratioOfCanvasRange = canvasOptions.canvasLength / (canvasOptions.rangeMaxVisible - canvasOptions.rangeMinVisible);
 
+        if(breaks !== undefined) {
+            canvasOptions.ratioOfCanvasRange = (canvasOptions.canvasLength - breaks[breaks.length - 1].cumulativeWidth) /
+                (canvasOptions.rangeMaxVisible - canvasOptions.rangeMinVisible - breaks[breaks.length - 1].length);
+        }
+
         return canvasOptions;
     },
 
@@ -185,14 +316,21 @@ _Translator2d.prototype = {
     },
 
     updateBusinessRange: function(businessRange) {
-        this._businessRange = validateBusinessRange(businessRange);
-        this.reinit();
+        var that = this,
+            breaks = businessRange.breaks || [];
+
+        that._businessRange = validateBusinessRange(businessRange);
+
+        that._breaks = breaks.length ? prepareBreaks(breaks, that._businessRange) : undefined;
+
+        that.reinit();
     },
 
     update: function(businessRange, canvas, options) {
         var that = this;
         that._options = extend(that._options || {}, options);
         that._canvas = validateCanvas(canvas);
+
         that.updateBusinessRange(businessRange);
     },
 
@@ -259,8 +397,12 @@ _Translator2d.prototype = {
         var canvasOptions = this._canvasOptions;
         return canvasOptions.invert ? canvasOptions.rangeMaxVisible.valueOf() - distance : canvasOptions.rangeMinVisible.valueOf() + distance;
     },
-    getVisibleCategories: function() {
-        return this.visibleCategories;
+
+    _isValueOutOfCanvas: function(bp) {
+        var canvasOptions = this._canvasOptions,
+            doubleError = canvasOptions.rangeDoubleError;
+
+        return isNaN(bp) || bp.valueOf() + doubleError < canvasOptions.rangeMin || bp.valueOf() - doubleError > canvasOptions.rangeMax;
     },
     getMinBarSize: function(minBarSize) {
         var visibleArea = this.getCanvasVisibleArea(),

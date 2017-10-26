@@ -2,7 +2,9 @@
 
 /* global fields */
 
-var $ = require("jquery");
+var $ = require("jquery"),
+    isRenderer = require("core/utils/type").isRenderer,
+    config = require("core/config");
 
 require("ui/filter_builder/filter_builder");
 
@@ -146,6 +148,25 @@ QUnit.module("Rendering", function() {
         assert.equal(container.find("." + FILTER_BUILDER_ITEM_OPERATION_CLASS).text(), "Contains");
         assert.equal(container.find("." + FILTER_BUILDER_ITEM_VALUE_CLASS).text(), "<enter a value>");
         assert.ok($(".dx-filterbuilder-fields").length === 0);
+    });
+
+    QUnit.test("editorElement argument of onEditorPreparing option is correct", function(assert) {
+        var container = $("#container"),
+            companyNameValueField;
+
+        container.dxFilterBuilder({
+            value: [
+                ["CompanyName", "=", "DevExpress"]
+            ],
+            onEditorPreparing: function(e) {
+                assert.equal(isRenderer(e.editorElement), config().useJQuery, "editorElement is correct");
+            },
+            fields: fields
+        });
+
+        //act
+        companyNameValueField = $("." + FILTER_BUILDER_ITEM_VALUE_CLASS).eq(0);
+        companyNameValueField.find("." + FILTER_BUILDER_ITEM_VALUE_TEXT_CLASS).click();
     });
 
     QUnit.test("operations are changed after field change", function(assert) {
@@ -321,6 +342,31 @@ QUnit.module("Rendering", function() {
         assert.deepEqual(instance.option("value"), ["State", "<>", "Test"]);
     });
 
+    QUnit.testInActiveWindow("change filter value in selectbox", function(assert) {
+        var $container = $("#container"),
+            instance = $container.dxFilterBuilder({
+                allowHierarchicalFields: true,
+                value: ["CompanyName", "<>", "KS Music"],
+                fields: fields
+            }).dxFilterBuilder("instance");
+
+        var $valueButton = $container.find("." + FILTER_BUILDER_ITEM_VALUE_TEXT_CLASS);
+        $valueButton.click();
+
+        var $input = $container.find("." + FILTER_BUILDER_ITEM_VALUE_CLASS).find("input");
+        assert.ok($input.is(":focus"));
+
+        var selectBoxInstance = $container.find(".dx-selectbox").dxSelectBox("instance");
+        selectBoxInstance.open();
+        $(".dx-list-item").eq(2).trigger("dxclick");
+        assert.ok($input.is(":focus"));
+
+        selectBoxInstance.blur();
+        assert.notOk($container.find("input").length, "hasn't input");
+        assert.deepEqual(instance.option("value"), ["CompanyName", "<>", "Super Mart of the West"]);
+
+    });
+
     QUnit.testInActiveWindow("check default value for number", function(assert) {
         var container = $("#container"),
             instance = container.dxFilterBuilder({
@@ -412,6 +458,21 @@ QUnit.module("Rendering", function() {
         assert.deepEqual(instance._model, [["State", "<>", "Test"]]);
         assert.deepEqual(instance.option("value"), ["State", "<>", "Test"]);
         assert.notEqual(instance.option("value"), instance._model[0]);
+    });
+
+    QUnit.test("show editor on keyup event", function(assert) {
+        var container = $("#container");
+
+        container.dxFilterBuilder({
+            value: ["Zipcode", "<>", 123],
+            fields: fields
+        });
+
+        var $valueButton = container.find("." + FILTER_BUILDER_ITEM_VALUE_TEXT_CLASS);
+        $valueButton.trigger($.Event("keyup", { keyCode: 13 }));
+
+        assert.notOk(container.find("." + FILTER_BUILDER_ITEM_VALUE_TEXT_CLASS).length);
+        assert.ok(container.find(".dx-texteditor").length);
     });
 });
 

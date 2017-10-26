@@ -17,7 +17,8 @@ var formatHelper = require("../../format_helper"),
     BOTTOM = constants.bottom,
     LEFT = constants.left,
     RIGHT = constants.right,
-    CENTER = constants.center;
+    CENTER = constants.center,
+    SCALE_BREAK_OFFSET = 3;
 
 function prepareDatesDifferences(datesDifferences, tickInterval) {
     var dateUnitInterval,
@@ -195,25 +196,6 @@ module.exports = {
             return this._translator.translate(value, offset);
         },
 
-        _getCanvasStartEnd: function() {
-            var isHorizontal = this._isHorizontal,
-                canvas = this._canvas,
-                invert = this._translator.getBusinessRange().invert,
-                coords = isHorizontal ? [canvas.left, canvas.width - canvas.right] : [canvas.height - canvas.bottom, canvas.top];
-
-            invert && coords.reverse();
-
-            return {
-                start: coords[0],
-                end: coords[1]
-            };
-        },
-
-        _getScreenDelta: function() {
-            var canvas = this._getCanvasStartEnd();
-            return _math.abs(canvas.start - canvas.end);
-        },
-
         _initAxisPositions: function() {
             var that = this,
                 position = that._options.position;
@@ -297,7 +279,7 @@ module.exports = {
             }
         },
 
-        _drawDateMarker: function(date, options) {
+        _drawDateMarker: function(date, options, range) {
             var that = this,
                 markerOptions = that._options.marker,
                 invert = that._translator.getBusinessRange().invert,
@@ -313,7 +295,7 @@ module.exports = {
                     .append(that._axisElementsGroup);
             }
 
-            text = String(constants.formatLabel(date, options.labelFormat));
+            text = String(that.formatLabel(date, options.labelOptions, range));
 
             return {
                 date: date,
@@ -351,7 +333,8 @@ module.exports = {
             var that = this,
                 options = that._options,
                 translator = that._translator,
-                minBound = that._minBound,
+                viewport = that._getViewportRange(),
+                minBound = viewport.minVisible,
                 tickInterval,
                 markerInterval,
                 markerDates,
@@ -363,9 +346,9 @@ module.exports = {
                 return that._drawDateMarker(markerDate, {
                     x: translator.translate(markerDate),
                     y: markersAreaTop,
-                    labelFormat: that._getLabelFormatOptions(format),
+                    labelOptions: that._getLabelFormatOptions(format),
                     withoutStick: withoutStick
-                });
+                }, viewport);
             }
 
             if(!options.marker.visible || options.argumentType !== "datetime" || options.type === "discrete" || that._majorTicks.length <= 1) {
@@ -373,10 +356,10 @@ module.exports = {
             }
 
             markersAreaTop = that._axisPosition + options.marker.topIndent;
-            tickInterval = dateUtils.getDateUnitInterval(this._tickManager.getTickInterval());
+            tickInterval = dateUtils.getDateUnitInterval(this._tickInterval);
             markerInterval = getMarkerInterval(tickInterval);
 
-            markerDates = getMarkerDates(minBound, that._maxBound, markerInterval);
+            markerDates = getMarkerDates(minBound, viewport.maxVisible, markerInterval);
 
             if(markerDates.length > 1
                 || (markerDates.length === 1 && minBound < markerDates[0])) {
@@ -642,26 +625,21 @@ module.exports = {
             return height && (height + labelOptions.indentFromAxis || 0) || 0;
         },
 
-        _estimateLabelFormat: function(canvas) {
-            this.updateCanvas(canvas);
-            this._updateTickManager();
-            this._tickManager.getTicks();
-            this._correctLabelFormat();
-        },
-
         estimateMargins: function(canvas) {
-            this._estimateLabelFormat(canvas);
-
+            this.updateCanvas(canvas);
             var that = this,
+                range = that._getViewportRange(),
+                ticksData = this._createTicksAndLabelFormat(range),
+                ticks = ticksData.ticks,
+                tickInterval = ticksData.tickInterval,
                 options = this._options,
                 constantLineOptions = (options.constantLines || []).filter(function(options) {
                     that._checkAlignmentConstantLineLabels(options.label);
                     return options.label.position === "outside" && options.label.visible;
                 }),
                 rootElement = that._renderer.root,
-                businessRange = that._translator.getBusinessRange(),
-                labelIsVisible = options.label.visible && !that._translator.getBusinessRange().stubData,
-                labelValue = labelIsVisible && constants.formatLabel(businessRange.axisType === "discrete" ? businessRange.categories[0] : businessRange.max, options.label),
+                labelIsVisible = options.label.visible && !range.stubData && ticks.length,
+                labelValue = labelIsVisible && that.formatLabel(ticks[ticks.length - 1], options.label, undefined, undefined, tickInterval, ticks),
                 labelElement = labelIsVisible && that._renderer.text(labelValue, 0, 0)
                     .css(that._textFontStyles)
                     .attr(that._textOptions)
@@ -881,15 +859,82 @@ module.exports = {
             };
         },
 
-        _getSkippedCategory: function() {
-            var skippedCategory,
-                categories = this._translator.getVisibleCategories() || this._translator.getBusinessRange().categories;
+        areCoordsOutsideAxis: function(coords) {
+            //getCanvasVisibleArea takes into account inverted case
+            var canvas = this._translator.getCanvasVisibleArea(),
+                coord = this._isHorizontal ? coords.x : coords.y;
 
-            if(categories && categories.length && !!this._tickOffset) {
-                skippedCategory = categories[categories.length - 1];
+            if(coord < canvas.min || coord > canvas.max) {
+                return true;
+            }
+            return false;
+        },
+
+        _getSkippedCategory: function(ticks) {
+            var skippedCategory;
+
+            if(this._options.type === constants.discrete && this._tickOffset && ticks.length !== 0) {
+                skippedCategory = ticks[ticks.length - 1];
             }
 
             return skippedCategory;
+        },
+
+        _drawBreak: function(br, scaleBreakPattern, positionFrom, positionTo, length) {
+            var that = this,
+                translatedEnd = that._getTranslatedCoord(br.to),
+                breakStart = Math.min(translatedEnd, !that._translator.isInverted() ? translatedEnd - length : translatedEnd + length),
+                rect;
+
+            if(that._isHorizontal) {
+                rect = that._renderer.rect(breakStart, positionFrom, scaleBreakPattern.size, positionTo - positionFrom);
+            } else {
+                rect = that._renderer.rect(positionFrom, breakStart, positionTo - positionFrom, scaleBreakPattern.size);
+            }
+            rect.attr({ fill: scaleBreakPattern.id }).append(that._scaleBreaksGroup);
+        },
+
+        drawScaleBreaks: function(canvas) {
+            var that = this,
+                options = that._options,
+                breakStyle = options.breakStyle,
+                position = options.position,
+                positionFrom,
+                positionTo,
+                breaks = that._translator.getBusinessRange().breaks || [],
+                scaleBreakPattern;
+
+            if(!(breaks && breaks.length)) {
+                return;
+            }
+
+            if(canvas) {
+                positionFrom = canvas.start;
+                positionTo = canvas.end;
+            } else {
+                positionFrom = that._orthogonalPositions.start - (options.visible && (position === "left" || position === "top") ? SCALE_BREAK_OFFSET : 0);
+                positionTo = that._orthogonalPositions.end + (options.visible && (position === "right" || position === "bottom") ? SCALE_BREAK_OFFSET : 0);
+            }
+
+            if(that._scaleBreakPattern) {
+                that._scaleBreakPattern.dispose();
+            }
+            that._scaleBreakPattern = scaleBreakPattern = that._renderer.linePattern({
+                color: that._options.containerColor,
+                borderColor: breakStyle.color,
+                size: breakStyle.width,
+                canvasLength: positionTo - positionFrom,
+                isHorizontal: that._isHorizontal,
+                isWaved: breakStyle.line.toLowerCase() !== "straight"
+            });
+
+            that._scaleBreaksGroup.clear();
+
+            breaks.forEach(function(br) {
+                if(!br.gapSize) {
+                    that._drawBreak(br, scaleBreakPattern, positionFrom, positionTo, breakStyle.width / 2 + scaleBreakPattern.size / 2);
+                }
+            });
         },
 
         _getSpiderCategoryOption: noop,

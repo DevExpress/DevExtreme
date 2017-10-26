@@ -8,6 +8,8 @@ var $ = require("jquery"),
     translator = require("animation/translator"),
     animationFrame = require("animation/frame"),
     holdEvent = require("events/hold"),
+    isRenderer = require("core/utils/type").isRenderer,
+    config = require("core/config"),
     pointerMock = require("../../../helpers/pointerMock.js"),
     contextMenuEvent = require("events/contextmenu"),
     decoratorRegistry = require("ui/list/ui.list.edit.decorator_registry"),
@@ -1017,7 +1019,7 @@ QUnit.test("menu item action should be fired after item click", function(assert)
 });
 
 QUnit.test("menu item action should be fired after item click", function(assert) {
-    assert.expect(2);
+    assert.expect(3);
 
     var $list = $("#templated-list").dxList({
         items: ["0"],
@@ -1026,6 +1028,7 @@ QUnit.test("menu item action should be fired after item click", function(assert)
             {
                 text: "menu",
                 action: function(e) {
+                    assert.equal(isRenderer(e.itemElement), config().useJQuery, "itemElement is correct");
                     assert.equal($(e.itemElement).get(0), $item.get(0));
                 }
             }

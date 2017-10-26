@@ -191,7 +191,9 @@ var TreeViewBase = HierarchicalCollectionWidget.inherit({
             * @name dxTreeViewOptions_onItemSelectionChanged
             * @publicName onItemSelectionChanged
             * @extends Action
-            * @type_function_param1_field7 node:dxtreeviewnode
+            * @type function(e)
+            * @type_function_param1 e:object
+            * @type_function_param1_field7 node:dxTreeViewNode
             * @action
             */
             onItemSelectionChanged: null,
@@ -200,7 +202,9 @@ var TreeViewBase = HierarchicalCollectionWidget.inherit({
             * @name dxTreeViewOptions_onItemClick
             * @publicName onItemClick
             * @extends Action
-            * @type_function_param1_field7 node:dxtreeviewnode
+            * @type function(e)
+            * @type_function_param1 e:object
+            * @type_function_param1_field7 node:dxTreeViewNode
             * @action
             * @extend_doc
             */
@@ -209,7 +213,9 @@ var TreeViewBase = HierarchicalCollectionWidget.inherit({
             * @name dxTreeViewOptions_onItemContextMenu
             * @publicName onItemContextMenu
             * @extends Action
-            * @type_function_param1_field8 node:dxtreeviewnode
+            * @type function(e)
+            * @type_function_param1 e:object
+            * @type_function_param1_field8 node:dxTreeViewNode
             * @action
             * @extend_doc
             */
@@ -218,7 +224,9 @@ var TreeViewBase = HierarchicalCollectionWidget.inherit({
             * @name dxTreeViewOptions_onItemRendered
             * @publicName onItemRendered
             * @extends Action
-            * @type_function_param1_field8 node:dxtreeviewnode
+            * @type function(e)
+            * @type_function_param1 e:object
+            * @type_function_param1_field8 node:dxTreeViewNode
             * @action
             * @extend_doc
             */
@@ -227,7 +235,9 @@ var TreeViewBase = HierarchicalCollectionWidget.inherit({
             * @name dxTreeViewOptions_onItemHold
             * @publicName onItemHold
             * @extends Action
-            * @type_function_param1_field8 node:dxtreeviewnode
+            * @type function(e)
+            * @type_function_param1 e:object
+            * @type_function_param1_field8 node:dxTreeViewNode
             * @action
             * @extend_doc
             */
@@ -236,11 +246,14 @@ var TreeViewBase = HierarchicalCollectionWidget.inherit({
             * @name dxTreeViewOptions_onItemExpanded
             * @publicName onItemExpanded
             * @extends Action
+            * @type function(e)
+            * @type_function_param1 e:object
             * @type_function_param1_field4 itemData:object
-            * @type_function_param1_field5 itemElement:Element
+            * @type_function_param1_field5 itemElement:dxElement
             * @type_function_param1_field6 itemIndex:Number
             * @type_function_param1_field7 jQueryEvent:jQuery.Event
-            * @type_function_param1_field8 node:dxtreeviewnode
+            * @type_function_param1_field8 event:event
+            * @type_function_param1_field9 node:dxTreeViewNode
             * @action
             */
             onItemExpanded: null,
@@ -249,11 +262,14 @@ var TreeViewBase = HierarchicalCollectionWidget.inherit({
             * @name dxTreeViewOptions_onItemCollapsed
             * @publicName onItemCollapsed
             * @extends Action
+            * @type function(e)
+            * @type_function_param1 e:object
             * @type_function_param1_field4 itemData:object
-            * @type_function_param1_field5 itemElement:Element
+            * @type_function_param1_field5 itemElement:dxElement
             * @type_function_param1_field6 itemIndex:Number
             * @type_function_param1_field7 jQueryEvent:jQuery.Event
-            * @type_function_param1_field8 node:dxtreeviewnode
+            * @type_function_param1_field8 event:event
+            * @type_function_param1_field9 node:dxTreeViewNode
             * @action
             */
             onItemCollapsed: null,
@@ -317,8 +333,10 @@ var TreeViewBase = HierarchicalCollectionWidget.inherit({
             * @name dxTreeViewOptions_onSelectionChanged
             * @publicName onSelectionChanged
             * @extends Action
-            * @type_function_param1_field4 addedItems:hidden
-            * @type_function_param1_field5 removedItems:hidden
+            * @type function(e)
+            * @type_function_param1 e:object
+            * @type_function_param1_field4 addedItems:Array<any>
+            * @type_function_param1_field5 removedItems:Array<any>
             * @action
             * @extend_doc
             */
@@ -424,12 +442,12 @@ var TreeViewBase = HierarchicalCollectionWidget.inherit({
             "showCheckBoxes": { since: "15.2", message: "use 'showCheckBoxesMode' option instead" },
 
             /**
-             * @name dxTreeViewOptions_selectAllEnabled
-             * @publicName selectAllEnabled
-             * @type boolean
-             * @default false
+            * @name dxTreeViewOptions_selectAllEnabled
+            * @publicName selectAllEnabled
+            * @type boolean
+            * @default false
             * @deprecated dxTreeViewOptions_showCheckBoxesMode
-             */
+            */
             "selectAllEnabled": { since: "15.2", message: "use 'showCheckBoxesMode' option instead" },
 
             /**
@@ -437,7 +455,9 @@ var TreeViewBase = HierarchicalCollectionWidget.inherit({
             * @publicName onItemSelected
             * @extends Action
             * @deprecated dxTreeViewOptions_onItemSelectionChanged
-            * @type_function_param1_field7 node:dxtreeviewnode
+            * @type function(e)
+            * @type_function_param1 e:object
+            * @type_function_param1_field7 node:dxTreeViewNode
             * @action
             */
             "onItemSelected": { since: "16.1", alias: "onItemSelectionChanged" }

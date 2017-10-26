@@ -36,7 +36,7 @@ var TabPanel = MultiView.inherit({
             * @default "title"
             * @type_function_param1 itemData:object
             * @type_function_param2 itemIndex:number
-            * @type_function_param3 itemElement:Element
+            * @type_function_param3 itemElement:dxElement
             * @type_function_return string|Node|jQuery
             */
             itemTitleTemplate: "title",
@@ -78,9 +78,10 @@ var TabPanel = MultiView.inherit({
             * @name dxTabPanelOptions_onTitleClick
             * @publicName onTitleClick
             * @extends Action
-            * @type function|string
+            * @type function(e)|string
+            * @type_function_param1 e:object
             * @type_function_param1_field4 itemData:object
-            * @type_function_param1_field5 itemElement:Element
+            * @type_function_param1_field5 itemElement:dxElement
             * @action
             */
             onTitleClick: null,
@@ -89,8 +90,10 @@ var TabPanel = MultiView.inherit({
             * @name dxTabPanelOptions_onTitleHold
             * @publicName onTitleHold
             * @extends Action
+            * @type function(e)
+            * @type_function_param1 e:object
             * @type_function_param1_field4 itemData:object
-            * @type_function_param1_field5 itemElement:Element
+            * @type_function_param1_field5 itemElement:dxElement
             * @action
             */
             onTitleHold: null,
@@ -99,8 +102,10 @@ var TabPanel = MultiView.inherit({
             * @name dxTabPanelOptions_onTitleRendered
             * @publicName onTitleRendered
             * @extends Action
+            * @type function(e)
+            * @type_function_param1 e:object
             * @type_function_param1_field4 itemData:object
-            * @type_function_param1_field5 itemElement:Element
+            * @type_function_param1_field5 itemElement:dxElement
             * @action
             */
             onTitleRendered: null

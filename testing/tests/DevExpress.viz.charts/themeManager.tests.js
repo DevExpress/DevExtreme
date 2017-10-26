@@ -1990,12 +1990,14 @@ function createThemeManager(options, themeGroupName) {
     QUnit.test('get valueAxis for rangeSelector', function(assert) {
         var themeManager = createThemeManager(this.getOptions({}));
         themeManager.setTheme("getOptionsTheme");
-        assert.deepEqual(themeManager.getOptions('valueAxisRangeSelector'), {
-            valueAxisTheme: true,
-            grid: {
-                visible: true
-            }
+
+        var valueOptions = themeManager.getOptions('valueAxisRangeSelector');
+
+        assert.equal(valueOptions.endOnTick, true);
+        assert.deepEqual(valueOptions.grid, {
+            visible: true
         });
+        assert.equal(valueOptions.valueAxisTheme, true);
     });
 
     QUnit.test('get valueAxis for rangeSelector with preset values', function(assert) {
@@ -2006,15 +2008,14 @@ function createThemeManager(options, themeGroupName) {
             }
         }));
         themeManager.setTheme("getOptionsTheme");
+        var valueOptions = themeManager.getOptions('valueAxisRangeSelector');
 
-        assert.deepEqual(themeManager.getOptions('valueAxisRangeSelector'), {
-            grid: {
-                visible: true
-            },
-            logarithmBase: 2,
-            someField: 'someValue',
-            valueAxisTheme: true
+        assert.equal(valueOptions.endOnTick, true);
+        assert.deepEqual(valueOptions.grid, {
+            visible: true
         });
+        assert.equal(valueOptions.logarithmBase, 2);
+        assert.equal(valueOptions.someField, 'someValue');
+        assert.equal(valueOptions.valueAxisTheme, true);
     });
-
 })();

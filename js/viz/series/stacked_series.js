@@ -17,12 +17,7 @@ var noop = require("../../core/utils/common").noop,
         getErrorBarRangeCorrector: _noop,
         _fillErrorBars: _noop,
         _calculateErrorBars: _noop
-    },
-    baseFullStackedSeries = _extend({}, baseStackedSeries, {
-        isFullStackedSeries: function() {
-            return true;
-        }
-    });
+    };
 
 exports.chart = {};
 exports.polar = {};
@@ -31,30 +26,17 @@ exports.chart["stackedline"] = _extend({}, lineSeries.line, baseStackedSeries, {
 
 exports.chart["stackedspline"] = _extend({}, lineSeries["spline"], baseStackedSeries, {});
 
-var fullStackedLineSeries = exports.chart["fullstackedline"] = _extend({}, lineSeries.line, baseFullStackedSeries, {
-    _processRange: function(range) {
-        lineSeries.line._processRange.apply(this, arguments);
-        range.val.percentStick = true;
-    },
+exports.chart["fullstackedline"] = _extend({}, lineSeries.line, baseStackedSeries, {
     getValueRangeInitialValue: areaSeries.area.getValueRangeInitialValue
 });
 
-exports.chart["fullstackedspline"] = _extend({}, lineSeries["spline"], baseFullStackedSeries, {
-    _processRange: function(range) {
-        lineSeries.line._processRange.apply(this, arguments);
-        range.val.percentStick = true;
-    },
+exports.chart["fullstackedspline"] = _extend({}, lineSeries["spline"], baseStackedSeries, {
     getValueRangeInitialValue: areaSeries.area.getValueRangeInitialValue
 });
 
 exports.chart["stackedbar"] = _extend({}, chartBarSeries, baseStackedSeries, {});
 
-exports.chart["fullstackedbar"] = _extend({}, chartBarSeries, baseFullStackedSeries, {
-    _processRange: function(range) {
-        chartBarSeries._processRange.apply(this, arguments);
-        range.val.percentStick = true;
-    },
-});
+exports.chart["fullstackedbar"] = _extend({}, chartBarSeries, baseStackedSeries);
 
 function clonePoint(point, value, minValue, position) {
     point = objectUtils.clone(point);
@@ -164,16 +146,14 @@ exports.chart["stackedsplinearea"] = _extend({}, areaSeries["splinearea"], baseS
     _appendInGroup: exports.chart["stackedarea"]._appendInGroup
 });
 
-exports.chart["fullstackedarea"] = _extend({}, chartAreaSeries, baseFullStackedSeries, {
+exports.chart["fullstackedarea"] = _extend({}, chartAreaSeries, baseStackedSeries, {
     _prepareSegment: exports.chart["stackedarea"]._prepareSegment,
-    _appendInGroup: exports.chart["stackedarea"]._appendInGroup,
-    _processRange: fullStackedLineSeries._processRange
+    _appendInGroup: exports.chart["stackedarea"]._appendInGroup
 });
 
-exports.chart["fullstackedsplinearea"] = _extend({}, areaSeries["splinearea"], baseFullStackedSeries, {
+exports.chart["fullstackedsplinearea"] = _extend({}, areaSeries["splinearea"], baseStackedSeries, {
     _prepareSegment: exports.chart["stackedsplinearea"]._prepareSegment,
-    _appendInGroup: exports.chart["stackedarea"]._appendInGroup,
-    _processRange: fullStackedLineSeries._processRange
+    _appendInGroup: exports.chart["stackedarea"]._appendInGroup
 });
 
 exports.polar["stackedbar"] = _extend({}, barSeries.polar.bar, baseStackedSeries, {});

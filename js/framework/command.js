@@ -20,6 +20,7 @@ require("../integration/knockout");
 * @type_function_param1_field1 element:jQuery
 * @type_function_param1_field2 model:object
 * @type_function_param1_field3 jQueryEvent:jQuery.Event
+* @type_function_param1_field4 event:event
 */
 
 /**

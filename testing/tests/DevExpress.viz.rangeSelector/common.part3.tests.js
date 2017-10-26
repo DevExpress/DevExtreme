@@ -7,7 +7,8 @@ var $ = require("jquery"),
     seriesDataSourceModule = require("viz/range_selector/series_data_source"),
     _SeriesDataSource = seriesDataSourceModule.SeriesDataSource,
     dataSourceModule = require("data/data_source/data_source"),
-    dateLocalization = require("localization/date");
+    dateLocalization = require("localization/date"),
+    axisModule = require("viz/axes/base_axis");
 
 var formatsAreEqual = function(format1, format2) {
     var testDate = new Date(0, 1, 2, 3, 4, 5, 6);
@@ -76,7 +77,6 @@ QUnit.test("set range as numeric and datetime without valueType", function(asser
     assert.deepEqual(options.endValue, new Date(438758934573));
     assert.strictEqual(options.valueType, "datetime");
 });
-
 
 QUnit.test("set range as string without datasource", function(assert) {
     this.createWidget({
@@ -175,7 +175,7 @@ QUnit.test("set range by dataSource. discrete data", function(assert) {
     assert.strictEqual(options.valueType, "string");
 });
 
-QUnit.test("set range by dataSource for non-stick series", function(assert) {
+QUnit.test("set range by dataSource. Numeric", function(assert) {
     this.createWidget({
         dataSource: [{ x: 1, y1: 4 }, { x: 5, y1: 6 }],
         chart: {
@@ -187,12 +187,12 @@ QUnit.test("set range by dataSource for non-stick series", function(assert) {
     });
 
     var options = this.axis.updateOptions.lastCall.args[0];
-    assert.strictEqual(options.startValue, 0.5);
-    assert.strictEqual(options.endValue, 5.5);
+    assert.strictEqual(options.startValue, 1);
+    assert.strictEqual(options.endValue, 5);
     assert.strictEqual(options.valueType, "numeric");
     var range = this.axis.setBusinessRange.lastCall.args[0];
-    assert.strictEqual(range.minVisible, 0.5);
-    assert.strictEqual(range.maxVisible, 5.5);
+    assert.strictEqual(range.minVisible, 1);
+    assert.strictEqual(range.maxVisible, 5);
 });
 
 QUnit.test("set valueType by startValue (numeric)", function(assert) {
@@ -776,7 +776,7 @@ QUnit.test("Calculate custom ticks and minor custom ticks depended on tickInterv
     });
 
     assert.deepEqual(this.axis.updateOptions.lastCall.args[0].customMinorTicks, [10, 15, 20, 25, 30, 35, 40, 45, 50, 55]);
-    assert.deepEqual(this.axis.updateOptions.lastCall.args[0].customTicks, [0, 20, 40]);
+    assert.deepEqual(this.axis.updateOptions.lastCall.args[0].customTicks, [10, 20, 40]);
 });
 
 QUnit.test("Custom bound ticks only contain first customTick", function(assert) {
@@ -860,7 +860,7 @@ QUnit.test("Calculate tickInterval based on screen delta (3*minRange. numeric)",
     var options = this.axis.updateOptions.lastCall.args[0];
     assert.strictEqual(options.minorTickInterval, 5);
     assert.strictEqual(options.tickInterval, 15);
-    assert.deepEqual(options.customTicks, [0, 15, 30, 45]);
+    assert.deepEqual(options.customTicks, [10, 15, 30, 45]);
 });
 
 QUnit.test("Calculate tickInterval based on screen delta (datetime. minRange is day)", function(assert) {
@@ -878,7 +878,7 @@ QUnit.test("Calculate tickInterval based on screen delta (datetime. minRange is 
     var options = this.axis.updateOptions.lastCall.args[0];
     assert.strictEqual(options.minorTickInterval, "day");
     assert.strictEqual(options.tickInterval, "month");
-    assert.deepEqual(options.customTicks, [new Date(2015, 0, 1), new Date(2015, 1, 1)]);
+    assert.deepEqual(options.customTicks, [new Date(2015, 0, 15), new Date(2015, 1, 1)]);
 });
 
 QUnit.test("Calculate tickInterval based on screen delta (datetime. minRange is month)", function(assert) {
@@ -956,7 +956,7 @@ QUnit.test("Calculate tickInterval based on screen delta (datetime. minRange is 
     var options = this.axis.updateOptions.lastCall.args[0];
     assert.strictEqual(options.minorTickInterval, "day");
     assert.strictEqual(options.tickInterval, "month");
-    assert.deepEqual(options.customTicks, [new Date(2015, 0, 1), new Date(2015, 1, 1)]);
+    assert.deepEqual(options.customTicks, [new Date(2015, 0, 15), new Date(2015, 1, 1)]);
 });
 
 QUnit.test("If not set - scale label format depends on tickInterval", function(assert) {
@@ -1012,7 +1012,7 @@ QUnit.test("If set - scale label format depends on tickInterval if scale overlap
 
 QUnit.test("If not set - sliderMarker format depends on minorTickInterval", function(assert) {
     this.createWidget({
-        dataSource: [{ x: new Date(2016, 0, 1) }, { x: new Date(2016, 1, 1) }, { x: new Date(2016, 2, 1) }, { x: new Date(2016, 4, 10) }],
+        dataSource: [{ x: new Date(2016, 0, 1) }, { x: new Date(2016, 1, 1) }, { x: new Date(2016, 2, 1) }, { x: new Date(2017, 11, 20) }],
         dataSourceField: "x",
         scale: {
             type: "semidiscrete",
@@ -1020,10 +1020,50 @@ QUnit.test("If not set - sliderMarker format depends on minorTickInterval", func
         }
     });
 
-    assert.strictEqual(this.slidersController.update.lastCall.args[4].format, "month");
+    assert.strictEqual(this.slidersController.update.lastCall.args[4].format, "monthandyear");
+});
+
+QUnit.test("start value should be correct", function(assert) {
+    this.createWidget({
+        scale: {
+            type: "semidiscrete",
+            startValue: 1.2,
+            endValue: 2,
+            minRange: 0.1
+        }
+    });
+
+    assert.strictEqual(this.axis.updateOptions.lastCall.args[0].startValue, 1.20, "start value is correct");
+});
+
+QUnit.test("ticks should be correct", function(assert) {
+    this.createWidget({
+        scale: {
+            type: "semidiscrete",
+            startValue: 1.2,
+            endValue: 2,
+            minRange: 0.1
+        }
+    });
+
+    assert.deepEqual(this.axis.updateOptions.lastCall.args[0].customTicks, [1.2, 1.3, 1.4, 1.5, 1.6, 1.7, 1.8, 1.9, 2], "ticks are correct");
 });
 
 QUnit.module("Initialization", commons.environment);
+
+QUnit.test("Axis creation - check axis parameters", function(assert) {
+    this.createWidget();
+
+    assert.equal(axisModule.Axis.getCall(0).args[0].renderer, this.renderer);
+    assert.equal(axisModule.Axis.getCall(0).args[0].axisType, "xyAxes");
+    assert.equal(axisModule.Axis.getCall(0).args[0].drawingType, "linear");
+    assert.equal(axisModule.Axis.getCall(0).args[0].widgetClass, "dxrs");
+    assert.equal(axisModule.Axis.getCall(0).args[0].axisClass, "range-selector");
+    assert.equal(axisModule.Axis.getCall(0).args[0].axesContainerGroup.attr.firstCall.args[0].class, "dxrs-scale");
+    assert.equal(axisModule.Axis.getCall(0).args[0].scaleBreaksGroup.attr.firstCall.args[0].class, "dxrs-scale-breaks");
+    assert.equal(axisModule.Axis.getCall(0).args[0].scaleBreaksGroup.append.lastCall.args[0], this.renderer.root);
+    assert.equal(axisModule.Axis.getCall(0).args[0].isArgumentAxis, true);
+});
 
 QUnit.test("Update axis canvas", function(assert) {
     this.createWidget({
@@ -1041,6 +1081,50 @@ QUnit.test("Update axis canvas", function(assert) {
         width: 299
     }, "canvas passed to draw");
     assert.deepEqual(this.axis.shift.lastCall.args, [{ left: 0, bottom: 8 }], "shift arguments");
+});
+
+QUnit.test("Draw scale breaks", function(assert) {
+    this.createWidget({
+        margin: {
+            top: 20
+        }
+    });
+
+    assert.deepEqual(this.axis.drawScaleBreaks.lastCall.args[0], {
+        start: 20,
+        end: 44
+    }, "drawScaleBreaks called with custom canvas");
+});
+
+QUnit.test("range container canvas with no indents. scale's labels half width as indent", function(assert) {
+    this.createWidget({
+        scale: {
+            startValue: 1,
+            endValue: 10,
+            tickInterval: 0.5,
+            label: {
+                visible: true
+            }
+        }
+    });
+
+    assert.deepEqual(this.rangeView.update.lastCall.args[2], { left: 10, top: 0, width: 290, height: 24, right: 0, bottom: 0 });
+});
+
+QUnit.test("During indents estimation, format scale labels the same way the axis formats its labels", function(assert) {
+    this.createWidget({
+        scale: {
+            startValue: 1,
+            endValue: 10.5,
+            tickInterval: 1.5,
+            label: {
+                visible: true
+            }
+        }
+    });
+
+    assert.strictEqual(this.renderer.text.getCall(1).args[0], "1.0");
+    assert.strictEqual(this.renderer.text.getCall(2).args[0], "10.5");
 });
 
 QUnit.test("rangeContainer canvas if sliderMarker placeholderSize is defined", function(assert) {
@@ -1172,7 +1256,6 @@ QUnit.test("rangeContainer canvas for invisible sliderMarker if placeholderSize 
 
     assert.deepEqual(this.rangeView.update.lastCall.args[2], { left: 10, top: 10, width: 290, height: 24, right: 0, bottom: 0 });
 });
-
 
 QUnit.test("rangeContainer canvas if sliderMarker placeholderSize.width as number is defined", function(assert) {
     this.createWidget({
@@ -1318,13 +1401,32 @@ QUnit.test("Init selection format before calculate canvas for number type", func
 
     assert.deepEqual(this.slidersController.update.lastCall.args[4].format, { type: "fixedPoint", precision: 1 }, "format");
 });
+
+QUnit.test("format for sliders", function(assert) {
+    this.createWidget({
+        sliderMarker: {
+            format: ""
+        },
+        behavior: {
+            snapToTicks: false
+        },
+        scale: {
+            startValue: 0,
+            endValue: 8000
+        }
+    });
+
+    assert.strictEqual(this.slidersController.update.lastCall.args[4].format.precision, 1);
+});
+
 QUnit.test("Init selection format before calculate canvas for dateTime type", function(assert) {
     this.createWidget({
         sliderMarker: {
             format: ""
         },
         scale: {
-            minorTickInterval: "day",
+            minorTickInterval: { days: 1 },
+            tickInterval: { weeks: 1 },
             startValue: new Date(2010, 2, 13),
             endValue: new Date(2010, 2, 20)
         }
@@ -1419,6 +1521,77 @@ QUnit.test("custom backgroundColor", function(assert) {
     this.createWidget({ containerBackgroundColor: "red" });
 
     assert.strictEqual(this.slidersController.update.lastCall.args[5].color, "red");
+});
+
+QUnit.test("With chart - pass marginOptions to axis", function(assert) {
+    this.seriesDataSource.stub("isShowChart").returns(true);
+    this.seriesDataSource.stub("getBoundRange").returns({
+        arg: new commons.StubRange(),
+        val: new commons.StubRange()
+    });
+    this.seriesDataSource.stub("getMarginOptions").returns({
+        margin: "options"
+    });
+    this.createWidget({
+        dataSource: [{ x: 1, y1: 4 }, { x: 5, y1: 6 }],
+        chart: {
+            series: [
+                { argumentField: "x", valueField: "y1", type: "bar" },
+                { argumentField: "x", valueField: "y2" }
+            ]
+        }
+    });
+
+    assert.deepEqual(this.seriesDataSource.stub("getMarginOptions").lastCall.args, [{
+        bottom: 0,
+        height: 150,
+        left: 0,
+        right: 0,
+        top: 0,
+        width: 299
+    }]);
+    assert.deepEqual(this.axis.setMarginOptions.lastCall.args, [{
+        margin: "options"
+    }]);
+});
+
+QUnit.test("Without chart - do not pass marginOptions to axis", function(assert) {
+    this.seriesDataSource.stub("isShowChart").returns(false);
+    this.seriesDataSource.stub("getBoundRange").returns({
+        arg: new commons.StubRange(),
+        val: new commons.StubRange()
+    });
+    this.createWidget({
+        dataSource: [{ x: 1, y1: 4 }, { x: 5, y1: 6 }],
+        dataSourceField: "x"
+    });
+
+    assert.strictEqual(this.seriesDataSource.stub("getMarginOptions").callCount, 0);
+    assert.strictEqual(this.axis.stub("setMarginOptions").callCount, 0);
+});
+
+QUnit.test("Without dataSource - do not pass marginOptions to axis", function(assert) {
+    this.createWidget({
+        scale: {
+            startValue: 0,
+            endValue: 100
+        }
+    });
+
+    assert.strictEqual(this.axis.stub("setMarginOptions").callCount, 0);
+});
+
+QUnit.test("Generate minor ticks even if minorTicks are not visible", function(assert) {
+    this.createWidget({
+        scale: {
+            valueType: "datetime",
+            minorTick: {
+                visible: false
+            }
+        }
+    });
+
+    assert.strictEqual(this.axis.updateOptions.lastCall.args[0].calculateMinors, true);
 });
 
 QUnit.module("API", commons.environment);

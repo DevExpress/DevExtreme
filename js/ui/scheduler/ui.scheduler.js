@@ -137,6 +137,16 @@ var Scheduler = Widget.inherit({
                 * @default "item"
                 * @type_function_param1 itemData:object
                 * @type_function_param2 itemIndex:number
+                * @type_function_param3 itemElement:dxElement
+                * @type_function_return string|Node|jQuery
+                */
+
+                /**
+                * @pseudo DropDownAppointmentTemplate
+                * @type template
+                * @default "dropDownAppointment"
+                * @type_function_param1 itemData:object
+                * @type_function_param2 itemIndex:number
                 * @type_function_param3 itemElement:Element
                 * @type_function_return string|Node|jQuery
                 */
@@ -146,7 +156,7 @@ var Scheduler = Widget.inherit({
                 * @type template
                 * @default "appointmentTooltip"
                 * @type_function_param1 appointmentData:object
-                * @type_function_param2 contentElement:Element
+                * @type_function_param2 contentElement:dxElement
                 * @type_function_return string|jQuery
                 */
 
@@ -156,7 +166,7 @@ var Scheduler = Widget.inherit({
                 * @default null
                 * @type_function_param1 itemData:object
                 * @type_function_param2 itemIndex:number
-                * @type_function_param3 itemElement:Element
+                * @type_function_param3 itemElement:dxElement
                 * @type_function_return string|Node|jQuery
                 */
 
@@ -166,7 +176,7 @@ var Scheduler = Widget.inherit({
                 * @default null
                 * @type_function_param1 itemData:object
                 * @type_function_param2 itemIndex:number
-                * @type_function_param3 itemElement:Element
+                * @type_function_param3 itemElement:dxElement
                 * @type_function_return string|Node|jQuery
                 */
 
@@ -176,7 +186,7 @@ var Scheduler = Widget.inherit({
                 * @default null
                 * @type_function_param1 itemData:object
                 * @type_function_param2 itemIndex:number
-                * @type_function_param3 itemElement:Element
+                * @type_function_param3 itemElement:dxElement
                 * @type_function_return string|Node|jQuery
                 */
 
@@ -186,7 +196,7 @@ var Scheduler = Widget.inherit({
                 * @default null
                 * @type_function_param1 itemData:object
                 * @type_function_param2 itemIndex:number
-                * @type_function_param3 itemElement:Element
+                * @type_function_param3 itemElement:dxElement
                 * @type_function_return string|Node|jQuery
                 */
 
@@ -270,6 +280,12 @@ var Scheduler = Widget.inherit({
                 * @name dxSchedulerOptions_views_appointmentTemplate
                 * @publicName appointmentTemplate
                 * @extends AppointmentTemplate
+                */
+
+                /**
+                * @name dxSchedulerOptions_views_dropDownAppointmentTemplate
+                * @publicName dropDownAppointmentTemplate
+                * @extends DropDownAppointmentTemplate
                 */
 
                 /**
@@ -454,6 +470,13 @@ var Scheduler = Widget.inherit({
                 */
             appointmentTemplate: "item",
 
+            /**
+                * @name dxSchedulerOptions_dropDownAppointmentTemplate
+                * @publicName dropDownAppointmentTemplate
+                * @extends DropDownAppointmentTemplate
+                */
+            dropDownAppointmentTemplate: "dropDownAppointment",
+
                 /**
                 * @name dxSchedulerOptions_dataCellTemplate
                 * @publicName dataCellTemplate
@@ -612,9 +635,11 @@ var Scheduler = Widget.inherit({
                 * @name dxSchedulerOptions_onAppointmentRendered
                 * @publicName onAppointmentRendered
                 * @extends Action
+                * @type function(e)
+                * @type_function_param1 e:object
                 * @type_function_param1_field4 appointmentData:object
                 * @type_function_param1_field5 targetedAppointmentData:object
-                * @type_function_param1_field6 appointmentElement:Element
+                * @type_function_param1_field6 appointmentElement:dxElement
                 * @action
                 */
             onAppointmentRendered: null,
@@ -622,13 +647,15 @@ var Scheduler = Widget.inherit({
                 /**
                 * @name dxSchedulerOptions_onAppointmentClick
                 * @publicName onAppointmentClick
-                * @type function|string
+                * @type function(e)|string
                 * @extends Action
+                * @type_function_param1 e:object
                 * @type_function_param1_field4 appointmentData:object
                 * @type_function_param1_field5 targetedAppointmentData:object
-                * @type_function_param1_field6 appointmentElement:Element
+                * @type_function_param1_field6 appointmentElement:dxElement
                 * @type_function_param1_field7 jQueryEvent:jQuery.Event
-                * @type_function_param1_field8 cancel:Boolean
+                * @type_function_param1_field8 event:event
+                * @type_function_param1_field9 cancel:Boolean
                 * @action
                 */
             onAppointmentClick: null,
@@ -636,13 +663,15 @@ var Scheduler = Widget.inherit({
                 /**
                 * @name dxSchedulerOptions_onAppointmentDblClick
                 * @publicName onAppointmentDblClick
-                * @type function|string
+                * @type function(e)|string
                 * @extends Action
+                * @type_function_param1 e:object
                 * @type_function_param1_field4 appointmentData:object
                 * @type_function_param1_field5 targetedAppointmentData:object
-                * @type_function_param1_field6 appointmentElement:Element
+                * @type_function_param1_field6 appointmentElement:dxElement
                 * @type_function_param1_field7 jQueryEvent:jQuery.Event
-                * @type_function_param1_field8 cancel:Boolean
+                * @type_function_param1_field8 event:event
+                * @type_function_param1_field9 cancel:Boolean
                 * @action
                 */
             onAppointmentDblClick: null,
@@ -650,12 +679,14 @@ var Scheduler = Widget.inherit({
                 /**
                 * @name dxSchedulerOptions_onCellClick
                 * @publicName onCellClick
-                * @type function|string
+                * @type function(e)|string
                 * @extends Action
+                * @type_function_param1 e:object
                 * @type_function_param1_field4 cellData:object
-                * @type_function_param1_field5 cellElement:Element
+                * @type_function_param1_field5 cellElement:dxElement
                 * @type_function_param1_field6 jQueryEvent:jQuery.Event
-                * @type_function_param1_field7 cancel:Boolean
+                * @type_function_param1_field7 event:event
+                * @type_function_param1_field8 cancel:Boolean
                 * @action
                 */
             onCellClick: null,
@@ -664,8 +695,10 @@ var Scheduler = Widget.inherit({
                 * @name dxSchedulerOptions_onAppointmentAdding
                 * @publicName onAppointmentAdding
                 * @extends Action
+                * @type function(e)
+                * @type_function_param1 e:object
                 * @type_function_param1_field4 appointmentData:Object
-                * @type_function_param1_field5 cancel:Boolean|Promise
+                * @type_function_param1_field5 cancel:Boolean|Promise<Boolean>
                 * @action
                 */
             onAppointmentAdding: null,
@@ -674,8 +707,10 @@ var Scheduler = Widget.inherit({
                 * @name dxSchedulerOptions_onAppointmentAdded
                 * @publicName onAppointmentAdded
                 * @extends Action
+                * @type function(e)
+                * @type_function_param1 e:object
                 * @type_function_param1_field4 appointmentData:Object
-                * @type_function_param1_field5 error:JavaScript Error object
+                * @type_function_param1_field5 error:Error
                 * @action
                 */
             onAppointmentAdded: null,
@@ -684,9 +719,11 @@ var Scheduler = Widget.inherit({
                 * @name dxSchedulerOptions_onAppointmentUpdating
                 * @publicName onAppointmentUpdating
                 * @extends Action
+                * @type function(e)
+                * @type_function_param1 e:object
                 * @type_function_param1_field4 oldData:Object
                 * @type_function_param1_field5 newData:Object
-                * @type_function_param1_field6 cancel:Boolean|Promise
+                * @type_function_param1_field6 cancel:Boolean|Promise<Boolean>
                 * @action
                 */
             onAppointmentUpdating: null,
@@ -695,8 +732,10 @@ var Scheduler = Widget.inherit({
                 * @name dxSchedulerOptions_onAppointmentUpdated
                 * @publicName onAppointmentUpdated
                 * @extends Action
+                * @type function(e)
+                * @type_function_param1 e:object
                 * @type_function_param1_field4 appointmentData:Object
-                * @type_function_param1_field5 error:JavaScript Error object
+                * @type_function_param1_field5 error:Error
                 * @action
                 */
             onAppointmentUpdated: null,
@@ -705,8 +744,10 @@ var Scheduler = Widget.inherit({
                 * @name dxSchedulerOptions_onAppointmentDeleting
                 * @publicName onAppointmentDeleting
                 * @extends Action
+                * @type function(e)
+                * @type_function_param1 e:object
                 * @type_function_param1_field4 appointmentData:Object
-                * @type_function_param1_field5 cancel:Boolean|Promise
+                * @type_function_param1_field5 cancel:Boolean|Promise<Boolean>
                 * @action
                 */
             onAppointmentDeleting: null,
@@ -715,8 +756,10 @@ var Scheduler = Widget.inherit({
                 * @name dxSchedulerOptions_onAppointmentDeleted
                 * @publicName onAppointmentDeleted
                 * @extends Action
+                * @type function(e)
+                * @type_function_param1 e:object
                 * @type_function_param1_field4 appointmentData:Object
-                * @type_function_param1_field5 error:JavaScript Error object
+                * @type_function_param1_field5 error:Error
                 * @action
                 */
             onAppointmentDeleted: null,
@@ -725,8 +768,10 @@ var Scheduler = Widget.inherit({
                 * @name dxSchedulerOptions_onAppointmentFormCreated
                 * @publicName onAppointmentFormCreated
                 * @extends Action
+                * @type function(e)
+                * @type_function_param1 e:object
                 * @type_function_param1_field4 appointmentData:object
-                * @type_function_param1_field5 form:Object
+                * @type_function_param1_field5 form:dxForm
                 * @action
                */
             onAppointmentFormCreated: null,
@@ -745,7 +790,7 @@ var Scheduler = Widget.inherit({
                 * @type template
                 * @default "appointmentPopup"
                 * @type_function_param1 appointmentData:object
-                * @type_function_param2 contentElement:Element
+                * @type_function_param2 contentElement:dxElement
                 * @type_function_return string|jQuery
                 */
             appointmentPopupTemplate: "appointmentPopup",
@@ -950,6 +995,74 @@ var Scheduler = Widget.inherit({
                 */
                 /**
                 * @name dxSchedulerAppointmentTemplate_endDateTimeZone
+                * @publicName endDateTimeZone
+                * @type String
+                */
+
+                /**
+                * @name dxSchedulerDropDownAppointmentTemplate_html
+                * @publicName html
+                * @type String
+                */
+                /**
+                * @name dxSchedulerDropDownAppointmentTemplate_disabled
+                * @publicName disabled
+                * @type boolean
+                * @default false
+                */
+                /**
+                * @name dxSchedulerDropDownAppointmentTemplate_visible
+                * @publicName visible
+                * @type boolean
+                * @default true
+                */
+                /**
+                * @name dxSchedulerDropDownAppointmentTemplate_template
+                * @publicName template
+                * @type template
+                */
+                /**
+                * @name dxSchedulerDropDownAppointmentTemplate_text
+                * @publicName text
+                * @type String
+                */
+                /**
+                * @name dxSchedulerDropDownAppointmentTemplate_startDate
+                * @publicName startDate
+                * @type Date
+                */
+                /**
+                * @name dxSchedulerDropDownAppointmentTemplate_endDate
+                * @publicName endDate
+                * @type Date
+                */
+                /**
+                * @name dxSchedulerDropDownAppointmentTemplate_description
+                * @publicName description
+                * @type String
+                */
+                /**
+                * @name dxSchedulerDropDownAppointmentTemplate_recurrenceRule
+                * @publicName recurrenceRule
+                * @type String
+                */
+                /**
+                * @name dxSchedulerDropDownAppointmentTemplate_recurrenceException
+                * @publicName recurrenceException
+                * @type String
+                */
+                /**
+                * @name dxSchedulerDropDownAppointmentTemplate_allDay
+                * @publicName allDay
+                * @type Boolean
+                */
+                /**
+                * @name dxSchedulerDropDownAppointmentTemplate_startDateTimeZone
+                * @publicName startDateTimeZone
+                * @type String
+                */
+                /**
+                * @name dxSchedulerDropDownAppointmentTemplate_endDateTimeZone
                 * @publicName endDateTimeZone
                 * @type String
                 */
@@ -1251,6 +1364,7 @@ var Scheduler = Widget.inherit({
             case "recurrenceEditMode":
             case "remoteFiltering":
             case "timeZone":
+            case "dropDownAppointmentTemplate":
                 this.repaint();
                 break;
             case "dateSerializationFormat":
@@ -1480,6 +1594,7 @@ var Scheduler = Widget.inherit({
 
         this._defaultTemplates["appointmentTooltip"] = new EmptyTemplate(this);
         this._defaultTemplates["appointmentPopup"] = new EmptyTemplate(this);
+        this._defaultTemplates["dropDownAppointment"] = new EmptyTemplate(this);
     },
 
     _initAppointmentTemplate: function() {

@@ -80,10 +80,12 @@ var Button = Widget.inherit({
             /**
             * @name dxButtonOptions_onClick
             * @publicName onClick
-            * @type function|string
+            * @type function(e)|string
             * @extends Action
+            * @type_function_param1 e:object
             * @type_function_param1_field4 jQueryEvent:jQuery.Event
-            * @type_function_param1_field5 validationGroup:object
+            * @type_function_param1_field5 event:event
+            * @type_function_param1_field6 validationGroup:object
             * @action
             */
             onClick: null,
@@ -137,7 +139,7 @@ var Button = Widget.inherit({
             * @type_function_param1 buttonData:object
             * @type_function_param1_field1 text:string
             * @type_function_param1_field2 icon:string
-            * @type_function_param2 contentElement:Element
+            * @type_function_param2 contentElement:dxElement
             * @type_function_return string|jQuery
             */
             template: "content",

@@ -77,9 +77,6 @@ var environment = {
 
         chartSeriesNS["mocktype"] = {
             stylesHistory: [],
-            _processRange: function(data) {
-
-            },
             _getRangeData: function() {
                 return { isStub: true };
             },
@@ -173,6 +170,7 @@ var createPoint = function() {
     var stub = sinon.createStubInstance(pointModule.Point);
     stub.argument = 1;
     stub.hasValue.returns(true);
+    stub.hasCoords.returns(true);
     stub.isInVisibleArea.returns(true);
     return stub;
 };
@@ -188,6 +186,7 @@ var environmentWithSinonStubPoint = {
             stub.value = data.value || 11;
             stub.fullState = 0;
             stub.hasValue.returns(true);
+            stub.hasCoords.returns(true);
             stub.isInVisibleArea.returns(true);
             stub.draw.reset();
             stub.update.reset();
@@ -5087,4 +5086,22 @@ QUnit.test("select points with aggregation", function(assert) {
         target: series.getPointByPos(0)
     });
     assert.equal(series.getPointByPos(1).applyView.callCount, 1);
+});
+
+QUnit.module("getMarginOptions", environment);
+
+QUnit.test("non fullStacked series", function(assert) {
+    var series = createSeries({
+        type: "stackedline"
+    });
+
+    assert.strictEqual(series.getMarginOptions().percentStick, false);
+});
+
+QUnit.test("fullStackedBar series", function(assert) {
+    var series = createSeries({
+        type: "fullstackedline"
+    });
+
+    assert.strictEqual(series.getMarginOptions().percentStick, true);
 });

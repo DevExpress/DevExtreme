@@ -13,7 +13,7 @@ var $ = require("../../core/renderer"),
     callModuleItemsMethod = gridCore.callModuleItemsMethod;
 
 var DATAGRID_ROW_SELECTOR = ".dx-row",
-    DATAGRID_DEPRECATED_TEMPLATE_WARNING = "Specifying grid templates with the name of a jQuery selector is now deprecated. Instead, use the jQuery object that references this selector.";
+    DATAGRID_DEPRECATED_TEMPLATE_WARNING = "Specifying grid templates with the jQuery selector name is now deprecated. Use the DOM Node or the jQuery object that references this selector instead.";
 
 require("./ui.data_grid.column_headers");
 require("./ui.data_grid.columns_controller");

@@ -48,7 +48,7 @@ QUnit.testStart(function() {
     $("#qunit-fixture").html(markup);
 });
 
-var selectors = require("ui/widget/jquery.selectors");
+var selectors = require("ui/widget/selectors");
 
 QUnit.test("focusable", function(assert) {
     var focusableContainer = $(".focusable");

@@ -1,7 +1,10 @@
 "use strict";
 
+window.includeThemesLinks();
+
 var $ = require("jquery"),
     renderer = require("core/renderer"),
+    themes = require("ui/themes"),
     devices = require("core/devices"),
     fromUA = $.proxy(devices._fromUA, devices),
     viewPort = require("core/utils/view_port"),
@@ -337,6 +340,20 @@ QUnit.test("method current sets correct shortcuts if deviceType was not forced (
     assert.equal(device.deviceType, "tablet", "correct deviceType value");
     assert.ok(device.tablet, "correct tablet flag");
 });
+
+QUnit.test("method themes.ready calls a callback function after device setting and themes loading", function(assert) {
+    var done = assert.async();
+
+    themes.ready(function() {
+        assert.ok(devices.current().ios, "correct ios flag");
+        assert.equal(themes.current(), "ios7.default");
+
+        done();
+    });
+
+    devices.current({ platform: "ios" });
+});
+
 
 QUnit.test("attach css classes", function(assert) {
     var originalRealDevice = devices.real();

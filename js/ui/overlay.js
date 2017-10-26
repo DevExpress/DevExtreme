@@ -21,7 +21,7 @@ var $ = require("../core/renderer"),
     registerComponent = require("../core/component_registrator"),
     Widget = require("./widget/ui.widget"),
     KeyboardProcessor = require("./widget/ui.keyboard_processor"),
-    selectors = require("./widget/jquery.selectors"),
+    selectors = require("./widget/selectors"),
     dragEvents = require("../events/drag"),
     eventUtils = require("../events/utils"),
     pointerEvents = require("../events/pointer"),
@@ -313,6 +313,8 @@ var Overlay = Widget.inherit({
             * @name dxOverlayOptions_onHiding
             * @publicName onHiding
             * @extends Action
+            * @type function(e)
+            * @type_function_param1 e:object
             * @type_function_param1_field4 cancel:boolean
             * @action
             */
@@ -331,7 +333,7 @@ var Overlay = Widget.inherit({
             * @publicName contentTemplate
             * @type template
             * @default "content"
-            * @type_function_param1 contentElement:Element
+            * @type_function_param1 contentElement:dxElement
             * @type_function_return string|jQuery
             */
             contentTemplate: "content",
@@ -1478,7 +1480,7 @@ var Overlay = Widget.inherit({
     /**
     * @name dxOverlaymethods_content
     * @publicName content()
-    * @return Element
+    * @return dxElement
     */
     content: function() {
         return getPublicElement(this._$content);

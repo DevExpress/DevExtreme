@@ -58,15 +58,6 @@ _Range.prototype = {
             that[field] = that[field] || otherRange[field];
         };
 
-        if(typeUtils.isDefined(otherRange.stick)) {
-            that.stick = otherRange.stick;
-        }
-
-        checkField("addSpiderCategory");
-        checkField("percentStick");
-        checkField("minSpaceCorrection");
-        checkField("maxSpaceCorrection");
-
         checkField("invert");
         checkField(axisTypeSelector);
         checkField("dataType");
@@ -76,7 +67,6 @@ _Range.prototype = {
         } else {
             that[baseSelector] = undefined;
         }
-
 
         compareAndReplaceByField(minSelector, otherLessThan);
         compareAndReplaceByField(maxSelector, otherGreaterThan);
@@ -150,16 +140,5 @@ _Range.prototype = {
                 return cat.indexOf(item) !== -1;
             };
         arr && cat && (this.categories = arr.filter(callback));
-    },
-
-    //T170398
-    checkZeroStick: function() {
-        var that = this;
-        if(that.min >= 0 && that.max >= 0) {
-            that.minStickValue = 0;
-        } else if(that.min <= 0 && that.max <= 0) {
-            that.maxStickValue = 0;
-        }
-        return that;
     }
 };

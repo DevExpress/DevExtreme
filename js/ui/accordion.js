@@ -68,7 +68,7 @@ var Accordion = CollectionWidget.inherit({
             * @default "title"
             * @type_function_param1 itemData:object
             * @type_function_param2 itemIndex:number
-            * @type_function_param3 itemElement:Element
+            * @type_function_param3 itemElement:dxElement
             * @type_function_return string|Node|jQuery
             */
             itemTitleTemplate: "title",
@@ -76,10 +76,11 @@ var Accordion = CollectionWidget.inherit({
             /**
             * @name dxAccordionOptions_onItemTitleClick
             * @publicName onItemTitleClick
-            * @type function|string
+            * @type function(e)|string
             * @extends Action
+            * @type_function_param1 e:object
             * @type_function_param1_field4 itemData:object
-            * @type_function_param1_field5 itemElement:Element
+            * @type_function_param1_field5 itemElement:dxElement
             * @type_function_param1_field6 itemIndex:number
             * @action
             */
@@ -132,7 +133,7 @@ var Accordion = CollectionWidget.inherit({
             * @default "item"
             * @type_function_param1 itemData:object
             * @type_function_param2 itemIndex:number
-            * @type_function_param3 itemElement:Element
+            * @type_function_param3 itemElement:dxElement
             * @type_function_return string|Node|jQuery
             */
 

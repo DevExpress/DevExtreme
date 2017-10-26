@@ -308,7 +308,7 @@ var PivotGrid = Widget.inherit({
             * @type_function_param1_field4 items:Array<Object>
             * @type_function_param1_field5 area:string
             * @type_function_param1_field6 cell:dxPivotGridPivotGridCell
-            * @type_function_param1_field7 cellElement:Element
+            * @type_function_param1_field7 cellElement:dxElement
             * @type_function_param1_field8 columnIndex:number
             * @type_function_param1_field9 rowIndex:number
             * @type_function_param1_field10 dataFields:Array<PivotGridDataSourceOptions_fields>
@@ -679,7 +679,7 @@ var PivotGrid = Widget.inherit({
             * @type function(e)
             * @type_function_param1 e:Object
             * @type_function_param1_field4 area:string
-            * @type_function_param1_field5 cellElement:Element
+            * @type_function_param1_field5 cellElement:dxElement
             * @type_function_param1_field6 cell:dxPivotGridPivotGridCell
             * @type_function_param1_field7 rowIndex:number
             * @type_function_param1_field8 columnIndex:number
@@ -687,7 +687,8 @@ var PivotGrid = Widget.inherit({
             * @type_function_param1_field10 rowFields:Array<PivotGridDataSourceOptions_fields>
             * @type_function_param1_field11 dataFields:Array<PivotGridDataSourceOptions_fields>
             * @type_function_param1_field12 jQueryEvent:jQuery.Event
-            * @type_function_param1_field13 cancel:boolean
+            * @type_function_param1_field13 event:event
+            * @type_function_param1_field14 cancel:boolean
             * @extends Action
             * @action
             */
@@ -698,7 +699,7 @@ var PivotGrid = Widget.inherit({
             * @type function(e)
             * @type_function_param1 e:object
             * @type_function_param1_field4 area:string
-            * @type_function_param1_field5 cellElement:Element
+            * @type_function_param1_field5 cellElement:dxElement
             * @type_function_param1_field6 cell:dxPivotGridPivotGridCell
             * @type_function_param1_field7 rowIndex:number
             * @type_function_param1_field8 columnIndex:number

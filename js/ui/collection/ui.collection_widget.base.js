@@ -18,7 +18,7 @@ var $ = require("../../core/renderer"),
     pointerEvents = require("../../events/pointer"),
     DataHelperMixin = require("../../data_helper"),
     CollectionWidgetItem = require("./item"),
-    selectors = require("../widget/jquery.selectors"),
+    selectors = require("../widget/selectors"),
     messageLocalization = require("../../localization/message"),
     holdEvent = require("../../events/hold"),
     clickEvent = require("../../events/click"),
@@ -130,7 +130,7 @@ var CollectionWidget = Widget.inherit({
             * @default "item"
             * @type_function_param1 itemData:object
             * @type_function_param2 itemIndex:number
-            * @type_function_param3 itemElement:Element
+            * @type_function_param3 itemElement:dxElement
             * @type_function_return string|Node|jQuery
             */
             itemTemplate: "item",
@@ -139,8 +139,10 @@ var CollectionWidget = Widget.inherit({
             * @name CollectionWidgetOptions_onItemRendered
             * @publicName onItemRendered
             * @extends Action
+            * @type function(e)
+            * @type_function_param1 e:object
             * @type_function_param1_field4 itemData:object
-            * @type_function_param1_field5 itemElement:Element
+            * @type_function_param1_field5 itemElement:dxElement
             * @type_function_param1_field6 itemIndex:number
             * @action
             */
@@ -149,12 +151,14 @@ var CollectionWidget = Widget.inherit({
             /**
             * @name CollectionWidgetOptions_onItemClick
             * @publicName onItemClick
-            * @type function|string
+            * @type function(e)|string
             * @extends Action
+            * @type_function_param1 e:object
             * @type_function_param1_field4 itemData:object
-            * @type_function_param1_field5 itemElement:Element
+            * @type_function_param1_field5 itemElement:dxElement
             * @type_function_param1_field6 itemIndex:number
             * @type_function_param1_field7 jQueryEvent:jQuery.Event
+            * @type_function_param1_field8 event:event
             * @action
             */
             onItemClick: null,
@@ -163,8 +167,10 @@ var CollectionWidget = Widget.inherit({
             * @name CollectionWidgetOptions_onItemHold
             * @publicName onItemHold
             * @extends Action
+            * @type function(e)
+            * @type_function_param1 e:object
             * @type_function_param1_field4 itemData:object
-            * @type_function_param1_field5 itemElement:Element
+            * @type_function_param1_field5 itemElement:dxElement
             * @type_function_param1_field6 itemIndex:number
             * @action
             */
@@ -182,10 +188,13 @@ var CollectionWidget = Widget.inherit({
             * @name CollectionWidgetOptions_onItemContextMenu
             * @publicName onItemContextMenu
             * @extends Action
+            * @type function(e)
+            * @type_function_param1 e:object
             * @type_function_param1_field4 itemData:object
-            * @type_function_param1_field5 itemElement:Element
+            * @type_function_param1_field5 itemElement:dxElement
             * @type_function_param1_field6 itemIndex:number
             * @type_function_param1_field7 jQueryEvent:jQuery.Event
+            * @type_function_param1_field8 event:event
             * @action
             */
             onItemContextMenu: null,
@@ -229,7 +238,7 @@ var CollectionWidget = Widget.inherit({
             /**
             * @name CollectionWidgetOptions_focusedElement
             * @publicName focusedElement
-            * @type Element
+            * @type dxElement
             * @default null
             * @hidden
             * @extend_doc

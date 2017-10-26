@@ -122,8 +122,9 @@ declare module DevExpress.framework {
     }
 
     export module html {
-
+        /** @docid layoutSets */
         export var layoutSets: Array<string>;
+        /** @docid_ignore animationSets */
         export var animationSets: { [animationSetName: string]: AnimationSet };
 
         export interface AnimationSet {
@@ -232,8 +233,10 @@ declare module DevExpress.framework {
             /** @docid HtmlApplicationmethods_loadTemplates */
             loadTemplates(source: any): JQueryPromise<any>;
 
-            /** @docid HtmlApplicationmethods_navigate */
-            navigate(uri?: any, options?: Object): void;
+            /** @docid HtmlApplicationmethods_navigate#navigate(uri) */
+            navigate(uri?: any): void;
+            /** @docid HtmlApplicationmethods_navigate#navigate(uri, options) */
+            navigate(uri: any, options?: Object): void;
 
             /** @docid HtmlApplicationmethods_renderNavigation */
             renderNavigation(): void;

@@ -14,6 +14,7 @@ var createPoint = function() {
     var stub = sinon.createStubInstance(pointModule.Point);
     stub.argument = 1;
     stub.hasValue.returns(true);
+    stub.hasCoords.returns(true);
     stub.isInVisibleArea.returns(true);
 
     stub._options = {};//see T243839
@@ -170,6 +171,26 @@ var checkGroups = function(assert, series) {
         assert.equal(this.createPoint.firstCall.args[1].lowValue, -10, "Low value should be correct");
         assert.equal(this.createPoint.firstCall.args[1].openValue, 1, "Open value should be correct");
         assert.equal(this.createPoint.firstCall.args[1].closeValue, -4, "Close value should be correct");
+    });
+
+    QUnit.test("getMarginOptions", function(assert) {
+        var series = createSeries({
+            type: "stock",
+            reduction: { level: "open" },
+            label: { visible: false },
+            width: 2,
+            hoverStyle: {
+                width: 3
+            },
+            selectionStyle: {
+                width: 4
+            }
+        });
+
+        assert.deepEqual(series.getMarginOptions(), {
+            size: 14,
+            percentStick: false
+        });
     });
 
     QUnit.module("StockSeries series. Draw", {
