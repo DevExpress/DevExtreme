@@ -1179,11 +1179,9 @@ QUnit.test("Recurring appointment and timepanel should be rendered correctly if 
     var $element = this.instance.$element();
     var $appts = $element.find(".dx-scheduler-appointment");
     var timePanelDate = $element.find(".dx-scheduler-agenda-date").text();
-    var timePanelDayOfWeek = $element.find(".dx-scheduler-agenda-week-day").text();
 
     assert.equal($appts.length, 1, "Appt count is OK");
-    assert.equal(timePanelDate, "10", "Time panel date is OK");
-    assert.equal(timePanelDayOfWeek, "Thu", "Time panel week day is OK");
+    assert.equal(timePanelDate, "10 Thu", "Time panel date is OK");
 });
 
 QUnit.test("Recurring appointment and timepanel should be rendered correctly if DST makes sense(T444318), the second case", function(assert) {
@@ -1205,15 +1203,11 @@ QUnit.test("Recurring appointment and timepanel should be rendered correctly if 
     var $element = this.instance.$element();
     var $appts = $element.find(".dx-scheduler-appointment");
     var $timePanelDateEl = $element.find(".dx-scheduler-agenda-date");
-    var $timePanelDayOfWeekEl = $element.find(".dx-scheduler-agenda-week-day");
     var timePanelDate = $timePanelDateEl.text();
-    var timePanelDayOfWeek = $timePanelDayOfWeekEl.text();
 
     assert.equal($appts.length, 1, "Appt count is OK");
     assert.equal($timePanelDateEl.length, 1, "Timepanel cell count is OK");
-    assert.equal($timePanelDayOfWeekEl.length, 1, "Timepanel cell count is OK");
-    assert.equal(timePanelDate, "6", "Time panel date is OK");
-    assert.equal(timePanelDayOfWeek, "Sun", "Time panel week day is OK");
+    assert.equal(timePanelDate, "6 Sun", "Time panel date is OK");
 });
 
 QUnit.test("dateCellTemplate should take cellElement with correct geometry (T453520)", function(assert) {
