@@ -3701,9 +3701,7 @@ QUnit.test("T566739. Do not generate CrossJoin in select statement if skipValues
         skipValues: true
     });
 
-    var select = this.getQuery();
-
-    assert.ok(select.indexOf("SELECT [DX_columns] DIMENSION PROPERTIES PARENT_UNIQUE_NAME,") !== -1);
+    assert.ok(this.getQuery().toLowerCase().indexOf("crossjoin") === -1);
 });
 
 
