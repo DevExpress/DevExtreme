@@ -1678,6 +1678,7 @@ declare module DevExpress.framework.html {
         getViewTemplateInfo(viewName: string): any;
         /** Adds a specified HTML template to a collection of view or layout templates. */
         loadTemplates(source: string | JQuery): Promise<void> & JQueryPromise<void>;
+        navigate(uri?: string | any): void;
         /** Navigates to the specified URI. */
         navigate(uri: string | any, options: { root?: boolean, target?: string, direction?: string, modal?: boolean }): void;
         /** Detaches all event handlers from the specified event. */
@@ -1697,6 +1698,8 @@ declare module DevExpress.framework.html {
         /** Provides access to the object that defines the current context to be considered when choosing an appropriate template for a view. */
         templateContext(): any;
     }
+    export var layoutSets: Array<string>;
+    export var animationSets: any;
 }
 declare module DevExpress.ui {
     export interface dxAccordionOptions extends CollectionWidgetOptions {
@@ -2659,7 +2662,7 @@ declare module DevExpress.ui {
         /** A handler for the uploadAborted event. */
         onUploadAborted?: ((e: { component?: any, element?: DevExpress.core.dxElement, model?: any, file?: any, jQueryEvent?: JQueryEventObject, request?: XMLHttpRequest }) => any);
         /** A handler for the uploaded event. */
-        onUploaded?: ((e: { component?: any, element?: DevExpress.core.dxElement, model?: any, File?: File, jQueryEvent?: JQueryEventObject, request?: XMLHttpRequest }) => any);
+        onUploaded?: ((e: { component?: any, element?: DevExpress.core.dxElement, model?: any, file?: File, jQueryEvent?: JQueryEventObject, request?: XMLHttpRequest }) => any);
         /** A handler for the uploadError event. */
         onUploadError?: ((e: { component?: any, element?: DevExpress.core.dxElement, model?: any, file?: File, jQueryEvent?: JQueryEventObject, request?: XMLHttpRequest }) => any);
         /** A handler for the uploadStarted event. */
