@@ -477,6 +477,42 @@ QUnit.test("Commands adding animation is not applied to dxPivot container by def
     assert.equal(enterLog.length, 0, "pivot items shouldn't be animated (T314445)");
 });
 
+QUnit.test("dxToolbar command container items shouldn't be animated on rerendering (T559301)", function(assert) {
+    var commandMapping = new CommandMapping(),
+        manager = new CommandManager({ commandMapping: commandMapping }),
+        commands = [
+            new dxCommand({ id: 'cmd1', title: 'cmd1', visible: true }),
+            new dxCommand({ id: 'cmd2', title: 'cmd2', visible: false })
+        ],
+        containers = [
+            new dxCommandContainer($("<div/>").appendTo("#qunit-fixture").dxToolbar(), { id: 'toolbar' })
+        ],
+        enterLog = [];
+
+    TransitionExecutorModule.TransitionExecutor = TransitionExecutorModule.TransitionExecutor.inherit({
+        enter: function($el, config) {
+            enterLog.push({
+                $element: $el,
+                config: config
+            });
+        },
+        start: noop
+    });
+
+    commandMapping.mapCommands("toolbar", [
+        { id: 'cmd1', location: 'before' },
+        { id: 'cmd2', location: 'after' }
+    ]);
+
+    manager.renderCommandsToContainers(commands, containers);
+    assert.equal(enterLog.length, 1);
+
+    commands[1].option('visible', true);
+    commands[1].option('title', 'New Title');
+
+    assert.equal(enterLog.length, 1, 'T559301');
+});
+
 QUnit.test("Commands adding animation (invisible container)", function(assert) {
     var commandMapping = new CommandMapping(),
         manager = new CommandManager({ commandMapping: commandMapping }),
