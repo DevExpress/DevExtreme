@@ -183,7 +183,7 @@ function smartFormatter(tick, options) {
                         if(!isExponential(tick)) {
                             precision = abs(getNoZeroIndex(stringTick.split(".")[1]) - getCoefficient(tickInterval) + 1);
                         } else {
-                            precision = Math.max(abs(getCoefficient(adjust(tick)) - getCoefficient(adjust(tickInterval))), abs(getPrecision(adjust(tick)) - getPrecision(tickInterval)));
+                            precision = Math.max(abs(getCoefficient(tick) - getCoefficient(tickInterval)), abs(getPrecision(tick) - getPrecision(tickInterval)));
                         }
                     } else {
                         tickIntervalIndex = floor(log10(tickInterval));
