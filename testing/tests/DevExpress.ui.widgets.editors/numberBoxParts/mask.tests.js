@@ -102,7 +102,7 @@ QUnit.skip("removing required symbol should try replace it to 0", function(asser
     assert.equal(this.input.val(), "12.006", "remove after point");
 });
 
-QUnit.test("pressing '-' button should revert the number", function(assert) {
+QUnit.test("pressing NumPad '-' button should revert the number", function(assert) {
     this.instance.option({
         format: "#.000",
         value: 123.456
@@ -113,6 +113,21 @@ QUnit.test("pressing '-' button should revert the number", function(assert) {
     assert.equal(this.instance.option("value"), -123.456, "value is correct");
 
     this.keyboard.caret(2).keyDown(109);
+    assert.equal(this.input.val(), "123.456", "value is correct");
+    assert.equal(this.instance.option("value"), 123.456, "value is correct");
+});
+
+QUnit.test("pressing '-' button should revert the number", function(assert) {
+    this.instance.option({
+        format: "#.000",
+        value: 123.456
+    });
+
+    this.keyboard.keyDown(189);
+    assert.equal(this.input.val(), "-123.456", "value is correct");
+    assert.equal(this.instance.option("value"), -123.456, "value is correct");
+
+    this.keyboard.caret(2).keyDown(189);
     assert.equal(this.input.val(), "123.456", "value is correct");
     assert.equal(this.instance.option("value"), 123.456, "value is correct");
 });
