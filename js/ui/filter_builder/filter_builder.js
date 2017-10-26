@@ -34,9 +34,16 @@ var FILTER_BUILDER_CLASS = "dx-filterbuilder",
     FILTER_BUILDER_ADD_CONDITION_CLASS = "dx-filterbuilder-add-condition",
     ACTIVE_CLASS = "dx-state-active";
 
-var ACTIONS = [
-        "onEditorPreparing", "onEditorPrepared"
-    ],
+var ACTIONS = [{
+        name: "onEditorPreparing",
+        config: { excludeValidators: ["designMode", "disabled", "readOnly"], category: "rendering" }
+    }, {
+        name: "onEditorPrepared",
+        config: { excludeValidators: ["designMode", "disabled", "readOnly"], category: "rendering" }
+    }, {
+        name: "onValueChanged",
+        config: { excludeValidators: ["disabled", "readOnly"] }
+    }],
     OPERATORS = {
         and: "and",
         or: "or",
@@ -96,6 +103,16 @@ var FilterBuilder = Widget.inherit({
             * @publicName dxFilterBuilderField
             * @category Internal
             */
+
+            /**
+            * @name dxFilterBuilderOptions_onValueChanged
+            * @publicName onValueChanged
+            * @extends Action
+            * @type_function_param1_field4 value:object
+            * @type_function_param1_field5 previousValue:object
+            * @action
+            */
+            onValueChanged: null,
 
             /**
             * @name dxFilterBuilderOptions_fields
@@ -395,6 +412,10 @@ var FilterBuilder = Widget.inherit({
                 if(!this._disableInvalidateForValue) {
                     this._invalidate();
                 }
+                this.executeAction("onValueChanged", {
+                    value: args.value,
+                    previousValue: args.previousValue
+                });
                 break;
             default:
                 this.callBase(args);
@@ -425,7 +446,7 @@ var FilterBuilder = Widget.inherit({
         that._actions = {};
 
         ACTIONS.forEach(function(action) {
-            that._actions[action] = that._createActionByOption(action, { excludeValidators: ["designMode", "disabled", "readOnly"], category: "rendering" });
+            that._actions[action.name] = that._createActionByOption(action.name, action.config);
         });
     },
 

@@ -63,4 +63,26 @@ QUnit.module("Events", function() {
         assert.strictEqual(args.value, "DevExpress", "args -> value");
         assert.deepEqual(args.component, container.dxFilterBuilder("instance"), "args -> component");
     });
+
+    QUnit.test("onValueChanged", function(assert) {
+        //arrange
+        var args,
+            spy = sinon.spy(),
+            container = $("#container");
+
+        container.dxFilterBuilder({
+            value: ["Zipcode", "=", "666"],
+            fields: fields,
+            onValueChanged: spy
+        });
+
+        //act
+        container.dxFilterBuilder("instance").option("value", ["CompanyName", "=", "DevExpress"]);
+
+        //assert
+        args = spy.args[0][0];
+        assert.strictEqual(spy.callCount, 1, "onValueChanged is called");
+        assert.deepEqual(args.previousValue, ["Zipcode", "=", "666"], "previous value");
+        assert.deepEqual(args.value, ["CompanyName", "=", "DevExpress"], "current value");
+    });
 });
