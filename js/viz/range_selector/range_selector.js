@@ -474,7 +474,6 @@ function updateScaleOptions(scaleOptions, seriesDataSource, translatorRange, tic
         intervals = getIntervalCustomTicks(scaleOptions);
         scaleOptions.customMinorTicks = intervals.altIntervals;
         scaleOptions.customTicks = intervals.intervals;
-        //TODO rework
         scaleOptions.customBoundTicks = [scaleOptions.customTicks[0]];
     }
 }
@@ -511,7 +510,6 @@ function prepareScaleOptions(scaleOption, seriesDataSource, incidentOccurred) {
     }
 
     scaleOption.valueType = valueType;
-    //TODO
     scaleOption.dataType = valueType;
     parser = parseUtils.getParser(valueType);
 

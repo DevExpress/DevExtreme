@@ -959,6 +959,7 @@ var dxChart = {
         * @publicName setTicksAtUnitBeginning
         * @type boolean
         * @default true
+        * @deprecated
         */
         setTicksAtUnitBeginning: true,
         /**
@@ -2766,6 +2767,7 @@ var dxPolarChart = {
         * @publicName setTicksAtUnitBeginning
         * @type boolean
         * @default true
+        * @deprecated
         */
         setTicksAtUnitBeginning: true,
         /**

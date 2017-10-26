@@ -229,8 +229,6 @@ registerTheme({
     },
     "chart:common:axis": {
         visible: false,
-        //TODO
-        //setTicksAtUnitBeginning: true,
         valueMarginsEnabled: true,
         placeholderSize: null,
         logarithmBase: 10,
@@ -1002,8 +1000,6 @@ registerTheme({
             opacity: 0.1,
             showCustomBoundaryTicks: true,
             showMinorTicks: true, //DEPRECATED IN 15_2
-            //TODO
-            //setTicksAtUnitBeginning: true,
             label: {
                 overlappingBehavior: "hide",
                 alignment: "center",

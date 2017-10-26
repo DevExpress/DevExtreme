@@ -475,18 +475,6 @@ function dateGenerator(options) {
     );
 }
 
-// {
-//     dataType: "numeric",
-//     axisType: "continuous",
-//     axisDivisionFactor: 30,
-//     minorAxisDivisionFactor: 10,
-//     allowDecimals: true,
-//     endOnTick: true,
-//     logBase: 2,
-//     calculateMinors: false,
-//     incidentOccurred: () => {},
-//     numberMultipliers: [1, 2]
-// }
 exports.tickGenerator = function(options) {
     var result;
 

@@ -165,6 +165,7 @@ var dxRangeSelector = {
         * @publicName setTicksAtUnitBeginning
         * @type boolean
         * @default true
+        * @deprecated
         */
         setTicksAtUnitBeginning: true,
         /**

@@ -52,7 +52,6 @@ function getTickGenerator(options, incidentOccurred) {
         numberMultipliers: options.numberMultipliers,
         calculateMinors: options.minorTick.visible || options.minorGrid.visible || options.calculateMinors,
 
-        //TODO new options
         allowDecimals: options.allowDecimals,
         endOnTick: options.endOnTick,
 
@@ -940,11 +939,6 @@ Axis.prototype = {
 
         this._seriesData = new rangeModule.Range(validateBusinessRange(range, this._options.min, this._options.max));
 
-        //TODO we should remove it
-        //for aggregation
-        //and to ask for stubData
-        //and for estimateMargins
-        //and in rangeView
         this._translator.updateBusinessRange(this._seriesData);
     },
 
@@ -1142,7 +1136,6 @@ Axis.prototype = {
         that._translator.updateBusinessRange(range);
     },
 
-    //for internal use only
     _getViewportRange: function() {
         var range = new rangeModule.Range(this._seriesData),
             zoom = this._zoomArgs;
