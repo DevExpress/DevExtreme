@@ -1208,11 +1208,10 @@ var dxBarGauge = {
     /**
     * @name dxbargaugeoptions_ontooltipshown
     * @publicName onTooltipShown
+    * @extends Action
     * @type function(e)
     * @type_function_param1 e:object
-    * @type_function_param1_field1 component:object
-    * @type_function_param1_field2 element:object
-    * @type_function_param1_field3 target:object
+    * @type_function_param1_field4 target:object
     * @notUsedInTheme
     * @action
     */
@@ -1220,11 +1219,10 @@ var dxBarGauge = {
     /**
     * @name dxbargaugeoptions_ontooltiphidden
     * @publicName onTooltipHidden
+    * @extends Action
     * @type function(e)
     * @type_function_param1 e:object
-    * @type_function_param1_field1 component:object
-    * @type_function_param1_field2 element:object
-    * @type_function_param1_field3 target:object
+    * @type_function_param1_field4 target:object
     * @notUsedInTheme
     * @action
     */

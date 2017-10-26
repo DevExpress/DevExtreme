@@ -100,10 +100,7 @@ var BaseSparkline = {
     /**
     * @name basesparklineoptions_ontooltipshown
     * @publicName onTooltipShown
-    * @type function(e)
-    * @type_function_param1 e:object
-    * @type_function_param1_field1 component:object
-    * @type_function_param1_field2 element:object
+    * @extends Action
     * @notUsedInTheme
     * @action
     */
@@ -111,10 +108,7 @@ var BaseSparkline = {
     /**
     * @name basesparklineoptions_ontooltiphidden
     * @publicName onTooltipHidden
-    * @type function(e)
-    * @type_function_param1 e:object
-    * @type_function_param1_field1 component:object
-    * @type_function_param1_field2 element:object
+    * @extends Action
     * @notUsedInTheme
     * @action
     */
