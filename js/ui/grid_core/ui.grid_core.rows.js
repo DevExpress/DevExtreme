@@ -67,7 +67,7 @@ module.exports = {
             * @type_function_param1_field9 displayValue:string
             * @type_function_param1_field10 columnIndex:number
             * @type_function_param1_field11 rowIndex:number
-            * @type_function_param1_field12 column:dxDataGridOptions_columns
+            * @type_function_param1_field12 column:dxTreeListOptions_columns
             * @type_function_param1_field13 rowType:string
             * @type_function_param1_field14 cellElement:dxElement
             * @type_function_param1_field15 row:dxTreeListRowObject
