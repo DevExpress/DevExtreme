@@ -380,6 +380,18 @@ QUnit.test("leading zeros without stubs should be parsed", function(assert) {
     assert.equal(this.input.val(), "1$", "value is correct");
 });
 
+QUnit.test("incomplete enter should not be prevented when there are stubs after the caret", function(assert) {
+    this.instance.option({
+        format: "#0.## kg",
+        value: 123
+    });
+
+    this.keyboard.caret(3).type(".45");
+
+    assert.equal(this.input.val(), "123.45 kg", "value is correct");
+});
+
+
 QUnit.module("format: removing", moduleConfig);
 
 QUnit.test("delete key should remove a char", function(assert) {
