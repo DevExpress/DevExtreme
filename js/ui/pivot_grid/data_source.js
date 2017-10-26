@@ -1179,11 +1179,11 @@ module.exports = Class.inherit((function() {
         * @name PivotGridDataSourceMethods_createDrillDownDataSource
         * @publicName createDrillDownDataSource(options)
         * @param1 options:object
-        * @param1_field1 columnPath:Array<any>
-        * @param1_field2 rowPath:Array<any>
+        * @param1_field1 columnPath:Array<string, number, Date>
+        * @param1_field2 rowPath:Array<string, number, Date>
         * @param1_field3 dataIndex:number
         * @param1_field4 maxRowCount:number
-        * @param1_field5 customColumns:Array<any>
+        * @param1_field5 customColumns:Array<string, number, Date>
         * @return DataSource
         */
         createDrillDownDataSource: function(params) {

@@ -898,6 +898,7 @@ var fx = {
     * @param1 element:Node
     * @param2 config:animationConfig
     * @return Promise<void>
+    * @namespace DevExpress.fx
     */
     animate: animate,
     createAnimation: createAnimation,
@@ -906,6 +907,7 @@ var fx = {
     * @publicName isAnimating(element)
     * @param1 element:Node
     * @return boolean
+    * @namespace DevExpress.fx
     */
     isAnimating: isAnimating,
     /**
@@ -913,6 +915,7 @@ var fx = {
     * @publicName stop(element, jumpToEnd)
     * @param1 element:Node
     * @param2 jumpToEnd:boolean
+    * @namespace DevExpress.fx
     */
     stop: stop,
     _simulatedTransitionEndDelay: 100

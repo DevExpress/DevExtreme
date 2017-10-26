@@ -245,7 +245,7 @@ var dxVectorMap = {
         * @name dxvectormapoptions_layers_customize
         * @publicName customize
         * @type function(elements)
-        * @type_function_param1 elements:Array<any>
+        * @type_function_param1 elements:Array<MapLayerElement>
         * @notUsedInTheme
         */
         customize: function() { },
@@ -540,7 +540,7 @@ var dxVectorMap = {
     /**
     * @name dxvectormapoptions_markers_coordinates
     * @publicName coordinates
-    * @type Array<any>
+    * @type Array<number>
     * @default undefined
     * @deprecated dxvectormapoptions_layers_dataSource
     */
@@ -568,7 +568,7 @@ var dxVectorMap = {
     /**
     * @name dxvectormapoptions_markers_values
     * @publicName values
-    * @type Array<any>
+    * @type Array<number>
     * @default undefined
     * @deprecated dxvectormapoptions_layers_dataSource
     */
@@ -726,7 +726,7 @@ var dxVectorMap = {
         /**
         * @name dxvectormapoptions_markerSettings_sizeGroups
         * @publicName sizeGroups
-        * @type Array<any>
+        * @type Array<number>
         * @default undefined
         * @deprecated dxvectormapoptions_layers_sizeGroups
         */
@@ -923,11 +923,10 @@ var dxVectorMap = {
     /**
     * @name dxvectormapoptions_ontooltipshown
     * @publicName onTooltipShown
+    * @extends Action
     * @type function(e)
     * @type_function_param1 e:object
-    * @type_function_param1_field1 component:object
-    * @type_function_param1_field2 element:object
-    * @type_function_param1_field3 target:object
+    * @type_function_param1_field4 target:MapLayerElement
     * @notUsedInTheme
     * @action
     */
@@ -935,11 +934,10 @@ var dxVectorMap = {
     /**
     * @name dxvectormapoptions_ontooltiphidden
     * @publicName onTooltipHidden
+    * @extends Action
     * @type function(e)
     * @type_function_param1 e:object
-    * @type_function_param1_field1 component:object
-    * @type_function_param1_field2 element:object
-    * @type_function_param1_field3 target:object
+    * @type_function_param1_field4 target:MapLayerElement
     * @notUsedInTheme
     * @action
     */
@@ -1319,13 +1317,12 @@ var dxVectorMap = {
     /**
     * @name dxvectormapoptions_onClick
     * @publicName onClick
+    * @extends Action
     * @type function|string
     * @type_function_param1 e:object
-    * @type_function_param1_field1 component:object
-    * @type_function_param1_field2 element:object
-    * @type_function_param1_field3 jQueryEvent:jQuery.Event
-    * @type_function_param1_field4 event:event
-    * @type_function_param1_field5 target:MapLayerElement
+    * @type_function_param1_field4 jQueryEvent:jQuery.Event
+    * @type_function_param1_field5 event:event
+    * @type_function_param1_field6 target:MapLayerElement
     * @notUsedInTheme
     * @action
     */
@@ -1333,11 +1330,10 @@ var dxVectorMap = {
     /**
     * @name dxvectormapoptions_onCenterChanged
     * @publicName onCenterChanged
+    * @extends Action
     * @type function
     * @type_function_param1 e:object
-    * @type_function_param1_field1 component:object
-    * @type_function_param1_field2 element:object
-    * @type_function_param1_field3 center:Array<number>
+    * @type_function_param1_field4 center:Array<number>
     * @notUsedInTheme
     * @action
     */
@@ -1345,11 +1341,10 @@ var dxVectorMap = {
     /**
     * @name dxvectormapoptions_onZoomFactorChanged
     * @publicName onZoomFactorChanged
+    * @extends Action
     * @type function
     * @type_function_param1 e:object
-    * @type_function_param1_field1 component:object
-    * @type_function_param1_field2 element:object
-    * @type_function_param1_field3 zoomFactor:number
+    * @type_function_param1_field4 zoomFactor:number
     * @notUsedInTheme
     * @action
     */
@@ -1357,11 +1352,10 @@ var dxVectorMap = {
     /**
     * @name dxvectormapoptions_onSelectionChanged
     * @publicName onSelectionChanged
+    * @extends Action
     * @type function
     * @type_function_param1 e:object
-    * @type_function_param1_field1 component:object
-    * @type_function_param1_field2 element:object
-    * @type_function_param1_field3 target:MapLayerElement
+    * @type_function_param1_field4 target:MapLayerElement
     * @notUsedInTheme
     * @action
     */
@@ -1369,13 +1363,12 @@ var dxVectorMap = {
     /**
     * @name dxvectormapoptions_onAreaClick
     * @publicName onAreaClick
+    * @extends Action
     * @type function|string
     * @type_function_param1 e:object
-    * @type_function_param1_field1 component:object
-    * @type_function_param1_field2 element:object
-    * @type_function_param1_field3 jQueryEvent:jQuery.Event
-    * @type_function_param1_field4 event:event
-    * @type_function_param1_field5 target:areaObjects
+    * @type_function_param1_field4 jQueryEvent:jQuery.Event
+    * @type_function_param1_field5 event:event
+    * @type_function_param1_field6 target:areaObjects
     * @notUsedInTheme
     * @deprecated dxvectormapoptions_onClick
     * @action
@@ -1384,11 +1377,10 @@ var dxVectorMap = {
     /**
     * @name dxvectormapoptions_onAreaSelectionChanged
     * @publicName onAreaSelectionChanged
+    * @extends Action
     * @type function
     * @type_function_param1 e:object
-    * @type_function_param1_field1 component:object
-    * @type_function_param1_field2 element:object
-    * @type_function_param1_field3 target:areaObjects
+    * @type_function_param1_field4 target:areaObjects
     * @notUsedInTheme
     * @deprecated dxvectormapoptions_onSelectionChanged
     * @action
@@ -1397,13 +1389,12 @@ var dxVectorMap = {
     /**
     * @name dxvectormapoptions_onMarkerClick
     * @publicName onMarkerClick
+    * @extends Action
     * @type function|string
     * @type_function_param1 e:object
-    * @type_function_param1_field1 component:object
-    * @type_function_param1_field2 element:object
-    * @type_function_param1_field3 jQueryEvent:jQuery.Event
-    * @type_function_param1_field4 event:event
-    * @type_function_param1_field5 target:markerObjects
+    * @type_function_param1_field4 jQueryEvent:jQuery.Event
+    * @type_function_param1_field5 event:event
+    * @type_function_param1_field6 target:markerObjects
     * @notUsedInTheme
     * @deprecated dxvectormapoptions_onClick
     * @action
@@ -1412,11 +1403,10 @@ var dxVectorMap = {
     /**
     * @name dxvectormapoptions_onMarkerSelectionChanged
     * @publicName onMarkerSelectionChanged
+    * @extends Action
     * @type function
     * @type_function_param1 e:object
-    * @type_function_param1_field1 component:object
-    * @type_function_param1_field2 element:object
-    * @type_function_param1_field3 target:markerObjects
+    * @type_function_param1_field4 target:markerObjects
     * @notUsedInTheme
     * @deprecated dxvectormapoptions_onSelectionChanged
     * @action

@@ -44,7 +44,7 @@ var BaseBaseSeries = {
     * @name baseSeriesObjectmethods_getpointbypos
     * @publicName getPointByPos(positionIndex)
     * @param1 positionIndex:number
-    * @return object
+    * @return basePointObject
     */
     getPointByPos: function() { },
     /**

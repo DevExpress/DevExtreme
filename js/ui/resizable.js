@@ -104,6 +104,8 @@ var Resizable = DOMComponent.inherit({
             * @name dxResizableOptions_onResizeStart
             * @publicName onResizeStart
             * @extends Action
+            * @type function(e)
+            * @type_function_param1 e:object
             * @type_function_param1_field4 jQueryEvent:jQuery.Event
             * @type_function_param1_field5 event:event
             * @type_function_param1_field6 width:number

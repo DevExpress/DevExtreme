@@ -62,7 +62,7 @@ var staticMethods = {
     /**
     * @name vizmethods_getMarkup
     * @publicName getMarkup(widgetInstances)
-    * @param1 widgetInstances:Array<Object>
+    * @param1 widgetInstances:Array<DOMComponent>
     * @return string
     * @static
     * @module viz/export

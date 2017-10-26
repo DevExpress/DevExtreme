@@ -645,6 +645,7 @@ module.exports = {
             * @name GridBaseOptions_onAdaptiveDetailRowPreparing
             * @publicName onAdaptiveDetailRowPreparing
             * @extends Action
+            * @type function(e)
             * @type_function_param1 e:object
             * @type_function_param1_field4 formOptions:object
             * @action

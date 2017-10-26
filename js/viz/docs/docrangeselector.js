@@ -982,12 +982,11 @@ var dxRangeSelector = {
     /**
     * @name dxrangeselectoroptions_onselectedrangechanged
     * @publicName onSelectedRangeChanged
+    * @extends Action
     * @type function(e)
     * @type_function_param1 e:object
-    * @type_function_param1_field1 component:object
-    * @type_function_param1_field2 element:object
-    * @type_function_param1_field3 startValue:Date|Number
-    * @type_function_param1_field4 endValue:Date|Number
+    * @type_function_param1_field4 startValue:Date|Number
+    * @type_function_param1_field5 endValue:Date|Number
     * @default null
     * @deprecated dxrangeselectoroptions_onvaluechanged
     * @notUsedInTheme
@@ -997,12 +996,11 @@ var dxRangeSelector = {
     /**
     * @name dxrangeselectoroptions_onvaluechanged
     * @publicName onValueChanged
+    * @extends Action
     * @type function(e)
     * @type_function_param1 e:object
-    * @type_function_param1_field1 component:object
-    * @type_function_param1_field2 element:object
-    * @type_function_param1_field3 value:Array<number,string,Date>
-    * @type_function_param1_field4 previousValue:Array<number,string,Date>
+    * @type_function_param1_field4 value:Array<number,string,Date>
+    * @type_function_param1_field5 previousValue:Array<number,string,Date>
     * @default null
     * @notUsedInTheme
     * @action
