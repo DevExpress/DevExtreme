@@ -1,6 +1,7 @@
 "use strict";
 
-var mathUtils = require("core/utils/math");
+var mathUtils = require("core/utils/math"),
+    adjust = mathUtils.adjust;
 
 QUnit.test("fitIntoRange", function(assert) {
     var value = 10,
@@ -56,4 +57,8 @@ QUnit.test("fitIntoRange, when max = 0", function(assert) {
     assert.equal(mathUtils.fitIntoRange(value, min, max), 0, "Returned value is right");
 });
 
-
+QUnit.test("adjust", function(assert) {
+    assert.strictEqual(adjust(1.1 + 0.1, 0.1), 1.2, "adjusting numbers with floating point");
+    assert.strictEqual(adjust(1.1 + 1e-4, 1e-4), 1.1001, "adjusting numbers in exponential notation");
+    assert.strictEqual(adjust(1.1e-8 + 1.23456789e-8, 1.23456789e-8), 2.33456789e-8, "adjusting numbers with precision above 7");
+});

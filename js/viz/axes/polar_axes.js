@@ -41,11 +41,17 @@ function getPolarQuarter(angle) {
 polarAxes = exports;
 
 circularAxes = polarAxes.circular = {
-    _updateTranslator: function() {
-        this._translator.update({}, {}, {
+    _applyMargins: function(range) {
+        return range;
+    },
+
+    _getTranslatorOptions: function() {
+        return {
             isHorizontal: true,
-            conversionValue: true
-        });
+            conversionValue: true,
+            addSpiderCategory: this._getSpiderCategoryOption(),
+            stick: this._getStick()
+        };
     },
 
     getCenter: function() {
@@ -65,7 +71,6 @@ circularAxes = polarAxes.circular = {
         var rad = Math.min((canvas.width - canvas.left - canvas.right), (canvas.height - canvas.top - canvas.bottom)) / 2;
         this._radius = rad < 0 ? 0 : rad;
     },
-
 
     _updateCenter: function(canvas) {
         this._center = {
@@ -359,14 +364,14 @@ exports.circularSpider = _extend({}, circularAxes, {
     },
 
     getSpiderTicks: function() {
-        var that = this;
-
-        that._spiderTicks = that._tickManager.getFullTicks().map(tick(
+        var that = this,
+            ticks = that.getFullTicks();
+        that._spiderTicks = ticks.map(tick(
             that,
             that.renderer,
             {},
             {},
-            that._getSkippedCategory(),
+            that._getSkippedCategory(ticks),
             true
         ));
 
@@ -427,10 +432,11 @@ polarAxes.linear = {
     _getStick: xyAxesLinear._getStick,
     _getSpiderCategoryOption: _noop,
 
-    _updateTranslator: function() {
-        this._translator.update({}, {}, {
-            isHorizontal: true
-        });
+    _getTranslatorOptions: function() {
+        return {
+            isHorizontal: true,
+            stick: this._getStick()
+        };
     },
 
     _updateRadius: circularAxes._updateRadius,

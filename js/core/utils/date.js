@@ -1,6 +1,7 @@
 "use strict";
 
 var typeUtils = require("./type"),
+    adjust = require("./math").adjust,
     each = require("./iterator").each,
     camelize = require("./inflector").camelize,
 
@@ -263,7 +264,7 @@ function addDateInterval(value, interval, dir) {
 
 var addInterval = function(value, interval, isNegative) {
     var dir = isNegative ? -1 : +1;
-    return isDate(value) ? addDateInterval(value, interval, dir) : value + interval * dir;
+    return isDate(value) ? addDateInterval(value, interval, dir) : adjust(value + interval * dir, interval);
 };
 
 var getSequenceByInterval = function(min, max, interval) {

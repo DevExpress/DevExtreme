@@ -63,8 +63,6 @@ exports.pie = _extend({}, barSeries, {
         });
     },
 
-    _processRange: _noop,
-
     _applyElementsClipRect: _noop,
 
     getColor: _noop,

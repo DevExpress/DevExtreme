@@ -5,8 +5,8 @@ var registerComponent = require("../../core/component_registrator"),
     extend = require("../../core/utils/extend").extend,
     each = require("../../core/utils/iterator").each,
     vizUtils = require("../core/utils"),
-    adjustValue = vizUtils.adjustValue,
     dateUtils = require("../../core/utils/date"),
+    adjust = require("../../core/utils/math").adjust,
     addInterval = dateUtils.addInterval,
     dateToMilliseconds = dateUtils.dateToMilliseconds,
     getSequenceByInterval = dateUtils.getSequenceByInterval,
@@ -22,7 +22,7 @@ var registerComponent = require("../../core/component_registrator"),
     rangeViewModule = require("./range_view"),
     seriesDataSourceModule = require("./series_data_source"),
     themeManagerModule = require("./theme_manager"),
-    tickManagerModule = require("../axes/base_tick_manager"),
+    tickGeneratorModule = require("../axes/tick_generator"),
     log = require("../../core/errors").log,
 
     _isDefined = typeUtils.isDefined,
@@ -48,6 +48,8 @@ var registerComponent = require("../../core/component_registrator"),
     LOGARITHMIC = "logarithmic",
     INVISIBLE_POS = -1000,
     SEMIDISCRETE_GRID_SPACING_FACTOR = 50,
+    DEFAULT_AXIS_DIVISION_FACTOR = 30,
+    DEFAULT_MINOR_AXIS_DIVISION_FACTOR = 15,
     logarithmBase = 10;
 
 function calculateMarkerHeight(renderer, value, sliderMarkerOptions) {
@@ -56,8 +58,8 @@ function calculateMarkerHeight(renderer, value, sliderMarkerOptions) {
     return _ceil(textBBox.height) + 2 * sliderMarkerOptions.paddingTopBottom + commonModule.consts.pointerSize;
 }
 
-function calculateScaleLabelHalfWidth(renderer, value, scaleOptions) {
-    var formattedText = commonModule.formatValue(value, scaleOptions.label),
+function calculateScaleLabelHalfWidth(renderer, value, scaleOptions, tickIntervalsInfo) {
+    var formattedText = commonModule.formatValue(value, scaleOptions.label, tickIntervalsInfo, scaleOptions.valueType, scaleOptions.type),
         textBBox = getTextBBox(renderer, formattedText, scaleOptions.label.font);
 
     return _ceil(textBBox.width / 2);
@@ -103,7 +105,7 @@ function parseSliderMarkersPlaceholderSize(placeholderSize) {
     };
 }
 
-function calculateIndents(renderer, scale, sliderMarkerOptions, indentOptions) {
+function calculateIndents(renderer, scale, sliderMarkerOptions, indentOptions, tickIntervalsInfo) {
     var leftMarkerHeight,
         leftScaleLabelWidth = 0,
         rightScaleLabelWidth = 0,
@@ -138,8 +140,8 @@ function calculateIndents(renderer, scale, sliderMarkerOptions, indentOptions) {
     }
 
     if(scale.label.visible) {
-        leftScaleLabelWidth = calculateScaleLabelHalfWidth(renderer, scale.startValue, scale);
-        rightScaleLabelWidth = calculateScaleLabelHalfWidth(renderer, scale.endValue, scale);
+        leftScaleLabelWidth = calculateScaleLabelHalfWidth(renderer, scale.startValue, scale, tickIntervalsInfo);
+        rightScaleLabelWidth = calculateScaleLabelHalfWidth(renderer, scale.endValue, scale, tickIntervalsInfo);
     }
     placeholderWidthLeft = placeholderWidthLeft !== undefined ? placeholderWidthLeft : leftScaleLabelWidth;
     placeholderWidthRight = (placeholderWidthRight !== undefined ? placeholderWidthRight : rightScaleLabelWidth) || 1;  //T240698
@@ -270,39 +272,51 @@ function updateTickIntervals(scaleOptions, screenDelta, incidentOccurred, range)
         min = _isDefined(range.minVisible) ? range.minVisible : range.min,
         max = _isDefined(range.maxVisible) ? range.maxVisible : range.max,
         categoriesInfo = scaleOptions._categoriesInfo,
-        tickManager,
-        ticks;
+        ticksInfo,
+        length,
+        bounds = {};
 
     if(scaleOptions.type === SEMIDISCRETE) {
         result = calculateTickIntervalsForSemidiscreteScale(scaleOptions, min, max, screenDelta);
     } else {
-        tickManager = new tickManagerModule.TickManager({
+        ticksInfo = tickGeneratorModule.tickGenerator({
             axisType: scaleOptions.type,
-            dataType: scaleOptions.valueType
-        }, {
-            min: min,
-            max: max,
-            screenDelta: screenDelta,
-            customTicks: categoriesInfo && categoriesInfo.categories
-        }, {
-            labelOptions: {
+            dataType: scaleOptions.valueType,
+            logBase: scaleOptions.logarithmBase,
+
+            axisDivisionFactor: scaleOptions.axisDivisionFactor,
+            minorAxisDivisionFactor: scaleOptions.minorAxisDivisionFactor,
+            calculateMinors: true,
+
+            allowDecimals: scaleOptions.allowDecimals,
+            endOnTick: scaleOptions.endOnTick,
+
+            incidentOccurred: incidentOccurred
+        })(
+            {
+                min: min,
+                max: max,
+                categories: _isDefined(categoriesInfo) ? categoriesInfo.categories : []
             },
-            boundCoef: 1,
-            minorTickInterval: scaleOptions.minorTickInterval,
-            tickInterval: scaleOptions.tickInterval,
-            incidentOccurred: incidentOccurred,
-            base: scaleOptions.logarithmBase,
-            showMinorTicks: true,
-            withMinorCorrection: true,
-            stick: range.stick !== false
-        });
-        ticks = tickManager.getTicks(true); //Important to call this method before those below
+            screenDelta,
+            scaleOptions.tickInterval,
+            scaleOptions.forceUserTickInterval,
+            undefined,
+            scaleOptions.minorTickInterval,
+            scaleOptions.minorTickCount
+        );
+
+        length = ticksInfo.ticks.length;
+        if(length > 1) {
+            bounds.minVisible = ticksInfo.ticks[0].value < min ? ticksInfo.ticks[0].value : min;
+            bounds.maxVisible = ticksInfo.ticks[length - 1].value > max ? ticksInfo.ticks[length - 1].value : max;
+        }
 
         result = {
-            tickInterval: tickManager.getTickInterval(),
-            minorTickInterval: tickManager.getMinorTickInterval(),
-            bounds: tickManager.getTickBounds(),
-            ticks: ticks
+            tickInterval: ticksInfo.tickInterval,
+            minorTickInterval: scaleOptions.minorTickInterval === 0 ? 0 : ticksInfo.minorTickInterval,
+            bounds: bounds,
+            ticks: ticksInfo.ticks
         };
     }
 
@@ -334,7 +348,7 @@ function calculateTranslatorRange(seriesDataSource, scaleOptions) {
 
         categories = seriesDataSource ? seriesDataSource.argCategories : (scaleOptions.categories || (!seriesDataSource) && startValue && endValue && [startValue, endValue]);
         categories = categories || [];
-        scaleOptions._categoriesInfo = categoriesInfo = vizUtils.getCategoriesInfo(categories, startValue || categories[0], endValue || categories[categories.length - 1]);
+        scaleOptions._categoriesInfo = categoriesInfo = vizUtils.getCategoriesInfo(categories, startValue, endValue);
     }
 
     if(scaleOptions.type === SEMIDISCRETE) {
@@ -496,6 +510,7 @@ function prepareScaleOptions(scaleOption, seriesDataSource, incidentOccurred) {
     }
 
     scaleOption.valueType = valueType;
+    scaleOption.dataType = valueType;
     parser = parseUtils.getParser(valueType);
 
     validateStartEndValues(START_VALUE, parser);
@@ -518,6 +533,9 @@ function prepareScaleOptions(scaleOption, seriesDataSource, incidentOccurred) {
         scaleOption.marker.visible = false;
         scaleOption.maxRange = undefined;
     }
+
+    scaleOption.axisDivisionFactor = scaleOption.axisDivisionFactor !== undefined ? scaleOption.axisDivisionFactor : DEFAULT_AXIS_DIVISION_FACTOR;
+    scaleOption.minorAxisDivisionFactor = scaleOption.minorAxisDivisionFactor !== undefined ? scaleOption.minorAxisDivisionFactor : DEFAULT_MINOR_AXIS_DIVISION_FACTOR;
     return scaleOption;
 }
 
@@ -525,7 +543,7 @@ function correctValueByInterval(value, isDate, interval) {
     if(_isDefined(value)) {
         value = isDate
             ? dateUtils.correctDateWithUnitBeginning(new Date(value), interval)
-            : adjustValue(_floor(value / interval) * interval);
+            : adjust(_floor(adjust(value / interval)) * interval);
     }
     return value;
 }
@@ -552,9 +570,17 @@ function getIntervalCustomTicks(options) {
         max = correctValueByInterval(max, isDate, tickInterval);
 
         res.intervals = getSequenceByInterval(min, max, tickInterval);
+        res.intervals[0] = res.altIntervals[0];
     }
 
     return res;
+}
+
+function getPrecisionForSlider(startValue, endValue, screenDelta) {
+    var d = Math.abs(endValue - startValue) / screenDelta,
+        tail = d - Math.floor(d);
+
+    return tail > 0 ? Math.ceil(Math.abs(adjust(vizUtils.getLog(tail, 10)))) : 0;
 }
 
 var dxRangeSelector = require("../core/base_widget").inherit({
@@ -630,7 +656,8 @@ var dxRangeSelector = require("../core/base_widget").inherit({
         that._axis = new AxisWrapper({
             renderer: renderer,
             root: scaleGroup,
-            updateSelectedRange: function(range) { that.setValue(parseSelectedRange(range)); }
+            updateSelectedRange: function(range) { that.setValue(parseSelectedRange(range)); },
+            incidentOccurred: that._incidentOccurred
         });
 
         that._rangeView = new rangeViewModule.RangeView({
@@ -854,7 +881,7 @@ var dxRangeSelector = require("../core/base_widget").inherit({
         updateScaleOptions(scaleOptions, seriesDataSource, argTranslatorRange, tickIntervalsInfo, getDateMarkerVisibilityChecker(canvas.width));
         updateTranslatorRangeInterval(argTranslatorRange, scaleOptions);
         sliderMarkerOptions = that._prepareSliderMarkersOptions(scaleOptions, canvas.width, tickIntervalsInfo);
-        indents = calculateIndents(that._renderer, scaleOptions, sliderMarkerOptions, that.option("indent"));
+        indents = calculateIndents(that._renderer, scaleOptions, sliderMarkerOptions, that.option("indent"), tickIntervalsInfo);
         scaleLabelsAreaHeight = calculateScaleAreaHeight(that._renderer, scaleOptions, showScaleMarkers(scaleOptions));
         rangeContainerCanvas = {
             left: canvas.left + indents.left,
@@ -866,8 +893,7 @@ var dxRangeSelector = require("../core/base_widget").inherit({
         };
 
          // TODO: There should be one call to some axis method (not 4 methods)
-
-        that._axis.update(scaleOptions, isCompactMode, rangeContainerCanvas, argTranslatorRange);
+        that._axis.update(scaleOptions, isCompactMode, rangeContainerCanvas, argTranslatorRange, seriesDataSource);
 
         scaleOptions.minorTickInterval = scaleOptions.isEmpty ? 0 : scaleOptions.minorTickInterval;
 
@@ -947,7 +973,6 @@ var dxRangeSelector = require("../core/base_widget").inherit({
             endValue = scaleOptions.endValue,
             startValue = scaleOptions.startValue,
             sliderMarkerOptions = that._getOption(SLIDER_MARKER),
-            businessInterval,
             sliderMarkerUserOption = that.option(SLIDER_MARKER) || {},
             isTypeDiscrete = scaleOptions.type === DISCRETE,
             isValueTypeDatetime = scaleOptions.valueType === DATETIME;
@@ -956,9 +981,9 @@ var dxRangeSelector = require("../core/base_widget").inherit({
 
         if(!sliderMarkerOptions.format) {
             if(!that._getOption("behavior").snapToTicks && _isNumber(scaleOptions.startValue)) {
-                businessInterval = Math.abs(endValue - startValue);
                 sliderMarkerOptions.format = {
-                    type: "fixedPoint", precision: vizUtils.getSignificantDigitPosition(businessInterval / screenDelta)
+                    type: "fixedPoint",
+                    precision: getPrecisionForSlider(startValue, endValue, screenDelta)
                 };
             }
             if(isValueTypeDatetime && !isTypeDiscrete) {
@@ -1041,7 +1066,8 @@ function prepareAxisOptions(scaleOptions, isCompactMode, height, axisPosition) {
 
     scaleOptions.argumentType = scaleOptions.valueType;
     scaleOptions.visible = isCompactMode;
-    scaleOptions.minorTick.showCalculatedTicks = scaleOptions.isHorizontal = scaleOptions.stick = true;
+    scaleOptions.minorTick.showCalculatedTicks = scaleOptions.isHorizontal = true;
+    scaleOptions.calculateMinors = true;
 
     scaleOptions.semiDiscreteInterval = scaleOptions.minRange;
 
@@ -1071,11 +1097,13 @@ function AxisWrapper(params) {
     this._axis = new axisModule.Axis({
         renderer: params.renderer,
         axesContainerGroup: params.root,
+        incidentOccurred: params.incidentOccurred,
         // TODO: These dependencies should be statically resolved (not for every new instance)
         axisType: "xyAxes",
         drawingType: "linear",
         widgetClass: "dxrs",
-        axisClass: "range-selector"
+        axisClass: "range-selector",
+        isArgumentAxis: true
     });
     this._updateSelectedRangeCallback = params.updateSelectedRange;
 }
@@ -1087,10 +1115,17 @@ AxisWrapper.prototype = {
         this._axis.dispose();
     },
 
-    update: function(options, isCompactMode, canvas, businessRange) {
+    calculateInterval: function(value, prevValue) {
+        return this._axis.calculateInterval(value, prevValue);
+    },
+
+    update: function(options, isCompactMode, canvas, businessRange, seriesDataSource) {
         var axis = this._axis;
         axis.updateOptions(prepareAxisOptions(options, isCompactMode, canvas.height, canvas.height / 2 - Math.ceil(options.width / 2)));
         axis.setBusinessRange(businessRange);
+        if(seriesDataSource !== undefined && seriesDataSource.isShowChart()) {
+            axis.setMarginOptions(seriesDataSource.getMarginOptions(canvas));
+        }
 
         axis.draw(canvas);
         axis.shift({ left: 0, bottom: -canvas.height / 2 + canvas.top });

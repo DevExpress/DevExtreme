@@ -23,9 +23,8 @@ var createSeries = function(options, renderSettings, widgetType) {
     renderSettings = renderSettings || {};
     renderSettings.renderer = renderSettings.renderer || new vizMocks.Renderer();
     renderSettings.argumentAxis = renderSettings.argumentAxis || {
-        getViewport: function() {
-
-        }
+        getViewport: function() {},
+        calculateInterval: function(a, b) { return Math.abs(a - b); }
     };
     options = $.extend(true, {
         visible: true,
@@ -33,7 +32,6 @@ var createSeries = function(options, renderSettings, widgetType) {
         type: "mockType", argumentField: "arg", valueField: "val",
         hoverStyle: { border: { visible: false } }, selectionStyle: { border: { visible: false } },
         point: { selectionStyle: {}, hoverStyle: {} },
-        label: { visible: false, font: {}, connector: {}, border: {} },
         widgetType: widgetType || "chart",
         valueErrorBar: { displayMode: 'auto' }
     }, options);
@@ -42,7 +40,6 @@ var createSeries = function(options, renderSettings, widgetType) {
     series.updateDataType(series.getOptions());
     return series;
 };
-
 
 QUnit.module("Process range data on updating");
 
@@ -826,52 +823,6 @@ QUnit.test("Get range data for one point", function(assert) {
     assert.strictEqual(rangeData.val.dataType, "valueType");
 });
 
-QUnit.test("Labels are visible", function(assert) {
-    var data = [{ arg: 2, val: 11 }, { arg: 5, val: 22 }, { arg: 13, val: 3 }, { arg: 20, val: 15 }],
-        rangeData,
-        series = createSeries($.extend(true, {}, this.defaultOptions, { argumentAxisType: "continuous", label: { visible: true } }));
-
-    series.updateData(data);
-    rangeData = series.getRangeData();
-
-    assert.ok(rangeData, "Range data should be created");
-    assert.strictEqual(rangeData.arg.min, 2, "Min arg should be correct");
-    assert.strictEqual(rangeData.arg.max, 20, "Max arg should be correct");
-    assert.strictEqual(rangeData.arg.interval, 3, "Min interval arg should be correct");
-    assert.strictEqual(rangeData.arg.categories, undefined, "Categories x should be undefined");
-
-    assert.strictEqual(rangeData.val.min, 3, "Min val should be correct");
-    assert.strictEqual(rangeData.val.max, 22, "Max val should be correct");
-    assert.strictEqual(rangeData.val.interval, undefined, "Min val interval should be undefined");
-    assert.strictEqual(rangeData.val.categories, undefined, "Categories y should be undefined");
-
-    assert.equal(rangeData.val.minSpaceCorrection, undefined, "Min space correction is correct");
-    assert.equal(rangeData.val.maxSpaceCorrection, true, "Max space correction is correct");
-});
-
-QUnit.test("Labels are visible and inside", function(assert) {
-    var data = [{ arg: 2, val: 11 }, { arg: 5, val: 22 }, { arg: 13, val: 3 }, { arg: 20, val: 15 }],
-        rangeData,
-        series = createSeries($.extend(true, {}, this.defaultOptions, { argumentAxisType: "continuous", label: { visible: true, position: "inside" } }));
-
-    series.updateData(data);
-    rangeData = series.getRangeData();
-
-    assert.ok(rangeData, "Range data should be created");
-    assert.strictEqual(rangeData.arg.min, 2, "Min arg should be correct");
-    assert.strictEqual(rangeData.arg.max, 20, "Max arg should be correct");
-    assert.strictEqual(rangeData.arg.interval, 3, "Min interval arg should be correct");
-    assert.strictEqual(rangeData.arg.categories, undefined, "Categories x should be undefined");
-
-    assert.strictEqual(rangeData.val.min, 3, "Min val should be correct");
-    assert.strictEqual(rangeData.val.max, 22, "Max val should be correct");
-    assert.strictEqual(rangeData.val.interval, undefined, "Min val interval should be undefined");
-    assert.strictEqual(rangeData.val.categories, undefined, "Categories y should be undefined");
-
-    assert.equal(rangeData.val.minSpaceCorrection, undefined, "Min space correction is correct");
-    assert.equal(rangeData.val.maxSpaceCorrection, undefined, "Max space correction is correct");
-});
-
 QUnit.test("Numeric", function(assert) {
     var data = [{ arg: 2, val: 11 }, { arg: 5, val: 22 }, { arg: 13, val: 3 }, { arg: 20, val: 15 }],
         rangeData,
@@ -890,9 +841,6 @@ QUnit.test("Numeric", function(assert) {
     assert.strictEqual(rangeData.val.max, 22, "Max val should be correct");
     assert.strictEqual(rangeData.val.interval, undefined, "Min val interval should be undefined");
     assert.strictEqual(rangeData.val.categories, undefined, "Categories y should be undefined");
-
-    assert.equal(rangeData.val.minSpaceCorrection, undefined, "Min space correction is correct");
-    assert.equal(rangeData.val.maxSpaceCorrection, undefined, "Max space correction is correct");
 });
 
 QUnit.test("Datetime.", function(assert) {
@@ -921,9 +869,6 @@ QUnit.test("Datetime.", function(assert) {
     assert.deepEqual(rangeData.val.max, date8, "Max val should be correct");
     assert.strictEqual(rangeData.val.interval, undefined, "Min val interval should be undefined");
     assert.strictEqual(rangeData.val.categories, undefined, "Categories y should be undefined");
-
-    assert.equal(rangeData.val.minSpaceCorrection, undefined, "Min space correction is correct");
-    assert.equal(rangeData.val.maxSpaceCorrection, undefined, "Max space correction is correct");
 });
 
 QUnit.test("Numeric. Categories", function(assert) {
@@ -945,9 +890,6 @@ QUnit.test("Numeric. Categories", function(assert) {
     assert.strictEqual(rangeData.val.max, undefined, "Max val should be undefined");
     assert.strictEqual(rangeData.val.interval, undefined, "Min val interval should be undefined");
     assert.deepEqual(rangeData.val.categories, [2, 3, 4, 1], "Categories y should be undefined");
-
-    assert.equal(rangeData.val.minSpaceCorrection, undefined, "Min space correction is correct");
-    assert.equal(rangeData.val.maxSpaceCorrection, undefined, "Max space correction is correct");
 });
 
 QUnit.test("Datetime. Categories", function(assert) {
@@ -977,9 +919,6 @@ QUnit.test("Datetime. Categories", function(assert) {
     assert.strictEqual(rangeData.val.max, undefined, "Max val should be undefined");
     assert.strictEqual(rangeData.val.interval, undefined, "Min val interval should be undefined");
     assert.deepEqual(rangeData.val.categories, [date8, date7, date6, date5], "Categories y should be correct");
-
-    assert.equal(rangeData.val.minSpaceCorrection, undefined, "Min space correction is correct");
-    assert.equal(rangeData.val.maxSpaceCorrection, undefined, "Max space correction is correct");
 });
 
 QUnit.test("String.", function(assert) {
@@ -1000,9 +939,6 @@ QUnit.test("String.", function(assert) {
     assert.strictEqual(rangeData.val.max, undefined, "Max val should be undefined");
     assert.strictEqual(rangeData.val.interval, undefined, "Min val interval should be undefined");
     assert.deepEqual(rangeData.val.categories, ["6", "3", "7", "1"], "Categories y should be correct");
-
-    assert.equal(rangeData.val.minSpaceCorrection, undefined, "Min space correction is correct");
-    assert.equal(rangeData.val.maxSpaceCorrection, undefined, "Max space correction is correct");
 });
 
 QUnit.module("Get range data. Simple. For each types", {
@@ -1034,9 +970,6 @@ QUnit.test("Line", function(assert) {
     assert.strictEqual(rangeData.val.max, 22, "Max val should be correct");
     assert.strictEqual(rangeData.val.interval, undefined, "Min val interval should be undefined");
     assert.strictEqual(rangeData.val.categories, undefined, "Categories y should be undefined");
-
-    assert.equal(rangeData.val.minSpaceCorrection, undefined, "Min space correction is correct");
-    assert.equal(rangeData.val.maxSpaceCorrection, undefined, "Max space correction is correct");
 });
 
 QUnit.test("Scatter", function(assert) {
@@ -1057,9 +990,6 @@ QUnit.test("Scatter", function(assert) {
     assert.strictEqual(rangeData.val.max, 22, "Max val should be correct");
     assert.strictEqual(rangeData.val.interval, undefined, "Min val interval should be undefined");
     assert.strictEqual(rangeData.val.categories, undefined, "Categories y should be undefined");
-
-    assert.equal(rangeData.val.minSpaceCorrection, undefined, "Min space correction is correct");
-    assert.equal(rangeData.val.maxSpaceCorrection, undefined, "Max space correction is correct");
 });
 
 QUnit.test("Spline", function(assert) {
@@ -1080,9 +1010,6 @@ QUnit.test("Spline", function(assert) {
     assert.strictEqual(rangeData.val.max, 22, "Max val should be correct");
     assert.strictEqual(rangeData.val.interval, undefined, "Min val interval should be undefined");
     assert.strictEqual(rangeData.val.categories, undefined, "Categories y should be undefined");
-
-    assert.equal(rangeData.val.minSpaceCorrection, undefined, "Min space correction is correct");
-    assert.equal(rangeData.val.maxSpaceCorrection, undefined, "Max space correction is correct");
 });
 
 QUnit.test("Stepline", function(assert) {
@@ -1103,9 +1030,6 @@ QUnit.test("Stepline", function(assert) {
     assert.strictEqual(rangeData.val.max, 22, "Max val should be correct");
     assert.strictEqual(rangeData.val.interval, undefined, "Min val interval should be undefined");
     assert.strictEqual(rangeData.val.categories, undefined, "Categories y should be undefined");
-
-    assert.equal(rangeData.val.minSpaceCorrection, undefined, "Min space correction is correct");
-    assert.equal(rangeData.val.maxSpaceCorrection, undefined, "Max space correction is correct");
 });
 
 QUnit.test("Stackedline", function(assert) {
@@ -1127,9 +1051,6 @@ QUnit.test("Stackedline", function(assert) {
     assert.strictEqual(rangeData.val.max, 22, "Max val should be correct");
     assert.strictEqual(rangeData.val.interval, undefined, "Min val interval should be undefined");
     assert.strictEqual(rangeData.val.categories, undefined, "Categories y should be undefined");
-
-    assert.equal(rangeData.val.minSpaceCorrection, undefined, "Min space correction is correct");
-    assert.equal(rangeData.val.maxSpaceCorrection, undefined, "Max space correction is correct");
 });
 
 QUnit.test("Stackedspline", function(assert) {
@@ -1150,9 +1071,6 @@ QUnit.test("Stackedspline", function(assert) {
     assert.strictEqual(rangeData.val.max, 22, "Max val should be correct");
     assert.strictEqual(rangeData.val.interval, undefined, "Min val interval should be undefined");
     assert.strictEqual(rangeData.val.categories, undefined, "Categories y should be undefined");
-
-    assert.equal(rangeData.val.minSpaceCorrection, undefined, "Min space correction is correct");
-    assert.equal(rangeData.val.maxSpaceCorrection, undefined, "Max space correction is correct");
 });
 
 QUnit.test("Stackedline, update data", function(assert) {
@@ -1177,9 +1095,6 @@ QUnit.test("Stackedline, update data", function(assert) {
     assert.strictEqual(rangeData.val.max, 3, "Max val should be correct");
     assert.strictEqual(rangeData.val.interval, undefined, "Min val interval should be undefined");
     assert.strictEqual(rangeData.val.categories, undefined, "Categories y should be undefined");
-
-    assert.equal(rangeData.val.minSpaceCorrection, undefined, "Min space correction is correct");
-    assert.equal(rangeData.val.maxSpaceCorrection, undefined, "Max space correction is correct");
 });
 
 QUnit.test("Bubble", function(assert) {
@@ -1200,9 +1115,6 @@ QUnit.test("Bubble", function(assert) {
     assert.strictEqual(rangeData.val.max, 22, "Max val should be correct");
     assert.strictEqual(rangeData.val.interval, undefined, "Min val interval should be undefined");
     assert.strictEqual(rangeData.val.categories, undefined, "Categories y should be undefined");
-
-    assert.equal(rangeData.val.minSpaceCorrection, undefined, "Min space correction is correct");
-    assert.equal(rangeData.val.maxSpaceCorrection, undefined, "Max space correction is correct");
 });
 
 QUnit.module("Get range data. Bar/area", {
@@ -1231,29 +1143,6 @@ QUnit.test("Positive points", function(assert) {
     assert.strictEqual(rangeData.arg.max, undefined, "Max x should be undefined");
     assert.equal(rangeData.val.min, 0, "Min y should be correct");
     assert.equal(rangeData.val.max, 10, "Max y should be correct");
-
-    assert.equal(rangeData.val.percentStick, undefined, "Percent stick is correct");
-    assert.equal(rangeData.val.minSpaceCorrection, undefined, "Min space correction is correct");
-    assert.equal(rangeData.val.maxSpaceCorrection, undefined, "Max space correction is correct");
-});
-
-QUnit.test("Positive points. With labels", function(assert) {
-    var data = [{ arg: "1", val: 4 }, { arg: "2", val: 10 }, { arg: "3", val: 7 }, { arg: "4", val: 3 }],
-        series = createSeries($.extend(true, {}, this.defaultOptions, { label: { visible: true } })),
-        rangeData;
-
-    series.updateData(data);
-    rangeData = series.getRangeData();
-
-    assert.ok(rangeData, "Range data should be created");
-    assert.strictEqual(rangeData.arg.min, undefined, "Min x should be undefined");
-    assert.strictEqual(rangeData.arg.max, undefined, "Max x should be undefined");
-    assert.equal(rangeData.val.min, 0, "Min y should be correct");
-    assert.equal(rangeData.val.max, 10, "Max y should be correct");
-
-    assert.equal(rangeData.val.percentStick, undefined, "Percent stick is correct");
-    assert.equal(rangeData.val.minSpaceCorrection, undefined, "Min space correction is correct");
-    assert.equal(rangeData.val.maxSpaceCorrection, true, "Max space correction is correct");
 });
 
 QUnit.test("Negative points", function(assert) {
@@ -1269,29 +1158,6 @@ QUnit.test("Negative points", function(assert) {
     assert.strictEqual(rangeData.arg.max, undefined, "Max x should be undefined");
     assert.equal(rangeData.val.min, -10, "Min y should be correct");
     assert.equal(rangeData.val.max, 0, "Max y should be correct");
-
-    assert.equal(rangeData.val.percentStick, undefined, "Percent stick is correct");
-    assert.equal(rangeData.val.minSpaceCorrection, undefined, "Min space correction is correct");
-    assert.equal(rangeData.val.maxSpaceCorrection, undefined, "Max space correction is correct");
-});
-
-QUnit.test("Negative points. With labels", function(assert) {
-    var data = [{ arg: "1", val: -4 }, { arg: "2", val: -10 }, { arg: "3", val: -7 }, { arg: "4", val: -3 }],
-        series = createSeries($.extend(true, {}, this.defaultOptions, { label: { visible: true } })),
-        rangeData;
-
-    series.updateData(data);
-    rangeData = series.getRangeData();
-
-    assert.ok(rangeData, "Range data should be created");
-    assert.strictEqual(rangeData.arg.min, undefined, "Min x should be undefined");
-    assert.strictEqual(rangeData.arg.max, undefined, "Max x should be undefined");
-    assert.equal(rangeData.val.min, -10, "Min y should be correct");
-    assert.equal(rangeData.val.max, 0, "Max y should be correct");
-
-    assert.equal(rangeData.val.percentStick, undefined, "Percent stick is correct");
-    assert.equal(rangeData.val.minSpaceCorrection, true, "Min space correction is correct");
-    assert.equal(rangeData.val.maxSpaceCorrection, undefined, "Max space correction is correct");
 });
 
 QUnit.test("Positive and negative points", function(assert) {
@@ -1307,29 +1173,6 @@ QUnit.test("Positive and negative points", function(assert) {
     assert.strictEqual(rangeData.arg.max, undefined, "Max x should be undefined");
     assert.equal(rangeData.val.min, -7, "Min y should be correct");
     assert.equal(rangeData.val.max, 10, "Max y should be correct");
-
-    assert.equal(rangeData.val.percentStick, undefined, "Percent stick is correct");
-    assert.equal(rangeData.val.minSpaceCorrection, undefined, "Min space correction is correct");
-    assert.equal(rangeData.val.maxSpaceCorrection, undefined, "Max space correction is correct");
-});
-
-QUnit.test("Positive and negative points. With labels", function(assert) {
-    var data = [{ arg: "1", val: -4 }, { arg: "2", val: 10 }, { arg: "3", val: -7 }, { arg: "4", val: 3 }],
-        series = createSeries($.extend(true, {}, this.defaultOptions, { label: { visible: true } })),
-        rangeData;
-
-    series.updateData(data);
-    rangeData = series.getRangeData();
-
-    assert.ok(rangeData, "Range data should be created");
-    assert.strictEqual(rangeData.arg.min, undefined, "Min x should be undefined");
-    assert.strictEqual(rangeData.arg.max, undefined, "Max x should be undefined");
-    assert.equal(rangeData.val.min, -7, "Min y should be correct");
-    assert.equal(rangeData.val.max, 10, "Max y should be correct");
-
-    assert.equal(rangeData.val.percentStick, undefined, "Percent stick is correct");
-    assert.equal(rangeData.val.minSpaceCorrection, true, "Min space correction is correct");
-    assert.equal(rangeData.val.maxSpaceCorrection, true, "Max space correction is correct");
 });
 
 QUnit.test("Numeric", function(assert) {
@@ -1345,10 +1188,6 @@ QUnit.test("Numeric", function(assert) {
     assert.strictEqual(rangeData.arg.max, 4, "Max x should be correct");
     assert.equal(rangeData.val.min, 0, "Min y should be correct");
     assert.equal(rangeData.val.max, 10, "Max y should be correct");
-
-    assert.equal(rangeData.val.percentStick, undefined, "Percent stick is correct");
-    assert.equal(rangeData.val.minSpaceCorrection, undefined, "Min space correction is correct");
-    assert.equal(rangeData.val.maxSpaceCorrection, undefined, "Max space correction is correct");
 });
 
 QUnit.test("Datetime", function(assert) {
@@ -1377,10 +1216,6 @@ QUnit.test("Datetime", function(assert) {
     assert.deepEqual(rangeData.val.max, date8, "Max y should be correct");
     assert.strictEqual(rangeData.val.interval, undefined, "Interval y should be undefined");
     assert.equal(rangeData.val.categories, undefined, "Categories y should be undefined");
-
-    assert.equal(rangeData.val.percentStick, undefined, "Percent stick is correct");
-    assert.equal(rangeData.val.minSpaceCorrection, undefined, "Min space correction is correct");
-    assert.equal(rangeData.val.maxSpaceCorrection, undefined, "Max space correction is correct");
 });
 
 QUnit.test("showZero === undefined", function(assert) {
@@ -1408,31 +1243,6 @@ QUnit.test("showZero === false", function(assert) {
     assert.strictEqual(rangeData.val.min, 10, "minY");
 });
 
-QUnit.test("logarithmic axis", function(assert) {
-    var options = $.extend({}, true, this.defaultOptions, { label: { visible: false }, valueAxisType: "logarithmic", argumentAxisType: "continuous" }),
-        data = [{ arg: 1, val: 10 }, { arg: 2, val: 20 }, { arg: 3, val: 30 }, { arg: 4, val: 40 }, { arg: 5, val: 50 }],
-        rangeData,
-        series = createSeries(options);
-
-    series.updateData(data);
-    rangeData = series.getRangeData();
-
-    assert.ok(rangeData, "Range data should be created");
-    assert.deepEqual(rangeData.arg.min, 1, "Min x should be correct");
-    assert.deepEqual(rangeData.arg.max, 5, "Max x should be correct");
-    assert.strictEqual(rangeData.arg.interval, 1, "Interval x should be correct");
-    assert.equal(rangeData.arg.categories, undefined, "Categories x should be undefined");
-
-    assert.deepEqual(rangeData.val.min, 10, "Min y should be correct");
-    assert.deepEqual(rangeData.val.max, 50, "Max y should be correct");
-    assert.strictEqual(rangeData.val.interval, undefined, "Interval y should be undefined");
-    assert.equal(rangeData.val.categories, undefined, "Categories y should be undefined");
-
-    assert.equal(rangeData.val.percentStick, undefined, "Percent stick is correct");
-    assert.equal(rangeData.val.minSpaceCorrection, undefined, "Min space correction is correct");
-    assert.equal(rangeData.val.maxSpaceCorrection, undefined, "Max space correction is correct");
-});
-
 QUnit.test("Positive points. Polar bar point", function(assert) {
     var data = [{ arg: "1", val: 4 }, { arg: "2", val: 10 }, { arg: "3", val: 7 }, { arg: "4", val: 3 }],
         series = createSeries(this.defaultOptions, undefined, "polar"),
@@ -1446,10 +1256,6 @@ QUnit.test("Positive points. Polar bar point", function(assert) {
     assert.strictEqual(rangeData.arg.max, undefined, "Max x should be undefined");
     assert.equal(rangeData.val.min, 0, "Min y should be correct");
     assert.equal(rangeData.val.max, 10, "Max y should be correct");
-
-    assert.equal(rangeData.val.percentStick, undefined, "Percent stick is correct");
-    assert.equal(rangeData.val.minSpaceCorrection, undefined, "Min space correction is correct");
-    assert.equal(rangeData.val.maxSpaceCorrection, undefined, "Max space correction is correct");
 });
 
 QUnit.module("Get range data. Bar/area. For each types", {
@@ -1476,13 +1282,8 @@ QUnit.test("Bar", function(assert) {
     assert.ok(rangeData, "Range data should be created");
     assert.strictEqual(rangeData.arg.min, undefined, "Min x should be undefined");
     assert.strictEqual(rangeData.arg.max, undefined, "Max x should be undefined");
-    assert.strictEqual(rangeData.arg.stick, false, "Stick should be false");
     assert.equal(rangeData.val.min, 0, "Min y should be correct");
     assert.equal(rangeData.val.max, 10, "Max y should be correct");
-
-    assert.equal(rangeData.val.percentStick, undefined, "Percent stick is correct");
-    assert.equal(rangeData.val.minSpaceCorrection, undefined, "Min space correction is correct");
-    assert.equal(rangeData.val.maxSpaceCorrection, undefined, "Max space correction is correct");
 });
 
 QUnit.test("Stackedbar", function(assert) {
@@ -1496,13 +1297,8 @@ QUnit.test("Stackedbar", function(assert) {
     assert.ok(rangeData, "Range data should be created");
     assert.strictEqual(rangeData.arg.min, undefined, "Min x should be undefined");
     assert.strictEqual(rangeData.arg.max, undefined, "Max x should be undefined");
-    assert.strictEqual(rangeData.arg.stick, false, "Stick should be false");
     assert.equal(rangeData.val.min, 0, "Min y should be correct");
     assert.equal(rangeData.val.max, 10, "Max y should be correct");
-
-    assert.equal(rangeData.val.percentStick, undefined, "Percent stick is correct");
-    assert.equal(rangeData.val.minSpaceCorrection, undefined, "Min space correction is correct");
-    assert.equal(rangeData.val.maxSpaceCorrection, undefined, "Max space correction is correct");
 });
 
 QUnit.test("Stackedbar, update data", function(assert) {
@@ -1520,13 +1316,8 @@ QUnit.test("Stackedbar, update data", function(assert) {
     assert.ok(rangeData, "Range data should be created");
     assert.strictEqual(rangeData.arg.min, "1", "Min x should be undefined");
     assert.strictEqual(rangeData.arg.max, "3", "Max x should be undefined");
-    assert.strictEqual(rangeData.arg.stick, false, "Stick should be false");
     assert.equal(rangeData.val.min, 0, "Min y should be correct");
     assert.equal(rangeData.val.max, 10, "Max y should be correct");
-
-    assert.equal(rangeData.val.percentStick, undefined, "Percent stick is correct");
-    assert.equal(rangeData.val.minSpaceCorrection, undefined, "Min space correction is correct");
-    assert.equal(rangeData.val.maxSpaceCorrection, undefined, "Max space correction is correct");
 });
 
 QUnit.test("Fullstackedbar", function(assert) {
@@ -1540,13 +1331,8 @@ QUnit.test("Fullstackedbar", function(assert) {
     assert.ok(rangeData, "Range data should be created");
     assert.strictEqual(rangeData.arg.min, undefined, "Min x should be undefined");
     assert.strictEqual(rangeData.arg.max, undefined, "Max x should be undefined");
-    assert.strictEqual(rangeData.arg.stick, false, "Stick should be false");
     assert.equal(rangeData.val.min, 0, "Min y should be correct");
     assert.equal(rangeData.val.max, 10, "Max y should be correct");
-
-    assert.equal(rangeData.val.percentStick, true, "Percent stick is correct");
-    assert.equal(rangeData.val.minSpaceCorrection, undefined, "Min space correction is correct");
-    assert.equal(rangeData.val.maxSpaceCorrection, undefined, "Max space correction is correct");
 });
 
 QUnit.test("Area", function(assert) {
@@ -1562,10 +1348,6 @@ QUnit.test("Area", function(assert) {
     assert.strictEqual(rangeData.arg.max, undefined, "Max x should be undefined");
     assert.equal(rangeData.val.min, 0, "Min y should be correct");
     assert.equal(rangeData.val.max, 10, "Max y should be correct");
-
-    assert.equal(rangeData.val.percentStick, undefined, "Percent stick is correct");
-    assert.equal(rangeData.val.minSpaceCorrection, undefined, "Min space correction is correct");
-    assert.equal(rangeData.val.maxSpaceCorrection, undefined, "Max space correction is correct");
 });
 
 QUnit.test("Stackedarea", function(assert) {
@@ -1581,10 +1363,6 @@ QUnit.test("Stackedarea", function(assert) {
     assert.strictEqual(rangeData.arg.max, undefined, "Max x should be undefined");
     assert.equal(rangeData.val.min, 0, "Min y should be correct");
     assert.equal(rangeData.val.max, 10, "Max y should be correct");
-
-    assert.equal(rangeData.val.percentStick, undefined, "Percent stick is correct");
-    assert.equal(rangeData.val.minSpaceCorrection, undefined, "Min space correction is correct");
-    assert.equal(rangeData.val.maxSpaceCorrection, undefined, "Max space correction is correct");
 });
 
 QUnit.test("Stackedsplinearea", function(assert) {
@@ -1600,10 +1378,6 @@ QUnit.test("Stackedsplinearea", function(assert) {
     assert.strictEqual(rangeData.arg.max, undefined, "Max x should be undefined");
     assert.equal(rangeData.val.min, 0, "Min y should be correct");
     assert.equal(rangeData.val.max, 10, "Max y should be correct");
-
-    assert.equal(rangeData.val.percentStick, undefined, "Percent stick is correct");
-    assert.equal(rangeData.val.minSpaceCorrection, undefined, "Min space correction is correct");
-    assert.equal(rangeData.val.maxSpaceCorrection, undefined, "Max space correction is correct");
 });
 
 QUnit.test("Stackedarea, update data", function(assert) {
@@ -1623,10 +1397,6 @@ QUnit.test("Stackedarea, update data", function(assert) {
     assert.strictEqual(rangeData.arg.max, "3", "Max x should be undefined");
     assert.equal(rangeData.val.min, 0, "Min y should be correct");
     assert.equal(rangeData.val.max, 10, "Max y should be correct");
-
-    assert.equal(rangeData.val.percentStick, undefined, "Percent stick is correct");
-    assert.equal(rangeData.val.minSpaceCorrection, undefined, "Min space correction is correct");
-    assert.equal(rangeData.val.maxSpaceCorrection, undefined, "Max space correction is correct");
 });
 
 QUnit.test("Stackedarea, rearrange series family", function(assert) {
@@ -1647,10 +1417,6 @@ QUnit.test("Stackedarea, rearrange series family", function(assert) {
     assert.strictEqual(rangeData.arg.max, "4", "Max x should be undefined");
     assert.equal(rangeData.val.min, 0, "Min y should be correct");
     assert.equal(rangeData.val.max, 8, "Max y should be correct");
-
-    assert.equal(rangeData.val.percentStick, undefined, "Percent stick is correct");
-    assert.equal(rangeData.val.minSpaceCorrection, undefined, "Min space correction is correct");
-    assert.equal(rangeData.val.maxSpaceCorrection, undefined, "Max space correction is correct");
 });
 
 QUnit.test("Steparea", function(assert) {
@@ -1666,10 +1432,6 @@ QUnit.test("Steparea", function(assert) {
     assert.strictEqual(rangeData.arg.max, undefined, "Max x should be undefined");
     assert.equal(rangeData.val.min, 0, "Min y should be correct");
     assert.equal(rangeData.val.max, 10, "Max y should be correct");
-
-    assert.equal(rangeData.val.percentStick, undefined, "Percent stick is correct");
-    assert.equal(rangeData.val.minSpaceCorrection, undefined, "Min space correction is correct");
-    assert.equal(rangeData.val.maxSpaceCorrection, undefined, "Max space correction is correct");
 });
 
 QUnit.test("Splinearea", function(assert) {
@@ -1685,10 +1447,6 @@ QUnit.test("Splinearea", function(assert) {
     assert.strictEqual(rangeData.arg.max, undefined, "Max x should be undefined");
     assert.equal(rangeData.val.min, 0, "Min y should be correct");
     assert.equal(rangeData.val.max, 10, "Max y should be correct");
-
-    assert.equal(rangeData.val.percentStick, undefined, "Percent stick is correct");
-    assert.equal(rangeData.val.minSpaceCorrection, undefined, "Min space correction is correct");
-    assert.equal(rangeData.val.maxSpaceCorrection, undefined, "Max space correction is correct");
 });
 
 QUnit.module("Get range data. Fullstacked series", {
@@ -1719,10 +1477,6 @@ QUnit.module("Get range data. Fullstacked series", {
         assert.strictEqual(rangeData.arg.max, undefined, "Max x should be undefined");
         assert.equal(rangeData.val.min, min, "Min y should be correct");
         assert.equal(rangeData.val.max, max, "Max y should be correct");
-
-        assert.equal(rangeData.val.percentStick, true, "Percent stick is correct");
-        assert.equal(rangeData.val.minSpaceCorrection, minCorrected, "Min space correction is correct");
-        assert.equal(rangeData.val.maxSpaceCorrection, maxCorrected, "Max space correction is correct");
     },
 
     testGetRangeWithDataUpdate: function(assert, seriesType, data1, data2, min, max, minArg, maxArg) {
@@ -1741,10 +1495,6 @@ QUnit.module("Get range data. Fullstacked series", {
         assert.strictEqual(rangeData.arg.max, maxArg, "Max x should be undefined");
         assert.equal(rangeData.val.min, min, "Min y should be correct");
         assert.equal(rangeData.val.max, max, "Max y should be correct");
-
-        assert.equal(rangeData.val.percentStick, true, "Percent stick is correct");
-        assert.equal(rangeData.val.minSpaceCorrection, undefined, "Min space correction is correct");
-        assert.equal(rangeData.val.maxSpaceCorrection, undefined, "Max space correction is correct");
     }
 });
 
@@ -1759,17 +1509,6 @@ QUnit.test("Fullstacked Line", function(assert) {
         undefined);
 });
 
-QUnit.test("Fullstacked Line. With labels", function(assert) {
-    this.testGetRange(assert,
-        "fullstackedline",
-        [{ arg: "1", val: 4 }, { arg: "2", val: 10 }, { arg: "3", val: 7 }, { arg: "4", val: 3 }],
-        true,
-        0,
-        10,
-        undefined,
-        true);
-});
-
 QUnit.test("Fullstacked Line. Negative points", function(assert) {
     this.testGetRange(assert,
         "fullstackedline",
@@ -1778,17 +1517,6 @@ QUnit.test("Fullstacked Line. Negative points", function(assert) {
         -10,
         0,
         undefined,
-        undefined);
-});
-
-QUnit.test("Fullstacked Line. Negative points. With labels", function(assert) {
-    this.testGetRange(assert,
-        "fullstackedline",
-        [{ arg: "1", val: -4 }, { arg: "2", val: -10 }, { arg: "3", val: -7 }, { arg: "4", val: -3 }],
-        true,
-        -10,
-        0,
-        true,
         undefined);
 });
 
@@ -1814,17 +1542,6 @@ QUnit.test("Fullstacked Spline", function(assert) {
         undefined);
 });
 
-QUnit.test("Fullstacked Spline. With labels", function(assert) {
-    this.testGetRange(assert,
-        "fullstackedspline",
-        [{ arg: "1", val: 4 }, { arg: "2", val: 10 }, { arg: "3", val: 7 }, { arg: "4", val: 3 }],
-        true,
-        0,
-        10,
-        undefined,
-        true);
-});
-
 QUnit.test("Fullstacked Spline. Negative points", function(assert) {
     this.testGetRange(assert,
         "fullstackedspline",
@@ -1833,17 +1550,6 @@ QUnit.test("Fullstacked Spline. Negative points", function(assert) {
         -10,
         0,
         undefined,
-        undefined);
-});
-
-QUnit.test("Fullstacked Spline. Negative points. With labels", function(assert) {
-    this.testGetRange(assert,
-        "fullstackedspline",
-        [{ arg: "1", val: -4 }, { arg: "2", val: -10 }, { arg: "3", val: -7 }, { arg: "4", val: -3 }],
-        true,
-        -10,
-        0,
-        true,
         undefined);
 });
 
@@ -1869,17 +1575,6 @@ QUnit.test("Fullstacked Area", function(assert) {
         undefined);
 });
 
-QUnit.test("Fullstacked Area. With labels", function(assert) {
-    this.testGetRange(assert,
-        "fullstackedarea",
-        [{ arg: "1", val: 4 }, { arg: "2", val: 10 }, { arg: "3", val: 7 }, { arg: "4", val: 3 }],
-        true,
-        0,
-        10,
-        undefined,
-        true);
-});
-
 QUnit.test("Fullstacked Area. Negative points", function(assert) {
     this.testGetRange(assert,
         "fullstackedarea",
@@ -1888,17 +1583,6 @@ QUnit.test("Fullstacked Area. Negative points", function(assert) {
         -10,
         0,
         undefined,
-        undefined);
-});
-
-QUnit.test("Fullstacked Area. Negative points. With labels", function(assert) {
-    this.testGetRange(assert,
-        "fullstackedarea",
-        [{ arg: "1", val: -4 }, { arg: "2", val: -10 }, { arg: "3", val: -7 }, { arg: "4", val: -3 }],
-        true,
-        -10,
-        0,
-        true,
         undefined);
 });
 
@@ -1924,17 +1608,6 @@ QUnit.test("Fullstacked SplineArea", function(assert) {
         undefined);
 });
 
-QUnit.test("Fullstacked SplineArea. With labels", function(assert) {
-    this.testGetRange(assert,
-        "fullstackedsplinearea",
-        [{ arg: "1", val: 4 }, { arg: "2", val: 10 }, { arg: "3", val: 7 }, { arg: "4", val: 3 }],
-        true,
-        0,
-        10,
-        undefined,
-        true);
-});
-
 QUnit.test("Fullstacked SplineArea. Negative points", function(assert) {
     this.testGetRange(assert,
         "fullstackedsplinearea",
@@ -1943,17 +1616,6 @@ QUnit.test("Fullstacked SplineArea. Negative points", function(assert) {
         -10,
         0,
         undefined,
-        undefined);
-});
-
-QUnit.test("Fullstacked SplineArea. Negative points. With labels", function(assert) {
-    this.testGetRange(assert,
-        "fullstackedsplinearea",
-        [{ arg: "1", val: -4 }, { arg: "2", val: -10 }, { arg: "3", val: -7 }, { arg: "4", val: -3 }],
-        true,
-        -10,
-        0,
-        true,
         undefined);
 });
 
@@ -1979,17 +1641,6 @@ QUnit.test("Fullstacked Bar", function(assert) {
         undefined);
 });
 
-QUnit.test("Fullstacked Bar. With labels", function(assert) {
-    this.testGetRange(assert,
-        "fullstackedbar",
-        [{ arg: "1", val: 4 }, { arg: "2", val: 10 }, { arg: "3", val: 7 }, { arg: "4", val: 3 }],
-        true,
-        0,
-        10,
-        undefined,
-        true);
-});
-
 QUnit.test("Fullstacked Bar. Negative points", function(assert) {
     this.testGetRange(assert,
         "fullstackedbar",
@@ -1998,17 +1649,6 @@ QUnit.test("Fullstacked Bar. Negative points", function(assert) {
         -10,
         0,
         undefined,
-        undefined);
-});
-
-QUnit.test("Fullstacked Bar. Negative points. With labels", function(assert) {
-    this.testGetRange(assert,
-        "fullstackedbar",
-        [{ arg: "1", val: -4 }, { arg: "2", val: -10 }, { arg: "3", val: -7 }, { arg: "4", val: -3 }],
-        true,
-        -10,
-        0,
-        true,
         undefined);
 });
 
@@ -2036,54 +1676,6 @@ QUnit.module("Get range data. Range series", {
     }
 });
 
-QUnit.test("Labels are visible", function(assert) {
-    var data = [{ arg: 1, val1: 11, val2: 110 }, { arg: 2, val1: 22, val2: 100 }, { arg: 3, val1: 3, val2: 4 }, { arg: 4, val1: 15, val2: 115 }],
-        rangeData,
-        series = createSeries($.extend(true, {}, this.defaultOptions, { argumentAxisType: "continuous", label: { visible: true } }));
-
-    series.updateData(data);
-    rangeData = series.getRangeData();
-
-    assert.ok(rangeData, "Range data should be created");
-    assert.strictEqual(rangeData.arg.min, 1, "Min arg should be correct");
-    assert.strictEqual(rangeData.arg.max, 4, "Max arg should be correct");
-    assert.strictEqual(rangeData.arg.interval, 1, "Min interval arg should be correct");
-    assert.strictEqual(rangeData.arg.categories, undefined, "Categories x should be undefined");
-
-    assert.strictEqual(rangeData.val.min, 3, "Min val should be correct");
-    assert.strictEqual(rangeData.val.max, 115, "Max val should be correct");
-    assert.strictEqual(rangeData.val.interval, undefined, "Min val interval should be undefined");
-    assert.strictEqual(rangeData.val.categories, undefined, "Categories y should be undefined");
-
-    assert.equal(rangeData.val.percentStick, undefined, "Percent stick is correct");
-    assert.equal(rangeData.val.minSpaceCorrection, true, "Min space correction is correct");
-    assert.equal(rangeData.val.maxSpaceCorrection, true, "Max space correction is correct");
-});
-
-QUnit.test("Labels are visible and inside", function(assert) {
-    var data = [{ arg: 1, val1: 11, val2: 110 }, { arg: 2, val1: 22, val2: 100 }, { arg: 3, val1: 3, val2: 4 }, { arg: 4, val1: 15, val2: 115 }],
-        rangeData,
-        series = createSeries($.extend(true, {}, this.defaultOptions, { argumentAxisType: "continuous", label: { visible: true, position: "inside" } }));
-
-    series.updateData(data);
-    rangeData = series.getRangeData();
-
-    assert.ok(rangeData, "Range data should be created");
-    assert.strictEqual(rangeData.arg.min, 1, "Min arg should be correct");
-    assert.strictEqual(rangeData.arg.max, 4, "Max arg should be correct");
-    assert.strictEqual(rangeData.arg.interval, 1, "Min interval arg should be correct");
-    assert.strictEqual(rangeData.arg.categories, undefined, "Categories x should be undefined");
-
-    assert.strictEqual(rangeData.val.min, 3, "Min val should be correct");
-    assert.strictEqual(rangeData.val.max, 115, "Max val should be correct");
-    assert.strictEqual(rangeData.val.interval, undefined, "Min val interval should be undefined");
-    assert.strictEqual(rangeData.val.categories, undefined, "Categories y should be undefined");
-
-    assert.equal(rangeData.val.percentStick, undefined, "Percent stick is correct");
-    assert.equal(rangeData.val.minSpaceCorrection, undefined, "Min space correction is correct");
-    assert.equal(rangeData.val.maxSpaceCorrection, undefined, "Max space correction is correct");
-});
-
 QUnit.test("Numeric", function(assert) {
     var data = [{ arg: 1, val1: 11, val2: 110 }, { arg: 2, val1: 22, val2: 100 }, { arg: 3, val1: 3, val2: 4 }, { arg: 4, val1: 15, val2: 115 }],
         rangeData,
@@ -2102,10 +1694,6 @@ QUnit.test("Numeric", function(assert) {
     assert.strictEqual(rangeData.val.max, 115, "Max val should be correct");
     assert.strictEqual(rangeData.val.interval, undefined, "Min val interval should be correct");
     assert.strictEqual(rangeData.val.categories, undefined, "Categories val should be undefined");
-
-    assert.equal(rangeData.val.percentStick, undefined, "Percent stick is correct");
-    assert.equal(rangeData.val.minSpaceCorrection, undefined, "Min space correction is correct");
-    assert.equal(rangeData.val.maxSpaceCorrection, undefined, "Max space correction is correct");
 });
 
 QUnit.test("Datetime.", function(assert) {
@@ -2134,10 +1722,6 @@ QUnit.test("Datetime.", function(assert) {
     assert.deepEqual(rangeData.val.max, date8, "Max val should be correct");
     assert.strictEqual(rangeData.val.interval, undefined, "Min val interval should be correct");
     assert.strictEqual(rangeData.val.categories, undefined, "Categories val should be undefined");
-
-    assert.equal(rangeData.val.percentStick, undefined, "Percent stick is correct");
-    assert.equal(rangeData.val.minSpaceCorrection, undefined, "Min space correction is correct");
-    assert.equal(rangeData.val.maxSpaceCorrection, undefined, "Max space correction is correct");
 });
 
 QUnit.test("Numeric. Categories", function(assert) {
@@ -2159,10 +1743,6 @@ QUnit.test("Numeric. Categories", function(assert) {
     assert.strictEqual(rangeData.val.max, undefined, "Max val should be undefined");
     assert.strictEqual(rangeData.val.interval, undefined, "Min val interval should be undefined");
     assert.deepEqual(rangeData.val.categories, [110, 11, 100, 22, 15, 3, 115], "Categories val should be correct");
-
-    assert.equal(rangeData.val.percentStick, undefined, "Percent stick is correct");
-    assert.equal(rangeData.val.minSpaceCorrection, undefined, "Min space correction is correct");
-    assert.equal(rangeData.val.maxSpaceCorrection, undefined, "Max space correction is correct");
 });
 
 QUnit.test("Datetime. Categories", function(assert) {
@@ -2192,10 +1772,6 @@ QUnit.test("Datetime. Categories", function(assert) {
     assert.strictEqual(rangeData.val.max, undefined, "Max val should be undefined");
     assert.strictEqual(rangeData.val.interval, undefined, "Min val interval should be undefined");
     assert.deepEqual(rangeData.val.categories, [date2, date1, date4, date3, date6, date5, date8, date7], "Categories val should be correct");
-
-    assert.equal(rangeData.val.percentStick, undefined, "Percent stick is correct");
-    assert.equal(rangeData.val.minSpaceCorrection, undefined, "Min space correction is correct");
-    assert.equal(rangeData.val.maxSpaceCorrection, undefined, "Max space correction is correct");
 });
 
 QUnit.test("String.", function(assert) {
@@ -2217,10 +1793,6 @@ QUnit.test("String.", function(assert) {
     assert.strictEqual(rangeData.val.max, undefined, "Max val should be undefined");
     assert.strictEqual(rangeData.val.interval, undefined, "Min val interval should be undefined");
     assert.deepEqual(rangeData.val.categories, ["110", "11", "100", "22", "4", "3", "115", "15"], "Categories val should be correct");
-
-    assert.equal(rangeData.val.percentStick, undefined, "Percent stick is correct");
-    assert.equal(rangeData.val.minSpaceCorrection, undefined, "Min space correction is correct");
-    assert.equal(rangeData.val.maxSpaceCorrection, undefined, "Max space correction is correct");
 });
 
 QUnit.module("Get range data. Range series. For each types", {
@@ -2253,10 +1825,6 @@ QUnit.test("Rangebar", function(assert) {
     assert.strictEqual(rangeData.val.max, 115, "Max val should be correct");
     assert.strictEqual(rangeData.val.interval, undefined, "Min val interval should be correct");
     assert.strictEqual(rangeData.val.categories, undefined, "Categories val should be undefined");
-
-    assert.equal(rangeData.val.percentStick, undefined, "Percent stick is correct");
-    assert.equal(rangeData.val.minSpaceCorrection, undefined, "Min space correction is correct");
-    assert.equal(rangeData.val.maxSpaceCorrection, undefined, "Max space correction is correct");
 });
 
 QUnit.test("Rangearea", function(assert) {
@@ -2277,10 +1845,6 @@ QUnit.test("Rangearea", function(assert) {
     assert.strictEqual(rangeData.val.max, 115, "Max val should be correct");
     assert.strictEqual(rangeData.val.interval, undefined, "Min val interval should be correct");
     assert.strictEqual(rangeData.val.categories, undefined, "Categories val should be undefined");
-
-    assert.equal(rangeData.val.percentStick, undefined, "Percent stick is correct");
-    assert.equal(rangeData.val.minSpaceCorrection, undefined, "Min space correction is correct");
-    assert.equal(rangeData.val.maxSpaceCorrection, undefined, "Max space correction is correct");
 });
 
 QUnit.module("Get range data. Financial series", {
@@ -2303,55 +1867,6 @@ QUnit.module("Get range data. Financial series", {
     }
 });
 
-QUnit.test("Labels are visible", function(assert) {
-    var data = [{ arg: 1, l: 11, h: 110, o: 11, c: 110 }, { arg: 2, l: 22, h: 100, o: 22, c: 100 }, { arg: 3, l: 3, h: 4, o: 3, c: 4 }, { arg: 4, l: 15, h: 115, o: 15, c: 115 }],
-        rangeData,
-        series = createSeries($.extend(true, {}, this.defaultOptions, { argumentAxisType: "continuous", label: { visible: true } }));
-
-    series.updateData(data);
-
-    rangeData = series.getRangeData();
-
-    assert.ok(rangeData, "Range data should be created");
-    assert.strictEqual(rangeData.arg.min, 1, "Min arg should be correct");
-    assert.strictEqual(rangeData.arg.max, 4, "Max arg should be correct");
-    assert.strictEqual(rangeData.arg.interval, 1, "Min interval arg should be correct");
-    assert.strictEqual(rangeData.arg.categories, undefined, "Categories x should be undefined");
-
-    assert.strictEqual(rangeData.val.min, 3, "Min val should be correct");
-    assert.strictEqual(rangeData.val.max, 115, "Max val should be correct");
-    assert.strictEqual(rangeData.val.interval, undefined, "Min val interval should be undefined");
-    assert.strictEqual(rangeData.val.categories, undefined, "Categories y should be undefined");
-
-    assert.equal(rangeData.val.percentStick, undefined, "Percent stick is correct");
-    assert.equal(rangeData.val.minSpaceCorrection, true, "Min space correction is correct");
-    assert.equal(rangeData.val.maxSpaceCorrection, true, "Max space correction is correct");
-});
-
-QUnit.test("Labels are visible and inside", function(assert) {
-    var data = [{ arg: 1, l: 11, h: 110, o: 11, c: 110 }, { arg: 2, l: 22, h: 100, o: 22, c: 100 }, { arg: 3, l: 3, h: 4, o: 3, c: 4 }, { arg: 4, l: 15, h: 115, o: 15, c: 115 }],
-        rangeData,
-        series = createSeries($.extend(true, {}, this.defaultOptions, { argumentAxisType: "continuous", label: { visible: true, position: "inside" } }));
-
-    series.updateData(data);
-    rangeData = series.getRangeData();
-
-    assert.ok(rangeData, "Range data should be created");
-    assert.strictEqual(rangeData.arg.min, 1, "Min arg should be correct");
-    assert.strictEqual(rangeData.arg.max, 4, "Max arg should be correct");
-    assert.strictEqual(rangeData.arg.interval, 1, "Min interval arg should be correct");
-    assert.strictEqual(rangeData.arg.categories, undefined, "Categories x should be undefined");
-
-    assert.strictEqual(rangeData.val.min, 3, "Min val should be correct");
-    assert.strictEqual(rangeData.val.max, 115, "Max val should be correct");
-    assert.strictEqual(rangeData.val.interval, undefined, "Min val interval should be undefined");
-    assert.strictEqual(rangeData.val.categories, undefined, "Categories y should be undefined");
-
-    assert.equal(rangeData.val.percentStick, undefined, "Percent stick is correct");
-    assert.equal(rangeData.val.minSpaceCorrection, undefined, "Min space correction is correct");
-    assert.equal(rangeData.val.maxSpaceCorrection, undefined, "Max space correction is correct");
-});
-
 QUnit.test("Numeric", function(assert) {
     var data = [{ arg: 1, l: 11, h: 110, o: 11, c: 110 }, { arg: 2, l: 22, h: 100, o: 22, c: 100 }, { arg: 3, l: 3, h: 4, o: 3, c: 4 }, { arg: 4, l: 15, h: 115, o: 15, c: 115 }],
         rangeData,
@@ -2370,10 +1885,6 @@ QUnit.test("Numeric", function(assert) {
     assert.strictEqual(rangeData.val.max, 115, "Max val should be correct");
     assert.strictEqual(rangeData.val.interval, undefined, "Min val interval should be correct");
     assert.strictEqual(rangeData.val.categories, undefined, "Categories val should be undefined");
-
-    assert.equal(rangeData.val.percentStick, undefined, "Percent stick is correct");
-    assert.equal(rangeData.val.minSpaceCorrection, undefined, "Min space correction is correct");
-    assert.equal(rangeData.val.maxSpaceCorrection, undefined, "Max space correction is correct");
 });
 
 QUnit.test("Datetime.", function(assert) {
@@ -2402,10 +1913,6 @@ QUnit.test("Datetime.", function(assert) {
     assert.deepEqual(rangeData.val.max, date8, "Max val should be correct");
     assert.strictEqual(rangeData.val.interval, undefined, "Min val interval should be correct");
     assert.strictEqual(rangeData.val.categories, undefined, "Categories val should be undefined");
-
-    assert.equal(rangeData.val.percentStick, undefined, "Percent stick is correct");
-    assert.equal(rangeData.val.minSpaceCorrection, undefined, "Min space correction is correct");
-    assert.equal(rangeData.val.maxSpaceCorrection, undefined, "Max space correction is correct");
 });
 
 QUnit.test("Numeric. Categories", function(assert) {
@@ -2427,10 +1934,6 @@ QUnit.test("Numeric. Categories", function(assert) {
     assert.strictEqual(rangeData.val.max, undefined, "Max val should be undefined");
     assert.strictEqual(rangeData.val.interval, undefined, "Min val interval should be undefined");
     assert.deepEqual(rangeData.val.categories, [110, 11, 100, 22, 4, 3, 115, 15], "Categories val should be correct");
-
-    assert.equal(rangeData.val.percentStick, undefined, "Percent stick is correct");
-    assert.equal(rangeData.val.minSpaceCorrection, undefined, "Min space correction is correct");
-    assert.equal(rangeData.val.maxSpaceCorrection, undefined, "Max space correction is correct");
 });
 
 QUnit.test("Datetime. Categories", function(assert) {
@@ -2460,10 +1963,6 @@ QUnit.test("Datetime. Categories", function(assert) {
     assert.strictEqual(rangeData.val.max, undefined, "Max val should be undefined");
     assert.strictEqual(rangeData.val.interval, undefined, "Min val interval should be undefined");
     assert.deepEqual(rangeData.val.categories, [date2, date1, date4, date3, date6, date5, date8, date7], "Categories val should be correct");
-
-    assert.equal(rangeData.val.percentStick, undefined, "Percent stick is correct");
-    assert.equal(rangeData.val.minSpaceCorrection, undefined, "Min space correction is correct");
-    assert.equal(rangeData.val.maxSpaceCorrection, undefined, "Max space correction is correct");
 });
 
 QUnit.test("String.", function(assert) {
@@ -2485,10 +1984,6 @@ QUnit.test("String.", function(assert) {
     assert.strictEqual(rangeData.val.max, undefined, "Max val should be undefined");
     assert.strictEqual(rangeData.val.interval, undefined, "Min val interval should be undefined");
     assert.deepEqual(rangeData.val.categories, ["110", "11", "100", "22", "4", "3", "115", "15"], "Categories val should be correct");
-
-    assert.equal(rangeData.val.percentStick, undefined, "Percent stick is correct");
-    assert.equal(rangeData.val.minSpaceCorrection, undefined, "Min space correction is correct");
-    assert.equal(rangeData.val.maxSpaceCorrection, undefined, "Max space correction is correct");
 });
 
 QUnit.module("Get range data. Financial series. For each types", {
@@ -2529,10 +2024,6 @@ QUnit.test("Stock", function(assert) {
     assert.strictEqual(rangeData.val.max, 115, "Max val should be correct");
     assert.strictEqual(rangeData.val.interval, undefined, "Min val interval should be correct");
     assert.strictEqual(rangeData.val.categories, undefined, "Categories val should be undefined");
-
-    assert.equal(rangeData.val.percentStick, undefined, "Percent stick is correct");
-    assert.equal(rangeData.val.minSpaceCorrection, undefined, "Min space correction is correct");
-    assert.equal(rangeData.val.maxSpaceCorrection, undefined, "Max space correction is correct");
 });
 
 QUnit.test("Candlestick", function(assert) {
@@ -2553,10 +2044,6 @@ QUnit.test("Candlestick", function(assert) {
     assert.strictEqual(rangeData.val.max, 115, "Max val should be correct");
     assert.strictEqual(rangeData.val.interval, undefined, "Min val interval should be correct");
     assert.strictEqual(rangeData.val.categories, undefined, "Categories val should be undefined");
-
-    assert.equal(rangeData.val.percentStick, undefined, "Percent stick is correct");
-    assert.equal(rangeData.val.minSpaceCorrection, undefined, "Min space correction is correct");
-    assert.equal(rangeData.val.maxSpaceCorrection, undefined, "Max space correction is correct");
 });
 
 QUnit.module("Get range data. Pie series", {
@@ -2657,6 +2144,9 @@ QUnit.module("Zooming range data", {
         this.argumentAxis = {
             getViewport: function() {
                 return viewPort;
+            },
+            calculateInterval: function(a, b) {
+                return a - b;
             }
         };
         this.defaultOptions = {
@@ -2759,6 +2249,9 @@ QUnit.module("Zooming range data. Simple", {
         this.argumentAxis = {
             getViewport: function() {
                 return viewPort;
+            },
+            calculateInterval: function(a, b) {
+                return a - b;
             }
         };
         this.defaultOptions = {
@@ -2902,30 +2395,6 @@ QUnit.test("Datetime argument. String value.", function(assert) {
     //assert.deepEqual(rangeData.categories, ["30", "40", "50"?], "CategoriesY");
 });
 
-QUnit.test("with calcInterval", function(assert) {
-    var data = [{ arg: 1, val: 10 }, { arg: 2, val: 20 }, { arg: 3, val: 30 }, { arg: 4, val: 40 }, { arg: 5, val: 50 }, { arg: 6, val: 60 }],
-        rangeData,
-        series = createSeries(this.defaultOptions, { argumentAxis: this.argumentAxis });
-
-    series.updateData(data);
-
-    this.argumentAxis.calcInterval = function(a, b) {
-        return a / b;
-    };
-
-    rangeData = series.getRangeData();
-
-    assert.ok(rangeData, "Returned object");
-    assert.equal(rangeData.arg.min, 1, "min x");
-    assert.equal(rangeData.arg.max, 6, "max x");
-    assert.equal(rangeData.val.min, 10, "min y");
-    assert.equal(rangeData.val.max, 60, "max y");
-    assert.strictEqual(rangeData.arg.interval, 1.2);
-    assert.strictEqual(rangeData.val.interval, undefined);
-    assert.deepEqual(rangeData.arg.categories, undefined, "No categories");
-    assert.deepEqual(rangeData.val.categories, undefined, "No categories");
-});
-
 QUnit.test("Discrete argument axis.", function(assert) {
     var data = [{ arg: "1", val: 10 }, { arg: "2", val: 20 }, { arg: "3", val: 30 }, { arg: "4", val: 40 }, { arg: "5", val: 50 }, { arg: "6", val: 60 }],
         rangeData,
@@ -2956,6 +2425,9 @@ QUnit.module("Zooming range data. Bar/area", {
         this.argumentAxis = {
             getViewport: function() {
                 return viewPort;
+            },
+            calculateInterval: function(a, b) {
+                return a - b;
             }
         };
         this.defaultOptions = {

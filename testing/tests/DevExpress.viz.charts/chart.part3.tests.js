@@ -95,6 +95,9 @@ QUnit.test("Create Horizontal Category Axis, Vertical Continuous axis", function
     assert.equal(this.themeManager.getOptions.withArgs("argumentAxis").lastCall.args[2], false);
     assert.equal(this.themeManager.getOptions.withArgs("valueAxis").callCount, 1);
     assert.equal(this.themeManager.getOptions.withArgs("valueAxis").lastCall.args[2], false);
+
+    assert.equal(chart._argumentAxes[0].isArgumentAxis, true);
+    assert.equal(chart._valueAxes[0].isArgumentAxis, false);
 });
 
 //B254993
@@ -392,8 +395,7 @@ QUnit.test("Create Horizontal Continuous Axis, Vertical Continuous axis", functi
                 maxValueMargin: 0,
                 minValueMarginPriority: 50,
                 maxValueMarginPriority: 50
-            },
-            setTicksAtUnitBeginning: false
+            }
         },
         series: {
             type: "line"
@@ -414,7 +416,7 @@ QUnit.test("Create Horizontal Continuous Axis, Vertical Continuous axis", functi
 
     argumentAxis = chart._argumentAxes[0];
     assert.ok(!argumentAxis.getOptions().categories, "Categories should not be assigned");
-    assertCommonAxesProperties(assert, argumentAxis, { setTicksAtUnitBeginning: false });
+    assertCommonAxesProperties(assert, argumentAxis, { });
 
     valueAxis = chart._valueAxes[0];
     assert.ok(!valueAxis.getOptions().categories, "Categories should not be assigned");
@@ -481,8 +483,7 @@ QUnit.test("Create Vertical Category Axis, Horizontal Continuous axis (rotated)"
     var chart = this.createChart({
         rotated: true,
         argumentAxis: {
-            categories: categories,
-            setTicksAtUnitBeginning: false
+            categories: categories
         },
         series: {
             type: "line"
@@ -504,7 +505,7 @@ QUnit.test("Create Vertical Category Axis, Horizontal Continuous axis (rotated)"
     argumentAxis = chart._argumentAxes[0];
     assert.ok(argumentAxis.getOptions().categories, "Categories should be assigned");
     assert.deepEqual(argumentAxis.getOptions().categories, categories);
-    assertCommonAxesProperties(assert, argumentAxis, { setTicksAtUnitBeginning: false });
+    assertCommonAxesProperties(assert, argumentAxis, { });
 
     valueAxis = chart._valueAxes[0];
     assert.ok(!valueAxis.getOptions().categories, "Categories should not be assigned");
@@ -575,8 +576,7 @@ QUnit.test("Panes - named Horizontal Category Axis, named Vertical Continuous ax
             pane: "topPane"
         },
         valueAxis: {
-            pane: "topPane",
-            setTicksAtUnitBeginning: false
+            pane: "topPane"
         },
         series: {
             type: "line"
@@ -587,7 +587,7 @@ QUnit.test("Panes - named Horizontal Category Axis, named Vertical Continuous ax
     });
 
     assertCommonAxesProperties(assert, chart._argumentAxes[0], { pane: "topPane" });
-    assertCommonAxesProperties(assert, chart._valueAxes[0], { pane: "topPane", setTicksAtUnitBeginning: false });
+    assertCommonAxesProperties(assert, chart._valueAxes[0], { pane: "topPane" });
 });
 
 QUnit.test("Panes - single pane specified, replace default for Horizontal Category Axis, Vertical Continuous axis", function(assert) {
@@ -805,13 +805,11 @@ QUnit.test("Panes - two panes, replace default for Horizontal Category Axis, Ver
     var chart = this.createChart({
         argumentAxis: {
             categories: categories,
-            pane: "bottomPane",
-            setTicksAtUnitBeginning: false
+            pane: "bottomPane"
         },
         valueAxis: [{
             pane: "topPane",
             min: 1,
-            setTicksAtUnitBeginning: false,
             title: "axisForTopPane"
         }, {
             pane: "bottomPane",
@@ -829,12 +827,12 @@ QUnit.test("Panes - two panes, replace default for Horizontal Category Axis, Ver
     });
 
     assert.equal(chart._argumentAxes.length, 2, "Axis be duplicated");
-    assertCommonAxesProperties(assert, chart._argumentAxes[0], { pane: "topPane", setTicksAtUnitBeginning: false });
-    assertCommonAxesProperties(assert, chart._argumentAxes[1], { pane: "bottomPane", setTicksAtUnitBeginning: false });
+    assertCommonAxesProperties(assert, chart._argumentAxes[0], { pane: "topPane" });
+    assertCommonAxesProperties(assert, chart._argumentAxes[1], { pane: "bottomPane" });
 
     assert.equal(chart._valueAxes.length, 2, "Both axis specified and should be created");
     var verticalAxis = chart._valueAxes[0];
-    assertCommonAxesProperties(assert, verticalAxis, { pane: "topPane", setTicksAtUnitBeginning: false });
+    assertCommonAxesProperties(assert, verticalAxis, { pane: "topPane" });
     assert.strictEqual(verticalAxis.getOptions().min, 1, "Min values goes from top axis options");
 
     verticalAxis = chart._valueAxes[1];
@@ -947,7 +945,6 @@ QUnit.test("T555770. Do not pass name for argumentAxis", function(assert) {
 function assertCommonAxesProperties(assert, axis, options) {
     options = options || {};
     assert.ok(axis._renderer, "Renderer should be passed into axis");
-    assert.strictEqual(axis.getOptions().setTicksAtUnitBeginning, options.setTicksAtUnitBeginning, "setTicksAtUnitBeginning option for datetimeCalculator");
     assert.strictEqual(axis.getOptions().pane, options.pane || "default", "Default pane name");
 }
 

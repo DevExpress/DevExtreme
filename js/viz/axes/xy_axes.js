@@ -297,7 +297,7 @@ module.exports = {
             }
         },
 
-        _drawDateMarker: function(date, options) {
+        _drawDateMarker: function(date, options, range) {
             var that = this,
                 markerOptions = that._options.marker,
                 invert = that._translator.getBusinessRange().invert,
@@ -313,7 +313,7 @@ module.exports = {
                     .append(that._axisElementsGroup);
             }
 
-            text = String(constants.formatLabel(date, options.labelFormat));
+            text = String(that.formatLabel(date, options.labelOptions, range));
 
             return {
                 date: date,
@@ -351,7 +351,8 @@ module.exports = {
             var that = this,
                 options = that._options,
                 translator = that._translator,
-                minBound = that._minBound,
+                viewport = that._getViewportRange(),
+                minBound = viewport.minVisible,
                 tickInterval,
                 markerInterval,
                 markerDates,
@@ -363,9 +364,9 @@ module.exports = {
                 return that._drawDateMarker(markerDate, {
                     x: translator.translate(markerDate),
                     y: markersAreaTop,
-                    labelFormat: that._getLabelFormatOptions(format),
+                    labelOptions: that._getLabelFormatOptions(format),
                     withoutStick: withoutStick
-                });
+                }, viewport);
             }
 
             if(!options.marker.visible || options.argumentType !== "datetime" || options.type === "discrete" || that._majorTicks.length <= 1) {
@@ -373,10 +374,10 @@ module.exports = {
             }
 
             markersAreaTop = that._axisPosition + options.marker.topIndent;
-            tickInterval = dateUtils.getDateUnitInterval(this._tickManager.getTickInterval());
+            tickInterval = dateUtils.getDateUnitInterval(this._tickInterval);
             markerInterval = getMarkerInterval(tickInterval);
 
-            markerDates = getMarkerDates(minBound, that._maxBound, markerInterval);
+            markerDates = getMarkerDates(minBound, viewport.maxVisible, markerInterval);
 
             if(markerDates.length > 1
                 || (markerDates.length === 1 && minBound < markerDates[0])) {
@@ -642,17 +643,11 @@ module.exports = {
             return height && (height + labelOptions.indentFromAxis || 0) || 0;
         },
 
-        _estimateLabelFormat: function(canvas) {
-            this.updateCanvas(canvas);
-            this._updateTickManager();
-            this._tickManager.getTicks();
-            this._correctLabelFormat();
-        },
-
         estimateMargins: function(canvas) {
-            this._estimateLabelFormat(canvas);
-
             var that = this,
+                ticksData = this._createTicksAndLabelFormat(canvas),
+                ticks = ticksData.ticks,
+                tickInterval = ticksData.tickInterval,
                 options = this._options,
                 constantLineOptions = (options.constantLines || []).filter(function(options) {
                     that._checkAlignmentConstantLineLabels(options.label);
@@ -660,8 +655,8 @@ module.exports = {
                 }),
                 rootElement = that._renderer.root,
                 businessRange = that._translator.getBusinessRange(),
-                labelIsVisible = options.label.visible && !that._translator.getBusinessRange().stubData,
-                labelValue = labelIsVisible && constants.formatLabel(businessRange.axisType === "discrete" ? businessRange.categories[0] : businessRange.max, options.label),
+                labelIsVisible = options.label.visible && !businessRange.stubData && ticks.length,
+                labelValue = labelIsVisible && that.formatLabel(ticks[ticks.length - 1], options.label, undefined, undefined, tickInterval, ticks),
                 labelElement = labelIsVisible && that._renderer.text(labelValue, 0, 0)
                     .css(that._textFontStyles)
                     .attr(that._textOptions)
@@ -881,12 +876,22 @@ module.exports = {
             };
         },
 
-        _getSkippedCategory: function() {
-            var skippedCategory,
-                categories = this._translator.getVisibleCategories() || this._translator.getBusinessRange().categories;
+        areCoordsOutsideAxis: function(coords) {
+            //getCanvasVisibleArea takes into account inverted case
+            var canvas = this._translator.getCanvasVisibleArea(),
+                coord = this._isHorizontal ? coords.x : coords.y;
 
-            if(categories && categories.length && !!this._tickOffset) {
-                skippedCategory = categories[categories.length - 1];
+            if(coord < canvas.min || coord > canvas.max) {
+                return true;
+            }
+            return false;
+        },
+
+        _getSkippedCategory: function(ticks) {
+            var skippedCategory;
+
+            if(this._options.type === constants.discrete && this._tickOffset && ticks.length !== 0) {
+                skippedCategory = ticks[ticks.length - 1];
             }
 
             return skippedCategory;

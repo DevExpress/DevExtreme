@@ -172,6 +172,26 @@ var checkGroups = function(assert, series) {
         assert.equal(this.createPoint.firstCall.args[1].closeValue, -4, "Close value should be correct");
     });
 
+    QUnit.test("getMarginOptions", function(assert) {
+        var series = createSeries({
+            type: "stock",
+            reduction: { level: "open" },
+            label: { visible: false },
+            width: 2,
+            hoverStyle: {
+                width: 3
+            },
+            selectionStyle: {
+                width: 4
+            }
+        });
+
+        assert.deepEqual(series.getMarginOptions(), {
+            size: 14,
+            percentStick: false
+        });
+    });
+
     QUnit.module("StockSeries series. Draw", {
         beforeEach: environment.beforeEach,
         afterEach: environment.afterEach,

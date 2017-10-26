@@ -1,35 +1,14 @@
 "use strict";
-var _math = Math,
-    _abs = _math.abs,
-    unique = require("../../core/utils").unique,
+var unique = require("../../core/utils").unique,
     _isDefined = require("../../../core/utils/type").isDefined,
     DISCRETE = "discrete";
-
-function addLabelPaddings(series, valueRange) {
-    var labelOptions = series.getOptions().label;
-
-    if(series.areLabelsVisible() && labelOptions && labelOptions.visible && labelOptions.position !== "inside") {
-        if(valueRange.min < 0) {
-            valueRange.minSpaceCorrection = true;
-        }
-        if(valueRange.max > 0) {
-            valueRange.maxSpaceCorrection = true;
-        }
-    }
-}
-
-function addRangeSeriesLabelPaddings(series, range) {
-    if(series.areLabelsVisible() && series._options.label.visible && series._options.label.position !== "inside") {
-        range.minSpaceCorrection = range.maxSpaceCorrection = true;
-    }
-}
 
 function continuousRangeCalculator(range, minValue, maxValue) {
     range.min = range.min < minValue ? range.min : minValue;
     range.max = range.max > maxValue ? range.max : maxValue;
 }
 
-function getRangeCalculator(axisType, calcInterval) {
+function getRangeCalculator(axisType, axis) {
     if(axisType === DISCRETE) {
         return function(range, minValue, maxValue) {
             if(minValue !== maxValue) {
@@ -38,9 +17,9 @@ function getRangeCalculator(axisType, calcInterval) {
             range.categories.push(minValue);
         };
     }
-    if(calcInterval) {
+    if(axis) {
         return function(range, value) {
-            var interval = calcInterval(value, range.prevValue),
+            var interval = axis.calculateInterval(value, range.prevValue),
                 minInterval = range.interval;
 
             range.interval = (minInterval < interval ? minInterval : interval) || minInterval;
@@ -143,22 +122,10 @@ function getViewportReducer(series) {
     };
 }
 
-function getIntervalCalculator(series) {
-    var calcInterval = series.getArgumentAxis() && series.getArgumentAxis().calcInterval;
-    if(calcInterval) {
-        return calcInterval;
-    }
-
-    return function(value, prevValue) {
-        return _abs(value - prevValue);
-    };
-}
-
 module.exports = {
     getRangeData: function(series) {
         var points = series.getPoints(),
-            intervalCalculator = getIntervalCalculator(series),
-            argumentCalculator = getRangeCalculator(series.argumentAxisType, points.length > 1 && intervalCalculator),
+            argumentCalculator = getRangeCalculator(series.argumentAxisType, points.length > 1 && series.getArgumentAxis()),
             valueRangeCalculator = getRangeCalculator(series.valueAxisType),
             viewportReducer = getViewportReducer(series),
             range = points.reduce(function(range, point, index, points) {
@@ -196,8 +163,5 @@ module.exports = {
             });
         }
         return range;
-    },
-    //TODO - remove it
-    addLabelPaddings: addLabelPaddings,
-    addRangeSeriesLabelPaddings: addRangeSeriesLabelPaddings
+    }
 };

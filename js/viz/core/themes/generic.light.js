@@ -229,7 +229,6 @@ registerTheme({
     },
     "chart:common:axis": {
         visible: false,
-        setTicksAtUnitBeginning: true,
         valueMarginsEnabled: true,
         placeholderSize: null,
         logarithmBase: 10,
@@ -627,7 +626,7 @@ registerTheme({
         },
         horizontalAxis: {
             position: BOTTOM,
-            axisDivisionFactor: 50,
+            axisDivisionFactor: 70,
             label: {
                 rotationAngle: 90,
                 staggeringSpacing: 5,
@@ -649,7 +648,7 @@ registerTheme({
         },
         verticalAxis: {
             position: LEFT,
-            axisDivisionFactor: 30,
+            axisDivisionFactor: 40,
             label: {
                 alignment: RIGHT
             },
@@ -669,6 +668,7 @@ registerTheme({
         },
         argumentAxis: {},
         valueAxis: {
+            endOnTick: true,
             grid: {
                 visible: true
             }
@@ -994,12 +994,12 @@ registerTheme({
     },
     rangeSelector: {
         scale: {
+            valueMarginsEnabled: true,
             width: 1,
             color: BLACK,
             opacity: 0.1,
             showCustomBoundaryTicks: true,
             showMinorTicks: true, //DEPRECATED IN 15_2
-            setTicksAtUnitBeginning: true,
             label: {
                 overlappingBehavior: "hide",
                 alignment: "center",

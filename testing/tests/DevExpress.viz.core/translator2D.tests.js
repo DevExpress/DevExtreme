@@ -370,7 +370,7 @@ QUnit.test('Create discrete translator (Stick = false, invert = false)', functio
         canvas = $.extend({}, canvasTemplate),
         translator;
 
-    translator = new translator2DModule.Translator2D(range, canvas, optionsHorizontal);
+    translator = new translator2DModule.Translator2D(range, canvas, $.extend({ stick: false }, optionsHorizontal));
 
     assert.ok(translator);
     assert.deepEqual(translator._canvas, { width: 610, height: 400, left: 70, top: 10, right: 30, bottom: 60 });
@@ -391,11 +391,11 @@ QUnit.test('Create discrete translator (Stick = false, invert = false)', functio
 });
 
 QUnit.test('Create discrete translator (Stick = true, invert = true)', function(assert) {
-    var range = $.extend({ stick: true, invert: true }, discreteRange),
+    var range = $.extend({ invert: true }, discreteRange),
         canvas = $.extend({}, canvasTemplate),
         translator;
 
-    translator = new translator2DModule.Translator2D(range, canvas, optionsHorizontal);
+    translator = new translator2DModule.Translator2D(range, canvas, $.extend({ stick: true }, optionsHorizontal));
 
     assert.equal(translator._canvasOptions.interval, 170);
     assert.deepEqual(translator._categoriesToPoints, {
@@ -407,11 +407,10 @@ QUnit.test('Create discrete translator (Stick = true, invert = true)', function(
 });
 
 QUnit.test('Create discrete translator (Stick = true, addSpiderCategory = true)', function(assert) {
-    var range = $.extend({ stick: true, addSpiderCategory: true }, discreteRange),
-        canvas = $.extend({}, canvasTemplate),
+    var canvas = $.extend({}, canvasTemplate),
         translator;
 
-    translator = new translator2DModule.Translator2D(range, canvas, optionsHorizontal);
+    translator = new translator2DModule.Translator2D(discreteRange, canvas, $.extend({ addSpiderCategory: true, stick: true }, optionsHorizontal));
 
     assert.equal(translator._canvasOptions.interval, 127.5);
     assert.deepEqual(translator._categoriesToPoints, {
@@ -423,12 +422,12 @@ QUnit.test('Create discrete translator (Stick = true, addSpiderCategory = true)'
 });
 
 QUnit.test('Can create Discrete translator without categories. B253644', function(assert) {
-    var range = $.extend({ stick: true, invert: true }, discreteRange),
+    var range = $.extend({ invert: true }, discreteRange),
         canvas = $.extend({}, canvasTemplate),
         translator;
     range.categories = null;
 
-    translator = new translator2DModule.Translator2D(range, canvas, optionsHorizontal);
+    translator = new translator2DModule.Translator2D(range, canvas, $.extend({ stick: true }, optionsHorizontal));
 
     assert.ok(translator);
     assert.ok($.isFunction(translator.translate));
@@ -1066,10 +1065,10 @@ QUnit.test('GetInterval. Base = 2', function(assert) {
 
 QUnit.module('Discrete translator', {
     beforeEach: function() {
-        this.createTranslator = function(range, canvas) {
+        this.createTranslator = function(range, canvas, options) {
             canvas = canvas || { width: 2000, height: 2000, left: 500, top: 500, right: 500, bottom: 500 };
-            return new translator2DModule.Translator2D($.extend({ categories: ['a1', 'a2', 'a3', 'a4', 'a5'], axisType: 'discrete', dataType: 'string', invert: false, stick: false }, range),
-                canvas, { isHorizontal: true });
+            return new translator2DModule.Translator2D($.extend({ categories: ['a1', 'a2', 'a3', 'a4', 'a5'], axisType: 'discrete', dataType: 'string', invert: false }, range),
+                canvas, $.extend({ isHorizontal: true, stick: false }, options));
         };
     }
 });
@@ -1093,7 +1092,7 @@ QUnit.test('Translate. Invert = true. Stick = false.', function(assert) {
 });
 
 QUnit.test('Translate. Invert = false. Stick = true.', function(assert) {
-    var translator = this.createTranslator({ stick: true });
+    var translator = this.createTranslator(undefined, undefined, { stick: true });
 
     assert.equal(translator.translate('a0'), null, 'BP not in categories (Q522516)');
     assert.equal(translator.translate('a3'), 1000, 'BP inside range');
@@ -1102,7 +1101,7 @@ QUnit.test('Translate. Invert = false. Stick = true.', function(assert) {
 });
 
 QUnit.test('Translate. Invert = true. Stick = true.', function(assert) {
-    var translator = this.createTranslator({ invert: true, stick: true });
+    var translator = this.createTranslator({ invert: true }, undefined, { stick: true });
 
     assert.equal(translator.translate('a0'), null, 'BP not in categories (Q522516)');
     assert.equal(translator.translate('a3'), 1000, 'BP inside range');
@@ -1111,7 +1110,7 @@ QUnit.test('Translate. Invert = true. Stick = true.', function(assert) {
 });
 
 QUnit.test('Translate. AddSpiderCategory = true. Stick = true.', function(assert) {
-    var translator = this.createTranslator({ addSpiderCategory: true, stick: true });
+    var translator = this.createTranslator(undefined, undefined, { addSpiderCategory: true, stick: true });
 
     assert.equal(translator.translate('a0'), null, 'BP not in categories (Q522516)');
     assert.equal(translator.translate('a3'), 900, 'BP inside range');
@@ -1190,7 +1189,7 @@ QUnit.test('Untranslate. Invert = false. Stick = true.', function(assert) {
         end = 1500,
         delta = 250,
         center = 125,
-        translator = this.createTranslator({ stick: true });
+        translator = this.createTranslator(undefined, undefined, { stick: true });
 
     assert.equal(translator.untranslate(start - 100), null, 'Coord less than min');
     assert.equal(translator.untranslate(end + 100), null, 'Coord more than min');
@@ -1213,7 +1212,7 @@ QUnit.test('Untranslate. Invert = true. Stick = true.', function(assert) {
         end = 1500,
         delta = 250,
         center = 125,
-        translator = this.createTranslator({ invert: true, stick: true });
+        translator = this.createTranslator({ invert: true }, undefined, { stick: true });
 
     assert.equal(translator.untranslate(start - 100), null, 'Coord less than min');
     assert.equal(translator.untranslate(end + 100), null, 'Coord more than min');
@@ -1236,7 +1235,7 @@ QUnit.test('Untranslate. AddSpiderCategory = true. Stick = true.', function(asse
         end = 1500,
         delta = 250,
         center = 125,
-        translator = this.createTranslator({ stick: true, addSpiderCategory: true });
+        translator = this.createTranslator(undefined, undefined, { addSpiderCategory: true, stick: true });
 
     assert.equal(translator.untranslate(start - 100), null, 'Coord less than min');
     assert.equal(translator.untranslate(end + 100), null, 'Coord more than min');
@@ -1276,7 +1275,7 @@ QUnit.test('GetInterval (Stick = false)', function(assert) {
 });
 
 QUnit.test('GetInterval (Stick = true)', function(assert) {
-    var translator = this.createTranslator({ stick: true });
+    var translator = this.createTranslator(undefined, undefined, { stick: true });
 
     assert.equal(translator._canvasOptions.interval, 250);
     assert.equal(translator.getInterval(), 250);
@@ -1284,13 +1283,13 @@ QUnit.test('GetInterval (Stick = true)', function(assert) {
 
 //T111250
 QUnit.test('Without categories. stick = true', function(assert) {
-    var translator = this.createTranslator({ categories: null, stick: true });
+    var translator = this.createTranslator({ categories: null }, undefined, { stick: true });
 
     assert.equal(translator._canvasOptions.interval, translator._canvasOptions.canvasLength);
 });
 
 QUnit.test('One categories. stick = true', function(assert) {
-    var translator = this.createTranslator({ categories: ['a1'], stick: true });
+    var translator = this.createTranslator({ categories: ['a1'] }, undefined, { stick: true });
 
     assert.equal(translator._canvasOptions.interval, translator._canvasOptions.canvasLength);
 });
@@ -1555,8 +1554,8 @@ QUnit.module('Interval translator', {
     beforeEach: function() {
         this.createTranslator = function(range, interval) {
             var canvas = { width: 2000, height: 2000, left: 500, top: 500, right: 500, bottom: 500 };
-            return new translator2DModule.Translator2D($.extend({ axisType: 'semidiscrete', dataType: 'numeric', invert: false, stick: false }, range),
-                canvas, { isHorizontal: true, interval: interval || 5 });
+            return new translator2DModule.Translator2D($.extend({ axisType: 'semidiscrete', dataType: 'numeric', invert: false }, range),
+                canvas, { isHorizontal: true, interval: interval || 5, stick: false });
         };
     }
 });
@@ -1846,6 +1845,12 @@ QUnit.test("isValid, Interval specified", function(assert) {
     assert.strictEqual(translator.isValid(40, 20), true);
     assert.strictEqual(translator.isValid(59, 20), true);
     assert.strictEqual(translator.isValid(61, 20), false);
+});
+
+QUnit.test("fix double errors issue", function(assert) {
+    var translator = this.createTranslator({ min: 1.4, max: 1.6 });
+
+    assert.strictEqual(translator.isValid(1.3, 0.1), false);
 });
 
 QUnit.module('Translate special cases', {
@@ -2231,10 +2236,15 @@ QUnit.test('getMinScale', function(assert) {
 QUnit.module('Zooming and scrolling. Discrete translator', {
     beforeEach: function() {
         this.createTranslator = function(range, options, canvas) {
-            return new translator2DModule.Translator2D($.extend({ categories: ['a1', 'a2', 'a3', 'a4', 'a5'], axisType: 'discrete', dataType: 'string', invert: false, stick: false }, range),
+            return new translator2DModule.Translator2D($.extend({ categories: ['a1', 'a2', 'a3', 'a4', 'a5'], axisType: 'discrete', dataType: 'string', invert: false }, range),
                 $.extend({ width: 2000, height: 2000, left: 500, top: 500, right: 500, bottom: 500 }, canvas),
-                $.extend({ isHorizontal: true }, options || {}));
+                $.extend({ isHorizontal: true, stick: false }, options || {}));
         };
+    },
+    afterEach: function() {
+        if(this.getCategoriesInfo !== undefined) {
+            this.getCategoriesInfo.restore();
+        }
     }
 });
 
@@ -2527,7 +2537,7 @@ QUnit.test('positive scroll. Vertical Translator. Inverted', function(assert) {
 });
 
 QUnit.test('positive scroll with stick=true', function(assert) {
-    var translator = this.createTranslator({ minVisible: 'a1', maxVisible: 'a4', stick: true }),
+    var translator = this.createTranslator({ minVisible: 'a1', maxVisible: 'a4' }, { stick: true }),
         zoom;
 
     translator.zoom(250, 1);
@@ -2545,7 +2555,7 @@ QUnit.test('positive scroll with stick=true', function(assert) {
 });
 
 QUnit.test('negative scroll with stick=true', function(assert) {
-    var translator = this.createTranslator({ minVisible: 'a2', maxVisible: 'a5', stick: true }),
+    var translator = this.createTranslator({ minVisible: 'a2', maxVisible: 'a5' }, { stick: true }),
         zoom;
 
     translator.zoom(250, 1);
@@ -2593,7 +2603,7 @@ QUnit.test('scale', function(assert) {
 });
 
 QUnit.test('scale with stick=true', function(assert) {
-    var translator = this.createTranslator({ minVisible: 'a1', maxVisible: 'a4', stick: true }),
+    var translator = this.createTranslator({ minVisible: 'a1', maxVisible: 'a4' }, { stick: true }),
         zoom;
 
     translator.zoom(250, 1);
@@ -2645,14 +2655,8 @@ QUnit.test('getMinScale', function(assert) {
 
 });
 
-QUnit.test('getMinScale', function(assert) {
-    var translator = this.createTranslator({ minVisible: 'a2', maxVisible: 'a4' });
-
-    assert.deepEqual(translator.getVisibleCategories(), ["a2", "a3", "a4"]);
-});
-
 QUnit.test('get scale. stick=true', function(assert) {
-    var translator = this.createTranslator({ stick: true });
+    var translator = this.createTranslator(undefined, { stick: true });
 
     assert.strictEqual(translator.getScale(), 1, "without args");
     assert.strictEqual(translator.getScale("a1", "a5"), 1, "full range");
@@ -2661,7 +2665,7 @@ QUnit.test('get scale. stick=true', function(assert) {
 });
 
 QUnit.test('get scale. stick=false', function(assert) {
-    var translator = this.createTranslator({ stick: false });
+    var translator = this.createTranslator(undefined, { stick: false });
 
     assert.strictEqual(translator.getScale(), 1, "without args");
     assert.strictEqual(translator.getScale("a1", "a5"), 1, "full range");
@@ -2670,13 +2674,13 @@ QUnit.test('get scale. stick=false', function(assert) {
 });
 
 QUnit.test("get scale, canvas without margins", function(assert) {
-    var translator = this.createTranslator({ stick: true }, {}, { left: 0, right: 0 });
+    var translator = this.createTranslator(undefined, { stick: true }, { left: 0, right: 0 });
 
     assert.strictEqual(translator.getScale("a5", "a1"), 1);
 });
 
 QUnit.test("get scale, inverted", function(assert) {
-    var translator = this.createTranslator({ stick: true, invert: true }, {}, { left: 0 });
+    var translator = this.createTranslator({ invert: true }, { stick: true }, { left: 0 });
 
     assert.strictEqual(translator.getScale(), 1, "without args");
     assert.strictEqual(translator.getScale("a1"), 1);
