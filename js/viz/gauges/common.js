@@ -127,7 +127,7 @@ exports.dxGauge = dxBaseGauge.inherit({
 
         if(!majorTickEnabled && !minorTickEnabled && !label.visible) { return {}; }
 
-        textParams = that._scale.measureLabels();
+        textParams = that._scale.measureLabels(extend({}, that._canvas));
         layoutValue = that._getScaleLayoutValue();
         result = { min: layoutValue, max: layoutValue };
         coefs = that._getTicksCoefficients(scaleOptions);
@@ -235,22 +235,24 @@ exports.dxGauge = dxBaseGauge.inherit({
             bounds = that._translator.getDomain(),
             startValue = bounds[0],
             endValue = bounds[1],
-            angles = that._translator.getCodomain();
+            angles = that._translator.getCodomain(),
+            invert = startValue > endValue,
+            min = _min(startValue, endValue),
+            max = _max(startValue, endValue);
 
-        scaleOptions.min = startValue;
-        scaleOptions.max = endValue;
+        scaleOptions.min = min;
+        scaleOptions.max = max;
         scaleOptions.startAngle = SHIFT_ANGLE - angles[0];
         scaleOptions.endAngle = SHIFT_ANGLE - angles[1];
-
+        scaleOptions.skipViewportExtending = true;
         that._scale.updateOptions(scaleOptions);
         that._updateScaleTickIndent(scaleOptions);
         that._scale.setBusinessRange(new rangeModule.Range({
             axisType: "continuous",
             dataType: "numeric",
-            stick: true,
-            minVisible: startValue,
-            maxVisible: endValue,
-            invert: startValue > endValue
+            minVisible: min,
+            maxVisible: max,
+            invert: invert
         }));
 
         that._scaleGroup.linkAppend();

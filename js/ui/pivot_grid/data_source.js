@@ -1087,7 +1087,13 @@ module.exports = Class.inherit((function() {
                 field = this._fields && this._fields[index],
                 store = this.store(),
                 loadFields = [],
-                loadOptions = { columns: loadFields, rows: [], values: this.getAreaFields("data"), filters: [] },
+                loadOptions = {
+                    columns: loadFields,
+                    rows: [],
+                    values: this.getAreaFields("data"),
+                    filters: [],
+                    skipValues: true
+                },
                 d = new Deferred();
 
             if(field && store) {

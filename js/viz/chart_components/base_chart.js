@@ -675,7 +675,7 @@ var BaseChart = BaseWidget.inherit({
                 zoomMaxArg = argBusinessRange.maxVisible;
             }
 
-            that._scrollBar.init(argBusinessRange).setPosition(zoomMinArg, zoomMaxArg);
+            that._scrollBar.init(argBusinessRange, !that._argumentAxes[0].getOptions().valueMarginsEnabled).setPosition(zoomMinArg, zoomMaxArg);
         }
 
         that._updateTracker(trackerCanvases);

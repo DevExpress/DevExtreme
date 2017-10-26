@@ -3,12 +3,13 @@
 var eventsEngine = require("../../events/core/events_engine"),
     extend = require("../../core/utils/extend").extend,
     ensureDefined = require("../../core/utils/common").ensureDefined,
+    escapeRegExp = require("../../core/utils/common").escapeRegExp,
     number = require("../../localization/number"),
     NumberBoxBase = require("./number_box.base"),
     eventUtils = require("../../events/utils");
 
 var NUMBER_FORMATTER_NAMESPACE = "dxNumberFormatter",
-    STUB_CHAR_REG_EXP = "[^0-9]",
+    STUB_CHAR_REG_EXP = "[^0-9.]",
     MOVE_FORWARD = 1,
     MOVE_BACKWARD = -1;
 
@@ -75,7 +76,7 @@ var NumberBoxMask = NumberBoxBase.inherit({
             index--;
         }
 
-        while(this._isStub(text.charAt(index)) && text.charAt(index) !== number.getDecimalSeparator()) {
+        while(this._isStub(text.charAt(index))) {
             index += direction;
         }
 
@@ -130,9 +131,12 @@ var NumberBoxMask = NumberBoxBase.inherit({
 
         if(this._isStub(char)) {
             e.preventDefault();
-            if(char === number.getDecimalSeparator()) {
-                this._moveCaret(this._isDeleteKey(e.key) ? 1 : -1);
-            }
+            return;
+        }
+
+        if(char === number.getDecimalSeparator()) {
+            this._moveCaret(this._isDeleteKey(e.key) ? 1 : -1);
+            e.preventDefault();
             return;
         }
 
@@ -357,7 +361,8 @@ var NumberBoxMask = NumberBoxBase.inherit({
     },
 
     _endsWith: function(string, suffix) {
-        return string.indexOf(suffix, string.length - suffix.length) !== -1;
+        var regExp = new RegExp(escapeRegExp(suffix) + STUB_CHAR_REG_EXP + "*$", "ig");
+        return regExp.test(string);
     },
 
     _revertSign: function(e) {

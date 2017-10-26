@@ -1,27 +1,6 @@
 "use strict";
 
-var isFunction = require("../../core/utils/type").isFunction,
-    _map = require("../core/utils").map,
-    _format = require("../core/format");
-
-function getFormatObject(value, options, axisMinMax, point) {
-    var formatObject = {
-        value: value,
-        valueText: _format(value, options) || ""
-    };
-    //B252346
-    if(axisMinMax) {
-        formatObject.min = axisMinMax.min;
-        formatObject.max = axisMinMax.max;
-    }
-
-    //for crosshair's customizeText
-    if(point) {
-        formatObject.point = point;
-    }
-
-    return formatObject;
-}
+var _map = require("../core/utils").map;
 
 module.exports = {
     logarithmic: "logarithmic",
@@ -53,16 +32,6 @@ module.exports = {
 
     validateOverlappingMode: function(mode) {
         return mode === "ignore" || mode === "none" ? mode : "hide";
-    },
-
-    formatLabel: function(value, options, axisMinMax, point) {
-        var formatObject = getFormatObject(value, options, axisMinMax, point);
-        return isFunction(options.customizeText) ? options.customizeText.call(formatObject, formatObject) : formatObject.valueText;
-    },
-
-    formatHint: function(value, options, axisMinMax) {
-        var formatObject = getFormatObject(value, options, axisMinMax);
-        return isFunction(options.customizeHint) ? options.customizeHint.call(formatObject, formatObject) : undefined;
     },
 
     getTicksCountInRange: function(ticks, valueKey, range) {

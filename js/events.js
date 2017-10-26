@@ -159,7 +159,6 @@ exports.triggerHandler = eventsEngine.triggerHandler;
 * @name event
 * @publicName event
 * @type dxEvent|jQuery.Event
-* @return dxEvent
 * @hidden
 */
 

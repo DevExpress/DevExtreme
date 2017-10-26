@@ -92,6 +92,12 @@ var FilterBuilder = Widget.inherit({
             onEditorPrepared: null,
 
             /**
+            * @name dxFilterBuilderField
+            * @publicName dxFilterBuilderField
+            * @category Internal
+            */
+
+            /**
             * @name dxFilterBuilderOptions_fields
             * @publicName fields
             * @type Array<dxFilterBuilderField>
