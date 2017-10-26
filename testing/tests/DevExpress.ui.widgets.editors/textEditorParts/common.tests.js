@@ -26,11 +26,11 @@ var EVENTS = [
 ];
 
 var setCaretForEdge15 = function($input) {
-    //NOTE: We desided to return to this problem when the Edge will update to the 16 version
-    //Edge 15 sets caret to the end of the mask editor when iframe is used and focus was triggered by focus() method
-    var isEdge15 = browser.msie && browser.version >= 15 && browser.version < 16;
+    //NOTE: We desided to return to this problem when the Edge will update to the 17 version
+    //Edge 15 or 16 sets caret to the end of the mask editor when iframe is used and focus was triggered by focus() method
+    var isEdge15_16 = browser.msie && browser.version >= 15 && browser.version < 17;
 
-    if(isEdge15) {
+    if(isEdge15_16) {
         $input.focus();
         caret($input, 0);
     }
