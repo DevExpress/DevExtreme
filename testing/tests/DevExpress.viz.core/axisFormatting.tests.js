@@ -219,7 +219,7 @@ QUnit.test("formatting logarithmic ticks", function(assert) {
     [ "1E-5", "0.0001", "0.001", "0.01", "0.1", "0", "1", "10", "100", "1K", "10K", "1E+18"]);
 });
 
-QUnit.test("No formats for logarithmic ticks with logarithmBase !== 0", function(assert) {
+QUnit.test("No formats for logarithmic ticks with logarithmBase !== 10", function(assert) {
     this.testFormat(assert, {
         logarithmBase: 2,
         type: "logarithmic",
