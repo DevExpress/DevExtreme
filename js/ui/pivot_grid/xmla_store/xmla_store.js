@@ -62,8 +62,7 @@ exports.XmlaStore = Class.inherit((function() {
                 } catch(e) {
                     xml = undefined;
                 }
-
-                if(!xml || xml.getElementsByTagName("parsererror").length) {
+                if(!xml || xml.getElementsByTagName("parsererror").length || xml.childNodes.length === 0) {
                     throw new errors.Error("E4023", text);
                 }
             } catch(e) {
