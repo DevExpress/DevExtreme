@@ -306,7 +306,8 @@ QUnit.test("Scale is rendered", function(assert) {
         tickInterval: 4,
         tickOrientation: "center",
         startAngle: -910,
-        endAngle: -1910
+        endAngle: -1910,
+        skipViewportExtending: true
     }, "scale updating");
     assert.equal(scale.draw.callCount, 1, "scale drawing");
     assert.equal(scaleGroup.linkAppend.callCount, 1, "scale group appending");
@@ -763,6 +764,54 @@ QUnit.test("Translator with not valid settings", function(assert) {
     assert.strictEqual(gauge._translator.getDomainEnd(), 100, "domain end");
     assert.strictEqual(gauge._translator.getCodomainStart(), 1000, "codomain start");
     assert.strictEqual(gauge._translator.getCodomainEnd(), 2000, "codomain end");
+});
+
+QUnit.module("Gauge - scale initialization", environment);
+
+QUnit.test("startValue < endValue", function(assert) {
+    this.createTestGauge({
+        scale: {
+            startValue: 10,
+            endValue: 20
+        }
+    });
+
+    var scale = axisModule.Axis.getCall(0).returnValue,
+        updateOptions = scale.updateOptions.getCall(0).args[0],
+        setBusinessRange = scale.setBusinessRange.getCall(0).args[0].ctorArgs[0];
+
+    assert.strictEqual(updateOptions.min, 10);
+    assert.strictEqual(updateOptions.max, 20);
+    assert.deepEqual(setBusinessRange, {
+        axisType: "continuous",
+        dataType: "numeric",
+        minVisible: 10,
+        maxVisible: 20,
+        invert: false
+    });
+});
+
+QUnit.test("startValue > endValue", function(assert) {
+    this.createTestGauge({
+        scale: {
+            startValue: 20,
+            endValue: 10
+        }
+    });
+
+    var scale = axisModule.Axis.getCall(0).returnValue,
+        updateOptions = scale.updateOptions.getCall(0).args[0],
+        setBusinessRange = scale.setBusinessRange.getCall(0).args[0].ctorArgs[0];
+
+    assert.strictEqual(updateOptions.min, 10);
+    assert.strictEqual(updateOptions.max, 20);
+    assert.deepEqual(setBusinessRange, {
+        axisType: "continuous",
+        dataType: "numeric",
+        minVisible: 10,
+        maxVisible: 20,
+        invert: true
+    });
 });
 
 QUnit.module("Gauge - resizing", {

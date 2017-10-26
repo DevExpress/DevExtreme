@@ -1792,6 +1792,19 @@ declare module DevExpress.viz.charts {
         * @docid dxpolarchartoptions_valueaxis_strips
         */
         strips?: Array<Strip>;
+
+        /**
+        * @docid dxchartoptions_commonaxissettings_allowdecimals
+        * @docid dxpolarchartoptions_commonaxissettings_allowdecimals
+        */
+        allowDecimals?: Boolean;
+
+        /**
+        * @docid dxchartoptions_commonaxissettings_endontick
+        * @docid dxchartoptions_valueaxis_endontick
+        * @docid dxpolarchartoptions_commonaxissettings_endontick
+        */
+        endOnTick?: Boolean;
     }
 
     export interface ChartAxis extends ChartCommonAxisSettings, Axis {

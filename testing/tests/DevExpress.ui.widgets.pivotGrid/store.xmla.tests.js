@@ -94,6 +94,7 @@ var $ = require("jquery"),
         beforeEach: function() {
             var that = this;
             sinon.spy(errors, "log");
+            sinon.spy(errors, "Error");
 
             testEnvironment.beforeEach.call(that);
             that.sendDeferred = $.Deferred();
@@ -105,6 +106,7 @@ var $ = require("jquery"),
         afterEach: function() {
             this.sendRequest.restore();
             errors.log.restore();
+            errors.Error.restore();
             //testEnvironment.afterEach.call(this);
         },
         dataSource: testEnvironment.dataSource,
@@ -772,6 +774,23 @@ QUnit.test("T321308: dxPivotGrid with XMLA store - uncaught exception occurs whe
         assert.ok(data);
         assert.ok(data.values.length);
         assert.strictEqual(getValue(data), 18484);
+    }).fail(getFailCallBack(assert))
+        .always(done);
+});
+
+QUnit.test("T566739. Get All field values without load values", function(assert) {
+    var done = assert.async();
+    this.store.load({
+        columns: [{ dataField: "[Product].[Category]" }],
+        rows: [],
+        values: [
+            { dataField: "[Measures].[Internet Order Count]", caption: 'Data1' },
+            { dataField: "[Measures].[Growth in Customer Base]", caption: 'Data2' },
+            { dataField: "[Measures].[Customer Count]", caption: 'Data3' }
+        ],
+        skipValues: true
+    }).done(function(data) {
+        assert.deepEqual(data.columns, CATEGORIES_DATA_WITH_COMPONENTS);
     }).fail(getFailCallBack(assert))
         .always(done);
 });
@@ -3610,6 +3629,20 @@ QUnit.test("Differrent errors in defferent cells", function(assert) {
     });
 });
 
+QUnit.test("Throw error when unexpected response", function(assert) {
+    this.sendDeferred.resolve("");
+    this.store.load({
+        columns: [],
+        rows: [],
+        values: []
+    }).done(function(data) {
+        assert.ok(false);
+    }).fail(function() {
+        assert.equal(errors.Error.lastCall.args[0], "E4023");
+        assert.equal(errors.Error.lastCall.args[1], "");
+    });
+});
+
 QUnit.test("Parse time type cell data", function(assert) {
     this.sendDeferred.resolve('<soap:Envelope xmlns:soap="http://schemas.xmlsoap.org/soap/envelope/"><soap:Body><ExecuteResponse xmlns="urn:schemas-microsoft-com:xml-analysis"><return><root xmlns="urn:schemas-microsoft-com:xml-analysis:mddataset" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xmlns:xsd="http://www.w3.org/2001/XMLSchema" xmlns:msxmla="http://schemas.microsoft.com/analysisservices/2003/xmla"><Axes><Axis name="Axis0"><Tuples><Tuple><Member Hierarchy="[Measures]"><UName>[Measures].[Duracao]</UName><Caption>Duracao</Caption><LName>[Measures].[MeasuresLevel]</LName><LNum>0</LNum><DisplayInfo>0</DisplayInfo><HIERARCHY_UNIQUE_NAME>[Measures]</HIERARCHY_UNIQUE_NAME><MEMBER_VALUE>Duracao</MEMBER_VALUE></Member></Tuple></Tuples></Axis></Axes><CellData><Cell CellOrdinal="0"><Value>28:59:08</Value><FormatString>Long Time</FormatString></Cell></CellData></root></return></ExecuteResponse></soap:Body></soap:Envelope>');
 
@@ -3659,7 +3692,21 @@ QUnit.test("No LocaleIdentifier in query if unknown locale is set", function(ass
     } finally {
         localization.locale(locale);
     }
+});
 
+QUnit.test("T566739. Do not generate CrossJoin in select statement if skipValues is set to true", function(assert) {
+    this.store.load({
+        columns: [{ dataField: "[Product].[Category]" }],
+        rows: [],
+        values: [
+            { dataField: "[Measures].[Internet Order Count]", caption: 'Data1' },
+            { dataField: "[Measures].[Growth in Customer Base]", caption: 'Data2' },
+            { dataField: "[Measures].[Customer Count]", caption: 'Data3' }
+        ],
+        skipValues: true
+    });
+
+    assert.ok(this.getQuery().toLowerCase().indexOf("crossjoin") === -1);
 });
 
 

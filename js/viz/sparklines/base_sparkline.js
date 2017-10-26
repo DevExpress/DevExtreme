@@ -56,12 +56,11 @@ function createAxis(isHorizontal) {
         getTranslator: function() {
             return translator;
         },
-        update: function(range, canvas) {
-            translator.update(range, canvas);
+        update: function(range, canvas, options) {
+            translator.update(range, canvas, options);
         },
-        getViewport: function() {
-            return undefined;
-        }
+        getViewport: _noop,
+        calculateInterval: _noop
     };
 }
 
@@ -128,9 +127,11 @@ var BaseSparkline = BaseWidget.inherit({
     _updateWidgetElements: function() {
         this._updateRange();
 
-        this._argumentAxis.update(this._ranges.arg, this._canvas);
+        this._argumentAxis.update(this._ranges.arg, this._canvas, this._getStick());
         this._valueAxis.update(this._ranges.val, this._canvas);
     },
+
+    _getStick: function() { },
 
     _applySize: function(rect) {
         this._allOptions.size = { width: rect[2] - rect[0], height: rect[3] - rect[1] };

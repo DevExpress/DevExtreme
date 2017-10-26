@@ -80,13 +80,17 @@ QUnit.test("Chart view", function(assert) {
 
     this.rangeView.update({ color: "red", image: { url: "url" } }, { visible: true, image: { location: "loc" } }, this.canvas, false, "animation-enabled", seriesDataSource);
 
-    assert.strictEqual(valueAxis.setBusinessRange.lastCall.args[0], "bound-range");
     assert.deepEqual(valueAxis.updateCanvas.lastCall.args[0], {
         top: this.canvas.top,
         bottom: 0,
         height: this.canvas.height + this.canvas.top
     });
+
     assert.ok(seriesDataSource.adjustSeriesDimensions.called, "series dimensions");
+    assert.ok(seriesDataSource.adjustSeriesDimensions.lastCall.calledAfter(valueAxis.updateCanvas.lastCall));
+
+    assert.strictEqual(valueAxis.setBusinessRange.lastCall.args[0], "bound-range");
+
     $.each(series, function(i, item) {
         assert.strictEqual(item._extGroups.seriesGroup, root.children[2], "series group - " + i);
         assert.strictEqual(item._extGroups.labelsGroup, root.children[2], "labels group - " + i);

@@ -70,6 +70,7 @@ exports.environment = {
         this.axis = new StubAxis();
 
         this.axis.stub("getTranslator").returns(this.translator);
+        this.axis.calculateInterval = function(a, b) { return a - b; };
         this.seriesDataSource = new StubSeriesDataSource();
 
         rendererModule.Renderer = returnValue(this.renderer);
@@ -77,13 +78,16 @@ exports.environment = {
         rangeViewModule.RangeView = returnValue(this.rangeView);
         slidersControllerModule.SlidersController = returnValue(this.slidersController);
         trackerModule.Tracker = returnValue(this.tracker);
-        axisModule.Axis = returnValue(this.axis);
         seriesDataSourceModule.SeriesDataSource = returnValue(this.seriesDataSource);
         translator2DModule.Translator2D = returnValue(this.translator);
+
+        sinon.stub(axisModule, "Axis");
+        axisModule.Axis.returns(this.axis);
     },
 
     afterEach: function() {
         this.$container.remove();
+        axisModule.Axis.restore();
     },
 
     createWidget: function(options) {

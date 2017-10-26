@@ -446,9 +446,6 @@
             updateBusinessRange: function() {
 
             },
-            getVisibleCategories: function() {
-
-            },
             getMinBarSize: function() {
                 return arguments[0];
             },
@@ -528,7 +525,7 @@
             drawTrackers: function() {
                 this.drawnTrackers = true;
             },
-            getRangeData: function(visibleArea, calcInterval) {
+            getRangeData: function() {
                 if(options.visible === false) {
                     return { arg: {}, val: {} };
                 }
@@ -537,19 +534,6 @@
                 range.arg = range.arg || {};
                 range.val = range.val || {};
                 range.viewport = range.viewport || {};
-
-                var minSelector = "minVisible",
-                    maxSelector = "maxVisible";
-
-                options.calcInterval = calcInterval;
-                this.calcInterval = calcInterval;
-
-                visibleArea = visibleArea || {};
-
-                visibleArea.minArg && (range.arg[minSelector] = visibleArea.minArg);
-                visibleArea.maxArg && (range.arg[maxSelector] = visibleArea.maxArg);
-                visibleArea.minVal && (range.val[minSelector] = visibleArea.minVal);
-                visibleArea.maxVal && (range.val[maxSelector] = visibleArea.maxVal);
 
                 return range;
             },
@@ -668,7 +652,8 @@
             correctPosition: sinon.spy(),
             correctRadius: sinon.spy(),
             updateDataType: sinon.spy(),
-            getViewport: sinon.stub().returns({})
+            getViewport: sinon.stub().returns({}),
+            getMarginOptions: sinon.stub().returns(options.marginOptions || {})
         };
     };
 
@@ -977,12 +962,7 @@
                 if(!this._majorTicks) {
                     this._majorTicks = $.map(this._options.mockTickValues || [], function(item) { return { value: item }; });
                 }
-                this._tickManager = {
-                    _tickInterval: this._options.mockTickInterval,
-                    getTickInterval: function() {
-                        return this._tickInterval;
-                    }
-                };
+                this._tickInterval = this._options.mockTickInterval;
                 return {
                     majorTicksValues: $.map(this._majorTicks, function(item) { return item.value; }),
                     minorTicksValues: $.map(this._minorTicks || [], function(item) { return item.value; })
@@ -1011,6 +991,7 @@
             _constantLinesGroup: renderOptions.constantLinesGroup,
             axesContainerGroup: renderOptions.axesContainerGroup,
             gridGroup: renderOptions.gridGroup,
+            isArgumentAxis: renderOptions.isArgumentAxis,
             _renderer: renderer,
             applyClipRects: function(clipRect) {
                 this.clipRectsApplied = true;
@@ -1031,7 +1012,8 @@
             resetZoom: function() {
 
             },
-            resetTypes: sinon.spy()
+            resetTypes: sinon.spy(),
+            setMarginOptions: sinon.spy()
         };
     };
 

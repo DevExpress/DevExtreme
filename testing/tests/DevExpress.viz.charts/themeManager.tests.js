@@ -1991,6 +1991,7 @@ function createThemeManager(options, themeGroupName) {
         var themeManager = createThemeManager(this.getOptions({}));
         themeManager.setTheme("getOptionsTheme");
         assert.deepEqual(themeManager.getOptions('valueAxisRangeSelector'), {
+            endOnTick: true,
             valueAxisTheme: true,
             grid: {
                 visible: true
@@ -2008,6 +2009,7 @@ function createThemeManager(options, themeGroupName) {
         themeManager.setTheme("getOptionsTheme");
 
         assert.deepEqual(themeManager.getOptions('valueAxisRangeSelector'), {
+            endOnTick: true,
             grid: {
                 visible: true
             },

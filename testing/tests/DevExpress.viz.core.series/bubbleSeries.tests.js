@@ -134,6 +134,15 @@ QUnit.test("Creation with errorBars", function(assert) {
     assert.strictEqual(this.createPoint.firstCall.args[1].highError, undefined, "highError not passed");
 });
 
+QUnit.test("getMarginOptions", function(assert) {
+    var series = createSeries({ type: "bubble" });
+
+    assert.deepEqual(series.getMarginOptions(), {
+        processBubbleSize: true,
+        percentStick: false
+    });
+});
+
 QUnit.module("Bubble series. Draw", {
     beforeEach: environment.beforeEach,
     afterEach: environment.afterEach,

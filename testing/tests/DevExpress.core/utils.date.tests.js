@@ -425,7 +425,7 @@ QUnit.test('convertMillisecondsToDateUnits', function(assert) {
     assert.deepEqual(convertMillisecondsToDateUnits(new Date(2010, 9, 14) - new Date(2010, 8, 14)), { months: 1 }, 'months');
     assert.deepEqual(convertMillisecondsToDateUnits(new Date(2010, 9, 14, 3, 30) - new Date(2010, 9, 14, 1, 30)), { hours: 2 }, 'hours');
     assert.deepEqual(convertMillisecondsToDateUnits(new Date(2008, 9, 14, 1, 30, 45) - new Date(2007, 4, 14, 1, 30, 45)), { days: 4, months: 5, years: 1 }, 'big interval');
-    assert.deepEqual(convertMillisecondsToDateUnits(new Date(2008, 9, 14, 0, 0, 0) - new Date(2008, 4, 10, 1, 30, 45)), { seconds: 15, minutes: 29, hours: 22, days: 6, months: 5 }, 'setTicksAtUnitBeginning');
+    assert.deepEqual(convertMillisecondsToDateUnits(new Date(2008, 9, 14, 0, 0, 0) - new Date(2008, 4, 10, 1, 30, 45)), { seconds: 15, minutes: 29, hours: 22, days: 6, months: 5 });
 });
 
 QUnit.test('correctDateWithUnitBeginning without gap correction', function(assert) {

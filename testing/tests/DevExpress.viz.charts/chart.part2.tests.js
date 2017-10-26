@@ -29,14 +29,6 @@ QUnit.test("Pass rotation info to Business range (rotated = false)", function(as
     assert.strictEqual(chart._argumentAxes[0].setBusinessRange.lastCall.args[0].rotated, false);
 });
 
-QUnit.test("Pass stick info to Business range (axis is discrete)", function(assert) {
-    var chart = this.createChart({
-        argumentAxis: { mockRange: { axisType: "discrete" } }
-    });
-
-    assert.strictEqual(chart._argumentAxes[0].setBusinessRange.lastCall.args[0].stick, undefined);
-});
-
 QUnit.test("Calculate business range for continuous without indent", function(assert) {
     seriesMockData.series.push(new MockSeries({
         range: {
@@ -899,3 +891,150 @@ QUnit.test("Canvas lenght for not rotated chart", function(assert) {
     assert.ok(chart.getAllSeries()[0].resamplePoints.called);
     assert.equal(chart.getAllSeries()[0].resamplePoints.args[0][0], 270);
 });
+
+QUnit.module("Merge marginOptions", commons.environment);
+
+QUnit.test("Pass merged marginOptions to axes", function(assert) {
+    seriesMockData.series.push(new MockSeries({
+        marginOptions: {
+            checkInterval: false,
+            size: 8,
+            percentStick: true
+        }
+    }));
+
+    seriesMockData.series.push(new MockSeries({
+        marginOptions: {
+            checkInterval: true,
+            size: 5,
+            percentStick: false
+        }
+    }));
+
+    var chart = this.createChart({
+        series: [{}, {}]
+    });
+
+    assert.deepEqual(chart._valueAxes[0].setMarginOptions.lastCall.args[0], {
+        size: 8,
+        checkInterval: true,
+        percentStick: true
+    });
+
+    assert.deepEqual(chart._argumentAxes[0].setMarginOptions.lastCall.args[0], {
+        size: 8,
+        checkInterval: true,
+        percentStick: true
+    });
+});
+
+QUnit.test("Merge options witout size", function(assert) {
+    seriesMockData.series.push(new MockSeries({}));
+
+    var chart = this.createChart({
+        series: [{}]
+    });
+
+    assert.deepEqual(chart._valueAxes[0].setMarginOptions.lastCall.args[0].size, 0);
+});
+
+QUnit.test("Pass merged marginOptions to axes when two value axis", function(assert) {
+    seriesMockData.series.push(new MockSeries({
+        marginOptions: {
+            checkInterval: false,
+            size: 8,
+            percentStick: false
+        }
+    }));
+
+    seriesMockData.series.push(new MockSeries({
+        marginOptions: {
+            checkInterval: true,
+            size: 5,
+            percentStick: true
+        }
+    }));
+
+    var chart = this.createChart({
+        series: [{
+            axis: "axis1"
+        }, {
+            axis: "axis2"
+        }],
+        valueAxis: [{
+            name: "axis1"
+        }, {
+            name: "axis2"
+        }]
+    });
+
+    assert.deepEqual(chart._valueAxes[0].setMarginOptions.lastCall.args[0], {
+        checkInterval: false,
+        size: 8,
+        percentStick: false
+    });
+
+    assert.deepEqual(chart._valueAxes[1].setMarginOptions.lastCall.args[0], {
+        checkInterval: true,
+        size: 5,
+        percentStick: true
+    });
+
+    assert.deepEqual(chart._argumentAxes[0].setMarginOptions.lastCall.args[0], {
+        size: 8,
+        checkInterval: true,
+        percentStick: true
+    });
+});
+
+QUnit.test("Process margin for bubble", function(assert) {
+    seriesMockData.series.push(new MockSeries({
+        marginOptions: {
+            processBubbleSize: true
+        }
+    }));
+
+    var chart = this.createChart({
+        series: [{}],
+        panes: [{
+            name: "pane1"
+        },
+        {
+            name: "pane2"
+        }],
+        maxBubbleSize: 0.2,
+        size: {
+            width: 1000,
+            height: 800
+        }
+    });
+
+    assert.deepEqual(chart._valueAxes[0].setMarginOptions.lastCall.args[0].size, 80);
+});
+
+QUnit.test("Process margin for bubble. Rotated chart", function(assert) {
+    seriesMockData.series.push(new MockSeries({
+        marginOptions: {
+            processBubbleSize: true
+        }
+    }));
+
+    var chart = this.createChart({
+        series: [{}],
+        rotated: true,
+        panes: [{
+            name: "pane1"
+        },
+        {
+            name: "pane2"
+        }],
+        maxBubbleSize: 0.2,
+        size: {
+            width: 1000,
+            height: 800
+        }
+    });
+
+    assert.deepEqual(chart._valueAxes[0].setMarginOptions.lastCall.args[0].size, 100);
+});
+

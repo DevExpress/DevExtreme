@@ -3,23 +3,12 @@
 var $ = require("jquery"),
     vizMocks = require("../../helpers/vizMocks.js"),
     translator2DModule = require("viz/translators/translator2d"),
-    tickManagerModule = require("viz/axes/base_tick_manager"),
+    tickGeneratorModule = require("viz/axes/tick_generator"),
     rangeModule = require("viz/translators/range"),
     Axis = require("viz/axes/base_axis").Axis;
 
-var TickManagerStubCtor = new vizMocks.ObjectPool(tickManagerModule.TickManager),
-    TranslatorStubCtor = new vizMocks.ObjectPool(translator2DModule.Translator2D),
+var TranslatorStubCtor = new vizMocks.ObjectPool(translator2DModule.Translator2D),
     RangeStubCtor = new vizMocks.ObjectPool(rangeModule.Range);
-
-function createStubTickManager() {
-    var tickManager = new TickManagerStubCtor();
-    tickManager.getBoundaryTicks.returns([]);
-    tickManager.getTicks.returns([]);
-    tickManager.getMinorTicks.returns([]);
-    tickManager.getOptions.returns({});
-    return tickManager;
-}
-
 
 function getStub2DTranslatorWithSettings() {
     var translator = sinon.createStubInstance(translator2DModule.Translator2D);
@@ -43,13 +32,16 @@ var environment = {
 
         TranslatorStubCtor.resetIndex();
         RangeStubCtor.resetIndex();
-        TickManagerStubCtor.resetIndex();
 
         this.renderer = new vizMocks.Renderer();
 
-        this.tickManager = createStubTickManager();
-        this.createTickManager = sinon.stub(tickManagerModule, "TickManager", function() {
-            return that.tickManager;
+        this.tickGenerator = sinon.stub(tickGeneratorModule, "tickGenerator", function() {
+            return function() {
+                return {
+                    ticks: that.generatedTicks || [],
+                    minorTicks: []
+                };
+            };
         });
 
         this.translator = getStub2DTranslatorWithSettings();
@@ -108,7 +100,7 @@ var environment = {
 
     },
     afterEach: function() {
-        this.createTickManager.restore();
+        this.tickGenerator.restore();
         translator2DModule.Translator2D.restore();
     },
     createSimpleAxis: function(options) {
@@ -154,7 +146,7 @@ QUnit.module("Translators in axis", {
     }
 });
 
-QUnit.test("circular polar axis updates translator on option changed", function(assert) {
+QUnit.test("circular continuous axis - updates translator on option changed", function(assert) {
     var axis = new Axis({
             renderer: this.renderer,
             axisType: "polarAxes",
@@ -169,7 +161,69 @@ QUnit.test("circular polar axis updates translator on option changed", function(
     });
 
     assert.strictEqual(translator2DModule.Translator2D.callCount, 1, "created single translator instance");
-    assert.deepEqual(translator.update.lastCall.args[2], { isHorizontal: true, conversionValue: true });
+    assert.deepEqual(translator.update.lastCall.args[2], {
+        isHorizontal: true,
+        conversionValue: true,
+        addSpiderCategory: undefined,
+        stick: true
+    });
+});
+
+QUnit.test("circular discrete axis - stick false", function(assert) {
+    var axis = new Axis({
+            renderer: this.renderer,
+            axisType: "polarAxes",
+            drawingType: "circular"
+        }),
+        translator = translator2DModule.Translator2D.lastCall.returnValue;
+
+    sinon.spy(translator, "update");
+
+    axis.updateOptions({
+        label: {},
+        type: "discrete",
+        firstPointOnStartAngle: false
+    });
+
+    assert.strictEqual(translator.update.lastCall.args[2].stick, false);
+});
+
+QUnit.test("circular axis, firstPointOnStartAngle = true - addSpiderCategory and stick are true", function(assert) {
+    var axis = new Axis({
+            renderer: this.renderer,
+            axisType: "polarAxes",
+            drawingType: "circular"
+        }),
+        translator = translator2DModule.Translator2D.lastCall.returnValue;
+
+    sinon.spy(translator, "update");
+
+    axis.updateOptions({
+        label: {},
+        firstPointOnStartAngle: true
+    });
+
+    assert.strictEqual(translator.update.lastCall.args[2].addSpiderCategory, true);
+    assert.strictEqual(translator.update.lastCall.args[2].stick, true);
+});
+
+QUnit.test("circular spider axis - addSpiderCategory and stick are always true", function(assert) {
+    var axis = new Axis({
+            renderer: this.renderer,
+            axisType: "polarAxes",
+            drawingType: "circularSpider"
+        }),
+        translator = translator2DModule.Translator2D.lastCall.returnValue;
+
+    sinon.spy(translator, "update");
+
+    axis.updateOptions({
+        label: {},
+        firstPointOnStartAngle: false
+    });
+
+    assert.strictEqual(translator.update.lastCall.args[2].addSpiderCategory, true);
+    assert.strictEqual(translator.update.lastCall.args[2].stick, true);
 });
 
 QUnit.test("linear polar axis updates translator on option changed", function(assert) {
@@ -187,7 +241,28 @@ QUnit.test("linear polar axis updates translator on option changed", function(as
     });
 
     assert.strictEqual(translator2DModule.Translator2D.callCount, 1, "created single translator instance");
-    assert.deepEqual(translator.update.lastCall.args[2], { isHorizontal: true });
+    assert.deepEqual(translator.update.lastCall.args[2], {
+        isHorizontal: true,
+        stick: true
+    });
+});
+
+QUnit.test("linear axis, valueMarginsEnabled = true - stick false", function(assert) {
+    var axis = new Axis({
+            renderer: this.renderer,
+            axisType: "polarAxes",
+            drawingType: "linear"
+        }),
+        translator = translator2DModule.Translator2D.lastCall.returnValue;
+
+    sinon.spy(translator, "update");
+
+    axis.updateOptions({
+        label: {},
+        valueMarginsEnabled: true
+    });
+
+    assert.strictEqual(translator.update.lastCall.args[2].stick, false);
 });
 
 QUnit.test("Update canvas. polar circular axis", function(assert) {
@@ -331,13 +406,8 @@ QUnit.test("Update canvas. polar linear axis. radius < 0", function(assert) {
 QUnit.module("Ticks skipping. Polar axes", $.extend({}, environment, {
     beforeEach: function() {
         environment.beforeEach.apply(this, arguments);
-        var that = this;
-        that.options.label.visible = false;
-        that.tickManager.getTicks.returns(["c1", "c2", "c3", "c4"]);
-        this.createTickManager.restore();
-        this.createTickManager = sinon.stub(tickManagerModule, "TickManager", function() {
-            return that.tickManager;
-        });
+        this.options.label.visible = false;
+        this.generatedTicks = ["c1", "c2", "c3", "c4"];
     }
 }));
 
@@ -349,11 +419,11 @@ QUnit.test("Linear axis. axisDivisionMode is betweenLabels, valueMarginsEnabled 
         valueMarginsEnabled: false
     });
 
-    assert.equal(this.translator.translate.callCount, 4);
+    assert.equal(this.translator.translate.callCount, 8); //4 for labels
     assert.deepEqual(this.translator.translate.getCall(0).args, ["c1", 1]);
-    assert.deepEqual(this.translator.translate.getCall(1).args, ["c2", 1]);
-    assert.deepEqual(this.translator.translate.getCall(2).args, ["c3", 1]);
-    assert.deepEqual(this.translator.translate.getCall(3).args, ["c4", 1]);
+    assert.deepEqual(this.translator.translate.getCall(2).args, ["c2", 1]);
+    assert.deepEqual(this.translator.translate.getCall(4).args, ["c3", 1]);
+    assert.deepEqual(this.translator.translate.getCall(6).args, ["c4", 1]);
 });
 
 QUnit.test("Linear axis. axisDivisionMode is betweenLabels, valueMarginsEnabled true", function(assert) {
@@ -364,11 +434,11 @@ QUnit.test("Linear axis. axisDivisionMode is betweenLabels, valueMarginsEnabled 
         valueMarginsEnabled: true
     });
 
-    assert.equal(this.translator.translate.callCount, 4);
+    assert.equal(this.translator.translate.callCount, 8); //4 for labels
     assert.deepEqual(this.translator.translate.getCall(0).args, ["c1", 1]);
-    assert.deepEqual(this.translator.translate.getCall(1).args, ["c2", 1]);
-    assert.deepEqual(this.translator.translate.getCall(2).args, ["c3", 1]);
-    assert.deepEqual(this.translator.translate.getCall(3).args, ["c4", 1]);
+    assert.deepEqual(this.translator.translate.getCall(2).args, ["c2", 1]);
+    assert.deepEqual(this.translator.translate.getCall(4).args, ["c3", 1]);
+    assert.deepEqual(this.translator.translate.getCall(6).args, ["c4", 1]);
 });
 
 QUnit.test("Linear axis. axisDivisionMode is crossLabels, valueMarginsEnabled false", function(assert) {
@@ -379,11 +449,11 @@ QUnit.test("Linear axis. axisDivisionMode is crossLabels, valueMarginsEnabled fa
         valueMarginsEnabled: false
     });
 
-    assert.equal(this.translator.translate.callCount, 4);
+    assert.equal(this.translator.translate.callCount, 8); //4 for labels
     assert.deepEqual(this.translator.translate.getCall(0).args, ["c1", 0]);
-    assert.deepEqual(this.translator.translate.getCall(1).args, ["c2", 0]);
-    assert.deepEqual(this.translator.translate.getCall(2).args, ["c3", 0]);
-    assert.deepEqual(this.translator.translate.getCall(3).args, ["c4", 0]);
+    assert.deepEqual(this.translator.translate.getCall(2).args, ["c2", 0]);
+    assert.deepEqual(this.translator.translate.getCall(4).args, ["c3", 0]);
+    assert.deepEqual(this.translator.translate.getCall(6).args, ["c4", 0]);
 });
 
 QUnit.test("Linear axis. axisDivisionMode is crossLabels, valueMarginsEnabled true", function(assert) {
@@ -394,11 +464,11 @@ QUnit.test("Linear axis. axisDivisionMode is crossLabels, valueMarginsEnabled tr
         valueMarginsEnabled: true
     });
 
-    assert.equal(this.translator.translate.callCount, 4);
+    assert.equal(this.translator.translate.callCount, 8); //4 for labels
     assert.deepEqual(this.translator.translate.getCall(0).args, ["c1", 0]);
-    assert.deepEqual(this.translator.translate.getCall(1).args, ["c2", 0]);
-    assert.deepEqual(this.translator.translate.getCall(2).args, ["c3", 0]);
-    assert.deepEqual(this.translator.translate.getCall(3).args, ["c4", 0]);
+    assert.deepEqual(this.translator.translate.getCall(2).args, ["c2", 0]);
+    assert.deepEqual(this.translator.translate.getCall(4).args, ["c3", 0]);
+    assert.deepEqual(this.translator.translate.getCall(6).args, ["c4", 0]);
 });
 
 QUnit.test("Circular axis. axisDivisionMode is betweenLabels, valueMarginsEnabled false", function(assert) {
@@ -410,11 +480,11 @@ QUnit.test("Circular axis. axisDivisionMode is betweenLabels, valueMarginsEnable
         visible: false
     });
 
-    assert.equal(this.translator.translate.callCount, 4);
+    assert.equal(this.translator.translate.callCount, 8); //4 for labels
     assert.deepEqual(this.translator.translate.getCall(0).args, ["c1", -1]);
-    assert.deepEqual(this.translator.translate.getCall(1).args, ["c2", -1]);
-    assert.deepEqual(this.translator.translate.getCall(2).args, ["c3", -1]);
-    assert.deepEqual(this.translator.translate.getCall(3).args, ["c4", -1]);
+    assert.deepEqual(this.translator.translate.getCall(2).args, ["c2", -1]);
+    assert.deepEqual(this.translator.translate.getCall(4).args, ["c3", -1]);
+    assert.deepEqual(this.translator.translate.getCall(6).args, ["c4", -1]);
 });
 
 QUnit.test("Circular axis. axisDivisionMode is betweenLabels, valueMarginsEnabled true", function(assert) {
@@ -425,11 +495,11 @@ QUnit.test("Circular axis. axisDivisionMode is betweenLabels, valueMarginsEnable
         valueMarginsEnabled: true
     });
 
-    assert.equal(this.translator.translate.callCount, 4);
+    assert.equal(this.translator.translate.callCount, 8); //4 for labels
     assert.deepEqual(this.translator.translate.getCall(0).args, ["c1", -1]);
-    assert.deepEqual(this.translator.translate.getCall(1).args, ["c2", -1]);
-    assert.deepEqual(this.translator.translate.getCall(2).args, ["c3", -1]);
-    assert.deepEqual(this.translator.translate.getCall(3).args, ["c4", -1]);
+    assert.deepEqual(this.translator.translate.getCall(2).args, ["c2", -1]);
+    assert.deepEqual(this.translator.translate.getCall(4).args, ["c3", -1]);
+    assert.deepEqual(this.translator.translate.getCall(6).args, ["c4", -1]);
 });
 
 QUnit.test("Circular axis. axisDivisionMode is crossLabels, valueMarginsEnabled false", function(assert) {
@@ -440,11 +510,11 @@ QUnit.test("Circular axis. axisDivisionMode is crossLabels, valueMarginsEnabled 
         valueMarginsEnabled: false
     });
 
-    assert.equal(this.translator.translate.callCount, 4);
+    assert.equal(this.translator.translate.callCount, 8); //4 for labels
     assert.deepEqual(this.translator.translate.getCall(0).args, ["c1", 0]);
-    assert.deepEqual(this.translator.translate.getCall(1).args, ["c2", 0]);
-    assert.deepEqual(this.translator.translate.getCall(2).args, ["c3", 0]);
-    assert.deepEqual(this.translator.translate.getCall(3).args, ["c4", 0]);
+    assert.deepEqual(this.translator.translate.getCall(2).args, ["c2", 0]);
+    assert.deepEqual(this.translator.translate.getCall(4).args, ["c3", 0]);
+    assert.deepEqual(this.translator.translate.getCall(6).args, ["c4", 0]);
 });
 
 QUnit.test("Circular axis. axisDivisionMode is crossLabels, valueMarginsEnabled true", function(assert) {
@@ -455,23 +525,17 @@ QUnit.test("Circular axis. axisDivisionMode is crossLabels, valueMarginsEnabled 
         valueMarginsEnabled: true
     });
 
-    assert.equal(this.translator.translate.callCount, 4);
+    assert.equal(this.translator.translate.callCount, 8); //4 for labels
     assert.deepEqual(this.translator.translate.getCall(0).args, ["c1", 0]);
-    assert.deepEqual(this.translator.translate.getCall(1).args, ["c2", 0]);
-    assert.deepEqual(this.translator.translate.getCall(2).args, ["c3", 0]);
-    assert.deepEqual(this.translator.translate.getCall(3).args, ["c4", 0]);
+    assert.deepEqual(this.translator.translate.getCall(2).args, ["c2", 0]);
+    assert.deepEqual(this.translator.translate.getCall(4).args, ["c3", 0]);
+    assert.deepEqual(this.translator.translate.getCall(6).args, ["c4", 0]);
 });
-
 
 QUnit.module("Circular axis", $.extend({}, environment, {
     beforeEach: function() {
         environment.beforeEach.apply(this, arguments);
-        var that = this;
-        that.tickManager.getTicks.returns([0, 2000, 4000, 6000]);
-        this.createTickManager.restore();
-        this.createTickManager = sinon.stub(tickManagerModule, "TickManager", function() {
-            return that.tickManager;
-        });
+        this.generatedTicks = [0, 2000, 4000, 6000];
 
         this.translator.translate.returns(33 + 90);
         this.translator.translate.withArgs(10).returns(10 + 90);
@@ -524,7 +588,6 @@ QUnit.test("draw, not visible", function(assert) {
 });
 
 QUnit.test("draw ticks. Orientation = center", function(assert) {
-    this.range.stick = true;
     this.createDrawnAxis({ visible: true, tick: { visible: true, length: 20 } });
 
     assert.equal(this.renderer.path.callCount, 4);
@@ -540,7 +603,6 @@ QUnit.test("draw ticks. Orientation = center", function(assert) {
 });
 
 QUnit.test("draw ticks. Orientation = outside", function(assert) {
-    this.range.stick = true;
     this.createDrawnAxis({ visible: true, tickOrientation: "outside", tick: { visible: true, length: 20 } });
 
     for(var i = 0; i < this.renderer.path.callCount; i++) {
@@ -550,7 +612,6 @@ QUnit.test("draw ticks. Orientation = outside", function(assert) {
 });
 
 QUnit.test("draw ticks. Orientation = inside", function(assert) {
-    this.range.stick = true;
     this.createDrawnAxis({ visible: true, tickOrientation: "inside", tick: { visible: true, length: 20 } });
 
     for(var i = 0; i < this.renderer.path.callCount; i++) {
@@ -566,7 +627,7 @@ QUnit.test("draw ticks, is not visible", function(assert) {
 });
 
 QUnit.test("discrete axis", function(assert) {
-    this.tickManager.getTicks.returns(["one", "two", "three", "four", "five"]);
+    this.generatedTicks = ["one", "two", "three", "four", "five"];
     this.createDrawnAxis({ tick: { visible: true }, categories: ["one", "two", "three", "four", "five"] });
 
     assert.equal(this.renderer.path.callCount, 5);
@@ -584,14 +645,13 @@ QUnit.test("discrete axis", function(assert) {
 });
 
 QUnit.test("axisDivisionMode is betweenLabels", function(assert) {
-    this.tickManager.getTicks.returns(["one", "two", "three", "four", "five"]);
+    this.generatedTicks = ["one", "two", "three", "four", "five"];
     this.createDrawnAxis({ categories: ["one", "two", "three", "four", "five"], discreteAxisDivisionMode: "betweenLabels", tick: { visible: true } });
 
     assert.deepEqual(this.translator.translate.getCall(2).args[1], -1);
 });
 
 QUnit.test("draw labels", function(assert) {
-    this.range.stick = true;
     this.options.label.visible = true;
     var axis = this.createDrawnAxis();
 
@@ -610,7 +670,6 @@ QUnit.test("draw labels", function(assert) {
 });
 
 QUnit.test("adjust labels", function(assert) {
-    this.range.stick = true;
     this.options.label.visible = true;
     this.createDrawnAxis();
     var text = this.renderer.text;
@@ -636,7 +695,6 @@ QUnit.test("coordsIn method", function(assert) {
 
 QUnit.test("draw grid", function(assert) {
     var returnedPath;
-    this.range.stick = true;
     this.createDrawnAxis({ tick: { visible: false }, grid: { visible: true, color: "black", width: 1, opacity: 1 } });
 
     assert.equal(this.renderer.path.callCount, 4);
@@ -751,12 +809,12 @@ QUnit.test("measure labels with indents", function(assert) {
     this.options.label.indentFromAxis = 10;
     this.options.label.visible = true;
     var axis = this.createSimpleAxis();
-    assert.deepEqual(axis.measureLabels(true), { width: 34, height: 24, x: 1, y: 2 });
+    assert.deepEqual(axis.measureLabels(this.canvas, true), { width: 34, height: 24, x: 1, y: 2 });
 });
 
 QUnit.test("measure labels without labels, with axis, width of axis is thick", function(assert) {
     var axis = this.createSimpleAxis({ label: { visible: false }, visible: true, width: 6 });
-    assert.deepEqual(axis.measureLabels(), { width: 6, height: 6, x: 0, y: 0 });
+    assert.deepEqual(axis.measureLabels(this.canvas), { width: 6, height: 6, x: 0, y: 0 });
 });
 
 QUnit.test("get range data, set period without originValue", function(assert) {
@@ -831,44 +889,6 @@ QUnit.test("get range data, set period, argumentType is datetime", function(asse
     assert.equal(range.max, undefined);
 });
 
-QUnit.test("get range data, discrete argument axis", function(assert) {
-    var axis = this.createDrawnAxis({ type: "discrete" });
-    assert.strictEqual(axis.getRangeData().stick, false);
-});
-
-QUnit.test("get range data, continuous argument axis", function(assert) {
-    var axis = this.createDrawnAxis();
-    assert.strictEqual(axis.getRangeData().stick, true);
-});
-
-QUnit.test("get range data, spider web", function(assert) {
-    this.renderSettings.drawingType = "circularSpider";
-    var axis = this.createDrawnAxis({});
-    assert.strictEqual(axis.getRangeData().stick, true);
-    assert.strictEqual(axis.getRangeData().addSpiderCategory, true);
-});
-
-QUnit.test("get range data, circular axis. firstPointOnStartAngle", function(assert) {
-    this.renderSettings.drawingType = "circular";
-    this.options.firstPointOnStartAngle = true;
-    var axis = this.createDrawnAxis({});
-    assert.strictEqual(axis.getRangeData().stick, true);
-    assert.strictEqual(axis.getRangeData().addSpiderCategory, true);
-});
-
-QUnit.test("getSpiderTicks. stick = true", function(assert) {
-    this.range.stick = true;
-    this.renderSettings.drawingType = "circularSpider";
-    this.tickManager.getFullTicks.returns([0, 1, 2]);
-
-    var spiderTicks = this.createDrawnAxis({}).getSpiderTicks();
-
-    assert.equal(spiderTicks.length, 3);
-    assert.equal(spiderTicks[0].value, 0);
-    assert.equal(spiderTicks[1].value, 1);
-    assert.equal(spiderTicks[2].value, 2);
-});
-
 QUnit.test("getSpiderTicks. without spiderWeb", function(assert) {
     var axis = this.createDrawnAxis();
 
@@ -877,7 +897,7 @@ QUnit.test("getSpiderTicks. without spiderWeb", function(assert) {
 
 QUnit.test("getSpiderTicks with parameters", function(assert) {
     this.renderSettings.drawingType = "circularSpider";
-    this.tickManager.getFullTicks.returns([0, 1, 2]);
+    this.generatedTicks = [0, 1, 2];
 
     var spiderTicks = this.createDrawnAxis({}).getSpiderTicks(true);
 
@@ -889,7 +909,7 @@ QUnit.test("getSpiderTicks with parameters", function(assert) {
 
 QUnit.test("draw spider web axis", function(assert) {
     this.renderSettings.drawingType = "circularSpider";
-    this.tickManager.getFullTicks.returns([0, 1, 2]);
+    this.generatedTicks = [0, 1, 2];
     this.createDrawnAxis({ visible: true });
 
     assert.deepEqual(this.renderer.path.getCall(0).args, [[], "area"]);
@@ -900,25 +920,27 @@ QUnit.test("draw spider web axis", function(assert) {
 
 QUnit.test("T167450. draw spider web axis, betweenLabels", function(assert) {
     this.renderSettings.drawingType = "circularSpider";
-    this.tickManager.getFullTicks.returns([0, 1, 2]);
+    this.generatedTicks = [0, 1, 2];
     this.createDrawnAxis({ visible: true, discreteAxisDivisionMode: "betweenLabels" });
 
-    assert.equal(this.translator.translate.lastCall.args[0], 2);
-    assert.deepEqual(this.translator.translate.lastCall.args[1], 0, "translator should accept '0' parameter");
+    var lastTickCall = this.translator.translate.callCount - 2;
+    assert.strictEqual(this.translator.translate.getCall(lastTickCall).args[0], 2);
+    assert.strictEqual(this.translator.translate.getCall(lastTickCall).args[1], 0, "translator should accept '0' parameter");
 });
 
 QUnit.test("T167450. draw spider web axis, crossLabels", function(assert) {
     this.renderSettings.drawingType = "circularSpider";
-    this.tickManager.getFullTicks.returns([0, 1, 2]);
+    this.generatedTicks = [0, 1, 2];
     this.createDrawnAxis({ visible: true, discreteAxisDivisionMode: "crossLabels" });
 
-    assert.equal(this.translator.translate.lastCall.args[0], 2);
-    assert.equal(this.translator.translate.lastCall.args[1], 0);
+    var lastTickCall = this.translator.translate.callCount - 2;
+    assert.strictEqual(this.translator.translate.getCall(lastTickCall).args[0], 2);
+    assert.strictEqual(this.translator.translate.getCall(lastTickCall).args[1], 0);
 });
 
 QUnit.test("create spider strips", function(assert) {
     this.renderSettings.drawingType = "circularSpider";
-    this.tickManager.getFullTicks.returns([0, 10, 20, 30]);
+    this.generatedTicks = [0, 10, 20, 30];
     this.createDrawnAxis({ strips: [{ startValue: 10, endValue: 20, color: "red" }] });
 
     assert.ok(this.renderer.path.called);
@@ -929,25 +951,25 @@ QUnit.test("create spider strips", function(assert) {
 
 QUnit.test("T167450. create spider strips, betweenLabels", function(assert) {
     this.renderSettings.drawingType = "circularSpider";
-    this.tickManager.getFullTicks.returns([0, 10, 20, 30]);
+    this.generatedTicks = [0, 10, 20, 30];
     this.createDrawnAxis({ strips: [{ startValue: 10, endValue: 20, color: "red" }], discreteAxisDivisionMode: "betweenLabels", label: { visible: false } });
 
-    assert.deepEqual(this.translator.translate.args[4], [10, -1], "translator should accept 'false' parameter");
-    assert.deepEqual(this.translator.translate.args[5], [20, 1], "translator should accept 'false' parameter");
+    assert.deepEqual(this.translator.translate.args[8], [10, -1], "translator should accept 'false' parameter");
+    assert.deepEqual(this.translator.translate.args[9], [20, 1], "translator should accept 'false' parameter");
 });
 
 QUnit.test("T167450. create spider strips, crossLabels", function(assert) {
     this.renderSettings.drawingType = "circularSpider";
-    this.tickManager.getFullTicks.returns([0, 10, 20, 30]);
+    this.generatedTicks = [0, 10, 20, 30];
     this.createDrawnAxis({ strips: [{ startValue: 10, endValue: 20, color: "red" }], discreteAxisDivisionMode: "crossLabels", label: { visible: false } });
 
-    assert.deepEqual(this.translator.translate.args[4], [10, -1], "translator should accept 'false' parameter");
-    assert.deepEqual(this.translator.translate.args[5], [20, 1], "translator should accept 'false' parameter");
+    assert.deepEqual(this.translator.translate.args[8], [10, -1], "translator should accept 'false' parameter");
+    assert.deepEqual(this.translator.translate.args[9], [20, 1], "translator should accept 'false' parameter");
 });
 
 QUnit.test("create spider strips, strips from start value", function(assert) {
     this.renderSettings.drawingType = "circularSpider";
-    this.tickManager.getFullTicks.returns([10, 20, 30]);
+    this.generatedTicks = [10, 20, 30];
     this.createDrawnAxis({ strips: [{ startValue: 10, endValue: 20, color: "red" }] });
 
     assert.ok(this.renderer.path.called);
@@ -958,58 +980,13 @@ QUnit.test("create spider strips, strips from start value", function(assert) {
 
 QUnit.test("create spider strips, strips to end value", function(assert) {
     this.renderSettings.drawingType = "circularSpider";
-    this.tickManager.getFullTicks.returns([0, 10, 20, 30]);
+    this.generatedTicks = [0, 10, 20, 30];
     this.createDrawnAxis({ strips: [{ startValue: 20, endValue: 30, color: "red" }] });
 
     assert.ok(this.renderer.path.called);
     assert.deepEqual(this.renderer.path.getCall(0).args, [[37, 61, 37, 61, 39, 57, 37, 61, 37, 61, 20, 50], "area"]);
     assert.equal(this.renderer.path.getCall(0).returnValue.attr.firstCall.args[0].fill, "red");
     assert.equal(this.renderer.path.getCall(0).returnValue.append.firstCall.args[0], this.renderSettings.stripsGroup.children[0], "Created element attached to the group");
-});
-
-QUnit.test("check params for tickManager", function(assert) {
-    var axis = this.createSimpleAxis({ showCustomBoundaryTicks: true });
-    axis.setTypes("discrete", "numeric", "valueType");
-    axis.validate();
-    axis.createTicks(this.canvas);
-    var args = this.tickManager.update.lastCall.args;
-
-    assert.deepEqual(args[0], { axisType: "discrete", dataType: "numeric" }, "Types are correct");
-    assert.deepEqual(args[1], {
-        customMinorTicks: null,
-        customTicks: null,
-        customBoundTicks: undefined,
-        max: 5000,
-        min: 0,
-        screenDelta: 20 * 90 * Math.PI / 180
-    }, "Data is correct");
-    assert.deepEqual(args[2].addMinMax, { min: true }, "add min max");
-});
-
-QUnit.test("Pass minStickValue and maxStickValue to tickManager", function(assert) {
-    this.range.minStickValue = 10;
-    this.range.maxStickValue = 100;
-
-    this.createDrawnAxis({});
-
-    assert.deepEqual(this.tickManager.update.lastCall.args[2].maxStickValue, 100, "maxStickValue passed to tickManager");
-    assert.deepEqual(this.tickManager.update.lastCall.args[2].minStickValue, 10, "minStickValue passed to tickManager");
-});
-
-QUnit.test("Screen delta is the length of an arc of the circle (45 - 225)", function(assert) {
-    this.options.startAngle = 45;
-    this.options.endAngle = 225;
-    this.createDrawnAxis({ showCustomBoundaryTicks: true });
-
-    assert.deepEqual(this.tickManager.update.lastCall.args[1].screenDelta, 20 * 180 * Math.PI / 180);
-});
-
-QUnit.test("Screen delta is the length of an arc of the circle (240 - 200)", function(assert) {
-    this.options.startAngle = 240;
-    this.options.endAngle = 200;
-    this.createDrawnAxis({ showCustomBoundaryTicks: true });
-
-    assert.deepEqual(this.tickManager.update.lastCall.args[1].screenDelta, 20 * 40 * Math.PI / 180);
 });
 
 QUnit.test("shift", function(assert) {
@@ -1021,11 +998,35 @@ QUnit.test("shift", function(assert) {
     assert.equal(args.translateY, 30, "translateY");
 });
 
+QUnit.test("Value margins are not applied for circular axis", function(assert) {
+    this.options.min = 100;
+    this.options.max = 200;
+    this.generatedTicks = [100, 200];
+    var axis = this.createSimpleAxis({
+        period: 20,
+        argumentType: "numeric",
+        valueMarginsEnabled: true,
+        minValueMargin: 0.5,
+        maxValueMargin: 0.5
+    });
+    axis.setBusinessRange({
+        min: 100,
+        max: 200
+    });
+    axis.createTicks(this.canvas);
+
+    var range = this.translator.updateBusinessRange.lastCall.args[0];
+
+    assert.equal(range.min, 100);
+    assert.equal(range.max, 200);
+    assert.equal(range.minVisible, 100);
+    assert.equal(range.maxVisible, 200);
+});
+
 QUnit.module("Linear Axis", $.extend({}, environment, {
     beforeEach: function() {
         environment.beforeEach.apply(this, arguments);
-        this.createTickManager.restore();
-
+        this.generatedTicks = [0, 500, 1000];
         this.translator.translate.returns(0);
         this.translator.translate.withArgs(10).returns(10);
         this.translator.translate.withArgs(20).returns(20);
@@ -1084,6 +1085,7 @@ QUnit.test("draw ticks", function(assert) {
 });
 
 QUnit.test("discrete axis", function(assert) {
+    this.generatedTicks = ["one", "two", "three", "four", "five"];
     this.createDrawnAxis({ categories: ["one", "two", "three", "four", "five"], tick: { visible: true } });
 
     assert.equal(this.renderer.path.callCount, 5);
@@ -1184,12 +1186,6 @@ QUnit.test("draw grid", function(assert) {
     }
 });
 
-QUnit.test("getRangeData argumentAxis", function(assert) {
-    var axis = this.createSimpleAxis({ valueMarginsEnabled: true });
-
-    assert.strictEqual(axis.getRangeData().stick, false);
-});
-
 QUnit.test("draw spider grid", function(assert) {
     this.renderSettings.drawingType = "linearSpider";
     var axis = this.createSimpleAxis({ grid: { visible: true, color: "black", width: 1, opacity: 1 }, label: { overlappingBehavior: { mode: "ignore" } } });
@@ -1249,56 +1245,11 @@ QUnit.test("create spider constant line", function(assert) {
     assert.equal(this.renderer.path.getCall(0).returnValue.append.firstCall.args[0], this.renderSettings.constantLinesGroup.children[0], "Created element attached to the group");
 });
 
-QUnit.module("Linear Axis. Check params for linear axis", $.extend({}, environment, {
-    beforeEach: function() {
-        environment.beforeEach.apply(this, arguments);
-        var that = this;
-        that.tickManager.getTicks.returns([]);
-        this.createTickManager.restore();
-        this.createTickManager = sinon.stub(tickManagerModule, "TickManager", function() {
-            return that.tickManager;
-        });
-
-        this.translator.translate.returns(0);
-        this.translator.translate.withArgs(10).returns(10);
-        this.translator.translate.withArgs(20).returns(20);
-
-        this.renderSettings.drawingType = "linear";
-        this.renderSettings.axisType = "polarAxes";
-        this.options.min = 0;
-        this.options.max = 1000;
-    }
-}));
-
-QUnit.test("check params for tickManager", function(assert) {
-    var axis = this.createSimpleAxis();
-
-    axis.setTypes("discrete", "numeric", "valueType");
-    axis.validate();
-    axis.createTicks(this.canvas);
-    var args = this.tickManager.update.lastCall.args;
-
-    assert.deepEqual(args[0], { axisType: "discrete", dataType: "numeric" }, "Types are correct");
-    assert.deepEqual(args[1], {
-        customMinorTicks: null,
-        customTicks: null,
-        customBoundTicks: undefined,
-        max: 1000,
-        min: 0,
-        screenDelta: 20
-    }, "Data is correct");
-});
-
 QUnit.module("Label overlapping, circular axis", $.extend({}, environment, {
     beforeEach: function() {
         environment.beforeEach.apply(this, arguments);
-        var that = this;
-        that.tickManager.getTicks.returns([0, 2, 4, 6, 8, 10]);
-        that.createTickManager.restore();
-        that.createTickManager = sinon.stub(tickManagerModule, "TickManager", function() {
-            return that.tickManager;
-        });
-        that.bBoxCount = 0;
+        this.generatedTicks = [0, 2, 4, 6, 8, 10];
+        this.bBoxCount = 0;
 
         this.translator.translate.withArgs(0).returns(90);
         this.translator.translate.withArgs(1).returns(110);
@@ -1308,11 +1259,11 @@ QUnit.module("Label overlapping, circular axis", $.extend({}, environment, {
         this.translator.translate.withArgs(8).returns(210);
         this.translator.translate.withArgs(10).returns(240);
 
-        that.renderSettings.axisType = "polarAxes";
-        that.renderSettings.drawingType = "circular";
+        this.renderSettings.axisType = "polarAxes";
+        this.renderSettings.drawingType = "circular";
         this.options.startAngle = 0;
         this.options.endAngle = 90;
-        that.options.label = {
+        this.options.label = {
             overlappingBehavior: { mode: "hide" },
             visible: true,
             indentFromAxis: 0,
@@ -1517,7 +1468,7 @@ QUnit.test("First and last labels are overlap, hideFirstOrLast = first, close to
 
 QUnit.test("T498373. hideFirstOrLast = first. Single label", function(assert) {
     this.options.label.overlappingBehavior.hideFirstOrLast = "first";
-    this.tickManager.getTicks.returns([2]);
+    this.generatedTicks = [2];
 
     var markersBBoxes = [
         { x: 0, y: 2, width: 20, height: 10 }
@@ -1533,7 +1484,7 @@ QUnit.test("T498373. hideFirstOrLast = first. Single label", function(assert) {
 
 QUnit.test("T498699. hideFirstOrLast = first. Two labels", function(assert) {
     this.options.label.overlappingBehavior.hideFirstOrLast = "first";
-    this.tickManager.getTicks.returns([0, 2]);
+    this.generatedTicks = [0, 2];
 
     var markersBBoxes = [
         { x: 0, y: 2, width: 6, height: 4 },
@@ -1552,7 +1503,7 @@ QUnit.test("T498699. hideFirstOrLast = first. Two labels", function(assert) {
 
 QUnit.test("T498699. hideFirstOrLast = last. Two labels", function(assert) {
     this.options.label.overlappingBehavior.hideFirstOrLast = "last";
-    this.tickManager.getTicks.returns([0, 2]);
+    this.generatedTicks = [0, 2];
 
     var markersBBoxes = [
         { x: 0, y: 2, width: 6, height: 4 },
@@ -1706,7 +1657,7 @@ QUnit.test("frequent tisks", function(assert) {
         ],
         text;
 
-    this.tickManager.getTicks.returns([0, 2, 4, 6, 8, 10, 12, 14, 16, 18]);
+    this.generatedTicks = [0, 2, 4, 6, 8, 10, 12, 14, 16, 18];
     this.translator.translate.withArgs(0).returns(1);
     this.translator.translate.withArgs(2).returns(2);
     this.translator.translate.withArgs(4).returns(32);
@@ -1737,11 +1688,7 @@ QUnit.module("Label overlapping, linear axis", $.extend({}, environment, {
     beforeEach: function() {
         environment.beforeEach.apply(this, arguments);
         var that = this;
-        that.tickManager.getTicks.returns([0, 2, 4, 6, 8, 10]);
-        that.createTickManager.restore();
-        that.createTickManager = sinon.stub(tickManagerModule, "TickManager", function() {
-            return that.tickManager;
-        });
+        that.generatedTicks = [0, 2, 4, 6, 8, 10];
         that.bBoxCount = 0;
 
         that.translator.translate.withArgs(0).returns(90);
