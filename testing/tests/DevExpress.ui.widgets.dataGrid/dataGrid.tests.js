@@ -4001,6 +4001,54 @@ QUnit.testInActiveWindow("Height virtual table should be updated to show validat
     clock.restore();
 });
 
+QUnit.test("Error row is not hidden when rowKey is undefined by editMode is cell", function(assert) {
+    //arrange
+    var clock = sinon.useFakeTimers();
+    var dataGrid = createDataGrid({
+        loadingTimeout: undefined,
+        dataSource: [{
+            "ID": 1,
+            "FirstName": "John",
+            "LastName": "Heart",
+            "Prefix": "Mr.",
+            "Position": "CEO",
+            "BirthDate": "1964/03/16",
+            "HireDate": "1995/01/15",
+            "Address": "351 S Hill St.",
+            "StateID": 5
+        }],
+        keyExpr: 'myFakeKey',
+        paging: {
+            enabled: false
+        },
+        editing: {
+            mode: "cell",
+            allowUpdating: true
+        },
+        columns: ["Prefix", "FirstName"]
+    });
+
+    clock.tick();
+
+    //act
+    dataGrid.editCell(0, 0);
+    clock.tick();
+
+    $("input")
+        .val("new")
+        .change();
+
+    clock.tick();
+
+    dataGrid.editCell(0, 1);
+    clock.tick();
+
+    //assert
+    assert.equal($(".dx-error-message").length, 1, "Error message is shown");
+
+    clock.restore();
+});
+
 QUnit.module("Assign options", {
     beforeEach: function() {
         this.clock = sinon.useFakeTimers();
