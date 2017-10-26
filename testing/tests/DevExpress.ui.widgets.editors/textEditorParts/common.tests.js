@@ -958,7 +958,6 @@ QUnit.test("TextEditor with mask option should firing the 'onChange' event", fun
         keyboard = keyboardMock($input);
 
     caretWorkaround($input);
-
     $input.triggerHandler("focus");
     keyboard.type("123").press("enter");
     assert.equal(handler.callCount, 1, "'change' event is fired on enter after value change");
