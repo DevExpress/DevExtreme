@@ -435,7 +435,7 @@ gridCore.registerModule("summary", {
                  * @publicName calculateCustomSummary
                  * @type function(options)
                  * @type_function_param1 options:object
-                 * @type_function_param1_field1 component:object
+                 * @type_function_param1_field1 component:dxDataGrid
                  * @type_function_param1_field2 name:string
                  * @type_function_param1_field3 summaryProcess:string
                  * @type_function_param1_field4 value:any

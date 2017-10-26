@@ -129,7 +129,7 @@ module.exports = {
              * @publicName onToolbarPreparing
              * @type function(e)
              * @type_function_param1 e:object
-             * @type_function_param1_field4 toolbarOptions:Object
+             * @type_function_param1_field4 toolbarOptions:dxToolbarOptions
              * @extends Action
              * @action
              */

@@ -785,8 +785,6 @@ var PivotGrid = Widget.inherit({
             /**
              * @name dxPivotGridOptions_onExported
              * @publicName onExported
-             * @type function(e)
-             * @type_function_param1 e:object
              * @extends Action
              * @action
              */

@@ -49,8 +49,6 @@ var DOMComponent = Component.inherit({
             /**
             * @name domcomponentoptions_onDisposing
             * @publicName onDisposing
-            * @type function
-            * @type_function_param1 e:object
             * @action
             * @extends Action
             * @extend_doc
@@ -322,7 +320,7 @@ var DOMComponent = Component.inherit({
     * @type function
     * @default null
     * @type_function_param1 e:object
-    * @type_function_param1_field1 component:object
+    * @type_function_param1_field1 component:DOMComponent
     * @type_function_param1_field2 element:dxElement
     * @type_function_param1_field3 model:object
     **/

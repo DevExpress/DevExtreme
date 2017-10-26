@@ -533,7 +533,7 @@ module.exports = {
              * @type Array<any>|function(options)|DataSourceOptions
              * @type_function_param1 options:object
              * @type_function_param1_field1 component:object
-             * @type_function_param1_field2 dataSource:object
+             * @type_function_param1_field2 dataSource:DataSourceOptions
              * @default undefined
              */
             /**
