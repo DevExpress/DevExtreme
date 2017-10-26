@@ -82,5 +82,13 @@ registerTheme({
                 color: BACKGROUND_COLOR
             }
         }
+    },
+    sparkline: {
+        pointColor: BACKGROUND_COLOR
+    },
+    treeMap: {
+        group: {
+            color: BORDER_COLOR
+        }
     }
 }, "generic.dark");
