@@ -8,7 +8,9 @@ var DEFAULT_CONFIG = { thousandsSeparator: ",", decimalSeparator: "." },
 
 function getGroupSizes(formatString) {
     return formatString.split(",").slice(1).map(function(str) {
-        return str.length;
+        return str.split("").filter(function(char) {
+            return char === "#" || char === "0";
+        }).length;
     });
 }
 
@@ -215,5 +217,67 @@ function getFormatter(format, config) {
     };
 }
 
+function parseValue(text, isPercent, isNegative) {
+    var value = (isPercent ? 0.01 : 1) * parseFloat(text) || 0;
+
+    if(isNegative && value === 0) {
+        value = Number.EPSILON;
+    }
+
+    return isNegative ? -value : value;
+}
+
+function prepareValueText(valueText, formatter, isPercent, isIntegerPart) {
+    var nextValueText = valueText,
+        char,
+        text,
+        nextText;
+
+    do {
+        if(nextText) {
+            char = text.length === nextText.length ? "0" : "1";
+            valueText = isIntegerPart ? char + valueText : valueText + char;
+        }
+        text = nextText || formatter(parseValue(nextValueText, isPercent));
+        nextValueText = isIntegerPart ? "1" + nextValueText : nextValueText + "1";
+        nextText = formatter(parseValue(nextValueText, isPercent));
+    } while(text !== nextText && (isIntegerPart ? text.length === nextText.length : text.length <= nextText.length));
+
+    if(isIntegerPart && nextText.length > text.length) {
+        var hasGroups = formatter(12345).indexOf("12345") === -1;
+        do {
+            valueText = "1" + valueText;
+        } while(hasGroups && parseValue(valueText, isPercent) < 100000);
+    }
+
+    return valueText;
+}
+
+function getFormatByValueText(valueText, formatter, isPercent, isNegative) {
+    var format = formatter(parseValue(valueText, isPercent, isNegative));
+
+    format = format.replace(/1+/, "1").replace(/1/g, "#");
+
+    if(!isPercent) {
+        format = format.replace("%", "'%'");
+    }
+
+    return format;
+}
+
+function getFormat(formatter) {
+    var valueText = ".",
+        isPercent = formatter(1).indexOf("100") >= 0;
+
+    valueText = prepareValueText(valueText, formatter, isPercent, true);
+    valueText = prepareValueText(valueText, formatter, isPercent, false);
+
+    var positiveFormat = getFormatByValueText(valueText, formatter, isPercent, false);
+    var negativeFormat = getFormatByValueText(valueText, formatter, isPercent, true);
+
+    return negativeFormat === "-" + positiveFormat ? positiveFormat : positiveFormat + ";" + negativeFormat;
+}
+
 exports.getParser = getParser;
 exports.getFormatter = getFormatter;
+exports.getFormat = getFormat;
