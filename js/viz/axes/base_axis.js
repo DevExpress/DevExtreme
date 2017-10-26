@@ -789,6 +789,7 @@ Axis.prototype = {
                 ticks: ticks || convertTicksToValues(this._majorTicks),
                 tickInterval: isDefined(tickInterval) ? tickInterval : this._tickInterval,
                 dataType: this._options.dataType,
+                logarithmBase: this._options.logarithmBase,
                 type: this._options.type,
                 showTransition: !this._options.marker.visible,
                 point: point
