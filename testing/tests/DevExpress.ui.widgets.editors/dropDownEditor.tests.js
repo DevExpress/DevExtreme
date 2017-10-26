@@ -968,6 +968,19 @@ QUnit.test("the popup 'fullScreen' option should be overridden (T295450)", funct
     }
 });
 
+QUnit.test("widget should work correctly when popup 'fullScreen' is true", function(assert) {
+    var $dropDownEditor = $("<div>").dxDropDownEditor({
+        opened: true
+    }).appendTo("body");
+
+    var popup = $dropDownEditor.find(".dx-popup").dxPopup("instance");
+    popup.option("fullScreen", true);
+
+    assert.ok(true, "Widget works correctly");
+
+    $dropDownEditor.remove();
+});
+
 QUnit.module("popup buttons", {
     beforeEach: function() {
         fx.off = true;
@@ -1197,15 +1210,3 @@ QUnit.test("aria-owns should be removed when popup is not visible", function(ass
     assert.strictEqual($input.attr("aria-owns"), undefined, "owns does not exist");
 });
 
-QUnit.test("widget should work correctly when popup 'fullScreen' is true", function(assert) {
-    var $dropDownEditor = $("<div>").dxDropDownEditor({
-        opened: true
-    }).appendTo("body");
-
-    var popup = $dropDownEditor.find(".dx-popup").dxPopup("instance");
-    popup.option("fullScreen", true);
-
-    assert.ok(true, "Widget works correctly");
-
-    popup.option("fullScreen", false);
-});
