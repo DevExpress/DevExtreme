@@ -709,7 +709,7 @@ module.exports = {
                 },
                 _formItemPrepared: function(cellOptions, $container) {
                     this.callBase.apply(this, arguments);
-                    this.getController("validating").createValidator(cellOptions, $container.children(".dx-widget"));
+                    this.getController("validating").createValidator(cellOptions, $container.find(".dx-widget").first());
                 },
                 _cellPrepared: function($cell, parameters) {
                     this.getController("validating").createValidator(parameters, $cell);
