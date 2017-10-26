@@ -153,7 +153,7 @@ function smartFormatter(tick, options) {
         prevDateIndex,
         nextDateIndex;
 
-    if(!isDefined(format) && isDefined(tickInterval) && options.type !== "discrete") {
+    if(!isDefined(format) && isDefined(tickInterval) && options.type !== "discrete" && tick !== 0) {
         if(options.dataType !== "datetime") {
             if(ticks.length && ticks.indexOf(tick) === -1) {
                 indexOfTick = getTransitionTickIndex(ticks, tick);
@@ -163,7 +163,7 @@ function smartFormatter(tick, options) {
             separatedTickInterval = tickInterval.toString().split(".");
 
             if(options.type === "logarithmic") {
-                log10Tick = tick !== 0 ? log10(abs(tick)) : 1;
+                log10Tick = log10(abs(tick));
                 if(log10Tick > 0) {
                     typeFormat = formats[floor(log10Tick / 3)] || EXPONENTIAL;
                 } else {
@@ -187,7 +187,7 @@ function smartFormatter(tick, options) {
                         }
                     } else {
                         tickIntervalIndex = floor(log10(tickInterval));
-                        actualIndex = tickIndex = (tick !== 0) ? floor(log10(abs(tick))) : 1;
+                        actualIndex = tickIndex = floor(log10(abs(tick)));
 
                         if(tickIndex - tickIntervalIndex >= 2) {
                             actualIndex = tickIntervalIndex;

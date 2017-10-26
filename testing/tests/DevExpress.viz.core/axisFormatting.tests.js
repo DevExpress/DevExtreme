@@ -189,6 +189,7 @@ QUnit.test("format float number. tickInterval = 2.5", function(assert) {
 QUnit.test("Misc", function(assert) {
     this.testTickLabelFormat(assert, [10100], 100, ["10.1K"]);
     this.testTickLabelFormat(assert, [10000000000000000000], 1000000000000000000, ["1E+19"]);
+    this.testTickLabelFormat(assert, [0], 0.5, ["0"]);
 });
 
 QUnit.test("format numbers in exponential notation", function(assert) {
