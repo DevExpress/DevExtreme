@@ -26,11 +26,23 @@ QUnit.testStart(function() {
 QUnit.performanceTest("dxScheduler should force minimum relayout count on creation", function(assert) {
     var measureFunction = function() {
         $("#element").dxScheduler({
-            showCurrentTimeIndicator: false
+            showCurrentTimeIndicator: false,
+            showAllDayPanel: false
         });
     };
 
     assert.measureStyleRecalculation(measureFunction, 8);
+});
+
+QUnit.performanceTest("dxScheduler should force minimum relayout count on creation if showAllDayPanel = true", function(assert) {
+    var measureFunction = function() {
+        $("#element").dxScheduler({
+            showCurrentTimeIndicator: false,
+            showAllDayPanel: true
+        });
+    };
+
+    assert.measureStyleRecalculation(measureFunction, 9);
 });
 
 QUnit.performanceTest("dxScheduler day view should force minimum relayout count on creation with appointments", function(assert) {
@@ -41,11 +53,28 @@ QUnit.performanceTest("dxScheduler day view should force minimum relayout count 
             currentView: "day",
             currentDate: new Date(2016, 2, 9),
             dataSource: data,
-            showCurrentTimeIndicator: false
+            showCurrentTimeIndicator: false,
+            showAllDayPanel: false
         });
     };
 
-    assert.measureStyleRecalculation(measureFunction, 14);
+    assert.measureStyleRecalculation(measureFunction, 9);
+});
+
+QUnit.performanceTest("dxScheduler day view should force minimum relayout count on creation with appointments if showAllDayPanel = true", function(assert) {
+    var measureFunction = function() {
+        console.timeStamp("Scheduler");
+        $("#element").dxScheduler({
+            views: ["day"],
+            currentView: "day",
+            currentDate: new Date(2016, 2, 9),
+            dataSource: data,
+            showCurrentTimeIndicator: false,
+            showAllDayPanel: true
+        });
+    };
+
+    assert.measureStyleRecalculation(measureFunction, 15);
 });
 
 QUnit.performanceTest("dxScheduler week view should force minimum relayout count on creation with appointments", function(assert) {
@@ -56,11 +85,28 @@ QUnit.performanceTest("dxScheduler week view should force minimum relayout count
             currentView: "week",
             currentDate: new Date(2016, 2, 9),
             dataSource: data,
-            showCurrentTimeIndicator: false
+            showCurrentTimeIndicator: false,
+            showAllDayPanel: false
         });
     };
 
-    assert.measureStyleRecalculation(measureFunction, 14);
+    assert.measureStyleRecalculation(measureFunction, 9);
+});
+
+QUnit.performanceTest("dxScheduler week view should force minimum relayout count on creation with appointments if showAllDayPanel = true", function(assert) {
+    var measureFunction = function() {
+        console.timeStamp("Scheduler");
+        $("#element").dxScheduler({
+            views: ["week"],
+            currentView: "week",
+            currentDate: new Date(2016, 2, 9),
+            dataSource: data,
+            showCurrentTimeIndicator: false,
+            showAllDayPanel: true
+        });
+    };
+
+    assert.measureStyleRecalculation(measureFunction, 15);
 });
 
 QUnit.performanceTest("dxScheduler workWeek view should force minimum relayout count on creation with appointments", function(assert) {
@@ -71,11 +117,28 @@ QUnit.performanceTest("dxScheduler workWeek view should force minimum relayout c
             currentView: "workWeek",
             currentDate: new Date(2016, 2, 9),
             dataSource: data,
-            showCurrentTimeIndicator: false
+            showCurrentTimeIndicator: false,
+            showAllDayPanel: false
         });
     };
 
-    assert.measureStyleRecalculation(measureFunction, 14);
+    assert.measureStyleRecalculation(measureFunction, 9);
+});
+
+QUnit.performanceTest("dxScheduler workWeek view should force minimum relayout count on creation with appointments if showAllDayPanel = true", function(assert) {
+    var measureFunction = function() {
+        console.timeStamp("Scheduler");
+        $("#element").dxScheduler({
+            views: ["workWeek"],
+            currentView: "workWeek",
+            currentDate: new Date(2016, 2, 9),
+            dataSource: data,
+            showCurrentTimeIndicator: false,
+            showAllDayPanel: true
+        });
+    };
+
+    assert.measureStyleRecalculation(measureFunction, 15);
 });
 
 QUnit.performanceTest("dxScheduler month view should force minimum relayout count on creation with appointments", function(assert) {
