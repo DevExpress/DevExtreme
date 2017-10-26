@@ -12,7 +12,7 @@ var dxVectorMap = {
     * @publicName Options
     * @namespace DevExpress.viz.map
     * @hidden
-    */      
+    */
     /**
     * @name dxvectormapoptions_margin
     * @publicName margin
@@ -1324,7 +1324,8 @@ var dxVectorMap = {
     * @type_function_param1_field1 component:object
     * @type_function_param1_field2 element:object
     * @type_function_param1_field3 jQueryEvent:jQuery.Event
-    * @type_function_param1_field4 target:MapLayerElement
+    * @type_function_param1_field4 event:event
+    * @type_function_param1_field5 target:MapLayerElement
     * @notUsedInTheme
     * @action
     */
@@ -1373,7 +1374,8 @@ var dxVectorMap = {
     * @type_function_param1_field1 component:object
     * @type_function_param1_field2 element:object
     * @type_function_param1_field3 jQueryEvent:jQuery.Event
-    * @type_function_param1_field4 target:areaObjects
+    * @type_function_param1_field4 event:event
+    * @type_function_param1_field5 target:areaObjects
     * @notUsedInTheme
     * @deprecated dxvectormapoptions_onClick
     * @action
@@ -1400,7 +1402,8 @@ var dxVectorMap = {
     * @type_function_param1_field1 component:object
     * @type_function_param1_field2 element:object
     * @type_function_param1_field3 jQueryEvent:jQuery.Event
-    * @type_function_param1_field4 target:markerObjects
+    * @type_function_param1_field4 event:event
+    * @type_function_param1_field5 target:markerObjects
     * @notUsedInTheme
     * @deprecated dxvectormapoptions_onClick
     * @action

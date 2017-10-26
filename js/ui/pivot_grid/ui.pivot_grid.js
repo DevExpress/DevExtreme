@@ -687,7 +687,8 @@ var PivotGrid = Widget.inherit({
             * @type_function_param1_field10 rowFields:Array<PivotGridDataSourceOptions_fields>
             * @type_function_param1_field11 dataFields:Array<PivotGridDataSourceOptions_fields>
             * @type_function_param1_field12 jQueryEvent:jQuery.Event
-            * @type_function_param1_field13 cancel:boolean
+            * @type_function_param1_field13 event:event
+            * @type_function_param1_field14 cancel:boolean
             * @extends Action
             * @action
             */

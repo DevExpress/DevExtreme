@@ -144,6 +144,7 @@ var TextEditorBase = Editor.inherit({
             * @type function(e)
             * @type_function_param1 e:object
             * @type_function_param1_field4 jQueryEvent:jQuery.Event
+            * @type_function_param1_field5 event:event
             * @action
             */
             onFocusIn: null,
@@ -155,6 +156,7 @@ var TextEditorBase = Editor.inherit({
             * @type function(e)
             * @type_function_param1 e:object
             * @type_function_param1_field4 jQueryEvent:jQuery.Event
+            * @type_function_param1_field5 event:event
             * @action
             */
             onFocusOut: null,
@@ -166,6 +168,7 @@ var TextEditorBase = Editor.inherit({
             * @type function(e)
             * @type_function_param1 e:object
             * @type_function_param1_field4 jQueryEvent:jQuery.Event
+            * @type_function_param1_field5 event:event
             * @default null
             * @action
             */
@@ -178,6 +181,7 @@ var TextEditorBase = Editor.inherit({
             * @type function(e)
             * @type_function_param1 e:object
             * @type_function_param1_field4 jQueryEvent:jQuery.Event
+            * @type_function_param1_field5 event:event
             * @action
             */
             onKeyPress: null,
@@ -189,6 +193,7 @@ var TextEditorBase = Editor.inherit({
             * @type function(e)
             * @type_function_param1 e:object
             * @type_function_param1_field4 jQueryEvent:jQuery.Event
+            * @type_function_param1_field5 event:event
             * @action
             */
             onKeyUp: null,
@@ -200,6 +205,7 @@ var TextEditorBase = Editor.inherit({
             * @type function(e)
             * @type_function_param1 e:object
             * @type_function_param1_field4 jQueryEvent:jQuery.Event
+            * @type_function_param1_field5 event:event
             * @action
             */
             onChange: null,
@@ -211,6 +217,7 @@ var TextEditorBase = Editor.inherit({
             * @type function(e)
             * @type_function_param1 e:object
             * @type_function_param1_field4 jQueryEvent:jQuery.Event
+            * @type_function_param1_field5 event:event
             * @action
             */
             onInput: null,
@@ -222,6 +229,7 @@ var TextEditorBase = Editor.inherit({
             * @type function(e)
             * @type_function_param1 e:object
             * @type_function_param1_field4 jQueryEvent:jQuery.Event
+            * @type_function_param1_field5 event:event
             * @action
             */
             onCut: null,
@@ -233,6 +241,7 @@ var TextEditorBase = Editor.inherit({
             * @type function(e)
             * @type_function_param1 e:object
             * @type_function_param1_field4 jQueryEvent:jQuery.Event
+            * @type_function_param1_field5 event:event
             * @action
             */
             onCopy: null,
@@ -244,6 +253,7 @@ var TextEditorBase = Editor.inherit({
             * @type function(e)
             * @type_function_param1 e:object
             * @type_function_param1_field4 jQueryEvent:jQuery.Event
+            * @type_function_param1_field5 event:event
             * @action
             */
             onPaste: null,
@@ -255,6 +265,7 @@ var TextEditorBase = Editor.inherit({
             * @type function(e)
             * @type_function_param1 e:object
             * @type_function_param1_field4 jQueryEvent:jQuery.Event
+            * @type_function_param1_field5 event:event
             * @action
             */
             onEnterKey: null,

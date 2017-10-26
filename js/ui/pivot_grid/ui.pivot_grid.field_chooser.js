@@ -135,6 +135,7 @@ var FieldChooser = BaseFieldChooser.inherit({
             * @type_function_param1_field5 area:string
             * @type_function_param1_field6 field:PivotGridDataSourceOptions_fields
             * @type_function_param1_field7 jQueryEvent:jQuery.Event
+            * @type_function_param1_field8 event:event
             * @extends Action
             * @action
             */

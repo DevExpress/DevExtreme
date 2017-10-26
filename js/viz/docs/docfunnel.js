@@ -12,7 +12,7 @@ var dxFunnel = {
     * @publicName Options
     * @namespace DevExpress.viz.funnel
     * @hidden
-    */       
+    */
     /**
     * @name dxFunneloptions_adaptivelayout
     * @publicName adaptiveLayout
@@ -777,7 +777,8 @@ var dxFunnel = {
     * @type_function_param1_field1 component:object
     * @type_function_param1_field2 element:object
     * @type_function_param1_field3 jQueryEvent:jQuery.Event
-    * @type_function_param1_field4 item:dxFunnelItem
+    * @type_function_param1_field4 event:event
+    * @type_function_param1_field5 item:dxFunnelItem
     * @notUsedInTheme
     * @action
     */
@@ -790,7 +791,8 @@ var dxFunnel = {
     * @type_function_param1_field1 component:object
     * @type_function_param1_field2 element:object
     * @type_function_param1_field3 jQueryEvent:jQuery.Event
-    * @type_function_param1_field4 item:dxFunnelItem
+    * @type_function_param1_field4 event:event
+    * @type_function_param1_field5 item:dxFunnelItem
     * @notUsedInTheme
     * @action
     */

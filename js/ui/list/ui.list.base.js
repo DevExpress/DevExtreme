@@ -239,11 +239,12 @@ var ListBase = CollectionWidget.inherit({
             * @type function(e)
             * @type_function_param1 e:object
             * @type_function_param1_field4 jQueryEvent:jQuery.Event
-            * @type_function_param1_field5 scrollOffset:object
-            * @type_function_param1_field6 reachedLeft:boolean
-            * @type_function_param1_field7 reachedRight:boolean
-            * @type_function_param1_field8 reachedTop:boolean
-            * @type_function_param1_field9 reachedBottom:boolean
+            * @type_function_param1_field5 event:event
+            * @type_function_param1_field6 scrollOffset:object
+            * @type_function_param1_field7 reachedLeft:boolean
+            * @type_function_param1_field8 reachedRight:boolean
+            * @type_function_param1_field9 reachedTop:boolean
+            * @type_function_param1_field10 reachedBottom:boolean
             * @action
             */
             onScroll: null,
@@ -288,10 +289,11 @@ var ListBase = CollectionWidget.inherit({
             * @type function(e)
             * @type_function_param1 e:object
             * @type_function_param1_field4 jQueryEvent:jQuery.Event
-            * @type_function_param1_field5 itemData:object
-            * @type_function_param1_field6 itemElement:dxElement
-            * @type_function_param1_field7 itemIndex:number | object
-            * @type_function_param1_field8 direction:string
+            * @type_function_param1_field5 event:event
+            * @type_function_param1_field6 itemData:object
+            * @type_function_param1_field7 itemElement:dxElement
+            * @type_function_param1_field8 itemIndex:number | object
+            * @type_function_param1_field9 direction:string
             * @action
             */
             onItemSwipe: null,
