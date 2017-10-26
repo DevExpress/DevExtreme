@@ -8957,7 +8957,7 @@ QUnit.test("Datetime. Drawing user breaks with generated workday breaks. Should 
         containerColor: "#ffffff",
         workdaysOnly: true,
         argumentType: "datetime",
-        workweek: [1, 2, 3, 4, 5],
+        workWeek: [1, 2, 3, 4, 5],
         breaks: [[new Date(2017, 10, 7), new Date(2017, 10, 8) ]],
         breakStyle: {
             color: "black",

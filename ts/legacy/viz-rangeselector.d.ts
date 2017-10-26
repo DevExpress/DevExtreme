@@ -142,7 +142,7 @@ declare module DevExpress.viz.rangeSelector {
             workdaysOnly?: boolean;
 
             /** @docid dxrangeselectoroptions_scale_workweek */
-            workweek?: Array<number>;
+            workWeek?: Array<number>;
 
             /** @docid dxrangeselectoroptions_scale_holidays */
             holidays?: any;

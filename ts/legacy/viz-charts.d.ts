@@ -1896,7 +1896,7 @@ declare module DevExpress.viz.charts {
         workdaysOnly?: boolean;
 
         /** @docid dxchartoptions_argumentaxis_workweek */
-        workweek?: Array<number>;
+        workWeek?: Array<number>;
 
         /** @docid dxchartoptions_argumentaxis_holidays */
         holidays?: any;

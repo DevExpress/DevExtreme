@@ -2269,7 +2269,7 @@ QUnit.test("Generate weekend breaks", function(assert) {
     this.updateOptions({
         workdaysOnly: true,
         breakStyle: { width: 10 },
-        workweek: [1, 2, 3, 4, 5],
+        workWeek: [1, 2, 3, 4, 5],
         dataType: "datetime"
     });
 
@@ -2293,7 +2293,7 @@ QUnit.test("Do not generate weekend breaks if dataType is not datetime", functio
     this.updateOptions({
         workdaysOnly: false,
         breakStyle: { width: 0 },
-        workweek: [1, 2, 3, 4, 5],
+        workWeek: [1, 2, 3, 4, 5],
         dataType: "number"
     });
 
@@ -2310,7 +2310,7 @@ QUnit.test("Do not generate weekend breaks if workdaysOnly is set to false", fun
     this.updateOptions({
         workdaysOnly: false,
         breakStyle: { width: 0 },
-        workweek: [1, 2, 3, 4, 5],
+        workWeek: [1, 2, 3, 4, 5],
         dataType: "datetime"
     });
 
@@ -2327,7 +2327,7 @@ QUnit.test("Do not generate weekend breaks if axis type is discrete", function(a
     this.updateOptions({
         workdaysOnly: true,
         breakStyle: { width: 0 },
-        workweek: [1, 2, 3, 4, 5],
+        workWeek: [1, 2, 3, 4, 5],
         dataType: "datetime",
         type: "discrete"
     });
@@ -2345,7 +2345,7 @@ QUnit.test("Generate two breaks when two days off on week", function(assert) {
     this.updateOptions({
         workdaysOnly: true,
         breakStyle: { width: 0 },
-        workweek: [1, 2, 4, 5],
+        workWeek: [1, 2, 4, 5],
         dataType: "datetime"
     });
 
@@ -2379,7 +2379,7 @@ QUnit.test("The break starts with min if the range starts on a weekend", functio
     this.updateOptions({
         workdaysOnly: true,
         breakStyle: { width: 0 },
-        workweek: [1, 2, 3, 4, 5],
+        workWeek: [1, 2, 3, 4, 5],
         dataType: "datetime"
     });
 
@@ -2414,7 +2414,7 @@ QUnit.test("End of the scale break is max of the range if range ends on a weeken
     this.updateOptions({
         workdaysOnly: true,
         breakStyle: { width: 0 },
-        workweek: [1, 2, 3, 4, 5],
+        workWeek: [1, 2, 3, 4, 5],
         dataType: "datetime"
     });
 
@@ -2442,7 +2442,7 @@ QUnit.test("All range is in weekend", function(assert) {
     this.updateOptions({
         workdaysOnly: true,
         breakStyle: { width: 0 },
-        workweek: [1, 2, 3, 4, 5],
+        workWeek: [1, 2, 3, 4, 5],
         dataType: "datetime"
     });
 
@@ -2459,7 +2459,7 @@ QUnit.test("Exclude exactWorkDays from weekend when it at the end of the weekend
     this.updateOptions({
         workdaysOnly: true,
         breakStyle: { width: 0 },
-        workweek: [1, 2, 3, 4, 5],
+        workWeek: [1, 2, 3, 4, 5],
         dataType: "datetime",
         singleWorkdays: [new Date(2017, 8, 10, 8, 20)]
     });
@@ -2482,7 +2482,7 @@ QUnit.test("Exclude exactWorkDays from weekend when it at the begin of the weeke
     this.updateOptions({
         workdaysOnly: true,
         breakStyle: { width: 0 },
-        workweek: [1, 2, 3, 4, 5],
+        workWeek: [1, 2, 3, 4, 5],
         dataType: "datetime",
         singleWorkdays: [new Date(2017, 8, 9, 8, 20)]
     });
@@ -2505,7 +2505,7 @@ QUnit.test("Separate a weekend if exactWorkDays in the middle of the break", fun
     this.updateOptions({
         workdaysOnly: true,
         breakStyle: { width: 0 },
-        workweek: [2, 3, 4, 5],
+        workWeek: [2, 3, 4, 5],
         dataType: "datetime",
         singleWorkdays: [new Date(2017, 8, 10, 8, 20)]
     });
@@ -2526,7 +2526,7 @@ QUnit.test("Axis has not breaks if exactWorkDays in the weekend", function(asser
     this.updateOptions({
         workdaysOnly: true,
         breakStyle: { width: 0 },
-        workweek: [1, 2, 3, 4, 5],
+        workWeek: [1, 2, 3, 4, 5],
         dataType: "datetime",
         singleWorkdays: [new Date(2017, 8, 9, 8, 20), new Date(2017, 8, 10, 8, 20)]
     });
@@ -2544,7 +2544,7 @@ QUnit.test("Generate breaks for holidays", function(assert) {
     this.updateOptions({
         workdaysOnly: true,
         breakStyle: { width: 0 },
-        workweek: [0, 1, 2, 3, 4, 5, 6],
+        workWeek: [0, 1, 2, 3, 4, 5, 6],
         dataType: "datetime",
         holidays: [new Date(2017, 8, 10, 8, 20)]
     });
@@ -2567,7 +2567,7 @@ QUnit.test("The break starts with min range if holiday starts early then min", f
     this.updateOptions({
         workdaysOnly: true,
         breakStyle: { width: 0 },
-        workweek: [0, 1, 2, 3, 4, 5, 6],
+        workWeek: [0, 1, 2, 3, 4, 5, 6],
         dataType: "datetime",
         holidays: [new Date(2017, 8, 6, 6, 20)]
     });
@@ -2592,7 +2592,7 @@ QUnit.test("The break ends with max range if holiday ends later then max", funct
     this.updateOptions({
         workdaysOnly: true,
         breakStyle: { width: 0 },
-        workweek: [0, 1, 2, 3, 4, 5, 6],
+        workWeek: [0, 1, 2, 3, 4, 5, 6],
         dataType: "datetime",
         holidays: [new Date(2017, 8, 13, 6, 20)]
     });
@@ -2617,7 +2617,7 @@ QUnit.test("Do not generate the breaks for holiday if it in the weekend", functi
     this.updateOptions({
         workdaysOnly: true,
         breakStyle: { width: 0 },
-        workweek: [1, 2, 3, 4, 5],
+        workWeek: [1, 2, 3, 4, 5],
         dataType: "datetime",
         holidays: [new Date(2017, 8, 10, 8, 20)]
     });
@@ -2642,7 +2642,7 @@ QUnit.test("sort generated breaks", function(assert) {
     this.updateOptions({
         workdaysOnly: true,
         breakStyle: { width: 0 },
-        workweek: [1, 2, 3, 4, 5],
+        workWeek: [1, 2, 3, 4, 5],
         dataType: "datetime",
         holidays: [new Date(2017, 8, 6)]
     });
@@ -2677,7 +2677,7 @@ QUnit.test("Recalculate the breaks on zoom", function(assert) {
     this.updateOptions({
         workdaysOnly: true,
         breakStyle: { width: 0 },
-        workweek: [1, 2, 3, 5],
+        workWeek: [1, 2, 3, 5],
         dataType: "datetime"
     });
 
@@ -2707,7 +2707,7 @@ QUnit.test("Correct generation of the breaks if workdays set with uppercase", fu
     this.updateOptions({
         workdaysOnly: true,
         breakStyle: { width: 0 },
-        workweek: [1, 2, 3, 4, 5],
+        workWeek: [1, 2, 3, 4, 5],
         dataType: "datetime"
     });
 
@@ -2731,7 +2731,7 @@ QUnit.test("Correct generation of the breaks if holidays set with string", funct
     this.updateOptions({
         workdaysOnly: true,
         breakStyle: { width: 0 },
-        workweek: [0, 1, 2, 3, 4, 5, 6],
+        workWeek: [0, 1, 2, 3, 4, 5, 6],
         dataType: "datetime",
         holidays: ['September 11, 2017']
     });
@@ -2756,7 +2756,7 @@ QUnit.test("Correct generation of the breaks if exactWorkdays set with string", 
     this.updateOptions({
         workdaysOnly: true,
         breakStyle: { width: 0 },
-        workweek: [1, 2, 3, 4, 5],
+        workWeek: [1, 2, 3, 4, 5],
         dataType: "datetime",
         singleWorkdays: ['September 10, 2017']
     });
@@ -2781,7 +2781,7 @@ QUnit.test("Concatenate generated breaks with user breaks", function(assert) {
     this.updateOptions({
         workdaysOnly: true,
         breakStyle: { width: 0 },
-        workweek: [1, 2, 3, 4, 5],
+        workWeek: [1, 2, 3, 4, 5],
         dataType: "datetime",
         breaks: [[ new Date(2017, 8, 12), new Date(2017, 8, 13)]]
     });
@@ -2812,7 +2812,7 @@ QUnit.test("Merge generated breaks with user breaks", function(assert) {
     this.updateOptions({
         workdaysOnly: true,
         breakStyle: { width: 10 },
-        workweek: [1, 2, 3, 4, 5],
+        workWeek: [1, 2, 3, 4, 5],
         dataType: "datetime",
         breaks: [[new Date(2017, 8, 10), new Date(2017, 8, 13)]]
     });

@@ -1667,11 +1667,11 @@ var dxChart = {
         workdaysOnly: false,
         /**
         * @name dxchartoptions_argumentaxis_workweek
-        * @publicName workweek
+        * @publicName workWeek
         * @type Array<number>
         * @default [1, 2, 3, 4, 5]
         */
-        workweek: [1, 2, 3, 4, 5],
+        workWeek: [1, 2, 3, 4, 5],
         /**
         * @name dxchartoptions_argumentaxis_holidays
         * @publicName holidays

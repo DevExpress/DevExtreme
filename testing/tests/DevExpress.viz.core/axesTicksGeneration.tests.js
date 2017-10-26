@@ -2128,7 +2128,7 @@ QUnit.test("Do not tune day off scale break", function(assert) {
         tickInterval: { days: 1 },
         workdaysOnly: true,
         breakStyle: { width: 0 },
-        workweek: [1, 2, 3, 4, 5]
+        workWeek: [1, 2, 3, 4, 5]
     });
 
     this.axis.setBusinessRange({ minVisible: new Date(2017, 8, 13), maxVisible: new Date(2017, 8, 20), addRange: function() { return this; } });
@@ -2150,7 +2150,7 @@ QUnit.test("Do not remove day off scale break if it less than tickInterval", fun
         tickInterval: { weeks: 1 },
         breakStyle: { width: 0 },
         workdaysOnly: true,
-        workweek: [1, 2, 3, 4, 5]
+        workWeek: [1, 2, 3, 4, 5]
     });
 
     this.axis.setBusinessRange({ minVisible: new Date(2017, 8, 13), maxVisible: new Date(2017, 9, 20), addRange: function() { return this; } });
@@ -2192,7 +2192,7 @@ QUnit.test("Move datetime ticks to work day", function(assert) {
         breakStyle: { width: 0 },
         tickInterval: { hours: 14 },
         workdaysOnly: true,
-        workweek: [1, 2, 3, 4, 5]
+        workWeek: [1, 2, 3, 4, 5]
     });
 
     this.axis.setBusinessRange({ minVisible: new Date(2017, 8, 15), maxVisible: new Date(2017, 8, 19), addRange: function() { return this; } });
@@ -2216,7 +2216,7 @@ QUnit.test("Move datetime ticks to work day. Tick interval data - move tick to s
         breakStyle: { width: 0 },
         tickInterval: { days: 1 },
         workdaysOnly: true,
-        workweek: [1, 2, 3, 4, 5]
+        workWeek: [1, 2, 3, 4, 5]
     });
 
     this.axis.setBusinessRange({ minVisible: new Date(2017, 8, 15), maxVisible: new Date(2017, 8, 19), addRange: function() { return this; } });
@@ -2239,7 +2239,7 @@ QUnit.test("Do not move datetime ticks to work day if work day has tick", functi
         breakStyle: { width: 0 },
         tickInterval: { days: 2 },
         workdaysOnly: true,
-        workweek: [1, 2, 3, 4, 5]
+        workWeek: [1, 2, 3, 4, 5]
     });
 
     this.axis.setBusinessRange({ minVisible: new Date(2017, 8, 16), maxVisible: new Date(2017, 8, 22), addRange: function() { return this; } });

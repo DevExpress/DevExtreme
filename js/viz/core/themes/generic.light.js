@@ -668,7 +668,7 @@ registerTheme({
             constantLines: []
         },
         argumentAxis: {
-            workweek: [1, 2, 3, 4, 5]
+            workWeek: [1, 2, 3, 4, 5]
         },
         valueAxis: {
             endOnTick: true,
@@ -1040,7 +1040,7 @@ registerTheme({
                 label: {}
             },
             logarithmBase: 10,
-            workweek: [1, 2, 3, 4, 5],
+            workWeek: [1, 2, 3, 4, 5],
             breakStyle: { width: 5, color: "#ababab", line: "waved" }
         },
         selectedRangeColor: "#606060",

@@ -102,11 +102,11 @@ var dxRangeSelector = {
         workdaysOnly: false,
         /**
         * @name dxrangeselectoroptions_scale_workweek
-        * @publicName workweek
+        * @publicName workWeek
         * @type Array<number>
         * @default [1, 2, 3, 4, 5]
         */
-        workweek: [1, 2, 3, 4, 5],
+        workWeek: [1, 2, 3, 4, 5],
         /**
         * @name dxrangeselectoroptions_scale_holidays
         * @publicName holidays

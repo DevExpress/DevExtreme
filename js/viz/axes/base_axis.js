@@ -126,7 +126,7 @@ function getScaleBreaks(axisOptions, viewport, series, isArgumentAxis) {
     if(axisOptions.type !== "discrete" && axisOptions.dataType === "datetime" && axisOptions.workdaysOnly) {
         breaks = breaks.concat(generateDateBreaks(viewport.minVisible,
             viewport.maxVisible,
-            axisOptions.workweek,
+            axisOptions.workWeek,
             axisOptions.singleWorkdays,
             axisOptions.holidays));
     }
@@ -177,9 +177,7 @@ function generateAutoBreaks(options, series, viewport) {
         }
     }
 
-    breaks.sort(function(a, b) {
-        return a.from - b.from;
-    });
+    sortingBreaks(breaks);
 
     return breaks;
 }

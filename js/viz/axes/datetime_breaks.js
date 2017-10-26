@@ -14,7 +14,7 @@ function getWeekendDays(workdays) {
 }
 
 function getNextDayIndex(dayIndex) {
-    return (++dayIndex) % 7;
+    return (dayIndex + 1) % 7;
 }
 
 function dayBetweenWeekend(weekend, day) {
@@ -191,8 +191,8 @@ function calculateGaps(breaks) {
     });
 }
 
-exports.generateDateBreaks = function(min, max, workweek, singleWorkdays, holidays) {
-    var weekendDayIndices = getWeekEndDayIndices(workweek),
+exports.generateDateBreaks = function(min, max, workWeek, singleWorkdays, holidays) {
+    var weekendDayIndices = getWeekEndDayIndices(workWeek),
         breaks = generateDateBreaksForWeekend(min, max, weekendDayIndices);
 
     breaks.push.apply(breaks, generateBreaksForHolidays(min, max, holidays || [], weekendDayIndices));
