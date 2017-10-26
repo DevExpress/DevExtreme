@@ -367,6 +367,10 @@ function getNormalizedFilter(group, fields) {
         removeAndOperationFromGroup(criteria);
     }
 
+    if(group.length === 0) {
+        return null;
+    }
+
     return group;
 }
 
