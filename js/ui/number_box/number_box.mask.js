@@ -356,6 +356,10 @@ var NumberBoxMask = NumberBoxBase.inherit({
         return this._parsedValue;
     },
 
+    _endsWith: function(string, suffix) {
+        return string.indexOf(suffix, string.length - suffix.length) !== -1;
+    },
+
     _revertSign: function(e) {
         if(!this._useMaskBehavior()) {
             return;
@@ -369,7 +373,7 @@ var NumberBoxMask = NumberBoxBase.inherit({
         var text = this._input().val(),
             decimalSeparator = number.getDecimalSeparator();
 
-        if(text.endsWith(decimalSeparator) && this._lastKey === decimalSeparator) {
+        if(this._endsWith(text, decimalSeparator) && this._lastKey === decimalSeparator) {
             return;
         }
 
