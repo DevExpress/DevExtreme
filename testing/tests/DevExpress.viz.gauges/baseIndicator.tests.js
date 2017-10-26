@@ -56,6 +56,7 @@ var environment = {
     },
     afterEach: function() {
         this.target.dispose();
+        this.renderer.dispose();
     },
     patchRenderer: noop
 };
@@ -255,6 +256,11 @@ QUnit.module('BaseIndicator - animation', {
                     delete this.animationController;
                 }
                 return this;
+            };
+            var baseDispose = group.dispose;
+            group.dispose = function() {
+                baseDispose.apply(this, arguments);
+                this.animationController && this.animationController.dispose();
             };
             return group;
         };
