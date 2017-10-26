@@ -159,7 +159,8 @@ var ContextMenu = MenuBase.inherit((function() {
                 * @type function(e)
                 * @type_function_param1 e:object
                 * @type_function_param1_field4 jQueryEvent:jQuery.Event
-                * @type_function_param1_field5 position:positionConfig
+                * @type_function_param1_field5 event:event
+                * @type_function_param1_field6 position:positionConfig
                 * @action
                 */
                 onPositioning: null,

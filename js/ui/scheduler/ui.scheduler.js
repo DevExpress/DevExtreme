@@ -654,7 +654,8 @@ var Scheduler = Widget.inherit({
                 * @type_function_param1_field5 targetedAppointmentData:object
                 * @type_function_param1_field6 appointmentElement:dxElement
                 * @type_function_param1_field7 jQueryEvent:jQuery.Event
-                * @type_function_param1_field8 cancel:Boolean
+                * @type_function_param1_field8 event:event
+                * @type_function_param1_field9 cancel:Boolean
                 * @action
                 */
             onAppointmentClick: null,
@@ -669,7 +670,8 @@ var Scheduler = Widget.inherit({
                 * @type_function_param1_field5 targetedAppointmentData:object
                 * @type_function_param1_field6 appointmentElement:dxElement
                 * @type_function_param1_field7 jQueryEvent:jQuery.Event
-                * @type_function_param1_field8 cancel:Boolean
+                * @type_function_param1_field8 event:event
+                * @type_function_param1_field9 cancel:Boolean
                 * @action
                 */
             onAppointmentDblClick: null,
@@ -683,7 +685,8 @@ var Scheduler = Widget.inherit({
                 * @type_function_param1_field4 cellData:object
                 * @type_function_param1_field5 cellElement:dxElement
                 * @type_function_param1_field6 jQueryEvent:jQuery.Event
-                * @type_function_param1_field7 cancel:Boolean
+                * @type_function_param1_field7 event:event
+                * @type_function_param1_field8 cancel:Boolean
                 * @action
                 */
             onCellClick: null,

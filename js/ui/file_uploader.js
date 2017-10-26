@@ -256,7 +256,8 @@ var FileUploader = Editor.inherit({
             * @type_function_param1 e:object
             * @type_function_param1_field4 file:File
             * @type_function_param1_field5 jQueryEvent:jQuery.Event
-            * @type_function_param1_field6 request:XMLHttpRequest
+            * @type_function_param1_field6 event:event
+            * @type_function_param1_field7 request:XMLHttpRequest
             * @action
             */
             onUploadStarted: null,
@@ -269,7 +270,8 @@ var FileUploader = Editor.inherit({
             * @type_function_param1 e:object
             * @type_function_param1_field4 file:File
             * @type_function_param1_field5 jQueryEvent:jQuery.Event
-            * @type_function_param1_field6 request:XMLHttpRequest
+            * @type_function_param1_field6 event:event
+            * @type_function_param1_field7 request:XMLHttpRequest
             * @action
             */
             onUploaded: null,
@@ -285,7 +287,8 @@ var FileUploader = Editor.inherit({
             * @type_function_param1_field6 bytesLoaded:Number
             * @type_function_param1_field7 bytesTotal:Number
             * @type_function_param1_field8 jQueryEvent:jQuery.Event
-            * @type_function_param1_field9 request:XMLHttpRequest
+            * @type_function_param1_field9 event:event
+            * @type_function_param1_field10 request:XMLHttpRequest
             * @action
             */
             onProgress: null,
@@ -298,7 +301,8 @@ var FileUploader = Editor.inherit({
             * @type_function_param1 e:object
             * @type_function_param1_field4 file:File
             * @type_function_param1_field5 jQueryEvent:jQuery.Event
-            * @type_function_param1_field6 request:XMLHttpRequest
+            * @type_function_param1_field6 event:event
+            * @type_function_param1_field7 request:XMLHttpRequest
             * @action
             */
             onUploadError: null,
@@ -311,7 +315,8 @@ var FileUploader = Editor.inherit({
             * @type_function_param1 e:object
             * @type_function_param1_field4 file:object
             * @type_function_param1_field5 jQueryEvent:jQuery.Event
-            * @type_function_param1_field6 request:XMLHttpRequest
+            * @type_function_param1_field6 event:event
+            * @type_function_param1_field7 request:XMLHttpRequest
             * @action
             */
             onUploadAborted: null,
@@ -342,6 +347,7 @@ var FileUploader = Editor.inherit({
             * @type_function_param1_field4 value:Array<File>
             * @type_function_param1_field5 previousValue:Array<File>
             * @type_function_param1_field6 jQueryEvent:jQuery.Event
+            * @type_function_param1_field7 event:event
             * @action
             */
 

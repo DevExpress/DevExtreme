@@ -12,7 +12,7 @@ var dxTreeMap = {
     * @publicName Options
     * @namespace DevExpress.viz.treeMap
     * @hidden
-    */        
+    */
     /**
     * @name dxtreemapoptions_margin
     * @publicName margin
@@ -553,7 +553,8 @@ var dxTreeMap = {
     * @type_function_param1_field1 component:object
     * @type_function_param1_field2 element:object
     * @type_function_param1_field3 jQueryEvent:jQuery.Event
-    * @type_function_param1_field4 node:dxTreeMapNode
+    * @type_function_param1_field4 event:event
+    * @type_function_param1_field5 node:dxTreeMapNode
     * @notUsedInTheme
     * @action
     */
