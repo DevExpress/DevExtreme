@@ -3045,6 +3045,9 @@ declare module DevExpress.ui {
 
         /** @docid dxFilterBuilderOptions_onEditorPreparing */
         onEditorPreparing?: (e: Object) => void;
+
+        /** @docid dxFilterBuilderOptions_onValueChanged */
+        onValueChanged?: (e: Object) => void;
     }
 
     /** @docid dxfilterbuilder */
