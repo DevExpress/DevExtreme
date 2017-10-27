@@ -165,77 +165,85 @@ QUnit.test("class should be set for only an element node", function(assert) {
 
 QUnit.module("width and height methods");
 
-QUnit.test("should take into consideration borders and paddings if box-sizing is border-box)", function(assert) {
+QUnit.test("width and height should take into consideration borders and paddings if box-sizing is border-box", function(assert) {
     var $element = renderer("<div>");
     document.getElementById("qunit-fixture").appendChild($element.get(0));
 
     $element.css("box-sizing", "border-box");
-    $element.css("padding", 3);
+    $element.css("padding", "3px 4px");
     $element.css("border", "4px solid");
 
     $element.height(80);
+    $element.width(80);
 
     assert.equal($element.get(0).style.height, "94px");
+    assert.equal($element.get(0).style.width, "96px");
 });
 
-QUnit.test("shouldn't take into consideration borders and paddings if box-sizing isn't border-box)", function(assert) {
-    var $element = renderer("<div>");
-    document.getElementById("qunit-fixture").appendChild($element.get(0));
+["Width", "Height"].forEach(function(propName) {
+    var outerPropName = "outer" + propName;
+    var innerPropName = "inner" + propName;
+    propName = propName.toLocaleLowerCase();
 
-    $element.css("padding", 3);
-    $element.css("border", "4px solid");
+    QUnit.test(propName + " shouldn't take into consideration borders and paddings if box-sizing isn't border-box", function(assert) {
+        var $element = renderer("<div>");
+        document.getElementById("qunit-fixture").appendChild($element.get(0));
 
-    $element.height(80);
+        $element.css("padding", 3);
+        $element.css("border", "4px solid");
 
-    assert.equal($element.get(0).style.height, "80px");
-});
+        $element[propName](80);
 
-QUnit.test("outerHeight shouldn't take into consideration borders and paddings if box-sizing is border-box)", function(assert) {
-    var $element = renderer("<div>");
-    document.getElementById("qunit-fixture").appendChild($element.get(0));
+        assert.equal($element.get(0).style[propName], "80px");
+    });
 
-    $element.css("box-sizing", "border-box");
-    $element.css("padding", 3);
-    $element.css("border", "4px solid");
+    QUnit.test(outerPropName + " shouldn't take into consideration borders and paddings if box-sizing is border-box", function(assert) {
+        var $element = renderer("<div>");
+        document.getElementById("qunit-fixture").appendChild($element.get(0));
 
-    $element.outerHeight(80);
+        $element.css("box-sizing", "border-box");
+        $element.css("padding", 3);
+        $element.css("border", "4px solid");
 
-    assert.equal($element.get(0).style.height, "80px");
-});
+        $element[outerPropName](80);
 
-QUnit.test("outerHeight shouldn take into consideration borders and paddings if box-sizing isn't border-box)", function(assert) {
-    var $element = renderer("<div>");
-    document.getElementById("qunit-fixture").appendChild($element.get(0));
+        assert.equal($element.get(0).style[propName], "80px");
+    });
 
-    $element.css("padding", 3);
-    $element.css("border", "4px solid");
+    QUnit.test(outerPropName + " shouldn take into consideration borders and paddings if box-sizing isn't border-box", function(assert) {
+        var $element = renderer("<div>");
+        document.getElementById("qunit-fixture").appendChild($element.get(0));
 
-    $element.outerHeight(80);
+        $element.css("padding", 3);
+        $element.css("border", "4px solid");
 
-    assert.equal($element.get(0).style.height, "66px");
-});
+        $element[outerPropName](80);
 
-QUnit.test("innerHeight shouldn't take into consideration borders and paddings if box-sizing is border-box)", function(assert) {
-    var $element = renderer("<div>");
-    document.getElementById("qunit-fixture").appendChild($element.get(0));
+        assert.equal($element.get(0).style[propName], "66px");
+    });
 
-    $element.css("box-sizing", "border-box");
-    $element.css("padding", 3);
-    $element.css("border", "4px solid");
+    QUnit.test(innerPropName + " shouldn't take into consideration borders and paddings if box-sizing is border-box", function(assert) {
+        var $element = renderer("<div>");
+        document.getElementById("qunit-fixture").appendChild($element.get(0));
 
-    $element.innerHeight(80);
+        $element.css("box-sizing", "border-box");
+        $element.css("padding", 3);
+        $element.css("border", "4px solid");
 
-    assert.equal($element.get(0).style.height, "88px");
-});
+        $element[innerPropName](80);
 
-QUnit.test("innerHeight shouldn take into consideration borders and paddings if box-sizing isn't border-box)", function(assert) {
-    var $element = renderer("<div>");
-    document.getElementById("qunit-fixture").appendChild($element.get(0));
+        assert.equal($element.get(0).style[propName], "88px");
+    });
 
-    $element.css("padding", 3);
-    $element.css("border", "4px solid");
+    QUnit.test(innerPropName + " shouldn take into consideration borders and paddings if box-sizing isn't border-box", function(assert) {
+        var $element = renderer("<div>");
+        document.getElementById("qunit-fixture").appendChild($element.get(0));
 
-    $element.innerHeight(80);
+        $element.css("padding", 3);
+        $element.css("border", "4px solid");
 
-    assert.equal($element.get(0).style.height, "74px");
+        $element[innerPropName](80);
+
+        assert.equal($element.get(0).style[propName], "74px");
+    });
 });

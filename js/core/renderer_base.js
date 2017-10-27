@@ -212,7 +212,7 @@ initRender.prototype.toggleClass = function(className, value) {
 
         if(typeUtils.isNumeric(value)) {
             var elementStyles = window.getComputedStyle(element);
-            var sizeAdjustment = sizeUtils.getElementBoxParams(element, elementStyles);
+            var sizeAdjustment = sizeUtils.getElementBoxParams(propName, elementStyles);
             var isBorderBox = elementStyles.boxSizing === "border-box";
 
             if(isOuter) {
