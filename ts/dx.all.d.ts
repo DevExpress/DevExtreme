@@ -2707,6 +2707,7 @@ declare module DevExpress.ui {
         groupOperationDescriptions?: { and?: string, or?: string, notAnd?: string, notOr?: string };
         onEditorPrepared?: ((e: { component?: DOMComponent, element?: DevExpress.core.dxElement, model?: any, value?: any, setValue?: any, editorElement?: DevExpress.core.dxElement, editorName?: string, dataField?: string, updateValueTimeout?: number, width?: number, readOnly?: boolean, disabled?: boolean, rtlEnabled?: boolean }) => any);
         onEditorPreparing?: ((e: { component?: DOMComponent, element?: DevExpress.core.dxElement, model?: any, value?: any, setValue?: any, cancel?: boolean, editorElement?: DevExpress.core.dxElement, editorName?: string, editorOptions?: any, dataField?: string, updateValueTimeout?: number, width?: number, readOnly?: boolean, disabled?: boolean, rtlEnabled?: boolean }) => any);
+        onValueChanged?: ((e: { component?: DOMComponent, element?: DevExpress.core.dxElement, model?: any, value?: any, previousValue?: any }) => any);
         value?: string | Array<any>;
     }
     export class dxFilterBuilder extends Widget {
@@ -3215,6 +3216,7 @@ declare module DevExpress.ui {
         badge?: string;
     }
     export interface dxNumberBoxOptions extends dxTextEditorOptions {
+        /** Specifies the value's display format and controls the user input according to it. */
         format?: string;
         /** Specifies the text of the message displayed if the specified value is not a number. */
         invalidValueMessage?: string;
@@ -3293,7 +3295,7 @@ declare module DevExpress.ui {
     export class dxOverlay extends Widget {
         constructor(element: Element, options?: dxOverlayOptions)
         constructor(element: JQuery, options?: dxOverlayOptions)
-        /** An HTML element of the widget. */
+        /** The widget's container. */
         content(): DevExpress.core.dxElement;
         /** Hides the widget. */
         hide(): Promise<void> & JQueryPromise<void>;
@@ -5012,18 +5014,31 @@ declare module DevExpress.ui {
         visible?: boolean;
     }
     export interface dxSchedulerDropDownAppointmentTemplate {
+        /** Specifies whether the appointment lasts all day. */
         allDay?: boolean;
+        /** Specifies a detail description of the appointment. */
         description?: string;
+        /** Specifies whether or not an appointment must be displayed disabled. */
         disabled?: boolean;
+        /** Specifies the ending of the appointment. */
         endDate?: Date;
+        /** Specifies the timezone of the appointment end date. Applies only if timeZone is not specified. */
         endDateTimeZone?: string;
+        /** Specifies HTML code inserted into the appointment element. */
         html?: string;
+        /** Specifies exceptions for the current recurring appointment. */
         recurrenceException?: string;
+        /** Specifies a recurrence rule for generating recurring appointments in the scheduler. */
         recurrenceRule?: string;
+        /** Specifies the start of the appointment. */
         startDate?: Date;
+        /** Specifies the timezone of the appointment start date. Applies only if timeZone is not specified. */
         startDateTimeZone?: string;
+        /** Specifies an appointment template that should be used to render this appointment only. */
         template?: template;
+        /** Specifies the subject of the appointment. */
         text?: string;
+        /** Specifies whether or not an appointment must be displayed. */
         visible?: boolean;
     }
     export interface dxSchedulerAppointmentTooltipTemplate {
@@ -5074,7 +5089,7 @@ declare module DevExpress.ui {
         clientHeight(): number;
         /** Returns the width of the scrollable widget in pixels. */
         clientWidth(): number;
-        /** Returns an HTML element of the widget. */
+        /** Returns the widget's container. */
         content(): DevExpress.core.dxElement;
         /** Scrolls the widget content by the specified number of pixels. */
         scrollBy(distance: number): void;
@@ -6533,6 +6548,7 @@ declare module DevExpress.viz {
         /** Gets the parameters of the point's minimum bounding rectangle (MBR). */
         getBoundingRect(): any;
     }
+    export type ScaleBreak = Array<Date | string> | Array<number>; 
     /** This section describes the Item object, which represents a funnel item. */
     export class dxFunnelItem {
         /** The item's argument. */
@@ -7134,6 +7150,7 @@ declare module DevExpress.viz.charts {
         constantLines?: Array<dxChartArgumentAxisConstantLines>;
         /** Specifies the appearance of those constant lines that belong to the argument axis. */
         constantLineStyle?: dxChartArgumentAxisConstantLineStyle;
+        holidays?: Array<Date | string> | Array<number>;
         /** Specifies chart elements to be highlighted when a user points to an axis label. */
         hoverMode?: string;
         /** Configures the labels of the argument axis. */
@@ -7150,6 +7167,7 @@ declare module DevExpress.viz.charts {
         minorTickInterval?: any;
         /** Relocates the argument axis. */
         position?: string;
+        singleWorkdays?: Array<Date | string> | Array<number>;
         /** Declares a collection of strips belonging to the argument axis. */
         strips?: Array<dxChartArgumentAxisStrips>;
         /** Specifies the interval between major ticks. */
@@ -7158,6 +7176,8 @@ declare module DevExpress.viz.charts {
         title?: dxChartArgumentAxisTitle;
         /** Specifies the type of the argument axis. */
         type?: string;
+        workdaysOnly?: boolean;
+        workWeek?: Array<number>;
     }
     /** Declares a collection of constant lines belonging to the argument axis. */
     export interface dxChartArgumentAxisConstantLines extends dxChartCommonAxisSettingsConstantLineStyle {
@@ -7222,6 +7242,8 @@ declare module DevExpress.viz.charts {
     /** Defines common settings for both the argument and value axis in a chart. */
     export interface dxChartCommonAxisSettings {
         allowDecimals?: boolean;
+        breaks?: Array<ScaleBreak>;
+        breakStyle?: { width?: number, color?: string, line?: string };
         /** Specifies the color of the axis line. */
         color?: string;
         /** Configures the appearance of all constant lines in the widget. */
@@ -7247,7 +7269,6 @@ declare module DevExpress.viz.charts {
         opacity?: number;
         /** Reserves a pixel-measured space for the axis. */
         placeholderSize?: number;
-        /** Rounds off date-time values to the nearest tick interval. Applies only to the axes of the "continuous" type containing date-time values. */
         setTicksAtUnitBeginning?: boolean;
         /** Configures the appearance of strips. */
         stripStyle?: dxChartCommonAxisSettingsStripStyle;
@@ -7422,6 +7443,7 @@ declare module DevExpress.viz.charts {
     }
     /** Configures the value axis. */
     export interface dxChartValueAxis extends dxChartCommonAxisSettings {
+        autoBreaksEnabled?: boolean;
         /** Specifies the minimum distance between two neighboring major ticks in pixels. Applies only to the axes of the "continuous" and "logarithmic" types. */
         axisDivisionFactor?: number;
         /** Specifies the order of categories on an axis of the "discrete" type. */
@@ -7437,6 +7459,7 @@ declare module DevExpress.viz.charts {
         logarithmBase?: number;
         /** Coupled with the min option, focuses the widget on a specific chart segment. Applies only to the axes of the "continuous" and "logarithmic" type. */
         max?: number | Date | string;
+        maxAutoBreakCount?: number;
         /** Coupled with the max option, focuses the widget on a specific chart segment. Applies only to the axes of the "continuous" and "logarithmic" type. */
         min?: number | Date | string;
         /** Specifies how many minor ticks to place between two neighboring major ticks. */
@@ -7735,7 +7758,6 @@ declare module DevExpress.viz.charts {
         minorTick?: { visible?: boolean, color?: string, opacity?: number, width?: number, length?: number };
         /** Specifies the opacity of the line that represents an axis. */
         opacity?: number;
-        /** Indicates whether or not to set ticks/grid lines of a continuous axis of the 'date-time' type at the beginning of each date-time interval. */
         setTicksAtUnitBeginning?: boolean;
         /** An object defining configuration options for strip style. */
         stripStyle?: dxPolarChartCommonAxisSettingsStripStyle;
@@ -7931,7 +7953,7 @@ declare module DevExpress.viz.charts {
         /** A handler for the done event. */
         onDone?: ((e: { component?: DOMComponent, element?: DevExpress.core.dxElement, model?: any }) => any);
         /** A handler for the pointClick event. */
-        onPointClick?: ((e: { component?: any, element?: any, jQueryEvent?: JQueryEventObject, event?: event, target?: basePointObject }) => any) | string;
+        onPointClick?: ((e: { component?: DOMComponent, element?: DevExpress.core.dxElement, model?: any, jQueryEvent?: JQueryEventObject, event?: event, target?: basePointObject }) => any) | string;
         /** A handler for the pointHoverChanged event. */
         onPointHoverChanged?: ((e: { component?: any, element?: any, target?: basePointObject }) => any);
         /** A handler for the pointSelectionChanged event. */
@@ -8321,7 +8343,7 @@ declare module DevExpress.viz.rangeSelector {
         /** A handler for the valueChanged event. */
         onValueChanged?: ((e: { component?: DOMComponent, element?: DevExpress.core.dxElement, model?: any, value?: Array<number | string | Date>, previousValue?: Array<number | string | Date> }) => any);
         /** Specifies options of the range selector's scale. */
-        scale?: { valueType?: string, type?: string, logarithmBase?: number, minorTickCount?: number, showBoundaryTicks?: boolean, startValue?: number | Date | string, endValue?: number | Date | string, showMinorTicks?: boolean, minorTickInterval?: number | any | string, majorTickInterval?: number | any | string, tickInterval?: number | any | string, useTicksAutoArrangement?: boolean, setTicksAtUnitBeginning?: boolean, placeholderHeight?: number, minRange?: number | any | string, maxRange?: number | any | string, label?: any, tick?: any, minorTick?: any, marker?: any, categories?: Array<number | string | Date>, allowDecimals?: boolean, endOnTick?: boolean };
+        scale?: { valueType?: string, type?: string, logarithmBase?: number, minorTickCount?: number, showBoundaryTicks?: boolean, startValue?: number | Date | string, endValue?: number | Date | string, showMinorTicks?: boolean, minorTickInterval?: number | any | string, breaks?: Array<ScaleBreak>, workdaysOnly?: boolean, workWeek?: Array<number>, holidays?: Array<Date | string> | Array<number>, singleWorkdays?: Array<Date | string> | Array<number>, breakStyle?: any, majorTickInterval?: number | any | string, tickInterval?: number | any | string, useTicksAutoArrangement?: boolean, setTicksAtUnitBeginning?: boolean, placeholderHeight?: number, minRange?: number | any | string, maxRange?: number | any | string, label?: any, tick?: any, minorTick?: any, marker?: any, categories?: Array<number | string | Date>, allowDecimals?: boolean, endOnTick?: boolean };
         /** Use the value option instead. */
         selectedRange?: { startValue?: number | Date | string, endValue?: number | Date | string };
         /** Specifies the color of the selected range. */
