@@ -961,7 +961,7 @@ module.exports = {
              * @publicName onKeyDown
              * @type function(e)
              * @type_function_param1 e:object
-             * @type_function_param1_field3 jQueryEvent:jQuery.Event
+             * @type_function_param1_field3 jQueryEvent:jQuery.Event:deprecated(event)
              * @type_function_param1_field4 event:event
              * @type_function_param1_field5 handled:boolean
              * @extends Action

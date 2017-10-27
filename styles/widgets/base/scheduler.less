@@ -76,8 +76,8 @@
 
 @SCHEDULER_TIME_INDICATOR_FONT_SIZE: 30px;
 @SCHEDULER_TIME_INDICATOR_SIZE: 1px;
-@SCHEDULER_TIME_INDICATOR_TOP: -15px;
-@SCHEDULER_TIME_INDICATOR_LEFT: -12px;
+@SCHEDULER_TIME_INDICATOR_TOP: 14px;
+@SCHEDULER_TIME_INDICATOR_LEFT: 12px;
 
 @SCHEDULER_TIME_INDICATOR_SHADOW_COLOR: rgba(255, 255, 255, 0.10);
 @SCHEDULER_TIME_INDICATOR_SHADOW: 0 1px 0 0px @SCHEDULER_TIME_INDICATOR_SHADOW_COLOR;
@@ -485,8 +485,8 @@
             color: @SCHEDULER_TIME_INDICATOR_COLOR;
             position: absolute;
             z-index: 1000;
-            margin-top: @SCHEDULER_TIME_INDICATOR_TOP;
-            margin-left: @SCHEDULER_TIME_INDICATOR_LEFT;
+            margin-top: -@SCHEDULER_TIME_INDICATOR_TOP;
+            margin-left: -@SCHEDULER_TIME_INDICATOR_LEFT;
             .text-shadow(@SCHEDULER_TIME_INDICATOR_TEXT_SHADOW);
         }
 }
@@ -560,8 +560,8 @@
         .dx-icon-spindown;
 
         &:before {
-            margin-left: @SCHEDULER_TIME_INDICATOR_TOP;
-            margin-top: @SCHEDULER_TIME_INDICATOR_LEFT;
+            margin-left: -@SCHEDULER_TIME_INDICATOR_TOP;
+            margin-top: -@SCHEDULER_TIME_INDICATOR_LEFT;
         }
     }
     .dx-scheduler-date-time-shader{

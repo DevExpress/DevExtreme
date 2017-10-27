@@ -157,7 +157,7 @@ var CollectionWidget = Widget.inherit({
             * @type_function_param1_field4 itemData:object
             * @type_function_param1_field5 itemElement:dxElement
             * @type_function_param1_field6 itemIndex:number
-            * @type_function_param1_field7 jQueryEvent:jQuery.Event
+            * @type_function_param1_field7 jQueryEvent:jQuery.Event:deprecated(event)
             * @type_function_param1_field8 event:event
             * @action
             */
@@ -193,7 +193,7 @@ var CollectionWidget = Widget.inherit({
             * @type_function_param1_field4 itemData:object
             * @type_function_param1_field5 itemElement:dxElement
             * @type_function_param1_field6 itemIndex:number
-            * @type_function_param1_field7 jQueryEvent:jQuery.Event
+            * @type_function_param1_field7 jQueryEvent:jQuery.Event:deprecated(event)
             * @type_function_param1_field8 event:event
             * @action
             */
