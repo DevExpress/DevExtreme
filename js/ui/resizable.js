@@ -106,7 +106,7 @@ var Resizable = DOMComponent.inherit({
             * @extends Action
             * @type function(e)
             * @type_function_param1 e:object
-            * @type_function_param1_field4 jQueryEvent:jQuery.Event
+            * @type_function_param1_field4 jQueryEvent:jQuery.Event:deprecated(event)
             * @type_function_param1_field5 event:event
             * @type_function_param1_field6 width:number
             * @type_function_param1_field7 height:number
@@ -120,7 +120,7 @@ var Resizable = DOMComponent.inherit({
             * @extends Action
             * @type function(e)
             * @type_function_param1 e:object
-            * @type_function_param1_field4 jQueryEvent:jQuery.Event
+            * @type_function_param1_field4 jQueryEvent:jQuery.Event:deprecated(event)
             * @type_function_param1_field5 event:event
             * @type_function_param1_field6 width:number
             * @type_function_param1_field7 height:number
@@ -134,7 +134,7 @@ var Resizable = DOMComponent.inherit({
             * @extends Action
             * @type function(e)
             * @type_function_param1 e:object
-            * @type_function_param1_field4 jQueryEvent:jQuery.Event
+            * @type_function_param1_field4 jQueryEvent:jQuery.Event:deprecated(event)
             * @type_function_param1_field5 event:event
             * @type_function_param1_field6 width:number
             * @type_function_param1_field7 height:number
