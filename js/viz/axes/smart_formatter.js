@@ -231,14 +231,18 @@ function smartFormatter(tick, options) {
             typeFormat = dateUtils.getDateFormatByTickInterval(tickInterval);
             if(options.showTransition && ticks.length) {
                 indexOfTick = ticks.map(Number).indexOf(+tick);
-                if(indexOfTick === -1) {
-                    prevDateIndex = getTransitionTickIndex(ticks, tick);
+                if(ticks.length === 1 && indexOfTick === 0) {
+                    typeFormat = formatHelper.getDateFormatByTicks(ticks);
                 } else {
-                    prevDateIndex = indexOfTick === 0 ? ticks.length - 1 : indexOfTick - 1;
-                    nextDateIndex = indexOfTick === 0 ? 1 : -1;
+                    if(indexOfTick === -1) {
+                        prevDateIndex = getTransitionTickIndex(ticks, tick);
+                    } else {
+                        prevDateIndex = indexOfTick === 0 ? ticks.length - 1 : indexOfTick - 1;
+                        nextDateIndex = indexOfTick === 0 ? 1 : -1;
+                    }
+                    datesDifferences = getDatesDifferences(ticks[prevDateIndex], tick, ticks[nextDateIndex], typeFormat);
+                    typeFormat = formatHelper.getDateFormatByDifferences(datesDifferences, typeFormat);
                 }
-                datesDifferences = getDatesDifferences(ticks[prevDateIndex], tick, ticks[nextDateIndex], typeFormat);
-                typeFormat = formatHelper.getDateFormatByDifferences(datesDifferences, typeFormat);
                 if(isFunction(typeFormat)) {
                     typeFormatter = typeFormat;
                     typeFormat = null;

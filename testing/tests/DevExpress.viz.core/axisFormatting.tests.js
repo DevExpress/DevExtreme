@@ -385,6 +385,30 @@ QUnit.test("Numeric - no format", function(assert) {
 
 QUnit.module("Auto formatting. Tick labels. Datetime. Continuous axis", environment);
 
+QUnit.test("format is calculated by single tick", function(assert) {
+    this.testFormat(assert, {
+        argumentType: "datetime",
+        label: {
+            visible: true
+        }
+    }, [
+        new Date(2010, 0, 1, 15, 10)
+    ], { milliseconds: 1000 },
+    ["1/1/2010 3:10 PM"]);
+});
+
+QUnit.test("format is calculated by single tick (milliseconds)", function(assert) {
+    this.testFormat(assert, {
+        argumentType: "datetime",
+        label: {
+            visible: true
+        }
+    }, [
+        new Date(2010, 0, 1, 15, 0, 2, 100)
+    ], { milliseconds: 1000 },
+    ["1/1/2010 3:00:02 PM 100"]);
+});
+
 QUnit.test("format is calculated by ticks and tickInterval in years", function(assert) {
     this.testFormat(assert, {
         argumentType: "datetime",
