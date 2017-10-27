@@ -10658,6 +10658,36 @@ QUnit.test("Values of the editors should be correct after repaint on form", func
     assert.equal($testElement.find(".dx-form .dx-texteditor").eq(0).dxTextBox("instance").option("value"), "Bob", "value is correct after repaint");
 });
 
+//T562662
+QUnit.test("Render detail form row - creation а validator should not throw an exception when editCellTemplate  specified for column", function(assert) {
+    //arrange
+    this.setupModules(this);
+
+    var $testElement = $('#container');
+
+    this.rowsView.render($testElement);
+
+    this.columnOption("phone", {
+        editCellTemplate: function($container, options) {
+            return $("<div id=wrapper/>")
+                .append($("<div/>").dxAutocomplete({}));
+        },
+        validationRules: [{ type: "required" }]
+    });
+
+    try {
+        //act
+        this.editRow(0);
+
+        //assert
+        assert.ok(true, "no exceptions");
+    } catch(e) {
+        //assert
+        assert.ok(false, "exception");
+    }
+});
+
+
 
 QUnit.module('Editing - "popup" mode', {
     beforeEach: function() {
