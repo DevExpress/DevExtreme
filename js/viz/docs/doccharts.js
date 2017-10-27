@@ -1677,6 +1677,8 @@ var dxChart = {
         * @publicName breaks
         * @type Array<ScaleBreak>
         * @default undefined
+        * @inherits ScaleBreak
+        * @notUsedInTheme
         */
         breaks: undefined,
         /**
@@ -1966,7 +1968,9 @@ var dxChart = {
         * @name dxchartoptions_valueaxis_breaks
         * @publicName breaks
         * @type Array<ScaleBreak>
+        * @inherits ScaleBreak
         * @default undefined
+        * @notUsedInTheme
         */
         breaks: undefined,
         /**

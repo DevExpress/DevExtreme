@@ -136,7 +136,7 @@ declare module DevExpress.viz.rangeSelector {
             endValue?: any;
 
             /** @docid dxrangeselectoroptions_scale_breaks */
-            breaks?: Array<any>;
+            breaks?: Array<viz.core.ScaleBreak>;
 
             /** @docid dxrangeselectoroptions_scale_workdaysonly */
             workdaysOnly?: boolean;

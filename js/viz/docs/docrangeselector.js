@@ -90,7 +90,9 @@ var dxRangeSelector = {
         * @name dxrangeselectoroptions_scale_breaks
         * @publicName breaks
         * @type Array<ScaleBreak>
+        * @inherits ScaleBreak
         * @default undefined
+        * @notUsedInTheme
         */
         breaks: undefined,
         /**

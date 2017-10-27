@@ -119,8 +119,8 @@ function filterBreaks(breaks, viewport, breakStyle) {
 function getScaleBreaks(axisOptions, viewport, series, isArgumentAxis) {
     var breaks = (axisOptions.breaks || []).map(function(b) {
         return {
-            from: b[0],
-            to: b[1]
+            from: b.startValue,
+            to: b.endValue
         };
     });
     if(axisOptions.type !== "discrete" && axisOptions.dataType === "datetime" && axisOptions.workdaysOnly) {

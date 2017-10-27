@@ -3217,7 +3217,7 @@ declare module DevExpress.ui {
     }
     export interface dxNumberBoxOptions extends dxTextEditorOptions {
         /** Specifies the value's display format and controls the user input according to it. */
-        format?: string;
+        format?: format;
         /** Specifies the text of the message displayed if the specified value is not a number. */
         invalidValueMessage?: string;
         /** The maximum value accepted by the number box. */
@@ -5014,31 +5014,18 @@ declare module DevExpress.ui {
         visible?: boolean;
     }
     export interface dxSchedulerDropDownAppointmentTemplate {
-        /** Specifies whether the appointment lasts all day. */
         allDay?: boolean;
-        /** Specifies a detail description of the appointment. */
         description?: string;
-        /** Specifies whether or not an appointment must be displayed disabled. */
         disabled?: boolean;
-        /** Specifies the ending of the appointment. */
         endDate?: Date;
-        /** Specifies the timezone of the appointment end date. Applies only if timeZone is not specified. */
         endDateTimeZone?: string;
-        /** Specifies HTML code inserted into the appointment element. */
         html?: string;
-        /** Specifies exceptions for the current recurring appointment. */
         recurrenceException?: string;
-        /** Specifies a recurrence rule for generating recurring appointments in the scheduler. */
         recurrenceRule?: string;
-        /** Specifies the start of the appointment. */
         startDate?: Date;
-        /** Specifies the timezone of the appointment start date. Applies only if timeZone is not specified. */
         startDateTimeZone?: string;
-        /** Specifies an appointment template that should be used to render this appointment only. */
         template?: template;
-        /** Specifies the subject of the appointment. */
         text?: string;
-        /** Specifies whether or not an appointment must be displayed. */
         visible?: boolean;
     }
     export interface dxSchedulerAppointmentTooltipTemplate {
@@ -5471,6 +5458,10 @@ declare module DevExpress.viz {
         showLoadingIndicator(): void;
         /** Returns the widget's SVG markup. */
         svg(): string;
+    }
+    export interface ScaleBreak {
+        endValue?: number | Date | string;
+        startValue?: number | Date | string;
     }
     /** A class describing various time intervals. Inherited by tick intervals in Chart and RangeSelector. */
     export interface VizTimeInterval {
@@ -6548,7 +6539,6 @@ declare module DevExpress.viz {
         /** Gets the parameters of the point's minimum bounding rectangle (MBR). */
         getBoundingRect(): any;
     }
-    export type ScaleBreak = Array<Date | string> | Array<number>; 
     /** This section describes the Item object, which represents a funnel item. */
     export class dxFunnelItem {
         /** The item's argument. */
@@ -7144,6 +7134,7 @@ declare module DevExpress.viz.charts {
         argumentType?: string;
         /** Specifies the minimum distance between two neighboring major ticks in pixels. Applies only to the axes of the "continuous" and "logarithmic" types. */
         axisDivisionFactor?: number;
+        breaks?: Array<ScaleBreak>;
         /** Specifies the order of categories on an axis of the "discrete" type. */
         categories?: Array<number | string | Date>;
         /** Declares a collection of constant lines belonging to the argument axis. */
@@ -7242,7 +7233,6 @@ declare module DevExpress.viz.charts {
     /** Defines common settings for both the argument and value axis in a chart. */
     export interface dxChartCommonAxisSettings {
         allowDecimals?: boolean;
-        breaks?: Array<ScaleBreak>;
         breakStyle?: { width?: number, color?: string, line?: string };
         /** Specifies the color of the axis line. */
         color?: string;
@@ -7446,6 +7436,7 @@ declare module DevExpress.viz.charts {
         autoBreaksEnabled?: boolean;
         /** Specifies the minimum distance between two neighboring major ticks in pixels. Applies only to the axes of the "continuous" and "logarithmic" types. */
         axisDivisionFactor?: number;
+        breaks?: Array<ScaleBreak>;
         /** Specifies the order of categories on an axis of the "discrete" type. */
         categories?: Array<number | string | Date>;
         /** Declares a collection of constant lines belonging to the value axis. */

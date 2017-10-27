@@ -1757,7 +1757,10 @@ QUnit.test("Apply margins taking into account breakStyle.width", function(assert
     var axis = this.createAxis(false, {
         valueMarginsEnabled: true,
         breakStyle: { width: 50 },
-        breaks: [[100, 900]]
+        breaks: [{
+            startValue: 100,
+            endValue: 900
+        }]
     });
 
     axis.setBusinessRange({
@@ -1781,7 +1784,7 @@ QUnit.test("Apply margins taking into account breaks range size", function(asser
         minValueMargin: 0.1,
         maxValueMargin: 0.2,
         breakStyle: { width: 0 },
-        breaks: [[110, 190]]
+        breaks: [{ startValue: 110, endValue: 190 }]
     });
 
     axis.setBusinessRange({
@@ -2086,7 +2089,12 @@ QUnit.test("Get scale breaks in the viewport", function(assert) {
     this.updateOptions({
         dataType: "number",
         breakStyle: { width: 10 },
-        breaks: [[10, 100], [200, 300], [310, 360], [500, 600]]
+        breaks: [
+            { startValue: 10, endValue: 100 },
+            { startValue: 200, endValue: 300 },
+            { startValue: 310, endValue: 360 },
+            { startValue: 500, endValue: 600 }
+        ]
     });
 
     this.axis.setBusinessRange({ min: 0, max: 1000, addRange: function() { return this; } });
@@ -2108,7 +2116,7 @@ QUnit.test("Do not get scale break if viewport inside it", function(assert) {
     this.updateOptions({
         dataType: "number",
         breakStyle: { width: 0 },
-        breaks: [[200, 500]]
+        breaks: [{ startValue: 200, endValue: 500 }]
     });
 
     this.axis.setBusinessRange({ min: 0, max: 1000, addRange: function() { return this; } });
@@ -2126,7 +2134,7 @@ QUnit.test("Do not get scale break if multiple value axes", function(assert) {
     this.updateOptions({
         dataType: "number",
         breakStyle: { width: 0 },
-        breaks: [[200, 500]]
+        breaks: [{ startValue: 200, endValue: 500 }]
     });
 
     this.axis.setBusinessRange({ min: 0, max: 1000, addRange: function() { return this; } }, true);
@@ -2142,7 +2150,7 @@ QUnit.test("Sorting of the breaks if user set not sorted breaks", function(asser
     this.updateOptions({
         dataType: "number",
         breakStyle: { width: 0 },
-        breaks: [[200, 500], [100, 150]]
+        breaks: [{ startValue: 200, endValue: 500 }, { startValue: 100, endValue: 150 }]
     });
 
     this.axis.setBusinessRange({ min: 0, max: 700, addRange: function() { return this; } });
@@ -2163,7 +2171,7 @@ QUnit.test("Correct the breaks if user set 'from' > 'to'", function(assert) {
     this.updateOptions({
         dataType: "number",
         breakStyle: { width: 0 },
-        breaks: [[150, 100], [500, 200]]
+        breaks: [{ startValue: 150, endValue: 100 }, { startValue: 500, endValue: 200 }]
     });
 
     this.axis.setBusinessRange({ min: 0, max: 700, addRange: function() { return this; } });
@@ -2185,13 +2193,13 @@ QUnit.test("Filter the breaks if user set them with null and undefined values", 
         dataType: "number",
         breakStyle: { width: 0 },
         breaks: [
-            [100, null],
-            [null, 150],
-            [200, 500],
-            [null, null],
-            [undefined, undefined],
-            [undefined, 700],
-            [710, undefined]
+            { startValue: 100, endValue: null },
+            { startValue: null, endValue: 150 },
+            { startValue: 200, endValue: 500 },
+            { startValue: null, endValue: null },
+            { startValue: undefined, endValue: undefined },
+            { startValue: undefined, endValue: 700 },
+            { startValue: 710, endValue: undefined }
         ]
     });
 
@@ -2210,10 +2218,10 @@ QUnit.test("Merge breaks if they cross each other", function(assert) {
         dataType: "number",
         breakStyle: { width: 0 },
         breaks: [
-            [ 50, 100 ],
-            [ 70, 150 ],
-            [ 60, 65 ],
-            [ 150, 160 ]
+            { startValue: 50, endValue: 100 },
+            { startValue: 70, endValue: 150 },
+            { startValue: 60, endValue: 65 },
+            { startValue: 150, endValue: 160 }
         ]
     });
     this.axis.setBusinessRange({ min: 0, max: 750, addRange: function() { return this; } });
@@ -2236,8 +2244,8 @@ QUnit.test("Merge breaks if they cross each other and last the break more than m
         dataType: "number",
         breakStyle: { width: 0 },
         breaks: [
-            [50, 100 ],
-            [70, 150 ]
+            { startValue: 50, endValue: 100 },
+            { startValue: 70, endValue: 150 }
         ]
     });
 
@@ -2783,7 +2791,7 @@ QUnit.test("Concatenate generated breaks with user breaks", function(assert) {
         breakStyle: { width: 0 },
         workWeek: [1, 2, 3, 4, 5],
         dataType: "datetime",
-        breaks: [[ new Date(2017, 8, 12), new Date(2017, 8, 13)]]
+        breaks: [{ startValue: new Date(2017, 8, 12), endValue: new Date(2017, 8, 13) }]
     });
 
     this.axis.setBusinessRange({ min: new Date(2017, 8, 4), max: new Date(2017, 8, 13), addRange: function() { return this; } });
@@ -2814,7 +2822,7 @@ QUnit.test("Merge generated breaks with user breaks", function(assert) {
         breakStyle: { width: 10 },
         workWeek: [1, 2, 3, 4, 5],
         dataType: "datetime",
-        breaks: [[new Date(2017, 8, 10), new Date(2017, 8, 13)]]
+        breaks: [{ startValue: new Date(2017, 8, 10), endValue: new Date(2017, 8, 13) }]
     });
 
     this.axis.setBusinessRange({ min: new Date(2017, 8, 4), max: new Date(2017, 8, 13), addRange: function() { return this; } });
@@ -3071,7 +3079,7 @@ QUnit.test("Concatenate auto breaks with user breaks", function(assert) {
         autoBreaksEnabled: true,
         maxAutoBreakCount: 2,
         breakStyle: { width: 0 },
-        breaks: [[36, 40]]
+        breaks: [{ startValue: 36, endValue: 40 }]
     });
 
     this.axis.setGroupSeries(this.series);

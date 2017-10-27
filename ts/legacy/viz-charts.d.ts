@@ -1850,10 +1850,16 @@ declare module DevExpress.viz.charts {
         position?: string;
 
         /**
-          * @docid dxchartoptions_argumentaxis_title
-          * @docid dxchartoptions_valueaxis_title
-          */
+        * @docid dxchartoptions_argumentaxis_title
+        * @docid dxchartoptions_valueaxis_title
+        */
         title?: any;
+
+        /**
+        * @docid dxchartoptions_argumentaxis_breaks
+        * @docid dxchartoptions_valueaxis_breaks
+        */
+        breaks?: Array<viz.core.ScaleBreak>;
     }
 
     export interface PolarAxis extends PolarCommonAxisSettings, Axis {
@@ -1896,9 +1902,6 @@ declare module DevExpress.viz.charts {
 
         /** @docid dxchartoptions_argumentaxis_singleworkdays */
         singleWorkdays?: any;
-
-        /** @docid dxchartoptions_valueaxis_breaks */
-        breaks?: Array<Array<any>>;
     }
 
     export interface PolarArgumentAxis extends PolarAxis, ArgumentAxis {
@@ -1944,9 +1947,6 @@ declare module DevExpress.viz.charts {
 
         /** @docid dxchartoptions_valueaxis_maxautobreakcount */
         maxAutoBreakCount?: number;
-
-        /** @docid dxchartoptions_valueaxis_breaks */
-        breaks?: Array<Array<any>>;
     }
 
     export interface PolarValueAxis extends PolarAxis, ValueAxis {
