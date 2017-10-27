@@ -17,14 +17,14 @@ var eventsEngine = require("./events/core/events_engine");
 */
 
 /**
-* @name events_on
+* @name eventsMethods_on
 * @publicName on(element, eventName, selector, data, handler)
-* @type function
+* @namespace DevExpress.events
 * @param1 element:dxElement
 * @param2 eventName:string
 * @param3 selector:string
 * @param4 data:object
-* @param5 handler:eventsHandler
+* @param5 handler:function
 * @module events
 * @export on
 */
@@ -32,14 +32,14 @@ var eventsEngine = require("./events/core/events_engine");
 exports.on = eventsEngine.on;
 
 /**
-* @name events_one
+* @name eventsMethods_one
 * @publicName one(element, eventName, selector, data, handler)
-* @type function
+* @namespace DevExpress.events
 * @param1 element:dxElement
 * @param2 eventName:string
 * @param3 selector:string
 * @param4 data:object
-* @param5 handler:eventsHandler
+* @param5 handler:function
 * @module events
 * @export one
 */
@@ -47,13 +47,13 @@ exports.on = eventsEngine.on;
 exports.one = eventsEngine.one;
 
 /**
-* @name events_off
+* @name eventsMethods_off
 * @publicName off(element, eventName, selector, handler)
-* @type function
+* @namespace DevExpress.events
 * @param1 element:dxElement
 * @param2 eventName:string
 * @param3 selector:string
-* @param4 handler:eventsHandler
+* @param4 handler:function
 * @module events
 * @export off
 */
@@ -61,9 +61,9 @@ exports.one = eventsEngine.one;
 exports.off = eventsEngine.off;
 
 /**
-* @name events_trigger
+* @name eventsMethods_trigger
 * @publicName trigger(element, event, extraParameters)
-* @type function
+* @namespace DevExpress.events
 * @param1 element:dxElement
 * @param2 event:string|event
 * @param3 extraParameters:object
@@ -74,9 +74,9 @@ exports.off = eventsEngine.off;
 exports.trigger = eventsEngine.trigger;
 
 /**
-* @name events_triggerHandler
+* @name eventsMethods_triggerHandler
 * @publicName triggerHandler(element, event, extraParameters)
-* @type function
+* @namespace DevExpress.events
 * @param1 element:dxElement
 * @param2 event:string|event
 * @param3 extraParameters:object

@@ -7,7 +7,7 @@ var Item = {
     /**
     * @name dxFunnelItemfields_argument
     * @publicName argument
-    * @type any
+    * @type string|Date|number
     */
     argument: undefined,
     /**

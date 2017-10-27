@@ -154,6 +154,7 @@ var RangeSlider = Slider.inherit({
             * @name dxRangeSliderOptions_onValueChanged
             * @publicName onValueChanged
             * @action
+            * @extends Action
             * @type_function_param1_field4 start:number
             * @type_function_param1_field5 end:number
             * @type_function_param1_field6 value:array

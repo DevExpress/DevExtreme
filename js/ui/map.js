@@ -101,7 +101,7 @@ var Map = Widget.inherit({
 
             /**
             * @pseudo MapLocationType
-            * @type Object|string|Array<Object>
+            * @type Object|string|Array<number>
             */
             /**
             * @name MapLocation
