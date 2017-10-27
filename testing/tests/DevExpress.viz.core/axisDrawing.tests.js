@@ -91,7 +91,7 @@ var environment = {
         this.updateOptions($.extend({
             isHorizontal: false,
             containerColor: "#ffffff",
-            breaks: [[10, 20]],
+            breaks: [{ startValue: 10, endValue: 20 }],
             breakStyle: {
                 color: "black",
                 line: "waved",
@@ -8863,7 +8863,7 @@ QUnit.test("The scale break shouldn't created without breaks", function(assert) 
 QUnit.test("The scale break shouldn't created if break is out of the range", function(assert) {
     //arrange
     this.createAxisWithBreaks({
-        breaks: [[50, 60]]
+        breaks: [{ startValue: 50, endValue: 60 }]
     });
 
     //act
@@ -8958,7 +8958,7 @@ QUnit.test("Datetime. Drawing user breaks with generated workday breaks. Should 
         workdaysOnly: true,
         argumentType: "datetime",
         workWeek: [1, 2, 3, 4, 5],
-        breaks: [[new Date(2017, 10, 7), new Date(2017, 10, 8) ]],
+        breaks: [{ startValue: new Date(2017, 10, 7), endValue: new Date(2017, 10, 8) }],
         breakStyle: {
             color: "black",
             line: "waved",

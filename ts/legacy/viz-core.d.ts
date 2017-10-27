@@ -492,6 +492,21 @@ declare module DevExpress.viz.core {
         line?: string;
     }
 
+    export interface ScaleBreak {
+        /**
+        * @docid dxchartoptions_argumentaxis_breaks_startvalue
+        * @docid dxchartoptions_valueaxis_breaks_startvalue
+        * @docid dxrangeselectoroptions_scale_breaks_startvalue
+        */
+        startValue?: any;
+        /**
+        * @docid dxchartoptions_argumentaxis_breaks_endvalue
+        * @docid dxchartoptions_valueaxis_breaks_endvalue
+        * @docid dxrangeselectoroptions_scale_breaks_endvalue
+        */
+        endValue?: any;
+    }
+
     export interface BaseLegend {
         /**
         * @docid basechartoptions_legend_backgroundcolor

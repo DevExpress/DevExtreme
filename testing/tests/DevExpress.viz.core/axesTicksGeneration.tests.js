@@ -1979,7 +1979,7 @@ QUnit.test("Tune scale break values", function(assert) {
         allowDecimals: false,
         calculateMinors: true,
         breakStyle: { width: 0 },
-        breaks: [[20, 50], [75, 90]]
+        breaks: [{ startValue: 20, endValue: 50 }, { startValue: 75, endValue: 90 }]
     });
 
     this.axis.setBusinessRange({ minVisible: 0, maxVisible: 100, addRange: function() { return this; } });
@@ -2007,7 +2007,7 @@ QUnit.test("Break size is used to calculate tick interval", function(assert) {
         allowDecimals: false,
         calculateMinors: true,
         breakStyle: { width: 200 },
-        breaks: [[20, 50], [75, 90]]
+        breaks: [{ startValue: 20, endValue: 50 }, { startValue: 75, endValue: 90 }]
     });
 
     this.axis.setBusinessRange({ minVisible: 0, maxVisible: 100, addRange: function() { return this; } });
@@ -2026,7 +2026,7 @@ QUnit.test("Remove ticks that in the break", function(assert) {
         allowDecimals: false,
         calculateMinors: true,
         breakStyle: { width: 0 },
-        breaks: [[20, 50], [75, 90]]
+        breaks: [{ startValue: 20, endValue: 50 }, { startValue: 75, endValue: 90 }]
     });
 
     this.axis.setBusinessRange({ minVisible: 0, maxVisible: 100, addRange: function() { return this; } });
@@ -2048,7 +2048,7 @@ QUnit.test("Tune scale break values. Datetime", function(assert) {
             months: 1
         },
         breakStyle: { width: 0 },
-        breaks: [[new Date(2017, 4, 3), new Date(2017, 8, 5)]]
+        breaks: [{ startValue: new Date(2017, 4, 3), endValue: new Date(2017, 8, 5) }]
     });
 
     this.axis.setBusinessRange({ minVisible: new Date(2017, 0, 1), maxVisible: new Date(2017, 9, 1), addRange: function() { return this; } });
@@ -2080,7 +2080,7 @@ QUnit.test("Tune scale break values. Logarithmic", function(assert) {
         type: "logarithmic",
         logarithmBase: 10,
         breakStyle: { width: 0 },
-        breaks: [[0.1, 1000]]
+        breaks: [{ startValue: 0.1, endValue: 1000 }]
     });
 
     this.axis.setBusinessRange({ minVisible: 0.0001, maxVisible: 100000, addRange: function() { return this; } });
@@ -2104,7 +2104,7 @@ QUnit.test("Tune scale break values when axis division factor is too big", funct
         allowDecimals: false,
         calculateMinors: true,
         breakStyle: { width: 0 },
-        breaks: [[200, 8000]]
+        breaks: [{ startValue: 200, endValue: 8000 }]
     });
 
     this.axis.setBusinessRange({ minVisible: 0, maxVisible: 10000, addRange: function() { return this; } });
@@ -2172,7 +2172,7 @@ QUnit.test("Generate minor ticks when scale breaks at the begin and at the end",
         breakStyle: { width: 0 },
         allowDecimals: false,
         calculateMinors: true,
-        breaks: [[0, 25], [ 85, 106]]
+        breaks: [{ startValue: 0, endValue: 25 }, { startValue: 85, endValue: 106 }]
     });
 
     this.axis.setBusinessRange({ minVisible: 1, maxVisible: 105, addRange: function() { return this; } });
@@ -2257,7 +2257,7 @@ QUnit.test("Logarithmick with scale breaks", function(assert) {
         type: "logarithmic",
         breakStyle: { width: 0 },
         logarithmBase: 10,
-        breaks: [[0.1, 100]]
+        breaks: [{ startValue: 0.1, endValue: 100 }]
     });
 
     this.axis.setBusinessRange({ minVisible: 0.0001, maxVisible: 10000, addRange: function() { return this; } });
@@ -2276,7 +2276,7 @@ QUnit.test("Remove scale break if it less than tickInterval", function(assert) {
         breakStyle: { width: 0 },
         allowDecimals: false,
         calculateMinors: true,
-        breaks: [[10, 200], [350, 751]]
+        breaks: [{ startValue: 10, endValue: 200 }, { startValue: 350, endValue: 751 }]
     });
 
     this.axis.setBusinessRange({ minVisible: 0, maxVisible: 1000, addRange: function() { return this; } });
@@ -2301,7 +2301,7 @@ QUnit.test("Pass correct range in translator when value margins are enabled. Mar
         valueMarginsEnabled: true,
         minValueMargin: 0.1,
         maxValueMargin: 0.2,
-        breaks: [[100, 900]]
+        breaks: [{ startValue: 100, endValue: 900 }]
     });
 
     this.axis.setBusinessRange(new rangeModule.Range({ minVisible: 50, maxVisible: 1000 }));
@@ -2322,7 +2322,7 @@ QUnit.test("Use original scale breaks after recalculation ticks", function(asser
         breakStyle: { width: 0 },
         minValueMargin: 0.1,
         maxValueMargin: 0.2,
-        breaks: [[100, 900]]
+        breaks: [{ startValue: 100, endValue: 900 }]
     });
 
     this.axis.setBusinessRange(new rangeModule.Range({ minVisible: 50, maxVisible: 1000 }));
