@@ -27,7 +27,7 @@ var SchedulerAppointmentForm = {
     },
 
     _getAllDayStartDate: function(startDate) {
-        startDate.setHours(0, 0, 0, 0);
+        return startDate.setHours(0, 0, 0, 0);
     },
 
     _getAllDayEndDate: function(startDate) {
