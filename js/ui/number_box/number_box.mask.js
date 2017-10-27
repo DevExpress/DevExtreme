@@ -229,8 +229,8 @@ var NumberBoxMask = NumberBoxBase.inherit({
     _setInputText: function(text, position) {
         var lastLength = (this._formattedValue || "").length,
             newLength = text.length,
-            lastStubCount = this._getStubCount(this._formattedValue, position - (newLength - lastLength)),
-            newStubCount = this._getStubCount(text, position),
+            lastStubCount = this._getStubCountBeforePosition(this._formattedValue, position - (newLength - lastLength)),
+            newStubCount = this._getStubCountBeforePosition(text, position),
             caretDelta = newStubCount - lastStubCount;
 
         if(this._formattedValue === "") {
@@ -336,7 +336,7 @@ var NumberBoxMask = NumberBoxBase.inherit({
         }
     },
 
-    _getStubCount: function(text, position) {
+    _getStubCountBeforePosition: function(text, position) {
         text = text || this._input().val();
         position = position || text.length;
 
@@ -375,7 +375,7 @@ var NumberBoxMask = NumberBoxBase.inherit({
         return regExp.test(string);
     },
 
-    _revertSign: function(e) {
+    _revertSign: function() {
         if(!this._useMaskBehavior()) {
             return;
         }
