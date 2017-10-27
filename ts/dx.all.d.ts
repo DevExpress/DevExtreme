@@ -3598,7 +3598,7 @@ declare module DevExpress.ui {
         /** The value to be assigned to the name attribute of the underlying `` element. */
         endName?: string;
         /** A handler for the valueChanged event. */
-        onValueChanged?: any;
+        onValueChanged?: ((e: { component?: DOMComponent, element?: DevExpress.core.dxElement, model?: any }) => any);
         /** The left edge of the interval currently selected using the range slider. */
         start?: number;
         /** The value to be assigned to the name attribute of the underlying `` element. */
@@ -8055,13 +8055,13 @@ declare module DevExpress.viz.funnel {
         /** Specifies the ratio between the width of the neck and that of the whole funnel. Accepts values from 0 to 1. Applies only if the algorithm is "dynamicHeight". */
         neckWidth?: number;
         /** A handler for the hoverChanged event. Executed after a funnel item's hover state is changed in the UI or programmatically. */
-        onHoverChanged?: ((e: { component?: any, element?: any, item?: dxFunnelItem }) => any);
+        onHoverChanged?: ((e: { component?: DOMComponent, element?: DevExpress.core.dxElement, model?: any, item?: dxFunnelItem }) => any);
         /** A handler for the itemClick event. Executed when a user clicks a funnel item. */
-        onItemClick?: ((e: { component?: any, element?: any, jQueryEvent?: JQueryEventObject, event?: event, item?: dxFunnelItem }) => any) | string;
+        onItemClick?: ((e: { component?: DOMComponent, element?: DevExpress.core.dxElement, model?: any, jQueryEvent?: JQueryEventObject, event?: event, item?: dxFunnelItem }) => any) | string;
         /** A handler for the legendClick event. Executed when a user clicks a legend item. */
-        onLegendClick?: ((e: { component?: any, element?: any, jQueryEvent?: JQueryEventObject, event?: event, item?: dxFunnelItem }) => any) | string;
+        onLegendClick?: ((e: { component?: DOMComponent, element?: DevExpress.core.dxElement, model?: any, jQueryEvent?: JQueryEventObject, event?: event, item?: dxFunnelItem }) => any) | string;
         /** A handler for the selectionChanged event. Executed after a funnel item's selection state is changed in the UI or programmatically. */
-        onSelectionChanged?: ((e: { component?: any, element?: any, item?: dxFunnelItem }) => any);
+        onSelectionChanged?: ((e: { component?: DOMComponent, element?: DevExpress.core.dxElement, model?: any, item?: dxFunnelItem }) => any);
         /** Sets the palette to be used for colorizing funnel items. */
         palette?: Array<string> | string;
         /** Specifies whether a single or multiple funnel items can be in the selected state at a time. Assigning "none" disables the selection feature. */
@@ -8086,9 +8086,9 @@ declare module DevExpress.viz.gauges {
         /** Specifies the color of the parent page element. */
         containerBackgroundColor?: string;
         /** A handler for the tooltipHidden event. */
-        onTooltipHidden?: ((e: { component?: any, element?: any, target?: any }) => any);
+        onTooltipHidden?: ((e: { component?: DOMComponent, element?: DevExpress.core.dxElement, model?: any, target?: any }) => any);
         /** A handler for the tooltipShown event. */
-        onTooltipShown?: ((e: { component?: any, element?: any, target?: any }) => any);
+        onTooltipShown?: ((e: { component?: DOMComponent, element?: DevExpress.core.dxElement, model?: any, target?: any }) => any);
         /** Specifies options of the gauge's range container. */
         rangeContainer?: BaseGaugeRangeContainer;
         /** Specifies options of the gauge's scale. */
