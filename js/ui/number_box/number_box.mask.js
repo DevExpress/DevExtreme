@@ -35,6 +35,10 @@ var NumberBoxMask = NumberBoxBase.inherit({
         return key === "Delete" || key === "Del";
     },
 
+    _isBackspaceKey: function(key) {
+        return key === "Backspace";
+    },
+
     _supportedKeys: function() {
         if(!this._useMaskBehavior()) {
             return this.callBase();
@@ -336,6 +340,13 @@ var NumberBoxMask = NumberBoxBase.inherit({
         }
     },
 
+    _getLeadingZeroCountBeforePosition: function(text, position) {
+        var regExp = new RegExp("^" + STUB_CHAR_REG_EXP + "*(0)*[^0]*$", "g"),
+            leadingZeros = text.slice(0, position).replace(regExp, "$1");
+
+        return leadingZeros.length;
+    },
+
     _getStubCountBeforePosition: function(text, position) {
         text = text || this._input().val();
         position = position || text.length;
@@ -399,9 +410,18 @@ var NumberBoxMask = NumberBoxBase.inherit({
         var format = this._getFormatPattern(),
             caret = this._caret(),
             formatted = number.format(this._parsedValue, format),
-            shouldMoveCaret = this._isDeleteKey(this._lastKey) && text.length === formatted.length;
+            beforeLeadingZeros = this._getLeadingZeroCountBeforePosition(text, caret.start),
+            afterLeadingZeros = this._getLeadingZeroCountBeforePosition(formatted, caret.start),
+            zerosDelta = afterLeadingZeros - beforeLeadingZeros,
+            beforeStubs = this._getStubCountBeforePosition(text, caret.start),
+            afterStubs = this._getStubCountBeforePosition(formatted, caret.start + zerosDelta),
+            caretDelta = (afterLeadingZeros + afterStubs) - (beforeLeadingZeros + beforeStubs);
 
-        this._setInputText(formatted, shouldMoveCaret ? caret.start + 1 : caret.start);
+        if(this._isBackspaceKey(this._lastKey) || formatted.length > text.length || this._formattedValue === "") {
+            caretDelta = 0;
+        }
+
+        this._setInputText(formatted, caret.start + caretDelta);
     },
 
     _renderValue: function() {
