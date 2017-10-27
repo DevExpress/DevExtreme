@@ -220,10 +220,6 @@ function getFormatter(format, config) {
 function parseValue(text, isPercent, isNegative) {
     var value = (isPercent ? 0.01 : 1) * parseFloat(text) || 0;
 
-    if(isNegative && value === 0) {
-        value = Number.EPSILON;
-    }
-
     return isNegative ? -value : value;
 }
 
