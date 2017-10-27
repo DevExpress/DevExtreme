@@ -210,8 +210,18 @@ initRender.prototype.toggleClass = function(className, value) {
             return this;
         }
 
-        if(typeUtils.isNumeric(value) && isOuter) {
-            value -= sizeUtils.getBorderAdjustment(element, propName);
+        if(typeUtils.isNumeric(value)) {
+            var elementStyles = window.getComputedStyle(element);
+            var sizeAdjustment = sizeUtils.getElementBoxParams(propName, elementStyles);
+            var isBorderBox = elementStyles.boxSizing === "border-box";
+
+            if(isOuter) {
+                value -= isBorderBox ? 0 : (sizeAdjustment.border + sizeAdjustment.padding);
+            } else if(isInner) {
+                value += isBorderBox ? sizeAdjustment.border : -sizeAdjustment.padding;
+            } else if(isBorderBox) {
+                value += sizeAdjustment.border + sizeAdjustment.padding;
+            }
         }
         value += typeUtils.isNumeric(value) ? "px" : "";
 

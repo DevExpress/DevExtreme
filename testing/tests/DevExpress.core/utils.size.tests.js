@@ -225,29 +225,25 @@ QUnit.test("element is not in a DOM", function(assert) {
 });
 
 
-QUnit.module("getBorderAdjustment", {
-    beforeEach: function() {
-        this.$parent = $("<div style='width: 100px; height: 110px'></div>").appendTo("#qunit-fixture");
-        this.$element = $("<div/>");
-        this.$parent.append(this.$element);
-    },
-
-    afterEach: function() {
-    }
-});
+QUnit.module("getElementBoxParams");
 
 QUnit.test("element in parent with fixed size", function(assert) {
-    this.$element.attr("style", "width: 40px; height: 50px; border: 1px solid black;");
-    assert.equal(sizeUtils.getBorderAdjustment(this.$element[0], "width"), 2);
-    assert.equal(sizeUtils.getBorderAdjustment(this.$element[0], "heigth"), 2);
+    var $element = $("<div>").appendTo("#qunit-fixture");
+    var element = $element.get(0);
 
-    this.$element.attr("style", "width: 40px; height: 50px; border-left: 2px solid black; border-top: 3px solid black;");
-    assert.equal(sizeUtils.getBorderAdjustment(this.$element[0], "width"), 2);
-    assert.equal(sizeUtils.getBorderAdjustment(this.$element[0], "heigth"), 3);
-});
+    $element.attr("style", "width: 40px; height: 50px; border: 1px solid black; padding: 3px 4px; margin: 5px 6px");
 
-QUnit.test("element with box-sizing = border-box", function(assert) {
-    this.$element.attr("style", "width: 40px; height: 50px; border: 1px solid black; box-sizing: border-box;");
-    assert.equal(sizeUtils.getBorderAdjustment(this.$element[0], "width"), 0);
-    assert.equal(sizeUtils.getBorderAdjustment(this.$element[0], "heigth"), 0);
+    var computedStyles = window.getComputedStyle(element);
+
+    assert.deepEqual(sizeUtils.getElementBoxParams("width", computedStyles), {
+        border: 2,
+        margin: 12,
+        padding: 8
+    }, "element borders, paddings and margins were computed correctly");
+
+    assert.deepEqual(sizeUtils.getElementBoxParams("height", computedStyles), {
+        border: 2,
+        margin: 10,
+        padding: 6
+    }, "element borders, paddings and margins were computed correctly");
 });
