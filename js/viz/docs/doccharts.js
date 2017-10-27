@@ -2231,6 +2231,7 @@ var dxChart = {
         * @publicName endOnTick
         * @type boolean
         * @default true
+        * @extend_doc
         */
         endOnTick: true
     },
