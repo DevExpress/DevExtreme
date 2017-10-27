@@ -290,6 +290,12 @@
     }
   },
   {
+    "name": "ui/filter_builder",
+    "exports": {
+      "default": "ui.dxFilterBuilder"
+    }
+  },
+  {
     "name": "ui/form",
     "exports": {
       "default": "ui.dxForm"
