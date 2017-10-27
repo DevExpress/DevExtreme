@@ -110,7 +110,7 @@ var Lookup = DropDownList.inherit({
             * @extends Action
             * @type function(e)
             * @type_function_param1 e:object
-            * @type_function_param1_field1 titleElement:dxElement
+            * @type_function_param1_field4 titleElement:dxElement
             * @action
             */
             onTitleRendered: null,

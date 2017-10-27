@@ -123,11 +123,10 @@ var BaseWidget = {
     /**
     * @name BaseWidgetOptions_onIncidentoccurred
     * @publicName onIncidentOccurred
+    * @extends Action
     * @type function(e)
     * @type_function_param1 e:object
-    * @type_function_param1_field1 component:object
-    * @type_function_param1_field2 element:object
-    * @type_function_param1_field3 target:object
+    * @type_function_param1_field4 target:any
     * @action
     */
     onIncidentOccurred: function() { },
@@ -173,10 +172,7 @@ var BaseWidget = {
     /**
     * @name BaseWidgetOptions_onDrawn
     * @publicName onDrawn
-    * @type function(e)
-    * @type_function_param1 e:object
-    * @type_function_param1_field1 component:object
-    * @type_function_param1_field2 element:object
+    * @extends Action
     * @notUsedInTheme
     * @action
     */
@@ -445,8 +441,6 @@ var BaseWidget = {
     /**
     * @name BaseWidgetOptions_onexported
     * @publicName onExported
-    * @type function(e)
-    * @type_function_param1 e:object
     * @extends Action
     * @action
     */

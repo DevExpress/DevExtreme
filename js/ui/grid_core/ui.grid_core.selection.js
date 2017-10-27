@@ -404,7 +404,7 @@ exports.SelectionController = gridCore.Controller.inherit((function() {
         /**
          * @name GridBaseMethods_selectRowsByIndexes
          * @publicName selectRowsByIndexes(indexes)
-         * @param1 indexes:Array<any>
+         * @param1 indexes:Array<number>
          * @return Promise<any>
          */
         selectRowsByIndexes: function(indexes) {
