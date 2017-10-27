@@ -3905,13 +3905,12 @@ var BaseChart = {
     /**
     * @name basechartoptions_onpointclick
     * @publicName onPointClick
+    * @extends Action
     * @type function(e)|string
     * @type_function_param1 e:object
-    * @type_function_param1_field1 component:object
-    * @type_function_param1_field2 element:object
-    * @type_function_param1_field3 jQueryEvent:jQuery.Event
-    * @type_function_param1_field4 event:event
-    * @type_function_param1_field5 target:basePointObject
+    * @type_function_param1_field4 jQueryEvent:jQuery.Event
+    * @type_function_param1_field5 event:event
+    * @type_function_param1_field6 target:basePointObject
     * @notUsedInTheme
     * @action
     */
