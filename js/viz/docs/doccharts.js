@@ -1009,13 +1009,6 @@ var dxChart = {
         */
         placeholderSize: null,
         /**
-        * @name dxchartoptions_commonaxissettings_breaks
-        * @publicName breaks
-        * @type Array<ScaleBreak>
-        * @default undefined
-        */
-        breaks: undefined,
-        /**
         * @name dxchartoptions_commonaxissettings_breakStyle
         * @publicName breakStyle
         * @type object
@@ -1683,6 +1676,13 @@ var dxChart = {
         */
         holidays: undefined,
         /**
+        * @name dxchartoptions_argumentaxis_breaks
+        * @publicName breaks
+        * @type Array<ScaleBreak>
+        * @default undefined
+        */
+        breaks: undefined,
+        /**
         * @name dxchartoptions_argumentaxis_singleworkdays
         * @publicName singleWorkdays
         * @type Array<Date, string>| Array<number>
@@ -1965,6 +1965,13 @@ var dxChart = {
         * @default undefined
         */
         minorTickCount: undefined,
+        /**
+        * @name dxchartoptions_valueaxis_breaks
+        * @publicName breaks
+        * @type Array<ScaleBreak>
+        * @default undefined
+        */
+        breaks: undefined,
         /**
         * @name dxchartoptions_valueaxis_autobreaksenabled
         * @publicName autoBreaksEnabled

@@ -1563,9 +1563,6 @@ declare module DevExpress.viz.charts {
         /** @docid dxchartoptions_commonaxissettings_placeholdersize */
         placeholderSize?: number;
 
-        /** @docid dxchartoptions_commonaxissettings_breaks */
-        breaks?: Array<Array<any>>;
-
         /** @docid dxchartoptions_commonaxissettings_breakStyle */
         breakStyle?: viz.core.BreakStyle,
 
@@ -1792,11 +1789,7 @@ declare module DevExpress.viz.charts {
           */
         pane?: string;
 
-        /** @docid dxchartoptions_valueaxis_autobreaksenabled */
-        autoBreaksEnabled?: boolean;
 
-        /** @docid dxchartoptions_valueaxis_maxautobreakcount */
-        maxAutoBreakCount?: number;
         /**
         * @docid dxchartoptions_argumentaxis_strips
         * @docid dxchartoptions_valueaxis_strips
@@ -1903,6 +1896,9 @@ declare module DevExpress.viz.charts {
 
         /** @docid dxchartoptions_argumentaxis_singleworkdays */
         singleWorkdays?: any;
+
+        /** @docid dxchartoptions_valueaxis_breaks */
+        breaks?: Array<Array<any>>;
     }
 
     export interface PolarArgumentAxis extends PolarAxis, ArgumentAxis {
@@ -1942,6 +1938,15 @@ declare module DevExpress.viz.charts {
 
         /** @docid dxchartoptions_valueaxis_synchronizedvalue */
         synchronizedValue?: number;
+
+        /** @docid dxchartoptions_valueaxis_autobreaksenabled */
+        autoBreaksEnabled?: boolean;
+
+        /** @docid dxchartoptions_valueaxis_maxautobreakcount */
+        maxAutoBreakCount?: number;
+
+        /** @docid dxchartoptions_valueaxis_breaks */
+        breaks?: Array<Array<any>>;
     }
 
     export interface PolarValueAxis extends PolarAxis, ValueAxis {
