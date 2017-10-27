@@ -492,12 +492,12 @@ declare module DevExpress.viz.core {
         line?: string;
     }
 
-    /** @docid VizScaleBreak */
+    /** @docid ScaleBreak */
     export interface ScaleBreak {
-        /** @docid VizScaleBreak_startvalue */
+        /** @docid ScaleBreak_startvalue */
         startValue?: any;
 
-        /** @docid VizScaleBreak_endvalue */
+        /** @docid ScaleBreak_startvalue */
         endValue?: any;
     }
 
