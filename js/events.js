@@ -90,6 +90,7 @@ exports.triggerHandler = eventsEngine.triggerHandler;
 /**
 * @name dxEvent
 * @publicName dxEvent
+* @section commonObjectStructures
 */
 
 /**
