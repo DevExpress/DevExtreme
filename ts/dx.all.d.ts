@@ -5014,31 +5014,18 @@ declare module DevExpress.ui {
         visible?: boolean;
     }
     export interface dxSchedulerDropDownAppointmentTemplate {
-        /** Specifies whether the appointment lasts all day. */
         allDay?: boolean;
-        /** Specifies a detail description of the appointment. */
         description?: string;
-        /** Specifies whether or not an appointment must be displayed disabled. */
         disabled?: boolean;
-        /** Specifies the ending of the appointment. */
         endDate?: Date;
-        /** Specifies the timezone of the appointment end date. Applies only if timeZone is not specified. */
         endDateTimeZone?: string;
-        /** Specifies HTML code inserted into the appointment element. */
         html?: string;
-        /** Specifies exceptions for the current recurring appointment. */
         recurrenceException?: string;
-        /** Specifies a recurrence rule for generating recurring appointments in the scheduler. */
         recurrenceRule?: string;
-        /** Specifies the start of the appointment. */
         startDate?: Date;
-        /** Specifies the timezone of the appointment start date. Applies only if timeZone is not specified. */
         startDateTimeZone?: string;
-        /** Specifies an appointment template that should be used to render this appointment only. */
         template?: template;
-        /** Specifies the subject of the appointment. */
         text?: string;
-        /** Specifies whether or not an appointment must be displayed. */
         visible?: boolean;
     }
     export interface dxSchedulerAppointmentTooltipTemplate {
@@ -5472,6 +5459,10 @@ declare module DevExpress.viz {
         /** Returns the widget's SVG markup. */
         svg(): string;
     }
+    export interface ScaleBreak {
+        endValue?: number | Date | string;
+        startValue?: number | Date | string;
+    }
     /** A class describing various time intervals. Inherited by tick intervals in Chart and RangeSelector. */
     export interface VizTimeInterval {
         /** Specifies the time interval measured in days. Available only for an axis/scale displaying date-time values. */
@@ -5492,10 +5483,6 @@ declare module DevExpress.viz {
         weeks?: number;
         /** Specifies the time interval measured in years. Available only for an axis/scale displaying date-time values. */
         years?: number;
-    }
-    export class ScaleBreak {
-        startValue: number | Date | string;
-        endvalue: number | Date | string;
     }
     /** The Chart is a widget that visualizes data from a local or remote storage using a great variety of series types along with different interactive elements, such as tooltips, crosshair pointer, legend, etc. */
     export class dxChart extends BaseChart {

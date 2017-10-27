@@ -740,14 +740,14 @@ var BaseWidget = {
 */
 var ScaleBreak = {
     /**
-    * @name ScaleBreakFields_startvalue
+    * @name ScaleBreak_startvalue
     * @publicName startValue
     * @type number|date|string
     * @default undefined
     */
     startValue: undefined,
     /**
-    * @name ScaleBreakFields_endValue
+    * @name ScaleBreak_endValue
     * @publicName endValue
     * @type number|date|string
     * @default undefined
