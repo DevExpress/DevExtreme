@@ -3217,7 +3217,7 @@ declare module DevExpress.ui {
     }
     export interface dxNumberBoxOptions extends dxTextEditorOptions {
         /** Specifies the value's display format and controls the user input according to it. */
-        format?: string;
+        format?: format;
         /** Specifies the text of the message displayed if the specified value is not a number. */
         invalidValueMessage?: string;
         /** The maximum value accepted by the number box. */
@@ -5493,6 +5493,10 @@ declare module DevExpress.viz {
         /** Specifies the time interval measured in years. Available only for an axis/scale displaying date-time values. */
         years?: number;
     }
+    export class ScaleBreak {
+        startValue: number | Date | string;
+        endvalue: number | Date | string;
+    }
     /** The Chart is a widget that visualizes data from a local or remote storage using a great variety of series types along with different interactive elements, such as tooltips, crosshair pointer, legend, etc. */
     export class dxChart extends BaseChart {
         constructor(element: Element, options?: DevExpress.viz.charts.dxChartOptions)
@@ -6548,7 +6552,6 @@ declare module DevExpress.viz {
         /** Gets the parameters of the point's minimum bounding rectangle (MBR). */
         getBoundingRect(): any;
     }
-    export type ScaleBreak = Array<Date | string> | Array<number>; 
     /** This section describes the Item object, which represents a funnel item. */
     export class dxFunnelItem {
         /** The item's argument. */
@@ -7144,6 +7147,7 @@ declare module DevExpress.viz.charts {
         argumentType?: string;
         /** Specifies the minimum distance between two neighboring major ticks in pixels. Applies only to the axes of the "continuous" and "logarithmic" types. */
         axisDivisionFactor?: number;
+        breaks?: Array<ScaleBreak>;
         /** Specifies the order of categories on an axis of the "discrete" type. */
         categories?: Array<number | string | Date>;
         /** Declares a collection of constant lines belonging to the argument axis. */
@@ -7242,7 +7246,6 @@ declare module DevExpress.viz.charts {
     /** Defines common settings for both the argument and value axis in a chart. */
     export interface dxChartCommonAxisSettings {
         allowDecimals?: boolean;
-        breaks?: Array<ScaleBreak>;
         breakStyle?: { width?: number, color?: string, line?: string };
         /** Specifies the color of the axis line. */
         color?: string;
@@ -7446,6 +7449,7 @@ declare module DevExpress.viz.charts {
         autoBreaksEnabled?: boolean;
         /** Specifies the minimum distance between two neighboring major ticks in pixels. Applies only to the axes of the "continuous" and "logarithmic" types. */
         axisDivisionFactor?: number;
+        breaks?: Array<ScaleBreak>;
         /** Specifies the order of categories on an axis of the "discrete" type. */
         categories?: Array<number | string | Date>;
         /** Declares a collection of constant lines belonging to the value axis. */
