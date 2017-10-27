@@ -1559,8 +1559,7 @@ var SchedulerWorkSpace = Widget.inherit({
             hours = endDayHour - 1;
         }
 
-        currentDate.setHours(hours);
-        currentDate.setMinutes(minutes);
+        currentDate.setHours(hours, minutes, 0, 0);
 
         return this.getCoordinatesByDate(currentDate);
     },
@@ -1676,8 +1675,7 @@ var SchedulerWorkSpace = Widget.inherit({
         var cellDuration = this.getCellDuration(),
             currentDayStart = new Date(date);
 
-        currentDayStart.setMinutes(0, 0, 0);
-        currentDayStart.setHours(this.option("startDayHour"));
+        currentDayStart.setHours(this.option("startDayHour"), 0, 0, 0);
 
         return ((date.getTime() - currentDayStart.getTime()) % cellDuration) / cellDuration;
     },

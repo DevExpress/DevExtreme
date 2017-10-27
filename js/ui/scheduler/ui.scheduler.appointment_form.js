@@ -3,6 +3,7 @@
 var $ = require("../../core/renderer"),
     Form = require("../form"),
     dateSerialization = require("../../core/utils/date_serialization"),
+    dateUtils = require("../../core/utils/date"),
     messageLocalization = require("../../localization/message"),
     clickEvent = require("../../events/click"),
     eventsEngine = require("../../events/core/events_engine");
@@ -27,9 +28,7 @@ var SchedulerAppointmentForm = {
     },
 
     _getAllDayStartDate: function(startDate) {
-        startDate.setHours(0);
-        startDate.setMinutes(0);
-        return startDate;
+        return dateUtils.trimTime(startDate);
     },
 
     _getAllDayEndDate: function(startDate) {
