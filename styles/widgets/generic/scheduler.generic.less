@@ -534,10 +534,12 @@
         }
 
         &.dx-scheduler-work-space-day {
-            .dx-scheduler-header-scrollable-mixin(@GENERIC_SCHEDULER_ALL_DAY_TABLE_CELL_HEIGHT + @GENERIC_SCHEDULER_HEADER_PANEL_TOP_GAP);
+            &:not(.dx-scheduler-work-space-count) {
+                .dx-scheduler-header-scrollable-mixin(@GENERIC_SCHEDULER_ALL_DAY_TABLE_CELL_HEIGHT);
 
-            &.dx-scheduler-work-space-all-day-collapsed {
-                .dx-scheduler-header-scrollable-mixin(@GENERIC_SCHEDULER_COLLAPSED_ALL_DAY_TABLE_CELL_HEIGHT + @GENERIC_SCHEDULER_HEADER_PANEL_TOP_GAP);
+                &.dx-scheduler-work-space-all-day-collapsed {
+                    .dx-scheduler-header-scrollable-mixin(@GENERIC_SCHEDULER_COLLAPSED_ALL_DAY_TABLE_CELL_HEIGHT);
+                }
             }
         }
     }
