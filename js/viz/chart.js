@@ -541,6 +541,7 @@ var dxChart = AdvancedChart.inherit({
             panesBorderOptions = that._createPanesBorderOptions(),
             useAggregation = that._options.useAggregation,
             canvas = that._canvas,
+            series = that._getVisibleSeries(),
             canvasLength = that._isRotated() ? canvas.height - canvas.top - canvas.bottom : canvas.width - canvas.left - canvas.right;
 
         that._createPanesBackground();
@@ -551,14 +552,14 @@ var dxChart = AdvancedChart.inherit({
         that._updatePanesCanvases(drawOptions);
 
         if(useAggregation) {
-            that.series.forEach(function(series) {
+            series.forEach(function(series) {
                 series.resamplePoints(canvasLength);
             });
         }
 
         if((useAggregation || _isDefined(that._zoomMinArg) || _isDefined(that._zoomMaxArg)) && that._themeManager.getOptions("adjustOnZoom")) {
             that._valueAxes.forEach(function(axis) {
-                var viewport = that.series.filter(function(s) {
+                var viewport = series.filter(function(s) {
                     return s.getValueAxis() === axis;
                 }).reduce(function(range, s) {
                     var seriesRange = s.getViewport();
