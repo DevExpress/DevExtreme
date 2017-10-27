@@ -89,25 +89,11 @@ var dxRangeSelector = {
         /**
         * @name dxrangeselectoroptions_scale_breaks
         * @publicName breaks
-        * @type Array<Object>
+        * @type Array<VizScaleBreak>
+        * @default undefined
         * @notUsedInTheme
         */
-        breaks: [{
-            /**
-            * @name dxrangeselectoroptions_scale_breaks_startvalue
-            * @publicName startValue
-            * @type number | datetime | string
-            * @default undefined
-            */
-            startValue: undefined,
-            /**
-            * @name dxrangeselectoroptions_scale_breaks_endvalue
-            * @publicName endValue
-            * @type number | datetime | string
-            * @default undefined
-            */
-            endValue: undefined
-        }],
+        breaks: undefined,
         /**
         * @name dxrangeselectoroptions_scale_workdaysonly
         * @publicName workdaysOnly

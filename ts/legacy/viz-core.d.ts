@@ -492,18 +492,12 @@ declare module DevExpress.viz.core {
         line?: string;
     }
 
+    /** @docid VizScaleBreak */
     export interface ScaleBreak {
-        /**
-        * @docid dxchartoptions_argumentaxis_breaks_startvalue
-        * @docid dxchartoptions_valueaxis_breaks_startvalue
-        * @docid dxrangeselectoroptions_scale_breaks_startvalue
-        */
+        /** @docid VizScaleBreak_startvalue */
         startValue?: any;
-        /**
-        * @docid dxchartoptions_argumentaxis_breaks_endvalue
-        * @docid dxchartoptions_valueaxis_breaks_endvalue
-        * @docid dxrangeselectoroptions_scale_breaks_endvalue
-        */
+
+        /** @docid VizScaleBreak_endvalue */
         endValue?: any;
     }
 

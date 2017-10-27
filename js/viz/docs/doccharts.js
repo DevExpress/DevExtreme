@@ -1675,25 +1675,11 @@ var dxChart = {
         /**
         * @name dxchartoptions_argumentaxis_breaks
         * @publicName breaks
-        * @type Array<Object>
+        * @type Array<VizScaleBreak>
+        * @default undefined
         * @notUsedInTheme
         */
-        breaks: [{
-            /**
-            * @name dxchartoptions_argumentaxis_breaks_startvalue
-            * @publicName startValue
-            * @type number | datetime | string
-            * @default undefined
-            */
-            startValue: undefined,
-            /**
-            * @name dxchartoptions_argumentaxis_breaks_endvalue
-            * @publicName endValue
-            * @type number | datetime | string
-            * @default undefined
-            */
-            endValue: undefined
-        }],
+        breaks: undefined,
         /**
         * @name dxchartoptions_argumentaxis_singleworkdays
         * @publicName singleWorkdays
@@ -1980,25 +1966,11 @@ var dxChart = {
         /**
         * @name dxchartoptions_valueaxis_breaks
         * @publicName breaks
-        * @type Array<Object>
+        * @type Array<VizScaleBreak>
+        * @default undefined
         * @notUsedInTheme
         */
-        breaks: [{
-            /**
-            * @name dxchartoptions_valueaxis_breaks_startvalue
-            * @publicName startValue
-            * @type number | datetime | string
-            * @default undefined
-            */
-            startValue: undefined,
-            /**
-            * @name dxchartoptions_valueaxis_breaks_endvalue
-            * @publicName endValue
-            * @type number | datetime | string
-            * @default undefined
-            */
-            endValue: undefined
-        }],
+        breaks: undefined,
         /**
         * @name dxchartoptions_valueaxis_autobreaksenabled
         * @publicName autoBreaksEnabled

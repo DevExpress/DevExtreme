@@ -733,6 +733,29 @@ var BaseWidget = {
 };
 
 /**
+* @name VizScaleBreak
+* @publicName VizScaleBreak
+* @type object
+* @hidden
+*/
+var VizScaleBreak = {
+    /**
+    * @name VizScaleBreak_startvalue
+    * @publicName startValue
+    * @type number | datetime | string
+    * @default undefined
+    */
+    startValue: undefined,
+    /**
+    * @name VizScaleBreak_endvalue
+    * @publicName startValue
+    * @type number | datetime | string
+    * @default undefined
+    */
+    endValue: undefined
+};
+
+/**
 * @name VizTimeInterval
 * @publicName VizTimeInterval
 * @type object
