@@ -66,7 +66,7 @@ var dxChart = {
     * @extends Action
     * @type function(e)|string
     * @type_function_param1 e:object
-    * @type_function_param1_field4 jQueryEvent:jQuery.Event
+    * @type_function_param1_field4 jQueryEvent:jQuery.Event:deprecated(event)
     * @type_function_param1_field5 event:event
     * @type_function_param1_field6 target:chartSeriesObject
     * @notUsedInTheme
@@ -79,7 +79,7 @@ var dxChart = {
     * @extends Action
     * @type function(e)|string
     * @type_function_param1 e:object
-    * @type_function_param1_field4 jQueryEvent:jQuery.Event
+    * @type_function_param1_field4 jQueryEvent:jQuery.Event:deprecated(event)
     * @type_function_param1_field5 event:event
     * @type_function_param1_field6 target:chartSeriesObject
     * @notUsedInTheme
@@ -895,7 +895,7 @@ var dxChart = {
     * @extends Action
     * @type function(e)|string
     * @type_function_param1 e:object
-    * @type_function_param1_field4 jQueryEvent:jQuery.Event
+    * @type_function_param1_field4 jQueryEvent:jQuery.Event:deprecated(event)
     * @type_function_param1_field5 event:event
     * @type_function_param1_field6 argument:Date|Number|string
     * @notUsedInTheme
@@ -2567,7 +2567,7 @@ var dxPieChart = {
     * @extends Action
     * @type function(e)|string
     * @type_function_param1 e:object
-    * @type_function_param1_field4 jQueryEvent:jQuery.Event
+    * @type_function_param1_field4 jQueryEvent:jQuery.Event:deprecated(event)
     * @type_function_param1_field5 event:event
     * @type_function_param1_field6 target:String|Number
     * @type_function_param1_field7 points:Array<piePointObject>
@@ -2659,7 +2659,7 @@ var dxPolarChart = {
     * @extends Action
     * @type function(e)|string
     * @type_function_param1 e:object
-    * @type_function_param1_field4 jQueryEvent:jQuery.Event
+    * @type_function_param1_field4 jQueryEvent:jQuery.Event:deprecated(event)
     * @type_function_param1_field5 event:event
     * @type_function_param1_field6 target:polarChartSeriesObject
     * @notUsedInTheme
@@ -2672,7 +2672,7 @@ var dxPolarChart = {
     * @extends Action
     * @type function(e)|string
     * @type_function_param1 e:object
-    * @type_function_param1_field4 jQueryEvent:jQuery.Event
+    * @type_function_param1_field4 jQueryEvent:jQuery.Event:deprecated(event)
     * @type_function_param1_field5 event:event
     * @type_function_param1_field6 target:polarChartSeriesObject
     * @notUsedInTheme
@@ -2790,7 +2790,7 @@ var dxPolarChart = {
     * @extends Action
     * @type function(e)|string
     * @type_function_param1 e:object
-    * @type_function_param1_field4 jQueryEvent:jQuery.Event
+    * @type_function_param1_field4 jQueryEvent:jQuery.Event:deprecated(event)
     * @type_function_param1_field5 event:event
     * @type_function_param1_field6 target:object
     * @type_function_param1_field7 argument:Date|Number|string
@@ -3916,7 +3916,7 @@ var BaseChart = {
     * @extends Action
     * @type function(e)|string
     * @type_function_param1 e:object
-    * @type_function_param1_field4 jQueryEvent:jQuery.Event
+    * @type_function_param1_field4 jQueryEvent:jQuery.Event:deprecated(event)
     * @type_function_param1_field5 event:event
     * @type_function_param1_field6 target:basePointObject
     * @notUsedInTheme

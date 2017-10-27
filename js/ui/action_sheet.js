@@ -196,7 +196,7 @@ var ActionSheet = CollectionWidget.inherit({
             * @type function(e)|string
             * @extends Action
             * @type_function_param1 e:object
-            * @type_function_param1_field4 jQueryEvent:jQuery.Event
+            * @type_function_param1_field4 jQueryEvent:jQuery.Event:deprecated(event)
             * @type_function_param1_field5 event:event
             */
             /**
