@@ -260,7 +260,12 @@ registerTheme({
             color: "#70c92f"
         },
         group: {
-            color: "#797979"
+            color: "#797979",
+            label: {
+                font: {
+                    color: WHITE
+                }
+            }
         }
     },
     sparkline: {

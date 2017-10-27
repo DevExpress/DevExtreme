@@ -1287,6 +1287,7 @@ registerTheme({
                 paddingLeftRight: 5,
                 paddingTopBottom: 4,
                 font: {
+                    color: SECONDARY_TITLE_COLOR,
                     weight: 600
                 }
             }

@@ -77,7 +77,7 @@ registerTheme({
         }
     },
     barGauge: {
-        backgroundColor: "#445066"
+        backgroundColor: "#526280"
     },
     funnel: {
         item: {
@@ -91,7 +91,12 @@ registerTheme({
     },
     treeMap: {
         group: {
-            color: BORDER_COLOR
+            color: BORDER_COLOR,
+            label: {
+                font: {
+                    color: TITLE_COLOR
+                }
+            }
         }
     },
     map: {

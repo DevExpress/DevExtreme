@@ -184,7 +184,12 @@ registerTheme({
     },
     treeMap: {
         group: {
-            color: "#4c4c4c"
+            color: "#4c4c4c",
+            label: {
+                font: {
+                    color: "##a3a3a3"
+                }
+            }
         }
     },
     sparkline: {

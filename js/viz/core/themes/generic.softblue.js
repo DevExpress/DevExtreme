@@ -81,7 +81,12 @@ registerTheme({
     },
     treeMap: {
         group: {
-            color: BORDER_COLOR
+            color: BORDER_COLOR,
+            label: {
+                font: {
+                    color: SUBTITLE_COLOR
+                }
+            }
         }
     }
 }, "generic.light");
