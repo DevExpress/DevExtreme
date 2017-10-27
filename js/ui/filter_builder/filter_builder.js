@@ -401,6 +401,7 @@ var FilterBuilder = Widget.inherit({
         switch(args.name) {
             case "onEditorPreparing":
             case "onEditorPrepared":
+            case "onValueChanged":
                 this._initActions();
                 break;
             case "fields":
