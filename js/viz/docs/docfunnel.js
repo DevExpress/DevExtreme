@@ -772,13 +772,12 @@ var dxFunnel = {
     /**
     * @name dxFunneloptions_onitemclick
     * @publicName onItemClick
+    * @extends Action
     * @type function|string
     * @type_function_param1 e:object
-    * @type_function_param1_field1 component:object
-    * @type_function_param1_field2 element:object
-    * @type_function_param1_field3 jQueryEvent:jQuery.Event
-    * @type_function_param1_field4 event:event
-    * @type_function_param1_field5 item:dxFunnelItem
+    * @type_function_param1_field4 jQueryEvent:jQuery.Event
+    * @type_function_param1_field5 event:event
+    * @type_function_param1_field6 item:dxFunnelItem
     * @notUsedInTheme
     * @action
     */
@@ -786,13 +785,12 @@ var dxFunnel = {
     /**
     * @name dxFunneloptions_onlegendclick
     * @publicName onLegendClick
+    * @extends Action
     * @type function|string
     * @type_function_param1 e:object
-    * @type_function_param1_field1 component:object
-    * @type_function_param1_field2 element:object
-    * @type_function_param1_field3 jQueryEvent:jQuery.Event
-    * @type_function_param1_field4 event:event
-    * @type_function_param1_field5 item:dxFunnelItem
+    * @type_function_param1_field4 jQueryEvent:jQuery.Event
+    * @type_function_param1_field5 event:event
+    * @type_function_param1_field6 item:dxFunnelItem
     * @notUsedInTheme
     * @action
     */
@@ -800,11 +798,10 @@ var dxFunnel = {
     /**
     * @name dxFunneloptions_onhoverchanged
     * @publicName onHoverChanged
+    * @extends Action
     * @type function
     * @type_function_param1 e:object
-    * @type_function_param1_field1 component:object
-    * @type_function_param1_field2 element:object
-    * @type_function_param1_field3 item:dxFunnelItem
+    * @type_function_param1_field4 item:dxFunnelItem
     * @notUsedInTheme
     * @action
     */
@@ -812,11 +809,10 @@ var dxFunnel = {
     /**
     * @name dxFunneloptions_onselectionchanged
     * @publicName onSelectionChanged
+    * @extends Action
     * @type function
     * @type_function_param1 e:object
-    * @type_function_param1_field1 component:object
-    * @type_function_param1_field2 element:object
-    * @type_function_param1_field3 item:dxFunnelItem
+    * @type_function_param1_field4 item:dxFunnelItem
     * @notUsedInTheme
     * @action
     */
