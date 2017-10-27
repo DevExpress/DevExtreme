@@ -2,7 +2,11 @@
 
 var getNumberParser = require("localization/ldml/number").getParser;
 var getNumberFormatter = require("localization/ldml/number").getFormatter;
+var getNumberFormat = require("localization/ldml/number").getFormat;
 var getDateParser = require("localization/ldml/date.parser").getParser;
+var numberLocalization = require("localization/number");
+
+require("localization/currency");
 
 QUnit.module("date parser");
 
@@ -63,6 +67,7 @@ QUnit.test("integer format parser with group separator", function(assert) {
     assert.strictEqual(parser("123"), 123, "parse number with 3 digits");
     assert.strictEqual(parser("012"), null, "parse number with 3 digits with leading zero");
     assert.strictEqual(parser("1234"), 1234, "parse number with 4 digits without separator");
+    assert.strictEqual(parser("1,234"), 1234, "parse number with 4 digits with separator");
     assert.strictEqual(parser("1,234"), 1234, "parse number with 4 digits with separator");
     assert.strictEqual(parser(",234"), 234, "parse number with comma at start position");
     assert.strictEqual(parser("01,234"), null, "parse number with 5 digits with separator with leading zero");
@@ -174,6 +179,7 @@ QUnit.test("integer with non-required digits", function(assert) {
     assert.strictEqual(formatter(null), "", "format an empty value");
     assert.strictEqual(formatter(NaN), "", "NaN value should not be formatted");
     assert.strictEqual(formatter(0), "", "format zero");
+    assert.strictEqual(formatter(-0), "-", "format minus zero");
     assert.strictEqual(formatter(10), "10", "format integer wkth zero at the end");
     assert.strictEqual(formatter(123), "123", "format integer");
     assert.strictEqual(formatter(123456), "123456", "format large integer");
@@ -276,6 +282,17 @@ QUnit.test("complex group", function(assert) {
     assert.strictEqual(formatter(123456789), "12,34,56,789", "format integer with 3 groups");
 });
 
+QUnit.test("different positive and negative formatting with groups", function(assert) {
+    var formatter = getNumberFormatter("#,##0;(#,##0)");
+
+    assert.strictEqual(formatter(0), "0", "format zero");
+    assert.strictEqual(formatter(-0), "(0)", "format negative zero");
+    assert.strictEqual(formatter(123), "123", "format integer without groups");
+    assert.strictEqual(formatter(-123), "(123)", "format negative integer without groups");
+    assert.strictEqual(formatter(1234), "1,234", "format integer with 1 group");
+    assert.strictEqual(formatter(-1234), "(1,234)", "format negative with 1 group");
+});
+
 QUnit.test("custom separators", function(assert) {
     var formatter = getNumberFormatter("#,##0.##", { thousandsSeparator: " ", decimalSeparator: "," });
 
@@ -283,4 +300,58 @@ QUnit.test("custom separators", function(assert) {
     assert.strictEqual(formatter(0.12), "0,12", "number with decimal separator");
     assert.strictEqual(formatter(1234), "1 234", "number with group separator");
     assert.strictEqual(formatter(1234.567), "1 234,57", "number with group and decimal separator");
+});
+
+QUnit.test("getFormat for ldml number formatters", function(assert) {
+    var checkFormat = function(format, ldmlFormat) {
+        var formatter = getNumberFormatter(format);
+        assert.strictEqual(getNumberFormat(formatter), ldmlFormat || format, format);
+    };
+
+    checkFormat("#");
+    checkFormat("#.#");
+    checkFormat("#.##");
+    checkFormat("#.0");
+    checkFormat("#.00");
+    checkFormat("#.00#");
+    checkFormat("#,###");
+    checkFormat("#,##0");
+    checkFormat("#,####");
+    checkFormat("#,##,###");
+    checkFormat("#,##,#00.00#");
+    checkFormat("$ #,##0.##");
+    checkFormat("#,##0.## руб");
+    checkFormat("00000");
+    checkFormat("$ #,##0;($ #,##0)");
+    checkFormat("#.## %");
+    checkFormat("#.## '%'");
+});
+
+QUnit.test("getFormat for build-in number formats", function(assert) {
+    var checkFormat = function(format, ldmlFormat) {
+        var formatter = function(value) {
+            return numberLocalization.format(value, format);
+        };
+        assert.strictEqual(getNumberFormat(formatter), ldmlFormat, JSON.stringify(format));
+    };
+
+    checkFormat("fixedpoint", "#,##0");
+    checkFormat({ type: "fixedpoint", precision: 2 }, "#,##0.00");
+    checkFormat("percent", "#,###,##0%");
+    checkFormat({ type: "percent", precision: 2 }, "#,###,##0.00%");
+    checkFormat("currency", "$#,##0;$-#,##0");
+    checkFormat({ type: "currency", precision: 2 }, "$#,##0.00;$-#,##0.00");
+});
+
+QUnit.test("getFormat for function number formats", function(assert) {
+    var checkFormat = function(formatter, ldmlFormat) {
+        assert.strictEqual(getNumberFormat(formatter), ldmlFormat, ldmlFormat);
+    };
+
+    checkFormat(function(value) {
+        return value.toString();
+    }, "#0.##############");
+    checkFormat(function(value) {
+        return value.toFixed(2);
+    }, "#0.00");
 });

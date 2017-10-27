@@ -342,6 +342,15 @@ QUnit.test("percent format should work properly on value change", function(asser
     assert.equal(this.instance.option("value"), 0.45, "value is correct");
 });
 
+QUnit.test("non-ldml percent format should work properly on value change", function(assert) {
+    this.instance.option("value", "");
+    this.instance.option("format", "percent");
+    this.keyboard.type("45").change();
+
+    assert.equal(this.input.val(), "45%", "text is correct");
+    assert.equal(this.instance.option("value"), 0.45, "value is correct");
+});
+
 QUnit.test("removing a stub should not work", function(assert) {
     this.instance.option("format", "#%");
     this.instance.option("value", 1.23);
