@@ -5,6 +5,7 @@ var eventsEngine = require("../../events/core/events_engine"),
     ensureDefined = require("../../core/utils/common").ensureDefined,
     escapeRegExp = require("../../core/utils/common").escapeRegExp,
     number = require("../../localization/number"),
+    getLDMLFormat = require("../../localization/ldml/number").getFormat,
     NumberBoxBase = require("./number_box.base"),
     eventUtils = require("../../events/utils");
 
@@ -23,8 +24,8 @@ var NumberBoxMask = NumberBoxBase.inherit({
             /**
              * @name dxNumberBoxOptions_format
              * @publicName format
-             * @type String
-             * @default null
+             * @type format
+             * @default ""
              */
             format: null
         });
@@ -156,7 +157,16 @@ var NumberBoxMask = NumberBoxBase.inherit({
     },
 
     _getFormatPattern: function() {
-        return this.option("format");
+        var format = this.option("format"),
+            isLDMLPattern = typeof format === "string" && (format.indexOf("0") >= 0 || format.indexOf("#") >= 0);
+
+        if(isLDMLPattern) {
+            return format;
+        } else {
+            return getLDMLFormat(function(value) {
+                return number.format(value, format);
+            });
+        }
     },
 
     _getEditedText: function(text, selection, char) {
