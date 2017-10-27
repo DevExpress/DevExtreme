@@ -147,6 +147,19 @@ QUnit.test("leading zeros should be replaced on input", function(assert) {
     assert.equal(this.input.val(), "$ 12 d", "value is correct");
 });
 
+QUnit.test("leading zeros should not be replaced if input is before them", function(assert) {
+    this.instance.option("format", "#0 d");
+    this.instance.option("value", 0);
+
+    assert.equal(this.input.val(), "0 d", "value is correct");
+
+    this.keyboard.caret(0).type("12");
+
+    assert.equal(this.input.val(), "120 d", "value is correct");
+});
+
+
+
 QUnit.module("format: percent format", moduleConfig);
 
 QUnit.test("percent format should work properly on value change", function(assert) {
@@ -164,6 +177,15 @@ QUnit.test("non-ldml percent format should work properly on value change", funct
 
     assert.equal(this.input.val(), "45%", "text is correct");
     assert.equal(this.instance.option("value"), 0.45, "value is correct");
+});
+
+QUnit.test("input before leading zero", function(assert) {
+    this.instance.option("format", "#0%");
+    this.instance.option("value", 0);
+
+    this.keyboard.caret(0).type("45");
+
+    assert.equal(this.input.val(), "450%", "text is correct");
 });
 
 
