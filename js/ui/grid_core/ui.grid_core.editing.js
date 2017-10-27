@@ -1302,14 +1302,16 @@ var EditingController = modules.ViewController.inherit((function() {
                 that._dataController.dataErrorOccurred.fire(errors.Error("E1043"));
             }
 
-            if(rowKey !== undefined && options.column.setCellValue) {
-                if(editMode === EDIT_MODE_BATCH) {
-                    that._applyModified($cellElement, options);
-                }
-                options.value = value;
-                options.column.setCellValue(newData, value, extend(true, {}, oldData), text);
-                if(text && options.column.displayValueMap) {
-                    options.column.displayValueMap[value] = text;
+            if(options.column.setCellValue) {
+                if(rowKey !== undefined) {
+                    if(editMode === EDIT_MODE_BATCH) {
+                        that._applyModified($cellElement, options);
+                    }
+                    options.value = value;
+                    options.column.setCellValue(newData, value, extend(true, {}, oldData), text);
+                    if(text && options.column.displayValueMap) {
+                        options.column.displayValueMap[value] = text;
+                    }
                 }
                 params = {
                     data: newData,
@@ -1649,7 +1651,11 @@ var EditingController = modules.ViewController.inherit((function() {
 
         _afterInsertRow: function() { },
 
-        _beforeSaveEditData: function() { },
+        _beforeSaveEditData: function(editData) {
+            if(editData && !typeUtils.isDefined(editData.key) && typeUtils.isDefined(editData.type)) {
+                return true;
+            }
+        },
 
         _afterSaveEditData: function() { },
 
