@@ -283,9 +283,9 @@ var stubInvokeMethod = function(instance, options) {
             cellHeight = $cell.outerHeight(),
             cellWidth = $cell.outerWidth();
 
-        assert.roughEqual($shader.outerHeight(), 9.5 * cellHeight, 1, "Shader has correct height");
-        assert.roughEqual($topShader.outerHeight(), 9.5 * cellHeight, 1, "Top shader has correct height");
-        assert.roughEqual($bottomShader.outerHeight(), 22.5 * cellHeight, 1, "Bottom shader has correct height");
+        assert.roughEqual($shader.outerHeight(), 9.5 * cellHeight, 1.5, "Shader has correct height");
+        assert.roughEqual($topShader.outerHeight(), 9.5 * cellHeight, 1.5, "Top shader has correct height");
+        assert.roughEqual($bottomShader.outerHeight(), 22.5 * cellHeight, 1.5, "Bottom shader has correct height");
 
         assert.roughEqual($shader.outerWidth(), 3 * cellWidth, 2, "Shader has correct width");
         assert.roughEqual($topShader.outerWidth(), 2 * cellWidth, 1, "Top shader has correct width");
@@ -307,9 +307,9 @@ var stubInvokeMethod = function(instance, options) {
             cellHeight = $cell.outerHeight(),
             cellWidth = $cell.outerWidth();
 
-        assert.roughEqual($shader.outerHeight(), 9.5 * cellHeight, 1, "Indicator has correct height");
-        assert.roughEqual($topShader.outerHeight(), 9.5 * cellHeight, 1, "Top shader has correct height");
-        assert.roughEqual($bottomShader.outerHeight(), 22.5 * cellHeight, 1, "Bottom shader has correct height");
+        assert.roughEqual($shader.outerHeight(), 9.5 * cellHeight, 1.5, "Indicator has correct height");
+        assert.roughEqual($topShader.outerHeight(), 9.5 * cellHeight, 1.5, "Top shader has correct height");
+        assert.roughEqual($bottomShader.outerHeight(), 22.5 * cellHeight, 1.5, "Bottom shader has correct height");
 
         assert.roughEqual($shader.outerWidth(), 3 * cellWidth, 2, "Indicator has correct width");
         assert.roughEqual($topShader.outerWidth(), 2 * cellWidth, 1, "Top shader has correct width");
@@ -330,9 +330,9 @@ var stubInvokeMethod = function(instance, options) {
             cellHeight = $cell.outerHeight(),
             cellWidth = $cell.outerWidth();
 
-        assert.roughEqual($topShader.outerHeight(), 0, 1, "Top shader has correct height");
-        assert.roughEqual($bottomShader.outerHeight(), 24 * cellHeight, 1, "Bottom shader has correct height");
-        assert.roughEqual($bottomShader.outerWidth(), cellWidth, 1, "Bottom shader has correct width");
+        assert.roughEqual($topShader.outerHeight(), 0, 1.5, "Top shader has correct height");
+        assert.roughEqual($bottomShader.outerHeight(), 24 * cellHeight, 1.5, "Bottom shader has correct height");
+        assert.roughEqual($bottomShader.outerWidth(), cellWidth, 1.5, "Bottom shader has correct width");
     });
 
     QUnit.test("Shader should be rendered correctly, Day view with groups", function(assert) {
