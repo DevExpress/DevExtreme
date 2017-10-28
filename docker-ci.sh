@@ -6,6 +6,7 @@ trap "echo 'Interrupted!' && exit 1" TERM INT
 
 export DEVEXTREME_DOCKER_CI=true
 export NUGET_PACKAGES=$PWD/dotnet_packages
+export DOTNET_SKIP_FIRST_TIME_EXPERIENCE=true
 
 function run_lint {
     npm i eslint eslint-plugin-spellcheck jshint
