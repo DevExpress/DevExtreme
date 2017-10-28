@@ -58,14 +58,6 @@ The Dockerfile used to build "devexpress/devextreme-build" images is in the [bui
 
 A VNC server is available within the running container. To track test execution, add the `-p 5900:5900` parameter to the `docker run` command and connect to "localhost:5900" using any VNC client.
 
-### Locally using Drone CLI (Linux and Mac)
-
-Instead of running Docker directly, you can also use [Drone CLI](http://readme.drone.io/0.5/install/cli/).
-
-```
-drone exec --matrix TARGET=test
-```
-
 ### In a Cloud CI
 
 We provide configuration YAML files for [Travis CI](https://travis-ci.org/) ([.travis.yml](.travis.yml)) and [Shippable](https://app.shippable.com/) ([shippable.yml](shippable.yml)). Enable one of them for your forked repo (we recommend Travis).
