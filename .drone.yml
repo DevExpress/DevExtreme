@@ -4,9 +4,6 @@
 
 pipeline:
 
-  clone:
-    image: plugins/git
-
   build:
     image: devexpress/devextreme-build:17_2
     pull: true
