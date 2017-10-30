@@ -760,6 +760,14 @@ QUnit.test("Split appointment by day", function(assert) {
     ], "Parts are OK");
 });
 
+QUnit.test("Split appointment by day should trim minutes, seconds and milliseconds if needed", function(assert) {
+    var appt1 = { startDate: new Date(2017, 7, 21, 9, 0, 10).toString(), endDate: new Date(2017, 7, 22, 18, 0).toString() };
+
+    var parts1 = this.instance.splitAppointmentByDay(appt1);
+
+    assert.deepEqual(parts1[1], { appointmentData: appt1, startDate: new Date(2017, 7, 22, 0, 0, 0) }, "Parts are OK");
+});
+
 QUnit.test("Appointment should process resource names with spaces", function(assert) {
     var items = [{ text: "Appointment 1", startDate: new Date(2015, 10, 3, 9), endDate: new Date(2015, 10, 3, 11) }];
 
