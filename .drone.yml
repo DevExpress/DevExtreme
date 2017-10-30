@@ -5,7 +5,9 @@ pipeline:
   build:
     image: devexpress/devextreme-build:16_2
     pull: true
-    commands: ./docker-ci.sh
+    commands:
+      - ./drone-pr-workaround.sh
+      - ./docker-ci.sh
 
 matrix:
   include:
