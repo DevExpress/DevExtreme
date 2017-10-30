@@ -195,7 +195,7 @@ registerTheme({
             color: "#4c4c4c",
             label: {
                 font: {
-                    color: "##a3a3a3"
+                    color: "#a3a3a3"
                 }
             }
         }
