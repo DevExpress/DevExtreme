@@ -62,6 +62,8 @@ function getTickGenerator(options, incidentOccurred) {
 
         incidentOccurred: incidentOccurred,
 
+        firstDayOfWeek: options.workWeek && options.workWeek[0],
+
         showCalculatedTicks: options.tick.showCalculatedTicks, //DEPRECATED IN 15_2
         showMinorCalculatedTicks: options.minorTick.showCalculatedTicks //DEPRECATED IN 15_2
     });

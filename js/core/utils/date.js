@@ -156,7 +156,7 @@ var getFirstQuarterMonth = function(month) {
     return getQuarter(month) * 3;
 };
 
-var correctDateWithUnitBeginning = function(date, dateInterval, withCorrection) {
+var correctDateWithUnitBeginning = function(date, dateInterval, withCorrection, firstDayOfWeek) {
     date = new Date(date.getTime());
     var oldDate = new Date(date.getTime()),
         firstQuarterMonth,
@@ -182,7 +182,7 @@ var correctDateWithUnitBeginning = function(date, dateInterval, withCorrection) 
             date.setHours(0, 0, 0, 0);
             break;
         case 'week':
-            date.setDate(date.getDate() - date.getDay());
+            date = getFirstWeekDate(date, firstDayOfWeek || 0);
             date.setHours(0, 0, 0, 0);
             break;
         case 'quarter':
