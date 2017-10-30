@@ -990,7 +990,6 @@ var Scheduler = Widget.inherit({
                 */
 
                 /**
-
                 * @name dxSchedulerAppointmentTooltipTemplate_text
                 * @publicName text
                 * @type String
