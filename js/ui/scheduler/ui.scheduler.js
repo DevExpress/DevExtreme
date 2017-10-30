@@ -142,16 +142,6 @@ var Scheduler = Widget.inherit({
                 */
 
                 /**
-                * @pseudo DropDownAppointmentTemplate
-                * @type template
-                * @default "dropDownAppointment"
-                * @type_function_param1 itemData:object
-                * @type_function_param2 itemIndex:number
-                * @type_function_param3 itemElement:Element
-                * @type_function_return string|Node|jQuery
-                */
-
-                /**
                 * @pseudo AppointmentTooltipTemplate
                 * @type template
                 * @default "appointmentTooltip"
@@ -285,7 +275,7 @@ var Scheduler = Widget.inherit({
                 /**
                 * @name dxSchedulerOptions_views_dropDownAppointmentTemplate
                 * @publicName dropDownAppointmentTemplate
-                * @extends DropDownAppointmentTemplate
+                * @extends AppointmentTemplate
                 */
 
                 /**
@@ -473,7 +463,7 @@ var Scheduler = Widget.inherit({
             /**
                 * @name dxSchedulerOptions_dropDownAppointmentTemplate
                 * @publicName dropDownAppointmentTemplate
-                * @extends DropDownAppointmentTemplate
+                * @extends AppointmentTemplate
                 */
             dropDownAppointmentTemplate: "dropDownAppointment",
 
@@ -995,74 +985,6 @@ var Scheduler = Widget.inherit({
                 */
                 /**
                 * @name dxSchedulerAppointmentTemplate_endDateTimeZone
-                * @publicName endDateTimeZone
-                * @type String
-                */
-
-                /**
-                * @name dxSchedulerDropDownAppointmentTemplate_html
-                * @publicName html
-                * @type String
-                */
-                /**
-                * @name dxSchedulerDropDownAppointmentTemplate_disabled
-                * @publicName disabled
-                * @type boolean
-                * @default false
-                */
-                /**
-                * @name dxSchedulerDropDownAppointmentTemplate_visible
-                * @publicName visible
-                * @type boolean
-                * @default true
-                */
-                /**
-                * @name dxSchedulerDropDownAppointmentTemplate_template
-                * @publicName template
-                * @type template
-                */
-                /**
-                * @name dxSchedulerDropDownAppointmentTemplate_text
-                * @publicName text
-                * @type String
-                */
-                /**
-                * @name dxSchedulerDropDownAppointmentTemplate_startDate
-                * @publicName startDate
-                * @type Date
-                */
-                /**
-                * @name dxSchedulerDropDownAppointmentTemplate_endDate
-                * @publicName endDate
-                * @type Date
-                */
-                /**
-                * @name dxSchedulerDropDownAppointmentTemplate_description
-                * @publicName description
-                * @type String
-                */
-                /**
-                * @name dxSchedulerDropDownAppointmentTemplate_recurrenceRule
-                * @publicName recurrenceRule
-                * @type String
-                */
-                /**
-                * @name dxSchedulerDropDownAppointmentTemplate_recurrenceException
-                * @publicName recurrenceException
-                * @type String
-                */
-                /**
-                * @name dxSchedulerDropDownAppointmentTemplate_allDay
-                * @publicName allDay
-                * @type Boolean
-                */
-                /**
-                * @name dxSchedulerDropDownAppointmentTemplate_startDateTimeZone
-                * @publicName startDateTimeZone
-                * @type String
-                */
-                /**
-                * @name dxSchedulerDropDownAppointmentTemplate_endDateTimeZone
                 * @publicName endDateTimeZone
                 * @type String
                 */
