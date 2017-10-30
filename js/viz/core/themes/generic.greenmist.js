@@ -95,5 +95,10 @@ registerTheme({
                 }
             }
         }
+    },
+    rangeSelector: {
+        shutter: {
+            color: BACKGROUND_COLOR
+        }
     }
 }, "generic.light");

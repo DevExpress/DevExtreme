@@ -103,5 +103,10 @@ registerTheme({
         background: {
             borderColor: BORDER_COLOR
         }
+    },
+    rangeSelector: {
+        shutter: {
+            color: BACKGROUND_COLOR
+        }
     }
 }, "generic.dark");
