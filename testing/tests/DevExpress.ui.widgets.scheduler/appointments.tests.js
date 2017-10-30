@@ -765,10 +765,7 @@ QUnit.test("Split appointment by day should trim minutes, seconds and millisecon
 
     var parts1 = this.instance.splitAppointmentByDay(appt1);
 
-    assert.deepEqual(parts1, [
-        { settings: { startDate: new Date(2017, 7, 21, 9, 0, 10), endDate: new Date(2017, 7, 21, 20) }, startDate: appt1.startDate, endDate: appt1.endDate },
-        { settings: { startDate: new Date(2017, 7, 22, 8, 0, 0), endDate: new Date(2017, 7, 22, 18) }, startDate: appt1.startDate, endDate: appt1.endDate }
-    ], "Parts are OK");
+    assert.deepEqual(parts1[1], { appointmentData: appt1, startDate: new Date(2017, 7, 22, 0, 0, 0) }, "Parts are OK");
 });
 
 QUnit.test("Appointment should process resource names with spaces", function(assert) {

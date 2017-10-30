@@ -1015,7 +1015,7 @@ var SchedulerAppointments = CollectionWidget.inherit({
         })];
 
         var currentDate = startDate.getDate();
-        startDate.setHours(startDate.getHours() + 1);
+        startDate.setHours(startDate.getHours() + 1, 0, 0, 0);
 
         while(startDate.getTime() < endDate.getTime() - 1 && startDate.getTime() < maxAllowedDate.getTime()) {
             if(currentDate !== startDate.getDate()) {
@@ -1025,7 +1025,7 @@ var SchedulerAppointments = CollectionWidget.inherit({
             }
 
             currentDate = startDate.getDate();
-            startDate.setHours(startDate.getHours() + 1);
+            startDate.setHours(startDate.getHours() + 1, 0, 0, 0);
         }
 
         return result;
