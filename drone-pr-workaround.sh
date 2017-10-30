@@ -10,8 +10,8 @@ fi
 
 for i in {1..10}; do 
     if (( i > 1 )); then
-        echo "Retrying in 5 sec..."
-        sleep 5
+        echo "Will retry..."
+        sleep 15
     fi
 
     git fetch --no-tags origin +refs/pull/$DRONE_PULL_REQUEST/merge && git checkout -qf FETCH_HEAD && exit 0
