@@ -374,8 +374,7 @@ var subscribes = {
         }
 
         if(updatedStartDate.getHours() < startDayHour) {
-            updatedStartDate.setHours(startDayHour);
-            updatedStartDate.setMinutes(0);
+            updatedStartDate.setHours(startDayHour, 0, 0, 0);
         }
 
         options.callback(updatedStartDate);
@@ -387,8 +386,7 @@ var subscribes = {
             updatedEndDate = endDate;
 
         if(endDate.getHours() >= endDayHour) {
-            updatedEndDate.setHours(endDayHour);
-            updatedEndDate.setMinutes(0);
+            updatedEndDate.setHours(endDayHour, 0, 0, 0);
         }
         options.callback(updatedEndDate);
     },
