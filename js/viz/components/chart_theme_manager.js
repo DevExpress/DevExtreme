@@ -88,8 +88,11 @@ var ThemeManager = BaseThemeManager.inherit((function() {
     var applyParticularAxisOptions = function(name, userOptions, rotated) {
         var theme = this._theme,
             position = !(rotated ^ (name === "valueAxis")) ? "horizontalAxis" : "verticalAxis",
-            commonAxisSettings = processAxisOptions(this._userOptions["commonAxisSettings"], name);
-        return extend(true, {}, theme.commonAxisSettings, theme[position], theme[name], commonAxisSettings, processAxisOptions(userOptions, name));
+            commonAxisSettings = processAxisOptions(this._userOptions["commonAxisSettings"], name),
+            mergeOptions = extend(true, {}, theme.commonAxisSettings, theme[position], theme[name], commonAxisSettings, processAxisOptions(userOptions, name));
+
+        mergeOptions.workWeek = userOptions.workWeek || theme[name].workWeek;
+        return mergeOptions;
     };
 
     var mergeOptions = function(name, userOptions) {

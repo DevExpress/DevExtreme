@@ -1889,6 +1889,28 @@ function createThemeManager(options, themeGroupName) {
         }), 'logarithmic', 10, true, 'valueAxis[3]');
     });
 
+    QUnit.test("Axis options. Argument Axis. workWeek option", function(assert) {
+        var themeManager = createThemeManager(this.getOptions({
+            commonAxisSettings: {
+                workWeek: [0]
+            },
+            verticalAxis: {
+                workWeek: [1]
+            },
+            argumentAxis: {
+                workWeek: [1, 2, 3, 4, 5]
+            },
+            horizontalAxis: {
+                workWeek: [3]
+            }
+        }));
+        themeManager.setTheme("getOptionsTheme");
+
+        var result = themeManager.getOptions("argumentAxis", { workWeek: [1, 2] });
+
+        assert.deepEqual(result.workWeek, [1, 2]);
+    });
+
     QUnit.test('set label alignment in commonAxisSettings ', function(assert) {
         var themeManager = createThemeManager(this.getOptions({
             commonAxisSettings: {
