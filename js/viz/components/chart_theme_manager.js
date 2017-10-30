@@ -62,7 +62,7 @@ var ThemeManager = BaseThemeManager.inherit((function() {
 
     var processAxisOptions = function(axisOptions) {
         if(!axisOptions) {
-            return;
+            return {};
         }
         axisOptions = extend(true, {}, axisOptions);
         axisOptions.title = processTitleOptions(axisOptions.title);
@@ -88,8 +88,12 @@ var ThemeManager = BaseThemeManager.inherit((function() {
     var applyParticularAxisOptions = function(name, userOptions, rotated) {
         var theme = this._theme,
             position = !(rotated ^ (name === "valueAxis")) ? "horizontalAxis" : "verticalAxis",
-            commonAxisSettings = processAxisOptions(this._userOptions["commonAxisSettings"], name);
-        return extend(true, {}, theme.commonAxisSettings, theme[position], theme[name], commonAxisSettings, processAxisOptions(userOptions, name));
+            processedUserOptions = processAxisOptions(userOptions, name),
+            commonAxisSettings = processAxisOptions(this._userOptions["commonAxisSettings"], name),
+            mergeOptions = extend(true, {}, theme.commonAxisSettings, theme[position], theme[name], commonAxisSettings, processedUserOptions);
+
+        mergeOptions.workWeek = processedUserOptions.workWeek || theme[name].workWeek;
+        return mergeOptions;
     };
 
     var mergeOptions = function(name, userOptions) {
