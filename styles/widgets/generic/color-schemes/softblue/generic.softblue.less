@@ -193,7 +193,7 @@
 
 @texteditor-color: @base-text-color;
 @texteditor-disabled-opacity: .5;
-@texteditor-readonly-border-color: lighten(@texteditor-border-color, 9%);
+@texteditor-readonly-border-color: fade(@texteditor-border-color, 50%);
 
 /**
 * @name 60. Placeholder text color
@@ -202,7 +202,7 @@
 */
 @texteditor-placeholder-color: lighten(@texteditor-color, 40%);
 
-@texteditor-button-clear-icon-color: lighten(@texteditor-color, 40%);
+@texteditor-button-clear-icon-color: @base-icon-color;
 
 @texteditor-invalid-focused-border-color: @base-invalid-color;
 @texteditor-invalid-faded-border-color: @base-invalid-faded-border-color;
@@ -998,8 +998,8 @@
 * @type color
 * @group scrollview
 */
-@scrollable-scroll-bg: fade(darken(@scrollable-bg, 25%), 70%);
-@scrollable-scroll-active-bg: darken(@scrollable-bg, 25%);
+@scrollable-scroll-bg: fade(darken(@base-accent, 15%), 80%);
+@scrollable-scroll-active-bg: darken(@base-accent, 15%);
 @scrollable-scroll-shadow-color: transparent;
 
 @scrollable-scrollbar-bg: transparent;

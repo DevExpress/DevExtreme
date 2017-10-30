@@ -140,7 +140,6 @@ function patchTheme(theme) {
     mergeScalar(theme.treeMap.group.border, "color", null, theme.axisColor);
     mergeScalar(theme.treeMap.tile.selectionStyle.border, "color", null, theme.primaryTitleColor);
     mergeScalar(theme.treeMap.group.selectionStyle.border, "color", null, theme.primaryTitleColor);
-    mergeScalar(theme.treeMap.group.label.font, "color", null, theme.secondaryTitleColor);
 
     mergeScalar(theme.map.legend, "backgroundColor", theme);
     patchMapLayers(theme);

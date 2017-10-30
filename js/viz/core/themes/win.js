@@ -63,6 +63,15 @@ registerTheme({
                 opacity: 0.07
             }
         }
+    },
+    treeMap: {
+        group: {
+            label: {
+                font: {
+                    color: "#d8d8d8"
+                }
+            }
+        }
     }
 }, "generic.dark");
 
@@ -97,6 +106,15 @@ registerTheme({
             minorTick: {
                 color: BLACK,
                 opacity: 0.03
+            }
+        }
+    },
+    treeMap: {
+        group: {
+            label: {
+                font: {
+                    color: "#767676"
+                }
             }
         }
     }

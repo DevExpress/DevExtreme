@@ -250,7 +250,6 @@ QUnit.test("Patched properties on register theme", function(assert) {
     assert.strictEqual(theme.treeMap.group.border.color, theme.axisColor, "treeMap - group.border.color");
     assert.strictEqual(theme.treeMap.tile.selectionStyle.border.color, theme.primaryTitleColor, "treeMap - tile.selectionStyle.border.color");
     assert.strictEqual(theme.treeMap.group.selectionStyle.border.color, theme.primaryTitleColor, "treeMap - group.selectionStyle.border.color");
-    assert.strictEqual(theme.treeMap.group.label.font.color, theme.secondaryTitleColor, "treeMap - group.label.font.color");
 });
 
 

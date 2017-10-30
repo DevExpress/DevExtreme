@@ -36,6 +36,15 @@ themeModule.registerTheme({
                 opacity: 0.05
             }
         }
+    },
+    treeMap: {
+        group: {
+            label: {
+                font: {
+                    color: SECONDARY_TEXT_COLOR
+                }
+            }
+        }
     }
 }, "generic.light");
 

@@ -142,7 +142,7 @@
 * @type color
 * @group badges
 */
-@badge-bg: @base-text-color;
+@badge-bg: lighten(@base-accent, 25%);
 
 /**
 * @name 20. Badge text color
@@ -192,7 +192,7 @@
 
 @texteditor-color: @base-text-color;
 @texteditor-disabled-opacity: .5;
-@texteditor-readonly-border-color: darken(@texteditor-border-color, 9%);
+@texteditor-readonly-border-color: fade(@texteditor-border-color, 50%);
 
 /**
 * @name 60. Placeholder text color
@@ -201,7 +201,7 @@
 */
 @texteditor-placeholder-color: darken(@base-label-color, 17%); // #c1c7c9 => #919ea3
 
-@texteditor-button-clear-icon-color: darken(@texteditor-color, 40%);
+@texteditor-button-clear-icon-color: @base-icon-color;
 
 @texteditor-invalid-focused-border-color: @base-invalid-color;
 @texteditor-invalid-faded-border-color: @base-invalid-faded-border-color;
@@ -210,7 +210,7 @@
 @texteditor-input-border-radius: @base-border-radius;
 
 //TextBox
-@textbox-search-icon-color: darken(@base-icon-color, 40%);
+@textbox-search-icon-color: @base-icon-color;
 
 // RadioGroup
 
@@ -998,8 +998,8 @@
 * @type color
 * @group scrollview
 */
-@scrollable-scroll-bg: fade(@base-accent, 50%);
-@scrollable-scroll-active-bg: lighten(@scrollable-bg, 25%);
+@scrollable-scroll-bg: fade(darken(@base-accent, 15%), 80%);
+@scrollable-scroll-active-bg: darken(@base-accent, 15%);
 @scrollable-scroll-shadow-color: transparent;
 
 @scrollable-scrollbar-bg: transparent;
@@ -1009,7 +1009,7 @@
 * @type color
 * @group scrollview
 */
-@scrollable-scrollbar-active-bg: lighten(@base-bg, 25%);
+@scrollable-scrollbar-active-bg: fade(lighten(@base-bg, 25%), 20%);
 
 // Custom scrollable
 @scrollable-scrollbar-arrow-custom-bg: lighten(@scrollable-bg, 70.5%);
@@ -1328,7 +1328,7 @@
 * @type color
 * @group datagrid
 */
-@datagrid-menu-icon-color: @screen-text-color;
+@datagrid-menu-icon-color: @base-icon-color;
 
 /**
 * @name 71. Modified data color
@@ -1420,7 +1420,7 @@
 * @group datagrid
 * @paletteColorOpacity 1
 */
-@datagrid-focused-border-color: @base-focus-color;
+@datagrid-focused-border-color: darken(@base-accent, 20%);
 /**
 * @name 131. Editor background
 * @type color
@@ -1630,7 +1630,7 @@
 * @group treelist
 * @paletteColorOpacity 1
 */
-@treelist-focused-border-color: @base-focus-color;
+@treelist-focused-border-color: darken(@base-accent, 15%);
 /**
 * @name 131. Editor background
 * @type color
@@ -2240,4 +2240,4 @@
 @filterbuilder-text-color: #000000;
 @filterbuilder-text-focus-color: @filterbuilder-text-color;
 
-@filterbuilder-menu-icon-color: @screen-text-color;
+@filterbuilder-menu-icon-color: @base-icon-color;

@@ -77,13 +77,36 @@ registerTheme({
         }
     },
     barGauge: {
-        backgroundColor: "#445066"
+        backgroundColor: "#526280"
     },
     funnel: {
         item: {
             border: {
                 color: BACKGROUND_COLOR
             }
+        }
+    },
+    sparkline: {
+        pointColor: BACKGROUND_COLOR
+    },
+    treeMap: {
+        group: {
+            color: BORDER_COLOR,
+            label: {
+                font: {
+                    color: TITLE_COLOR
+                }
+            }
+        }
+    },
+    map: {
+        background: {
+            borderColor: BORDER_COLOR
+        }
+    },
+    rangeSelector: {
+        shutter: {
+            color: BACKGROUND_COLOR
         }
     }
 }, "generic.dark");

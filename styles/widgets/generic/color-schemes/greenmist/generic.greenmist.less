@@ -188,7 +188,7 @@
 
 @texteditor-color: @base-text-color;
 @texteditor-disabled-opacity: .5;
-@texteditor-readonly-border-color: lighten(@texteditor-border-color, 9%);
+@texteditor-readonly-border-color: fade(@texteditor-border-color, 50%);
 
 /**
 * @name 60. Placeholder text color
@@ -197,7 +197,7 @@
 */
 @texteditor-placeholder-color: lighten(@base-label-color, 16%); // #728e94 => #a1b1b5
 
-@texteditor-button-clear-icon-color: lighten(@texteditor-color, 40%);
+@texteditor-button-clear-icon-color: @base-icon-color;
 
 @texteditor-invalid-focused-border-color: @base-invalid-color;
 @texteditor-invalid-faded-border-color: @base-invalid-faded-border-color;
@@ -993,8 +993,8 @@
 * @type color
 * @group scrollview
 */
-@scrollable-scroll-bg: @base-accent;
-@scrollable-scroll-active-bg: darken(@scrollable-bg, 25%);
+@scrollable-scroll-bg: fade(darken(@base-accent, 15%), 80%);
+@scrollable-scroll-active-bg: darken(@base-accent, 15%);
 @scrollable-scroll-shadow-color: transparent;
 
 @scrollable-scrollbar-bg: transparent;
@@ -1320,7 +1320,7 @@
 * @type color
 * @group datagrid
 */
-@datagrid-menu-icon-color: @base-label-color;
+@datagrid-menu-icon-color: @base-icon-color;
 
 /**
 * @name 71. Modified data border color
@@ -1411,7 +1411,7 @@
 * @group datagrid
 * @paletteColorOpacity 1
 */
-@datagrid-focused-border-color: @base-focus-color;
+@datagrid-focused-border-color: darken(@base-accent, 15%);
 /**
 * @name 131. Editor background
 * @type color
@@ -1537,7 +1537,7 @@
 * @type color
 * @group treelist
 */
-@treelist-menu-icon-color: @base-label-color;
+@treelist-menu-icon-color: @base-icon-color;
 
 /**
 * @name 71. Modified data border color
@@ -1620,7 +1620,7 @@
 * @group treelist
 * @paletteColorOpacity 1
 */
-@treelist-focused-border-color: @base-focus-color;
+@treelist-focused-border-color: darken(@base-accent, 15%);
 /**
 * @name 131. Editor background
 * @type color
@@ -2231,4 +2231,4 @@
 @filterbuilder-text-focus-color: #FFF;
 @filterbuilder-text-color: @base-text-color;
 
-@filterbuilder-menu-icon-color: @base-label-color;
+@filterbuilder-menu-icon-color: @base-icon-color;
