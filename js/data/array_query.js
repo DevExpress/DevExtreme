@@ -249,12 +249,13 @@ var compileCriteria = (function() {
         return function(d) {
             var result = isConjunctiveOperator;
 
-            ops.forEach(function(op) {
-                if(op(d) !== isConjunctiveOperator) {
+            for(var i = 0; i < ops.length; i++) {
+                if(ops[i](d) !== isConjunctiveOperator) {
                     result = !isConjunctiveOperator;
-                    return false;
+                    break;
                 }
-            });
+            }
+
             return result;
         };
     };
