@@ -643,8 +643,7 @@ var SchedulerAppointments = CollectionWidget.inherit({
         var daysCount = Math.ceil(deltaTime / visibleDayDuration),
             maxDate = new Date(endDate);
 
-        maxDate.setHours(endDayHour);
-        maxDate.setMinutes(0);
+        maxDate.setHours(endDayHour, 0, 0, 0);
 
         if(result > maxDate.getTime()) {
             var tailOfCurrentDay = maxDate.getTime() - endDate.getTime(),
@@ -667,8 +666,7 @@ var SchedulerAppointments = CollectionWidget.inherit({
         var daysCount = Math.ceil(deltaTime / visibleDayDuration),
             minDate = new Date(startDate);
 
-        minDate.setHours(startDayHour);
-        minDate.setMinutes(0);
+        minDate.setHours(startDayHour, 0, 0, 0);
 
         if(result < minDate.getTime()) {
             var tailOfCurrentDay = startDate.getTime() - minDate.getTime(),
@@ -1076,21 +1074,17 @@ var SchedulerAppointments = CollectionWidget.inherit({
 
     _checkStartDate: function(currentDate, originalDate, startDayHour) {
         if(!dateUtils.sameDate(currentDate, originalDate) || currentDate.getHours() <= startDayHour) {
-            currentDate.setHours(startDayHour);
-            currentDate.setMinutes(0);
+            currentDate.setHours(startDayHour, 0, 0, 0);
         } else {
-            currentDate.setHours(originalDate.getHours());
-            currentDate.setMinutes(originalDate.getMinutes());
+            currentDate.setHours(originalDate.getHours(), originalDate.getMinutes(), originalDate.getSeconds(), originalDate.getMilliseconds());
         }
     },
 
     _checkEndDate: function(currentDate, originalDate, endDayHour) {
         if(!dateUtils.sameDate(currentDate, originalDate) || currentDate.getHours() > endDayHour) {
-            currentDate.setHours(endDayHour);
-            currentDate.setMinutes(0);
+            currentDate.setHours(endDayHour, 0, 0, 0);
         } else {
-            currentDate.setHours(originalDate.getHours());
-            currentDate.setMinutes(originalDate.getMinutes());
+            currentDate.setHours(originalDate.getHours(), originalDate.getMinutes(), originalDate.getSeconds(), originalDate.getMilliseconds());
         }
     }
 
