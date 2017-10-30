@@ -2123,9 +2123,7 @@ var Scheduler = Widget.inherit({
     },
 
     _getRecurrenceExceptionDate: function(exceptionDate, targetStartDate) {
-        exceptionDate.setHours(targetStartDate.getHours());
-        exceptionDate.setMinutes(targetStartDate.getMinutes());
-        exceptionDate.setSeconds(targetStartDate.getSeconds());
+        exceptionDate.setHours(targetStartDate.getHours(), targetStartDate.getMinutes(), targetStartDate.getSeconds(), targetStartDate.getMilliseconds());
 
         return dateSerialization.serializeDate(exceptionDate, "yyyyMMddTHHmmss");
     },
@@ -2239,8 +2237,7 @@ var Scheduler = Widget.inherit({
                 }
 
                 if(!options.skipHoursProcessing) {
-                    updatedStartDate.setHours(startDate.getHours());
-                    updatedStartDate.setMinutes(startDate.getMinutes());
+                    updatedStartDate.setHours(startDate.getHours(), startDate.getMinutes(), startDate.getSeconds(), startDate.getMilliseconds());
                 }
             }
         }

@@ -608,7 +608,7 @@ var SchedulerAppointments = CollectionWidget.inherit({
         var daysCount = Math.ceil(deltaTime / visibleDayDuration),
             maxDate = new Date(endDate);
 
-        maxDate.setHours(endDayHour);
+        maxDate.setHours(endDayHour, 0, 0, 0);
 
         if(result > maxDate.getTime()) {
             var tailOfCurrentDay = maxDate.getTime() - endDate.getTime(),
@@ -631,7 +631,7 @@ var SchedulerAppointments = CollectionWidget.inherit({
         var daysCount = Math.ceil(deltaTime / visibleDayDuration),
             minDate = new Date(startDate);
 
-        minDate.setHours(startDayHour);
+        minDate.setHours(startDayHour, 0, 0, 0);
 
         if(result < minDate.getTime()) {
             var tailOfCurrentDay = startDate.getTime() - minDate.getTime(),
@@ -1029,7 +1029,7 @@ var SchedulerAppointments = CollectionWidget.inherit({
         }
 
         return result;
-    }
+    },
 
 }).include(publisherMixin);
 
