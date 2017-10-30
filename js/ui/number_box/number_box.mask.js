@@ -349,7 +349,7 @@ var NumberBoxMask = NumberBoxBase.inherit({
 
     _getStubCountBeforePosition: function(text, position) {
         text = text || this._input().val();
-        position = position || text.length;
+        position = ensureDefined(position, text.length);
 
         var stubRegExp = new RegExp(STUB_CHAR_REG_EXP, "g"),
             checkedText = text.slice(0, position);
