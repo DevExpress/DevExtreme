@@ -454,22 +454,15 @@ QUnit.test("conditions are not checked if it's not necessary", function(assert) 
                 callCount++;
             }])
             .enumerate()
-            .fail(function() {
-                assert.ok(false, "Shouldn't reach this point");
-            })
             .done(function(r) {
-                assert.deepEqual(callCount, 1);
+                assert.equal(callCount, 1);
             });
     };
 
     $.when(
         check("and"),
         check("or")
-    ).done(function() {
-        done();
-    }).fail(function() {
-        assert.ok(false, "Shouldn't reach this point");
-    });
+    ).done(done);
 });
 
 
