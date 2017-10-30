@@ -1911,6 +1911,18 @@ function createThemeManager(options, themeGroupName) {
         assert.deepEqual(result.workWeek, [1, 2]);
     });
 
+    QUnit.test("Axis options. Get axis options without passing user options", function(assert) {
+        var themeManager = createThemeManager(this.getOptions({
+            commonAxisSettings: {
+                common: true
+            }
+        }));
+        themeManager.setTheme("getOptionsTheme");
+        var result = themeManager.getOptions("argumentAxis");
+
+        assert.ok(result.common);
+    });
+
     QUnit.test('set label alignment in commonAxisSettings ', function(assert) {
         var themeManager = createThemeManager(this.getOptions({
             commonAxisSettings: {
