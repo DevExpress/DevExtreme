@@ -1,4 +1,5 @@
 #!/bin/bash -e
+printenv
 
 # Run inside https://hub.docker.com/r/devexpress/devextreme-build/
 
