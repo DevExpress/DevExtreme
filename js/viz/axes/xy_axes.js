@@ -977,12 +977,13 @@ module.exports = {
         },
 
         _getScaleBreaks: function(axisOptions, viewport, series, isArgumentAxis) {
-            var breaks = (axisOptions.breaks || []).map(function(b) {
-                return {
-                    from: b.startValue,
-                    to: b.endValue
-                };
-            });
+            var that = this,
+                breaks = (axisOptions.breaks || []).map(function(b) {
+                    return {
+                        from: that.parser(b.startValue),
+                        to: that.parser(b.endValue)
+                    };
+                });
             if(axisOptions.type !== "discrete" && axisOptions.dataType === "datetime" && axisOptions.workdaysOnly) {
                 breaks = breaks.concat(generateDateBreaks(viewport.minVisible,
                     viewport.maxVisible,

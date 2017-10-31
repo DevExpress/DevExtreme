@@ -2963,6 +2963,25 @@ QUnit.test("Merge breaks if they cross each other and last the break more than m
     }]);
 });
 
+QUnit.test("Datetime axis, breaks values are string", function(assert) {
+    this.updateOptions({ valueType: "datetime" });
+    this.axis.validate();
+    this.updateOptions({
+        dataType: "datetime",
+        breaks: [{ startValue: 'May 7, 2015', endValue: 'May 9, 2015' }],
+        min: new Date(2015, 4, 5),
+        max: new Date(2015, 4, 10)
+    });
+
+    this.axis.createTicks(this.canvas);
+
+    assert.deepEqual(this.tickGeneratorSpy.lastCall.args[7], [{
+        from: new Date(2015, 4, 7),
+        to: new Date(2015, 4, 9),
+        cumulativeWidth: 0
+    }]);
+});
+
 QUnit.module("Datetime scale breaks. Weekends and holidays", $.extend({}, environment2DTranslator, {
     beforeEach: function() {
         var that = this;
@@ -3807,6 +3826,7 @@ QUnit.test("Apply margins taking into account breakStyle.width", function(assert
         }],
         isHorizontal: true
     }));
+    axis.validate();
     axis.setBusinessRange({ min: 50, max: 1000 });
     axis.setMarginOptions({ size: 100 });
 
@@ -3835,6 +3855,7 @@ QUnit.test("Apply margins taking into account breaks range size", function(asser
         breaks: [{ startValue: 110, endValue: 190 }],
         isArgumentAxis: true
     }));
+    axis.validate();
     axis.setBusinessRange({ min: 100, max: 200 });
 
     axis.createTicks({
