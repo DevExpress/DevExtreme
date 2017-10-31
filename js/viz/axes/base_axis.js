@@ -825,6 +825,8 @@ Axis.prototype = {
     setTypes: function(type, axisType, typeSelector) {
         this._options.type = type || this._options.type;
         this._options[typeSelector] = axisType || this._options[typeSelector];
+
+        this._updateTranslator();
     },
 
     resetTypes: function(typeSelector) {
@@ -1674,7 +1676,7 @@ Axis.prototype = {
         return new Translator2DModule.Translator2D({}, {}, {});
     },
 
-    _updateTranslator: function(range) {
+    _updateTranslator: function() {
         this._translator.update({}, {}, this._getTranslatorOptions());
     },
 

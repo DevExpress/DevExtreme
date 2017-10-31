@@ -188,6 +188,24 @@ QUnit.test("circular discrete axis - stick false", function(assert) {
     assert.strictEqual(translator.update.lastCall.args[2].stick, false);
 });
 
+QUnit.test("Update translator on setTypes", function(assert) {
+    var axis = new Axis({
+            renderer: this.renderer,
+            axisType: "polarAxes",
+            drawingType: "circular"
+        }),
+        translator = translator2DModule.Translator2D.lastCall.returnValue;
+    axis.updateOptions({
+        label: {}
+    });
+    sinon.spy(translator, "update");
+
+    //act
+    axis.setTypes("discrete", "string", "valueType");
+
+    assert.strictEqual(translator.update.lastCall.args[2].stick, false);
+});
+
 QUnit.test("circular axis, firstPointOnStartAngle = true - addSpiderCategory and stick are true", function(assert) {
     var axis = new Axis({
             renderer: this.renderer,
