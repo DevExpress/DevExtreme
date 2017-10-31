@@ -214,11 +214,6 @@ QUnit.test("delete key", function(assert) {
     assert.notOk(this.keyboard.event.isDefaultPrevented(), "delete should not be prevented");
     this.keyboard.input("del");
     assert.equal(this.input.val(), "$ 23.05 d", "required digit should be replaced to 0 after removing");
-
-    this.keyboard.caret({ start: 3, end: 7 }).keyDown("del");
-    assert.notOk(this.keyboard.event.isDefaultPrevented(), "delete should not be prevented");
-    this.keyboard.input("del");
-    assert.equal(this.input.val(), "$ 23.00 d", "required chars in selection was replaced to 0");
 });
 
 QUnit.test("backspace key", function(assert) {
@@ -243,9 +238,6 @@ QUnit.test("backspace key", function(assert) {
     assert.notOk(this.keyboard.event.isDefaultPrevented(), "delete should not be prevented");
     this.keyboard.input("backspace");
     assert.equal(this.input.val(), "$ 23.05 d", "required digit should be replaced to 0 after removing");
-
-    this.keyboard.caret({ start: 3, end: 7 }).press("backspace");
-    assert.equal(this.input.val(), "$ 23.00 d", "required chars in selection was replaced to 0");
 });
 
 QUnit.test("removing non required char with negative value", function(assert) {
@@ -303,7 +295,6 @@ QUnit.test("removing with group separators using backspace key", function(assert
     assert.notOk(this.keyboard.event.isDefaultPrevented(), "delete should not be prevented");
     this.keyboard.input("backspace");
     assert.equal(this.input.val(), "$ 2,390 d", "value is correct");
-    assert.deepEqual(this.keyboard.caret(), { start: 5, end: 5 }, "caret is good");
 });
 
 
