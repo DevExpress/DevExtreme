@@ -61,4 +61,8 @@ QUnit.test("adjust", function(assert) {
     assert.strictEqual(adjust(1.1 + 0.1, 0.1), 1.2, "adjusting numbers with floating point");
     assert.strictEqual(adjust(1.1 + 1e-4, 1e-4), 1.1001, "adjusting numbers in exponential notation");
     assert.strictEqual(adjust(1.1e-8 + 1.23456789e-8, 1.23456789e-8), 2.33456789e-8, "adjusting numbers with precision above 7");
+    assert.strictEqual(adjust(3e-8), 3e-8, "checking adjust numbers in exponential notation (Edge, precision=0)");
+    assert.strictEqual(adjust(1.1e-8), 1.1e-8, "checking adjust numbers in exponential notation (Edge, precision=1)");
+    assert.strictEqual(adjust(1.03e-8), 1.03e-8, "checking adjust numbers in exponential notation (Edge, precision=2)");
+    assert.strictEqual(adjust(1.3e-16 - 1.1e-16), 2e-17, "checking adjust numbers in exponential notation (Edge, exponent < -15)");
 });
