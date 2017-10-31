@@ -5,6 +5,7 @@ var eventsEngine = require("../../events/core/events_engine"),
     ensureDefined = require("../../core/utils/common").ensureDefined,
     isNumeric = require("../../core/utils/type").isNumeric,
     fitIntoRange = require("../../core/utils/math").fitIntoRange,
+    inRange = require("../../core/utils/math").inRange,
     escapeRegExp = require("../../core/utils/common").escapeRegExp,
     number = require("../../localization/number"),
     getLDMLFormat = require("../../localization/ldml/number").getFormat,
@@ -105,7 +106,7 @@ var NumberBoxMask = NumberBoxBase.inherit({
         e && e.preventDefault();
     },
 
-    _clickHandler: function(position) {
+    _moveToClosestNonStub: function(position) {
         position = isNumeric(position) ? { start: position, end: position } : position;
 
         var caret = ensureDefined(position, this._caret());
@@ -228,11 +229,23 @@ var NumberBoxMask = NumberBoxBase.inherit({
                 ensureDefined(replaced, ensureDefined(lightParsed, noLeadingZeros))
             );
 
+        if(!this._isValueInRange(value)) {
+            return null;
+        }
+
         if(value === lightParsed) {
             this._formattedValue = "";
         }
 
         return value;
+    },
+
+    _isValueInRange: function(value) {
+        var min = this.option("min"),
+            max = this.option("max"),
+            nextValue = value * 10;
+
+        return inRange(value, min, max) || inRange(nextValue, min, max);
     },
 
     _setInputText: function(text, position) {
@@ -252,7 +265,7 @@ var NumberBoxMask = NumberBoxBase.inherit({
         this._formattedValue = text;
 
         if(wasRemoved) {
-            this._clickHandler({ start: position, end: position });
+            this._moveToClosestNonStub({ start: position, end: position });
         } else {
             this._caret({
                 start: position + caretDelta,
@@ -341,7 +354,7 @@ var NumberBoxMask = NumberBoxBase.inherit({
         var $input = this._input();
 
         eventsEngine.on($input, eventUtils.addNamespace("input", NUMBER_FORMATTER_NAMESPACE), this._formatValue.bind(this));
-        eventsEngine.on($input, eventUtils.addNamespace("dxclick", NUMBER_FORMATTER_NAMESPACE), this._clickHandler.bind(this, null));
+        eventsEngine.on($input, eventUtils.addNamespace("dxclick", NUMBER_FORMATTER_NAMESPACE), this._moveToClosestNonStub.bind(this, null));
     },
 
     _forceRefreshInputValue: function() {
@@ -402,7 +415,10 @@ var NumberBoxMask = NumberBoxBase.inherit({
         }
 
         var newValue = -1 * ensureDefined(this._parsedValue, null);
-        this.option("value", newValue);
+
+        if(this._isValueInRange(newValue, this.option("min"), this.option("max"))) {
+            this.option("value", newValue);
+        }
     },
 
     _formatValue: function() {

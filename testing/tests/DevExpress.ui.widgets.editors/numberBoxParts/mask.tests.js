@@ -80,6 +80,39 @@ QUnit.test("pressing '-' button should revert the number", function(assert) {
     assert.equal(this.instance.option("value"), 123.456, "value is correct");
 });
 
+QUnit.module("format: minimum and maximum", moduleConfig);
+
+QUnit.test("input should be prevented when digit is not in range", function(assert) {
+    this.instance.option({
+        min: 5,
+        max: 10
+    });
+
+    this.keyboard.type("4");
+    assert.equal(this.input.val(), "", "input for incorrect digit was prevented");
+});
+
+QUnit.test("input should not be prevented if digit + '0' is in range", function(assert) {
+    this.instance.option({
+        min: 5,
+        max: 40
+    });
+
+    this.keyboard.type("4");
+    assert.equal(this.input.val(), "4", "input for digit was not prevented");
+});
+
+QUnit.test("invert sign should be prevented if minimum is larger than 0", function(assert) {
+    this.instance.option({
+        min: 0,
+        value: 4
+    });
+
+    this.keyboard.press("-");
+    assert.equal(this.input.val(), "4", "reverting was prevented");
+});
+
+
 QUnit.module("format: text input", moduleConfig);
 
 QUnit.test("invalid chars should be prevented on keydown", function(assert) {
@@ -159,7 +192,6 @@ QUnit.test("leading zeros should not be replaced if input is before them", funct
 });
 
 
-
 QUnit.module("format: percent format", moduleConfig);
 
 QUnit.test("percent format should work properly on value change", function(assert) {
@@ -187,7 +219,6 @@ QUnit.test("input before leading zero", function(assert) {
 
     assert.equal(this.input.val(), "450%", "text is correct");
 });
-
 
 
 QUnit.module("format: removing", moduleConfig);
