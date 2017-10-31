@@ -8,7 +8,8 @@ var $ = require("jquery"),
     _SeriesDataSource = seriesDataSourceModule.SeriesDataSource,
     dataSourceModule = require("data/data_source/data_source"),
     dateLocalization = require("localization/date"),
-    axisModule = require("viz/axes/base_axis");
+    axisModule = require("viz/axes/base_axis"),
+    typeUtils = require("core/utils/type");
 
 var formatsAreEqual = function(format1, format2) {
     var testDate = new Date(0, 1, 2, 3, 4, 5, 6);
@@ -1391,7 +1392,25 @@ QUnit.test("T214998. scale multi-line text label", function(assert) {
         }
     });
     assert.ok(true);
-    //assert.strictEqual(this.renderer.text.lastCall.args[0], "0\r\n0");
+});
+
+QUnit.test("Passing to customizeText dateTime values for dateTime axis", function(assert) {
+    var values = [];
+    this.createWidget({
+        scale: {
+            startValue: new Date(2017, 0, 1),
+            endValue: new Date(2018, 0, 1),
+            label: {
+                customizeText: function(e) {
+                    values.push(e.value);
+                }
+            }
+        }
+    });
+
+    values.forEach(function(v) {
+        assert.strictEqual(typeUtils.isDate(v), true);
+    });
 });
 
 QUnit.test("range selectedRangeChanged initialization", function(assert) {
