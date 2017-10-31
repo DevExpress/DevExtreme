@@ -4,13 +4,15 @@ var _format = require("../core/format"),
     formatHelper = require("../../format_helper"),
     typeUtils = require("../../core/utils/type"),
     dateUtils = require("../../core/utils/date"),
+    mathUtils = require("../../core/utils/math"),
     getLog = require("../core/utils").getLog,
     isDefined = typeUtils.isDefined,
     isFunction = typeUtils.isFunction,
     isExponential = typeUtils.isExponential,
     floor = Math.floor,
-    adjust = require("../../core/utils/math").adjust,
-    getPrecision = require("../../core/utils/math").getPrecision,
+    adjust = mathUtils.adjust,
+    getPrecision = mathUtils.getPrecision,
+    getExponent = mathUtils.getExponent,
     abs = Math.abs,
     EXPONENTIAL = "exponential",
     formats = ["fixedPoint", "thousands", "millions", "billions", "trillions", EXPONENTIAL],
@@ -111,10 +113,6 @@ function getNoZeroIndex(str) {
     return str.length - parseInt(str).toString().length;
 }
 
-function getCoefficient(value) {
-    return abs(parseFloat(value.toString().split("e")[1]));
-}
-
 function getTransitionTickIndex(ticks, value) {
     var i,
         curDiff,
@@ -182,9 +180,9 @@ function smartFormatter(tick, options) {
                     if(isExponential(tickInterval) && (stringTick.indexOf(".") !== -1 || isExponential(tick))) {
                         typeFormat = EXPONENTIAL;
                         if(!isExponential(tick)) {
-                            precision = abs(getNoZeroIndex(stringTick.split(".")[1]) - getCoefficient(tickInterval) + 1);
+                            precision = abs(getNoZeroIndex(stringTick.split(".")[1]) - getExponent(tickInterval) + 1);
                         } else {
-                            precision = Math.max(abs(getCoefficient(tick) - getCoefficient(tickInterval)), abs(getPrecision(tick) - getPrecision(tickInterval)));
+                            precision = Math.max(abs(getExponent(tick) - getExponent(tickInterval)), abs(getPrecision(tick) - getPrecision(tickInterval)));
                         }
                     } else {
                         tickIntervalIndex = floor(log10(tickInterval));

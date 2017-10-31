@@ -1,5 +1,7 @@
 "use strict";
 
+var browser = require("./browser");
+
 var sign = function(value) {
     if(value === 0) {
         return 0;
@@ -22,10 +24,18 @@ var inRange = function(value, minValue, maxValue) {
     return value >= minValue && value <= maxValue;
 };
 
-function adjust(value, interval) {
-    var precision = getPrecision(interval || 0);
+function getExponent(value) {
+    return Math.abs(parseInt(value.toExponential().toString().split("e")[1]));
+}
 
-    return parseFloat(value.toPrecision(precision > 7 ? 15 : 7));
+function adjust(value, interval) {
+    var precision = getPrecision(interval || 0),
+        exponent = getExponent(value),
+        isEdge = browser.msie && browser.version >= 13;
+
+    precision = ((isEdge && exponent > 7) || precision > 7) ? 15 : 7; //fix toPrecision() bug in Edge (T570217)
+
+    return parseFloat(value.toPrecision(precision));
 }
 
 function getPrecision(value) {
@@ -47,4 +57,5 @@ exports.fitIntoRange = fitIntoRange;
 exports.inRange = inRange;
 exports.adjust = adjust;
 exports.getPrecision = getPrecision;
+exports.getExponent = getExponent;
 
