@@ -103,12 +103,14 @@ QUnit.test("input should not be prevented if digit + '0' is in range", function(
 });
 
 QUnit.test("invert sign should be prevented if minimum is larger than 0", function(assert) {
+    var MINUS_KEY = 189;
+
     this.instance.option({
         min: 0,
         value: 4
     });
 
-    this.keyboard.press("-");
+    this.keyboard.keyDown(MINUS_KEY);
     assert.equal(this.input.val(), "4", "reverting was prevented");
 });
 

@@ -241,8 +241,8 @@ var NumberBoxMask = NumberBoxBase.inherit({
     },
 
     _isValueInRange: function(value) {
-        var min = this.option("min"),
-            max = this.option("max"),
+        var min = ensureDefined(this.option("min"), -Infinity),
+            max = ensureDefined(this.option("max"), Infinity),
             nextValue = value * 10;
 
         return inRange(value, min, max) || inRange(nextValue, min, max);
