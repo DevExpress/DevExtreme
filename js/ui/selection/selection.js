@@ -167,6 +167,10 @@ module.exports = Class.inherit({
         delete this._shiftFocusedItemIndex;
     },
 
+    _resetFocusedItemIndex: function() {
+        this._focusedItemIndex = -1;
+    },
+
     changeItemSelectionWhenShiftKeyPressed: function(itemIndex, items) {
         var isSelectedItemsChanged = false,
             itemIndexStep,
@@ -221,6 +225,8 @@ module.exports = Class.inherit({
     },
 
     selectAll: function(isOnePage) {
+        this._resetFocusedItemIndex();
+
         if(isOnePage) {
             return this._onePageSelectAll(false);
         } else {
@@ -229,6 +235,8 @@ module.exports = Class.inherit({
     },
 
     deselectAll: function(isOnePage) {
+        this._resetFocusedItemIndex();
+
         if(isOnePage) {
             return this._onePageSelectAll(true);
         } else {
