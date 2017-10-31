@@ -191,24 +191,15 @@ function checkLogarithmicOptions(options, defaultLogarithmBase, incidentOccurred
 }
 
 function calculateScaleAreaHeight(renderer, scaleOptions, visibleMarkers) {
-    var textBBox,
-        value = "0",
-        formatObject = {
-            value: 0,
-            valueText: value
-        },
-        labelScaleOptions = scaleOptions.label,
+    var labelScaleOptions = scaleOptions.label,
         markerScaleOptions = scaleOptions.marker,
-        customizeText = labelScaleOptions.customizeText,
         placeholderHeight = scaleOptions.placeholderHeight,
-        text = commonUtils.isFunction(customizeText) ? customizeText.call(formatObject, formatObject) : value,
-        visibleLabels = labelScaleOptions.visible;
+        text = commonModule.formatValue(scaleOptions.startValue, labelScaleOptions);
 
     if(placeholderHeight) {
         return placeholderHeight;
     } else {
-        textBBox = getTextBBox(renderer, text, labelScaleOptions.font);
-        return (visibleLabels ? labelScaleOptions.topIndent + textBBox.height : 0) +
+        return (labelScaleOptions.visible ? labelScaleOptions.topIndent + getTextBBox(renderer, text, labelScaleOptions.font).height : 0) +
             (visibleMarkers ? markerScaleOptions.topIndent + markerScaleOptions.separatorHeight : 0);
     }
 }
