@@ -15,7 +15,8 @@ var eventsEngine = require("../../events/core/events_engine"),
 var NUMBER_FORMATTER_NAMESPACE = "dxNumberFormatter",
     STUB_CHAR_REG_EXP = "[^0-9.]",
     MOVE_FORWARD = 1,
-    MOVE_BACKWARD = -1;
+    MOVE_BACKWARD = -1,
+    MAXIMUM_FLOAT_LIMIT = 999999999999999;
 
 var NumberBoxMask = NumberBoxBase.inherit({
 
@@ -394,7 +395,7 @@ var NumberBoxMask = NumberBoxBase.inherit({
 
     _lightParse: function(text) {
         var value = +text;
-        return isNaN(value) || Math.abs(value) > 999999999999999 ? null : value;
+        return isNaN(value) || Math.abs(value) > MAXIMUM_FLOAT_LIMIT ? null : value;
     },
 
     _parseValue: function(text) {
