@@ -80,6 +80,7 @@ QUnit.test("pressing '-' button should revert the number", function(assert) {
     assert.equal(this.instance.option("value"), 123.456, "value is correct");
 });
 
+
 QUnit.module("format: minimum and maximum", moduleConfig);
 
 QUnit.test("input should be prevented when digit is not in range", function(assert) {
@@ -160,15 +161,15 @@ QUnit.test("ctrl+v should not be prevented", function(assert) {
     assert.strictEqual(this.keyboard.event.isDefaultPrevented(), false, "keydown event is not prevented");
 });
 
-QUnit.test("incomplete enter should not be prevented when there are stubs after the caret", function(assert) {
+QUnit.test("incomplete input should not be prevented when there are stubs and zeros after the caret", function(assert) {
     this.instance.option({
         format: "#0.## kg",
         value: 123
     });
 
-    this.keyboard.caret(3).type(".45");
+    this.keyboard.caret(3).type(".05");
 
-    assert.equal(this.input.val(), "123.45 kg", "value is correct");
+    assert.equal(this.input.val(), "123.05 kg", "value is correct");
 });
 
 QUnit.test("leading zeros should be replaced on input", function(assert) {

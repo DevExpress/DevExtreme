@@ -404,9 +404,13 @@ var NumberBoxMask = NumberBoxBase.inherit({
         return this._parsedValue;
     },
 
-    _endsWith: function(string, suffix) {
-        var regExp = new RegExp(escapeRegExp(suffix) + STUB_CHAR_REG_EXP + "*$", "ig");
-        return regExp.test(string);
+    _isIncomplete: function(string) {
+        var decimalSeparator = number.getDecimalSeparator(),
+            escapedSeparator = escapeRegExp(decimalSeparator),
+            regExp = new RegExp("[^" + escapedSeparator + "]" + escapedSeparator + "0*" + STUB_CHAR_REG_EXP + "*$", "ig"),
+            lastKeyIncomplete = this._lastKey === decimalSeparator || this._lastKey === "0";
+
+        return lastKeyIncomplete && regExp.test(string);
     },
 
     _revertSign: function() {
@@ -422,10 +426,9 @@ var NumberBoxMask = NumberBoxBase.inherit({
     },
 
     _formatValue: function() {
-        var text = this._input().val(),
-            decimalSeparator = number.getDecimalSeparator();
+        var text = this._input().val();
 
-        if(this._endsWith(text, decimalSeparator) && this._lastKey === decimalSeparator) {
+        if(this._isIncomplete(text)) {
             this._formattedValue = text;
             return;
         }
