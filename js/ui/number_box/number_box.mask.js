@@ -434,10 +434,6 @@ var NumberBoxMask = NumberBoxBase.inherit({
             return;
         }
 
-        if(text === "") {
-            this._parsedValue = "";
-        }
-
         var format = this._getFormatPattern(),
             caret = this._caret(),
             formatted = number.format(this._parsedValue, format),

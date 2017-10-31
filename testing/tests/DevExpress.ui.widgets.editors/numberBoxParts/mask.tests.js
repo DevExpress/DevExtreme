@@ -345,6 +345,13 @@ QUnit.test("removing with group separators using backspace key", function(assert
     assert.equal(this.input.val(), "$ 2,390 d", "value is correct");
 });
 
+QUnit.test("removing required last char should replace it to 0", function(assert) {
+    this.instance.option("value", 1);
+    this.keyboard.caret(1).press("backspace").input("backspace");
+
+    assert.equal(this.input.val(), "0", "value is correct");
+});
+
 
 QUnit.module("format: caret boundaries", moduleConfig);
 
