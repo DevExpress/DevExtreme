@@ -3,11 +3,12 @@
 var formatHelper = require("../../format_helper"),
     dateUtils = require("../../core/utils/date"),
     extend = require("../../core/utils/extend").extend,
+    generateDateBreaks = require("./datetime_breaks").generateDateBreaks,
     getNextDateUnit = dateUtils.getNextDateUnit,
     correctDateWithUnitBeginning = dateUtils.correctDateWithUnitBeginning,
     noop = require("../../core/utils/common").noop,
     vizUtils = require("../core/utils"),
-    _isDefined = require("../../core/utils/type").isDefined,
+    isDefined = require("../../core/utils/type").isDefined,
     constants = require("./axes_constants"),
     _extend = extend,
     _math = Math,
@@ -18,7 +19,8 @@ var formatHelper = require("../../format_helper"),
     LEFT = constants.left,
     RIGHT = constants.right,
     CENTER = constants.center,
-    SCALE_BREAK_OFFSET = 3;
+    SCALE_BREAK_OFFSET = 3,
+    RANGE_RATIO = 0.3;
 
 function prepareDatesDifferences(datesDifferences, tickInterval) {
     var dateUnitInterval,
@@ -42,6 +44,55 @@ function prepareDatesDifferences(datesDifferences, tickInterval) {
             }
         }
     }
+}
+
+function sortingBreaks(breaks) {
+    return breaks.sort(function(a, b) { return a.from - b.from; });
+}
+
+function filterBreaks(breaks, viewport, breakStyle) {
+    var minVisible = viewport.minVisible,
+        maxVisible = viewport.maxVisible,
+        breakSize = breakStyle ? breakStyle.width : 0;
+
+    return breaks.reduce(function(result, currentBreak) {
+        var from = currentBreak.from,
+            to = currentBreak.to,
+            lastResult = result[result.length - 1],
+            newBreak;
+
+        if(!isDefined(from) || !isDefined(to)) {
+            return result;
+        }
+        if(from > to) {
+            to = [from, from = to][0];
+        }
+        if(result.length && from < lastResult.to) {
+            if(to > lastResult.to) {
+                lastResult.to = to > maxVisible ? maxVisible : to;
+                if(lastResult.gapSize) {
+                    lastResult.gapSize = undefined;
+                    lastResult.cumulativeWidth += breakSize;
+                }
+            }
+        } else {
+            if(((from >= minVisible && from < maxVisible) || (to <= maxVisible && to > minVisible)) && to - from < maxVisible - minVisible) {
+                from = from >= minVisible ? from : minVisible;
+                to = to <= maxVisible ? to : maxVisible;
+                newBreak = {
+                    from: from,
+                    to: to,
+                    cumulativeWidth: (lastResult ? lastResult.cumulativeWidth : 0) + breakSize
+                };
+                if(currentBreak.gapSize) {
+                    newBreak.gapSize = dateUtils.convertMillisecondsToDateUnits(to - from);
+                    newBreak.cumulativeWidth = lastResult ? lastResult.cumulativeWidth : 0;
+                }
+                result.push(newBreak);
+            }
+        }
+        return result;
+    }, []);
 }
 
 function getMarkerDates(min, max, markerInterval) {
@@ -134,6 +185,51 @@ function getLeftMargin(bBox) {
 
 function getRightMargin(bBox) {
     return _math.abs(bBox.width - _math.abs(bBox.x)) || 0;
+}
+
+function generateAutoBreaks(options, series, viewport) {
+    var ranges = [],
+        length,
+        breaks = [],
+        i,
+        getRange = options.type === "logarithmic" ?
+            function(min, max) { return vizUtils.getLog(max / min, options.logarithmBase); } :
+            function(min, max) { return max - min; },
+        visibleRange = getRange(viewport.minVisible, viewport.maxVisible),
+        maxAutoBreakCount,
+        points = series.reduce(function(points, s) {
+            points = points.concat(s.getPointsInViewPort());
+            return points;
+        }, []).sort(function(a, b) {
+            return b - a;
+        }),
+        minDiff = RANGE_RATIO * visibleRange;
+
+    for(i = 1, length = points.length; i < length; i++) {
+        ranges.push({ start: points[i], end: points[i - 1], length: getRange(points[i], points[i - 1]) });
+    }
+
+    ranges.sort(function(a, b) {
+        return b.length - a.length;
+    });
+
+    maxAutoBreakCount = isDefined(options.maxAutoBreakCount) ? Math.min(options.maxAutoBreakCount, ranges.length) : ranges.length;
+    for(i = 0; i < maxAutoBreakCount; i++) {
+        if(ranges[i].length >= minDiff) {
+            if(visibleRange <= ranges[i].length) {
+                break;
+            }
+            visibleRange -= ranges[i].length;
+            breaks.push({ from: ranges[i].start, to: ranges[i].end });
+            minDiff = RANGE_RATIO * visibleRange;
+        } else {
+            break;
+        }
+    }
+
+    sortingBreaks(breaks);
+
+    return breaks;
 }
 
 module.exports = {
@@ -490,7 +586,7 @@ module.exports = {
                 that._markerLabelOptions = markerLabelOptions = _extend(true, {}, that._options.marker.label);
             }
 
-            if(!_isDefined(that._options.marker.label.format)) {
+            if(!isDefined(that._options.marker.label.format)) {
                 markerLabelOptions.format = formatString;
             }
 
@@ -878,6 +974,27 @@ module.exports = {
             }
 
             return skippedCategory;
+        },
+
+        _getScaleBreaks: function(axisOptions, viewport, series, isArgumentAxis) {
+            var breaks = (axisOptions.breaks || []).map(function(b) {
+                return {
+                    from: b.startValue,
+                    to: b.endValue
+                };
+            });
+            if(axisOptions.type !== "discrete" && axisOptions.dataType === "datetime" && axisOptions.workdaysOnly) {
+                breaks = breaks.concat(generateDateBreaks(viewport.minVisible,
+                    viewport.maxVisible,
+                    axisOptions.workWeek,
+                    axisOptions.singleWorkdays,
+                    axisOptions.holidays));
+            }
+            if(!isArgumentAxis && axisOptions.type !== "discrete" && axisOptions.dataType !== "datetime"
+                && axisOptions.autoBreaksEnabled && axisOptions.maxAutoBreakCount !== 0) {
+                breaks = breaks.concat(generateAutoBreaks(axisOptions, series, viewport));
+            }
+            return filterBreaks(sortingBreaks(breaks), viewport, axisOptions.breakStyle);
         },
 
         _drawBreak: function(br, scaleBreakPattern, positionFrom, positionTo, length) {
