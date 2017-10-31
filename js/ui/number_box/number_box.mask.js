@@ -416,7 +416,7 @@ var NumberBoxMask = NumberBoxBase.inherit({
 
         var newValue = -1 * ensureDefined(this._parsedValue, null);
 
-        if(this._isValueInRange(newValue, this.option("min"), this.option("max"))) {
+        if(this._isValueInRange(newValue)) {
             this.option("value", newValue);
         }
     },
