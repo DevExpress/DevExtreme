@@ -2,7 +2,6 @@
 
 var vizUtils = require("../core/utils"),
     typeUtils = require("../../core/utils/type"),
-    dateUtils = require("../../core/utils/date"),
     formatHelper = require("../../format_helper"),
     each = require("../../core/utils/iterator").each,
     extend = require("../../core/utils/extend").extend,
@@ -15,8 +14,6 @@ var vizUtils = require("../core/utils"),
     tick = require("./tick").tick,
     _format = require("./smart_formatter").smartFormatter,
     convertTicksToValues = constants.convertTicksToValues,
-
-    generateDateBreaks = require("./datetime_breaks").generateDateBreaks,
 
     isDefined = typeUtils.isDefined,
     isFunction = typeUtils.isFunction,
@@ -42,8 +39,6 @@ var vizUtils = require("../core/utils"),
     DEFAULT_AXIS_DIVISION_FACTOR = 50,
     DEFAULT_MINOR_AXIS_DIVISION_FACTOR = 15,
 
-    RANGE_RATIO = 0.3,
-
     Axis;
 
 function getTickGenerator(options, incidentOccurred) {
@@ -67,121 +62,6 @@ function getTickGenerator(options, incidentOccurred) {
         showCalculatedTicks: options.tick.showCalculatedTicks, //DEPRECATED IN 15_2
         showMinorCalculatedTicks: options.minorTick.showCalculatedTicks //DEPRECATED IN 15_2
     });
-}
-
-function sortingBreaks(breaks) {
-    return breaks.sort(function(a, b) { return a.from - b.from; });
-}
-
-function filterBreaks(breaks, viewport, breakStyle) {
-    var minVisible = viewport.minVisible,
-        maxVisible = viewport.maxVisible,
-        breakSize = breakStyle ? breakStyle.width : 0;
-
-    return breaks.reduce(function(result, currentBreak) {
-        var from = currentBreak.from,
-            to = currentBreak.to,
-            lastResult = result[result.length - 1],
-            newBreak;
-
-        if(!isDefined(from) || !isDefined(to)) {
-            return result;
-        }
-        if(from > to) {
-            to = [from, from = to][0];
-        }
-        if(result.length && from < lastResult.to) {
-            if(to > lastResult.to) {
-                lastResult.to = to > maxVisible ? maxVisible : to;
-                if(lastResult.gapSize) {
-                    lastResult.gapSize = undefined;
-                    lastResult.cumulativeWidth += breakSize;
-                }
-            }
-        } else {
-            if(((from >= minVisible && from < maxVisible) || (to <= maxVisible && to > minVisible)) && to - from < maxVisible - minVisible) {
-                from = from >= minVisible ? from : minVisible;
-                to = to <= maxVisible ? to : maxVisible;
-                newBreak = {
-                    from: from,
-                    to: to,
-                    cumulativeWidth: (lastResult ? lastResult.cumulativeWidth : 0) + breakSize
-                };
-                if(currentBreak.gapSize) {
-                    newBreak.gapSize = dateUtils.convertMillisecondsToDateUnits(to - from);
-                    newBreak.cumulativeWidth = lastResult ? lastResult.cumulativeWidth : 0;
-                }
-                result.push(newBreak);
-            }
-        }
-        return result;
-    }, []);
-}
-
-function getScaleBreaks(axisOptions, viewport, series, isArgumentAxis) {
-    var breaks = (axisOptions.breaks || []).map(function(b) {
-        return {
-            from: b.startValue,
-            to: b.endValue
-        };
-    });
-    if(axisOptions.type !== "discrete" && axisOptions.dataType === "datetime" && axisOptions.workdaysOnly) {
-        breaks = breaks.concat(generateDateBreaks(viewport.minVisible,
-            viewport.maxVisible,
-            axisOptions.workWeek,
-            axisOptions.singleWorkdays,
-            axisOptions.holidays));
-    }
-    if(!isArgumentAxis && axisOptions.type !== "discrete" && axisOptions.dataType !== "datetime"
-        && axisOptions.autoBreaksEnabled && axisOptions.maxAutoBreakCount !== 0) {
-        breaks = breaks.concat(generateAutoBreaks(axisOptions, series, viewport));
-    }
-    return filterBreaks(sortingBreaks(breaks), viewport, axisOptions.breakStyle);
-}
-
-function generateAutoBreaks(options, series, viewport) {
-    var ranges = [],
-        length,
-        breaks = [],
-        i,
-        getRange = options.type === "logarithmic" ?
-            function(min, max) { return vizUtils.getLog(max / min, options.logarithmBase); } :
-            function(min, max) { return max - min; },
-        visibleRange = getRange(viewport.minVisible, viewport.maxVisible),
-        maxAutoBreakCount,
-        points = series.reduce(function(points, s) {
-            points = points.concat(s.getPointsInViewPort());
-            return points;
-        }, []).sort(function(a, b) {
-            return b - a;
-        }),
-        minDiff = RANGE_RATIO * visibleRange;
-
-    for(i = 1, length = points.length; i < length; i++) {
-        ranges.push({ start: points[i], end: points[i - 1], length: getRange(points[i], points[i - 1]) });
-    }
-
-    ranges.sort(function(a, b) {
-        return b.length - a.length;
-    });
-
-    maxAutoBreakCount = isDefined(options.maxAutoBreakCount) ? Math.min(options.maxAutoBreakCount, ranges.length) : ranges.length;
-    for(i = 0; i < maxAutoBreakCount; i++) {
-        if(ranges[i].length >= minDiff) {
-            if(visibleRange <= ranges[i].length) {
-                break;
-            }
-            visibleRange -= ranges[i].length;
-            breaks.push({ from: ranges[i].start, to: ranges[i].end });
-            minDiff = RANGE_RATIO * visibleRange;
-        } else {
-            break;
-        }
-    }
-
-    sortingBreaks(breaks);
-
-    return breaks;
 }
 
 function createMajorTick(axis, renderer, skippedCategory) {
@@ -1053,23 +933,25 @@ Axis.prototype = {
     },
 
     setBusinessRange: function(range, isMultipleAxes) {
-        var validateBusinessRange = function(range, min, max) {
-            function validate(valueSelector, baseValueSelector, optionValue) {
-                range[valueSelector] = isDefined(optionValue) ? optionValue :
-                    (isDefined(range[valueSelector]) ? range[valueSelector] : range[baseValueSelector]);
-            }
+        var that = this,
+            validateBusinessRange = function(range, min, max) {
+                function validate(valueSelector, baseValueSelector, optionValue) {
+                    range[valueSelector] = isDefined(optionValue) ? optionValue :
+                        (isDefined(range[valueSelector]) ? range[valueSelector] : range[baseValueSelector]);
+                }
 
-            validate("minVisible", "min", min);
-            validate("maxVisible", "max", max);
-            return range;
-        };
+                validate("minVisible", "min", min);
+                validate("maxVisible", "max", max);
+                return range;
+            },
+            options = that._options;
 
-        this._seriesData = new rangeModule.Range(validateBusinessRange(range, this._options.min, this._options.max));
+        that._seriesData = new rangeModule.Range(validateBusinessRange(range, options.min, options.max));
 
-        this._breaks = !isMultipleAxes ? getScaleBreaks(this._options, this._seriesData, this._series, this.isArgumentAxis) : [];
-        this._disableBreaks = isMultipleAxes;
+        that._breaks = !isMultipleAxes ? that._getScaleBreaks(options, that._seriesData, that._series, that.isArgumentAxis) : [];
+        that._disableBreaks = isMultipleAxes;
 
-        this._translator.updateBusinessRange(this._seriesData);
+        that._translator.updateBusinessRange(that._seriesData);
     },
 
     setGroupSeries: function(series) {
@@ -1498,9 +1380,10 @@ Axis.prototype = {
 
     zoom: function(min, max, skipAdjusting) {
         var that = this,
-            minOpt = that._options.min,
-            maxOpt = that._options.max,
-            isDiscrete = that._options.type === constants.discrete;
+            options = that._options,
+            minOpt = options.min,
+            maxOpt = options.max,
+            isDiscrete = options.type === constants.discrete;
 
         skipAdjusting = skipAdjusting || isDiscrete;
 
@@ -1524,10 +1407,10 @@ Axis.prototype = {
 
         that._zoomArgs = { min: min, max: max };
 
-        this._breaks = !this._disableBreaks ? getScaleBreaks(this._options, {
+        that._breaks = !that._disableBreaks ? that._getScaleBreaks(options, {
             minVisible: min,
             maxVisible: max
-        }, this._series, this.isArgumentAxis) : [];
+        }, that._series, that.isArgumentAxis) : [];
 
         return that._zoomArgs;
     },
@@ -1828,6 +1711,8 @@ Axis.prototype = {
 
         return screenDelta - (breaksLength ? breaks[breaksLength - 1].cumulativeWidth : 0);
     },
+
+    _getScaleBreaks: function() { return []; },
 
     _adjustTitle: _noop,
 
