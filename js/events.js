@@ -94,40 +94,40 @@ exports.triggerHandler = eventsEngine.triggerHandler;
 */
 
 /**
-* @name dxEventFields_isPropagationStopped
+* @name dxEventMethods_isPropagationStopped
 * @publicName isPropagationStopped
 * @type function
 * @return boolean
 */
 
 /**
-* @name dxEventFields_stopPropagation
+* @name dxEventMethods_stopPropagation
 * @publicName stopPropagation
 * @type function
 */
 
 /**
-* @name dxEventFields_isImmediatePropagationStopped
+* @name dxEventMethods_isImmediatePropagationStopped
 * @publicName isImmediatePropagationStopped
 * @type function
 * @return boolean
 */
 
 /**
-* @name dxEventFields_stopImmediatePropagation
+* @name dxEventMethods_stopImmediatePropagation
 * @publicName stopImmediatePropagation
 * @type function
 */
 
 /**
-* @name dxEventFields_isDefaultPrevented
+* @name dxEventMethods_isDefaultPrevented
 * @publicName isDefaultPrevented
 * @type function
 * @return boolean
 */
 
 /**
-* @name dxEventFields_preventDefault
+* @name dxEventMethods_preventDefault
 * @publicName preventDefault
 * @type function
 */
