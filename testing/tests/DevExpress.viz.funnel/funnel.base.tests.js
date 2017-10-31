@@ -146,7 +146,7 @@ QUnit.test("Data source with invalid value fields and items are not created, war
     });
 
     assert.ok(spy.called);
-    assert.equal(spy.getCall(0).args[0].target.id, "E2204");
+    assert.equal(spy.getCall(0).args[0].target.id, "E2005");
     assert.equal(spy.getCall(0).args[0].target.text, "The value field \"val1\" is absent in the data source or all its values are negative");
     assert.equal(spy.getCall(0).args[0].target.type, "error");
     assert.equal(spy.getCall(0).args[0].target.widget, "dxFunnel");
@@ -172,7 +172,7 @@ QUnit.test("Data source with negative values", function(assert) {
     });
 
     assert.ok(spy.called);
-    assert.equal(spy.getCall(0).args[0].target.id, "E2204");
+    assert.equal(spy.getCall(0).args[0].target.id, "E2005");
     assert.equal(spy.getCall(0).args[0].target.text, "The value field \"value\" is absent in the data source or all its values are negative");
 });
 
