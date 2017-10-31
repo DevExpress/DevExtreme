@@ -1081,14 +1081,11 @@ QUnit.test("Draw", function(assert) {
     pointImageStrategy.draw(this.context, figure, "test-data");
 
     assert.deepEqual(this.renderer.g.lastCall.args, [], "root is created");
-    assert.deepEqual(this.renderer.image.lastCall.args, [], "image is created");
-
+    assert.deepEqual(this.renderer.image.lastCall.args, [null, null, null, null, null, "center"], "image is created");
     assert.strictEqual(figure.root, this.renderer.g.lastCall.returnValue, "root");
     assert.strictEqual(figure.image, this.renderer.image.lastCall.returnValue, "image");
-
-    assert.deepEqual(figure.image.attr.lastCall.args, [{ location: "center" }], "image settings");
+    assert.deepEqual(figure.image.attr.lastCall.args, [{ "pointer-events": "visible" }], "image settings");//T567545
     assert.deepEqual(figure.image.data.lastCall.args, ["data-key", "test-data"], "image data");
-
     assert.deepEqual(figure.image.append.lastCall.args, [figure.root], "image is appended");
 });
 

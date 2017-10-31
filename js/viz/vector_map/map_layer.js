@@ -582,7 +582,10 @@ strategiesByElementType[TYPE_MARKER] = {
 
     image: {
         _draw: function(ctx, figure, data) {
-            figure.image = ctx.renderer.image().attr({ location: "center" }).data(ctx.dataKey, data).append(figure.root);
+            figure.image = ctx.renderer.image(null, null, null, null, null, "center")
+                .attr({ "pointer-events": "visible" })//T567545
+                .data(ctx.dataKey, data)
+                .append(figure.root);
         },
 
         refresh: function(ctx, figure, data, proxy) {
