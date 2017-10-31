@@ -394,7 +394,7 @@ var NumberBoxMask = NumberBoxBase.inherit({
 
     _lightParse: function(text) {
         var value = +text;
-        return isNaN(value) ? null : value;
+        return isNaN(value) || Math.abs(value) > 999999999999999 ? null : value;
     },
 
     _parseValue: function(text) {
