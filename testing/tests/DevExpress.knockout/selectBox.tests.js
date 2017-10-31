@@ -15,6 +15,7 @@ QUnit.testStart(function() {
                 <span id="customField" data-bind="text: $data.name"></span>\
             </div>\
         </div>\
+        <div id="selectBoxWithCustomConfig" data-bind="dxSelectBox: customConfig"></div>\
         \
         <div id="selectBoxWithFieldTemplate2" data-bind="dxSelectBox: { dataSource: dataSource, fieldTemplate: \'field\', selectedItem: selectedItem }">\
             <div data-options="dxTemplate: {name: \'field\'}">\
@@ -89,4 +90,50 @@ QUnit.test("dropDownButton should be rendered when fieldTemplate is specified", 
 
     $selectBox.dxSelectBox("option", "value", 1);
     assert.equal($selectBox.find(".dx-dropdowneditor-button").length, 1, "dropDownButton rendered after init");
+});
+
+QUnit.testInActiveWindow("select box should correctly update computed value", function(assert) {
+    var clock = sinon.useFakeTimers(),
+        $selectBox = $("#selectBoxWithCustomConfig"),
+        getVM = function() {
+            var that = this;
+            that.disabled = ko.observable(false);
+            that._value = ko.observable("");
+
+            that.customConfig = {
+                dataSource: [
+                    { value: 1, displayValue: 1 },
+                    { value: 2, displayValue: 2 }
+                ],
+                valueExpr: "value",
+                displayExpr: "displayValue",
+                disabled: that.disabled,
+                value: ko.computed({
+                    read: function() { return that._value(); },
+                    write: function(newVal) {
+                        that._value(newVal);
+                        that.disabled(true);
+                        setTimeout(function() {
+                            that.disabled(false);
+                        }, 200);
+                    }
+                })
+            };
+        };
+
+    ko.applyBindings(new getVM(), $selectBox.get(0));
+
+    var selectBox = $selectBox.dxSelectBox("instance");
+
+    selectBox.focus();
+    selectBox.open();
+    $(".dx-selectbox-popup-wrapper .dx-list-item")
+        .first()
+        .trigger("focusin")
+        .trigger("dxclick");
+    clock.tick(300);
+
+    assert.equal(selectBox.option("value"), 1, "select box correctly updates the value");
+    assert.equal($selectBox.find(".dx-texteditor-input").val(), 1, "input value is correct");
+    clock.restore();
 });
