@@ -29,6 +29,11 @@ module.exports = errorUtils(errors.ERROR_MESSAGES, {
     */
     E2004: "The \"{0}\" data source field is inconsistent",
     /**
+    * @name Errors and Warnings_e2005
+    * @publicName E2005
+    */
+    E2005: "The value field \"{0}\" is absent in the data source or all its values are negative",
+    /**
     * @name Errors and Warnings_e2101
     * @publicName E2101
     */
@@ -68,11 +73,6 @@ module.exports = errorUtils(errors.ERROR_MESSAGES, {
     * @publicName E2203
     */
     E2203: "The range you are trying to set is invalid",
-    /**
-    * @name Errors and Warnings_e2204
-    * @publicName E2204
-    */
-    E2204: "The value field \"{0}\" is absent in the data source or all its values are negative",
     /**
     * @name Errors and Warnings_w2002
     * @publicName W2002
