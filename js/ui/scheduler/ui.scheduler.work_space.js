@@ -833,12 +833,12 @@ var SchedulerWorkSpace = Widget.inherit({
         var that = this;
         this._cellClickAction = this._createActionByOption("onCellClick", {
             afterExecute: function(e) {
-                that._clickHandler(e.args[0].event);
+                that._moveToClosestNonStub(e.args[0].event);
             }
         });
     },
 
-    _clickHandler: function(e) {
+    _moveToClosestNonStub: function(e) {
         var $target = $(e.target);
 
         if(this._showPopup && this._hasFocusClass($target)) {
