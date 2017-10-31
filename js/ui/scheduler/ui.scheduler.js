@@ -275,6 +275,7 @@ var Scheduler = Widget.inherit({
                 /**
                 * @name dxSchedulerOptions_views_dropDownAppointmentTemplate
                 * @publicName dropDownAppointmentTemplate
+                * @default "dropDownAppointment"
                 * @extends AppointmentTemplate
                 */
 
@@ -463,6 +464,7 @@ var Scheduler = Widget.inherit({
             /**
                 * @name dxSchedulerOptions_dropDownAppointmentTemplate
                 * @publicName dropDownAppointmentTemplate
+                * @default "dropDownAppointment"
                 * @extends AppointmentTemplate
                 */
             dropDownAppointmentTemplate: "dropDownAppointment",
