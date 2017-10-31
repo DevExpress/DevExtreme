@@ -441,6 +441,31 @@ QUnit.test("missing logic operator means AND", function(assert) {
     });
 });
 
+QUnit.test("conditions are not checked if it's not necessary", function(assert) {
+    assert.expect(2);
+
+    var done = assert.async();
+
+    var check = function(op) {
+        var callCount = 0;
+
+        return QUERY([{ f: 1 }, { f: 2 }])
+            .filter([["f", ">", 1], op, function() {
+                callCount++;
+            }])
+            .enumerate()
+            .done(function(r) {
+                assert.equal(callCount, 1);
+            });
+    };
+
+    $.when(
+        check("and"),
+        check("or")
+    ).done(done);
+});
+
+
 QUnit.test("string functions", function(assert) {
     assert.expect(4);
 

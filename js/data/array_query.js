@@ -226,33 +226,38 @@ var SortIterator = Iterator.inherit({
 var compileCriteria = (function() {
 
     var compileGroup = function(crit) {
-        /* jshint evil:true */
+        var ops = [];
 
-        var idx = 0,
-            bag = [],
-            ops = [],
-
-            groupOperator,
-            nextGroupOperator;
+        var isConjunctiveOperator = false;
+        var isConjunctiveNextOperator = false;
 
         iteratorUtils.each(crit, function() {
             if(Array.isArray(this) || typeUtils.isFunction(this)) {
-                if(bag.length > 1 && groupOperator !== nextGroupOperator) {
+                if(ops.length > 1 && isConjunctiveOperator !== isConjunctiveNextOperator) {
                     throw new errorsModule.errors.Error("E4019");
                 }
 
                 ops.push(compileCriteria(this));
-                bag.push("op[" + idx + "](d)");
-                idx++;
 
-                groupOperator = nextGroupOperator;
-                nextGroupOperator = "&&";
+                isConjunctiveOperator = isConjunctiveNextOperator;
+                isConjunctiveNextOperator = true;
             } else {
-                nextGroupOperator = dataUtils.isConjunctiveOperator(this) ? "&&" : "||";
+                isConjunctiveNextOperator = dataUtils.isConjunctiveOperator(this);
             }
         });
 
-        return (new Function("op", "return function(d) { return " + bag.join(" " + groupOperator + " ") + " }"))(ops);
+        return function(d) {
+            var result = isConjunctiveOperator;
+
+            for(var i = 0; i < ops.length; i++) {
+                if(ops[i](d) !== isConjunctiveOperator) {
+                    result = !isConjunctiveOperator;
+                    break;
+                }
+            }
+
+            return result;
+        };
     };
 
     var toString = function(value) {
