@@ -4,7 +4,7 @@ var extendUtils = require("./utils/extend");
 /**
 * @name globalConfig
 * @section commonObjectStructures
-* @publicName GlobalConfig
+* @publicName globalConfig
 * @type object
 * @namespace DevExpress
 * @module core/config
