@@ -1008,7 +1008,7 @@ module.exports = {
             } else {
                 rect = that._renderer.rect(positionFrom, breakStart, positionTo - positionFrom, scaleBreakPattern.size);
             }
-            rect.attr({ fill: scaleBreakPattern.id }).append(that._scaleBreaksGroup);
+            rect.attr({ fill: scaleBreakPattern.id }).append(that._axisBreaksGroup);
         },
 
         drawScaleBreaks: function(canvas) {
@@ -1044,8 +1044,6 @@ module.exports = {
                 isHorizontal: that._isHorizontal,
                 isWaved: breakStyle.line.toLowerCase() !== "straight"
             });
-
-            that._scaleBreaksGroup.clear();
 
             breaks.forEach(function(br) {
                 if(!br.gapSize) {

@@ -103,7 +103,7 @@ QUnit.test("Create axis", function(assert) {
     });
 
     assert.ok(axis, "Axis was created");
-    assert.equal(renderer.g.callCount, 10, "groups were created");
+    assert.equal(renderer.g.callCount, 11, "groups were created");
 
     assert.equal(renderer.g.getCall(0).returnValue._stored_settings["class"], "testWidget-testType-axis", "Group for axis was created");
     assert.equal(renderer.g.getCall(1).returnValue._stored_settings["class"], "testWidget-testType-strips", "Group for axis strips was created");
@@ -115,6 +115,7 @@ QUnit.test("Create axis", function(assert) {
     assert.equal(renderer.g.getCall(7).returnValue._stored_settings["class"], "testWidget-testType-constant-lines", "Group for axis constant lines was created");
     assert.equal(renderer.g.getCall(8).returnValue._stored_settings["class"], "testWidget-testType-constant-lines", "Group for axis constant lines was created");
     assert.equal(renderer.g.getCall(9).returnValue._stored_settings["class"], "testWidget-testType-axis-labels", "Group for axis labels was created");
+    assert.equal(renderer.g.getCall(10).returnValue._stored_settings["class"], "testWidget-testType-breaks", "Group for axis breaks was created");
 });
 
 QUnit.test("Create axis when axis class is undefined", function(assert) {
