@@ -507,15 +507,6 @@ exports.plugin = {
         this._exportMenu.dispose();
         this._exportMenu = null;
     },
-
-    extenders: {
-        _applySize: function() {
-            if(this._exportMenu) {
-                this._exportMenu.setOptions(this._getExportMenuOptions());
-            }
-        }
-    },
-
     members: {
         _getExportMenuOptions: function() {
             var userOptions = this._getOption("export") || {},
