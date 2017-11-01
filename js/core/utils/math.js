@@ -28,12 +28,16 @@ function getExponent(value) {
     return Math.abs(parseInt(value.toExponential().toString().split("e")[1]));
 }
 
+function getCoefficient(value) {
+    return Math.abs(parseFloat(value.toExponential().toString().split("e")[0]));
+}
+
 function adjust(value, interval) {
     var precision = getPrecision(interval || 0),
         exponent = getExponent(value),
         isEdge = browser.msie && browser.version >= 13;
 
-    precision = ((isEdge && exponent > 7) || precision > 7) ? 15 : 7; //fix toPrecision() bug in Edge (T570217)
+    precision = ((isEdge && (exponent + getPrecision(getCoefficient(value)) > 7)) || precision > 7) ? 15 : 7; //fix toPrecision() bug in Edge (T570217)
 
     return parseFloat(value.toPrecision(precision));
 }
