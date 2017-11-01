@@ -919,8 +919,8 @@ QUnit.test("Minor ticks with given minorTickCount", function(assert) {
     //act
     this.axis.createTicks(canvas(200));
 
-    assert.deepEqual(this.axis._minorTicks.map(value), [2, 4, 8, 10]);
-    assert.deepEqual(this.axis._minorTickInterval, 2);
+    assert.deepEqual(this.axis._minorTicks.map(value), [1.5, 3, 4.5, 7.5, 9, 10.5]);
+    assert.deepEqual(this.axis._minorTickInterval, 1.5);
 });
 
 QUnit.test("minorTickInterval has higher priority than minorTickCount", function(assert) {
@@ -1902,8 +1902,85 @@ QUnit.test("Minor ticks when there is only one major tick in the middle (big tic
     //act
     this.axis.createTicks(canvas(75));
 
-    assert.deepEqual(this.axis._minorTicks.map(value), [new Date(2012, 2, 20), new Date(2012, 2, 27), new Date(2012, 3, 8)].map(function(d) { return d.valueOf(); }));
+    assert.deepEqual(this.axis._minorTicks.map(value), [new Date(2012, 2, 22), new Date(2012, 2, 29), new Date(2012, 3, 8)].map(function(d) { return d.valueOf(); }));
     assert.deepEqual(this.axis._minorTickInterval, { days: 7 });
+});
+
+QUnit.test("Minor ticks with given minorTickCount", function(assert) {
+    this.createAxis();
+    this.updateOptions({
+        valueType: "datetime",
+        type: "continuous",
+        tickInterval: {
+            months: 1
+        },
+        minorTickCount: 3,
+        minorTick: {
+            visible: true
+        }
+    });
+
+    this.axis.setBusinessRange({ minVisible: new Date(2015, 11, 24), maxVisible: new Date(2017, 0, 7), addRange: function() { } });
+
+    //act
+    this.axis.createTicks(canvas(1388));
+
+    assert.deepEqual(this.axis._minorTickInterval, { days: 7, hours: 12 });
+    assert.ok(!this.incidentOccurred.called);
+});
+
+QUnit.test("Do not generate minor ticks more than minorTickCount", function(assert) {
+    this.createAxis();
+    this.updateOptions({
+        valueType: "datetime",
+        type: "continuous",
+        tickInterval: {
+            months: 1
+        },
+        minorTickCount: 3,
+        minorTick: {
+            visible: true
+        }
+    });
+
+    this.axis.setBusinessRange({ minVisible: new Date(2016, 11, 24), maxVisible: new Date(2017, 1, 7), addRange: function() { } });
+
+    //act
+    this.axis.createTicks(canvas(400));
+
+    var minorTicks = this.axis._minorTicks.filter(function(item) {
+        var value = item.value;
+        return value.getMonth() === 0;
+    });
+
+    assert.equal(minorTicks.length, 3);
+});
+
+QUnit.test("Do not generate minor ticks more than minorTickCount before first tick", function(assert) {
+    this.createAxis();
+    this.updateOptions({
+        valueType: "datetime",
+        type: "continuous",
+        tickInterval: {
+            months: 1
+        },
+        minorTickCount: 3,
+        minorTick: {
+            visible: true
+        }
+    });
+
+    this.axis.setBusinessRange({ minVisible: new Date(2016, 0, 15), maxVisible: new Date(2016, 2, 7), addRange: function() { } });
+
+    //act
+    this.axis.createTicks(canvas(400));
+
+    var minorTicks = this.axis._minorTicks.filter(function(item) {
+        var value = item.value;
+        return value.getMonth() === 0;
+    });
+
+    assert.equal(minorTicks.length, 2);
 });
 
 QUnit.module("Polar axes", environment);

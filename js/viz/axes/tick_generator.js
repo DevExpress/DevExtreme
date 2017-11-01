@@ -295,11 +295,12 @@ function calculateTicks(addInterval, correctMinValue) {
 }
 
 function calculateMinorTicks(updateTickInterval, addInterval, correctMinValue, correctTickValue, ceil) {
-    return function(min, max, majorTicks, minorTickInterval, tickInterval, breaks) {
+    return function(min, max, majorTicks, minorTickInterval, tickInterval, breaks, maxCount) {
         var factor = tickInterval / minorTickInterval,
             lastMajor = majorTicks[majorTicks.length - 1],
             firstMajor = majorTicks[0],
-            push = pushTick(breaks);
+            push = pushTick(breaks),
+            tickBalance = maxCount - 1;
 
         minorTickInterval = updateTickInterval(minorTickInterval, firstMajor, factor);
 
@@ -308,16 +309,18 @@ function calculateMinorTicks(updateTickInterval, addInterval, correctMinValue, c
         }
 
         //min to first tick
-        var cur = correctMinValue(min, minorTickInterval, min),
+        var cur = correctTickValue(correctMinValue(min, tickInterval, min), minorTickInterval, min),
             ticks = [];
 
-        while(cur < firstMajor) {
-            push(ticks, cur);
+        while(cur < firstMajor && (!tickBalance || tickBalance > 0)) {
+            cur >= min && push(ticks, cur);
+            tickBalance--;
             cur = addInterval(cur, minorTickInterval);
         }
 
         //between ticks
         var middleTicks = majorTicks.reduce(function(r, tick) {
+            tickBalance = maxCount - 1;
             if(r.prevTick === null) {
                 r.prevTick = tick;
                 return r;
@@ -325,8 +328,9 @@ function calculateMinorTicks(updateTickInterval, addInterval, correctMinValue, c
 
             minorTickInterval = updateTickInterval(minorTickInterval, tick, factor);
             var cur = correctTickValue(r.prevTick, minorTickInterval, min);
-            while(cur < tick) {
+            while(cur < tick && (!tickBalance || tickBalance > 0)) {
                 push(r.minors, cur);
+                tickBalance--;
                 cur = addInterval(cur, minorTickInterval);
             }
 
@@ -452,13 +456,15 @@ function generator(options, getBusinessDelta, calculateTickInterval, calculateMi
             majorTicks = ticks.ticks;
 
         if(!minorTickInterval && minorTickCount) {
-            minorTickInterval = minorBusinessDelta / minorTickCount;
+            minorTickInterval = getTickIntervalByCustomTicks([minorBusinessDelta / (minorTickCount + 1), minorBusinessDelta / (minorTickCount + 1) * 2]);
+        } else {
+            minorTickCount = undefined;
         }
 
         minorTickInterval = correctUserTickInterval(minorTickInterval, minorBusinessDelta, minorScreenDelta);
 
         minorTickInterval = calculateMinorTickInterval(minorBusinessDelta, minorScreenDelta, minorTickInterval, options.minorAxisDivisionFactor);
-        ticks.minorTicks = ticks.minorTicks.concat(calculateMinorTicks(data.min, data.max, majorTicks, minorTickInterval, tickInterval, breaks));
+        ticks.minorTicks = ticks.minorTicks.concat(calculateMinorTicks(data.min, data.max, majorTicks, minorTickInterval, tickInterval, breaks, minorTickCount));
         ticks.minorTickInterval = minorTickInterval;
 
         return ticks;
@@ -514,7 +520,7 @@ function numericGenerator(options) {
         getTickIntervalByCustomTicks(getValue, getValue),
         getValue,
         calculateTicks(addInterval, options.endOnTick ? floor : ceil),
-        calculateMinorTicks(getValue, addInterval, options.endOnTick ? floor : ceil, addInterval, getValue),
+        calculateMinorTicks(getValue, addInterval, floor, addInterval, getValue),
         getScaleBreaksProcessor(getValue, function(value, correction) {
             return value + correction;
         })
@@ -541,7 +547,7 @@ function logarithmicGenerator(options) {
         getTickIntervalByCustomTicks(log, getValue),
         getValue,
         calculateTicks(addIntervalLog(base), options.endOnTick ? floor : ceil),
-        calculateMinorTicks(updateTickInterval, addInterval, ceilNumber, ceilNumber, ceil),
+        calculateMinorTicks(updateTickInterval, addInterval, floor, ceilNumber, ceil),
         getScaleBreaksProcessor(getValue, function(value, correction) {
             return raise(log(value) + correction);
         })
@@ -595,7 +601,7 @@ function dateGenerator(options) {
         getTickIntervalByCustomTicks(getValue, dateUtils.convertMillisecondsToDateUnits),
         dateToMilliseconds,
         calculateTicks(addIntervalDate, options.endOnTick ? floor : ceil),
-        calculateMinorTicks(getValue, addIntervalDate, options.endOnTick ? floor : ceil, addIntervalDate, getValue),
+        calculateMinorTicks(getValue, addIntervalDate, floor, addIntervalDate, getValue),
         getScaleBreaksProcessor(dateToMilliseconds, function(value, correction) {
             return new Date(value.getTime() + correction);
         })
