@@ -381,6 +381,22 @@ QUnit.test("forceTickInterval true. No user's tickIntervsal, calculated tickInte
 
 QUnit.module("Numeric. Misc", environment);
 
+QUnit.test("Adjust numeric ticks", function(assert) {
+    this.createAxis();
+    this.updateOptions({
+        argumentType: "numeric",
+        type: "continuous"
+    });
+
+    this.axis.setBusinessRange({ minVisible: 1.2e-7, maxVisible: 1.22e-7, addRange: function() { } });
+
+    //act
+    this.axis.createTicks(canvas(1000));
+
+    assert.deepEqual(this.axis._majorTicks.map(value), [1.2e-7, 1.202e-7, 1.204e-7, 1.206e-7, 1.208e-7, 1.21e-7, 1.212e-7, 1.214e-7, 1.216e-7, 1.218e-7, 1.22e-7]);
+    assert.deepEqual(this.axis._tickInterval, 2e-10);
+});
+
 QUnit.test("Without endOnTick - calculate ticks inside data bounds", function(assert) {
     this.createAxis();
     this.updateOptions({
