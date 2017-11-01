@@ -167,6 +167,9 @@
     }
   },
   {
+    "name": "integration/jquery"
+  },
+  {
     "name": "framework/view_cache",
     "exports": {
       "default": "framework.ViewCache"
