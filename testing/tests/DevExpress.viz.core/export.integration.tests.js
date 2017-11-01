@@ -301,7 +301,7 @@ QUnit.test("Depends on theme", function(assert) {
 
     widget.option("theme", "test-theme");
 
-    assert.strictEqual(this.exportMenu.setOptions.callCount, 1);
+    assert.strictEqual(this.exportMenu.setOptions.callCount, 2);
 });
 
 QUnit.test('Print method', function(assert) {
@@ -331,4 +331,18 @@ QUnit.test('Print method', function(assert) {
     assert.deepEqual(svgNode.style, { backgroundColor: "#ffffff" });
 
     window.open.restore();
+});
+
+QUnit.test("Widget updates exportOptions on resize", function(assert) {
+    var widget = this.createWidget();
+    this.exportMenu.setOptions.reset();
+
+    widget.option({
+        size: {
+            width: 100
+        }
+    });
+
+    assert.equal(this.exportMenu.setOptions.callCount, 1);
+    assert.deepEqual(this.exportMenu.setOptions.lastCall.args[0].exportOptions.width, 100);
 });
