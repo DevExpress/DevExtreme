@@ -1448,6 +1448,7 @@ QUnit.test("Do not recalculate canvas on zooming - only draw axes in old canvas"
     assert.equal(valAxisStub.shift.called, false);
 
     assert.ok(valAxisStub.drawScaleBreaks.called, "draw scaleBreaks for value axis");
+    assert.ok(argAxisStub.drawScaleBreaks.called, "draw scaleBreaks for argument axis");
 });
 
 QUnit.module("Axes synchronization", environment);

@@ -661,7 +661,7 @@ var dxChart = AdvancedChart.inherit({
         if(!drawOptions.adjustAxes) {
             drawAxesWithTicks(verticalAxes, !rotated && synchronizeMultiAxes, panesCanvases, panesBorderOptions);
             drawAxesWithTicks(horizontalAxes, rotated && synchronizeMultiAxes, panesCanvases, panesBorderOptions);
-            that._valueAxes.forEach(function(axis) {
+            that._valueAxes.concat(that._argumentAxes).forEach(function(axis) {
                 axis.drawScaleBreaks();
             });
             return;
