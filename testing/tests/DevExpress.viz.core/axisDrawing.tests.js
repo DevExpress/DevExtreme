@@ -8693,10 +8693,10 @@ QUnit.test("Drawing scale breaks for value axis", function(assert) {
     }, "pattern was created");
 
     assert.equal(this.renderer.rect.callCount, 1);
-    assert.ok(scaleBreaksGroup.clear.called);
+    assert.ok(scaleBreaksGroup.children[0].clear.called);
     assert.deepEqual(this.renderer.rect.lastCall.args, [10, 20, 80, 6]);
     assert.deepEqual(this.renderer.rect.lastCall.returnValue.attr.args[0][0], { fill: "scaleBreak_id" });
-    assert.equal(this.renderer.rect.lastCall.returnValue.append.args[0][0], scaleBreaksGroup);
+    assert.equal(this.renderer.rect.lastCall.returnValue.append.args[0][0], scaleBreaksGroup.children[0]);
 });
 
 QUnit.test("Drawing scale breaks using drawScaleBreaks method", function(assert) {
@@ -8724,7 +8724,7 @@ QUnit.test("Drawing scale breaks using drawScaleBreaks method", function(assert)
     assert.equal(this.renderer.rect.callCount, 1);
     assert.deepEqual(this.renderer.rect.lastCall.args, [10, 20, 80, 6]);
     assert.deepEqual(this.renderer.rect.lastCall.returnValue.attr.args[0][0], { fill: "scaleBreak_id" });
-    assert.equal(this.renderer.rect.lastCall.returnValue.append.args[0][0], scaleBreaksGroup);
+    assert.equal(this.renderer.rect.lastCall.returnValue.append.args[0][0], scaleBreaksGroup.children[0]);
 });
 
 QUnit.test("Drawing scale with custom canvas", function(assert) {
@@ -8755,7 +8755,7 @@ QUnit.test("Drawing scale with custom canvas", function(assert) {
     assert.equal(this.renderer.rect.callCount, 1);
     assert.deepEqual(this.renderer.rect.lastCall.args, [30, 20, 60, 6]);
     assert.deepEqual(this.renderer.rect.lastCall.returnValue.attr.args[0][0], { fill: "scaleBreak_id" });
-    assert.equal(this.renderer.rect.lastCall.returnValue.append.args[0][0], scaleBreaksGroup);
+    assert.equal(this.renderer.rect.lastCall.returnValue.append.args[0][0], scaleBreaksGroup.children[0]);
 });
 
 QUnit.test("Drawing scale breaks for value axis, chart is rotated", function(assert) {
