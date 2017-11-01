@@ -1,11 +1,11 @@
 "use strict";
 
 var proto = require("./tree_map.base").prototype,
-    common = require("./common");
+    _expand = require("../core/helpers").expand;
 
 require("./api");
 
-common.expand(proto, "_extendProxyType", function(proto) {
+_expand(proto, "_extendProxyType", function(proto) {
     var that = this;
 
     proto.showTooltip = function(coords) {
@@ -13,14 +13,14 @@ common.expand(proto, "_extendProxyType", function(proto) {
     };
 });
 
-common.expand(proto, "_onNodesCreated", function() {
+_expand(proto, "_onNodesCreated", function() {
     if(this._tooltipIndex >= 0) {
         this._tooltip.hide();
     }
     this._tooltipIndex = -1;
 });
 
-common.expand(proto, "_onTilingPerformed", function() {
+_expand(proto, "_onTilingPerformed", function() {
     if(this._tooltipIndex >= 0) {
         this._moveTooltip(this._nodes[this._tooltipIndex]);
     }
