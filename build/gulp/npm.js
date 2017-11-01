@@ -132,6 +132,11 @@ gulp.task('npm-dts-generator', function() {
 
         var name = moduleMeta.name + '.d.ts',
             content = 'import DevExpress from \'' + relPath + '\';' + exports;
+
+        if(moduleMeta.name === 'integration/jquery') {
+            content = 'import \'jquery\';';
+        }
+
         return file(name, content, { src: true });
     });
 
