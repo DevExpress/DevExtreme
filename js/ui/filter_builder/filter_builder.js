@@ -750,12 +750,11 @@ var FilterBuilder = Widget.inherit({
         return this._createButtonWithMenu({
             menu: {
                 items: [{
-                    caption: messageLocalization.format("dxFilterBuilder-addGroup"),
-                    click: addGroupHandler
-                },
-                {
                     caption: messageLocalization.format("dxFilterBuilder-addCondition"),
                     click: addConditionHandler
+                }, {
+                    caption: messageLocalization.format("dxFilterBuilder-addGroup"),
+                    click: addGroupHandler
                 }],
                 displayExpr: "caption",
                 onItemClick: function(e) {

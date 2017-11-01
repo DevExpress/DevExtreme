@@ -430,7 +430,7 @@ QUnit.module("Rendering", function() {
 
         assert.ok($(".dx-filterbuilder-add-condition").length > 0);
 
-        $(".dx-menu-item-text").eq(1).trigger("dxclick");
+        $(".dx-menu-item-text").eq(0).trigger("dxclick");
 
         assert.ok($(".dx-filterbuilder-add-condition").length === 0);
         assert.deepEqual(instance._model, [["State", "<>", "Test"], ["CompanyName", "contains", ""]]);
@@ -450,7 +450,7 @@ QUnit.module("Rendering", function() {
                 fields: fields
             }).dxFilterBuilder("instance");
 
-        clickByButtonAndSelectMenuItem($("." + FILTER_BUILDER_IMAGE_ADD_CLASS), 0);
+        clickByButtonAndSelectMenuItem($("." + FILTER_BUILDER_IMAGE_ADD_CLASS), 1);
         assert.deepEqual(instance._model, [["State", "<>", "Test"], ["and"]]);
         assert.deepEqual(instance.option("value"), ["State", "<>", "Test"]);
 
@@ -700,12 +700,12 @@ QUnit.module("on value changed", function() {
 
         // add group
         value = instance.option("value");
-        clickByButtonAndSelectMenuItem($("." + FILTER_BUILDER_IMAGE_ADD_CLASS), 0);
+        clickByButtonAndSelectMenuItem($("." + FILTER_BUILDER_IMAGE_ADD_CLASS), 1);
         assert.equal(instance.option("value"), value);
 
         // add inner condition
         value = instance.option("value");
-        clickByButtonAndSelectMenuItem($("." + FILTER_BUILDER_IMAGE_ADD_CLASS).eq(1), 1);
+        clickByButtonAndSelectMenuItem($("." + FILTER_BUILDER_IMAGE_ADD_CLASS).eq(1), 0);
         assert.notEqual(instance.option("value"), value);
 
         //remove group
@@ -724,7 +724,7 @@ QUnit.module("on value changed", function() {
             }).dxFilterBuilder("instance");
 
         // add condition
-        clickByButtonAndSelectMenuItem($("." + FILTER_BUILDER_IMAGE_ADD_CLASS), 1);
+        clickByButtonAndSelectMenuItem($("." + FILTER_BUILDER_IMAGE_ADD_CLASS), 0);
 
         assert.notEqual(instance.option("value"), value);
 
@@ -744,7 +744,7 @@ QUnit.module("on value changed", function() {
             }).dxFilterBuilder("instance");
 
         // add condition
-        clickByButtonAndSelectMenuItem($("." + FILTER_BUILDER_IMAGE_ADD_CLASS), 1);
+        clickByButtonAndSelectMenuItem($("." + FILTER_BUILDER_IMAGE_ADD_CLASS), 0);
 
         assert.equal(instance.option("value"), value);
 
