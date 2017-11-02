@@ -15,6 +15,29 @@ function getContainer() {
     return $('<div>').appendTo("#qunit-fixture");
 }
 
+function getPieChecker(x, y, r, assert, done) {
+    return function(e) {
+        assert.strictEqual(e.component.layoutManager.applyEqualPieChartLayout.lastCall.args[0][0], e.component.series[0]);
+        assert.deepEqual(e.component.layoutManager.applyEqualPieChartLayout.lastCall.args[1], {
+            drawOptions: {
+                adjustAxes: true,
+                animate: true,
+                animationPointsLimit: 300,
+                drawLegend: true,
+                drawTitle: true,
+                force: true,
+                hideLayoutLabels: true,
+                recreateCanvas: true
+            },
+            x: x,
+            y: y,
+            radius: r
+        });
+
+        done();
+    };
+}
+
 function setupMocks() {
     insertMockFactory();
 
@@ -175,7 +198,7 @@ QUnit.test("Create pies without groups. Do not ask for common layout", function(
 });
 
 QUnit.test("Create pies with same group. Ask for common layout", function(assert) {
-    var done = assert.async(2);
+    var checkPie = getPieChecker(150, 250, 200, assert, assert.async(2));
 
     seriesMockData.series.push(new MockSeries({ points: this.stubPoints }));
     seriesMockData.series.push(new MockSeries({ points: this.stubPoints }));
@@ -196,15 +219,6 @@ QUnit.test("Create pies with same group. Ask for common layout", function(assert
     },
     { radiusInner: 0, radiusOuter: 200, centerX: 150, centerY: 250, canvas: {} },
     { radiusInner: 0, radiusOuter: 200, centerX: 150, centerY: 250, canvas: {} });
-
-    function checkPie(e) {
-        assert.equal(e.component.layoutManager.applyEqualPieChartLayout.callCount, 1);
-        assert.deepEqual(e.component.layoutManager.applyEqualPieChartLayout.lastCall.args, [
-            e.component.series,
-            { radius: 200, x: 150, y: 250 }
-        ]);
-        done();
-    }
 });
 
 QUnit.test("Create two sets of pies with different groups. Ask corresponding common layout", function(assert) {
@@ -219,7 +233,7 @@ QUnit.test("Create two sets of pies with different groups. Ask corresponding com
         sizeGroup: "group1",
         dataSource: dataSourceTemplate,
         series: [{}],
-        onDrawn: checkPie(150, 250, 200)
+        onDrawn: getPieChecker(150, 250, 200, assert, done)
     },
     { radiusInner: 0, radiusOuter: 300, centerX: 100, centerY: 200, canvas: {} },
     { radiusInner: 0, radiusOuter: 200, centerX: 150, centerY: 250, canvas: {} });
@@ -227,7 +241,7 @@ QUnit.test("Create two sets of pies with different groups. Ask corresponding com
         sizeGroup: "group1",
         dataSource: dataSourceTemplate,
         series: [{}],
-        onDrawn: checkPie(150, 250, 200)
+        onDrawn: getPieChecker(150, 250, 200, assert, done)
     },
     { radiusInner: 0, radiusOuter: 200, centerX: 150, centerY: 250, canvas: {} },
     { radiusInner: 0, radiusOuter: 200, centerX: 150, centerY: 250, canvas: {} });
@@ -236,7 +250,7 @@ QUnit.test("Create two sets of pies with different groups. Ask corresponding com
         sizeGroup: "group2",
         dataSource: dataSourceTemplate,
         series: [{}],
-        onDrawn: checkPie(200, 300, 100)
+        onDrawn: getPieChecker(200, 300, 100, assert, done)
     },
     { radiusInner: 0, radiusOuter: 100, centerX: 200, centerY: 300, canvas: {} },
     { radiusInner: 0, radiusOuter: 100, centerX: 200, centerY: 300, canvas: {} });
@@ -244,25 +258,14 @@ QUnit.test("Create two sets of pies with different groups. Ask corresponding com
         sizeGroup: "group2",
         dataSource: dataSourceTemplate,
         series: [{}],
-        onDrawn: checkPie(200, 300, 100)
+        onDrawn: getPieChecker(200, 300, 100, assert, done)
     },
     { radiusInner: 0, radiusOuter: 200, centerX: 150, centerY: 250, canvas: {} },
     { radiusInner: 0, radiusOuter: 200, centerX: 150, centerY: 250, canvas: {} });
-
-    function checkPie(x, y, radius) {
-        return function(e) {
-            assert.equal(e.component.layoutManager.applyEqualPieChartLayout.callCount, 1);
-            assert.deepEqual(e.component.layoutManager.applyEqualPieChartLayout.lastCall.args, [
-                e.component.series,
-                { radius: radius, x: x, y: y }
-            ]);
-            done();
-        };
-    }
 });
 
 QUnit.test("Have pies with group. Add new pie to the same group. Ask common layout for all pies", function(assert) {
-    var done = assert.async(3);
+    var checkPie = getPieChecker(200, 300, 100, assert, assert.async(3));
 
     seriesMockData.series.push(new MockSeries({ points: this.stubPoints }));
     seriesMockData.series.push(new MockSeries({ points: this.stubPoints }));
@@ -311,14 +314,6 @@ QUnit.test("Have pies with group. Add new pie to the same group. Ask common layo
     },
     { radiusInner: 0, radiusOuter: 200, centerX: 150, centerY: 250, canvas: {} },
     { radiusInner: 0, radiusOuter: 200, centerX: 150, centerY: 250, canvas: {} });
-
-    function checkPie(e) {
-        assert.deepEqual(e.component.layoutManager.applyEqualPieChartLayout.lastCall.args, [
-            e.component.series,
-            { x: 200, y: 300, radius: 100 }
-        ]);
-        done();
-    }
 });
 
 QUnit.module("Misc", environment);
