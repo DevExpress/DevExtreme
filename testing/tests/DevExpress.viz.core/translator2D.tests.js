@@ -857,14 +857,14 @@ QUnit.test("Untranslate. Scale breaks. Values on the breaks and should not be un
     assert.strictEqual(translator.untranslate(1390), null);
 });
 
-QUnit.test("Untranslate. Scale breaks. Values on the breaks and should be untranslated to left side of break if direction<0", function(assert) {
+QUnit.test("Untranslate (from). Scale breaks. Values on the breaks and should be untranslated to left side of break if direction<0", function(assert) {
     var translator = createTranslatorWithScaleBreaks.call(this, {});
 
     assert.strictEqual(translator.from(610, -1), 150);
     assert.strictEqual(translator.from(1390, -1), 590);
 });
 
-QUnit.test("Untranslate. Scale breaks. Values on the breaks and should be untranslated to right side of break if direction>0", function(assert) {
+QUnit.test("Untranslate (from). Scale breaks. Values on the breaks and should be untranslated to right side of break if direction>0", function(assert) {
     var translator = createTranslatorWithScaleBreaks.call(this, {});
 
     assert.strictEqual(translator.from(610, 1), 200);
@@ -998,6 +998,24 @@ QUnit.test("Untranslate. With scale breaks. Value in the scale break and shouldn
     });
 
     assert.deepEqual(translator.untranslate(950), null);
+});
+
+QUnit.test("Untranslate (from). Scale breaks. Values in the breaks and should be untranslated to left side of break if direction<0", function(assert) {
+    var translator = createTranslatorWithScaleBreaks.call(this, {
+        min: new Date(2012, 8, 1), max: new Date(2012, 8, 2),
+        breaks: [{ from: new Date(2012, 8, 1, 10), to: new Date(2012, 8, 1, 11) }, { from: new Date(2012, 8, 1, 20), to: new Date(2012, 8, 1, 21) }]
+    });
+
+    assert.deepEqual(translator.from(950, -1), new Date(2012, 8, 1, 10));
+});
+
+QUnit.test("Untranslate (from). Scale breaks. Values in the breaks and should be untranslated to right side of break if direction>0", function(assert) {
+    var translator = createTranslatorWithScaleBreaks.call(this, {
+        min: new Date(2012, 8, 1), max: new Date(2012, 8, 2),
+        breaks: [{ from: new Date(2012, 8, 1, 10), to: new Date(2012, 8, 1, 11) }, { from: new Date(2012, 8, 1, 20), to: new Date(2012, 8, 1, 21) }]
+    });
+
+    assert.deepEqual(translator.from(950, 1), new Date(2012, 8, 1, 11));
 });
 
 QUnit.test('GetInterval', function(assert) {
@@ -1198,6 +1216,28 @@ QUnit.test("Untranslate. Scale breaks. Values on the breaks and should not be un
 
     assert.strictEqual(translator.untranslate(670), null);
     assert.strictEqual(translator.untranslate(1170), null);
+});
+
+QUnit.test("Untranslate (from). Scale breaks. Values in the breaks and should be untranslated to left side of break if direction<0", function(assert) {
+    var translator = createTranslatorWithScaleBreaks.call(this, {
+            min: 0.0001, max: 1000000,
+            breaks: [{ from: 0.001, to: 0.1 }, { from: 100, to: 10000 }],
+            breakSize: 50
+        }),
+        doubleDelta = 0.00001;
+
+    assert.roughEqual(translator.from(670, -1), 0.001, doubleDelta);
+});
+
+QUnit.test("Untranslate (from). Scale breaks. Values in the breaks and should be untranslated to right side of break if direction>0", function(assert) {
+    var translator = createTranslatorWithScaleBreaks.call(this, {
+            min: 0.0001, max: 1000000,
+            breaks: [{ from: 0.001, to: 0.1 }, { from: 100, to: 10000 }],
+            breakSize: 50
+        }),
+        doubleDelta = 0.00001;
+
+    assert.roughEqual(translator.from(670, 1), 0.1, doubleDelta);
 });
 
 QUnit.test('GetInterval', function(assert) {

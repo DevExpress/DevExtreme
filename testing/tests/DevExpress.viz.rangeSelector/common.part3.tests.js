@@ -1091,6 +1091,8 @@ QUnit.test("Draw scale breaks", function(assert) {
         }
     });
 
+    assert.ok(this.axis.validate.called);
+    assert.ok(this.axis.validate.calledBefore(this.axis.setBusinessRange));
     assert.deepEqual(this.axis.drawScaleBreaks.lastCall.args[0], {
         start: 20,
         end: 44

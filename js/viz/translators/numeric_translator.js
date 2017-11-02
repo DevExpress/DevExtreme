@@ -150,9 +150,9 @@ module.exports = {
 
         if(prop.inBreak === true) {
             if(direction > 0) {
-                return prop.break.to;
+                return prop.break.trTo;
             } else if(direction < 0) {
-                return prop.break.from;
+                return prop.break.trFrom;
             } else {
                 return null;
             }

@@ -2409,6 +2409,25 @@ QUnit.test("Remove scale break if it less than tickInterval", function(assert) {
     }]);
 });
 
+QUnit.test("Remove scale break if it less than tickInterval, logarithmic", function(assert) {
+    this.createAxis();
+    this.updateOptions({
+        argumentType: "numeric",
+        type: "logarithmic",
+        logarithmBase: 10,
+        breakStyle: { width: 0 },
+        breaks: [{ startValue: 10, endValue: 50 }]
+    });
+
+    this.axis.setBusinessRange({ minVisible: 0.001, maxVisible: 100 });
+
+    //act
+    this.axis.createTicks(canvas(200));
+
+    assert.equal(this.axis._tickInterval, 2, "interval");
+    assert.deepEqual(this.translator.updateBusinessRange.lastCall.args[0].breaks, []);
+});
+
 QUnit.test("Pass correct range in translator when value margins are enabled. Margins are calculated using original breaks", function(assert) {
     this.createAxis();
     this.updateOptions({
