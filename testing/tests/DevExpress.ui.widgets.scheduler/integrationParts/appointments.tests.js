@@ -4469,12 +4469,12 @@ QUnit.test("Appointment should have right width in workspace with timezone", fun
         endDayHour: 24,
         timeZone: "Europe/Kiev"
     });
-    var timezoneDiff = (new Date(2017, 4, 4).getTimezoneOffset() - new Date().getTimezoneOffset()) * 60000;
+    var daylightDiff = (new Date(2017, 4, 4).getTimezoneOffset() - new Date().getTimezoneOffset()) * 60000;
 
     this.instance.addAppointment({
         text: "Task 1",
-        startDate: new Date(2017, 4, 4).getTime() + timezoneDiff,
-        endDate: new Date(2017, 4, 5).getTime() + timezoneDiff
+        startDate: new Date(2017, 4, 4).getTime() + daylightDiff,
+        endDate: new Date(2017, 4, 5).getTime() + daylightDiff
     });
 
     var $appointment = $(this.instance.$element()).find(".dx-scheduler-work-space .dx-scheduler-appointment").eq(0),

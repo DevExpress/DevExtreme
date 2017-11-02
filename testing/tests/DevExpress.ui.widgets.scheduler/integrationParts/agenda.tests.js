@@ -1119,7 +1119,7 @@ QUnit.test("All-day appointment should not be duplicated with custom timezone", 
             return new Date(date.getTime() - timezoneDifference);
         };
 
-    var timezoneDiff = (new Date(2016, 4, 3).getTimezoneOffset() - new Date().getTimezoneOffset()) * 60000;
+    var daylightDiff = (new Date(2016, 4, 3).getTimezoneOffset() - new Date().getTimezoneOffset()) * 60000;
 
     this.createInstance({
         views: ["agenda"],
@@ -1127,8 +1127,8 @@ QUnit.test("All-day appointment should not be duplicated with custom timezone", 
         currentDate: new Date(2016, 4, 3),
         timeZone: "Asia/Ashkhabad",
         dataSource: [{
-            startDate: getDate(new Date(2016, 4, 4)).getTime() - timezoneDiff,
-            endDate: getDate(new Date(2016, 4, 5)).getTime() - timezoneDiff
+            startDate: getDate(new Date(2016, 4, 4)).getTime() - daylightDiff,
+            endDate: getDate(new Date(2016, 4, 5)).getTime() - daylightDiff
         }]
     });
 
