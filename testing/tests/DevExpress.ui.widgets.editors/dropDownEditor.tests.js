@@ -414,7 +414,6 @@ QUnit.testInActiveWindow("editor should save focus on clearbutton clicking, fiel
     });
 
     $dropDownEditor.find(".dx-texteditor-input").focus();
-    $dropDownEditor.find(".dx-texteditor-input").focusin();
 
     assert.ok($dropDownEditor.find(".dx-texteditor").hasClass("dx-state-focused"), "Widget is focused");
 
