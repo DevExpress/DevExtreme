@@ -46,10 +46,13 @@ var setupModule = function() {
             initViews: true
         });
     };
+
+    this.clock = sinon.useFakeTimers();
 };
 
 var teardownModule = function() {
     this.dispose();
+    this.clock.restore();
 };
 
 QUnit.module("Selection", { beforeEach: setupModule, afterEach: teardownModule });
@@ -204,7 +207,7 @@ QUnit.test("Checkboxes should not be rendered if selection is not multiple", fun
 });
 
 QUnit.test("Click on select checkbox should works correctly", function(assert) {
-   //arrange
+    //arrange
     var $testElement = $('#treeList');
 
     this.options.selection = { mode: "multiple", showCheckBoxesMode: "always" };
@@ -386,6 +389,30 @@ QUnit.test("Not select row when click by expanding icon", function(assert) {
     //assert
     assert.equal(this.option("selectedRowKeys"), undefined, "checking the 'selectedRowKeys' option - should be empty");
     assert.notOk(this.dataController.items()[0].isSelected, "row isn't selected");
+});
+
+QUnit.testInActiveWindow("Focused border is not displayed around expandable cell when row is selected", function(assert) {
+    //arrange
+    var $testElement = $('#treeList');
+
+    this.element = function() {
+        return $testElement;
+    };
+
+    this.options.selection = { mode: "multiple", showCheckBoxesMode: "always" };
+
+    this.setupTreeList();
+    this.rowsView.render($testElement);
+
+    //act
+    var $expandableCell = $testElement.find(".dx-treelist-cell-expandable").first(),
+        $selectCheckbox = $expandableCell.find(".dx-select-checkbox").first();
+
+    $selectCheckbox.focus();
+    this.clock.tick();
+
+    //assert
+    assert.ok(!$expandableCell.hasClass("dx-focused"));
 });
 
 QUnit.module("Recursive selection", { beforeEach: function() {
