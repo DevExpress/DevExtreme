@@ -12,6 +12,7 @@ QUnit.testStart(function() {
 });
 
 require("common.css!");
+require("generic_light.css!");
 
 require("ui/data_grid/ui.data_grid");
 
@@ -1286,6 +1287,41 @@ QUnit.test("State of the 'Apply filter' button should be saved after repaint", f
     assert.notOk($button.hasClass("dx-state-disabled"), "button is enabled");
 });
 
+QUnit.testInActiveWindow("Title is not appended for menu item of filter row", function(assert) {
+    //arrange
+    var testElement = $('#container'),
+        $filterMenu,
+        $rootMenuItem;
+
+    $.extend(this.columns, [{
+        caption: 'Column 1',
+        allowFiltering: true,
+        filterOperations: ['=', '<>']
+    }]);
+
+    this.options.cellHintEnabled = true;
+    this.options.filterRow.operationDescriptions = {
+        'equal': 'test equals',
+        'notEqual': 'test not equals'
+    };
+
+    //act
+    this.columnHeadersView.render(testElement);
+
+    $filterMenu = $(".dx-filter-menu").first();
+
+    $filterMenu.trigger("focusin");
+    this.clock.tick();
+
+    $rootMenuItem = $filterMenu.find(".dx-menu-item");
+    $rootMenuItem.trigger('mouseenter');
+
+    $filterMenu.trigger("mousemove");
+
+    //assert
+    assert.equal($filterMenu.attr("title"), undefined, "title of menu item");
+});
+
 QUnit.module('Filter Row with real dataController and columnsController', {
     beforeEach: function() {
         this.items = [
@@ -1494,7 +1530,7 @@ QUnit.test('Filter row - focus editor', function(assert) {
     that.editorFactoryController.focus($testElement.find("td").first());
     that.clock.tick();
 
-    assert.roughEqual($testElement.find(".dx-datagrid-focus-overlay").outerHeight(), $testElement.find("td").first().outerHeight(), 1, "height focus overlay");
+    assert.roughEqual($testElement.find(".dx-datagrid-focus-overlay").outerHeight(), $testElement.find("td").first().outerHeight(), 1.01, "height focus overlay");
 });
 
 QUnit.test("Filter row with menu for number column", function(assert) {
