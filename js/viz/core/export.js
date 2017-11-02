@@ -519,7 +519,7 @@ exports.plugin = {
     },
 
     extenders: {
-        _applySize: function() {
+        _change_LAYOUT: function() {
             if(this._exportMenu) {
                 this._exportMenu.setOptions(this._getExportMenuOptions());
             }
