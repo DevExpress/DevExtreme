@@ -25,8 +25,8 @@ module.exports = {
 
     to: numericTranslator.to,
 
-    from: function(position) {
-        var result = numericTranslator.from.call(this, position);
+    from: function(position, direction) {
+        var result = numericTranslator.from.call(this, position, direction);
         return result === null ? result : new Date(result);
     },
 

@@ -52,8 +52,8 @@ module.exports = {
         return numericTranslator.to.call(this, getLog(value, this._businessRange.base));
     },
 
-    from: function(position) {
-        var result = numericTranslator.from.call(this, position);
+    from: function(position, direction) {
+        var result = numericTranslator.from.call(this, position, direction);
         return result !== null ? raiseTo(result, this._businessRange.base) : result;
     },
 

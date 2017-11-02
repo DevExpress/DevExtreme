@@ -485,14 +485,14 @@ function generator(options, getBusinessDelta, calculateTickInterval, calculateMi
     };
 }
 
-function getScaleBreaksProcessor(convertTickInterval, addCorrection) {
+function getScaleBreaksProcessor(convertTickInterval, getValue, addCorrection) {
     return function(breaks, tickInterval, screenDelta, axisDivisionFactor) {
         var interval = convertTickInterval(tickInterval),
             maxTickCount = Math.floor(screenDelta / axisDivisionFactor),
             correction = maxTickCount > breaks.length ? interval / 2 : interval / 100;
 
         return breaks.reduce(function(result, b) {
-            if(b.to - b.from < interval && !b.gapSize) {
+            if(getValue(b.to) - getValue(b.from) < interval && !b.gapSize) {
                 return result;
             }
             if(b.gapSize) {
@@ -507,7 +507,6 @@ function getScaleBreaksProcessor(convertTickInterval, addCorrection) {
     };
 }
 
-
 function numericGenerator(options) {
     var floor = correctValueByInterval(getValue, mathFloor, getValue),
         ceil = correctValueByInterval(getValue, mathCeil, getValue);
@@ -521,7 +520,7 @@ function numericGenerator(options) {
         getValue,
         calculateTicks(addInterval, options.endOnTick ? floor : ceil),
         calculateMinorTicks(getValue, addInterval, floor, addInterval, getValue),
-        getScaleBreaksProcessor(getValue, function(value, correction) {
+        getScaleBreaksProcessor(getValue, getValue, function(value, correction) {
             return value + correction;
         })
     );
@@ -548,7 +547,7 @@ function logarithmicGenerator(options) {
         getValue,
         calculateTicks(addIntervalLog(base), options.endOnTick ? floor : ceil),
         calculateMinorTicks(updateTickInterval, addInterval, floor, ceilNumber, ceil),
-        getScaleBreaksProcessor(getValue, function(value, correction) {
+        getScaleBreaksProcessor(getValue, log, function(value, correction) {
             return raise(log(value) + correction);
         })
     );
@@ -602,7 +601,7 @@ function dateGenerator(options) {
         dateToMilliseconds,
         calculateTicks(addIntervalDate, options.endOnTick ? floor : ceil),
         calculateMinorTicks(getValue, addIntervalDate, floor, addIntervalDate, getValue),
-        getScaleBreaksProcessor(dateToMilliseconds, function(value, correction) {
+        getScaleBreaksProcessor(dateToMilliseconds, getValue, function(value, correction) {
             return new Date(value.getTime() + correction);
         })
     );
