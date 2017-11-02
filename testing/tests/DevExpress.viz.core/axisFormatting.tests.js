@@ -157,8 +157,8 @@ QUnit.test("format numbers with non zero precision", function(assert) {
 });
 
 QUnit.test("formatting numbers wtih multiplier of tickInterval === 2.5", function(assert) {
-    this.testTickLabelFormat(assert, [1250, 8000, 160000], 250, ["1.25K", "8.00K", "160K"]);
-    this.testTickLabelFormat(assert, [2500, 30000], 2500, ["2.5K", "30K"]);
+    this.testTickLabelFormat(assert, [1250, 8000, 160000, 165250], 250, ["1.25K", "8.00K", "160.00K", "165.25K"]);
+    this.testTickLabelFormat(assert, [2500, 30000], 2500, ["2.5K", "30.0K"]);
 });
 
 QUnit.test("index of tickInterval is not equal index of tick", function(assert) {
@@ -258,7 +258,7 @@ QUnit.test("format numbers with non zero precision", function(assert) {
 });
 
 QUnit.test("formatting numbers with a value not equal to tick (tickInterval equal to millions)", function(assert) {
-    this.testConstantLineLabelFormat(assert, [1000000, 2000000, 3000000], 1000000, "1.5M", 1520000);
+    this.testConstantLineLabelFormat(assert, [1000000, 2000000, 3000000], 1000000, "1.52M", 1520000);
 });
 
 QUnit.test("formatting numbers with a value not equal to tick (tickInterval equal to millions and difference equal to thousands)", function(assert) {
