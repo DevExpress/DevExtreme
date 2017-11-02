@@ -198,6 +198,10 @@ var CollectionWidget = BaseCollectionWidget.inherit({
         return !!(this._dataSource && this._dataSource.key());
     },
 
+    _getCombinedFilter: function() {
+        return this._dataSource && this._dataSource.filter();
+    },
+
     keyOf: function(item) {
         var key = item,
             store = this._dataSource && this._dataSource.store();
@@ -225,9 +229,7 @@ var CollectionWidget = BaseCollectionWidget.inherit({
                     that._updateSelectedItems(args.addedItems, args.removedItems);
                 }
             },
-            filter: function() {
-                return that._dataSource && that._dataSource.filter();
-            },
+            filter: that._getCombinedFilter.bind(that),
             totalCount: function() {
                 var items = that.option("items");
                 var dataSource = that._dataSource;
