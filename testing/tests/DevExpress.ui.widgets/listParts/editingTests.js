@@ -509,18 +509,19 @@ QUnit.test("selection works well after clean all selected items and selectAllMod
 QUnit.test("Selecting all filtered items when selectAllMode is 'allPages'", function(assert) {
     //arrange
     var items = [1, 2, 3, 4, 5],
-        $selectAll;
-
-    var instance = $("#list").dxList({
-        dataSource: {
+        $selectAll,
+        ds = new DataSource({
             store: items,
             pageSize: 2,
-            paginate: true
-        },
+            paginate: true,
+            searchValue: "1"
+        });
+
+    var instance = $("#list").dxList({
+        dataSource: ds,
         showSelectionControls: true,
         selectionMode: "all",
-        selectAllMode: "allPages",
-        searchValue: "1"
+        selectAllMode: "allPages"
     }).dxList("instance");
 
     //act
@@ -532,7 +533,8 @@ QUnit.test("Selecting all filtered items when selectAllMode is 'allPages'", func
     assert.deepEqual(instance.option("selectedItems"), [1], "selected items");
 
     //act
-    instance.option("searchValue", "");
+    ds.searchValue("");
+    ds.load();
 
     //assert
     $selectAll = $("#list").find(".dx-list-select-all-checkbox");
