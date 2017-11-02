@@ -193,8 +193,8 @@ function smartFormatter(tick, options) {
                         }
 
                         indexOfFormat = floor(actualIndex / 3);
+                        offset = indexOfFormat * 3;
                         if(indexOfFormat < 5) {
-                            offset = indexOfFormat * 3;
                             if(tickIntervalIndex - offset === 2 && tickIndex >= 3) {
                                 indexOfFormat++;
                                 offset = indexOfFormat * 3;
@@ -204,17 +204,10 @@ function smartFormatter(tick, options) {
                             typeFormat = formats[formats.length - 1];
                         }
 
-                        if(offset !== 0 && stringTick[stringTick.length - offset] !== "0" && typeFormat !== formats[0]) {
-                            precision++;
-                            if(abs(tickInterval / Math.pow(10, tickIntervalIndex) - 2.5) < 0.0001 && stringTick[stringTick.length - offset + 1] !== "0") {
-                                precision++;
-                            }
-                        } else {
-                            if(precision === 0 && tickIndex - tickIntervalIndex === 1 && floor(tickIndex / 3) !== floor(tickIntervalIndex / 3)) {
-                                precision = 1;
-                                if(abs(tickInterval / Math.pow(10, tickIntervalIndex) - 2.5) < 0.0001) {
-                                    precision = 2;
-                                }
+                        if(offset > 0) {
+                            separatedTickInterval = (tickInterval / Math.pow(10, offset)).toString().split(".");
+                            if(separatedTickInterval[1]) {
+                                precision = separatedTickInterval[1].length;
                             }
                         }
                     }
