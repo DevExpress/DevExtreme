@@ -4,7 +4,7 @@ var isDefined = require("../../core/utils/type").isDefined,
     round = Math.round;
 
 module.exports = {
-    translate: function(bp) {
+    translate: function(bp, direction) {
         var that = this,
             specialValue = that.translateSpecialCase(bp);
 
@@ -15,7 +15,7 @@ module.exports = {
         if(that._isValueOutOfCanvas(bp)) {
             return null;
         }
-        return that.to(bp);
+        return that.to(bp, direction);
     },
 
     untranslate: function(pos, _, enableOutOfCanvas) {
@@ -111,7 +111,7 @@ module.exports = {
         return Number(value);
     },
 
-    to: function(bp) {
+    to: function(bp, direction) {
         var that = this,
             canvasOptions = that._canvasOptions,
             breaks = that._breaks,
@@ -123,7 +123,13 @@ module.exports = {
             commonBreakSize = isDefined(prop.breaksSize) ? prop.breaksSize : 0;
         }
         if(prop.inBreak === true) {
-            return null;
+            if(direction > 0) {
+                return prop.break.start;
+            } else if(direction < 0) {
+                return prop.break.end;
+            } else {
+                return null;
+            }
         }
         return that._conversionValue(that._calculateProjection((bp - canvasOptions.rangeMinVisible - prop.length) *
             canvasOptions.ratioOfCanvasRange + commonBreakSize));
