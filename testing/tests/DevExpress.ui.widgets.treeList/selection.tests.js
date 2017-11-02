@@ -46,13 +46,10 @@ var setupModule = function() {
             initViews: true
         });
     };
-
-    this.clock = sinon.useFakeTimers();
 };
 
 var teardownModule = function() {
     this.dispose();
-    this.clock.restore();
 };
 
 QUnit.module("Selection", { beforeEach: setupModule, afterEach: teardownModule });
@@ -393,6 +390,7 @@ QUnit.test("Not select row when click by expanding icon", function(assert) {
 
 QUnit.testInActiveWindow("Focused border is not displayed around expandable cell when row is selected", function(assert) {
     //arrange
+    var clock = sinon.useFakeTimers();
     var $testElement = $('#treeList');
 
     this.element = function() {
@@ -409,10 +407,11 @@ QUnit.testInActiveWindow("Focused border is not displayed around expandable cell
         $selectCheckbox = $expandableCell.find(".dx-select-checkbox").first();
 
     $selectCheckbox.focus();
-    this.clock.tick();
+    clock.tick();
 
     //assert
     assert.ok(!$expandableCell.hasClass("dx-focused"));
+    clock.restore();
 });
 
 QUnit.module("Recursive selection", { beforeEach: function() {
