@@ -1143,12 +1143,12 @@ declare module DevExpress {
     /** @docid_ignore eventsMethods_triggerHandler */
     /** @docid_ignore eventsHandler */
     /** @docid_ignore dxEvent */
-    /** @docid_ignore dxEventFields_isPropagationStopped */
-    /** @docid_ignore dxEventFields_stopPropagation */
-    /** @docid_ignore dxEventFields_isImmediatePropagationStopped */
-    /** @docid_ignore dxEventFields_stopImmediatePropagation */
-    /** @docid_ignore dxEventFields_isDefaultPrevented */
-    /** @docid_ignore dxEventFields_preventDefault */
+    /** @docid_ignore dxEventMethods_isPropagationStopped */
+    /** @docid_ignore dxEventMethods_stopPropagation */
+    /** @docid_ignore dxEventMethods_isImmediatePropagationStopped */
+    /** @docid_ignore dxEventMethods_stopImmediatePropagation */
+    /** @docid_ignore dxEventMethods_isDefaultPrevented */
+    /** @docid_ignore dxEventMethods_preventDefault */
     /** @docid_ignore dxEventFields_target */
     /** @docid_ignore dxEventFields_currentTarget */
     /** @docid_ignore dxEventFields_delegateTarget */

@@ -80,7 +80,7 @@ if(window && window.DevExpress && window.DevExpress.config) {
  * @name config
  * @publicName config()
  * @type method
- * @return GlobalConfig
+ * @return globalConfig
  * @namespace DevExpress
  * @module core/config
  * @export default
@@ -88,7 +88,7 @@ if(window && window.DevExpress && window.DevExpress.config) {
 /**
  * @name config
  * @publicName config(config)
- * @param1 config:GlobalConfig
+ * @param1 config:globalConfig
  * @namespace DevExpress
  * @module core/config
  * @export default
