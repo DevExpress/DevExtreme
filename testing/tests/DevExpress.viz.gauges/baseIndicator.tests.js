@@ -223,21 +223,27 @@ QUnit.test('Write - several times called (B219848)', function(assert) {
 
 QUnit.module('BaseIndicator - animation', {
     beforeEach: function() {
+        this.animationController = new animation.AnimationController();
         environment.beforeEach.apply(this, arguments);
         this.target.render({ currentValue: 50, animation: { enabled: true, duration: 50 } }).resize();
     },
     afterEach: function() {
         this.target.clean();
+        this.animationController.dispose();
         environment.afterEach.apply(this, arguments);
     },
     patchRenderer: function() {
-        var _createGroup = this.renderer.stub("g");
+        var that = this,
+            _createGroup = that.renderer.stub("g"),
+            animationController = this.animationController;
+
         this.renderer.g = function() {
             var group = _createGroup.apply(this, arguments);
+
             group.animate = function(properties, options) {
-                var that = this;
-                this.animationController = new animation.AnimationController();
-                var _originalStep = options.step, _originalComplete = options.complete;
+                var that = this,
+                    _originalStep = options.step, _originalComplete = options.complete;
+
                 options.step = function(pos) {
                     _originalStep && _originalStep.apply(this, arguments);
                     group.animateStep && group.animateStep.call(group, pos);
@@ -246,21 +252,12 @@ QUnit.module('BaseIndicator - animation', {
                     _originalComplete && _originalComplete.apply(this, arguments);
                     group.animateComplete && group.animateComplete.call(group);
                 };
-                this.animationController.animateElement(this, properties, options);
+                animationController.animateElement(this, properties, options);
                 return that;
             };
             group.stopAnimation = function() {
-                if(this.animationController) {
-                    this.animationController.stop();
-                    this.animation.stop();
-                    delete this.animationController;
-                }
+                this.animation && this.animation.stop();
                 return this;
-            };
-            var baseDispose = group.dispose;
-            group.dispose = function() {
-                baseDispose.apply(this, arguments);
-                this.animationController && this.animationController.dispose();
             };
             return group;
         };
