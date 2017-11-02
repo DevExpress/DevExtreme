@@ -389,6 +389,39 @@ QUnit.testInActiveWindow("editor should save focus on button clicking", function
     });
 });
 
+QUnit.testInActiveWindow("editor should save focus on clearbutton clicking, fieldTemplate is used", function(assert) {
+    if(devices.real().platform !== "generic") {
+        assert.ok(true, "blur preventing unnecessary on mobile devices");
+        return;
+    }
+
+    var $dropDownEditor = $("#dropDownEditorLazy").dxDropDownEditor({
+        items: [{ "Name": "one", "ID": 1 }, { "Name": "two", "ID": 2 }, { "Name": "three", "ID": 3 }],
+        displayExpr: "Name",
+        valueExpr: "ID",
+        showClearButton: "true",
+        value: 1,
+        fieldTemplate: function(value) {
+            var $textBox = $("<div>").dxTextBox({
+                text: value,
+                focusStateEnabled: true
+            });
+            return $("<div>").text(value + this.option("value")).append($textBox);
+        },
+    });
+
+    $dropDownEditor.find(".dx-texteditor-input").focus();
+
+    assert.ok($dropDownEditor.find(".dx-texteditor").hasClass("dx-state-focused"), "Widget is focused");
+
+    var $buttonsContainer = $dropDownEditor.find(".dx-texteditor-buttons-container"),
+        $buttons = $buttonsContainer.children();
+
+    $buttons.eq(1).trigger("dxclick");
+
+    assert.ok($dropDownEditor.hasClass("dx-state-focused"), "Widget is focused after click on clearButton");
+});
+
 QUnit.testInActiveWindow("input is focused by click on dropDownButton", function(assert) {
     var $dropDownEditor = $("#dropDownEditorLazy").dxDropDownEditor({
         focusStateEnabled: true
