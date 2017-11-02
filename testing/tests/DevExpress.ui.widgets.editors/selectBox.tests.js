@@ -355,14 +355,16 @@ QUnit.test("click on textbox toggle popup visibility", function(assert) {
 
 QUnit.test("click on arrow toggle popup visibility", function(assert) {
     var $element = $("#selectBox").dxSelectBox({ items: [0, 1, 2] }),
-        $list = $element.find(".dx-list"),
+        popup = $element.dxSelectBox("instance")._popup,
         $arrow = $element.find(".dx-dropdowneditor-icon");
 
-    assert.ok($list.is(':hidden'), "when start list is hidden");
-    pointerMock($arrow).start().click();
-    assert.ok($list.is(':visible'), "when we click on arrow - show list");
-    pointerMock($arrow).start().click();
-    assert.ok($list.is(':hidden'), "when we click on arrow once again - hide list");
+    assert.notOk(popup.option("visible"), "when start popup is hidden");
+
+    $arrow.trigger("dxclick");
+    assert.ok(popup.option("visible"), "when we click on arrow - show popup");
+
+    $arrow.trigger("dxclick");
+    assert.notOk(popup.option("visible"), "when we click on arrow once again - hide popup");
 });
 
 QUnit.test("click on disabled selectbox doesn't toggle popup visibility", function(assert) {
