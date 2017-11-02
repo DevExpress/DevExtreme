@@ -829,6 +829,18 @@ QUnit.test("Translate. Scale breaks. Inverted axis", function(assert) {
     assert.strictEqual(translator.translate(700), 500);
 });
 
+QUnit.test("Translate. Scale breaks. Values on the breaks and should be translated to right side of break if direction>0", function(assert) {
+    var translator = createTranslatorWithScaleBreaks.call(this, {});
+
+    assert.strictEqual(translator.translate(150, 1), 600);
+});
+
+QUnit.test("Translate. Scale breaks. Values on the breaks and should be translated to left side of break if direction<0", function(assert) {
+    var translator = createTranslatorWithScaleBreaks.call(this, {});
+
+    assert.strictEqual(translator.translate(150, -1), 620);
+});
+
 QUnit.test("Untranslate. Scale breaks. Values not on the breaks and should be untranslated", function(assert) {
     var translator = createTranslatorWithScaleBreaks.call(this, {});
 
@@ -1140,6 +1152,26 @@ QUnit.test("Translate. Scale breaks. Values out of the breaks and shouldn't be t
 
     assert.strictEqual(translator.translate(0.01), null);
     assert.strictEqual(translator.translate(1000), null);
+});
+
+QUnit.test("Translate. Scale breaks. Values on the breaks and should be translated to right side of break if direction>0", function(assert) {
+    var translator = createTranslatorWithScaleBreaks.call(this, {
+        min: 0.0001, max: 1000000,
+        breaks: [{ from: 0.001, to: 0.1 }, { from: 100, to: 10000 }],
+        breakSize: 50
+    });
+
+    assert.strictEqual(translator.translate(0.01, 1), 650);
+});
+
+QUnit.test("Translate. Scale breaks. Values on the breaks and should be translated to left side of break if direction<0", function(assert) {
+    var translator = createTranslatorWithScaleBreaks.call(this, {
+        min: 0.0001, max: 1000000,
+        breaks: [{ from: 0.001, to: 0.1 }, { from: 100, to: 10000 }],
+        breakSize: 50
+    });
+
+    assert.strictEqual(translator.translate(0.01, -1), 700);
 });
 
 QUnit.test("Untranslate. Scale breaks. Values not on the breaks and should be untranslated", function(assert) {
