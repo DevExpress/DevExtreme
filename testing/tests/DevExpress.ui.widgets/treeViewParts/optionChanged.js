@@ -243,6 +243,29 @@ QUnit.test("searchMode", function(assert) {
     assert.strictEqual($items.length, 1, "count item");
 });
 
+QUnit.test("current expansion should be saved after searchMode option was changed", function(assert) {
+    var $treeView = initTree({
+            items: [{
+                id: "1",
+                items: [{ id: "1_1", expanded: true, items: [{ id: "1_1_1" }] }]
+            }, {
+                id: "2",
+                items: [{ id: "2_1", expanded: true, items: [{ id: "2_1_1" }] }]
+            }]
+        }),
+        instance = $treeView.dxTreeView("instance"),
+        items;
+
+    instance.collapseItem("1");
+    instance.collapseItem("2");
+
+    instance.option("searchMode", "startswith");
+    items = instance.option("items");
+
+    assert.notOk(items[0].expanded, "item is collapsed");
+    assert.notOk(items[1].expanded, "item is collapsed");
+});
+
 QUnit.test("searchExpr", function(assert) {
     var $treeView = initTree({
             items: [
