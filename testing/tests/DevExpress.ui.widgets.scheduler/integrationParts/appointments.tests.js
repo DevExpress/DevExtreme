@@ -4459,28 +4459,32 @@ QUnit.test("Long multiday appointment should have right position on timeline wee
 });
 
 QUnit.test("Appointment should have right width in workspace with timezone", function(assert) {
-    this.clock.restore();
-    this.createInstance({
-        dataSource: [],
-        currentDate: new Date(2017, 4, 1),
-        currentView: "month",
-        firstDayOfWeek: 1,
-        startDayHour: 3,
-        endDayHour: 24,
-        timeZone: "Europe/Kiev"
-    });
-    var daylightDiff = (new Date(2017, 4, 4).getTimezoneOffset() - new Date().getTimezoneOffset()) * 60000;
+    var tzOffsetStub = sinon.stub(subscribes, "getClientTimezoneOffset").returns(-10800000);
+    try {
+        this.clock.restore();
+        this.createInstance({
+            dataSource: [],
+            currentDate: new Date(2017, 4, 1),
+            currentView: "month",
+            firstDayOfWeek: 1,
+            startDayHour: 3,
+            endDayHour: 24,
+            timeZone: "Asia/Ashkhabad"
+        });
 
-    this.instance.addAppointment({
-        text: "Task 1",
-        startDate: new Date(2017, 4, 4).getTime() + daylightDiff,
-        endDate: new Date(2017, 4, 5).getTime() + daylightDiff
-    });
+        this.instance.addAppointment({
+            text: "Task 1",
+            startDate: new Date(2017, 4, 4),
+            endDate: new Date(2017, 4, 5)
+        });
 
-    var $appointment = $(this.instance.$element()).find(".dx-scheduler-work-space .dx-scheduler-appointment").eq(0),
-        $cell = $(this.instance.$element()).find(".dx-scheduler-work-space .dx-scheduler-date-table-cell").eq(9);
+        var $appointment = $(this.instance.$element()).find(".dx-scheduler-work-space .dx-scheduler-appointment").eq(0),
+            $cell = $(this.instance.$element()).find(".dx-scheduler-work-space .dx-scheduler-date-table-cell").eq(9);
 
-    assert.roughEqual($appointment.outerWidth(), 2 * $cell.outerWidth(), 1.001, "Task has a right width");
+        assert.roughEqual($appointment.outerWidth(), $cell.outerWidth(), 1.001, "Task has a right width");
+    } finally {
+        tzOffsetStub.restore();
+    }
 });
 
 QUnit.test("Appointment with zero-duration should be rendered correctly(T443143)", function(assert) {
