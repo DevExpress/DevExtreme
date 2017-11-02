@@ -136,7 +136,8 @@ exports.ColumnsView = modules.View.inherit(columnStateMixin).inherit({
                     rowOptions = $row.data("options"),
                     columnIndex = $cell.index(),
                     cellOptions = rowOptions && rowOptions.cells && rowOptions.cells[columnIndex],
-                    column = cellOptions ? cellOptions.column : visibleColumns[columnIndex];
+                    column = cellOptions ? cellOptions.column : visibleColumns[columnIndex],
+                    text;
 
                 if((!isDataRow || (isDataRow && column && !column.cellTemplate)) &&
                     (!isHeaderRow || (isHeaderRow && column && !column.headerCellTemplate)) &&
@@ -146,8 +147,9 @@ exports.ColumnsView = modules.View.inherit(columnStateMixin).inherit({
                         $element.data(CELL_HINT_VISIBLE, false);
                     }
 
-                    if($element[0].scrollWidth > $element[0].clientWidth && !commonUtils.isDefined($element.attr("title"))) {
-                        $element.attr("title", $element.text());
+                    text = $element.get(0).innerText;
+                    if(text && $element[0].scrollWidth > $element[0].clientWidth && !commonUtils.isDefined($element.attr("title"))) {
+                        $element.attr("title", text);
                         $element.data(CELL_HINT_VISIBLE, true);
                     }
                 }
