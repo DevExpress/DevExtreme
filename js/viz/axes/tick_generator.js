@@ -329,7 +329,7 @@ function calculateMinorTicks(updateTickInterval, addInterval, correctMinValue, c
             minorTickInterval = updateTickInterval(minorTickInterval, tick, factor);
             var cur = correctTickValue(r.prevTick, minorTickInterval, min);
             while(cur < tick && (!tickBalance || tickBalance > 0)) {
-                push(r.minors, cur);
+                cur !== r.prevTick && push(r.minors, cur);
                 tickBalance--;
                 cur = addInterval(cur, minorTickInterval);
             }
@@ -396,12 +396,12 @@ function correctTickValueOnGapSize(addInterval, breaks) {
     };
 }
 
-function generator(options, getBusinessDelta, calculateTickInterval, calculateMinorTickInterval, getTickIntervalByCustomTicks, convertTickInterval, calculateTicks, calculateMinorTicks, processScaleBreaks) {
+function generator(options, getBusinessDelta, calculateTickInterval, calculateMinorTickInterval, getMajorTickIntervalByCustomTicks, getMinorTickIntervalByCustomTicks, convertTickInterval, calculateTicks, calculateMinorTicks, processScaleBreaks) {
     function processCustomTicks(customTicks) {
         return {
-            tickInterval: getTickIntervalByCustomTicks(customTicks.majors),
+            tickInterval: getMajorTickIntervalByCustomTicks(customTicks.majors),
             ticks: customTicks.majors || [],
-            minorTickInterval: getTickIntervalByCustomTicks(customTicks.minors),
+            minorTickInterval: getMinorTickIntervalByCustomTicks(customTicks.minors),
             minorTicks: customTicks.minors || []
         };
     }
@@ -456,7 +456,7 @@ function generator(options, getBusinessDelta, calculateTickInterval, calculateMi
             majorTicks = ticks.ticks;
 
         if(!minorTickInterval && minorTickCount) {
-            minorTickInterval = getTickIntervalByCustomTicks([minorBusinessDelta / (minorTickCount + 1), minorBusinessDelta / (minorTickCount + 1) * 2]);
+            minorTickInterval = getMinorTickIntervalByCustomTicks([minorBusinessDelta / (minorTickCount + 1), minorBusinessDelta / (minorTickCount + 1) * 2]);
         } else {
             minorTickCount = undefined;
         }
@@ -510,14 +510,16 @@ function getScaleBreaksProcessor(convertTickInterval, addCorrection) {
 
 function numericGenerator(options) {
     var floor = correctValueByInterval(getValue, mathFloor, getValue),
-        ceil = correctValueByInterval(getValue, mathCeil, getValue);
+        ceil = correctValueByInterval(getValue, mathCeil, getValue),
+        calculateTickIntervalByCustomTicks = getTickIntervalByCustomTicks(getValue, getValue);
 
     return generator(
         options,
         getBusinessDelta,
         calculateTickInterval,
         calculateMinorTickInterval,
-        getTickIntervalByCustomTicks(getValue, getValue),
+        calculateTickIntervalByCustomTicks,
+        calculateTickIntervalByCustomTicks,
         getValue,
         calculateTicks(addInterval, options.endOnTick ? floor : ceil),
         calculateMinorTicks(getValue, addInterval, floor, addInterval, getValue),
@@ -545,6 +547,7 @@ function logarithmicGenerator(options) {
         calculateTickIntervalLog,
         calculateMinorTickInterval,
         getTickIntervalByCustomTicks(log, getValue),
+        getTickIntervalByCustomTicks(getValue, getValue),
         getValue,
         calculateTicks(addIntervalLog(base), options.endOnTick ? floor : ceil),
         calculateMinorTicks(updateTickInterval, addInterval, floor, ceilNumber, ceil),
@@ -593,12 +596,15 @@ function dateGenerator(options) {
         return newValue;
     }
 
+    var calculateTickIntervalByCustomTicks = getTickIntervalByCustomTicks(getValue, dateUtils.convertMillisecondsToDateUnits);
+
     return generator(
         options,
         getBusinessDelta,
         calculateTickIntervalDateTime,
         calculateMinorTickIntervalDateTime,
-        getTickIntervalByCustomTicks(getValue, dateUtils.convertMillisecondsToDateUnits),
+        calculateTickIntervalByCustomTicks,
+        calculateTickIntervalByCustomTicks,
         dateToMilliseconds,
         calculateTicks(addIntervalDate, options.endOnTick ? floor : ceil),
         calculateMinorTicks(getValue, addIntervalDate, floor, addIntervalDate, getValue),
