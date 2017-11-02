@@ -12,10 +12,6 @@ var $ = require("jquery"),
     dateUtils = require("core/utils/date"),
     config = require("core/config");
 
-function getDaylightSavingsOffset(date1, date2) {
-    return date1.getTimezoneOffset() - date2.getTimezoneOffset();
-}
-
 QUnit.testStart(function() {
     $("#qunit-fixture").html('<div id="scheduler"></div>');
 });
@@ -699,10 +695,8 @@ QUnit.test("'convertDateByTimezone' should return date according to the custom t
         timeZone: timezoneValue
     });
 
-    var date = new Date(2015, 6, 3, 3),
+    var date = new Date(2017, 6, 3, 3),
         timezoneDifference = date.getTimezoneOffset() * 60000 + timezoneValue * 3600000;
-
-    timezoneDifference -= getDaylightSavingsOffset(date, new Date()) * 60000;
 
     var convertedDate = this.instance.fire("convertDateByTimezone", date);
 
@@ -718,10 +712,8 @@ QUnit.test("'convertDateByTimezone' should return date according to the custom t
         timeZone: timezone.id
     });
 
-    var date = new Date(2015, 6, 3, 3),
+    var date = new Date(2017, 6, 3, 3),
         timezoneDifference = date.getTimezoneOffset() * 60000 + timezone.value * 3600000;
-
-    timezoneDifference -= getDaylightSavingsOffset(date, new Date()) * 60000;
 
     var convertedDate = this.instance.fire("convertDateByTimezone", date);
 
