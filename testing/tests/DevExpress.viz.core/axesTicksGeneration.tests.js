@@ -2208,6 +2208,30 @@ QUnit.test("Move datetime ticks to work day", function(assert) {
     ]);
 });
 
+QUnit.test("Correct first tick to work day", function(assert) {
+    this.createAxis();
+    this.updateOptions({
+        valueType: "datetime",
+        type: "continuous",
+        breakStyle: { width: 0 },
+        tickInterval: { hours: 14 },
+        workdaysOnly: true,
+        workWeek: [1, 2, 3, 4, 5]
+    });
+
+    this.axis.setBusinessRange({ minVisible: new Date(1994, 2, 1), maxVisible: new Date(1994, 2, 31), addRange: function() { return this; } });
+
+    //act
+    this.axis.createTicks(canvas(500));
+
+    assert.deepEqual(this.axis._majorTicks.map(value), [
+        new Date(1994, 2, 7).getTime(),
+        new Date(1994, 2, 14).getTime(),
+        new Date(1994, 2, 21).getTime(),
+        new Date(1994, 2, 28).getTime(),
+    ]);
+});
+
 QUnit.test("Move datetime ticks to work day. Tick interval data - move tick to start of work week", function(assert) {
     this.createAxis();
     this.updateOptions({

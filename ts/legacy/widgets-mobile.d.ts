@@ -3,375 +3,375 @@
 declare module DevExpress.ui {
 
     export interface dxTileViewOptions extends CollectionWidgetOptions {
-        /** @docid_ignore dxTileViewOptions_selectedIndex */
-        /** @docid_ignore dxTileViewOptions_selectedItem */
-        /** @docid_ignore dxTileViewOptions_selectedItems */
-        /** @docid_ignore dxTileViewOptions_selectedItemKeys */
-        /** @docid_ignore dxTileViewOptions_keyExpr */
-        /** @docid_ignore dxTileViewOptions_onSelectionChanged */
-        /** @docid_ignore dxTileViewOptions_hoverStateEnabled */
-        /** @docid_ignore dxTileViewOptions_focusStateEnabled */
+        
+        
+        
+        
+        
+        
+        
+        
 
-        /** @docid dxTileViewOptions_activeStateEnabled */
+        /** A Boolean value specifying whether or not the widget changes its state when interacting with a user. */
         activeStateEnabled?: boolean;
 
-        /** @docid dxTileViewOptions_baseItemHeight */
+        /** Specifies the height of the base tile view item. */
         baseItemHeight?: number;
 
-        /** @docid dxTileViewOptions_baseItemwidth */
+        /** Specifies the width of the base tile view item. */
         baseItemWidth?: number;
 
-        /** @docid dxTileViewOptions_direction */
+        /** Specifies whether tiles are placed horizontally or vertically. */
         direction?: string;
 
-        /** @docid dxTileViewOptions_height */
+        /** Specifies the widget's height. */
         height?: any;
 
-        /** @docid dxTileViewOptions_itemMargin */
+        /** Specifies the distance in pixels between adjacent tiles. */
         itemMargin?: number;
 
-        /** @docid dxTileViewOptions_showScrollbar */
+        /** A Boolean value specifying whether or not to display a scrollbar. */
         showScrollbar?: boolean;
     }
 
-    /** @docid dxtileview */
+    /** The TileView widget contains a collection of tiles. Tiles can store much more information than ordinary buttons, that is why they are very popular in apps designed for touch devices. */
     export class dxTileView extends CollectionWidget {
         constructor(element: JQuery, options?: dxTileViewOptions);
         constructor(element: Element, options?: dxTileViewOptions);
 
-        /** @docid_ignore dxTileViewItemTemplate_heightRatio */
-        /** @docid_ignore dxTileViewItemTemplate_widthRatio */
+        
+        
 
-        /** @docid dxtileviewmethods_scrollPosition */
+        /** Returns the current scroll position of the widget content. */
         scrollPosition(): number;
     }
 
     export interface dxSwitchOptions extends EditorOptions {
-        /** @docid_ignore dxSwitchOptions_hoverStateEnabled */
-        /** @docid_ignore dxSwitchOptions_focusStateEnabled */
+        
+        
 
-	    /** @docid dxSwitchOptions_activeStateEnabled */
+	    
 	    activeStateEnabled?: boolean;
 
-        /** @docid dxSwitchOptions_offText */
+        /** Text displayed when the widget is in a disabled state. */
         offText?: string;
 
-        /** @docid dxSwitchOptions_onText */
+        /** Text displayed when the widget is in an enabled state. */
         onText?: string;
 
-        /** @docid dxSwitchOptions_value */
+        /** A Boolean value specifying whether the current switch state is "On" or "Off". */
         value?: boolean;
 
-        /** @docid dxSwitchOptions_name */
+        
         name?: string;
     }
 
-    /** @docid dxSwitch */
+    /** The Switch is a widget that can be in two states: "On" and "Off". */
     export class dxSwitch extends Editor {
         constructor(element: JQuery, options?: dxSwitchOptions);
         constructor(element: Element, options?: dxSwitchOptions);
     }
 
     export interface dxSlideOutViewOptions extends WidgetOptions {
-        /** @docid_ignore dxSlideOutViewOptions_contentOffset */
-        /** @docid_ignore dxSlideOutViewOptions_focusStateEnabled */
-        /** @docid_ignore dxSlideOutViewOptions_accessKey */
-        /** @docid_ignore dxSlideOutViewOptions_tabIndex */
+        
+        
+        
+        
 
-        /** @docid dxSlideOutViewOptions_menuPosition */
+        /** Specifies the current menu position. */
         menuPosition?: string;
 
-        /** @docid dxSlideOutViewOptions_menuVisible */
+        /** Specifies whether or not the menu panel is visible. */
         menuVisible?: boolean;
 
-        /** @docid dxSlideOutViewOptions_swipeEnabled */
+        /** Specifies whether or not the menu is shown when a user swipes the widget content. */
         swipeEnabled?: boolean;
 
-        /** @docid dxSlideOutViewOptions_menuTemplate */
+        /** A template to be used for rendering menu panel content. */
         menuTemplate?: any;
 
-        /** @docid dxSlideOutViewOptions_contentTemplate */
+        /** A template to be used for rendering widget content. */
         contentTemplate?: any;
     }
 
-    /** @docid dxSlideOutView */
+    /** The SlideOutView widget is a classic slide-out menu paired with a view. */
     export class dxSlideOutView extends Widget {
         constructor(element: JQuery, options?: dxSlideOutViewOptions);
         constructor(element: Element, options?: dxSlideOutViewOptions);
 
-        /** @docid_ignore dxSlideOutViewMethods_registerKeyHandler */
-        /** @docid_ignore dxSlideOutViewMethods_focus */
+        
+        
 
-        /** @docid dxSlideOutViewMethods_menuContent */
+        /** Returns an HTML element of the widget menu block. */
         menuContent(): JQuery;
 
-        /** @docid dxSlideOutViewMethods_content */
+        /** Returns an HTML element of the widget content block. */
         content(): JQuery;
 
-        /** @docid dxSlideOutViewMethods_showMenu */
+        /** Displays the widget's menu block. */
         showMenu(): JQueryPromise<void>;
 
-        /** @docid dxSlideOutViewMethods_hideMenu */
+        /** Hides the widget's menu block. */
         hideMenu(): JQueryPromise<void>;
 
-        /** @docid dxSlideOutViewMethods_toggleMenuVisibility */
+        /** Toggles the visibility of the widget's menu block. */
         toggleMenuVisibility(): JQueryPromise<void>;
     }
 
     export interface dxSlideOutOptions extends CollectionWidgetOptions {
-        /** @docid_ignore dxSlideOutOptions_selectedItems */
-        /** @docid_ignore dxSlideOutOptions_selectedItemKeys */
-        /** @docid_ignore dxSlideOutOptions_keyExpr */
-        /** @docid_ignore dxSlideOutOptions_focusStateEnabled */
-        /** @docid_ignore dxSlideOutOptions_accessKey */
-        /** @docid_ignore dxSlideOutOptions_tabIndex */
+        
+        
+        
+        
+        
+        
 
-        /** @docid dxSlideOutOptions_activeStateEnabled */
+        /** A Boolean value specifying whether or not the widget changes its state when interacting with a user. */
         activeStateEnabled?: boolean;
 
-        /** @docid dxSlideOutOptions_menuGrouped */
+        /** A Boolean value specifying whether or not to display a grouped menu. */
         menuGrouped?: boolean;
 
-        /** @docid dxSlideOutOptions_menuPosition */
+        /** Specifies the current menu position. */
         menuPosition?: string;
 
-        /** @docid dxSlideOutOptions_menuGroupTemplate */
+        /** Specifies a custom template for a group caption. */
         menuGroupTemplate?: any;
 
-        /** @docid dxSlideOutOptions_menuItemTemplate */
+        /** The template used to render menu items. */
         menuItemTemplate?: any;
 
-        /** @docid dxSlideOutOptions_onMenuGroupRendered */
+        /** A handler for the menuGroupRendered event. */
         onMenuGroupRendered?: Function;
 
-        /** @docid dxSlideOutOptions_onMenuItemRendered */
+        /** A handler for the menuItemRendered event. */
         onMenuItemRendered?: Function;
 
-        /** @docid dxSlideOutOptions_menuVisible */
+        /** Specifies whether or not the slide-out menu is displayed. */
         menuVisible?: boolean;
 
-        /** @docid dxSlideOutOptions_swipeEnabled */
+        /** Indicates whether the menu can be shown/hidden by swiping the widget's main panel. */
         swipeEnabled?: boolean;
 
-        /** @docid dxSlideOutOptions_contentTemplate */
+        /** A template to be used for rendering widget content. */
         contentTemplate?: any;
 
-        /** @docid dxSlideOutOptions_selectedIndex */
+        /** The index number of the currently selected item. */
         selectedIndex?: number;
     }
 
-    /** @docid dxSlideout */
+    /** The SlideOut widget is a classic slide-out menu paired with a view. An end user opens the menu by swiping away the view. */
     export class dxSlideOut extends CollectionWidget {
         constructor(element: JQuery, options?: dxSlideOutOptions);
         constructor(element: Element, options?: dxSlideOutOptions);
 
-        /** @docid_ignore dxSlideOutItemTemplate_menutemplate */
+        
 
-        /** @docid_ignore dxslideoutmethods_registerKeyHandler */
-        /** @docid_ignore dxslideoutmethods_focus */
+        
+        
 
-        /** @docid dxslideoutmethods_hide */
+        /** Hides the widget's slide-out menu. */
         hideMenu(): JQueryPromise<void>;
 
-        /** @docid dxslideoutmethods_show */
+        /** Displays the widget's slide-out menu. */
         showMenu(): JQueryPromise<void>;
 
-        /** @docid dxslideoutmethods_toggleMenuVisibility */
+        /** Toggles the visibility of the widget's slide-out menu. */
         toggleMenuVisibility(showing: boolean): JQueryPromise<void>;
     }
 
     export interface dxPivotOptions extends CollectionWidgetOptions {
-        /** @docid_ignore dxPivotOptions_noDataText */
-        /** @docid_ignore dxPivotOptions_selectedItems */
-        /** @docid_ignore dxPivotOptions_selectedItemKeys */
-        /** @docid_ignore dxPivotOptions_keyExpr */
-        /** @docid_ignore dxPivotOptions_focusStateEnabled */
-        /** @docid_ignore dxPivotOptions_accessKey */
-        /** @docid_ignore dxPivotOptions_tabIndex */
+        
+        
+        
+        
+        
+        
+        
 
-        /** @docid dxPivotOptions_selectedIndex */
+        /** The index of the currently active pivot item. */
         selectedIndex?: number;
 
-        /** @docid dxPivotOptions_swipeEnabled */
+        /** A Boolean value specifying whether or not to allow users to switch between items by swiping. */
         swipeEnabled?: boolean;
 
-        /** @docid dxPivotOptions_contentTemplate */
+        /** A template to be used for rendering widget content. */
         contentTemplate?: any;
 
-        /** @docid dxPivotOptions_itemTitleTemplate */
+        /** Specifies a custom template for an item title. */
         itemTitleTemplate?: any;
     }
 
-    /** @docid dxPivot */
+    /** The Pivot provides a quick way to manage multiple views. It includes a collection of views and a navigation header. An end user switches the views by swiping them or by clicking their titles on the navigation header. */
     export class dxPivot extends CollectionWidget {
         constructor(element: JQuery, options?: dxPivotOptions);
         constructor(element: Element, options?: dxPivotOptions);
 
-        /** @docid_ignore dxPivotItemTemplate_title */
-        /** @docid_ignore dxPivotItemTemplate_visible */
-        /** @docid_ignore dxPivotItemTemplate_titleTemplate */
+        
+        
+        
 
-        /** @docid_ignore dxPivotMethods_registerKeyHandler */
-        /** @docid_ignore dxPivotMethods_focus */
+        
+        
     }
 
     export interface dxPanoramaOptions extends CollectionWidgetOptions {
-        /** @docid_ignore dxPanoramaOptions_noDataText */
-        /** @docid_ignore dxPanoramaOptions_selectedItems */
-        /** @docid_ignore dxPanoramaOptions_selectedItemKeys */
-        /** @docid_ignore dxPanoramaOptions_keyExpr */
-        /** @docid_ignore dxPanoramaOptions_focusStateEnabled */
-        /** @docid_ignore dxPanoramaOptions_accessKey */
-        /** @docid_ignore dxPanoramaOptions_tabIndex */
+        
+        
+        
+        
+        
+        
+        
 
-        /** @docid dxPanoramaOptions_backgroundImage */
+        /** An object exposing options for setting a background image for the panorama. */
         backgroundImage?: {
-            /** @docid dxPanoramaOptions_backgroundImage_height */
+            /** Specifies the height of the panorama's background image. */
             height?: number;
 
-            /** @docid dxPanoramaOptions_backgroundImage_url */
+            /** Specifies the URL of the image that is used as the panorama's background image. */
             url?: string;
 
-            /** @docid dxPanoramaOptions_backgroundImage_width */
+            /** Specifies the width of the panorama's background image. */
             width?: number;
         };
 
-        /** @docid dxPanoramaOptions_selectedIndex */
+        /** The index of the currently active panorama item. */
         selectedIndex?: number;
 
-        /** @docid dxPanoramaOptions_title */
+        /** Specifies the widget content title. */
         title?: string;
     }
 
-    /** @docid dxPanorama */
+    /** The Panorama widget is a full-screen widget that allows you to arrange items on a long horizontal canvas split into several views. Each view contains several items, and an end user navigates the views with the swipe gesture. The Panorama is often used as a navigation map on the first page of an application. */
     export class dxPanorama extends CollectionWidget {
         constructor(element: JQuery, options?: dxDropDownEditorOptions);
         constructor(element: Element, options?: dxDropDownEditorOptions);
 
-        /** @docid_ignore dxPanoramaItemTemplate_title */
-        /** @docid_ignore dxPanoramaItemTemplate_visible */
+        
+        
 
-        /** @docid_ignore dxPanoramaMethods_registerKeyHandler */
-        /** @docid_ignore dxPanoramaMethods_focus */
+        
+        
     }
 
     export interface dxDropDownMenuOptions extends WidgetOptions {
-        /** @docid_ignore dxDropDownMenuOptions_onContentReady */
+        
 
-        /** @docid dxDropDownMenuOptions_onButtonClick */
+        /** A handler for the buttonClick event. */
         onButtonClick?: any;
 
-        /** @docid dxDropDownMenuOptions_buttonIcon */
+        /** The name of the icon to be displayed by the DropDownMenu button. */
         buttonIcon?: string;
 
-        /** @docid dxDropDownMenuOptions_buttontext */
+        /** The text displayed in the DropDownMenu button. */
         buttonText?: string;
 
-        /** @docid dxDropDownMenuOptions_buttonIconSrc */
+        
         buttonIconSrc?: string;
 
-        /** @docid dxDropDownMenuOptions_dataSource */
+        /** A data source used to fetch data to be displayed by the widget. */
         dataSource?: any;
 
-        /** @docid dxDropDownMenuOptions_onItemClick */
+        /** A handler for the itemClick event. */
         onItemClick?: any;
 
-        /** @docid dxDropDownMenuOptions_items */
+        /** An array of items displayed by the widget. */
         items?: Array<any>;
 
-        /** @docid dxDropDownMenuOptions_itemTemplate */
+        /** The template to be used for rendering items. */
         itemTemplate?: any;
 
-        /** @docid dxDropDownMenuOptions_usePopover */
+        /** Specifies whether or not to show the drop down menu within a Popover widget. */
         usePopover?: boolean;
 
-        /** @docid dxDropDownMenuOptions_popupWidth */
+        /** The width of the menu popup in pixels. */
         popupWidth?: any;
 
-        /** @docid dxDropDownMenuOptions_popupHeight */
+        /** The height of the menu popup in pixels. */
         popupHeight?: any;
 
-        /** @docid dxDropDownMenuOptions_opened */
+        /** Specifies whether or not the drop-down menu is displayed. */
         opened?: boolean;
 
-        /** @docid dxDropDownMenuOptions_hoverStateEnabled */
+        
         hoverStateEnabled?: boolean;
 
-        /** @docid dxDropDownMenuOptions_activeStateEnabled */
+        
         activeStateEnabled?: boolean;
     }
 
-    /** @docid dxdropdownmenu */
+    /** A drop-down menu widget. */
     export class dxDropDownMenu extends Widget {
         constructor(element: JQuery, options?: dxDropDownEditorOptions);
         constructor(element: Element, options?: dxDropDownEditorOptions);
 
-        /** @docid dxDropDownMenuMethods_open */
+        /** Opens the drop-down menu. */
         open(): void;
 
-        /** @docid dxDropDownMenuMethods_close */
+        /** Closes the drop-down menu. */
         close(): void;
     }
 
     export interface dxActionSheetOptions extends CollectionWidgetOptions {
-        /** @docid_ignore dxActionSheetOptions_activeStateEnabled */
-        /** @docid_ignore dxActionSheetOptions_selectedIndex */
-        /** @docid_ignore dxActionSheetOptions_selectedItem */
-        /** @docid_ignore dxActionSheetOptions_selectedItems */
-        /** @docid_ignore dxActionSheetOptions_selectedItemKeys */
-        /** @docid_ignore dxActionSheetOptions_keyExpr */
-        /** @docid_ignore dxActionSheetOptions_noDataText */
-        /** @docid_ignore dxActionSheetOptions_onSelectionChanged */
-        /** @docid_ignore dxActionSheetOptions_focusStateEnabled */
-        /** @docid_ignore dxActionSheetOptions_accessKey */
-        /** @docid_ignore dxActionSheetOptions_tabIndex */
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
 
-        /** @docid dxActionSheetOptions_onCancelClick */
+        /** A handler for the cancelClick event. */
         onCancelClick?: any;
 
-        /** @docid dxActionSheetOptions_cancelText */
+        /** The text displayed in the button that closes the action sheet. */
         cancelText?: string;
 
-        /** @docid dxActionSheetOptions_showCancelButton */
+        /** Specifies whether or not to display the Cancel button in action sheet. */
         showCancelButton?: boolean;
 
-        /** @docid dxActionSheetOptions_showTitle */
+        /** A Boolean value specifying whether or not the title of the action sheet is visible. */
         showTitle?: boolean;
 
-        /** @docid dxActionSheetOptions_target */
+        /** Specifies the element the action sheet popover points at. */
         target?: any;
 
-        /** @docid dxActionSheetOptions_title */
+        /** The title of the action sheet. */
         title?: string;
 
-        /** @docid dxActionSheetOptions_usePopover */
+        /** Specifies whether or not to show the action sheet within a Popover widget. */
         usePopover?: boolean;
 
-        /** @docid dxActionSheetOptions_visible */
+        /** A Boolean value specifying whether or not the ActionSheet widget is visible. */
         visible?: boolean;
     }
 
-    /** @docid dxactionsheet */
+    /** The ActionSheet widget is a sheet containing a set of buttons located one under the other. These buttons usually represent several choices relating to a single task. */
     export class dxActionSheet extends CollectionWidget {
         constructor(element: JQuery, options?: dxActionSheetOptions);
         constructor(element: Element, options?: dxActionSheetOptions);
 
-        /** @docid_ignore dxActionSheetItemTemplate_html */
-        /** @docid_ignore dxActionSheetItemtemplate_type */
-        /** @docid_ignore dxActionSheetItemTemplate_visible */
-        /** @docid_ignore dxActionSheetItemTemplate_onClick */
-        /** @docid_ignore dxActionSheetItemTemplate_icon */
+        
+        
+        
+        
+        
 
-        /** @docid_ignore dxactionsheetmethods_registerKeyHandler */
-        /** @docid_ignore dxactionsheetmethods_focus */
+        
+        
 
-        /** @docid dxactionsheetmethods_hide */
+        /** Hides the widget. */
         hide(): JQueryPromise<dxActionSheet>;
 
-        /** @docid dxactionsheetmethods_show */
+        /** Shows the widget. */
         show(): JQueryPromise<dxActionSheet>;
 
-        /** @docid dxactionsheetmethods_toggle */
+        /** Shows or hides the widget depending on the Boolean value passed as the parameter. */
         toggle(showing: boolean): JQueryPromise<dxActionSheet>;
     }
 }

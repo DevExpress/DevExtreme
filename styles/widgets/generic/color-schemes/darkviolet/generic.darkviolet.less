@@ -197,7 +197,7 @@
 
 @texteditor-color: @base-text-color;
 @texteditor-disabled-opacity: .5;
-@texteditor-readonly-border-color: darken(@texteditor-border-color, 9%);
+@texteditor-readonly-border-color: fade(@texteditor-border-color, 50%);
 
 /**
 * @name 60. Placeholder text color
@@ -206,7 +206,7 @@
 */
 @texteditor-placeholder-color: darken(@texteditor-color, 40%);
 
-@texteditor-button-clear-icon-color: darken(@texteditor-color, 40%);
+@texteditor-button-clear-icon-color: @base-icon-color;
 
 @texteditor-invalid-focused-border-color: @base-invalid-color;
 @texteditor-invalid-faded-border-color: @base-invalid-faded-border-color;
@@ -1003,8 +1003,8 @@
 * @type color
 * @group scrollview
 */
-@scrollable-scroll-bg: @base-hover-background;
-@scrollable-scroll-active-bg: lighten(@scrollable-bg, 25%);
+@scrollable-scroll-bg: fade(darken(@base-accent, 15%), 80%);
+@scrollable-scroll-active-bg: darken(@base-accent, 15%);
 @scrollable-scroll-shadow-color: transparent;
 
 @scrollable-scrollbar-bg: transparent;
@@ -1333,7 +1333,7 @@
 * @type color
 * @group datagrid
 */
-@datagrid-menu-icon-color: @base-text-color;
+@datagrid-menu-icon-color: @base-icon-color;
 
 /**
 * @name 71. Modified data color
@@ -1551,7 +1551,7 @@
 * @type color
 * @group treelist
 */
-@treelist-menu-icon-color: @base-text-color;
+@treelist-menu-icon-color: @base-icon-color;
 
 /**
 * @name 71. Modified data color
@@ -1812,14 +1812,14 @@
 * @type color
 * @group scheduler
 */
-@SCHEDULER_WORKSPACE_FOCUSED_CELL_COLOR: lighten(@base-accent, 25%);
+@SCHEDULER_WORKSPACE_FOCUSED_CELL_COLOR: darken(@base-selected-background, 12%);
 
 /**
 * @name 10. Text color
 * @type color
 * @group scheduler
 */
-@SCHEDULER_PANEL_TEXT_COLOR: @base-link-color;
+@SCHEDULER_PANEL_TEXT_COLOR: @base-header-color;
 
 /**
 * @name 5. Workspace color
@@ -2245,4 +2245,4 @@
 @filterbuilder-text-color: #000000;
 @filterbuilder-text-focus-color: @filterbuilder-text-color;
 
-@filterbuilder-menu-icon-color: @base-text-color;
+@filterbuilder-menu-icon-color: @base-icon-color;

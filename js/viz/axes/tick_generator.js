@@ -271,23 +271,23 @@ function pushTick(breaks) {
 
 function calculateTicks(addInterval, correctMinValue) {
     return function(min, max, tickInterval, endOnTick, breaks) {
-
-        addInterval = addIntervalWithBreakGap(addInterval, breaks);
-
-        var cur = correctMinValue(min, tickInterval, min),
+        var correctTickValue = correctTickValueOnGapSize(addInterval, breaks),
+            cur = correctMinValue(min, tickInterval, min),
             ticks = [],
             push = pushTick();
 
         if(cur > max) {
             cur = min;
         }
+        cur = correctTickValue(cur);
+
         while(cur < max) {
             push(ticks, cur);
-            cur = addInterval(cur, tickInterval);
+            cur = correctTickValue(addInterval(cur, tickInterval));
         }
         if(endOnTick || (cur - max === 0)) {
             while(!push(ticks, cur)) {
-                cur = addInterval(cur, tickInterval);
+                cur = correctTickValue(addInterval(cur, tickInterval));
             }
         }
         return ticks;
@@ -374,13 +374,9 @@ function filterTicks(ticks, breaks) {
     return ticks;
 }
 
-
-function addIntervalWithBreakGap(addInterval, breaks) {
-
-    return function(value, interval) {
+function correctTickValueOnGapSize(addInterval, breaks) {
+    return function(value) {
         var gapSize;
-
-        value = addInterval(value, interval);
 
         if(!breaks.every(function(item) {
             var tickInBreak = value >= item.from && value < item.to;
@@ -558,7 +554,7 @@ function dateGenerator(options) {
             intervalObject = typeUtils.isString(interval) ? dateUtils.getDateIntervalByString(interval.toLowerCase()) : interval,
             divider = dateToMilliseconds(interval);
 
-        value = dateUtils.correctDateWithUnitBeginning(value, intervalObject);
+        value = dateUtils.correctDateWithUnitBeginning(value, intervalObject, null, options.firstDayOfWeek);
 
         if("years" in intervalObject) {
             value.setFullYear(floorNumber(value.getFullYear(), intervalObject.years, 0));

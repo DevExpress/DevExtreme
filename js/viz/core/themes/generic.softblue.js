@@ -75,5 +75,18 @@ registerTheme({
                 color: BORDER_COLOR
             }
         }
+    },
+    sparkline: {
+        pointColor: BACKGROUND_COLOR
+    },
+    treeMap: {
+        group: {
+            color: BORDER_COLOR,
+            label: {
+                font: {
+                    color: SUBTITLE_COLOR
+                }
+            }
+        }
     }
 }, "generic.light");

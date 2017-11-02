@@ -2,107 +2,107 @@
 
 declare module DevExpress {
 
-    /** @docid globalConfig */
+    /** Specifies settings that affect all DevExtreme widgets. */
     export interface GlobalConfguration {
-        /** @docid globalConfig_rtlEnabled */
+        /** Specifies whether the widgets support a right-to-left representation. */
         rtlEnabled?: boolean;
 
-        /** @docid globalConfig_defaultCurrency */
+        /** Specifies the default currency the widgets use. */
         defaultCurrency?: String;
 
-        /** @docid globalConfig_serverDecimalSeparator */
+        
         serverDecimalSeparator?: String;
 
-        /** @docid globalConfig_decimalSeparator */
+        
         decimalSeparator?: String;
 
-        /** @docid globalConfig_thousandsSeparator */
+        
         thousandsSeparator?: String;
 
-        /** @docid globalConfig_forceIsoDateParsing */
+        /** Specifies whether dates are parsed and serialized according to the ISO 8601 standard in all browsers. */
         forceIsoDateParsing?: boolean;
 
-        /** @docid globalConfig_useJQuery */
+        /** Specifies whether DevExtreme widgets use jQuery. */
         useJQuery?: boolean;
     }
 
-    /** @docid format */
+    /** Formats values. */
     export interface Format {
-        /** @docid format_type */
+        /** Specifies a predefined format. Does not apply if you have specified the formatter function. */
         type?: String;
 
-        /** @docid format_currency */
+        /** Specifies the currency code for the 'currency' format. */
         currency?: String;
 
-        /** @docid format_precision */
+        /** Specifies a precision for values of a numeric format. */
         precision?: number;
 
-        /** @docid format_parser */
+        /** Parses string values into numeric or date-time values. Always used with formatter. */
         parser?: (value: any) => any;
 
-        /** @docid format_formatter */
+        /** Specifies a custom format. */
         formatter?: (value: any) => any;
     }
 
-    /** @docid EventsMixin */
+    /** A mixin that provides a capability to fire and subscribe to events. */
     export interface EventsMixin<T> {
-        /** @docid EventsMixinMethods_on#on(eventName,eventHandler) */
+        /** Subscribes to a specified event. */
         on(eventName: string, eventHandler: Function): T;
 
-        /** @docid EventsMixinMethods_on#on(events) */
+        /** Subscribes to the specified events. */
         on(events: { [eventName: string]: Function; }): T;
 
-        /** @docid EventsMixinMethods_off#off(eventName) */
+        /** Detaches all event handlers from the specified event. */
         off(eventName: string): Object;
 
-        /** @docid EventsMixinMethods_off#off(eventName,eventHandler) */
+        /** Detaches a particular event handler from the specified event. */
         off(eventName: string, eventHandler: Function): T;
     }
 
-    /** @docid validationEngine */
+    /** An object that serves as a namespace for the methods required to perform validation. */
     export module validationEngine {
         export interface IValidator {
             validate(): ValidatorValidationResult;
             reset(): void;
         }
 
-        /** @docid_ignore requiredRule */
-        /** @docid_ignore requiredRule_type */
-        /** @docid_ignore requiredRule_trim */
-        /** @docid_ignore requiredRule_message */
-        /** @docid_ignore numericRule */
-        /** @docid_ignore numericRule_type */
-        /** @docid_ignore numericRule_message */
-        /** @docid_ignore rangeRule */
-        /** @docid_ignore rangeRule_type */
-        /** @docid_ignore rangeRule_min */
-        /** @docid_ignore rangeRule_max */
-        /** @docid_ignore rangeRule_message */
-        /** @docid_ignore rangeRule_reevaluate */
-        /** @docid_ignore stringLengthRule */
-        /** @docid_ignore stringLengthRule_type */
-        /** @docid_ignore stringLengthRule_min */
-        /** @docid_ignore stringLengthRule_max */
-        /** @docid_ignore stringLengthRule_trim */
-        /** @docid_ignore stringLengthRule_message */
-        /** @docid_ignore customRule */
-        /** @docid_ignore customRule_type */
-        /** @docid_ignore customRule_validationCallback */
-        /** @docid_ignore customRule_message */
-        /** @docid_ignore customRule_reevaluate */
-        /** @docid_ignore compareRule */
-        /** @docid_ignore compareRule_type */
-        /** @docid_ignore compareRule_comparisonTarget */
-        /** @docid_ignore compareRule_comparisonType */
-        /** @docid_ignore compareRule_message */
-        /** @docid_ignore compareRule_reevaluate */
-        /** @docid_ignore patternRule */
-        /** @docid_ignore patternRule_type */
-        /** @docid_ignore patternRule_pattern */
-        /** @docid_ignore patternRule_message */
-        /** @docid_ignore emailRule */
-        /** @docid_ignore emailRule_type */
-        /** @docid_ignore emailRule_message */
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
 
         export interface ValidatorValidationResult {
             isValid: boolean;
@@ -125,66 +125,69 @@ declare module DevExpress {
             reset(): void;
         }
 
-        /** @docid validationEngineMethods_getGroupConfig#getGroupConfig(group) */
+        /** Provides access to the object that represents the specified validation group. */
         export function getGroupConfig(group: any): GroupConfig
-        /** @docid validationEngineMethods_getGroupConfig#getGroupConfig() */
+        /** Provides access to the object that represents the default validation group. */
         export function getGroupConfig(): GroupConfig
 
-        /** @docid validationEngineMethods_validateGroup#validateGroup(group) */
+        /** Validates rules of the validators that belong to the specified validation group. */
         export function validateGroup(group: any): ValidationGroupValidationResult;
 
-        /** @docid validationEngineMethods_validateGroup#validateGroup() */
+        /** Validates rules of the validators that belong to the default validation group. */
         export function validateGroup(): ValidationGroupValidationResult;
 
-        /** @docid validationEngineMethods_resetGroup#resetGroup(group) */
+        /** Resets the values and validation result of the editors that belong to the specified validation group. */
         export function resetGroup(group: any): void;
 
-        /** @docid validationEngineMethods_resetGroup#resetGroup() */
+        /** Resets the values and validation result of the editors that belong to the default validation group. */
         export function resetGroup(): void;
 
-        /** @docid validationEngineMethods_validateModel */
+        /** Validates the rules that are defined within the dxValidator objects that are registered for the specified ViewModel. */
         export function validateModel(model: Object): ValidationGroupValidationResult;
 
-        /** @docid validationEngineMethods_registerModelForValidation */
+        /** Registers all the Validator objects extending fields of the specified ViewModel. */
         export function registerModelForValidation(model: Object): void;
 
-        /** @docid validationEngineMethods_unregisterModelForValidation */
+        /** Unregisters all the Validator objects extending fields of the specified ViewModel. */
         export function unregisterModelForValidation(model: Object): void;
     }
 
     export var hardwareBackButton: JQueryCallback;
 
-    /** @docid processHardwareBackButton */
+    /** Processes the hardware back button click. */
     export function processHardwareBackButton(): void;
 
-    /** @docid hideTopOverlay */
+    /** Hides the last displayed overlay widget. */
     export function hideTopOverlay(): boolean;
 
-    /** @docid rtlEnabled */
+    /**
+ * Specifies whether or not the entire application/site supports right-to-left representation.
+ * @deprecated Use the config(config) method instead.
+ */
     export var rtlEnabled: boolean;
 
-    /** @docid config#config() */
+    /** Gets the current global configuration object. */
     export function config(): Object;
 
-    /** @docid config#config(config) */
+    /** Sets the global configuration object. */
     export function config(config: GlobalConfguration): void;
 
-    /** @docid registerComponent#registerComponent(name,componentClass) */
+    
     export function registerComponent(name: string, componentClass: Object): void;
 
-    /** @docid registerComponent#registerComponent(name,namespace,componentClass) */
+    
     export function registerComponent(name: string, namespace: Object, componentClass: Object): void;
 
-    /** @docid_ignore requestAnimationFrame */
+    
     export function requestAnimationFrame(callback: Function): number;
 
-    /** @docid_ignore cancelAnimationFrame */
+    
     export function cancelAnimationFrame(requestID: number): void;
 
-    /** @docid dxaction */
+    /** Custom Knockout binding that links an HTML element with a specific action. */
     export class Action { }
 
-    /** @docid EndpointSelector */
+    /** An object used to manage OData endpoints in your application. */
     export class EndpointSelector {
         constructor(options: {
             [key: string]: {
@@ -193,140 +196,140 @@ declare module DevExpress {
             }
         });
 
-        /** @docid EndpointSelectorMethods_urlFor */
+        /** Returns an endpoint for the specified key. */
         urlFor(key: string): string;
     }
 
-    /** @docid fx */
+    /** An object that serves as a namespace for the methods that are used to animate UI elements. */
     export module fx {
 
-        /** @docid animationConfig */
+        /** Defines animation options. */
         export interface AnimationOptions {
-            /** @docid animationConfig_complete */
+            /** A function called after animation is completed. */
             complete?: (element: JQuery, config: AnimationOptions) => void;
 
-            /** @docid animationConfig_delay */
+            /** A number specifying wait time before animation execution. */
             delay?: number;
 
-            /** @docid animationConfig_staggerDelay */
+            /** A number specifying the time period to wait before the animation of the next stagger item starts. */
             staggerDelay?: number;
 
-            /** @docid animationConfig_duration */
+            /** A number specifying the time in milliseconds spent on animation. */
             duration?: number;
 
-            /** @docid animationConfig_easing */
+            /** A string specifying the easing function for animation. */
             easing?: string;
 
-            /** @docid animationConfig_from */
+            /** Specifies the initial animation state. */
             from?: any;
 
-            /** @docid animationConfig_start */
+            /** A function called before animation is started. */
             start?: (element: JQuery, config: AnimationOptions) => void;
 
-            /** @docid animationConfig_to */
+            /** Specifies a final animation state. */
             to?: any;
 
-            /** @docid animationConfig_type */
+            /** A string value specifying the animation type. */
             type?: string;
 
-            /** @docid animationConfig_direction */
+            /** Specifies the animation direction for the "slideIn" and "slideOut" animation types. */
             direction?: string;
         }
 
-        /** @docid fxmethods_animate */
+        /** Animates the specified element. */
         export function animate(element: HTMLElement, config: AnimationOptions): JQueryPromise<void>;
 
-        /** @docid fxmethods_isAnimating */
+        /** Returns a value indicating whether the specified element is being animated. */
         export function isAnimating(element: HTMLElement): boolean;
 
-        /** @docid fxmethods_stop */
+        /** Stops the animation. */
         export function stop(element: HTMLElement, jumpToEnd: boolean): void;
     }
 
-    /** @docid TransitionExecutor */
+    /** The manager that performs several specified animations at a time. */
     export class TransitionExecutor {
-        /** @docid TransitionExecutorMethods_reset */
+        /** Deletes all the animations registered in the Transition Executor by using the enter(elements, animation) and leave(elements, animation) methods. */
         reset(): void;
-        /** @docid TransitionExecutorMethods_enter */
+        /** Registers a set of elements that should be animated as "entering" using the specified animation configuration. */
         enter(elements: JQuery, animation: any): void;
-        /** @docid TransitionExecutorMethods_leave */
+        /** Registers a set of elements that should be animated as "leaving" using the specified animation configuration. */
         leave(elements: JQuery, animation: any): void;
-        /** @docid TransitionExecutorMethods_start */
+        /** Starts all the animations registered using the enter(elements, animation) and leave(elements, animation) methods beforehand. */
         start(config: Object): JQueryPromise<void>;
-        /** @docid TransitionExecutorMethods_stop */
+        /** Stops all started animations. */
         stop(): void;
     }
 
     export class AnimationPresetCollection {
-        /** @docid animationPresetsMethods_resetToDefaults */
+        /** Resets all the changes made in the animation repository. */
         resetToDefaults(): void;
-        /** @docid animationPresetsMethods_clear */
+        /** Deletes the specified animation or clears all the animation repository, if an animation name is not passed. */
         clear(name: string): void;
-        /** @docid animationPresetsMethods_registerPreset */
+        /** Adds the specified animation preset to the animation repository by the specified name. */
         registerPreset(name: string, config: any): void;
-        /** @docid animationPresetsMethods_applyChanges */
+        /** Applies the changes made in the animation repository. */
         applyChanges(): void;
-        /** @docid animationPresetsMethods_getPreset */
+        /** Returns the configuration of the animation found in the animation repository by the specified name for the current device. */
         getPreset(name: string): void;
-        /** @docid animationPresetsMethods_registerDefaultPresets */
+        /** Registers predefined animations in the animation repository. */
         registerDefaultPresets(): void;
     }
 
-    /** @docid animationPresets */
+    /** A repository of animations. */
     export var animationPresets: AnimationPresetCollection;
 
-    /** @docid device */
+    /** The device object defines the device on which the application is running. */
     export interface Device {
-        /** @docid device_android */
+        /** Indicates whether or not the device platform is Android. */
         android?: boolean;
 
-        /** @docid device_devicetype */
+        /** Specifies the type of the device on which the application is running. */
         deviceType?: string;
 
-        /** @docid device_generic */
+        /** Indicates whether or not the device platform is generic, which means that the application will look and behave according to a generic "light" or "dark" theme. */
         generic?: boolean;
 
-        /** @docid device_ios */
+        /** Indicates whether or not the device platform is iOS. */
         ios?: boolean;
 
-        /** @docid device_phone */
+        /** Indicates whether or not the device type is 'phone'. */
         phone?: boolean;
 
-        /** @docid device_platform */
+        /** Specifies the platform of the device on which the application is running. */
         platform?: string;
 
-        /** @docid device_tablet */
+        /** Indicates whether or not the device type is 'tablet'. */
         tablet?: boolean;
 
-        /** @docid device_version */
+        /** Specifies an array with the major and minor versions of the device platform. */
         version?: Array<number>;
 
-        /** @docid device_win */
+        /** Indicates whether or not the device platform is Windows. */
         win?: boolean;
 
-        /** @docid device_grade */
+        /** Specifies a performance grade of the current device. */
         grade?: string;
     }
 
 
-    /** @docid DevicesObject */
+    /** An object that serves as a namespace for the methods and events specifying information on the current device. */
     export class Devices implements EventsMixin<Devices> {
-        /** @docid DevicesObjectMethods_ctor */
+        
         constructor(options: { window: Window });
 
-        /** @docid DevicesObjectmethods_current#current(deviceName) */
+        /** Overrides actual device information to force the application to operate as if it was running on a specified device. */
         current(deviceName: any): void;
 
-        /** @docid DevicesObjectmethods_current#current() */
+        /** Returns information about the current device. */
         current(): Device;
 
-        /** @docid DevicesObjectevents_orientationChanged */
+        
         orientationChanged: JQueryCallback;
 
-        /** @docid DevicesObjectmethods_orientation */
+        /** Returns the current device orientation. */
         orientation(): string;
 
-        /** @docid DevicesObjectmethods_real */
+        /** Returns real information about the current device regardless of the value passed to the devices.current(deviceName) method. */
         real(): Device;
 
         on(eventName: "orientationChanged", eventHandler: (e: { orientation: string }) => void): Devices;
@@ -341,85 +344,74 @@ declare module DevExpress {
         off(eventName: string, eventHandler: Function): Devices;
     }
 
-    /** @docid devices */
+    
     export var devices: Devices;
 
-    /** @docid positionConfig */
+    /** The position object specifies the widget positioning options. */
     export interface PositionOptions {
-        /**
-        * @docid_ignore positionConfig_at_x
-        * @docid_ignore positionConfig_at_y
-        * @docid_ignore positionConfig_boundaryOffset_x
-        * @docid_ignore positionConfig_boundaryOffset_y
-        * @docid_ignore positionConfig_collision_x
-        * @docid_ignore positionConfig_collision_y
-        * @docid_ignore positionConfig_my_x
-        * @docid_ignore positionConfig_my_y
-        * @docid_ignore positionConfig_offset_x
-        * @docid_ignore positionConfig_offset_y
-        */
+        
 
-        /** @docid positionConfig_at */
+        /** The target element position that the widget is positioned against. */
         at?: any;
 
-        /** @docid positionConfig_boundary */
+        /** The element within which the widget is positioned. */
         boundary?: any;
 
-        /** @docid positionConfig_boundaryOffset */
+        /** Specifies the horizontal and vertical offset from the window's boundaries. */
         boundaryOffset?: any;
 
-        /** @docid positionConfig_collision */
+        /** Specifies how to move the widget if it overflows the screen. */
         collision?: any;
 
-        /** @docid positionConfig_my */
+        /** The position of the widget to align against the target element. */
         my?: any;
 
-        /** @docid positionConfig_of */
+        /** The target element that the widget is positioned against. */
         of?: any;
 
-        /** @docid positionConfig_offset */
+        /** Specifies horizontal and vertical offset in pixels. */
         offset?: any;
     }
 
     export interface ComponentOptions {
-        /** @docid componentOptions_onInitialized */
+        /** A handler for the initialized event. Executed only once, after the widget is initialized. */
         onInitialized?: Function;
 
-        /** @docid componentOptions_onOptionChanged */
+        /** A handler for the optionChanged event. Executed after an option of the widget is changed. */
         onOptionChanged?: Function;
 
-        /** @docid componentOptions_onDisposing */
+        /** A handler for the disposing event. Executed when the widget is removed from the DOM using the remove(), empty(), or html() jQuery methods only. */
         onDisposing?: Function;
     }
 
-    /** @docid component */
+    /** A base class for all components and widgets. */
     export class Component implements EventsMixin<Component> {
-        /** @docid ComponentMethods_ctor */
+        
         constructor(options?: ComponentOptions)
 
-        /** @docid componentmethods_beginupdate#beginUpdate() */
+        /** Prevents the widget from refreshing until the endUpdate() method is called. */
         beginUpdate(): void;
 
-        /** @docid componentmethods_endupdate#endUpdate() */
+        /** Refreshes the widget after a call of the beginUpdate() method. */
         endUpdate(): void;
 
-        /** @docid componentmethods_instance#instance() */
+        /** Returns this widget's instance. Use it to access other methods of the widget. */
         instance(): Component;
 
-        /** @docid componentmethods_option#option() */
+        /** Gets the widget's options. */
         option(): {
             [optionKey: string]: any;
         };
 
-        /** @docid componentmethods_option#option(options) */
+        /** Sets one or more options. */
         option(options: {
             [optionKey: string]: any;
         }): void;
 
-        /** @docid componentmethods_option#option(optionName) */
+        /** Gets a specific option value. */
         option(optionName: string): any;
 
-        /** @docid componentmethods_option#option(optionName,optionValue) */
+        /** Assigns a new value to a specific option. */
         option(optionName: string, optionValue: any): void;
 
         on(eventName: string, eventHandler: Function): Component;
@@ -430,13 +422,13 @@ declare module DevExpress {
     }
 
     export interface DOMComponentOptionsBase extends ComponentOptions {
-        /** @docid_ignore domcomponentoptions_onOptionChanged */
-        /** @docid_ignore domcomponentoptions_onDisposing */
+        
+        
 
-        /** @docid domcomponentoptions_rtlEnabled */
+        /** Switches the widget to a right-to-left representation. */
         rtlEnabled?: boolean;
 
-        /** @docid domcomponentoptions_elementAttr */
+        /** Specifies the attributes to be attached to the widget's root element. */
         elementAttr?: Object;
 
         /** A bag for holding any options that require two-way binding (Angular approach specific) */
@@ -444,32 +436,32 @@ declare module DevExpress {
     }
 
     export interface DOMComponentOptions extends DOMComponentOptionsBase {
-        /** @docid domcomponentoptions_height */
+        /** Specifies the widget's height. */
         height?: any;
 
-        /** @docid domcomponentoptions_width */
+        /** Specifies the widget's width. */
         width?: any;
     }
 
-    /** @docid domcomponent */
+    /** A base class for all components. */
     export class DOMComponent extends Component {
-        /** @docid DOMComponentMethods_ctor */
+        
         constructor(element: JQuery, options?: DOMComponentOptions);
         constructor(element: HTMLElement, options?: DOMComponentOptions);
 
-        /** @docid domcomponentmethods_element */
+        /** Gets the root element of the widget. */
         element(): JQuery;
 
-        /** @docid domcomponentmethods_dispose */
+        
         dispose(): void;
 
-        /** @docid domcomponentmethods_defaultOptions */
+        /** Specifies the device-dependent default configuration options for this component. */
         static defaultOptions(rule: {
             device?: any;
             options?: any;
         }): void;
 
-        /** @docid domcomponentmethods_getInstance */
+        
         static getInstance(element: JQuery): DOMComponent;
     }
 
@@ -480,68 +472,68 @@ declare module DevExpress {
         }
 
         export interface StoreOptions {
-            /** @docid StoreOptions_onModified */
+            /** A handler for the modified event. */
             onModified?: () => void;
 
-            /** @docid StoreOptions_onModifying */
+            /** A handler for the modifying event. */
             onModifying?: () => void;
 
-            /** @docid StoreOptions_onRemoved */
+            /** A handler for the removed event. */
             onRemoved?: (key: any) => void;
 
-            /** @docid StoreOptions_onRemoving */
+            /** A handler for the removing event. */
             onRemoving?: (key: any) => void;
 
-            /** @docid StoreOptions_onUpdated */
+            /** A handler for the updated event. */
             onUpdated?: (key: any, values: Object) => void;
 
-            /** @docid StoreOptions_onUpdating */
+            /** A handler for the updating event. */
             onUpdating?: (key: any, values: Object) => void;
 
-            /** @docid  StoreOptions_onLoaded */
+            /** A handler for the loaded event. */
             onLoaded?: (result: Array<any>) => void;
 
-            /** @docid StoreOptions_onLoading */
+            /** A handler for the loading event. */
             onLoading?: (loadOptions: LoadOptions) => void;
 
-            /** @docid StoreOptions_onInserted */
+            /** A handler for the inserted event. */
             onInserted?: (values: Object, key: any) => void;
 
-            /** @docid StoreOptions_onInserting */
+            /** A handler for the inserting event. */
             onInserting?: (values: Object) => void;
 
-            /** @docid StoreOptions_errorHandler */
+            /** Specifies the function called when the Store causes an error. */
             errorHandler?: (e: Error) => void;
 
-            /** @docid StoreOptions_key */
+            /** Specifies the key properties within the data associated with the Store. */
             key?: any;
         }
 
-        /** @docid LoadOptions */
+        
         export interface LoadOptions {
-            /** @docid LoadOptions_searchValue */
+            
             searchValue?: any;
-            /** @docid LoadOptions_searchExpr */
+            
             searchExpr?: any;
-            /** @docid LoadOptions_searchOperation */
+            
             searchOperation?: string;
-            /** @docid LoadOptions_filter */
+            
             filter?: Object;
-            /** @docid LoadOptions_sort */
+            
             sort?: Object;
-            /** @docid LoadOptions_select */
+            
             select?: Object;
-            /** @docid LoadOptions_expand */
+            
             expand?: Object;
-            /** @docid LoadOptions_group */
+            
             group?: Object;
-            /** @docid LoadOptions_skip */
+            
             skip?: number;
-            /** @docid LoadOptions_take */
+            
             take?: number;
-            /** @docid LoadOptions_userData */
+            
             userData?: Object;
-            /** @docid LoadOptions_requireTotalCount */
+            
             requireTotalCount?: boolean;
         }
 
@@ -556,38 +548,38 @@ declare module DevExpress {
             groupSummary?: Object;
         }
 
-        /** @docid Store */
+        /** The base class for all Stores. */
         export class Store implements EventsMixin<Store> {
             constructor(options?: StoreOptions);
 
-            /** @docid StoreMethods_byKey */
+            /** Returns the data item specified by the key. */
             byKey(key: any): JQueryPromise<any>;
 
-            /** @docid StoreMethods_insert */
+            /** Adds an item to the data associated with this Store. */
             insert(values: Object): JQueryPromise<any>;
 
-            /** @docid StoreMethods_key */
+            /** Returns the key expression specified via the key configuration option. */
             key(): any;
 
-            /** @docid StoreMethods_keyOf */
+            /** Returns the key of the Store item that matches the specified object. */
             keyOf(obj: Object): any;
 
-            /** @docid StoreMethods_load#load() */
+            /** Starts loading data. */
             load(): JQueryPromise<any[]>;
 
-            /** @docid StoreMethods_load#load(options) */
+            /** Starts loading data. */
             load(options?: LoadOptions): JQueryPromise<any[]>;
 
-            /** @docid StoreMethods_remove */
+            /** Removes the data item specified by the key. */
             remove(key: any): JQueryPromise<any>;
 
-            /** @docid StoreMethods_totalCount */
+            /** Obtains the total count of items that will be returned by the load() function. */
             totalCount(options?: {
                 filter?: Object;
                 group?: Object;
             }): JQueryPromise<any>;
 
-            /** @docid StoreMethods_update */
+            /** Updates the data item specified by the key. */
             update(key: any, values: Object): JQueryPromise<any>;
 
             on(eventName: "removing", eventHandler: (key: any) => void): Store;
@@ -630,18 +622,18 @@ declare module DevExpress {
         }
 
         export interface ArrayStoreOptions extends StoreOptions {
-            /** @docid ArrayStoreOptions_data */
+            /** Specifies the array associated with this Store. */
             data?: Array<any>;
         }
 
-        /** @docid ArrayStore */
+        /** A Store accessing an in-memory array. */
         export class ArrayStore extends Store {
             constructor(options?: ArrayStoreOptions);
 
-            /** @docid ArrayStoreMethods_clear */
+            /** Clears all data associated with the current ArrayStore. */
             clear(): void;
 
-            /** @docid ArrayStoreMethods_createQuery */
+            /** Creates the Query object for the underlying array. */
             createQuery(): Query;
         }
 
@@ -651,100 +643,100 @@ declare module DevExpress {
         }
 
         export interface CustomStoreOptions extends StoreOptions {
-            /** @docid CustomStoreOptions_useDefaultSearch */
+            /** Specifies whether or not the store combines the search expression with the filter expression. */
             useDefaultSearch?: boolean;
 
-            /** @docid CustomStoreOptions_loadMode */
+            /** Specifies how data returned by the load function is treated. */
             loadMode?: string;
 
-            /** @docid CustomStoreOptions_cacheRawData */
+            /** Specifies whether raw data should be saved in the cache. Applies only if loadMode is "raw". */
             cacheRawData?: boolean;
 
-            /** @docid CustomStoreOptions_byKey */
+            /** The user implementation of the byKey(key, extraOptions) method. */
             byKey?: (key: any) => Promise;
 
-            /** @docid CustomStoreOptions_insert */
+            /** The user implementation of the insert(values) method. */
             insert?: (values: Object) => Promise;
 
-            /** @docid CustomStoreOptions_load */
+            /** The user implementation of the load(options) method. */
             load?: (options?: LoadOptions) => Promise;
 
-            /** @docid CustomStoreOptions_remove */
+            /** The user implementation of the remove(key) method. */
             remove?: (key: any) => Promise;
 
-            /** @docid CustomStoreOptions_totalCount */
+            /** The user implementation of the totalCount(options) method. */
             totalCount?: (options?: {
                 filter?: Object;
                 group?: Object;
             }) => Promise;
 
-            /** @docid CustomStoreOptions_update */
+            /** The user implementation of the update(key, values) method. */
             update?: (key: any, values: Object) => Promise;
         }
 
-        /** @docid CustomStore */
+        /** A Store object that enables you to implement your own data access logic. */
         export class CustomStore extends Store {
             constructor(options: CustomStoreOptions);
 
-            /** @docid CustomStoreMethods_clearRawDataCache */
+            /** Deletes data from the cache. Takes effect only if the cacheRawData option is true. */
             clearRawDataCache(): void;
         }
 
         export interface DataSourceOptions {
-            /** @docid_ignore DataSourceOptions_store_type */
+            
 
-            /** @docid DataSourceOptions_filter */
+            /** Specifies data filtering conditions. */
             filter?: Object;
 
-            /** @docid DataSourceOptions_group */
+            /** Specifies data grouping conditions. */
             group?: Object;
 
-            /** @docid DataSourceOptions_map */
+            /** The item mapping function. */
             map?: (record: any) => any;
 
-            /** @docid DataSourceOptions_pageSize */
+            /** Specifies the maximum number of items the page can contain. */
             pageSize?: number;
 
-            /** @docid DataSourceOptions_paginate */
+            /** Specifies whether a DataSource loads data by pages, or all items at once. */
             paginate?: boolean;
 
-            /** @docid DataSourceOptions_postProcess */
+            /** The data post processing function. */
             postProcess?: (data: any[]) => any[];
 
-            /** @docid DataSourceOptions_searchExpr */
+            /** Specifies a value by which the required items are searched. */
             searchExpr?: any;
 
-            /** @docid DataSourceOptions_searchOperation */
+            /** Specifies the comparison operation used to search for the required items. */
             searchOperation?: string;
 
-            /** @docid DataSourceOptions_searchValue */
+            /** Specifies the value to which the search expression is compared. */
             searchValue?: any;
 
-            /** @docid DataSourceOptions_select */
+            /** Specifies the initial select option value. */
             select?: Object;
 
-            /** @docid DataSourceOptions_expand */
+            /** An array of the strings that represent the names of the navigation properties to be loaded simultaneously with the OData store's entity. */
             expand?: Object;
 
-            /** @docid DataSourceOptions_customQueryParams */
+            /** The bag of custom parameters passed to the query executed when the DataSource load operation is invoked. */
             customQueryParams?: Object;
 
-            /** @docid DataSourceOptions_requireTotalCount */
+            /** Specifies whether or not the DataSource instance requests the total count of items available in the storage. */
             requireTotalCount?: boolean;
 
-            /** @docid DataSourceOptions_sort */
+            /** Specifies the initial sort option value. */
             sort?: Object;
 
-            /** @docid DataSourceOptions_store */
+            /** Specifies the underlying Store instance used to access data. */
             store?: any;
 
-            /** @docid DataSourceOptions_onChanged */
+            /** A handler for the changed event. */
             onChanged?: () => void;
 
-            /** @docid DataSourceOptions_onLoadingChanged */
+            /** A handler for the loadingChanged event. */
             onLoadingChanged?: (isLoading: boolean) => void;
 
-            /** @docid DataSourceOptions_onLoadError */
+            /** A handler for the loadError event. */
             onLoadError?: (e?: Error) => void;
         }
 
@@ -752,116 +744,116 @@ declare module DevExpress {
             operationId: number;
         }
 
-        /** @docid DataSource */
+        /** An object that provides access to a data web service or local data storage for collection container widgets. */
         export class DataSource implements EventsMixin<DataSource> {
-            /** @docid DataSourceMethods_ctor#ctor(url) */
+            
             constructor(url: string);
-            /** @docid DataSourceMethods_ctor#ctor(data) */
+            
             constructor(data: Array<any>);
-            /** @docid DataSourceMethods_ctor#ctor(options) */
+            
             constructor(options: CustomStoreOptions);
             constructor(options: DataSourceOptions);
 
-            /** @docid DataSourceMethods_dispose */
+            /** Disposes all resources associated with this DataSource. */
             dispose(): void;
 
-            /** @docid DataSourceMethods_filter#filter() */
+            /** Returns the current filter option value. */
             filter(): Object;
 
-            /** @docid DataSourceMethods_filter#filter(filterExpr) */
+            /** Sets the filter option value. */
             filter(filterExpr: Object): void;
 
-            /** @docid DataSourceMethods_group#group() */
+            /** Returns the current group option value. */
             group(): Object;
 
-            /** @docid DataSourceMethods_group#group(groupExpr) */
+            /** Sets the group option value. */
             group(groupExpr: Object): void;
 
-            /** @docid DataSourceMethods_isLastPage */
+            /** Indicates whether or not the current page contains fewer items than the number of items specified by the pageSize configuration option. */
             isLastPage(): boolean;
 
-            /** @docid DataSourceMethods_isLoaded */
+            /** Indicates whether or not at least one load() method execution has successfully finished. */
             isLoaded(): boolean;
 
-            /** @docid DataSourceMethods_isLoading */
+            /** Indicates whether or not the DataSource is currently being loaded. */
             isLoading(): boolean;
 
-            /** @docid DataSourceMethods_items */
+            /** Returns the array of items currently operated by the DataSource. */
             items(): Array<any>;
 
-            /** @docid DataSourceMethods_key */
+            /** Returns the key expression specified by the key configuration option of the underlying Store. */
             key(): any;
 
-            /** @docid DataSourceMethods_load */
+            /** Starts loading data. */
             load(): OperationPromise<Array<any>>;
 
-            /** @docid DataSourceMethods_reload */
+            /** Clears currently loaded DataSource items and calls the load() method. */
             reload(): OperationPromise<Array<any>>;
 
-            /** @docid DataSourceMethods_loadOptions */
+            /** Returns an object that would be passed to the load() method of the underlying Store according to the current data shaping option values of the current DataSource instance. */
             loadOptions(): Object;
 
-            /** @docid DataSourceMethods_pageSize#pageSize() */
+            /** Returns the current pageSize option value. */
             pageSize(): number;
 
-            /** @docid DataSourceMethods_pageSize#pageSize(value) */
+            /** Sets the pageSize option value. */
             pageSize(value: number): void;
 
-            /** @docid DataSourceMethods_pageIndex#pageIndex() */
+            /** Specifies the index of the currently loaded page. */
             pageIndex(): number;
 
-            /** @docid DataSourceMethods_pageIndex#pageIndex(newIndex) */
+            /** Specifies the index of the page to be loaded during the next load() method execution. */
             pageIndex(newIndex: number): void;
 
-            /** @docid DataSourceMethods_paginate#paginate() */
+            /** Returns the current paginate option value. */
             paginate(): boolean;
 
-            /** @docid DataSourceMethods_paginate#paginate(value) */
+            /** Sets the paginate option value. */
             paginate(value: boolean): void;
 
-            /** @docid DataSourceMethods_searchExpr#searchExpr() */
+            /** Returns the searchExpr option value. */
             searchExpr(): any;
 
-            /** @docid DataSourceMethods_searchExpr#searchExpr(expr) */
+            /** Sets the searchExpr option value. */
             searchExpr(...expr: any[]): void;
 
-            /** @docid DataSourceMethods_searchOperation#searchOperation() */
+            /** Returns the currently specified search operation. */
             searchOperation(): string;
 
-            /** @docid DataSourceMethods_searchOperation#searchOperation(op) */
+            /** Sets the current search operation. */
             searchOperation(op: string): void;
 
-            /** @docid DataSourceMethods_searchValue#searchValue() */
+            /** Returns the searchValue option value. */
             searchValue(): any;
 
-            /** @docid DataSourceMethods_searchValue#searchValue(value) */
+            /** Sets the searchValue option value. */
             searchValue(value: any): void;
 
-            /** @docid DataSourceMethods_select#select() */
+            /** Returns the current select option value. */
             select(): any;
 
-            /** @docid DataSourceMethods_select#select(expr) */
+            /** Sets the select option value. */
             select(expr: any): void;
 
-            /** @docid DataSourceMethods_requireTotalCount#requireTotalCount() */
+            /** Returns the current requireTotalCount option value. */
             requireTotalCount(): boolean;
 
-            /** @docid DataSourceMethods_requireTotalCount#requireTotalCount(value) */
+            /** Sets the requireTotalCount option value. */
             requireTotalCount(value: boolean): void;
 
-            /** @docid DataSourceMethods_sort#sort() */
+            /** Returns the current sort option value. */
             sort(): any;
 
-            /** @docid DataSourceMethods_sort#sort(sortExpr) */
+            /** Sets the sort option value. */
             sort(sortExpr: any): void;
 
-            /** @docid DataSourceMethods_store */
+            /** Returns the underlying Store instance. */
             store(): Store;
 
-            /** @docid DataSourceMethods_totalCount */
+            /** Returns the number of data items available in an underlying Store after the last load() operation without paging. */
             totalCount(): number;
 
-            /** @docid DataSourceMethods_cancel */
+            /** Cancels the load operation associated with the specified identifier. */
             cancel(operationId: number): boolean;
 
             on(eventName: "loadingChanged", eventHandler: (isLoading: boolean) => void): DataSource;
@@ -881,79 +873,76 @@ declare module DevExpress {
             off(eventName: string, eventHandler: Function): DataSource;
         }
 
-        /** @docid EdmLiteral */
+        /** An object used to work with primitive data types not supported by JavaScript when accessing an OData web service. */
         export class EdmLiteral {
-            /** @docid EdmLiteralMethods_ctor */
+            /** Creates an EdmLiteral instance and assigns the specified value to it. */
             constructor(value: string);
 
-            /** @docid EdmLiteralMethods_valueOf */
+            /** Returns a string representation of the value associated with this EdmLiteral object. */
             valueOf(): string;
         }
 
-        /** @docid Guid */
+        /** An object used to generate and hold the GUID. */
         export class Guid {
 
-            /** @docid Guidmethods_ctor#ctor(value) */
+            /** Creates a new Guid instance that holds the specified GUID. */
             constructor(value: string);
 
-            /** @docid Guidmethods_ctor#ctor() */
+            /** Creates a new Guid instance holding the generated GUID. */
             constructor();
 
-            /** @docid Guidmethods_toString */
+            /** Returns a string representation of the Guid instance. */
             toString(): string;
 
-            /** @docid Guidmethods_valueOf */
+            /** Returns a string representation of the Guid instance. */
             valueOf(): string;
         }
 
         export interface LocalStoreOptions extends ArrayStoreOptions {
-            /** @docid LocalStoreOptions_flushInterval */
+            /** Specifies the time (in miliseconds) after the change operation, before the data is flushed. */
             flushInterval?: number;
 
-            /** @docid LocalStoreOptions_immediate */
+            /** Specifies whether the data is flushed immediatelly after each change operation, or after the delay specified via the flushInterval option. */
             immediate?: boolean;
 
-            /** @docid LocalStoreOptions_name */
+            /** The unique identifier used to distinguish the data within the HTML5 Web Storage. */
             name?: string;
         }
 
-        /** @docid LocalStore */
+        /** A Store providing access to the HTML5 Web Storage. */
         export class LocalStore extends ArrayStore {
             constructor(options?: LocalStoreOptions);
 
-            /** @docid LocalStoreMethods_clear */
+            /** Removes all data associated with this Store. */
             clear(): void;
         }
 
         export interface ODataContextOptions extends ODataStoreOptions {
-            /** @docid ODataContextOptions_entities */
+            /** Specifies the list of entities to be accessed with the ODataContext. */
             entities?: Object;
 
-            /** @docid ODataContextOptions_errorHandler */
+            /** Specifies the function called if the ODataContext causes an error. */
             errorHandler?: (e: Error) => void;
         }
 
-        /** @docid ODataContext */
+        /** Provides access to the entire OData service. */
         export class ODataContext {
             constructor(options?: ODataContextOptions);
 
-            /** @docid ODataContextmethods_get */
+            /** Initiates the specified WebGet service operation that returns a value. For the information on service operations, refer to the OData documentation. */
             get(operationName: string, params: Object): JQueryPromise<any>;
 
-            /** @docid ODataContextmethods_invoke */
+            /** Initiates the specified WebGet service operation that returns nothing. For the information on service operations, refer to the OData documentation. */
             invoke(operationName: string, params: Object, httpMethod: Object): JQueryPromise<any>;
 
-            /** @docid ODataContextmethods_objectLink */
+            /** Return a special proxy object to describe the entity link. */
             objectLink(entityAlias: string, key: any): Object;
         }
 
         export interface ODataStoreOptions extends StoreOptions {
-            /** @docid_ignore ODataStoreOptions_onLoading */
+            
 
-            /**
-              * @docid ODataStoreOptions_beforeSend
-              * @docid ODataContextOptions_beforeSend
-              */
+            /** A function used to customize a web request before it is sent. */
             beforeSend?: (request: {
                 url: string;
                 async: boolean;
@@ -964,152 +953,133 @@ declare module DevExpress {
                 headers: Object;
             }) => void;
 
-            /**
-              * @docid ODataStoreOptions_jsonp
-              * @docid ODataContextOptions_jsonp
-              */
+            /** Specifies whether the ODataStore uses the JSONP approach to access non-CORS-compatible remote services. */
             jsonp?: boolean;
 
-            /**
-              * @docid ODataStoreOptions_keyType
-              */
+            /** Specifies the type of the ODataStore key property. The following key types are supported out of the box: String, Int32, Int64, Boolean, Single, Decimal and Guid. */
             keyType?: any;
 
-            /**
-              * @docid ODataStoreOptions_fieldTypes
-              */
+            /** Specifies the types of data fields. Accepts the following types: "String", "Int32", "Int64", "Boolean", "Single", "Decimal" and "Guid". */
             fieldTypes?: Object;
 
-            /**
-              * @docid ODataStoreOptions_deserializeDates
-              * @docid ODataContextOptions_deserializeDates
-              */
+            /** Specifies whether or not dates in a response are deserialized. */
             deserializeDates?: boolean;
 
-            /**
-              * @docid ODataStoreOptions_url
-              * @docid ODataContextOptions_url
-              */
+            /** Specifies the URL of the data service being accessed via the current ODataContext. */
             url?: string;
 
-            /**
-              * @docid ODataStoreOptions_version
-              * @docid ODataContextOptions_version
-              */
+            /** Specifies the version of the OData protocol used to interact with the data service. */
             version?: number;
 
-            /**
-              * @docid ODataStoreOptions_withCredentials
-              * @docid ODataContextOptions_withCredentials
-              */
+            /** Specifies the value of the withCredentials field of the underlying jqXHR object. */
             withCredentials?: boolean;
         }
 
-        /** @docid ODataStore */
+        /** A Store providing access to a separate OData web service entity. */
         export class ODataStore extends Store {
-            /** @docid_ignore ODataStoreMethods_load */
+            
 
             constructor(options?: ODataStoreOptions);
 
-            /** @docid ODataStoreMethods_createQuery */
+            /** Creates the Query object for the OData endpoint. */
             createQuery(loadOptions: Object): Object;
 
-            /** @docid ODataStoreMethods_byKey */
+            /** Returns the data item specified by the key. */
             byKey(key: any, extraOptions?: { expand?: Object }): JQueryPromise<any>;
         }
 
-        /** @docid Query */
+        /** An universal chainable data query interface object. */
         export interface Query {
 
-            /** @docid QueryMethods_aggregate#aggregate(step) */
+            /** Calculates a custom summary for the items in the current Query. */
             aggregate(step: (accumulator: any, value: any) => any): JQueryPromise<any>;
 
-            /** @docid QueryMethods_aggregate#aggregate(seed,step,finalize) */
+            /** Calculates a custom summary for the items in the current Query. */
             aggregate(seed: any, step: (accumulator: any, value: any) => any, finalize: (result: any) => any): JQueryPromise<any>;
 
-            /** @docid QueryMethods_avg#avg(getter) */
+            /** Calculates the average item value for the current Query. */
             avg(getter: Object): JQueryPromise<any>;
 
-            /** @docid QueryMethods_max#max(getter) */
+            /** Finds the item with the maximum getter value. */
             max(getter: Object): JQueryPromise<any>;
 
-            /** @docid QueryMethods_max#max() */
+            /** Finds the item with the maximum value in the Query. */
             max(): JQueryPromise<any>;
 
-            /** @docid QueryMethods_min#min() */
+            /** Finds the item with the minimum value in the Query. */
             min(): JQueryPromise<any>;
 
-            /** @docid QueryMethods_min#min(getter) */
+            /** Finds the item with the minimum getter value. */
             min(getter: Object): JQueryPromise<any>;
 
-            /** @docid QueryMethods_avg#avg() */
+            /** Calculates the average item value for the current Query, if each Query item has a numeric type. */
             avg(): JQueryPromise<any>;
 
-            /** @docid QueryMethods_count */
+            /** Returns the total count of items in the current Query. */
             count(): JQueryPromise<any>;
 
-            /** @docid QueryMethods_enumerate */
+            /** Executes the Query. */
             enumerate(): JQueryPromise<any>;
 
-            /** @docid QueryMethods_filter#filter(criteria) */
+            /** Filters the current Query data. */
             filter(criteria: Array<any>): Query;
 
-            /** @docid QueryMethods_filter#filter(predicate) */
+            /** Filters the current Query data. */
             filter(predicate: (item: any) => boolean): Query;
 
-            /** @docid QueryMethods_groupBy */
+            /** Groups the current Query data. */
             groupBy(getter: Object): Query;
 
-            /** @docid QueryMethods_select */
+            /** Applies the specified transformation to each item. */
             select(getter: Object): Query;
 
-            /** @docid QueryMethods_slice */
+            /** Limits the data item count. */
             slice(skip: number, take?: number): Query;
 
-            /** @docid QueryMethods_sortBy#sortBy(getter,desc) */
+            /** Sorts current Query data. */
             sortBy(getter: Object, desc: boolean): Query;
 
-            /** @docid QueryMethods_sortBy#sortBy(getter) */
+            /** Sorts current Query data. */
             sortBy(getter: Object): Query;
 
-            /** @docid QueryMethods_sum#sum(getter) */
+            /** Calculates the sum of item getter values in the current Query. */
             sum(getter: Object): JQueryPromise<any>;
 
-            /** @docid QueryMethods_sum#sum() */
+            /** Calculates the sum of item values in the current Query. */
             sum(): JQueryPromise<any>;
 
-            /** @docid QueryMethods_thenBy#thenBy(getter) */
+            /** Adds one more sorting condition to the current Query. */
             thenBy(getter: Object): Query;
 
-            /** @docid QueryMethods_thenBy#thenBy(getter,desc) */
+            /** Adds one more sorting condition to the current Query. */
             thenBy(getter: Object, desc: boolean): Query;
 
-            /** @docid QueryMethods_toArray */
+            /** Returns the array of current Query items. */
             toArray(): Array<any>;
         }
 
-        /** @docid Utils_errorHandler */
+        /** The global data layer error handler. */
         export var errorHandler: (e: Error) => void;
 
-        /** @docid Utils_base64encode */
+        /** Encodes the specified string or array of bytes to base64 encoding. */
         export function base64_encode(input: any): string;
 
-        /** @docid Utils_query#query(array) */
+        /** Creates a Query instance. */
         export function query(array: Array<any>): Query;
 
-        /** @docid Utils_query#query(url,queryOptions) */
+        /** Creates a Query instance for accessing the remote service specified by a URL. */
         export function query(url: string, queryOptions: Object): Query;
 
-        /** @docid Utils */
+        /** This section describes the utility objects provided by the DevExtreme data layer. */
         export module utils {
-            /** @docid Utils_compileGetter */
+            /** Compiles a getter function from the getter expression. */
             export function compileGetter(expr: any): Function;
 
-            /** @docid Utils_compileSetter */
+            /** Compiles a setter function from the setter expression. */
             export function compileSetter(expr: any): Function;
 
             export module odata {
-                /** @docid Utils_keyConverters */
+                /** Holds key value converters for OData. */
                 export module keyConverters {
                     export function String(value: any): string;
                     export function Int32(value: any): number;
@@ -1123,283 +1093,283 @@ declare module DevExpress {
         }
     }
 
-    /** @docid localization */
+    /** An object that serves as a namespace for the methods that are used to localize an application. */
     export module localization {
-        /** @docid localization_locale#locale() */
+        /** Gets the current locale identifier. */
         export function locale(): string;
 
-        /** @docid localization_locale#locale(locale) */
+        /** Sets the current locale identifier. */
         export function locale(locale: string): void;
 
-        /** @docid localization_loadMessages */
+        /** Loads DevExtreme messages. */
         export function loadMessages(messages: any): void;
     }
 
-    /** @docid_ignore events */
-    /** @docid_ignore eventsMethods_on */
-    /** @docid_ignore eventsMethods_one */
-    /** @docid_ignore eventsMethods_off */
-    /** @docid_ignore eventsMethods_trigger */
-    /** @docid_ignore eventsMethods_triggerHandler */
-    /** @docid_ignore eventsHandler */
-    /** @docid_ignore dxEvent */
-    /** @docid_ignore dxEventFields_isPropagationStopped */
-    /** @docid_ignore dxEventFields_stopPropagation */
-    /** @docid_ignore dxEventFields_isImmediatePropagationStopped */
-    /** @docid_ignore dxEventFields_stopImmediatePropagation */
-    /** @docid_ignore dxEventFields_isDefaultPrevented */
-    /** @docid_ignore dxEventFields_preventDefault */
-    /** @docid_ignore dxEventFields_target */
-    /** @docid_ignore dxEventFields_currentTarget */
-    /** @docid_ignore dxEventFields_delegateTarget */
-    /** @docid_ignore dxEventFields_data */
-    /** @docid_ignore event */
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
 
-    /** @docid_ignore dxElement */
+    
 
-    /** @docid ui */
+    /** An object that serves as a namespace for DevExtreme UI widgets as well as for methods implementing UI logic in DevExtreme sites/applications. */
     export module ui {
-        /** @docid_ignore dxTemplate */
-        /** @docid_ignore dxTemplateOptions_name */
+        
+        
 
         export interface WidgetOptions extends DOMComponentOptions {
-            /** @docid_ignore WidgetOptions_onContentReady */
-            /** @docid_ignore WidgetOptions_onFocusIn */
-            /** @docid_ignore WidgetOptions_onFocusOut */
+            
+            
+            
 
-            /** @docid WidgetOptions_activeStateEnabled */
+            /** Specifies whether or not the widget changes its state when interacting with a user. */
             activeStateEnabled?: boolean;
 
-            /** @docid WidgetOptions_disabled */
+            /** Specifies whether the widget responds to user interaction. */
             disabled?: boolean;
 
-            /** @docid WidgetOptions_hoverStateEnabled */
+            /** Specifies whether the widget changes its state when a user pauses on it. */
             hoverStateEnabled?: boolean;
 
-            /** @docid WidgetOptions_focusStateEnabled */
+            /** Specifies whether the widget can be focused using keyboard navigation. */
             focusStateEnabled?: boolean;
 
-            /** @docid WidgetOptions_accessKey */
+            /** Specifies the shortcut key that sets focus on the widget. */
             accessKey?: string;
 
-            /** @docid WidgetOptions_visible */
+            /** Specifies whether the widget is visible. */
             visible?: boolean;
 
-            /** @docid WidgetOptions_tabIndex */
+            /** Specifies the number of the element when the Tab key is used for navigating. */
             tabIndex?: number;
 
-            /** @docid WidgetOptions_hint */
+            /** Specifies text for a hint that appears when a user pauses on the widget. */
             hint?: string;
         }
 
-        /** @docid Widget */
+        /** The base class for widgets. */
         export class Widget extends DOMComponent {
-            /** @docid_ignore dxItem */
+            
 
             constructor(options?: WidgetOptions);
 
-            /** @docid WidgetMethods_repaint */
+            /** Repaints the widget. Call it if you made modifications that changed the widget's state to invalid. */
             repaint(): void;
 
-            /** @docid WidgetMethods_focus */
+            /** Sets focus on the widget. */
             focus(): void;
 
-            /** @docid WidgetMethods_registerKeyHandler */
+            /** Registers a handler to be executed when a user presses a specific key. */
             registerKeyHandler(key: string, handler: Function): void;
         }
 
         export interface CollectionWidgetOptions extends WidgetOptions {
-            /** @docid_ignore CollectionWidgetOptions_selectOnFocus */
-            /** @docid_ignore CollectionWidgetOptions_selectionMode */
-            /** @docid_ignore CollectionWidgetOptions_selectionByClick */
-            /** @docid_ignore CollectionWidgetOptions_selectionRequired */
-            /** @docid_ignore CollectionWidgetOptions_focusedElement */
+            
+            
+            
+            
+            
 
-            /** @docid CollectionWidgetOptions_datasource */
+            /** A data source used to fetch data to be displayed by the widget. */
             dataSource?: any;
 
-            /** @docid CollectionWidgetOptions_itemHoldTimeout */
+            /** The time period in milliseconds before the onItemHold event is raised. */
             itemHoldTimeout?: number;
 
-            /** @docid CollectionWidgetOptions_items */
+            /** An array of items displayed by the widget. */
             items?: Array<any>;
 
-            /** @docid CollectionWidgetOptions_itemTemplate */
+            /** Specifies a custom template for an item. */
             itemTemplate?: any;
 
-            /** @docid CollectionWidgetOptions_loopItemFocus */
+            
             loopItemFocus?: boolean;
 
-            /** @docid CollectionWidgetOptions_noDataText */
+            /** The text or HTML markup displayed by the widget if the item collection is empty. */
             noDataText?: string;
 
-            /** @docid CollectionWidgetOptions_onContentReady */
+            
             onContentReady?: any;
 
-            /** @docid CollectionWidgetOptions_onItemClick */
+            /** A handler for the itemClick event. */
             onItemClick?: any;
 
-            /** @docid CollectionWidgetOptions_onItemContextMenu */
+            /** A handler for the itemContextMenu event. */
             onItemContextMenu?: Function;
 
-            /** @docid CollectionWidgetOptions_onItemHold */
+            /** A handler for the itemHold event. */
             onItemHold?: Function;
 
-            /** @docid CollectionWidgetOptions_onItemRendered */
+            /** A handler for the itemRendered event. */
             onItemRendered?: Function;
 
-            /** @docid CollectionWidgetOptions_onSelectionChanged */
+            /** A handler for the selectionChanged event. Raised after an item is selected or unselected. */
             onSelectionChanged?: Function;
 
-            /** @docid CollectionWidgetOptions_selectedIndex */
+            /** The index of the currently selected widget item. */
             selectedIndex?: number;
 
-            /** @docid CollectionWidgetOptions_selectedItem */
+            /** The selected item object. */
             selectedItem?: Object;
 
-            /** @docid CollectionWidgetOptions_selectedItems */
+            /** An array of currently selected item objects. */
             selectedItems?: Array<any>;
 
-            /** @docid CollectionWidgetOptions_selectedItemKeys */
+            /** Specifies an array of currently selected item keys. */
             selectedItemKeys?: Array<any>;
 
-            /** @docid CollectionWidgetOptions_keyExpr */
+            /** Specifies which data field provides keys for widget items. */
             keyExpr?: any;
 
-            /** @docid CollectionWidgetOptions_onItemDeleting */
+            /** A handler for the itemDeleting event. Executed before an item is deleted from the data source. */
             onItemDeleting?: Function;
 
-            /** @docid CollectionWidgetOptions_onItemDeleted */
+            /** A handler for the itemDeleted event. */
             onItemDeleted?: Function;
 
-            /** @docid CollectionWidgetOptions_onItemReordered */
+            /** A handler for the itemReordered event. */
             onItemReordered?: Function;
         }
 
-        /** @docid DataHelperMixin */
+        
         export interface DataHelperMixin {
-            /** @docid DataHelperMixinMethods_getDataSource */
+            /** Gets the DataSource instance. */
             getDataSource(): DevExpress.data.DataSource;
         }
 
-        /** @docid CollectionWidget */
+        /** The base class for widgets containing an item collection. */
         export class CollectionWidget extends Widget implements DataHelperMixin
         {
             constructor(element: JQuery, options?: CollectionWidgetOptions);
             constructor(element: HTMLElement, options?: CollectionWidgetOptions);
 
-            /** @docid_ignore CollectionWidgetItemTemplate_disabled */
-            /** @docid_ignore CollectionWidgetItemTemplate_html */
-            /** @docid_ignore CollectionWidgetItemTemplate_text */
-            /** @docid_ignore CollectionWidgetItemTemplate_visible */
-            /** @docid_ignore CollectionWidgetItemTemplate_template */
-            /** @docid_ignore CollectionWidgetmethods_itemElements */
-            /** @docid_ignore CollectionWidgetmethods_itemsContainer */
-            /** @docid_ignore CollectionWidgetmethods_getFocusedItemId */
+            
+            
+            
+            
+            
+            
+            
+            
 
-            /** @docid CollectionWidgetMethods_selectItem */
+            
             selectItem(itemElement: any): void;
 
-            /** @docid CollectionWidgetMethods_unselectItem */
+            
             unselectItem(itemElement: any): void;
 
-            /** @docid CollectionWidgetMethods_deleteItem */
+            
             deleteItem(itemElement: any): JQueryPromise<void>;
 
-            /** @docid CollectionWidgetMethods_isItemSelected */
+            
             isItemSelected(itemElement: any): boolean;
 
-            /** @docid CollectionWidgetMethods_reorderItem */
+            
             reorderItem(itemElement: any, toItemElement: any): JQueryPromise<void>;
 
             getDataSource(): DevExpress.data.DataSource;
         }
 
-        /** @docid DataExpressionMixin */
+        
         export interface DataExpressionMixinOptions {
 
-            /** @docid_ignore DataExpressionMixinItemTemplate_disabled */
-            /** @docid_ignore DataExpressionMixinItemTemplate_html */
-            /** @docid_ignore DataExpressionMixinItemTemplate_text */
-            /** @docid_ignore DataExpressionMixinItemTemplate_visible */
-            /** @docid_ignore DataExpressionMixinItemTemplate_template */
+            
+            
+            
+            
+            
 
-            /** @docid DataExpressionMixinOptions_dataSource */
+            /** A data source used to fetch data to be displayed by the widget. */
             dataSource?: any;
 
-            /** @docid DataExpressionMixinOptions_displayExpr  */
+            /** Specifies the name of the data source item field whose value is displayed by the widget. */
             displayExpr?: any;
 
-            /** @docid DataExpressionMixinOptions_valueExpr  */
+            /** Specifies which data field provides the widget value. */
             valueExpr?: any;
 
-            /** @docid DataExpressionMixinOptions_items */
+            /** An array of items displayed by the widget. */
             items?: Array<any>;
 
-            /** @docid DataExpressionMixinOptions_itemTemplate  */
+            /** Specifies a custom template for an item. */
             itemTemplate?: any;
 
-            /** @docid DataExpressionMixinOptions_value */
+            /** Specifies the currently selected value. */
             value?: any;
         }
 
-        /** @docid SearchBoxMixin */
+        
         export interface SearchBoxMixinOptions {
-            /** @docid SearchBoxMixinOptions_searchEnabled */
+            /** Specifies whether searching is enabled. */
             searchEnabled?: boolean;
 
-            /** @docid SearchBoxMixinOptions_searchValue */
+            /** Specifies the current search string. */
             searchValue?: string;
 
-            /** @docid SearchBoxMixinOptions_searchExpr */
+            /** Specifies a data object's field name or an expression whose value is compared to the search string. */
             searchExpr?: any;
 
-            /** @docid SearchBoxMixinOptions_searchMode */
+            /** Specifies whether the widget finds entries that contain your search string or entries that only start with it. */
             searchMode?: string;
 
-            /** @docid SearchBoxMixinOptions_searchEditorOptions */
+            /** Configures the search panel. */
             searchEditorOptions?: DevExpress.ui.dxTextBoxOptions;
         }
 
         export interface EditorOptions extends WidgetOptions {
-            /** @docid EditorOptions_value */
+            /** Specifies the currently selected value. */
             value?: any;
 
-            /** @docid EditorOptions_name */
+            /** The value to be assigned to the `name` attribute of the underlying HTML element. */
             name?: string;
 
-            /** @docid EditorOptions_onValueChanged */
+            /** A handler for the valueChanged event. */
             onValueChanged?: Function;
 
-            /** @docid EditorOptions_readOnly */
+            /** A Boolean value specifying whether or not the widget is read-only. */
             readOnly?: boolean;
 
-            /** @docid EditorOptions_validationError */
+            /** Holds the object that defines the error that occurred during validation. */
             validationError?: Object;
 
-            /** @docid EditorOptions_isValid */
+            /** Specifies whether the editor's value is valid. */
             isValid?: boolean;
 
-            /** @docid EditorOptions_validationMessageMode */
+            /** Specifies how the message about the validation rules that are not satisfied by this editor's value is displayed. */
             validationMessageMode?: string;
         }
 
-        /** @docid Editor */
+        /** A base class for editors. */
         export class Editor extends Widget {
 
-            /** @docid EditorMethods_reset */
+            /** Resets the editor's value to undefined. */
             reset(): void;
         }
 
-        /** @docid ui_dialog */
+        /** An object that serves as a namespace for methods displaying a message in an application/site. */
         export var dialog: {
-            /** @docid ui_dialogmethods_alert */
+            /** Creates an alert dialog message containing a single "OK" button. */
             alert(message: string, title: string): JQueryPromise<void>;
 
-            /** @docid ui_dialogmethods_confirm */
+            /** Creates a confirm dialog that contains "Yes" and "No" buttons. */
             confirm(message: string, title: string): JQueryPromise<boolean>;
 
-            /** @docid ui_dialogmethods_custom */
+            /** Creates a custom dialog using the options specified by the passed configuration object. */
             custom(options: { title?: string; message?: string; buttons?: Array<Object>; }): {
                 show(): JQueryPromise<any>;
                 hide(): void;
@@ -1407,73 +1377,73 @@ declare module DevExpress {
             };
         };
 
-        /** @docid ui_notify#notify(message,type,displayTime) */
+        /** Creates a toast message. */
         export function notify(message: string, type?: string, displayTime?: number): void;
 
-        /** @docid ui_notify#notify(options,type,displayTime) */
+        
         export function notify(options: Object, type?: string, displayTime?: number): void;
 
-        /** @docid ui_themes */
+        /** An object that serves as a namespace for the methods that work with DevExtreme CSS Themes. */
         export var themes: {
-            /** @docid ui_themesmethods_current#current() */
+            /** Returns the name of the currently applied theme. */
             current(): string;
 
-            /** @docid ui_themesmethods_current#current(themeName) */
+            /** Changes the current theme to the specified one. */
             current(themeName: string): void;
             
-            /** @docid ui_themesmethods_ready */
+            
             ready(callback: Function): void;
         };
 
-        /** @docid ui_setTemplateEngine#setTemplateEngine(name) */
+        /** Sets a specified template engine. */
         export function setTemplateEngine(name: string): void;
 
-        /** @docid ui_setTemplateEngine#setTemplateEngine(options) */
+        /** Sets a custom template engine defined via custom compile and render functions. */
         export function setTemplateEngine(options: Object): void;
     }
 
-    /** @docid utils */
+    /** An object that serves as a namespace for utility methods that can be helpful when working with the DevExtreme framework and UI widgets. */
     export module utils {
-        /** @docid utils_initMobileViewport */
+        /** Sets parameters for the viewport meta tag. */
         export function initMobileViewport(options: { allowZoom?: boolean; allowPan?: boolean; allowSelection?: boolean }): void;
 
-        /** @docid utils_requestAnimationFrame */
+        /** Requests that the browser call a specified function to update animation before the next repaint. */
         export function requestAnimationFrame(callback: Function): number;
 
-        /** @docid utils_cancelAnimationFrame */
+        /** Cancels an animation frame request scheduled with the requestAnimationFrame method. */
         export function cancelAnimationFrame(requestID: number): void;
     }
 
-    /** @docid viz */
+    /** An object that serves as a namespace for DevExtreme Data Visualization Widgets. */
     export module viz {
-        /** @docid vizmethods_currentTheme#currentTheme(theme) */
+        /** Changes the current theme for all data visualization widgets on the page. */
         export function currentTheme(theme: string): void;
 
-        /** @docid vizmethods_currentTheme#currentTheme(platform, colorScheme) */
+        /** Changes the current theme for all data visualization widgets on the page. The color scheme is defined separately. */
         export function currentTheme(platform: string, colorScheme: string): void;
 
-        /** @docid vizmethods_registerTheme */
+        /** Registers a new theme based on the existing one. */
         export function registerTheme(customTheme: Object, baseTheme: string): void;
 
-        /** @docid vizmethods_refreshTheme */
+        /** Refreshes the current theme and palette in all data visualization widgets on the page. */
         export function refreshTheme(): void;
 
-        /** @docid vizmethods_exportFromMarkup */
+        /** Allows you to export widgets using their SVG markup. */
         export function exportFromMarkup(markup: string, options: Object): void;
 
-        /** @docid vizmethods_getMarkup */
+        /** Gets the SVG markup of specific widgets for their subsequent export. */
         export function getMarkup(widgetInstances: Array<Object>): string;
 
-        /** @docid vizmethods_currentPalette */
+        /** Changes the current palette for all data visualization widgets on the page. */
         export function currentPalette(paletteName: string): void;
 
-        /** @docid vizmethods_getPalette */
+        /** Obtains the color sets of a predefined or registered palette. */
         export function getPalette(paletteName: string): Object;
 
-        /** @docid vizmethods_registerPalette */
+        /** Registers a new palette. */
         export function registerPalette(paletteName: string, palette: Object): void;
 
-        /** @docid vizmethods_refreshPaths */
+        /** The method to be called every time the active entry in the browser history is modified without reloading the current page. */
         export function refreshPaths(): void;
     }
 }

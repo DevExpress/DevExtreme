@@ -4,162 +4,162 @@
 declare module DevExpress.viz.funnel {
 
     export interface Legend extends viz.core.BaseLegend {
-        /** @docid dxFunneloptions_legend_customizehint */
+        /** Specifies the hint that appears when a user hovers the mouse pointer over a legend item. */
         customizeHint?: (itemInfo: { item: funnelItem; text: string; }) => string;
 
-        /** @docid dxFunneloptions_legend_customizetext */
+        /** Customizes the text displayed by legend items. */
         customizeText?: (itemInfo: { item: funnelItem; text: string; }) => string;
     }
 
-    /** @docid dxFunnelItem */
+    /** This section describes the Item object, which represents a funnel item. */
     export interface funnelItem {
 
-    /** @docid dxFunnelItemfields_data */
+    /** The item's original data object. */
         data: Object;
 
-        /** @docid dxFunnelItemfields_argument */
+        /** The item's argument. */
         argument: any;
 
-        /** @docid dxFunnelItemfields_percent */
+        /** The item's calculated percentage value. */
         percent: number;
 
-        /** @docid dxFunnelItemfields_value */
+        /** The item's value. */
         value: number;
 
-        /** @docid dxFunnelItemmethods_select */
+        /** Selects or cancels the funnel item's selection. */
         select(state: boolean): void;
 
-        /** @docid dxFunnelItemmethods_hover */
+        /** Changes the funnel item's hover state. */
         hover(state: boolean): void;
 
-        /** @docid dxFunnelItemmethods_getcolor */
+        /** Gets the funnel item's color specified in the data source or palette. */
         getColor(): string;
 
-        /** @docid dxFunnelItemmethods_ishovered */
+        /** Indicates whether the funnel item is in the hover state. */
         isHovered(): boolean;
 
-        /** @docid dxFunnelItemmethods_isselected */
+        /** Indicates whether the funnel item is selected. */
         isSelected(): boolean;
 
-        /** @docid dxFunnelItemmethods_showtooltip */
+        /** Shows the funnel item's tooltip. */
         showTooltip(): void;
     }
-    /** @docid dxFunnel_options */
+    
     export interface dxFunnelOptions extends viz.core.BaseWidgetOptions, viz.core.RedrawOnResizeOptions, viz.core.TitleOptions, viz.core.LoadingIndicatorOptions, viz.core.ExportOptions {
-        /** @docid dxFunneloptions_adaptivelayout */
+        /** Specifies adaptive layout options. */
         adaptiveLayout?: {
-            /** @docid dxFunneloptions_adaptivelayout_width */
+            /** Specifies the widget's width small enough for the layout to begin adapting. */
             width?: number;
-            /** @docid dxFunneloptions_adaptivelayout_height */
+            /** Specifies the widget's height small enough for the layout to begin adapting. */
             height?: number;
-            /** @docid dxFunneloptions_adaptivelayout_keeplabels */
+            /** Specifies whether item labels should be kept when the layout is adapting. */
             keepLabels?: boolean;
         };
 
-        /** @docid dxFunneloptions_datasource */
+        /** Specifies the widget's data origin. */
         dataSource?: any;
 
-        /** @docid dxFunneloptions_valuefield */
+        /** Specifies which data source field provides values for funnel items. The value defines a funnel item's area. */
         valueField?: string;
 
-        /** @docid dxFunneloptions_colorfield */
+        /** Specifies which data source field provides colors for funnel items. If this field is absent, the palette provides the colors. */
         colorField?: string;
 
-        /** @docid dxFunneloptions_hoverenabled */
+        /** Specifies whether funnel items change their style when a user pauses on them. */
         hoverEnabled?: boolean;
 
-        /** @docid dxFunneloptions_argumentfield */
+        /** Specifies which data source field provides arguments for funnel items. The argument identifies a funnel item and represents it on the legend. */
         argumentField?: string;
 
-        /** @docid dxFunneloptions_selectionmode */
+        /** Specifies whether a single or multiple funnel items can be in the selected state at a time. Assigning "none" disables the selection feature. */
         selectionMode?: string;
 
-        /** @docid dxFunneloptions_palette */
+        /** Sets the palette to be used for colorizing funnel items. */
         palette?: any;
 
-        /** @docid dxFunneloptions_algorithm */
+        /** Specifies the algorithm for building the funnel. */
         algorithm?: string;
 
-        /** @docid dxFunneloptions_neckheight */
+        /** Specifies the ratio between the height of the neck and that of the whole funnel. Accepts values from 0 to 1. Applies only if the algorithm is "dynamicHeight". */
         neckHeight?: number;
 
-        /** @docid dxFunneloptions_neckwidth */
+        /** Specifies the ratio between the width of the neck and that of the whole funnel. Accepts values from 0 to 1. Applies only if the algorithm is "dynamicHeight". */
         neckWidth?: number;
 
-        /** @docid dxFunneloptions_inverted */
+        /** Turns the funnel upside down. */
         inverted?: boolean;
 
-        /** @docid dxFunneloptions_sortdata */
+        /** Specifies whether to sort funnel items. */
         sortData?: boolean;
 
-        /** @docid dxFunneloptions_item */
+        
         item?: {
 
-            /** @docid dxFunneloptions_item_border */
+            /** Configures a funnel item's border. */
             border?: viz.core.Border;
 
-            /** @docid dxFunneloptions_item_hoverstyle */
+            /** Configures a funnel item's appearance when a user presses the item or hovers the mouse pointer over it. */
             hoverStyle?: {
-                /** @docid dxFunneloptions_item_hoverstyle_border */
+                /** Configures a funnel item's border appearance when a user presses the item or hovers the mouse pointer over it. */
                 border?: viz.core.Border;
 
-                /** @docid dxFunneloptions_item_hoverstyle_hatching */
+                /** Applies hatching to a funnel item when a user presses the item or hovers the mouse pointer over it. */
                 hatching?: viz.core.Hatching;
             };
 
-            /** @docid dxFunneloptions_item_selectionstyle */
+            /** Configures a funnel item's appearance when a user selects it. */
             selectionStyle?: {
 
-                /** @docid dxFunneloptions_item_selectionstyle_border */
+                /** Configures a funnel item's border appearance when a user selects this item. */
                 border?: viz.core.Border;
 
-                /** @docid dxFunneloptions_item_selectionstyle_hatching */
+                /** Applies hatching to a selected funnel item. */
                 hatching?: viz.core.Hatching;
             };
         };
 
-        /** @docid dxFunneloptions_label */
+        /** Configures funnel item labels. */
         label?: {
-            /** @docid dxFunneloptions_label_font */
+            /** Specifies labels' font options. */
             font?: viz.core.Font;
 
-            /** @docid dxFunneloptions_label_position */
+            /** Specifies whether to display labels inside or outside funnel items or arrange them in columns. */
             position?: string;
 
-            /** @docid dxFunneloptions_label_horizontaloffset */
+            /** Moves labels from their initial positions. */
             horizontalOffset?: number;
 
-            /** @docid dxFunneloptions_label_horizontalalignment */
+            /** Specifies labels' position in relation to the funnel items. */
             horizontalAlignment?: string;
 
-            /** @docid dxFunneloptions_label_connector */
+            /** Configures label connectors. */
             connector?: {
-                /** @docid dxFunneloptions_label_connector_color */
+                /** Colors label connectors. */
                 color?: string;
 
-                /** @docid dxFunneloptions_label_connector_visible */
+                /** Shows label connectors. */
                 visible?: boolean;
 
-                /** @docid dxFunneloptions_label_connector_width */
+                /** Specifies the label connector width in pixels. */
                 width?: number;
 
-                /** @docid dxFunneloptions_label_connector_opacity */
+                /** Specifies the transparency of label connectors. */
                 opacity?: number;
             };
 
-            /** @docid dxFunneloptions_label_backgroundcolor */
+            /** Colors the labels' background. Inherits the funnel item's color by default. */
             backgroundColor?: string;
 
-            /** @docid dxFunneloptions_label_border */
+            /** Configures the label borders. */
             border?: viz.core.DashedBorder;
 
-            /** @docid dxFunneloptions_label_visible */
+            /** Controls the labels' visibility. */
             visible?: boolean;
 
-            /** @docid dxFunneloptions_label_showforzerovalues */
+            /** Specifies whether to show labels for items with zero value. */
             showForZeroValues?: boolean;
 
-            /** @docid dxFunneloptions_label_customizetext */
+            /** Customizes labels' text. */
             customizeText?: (itemInfo: {
                 item: funnelItem;
                 valueText: string;
@@ -168,53 +168,53 @@ declare module DevExpress.viz.funnel {
                 percentText: string;
             }) => string;
 
-            /** @docid dxFunneloptions_label_format */
+            /** Formats the item value before displaying it in the label. */
             format?: any;
         };
-        /** @docid dxFunneloptions_legend */
+        /** Configures the legend. */
         legend?: Legend;
 
-        /** @docid  dxFunneloptions_onitemclick */
+        /** A handler for the itemClick event. Executed when a user clicks a funnel item. */
         onItemClick?: any;
 
-        /** @docid  dxFunneloptions_onlegendclick */
+        /** A handler for the legendClick event. Executed when a user clicks a legend item. */
         onLegendClick?: any;
 
-        /** @docid  dxFunneloptions_onhoverchanged */
+        /** A handler for the hoverChanged event. Executed after a funnel item's hover state is changed in the UI or programmatically. */
         onHoverChanged?: (e: {
             component: dxFunnel;
             element: Element;
             node: funnelItem;
         }) => void;
 
-        /** @docid  dxFunneloptions_onselectionchanged */
+        /** A handler for the selectionChanged event. Executed after a funnel item's selection state is changed in the UI or programmatically. */
         onSelectionChanged?: (e: {
             component: dxFunnel;
             element: Element;
             node: funnelItem;
         }) => void;
 
-        /** @docid dxFunneloptions_tooltip */
+        
         tooltip?: viz.core.Tooltip;
     }
 }
 
 declare module DevExpress.viz {
-    /** @docid dxFunnel */
+    
     export class dxFunnel extends viz.core.BaseWidget implements viz.core.LoadingIndicatorMethods {
         constructor(element: JQuery, options?: DevExpress.viz.funnel.dxFunnelOptions);
         constructor(element: Element, options?: DevExpress.viz.funnel.dxFunnelOptions);
 
-        /** @docid dxFunnelmethods_clearselection */
+        /** Cancels the selection of all funnel items. */
         clearSelection(): void;
 
-        /** @docid dxFunnelmethods_getallitems */
+        /** Provides access to all funnel items. */
         getAllItems(): Array<DevExpress.viz.funnel.funnelItem>;
 
-        /** @docid dxFunnelmethods_hidetooltip */
+        /** Hides all widget tooltips. */
         hideTooltip(): void;
 
-        /** @docid dxFunnelmethods_getdatasource */
+        /** Provides access to the DataSource instance. */
         getDataSource(): DevExpress.data.DataSource;
 
         showLoadingIndicator(): void;
