@@ -9,12 +9,13 @@ var $ = require("jquery"),
     AgendaAppointmentsStrategy = require("ui/scheduler/ui.scheduler.appointments.strategy.agenda"),
     DataSource = require("data/data_source/data_source").DataSource,
     CustomStore = require("data/custom_store"),
+    subscribes = require("ui/scheduler/ui.scheduler.subscribes"),
     dataUtils = require("core/element_data");
 
 require("ui/scheduler/ui.scheduler");
 
 function getDeltaTz(schedulerTz) {
-    var defaultTz = new Date().getTimezoneOffset() * 60000;
+    var defaultTz = -10800000;
     return schedulerTz * 3600000 + defaultTz;
 }
 
@@ -1113,28 +1114,31 @@ QUnit.test("The timeZone option should be processed correctly", function(assert)
 });
 
 QUnit.test("All-day appointment should not be duplicated with custom timezone", function(assert) {
-    this.clock.restore();
-    var timezoneDifference = getDeltaTz(5),
-        getDate = function(date) {
-            return new Date(date.getTime() - timezoneDifference);
-        };
+    var tzOffsetStub = sinon.stub(subscribes, "getClientTimezoneOffset").returns(-10800000);
+    try {
+        this.clock.restore();
+        var timezoneDifference = getDeltaTz(5),
+            getDate = function(date) {
+                return new Date(date.getTime() - timezoneDifference);
+            };
 
-    var daylightDiff = (new Date(2016, 4, 3).getTimezoneOffset() - new Date().getTimezoneOffset()) * 60000;
+        this.createInstance({
+            views: ["agenda"],
+            currentView: "agenda",
+            currentDate: new Date(2016, 4, 3),
+            timeZone: "Asia/Ashkhabad",
+            dataSource: [{
+                startDate: getDate(new Date(2016, 4, 4)),
+                endDate: getDate(new Date(2016, 4, 5))
+            }]
+        });
 
-    this.createInstance({
-        views: ["agenda"],
-        currentView: "agenda",
-        currentDate: new Date(2016, 4, 3),
-        timeZone: "Asia/Ashkhabad",
-        dataSource: [{
-            startDate: getDate(new Date(2016, 4, 4)).getTime() - daylightDiff,
-            endDate: getDate(new Date(2016, 4, 5)).getTime() - daylightDiff
-        }]
-    });
+        var $appts = this.instance.$element().find(".dx-scheduler-appointment");
 
-    var $appts = this.instance.$element().find(".dx-scheduler-appointment");
-
-    assert.equal($appts.length, 1, "Appt count is OK");
+        assert.equal($appts.length, 1, "Appt count is OK");
+    } finally {
+        tzOffsetStub.restore();
+    }
 });
 
 QUnit.test("All-day appointment should not be duplicated with custom timezone (T437288)", function(assert) {
