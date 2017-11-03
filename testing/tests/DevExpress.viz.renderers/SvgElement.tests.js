@@ -5588,9 +5588,12 @@ function checkDashStyle(assert, elem, result, style, value) {
             }),
             mixedQuotesWithStyle4 = this.createText().attr({
                 text: "<b src='e' style='font-size:11px;fill:#767676;font-family:\"Segoe UI\", \"Helvetica Neue\";font-weight:400;cursor:default;' >aa</b>", x: 20, y: 30
+            }),
+            withoutQuotes = this.createText().attr({
+                text: "<video src=1 style='font-size:11px;' onerror=alert(1)> </video>", x: 20, y: 30
             });
 
-        assert.strictEqual(withoutClosingTags.DEBUG_parsedHtml, "text >with <angle brackets > without closing");
+        assert.strictEqual(withoutClosingTags.DEBUG_parsedHtml, "text >with <angle > without closing");
         assert.strictEqual(withClosing.DEBUG_parsedHtml, "text <with>angle brackets </with >closing");
         assert.strictEqual(withSimpleMarkup.DEBUG_parsedHtml, "text with markup1<a class=\"className\"></a>");
         assert.strictEqual(withSimpleStyleTag.DEBUG_parsedHtml, '<b style="font-size:11px;" >aa</b>');
@@ -5600,5 +5603,6 @@ function checkDashStyle(assert, elem, result, style, value) {
         assert.strictEqual(mixedQuotesWithStyle2.DEBUG_parsedHtml, '<b style=\'font-size:11px;fill:#767676;font-family:"Segoe UI", "Helvetica Neue"font-weight:400;cursor:default;\' >aa</b>');
         assert.strictEqual(mixedQuotesWithStyle3.DEBUG_parsedHtml, "<b style='font-size:11px;fill:#767676;font-family:\"Segoe UI\"; cursor:default;' > </b>");
         assert.strictEqual(mixedQuotesWithStyle4.DEBUG_parsedHtml, "<b style='font-size:11px;fill:#767676;font-family:\"Segoe UI\", \"Helvetica Neue\";font-weight:400;cursor:default;' >aa</b>");
+        assert.strictEqual(withoutQuotes.DEBUG_parsedHtml, "<video style='font-size:11px;' > </video>");
     });
 })();
