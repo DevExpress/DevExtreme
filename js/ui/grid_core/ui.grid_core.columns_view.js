@@ -26,6 +26,7 @@ var SCROLL_CONTAINER_CLASS = "scroll-container",
     ROW_CLASS = "dx-row",
     GROUP_ROW_CLASS = "dx-group-row",
     DETAIL_ROW_CLASS = "dx-master-detail-row",
+    FILTER_ROW_CLASS = "filter-row",
 
     HIDDEN_COLUMNS_WIDTH = "0.0001px",
 
@@ -138,14 +139,14 @@ exports.ColumnsView = modules.View.inherit(columnStateMixin).inherit({
                     isDataRow = $row.hasClass("dx-data-row"),
                     isHeaderRow = $row.hasClass("dx-header-row"),
                     isGroupRow = $row.hasClass("dx-group-row"),
+                    isFilterRow = $row.hasClass(that.addWidgetPrefix(FILTER_ROW_CLASS)),
                     visibleColumns = that._columnsController.getVisibleColumns(),
                     rowOptions = $row.data("options"),
                     columnIndex = $cell.index(),
                     cellOptions = rowOptions && rowOptions.cells && rowOptions.cells[columnIndex],
-                    column = cellOptions ? cellOptions.column : visibleColumns[columnIndex],
-                    text;
+                    column = cellOptions ? cellOptions.column : visibleColumns[columnIndex];
 
-                if((!isDataRow || (isDataRow && column && !column.cellTemplate)) &&
+                if(!isFilterRow && (!isDataRow || (isDataRow && column && !column.cellTemplate)) &&
                     (!isHeaderRow || (isHeaderRow && column && !column.headerCellTemplate)) &&
                     (!isGroupRow || (isGroupRow && column && (column.groupIndex === undefined || !column.groupCellTemplate)))) {
                     if($element.data(CELL_HINT_VISIBLE)) {
@@ -153,9 +154,8 @@ exports.ColumnsView = modules.View.inherit(columnStateMixin).inherit({
                         $element.data(CELL_HINT_VISIBLE, false);
                     }
 
-                    text = $element.get(0).innerText;
-                    if(text && $element[0].scrollWidth > $element[0].clientWidth && !typeUtils.isDefined($element.attr("title"))) {
-                        $element.attr("title", text);
+                    if($element[0].scrollWidth > $element[0].clientWidth && !typeUtils.isDefined($element.attr("title"))) {
+                        $element.attr("title", $element.text());
                         $element.data(CELL_HINT_VISIBLE, true);
                     }
                 }
