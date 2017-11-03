@@ -165,6 +165,10 @@ QUnit.test("index of tickInterval is not equal index of tick", function(assert) 
     this.testTickLabelFormat(assert, [1002], 2, ["1,002"]);
 });
 
+QUnit.test("tiсk with a decimal point does not depend on the tickInterval", function(assert) {
+    this.testTickLabelFormat(assert, [0.25], 1, ["0.25"]);
+});
+
 QUnit.test("format negative values", function(assert) {
     this.testTickLabelFormat(assert, [-20], 10, ["-20"]);
 });

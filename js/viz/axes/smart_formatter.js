@@ -131,6 +131,10 @@ function getTransitionTickIndex(ticks, value) {
     return nearestTickIndex;
 }
 
+function splitDecimalNumber(value) {
+    return value.toString().split(".");
+}
+
 function smartFormatter(tick, options) {
     var tickInterval = options.tickInterval,
         tickIntervalIndex,
@@ -152,14 +156,17 @@ function smartFormatter(tick, options) {
         nextDateIndex,
         isLogarithmic = options.type === "logarithmic";
 
-    if(!isDefined(format) && isDefined(tickInterval) && options.type !== "discrete" && tick !== 0 && (options.logarithmBase === 10 || !isLogarithmic)) {
+    if(!isDefined(format) && isDefined(tickInterval) && options.type !== "discrete" && isDefined(tick) && tick !== 0 && (options.logarithmBase === 10 || !isLogarithmic)) {
         if(options.dataType !== "datetime") {
             if(ticks.length && ticks.indexOf(tick) === -1) {
                 indexOfTick = getTransitionTickIndex(ticks, tick);
                 tickInterval = adjust(abs(tick - ticks[indexOfTick]), tick);
             }
 
-            separatedTickInterval = tickInterval.toString().split(".");
+            separatedTickInterval = splitDecimalNumber(tickInterval);
+            if(separatedTickInterval < 2) {
+                separatedTickInterval = splitDecimalNumber(tick);
+            }
 
             if(isLogarithmic) {
                 log10Tick = log10(abs(tick));
@@ -205,7 +212,7 @@ function smartFormatter(tick, options) {
                         }
 
                         if(offset > 0) {
-                            separatedTickInterval = (tickInterval / Math.pow(10, offset)).toString().split(".");
+                            separatedTickInterval = splitDecimalNumber(tickInterval / Math.pow(10, offset));
                             if(separatedTickInterval[1]) {
                                 precision = separatedTickInterval[1].length;
                             }
