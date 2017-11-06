@@ -463,13 +463,19 @@ var NumberBoxMask = NumberBoxBase.inherit({
         this._setInputText(formatted, caret.start + caretDelta);
     },
 
+    _renderDisplayText: function() {
+        if(this._useMaskBehavior()) {
+            this._toggleEmptinessEventHandler();
+        } else {
+            this.callBase.apply(this, arguments);
+        }
+    },
+
     _renderValue: function() {
-        var text = this._input().val();
         this.callBase();
 
         if(this._useMaskBehavior()) {
             this._parsedValue = this.option("value");
-            this._input().val(text);
             this._formatValue();
         }
     },

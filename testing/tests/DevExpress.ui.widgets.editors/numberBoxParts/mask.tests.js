@@ -63,21 +63,25 @@ QUnit.test("pressing '-' button should revert the number", function(assert) {
         value: 123.456
     });
 
-    this.keyboard.keyDown(NUMPAD_MINUS_KEY);
+    this.keyboard.caret(3).keyDown(NUMPAD_MINUS_KEY);
     assert.equal(this.input.val(), "-123.456", "value is correct");
     assert.equal(this.instance.option("value"), -123.456, "value is correct");
+    assert.deepEqual(this.keyboard.caret(), { start: 4, end: 4 }, "caret is correct");
 
-    this.keyboard.caret(2).keyDown(NUMPAD_MINUS_KEY);
+    this.keyboard.keyDown(NUMPAD_MINUS_KEY);
     assert.equal(this.input.val(), "123.456", "value is correct");
     assert.equal(this.instance.option("value"), 123.456, "value is correct");
+    assert.deepEqual(this.keyboard.caret(), { start: 3, end: 3 }, "caret is correct");
 
     this.keyboard.keyDown(MINUS_KEY);
     assert.equal(this.input.val(), "-123.456", "value is correct");
     assert.equal(this.instance.option("value"), -123.456, "value is correct");
+    assert.deepEqual(this.keyboard.caret(), { start: 4, end: 4 }, "caret is correct");
 
-    this.keyboard.caret(2).keyDown(MINUS_KEY);
+    this.keyboard.keyDown(MINUS_KEY);
     assert.equal(this.input.val(), "123.456", "value is correct");
     assert.equal(this.instance.option("value"), 123.456, "value is correct");
+    assert.deepEqual(this.keyboard.caret(), { start: 3, end: 3 }, "caret is correct");
 });
 
 QUnit.test("pressing '-' button should revert zero number", function(assert) {
