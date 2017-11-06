@@ -176,6 +176,15 @@ var NumberBoxMask = NumberBoxBase.inherit({
             return;
         }
 
+        if(end - start < text.length) {
+            var editedText = this._getEditedText(text, { start: start, end: end }, ""),
+                noDigits = editedText.search(/[0-9]/) < 0;
+            if(noDigits && this._isValueInRange(0)) {
+                this._parsedValue = 0;
+                return;
+            }
+        }
+
         var valueAfterRemoving = this._tryParse(text, { start: start, end: end }, "");
         if(valueAfterRemoving === undefined) {
             e.preventDefault();

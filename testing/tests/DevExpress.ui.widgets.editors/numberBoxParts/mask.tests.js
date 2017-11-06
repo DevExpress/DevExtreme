@@ -416,15 +416,28 @@ QUnit.test("removing integer digit using backspace if group separator is hiding"
     assert.deepEqual(this.keyboard.caret(), { start: 2, end: 2 }, "caret position is correct");
 });
 
-QUnit.test("removing all characters should be change value to null", function(assert) {
+QUnit.test("removing all characters should change value to null", function(assert) {
     this.instance.option({
         format: "$#0",
         value: 1
     });
+
     this.keyboard.caret({ start: 0, end: 2 }).press("backspace").input("backspace").change();
 
     assert.strictEqual(this.input.val(), "", "value is correct");
     assert.strictEqual(this.instance.option("value"), null, "value is reseted");
+});
+
+QUnit.test("removing all digits but not all characters should change value to 0", function(assert) {
+    this.instance.option({
+        format: "#0.0 kg",
+        value: 1
+    });
+
+    this.keyboard.caret({ start: 0, end: 4 }).press("backspace").input("backspace").change();
+
+    assert.strictEqual(this.input.val(), "0.0 kg", "value is correct");
+    assert.strictEqual(this.instance.option("value"), 0, "value is reseted");
 });
 
 QUnit.test("removing digit if decimal format", function(assert) {
