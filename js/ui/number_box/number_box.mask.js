@@ -130,6 +130,27 @@ var NumberBoxMask = NumberBoxBase.inherit({
         });
     },
 
+    _keyboardHandler: function(e) {
+        if(!this._shouldHandleKey(e.originalEvent)) {
+            this._lastKey = null;
+            return this.callBase(e);
+        }
+
+        var text = this._input().val(),
+            caret = this._caret();
+
+        this._lastKey = e.originalEvent.key;
+
+        var newValue = this._tryParse(text, caret, e.originalEvent.key);
+        if(newValue === undefined) {
+            e.originalEvent.preventDefault();
+        } else {
+            this._parsedValue = newValue;
+        }
+
+        return this.callBase(e);
+    },
+
     _removeHandler: function(e) {
         var caret = this._caret(),
             text = this._input().val(),
@@ -322,28 +343,6 @@ var NumberBoxMask = NumberBoxBase.inherit({
         return useMaskBehavior && !isSpecialChar;
     },
 
-    _keyboardHandler: function(e) {
-        window.console.log("keyboardHandler", e);
-        if(!this._shouldHandleKey(e.originalEvent)) {
-            this._lastKey = null;
-            return this.callBase(e);
-        }
-
-        var text = this._input().val(),
-            caret = this._caret();
-
-        this._lastKey = e.originalEvent.key;
-
-        var newValue = this._tryParse(text, caret, e.originalEvent.key);
-        if(newValue === undefined) {
-            e.originalEvent.preventDefault();
-        } else {
-            this._parsedValue = newValue;
-        }
-
-        return this.callBase(e);
-    },
-
     _renderInput: function() {
         this.callBase();
         this._renderFormatter();
@@ -431,11 +430,20 @@ var NumberBoxMask = NumberBoxBase.inherit({
 
         var format = this._getFormatPattern(),
             caret = this._caret(),
-            formatted = number.format(this._parsedValue, format) || "",
             decimalSeparator = number.getDecimalSeparator(),
             decimalSeparatorIndex = text.indexOf(decimalSeparator),
             isFloatInput = decimalSeparatorIndex >= 0 && caret.start > decimalSeparatorIndex,
+            formatted,
             caretDelta;
+
+        if(this._formattedValue !== text) {
+            var parsedValueByText = this._tryParse(text, caret, "");
+            if(parsedValueByText !== undefined && parsedValueByText !== null) {
+                this._parsedValue = parsedValueByText;
+            }
+        }
+
+        formatted = number.format(this._parsedValue, format) || "";
 
         if((Math.abs(formatted.length - text.length) === 1 && isFloatInput) || this._formattedValue === "") {
             caretDelta = 0;
@@ -447,10 +455,12 @@ var NumberBoxMask = NumberBoxBase.inherit({
     },
 
     _renderValue: function() {
+        var text = this._input().val();
         this.callBase();
 
         if(this._useMaskBehavior()) {
             this._parsedValue = this.option("value");
+            this._input().val(text);
             this._formatValue();
         }
     },

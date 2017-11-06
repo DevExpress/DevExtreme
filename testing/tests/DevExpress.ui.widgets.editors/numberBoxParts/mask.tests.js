@@ -157,6 +157,22 @@ QUnit.test("select and replace all text", function(assert) {
     assert.equal(this.input.val(), "$ 4.000 d", "value is correct");
 });
 
+QUnit.test("paste value from clipboard", function(assert) {
+    this.instance.option({
+        format: "$ #,##0.000",
+        value: 0.5
+    });
+
+    assert.equal(this.input.val(), "$ 0.500", "value before paste");
+
+    this.keyboard.caret(3);
+    this.input.val("$ 01234.500");
+    this.keyboard.press("ctrl+v");
+    this.keyboard.input();
+
+    assert.equal(this.input.val(), "$ 1,234.500", "value after paste");
+});
+
 QUnit.test("decimal point should move the caret before float part only", function(assert) {
     this.instance.option("value", 123.45);
     this.keyboard.caret(2).type(".");
