@@ -1,32 +1,66 @@
-FROM ubuntu:16.04
+FROM ubuntu:16.04 as builder
+
+# Setup APT
+RUN echo 'APT::Install-Recommends "0";' > /etc/apt/apt.conf.d/dx-no-recommends
+RUN apt-get update && apt-get -y upgrade
+
+RUN apt-get install -y ca-certificates mc
+
+# Build-time utils
+RUN apt-get install -y apt-transport-https curl gdebi-core gnupg2
+
+# Node
+RUN curl -sL https://deb.nodesource.com/setup_8.x | bash -
+RUN apt-get install -y nodejs
+RUN npm set progress=false
+RUN npm set loglevel=error
+RUN npm set depth=0
+RUN npm set unsafe-perm=true
+RUN npm set fetch-retries 5
+
+# .NET Core
+RUN curl https://packages.microsoft.com/keys/microsoft.asc | gpg --dearmor > /etc/apt/trusted.gpg.d/microsoft.gpg
+RUN echo "deb [arch=amd64] https://packages.microsoft.com/repos/microsoft-ubuntu-xenial-prod xenial main" > /etc/apt/sources.list.d/dotnetdev.list
+RUN apt-get update
+RUN DOTNET_SKIP_FIRST_TIME_EXPERIENCE=1 apt-get install -y dotnet-sdk-2.0.2
+RUN rm /usr/share/dotnet/sdk/*/nuGetPackagesArchive.lzma
+
+# Chrome, see https://stackoverflow.com/a/36906724
+RUN curl https://www.slimjetbrowser.com/chrome/lnx/chrome64_61.0.3163.79.deb > chrome.deb
+RUN gdebi -n ./chrome.deb
+RUN unlink ./chrome.deb
+
+# Utils for docker-ci.sh
+RUN apt-get install -y dbus-x11 git httping x11vnc xvfb
+
+# Use UTF-8
+RUN apt-get install -y locales
+RUN locale-gen en_US.UTF-8
+
+# Ensure UTC
+RUN [ "$(date +%Z)" = "UTC" ] || exit 1
+
+# Remove build-time utils
+RUN apt-get purge -y apt-transport-https curl gdebi-core gnupg2
+
+# Clean APT
+RUN apt-get autoremove -y --purge
+RUN apt-get clean
+RUN rm -rf /var/lib/apt/lists/*
+
+#############################################################
+
+FROM scratch
+
+COPY --from=builder / /
 
 ENV LC_ALL=en_US.UTF-8 \
     LANG=en_US.UTF-8 \
     TERM=xterm \
-    DISPLAY=:99
+    DISPLAY=:99 \
+    NUGET_XMLDOC_MODE=skip \
+    DOTNET_SKIP_FIRST_TIME_EXPERIENCE=1 \
+    DOTNET_CLI_TELEMETRY_OPTOUT=1
 
 WORKDIR /devextreme
 STOPSIGNAL SIGKILL
-
-RUN apt-get update \
-    && apt-get install -y apt-transport-https curl gdebi git httping mc openssl python software-properties-common unzip wget x11vnc xvfb locales tzdata \
-    && locale-gen en_US.UTF-8
-
-RUN ln -fs /usr/share/zoneinfo/UTC /etc/localtime \
-    && dpkg-reconfigure -f noninteractive tzdata
-
-RUN curl -sL https://deb.nodesource.com/setup_6.x | bash - \
-    && apt-get install -y nodejs \
-    && npm set progress=false \
-    && npm set loglevel=error \
-    && npm set depth=0 \
-    && npm set unsafe-perm=true
-
-RUN sh -c 'echo "deb [arch=amd64] https://apt-mo.trafficmanager.net/repos/dotnet-release/ xenial main" > /etc/apt/sources.list.d/dotnetdev.list' \
-    && apt-key adv --keyserver apt-mo.trafficmanager.net --recv-keys 417A0893 \
-    && apt-get update \
-    && apt-get install -y dotnet-sdk-2.0.0
-
-RUN wget https://dl.google.com/linux/direct/google-chrome-stable_current_amd64.deb -O chrome.deb \
-    && gdebi -n ./chrome.deb \
-    && unlink ./chrome.deb
