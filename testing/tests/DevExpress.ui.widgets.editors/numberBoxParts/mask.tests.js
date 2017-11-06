@@ -80,6 +80,22 @@ QUnit.test("pressing '-' button should revert the number", function(assert) {
     assert.equal(this.instance.option("value"), 123.456, "value is correct");
 });
 
+QUnit.test("pressing '-' button should revert zero number", function(assert) {
+    var MINUS_KEY = 189;
+
+    this.instance.option({
+        format: "#0",
+        value: 0
+    });
+
+    this.keyboard.keyDown(MINUS_KEY);
+    assert.equal(this.input.val(), "-0", "text is correct");
+    assert.equal(1 / this.instance.option("value"), -Infinity, "value is negative");
+
+    this.keyboard.keyDown(MINUS_KEY);
+    assert.equal(this.input.val(), "0", "text is correct");
+    assert.equal(1 / this.instance.option("value"), Infinity, "value is positive");
+});
 
 QUnit.module("format: minimum and maximum", moduleConfig);
 
@@ -183,7 +199,6 @@ QUnit.test("decimal point should move the caret before float part only", functio
     this.keyboard.caret(3).type(".");
     assert.equal(this.input.val(), "123.45", "value is right");
     assert.deepEqual(this.keyboard.caret(), { start: 4, end: 4 }, "caret was moved to the float part");
-
 });
 
 QUnit.test("ctrl+v should not be prevented", function(assert) {

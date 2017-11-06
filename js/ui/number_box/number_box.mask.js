@@ -488,6 +488,13 @@ var NumberBoxMask = NumberBoxBase.inherit({
         }
     },
 
+    _optionValuesEqual: function(name, oldValue, newValue) {
+        if(name === "value" && oldValue === 0 && newValue === 0) {
+            return (1 / oldValue) === (1 / newValue);
+        }
+        return this.callBase.apply(this, arguments);
+    },
+
     _clearCache: function() {
         delete this._formattedValue;
         delete this._lastKey;
