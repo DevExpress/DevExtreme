@@ -237,7 +237,6 @@ QUnit.test("input before leading zero", function(assert) {
     assert.equal(this.input.val(), "450%", "text is correct");
 });
 
-
 QUnit.module("format: removing", moduleConfig);
 
 QUnit.test("delete key", function(assert) {
@@ -317,6 +316,8 @@ QUnit.test("removing with group separators using delete key", function(assert) {
 
     this.keyboard.caret({ start: 4, end: 11 }).keyDown("del");
     assert.notOk(this.keyboard.event.isDefaultPrevented(), "delete should not be prevented");
+    this.input.val("$ 2390 d");
+    this.keyboard.caret({ start: 4, end: 4 });
     this.keyboard.input("del");
     assert.equal(this.input.val(), "$ 2,390 d", "value is correct");
     assert.deepEqual(this.keyboard.caret(), { start: 5, end: 5 }, "caret is good after selection removing");
@@ -350,6 +351,62 @@ QUnit.test("removing required last char should replace it to 0", function(assert
     this.keyboard.caret(1).press("backspace").input("backspace");
 
     assert.equal(this.input.val(), "0", "value is correct");
+    assert.deepEqual(this.keyboard.caret(), { start: 1, end: 1 }, "caret position is correct");
+});
+
+QUnit.test("removing required last char should replace it to 0 if percent format", function(assert) {
+    this.instance.option("format", "#0%");
+    this.instance.option("value", 0.01);
+    this.keyboard.caret(1).press("backspace").input("backspace");
+
+    assert.equal(this.input.val(), "0%", "value is correct");
+    assert.deepEqual(this.keyboard.caret(), { start: 1, end: 1 }, "caret position is correct");
+});
+
+QUnit.test("removing required decimal digit should replace it to 0 and move caret", function(assert) {
+    this.instance.option({
+        format: "#0.00",
+        value: 1.23
+    });
+    this.keyboard.caret(4).press("backspace").input("backspace");
+
+    assert.equal(this.input.val(), "1.20", "value is correct");
+    assert.deepEqual(this.keyboard.caret(), { start: 3, end: 3 }, "caret position is correct");
+});
+
+QUnit.test("removing integer digit using backspace if group separator is hiding", function(assert) {
+    this.instance.option({
+        format: "#,##0",
+        value: 1234
+    });
+    this.keyboard.caret(4).press("backspace").input("backspace");
+
+    assert.equal(this.input.val(), "124", "value is correct");
+    assert.deepEqual(this.keyboard.caret(), { start: 2, end: 2 }, "caret position is correct");
+});
+
+QUnit.test("removing all characters should be change value to null", function(assert) {
+    this.instance.option({
+        format: "$#0",
+        value: 1
+    });
+    this.keyboard.caret({ start: 0, end: 2 }).press("backspace").input("backspace").change();
+
+    assert.strictEqual(this.input.val(), "", "value is correct");
+    assert.strictEqual(this.instance.option("value"), null, "value is reseted");
+});
+
+QUnit.test("removing digit if decimal format", function(assert) {
+    this.instance.option({
+        format: "00000",
+        value: 1234
+    });
+
+    assert.equal(this.input.val(), "01234", "value is correct");
+
+    this.keyboard.caret(5).press("backspace").input("backspace");
+    assert.equal(this.input.val(), "00123", "value is correct");
+    assert.deepEqual(this.keyboard.caret(), { start: 5, end: 5 }, "caret is correct");
 });
 
 
