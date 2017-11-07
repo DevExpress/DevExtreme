@@ -468,6 +468,19 @@ var TestPointerElement = TestElement.inherit({
         assert.strictEqual(gauge._subvalueIndicatorsSet._options.y, 307, "sub pointers set y");
     });
 
+    //T569322
+    QUnit.test("Indents of labels", function(assert) {
+        new dxLinearGauge(this.container, {
+            scale: {
+                startValue: 0,
+                endValue: 30
+            }
+        });
+        var scale = axisModule.Axis.getCall(0).returnValue;
+
+        assert.strictEqual(scale.updateOptions.lastCall.calledAfter(rangeModule.Range.lastCall), true);
+    });
+
     QUnit.module("VerticalGauge - positioning of elements", environment);
 
     QUnit.test("Default", function(assert) {

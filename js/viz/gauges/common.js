@@ -246,7 +246,6 @@ exports.dxGauge = dxBaseGauge.inherit({
         scaleOptions.endAngle = SHIFT_ANGLE - angles[1];
         scaleOptions.skipViewportExtending = true;
         that._scale.updateOptions(scaleOptions);
-        that._updateScaleTickIndent(scaleOptions);
         that._scale.setBusinessRange(new rangeModule.Range({
             axisType: "continuous",
             dataType: "numeric",
@@ -254,6 +253,7 @@ exports.dxGauge = dxBaseGauge.inherit({
             maxVisible: max,
             invert: invert
         }));
+        that._updateScaleTickIndent(scaleOptions);
 
         that._scaleGroup.linkAppend();
         that._scale.draw(extend({}, that._canvas));

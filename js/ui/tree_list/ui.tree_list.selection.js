@@ -8,6 +8,7 @@ var $ = require("../../core/renderer"),
     extend = require("../../core/utils/extend").extend;
 
 var TREELIST_SELECT_ALL_CLASS = "dx-treelist-select-all",
+    CELL_FOCUS_DISABLED_CLASS = "dx-cell-focus-disabled",
     SELECT_CHECKBOX_CLASS = "dx-select-checkbox";
 
 var originalRowClick = selectionModule.extenders.views.rowsView._rowClick;
@@ -71,6 +72,8 @@ treeListCore.registerModule("selection", extend(true, {}, selectionModule, {
                 renderSelectCheckBoxContainer: function($container, model) {
                     var that = this,
                         rowsView = that.component.getView("rowsView");
+
+                    $container.addClass(CELL_FOCUS_DISABLED_CLASS);
 
                     var $checkbox = rowsView._renderSelectCheckBox($container, model.row.isSelected);
 

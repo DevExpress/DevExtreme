@@ -247,3 +247,15 @@ QUnit.test("width and height should take into consideration borders and paddings
         assert.equal($element.get(0).style[propName], "74px");
     });
 });
+
+QUnit.module("text method");
+
+QUnit.test("shouldn process functions", function(assert) {
+    var element = renderer("<div>");
+
+    element.text(function() {
+        return "text";
+    });
+
+    assert.equal(element[0].textContent, "text", "the value that the function returns");
+});

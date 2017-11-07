@@ -28,13 +28,24 @@ var TreeViewSearch = TreeViewBase.inherit(extend({}, searchBoxMixin, { _dataSour
                 this._repaintContainer();
                 break;
             case "searchExpr":
-            case "searchMode":
                 this._initDataAdapter();
+                this.repaint();
+                break;
+            case "searchMode":
+                this.option("expandNodesRecursive") ? this._updateDataAdapter() : this._initDataAdapter();
                 this.repaint();
                 break;
             default:
                 this.callBase(args);
         }
+    },
+
+    _updateDataAdapter: function() {
+        this._setOptionSilent("expandNodesRecursive", false);
+
+        this._initDataAdapter();
+
+        this._setOptionSilent("expandNodesRecursive", true);
     },
 
     _getDataAdapterOptions: function() {

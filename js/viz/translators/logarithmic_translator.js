@@ -7,7 +7,7 @@ var numericTranslator = require("./numeric_translator"),
     getLog = vizUtils.getLog;
 
 module.exports = {
-    translate: function(bp) {
+    translate: function(bp, direction) {
         var that = this,
             specialValue = that.translateSpecialCase(bp);
 
@@ -17,7 +17,7 @@ module.exports = {
         if(that._isValueOutOfCanvas(getLog(bp, that._businessRange.base))) {
             return null;
         }
-        return that.to(bp);
+        return that.to(bp, direction);
     },
 
     untranslate: numericTranslator.untranslate,
@@ -48,12 +48,12 @@ module.exports = {
 
     parse: numericTranslator.parse,
 
-    to: function(value) {
-        return numericTranslator.to.call(this, getLog(value, this._businessRange.base));
+    to: function(value, direction) {
+        return numericTranslator.to.call(this, getLog(value, this._businessRange.base), direction);
     },
 
-    from: function(position) {
-        var result = numericTranslator.from.call(this, position);
+    from: function(position, direction) {
+        var result = numericTranslator.from.call(this, position, direction);
         return result !== null ? raiseTo(result, this._businessRange.base) : result;
     },
 

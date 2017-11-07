@@ -131,6 +131,10 @@ function getTransitionTickIndex(ticks, value) {
     return nearestTickIndex;
 }
 
+function splitDecimalNumber(value) {
+    return value.toString().split(".");
+}
+
 function smartFormatter(tick, options) {
     var tickInterval = options.tickInterval,
         tickIntervalIndex,
@@ -152,14 +156,17 @@ function smartFormatter(tick, options) {
         nextDateIndex,
         isLogarithmic = options.type === "logarithmic";
 
-    if(!isDefined(format) && isDefined(tickInterval) && options.type !== "discrete" && tick !== 0 && (options.logarithmBase === 10 || !isLogarithmic)) {
+    if(!isDefined(format) && isDefined(tickInterval) && options.type !== "discrete" && isDefined(tick) && tick !== 0 && (options.logarithmBase === 10 || !isLogarithmic)) {
         if(options.dataType !== "datetime") {
             if(ticks.length && ticks.indexOf(tick) === -1) {
                 indexOfTick = getTransitionTickIndex(ticks, tick);
                 tickInterval = adjust(abs(tick - ticks[indexOfTick]), tick);
             }
 
-            separatedTickInterval = tickInterval.toString().split(".");
+            separatedTickInterval = splitDecimalNumber(tickInterval);
+            if(separatedTickInterval < 2) {
+                separatedTickInterval = splitDecimalNumber(tick);
+            }
 
             if(isLogarithmic) {
                 log10Tick = log10(abs(tick));
@@ -193,8 +200,8 @@ function smartFormatter(tick, options) {
                         }
 
                         indexOfFormat = floor(actualIndex / 3);
+                        offset = indexOfFormat * 3;
                         if(indexOfFormat < 5) {
-                            offset = indexOfFormat * 3;
                             if(tickIntervalIndex - offset === 2 && tickIndex >= 3) {
                                 indexOfFormat++;
                                 offset = indexOfFormat * 3;
@@ -204,17 +211,10 @@ function smartFormatter(tick, options) {
                             typeFormat = formats[formats.length - 1];
                         }
 
-                        if(offset !== 0 && stringTick[stringTick.length - offset] !== "0" && typeFormat !== formats[0]) {
-                            precision++;
-                            if(abs(tickInterval / Math.pow(10, tickIntervalIndex) - 2.5) < 0.0001 && stringTick[stringTick.length - offset + 1] !== "0") {
-                                precision++;
-                            }
-                        } else {
-                            if(precision === 0 && tickIndex - tickIntervalIndex === 1 && floor(tickIndex / 3) !== floor(tickIntervalIndex / 3)) {
-                                precision = 1;
-                                if(abs(tickInterval / Math.pow(10, tickIntervalIndex) - 2.5) < 0.0001) {
-                                    precision = 2;
-                                }
+                        if(offset > 0) {
+                            separatedTickInterval = splitDecimalNumber(tickInterval / Math.pow(10, offset));
+                            if(separatedTickInterval[1]) {
+                                precision = separatedTickInterval[1].length;
                             }
                         }
                     }

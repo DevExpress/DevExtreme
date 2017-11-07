@@ -72,7 +72,7 @@ function getParser(format, config) {
 
     return function(text) {
         if(!checkParserArguments(format, text)) {
-            return null;
+            return;
         }
 
         var signParts = getSignParts(format),
@@ -80,7 +80,7 @@ function getParser(format, config) {
             parseResult = new RegExp("^(" + regExpText + ")$").exec(text);
 
         if(!parseResult) {
-            return null;
+            return;
         }
 
         var signPartResultCount = parseResult.length / 2 - 1,
@@ -93,7 +93,7 @@ function getParser(format, config) {
         var value = parseInt(integerPart) || 0;
 
         if(value > MAX_SAFE_INTEGER) {
-            return null;
+            return;
         }
 
         if(floatPart) {

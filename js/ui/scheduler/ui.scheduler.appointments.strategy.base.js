@@ -453,10 +453,12 @@ var BaseRenderingStrategy = Class.inherit({
 
         }
 
-        var viewEndDate = dateUtils.roundToHour(this.instance.fire("getEndViewDate"));
+        if(!this.isAllDay(appointment)) {
+            var viewEndDate = dateUtils.roundToHour(this.instance.fire("getEndViewDate"));
 
-        if(endDate > viewEndDate) {
-            endDate = viewEndDate;
+            if(endDate > viewEndDate) {
+                endDate = viewEndDate;
+            }
         }
 
         return endDate;

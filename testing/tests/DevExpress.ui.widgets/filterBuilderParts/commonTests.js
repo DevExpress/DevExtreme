@@ -364,7 +364,29 @@ QUnit.module("Rendering", function() {
         selectBoxInstance.blur();
         assert.notOk($container.find("input").length, "hasn't input");
         assert.deepEqual(instance.option("value"), ["CompanyName", "<>", "Super Mart of the West"]);
+    });
 
+    QUnit.testInActiveWindow("change filter value in selectbox with different value and displayText", function(assert) {
+        var $container = $("#container"),
+            instance = $container.dxFilterBuilder({
+                allowHierarchicalFields: true,
+                value: ["Product", "=", 1],
+                fields: fields
+            }).dxFilterBuilder("instance");
+
+        assert.equal($container.find("." + FILTER_BUILDER_ITEM_VALUE_TEXT_CLASS).text(), "DataGrid");
+
+        var $valueButton = $container.find("." + FILTER_BUILDER_ITEM_VALUE_TEXT_CLASS);
+        $valueButton.click();
+
+        var selectBoxInstance = $container.find(".dx-selectbox").dxSelectBox("instance");
+        selectBoxInstance.open();
+        $(".dx-list-item").eq(2).trigger("dxclick");
+
+        selectBoxInstance.blur();
+
+        assert.equal($container.find("." + FILTER_BUILDER_ITEM_VALUE_TEXT_CLASS).text(), "PivotGrid");
+        assert.deepEqual(instance.option("value"), ["Product", "=", 2]);
     });
 
     QUnit.testInActiveWindow("check default value for number", function(assert) {

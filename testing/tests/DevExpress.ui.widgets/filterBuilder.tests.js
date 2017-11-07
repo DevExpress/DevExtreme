@@ -75,6 +75,26 @@ window.fields = [{
     format: "shortDate",
     filterOperations: ["=", "<>", "<", ">", "<=", ">="],
     defaultFilterOperation: ""
+},
+{
+    caption: "Product",
+    dataField: "Product",
+    dataType: "number",
+    filterOperations: ["=", "<>"],
+    lookup: {
+        dataSource: [{
+            value: 1,
+            text: "DataGrid"
+        }, {
+            value: 2,
+            text: "PivotGrid"
+        }, {
+            value: 3,
+            text: "TreeList"
+        }],
+        valueExpr: "value",
+        displayExpr: "text"
+    }
 }];
 
 QUnit.testStart(function() {

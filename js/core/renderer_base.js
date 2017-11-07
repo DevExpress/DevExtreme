@@ -455,7 +455,7 @@ initRender.prototype.clone = function() {
     return renderer(result);
 };
 
-initRender.prototype.text = function(text) {
+initRender.prototype.text = function(value) {
     if(!arguments.length) {
         var result = "";
 
@@ -464,6 +464,8 @@ initRender.prototype.text = function(text) {
         }
         return result;
     }
+
+    var text = typeUtils.isFunction(value) ? value() : value;
 
     dataUtils.cleanDataRecursive(this[0], false);
     domAdapter.setText(this[0], typeUtils.isDefined(text) ? text : "");

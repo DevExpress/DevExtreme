@@ -1091,6 +1091,8 @@ QUnit.test("Draw scale breaks", function(assert) {
         }
     });
 
+    assert.ok(this.axis.validate.called);
+    assert.ok(this.axis.validate.calledBefore(this.axis.setBusinessRange));
     assert.deepEqual(this.axis.drawScaleBreaks.lastCall.args[0], {
         start: 20,
         end: 44
@@ -1133,15 +1135,15 @@ QUnit.test("During indents estimation, format scale labels the same way the axis
         scale: {
             startValue: 1,
             endValue: 10.5,
-            tickInterval: 1.5,
+            tickInterval: 2,
             label: {
                 visible: true
             }
         }
     });
 
-    assert.strictEqual(this.renderer.text.getCall(1).args[0], "1.0");
-    assert.strictEqual(this.renderer.text.getCall(2).args[0], "10.5");
+    assert.strictEqual(this.renderer.text.getCall(1).args[0], "2");
+    assert.strictEqual(this.renderer.text.getCall(2).args[0], "10");
 });
 
 QUnit.test("rangeContainer canvas if sliderMarker placeholderSize is defined", function(assert) {

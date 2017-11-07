@@ -848,3 +848,87 @@ QUnit.module("Formatting", function() {
         assert.equal(utils.getCurrentValueText(field, value), "9/5/2017, 12:30 PM");
     });
 });
+
+QUnit.module("Lookup Value", function() {
+    QUnit.test("array of strings & value=empty", function(assert) {
+        var field = {
+                lookup: {
+                    dataSource: [
+                        "DataGrid",
+                        "PivotGrid",
+                        "TreeList"
+                    ]
+                }
+            },
+            value = "";
+
+        utils.getCurrentLookupValueText(field, value, function(r) {
+            assert.equal(r, "");
+        });
+    });
+
+    QUnit.test("array of strings", function(assert) {
+        var field = {
+                lookup: {
+                    dataSource: [
+                        "DataGrid",
+                        "PivotGrid",
+                        "TreeList"
+                    ]
+                }
+            },
+            value = "PivotGrid";
+
+        utils.getCurrentLookupValueText(field, value, function(r) {
+            assert.equal(r, "PivotGrid");
+        });
+    });
+
+    QUnit.test("dataField & textField", function(assert) {
+        var field = {
+                lookup: {
+                    dataSource: [{
+                        data: 1,
+                        text: "DataGrid"
+                    }, {
+                        data: 2,
+                        text: "PivotGrid"
+                    }, {
+                        data: 3,
+                        text: "TreeList"
+                    }],
+                    valueExpr: "data",
+                    displayExpr: "text"
+                }
+            },
+            value = 2;
+
+        utils.getCurrentLookupValueText(field, value, function(r) {
+            assert.equal(r, "PivotGrid");
+        });
+    });
+
+    QUnit.test("dataField & textField & value = empty", function(assert) {
+        var field = {
+                lookup: {
+                    dataSource: [{
+                        data: 1,
+                        text: "DataGrid"
+                    }, {
+                        data: 2,
+                        text: "PivotGrid"
+                    }, {
+                        data: 3,
+                        text: "TreeList"
+                    }],
+                    valueExpr: "data",
+                    displayExpr: "text"
+                }
+            },
+            value = "";
+
+        utils.getCurrentLookupValueText(field, value, function(r) {
+            assert.equal(r, "");
+        });
+    });
+});

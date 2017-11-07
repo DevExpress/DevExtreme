@@ -1321,7 +1321,8 @@ QUnit.test("customTicks", function(assert) {
         argumentType: "numeric",
         type: "logarithmic",
         logarithmBase: 10,
-        customTicks: [1, 100, 10000]
+        customTicks: [1, 100, 10000],
+        customMinorTicks: [1, 2, 3]
     });
 
     this.axis.setBusinessRange({ minVisible: 1, maxVisible: 1000, addRange: function() { } });
@@ -1330,7 +1331,9 @@ QUnit.test("customTicks", function(assert) {
     this.axis.createTicks(canvas(300));
 
     assert.deepEqual(this.axis._majorTicks.map(value), [1, 100, 10000]);
+    assert.deepEqual(this.axis._minorTicks.map(value), [1, 2, 3]);
     assert.deepEqual(this.axis._tickInterval, 2);
+    assert.deepEqual(this.axis._minorTickInterval, 1);
 });
 
 QUnit.module("Logarithmic. Minor ticks", environment);
@@ -1460,6 +1463,27 @@ QUnit.test("Minor ticks when there is only one major tick in the middle (big tic
 
     assert.deepEqual(this.axis._minorTicks.map(value), [60, 80, 200]);
     assert.deepEqual(this.axis._minorTickInterval, 0.2);
+});
+
+QUnit.test("Minor ticks when given minorTickCount", function(assert) {
+    this.createAxis();
+    this.updateOptions({
+        argumentType: "numeric",
+        type: "logarithmic",
+        logarithmBase: 10,
+        minorTickCount: 9,
+        allowDecimals: true,
+        minorTick: {
+            visible: true
+        }
+    });
+
+    this.axis.setBusinessRange({ minVisible: 10, maxVisible: 100, addRange: function() { } });
+
+    //act
+    this.axis.createTicks(canvas(200));
+
+    assert.deepEqual(this.axis._minorTicks.map(value), [20, 30, 40, 50, 60, 70, 80, 90]);
 });
 
 QUnit.module("DateTime. Calculate tickInterval and ticks", environment);
@@ -2407,6 +2431,25 @@ QUnit.test("Remove scale break if it less than tickInterval", function(assert) {
         to: 626,
         cumulativeWidth: 0
     }]);
+});
+
+QUnit.test("Remove scale break if it less than tickInterval, logarithmic", function(assert) {
+    this.createAxis();
+    this.updateOptions({
+        argumentType: "numeric",
+        type: "logarithmic",
+        logarithmBase: 10,
+        breakStyle: { width: 0 },
+        breaks: [{ startValue: 10, endValue: 50 }]
+    });
+
+    this.axis.setBusinessRange({ minVisible: 0.001, maxVisible: 100 });
+
+    //act
+    this.axis.createTicks(canvas(200));
+
+    assert.equal(this.axis._tickInterval, 2, "interval");
+    assert.deepEqual(this.translator.updateBusinessRange.lastCall.args[0].breaks, []);
 });
 
 QUnit.test("Pass correct range in translator when value margins are enabled. Margins are calculated using original breaks", function(assert) {

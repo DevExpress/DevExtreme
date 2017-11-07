@@ -6,6 +6,7 @@ var isFunction = require("../core/utils/type").isFunction,
 
 var TransitionTimingFuncMap = {
     "linear": "cubic-bezier(0, 0, 1, 1)",
+    "swing": "cubic-bezier(0.445, 0.05, 0.55, 0.95)",
     "ease": "cubic-bezier(0.25, 0.1, 0.25, 1)",
     "ease-in": "cubic-bezier(0.42, 0, 1, 1)",
     "ease-out": "cubic-bezier(0, 0, 0.58, 1)",

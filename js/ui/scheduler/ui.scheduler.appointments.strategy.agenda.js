@@ -64,21 +64,9 @@ var AgendaRenderingStrategy = BaseAppointmentsStrategy.inherit({
                 height: height,
                 width: "100%",
                 sortedIndex: sortedIndex++,
-                groupIndex: this._calculateGroupIndex(index, appointmentsByResources),
-                appointmentReduced: this._calculateIfApptReduced(appt)
+                groupIndex: this._calculateGroupIndex(index, appointmentsByResources)
             }]);
         }.bind(this));
-
-        return result;
-    },
-
-    _calculateIfApptReduced: function(appointment) {
-        var isRecurrence = !!this.instance.fire("getField", "recurrenceRule", appointment),
-            result = false;
-
-        if(this.instance.fire("appointmentTakesSeveralDays", appointment) && !isRecurrence) {
-            result = "head";
-        }
 
         return result;
     },

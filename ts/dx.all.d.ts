@@ -506,24 +506,34 @@ declare module DevExpress {
         /** Gets the DataSource instance. */
         getDataSource(): DevExpress.data.DataSource;
     }
+    /** This namespace provides methods for controlling events without using jQuery. */
     export class events {
+        /** Detaches an event handler from the specified element. */
         off(element: DevExpress.core.dxElement, eventName: string, selector: string, handler: Function): void;
+        /** Attaches an event handler to the specified element. */
         on(element: DevExpress.core.dxElement, eventName: string, selector: string, data: any, handler: Function): void;
+        /** Attaches an event handler to be executed only once to the specified element. */
         one(element: DevExpress.core.dxElement, eventName: string, selector: string, data: any, handler: Function): void;
+        /** Executes all handlers of a given event type attached to the specified element. */
         trigger(element: DevExpress.core.dxElement, event: string | event, extraParameters: any): void;
     }
     export function eventsHandler(element: DevExpress.core.dxElement, extraParameters: any): boolean;
+    /** Describes dxEvent, a counterpart of the jQuery.Event to be used without jQuery. */
     export class dxEvent {
-        isPropagationStopped: (() => boolean);
-        stopPropagation: Function;
-        isImmediatePropagationStopped: (() => boolean);
-        stopImmediatePropagation: Function;
-        isDefaultPrevented: (() => boolean);
-        preventDefault: Function;
+        /** The DOM element that initiated the event. */
         target: Element;
+        /** The DOM element within the current event propagation stage. */
         currentTarget: Element;
+        /** The DOM element to which the currently-called event handler was attached. */
         delegateTarget: Element;
+        /** Data passed to the event handler. */
         data: any;
+        isDefaultPrevented(): boolean;
+        isImmediatePropagationStopped(): boolean;
+        isPropagationStopped(): boolean;
+        preventDefault(): void;
+        stopImmediatePropagation(): void;
+        stopPropagation(): void;
     }
     export type event = dxEvent | JQueryEventObject; 
     /** An object that serves as a namespace for the methods that are used to localize an application. */
@@ -659,10 +669,13 @@ declare module DevExpress {
         /** Sets one or more options. */
         option(options: any): void;
     }
+    /** Registers a new component in the DevExpress.ui namespace. */
     export function registerComponent(name: string, componentClass: any): void;
+    /** Registers a new component in the specified namespace. */
     export function registerComponent(name: string, namespace: any, componentClass: any): void;
     /** Specifies settings that affect all DevExtreme widgets. */
-    export interface GlobalConfig {
+    export interface globalConfig {
+        /** A decimal separator. Applies only if you do not use the Globalize or Intl library. */
         decimalSeparator?: string;
         /** Specifies the default currency the widgets use. */
         defaultCurrency?: string;
@@ -670,13 +683,15 @@ declare module DevExpress {
         forceIsoDateParsing?: boolean;
         /** Specifies whether the widgets support a right-to-left representation. */
         rtlEnabled?: boolean;
+        /** The decimal separator that is used when submitting a value to the server. */
         serverDecimalSeparator?: string;
+        /** A group separator. Applies only if you do not use the Globalize or Intl library. */
         thousandsSeparator?: string;
     }
     /** Gets the current global configuration object. */
-    export function config(): GlobalConfig;
+    export function config(): globalConfig;
     /** Sets the global configuration object. */
-    export function config(config: GlobalConfig): void;
+    export function config(config: globalConfig): void;
     /** The device object defines the device on which the application is running. */
     export interface Device {
         /** Indicates whether or not the device platform is Android. */
@@ -740,9 +755,11 @@ declare module DevExpress {
         constructor(element: Element | JQuery, options?: DOMComponentOptions);
         /** Specifies the device-dependent default configuration options for this component. */
         static defaultOptions(rule: { device?: any | Array<any> | Function, options?: any }): void;
+        /** Removes the widget from the DOM. */
         dispose(): void;
         /** Gets the root element of the widget. */
         element(): DevExpress.core.dxElement;
+        /** Gets the widget's instance using a DOM element. */
         static getInstance(element: Element | JQuery): DOMComponent;
     }
     /** An object used to manage OData endpoints in your application. */
@@ -779,6 +796,7 @@ declare module DevExpress {
     export class ui {
         /** Creates a toast message. */
         static notify(message: string, type?: string, displayTime?: number): void;
+        /** Creates a toast message. */
         static notify(options: any, type?: string, displayTime?: number): void;
         /** Sets a specified template engine. */
         static setTemplateEngine(templateEngineName: string): void;
@@ -906,18 +924,31 @@ declare module DevExpress.data {
         /** Creates the Query object for the underlying array. */
         createQuery(): any;
     }
+    /** This section describes the loadOptions object's fields. */
     export interface LoadOptions {
+        /** An array of strings that represent the names of navigation properties to be loaded simultaneously with the ODataStore. */
         expand?: any;
+        /** A filter expression. */
         filter?: any;
+        /** A group expression. */
         group?: any;
+        /** Indicates whether the total count of data objects is needed. */
         requireTotalCount?: boolean;
+        /** A data field or an expression whose value is compared to the search value. */
         searchExpr?: Function | Array<Function>;
+        /** A comparison operation. One of the following: "=", "<>", ">", ">=", "<", "<=", "startswith", "endswith", "contains", "notcontains", "isblank" and "isnotblank". */
         searchOperation?: string;
+        /** The current search value. */
         searchValue?: any;
+        /** A select expression. */
         select?: any;
+        /** The number of data objects to be skipped from the result set's start. In conjunction with take, used to implement paging. */
         skip?: number;
+        /** A sort expression. */
         sort?: any;
+        /** The number of data objects to be loaded. In conjunction with skip, used to implement paging. */
         take?: number;
+        /** An object for storing additional settings that should be sent to the server. */
         userData?: any;
     }
     export interface CustomStoreOptions extends StoreOptions {
@@ -1678,6 +1709,7 @@ declare module DevExpress.framework.html {
         getViewTemplateInfo(viewName: string): any;
         /** Adds a specified HTML template to a collection of view or layout templates. */
         loadTemplates(source: string | JQuery): Promise<void> & JQueryPromise<void>;
+        /** Navigates to the specified URI. */
         navigate(uri?: string | any): void;
         /** Navigates to the specified URI. */
         navigate(uri: string | any, options: { root?: boolean, target?: string, direction?: string, modal?: boolean }): void;
@@ -2701,15 +2733,24 @@ declare module DevExpress.ui {
         constructor(element: JQuery, options?: dxFileUploaderOptions)
     }
     export interface dxFilterBuilderOptions extends WidgetOptions {
+        /** Specifies whether the widget can display hierarchical data fields. */
         allowHierarchicalFields?: boolean;
+        /** Configures fields. */
         fields?: Array<dxFilterBuilderField>;
+        /** Specifies filter operation descriptions. */
         filterOperationDescriptions?: { equal?: string, notEqual?: string, lessThan?: string, lessThanOrEqual?: string, greaterThan?: string, greaterThanOrEqual?: string, startsWith?: string, contains?: string, notContains?: string, endsWith?: string, isBlank?: string, isNotBlank?: string };
+        /** Specifies group operation descriptions. */
         groupOperationDescriptions?: { and?: string, or?: string, notAnd?: string, notOr?: string };
+        /** A handler for the editorPrepared event. Executed after an editor is created. */
         onEditorPrepared?: ((e: { component?: DOMComponent, element?: DevExpress.core.dxElement, model?: any, value?: any, setValue?: any, editorElement?: DevExpress.core.dxElement, editorName?: string, dataField?: string, updateValueTimeout?: number, width?: number, readOnly?: boolean, disabled?: boolean, rtlEnabled?: boolean }) => any);
+        /** A handler for the editorPreparing event. Executed before an editor is created. */
         onEditorPreparing?: ((e: { component?: DOMComponent, element?: DevExpress.core.dxElement, model?: any, value?: any, setValue?: any, cancel?: boolean, editorElement?: DevExpress.core.dxElement, editorName?: string, editorOptions?: any, dataField?: string, updateValueTimeout?: number, width?: number, readOnly?: boolean, disabled?: boolean, rtlEnabled?: boolean }) => any);
+        /** A handler for the valueChanged event. Executed after the widget's value is changed. */
         onValueChanged?: ((e: { component?: DOMComponent, element?: DevExpress.core.dxElement, model?: any, value?: any, previousValue?: any }) => any);
+        /** Specifies the current filter expression. */
         value?: string | Array<any>;
     }
+    /** The FilterBuilder widget allows a user to build complex filter expressions with an unlimited number of filter conditions, combined by logical operations using the UI. */
     export class dxFilterBuilder extends Widget {
         constructor(element: Element, options?: dxFilterBuilderOptions)
         constructor(element: JQuery, options?: dxFilterBuilderOptions)
@@ -3682,6 +3723,7 @@ declare module DevExpress.ui {
         dateSerializationFormat?: string;
         /** Specifies the name of the data source item field whose value holds the description of the corresponding appointment. */
         descriptionExpr?: string;
+        /** The template to be used for rendering appointments in the appointment collector's drop-down menu. */
         dropDownAppointmentTemplate?: template;
         /** Specifies which editing operations an end-user can perform on appointments. */
         editing?: boolean | { allowAdding?: boolean, allowUpdating?: boolean, allowDeleting?: boolean, allowResizing?: boolean, allowDragging?: boolean };
@@ -5013,21 +5055,6 @@ declare module DevExpress.ui {
         /** Specifies whether or not an appointment must be displayed. */
         visible?: boolean;
     }
-    export interface dxSchedulerDropDownAppointmentTemplate {
-        allDay?: boolean;
-        description?: string;
-        disabled?: boolean;
-        endDate?: Date;
-        endDateTimeZone?: string;
-        html?: string;
-        recurrenceException?: string;
-        recurrenceRule?: string;
-        startDate?: Date;
-        startDateTimeZone?: string;
-        template?: template;
-        text?: string;
-        visible?: boolean;
-    }
     export interface dxSchedulerAppointmentTooltipTemplate {
         /** Specifies whether or not the current appointment is an all-day appointment. */
         allDay?: boolean;
@@ -5314,6 +5341,7 @@ declare module DevExpress.ui {
         static current(): string;
         /** Changes the current theme to the specified one. */
         static current(themeName: string): void;
+        /** Specifies a function to execute when the theme is loaded. */
         static ready(callback: Function): void;
     }
 }
@@ -5459,8 +5487,11 @@ declare module DevExpress.viz {
         /** Returns the widget's SVG markup. */
         svg(): string;
     }
+    /** A class describing a scale break range. Inherited by scale breaks in the Chart and RangeSelector. */
     export interface ScaleBreak {
+        /** Along with the startValue option, limits the scale break. */
         endValue?: number | Date | string;
+        /** Along with the endValue option, limits the scale break. */
         startValue?: number | Date | string;
     }
     /** A class describing various time intervals. Inherited by tick intervals in Chart and RangeSelector. */
@@ -6247,6 +6278,7 @@ declare module DevExpress.viz {
         /** Calls the browser's print window. */
         print(): void;
     }
+    /** The Funnel is a widget that visualizes a value at different stages. It helps assess value changes throughout these stages and identify potential issues. The Funnel widget conveys information using different interactive elements (tooltips, labels, legend) and enables you to create not only a funnel, but also a pyramid chart. */
     export class dxFunnel extends BaseWidget {
         constructor(element: Element, options?: DevExpress.viz.funnel.dxFunnelOptions)
         constructor(element: JQuery, options?: DevExpress.viz.funnel.dxFunnelOptions)
@@ -7019,9 +7051,13 @@ declare module DevExpress.viz {
     }
 }
 declare module DevExpress.events {
+    /** Attaches an event handler to the specified element. */
     export function on(element: DevExpress.core.dxElement, eventName: string, selector: string, data: any, handler: Function): void;
+    /** Attaches an event handler to be executed only once to the specified element. */
     export function one(element: DevExpress.core.dxElement, eventName: string, selector: string, data: any, handler: Function): void;
+    /** Detaches an event handler from the specified element. */
     export function off(element: DevExpress.core.dxElement, eventName: string, selector: string, handler: Function): void;
+    /** Executes all handlers of a given event type attached to the specified element. */
     export function trigger(element: DevExpress.core.dxElement, event: string | event, extraParameters: any): void;
     export function triggerHandler(element: DevExpress.core.dxElement, event: string | event, extraParameters: any): void;
 }
@@ -7134,6 +7170,7 @@ declare module DevExpress.viz.charts {
         argumentType?: string;
         /** Specifies the minimum distance between two neighboring major ticks in pixels. Applies only to the axes of the "continuous" and "logarithmic" types. */
         axisDivisionFactor?: number;
+        /** Declares a scale break collection. Applies only if the axis' type is "continuous" or "logarithmic". */
         breaks?: Array<ScaleBreak>;
         /** Specifies the order of categories on an axis of the "discrete" type. */
         categories?: Array<number | string | Date>;
@@ -7141,6 +7178,7 @@ declare module DevExpress.viz.charts {
         constantLines?: Array<dxChartArgumentAxisConstantLines>;
         /** Specifies the appearance of those constant lines that belong to the argument axis. */
         constantLineStyle?: dxChartArgumentAxisConstantLineStyle;
+        /** Days to be excluded from the axis when workdaysOnly is true. */
         holidays?: Array<Date | string> | Array<number>;
         /** Specifies chart elements to be highlighted when a user points to an axis label. */
         hoverMode?: string;
@@ -7158,6 +7196,7 @@ declare module DevExpress.viz.charts {
         minorTickInterval?: any;
         /** Relocates the argument axis. */
         position?: string;
+        /** Days to be included in the axis when workdaysOnly is true. */
         singleWorkdays?: Array<Date | string> | Array<number>;
         /** Declares a collection of strips belonging to the argument axis. */
         strips?: Array<dxChartArgumentAxisStrips>;
@@ -7167,7 +7206,9 @@ declare module DevExpress.viz.charts {
         title?: dxChartArgumentAxisTitle;
         /** Specifies the type of the argument axis. */
         type?: string;
+        /** Leaves only workdays on the axis: the work week days plus single workdays minus holidays. Applies only if the axis' argumentType is "datetime". */
         workdaysOnly?: boolean;
+        /** Specifies which days are workdays. The array can contain values from 0 (Sunday) to 6 (Saturday). Applies only if workdaysOnly is true. */
         workWeek?: Array<number>;
     }
     /** Declares a collection of constant lines belonging to the argument axis. */
@@ -7232,7 +7273,9 @@ declare module DevExpress.viz.charts {
     }
     /** Defines common settings for both the argument and value axis in a chart. */
     export interface dxChartCommonAxisSettings {
+        /** Specifies whether to allow decimal values on the axis. When false, the axis contains integer values only. */
         allowDecimals?: boolean;
+        /** Configures the scale breaks' appearance. */
         breakStyle?: { width?: number, color?: string, line?: string };
         /** Specifies the color of the axis line. */
         color?: string;
@@ -7240,6 +7283,7 @@ declare module DevExpress.viz.charts {
         constantLineStyle?: dxChartCommonAxisSettingsConstantLineStyle;
         /** Specifies whether ticks and grid lines should cross axis labels or lie between them. Applies only to the axes of the "discrete" type. */
         discreteAxisDivisionMode?: string;
+        /** Specifies whether to force the axis to start and end on ticks. */
         endOnTick?: boolean;
         /** Configures the grid. */
         grid?: { visible?: boolean, color?: string, width?: number, opacity?: number };
@@ -7259,6 +7303,7 @@ declare module DevExpress.viz.charts {
         opacity?: number;
         /** Reserves a pixel-measured space for the axis. */
         placeholderSize?: number;
+        /** This functionality is deprecated as redundant. */
         setTicksAtUnitBeginning?: boolean;
         /** Configures the appearance of strips. */
         stripStyle?: dxChartCommonAxisSettingsStripStyle;
@@ -7433,9 +7478,11 @@ declare module DevExpress.viz.charts {
     }
     /** Configures the value axis. */
     export interface dxChartValueAxis extends dxChartCommonAxisSettings {
+        /** Enables auto-calculated scale breaks. Applies only if the axis' type is "continuous" or "logarithmic". Does not apply to a multi-axis chart. */
         autoBreaksEnabled?: boolean;
         /** Specifies the minimum distance between two neighboring major ticks in pixels. Applies only to the axes of the "continuous" and "logarithmic" types. */
         axisDivisionFactor?: number;
+        /** Declares a custom scale break collection. Applies only if the axis' type is "continuous" or "logarithmic". Does not apply to a multi-axis chart. */
         breaks?: Array<ScaleBreak>;
         /** Specifies the order of categories on an axis of the "discrete" type. */
         categories?: Array<number | string | Date>;
@@ -7443,6 +7490,7 @@ declare module DevExpress.viz.charts {
         constantLines?: Array<dxChartValueAxisConstantLines>;
         /** Specifies the appearance of those constant lines that belong to the value axis. */
         constantLineStyle?: dxChartValueAxisConstantLineStyle;
+        /** Specifies whether to force the axis to start and end on ticks. */
         endOnTick?: boolean;
         /** Configures the labels of the value axis. */
         label?: dxChartValueAxisLabel;
@@ -7450,6 +7498,7 @@ declare module DevExpress.viz.charts {
         logarithmBase?: number;
         /** Coupled with the min option, focuses the widget on a specific chart segment. Applies only to the axes of the "continuous" and "logarithmic" type. */
         max?: number | Date | string;
+        /** Sets a limit on auto-calculated scale breaks. Custom scale breaks are not counted. */
         maxAutoBreakCount?: number;
         /** Coupled with the max option, focuses the widget on a specific chart segment. Applies only to the axes of the "continuous" and "logarithmic" type. */
         min?: number | Date | string;
@@ -7729,6 +7778,7 @@ declare module DevExpress.viz.charts {
     }
     /** An object defining the configuration options that are common for all axes of the PolarChart widget. */
     export interface dxPolarChartCommonAxisSettings {
+        /** Specifies whether to allow decimal values on the axis. When false, the axis contains integer values only. */
         allowDecimals?: boolean;
         /** Specifies the color of the line that represents an axis. */
         color?: string;
@@ -7736,6 +7786,7 @@ declare module DevExpress.viz.charts {
         constantLineStyle?: dxPolarChartCommonAxisSettingsConstantLineStyle;
         /** Specifies whether ticks/grid lines of a discrete axis are located between labels or cross the labels. */
         discreteAxisDivisionMode?: string;
+        /** Specifies whether to force the axis to start and end on ticks. */
         endOnTick?: boolean;
         /** An object defining the configuration options for the grid lines of an axis in the PolarChart widget. */
         grid?: { visible?: boolean, color?: string, width?: number, opacity?: number };
@@ -7749,6 +7800,7 @@ declare module DevExpress.viz.charts {
         minorTick?: { visible?: boolean, color?: string, opacity?: number, width?: number, length?: number };
         /** Specifies the opacity of the line that represents an axis. */
         opacity?: number;
+        /** This functionality is deprecated as redundant. */
         setTicksAtUnitBeginning?: boolean;
         /** An object defining configuration options for strip style. */
         stripStyle?: dxPolarChartCommonAxisSettingsStripStyle;
@@ -8036,6 +8088,7 @@ declare module DevExpress.viz.funnel {
         hoverEnabled?: boolean;
         /** Turns the funnel upside down. */
         inverted?: boolean;
+        /** Configures funnel items' appearance. */
         item?: { border?: any, hoverStyle?: any, selectionStyle?: any };
         /** Configures funnel item labels. */
         label?: { position?: string, horizontalOffset?: number, horizontalAlignment?: string, format?: DevExpress.ui.format, connector?: any, backgroundColor?: string, border?: any, visible?: boolean, showForZeroValues?: boolean, customizeText?: ((itemInfo: { item?: dxFunnelItem, value?: number, valueText?: string, percent?: number, percentText?: string }) => string), font?: Font };
@@ -8117,6 +8170,7 @@ declare module DevExpress.viz.gauges {
     }
     /** Specifies options of the gauge's scale. */
     interface BaseGaugeScale {
+        /** Specifies whether to allow decimal values on the scale. When false, the scale contains integer values only. */
         allowDecimals?: boolean;
         /** Specifies an array of custom minor ticks. */
         customMinorTicks?: Array<number>;
