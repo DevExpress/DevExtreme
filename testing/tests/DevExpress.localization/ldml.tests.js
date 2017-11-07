@@ -327,6 +327,18 @@ QUnit.test("getFormat for ldml number formatters", function(assert) {
     checkFormat("#.## '%'");
 });
 
+QUnit.test("getFormat for currency if separators are russion", function(assert) {
+    var formatter = getNumberFormatter("#,##0.00 $", { thousandsSeparator: " ", decimalSeparator: "," });
+
+    assert.strictEqual(getNumberFormat(formatter), "#,##0.00 $", "format is correct");
+});
+
+QUnit.test("getFormat for currency if separators are deutsch", function(assert) {
+    var formatter = getNumberFormatter("#,##0.00 $", { thousandsSeparator: ".", decimalSeparator: "," });
+
+    assert.strictEqual(getNumberFormat(formatter), "#,##0.00 $", "format is correct");
+});
+
 QUnit.test("getFormat for build-in number formats", function(assert) {
     var checkFormat = function(format, ldmlFormat) {
         var formatter = function(value) {

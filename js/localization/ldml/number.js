@@ -250,7 +250,17 @@ function prepareValueText(valueText, formatter, isPercent, isIntegerPart) {
 }
 
 function getFormatByValueText(valueText, formatter, isPercent, isNegative) {
-    var format = formatter(parseValue(valueText, isPercent, isNegative));
+    var format = formatter(parseValue(valueText, isPercent, isNegative)),
+        valueTextParts = valueText.split("."),
+        valueTextWithModifiedFloat = valueTextParts[0] + ".3" + valueTextParts[1].slice(1),
+        valueWithModifiedFloat = parseValue(valueTextWithModifiedFloat, isPercent, isNegative),
+        decimalSeparatorIndex = formatter(valueWithModifiedFloat).indexOf("3") - 1;
+
+    format = format.replace(/(\d)\D(\d)/g, "$1,$2");
+
+    if(decimalSeparatorIndex >= 0) {
+        format = format.slice(0, decimalSeparatorIndex) + "." + format.slice(decimalSeparatorIndex + 1);
+    }
 
     format = format.replace(/1+/, "1").replace(/1/g, "#");
 
