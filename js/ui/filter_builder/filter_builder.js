@@ -770,12 +770,22 @@ var FilterBuilder = Widget.inherit({
 
     _createValueText: function(item, field, $container) {
         var that = this,
-            valueText = utils.getCurrentValueText(field, item[2]) || messageLocalization.format("dxFilterBuilder-enterValueText"),
             $text = $("<div>")
                 .addClass(FILTER_BUILDER_ITEM_VALUE_TEXT_CLASS)
                 .attr("tabindex", 0)
-                .text(valueText)
-                .appendTo($container);
+                .appendTo($container),
+            value = item[2],
+            setText = function(valueText) {
+                $text.text(valueText || messageLocalization.format("dxFilterBuilder-enterValueText"));
+            };
+
+        if(field.lookup) {
+            utils.getCurrentLookupValueText(field, value, function(valueText) {
+                setText(valueText);
+            });
+        } else {
+            setText(utils.getCurrentValueText(field, value));
+        }
 
         that._subscribeOnClickAndEnterKey($text, function() {
             that._createValueEditorWithEvents(item, field, $container);
