@@ -37,7 +37,7 @@
 @SCHEDULER_APPOINTMENT_TOOLTIP_FONT_SIZE: 16px;
 
 @SCHEDULER_APPOINTMENT_CONTENT_PADDING: 5px 7px;
-@SCHEDULER_APPOINTMENT_REDUCED_CONTENT_PADDING: 5px 20px 5px 7px;
+@SCHEDULER_APPOINTMENT_REDUCED_CONTENT_PADDING: 5px 40px 5px 7px;
 @SCHEDULER_APPOINTMENT_RECURRENCE_CONTENT_PADDING: 5px 25px 5px 7px;
 @SCHEDULER_APPOINTMENT_RECURRENCE_CONTENT_PADDING_RTL: 5px 7px 5px 25px;
 
@@ -1363,8 +1363,8 @@
 
     .dx-scheduler-appointment-head {
         .dx-scheduler-appointment-recurrence-icon {
-            top: 20px;
-            right: 5px;
+            top: calc(~'35% - 3px');
+            right: 20px;
         }
     }
 }
@@ -1976,14 +1976,12 @@
         right: auto;
     }
     
-    .dx-scheduler-work-space-month,
-    .dx-scheduler-timeline {
-        .dx-scheduler-appointment-reduced {
-            .dx-scheduler-appointment-recurrence-icon {
-                left: 20px;
-                right: auto;
-            }
-        }
+    
+    .dx-scheduler-appointment-reduced {
+        .dx-scheduler-appointment-recurrence-icon {
+            left: 20px;
+            right: auto;
+        } 
     }
 
     .dx-scheduler-work-space-week .dx-scheduler-all-day-table-cell,

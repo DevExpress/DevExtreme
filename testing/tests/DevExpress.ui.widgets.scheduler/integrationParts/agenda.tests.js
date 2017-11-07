@@ -152,24 +152,6 @@ QUnit.test("Agenda should contain a right quantity of long-appointments", functi
     assert.equal(this.instance.element().find(".dx-scheduler-appointment").length, 7, "Appointment count is OK");
 });
 
-QUnit.test("Long appointment parts should have a reduced-icon and reduced class", function(assert) {
-    this.createInstance({
-        views: ["agenda"],
-        currentView: "agenda",
-        currentDate: new Date(2016, 1, 24),
-        dataSource: [
-            { startDate: new Date(2016, 1, 22, 1), endDate: new Date(2016, 1, 28, 1, 30) }
-        ]
-    });
-
-    var $appointments = this.instance.element().find(".dx-scheduler-appointment");
-
-    assert.ok($appointments.eq(0).hasClass("dx-scheduler-appointment-reduced"), "Appointment part has a reduced-class");
-    assert.equal($appointments.eq(0).find(".dx-scheduler-appointment-reduced-icon").length, 1, "Appointment part has a reduced-icon");
-    assert.ok($appointments.eq(2).hasClass("dx-scheduler-appointment-reduced"), "Appointment part has a reduced-class");
-    assert.equal($appointments.eq(2).find(".dx-scheduler-appointment-reduced-icon").length, 1, "Appointment part has a reduced-icon");
-});
-
 QUnit.test("Long and recurrent appointment parts should not have a reduced-icon and reduced class", function(assert) {
     this.createInstance({
         views: ["agenda"],
@@ -800,7 +782,7 @@ QUnit.test("Long & recurrence appts should be sorted correctly", function(assert
             positionInArray = recurrenceApptsIndices.indexOf(index);
             assert.notOk($appt.hasClass("dx-scheduler-appointment-reduced"), "Recurrence appt doesn't have 'reduced' class");
 
-        } else if($appt.hasClass("dx-scheduler-appointment-reduced")) {
+        } else {
             positionInArray = longApptsIndices.indexOf(index);
         }
 
