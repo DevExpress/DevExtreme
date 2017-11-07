@@ -3482,14 +3482,13 @@ QUnit.test("Merge generated breaks with user breaks", function(assert) {
 QUnit.module("Auto scale breaks", $.extend({}, environment2DTranslator, {
     beforeEach: function() {
         environment2DTranslator.beforeEach.call(this);
-
+        this.options.maxAutoBreakCount = 2;
         this.axis = this.createAxis(this.renderSettings, this.options);
         this.axis.validate();
     },
     updateOptions: function(opt) {
         this.axis.updateOptions($.extend(true, this.options, {
             autoBreaksEnabled: true,
-            maxAutoBreakCount: 2,
             breakStyle: { width: 0 }
         }, opt));
         this.axis.setBusinessRange({ min: opt.min, max: opt.max });
@@ -3666,11 +3665,11 @@ QUnit.test("Option maxCountOfBreaks is undefined", function(assert) {
     ];
     this.axis.setGroupSeries(this.series);
 
-    this.axis.updateOptions($.extend(true, this.options, {
+    this.options.maxAutoBreakCount = undefined;
+    this.updateOptions({
         autoBreaksEnabled: true,
-        breakStyle: { width: 0 },
-        maxAutoBreakCount: undefined
-    }));
+        breakStyle: { width: 0 }
+    });
     this.axis.setBusinessRange({ min: 2, max: 120 });
 
     this.axis.createTicks(this.canvas);
@@ -3700,6 +3699,46 @@ QUnit.test("Logarithmic axis", function(assert) {
     this.axis.createTicks(this.canvas);
 
     assert.deepEqual(this.tickGeneratorSpy.lastCall.args[7], [{ from: 1000, to: 10000000, cumulativeWidth: 0 }]);
+});
+
+QUnit.test("Breaks length should be less than visible range. T569737", function(assert) {
+    this.series = [
+        this.stubSeries([0.001, 0.267, 19, 23, 145, 1009])
+    ];
+    this.axis.setGroupSeries(this.series);
+
+    this.options.maxAutoBreakCount = undefined;
+
+    this.updateOptions({
+        type: "logarithmic",
+        logarithmBase: 10,
+        min: 0.001,
+        max: 1009
+    });
+
+    this.axis.createTicks(this.canvas);
+
+    assert.equal(this.tickGeneratorSpy.lastCall.args[7].length, 4);
+});
+
+QUnit.test("Breaks count is equal point range count if breaks length less than visible range. T569737", function(assert) {
+    this.series = [
+        this.stubSeries([0.001, 0.267, 19, 23, 145, 1009])
+    ];
+    this.axis.setGroupSeries(this.series);
+
+    this.options.maxAutoBreakCount = undefined;
+
+    this.updateOptions({
+        type: "logarithmic",
+        logarithmBase: 10,
+        min: 0.0009,
+        max: 1009
+    });
+
+    this.axis.createTicks(this.canvas);
+
+    assert.equal(this.tickGeneratorSpy.lastCall.args[7].length, 5);
 });
 
 QUnit.test("Concatenate auto breaks with user breaks", function(assert) {
