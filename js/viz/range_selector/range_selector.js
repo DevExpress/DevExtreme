@@ -116,7 +116,8 @@ function calculateIndents(renderer, scale, sliderMarkerOptions, indentOptions, t
         parsedPlaceholderSize,
         ticks = tickIntervalsInfo.ticks,
         startTickValue,
-        endTickValue;
+        endTickValue,
+        isDiscreteScale = scale.type === "discrete" || scale.type === "semidiscrete";
 
     indentOptions = indentOptions || {};
     parsedPlaceholderSize = parseSliderMarkersPlaceholderSize(sliderMarkerOptions.placeholderSize);
@@ -143,8 +144,8 @@ function calculateIndents(renderer, scale, sliderMarkerOptions, indentOptions, t
     }
 
     if(scale.label.visible) {
-        startTickValue = _isDefined(scale.startValue) ? ticks[0] : scale.startValue;
-        endTickValue = _isDefined(scale.endValue) ? ticks[ticks.length - 1] : scale.endValue;
+        startTickValue = !isDiscreteScale && +ticks[0] === +scale.startValue ? scale.startValue : undefined;
+        endTickValue = !isDiscreteScale && +ticks[ticks.length - 1] === +scale.endValue ? scale.endValue : undefined;
         leftScaleLabelWidth = calculateScaleLabelHalfWidth(renderer, startTickValue, scale, tickIntervalsInfo);
         rightScaleLabelWidth = calculateScaleLabelHalfWidth(renderer, endTickValue, scale, tickIntervalsInfo);
     }
