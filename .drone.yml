@@ -2,12 +2,25 @@
 
 pipeline:
 
+  cache-restore:
+    image: devexpress/devextreme-ci-cache
+    restore: true
+    when:
+      event: [ push, pull_request ]
+
   build:
     image: devexpress/devextreme-build:17_2
     pull: true
     commands:
       - ./drone-pr-workaround.sh
       - ./docker-ci.sh
+
+  cache-rebuild:
+    image: devexpress/devextreme-ci-cache
+    rebuild: true
+    secrets: [ devextreme_ci_cache_access_key, devextreme_ci_cache_secret_key ]
+    when:
+      event: [ push ]
 
 matrix:
   include:
