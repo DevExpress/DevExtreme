@@ -6,6 +6,7 @@ var dataErrors = require("../../data/errors").errors,
     formatHelper = require("../../format_helper"),
     inflector = require("../../core/utils/inflector"),
     messageLocalization = require("../../localization/message"),
+    DataSource = require("../../data/data_source/data_source").DataSource,
     filterOperationsDictionary = require("./ui.filter_operations_dictionary");
 
 var DEFAULT_DATA_TYPE = "string",
@@ -378,6 +379,21 @@ function getFieldFormat(field) {
     return field.format || DEFAULT_FORMAT[field.dataType];
 }
 
+function getCurrentLookupValueText(field, value, handler) {
+    var dataSource = new DataSource(field.lookup.dataSource);
+    dataSource.filter(field.lookup.valueExpr, value);
+    dataSource.load().done(function(result) {
+        if(result && result.length > 0) {
+            var data = result[0];
+            handler(field.lookup.displayExpr ? data[field.lookup.displayExpr] : data);
+        } else {
+            handler("");
+        }
+    }).fail(function() {
+        handler("");
+    });
+}
+
 function getCurrentValueText(field, value) {
     var valueText;
     if(value === true) {
@@ -530,6 +546,7 @@ exports.getGroupCriteria = getGroupCriteria;
 exports.convertToInnerStructure = convertToInnerStructure;
 exports.getDefaultOperation = getDefaultOperation;
 exports.getCurrentValueText = getCurrentValueText;
+exports.getCurrentLookupValueText = getCurrentLookupValueText;
 exports.getFilterOperations = getFilterOperations;
 exports.getCaptionByOperation = getCaptionByOperation;
 exports.getOperationValue = getOperationValue;
