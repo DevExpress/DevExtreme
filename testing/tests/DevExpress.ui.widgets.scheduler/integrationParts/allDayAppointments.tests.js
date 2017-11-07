@@ -1104,6 +1104,26 @@ QUnit.test("Multi-day appointment parts should have allDay class", function(asse
     assert.ok($appointment.hasClass("dx-scheduler-all-day-appointment"), "Appointment part has allDay class");
 });
 
+QUnit.test("Multi-day appointment parts should have correct reduced class", function(assert) {
+    var appointment = { startDate: new Date(2015, 1, 4, 0), endDate: new Date(2015, 1, 7, 0), text: "long appointment" };
+
+    this.createInstance({
+        currentDate: new Date(2015, 1, 5),
+        dataSource: [appointment],
+        currentView: "day"
+    });
+
+    var $appointment = this.instance.element().find(".dx-scheduler-all-day-appointments .dx-scheduler-appointment").eq(0);
+
+    assert.ok($appointment.hasClass("dx-scheduler-appointment-head"), "Appointment part has reduced class");
+
+    this.instance.option("currentDate", new Date(2015, 1, 6));
+
+    $appointment = this.instance.element().find(".dx-scheduler-all-day-appointments .dx-scheduler-appointment").eq(0);
+
+    assert.notOk($appointment.hasClass("dx-scheduler-appointment-head"), "Appointment part hasn't reduced class. It is tail");
+});
+
 QUnit.test("AllDay recurrent appointment should be rendered coorectly after changing currentDate", function(assert) {
     var appointment = {
         text: "Appointment",
