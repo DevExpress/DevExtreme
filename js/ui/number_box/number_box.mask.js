@@ -184,7 +184,7 @@ var NumberBoxMask = NumberBoxBase.inherit({
             var editedText = this._getEditedText(text, { start: start, end: end }, ""),
                 noDigits = editedText.search(/[0-9]/) < 0;
             if(noDigits && this._isValueInRange(0)) {
-                this._parsedValue = 0;
+                this._parsedValue = this._parsedValue < 0 || 1 / this._parsedValue === -Infinity ? -0 : 0;
                 return;
             }
         }

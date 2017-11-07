@@ -445,6 +445,28 @@ QUnit.test("removing all digits but not all characters should change value to 0"
     assert.strictEqual(this.instance.option("value"), 0, "value is reseted");
 });
 
+QUnit.test("removing all digits should save the sign", function(assert) {
+    this.instance.option({
+        format: "#0 kg",
+        value: -1
+    });
+
+    this.keyboard.caret({ start: 2, end: 2 }).press("backspace").input("backspace");
+
+    assert.strictEqual(this.input.val(), "-0 kg", "text is correct");
+});
+
+QUnit.test("removing last digit 0 should save the sign", function(assert) {
+    this.instance.option({
+        format: "#0 kg",
+        value: -0
+    });
+
+    this.keyboard.caret({ start: 2, end: 2 }).press("backspace").input("backspace");
+
+    assert.strictEqual(this.input.val(), "-0 kg", "text is correct");
+});
+
 QUnit.test("removing digit if decimal format", function(assert) {
     this.instance.option({
         format: "00000",
