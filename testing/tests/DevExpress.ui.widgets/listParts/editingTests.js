@@ -505,6 +505,42 @@ QUnit.test("selection works well after clean all selected items and selectAllMod
     assert.equal(selectionChangedSpy.callCount, 3, "'selectionChanged' event has been fired 3 times");
 });
 
+//T567757
+QUnit.test("Selecting all filtered items when selectAllMode is 'allPages'", function(assert) {
+    //arrange
+    var items = [1, 2, 3, 4, 5],
+        $selectAll,
+        ds = new DataSource({
+            store: items,
+            pageSize: 2,
+            paginate: true,
+            searchValue: "1"
+        });
+
+    var instance = $("#list").dxList({
+        dataSource: ds,
+        showSelectionControls: true,
+        selectionMode: "all",
+        selectAllMode: "allPages"
+    }).dxList("instance");
+
+    //act
+    instance.selectItem(0);
+
+    //assert
+    $selectAll = $("#list").find(".dx-list-select-all-checkbox");
+    assert.ok($selectAll.hasClass("dx-checkbox-checked"), "selectAll checkbox is checked");
+    assert.deepEqual(instance.option("selectedItems"), [1], "selected items");
+
+    //act
+    ds.searchValue("");
+    ds.load();
+
+    //assert
+    $selectAll = $("#list").find(".dx-list-select-all-checkbox");
+    assert.ok($selectAll.hasClass("dx-checkbox-indeterminate"), "selectAll checkbox is indeterminate");
+});
+
 var LIST_ITEM_SELECTED_CLASS = "dx-list-item-selected";
 
 QUnit.module("selecting in grouped list", {
