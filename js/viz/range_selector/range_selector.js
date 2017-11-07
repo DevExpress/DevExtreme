@@ -144,8 +144,8 @@ function calculateIndents(renderer, scale, sliderMarkerOptions, indentOptions, t
     }
 
     if(scale.label.visible) {
-        startTickValue = !isDiscreteScale && +ticks[0] === +scale.startValue ? scale.startValue : undefined;
-        endTickValue = !isDiscreteScale && +ticks[ticks.length - 1] === +scale.endValue ? scale.endValue : undefined;
+        startTickValue = !isDiscreteScale && _isDefined(scale.startValue) ? ticks[0] : undefined;
+        endTickValue = !isDiscreteScale && _isDefined(scale.endValue) ? ticks[ticks.length - 1] : undefined;
         leftScaleLabelWidth = calculateScaleLabelHalfWidth(renderer, startTickValue, scale, tickIntervalsInfo);
         rightScaleLabelWidth = calculateScaleLabelHalfWidth(renderer, endTickValue, scale, tickIntervalsInfo);
     }
