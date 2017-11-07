@@ -1054,6 +1054,37 @@ QUnit.test("Tick visible false, but showCustomBoundaryTicks true - render bounda
     });
 
     this.axis.setBusinessRange({ minVisible: 1, maxVisible: 3, addRange: function() { } });
+    this.generatedTicks = [1.5, 2, 2.5];
+
+    this.translator.stub("translate").withArgs(1).returns(30);
+    this.translator.stub("translate").withArgs(3).returns(70);
+
+    //act
+    this.axis.draw(this.canvas);
+
+    var path = this.renderer.path;
+    assert.deepEqual(path.getCall(0).returnValue.attr.getCall(1).args[0], { points: [30, 70 - 5, 30, 70 + 5] });
+    assert.deepEqual(path.getCall(1).returnValue.attr.getCall(1).args[0], { points: [70, 70 - 5, 70, 70 + 5] });
+});
+
+QUnit.test("No ticks, showCustomBoundaryTicks true - render boundary ticks", function(assert) {
+    //arrange
+    this.createAxis();
+    this.updateOptions({
+        isHorizontal: true,
+        position: "bottom",
+        showCustomBoundaryTicks: true,
+        tick: {
+            visible: true,
+            color: "#123456",
+            opacity: 0.3,
+            width: 5,
+            length: 10
+        }
+    });
+
+    this.axis.setBusinessRange({ minVisible: 1, maxVisible: 3, addRange: function() { } });
+    this.generatedTicks = [];
 
     this.translator.stub("translate").withArgs(1).returns(30);
     this.translator.stub("translate").withArgs(3).returns(70);
@@ -1273,6 +1304,35 @@ QUnit.test("showCustomBoundaryTicks true, customBoundTicks - render first two cu
     assert.deepEqual(path.getCall(1).returnValue.attr.getCall(0).args[0], { stroke: "#123456", "stroke-width": 5, "stroke-opacity": 0.3 });
     assert.deepEqual(path.getCall(0).returnValue.attr.getCall(1).args[0], { points: [30, 70 - 5, 30, 70 + 5] });
     assert.deepEqual(path.getCall(1).returnValue.attr.getCall(1).args[0], { points: [70, 70 - 5, 70, 70 + 5] });
+});
+
+QUnit.test("showCustomBoundaryTicks true, range inside ticks (endOnTick = true) - do not render boundary ticks", function(assert) {
+    //arrange
+    this.createAxis();
+    this.updateOptions({
+        isHorizontal: true,
+        position: "bottom",
+        showCustomBoundaryTicks: true,
+        endOnTick: true,
+        tick: {
+            visible: false,
+            color: "#123456",
+            opacity: 0.3,
+            width: 5,
+            length: 10
+        }
+    });
+
+    this.axis.setBusinessRange({ minVisible: 1.5, maxVisible: 3.5, addRange: function() { } });
+    this.generatedTicks = [1, 2, 3, 4];
+
+    this.translator.stub("translate").withArgs(1).returns(30);
+    this.translator.stub("translate").withArgs(3).returns(70);
+
+    //act
+    this.axis.draw(this.canvas);
+
+    assert.strictEqual(this.renderer.stub("path").callCount, 0);
 });
 
 QUnit.test("Boundary points coincide with minor ticks - remove minor ticks", function(assert) {

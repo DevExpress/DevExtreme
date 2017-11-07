@@ -981,7 +981,7 @@ Axis.prototype = {
 
     _getBoundaryTicks: function(majors, viewPort) {
         var that = this,
-            tickValues = majors.map(valueOf),
+            length = majors.length,
             options = that._options,
             customBounds = options.customBoundTicks,
             min = viewPort.minVisible,
@@ -1003,11 +1003,11 @@ Axis.prototype = {
                     boundaryTicks.push(customBounds[1]);
                 }
             } else {
-                if(addMinMax.min && tickValues.indexOf(valueOf(min)) === -1) {
+                if(addMinMax.min && (length === 0 || majors[0] > min)) {
                     boundaryTicks.push(min);
                 }
 
-                if(addMinMax.max && tickValues.indexOf(valueOf(max)) === -1) {
+                if(addMinMax.max && (length === 0 || majors[length - 1] < max)) {
                     boundaryTicks.push(max);
                 }
             }
