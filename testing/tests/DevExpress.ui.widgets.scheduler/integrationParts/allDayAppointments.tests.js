@@ -1157,13 +1157,13 @@ QUnit.test("Multi-day appointment parts should have correct reduced class", func
         currentView: "day"
     });
 
-    var $appointment = this.instance.element().find(".dx-scheduler-all-day-appointments .dx-scheduler-appointment").eq(0);
+    var $appointment = this.instance.$element().find(".dx-scheduler-all-day-appointments .dx-scheduler-appointment").eq(0);
 
     assert.ok($appointment.hasClass("dx-scheduler-appointment-head"), "Appointment part has reduced class");
 
     this.instance.option("currentDate", new Date(2015, 1, 6));
 
-    $appointment = this.instance.element().find(".dx-scheduler-all-day-appointments .dx-scheduler-appointment").eq(0);
+    $appointment = this.instance.$element().find(".dx-scheduler-all-day-appointments .dx-scheduler-appointment").eq(0);
 
     assert.notOk($appointment.hasClass("dx-scheduler-appointment-head"), "Appointment part hasn't reduced class. It is tail");
 });
