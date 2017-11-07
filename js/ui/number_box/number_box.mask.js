@@ -2,7 +2,6 @@
 
 var eventsEngine = require("../../events/core/events_engine"),
     extend = require("../../core/utils/extend").extend,
-    ensureDefined = require("../../core/utils/common").ensureDefined,
     isNumeric = require("../../core/utils/type").isNumeric,
     fitIntoRange = require("../../core/utils/math").fitIntoRange,
     inRange = require("../../core/utils/math").inRange,
@@ -17,6 +16,10 @@ var NUMBER_FORMATTER_NAMESPACE = "dxNumberFormatter",
     MOVE_FORWARD = 1,
     MOVE_BACKWARD = -1,
     MAXIMUM_FLOAT_LIMIT = 999999999999999;
+
+var ensureDefined = function(value, defaultValue) {
+    return value === undefined ? defaultValue : value;
+};
 
 var NumberBoxMask = NumberBoxBase.inherit({
 
@@ -54,10 +57,10 @@ var NumberBoxMask = NumberBoxBase.inherit({
             minus: that._revertSign.bind(that),
             del: that._removeHandler.bind(that),
             backspace: that._removeHandler.bind(that),
-            leftArrow: that._arrowHandler.bind(that, MOVE_BACKWARD),
-            rightArrow: that._arrowHandler.bind(that, MOVE_FORWARD),
-            end: that._moveCaretToBoundary.bind(that, MOVE_BACKWARD),
-            home: that._moveCaretToBoundary.bind(that, MOVE_FORWARD)
+            leftArrow: that._arrowHandler.bind(that, MOVE_FORWARD),
+            rightArrow: that._arrowHandler.bind(that, MOVE_BACKWARD),
+            home: that._moveCaretToBoundary.bind(that, MOVE_FORWARD),
+            end: that._moveCaretToBoundary.bind(that, MOVE_BACKWARD)
         });
     },
 
@@ -68,12 +71,16 @@ var NumberBoxMask = NumberBoxBase.inherit({
 
         var text = this._input().val(),
             caret = this._caret(),
-            start = step < 0 ? 0 : caret.start,
-            end = step < 0 ? caret.start : text.length,
+            start = step > 0 ? 0 : caret.start,
+            end = step > 0 ? caret.start : text.length,
             chars = text.slice(start, end);
 
         if(this._isStub(chars, true)) {
             e.preventDefault();
+        }
+
+        if(caret.end - caret.start === text.length) {
+            this._moveCaretToBoundary(step, e);
         }
     },
 
@@ -110,7 +117,7 @@ var NumberBoxMask = NumberBoxBase.inherit({
     _moveToClosestNonStub: function(position) {
         position = isNumeric(position) ? { start: position, end: position } : position;
 
-        var caret = ensureDefined(position, this._caret());
+        var caret = position || this._caret();
 
         if(caret.start !== caret.end) {
             return;
@@ -125,6 +132,27 @@ var NumberBoxMask = NumberBoxBase.inherit({
             start: index,
             end: index
         });
+    },
+
+    _keyboardHandler: function(e) {
+        if(!this._shouldHandleKey(e.originalEvent)) {
+            this._lastKey = null;
+            return this.callBase(e);
+        }
+
+        var text = this._input().val(),
+            caret = this._caret();
+
+        this._lastKey = e.originalEvent.key;
+
+        var newValue = this._tryParse(text, caret, e.originalEvent.key);
+        if(newValue === undefined) {
+            e.originalEvent.preventDefault();
+        } else {
+            this._parsedValue = newValue;
+        }
+
+        return this.callBase(e);
     },
 
     _removeHandler: function(e) {
@@ -152,8 +180,17 @@ var NumberBoxMask = NumberBoxBase.inherit({
             return;
         }
 
+        if(end - start < text.length) {
+            var editedText = this._getEditedText(text, { start: start, end: end }, ""),
+                noDigits = editedText.search(/[0-9]/) < 0;
+            if(noDigits && this._isValueInRange(0)) {
+                this._parsedValue = this._parsedValue < 0 || 1 / this._parsedValue === -Infinity ? -0 : 0;
+                return;
+            }
+        }
+
         var valueAfterRemoving = this._tryParse(text, { start: start, end: end }, "");
-        if(valueAfterRemoving === null) {
+        if(valueAfterRemoving === undefined) {
             e.preventDefault();
         } else {
             this._parsedValue = valueAfterRemoving;
@@ -212,6 +249,14 @@ var NumberBoxMask = NumberBoxBase.inherit({
         return number.parse(cleared, format);
     },
 
+    _tryAddLeadingZero: function(text, selection, char) {
+        var format = this._getFormatPattern(),
+            inserted = this._getEditedText(text, selection, char),
+            leadingZeroAdded = inserted.replace(/[0-9]/, "0$&");
+
+        return number.parse(leadingZeroAdded, format);
+    },
+
     _tryLightParse: function(text, selection, char) {
         var textBefore = text.slice(0, selection.start),
             textAfter = text.slice(selection.end),
@@ -223,19 +268,19 @@ var NumberBoxMask = NumberBoxBase.inherit({
 
     _tryParse: function(text, selection, char) {
         var inserted = this._tryInsert(text, selection, char),
+            leadingZeroAdded = this._tryAddLeadingZero(text, selection, char),
             replaced = this._tryReplace(text, selection, char),
             lightParsed = this._tryLightParse(text, selection, char),
             noLeadingZeros = this._tryRemoveLeadingZeros(text, selection, char),
-            value = ensureDefined(inserted,
-                ensureDefined(replaced, ensureDefined(lightParsed, noLeadingZeros))
-            );
+            value =
+                ensureDefined(inserted,
+                    ensureDefined(leadingZeroAdded,
+                        ensureDefined(replaced,
+                            ensureDefined(lightParsed, noLeadingZeros)
+            )));
 
         if(!this._isValueInRange(value)) {
-            return null;
-        }
-
-        if(value === lightParsed) {
-            this._formattedValue = "";
+            return;
         }
 
         return value;
@@ -253,11 +298,9 @@ var NumberBoxMask = NumberBoxBase.inherit({
         var oldLength = (this._formattedValue || "").length,
             newLength = text.length,
             wasRemoved = newLength < oldLength,
-            lastStubCount = this._getStubCountBeforePosition(this._formattedValue, position - 1),
-            newStubCount = this._getStubCountBeforePosition(text, position),
-            caretDelta = newStubCount - lastStubCount;
+            caretDelta = 0;
 
-        if(this._formattedValue === "") {
+        if(this._formattedValue === "" && this._parsedValue !== null) {
             var indexOfLastKey = text.indexOf(this._parsedValue.toString());
             caretDelta = indexOfLastKey !== -1 ? indexOfLastKey : 0;
         }
@@ -313,26 +356,6 @@ var NumberBoxMask = NumberBoxBase.inherit({
         return useMaskBehavior && !isSpecialChar;
     },
 
-    _keyboardHandler: function(e) {
-        if(!this._shouldHandleKey(e.originalEvent)) {
-            return this.callBase(e);
-        }
-
-        var text = this._input().val(),
-            caret = this._caret();
-
-        this._lastKey = e.originalEvent.key;
-
-        var newValue = this._tryParse(text, caret, e.originalEvent.key);
-        if(newValue === null) {
-            e.originalEvent.preventDefault();
-        } else {
-            this._parsedValue = newValue;
-        }
-
-        return this.callBase(e);
-    },
-
     _renderInput: function() {
         this.callBase();
         this._renderFormatter();
@@ -364,23 +387,6 @@ var NumberBoxMask = NumberBoxBase.inherit({
         }
     },
 
-    _getLeadingZeroCountBeforePosition: function(text, position) {
-        var regExp = new RegExp("^" + STUB_CHAR_REG_EXP + "*(0)*[^0]*$", "g"),
-            leadingZeros = text.slice(0, position).replace(regExp, "$1");
-
-        return leadingZeros.length;
-    },
-
-    _getStubCountBeforePosition: function(text, position) {
-        text = text || this._input().val();
-        position = ensureDefined(position, text.length);
-
-        var stubRegExp = new RegExp(STUB_CHAR_REG_EXP, "g"),
-            checkedText = text.slice(0, position);
-
-        return (checkedText.match(stubRegExp) || []).length;
-    },
-
     _isStub: function(str, isString) {
         var stubRegExp = new RegExp("^" + STUB_CHAR_REG_EXP + "+$", "g");
         return stubRegExp.test(str) && (isString || this._isChar(str));
@@ -395,7 +401,8 @@ var NumberBoxMask = NumberBoxBase.inherit({
 
     _lightParse: function(text) {
         var value = +text;
-        return isNaN(value) || Math.abs(value) > MAXIMUM_FLOAT_LIMIT ? null : value;
+        if(text === "") return null;
+        return isNaN(value) || Math.abs(value) > MAXIMUM_FLOAT_LIMIT ? undefined : value;
     },
 
     _parseValue: function(text) {
@@ -436,19 +443,38 @@ var NumberBoxMask = NumberBoxBase.inherit({
 
         var format = this._getFormatPattern(),
             caret = this._caret(),
-            formatted = number.format(this._parsedValue, format),
-            beforeLeadingZeros = this._getLeadingZeroCountBeforePosition(text, caret.start),
-            afterLeadingZeros = this._getLeadingZeroCountBeforePosition(formatted, caret.start),
-            zerosDelta = afterLeadingZeros - beforeLeadingZeros,
-            beforeStubs = this._getStubCountBeforePosition(text, caret.start),
-            afterStubs = this._getStubCountBeforePosition(formatted, caret.start + zerosDelta),
-            caretDelta = (afterLeadingZeros + afterStubs) - (beforeLeadingZeros + beforeStubs);
+            decimalSeparator = number.getDecimalSeparator(),
+            decimalSeparatorIndex = text.indexOf(decimalSeparator),
+            isFloatInput = decimalSeparatorIndex >= 0 && caret.start > decimalSeparatorIndex,
+            formatted,
+            caretDelta;
 
-        if(this._isBackspaceKey(this._lastKey) || formatted.length > text.length || this._formattedValue === "") {
+        if(this._formattedValue !== text) {
+            var parsedValueByText = this._tryParse(text, caret, "");
+            if(parsedValueByText !== undefined && parsedValueByText !== null) {
+                this._parsedValue = parsedValueByText;
+            }
+        }
+
+        formatted = number.format(this._parsedValue, format) || "";
+
+        if((Math.abs(formatted.length - text.length) === 1 && isFloatInput) || this._formattedValue === "") {
             caretDelta = 0;
+        } else if(text.length === 1 && formatted.length && this._lastKey === text) {
+            caretDelta = formatted.indexOf(text) - caret.start + 1;
+        } else {
+            caretDelta = formatted.length - text.length;
         }
 
         this._setInputText(formatted, caret.start + caretDelta);
+    },
+
+    _renderDisplayText: function() {
+        if(this._useMaskBehavior()) {
+            this._toggleEmptinessEventHandler();
+        } else {
+            this.callBase.apply(this, arguments);
+        }
     },
 
     _renderValue: function() {
@@ -481,6 +507,13 @@ var NumberBoxMask = NumberBoxBase.inherit({
             default:
                 this.callBase(args);
         }
+    },
+
+    _optionValuesEqual: function(name, oldValue, newValue) {
+        if(name === "value" && oldValue === 0 && newValue === 0) {
+            return (1 / oldValue) === (1 / newValue);
+        }
+        return this.callBase.apply(this, arguments);
     },
 
     _clearCache: function() {
