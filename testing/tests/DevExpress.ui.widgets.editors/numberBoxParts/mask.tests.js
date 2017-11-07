@@ -175,6 +175,7 @@ QUnit.test("select and replace all text", function(assert) {
         .type("4");
 
     assert.equal(this.input.val(), "$ 4.000 d", "value is correct");
+    assert.deepEqual(this.keyboard.caret(), { start: 3, end: 3 }, "caret position is correct");
 });
 
 QUnit.test("paste value from clipboard", function(assert) {
@@ -472,6 +473,19 @@ QUnit.test("right arrow limitation", function(assert) {
     assert.ok(this.keyboard.event.isDefaultPrevented(), "event is prevented");
 });
 
+QUnit.test("right arrow after select all", function(assert) {
+    this.instance.option({
+        format: "# d",
+        value: 1
+    });
+
+    assert.equal(this.input.val(), "1 d", "text is correct");
+
+    this.keyboard.caret({ start: 0, end: 3 }).keyDown("right");
+
+    assert.deepEqual(this.keyboard.caret(), { start: 1, end: 1 }, "caret is after last digit");
+});
+
 QUnit.test("left arrow limitation", function(assert) {
     this.instance.option({
         format: "$#",
@@ -482,6 +496,19 @@ QUnit.test("left arrow limitation", function(assert) {
 
     this.keyboard.caret(1).keyDown("left");
     assert.ok(this.keyboard.event.isDefaultPrevented(), "event is prevented");
+});
+
+QUnit.test("left arrow after select all", function(assert) {
+    this.instance.option({
+        format: "$ #0",
+        value: 1
+    });
+
+    assert.equal(this.input.val(), "$ 1", "text is correct");
+
+    this.keyboard.caret({ start: 0, end: 3 }).keyDown("left");
+
+    assert.deepEqual(this.keyboard.caret(), { start: 2, end: 2 }, "caret is before first digit");
 });
 
 QUnit.test("home button limitation", function(assert) {

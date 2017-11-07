@@ -57,10 +57,10 @@ var NumberBoxMask = NumberBoxBase.inherit({
             minus: that._revertSign.bind(that),
             del: that._removeHandler.bind(that),
             backspace: that._removeHandler.bind(that),
-            leftArrow: that._arrowHandler.bind(that, MOVE_BACKWARD),
-            rightArrow: that._arrowHandler.bind(that, MOVE_FORWARD),
-            end: that._moveCaretToBoundary.bind(that, MOVE_BACKWARD),
-            home: that._moveCaretToBoundary.bind(that, MOVE_FORWARD)
+            leftArrow: that._arrowHandler.bind(that, MOVE_FORWARD),
+            rightArrow: that._arrowHandler.bind(that, MOVE_BACKWARD),
+            home: that._moveCaretToBoundary.bind(that, MOVE_FORWARD),
+            end: that._moveCaretToBoundary.bind(that, MOVE_BACKWARD)
         });
     },
 
@@ -71,12 +71,16 @@ var NumberBoxMask = NumberBoxBase.inherit({
 
         var text = this._input().val(),
             caret = this._caret(),
-            start = step < 0 ? 0 : caret.start,
-            end = step < 0 ? caret.start : text.length,
+            start = step > 0 ? 0 : caret.start,
+            end = step > 0 ? caret.start : text.length,
             chars = text.slice(start, end);
 
         if(this._isStub(chars, true)) {
             e.preventDefault();
+        }
+
+        if(caret.end - caret.start === text.length) {
+            this._moveCaretToBoundary(step, e);
         }
     },
 
@@ -456,6 +460,8 @@ var NumberBoxMask = NumberBoxBase.inherit({
 
         if((Math.abs(formatted.length - text.length) === 1 && isFloatInput) || this._formattedValue === "") {
             caretDelta = 0;
+        } else if(text.length === 1 && formatted.length && this._lastKey === text) {
+            caretDelta = formatted.indexOf(text) - caret.start + 1;
         } else {
             caretDelta = formatted.length - text.length;
         }
