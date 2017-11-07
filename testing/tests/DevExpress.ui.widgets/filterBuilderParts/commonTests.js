@@ -757,6 +757,25 @@ QUnit.module("on value changed", function() {
         assert.notEqual(instance.option("value"), value);
     });
 
+    QUnit.test("add/remove condition for field without datatype", function(assert) {
+        var container = $("#container"),
+            value = [["Field", "=", "1"]],
+            instance = container.dxFilterBuilder({
+                fields: [{ dataField: "Field" }]
+            }).dxFilterBuilder("instance");
+
+        // add condition
+        clickByButtonAndSelectMenuItem($("." + FILTER_BUILDER_IMAGE_ADD_CLASS), 0);
+
+        assert.deepEqual(instance.option("value"), ["Field", "contains", ""]);
+
+        //remove condition
+        value = instance.option("value");
+        clickByButtonAndSelectMenuItem($("." + FILTER_BUILDER_IMAGE_REMOVE_CLASS).eq(0), 0);
+
+        assert.deepEqual(instance.option("value"), null);
+    });
+
     QUnit.test("add/remove not valid conditions", function(assert) {
         var container = $("#container"),
             value = [["Zipcode", ""]],
