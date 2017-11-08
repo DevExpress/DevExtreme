@@ -996,6 +996,67 @@ QUnit.test("Auto format when minorTickInterval is auto calculated", function(ass
     assert.strictEqual(this.slidersController.update.lastCall.args[4].format, "shortdate", "Slider marker auto format monthAndYear(day)");
 });
 
+QUnit.test("Auto format for sliderMarker when minorTickInterval and tickInterval have same unit - take previous unit", function(assert) {
+    this.createWidget({
+        scale: {
+            startValue: new Date(2006, 10, 1),
+            endValue: new Date(2010, 1, 1),
+            tickInterval: { months: 4 },
+            minorTickInterval: { months: 2 }
+        }
+    });
+
+    assert.strictEqual(this.slidersController.update.lastCall.args[4].format, "shortdate", 'Slider markers auto format');
+});
+
+QUnit.test("Auto format for sliderMarker when minorTickInterval and tickInterval have same unit (with marker) - take previous unit", function(assert) {
+    this.createWidget({
+        scale: {
+            startValue: new Date(2006, 10, 1),
+            endValue: new Date(2008, 1, 1),
+            tickInterval: { months: 4 },
+            minorTickInterval: { months: 2 },
+            marker: {
+                visible: true
+            }
+        }
+    });
+
+    assert.strictEqual(this.slidersController.update.lastCall.args[4].format, "day", 'Slider markers auto format');
+});
+
+QUnit.test("Auto format for sliderMarker when minorTickInterval and tickInterval are milliseconds - take milliseconds", function(assert) {
+    this.createWidget({
+        scale: {
+            startValue: new Date(2006, 10, 1, 1, 1, 1),
+            endValue: new Date(2006, 10, 1, 1, 1, 4),
+            tickInterval: { milliseconds: 500 },
+            minorTickInterval: { milliseconds: 100 }
+        },
+        marker: {
+            visible: false
+        }
+    });
+
+    assert.strictEqual(this.slidersController.update.lastCall.args[4].format(new Date(2017, 1, 1, 1, 1, 1, 123)), "1:01:01 AM 123", 'Slider markers auto format');
+});
+
+QUnit.test("Auto format for sliderMarker when minorTickInterval and tickInterval have different units but snapToTicks true - take minorTickInterval", function(assert) {
+    this.createWidget({
+        behavior: {
+            snapToTicks: true
+        },
+        scale: {
+            startValue: new Date(2006, 10, 1),
+            endValue: new Date(2010, 1, 1),
+            tickInterval: { months: 1 },
+            minorTickInterval: { days: 14 }
+        }
+    });
+
+    assert.strictEqual(this.slidersController.update.lastCall.args[4].format, "shortdate");
+});
+
 //B251771
 QUnit.test("scale.marker.label.customizeText is not a function", function(assert) {
     this.createWidget({

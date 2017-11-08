@@ -212,6 +212,18 @@ function calculateScaleAreaHeight(renderer, scaleOptions, visibleMarkers) {
     }
 }
 
+function getMinorTickIntervalUnit(tickInterval, minorTickInterval, withCorrection) {
+    var interval = dateUtils.getDateUnitInterval(minorTickInterval),
+        majorUnit = dateUtils.getDateUnitInterval(tickInterval),
+        idx = dateUtils.dateUnitIntervals.indexOf(interval);
+
+    if(withCorrection && interval === majorUnit && idx > 0) {
+        interval = dateUtils.dateUnitIntervals[idx - 1];
+    }
+
+    return interval;
+}
+
 function getNextTickInterval(tickInterval, minorTickInterval, isDateType) {
     if(!tickInterval) {
         tickInterval = minorTickInterval;
@@ -972,29 +984,35 @@ var dxRangeSelector = require("../core/base_widget").inherit({
         var that = this,
             minorTickInterval = tickIntervalsInfo.minorTickInterval,
             tickInterval = tickIntervalsInfo.tickInterval,
+            interval = tickInterval,
             endValue = scaleOptions.endValue,
             startValue = scaleOptions.startValue,
             sliderMarkerOptions = that._getOption(SLIDER_MARKER),
             sliderMarkerUserOption = that.option(SLIDER_MARKER) || {},
+            doNotSnap = !that._getOption("behavior").snapToTicks,
             isTypeDiscrete = scaleOptions.type === DISCRETE,
             isValueTypeDatetime = scaleOptions.valueType === DATETIME;
 
         sliderMarkerOptions.borderColor = that._getOption(CONTAINER_BACKGROUND_COLOR, true);
 
         if(!sliderMarkerOptions.format) {
-            if(!that._getOption("behavior").snapToTicks && _isNumber(scaleOptions.startValue)) {
+            if(doNotSnap && _isNumber(scaleOptions.startValue)) {
                 sliderMarkerOptions.format = {
                     type: "fixedPoint",
                     precision: getPrecisionForSlider(startValue, endValue, screenDelta)
                 };
             }
             if(isValueTypeDatetime && !isTypeDiscrete) {
+                if(_isDefined(minorTickInterval) && minorTickInterval !== 0) {
+                    interval = getMinorTickIntervalUnit(tickInterval, minorTickInterval, doNotSnap);
+                }
+
                 if(!scaleOptions.marker.visible) {
                     if(_isDefined(startValue) && _isDefined(endValue)) {
-                        sliderMarkerOptions.format = formatHelper.getDateFormatByTickInterval(startValue, endValue, _isDefined(minorTickInterval) && minorTickInterval !== 0 ? minorTickInterval : tickInterval);
+                        sliderMarkerOptions.format = formatHelper.getDateFormatByTickInterval(startValue, endValue, interval);
                     }
                 } else {
-                    sliderMarkerOptions.format = dateUtils.getDateFormatByTickInterval(_isDefined(minorTickInterval) && minorTickInterval !== 0 ? minorTickInterval : tickInterval);
+                    sliderMarkerOptions.format = dateUtils.getDateFormatByTickInterval(interval);
                 }
             }
             // T347293

@@ -1258,10 +1258,10 @@
         }
 
         &.dx-scheduler-work-space-day {
-            .dx-scheduler-header-scrollable-mixin(@SCHEDULER_ALL_DAY_TABLE_CELL_HEIGHT);
+            .dx-scheduler-header-scrollable-mixin(@SCHEDULER_ALL_DAY_TABLE_CELL_HEIGHT + @SCHEDULER_HEADER_PANEL_TOP_GAP);
 
             &.dx-scheduler-work-space-all-day-collapsed {
-                .dx-scheduler-header-scrollable-mixin(@SCHEDULER_COLLAPSED_ALL_DAY_TABLE_CELL_HEIGHT);
+                .dx-scheduler-header-scrollable-mixin(@SCHEDULER_COLLAPSED_ALL_DAY_TABLE_CELL_HEIGHT + @SCHEDULER_HEADER_PANEL_TOP_GAP);
             }
         }
     }
