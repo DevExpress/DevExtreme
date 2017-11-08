@@ -12,7 +12,6 @@ var eventsEngine = require("../../events/core/events_engine"),
     eventUtils = require("../../events/utils");
 
 var NUMBER_FORMATTER_NAMESPACE = "dxNumberFormatter",
-    STUB_CHAR_REG_EXP = "[^0-9.]",
     MOVE_FORWARD = 1,
     MOVE_BACKWARD = -1,
     MAXIMUM_FLOAT_LIMIT = 999999999999999;
@@ -225,36 +224,40 @@ var NumberBoxMask = NumberBoxBase.inherit({
         return edited;
     },
 
-    _tryInsert: function(text, selection, char) {
+    _parseNumber: function(text) {
         var format = this._getFormatPattern();
-        return number.parse(this._getEditedText(text, selection, char), format);
+        return number.parse(text, format);
+    },
+
+    _tryInsert: function(text, selection, char) {
+        return this._parseNumber(this._getEditedText(text, selection, char));
     },
 
     _tryReplace: function(text, selection, char) {
-        var format = this._getFormatPattern(),
-            start = selection.start,
+        var start = selection.start,
             end = selection.start === selection.end ? selection.end + 1 : selection.end,
             replacement = selection.start === selection.end ? char : "0",
             replaced = this._getEditedText(text, { start: start, end: end }, replacement);
 
-        return number.parse(replaced, format);
+        return this._parseNumber(replaced);
     },
 
-    _tryRemoveLeadingZeros: function(text, selection, char) {
-        var format = this._getFormatPattern(),
+    _tryRemoveLeadingZero: function(text, selection, char) {
+        var escapedDecimalSeparator = escapeRegExp(number.getDecimalSeparator()),
             inserted = this._getEditedText(text, selection, char),
-            regExp = new RegExp("^(" + STUB_CHAR_REG_EXP + "*)(0+)", "g"),
+            regExp = new RegExp("^([^0-9" + escapedDecimalSeparator + "]*)0", "g"),
             cleared = inserted.replace(regExp, "$1");
 
-        return number.parse(cleared, format);
+        return this._parseNumber(cleared);
     },
 
     _tryAddLeadingZero: function(text, selection, char) {
-        var format = this._getFormatPattern(),
+        var escapedDecimalSeparator = escapeRegExp(number.getDecimalSeparator()),
             inserted = this._getEditedText(text, selection, char),
-            leadingZeroAdded = inserted.replace(/[0-9]/, "0$&");
+            regExp = new RegExp("^([^0-9" + escapedDecimalSeparator + "]*)([0-9])", "g"),
+            leadingZeroAdded = inserted.replace(regExp, "$10$2");
 
-        return number.parse(leadingZeroAdded, format);
+        return this._parseNumber(leadingZeroAdded);
     },
 
     _tryLightParse: function(text, selection, char) {
@@ -271,7 +274,7 @@ var NumberBoxMask = NumberBoxBase.inherit({
             leadingZeroAdded = this._tryAddLeadingZero(text, selection, char),
             replaced = this._tryReplace(text, selection, char),
             lightParsed = this._tryLightParse(text, selection, char),
-            noLeadingZeros = this._tryRemoveLeadingZeros(text, selection, char),
+            noLeadingZeros = this._tryRemoveLeadingZero(text, selection, char),
             value =
                 ensureDefined(inserted,
                     ensureDefined(leadingZeroAdded,
@@ -388,7 +391,8 @@ var NumberBoxMask = NumberBoxBase.inherit({
     },
 
     _isStub: function(str, isString) {
-        var stubRegExp = new RegExp("^" + STUB_CHAR_REG_EXP + "+$", "g");
+        var escapedDecimalSeparator = escapeRegExp(number.getDecimalSeparator());
+        var stubRegExp = new RegExp("^[^0-9" + escapedDecimalSeparator + "]+$", "g");
         return stubRegExp.test(str) && (isString || this._isChar(str));
     },
 
@@ -415,7 +419,7 @@ var NumberBoxMask = NumberBoxBase.inherit({
     _isIncomplete: function(string) {
         var decimalSeparator = number.getDecimalSeparator(),
             escapedSeparator = escapeRegExp(decimalSeparator),
-            regExp = new RegExp("[^" + escapedSeparator + "]" + escapedSeparator + "0*" + STUB_CHAR_REG_EXP + "*$", "ig"),
+            regExp = new RegExp("[^" + escapedSeparator + "]" + escapedSeparator + "0*[^0-9" + escapedSeparator + "]*$", "ig"),
             lastKeyIncomplete = this._lastKey === decimalSeparator || this._lastKey === "0";
 
         return lastKeyIncomplete && regExp.test(string);
