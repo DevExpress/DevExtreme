@@ -156,7 +156,7 @@ function smartFormatter(tick, options) {
         nextDateIndex,
         isLogarithmic = options.type === "logarithmic";
 
-    if(!isDefined(format) && isDefined(tickInterval) && options.type !== "discrete" && isDefined(tick) && tick !== 0 && (options.logarithmBase === 10 || !isLogarithmic)) {
+    if(!isDefined(format) && isDefined(tickInterval) && options.type !== "discrete" && tick && (options.logarithmBase === 10 || !isLogarithmic)) {
         if(options.dataType !== "datetime") {
             if(ticks.length && ticks.indexOf(tick) === -1) {
                 indexOfTick = getTransitionTickIndex(ticks, tick);

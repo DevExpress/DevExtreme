@@ -203,6 +203,7 @@ function generateAutoBreaks(options, series, viewport) {
         }, []).sort(function(a, b) {
             return b - a;
         }),
+        epsilon = visibleRange / 1E10,
         minDiff = RANGE_RATIO * visibleRange;
 
     for(i = 1, length = points.length; i < length; i++) {
@@ -220,8 +221,10 @@ function generateAutoBreaks(options, series, viewport) {
                 break;
             }
             visibleRange -= ranges[i].length;
-            breaks.push({ from: ranges[i].start, to: ranges[i].end });
-            minDiff = RANGE_RATIO * visibleRange;
+            if(visibleRange > epsilon || visibleRange < -epsilon) {
+                breaks.push({ from: ranges[i].start, to: ranges[i].end });
+                minDiff = RANGE_RATIO * visibleRange;
+            }
         } else {
             break;
         }

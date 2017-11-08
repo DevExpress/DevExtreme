@@ -39,7 +39,11 @@ var compareLocales = function(first, second, assert) {
             "dxDataGrid-headerFilterOK",
             "dxForm-optionalMark",
             "dxScheduler-switcherAgenda",
-            "dxPivotGrid-dataNotAvailable"
+            "dxPivotGrid-dataNotAvailable",
+            "dxFilterBuilder-and",
+            "dxFilterBuilder-or",
+            "dxFilterBuilder-notAnd",
+            "dxFilterBuilder-notOr"
         ];
 
     $.each(firstLocaleMessages, function(name, value) {

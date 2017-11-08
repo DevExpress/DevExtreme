@@ -1146,6 +1146,22 @@ QUnit.test("During indents estimation, format scale labels the same way the axis
     assert.strictEqual(this.renderer.text.getCall(2).args[0], "10");
 });
 
+QUnit.test("During indents estimation, format discrete scale labels as empty", function(assert) {
+    this.createWidget({
+        scale: {
+            startValue: 1,
+            endValue: 10.5,
+            label: {
+                visible: true
+            },
+            type: "discrete"
+        }
+    });
+
+    assert.strictEqual(this.renderer.text.getCall(1).args[0], "");
+    assert.strictEqual(this.renderer.text.getCall(2).args[0], "");
+});
+
 QUnit.test("rangeContainer canvas if sliderMarker placeholderSize is defined", function(assert) {
     this.createWidget({
         sliderMarker: {

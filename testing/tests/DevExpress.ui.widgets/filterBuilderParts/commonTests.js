@@ -364,7 +364,29 @@ QUnit.module("Rendering", function() {
         selectBoxInstance.blur();
         assert.notOk($container.find("input").length, "hasn't input");
         assert.deepEqual(instance.option("value"), ["CompanyName", "<>", "Super Mart of the West"]);
+    });
 
+    QUnit.testInActiveWindow("change filter value in selectbox with different value and displayText", function(assert) {
+        var $container = $("#container"),
+            instance = $container.dxFilterBuilder({
+                allowHierarchicalFields: true,
+                value: ["Product", "=", 1],
+                fields: fields
+            }).dxFilterBuilder("instance");
+
+        assert.equal($container.find("." + FILTER_BUILDER_ITEM_VALUE_TEXT_CLASS).text(), "DataGrid");
+
+        var $valueButton = $container.find("." + FILTER_BUILDER_ITEM_VALUE_TEXT_CLASS);
+        $valueButton.click();
+
+        var selectBoxInstance = $container.find(".dx-selectbox").dxSelectBox("instance");
+        selectBoxInstance.open();
+        $(".dx-list-item").eq(2).trigger("dxclick");
+
+        selectBoxInstance.blur();
+
+        assert.equal($container.find("." + FILTER_BUILDER_ITEM_VALUE_TEXT_CLASS).text(), "PivotGrid");
+        assert.deepEqual(instance.option("value"), ["Product", "=", 2]);
     });
 
     QUnit.testInActiveWindow("check default value for number", function(assert) {
@@ -733,6 +755,25 @@ QUnit.module("on value changed", function() {
         clickByButtonAndSelectMenuItem($("." + FILTER_BUILDER_IMAGE_REMOVE_CLASS).eq(1), 0);
 
         assert.notEqual(instance.option("value"), value);
+    });
+
+    QUnit.test("add/remove condition for field without datatype", function(assert) {
+        var container = $("#container"),
+            value = [["Field", "=", "1"]],
+            instance = container.dxFilterBuilder({
+                fields: [{ dataField: "Field" }]
+            }).dxFilterBuilder("instance");
+
+        // add condition
+        clickByButtonAndSelectMenuItem($("." + FILTER_BUILDER_IMAGE_ADD_CLASS), 0);
+
+        assert.deepEqual(instance.option("value"), ["Field", "contains", ""]);
+
+        //remove condition
+        value = instance.option("value");
+        clickByButtonAndSelectMenuItem($("." + FILTER_BUILDER_IMAGE_REMOVE_CLASS).eq(0), 0);
+
+        assert.deepEqual(instance.option("value"), null);
     });
 
     QUnit.test("add/remove not valid conditions", function(assert) {

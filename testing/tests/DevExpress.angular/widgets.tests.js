@@ -582,6 +582,32 @@ QUnit.test("Change selection.mode option via binding and refresh", function(asse
 });
 
 
+QUnit.test("Scope refreshing count on init", function(assert) {
+    var $markup = $("<div dx-data-grid=\"gridOptions\"></div> <div>{{ calculateValue() }}</div>");
+
+    var refreshingCount = 0;
+    var controller = function($scope) {
+        $scope.gridOptions = {
+            dataSource: [
+                { field1: 1 },
+                { field1: 2 },
+                { field1: 3 },
+                { field1: 4 }
+            ]
+        };
+        $scope.calculateValue = function() {
+            refreshingCount++;
+            return "Test value";
+        };
+    };
+
+    initMarkup($markup, controller, this);
+
+    this.clock.tick(30);
+
+    assert.equal(refreshingCount, 4);
+});
+
 QUnit.module("Adaptive menu", {
     beforeEach: function() {
         QUnit.timerIgnoringCheckers.register(ignoreAngularBrowserDeferTimer);
