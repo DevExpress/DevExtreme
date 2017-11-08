@@ -2,6 +2,7 @@
 
 var registerEventCallbacks = require("./event_registrator_callbacks");
 var extend = require("../../core/utils/extend").extend;
+var injector = require("../../core/utils/dependency_injector");
 var typeUtils = require("../../core/utils/type");
 var Callbacks = require("../../core/utils/callbacks");
 var isWindow = typeUtils.isWindow;
@@ -46,6 +47,31 @@ var special = (function() {
         }
     };
 }());
+
+var applyForEach = function(args, method) {
+    var element = args[0];
+
+    if(!element) {
+        return;
+    }
+
+    if(element.nodeType || isWindow(element)) {
+        method.apply(eventsEngine, args);
+    } else if(element.each) {
+        var itemArgs = Array.prototype.slice.call(args, 0);
+
+        element.each(function() {
+            itemArgs[0] = this;
+            applyForEach(itemArgs, method);
+        });
+    }
+};
+
+var getHandler = function(method) {
+    return function() {
+        applyForEach(arguments, method);
+    };
+};
 
 var getHandlersController = function(element, eventName) {
     var elementData = elementDataMap.get(element);
@@ -376,27 +402,27 @@ var calculateWhich = function(event) {
     return event.which;
 };
 
-var eventsEngine = {
-    on: normalizeOnArguments(iterate(function(element, eventName, selector, data, handler) {
+var eventsEngine = injector({
+    on: getHandler(normalizeOnArguments(iterate(function(element, eventName, selector, data, handler) {
         var handlersController = getHandlersController(element, eventName);
         handlersController.addHandler(handler, selector, data);
-    })),
+    }))),
 
-    one: normalizeOnArguments(function(element, eventName, selector, data, handler) {
+    one: getHandler(normalizeOnArguments(function(element, eventName, selector, data, handler) {
         var oneTimeHandler = function() {
             eventsEngine.off(element, eventName, selector, oneTimeHandler);
             handler.apply(this, arguments);
         };
 
         eventsEngine.on(element, eventName, selector, data, oneTimeHandler);
-    }),
-
-    off: normalizeOffArguments(iterate(function(element, eventName, selector, handler) {
-        var handlersController = getHandlersController(element, eventName);
-        handlersController.removeHandler(handler, selector);
     })),
 
-    trigger: normalizeTriggerArguments(function(element, event, extraParameters) {
+    off: getHandler(normalizeOffArguments(iterate(function(element, eventName, selector, handler) {
+        var handlersController = getHandlersController(element, eventName);
+        handlersController.removeHandler(handler, selector);
+    }))),
+
+    trigger: getHandler(normalizeTriggerArguments(function(element, event, extraParameters) {
         var eventName = event.type;
         var handlersController = getHandlersController(element, event.type);
 
@@ -432,60 +458,67 @@ var eventsEngine = {
             special.callMethod(eventName, "_default", element, [ event, extraParameters ]);
             callNativeMethod(eventName, element);
         }
-    }),
+    })),
 
-    triggerHandler: normalizeTriggerArguments(function(element, event, extraParameters) {
+    triggerHandler: getHandler(normalizeTriggerArguments(function(element, event, extraParameters) {
         var handlersController = getHandlersController(element, event.type);
         handlersController.callHandlers(event, extraParameters);
-    }),
+    }))
+});
 
-    Event: normalizeEventArguments(function(src, config) {
-        var that = this;
-        var propagationStopped = false;
-        var immediatePropagationStopped = false;
-        var defaultPrevented = false;
-
-        extend(that, src);
-
-        if(src instanceof eventsEngine.Event || src instanceof Event) {
-            that.originalEvent = src;
-            that.currentTarget = undefined;
-        }
-
-        if(!(src instanceof eventsEngine.Event)) {
-            extend(that, {
-                isPropagationStopped: function() {
-                    return !!(propagationStopped || that.originalEvent && that.originalEvent.propagationStopped);
-                },
-                stopPropagation: function() {
-                    propagationStopped = true;
-                    that.originalEvent && that.originalEvent.stopPropagation();
-                },
-                isImmediatePropagationStopped: function() {
-                    return immediatePropagationStopped;
-                },
-                stopImmediatePropagation: function() {
-                    this.stopPropagation();
-                    immediatePropagationStopped = true;
-                    that.originalEvent && that.originalEvent.stopImmediatePropagation();
-                },
-                isDefaultPrevented: function() {
-                    return !!(defaultPrevented || that.originalEvent && that.originalEvent.defaultPrevented);
-                },
-                preventDefault: function() {
-                    defaultPrevented = true;
-                    that.originalEvent && that.originalEvent.preventDefault();
-                }
-            });
-        }
-
-        addProperty("which", calculateWhich, that);
-
-        extend(that, config);
-
-        that.guid = ++guid;
-    })
+var initEvent = function(EventClass) {
+    if(EventClass) {
+        eventsEngine.Event = EventClass;
+        eventsEngine.Event.prototype = EventClass.prototype;
+    }
 };
+
+initEvent(normalizeEventArguments(function(src, config) {
+    var that = this;
+    var propagationStopped = false;
+    var immediatePropagationStopped = false;
+    var defaultPrevented = false;
+
+    extend(that, src);
+
+    if(src instanceof eventsEngine.Event || src instanceof Event) {
+        that.originalEvent = src;
+        that.currentTarget = undefined;
+    }
+
+    if(!(src instanceof eventsEngine.Event)) {
+        extend(that, {
+            isPropagationStopped: function() {
+                return !!(propagationStopped || that.originalEvent && that.originalEvent.propagationStopped);
+            },
+            stopPropagation: function() {
+                propagationStopped = true;
+                that.originalEvent && that.originalEvent.stopPropagation();
+            },
+            isImmediatePropagationStopped: function() {
+                return immediatePropagationStopped;
+            },
+            stopImmediatePropagation: function() {
+                this.stopPropagation();
+                immediatePropagationStopped = true;
+                that.originalEvent && that.originalEvent.stopImmediatePropagation();
+            },
+            isDefaultPrevented: function() {
+                return !!(defaultPrevented || that.originalEvent && that.originalEvent.defaultPrevented);
+            },
+            preventDefault: function() {
+                defaultPrevented = true;
+                that.originalEvent && that.originalEvent.preventDefault();
+            }
+        });
+    }
+
+    addProperty("which", calculateWhich, that);
+
+    extend(that, config);
+
+    that.guid = ++guid;
+}));
 
 var addProperty = function(propName, hook, eventInstance) {
     Object.defineProperty(eventInstance || eventsEngine.Event.prototype, propName, {
@@ -509,72 +542,36 @@ var addProperty = function(propName, hook, eventInstance) {
 
 hookTouchProps(addProperty);
 
-var applyForEach = function(args, method) {
-    var element = args[0];
-
-    if(!element) {
-        return;
-    }
-
-    if(element.nodeType || isWindow(element)) {
-        method.apply(eventsEngine, args);
-    } else if(element.each) {
-        var itemArgs = Array.prototype.slice.call(args, 0);
-
-        element.each(function() {
-            itemArgs[0] = this;
-            applyForEach(itemArgs, method);
-        });
-    }
-};
-
-
-var getHandler = function(methodName) {
-    return function() {
-        applyForEach(arguments, eventsEngine[methodName]);
-    };
-};
-
 var beforeSetStrategy = Callbacks();
 var afterSetStrategy = Callbacks();
 
-var result = {
-    on: getHandler("on"),
-    one: getHandler("one"),
-    off: getHandler("off"),
-    trigger: getHandler("trigger"),
-    triggerHandler: getHandler("triggerHandler"),
-    Event: function() {
-        return eventsEngine.Event.apply(eventsEngine, arguments);
-    },
-    subscribeGlobal: function() {
-        applyForEach(arguments, normalizeOnArguments(function() {
-            var args = arguments;
-
-            result.on.apply(this, args);
-
-            beforeSetStrategy.add(function() {
-                var offArgs = Array.prototype.slice.call(args, 0);
-                offArgs.splice(3, 1);
-                result.off.apply(this, offArgs);
-            });
-
-            afterSetStrategy.add(function() {
-                result.on.apply(this, args);
-            });
-        }));
-    },
-    set: function(engine) {
-        beforeSetStrategy.fire();
-        eventsEngine = engine;
-        afterSetStrategy.fire();
-    }
+eventsEngine.set = function(engine) {
+    beforeSetStrategy.fire();
+    eventsEngine.inject(engine);
+    initEvent(engine.Event);
+    afterSetStrategy.fire();
 };
 
-result.Event.prototype = eventsEngine.Event.prototype;
+eventsEngine.subscribeGlobal = function() {
+    applyForEach(arguments, normalizeOnArguments(function() {
+        var args = arguments;
+
+        eventsEngine.on.apply(this, args);
+
+        beforeSetStrategy.add(function() {
+            var offArgs = Array.prototype.slice.call(args, 0);
+            offArgs.splice(3, 1);
+            eventsEngine.off.apply(this, offArgs);
+        });
+
+        afterSetStrategy.add(function() {
+            eventsEngine.on.apply(this, args);
+        });
+    }));
+};
 
 ///#DEBUG
-result.elementDataMap = elementDataMap;
+eventsEngine.elementDataMap = elementDataMap;
 ///#ENDDEBUG
 
-module.exports = result;
+module.exports = eventsEngine;
