@@ -19,6 +19,10 @@
     .dx-@{widgetName}-content .dx-@{widgetName}-table .dx-row .dx-editor-cell .dx-dropdowneditor {
         margin-left: 0;
         padding-left: 0;
+
+        .dx-icon-clear {
+            left: 0px;
+        }
     }
 
     .dx-@{widgetName}-filter-range-overlay .dx-overlay-content {
@@ -216,28 +220,6 @@
 
     .dx-@{widgetName}-edit-popup .dx-error-message {
         padding: @GRID_BASE_CELL_PADDING;
-    }
-
-    .dx-@{widgetName}-headers, .dx-@{widgetName}-rowsview {
-        .dx-texteditor-input {
-           padding: @GRID_BASE_CELL_PADDING;
-        }
-
-        .dx-dropdowneditor-button-visible {
-            &.dx-show-clear-button .dx-texteditor-input {
-                padding-right: @WIN10_DROPDOWNEDITOR_DROPDOWN_BUTTON_WIDTH + @WIN10_TEXTEDITOR_CLEAR_BUTTON_WIDTH + @WIN10_TEXEDITOR_INPUT_PADDING_HORIZONTAL;
-
-                .dx-rtl&,
-                .dx-rtl & {
-                    padding-right: @WIN10_TEXEDITOR_INPUT_PADDING_HORIZONTAL;
-                    padding-left: @WIN10_DROPDOWNEDITOR_DROPDOWN_BUTTON_WIDTH + @WIN10_TEXTEDITOR_CLEAR_BUTTON_WIDTH + @WIN10_TEXEDITOR_INPUT_PADDING_HORIZONTAL;
-                }
-            }
-
-            .dx-texteditor-input {
-                padding-right: @WIN10_DROPDOWNEDITOR_DROPDOWN_BUTTON_WIDTH;
-            }
-        }
     }
 
     .dx-@{widgetName}-export-menu {
@@ -468,13 +450,6 @@
                 border-bottom: ~"@{@{widgetName}-border}";
             }
         }
-
-        .dx-editor-cell {
-            .dx-icon-clear {
-                left: 0px;
-            }
-        }
-
 
         .dx-data-row {
             .dx-validator.dx-@{widgetName}-invalid {

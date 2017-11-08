@@ -225,41 +225,26 @@
     }
 
     .dx-@{widgetName}-headers, .dx-@{widgetName}-rowsview {
-        .dx-texteditor-input {
-           padding: @GRID_BASE_CELL_PADDING;
-        }
-
         .dx-dropdowneditor-button-visible {
-            &.dx-show-clear-button  {
-                .dx-texteditor-input {
-                    padding-right: @DROPDOWNEDITOR_BUTTON_WITH_CLEAR_PADDING;
-                }
-
-                &.dx-invalid {
-                    .dx-texteditor-input {
-                        padding-right: @TEXTEDITOR_INVALID_BADGE_WIDTH + @DROPDOWNEDITOR_BUTTON_WITH_CLEAR_PADDING;
-                    }
-
-                    &.dx-rtl .dx-texteditor-input {
-                        padding: @GRID_BASE_CELL_PADDING;
-                        padding-left: @TEXTEDITOR_INVALID_BADGE_WIDTH + @DROPDOWNEDITOR_BUTTON_WITH_CLEAR_PADDING;
-                    }
-                }
-            }
-
             &.dx-invalid {
                 .dx-texteditor-input {
                     padding-right: @DROPDOWNEDITOR_BUTTON_WIDTH + @TEXTEDITOR_INVALID_BADGE_WIDTH;
+                }
+
+                &.dx-show-clear-button .dx-texteditor-input {
+                    padding-right: @TEXTEDITOR_INVALID_BADGE_WIDTH + @DROPDOWNEDITOR_BUTTON_WITH_CLEAR_PADDING;
                 }
 
                 &.dx-rtl .dx-texteditor-input {
                     padding: @GRID_BASE_CELL_PADDING;
                     padding-left: @DROPDOWNEDITOR_BUTTON_WIDTH + @TEXTEDITOR_INVALID_BADGE_WIDTH;
                 }
-            }
 
-            .dx-texteditor-input {
-                padding-right: @DROPDOWNEDITOR_BUTTON_WIDTH;
+                &.dx-show-clear-button
+                &.dx-rtl .dx-texteditor-input {
+                    padding: @GRID_BASE_CELL_PADDING;
+                    padding-left: @TEXTEDITOR_INVALID_BADGE_WIDTH + @DROPDOWNEDITOR_BUTTON_WITH_CLEAR_PADDING;
+                }
             }
         }
     }
