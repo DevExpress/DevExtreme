@@ -424,6 +424,17 @@ QUnit.module("Utils", function() {
         assert.notOk(utils.isValidCondition(["ZipCode", "=", ""], fields[3]));
         assert.ok(utils.isValidCondition(["Field", "=", ""], { dataField: "Field" }));
     });
+
+    QUnit.test("getField test", function(assert) {
+        var field = utils.getField("Company", [{ dataField: "State.Name" }, { dataField: "Company" }]);
+        assert.equal(field.dataField, "Company");
+
+        field = utils.getField("State.Name", [{ dataField: "State.Name" }, { dataField: "Company" }]);
+        assert.equal(field.dataField, "State.Name");
+
+        field = utils.getField("State", [{ dataField: "State.Name" }, { dataField: "Company" }]);
+        assert.equal(field.dataField, "State");
+    });
 });
 
 QUnit.module("Add item", function() {
@@ -790,6 +801,14 @@ QUnit.module("Filter normalization", function() {
 
         assert.deepEqual(group, [[condition1, condition2], [condition3, condition2]]);
         assert.equal(group[1][0], condition3);
+    });
+
+    QUnit.test("get normalized filter which contains not specified field", function(assert) {
+        var group = [["State", "=", null]];
+
+        group = utils.getNormalizedFilter(group, [{ dataField: "State.Name" }]);
+
+        assert.deepEqual(group, ["State", "=", null]);
     });
 });
 

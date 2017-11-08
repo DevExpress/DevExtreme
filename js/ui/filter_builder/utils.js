@@ -251,9 +251,18 @@ function addItem(item, group) {
 }
 
 function getField(dataField, fields) {
-    for(var i = 0; i < fields.length; i++) {
+    var i;
+    for(i = 0; i < fields.length; i++) {
         if(fields[i].dataField.toLowerCase() === dataField.toLowerCase()) {
             return fields[i];
+        }
+    }
+    var extendedFields = getItems(fields, true).filter(function(item) {
+        return fields.indexOf(item) < 0;
+    });
+    for(i = 0; i < extendedFields.length; i++) {
+        if(extendedFields[i].dataField.toLowerCase() === dataField.toLowerCase()) {
+            return extendedFields[i];
         }
     }
     throw new errors.Error("E1047", dataField);

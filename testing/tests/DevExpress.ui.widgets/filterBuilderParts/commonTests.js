@@ -319,6 +319,27 @@ QUnit.module("Rendering", function() {
         assert.equal(container.find("." + FILTER_BUILDER_ITEM_VALUE_CLASS).length, 1);
     });
 
+    QUnit.test("change specified field to not specified field with object dataType", function(assert) {
+        var container = $("#container");
+
+        container.dxFilterBuilder({
+            value: [
+                ["State.Name", "=", "Texas"]
+            ],
+            fields: [{
+                dataField: "State.Name"
+            }],
+            allowHierarchicalFields: true
+        });
+
+        var $fieldButton = container.find("." + FILTER_BUILDER_ITEM_FIELD_CLASS);
+
+        $fieldButton.click();
+        $(".dx-treeview-item-content").eq(0).trigger("dxclick");
+        assert.equal($fieldButton.text(), "State");
+        assert.deepEqual(container.dxFilterBuilder("instance").option("value"), ["State", "=", null]);
+    });
+
     QUnit.testInActiveWindow("change filter value", function(assert) {
         var container = $("#container"),
             instance = container.dxFilterBuilder({
