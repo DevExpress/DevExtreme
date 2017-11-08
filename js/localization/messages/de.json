@@ -209,13 +209,13 @@
         "vizExport-printingButtonText": "Drucken",
         "vizExport-titleMenuText": "Export/Druck",
         "vizExport-exportButtonText": "{0}-Datei",
-        "dxFilterBuilder-and": "!TODO!",
-        "dxFilterBuilder-or": "!TODO!",
-        "dxFilterBuilder-notAnd": "!TODO!",
-        "dxFilterBuilder-notOr": "!TODO!",
-        "dxFilterBuilder-addCondition": "!TODO!",
-        "dxFilterBuilder-addGroup": "!TODO!",
-        "dxFilterBuilder-enterValueText": "!TODO!",
+        "dxFilterBuilder-and": "Und",
+        "dxFilterBuilder-or": "Oder",
+        "dxFilterBuilder-notAnd": "Nicht Und",
+        "dxFilterBuilder-notOr": "Nicht Oder",
+        "dxFilterBuilder-addCondition": "Bedingung hinzufügen",
+        "dxFilterBuilder-addGroup": "Gruppe hinzufügen",
+        "dxFilterBuilder-enterValueText": "<Wert eingeben>",
         "dxFilterBuilder-filterOperationEquals": "Ist gleich",
         "dxFilterBuilder-filterOperationNotEquals": "Ist nicht gleich",
         "dxFilterBuilder-filterOperationLess": "Kleiner als",
@@ -226,7 +226,7 @@
         "dxFilterBuilder-filterOperationContains": "Enthält",
         "dxFilterBuilder-filterOperationNotContains": "Enthält nicht",
         "dxFilterBuilder-filterOperationEndsWith": "Endet mit",
-        "dxFilterBuilder-filterOperationIsBlank": "!TODO!",
-        "dxFilterBuilder-filterOperationIsNotBlank": "!TODO!"
+        "dxFilterBuilder-filterOperationIsBlank": "Ist leer",
+        "dxFilterBuilder-filterOperationIsNotBlank": "Ist nicht leer"
     }
 }
