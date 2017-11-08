@@ -257,7 +257,7 @@ function getField(dataField, fields) {
         }
     }
     var extendedFields = getItems(fields, true).filter(function(item) {
-        return fields.indexOf(item) < 0 && (item.dataField.toLowerCase() === dataField.toLowerCase());
+        return fields.indexOf(item) < 0 && item.dataField.toLowerCase() === dataField.toLowerCase();
     });
     if(extendedFields.length > 0) {
         return extendedFields[0];
