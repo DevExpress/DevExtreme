@@ -251,19 +251,16 @@ function addItem(item, group) {
 }
 
 function getField(dataField, fields) {
-    var i;
-    for(i = 0; i < fields.length; i++) {
+    for(var i = 0; i < fields.length; i++) {
         if(fields[i].dataField.toLowerCase() === dataField.toLowerCase()) {
             return fields[i];
         }
     }
     var extendedFields = getItems(fields, true).filter(function(item) {
-        return fields.indexOf(item) < 0;
+        return fields.indexOf(item) < 0 && (item.dataField.toLowerCase() === dataField.toLowerCase());
     });
-    for(i = 0; i < extendedFields.length; i++) {
-        if(extendedFields[i].dataField.toLowerCase() === dataField.toLowerCase()) {
-            return extendedFields[i];
-        }
+    if(extendedFields.length > 0) {
+        return extendedFields[0];
     }
     throw new errors.Error("E1047", dataField);
 }
