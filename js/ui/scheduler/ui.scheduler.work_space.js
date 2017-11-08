@@ -659,12 +659,16 @@ var SchedulerWorkSpace = Widget.inherit({
     },
 
     _attachTableClasses: function() {
-        function addClass($el, className) {
-            ($el && !$el.hasClass(className)) && $el.addClass(className);
-        }
-        addClass(this._$headerPanel, HEADER_PANEL_CLASS);
-        addClass(this._$dateTable, this._getDateTableClass());
-        addClass(this._$allDayTable, ALL_DAY_TABLE_CLASS);
+        this._addTableClass(this._$dateTable, this._getDateTableClass());
+        this._addTableClass(this._$allDayTable, ALL_DAY_TABLE_CLASS);
+    },
+
+    _attachHeaderTableClasses: function() {
+        this._addTableClass(this._$headerPanel, HEADER_PANEL_CLASS);
+    },
+
+    _addTableClass: function($el, className) {
+        ($el && !$el.hasClass(className)) && $el.addClass(className);
     },
 
     _setTableSizes: function() {
@@ -691,6 +695,8 @@ var SchedulerWorkSpace = Widget.inherit({
         this._$headerPanel.width(width);
         this._$dateTable.width(width);
         this._$allDayTable.width(width);
+
+        this._attachHeaderTableClasses();
     },
 
     _getWorkSpaceMinWidth: function() {
@@ -725,6 +731,7 @@ var SchedulerWorkSpace = Widget.inherit({
 
         if(!this.option("crossScrollingEnabled")) {
             this._attachTableClasses();
+            this._attachHeaderTableClasses();
         }
 
         this._toggleGroupedClass();
