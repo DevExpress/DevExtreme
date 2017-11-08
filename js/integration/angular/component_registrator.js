@@ -446,11 +446,11 @@ var ComponentBuilder = Class.inherit({
                 }
 
                 if(Config().wrapActionsBeforeExecute) {
-                    safeApply(function() {}, scope);
+                    this._applyAsync(function() {}, scope);
                 }
 
                 return disposeWatcher;
-            },
+            }.bind(this),
             templates: {
                 "dx-polymorph-widget": {
                     render: function(options) {
