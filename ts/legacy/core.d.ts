@@ -543,11 +543,16 @@ declare module DevExpress {
             userData?: Object;
             /** @docid LoadOptions_requireTotalCount */
             requireTotalCount?: boolean;
+            /** @docid LoadOptions_customQueryParams */
+            customQueryParams?: Object;
         }
 
         export interface DataGridLoadOptions extends LoadOptions {
+            /** @docid LoadOptions_totalSummary */
             totalSummary?: Object;
+            /** @docid LoadOptions_groupSummary */
             groupSummary?: Object;
+            /** @docid LoadOptions_requireGroupCount */
             requireGroupCount?: boolean;
         }
 

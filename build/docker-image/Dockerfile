@@ -4,10 +4,11 @@ FROM ubuntu:16.04 as builder
 RUN echo 'APT::Install-Recommends "0";' > /etc/apt/apt.conf.d/dx-no-recommends
 RUN apt-get update && apt-get -y upgrade
 
-RUN apt-get install -y ca-certificates mc
+# Curl
+RUN apt-get install -y ca-certificates curl
 
 # Build-time utils
-RUN apt-get install -y apt-transport-https curl gdebi-core gnupg2
+RUN apt-get install -y apt-transport-https gdebi-core gnupg2
 
 # Node
 RUN curl -sL https://deb.nodesource.com/setup_8.x | bash -
@@ -33,6 +34,9 @@ RUN unlink ./chrome.deb
 # Utils for docker-ci.sh
 RUN apt-get install -y dbus-x11 git httping x11vnc xvfb
 
+# Yes :)
+RUN apt-get install -y mc
+
 # Use UTF-8
 RUN apt-get install -y locales
 RUN locale-gen en_US.UTF-8
@@ -41,7 +45,7 @@ RUN locale-gen en_US.UTF-8
 RUN [ "$(date +%Z)" = "UTC" ] || exit 1
 
 # Remove build-time utils
-RUN apt-get purge -y apt-transport-https curl gdebi-core gnupg2
+RUN apt-get purge -y apt-transport-https gdebi-core gnupg2
 
 # Clean APT
 RUN apt-get autoremove -y --purge
