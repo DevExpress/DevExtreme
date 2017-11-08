@@ -2104,7 +2104,7 @@ module.exports = {
 
                     if(customizeColumns) {
                         hasOwnerBand = columns.some(function(column) {
-                            return commonUtils.isObject(column.ownerBand);
+                            return typeUtils.isObject(column.ownerBand);
                         });
 
                         if(hasOwnerBand) {
