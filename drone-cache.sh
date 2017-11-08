@@ -1,4 +1,4 @@
-﻿#!/bin/bash
+#!/bin/bash
 
 CACHE_BUCKET=devextreme-ci-cache
 CACHE_DIRS="node_modules dotnet_packages"
