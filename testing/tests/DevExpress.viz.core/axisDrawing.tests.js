@@ -8146,17 +8146,19 @@ QUnit.test("Update tick mark points", function(assert) {
         }
     });
 
-    this.generatedTicks = [1, 2, 3];
+    this.generatedTicks = [1, 2, 3, 4];
 
     this.axis.draw(this.zeroMarginCanvas);
     this.translator.stub("translate").withArgs(1).returns(30);
     this.translator.stub("translate").withArgs(2).returns(50);
     this.translator.stub("translate").withArgs(3).returns(70);
+    this.translator.stub("translate").withArgs(4).returns(null);
 
     //act
     this.axis.updateSize(this.canvas);
 
     var path = this.renderer.path;
+    assert.deepEqual(this.axis._majorTicks.length, 3);
     assert.deepEqual(path.getCall(0).returnValue.attr.lastCall.args[0], { points: [30, 30 - 5, 30, 30 + 5] });
     assert.deepEqual(path.getCall(1).returnValue.attr.lastCall.args[0], { points: [50, 30 - 5, 50, 30 + 5] });
     assert.deepEqual(path.getCall(2).returnValue.attr.lastCall.args[0], { points: [70, 30 - 5, 70, 30 + 5] });
@@ -8177,17 +8179,19 @@ QUnit.test("Update minor tick mark points", function(assert) {
         }
     });
 
-    this.generatedMinorTicks = [1, 2, 3];
+    this.generatedMinorTicks = [1, 2, 3, 4];
 
     this.axis.draw(this.zeroMarginCanvas);
     this.translator.stub("translate").withArgs(1).returns(30);
     this.translator.stub("translate").withArgs(2).returns(50);
     this.translator.stub("translate").withArgs(3).returns(70);
+    this.translator.stub("translate").withArgs(4).returns(null);
 
     //act
     this.axis.updateSize(this.canvas);
 
     var path = this.renderer.path;
+    assert.deepEqual(this.axis._minorTicks.length, 3);
     assert.deepEqual(path.getCall(0).returnValue.attr.lastCall.args[0], { points: [30, 30 - 5, 30, 30 + 5] });
     assert.deepEqual(path.getCall(1).returnValue.attr.lastCall.args[0], { points: [50, 30 - 5, 50, 30 + 5] });
     assert.deepEqual(path.getCall(2).returnValue.attr.lastCall.args[0], { points: [70, 30 - 5, 70, 30 + 5] });
@@ -8215,13 +8219,42 @@ QUnit.test("Update boundary tick mark points", function(assert) {
     this.translator.stub("translate").withArgs(1).returns(30);
     this.translator.stub("translate").withArgs(3).returns(70);
 
-
     //act
     this.axis.updateSize(this.canvas);
 
     var path = this.renderer.path;
     assert.deepEqual(path.getCall(0).returnValue.attr.lastCall.args[0], { points: [30, 70 - 5, 30, 70 + 5] });
     assert.deepEqual(path.getCall(1).returnValue.attr.lastCall.args[0], { points: [70, 70 - 5, 70, 70 + 5] });
+});
+
+QUnit.test("Update boundary invalid tick mark points", function(assert) {
+    //arrange
+    this.createAxis();
+    this.updateOptions({
+        isHorizontal: true,
+        position: "bottom",
+        showCustomBoundaryTicks: true,
+        tick: {
+            visible: true,
+            color: "#123456",
+            opacity: 0.3,
+            width: 5,
+            length: 10
+        }
+    });
+
+    this.axis.setBusinessRange({ minVisible: 1, maxVisible: 4, addRange: function() { } });
+
+    this.axis.draw(this.zeroMarginCanvas);
+    this.translator.stub("translate").withArgs(1).returns(30);
+    this.translator.stub("translate").withArgs(4).returns(null);
+
+    //act
+    this.axis.updateSize(this.canvas);
+
+    var path = this.renderer.path;
+    assert.deepEqual(this.axis._boundaryTicks.length, 1);
+    assert.deepEqual(path.getCall(0).returnValue.attr.lastCall.args[0], { points: [30, 70 - 5, 30, 70 + 5] });
 });
 
 QUnit.test("Update tick label coords", function(assert) {

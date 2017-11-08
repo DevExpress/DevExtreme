@@ -132,6 +132,30 @@ function measureLabels(items) {
     });
 }
 
+function cleanUpInvalidTicks(ticks) {
+    var i = ticks.length - 1;
+    for(i; i >= 0; i--) {
+        if(!removeInvalidTick(ticks, i)) {
+            break;
+        }
+    }
+    for(i = 0; i < ticks.length; i++) {
+        if(removeInvalidTick(ticks, i)) {
+            i--;
+        } else {
+            break;
+        }
+    }
+}
+
+function removeInvalidTick(ticks, i) {
+    if(ticks[i].coords.x === null || ticks[i].coords.y === null) {
+        ticks.splice(i, 1);
+        return true;
+    }
+    return false;
+}
+
 function getAddFunction(range, correctZeroLevel) {
     //T170398
     if(range.dataType === "datetime") {
@@ -1328,6 +1352,10 @@ Axis.prototype = {
         initTickCoords(that._majorTicks);
         initTickCoords(that._minorTicks);
         initTickCoords(that._boundaryTicks || []);
+
+        cleanUpInvalidTicks(that._majorTicks);
+        cleanUpInvalidTicks(that._minorTicks);
+        cleanUpInvalidTicks(that._boundaryTicks || []);
 
         that._updateAxisElementPosition();
 
