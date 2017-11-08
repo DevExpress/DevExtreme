@@ -15,7 +15,6 @@ if [ "$1" == "rebuild" ]; then
         exit 0
     fi
 
-    echo "Rebuilding cache..."
     for i in $CACHE_DIRS; do
         if [ -e $i ]; then
             url="http://$CACHE_BUCKET.s3.amazonaws.com/$DRONE_REPO/$DRONE_BRANCH/$i.tgz"
@@ -31,7 +30,6 @@ if [ "$1" == "rebuild" ]; then
 fi
 
 if [ "$1" == "restore" ]; then
-    echo "Restoring cache..."
     for i in $CACHE_DIRS; do
         url="http://$CACHE_BUCKET.s3.amazonaws.com/$DRONE_REPO/$DRONE_BRANCH/$i.tgz"
         if curl -sf "$url" | tar xzf - 2>/dev/null; then
