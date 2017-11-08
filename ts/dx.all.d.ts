@@ -528,11 +528,17 @@ declare module DevExpress {
         delegateTarget: Element;
         /** Data passed to the event handler. */
         data: any;
+        /** Checks if the preventDefault() method was called on this event object. */
         isDefaultPrevented(): boolean;
+        /** Checks if the stopImmediatePropagation() method was called on this event object. */
         isImmediatePropagationStopped(): boolean;
+        /** Checks if the stopPropagation() method was called on this event object. */
         isPropagationStopped(): boolean;
+        /** Prevents the event's default action from triggering. */
         preventDefault(): void;
+        /** Stops the event's propagation up the DOM tree, preventing the rest of the handlers from being executed. */
         stopImmediatePropagation(): void;
+        /** Stops the event's propagation up the DOM tree, keeping parent handlers unnotified of the event. */
         stopPropagation(): void;
     }
     export type event = dxEvent | JQueryEventObject; 
@@ -926,12 +932,15 @@ declare module DevExpress.data {
     }
     /** This section describes the loadOptions object's fields. */
     export interface LoadOptions {
+        customQueryParams?: any;
         /** An array of strings that represent the names of navigation properties to be loaded simultaneously with the ODataStore. */
         expand?: any;
         /** A filter expression. */
         filter?: any;
         /** A group expression. */
         group?: any;
+        groupSummary?: any;
+        requireGroupCount?: boolean;
         /** Indicates whether the total count of data objects is needed. */
         requireTotalCount?: boolean;
         /** A data field or an expression whose value is compared to the search value. */
@@ -948,6 +957,7 @@ declare module DevExpress.data {
         sort?: any;
         /** The number of data objects to be loaded. In conjunction with skip, used to implement paging. */
         take?: number;
+        totalSummary?: any;
         /** An object for storing additional settings that should be sent to the server. */
         userData?: any;
     }
@@ -1004,7 +1014,7 @@ declare module DevExpress.data {
         requireTotalCount?: boolean;
         /** Specifies a value by which the required items are searched. */
         searchExpr?: Function | Array<Function>;
-        /** Specifies the comparison operation used to search for the required items. */
+        /** Specifies the comparison operation used to search for the required items. One of "=", "<>", ">", ">=", "<", "<=", "startswith", "endswith", "contains", "notcontains". */
         searchOperation?: string;
         /** Specifies the value to which the search expression is compared. */
         searchValue?: any;
@@ -1218,7 +1228,7 @@ declare module DevExpress.data {
         /** Starts loading data. */
         load(): Promise<any> & JQueryPromise<any>;
         /** Starts loading data. */
-        load(options: { expand?: string | Array<string>, requireTotalCount?: boolean, customQueryParams?: any }): Promise<any> & JQueryPromise<any>;
+        load(options: LoadOptions): Promise<any> & JQueryPromise<any>;
     }
     /** An object used to work with primitive data types not supported by JavaScript when accessing an OData web service. */
     export class EdmLiteral {
