@@ -353,6 +353,66 @@ QUnit.module("Utils", function() {
         assert.strictEqual(operations[5].icon, "greaterorequal");
     });
 
+    QUnit.test("getAvailableOperations for field with lookup", function(assert) {
+        var operations = utils.getAvailableOperations({
+            dataField: "Product",
+            lookup: {
+                dataSource: [
+                    "DataGrid",
+                    "PivotGrid",
+                    "TreeList"
+                ]
+            }
+        }, filterOperationsDescriptions);
+
+        assert.deepEqual(operations, [{
+            "icon": "equal",
+            "text": "Equals",
+            "value": "="
+        }, {
+            "icon": "notequal",
+            "text": "Does not equal",
+            "value": "<>"
+        }, {
+            "icon": "isblank",
+            "text": "Is blank",
+            "value": "isblank"
+        }, {
+            "icon": "isnotblank",
+            "text": "Is not blank",
+            "value": "isnotblank"
+        }]);
+    });
+
+    QUnit.test("getAvailableOperations for field with lookup and specified filterOperations", function(assert) {
+        var operations = utils.getAvailableOperations(fields[0], filterOperationsDescriptions);
+        assert.deepEqual(operations, [{
+            "icon": "contains",
+            "text": "Contains",
+            "value": "contains"
+        }, {
+            "icon": "doesnotcontain",
+            "text": "Does not contain",
+            "value": "notcontains"
+        }, {
+            "icon": "startswith",
+            "text": "Starts with",
+            "value": "startswith"
+        }, {
+            "icon": "endswith",
+            "text": "Ends with",
+            "value": "endswith"
+        }, {
+            "icon": "equal",
+            "text": "Equals",
+            "value": "="
+        }, {
+            "icon": "notequal",
+            "text": "Does not equal",
+            "value": "<>"
+        }]);
+    });
+
     QUnit.test("create condition", function(assert) {
         var condition = utils.createCondition(fields[0]);
 
