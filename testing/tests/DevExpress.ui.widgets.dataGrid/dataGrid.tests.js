@@ -7418,6 +7418,33 @@ QUnit.test("Change page index when virtual scrolling is enabled", function(asser
     assert.equal(dataGrid.pageIndex(), 3, "page index");
 });
 
+//T558189
+QUnit.test("Band columns should be displayed correctly after state is reset", function(assert) {
+    //arrange
+    var columns,
+        dataGrid = createDataGrid({
+            dataSource: [{ field1: 1, field2: 2, field3: 3, field4: 4 }],
+            paging: {
+                pageIndex: 0
+            },
+            customizeColumns: function() {},
+            columns: ["field1", "field2", { caption: "Band Column", columns: ["field3", "field4"] }]
+        });
+
+    this.clock.tick();
+
+    //act
+    dataGrid.state(null);
+    this.clock.tick();
+
+    //assert
+    columns = dataGrid.getVisibleColumns(0).map(function(column) { return column.caption; });
+    assert.deepEqual(columns, ["Field 1", "Field 2", "Band Column"], "columns of the first level");
+
+    columns = dataGrid.getVisibleColumns(1).map(function(column) { return column.caption; });
+    assert.deepEqual(columns, ["Field 3", "Field 4"], "columns of the second level");
+});
+
 
 QUnit.module("templates");
 

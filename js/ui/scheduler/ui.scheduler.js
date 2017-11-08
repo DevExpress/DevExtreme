@@ -1611,7 +1611,10 @@ var Scheduler = Widget.inherit({
                         var value = getter.apply(this, arguments);
                         if(config().forceIsoDateParsing) {
                             if(!that.option("dateSerializationFormat")) {
-                                that.option("dateSerializationFormat", dateSerialization.getDateSerializationFormat(value));
+                                var format = dateSerialization.getDateSerializationFormat(value);
+                                if(format) {
+                                    that.option("dateSerializationFormat", format);
+                                }
                             }
                             value = dateSerialization.deserializeDate(value);
                         }

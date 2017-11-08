@@ -2099,9 +2099,18 @@ module.exports = {
                 },
                 _customizeColumns: function(columns) {
                     var that = this,
+                        hasOwnerBand,
                         customizeColumns = that.option("customizeColumns");
 
                     if(customizeColumns) {
+                        hasOwnerBand = columns.some(function(column) {
+                            return typeUtils.isObject(column.ownerBand);
+                        });
+
+                        if(hasOwnerBand) {
+                            updateIndexes(that);
+                        }
+
                         customizeColumns(columns);
                         assignColumns(that, createColumnsFromOptions(that, columns));
                     }
