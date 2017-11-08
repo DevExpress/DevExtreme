@@ -482,6 +482,7 @@ QUnit.module("Utils", function() {
         assert.ok(utils.isValidCondition(["ZipCode", "=", 1], fields[3]));
         assert.ok(utils.isValidCondition(["ZipCode", "=", null], fields[3]));
         assert.notOk(utils.isValidCondition(["ZipCode", "=", ""], fields[3]));
+        assert.ok(utils.isValidCondition(["Field", "=", ""], { dataField: "Field" }));
     });
 });
 

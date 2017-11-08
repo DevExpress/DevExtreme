@@ -1999,6 +1999,7 @@ QUnit.test("Defining item data alias by 'itemAlias' with custom template for all
 });
 
 QUnit.test("Defining item data alias by 'itemAlias' with custom template for some items", function(assert) {
+    this.clock = sinon.useFakeTimers();
     var controller = function($scope) {
             $scope.collection = [{ name: "0", template: "customWidget" }, { name: "1", template: "custom" }, { text: "2" }, "3"];
         },
@@ -2014,6 +2015,8 @@ QUnit.test("Defining item data alias by 'itemAlias' with custom template for som
         ), controller),
         scope = $markup.scope();
 
+    this.clock.tick();
+
     var $items = $markup.children();
     assert.equal($items.eq(0).find(".test-widget").dxTestWidget("option", "text"), "0");
     assert.equal($.trim($items.eq(1).text()), "1");
@@ -2027,6 +2030,8 @@ QUnit.test("Defining item data alias by 'itemAlias' with custom template for som
         scope.collection[3] = "new text 3";
     });
 
+    this.clock.tick();
+
     $items = $markup.children();
     assert.equal($items.eq(0).find(".test-widget").dxTestWidget("option", "text"), "new text 0");
     assert.equal($.trim($items.eq(1).text()), "new text 1");
@@ -2035,6 +2040,8 @@ QUnit.test("Defining item data alias by 'itemAlias' with custom template for som
 
     $items.eq(0).find(".test-widget").dxTestWidget("option", "text", "widget text");
     assert.equal(scope.collection[0].name, "widget text");
+
+    this.clock.restore();
 });
 
 QUnit.test("$index is available in markup (T542335)", function(assert) {

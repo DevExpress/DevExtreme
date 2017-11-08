@@ -519,7 +519,7 @@ function getOperationValue(condition) {
 }
 
 function isValidCondition(condition, field) {
-    if(field.dataType !== "string") {
+    if(field.dataType && field.dataType !== "string") {
         return condition[2] !== "";
     }
     return true;
