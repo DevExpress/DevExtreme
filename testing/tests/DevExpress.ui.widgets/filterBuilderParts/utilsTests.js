@@ -802,14 +802,6 @@ QUnit.module("Filter normalization", function() {
         assert.deepEqual(group, [[condition1, condition2], [condition3, condition2]]);
         assert.equal(group[1][0], condition3);
     });
-
-    QUnit.test("get normalized filter which contains not specified field", function(assert) {
-        var group = [["State", "=", null]];
-
-        group = utils.getNormalizedFilter(group, [{ dataField: "State.Name" }]);
-
-        assert.deepEqual(group, ["State", "=", null]);
-    });
 });
 
 QUnit.module("Formatting", function() {
