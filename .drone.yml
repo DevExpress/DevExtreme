@@ -3,7 +3,7 @@
 pipeline:
 
   build:
-    image: devexpress/devextreme-build:2017-11-08
+    image: devexpress/devextreme-build:17_2
     pull: true
     commands:
       - ./drone-cache.sh restore
