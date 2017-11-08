@@ -153,10 +153,8 @@ var ODataStore = Store.inherit({
     /**
     * @name ODataStoreMethods_load
     * @publicName load(options)
-    * @param1 options:object
-    * @param1_field8 expand:string|Array<string>
-    * @param1_field9 requireTotalCount:boolean
-    * @param1_field10 customQueryParams:object
+    * @type function
+    * @param1 options:LoadOptions
     * @return Promise<any>
     * @extend_doc
     */
