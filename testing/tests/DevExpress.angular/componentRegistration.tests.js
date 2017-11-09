@@ -777,6 +777,51 @@ QUnit.test("Lockers works correctly when widget options changed using action (T3
     assert.equal(instance.option("testOption"), true, "binding worked");
 });
 
+// Note: Needed for dxFilterBuilder
+QUnit.test("The component should not be rendered more times than it needed", function(assert) {
+    var rendered = sinon.stub();
+    var MyComponent = DOMComponent.inherit({
+        _getDefaultOptions: function() {
+            return $.extend(this.callBase(), {
+                onClick: function(e) {
+                    e.component.skipInvalidation = true;
+                    e.component.option("testOption", [ 3, 2, 1 ]);
+                }
+            });
+        },
+        _optionChanged: function() {
+            if(this.skipInvalidation) {
+                this.skipInvalidation = false;
+            } else {
+                rendered();
+                return this.callBase.apply(this, arguments);
+            }
+        },
+        emulateAction: function() {
+            this._createActionByOption("onClick")();
+        }
+    });
+
+    registerComponent("dxMyComponent", MyComponent);
+
+    var $markup = $("<div></div>")
+            .attr("dx-my-component", "{ bindingOptions: { testOption: 'testOption' } }")
+            .appendTo(this.$controller);
+
+    this.testApp.controller("my-controller", function($scope) {
+        $scope.testOption = [ 1, 2, 3 ];
+    });
+
+    angular.bootstrap(this.$container, ["testApp"]);
+
+    var instance = $markup.dxMyComponent("instance");
+
+    assert.equal(rendered.callCount, 1);
+
+    instance.emulateAction();
+    assert.equal(rendered.callCount, 1);
+});
+
 QUnit.test("WrappedAction should return function result (T388034)", function(assert) {
     var MyComponent = DOMComponent.inherit({
         _getDefaultOptions: function() {
@@ -843,6 +888,46 @@ QUnit.test("Empty action doesn't call scope.$apply if config.wrapActionsBeforeEx
 
     scope.$apply = originApply;
     config({ wrapActionsBeforeExecute: originFlag });
+});
+
+QUnit.test("The option should be changed if changes occur before scope.$apply calling", function(assert) {
+    var $markup = $("<div></div>")
+            .attr("dx-test", "{ bindingOptions: { text: 'text' } }")
+            .appendTo(this.$controller);
+
+    this.testApp.controller("my-controller", function($scope) {
+        $scope.text = "initial text";
+    });
+
+    angular.bootstrap(this.$container, ["testApp"]);
+
+    var instance = $markup.dxTest("instance");
+    var scope = $markup.scope();
+
+    assert.equal(instance.option("text"), "initial text");
+    assert.equal(scope.text, "initial text");
+
+    scope.text = "change1";
+    scope.$apply();
+    assert.equal(instance.option("text"), "change1");
+    assert.equal(scope.text, "change1");
+
+    instance.option("text", "change2");
+    scope.$apply();
+    assert.equal(instance.option("text"), "change2");
+    assert.equal(scope.text, "change2");
+
+    scope.text = "change3";
+    scope.text = "change4";
+    scope.$apply();
+    assert.equal(instance.option("text"), "change4");
+    assert.equal(scope.text, "change4");
+
+    instance.option("text", "change5");
+    instance.option("text", "change6");
+    scope.$apply();
+    assert.equal(instance.option("text"), "change6");
+    assert.equal(scope.text, "change6");
 });
 
 QUnit.test("The 'release' method shouldn't be called for an unlocked Lock object (T400093)", function(assert) {
