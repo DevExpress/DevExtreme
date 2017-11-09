@@ -25,18 +25,18 @@
             color: @WIN10_TEXTEDITOR_INPUT_COLOR;
         }
 
-        .dx-show-clear-button & {
-            padding-right: @WIN10_TEXTEDITOR_CLEAR_BUTTON_WIDTH + @WIN10_TEXEDITOR_INPUT_PADDING_HORIZONTAL;
-
-            .dx-rtl&,
-            .dx-rtl & {
-                padding-right: @WIN10_TEXEDITOR_INPUT_PADDING_HORIZONTAL;
-                padding-left: @WIN10_TEXTEDITOR_CLEAR_BUTTON_WIDTH + @WIN10_TEXEDITOR_INPUT_PADDING_HORIZONTAL;
-            }
-        }
-
         &::-ms-value {
             margin: 0;
+        }
+    }
+
+    &.dx-show-clear-button .dx-texteditor-input {
+        padding-right: @WIN10_TEXTEDITOR_CLEAR_BUTTON_WIDTH;
+
+        .dx-rtl&,
+        .dx-rtl & {
+            padding-right: @WIN10_TEXEDITOR_INPUT_PADDING_HORIZONTAL;
+            padding-left: @WIN10_TEXTEDITOR_CLEAR_BUTTON_WIDTH;
         }
     }
 
