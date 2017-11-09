@@ -602,6 +602,7 @@ var Scrollable = DOMComponent.inherit({
     /**
     * @name dxScrollablemethods_update
     * @publicName update()
+     * @return Promise
     */
     update: function() {
         var that = this;
