@@ -248,7 +248,7 @@ function addIntervalDate(value, interval) {
     return addInterval(value, interval);
 }
 
-function addIntervalWithBreaks(addInterval, breaks) {
+function addIntervalWithBreaks(addInterval, breaks, correctValue) {
     breaks = breaks.filter(function(b) { return !b.gapSize; });
 
     return function(value, interval) {
@@ -262,7 +262,7 @@ function addIntervalWithBreaks(addInterval, breaks) {
             }
             return !breakSize;
         })) {
-            value = addInterval(value, breakSize);
+            value = correctValue(addInterval(value, breakSize), interval);
         }
         return value;
     };
@@ -275,7 +275,7 @@ function calculateTicks(addInterval, correctMinValue) {
             ticks = [];
 
         if(breaks && breaks.length) {
-            addInterval = addIntervalWithBreaks(addInterval, breaks);
+            addInterval = addIntervalWithBreaks(addInterval, breaks, correctMinValue);
         }
 
         if(cur > max) {
@@ -302,7 +302,7 @@ function calculateMinorTicks(updateTickInterval, addInterval, correctMinValue, c
             tickBalance = maxCount - 1;
 
         if(breaks && breaks.length) {
-            addInterval = addIntervalWithBreaks(addInterval, breaks);
+            addInterval = addIntervalWithBreaks(addInterval, breaks, correctMinValue);
         }
 
         minorTickInterval = updateTickInterval(minorTickInterval, firstMajor, factor);
