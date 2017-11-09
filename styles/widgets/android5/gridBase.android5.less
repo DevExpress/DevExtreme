@@ -600,6 +600,23 @@
         }
     }
 
+    .dx-@{widgetName}-rowsview, .dx-@{widgetName}-headers{
+        .dx-dropdowneditor-button-visible {
+            &.dx-show-clear-button {
+                &.dx-invalid {
+                    .dx-texteditor-input {
+                        padding-right: @ANDROID5_DROPDOWNEDITOR_BUTTON_WIDTH + 1.5 * @ANDROID5_TEXTEDITOR_INVALID_BADGE_WIDTH + @ANDROID5_TEXTEDITOR_CLEAR_ICON_SIZE + 2 * @ANDROID5_TEXTEDITOR_CLEAR_ICON_RIGHT;
+                    }
+
+                    &.dx-rtl .dx-texteditor-input {
+                        padding-left: @ANDROID5_DROPDOWNEDITOR_BUTTON_WIDTH + 1.5 * @ANDROID5_TEXTEDITOR_INVALID_BADGE_WIDTH + @ANDROID5_TEXTEDITOR_CLEAR_ICON_SIZE + 2 * @ANDROID5_TEXTEDITOR_CLEAR_ICON_RIGHT;
+                        padding-right: 0;
+                    }
+                }
+            }
+        }
+    }
+
     .dx-@{widgetName}-search-text {
         background-color: ~"@{@{widgetName}-search-text-background}";
     }
