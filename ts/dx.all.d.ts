@@ -506,17 +506,6 @@ declare module DevExpress {
         /** Gets the DataSource instance. */
         getDataSource(): DevExpress.data.DataSource;
     }
-    /** This namespace provides methods for controlling events without using jQuery. */
-    export class events {
-        /** Detaches an event handler from the specified element. */
-        off(element: DevExpress.core.dxElement, eventName: string, selector: string, handler: Function): void;
-        /** Attaches an event handler to the specified element. */
-        on(element: DevExpress.core.dxElement, eventName: string, selector: string, data: any, handler: Function): void;
-        /** Attaches an event handler to be executed only once to the specified element. */
-        one(element: DevExpress.core.dxElement, eventName: string, selector: string, data: any, handler: Function): void;
-        /** Executes all handlers of a given event type attached to the specified element. */
-        trigger(element: DevExpress.core.dxElement, event: string | event, extraParameters: any): void;
-    }
     export function eventsHandler(element: DevExpress.core.dxElement, extraParameters: any): boolean;
     /** Describes dxEvent, a counterpart of the jQuery.Event to be used without jQuery. */
     export class dxEvent {
@@ -551,15 +540,6 @@ declare module DevExpress {
         /** Sets the current locale identifier. */
         static locale(locale: string): void;
     }
-    /** An object that serves as a namespace for utility methods that can be helpful when working with the DevExtreme framework and UI widgets. */
-    export class utils {
-        /** Cancels an animation frame request scheduled with the requestAnimationFrame method. */
-        cancelAnimationFrame(requestID: number): void;
-        /** Sets parameters for the viewport meta tag. */
-        initMobileViewport(options: { allowZoom?: boolean, allowPan?: boolean, allowSelection?: boolean }): void;
-        /** Requests that the browser call a specified function to update animation before the next repaint. */
-        requestAnimationFrame(callback: Function): number;
-    }
     /** Defines animation options. */
     export interface animationConfig {
         /** A function called after animation is completed. */
@@ -582,15 +562,6 @@ declare module DevExpress {
         to?: number | string | any;
         /** A string value specifying the animation type. */
         type?: string;
-    }
-    /** An object that serves as a namespace for the methods that are used to animate UI elements. */
-    export class fx {
-        /** Animates the specified element. */
-        animate(element: Element, config: animationConfig): Promise<void> & JQueryPromise<void>;
-        /** Returns a value indicating whether the specified element is being animated. */
-        isAnimating(element: Element): boolean;
-        /** Stops the animation. */
-        stop(element: Element, jumpToEnd: boolean): void;
     }
     /** The position object specifies the widget positioning options. */
     export interface positionConfig {
@@ -780,19 +751,19 @@ declare module DevExpress {
         /** Provides access to the object that represents the specified validation group. */
         static getGroupConfig(group: string | any): any;
         /** Registers all the Validator objects extending fields of the specified ViewModel. */
-        registerModelForValidation(model: any): void;
+        static registerModelForValidation(model: any): void;
         /** Resets the values and validation result of the editors that belong to the default validation group. */
         static resetGroup(): void;
         /** Resets the values and validation result of the editors that belong to the specified validation group. */
         static resetGroup(group: string | any): void;
         /** Unregisters all the Validator objects extending fields of the specified ViewModel. */
-        unregisterModelForValidation(model: any): void;
+        static unregisterModelForValidation(model: any): void;
         /** Validates rules of the validators that belong to the default validation group. */
         static validateGroup(): any;
         /** Validates rules of the validators that belong to the specified validation group. */
         static validateGroup(group: string | any): any;
         /** Validates the rules that are defined within the dxValidator objects that are registered for the specified ViewModel. */
-        validateModel(model: any): any;
+        static validateModel(model: any): any;
     }
     /** Hides the last displayed overlay widget. */
     export function hideTopOverlay(): boolean;
@@ -832,27 +803,8 @@ declare module DevExpress {
         /** Registers a new theme based on the existing one. */
         static registerTheme(customTheme: any, baseTheme: string): void;
     }
-    /** Registers all the Validator objects extending fields of the specified ViewModel. */
-    export function registerModelForValidation(model: any): void;
-    /** Unregisters all the Validator objects extending fields of the specified ViewModel. */
-    export function unregisterModelForValidation(model: any): void;
-    /** Validates the rules that are defined within the dxValidator objects that are registered for the specified ViewModel. */
-    export function validateModel(model: any): any;
 }
 declare module DevExpress.data {
-    /** This section describes the utility objects provided by the DevExtreme data layer. */
-    export class Utils {
-        /** Encodes the specified string or array of bytes to base64 encoding. */
-        base64encode(input: string | Array<number>): string;
-        /** Compiles a getter function from the getter expression. */
-        compileGetter(expr: string | Array<string>): Function;
-        /** Compiles a setter function from the setter expression. */
-        compileSetter(expr: string | Array<string>): Function;
-        /** Creates a Query instance. */
-        query(array: Array<any>): Query;
-        /** Creates a Query instance for accessing the remote service specified by a URL. */
-        query(url: string, queryOptions: any): Query;
-    }
     /** An object used to generate and hold the GUID. */
     export class Guid {
         constructor();
@@ -1255,87 +1207,6 @@ declare module DevExpress.data {
         retrieveFields?: boolean;
         /** Specifies the underlying Store instance used to access data. */
         store?: Store | StoreOptions | XmlaStore | XmlaStoreOptions | Array<{ type?: string }> | { type?: string };
-    }
-    /** An array of pivot grid fields. */
-    export interface PivotGridDataSourceField {
-        /** Specifies whether to allow the predefined summary post-processing functions ('absoluteVariation' and 'percentVariation') and runningTotal to take values of different groups into account. */
-        allowCrossGroupCalculation?: boolean;
-        /** Allows an end-user to expand/collapse all header items within a header level. */
-        allowExpandAll?: boolean;
-        /** Allows a user to filter fields by selecting or deselecting values in the popup menu. */
-        allowFiltering?: boolean;
-        /** Allows an end-user to change sorting options. */
-        allowSorting?: boolean;
-        /** Allows an end-user to sort columns by summary values. */
-        allowSortingBySummary?: boolean;
-        /** Type of the area where the field is located. */
-        area?: string;
-        /** Index among the other fields displayed within the same area. */
-        areaIndex?: number;
-        /** Allows you to use a custom aggregate function to calculate the summary values. Cannot be used for the XmlaStore store type. */
-        calculateCustomSummary?: ((options: { summaryProcess?: string, value?: any, totalValue?: any }) => any);
-        /** Specifies a callback function that allows you to modify summary values after they are calculated. */
-        calculateSummaryValue?: ((e: DevExpress.ui.dxPivotGridSummaryCell) => number);
-        /** A caption that will be displayed in the pivot grid's field chooser and field panel to identify the field. */
-        caption?: string;
-        /** Specifies a callback function that returns the text to be displayed in the cells of a field. */
-        customizeText?: ((cellInfo: { value?: string | number | Date, valueText?: string }) => string);
-        /** Name of the data source field containing data for the pivot grid field. */
-        dataField?: string;
-        /** Specifies a type of field values. */
-        dataType?: string;
-        /** The name of the folder in which the field is located. */
-        displayFolder?: string;
-        /** Indicates whether all header items of the field's header level are expanded. */
-        expanded?: boolean;
-        /** Specifies whether a user can change the current filter by including (selecting) or excluding (clearing the selection) values. Applies only if allowFiltering is true. */
-        filterType?: string;
-        /** Specifies by which values the field is filtered. */
-        filterValues?: Array<any>;
-        /** Specifies a display format for field values. */
-        format?: DevExpress.ui.format;
-        /** The index of the field within a group. */
-        groupIndex?: number;
-        /** Specifies how the values of the current field are combined into groups. Cannot be used for the XmlaStore store type. */
-        groupInterval?: string | number;
-        /** The name of the group to which the field belongs. */
-        groupName?: string;
-        /** Configures the header filter feature. */
-        headerFilter?: { width?: number, height?: number, allowSearch?: boolean };
-        /** Specifies whether the field should be treated as a Data Field. */
-        isMeasure?: boolean;
-        /** Use the format.precision option instead. */
-        precision?: number;
-        /** Specifies whether to summarize each next summary value with the previous one by rows or columns. */
-        runningTotal?: string;
-        /** Specifies the function that determines how to split data from the data source into ranges for header items. Cannot be used for the XmlaStore store type and along with remote operations. */
-        selector?: Function;
-        /** Specifies whether or not to display Grand Total values for the field. */
-        showGrandTotals?: boolean;
-        /** Specifies whether or not to display Total values for the field. */
-        showTotals?: boolean;
-        /** Specifies whether or not to display summary values. Applies only to the fields whose area is "data". Inherits the value of showTotals by default. */
-        showValues?: boolean;
-        /** Specifies how field data should be sorted. Can be used for the XmlaStore store type only. */
-        sortBy?: string;
-        /** Sorts the header items of this field by the summary values of another field. */
-        sortBySummaryField?: string;
-        /** The array of field names that specify a path to column/row whose summary field is used for sorting of this field's header items. */
-        sortBySummaryPath?: Array<number | string>;
-        /** Specifies how to sort header items. */
-        sortingMethod?: ((a: { value?: string | number, children?: Array<any> }, b: { value?: string | number, children?: Array<any> }) => number);
-        /** Specifies the sort order of field values. */
-        sortOrder?: string;
-        /** Specifies the summary post-processing algorithm. */
-        summaryDisplayMode?: string;
-        /** Specifies how to aggregate field data. Cannot be used for the XmlaStore store type. */
-        summaryType?: string;
-        /** A boolean value specifying whether or not the field is visible in the pivot grid and the Field Chooser. */
-        visible?: boolean;
-        /** Specifies the absolute width of the field in the pivot grid. */
-        width?: number;
-        /** Specifies whether or not long text in header items should be wrapped. */
-        wordWrapEnabled?: boolean;
     }
     /** An object that provides access to data for the PivotGrid widget. */
     export class PivotGridDataSource {
@@ -8517,7 +8388,7 @@ declare module DevExpress.viz.map {
         /** Specifies options for VectorMap widget layers. */
         layers?: Array<{ name?: string, dataSource?: any | DevExpress.data.DataSource | DevExpress.data.DataSourceOptions | string, data?: any | DevExpress.data.DataSource | DevExpress.data.DataSourceOptions, type?: string, elementType?: string, borderWidth?: number, borderColor?: string, color?: string, hoveredBorderWidth?: number, hoveredBorderColor?: string, hoveredColor?: string, selectedBorderWidth?: number, selectedBorderColor?: string, selectedColor?: string, opacity?: number, size?: number, minSize?: number, maxSize?: number, hoverEnabled?: boolean, selectionMode?: string, palette?: Array<string> | string, paletteSize?: number, colorGroups?: Array<number>, colorGroupingField?: string, sizeGroups?: Array<number>, sizeGroupingField?: string, dataField?: string, customize?: ((elements: Array<MapLayerElement>) => any), label?: any }> | { name?: string, dataSource?: any | DevExpress.data.DataSource | DevExpress.data.DataSourceOptions | string, data?: any | DevExpress.data.DataSource | DevExpress.data.DataSourceOptions, type?: string, elementType?: string, borderWidth?: number, borderColor?: string, color?: string, hoveredBorderWidth?: number, hoveredBorderColor?: string, hoveredColor?: string, selectedBorderWidth?: number, selectedBorderColor?: string, selectedColor?: string, opacity?: number, size?: number, minSize?: number, maxSize?: number, hoverEnabled?: boolean, selectionMode?: string, palette?: Array<string> | string, paletteSize?: number, colorGroups?: Array<number>, colorGroupingField?: string, sizeGroups?: Array<number>, sizeGroupingField?: string, dataField?: string, customize?: ((elements: Array<MapLayerElement>) => any), label?: any };
         /** Configures map legends. */
-        legends?: Array<{ source?: any, customizeText?: ((itemInfo: { start?: number, end?: number, index?: number, color?: string | undefined, size?: number | undefined }) => string), customizeHint?: ((itemInfo: { start?: number, end?: number, index?: number, color?: string | undefined, size?: number | undefined }) => string), verticalAlignment?: string, horizontalAlignment?: string, orientation?: string, itemTextPosition?: string, itemsAlignment?: string, visible?: boolean, margin?: number | any, markerSize?: number, markerColor?: string, markerShape?: string, backgroundColor?: string, border?: any, paddingLeftRight?: number, paddingTopBottom?: number, columnCount?: number, rowCount?: number, columnItemSpacing?: number, rowItemSpacing?: number, font?: Font }>;
+        legends?: Array<{ source?: any, customizeText?: ((itemInfo: { start?: number, end?: number, index?: number, color?: string, size?: number }) => string), customizeHint?: ((itemInfo: { start?: number, end?: number, index?: number, color?: string, size?: number }) => string), verticalAlignment?: string, horizontalAlignment?: string, orientation?: string, itemTextPosition?: string, itemsAlignment?: string, visible?: boolean, margin?: number | any, markerSize?: number, markerColor?: string, markerShape?: string, backgroundColor?: string, border?: any, paddingLeftRight?: number, paddingTopBottom?: number, columnCount?: number, rowCount?: number, columnItemSpacing?: number, rowItemSpacing?: number, font?: Font }>;
         /** Use the layers.dataSource option instead. */
         mapData?: Array<string> | string;
         /** Use the layers.dataSource option instead. */
