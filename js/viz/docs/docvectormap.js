@@ -1235,9 +1235,9 @@ var dxVectorMap = {
         * @name dxvectormapoptions_legends_columnitemspacing
         * @publicName columnItemSpacing
         * @type number
-        * @default 8
+        * @default 20
         */
-        columnItemSpacing: 8,
+        columnItemSpacing: 20,
         /**
         * @name dxvectormapoptions_legends_rowitemspacing
         * @publicName rowItemSpacing
