@@ -2963,6 +2963,35 @@ QUnit.test("'itemOption' should get an item with several spaces in the caption a
     assert.deepEqual(innerGroupItem, { dataField: "FirstName" }, "corrected item received");
 });
 
+QUnit.test("'itemOption' should get an group inner item located into tabbed item", function(assert) {
+    //arrange
+    var $testContainer = $("#form").dxForm({
+            formData: { EmployeeID: 1, LastName: "John", FirstName: "Dow" },
+            items: [
+                {
+                    itemType: "tabbed",
+                    tabs: [{
+                        title: "Test Tab 1",
+                        items: ["EmployeeID"]
+                    }, {
+                        title: "Test Tab 2",
+                        items: [{
+                            itemType: "group",
+                            caption: "Test Group 1",
+                            items: ["FirstName", "LastName"]
+                        }]
+                    }]
+                }]
+        }),
+        form = $testContainer.dxForm("instance");
+
+    //act
+    var innerGroupItem = form.itemOption("TestTab2.TestGroup1.FirstName");
+
+    //assert
+    assert.deepEqual(innerGroupItem, { dataField: "FirstName" }, "corrected item received");
+});
+
 function getID(form, dataField) {
     return "dx_" + form.option("formID") + "_" + dataField;
 }
