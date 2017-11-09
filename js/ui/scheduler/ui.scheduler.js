@@ -581,6 +581,14 @@ var Scheduler = Widget.inherit({
             shadeUntilCurrentTime: false,
 
                 /**
+                * @name dxSchedulerOptions_indicatorUpdateInterval
+                * @publicName indicatorUpdateInterval
+                * @type number
+                * @default 300000
+                */
+            indicatorUpdateInterval: 300000,
+
+                /**
                 * @hidden
                 * @name dxSchedulerOptions_indicatorTime
                 * @publicName indicatorTime
@@ -588,15 +596,6 @@ var Scheduler = Widget.inherit({
                 * @default undefined
                 */
             indicatorTime: undefined,
-
-                /**
-                * @hidden
-                * @name dxSchedulerOptions_indicatorUpdateInterval
-                * @publicName indicatorUpdateInterval
-                * @type number
-                * @default 300000
-                */
-            indicatorUpdateInterval: 300000,
 
                 /**
                 * @name dxSchedulerOptions_recurrenceEditMode
