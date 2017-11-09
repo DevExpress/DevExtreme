@@ -720,7 +720,7 @@ declare module DevExpress.ui {
         scrollWidth(): number;
 
         /** @docid dxscrollablemethods_update */
-        update(): void;
+        update(): JQueryPromise<void>;
     }
 
     export interface dxRadioGroupOptions extends EditorOptions, DataExpressionMixinOptions {
