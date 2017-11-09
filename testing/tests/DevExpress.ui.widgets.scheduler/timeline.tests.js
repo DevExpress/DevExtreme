@@ -428,13 +428,10 @@ QUnit.test("Ensure cell min height is equal to cell height if crossScrollingEnab
         crossScrollingEnabled: true
     });
 
-    this.instance.option("currentDate", new Date(2010, 10, 10));
+    var recalculateGroupHeader = sinon.spy(this.instance, "_setGroupHeaderCellsHeight");
     resizeCallbacks.fire();
 
-    var height = this.instance.$element().find(".dx-scheduler-group-header-content").eq(0).outerHeight(),
-        expectedHeight = this.instance.$element().find(".dx-scheduler-date-table-cell").first().outerHeight() - 1;
-
-    assert.roughEqual(height, expectedHeight, 2.001, "Group cell height is OK");
+    assert.ok(recalculateGroupHeader.called, "Group header was recalculated");
 });
 
 QUnit.module("Timeline Day", {
