@@ -18,6 +18,7 @@ var DEFAULT_DATA_TYPE = "string",
         "boolean": ["=", "<>", "isblank", "isnotblank"],
         "object": ["isblank", "isnotblank"]
     },
+    LOOKUP_OPERATIONS = ["=", "<>", "isblank", "isnotblank"],
     DEFAULT_FORMAT = {
         "date": "shortDate",
         "datetime": "shortDateShortTime"
@@ -144,7 +145,7 @@ function isCriteriaContainValueItem(criteria) {
 }
 
 function getFilterOperations(field) {
-    return field.filterOperations || DATATYPE_OPERATIONS[field.dataType || DEFAULT_DATA_TYPE];
+    return field.filterOperations || (field.lookup && LOOKUP_OPERATIONS) || DATATYPE_OPERATIONS[field.dataType || DEFAULT_DATA_TYPE];
 }
 
 function getCaptionByOperation(operation, filterOperationDescriptions) {

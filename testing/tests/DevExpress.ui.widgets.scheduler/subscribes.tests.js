@@ -442,6 +442,22 @@ QUnit.test("check the 'setField' method with date field and auto detect of seria
     }
 });
 
+QUnit.test("prevent unexpected dateSerializationFormat option changing", function(assert) {
+    var defaultForceIsoDateParsing = config().forceIsoDateParsing;
+    config().forceIsoDateParsing = true;
+    try {
+        this.createInstance();
+        var obj = { startDate: new Date(2017, 2, 7) };
+
+        assert.strictEqual(this.instance.option("dateSerializationFormat"), undefined);
+        this.instance.fire("getField", "startDate", obj);
+
+        assert.strictEqual(this.instance.option("dateSerializationFormat"), undefined);
+    } finally {
+        config().forceIsoDateParsing = defaultForceIsoDateParsing;
+    }
+});
+
 QUnit.test("check the 'setField' method with date field and dateSerializationFormat", function(assert) {
     this.createInstance({
         dateSerializationFormat: "yyyy-MM-ddTHH:mm:ssZ"

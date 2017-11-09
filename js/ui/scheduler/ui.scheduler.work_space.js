@@ -87,7 +87,7 @@ var COMPONENT_CLASS = "dx-scheduler-work-space",
 
     CELL_DATA = "dxCellData",
 
-    DATE_TABLE_CELL_WIDTH = 75,
+    DATE_TABLE_MIN_CELL_WIDTH = 75,
 
     DAY_MS = toMs("day"),
     HOUR_MS = toMs("hour");
@@ -659,17 +659,28 @@ var SchedulerWorkSpace = Widget.inherit({
     },
 
     _attachTableClasses: function() {
-        function addClass($el, className) {
-            ($el && !$el.hasClass(className)) && $el.addClass(className);
-        }
-        addClass(this._$headerPanel, HEADER_PANEL_CLASS);
-        addClass(this._$dateTable, this._getDateTableClass());
-        addClass(this._$allDayTable, ALL_DAY_TABLE_CLASS);
+        this._addTableClass(this._$dateTable, this._getDateTableClass());
+        this._addTableClass(this._$allDayTable, ALL_DAY_TABLE_CLASS);
+    },
+
+    _attachHeaderTableClasses: function() {
+        this._addTableClass(this._$headerPanel, HEADER_PANEL_CLASS);
+    },
+
+    _addTableClass: function($el, className) {
+        ($el && !$el.hasClass(className)) && $el.addClass(className);
     },
 
     _setTableSizes: function() {
-        var cellWidth = DATE_TABLE_CELL_WIDTH,
-            minWidth = this._getWorkSpaceMinWidth(),
+        this._attachTableClasses();
+
+        var cellWidth = this.getCellWidth();
+
+        if(cellWidth < DATE_TABLE_MIN_CELL_WIDTH) {
+            cellWidth = DATE_TABLE_MIN_CELL_WIDTH;
+        }
+
+        var minWidth = this._getWorkSpaceMinWidth(),
             $headerCells = this._$headerPanel
                 .find("tr")
                 .last()
@@ -685,9 +696,7 @@ var SchedulerWorkSpace = Widget.inherit({
         this._$dateTable.width(width);
         this._$allDayTable.width(width);
 
-        if(this.option("crossScrollingEnabled")) {
-            this._attachTableClasses();
-        }
+        this._attachHeaderTableClasses();
     },
 
     _getWorkSpaceMinWidth: function() {
@@ -722,6 +731,7 @@ var SchedulerWorkSpace = Widget.inherit({
 
         if(!this.option("crossScrollingEnabled")) {
             this._attachTableClasses();
+            this._attachHeaderTableClasses();
         }
 
         this._toggleGroupedClass();

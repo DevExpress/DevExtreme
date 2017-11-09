@@ -383,3 +383,25 @@ QUnit.test("removing subscriptions should not remove data from elementDataMap if
 
     assert.equal(eventsEngine.elementDataMap.has(div), hasData);
 });
+
+QUnit.module("strategy");
+
+QUnit.test("it should be possible to set only one method for strategy", function(assert) {
+    assert.expect(1);
+    var div = document.createElement("div");
+
+    var originalOn;
+    eventsEngine.set({
+        "on": function() {
+            originalOn = this.callBase;
+            assert.ok(true, "method was applied");
+        }
+    });
+
+    eventsEngine.on(div, "testEvent", function() {});
+    eventsEngine.off(div);
+
+    eventsEngine.set({
+        "on": originalOn
+    });
+});

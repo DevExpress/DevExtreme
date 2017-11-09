@@ -240,6 +240,8 @@ var SchedulerTimeline = SchedulerWorkSpace.inherit({
 
         this._$sidebarTable.height(height);
         this._$dateTable.height(height);
+
+        this._setGroupHeaderCellsHeight();
     },
 
     _getWorkSpaceMinHeight: function() {
