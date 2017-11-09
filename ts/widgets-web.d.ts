@@ -1435,16 +1435,16 @@ declare module DevExpress.ui {
         keyExpr?: any;
 
         /** @docid dxDataGridOptions_onContextMenuPreparing */
-        onContextMenuPreparing?: (e: Object) => void;
+        onContextMenuPreparing?: (e: any) => void;
 
         /** @docid dxDataGridOptions_onCellClick */
         onCellClick?: any;
 
         /** @docid dxDataGridOptions_onCellHoverChanged */
-        onCellHoverChanged?: (e: Object) => void;
+        onCellHoverChanged?: (e: any) => void;
 
         /** @docid dxDataGridOptions_onCellPrepared */
-        onCellPrepared?: (e: Object) => void;
+        onCellPrepared?: (e: any) => void;
 
         /** @docid dxDataGridOptions_columns */
         columns?: Array<dxDataGridColumn>;
@@ -1460,17 +1460,17 @@ declare module DevExpress.ui {
 
         /** @docid dxDataGridOptions_onEditingStart */
         onEditingStart?: (e: {
-            data: Object;
+            data: any;
             key: any;
             cancel: boolean;
             column: dxDataGridColumn
         }) => void;
 
         /** @docid dxDataGridOptions_onEditorPrepared */
-        onEditorPrepared?: (e: Object) => void;
+        onEditorPrepared?: (e: any) => void;
 
         /** @docid dxDataGridOptions_onEditorPreparing */
-        onEditorPreparing?: (e: Object) => void;
+        onEditorPreparing?: (e: any) => void;
 
         /** @docid dxDataGridOptions_editing */
         editing?: dxDataGridEditing;
@@ -1563,7 +1563,7 @@ declare module DevExpress.ui {
         onRowClick?: any;
 
         /** @docid dxDataGridOptions_onRowPrepared */
-        onRowPrepared?: (e: Object) => void;
+        onRowPrepared?: (e: any) => void;
 
         /** @docid dxDataGridOptions_rowTemplate */
         rowTemplate?: any;
@@ -1650,7 +1650,7 @@ declare module DevExpress.ui {
         }) => void;
 
         /** @docid dxDataGridOptions_onExported */
-        onExported?: (e: Object) => void;
+        onExported?: (e: any) => void;
 
         /** @docid dxDataGridOptions_stateStoring */
         stateStoring?: {
@@ -1829,16 +1829,16 @@ declare module DevExpress.ui {
         columns?: Array<dxTreeListColumn>;
 
         /** @docid dxTreeListOptions_onContextMenuPreparing */
-        onContextMenuPreparing?: (e: Object) => void;
+        onContextMenuPreparing?: (e: any) => void;
 
         /** @docid dxTreeListOptions_onCellClick */
         onCellClick?: any;
 
         /** @docid dxTreeListOptions_onCellHoverChanged */
-        onCellHoverChanged?: (e: Object) => void;
+        onCellHoverChanged?: (e: any) => void;
 
         /** @docid dxTreeListOptions_onCellPrepared */
-        onCellPrepared?: (e: Object) => void;
+        onCellPrepared?: (e: any) => void;
 
         /** @docid dxTreeListOptions_onContentReady */
         onContentReady?: Function;
@@ -1850,21 +1850,21 @@ declare module DevExpress.ui {
         onRowClick?: any;
 
         /** @docid dxTreeListOptions_onRowPrepared */
-        onRowPrepared?: (e: Object) => void;
+        onRowPrepared?: (e: any) => void;
 
         /** @docid dxTreeListOptions_onEditingStart */
         onEditingStart?: (e: {
-            data: Object;
+            data: any;
             key: any;
             cancel: boolean;
             column: dxTreeListColumn
         }) => void;
 
         /** @docid dxTreeListOptions_onEditorPrepared */
-        onEditorPrepared?: (e: Object) => void;
+        onEditorPrepared?: (e: any) => void;
 
         /** @docid dxTreeListOptions_onEditorPreparing */
-        onEditorPreparing?: (e: Object) => void;
+        onEditorPreparing?: (e: any) => void;
 
         /** @docid dxTreeListOptions_editing */
         editing?: dxTreeListEditing;
@@ -1876,7 +1876,7 @@ declare module DevExpress.ui {
         scrolling?: dxTreeListScrolling;
 
         /** @docid dxTreeListOptions_onNodesInitialized */
-        onNodesInitialized?: (e: Object) => void;
+        onNodesInitialized?: (e: any) => void;
 
         /** @docid dxTreeListOptions_remoteOperations */
         remoteOperations?: any;
@@ -1979,31 +1979,31 @@ declare module DevExpress.ui {
         dateSerializationFormat?: string;
 
         /** @docid GridBaseOptions_onInitNewRow */
-        onInitNewRow?: (e: { data: Object }) => void;
+        onInitNewRow?: (e: { data: any }) => void;
 
         /** @docid GridBaseOptions_onRowInserted */
-        onRowInserted?: (e: { data: Object; key: any }) => void;
+        onRowInserted?: (e: { data: any; key: any }) => void;
 
         /** @docid GridBaseOptions_onRowInserting */
-        onRowInserting?: (e: { data: Object; cancel: any }) => void;
+        onRowInserting?: (e: { data: any; cancel: any }) => void;
 
         /** @docid GridBaseOptions_onRowRemoved */
-        onRowRemoved?: (e: { data: Object; key: any }) => void;
+        onRowRemoved?: (e: { data: any; key: any }) => void;
 
         /** @docid GridBaseOptions_onRowRemoving */
-        onRowRemoving?: (e: { data: Object; key: any; cancel: any }) => void;
+        onRowRemoving?: (e: { data: any; key: any; cancel: any }) => void;
 
         /** @docid GridBaseOptions_onRowUpdated */
-        onRowUpdated?: (e: { data: Object; key: any }) => void;
+        onRowUpdated?: (e: { data: any; key: any }) => void;
 
         /** @docid GridBaseOptions_onRowUpdating */
-        onRowUpdating?: (e: { oldData: Object; newData: Object; key: any; cancel: any }) => void;
+        onRowUpdating?: (e: { oldData: any; newData: any; key: any; cancel: any }) => void;
 
         /** @docid GridBaseOptions_onRowValidating */
-        onRowValidating?: (e: Object) => void;
+        onRowValidating?: (e: any) => void;
 
         /** @docid GridBaseOptions_onToolbarPreparing */
-        onToolbarPreparing?: (e: Object) => void;
+        onToolbarPreparing?: (e: any) => void;
 
         /** @docid GridBaseOptions_columnChooser */
         columnChooser?: {
@@ -2129,7 +2129,7 @@ declare module DevExpress.ui {
         columnHidingEnabled?: boolean;
 
         /** @docid GridBaseOptions_onAdaptiveDetailRowPreparing */
-        onAdaptiveDetailRowPreparing?: (e: Object) => void;
+        onAdaptiveDetailRowPreparing?: (e: any) => void;
 
         /** @docid GridBaseOptions_errorRowEnabled */
         errorRowEnabled?: boolean;
@@ -2146,7 +2146,7 @@ declare module DevExpress.ui {
         }) => void;
 
         /** @docid GridBaseOptions_onKeyDown */
-        onKeyDown?: (e: Object) => void;
+        onKeyDown?: (e: any) => void;
 
         /** @docid GridBaseOptions_searchPanel */
         searchPanel?: {
@@ -2173,16 +2173,16 @@ declare module DevExpress.ui {
         };
 
         /** @docid GridBaseOptions_onRowExpanding */
-        onRowExpanding?: (e: Object) => void;
+        onRowExpanding?: (e: any) => void;
 
         /** @docid GridBaseOptions_onRowExpanded */
-        onRowExpanded?: (e: Object) => void;
+        onRowExpanded?: (e: any) => void;
 
         /** @docid GridBaseOptions_onRowCollapsing */
-        onRowCollapsing?: (e: Object) => void;
+        onRowCollapsing?: (e: any) => void;
 
         /** @docid GridBaseOptions_onRowCollapsed */
-        onRowCollapsed?: (e: Object) => void;
+        onRowCollapsed?: (e: any) => void;
     }
 
     /** @docid GridBase */
@@ -2683,7 +2683,7 @@ declare module DevExpress.ui {
         onCellPrepared?: (e: any) => void;
 
         /** @docid dxPivotGridOptions_onContextMenuPreparing */
-        onContextMenuPreparing?: (e: Object) => void;
+        onContextMenuPreparing?: (e: any) => void;
 
         /** @docid dxPivotGridOptions_export */
         export?: {
@@ -2710,7 +2710,7 @@ declare module DevExpress.ui {
         }) => void;
 
         /** @docid dxPivotGridOptions_onExported */
-        onExported?: (e: Object) => void;
+        onExported?: (e: any) => void;
 
         /** @docid dxPivotGridOptions_stateStoring */
         stateStoring?: {
@@ -2779,7 +2779,7 @@ declare module DevExpress.ui {
         onContentReady?: Function;
 
         /** @docid dxPivotGridFieldChooserOptions_onContextMenuPreparing */
-        onContextMenuPreparing?: (e: Object) => void;
+        onContextMenuPreparing?: (e: any) => void;
 
         /** @docid dxPivotGridFieldChooserOptions_texts */
         texts?: {
