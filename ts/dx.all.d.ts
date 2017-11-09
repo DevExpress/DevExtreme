@@ -608,9 +608,11 @@ declare module DevExpress {
         /** Stops all started animations. */
         stop(): void;
     }
+    /** @deprecated */
     export function requestAnimationFrame(): void;
+    /** @deprecated */
     export function cancelAnimationFrame(): void;
-    /** Use the config(config) method instead. */
+    /** @deprecated Use the config(config) method instead. */
     export var rtlEnabled: boolean;
     export interface ComponentOptions {
         /** A handler for the disposing event. Executed when the widget is removed from the DOM using the remove(), empty(), or html() jQuery methods only. */
@@ -1328,7 +1330,7 @@ declare module DevExpress.data {
         headerFilter?: { width?: number, height?: number, allowSearch?: boolean };
         /** Specifies whether the field should be treated as a Data Field. */
         isMeasure?: boolean;
-        /** Use the format.precision option instead. */
+        /** @deprecated Use the format.precision option instead. */
         precision?: number;
         /** Specifies whether to summarize each next summary value with the previous one by rows or columns. */
         runningTotal?: string;
@@ -1384,6 +1386,7 @@ declare module DevExpress.framework {
         disabled?: boolean;
         /** Specifies the name of the icon shown inside the widget associated with this command. */
         icon?: string;
+        /** @deprecated */
         iconSrc?: any;
         /** The identifier of the command. */
         id?: string;
@@ -1500,7 +1503,7 @@ declare module DevExpress.framework {
         animation?: string;
         /** Specifies the name of the dxTransition component instance. */
         name?: string;
-        /** Use the animation option instead. */
+        /** @deprecated Use the animation option instead. */
         type?: string;
     }
     /** A markup component used to configure transitions for content that changes in a layout. */
@@ -1514,7 +1517,7 @@ declare module DevExpress.framework {
         contentCssPosition?: string;
         /** Specifies the content placeholder name. */
         name?: string;
-        /** Use the animation option instead. */
+        /** @deprecated Use the animation option instead. */
         transition?: string;
     }
     /** A markup component used to define markup options for a content placeholder. */
@@ -1653,7 +1656,7 @@ declare module DevExpress.ui {
     export interface dxAccordionItemTemplate {
         /** Specifies the name of the icon displayed by the widget item title. */
         icon?: string;
-        /** Use the icon field instead. */
+        /** @deprecated Use the icon field instead. */
         iconSrc?: string;
         /** Specifies text displayed for the widget item title. */
         title?: string;
@@ -1696,7 +1699,7 @@ declare module DevExpress.ui {
         type?: string;
     }
     export interface dxAutocompleteOptions extends dxDropDownListOptions {
-        /** Specifies the name of the data source item field whose value is displayed by the widget. */
+        /** @deprecated */
         displayExpr?: any;
         /** Specifies the maximum count of items displayed by the widget. */
         maxItemCount?: number;
@@ -1740,6 +1743,7 @@ declare module DevExpress.ui {
         hoverStateEnabled?: boolean;
         /** Specifies the icon to be displayed on the button. */
         icon?: string;
+        /** @deprecated */
         iconSrc?: any;
         /** A handler for the click event. */
         onClick?: ((e: { component?: DOMComponent, element?: DevExpress.core.dxElement, model?: any, jQueryEvent?: JQueryEventObject, event?: event, validationGroup?: any }) => any) | string;
@@ -2340,16 +2344,20 @@ declare module DevExpress.ui {
         groupCellTemplate?: template;
         /** Specifies the index of a column when grid records are grouped by the values of this column. */
         groupIndex?: number;
-        /** Use the format.precision option instead. */
+        /** @deprecated Use the format.precision option instead. */
         precision?: number;
         /** Specifies whether or not to display the column when grid records are grouped by it. */
         showWhenGrouped?: boolean;
     }
     /** Configures editing. */
     export interface dxDataGridEditing extends GridBaseEditing {
+        /** @deprecated */
         editEnabled?: any;
+        /** @deprecated */
         editMode?: any;
+        /** @deprecated */
         insertEnabled?: any;
+        /** @deprecated */
         removeEnabled?: any;
         /** Contains options that specify texts for editing-related UI elements. */
         texts?: any;
@@ -2400,7 +2408,7 @@ declare module DevExpress.ui {
         getVisibleColumns(headerLevel: number): Array<dxDataGridColumn>;
         /** Gets currently rendered rows. */
         getVisibleRows(): Array<dxDataGridRowObject>;
-        /** Use the addRow() method instead. */
+        /** @deprecated Use the addRow() method instead. */
         insertRow(): void;
         /** Checks whether a specific group or master row is expanded or collapsed. */
         isRowExpanded(key: any): boolean;
@@ -2418,7 +2426,7 @@ declare module DevExpress.ui {
         pageSize(): number;
         /** Sets the page size. */
         pageSize(value: number): void;
-        /** Use the deleteRow(rowIndex) method instead. */
+        /** @deprecated Use the deleteRow(rowIndex) method instead. */
         removeRow(rowIndex: number): void;
         /** Returns the current state of the grid. */
         state(): any;
@@ -2442,7 +2450,9 @@ declare module DevExpress.ui {
         disabledDates?: Array<Date> | ((data: { component?: dxDateBox, date?: Date, view?: string }) => boolean);
         /** Specifies the date display format. Ignored if the pickerType option is 'native' */
         displayFormat?: format;
+        /** @deprecated */
         format?: any;
+        /** @deprecated */
         formatString?: any;
         /** Specifies the interval between neighboring values in the popup list in minutes. */
         interval?: number;
@@ -2464,9 +2474,9 @@ declare module DevExpress.ui {
         placeholder?: string;
         /** A format used to display date/time information. */
         type?: string;
-        /** Use the pickerType option instead. */
+        /** @deprecated Use the pickerType option instead. */
         useCalendar?: boolean;
-        /** Use the pickerType option instead. */
+        /** @deprecated Use the pickerType option instead. */
         useNative?: boolean;
         /** An object or a value specifying the date and time currently selected using the date box. */
         value?: Date | number | string;
@@ -2521,6 +2531,7 @@ declare module DevExpress.ui {
         activeStateEnabled?: boolean;
         /** The name of the icon to be displayed by the DropDownMenu button. */
         buttonIcon?: string;
+        /** @deprecated */
         buttonIconSrc?: any;
         /** The text displayed in the DropDownMenu button. */
         buttonText?: string;
@@ -2561,6 +2572,7 @@ declare module DevExpress.ui {
         accept?: string;
         /** Specifies if an end user can remove a file from the selection and interrupt uploading. */
         allowCanceling?: boolean;
+        /** @deprecated */
         buttonText?: any;
         /** Specifies whether the widget can be focused using keyboard navigation. */
         focusStateEnabled?: boolean;
@@ -2606,6 +2618,7 @@ declare module DevExpress.ui {
         uploadUrl?: string;
         /** Specifies a File instance representing the selected file. Read-only when uploadMode is "useForm". */
         value?: Array<File>;
+        /** @deprecated */
         values?: any;
     }
     /** The FileUploader widget enables an end user to upload files to the server. An end user can select files in the file explorer or drag and drop files to the FileUploader area on the page. */
@@ -2759,6 +2772,7 @@ declare module DevExpress.ui {
         allowItemDeleting?: boolean;
         /** Specifies whether or not an end user can reorder list items. */
         allowItemReordering?: boolean;
+        /** @deprecated */
         autoPagingEnabled?: any;
         /** A Boolean value specifying whether to enable or disable the bounce-back effect. */
         bounceEnabled?: boolean;
@@ -2828,6 +2842,7 @@ declare module DevExpress.ui {
         selectAllMode?: string;
         /** Specifies item selection mode. */
         selectionMode?: string;
+        /** @deprecated */
         showNextButton?: any;
         /** Specifies when the widget shows the scrollbar. */
         showScrollbar?: string;
@@ -2945,7 +2960,7 @@ declare module DevExpress.ui {
         clearButtonText?: string;
         /** A Boolean value specifying whether or not a widget is closed if a user clicks outside of the overlaying window. */
         closeOnOutsideClick?: boolean | (() => boolean);
-        /** This option is deprecated, because the functionality controlled by it was not supposed to belong to the Lookup widget. Instead, we suggest that you use the SelectBox widget with the acceptCustomValue option set to true. */
+        /** @deprecated This option is deprecated, because the functionality controlled by it was not supposed to belong to the Lookup widget. Instead, we suggest that you use the SelectBox widget with the acceptCustomValue option set to true. */
         fieldEditEnabled?: any;
         /** The template to be used for rendering the widget text field. */
         fieldTemplate?: template;
@@ -2973,7 +2988,7 @@ declare module DevExpress.ui {
         pageLoadingText?: string;
         /** Specifies whether the next page is loaded when a user scrolls the widget to the bottom or when the "next" button is clicked. */
         pageLoadMode?: string;
-        /** Use the DataSource paging opportunities instead. */
+        /** @deprecated */
         pagingEnabled?: any;
         /** The text displayed by the widget when nothing is selected. */
         placeholder?: string;
@@ -3001,7 +3016,7 @@ declare module DevExpress.ui {
         showCancelButton?: boolean;
         /** Specifies whether or not to display the Clear button in the lookup window. */
         showClearButton?: boolean;
-        /** Use the pageLoadMode option instead. */
+        /** @deprecated Use the pageLoadMode option instead. */
         showNextButton?: boolean;
         /** A Boolean value specifying whether or not to display the title in the popup window. */
         showPopupTitle?: boolean;
@@ -3327,6 +3342,7 @@ declare module DevExpress.ui {
         stateStoring?: { enabled?: boolean, storageKey?: string, type?: string, customLoad?: (() => Promise<any> | JQueryPromise<any>), customSave?: ((state: any) => any), savingTimeout?: number };
         /** Strings that can be changed or localized in the PivotGrid widget. */
         texts?: { grandTotal?: string, total?: string, noData?: string, showFieldChooser?: string, expandAll?: string, collapseAll?: string, sortColumnBySummary?: string, sortRowBySummary?: string, removeAllSorting?: string, exportToExcel?: string, dataNotAvailable?: string };
+        /** @deprecated */
         useNativeScrolling?: string | boolean;
         /** Specifies whether long text in header items should be wrapped. */
         wordWrapEnabled?: boolean;
@@ -3414,7 +3430,7 @@ declare module DevExpress.ui {
     export interface dxPopupOptions extends dxOverlayOptions {
         /** Configures widget visibility animations. This object contains two fields: show and hide. */
         animation?: any;
-        /** Use the toolbarItems option instead. */
+        /** @deprecated Use the toolbarItems option instead. */
         buttons?: Array<any>;
         /** Specifies whether or not to allow a user to drag the popup window. */
         dragEnabled?: boolean;
@@ -3604,7 +3620,7 @@ declare module DevExpress.ui {
         dateSerializationFormat?: string;
         /** Specifies the name of the data source item field whose value holds the description of the corresponding appointment. */
         descriptionExpr?: string;
-        /** The template to be used for rendering appointments in the appointment collector's drop-down menu. */
+        /** The template to be used for rendering appointments in the appointment collector's drop-down list. */
         dropDownAppointmentTemplate?: template;
         /** Specifies which editing operations an end-user can perform on appointments. */
         editing?: boolean | { allowAdding?: boolean, allowUpdating?: boolean, allowDeleting?: boolean, allowResizing?: boolean, allowDragging?: boolean };
@@ -3620,7 +3636,9 @@ declare module DevExpress.ui {
         focusStateEnabled?: boolean;
         /** Specifies the resource kinds by which the scheduler's appointments are grouped in a timetable. */
         groups?: Array<string>;
+        /** @deprecated */
         horizontalScrollingEnabled?: any;
+        indicatorUpdateInterval?: number;
         /** The latest date the widget allows you to select. */
         max?: Date | number | string;
         /** Specifies the limit of full-sized appointments displayed per cell. In the "day", "week" and "workweek" views, this option applies only to all-day appointments. */
@@ -3881,7 +3899,7 @@ declare module DevExpress.ui {
         badge?: string;
         /** Specifies the name of the icon displayed by the widget item. */
         icon?: string;
-        /** Use the icon field instead. */
+        /** @deprecated Use the icon field instead. */
         iconSrc?: string;
     }
     export interface dxTabPanelOptions extends dxMultiViewOptions {
@@ -3918,7 +3936,7 @@ declare module DevExpress.ui {
         badge?: string;
         /** Specifies the name of the icon displayed by the widget item title. */
         icon?: string;
-        /** Use the icon field instead. */
+        /** @deprecated Use the icon field instead. */
         iconSrc?: string;
         /** Specifies a template that should be used to render the tab for this item only. */
         tabTemplate?: template;
@@ -3950,6 +3968,7 @@ declare module DevExpress.ui {
         tagTemplate?: template;
         /** Specifies the selected items. */
         value?: Array<string | number | any>;
+        /** @deprecated */
         values?: any;
     }
     /** The TagBox widget is an editor that allows an end user to select multiple items from a drop-down list. */
@@ -4244,7 +4263,7 @@ declare module DevExpress.ui {
         onItemHold?: ((e: { component?: DOMComponent, element?: DevExpress.core.dxElement, model?: any, node?: dxTreeViewNode }) => any);
         /** A handler for the itemRendered event. */
         onItemRendered?: ((e: { component?: DOMComponent, element?: DevExpress.core.dxElement, model?: any, node?: dxTreeViewNode }) => any);
-        /** Use the itemSelectionChanged event instead. */
+        /** @deprecated Use the itemSelectionChanged event instead. */
         onItemSelected?: ((e: { component?: DOMComponent, element?: DevExpress.core.dxElement, model?: any, node?: dxTreeViewNode }) => any);
         /** A handler for the itemSelectionChanged event. */
         onItemSelectionChanged?: ((e: { component?: DOMComponent, element?: DevExpress.core.dxElement, model?: any, node?: dxTreeViewNode }) => any);
@@ -4256,7 +4275,7 @@ declare module DevExpress.ui {
         rootValue?: any;
         /** A string value specifying available scrolling directions. */
         scrollDirection?: string;
-        /** Use the showCheckBoxesMode options instead. */
+        /** @deprecated Use the showCheckBoxesMode options instead. */
         selectAllEnabled?: boolean;
         /** Specifies the text displayed at the "Select All" check box. */
         selectAllText?: string;
@@ -4266,7 +4285,7 @@ declare module DevExpress.ui {
         selectionMode?: string;
         /** Specifies whether or not to select nodes recursively. */
         selectNodesRecursive?: boolean;
-        /** Use the showCheckBoxesMode options instead. */
+        /** @deprecated Use the showCheckBoxesMode options instead. */
         showCheckBoxes?: boolean;
         /** Specifies the current check boxes display mode. */
         showCheckBoxesMode?: string;
@@ -4507,7 +4526,7 @@ declare module DevExpress.ui {
         items?: Array<dxMenuBaseItemTemplate>;
         /** Specifies whether or not an item becomes selected if a user clicks it. */
         selectByClick?: boolean;
-        /** Use the selectByClick option instead. */
+        /** @deprecated Use the selectByClick option instead. */
         selectionByClick?: boolean;
         /** Specifies the selection mode supported by the menu. */
         selectionMode?: string;
@@ -4531,7 +4550,7 @@ declare module DevExpress.ui {
         disabled?: boolean;
         /** The name of an icon to be displayed on the menu item. */
         icon?: string;
-        /** Use the icon field instead. */
+        /** @deprecated Use the icon field instead. */
         iconSrc?: string;
         /** Holds an array of menu items. */
         items?: Array<dxMenuBaseItemTemplate>;
@@ -4555,6 +4574,7 @@ declare module DevExpress.ui {
         deferRendering?: boolean;
         /** Specifies a custom template for the drop-down button. */
         dropDownButtonTemplate?: template;
+        /** @deprecated */
         fieldEditEnabled?: any;
         /** A handler for the closed event. */
         onClosed?: ((e: { component?: DOMComponent, element?: DevExpress.core.dxElement, model?: any }) => any);
@@ -4599,7 +4619,7 @@ declare module DevExpress.ui {
         onSelectionChanged?: ((e: { component?: DOMComponent, element?: DevExpress.core.dxElement, model?: any, selectedItem?: any }) => any);
         /** A handler for the valueChanged event. */
         onValueChanged?: ((e: { component?: DOMComponent, element?: DevExpress.core.dxElement, model?: any, value?: any, previousValue?: any, jQueryEvent?: JQueryEventObject, event?: event }) => any);
-        /** Use the DataSource paging opportunities instead. */
+        /** @deprecated Use the DataSource paging opportunities instead. */
         pagingEnabled?: boolean;
         /** Specifies whether or not the widget supports searching. */
         searchEnabled?: boolean;
@@ -5007,7 +5027,7 @@ declare module DevExpress.ui {
         /** Returns the width of the scrollable content in pixels. */
         scrollWidth(): number;
         /** Updates the dimensions of the scrollable contents. */
-        update(): void;
+        update(): Promise<void> & JQueryPromise<void>;
     }
     export interface dxSliderBaseOptions extends dxTrackBarOptions {
         /** Specifies whether or not the widget changes its state when interacting with a user. */
@@ -5034,6 +5054,7 @@ declare module DevExpress.ui {
         constructor(element: JQuery, options?: dxSliderBaseOptions)
     }
     export interface dxTextEditorOptions extends EditorOptions {
+        /** @deprecated */
         attr?: any;
         /** Specifies whether the widget can be focused using keyboard navigation. */
         focusStateEnabled?: boolean;
@@ -5122,7 +5143,7 @@ declare module DevExpress.ui {
         hasItems?: boolean;
         /** The name of an icon to be displayed on the tree view item. */
         icon?: string;
-        /** Use the icon field instead. */
+        /** @deprecated Use the icon field instead. */
         iconSrc?: string;
         /** Holds an array of tree view items. */
         items?: Array<any>;
@@ -5342,7 +5363,7 @@ declare module DevExpress.viz {
         paddingLeftRight?: number;
         /** Generates an empty space, measured in pixels, between a tooltip's top/bottom border and its text. */
         paddingTopBottom?: number;
-        /** Use the tooltip.format.precision option instead. */
+        /** @deprecated Use the tooltip.format.precision option instead. */
         precision?: number;
         /** Configures a tooltip's shadow. */
         shadow?: { opacity?: number, color?: string, offsetX?: number, offsetY?: number, blur?: number };
@@ -5407,7 +5428,7 @@ declare module DevExpress.viz {
     export class dxPieChart extends BaseChart {
         constructor(element: Element, options?: DevExpress.viz.charts.dxPieChartOptions)
         constructor(element: JQuery, options?: DevExpress.viz.charts.dxPieChartOptions)
-        /** Use the getAllSeries() method instead. */
+        /** @deprecated Use the getAllSeries() method instead. */
         getSeries(): pieChartSeriesObject;
         /** Gets a series within the chart's series collection by the specified name (see the name option). */
         getSeriesByName(seriesName: any): chartSeriesObject;
@@ -5700,7 +5721,7 @@ declare module DevExpress.viz {
         alignment?: string;
         /** Formats the point argument before it will be displayed in the point label. */
         argumentFormat?: DevExpress.ui.format;
-        /** Use the series.label.argumentFormat.precision instead. */
+        /** @deprecated Use the series.label.argumentFormat.precision instead. */
         argumentPrecision?: number;
         /** Colors the background of point labels. By default, point labels inherit the color from their points. */
         backgroundColor?: string;
@@ -5716,11 +5737,11 @@ declare module DevExpress.viz {
         format?: DevExpress.ui.format;
         /** Along with verticalOffset, shifts point labels from their initial positions. */
         horizontalOffset?: number;
-        /** Use the series.label.format.percentPrecision instead. */
+        /** @deprecated Use the series.label.format.percentPrecision instead. */
         percentPrecision?: number;
         /** Specifies whether to display point labels inside or outside of series points. Applies only to bubble, range-like and bar-like series. */
         position?: string;
-        /** Use the series.label.format.precision option instead. */
+        /** @deprecated Use the series.label.format.precision option instead. */
         precision?: number;
         /** Rotates point labels. */
         rotationAngle?: number;
@@ -6151,7 +6172,7 @@ declare module DevExpress.viz {
         /** Specifies a div container that holds the widget to be exported. */
         sourceContainer?: string;
     }
-    /** [note]This widget is deprecated. Instead of it, use the built-in client-side exporting. For further information, refer to the export option of a particular widget. */
+    /** @deprecated [note]This widget is deprecated. Instead of it, use the built-in client-side exporting. For further information, refer to the export option of a particular widget. */
     export class dxExporter extends Component {
         constructor(options?: dxExporterOptions)
         /** Exports a DevExtreme data visualization widget into a file with a specified name and format. */
@@ -6218,7 +6239,7 @@ declare module DevExpress.viz {
         format?: DevExpress.ui.format;
         /** Specifies the range bar's label indent in pixels. */
         indent?: number;
-        /** Use the text.format.precision option instead. */
+        /** @deprecated Use the text.format.precision option instead. */
         precision?: number;
     }
     /** A base object for gauge value and subvalue indicators. Includes the options of indicators of all types. */
@@ -6576,40 +6597,40 @@ declare module DevExpress.viz {
         /** Sets the selection state of the layer element. */
         selected(state: boolean): void;
     }
-    /** Use the Layer Element instead. */
+    /** @deprecated Use the Layer Element instead. */
     export class areaObjects {
-        /** Use the Layer.type instead. */
+        /** @deprecated Use the Layer.type instead. */
         type: string;
-        /** Use the Layer Element.applySettings(settings) method instead. */
+        /** @deprecated Use the Layer Element.applySettings(settings) method instead. */
         applySettings(settings: any): void;
-        /** Use the Layer Element.attribute(name, value) method instead. */
+        /** @deprecated Use the Layer Element.attribute(name, value) method instead. */
         attribute(name: string): any & Array<any> & number & string & boolean;
-        /** Use the Layer Element.selected() method instead. */
+        /** @deprecated Use the Layer Element.selected() method instead. */
         selected(): boolean;
-        /** Use the Layer Element.selected(state) method instead. */
+        /** @deprecated Use the Layer Element.selected(state) method instead. */
         selected(state: boolean): void;
     }
-    /** Use the Layer Element instead. */
+    /** @deprecated Use the Layer Element instead. */
     export class markerObjects {
-        /** Use the Layer.type instead. */
+        /** @deprecated Use the Layer.type instead. */
         type: string;
-        /** Get the text using the Layer Element.attribute(name) method. The name parameter value for text is set at the dataField option. */
+        /** @deprecated Get the text using the Layer Element.attribute(name) method. The name parameter value for text is set at the dataField option. */
         text: string;
-        /** Get the bubble value using the Layer Element.attribute(name) method. The name parameter for the bubble value is set at the dataField option. */
+        /** @deprecated Get the bubble value using the Layer Element.attribute(name) method. The name parameter for the bubble value is set at the dataField option. */
         value: number;
-        /** Get the pie values using the Layer Element.attribute(name) method. The name parameter for pie values is set at the dataField option. */
+        /** @deprecated Get the pie values using the Layer Element.attribute(name) method. The name parameter for pie values is set at the dataField option. */
         values: Array<number>;
-        /** Get the image URL using the Layer Element.attribute(name) method. The name parameter value for the image URL is set at the dataField option. */
+        /** @deprecated Get the image URL using the Layer Element.attribute(name) method. The name parameter value for the image URL is set at the dataField option. */
         url: string;
-        /** Use the Layer Element.applySettings(settings) method instead. */
+        /** @deprecated Use the Layer Element.applySettings(settings) method instead. */
         applySettings(settings: any): void;
-        /** Use the Layer Element.attribute(name, value) method instead. */
+        /** @deprecated Use the Layer Element.attribute(name, value) method instead. */
         attribute(name: string): any & Array<any> & number & string & boolean;
-        /** Use the Layer Element.coordinates() method instead. */
+        /** @deprecated Use the Layer Element.coordinates() method instead. */
         coordinates(): Array<number>;
-        /** Use the Layer Element.selected() method instead. */
+        /** @deprecated Use the Layer Element.selected() method instead. */
         selected(): boolean;
-        /** Use the Layer Element.selected(state) method instead. */
+        /** @deprecated Use the Layer Element.selected(state) method instead. */
         selected(state: boolean): void;
     }
     export interface dxPieChartSeriesTypes {
@@ -6634,7 +6655,7 @@ declare module DevExpress.viz {
         hoverMode?: string;
         /** An object defining configuration options for a hovered series. */
         hoverStyle?: { color?: string, hatching?: any, border?: any };
-        /** Use the innerRadius option instead. */
+        /** @deprecated Use the innerRadius option instead. */
         innerRadius?: number;
         /** An object defining the label configuration options. */
         label?: { customizeText?: ((pointInfo: any) => string), visible?: boolean, rotationAngle?: number, radialOffset?: number, format?: DevExpress.ui.format, precision?: number, argumentFormat?: DevExpress.ui.format, argumentPrecision?: number, percentPrecision?: number, position?: string, backgroundColor?: string, border?: any, connector?: any, font?: Font };
@@ -6642,7 +6663,7 @@ declare module DevExpress.viz {
         maxLabelCount?: number;
         /** Specifies a minimal size of a displayed pie segment. */
         minSegmentSize?: number;
-        /** Use the segmentsDirection option instead. */
+        /** @deprecated Use the segmentsDirection option instead. */
         segmentsDirection?: string;
         /** Specifies the chart elements to highlight when the series is selected. */
         selectionMode?: string;
@@ -6650,7 +6671,7 @@ declare module DevExpress.viz {
         selectionStyle?: { color?: string, hatching?: any, border?: any };
         /** Specifies chart segment grouping options. */
         smallValuesGrouping?: { mode?: string, topCount?: number, threshold?: number, groupName?: string };
-        /** Use the startAngle option instead. */
+        /** @deprecated Use the startAngle option instead. */
         startAngle?: number;
         /** Specifies the name of the data source field that provides data about a point. */
         tagField?: string;
@@ -6743,7 +6764,7 @@ declare module DevExpress.viz {
     export interface dxPolarChartSeriesTypesCommonPolarChartSeriesLabel {
         /** Specifies a format for arguments displayed by point labels. */
         argumentFormat?: DevExpress.ui.format;
-        /** Use the series.label.argumentFormat.precision instead. */
+        /** @deprecated Use the series.label.argumentFormat.precision instead. */
         argumentPrecision?: number;
         /** Specifies a background color for point labels. */
         backgroundColor?: string;
@@ -6759,7 +6780,7 @@ declare module DevExpress.viz {
         format?: DevExpress.ui.format;
         /** Specifies a label position in bar-like series. */
         position?: string;
-        /** Use the series.label.format.precision option instead. */
+        /** @deprecated Use the series.label.format.precision option instead. */
         precision?: number;
         /** Specifies the angle used to rotate point labels from their initial position. */
         rotationAngle?: number;
@@ -6818,7 +6839,7 @@ declare module DevExpress.viz {
         constructor(element: JQuery, options?: DevExpress.viz.rangeSelector.dxRangeSelectorOptions)
         /** Returns the DataSource instance. */
         getDataSource(): DevExpress.data.DataSource;
-        /** Use the getValue() method instead. */
+        /** @deprecated Use the getValue() method instead. */
         getSelectedRange(): any;
         /** Gets the currently selected range. */
         getValue(): Array<number | string | Date>;
@@ -6826,7 +6847,7 @@ declare module DevExpress.viz {
         render(): void;
         /** Redraws a widget. */
         render(skipChartAnimation: boolean): void;
-        /** Use the setValue(value) method instead. */
+        /** @deprecated Use the setValue(value) method instead. */
         setSelectedRange(selectedRange: { startValue?: Date | number | string, endValue?: Date | number | string }): void;
         /** Selects a specific range. */
         setValue(value: Array<number | string | Date>): void;
@@ -6875,15 +6896,15 @@ declare module DevExpress.viz {
         center(): Array<number>;
         /** Sets the coordinates of the map center. */
         center(centerCoordinates: Array<number>): void;
-        /** Use the layer's clearSelection() method instead. */
+        /** @deprecated Use the layer's clearSelection() method instead. */
         clearAreaSelection(): void;
-        /** Use the layer's clearSelection() method instead. */
+        /** @deprecated Use the layer's clearSelection() method instead. */
         clearMarkerSelection(): void;
         /** Deselects all the selected area and markers on a map at once. The areas and markers are displayed in their initial style after. */
         clearSelection(): void;
         /** Converts client area coordinates into map coordinates. */
         convertCoordinates(x: number, y: number): Array<number>;
-        /** Use the layer's getElements() method instead. */
+        /** @deprecated Use the layer's getElements() method instead. */
         getAreas(): Array<areaObjects>;
         /** Gets the layer by its index. */
         getLayerByIndex(index: number): MapLayer;
@@ -6891,7 +6912,7 @@ declare module DevExpress.viz {
         getLayerByName(name: string): MapLayer;
         /** Gets all map layers. */
         getLayers(): Array<MapLayer>;
-        /** Use the layer's getElements() method instead. */
+        /** @deprecated Use the layer's getElements() method instead. */
         getMarkers(): Array<markerObjects>;
         /** Gets the current coordinates of the map viewport. */
         viewport(): Array<number>;
@@ -6915,19 +6936,19 @@ declare module DevExpress.viz {
         /** Specifies a font weight. */
         weight?: number;
     }
-    /** Use the DevExpress.viz namespace instead of DevExpress.core.viz. */
+    /** @deprecated Use the DevExpress.viz namespace instead of DevExpress.core.viz. */
     export class core {
-        /** Use the DevExpress.viz.currentPalette(paletteName) method instead. */
+        /** @deprecated Use the DevExpress.viz.currentPalette(paletteName) method instead. */
         static currentPalette(paletteName: string): void;
-        /** Use the DevExpress.viz.currentTheme(platform, colorScheme) method instead. */
+        /** @deprecated Use the DevExpress.viz.currentTheme(platform, colorScheme) method instead. */
         static currentTheme(platform: string, colorScheme: string): void;
-        /** Use the DevExpress.viz.currentTheme(theme) method instead. */
+        /** @deprecated Use the DevExpress.viz.currentTheme(theme) method instead. */
         static currentTheme(theme: string): void;
-        /** Use the DevExpress.viz.getPalette(paletteName) method instead. */
+        /** @deprecated Use the DevExpress.viz.getPalette(paletteName) method instead. */
         static getPalette(paletteName: string): any;
-        /** Use the DevExpress.viz.registerPalette(paletteName, palette) method instead. */
+        /** @deprecated Use the DevExpress.viz.registerPalette(paletteName, palette) method instead. */
         static registerPalette(paletteName: string, palette: any): void;
-        /** Use the DevExpress.viz.registerTheme(customTheme, baseTheme) method instead. */
+        /** @deprecated Use the DevExpress.viz.registerTheme(customTheme, baseTheme) method instead. */
         static registerTheme(customTheme: any, baseTheme: string): void;
     }
 }
@@ -7128,7 +7149,7 @@ declare module DevExpress.viz.charts {
         customizeText?: ((argument: { value?: Date | number | string, valueText?: string }) => string);
         /** Specifies the format of the arguments displayed by axis labels. */
         format?: DevExpress.ui.format;
-        /** Use the argumentAxis.label.format.precision option instead. */
+        /** @deprecated Use the argumentAxis.label.format.precision option instead. */
         precision?: number;
     }
     /** Declares a collection of strips belonging to the argument axis. */
@@ -7184,7 +7205,7 @@ declare module DevExpress.viz.charts {
         opacity?: number;
         /** Reserves a pixel-measured space for the axis. */
         placeholderSize?: number;
-        /** This functionality is deprecated as redundant. */
+        /** @deprecated This functionality is deprecated as redundant. */
         setTicksAtUnitBeginning?: boolean;
         /** Configures the appearance of strips. */
         stripStyle?: dxChartCommonAxisSettingsStripStyle;
@@ -7446,7 +7467,7 @@ declare module DevExpress.viz.charts {
         customizeText?: ((axisValue: { value?: Date | number | string, valueText?: string }) => string);
         /** Specifies the format of the values displayed by axis labels. */
         format?: DevExpress.ui.format;
-        /** Use the valueAxis.label.format.precision option instead. */
+        /** @deprecated Use the valueAxis.label.format.precision option instead. */
         precision?: number;
     }
     /** Declares a collection of strips belonging to the value axis. */
@@ -7509,7 +7530,7 @@ declare module DevExpress.viz.charts {
     }
     /** An object defining the configuration options that are common for all series of the PieChart widget. */
     export interface dxPieChartCommonSeriesSettings extends dxPieChartSeriesTypesCommonPieChartSeries {
-        /** Use the type option instead. */
+        /** @deprecated Use the type option instead. */
         type?: string;
     }
     /** Specifies PieChart legend options. */
@@ -7527,7 +7548,7 @@ declare module DevExpress.viz.charts {
         name?: string;
         /** Specifies data about a series. */
         tag?: any;
-        /** Use the type option instead. */
+        /** @deprecated Use the type option instead. */
         type?: string;
     }
     export interface dxPolarChartOptions extends BaseChartOptions {
@@ -7638,7 +7659,7 @@ declare module DevExpress.viz.charts {
         customizeText?: ((argument: { value?: Date | number | string, valueText?: string }) => string);
         /** Specifies a format for the text displayed by axis labels. */
         format?: DevExpress.ui.format;
-        /** Use the argumentAxis.label.format.precision option instead. */
+        /** @deprecated Use the argumentAxis.label.format.precision option instead. */
         precision?: number;
     }
     /** Specifies options for argument axis strips. */
@@ -7681,7 +7702,7 @@ declare module DevExpress.viz.charts {
         minorTick?: { visible?: boolean, color?: string, opacity?: number, width?: number, length?: number };
         /** Specifies the opacity of the line that represents an axis. */
         opacity?: number;
-        /** This functionality is deprecated as redundant. */
+        /** @deprecated This functionality is deprecated as redundant. */
         setTicksAtUnitBeginning?: boolean;
         /** An object defining configuration options for strip style. */
         stripStyle?: dxPolarChartCommonAxisSettingsStripStyle;
@@ -7837,7 +7858,7 @@ declare module DevExpress.viz.charts {
         customizeText?: ((axisValue: { value?: Date | number | string, valueText?: string }) => string);
         /** Specifies a format for the text displayed by axis labels. */
         format?: DevExpress.ui.format;
-        /** Use the valueAxis.label.format.precision option instead. */
+        /** @deprecated Use the valueAxis.label.format.precision option instead. */
         precision?: number;
     }
     /** Specifies options for value axis strips. */
@@ -7945,11 +7966,11 @@ declare module DevExpress.viz.charts {
     interface BaseChartTooltip extends BaseWidgetTooltip {
         /** Specifies a format for arguments of the chart's series points. */
         argumentFormat?: DevExpress.ui.format;
-        /** Use the tooltip.argumentFormat.precision option instead. */
+        /** @deprecated Use the tooltip.argumentFormat.precision option instead. */
         argumentPrecision?: number;
         /** Allows you to change tooltip appearance. */
         customizeTooltip?: ((pointInfo: any) => any);
-        /** Use the tooltip.format.percentPrecision option instead. */
+        /** @deprecated Use the tooltip.format.percentPrecision option instead. */
         percentPrecision?: number;
     }
 }
@@ -8018,7 +8039,7 @@ declare module DevExpress.viz.gauges {
         rangeContainer?: BaseGaugeRangeContainer;
         /** Specifies options of the gauge's scale. */
         scale?: BaseGaugeScale;
-        /** Use the title.subtitle option instead. */
+        /** @deprecated Use the title.subtitle option instead. */
         subtitle?: BaseGaugeSubtitle | string;
         /** Specifies a set of subvalues to be designated by the subvalue indicators. */
         subvalues?: Array<number>;
@@ -8059,17 +8080,17 @@ declare module DevExpress.viz.gauges {
         customTicks?: Array<number>;
         /** Specifies the end value for the scale of the gauge. */
         endValue?: number;
-        /** Use the scale.label.overlappingBehavior.hideFirstOrLast option instead. */
+        /** @deprecated Use the scale.label.overlappingBehavior.hideFirstOrLast option instead. */
         hideFirstLabel?: boolean;
-        /** Use the scale.label.overlappingBehavior.hideFirstOrLast option instead. */
+        /** @deprecated Use the scale.label.overlappingBehavior.hideFirstOrLast option instead. */
         hideFirstTick?: boolean;
-        /** Use the scale.label.overlappingBehavior.hideFirstOrLast option instead. */
+        /** @deprecated Use the scale.label.overlappingBehavior.hideFirstOrLast option instead. */
         hideLastLabel?: boolean;
-        /** Use the scale.label.overlappingBehavior.hideFirstOrLast option instead. */
+        /** @deprecated Use the scale.label.overlappingBehavior.hideFirstOrLast option instead. */
         hideLastTick?: boolean;
         /** Specifies common options for scale labels. */
         label?: BaseGaugeScaleLabel;
-        /** Use the tick option instead. */
+        /** @deprecated Use the tick option instead. */
         majorTick?: { color?: string, length?: number, width?: number, customTickValues?: Array<number>, useTicksAutoArrangement?: boolean, tickInterval?: number, showCalculatedTicks?: boolean, visible?: boolean };
         /** Specifies options of the gauge's minor ticks. */
         minorTick?: { color?: string, opacity?: number, length?: number, width?: number, visible?: boolean, showCalculatedTicks?: boolean, customTickValues?: Array<number>, tickInterval?: number };
@@ -8092,7 +8113,7 @@ declare module DevExpress.viz.gauges {
         format?: DevExpress.ui.format;
         /** Decides how to arrange scale labels when there is not enough space to keep all of them. */
         overlappingBehavior?: string | BaseGaugeScaleLabelOverlappingBehavior;
-        /** Use the scale.label.format.precision option instead. */
+        /** @deprecated Use the scale.label.format.precision option instead. */
         precision?: number;
         /** Specifies whether or not scale labels should be colored similarly to their corresponding ranges in the range container. */
         useRangeColors?: boolean;
@@ -8101,19 +8122,19 @@ declare module DevExpress.viz.gauges {
     }
     /** Decides how to arrange scale labels when there is not enough space to keep all of them. */
     interface BaseGaugeScaleLabelOverlappingBehavior {
-        /** Instead, use the overlappingBehavior option directly. */
+        /** @deprecated Instead, use the overlappingBehavior option directly. */
         useAutoArrangement?: boolean;
     }
-    /** Use the title.subtitle option instead. */
+    /** @deprecated Use the title.subtitle option instead. */
     interface BaseGaugeSubtitle {
-        /** Use the title.subtitle.font option instead. */
+        /** @deprecated */
         font?: Font;
-        /** Use the title.subtitle.text option instead. */
+        /** @deprecated Use the title.subtitle.text option instead. */
         text?: string;
     }
     /** Configures the widget's title. */
     interface BaseGaugeTitle extends BaseWidgetTitle {
-        /** Use the horizontalAlignment and verticalAlignment options instead. */
+        /** @deprecated Use the horizontalAlignment and verticalAlignment options instead. */
         position?: string;
     }
     /** Configures tooltips. */
@@ -8158,7 +8179,7 @@ declare module DevExpress.viz.gauges {
     }
     /** Decides how to arrange scale labels when there is not enough space to keep all of them. */
     export interface dxCircularGaugeScaleLabelOverlappingBehavior extends BaseGaugeScaleLabelOverlappingBehavior {
-        /** Use the scale.label.hideFirstOrLast option instead. */
+        /** @deprecated Use the scale.label.hideFirstOrLast option instead. */
         hideFirstOrLast?: string;
     }
     export interface dxLinearGaugeOptions extends BaseGaugeOptions {
@@ -8200,7 +8221,7 @@ declare module DevExpress.viz.gauges {
     }
     /** Decides how to arrange scale labels when there is not enough space to keep all of them. */
     export interface dxLinearGaugeScaleLabelOverlappingBehavior extends BaseGaugeScaleLabelOverlappingBehavior {
-        /** This functionality is deprecated as redundant. */
+        /** @deprecated This functionality is deprecated as redundant. */
         hideFirstOrLast?: string;
     }
     export interface dxBarGaugeOptions extends BaseWidgetOptions {
@@ -8228,7 +8249,7 @@ declare module DevExpress.viz.gauges {
         relativeInnerRadius?: number;
         /** Specifies a start value for the gauge's invisible scale. */
         startValue?: number;
-        /** Use the title.subtitle option instead. */
+        /** @deprecated Use the title.subtitle option instead. */
         subtitle?: any | string;
         /** Configures the widget's title. */
         title?: any;
@@ -8239,7 +8260,7 @@ declare module DevExpress.viz.gauges {
     }
     /** Configures the widget's title. */
     export interface dxBarGaugeTitle extends BaseWidgetTitle {
-        /** Use the horizontalAlignment and verticalAlignment options instead. */
+        /** @deprecated Use the horizontalAlignment and verticalAlignment options instead. */
         position?: string;
     }
     /** Configures tooltips. */
@@ -8264,13 +8285,13 @@ declare module DevExpress.viz.rangeSelector {
         dataSourceField?: string;
         /** Range selector's indent options. */
         indent?: { left?: number, right?: number };
-        /** Use the onValueChanged option instead. */
+        /** @deprecated Use the onValueChanged option instead. */
         onSelectedRangeChanged?: ((e: { component?: DOMComponent, element?: DevExpress.core.dxElement, model?: any, startValue?: Date | number, endValue?: Date | number }) => any);
         /** A handler for the valueChanged event. */
         onValueChanged?: ((e: { component?: DOMComponent, element?: DevExpress.core.dxElement, model?: any, value?: Array<number | string | Date>, previousValue?: Array<number | string | Date> }) => any);
         /** Specifies options of the range selector's scale. */
         scale?: { valueType?: string, type?: string, logarithmBase?: number, minorTickCount?: number, showBoundaryTicks?: boolean, startValue?: number | Date | string, endValue?: number | Date | string, showMinorTicks?: boolean, minorTickInterval?: number | any | string, breaks?: Array<ScaleBreak>, workdaysOnly?: boolean, workWeek?: Array<number>, holidays?: Array<Date | string> | Array<number>, singleWorkdays?: Array<Date | string> | Array<number>, breakStyle?: any, majorTickInterval?: number | any | string, tickInterval?: number | any | string, useTicksAutoArrangement?: boolean, setTicksAtUnitBeginning?: boolean, placeholderHeight?: number, minRange?: number | any | string, maxRange?: number | any | string, label?: any, tick?: any, minorTick?: any, marker?: any, categories?: Array<number | string | Date>, allowDecimals?: boolean, endOnTick?: boolean };
-        /** Use the value option instead. */
+        /** @deprecated Use the value option instead. */
         selectedRange?: { startValue?: number | Date | string, endValue?: number | Date | string };
         /** Specifies the color of the selected range. */
         selectedRangeColor?: string;
@@ -8299,9 +8320,9 @@ declare module DevExpress.viz.sparklines {
         customizeTooltip?: ((pointsInfo: any) => any);
         /** Enables tooltips. */
         enabled?: boolean;
-        /** Tooltip alignment is no longer useful because the tooltips are aligned automatically. */
+        /** @deprecated Tooltip alignment is no longer useful because the tooltips are aligned automatically. */
         horizontalAlignment?: string;
-        /** Tooltip alignment is no longer useful because the tooltips are aligned automatically. */
+        /** @deprecated Tooltip alignment is no longer useful because the tooltips are aligned automatically. */
         verticalAlignment?: string;
     }
     export interface dxSparklineOptions extends BaseSparklineOptions {
@@ -8375,7 +8396,7 @@ declare module DevExpress.viz.map {
     /** Creates a new projection. */
     export function projection(data: { to?: Function, from?: Function, aspectRatio?: number }): any;
     export interface dxVectorMapOptions extends BaseWidgetOptions {
-        /** Use the "area" type element of the layers array. */
+        /** @deprecated Use the "area" type element of the layers array. */
         areaSettings?: dxVectorMapAreaSettings;
         /** Specifies the options for the map background. */
         background?: { borderColor?: string, color?: string };
@@ -8389,25 +8410,25 @@ declare module DevExpress.viz.map {
         layers?: Array<{ name?: string, dataSource?: any | DevExpress.data.DataSource | DevExpress.data.DataSourceOptions | string, data?: any | DevExpress.data.DataSource | DevExpress.data.DataSourceOptions, type?: string, elementType?: string, borderWidth?: number, borderColor?: string, color?: string, hoveredBorderWidth?: number, hoveredBorderColor?: string, hoveredColor?: string, selectedBorderWidth?: number, selectedBorderColor?: string, selectedColor?: string, opacity?: number, size?: number, minSize?: number, maxSize?: number, hoverEnabled?: boolean, selectionMode?: string, palette?: Array<string> | string, paletteSize?: number, colorGroups?: Array<number>, colorGroupingField?: string, sizeGroups?: Array<number>, sizeGroupingField?: string, dataField?: string, customize?: ((elements: Array<MapLayerElement>) => any), label?: any }> | { name?: string, dataSource?: any | DevExpress.data.DataSource | DevExpress.data.DataSourceOptions | string, data?: any | DevExpress.data.DataSource | DevExpress.data.DataSourceOptions, type?: string, elementType?: string, borderWidth?: number, borderColor?: string, color?: string, hoveredBorderWidth?: number, hoveredBorderColor?: string, hoveredColor?: string, selectedBorderWidth?: number, selectedBorderColor?: string, selectedColor?: string, opacity?: number, size?: number, minSize?: number, maxSize?: number, hoverEnabled?: boolean, selectionMode?: string, palette?: Array<string> | string, paletteSize?: number, colorGroups?: Array<number>, colorGroupingField?: string, sizeGroups?: Array<number>, sizeGroupingField?: string, dataField?: string, customize?: ((elements: Array<MapLayerElement>) => any), label?: any };
         /** Configures map legends. */
         legends?: Array<{ source?: any, customizeText?: ((itemInfo: { start?: number, end?: number, index?: number, color?: string, size?: number }) => string), customizeHint?: ((itemInfo: { start?: number, end?: number, index?: number, color?: string, size?: number }) => string), verticalAlignment?: string, horizontalAlignment?: string, orientation?: string, itemTextPosition?: string, itemsAlignment?: string, visible?: boolean, margin?: number | any, markerSize?: number, markerColor?: string, markerShape?: string, backgroundColor?: string, border?: any, paddingLeftRight?: number, paddingTopBottom?: number, columnCount?: number, rowCount?: number, columnItemSpacing?: number, rowItemSpacing?: number, font?: Font }>;
-        /** Use the layers.dataSource option instead. */
+        /** @deprecated Use the layers.dataSource option instead. */
         mapData?: Array<string> | string;
-        /** Use the layers.dataSource option instead. */
+        /** @deprecated Use the layers.dataSource option instead. */
         markers?: Array<{ coordinates?: Array<number>, attributes?: any, text?: string, value?: number, values?: Array<number>, url?: string }> | string;
-        /** Use the "marker" type element of the layers array. */
+        /** @deprecated Use the "marker" type element of the layers array. */
         markerSettings?: dxVectorMapMarkerSettings;
         /** Specifies a map's maximum zoom factor. */
         maxZoomFactor?: number;
-        /** Use the onClick option instead. */
+        /** @deprecated Use the onClick option instead. */
         onAreaClick?: ((e: { component?: DOMComponent, element?: DevExpress.core.dxElement, model?: any, jQueryEvent?: JQueryEventObject, event?: event, target?: areaObjects }) => any) | string;
-        /** Use the onSelectionChanged option instead. */
+        /** @deprecated Use the onSelectionChanged option instead. */
         onAreaSelectionChanged?: ((e: { component?: DOMComponent, element?: DevExpress.core.dxElement, model?: any, target?: areaObjects }) => any);
         /** A handler for the centerChanged event. */
         onCenterChanged?: ((e: { component?: DOMComponent, element?: DevExpress.core.dxElement, model?: any, center?: Array<number> }) => any);
         /** A handler for the click event. */
         onClick?: ((e: { component?: DOMComponent, element?: DevExpress.core.dxElement, model?: any, jQueryEvent?: JQueryEventObject, event?: event, target?: MapLayerElement }) => any) | string;
-        /** Use the onClick option instead. */
+        /** @deprecated Use the onClick option instead. */
         onMarkerClick?: ((e: { component?: DOMComponent, element?: DevExpress.core.dxElement, model?: any, jQueryEvent?: JQueryEventObject, event?: event, target?: markerObjects }) => any) | string;
-        /** Use the onSelecitonChanged option instead. */
+        /** @deprecated Use the onSelecitonChanged option instead. */
         onMarkerSelectionChanged?: ((e: { component?: DOMComponent, element?: DevExpress.core.dxElement, model?: any, target?: markerObjects }) => any);
         /** A handler for the selectionChanged event. */
         onSelectionChanged?: ((e: { component?: DOMComponent, element?: DevExpress.core.dxElement, model?: any, target?: MapLayerElement }) => any);
@@ -8432,90 +8453,90 @@ declare module DevExpress.viz.map {
         /** Disables the zooming capability. */
         zoomingEnabled?: boolean;
     }
-    /** Use the "area" type element of the layers array. */
+    /** @deprecated Use the "area" type element of the layers array. */
     export interface dxVectorMapAreaSettings {
-        /** Use the layers.borderColor option instead. */
+        /** @deprecated Use the layers.borderColor option instead. */
         borderColor?: string;
-        /** Use the layers.borderWidth option instead. */
+        /** @deprecated Use the layers.borderWidth option instead. */
         borderWidth?: number;
-        /** Use the layers.color option instead. */
+        /** @deprecated Use the layers.color option instead. */
         color?: string;
-        /** Use the layers.colorGroupingField option instead. */
+        /** @deprecated Use the layers.colorGroupingField option instead. */
         colorGroupingField?: string;
-        /** Use the layers.colorGroups option instead. */
+        /** @deprecated Use the layers.colorGroups option instead. */
         colorGroups?: Array<number>;
-        /** Use the layers.customize option instead. */
+        /** @deprecated Use the layers.customize option instead. */
         customize?: ((area: areaObjects) => dxVectorMapAreaSettings);
-        /** Use the layers.hoveredBorderColor option instead. */
+        /** @deprecated Use the layers.hoveredBorderColor option instead. */
         hoveredBorderColor?: string;
-        /** Use the layers.hoveredBorderWidth option instead. */
+        /** @deprecated Use the layers.hoveredBorderWidth option instead. */
         hoveredBorderWidth?: number;
-        /** Use the layers.hoveredColor option instead. */
+        /** @deprecated Use the layers.hoveredColor option instead. */
         hoveredColor?: string;
-        /** Use the layers.hoverEnabled option instead. */
+        /** @deprecated Use the layers.hoverEnabled option instead. */
         hoverEnabled?: boolean;
-        /** Use the layers.label option instead. */
+        /** @deprecated Use the layers.label option instead. */
         label?: { enabled?: boolean, dataField?: string, font?: Font };
-        /** Use the layers.palette option instead. */
+        /** @deprecated Use the layers.palette option instead. */
         palette?: Array<string> | string;
-        /** Use the layers.paletteSize option instead. */
+        /** @deprecated Use the layers.paletteSize option instead. */
         paletteSize?: number;
-        /** Use the layers.selectedBorderColor option instead. */
+        /** @deprecated Use the layers.selectedBorderColor option instead. */
         selectedBorderColor?: string;
-        /** Use the layers.selectedBorderWidth option instead. */
+        /** @deprecated Use the layers.selectedBorderWidth option instead. */
         selectedBorderWidth?: number;
-        /** Use the layers.selectedColor option instead. */
+        /** @deprecated Use the layers.selectedColor option instead. */
         selectedColor?: string;
-        /** Use the layers.selectionMode option instead. */
+        /** @deprecated Use the layers.selectionMode option instead. */
         selectionMode?: string;
     }
-    /** Use the "marker" type element of the layers array. */
+    /** @deprecated Use the "marker" type element of the layers array. */
     export interface dxVectorMapMarkerSettings {
-        /** Use the layers.borderColor option instead. */
+        /** @deprecated Use the layers.borderColor option instead. */
         borderColor?: string;
-        /** Use the layers.borderWidth option instead. */
+        /** @deprecated Use the layers.borderWidth option instead. */
         borderWidth?: number;
-        /** Use the layers.color option instead. */
+        /** @deprecated Use the layers.color option instead. */
         color?: string;
-        /** Use the layers.colorGroupingField option instead. */
+        /** @deprecated Use the layers.colorGroupingField option instead. */
         colorGroupingField?: string;
-        /** Use the layers.colorGroups option instead. */
+        /** @deprecated Use the layers.colorGroups option instead. */
         colorGroups?: Array<number>;
-        /** Use the layers.customize option instead. */
+        /** @deprecated Use the layers.customize option instead. */
         customize?: ((marker: markerObjects) => dxVectorMapMarkerSettings);
-        /** Use the layers.hoveredBorderColor option instead. */
+        /** @deprecated Use the layers.hoveredBorderColor option instead. */
         hoveredBorderColor?: string;
-        /** Use the layers.hoveredBorderWidth option instead. */
+        /** @deprecated Use the layers.hoveredBorderWidth option instead. */
         hoveredBorderWidth?: number;
-        /** Use the layers.hoveredColor option instead. */
+        /** @deprecated Use the layers.hoveredColor option instead. */
         hoveredColor?: string;
-        /** Use the layers.hoverEnabled option instead. */
+        /** @deprecated Use the layers.hoverEnabled option instead. */
         hoverEnabled?: boolean;
-        /** Use the layers.label option instead. */
+        /** @deprecated Use the layers.label option instead. */
         label?: { enabled?: boolean, font?: Font };
-        /** Use the layers.maxSize option instead. */
+        /** @deprecated Use the layers.maxSize option instead. */
         maxSize?: number;
-        /** Use the layers.minSize option instead. */
+        /** @deprecated Use the layers.minSize option instead. */
         minSize?: number;
-        /** Use the layers.opacity option instead. */
+        /** @deprecated Use the layers.opacity option instead. */
         opacity?: number;
-        /** Use the layers.palette option instead. */
+        /** @deprecated Use the layers.palette option instead. */
         palette?: Array<string> | string;
-        /** Use the layers.selectedBorderColor option instead. */
+        /** @deprecated Use the layers.selectedBorderColor option instead. */
         selectedBorderColor?: string;
-        /** Use the layers.selectedBorderWidth option instead. */
+        /** @deprecated Use the layers.selectedBorderWidth option instead. */
         selectedBorderWidth?: number;
-        /** Use the layers.selectedColor option instead. */
+        /** @deprecated Use the layers.selectedColor option instead. */
         selectedColor?: string;
-        /** Use the layers.selectionMode option instead. */
+        /** @deprecated Use the layers.selectionMode option instead. */
         selectionMode?: string;
-        /** Use the layers.size option instead. */
+        /** @deprecated Use the layers.size option instead. */
         size?: number;
-        /** Use the layers.sizeGroupingField option instead. */
+        /** @deprecated Use the layers.sizeGroupingField option instead. */
         sizeGroupingField?: string;
-        /** Use the layers.sizeGroups option instead. */
+        /** @deprecated Use the layers.sizeGroups option instead. */
         sizeGroups?: Array<number>;
-        /** Use the layers.elementType option instead. */
+        /** @deprecated Use the layers.elementType option instead. */
         type?: string;
     }
     /** Configures tooltips. */
