@@ -455,6 +455,17 @@ QUnit.module("Utils", function() {
         assert.notOk(utils.isValidCondition(["ZipCode", "=", ""], fields[3]));
         assert.ok(utils.isValidCondition(["Field", "=", ""], { dataField: "Field" }));
     });
+
+    QUnit.test("getField test", function(assert) {
+        var field = utils.getField("Company", [{ dataField: "State.Name" }, { dataField: "Company" }]);
+        assert.equal(field.dataField, "Company");
+
+        field = utils.getField("State.Name", [{ dataField: "State.Name" }, { dataField: "Company" }]);
+        assert.equal(field.dataField, "State.Name");
+
+        field = utils.getField("State", [{ dataField: "State.Name" }, { dataField: "Company" }]);
+        assert.equal(field.dataField, "State");
+    });
 });
 
 QUnit.module("Add item", function() {

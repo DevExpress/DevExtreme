@@ -257,6 +257,12 @@ function getField(dataField, fields) {
             return fields[i];
         }
     }
+    var extendedFields = getItems(fields, true).filter(function(item) {
+        return item.dataField.toLowerCase() === dataField.toLowerCase();
+    });
+    if(extendedFields.length > 0) {
+        return extendedFields[0];
+    }
     throw new errors.Error("E1047", dataField);
 }
 
