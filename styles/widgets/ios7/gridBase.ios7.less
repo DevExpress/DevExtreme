@@ -230,8 +230,21 @@
         }
 
         .dx-dropdowneditor-button-visible {
-            &.dx-show-clear-button .dx-texteditor-input {
-                padding-right: @DROPDOWNEDITOR_BUTTON_WIDTH + @CLEAR_ICON_SIZE + @CLEAR_ICON_RIGHT;
+            &.dx-show-clear-button  {
+                .dx-texteditor-input {
+                    padding-right: @TEXTEDITOR_INVALID_BADGE_WIDTH + 2 * @TEXTEDITOR_INVALID_BADGE_HORIZONTAL_PADDING + @CLEAR_ICON_SIZE + @CLEAR_ICON_RIGHT;
+                }
+
+                &.dx-invalid {
+                    .dx-texteditor-input {
+                        padding-right: @DROPDOWNEDITOR_BUTTON_WIDTH + 1.5 * @TEXTEDITOR_INVALID_BADGE_WIDTH + @TEXTEDITOR_CLEAR_BUTTON_WIDTH;
+                    }
+
+                    &.dx-rtl .dx-texteditor-input {
+                        padding-left: @DROPDOWNEDITOR_BUTTON_WIDTH + 1.5 * @TEXTEDITOR_INVALID_BADGE_WIDTH + @TEXTEDITOR_CLEAR_BUTTON_WIDTH;
+                        padding-right: @TEXTEDITOR_INPUT_PADDING;
+                    }
+                }
             }
 
             .dx-texteditor-input {
