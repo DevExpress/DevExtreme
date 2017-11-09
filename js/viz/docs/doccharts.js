@@ -4019,9 +4019,9 @@ var BaseChart = {
         * @name basechartoptions_legend_columnitemspacing
         * @publicName columnItemSpacing
         * @type number
-        * @default 8
+        * @default 20
         */
-        columnItemSpacing: 8,
+        columnItemSpacing: 20,
         /**
         * @name basechartoptions_legend_rowitemspacing
         * @publicName rowItemSpacing
