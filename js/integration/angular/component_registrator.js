@@ -199,12 +199,12 @@ var ComponentBuilder = Class.inherit({
                 return;
             }
 
-            var isPhase = that._scope.$$phase;
+            var isActivePhase = that._scope.$$phase;
             var obtainOption = function() {
                 that._ngLocker.obtain(fullName);
             };
 
-            if(isPhase) {
+            if(isActivePhase) {
                 that._digestCallbacks.begin.add(obtainOption);
             } else {
                 obtainOption();
@@ -234,7 +234,7 @@ var ComponentBuilder = Class.inherit({
                 that._digestCallbacks.end.remove(releaseOption);
             };
 
-            if(isPhase) {
+            if(isActivePhase) {
                 that._digestCallbacks.end.add(releaseOption);
             } else {
                 releaseOption();

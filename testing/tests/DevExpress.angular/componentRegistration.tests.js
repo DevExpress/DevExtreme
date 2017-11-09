@@ -969,7 +969,6 @@ QUnit.test("The 'release' method shouldn't be called for an unlocked Lock object
     } catch(e) {
         assert.ok(false, "the error is thrown (The 'release' method was called for an unlocked Lock object)");
     }
-
     assert.equal(instance.option("text"), "third");
     assert.equal(scope.text, "third");
     assert.equal(instance.option("obj").text, "third");
