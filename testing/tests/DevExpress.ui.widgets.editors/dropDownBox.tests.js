@@ -63,6 +63,16 @@ QUnit.test("the widget should work without the dataSource", function(assert) {
     assert.equal($input.val(), "Test", "input value is correct");
 });
 
+QUnit.test("the widget should work when dataSource is set to null", function(assert) {
+    this.$element.dxDropDownBox({ value: 1, dataSource: [1, 2, 3] });
+
+    var instance = this.$element.dxDropDownBox("instance");
+
+    instance.option("dataSource", null);
+
+    assert.ok(true, "widget works correctly");
+});
+
 QUnit.test("expressions", function(assert) {
     this.$element.dxDropDownBox({
         items: this.simpleItems,
