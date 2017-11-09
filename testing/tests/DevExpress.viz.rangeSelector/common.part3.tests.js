@@ -1146,7 +1146,7 @@ QUnit.test("During indents estimation, format scale labels the same way the axis
     assert.strictEqual(this.renderer.text.getCall(2).args[0], "10");
 });
 
-QUnit.test("During indents estimation, format discrete scale labels as empty", function(assert) {
+QUnit.test("During indents estimation, format semidiscrete scale labels the same way the axis formats its labels", function(assert) {
     this.createWidget({
         scale: {
             startValue: 1,
@@ -1154,12 +1154,13 @@ QUnit.test("During indents estimation, format discrete scale labels as empty", f
             label: {
                 visible: true
             },
-            type: "discrete"
+            type: "semidiscrete",
+            minRange: 4
         }
     });
 
-    assert.strictEqual(this.renderer.text.getCall(1).args[0], "");
-    assert.strictEqual(this.renderer.text.getCall(2).args[0], "");
+    assert.strictEqual(this.renderer.text.getCall(1).args[0], "0");
+    assert.strictEqual(this.renderer.text.getCall(2).args[0], "8");
 });
 
 QUnit.test("rangeContainer canvas if sliderMarker placeholderSize is defined", function(assert) {
