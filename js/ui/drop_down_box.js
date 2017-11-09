@@ -192,7 +192,6 @@ var DropDownBox = DropDownEditor.inherit({
             values = [];
 
         if(!this._dataSource) {
-            this.option("value", undefined);
             callBase(values);
             return;
         }
