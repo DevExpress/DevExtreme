@@ -1464,7 +1464,7 @@ var Form = Widget.inherit({
     },
 
     _getTextWithoutSpaces: function(text) {
-        return text ? text.replace(" ", "") : undefined;
+        return text ? text.replace(/\s/g, '') : undefined;
     },
 
     _isExpectedItem: function(item, fieldName) {

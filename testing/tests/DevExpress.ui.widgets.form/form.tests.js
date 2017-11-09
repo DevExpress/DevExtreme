@@ -2903,6 +2903,66 @@ QUnit.test("Use 'itemOption' with tabs", function(assert) {
     assert.equal($testContainer.find("." + internals.FIELD_ITEM_LABEL_CLASS).eq(4).text(), "NEWLABEL:", "new label rendered");
 });
 
+QUnit.test("'itemOption' should get an item with several spaces in the caption", function(assert) {
+    //arrange
+    var $testContainer = $("#form").dxForm({
+            formData: { EmployeeID: 1, LastName: "John", FirstName: "Dow" },
+            items: [
+                "EmployeeID",
+                {
+                    itemType: "group",
+                    caption: "Test group item",
+                    items: [
+                        "FirstName", "LastName"
+                    ]
+                }
+            ] }
+        ),
+        form = $testContainer.dxForm("instance");
+
+    //act
+    var groupItem = form.itemOption("Testgroupitem"),
+        innerGroupItem = form.itemOption("Testgroupitem.FirstName");
+
+    assert.deepEqual(groupItem, {
+        itemType: "group",
+        caption: "Test group item",
+        items: [ { dataField: "FirstName" }, { dataField: "LastName" }]
+    }, "Correct group item");
+
+    form.itemOption("Testgroupitem.LastName", "label", { text: "NEWLABEL" });
+
+    //assert
+    assert.equal(innerGroupItem.dataField, "FirstName", "corrected item received");
+    assert.equal($testContainer.find("." + internals.FIELD_ITEM_LABEL_CLASS).last().text(), "NEWLABEL:", "new label rendered");
+});
+
+QUnit.test("'itemOption' should get an item with several spaces in the caption and long path", function(assert) {
+    //arrange
+    var $testContainer = $("#form").dxForm({
+            formData: { EmployeeID: 1, LastName: "John", FirstName: "Dow" },
+            items: [
+                "EmployeeID",
+                {
+                    itemType: "group",
+                    caption: "Test group 1",
+                    items: [{
+                        itemType: "group",
+                        caption: "Test group 2",
+                        items: ["FirstName", "LastName"]
+                    }]
+                }
+            ] }
+        ),
+        form = $testContainer.dxForm("instance");
+
+    //act
+    var innerGroupItem = form.itemOption("Testgroup1.Testgroup2.FirstName");
+
+    //assert
+    assert.deepEqual(innerGroupItem, { dataField: "FirstName" }, "corrected item received");
+});
+
 function getID(form, dataField) {
     return "dx_" + form.option("formID") + "_" + dataField;
 }
