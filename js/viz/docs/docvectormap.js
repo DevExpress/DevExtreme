@@ -979,8 +979,8 @@ var dxVectorMap = {
         * @type_function_param1_field1 start:number
         * @type_function_param1_field2 end:number
         * @type_function_param1_field3 index:number
-        * @type_function_param1_field4 color:string|undefined
-        * @type_function_param1_field5 size:number|undefined
+        * @type_function_param1_field4 color:string
+        * @type_function_param1_field5 size:number
         * @type_function_return string
         * @notUsedInTheme
         */
@@ -993,8 +993,8 @@ var dxVectorMap = {
         * @type_function_param1_field1 start:number
         * @type_function_param1_field2 end:number
         * @type_function_param1_field3 index:number
-        * @type_function_param1_field4 color:string|undefined
-        * @type_function_param1_field5 size:number|undefined
+        * @type_function_param1_field4 color:string
+        * @type_function_param1_field5 size:number
         * @type_function_return string
         * @notUsedInTheme
         */
