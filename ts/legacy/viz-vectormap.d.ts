@@ -2,543 +2,743 @@
 /// <reference path="viz-core.d.ts" />
 
 declare module DevExpress.viz.map {
-    /** @docid MapLayer */
+    /** This section describes the Layer object, which represents a vector map layer. */
     export interface MapLayer {
-        /** @docid MapLayerfields_name */
+        /** The name of the layer. */
         name: string;
 
-        /** @docid MapLayerfields_index */
+        /** The layer index in the layers array. */
         index: number;
 
-        /** @docid MapLayerfields_type */
+        /** The layer type. Can be "area", "line" or "marker". */
         type: string;
 
-        /** @docid MapLayerfields_elementType */
+        /** The type of the layer elements. */
         elementType: string;
 
-        /** @docid MapLayermethods_getElements */
+        /** Gets all layer elements. */
         getElements(): Array<MapLayerElement>;
 
-        /** @docid MapLayermethods_clearSelection */
+        /** Deselects all layer elements. */
         clearSelection(): void;
 
-        /** @docid MapLayermethods_getDataSource */
+        /** Returns the DataSource instance. */
         getDataSource(): DevExpress.data.DataSource;
     }
 
-    /** @docid MapLayerElement */
+    /** This section describes the Layer Element object, which represents a vector map layer element. */
     export interface MapLayerElement {
-        /** @docid MapLayerElementfields_layer */
+        /** The parent layer of the layer element. */
         layer: MapLayer;
 
-        /** @docid MapLayerElementmethods_coordinates */
+        /** Gets the layer element coordinates. */
         coordinates(): Object;
 
-        /** @docid MapLayerElementmethods_attribute#attribute(name, value) */
+        /** Sets the value of an attribute. */
         attribute(name: string, value: any): void;
 
-        /** @docid MapLayerElementmethods_attribute#attribute(name) */
+        /** Gets the value of an attribute. */
         attribute(name: string): any;
 
-        /** @docid MapLayerElementmethods_selected#selected() */
+        /** Gets the selection state of the layer element. */
         selected(): boolean;
 
-        /** @docid MapLayerElementmethods_selected#selected(state) */
+        /** Sets the selection state of the layer element. */
         selected(state: boolean): void;
 
-        /** @docid MapLayerElementmethods_applySettings */
+        /** Applies the layer element settings and updates element appearance. */
         applySettings(settings: any): void;
     }
 
-    /** @docid areaObjects */
+    /**
+                                                                          * This section describes the fields and methods that can be used in code to manipulate the Area object.
+                                                                          * @deprecated Use the Layer Element instead.
+                                                                          */
     export interface Area {
-        /** @docid areaObjectsfields_type */
+        /**
+                                                                         * Contains the element type.
+                                                                         * @deprecated Use the Layer.type instead.
+                                                                         */
         type: string;
 
-        /** @docid areaObjectsmethods_attribute */
+        /**
+                                                                        * Return the value of an attribute.
+                                                                        * @deprecated Use the Layer Element.attribute(name, value) method instead.
+                                                                        */
         attribute(name: string): any;
 
-        /** @docid areaObjectsmethods_selected#selected() */
+        /**
+                                                                       * Provides information about the selection state of an area.
+                                                                       * @deprecated Use the Layer Element.selected() method instead.
+                                                                       */
         selected(): boolean;
 
-        /** @docid areaObjectsmethods_selected#selected(state) */
+        /**
+                                                                      * Sets a new selection state for an area.
+                                                                      * @deprecated Use the Layer Element.selected(state) method instead.
+                                                                      */
         selected(state: boolean): void;
 
-        /** @docid areaObjectsmethods_applySettings */
+        /**
+                                                                     * Applies the area settings specified as a parameter and updates the area appearance.
+                                                                     * @deprecated Use the Layer Element.applySettings(settings) method instead.
+                                                                     */
         applySettings(settings: any): void;
     }
 
-    /** @docid markerObjects */
+    /**
+                                                                    * This section describes the fields and methods that can be used in code to manipulate the Markers object.
+                                                                    * @deprecated Use the Layer Element instead.
+                                                                    */
     export interface Marker {
-        /** @docid markerObjectsfields_text */
+        /**
+                                                                   * Contains the descriptive text accompanying the map marker.
+                                                                   * @deprecated Get the text using the Layer Element.attribute(name) method. The name parameter value for text is set at the dataField option.
+                                                                   */
         text: string;
 
-        /** @docid markerObjectsfields_type */
+        /**
+                                                                  * Contains the type of the element.
+                                                                  * @deprecated Use the Layer.type instead.
+                                                                  */
         type: string;
 
-        /** @docid markerObjectsfields_url */
+        /**
+                                                                 * Contains the URL of an image map marker.
+                                                                 * @deprecated Get the image URL using the Layer Element.attribute(name) method. The name parameter value for the image URL is set at the dataField option.
+                                                                 */
         url: string;
 
-        /** @docid markerObjectsfields_value */
+        /**
+                                                                * Contains the value of a bubble map marker.
+                                                                * @deprecated Get the bubble value using the Layer Element.attribute(name) method. The name parameter for the bubble value is set at the dataField option.
+                                                                */
         value: number;
 
-        /** @docid markerObjectsfields_values */
+        /**
+                                                               * Contains the values of a pie map marker.
+                                                               * @deprecated Get the pie values using the Layer Element.attribute(name) method. The name parameter for pie values is set at the dataField option.
+                                                               */
         values: Array<number>;
 
-        /** @docid markerObjectsmethods_attribute */
+        /**
+                                                              * Returns the value of an attribute.
+                                                              * @deprecated Use the Layer Element.attribute(name, value) method instead.
+                                                              */
         attribute(name: string): any;
 
-        /** @docid markerObjectsmethods_coordinates */
+        /**
+                                                             * Returns the coordinates of a specific marker.
+                                                             * @deprecated Use the Layer Element.coordinates() method instead.
+                                                             */
         coordinates(): Array<number>;
 
-        /** @docid markerObjectsmethods_selected#selected() */
+        /**
+                                                            * Provides information about the selection state of a marker.
+                                                            * @deprecated Use the Layer Element.selected() method instead.
+                                                            */
         selected(): boolean;
 
-        /** @docid markerObjectsmethods_selected#selected(state) */
+        /**
+                                                           * Sets a new selection state for a marker.
+                                                           * @deprecated Use the Layer Element.selected(state) method instead.
+                                                           */
         selected(state: boolean): void;
 
-        /** @docid markerObjectsmethods_applySettings */
+        /**
+                                                          * Applies the marker settings specified as a parameter and updates marker appearance.
+                                                          * @deprecated Use the Layer Element.applySettings(settings) method instead.
+                                                          */
         applySettings(settings: any): void;
     }
 
     export interface MapLayerSettings {
-        /** @docid_ignore dxvectormapoptions_layers_data */
+        
 
-        /** @docid dxvectormapoptions_layers_name */
+        /** Specifies the layer name. */
         name?: string;
 
-        /** @docid dxvectormapoptions_layers_type */
+        /** Specifies layer type. */
         type?: string;
 
-        /** @docid dxvectormapoptions_layers_elementType */
+        /** Specifies the type of a marker element. Setting this option makes sense only if the layer type is "marker". */
         elementType?: string;
 
-        /** @docid dxvectormapoptions_layers_dataSource */
+        /** Specifies a data source for the layer. */
         dataSource?: any;
 
-        /** @docid dxvectormapoptions_layers_borderWidth */
+        /** Specifies the line width (for layers of a line type) or width of the layer elements border in pixels. */
         borderWidth?: number;
 
-        /** @docid dxvectormapoptions_layers_borderColor */
+        /** Specifies a color for the border of the layer elements. */
         borderColor?: string;
 
-        /** @docid dxvectormapoptions_layers_color */
+        /** Specifies a color for layer elements. */
         color?: string;
 
-        /** @docid dxvectormapoptions_layers_hoveredBorderColor */
+        /** Specifies a color for the border of the layer element when it is hovered over. */
         hoveredBorderColor?: string;
 
-        /** @docid dxvectormapoptions_layers_hoveredBorderWidth */
+        /** Specifies the pixel-measured line width (for layers of a line type) or width for the border of the layer element when it is hovered over. */
         hoveredBorderWidth?: number;
 
-        /** @docid dxvectormapoptions_layers_hoveredColor */
+        /** Specifies a color for a layer element when it is hovered over. */
         hoveredColor?: string;
 
-        /** @docid dxvectormapoptions_layers_selectedBorderWidth */
+        /** Specifies a pixel-measured line width (for layers of a line type) or width for the border of the layer element when it is selected. */
         selectedBorderWidth?: number;
 
-        /** @docid dxvectormapoptions_layers_selectedBorderColor */
+        /** Specifies a color for the border of the layer element when it is selected. */
         selectedBorderColor?: string;
 
-        /** @docid dxvectormapoptions_layers_selectedColor */
+        /** Specifies a color for the layer element when it is selected. */
         selectedColor?: string;
 
-        /** @docid dxvectormapoptions_layers_opacity */
+        /** Specifies the layer opacity (from 0 to 1). */
         opacity?: number;
 
-        /** @docid dxvectormapoptions_layers_size */
+        /** Specifies the size of markers. Setting this option makes sense only if the layer type is "marker" and the elementType is "dot", "pie" or "image". */
         size?: number;
 
-        /** @docid dxvectormapoptions_layers_minSize */
+        /** Specifies the pixel-measured diameter of the marker that represents the smallest value. Setting this option makes sense only if the layer type is "marker". */
         minSize?: number;
 
-        /** @docid dxvectormapoptions_layers_maxSize */
+        /** Specifies the pixel-measured diameter of the marker that represents the biggest value. Setting this option makes sense only if the layer type is "marker". */
         maxSize?: number;
 
-        /** @docid dxvectormapoptions_layers_hoverEnabled */
+        /** Specifies whether or not to change the appearance of a layer element when it is hovered over. */
         hoverEnabled?: boolean;
 
-        /** @docid dxvectormapoptions_layers_selectionMode */
+        /** Specifies whether single or multiple map elements can be selected on a vector map. */
         selectionMode?: string;
 
-        /** @docid dxvectormapoptions_layers_palette */
+        /** Specifies the name of the palette or a custom range of colors to be used for coloring a layer. */
         palette?: any;
 
-        /** @docid dxvectormapoptions_layers_paletteSize */
+        /** Specifies the number of colors in a palette. */
         paletteSize?: number;
 
-        /** @docid dxvectormapoptions_layers_colorGroups */
+        /** Allows you to paint layer elements with similar attributes in the same color. */
         colorGroups?: Array<number>;
 
-        /** @docid dxvectormapoptions_layers_colorGroupingField */
+        /** Specifies the field that provides data to be used for coloring of layer elements. */
         colorGroupingField?: string;
 
-        /** @docid dxvectormapoptions_layers_sizeGroups */
+        /** Allows you to display bubbles with similar attributes in the same size. Setting this option makes sense only if the layer type is "marker" and the elementType is "bubble". */
         sizeGroups?: Array<number>;
 
-        /** @docid dxvectormapoptions_layers_sizeGroupingField */
+        /** Specifies the field that provides data to be used for sizing bubble markers. Setting this option makes sense only if the layer type is "marker" and the elementType is "bubble". */
         sizeGroupingField?: string;
 
-        /** @docid dxvectormapoptions_layers_dataField */
+        /** Specifies the name of the attribute containing marker data. Setting this option makes sense only if the layer type is "marker" and the elementType is "bubble", "pie" or "image". */
         dataField?: string;
 
-        /** @docid dxvectormapoptions_layers_customize */
+        /** Specifies the function that customizes each layer element individually. */
         customize?: (eleemnts: Array<MapLayerElement>) => void;
 
-        /** @docid dxvectormapoptions_layers_label */
+        /** Specifies marker label options. */
         label?: {
-            /** @docid dxvectormapoptions_layers_label_dataField */
+            /** The name of the data source attribute containing marker texts. */
             dataField?: string;
 
-            /** @docid dxvectormapoptions_layers_label_enabled */
+            /** Enables marker labels. */
             enabled?: boolean;
 
-            /** @docid dxvectormapoptions_layers_label_font */
+            /** Specifies font options for marker labels. */
             font?: viz.core.Font;
         };
     }
 
     export interface AreaSettings {
-        /** @docid dxvectormapoptions_areaSettings_borderWidth */
+        /**
+        * Specifies the width of the area border in pixels.
+        * @deprecated Use the layers.borderWidth option instead.
+        */
         borderWidth?: number;
 
-        /** @docid dxvectormapoptions_areaSettings_borderColor */
+        /**
+        * Specifies a color for the area border.
+        * @deprecated Use the layers.borderColor option instead.
+        */
         borderColor?: string;
 
-        /** @docid dxvectormapoptions_areaSettings_color */
+        /**
+        * Specifies a color for an area.
+        * @deprecated Use the layers.color option instead.
+        */
         color?: string;
 
-        /** @docid dxvectormapoptions_areaSettings_customize */
+        /**
+        * Specifies the function that customizes each area individually.
+        * @deprecated Use the layers.customize option instead.
+        */
         customize?: (areaInfo: Area) => AreaSettings;
 
-        /** @docid dxvectormapoptions_areaSettings_hoveredBorderColor */
+        /**
+        * Specifies a color for the area border when the area is hovered over.
+        * @deprecated Use the layers.hoveredBorderColor option instead.
+        */
         hoveredBorderColor?: string;
 
-        /** @docid dxvectormapoptions_areaSettings_hoveredBorderWidth */
+        /**
+        * Specifies the pixel-measured width of the area border when the area is hovered over.
+        * @deprecated Use the layers.hoveredBorderWidth option instead.
+        */
         hoveredBorderWidth?: number;
 
-        /** @docid dxvectormapoptions_areaSettings_hoveredColor */
+        /**
+        * Specifies a color for an area when this area is hovered over.
+        * @deprecated Use the layers.hoveredColor option instead.
+        */
         hoveredColor?: string;
 
-        /** @docid dxvectormapoptions_areaSettings_hoverEnabled */
+        /**
+        * Specifies whether or not to change the appearance of an area when it is hovered over.
+        * @deprecated Use the layers.hoverEnabled option instead.
+        */
         hoverEnabled?: boolean;
 
-        /** @docid dxvectormapoptions_areaSettings_label */
+        /**
+        * Configures area labels.
+        * @deprecated Use the layers.label option instead.
+        */
         label?: {
 
-            /** @docid dxvectormapoptions_areaSettings_label_dataField */
+            /**
+            * Specifies the data field that provides data for area labels.
+            * @deprecated Use the layers.label.dataField option instead.
+            */
             dataField?: string;
 
-            /** @docid dxvectormapoptions_areaSettings_label_enabled */
+            /**
+            * Enables area labels.
+            * @deprecated Use the layers.label.enabled option instead.
+            */
             enabled?: boolean;
 
-            /** @docid dxvectormapoptions_areaSettings_label_font */
+            /**
+            * Use the layers.label.font option instead.
+            * @deprecated 
+            */
             font?: viz.core.Font;
         };
 
-        /** @docid dxvectormapoptions_areaSettings_palette */
+        /**
+        * Specifies the name of the palette or a custom range of colors to be used for coloring a map.
+        * @deprecated Use the layers.palette option instead.
+        */
         palette?: any;
 
-        /** @docid dxvectormapoptions_areaSettings_paletteSize */
+        /**
+        * Specifies the number of colors in a palette.
+        * @deprecated Use the layers.paletteSize option instead.
+        */
         paletteSize?: number;
 
-        /** @docid dxvectormapoptions_areaSettings_colorGroups */
+        /**
+        * Allows you to paint areas with similar attributes in the same color.
+        * @deprecated Use the layers.colorGroups option instead.
+        */
         colorGroups?: Array<number>;
 
-        /** @docid dxvectormapoptions_areaSettings_colorGroupingField */
+        /**
+        * Specifies the field that provides data to be used for coloring areas.
+        * @deprecated Use the layers.colorGroupingField option instead.
+        */
         colorGroupingField?: string;
 
-        /** @docid dxvectormapoptions_areaSettings_selectedBorderColor */
+        /**
+        * Specifies a color for the area border when the area is selected.
+        * @deprecated Use the layers.selectedBorderColor option instead.
+        */
         selectedBorderColor?: string;
 
-        /** @docid dxvectormapoptions_areaSettings_selectedColor */
+        /**
+        * Specifies a color for an area when this area is selected.
+        * @deprecated Use the layers.selectedColor option instead.
+        */
         selectedColor?: string;
 
-        /** @docid dxvectormapoptions_areaSettings_selectedBorderWidth */
+        /**
+        * Specifies the pixel-measured width of the area border when the area is selected.
+        * @deprecated Use the layers.selectedBorderWidth option instead.
+        */
         selectedBorderWidth?: number;
 
-        /** @docid dxvectormapoptions_areaSettings_selectionMode */
+        /**
+        * Specifies whether single or multiple areas can be selected on a vector map.
+        * @deprecated Use the layers.selectionMode option instead.
+        */
         selectionMode?: string;
     }
 
     export interface MarkerSettings {
-        /** @docid dxvectormapoptions_markerSettings_borderColor */
+        /**
+        * Specifies a color for the marker border.
+        * @deprecated Use the layers.borderColor option instead.
+        */
         borderColor?: string;
 
-        /** @docid dxvectormapoptions_markerSettings_borderWidth */
+        /**
+        * Specifies the width of the marker border in pixels.
+        * @deprecated Use the layers.borderWidth option instead.
+        */
         borderWidth?: number;
 
-        /** @docid dxvectormapoptions_markerSettings_color */
+        /**
+        * Specifies a color for a marker of the dot or bubble type.
+        * @deprecated Use the layers.color option instead.
+        */
         color?: string;
 
-        /** @docid dxvectormapoptions_markerSettings_customize */
+        /**
+        * Specifies the function that customizes each marker individually.
+        * @deprecated Use the layers.customize option instead.
+        */
         customize?: (markerInfo: Marker) => MarkerSettings;
 
-        /** @docid dxvectormapoptions_markerSettings_hoveredBorderWidth */
+        /**
+        * Specifies the pixel-measured width of the marker border when the marker is hovered over.
+        * @deprecated Use the layers.hoveredBorderWidth option instead.
+        */
         hoveredBorderWidth?: number;
 
-        /** @docid dxvectormapoptions_markerSettings_hoveredBorderColor */
+        /**
+        * Specifies a color for the marker border when the marker is hovered over.
+        * @deprecated Use the layers.hoveredBorderColor option instead.
+        */
         hoveredBorderColor?: string;
 
-        /** @docid dxvectormapoptions_markerSettings_hoveredColor */
+        /**
+        * Specifies a color for a marker of the dot or bubble type when this marker is hovered over.
+        * @deprecated Use the layers.hoveredColor option instead.
+        */
         hoveredColor?: string;
 
-        /** @docid dxvectormapoptions_markerSettings_hoverEnabled */
+        /**
+        * Specifies whether or not to change the appearance of a marker when it is hovered over.
+        * @deprecated Use the layers.hoverEnabled option instead.
+        */
         hoverEnabled?: boolean;
 
-        /** @docid dxvectormapoptions_markerSettings_label */
+        /**
+        * Specifies marker label options.
+        * @deprecated Use the layers.label option instead.
+        */
         label?: {
 
-            /** @docid dxvectormapoptions_markerSettings_label_enabled */
+            /**
+            * Enables marker labels.
+            * @deprecated Use the layers.label.enabled option instead.
+            */
             enabled?: boolean;
 
-            /** @docid dxvectormapoptions_markerSettings_label_font */
+            /**
+            * Use the layers.label.font option instead.
+            * @deprecated 
+            */
             font?: viz.core.Font;
         };
 
-        /** @docid dxvectormapoptions_markerSettings_maxSize */
+        /**
+        * Specifies the pixel-measured diameter of the marker that represents the biggest value. Setting this option makes sense only if you use markers of the bubble type.
+        * @deprecated Use the layers.maxSize option instead.
+        */
         maxSize?: number;
 
-        /** @docid dxvectormapoptions_markerSettings_minSize */
+        /**
+        * Specifies the pixel-measured diameter of the marker that represents the smallest value. Setting this option makes sense only if you use markers of the bubble type.
+        * @deprecated Use the layers.minSize option instead.
+        */
         minSize?: number;
 
-        /** @docid dxvectormapoptions_markerSettings_opacity */
+        /**
+        * Specifies the opacity of markers. Setting this option makes sense only if you use markers of the bubble type.
+        * @deprecated Use the layers.opacity option instead.
+        */
         opacity?: number;
 
-        /** @docid dxvectormapoptions_markerSettings_selectedBorderWidth */
+        /**
+        * Specifies the pixel-measured width of the marker border when the marker is selected.
+        * @deprecated Use the layers.selectedBorderWidth option instead.
+        */
         selectedBorderWidth?: number;
 
-        /** @docid dxvectormapoptions_markerSettings_selectedBorderColor */
+        /**
+        * Specifies a color for the marker border when the marker is selected.
+        * @deprecated Use the layers.selectedBorderColor option instead.
+        */
         selectedBorderColor?: string;
 
-        /** @docid dxvectormapoptions_markerSettings_selectedColor */
+        /**
+        * Specifies a color for a marker of the dot or bubble type when this marker is selected.
+        * @deprecated Use the layers.selectedColor option instead.
+        */
         selectedColor?: string;
 
-        /** @docid dxvectormapoptions_markerSettings_selectionMode */
+        /**
+        * Specifies whether a single or multiple markers can be selected on a vector map.
+        * @deprecated Use the layers.selectionMode option instead.
+        */
         selectionMode?: string;
 
-        /** @docid dxvectormapoptions_markerSettings_size */
+        /**
+        * Specifies the size of markers. Setting this option makes sense for any type of marker except bubble.
+        * @deprecated Use the layers.size option instead.
+        */
         size?: number;
 
-        /** @docid dxvectormapoptions_markerSettings_type */
+        /**
+        * Specifies the type of markers to be used on the map.
+        * @deprecated Use the layers.elementType option instead.
+        */
         type?: string;
 
-        /** @docid dxvectormapoptions_markerSettings_palette */
+        /**
+        * Specifies the name of a palette or a custom set of colors to be used for coloring markers of the pie type.
+        * @deprecated Use the layers.palette option instead.
+        */
         palette?: any;
 
-        /** @docid dxvectormapoptions_markerSettings_colorGroups */
+        /**
+        * Allows you to paint markers with similar attributes in the same color.
+        * @deprecated Use the layers.colorGroups option instead.
+        */
         colorGroups?: Array<number>;
 
-        /** @docid dxvectormapoptions_markerSettings_colorGroupingField */
+        /**
+        * Specifies the field that provides data to be used for coloring markers.
+        * @deprecated Use the layers.colorGroupingField option instead.
+        */
         colorGroupingField?: string;
 
-        /** @docid dxvectormapoptions_markerSettings_sizeGroups */
+        /**
+        * Allows you to display bubbles with similar attributes in the same size.
+        * @deprecated Use the layers.sizeGroups option instead.
+        */
         sizeGroups?: Array<number>;
 
-        /** @docid dxvectormapoptions_markerSettings_sizeGroupingField */
+        /**
+        * Specifies the field that provides data to be used for sizing bubble markers.
+        * @deprecated Use the layers.sizeGroupingField option instead.
+        */
         sizeGroupingField?: string;
     }
 
-    /** @docid dxvectormap_options */
+    
     export interface dxVectorMapOptions extends viz.core.BaseWidgetOptions, viz.core.RedrawOnResizeOptions, viz.core.TitleOptions, viz.core.LoadingIndicatorOptions, viz.core.ExportOptions {
-        /** @docid_ignore dxvectormapoptions_margin */
+        
 
-        /** @docid_ignore dxvectormapoptions_tooltip_format */
-        /** @docid_ignore dxvectormapoptions_tooltip_precision */
-
-        /** @docid_ignore dxvectormapoptions_markers_attributes */
-        /** @docid_ignore dxvectormapoptions_markers_coordinates */
-        /** @docid_ignore dxvectormapoptions_markers_text */
-        /** @docid_ignore dxvectormapoptions_markers_url */
-        /** @docid_ignore dxvectormapoptions_markers_value */
-        /** @docid_ignore dxvectormapoptions_markers_values */
-
-        /** @docid dxvectormapoptions_areaSettings */
+        /**
+        * An object specifying options for the map areas.
+        * @deprecated Use the "area" type element of the layers array.
+        */
         areaSettings?: AreaSettings;
 
-        /** @docid dxvectormapoptions_background */
+        /** Specifies the options for the map background. */
         background?: {
 
-            /** @docid dxvectormapoptions_background_borderColor */
+            /** Specifies a color for the background border. */
             borderColor?: string;
 
-            /** @docid dxvectormapoptions_background_color */
+            /** Specifies a color for the background. */
             color?: string;
         };
 
-        /** @docid dxvectormapoptions_layers */
+        /** Specifies options for VectorMap widget layers. */
         layers?: Array<MapLayerSettings>;
 
-        /** @docid dxvectormapoptions_projection */
+        /** Specifies the map projection. */
         projection?: Object;
 
-        /** @docid dxvectormapoptions_bounds */
+        /** Specifies the positioning of a map in geographical coordinates. */
         bounds?: Array<number>;
 
-        /** @docid dxvectormapoptions_controlbar */
+        /** Specifies the options of the control bar. */
         controlBar?: {
 
-            /** @docid dxvectormapoptions_controlbar_borderColor */
+            /** Specifies a color for the outline of the control bar elements. */
             borderColor?: string;
 
-            /** @docid dxvectormapoptions_controlbar_color */
+            /** Specifies a color for the inner area of the control bar elements. */
             color?: string;
 
-            /** @docid dxvectormapoptions_controlbar_enabled */
+            /** Specifies whether or not to display the control bar. */
             enabled?: boolean;
 
-            /** @docid dxvectormapoptions_controlbar_margin */
+            /** Specifies the margin of the control bar in pixels. */
             margin?: number;
 
-            /** @docid dxvectormapoptions_controlbar_horizontalAlignment */
+            /** Specifies the position of the control bar. */
             horizontalAlignment?: string;
 
-            /** @docid dxvectormapoptions_controlbar_verticalAlignment */
+            /** Specifies the position of the control bar. */
             verticalAlignment?: string;
 
-            /** @docid dxvectormapoptions_controlbar_opacity */
+            /** Specifies the opacity of the control bar. */
             opacity?: number;
         };
 
-        /** @docid dxvectormapoptions_mapData */
+        /**
+        * Specifies a data source for the map area.
+        * @deprecated Use the layers.dataSource option instead.
+        */
         mapData?: any;
 
-        /** @docid dxvectormapoptions_markers */
+        /**
+        * Specifies a data source for the map markers.
+        * @deprecated Use the layers.dataSource option instead.
+        */
         markers?: any;
 
-        /** @docid dxvectormapoptions_markerSettings */
+        /**
+        * An object specifying options for the map markers.
+        * @deprecated Use the "marker" type element of the layers array.
+        */
         markerSettings?: MarkerSettings;
 
-        /** @docid dxvectormapoptions_tooltip */
+        /** Configures tooltips. */
         tooltip?: viz.core.Tooltip;
 
-        /** @docid dxvectormapoptions_legends */
+        /** Configures map legends. */
         legends?: Array<Legend>;
 
-        /** @docid dxvectormapoptions_wheelEnabled */
+        /** Specifies whether or not the map should respond when a user rolls the mouse wheel. */
         wheelEnabled?: boolean;
 
-        /** @docid dxvectormapoptions_touchEnabled */
+        /** Specifies whether the map should respond to touch gestures. */
         touchEnabled?: boolean;
 
-        /** @docid dxvectormapoptions_zoomingEnabled */
+        /** Disables the zooming capability. */
         zoomingEnabled?: boolean;
 
-        /** @docid dxvectormapoptions_center */
+        /** Specifies the geographical coordinates of the center for a map. */
         center?: Array<number>;
 
-        /** @docid dxvectormapoptions_onCenterChanged */
+        /** A handler for the centerChanged event. */
         onCenterChanged?: (e: {
 			center: Array<number>;
 			component: dxVectorMap;
 			element: Element;
         }) => void;
 
-        /** @docid dxvectormapoptions_ontooltipshown*/
+        /** A handler for the tooltipShown event. */
         onTooltipShown?: (e: {
             component: dxVectorMap;
             element: Element;
             target: {};
         }) => void;
 
-        /** @docid dxvectormapoptions_ontooltiphidden*/
+        /** A handler for the tooltipHidden event. */
         onTooltipHidden?: (e: {
             component: dxVectorMap;
             element: Element;
             target: {};
         }) => void;
 
-        /** @docid dxvectormapoptions_zoomFactor */
+        /** Specifies a number that is used to zoom a map initially. */
         zoomFactor?: number;
 
-        /** @docid dxvectormapoptions_maxZoomFactor */
+        /** Specifies a map's maximum zoom factor. */
         maxZoomFactor?: number;
 
-        /** @docid dxvectormapoptions_onZoomFactorChanged */
+        /** A handler for the zoomFactorChanged event. */
         onZoomFactorChanged?: (e: {
             component: dxVectorMap;
             element: Element;
             zoomFactor: number;
         }) => void;
 
-        /** @docid dxvectormapoptions_onClick */
+        /** A handler for the click event. */
         onClick?: any;
 
-        /** @docid dxvectormapoptions_onSelectionChanged */
+        /** A handler for the selectionChanged event. */
         onSelectionChanged?: (e: {
             component: dxVectorMap;
             element: Element;
             target: MapLayerElement;
         }) => void;
 
-        /** @docid dxvectormapoptions_onAreaClick */
+        /**
+        * A handler for the areaClick event.
+        * @deprecated Use the onClick option instead.
+        */
         onAreaClick?: any;
 
-        /** @docid dxvectormapoptions_onAreaSelectionChanged */
+        /**
+        * A handler for the areaSelectionChanged event.
+        * @deprecated Use the onSelectionChanged option instead.
+        */
         onAreaSelectionChanged?: (e: {
             target: Area;
             component: dxVectorMap;
             element: Element;
         }) => void;
 
-        /** @docid dxvectormapoptions_onMarkerClick */
+        /**
+        * A handler for the markerClick event.
+        * @deprecated Use the onClick option instead.
+        */
         onMarkerClick?: any;
 
-        /** @docid dxvectormapoptions_onMarkerSelectionChanged */
+        /**
+        * A handler for the markerSelectionChanged event.
+        * @deprecated Use the onSelecitonChanged option instead.
+        */
         onMarkerSelectionChanged?: (e: {
             target: Marker;
             component: dxVectorMap;
             element: Element;
         }) => void;
 
-        /** @docid dxvectormapoptions_panningEnabled */
+        /** Disables the panning capability. */
         panningEnabled?: boolean;
     }
 
     export interface Legend extends viz.core.BaseLegend {
-        /** @docid dxvectormapoptions_legends_markerColor */
+        /** Specifies the color of item markers in the legend. The specified color applied only when the legend uses 'size' source. */
         markerColor?: string;
 
-        /** @docid dxvectormapoptions_legends_markerShape */
+        /** Specifies the shape of item markers. */
         markerShape?: string;
 
-        /** @docid dxvectormapoptions_legends_customizetext */
+        /** Specifies text for legend items. */
         customizeText?: (itemInfo: { start: number; end: number; index: number; color: string; size: number; }) => string;
 
-        /** @docid dxvectormapoptions_legends_customizehint */
+        /** Specifies text for a hint that appears when a user hovers the mouse pointer over the text of a legend item. */
         customizeHint?: (itemInfo: { start: number; end: number; index: number; color: string; size: number }) => string;
 
-        /** @docid dxvectormapoptions_legends_source */
+        /** Specifies the source of data for the legend. */
         source?: {
-            /** @docid dxvectormapoptions_legends_source_layer */
+            /** Specifies a layer to which the legend belongs. */
             layer?: string;
-            /** @docid dxvectormapoptions_legends_source_grouping */
+            /** Specifies the type of the legend grouping. */
             grouping?: string;
         }
     }
 
-    /** @docid_ignore viz_map */
+    
 
     export var projection: ProjectionCreator;
 
     export interface ProjectionCreator {
-        /** @docid viz_mapmethods_projection */
+        /** Creates a new projection. */
         (data: {
             to?: (coordinates: Array<number>) => Array<number>;
             from?: (coordinates: Array<number>) => Array<number>;
             aspectRatio?: number;
         }): Object;
 
-        /** @docid viz_mapmethods_projection_get */
+        /** Gets the default or custom projection from the projection storage. */
         get(name: string): Object;
 
-        /** @docid viz_mapmethods_projection_add */
+        /** Adds a new projection to the internal projections storage. */
         add(name: string, projection: Object): void;
     }
 }
 
 declare module DevExpress.viz {
-    /** @docid dxvectormap */
+    /** The VectorMap is a widget that visualize geographical locations. This widget represents a geographical map that contains areas and markers. Areas embody continents and countries. Markers flag specific points on the map, for example, towns, cities or capitals. */
     export class dxVectorMap extends viz.core.BaseWidget implements viz.core.LoadingIndicatorMethods {
         constructor(element: JQuery, options?: DevExpress.viz.map.dxVectorMapOptions);
         constructor(element: Element, options?: DevExpress.viz.map.dxVectorMapOptions);
@@ -547,49 +747,61 @@ declare module DevExpress.viz {
 
         hideLoadingIndicator(): void;
 
-        /** @docid dxvectormapmethods_center#center() */
+        /** Gets the current coordinates of the map center. */
         center(): Array<number>;
 
-        /** @docid dxvectormapmethods_center#center(centerCoordinates) */
+        /** Sets the coordinates of the map center. */
         center(centerCoordinates: Array<number>): void;
 
-        /** @docid dxvectormapmethods_clearAreaSelection */
+        /**
+        * Deselects all the selected areas on a map. The areas are displayed in their initial style after.
+        * @deprecated Use the layer's clearSelection() method instead.
+        */
         clearAreaSelection(): void;
 
-        /** @docid dxvectormapmethods_clearMarkerSelection */
+        /**
+        * Deselects all the selected markers on a map. The markers are displayed in their initial style after.
+        * @deprecated Use the layer's clearSelection() method instead.
+        */
         clearMarkerSelection(): void;
 
-        /** @docid dxvectormapmethods_clearSelection */
+        /** Deselects all the selected area and markers on a map at once. The areas and markers are displayed in their initial style after. */
         clearSelection(): void;
 
-        /** @docid dxvectormapmethods_convertCoordinates */
+        /** Converts client area coordinates into map coordinates. */
         convertCoordinates(x: number, y: number): Array<number>;
 
-        /** @docid dxvectormapmethods_getLayers */
+        /** Gets all map layers. */
         getLayers(): Array<DevExpress.viz.map.MapLayer>;
 
-        /** @docid dxvectormapmethods_getLayerByIndex */
+        /** Gets the layer by its index. */
         getLayerByIndex(index: number): DevExpress.viz.map.MapLayer;
 
-        /** @docid dxvectormapmethods_getLayerByName */
+        /** Gets the layer by its name. */
         getLayerByName(name: string): DevExpress.viz.map.MapLayer;
 
-        /** @docid dxvectormapmethods_getAreas */
+        /**
+        * Returns an array with all the map areas.
+        * @deprecated Use the layer's getElements() method instead.
+        */
         getAreas(): Array<DevExpress.viz.map.Area>;
 
-        /** @docid dxvectormapmethods_getMarkers */
+        /**
+        * Returns an array with all the map markers.
+        * @deprecated Use the layer's getElements() method instead.
+        */
         getMarkers(): Array<DevExpress.viz.map.Marker>;
 
-        /** @docid dxvectormapmethods_viewport#viewport() */
+        /** Gets the current coordinates of the map viewport. */
         viewport(): Array<any>;
 
-        /** @docid dxvectormapmethods_viewport#viewport(viewportCoordinates) */
+        /** Sets the coordinates of the map viewport. */
         viewport(viewportCoordinates: Array<number>): void;
 
-        /** @docid dxvectormapmethods_zoomFactor#zoomFactor() */
+        /** Gets the current value of the map zoom factor. */
         zoomFactor(): number;
 
-        /** @docid dxvectormapmethods_zoomFactor#zoomFactor(zoomFactor) */
+        /** Sets the value of the map zoom factor. */
         zoomFactor(zoomFactor: number): void;
     }
 }
