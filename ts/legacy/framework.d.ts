@@ -1,130 +1,106 @@
 declare module DevExpress.framework {
-    /** @docid_ignore dxCommandContainer */
-    /** @docid_ignore dxCommandContaineroptions_id */
-    /** @docid_ignore dxcontent */
-    /** @docid_ignore dxcontentoptions_targetPlaceholder */
-    /** @docid_ignore dxcontentplaceholderoptions_contentCssPosition */
-    /** @docid_ignore dxcontentplaceholderoptions_name */
-    /** @docid_ignore dxcontentplaceholderoptions_transition */
-    /** @docid_ignore dxcontentplaceholderoptions_animation */
-    /** @docid_ignore dxcontentplaceholder */
-    /** @docid_ignore dxtransitionoptions_name */
-    /** @docid_ignore dxtransitionoptions_type */
-    /** @docid_ignore dxtransitionoptions_animation */
-    /** @docid_ignore dxtransition */
-    /** @docid_ignore dxlayoutoptions_name */
-    /** @docid_ignore dxlayout */
-    /** @docid_ignore dxviewoptions_disableCache */
-    /** @docid_ignore dxviewoptions_modal */
-    /** @docid_ignore dxviewoptions_name */
-    /** @docid_ignore dxviewoptions_orientation */
-    /** @docid_ignore dxviewoptions_pane */
-    /** @docid_ignore dxviewoptions_title */
-    /** @docid_ignore dxview */
-    /** @docid_ignore dxviewPlaceholderoptions_viewName */
-    /** @docid_ignore dxviewPlaceholder */
 
-    /** @docid ViewCache */
+    /** An object that stores information about views displayed in the application. */
     export class ViewCache {
 
-        /** @docid ViewCacheevents_viewRemoved */
+        
         viewRemoved: JQueryCallback;
 
-        /** @docid ViewCachemethods_clear */
+        /** Removes all the viewInfo objects from the cache. */
         clear(): void;
 
-        /** @docid ViewCachemethods_getView */
+        /** Obtains a viewInfo object from the cache by the specified key. */
         getView(key: string): Object;
 
-        /** @docid ViewCachemethods_hasView */
+        /** Checks whether or not a viewInfo object is contained in the view cache under the specified key. */
         hasView(key: string): boolean;
 
-        /** @docid ViewCachemethods_removeView */
+        /** Removes a viewInfo object from the cache by the specified key. */
         removeView(key: string): Object;
 
-        /** @docid ViewCachemethods_setView */
+        /** Adds the specified viewInfo object to the cache under the specified key. */
         setView(key: string, viewInfo: Object): void;
     }
 
     export interface dxCommandOptions extends DOMComponentOptions {
-        /** @docid dxCommandOptions_onExecute */
+        /** Specifies an action performed when the execute() method of the command is called. */
         onExecute?: any;
 
-        /** @docid dxCommandOptions_disabled */
+        /** Indicates whether or not the widget that displays this command is disabled. */
         disabled?: boolean;
 
-        /** @docid dxCommandOptions_renderStage */
+        /** Specifies whether the current command is rendered when a view is being rendered or after a view is shown. */
         renderStage?: string;
 
-        /** @docid dxCommandOptions_icon */
+        /** Specifies the name of the icon shown inside the widget associated with this command. */
         icon?: string;
 
-        /** @docid dxCommandOptions_iconSrc */
+        
         iconSrc?: string;
 
-        /** @docid dxCommandOptions_id */
+        /** The identifier of the command. */
         id?: string;
 
-        /** @docid dxCommandOptions_title */
+        /** Specifies the title of the widget associated with this command. */
         title?: string;
 
-        /** @docid dxCommandOptions_type */
+        /** Specifies the type of the button, if the command is rendered as a Button widget. */
         type?: string;
 
-        /** @docid dxCommandOptions_visible */
+        /** A Boolean value specifying whether or not the widget associated with this command is visible. */
         visible?: boolean;
     }
 
-    /** @docid dxcommand */
+    /** A markup component used to define markup options for a command. */
     export class dxCommand extends DOMComponent {
         constructor(element: JQuery, options: dxCommandOptions);
         constructor(options: dxCommandOptions);
 
-        /** @docid dxcommandmethods_execute */
+        /** Executes the action associated with this command. */
         execute(): void;
     }
 
-    /** @docid Router */
+    /** An object responsible for routing. */
     export class Router {
-        /** @docid RouterMethods_register */
+        /** Adds a routing rule to the list of registered rules. */
         register(pattern: string, defaults?: Object, constraints?: Object): void;
 
-        /** @docid RouterMethods_parse */
+        /** Decodes the specified URI to an object using the registered routing rules. */
         parse(uri: string): Object;
 
-        /** @docid RouterMethods_format */
+        /** Formats an object to a URI. */
         format(obj: Object): string;
     }
 
     export interface StateManagerOptions {
-        /** @docid StateManageroptions_storage */
+        /** A storage to which the state manager saves the application state. */
         storage?: Object;
     }
 
-    /** @docid StateManager */
+    /** An object that stores the current application state. */
     export class StateManager {
         constructor(options?: StateManagerOptions);
-        /** @docid StateManagerMethods_addStateSource */
+        /** Adds an object that implements an interface of a state source to the state manager's collection of state sources. */
         addStateSource(stateSource: Object): void;
 
-        /** @docid StateManagerMethods_removeStateSource */
+        /** Removes a specified state source from the state manager's collection of state sources. */
         removeStateSource(stateSource: Object): void;
 
-        /** @docid StateManagerMethods_saveState */
+        /** Saves the current application state. */
         saveState(): void;
 
-        /** @docid StateManagerMethods_restoreState */
+        /** Restores the application state that has been saved by the saveState() method to the state storage. */
         restoreState(): void;
 
-        /** @docid StateManagerMethods_clearState */
+        /** Removes the application state that has been saved by the saveState() method to the state storage. */
         clearState(): void;
 
     }
 
     export module html {
-        /** @docid layoutSets */
+        
         export var layoutSets: Array<string>;
-        /** @docid_ignore animationSets */
+        
         export var animationSets: { [animationSetName: string]: AnimationSet };
 
         export interface AnimationSet {
@@ -132,56 +108,56 @@ declare module DevExpress.framework {
         }
 
         export interface HtmlApplicationOptions {
-            /** @docid HtmlApplicationoptions_commandMapping */
+            /** Specifies where the commands that are defined in the application's views must be displayed. */
             commandMapping?: Object;
 
-            /** @docid HtmlApplicationoptions_disableViewCache */
+            /** Specifies whether or not view caching is disabled. */
             disableViewCache?: boolean;
 
-            /** @docid HtmlApplicationoptions_layoutSet */
+            /** An array of layout controllers that should be used to show application views in the current navigation context. */
             layoutSet?: any;
 
-            /** @docid HtmlApplicationoptions_animationSet */
+            /** Specifies the animation presets that are used to animate different UI elements in the current application. */
             animationSet?: AnimationSet;
 
-            /** @docid HtmlApplicationoptions_mode */
+            /** Specifies whether the current application must behave as a mobile or web application. */
             mode?: string;
 
-            /** @docid HtmlApplicationoptions_namespace */
+            /** Specifies the object that represents a root namespace of the application. */
             namespace?: Object;
 
-            /** @docid HtmlApplicationoptions_navigateToRootViewMode */
+            /** Specifies application behavior when the user navigates to a root view. */
             navigateToRootViewMode?: string;
 
-            /** @docid HtmlApplicationoptions_navigation */
+            /** An array of dxCommand configuration objects used to define commands available from the application's global navigation. */
             navigation?: Array<any>;
 
-            /** @docid HtmlApplicationOptions_stateManager */
+            /** A state manager to be used in the application. */
             stateManager?: StateManager;
 
-            /** @docid HtmlApplicationOptions_stateStorage */
+            /** Specifies the storage to be used by the application's state manager to store the application state. */
             stateStorage?: Object;
 
-            /** @docid HtmlApplicationoptions_useViewTitleAsBackText */
+            /** Indicates whether on not to use the title of the previously displayed view as text on the Back button. */
             useViewTitleAsBackText?: boolean;
 
-            /** @docid HtmlApplicationoptions_viewCache */
+            /** A custom view cache to be used in the application. */
             viewCache?: Object;
 
-            /** @docid HtmlApplicationoptions_viewCacheSize */
+            /** Specifies a limit for the views that can be cached. */
             viewCacheSize?: number;
 
-            /** @docid HtmlApplicationoptions_templatesVersion */
+            /** Specifies the current version of application templates. */
             templatesVersion?: string;
 
-            /** @docid HtmlApplicationoptions_viewPort */
+            /** Specifies options for the viewport meta tag of a mobile browser. */
             viewPort?: JQuery;
 
-            /** @docid HtmlApplicationOptions_router */
+            /** A custom router to be used in the application. */
             router?: Router;
         }
 
-        /** @docid HtmlApplication */
+        /** An object that manages views and controls the application life cycle. */
         export class HtmlApplication implements EventsMixin<HtmlApplication> {
 
             constructor(options: HtmlApplicationOptions);
@@ -200,54 +176,54 @@ declare module DevExpress.framework {
             viewShowing: JQueryCallback;
             viewShown: JQueryCallback;
 
-            /** @docid HtmlApplicationfields_viewCache */
+            /** Provides access to the ViewCache object. */
             viewCache: ViewCache;
 
-            /** @docid HtmlApplicationfields_navigation */
+            /** An array of dxCommand components that are created based on the application's navigation option value. */
             navigation: Array<any>;
 
-            /** @docid HtmlApplicationFields_stateManager */
+            /** Provides access to the StateManager object. */
             stateManager: StateManager;
 
-            /** @docid HtmlApplicationFields_router */
+            /** Provides access to the Router object. */
             router: Router;
 
-            /** @docid HtmlApplicationmethods_back */
+            /** Navigates to the URI preceding the current one in the navigation history. */
             back(): void;
 
-            /** @docid HtmlApplicationmethods_canBack */
+            /** Returns a Boolean value indicating whether or not backwards navigation is currently possible. */
             canBack(): boolean;
 
-            /** @docid HtmlApplicationmethods_clearState */
+            /** Calls the clearState() method of the application's StateManager object. */
             clearState(): void;
 
-            /** @docid HtmlApplicationmethods_createNavigation */
+            /** Creates global navigation commands. */
             createNavigation(navigationConfig: Array<any>): void;
 
-            /** @docid HtmlApplicationmethods_getViewTemplate */
+            /** Returns an HTML template of the specified view. */
             getViewTemplate(viewName: string): JQuery;
 
-            /** @docid HtmlApplicationmethods_getViewTemplateInfo */
+            /** Returns a configuration object used to create a dxView component for a specified view. */
             getViewTemplateInfo(viewName: string): Object;
 
-            /** @docid HtmlApplicationmethods_loadTemplates */
+            /** Adds a specified HTML template to a collection of view or layout templates. */
             loadTemplates(source: any): JQueryPromise<any>;
 
-            /** @docid HtmlApplicationmethods_navigate#navigate(uri) */
+            /** Navigates to the specified URI. */
             navigate(uri?: any): void;
-            /** @docid HtmlApplicationmethods_navigate#navigate(uri, options) */
+            /** Navigates to the specified URI. */
             navigate(uri: any, options?: Object): void;
 
-            /** @docid HtmlApplicationmethods_renderNavigation */
+            /** Renders navigation commands to the navigation command containers that are located in the layouts used in the application. */
             renderNavigation(): void;
 
-            /** @docid HtmlApplicationmethods_restoreState */
+            /** Calls the restoreState() method of the application's StateManager object. */
             restoreState(): void;
 
-            /** @docid HtmlApplicationmethods_saveState */
+            /** Calls the saveState method of the application's StateManager object. */
             saveState(): void;
 
-            /** @docid HtmlApplicationmethods_templateContext */
+            /** Provides access to the object that defines the current context to be considered when choosing an appropriate template for a view. */
             templateContext(): Object;
 
             on(eventName: "initialized", eventHandler: () => void): HtmlApplication;
