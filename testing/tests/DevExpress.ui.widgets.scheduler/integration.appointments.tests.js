@@ -1,5 +1,18 @@
 "use strict";
 
+var $ = require("jquery");
+
+QUnit.testStart(function() {
+    $("#qunit-fixture").html(
+        '<div id="scheduler">\
+            <div data-options="dxTemplate: { name: \'template\' }">Task Template</div>\
+            </div>');
+});
+
+require("common.css!");
+require("generic_light.css!");
+
+
 var $ = require("jquery"),
     noop = require("core/utils/common").noop,
     errors = require("ui/widget/ui.errors"),
@@ -8,7 +21,7 @@ var $ = require("jquery"),
     messageLocalization = require("localization/message"),
     dblclickEvent = require("events/dblclick"),
     fx = require("animation/fx"),
-    pointerMock = require("../../../helpers/pointerMock.js"),
+    pointerMock = require("../../helpers/pointerMock.js"),
     Color = require("color"),
     tooltip = require("ui/tooltip/ui.tooltip"),
     devices = require("core/devices"),

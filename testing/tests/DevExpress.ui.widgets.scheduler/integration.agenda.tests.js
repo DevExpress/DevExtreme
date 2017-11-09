@@ -1,5 +1,18 @@
 "use strict";
 
+var $ = require("jquery");
+
+QUnit.testStart(function() {
+    $("#qunit-fixture").html(
+        '<div id="scheduler">\
+            <div data-options="dxTemplate: { name: \'template\' }">Task Template</div>\
+            </div>');
+});
+
+require("common.css!");
+require("generic_light.css!");
+
+
 var $ = require("jquery"),
     devices = require("core/devices"),
     resizeCallbacks = require("core/utils/window").resizeCallbacks,
