@@ -9,10 +9,6 @@
     @GRID_BASE_ADAPTIVE_TEXT_PADDING: 11px;
     @GRID_BASE_DATA_MODIFIED_COLOR: "@{widgetName}-data-modified-color";
 
-    @ANDROID5_DROPDOWNEDITOR_CLEAN_BUTTON_WIDTH: @ANDROID5_TEXTEDITOR_CLEAR_ICON_SIZE + @ANDROID5_TEXTEDITOR_CLEAR_ICON_RIGHT;
-    @DROPDOWNEDITOR_INVALID_BADGE_OFFSET: @ANDROID5_DROPDOWNEDITOR_BUTTON_WIDTH - 3px;
-    @ANDROID5_TEXTEDITOR_INVALID_PADDING: @ANDROID5_DROPDOWNEDITOR_BUTTON_WIDTH + @ANDROID5_TEXTEDITOR_INVALID_BADGE_WIDTH + 3px;
-
     .dx-@{widgetName}-checkbox-size {
         &.dx-focused {
             .dx-checkbox-icon {
@@ -347,7 +343,8 @@
         .touch-action(pinch-zoom);
 
         .dx-texteditor-input, .dx-placeholder::before {
-           padding: @GRID_BASE_CELL_PADDING;
+           padding-top: @GRID_BASE_CELL_PADDING;
+           padding-bottom: @GRID_BASE_CELL_PADDING;
         }
 
         .dx-@{widgetName}-table {
@@ -500,7 +497,8 @@
 
     .dx-@{widgetName}-rowsview {
         .dx-texteditor-input {
-           padding: @GRID_BASE_CELL_PADDING;
+           padding-top: @GRID_BASE_CELL_PADDING;
+           padding-bottom: @GRID_BASE_CELL_PADDING;
         }
 
         .dx-row {
@@ -598,40 +596,6 @@
         .dx-master-detail-row:not(.dx-@{widgetName}-edit-form) {
             > .dx-@{widgetName}-group-space, .dx-master-detail-cell {
                 background-color: ~"@{@{widgetName}-master-detail-background-color}";
-            }
-        }
-    }
-
-    .dx-@{widgetName}-headers, .dx-@{widgetName}-rowsview {
-        .dx-dropdowneditor-button-visible {
-            .dx-texteditor-container:after {
-                right: @DROPDOWNEDITOR_INVALID_BADGE_OFFSET;
-            }
-
-            &.dx-show-clear-button:not(.dx-texteditor-empty) .dx-texteditor-container:after {
-                right: @DROPDOWNEDITOR_INVALID_BADGE_OFFSET + @ANDROID5_DROPDOWNEDITOR_CLEAN_BUTTON_WIDTH;
-            }
-
-            &.dx-invalid {
-                .dx-texteditor-input {
-                    padding-right: @ANDROID5_TEXTEDITOR_INVALID_PADDING;
-
-                    &.dx-rtl {
-                        padding: @GRID_BASE_CELL_PADDING;
-                        padding-left: @ANDROID5_TEXTEDITOR_INVALID_PADDING;
-                    }
-                }
-
-                &.dx-show-clear-button {
-                    .dx-texteditor-input {
-                        padding-right: @ANDROID5_TEXTEDITOR_INVALID_PADDING + @ANDROID5_DROPDOWNEDITOR_CLEAN_BUTTON_WIDTH;
-
-                        &.dx-rtl  {
-                            padding: @GRID_BASE_CELL_PADDING;
-                            padding-left: @ANDROID5_TEXTEDITOR_INVALID_PADDING + @ANDROID5_DROPDOWNEDITOR_CLEAN_BUTTON_WIDTH;
-                        }
-                    }
-                }
             }
         }
     }

@@ -41,7 +41,6 @@
     @GENERIC_GRID_BASE_DRAG_HEADER_FIRST_SHADOW: 0px 0px 1px ~"@{@{widgetName}-drag-header-shadow-color}";
     @GENERIC_GRID_BASE_DRAG_HEADER_SECOND_SHADOW: 0px 1px 3px ~"@{@{widgetName}-drag-header-second-shadow-color}";
     @GENERIC_GRID_BASE_CHECKBOX_ICON_SIZE: 16px;
-    @GENERIC_DROPDOWNEDITOR_CONTAINER_WITH_CLEAR_BUTTON: @GENERIC_DROPDOWNEDITOR_CONTAINER_BUTTON_SIZE + @GENERIC_DROPDOWNEDITOR_INVALID_BADGE_SIZE;
 
     .dx-set-checkbox-border-color-as-background() when (@GENERIC_COLOR_POSTFIX = ".contrast") {
         .dx-selection .dx-checkbox-icon {
@@ -203,7 +202,8 @@
 
     .dx-@{widgetName}-headers, .dx-@{widgetName}-rowsview {
         .dx-texteditor-input {
-            padding: @GENERIC_GRID_BASE_CELL_PADDING;
+            padding-top: @GENERIC_GRID_BASE_CELL_PADDING;
+            padding-bottom: @GENERIC_GRID_BASE_CELL_PADDING;
             min-height: round(@GENERIC_BASE_LINE_HEIGHT * @GENERIC_BASE_FONT_SIZE) + 2 * @GENERIC_GRID_BASE_CELL_PADDING
         }
 
@@ -218,25 +218,34 @@
         }
 
         .dx-dropdowneditor-button-visible {
+            &.dx-show-clear-button {
+                .dx-texteditor-input {
+                   padding-right: @GENERIC_DROPDOWNEDITOR_BUTTON_WITH_CLEAR_PADDING;
+                }
+
+                &.dx-invalid {
+                    .dx-texteditor-input {
+                        padding-right: @GENERIC_DROPDOWNEDITOR_CONTAINER_BUTTON_SIZE + @GENERIC_DROPDOWNEDITOR_INVALID_BADGE_SIZE + @GENERIC_DROPDOWNEDITOR_CLEAR_ICON_CONTAINER_SIZE;
+                    }
+
+                    &.dx-rtl .dx-texteditor-input {
+                        padding: @GENERIC_TEXTEDITOR_INPUT_PADDING;
+                        padding-left: @GENERIC_DROPDOWNEDITOR_CONTAINER_BUTTON_SIZE + @GENERIC_DROPDOWNEDITOR_INVALID_BADGE_SIZE + @GENERIC_DROPDOWNEDITOR_CLEAR_ICON_CONTAINER_SIZE;
+                    }
+                }
+            }
+
             &.dx-invalid {
                 .dx-texteditor-input {
-                    padding-right: @GENERIC_DROPDOWNEDITOR_CONTAINER_WITH_CLEAR_BUTTON;
+                    padding-right: @GENERIC_DROPDOWNEDITOR_CONTAINER_BUTTON_SIZE + @GENERIC_DROPDOWNEDITOR_INVALID_BADGE_SIZE;
                 }
-
-                &.dx-show-clear-button .dx-texteditor-input {
-                    padding-right: @GENERIC_DROPDOWNEDITOR_CONTAINER_WITH_CLEAR_BUTTON + @GENERIC_DROPDOWNEDITOR_CLEAR_ICON_CONTAINER_SIZE;
-                }
-
                 &.dx-rtl .dx-texteditor-input {
                     padding: @GENERIC_TEXTEDITOR_INPUT_PADDING;
-                    padding-left: @GENERIC_DROPDOWNEDITOR_CONTAINER_WITH_CLEAR_BUTTON;
+                    padding-left: @GENERIC_DROPDOWNEDITOR_CONTAINER_BUTTON_SIZE + @GENERIC_DROPDOWNEDITOR_INVALID_BADGE_SIZE;
                 }
-
-                &.dx-show-clear-button
-                &.dx-rtl .dx-texteditor-input {
-                    padding: @GENERIC_TEXTEDITOR_INPUT_PADDING;
-                    padding-left: @GENERIC_DROPDOWNEDITOR_CONTAINER_WITH_CLEAR_BUTTON + @GENERIC_DROPDOWNEDITOR_CLEAR_ICON_CONTAINER_SIZE;
-                }
+            }
+            .dx-texteditor-input {
+                padding-right: @GENERIC_DROPDOWNEDITOR_CONTAINER_BUTTON_SIZE;
             }
         }
 
@@ -284,10 +293,6 @@
 
         .dx-dropdowneditor {
             background-color: ~"@{@{widgetName}-editor-bg}";
-
-            .dx-icon-clear {
-                left: 0px;
-            }
         }
 
         &.dx-focused .dx-dropdowneditor-icon {

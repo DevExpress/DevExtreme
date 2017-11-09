@@ -8,7 +8,6 @@
     @GRID_BASE_COMMAND_EDIT_COLUMN_WIDTH: 100px;
     @GRID_BASE_ADAPTIVE_TEXT_PADDING: 8px;
     @GRID_BASE_CHECKBOX_ICON_SIZE: 20px;
-    @DROPDOWNEDITOR_BUTTON_WITH_CLEAR_PADDING: 1.5 * @DROPDOWNEDITOR_BUTTON_WIDTH + @CLEAR_ICON_SIZE + @CLEAR_ICON_RIGHT;
 
     .dx-@{widgetName}-checkbox-size {
         .dx-checkbox-icon {
@@ -225,26 +224,17 @@
     }
 
     .dx-@{widgetName}-headers, .dx-@{widgetName}-rowsview {
+        .dx-texteditor-input {
+           padding-top: @GRID_BASE_CELL_PADDING;
+           padding-bottom: @GRID_BASE_CELL_PADDING;
+        }
+
         .dx-dropdowneditor-button-visible {
-            &.dx-invalid {
-                .dx-texteditor-input {
-                    padding-right: @DROPDOWNEDITOR_BUTTON_WIDTH + @TEXTEDITOR_INVALID_BADGE_WIDTH;
-                }
-
-                &.dx-show-clear-button .dx-texteditor-input {
-                    padding-right: @TEXTEDITOR_INVALID_BADGE_WIDTH + @DROPDOWNEDITOR_BUTTON_WITH_CLEAR_PADDING;
-                }
-
-                &.dx-rtl .dx-texteditor-input {
-                    padding: @GRID_BASE_CELL_PADDING;
-                    padding-left: @DROPDOWNEDITOR_BUTTON_WIDTH + @TEXTEDITOR_INVALID_BADGE_WIDTH;
-                }
-
-                &.dx-show-clear-button
-                &.dx-rtl .dx-texteditor-input {
-                    padding: @GRID_BASE_CELL_PADDING;
-                    padding-left: @TEXTEDITOR_INVALID_BADGE_WIDTH + @DROPDOWNEDITOR_BUTTON_WITH_CLEAR_PADDING;
-                }
+            &.dx-show-clear-button .dx-texteditor-input {
+                padding-right: @DROPDOWNEDITOR_BUTTON_WIDTH + @CLEAR_ICON_SIZE + @CLEAR_ICON_RIGHT;
+            }
+            .dx-texteditor-input {
+                padding-right: @DROPDOWNEDITOR_BUTTON_WIDTH;
             }
         }
     }
