@@ -2497,3 +2497,22 @@ QUnit.test("Use original scale breaks after recalculation ticks", function(asser
         cumulativeWidth: 0
     }]);
 });
+
+QUnit.test("Generate sexy tick when there are breaks", function(assert) {
+    this.createAxis();
+    this.updateOptions({
+        argumentType: "numeric",
+        type: "continuous",
+        allowDecimals: false,
+        calculateMinors: true,
+        breakStyle: { width: 0 },
+        breaks: [{ startValue: 1, endValue: 14.6 }, { startValue: 17.2, endValue: 95 }, { startValue: 95, endValue: 318 }]
+    });
+
+    this.axis.setBusinessRange({ minVisible: 0, maxVisible: 318, addRange: function() { return this; } });
+
+    //act
+    this.axis.createTicks(canvas(600));
+
+    assert.deepEqual(this.axis._majorTicks.map(value), [0, 1, 15, 16, 17, 95, 318], "ticks");
+});
