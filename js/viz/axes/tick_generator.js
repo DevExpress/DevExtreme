@@ -254,7 +254,7 @@ function addIntervalWithBreaks(addInterval, breaks) {
     return function(value, interval) {
         var breakSize;
 
-        value = addInterval(value, interval)
+        value = addInterval(value, interval);
 
         if(!breaks.every(function(item) {
             if(value >= addInterval(item.from, interval) && addInterval(value, interval) < item.to) {
