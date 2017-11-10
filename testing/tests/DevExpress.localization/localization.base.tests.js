@@ -465,6 +465,33 @@ QUnit.test("firstDayOfWeekIndex", function(assert) {
     assert.equal(dateLocalization.firstDayOfWeekIndex(), 0);
 });
 
+QUnit.module("Localization date (ru)", {
+    beforeEach: function() {
+        sinon
+            .stub(dateLocalization, "getMonthNames")
+            .withArgs("wide", "format")
+            .returns(["января", "февраля", "марта"])
+            .withArgs("wide", "standalone")
+            .returns(["январь", "февраль", "март"]);
+
+        localization.locale("ru");
+    },
+    afterEach: function() {
+        dateLocalization.getMonthNames.restore();
+        localization.locale("en");
+    }
+});
+
+QUnit.test("format LDML pattern with month name", function(assert) {
+    assert.equal(dateLocalization.format(new Date(2015, 2, 1), "d MMMM"), "1 марта");
+    assert.equal(dateLocalization.format(new Date(2015, 2, 1), "LLLL y"), "март 2015");
+});
+
+QUnit.test("parse LDML pattern with month name", function(assert) {
+    assert.deepEqual(dateLocalization.parse("1 марта 2015", "d MMMM y"), new Date(2015, 2, 1));
+    assert.deepEqual(dateLocalization.parse("март 2015", "LLLL y"), new Date(2015, 2, 1));
+});
+
 QUnit.module("Localization message (en)", {
     beforeEach: function() {
         localization.loadMessages({
