@@ -2,6 +2,7 @@
 
 var BaseAppointmentsStrategy = require("./ui.scheduler.appointments.strategy.base"),
     extend = require("../../core/utils/extend").extend,
+    isNumeric = require("../../core/utils/type").isNumeric,
     dateUtils = require("../../core/utils/date");
 
 var WEEK_APPOINTMENT_DEFAULT_OFFSET = 25,
@@ -239,11 +240,11 @@ var VerticalRenderingStrategy = BaseAppointmentsStrategy.inherit({
     },
 
     _getAppointmentCount: function(overlappingMode, coordinates) {
-        return overlappingMode !== "auto" && coordinates.count === 1 ? coordinates.count : this._getMaxAppointmentCountPerCell();
+        return overlappingMode !== "auto" && (coordinates.count === 1 && !isNumeric(overlappingMode)) ? coordinates.count : this._getMaxAppointmentCountPerCell();
     },
 
     _getDefaultRatio: function(coordinates, appointmentCountPerCell) {
-        return (this.instance.fire("getMaxAppointmentsPerCell") && appointmentCountPerCell !== 1) || coordinates.count > APPOINTMENT_COUNT_PER_CELL ? 0.65 : 1;
+        return coordinates.count > APPOINTMENT_COUNT_PER_CELL ? 0.65 : 1;
     },
 
     _getOffsets: function() {
