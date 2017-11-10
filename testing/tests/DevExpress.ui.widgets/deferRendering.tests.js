@@ -598,8 +598,6 @@ QUnit.test("stops animation on the 'renderWhen' option toggling (T574848)", func
     deferRendering.option("renderWhen", false);
     deferRendering.option("renderWhen", true);
     assert.equal(stopLog.length, 1, "T574848");
-
-    $test.remove();
 });
 
 QUnit.test("should support Promise/A+ standard", function(assert) {
