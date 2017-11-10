@@ -11,7 +11,7 @@ RUN apt-get install -y ca-certificates curl
 RUN apt-get install -y apt-transport-https gdebi-core gnupg2
 
 # Node
-RUN curl -sL https://deb.nodesource.com/setup_8.x | bash -
+RUN curl -L https://deb.nodesource.com/setup_8.x | bash -
 RUN apt-get install -y nodejs
 RUN npm set progress=false
 RUN npm set loglevel=error
@@ -20,14 +20,14 @@ RUN npm set unsafe-perm=true
 RUN npm set fetch-retries 5
 
 # .NET Core
-RUN curl https://packages.microsoft.com/keys/microsoft.asc | gpg --dearmor > /etc/apt/trusted.gpg.d/microsoft.gpg
+RUN curl -L https://packages.microsoft.com/keys/microsoft.asc | gpg --dearmor > /etc/apt/trusted.gpg.d/microsoft.gpg
 RUN echo "deb [arch=amd64] https://packages.microsoft.com/repos/microsoft-ubuntu-xenial-prod xenial main" > /etc/apt/sources.list.d/dotnetdev.list
 RUN apt-get update
 RUN DOTNET_SKIP_FIRST_TIME_EXPERIENCE=1 apt-get install -y dotnet-sdk-2.0.2
 RUN rm /usr/share/dotnet/sdk/*/nuGetPackagesArchive.lzma
 
 # Chrome, see https://stackoverflow.com/a/36906724
-RUN curl https://www.slimjetbrowser.com/chrome/lnx/chrome64_61.0.3163.79.deb > chrome.deb
+RUN curl -L https://www.slimjet.com/chrome/lnx/chrome64_61.0.3163.79.deb > chrome.deb
 RUN gdebi -n ./chrome.deb
 RUN unlink ./chrome.deb
 
