@@ -187,9 +187,41 @@ function getRightMargin(bBox) {
     return _math.abs(bBox.width - _math.abs(bBox.x)) || 0;
 }
 
-function generateAutoBreaks(options, series, viewport) {
-    var ranges = [],
+function generateRangesOnPoints(points, edgePoints, getRange) {
+    var i,
         length,
+        maxRange = null,
+        ranges = [],
+        curValue,
+        prevValue,
+        curRange;
+
+    for(i = 1, length = points.length; i < length; i++) {
+        curValue = points[i];
+        prevValue = points[i - 1];
+        curRange = getRange(curValue, prevValue);
+
+        if(edgePoints.indexOf(curValue) >= 0) {
+            if(!maxRange || curRange > maxRange.length) {
+                maxRange = { start: curValue, end: prevValue, length: curRange };
+            }
+        } else {
+            if(maxRange && curRange < maxRange.length) {
+                ranges.push(maxRange);
+            } else {
+                ranges.push({ start: curValue, end: prevValue, length: curRange });
+            }
+            maxRange = null;
+        }
+    }
+    if(maxRange) {
+        ranges.push(maxRange);
+    }
+    return ranges;
+}
+
+function generateAutoBreaks(options, series, viewport) {
+    var ranges,
         breaks = [],
         i,
         getRange = options.type === "logarithmic" ?
@@ -197,20 +229,22 @@ function generateAutoBreaks(options, series, viewport) {
             function(min, max) { return max - min; },
         visibleRange = getRange(viewport.minVisible, viewport.maxVisible),
         maxAutoBreakCount,
-        points = series.reduce(function(points, s) {
-            points = points.concat(s.getPointsInViewPort());
-            return points;
-        }, []).sort(function(a, b) {
+        points = series.reduce(function(result, s) {
+            var points = s.getPointsInViewPort();
+            result[0] = result[0].concat(points[0]);
+            result[1] = result[1].concat(points[1]);
+            return result;
+        }, [[], []]),
+        sortedAllPoints = points[0].concat(points[1]).sort(function(a, b) {
             return b - a;
+        }),
+        edgePoints = points[1].filter(function(p) {
+            return points[0].indexOf(p) < 0;
         }),
         epsilon = visibleRange / 1E10,
         minDiff = RANGE_RATIO * visibleRange;
 
-    for(i = 1, length = points.length; i < length; i++) {
-        ranges.push({ start: points[i], end: points[i - 1], length: getRange(points[i], points[i - 1]) });
-    }
-
-    ranges.sort(function(a, b) {
+    ranges = generateRangesOnPoints(sortedAllPoints, edgePoints, getRange).sort(function(a, b) {
         return b.length - a.length;
     });
 

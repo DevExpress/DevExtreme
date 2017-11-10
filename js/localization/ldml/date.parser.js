@@ -106,7 +106,7 @@ var PATTERN_PARSERS = {
     }
 };
 
-var PATTERNS = ["y", "M", "d", "h", "m", "s", "S"];
+var ORDERED_PATTERNS = ["y", "M", "d", "h", "m", "s", "S"];
 
 var PATTERN_SETTERS = {
     y: "setFullYear",
@@ -199,6 +199,35 @@ var setPatternPart = function(date, pattern, text, dateParts) {
     }
 };
 
+var setPatternPartFromNow = function(date, pattern, now) {
+    var setterName = PATTERN_SETTERS[pattern],
+        getterName = "g" + setterName.substr(1);
+
+    date[setterName](now[getterName]());
+};
+
+var getShortPatterns = function(fullPatterns) {
+    return fullPatterns.map(function(pattern) {
+        return pattern[0] === "H" ? "h" : pattern[0];
+    });
+};
+
+var getMaxOrderedPatternIndex = function(patterns) {
+    var indexes = patterns.map(function(pattern) {
+        return ORDERED_PATTERNS.indexOf(pattern);
+    });
+
+    return Math.max.apply(Math, indexes);
+};
+
+var getOrderedFormatPatterns = function(formatPatterns) {
+    var otherPatterns = formatPatterns.filter(function(pattern) {
+        return ORDERED_PATTERNS.indexOf(pattern) < 0;
+    });
+
+    return ORDERED_PATTERNS.concat(otherPatterns);
+};
+
 var getParser = function(format, dateParts) {
     var regExpInfo = getRegExpInfo(format, dateParts);
 
@@ -208,26 +237,21 @@ var getParser = function(format, dateParts) {
         if(regExpResult) {
             var now = new Date(),
                 date = new Date(now.getFullYear(), 0, 1),
-                assignedPatterns = ["y"];
+                formatPatterns = getShortPatterns(regExpInfo.patterns),
+                maxPatternIndex = getMaxOrderedPatternIndex(formatPatterns),
+                orderedFormatPatterns = getOrderedFormatPatterns(formatPatterns);
 
-            regExpInfo.patterns.forEach(function(pattern, index) {
-                var partText = regExpResult[index + 1];
-                setPatternPart(date, pattern, partText, dateParts);
-                pattern = pattern[0];
-                if(pattern === "H") pattern = "h";
-                var patternIndex = PATTERNS.indexOf(pattern) - 1;
-                while(patternIndex >= 0) {
-                    assignedPatterns.push(pattern);
-                    pattern = PATTERNS[patternIndex];
-                    if(assignedPatterns.indexOf(pattern) < 0) {
-                        var setterName = PATTERN_SETTERS[pattern],
-                            getterName = "g" + setterName.substr(1);
+            orderedFormatPatterns.forEach(function(pattern, index) {
+                if(index < ORDERED_PATTERNS.length && index > maxPatternIndex) return;
 
-                        date[setterName](now[getterName]());
-                    }
-                    patternIndex--;
+                var patternIndex = formatPatterns.indexOf(pattern);
+                if(patternIndex >= 0) {
+                    setPatternPart(date, regExpInfo.patterns[patternIndex], regExpResult[patternIndex + 1], dateParts);
+                } else {
+                    setPatternPartFromNow(date, pattern, now);
                 }
             });
+
             return date;
         }
 

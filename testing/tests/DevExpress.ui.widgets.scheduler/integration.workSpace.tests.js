@@ -1,10 +1,23 @@
 "use strict";
 
+var $ = require("jquery");
+
+QUnit.testStart(function() {
+    $("#qunit-fixture").html(
+        '<div id="scheduler">\
+            <div data-options="dxTemplate: { name: \'template\' }">Task Template</div>\
+            </div>');
+});
+
+require("common.css!");
+require("generic_light.css!");
+
+
 var $ = require("jquery"),
     eventsEngine = require("events/core/events_engine"),
     renderer = require("core/renderer"),
     fx = require("animation/fx"),
-    pointerMock = require("../../../helpers/pointerMock.js"),
+    pointerMock = require("../../helpers/pointerMock.js"),
     dragEvents = require("events/drag"),
     CustomStore = require("data/custom_store"),
     dateLocalization = require("localization/date"),
@@ -365,15 +378,19 @@ QUnit.test("WorkSpace should have a correct 'endDayHour' option", function(asser
 });
 
 QUnit.test("drop and dragenter handlers should be different for date table and allDay table, T245137", function(assert) {
-    var originalEventsEngineOn = eventsEngine.on;
     var guid = 0;
     var log = {};
 
     log[dragEvents.drop] = {};
     log[dragEvents.enter] = {};
 
+    var onSpy = sinon.spy(eventsEngine, "on");
 
-    eventsEngine.on = function($element, eventName) {
+    this.createInstance();
+
+    onSpy.getCalls().forEach(function(spyCall) {
+        var $element = $(spyCall.args[0]);
+        var eventName = spyCall.args[1];
         var logByEvent = log[eventName.split(".")[0]];
 
         if(!logByEvent) {
@@ -386,38 +403,31 @@ QUnit.test("drop and dragenter handlers should be different for date table and a
         if($element.hasClass("dx-scheduler-all-day-table")) {
             logByEvent["allDayTable"] = guid++;
         }
-    };
-
-    this.createInstance();
+    });
 
     assert.ok(log[dragEvents.drop].allDayTable > log[dragEvents.drop].dateTable, "AllDay drop handler was created after dateTable drop handler");
     assert.ok(log[dragEvents.enter].allDayTable > log[dragEvents.enter].dateTable, "AllDay dragenter handler was created after dateTable dragenter handler");
 
-    eventsEngine.on = originalEventsEngineOn;
+    eventsEngine.on.restore();
 });
 
 QUnit.test("event handlers should be reattached after changing allDayExpanded", function(assert) {
-    var originalEventsEngineOn = eventsEngine.on;
-    var dateTableDropSubscriptionLog = [];
-
-    eventsEngine.on = function($element, eventName) {
+    var onSpy = sinon.spy(eventsEngine, "on").withArgs(sinon.match(function(element) {
+        return $(element).hasClass("dx-scheduler-date-table");
+    }), sinon.match(function(eventName) {
         eventName = eventName.split(".")[0];
-
-        if(eventName === dragEvents.drop && $element.hasClass("dx-scheduler-date-table")) {
-            dateTableDropSubscriptionLog.push(arguments);
-        }
-    };
-
+        return eventName === dragEvents.drop;
+    }));
 
     this.createInstance();
 
-    var previousSubscriptionsLength = dateTableDropSubscriptionLog.length;
+    var previousSubscriptionsLength = onSpy.callCount;
 
     this.instance.getWorkSpace().option("allDayExpanded", true);
 
-    assert.ok(dateTableDropSubscriptionLog.length > previousSubscriptionsLength, "Events were reattached");
+    assert.ok(onSpy.callCount > previousSubscriptionsLength, "Events were reattached");
 
-    eventsEngine.on = originalEventsEngineOn;
+    eventsEngine.on.restore();
 });
 
 QUnit.test("Work space should have right all-day-collapsed class on init", function(assert) {

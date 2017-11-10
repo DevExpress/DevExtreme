@@ -10,7 +10,7 @@ namespace StyleCompiler
         public static string GetRepoRootPath()
         {
             return Path.GetFullPath(
-                Path.Combine(PlatformServices.Default.Application.ApplicationBasePath, "../../../../..")
+                Path.Combine(PlatformServices.Default.Application.ApplicationBasePath, "../../..")
             );
         }
 

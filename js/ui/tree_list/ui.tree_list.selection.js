@@ -82,17 +82,17 @@ treeListCore.registerModule("selection", extend(true, {}, selectionModule, {
 
                 _updateSelectColumn: noop,
 
-                _getVisibleNodeKeys: function(onlyRootChildren) {
+                _getVisibleNodeKeys: function(isRecursiveSelection) {
                     var component = this.component,
                         root = component.getRootNode(),
                         keys = [];
 
                     root && treeListCore.foreachNodes(root.children, function(node) {
-                        if(node.key !== undefined && node.visible) {
+                        if(node.key !== undefined && (node.visible || isRecursiveSelection)) {
                             keys.push(node.key);
                         }
 
-                        return onlyRootChildren ? false : component.isRowExpanded(node.key);
+                        return isRecursiveSelection ? false : component.isRowExpanded(node.key);
                     });
 
                     return keys;

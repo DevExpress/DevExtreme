@@ -1,5 +1,18 @@
 "use strict";
 
+var $ = require("jquery");
+
+QUnit.testStart(function() {
+    $("#qunit-fixture").html(
+        '<div id="scheduler">\
+            <div data-options="dxTemplate: { name: \'template\' }">Task Template</div>\
+            </div>');
+});
+
+require("common.css!");
+require("generic_light.css!");
+
+
 var $ = require("jquery"),
     Tooltip = require("ui/tooltip"),
     tooltip = require("ui/tooltip/ui.tooltip"),
@@ -9,7 +22,7 @@ var $ = require("jquery"),
     messageLocalization = require("localization/message"),
     DataSource = require("data/data_source/data_source").DataSource,
     appointmentTooltip = require("ui/scheduler/ui.scheduler.appointment_tooltip"),
-    keyboardMock = require("../../../helpers/keyboardMock.js"),
+    keyboardMock = require("../../helpers/keyboardMock.js"),
     dataUtils = require("core/element_data");
 
 require("ui/scheduler/ui.scheduler");

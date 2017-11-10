@@ -42,7 +42,7 @@ var setupModule = function() {
     };
 
     that.setupTreeList = function() {
-        setupTreeListModules(that, ["data", "columns", "rows", "selection", "editorFactory", "columnHeaders", "filterRow", "sorting"], {
+        setupTreeListModules(that, ["data", "columns", "rows", "selection", "editorFactory", "columnHeaders", "filterRow", "sorting", "search"], {
             initViews: true
         });
     };
@@ -991,4 +991,29 @@ QUnit.test("Selecting a node and its child node", function(assert) {
     assert.ok(items[0].isSelected, "first item is selected");
     assert.ok(items[1].isSelected, "second item is selected");
     assert.ok(items[2].isSelected, "third item is selected");
+});
+
+//T560463
+QUnit.test("Select all after filtering data", function(assert) {
+    //arrange
+    var $testElement = $('#treeList');
+
+    this.options.dataSource = [
+            { id: 1, field1: 'test1', field2: 1, field3: new Date(2001, 0, 1) },
+            { id: 2, parentId: 1, field1: 'test2', field2: 2, field3: new Date(2002, 1, 2) },
+            { id: 3, parentId: 1, field1: 'test3', field2: 3, field3: new Date(2002, 1, 3) },
+            { id: 4, field1: 'test4', field2: 4, field3: new Date(2002, 1, 4) },
+            { id: 5, field1: 'test5', field2: 5, field3: new Date(2001, 0, 5) }
+    ];
+    this.options.searchPanel = {
+        text: "test2"
+    };
+    this.setupTreeList();
+    this.rowsView.render($testElement);
+
+    //act
+    this.selectAll();
+
+    //assert
+    assert.deepEqual(this.option("selectedRowKeys"), [1, 4, 5], "selected row keys");
 });

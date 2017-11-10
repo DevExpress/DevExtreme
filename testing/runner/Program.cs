@@ -21,7 +21,7 @@ namespace Runner
         {
             try
             {
-                var rootPath = Path.Combine(PlatformServices.Default.Application.ApplicationBasePath, "../../../../..");
+                var rootPath = Path.Combine(PlatformServices.Default.Application.ApplicationBasePath, "../../..");
                 Ports.Load(Path.Combine(rootPath, "ports.json"));
 
                 var url = "http://0.0.0.0:" + Ports.Get("qunit");

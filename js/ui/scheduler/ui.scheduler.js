@@ -581,6 +581,14 @@ var Scheduler = Widget.inherit({
             shadeUntilCurrentTime: false,
 
                 /**
+                * @name dxSchedulerOptions_indicatorUpdateInterval
+                * @publicName indicatorUpdateInterval
+                * @type number
+                * @default 300000
+                */
+            indicatorUpdateInterval: 300000,
+
+                /**
                 * @hidden
                 * @name dxSchedulerOptions_indicatorTime
                 * @publicName indicatorTime
@@ -588,15 +596,6 @@ var Scheduler = Widget.inherit({
                 * @default undefined
                 */
             indicatorTime: undefined,
-
-                /**
-                * @hidden
-                * @name dxSchedulerOptions_indicatorUpdateInterval
-                * @publicName indicatorUpdateInterval
-                * @type number
-                * @default 300000
-                */
-            indicatorUpdateInterval: 300000,
 
                 /**
                 * @name dxSchedulerOptions_recurrenceEditMode
@@ -1611,7 +1610,10 @@ var Scheduler = Widget.inherit({
                         var value = getter.apply(this, arguments);
                         if(config().forceIsoDateParsing) {
                             if(!that.option("dateSerializationFormat")) {
-                                that.option("dateSerializationFormat", dateSerialization.getDateSerializationFormat(value));
+                                var format = dateSerialization.getDateSerializationFormat(value);
+                                if(format) {
+                                    that.option("dateSerializationFormat", format);
+                                }
                             }
                             value = dateSerialization.deserializeDate(value);
                         }
@@ -2218,6 +2220,7 @@ var Scheduler = Widget.inherit({
             }
             this.addAppointment(formData);
         }
+        this._enableDoneButton();
 
         return true;
     },
@@ -2225,6 +2228,12 @@ var Scheduler = Widget.inherit({
     _disableDoneButton: function() {
         var toolbarItems = this._popup.option("toolbarItems");
         toolbarItems[0].options = { disabled: true };
+        this._popup.option("toolbarItems", toolbarItems);
+    },
+
+    _enableDoneButton: function() {
+        var toolbarItems = this._popup.option("toolbarItems");
+        toolbarItems[0].options = { disabled: false };
         this._popup.option("toolbarItems", toolbarItems);
     },
 

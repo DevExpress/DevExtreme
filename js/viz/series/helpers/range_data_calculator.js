@@ -1,6 +1,7 @@
 "use strict";
 var unique = require("../../core/utils").unique,
     _isDefined = require("../../../core/utils/type").isDefined,
+    noop = require("../../../core/utils/common").noop,
     DISCRETE = "discrete";
 
 function continuousRangeCalculator(range, minValue, maxValue) {
@@ -90,10 +91,15 @@ function calculateRangeBetweenPoints(rangeCalculator, range, point, prevPoint, b
     rangeCalculator(range, value, value);
 }
 
+function isLineSeries(series) {
+    return series.type.toLowerCase().indexOf("line") >= 0 || series.type.toLowerCase().indexOf("area") >= 0;
+}
+
 function getViewportReducer(series) {
     var rangeCalculator = getRangeCalculator(series.valueAxisType),
         viewport = series.getArgumentAxis() && series.getArgumentAxis().getViewport() || {},
-        viewportFilter;
+        viewportFilter,
+        calculatePointBetweenPoints = isLineSeries(series) ? calculateRangeBetweenPoints : noop;
 
     viewportFilter = getViewPortFilter(viewport);
 
@@ -107,15 +113,15 @@ function getViewportReducer(series) {
         if(viewportFilter(argument)) {
             if(!range.startCalc) {
                 range.startCalc = true;
-                calculateRangeBetweenPoints(rangeCalculator, range, point, points[index - 1], viewport.min);
+                calculatePointBetweenPoints(rangeCalculator, range, point, points[index - 1], viewport.min);
             }
             rangeCalculator(range, point.getMinValue(), point.getMaxValue());
         } else if(_isDefined(viewport.max) && argument > viewport.max) {
             if(!range.startCalc) {
-                calculateRangeBetweenPoints(rangeCalculator, range, point, points[index - 1], viewport.min);
+                calculatePointBetweenPoints(rangeCalculator, range, point, points[index - 1], viewport.min);
             }
             range.endCalc = true;
-            calculateRangeBetweenPoints(rangeCalculator, range, point, points[index - 1], viewport.max);
+            calculatePointBetweenPoints(rangeCalculator, range, point, points[index - 1], viewport.max);
         }
 
         return range;
@@ -170,43 +176,48 @@ module.exports = {
             valueViewPort = series.getValueAxis().getViewport() || {},
             valueViewPortFilter = getViewPortFilter(valueViewPort),
             points = series.getPoints(),
-            addValue = function(values, point) {
+            addValue = function(values, point, isEdge) {
                 var minValue = point.getMinValue(),
-                    maxValue = point.getMaxValue();
-                if(valueViewPortFilter(minValue)) {
+                    maxValue = point.getMaxValue(),
+                    isMinValueInViewPort = valueViewPortFilter(minValue),
+                    isMaxValueInViewPort = valueViewPortFilter(maxValue);
+
+                if(isMinValueInViewPort) {
                     values.push(minValue);
                 }
-                if(maxValue !== minValue && valueViewPortFilter(maxValue)) {
+                if(maxValue !== minValue && isMaxValueInViewPort) {
                     values.push(maxValue);
                 }
-            },
-            checkPointInViewport = function(prev, point, index) {
-                if(argumentViewPortFilter(point.argument)) {
-                    addValue(prev, point);
-                } else {
-                    var prevPoint = points[index - 1],
-                        nextPoint = points[index + 1];
-
-                    if(nextPoint && argumentViewPortFilter(nextPoint.argument)) {
-                        addValue(prev, point);
+                if(isEdge && !isMinValueInViewPort && !isMaxValueInViewPort) {
+                    if(!values.length) {
+                        values.push(valueViewPort.min);
+                    } else {
+                        values.push(valueViewPort.max);
                     }
-
-                    if(prevPoint && argumentViewPortFilter(prevPoint.argument)) {
-                        addValue(prev, point);
-                    }
-
                 }
-                return prev;
             },
-            values = points.reduce(checkPointInViewport, []);
+            addEdgePoints = isLineSeries(series) ? function(result, points, index) {
+                var point = points[index],
+                    prevPoint = points[index - 1],
+                    nextPoint = points[index + 1];
 
-        if(valueViewPort.min) {
-            values.push(valueViewPort.min);
-        }
-        if(valueViewPort.max) {
-            values.push(valueViewPort.max);
-        }
+                if(nextPoint && argumentViewPortFilter(nextPoint.argument)) {
+                    addValue(result[1], point, true);
+                }
 
-        return values;
+                if(prevPoint && argumentViewPortFilter(prevPoint.argument)) {
+                    addValue(result[1], point, true);
+                }
+            } : noop,
+            checkPointInViewport = function(result, point, index) {
+                if(argumentViewPortFilter(point.argument)) {
+                    addValue(result[0], point);
+                } else {
+                    addEdgePoints(result, points, index);
+                }
+                return result;
+            };
+
+        return points.reduce(checkPointInViewport, [[], []]);
     }
 };

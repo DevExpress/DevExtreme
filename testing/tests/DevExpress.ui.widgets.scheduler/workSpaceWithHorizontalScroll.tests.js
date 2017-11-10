@@ -165,7 +165,6 @@ QUnit.test("the 'getCellIndexByCoordinates' method should return a right result"
 
 QUnit.test("Header panel, all-day panel, date table should have a correct width", function(assert) {
     var $element = this.instance.$element();
-
     domUtils.triggerHidingEvent($element);
     domUtils.triggerShownEvent($element);
 
@@ -176,6 +175,24 @@ QUnit.test("Header panel, all-day panel, date table should have a correct width"
     assert.equal(headerPanelWidth, 525, "Width is OK");
     assert.equal(allDayTableWidth, 525, "Width is OK");
     assert.equal(dateTableWidth, 525, "Width is OK");
+});
+
+QUnit.test("Header panel, all-day panel, date table should have a correct width if cell is larger than 75px", function(assert) {
+    var $element = this.instance.$element(),
+        $cells = $element.find(".dx-scheduler-date-table-cell");
+
+    $cells.get(0).style.width = '300px';
+
+    domUtils.triggerHidingEvent($element);
+    domUtils.triggerShownEvent($element);
+
+    var headerPanelWidth = $element.find(".dx-scheduler-header-panel").outerWidth(),
+        allDayTableWidth = $element.find(".dx-scheduler-all-day-table").outerWidth(),
+        dateTableWidth = $element.find(".dx-scheduler-date-table").outerWidth();
+
+    assert.equal(headerPanelWidth, 2100, "Width is OK");
+    assert.equal(allDayTableWidth, 2100, "Width is OK");
+    assert.equal(dateTableWidth, 2100, "Width is OK");
 });
 
 QUnit.test("Header panel, all-day panel, date table should always take all work space width", function(assert) {

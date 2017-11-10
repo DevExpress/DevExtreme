@@ -18,6 +18,7 @@ var DEFAULT_DATA_TYPE = "string",
         "boolean": ["=", "<>", "isblank", "isnotblank"],
         "object": ["isblank", "isnotblank"]
     },
+    LOOKUP_OPERATIONS = ["=", "<>", "isblank", "isnotblank"],
     DEFAULT_FORMAT = {
         "date": "shortDate",
         "datetime": "shortDateShortTime"
@@ -144,7 +145,7 @@ function isCriteriaContainValueItem(criteria) {
 }
 
 function getFilterOperations(field) {
-    return field.filterOperations || DATATYPE_OPERATIONS[field.dataType || DEFAULT_DATA_TYPE];
+    return field.filterOperations || (field.lookup && LOOKUP_OPERATIONS) || DATATYPE_OPERATIONS[field.dataType || DEFAULT_DATA_TYPE];
 }
 
 function getCaptionByOperation(operation, filterOperationDescriptions) {
@@ -255,6 +256,12 @@ function getField(dataField, fields) {
         if(fields[i].dataField.toLowerCase() === dataField.toLowerCase()) {
             return fields[i];
         }
+    }
+    var extendedFields = getItems(fields, true).filter(function(item) {
+        return item.dataField.toLowerCase() === dataField.toLowerCase();
+    });
+    if(extendedFields.length > 0) {
+        return extendedFields[0];
     }
     throw new errors.Error("E1047", dataField);
 }
@@ -518,7 +525,7 @@ function getOperationValue(condition) {
 }
 
 function isValidCondition(condition, field) {
-    if(field.dataType !== "string") {
+    if(field.dataType && field.dataType !== "string") {
         return condition[2] !== "";
     }
     return true;

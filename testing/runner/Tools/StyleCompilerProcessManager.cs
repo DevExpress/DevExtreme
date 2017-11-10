@@ -23,7 +23,7 @@ namespace Runner.Tools
                 {
                     FileName = "dotnet",
                     Arguments = "style-compiler.dll test-server",
-                    WorkingDirectory = Path.Combine(_rootPath, "build/style-compiler/bin/Debug/dist"),
+                    WorkingDirectory = Path.Combine(_rootPath, "build/style-compiler/bin"),
                     UseShellExecute = false,
                     RedirectStandardInput = true,
                 };

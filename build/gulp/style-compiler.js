@@ -10,7 +10,7 @@ function runStyleCompiler(command, params, callback) {
     var spawn = require('child_process').spawn;
     var process = spawn(
         'dotnet',
-        ['build/style-compiler/bin/Debug/dist/style-compiler.dll', command].concat(params),
+        ['build/style-compiler/bin/style-compiler.dll', command].concat(params),
         { stdio: 'inherit' }
     );
 

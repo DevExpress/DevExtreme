@@ -353,6 +353,37 @@ QUnit.module("Utils", function() {
         assert.strictEqual(operations[5].icon, "greaterorequal");
     });
 
+    QUnit.test("getAvailableOperations for field with lookup", function(assert) {
+        var operations = utils.getAvailableOperations({
+            dataField: "Product",
+            lookup: {
+                dataSource: [
+                    "DataGrid",
+                    "PivotGrid",
+                    "TreeList"
+                ]
+            }
+        }, filterOperationsDescriptions);
+
+        assert.deepEqual(operations, [{
+            "icon": "equal",
+            "text": "Equals",
+            "value": "="
+        }, {
+            "icon": "notequal",
+            "text": "Does not equal",
+            "value": "<>"
+        }, {
+            "icon": "isblank",
+            "text": "Is blank",
+            "value": "isblank"
+        }, {
+            "icon": "isnotblank",
+            "text": "Is not blank",
+            "value": "isnotblank"
+        }]);
+    });
+
     QUnit.test("create condition", function(assert) {
         var condition = utils.createCondition(fields[0]);
 
@@ -422,6 +453,18 @@ QUnit.module("Utils", function() {
         assert.ok(utils.isValidCondition(["ZipCode", "=", 1], fields[3]));
         assert.ok(utils.isValidCondition(["ZipCode", "=", null], fields[3]));
         assert.notOk(utils.isValidCondition(["ZipCode", "=", ""], fields[3]));
+        assert.ok(utils.isValidCondition(["Field", "=", ""], { dataField: "Field" }));
+    });
+
+    QUnit.test("getField test", function(assert) {
+        var field = utils.getField("Company", [{ dataField: "State.Name" }, { dataField: "Company" }]);
+        assert.equal(field.dataField, "Company");
+
+        field = utils.getField("State.Name", [{ dataField: "State.Name" }, { dataField: "Company" }]);
+        assert.equal(field.dataField, "State.Name");
+
+        field = utils.getField("State", [{ dataField: "State.Name" }, { dataField: "Company" }]);
+        assert.equal(field.dataField, "State");
     });
 });
 

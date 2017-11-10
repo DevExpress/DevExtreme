@@ -1,6 +1,7 @@
 "use strict";
 
 var $ = require("jquery"),
+    config = require("core/config"),
     keyboardMock = require("../../../helpers/keyboardMock.js");
 
 require("ui/text_box/ui.text_editor");
@@ -480,6 +481,38 @@ QUnit.test("removing digit if decimal format", function(assert) {
     assert.deepEqual(this.keyboard.caret(), { start: 5, end: 5 }, "caret is correct");
 });
 
+QUnit.test("removing digit if decimal format with prefix", function(assert) {
+    this.instance.option({
+        format: "$00000",
+        value: 1234
+    });
+
+    assert.equal(this.input.val(), "$01234", "value is correct");
+
+    this.keyboard.caret(6).press("backspace").input("backspace");
+    assert.equal(this.input.val(), "$00123", "value is correct");
+    assert.deepEqual(this.keyboard.caret(), { start: 6, end: 6 }, "caret is correct");
+});
+
+QUnit.test("removing decimal separator if decimal separator is not default", function(assert) {
+    var oldDecimalSeparator = config().decimalSeparator;
+
+    config({ decimalSeparator: "," });
+
+    try {
+        this.instance.option({
+            format: "#0.00",
+            value: 1
+        });
+
+        this.keyboard.caret(2).press("backspace").input("backspace");
+
+        assert.equal(this.input.val(), "1,00", "text is correct");
+        assert.deepEqual(this.keyboard.caret(), { start: 1, end: 1 }, "caret is moved");
+    } finally {
+        config({ decimalSeparator: oldDecimalSeparator });
+    }
+});
 
 QUnit.module("format: caret boundaries", moduleConfig);
 

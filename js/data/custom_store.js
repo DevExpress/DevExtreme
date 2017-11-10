@@ -277,6 +277,26 @@ function runRawLoadWithKey(pendingDeferred, store, key) {
  * @publicName searchExpr
  * @type getter|Array<getter>
  */
+ /**
+ * @name LoadOptions_customQueryParams
+ * @publicName customQueryParams
+ * @type Object
+ */
+ /**
+ * @name LoadOptions_totalSummary
+ * @publicName totalSummary
+ * @type Object
+ */
+ /**
+ * @name LoadOptions_groupSummary
+ * @publicName groupSummary
+ * @type Object
+ */
+ /**
+ * @name LoadOptions_requireGroupCount
+ * @publicName requireGroupCount
+ * @type boolean
+ */
 
 /**
 * @name CustomStore

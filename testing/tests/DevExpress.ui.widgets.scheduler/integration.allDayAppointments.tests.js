@@ -1,10 +1,23 @@
 "use strict";
 
+var $ = require("jquery");
+
+QUnit.testStart(function() {
+    $("#qunit-fixture").html(
+        '<div id="scheduler">\
+            <div data-options="dxTemplate: { name: \'template\' }">Task Template</div>\
+            </div>');
+});
+
+require("common.css!");
+require("generic_light.css!");
+
+
 var $ = require("jquery"),
     translator = require("animation/translator"),
     dblclickEvent = require("events/dblclick"),
     fx = require("animation/fx"),
-    pointerMock = require("../../../helpers/pointerMock.js"),
+    pointerMock = require("../../helpers/pointerMock.js"),
     dragEvents = require("events/drag"),
     DataSource = require("data/data_source/data_source").DataSource,
     ArrayStore = require("data/array_store"),

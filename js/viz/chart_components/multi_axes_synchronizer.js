@@ -11,9 +11,7 @@ var debug = require("../../core/utils/console").debug,
     _max = _math.max,
     _abs = _math.abs,
 
-    _map = require("../core/utils").map,
-
-    MIN_RANGE_FOR_ADJUST_BOUNDS = 0.1; //B254389
+    _map = require("../core/utils").map;
 
 var getValueAxesPerPanes = function(valueAxes) {
     var result = {};
@@ -263,12 +261,8 @@ var correctMinMaxValuesByPaddings = function(axesInfo, paddings) {
         var range = getAxisRange(info),
             inverted = info.inverted;
 
-        info.minValue -= paddings[inverted ? "end" : "start"] * range;
-        info.maxValue += paddings[inverted ? "start" : "end"] * range;
-        if(range > MIN_RANGE_FOR_ADJUST_BOUNDS) {
-            info.minValue = _math.min(info.minValue, adjust(info.minValue));
-            info.maxValue = _max(info.maxValue, adjust(info.maxValue));
-        }
+        info.minValue = adjust(info.minValue - paddings[inverted ? "end" : "start"] * range);
+        info.maxValue = adjust(info.maxValue + paddings[inverted ? "start" : "end"] * range);
     });
 };
 
@@ -280,19 +274,19 @@ var updateTickValuesIfSynchronizedValueUsed = function(axesInfo) {
     });
 
     _each(axesInfo, function(_, info) {
-        var lastTickValue,
-            tickInterval = info.tickInterval,
+        var tickInterval = info.tickInterval,
             tickValues = info.tickValues,
             maxValue = info.maxValue,
-            minValue = info.minValue;
+            minValue = info.minValue,
+            tick;
 
         if(hasSynchronizedValue && tickInterval) {
-            while(tickValues[0] - tickInterval >= minValue) {
-                tickValues.unshift(adjust(tickValues[0] - tickInterval));
+            while((tick = adjust(tickValues[0] - tickInterval)) >= minValue) {
+                tickValues.unshift(tick);
             }
-            lastTickValue = tickValues[tickValues.length - 1];
-            while((lastTickValue = lastTickValue + tickInterval) <= maxValue) {
-                tickValues.push(typeUtils.isExponential(lastTickValue) ? adjust(lastTickValue) : adjust(lastTickValue));
+            tick = tickValues[tickValues.length - 1];
+            while((tick = adjust(tick + tickInterval)) <= maxValue) {
+                tickValues.push(tick);
             }
         }
         while(tickValues[0] < minValue) {

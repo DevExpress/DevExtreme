@@ -189,9 +189,15 @@ var DropDownBox = DropDownEditor.inherit({
 
     _renderInputValue: function() {
         var callBase = this.callBase.bind(this),
-            currentValue = this._getCurrentValue(),
-            keys = commonUtils.ensureDefined(currentValue, []),
             values = [];
+
+        if(!this._dataSource) {
+            callBase(values);
+            return;
+        }
+
+        var currentValue = this._getCurrentValue(),
+            keys = commonUtils.ensureDefined(currentValue, []);
 
         keys = Array.isArray(keys) ? keys : [keys];
 

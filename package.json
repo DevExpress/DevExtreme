@@ -1,6 +1,6 @@
 {
   "name": "devextreme",
-  "version": "17.2.2",
+  "version": "17.2.3",
   "description": "HTML5 JavaScript Component Suite for Responsive Web Development",
   "keywords": [ "html5", "controls", "widgets", "components", "jquery", "knockout", "angular", "web", "ui", "datagrid", "pivotgrid", "scheduler", "treelist", "chart" ],
   "homepage": "https://js.devexpress.com/",
@@ -60,11 +60,7 @@
     "lint": "jshint --verbose . && eslint .",
     "lint-staged": "lint-staged",
 
-    "build-style-compiler": "cd build/style-compiler && dotnet restore -v minimal && dotnet publish -o bin/Debug/dist",
-    "build-test-runner": "cd testing/runner && dotnet restore -v minimal && dotnet publish -o bin/Debug/dist",
-    "build-dotnet": "npm run -s build-style-compiler && npm run -s build-test-runner",
-
-    "build": "npm run -s build-dotnet && gulp default",
+    "build": "dotnet build build/build-dotnet.sln && gulp default",
     "build-dist": "npm run -s build-dotnet && gulp default --uglify",
     "build-themes": "gulp style-compiler-themes"
   },

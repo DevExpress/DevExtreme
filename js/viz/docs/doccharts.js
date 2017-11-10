@@ -1984,9 +1984,9 @@ var dxChart = {
         * @name dxchartoptions_valueaxis_maxautobreakcount
         * @publicName maxAutoBreakCount
         * @type numeric
-        * @default undefined
+        * @default 4
         */
-        maxAutoBreakCount: undefined,
+        maxAutoBreakCount: 4,
         /**
         * @name dxchartoptions_valueaxis_title
         * @publicName title
@@ -4191,9 +4191,9 @@ var BaseChart = {
         * @name basechartoptions_legend_columnitemspacing
         * @publicName columnItemSpacing
         * @type number
-        * @default 8
+        * @default 20
         */
-        columnItemSpacing: 8,
+        columnItemSpacing: 20,
         /**
         * @name basechartoptions_legend_rowitemspacing
         * @publicName rowItemSpacing

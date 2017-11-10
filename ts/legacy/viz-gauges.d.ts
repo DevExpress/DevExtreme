@@ -4,448 +4,386 @@
 declare module DevExpress.viz.gauges {
 
     export interface BaseRangeContainer {
-        /** @docid basegaugeoptions_rangeContainer_backgroundColor */
+        /** Specifies a range container's background color. */
         backgroundColor?: string;
 
-        /** @docid basegaugeoptions_rangeContainer_offset */
+        /** Specifies the offset of the range container from an invisible scale line in pixels. */
         offset?: number;
 
-        /** @docid basegaugeoptions_rangeContainer_palette */
+        /** Sets the name of the palette or an array of colors to be used for coloring the gauge range container. */
         palette?: any;
 
-        /** @docid basegaugeoptions_rangeContainer_ranges */
+        /** An array of objects representing ranges contained in the range container. */
         ranges?: Array<{ startValue: number; endValue: number; color: string }>;
 
-        /** @docid basegaugeoptions_rangeContainer_ranges_color */
+        /** Specifies a color of a range. */
         color?: string;
 
-        /** @docid basegaugeoptions_rangeContainer_ranges_endValue */
+        /** Specifies an end value of a range. */
         endValue?: number;
 
-        /** @docid basegaugeoptions_rangeContainer_ranges_startValue */
+        /** Specifies a start value of a range. */
         startValue?: number;
     }
 
     export interface ScaleTick {
-        /**
-          * @docid basegaugeoptions_scale_majorTick_color
-          * @docid basegaugeoptions_scale_minorTick_color
-          */
+        /** Specifies the color of the scale's minor ticks. */
         color?: string;
 
         /**
-          * @docid basegaugeoptions_scale_majorTick_customTickValues
-          * @docid basegaugeoptions_scale_minorTick_customTickValues
-          */
+         * Specifies an array of custom minor ticks.
+         * @deprecated Use the scale.customMinorTicks option instead.
+         */
         customTickValues?: Array<any>;
 
-        /**
-          * @docid basegaugeoptions_scale_majorTick_length
-          * @docid basegaugeoptions_scale_minorTick_length
-          */
+        /** Specifies the length of the scale's minor ticks. */
         length?: number;
 
         /**
-          * @docid basegaugeoptions_scale_majorTick_showCalculatedTicks
-          * @docid basegaugeoptions_scale_minorTick_showCalculatedTicks
-          */
+        * Indicates whether automatically calculated minor ticks are visible or not.
+        * @deprecated This option will be removed in the near future. Its use is not recommended.
+        */
         showCalculatedTicks?: boolean;
 
         /**
-          * @docid basegaugeoptions_scale_majorTick_tickInterval
-          * @docid basegaugeoptions_scale_minorTick_tickInterval
-          */
+         * Specifies an interval between minor ticks.
+         * @deprecated Use the scale.minorTickInterval option instead.
+         */
         tickInterval?: number;
 
-        /**
-          * @docid basegaugeoptions_scale_majorTick_visible
-          * @docid basegaugeoptions_scale_minorTick_visible
-          */
+        /** Indicates whether scale minor ticks are visible or not. */
         visible?: boolean;
 
-        /**
-          * @docid basegaugeoptions_scale_majorTick_width
-          * @docid basegaugeoptions_scale_minorTick_width
-          */
+        /** Specifies the width of the scale's minor ticks. */
         width?: number;
     }
 
     export interface ScaleMajorTick extends ScaleTick {
-        /** @docid basegaugeoptions_scale_majorTick_useTicksAutoArrangement */
+        /**
+            * Specifies whether or not to expand the current major tick interval if labels overlap each other.
+            * @deprecated Use the overlappingBehavior option instead.
+            */
         useTicksAutoArrangement?: boolean;
     }
 
     export interface ScaleMinorTick extends ScaleTick {
-        /** @docid basegaugeoptions_scale_minorTick_opacity */
+        /** Specifies the opacity of the scale's minor ticks. */
         opacity?: number;
     }
 
     export interface BaseScaleLabel {
-        /** @docid basegaugeoptions_scale_label_useRangeColors */
+        /** Specifies whether or not scale labels should be colored similarly to their corresponding ranges in the range container. */
         useRangeColors?: boolean;
 
-        /** @docid basegaugeoptions_scale_label_customizeText */
+        /** Specifies a callback function that returns the text to be displayed in scale labels. */
         customizeText?: (scaleValue: { value: number; valueText: string }) => string;
 
-        /** @docid_ignore basegaugeoptions_scale_label_overlappingBehavior_useAutoArrangement */
-        /** @docid basegaugeoptions_scale_label_overlappingBehavior */
+        
+        /** Decides how to arrange scale labels when there is not enough space to keep all of them. */
         overlappingBehavior?: any;
 
-        /** @docid basegaugeoptions_scale_label_font */
+        /** Specifies font options for the text displayed in the scale labels of the gauge. */
         font?: viz.core.Font;
 
-        /** @docid basegaugeoptions_scale_label_format */
+        /** Specifies a format for the text displayed in scale labels. */
         format?: any;
 
-        /** @docid basegaugeoptions_scale_label_precision */
+        /**
+           * Specifies a precision for the formatted value displayed in the scale labels.
+           * @deprecated Use the scale.label.format.precision option instead.
+           */
         precision?: number;
 
-        /** @docid basegaugeoptions_scale_label_visible */
+        /** Specifies whether or not scale labels are visible on the gauge. */
         visible?: boolean;
     }
 
     export interface BaseScale {
-        /** @docid basegaugeoptions_scale_endValue */
+        /** Specifies the end value for the scale of the gauge. */
         endValue?: number;
 
-        /** @docid basegaugeoptions_scale_hideFirstLabel */
+        /**
+          * Specifies whether or not to hide the first scale label.
+          * @deprecated Use the scale.label.overlappingBehavior.hideFirstOrLast option instead.
+          */
         hideFirstLabel?: boolean;
 
-        /** @docid basegaugeoptions_scale_hideFirstTick */
+        /**
+         * Specifies whether or not to hide the first major tick on the scale.
+         * @deprecated Use the scale.label.overlappingBehavior.hideFirstOrLast option instead.
+         */
         hideFirstTick?: boolean;
 
-        /** @docid basegaugeoptions_scale_hideLastLabel */
+        /**
+        * Specifies whether or not to hide the last scale label.
+        * @deprecated Use the scale.label.overlappingBehavior.hideFirstOrLast option instead.
+        */
         hideLastLabel?: boolean;
 
-        /** @docid basegaugeoptions_scale_hideLastTick */
+        /**
+       * Specifies whether or not to hide the last major tick on the scale.
+       * @deprecated Use the scale.label.overlappingBehavior.hideFirstOrLast option instead.
+       */
         hideLastTick?: boolean;
 
-        /** @docid basegaugeoptions_scale_tickInterval */
+        /** Specifies an interval between major ticks. */
         tickInterval?: number;
 
-        /** @docid basegaugeoptions_scale_minorTickInterval */
+        /** Specifies an interval between minor ticks. */
         minorTickInterval?: number;
 
-        /** @docid basegaugeoptions_scale_customTicks */
+        /** Specifies an array of custom major ticks. */
         customTicks?: Array<any>;
 
-        /** @docid basegaugeoptions_scale_customMinorTicks */
+        /** Specifies an array of custom minor ticks. */
         customMinorTicks?: Array<any>;
 
-        /**
-          * @docid basegaugeoptions_scale_label
-          * @docid dxlineargaugeoptions_scale_label
-          * @docid dxcirculargaugeoptions_scale_label
-          */
+        /** Specifies common options for scale labels. */
         label?: BaseScaleLabel;
 
-        /** @docid basegaugeoptions_scale_majorTick */
+        /**
+      * Specifies options of the gauge's major ticks.
+      * @deprecated Use the tick option instead.
+      */
         majorTick?: ScaleMajorTick;
 
-        /** @docid basegaugeoptions_scale_tick */
+        /** Specifies options of the gauge's major ticks. */
         tick?: {
-            /** @docid basegaugeoptions_scale_tick_color */
+            /** Specifies the color of the scale's major ticks. */
             color?: string;
 
-            /** @docid basegaugeoptions_scale_tick_length */
+            /** Specifies the length of the scale's major ticks. */
             length?: number;
 
-            /** @docid basegaugeoptions_scale_tick_visible */
+            /** Indicates whether scale major ticks are visible or not. */
             visible?: boolean;
 
-            /** @docid basegaugeoptions_scale_tick_width */
+            /** Specifies the width of the scale's major ticks. */
             width?: number;
 
-            /** @docid basegaugeoptions_scale_tick_opacity */
+            /** Specifies the opacity of the scale's major ticks. */
             opacity?: number;
         };
 
-        /** @docid basegaugeoptions_scale_minorTick */
+        /** Specifies options of the gauge's minor ticks. */
         minorTick?: ScaleMinorTick;
 
-        /** @docid basegaugeoptions_scale_startValue */
+        /** Specifies the start value for the scale of the gauge. */
         startValue?: number;
 
-        /** @docid basegaugeoptions_scale_allowdecimals */
+        /** Specifies whether to allow decimal values on the scale. When false, the scale contains integer values only. */
         allowDecimals?: Boolean;
     }
 
-    /**
-      * @docid_ignore commonIndicator
-      * @docid_ignore circularRectangleNeedle
-      * @docid_ignore circularTriangleNeedle
-      * @docid_ignore circularTwoColorNeedle
-      * @docid_ignore circularRangeBar
-      * @docid_ignore circularTriangleMarker
-      * @docid_ignore circularTextCloud
-      * @docid_ignore linearRectangle
-      * @docid_ignore linearCircle
-      * @docid_ignore linearRhombus
-      * @docid_ignore linearRangeBar
-      * @docid_ignore linearTriangleMarker
-      * @docid_ignore linearTextCloud
-      */
 
     export interface BaseValueIndicator {
-        /**
-          * @docid dxcirculargaugeoptions_valueIndicator_type
-          * @docid dxcirculargaugeoptions_subvalueIndicator_type
-          * @docid dxlineargaugeoptions_valueIndicator_type
-          * @docid dxlineargaugeoptions_subvalueIndicator_type
-          */
+        /** Specifies the type of subvalue indicators. */
         type?: string;
 
-        /** @docid commonIndicatoroptions_backgroundColor */
+        /** Specifies the background color for the indicator of the rangeBar type. */
         backgroundColor?: string;
 
-        /** @docid commonIndicatoroptions_baseValue */
+        /** Specifies the base value for the indicator of the rangeBar type. */
         baseValue?: number;
 
-        /** @docid commonIndicatoroptions_color */
+        /** Specifies a color of the indicator. */
         color?: string;
 
-        /** @docid commonIndicatoroptions_size */
+        /** Specifies the range bar size for an indicator of the rangeBar type. */
         size?: number;
 
-        /**
-          * @docid commonIndicatoroptions_text
-          * @docid circularTextCloudoptions_text
-          * @docid linearTextCloudoptions_text
-          */
+        
         text?: {
 
-            /** @docid commonIndicatoroptions_text_customizeText */
+            /** Specifies a callback function that returns the text to be displayed in an indicator. */
             customizeText?: (indicatedValue: { value: number; valueText: string }) => string;
 
-            /**
-              * @docid commonIndicatoroptions_text_font
-              * @docid linearTextCloudoptions_text_font
-              * @docid circularTextCloudoptions_text_font
-              */
+            /** Specifies font options for the text displayed by the indicator. */
             font?: viz.core.Font;
 
-            /** @docid commonIndicatoroptions_text_format */
+            /** Specifies a format for the text displayed in an indicator. */
             format?: any;
 
-            /** @docid commonIndicatoroptions_text_indent */
+            /** Specifies the range bar's label indent in pixels. */
             indent?: number;
 
-            /** @docid commonIndicatoroptions_text_precision */
+            /**
+     * Specifies a precision for the formatted value displayed by an indicator.
+     * @deprecated Use the text.format.precision option instead.
+     */
             precision?: number;
         };
 
-        /**
-          * @docid commonIndicatoroptions_offset
-          * @docid linearRectangleoptions_offset
-          * @docid linearCircleoptions_offset
-          * @docid linearRhombusoptions_offset
-          * @docid linearRangeBaroptions_offset
-          * @docid linearTriangleMarkeroptions_offset
-          * @docid linearTextCloudoptions_offset
-          */
+        
         offset?: number;
 
-        /**
-          * @docid commonIndicatoroptions_length
-          * @docid circularTriangleMarkeroptions_length
-          * @docid linearTriangleMarkeroptions_length
-          */
+        
         length?: number;
 
-        /**
-          * @docid commonIndicatoroptions_width
-          * @docid linearRectangleoptions_width
-          * @docid linearRhombusoptions_width
-          * @docid circularTriangleMarkeroptions_width
-          * @docid linearTriangleMarkeroptions_width
-          */
+        
         width?: number;
 
-        /** @docid commonIndicatoroptions_arrowLength */
+        /** Specifies the length of an arrow for the indicator of the textCloud type in pixels. */
         arrowLength?: number;
 
-        /** @docid commonIndicatoroptions_palette */
+        /** Sets the array of colors to be used for coloring subvalue indicators. */
         palette?: any;
 
-        /** @docid commonIndicatoroptions_indentFromCenter */
+        /** Specifies the distance between the needle and the center of a gauge for the indicator of a needle-like type. */
         indentFromCenter?: number;
 
-        /** @docid commonIndicatoroptions_secondColor */
+        /** Specifies the second color for the indicator of the twoColorNeedle type. */
         secondColor?: string;
 
-        /** @docid commonIndicatoroptions_secondFraction */
+        /** Specifies the length of a twoNeedleColor type indicator tip as a percentage. */
         secondFraction?: number;
 
-        /** @docid commonIndicatoroptions_spindleSize */
+        /** Specifies the spindle's diameter in pixels for the indicator of a needle-like type. */
         spindleSize?: number;
 
-        /** @docid commonIndicatoroptions_spindleGapSize */
+        /** Specifies the inner diameter in pixels, so that the spindle has the shape of a ring. */
         spindleGapSize?: number;
 
-        /** @docid commonIndicatoroptions_horizontalOrientation */
+        /** Specifies the orientation of the rangeBar indicator. Applies only if the geometry.orientation option is "vertical". */
         horizontalOrientation?: string;
 
-        /** @docid commonIndicatoroptions_verticalOrientation */
+        /** Specifies the orientation of the rangeBar indicator. Applies only if the geometry.orientation option is "horizontal". */
         verticalOrientation?: string;
     }
 
     export interface SharedGaugeOptions extends viz.core.MarginOptions, viz.core.RedrawOnResizeOptions, viz.core.TitleOptions, viz.core.LoadingIndicatorOptions, viz.core.ExportOptions {
-        /**
-          * @docid_ignore basegaugeoptions_title
-          * @docid_ignore dxbargaugeoptions_title
-          * @docid_ignore basegaugeoptions_title_position
-          * @docid_ignore dxbargaugeoptions_title_position
-          */
+        
 
-        /**
-          * @docid basegaugeoptions_animation
-          * @docid dxbargaugeoptions_animation
-          */
+        /** Specifies animation options. */
         animation?: viz.core.Animation;
 
         /**
-          * @docid basegaugeoptions_subtitle
-          * @docid dxbargaugeoptions_subtitle
-          */
+    * Specifies a subtitle for the widget.
+    * @deprecated Use the title.subtitle option instead.
+    */
         subtitle?: {
 
-            /** @docid basegaugeoptions_subtitle_font */
+            /**
+   * Use the title.subtitle.font option instead.
+   * @deprecated 
+   */
             font?: viz.core.Font;
 
-            /** @docid basegaugeoptions_subtitle_text */
+            /**
+  * Specifies a text for the subtitle.
+  * @deprecated Use the title.subtitle.text option instead.
+  */
             text?: string;
         };
 
-        /**
-          * @docid basegaugeoptions_tooltip
-          * @docid dxbargaugeoptions_tooltip
-          */
+        /** Configures tooltips. */
         tooltip?: viz.core.Tooltip;
 
-        /**
-          * @docid basegaugeoptions_ontooltipshown
-          * @docid dxbargaugeoptions_ontooltipshown
-          */
+        /** A handler for the tooltipShown event. */
         onTooltipShown?: (e: {
             component: dxBaseGauge;
             element: Element;
             target: {};
         }) => void;
 
-        /**
-          * @docid basegaugeoptions_ontooltiphidden
-          * @docid dxbargaugeoptions_ontooltiphidden
-          */
+        /** A handler for the tooltipHidden event. */
         onTooltipHidden?: (e: {
             component: dxBaseGauge;
             element: Element;
             target: {};
         }) => void;
     }
-
-    /** @docid basegauge_options */
+   
     export interface BaseGaugeOptions extends viz.core.BaseWidgetOptions, SharedGaugeOptions {
-        /** @docid basegaugeoptions_containerBackgroundColor */
+        /** Specifies the color of the parent page element. */
         containerBackgroundColor?: string;
 
-        /** @docid basegaugeoptions_rangeContainer */
+        /** Specifies options of the gauge's range container. */
         rangeContainer?: BaseRangeContainer;
 
-        /**
-          * @docid basegaugeoptions_scale
-          * @docid dxlineargaugeoptions_scale
-          * @docid dxcirculargaugeoptions_scale
-          */
+        /** Specifies a gauge's scale options. */
         scale?: BaseScale;
 
-        /**
-          * @docid dxlineargaugeoptions_subvalueIndicator
-          * @docid dxcirculargaugeoptions_subvalueIndicator
-          */
+        /** Specifies the appearance options of subvalue indicators. */
         subvalueIndicator?: BaseValueIndicator;
 
-        /** @docid basegaugeoptions_subvalues */
+        /** Specifies a set of subvalues to be designated by the subvalue indicators. */
         subvalues?: Array<number>;
 
-        /** @docid basegaugeoptions_value */
+        /** Specifies the main value on a gauge. */
         value?: number;
 
-        /**
-          * @docid dxlineargaugeoptions_valueIndicator
-          * @docid dxcirculargaugeoptions_valueIndicator
-          */
+        /** Specifies the appearance options of the value indicator. */
         valueIndicator?: BaseValueIndicator;
     }
 
-    /** @docid basegauge */
+    /** A gauge widget. */
     export class dxBaseGauge extends viz.core.BaseWidget implements viz.core.LoadingIndicatorMethods {
 
         showLoadingIndicator(): void;
 
         hideLoadingIndicator(): void;
 
-        /** @docid basegaugemethods_value#value() */
+        /** Returns the main gauge value. */
         value(): number;
 
-        /** @docid basegaugemethods_value#value(value) */
+        /** Updates a gauge value. */
         value(value: number): void;
 
-        /** @docid basegaugemethods_subvalues#subvalues() */
+        /** Returns an array of gauge subvalues. */
         subvalues(): Array<number>;
 
-        /** @docid basegaugemethods_subvalues#subvalues(subvalues) */
+        /** Updates gauge subvalues. */
         subvalues(subvalues: Array<number>): void;
     }
 
     // LinearGauge
 
     export interface LinearRangeContainer extends BaseRangeContainer {
-        /** @docid dxlineargaugeoptions_rangeContainer_horizontalOrientation */
+        /** Specifies the orientation of the range container. Applies only if the geometry.orientation option is "vertical". */
         horizontalOrientation?: string;
 
-        /** @docid dxlineargaugeoptions_rangeContainer_verticalOrientation */
+        /** Specifies the orientation of the range container. Applies only if the geometry.orientation option is "horizontal". */
         verticalOrientation?: string;
 
-        /** @docid dxlineargaugeoptions_rangeContainer_width */
+        /** Specifies the width of the range container's start and end boundaries in the LinearGauge widget. */
         width?: any;
 
-        /** @docid dxlineargaugeoptions_rangeContainer_width_end */
+        /** Specifies an end width of a range container. */
         end?: number;
 
-        /** @docid dxlineargaugeoptions_rangeContainer_width_start */
+        /** Specifies a start width of a range container. */
         start?: number;
     }
 
     export interface LinearScaleLabel extends BaseScaleLabel {
-        /** @docid dxlineargaugeoptions_scale_label_indentFromTick */
+        /** Specifies the spacing between scale labels and ticks. */
         indentFromTick?: number;
-
-        /** @docid_ignore dxlineargaugeoptions_scale_label_overlappingBehavior_hideFirstOrLast */
-        /** @docid dxlineargaugeoptions_scale_label_overlappingBehavior */
+       
         overlappingBehavior?: any;
     }
 
     export interface LinearScale extends BaseScale {
 
-        /** @docid dxlineargaugeoptions_scale_horizontalOrientation */
+        /** Specifies the orientation of scale ticks. Applies only if the geometry.orientation option is "vertical". */
         horizontalOrientation?: string;
 
         label?: LinearScaleLabel;
 
-        /** @docid dxlineargaugeoptions_scale_verticalOrientation */
+        /** Specifies the orientation of scale ticks. Applies only if the geometry.orientation option is "horizontal". */
         verticalOrientation?: string;
     }
 
-    /** @docid dxlineargauge_options */
+    
     export interface dxLinearGaugeOptions extends BaseGaugeOptions {
-        /** @docid dxlineargaugeoptions_geometry */
+        /** Specifies the options required to set the geometry of the LinearGauge widget. */
         geometry?: {
 
-            /** @docid dxlineargaugeoptions_geometry_orientation */
+            /** Indicates whether to display the LinearGauge widget vertically or horizontally. */
             orientation?: string;
         };
 
-        /** @docid dxlineargaugeoptions_rangeContainer */
+        /** Specifies gauge range container options. */
         rangeContainer?: LinearRangeContainer;
 
         scale?: LinearScale;
@@ -454,132 +392,131 @@ declare module DevExpress.viz.gauges {
     // CircularGauge
 
     export interface CircularRangeContainer extends BaseRangeContainer {
-        /** @docid dxcirculargaugeoptions_rangeContainer_orientation */
+        /** Specifies the orientation of the range container in the CircularGauge widget. */
         orientation?: string;
 
-        /** @docid dxcirculargaugeoptions_rangeContainer_width */
+        /** Specifies the range container's width in pixels. */
         width?: number;
     }
 
     export interface CircularScaleLabel extends BaseScaleLabel {
-        /** @docid dxcirculargaugeoptions_scale_label_indentFromTick */
+        /** Specifies the spacing between scale labels and ticks. */
         indentFromTick?: number;
 
-        /** @docid dxcirculargaugeoptions_scale_label_hideFirstOrLast */
+        /** Specifies which label to hide in case of overlapping. */
         hideFirstOrLast?: string;
-
-        /** @docid_ignore dxcirculargaugeoptions_scale_label_overlappingBehavior_hideFirstOrLast */
-        /** @docid dxcirculargaugeoptions_scale_label_overlappingBehavior */
+        
         overlappingBehavior?: any;
     }
 
     export interface CircularScale extends BaseScale {
         label?: CircularScaleLabel;
 
-        /** @docid dxcirculargaugeoptions_scale_orientation */
+        /** Specifies the orientation of scale ticks. */
         orientation?: string;
     }
-
-    /** @docid dxcirculargauge_options */
+   
     export interface dxCircularGaugeOptions extends BaseGaugeOptions {
-        /** @docid dxcirculargaugeoptions_geometry */
+        /** Specifies the options required to set the geometry of the CircularGauge widget. */
         geometry?: {
 
-            /** @docid dxcirculargaugeoptions_geometry_endAngle */
+            /** Specifies the end angle of the circular gauge's arc. */
             endAngle?: number;
 
-            /** @docid dxcirculargaugeoptions_geometry_startAngle */
+            /** Specifies the start angle of the circular gauge's arc. */
             startAngle?: number;
         };
 
-        /** @docid dxcirculargaugeoptions_rangeContainer */
+        /** Specifies gauge range container options. */
         rangeContainer?: CircularRangeContainer;
 
         scale?: CircularScale;
     }
 
     // dxBarGauge
-
-    /** @docid dxbargauge_options */
+   
     export interface dxBarGaugeOptions extends viz.core.BaseWidgetOptions, SharedGaugeOptions {
-        /** @docid dxbargaugeoptions_backgroundColor */
+        /** Specifies a color for the remaining segment of the bar's track. */
         backgroundColor?: string;
 
-        /** @docid dxbargaugeoptions_barSpacing */
+        /** Specifies a distance between bars in pixels. */
         barSpacing?: number;
 
-        /** @docid dxbargaugeoptions_baseValue */
+        /** Specifies a base value for bars. */
         baseValue?: number;
 
-        /** @docid dxbargaugeoptions_endValue */
+        /** Specifies an end value for the gauge's invisible scale. */
         endValue?: number;
 
-        /** @docid dxbargaugeoptions_geometry */
+        /** Defines the shape of the gauge's arc. */
         geometry?: {
 
-            /** @docid dxbargaugeoptions_geometry_endAngle */
+            /** Specifies the end angle of the bar gauge's arc. */
             endAngle?: number;
 
-            /** @docid dxbargaugeoptions_geometry_startAngle */
+            /** Specifies the start angle of the bar gauge's arc. */
             startAngle?: number;
         };
 
-        /** @docid dxbargaugeoptions_label */
+        /** Specifies the options of the labels that accompany gauge bars. */
         label?: {
 
-            /** @docid dxbargaugeoptions_label_connectorColor */
+            /** Specifies a color for the label connector text. */
             connectorColor?: string;
 
-            /** @docid dxbargaugeoptions_label_connectorWidth */
+            /** Specifies the width of the label connector in pixels. */
             connectorWidth?: number;
 
-            /** @docid dxbargaugeoptions_label_customizeText */
+            /** Specifies a callback function that returns a text for labels. */
             customizeText?: (barValue: { value: number; valueText: string }) => string;
 
-            /** @docid dxbargaugeoptions_label_font */
+            /** Specifies font options for bar labels. */
             font?: viz.core.Font;
 
-            /** @docid dxbargaugeoptions_label_format */
+            /** Specifies a format for bar labels. */
             format?: any;
 
-            /** @docid dxbargaugeoptions_label_indent */
+            /** Specifies the distance between the upper bar and bar labels in pixels. */
             indent?: number;
 
-            /** @docid dxbargaugeoptions_label_precision */
+            /**
+             * Specifies a precision for the formatted value displayed by labels.
+             * @deprecated Use the label.format.precision option instead.
+             */
             precision?: number;
 
-            /** @docid dxbargaugeoptions_label_visible */
+            /** Specifies whether bar labels appear on a gauge or not. */
             visible?: boolean;
         };
 
-        /** @docid dxbargaugeoptions_palette */
+        /** Sets the name of the palette or an array of colors to be used for coloring the gauge range container. */
         palette?: any;
 
-        /** @docid dxbargaugeoptions_relativeInnerRadius */
+        /** Defines the radius of the bar that is closest to the center relatively to the radius of the topmost bar. */
         relativeInnerRadius?: number;
 
-        /** @docid dxbargaugeoptions_startValue */
+        /** Specifies a start value for the gauge's invisible scale. */
         startValue?: number;
 
-        /** @docid dxbargaugeoptions_values */
+        /** Specifies the array of values to be indicated on a bar gauge. */
         values?: Array<number>;
     }
 }
 
 declare module DevExpress.viz {
-    /** @docid dxlineargauge */
+    /** The LinearGauge is a widget that indicates values on a linear numeric scale. */
     export class dxLinearGauge extends DevExpress.viz.gauges.dxBaseGauge {
         constructor(element: JQuery, options?: DevExpress.viz.gauges.dxLinearGaugeOptions);
         constructor(element: Element, options?: DevExpress.viz.gauges.dxLinearGaugeOptions);
     }
 
-    /** @docid dxcirculargauge */
+    /** The CircularGauge is a widget that indicates values on a circular numeric scale. */
     export class dxCircularGauge extends DevExpress.viz.gauges.dxBaseGauge {
         constructor(element: JQuery, options?: DevExpress.viz.gauges.dxCircularGaugeOptions);
         constructor(element: Element, options?: DevExpress.viz.gauges.dxCircularGaugeOptions);
     }
 
-    /** @docid dxbargauge */
+    /** The BarGauge widget contains several circular bars that each indicates a single value. */
     export class dxBarGauge extends viz.core.BaseWidget implements viz.core.LoadingIndicatorMethods {
         constructor(element: JQuery, options?: DevExpress.viz.gauges.dxBarGaugeOptions);
         constructor(element: Element, options?: DevExpress.viz.gauges.dxBarGaugeOptions);
@@ -588,10 +525,10 @@ declare module DevExpress.viz {
 
         hideLoadingIndicator(): void;
 
-        /** @docid dxbargaugemethods_values#values() */
+        /** Returns an array of gauge values. */
         values(): Array<number>;
 
-        /** @docid dxbargaugemethods_values#values(newValues) */
+        /** Updates the values displayed by a gauge. */
         values(values: Array<number>): void;
     }
 }
