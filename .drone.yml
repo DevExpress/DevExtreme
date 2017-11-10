@@ -5,7 +5,10 @@ pipeline:
   build:
     image: devexpress/devextreme-build:17_1
     pull: true
-    commands: ./docker-ci.sh
+    commands:
+      - ./drone-cache.sh restore
+      - ./docker-ci.sh
+      - ./drone-cache.sh rebuild
 
 matrix:
   include:
