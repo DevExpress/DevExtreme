@@ -303,14 +303,15 @@ var DeferRendering = Widget.inherit({
     _abortRenderTask: function() {
         if(this._renderTask) {
             this._renderTask.abort();
+            this._renderTask = undefined;
         }
     },
 
     _dispose: function() {
         this.transitionExecutor.stop(true);
         this._abortRenderTask();
-        this._actions = null;
-        this._$initialContent = null;
+        this._actions = undefined;
+        this._$initialContent = undefined;
         this.callBase();
     }
 
