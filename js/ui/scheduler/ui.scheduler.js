@@ -2054,7 +2054,7 @@ var Scheduler = Widget.inherit({
 
     _enableDoneButton: function() {
         var toolbarItems = this._popup.option("toolbarItems");
-        toolbarItems[0].options = { enabled: true };
+        toolbarItems[0].options = { disabled: false };
         this._popup.option("toolbarItems", toolbarItems);
     },
 
