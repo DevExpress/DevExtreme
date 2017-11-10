@@ -2220,6 +2220,7 @@ var Scheduler = Widget.inherit({
             }
             this.addAppointment(formData);
         }
+        this._enableDoneButton();
 
         return true;
     },
@@ -2227,6 +2228,12 @@ var Scheduler = Widget.inherit({
     _disableDoneButton: function() {
         var toolbarItems = this._popup.option("toolbarItems");
         toolbarItems[0].options = { disabled: true };
+        this._popup.option("toolbarItems", toolbarItems);
+    },
+
+    _enableDoneButton: function() {
+        var toolbarItems = this._popup.option("toolbarItems");
+        toolbarItems[0].options = { enabled: true };
         this._popup.option("toolbarItems", toolbarItems);
     },
 
