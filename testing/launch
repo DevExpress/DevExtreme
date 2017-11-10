@@ -15,7 +15,7 @@ if(parseInt(process.versions.node.split('.')[0]) < 6)
 
 childProcess.spawn(
     "dotnet",
-    [ path.join(__dirname, "runner/bin/Debug/dist/runner.dll") ],
+    [ path.join(__dirname, "runner/bin/runner.dll") ],
     { stdio: "inherit" }
 );
 
