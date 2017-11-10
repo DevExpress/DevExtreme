@@ -1021,6 +1021,14 @@ module.exports = {
                     return this.callBase($cell) && !$cell.hasClass(this.addWidgetPrefix(HIDDEN_COLUMN_CLASS));
                 },
 
+                _getDataCellElements: function($row) {
+                    return $row.find("td:not(.dx-datagrid-hidden-column, [class*='dx-command-'])");
+                },
+
+                _equalCellElements: function($cell1, $cell2) {
+                    return $cell1.get(0).cellIndex === $cell2.get(0).cellIndex;
+                },
+
                 _processNextCellInMasterDetail: function($nextCell) {
                     this.callBase($nextCell);
 
@@ -1031,6 +1039,30 @@ module.exports = {
                         };
                         $nextCell.on("focus", focusHandler);
                     }
+                },
+
+                _handleTabKeyOnMasterDetailCell: function(eventTarget, direction) {
+                    var result = this.callBase(eventTarget, direction);
+                    if(!result) {
+                        var $currentCell = this._getFocusedCell(),
+                            $row = $currentCell.parent(),
+                            $dataCells = this._getDataCellElements($row),
+                            $targetCell = direction === "next" ? $dataCells.last() : $dataCells.first(),
+                            rowIndex = $row.get(0).rowIndex,
+                            key = this._dataController.getKeyByRowIndex(direction === "next" ? rowIndex : rowIndex - 1);
+
+                        return this._isAdaptiveDetailRowExpanded(key) && this._equalCellElements($currentCell, $targetCell);
+                    }
+                    return result;
+                },
+
+                _isAdaptiveDetailRowExpanded: function(key) {
+                    return this._adaptiveController.isAdaptiveDetailRowExpanded(key);
+                },
+
+                init: function() {
+                    this.callBase();
+                    this._adaptiveController = this.getController("adaptiveColumns");
                 }
             }
         }
