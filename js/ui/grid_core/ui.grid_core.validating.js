@@ -23,6 +23,7 @@ var INVALIDATE_CLASS = "invalid",
     CELL_HIGHLIGHT_OUTLINE = "dx-highlight-outline",
 
     INSERT_INDEX = "__DX_INSERT_INDEX__",
+    PADDING_BETWEEN_TOOLTIPS = 2,
     EDIT_MODE_ROW = "row",
     EDIT_MODE_FORM = "form",
     EDIT_MODE_BATCH = "batch",
@@ -177,14 +178,25 @@ var ValidatingController = modules.Controller.inherit((function() {
                 getValue = function() {
                     var value = column.calculateCellValue(editData.data || {});
                     return value !== undefined ? value : parameters.value;
-                };
+                },
+                visibleColumns,
+                columnsController,
+                showEditorAlways = column.showEditorAlways;
 
             if(!column.validationRules || !Array.isArray(column.validationRules) || commonUtils.isDefined(column.command)) return;
 
             editIndex = editingController.getIndexByKey(parameters.key, editingController._editData);
 
-            if(editIndex < 0 && column.showEditorAlways) {
-                editIndex = editingController._addEditData({ key: parameters.key });
+            if(editIndex < 0) {
+                if(!showEditorAlways) {
+                    columnsController = that.getController("columns");
+                    visibleColumns = columnsController && columnsController.getVisibleColumns() || [];
+                    showEditorAlways = visibleColumns.some(function(column) { return column.showEditorAlways; });
+                }
+
+                if(showEditorAlways) {
+                    editIndex = editingController._addEditData({ key: parameters.key, oldData: parameters.data });
+                }
             }
 
             if(editIndex >= 0) {
@@ -439,9 +451,10 @@ module.exports = {
                 _beforeEditCell: function(rowIndex, columnIndex, item) {
                     var result = this.callBase(rowIndex, columnIndex, item),
                         $cell = this.component.getCellElement(rowIndex, columnIndex),
-                        validator = $cell && $cell.data("dxValidator");
+                        validator = $cell && $cell.data("dxValidator"),
+                        value = validator && validator.option("adapter").getValue();
 
-                    if(this.getEditMode(this) === EDIT_MODE_CELL && (!validator || validator.validate().isValid)) {
+                    if(this.getEditMode(this) === EDIT_MODE_CELL && (!validator || value !== undefined && validator.validate().isValid)) {
                         return result;
                     }
                 },
@@ -463,21 +476,24 @@ module.exports = {
                 },
 
                 _showErrorRow: function(editData) {
-                    var errorHandling = this.getController("errorHandling"),
+                    var $popupContent,
+                        errorHandling = this.getController("errorHandling"),
                         items = this.getController("data").items(),
                         rowIndex = this.getIndexByKey(editData.key, items);
 
                     if(!editData.isValid && editData.errorText && rowIndex >= 0) {
-                        errorHandling && errorHandling.renderErrorRow(editData.errorText, rowIndex);
+                        $popupContent = this.getPopupContent();
+                        errorHandling && errorHandling.renderErrorRow(editData.errorText, rowIndex, $popupContent);
                     }
                 },
 
-                updateFieldValue: function() {
-                    var that = this;
+                updateFieldValue: function(e) {
+                    var that = this,
+                        editMode = that.getEditMode();
 
                     that.callBase.apply(that, arguments);
 
-                    if(that.getEditMode() === EDIT_MODE_ROW) {
+                    if(editMode === EDIT_MODE_ROW || (editMode === EDIT_MODE_BATCH && e.column.showEditorAlways)) {
                         var currentValidator = that.getController("validating").getValidator();
                         currentValidator && currentValidator.validate();
                     }
@@ -507,7 +523,7 @@ module.exports = {
                     var that = this;
 
                     if($targetElement && $targetElement.length) {
-                        new Tooltip(
+                        return new Tooltip(
                         $("<div>")
                             .addClass(that.addWidgetPrefix(REVERT_TOOLTIP_CLASS))
                             .appendTo($container),
@@ -540,8 +556,9 @@ module.exports = {
                     }
                 },
 
-                _showValidationMessage: function($cell, message, alignment) {
+                _showValidationMessage: function($cell, message, alignment, revertTooltip) {
                     var that = this,
+                        needRepaint,
                         $highlightContainer = $cell.find("." + CELL_HIGHLIGHT_OUTLINE),
                         isOverlayVisible = $cell.find(".dx-dropdowneditor-overlay:visible").length,
                         myPosition = isOverlayVisible ? "top right" : "top " + alignment,
@@ -569,10 +586,29 @@ module.exports = {
                                 my: myPosition,
                                 at: atPosition
                             },
-                            onPositioned: function() {
-                                that._rowsView.element() && that._rowsView.updateFreeSpaceRowHeight();
+                            onPositioned: function(e) {
+                                if(!needRepaint) {
+                                    needRepaint = that._rowsView.updateFreeSpaceRowHeight();
+                                    if(needRepaint) {
+                                        e.component.repaint();
+                                    }
+                                }
+
+                                that._shiftValidationMessageIfNeed(e.component.content(), revertTooltip && revertTooltip.content(), $cell);
                             }
                         });
+                },
+
+                _shiftValidationMessageIfNeed: function($content, $revertContent, $cell) {
+                    if(!$revertContent) return;
+
+                    var contentOffset = $content.offset(),
+                        revertContentOffset = $revertContent.offset();
+
+                    if(contentOffset.top === revertContentOffset.top && contentOffset.left + $content.width() > revertContentOffset.left) {
+                        var left = $revertContent.width() + PADDING_BETWEEN_TOOLTIPS;
+                        $content.css("left", revertContentOffset.left < $cell.offset().left ? -left : left);
+                    }
                 },
 
                 _getTooltipsSelector: function() {
@@ -601,6 +637,8 @@ module.exports = {
                         validationResult,
                         $tooltips = $focus && $focus.closest("." + that.addWidgetPrefix(ROWS_VIEW_CLASS)).find(that._getTooltipsSelector()),
                         $cell = $focus && $focus.is("td") ? $focus : null,
+                        showValidationMessage = false,
+                        revertTooltip,
                         column = $cell && that.getController("columns").getVisibleColumns()[$cell.index()];
 
                     if(!arguments.length) return that.callBase();
@@ -615,18 +653,18 @@ module.exports = {
 
                             if(!validationResult.isValid) {
                                 hideBorder = true;
-
-                                if($cell && column) {
-                                    that._showValidationMessage($focus, validationResult.brokenRule.message, column.alignment);
-                                }
+                                showValidationMessage = true;
                             }
                         }
                     }
 
                     if((validationResult && !validationResult.isValid) || (editData && editData.type === "update")) {
                         if(that._editingController.getEditMode() === EDIT_MODE_CELL) {
-                            that._showRevertButton($focus, $cell ? $focus.find("." + CELL_HIGHLIGHT_OUTLINE).first() : $focus);
+                            revertTooltip = that._showRevertButton($focus, $cell ? $focus.find("." + CELL_HIGHLIGHT_OUTLINE).first() : $focus);
                         }
+                    }
+                    if(showValidationMessage && $cell && column) {
+                        that._showValidationMessage($focus, validationResult.brokenRule.message, column.alignment, revertTooltip);
                     }
 
                     !hideBorder && that._rowsView.element() && that._rowsView.updateFreeSpaceRowHeight();
@@ -638,22 +676,29 @@ module.exports = {
             rowsView: {
                 updateFreeSpaceRowHeight: function($table) {
                     var that = this,
-                        $rowElements = that._getRowElements(),
-                        $freeSpaceRowElements = that._getFreeSpaceRowElements($table),
-                        $freeSpaceRowElement = $freeSpaceRowElements.first(),
-                        $tooltipContent = that.element().find(".dx-invalid-message .dx-overlay-content");
+                        $rowElements,
+                        $freeSpaceRowElement,
+                        $freeSpaceRowElements,
+                        $element = that.element(),
+                        $tooltipContent = $element && $element.find(".dx-invalid-message .dx-overlay-content");
 
                     that.callBase($table);
 
+                    if($tooltipContent && $tooltipContent.length) {
+                        $rowElements = that._getRowElements();
+                        $freeSpaceRowElements = that._getFreeSpaceRowElements($table);
+                        $freeSpaceRowElement = $freeSpaceRowElements.first();
 
-                    if($tooltipContent.length && $freeSpaceRowElement && $rowElements.length === 1 && (!$freeSpaceRowElement.is(":visible") || $tooltipContent.outerHeight() > $freeSpaceRowElement.outerHeight())) {
-                        $freeSpaceRowElements.show();
-                        $freeSpaceRowElements.height($tooltipContent.outerHeight());
+                        if($freeSpaceRowElement && $rowElements.length === 1 && (!$freeSpaceRowElement.is(":visible") || $tooltipContent.outerHeight() > $freeSpaceRowElement.outerHeight())) {
+                            $freeSpaceRowElements.show();
+                            $freeSpaceRowElements.height($tooltipContent.outerHeight());
+                            return true;
+                        }
                     }
                 },
                 _formItemPrepared: function(cellOptions, $container) {
                     this.callBase.apply(this, arguments);
-                    this.getController("validating").createValidator(cellOptions, $container.children(".dx-widget"));
+                    this.getController("validating").createValidator(cellOptions, $container.find(".dx-widget").first());
                 },
                 _cellPrepared: function($cell, parameters) {
                     this.getController("validating").createValidator(parameters, $cell);

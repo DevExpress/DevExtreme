@@ -74,7 +74,7 @@ function subscribeToScrollEvent(area, handler) {
 
 var scrollBarInfoCache = {};
 
-function getScrollBarInfo(rootElement, useNativeScrolling) {
+function getScrollBarInfo(useNativeScrolling) {
     if(scrollBarInfoCache[useNativeScrolling]) {
         return scrollBarInfoCache[useNativeScrolling];
     }
@@ -86,9 +86,11 @@ function getScrollBarInfo(rootElement, useNativeScrolling) {
     var container = $(DIV).css({
         position: 'absolute',
         visibility: 'hidden',
+        top: -1000,
+        left: -1000,
         width: 100,
         height: 100
-    }).appendTo(rootElement);
+    }).appendTo("body");
 
     var content = $('<p>').css({
         width: '100%',
@@ -155,7 +157,7 @@ function clickedOnFieldsArea($targetElement) {
 
 /**
  * @name dxPivotGridOptions_focusStateEnabled
- * @publicName hoverStateEnabled
+ * @publicName focusStateEnabled
  * @hidden
 * @extend_doc
 */
@@ -201,7 +203,7 @@ var PivotGrid = Widget.inherit({
             /**
              * @name dxPivotGridOptions_dataSource
              * @publicName dataSource
-             * @type array|PivotGridDataSource|PivotGridDataSource configuration
+             * @type array|PivotGridDataSource|PivotGridDataSourceOptions
              * @default null
              */
             dataSource: null,
@@ -733,7 +735,7 @@ var PivotGrid = Widget.inherit({
                  * @name dxPivotGridOptions_stateStoring_customLoad
                  * @publicName customLoad
                  * @type function()
-                 * @type_function_return deferred object
+                 * @type_function_return Promise
                  */
                 customLoad: null,
 
@@ -999,7 +1001,7 @@ var PivotGrid = Widget.inherit({
         if(columnsArea && !columnsArea.hasScroll()) {
             that._scrollLeft = null;
         }
-        if(that._scrollTop !== null || that._scrollLeft !== null || scrolled) {
+        if(that._scrollTop !== null || that._scrollLeft !== null || scrolled || that.option("rtlEnabled")) {
             scrollTop = that._scrollTop || 0;
             scrollLeft = that._scrollLeft || 0;
             dataArea.scrollTo({ x: scrollLeft, y: scrollTop });
@@ -1475,16 +1477,12 @@ var PivotGrid = Widget.inherit({
             dataArea,
             rowsArea,
             columnsArea,
-            scrollBarInfo = getScrollBarInfo(that.element(), that.option("scrolling.useNative")),
             isFirstDrawing = !that._pivotGridContainer,
             rowHeaderContainer,
             columnHeaderContainer,
             filterHeaderContainer,
             dataHeaderContainer,
             updateHandler;
-
-        that._scrollBarWidth = scrollBarInfo.scrollBarWidth;
-        that._scrollBarUseNative = scrollBarInfo.scrollBarUseNative;
 
         tableElement = !isFirstDrawing && that._tableElement();
 
@@ -1566,7 +1564,7 @@ var PivotGrid = Widget.inherit({
         };
 
         that._renderHeaders(rowHeaderContainer, columnHeaderContainer, filterHeaderContainer, dataHeaderContainer);
-        if(that._needDelayResizing(that._dataController.getCellsInfo()) && isFirstDrawing) {
+        if(that._needDelayResizing(dataArea.getData()) && isFirstDrawing) {
             setTimeout(updateHandler);
         } else {
             updateHandler();
@@ -1636,6 +1634,10 @@ var PivotGrid = Widget.inherit({
         return this.element().find('table').first();
     },
 
+    addWidgetPrefix: function(className) {
+        return "dx-pivotgrid-" + className;
+    },
+
     resize: function() {
         this.updateDimensions();
     },
@@ -1667,7 +1669,8 @@ var PivotGrid = Widget.inherit({
             rowsAreaWidth = 0,
             hasRowsScroll,
             hasColumnsScroll,
-            scrollBarWidth = that._scrollBarWidth || 0,
+            scrollBarInfo = getScrollBarInfo(that.option("scrolling.useNative")),
+            scrollBarWidth = scrollBarInfo.scrollBarWidth,
             dataAreaCell = tableElement.find("." + DATA_AREA_CELL_CLASS),
             rowAreaCell = tableElement.find("." + ROW_AREA_CELL_CLASS),
             columnAreaCell = tableElement.find("." + COLUMN_AREA_CELL_CLASS),
@@ -1682,6 +1685,11 @@ var PivotGrid = Widget.inherit({
             columnsAreaRowCount,
             needSynchronizeFieldPanel = rowFieldsHeader.isVisible() && that.option("rowHeaderLayout") !== "tree",
             d = $.Deferred();
+
+        ///#DEBUG
+        that.__scrollBarUseNative = scrollBarInfo.scrollBarUseNative;
+        that.__scrollBarWidth = scrollBarWidth;
+        ///#ENDDEBUG
 
         that._detectHasContainerHeight();
 
@@ -1735,6 +1743,8 @@ var PivotGrid = Widget.inherit({
             bordersWidth = getCommonBorderWidth([rowAreaCell, dataAreaCell, tableElement], "width");
             groupWidth = elementWidth - rowsAreaWidth - bordersWidth;
 
+            groupWidth = groupWidth > 0 ? groupWidth : totalWidth;
+
             hasRowsScroll = that._hasHeight && (totalHeight - groupHeight) >= 1;
             hasColumnsScroll = (totalWidth - groupWidth) >= 1;
             if(!hasRowsScroll) {
@@ -1776,8 +1786,8 @@ var PivotGrid = Widget.inherit({
 
                 needSynchronizeFieldPanel && rowFieldsHeader.setColumnsWidth(rowsAreaColumnWidths);
 
-                dataAreaCell.toggleClass(BOTTOM_BORDER_CLASS, !(hasRowsScroll || scrollBarWidth));
-                rowAreaCell.toggleClass(BOTTOM_BORDER_CLASS, !(hasRowsScroll && !scrollBarWidth));
+                dataAreaCell.toggleClass(BOTTOM_BORDER_CLASS, !hasRowsScroll);
+                rowAreaCell.toggleClass(BOTTOM_BORDER_CLASS, !hasRowsScroll);
 
                 //T317921
                 if(!that._hasHeight && (elementWidth !== that.element().width())) {
@@ -1826,11 +1836,11 @@ var PivotGrid = Widget.inherit({
 
                 var updateScrollableResults = [];
 
+                dataArea.processScroll(scrollBarInfo.scrollBarUseNative);
+
                 $.each([columnsArea, rowsArea, dataArea], function(_, area) {
                     updateScrollableResults.push(area && area.updateScrollable());
                 });
-
-                dataArea.processScroll(that._scrollBarUseNative);
 
                 that._updateLoading();
                 that._renderNoDataText(dataAreaCell);

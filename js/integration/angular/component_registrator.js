@@ -1,9 +1,10 @@
 "use strict";
 
 var $ = require("../../core/renderer"),
+    Config = require("../../core/config"),
     registerComponent = require("../../core/component_registrator"),
     Class = require("../../core/class"),
-    type = require("../../core/utils/common").type,
+    commonUtils = require("../../core/utils/common"),
     inArray = require("../../core/utils/array").inArray,
     Locker = require("../../core/utils/locker"),
     Widget = require("../../ui/widget/ui.widget"),
@@ -92,7 +93,7 @@ var ComponentBuilder = Class.inherit({
 
         if(options.bindingOptions) {
             $.each(options.bindingOptions, function(key, value) {
-                if(type(value) === 'string') {
+                if(commonUtils.type(value) === 'string') {
                     that._ngOptions.bindingOptions[key] = { dataPath: value };
                 }
             });
@@ -199,6 +200,10 @@ var ComponentBuilder = Class.inherit({
             that._ngLocker.obtain(fullName);
             safeApply(function() {
                 $.each(optionDependencies[optionName], function(optionPath, valuePath) {
+                    if(!that._optionsAreLinked(fullName, optionPath)) {
+                        return;
+                    }
+
                     var value = component.option(optionPath);
                     that._parse(valuePath).assign(that._scope, value);
 
@@ -222,6 +227,19 @@ var ComponentBuilder = Class.inherit({
         });
     },
 
+    _optionsAreNested: function(optionPath1, optionPath2) {
+        var parentSeparator = optionPath1[optionPath2.length];
+        return optionPath1.indexOf(optionPath2) === 0 && (parentSeparator === "." || parentSeparator === "[");
+    },
+
+    _optionsAreLinked: function(optionPath1, optionPath2) {
+        if(optionPath1 === optionPath2) return true;
+
+        return optionPath1.length > optionPath2.length
+            ? this._optionsAreNested(optionPath1, optionPath2)
+            : this._optionsAreNested(optionPath2, optionPath1);
+    },
+
     _compilerByTemplate: function(template) {
         var that = this,
             scopeItemsPath = this._getScopeItemsPath();
@@ -229,7 +247,7 @@ var ComponentBuilder = Class.inherit({
         return function(options) {
             var $resultMarkup = $(template).clone(),
                 dataIsScope = options.model && options.model.constructor === that._scope.$root.constructor,
-                templateScope = dataIsScope ? options.model : (options.noModel ? that._scope : that._createScopeWithData(options.model));
+                templateScope = dataIsScope ? options.model : (options.noModel ? that._scope : that._createScopeWithData(options));
 
             if(scopeItemsPath) {
                 that._synchronizeScopes(templateScope, scopeItemsPath, options.index);
@@ -278,11 +296,15 @@ var ComponentBuilder = Class.inherit({
         }
     },
 
-    _createScopeWithData: function(data) {
+    _createScopeWithData: function(options) {
         var newScope = this._scope.$new();
 
         if(this._itemAlias) {
-            newScope[this._itemAlias] = data;
+            newScope[this._itemAlias] = options.model;
+        }
+
+        if(commonUtils.isDefined(options.index)) {
+            newScope.$index = options.index;
         }
 
         return newScope;
@@ -373,16 +395,25 @@ var ComponentBuilder = Class.inherit({
 
             return wrappedAction;
         };
+        result.beforeActionExecute = result.onActionCreated;
         result.nestedComponentOptions = function(component) {
             return {
                 templatesRenderAsynchronously: component.option("templatesRenderAsynchronously"),
+                forceApplyBindings: component.option("forceApplyBindings"),
                 modelByElement: component.option("modelByElement"),
                 onActionCreated: component.option("onActionCreated"),
+                beforeActionExecute: component.option("beforeActionExecute"),
                 nestedComponentOptions: component.option("nestedComponentOptions")
             };
         };
 
         result.templatesRenderAsynchronously = true;
+
+        if(Config().wrapActionsBeforeExecute) {
+            result.forceApplyBindings = function() {
+                safeApply(function() {}, scope);
+            };
+        }
 
         result.integrationOptions = {
             createTemplate: function(element) {
@@ -391,6 +422,7 @@ var ComponentBuilder = Class.inherit({
             watchMethod: function(fn, callback, options) {
                 options = options || {};
 
+                var immediateValue;
                 var skipCallback = options.skipImmediate;
                 var disposeWatcher = scope.$watch(function() {
                     var value = fn();
@@ -399,14 +431,24 @@ var ComponentBuilder = Class.inherit({
                     }
                     return value;
                 }, function(newValue) {
-                    if(!skipCallback) {
+                    var isSameValue = immediateValue === newValue;
+                    if(!skipCallback && (!isSameValue || isSameValue && options.deep)) {
                         callback(newValue);
                     }
                     skipCallback = false;
                 }, options.deep);
 
+                if(!skipCallback) {
+                    immediateValue = fn();
+                    callback(immediateValue);
+                }
+
+                if(Config().wrapActionsBeforeExecute) {
+                    this._applyAsync(function() {}, scope);
+                }
+
                 return disposeWatcher;
-            },
+            }.bind(this),
             templates: {
                 "dx-polymorph-widget": {
                     render: function(options) {
@@ -489,7 +531,9 @@ ComponentBuilder = ComponentBuilder.inherit({
 
                 that._ngModelController.$setViewValue(args.value);
             } finally {
-                that._ngLocker.release(that._ngModelOption());
+                if(that._ngLocker.locked(that._ngModelOption())) {
+                    that._ngLocker.release(that._ngModelOption());
+                }
             }
         });
 

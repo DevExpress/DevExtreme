@@ -93,17 +93,16 @@ function updateCalculatedFieldProperties(field, calculatedProperties) {
     }
 }
 
-function areExpressionsUsed(descriptions) {
-    var expressionsUsed = false;
-
-    each(descriptions.values, function(_, field) {
-        if(field.summaryDisplayMode || field.calculateSummaryValue || field.runningTotal) {
-            expressionsUsed = true;
-            return false;
-        }
+function areExpressionsUsed(dataFields) {
+    return dataFields.some(function(field) {
+        return field.summaryDisplayMode || field.calculateSummaryValue;
     });
+}
 
-    return expressionsUsed;
+function isRunningTotalUsed(dataFields) {
+    return dataFields.some(function(field) {
+        return !!field.runningTotal;
+    });
 }
 
 module.exports = Class.inherit((function() {
@@ -249,16 +248,29 @@ module.exports = Class.inherit((function() {
         return store;
     }
 
-    function getExpandedPaths(dataSource, loadOptions, dimensionName) {
+    function equalFields(fields, prevFields, count) {
+        for(var i = 0; i < count; i++) {
+            if(!fields[i] || !prevFields[i] || fields[i].index !== prevFields[i].index) {
+                return false;
+            }
+        }
+
+        return true;
+    }
+
+    function getExpandedPaths(dataSource, loadOptions, dimensionName, prevLoadOptions) {
         var result = [],
-            fields = (loadOptions && loadOptions[dimensionName]) || [];
+            fields = (loadOptions && loadOptions[dimensionName]) || [],
+            prevFields = (prevLoadOptions && prevLoadOptions[dimensionName]) || [];
 
         foreachTree(dataSource[dimensionName], function(items) {
             var item = items[0],
                 path = createPath(items);
 
             if(item.children && fields[path.length - 1] && !fields[path.length - 1].expanded) {
-                (path.length < fields.length) && result.push(path.slice());
+                if(path.length < fields.length && (!prevLoadOptions || equalFields(fields, prevFields, path.length))) {
+                    result.push(path.slice());
+                }
             }
         }, true);
         return result;
@@ -372,7 +384,7 @@ module.exports = Class.inherit((function() {
 
     function sortFieldsByAreaIndex(fields) {
         fields.sort(function(field1, field2) {
-            return field1.areaIndex - field2.areaIndex;
+            return field1.areaIndex - field2.areaIndex || field1.groupIndex - field2.groupIndex;
         });
     }
 
@@ -911,7 +923,7 @@ module.exports = Class.inherit((function() {
             * @name PivotGridDataSourceOptions_fields_calculateSummaryValue
             * @publicName calculateSummaryValue
             * @type function(e)
-            * @type_function_param1 e:SummaryCell
+            * @type_function_param1 e:dxPivotGridSummaryCell
             * @type_function_return number
             * @default undefined
             */
@@ -1036,7 +1048,13 @@ module.exports = Class.inherit((function() {
                 field = this._fields && this._fields[index],
                 store = this.store(),
                 loadFields = [],
-                loadOptions = { columns: loadFields, rows: [], values: this.getAreaFields("data"), filters: [] },
+                loadOptions = {
+                    columns: loadFields,
+                    rows: [],
+                    values: this.getAreaFields("data"),
+                    filters: [],
+                    skipValues: true
+                },
                 d = $.Deferred();
 
             if(field && store) {
@@ -1090,7 +1108,7 @@ module.exports = Class.inherit((function() {
                 d = $.Deferred();
             options = options || {};
 
-            that._changeLoadingCount(1);
+            that.beginLoading();
 
             d.progress(function(progress) {
                 that._changeLoadingCount(0, progress * 0.8);
@@ -1099,7 +1117,7 @@ module.exports = Class.inherit((function() {
             d.fail(function(e) {
                 that.fireEvent("loadError", [e]);
             }).always(function() {
-                that._changeLoadingCount(-1);
+                that.endLoading();
             });
 
             function loadTask() {
@@ -1241,13 +1259,13 @@ module.exports = Class.inherit((function() {
                 }, state);
 
                 if(!that._descriptions) {
-                    that._changeLoadingCount(1);
+                    that.beginLoading();
                     when(getFields(that)).done(function(fields) {
                         that._fields = setFieldsState(state.fields, fields);
                         that._fieldsPrepared(fields);
                         that.load(state);
                     }).always(function() {
-                        that._changeLoadingCount(-1);
+                        that.endLoading();
                     });
                 } else {
                     that._fields = setFieldsState(state.fields, that._fields);
@@ -1262,6 +1280,14 @@ module.exports = Class.inherit((function() {
                     rowExpandedPaths: getExpandedPaths(that._data, that._descriptions, "rows")
                 };
             }
+        },
+
+        beginLoading: function() {
+            this._changeLoadingCount(1);
+        },
+
+        endLoading: function() {
+            this._changeLoadingCount(-1);
         },
 
         _changeLoadingCount: function(increment, progress) {
@@ -1286,22 +1312,23 @@ module.exports = Class.inherit((function() {
 
             if(store) {
                 extend(options, descriptions);
-                options.columnExpandedPaths = options.columnExpandedPaths || getExpandedPaths(this._data, options, "columns");
-                options.rowExpandedPaths = options.rowExpandedPaths || getExpandedPaths(this._data, options, "rows");
+                options.columnExpandedPaths = options.columnExpandedPaths || getExpandedPaths(this._data, options, "columns", that._lastLoadOptions);
+                options.rowExpandedPaths = options.rowExpandedPaths || getExpandedPaths(this._data, options, "rows", that._lastLoadOptions);
 
                 if(headerName) {
                     options.headerName = headerName;
                 }
 
-                that._changeLoadingCount(1);
+                that.beginLoading();
                 deferred.always(function() {
-                    that._changeLoadingCount(-1);
+                    that.endLoading();
                 });
                 when(store.load(options)).progress(deferred.notify).done(function(data) {
                     if(options.path) {
                         that.applyPartialDataSource(options.area, options.path, data, deferred);
                     } else {
                         extend(that._data, data);
+                        that._lastLoadOptions = options;
                         that._update(deferred);
                     }
                 }).fail(deferred.reject);
@@ -1323,7 +1350,8 @@ module.exports = Class.inherit((function() {
             var that = this,
                 descriptions = that._descriptions,
                 loadedData = that._data,
-                expressionsUsed = areExpressionsUsed(descriptions);
+                dataFields = descriptions.values,
+                expressionsUsed = areExpressionsUsed(dataFields);
 
             when(formatHeaders(descriptions, loadedData), updateCache(loadedData.rows), updateCache(loadedData.columns)).done(function() {
                 if(expressionsUsed) {
@@ -1332,6 +1360,8 @@ module.exports = Class.inherit((function() {
                 }
 
                 that._sort(descriptions, loadedData);
+
+                isRunningTotalUsed(dataFields) && summaryDisplayModes.applyRunningTotal(descriptions, loadedData);
 
                 that._data = loadedData;
                 when(deferred).done(function() {

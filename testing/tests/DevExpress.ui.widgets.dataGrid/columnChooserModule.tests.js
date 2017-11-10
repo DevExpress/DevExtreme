@@ -3,10 +3,10 @@
 window.includeThemesLinks();
 
 require("common.css!");
+require("generic_light.css!");
 require("ui/data_grid/ui.data_grid");
 
 var $ = require("jquery"),
-    setTemplateEngine = require("ui/set_template_engine"),
     commonUtils = require("core/utils/common"),
     devices = require("core/devices"),
     device = devices.real(),
@@ -17,10 +17,6 @@ var $ = require("jquery"),
 themes.current({
     theme: "generic"
 });
-
-require("../../../vendor/template-engines/hogan-2.0.0.js");
-setTemplateEngine("hogan");
-
 QUnit.testStart(function() {
     var markup =
         '<div id="container" class="dx-datagrid"></div>';
@@ -787,11 +783,15 @@ QUnit.test("CheckBox mode - not update treeview when selected items", function(a
 
     this.renderColumnChooser();
     columnChooserView._columnsController.columnOption = function(columnIndex, optionName, value) {
+        if(!commonUtils.isDefined(value)) {
+            return;
+        }
+
         //assert
         assert.equal(columnIndex, 0, "column index");
         assert.strictEqual(optionName, "visible", "option name is 'visible'");
         assert.ok(!value, "value of the option");
-        this.columnsChanged.fire({ optionNames: {} });
+        this.columnsChanged.fire({ optionNames: {}, changeTypes: {} });
     };
     columnChooserView._popupContainer.option("visible", true);
     columnChooserView._renderColumnChooserList = function() {
@@ -883,4 +883,89 @@ QUnit.test("CheckBox mode - check hidden band column", function(assert) {
     assert.ok($checkBoxElements.eq(0).hasClass("dx-checkbox-checked"), "checkbox is checked");
     assert.ok($checkBoxElements.eq(1).hasClass("dx-checkbox-checked"), "checkbox is checked");
     assert.ok(!$checkBoxElements.eq(2).hasClass("dx-checkbox-checked"), "checkbox isn't checked");
+});
+
+QUnit.test("CheckBox mode - Update a selection state when column visibility is changed via API", function(assert) {
+    //arrange
+    var $testElement = $("#container");
+
+    this.options.columnChooser.mode = "select";
+    $.extend(this.columns, [{ caption: "Column 1", index: 0, visible: true, showInColumnChooser: true }, { caption: "Column 2", index: 1, visible: true, showInColumnChooser: true }]);
+    this.setTestElement($testElement);
+
+    //act
+    this.columnChooserView.showColumnChooser();
+    this.clock.tick(1000);
+
+    this.columnsController.columnOption(0, "visible", false);
+    this.columnsController.columnsChanged.fire({
+        columnIndex: 0,
+        optionNames: {
+            visible: true
+        }
+    });
+
+    //assert
+    assert.ok(!this.columnChooserView._columnChooserList.getNodes()[0].selected, "first item is not selected");
+
+    this.columnChooserView.hideColumnChooser();
+});
+
+QUnit.test("CheckBox mode - scroll position after selecting an last item", function(assert) {
+    //arrange
+    var $columnChooser,
+        $lastItemElement,
+        scrollableInstance,
+        $testElement = $("#container");
+
+    this.options.columnChooser.mode = "select";
+    this.options.columnChooser.height = 200;
+    this.columns.push(
+        { caption: "Column 1", index: 0, visible: true, showInColumnChooser: true },
+        { caption: "Column 2", index: 1, visible: true, showInColumnChooser: true },
+        { caption: "Column 3", index: 2, visible: true, showInColumnChooser: true },
+        { caption: "Column 4", index: 3, visible: true, showInColumnChooser: true },
+        { caption: "Column 5", index: 4, visible: true, showInColumnChooser: true },
+        { caption: "Column 6", index: 5, visible: true, showInColumnChooser: true },
+        { caption: "Column 7", index: 6, visible: true, showInColumnChooser: true },
+        { caption: "Column 8", index: 7, visible: true, showInColumnChooser: true }
+    );
+
+    this.setTestElement($testElement);
+    this.columnChooserView.showColumnChooser();
+    this.clock.tick(1000);
+
+    $columnChooser = $("body").children(".dx-datagrid-column-chooser");
+    $lastItemElement = $columnChooser.find(".dx-treeview-item").last();
+    scrollableInstance = $columnChooser.find(".dx-scrollable").data("dxScrollable");
+    scrollableInstance.scrollToElement($lastItemElement);
+
+    //act
+    this.columnsController.columnOption(7, "visible", false);
+    this.columnChooserView.render($testElement, true);
+
+    //assert
+    scrollableInstance = $columnChooser.find(".dx-scrollable").data("dxScrollable");
+    assert.ok(scrollableInstance.scrollTop() > 0, "scroll position");
+});
+
+//T535738
+QUnit.test("CheckBox mode - update treeview when changing the column options", function(assert) {
+    //arrange
+    var $testElement = $("#container");
+
+    this.options.columnChooser.mode = "select";
+    $.extend(this.columns, [{ caption: "Column 1", index: 0, visible: true }, { caption: "Column 2", index: 1, visible: true }]);
+    this.setTestElement($testElement);
+
+    this.showColumnChooser();
+    this.clock.tick(1000);
+
+    sinon.spy(this.columnChooserView, "_renderColumnChooserList");
+
+    //act
+    this.columnsController.columnsChanged.fire({ optionNames: { all: true }, changeTypes: { columns: true } });
+
+    //assert
+    assert.strictEqual(this.columnChooserView._renderColumnChooserList.callCount, 1, "update treeview");
 });

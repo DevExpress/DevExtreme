@@ -1897,6 +1897,26 @@ QUnit.test("next loaded page should be selected when selectAll is enabled", func
     assert.equal($list.find(".dx-list-item-selected").length, 4, "all items has selected class");
 });
 
+QUnit.test("selectAll should have active state", function(assert) {
+    var clock = sinon.useFakeTimers(),
+        $list = $("#list").dxList({
+            dataSource: new DataSource({
+                store: [1, 2, 3, 4, 5, 6],
+            }),
+            showSelectionControls: true,
+            selectionMode: "all",
+            selectAllMode: "allPages"
+        });
+
+    var $selectAll = $list.find(".dx-list-select-all");
+
+    var pointer = pointerMock($selectAll);
+    pointer.start("touch").down();
+    clock.tick(100);
+    assert.ok($selectAll.hasClass("dx-state-active"), "selectAll has active state");
+    clock.restore();
+});
+
 QUnit.test("selectAll should not select items if they are not in current filter", function(assert) {
     var ds = new DataSource({
         store: [
@@ -2340,6 +2360,34 @@ QUnit.test("selectAll checkbox should be updated after load next page", function
     $moreButton.trigger("dxclick");
 
     assert.equal($selectAll.dxCheckBox("option", "value"), undefined, "selectAll checkbox is selected");
+});
+
+QUnit.test("onContentReady event should be called after update the state Select All checkbox", function(assert) {
+    var clock = sinon.useFakeTimers(),
+        $list = $("#list").dxList({
+            dataSource: {
+                load: function() {
+                    var d = $.Deferred();
+
+                    setTimeout(function() {
+                        d.resolve([0, 1]);
+                    }, 100);
+
+                    return d.promise();
+                }
+            },
+            showSelectionControls: true,
+            selectionMode: "all",
+            onContentReady: function(e) {
+                e.element.find(".dx-list-select-all-checkbox").dxCheckBox("instance").option("value", undefined);
+            }
+        });
+
+    clock.tick(100);
+
+    assert.ok($list.find(".dx-list-select-all-checkbox").hasClass("dx-checkbox-indeterminate"), "checkbox in an indeterminate state");
+
+    clock.restore();
 });
 
 

@@ -26,7 +26,7 @@ QUnit.performanceTest("dxDataGrid without data", function(assert) {
     var measureFunction = createDataGridMeasureFunction({
     });
 
-    assert.measureStyleRecalculation(measureFunction, 13);
+    assert.measureStyleRecalculation(measureFunction, 14);
 });
 
 QUnit.performanceTest("dxDataGrid with data", function(assert) {

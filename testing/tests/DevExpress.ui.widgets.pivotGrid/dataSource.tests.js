@@ -468,7 +468,8 @@ QUnit.test("Load Field Values", function(assert) {
             }
         ],
         rows: [],
-        filters: []
+        filters: [],
+        skipValues: true
     }], "load args");
 
     assert.deepEqual(fieldValues, loadResult.columns);
@@ -625,6 +626,7 @@ QUnit.test("Load Field Values for group", function(assert) {
                 customizeText: customize2
             }
         ],
+        skipValues: true,
         rows: [],
         filters: []
     }], "load args");
@@ -2417,6 +2419,45 @@ QUnit.test("Remove field when expanded items exist", function(assert) {
     }], "changed Fields");
 });
 
+//T496854
+QUnit.test("Reorder field when expanded items exist", function(assert) {
+    this.testStore.load.returns($.Deferred().resolve({
+        columns: [],
+        rows: [{
+            index: 1,
+            value: 1,
+            children: [{
+                value: 2,
+                index: 2,
+                children: [{
+                    value: 3,
+                    index: 3
+                }]
+            }]
+        }],
+        values: [],
+        grandTotalColumnIndex: 0,
+        grandTotalRowIndex: 0
+    }));
+
+    var dataSource = createDataSource({
+        fields: [
+            { dataField: "Field1", area: "row", areaIndex: 0 },
+            { dataField: "Field2", area: "row", areaIndex: 1 },
+            { dataField: "Field3", area: "row", areaIndex: 2 },
+        ],
+        store: this.testStore
+    });
+    this.testStore.load.returns($.Deferred().reject());
+
+    //act
+    dataSource.field(2, { area: "row", areaIndex: 1 });
+    dataSource.load();
+
+    //assert
+    assert.deepEqual(this.testStore.load.lastCall.args[0].rowExpandedPaths, [[1]], "Expanded rows paths");
+});
+
 QUnit.test("Change field when fields not loaded", function(assert) {
     var def = $.Deferred(),
         retrieveFieldsDef = $.Deferred();
@@ -2726,6 +2767,155 @@ QUnit.test("Load with group field", function(assert) {
         ],
         filters: []
     }], "load args");
+});
+
+//T531359
+QUnit.test("Sort group fields", function(assert) {
+    this.testStore.load.returns($.Deferred());
+
+    var fields = [
+        {
+            caption: "Date Problem",
+            displayFolder: "Project",
+            dataField: "projectCust_datumproblem",
+            groupName: "projectCust_datumproblem",
+            dataType: "date",
+            area: "column"
+        },
+        {
+            groupName: "projectCust_datumproblem",
+            groupInterval: "year",
+            groupIndex: 0,
+            caption: "datumProblem Jahr",
+            area: "column"
+        },
+        {
+            groupName: "projectCust_datumproblem",
+            groupInterval: "quarter",
+            groupIndex: 1,
+            caption: "datumProblem Quartal",
+            area: "column"
+        },
+        {
+            groupName: "projectCust_datumproblem",
+            groupInterval: "month",
+            groupIndex: 2,
+            caption: "datumProblem Monat",
+            area: "column"
+        },
+        {
+            caption: "Allocation Date",
+            displayFolder: "Project",
+            dataField: "allocationDate",
+            groupName: "allocationDate",
+            dataType: "date",
+            area: "column"
+        },
+        {
+            groupName: "allocationDate",
+            groupInterval: "year",
+            groupIndex: 0,
+            caption: "Allocation Jahr",
+            area: "column"
+        },
+        {
+            groupName: "allocationDate",
+            groupInterval: "quarter",
+            groupIndex: 1,
+            caption: "Allocation Quartal",
+            area: "column"
+        },
+        {
+            groupName: "allocationDate",
+            groupInterval: "month",
+            groupIndex: 2,
+            caption: "Allocation Monat",
+            area: "column"
+        },
+        {
+            caption: "Project Finish",
+            displayFolder: "Project",
+            dataField: "projectFinishDate",
+            groupName: "projectFinishDate",
+            dataType: "date",
+            area: "column"
+        },
+        {
+            groupName: "projectFinishDate",
+            groupInterval: "year",
+            groupIndex: 0,
+            caption: "Project Finish Jahr",
+            area: "column"
+        },
+        {
+            groupName: "projectFinishDate",
+            groupInterval: "quarter",
+            groupIndex: 1,
+            caption: "Project Finish Quartal",
+            area: "column"
+        },
+        {
+            groupName: "projectFinishDate",
+            groupInterval: "month",
+            groupIndex: 2,
+            caption: "Project Finish Monat",
+            area: "column"
+        },
+        {
+            caption: "Project Start",
+            displayFolder: "Project",
+            dataField: "projectStartDate",
+            groupName: "projectStartDate",
+            dataType: "date",
+            area: "column"
+        },
+        {
+            groupName: "projectStartDate",
+            groupInterval: "year",
+            groupIndex: 0,
+            caption: "Project Start Jahr",
+            area: "column"
+        },
+        {
+            groupName: "projectStartDate",
+            groupInterval: "quarter",
+            groupIndex: 1,
+            caption: "Project Start Quartal",
+            area: "column"
+        },
+        {
+            groupName: "projectStartDate",
+            groupInterval: "month",
+            groupIndex: 2,
+            caption: "Project Start Monat",
+            area: "column"
+        }
+    ];
+
+    createDataSource({
+        fields: fields,
+        store: this.testStore
+    });
+
+    //assert
+    assert.ok(this.testStore.load.calledOnce, "load once");
+    assert.deepEqual(this.testStore.load.lastCall.args[0].columns, [
+        fields[1],
+        fields[2],
+        fields[3],
+
+        fields[5],
+        fields[6],
+        fields[7],
+
+        fields[9],
+        fields[10],
+        fields[11],
+
+        fields[13],
+        fields[14],
+        fields[15]
+    ], "columns order");
 });
 
 QUnit.test("Load with group field. Pass sorting params", function(assert) {
@@ -4750,10 +4940,15 @@ QUnit.module("Apply summary mode", {
         sinon.stub(summaryDisplayModes, "applyDisplaySummaryMode", function(descriptions, data) {
             that.applyDisplaySummaryModePassedData = $.extend(true, {}, data);
         });
+
+        sinon.stub(summaryDisplayModes, "applyRunningTotal", function(descriptions, data) {
+            that.applyRunningTotalPassedData = $.extend(true, {}, data);
+        });
     },
     afterEach: function() {
         defaultEnvironment.afterEach.apply(this, arguments);
         summaryDisplayModes.applyDisplaySummaryMode.restore();
+        summaryDisplayModes.applyRunningTotal.restore();
     }
 });
 
@@ -5005,7 +5200,9 @@ QUnit.test("apply Display Summary Mode when runningTotal is used", function(asse
 
     def.resolve(this.storeData);
 
-    assert.deepEqual(prepareLoadedData(this.applyDisplaySummaryModePassedData.rows), [
+    assert.ok(summaryDisplayModes.applyRunningTotal.calledOnce);
+
+    assert.deepEqual(prepareLoadedData(this.applyRunningTotalPassedData.rows), [
         {
             index: 3,
             value: 1985
@@ -5017,7 +5214,7 @@ QUnit.test("apply Display Summary Mode when runningTotal is used", function(asse
             value: 1991
         }]);
 
-    assert.deepEqual(prepareLoadedData(this.applyDisplaySummaryModePassedData.columns), [{
+    assert.deepEqual(prepareLoadedData(this.applyRunningTotalPassedData.columns), [{
         index: 2,
         value: "Boise"
     }, {
@@ -5052,7 +5249,7 @@ QUnit.test("apply Display Summary Mode when runningTotal is used", function(asse
         }]);
 });
 
-QUnit.test("apply Display Summary Mode when expressions were used when data is sorted", function(assert) {
+QUnit.test("apply Display Summary Mode when expressions were used and data is sorted", function(assert) {
     var def = $.Deferred();
 
     this.testStore.load.returns(def);

@@ -6,10 +6,12 @@ var $ = require("jquery"),
     ArrayStore = require("data/array_store"),
     CustomStore = require("data/custom_store"),
     ODataStore = require("data/odata/store"),
+    dataQuery = require("data/query"),
     gridCore = require("ui/data_grid/ui.data_grid.core"),
     dataGridMocks = require("../../helpers/dataGridMocks.js"),
     setupDataGridModules = dataGridMocks.setupDataGridModules,
     loadTotalCount = require("ui/data_grid/ui.data_grid.grouping.expanded").loadTotalCount,
+    createOffsetFilter = require("ui/data_grid/ui.data_grid.grouping.core").createOffsetFilter,
     getContinuationGroupCount = require("ui/data_grid/ui.data_grid.grouping.collapsed").getContinuationGroupCount,
     ExpandedGroupingHelper = require("ui/data_grid/ui.data_grid.grouping.expanded").GroupingHelper,
     CollapsedGroupingHelper = require("ui/data_grid/ui.data_grid.grouping.collapsed").GroupingHelper;
@@ -620,6 +622,34 @@ QUnit.test("No error when store returned non-array", function(assert) {
 
     //assert
     assert.ok(true, "There are no exceptions");
+});
+
+QUnit.test("createOffsetFilter should generate filters with =/<> filter operations for boolean values", function(assert) {
+    //arrange
+
+    var booleanValues = [null, false, true];
+    var descValues = [false, true];
+
+    function checkFilter(filter) {
+        if(Array.isArray(filter)) {
+            if(Array.isArray(filter[0])) {
+                filter.forEach(checkFilter);
+            } else {
+                if(filter[1] !== "=" && filter[1] !== "<>") {
+                    assert.ok(false, "filter contains incorrect filter operation '" + filter[1] + "'");
+                }
+            }
+        }
+    }
+
+    descValues.forEach(function(desc) {
+        booleanValues.forEach(function(value, index) {
+            var filter = createOffsetFilter([value], { group: [{ selector: "this", desc: desc }] });
+
+            checkFilter(filter);
+            assert.deepEqual(dataQuery(booleanValues).filter(filter).toArray(), desc ? booleanValues.slice(index + 1) : booleanValues.slice(0, index), "filter for value " + value + " and desc " + false + " is correct");
+        });
+    });
 });
 
 QUnit.module("DataSource when not requireTotalCount", {
@@ -1839,6 +1869,38 @@ QUnit.test("loadTotalCount for CustomStore when no totalCount in extra", functio
     assert.strictEqual(totalCount, 10);
 });
 
+//T545211
+QUnit.test("Ungrouping with custom store - there are no exceptions when remote paging", function(assert) {
+    //arrange
+    var that = this,
+        dataSource = createDataSource({
+            load: function() {
+                return $.Deferred().resolve({
+                    data: that.array,
+                    totalCount: that.array.length
+                });
+            },
+            paginate: true,
+            requireTotalCount: true,
+            remoteOperations: { paging: true }
+        });
+
+    dataSource.group("field1");
+    dataSource.load();
+
+    try {
+        //act
+        dataSource.group(null);
+        dataSource.load();
+
+        //assert
+        assert.ok(true, "There are no exceptions");
+    } catch(error) {
+        //assert
+        assert.ok(false, "exception was threw:" + error);
+    }
+});
+
 
 QUnit.module("Grouping with basic remoteOperations. Second level", {
     beforeEach: function() {
@@ -2499,8 +2561,8 @@ QUnit.test("change filter after collapse second level group", function(assert) {
 });
 
 function createDataSourceWithRemoteGrouping(options, remoteGroupPaging, brokeOptions) {
-    if($.isArray(options.store) || (options.store && options.store.type === "array")) {
-        var arrayStore = new ArrayStore(options.store);
+    if($.isArray(options.store) || (options.store && options.store.type === "array") || options.load) {
+        var arrayStore = new ArrayStore(options.store || []);
         options.executeAsync = options.executeAsync || function(func) { func(); };
         brokeOptions = brokeOptions || {};
 
@@ -2509,7 +2571,7 @@ function createDataSourceWithRemoteGrouping(options, remoteGroupPaging, brokeOpt
             options.remoteOperations.groupPaging = true;
         }
         delete options.store;
-        options.load = function(loadOptions) {
+        options.load = options.load || function(loadOptions) {
             var d = $.Deferred();
 
             var removeDataItems = function(items, groupCount) {
@@ -2644,6 +2706,60 @@ QUnit.test("Load collapsed group and expand first item", function(assert) {
     assert.strictEqual(loadingChanged.getCall(1).args[0].requireGroupCount, false, "require group count is passed on first loading");
     assert.strictEqual(loadingChanged.getCall(1).args[0].skip, undefined, "skip for second level");
     assert.strictEqual(loadingChanged.getCall(1).args[0].take, 2, "take for second level");
+});
+
+//T511907
+QUnit.test("Load collapsed group and expand group item that contain items with white space at the end", function(assert) {
+    var loadStub = sinon.stub(),
+        dataSource = this.createDataSource({
+            load: loadStub,
+            group: "name",
+            pageSize: 3
+        });
+
+    loadStub.onCall(0).returns($.Deferred().resolve({ data: [
+        { key: "test1", items: null, count: 3 },
+        { key: "test2", items: null, count: 3 },
+        { key: "test3", items: null, count: 3 }
+    ], totalCount: 9, groupCount: 3 }));
+
+    loadStub.onCall(1).returns($.Deferred().resolve({ data: [
+        { key: "test1", items: null, count: 3 }
+    ], totalCount: 9, groupCount: 3 }));
+
+    loadStub.onCall(2).returns($.Deferred().resolve({ data: [
+        { name: "test1", id: 1 },
+        { name: "test1 ", id: 2 }
+    ] }));
+
+    dataSource.load();
+
+    dataSource.changeRowExpand(["test1"]);
+
+    //act
+    dataSource.load();
+
+    //assert
+    assert.deepEqual(dataSource.items(), [
+        {
+            key: "test1",
+            isContinuationOnNextPage: true,
+            items: [
+                { name: "test1", id: 1 },
+                { name: "test1 ", id: 2 }
+            ]
+        }], "items");
+
+    assert.equal(dataSource.totalItemsCount(), 7, "total items count");
+
+    assert.strictEqual(loadStub.callCount, 3, "loading count");
+    assert.deepEqual(loadStub.getCall(0).args[0].group, [{ "desc": false, "selector": "name" }], "load 0 group");
+    assert.deepEqual(loadStub.getCall(1).args[0].group, [{ "desc": false, "selector": "name" }], "load 1 group");
+
+    assert.deepEqual(loadStub.getCall(2).args[0].group, null, "load 2 group");
+    assert.deepEqual(loadStub.getCall(2).args[0].filter, ["name", "=", "test1"], "load 2 filter");
+    assert.strictEqual(loadStub.getCall(2).args[0].skip, undefined, "load 2 skip");
+    assert.strictEqual(loadStub.getCall(2).args[0].take, 2, "load 2 skip");
 });
 
 QUnit.test("Load collapsed group and expand first item when native promise is used", function(assert) {
@@ -3269,7 +3385,7 @@ $.each(["Grouping without remoteOperations", "Grouping with remoteOperations", "
             //assert
             assert.equal(loadArgs.length, 2);
 
-            assert.deepEqual(loadArgs[0].group, [{ selector: "field2", isExpanded: true }]);
+            assert.deepEqual(loadArgs[0].group, [{ selector: "field2", isExpanded: false, desc: false }]);
             assert.deepEqual(loadArgs[0].select, ["field2", "field3"]);
             assert.deepEqual(loadArgs[0].filter, undefined);
             assert.strictEqual(loadArgs[0].skip, undefined);
@@ -3297,6 +3413,43 @@ $.each(["Grouping without remoteOperations", "Grouping with remoteOperations", "
                     { field2: 2, field3: 4 }
                 ]
             }]);
+
+            clock.restore();
+        });
+
+        QUnit.test("grouping with paginate. Several groups are expanded. Async loading", function(assert) {
+            var clock = sinon.useFakeTimers(),
+                loadArgs = [],
+                source = this.createDataSource({
+                    group: [{ selector: "field1", isExpanded: true }, { selector: "field2", isExpanded: true }],
+                    pageSize: 3,
+                    executeAsync: function(func, loadOptions) {
+                        loadArgs.push(loadOptions);
+                        setTimeout(function() {
+                            func();
+                        }, 10);
+                    }
+                });
+
+            source.load();
+
+            assert.equal(loadArgs.length, 1);
+
+            //act
+            clock.tick(10);
+
+            //assert
+            assert.equal(loadArgs.length, 2);
+
+            assert.deepEqual(loadArgs[0].group, [{ selector: "field1", isExpanded: true, desc: false }, { selector: "field2", isExpanded: false, desc: false }], "isExpanded is false for last group");
+            assert.deepEqual(loadArgs[0].filter, undefined);
+            assert.strictEqual(loadArgs[0].skip, undefined);
+            assert.strictEqual(loadArgs[0].take, undefined);
+
+            assert.deepEqual(loadArgs[1].group, null);
+            assert.deepEqual(loadArgs[1].filter, [["field1", "=", 1], "and", ["field2", "=", 2]]);
+            assert.strictEqual(loadArgs[1].skip, undefined);
+            assert.strictEqual(loadArgs[1].take, 1);
 
             clock.restore();
         });
@@ -5885,16 +6038,15 @@ QUnit.test("load when remote grouping and isLoadingAll", function(assert) {
     dataSource.load({
         isLoadingAll: true,
         filter: ["this", ">", "5"],
-        group: "this",
-        skip: 2,
-        take: 2
+        group: "this"
     }).done(function(data) {
         customLoadData = data;
     });
 
-
     //assert
-    assert.deepEqual(customLoadData, [{ key: 8, items: [8], count: 1 }, { key: 9, items: [9], count: 1 }], "custom load data");
+    assert.deepEqual(customLoadData, [6, 7, 8, 9, 10].map(function(key) {
+        return { key: key, items: [key], count: 1 };
+    }), "custom load data");
     assert.ok(!changedArgs.length, "changed is not fired");
     assert.deepEqual(loadingChangedArgs, [true, false], "loadingChanged args");
 

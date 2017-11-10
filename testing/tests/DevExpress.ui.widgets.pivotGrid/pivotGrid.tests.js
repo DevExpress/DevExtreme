@@ -47,6 +47,26 @@ function sumArray(array) {
     return sum;
 }
 
+function getScrollBarWidth() {
+    var container = $("<div>").css({
+        position: 'absolute',
+        visibility: 'hidden',
+        top: -1000,
+        left: -1000,
+        width: 100,
+        height: 100
+    }).appendTo("body");
+
+    var content = $('<p>').css({
+        width: '100%',
+        height: 200
+    }).appendTo(container);
+
+    container.remove();
+
+    return container.width() - content.width();
+}
+
 var moduleConfig = {
     beforeEach: function() {
         var rowItems = [
@@ -166,7 +186,7 @@ QUnit.test("No data", function(assert) {
         }, assert);
     assert.ok(pivotGrid);
 
-    var $noDataElement = pivotGrid.element().find(".dx-datagrid-nodata"),
+    var $noDataElement = pivotGrid.element().find(".dx-pivotgrid-nodata"),
         dataAreaCell = $(".dx-area-data-cell"),
         dataAreaCellOffset = dataAreaCell.offset(),
         noDataElementOffset = $noDataElement.offset();
@@ -194,7 +214,7 @@ QUnit.test("No data when pivot grid rendered to invisible container", function(a
     domUtils.triggerShownEvent($pivotGridElement);
     this.clock.tick();
 
-    var $noDataElement = pivotGrid.element().find(".dx-datagrid-nodata"),
+    var $noDataElement = pivotGrid.element().find(".dx-pivotgrid-nodata"),
         dataAreaCell = $(".dx-area-data-cell"),
         dataAreaCellOffset = dataAreaCell.offset(),
         noDataElementOffset = $noDataElement.offset();
@@ -213,7 +233,7 @@ QUnit.test("Create PivotGrid with Data", function(assert) {
 
     pivotGrid = createPivotGrid(this.testOptions, assert);
 
-    $noDataElement = pivotGrid.element().find(".dx-datagrid-nodata");
+    $noDataElement = pivotGrid.element().find(".dx-pivotgrid-nodata");
 
     assert.equal($noDataElement.length, 1);
     assert.ok(!$noDataElement.is(":visible"));
@@ -249,7 +269,7 @@ QUnit.test("Loading DataSource", function(assert) {
         onContentReady: onContentReadyCallback
     }, assert);
 
-    $noDataElement = pivotGrid.element().find(".dx-datagrid-nodata");
+    $noDataElement = pivotGrid.element().find(".dx-pivotgrid-nodata");
 
     assert.equal($noDataElement.length, 1);
     assert.ok(!$noDataElement.is(":visible"));
@@ -1479,7 +1499,10 @@ QUnit.test("Sorting by Summary context menu when sorting defined", function(asse
 });
 
 QUnit.test("Render to invisible container", function(assert) {
-    var $pivotGridElement = $("#pivotGrid").hide().addClass("container-height-200px"),
+    var $pivotGridElement = $("#pivotGrid")
+        .hide()
+        .width(2000)
+        .addClass("container-height-200px"),
         pivotGrid = createPivotGrid(this.testOptions, assert);
 
     $pivotGridElement.show();
@@ -1487,6 +1510,8 @@ QUnit.test("Render to invisible container", function(assert) {
     domUtils.triggerShownEvent($pivotGridElement);
 
     assert.ok(pivotGrid._rowsArea.hasScroll(), 'has vertical scroll');
+    assert.ok(!pivotGrid._columnsArea.hasScroll(), 'has no horizontal scroll');
+    assert.equal(pivotGrid.__scrollBarWidth, getScrollBarWidth());
 });
 
 QUnit.test("Sorting by Summary context menu when sorting defined for grand total", function(assert) {
@@ -2156,6 +2181,35 @@ if(!devices.real().ios) {
     });
 }
 
+QUnit.test("no bottom border if vertical scroll when small height", function(assert) {
+    //act
+    $("#pivotGrid").height(200);
+    this.testOptions.scrolling = {
+        useNative: true
+    };
+    var pivotGrid = createPivotGrid(this.testOptions, assert);
+
+    //assert
+    assert.ok(pivotGrid._rowsArea.hasScroll(), 'has vertical scroll');
+    assert.equal(parseFloat(pivotGrid.element().find(".dx-area-data-cell").css('border-bottom-width')), 0, 'data area border bottom width');
+    assert.equal(parseFloat(pivotGrid.element().find(".dx-area-row-cell").css('border-bottom-width')), 0, 'row area border bottom width');
+});
+
+QUnit.test("bottom border if horizontal scroll", function(assert) {
+    //act
+    $("#pivotGrid").width(300);
+    this.testOptions.scrolling = {
+        useNative: true
+    };
+    var pivotGrid = createPivotGrid(this.testOptions, assert);
+
+    //assert
+    assert.ok(!pivotGrid._rowsArea.hasScroll(), 'has vertical scroll');
+    assert.ok(pivotGrid._columnsArea.hasScroll(), 'has horizontal scroll');
+    assert.ok(parseFloat(pivotGrid.element().find(".dx-area-data-cell").css('border-bottom-width')) > 0, 'data area border bottom width');
+    assert.ok(parseFloat(pivotGrid.element().find(".dx-area-row-cell").css('border-bottom-width')) > 0, 'row area border bottom width when no scrollbar width');
+});
+
 QUnit.test('mergeArraysByMaxValue', function(assert) {
     var array1 = [10, 12, 35, 7],
         array2 = [8, 12, 39, 5];
@@ -2277,6 +2331,158 @@ QUnit.test("Scrolling when virtual scrolling is enabled", function(assert) {
     };
     //act2
     scrollable.scrollTo({ left: 10, top: 1 });
+});
+
+//T518512
+QUnit.test("render should be called once after expand item if virtual scrolling enabled", function(assert) {
+    $('#pivotGrid').empty();
+    $('#pivotGrid').width(100);
+    $('#pivotGrid').height(150);
+
+    var array = [];
+    for(var i = 0; i < 30; i++) {
+        array.push({ id: i, row: i + 1, column: i + 1, data: 1 });
+    }
+
+    var pivotGrid = createPivotGrid({
+        fieldChooser: {
+            enabled: false
+        },
+        scrolling: {
+            mode: "virtual",
+            timeout: 0
+        },
+        dataSource: {
+            store: array,
+            fields: [
+                { dataField: "column", area: "column" },
+                { dataField: "row", area: "row" },
+                { dataField: "id", area: "row" },
+                { dataField: "data", area: "data" }
+            ]
+        }
+    }, assert);
+
+    this.clock.tick();
+
+    var contentReadyCallCount = 0;
+
+    pivotGrid.on("contentReady", function() {
+        contentReadyCallCount++;
+    });
+
+    //act
+    pivotGrid.getDataSource().expandHeaderItem("row", [1]);
+    pivotGrid.getDataSource().load();
+    this.clock.tick();
+
+    //assert
+    assert.equal(contentReadyCallCount, 1);
+});
+
+//T529461
+QUnit.test("Initial horizontal scroll position when rtl is enabled", function(assert) {
+    $('#pivotGrid').empty();
+    $('#pivotGrid').width(100);
+    $('#pivotGrid').height(150);
+    var pivotGrid = createPivotGrid({
+        rtlEnabled: true,
+        fieldChooser: {
+            enabled: false
+        },
+        dataSource: this.dataSource
+    }, assert);
+    this.clock.tick();
+
+    //assert
+    var dataAreaScrollable = pivotGrid._dataArea._getScrollable();
+    var columnAreaScrollable = pivotGrid._columnsArea._getScrollable();
+    assert.ok(dataAreaScrollable.scrollLeft() > 0, "scrollLeft is not zero");
+    assert.ok(columnAreaScrollable.scrollLeft() > 0, "scrollLeft is not zero");
+    assert.roughEqual(dataAreaScrollable.scrollLeft() + dataAreaScrollable._container().width(), dataAreaScrollable.content().width(), 1, "scrollLeft is in max right position");
+    assert.roughEqual(columnAreaScrollable.scrollLeft() + columnAreaScrollable._container().width(), columnAreaScrollable.content().width(), 1, "scrollLeft is in max right position");
+});
+
+//T529461
+QUnit.test("Initial horizontal scroll position when rtl is enabled and scrolling mode is virtual", function(assert) {
+    $('#pivotGrid').empty();
+    $('#pivotGrid').width(100);
+    $('#pivotGrid').height(150);
+    var pivotGrid = createPivotGrid({
+        rtlEnabled: true,
+        fieldChooser: {
+            enabled: false
+        },
+        scrolling: {
+            mode: "virtual",
+            timeout: 0
+        },
+        dataSource: this.dataSource
+    }, assert);
+    this.clock.tick();
+    assert.ok(pivotGrid);
+
+    //assert
+    var dataAreaScrollable = pivotGrid._dataArea._getScrollable();
+    var columnAreaScrollable = pivotGrid._columnsArea._getScrollable();
+    var dataAreaFakeTable = pivotGrid.element().find(".dx-pivotgrid-area-data .dx-pivot-grid-fake-table");
+    var columnAreaFakeTable = pivotGrid.element().find(".dx-pivotgrid-horizontal-headers .dx-pivot-grid-fake-table");
+    var dataAreaContentTable = pivotGrid.element().find(".dx-pivotgrid-area-data .dx-scrollable-content > table");
+    var columnAreaContentTable = pivotGrid.element().find(".dx-pivotgrid-horizontal-headers .dx-scrollable-content > table");
+    assert.ok(dataAreaScrollable.scrollLeft() > 0, "scrollLeft is not zero");
+    assert.ok(columnAreaScrollable.scrollLeft() > 0, "scrollLeft is not zero");
+    assert.roughEqual(dataAreaScrollable.scrollLeft() + dataAreaScrollable._container().width(), dataAreaScrollable.content().width(), 1, "scrollLeft is in max right position");
+    assert.roughEqual(columnAreaScrollable.scrollLeft() + columnAreaScrollable._container().width(), columnAreaScrollable.content().width(), 1, "scrollLeft is in max right position");
+    assert.equal(dataAreaFakeTable.css("right"), "0px");
+    assert.equal(columnAreaFakeTable.css("right"), "0px");
+    assert.equal(dataAreaContentTable.css("right"), "0px");
+    assert.equal(columnAreaContentTable.css("right"), "0px");
+    assert.equal(dataAreaFakeTable.css("left"), "auto");
+    assert.equal(columnAreaFakeTable.css("left"), "auto");
+    assert.equal(dataAreaContentTable[0].style.left, "");
+    assert.equal(columnAreaContentTable[0].style.left, "");
+});
+
+QUnit.test("Horizontal scroll position after scroll when rtl is enabled", function(assert) {
+    var done = assert.async();
+
+    $('#pivotGrid').empty();
+    $('#pivotGrid').width(100);
+    $('#pivotGrid').height(150);
+    var pivotGrid = createPivotGrid({
+        rtlEnabled: true,
+        fieldChooser: {
+            enabled: false
+        },
+        scrolling: {
+            mode: "virtual",
+            timeout: 0
+        },
+        dataSource: this.dataSource
+    }, assert);
+    this.clock.tick();
+    assert.ok(pivotGrid);
+
+    var dataAreaScrollable = pivotGrid._dataArea._getScrollable();
+    var columnAreaScrollable = pivotGrid._columnsArea._getScrollable();
+
+    var scrollAssert = function() {
+        dataAreaScrollable.off("scroll", scrollAssert);
+
+        //assert
+        assert.ok(pivotGrid._scrollLeft, 10, "_scrollLeft variable store inverted value");
+        assert.ok(dataAreaScrollable.scrollLeft() > 0, "scrollLeft is not zero");
+        assert.ok(columnAreaScrollable.scrollLeft() > 0, "scrollLeft is not zero");
+        assert.roughEqual(dataAreaScrollable.scrollLeft() + 10 + dataAreaScrollable._container().width(), dataAreaScrollable.content().width(), 1, "scrollLeft is in max right position");
+        assert.roughEqual(columnAreaScrollable.scrollLeft() + 10 + columnAreaScrollable._container().width(), columnAreaScrollable.content().width(), 1, "scrollLeft is in max right position");
+
+        done();
+    };
+
+    dataAreaScrollable.on("scroll", scrollAssert);
+
+    //act
+    dataAreaScrollable.scrollBy({ left: -10 });
 });
 
 QUnit.test("Virtual scrolling if height is not defined", function(assert) {
@@ -2815,6 +3021,22 @@ QUnit.test('B253995 - dxPivotGrid height is wrong when rows area has text wrappe
     assert.strictEqual(Math.round(tableElement.outerHeight()), 250);
 });
 
+QUnit.test("T510943. Row area width is higher than a container's width", function(assert) {
+    this.dataSource.fields[0].dataField = "Big big big big big big big big title";
+    var pivotGrid = createPivotGrid({
+        dataSource: this.dataSource,
+        fieldPanel: {
+            visible: true
+        },
+        width: 150
+    }, assert);
+
+    this.clock.tick();
+    //assert
+    var dataArea = pivotGrid._dataArea;
+    assert.strictEqual(parseFloat(dataArea.groupElement()[0].style.width).toFixed(2), dataArea.tableElement().width().toFixed(2));
+});
+
 QUnit.test('Pivot grid with border', function(assert) {
     var columnItems = [
         {
@@ -2989,6 +3211,33 @@ QUnit.test("DataController - scrollChanged event", function(assert) {
     assert.strictEqual(dataAreaScrollable.scrollLeft(), 15);
 });
 
+//T518378
+QUnit.test("Column area should be visible after change scrolling.mode to virtual", function(assert) {
+    var widget = createPivotGrid({
+        fieldChooser: {
+            enabled: false
+        },
+        scrolling: {
+            mode: "standard"
+        },
+        dataSource: {
+            fields: [{ area: "row" }, { area: "data" }],
+            rows: [{ index: 0, value: "Row 1" }],
+            values: [
+                [[1]],
+                [[2]]
+            ]
+        }
+    }, assert);
+
+    widget.option({
+        scrolling: {
+            mode: "virtual"
+        }
+    });
+
+    assert.ok(widget.element().find(".dx-area-column-cell").height() > 0, "column area is visible");
+});
 
 QUnit.module("Field Panel", {
     beforeEach: function() {
@@ -3304,6 +3553,7 @@ QUnit.module("Tests with stubs", {
         that.dataArea.element.returns($("<div>"));
         that.dataArea.groupElement.returns($("<div>"));
         that.dataArea.getRowsHeight.returns([]);
+        that.dataArea.getData.returns([]);
         that.dataArea.on.returns(that.dataArea);
         that.dataArea.off.returns(that.dataArea);
 
@@ -3571,7 +3821,7 @@ QUnit.test("Virtual Scrolling", function(assert) {
     });
 
     assert.ok(this.dataArea.processScroll.calledAfter(this.horizontalArea.setVirtualContentParams));
-    assert.deepEqual(this.dataArea.processScroll.lastCall.args[0], pivotGrid._scrollBarUseNative);
+    assert.deepEqual(this.dataArea.processScroll.lastCall.args[0], pivotGrid.__scrollBarUseNative);
     assert.strictEqual(this.dataArea.groupHeight.lastCall.args[0], 71);
     assert.strictEqual(this.verticalArea.groupHeight.lastCall.args[0], 71);
     assert.ok(!this.dataController.subscribeToWindowScrollEvents.called);
@@ -3632,7 +3882,7 @@ QUnit.test("Virtual Scrolling. Widget height is not defined", function(assert) {
     });
 
     assert.ok(this.dataArea.processScroll.calledAfter(this.horizontalArea.setVirtualContentParams));
-    assert.deepEqual(this.dataArea.processScroll.lastCall.args[0], pivotGrid._scrollBarUseNative);
+    assert.deepEqual(this.dataArea.processScroll.lastCall.args[0], pivotGrid.__scrollBarUseNative);
 
     assert.strictEqual(this.dataArea.groupHeight.lastCall.args[0], "auto");
     assert.strictEqual(this.verticalArea.groupHeight.lastCall.args[0], "auto");
@@ -3678,7 +3928,7 @@ QUnit.test("DataController creation", function(assert) {
 
     var dataControllerOptions = pivotGridDataController.DataController.lastCall.args[0];
 
-    assert.strictEqual(dataControllerOptions.dataSource, this.testOptions.dataSource);
+    assert.deepEqual(dataControllerOptions.dataSource, this.testOptions.dataSource);
     assert.deepEqual(dataControllerOptions.texts, texts);
 
     assert.strictEqual(dataControllerOptions.showColumnGrandTotals, "customShowColumnGrandTotals");
@@ -3734,7 +3984,7 @@ QUnit.test("Change DataController options", function(assert) {
 
     assert.strictEqual(dataController.updateViewOptions.callCount, 8);
 
-    assert.strictEqual(dataControllerOptions.dataSource, this.testOptions.dataSource);
+    assert.deepEqual(dataControllerOptions.dataSource, this.testOptions.dataSource);
     assert.deepEqual(dataControllerOptions.texts, 0);
 
     assert.strictEqual(dataControllerOptions.showColumnGrandTotals, 1);
@@ -4486,7 +4736,6 @@ QUnit.test('Update colspans. when new columns count less than headers area have'
     assert.strictEqual($lastCells.get(2).colSpan, 2);
     assert.strictEqual($lastCells.get(3).colSpan, 2);
 });
-
 
 QUnit.module('Data area');
 

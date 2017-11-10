@@ -72,6 +72,84 @@ QUnit.test("sort using functional getter", function(assert) {
     });
 });
 
+QUnit.test("sort using compare function", function(assert) {
+    assert.expect(1);
+
+    var done = assert.async(),
+        input = [2, 1, 3],
+        output = [3, 1, 2];
+
+    QUERY(input).sortBy("this", false, function(x, y) {
+        return output.indexOf(x) - output.indexOf(y);
+    }).enumerate().done(function(r) {
+        assert.deepEqual(r, output);
+        done();
+    });
+});
+
+QUnit.test("thenBy with compare function", function(assert) {
+    assert.expect(1);
+
+    var done = assert.async(),
+        input = [2, 1, 3],
+        output = [3, 1, 2];
+
+    QUERY(input).sortBy("fake").thenBy("this", false, function(x, y) {
+        return output.indexOf(x) - output.indexOf(y);
+    }).enumerate().done(function(r) {
+        assert.deepEqual(r, output);
+        done();
+    });
+});
+
+QUnit.test("sort using compare function and getter", function(assert) {
+    assert.expect(1);
+
+    var done = assert.async(),
+        order = [2, 1],
+        input = [{ val: 1 }, { val: 2 }],
+        output = [{ val: 2 }, { val: 1 }];
+
+    QUERY(input).sortBy("val", false, function(x, y) {
+        return order.indexOf(x) - order.indexOf(y);
+    }).enumerate().done(function(r) {
+        assert.deepEqual(r, output);
+        done();
+    });
+});
+
+QUnit.test("sort using compare function if desc is true", function(assert) {
+    assert.expect(1);
+
+    var done = assert.async(),
+        input = [2, 1, 3],
+        output = [3, 1, 2];
+
+    QUERY(input).sortBy("this", true, function(x, y) {
+        return output.indexOf(x) - output.indexOf(y);
+    }).enumerate().done(function(r) {
+        assert.deepEqual(r, output.slice().reverse());
+        done();
+    });
+});
+
+QUnit.test("compare function arguments should not be normalized via toComparable", function(assert) {
+    assert.expect(1);
+
+    var done = assert.async(),
+        input = ["A", "a", "B"],
+        output = ["A", "B", "a"];
+
+    QUERY(input).sortBy("this", false, function(x, y) {
+        if(x < y) return -1;
+        if(x > y) return 1;
+        return 0;
+    }).enumerate().done(function(r) {
+        assert.deepEqual(r, output);
+        done();
+    });
+});
+
 QUnit.test("sort without a getter", function(assert) {
     assert.expect(1);
 

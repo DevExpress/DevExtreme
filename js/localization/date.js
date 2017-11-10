@@ -108,7 +108,7 @@ var FORMATTERS = {
     },
 
     "day": function(date) {
-        return date.getDate();
+        return String(date.getDate());
     },
     "dayofweek": function(date) {
         return days[date.getDay()];
@@ -125,7 +125,7 @@ var FORMATTERS = {
     },
 
     "year": function(date) {
-        return date.getFullYear();
+        return String(date.getFullYear());
     },
     "shortyear": function(date) {
         return String(date.getFullYear()).substr(2, 2);
@@ -192,10 +192,10 @@ var FORMATTERS = {
     },
 
     "d": function(date) {
-        return formatNumber(FORMATTERS["day"](date), 1);
+        return formatNumber(date.getDate(), 1);
     },
     "dd": function(date) {
-        return formatNumber(FORMATTERS["day"](date), 2);
+        return formatNumber(date.getDate(), 2);
     },
 
     "d MMMM": function(date) {
@@ -456,12 +456,18 @@ var PARSERS = {
         return PARSERS.year(year);
     },
     "shortdate": function(text) {
-        if(!/^(0?[1-9]|1[012])\/(0?[1-9]|[12][0-9]|3[01])\/\d{4}/.test(text)) {
+        if(!/^(0?[1-9]|1[012])\/(0?[1-9]|[12][0-9]|3[01])\/\d{1,4}/.test(text)) {
             return;
         }
         var parts = text.split("/");
 
-        return new Date(Number(parts[2]), Number(parts[0]) - 1, Number(parts[1]));
+        var date = new Date(Number(parts[2]), Number(parts[0]) - 1, Number(parts[1]));
+
+        if(parts[2].length < 3) {
+            date.setFullYear(Number(parts[2]), Number(parts[0]) - 1, Number(parts[1]));
+        }
+
+        return date;
     },
 
     "longtime": function(text) {

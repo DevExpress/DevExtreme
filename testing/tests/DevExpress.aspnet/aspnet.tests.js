@@ -9,7 +9,8 @@
                 require("aspnet"),
                 require("ui/text_box"),
                 require("ui/button"),
-                require("ui/validator")
+                require("ui/validator"),
+                require("ui/validation_summary")
             );
         });
     } else {
@@ -27,7 +28,7 @@
         "Client Validation",
         {
             beforeEach: function() {
-                $("#qunit-fixture").html("<div id='editor'></div>");
+                $("#qunit-fixture").html("<div id='editor'></div><div id='editor2'></div><div id='summary'></div>");
             }
         },
         function() {
@@ -39,6 +40,95 @@
 
                 assert.equal(aspnet.getEditorValue("FullName"), "testMVC", "value of editor");
             });
+
+            QUnit.test("Create validationSummary items", function(assert) {
+                var validationGroup = "test-group";
+
+                $("#editor")
+                    .dxTextBox({
+                        name: "FullName",
+                        validationError: {
+                            message: "Server exception"
+                        }
+                    })
+                    .dxValidator({
+                        validationGroup: validationGroup
+                    });
+
+                $("#summary").dxValidationSummary({
+                    validationGroup: validationGroup
+                });
+
+                aspnet.createValidationSummaryItems(validationGroup, ["FullName"]);
+
+                var summary = $("#summary").dxValidationSummary("instance"),
+                    item = summary.option("items")[0],
+                    editor = item.validator.element().dxTextBox("instance");
+
+                assert.equal(summary.option("items").length, 1, "item count is OK");
+                assert.equal(item.text, "Server exception", "text of first item is OK");
+                assert.equal(editor.option("name"), "FullName", "validator is OK");
+            });
+
+            QUnit.test("Create validationSummary items for different validationGroup", function(assert) {
+                var validationGroup = "custom-group";
+
+                $("#editor")
+                    .dxTextBox({
+                        name: "FullName",
+                        validationError: {
+                            message: "Server exception"
+                        }
+                    })
+                    .dxValidator({
+                        validationGroup: validationGroup
+                    });
+
+                $("#summary").dxValidationSummary({
+                    validationGroup: validationGroup
+                });
+
+                aspnet.createValidationSummaryItems("custom-group-2", ["FullName"]);
+
+                var summary = $("#summary").dxValidationSummary("instance");
+
+                assert.notOk(summary.option("items").length, "items not found");
+            });
+
+            QUnit.test("Create validationSummary items only for editor with related option name", function(assert) {
+                var validationGroup = "test-group";
+
+                $("#editor")
+                    .dxTextBox({
+                        name: "FullName",
+                        validationError: {
+                            message: "Server exception"
+                        }
+                    })
+                    .dxValidator({
+                        validationGroup: validationGroup
+                    });
+
+                $("#editor2")
+                    .dxTextBox({
+                        name: "City"
+                    })
+                    .dxValidator({
+                        validationGroup: validationGroup
+                    });
+
+                $("#summary").dxValidationSummary({
+                    validationGroup: validationGroup
+                });
+
+                aspnet.createValidationSummaryItems(validationGroup, ["FullName"]);
+
+                var summary = $("#summary").dxValidationSummary("instance"),
+                    item = summary.option("items")[0];
+
+                assert.equal(summary.option("items").length, 1, "item length is OK");
+                assert.equal(item.text, "Server exception", "text of first item is OK");
+            });
         }
     );
 
@@ -49,6 +139,12 @@
                 $("#qunit-fixture").html(
                     '<div id="button"></div>\
                     \
+                    <script id="templateWithCreateComponent" type="text/html">\
+                    <div id="templateContent">\
+                        <div id="inner-button"></div>\
+                        <% DevExpress.aspnet.createComponent("dxButton", { text: "text" }, "inner-button"); %>\
+                    </div>\
+                    </script>\
                     <script id="simpleTemplate" type="text/html">\
                     <div id="templateContent">\
                         <%= DevExpress.aspnet.renderComponent("dxButton") %>\
@@ -64,6 +160,12 @@
                     <script id="templateWithID" type="text/html">\
                     <div id="templateContent">\
                         <%= DevExpress.aspnet.renderComponent("dxButton", { }, "test-id") %>\
+                    </div>\
+                    </script>\
+                    \
+                    <script id="templateWithExoticId" type="text/html">\
+                    <div id="templateContent">\
+                        <%= DevExpress.aspnet.renderComponent("dxButton", { }, "id-_1α♠!#$%&()*+,./:;<=>?@[\]^`{|}~") %>\
                     </div>\
                     </script>\
                     \
@@ -96,6 +198,11 @@
                 return $("#templateContent").children();
             }
 
+            QUnit.test("Create component", function(assert) {
+                var $result = renderTemplate("#templateWithCreateComponent");
+                assert.ok($result.is(".dx-button"));
+            });
+
             QUnit.test("Component element rendering", function(assert) {
                 var $result = renderTemplate("#simpleTemplate");
                 assert.ok($result.is("div[id|=dx]"));
@@ -119,6 +226,11 @@
             QUnit.test("Component element rendering with validator", function(assert) {
                 var $result = renderTemplate("#templateWithValidator");
                 assert.equal($result.dxValidator("option", "validationGroup"), "my-group");
+            });
+
+            QUnit.test("Exotic characters in component ID should be escaped (T531137)", function(assert) {
+                var $result = renderTemplate("#templateWithExoticId");
+                assert.ok($result.dxButton("instance"));
             });
         }
     );
@@ -167,6 +279,11 @@
         testTemplate("Evaluate",
             "<% text %>",
             ""
+        );
+
+        testTemplate("Evalute expr w/ semicolon",
+            "<% text %>abc",
+            "abc"
         );
 
         testTemplate("For loop",

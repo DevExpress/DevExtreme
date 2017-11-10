@@ -19,10 +19,8 @@ require("ui/tree_list/ui.tree_list");
 var $ = require("jquery"),
     noop = require("core/utils/common").noop,
     devices = require("core/devices"),
-    browser = require("core/utils/browser"),
     fx = require("animation/fx");
 
-browser.webkit = false;
 fx.off = true;
 
 QUnit.module("Initialization", {
@@ -45,10 +43,13 @@ var createTreeList = function(options) {
 
 QUnit.test("Empty options", function(assert) {
     var treeList = createTreeList({}),
-        $treeListElement = treeList.element();
+        $treeListElement = treeList.element(),
+        $noDataElement = $treeListElement.find(".dx-treelist-nodata");
 
     assert.ok(treeList);
     assert.ok($treeListElement.hasClass("dx-treelist"), "widget class on the root element");
+    assert.ok($noDataElement.length, "widget have a 'no data' element");
+    assert.ok($noDataElement.is(":visible"), "'No data' element is visible");
     assert.ok($treeListElement.children().hasClass("dx-treelist-container"), "container class on the child");
 });
 
@@ -291,6 +292,35 @@ QUnit.test("Filter Row", function(assert) {
     assert.equal(treeList.element().find(".dx-treelist-filter-row").length, 1, "filter row is rendered");
 });
 
+//T516918
+QUnit.test("Filter menu items should have icons", function(assert) {
+    //arrange
+    var $filterMenuElement,
+        $menuItemElements,
+        treeList = createTreeList({
+            filterRow: {
+                visible: true
+            },
+            columns: ["name", { dataField: "age", filterValue: 19 }],
+            dataSource: [
+                { id: 1, parentId: 0, name: "Name 3", age: 19 },
+                { id: 2, parentId: 0, name: "Name 1", age: 19 },
+                { id: 3, parentId: 0, name: "Name 2", age: 18 }
+            ]
+        });
+
+    this.clock.tick();
+
+    //act
+    $filterMenuElement = treeList.element().find(".dx-treelist-filter-row").find(".dx-menu").first().find(".dx-menu-item");
+    $filterMenuElement.trigger("dxclick"); // show menu
+
+    //assert
+    $menuItemElements = $(".dx-overlay-wrapper").find(".dx-menu-item");
+    assert.ok($menuItemElements.length > 0, "has filter menu items");
+    assert.equal($menuItemElements.first().find(".dx-icon").css("font-family"), "DXIcons", "first item has icon");
+});
+
 QUnit.test("Header Filter", function(assert) {
     var treeList = createTreeList({
         headerFilter: {
@@ -312,6 +342,64 @@ QUnit.test("Header Filter", function(assert) {
     assert.equal(treeList.element().find(".dx-header-filter").length, 2, "two header filter icons area rendered");
 });
 
+QUnit.test("Expanding of all items should work correctly after clearing filter", function(assert) {
+    var treeList = createTreeList({
+        headerFilter: {
+            visible: true
+        },
+        autoExpandAll: true,
+        columns: ["name", { dataField: "age", filterValues: [19], allowFiltering: true }, "gender"],
+        dataSource: [
+            { id: 1, parentId: 0, name: "Name 3", age: 19, gender: "male" },
+            { id: 2, parentId: 1, name: "Name 1", age: 19, gender: "female" },
+            { id: 3, parentId: 1, name: "Name 2", age: 18, gender: "male" },
+            { id: 4, parentId: 2, name: "Name 4", age: 19, gender: "male" },
+            { id: 5, parentId: 2, name: "Name 5", age: 20, gender: "female" },
+            { id: 6, parentId: 3, name: "Name 6", age: 18, gender: "male" }
+        ]
+    });
+
+    this.clock.tick();
+    assert.equal(treeList.element().find(".dx-data-row").length, 3, "filtered rows are rendered");
+    treeList.filter("gender", "=", "male");
+    this.clock.tick();
+    assert.equal(treeList.element().find(".dx-data-row").length, 3, "filtered rows are rendered");
+
+    //act
+    treeList.clearFilter();
+    this.clock.tick();
+
+    //assert
+    assert.equal(treeList.element().find(".dx-data-row").length, 6, "six filtered rows are rendered");
+});
+
+QUnit.test("Items should be collapsed after clearing filter, autoExpandAll = false", function(assert) {
+    var treeList = createTreeList({
+        headerFilter: {
+            visible: true
+        },
+        autoExpandAll: false,
+        columns: ["name", { dataField: "age", filterValues: [19], allowFiltering: true }],
+        dataSource: [
+            { id: 1, parentId: 0, name: "Name 3", age: 19 },
+            { id: 2, parentId: 1, name: "Name 1", age: 19 },
+            { id: 3, parentId: 2, name: "Name 2", age: 18 },
+            { id: 4, parentId: 0, name: "Name 4", age: 19 },
+            { id: 5, parentId: 4, name: "Name 5", age: 20 },
+            { id: 6, parentId: 5, name: "Name 6", age: 18 }
+        ]
+    });
+
+    this.clock.tick();
+    assert.equal(treeList.element().find(".dx-data-row").length, 2, "filtered rows are rendered");
+
+    //act
+    treeList.clearFilter();
+    this.clock.tick();
+
+    //assert
+    assert.equal(treeList.element().find(".dx-data-row").length, 2, "two rows are rendered");
+});
 
 QUnit.test("Search Panel", function(assert) {
     var treeList = createTreeList({
@@ -378,7 +466,6 @@ QUnit.test("Click on selectCheckBox shouldn't render editor, editing & selection
     assert.notOk($("#treeList").find(".dx-texteditor").length, "Editing textEditor wasn't rendered");
 });
 
-
 QUnit.test("Aria accessibility", function(assert) {
     //arrange, act
     var $dataRows,
@@ -414,4 +501,30 @@ QUnit.test("Aria accessibility", function(assert) {
     assert.equal($dataRows.eq(1).attr("aria-level"), "1", "second data row - value of 'aria-level' attribute");
     assert.equal($dataRows.eq(2).attr("aria-expanded"), undefined, "third data row hasn't the 'aria-expanded' attribute");
     assert.equal($dataRows.eq(2).attr("aria-level"), "0", "third data row - value of 'aria-level' attribute");
+});
+
+QUnit.module("Option Changed", {
+    beforeEach: function() {
+        this.clock = sinon.useFakeTimers();
+    },
+    afterEach: function() {
+        this.clock.restore();
+    }
+});
+
+QUnit.test("Change dataSource, selectedRowKeys and scrolling options together", function(assert) {
+    //arrange
+    var treeList = createTreeList({});
+    this.clock.tick(30);
+
+    //act
+    treeList.option({
+        dataSource: [{ id: 1 }],
+        selectedRowKeys: [1],
+        scrolling: { mode: "virtual" }
+    });
+    this.clock.tick(30);
+
+    //assert
+    assert.strictEqual(treeList.getVisibleRows().length, 1, "row count");
 });

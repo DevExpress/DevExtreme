@@ -31,7 +31,9 @@ var TAGBOX_CLASS = "dx-tagbox",
     TAGBOX_TAG_CONTENT_CLASS = "dx-tag-content",
     TAGBOX_DEFAULT_FIELD_TEMPLATE_CLASS = "dx-tagbox-default-template",
     TAGBOX_CUSTOM_FIELD_TEMPLATE_CLASS = "dx-tagbox-custom-template",
-    NATIVE_CLICK_CLASS = "dx-native-click";
+    NATIVE_CLICK_CLASS = "dx-native-click",
+
+    TEXTEDITOR_CONTAINER_CLASS = "dx-texteditor-container";
 
 var TAGBOX_MOUSE_WHEEL_DELTA_MULTIPLIER = -0.3;
 
@@ -144,7 +146,8 @@ var TagBox = SelectBox.inherit({
     },
 
     _isCaretAtTheStart: function() {
-        return caret(this._input()).start === 0;
+        var position = caret(this._input());
+        return position.start === 0 && position.end === 0;
     },
 
     _moveTagFocus: function(direction, clearOnBoundary) {
@@ -480,6 +483,8 @@ var TagBox = SelectBox.inherit({
     },
 
     _render: function() {
+        this._tagElementsCache = $();
+
         var isSingleLineMode = !this.option("multiline");
 
         this.element()
@@ -531,7 +536,7 @@ var TagBox = SelectBox.inherit({
         var eventName = eventUtils.addNamespace(clickEvent.name, "dxTagBoxTagRemove");
 
         this.element()
-            .find(".dx-texteditor-container")
+            .find("." + TEXTEDITOR_CONTAINER_CLASS)
             .off(eventName)
             .on(eventName, "." + TAGBOX_TAG_REMOVE_BUTTON_CLASS, function(e) {
                 tagRemoveAction({ jQueryEvent: e });
@@ -568,9 +573,7 @@ var TagBox = SelectBox.inherit({
 
     _renderTypingEvent: function() {
         this._input().on(eventUtils.addNamespace("keydown", this.NAME), (function(e) {
-            var keyCode = e.which || e.keyCode;
-
-            if(!this._isControlKey(keyCode) && this._isEditable()) {
+            if(!this._isControlKey(e.key) && this._isEditable()) {
                 this._clearTagFocus();
             }
         }).bind(this));
@@ -582,6 +585,10 @@ var TagBox = SelectBox.inherit({
 
     _renderInputValueImpl: function() {
         this._renderMultiSelect();
+    },
+
+    _loadInputValue: function() {
+        return $.when();
     },
 
     _clearTextValue: function() {
@@ -658,18 +665,18 @@ var TagBox = SelectBox.inherit({
 
     _renderMultiSelect: function() {
         this._$tagsContainer = this.element()
-            .find(".dx-texteditor-container")
+            .find("." + TEXTEDITOR_CONTAINER_CLASS)
             .addClass(TAGBOX_TAG_CONTAINER_CLASS)
             .addClass(NATIVE_CLICK_CLASS);
 
         this._renderInputSize();
         this._clearFilter();
         this._renderTags();
-        this._popup && this._popup.repaint();
+        this._popup && this._popup.refreshPosition();
     },
 
     _listItemClickHandler: function(e) {
-        this._clearTextValue();
+        !this.option("showSelectionControls") && this._clearTextValue();
 
         if(this.option("applyValueMode") === "useButtons") {
             return;
@@ -711,6 +718,8 @@ var TagBox = SelectBox.inherit({
         if(!this._preserveFocusedTag) {
             this._clearTagFocus();
         }
+
+        this._refreshTagElements();
     },
 
     _renderEmptyState: function() {
@@ -760,8 +769,12 @@ var TagBox = SelectBox.inherit({
         }
     },
 
+    _refreshTagElements: function() {
+        this._tagElementsCache = this.element().find("." + TAGBOX_TAG_CLASS);
+    },
+
     _tagElements: function() {
-        return this.element().find("." + TAGBOX_TAG_CLASS);
+        return this._tagElementsCache;
     },
 
     _getDefaultTagTemplate: function() {
@@ -797,15 +810,17 @@ var TagBox = SelectBox.inherit({
     },
 
     _getTag: function(value) {
-        var $tags = this._tagElements();
+        var $tags = this._tagElements(),
+            tagsLength = $tags.length;
         var result = false;
-        $.each($tags, function(_, tag) {
-            var $tag = $(tag);
-            if(value === $tag.data(TAGBOX_TAG_DATA_KEY)) {
-                result = $tag;
-                return false;
+
+        for(var i = 0; i < tagsLength; i++) {
+            var $tag = $tags[i];
+            if(value === $.data($tag, TAGBOX_TAG_DATA_KEY)) {
+                result = $($tag);
+                break;
             }
-        });
+        }
         return result;
     },
 
@@ -837,6 +852,7 @@ var TagBox = SelectBox.inherit({
     _removeTagElement: function($tag) {
         var itemValue = $tag.data(TAGBOX_TAG_DATA_KEY);
         this._removeTagWithUpdate(itemValue);
+        this._refreshTagElements();
     },
 
     _updateField: commonUtils.noop,
@@ -935,7 +951,9 @@ var TagBox = SelectBox.inherit({
     },
 
     _lastValue: function() {
-        return this._getValue().slice(-1).pop() || null;
+        var values = this._getValue(),
+            lastValue = values[values.length - 1];
+        return commonUtils.isDefined(lastValue) ? lastValue : null;
     },
 
     _valueChangeEventHandler: commonUtils.noop,
@@ -968,7 +986,6 @@ var TagBox = SelectBox.inherit({
 
     _refreshSelected: function() {
         this._list && this._suppressingSelectionChanged(function() {
-            this._setListOption("selectedItems", this._selectedItems.slice());
             this.callBase();
         });
     },
@@ -979,6 +996,8 @@ var TagBox = SelectBox.inherit({
         if(!dataSource) {
             return;
         }
+
+        delete this._userFilter;
 
         dataSource.filter(null);
         dataSource.reload();
@@ -995,11 +1014,37 @@ var TagBox = SelectBox.inherit({
             return;
         }
 
-        dataSource.filter(this._dataSourceFilter.bind(this));
+        var valueGetterExpr = this._valueGetterExpr();
+
+        if(commonUtils.isString(valueGetterExpr) && valueGetterExpr !== "this") {
+            var filter = this._dataSourceFilterExpr();
+
+            if(!this._userFilter) {
+                this._userFilter = dataSource.filter();
+            }
+
+            this._userFilter && filter.push(this._userFilter);
+
+            filter.length && dataSource.filter(filter);
+
+        } else {
+            dataSource.filter(this._dataSourceFilterFunction.bind(this));
+        }
+
         dataSource.reload();
     },
 
-    _dataSourceFilter: function(itemData) {
+    _dataSourceFilterExpr: function() {
+        var filter = [];
+
+        $.each(this._getValue(), (function(index, value) {
+            filter.push(["!", [this._valueGetterExpr(), value]]);
+        }).bind(this));
+
+        return filter;
+    },
+
+    _dataSourceFilterFunction: function(itemData) {
         var itemValue = this._valueGetter(itemData),
             result = true;
 

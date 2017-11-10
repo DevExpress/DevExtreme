@@ -32,7 +32,7 @@ var DataExpressionMixin = extend(DataHelperMixin, {
             /**
             * @name DataExpressionMixinOptions_dataSource
             * @publicName dataSource
-            * @type string|array|DataSource|DataSource configuration
+            * @type string|array|DataSource|DataSourceOptions
             * @default null
             */
             dataSource: null,
@@ -205,7 +205,7 @@ var DataExpressionMixin = extend(DataHelperMixin, {
     },
 
     _compareValues: function(value1, value2) {
-        return dataCoreUtils.toComparable(value1) === dataCoreUtils.toComparable(value2);
+        return dataCoreUtils.toComparable(value1, true) === dataCoreUtils.toComparable(value2, true);
     },
 
     _initDynamicTemplates: function() {

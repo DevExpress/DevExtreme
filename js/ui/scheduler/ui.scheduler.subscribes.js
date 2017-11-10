@@ -369,15 +369,14 @@ var subscribes = {
         if(this.appointmentTakesAllDay(appointment)) {
             updatedStartDate = dateUtils.normalizeDate(startDate, firstViewDate);
         } else {
-            if(startDate.getTime() < firstViewDate.getTime()) {
+            if(startDate < firstViewDate) {
                 startDate = firstViewDate;
             }
             updatedStartDate = dateUtils.normalizeDate(options.startDate, new Date(startDate));
         }
 
         if(updatedStartDate.getHours() < startDayHour) {
-            updatedStartDate.setHours(startDayHour);
-            updatedStartDate.setMinutes(0);
+            updatedStartDate.setHours(startDayHour, 0, 0, 0);
         }
 
         options.callback(updatedStartDate);
@@ -389,8 +388,7 @@ var subscribes = {
             updatedEndDate = endDate;
 
         if(endDate.getHours() >= endDayHour) {
-            updatedEndDate.setHours(endDayHour);
-            updatedEndDate.setMinutes(0);
+            updatedEndDate.setHours(endDayHour, 0, 0, 0);
         }
         options.callback(updatedEndDate);
     },
@@ -592,14 +590,15 @@ var subscribes = {
         return this._getTimezoneOffsetByOption();
     },
 
-    getClientTimezoneOffset: function() {
-        return SchedulerTimezones.getClientTimezoneOffset();
+    getClientTimezoneOffset: function(date) {
+        date = date || new Date();
+        return SchedulerTimezones.getClientTimezoneOffset(date);
     },
 
     convertDateByTimezone: function(date, appointmentTimezone) {
         date = new Date(date);
 
-        var clientTzOffset = -(this._subscribes["getClientTimezoneOffset"]() / 3600000);
+        var clientTzOffset = -(this._subscribes["getClientTimezoneOffset"](date) / 3600000);
 
         var commonTimezoneOffset = this._getTimezoneOffsetByOption(date);
 
@@ -623,7 +622,7 @@ var subscribes = {
     convertDateByTimezoneBack: function(date, appointmentTimezone) {
         date = new Date(date);
 
-        var clientTzOffset = -(this._subscribes["getClientTimezoneOffset"]() / 3600000);
+        var clientTzOffset = -(this._subscribes["getClientTimezoneOffset"](date) / 3600000);
 
         var commonTimezoneOffset = this._getTimezoneOffsetByOption(date);
 
@@ -689,16 +688,33 @@ var subscribes = {
 
             result = ceilQuantityOfDays * visibleDayDuration;
         } else {
-            var floorQuantityOfDays = Math.floor(appointmentDuration / dayDuration),
-                tailDuration = dateUtils.sameDate(startDate, endDate) ? appointmentDuration % dayDuration : appointmentDuration - floorQuantityOfDays * dayDuration;
+            var isDifferentDate = !dateUtils.sameDate(startDate, new Date(endDate.getTime() - 1)),
+                floorQuantityOfDays = Math.floor(appointmentDuration / dayDuration),
+                tailDuration;
 
-            if(!floorQuantityOfDays && !dateUtils.sameDate(startDate, endDate)) {
-                tailDuration = tailDuration - (dayDuration - visibleDayDuration);
+            if(isDifferentDate) {
+                var hiddenDayDuration = dayDuration - visibleDayDuration;
+
+                tailDuration = appointmentDuration - (floorQuantityOfDays ? floorQuantityOfDays * dayDuration : hiddenDayDuration);
+
+                var startDayTime = this.option("startDayHour") * toMs("hour"),
+                    endPartDuration = endDate - dateUtils.trimTime(endDate);
+
+                if(endPartDuration < startDayTime) {
+                    if(floorQuantityOfDays) {
+                        tailDuration -= hiddenDayDuration;
+                    }
+
+                    tailDuration += startDayTime - endPartDuration;
+                }
+            } else {
+                tailDuration = appointmentDuration % dayDuration;
             }
 
             if(tailDuration > visibleDayDuration) {
                 tailDuration = visibleDayDuration;
             }
+
             result = floorQuantityOfDays * visibleDayDuration + tailDuration;
         }
         options.callback(result);

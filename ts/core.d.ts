@@ -210,7 +210,7 @@ declare module DevExpress {
         }
 
         /** @docid fxmethods_animate */
-        export function animate(element: HTMLElement, config: AnimationOptions): Object;
+        export function animate(element: HTMLElement, config: AnimationOptions): JQueryPromise<void>;
 
         /** @docid fxmethods_isAnimating */
         export function isAnimating(element: HTMLElement): boolean;
@@ -497,6 +497,17 @@ declare module DevExpress {
             requireTotalCount?: boolean;
         }
 
+        export interface DataGridLoadOptions extends LoadOptions {
+            totalSummary?: Object;
+            groupSummary?: Object;
+            requireGroupCount?: boolean;
+        }
+
+        export interface PivotGridLoadOptions extends LoadOptions {
+            totalSummary?: Object;
+            groupSummary?: Object;
+        }
+
         /** @docid Store */
         export class Store implements EventsMixin<Store> {
             constructor(options?: StoreOptions);
@@ -585,7 +596,7 @@ declare module DevExpress {
 
         //T184606
         interface Promise {
-            then(doneFn?: Function, failFn?: Function, progressFn?: Function): Promise;
+            then(doneFn?: any, failFn?: any, progressFn?: any): Promise;
         }
 
         export interface CustomStoreOptions extends StoreOptions {
@@ -1206,10 +1217,6 @@ declare module DevExpress {
             /** @docid_ignore CollectionWidgetItemTemplate_text */
             /** @docid_ignore CollectionWidgetItemTemplate_visible */
             /** @docid_ignore CollectionWidgetItemTemplate_template */
-            /** @docid_ignore CollectionWidgetEvents_ItemClick */
-            /** @docid_ignore CollectionWidgetEvents_ItemContextMenu */
-            /** @docid_ignore CollectionWidgetEvents_ItemHold */
-            /** @docid_ignore CollectionWidgetEvents_ItemRendered */
             /** @docid_ignore CollectionWidgetmethods_itemElements */
             /** @docid_ignore CollectionWidgetmethods_itemsContainer */
             /** @docid_ignore CollectionWidgetmethods_getFocusedItemId */
@@ -1350,6 +1357,9 @@ declare module DevExpress {
 
         /** @docid vizmethods_registerTheme */
         export function registerTheme(customTheme: Object, baseTheme: string): void;
+
+        /** @docid vizmethods_refreshTheme */
+        export function refreshTheme(): void;
 
         /** @docid vizmethods_exportFromMarkup */
         export function exportFromMarkup(markup: string, options: Object): void;

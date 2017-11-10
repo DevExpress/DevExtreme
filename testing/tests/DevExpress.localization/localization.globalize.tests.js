@@ -367,13 +367,21 @@ define(function(require, exports, module) {
         assert.equal(numberLocalization.format(123, { minimumIntegerDigits: 3 }), "123");
     });
 
-    QUnit.module("Localization globalizeCurrency");
+    QUnit.module("Localization currency with Globalize");
 
     QUnit.test("format", function(assert) {
         assert.equal(numberLocalization.format(1.2, { currency: "default" }), "$1.20");
         assert.equal(numberLocalization.format(12, { currency: "default" }), "$12.00");
         assert.equal(numberLocalization.format(1, { minimumIntegerDigits: 2, minimumFractionDigits: 0, currency: "default" }), "$01");
         assert.equal(numberLocalization.format(1, { minimumIntegerDigits: 2, minimumFractionDigits: 0, currency: "RUB" }), "RUB" + NBSP + "01");
+    });
+
+    QUnit.test("format currency & power in RU locale", function(assert) {
+        Globalize.locale("ru");
+        assert.equal(numberLocalization.format(0, { type: "currency thousands", currency: undefined, precision: 0 }), "0K" + NBSP + "$");
+        assert.equal(numberLocalization.format(0, { type: "currency thousands", currency: "CSK", precision: 2 }), "0,00K" + NBSP + "CSK");
+        assert.equal(numberLocalization.format(2e+5, { type: "currency thousands", precision: 0 }), "200K" + NBSP + "$");
+        Globalize.locale("en");
     });
 
     QUnit.test("getOpenXmlCurrencyFormat RUB", function(assert) {

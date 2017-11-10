@@ -269,6 +269,23 @@ var Fixture = Class.inherit({
         instance.option("name", expectedName);
         assert.equal($input.attr("name"), expectedName, "the input 'name' attribute has correct value ");
     });
+
+    QUnit.test("the 'name' attribute should not be rendered if name is an empty string", function(assert) {
+        new this.EditorInheritor(this.$element);
+
+        var input = this.$element.find("input[type='hidden']").get(0);
+        assert.notOk(input.hasAttribute("name"), "there should be no 'name' attribute for hidden input");
+    });
+
+    QUnit.test("the 'name' attribute should be removed after name is changed to an empty string", function(assert) {
+        var instance = new this.EditorInheritor(this.$element, {
+                name: "some_name"
+            }),
+            input = this.$element.find("input[type='hidden']").get(0);
+
+        instance.option("name", "");
+        assert.notOk(input.hasAttribute("name"), "there should be no 'name' attribute for hidden input");
+    });
 })("the 'name' option");
 
 
@@ -555,16 +572,40 @@ var Fixture = Class.inherit({
     });
 
     QUnit.test("Validation overlay should have the 'propagateOutsideClick' with true ", function(assert) {
-        var $element = this.fixture.createOnlyElement(),
-            editor = new Editor($element, {
-                validationMessageMode: "always",
-                validationError: {
-                    message: "ErrorErrorErrorErrorErrorErrorError"
-                },
-                isValid: false
-            });
+        var $element = this.fixture.createOnlyElement();
 
-        assert.equal(editor._$validationMessage.dxOverlay("instance").option("propagateOutsideClick"), true, "'propagateOutsideClick' option has correct value");
+        new Editor($element, {
+            validationMessageMode: "always",
+            validationError: {
+                message: "Error"
+            },
+            isValid: false
+        });
+
+        assert.equal($element.find(".dx-invalid-message.dx-widget").dxOverlay("option", "propagateOutsideClick"), true, "'propagateOutsideClick' option has correct value");
+    });
+
+    QUnit.test("Validation overlay should not inherit templates from the editor", function(assert) {
+        var $element = this.fixture.createOnlyElement();
+
+        new Editor($element, {
+            validationMessageMode: "always",
+            validationError: {
+                message: "Error"
+            },
+            integrationOptions: {
+                templates: {
+                    content: {
+                        render: function() {
+                            $("div").attr("id", "editorContentTemplate");
+                        }
+                    }
+                }
+            },
+            isValid: false
+        });
+
+        assert.equal($element.find(".dx-invalid-message.dx-widget #editorContentTemplate").length, 0, "overlay does not inherit templates from the editor");
     });
 
     QUnit.test("Validation overlay should be render correctly in hidden area", function(assert) {

@@ -738,7 +738,8 @@ dataGridCore.registerModule("export", {
                                 name: "exportButton",
                                 allowExportSelected: true,
                                 location: "after",
-                                locateInMenu: "auto"
+                                locateInMenu: "auto",
+                                sortIndex: 30
                             });
 
                         } else {
@@ -751,12 +752,12 @@ dataGridCore.registerModule("export", {
                                 },
                                 name: "exportButton",
                                 location: "after",
-                                locateInMenu: "auto"
+                                locateInMenu: "auto",
+                                sortIndex: 30
                             });
                         }
-
                         items = items.concat(exportItems);
-                        that._correctSearchPanelPosition(items);
+                        that._correctItemsPosition(items);
                     }
 
                     return items;
@@ -825,17 +826,9 @@ dataGridCore.registerModule("export", {
 
                 },
 
-                _correctSearchPanelPosition: function(items) {
+                _correctItemsPosition: function(items) {
                     items.sort(function(itemA, itemB) {
-                        var result = 0;
-
-                        if(itemA.name === "searchPanel" || (itemA.name === "columnChooserButton" && itemB.name !== "searchPanel")) {
-                            result = 1;
-                        } else if(itemB.name === "searchPanel") {
-                            result = -1;
-                        }
-
-                        return result;
+                        return itemA.sortIndex - itemB.sortIndex;
                     });
                 },
 
@@ -916,9 +909,8 @@ dataGridCore.registerModule("export", {
                     this._exportController = this.getController("export");
                     this._editingController = this.getController("editing");
                     this._editingController.editingChanged.add(function(hasChanges) {
-                        that.updateToolbarItemOption("exportButton", "disabled", hasChanges);
+                        that.setToolbarItemDisabled("exportButton", hasChanges);
                     });
-
                 },
 
                 isVisible: function() {

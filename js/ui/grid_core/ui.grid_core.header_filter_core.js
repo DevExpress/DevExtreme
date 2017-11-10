@@ -20,8 +20,15 @@ function resetChildrenItemSelection(items) {
     }
 }
 
-exports.updateHeaderFilterItemSelectionState = function(item, filterValuesMatch, isExcludeFilter) {
+function updateSelectAllState($listContainer, filterValues) {
+    var selectAllCheckBox = $listContainer.find(".dx-list-select-all-checkbox").data("dxCheckBox");
 
+    if(selectAllCheckBox && filterValues && filterValues.length) {
+        selectAllCheckBox.option("value", undefined);
+    }
+}
+
+exports.updateHeaderFilterItemSelectionState = function(item, filterValuesMatch, isExcludeFilter) {
     if(filterValuesMatch ^ isExcludeFilter) {
         item.selected = true;
 
@@ -33,7 +40,7 @@ exports.updateHeaderFilterItemSelectionState = function(item, filterValuesMatch,
                 }
             }
         }
-    } else if(isExcludeFilter) {
+    } else if(isExcludeFilter || item.selected) {
         item.selected = false;
         resetChildrenItemSelection(item.items);
     }
@@ -75,7 +82,7 @@ exports.HeaderFilterView = modules.View.inherit({
         }
 
         if(options.filterValues && !options.filterValues.length) {
-            options.filterValues = undefined;
+            options.filterValues = null; //T500956
         }
 
         options.apply();
@@ -237,12 +244,13 @@ exports.HeaderFilterView = modules.View.inherit({
                                 }
                             }
                         });
+
+                        updateSelectAllState(e.element, options.filterValues);
                     },
                     onContentReady: function(e) {
                         var component = e.component,
                             items = component.option("items"),
-                            selectedItems = [],
-                            selectAllCheckBox = e.element.find(".dx-list-select-all-checkbox").dxCheckBox("instance");
+                            selectedItems = [];
 
                         $.each(items, function() {
                             if(this.selected) {
@@ -253,10 +261,7 @@ exports.HeaderFilterView = modules.View.inherit({
                         component.option("selectedItems", selectedItems);
                         component._selectedItemsUpdating = false;
 
-                        if(options.filterValues && options.filterValues.length) {
-                            selectAllCheckBox.option("value", undefined);
-                        }
-
+                        updateSelectAllState(e.element, options.filterValues);
                     }
                 }));
         }

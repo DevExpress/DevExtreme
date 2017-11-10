@@ -251,14 +251,16 @@ QUnit.test("RTL markup - rtlEnabled by default", function(assert) {
 QUnit.module("option", moduleConfig);
 
 QUnit.test("RTL markup - rtlEnabled by option", function(assert) {
-    var overlay = $("#overlay").dxOverlay().dxOverlay("instance"),
-        $content = overlay.content();
+    var overlay = $("#overlay").dxOverlay({ deferRendering: false }).dxOverlay("instance"),
+        $content = overlay.content(),
+        contentRenderSpy = sinon.spy(overlay, "_renderContentImpl");
 
     overlay.option("rtlEnabled", true);
     assert.ok($content.hasClass("dx-rtl"));
 
     overlay.option("rtlEnabled", false);
     assert.ok(!$content.hasClass("dx-rtl"));
+    assert.equal(contentRenderSpy.callCount, 2, "must invalidate content when RTL changed");
 });
 
 QUnit.test("disabled", function(assert) {
@@ -1110,8 +1112,8 @@ QUnit.test("'animation.hide.from.position' should be configured according to wid
     }
 });
 
-QUnit.test("pointer events should be disabled during animation", function(assert) {
-    assert.expect(4);
+QUnit.test("pointer events should be disabled during hide animation", function(assert) {
+    assert.expect(2);
 
     if(!$("body").css("pointer-events")) {
         assert.expect(0);
@@ -1121,23 +1123,22 @@ QUnit.test("pointer events should be disabled during animation", function(assert
     var animationConfig = {
         duration: 0,
         start: function() {
-            assert.equal(instance.content().css("pointer-events"), "none");
+            assert.equal(instance.content().css("pointer-events"), "none", "start of the hiding animation has correct pointer-events");
         },
         complete: function() {
-            assert.equal(instance.content().css("pointer-events"), originalPointerEvents);
+            assert.equal(instance.content().css("pointer-events"), originalPointerEvents, "complete of the hiding animation has correct pointer-events");
         }
     };
 
     var $element = $("#overlay").dxOverlay({
+            visible: true,
             animation: {
-                show: animationConfig,
                 hide: animationConfig
             }
         }),
         instance = $element.dxOverlay("instance"),
         originalPointerEvents = instance.content().css("pointer-events");
 
-    instance.show();
     instance.hide();
 });
 
@@ -1334,6 +1335,25 @@ QUnit.test("overlay should not be hidden after click inside was present", functi
     assert.equal(overlay.option("visible"), true, "overlay is not hidden");
 });
 
+//T494814
+QUnit.test("overlay should not be hidden after click in detached element", function(assert) {
+    var overlay = $("#overlayBug").dxOverlay({
+        closeOnOutsideClick: true,
+        visible: true
+    })
+    .dxOverlay("instance");
+
+    $("#content").on("dxpointerdown", function(e) {
+        $("#content").replaceWith($("<div>").attr("id", "content"));
+    });
+
+    //act
+    $("#content").trigger("dxpointerdown");
+
+    //assert
+    assert.equal(overlay.option("visible"), true, "overlay is not hidden");
+});
+
 QUnit.test("overlay should not propagate events after click outside was present", function(assert) {
     $("#overlay").dxOverlay({
         closeOnOutsideClick: true,
@@ -1481,7 +1501,7 @@ QUnit.test("click on overlay during the start animation should end the animation
         fx.off = false;
         overlay.show();
 
-        $("body").trigger("dxpointerdown");
+        overlay.content().trigger("dxpointerdown");
         assert.ok(overlay.option("visible"), "overlay is stay visible");
     } finally {
         fx.off = true;
@@ -2335,7 +2355,7 @@ QUnit.test("overlay can be dragged out of target if viewport and container is no
 
         var $container = $(window),
             viewWidth = $container.outerWidth(),
-            viewHeight = $container.outerHeight(),
+            viewHeight = Math.max($(document).outerHeight(), $container.outerHeight()),
             position = $overlayContent.position();
 
         var startEvent = pointer.start().dragStart().lastEvent();
@@ -2388,6 +2408,34 @@ QUnit.test("overlay should not be dragged when container size less than overlay 
     assert.equal(startEvent.maxRightOffset, 0, "overlay should not be dragged horizontally");
 });
 
+QUnit.test("overlay should be dragged correctly when position.of and shading (T534551)", function(assert) {
+    var $container = $("<div>").appendTo("#qunit-fixture").height(0).width(200);
+    $container.css("margin-left", "200px");
+    $container.css("margin-top", "200px");
+
+    var $overlay = $("#overlay").dxOverlay({
+        dragEnabled: true,
+        visible: true,
+        shading: true,
+        height: 20,
+        width: 20,
+        position: { of: $container }
+    });
+
+    var $overlayContent = $overlay.dxOverlay("content"),
+        overlayPosition = $overlayContent.position(),
+        containerPosition = $container.position(),
+        viewWidth = viewport().outerWidth(),
+        viewHeight = viewport().outerHeight();
+
+    var pointer = pointerMock($overlayContent);
+    var startEvent = pointer.start().dragStart().lastEvent();
+
+    assert.equal(startEvent.maxRightOffset, viewWidth - $overlayContent.outerWidth() - overlayPosition.left - 200, "overlay should be dragged right");
+    assert.equal(startEvent.maxLeftOffset, 200 + overlayPosition.left, "overlay should be dragged left");
+    assert.roughEqual(startEvent.maxTopOffset, 200 + overlayPosition.top + containerPosition.top, 1, "overlay should be dragged top");
+    assert.roughEqual(startEvent.maxBottomOffset, viewHeight - $overlayContent.outerHeight() - containerPosition.top - overlayPosition.top - 200, 1, "overlay should be dragged bottom");
+});
 
 QUnit.module("resize", moduleConfig);
 
@@ -2694,6 +2742,27 @@ QUnit.test("elements under overlay with shader have not to get focus by tab", fu
     assert.equal(document.activeElement, $lastTabbable.get(0), "last item focused on press tab+shift on first item (does not go under overlay)");
 
     $outsideTabbable.focus();
+    $(document).trigger(this.tabEvent);
+    assert.equal(document.activeElement, $firstTabbable.get(0), "first item focused on press tab on last item (does not go under overlay)");
+});
+
+QUnit.test("elements under overlay with shader have not to get focus by tab when top overlay has no tabbable elements", function(assert) {
+    var overlay1 = new Overlay($("<div>").appendTo("#qunit-fixture"), {
+            shading: true,
+            contentTemplate: $("#focusableTemplate")
+        }),
+        overlay2 = new Overlay($("<div>").appendTo("#qunit-fixture"), {
+            shading: false,
+            contentTemplate: function() { return "test"; }
+        }),
+        $content = $(overlay1.content());
+
+    overlay1.show();
+    overlay2.show();
+
+    var $firstTabbable = $content.find(".firstTabbable");
+
+    $content.find(".lastTabbable").focus();
     $(document).trigger(this.tabEvent);
     assert.equal(document.activeElement, $firstTabbable.get(0), "first item focused on press tab on last item (does not go under overlay)");
 });

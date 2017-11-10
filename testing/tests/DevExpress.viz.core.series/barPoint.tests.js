@@ -26,10 +26,10 @@ var environment = {
             translateYData = { 1: 111, 2: 222, 3: 333, 4: 444, 5: 555, "canvas_position_default": 600 };
 
         this.translators = {
-            x: new MockTranslator({
+            arg: new MockTranslator({
                 translate: translateXData,
             }),
-            y: new MockTranslator({
+            val: new MockTranslator({
                 translate: translateYData,
             })
         };
@@ -58,7 +58,10 @@ var environment = {
             _options: {},
             areLabelsVisible: function() { return true; },
             getLabelVisibility: function() { return true; },
-            _visibleArea: { minX: 0, maxX: 200, minY: 0, maxY: 210 }
+            _visibleArea: { minX: 0, maxX: 200, minY: 0, maxY: 210 },
+            getVisibleArea: function() { return this._visibleArea; },
+            getValueAxis: function() { return { getTranslator: function() { return that.translators.val; } }; },
+            getArgumentAxis: function() { return { getTranslator: function() { return that.translators.arg; } }; }
         };
         this.label = sinon.createStubInstance(labelModule.Label);
         this.labelFactory = labelModule.Label = sinon.spy(function() {
@@ -72,8 +75,25 @@ var environment = {
     }
 };
 
+function getTranslators(translateX, translateY, options) {
+    var xTranslator = new MockTranslator({
+            translate: translateX
+        }),
+        yTranslator = new MockTranslator({
+            translate: translateY
+        });
+    return options.rotated ? {
+        arg: yTranslator,
+        val: xTranslator
+    } : {
+        arg: xTranslator,
+        val: yTranslator
+    };
+}
+
 QUnit.module("Point coordinates translation", {
     beforeEach: function() {
+        var that = this;
         this.opt = {
             widgetType: "chart",
             styles: {},
@@ -85,51 +105,31 @@ QUnit.module("Point coordinates translation", {
         this.series = {
             name: "series",
             isFullStackedSeries: function() { return false; },
-            getLabelVisibility: function() { return false; }
-        };
-        var translateXData = { 1: 110, 2: 220, 3: 330, 4: 440, 5: 550, "canvas_position_default": 70 },
-            translateYData = { 1: 111, 2: 222, 3: 333, 4: 444, 5: 555, "canvas_position_default": 600 };
-
-        this.continuousTranslators = {
-            x: new MockTranslator({
-                translate: translateXData,
-                getCanvasVisibleArea: { min: 0, max: 700 }
-            }),
-            y: new MockTranslator({
-                translate: translateYData,
-                getCanvasVisibleArea: { min: 0, max: 700 }
-            })
+            getLabelVisibility: function() { return false; },
+            getValueAxis: function() { return { getTranslator: function() { return that.translators.val; } }; },
+            getArgumentAxis: function() { return { getTranslator: function() { return that.translators.arg; } }; },
+            getVisibleArea: function() { return { minX: 0, maxX: 700, minY: 0, maxY: 700 }; }
         };
 
-        this.horizontalCategoryTranslators = {
-            x: new MockTranslator({
-                translate: { cat1: 100, cat2: 200, cat3: 300, cat4: 400, cat5: 500 },
-                getCanvasVisibleArea: { min: 0, max: 700 }
-            }),
-            y: new MockTranslator({
-                translate: translateYData,
-                getCanvasVisibleArea: { min: 0, max: 700 }
-            })
-        };
-
-        this.verticalCategoryTranslators = {
-            x: new MockTranslator({
-                translate: translateXData,
-                getCanvasVisibleArea: { min: 0, max: 700 }
-            }),
-            y: new MockTranslator({
-                translate: { cat1: 20, cat2: 30, cat3: 40, cat4: 50, cat5: 60 },
-                getCanvasVisibleArea: { min: 0, max: 700 }
-            })
-        };
-
+    },
+    translateXData: { 1: 110, 2: 220, 3: 330, 4: 440, 5: 550, "canvas_position_default": 70 },
+    translateYData: { 1: 111, 2: 222, 3: 333, 4: 444, 5: 555, "canvas_position_default": 600 },
+    setContinuousTranslators: function() {
+        this.translators = getTranslators(this.translateXData, this.translateYData, this.opt);
+    },
+    setHorizontalCategoryTranslators: function() {
+        this.translators = getTranslators({ cat1: 100, cat2: 200, cat3: 300, cat4: 400, cat5: 500 }, this.translateYData, this.opt);
+    },
+    setVerticalCategoryTranslators: function() {
+        this.translators = getTranslators(this.translateXData, { cat1: 20, cat2: 30, cat3: 40, cat4: 50, cat5: 60 }, this.opt);
     }
 });
 
 QUnit.test("Continuous", function(assert) {
+    this.setContinuousTranslators();
     var point = createPoint(this.series, { argument: 1, value: 5 }, this.opt);
 
-    point.translate(this.continuousTranslators);
+    point.translate();
 
     assert.equal(point.x, 110, "Point x should be correct");
     assert.equal(point.y, 555, "Point y should be correct");
@@ -141,9 +141,10 @@ QUnit.test("Continuous", function(assert) {
 });
 
 QUnit.test("Category", function(assert) {
+    this.setHorizontalCategoryTranslators();
     var point = createPoint(this.series, { argument: "cat2", value: 4 }, this.opt);
 
-    point.translate(this.horizontalCategoryTranslators);
+    point.translate();
 
     assert.equal(point.x, 200, "Point x should be correct");
     assert.equal(point.y, 444, "Point y should be correct");
@@ -156,9 +157,10 @@ QUnit.test("Category", function(assert) {
 
 QUnit.test("Continuous. Rotated", function(assert) {
     this.opt.rotated = true;
+    this.setContinuousTranslators();
     var point = createPoint(this.series, { argument: 2, value: 3 }, this.opt);
 
-    point.translate(this.continuousTranslators);
+    point.translate();
 
     assert.equal(point.x, 70, "Point x should be correct");
     assert.equal(point.y, 222, "Point y should be correct");
@@ -171,9 +173,10 @@ QUnit.test("Continuous. Rotated", function(assert) {
 
 QUnit.test("Category. Rotated", function(assert) {
     this.opt.rotated = true;
+    this.setVerticalCategoryTranslators();
     var point = createPoint(this.series, { argument: "cat5", value: 2 }, this.opt);
 
-    point.translate(this.verticalCategoryTranslators);
+    point.translate();
 
     assert.equal(point.x, 70, "Point x should be correct");
     assert.equal(point.y, 60, "Point y should be correct");
@@ -186,6 +189,7 @@ QUnit.test("Category. Rotated", function(assert) {
 
 QUnit.module("Point coordinates translation. Negative values", {
     beforeEach: function() {
+        var that = this;
         this.opt = {
             widgetType: "chart",
             type: "bar",
@@ -197,51 +201,30 @@ QUnit.module("Point coordinates translation. Negative values", {
         this.series = {
             name: "series",
             isFullStackedSeries: function() { return false; },
-            getLabelVisibility: function() { return false; }
+            getLabelVisibility: function() { return false; },
+            getValueAxis: function() { return { getTranslator: function() { return that.translators.val; } }; },
+            getArgumentAxis: function() { return { getTranslator: function() { return that.translators.arg; } }; },
+            getVisibleArea: function() { return { minX: 0, maxX: 700, minY: 0, maxY: 700 }; }
         };
-        var translateXData = { "-1": 180, "-2": 160, "-3": 140, "-4": 120, "-5": 100, "1": 220, "2": 240, "3": 260, "4": 280, "5": 300, "canvas_position_default": 200 },
-            translateYData = { "1": 90, "2": 80, "3": 70, "4": 60, "5": 50, "-1": 110, "-2": 120, "-3": 130, "-4": 140, "-5": 150, "canvas_position_default": 100 };
-
-        this.continuousTranslators = {
-            x: new MockTranslator({
-                translate: translateXData,
-                getCanvasVisibleArea: { min: 0, max: 700 }
-            }),
-            y: new MockTranslator({
-                translate: translateYData,
-                getCanvasVisibleArea: { min: 0, max: 700 }
-            })
-        };
-
-
-        this.horizontalCategoryTranslators = {
-            x: new MockTranslator({
-                translate: { cat1: 210, cat2: 230, cat3: 250, cat4: 270, cat5: 290 },
-                getCanvasVisibleArea: { min: 0, max: 700 }
-            }),
-            y: new MockTranslator({
-                translate: translateYData,
-                getCanvasVisibleArea: { min: 0, max: 700 }
-            })
-        };
-
-        this.verticalCategoryTranslators = {
-            x: new MockTranslator({
-                translate: translateXData,
-                getCanvasVisibleArea: { min: 0, max: 700 }
-            }),
-            y: new MockTranslator({
-                translate: { cat1: 105, cat2: 95, cat3: 85, cat4: 75, cat5: 65 },
-                getCanvasVisibleArea: { min: 0, max: 700 }
-            })
-        };
+    },
+    translateXData: { "-1": 180, "-2": 160, "-3": 140, "-4": 120, "-5": 100, "1": 220, "2": 240, "3": 260, "4": 280, "5": 300, "canvas_position_default": 200 },
+    translateYData: { "1": 90, "2": 80, "3": 70, "4": 60, "5": 50, "-1": 110, "-2": 120, "-3": 130, "-4": 140, "-5": 150, "canvas_position_default": 100 },
+    setContinuousTranslators: function() {
+        this.translators = getTranslators(this.translateXData, this.translateYData, this.opt);
+    },
+    setHorizontalCategoryTranslators: function() {
+        this.translators = getTranslators({ cat1: 210, cat2: 230, cat3: 250, cat4: 270, cat5: 290 }, this.translateYData, this.opt);
+    },
+    setVerticalCategoryTranslators: function() {
+        this.translators = getTranslators(this.translateXData, { cat1: 105, cat2: 95, cat3: 85, cat4: 75, cat5: 65 }, this.opt);
     }
 });
 
 QUnit.test("Continuous", function(assert) {
+    this.setContinuousTranslators();
     var point = createPoint(this.series, { argument: 1, value: -5 }, this.opt);
 
-    point.translate(this.continuousTranslators);
+    point.translate();
 
     assert.equal(point.x, 220, "Point x should be correct");
     assert.equal(point.y, 100, "Point y should be correct");
@@ -255,9 +238,10 @@ QUnit.test("Continuous", function(assert) {
 });
 
 QUnit.test("Category", function(assert) {
+    this.setHorizontalCategoryTranslators();
     var point = createPoint(this.series, { argument: "cat2", value: -4 }, this.opt);
 
-    point.translate(this.horizontalCategoryTranslators);
+    point.translate();
 
     assert.equal(point.x, 230, "Point x should be correct");
     assert.equal(point.y, 100, "Point y should be correct");
@@ -270,9 +254,10 @@ QUnit.test("Category", function(assert) {
 
 QUnit.test("Continuous. Rotated", function(assert) {
     this.opt.rotated = true;
+    this.setContinuousTranslators();
     var point = createPoint(this.series, { argument: 2, value: -3 }, this.opt);
 
-    point.translate(this.continuousTranslators);
+    point.translate();
 
     assert.equal(point.x, 140, "Point x should be correct");
     assert.equal(point.y, 80, "Point y should be correct");
@@ -285,9 +270,10 @@ QUnit.test("Continuous. Rotated", function(assert) {
 
 QUnit.test("Category. Rotated", function(assert) {
     this.opt.rotated = true;
+    this.setVerticalCategoryTranslators();
     var point = createPoint(this.series, { argument: "cat5", value: -2 }, this.opt);
 
-    point.translate(this.verticalCategoryTranslators);
+    point.translate();
 
     assert.equal(point.x, 160, "Point x should be correct");
     assert.equal(point.y, 65, "Point y should be correct");
@@ -300,6 +286,7 @@ QUnit.test("Category. Rotated", function(assert) {
 
 QUnit.module("Point coordinates translation with correction on canvas visible area", {
     beforeEach: function() {
+        var that = this;
         this.opt = {
             widgetType: "chart",
             type: "bar",
@@ -311,17 +298,20 @@ QUnit.module("Point coordinates translation with correction on canvas visible ar
         this.series = {
             name: "series",
             isFullStackedSeries: function() { return false; },
-            getLabelVisibility: function() { return false; }
+            getLabelVisibility: function() { return false; },
+            getValueAxis: function() { return { getTranslator: function() { return that.continuousTranslators.val; } }; },
+            getArgumentAxis: function() { return { getTranslator: function() { return that.continuousTranslators.arg; } }; },
+            getVisibleArea: function() { return { minX: 100, maxX: 500, minY: 200, maxY: 300 }; }
         };
         var translateXData = { 1: 0, 2: 80, 3: 200, 4: 300, 5: 400, 6: 480, 7: 600, "canvas_position_default": 100 },
             translateYData = { 0.1: null, 1: 350, 2: 325, 3: 290, 4: 250, 5: 225, 6: 150, "canvas_position_default": 300 };
         this.continuousTranslators = {
-            x: new MockTranslator({
+            arg: new MockTranslator({
                 translate: translateXData,
                 failOnWrongData: true,
                 getCanvasVisibleArea: { min: 100, max: 500 }
             }),
-            y: new MockTranslator({
+            val: new MockTranslator({
                 translate: translateYData,
                 failOnWrongData: true,
                 getCanvasVisibleArea: { min: 200, max: 300 }
@@ -335,7 +325,7 @@ QUnit.test("Point is out of boundaries on the left", function(assert) {
 
     point.width = 50;
 
-    point.translate(this.continuousTranslators);
+    point.translate();
 
     assert.strictEqual(point.inVisibleArea, false, "inVisibleArea");
     assert.strictEqual(point.y, 250, "y");
@@ -353,7 +343,7 @@ QUnit.test("Point is partially out of boundaries on the left and bottom", functi
     var point = createPoint(this.series, { argument: 2, value: 5 }, this.opt);
 
     point.width = 50;
-    point.translate(this.continuousTranslators);
+    point.translate();
 
     assert.strictEqual(point.inVisibleArea, true, "inVisibleArea");
     assert.strictEqual(point.y, 225, "y");
@@ -368,7 +358,7 @@ QUnit.test("Point is partially out of boundaries at the top and bottom", functio
     var point = createPoint(this.series, { argument: 3, value: 6 }, this.opt);
 
     point.width = 50;
-    point.translate(this.continuousTranslators);
+    point.translate();
 
     assert.strictEqual(point.inVisibleArea, true, "inVisibleArea");
     assert.strictEqual(point.y, 200, "y");
@@ -383,7 +373,7 @@ QUnit.test("Point is partially out of boundaries at the bottom", function(assert
     var point = createPoint(this.series, { argument: 4, value: 4 }, this.opt);
 
     point.width = 50;
-    point.translate(this.continuousTranslators);
+    point.translate();
 
     assert.strictEqual(point.inVisibleArea, true, "inVisibleArea");
     assert.strictEqual(point.y, 250, "y");
@@ -398,7 +388,7 @@ QUnit.test("Point is partially out of boundaries at the top", function(assert) {
     var point = createPoint(this.series, { argument: 5, value: 6 }, this.opt);
 
     point.width = 50;
-    point.translate(this.continuousTranslators);
+    point.translate();
 
     assert.strictEqual(point.inVisibleArea, true, "inVisibleArea");
     assert.strictEqual(point.y, 200, "y");
@@ -413,7 +403,7 @@ QUnit.test("Point is partially out of boundaries on the right", function(assert)
     var point = createPoint(this.series, { argument: 6, value: 5 }, this.opt);
 
     point.width = 50;
-    point.translate(this.continuousTranslators);
+    point.translate();
 
     assert.strictEqual(point.inVisibleArea, true, "inVisibleArea");
     assert.strictEqual(point.y, 225, "y");
@@ -428,7 +418,7 @@ QUnit.test("Point is out of boundaries on the right", function(assert) {
     var point = createPoint(this.series, { argument: 7, value: 5 }, this.opt);
 
     point.width = 50;
-    point.translate(this.continuousTranslators);
+    point.translate();
 
     assert.strictEqual(point.inVisibleArea, false, "inVisibleArea");
     assert.strictEqual(point.y, 225, "y");
@@ -443,7 +433,7 @@ QUnit.test("Point's value is translated to null", function(assert) {
     var point = createPoint(this.series, { argument: 4, value: 0.1 }, this.opt);
 
     point.width = 50;
-    point.translate(this.continuousTranslators);
+    point.translate();
 
     assert.strictEqual(point.inVisibleArea, true, "inVisibleArea");
     assert.strictEqual(point.y, 300, "y");
@@ -453,6 +443,7 @@ QUnit.test("Point's value is translated to null", function(assert) {
 
 QUnit.module("Point coordinates translation with correction on canvas visible area. Rotated.", {
     beforeEach: function() {
+        var that = this;
         this.opt = {
             widgetType: "chart",
             styles: {},
@@ -465,18 +456,21 @@ QUnit.module("Point coordinates translation with correction on canvas visible ar
         this.series = {
             name: "series",
             isFullStackedSeries: function() { return false; },
-            getLabelVisibility: function() { return false; }
+            getLabelVisibility: function() { return false; },
+            getValueAxis: function() { return { getTranslator: function() { return that.continuousTranslators.val; } }; },
+            getArgumentAxis: function() { return { getTranslator: function() { return that.continuousTranslators.arg; } }; },
+            getVisibleArea: function() { return { minX: 200, maxX: 300, minY: 100, maxY: 500 }; }
         };
         var translateYData = { 1: 0, 2: 80, 3: 200, 4: 300, 5: 400, 6: 480, 7: 600, "canvas_position_default": 100 },
             translateXData = { 0.1: null, 1: 350, 2: 325, 3: 290, 4: 250, 5: 225, 6: 150, "canvas_position_default": 300 };
 
         this.continuousTranslators = {
-            x: new MockTranslator({
+            val: new MockTranslator({
                 translate: translateXData,
                 failOnWrongData: true,
                 getCanvasVisibleArea: { min: 200, max: 300 }
             }),
-            y: new MockTranslator({
+            arg: new MockTranslator({
                 translate: translateYData,
                 failOnWrongData: true,
                 getCanvasVisibleArea: { min: 100, max: 500 }
@@ -489,7 +483,7 @@ QUnit.test("Point is out of boundaries on the left", function(assert) {
     var point = createPoint(this.series, { argument: 1, value: 4 }, this.opt);
 
     point.height = 50;
-    point.translate(this.continuousTranslators);
+    point.translate();
 
     assert.strictEqual(point.inVisibleArea, false, "inVisibleArea");
     assert.strictEqual(point.y, 0, "y");
@@ -507,7 +501,7 @@ QUnit.test("Point is partially out of boundaries on the left and bottom", functi
     var point = createPoint(this.series, { argument: 2, value: 5 }, this.opt);
 
     point.height = 50;
-    point.translate(this.continuousTranslators);
+    point.translate();
 
     assert.strictEqual(point.inVisibleArea, true, "inVisibleArea");
     assert.strictEqual(point.y, 100, "y");
@@ -522,7 +516,7 @@ QUnit.test("Point is partially out of boundaries at the top and bottom", functio
     var point = createPoint(this.series, { argument: 3, value: 6 }, this.opt);
 
     point.height = 50;
-    point.translate(this.continuousTranslators);
+    point.translate();
 
     assert.strictEqual(point.inVisibleArea, true, "inVisibleArea");
     assert.strictEqual(point.y, 200, "y");
@@ -537,7 +531,7 @@ QUnit.test("Point is partially out of boundaries at the bottom", function(assert
     var point = createPoint(this.series, { argument: 4, value: 4 }, this.opt);
 
     point.height = 50;
-    point.translate(this.continuousTranslators);
+    point.translate();
 
     assert.strictEqual(point.inVisibleArea, true, "inVisibleArea");
     assert.strictEqual(point.y, 300, "y");
@@ -552,7 +546,7 @@ QUnit.test("Point is partially out of boundaries at the top", function(assert) {
     var point = createPoint(this.series, { argument: 5, value: 6 }, this.opt);
 
     point.height = 50;
-    point.translate(this.continuousTranslators);
+    point.translate();
 
     assert.strictEqual(point.inVisibleArea, true, "inVisibleArea");
     assert.strictEqual(point.y, 400, "y");
@@ -567,7 +561,7 @@ QUnit.test("Point is partially out of boundaries on the right", function(assert)
     var point = createPoint(this.series, { argument: 6, value: 5 }, this.opt);
 
     point.height = 50;
-    point.translate(this.continuousTranslators);
+    point.translate();
 
     assert.strictEqual(point.inVisibleArea, true, "inVisibleArea");
     assert.strictEqual(point.y, 480, "y");
@@ -582,7 +576,7 @@ QUnit.test("Point is out of boundaries on the right", function(assert) {
     var point = createPoint(this.series, { argument: 7, value: 5 }, this.opt);
 
     point.height = 50;
-    point.translate(this.continuousTranslators);
+    point.translate();
 
     assert.strictEqual(point.inVisibleArea, false, "inVisibleArea");
     assert.strictEqual(point.y, 600, "y");
@@ -597,7 +591,7 @@ QUnit.test("Point's value is translated to null", function(assert) {
     var point = createPoint(this.series, { argument: 4, value: 0.1 }, this.opt);
 
     point.height = 50;
-    point.translate(this.continuousTranslators);
+    point.translate();
 
     assert.strictEqual(point.inVisibleArea, true, "inVisibleArea");
     assert.strictEqual(point.x, 300, "x");
@@ -762,6 +756,7 @@ QUnit.test("Not integer offset", function(assert) {
 
 QUnit.module("Translation after offset", {
     beforeEach: function() {
+        var that = this;
         this.opt = {
             widgetType: "chart",
             type: "bar",
@@ -773,53 +768,23 @@ QUnit.module("Translation after offset", {
         this.series = {
             name: "series",
             isFullStackedSeries: function() { return false; },
-            getLabelVisibility: function() { return false; }
+            getLabelVisibility: function() { return false; },
+            getValueAxis: function() { return { getTranslator: function() { return that.translators.val; } }; },
+            getArgumentAxis: function() { return { getTranslator: function() { return that.translators.arg; } }; },
+            getVisibleArea: function() { return { minX: 0, maxX: 700, minY: 0, maxY: 700 }; }
         };
-        var translateXData = { 1: 110, 2: 220, 3: 330, 4: 440, 5: 550, "canvas_position_default": 70 },
-            translateYData = { 1: 111, 2: 222, 3: 333, 4: 444, 5: 555, "canvas_position_default": 600 };
-
-        this.continuousTranslators = {
-            x: new MockTranslator({
-                translate: translateXData,
-                getCanvasVisibleArea: { min: 0, max: 700 }
-            }),
-            y: new MockTranslator({
-                translate: translateYData,
-                getCanvasVisibleArea: { min: 0, max: 700 }
-            })
-        };
-
-
-        this.horizontalCategoryTranslators = {
-            x: new MockTranslator({
-                translate: { cat1: 100, cat2: 200, cat3: 300, cat4: 400, cat5: 500 },
-                getCanvasVisibleArea: { min: 0, max: 700 }
-            }),
-            y: new MockTranslator({
-                translate: translateYData,
-                getCanvasVisibleArea: { min: 0, max: 700 }
-            })
-        };
-
-        this.verticalCategoryTranslators = {
-            x: new MockTranslator({
-                translate: translateXData,
-                getCanvasVisibleArea: { min: 0, max: 700 }
-            }),
-            y: new MockTranslator({
-                translate: { cat1: 20, cat2: 30, cat3: 40, cat4: 50, cat5: 60 },
-                getCanvasVisibleArea: { min: 0, max: 700 }
-            })
-        };
-
+    },
+    setContinuousTranslators: function() {
+        this.translators = getTranslators({ 1: 110, 2: 220, 3: 330, 4: 440, 5: 550, "canvas_position_default": 70 }, { 1: 111, 2: 222, 3: 333, 4: 444, 5: 555, "canvas_position_default": 600 }, this.opt);
     }
 });
 
 QUnit.test("Continuous", function(assert) {
+    this.setContinuousTranslators();
     var point = createPoint(this.series, { argument: 1, value: 5 }, this.opt);
 
     point.correctCoordinates({ width: 20, offset: 100 });
-    point.translate(this.continuousTranslators);
+    point.translate();
 
     assert.equal(point.x, 110 + 100 - 20 / 2, "x");
     assert.equal(point.y, 555, "y");
@@ -830,10 +795,11 @@ QUnit.test("Continuous", function(assert) {
 
 QUnit.test("Continuous. Rotated", function(assert) {
     this.opt.rotated = true;
+    this.setContinuousTranslators();
     var point = createPoint(this.series, { argument: 2, value: 3 }, this.opt);
 
     point.correctCoordinates({ width: 20, offset: 100 });
-    point.translate(this.continuousTranslators);
+    point.translate();
 
     assert.equal(point.x, 70, "x");
     assert.equal(point.y, 222 + 100 - 20 / 2, "y");
@@ -844,10 +810,11 @@ QUnit.test("Continuous. Rotated", function(assert) {
 
 QUnit.test("Null value. Rotated", function(assert) {
     this.opt.rotated = true;
+    this.setContinuousTranslators();
     var point = createPoint(this.series, { argument: 2, value: null }, this.opt);
 
     point.correctCoordinates({ width: 20, offset: 100 });
-    point.translate(this.continuousTranslators);
+    point.translate();
 
     assert.ok(!point.x, "x");
     assert.ok(!point.y, "y");
@@ -855,6 +822,7 @@ QUnit.test("Null value. Rotated", function(assert) {
 
 QUnit.module("Draw point", {
     beforeEach: function() {
+        var that = this;
         this.renderer = new vizMocks.Renderer();
         this.group = this.renderer.g();
         this.errorBarGroup = this.renderer.g();
@@ -872,15 +840,18 @@ QUnit.module("Draw point", {
             name: "series",
             areLabelsVisible: function() { return false; },
             isFullStackedSeries: function() { return false; },
-            getLabelVisibility: function() { return false; }
+            getLabelVisibility: function() { return false; },
+            getValueAxis: function() { return { getTranslator: function() { return that.continuousTranslators.val; } }; },
+            getArgumentAxis: function() { return { getTranslator: function() { return that.continuousTranslators.arg; } }; },
+            getVisibleArea: function() { return { minX: 0, maxX: 700, minY: 0, maxY: 700 }; }
         };
 
         this.continuousTranslators = {
-            x: new MockTranslator({
+            arg: new MockTranslator({
                 translate: { 1: 111, 2: 222, 3: 333, 4: 444, 5: 555, 7: 900, "canvas_position_default": 600 },
                 getCanvasVisibleArea: { min: 0, max: 700 }
             }),
-            y: new MockTranslator({
+            val: new MockTranslator({
                 translate: { 1: 111, 2: 222, 3: 333, 4: 444, 5: 555, "canvas_position_default": 600 },
                 getCanvasVisibleArea: { min: 0, max: 700 }
             })
@@ -890,7 +861,6 @@ QUnit.module("Draw point", {
             markers: this.group,
             errorBars: this.errorBarGroup
         };
-
     }
 });
 
@@ -928,7 +898,7 @@ QUnit.test("draw errorBar", function(assert) {
     var point = createPoint(this.series, { argument: 7, value: 1, lowError: 1, highError: 2 }, this.options);
     point.width = 44;
 
-    point.translate(this.continuousTranslators);
+    point.translate();
 
     point.draw(this.renderer, this.groups);
 
@@ -947,7 +917,7 @@ QUnit.test("draw errorBar when argument out of the canvas", function(assert) {
     var point = createPoint(this.series, { argument: 1, value: 1, lowError: 1, highError: 2 }, this.options);
     point.width = 44;
 
-    point.translate(this.continuousTranslators);
+    point.translate();
 
     point.draw(this.renderer, this.groups);
 
@@ -1061,13 +1031,13 @@ QUnit.test("Marker. animate without graphic", function(assert) {
 QUnit.test("Update marker", function(assert) {
     var point = createPoint(this.series, { argument: "2", value: 1 }, this.options);
 
-    point.translate(this.translators);
+    point.translate();
     point.inVisibleArea = true;
     point.draw(this.renderer, this.groups);
 
     this.options.styles.normal.fill = "red";
     point.updateOptions(this.options);
-    point.translate(this.translators);
+    point.translate();
     point.inVisibleArea = true;
     point.draw(this.renderer, this.groups);
 
@@ -1081,7 +1051,7 @@ QUnit.test("Update marker", function(assert) {
 QUnit.test("Update marker location", function(assert) {
     var point = createPoint(this.series, { argument: "2", value: 1 }, this.options);
 
-    point.translate(this.translators);
+    point.translate();
     point.inVisibleArea = true;
     point.draw(this.renderer, this.groups);
 
@@ -1095,6 +1065,7 @@ QUnit.test("Update marker location", function(assert) {
     assert.equal(point.graphic, this.renderer.stub("rect").firstCall.returnValue);
 
     assert.deepEqual(point.graphic.stub("attr").lastCall.args[0], {
+        height: 489,
         style: "normal",
         x: 10,
         y: 20
@@ -1106,7 +1077,7 @@ QUnit.test("Update marker location", function(assert) {
 QUnit.test("Update marker location with animation enabled", function(assert) {
     var point = createPoint(this.series, { argument: "2", value: 1 }, this.options);
 
-    point.translate(this.translators);
+    point.translate();
     point.inVisibleArea = true;
     point.draw(this.renderer, this.groups);
 
@@ -1141,17 +1112,17 @@ QUnit.test("get coords marker", function(assert) {
 
 QUnit.module("Tooltip", {
     beforeEach: function() {
-
-        var translateXData = { 1: 110, 2: 220, 3: 330, 4: 440, 5: 550, "canvas_position_default": 70 },
+        var that = this,
+            translateXData = { 1: 110, 2: 220, 3: 330, 4: 440, 5: 550, "canvas_position_default": 70 },
             translateYData = { 1: 111, 2: 222, 3: 333, 4: 444, 5: 555, "canvas_position_default": 600 };
 
         this.translators = {
-            x: new MockTranslator({
+            arg: new MockTranslator({
                 translate: translateXData,
                 getCanvasVisibleArea: { min: 10, max: 600 },
                 getBusinessRange: function() {}
             }),
-            y: new MockTranslator({
+            val: new MockTranslator({
                 translate: translateYData,
                 getCanvasVisibleArea: { min: 5, max: 810 },
                 getBusinessRange: function() {}
@@ -1172,7 +1143,9 @@ QUnit.module("Tooltip", {
         this.series = {
             name: "series1",
             isFullStackedSeries: function() { return false; },
-            getLabelVisibility: function() { return false; }
+            getLabelVisibility: function() { return false; },
+            getValueAxis: function() { return { getTranslator: function() { return that.translators.val; } }; },
+            getArgumentAxis: function() { return { getTranslator: function() { return that.translators.arg; } }; }
         };
     }
 });
@@ -1180,7 +1153,6 @@ QUnit.module("Tooltip", {
 QUnit.test("Get tooltip coordinates. Location is center. Not rotated. Positive", function(assert) {
     var point = createPoint(this.series, this.data, this.options);
 
-    point.translators = this.translators;
     point.x = 430;
     point.y = 250;
     point.width = 30;
@@ -1195,7 +1167,6 @@ QUnit.test("Get tooltip coordinates. Location is center. Rotated", function(asse
     this.options.rotated = true;
     var point = createPoint(this.series, this.data, this.options);
 
-    point.translators = this.translators;
     point.x = 430;
     point.y = 250;
     point.width = 50;
@@ -1209,7 +1180,6 @@ QUnit.test("Get tooltip coordinates. Location is center. Rotated", function(asse
 QUnit.test("Get tooltip coordinates. Location is edge. Not rotated. Positive", function(assert) {
     var point = createPoint(this.series, this.data, this.options);
 
-    point.translators = this.translators;
     point.x = 430;
     point.y = 250;
     point.width = 30;
@@ -1224,7 +1194,6 @@ QUnit.test("Get tooltip coordinates. Location is edge. Not rotated. Negative", f
     this.data.value = -10;
     var point = createPoint(this.series, this.data, this.options);
 
-    point.translators = this.translators;
     point.x = 430;
     point.y = 250;
     point.width = 30;
@@ -1239,7 +1208,6 @@ QUnit.test("Get tooltip coordinates. Location is edge. Rotated. Positive", funct
     this.options.rotated = true;
     var point = createPoint(this.series, this.data, this.options);
 
-    point.translators = this.translators;
     point.x = 430;
     point.y = 250;
     point.width = 50;
@@ -1255,7 +1223,6 @@ QUnit.test("Get tooltip coordinates. Location is edge. Rotated. Negative", funct
     this.options.rotated = true;
     var point = createPoint(this.series, this.data, this.options);
 
-    point.translators = this.translators;
     point.x = 430;
     point.y = 250;
     point.width = 50;
@@ -1268,11 +1235,11 @@ QUnit.test("Get tooltip coordinates. Location is edge. Rotated. Negative", funct
 
 QUnit.test("Get tooltip coordinates. Location is edge. Not rotated. Invert. Positive", function(assert) {
     this.options.rotated = false;
-    var point = createPoint(this.series, this.data, this.options);
-    this.translators.y.getBusinessRange = function() {
+    this.translators.val.getBusinessRange = function() {
         return { invert: true };
     };
-    point.translators = this.translators;
+    var point = createPoint(this.series, this.data, this.options);
+
     point.x = 430;
     point.y = 250;
     point.width = 50;
@@ -1286,11 +1253,11 @@ QUnit.test("Get tooltip coordinates. Location is edge. Not rotated. Invert. Posi
 QUnit.test("Get tooltip coordinates. Location is edge. Not rotated. Invert. Negative", function(assert) {
     this.data.value = -10;
     this.options.rotated = false;
-    var point = createPoint(this.series, this.data, this.options);
-    this.translators.y.getBusinessRange = function() {
+    this.translators.val.getBusinessRange = function() {
         return { invert: true };
     };
-    point.translators = this.translators;
+    var point = createPoint(this.series, this.data, this.options);
+
     point.x = 430;
     point.y = 250;
     point.width = 50;
@@ -1303,12 +1270,11 @@ QUnit.test("Get tooltip coordinates. Location is edge. Not rotated. Invert. Nega
 
 QUnit.test("Get tooltip coordinates. Location is edge. Rotated. Invert. Positive", function(assert) {
     this.options.rotated = true;
-    var point = createPoint(this.series, this.data, this.options);
-    this.translators.x.getBusinessRange = function() {
+    this.translators.val.getBusinessRange = function() {
         return { invert: true };
     };
+    var point = createPoint(this.series, this.data, this.options);
 
-    point.translators = this.translators;
     point.x = 430;
     point.y = 250;
     point.width = 50;
@@ -1322,12 +1288,11 @@ QUnit.test("Get tooltip coordinates. Location is edge. Rotated. Invert. Positive
 QUnit.test("Get tooltip coordinates. Location is edge. Rotated. Invert. Negative", function(assert) {
     this.data.value = -10;
     this.options.rotated = true;
-    var point = createPoint(this.series, this.data, this.options);
-    this.translators.x.getBusinessRange = function() {
+    this.translators.val.getBusinessRange = function() {
         return { invert: true };
     };
+    var point = createPoint(this.series, this.data, this.options);
 
-    point.translators = this.translators;
     point.x = 430;
     point.y = 250;
     point.width = 50;
@@ -1341,7 +1306,6 @@ QUnit.test("Get tooltip coordinates. Location is edge. Rotated. Invert. Negative
 QUnit.test("Get tooltip coordinates. Location is invalid", function(assert) {
     var point = createPoint(this.series, this.data, this.options);
 
-    point.translators = this.translators;
     point.x = 430;
     point.y = 250;
     point.width = 30;
@@ -1394,7 +1358,6 @@ QUnit.test("Value = null", function(assert) {
     point.y = 22;
     point.width = 20;
     point.height = 10;
-    point.translators = this.translators;
 
     point._drawLabel(this.renderer, this.group);
 
@@ -1408,7 +1371,6 @@ QUnit.test("Get bbox for point", function(assert) {
     point.y = 40;
     point.width = 20;
     point.height = 10;
-    point.translators = this.translators;
     point.graphic = this.graphic;
 
     var bBox = point._getGraphicBBox();
@@ -1423,7 +1385,6 @@ QUnit.test("Get bbox for point with border", function(assert) {
     point.y = 35;
     point.width = 30;
     point.height = 20;
-    point.translators = this.translators;
 
     var bBox = point._getGraphicBBox();
 
@@ -1438,7 +1399,6 @@ QUnit.test("Default, not rotated", function(assert) {
     point.y = 22;
     point.width = 20;
     point.height = 10;
-    point.translators = this.translators;
 
     point.correctLabelPosition(label);
 
@@ -1456,7 +1416,6 @@ QUnit.test("Default, not rotated. Position is invalid", function(assert) {
     point.y = 22;
     point.width = 20;
     point.height = 10;
-    point.translators = this.translators;
 
     point.correctLabelPosition(label);
 
@@ -1474,7 +1433,6 @@ QUnit.test("Default, not rotated with zero value", function(assert) {
     point.y = 22;
     point.width = 20;
     point.height = 10;
-    point.translators = this.translators;
 
     point.correctLabelPosition(label);
 
@@ -1491,7 +1449,6 @@ QUnit.test("Default, not rotated with negative value", function(assert) {
     point.y = 32;
     point.width = 20;
     point.height = 10;
-    point.translators = this.translators;
 
     point.correctLabelPosition(label);
 
@@ -1509,7 +1466,6 @@ QUnit.test("Default, not rotated fullstacked with negative value", function(asse
     point.y = 32;
     point.width = 20;
     point.height = 10;
-    point.translators = this.translators;
 
     point.correctLabelPosition(label);
 
@@ -1527,7 +1483,6 @@ QUnit.test("Default, not rotated fullstacked with zero value", function(assert) 
     point.y = 20;
     point.width = 20;
     point.height = 0;
-    point.translators = this.translators;
 
     point.correctLabelPosition(label);
 
@@ -1544,7 +1499,6 @@ QUnit.test("Default, rotated", function(assert) {
     point.y = 12;
     point.width = 20;
     point.height = 10;
-    point.translators = this.translators;
 
     point.correctLabelPosition(label);
 
@@ -1562,7 +1516,6 @@ QUnit.test("Default, rotated with zero value", function(assert) {
     point.y = 13;
     point.width = 16;
     point.height = 8;
-    point.translators = this.translators;
 
     point.correctLabelPosition(label);
 
@@ -1580,7 +1533,6 @@ QUnit.test("Default, rotated with negative value", function(assert) {
     point.y = 12;
     point.width = 20;
     point.height = 10;
-    point.translators = this.translators;
 
     point.correctLabelPosition(label);
 
@@ -1601,7 +1553,6 @@ QUnit.test("Default, rotated fullstacked with negative value", function(assert) 
     point.height = 10;
     point.defaultX = 0;
     point.defaultY = 0;
-    point.translators = this.translators;
 
     point.correctLabelPosition(label);
 
@@ -1620,7 +1571,6 @@ QUnit.test("Default, rotated fullstacked with zero value", function(assert) {
     point.y = 13;
     point.width = 0;
     point.height = 10;
-    point.translators = this.translators;
 
     point.correctLabelPosition(label);
 
@@ -1635,7 +1585,6 @@ QUnit.test("Default, label with zero value, showForZeroValues is true", function
 
     point.x = 33;
     point.y = 22;
-    point.translators = this.translators;
 
     point._drawLabel(this.renderer, this.group);
 
@@ -1664,7 +1613,6 @@ QUnit.test("Default, double draw, hidden to visible", function(assert) {
     point.y = 22;
     point.width = 20;
     point.height = 10;
-    point.translators = this.translators;
     point.correctLabelPosition(label);
 
     this.options.resolveLabelsOverlapping = false;
@@ -1683,7 +1631,6 @@ QUnit.test("Default, inside, not rotated", function(assert) {
     point.y = 10;
     point.width = 20;
     point.height = 10;
-    point.translators = this.translators;
 
     point.correctLabelPosition(label);
 
@@ -1701,7 +1648,6 @@ QUnit.test("Default, inside, not rotated, label height > point height", function
     point.y = 22;
     point.width = 20;
     point.height = 10;
-    point.translators = this.translators;
 
     point.correctLabelPosition(label);
 
@@ -1723,7 +1669,6 @@ QUnit.test("Inside, not rotated, label height > point height with resolveLabelOv
     point.y = 22;
     point.width = 20;
     point.height = 10;
-    point.translators = this.translators;
 
     point.correctLabelPosition(label);
 
@@ -1743,7 +1688,6 @@ QUnit.test("Inside, not rotated, label width > point width with resolveLabelOver
     point.y = 22;
     point.width = 20;
     point.height = 10;
-    point.translators = this.translators;
 
     point.correctLabelPosition(label);
 
@@ -1762,7 +1706,6 @@ QUnit.test("Default, inside, not rotated with negative value", function(assert) 
     point.y = 32;
     point.width = 20;
     point.height = 10;
-    point.translators = this.translators;
     point.graphic = this.graphic;
 
     point.correctLabelPosition(label);
@@ -1786,7 +1729,6 @@ QUnit.test("Default, inside, not rotated fullstacked with negative value", funct
     point.height = 10;
     point.defaultX = 0;
     point.defaultY = 0;
-    point.translators = this.translators;
 
     point.correctLabelPosition(label);
 
@@ -1804,7 +1746,6 @@ QUnit.test("Default, inside, rotated", function(assert) {
     point.y = 12;
     point.width = 30;
     point.height = 20;
-    point.translators = this.translators;
 
     point.correctLabelPosition(label);
 
@@ -1823,7 +1764,6 @@ QUnit.test("Default, inside, not rotated, label width > point width", function(a
     point.y = 22;
     point.width = 20;
     point.height = 10;
-    point.translators = this.translators;
 
     point.correctLabelPosition(label);
 
@@ -1846,7 +1786,6 @@ QUnit.test("Inside, rotated, label width > point width with resolveLabelOverlapp
     point.y = 22;
     point.width = 20;
     point.height = 10;
-    point.translators = this.translators;
 
     point.correctLabelPosition(label);
 
@@ -1870,7 +1809,6 @@ QUnit.test("Outside, rotated, label width > point width with resolveLabelOverlap
     point.y = 22;
     point.width = 20;
     point.height = 10;
-    point.translators = this.translators;
 
     point.correctLabelPosition(label);
 
@@ -1892,7 +1830,6 @@ QUnit.test("Inside, rotated, label height > point height with resolveLabelOverla
     point.y = 22;
     point.width = 20;
     point.height = 10;
-    point.translators = this.translators;
 
     point.correctLabelPosition(label);
 
@@ -1911,7 +1848,6 @@ QUnit.test("Default, inside, rotated with negative value", function(assert) {
     point.y = 12;
     point.width = 20;
     point.height = 10;
-    point.translators = this.translators;
 
     point.correctLabelPosition(label);
 
@@ -1934,7 +1870,6 @@ QUnit.test("Default, inside, rotated fullstacked with negative value", function(
     point.height = 10;
     point.defaultX = 0;
     point.defaultY = 0;
-    point.translators = this.translators;
 
     point.correctLabelPosition(label);
 
@@ -1943,16 +1878,14 @@ QUnit.test("Default, inside, rotated fullstacked with negative value", function(
 });
 
 QUnit.test("Inverted value axis, not rotated", function(assert) {
+    this.translators.val.getBusinessRange = function() { return { invert: true }; };
     var point = createPoint(this.series, this.data, this.options),
         label = point._label;
-
-    this.translators.y.getBusinessRange = function() { return { invert: true }; };
 
     point.x = 33;
     point.y = 22;
     point.width = 20;
     point.height = 10;
-    point.translators = this.translators;
 
     point.correctLabelPosition(label);
 
@@ -1962,16 +1895,14 @@ QUnit.test("Inverted value axis, not rotated", function(assert) {
 
 QUnit.test("Inverted value axis, rotated", function(assert) {
     this.options.rotated = true;
+    this.translators.val.getBusinessRange = function() { return { invert: true }; };
     var point = createPoint(this.series, this.data, this.options),
         label = point._label;
-
-    this.translators.x.getBusinessRange = function() { return { invert: true }; };
 
     point.x = 33;
     point.y = 22;
     point.width = 20;
     point.height = 10;
-    point.translators = this.translators;
 
     point.correctLabelPosition(label);
 
@@ -1981,16 +1912,14 @@ QUnit.test("Inverted value axis, rotated", function(assert) {
 
 QUnit.test("Inverted value axis, not rotated, negative value", function(assert) {
     this.data.value = -15;
+    this.translators.val.getBusinessRange = function() { return { invert: true }; };
     var point = createPoint(this.series, this.data, this.options),
         label = point._label;
-
-    this.translators.y.getBusinessRange = function() { return { invert: true }; };
 
     point.x = 33;
     point.y = 22;
     point.width = 20;
     point.height = 10;
-    point.translators = this.translators;
 
     point.correctLabelPosition(label);
 
@@ -2001,16 +1930,14 @@ QUnit.test("Inverted value axis, not rotated, negative value", function(assert) 
 QUnit.test("Inverted value axis, rotated, negative value", function(assert) {
     this.data.value = -15;
     this.options.rotated = true;
+    this.translators.val.getBusinessRange = function() { return { invert: true }; };
     var point = createPoint(this.series, this.data, this.options),
         label = point._label;
-
-    this.translators.x.getBusinessRange = function() { return { invert: true }; };
 
     point.x = 33;
     point.y = 22;
     point.width = 20;
     point.height = 10;
-    point.translators = this.translators;
 
     point.correctLabelPosition(label);
 
@@ -2027,7 +1954,6 @@ QUnit.test("Value axis contains categories, not inverted, not rotated", function
     point.y = 23;
     point.width = 20;
     point.height = 10;
-    point.translators = this.translators;
 
     point.correctLabelPosition(label);
 
@@ -2037,16 +1963,14 @@ QUnit.test("Value axis contains categories, not inverted, not rotated", function
 
 QUnit.test("Value axis contains categories, inverted, not rotated", function(assert) {
     this.series._options.valueAxisType = "discrete";
+    this.translators.val.getBusinessRange = function() { return { invert: true }; };
     var point = createPoint(this.series, this.data, this.options),
         label = point._label;
-
-    this.translators.y.getBusinessRange = function() { return { invert: true }; };
 
     point.x = 54;
     point.y = 23;
     point.width = 20;
     point.height = 10;
-    point.translators = this.translators;
 
     point.correctLabelPosition(label);
 
@@ -2064,7 +1988,6 @@ QUnit.test("Value axis contains categories, not inverted, rotated", function(ass
     point.y = 23;
     point.width = 20;
     point.height = 10;
-    point.translators = this.translators;
 
     point.correctLabelPosition(label);
 
@@ -2075,16 +1998,14 @@ QUnit.test("Value axis contains categories, not inverted, rotated", function(ass
 QUnit.test("Value axis contains categories, inverted, rotated", function(assert) {
     this.series._options.valueAxisType = "discrete";
     this.options.rotated = true;
+    this.translators.val.getBusinessRange = function() { return { invert: true }; };
     var point = createPoint(this.series, this.data, this.options),
         label = point._label;
-
-    this.translators.x.getBusinessRange = function() { return { invert: true }; };
 
     point.x = 54;
     point.y = 23;
     point.width = 20;
     point.height = 10;
-    point.translators = this.translators;
 
     point.correctLabelPosition(label);
 
@@ -2221,6 +2142,7 @@ QUnit.test("Draw label, point is abroad on the bottom", function(assert) {
 });
 QUnit.module("API", {
     beforeEach: function() {
+        var that = this;
         this.opt = {
             type: "bar",
             widgetType: "chart",
@@ -2232,45 +2154,24 @@ QUnit.module("API", {
         this.series = {
             name: "series",
             isFullStackedSeries: function() { return false; },
-            getLabelVisibility: function() { return false; }
+            getLabelVisibility: function() { return false; },
+            getValueAxis: function() { return { getTranslator: function() { return that.continuousTranslators.val; } }; },
+            getArgumentAxis: function() { return { getTranslator: function() { return that.continuousTranslators.arg; } }; },
+            getVisibleArea: function() { return { minX: 0, maxX: 700, minY: 0, maxY: 700 }; }
         };
         var translateXData = { 1: 110, 2: 220, 3: 330, 4: 440, 5: 550, "canvas_position_default": 70 },
             translateYData = { 1: 111, 2: 222, 3: 333, 4: 444, 5: 555, "canvas_position_default": 600 };
 
         this.continuousTranslators = {
-            x: new MockTranslator({
+            arg: new MockTranslator({
                 translate: translateXData,
                 getCanvasVisibleArea: { min: 0, max: 700 }
             }),
-            y: new MockTranslator({
+            val: new MockTranslator({
                 translate: translateYData,
                 getCanvasVisibleArea: { min: 0, max: 700 }
             })
         };
-
-
-        this.horizontalCategoryTranslators = {
-            x: new MockTranslator({
-                translate: { cat1: 100, cat2: 200, cat3: 300, cat4: 400, cat5: 500 },
-                getCanvasVisibleArea: { min: 0, max: 700 }
-            }),
-            y: new MockTranslator({
-                translate: translateYData,
-                getCanvasVisibleArea: { min: 0, max: 700 }
-            })
-        };
-
-        this.verticalCategoryTranslators = {
-            x: new MockTranslator({
-                translate: translateXData,
-                getCanvasVisibleArea: { min: 0, max: 700 }
-            }),
-            y: new MockTranslator({
-                translate: { cat1: 20, cat2: 30, cat3: 40, cat4: 50, cat5: 60 },
-                getCanvasVisibleArea: { min: 0, max: 700 }
-            })
-        };
-
     }
 });
 
@@ -2278,7 +2179,7 @@ QUnit.test("coordsIn", function(assert) {
     var point = createPoint(this.series, { argument: 1, value: 5 }, this.opt);
 
     point.correctCoordinates({ width: 20, offset: 100 });
-    point.translate(this.continuousTranslators);
+    point.translate();
 
     assert.equal(point.x, 200, "x");
     assert.equal(point.y, 555, "y");
@@ -2344,7 +2245,6 @@ function createLabel(pointBBox) {
 
     $.extend(point, pointBBox);
 
-    point.translators = this.translators;
     point.correctLabelPosition(label);
 
     return label;

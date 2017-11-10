@@ -53,14 +53,14 @@ var dxVectorMap = {
         /**
         * @name dxvectormapoptions_layers_dataSource
         * @publicName dataSource
-        * @type object|DataSource|DataSource configuration|string
+        * @type object|DataSource|DataSourceOptions|string
         * @extends CommonVizDataSource
         */
         dataSource: undefined,
         /**
         * @name dxvectormapoptions_layers_data
         * @publicName data
-        * @type object|DataSource|DataSource configuration
+        * @type object|DataSource|DataSourceOptions
         * @deprecated dxvectormapoptions_layers_dataSource
         * @notUsedInTheme
         */
@@ -311,7 +311,7 @@ var dxVectorMap = {
     * @publicName mapData
     * @type array|string
     * @default undefined
-    * @deprecated
+    * @deprecated dxvectormapoptions_layers_dataSource
     * @notUsedInTheme
     */
     mapData: undefined,
@@ -319,7 +319,7 @@ var dxVectorMap = {
     * @name dxvectormapoptions_areaSettings
     * @publicName areaSettings
     * @type object
-    * @deprecated
+    * @deprecated dxvectormapoptions_layers
     */
     areaSettings: {
         /**
@@ -516,8 +516,8 @@ var dxVectorMap = {
         * @name dxvectormapoptions_areaSettings_customize
         * @publicName customize
         * @type function(area)
-        * @type_function_param1 area:Area object
-        * @type_function_return Area configuration
+        * @type_function_param1 area:areaObjects
+        * @type_function_return dxVectorMapOptions_areaSettings
         * @deprecated dxvectormapoptions_layers_customize
         * @notUsedInTheme
         */
@@ -528,7 +528,7 @@ var dxVectorMap = {
     * @publicName markers
     * @type array|string
     * @default undefined
-    * @deprecated
+    * @deprecated dxvectormapoptions_layers_dataSource
     * @notUsedInTheme
     */
     /**
@@ -536,49 +536,49 @@ var dxVectorMap = {
     * @publicName coordinates
     * @type array
     * @default undefined
-    * @deprecated
+    * @deprecated dxvectormapoptions_layers_dataSource
     */
     /**
     * @name dxvectormapoptions_markers_attributes
     * @publicName attributes
     * @type object
     * @default undefined
-    * @deprecated
+    * @deprecated dxvectormapoptions_layers_dataSource
     */
     /**
     * @name dxvectormapoptions_markers_text
     * @publicName text
     * @type string
     * @default undefined
-    * @deprecated
+    * @deprecated dxvectormapoptions_layers_dataSource
     */
     /**
     * @name dxvectormapoptions_markers_value
     * @publicName value
     * @type number
     * @default undefined
-    * @deprecated
+    * @deprecated dxvectormapoptions_layers_dataSource
     */
     /**
     * @name dxvectormapoptions_markers_values
     * @publicName values
     * @type array
     * @default undefined
-    * @deprecated
+    * @deprecated dxvectormapoptions_layers_dataSource
     */
     /**
     * @name dxvectormapoptions_markers_url
     * @publicName url
     * @type string
     * @default undefined
-    * @deprecated
+    * @deprecated dxvectormapoptions_layers_dataSource
     */
     markers: undefined,
     /**
     * @name dxvectormapoptions_markerSettings
     * @publicName markerSettings
     * @type object
-    * @deprecated
+    * @deprecated dxvectormapoptions_layers
     */
     markerSettings: {
         /**
@@ -818,8 +818,8 @@ var dxVectorMap = {
         * @name dxvectormapoptions_markerSettings_customize
         * @publicName customize
         * @type function(marker)
-        * @type_function_param1 marker:Marker object
-        * @type_function_return Marker configuration
+        * @type_function_param1 marker:markerObjects
+        * @type_function_return dxVectorMapOptions_markerSettings
         * @deprecated dxvectormapoptions_layers_customize
         * @notUsedInTheme
         */
@@ -893,7 +893,7 @@ var dxVectorMap = {
         * @name dxvectormapoptions_tooltip_customizetooltip
         * @publicName customizeTooltip
         * @type function(info)
-        * @type_function_param1 info:Area object|Marker object
+        * @type_function_param1 info:areaObjects|markerObjects
         * @type_function_return object
         * @default undefined
         * @notUsedInTheme
@@ -1231,9 +1231,9 @@ var dxVectorMap = {
         * @name dxvectormapoptions_legends_columnitemspacing
         * @publicName columnItemSpacing
         * @type number
-        * @default 8
+        * @default 20
         */
-        columnItemSpacing: 8,
+        columnItemSpacing: 20,
         /**
         * @name dxvectormapoptions_legends_rowitemspacing
         * @publicName rowItemSpacing
@@ -1366,10 +1366,10 @@ var dxVectorMap = {
     * @type_function_param1 e:object
     * @type_function_param1_field1 component:object
     * @type_function_param1_field2 element:object
-    * @type_function_param1_field3 jQueryEvent:jQuery-event object
-    * @type_function_param1_field4 target:Area object
+    * @type_function_param1_field3 jQueryEvent:jQueryEvent
+    * @type_function_param1_field4 target:areaObjects
     * @notUsedInTheme
-    * @deprecated
+    * @deprecated dxvectormapoptions_onClick
     * @action
     */
     onAreaClick: function() { },
@@ -1380,9 +1380,9 @@ var dxVectorMap = {
     * @type_function_param1 e:object
     * @type_function_param1_field1 component:object
     * @type_function_param1_field2 element:object
-    * @type_function_param1_field3 target:Area object
+    * @type_function_param1_field3 target:areaObjects
     * @notUsedInTheme
-    * @deprecated
+    * @deprecated dxvectormapoptions_onSelectionChanged
     * @action
     */
     onAreaSelectionChanged: function() { },
@@ -1396,7 +1396,7 @@ var dxVectorMap = {
     * @type_function_param1_field3 jQueryEvent:jQuery-event object
     * @type_function_param1_field4 target:Marker object
     * @notUsedInTheme
-    * @deprecated
+    * @deprecated dxvectormapoptions_onClick
     * @action
     */
     onMarkerClick: function() { },
@@ -1409,7 +1409,7 @@ var dxVectorMap = {
     * @type_function_param1_field2 element:object
     * @type_function_param1_field3 target:Marker object
     * @notUsedInTheme
-    * @deprecated
+    * @deprecated dxvectormapoptions_onSelectionChanged
     * @action
     */
     onMarkerSelectionChanged: function() { },
@@ -1437,26 +1437,26 @@ var dxVectorMap = {
     * @name dxvectormapmethods_getAreas
     * @publicName getAreas()
     * @return array
-    * @deprecated
+    * @deprecated dxvectormapmethods_getLayers
     */
     getAreas: function() { },
     /**
     * @name dxvectormapmethods_getMarkers
     * @publicName getMarkers()
     * @return array
-    * @deprecated
+    * @deprecated dxvectormapmethods_getLayers
     */
     getMarkers: function() { },
     /**
     * @name dxvectormapmethods_clearAreaSelection
     * @publicName clearAreaSelection()
-    * @deprecated
+    * @deprecated dxvectormapmethods_clearSelection
     */
     clearAreaSelection: function() { },
     /**
     * @name dxvectormapmethods_clearMarkerSelection
     * @publicName clearMarkerSelection()
-    * @deprecated
+    * @deprecated dxvectormapmethods_clearSelection
     */
     clearMarkerSelection: function() { },
     /**

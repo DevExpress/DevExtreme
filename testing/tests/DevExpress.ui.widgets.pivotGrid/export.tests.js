@@ -525,10 +525,29 @@ QUnit.test("Data alignment", function(assert) {
 
     var styles = dataProvider.getStyles();
 
-    assert.strictEqual(styles[dataProvider.getStyleId(0, 0)].alignment, "right", "description cell alignment");
+    assert.strictEqual(styles[dataProvider.getStyleId(0, 0)].alignment, "center", "description cell alignment");
     assert.strictEqual(styles[dataProvider.getStyleId(0, 1)].alignment, "center", "column header alignment");
     assert.strictEqual(styles[dataProvider.getStyleId(1, 0)].alignment, "left", "row header alignment");
     assert.strictEqual(styles[dataProvider.getStyleId(1, 1)].alignment, "right", "data alignment");
+});
+
+QUnit.test("Data alignment without data fields", function(assert) {
+    var dataProvider = new DataProvider({
+        items: [
+            [{ rowspan: 1, colspan: 1 }, {}, {}],
+            [{ text: "row1" }, { }, { }]
+        ],
+        dataFields: []
+    });
+
+    dataProvider.ready();
+
+    var styles = dataProvider.getStyles();
+
+    assert.strictEqual(styles[dataProvider.getStyleId(0, 0)].alignment, "center", "description cell alignment");
+    assert.strictEqual(styles[dataProvider.getStyleId(0, 1)].alignment, "center", "column header alignment");
+    assert.strictEqual(styles[dataProvider.getStyleId(1, 0)].alignment, "left", "row header alignment");
+    assert.strictEqual(styles[dataProvider.getStyleId(1, 1)].alignment, "right", "empty cell alignment");
 });
 
 QUnit.test("Data alignment. RTL", function(assert) {

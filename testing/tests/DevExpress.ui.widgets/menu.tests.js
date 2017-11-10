@@ -42,7 +42,6 @@ var DX_MENU_CLASS = "dx-menu",
     DX_CONTEXT_MENU_DELIMETER_CLASS = "dx-context-menu-content-delimiter",
     DX_MENU_HORIZONTAL = "dx-menu-horizontal",
     DX_MENU_ITEM_POPOUT_CLASS = DX_MENU_ITEM_CLASS + "-popout",
-    DX_MENU_ITEMS_CONTAINER_CLASS = DX_MENU_CLASS + "-items-container",
     DX_ADAPTIVE_HAMBURGER_BUTTON_CLASS = DX_MENU_CLASS + "-hamburger-button",
     DX_ADAPTIVE_MODE_CLASS = DX_MENU_CLASS + "-adaptive-mode",
     DX_TREEVIEW_CLASS = "dx-treeview",
@@ -71,22 +70,6 @@ QUnit.module("Render content delimiters", {
     afterEach: function() {
         this.clock.restore();
     }
-});
-
-QUnit.test("Don't render content delimiter", function(assert) {
-    var options = { _hideDelimiter: true, showFirstSubmenuMode: "onClick", items: [{ text: "itemB", items: [{ text: "itemB-A" }] }] },
-        menu = createMenuInWindow(options),
-        rootMenuItem = menu.element.find("." + DX_MENU_ITEM_CLASS).eq(0),
-        submenu,
-        delimiter;
-
-    assert.ok(menu);
-    assert.ok(!rootMenuItem.children("." + DX_CONTEXT_MENU_CLASS).length);
-    $(rootMenuItem).trigger("dxclick");
-    submenu = getSubMenuInstance(rootMenuItem);
-    assert.ok(submenu._overlay.option("visible"));
-    delimiter = submenu.$contentDelimiter;
-    assert.ok(!delimiter);
 });
 
 QUnit.test("Render horizontal content delimiter", function(assert) {
@@ -725,6 +708,57 @@ QUnit.test("Don't hide submenu when cancel is true", function(assert) {
     assert.equal(i, 1, "event triggered");
 });
 
+QUnit.test("Fire submenu events for all levels", function(assert) {
+    var handlerShowing = sinon.stub(),
+        handlerShown = sinon.stub(),
+        handlerHiding = sinon.stub(),
+        handlerHidden = sinon.stub(),
+        options = {
+            showFirstSubmenuMode: "onClick",
+            showSubmenuMode: "onClick",
+            items: [{
+                text: "rootItem",
+                items: [{
+                    text: "item1",
+                    items: [{ text: "item1-1" }]
+                }, {
+                    text: "item2",
+                    items: [{ text: "item2-1" }],
+                }]
+            }],
+            onSubmenuShowing: handlerShowing,
+            onSubmenuShown: handlerShown,
+            onSubmenuHiding: handlerHiding,
+            onSubmenuHidden: handlerHidden
+        },
+        menu = createMenu(options),
+        $rootItem = $(menu.element).find("." + DX_MENU_ITEM_CLASS).eq(0);
+
+    //show submenu
+    $($rootItem).trigger("dxclick");
+    assert.equal(handlerShowing.callCount, 1);
+    assert.equal(handlerShown.callCount, 1);
+    assert.equal(handlerHiding.callCount, 0);
+    assert.equal(handlerHidden.callCount, 0);
+
+    var submenu = getSubMenuInstance($rootItem),
+        $submenuItems = submenu.itemElements();
+
+    //show second level first time
+    $($submenuItems.eq(0)).trigger("dxclick");
+    assert.equal(handlerShowing.callCount, 2);
+    assert.equal(handlerShown.callCount, 2);
+    assert.equal(handlerHiding.callCount, 0);
+    assert.equal(handlerHidden.callCount, 0);
+
+    //show second level second time
+    $($submenuItems.eq(1)).trigger("dxclick");
+    assert.equal(handlerShowing.callCount, 3);
+    assert.equal(handlerShown.callCount, 3);
+    assert.equal(handlerHiding.callCount, 1);
+    assert.equal(handlerHidden.callCount, 1);
+});
+
 QUnit.test("Do not show contextmenu on hover with pressed mouse button", function(assert) {
     var options = { showFirstSubmenuMode: "onHover", items: [{ text: "item1", items: [{ text: "item1-1" }] }] },
         menu = createMenu(options),
@@ -1236,6 +1270,23 @@ QUnit.test("Menu should stop show submenu timeout when another level submenu was
     this.clock.tick(25);
 
     assert.ok(submenu.isOverlayVisible(), "submenu is still visible");
+});
+
+QUnit.test("click should not be blocked on menu's item", function(assert) {
+    var menu = createMenu({
+            items: [{ text: "Item 1" }]
+        }),
+        $item = $(menu.element).find("." + DX_MENU_ITEM_CLASS).eq(0),
+        clickHandler = sinon.stub();
+
+    try {
+        $(document).on("click", clickHandler);
+        $item.trigger("click");
+
+        assert.equal(clickHandler.callCount, 1, "click was handled");
+    } finally {
+        $(document).off("click");
+    }
 });
 
 
@@ -1787,7 +1838,7 @@ QUnit.test("Adaptive menu is invisible at first", function(assert) {
 
     var $button = this.$element.find("." + DX_ADAPTIVE_HAMBURGER_BUTTON_CLASS).eq(0),
         $treeview = this.$element.find("." + DX_TREEVIEW_CLASS).eq(0),
-        $itemsContainer = this.$element.find("." + DX_MENU_ITEMS_CONTAINER_CLASS).eq(0);
+        $itemsContainer = this.$element.find("." + DX_MENU_HORIZONTAL).eq(0);
 
     assert.ok($button.is(":visible"), "hamburger button is visible on init");
     assert.ok($treeview.is(":hidden"), "treeview is hidden on init");
@@ -1805,7 +1856,7 @@ QUnit.test("Adaptive menu with 'templatesRenderAsynchronously' option should tri
         templatesRenderAsynchronously: true
     });
 
-    var $itemsContainer = this.$element.find("." + DX_MENU_ITEMS_CONTAINER_CLASS).eq(0);
+    var $itemsContainer = this.$element.find("." + DX_MENU_HORIZONTAL).eq(0);
 
     assert.ok($itemsContainer.is(":visible"), "non adaptive container is visible yet");
 
@@ -1839,7 +1890,7 @@ QUnit.test("Adaptive elements should be removed after disabling adaptivity", fun
     var $adaptiveContainer = this.$element.find("." + DX_ADAPTIVE_MODE_CLASS),
         $button = this.$element.find("." + DX_ADAPTIVE_HAMBURGER_BUTTON_CLASS),
         $treeview = this.$element.find("." + DX_TREEVIEW_CLASS),
-        $itemsContainer = this.$element.find("." + DX_MENU_ITEMS_CONTAINER_CLASS).eq(0);
+        $itemsContainer = this.$element.find("." + DX_MENU_HORIZONTAL).eq(0);
 
     assert.equal($button.length, 0, "button was not rendered");
     assert.equal($treeview.length, 0, "treeview was not rendered");
@@ -2119,6 +2170,21 @@ QUnit.test("selectByClick option should be transferred to the treeview", functio
     assert.ok(treeview.option("selectByClick"), "selectByClick is correct on option changed");
 });
 
+QUnit.test("animationEnabled option should be true in the dxTreeView if animation option in the dxMenu is not null", function(assert) {
+    var menu = new Menu(this.$element, {
+            items: this.items,
+            adaptivityEnabled: true
+        }),
+        $treeview = this.$element.find("." + DX_TREEVIEW_CLASS).eq(0),
+        treeview = $treeview.dxTreeView("instance");
+
+    assert.strictEqual(treeview.option("animationEnabled"), true, "animation is enabled in the dxTreeView by default");
+
+    menu.option("animation", null);
+
+    assert.strictEqual(treeview.option("animationEnabled"), false, "animation has been changed to disabled");
+});
+
 
 QUnit.module("adaptivity: behavior", {
     beforeEach: function() {
@@ -2149,7 +2215,7 @@ QUnit.test("Adaptive menu should be shown when hamburger button clicked", functi
 
     var $button = this.$element.find("." + DX_ADAPTIVE_HAMBURGER_BUTTON_CLASS).eq(0),
         $treeview = this.$element.find("." + DX_TREEVIEW_CLASS).eq(0),
-        $itemsContainer = this.$element.find("." + DX_MENU_ITEMS_CONTAINER_CLASS).eq(0);
+        $itemsContainer = this.$element.find("." + DX_MENU_HORIZONTAL).eq(0);
 
     $button.trigger("dxclick");
 
@@ -2167,7 +2233,7 @@ QUnit.test("Adaptive menu should disappear after the second click on the hamburg
 
     var $button = this.$element.find("." + DX_ADAPTIVE_HAMBURGER_BUTTON_CLASS).eq(0),
         $treeview = this.$element.find("." + DX_TREEVIEW_CLASS).eq(0),
-        $itemsContainer = this.$element.find("." + DX_MENU_ITEMS_CONTAINER_CLASS).eq(0);
+        $itemsContainer = this.$element.find("." + DX_MENU_HORIZONTAL).eq(0);
 
     $button.trigger("dxclick");
     $button.trigger("dxclick");
@@ -2268,7 +2334,7 @@ QUnit.test("Menu should toggle it's view between adaptive and non adaptive on vi
             adaptivityEnabled: true,
             visible: false
         }),
-        $itemsContainer = this.$element.find("." + DX_MENU_ITEMS_CONTAINER_CLASS).eq(0);
+        $itemsContainer = this.$element.find("." + DX_MENU_HORIZONTAL).eq(0);
 
     $("#qunit-fixture").width(50);
     menu.option("visible", true);
@@ -2284,7 +2350,7 @@ QUnit.test("Adaptive mode should depend on summary item width but not on item co
             adaptivityEnabled: true,
             visible: false
         }),
-        $itemsContainer = this.$element.find("." + DX_MENU_ITEMS_CONTAINER_CLASS).eq(0);
+        $itemsContainer = this.$element.find("." + DX_MENU_HORIZONTAL).eq(0);
 
     $("#qunit-fixture").width(50);
     $itemsContainer.width(50);
@@ -2302,7 +2368,7 @@ QUnit.test("Adaptive mode should not show on visibility change when adaptivity i
             adaptivityEnabled: false,
             visible: false
         }),
-        $itemsContainer = this.$element.find("." + DX_MENU_ITEMS_CONTAINER_CLASS).eq(0);
+        $itemsContainer = this.$element.find("." + DX_MENU_HORIZONTAL).eq(0);
 
     $("#qunit-fixture").width(50);
     menu.option("visible", true);
@@ -2361,7 +2427,7 @@ QUnit.test("TreeView should disappear when menu transform to common view", funct
     assert.ok($treeview.is(":hidden"), "treeview is hidden");
 });
 
-QUnit.test("TreeView should scroll after expand item", function(assert) {
+QUnit.test("Overlay should change dimensions after any node expanded or collapsed", function(assert) {
     new Menu(this.$element, {
         items: this.items,
         adaptivityEnabled: true
@@ -2370,15 +2436,22 @@ QUnit.test("TreeView should scroll after expand item", function(assert) {
     var $button = this.$element.find("." + DX_ADAPTIVE_HAMBURGER_BUTTON_CLASS).eq(0),
         $treeview = this.$element.find("." + DX_TREEVIEW_CLASS).eq(0),
         $item2 = $treeview.find(".dx-treeview-item").eq(1),
-        $overlay = this.$element.find(".dx-overlay-content").first();
+        overlay = this.$element.find(".dx-overlay").dxOverlay("instance"),
+        overlayPositioned = sinon.stub(),
+        $overlayContent = overlay.content();
+
+    overlay.on("positioned", overlayPositioned);
 
     $button.trigger("dxclick");
-
-    var height = $overlay.outerHeight();
+    var height = $overlayContent.outerHeight();
 
     $item2.trigger("dxclick");
+    assert.ok($overlayContent.outerHeight() > height, "overlay should be enlarged");
+    assert.equal(overlayPositioned.callCount, 2, "overlay's position should be recalculated");
 
-    assert.equal(height, $overlay.outerHeight(), "overlay should not change it's height");
+    $item2.trigger("dxclick");
+    assert.equal($overlayContent.outerHeight(), height, "overlay should be shrinked");
+    assert.equal(overlayPositioned.callCount, 3, "overlay's position should be recalculated");
 });
 
 QUnit.test("Adaptive width limit should contain only root items", function(assert) {

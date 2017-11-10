@@ -164,6 +164,22 @@ QUnit.test("show popup on click", function(assert) {
     assert.equal(popup.option("visible"), false);
 });
 
+QUnit.test("hide popup on click on editor", function(assert) {
+    var instance = this.instance;
+
+    instance.option({
+        dataSource: [1, 2, 3]
+    });
+
+    this.togglePopup();
+
+    var popup = this.popup,
+        $field = this.$field;
+
+    $field.trigger("dxclick");
+    assert.ok(!popup.option("visible"), "popup hides on click");
+});
+
 QUnit.test("selecting item on click", function(assert) {
     this.instance.option({
         dataSource: [1, 2, 3]
@@ -2097,6 +2113,21 @@ QUnit.test("shading should present", function(assert) {
 
     instance.option("shading", false);
     assert.ok(!$wrapper.hasClass(OVERLAY_SHADER_CLASS));
+});
+
+QUnit.test("popup should not be hidden after outsideClick", function(assert) {
+    var $lookup = $("#lookupOptions"),
+
+        instance = $lookup.dxLookup({
+            dataSource: [1, 2, 3]
+        }).dxLookup("instance");
+
+    openPopupWithList(instance);
+
+    var $overlay = $(toSelector(OVERLAY_CONTENT_CLASS)).eq(0);
+
+    $(document).trigger("dxpointerdown");
+    assert.equal($overlay.is(":visible"), true, "overlay is not hidden");
 });
 
 QUnit.test("lookup popup should be hidden after click outside was present", function(assert) {

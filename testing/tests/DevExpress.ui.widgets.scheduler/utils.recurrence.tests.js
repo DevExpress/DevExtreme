@@ -70,10 +70,52 @@ QUnit.test('getDatesByRecurrence should not handled strings only with INTERVAL',
     assert.deepEqual(dates, [], 'result is right');
 });
 
+QUnit.test('getDatesByRecurrence should handle strings with DAILY & BYDAY=SU rules and start in Sunday', function(assert) {
+    var dates = recurrenceUtils.getDatesByRecurrence({ rule: 'FREQ=DAILY;BYDAY=SU', start: new Date(2015, 4, 24), min: new Date(2015, 4, 20), max: new Date(2015, 5, 7) });
+
+    assert.deepEqual(dates, [new Date(2015, 4, 24), new Date(2015, 4, 31), new Date(2015, 5, 7)], 'dates are right');
+});
+
+QUnit.test('getDatesByRecurrence should handle strings with DAILY & BYDAY=MO rules and WKST=WE', function(assert) {
+    var dates = recurrenceUtils.getDatesByRecurrence({ rule: 'FREQ=DAILY;WKST=WE;BYDAY=MO', start: new Date(2015, 4, 18), min: new Date(2015, 4, 18), max: new Date(2015, 5, 7) });
+
+    assert.deepEqual(dates, [new Date(2015, 4, 25), new Date(2015, 5, 1)], 'dates are right');
+});
+
+QUnit.test('getDatesByRecurrence should handle strings with DAILY, BYDAY = whole week, WKST rules', function(assert) {
+    var dates = recurrenceUtils.getDatesByRecurrence({ rule: 'FREQ=DAILY;BYDAY=SU,MO,TU,WE,TH,FR,SA;WKST=WE', start: new Date(2015, 4, 18), min: new Date(2015, 4, 18), max: new Date(2015, 4, 26) });
+
+    assert.deepEqual(dates, [new Date(2015, 4, 20), new Date(2015, 4, 21), new Date(2015, 4, 22), new Date(2015, 4, 23), new Date(2015, 4, 24), new Date(2015, 4, 25), new Date(2015, 4, 26)], 'dates are right');
+});
+
 QUnit.test('getDatesByRecurrence should handle strings with COUNT', function(assert) {
     var dates = recurrenceUtils.getDatesByRecurrence({ rule: 'FREQ=DAILY;INTERVAL=3;COUNT=2', start: new Date(2015, 0, 1), min: new Date(2015, 0, 1), max: new Date(2015, 0, 21) });
 
     assert.deepEqual(dates, [new Date(2015, 0, 1), new Date(2015, 0, 4)], 'date are right');
+});
+
+QUnit.test('getDatesByRecurrence should handle strings with COUNT without range', function(assert) {
+    var dates = recurrenceUtils.getDatesByRecurrence({ rule: 'FREQ=WEEKLY;BYDAY=MO,WE,FR;COUNT=4', start: new Date(2015, 0, 1), min: new Date(2015, 0, 1), max: new Date(2015, 0, 21) });
+
+    assert.deepEqual(dates, [new Date(2015, 0, 2), new Date(2015, 0, 5), new Date(2015, 0, 7), new Date(2015, 0, 9)], 'date are right');
+});
+
+QUnit.test('getDatesByRecurrence should handle strings with COUNT & BYDAY', function(assert) {
+    var dates = recurrenceUtils.getDatesByRecurrence({ rule: 'FREQ=WEEKLY;BYDAY=MO,WE,FR;COUNT=10', start: new Date(2015, 0, 1), min: new Date(2015, 0, 1), max: new Date(2015, 0, 20) });
+
+    assert.deepEqual(dates, [new Date(2015, 0, 2), new Date(2015, 0, 5), new Date(2015, 0, 7), new Date(2015, 0, 9), new Date(2015, 0, 12), new Date(2015, 0, 14), new Date(2015, 0, 16), new Date(2015, 0, 19)], 'date are right');
+});
+
+QUnit.test('getDatesByRecurrence should handle strings with COUNT & BYMONTH', function(assert) {
+    var dates = recurrenceUtils.getDatesByRecurrence({ rule: 'FREQ=MONTHLY;BYMONTHDAY=2;COUNT=10', start: new Date(2017, 0, 1), min: new Date(2017, 0, 1), max: new Date(2017, 11, 20) });
+
+    assert.deepEqual(dates, [new Date(2017, 0, 2), new Date(2017, 1, 2), new Date(2017, 2, 2), new Date(2017, 3, 2), new Date(2017, 4, 2), new Date(2017, 5, 2), new Date(2017, 6, 2), new Date(2017, 7, 2), new Date(2017, 8, 2), new Date(2017, 9, 2)], 'date are right');
+});
+
+QUnit.test('getDatesByRecurrence should handle strings with BYYEARDAY, COUNT & YEARLY', function(assert) {
+    var dates = recurrenceUtils.getDatesByRecurrence({ rule: 'FREQ=YEARLY;BYYEARDAY=200,201;COUNT=10', start: new Date(2017, 0, 1), min: new Date(2017, 6, 1), max: new Date(2018, 7, 1) });
+
+    assert.deepEqual(dates, [new Date(2017, 6, 19), new Date(2017, 6, 20), new Date(2018, 6, 19), new Date(2018, 6, 20)], 'date are right');
 });
 
 QUnit.test('getDatesByRecurrence should not have any string if count is out', function(assert) {
@@ -118,10 +160,26 @@ QUnit.test('getDatesByRecurrence should handle strings with BYMONTHDAY', functio
     assert.deepEqual(dates, [new Date(2015, 0, 2), new Date(2015, 1, 2), new Date(2015, 2, 2)], 'date are right');
 });
 
+QUnit.test('getDatesByRecurrence should handle strings with MONTHLY & BYDAY', function(assert) {
+    var dates = recurrenceUtils.getDatesByRecurrence({ rule: 'FREQ=MONTHLY;BYDAY=MO', start: new Date(2017, 8, 25), min: new Date(2017, 8, 20), max: new Date(2017, 9, 20) });
+
+    assert.deepEqual(dates, [new Date(2017, 8, 25), new Date(2017, 9, 2), new Date(2017, 9, 9), new Date(2017, 9, 16)], 'date are right');
+});
+
 QUnit.test('getDatesByRecurrence should handle strings with BYMONTHDAY value < 0', function(assert) {
     var dates = recurrenceUtils.getDatesByRecurrence({ rule: 'FREQ=MONTHLY;BYMONTHDAY=-1', start: new Date(2015, 0, 1), min: new Date(2015, 0, 1), max: new Date(2015, 5, 19) });
 
     assert.deepEqual(dates, [new Date(2015, 0, 31), new Date(2015, 1, 28), new Date(2015, 2, 31), new Date(2015, 3, 30), new Date(2015, 4, 31)], 'dates are right');
+});
+
+QUnit.test('getDatesByRecurrence should handle strings with BYMONTHDAY value = -1, recStart - last day of Month (31st) (T515652)', function(assert) {
+    var firstRecurrence = recurrenceUtils.getDatesByRecurrence({ rule: 'FREQ=MONTHLY;BYMONTHDAY=-1', start: new Date(2017, 4, 31), min: new Date(2017, 4, 31), max: new Date(2017, 6, 1) });
+
+    assert.deepEqual(firstRecurrence, [new Date(2017, 4, 31), new Date(2017, 5, 30)], 'dates are right');
+
+    var secondRecurrence = recurrenceUtils.getDatesByRecurrence({ rule: 'FREQ=MONTHLY;BYMONTHDAY=-1', start: new Date(2017, 2, 31), min: new Date(2017, 2, 31), max: new Date(2017, 4, 1) });
+
+    assert.deepEqual(secondRecurrence, [new Date(2017, 2, 31), new Date(2017, 3, 30)], 'dates are right');
 });
 
 QUnit.test('getDatesByRecurrence should handle strings with BYMONTHDAY value = -31', function(assert) {
@@ -146,6 +204,12 @@ QUnit.test('getDatesByRecurrence should handle strings with several value in BYM
     var dates = recurrenceUtils.getDatesByRecurrence({ rule: 'FREQ=MONTHLY;BYMONTHDAY=11,22', start: new Date(2015, 0, 1), min: new Date(2015, 0, 1), max: new Date(2015, 2, 19) });
 
     assert.deepEqual(dates, [new Date(2015, 0, 11), new Date(2015, 0, 22), new Date(2015, 1, 11), new Date(2015, 1, 22), new Date(2015, 2, 11)], 'date are right');
+});
+
+QUnit.test('getDatesByRecurrence should handle strings with BYMONTHDAY correctly when recurrenceDate is out of range', function(assert) {
+    var dates = recurrenceUtils.getDatesByRecurrence({ rule: 'FREQ=MONTHLY;BYMONTHDAY=26', start: new Date(2015, 4, 25, 9, 30), end: new Date(2015, 4, 26, 11, 30), min: new Date(2015, 4, 27), max: new Date(2015, 4, 27, 23, 59) });
+
+    assert.deepEqual(dates, [], 'date are right');
 });
 
 QUnit.test('getDatesByRecurrence should handle strings with BYMONTH & BYMONTHDAY', function(assert) {
@@ -327,6 +391,12 @@ QUnit.test('getDatesByRecurrence should handle strings correctly if interval sta
     var dates = recurrenceUtils.getDatesByRecurrence({ rule: 'FREQ=WEEKLY;BYDAY=MO,TH,SA', start: new Date(2015, 2, 12), min: new Date(2015, 2, 12), max: new Date(2015, 2, 18, 23, 59) });
 
     assert.deepEqual(dates, [new Date(2015, 2, 12), new Date(2015, 2, 14), new Date(2015, 2, 16)], 'dates are right');
+});
+
+QUnit.test('getDatesByRecurrence should handle strings correctly for WEEKLY rule with BYDAY for next week', function(assert) {
+    var dates = recurrenceUtils.getDatesByRecurrence({ rule: 'FREQ=WEEKLY;BYDAY=MO,TU,WE,TH', start: new Date(2017, 5, 29, 9), min: new Date(2017, 6, 3), max: new Date(2017, 6, 7, 23, 59) });
+
+    assert.deepEqual(dates, [new Date(2017, 6, 3, 9), new Date(2017, 6, 4, 9), new Date(2017, 6, 5, 9), new Date(2017, 6, 6, 9)], 'dates are right');
 });
 
 QUnit.test('getRecurrenceString should handle objects with freq', function(assert) {

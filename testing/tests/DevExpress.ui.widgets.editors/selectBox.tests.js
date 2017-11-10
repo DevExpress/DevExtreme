@@ -52,6 +52,7 @@ var WIDGET_CLASS = "dx-selectbox",
     POPUP_CLASS = "dx-selectbox-popup",
     LIST_ITEM_CLASS = "dx-list-item",
     LIST_ITEM_SELECTED_CLASS = "dx-list-item-selected",
+    DX_DROP_DOWN_BUTTON = "dx-dropdowneditor-button",
     STATE_FOCUSED_CLASS = "dx-state-focused",
     TEXTBOX_CLASS = "dx-texteditor-input",
     TEXTEDITOR_BUTTONS_CONTAINER_CLASS = "dx-texteditor-buttons-container",
@@ -352,14 +353,16 @@ QUnit.test("click on textbox toggle popup visibility", function(assert) {
 
 QUnit.test("click on arrow toggle popup visibility", function(assert) {
     var $element = $("#selectBox").dxSelectBox({ items: [0, 1, 2] }),
-        $list = $element.find(".dx-list"),
+        popup = $element.dxSelectBox("instance")._popup,
         $arrow = $element.find(".dx-dropdowneditor-icon");
 
-    assert.ok($list.is(':hidden'), "when start list is hidden");
-    pointerMock($arrow).start().click();
-    assert.ok($list.is(':visible'), "when we click on arrow - show list");
-    pointerMock($arrow).start().click();
-    assert.ok($list.is(':hidden'), "when we click on arrow once again - hide list");
+    assert.notOk(popup.option("visible"), "when start popup is hidden");
+
+    $arrow.trigger("dxclick");
+    assert.ok(popup.option("visible"), "when we click on arrow - show popup");
+
+    $arrow.trigger("dxclick");
+    assert.notOk(popup.option("visible"), "when we click on arrow once again - hide popup");
 });
 
 QUnit.test("click on disabled selectbox doesn't toggle popup visibility", function(assert) {
@@ -1912,6 +1915,52 @@ QUnit.test("Filter should be cleared if the 'onCustomItemCreating' deferred is r
     assert.equal(selectBox.content().find(".dx-list-item").length, 3, "filter was cleared");
 });
 
+QUnit.test("filter should be cleared if all text was removed using backspace", function(assert) {
+    var $selectBox = $("#selectBox").dxSelectBox({
+            searchEnabled: true,
+            opened: true,
+            items: [1, 2, 3]
+        }),
+        selectBox = $selectBox.dxSelectBox("instance"),
+        $input = $selectBox.find(".dx-texteditor-input"),
+        keyboard = keyboardMock($input);
+
+    keyboard.type("456");
+    this.clock.tick(TIME_TO_WAIT);
+    assert.equal(selectBox.content().find(".dx-list-item").length, 0, "filter is applied");
+
+    $input.get(0).setSelectionRange(0, 3);
+    keyboard.caret({ start: 0, end: 3 });
+    keyboard.press("backspace");
+    this.clock.tick(TIME_TO_WAIT);
+
+    assert.equal($input.val(), "", "value was cleared");
+    assert.equal(selectBox.content().find(".dx-list-item").length, 3, "filter was cleared");
+});
+
+QUnit.test("search timer should not be cleared when the widget is opening", function(assert) {
+    var $selectBox = $("#selectBox").dxSelectBox({
+            searchEnabled: true,
+            searchTimeout: 100,
+            openOnFieldClick: false,
+            opened: true,
+            items: [1, 2, 3]
+        }),
+        selectBox = $selectBox.dxSelectBox("instance"),
+        $input = $selectBox.find(".dx-texteditor-input"),
+        $button = $selectBox.find(".dx-dropdowneditor-button"),
+        keyboard = keyboardMock($input);
+
+    keyboard.type("4");
+    this.clock.tick(100);
+    assert.equal(selectBox.content().find(".dx-list-item").length, 0, "items are filtered");
+
+    keyboard.press("backspace");
+    $button.trigger("dxclick");
+    this.clock.tick(TIME_TO_WAIT);
+    assert.equal(selectBox.content().find(".dx-list-item").length, 3, "filter was cleared");
+});
+
 QUnit.test("Custom value should be selected in list if items were modified on custom item creation", function(assert) {
     var items = [1, 2, 3],
         $selectBox = $("#selectBox").dxSelectBox({
@@ -2092,6 +2141,30 @@ QUnit.test("data is filtered when min search length is exceeded", function(asser
     assert.equal($items.length, 1, "items was filtered");
 });
 
+QUnit.test("data is filtered correctly for grouped items", function(assert) {
+    var $selectBox = $("#selectBox").dxSelectBox({
+        dataSource: {
+            store: [{ "value": "one", "groupName": "group1" }, { "value": "two", "groupName": "group1" }],
+            group: 'groupName'
+        },
+        valueExpr: 'value',
+        displayExpr: 'value',
+        grouped: true,
+        searchEnabled: true,
+        searchTimeout: 0,
+        searchMode: "startswith",
+        opened: true
+    });
+
+    var $input = $selectBox.find("." + TEXTEDITOR_INPUT_CLASS);
+    var keyboard = keyboardMock($input);
+
+    keyboard.type("o");
+
+    var $items = $(".dx-list-item");
+    assert.equal($items.length, 1, "items was filtered");
+});
+
 QUnit.test("data is reset to first page after reset filter", function(assert) {
     var $selectBox = $("#selectBox").dxSelectBox({
         dataSource: ["one", "two", "three"],
@@ -2199,6 +2272,19 @@ QUnit.test("dataSource load is not called when showDataBeforeSearch is false", f
     } finally {
         dataSourceLoadSpy.restore();
     }
+});
+
+QUnit.test("Widget should works correctly after setting dataSource to null", function(assert) {
+    var dataSource = new DataSource(["one", "two", "three"]);
+    var selectBox = $("#selectBox").dxSelectBox({
+        dataSource: dataSource,
+    }).dxSelectBox("instance");
+
+    selectBox.option("dataSource", null);
+    selectBox.open();
+
+    var $list = $(".dx-list");
+    assert.equal($list.dxList("option", "noDataText"), "No data to display", "SelectBox works correctly");
 });
 
 QUnit.testInActiveWindow("Value should be null after input is cleared and enter key is tapped", function(assert) {
@@ -2844,6 +2930,35 @@ QUnit.test("the selected item should be visible if the data source is loaded aft
     });
 });
 
+QUnit.test("selectbox should not render own components if it was disposed (T517486)", function(assert) {
+    this.clock = sinon.useFakeTimers();
+
+    try {
+        var instance = $("#selectBox").dxSelectBox({
+            dataSource: {
+                load: function() {
+                    return [1];
+                },
+                byKey: function() {
+                    var d = $.Deferred();
+                    setTimeout(function() {
+                        d.resolveWith(1);
+                    }, 200);
+                    return d.promise();
+                }
+            }
+        }).dxSelectBox("instance");
+
+        instance.option("value", "1");
+        instance.element().remove();
+        this.clock.tick(200);
+        assert.ok(true, "exception is not expected");
+    } catch(e) {
+        assert.ok(false, "Exception: " + e);
+    } finally {
+        this.clock.restore();
+    }
+});
 
 QUnit.module("regressions", moduleSetup);
 
@@ -3271,6 +3386,22 @@ QUnit.test("Enter and escape key press does not prevent default when popup is no
     assert.equal(prevented, 0, "defaults has not prevented on enter and escape keys");
 });
 
+QUnit.test("Escape key press does not throw any errors when popup is not opened", function(assert) {
+    var $element = $("#selectBox").dxSelectBox({
+            items: [0, 1, 2],
+            value: 1,
+            focusStateEnabled: true,
+            deferRendering: true,
+            opened: false
+        }),
+        $input = $element.find("." + TEXTEDITOR_INPUT_CLASS),
+        keyboard = keyboardMock($input);
+
+    keyboard.keyDown("esc");
+
+    assert.ok(true, "SelectBox works correctly");
+});
+
 QUnit.test("T243237: dxSelectBox keyboard navigation: up arrow can not circulate through the values, as down arrow", function(assert) {
     var $element = $("#selectBox").dxSelectBox({
             items: [0, 1, 2],
@@ -3586,6 +3717,51 @@ QUnit.testInActiveWindow("value should be reset on the 'tab' press after input v
     assert.equal(selectBox.option("value"), null, "widget value is reset");
 });
 
+QUnit.test("value should be restored after the focusout when selection was not changed", function(assert) {
+    if(devices.real().deviceType !== "desktop") {
+        assert.ok(true, "not actual");
+        return;
+    }
+
+    var items = ["first", "second"],
+        $selectBox = $("#selectBox").dxSelectBox({
+            items: items,
+            opened: true,
+            value: items[0]
+        }),
+        $input = $selectBox.find("." + TEXTEDITOR_INPUT_CLASS),
+        keyboard = keyboardMock($input);
+
+    keyboard.keyDown(KEY_DOWN);
+    assert.equal($input.val(), "second", "value has been changed");
+
+    $input.blur();
+    assert.equal($input.val(), "first", "value has been restored");
+});
+
+QUnit.test("value should be restored after the drop down button pressed when selection was not changed", function(assert) {
+    if(devices.real().deviceType !== "desktop") {
+        assert.ok(true, "not actual");
+        return;
+    }
+
+    var items = ["first", "second"],
+        $selectBox = $("#selectBox").dxSelectBox({
+            items: items,
+            opened: true,
+            value: items[0]
+        }),
+        $input = $selectBox.find("." + TEXTEDITOR_INPUT_CLASS),
+        $dropDownButton = $selectBox.find("." + DX_DROP_DOWN_BUTTON),
+        keyboard = keyboardMock($input);
+
+    keyboard.keyDown(KEY_DOWN);
+    assert.equal($input.val(), "second", "value has been changed");
+
+    $dropDownButton.trigger("dxclick");
+    assert.equal($input.val(), "first", "value has been restored");
+});
+
 
 QUnit.module("keyboard navigation 'TAB' button", moduleSetup);
 
@@ -3869,6 +4045,28 @@ QUnit.test("value must appear in the INPUT ​​after removal of value with sea
     $item = $(".dx-list-item").eq(1);
     $item.trigger("dxclick");
     assert.equal($input.val(), "b", "item should be choose after click on list item");
+});
+
+QUnit.testInActiveWindow("dxSelectBox should not filter a dataSource when the widget disposing (T535861)", function(assert) {
+    var instance = $("#selectBox").dxSelectBox({
+            dataSource: [1, 2],
+            acceptCustomValue: true,
+            searchEnabled: true,
+            onCustomItemCreating: function(e) {
+                e.element.remove();
+                return "";
+            }
+        }).dxSelectBox("instance"),
+        $input = instance.element().find("." + TEXTEDITOR_INPUT_CLASS),
+        keyboard = keyboardMock($input),
+        filterDataSourceStub = sinon.stub(instance, "_filterDataSource");
+
+    keyboard
+        .focus()
+        .type("t")
+        .change();
+
+    assert.ok(filterDataSourceStub.notCalled, "dataSource didn't filter when widget disposed");
 });
 
 

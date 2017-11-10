@@ -260,7 +260,7 @@ var Autocomplete = DropDownList.inherit({
     },
 
     _searchHandler: function(e) {
-        if(this._isControlKey(e.which || e.keyCode)) {
+        if(this._isControlKey(e.key)) {
             return;
         }
 

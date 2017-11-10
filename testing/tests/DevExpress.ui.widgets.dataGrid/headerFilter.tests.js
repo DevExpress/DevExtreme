@@ -15,6 +15,7 @@ require("generic_light.css!");
 require("ui/data_grid/ui.data_grid");
 
 var $ = require("jquery"),
+    ArrayStore = require("data/array_store"),
     noop = require("core/utils/common").noop,
     ODataStore = require("data/odata/store"),
     devices = require("core/devices"),
@@ -1175,7 +1176,7 @@ QUnit.test("Update when select all items", function(assert) {
 
     assert.equal(that.columnsController.updateOptions[0].columnIndex, 0, "column index");
     assert.deepEqual(that.columnsController.updateOptions[0].optionName, {
-        filterValues: undefined,
+        filterValues: null, //T500956
         filterType: "exclude"
     }, "column options");
 });
@@ -1518,9 +1519,13 @@ QUnit.test("Checking filterValues of the column after deselect item of a loaded 
 
     this.headerFilterController.showHeaderFilterMenu(0);
 
-    //act
     $popupContent = this.headerFilterView.getPopupContainer().content();
     $popupContent.find(".dx-list-item").first().trigger("dxclick"); // deselect first item
+
+    //assert
+    assert.ok($popupContent.find(".dx-list-select-all-checkbox").hasClass("dx-checkbox-indeterminate"), "checkbox in an indeterminate state");
+
+    //act
     $popupContent.parent().find(".dx-button").eq(0).trigger("dxclick"); // apply filter
     this.clock.tick(500);
 
@@ -2130,7 +2135,7 @@ QUnit.test("Header Filter when grid with CustomStore when remote grouping and gr
     assert.strictEqual($popupContent.find(".dx-treeview-item").length, 1, "header items count");
     assert.strictEqual($popupContent.find(".dx-treeview-item").eq(0).text(), "0 - 100", "item 1 text");
     assert.strictEqual(loadArgs.length, 2, "load count");
-    assert.deepEqual(loadArgs[1].group, [{ selector: "Test1", groupInterval: 100, isExpanded: false }, { selector: "Test1", groupInterval: 10, isExpanded: false }], "header filter load group");
+    assert.deepEqual(loadArgs[1].group, [{ selector: "Test1", groupInterval: 100, isExpanded: true }, { selector: "Test1", groupInterval: 10, isExpanded: false }], "header filter load group");
     assert.deepEqual(loadArgs[1].skip, undefined, "header filter load skip");
     assert.deepEqual(loadArgs[1].take, undefined, "header filter load take");
 });
@@ -3088,6 +3093,34 @@ QUnit.test("Proxy customQueryParams load parameter during headerFilter operation
     assert.deepEqual(loadOptions.customQueryParams, { param: "test" }, "custom query param");
 });
 
+QUnit.test("dataSource group parameter should contains compare option if column has sortingMethod callback", function(assert) {
+    //arrange
+    var that = this,
+        column;
+
+    var context;
+    that.options.columns[0].sortingMethod = function(x, y) {
+        context = this;
+        return x - y;
+    };
+
+    that.options.dataSource = [];
+
+    that.setupDataGrid();
+
+    column = that.columnsController.getVisibleColumns()[0];
+
+    //act
+    var dataSource = that.headerFilterController.getDataSource(column);
+    that.clock.tick();
+
+    //assert
+    assert.equal(dataSource.group.length, 1, "one group parameter");
+    assert.equal(dataSource.group[0].selector({ Test1: 5 }), 5, "group selector");
+    assert.equal(dataSource.group[0].compare(10, 1), 9, "group compare");
+    assert.equal(context.dataField, "Test1", "compare context");
+});
+
 //T349706
 QUnit.test("Not apply filter when selected all items", function(assert) {
     //arrange
@@ -3129,7 +3162,7 @@ QUnit.test("Not apply filter when selected all items", function(assert) {
     column = that.columnsController.getVisibleColumns()[0];
     assert.ok(!$popupContent.is(":visible"), "not visible popup");
     assert.ok(!callApplyFilter, "not apply filter");
-    assert.strictEqual(column.filterValues, undefined, "filterValues of the first column");
+    assert.strictEqual(column.filterValues, null, "filterValues of the first column");
     assert.strictEqual(column.filterType, "exclude", "filterType of the first column");
 });
 
@@ -3157,4 +3190,81 @@ QUnit.test("Draw header filter indicator for band columns", function(assert) {
     assert.ok($cells.eq(4).find(".dx-header-filter").length, "has header filter indicator");
     assert.ok($cells.eq(5).find(".dx-header-filter").length, "has header filter indicator");
     assert.ok($cells.eq(6).find(".dx-header-filter").length, "has header filter indicator");
+});
+
+//T534059
+QUnit.test("Header filter should consider the 'trueText' and 'falseText' column options", function(assert) {
+    //arrange
+    var that = this,
+        $itemElements,
+        $testElement = $("#container");
+
+    that.options.columns = [{
+        dataField: "field",
+        dataType: "boolean",
+        trueText: "Yes",
+        falseText: "No"
+    }];
+    that.setupDataGrid({
+        controllers: {
+            data: new MockDataController({ items: [{ field: undefined }, { field: true }, { field: false }] })
+        }
+    });
+    that.columnHeadersView.render($testElement);
+    that.headerFilterView.render($testElement);
+
+    //act
+    that.headerFilterController.showHeaderFilterMenu(0);
+
+    //assert
+    $itemElements = that.headerFilterView.getPopupContainer().content().find(".dx-list-item");
+    assert.equal($itemElements.length, 3, "count item");
+    assert.strictEqual($itemElements.eq(0).text(), "(Blanks)", "text of the first item");
+    assert.strictEqual($itemElements.eq(1).text(), "No", "text of the second item");
+    assert.strictEqual($itemElements.eq(2).text(), "Yes", "text of the third item");
+});
+
+//T544400
+QUnit.test("Updating selection state should be correct when headerFilter.dataSource as ArrayStore", function(assert) {
+    //arrange
+    var that = this,
+        $listItems,
+        $popupContent,
+        $cancelButton,
+        $testElement = $("#container");
+
+    that.options.dataSource = that.items;
+    that.options.columns[0] = {
+        dataField: "Test1",
+        allowHeaderFiltering: true,
+        headerFilter: {
+            dataSource: new ArrayStore([
+                { value: "value1", text: "Value1" },
+                { value: "value2", text: "Value2" }
+            ])
+        }
+    };
+    that.setupDataGrid();
+    that.columnHeadersView.render($testElement);
+    that.headerFilterView.render($testElement);
+
+    that.headerFilterController.showHeaderFilterMenu(0);
+
+    $popupContent = that.headerFilterView.getPopupContainer().content();
+    $listItems = $popupContent.find(".dx-list-item");
+    $listItems.first().trigger("dxclick");
+
+    //assert
+    assert.ok($listItems.first().find(".dx-checkbox-checked").length, "checkbox checked");
+
+    //act
+    $cancelButton = $popupContent.parent().find(".dx-button").last();
+    $cancelButton.trigger("dxclick");
+
+    that.headerFilterController.showHeaderFilterMenu(0);
+    $popupContent = that.headerFilterView.getPopupContainer().content();
+    $listItems = $popupContent.find(".dx-list-item");
+
+    //assert
+    assert.notOk($listItems.first().find(".dx-checkbox-checked").length, "checkbox unchecked");
 });

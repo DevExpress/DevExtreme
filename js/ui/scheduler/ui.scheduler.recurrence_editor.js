@@ -268,7 +268,7 @@ var SchedulerRecurrenceEditor = Editor.inherit({
             min: 1,
             value: interval,
             showSpinButtons: true,
-            useTouchSpinButtons: false,
+            useLargeSpinButtons: false,
             onValueChanged: this._valueChangedHandler.bind(this)
         });
 
@@ -500,7 +500,7 @@ var SchedulerRecurrenceEditor = Editor.inherit({
             min: 1,
             max: 31,
             showSpinButtons: true,
-            useTouchSpinButtons: false,
+            useLargeSpinButtons: false,
             value: byMonthDay,
             onValueChanged: this._valueChangedHandler.bind(this)
         });
@@ -528,24 +528,23 @@ var SchedulerRecurrenceEditor = Editor.inherit({
     _renderRepeatEndSwitch: function() {
         var that = this;
         var $switchEndEditor = $("<div>")
-            .addClass(SWITCH_REPEAT_END_EDITOR)
-            .addClass(FIELD_VALUE_CLASS),
-
+                .addClass(SWITCH_REPEAT_END_EDITOR)
+                .addClass(FIELD_VALUE_CLASS),
             $switchEndLabel = $("<div>")
-                            .text(messageLocalization.format("dxScheduler-recurrenceEnd") + ":")
-                            .addClass(INTERVAL_EDITOR + LABEL_POSTFIX)
-                            .addClass(FIELD_LABEL_CLASS);
-
-        this._switchEndEditor = this._createComponent($switchEndEditor, Switch, {
-            value: that._recurrenceRule.repeatableRule() ? true : false,
-            onValueChanged: this._repeatEndSwitchValueChangeHandler.bind(this)
-        });
+                .text(messageLocalization.format("dxScheduler-recurrenceEnd") + ":")
+                .addClass(INTERVAL_EDITOR + LABEL_POSTFIX)
+                .addClass(FIELD_LABEL_CLASS);
 
         $("<div>")
             .addClass(FIELD_CLASS)
             .addClass(REPEAT_END_EDITOR_FIELD)
             .append($switchEndLabel, $switchEndEditor)
             .appendTo(this._$container);
+
+        this._switchEndEditor = this._createComponent($switchEndEditor, Switch, {
+            value: that._recurrenceRule.repeatableRule() ? true : false,
+            onValueChanged: this._repeatEndSwitchValueChangeHandler.bind(this)
+        });
 
         this._setAriaDescribedBy(this._switchEndEditor, $switchEndLabel);
     },
@@ -667,7 +666,7 @@ var SchedulerRecurrenceEditor = Editor.inherit({
             field: "count",
             min: 1,
             showSpinButtons: true,
-            useTouchSpinButtons: false,
+            useLargeSpinButtons: false,
             value: repeatCount,
             onValueChanged: this._repeatCountValueChangeHandler.bind(this)
         });

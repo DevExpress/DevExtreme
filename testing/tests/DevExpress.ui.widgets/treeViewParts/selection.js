@@ -151,6 +151,35 @@ QUnit.test("all nodes should have selected class if they have selected property"
     assert.equal($nodes.length, 3, "all nodes should have selected class");
 });
 
+QUnit.test("should not fire an error when try to select unspecified item", function(assert) {
+    var items = [{ text: "item 1", selected: true, expanded: true, items: [{ text: "item 11", selected: true }] }, { text: "item 2", selected: true }],
+        treeview = initTree({
+            items: items
+        }).dxTreeView("instance");
+
+    try {
+        treeview.selectItem(null);
+    } catch(e) {
+        assert.notOk(true, "Error has been raised");
+    } finally {
+        assert.ok(true);
+    }
+});
+
+QUnit.test("should not fire an error when item contains 'nodeType' field", function(assert) {
+    var treeview = initTree({
+        items: [{ id: 1, nodeType: "test" }]
+    }).dxTreeView("instance");
+
+    try {
+        treeview.selectItem({ id: 1, nodeType: "test" });
+    } catch(e) {
+        assert.notOk(true, "Error has been raised");
+    } finally {
+        assert.step("Test completed");
+    }
+});
+
 
 QUnit.module("selection single");
 

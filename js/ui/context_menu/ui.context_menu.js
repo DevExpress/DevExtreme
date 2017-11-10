@@ -352,7 +352,8 @@ var ContextMenu = MenuBase.inherit((function() {
 
         _expandSubmenuHandler: function($items, location) {
             var $curItem = this._getActiveItem(true),
-                node = this._dataAdapter.getNodeByItem(this._getItemData($curItem)),
+                itemData = this._getItemData($curItem),
+                node = this._dataAdapter.getNodeByItem(itemData),
                 isItemHasSubmenu = this._hasSubmenu(node),
                 $submenu = $curItem.children("." + DX_SUBMENU_CLASS);
 
@@ -374,7 +375,6 @@ var ContextMenu = MenuBase.inherit((function() {
                 this._overlay = null;
             }
             this._detachShowContextMenuEvents(this._getTarget());
-            this.option("templatesRenderAsynchronously") && clearTimeout(this._drawSubmenuTimeout);
             this.callBase();
         },
 
@@ -390,6 +390,10 @@ var ContextMenu = MenuBase.inherit((function() {
         _renderContentImpl: function() {
             this._detachShowContextMenuEvents(this._getTarget());
             this._attachShowContextMenuEvents();
+        },
+
+        _attachKeyboardEvents: function() {
+            !this._keyboardProcessor && this._focusTarget().length && this.callBase();
         },
 
         _renderContextMenuOverlay: function() {
@@ -669,7 +673,6 @@ var ContextMenu = MenuBase.inherit((function() {
                     .parent("." + DX_MENU_ITEM_WRAPPER_CLASS).siblings()
                     .find("." + DX_MENU_ITEM_EXPANDED_CLASS);
 
-
             if($expandedItems.length) {
                 $expandedItems.removeClass(DX_MENU_ITEM_EXPANDED_CLASS);
                 this._hideSubmenu($expandedItems.find("." + DX_SUBMENU_CLASS));
@@ -755,8 +758,6 @@ var ContextMenu = MenuBase.inherit((function() {
         //TODO: try to simplify it
         _updateSubmenuVisibilityOnClick: function(actionArgs) {
             if(!actionArgs.args.length) return;
-
-            actionArgs.args[0].jQueryEvent.stopPropagation();
 
             var $itemElement = actionArgs.args[0].itemElement,
                 itemData = actionArgs.args[0].itemData,

@@ -31,76 +31,88 @@ var $ = require("../../core/renderer"),
     _setCanvasValues = vizUtils.setCanvasValues,
     DEFAULT_OPACITY = 0.3,
 
-    REINIT_REFRESH_ACTION_OPTIONS = [
-        "adaptiveLayout",
-        "crosshair",
+    REFRESH_SERIES_DATA_INIT_ACTION_OPTIONS = [
+        "series",
+        "commonSeriesSettings",
+        "containerBackgroundColor",
+        "dataPrepareSettings",
+        "seriesSelectionMode",
+        "pointSelectionMode",
+        "synchronizeMultiAxes"
+    ],
+
+    REFRESH_SERIES_FAMILIES_ACTION_OPTIONS = [
         "equalBarWidth",
         "minBubbleSize",
         "maxBubbleSize",
         "barWidth",
         "negativesAsZeroes",
-        "negativesAsZeros", //misspelling case
+        "negativesAsZeros" //misspelling case
+    ],
+
+    FORCE_RENDER_REFRESH_ACTION_OPTIONS = [
+        "adaptiveLayout",
+        "crosshair",
         "resolveLabelOverlapping",
-        "seriesSelectionMode",
-        "pointSelectionMode",
         "adjustOnZoom",
-        "synchronizeMultiAxes",
         "zoomingMode",
-        "scrollingMode",
-        "useAggregation"
+        "scrollingMode"
     ];
 
-function checkHeightLabelsInCanvas(points, canvas, isRotated) {
-    var commonLabelSize = 0,
-        canvasSize = canvas.end - canvas.start,
-        labels,
-        label,
-        allLabelsAreInvisible;
+function checkHeightRollingStock(rollingStocks, stubCanvas) {
+    var canvasSize = stubCanvas.end - stubCanvas.start,
+        size = 0;
+    rollingStocks.forEach(function(rollingStock) {
+        size += rollingStock.getBoundingRect().width;
+    });
 
-    for(var i = 0; i < points.length; i++) {
-        labels = points[i].getLabels();
-
-        allLabelsAreInvisible = true;
-
-        for(var j = 0; j < labels.length; j++) {
-            label = labels[j];
-
-            if(label.isVisible()) {
-                commonLabelSize += label.getBoundingRect()[isRotated ? "width" : "height"];
-                allLabelsAreInvisible = false;
-            }
-        }
-
-        if(allLabelsAreInvisible) {
-            points[i] = null;
-        }
-    }
-    if(canvasSize > 0) {
-        while(commonLabelSize > canvasSize) {
-            commonLabelSize -= killSmallValues(points, isRotated);
-        }
+    while(canvasSize < size) {
+        size -= findAndKillSmallValue(rollingStocks);
     }
 }
 
-function killSmallValues(points, isRotated) {
-    var smallestValuePoint = { originalValue: Infinity },
-        bBox = 0,
-        indexOfPoint;
-    _each(points, function(index, point) {
-        if(point && smallestValuePoint.originalValue >= point.originalValue) {
-            smallestValuePoint = point;
-            indexOfPoint = index;
-        }
+function findAndKillSmallValue(rollingStocks) {
+    var smallestObject,
+        width;
+
+    smallestObject = rollingStocks.reduce(function(prev, rollingStock, index) {
+        if(!rollingStock) return prev;
+        var value = rollingStock.getLabels()[0].getData().value;
+        return value < prev.value ? {
+            value: value,
+            rollingStock: rollingStock,
+            index: index
+        } : prev;
+    }, {
+        rollingStock: undefined,
+        value: Infinity,
+        index: undefined
     });
-    if(indexOfPoint !== null) {
-        points[indexOfPoint].getLabels().forEach(function(label) {
-            bBox += label.getBoundingRect()[isRotated ? "width" : "height"];
-            label.hide();
-        });
-        points[indexOfPoint] = null;
-        return bBox;
+
+    smallestObject.rollingStock.getLabels()[0].hide();
+    width = smallestObject.rollingStock.getBoundingRect().width;
+    rollingStocks[smallestObject.index] = null;
+
+    return width;
+}
+
+function checkStackOverlap(rollingStocks) {
+    var i,
+        j,
+        iLength,
+        jLength,
+        overlap = false;
+
+    for(i = 0, iLength = rollingStocks.length - 1; i < iLength; i++) {
+        for(j = 0, jLength = rollingStocks.length; j < jLength; j++) {
+            if(i !== j && checkStacksOverlapping(rollingStocks[i], rollingStocks[j], true)) {
+                overlap = true;
+                break;
+            }
+        }
+        if(overlap) break;
     }
-    return 0;
+    return overlap;
 }
 
 function resolveLabelOverlappingInOneDirection(points, canvas, isRotated, shiftFunction) {
@@ -108,53 +120,57 @@ function resolveLabelOverlappingInOneDirection(points, canvas, isRotated, shiftF
         stubCanvas = {
             start: isRotated ? canvas.left : canvas.top,
             end: isRotated ? canvas.width - canvas.right : canvas.height - canvas.bottom
-        };
-
-    checkHeightLabelsInCanvas(points, stubCanvas, isRotated);
+        },
+        hasStackedSeries = false;
 
     points.forEach(function(p) {
         if(!p) return;
 
+        hasStackedSeries = hasStackedSeries || p.series.isStackedSeries() || p.series.isFullStackedSeries();
         p.getLabels().forEach(function(l) {
             l.isVisible() && rollingStocks.push(new RollingStock(l, isRotated, shiftFunction));
         });
     });
 
-    rollingStocks.sort(function(a, b) {
-        return a.getInitialPosition() - b.getInitialPosition();
-    });
+    if(hasStackedSeries) {
+        !isRotated && rollingStocks.reverse();
+    } else {
+        rollingStocks.sort(function(a, b) { return a.getInitialPosition() - b.getInitialPosition(); });
+    }
 
     if(!checkStackOverlap(rollingStocks)) return;
+    checkHeightRollingStock(rollingStocks, stubCanvas);
+
+    prepareOverlapStacks(rollingStocks);
 
     rollingStocks.reverse();
     moveRollingStock(rollingStocks, stubCanvas);
 }
 
-function overlapRollingStock(firstRolling, secondRolling) {
+function checkStacksOverlapping(firstRolling, secondRolling, inTwoSides) {
     if(!firstRolling || !secondRolling) return;
-    return firstRolling.getBoundingRect().end > secondRolling.getBoundingRect().start;
+    var firstRect = firstRolling.getBoundingRect(),
+        secondRect = secondRolling.getBoundingRect(),
+        oppositeOverlapping = inTwoSides ? ((firstRect.oppositeStart <= secondRect.oppositeStart && firstRect.oppositeEnd > secondRect.oppositeStart) ||
+            (secondRect.oppositeStart <= firstRect.oppositeStart && secondRect.oppositeEnd > firstRect.oppositeStart)) : true;
+    return firstRect.end > secondRect.start && oppositeOverlapping;
 }
 
-function checkStackOverlap(rollingStocks) {
-    var i, j,
+function prepareOverlapStacks(rollingStocks) {
+    var i,
         currentRollingStock,
-        nextRollingStock,
-        overlap;
+        root;
 
-    for(i = 0; i < rollingStocks.length; i++) {
-        currentRollingStock = rollingStocks[i];
-
-        for(j = i + 1; j < rollingStocks.length; j++) {
-            nextRollingStock = rollingStocks[j];
-
-            if(overlapRollingStock(currentRollingStock, nextRollingStock)) {
-                currentRollingStock.toChain(nextRollingStock);
-                overlap = true;
-                rollingStocks[j] = null;
-            }
+    for(i = 0; i < rollingStocks.length - 1; i++) {
+        currentRollingStock = root || rollingStocks[i];
+        if(checkStacksOverlapping(currentRollingStock, rollingStocks[i + 1])) {
+            currentRollingStock.toChain(rollingStocks[i + 1]);
+            rollingStocks[i + 1] = null;
+            root = currentRollingStock;
+        } else {
+            root = null;
         }
     }
-    return overlap;
 }
 
 function moveRollingStock(rollingStocks, canvas) {
@@ -195,15 +211,21 @@ function rollingStocksIsOut(rollingStock, canvas) {
 }
 
 function RollingStock(label, isRotated, shiftFunction) {
-    var bBox = label.getBoundingRect();
+    var bBox = label.getBoundingRect(),
+        x = bBox.x,
+        y = bBox.y,
+        endX = bBox.x + bBox.width,
+        endY = bBox.y + bBox.height;
 
     this.labels = [label];
     this.shiftFunction = shiftFunction;
 
     this._bBox = {
-        start: isRotated ? bBox.x : bBox.y,
+        start: isRotated ? x : y,
         width: isRotated ? bBox.width : bBox.height,
-        end: isRotated ? bBox.x + bBox.width : bBox.y + bBox.height
+        end: isRotated ? endX : endY,
+        oppositeStart: isRotated ? y : x,
+        oppositeEnd: isRotated ? endY : endX
     };
     this._initialPosition = isRotated ? bBox.x : bBox.y;
 
@@ -236,6 +258,9 @@ RollingStock.prototype = {
         if(this._bBox.end > canvas.end) {
             this.shift(this._bBox.end - canvas.end);
         }
+    },
+    getLabels: function() {
+        return this.labels;
     },
     getInitialPosition: function() {
         return this._initialPosition;
@@ -438,10 +463,9 @@ var BaseChart = BaseWidget.inherit({
             },
             disposeObjectsInArray = this._disposeObjectsInArray;
 
-        clearTimeout(that._delayedRedraw);
         that._renderer.stopAllAnimations();
 
-        that.businessRanges = that.translators = null;
+        that.businessRanges = null;
         disposeObjectsInArray.call(that, "series");
 
         disposeObject("_headerBlock");
@@ -449,7 +473,6 @@ var BaseChart = BaseWidget.inherit({
         disposeObject("_crosshair");
 
         that.layoutManager =
-        that.paneAxis =
         that._userOptions =
         that._canvas =
         that._groupsData = null;
@@ -566,7 +589,6 @@ var BaseChart = BaseWidget.inherit({
         that._resetIsReady(); //T207606
         drawOptions = that._prepareDrawOptions(_options);
         recreateCanvas = drawOptions.recreateCanvas;
-        clearTimeout(that._delayedRedraw);
 
         // T207665
         that.__originalCanvas = that._canvas;
@@ -591,8 +613,6 @@ var BaseChart = BaseWidget.inherit({
         that._renderElements(drawOptions);
     },
 
-    _saveBusinessRange: _noop,
-
     _renderElements: function(drawOptions) {
         var that = this,
             preparedOptions = that._prepareToRender(drawOptions),
@@ -616,15 +636,16 @@ var BaseChart = BaseWidget.inherit({
 
         that._renderer.lock();
 
-        that._saveBusinessRange();
         that.layoutManager.setOptions(that._layoutManagerOptions());
         that.layoutManager.layoutElements(
             drawElements,
             that._canvas,
-            that._getAxisDrawingMethods(drawOptions, preparedOptions, isRotated),
+            function(sizeShortage) {
+                that._renderAxes(drawOptions, preparedOptions, isRotated);
+                sizeShortage && that._shrinkAxes(drawOptions, sizeShortage);
+            },
             layoutTargets,
-            isRotated,
-            that._getAxesForTransform(isRotated)
+            isRotated
         );
         layoutCanvas && that._updateCanvasClipRect(dirtyCanvas);
 
@@ -643,15 +664,15 @@ var BaseChart = BaseWidget.inherit({
         });
 
         if(that._scrollBar) {
-            argBusinessRange = that.businessRanges[0].arg;
-
+            argBusinessRange = that._argumentAxes[0].getTranslator().getBusinessRange();
             if(argBusinessRange.axisType === "discrete" && argBusinessRange.categories && argBusinessRange.categories.length <= 1) {
                 zoomMinArg = zoomMaxArg = undefined;
             } else {
                 zoomMinArg = argBusinessRange.minVisible;
                 zoomMaxArg = argBusinessRange.maxVisible;
             }
-            that._scrollBar.init(argBusinessRange, layoutTargets[0].canvas).setPosition(zoomMinArg, zoomMaxArg);
+
+            that._scrollBar.init(argBusinessRange).setPosition(zoomMinArg, zoomMaxArg);
         }
 
         that._updateTracker(trackerCanvases);
@@ -695,8 +716,7 @@ var BaseChart = BaseWidget.inherit({
             singleSeries = series[i];
             that._applyExtraSettings(singleSeries, drawOptions);
 
-            singleSeries.draw(that._prepareTranslators(singleSeries, i, isRotated),
-                drawOptions.animate && singleSeries.getPoints().length <= drawOptions.animationPointsLimit && that._renderer.animationEnabled(),
+            singleSeries.draw(drawOptions.animate && singleSeries.getPoints().length <= drawOptions.animationPointsLimit && that._renderer.animationEnabled(),
                 drawOptions.hideLayoutLabels,
                 that._getLegendCallBack(singleSeries)
             );
@@ -896,11 +916,6 @@ var BaseChart = BaseWidget.inherit({
         dataSource: "DATA_SOURCE",
         palette: "PALETTE",
 
-        series: "REFRESH_SERIES_DATA_INIT",
-        commonSeriesSettings: "REFRESH_SERIES_DATA_INIT",
-        containerBackgroundColor: "REFRESH_SERIES_DATA_INIT",
-        dataPrepareSettings: "REFRESH_SERIES_DATA_INIT",
-
         legend: "DATA_INIT",
         seriesTemplate: "DATA_INIT",
 
@@ -911,6 +926,7 @@ var BaseChart = BaseWidget.inherit({
         commonAxisSettings: "AXES_AND_PANES",
         panes: "AXES_AND_PANES",
         defaultPane: "AXES_AND_PANES",
+        useAggregation: 'AXES_AND_PANES',
 
         rotated: "ROTATED",
 
@@ -920,7 +936,7 @@ var BaseChart = BaseWidget.inherit({
         scrollBar: "SCROLL_BAR"
     },
 
-    _customChangesOrder: ["ANIMATION", "DATA_SOURCE", "PALETTE", "REFRESH_SERIES_DATA_INIT", "DATA_INIT",
+    _customChangesOrder: ["ANIMATION", "REFRESH_SERIES_FAMILIES", "DATA_SOURCE", "PALETTE", "REFRESH_SERIES_DATA_INIT", "DATA_INIT",
         "FORCE_RENDER", "AXES_AND_PANES", "ROTATED", "REFRESH_SERIES_REINIT", "SCROLL_BAR", "CHART_TOOLTIP", "REINIT"],
 
     _change_ANIMATION: function() {
@@ -945,13 +961,18 @@ var BaseChart = BaseWidget.inherit({
         this._processRefreshData(DATA_INIT_REFRESH_ACTION);
     },
 
+    _change_REFRESH_SERIES_FAMILIES: function() {
+        this._processSeriesFamilies();
+        this._populateBusinessRange();
+        this._processRefreshData(FORCE_RENDER_REFRESH_ACTION);
+    },
+
     _change_FORCE_RENDER: function() {
         this._processRefreshData(FORCE_RENDER_REFRESH_ACTION);
     },
 
     _change_AXES_AND_PANES: function() {
         this._refreshSeries(REINIT_REFRESH_ACTION);
-        this.paneAxis = {};
     },
 
     _change_ROTATED: function() {
@@ -1012,7 +1033,6 @@ var BaseChart = BaseWidget.inherit({
     },
 
     _dataInit: function() {
-        clearTimeout(this._delayedRedraw);
         this._dataSpecificInit(true);
     },
 
@@ -1049,7 +1069,8 @@ var BaseChart = BaseWidget.inherit({
         that._groupSeries();
         parsedData = dataValidatorModule.validateData(data, that._groupsData, that._incidentOccurred, dataValidatorOptions);
         themeManager.resetPalette();
-        _each(that.series, function(_, singleSeries) {
+
+        that.series.forEach(function(singleSeries) {
             singleSeries.updateData(parsedData[singleSeries.getArgumentField()]);
             that._processSingleSeries(singleSeries);
         });
@@ -1185,7 +1206,9 @@ var BaseChart = BaseWidget.inherit({
                 labelsGroup: that._labelsGroup,
                 eventTrigger: that._eventTrigger,
                 commonSeriesModes: that._getSelectionModes(),
-                eventPipe: eventPipe
+                eventPipe: eventPipe,
+                argumentAxis: that._getArgumentAxis(),
+                valueAxis: that._getValueAxis(seriesTheme.pane, seriesTheme.axis)
             }, seriesTheme);
 
             if(!particularSeries.isUpdated) {
@@ -1237,16 +1260,19 @@ var BaseChart = BaseWidget.inherit({
         that.callBase.apply(that, arguments);
         that.__renderOptions = that.__forceRender = null;
         return that;
-    },
-
-    getSize: function() {
-        var canvas = this._canvas || {};
-        return { width: canvas.width, height: canvas.height };
     }
 });
 
-_each(REINIT_REFRESH_ACTION_OPTIONS, function(_, name) {
-    BaseChart.prototype._optionChangesMap[name] = "REINIT";
+REFRESH_SERIES_DATA_INIT_ACTION_OPTIONS.forEach(function(name) {
+    BaseChart.prototype._optionChangesMap[name] = "REFRESH_SERIES_DATA_INIT";
+});
+
+FORCE_RENDER_REFRESH_ACTION_OPTIONS.forEach(function(name) {
+    BaseChart.prototype._optionChangesMap[name] = "FORCE_RENDER";
+});
+
+REFRESH_SERIES_FAMILIES_ACTION_OPTIONS.forEach(function(name) {
+    BaseChart.prototype._optionChangesMap[name] = "REFRESH_SERIES_FAMILIES";
 });
 
 exports.overlapping = overlapping;

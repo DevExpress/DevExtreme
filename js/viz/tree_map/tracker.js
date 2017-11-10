@@ -1,12 +1,11 @@
 "use strict";
 
 var proto = require("./tree_map.base").prototype,
-
-    common = require("./common"),
     extend = require("../../core/utils/extend").extend,
 
     _eventData = require("../../events/utils").eventData,
     _parseScalar = require("../core/utils").parseScalar,
+    _expand = require("../core/helpers").expand,
 
     clickEventName = require("../../events/click").name,
     downPointerEventName = require("../../events/pointer").down,
@@ -23,7 +22,7 @@ require("./tooltip");
 
 proto._eventsMap.onClick = { name: "click" };
 
-common.expand(proto, "_initCore", function() {
+_expand(proto, "_initCore", function() {
     var that = this,
         dataKey = DATA_KEY_BASE + dataKeyModifier++;
 
@@ -54,7 +53,7 @@ common.expand(proto, "_initCore", function() {
     ///#ENDDEBUG
 });
 
-common.expand(proto, "_disposeCore", function() {
+_expand(proto, "_disposeCore", function() {
     this._tracker.dispose();
 });
 

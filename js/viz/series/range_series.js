@@ -1,8 +1,7 @@
 "use strict";
 
 //there are rangebar, rangearea
-var $ = require("../../core/renderer"),
-    commonUtils = require("../../core/utils/common"),
+var commonUtils = require("../../core/utils/common"),
     extend = require("../../core/utils/extend").extend,
     _extend = extend,
     _isDefined = commonUtils.isDefined,
@@ -37,16 +36,7 @@ var baseRangeSeries = {
         options.tagField = that.getTagField() + name;
     },
 
-    _processRange: function(point, prevPoint) {
-        rangeCalculator.processTwoValues(this, point, prevPoint, "value", "minValue");
-    },
-
-    _getRangeData: function(zoomArgs, calcIntervalFunction) {
-        rangeCalculator.calculateRangeData(this, zoomArgs, calcIntervalFunction, "value", "minValue");
-        rangeCalculator.addRangeSeriesLabelPaddings(this);
-
-        return this._rangeData;
-    },
+    getValueRangeInitialValue: scatterSeries.getValueRangeInitialValue,
 
     _getPointData: function(data, options) {
         return {
@@ -70,6 +60,10 @@ var baseRangeSeries = {
 
     getValueFields: function() {
         return [this._options.rangeValue1Field || "val1", this._options.rangeValue2Field || "val2"];
+    },
+
+    _processRange: function(range) {
+        rangeCalculator.addRangeSeriesLabelPaddings(this, range.val);
     }
 };
 
@@ -132,7 +126,7 @@ exports.chart["rangearea"] = _extend({}, areaSeries, {
 
         elementsGroup && elementsGroup.smartAttr(style.elements);
         bordersGroup && bordersGroup.attr(style.border);
-        $.each(that._graphics || [], function(_, graphic) {
+        (that._graphics || []).forEach(function(graphic) {
             graphic.line && graphic.line.attr({ "stroke-width": style.border["stroke-width"] });
             graphic.bottomLine && graphic.bottomLine.attr({ "stroke-width": style.border["stroke-width"] });
         });

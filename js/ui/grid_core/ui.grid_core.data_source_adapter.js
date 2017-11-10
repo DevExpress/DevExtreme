@@ -111,6 +111,10 @@ module.exports = gridCore.Controller.inherit((function() {
                 that._hasLastPage = that._isLastPage;
             }
         },
+        resetCache: function() {
+            this._cachedStoreData = undefined;
+            this._cachedPagingData = undefined;
+        },
         _customizeRemoteOperations: function(options, isReload, operationTypes) {
             var that = this,
                 cachedStoreData = that._cachedStoreData,
@@ -305,8 +309,10 @@ module.exports = gridCore.Controller.inherit((function() {
                 that._currentTotalCount = Math.max(that._currentTotalCount, currentTotalCount);
                 if(itemsCount === 0 && dataSource.pageIndex() >= that.pageCount()) {
                     dataSource.pageIndex(that.pageCount() - 1);
-                    dataSource.load();
-                    isLoading = true;
+                    if(that.option("scrolling.mode") !== "infinite") {
+                        dataSource.load();
+                        isLoading = true;
+                    }
                 }
             }
 
@@ -391,6 +397,8 @@ module.exports = gridCore.Controller.inherit((function() {
 
                 that._handleDataLoading(loadResult);
                 executeTask(function() {
+                    if(!dataSource.store()) return;
+
                     when(loadResult.data || that.loadFromStore(loadResult.storeLoadOptions)).done(function(data, extra) {
                         loadResult.data = data;
                         loadResult.extra = extra || {};

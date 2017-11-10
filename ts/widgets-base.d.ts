@@ -727,7 +727,7 @@ declare module DevExpress.ui {
         scrollWidth(): number;
 
         /** @docid dxscrollablemethods_update */
-        update(): void;
+        update(): JQueryPromise<void>;
     }
 
     export interface dxRadioGroupOptions extends EditorOptions, DataExpressionMixinOptions {
@@ -1001,7 +1001,8 @@ declare module DevExpress.ui {
         /** @docid dxOverlaymethods_toggle */
         toggle(showing: boolean): JQueryPromise<void>;
 
-        /** @docid dxOverlayMethods_baseZIndex */
+        /** @docid ui_dxOverlay */
+        /** @docid ui_dxOverlayMethods_baseZIndex */
         static baseZIndex(zIndex: number): void;
     }
 
@@ -1022,8 +1023,8 @@ declare module DevExpress.ui {
         /** @docid dxNumberBoxOptions_showSpinButtons */
         showSpinButtons?: boolean;
 
-        /** @docid dxNumberBoxOptions_useTouchSpinButtons */
-        useTouchSpinButtons?: boolean;
+        /** @docid dxNumberBoxOptions_useLargeSpinButtons */
+        useLargeSpinButtons?: boolean;
 
         /** @docid dxNumberBoxOptions_step */
         step?: number;
@@ -1061,7 +1062,6 @@ declare module DevExpress.ui {
     }
 
     export interface dxMultiViewOptions extends CollectionWidgetOptions {
-        /** @docid_ignore dxMultiViewOptions_noDataText */
         /** @docid_ignore dxMultiViewOptions_selectedItems */
         /** @docid_ignore dxMultiViewOptions_selectedItemKeys */
         /** @docid_ignore dxMultiViewOptions_keyExpr */
@@ -1384,11 +1384,15 @@ declare module DevExpress.ui {
         /** @docid_ignore dxLoadPanelOptions_accessKey */
         /** @docid_ignore dxLoadPanelOptions_tabIndex */
         /** @docid_ignore dxLoadPanelOptions_shadingColor */
-        /** @docid_ignore dxLoadPanelOptions_animation_show */
-        /** @docid_ignore dxLoadPanelOptions_animation_hide */
 
         /** @docid dxLoadPanelOptions_animation */
-        animation?: fx.AnimationOptions;
+        animation?: {
+            /** @docid dxLoadPanelOptions_animation_show */
+            show?: fx.AnimationOptions;
+
+            /** @docid dxLoadPanelOptions_animation_hide */
+            hide?: fx.AnimationOptions;
+        };
 
         /** @docid dxLoadPanelOptions_delay */
         delay?: number;
@@ -1787,7 +1791,7 @@ declare module DevExpress.ui {
         content(): JQuery;
     }
 
-    export interface dxDropDownBoxOptions extends dxDropDownEditorOptions {
+    export interface dxDropDownBoxOptions extends dxDropDownEditorOptions, DataExpressionMixinOptions {
         /** @docid_ignore dxDropDownBoxOptions_maxLength */
         /** @docid_ignore dxDropDownBoxOptions_spellcheck */
         /** @docid_ignore dxDropDownBoxOptions_applyValueMode */
@@ -1803,6 +1807,9 @@ declare module DevExpress.ui {
 
         /** @docid dxDropDownBoxOptions_dropDownOptions */
         dropDownOptions?: DevExpress.ui.dxPopupOptions;
+
+        /** @docid dxDropDownBoxOptions_valueChangeEvent */
+        valueChangeEvent?: string;
     }
 
     /** @docid dxDropDownBox */
@@ -1811,7 +1818,7 @@ declare module DevExpress.ui {
         constructor(element: Element, options?: dxDropDownBoxOptions);
     }
 
-    export interface dxDateBoxOptions extends dxTextEditorOptions {
+    export interface dxDateBoxOptions extends dxDropDownEditorOptions {
         /** @docid dxDateBoxOptions_formatString */
         formatString?: any;
 
@@ -2165,7 +2172,6 @@ declare module DevExpress.ui {
 
         /** @docid_ignore dxAccordionItemTemplate_icon */
         /** @docid_ignore dxAccordionItemTemplate_iconSrc */
-        /** @docid_ignore dxAccordionEvents_ItemTitleClick */
 
         /** @docid dxAccordionMethods_collapseItem */
         collapseItem(index: number): JQueryPromise<dxAccordion>;
@@ -2654,7 +2660,7 @@ declare module DevExpress.ui {
         itemOption(field: string): any;
 
         /** @docid dxFormMethods_getEditor */
-        getEditor(field: string): Object;
+        getEditor(field: string): any;
 
         /** @docid dxFormMethods_updateDimensions */
         updateDimensions(): JQueryPromise<void>;

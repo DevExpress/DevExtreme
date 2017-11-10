@@ -1,10 +1,8 @@
 "use strict";
 
 //there are area, steparea, stackedarea, fullstackedarea, splinearea
-var $ = require("../../core/renderer"),
-    objectUtils = require("../../core/utils/object"),
+var objectUtils = require("../../core/utils/object"),
     extend = require("../../core/utils/extend").extend,
-    rangeCalculator = require("./helpers/range_data_calculator"),
     scatterSeries = require("./scatter_series").chart,
     lineSeries = require("./line_series"),
     chartLineSeries = lineSeries.chart.line,
@@ -20,17 +18,19 @@ var baseAreaMethods = {
     _createBorderElement: chartLineSeries._createMainElement,
 
     _createLegendState: function(styleOptions, defaultColor) {
-        var legendState = scatterSeries._createLegendState.call(this, styleOptions, defaultColor);
-        legendState.opacity = styleOptions.opacity;
-        return legendState;
+        return {
+            fill: styleOptions.color || defaultColor,
+            opacity: styleOptions.opacity,
+            hatching: styleOptions.hatching
+        };
     },
 
-    _getRangeData: function(zoomArgs, calcIntervalFunction) {
-        rangeCalculator.calculateRangeData(this, zoomArgs, calcIntervalFunction);
-        rangeCalculator.addLabelPaddings(this);
-        rangeCalculator.calculateRangeMinValue(this, zoomArgs);
-
-        return this._rangeData;
+    getValueRangeInitialValue: function() {
+        if(this.valueAxisType !== "logarithmic" && this.valueType !== "datetime" && this.showZero !== false) {
+            return 0;
+        } else {
+            return scatterSeries.getValueRangeInitialValue.call(this);
+        }
     },
 
     _getDefaultSegment: function(segment) {
@@ -69,7 +69,7 @@ var baseAreaMethods = {
 
         that._elementsGroup && that._elementsGroup.smartAttr(style.elements);
         that._bordersGroup && that._bordersGroup.attr(style.border);
-        $.each(that._graphics || [], function(_, graphic) {
+        (that._graphics || []).forEach(function(graphic) {
             graphic.line && graphic.line.attr({ 'stroke-width': style.border["stroke-width"] }).sharp();
         });
     },
@@ -78,7 +78,9 @@ var baseAreaMethods = {
         var borderOptions = options.border || {},
             borderStyle = chartLineSeries._parseLineOptions(borderOptions, defaultBorderColor);
 
-        borderStyle["stroke-width"] = borderOptions.visible ? borderStyle["stroke-width"] : 0;
+        borderStyle.stroke = (borderOptions.visible && borderStyle["stroke-width"]) ? borderStyle.stroke : "none";
+        borderStyle["stroke-width"] = borderStyle["stroke-width"] || 1;
+
         return {
             border: borderStyle,
             elements: {

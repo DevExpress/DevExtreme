@@ -30,7 +30,6 @@ var OVERLAY_CLASS = "dx-overlay",
     OVERLAY_CONTENT_CLASS = "dx-overlay-content",
     OVERLAY_SHADER_CLASS = "dx-overlay-shader",
     OVERLAY_MODAL_CLASS = "dx-overlay-modal",
-
     INVISIBLE_STATE_CLASS = "dx-state-invisible",
 
     ANONYMOUS_TEMPLATE_NAME = "content",
@@ -531,7 +530,6 @@ var Overlay = Widget.inherit({
     _documentDownHandler: function(e) {
         if(this._showAnimationProcessing) {
             this._stopAnimation();
-            return;
         }
 
         var closeOnOutsideClick = this.option("closeOnOutsideClick");
@@ -541,7 +539,7 @@ var Overlay = Widget.inherit({
         }
         if(closeOnOutsideClick) {
             var $container = this._$content,
-                outsideClick = (!$container.is(e.target) && !$.contains($container.get(0), e.target));
+                outsideClick = (!$container.is(e.target) && !$.contains($container.get(0), e.target) && $(e.target).closest(document).length);
 
             if(outsideClick) {
                 if(this.option("shading")) {
@@ -563,7 +561,16 @@ var Overlay = Widget.inherit({
 
     _isTopOverlay: function() {
         var overlayStack = this._overlayStack();
-        return overlayStack[overlayStack.length - 1] === this;
+
+        for(var i = overlayStack.length - 1; i >= 0; i--) {
+            var $tabbableElements = overlayStack[i]._findTabbableElements();
+
+            if($tabbableElements.length) {
+                return overlayStack[i] === this;
+            }
+        }
+
+        return false;
     },
 
     _overlayStack: function() {
@@ -687,6 +694,7 @@ var Overlay = Widget.inherit({
             deferred = $.Deferred(),
             animation = that._getAnimationConfig() || {},
             hideAnimation = this._normalizeAnimation(animation.hide, "from"),
+            startHideAnimation = (hideAnimation && hideAnimation.start) || commonUtils.noop,
             completeHideAnimation = (hideAnimation && hideAnimation.complete) || commonUtils.noop,
             hidingArgs = { cancel: false };
 
@@ -701,14 +709,22 @@ var Overlay = Widget.inherit({
             this._toggleShading(false);
             this._toggleSubscriptions(false);
 
-            this._animate(hideAnimation, function() {
-                that._renderVisibility(false);
+            this._animate(hideAnimation,
+                function() {
+                    that._$content.css("pointer-events", "");
+                    that._renderVisibility(false);
 
-                completeHideAnimation.apply(this, arguments);
-                that._actions.onHidden();
+                    completeHideAnimation.apply(this, arguments);
+                    that._actions.onHidden();
 
-                deferred.resolve();
-            });
+                    deferred.resolve();
+                },
+
+                function() {
+                    that._$content.css("pointer-events", "none");
+                    startHideAnimation.apply(this, arguments);
+                }
+            );
         }
         return deferred.promise();
     },
@@ -721,19 +737,9 @@ var Overlay = Widget.inherit({
         if(animation) {
             startCallback = startCallback || animation.start || commonUtils.noop;
 
-            var $content = this._$content;
-
             fx.animate(this._$content, extend({}, animation, {
-                start: function() {
-                    $content.css("pointer-events", "none");
-
-                    startCallback.apply(this, arguments);
-                },
-                complete: function() {
-                    $content.css("pointer-events", "");
-
-                    completeCallback.apply(this, arguments);
-                }
+                start: startCallback,
+                complete: completeCallback
             }));
         } else {
             completeCallback();
@@ -824,13 +830,17 @@ var Overlay = Widget.inherit({
         }
     },
 
+    _findTabbableElements: function() {
+        return this._$wrapper
+            .find("*").filter(selectors.tabbable);
+    },
+
     _tabKeyHandler: function(e) {
         if(e.keyCode !== TAB_KEY || !this._isTopOverlay()) {
             return;
         }
 
-        var tabbableElements = this._$wrapper
-                .find("*").filter(selectors.tabbable),
+        var tabbableElements = this._findTabbableElements(),
 
             $firstTabbable = tabbableElements.first(),
             $lastTabbable = tabbableElements.last(),
@@ -1074,6 +1084,14 @@ var Overlay = Widget.inherit({
             containerWidth = $container.outerWidth(),
             containerHeight = $container.outerHeight();
 
+        if(this._isWindow($container)) {
+            var fullPageHeight = Math.max($(document).outerHeight(), containerHeight),
+                fullPageWidth = Math.max($(document).outerWidth(), containerWidth);
+
+            containerHeight = fullPageHeight;
+            containerWidth = fullPageWidth;
+        }
+
         return {
             width: containerWidth - contentWidth,
             height: containerHeight - contentHeight
@@ -1108,13 +1126,14 @@ var Overlay = Widget.inherit({
         var position = translator.locate(this._$content),
             deltaSize = this._deltaSize(),
             isAllowedDrag = deltaSize.height >= 0 && deltaSize.width >= 0,
+            shaderOffset = this.option("shading") && !this.option("container") && !this._isWindow(this._getContainer()) ? translator.locate(this._$wrapper) : { top: 0, left: 0 },
             boundaryOffset = this.option("boundaryOffset");
 
         return {
-            top: isAllowedDrag ? position.top + boundaryOffset.v : 0,
-            bottom: isAllowedDrag ? -position.top + deltaSize.height - boundaryOffset.v : 0,
-            left: isAllowedDrag ? position.left + boundaryOffset.h : 0,
-            right: isAllowedDrag ? -position.left + deltaSize.width - boundaryOffset.h : 0
+            top: isAllowedDrag ? position.top + shaderOffset.top + boundaryOffset.v : 0,
+            bottom: isAllowedDrag ? -position.top - shaderOffset.top + deltaSize.height - boundaryOffset.v : 0,
+            left: isAllowedDrag ? position.left + shaderOffset.left + boundaryOffset.h : 0,
+            right: isAllowedDrag ? -position.left - shaderOffset.left + deltaSize.width - boundaryOffset.h : 0
         };
     },
 
@@ -1398,6 +1417,11 @@ var Overlay = Widget.inherit({
             case "animation":
             case "propagateOutsideClick":
                 break;
+            case "rtlEnabled":
+                this._contentAlreadyRendered = false;
+                this.option("visible", false);
+                this.callBase(args);
+                break;
             default:
                 this.callBase(args);
         }
@@ -1462,7 +1486,12 @@ var Overlay = Widget.inherit({
 });
 
 /**
-* @name dxOverlayMethods_baseZIndex
+* @name ui_dxOverlay
+* @publicName dxOverlay
+* @section utils
+*/
+/**
+* @name ui_dxOverlayMethods_baseZIndex
 * @publicName baseZIndex(zIndex)
 * @param1 zIndex:number
 */

@@ -476,6 +476,11 @@ module.exports = DOMComponent.inherit({
         return this._renderer.svg();
     },
 
+    getSize: function() {
+        var canvas = this._canvas || {};
+        return { width: canvas.width, height: canvas.height };
+    },
+
     isReady: getFalse,
 
     _dataIsReady: getTrue,

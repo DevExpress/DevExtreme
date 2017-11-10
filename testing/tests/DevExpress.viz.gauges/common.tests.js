@@ -16,8 +16,6 @@ var $ = require("jquery"),
     tooltipModule = require("viz/core/tooltip"),
     rangeModule = require("viz/translators/range"),
     translator1DModule = require("viz/translators/translator1d"),
-    translator2DModule = require("viz/translators/translator2d"),
-    stubTranslator2D = vizMocks.stubClass(translator2DModule.Translator2D),
     rendererModule = require("viz/core/renderers/renderer"),
     stubRange = vizMocks.stubClass(rangeModule.Range),
     ThemeManager = require("viz/gauges/theme_manager");
@@ -26,10 +24,6 @@ $('<div id="test-container">').appendTo("#qunit-fixture");
 
 sinon.stub(rangeModule, "Range", function(parameters) {
     return new stubRange(parameters);
-});
-
-sinon.stub(translator2DModule, "Translator2D", function() {
-    return new stubTranslator2D();
 });
 
 var dxTestGauge = dxGauge.inherit({
@@ -50,15 +44,6 @@ var dxTestGauge = dxGauge.inherit({
     },
     _gridSpacingFactor: 0,
     _setOrientation: noop,
-    _initScaleTranslator: noop,
-    _getScaleTranslatorComponent: function() {
-        var translator = new translator2DModule.Translator2D();
-        sinon.stub(translator, "getBusinessRange", function() {
-            return rangeModule.Range.getCall(0).returnValue;
-        });
-        return translator;
-    },
-    _updateScaleAngles: noop,
     _shiftScale: noop,
     _getTicksOrientation: function() {
         return "center";
@@ -199,7 +184,6 @@ var environment = {
         vizMocks.stubIncidentOccurredCreation();
         rangeModule.Range.reset();
         axisModule.Axis.reset();
-        translator2DModule.Translator2D.reset();
         this.renderer = new vizMocks.Renderer();
         this.container = createTestContainer("#test-container", { width: 800, height: 600 });
     },
@@ -320,8 +304,9 @@ QUnit.test("Scale is rendered", function(assert) {
             width: 2
         },
         tickInterval: 4,
-        tickOrientation: "center"
-
+        tickOrientation: "center",
+        startAngle: -910,
+        endAngle: -1910
     }, "scale updating");
     assert.equal(scale.draw.callCount, 1, "scale drawing");
     assert.equal(scaleGroup.linkAppend.callCount, 1, "scale group appending");
@@ -749,22 +734,6 @@ QUnit.test("Value indicators are rendered - not valid types", function(assert) {
 });
 
 QUnit.module("Gauge - general parts creation", environment);
-
-QUnit.test("Scale translator is set", function(assert) {
-    this.createTestGauge();
-
-    var argTranslator = translator2DModule.Translator2D.getCall(0).returnValue,
-        valTranslator = translator2DModule.Translator2D.getCall(1).returnValue;
-
-    assert.deepEqual(rangeModule.Range.getCall(0).args[0], { axisType: "continuous", dataType: "numeric", stick: true }, "range for scale translator");
-
-    assert.equal(argTranslator.updateBusinessRange.getCall(0).args[0].minVisible, 0, "minVisible for translator");
-    assert.equal(argTranslator.updateBusinessRange.getCall(0).args[0].maxVisible, 100, "maxVisible for translator");
-    assert.strictEqual(argTranslator.updateBusinessRange.getCall(0).args[0].invert, false, "invert for translator");
-    assert.equal(valTranslator.stub("reinit").callCount, 0, "reinit for val translator");
-
-    assert.deepEqual(axisModule.Axis.getCall(0).returnValue.setTranslator.getCall(0).args, [argTranslator, valTranslator], "translators for scale");
-});
 
 QUnit.test("Translator is set", function(assert) {
     var gauge = this.createTestGauge();

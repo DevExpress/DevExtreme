@@ -42,8 +42,6 @@ var DropDownList = DropDownEditor.inherit({
                 if(this.option("opened") && this.option("applyValueMode") === "instantly") {
                     var $focusedItem = this._list.option("focusedElement");
                     $focusedItem && this._setSelectedElement($focusedItem);
-                } else {
-                    this._focusTarget().focusout();
                 }
 
                 parent.tab.apply(this, arguments);
@@ -363,9 +361,9 @@ var DropDownList = DropDownEditor.inherit({
         this._input().on("input", this._setFocusPolicy.bind(this));
     },
 
-    _preventFocusOnPopup: function(e) {
+    _saveFocusOnWidget: function(e) {
         if(this._list && this._list.initialOption("focusStateEnabled")) {
-            e.preventDefault();
+            this.focus();
         }
     },
 
@@ -373,8 +371,8 @@ var DropDownList = DropDownEditor.inherit({
         this.callBase();
         this._popup._wrapper().addClass(this._popupWrapperClass());
         this._popup.content()
-            .off("mousedown")
-            .on("mousedown", this._preventFocusOnPopup.bind(this));
+            .off("mouseup")
+            .on("mouseup", this._saveFocusOnWidget.bind(this));
     },
 
     _popupWrapperClass: function() {
@@ -382,19 +380,21 @@ var DropDownList = DropDownEditor.inherit({
     },
 
     _renderInputValue: function() {
-        var callBase = this.callBase.bind(this),
-            value = this._getCurrentValue();
+        var value = this._getCurrentValue();
 
-        return this._loadItem(value).always((function(item) {
-            this._setSelectedItem(item);
-            callBase(value);
-        }).bind(this));
+        return this._loadInputValue(value, this._setSelectedItem.bind(this))
+            .always(this.callBase.bind(this, value));
+    },
+
+    _loadInputValue: function(value, callback) {
+        return this._loadItem(value).always(callback);
     },
 
     _loadItem: function(value) {
-        var selectedItem = commonUtils.grep(this._getPlainItems(this.option("items")) || [], (function(item) {
-            return this._isValueEquals(this._valueGetter(item), value);
-        }).bind(this))[0];
+        var plainItems = this._getPlainItems(this.option("items")),
+            selectedItem = commonUtils.grep(plainItems, (function(item) {
+                return this._isValueEquals(this._valueGetter(item), value);
+            }).bind(this))[0];
 
         return selectedItem !== undefined
             ? $.Deferred().resolve(selectedItem).promise()
@@ -403,6 +403,8 @@ var DropDownList = DropDownEditor.inherit({
 
     _getPlainItems: function(items) {
         var plainItems = [];
+
+        items = items || [];
 
         for(var i = 0; i < items.length; i++) {
             if(items[i] && items[i].items) {
@@ -778,6 +780,10 @@ var DropDownList = DropDownEditor.inherit({
     },
 
     _needPopupRepaint: function() {
+        if(!this._dataSource) {
+            return false;
+        }
+
         var currentPageIndex = this._dataSource.pageIndex(),
             needRepaint = commonUtils.isDefined(this._pageIndex) && currentPageIndex <= this._pageIndex;
 

@@ -88,7 +88,7 @@ Tracker.prototype = {
 
         if(!state) { return; }
 
-        if(_now() - state.time <= CLICK_TIME_THRESHOLD) {
+        if(data && _now() - state.time <= CLICK_TIME_THRESHOLD) {
             threshold = state.threshold;
             coords = getEventCoords(event);
             if(_abs(coords.x - state.x) <= threshold && _abs(coords.y - state.y) <= threshold) {

@@ -41,3 +41,50 @@ QUnit.test("template result should be correct", function(assert) {
     };
     assert.equal(template.render({ container: $container }).get(0), result, "result is correct");
 });
+
+QUnit.test("user's options object should not be changed after template rendering", function(assert) {
+    var template = new KoTemplate($("<div data-bind='text: $data.testField + $index'>"));
+    var options = { container: $("<div>"), model: { testField: "test" }, index: 1 };
+
+    template.render(options);
+
+    assert.deepEqual(options.model, { testField: "test" });
+});
+
+QUnit.test("template binding works when model is object", function(assert) {
+    var $container = $("<div>");
+    var template = new KoTemplate($("<div data-bind='text: $data.testField + $index'>"));
+
+    template.render({ container: $container, model: { testField: "test" }, index: 1 });
+
+    assert.equal($container.children().text(), "test1");
+});
+
+QUnit.test("template binding works when model is string", function(assert) {
+    var $container = $("<div>");
+    var template = new KoTemplate($("<div data-bind='text: $data + $index'>"));
+
+    template.render({ container: $container, model: "test", index: 1 });
+
+    assert.equal($container.children().text(), "test1");
+});
+
+QUnit.test("template binding works when model is observable", function(assert) {
+    var $container = $("<div>");
+    var template = new KoTemplate($("<div data-bind='text: $data + $index'>"));
+    var test = ko.observable("test");
+
+    template.render({ container: $container, model: test, index: 1 });
+
+    assert.equal($container.children().text(), "test1");
+});
+
+QUnit.test("template binding works when model is not defined", function(assert) {
+    var $container = $("<div>");
+    var template = new KoTemplate($("<div data-bind='text: $index'>"));
+
+    template.render({ container: $container, index: 1 });
+
+    assert.equal($container.children().text(), "1");
+});
+

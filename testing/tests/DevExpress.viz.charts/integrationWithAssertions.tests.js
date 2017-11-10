@@ -397,8 +397,8 @@ QUnit.test("dxChart groups and classes", function(assert) {
     assert.equal($container.find(".dxc-labels-group").length, 1, "There is one labels group");
     assert.equal($container.find(".dxc-legend").length, 1, "There is one legend group");
     assert.equal($container.find(".dxc-constant-lines-group").length, 1, "There is one constant line group");
-    assert.equal($container.find(".dxc-arg-constant-lines").length, 1, "There is one h-constant-lines group");
-    assert.equal($container.find(".dxc-val-constant-lines").length, 1, "There is one v-constant-lines group");
+    assert.equal($container.find(".dxc-arg-constant-lines").length, 3, "There is one h-constant-lines group");
+    assert.equal($container.find(".dxc-val-constant-lines").length, 3, "There is one v-constant-lines group");
 });
 
 QUnit.test("dxChart groups and classes after redraw", function(assert) {
@@ -430,8 +430,8 @@ QUnit.test("dxChart groups and classes after redraw", function(assert) {
     assert.equal($container.find(".dxc-labels-group").length, 1, "There is one labels group");
     assert.equal($container.find(".dxc-legend").length, 1, "There is one legend group");
     assert.equal($container.find(".dxc-constant-lines-group").length, 1, "There is one constant lines group");
-    assert.equal($container.find(".dxc-arg-constant-lines").length, 1, "There is one h-constant-lines group");
-    assert.equal($container.find(".dxc-val-constant-lines").length, 1, "There is one v-constant-line group");
+    assert.equal($container.find(".dxc-arg-constant-lines").length, 3, "There is one h-constant-lines group");
+    assert.equal($container.find(".dxc-val-constant-lines").length, 3, "There is one v-constant-line group");
 });
 
 QUnit.test("Pie chart groups and classes after redraw", function(assert) {
@@ -922,11 +922,10 @@ QUnit.test('T295685. dxChart with adaptive layout', function(assert) {
     chart.option("size", { width: 50, height: 50 });
 
     //assert
-    var translators = chart.translators["default"][chart._valueAxes[0].name];
-    assert.equal(translators.arg.getBusinessRange().min, -2.5, "min arg");
-    assert.equal(translators.arg.getBusinessRange().max, 12.5, "max arg");
-    assert.equal(translators.val.getBusinessRange().min, 0, "min val");
-    assert.equal(translators.val.getBusinessRange().max, 15, "min val");
+    assert.equal(chart._argumentAxes[0].getTranslator().getBusinessRange().min, -2.5, "min arg");
+    assert.equal(chart._argumentAxes[0].getTranslator().getBusinessRange().max, 12.5, "max arg");
+    assert.equal(chart._valueAxes[0].getTranslator().getBusinessRange().min, 0, "min val");
+    assert.equal(chart._valueAxes[0].getTranslator().getBusinessRange().max, 15, "min val");
 });
 
 QUnit.test("Pie chart with sizeGroup, change option in between rendering steps - legend and title should have original place", function(assert) {

@@ -7,6 +7,7 @@ var $ = require("jquery"),
     List = require("ui/list"),
     executeAsyncMock = require("../../../helpers/executeAsyncMock.js"),
     pointerMock = require("../../../helpers/pointerMock.js"),
+    KeyboardProcessor = require("ui/widget/ui.keyboard_processor"),
     keyboardMock = require("../../../helpers/keyboardMock.js"),
     registerComponent = require("core/component_registrator"),
     DOMComponent = require("core/dom_component"),
@@ -584,6 +585,132 @@ QUnit.test("scrollView should be updated after group collapsed", function(assert
         $.fx.off = false;
     }
 });
+
+QUnit.test("scrollView should update its position after a group has been collapsed", function(assert) {
+    try {
+        List.mockScrollView(this.originalScrollView);
+        $.fx.off = true;
+
+        var $element = this.element.dxList({
+                pageLoadMode: "scrollBottom",
+                height: 130,
+                scrollingEnabled: true,
+                useNativeScrolling: false,
+                dataSource: {
+                    load: function(options) {
+                        var d = $.Deferred(),
+                            items = [{
+                                key: 'first',
+                                items: [{ a: 0 }, { a: 1 }, { a: 2 }]
+                            },
+                            {
+                                key: 'second',
+                                items: [{ a: 3 }, { a: 4 }, { a: 5 }]
+                            },
+                            {
+                                key: 'third',
+                                items: [{ a: 6 }, { a: 7 }, { a: 8 }]
+                            }];
+                        setTimeout(function() {
+                            d.resolve(items.slice(options.skip, options.skip + options.take));
+                        }, 50);
+                        return d.promise();
+                    },
+                    group: "key",
+                    pageSize: 1,
+                },
+                grouped: true,
+                collapsibleGroups: true,
+                groupTemplate: function(data) {
+                    return $("<div>").text(data.key);
+                },
+                itemTemplate: function(data) {
+                    return $("<div>").text(data.a);
+                }
+            }),
+            instance = $element.dxList("instance"),
+            releaseSpy = sinon.spy(instance._scrollView, "release");
+
+        this.clock.tick(50);
+
+        instance.scrollTo(200);
+        this.clock.tick(50);
+
+        instance.scrollTo(200);
+        this.clock.tick(50);
+
+        instance.collapseGroup(2);
+        this.clock.tick(50);
+
+        assert.ok(releaseSpy.lastCall.args[0], "The last call of 'release' hides load indicator");
+    } finally {
+        $.fx.off = false;
+    }
+});
+
+QUnit.test("more button shouldn't disappear after group collapsed with array store", function(assert) {
+    try {
+        List.mockScrollView(this.originalScrollView);
+        $.fx.off = true;
+        var $element = this.element.dxList({
+                dataSource: {
+                    store: [
+                        { key: "a", items: ["0", "1", "2"] },
+                        { key: "b", items: ["0", "1", "2"] },
+                        { key: "c", items: ["0", "1", "2"] },
+                        { key: "d", items: ["0", "1", "2"] }],
+                    paginate: true,
+                    pageSize: 3
+                },
+                pageLoadMode: "nextButton",
+                height: 500,
+                grouped: true,
+                collapsibleGroups: true
+            }),
+            instance = $element.dxList("instance");
+
+        instance.collapseGroup(1);
+
+        this.clock.tick();
+        assert.ok(instance.element().find(".dx-list-next-button").length, "button was not removed");
+    } finally {
+        $.fx.off = false;
+    }
+});
+
+QUnit.test("more button shouldn't disappear after group collapsed with custom store", function(assert) {
+    try {
+        List.mockScrollView(this.originalScrollView);
+        $.fx.off = true;
+        var data = [
+                { key: "a", items: ["0", "1", "2"] },
+                { key: "b", items: ["0", "1", "2"] },
+                { key: "c", items: ["0", "1", "2"] },
+                { key: "d", items: ["0", "1", "2"] }],
+            $element = this.element.dxList({
+                dataSource: {
+                    load: function() {
+                        return data;
+                    },
+                    paginate: true,
+                    pageSize: 3
+                },
+                pageLoadMode: "nextButton",
+                height: 400,
+                grouped: true,
+                collapsibleGroups: true
+            }),
+            instance = $element.dxList("instance");
+
+        instance.collapseGroup(1);
+
+        this.clock.tick();
+        assert.ok(instance.element().find(".dx-list-next-button").length, "button was not removed");
+    } finally {
+        $.fx.off = false;
+    }
+});
+
 
 
 QUnit.module("next button", moduleSetup);
@@ -2234,6 +2361,21 @@ QUnit.test("list scroll to hidden focused item after press pageUp", function(ass
 
     assert.roughEqual(instance.scrollTop(), itemHeight, 1.0001, "list scrolled to previous focusedItem");
     assert.ok($items.eq(1).hasClass("dx-state-focused"), "focused item change to last visible item on new page");
+});
+
+QUnit.test("list should attach keyboard events even if focusStateEnabled is false when this option was passed from outer widget", function(assert) {
+    var handler = sinon.stub(),
+        $element = $("#list"),
+        instance = $element.dxList({
+            focusStateEnabled: false,
+            _keyboardProcessor: new KeyboardProcessor({ element: $element }),
+            items: [1, 2, 3]
+        }).dxList("instance");
+
+    instance.registerKeyHandler("enter", handler);
+    $element.trigger($.Event("keydown", { which: 13 }));
+
+    assert.equal(handler.callCount, 1, "keyboardProcessor is attached");
 });
 
 

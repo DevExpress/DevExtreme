@@ -367,17 +367,26 @@ QUnit.module("Update type of point", {
         this.series = {
             isFullStackedSeries: function() { return false; },
             getLabelVisibility: function() { return false; },
-            _options: {}
-        };
-        this.translators = {
-            x: new MockTranslator({
-                translate: { "null": 0, 1: 11 },
-                getCanvasVisibleArea: { min: 0, max: 700 }
-            }),
-            y: new MockTranslator({
-                translate: { "null": 0, 1: 22 },
-                getCanvasVisibleArea: { min: 0, max: 700 }
-            })
+            _options: {},
+            getVisibleArea: function() { return { minX: 0, maxX: 700, minY: 0, maxY: 700 }; },
+            getValueAxis: function() {
+                return {
+                    getTranslator: function() {
+                        return new MockTranslator({
+                            translate: { "null": 0, 1: 22 },
+                        });
+                    }
+                };
+            },
+            getArgumentAxis: function() {
+                return {
+                    getTranslator: function() {
+                        return new MockTranslator({
+                            translate: { "null": 0, 1: 11 },
+                        });
+                    }
+                };
+            }
         };
     }
 });
@@ -388,7 +397,7 @@ QUnit.test("Update simple to simple without data", function(assert) {
         point = createPoint(this.series, data, this.options),
         drawMarkerCalled = 0;
 
-    point.translate(this.translators);
+    point.translate();
     point.draw(this.renderer, this.group);
 
     point.drawMarker = function() {
@@ -397,7 +406,7 @@ QUnit.test("Update simple to simple without data", function(assert) {
     //act
     var newOptions = $.extend(true, {}, this.options, { type: "area" });
     point.update(data, newOptions);
-    point.translate(this.translators);
+    point.translate();
     point.draw(this.renderer, this.group);
 
     assert.equal(drawMarkerCalled, 0);
@@ -409,7 +418,7 @@ QUnit.test("Update simple to simple with data", function(assert) {
         point = createPoint(this.series, data, this.options),
         drawMarkerCalled = 0;
 
-    point.translate(this.translators);
+    point.translate();
     point.draw(this.renderer, this.group);
 
     point.drawMarker = function() {
@@ -418,7 +427,7 @@ QUnit.test("Update simple to simple with data", function(assert) {
     //act
     data = { argument: 2, value: 2 };
     point.update(data, this.options);
-    point.translate(this.translators);
+    point.translate();
     point.draw(this.renderer, this.group);
 
     assert.equal(drawMarkerCalled, 0);
@@ -429,7 +438,7 @@ QUnit.test("Update simple to range", function(assert) {
     var data = { argument: 1, value: 1, minValue: 1 },
         point = createPoint(this.series, data, this.options);
 
-    point.translate(this.translators);
+    point.translate();
     point.draw(this.renderer, this.group);
 
     var deleteMarkerSpy = sinon.spy(point, "deleteMarker"),
@@ -437,7 +446,7 @@ QUnit.test("Update simple to range", function(assert) {
 
     var newOptions = $.extend(true, {}, this.options, { type: "rangearea" });
     point.update(data, newOptions);
-    point.translate(this.translators);
+    point.translate();
     point.draw(this.renderer, this.group);
 
     assert.ok(deleteMarkerSpy.calledOnce);
@@ -453,7 +462,7 @@ QUnit.test("Update range to simple", function(assert) {
     var data = { argument: 1, value: 1, minValue: 1 },
         point = createPoint(this.series, data, this.options);
 
-    point.translate(this.translators);
+    point.translate();
     point.draw(this.renderer, this.group);
 
     var deleteMarkerSpy = sinon.spy(point, "deleteMarker"),
@@ -461,7 +470,7 @@ QUnit.test("Update range to simple", function(assert) {
 
     var newOptions = $.extend(true, {}, this.options, { type: "line" });
     point.update(data, newOptions);
-    point.translate(this.translators);
+    point.translate();
     point.draw(this.renderer, this.group);
 
     assert.ok(deleteMarkerSpy.calledOnce);
@@ -477,7 +486,7 @@ QUnit.test("Update range to range", function(assert) {
     var data = { argument: 1, value: 1, minValue: 1 },
         point = createPoint(this.series, data, this.options);
 
-    point.translate(this.translators);
+    point.translate();
     point.draw(this.renderer, this.group);
 
     var deleteMarkerSpy = sinon.spy(point, "deleteMarker"),
@@ -485,7 +494,7 @@ QUnit.test("Update range to range", function(assert) {
 
     var newOptions = $.extend(true, {}, this.options, { type: "rangebar" });
     point.update(data, newOptions);
-    point.translate(this.translators);
+    point.translate();
     point.draw(this.renderer, this.group);
 
     assert.ok(deleteMarkerSpy.calledOnce);
@@ -501,16 +510,6 @@ QUnit.module("Draw", {
         this.renderer = new vizMocks.Renderer();
         this.group = this.renderer.g();
 
-        this.translators = {
-            x: new MockTranslator({
-                translate: { 5: 50 },
-                getCanvasVisibleArea: { min: 1, max: 100 }
-            }),
-            y: new MockTranslator({
-                translate: { 5: 100 },
-                getCanvasVisibleArea: { min: 2, max: 210 }
-            })
-        };
         this.labelsGroup = this.renderer.g();
         this.data = { argument: 5, value: 5 };
         this.options = {
@@ -530,7 +529,26 @@ QUnit.module("Draw", {
         });
         this.series = {
             isFullStackedSeries: function() { return false; },
-            getLabelVisibility: function() { return true; }
+            getLabelVisibility: function() { return true; },
+            getVisibleArea: function() { return { minX: 1, maxX: 100, minY: 2, maxY: 210 }; },
+            getValueAxis: function() {
+                return {
+                    getTranslator: function() {
+                        return new MockTranslator({
+                            translate: { 5: 100 }
+                        });
+                    }
+                };
+            },
+            getArgumentAxis: function() {
+                return {
+                    getTranslator: function() {
+                        return new MockTranslator({
+                            translate: { 5: 50 }
+                        });
+                    }
+                };
+            }
         };
 
         this.groups = {
@@ -547,7 +565,7 @@ QUnit.test("Point is not visible", function(assert) {
     this.options.visible = false;
     var point = createPoint(this.series, this.data, this.options);
 
-    point.translate(this.translators);
+    point.translate();
     var spy = sinon.spy(point, "_drawMarker");
     point.draw(this.renderer, this.groups);
 
@@ -558,7 +576,7 @@ QUnit.test("Point is visible", function(assert) {
     this.options.visible = true;
     var point = createPoint(this.series, this.data, this.options);
 
-    point.translate(this.translators);
+    point.translate();
     var spy = sinon.spy(point, "_drawMarker");
     point.draw(this.renderer, this.groups);
 
@@ -570,16 +588,6 @@ QUnit.module("Label", {
         this.renderer = new vizMocks.Renderer();
         this.group = this.renderer.g();
 
-        this.translators = {
-            x: new MockTranslator({
-                translate: { 5: 50 },
-                getCanvasVisibleArea: { min: 1, max: 100 }
-            }),
-            y: new MockTranslator({
-                translate: { 5: 100 },
-                getCanvasVisibleArea: { min: 2, max: 210 }
-            })
-        };
         this.sinonFactory = sinon.stub(labelModule, "Label", function() {
             return sinon.createStubInstance(originalLabel);
         });
@@ -605,7 +613,26 @@ QUnit.module("Label", {
         };
         this.series = {
             isFullStackedSeries: function() { return false; },
-            getLabelVisibility: function() { return true; }
+            getLabelVisibility: function() { return true; },
+            getVisibleArea: function() { return { minX: 1, maxX: 100, minY: 2, maxY: 210 }; },
+            getValueAxis: function() {
+                return {
+                    getTranslator: function() {
+                        return new MockTranslator({
+                            translate: { 5: 100 },
+                        });
+                    }
+                };
+            },
+            getArgumentAxis: function() {
+                return {
+                    getTranslator: function() {
+                        return new MockTranslator({
+                            translate: { 5: 50 },
+                        });
+                    }
+                };
+            }
         };
     },
     afterEach: function() {
@@ -618,7 +645,7 @@ QUnit.test("Draw label. Visible", function(assert) {
 
     point._label.getBoundingRect.returns({});
     point._label.getLayoutOptions.returns({});
-    point.translate(this.translators);
+    point.translate();
     point.draw(this.renderer, this.groups);
 
     assert.ok(point._label);
@@ -629,7 +656,7 @@ QUnit.test("Draw label. Common visible = false", function(assert) {
     this.series.getLabelVisibility = function() { return false; };
     var point = createPoint(this.series, this.data, this.options);
 
-    point.translate(this.translators);
+    point.translate();
     point.draw(this.renderer, this.groups);
 
     assert.ok(point._label);
@@ -641,7 +668,7 @@ QUnit.test("Draw label. Invisible", function(assert) {
     this.series.getLabelVisibility = function() { return false; };
     var point = createPoint(this.series, this.data, this.options);
 
-    point.translate(this.translators);
+    point.translate();
     point.draw(this.renderer, this.groups);
 
     assert.ok(point._label);
@@ -653,7 +680,7 @@ QUnit.test("Update label. Visible", function(assert) {
     point._label.getBoundingRect.returns({});
     point._label.getLayoutOptions.returns({});
 
-    point.translate(this.translators);
+    point.translate();
     point.draw(this.renderer, this.groups);
     point.update(this.data, this.options);
 
@@ -672,7 +699,7 @@ QUnit.test("Update data with null value after data with value", function(assert)
     point._label.getBoundingRect.returns({});
     point._label.getLayoutOptions.returns({});
 
-    point.translate(this.translators);
+    point.translate();
     point.draw(this.renderer, this.groups);
 
     sinon.spy(point, "setInvisibility");
@@ -704,17 +731,26 @@ QUnit.module("Deleting", {
 
         this.series = {
             isFullStackedSeries: function() { return false; },
-            getLabelVisibility: function() { return false; }
-        };
-        this.translators = {
-            x: new MockTranslator({
-                translate: { "null": 0, 1: 11 },
-                getCanvasVisibleArea: { min: 1, max: 100 }
-            }),
-            y: new MockTranslator({
-                translate: { "null": 0, 1: 22 },
-                getCanvasVisibleArea: { min: 2, max: 210 }
-            })
+            getLabelVisibility: function() { return false; },
+            getVisibleArea: function() { return { minX: 1, maxX: 100, minY: 2, maxY: 210 }; },
+            getValueAxis: function() {
+                return {
+                    getTranslator: function() {
+                        return new MockTranslator({
+                            translate: { "null": 0, 1: 22 }
+                        });
+                    }
+                };
+            },
+            getArgumentAxis: function() {
+                return {
+                    getTranslator: function() {
+                        return new MockTranslator({
+                            translate: { "null": 0, 1: 11 }
+                        });
+                    }
+                };
+            }
         };
     }
 });
@@ -724,7 +760,7 @@ QUnit.test("Delete marker", function(assert) {
     var data = { argument: 1, value: 1 },
         point = createPoint(this.series, data, this.options);
 
-    point.translate(this.translators);
+    point.translate();
     point.draw(this.renderer, this.groups);
 
     point.deleteMarker();
@@ -746,16 +782,21 @@ QUnit.module("states and styles", {
             symbol: "circle"
         };
         this.data = { argument: 1, value: 1, lowError: 2, highError: 4 };
-        this.translators = {
-            x: new MockTranslator({
-                translate: { "null": 0, 1: 11, 2: 12, 3: 13, 4: 14 },
-                getCanvasVisibleArea: { min: 1, max: 100 }
-            }),
-            y: new MockTranslator({
-                translate: { "null": 0, 1: 22, 2: 23, 3: 24, 4: 25 },
-                getCanvasVisibleArea: { min: 2, max: 210 }
-            })
-        };
+        this.series.getVisibleArea = function() { return { minX: 1, maxX: 100, minY: 2, maxY: 210 }; },
+        this.series.getValueAxis.returns({
+            getTranslator: function() {
+                return new MockTranslator({
+                    translate: { "null": 0, 1: 22, 2: 23, 3: 24, 4: 25 }
+                });
+            }
+        });
+        this.series.getArgumentAxis.returns({
+            getTranslator: function() {
+                return new MockTranslator({
+                    translate: { "null": 0, 1: 11, 2: 12, 3: 13, 4: 14 }
+                });
+            }
+        });
 
         this.groups = {
             markers: this.group,
@@ -766,7 +807,7 @@ QUnit.module("states and styles", {
 
 QUnit.test("Apply normal style", function(assert) {
     var point = createPoint(this.series, this.data, this.options);
-    point.translate(this.translators);
+    point.translate();
 
     point.draw(this.renderer, this.groups);
     point.graphic.stub("attr").reset();
@@ -784,7 +825,7 @@ QUnit.test("Apply normal style", function(assert) {
 
 QUnit.test("Apply hover style", function(assert) {
     var point = createPoint(this.series, this.data, this.options);
-    point.translate(this.translators);
+    point.translate();
     point.draw(this.renderer, this.groups);
     point.graphic.stub("attr").reset();
     point.applyStyle("hover");
@@ -795,7 +836,7 @@ QUnit.test("Apply hover style", function(assert) {
 
 QUnit.test("Apply selection style", function(assert) {
     var point = createPoint(this.series, this.data, this.options);
-    point.translate(this.translators);
+    point.translate();
     point.draw(this.renderer, this.groups);
     point.graphic.stub("attr").reset();
 
@@ -807,7 +848,7 @@ QUnit.test("Apply selection style", function(assert) {
 
 QUnit.test("Draw point with some style, point in the visible area after it was in invisible area and wasn't drawn", function(assert) {
     var point = createPoint(this.series, this.data, this.options);
-    point.translate(this.translators);
+    point.translate();
     point.applyStyle('selection');
     point.draw(this.renderer, this.groups);
 
@@ -817,7 +858,7 @@ QUnit.test("Draw point with some style, point in the visible area after it was i
 QUnit.test("T333557", function(assert) {
     this.options.styles.normal = { style: 'normal', fill: 'red' };
     var point = createPoint(this.series, this.data, this.options);
-    point.translate(this.translators);
+    point.translate();
     point.draw(this.renderer, this.groups);
 
     //act
@@ -835,7 +876,7 @@ QUnit.test("T333557", function(assert) {
 
 QUnit.test("Draw point without state", function(assert) {
     var point = createPoint(this.series, this.data, this.options);
-    point.translate(this.translators);
+    point.translate();
     point.draw(this.renderer, this.groups);
 
     //assert
@@ -844,7 +885,7 @@ QUnit.test("Draw point without state", function(assert) {
 
 QUnit.test("Release hover state", function(assert) {
     var point = createPoint(this.series, this.data, this.options);
-    point.translate(this.translators);
+    point.translate();
     point.draw(this.renderer, this.groups);
     //act
     point.releaseHoverState();
@@ -854,7 +895,7 @@ QUnit.test("Release hover state", function(assert) {
 
 QUnit.test("Release hover state check background when state is selected", function(assert) {
     var point = createPoint(this.series, this.data, this.options);
-    point.translate(this.translators);
+    point.translate();
     point.draw(this.renderer, this.groups);
     point.fullState = 2;
 
@@ -877,16 +918,21 @@ QUnit.module("point views", {
             symbol: "circle"
         };
         this.data = { argument: 1, value: 1, lowError: 2, highError: 4 };
-        this.translators = {
-            x: new MockTranslator({
-                translate: { "null": 0, 1: 11, 2: 12, 3: 13, 4: 14 },
-                getCanvasVisibleArea: { min: 1, max: 100 }
-            }),
-            y: new MockTranslator({
-                translate: { "null": 0, 1: 22, 2: 23, 3: 24, 4: 25 },
-                getCanvasVisibleArea: { min: 2, max: 210 }
-            })
-        };
+        this.series.getVisibleArea = function() { return { minX: 1, maxX: 100, minY: 2, maxY: 210 }; },
+        this.series.getValueAxis.returns({
+            getTranslator: function() {
+                return new MockTranslator({
+                    translate: { "null": 0, 1: 22, 2: 23, 3: 24, 4: 25 }
+                });
+            }
+        });
+        this.series.getArgumentAxis.returns({
+            getTranslator: function() {
+                return new MockTranslator({
+                    translate: { "null": 0, 1: 11, 2: 12, 3: 13, 4: 14 }
+                });
+            }
+        });
 
         this.groups = {
             markers: this.group,
@@ -894,7 +940,7 @@ QUnit.module("point views", {
         };
 
         var point = createPoint(this.series, this.data, this.options);
-        point.translate(this.translators);
+        point.translate();
         point.draw(this.renderer, this.groups);
         //point.graphic.stub("attr").reset();
 
@@ -1113,9 +1159,19 @@ QUnit.module("Event binding", {
             symbol: "circle"
         };
         this.data = { argument: 1, value: 1 };
-        this.translators = new MockTranslator({
-            translateX: { "null": 0, 1: 11 },
-            translateY: { "null": 0, 1: 22 }
+        this.series.getValueAxis.returns({
+            getTranslator: function() {
+                return new MockTranslator({
+                    translate: { "null": 0, 1: 22 }
+                });
+            }
+        });
+        this.series.getArgumentAxis.returns({
+            getTranslator: function() {
+                return new MockTranslator({
+                    translate: { "null": 0, 1: 11 }
+                });
+            }
         });
         this.groups = {
             markers: this.group
@@ -1190,16 +1246,6 @@ QUnit.module("Dispose", {
     beforeEach: function() {
         this.renderer = new vizMocks.Renderer();
         this.group = this.renderer.g();
-        this.translators = {
-            x: new MockTranslator({
-                translate: { 5: 50 },
-                getCanvasVisibleArea: { min: 1, max: 100 }
-            }),
-            y: new MockTranslator({
-                translate: { 5: 100 },
-                getCanvasVisibleArea: { min: 2, max: 210 }
-            })
-        };
         this.labelsGroup = this.renderer.g();
 
         this.data = { argument: 5, value: 5, lowError: 5, highError: 5 };
@@ -1223,7 +1269,26 @@ QUnit.module("Dispose", {
         });
         this.series = {
             isFullStackedSeries: function() { return false; },
-            getLabelVisibility: function() { return true; }
+            getLabelVisibility: function() { return true; },
+            getVisibleArea: function() { return { minX: 1, maxX: 100, minY: 2, maxY: 210 }; },
+            getValueAxis: function() {
+                return {
+                    getTranslator: function() {
+                        return new MockTranslator({
+                            translate: { 5: 100 },
+                        });
+                    }
+                };
+            },
+            getArgumentAxis: function() {
+                return {
+                    getTranslator: function() {
+                        return new MockTranslator({
+                            translate: { 5: 50 },
+                        });
+                    }
+                };
+            }
         };
 
         this.groups = {
@@ -1241,7 +1306,7 @@ QUnit.module("Dispose", {
 QUnit.test("Dispose", function(assert) {
     var point = createPoint(this.series, this.data, this.options);
 
-    point.translate(this.translators);
+    point.translate();
     point.draw(this.renderer, this.groups);
 
     var graphic = point.graphic,
@@ -1252,7 +1317,6 @@ QUnit.test("Dispose", function(assert) {
     assert.strictEqual(point._options, null, "options");
     assert.strictEqual(point._styles, null, "styles");
     assert.strictEqual(point.series, null, "series");
-    assert.strictEqual(point.translators, null, "translators");
 
     assert.strictEqual(point._label, null, "label");
     assert.strictEqual(point.graphic, null, "graphic");

@@ -16,6 +16,7 @@ var $ = require("../../core/renderer"),
     messageLocalization = require("../../localization/message"),
 
     DATEBOX_CLASS = "dx-datebox",
+    DX_AUTO_WIDTH_CLASS = "dx-auto-width",
     DATEBOX_WRAPPER_CLASS = "dx-datebox-wrapper";
 
 var PICKER_TYPE = {
@@ -169,7 +170,7 @@ var DateBox = DropDownEditor.inherit({
             * @publicName useCalendar
             * @type boolean
             * @default false
-            * @deprecated
+            * @deprecated dxDateBoxOptions_pickerType
             */
             useCalendar: false,
 
@@ -212,7 +213,7 @@ var DateBox = DropDownEditor.inherit({
             * @publicName useNative
             * @type boolean
             * @default true
-            * @deprecated
+            * @deprecated dxDateBoxOptions_pickerType
             */
             useNative: true,
 
@@ -487,6 +488,11 @@ var DateBox = DropDownEditor.inherit({
         this._strategy.renderInputMinMax(this._input());
     },
 
+    _renderDimensions: function() {
+        this.callBase();
+        this.element().toggleClass(DX_AUTO_WIDTH_CLASS, !this.option("width"));
+    },
+
     _refreshFormatClass: function() {
         var $element = this.element();
 
@@ -611,12 +617,14 @@ var DateBox = DropDownEditor.inherit({
     },
 
     _renderValue: function() {
-        var value = this.dateOption("value");
+        var value = this.dateOption("value"),
+            dateSerializationFormat = this.option("dateSerializationFormat");
 
         this.option("text", this._getDisplayedText(value));
 
         var submitFormat = uiDateUtils.SUBMIT_FORMATS_MAP[this.option("type")];
-        this._$submitElement.val(uiDateUtils.toStandardDateFormat(value, submitFormat));
+        var submitValue = dateSerializationFormat ? dateSerialization.serializeDate(value, dateSerializationFormat) : uiDateUtils.toStandardDateFormat(value, submitFormat);
+        this._$submitElement.val(submitValue);
 
         this._strategy.renderValue();
         this.callBase();
@@ -647,12 +655,12 @@ var DateBox = DropDownEditor.inherit({
     },
 
     _valueChangeEventHandler: function(e) {
-        var text = this.option("text");
-
-        var date = this._getParsedDate(text),
-            value = this.dateOption("value"),
+        var text = this.option("text"),
+            parsedDate = this._getParsedDate(text),
+            value = this.dateOption("value") || this._getDateByDefault(),
             type = this.option("type"),
-            newValue = uiDateUtils.mergeDates(value, date, type);
+            newValue = uiDateUtils.mergeDates(value, parsedDate, type),
+            date = parsedDate && type === "time" ? newValue : parsedDate;
 
         if(this._validateValue(date)) {
             var displayedText = this._getDisplayedText(newValue);
@@ -668,6 +676,10 @@ var DateBox = DropDownEditor.inherit({
             value: newValue,
             editor: this
         });
+    },
+
+    _getDateByDefault: function() {
+        return this._strategy.useCurrentDateByDefault() && new Date();
     },
 
     _getParsedDate: function(text) {
@@ -700,6 +712,14 @@ var DateBox = DropDownEditor.inherit({
         });
 
         return isValid;
+    },
+
+    _isValueChanged: function(newValue) {
+        var oldValue = this.dateOption("value"),
+            oldTime = oldValue && oldValue.getTime(),
+            newTime = newValue && newValue.getTime();
+
+        return oldTime !== newTime;
     },
 
     _renderProps: function() {
@@ -795,10 +815,13 @@ var DateBox = DropDownEditor.inherit({
             case "placeholder":
                 this._renderPlaceholder();
                 break;
-            case "dateSerializationFormat":
-            case "readOnly":
             case "min":
             case "max":
+                this._validateValue(this.dateOption("value"));
+                this._invalidate();
+                break;
+            case "dateSerializationFormat":
+            case "readOnly":
             case "interval":
             case "minZoomLevel":
             case "maxZoomLevel":
@@ -828,7 +851,7 @@ var DateBox = DropDownEditor.inherit({
                 this._updateSize();
                 break;
             case "value":
-                this._validateValue(dateSerialization.deserializeDate(this.option("value")));
+                this._validateValue(this.dateOption("value"));
                 this.callBase.apply(this, arguments);
                 break;
             case "showDropDownButton":
@@ -859,11 +882,11 @@ var DateBox = DropDownEditor.inherit({
         return dateSerialization.getDateSerializationFormat(value);
     },
 
-    dateValue: function() {
-        var jQueryEvent = arguments[1],
-            value = arguments[0];
+    dateValue: function(value, jQueryEvent) {
+        if(this._isValueChanged(value) && jQueryEvent) {
+            this._saveValueChangeEvent(jQueryEvent);
+        }
 
-        if(jQueryEvent) this._saveValueChangeEvent(jQueryEvent);
         return this.dateOption("value", value);
     },
 

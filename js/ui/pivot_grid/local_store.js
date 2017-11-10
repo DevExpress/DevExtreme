@@ -173,9 +173,10 @@ exports.LocalStore = Class.inherit((function() {
 
     function fillHashExpandedPath(expandedPaths) {
         if(expandedPaths) {
-            expandedPaths.hash = {};
-            $.each(expandedPaths, function() {
-                expandedPaths.hash[this.join(".")] = true;
+            var hash = expandedPaths.hash = {};
+            expandedPaths.forEach(function(path) {
+                var pathValue = path.map(function(value) { return value + ""; }).join(".");
+                hash[pathValue] = true;
             });
         }
     }
@@ -263,16 +264,23 @@ exports.LocalStore = Class.inherit((function() {
     }
 
     function areValuesEqual(filterValue, fieldValue) {
+        var valueOfFilter = filterValue && filterValue.valueOf(),
+            valueOfField = fieldValue && fieldValue.valueOf();
+
         if(Array.isArray(filterValue)) {
             fieldValue = fieldValue || [];
+
             for(var i = 0; i < filterValue.length; i++) {
-                if(filterValue[i] !== fieldValue[i]) {
+                valueOfFilter = filterValue[i] && filterValue[i].valueOf();
+                valueOfField = fieldValue[i] && fieldValue[i].valueOf();
+
+                if(valueOfFilter !== valueOfField) {
                     return false;
                 }
             }
             return true;
         } else {
-            return filterValue === fieldValue;
+            return valueOfFilter === valueOfField;
         }
     }
 

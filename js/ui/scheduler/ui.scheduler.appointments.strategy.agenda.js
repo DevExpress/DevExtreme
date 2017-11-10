@@ -31,7 +31,6 @@ var AgendaRenderingStrategy = BaseAppointmentsStrategy.inherit({
                     recurrentIndexes = [];
 
                 $.each(appts, function(index, appointment) {
-
                     var recurrenceBatch = this.instance.getAppointmentsInstance()._processRecurrenceAppointment(appointment, index),
                         appointmentBatch = null;
 
@@ -64,23 +63,9 @@ var AgendaRenderingStrategy = BaseAppointmentsStrategy.inherit({
                 height: height,
                 width: "100%",
                 sortedIndex: sortedIndex++,
-                groupIndex: this._calculateGroupIndex(index, appointmentsByResources),
-                appointmentReduced: this._calculateIfApptReduced(appt)
+                groupIndex: this._calculateGroupIndex(index, appointmentsByResources)
             }]);
         }.bind(this));
-
-        return result;
-    },
-
-    _calculateIfApptReduced: function(appointment) {
-        var appointmentData = appointment.appointmentData || appointment;
-
-        var isRecurrence = !!this.instance.fire("getField", "recurrenceRule", appointmentData),
-            result = false;
-
-        if(this.instance.fire("appointmentTakesSeveralDays", appointmentData) && !isRecurrence) {
-            result = "head";
-        }
 
         return result;
     },
@@ -159,14 +144,13 @@ var AgendaRenderingStrategy = BaseAppointmentsStrategy.inherit({
 
     getCompactAppointmentDefaultOffset: noop,
 
-    calculateRows: function(appointments, agendaDuration, currentDate) {
+    calculateRows: function(appointments, agendaDuration, currentDate, needClearSettings) {
         this._rows = [];
 
         var appts = {
             indexes: [],
             parts: []
         };
-
         var groupedAppointments = this.instance.fire("groupAppointmentsByResources", appointments);
         currentDate = dateUtils.trimTime(new Date(currentDate));
 
@@ -180,7 +164,14 @@ var AgendaRenderingStrategy = BaseAppointmentsStrategy.inherit({
             }
 
             $.each(currentAppointments, function(index, appointment) {
-                var result = this.instance.getAppointmentsInstance()._processRecurrenceAppointment(appointment, index, true);
+                var startDate = this.instance.fire("getField", "startDate", appointment),
+                    endDate = this.instance.fire("getField", "endDate", appointment);
+
+                this._checkWrongEndDate(appointment, startDate, endDate);
+
+                needClearSettings && delete appointment.settings;
+
+                var result = this.instance.getAppointmentsInstance()._processRecurrenceAppointment(appointment, index, false);
                 appts.parts = appts.parts.concat(result.parts);
                 appts.indexes = appts.indexes.concat(result.indexes);
             }.bind(this));
@@ -190,7 +181,6 @@ var AgendaRenderingStrategy = BaseAppointmentsStrategy.inherit({
             $.merge(currentAppointments, appts.parts);
 
             var appointmentCount = currentAppointments.length;
-
             for(var i = 0; i < agendaDuration; i++) {
                 var day = new Date(currentDate);
                 day.setMilliseconds(day.getMilliseconds() + (24 * 3600000 * i));
@@ -200,8 +190,10 @@ var AgendaRenderingStrategy = BaseAppointmentsStrategy.inherit({
                 }
 
                 for(var j = 0; j < appointmentCount; j++) {
-                    var appointmentData = currentAppointments[j].itemData || currentAppointments[j];
-                    if(this.instance.fire("dayHasAppointment", day, appointmentData, true)) {
+                    var appointmentData = currentAppointments[j].settings || currentAppointments[j],
+                        appointmentIsLong = this.instance.fire("appointmentTakesSeveralDays", currentAppointments[j]);
+
+                    if(this.instance.fire("dayHasAppointment", day, appointmentData, true) || (appointmentIsLong && this.instance.fire("dayHasAppointment", day, currentAppointments[j], true))) {
                         groupResult[i] += 1;
                     }
                 }

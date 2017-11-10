@@ -7,6 +7,7 @@ var $ = require("../../core/renderer"),
     isEmptyObject = require("../../core/utils/type").isEmptyObject,
     isWrapped = require("../../core/utils/variable_wrapper").isWrapped,
     isWritableWrapped = require("../../core/utils/variable_wrapper").isWritableWrapped,
+    unwrap = require("../../core/utils/variable_wrapper").unwrap,
     windowUtils = require("../../core/utils/window"),
     stringUtils = require("../../core/utils/string"),
     extend = require("../../core/utils/extend").extend,
@@ -44,6 +45,7 @@ var FORM_EDITOR_BY_DEFAULT = "dxTextBox",
     FIELD_ITEM_CONTENT_LOCATION_CLASS = "dx-field-item-content-location-",
     FIELD_ITEM_CONTENT_WRAPPER_CLASS = "dx-field-item-content-wrapper",
     FIELD_ITEM_HELP_TEXT_CLASS = "dx-field-item-help-text",
+    SINGLE_COLUMN_ITEM_CONTENT = "dx-single-column-item-content",
 
     LABEL_HORIZONTAL_ALIGNMENT_CLASS = "dx-label-h-align",
     LABEL_VERTICAL_ALIGNMENT_CLASS = "dx-label-v-align",
@@ -58,6 +60,8 @@ var FORM_EDITOR_BY_DEFAULT = "dxTextBox",
 
     LAYOUT_STRATEGY_FLEX = "flex",
     LAYOUT_STRATEGY_FALLBACK = "fallback",
+
+    SIMPLE_ITEM_TYPE = "simple",
 
     DATA_OPTIONS = ["dataSource", "items"];
 
@@ -94,7 +98,14 @@ var LayoutManager = Widget.inherit({
 
     _init: function() {
         this.callBase();
+        this._itemWatchers = [];
         this._initDataAndItems(this.option("layoutData"));
+    },
+
+    _dispose: function() {
+        this.callBase();
+
+        this._cleanItemWatchers();
     },
 
     _initDataAndItems: function(initialData) {
@@ -146,11 +157,12 @@ var LayoutManager = Widget.inherit({
     _updateItems: function(layoutData) {
         var that = this,
             userItems = this.option("items"),
+            isUserItemsExist = utils.isDefined(userItems),
             customizeItem = that.option("customizeItem"),
             items,
             processedItems;
 
-        items = utils.isDefined(userItems) ? userItems : this._generateItemsByData(layoutData);
+        items = isUserItemsExist ? userItems : this._generateItemsByData(layoutData);
         if(utils.isDefined(items)) {
             processedItems = [];
 
@@ -160,16 +172,48 @@ var LayoutManager = Widget.inherit({
 
                     customizeItem && customizeItem(item);
 
-                    if(utils.isObject(item) && item.visible !== false) {
+                    if(utils.isObject(item) && unwrap(item.visible) !== false) {
                         processedItems.push(item);
                     }
                 }
             });
 
+            if(!that._itemWatchers.length || !isUserItemsExist) {
+                that._updateItemWatchers(items);
+            }
+
             this._items = processedItems;
 
             this._sortItems();
         }
+    },
+
+    _cleanItemWatchers: function() {
+        this._itemWatchers.forEach(function(dispose) {
+            dispose();
+        });
+        this._itemWatchers = [];
+    },
+
+    _updateItemWatchers: function(items) {
+        var that = this,
+            watch = that._getWatch();
+
+        items.forEach(function(item) {
+            if(utils.isObject(item) && utils.isDefined(item.visible) && $.isFunction(watch)) {
+                that._itemWatchers.push(
+                    watch(
+                        function() {
+                            return unwrap(item.visible);
+                        },
+                        function() {
+                            that._updateItems(that.option("layoutData"));
+                            that.repaint();
+                        },
+                        { skipImmediate: true }
+                ));
+            }
+        });
     },
 
     _generateItemsByData: function(layoutData) {
@@ -188,10 +232,9 @@ var LayoutManager = Widget.inherit({
 
     _isAcceptableItem: function(item) {
         var itemField = item.dataField || item,
-            itemData = this._getDataByField(itemField),
-            isVisibleItem = item.visible !== false;
+            itemData = this._getDataByField(itemField);
 
-        return !(utils.isFunction(itemData) && !isWrapped(itemData)) && isVisibleItem;
+        return !(utils.isFunction(itemData) && !isWrapped(itemData));
     },
 
     _processItem: function(item) {
@@ -200,7 +243,7 @@ var LayoutManager = Widget.inherit({
         }
 
         if(typeof item === "object" && !item.itemType) {
-            item.itemType = "simple";
+            item.itemType = SIMPLE_ITEM_TYPE;
         }
 
         if(!utils.isDefined(item.editorType) && utils.isDefined(item.dataField)) {
@@ -312,16 +355,16 @@ var LayoutManager = Widget.inherit({
             _layoutStrategy: that._hasBrowserFlex() ? LAYOUT_STRATEGY_FLEX : LAYOUT_STRATEGY_FALLBACK,
             onLayoutChanged: function() {
                 var onLayoutChanged = that.option("onLayoutChanged"),
-                    isLayoutChanged = that.isLayoutChanged();
+                    isSingleColumnMode = that.isSingleColumnMode();
 
                 if(onLayoutChanged) {
-                    that.element().toggleClass(LAYOUT_MANAGER_ONE_COLUMN, isLayoutChanged);
-                    onLayoutChanged(isLayoutChanged);
+                    that.element().toggleClass(LAYOUT_MANAGER_ONE_COLUMN, isSingleColumnMode);
+                    onLayoutChanged(isSingleColumnMode);
                 }
             },
             onContentReady: function(e) {
                 if(that.option("onLayoutChanged")) {
-                    that.element().toggleClass(LAYOUT_MANAGER_ONE_COLUMN, that.isLayoutChanged(e.component));
+                    that.element().toggleClass(LAYOUT_MANAGER_ONE_COLUMN, that.isSingleColumnMode(e.component));
                 }
                 that._fireContentReadyAction();
             },
@@ -334,6 +377,8 @@ var LayoutManager = Widget.inherit({
                     $fieldItem = $("<div/>")
                         .addClass(item.cssClass)
                         .appendTo($itemElement);
+
+                $itemElement.toggleClass(SINGLE_COLUMN_ITEM_CONTENT, that.isSingleColumnMode(this));
 
                 if(e.location.row === 0) {
                     $fieldItem.addClass(LAYOUT_MANAGER_FIRST_ROW_CLASS);
@@ -369,15 +414,23 @@ var LayoutManager = Widget.inherit({
                 return this._cashedColCount;
             }
 
-            var minColWidth = this.option("minColWidth"),
-                width = this.element().width(),
-                itemsCount = this._items.length,
-                maxColCount = Math.floor(width / minColWidth) || 1;
-
-            this._cashedColCount = colCount = itemsCount < maxColCount ? itemsCount : maxColCount;
+            this._cashedColCount = colCount = this._getMaxColCount();
         }
 
         return colCount < 1 ? 1 : colCount;
+    },
+
+    _getMaxColCount: function() {
+        var minColWidth = this.option("minColWidth"),
+            width = this.element().width(),
+            itemsCount = this._items.length,
+            maxColCount = Math.floor(width / minColWidth) || 1;
+
+        return itemsCount < maxColCount ? itemsCount : maxColCount;
+    },
+
+    isCachedColCountObsolete: function() {
+        return this._cashedColCount && this._getMaxColCount() !== this._cashedColCount;
     },
 
     _prepareItemsWithMerging: function(colCount) {
@@ -468,7 +521,7 @@ var LayoutManager = Widget.inherit({
             $label = that._renderLabel(labelOptions).appendTo($container);
         }
 
-        if(item.itemType === "simple") {
+        if(item.itemType === SIMPLE_ITEM_TYPE) {
             if(that._isLabelNeedBaselineAlign(item) && labelOptions.location !== "top") {
                 $container.addClass(FIELD_ITEM_LABEL_ALIGN_CLASS);
             }
@@ -670,7 +723,7 @@ var LayoutManager = Widget.inherit({
     },
 
     _prepareValidationRules: function(userValidationRules, isItemRequired, itemType, itemName) {
-        var isSimpleItem = itemType === "simple",
+        var isSimpleItem = itemType === SIMPLE_ITEM_TYPE,
             validationRules;
 
         if(isSimpleItem) {
@@ -836,9 +889,10 @@ var LayoutManager = Widget.inherit({
     },
 
     _renderHelpText: function(fieldItem, $editor, helpID) {
-        var helpText = fieldItem.helpText;
+        var helpText = fieldItem.helpText,
+            isSimpleItem = fieldItem.itemType === SIMPLE_ITEM_TYPE;
 
-        if(helpText) {
+        if(helpText && isSimpleItem) {
             var $editorWrapper = $("<div>").addClass(FIELD_ITEM_CONTENT_WRAPPER_CLASS);
 
             $editor.wrap($editorWrapper);
@@ -915,6 +969,7 @@ var LayoutManager = Widget.inherit({
                 }
                 break;
             case "items":
+                this._cleanItemWatchers();
                 this._initDataAndItems(args.value);
                 this._invalidate();
                 break;
@@ -1005,6 +1060,12 @@ var LayoutManager = Widget.inherit({
         this._isValueChangedCalled = false;
     },
 
+    _dimensionChanged: function() {
+        if(this.option("colCount") === "auto" && this.isCachedColCountObsolete()) {
+            this.fireEvent("autoColCountChanged");
+        }
+    },
+
     getItemID: function(name) {
         var formInstance = this.option("form");
         return formInstance && formInstance.getItemID(name);
@@ -1026,7 +1087,7 @@ var LayoutManager = Widget.inherit({
         return this._editorInstancesByField[field];
     },
 
-    isLayoutChanged: function(component) {
+    isSingleColumnMode: function(component) {
         var responsiveBox = this._responsiveBox || component;
         if(responsiveBox) {
             return responsiveBox.option("currentScreenFactor") === responsiveBox.option("singleColumnScreen");

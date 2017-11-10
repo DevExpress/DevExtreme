@@ -506,9 +506,9 @@ var normalizeDateByWeek = function(date, currentDate) {
 
 var dateInRange = function(date, min, max, format) {
     if(format === "date") {
-        min = min && new Date(min.getFullYear(), min.getMonth(), min.getDate());
-        max = max && new Date(max.getFullYear(), max.getMonth(), max.getDate());
-        date = date && new Date(date.getFullYear(), date.getMonth(), date.getDate());
+        min = min && dateUtils.correctDateWithUnitBeginning(min, "day");
+        max = max && dateUtils.correctDateWithUnitBeginning(max, "day");
+        date = date && dateUtils.correctDateWithUnitBeginning(date, "day");
     }
 
     return normalizeDate(date, min, max) === date;
@@ -552,6 +552,13 @@ var fixTimezoneGap = function(oldDate, newDate) {
     if(sign > 0 || trial.getDate() === newDate.getDate()) {
         newDate.setTime(trial.getTime());
     }
+};
+
+var roundToHour = function(date) {
+    date.setHours(date.getHours() + 1);
+    date.setMinutes(0);
+
+    return date;
 };
 
 var getTimezonesDifference = function(min, max) {
@@ -604,6 +611,7 @@ var dateUtils = {
     getQuarter: getQuarter,
     getFirstQuarterMonth: getFirstQuarterMonth,
     dateInRange: dateInRange,
+    roundToHour: roundToHour,
     normalizeDate: normalizeDate,
     getViewMinBoundaryDate: getViewMinBoundaryDate,
     getViewMaxBoundaryDate: getViewMaxBoundaryDate,

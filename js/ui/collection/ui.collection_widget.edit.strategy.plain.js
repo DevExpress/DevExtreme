@@ -54,7 +54,7 @@ var PlainEditStrategy = EditStrategy.inherit({
     },
 
     getItemsByKeys: function(keys, items) {
-        return items || keys;
+        return (items || keys).slice();
     },
 
     moveItemAtIndexToIndex: function(movingIndex, destinationIndex) {

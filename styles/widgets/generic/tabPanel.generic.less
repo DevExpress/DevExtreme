@@ -42,28 +42,29 @@
             border: @GENERIC_TAB_FOCUS_BORDER;
         }
 
-        .dx-tab:not(.dx-tab-selected):before {
-            content: "";
-            pointer-events: none;
-            position: absolute;
-            top: 100%;
-            bottom: -1px;
-            left: 0;
-            right: 0;
-            z-index: 2;
-            height: 0;
-            border-bottom: 1.5px solid @tabs-focused-border-color;
-            bottom: -1.4px;
-        }
-
         .dx-tab-selected:after {
             border-top: @GENERIC_TAB_FOCUS_BORDER;
             border-right: @GENERIC_TAB_FOCUS_BORDER;
             border-left: @GENERIC_TAB_FOCUS_BORDER;
         }
 
-        .dx-tabs-scrollable .dx-tab-selected:after {
-            border-bottom: 1.5px solid @tabs-tab-bg;
+        .dx-tabs-scrollable {
+            .dx-tab:not(.dx-tab-selected):before {
+                content: "";
+                pointer-events: none;
+                position: absolute;
+                top: 100%;
+                bottom: -1px;
+                left: 0;
+                right: 0;
+                z-index: 2;
+                height: 0;
+                border-bottom: 1.5px solid @tabs-focused-border-color;
+                bottom: -1.4px;
+            }
+            .dx-tab-selected:after {
+                border-bottom: 1.5px solid @tabs-tab-bg;
+            }
         }
     }
 

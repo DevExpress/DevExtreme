@@ -190,6 +190,10 @@ exports.DataController = Class.inherit((function() {
                 var hideTotals = options.showTotals === false || dataFields.length > 0 && (dataFields.length === options.hiddenTotals.length),
                     hideData = dataFields.length > 0 && options.hiddenValues.length === dataFields.length;
 
+                if(hideData && hideTotals) {
+                    depthSize = 1;
+                }
+
                 if(!hideTotals || options.layout === "tree") {
                     addAdditionalTotalHeaderItems(viewHeaderItems, headerDescriptions, options.showTotalsPrior, options.layout === "tree");
                 }
@@ -268,6 +272,10 @@ exports.DataController = Class.inherit((function() {
 
             if(childrenStack[depth + 1]) {
                 node.children = childrenStack[depth + 1];
+                //T541266
+                for(var i = depth + 1; i < childrenStack.length; i++) {
+                    childrenStack[i] = undefined;
+                }
                 childrenStack.length = depth + 1;
             }
 
@@ -588,7 +596,7 @@ exports.DataController = Class.inherit((function() {
         return info;
     }
 
-    function getHeaderIndexedItems(headerItems, maxDepth, options) {
+    function getHeaderIndexedItems(headerItems, options) {
         var visibleIndex = 0,
             indexedItems = [];
 
@@ -628,7 +636,7 @@ exports.DataController = Class.inherit((function() {
                     if(this.pageIndex() < this.pageCount() - 1) {
                         return this.pageSize();
                     } else {
-                        this.totalItemsCount() % this.pageSize();
+                        return this.totalItemsCount() % this.pageSize();
                     }
                 },
                 items: function() {
@@ -802,8 +810,10 @@ exports.DataController = Class.inherit((function() {
                 columnsScrollController.viewportSize(contentParams.viewportWidth / columnsScrollController.viewportItemSize());
                 columnsScrollController.setContentSize(contentParams.contentWidth);
 
-                columnsScrollController.loadIfNeed();
-                rowsScrollController.loadIfNeed();
+                commonUtils.deferUpdate(function() {
+                    columnsScrollController.loadIfNeed();
+                    rowsScrollController.loadIfNeed();
+                });
 
                 newLeftPosition = columnsScrollController.getViewportPosition() * columnViewportItemSize / oldColumnViewportItemSize;
                 newTopPosition = rowsScrollController.getViewportPosition() * rowViewportItemSize / oldRowViewportItemSize;
@@ -887,10 +897,10 @@ exports.DataController = Class.inherit((function() {
             return this._dataSource.isLoading();
         },
         beginLoading: function() {
-            this._dataSource._changeLoadingCount(1);
+            this._dataSource.beginLoading();
         },
         endLoading: function() {
-            this._dataSource._changeLoadingCount(-1);
+            this._dataSource.endLoading();
         },
         isEmpty: function() {
             var dataFields = this._dataSource.getAreaFields("data"),
@@ -950,10 +960,10 @@ exports.DataController = Class.inherit((function() {
                 };
 
             if(!commonUtils.isDefined(data.grandTotalRowIndex)) {
-                data.grandTotalRowIndex = getHeaderIndexedItems(data.rows, rowFields.length - 1, rowOptions).length;
+                data.grandTotalRowIndex = getHeaderIndexedItems(data.rows, rowOptions).length;
             }
             if(!commonUtils.isDefined(data.grandTotalColumnIndex)) {
-                data.grandTotalColumnIndex = getHeaderIndexedItems(data.columns, columnFields.length - 1, columnOptions).length;
+                data.grandTotalColumnIndex = getHeaderIndexedItems(data.columns, columnOptions).length;
             }
 
             dataSource._changeLoadingCount(1, 0.8);
@@ -961,7 +971,9 @@ exports.DataController = Class.inherit((function() {
             when(
                 createHeaderInfo(data.columns, columnFields, dataFieldsForColumns, true, columnOptions),
                 createHeaderInfo(data.rows, rowFields, dataFieldsForRows, false, rowOptions)
-            ).done(function(columnsInfo, rowsInfo) {
+            ).always(function() {
+                dataSource._changeLoadingCount(-1);
+            }).done(function(columnsInfo, rowsInfo) {
                 that._columnsInfo = columnsInfo;
                 that._rowsInfo = rowsInfo;
 
@@ -974,8 +986,6 @@ exports.DataController = Class.inherit((function() {
                     that._columnsScrollController.load();
                     that._lockChanged = false;
                 }
-            }).always(function() {
-                dataSource._changeLoadingCount(-1);
             }).done(function() {
                 that._fireChanged();
                 if(that._stateStoringController.isEnabled() && !that._dataSource.isLoading()) {
@@ -1054,23 +1064,24 @@ exports.DataController = Class.inherit((function() {
                 foreachColumnInfo(info, function(columnInfo, visibleIndex, rowIndex) {
                     var cell = columnInfo,
                         colspan,
-                        isVisible = visibleIndex + (cell.colspan - 1 || 0) >= startIndex && visibleIndex < endIndex;
+                        cellColspan = cell.colspan || 1,
+                        isVisible = visibleIndex + cellColspan - 1 >= startIndex && visibleIndex < endIndex;
 
                     newInfo[rowIndex] = newInfo[rowIndex] || [];
 
                     if(isVisible) {
                         if(visibleIndex < startIndex) {
-                            colspan = cell.colspan - (startIndex - visibleIndex);
+                            colspan = cellColspan - (startIndex - visibleIndex);
                             visibleIndex = startIndex;
                         } else {
-                            colspan = cell.colspan;
+                            colspan = cellColspan;
                         }
 
                         if(visibleIndex + colspan > endIndex) {
                             colspan = endIndex - visibleIndex;
                         }
 
-                        if(colspan !== cell.colspan) {
+                        if(colspan !== cellColspan) {
                             cell = extend({}, cell, {
                                 colspan: colspan
                             });
@@ -1082,6 +1093,10 @@ exports.DataController = Class.inherit((function() {
                         return false;
                     }
                 });
+
+                for(var i = 0; i < newInfo.length; i++) {
+                    newInfo[i] = newInfo[i] || [];
+                }
 
                 info = newInfo;
             }

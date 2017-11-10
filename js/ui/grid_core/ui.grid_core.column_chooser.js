@@ -171,7 +171,9 @@ var ColumnChooserView = columnsView.ColumnsView.inherit({
     },
 
     _renderColumnChooserList: function($container, items) {
-        var isSelectMode = this.option("columnChooser.mode") === "select",
+        var scrollTop,
+            scrollableInstance,
+            isSelectMode = this.option("columnChooser.mode") === "select",
             listConfig = {
                 items: items,
                 dataStructure: "plain",
@@ -182,6 +184,19 @@ var ColumnChooserView = columnsView.ColumnsView.inherit({
                 showCheckBoxesMode: "none",
                 rootValue: null
             };
+
+        if(isSelectMode) {
+            scrollableInstance = $container.find(".dx-scrollable").data("dxScrollable");
+            scrollTop = scrollableInstance && scrollableInstance.scrollTop();
+
+            listConfig.onContentReady = function(e) {
+                if(scrollTop) {
+                    var scrollable = e.element.find(".dx-scrollable").data("dxScrollable");
+
+                    scrollable && scrollable.scrollTo({ y: scrollTop });
+                }
+            };
+        }
 
         if(this._isWinDevice()) {
             listConfig.useNativeScrolling = false;
@@ -237,13 +252,16 @@ var ColumnChooserView = columnsView.ColumnsView.inherit({
     },
 
     _columnOptionChanged: function(e) {
-        var optionNames = e.optionNames,
+        var changeTypes = e.changeTypes,
+            optionNames = e.optionNames,
             isSelectMode = this.option("columnChooser.mode") === "select";
 
         this.callBase(e);
 
-        if(isSelectMode && optionNames.showInColumnChooser) {
-            this.render(null, true);
+        if(isSelectMode) {
+            if(optionNames.showInColumnChooser || optionNames.visible || changeTypes.columns && optionNames.all) {
+                this.render(null, true);
+            }
         }
     },
 
@@ -437,7 +455,8 @@ module.exports = {
                                 showText: "inMenu",
                                 location: "after",
                                 name: "columnChooserButton",
-                                locateInMenu: "auto"
+                                locateInMenu: "auto",
+                                sortIndex: 40
                             };
 
                         items.push(toolbarItem);

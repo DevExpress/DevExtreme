@@ -155,7 +155,7 @@ var Form = Widget.inherit({
              * @name dxFormOptions_customizeItem
              * @publicName customizeItem
              * @type function
-             * @type_function_param1 item:Form item
+             * @type_function_param1 item:dxFormSimpleItem|dxFormGroupItem|dxFormTabbedItem|dxFormEmptyItem
              */
             customizeItem: null,
             /**
@@ -287,7 +287,7 @@ var Form = Widget.inherit({
              * @name dxFormSimpleItemOptions_editorType
              * @publicName editorType
              * @type string
-             * @acceptValues 'dxTextBox'|'dxNumberBox'|'dxDateBox'|'dxCheckBox'|'dxSwitch'|'dxSelectBox'|'dxLookup'|'dxTagBox'|'dxTextArea'|'dxColorBox'|'dxCalendar'|'dxAutocomplete'|'dxRadioGroup'|'dxSlider'
+             * @acceptValues 'dxTextBox'|'dxNumberBox'|'dxDateBox'|'dxCheckBox'|'dxSwitch'|'dxSelectBox'|'dxLookup'|'dxTagBox'|'dxTextArea'|'dxColorBox'|'dxCalendar'|'dxAutocomplete'|'dxRadioGroup'|'dxSlider'|'dxDropDownBox'
              */
             /**
              * @name dxFormSimpleItemOptions_editorOptions
@@ -500,7 +500,7 @@ var Form = Widget.inherit({
             /**
              * @name dxFormTabbedItemOptions_tabPanelOptions
              * @publicName tabPanelOptions
-             * @type TabPanel options
+             * @type dxTabPanelOptions
              * @default undefined
              */
             /**
@@ -720,9 +720,9 @@ var Form = Widget.inherit({
         }
     },
 
-    _applyLabelsWidth: function($container, excludeTabbed, inOneColumn) {
-        var colCount = inOneColumn ? 1 : this._getColCount($container),
-            applyLabelsOptions = {
+    _applyLabelsWidth: function($container, excludeTabbed, inOneColumn, colCount) {
+        colCount = inOneColumn ? 1 : colCount || this._getColCount($container);
+        var applyLabelsOptions = {
                 excludeTabbed: excludeTabbed,
                 inOneColumn: inOneColumn
             },
@@ -784,7 +784,7 @@ var Form = Widget.inherit({
             if(this._checkGrouping(options.items)) {
                 this._applyLabelsWidthWithGroups(options.$container, options.layoutManager._getColCount(), options.excludeTabbed);
             } else {
-                this._applyLabelsWidth(options.$container, options.excludeTabbed);
+                this._applyLabelsWidth(options.$container, options.excludeTabbed, false, options.layoutManager._getColCount());
             }
         }
         this._removeHiddenElement();
@@ -942,7 +942,6 @@ var Form = Widget.inherit({
 
         that._rootLayoutManager = that._renderLayoutManager(items, $content, {
             colCount: that.option("colCount"),
-            width: this.option("width"),
             alignItemLabels: that.option("alignItemLabels"),
             screenByWidth: this.option("screenByWidth"),
             colCountByScreen: this.option("colCountByScreen"),
@@ -950,7 +949,7 @@ var Form = Widget.inherit({
                 that._alignLabels.bind(that)(that._rootLayoutManager, inOneColumn);
             },
             onContentReady: function(e) {
-                that._alignLabels(e.component, e.component.isLayoutChanged());
+                that._alignLabels(e.component, e.component.isSingleColumnMode());
             }
         });
     },
@@ -988,7 +987,7 @@ var Form = Widget.inherit({
                             $container: $container,
                             layoutManager: layoutManager,
                             items: itemData.items,
-                            inOneColumn: layoutManager.isLayoutChanged()
+                            inOneColumn: layoutManager.isSingleColumnMode()
                         });
                     }
                 }
@@ -1057,6 +1056,7 @@ var Form = Widget.inherit({
         that._cachedColCountOptions.push({ colCountByScreen: extend(baseColCountByScreen, options.colCountByScreen) });
         $element.appendTo($rootElement);
         instance = that._createComponent($element, "dxLayoutManager", config);
+        instance.on("autoColCountChanged", function() { that._refresh(); });
         that._cachedLayoutManagers.push(instance);
         return instance;
     },
@@ -1142,7 +1142,7 @@ var Form = Widget.inherit({
                             that._isDataUpdating = false;
                         }
 
-                        if(args.name === "readOnly") {
+                        if(args.name === "readOnly" || args.name === "disabled") {
                             layoutManager.option(optionFullName, args.value);
                         }
                     });
@@ -1199,7 +1199,7 @@ var Form = Widget.inherit({
             case "width":
                 this.callBase(args);
                 this._rootLayoutManager.option(args.name, args.value);
-                this._alignLabels(this._rootLayoutManager, this._rootLayoutManager.isLayoutChanged());
+                this._alignLabels(this._rootLayoutManager, this._rootLayoutManager.isSingleColumnMode());
                 break;
             case "visible":
                 this.callBase(args);
@@ -1238,20 +1238,19 @@ var Form = Widget.inherit({
             case "items":
                 var itemPath = this._getItemPath(nameParts),
                     instance,
-                    items,
-                    name,
                     item = this.option(itemPath);
 
                 if(args.fullName.search("editorOptions") !== -1) {
-                    instance = this.getEditor(item.dataField);
+                    instance = this.getEditor(item.dataField) || this.getEditor(item.name);
                     instance && instance.option(item.editorOptions);
-                } else {
-                    if(item) {
-                        name = args.fullName.replace(itemPath + ".", "");
-                        this._changeItemOption(item, name, args.value);
-                        items = this._generateItemsFromData(this.option("items"));
-                        this.option("items", items);
-                    }
+                }
+
+                if(!instance && item) {
+                    var name = args.fullName.replace(itemPath + ".", ""),
+                        items;
+                    this._changeItemOption(item, name, args.value);
+                    items = this._generateItemsFromData(this.option("items"));
+                    this.option("items", items);
                 }
 
                 break;
@@ -1429,7 +1428,7 @@ var Form = Widget.inherit({
             } else {
                 break;
             }
-        } while(path.length && result !== false);
+        } while(path.length && !utils.isDefined(result));
 
         return result;
     },
@@ -1443,7 +1442,7 @@ var Form = Widget.inherit({
             result;
 
         $.each(items, function(index, groupItem) {
-            result = that._getItemByFieldPath(path, fieldName, groupItem);
+            result = that._getItemByFieldPath(path.slice(), fieldName, groupItem);
             if(result) {
                 return false;
             }
@@ -1457,7 +1456,7 @@ var Form = Widget.inherit({
     },
 
     _getTextWithoutSpaces: function(text) {
-        return text ? text.replace(" ", "") : undefined;
+        return text ? text.replace(/\s/g, '') : undefined;
     },
 
     _isExpectedItem: function(item, fieldName) {
@@ -1481,10 +1480,6 @@ var Form = Widget.inherit({
 
             this._cachedScreenFactor = currentScreenFactor;
             return;
-        }
-
-        if(this.option("colCount") === "auto") {
-            this._refresh();
         }
     },
 
@@ -1579,7 +1574,7 @@ var Form = Widget.inherit({
      * @name dxFormMethods_getEditor
      * @publicName getEditor(field)
      * @param1 field:string
-     * @return object
+     * @return any
      */
     getEditor: function(field) {
         return this._editorInstancesByField[field];

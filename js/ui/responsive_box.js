@@ -36,7 +36,8 @@ var ResponsiveBox = CollectionWidget.inherit({
             /**
             * @name dxResponsiveBoxOptions_rows_baseSize
             * @publicName baseSize
-            * @type number
+            * @type number | string
+            * @acceptValues 'auto'
             * @default 0
             */
             /**
@@ -61,7 +62,8 @@ var ResponsiveBox = CollectionWidget.inherit({
             /**
             * @name dxResponsiveBoxOptions_cols_baseSize
             * @publicName baseSize
-            * @type number
+            * @type number | string
+            * @acceptValues 'auto'
             * @default 0
             */
             /**
@@ -462,7 +464,7 @@ var ResponsiveBox = CollectionWidget.inherit({
         return extend({
             width: "100%",
             height: "100%",
-            itemTemplate: this.option("itemTemplate"),
+            itemTemplate: this._getTemplateByOption("itemTemplate"),
             itemHoldTimeout: this.option("itemHoldTimeout"),
             onItemHold: this._createActionByOption("onItemHold"),
             onItemClick: this._createActionByOption("onItemClick"),

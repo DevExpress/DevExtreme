@@ -7,7 +7,6 @@ var $ = require("../../core/renderer"),
     groupingCore = require("./ui.data_grid.grouping.core"),
     createGroupFilter = groupingCore.createGroupFilter,
     createOffsetFilter = groupingCore.createOffsetFilter,
-    dataQuery = require("../../data/query"),
     errors = require("../widget/ui.errors"),
     dataErrors = require("../../data/errors").errors,
     when = require("../../integration/jquery/deferred").when;
@@ -311,10 +310,11 @@ exports.GroupingHelper = groupingCore.GroupingHelper.inherit((function() {
 
         when(expandedInfo.take === 0 ? [] : that._dataSource.loadFromStore(loadOptions)).done(function(items, extra) {
             $.each(expandedInfo.items, function(index, item) {
-                dataQuery(items).filter(expandedFilters[index]).enumerate().done(function(expandedItems) {
-                    applyContinuationToGroupItem(options, expandedInfo, groups.length - 1, index);
-                    item.items = expandedItems;
-                });
+                var itemCount = item.count - (index === 0 && loadOptions.skip || 0),
+                    expandedItems = items.splice(0, itemCount);
+
+                applyContinuationToGroupItem(options, expandedInfo, groups.length - 1, index);
+                item.items = expandedItems;
             });
             options.data.resolve(data);
         }).fail(options.data.reject);
@@ -473,24 +473,35 @@ exports.GroupingHelper = groupingCore.GroupingHelper.inherit((function() {
             return $.Deferred().reject();
         },
         handleDataLoading: function(options) {
-            var groups = normalizeSortingInfo(options.storeLoadOptions.group || options.loadOptions.group);
-            var that = this;
+            var that = this,
+                storeLoadOptions = options.storeLoadOptions,
+                groups = normalizeSortingInfo(storeLoadOptions.group || options.loadOptions.group);
 
             if(options.isCustomLoading || !groups.length) {
                 return;
             }
 
+            if(options.remoteOperations.grouping) {
+                var remotePaging = that._dataSource.remoteOperations().paging;
+
+                storeLoadOptions.group = normalizeSortingInfo(storeLoadOptions.group);
+                storeLoadOptions.group.forEach(function(group, index) {
+                    var isLastGroup = index === storeLoadOptions.group.length - 1;
+                    group.isExpanded = !remotePaging || !isLastGroup;
+                });
+            }
+
             options.group = options.group || groups;
 
             if(options.remoteOperations.paging) {
-                options.skip = options.storeLoadOptions.skip;
-                options.take = options.storeLoadOptions.take;
-                options.storeLoadOptions.requireGroupCount = true;
-                options.storeLoadOptions.group = groups.slice(0, 1);
+                options.skip = storeLoadOptions.skip;
+                options.take = storeLoadOptions.take;
+                storeLoadOptions.requireGroupCount = true;
+                storeLoadOptions.group = groups.slice(0, 1);
                 that._updatePagingOptions(options);
 
-                options.storeLoadOptions.skip = options.skip;
-                options.storeLoadOptions.take = options.take;
+                storeLoadOptions.skip = options.skip;
+                storeLoadOptions.take = options.take;
             } else {
                 that.foreachGroups(function(groupInfo) { groupInfo.count = 0; });
             }

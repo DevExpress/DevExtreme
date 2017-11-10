@@ -28,22 +28,28 @@ var EVENTS_LIST = [
     "Change", "Cut", "Copy", "Paste", "Input"
 ];
 
-var CONTROL_KEYS = {
-    "9": "tab",
-    "13": "enter",
-    "16": "shift",
-    "17": "ctrl",
-    "18": "alt",
-    "27": "escape",
-    "33": "pageUp",
-    "34": "pageDown",
-    "35": "end",
-    "36": "home",
-    "37": "leftArrow",
-    "38": "upArrow",
-    "39": "rightArrow",
-    "40": "downArrow"
-};
+var CONTROL_KEYS = [
+    "Tab",
+    "Enter",
+    "Shift",
+    "Control",
+    "Alt",
+    "Escape",
+    "PageUp",
+    "PageDown",
+    "End",
+    "Home",
+    "ArrowLeft",
+    "ArrowUp",
+    "ArrowRight",
+    "ArrowDown",
+    //IE9 fallback:
+    "Esc",
+    "Left",
+    "Up",
+    "Right",
+    "Down"
+];
 
 /**
 * @name dxTextEditor
@@ -297,8 +303,8 @@ var TextEditorBase = Editor.inherit({
         return this._inputWrapper().find("." + TEXTEDITOR_BUTTONS_CONTAINER_CLASS);
     },
 
-    _isControlKey: function(keyCode) {
-        return !!CONTROL_KEYS[keyCode];
+    _isControlKey: function(key) {
+        return CONTROL_KEYS.indexOf(key) !== -1;
     },
 
     _render: function() {
@@ -397,9 +403,9 @@ var TextEditorBase = Editor.inherit({
     },
 
     _renderProps: function() {
-        this._toggleDisabledState(this.option("disabled"));
         this._toggleReadOnlyState();
         this._toggleSpellcheckState();
+        this._toggleTabIndex();
     },
 
     _toggleDisabledState: function(value) {
@@ -407,9 +413,21 @@ var TextEditorBase = Editor.inherit({
 
         var $input = this._input();
         if(value) {
-            $input.attr("disabled", true).attr("tabindex", -1);
+            $input.attr("disabled", true);
         } else {
-            $input.removeAttr("disabled").removeAttr("tabindex");
+            $input.removeAttr("disabled");
+        }
+    },
+
+    _toggleTabIndex: function() {
+        var $input = this._input(),
+            disabled = this.option("disabled"),
+            focusStateEnabled = this.option("focusStateEnabled");
+
+        if(disabled || !focusStateEnabled) {
+            $input.attr("tabIndex", -1);
+        } else {
+            $input.removeAttr("tabIndex");
         }
     },
 
@@ -498,6 +516,7 @@ var TextEditorBase = Editor.inherit({
         this.reset();
 
         !$input.is(":focus") && $input.focus();
+        $input.trigger("input");
     },
 
     _renderEvents: function() {
@@ -652,6 +671,10 @@ var TextEditorBase = Editor.inherit({
             case "readOnly":
                 this.callBase(args);
                 this._renderInputAddons();
+                break;
+            case "focusStateEnabled":
+                this.callBase(args);
+                this._toggleTabIndex();
                 break;
             case "spellcheck":
                 this._toggleSpellcheckState();

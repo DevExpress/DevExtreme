@@ -24,11 +24,6 @@
     }
 
     .dx-@{widgetName} {
-        position: relative;
-        cursor: default;
-        white-space: normal;
-        line-height: normal;
-
         .dx-@{widgetName}-content-fixed {
             position: absolute;
             top: 0;
@@ -200,6 +195,7 @@
                     &.dx-@{widgetName}-drag-action {
                         opacity: 1;
                         cursor: pointer;
+                        .touch-action(pinch-zoom);
                     }
                 }
             }

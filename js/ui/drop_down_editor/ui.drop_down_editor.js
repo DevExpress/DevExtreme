@@ -4,6 +4,7 @@ var $ = require("../../core/renderer"),
     Guid = require("../../core/guid"),
     registerComponent = require("../../core/component_registrator"),
     commonUtils = require("../../core/utils/common"),
+    isDefined = commonUtils.isDefined,
     extend = require("../../core/utils/extend").extend,
     errors = require("../widget/ui.errors"),
     positionUtils = require("../../animation/position"),
@@ -349,7 +350,6 @@ var DropDownEditor = TextBox.inherit({
 
     _renderTemplatedField: function(fieldTemplate, data) {
         var isFocused = this._input().is(":focus");
-
         this._resetFocus(isFocused);
 
         var $container = this._$container;
@@ -369,9 +369,9 @@ var DropDownEditor = TextBox.inherit({
 
         this._refreshEvents();
         this._refreshValueChangeEvent();
-        isFocused && this._input().focus();
-
         this._renderFocusState();
+
+        isFocused && this._input().focus();
     },
 
     _resetFocus: function(isFocused) {
@@ -453,14 +453,23 @@ var DropDownEditor = TextBox.inherit({
             eventName = eventUtils.addNamespace(clickEvent.name, that.NAME),
             openOnFieldClick = that.option("openOnFieldClick");
 
-        $inputWrapper.off(eventName);
+        $inputWrapper
+            .off(eventName)
+            .on(eventName, that._getInputClickHandler(openOnFieldClick));
+
         that.element().toggleClass(DROP_DOWN_EDITOR_FIELD_CLICKABLE, openOnFieldClick);
 
         if(openOnFieldClick) {
             that._openOnFieldClickAction = that._createAction(that._openHandler.bind(that));
-            $inputWrapper.on(eventName, function(e) { that._executeOpenAction(e); });
-            return;
         }
+    },
+
+    _getInputClickHandler: function(openOnFieldClick) {
+        var that = this;
+
+        return openOnFieldClick ?
+            function(e) { that._executeOpenAction(e); } :
+            function(e) { that._focusInput(); };
     },
 
     _openHandler: function() {
@@ -475,12 +484,19 @@ var DropDownEditor = TextBox.inherit({
         return this._input();
     },
 
-    _toggleOpenState: function(isVisible) {
+    _focusInput: function() {
         if(this.option("disabled")) {
-            return;
+            return false;
         }
 
         this._input().focus();
+        return true;
+    },
+
+    _toggleOpenState: function(isVisible) {
+        if(!this._focusInput()) {
+            return;
+        }
 
         if(!this.option("readOnly")) {
             isVisible = arguments.length ? isVisible : !this.option("opened");
@@ -572,7 +588,7 @@ var DropDownEditor = TextBox.inherit({
     },
 
     _popupPositionedHandler: function(e) {
-        this._popup.overlayContent().toggleClass(DROP_DOWN_EDITOR_OVERLAY_FLIPPED, e.position.v.flip);
+        e.position && this._popup.overlayContent().toggleClass(DROP_DOWN_EDITOR_OVERLAY_FLIPPED, e.position.v.flip);
     },
 
     _popupShowingHandler: commonUtils.noop,
@@ -765,7 +781,11 @@ var DropDownEditor = TextBox.inherit({
                 this._initPopupInitializedAction();
                 break;
             case "fieldTemplate":
-                this._renderInputAddons();
+                if(isDefined(args.value)) {
+                    this._renderInputAddons();
+                } else {
+                    this._invalidate();
+                }
                 break;
             case "showDropDownButton":
             case "contentTemplate":
@@ -815,6 +835,7 @@ var DropDownEditor = TextBox.inherit({
     */
     reset: function() {
         this.option("value", null);
+        this._input().val("");
     },
 
     /**

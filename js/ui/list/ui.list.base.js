@@ -30,6 +30,7 @@ var LIST_CLASS = "dx-list",
     LIST_GROUP_COLLAPSED_CLASS = "dx-list-group-collapsed",
     LIST_HAS_NEXT_CLASS = "dx-has-next",
     LIST_NEXT_BUTTON_CLASS = "dx-list-next-button",
+    SELECT_ALL_SELECTOR = ".dx-list-select-all",
 
     LIST_ITEM_DATA_KEY = "dxListItemData",
     LIST_FEEDBACK_SHOW_TIMEOUT = 70;
@@ -38,7 +39,7 @@ var groupItemsGetter = compileGetter("items");
 
 var ListBase = CollectionWidget.inherit({
 
-    _activeStateUnit: LIST_ITEM_SELECTOR,
+    _activeStateUnit: [LIST_ITEM_SELECTOR, SELECT_ALL_SELECTOR].join(","),
 
     _supportedKeys: function() {
         var that = this;
@@ -510,15 +511,29 @@ var ListBase = CollectionWidget.inherit({
         return this._$container;
     },
 
-    _itemElements: function() {
+    _refreshItemElements: function() {
         if(!this.option("grouped")) {
-            return this._itemContainer().children(this._itemSelector());
+            this._itemElementsCache = this._itemContainer().children(this._itemSelector());
+        } else {
+            this._itemElementsCache = this._itemContainer()
+                 .children("." + LIST_GROUP_CLASS)
+                 .children("." + LIST_GROUP_BODY_CLASS)
+                 .children(this._itemSelector());
         }
+    },
 
-        return this._itemContainer()
-            .children("." + LIST_GROUP_CLASS)
-            .children("." + LIST_GROUP_BODY_CLASS)
-            .children(this._itemSelector());
+    reorderItem: function(itemElement, toItemElement) {
+        this.callBase(itemElement, toItemElement);
+        this._refreshItemElements();
+    },
+
+    _deleteItem: function(itemElement) {
+        this.callBase(itemElement);
+        this._refreshItemElements();
+    },
+
+    _itemElements: function() {
+        return this._itemElementsCache;
     },
 
     _itemSelectHandler: function(e) {
@@ -623,7 +638,7 @@ var ListBase = CollectionWidget.inherit({
 
         if(stopLoading || this._scrollViewIsFull()) {
             this._scrollView.release(hideLoadIndicator);
-            this._toggleNextButton(this._shouldRenderNextButton() && !isDataLoaded);
+            this._toggleNextButton(this._shouldRenderNextButton() && !this._isLastPage());
             this._loadIndicationSuppressed(false);
         } else {
             this._infiniteDataLoading();
@@ -720,6 +735,7 @@ var ListBase = CollectionWidget.inherit({
             this.callBase.apply(this, arguments);
         }
 
+        this._refreshItemElements();
         this._updateLoadingState(true);
     },
 
@@ -767,7 +783,7 @@ var ListBase = CollectionWidget.inherit({
             duration: 200,
             complete: (function() {
                 this.updateDimensions();
-                this._updateLoadingState(true);
+                this._updateLoadingState();
                 deferred.resolve();
             }).bind(this)
         });
@@ -785,6 +801,8 @@ var ListBase = CollectionWidget.inherit({
     },
 
     _render: function() {
+        this._itemElementsCache = $();
+
         this.element().addClass(LIST_CLASS);
         this.callBase();
 
@@ -815,6 +833,7 @@ var ListBase = CollectionWidget.inherit({
     },
 
     _postprocessRenderItem: function(args) {
+        this._refreshItemElements();
         this.callBase.apply(this, arguments);
 
         if(this.option("onItemSwipe")) {

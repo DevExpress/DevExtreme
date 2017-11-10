@@ -9,6 +9,7 @@ var $ = require("jquery"),
     devices = require("core/devices"),
     domUtils = require("core/utils/dom"),
     dateUtils = require("core/utils/date"),
+    errors = require("ui/widget/ui.errors"),
     Color = require("color"),
     fx = require("animation/fx"),
     config = require("core/config"),
@@ -276,26 +277,33 @@ QUnit.testStart(function() {
     });
 
     QUnit.test("Add new item when timezone doesn't equal to the default value", function(assert) {
-        var data = [],
-            deltaTz = getDeltaTz(5);
+        var currentDevice = devices.current(),
+            isWinPhone = currentDevice.deviceType === "phone" && currentDevice.platform === "win";
 
-        this.instance.option("timeZone", 5);
+        if(!isWinPhone) {
+            var data = [],
+                deltaTz = getDeltaTz(5);
 
-        this.instance.option({
-            currentDate: new Date(2015, 1, 9),
-            dataSource: data
-        });
+            this.instance.option("timeZone", 5);
 
-        this.instance.addAppointment({ startDate: new Date(2015, 1, 9, 16), endDate: new Date(2015, 1, 9, 17), text: "first" });
+            this.instance.option({
+                currentDate: new Date(2015, 1, 9),
+                dataSource: data
+            });
 
-        assert.deepEqual(data[0].startDate, new Date(2015, 1, 9, 16 - deltaTz), "Start date is OK");
-        assert.deepEqual(data[0].endDate, new Date(2015, 1, 9, 17 - deltaTz), "End date is OK");
+            this.instance.addAppointment({ startDate: new Date(2015, 1, 9, 16), endDate: new Date(2015, 1, 9, 17), text: "first" });
 
-        this.instance.addAppointment({ startDate: new Date(2015, 1, 9), endDate: new Date(2015, 1, 9, 0, 30), text: "second" });
-        this.instance.addAppointment({ startDate: new Date(2015, 1, 9, 23, 30), endDate: new Date(2015, 1, 9, 23, 59), text: "third" });
+            assert.deepEqual(data[0].startDate, new Date(2015, 1, 9, 16 - deltaTz), "Start date is OK");
+            assert.deepEqual(data[0].endDate, new Date(2015, 1, 9, 17 - deltaTz), "End date is OK");
 
-        var $appointments = this.instance.element().find(".dx-scheduler-appointment");
-        assert.equal($appointments.length, 3, "All appts are rendered");
+            this.instance.addAppointment({ startDate: new Date(2015, 1, 9), endDate: new Date(2015, 1, 9, 0, 30), text: "second" });
+            this.instance.addAppointment({ startDate: new Date(2015, 1, 9, 23, 30), endDate: new Date(2015, 1, 9, 23, 59), text: "third" });
+
+            var $appointments = this.instance.element().find(".dx-scheduler-appointment");
+            assert.equal($appointments.length, 3, "All appts are rendered");
+        } else {
+            assert.ok(true);
+        }
     });
 
     QUnit.test("Add new item when timezone doesn't equal to the default value, startDay and endDay hours are set", function(assert) {
@@ -324,30 +332,37 @@ QUnit.testStart(function() {
     });
 
     QUnit.test("Add new item when timezone doesn't equal to the default value, negative value", function(assert) {
-        var data = [],
-            deltaTz = getDeltaTz(-7);
+        var currentDevice = devices.current(),
+            isWinPhone = currentDevice.deviceType === "phone" && currentDevice.platform === "win";
 
-        this.instance.option("timeZone", -7);
+        if(!isWinPhone) {
+            var data = [],
+                deltaTz = getDeltaTz(-7);
 
-        this.instance.option({
-            currentDate: new Date(2015, 1, 9),
-            dataSource: data
-        });
+            this.instance.option("timeZone", -7);
 
-        this.instance.addAppointment({
-            startDate: new Date(2015, 1, 9, 16),
-            endDate: new Date(2015, 1, 9, 17),
-            text: "first"
-        });
+            this.instance.option({
+                currentDate: new Date(2015, 1, 9),
+                dataSource: data
+            });
 
-        assert.deepEqual(data[0].startDate, new Date(new Date(2015, 1, 9).setHours(16 - deltaTz)), "Start date is OK");
-        assert.deepEqual(data[0].endDate, new Date(new Date(2015, 1, 9).setHours(17 - deltaTz)), "End date is OK");
+            this.instance.addAppointment({
+                startDate: new Date(2015, 1, 9, 16),
+                endDate: new Date(2015, 1, 9, 17),
+                text: "first"
+            });
 
-        this.instance.addAppointment({ startDate: new Date(2015, 1, 9), endDate: new Date(2015, 1, 9, 0, 30), text: "second" });
-        this.instance.addAppointment({ startDate: new Date(2015, 1, 9, 23, 30), endDate: new Date(2015, 1, 9, 23, 59), text: "third" });
+            assert.deepEqual(data[0].startDate, new Date(new Date(2015, 1, 9).setHours(16 - deltaTz)), "Start date is OK");
+            assert.deepEqual(data[0].endDate, new Date(new Date(2015, 1, 9).setHours(17 - deltaTz)), "End date is OK");
 
-        var $appointments = this.instance.element().find(".dx-scheduler-appointment");
-        assert.equal($appointments.length, 3, "All appts are rendered");
+            this.instance.addAppointment({ startDate: new Date(2015, 1, 9), endDate: new Date(2015, 1, 9, 0, 30), text: "second" });
+            this.instance.addAppointment({ startDate: new Date(2015, 1, 9, 23, 30), endDate: new Date(2015, 1, 9, 23, 59), text: "third" });
+
+            var $appointments = this.instance.element().find(".dx-scheduler-appointment");
+            assert.equal($appointments.length, 3, "All appts are rendered");
+        } else {
+            assert.ok(true);
+        }
     });
 
     QUnit.test("Add new item when timezone doesn't equal to the default value, negative value, startDay and endDay hours are set", function(assert) {
@@ -683,7 +698,8 @@ QUnit.testStart(function() {
 
         this.instance.scrollToTime(9, 5);
 
-        assert.roughEqual(scrollBy.getCall(0).args[0], this.instance._workSpace.getCoordinatesByDate(new Date(2015, 1, 9, 9, 5)).top, 1.001, "scrollBy was called with right distance");
+        assert.roughEqual(scrollBy.getCall(0).args[0].top, this.instance._workSpace.getCoordinatesByDate(new Date(2015, 1, 9, 9, 5)).top, 1.001, "scrollBy was called with right distance");
+        assert.equal(scrollBy.getCall(0).args[0].left, 0, "scrollBy was called with right distance");
     });
 
     QUnit.test("Check scrolling to time, if startDayHour is not 0", function(assert) {
@@ -699,11 +715,11 @@ QUnit.testStart(function() {
 
         this.instance.scrollToTime(2, 0);
 
-        assert.roughEqual(scrollBy.getCall(0).args[0], 0, 2.001, "scrollBy was called with right distance");
+        assert.roughEqual(scrollBy.getCall(0).args[0].top, 0, 2.001, "scrollBy was called with right distance");
 
         this.instance.scrollToTime(5, 0);
 
-        assert.roughEqual(scrollBy.getCall(1).args[0], this.instance._workSpace.getCoordinatesByDate(new Date(2015, 1, 9, 5, 0)).top, 1.001, "scrollBy was called with right distance");
+        assert.roughEqual(scrollBy.getCall(1).args[0].top, this.instance._workSpace.getCoordinatesByDate(new Date(2015, 1, 9, 5, 0)).top, 1.001, "scrollBy was called with right distance");
     });
 
     QUnit.test("Check scrolling to time, if 'hours' argument greater than the 'endDayHour' option", function(assert) {
@@ -719,7 +735,22 @@ QUnit.testStart(function() {
 
         this.instance.scrollToTime(12, 0);
 
-        assert.roughEqual(scrollBy.getCall(0).args[0], this.instance._workSpace.getCoordinatesByDate(new Date(2015, 1, 9, 9, 0)).top, 1.001, "scrollBy was called with right distance");
+        assert.roughEqual(scrollBy.getCall(0).args[0].top, this.instance._workSpace.getCoordinatesByDate(new Date(2015, 1, 9, 9, 0)).top, 1.001, "scrollBy was called with right distance");
+    });
+
+    QUnit.test("Scrolling to date which doesn't locate on current view should call console warning", function(assert) {
+        this.instance.option({
+            currentView: "week",
+            currentDate: new Date(2015, 1, 9),
+            height: 500
+        });
+
+        var warningHandler = sinon.spy(errors, "log");
+
+        this.instance.scrollToTime(12, 0, new Date(2015, 1, 16));
+
+        assert.equal(warningHandler.callCount, 1, "warning has been called once");
+        assert.equal(warningHandler.getCall(0).args[0], "W1008", "warning has correct error id");
     });
 
     QUnit.test("Check scrolling to time for timeline view", function(assert) {
@@ -1931,8 +1962,8 @@ QUnit.testStart(function() {
                 var targetedAppointmentData = e.targetedAppointmentData,
                     appointmentIndex = e.appointmentElement.index();
 
-                assert.equal(targetedAppointmentData.startDate.getTime(), new Date(2015, 1, 9 + appointmentIndex, 16).getTime(), "Start date is OK");
-                assert.equal(targetedAppointmentData.endDate.getTime(), new Date(2015, 1, 9 + appointmentIndex, 17).getTime(), "End date is OK");
+                assert.equal(targetedAppointmentData.settings.startDate.getTime(), new Date(2015, 1, 9 + appointmentIndex, 16).getTime(), "Start date is OK");
+                assert.equal(targetedAppointmentData.settings.endDate.getTime(), new Date(2015, 1, 9 + appointmentIndex, 17).getTime(), "End date is OK");
             },
             currentDate: new Date(2015, 1, 9),
             views: ["agenda"],
@@ -2671,9 +2702,13 @@ QUnit.testStart(function() {
 (function() {
     QUnit.module("Small size", {
         beforeEach: function() {
+            this.clock = sinon.useFakeTimers();
             this.createInstance = function(options) {
                 this.instance = $("#scheduler").dxScheduler(options).dxScheduler("instance");
             };
+        },
+        afterEach: function() {
+            this.clock.restore();
         }
     });
 
@@ -2695,6 +2730,31 @@ QUnit.testStart(function() {
         assert.ok(this.instance.element().hasClass("dx-scheduler-small"), "Scheduler has 'dx-scheduler-small' css class");
         this.instance.option("width", 600);
         assert.notOk(this.instance.element().hasClass("dx-scheduler-small"), "Scheduler has no 'dx-scheduler-small' css class");
+    });
+
+    QUnit.test("Rendering small scheduler inside invisible element", function(assert) {
+        try {
+            domUtils.triggerHidingEvent($("#scheduler"));
+            this.createInstance({
+                width: 300,
+                currentView: "week",
+                dataSource: [{
+                    text: "a",
+                    startDate: new Date(2015, 6, 5, 0, 0),
+                    endDate: new Date(2015, 6, 5, 3, 0),
+                }],
+                currentDate: new Date(2015, 6, 6)
+            });
+            $("#scheduler").hide();
+        } finally {
+            $("#scheduler").show();
+            domUtils.triggerShownEvent($("#scheduler"));
+            this.instance.option("width", 600);
+            this.clock.tick();
+
+            var $appointment = this.instance.element().find(".dx-scheduler-appointment");
+            assert.roughEqual($appointment.position().left, 100, 1.001, "Appointment is rendered correctly");
+        }
     });
 
 })("Small size");

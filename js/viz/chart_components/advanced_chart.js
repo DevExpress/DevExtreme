@@ -9,6 +9,7 @@ var $ = require("../../core/renderer"),
     axisModule = require("../axes/base_axis"),
     seriesFamilyModule = require("../core/series_family"),
     BaseChart = require("./base_chart").BaseChart,
+    crosshairModule = require("./crosshair"),
 
     _isArray = Array.isArray,
     _isDefined = commonUtils.isDefined,
@@ -40,9 +41,19 @@ var AdvancedChart = BaseChart.inherit({
     },
 
     _reinitAxes: function() {
-        this.translators = {};
         this.panes = this._createPanes();
         this._populateAxes();
+    },
+
+    _getCrosshairMargins: function() {
+        var crosshairOptions = this._getCrosshairOptions() || {},
+            crosshairEnabled = crosshairOptions.enabled,
+            margins = crosshairModule.getMargins();
+
+        return {
+            x: crosshairEnabled && crosshairOptions.horizontalLine.visible ? margins.x : 0,
+            y: crosshairEnabled && crosshairOptions.verticalLine.visible ? margins.y : 0
+        };
     },
 
     _populateAxes: function() {
@@ -58,10 +69,7 @@ var AdvancedChart = BaseChart.inherit({
             axisNames = [],
             valueAxesCounter = 0,
             paneWithNonVirtualAxis,
-            crosshairOptions = that._getCrosshairOptions() || {},
-            crosshairEnabled = crosshairOptions.enabled,
-            horCrosshairEnabled = crosshairEnabled && crosshairOptions.horizontalLine.visible,
-            verCrosshairEnabled = crosshairEnabled && crosshairOptions.verticalLine.visible;
+            crosshairMargins = that._getCrosshairMargins();
 
         function getNextAxisName() {
             return DEFAULT_AXIS_NAME + valueAxesCounter++;
@@ -78,7 +86,8 @@ var AdvancedChart = BaseChart.inherit({
         argumentAxes = _map(panes, function(pane, index) {
             return that._createAxis("argumentAxis", argumentAxesOptions, {
                 pane: pane.name,
-                crosshairEnabled: rotated ? horCrosshairEnabled : verCrosshairEnabled
+                name: null,
+                crosshairMargin: rotated ? crosshairMargins.x : crosshairMargins.y
             }, rotated, pane.name !== paneWithNonVirtualAxis, index);
         });
 
@@ -108,7 +117,7 @@ var AdvancedChart = BaseChart.inherit({
                     name: name || getNextAxisName(),
                     pane: pane,
                     priority: priority,
-                    crosshairEnabled: rotated ? verCrosshairEnabled : horCrosshairEnabled
+                    crosshairMargin: rotated ? crosshairMargins.y : crosshairMargins.x
                 }, rotated));
             });
 
@@ -166,22 +175,9 @@ var AdvancedChart = BaseChart.inherit({
         disposeObjectsInArray.call(that, "_valueAxes");
     },
 
-    _drawAxes: function(panesBorderOptions, drawOptions, adjustUnits) {
-        var that = this,
-            drawAxes = function(axes) {
-                _each(axes, function(_, axis) {
-                    axis.draw(adjustUnits);
-                });
-            },
-            drawStaticAxisElements = function(axes) {
-                _each(axes, function(_i, axis) {
-                    axis.drawGrids(panesBorderOptions[axis.pane]);
-                });
-            };
-
-        that._restoreOriginalBusinessRange();
-        that._reinitTranslators();
-        that._prepareAxesAndDraw(drawAxes, drawStaticAxisElements, drawOptions);
+    _drawAxes: function(drawOptions, panesBorderOptions) {
+        this._restoreOriginalBusinessRange();
+        this._prepareAxesAndDraw(drawOptions, panesBorderOptions);
     },
 
     _restoreOriginalBusinessRange: _noop,
@@ -282,11 +278,10 @@ var AdvancedChart = BaseChart.inherit({
             seriesFamilies = that.seriesFamilies || [];
 
         for(i = 0; i < seriesFamilies.length; i++) {
-            var family = seriesFamilies[i],
-                translators = that._getTranslator(family.pane) || {};
+            var family = seriesFamilies[i];
 
-            family.updateSeriesValues(translators);
-            family.adjustSeriesDimensions(translators);
+            family.updateSeriesValues();
+            family.adjustSeriesDimensions();
         }
     },
 
@@ -303,16 +298,12 @@ var AdvancedChart = BaseChart.inherit({
         that._labelAxesGroup.linkAppend();
     },
 
-    _populateBusinessRange: function(visibleArea) {
+    _populateBusinessRange: function() {
         var that = this,
             businessRanges = [],
             rotated = that._isRotated(),
             argAxes = that._argumentAxes,
-            lastArgAxis = argAxes[argAxes.length - 1],
-            translator = argAxes[0].getTranslator(),
-            calcInterval = lastArgAxis.calcInterval,
             argRange = new rangeModule.Range({ rotated: !!rotated }),
-            argBusinessRange,
             groupsData = that._groupsData;
 
         that.businessRanges = null;
@@ -321,44 +312,36 @@ var AdvancedChart = BaseChart.inherit({
             argRange.addRange(axis.getRangeData());
         });
 
-        _each(groupsData.groups, function(_, group) {
+        that._valueAxes.forEach(function(valueAxis) {
             var groupRange = new rangeModule.Range({
                     rotated: !!rotated,
-                    pane: group.valueAxis.pane,
-                    axis: group.valueAxis.name
+                    pane: valueAxis.pane,
+                    axis: valueAxis.name
                 }),
-                groupAxisRange = group.valueAxis.getRangeData();
+                groupAxisRange = valueAxis.getRangeData(),
+                groupSeries = that.series.filter(function(series) {
+                    return series.getValueAxis() === valueAxis;
+                });
 
             groupRange.addRange(groupAxisRange);
 
-            if(visibleArea) {
-                visibleArea.minArg = _isDefined(visibleArea.minArg) ? visibleArea.minArg : argRange.minVisible;
-                visibleArea.maxArg = _isDefined(visibleArea.maxArg) ? visibleArea.maxArg : argRange.maxVisible;
-            }
-
-            _each(group.series, function(_, series) {
-                var aggregationRange = series.getRangeData(),
-                    visibleSeriesArea = visibleArea && {
-                        minArg: _isDefined(visibleArea.minArg) ? visibleArea.minArg : aggregationRange.arg.min,
-                        maxArg: _isDefined(visibleArea.maxArg) ? visibleArea.maxArg : aggregationRange.arg.max,
-                        minVal: groupAxisRange.min,
-                        maxVal: groupAxisRange.max,
-                        adjustOnZoom: visibleArea.adjustOnZoom
-                    },
-                    seriesRange = series.getRangeData(visibleSeriesArea, calcInterval);
+            groupSeries.forEach(function(series) {
+                var seriesRange = series.getRangeData();
 
                 groupRange.addRange(seriesRange.val);
                 argRange.addRange(seriesRange.arg);
             });
 
             if(!groupRange.isDefined()) {
-                groupRange.setStubData(group.valueAxis.getOptions().valueType);
+                groupRange.setStubData(valueAxis.getOptions().valueType);
             }
 
-            if(group.valueAxis.getOptions().showZero) {
+            if(valueAxis.getOptions().showZero) {
                 groupRange.correctValueZeroLevel();
             }
             groupRange.checkZeroStick();
+
+            valueAxis.setBusinessRange(groupRange);
 
             businessRanges.push({ val: groupRange, arg: argRange });
         });
@@ -366,21 +349,19 @@ var AdvancedChart = BaseChart.inherit({
         argRange.sortCategories(groupsData.categories);
 
         if(!argRange.isDefined()) {
-            if(translator && argRange.axisType !== "discrete") { //T424992
-                argBusinessRange = translator.getBusinessRange();
-                argRange.addRange({ min: argBusinessRange.min, max: argBusinessRange.max });
-                argRange.stubData = true;
-            } else {
-                argRange.setStubData(argAxes[0].getOptions().argumentType);
-            }
+            argRange.setStubData(argAxes[0].getOptions().argumentType);
         }
 
-        if(visibleArea && visibleArea.notApplyMargins && argRange.axisType !== "discrete") {
-            argBusinessRange = translator.getBusinessRange();
-            argRange.addRange({ min: argBusinessRange.min, max: argBusinessRange.max, stick: true });
-        }
+
+        that._argumentAxes.forEach(function(a) {
+            a.setBusinessRange(argRange);
+        });
 
         that.businessRanges = businessRanges;
+    },
+
+    _getArgumentAxis: function() {
+        return this._argumentAxes[0];
     },
 
     _getArgumentAxes: function() {
@@ -391,21 +372,47 @@ var AdvancedChart = BaseChart.inherit({
         return this._valueAxes;
     },
 
-    _processValueAxisFormat: function() {
+    _getGroupsData: function() {
         var that = this,
-            valueAxes = that._valueAxes,
-            axesWithFullStackedFormat = [];
-        _each(that.series, function() {
-            if(this.isFullStackedSeries() && inArray(this.axis, axesWithFullStackedFormat) === -1) {
-                axesWithFullStackedFormat.push(this.axis);
+            groups = [];
+
+        that._valueAxes.forEach(function(axis) {
+            groups.push({
+                series: that.series.filter(function(series) {
+                    return series.getValueAxis() === axis;
+                }),
+                valueAxis: axis,
+                valueOptions: axis.getOptions()
+            });
+        });
+
+        return {
+            groups: groups,
+            argumentAxes: that._argumentAxes,
+            argumentOptions: that._argumentAxes[0].getOptions()
+        };
+    },
+
+    _groupSeries: function() {
+        var that = this;
+        that._correctValueAxes(false);
+        that._groupsData = that._getGroupsData();
+    },
+
+    _processValueAxisFormat: function() {
+        var axesWithFullStackedFormat = [];
+
+        this.series.forEach(function(series) {
+            var axis = series.getValueAxis();
+            if(series.isFullStackedSeries()) {
+                axis.setPercentLabelFormat();
+                axesWithFullStackedFormat.push(axis);
             }
         });
 
-        _each(valueAxes, function() {
-            if(inArray(this.name, axesWithFullStackedFormat) !== -1) {
-                this.setPercentLabelFormat();
-            } else {
-                this.resetAutoLabelFormat();
+        this._valueAxes.forEach(function(axis) {
+            if(axesWithFullStackedFormat.indexOf(axis) === -1) {
+                axis.resetAutoLabelFormat();  //B239299
             }
         });
     },
@@ -464,7 +471,9 @@ var AdvancedChart = BaseChart.inherit({
 
     _legendDataField: "series",
 
-    _adjustSeries: _noop
+    _adjustSeries: _noop,
+
+    _correctValueAxes: _noop
 });
 
 exports.AdvancedChart = AdvancedChart;

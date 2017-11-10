@@ -186,7 +186,7 @@ gridCore.registerModule("pager", {
                  * @name dxDataGridOptions_pager_infoText
                  * @publicName infoText
                  * @type string
-                 * @default "Page {0} of {1}"
+                 * @default "Page {0} of {1} ({2} items)"
                  */
             }
         };

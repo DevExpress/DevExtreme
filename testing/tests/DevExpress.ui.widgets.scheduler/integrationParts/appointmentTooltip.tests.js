@@ -13,8 +13,8 @@ var $ = require("jquery"),
 
 require("ui/scheduler/ui.scheduler");
 
-function getDeltaTz(schedulerTz) {
-    var defaultTz = new Date().getTimezoneOffset() * 60000;
+function getDeltaTz(schedulerTz, date) {
+    var defaultTz = date.getTimezoneOffset() * 60000;
     return schedulerTz * 3600000 + defaultTz;
 }
 
@@ -268,7 +268,7 @@ QUnit.test("Scheduler appointment tooltip dates should be correct, when custom t
             }]
         });
 
-    var deltaTz = getDeltaTz(5);
+    var deltaTz = getDeltaTz(5, startDate);
     this.createInstance({ currentDate: new Date(2015, 1, 9), dataSource: data, currentView: "week", timeZone: 5 });
 
     this.instance.element().find(".dx-scheduler-appointment").eq(0).trigger("dxclick");
@@ -294,7 +294,7 @@ QUnit.test("Scheduler appointment tooltip dates should be correct, when custom t
     var data = new DataSource({
         store: [appointment]
     });
-    var deltaTz = getDeltaTz(5);
+    var deltaTz = getDeltaTz(5, startDate);
     this.createInstance({ currentDate: new Date(2015, 1, 9), dataSource: data, currentView: "week", timeZone: "Asia/Ashkhabad" });
 
     this.instance.showAppointmentTooltip(appointment, ".dx-scheduler-appointment");

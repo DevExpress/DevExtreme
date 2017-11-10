@@ -66,6 +66,11 @@ var ListEdit = ListBase.inherit({
         });
     },
 
+    _updateSelection: function() {
+        this._editProvider.afterItemsRendered();
+        this.callBase();
+    },
+
     _getDefaultOptions: function() {
         return extend(this.callBase(), {
             /**
@@ -173,6 +178,7 @@ var ListEdit = ListBase.inherit({
             * @type_function_param1_field4 itemData:object
             * @type_function_param1_field5 itemElement:jQuery
             * @type_function_param1_field6 itemIndex:number | object
+            * @type_function_param1_field7 cancel:boolean | Promise
             * @action
             * @hidden false
             * @extend_doc
@@ -273,6 +279,20 @@ var ListEdit = ListBase.inherit({
         if(!this._isPageSelectAll()) {
             this._dataSource && this._dataSource.requireTotalCount(true);
         }
+    },
+
+    _getCombinedFilter: function() {
+        var filter,
+            storeLoadOptions,
+            dataSource = this._dataSource;
+
+        if(dataSource) {
+            storeLoadOptions = { filter: dataSource.filter() };
+            dataSource._addSearchFilter(storeLoadOptions);
+            filter = storeLoadOptions.filter;
+        }
+
+        return filter;
     },
 
     _isPageSelectAll: function() {
@@ -377,12 +397,6 @@ var ListEdit = ListBase.inherit({
     _clean: function() {
         this._disposeEditProvider();
         this.callBase();
-    },
-
-    _dataSourceChangedHandler: function(newItems) {
-        this.callBase(newItems);
-
-        this._editProvider && this._editProvider.handleDataSourceChanged();
     },
 
     _optionChanged: function(args) {

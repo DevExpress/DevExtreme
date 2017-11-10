@@ -217,17 +217,11 @@ var Scroller = Class.inherit({
     _scrollComplete: function() {
         if(this._inBounds()) {
             this._hideScrollbar();
-            this._correctLocation();
             if(this._completeDeferred) {
                 this._completeDeferred.resolve();
             }
         }
         this._scrollToBounds();
-    },
-
-    _correctLocation: function() {
-        this._location = math.round(this._location);
-        this._move();
     },
 
     _scrollToBounds: function() {
@@ -471,12 +465,7 @@ var Scroller = Class.inherit({
     _validateEvent: function(e) {
         var $target = $(e.originalEvent.target);
 
-        if(this._isThumb($target) || this._isScrollbar($target)) {
-            e.preventDefault();
-            return true;
-        }
-
-        return this._isContent($target);
+        return this._isThumb($target) || this._isScrollbar($target) || this._isContent($target);
     },
 
     _isThumb: function($element) {
@@ -792,9 +781,10 @@ var SimulatedStrategy = Class.inherit({
         var scrollerX = this._scrollers[HORIZONTAL],
             scrollerY = this._scrollers[VERTICAL];
 
+        var location = this.location();
         this._scrollOffset = {
-            top: scrollerY && -scrollerY._location,
-            left: scrollerX && -scrollerX._location
+            top: scrollerY && -location.top,
+            left: scrollerX && -location.left
         };
 
         return {
@@ -890,9 +880,11 @@ var SimulatedStrategy = Class.inherit({
 
         return when(result, commonUtils.deferUpdate(function() {
             var allowedDirections = that._allowedDirections();
-            var allowedScroll = allowedDirections.vertical || allowedDirections.horizontal;
             commonUtils.deferRender(function() {
-                that._$container.css("touchAction", allowedScroll ? "none" : "");
+                var touchDirection = allowedDirections.vertical ? "pan-x" : "";
+                touchDirection = allowedDirections.horizontal ? "pan-y" : touchDirection;
+                touchDirection = allowedDirections.vertical && allowedDirections.horizontal ? "none" : touchDirection;
+                that._$container.css("touchAction", touchDirection);
             });
             return when().promise();
         }));
@@ -907,6 +899,10 @@ var SimulatedStrategy = Class.inherit({
             vertical: verticalScroller && (verticalScroller._minOffset < 0 || bounceEnabled),
             horizontal: horizontalScroller && (horizontalScroller._minOffset < 0 || bounceEnabled)
         };
+    },
+
+    updateBounds: function() {
+        this._scrollers[HORIZONTAL] && this._scrollers[HORIZONTAL]._updateBounds();
     },
 
     scrollBy: function(distance) {

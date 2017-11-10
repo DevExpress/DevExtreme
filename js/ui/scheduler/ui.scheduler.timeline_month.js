@@ -8,6 +8,13 @@ var TIMELINE_CLASS = "dx-scheduler-timeline-month",
     DAY_IN_MILLISECONDS = 86400000;
 
 var SchedulerTimelineMonth = SchedulerTimeline.inherit({
+
+    _renderView: function() {
+        this.callBase();
+
+        this._updateScrollable();
+    },
+
     _getElementClass: function() {
         return TIMELINE_CLASS;
     },

@@ -761,19 +761,6 @@ QUnit.test("Generate bounds. Discrete. With boundCoef", function(assert) {
     assert.strictEqual(bounds.max, undefined, "Max bound");
 });
 
-QUnit.test("Custom min and max value margin. Float numeric", function(assert) {
-    this.tickManager.update(this.types, {
-        min: 5,
-        max: 11
-    }, {
-        minValueMargin: 0.26,
-        maxValueMargin: 0.48
-    });
-
-    assert.equal(this.tickManager._min, 3.44, "Min is correct");
-    assert.equal(this.tickManager._max, 13.88, "Max is correct");
-});
-
 QUnit.test("Correction min & max with stickValues", function(assert) {
     this.tickManager.update(this.types, {
         min: -10,
@@ -787,86 +774,6 @@ QUnit.test("Correction min & max with stickValues", function(assert) {
 
     assert.equal(this.tickManager._min, 0, "Min is correct");
     assert.equal(this.tickManager._max, 101, "Max is correct");
-});
-
-
-QUnit.test("Custom min and max value margin. Datetime", function(assert) {
-    this.tickManager.update({
-        axisType: "continuous",
-        dataType: "datetime"
-    }, {
-        min: new Date(2011, 1, 1),
-        max: new Date(2011, 1, 2)
-    }, {
-        setTicksAtUnitBeginning: true,
-        minValueMargin: 0.2648413156465,
-        maxValueMargin: 0.468454
-    });
-
-    assert.equal(this.tickManager._min.valueOf(), new Date(2011, 0, 31, 17).valueOf(), "Min is correct");
-    assert.equal(this.tickManager._max.valueOf(), new Date(2011, 1, 2, 11).valueOf(), "Max is correct");
-});
-
-QUnit.test("Custom min and max value margin. Logarithmic", function(assert) {
-    this.tickManager.update({
-        axisType: "logarithmic",
-        dataType: "numeric"
-    }, {
-        min: 0.0001,
-        max: 1000
-    }, {
-        setTicksAtUnitBeginning: true,
-        minValueMargin: 0.2648413156465,
-        maxValueMargin: 0.468454
-    });
-
-    assert.equal(this.tickManager._min, 0.0001, "Min is correct");
-    assert.equal(this.tickManager._max, 1000, "Max is correct");
-});
-
-QUnit.test("Custom min value margin. Valid", function(assert) {
-    this.tickManager.update(this.types, {
-        min: 5,
-        max: 11
-    }, {
-        minValueMargin: 0.2
-    });
-
-    assert.equal(this.tickManager._min, 3.8, "Min is correct");
-});
-
-QUnit.test("Custom min value margin. Valid. With stick", function(assert) {
-    this.tickManager.update(this.types, {
-        min: 5,
-        max: 11
-    }, {
-        stick: true,
-        minValueMargin: 0.2
-    });
-
-    assert.equal(this.tickManager._min, 5, "Min is correct");
-});
-
-QUnit.test("Custom min value margin. Invalid", function(assert) {
-    this.tickManager.update(this.types, {
-        min: 5,
-        max: 11
-    }, {
-        minValueMargin: "abs"
-    });
-
-    assert.equal(this.tickManager._min, 5, "Min is correct");
-});
-
-QUnit.test("Custom max value margin. Valid", function(assert) {
-    this.tickManager.update(this.types, {
-        min: 5,
-        max: 11
-    }, {
-        maxValueMargin: 0.2
-    });
-
-    assert.equal(this.tickManager._max, 12.2, "Max is correct");
 });
 
 QUnit.test("Custom max value margin. Valid. With stick", function(assert) {

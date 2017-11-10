@@ -35,6 +35,12 @@ declare module DevExpress.viz.charts {
         /** @docid baseSeriesObjectmethods_deselectpoint */
         deselectPoint(point: BasePoint): void;
 
+        /** @docid baseSeriesObjectmethods_hover */
+        hover(): void;
+
+        /** @docid baseSeriesObjectmethods_clearHover */
+        clearHover(): void;
+
         /** @docid baseSeriesObjectmethods_getallpoints */
         getAllPoints(): Array<BasePoint>;
 
@@ -42,10 +48,10 @@ declare module DevExpress.viz.charts {
         getVisiblePoints(): Array<BasePoint>;
 
         /** @docid baseSeriesObjectFields_name */
-        name: string;
+        name: any;
 
         /** @docid baseSeriesObjectFields_tag */
-        tag: string;
+        tag: any;
 
         /** @docid baseSeriesObjectmethods_hide */
         hide(): void;
@@ -75,7 +81,7 @@ declare module DevExpress.viz.charts {
         originalValue: any;
 
         /** @docid basePointObjectFields_tag */
-        tag: string;
+        tag: any;
 
         /** @docid basePointObjectmethods_clearselection */
         clearSelection(): void;
@@ -94,6 +100,12 @@ declare module DevExpress.viz.charts {
 
         /** @docid basePointObjectmethods_select */
         select(): void;
+
+        /** @docid basePointObjectmethods_hover */
+        hover(): void;
+
+        /** @docid basePointObjectmethods_clearHover */
+        clearHover(): void;
 
         /** @docid basePointObjectmethods_showTooltip */
         showTooltip(): void;
@@ -157,7 +169,12 @@ declare module DevExpress.viz.charts {
         show(): void;
     }
 
+    /** @docid pieChartSeriesObject */
     export interface PieSeries extends BaseSeries {
+        /** @docid_ignore pieChartSeriesObjectmethods_hover */
+        /** @docid_ignore pieChartSeriesObjectmethods_clearHover */
+        /** @docid_ignore pieChartSeriesObjectmethods_isHovered */
+
         selectPoint(point: PiePoint): void;
         deselectPoint(point: PiePoint): void;
         getAllPoints(): Array<PiePoint>;
@@ -1217,7 +1234,7 @@ declare module DevExpress.viz.charts {
           * @docid dxchartoptions_seriestemplate_customizeSeries
           * @docid dxrangeselectoroptions_chart_seriestemplate_customizeSeries
           */
-        customizeSeries?: (seriesName: string) => SeriesConfig;
+        customizeSeries?: (seriesName: any) => SeriesConfig;
 
         /**
           * @docid dxchartoptions_seriestemplate_nameField
@@ -1228,7 +1245,7 @@ declare module DevExpress.viz.charts {
 
     export interface PolarSeriesTemplate {
         /** @docid dxpolarchartoptions_seriestemplate_customizeSeries */
-        customizeSeries?: (seriesName: string) => PolarSeriesConfig;
+        customizeSeries?: (seriesName: any) => PolarSeriesConfig;
 
         /** @docid dxpolarchartoptions_seriestemplate_nameField */
         nameField?: string;
@@ -1236,7 +1253,7 @@ declare module DevExpress.viz.charts {
 
     export interface PieSeriesTemplate {
         /** @docid dxpiechartoptions_seriestemplate_customizeSeries */
-        customizeSeries?: (seriesName: string) => PieSeriesConfig;
+        customizeSeries?: (seriesName: any) => PieSeriesConfig;
 
         /** @docid dxpiechartoptions_seriestemplate_nameField */
         nameField?: string;
@@ -1976,10 +1993,10 @@ declare module DevExpress.viz.charts {
         animation?: ChartAnimation;
 
         /** @docid basechartoptions_customizelabel */
-        customizeLabel?: (pointInfo: Object) => Object;
+        customizeLabel?: (pointInfo: any) => Object;
 
         /** @docid basechartoptions_customizepoint */
-        customizePoint?: (pointInfo: Object) => Object;
+        customizePoint?: (pointInfo: any) => Object;
 
         /** @docid basechartoptions_datasource */
         dataSource?: any;
@@ -2046,14 +2063,11 @@ declare module DevExpress.viz.charts {
         /** @docid basechartmethods_clearselection */
         clearSelection(): void;
 
-        /** @docid basechartmethods_getsize */
-        getSize(): { width: number; height: number };
-
         /** @docid basechartmethods_getallseries */
         getAllSeries(): Array<BaseSeries>;
 
         /** @docid basechartmethods_getseriesbyname */
-        getSeriesByName(seriesName: string): BaseSeries;
+        getSeriesByName(seriesName: any): BaseSeries;
 
         /** @docid basechartmethods_getseriesbypos */
         getSeriesByPos(seriesIndex: number): BaseSeries;
@@ -2082,13 +2096,13 @@ declare module DevExpress.viz.charts {
         * @docid dxchartoptions_legend_customizehint
         * @docid dxpolarchartoptions_legend_customizehint
         */
-        customizeHint?: (seriesInfo: { seriesName: string; seriesIndex: number; seriesColor: string; }) => string;
+        customizeHint?: (seriesInfo: { seriesName: any; seriesIndex: number; seriesColor: string; }) => string;
 
         /**
         * @docid dxchartoptions_legend_customizetext
         * @docid dxpolarchartoptions_legend_customizetext
         */
-        customizeText?: (seriesInfo: { seriesName: string; seriesIndex: number; seriesColor: string; }) => string;
+        customizeText?: (seriesInfo: { seriesName: any; seriesIndex: number; seriesColor: string; }) => string;
 
         /**
         * @docid dxchartoptions_legend_hovermode
@@ -2453,10 +2467,10 @@ declare module DevExpress.viz.charts {
         hoverMode?: string;
 
         /** @docid dxpiechartoptions_legend_customizehint */
-        customizeHint?: (pointInfo: { pointName: string; pointIndex: number; pointColor: string; }) => string;
+        customizeHint?: (pointInfo: { pointName: any; pointIndex: number; pointColor: string; }) => string;
 
         /** @docid dxpiechartoptions_legend_customizetext */
-        customizeText?: (pointInfo: { pointName: string; pointIndex: number; pointColor: string; }) => string;
+        customizeText?: (pointInfo: { pointName: any; pointIndex: number; pointColor: string; }) => string;
     }
 
     export interface dxPieChartOptions extends BaseChartOptions<PiePoint> {

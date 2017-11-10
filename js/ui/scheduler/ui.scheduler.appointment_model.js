@@ -12,6 +12,9 @@ var $ = require("../../core/renderer"),
     arrayUtils = require("../../core/utils/array"),
     query = require("../../data/query");
 
+var DATE_FILTER_POSITION = 0,
+    USER_FILTER_POSITION = 1;
+
 var FilterMaker = Class.inherit({
     ctor: function(dataExpressions, dataAccessors) {
         this._filterRegistry = null;
@@ -21,6 +24,10 @@ var FilterMaker = Class.inherit({
 
     isRegistered: function() {
         return !!this._filterRegistry;
+    },
+
+    clearRegistry: function() {
+        delete this._filterRegistry;
     },
 
     make: function(type, args) {
@@ -67,6 +74,10 @@ var FilterMaker = Class.inherit({
         this._filterRegistry.user && filter.push(this._filterRegistry.user);
 
         return filter;
+    },
+
+    dateFilter: function() {
+        return this._filterRegistry.date;
     }
 });
 
@@ -74,11 +85,20 @@ var AppointmentModel = Class.inherit({
 
     _createFilter: function(min, max, remoteFiltering, dateSerializationFormat) {
         this._filterMaker.make("date", [min, max]);
-        this._filterMaker.make("user", [this._dataSource.filter()]);
+
+        var userFilterPosition = this._excessFiltering() ? this._dataSource.filter()[USER_FILTER_POSITION] : this._dataSource.filter();
+        this._filterMaker.make("user", [userFilterPosition]);
 
         if(remoteFiltering) {
             this._dataSource.filter(this._combineRemoteFilter(dateSerializationFormat));
         }
+    },
+
+    _excessFiltering: function() {
+        var dateFilter = this._filterMaker.dateFilter(),
+            dataSourceFilter = this._dataSource.filter();
+
+        return dataSourceFilter && (commonUtils.equalByValue(dataSourceFilter, dateFilter) || (dataSourceFilter.length && commonUtils.equalByValue(dataSourceFilter[DATE_FILTER_POSITION], dateFilter)));
     },
 
     _combineFilter: function() {
@@ -233,7 +253,7 @@ var AppointmentModel = Class.inherit({
             }
 
             if(result && useRecurrence && !recurrenceRule) {
-                if(comparableEndDate.getTime() < min.getTime() && !isAllDay) {
+                if(comparableEndDate < min && !isAllDay) {
                     result = false;
                 }
             }
@@ -250,6 +270,8 @@ var AppointmentModel = Class.inherit({
 
     setDataSource: function(dataSource) {
         this._dataSource = dataSource;
+
+        this._filterMaker && this._filterMaker.clearRegistry();
     },
 
     setDataAccessors: function(dataAccessors) {

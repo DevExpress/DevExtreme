@@ -3,7 +3,8 @@
 var $ = require("jquery"),
     executeAsyncMock = require("../../../helpers/executeAsyncMock.js"),
     keyboardMock = require("../../../helpers/keyboardMock.js"),
-    DataSource = require("data/data_source/data_source").DataSource;
+    DataSource = require("data/data_source/data_source").DataSource,
+    ArrayStore = require("data/array_store");
 
 require("ui/list");
 
@@ -329,32 +330,99 @@ QUnit.test("selectAll/unselectAll for 'page' selectAllMode", function(assert) {
 
 QUnit.test("selectAll/unselectAll for 'allPages' selectAllMode", function(assert) {
     var items = [1, 2, 3, 4, 5];
+    var loading = sinon.spy();
     var ds = new DataSource({
-        store: items,
+        store: {
+            type: "array",
+            data: items,
+            onLoading: loading
+        },
         pageSize: 2,
         paginate: true
     });
 
     var $element = $("#list").dxList({
         dataSource: ds,
-        pageLoadMode: "nextButton",
         selectionMode: "multiple",
         selectAllMode: "allPages"
     });
 
     var instance = $element.dxList("instance");
+    assert.equal(loading.callCount, 1, "one load during creation");
 
     instance.selectAll();
 
     assert.deepEqual(instance.option("selectedItems"), items, "selected items is correct");
+    assert.equal(loading.callCount, 2, "one load during select all");
 
     instance.unselectAll();
 
     assert.deepEqual(instance.option("selectedItems"), [], "selected items is empty");
+    assert.equal(loading.callCount, 2, "no load during unselect all");
 });
 
-
 QUnit.module("selection");
+
+QUnit.test("unselectItem for last item if 'allPages' selectAllMode", function(assert) {
+    var items = [1, 2, 3, 4, 5];
+    var loading = sinon.spy();
+    var ds = new DataSource({
+        store: items,
+        pageSize: 2,
+        paginate: true
+    });
+    ds.store().on("loading", loading);
+
+    var $element = $("#list").dxList({
+        selectedItems: [1],
+        dataSource: ds,
+        pageLoadMode: "nextButton",
+        showSelectionControls: true,
+        selectionMode: "all",
+        selectAllMode: "allPages"
+    });
+
+    var instance = $element.dxList("instance");
+    assert.equal(loading.callCount, 1, "one load during creation");
+
+    //act
+    instance.unselectItem(0);
+
+    //assert
+    assert.equal(loading.callCount, 1, "no load during unselect last item");
+    assert.deepEqual(instance.option("selectedItems"), [], "selected items is empty");
+});
+
+QUnit.test("change selectedItemKeys to invisible items should perform load with filter", function(assert) {
+    var items = [1, 2, 3, 4, 5];
+    var ds = new DataSource({
+        store: {
+            type: "array",
+            key: "this",
+            data: items,
+            onLoading: loading
+        },
+        pageSize: 2,
+        paginate: true
+    });
+
+    var $element = $("#list").dxList({
+        dataSource: ds,
+        selectionMode: "multiple"
+    });
+
+    var instance = $element.dxList("instance");
+    var loading = sinon.spy();
+    ds.store().on("loading", loading);
+
+    //act
+    instance.option("selectedItemKeys", [4]);
+
+    //assert
+    assert.equal(loading.callCount, 1, "one load during change selectedRowKeys");
+    assert.deepEqual(loading.lastCall.args[0].filter, ["this", "=", 4], "load during change selectedRowKeys");
+    assert.deepEqual(instance.option("selectedItems"), [4], "selected items is empty");
+});
 
 QUnit.test("selectedItems should not be removed if items won't loaded", function(assert) {
     var items = [1, 2, 3, 4, 5];
@@ -394,6 +462,84 @@ QUnit.test("selectedItems should be cleaned after pulldown", function(assert) {
     assert.deepEqual($element.dxList("option", "selectedItems"), [], "selected items were cleaned");
 });
 
+QUnit.test("selectedItems should not be cleaned after reordering if store key specified", function(assert) {
+    var items = [{ id: 1, text: "1" }, { id: 2, text: "2" }, { id: 3, text: "3" }];
+
+    var listInstance = $("#list").dxList({
+        dataSource: new ArrayStore({
+            key: "id",
+            data: items
+        }),
+        selectionMode: "all"
+    }).dxList("instance");
+
+    listInstance.selectItem(0);
+
+    var item0 = $("#list").find(toSelector(LIST_ITEM_CLASS)).eq(0).get(0),
+        item1 = $("#list").find(toSelector(LIST_ITEM_CLASS)).eq(1).get(0);
+
+    listInstance.reorderItem(item0, item1);
+    assert.equal(listInstance.option("selectedItems")[0], items[0], "first item is selected");
+});
+
+//T525081
+QUnit.test("selection works well after clean all selected items and selectAllMode is 'allPages'", function(assert) {
+    var items = [1, 2, 3],
+        selectionChangedSpy = sinon.spy();
+
+    var listInstance = $("#list").dxList({
+        dataSource: new ArrayStore({
+            key: "id",
+            data: items
+        }),
+        selectionMode: "all",
+        showSelectionControls: true,
+        selectAllMode: "allPages",
+        onSelectionChanged: selectionChangedSpy
+    }).dxList("instance");
+
+    listInstance.selectItem(0);
+    listInstance.unselectItem(0);
+    listInstance.selectItem(0);
+
+    assert.equal(selectionChangedSpy.callCount, 3, "'selectionChanged' event has been fired 3 times");
+});
+
+//T567757
+QUnit.test("Selecting all filtered items when selectAllMode is 'allPages'", function(assert) {
+    //arrange
+    var items = [1, 2, 3, 4, 5],
+        $selectAll,
+        ds = new DataSource({
+            store: items,
+            pageSize: 2,
+            paginate: true,
+            searchValue: "1"
+        });
+
+    var instance = $("#list").dxList({
+        dataSource: ds,
+        showSelectionControls: true,
+        selectionMode: "all",
+        selectAllMode: "allPages"
+    }).dxList("instance");
+
+    //act
+    instance.selectItem(0);
+
+    //assert
+    $selectAll = $("#list").find(".dx-list-select-all-checkbox");
+    assert.ok($selectAll.hasClass("dx-checkbox-checked"), "selectAll checkbox is checked");
+    assert.deepEqual(instance.option("selectedItems"), [1], "selected items");
+
+    //act
+    ds.searchValue("");
+    ds.load();
+
+    //assert
+    $selectAll = $("#list").find(".dx-list-select-all-checkbox");
+    assert.ok($selectAll.hasClass("dx-checkbox-indeterminate"), "selectAll checkbox is indeterminate");
+});
 
 var LIST_ITEM_SELECTED_CLASS = "dx-list-item-selected";
 
@@ -878,7 +1024,8 @@ QUnit.test("reorderItem should swap items by index", function(assert) {
             grouped: true,
             editEnabled: true
         }),
-        list = $list.dxList("instance");
+        list = $list.dxList("instance"),
+        refreshItemsSpy = sinon.spy(list, "_refreshItemElements");
 
     var groups = function() {
         return $list.find(toSelector(LIST_GROUP_CLASS));
@@ -893,6 +1040,7 @@ QUnit.test("reorderItem should swap items by index", function(assert) {
     list.reorderItem(this.movedItem, this.destinationItem);
     assert.equal(item01, item(1, 1));
     assert.equal(item11, item(1, 2));
+    assert.equal(refreshItemsSpy.callCount, 1, "Items refresh after reorder");
 });
 
 QUnit.test("reorderItem should swap items by node within one group", function(assert) {

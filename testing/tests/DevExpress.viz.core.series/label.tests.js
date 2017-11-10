@@ -177,6 +177,19 @@ QUnit.test("Hide", function(assert) {
     assert.deepEqual(label._group.stub("attr").lastCall.args[0], { visibility: "hidden" });
 });
 
+QUnit.test("Show hidden label in the correct position (using the 'resolveLabelOverlapping' option) after calling the 'show' method (T561563)", function(assert) {
+    var label = this.createLabel();
+    label.show();
+
+    label.hide();
+    label.show();
+
+    assert.equal(label._group.stub("attr").callCount, 5);
+    assert.deepEqual(label._group.stub("attr").getCall(1).args[0], { visibility: "hidden" });
+    assert.deepEqual(label._group.stub("attr").lastCall.args[0], { visibility: "visible" });
+    assert.equal(label._point.correctLabelPosition.callCount, 1);
+});
+
 QUnit.test("Draw label", function(assert) {
     var label = this.createAndDrawLabel();
 
@@ -564,6 +577,14 @@ QUnit.test("connector with zero angle", function(assert) {
     assert.deepEqual(label._connector._stored_settings.points, [80, 10, 108, 20]);
 });
 
+//T520777
+QUnit.test("Drawn connector to label with odd side", function(assert) {
+    var label = this.createLabelWithBBox({ x: 181, y: 36, height: 24, width: 75 }, { x: 218, y: 70, width: 0, height: 0 });
+    label.shift(181, 15);
+
+    assert.deepEqual(label._connector._stored_settings.points, [218, 70, 218, 35]);
+});
+
 QUnit.module("Set options", $.extend({}, environment, {
     beforeEach: function() {
         this.renderer = new vizMocks.Renderer();
@@ -652,7 +673,7 @@ QUnit.test("Set options on empty text", function(assert) {
     label.setOptions(this.options);
     label.show();
 
-    assert.strictEqual(label._group.stub("attr").callCount, 2);
+    assert.strictEqual(label._group.stub("attr").callCount, 3);
     assert.deepEqual(label._group.stub("attr").lastCall.args[0], { visibility: "hidden" });
 });
 

@@ -13,7 +13,6 @@ var canvas = {
         right: 25,
         width: 600,
         height: 400
-
     },
     range = {
         min: 10,
@@ -78,9 +77,9 @@ QUnit.test("create scrollBar", function(assert) {
 QUnit.test("init scrollBar", function(assert) {
     var group = new vizMocks.Element(),
         scrollBar = new ScrollBar(this.renderer, group);
-    scrollBar.update(this.options);
+    scrollBar.update(this.options).updateSize(canvas);
     //act
-    scrollBar.init(range, canvas);
+    scrollBar.init(range);
     //Assert
     assert.ok(translator2DModule.Translator2D.calledOnce);
     var scrollTranslator = translator2DModule.Translator2D.lastCall.returnValue;
@@ -108,9 +107,9 @@ QUnit.test("init scrollBar. Rotated", function(assert) {
     var group = new vizMocks.Element(),
         scrollBar = new ScrollBar(this.renderer, group);
     this.options.rotated = true;
-    scrollBar.update(this.options);
+    scrollBar.update(this.options).updateSize(canvas);
     //act
-    scrollBar.init(range, canvas);
+    scrollBar.init(range);
     //Assert
     assert.ok(translator2DModule.Translator2D.calledOnce);
     var scrollTranslator = translator2DModule.Translator2D.lastCall.returnValue;
@@ -178,19 +177,6 @@ QUnit.test("update scrollBar. Rotated", function(assert) {
         vertical: true,
         position: "right",
         width: 10
-    });
-});
-
-
-QUnit.test("shift scrollBar", function(assert) {
-    var group = new vizMocks.Element(),
-        scrollBar = new ScrollBar(this.renderer, group);
-    //act
-    scrollBar.shift(10, 30);
-    //Assert
-    assert.deepEqual(group.children[0]._stored_settings, {
-        translateX: 10,
-        translateY: 30
     });
 });
 
@@ -852,93 +838,84 @@ QUnit.test("setPane. Rotated", function(assert) {
     assert.strictEqual(p2, "pane2");
 });
 
-QUnit.test("getBoundingRect", function(assert) {
+QUnit.test("getMargins", function(assert) {
     var scrollBar = new ScrollBar(this.renderer, this.group),
         pane = {
-            name: "testPane",
-            canvas: {
-                width: 400,
-                height: 300,
-                top: 10,
-                bottom: 20,
-                left: 30,
-                right: 40
-            }
+            name: "testPane"
         };
-    var b1 = scrollBar.update(this.getOptions({ position: "top" })).setPane([pane]).getBoundingRect(),
-        b2 = scrollBar.update(this.getOptions({ position: "bottom" })).setPane([pane]).getBoundingRect();
+    var b1 = scrollBar.update(this.getOptions({ position: "top" })).setPane([pane]).getMargins(),
+        b2 = scrollBar.update(this.getOptions({ position: "bottom" })).setPane([pane]).getMargins();
 
     assert.deepEqual(b1, {
-        x: 30,
-        y: 5,
-        width: 330,
-        height: 15
+        top: 15,
+        bottom: 0,
+        left: 0,
+        right: 0
     }, "top scrollBar");
     assert.deepEqual(b2, {
-        x: 30,
-        y: 295,
-        width: 330,
-        height: 15
+        top: 0,
+        bottom: 15,
+        left: 0,
+        right: 0
     }, "bottom scrollBar");
 });
 
-QUnit.test("getBoundingRect. Rotated", function(assert) {
+QUnit.test("getMargins. Rotated", function(assert) {
     this.options.rotated = true;
     var scrollBar = new ScrollBar(this.renderer, this.group),
         pane = {
-            name: "testPane",
-            canvas: {
-                width: 400,
-                height: 300,
-                top: 10,
-                bottom: 20,
-                left: 30,
-                right: 40
-            }
+            name: "testPane"
         };
-
-    var b1 = scrollBar.update(this.getOptions({ position: "right" })).setPane([pane]).getBoundingRect(),
-        b2 = scrollBar.update(this.getOptions({ position: "left" })).setPane([pane]).getBoundingRect();
+    var b1 = scrollBar.update(this.getOptions({ position: "right" })).setPane([pane]).getMargins(),
+        b2 = scrollBar.update(this.getOptions({ position: "left" })).setPane([pane]).getMargins();
 
     assert.deepEqual(b1, {
-        x: 365,
-        y: 10,
-        width: 15,
-        height: 270
-    }, "right scrollBar");
+        top: 0,
+        bottom: 0,
+        left: 0,
+        right: 15
+    }, "top scrollBar");
     assert.deepEqual(b2, {
-        x: 15,
-        y: 10,
-        width: 15,
-        height: 270
-    }, "left scrollBar");
+        top: 0,
+        bottom: 0,
+        left: 15,
+        right: 0
+    }, "bottom scrollBar");
 });
 
-QUnit.test("Apply layout", function(assert) {
+QUnit.test("UpdateSize", function(assert) {
     var scrollBar = new ScrollBar(this.renderer, this.group);
-    sinon.spy(scrollBar, "shift");
 
-    scrollBar.update(this.getOptions({ position: "top" })).setPane(this.panes).applyLayout();
-    scrollBar.update(this.getOptions({ position: "bottom" })).setPane(this.panes).applyLayout();
+    scrollBar.update(this.getOptions({ position: "top" })).setPane(this.panes).updateSize(this.panes[0].canvas);
+    scrollBar.update(this.getOptions({ position: "bottom" })).setPane(this.panes).updateSize(this.panes[1].canvas);
 
-    assert.strictEqual(scrollBar.shift.callCount, 2);
+    assert.deepEqual(this.group.children[0].attr.getCall(1).args, [{
+        translateX: 0,
+        translateY: 95
+    }], "top scrollBar");
 
-    assert.deepEqual(scrollBar.shift.getCall(0).args, [0, 95], "top scrollBar");
-    assert.deepEqual(scrollBar.shift.getCall(1).args, [0, 465], "top scrollBar");
+    assert.deepEqual(this.group.children[0].attr.getCall(3).args, [{
+        translateX: 0,
+        translateY: 465
+    }], "top scrollBar");
 });
 
 QUnit.test("Apply layout. Rotated", function(assert) {
     this.options.rotated = true;
     var scrollBar = new ScrollBar(this.renderer, this.group);
-    sinon.spy(scrollBar, "shift");
 
-    scrollBar.update(this.getOptions({ position: "right" })).setPane(this.panes).applyLayout();
-    scrollBar.update(this.getOptions({ position: "left" })).setPane(this.panes).applyLayout();
+    scrollBar.update(this.getOptions({ position: "right" })).setPane(this.panes).updateSize(this.panes[1].canvas);
+    scrollBar.update(this.getOptions({ position: "left" })).setPane(this.panes).updateSize(this.panes[0].canvas);
 
-    assert.strictEqual(scrollBar.shift.callCount, 2);
+    assert.deepEqual(this.group.children[0].attr.getCall(1).args, [{
+        translateX: 10,
+        translateY: 0
+    }], "right scrollBar");
 
-    assert.deepEqual(scrollBar.shift.getCall(0).args, [10, 0], "right scrollBar");
-    assert.deepEqual(scrollBar.shift.getCall(1).args, [-5, 0], "left scrollBar");
+    assert.deepEqual(this.group.children[0].attr.getCall(3).args, [{
+        translateX: -5,
+        translateY: 0
+    }], "left scrollBar");
 });
 
 QUnit.test("getMultipleAxesSpacing", function(assert) {

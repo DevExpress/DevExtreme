@@ -1028,6 +1028,25 @@ QUnit.test("onItemClick fires on enter and space", function(assert) {
     assert.equal(itemClicked, 2, "press space on item call item click action");
 }),
 
+QUnit.test("default page scroll should be prevented for space key", function(assert) {
+    assert.expect(1);
+
+    var $element = $("#cmp");
+
+    new TestComponent($element, {
+        focusStateEnabled: true,
+        items: ["0"],
+        onItemClick: function(args) {
+            assert.ok(args.jQueryEvent.isDefaultPrevented(), "default scroll is prevented");
+        }
+    });
+
+    $element.find(".item").eq(0).trigger("dxpointerdown");
+    this.clock.tick();
+
+    keyboardMock($element).keyDown("space");
+}),
+
 QUnit.test("focused item changed after press right/left arrows", function(assert) {
     assert.expect(2);
 

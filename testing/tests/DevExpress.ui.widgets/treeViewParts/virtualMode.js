@@ -1075,6 +1075,20 @@ QUnit.test("the passed function is called on widget initialization", function(as
     assert.equal(spy.args[0][0], null, "'null' is passed as argument for the root item loading");
 });
 
+QUnit.test("'createChildren' callback didn't called at dblclick on item without children", function(assert) {
+    var $treeView = $("#treeView"),
+        spy = sinon.spy(),
+        treeView = $treeView.dxTreeView({
+            dataStructure: "plain",
+            items: [{ id: 1, text: "one", hasChildren: false }]
+        }).dxTreeView("instance");
+
+    treeView.option("createChildren", spy);
+    $treeView.find(".dx-treeview-item").trigger("dxdblclick");
+
+    assert.ok(spy.notCalled, "the callback didn't called");
+});
+
 QUnit.test("the passed function is called on node expansion", function(assert) {
     var $treeView = $("#treeView"),
         treeView = $treeView.dxTreeView({

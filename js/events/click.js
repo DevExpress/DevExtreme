@@ -18,7 +18,7 @@ var isInput = function(element) {
     return $(element).is("input, textarea, select, button ,:focus, :focus *");
 };
 
-var misc = { requestAnimationFrame: animationFrame.requestAnimationFrame };
+var misc = { requestAnimationFrame: animationFrame.requestAnimationFrame, cancelAnimationFrame: animationFrame.cancelAnimationFrame };
 
 var ClickEmitter = Emitter.inherit({
 
@@ -51,7 +51,7 @@ var ClickEmitter = Emitter.inherit({
         }
 
         this._accept(e);
-        misc.requestAnimationFrame((function() {
+        this._clickAnimationFrame = misc.requestAnimationFrame((function() {
             this._fireClickEvent(e);
         }).bind(this));
     },
@@ -70,6 +70,10 @@ var ClickEmitter = Emitter.inherit({
         this._fireEvent(CLICK_EVENT_NAME, e, {
             target: domUtils.closestCommonParent(this._startTarget, e.target)
         });
+    },
+
+    dispose: function() {
+        misc.cancelAnimationFrame(this._clickAnimationFrame);
     }
 
 });
@@ -84,8 +88,8 @@ var ClickEmitter = Emitter.inherit({
             realDevice.ios && compareVersions(realDevice.version, [9, 3]) >= 0 ||
             realDevice.android && compareVersions(realDevice.version, [5]) >= 0;
 
-    var isNativeClickEvent = function(e) {
-        return useNativeClick || $(e.target).closest("." + NATIVE_CLICK_CLASS).length;
+    var isNativeClickEvent = function(target) {
+        return useNativeClick || $(target).closest("." + NATIVE_CLICK_CLASS).length;
     };
 
 
@@ -97,7 +101,7 @@ var ClickEmitter = Emitter.inherit({
             eventAlreadyFired = lastFiredEvent !== originalEvent,
             leftButton = !e.which || e.which === 1;
 
-        if(leftButton && !prevented && isNativeClickEvent(e) && eventAlreadyFired) {
+        if(leftButton && !prevented && isNativeClickEvent(e.target) && eventAlreadyFired) {
             lastFiredEvent = originalEvent;
             eventUtils.fireEvent({
                 type: CLICK_EVENT_NAME,
@@ -108,7 +112,9 @@ var ClickEmitter = Emitter.inherit({
 
     ClickEmitter = ClickEmitter.inherit({
         _makeElementClickable: function($element) {
-            this.callBase($element);
+            if(!isNativeClickEvent($element)) {
+                this.callBase($element);
+            }
 
             $element.on("click", clickHandler);
         },
@@ -123,13 +129,13 @@ var ClickEmitter = Emitter.inherit({
         start: function(e) {
             prevented = null;
 
-            if(!isNativeClickEvent(e)) {
+            if(!isNativeClickEvent(e.target)) {
                 this.callBase(e);
             }
         },
 
         end: function(e) {
-            if(!isNativeClickEvent(e)) {
+            if(!isNativeClickEvent(e.target)) {
                 this.callBase(e);
             }
         },

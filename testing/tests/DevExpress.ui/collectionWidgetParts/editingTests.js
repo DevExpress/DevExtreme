@@ -551,6 +551,77 @@ var runTests = function() {
         }
     });
 
+    QUnit.test("selectedItems should be cleared if datasource instance has been changed to null", function(assert) {
+        var instance = new TestComponent($("<div>"), {
+            selectionMode: "multiple",
+            dataSource: [1, 2, 3],
+            selectedItemKeys: [1, 2]
+        });
+
+        assert.deepEqual(instance.option("selectedItems"), [1, 2], "selectedItems is correct");
+        assert.deepEqual(instance.option("selectedItem"), 1, "selectedItem is correct");
+        assert.deepEqual(instance.option("selectedItemKeys"), [1, 2], "selectedItem is correct");
+
+        instance.option("dataSource", null);
+
+        assert.deepEqual(instance.option("selectedItems"), [], "selectedItems was cleared");
+        assert.strictEqual(instance.option("selectedItem"), undefined, "selectedItem was cleared");
+        assert.deepEqual(instance.option("selectedItemKeys"), [], "selectedItemKeys was cleared");
+    });
+
+    QUnit.test("selectedItems should be cleared if datasource instance has been changed to empty array", function(assert) {
+        var instance = new TestComponent($("<div>"), {
+            selectionMode: "multiple",
+            dataSource: [1, 2, 3],
+            selectedItemKeys: [1, 2]
+        });
+
+        assert.deepEqual(instance.option("selectedItems"), [1, 2], "selectedItems is correct");
+        assert.deepEqual(instance.option("selectedItem"), 1, "selectedItem is correct");
+        assert.deepEqual(instance.option("selectedItemKeys"), [1, 2], "selectedItem is correct");
+
+        instance.option("dataSource", []);
+
+        assert.deepEqual(instance.option("selectedItems"), [], "selectedItems was cleared");
+        assert.strictEqual(instance.option("selectedItem"), undefined, "selectedItem was cleared");
+        assert.deepEqual(instance.option("selectedItemKeys"), [], "selectedItemKeys was cleared");
+    });
+
+    QUnit.test("selectedItems should not be cleared if datasource instance has been changed", function(assert) {
+        var instance = new TestComponent($("<div>"), {
+            selectionMode: "multiple",
+            dataSource: [1, 2, 3],
+            selectedItemKeys: [1, 2]
+        });
+
+        assert.deepEqual(instance.option("selectedItems"), [1, 2], "selectedItems is correct");
+        assert.deepEqual(instance.option("selectedItem"), 1, "selectedItem is correct");
+        assert.deepEqual(instance.option("selectedItemKeys"), [1, 2], "selectedItem is correct");
+
+        instance.option("dataSource", [1, 2, 3, 4]);
+
+        assert.deepEqual(instance.option("selectedItems"), [1, 2], "selectedItems wasn't cleared");
+        assert.strictEqual(instance.option("selectedItem"), 1, "selectedItem wasn't cleared");
+        assert.deepEqual(instance.option("selectedItemKeys"), [1, 2], "selectedItemKeys wasn't cleared");
+    });
+
+    QUnit.test("option change should hsve correct arguments after deselecting a value", function(assert) {
+        assert.expect(3);
+
+        var instance = new TestComponent($("<div>"), {
+            selectionMode: "multiple",
+            dataSource: [1, 2, 3],
+            onOptionChanged: function(args) {
+                if(args.name !== "selectedItems") {
+                    return;
+                }
+                assert.ok(args.previousValue !== args.value, "values are not equal");
+            }
+        });
+
+        instance.selectItem(1);
+        instance.unselectItem(1);
+    });
 
     QUnit.module("selecting of item keys", {
         beforeEach: function() {
@@ -1195,6 +1266,20 @@ var runTests = function() {
         assert.equal(instance.option("selectedItems").length, 1, "one item is selected");
     });
 
+    QUnit.test("several items should be selected if 'selectionItemKeys' is set and 'selectionRequired' option is 'true'", function(assert) {
+        var items = [{ key: 0 }, { key: 1 }, { key: 2 }];
+
+        var $element = $("#cmp"),
+            instance = new TestComponent($element, {
+                items: items,
+                keyExpr: "key",
+                selectionMode: 'multiple',
+                selectionRequired: true
+            });
+        instance.option("selectedItemKeys", [1, 2]);
+
+        assert.deepEqual(instance.option("selectedItems"), items.slice(1), "items is selected");
+    });
 
     QUnit.module("deleting of items");
 
@@ -1316,6 +1401,51 @@ var runTests = function() {
             assert.deepEqual(args.value, [items[0]], "correct option value");
         });
         instance.deleteItem(1);
+    });
+
+    QUnit.test("item should not be deleted if 'cancel' flag in onItemDeleting is true", function(assert) {
+        var instance = new TestComponent($("#cmp"), {
+            items: [0],
+            onItemDeleting: function(e) {
+                e.cancel = true;
+            }
+        });
+
+        var $item = instance.itemElements().eq(0);
+        instance.deleteItem($item);
+
+        $item = instance.itemElements().eq(0);
+        assert.equal($item.length, 1, "item not removed");
+    });
+
+    QUnit.test("item should not be deleted if 'cancel' flag in onItemDeleting is resolved with true", function(assert) {
+        var instance = new TestComponent($("#cmp"), {
+            items: [0],
+            onItemDeleting: function(e) {
+                e.cancel = $.Deferred().resolve(true);
+            }
+        });
+
+        var $item = instance.itemElements().eq(0);
+        instance.deleteItem($item);
+
+        $item = instance.itemElements().eq(0);
+        assert.equal($item.length, 1, "item not removed");
+    });
+
+    QUnit.test("item should be deleted if 'cancel' flag in onItemDeleting is resolved", function(assert) {
+        var instance = new TestComponent($("#cmp"), {
+            dataSource: [0],
+            onItemDeleting: function(e) {
+                e.cancel = $.Deferred().resolve();
+            }
+        });
+
+        var $item = instance.itemElements().eq(0);
+        instance.deleteItem($item);
+
+        $item = instance.itemElements().eq(0);
+        assert.equal($item.length, 0, "item removed");
     });
 
 

@@ -10,7 +10,7 @@ var $ = require("../../core/renderer"),
     dataUtils = require("../../data/utils"),
     formatHelper = require("../../format_helper");
 
-var DATAGRID_NODATA_TEXT_CLASS = "dx-datagrid-nodata",
+var NO_DATA_CLASS = "nodata",
     DATE_INTERVAL_SELECTORS = {
         "year": function(value) {
             return value && value.getFullYear();
@@ -189,14 +189,19 @@ module.exports = (function() {
             var that = this;
             $element = $element || this.element();
 
-            var noDataElement = $element.find("." + DATAGRID_NODATA_TEXT_CLASS),
+            if(!$element) {
+                return;
+            }
+
+            var noDataClass = that.addWidgetPrefix(NO_DATA_CLASS),
+                noDataElement = $element.find("." + noDataClass).last(),
                 isVisible = this._dataController.isEmpty(),
                 isLoading = this._dataController.isLoading(),
                 rtlEnabled = this.option("rtlEnabled");
 
             if(!noDataElement.length) {
                 noDataElement = $("<span>")
-                    .addClass(DATAGRID_NODATA_TEXT_CLASS)
+                    .addClass(noDataClass)
                     .appendTo($element);
             }
 
@@ -344,7 +349,9 @@ module.exports = (function() {
                 precision: column.precision,
                 getDisplayFormat: column.getDisplayFormat,
                 customizeText: column.customizeText,
-                target: target
+                target: target,
+                trueText: column.trueText,
+                falseText: column.falseText
             };
         },
 
@@ -443,19 +450,29 @@ module.exports = (function() {
 
             if(groupInterval) {
                 $.each(groupInterval, function(index, interval) {
-                    result.push(remoteGrouping ? { selector: dataField, groupInterval: interval, isExpanded: false } : getIntervalSelector.bind(column, interval));
+                    result.push(remoteGrouping ? { selector: dataField, groupInterval: interval, isExpanded: index < groupInterval.length - 1 } : getIntervalSelector.bind(column, interval));
                 });
 
                 return result;
             }
 
-            return remoteGrouping ? [{ selector: dataField, isExpanded: false }] : function(data) {
-                var result = column.calculateCellValue(data);
-                if(result === undefined || result === "") {
-                    result = null;
+            if(remoteGrouping) {
+                result = [{ selector: dataField, isExpanded: false }];
+            } else {
+                result = function(data) {
+                    var result = column.calculateCellValue(data);
+                    if(result === undefined || result === "") {
+                        result = null;
+                    }
+                    return result;
+                };
+
+                if(column.sortingMethod) {
+                    result = [{ selector: result, compare: column.sortingMethod.bind(column) }];
                 }
-                return result;
-            };
+            }
+
+            return result;
         },
 
         getGroupInterval: function(column) {

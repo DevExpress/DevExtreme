@@ -160,6 +160,12 @@
     input[type="date"] {
         line-height: normal;
     }
+
+    &, &:not(.dx-texteditor-empty) {
+        &.dx-auto-width {
+            .invalid-dropdowneditor-input-padding();
+        }
+    }
 }
 
 .dx-device-ios .dx-datebox.dx-texteditor-empty .dx-texteditor-input {

@@ -154,7 +154,7 @@ extend(Title.prototype, require("./layout_element").LayoutElement.prototype, {
         that._correctTitleLength(width);
         layoutOptions = that.getLayoutOptions();
 
-        if(layoutOptions.width > width || layoutOptions.height > height) {
+        if(layoutOptions.height > height) {
             that._params.incidentOccurred("W2103");
             that._group.linkRemove();
             that._boundingRect.width = that._boundingRect.height = 0;

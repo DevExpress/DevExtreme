@@ -97,6 +97,15 @@ QUnit.test("Initialize from options with invisible columns", function(assert) {
     assert.deepEqual(this.dataController.items()[1].values, ['Dan', '98-75-21']);
 });
 
+QUnit.test("Initialize array with keyExpr option", function(assert) {
+    //act
+    this.applyOptions({ keyExpr: "id", dataSource: [] });
+    this.dataController.optionChanged({ name: "keyExpr" });
+
+    //assert
+    assert.equal(this.getDataSource().store().key(), "id", "keyExpr is assigned to store");
+});
+
 QUnit.test("changed on initialize", function(assert) {
     var changedCount = 0;
     var lastArgs;
@@ -753,7 +762,7 @@ QUnit.test("update sorting on columnsChanged (changeType == 'sorting'). Refresh 
     assert.deepEqual(this.dataController.items()[0].values, ['Dan', 25]);
 });
 
-QUnit.test("update sorting on columnsChanged when sortingMethod defined(changeType == 'sorting'). Refresh current page", function(assert) {
+QUnit.test("sorting when calculateSortValue is defined", function(assert) {
     var array = [
         { name: 'Alex', age: 30 },
         { name: 'Dan', age: 25 },
@@ -767,6 +776,37 @@ QUnit.test("update sorting on columnsChanged when sortingMethod defined(changeTy
         columns: [{
             dataField: "name", calculateSortValue: function(data) {
                 return $.inArray(data.name, ['Dan', 'Bob', 'Alex']);
+            }
+        }, "age"],
+        sorting: { mode: 'single' }
+    });
+    this.dataController.setDataSource(dataSource);
+    dataSource.load();
+
+
+    //act
+    this.columnsController.changeSortOrder(0, 'asc');
+
+    assert.equal(this.dataController.pageIndex(), 0);
+    assert.equal(this.dataController.items().length, 2);
+    assert.deepEqual(this.dataController.items()[0].values, ['Dan', 25]);
+});
+
+QUnit.test("sorting when sortingMethod is defined", function(assert) {
+    var array = [
+        { name: 'Alex', age: 30 },
+        { name: 'Dan', age: 25 },
+        { name: 'Bob', age: 20 }
+    ];
+
+    var order = ['Dan', 'Bob', 'Alex'];
+    var dataSource = createDataSource(array, { key: 'name' }, { pageSize: 2 });
+
+    this.applyOptions({
+        commonColumnSettings: { allowSorting: true },
+        columns: [{
+            dataField: "name", sortingMethod: function(x, y) {
+                return order.indexOf(x) - order.indexOf(y);
             }
         }, "age"],
         sorting: { mode: 'single' }
@@ -1369,6 +1409,53 @@ QUnit.test("Set remoteOperations option to true", function(assert) {
 
     //assert
     assert.deepEqual(this.dataController.dataSource().remoteOperations(), { filtering: true, sorting: true, paging: true, grouping: true, summary: true }, "remote operations set correct");
+});
+
+//T541798
+QUnit.test("Apply sorting by the lookup column with calculateSortValue when the first load", function(assert) {
+    //arrange
+    var items,
+        array = [
+            { State: 1 },
+            { State: 2 },
+            { State: 3 }
+        ];
+
+    this.applyOptions({
+        dataSource: array,
+        columns: [{
+            dataField: "State",
+            sortOrder: "asc",
+            lookup: {
+                valueExpr: "id",
+                displayExpr: "name",
+                dataSource: [{
+                    id: 1,
+                    name: "Wyoming"
+                }, {
+                    id: 2,
+                    name: "California"
+                }, {
+                    id: 3,
+                    name: "Arkansas"
+                }]
+            },
+            calculateSortValue: function(data) {
+                var value = this.calculateCellValue(data);
+                return this.lookup.calculateCellValue(value);
+            }
+        }]
+    });
+
+    //act
+    this.dataController._refreshDataSource();
+
+    //assert
+    items = this.dataController.items();
+    assert.equal(items.length, 3, "count item");
+    assert.deepEqual(items[0].data, { State: 3 });
+    assert.deepEqual(items[1].data, { State: 2 });
+    assert.deepEqual(items[2].data, { State: 1 });
 });
 
 QUnit.module("No dataSource", { beforeEach: setupModule, afterEach: teardownModule });
@@ -2911,6 +2998,30 @@ QUnit.test("last page does not be loaded several times then totalCount % pageSiz
     assert.ok(this.dataController.isLoaded());
 });
 
+//T507750
+QUnit.test("last page does not be loaded several times then totalCount equals pageSize", function(assert) {
+    var changedArgs = [];
+
+    this.dataController.changed.add(function(e) {
+        changedArgs.push(e);
+    });
+
+    this.dataController.viewportSize(20);
+    this.dataController.pageSize(50);
+
+    //act
+    this.dataController.setViewportItemIndex(30);
+
+    //assert
+    assert.deepEqual(this.dataController.items().length, 50);
+    assert.equal(changedArgs.length, 2);
+    assert.deepEqual(changedArgs[0].changeType, 'refresh');
+    assert.deepEqual(changedArgs[0].items[0].key, 0);
+    assert.deepEqual(changedArgs[1].changeType, 'append');
+    assert.deepEqual(changedArgs[1].items, []);
+    assert.ok(this.dataController.isLoaded());
+});
+
 QUnit.module("Infinite scrolling (ScrollingDataSource)", {
     beforeEach: function() {
 
@@ -4203,6 +4314,40 @@ QUnit.test("Apply search for string column without reloading when all dataTypes 
     assert.equal(that.dataController.items()[0].data.name, 'Test');
 });
 
+//T528684
+QUnit.test("Apply search for lookup column", function(assert) {
+    //arrange
+    var that = this,
+        loadingArgs = [];
+
+    this.applyOptions({
+        searchPanel: { text: 'Second' },
+        remoteOperations: true,
+        dataSource: new ArrayStore({
+            onLoading: function(e) {
+                loadingArgs.push(e);
+            },
+            data: [{ name: "Alex", categoryId: 1 }, { name: "Dan", categoryId: 2 }]
+        }),
+        columns: [{ dataField: 'categoryId', dataType: "number", lookup: {
+            dataSource: [
+                { id: 1, name: "first" },
+                { id: 2, name: "second" }
+            ],
+            valueExpr: "id",
+            displayExpr: "name"
+        } }]
+    });
+
+    this.dataController.optionChanged({ name: "dataSource" });
+
+    //assert
+    assert.equal(loadingArgs.length, 1);
+    assert.deepEqual(loadingArgs[0].filter, ["categoryId", "=", 2]);
+    assert.equal(that.dataController.items().length, 1);
+    assert.equal(that.dataController.items()[0].data.categoryId, 2);
+});
+
 QUnit.test("column filter for one column", function(assert) {
     this.setupFilterableData();
 
@@ -5379,6 +5524,68 @@ QUnit.test("Inserting Row", function(assert) {
     assert.deepEqual(this.dataController.items()[1].values, ['Alex', '55-55-55']);
     assert.deepEqual(this.dataController.items()[1].data, { name: 'Alex', phone: '55-55-55' });
     assert.equal(this.dataController.items()[1].dataIndex, 0);
+});
+
+//T521968
+QUnit.test("Inserting several rows for cell editing mode", function(assert) {
+    var array = [
+        { name: 'Alex', phone: '55-55-55' },
+        { name: 'Dan', phone: '98-75-21' }
+    ];
+
+    this.options.editing = {
+        mode: "cell",
+        allowAdding: true
+    };
+
+    var dataSource = createDataSource(array, { key: 'name' });
+
+    this.dataController.setDataSource(dataSource);
+    dataSource.load();
+
+    //act
+    this.addRow();
+    this.addRow();
+
+    //assert
+    var items = this.dataController.items();
+
+    assert.equal(items.length, 4, "two rows are added");
+
+    assert.deepEqual(items[0].data, {}, "row 0 data");
+    assert.ok(items[0].inserted, "row 0 is inserted");
+    assert.deepEqual(items[1].data, array[0], "row 1 data");
+    assert.deepEqual(items[2].data, array[1], "row 2 data");
+    assert.notOk(items[3].inserted, "row 3 is saved");
+});
+
+QUnit.test("Inserting several rows for row editing mode", function(assert) {
+    var array = [
+        { name: 'Alex', phone: '55-55-55' },
+        { name: 'Dan', phone: '98-75-21' }
+    ];
+
+    this.options.editing = {
+        mode: "row",
+        allowAdding: true
+    };
+
+    var dataSource = createDataSource(array, { key: 'name' });
+
+    this.dataController.setDataSource(dataSource);
+    dataSource.load();
+
+    //act
+    this.addRow();
+    this.addRow();
+
+    //assert
+    var items = this.dataController.items();
+    assert.equal(items.length, 3, "only one row is added");
+
+    assert.deepEqual(items[0].data, {}, "row 1 data");
+    assert.deepEqual(items[1].data, array[0], "row 1 data");
+    assert.deepEqual(items[2].data, array[1], "row 2 data");
 });
 
 //T327787, T333894
@@ -7268,6 +7475,46 @@ QUnit.test("group sorting by summary", function(assert) {
     assert.deepEqual(this.dataController.items()[2].summaryCells[0][0].value, 3);
 });
 
+//T526028
+QUnit.test("group sorting by summary if remoteOperations option is enabled", function(assert) {
+    this.options = {
+        columns: ['name', 'age'],
+        remoteOperations: true,
+        dataSource: {
+            group: 'name',
+            load: function(options) {
+                return $.Deferred().resolve([
+                    { key: "Dan", summary: [1], items: null, count: 1 },
+                    { key: "Sam", summary: [3], items: null, count: 3 },
+                    { key: "Alex", summary: [2], items: null, count: 2 },
+                ]);
+            }
+        },
+        sortByGroupSummaryInfo: [{
+            summaryItem: 'count'
+        }],
+        summary: {
+            groupItems: [{
+                summaryType: 'count'
+            }]
+        }
+    };
+
+    //act
+    this.setupDataGridModules();
+    this.clock.tick();
+
+    //assert
+    assert.ok(!this.dataController.isLoading());
+    assert.strictEqual(this.dataController.items().length, 3);
+    assert.deepEqual(this.dataController.items()[0].data.key, 'Dan');
+    assert.deepEqual(this.dataController.items()[0].summaryCells[0][0].value, 1);
+    assert.deepEqual(this.dataController.items()[1].data.key, 'Alex');
+    assert.deepEqual(this.dataController.items()[1].summaryCells[0][0].value, 2);
+    assert.deepEqual(this.dataController.items()[2].data.key, 'Sam');
+    assert.deepEqual(this.dataController.items()[2].summaryCells[0][0].value, 3);
+});
+
 QUnit.test("group sorting by summary when change grouping", function(assert) {
     this.options = {
         columns: ['name', 'age'],
@@ -7898,6 +8145,60 @@ QUnit.test("groupFooter item when group summary items with showInGroupFooter and
     assert.deepEqual(this.dataController.items()[6].summaryCells, [[],
         [$.extend({ value: 25 }, this.options.summary.groupItems[0])]
     ]);
+});
+
+//T535240
+QUnit.test("groupFooter item when group by several fields and summary item is defined with showInGroupFooter", function(assert) {
+    this.options = {
+        dataSource: {
+            group: ['name', 'age'],
+            store: [
+                { name: 'Alex', age: 19 },
+                { name: 'Alex', age: 15 },
+                { name: 'Dan', age: 25 }
+            ]
+        },
+        columns: ['name', { dataField: 'age', showWhenGrouped: true }],
+        grouping: {
+            autoExpandAll: true
+        },
+        summary: {
+            groupItems: [{
+                column: 'age',
+                showInGroupFooter: true,
+                summaryType: 'max'
+            }]
+        }
+    };
+
+    //act
+    this.setupDataGridModules();
+    this.clock.tick();
+
+    //assert
+    var items = this.dataController.items();
+    assert.ok(!this.dataController.isLoading());
+    assert.strictEqual(items.length, 13);
+    assert.strictEqual(items[0].rowType, 'group');
+    assert.deepEqual(items[0].key, ['Alex']);
+
+    assert.strictEqual(items[1].rowType, 'group');
+    assert.deepEqual(items[1].key, ['Alex', 15]);
+    assert.strictEqual(items[2].rowType, 'data');
+    assert.strictEqual(items[3].rowType, 'groupFooter');
+    assert.strictEqual(items[3].summaryCells[2][0].value, 15);
+
+    assert.strictEqual(items[4].rowType, 'group');
+    assert.deepEqual(items[4].key, ['Alex', 19]);
+    assert.strictEqual(items[5].rowType, 'data');
+    assert.strictEqual(items[6].rowType, 'groupFooter');
+    assert.strictEqual(items[6].summaryCells[2][0].value, 19);
+
+    assert.strictEqual(items[7].rowType, 'groupFooter');
+    assert.strictEqual(items[7].summaryCells[2][0].value, 19);
+
+    assert.strictEqual(items[8].rowType, 'group');
+    assert.deepEqual(items[8].key, ['Dan']);
 });
 
 QUnit.test("several groupFooter items when group summary items with showInGroupFooter and autoExpandAll", function(assert) {
@@ -8755,7 +9056,7 @@ QUnit.test("update with incorrect rowIndices", function(assert) {
     dataSourceItems[0].age = 31;
     this.dataController.updateItems({
         changeType: 'update',
-        rowIndices: [0, -1, 0]
+        rowIndices: [0, -1, 0, 1000000]
     });
 
     //assert

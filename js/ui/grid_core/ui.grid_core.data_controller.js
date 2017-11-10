@@ -19,7 +19,7 @@ module.exports = {
             /**
              * @name GridBaseOptions_dataSource
              * @publicName dataSource
-             * @type string|array|DataSource|DataSource configuration
+             * @type string|array|DataSource|DataSourceOptions
              * @default null
              */
             dataSource: null,
@@ -257,6 +257,7 @@ module.exports = {
                         case "remoteOperations":
                             handled();
                             break;
+                        case "keyExpr":
                         case "dataSource":
                         case "scrolling":
                         case "paging":
@@ -426,6 +427,8 @@ module.exports = {
                             } else {
                                 that.updateItems(e);
                             }
+                        }).fail(function() {
+                            that._isDataSourceApplying = false;
                         });
                         if(that._isDataSourceApplying) {
                             isAsyncDataSourceApplying = true;
@@ -461,6 +464,21 @@ module.exports = {
                         dataSource.pageIndex(pageIndex);
                     }
                 },
+                _getSpecificDataSourceOption: function() {
+                    var dataSource = this.option("dataSource");
+
+                    if(Array.isArray(dataSource)) {
+                        return {
+                            store: {
+                                type: "array",
+                                data: dataSource,
+                                key: this.option("keyExpr")
+                            }
+                        };
+                    }
+
+                    return dataSource;
+                },
                 _initDataSource: function() {
                     var that = this,
                         dataSource = this.option("dataSource"),
@@ -477,15 +495,27 @@ module.exports = {
                     }
                 },
                 _loadDataSource: function() {
-                    var dataSource = this._dataSource;
-                    return dataSource ? dataSource.load() : $.Deferred().resolve().promise();
+                    var dataSource = this._dataSource,
+                        result = $.Deferred();
+
+                    when(this._columnsController.refresh(true)).always(function() {
+                        if(dataSource) {
+                            dataSource.load().done(result.resolve).fail(result.reject);
+                        } else {
+                            result.resolve();
+                        }
+                    });
+
+                    return result.promise();
                 },
-                _processItems: function(items) {
+                _processItems: function(items, changeType) {
                     var that = this,
                         visibleColumns = that._columnsController.getVisibleColumns(),
+                        visibleItems = that._items,
+                        dataIndex = changeType === "append" && visibleItems.length > 0 ? visibleItems[visibleItems.length - 1].dataIndex + 1 : 0,
                         options = {
                             visibleColumns: visibleColumns,
-                            dataIndex: 0
+                            dataIndex: dataIndex
                         },
                         result = [];
 
@@ -575,7 +605,11 @@ module.exports = {
                                 change.changeTypes = [];
 
                                 var equalItems = function(item1, item2, strict) {
-                                    return item1 && item2 && equalKeys(item1.key, item2.key) && (!strict || item1.rowType === item2.rowType);
+                                    var result = item1 && item2 && equalKeys(item1.key, item2.key);
+                                    if(result && strict) {
+                                        result = item1.rowType === item2.rowType && (item2.rowType !== "detail" || item1.isEditing === item2.isEditing);
+                                    }
+                                    return result;
                                 };
 
                                 $.each(rowIndices, function(index, rowIndex) {
@@ -588,8 +622,6 @@ module.exports = {
                                     rowIndex += rowIndexCorrection;
 
                                     if(prevIndex === rowIndex) return;
-
-                                    change.rowIndices.push(rowIndex);
 
                                     prevIndex = rowIndex;
                                     oldItem = that._items[rowIndex];
@@ -618,7 +650,14 @@ module.exports = {
                                         that._items.splice(rowIndex, 1);
                                         rowIndexCorrection--;
                                         prevIndex = -1;
+                                    } else if(newItem) {
+                                        changeType = "update";
+                                        that._items[rowIndex] = newItem;
+                                    } else {
+                                        return;
                                     }
+
+                                    change.rowIndices.push(rowIndex);
                                     change.changeTypes.push(changeType);
                                 });
                                 break;

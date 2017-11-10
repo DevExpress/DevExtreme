@@ -12,10 +12,6 @@ var $ = require("jquery"),
     dateUtils = require("core/utils/date"),
     config = require("core/config");
 
-function getDaylightSavingsOffset(date1, date2) {
-    return date1.getTimezoneOffset() - date2.getTimezoneOffset();
-}
-
 QUnit.testStart(function() {
     $("#qunit-fixture").html('<div id="scheduler"></div>');
 });
@@ -702,8 +698,6 @@ QUnit.test("'convertDateByTimezone' should return date according to the custom t
     var date = new Date(2015, 6, 3, 3),
         timezoneDifference = date.getTimezoneOffset() * 60000 + timezoneValue * 3600000;
 
-    timezoneDifference -= getDaylightSavingsOffset(date, new Date()) * 60000;
-
     var convertedDate = this.instance.fire("convertDateByTimezone", date);
 
     assert.deepEqual(convertedDate, new Date(date.getTime() + timezoneDifference), "'convertDateByTimezone' works fine");
@@ -720,8 +714,6 @@ QUnit.test("'convertDateByTimezone' should return date according to the custom t
 
     var date = new Date(2015, 6, 3, 3),
         timezoneDifference = date.getTimezoneOffset() * 60000 + timezone.value * 3600000;
-
-    timezoneDifference -= getDaylightSavingsOffset(date, new Date()) * 60000;
 
     var convertedDate = this.instance.fire("convertDateByTimezone", date);
 
@@ -753,6 +745,23 @@ QUnit.test("'getAppointmentDurationInMs' should return visible appointment durat
         endDate: new Date(2015, 2, 4, 20),
         callback: function(result) {
             assert.equal(result / dateUtils.dateToMilliseconds("hour"), 12 * 3, "'getAppointmentDurationInMs' works fine");
+        }
+    });
+});
+
+QUnit.test("'getAppointmentDurationInMs' should return visible appointment duration considering startDayHour and endDayHour for stricly allDay appointment without allDay field", function(assert) {
+    this.createInstance();
+
+    this.instance.option({
+        startDayHour: 8,
+        endDayHour: 20
+    });
+
+    this.instance.fire("getAppointmentDurationInMs", {
+        startDate: new Date(2015, 2, 2, 8),
+        endDate: new Date(2015, 2, 3, 0),
+        callback: function(result) {
+            assert.equal(result / dateUtils.dateToMilliseconds("hour"), 12, "'getAppointmentDurationInMs' works fine");
         }
     });
 });
@@ -1000,6 +1009,38 @@ QUnit.test("Agenda row count calculation with recurrence appointments", function
             currentDate: new Date(2016, 1, 1)
         }).done(function(rows) {
             assert.deepEqual(rows, [[1, 2, 2, 2, 2]], "Rows are OK");
+        });
+
+        instance._reloadDataSource();
+    } finally {
+        endViewDateStub.restore();
+        startViewDateStub.restore();
+    }
+});
+
+QUnit.test("Agenda row count calculation with wrong endDate appointments", function(assert) {
+    this.createInstance({
+        views: ["agenda"],
+        currentView: "agenda"
+    });
+    var instance = this.instance,
+        endViewDateStub = sinon.stub(instance, "getEndViewDate").returns(new Date(2016, 1, 5, 23, 59)),
+        startViewDateStub = sinon.stub(instance, "getStartViewDate").returns(new Date(2016, 1, 1));
+
+    try {
+        instance._reloadDataSource = function() {
+            this._dataSourceLoadedCallback.fireWith(this, [[
+                { startDate: new Date(2016, 1, 2), endDate: new Date(2016, 1, 2, 0, 30) },
+                { startDate: new Date(2016, 1, 3, 3, 30), endDate: new Date(2016, 1, 3) },
+                { startDate: new Date(2016, 1, 4), endDate: new Date(2016, 1, 4, 0, 30) }
+            ]]);
+        };
+
+        instance.fire("getAgendaRows", {
+            agendaDuration: 5,
+            currentDate: new Date(2016, 1, 1)
+        }).done(function(rows) {
+            assert.deepEqual(rows, [[0, 1, 1, 1, 0]], "Rows are OK");
         });
 
         instance._reloadDataSource();

@@ -35,6 +35,7 @@ exports.pie = _extend({}, barSeries, {
         !point.isVisible() && point.setInvisibility();
         point.isSelected() && legendCallback();
     },
+
     adjustLabels: function() {
         var that = this,
             points = that._points || [],
@@ -73,22 +74,19 @@ exports.pie = _extend({}, barSeries, {
     _prepareSeriesToDrawing: _noop,
 
     _endUpdateData: function() {
-        this._arrayArguments = {};
         chartScatterSeries._prepareSeriesToDrawing.call(this);
     },
 
-    drawLabelsWOPoints: function(translators) {
-        var that = this,
-            options = that._options,
-            points = that._points || [];
+    drawLabelsWOPoints: function() {
+        var that = this;
 
-        if(options.label.position === INSIDE) {
+        if(that._options.label.position === INSIDE) {
             return false;
         }
 
         that._labelsGroup.append(that._extGroups.labelsGroup);
-        _each(points, function(_, point) {
-            point.drawLabel(translators);
+        (that._points || []).forEach(function(point) {
+            point.drawLabel();
         });
 
         return true;
@@ -116,13 +114,7 @@ exports.pie = _extend({}, barSeries, {
     },
 
     _getMainColor: function(data) {
-        var that = this,
-            arr = that._arrayArguments || {},
-            argument = data.argument;
-
-        arr[argument] = ++arr[argument] || 0;
-        that._arrayArguments = arr;
-        return that._options.mainSeriesColor(argument, arr[argument]);
+        return this._options.mainSeriesColor(data.argument, data.index);
     },
 
     _getPointOptions: function(data) {

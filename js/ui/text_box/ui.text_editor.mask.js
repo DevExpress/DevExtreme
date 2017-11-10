@@ -351,6 +351,9 @@ var TextEditorMask = TextEditorBase.inherit({
 
         var inputValue = this._input().val();
         var caret = this._caret();
+        if(!caret.end) {
+            return;
+        }
         caret.start = caret.end - 1;
         var oldValue = inputValue.substring(0, caret.start) + inputValue.substring(caret.end);
         var char = inputValue[caret.start];
@@ -369,7 +372,7 @@ var TextEditorMask = TextEditorBase.inherit({
     },
 
     _isControlKeyFired: function(e) {
-        return this._isControlKey(e.keyCode) && !e.which || e.ctrlKey // NOTE: FF fires control keys on keypress
+        return this._isControlKey(e.key) || e.ctrlKey // NOTE: FF fires control keys on keypress
                 || e.metaKey; // NOTE: Safari fires keys with ctrl modifier on keypress
     },
 
@@ -598,12 +601,13 @@ var TextEditorMask = TextEditorBase.inherit({
     },
 
     _updateHiddenElement: function() {
+        this._removeHiddenElement();
+
         if(this.option("mask")) {
             this._input().attr("name", null);
             this._renderHiddenElement();
-        } else {
-            this._removeHiddenElement();
         }
+
         this._setSubmitElementName(this.option("name"));
     },
 

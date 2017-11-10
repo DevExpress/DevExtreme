@@ -6,6 +6,11 @@
     .dx-texteditor-container {
         width: auto;
         border: none;
+
+        .dx-icon-search {
+            width: 0px;
+            height: 0px;
+        }
     }
 
     .dx-placeholder {
@@ -73,6 +78,7 @@
     &:before {
         overflow: visible;
         display: none;
+        vertical-align: baseline;
         background-image: @ICON_SEARCH_PATH;
         background-position: 0 @SEARCH_ICON_OFFSET;
         margin-left: @SEARCH_ICON_OFFSET / 2;

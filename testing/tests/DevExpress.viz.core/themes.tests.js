@@ -390,7 +390,7 @@ QUnit.test("added items are refresh", function(assert) {
     themeModule.addCacheItem(item2);
     themeModule.addCacheItem(item3);
 
-    themeModule.refreshAll();
+    themeModule.refreshTheme();
 
     assert.ok(item1.refreshed, "item 1");
     assert.ok(item2.refreshed, "item 2");
@@ -406,7 +406,7 @@ QUnit.test("removed items are not refreshed", function(assert) {
     themeModule.addCacheItem(item3);
     themeModule.removeCacheItem(item2);
 
-    themeModule.refreshAll();
+    themeModule.refreshTheme();
 
     assert.ok(item1.refreshed, "item 1");
     assert.ok(!item2.refreshed, "item 2");

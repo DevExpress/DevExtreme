@@ -509,6 +509,7 @@
 
 @list-group-header-border-bottom: 1px solid @list-border-color;
 @list-group-header-default-padding-top: 10px;
+@list-group-header-compact-padding-top: 5px;
 @list-item-chevron-icon-color: @base-icon-color;
 
 // Overlay
@@ -892,6 +893,7 @@
 * @group datagrid
 */
 @datagrid-border-color: @base-border-color;
+@datagrid-border: 1px solid @datagrid-border-color;
 
 /**
 * @name 20. Header text color
@@ -1099,6 +1101,7 @@
 * @group treelist
 */
 @treelist-border-color: @base-border-color;
+@treelist-border: 1px solid @treelist-border-color;
 
 /**
 * @name 20. Header text color
@@ -1185,6 +1188,7 @@
 @treelist-search-color: @base-inverted-text-color;
 
 @treelist-spin-icon-color: @base-icon-color;
+@treelist-selection-spin-icon-color: @base-inverted-text-color;
 
 /**
 * @name 160. Highlighted text background color
@@ -1574,8 +1578,8 @@
 
 //DateView
 @dateview-border-color: @base-border-color;
-@dateview-shadow-up: bottom, fade(@base-bg, 0%) 0%, fade(@base-bg, 80%) 60%;
-@dateview-shadow-down: top, fade(@base-bg, 0%) 0%, fade(@base-bg, 80%) 60%;
+@dateview-shadow-up: 0deg, fade(@base-bg, 0%) 0%, fade(@base-bg, 80%) 60%;
+@dateview-shadow-down: 180deg, fade(@base-bg, 0%) 0%, fade(@base-bg, 80%) 60%;
 @dateview-color: @base-text-color;
 
 //ColorView

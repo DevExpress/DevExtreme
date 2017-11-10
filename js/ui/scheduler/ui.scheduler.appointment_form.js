@@ -1,7 +1,7 @@
 "use strict";
 
-var $ = require("../../core/renderer"),
-    Form = require("../form"),
+var Form = require("../form"),
+    dateSerialization = require("../../core/utils/date_serialization"),
     messageLocalization = require("../../localization/message"),
     clickEvent = require("../../events/click");
 
@@ -25,9 +25,7 @@ var SchedulerAppointmentForm = {
     },
 
     _getAllDayStartDate: function(startDate) {
-        startDate.setHours(0);
-        startDate.setMinutes(0);
-        return startDate;
+        return startDate.setHours(0, 0, 0, 0);
     },
 
     _getAllDayEndDate: function(startDate) {
@@ -83,7 +81,7 @@ var SchedulerAppointmentForm = {
                                 return;
                             }
 
-                            var startDate = new Date(startDateEditor.option("value"));
+                            var startDate = dateSerialization.deserializeDate(startDateEditor.option("value"));
 
                             if(value) {
                                 startDateEditor.option("value", that._getAllDayStartDate(startDate));
@@ -91,7 +89,7 @@ var SchedulerAppointmentForm = {
                             } else {
                                 startDate.setHours(schedulerInst.option("startDayHour"));
                                 startDateEditor.option("value", startDate);
-                                endDateEditor.option("value", schedulerInst._workSpace.calculateEndDate(startDateEditor.option("value")));
+                                endDateEditor.option("value", schedulerInst._workSpace.calculateEndDate(dateSerialization.deserializeDate(startDateEditor.option("value"))));
                             }
                         }
                     }
@@ -113,12 +111,12 @@ var SchedulerAppointmentForm = {
                         firstDayOfWeek: schedulerInst.option("firstDayOfWeek")
                     },
                     onValueChanged: function(args) {
-                        var value = args.value,
-                            previousValue = args.previousValue,
-                            endDateEditor = that._appointmentForm.getEditor(dataExprs.endDateExpr),
-                            endValue = endDateEditor.option("value");
+                        that._validateAppointmentFormDate(args.component, args.value, args.previousValue);
 
-                        that._validateAppointmentFormDate(args.component, value, previousValue);
+                        var value = dateSerialization.deserializeDate(args.value),
+                            previousValue = dateSerialization.deserializeDate(args.previousValue),
+                            endDateEditor = that._appointmentForm.getEditor(dataExprs.endDateExpr),
+                            endValue = dateSerialization.deserializeDate(endDateEditor.option("value"));
 
                         if(endValue < value) {
                             var duration = endValue.getTime() - previousValue.getTime();
@@ -155,12 +153,12 @@ var SchedulerAppointmentForm = {
                         firstDayOfWeek: schedulerInst.option("firstDayOfWeek")
                     },
                     onValueChanged: function(args) {
-                        var value = args.value,
-                            previousValue = args.previousValue,
-                            startDateEditor = that._appointmentForm.getEditor(dataExprs.startDateExpr),
-                            startValue = startDateEditor.option("value");
+                        that._validateAppointmentFormDate(args.component, args.value, args.previousValue);
 
-                        that._validateAppointmentFormDate(args.component, value, previousValue);
+                        var value = dateSerialization.deserializeDate(args.value),
+                            previousValue = dateSerialization.deserializeDate(args.previousValue),
+                            startDateEditor = that._appointmentForm.getEditor(dataExprs.startDateExpr),
+                            startValue = dateSerialization.deserializeDate(startDateEditor.option("value"));
 
                         if(value && startValue > value) {
                             var duration = previousValue ? previousValue.getTime() - startValue.getTime() : 0;
@@ -222,17 +220,6 @@ var SchedulerAppointmentForm = {
 
     concatResources: function(resources) {
         this._editors = this._editors.concat(resources);
-    },
-
-    fixFormVisibility: function($element) {
-        var $switches = $element.find(".dx-switch");
-
-        $.each($switches, function(_, $switch) {
-            var switchElement = $($switch).dxSwitch("instance");
-
-            switchElement.option("visible", false);
-            switchElement.option("visible", true);
-        });
     }
 };
 

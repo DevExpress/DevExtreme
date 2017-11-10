@@ -144,6 +144,7 @@ module.exports = {
 
                         return gridCoreUtils.combineFilters([filter, searchFilter]);
                     },
+
                     /**
                      * @name GridBaseMethods_searchByText
                      * @publicName searchByText(text)
@@ -211,7 +212,8 @@ module.exports = {
                                 },
                                 name: "searchPanel",
                                 location: "after",
-                                locateInMenu: "never"
+                                locateInMenu: "never",
+                                sortIndex: 40
                             };
 
                             items.push(toolbarItem);
@@ -255,6 +257,11 @@ module.exports = {
                 };
             })(),
             rowsView: {
+                init: function() {
+                    this.callBase.apply(this, arguments);
+                    this._searchParams = [];
+                },
+
                 _highlightSearchText: function(cellElement, isEquals, column) {
                     var that = this,
                         $parent,
@@ -325,23 +332,50 @@ module.exports = {
                 _renderCore: function() {
                     this.callBase.apply(this, arguments);
 
+                    //T103538
                     if(this.option("rowTemplate")) {
-                        //T103538
-                        this._highlightSearchText(this._getTableElement());
+                        if(this.option("templatesRenderAsynchronously")) {
+                            clearTimeout(this._highlightTimer);
+
+                            this._highlightTimer = setTimeout(function() {
+                                this._highlightSearchText(this._getTableElement());
+                            }.bind(this));
+                        } else {
+                            this._highlightSearchText(this._getTableElement());
+                        }
                     }
                 },
 
                 _updateCell: function($cell, parameters) {
-                    var that = this,
-                        column = parameters.column,
+                    var column = parameters.column,
                         dataType = column.lookup && column.lookup.dataType || column.dataType,
                         isEquals = dataType !== "string";
 
                     if(allowSearch(column)) {
-                        that._highlightSearchText($cell, isEquals, column);
+                        if(this.option("templatesRenderAsynchronously")) {
+                            if(!this._searchParams.length) {
+                                clearTimeout(this._highlightTimer);
+
+                                this._highlightTimer = setTimeout(function() {
+                                    this._searchParams.forEach(function(params) {
+                                        this._highlightSearchText.apply(this, params);
+                                    }.bind(this));
+
+                                    this._searchParams = [];
+                                }.bind(this));
+                            }
+                            this._searchParams.push([$cell, isEquals, column]);
+                        } else {
+                            this._highlightSearchText($cell, isEquals, column);
+                        }
                     }
 
-                    that.callBase($cell, parameters);
+                    this.callBase($cell, parameters);
+                },
+
+                dispose: function() {
+                    clearTimeout(this._highlightTimer);
+                    this.callBase();
                 }
             }
         }

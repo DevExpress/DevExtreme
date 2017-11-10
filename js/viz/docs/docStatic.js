@@ -29,10 +29,26 @@ var staticMethods = {
     */
     registerTheme: function() { },
     /**
+    * @name vizmethods_refreshTheme
+    * @publicName refreshTheme()
+    * @module viz/themes
+    * @export refreshTheme
+    */
+    refreshTheme: function() { },
+    /**
     * @name vizmethods_exportFromMarkup
     * @publicName exportFromMarkup(markup, options)
     * @param1 markup:string
     * @param2 options:object
+    * @param2_field1 fileName:string
+    * @param2_field2 format:string
+    * @param2_field3 backgroundColor:string
+    * @param2_field4 proxyUrl:string
+    * @param2_field5 width:number
+    * @param2_field6 height:number
+    * @param2_field7 onExporting:function(e)
+    * @param2_field8 onExported:function
+    * @param2_field9 onFileSaving:function(e)
     * @module viz/export
     * @export exportFromMarkup
     */
@@ -82,21 +98,21 @@ var staticMethods = {
     /**
     * @name viz_core
     * @publicName core
-    * @deprecated
+    * @deprecated viz
     */
     core: {
         /**
         * @name viz_coremethods_currentTheme
         * @publicName currentTheme(theme)
         * @param1 theme:string
-        * @deprecated
+        * @deprecated vizmethods_currentTheme
         */
         /**
         * @name viz_coremethods_currentTheme
         * @publicName currentTheme(platform, colorScheme)
         * @param1 platform:string
         * @param2 colorScheme:string
-        * @deprecated
+        * @deprecated vizmethods_currentTheme
         */
         currentTheme: function() { },
         /**
@@ -104,14 +120,14 @@ var staticMethods = {
         * @publicName registerTheme(customTheme, baseTheme)
         * @param1 customTheme:object
         * @param2 baseTheme:string
-        * @deprecated
+        * @deprecated vizmethods_registerTheme
         */
         registerTheme: function() { },
         /**
         * @name viz_coremethods_currentPalette
         * @publicName currentPalette(paletteName)
         * @param1 paletteName:string
-        * @deprecated
+        * @deprecated vizmethods_currentPalette
         */
         currentPalette: function() { },
         /**
@@ -119,7 +135,7 @@ var staticMethods = {
         * @publicName getPalette(paletteName)
         * @param1 paletteName:string
         * @return object
-        * @deprecated
+        * @deprecated vizmethods_getPalette
         */
         getPalette: function() { },
         /**
@@ -127,7 +143,7 @@ var staticMethods = {
         * @publicName registerPalette(paletteName, palette)
         * @param1 paletteName:string
         * @param2 palette:object
-        * @deprecated
+        * @deprecated vizmethods_registerPalette
         */
         registerPalette: function() { }
     },

@@ -441,7 +441,7 @@ extend(exports, {
         _each(panes, function(_, pane) {
             var calcLength = _round(pane.weight * oneWeight);
             pane.canvas = pane.canvas || {};
-            _extend(pane.canvas, { deltaLeft: 0, deltaRight: 0, deltaTop: 0, deltaBottom: 0 }, canvas);
+            _extend(pane.canvas, canvas);
             pane.canvas[startName] = canvas[startName] + distributedSpace;
             pane.canvas[endName] = canvas[endName] + (paneSpace - calcLength - distributedSpace);
 

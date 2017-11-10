@@ -638,6 +638,25 @@ QUnit.test("columnsInfo and rowsInfo without dimension fields when showGrandTota
     ]], "Rows Info");
 });
 
+QUnit.test("T541266. No dublicate cells in Chrome 60", function(assert) {
+    var dataController = new DataController({
+        dataSource: {
+            fields: [
+                { area: "row" },
+                { area: "row" },
+                { area: "data", caption: 'Sum', format: 'fixedPoint' }
+            ],
+            rows: [{ "value": 2014, "index": 1, "text": "2014", "children": [{ "value": 1, "index": 10, "text": "Q1" }, { "value": 2, "index": 11, "text": "Q2" }, { "value": 3, "index": 12, "text": "Q3" }, { "value": 4, "index": 13, "text": "Q4" }] }, { "value": 2015, "index": 2, "text": "2015", "children": [{ "value": 1, "index": 4, "text": "Q1", "children": [{ "value": 1, "index": 6, "text": "January" }, { "value": 2, "index": 7, "text": "February" }, { "value": 3, "index": 8, "text": "March" }] }] }]
+        },
+        texts: texts
+    });
+
+    var rowsInfo = dataController.getRowsInfo(true);
+
+    assert.equal(rowsInfo[0].length, 2);
+    assert.equal(rowsInfo[5].length, 3);
+});
+
 QUnit.test("columnsInfo and rowsInfo without dimension fields when showGrandTotals is disabled on dataField level only for one field and dataFieldArea = row", function(assert) {
     var dataController = new DataController({
         dataSource: {
@@ -3386,6 +3405,50 @@ QUnit.test("Format cell with error value", function(assert) {
     assert.equal(dataController.getCellsInfo()[0][1].text, "Error");
 });
 
+QUnit.test("T492326. Not set colspan in rowInfo item if all values and totals are hidden", function(assert) {
+    var dataController = new DataController({
+        dataSource: {
+            fields: [
+                { area: "row" },
+                { area: "row" },
+                { area: "column" },
+                {
+                    caption: 'Sum', format: 'decimal', area: "data",
+                    showValues: false,
+                    showTotals: false,
+                    showGrandTotals: true,
+                }
+            ],
+            rows: [{
+                index: 0,
+                value: "1",
+                children: [
+                    {
+                        value: "2",
+                        index: 1
+                    }
+                ]
+            }],
+            columns: [{
+                value: 'A', index: 1
+            }],
+            values: [
+                [[1], [3], [5]],
+                [[1], [3], [5]]
+            ]
+        }
+    });
+
+    assert.deepEqual(dataController.getRowsInfo(), [
+        [{
+            "isLast": true,
+            "text": undefined,
+            "type": "GT"
+        }]
+    ]);
+});
+
+
 QUnit.module("Showing total on the top", moduleConfig);
 
 QUnit.test("Get header info. Show column totals near", function(assert) {
@@ -5104,6 +5167,40 @@ QUnit.test("Get data by pageIndex, pageSize, pageCount. Columns", function(asser
     }]);
 });
 
+QUnit.test("T522627. Columns info. Second row not in the visible pages", function(assert) {
+    var dataController = new DataController(this.getOptions({
+        dataSource: {
+            fields: [
+                { area: "column" },
+                { area: "column" },
+                { area: "data", caption: "d1" },
+                { area: "data", caption: "d2" }
+            ],
+            columns: [
+                { value: 'A' },
+                { value: 'B' },
+                { value: 'C' },
+                {
+                    value: 'D',
+                    children: [
+                        { value: 'P1' },
+                        { value: 'P2' }
+                    ]
+                }]
+        },
+        texts: texts
+    }));
+
+    dataController.columnPageSize(2);
+    dataController._columnsScrollController.beginPageIndex.returns(0);
+    dataController._columnsScrollController.endPageIndex.returns(0);
+
+    var columnsInfo = dataController.getColumnsInfo();
+
+    assert.strictEqual(columnsInfo.length, 3);
+    assert.deepEqual(columnsInfo[1], []);
+});
+
 QUnit.test("Get page start with begin of header element. Columns", function(assert) {
     var dataController = new DataController(this.getOptions({
             dataSource: {
@@ -5547,7 +5644,8 @@ QUnit.module("StateStoring", {
                 },
                 texts: texts
             });
-            sinon.spy(this.dataController._dataSource, "_changeLoadingCount");
+            sinon.spy(this.dataController._dataSource, "beginLoading");
+            sinon.spy(this.dataController._dataSource, "endLoading");
         },
         afterEach: function() {
             moduleConfig.afterEach.call(this);
@@ -5557,15 +5655,15 @@ QUnit.module("StateStoring", {
     QUnit.test("beginLoading", function(assert) {
         this.dataController.beginLoading();
 
-        assert.equal(this.dataController._dataSource._changeLoadingCount.callCount, 1, "changeLoading was called once");
-        assert.equal(this.dataController._dataSource._changeLoadingCount.getCall(0).args[0], 1, "changeLoading args");
+        assert.equal(this.dataController._dataSource.beginLoading.callCount, 1, "beginLoading was called once");
+        assert.equal(this.dataController._dataSource.endLoading.callCount, 0, "endLoading was not called");
     });
 
     QUnit.test("endLoading", function(assert) {
         this.dataController.endLoading();
 
-        assert.equal(this.dataController._dataSource._changeLoadingCount.callCount, 1, "changeLoading was called once");
-        assert.equal(this.dataController._dataSource._changeLoadingCount.getCall(0).args[0], -1, "changeLoading args");
+        assert.equal(this.dataController._dataSource.beginLoading.callCount, 0, "beginLoading was not called");
+        assert.equal(this.dataController._dataSource.endLoading.callCount, 1, "endLoading was called once");
     });
 
 }

@@ -210,6 +210,11 @@ var ColumnHeadersViewFilterRowExtender = (function() {
             that.callBase(e);
         },
 
+        _renderCore: function() {
+            this._filterRangeOverlayInstance = null;
+            this.callBase.apply(this, arguments);
+        },
+
         _resizeCore: function() {
             this.callBase.apply(this, arguments);
             this._filterRangeOverlayInstance && this._filterRangeOverlayInstance.repaint();
@@ -431,8 +436,9 @@ var ColumnHeadersViewFilterRowExtender = (function() {
                 $editorContainer = $cell.find("." + EDITOR_CONTAINER_CLASS).first();
 
             $editorContainer.empty();
-            $("<div>").addClass(FILTER_RANGE_CONTENT_CLASS)
-                .attr("tabindex", 0)
+            $("<div>")
+                .addClass(FILTER_RANGE_CONTENT_CLASS)
+                .attr("tabindex", this.option("tabIndex"))
                 .on("focusin", function() {
                     that._showFilterRange($cell, column);
                 })
@@ -477,7 +483,7 @@ var ColumnHeadersViewFilterRowExtender = (function() {
                         isOnClickMode = isOnClickApplyFilterMode(that),
                         options = {};
 
-                    if(properties.itemData.items || selectedFilterOperation === columnSelectedFilterOperation) {
+                    if(properties.itemData.items || (selectedFilterOperation && selectedFilterOperation === columnSelectedFilterOperation)) {
                         return;
                     }
 
@@ -489,14 +495,14 @@ var ColumnHeadersViewFilterRowExtender = (function() {
                             options[isOnClickMode ? "bufferedFilterValue" : "filterValue"] = null;
                         }
                     } else {
-                        options[isOnClickMode ? "bufferedSelectedFilterOperation" : "selectedFilterOperation"] = column.defaultSelectedFilterOperation;
+                        options[isOnClickMode ? "bufferedSelectedFilterOperation" : "selectedFilterOperation"] = column.defaultSelectedFilterOperation || null;
                         options[isOnClickMode ? "bufferedFilterValue" : "filterValue"] = null;
                     }
 
                     that._columnsController.columnOption(column.index, options);
                     that._applyFilterViewController.setHighLight($editorContainer, true);
 
-                    if(properties.itemData.text === "Reset") {
+                    if(!selectedFilterOperation) {
                         var editor = getEditorInstance($editorContainer);
                         if(editor && editor.NAME === "dxDateBox" && !editor.option("isValid")) {
                             editor.reset();
@@ -515,8 +521,10 @@ var ColumnHeadersViewFilterRowExtender = (function() {
                     that.getController("editorFactory").loseFocus();
                 },
                 onSubmenuHiding: function() {
+                    var menu = Menu.getInstance($menu);
+
                     $menu.blur();
-                    Menu.getInstance($menu).option("focusedElement", null);
+                    menu && menu.option("focusedElement", null);
                     isCellWasFocused && that._focusEditor($editorContainer);
                 },
                 rtlEnabled: that.option("rtlEnabled")
@@ -864,12 +872,14 @@ module.exports = {
 
                 _prepareFilterItem: function() {
                     var that = this,
-                        itemDisabledState = that.getToolbarItemOption("applyFilterButton", "disabled"),
-                        disabled = commonUtils.isDefined(itemDisabledState) ? itemDisabledState : true,
                         filterItem = [];
 
                     if(that._isShowApplyFilterButton()) {
                         var hintText = that.option("filterRow.applyFilterText"),
+                            columns = that._columnsController.getColumns(),
+                            disabled = !columns.filter(function(column) {
+                                return column.bufferedFilterValue !== undefined;
+                            }).length,
                             onInitialized = function(e) {
                                 e.element.addClass(that._getToolbarButtonClass(APPLY_BUTTON_CLASS));
                             },
@@ -880,6 +890,7 @@ module.exports = {
                                 widget: "dxButton",
                                 options: {
                                     icon: "apply-filter",
+                                    disabled: disabled,
                                     onClick: onClickHandler,
                                     hint: hintText,
                                     text: hintText,
@@ -887,9 +898,9 @@ module.exports = {
                                 },
                                 showText: "inMenu",
                                 name: "applyFilterButton",
-                                disabled: disabled,
                                 location: "after",
-                                locateInMenu: "auto"
+                                locateInMenu: "auto",
+                                sortIndex: 10
                             };
 
                         filterItem.push(toolbarItem);
@@ -910,7 +921,7 @@ module.exports = {
                 },
 
                 enableApplyButton: function(value) {
-                    this.updateToolbarItemOption("applyFilterButton", "disabled", !value);
+                    this.setToolbarItemDisabled("applyFilterButton", !value);
                 },
 
                 isVisible: function() {

@@ -10,7 +10,7 @@ var $ = require("jquery"),
     mixins = seriesModule.mixins,
     chartSeriesNS = mixins.chart;
 
-/* global insertMockFactory, MockTranslator, MockPoint */
+/* global insertMockFactory, MockTranslator, MockPoint, MockAxis */
 require("../../helpers/chartMocks.js");
 
 
@@ -67,16 +67,6 @@ var environment = {
 
         this.renderer = new vizMocks.Renderer();
         _this.realCreatePoint = pointModule.Point;
-        this.translators = {
-            x: new MockTranslator({
-                translate: { "First": 10, "Second": 20, "Third": 30, "Fourth": 40 },
-                getCanvasVisibleArea: { min: 0, max: 700 }
-            }),
-            y: new MockTranslator({
-                translate: { 1: 100, 2: 200, 3: 300, 4: 400 },
-                getCanvasVisibleArea: { min: 0, max: 500 }
-            })
-        };
         pointModule.Point = function() {
             _this.pointsCreatingCount++;
             var point = _this.realCreatePoint.apply(null, arguments);
@@ -234,7 +224,6 @@ function getTranslator(min, max, start, end) {
         minVisible: min,
         maxVisible: max
     });
-    translator.canvasLength = end - start;
     return translator;
 }
 
@@ -260,9 +249,8 @@ QUnit.test("Empty data Series", function(assert) {
 QUnit.test("Series axis, pane passing", function(assert) {
     var series = createSeries({
         type: "line",
-        axis: "someAxis",
         pane: "somePane"
-    });
+    }, { valueAxis: { name: "someAxis" } });
 
     assert.ok(series);
     assert.equal(series.axis, "someAxis");
@@ -589,7 +577,10 @@ QUnit.test("Update series data when points are not empty. Old points length > ne
 
 QUnit.test("Update series data when points are not empty. Old points length < new points length", function(assert) {
     var options = { type: "mockType", argumentField: "arg", valueField: "val", label: { visible: false } },
-        series = createSeries(options),
+        series = createSeries(options, {
+            argumentAxis: new MockAxis({ renderer: this.renderer }),
+            valueAxis: new MockAxis({ renderer: this.renderer })
+        }),
         data = [{ arg: 1, val: 10 }],
         newData = [{ arg: 3, val: 4 }, { arg: 4, val: 11 }];
 
@@ -597,7 +588,7 @@ QUnit.test("Update series data when points are not empty. Old points length < ne
 
     series.updateData(newData);
     series._points = [];
-    series.draw(this.translators);
+    series.draw();
     assert.ok(series, "Series should be created");
 
     assert.ok(series.getAllPoints(), "Series points should be created");
@@ -906,30 +897,46 @@ QUnit.test("Update data with null values for argument. Financial series", functi
 
 QUnit.module("Drawing", {
     beforeEach: function() {
-        var _this = this;
-        environment.beforeEach.call(_this);
-        _this.seriesGroup = this.renderer.g({});
+        var that = this;
 
-        _this.series = createSeries({}, {
-            seriesGroup: _this.seriesGroup,
-            labelsGroup: this.renderer.g()
+        environment.beforeEach.call(this);
+        this.seriesGroup = this.renderer.g({});
+
+        this.setupAggregation = function(min, max) {
+            var translator = getTranslator(min, max);
+
+            that.argumentAxis.getTranslator = function() { return translator; };
+            that.argumentAxis.getViewport.returns({
+                min: min,
+                max: max
+            });
+        };
+
+        this.argumentAxis = new MockAxis({
+            renderer: this.renderer
         });
-        _this.renderer = _this.series._renderer;
+
+        this.series = createSeries({}, {
+            seriesGroup: this.seriesGroup,
+            labelsGroup: this.renderer.g(),
+            argumentAxis: this.argumentAxis,
+            valueAxis: new MockAxis({
+                renderer: this.renderer
+            })
+        });
+        this.renderer = this.series._renderer;
     }
 });
 
 QUnit.test("Draw without data", function(assert) {
     var series = this.series;
 
-    series.draw(this.translators, false);
+    series.draw(false);
 
     assert.ok(series.groupsSetSettings);
     assert.equal(series._group.parent, this.seriesGroup);
     assert.deepEqual(series.drawnPoints, undefined);
-
-
     assert.deepEqual(series.drawnSegments, undefined);
-
 });
 
 QUnit.test("Draw simple data. Without animation", function(assert) {
@@ -937,7 +944,7 @@ QUnit.test("Draw simple data. Without animation", function(assert) {
 
     series.updateData([{ arg: 1, val: 1 }]);
 
-    series.draw(this.translators, false);
+    series.draw(false);
 
     assert.ok(series.groupsSetSettings);
     assert.equal(series._group.parent, this.seriesGroup);
@@ -951,7 +958,7 @@ QUnit.test("Draw simple data. First drawing", function(assert) {
 
     series.updateData([{ arg: 1, val: 1 }]);
 
-    series.draw(this.translators, false);
+    series.draw(false);
 
     assert.ok(series.groupsSetSettings);
     assert.equal(series._group.parent, this.seriesGroup);
@@ -965,7 +972,7 @@ QUnit.test("Draw simple data. With animation", function(assert) {
 
     series.updateData([{ arg: 1, val: 1 }, { arg: 12, val: 1 }, { arg: 1, val: 13 }]);
 
-    series.draw(this.translators, true);
+    series.draw(true);
 
     assert.ok(series.groupsSetSettings);
     assert.equal(series._group.parent, this.seriesGroup);
@@ -982,7 +989,7 @@ QUnit.test("Draw simple data. hide layout labels = false", function(assert) {
     series.updateData([{ arg: 1, val: 1 }]);
     var hideLabelsSpy = sinon.spy(series, 'hideLabels');
 
-    series.draw(this.translators, false, false);
+    series.draw(false, false);
 
     assert.ok(!hideLabelsSpy.called);
 });
@@ -993,7 +1000,7 @@ QUnit.test("Draw simple data. hide layout labels = true", function(assert) {
     series.updateData([{ arg: 1, val: 1 }]);
     var hideLabelsSpy = sinon.spy(series, 'hideLabels');
 
-    series.draw(this.translators, false, true);
+    series.draw(false, true);
 
     assert.ok(hideLabelsSpy.calledOnce);
 });
@@ -1005,7 +1012,7 @@ QUnit.test("Draw simple data with null values", function(assert) {
     series.updateData([{ arg: 11, val: 1 }, { arg: 22, val: 2 }, { arg: 33, val: null }, { arg: 44, val: 2 }, { arg: 55, val: null }, { arg: 66, val: 3 }]);
     points = series.getAllPoints();
 
-    series.draw(this.translators, true);
+    series.draw(true);
 
     assert.ok(series.groupsSetSettings);
     assert.equal(series._group.parent, this.seriesGroup);
@@ -1040,7 +1047,7 @@ QUnit.test("Draw simple data with null values. Three null in row", function(asse
     series.updateData([{ arg: 11, val: 1 }, { arg: 22, val: 2 }, { arg: 33, val: null }, { arg: 44, val: null }, { arg: 55, val: null }, { arg: 66, val: 3 }]);
     points = series.getAllPoints();
 
-    series.draw(this.translators, true);
+    series.draw(true);
 
     assert.ok(series.groupsSetSettings);
     assert.equal(series._group.parent, this.seriesGroup);
@@ -1069,7 +1076,8 @@ QUnit.test("With Resample Points", function(assert) {
     var series = this.series;
 
     series.updateData([{ arg: 1, val: 22 }, { arg: 2, val: 33 }, { arg: 3, val: 11 }, { arg: 4, val: 44 }]);
-    series.resamplePoints(getTranslator(1, 4, 0, 15));
+    this.setupAggregation(1, 4);
+    series.resamplePoints(15);
 
     assert.deepEqual(series.resampleArgs[0], 2);
 });
@@ -1079,26 +1087,19 @@ QUnit.test("With Resample Points, Some interval", function(assert) {
         tickInterval = (4 - 3) / 1.5;
 
     series.updateData([{ arg: 1, val: 22 }, { arg: 2, val: 33 }, { arg: 3, val: 11 }, { arg: 4, val: 44 }, { arg: 5, val: 55 }, { arg: 6, val: 66 }]);
-    series.resamplePoints(getTranslator(3, 4, 0, 15), 3, 4);
+    this.setupAggregation(3, 4);
+    series.resamplePoints(15);
 
     assert.deepEqual(series.resampleArgs, [tickInterval, 3 - tickInterval, 4 + tickInterval, true]);
-});
-
-QUnit.test("On zooming take min and max into account and ignore range. T448819", function(assert) {
-    var series = this.series,
-        tickInterval = (5 - 2) / 1.5;
-
-    series.updateData([{ arg: 1, val: 22 }, { arg: 2, val: 33 }, { arg: 3, val: 11 }, { arg: 4, val: 44 }, { arg: 5, val: 55 }, { arg: 6, val: 66 }]);
-    series.resamplePoints(getTranslator(1, 6, 0, 15), 2, 5);
-
-    assert.deepEqual(series.resampleArgs, [tickInterval, 2 - tickInterval, 5 + tickInterval, true]);
 });
 
 QUnit.test("With Resample Points, Some point", function(assert) {
     var series = this.series;
 
     series.updateData([{ arg: 1, val: 22 }, { arg: 2, val: 33 }, { arg: 3, val: 11 }, { arg: 4, val: 44 }, { arg: 5, val: 55 }, { arg: 6, val: 66 }]);
-    series.resamplePoints(getTranslator(3, 3, 0, 15), 3, 3);
+    this.setupAggregation(3, 3);
+
+    series.resamplePoints(15);
 
     assert.deepEqual(series.resampleArgs, [0, 3, 3, true]);
 });
@@ -1110,7 +1111,8 @@ QUnit.test("Resample points after change dataSource", function(assert) {
     series.updateData([{ arg: 1, val: 22 }, { arg: 2, val: 33 }, { arg: 3, val: 11 }, { arg: 4, val: 44 }]);
     series.updateData([{ arg: 1, val: 22 }, { arg: 2, val: 33 }]);
 
-    series.resamplePoints(getTranslator(1, 2, 0, 10));
+    this.setupAggregation(1, 2);
+    series.resamplePoints(10);
 
     assert.deepEqual(series.resampleArgs[0], 1);
 });
@@ -1123,8 +1125,8 @@ QUnit.test("Resample points with empty dataSource", function(assert) {
     }));
 
     series.updateData([]);
-
-    series.resamplePoints(getTranslator());
+    this.setupAggregation();
+    series.resamplePoints();
 
     assert.ok(!series.resampleArgs);
     assert.deepEqual(series.getPoints(), []);
@@ -1137,6 +1139,8 @@ QUnit.test("T172956. With Resample Points, with Error Bars", function(assert) {
             type: "fixed",
             value: 2
         }
+    }, {
+        argumentAxis: this.argumentAxis
     });
 
     var data = [];
@@ -1145,7 +1149,9 @@ QUnit.test("T172956. With Resample Points, with Error Bars", function(assert) {
     }
 
     series.updateData(data);
-    series.resamplePoints(getTranslator(0, 99, 0, 10));
+    this.setupAggregation(0, 99);
+
+    series.resamplePoints(10);
 
     var points = series.getPoints();
 
@@ -1174,6 +1180,8 @@ QUnit.test("T172956. With Resample Points, with Error Bars when fusion points = 
                 type: "fixed",
                 value: 2
             }
+        }, {
+            argumentAxis: this.argumentAxis
         }),
         data = [];
 
@@ -1182,7 +1190,9 @@ QUnit.test("T172956. With Resample Points, with Error Bars when fusion points = 
     }
 
     series.updateData(data);
-    series.resamplePoints(getTranslator(0, 4, 0, 10));
+    this.setupAggregation(0, 4);
+
+    series.resamplePoints(10);
 
     var points = series.getPoints();
 
@@ -1190,7 +1200,9 @@ QUnit.test("T172956. With Resample Points, with Error Bars when fusion points = 
 });
 
 QUnit.test("T243926", function(assert) {
-    var series = createSeries({ type: "scatter", });
+    var series = createSeries({ type: "scatter" }, {
+        argumentAxis: this.argumentAxis
+    });
 
     var data = [];
     for(var i = 0; i < 100; i++) {
@@ -1198,7 +1210,8 @@ QUnit.test("T243926", function(assert) {
     }
 
     series.updateData(data);
-    series.resamplePoints(getTranslator(0, 99, 0, 10));
+    this.setupAggregation(0, 99);
+    series.resamplePoints(10);
     assert.ok(series.getPoints().length);
 
     $.each(series.getAllPoints(), function(_, p) {
@@ -1229,13 +1242,9 @@ QUnit.test("Style of marker group. Scatter", function(assert) {
 
     series.updateOptions($.extend(true, {}, series._options, options));
 
-    this.translators.businessRange = {
-        minVisibleX: 3,
-        maxVisibleX: 3
-    };
     series.updateData([{ arg: 1, val: 22 }, { arg: 2, val: 33 }, { arg: 3, val: 11 }, { arg: 4, val: 44 }, { arg: 5, val: 55 }, { arg: 6, val: 66 }]);
 
-    series.draw(this.translators, false);
+    series.draw(false);
 
     assert.ok(series._markersGroup);
     assert.equal(series._markersGroup._stored_settings.fill, "red");
@@ -1261,13 +1270,9 @@ QUnit.test("Style of marker group. Line", function(assert) {
 
     series.updateOptions($.extend(true, {}, series._options, options));
 
-    this.translators.businessRange = {
-        minVisibleX: 3,
-        maxVisibleX: 3
-    };
     series.updateData([{ arg: 1, val: 22 }, { arg: 2, val: 33 }, { arg: 3, val: 11 }, { arg: 4, val: 44 }, { arg: 5, val: 55 }, { arg: 6, val: 66 }]);
 
-    series.draw(this.translators, false);
+    series.draw(false);
 
     assert.ok(series._markersGroup);
     assert.equal(series._markersGroup._stored_settings.fill, "red");
@@ -1293,17 +1298,13 @@ QUnit.test("Update marker group", function(assert) {
 
     series.updateOptions($.extend(true, {}, series._options, options));
 
-    this.translators.businessRange = {
-        minVisibleX: 3,
-        maxVisibleX: 3
-    };
     series.updateData([{ arg: 1, val: 22 }, { arg: 2, val: 33 }, { arg: 3, val: 11 }, { arg: 4, val: 44 }, { arg: 5, val: 55 }, { arg: 6, val: 66 }]);
 
-    series.draw(this.translators, true);
+    series.draw(true);
     series._markersGroup.stub("attr").reset();
     this.renderer.stub("g").reset();
 
-    series.draw(this.translators, true);
+    series.draw(true);
 
     assert.ok(series._markersGroup.stub("attr").calledOnce);
     assert.ok(!this.renderer.stub("g").called);
@@ -1327,13 +1328,9 @@ QUnit.test("marker group style after updating", function(assert) {
 
     series.updateOptions(appliedOptions);
 
-    this.translators.businessRange = {
-        minVisibleX: 3,
-        maxVisibleX: 3
-    };
     series.updateData([{ arg: 1, val: 22 }, { arg: 2, val: 33 }, { arg: 3, val: 11 }, { arg: 4, val: 44 }, { arg: 5, val: 55 }, { arg: 6, val: 66 }]);
 
-    series.draw(this.translators, true);
+    series.draw(true);
 
     series._markersGroup.stub("attr").reset();
     this.renderer.stub("g").reset();
@@ -1346,7 +1343,7 @@ QUnit.test("marker group style after updating", function(assert) {
         visible: true
     };
     series.updateOptions(newOptions);
-    series.draw(this.translators, true);
+    series.draw(true);
 
     assert.ok(series._markersGroup.stub("attr").calledOnce);
     assert.equal(series._markersGroup.stub("attr").lastCall.args[0].fill, "green");
@@ -1368,13 +1365,9 @@ QUnit.test("Style of marker group. Financial", function(assert) {
 
     series.updateOptions($.extend(true, {}, series._options, options));
 
-    this.translators.businessRange = {
-        minVisibleX: 3,
-        maxVisibleX: 3
-    };
     series.updateData([{ arg: 1, val: 22 }, { arg: 2, val: 33 }, { arg: 3, val: 11 }, { arg: 4, val: 44 }, { arg: 5, val: 55 }, { arg: 6, val: 66 }]);
 
-    series.draw(this.translators, true);
+    series.draw(true);
 
     assert.ok(series._markersGroup);
     assert.equal(series._markersGroup.defaultMarkersGroup._stored_settings.fill, "red");
@@ -1405,13 +1398,9 @@ QUnit.test("Update marker group. Financial", function(assert) {
 
     series.updateOptions($.extend(true, {}, series._options, options));
 
-    this.translators.businessRange = {
-        minVisibleX: 3,
-        maxVisibleX: 3
-    };
     series.updateData([{ arg: 1, val: 22 }, { arg: 2, val: 33 }, { arg: 3, val: 11 }, { arg: 4, val: 44 }, { arg: 5, val: 55 }, { arg: 6, val: 66 }]);
 
-    series.draw(this.translators, true);
+    series.draw(true);
 
     series._markersGroup.defaultMarkersGroup.stub("attr").reset();
     series._markersGroup.reductionMarkersGroup.stub("attr").reset();
@@ -1419,7 +1408,7 @@ QUnit.test("Update marker group. Financial", function(assert) {
     series._markersGroup.reductionPositiveMarkersGroup.stub("attr").reset();
     this.renderer.stub("g").reset();
 
-    series.draw(this.translators, true);
+    series.draw(true);
 
     assert.ok(series._markersGroup.defaultMarkersGroup.stub("attr").calledOnce);
     assert.ok(series._markersGroup.reductionMarkersGroup.stub("attr").calledOnce);
@@ -1442,13 +1431,9 @@ QUnit.test("marker group style after updating. Financial", function(assert) {
 
     series.updateOptions(appliedOptions);
 
-    this.translators.businessRange = {
-        minVisibleX: 3,
-        maxVisibleX: 3
-    };
     series.updateData([{ arg: 1, val: 22 }, { arg: 2, val: 33 }, { arg: 3, val: 11 }, { arg: 4, val: 44 }, { arg: 5, val: 55 }, { arg: 6, val: 66 }]);
 
-    series.draw(this.translators, true);
+    series.draw(true);
 
     series._markersGroup.defaultMarkersGroup.stub("attr").reset();
     series._markersGroup.reductionMarkersGroup.stub("attr").reset();
@@ -1461,7 +1446,7 @@ QUnit.test("marker group style after updating. Financial", function(assert) {
     newOptions.reduction.color = "yellow";
     newOptions.width = 3;
     series.updateOptions(newOptions);
-    series.draw(this.translators, true);
+    series.draw(true);
 
 
     assert.ok(series._markersGroup.defaultMarkersGroup.stub("attr").calledOnce);
@@ -1502,18 +1487,14 @@ QUnit.test("Update label group", function(assert) {
 
     series.updateOptions($.extend(true, {}, series._options, options));
 
-    this.translators.businessRange = {
-        minVisibleX: 3,
-        maxVisibleX: 3
-    };
     series.updateData([{ arg: 1, val: 22 }, { arg: 2, val: 33 }, { arg: 3, val: 11 }, { arg: 4, val: 44 }, { arg: 5, val: 55 }, { arg: 6, val: 66 }]);
 
-    series.draw(this.translators, false);
+    series.draw(false);
 
     series._labelsGroup.stub("attr").reset();
     this.renderer.stub("g").reset();
 
-    series.draw(this.translators, false);
+    series.draw(false);
 
     assert.ok(series._labelsGroup.stub("attr").calledOnce);
     assert.ok(!this.renderer.stub("g").called);
@@ -1531,11 +1512,11 @@ QUnit.module("Disposing", {
                 visible: true
             }
         }, {
-            seriesGroup: _this.seriesGroup
+            seriesGroup: _this.seriesGroup,
+            argumentAxis: new MockAxis({ renderer: this.renderer }),
+            valueAxis: new MockAxis({ renderer: this.renderer })
         });
         _this.renderer = _this.series._renderer;
-        this.translators.canvasLength = 700;
-
     }
 });
 
@@ -1543,12 +1524,11 @@ QUnit.test("Fields disposing", function(assert) {
     var series = this.series;
 
     series.updateData([{ arg: 1, val: 1 }]);
-    series.draw(this.translators, false);
+    series.draw(false);
     series.dispose();
 
     assert.strictEqual(series._rangeData, null, "range data");
     assert.strictEqual(series._renderer, null, "renderer");
-    assert.strictEqual(series.translators, null, "translators");
     assert.strictEqual(series._options, null, "options");
     assert.strictEqual(series._styles, null, "styles");
 
@@ -1625,7 +1605,7 @@ QUnit.test("Arrays disposing", function(assert) {
         trackerElement = this.renderer.g();
 
     series.updateData([{ arg: 1, val: 1 }]);
-    series.draw(this.translators, false);
+    series.draw(false);
 
     series._originalPoints = [originalPoint];
     series._aggregatedPoints = [aggregatedPoint];
@@ -1658,7 +1638,9 @@ QUnit.module("Apply clipping", {
             seriesGroup: _this.seriesGroup,
             labelsGroup: _this.renderer.g(),
             trackersGroup: _this.renderer.g(),
-            markerTrackerGroup: _this.renderer.g()
+            markerTrackerGroup: _this.renderer.g(),
+            valueAxis: new MockAxis({ renderer: _this.renderer }),
+            argumentAxis: new MockAxis({ renderer: _this.renderer })
         });
         _this.options = {
             type: "scatter",
@@ -1685,7 +1667,6 @@ QUnit.module("Apply clipping", {
             valueErrorBar: {},
             widgetType: "chart"
         };
-        this.translators.canvasLength = 700;
     },
     afterEach: function() {
         environmentWithSinonStubPoint.afterEach.call(this);
@@ -1702,7 +1683,7 @@ QUnit.test("ApplyClip", function(assert) {
     this.series.updateData([{ arg: "First", val: 1 }]);
 
     this.series.setClippingParams("baseClipId", "wideClipId", false);
-    this.series.draw(this.translators, false);
+    this.series.draw(false);
     //act
     this.series.applyClip();
 
@@ -1718,7 +1699,7 @@ QUnit.test("Reset Clip", function(assert) {
     this.series.updateData([{ arg: "First", val: 1 }]);
 
     this.series.setClippingParams("baseClipId", "wideClipId", false);
-    this.series.draw(this.translators, false);
+    this.series.draw(false);
     //act
     this.series.resetClip();
 
@@ -1734,7 +1715,7 @@ QUnit.test("ApplyClip. Financial", function(assert) {
     this.series.updateData({ date: "First", low: 1, open: 1, close: 1, high: 1 });
 
     this.series.setClippingParams("baseClipId", "wideClipId", false);
-    this.series.draw(this.translators, false);
+    this.series.draw(false);
     //act
     this.series.applyClip();
 
@@ -1750,7 +1731,7 @@ QUnit.test("Reset Clip. Financial", function(assert) {
     this.series.updateData({ date: "First", low: 1, open: 1, close: 1, high: 1 });
 
     this.series.setClippingParams("baseClipId", "wideClipId", false);
-    this.series.draw(this.translators, false);
+    this.series.draw(false);
     //act
     this.series.resetClip();
 
@@ -1766,7 +1747,7 @@ QUnit.test("Symbol. Without force", function(assert) {
     this.series.updateData([{ arg: "First", val: 1 }]);
 
     this.series.setClippingParams("baseClipId", "wideClipId", false);
-    this.series.draw(this.translators, false);
+    this.series.draw(false);
 
     assert.equal(this.series._elementsGroup._stored_settings["clip-path"], "baseClipId", "elements group");
     assert.equal(this.series._bordersGroup._stored_settings["clip-path"], "baseClipId", "borders group");
@@ -1783,7 +1764,7 @@ QUnit.test("Symbol. With force", function(assert) {
     this.series.updateData([{ arg: "First", val: 1 }]);
 
     this.series.setClippingParams("baseClipId", "wideClipId", true);
-    this.series.draw(this.translators, false);
+    this.series.draw(false);
 
     assert.equal(this.series._elementsGroup._stored_settings["clip-path"], "baseClipId", "elements group");
     assert.equal(this.series._bordersGroup._stored_settings["clip-path"], "baseClipId", "borders group");
@@ -1800,7 +1781,7 @@ QUnit.test("Symbol. Tracker. Without force", function(assert) {
     this.series.updateData([{ arg: "First", val: 1 }]);
 
     this.series.setClippingParams("baseClipId", "wideClipId", false);
-    this.series.draw(this.translators, false);
+    this.series.draw(false);
     this.series._segments = [[1, 2]];
 
     this.series.drawTrackers();
@@ -1817,7 +1798,7 @@ QUnit.test("Symbol. Tracker. With force", function(assert) {
     this.series.updateData([{ arg: "First", val: 1 }]);
 
     this.series.setClippingParams("baseClipId", "wideClipId", true);
-    this.series.draw(this.translators, false);
+    this.series.draw(false);
     this.series._segments = [[1, 2]];
 
     this.series.drawTrackers();
@@ -1841,7 +1822,7 @@ QUnit.test("Bar. Without force", function(assert) {
 
     this.series.setClippingParams("baseClipId", "wideClipId", false);
     this.series._visible = true;
-    this.series.draw(this.translators, false);
+    this.series.draw(false);
 
     assert.strictEqual(this.series._markersGroup._stored_settings["clip-path"], null, "markers group");
     assert.equal(this.series._labelsGroup._stored_settings["clip-path"], "baseClipId", "labels group");
@@ -1855,7 +1836,7 @@ QUnit.test("Bar. With force", function(assert) {
     this.series.updateData([{ arg: "First", val: 1 }]);
 
     this.series.setClippingParams("baseClipId", "wideClipId", true);
-    this.series.draw(this.translators, false);
+    this.series.draw(false);
 
     assert.strictEqual(this.series._markersGroup._stored_settings["clip-path"], null, "markers group");
     assert.equal(this.series._labelsGroup._stored_settings["clip-path"], "baseClipId", "labels group");
@@ -1869,7 +1850,7 @@ QUnit.test("Bubble. Without force", function(assert) {
     this.series.updateData([{ arg: "First", val: 1 }]);
 
     this.series.setClippingParams("baseClipId", "wideClipId", false);
-    this.series.draw(this.translators, false);
+    this.series.draw(false);
 
     assert.equal(this.series._markersGroup._stored_settings["clip-path"], "baseClipId", "markers group");
     assert.equal(this.series._labelsGroup._stored_settings["clip-path"], "baseClipId", "labels group");
@@ -1883,7 +1864,7 @@ QUnit.test("Bubble. With force", function(assert) {
     this.series.updateData([{ arg: "First", val: 1 }]);
 
     this.series.setClippingParams("baseClipId", "wideClipId", true);
-    this.series.draw(this.translators, false);
+    this.series.draw(false);
 
     assert.equal(this.series._markersGroup._stored_settings["clip-path"], "baseClipId", "markers group");
     assert.equal(this.series._labelsGroup._stored_settings["clip-path"], "baseClipId", "labels group");
@@ -1898,7 +1879,7 @@ QUnit.test("Pie. Without force", function(assert) {
     this.series.updateData([{ arg: "First", val: 1 }]);
 
     this.series.setClippingParams("baseClipId", "wideClipId", false);
-    this.series.draw(this.translators, false);
+    this.series.draw(false);
 
     assert.equal(this.series._markersGroup._stored_settings["clip-path"], undefined, "markers group");
     assert.equal(this.series._labelsGroup._stored_settings["clip-path"], undefined, "labels group");
@@ -1913,7 +1894,7 @@ QUnit.test("Pie. With force", function(assert) {
     this.series.updateData([{ arg: "First", val: 1 }]);
 
     this.series.setClippingParams("baseClipId", "wideClipId", true);
-    this.series.draw(this.translators, false);
+    this.series.draw(false);
 
     assert.equal(this.series._markersGroup._stored_settings["clip-path"], undefined, "markers group");
     assert.equal(this.series._labelsGroup._stored_settings["clip-path"], undefined, "labels group");
@@ -1928,7 +1909,7 @@ QUnit.test("Pie. Tracker. Without force", function(assert) {
     this.series.updateData([{ arg: "First", val: 1 }]);
 
     this.series.setClippingParams("baseClipId", "wideClipId", false);
-    this.series.draw(this.translators, false);
+    this.series.draw(false);
     this.series.drawTrackers();
 
     assert.equal(this.series._extGroups.trackersGroup._stored_settings["clip-path"], undefined, "elements group");
@@ -1944,7 +1925,7 @@ QUnit.test("Pie. Tracker. With force", function(assert) {
     this.series.updateData([{ arg: "First", val: 1 }]);
 
     this.series.setClippingParams("baseClipId", "wideClipId", true);
-    this.series.draw(this.translators, false);
+    this.series.draw(false);
     this.series.drawTrackers();
 
     assert.equal(this.series._extGroups.trackersGroup._stored_settings["clip-path"], undefined, "elements group");
@@ -1960,7 +1941,7 @@ QUnit.test("Financial. Without force", function(assert) {
     this.series.updateData({ date: "First", low: 1, open: 1, close: 1, high: 1 });
 
     this.series.setClippingParams("baseClipId", "wideClipId", false);
-    this.series.draw(this.translators, false);
+    this.series.draw(false);
 
     assert.equal(this.series._markersGroup._stored_settings["clip-path"], "wideClipId", "markers group");
     assert.equal(this.series._labelsGroup._stored_settings["clip-path"], "baseClipId", "labels group");
@@ -1975,7 +1956,7 @@ QUnit.test("Financial. With force", function(assert) {
     this.series.updateData({ date: "First", low: 1, open: 1, close: 1, high: 1 });
 
     this.series.setClippingParams("baseClipId", "wideClipId", true);
-    this.series.draw(this.translators, false);
+    this.series.draw(false);
 
     assert.equal(this.series._markersGroup._stored_settings["clip-path"], "baseClipId", "markers group");
     assert.equal(this.series._labelsGroup._stored_settings["clip-path"], "baseClipId", "labels group");
@@ -1991,11 +1972,11 @@ QUnit.module("Point visibility", {
         _this.series = createSeries({}, {
             seriesGroup: _this.seriesGroup,
             labelsGroup: _this.renderer.g(),
-            markerTrackerGroup: _this.renderer.g()
+            markerTrackerGroup: _this.renderer.g(),
+            argumentAxis: new MockAxis({ renderer: _this.renderer }),
+            valueAxis: new MockAxis({ renderer: _this.renderer })
         });
         _this.renderer = _this.series._renderer;
-        this.translators.canvasLength = 700;
-
     },
     afterEach: environmentWithSinonStubPoint.afterEach
 });
@@ -2019,7 +2000,7 @@ QUnit.test("In visible area", function(assert) {
 
     series.updateData([{ arg: "First", val: 1 }]);
 
-    series.draw(this.translators, true);
+    series.draw(true);
 
     assert.ok(series.getAllPoints()[0].draw.calledOnce);
     assert.ok(series.getAllPoints()[0].clearVisibility.calledOnce);
@@ -2045,7 +2026,7 @@ QUnit.test("Not in visible area", function(assert) {
 
     series.updateData([{ arg: "First", val: 1 }]);
     series.getAllPoints()[0].isInVisibleArea.returns(false);
-    series.draw(this.translators, true);
+    series.draw(true);
 
     assert.ok(!series.getAllPoints()[0].draw.called);
     assert.ok(!series.getAllPoints()[0].clearVisibility.called);
@@ -2075,7 +2056,7 @@ QUnit.test("Rangeseries. Top marker not in visible area", function(assert) {
     series.updateData([{ arg: "First", val1: 1, val2: 1 }]);
     series.getAllPoints()[0].visibleTopMarker = false;
     series.getAllPoints()[0].visibleBottomMarker = true;
-    series.draw(this.translators, true);
+    series.draw(true);
 
     assert.ok(series.getAllPoints()[0].draw.calledOnce);
     assert.ok(series.getAllPoints()[0].clearVisibility.calledOnce);
@@ -2108,7 +2089,7 @@ QUnit.test("Rangeseries. Bottom marker not in visible area", function(assert) {
     series.getAllPoints()[0].isInVisibleArea.returns(true);
     series.getAllPoints()[0].visibleTopMarker = true;
     series.getAllPoints()[0].visibleBottomMarker = false;
-    series.draw(this.translators, true);
+    series.draw(true);
 
     assert.ok(series.getAllPoints()[0].draw.calledOnce);
     assert.ok(series.getAllPoints()[0].clearVisibility.calledOnce);
@@ -2127,22 +2108,6 @@ QUnit.module("Labels visibility", {
             maxLabelCount: 10
         };
 
-        this.translators = {
-            x: new MockTranslator({
-                translate: { "First": 10, "Second": 20, "Third": 30, "Fourth": 40 },
-                getCanvasVisibleArea: { min: 0, max: 700 }
-            }),
-            y: new MockTranslator({
-                translate: { 1: 100, 2: 200, 3: 300, 4: 400 },
-                getCanvasVisibleArea: { min: 0, max: 500 }
-            }),
-            businessRange: {
-                minVisibleX: 0,
-                maxVisibleX: 10,
-                minVisibleY: 0,
-                maxVisibleY: 10
-            }
-        };
         this.data = [{
             arg: 1,
             val: 2
@@ -2191,6 +2156,9 @@ QUnit.test("setSelectionState", function(assert) {
     var series = createSeries({
         selectionMode: "excludePoints",
         hoverMode: "excludePoints"
+    }, {
+        argumentAxis: new MockAxis({ renderer: this.renderer }),
+        valueAxis: new MockAxis({ renderer: this.renderer })
     });
     series.select();
 
@@ -2203,10 +2171,13 @@ QUnit.test("draw selected series", function(assert) {
     var series = createSeries({
         selectionMode: "excludePoints",
         hoverMode: "excludePoints"
+    }, {
+        argumentAxis: new MockAxis({ renderer: this.renderer }),
+        valueAxis: new MockAxis({ renderer: this.renderer })
     });
 
     series.select();
-    series.draw(this.translators, false, false);
+    series.draw(false, false);
 
     assert.ok(series.isSelected());
     assert.equal(series.stylesHistory.length, 2);
@@ -2218,9 +2189,12 @@ QUnit.test("draw hovered series", function(assert) {
     var series = createSeries({
         selectionMode: "excludePoints",
         hoverMode: "excludePoints"
+    }, {
+        argumentAxis: new MockAxis({ renderer: this.renderer }),
+        valueAxis: new MockAxis({ renderer: this.renderer })
     });
     series.hover();
-    series.draw(this.translators, false, false);
+    series.draw(false, false);
 
     assert.ok(!series.isSelected());
     assert.ok(series.isHovered());
@@ -2233,10 +2207,13 @@ QUnit.test("draw selected & hovered series", function(assert) {
     var series = createSeries({
         selectionMode: "excludePoints",
         hoverMode: "excludePoints"
+    }, {
+        argumentAxis: new MockAxis({ renderer: this.renderer }),
+        valueAxis: new MockAxis({ renderer: this.renderer })
     });
     series.select();
     series.hover();
-    series.draw(this.translators, false, false);
+    series.draw(false, false);
 
     assert.ok(series.isSelected());
     assert.ok(series.isHovered());
@@ -3438,6 +3415,9 @@ QUnit.module("Point States", {
         this.series = createSeries({
             selectionMode: "none",
             hoverMode: "none"
+        }, {
+            argumentAxis: new MockAxis({ renderer: this.renderer }),
+            valueAxis: new MockAxis({ renderer: this.renderer })
         });
         this.series.updateData([{}, {}]);
         this.point = this.series.getAllPoints()[0];
@@ -3801,10 +3781,10 @@ QUnit.test("apply point view after drawing selected series", function(assert) {
 
     series.updateOptions($.extend(true, {}, series._options, options));
     series.updateData([{ arg: 1, val: 1 }]);
-    series.draw(this.translators, false);
+    series.draw(false);
     series.select();
 
-    series.draw(this.translators, false);
+    series.draw(false);
 
     assert.equal(series.getAllPoints()[0].setView.callCount, 1);
 });
@@ -3817,10 +3797,10 @@ QUnit.test("apply point view after drawing hovered series", function(assert) {
 
     series.updateOptions($.extend(true, {}, series._options, options));
     series.updateData([{ arg: 1, val: 1 }]);
-    series.draw(this.translators, false);
+    series.draw(false);
     series.hover();
 
-    series.draw(this.translators, false);
+    series.draw(false);
 
     assert.equal(series.getAllPoints()[0].setView.callCount, 1);
 });
@@ -3835,10 +3815,12 @@ QUnit.test("Create visible series", function(assert) {
             visibilityChanged: spy
         }, {
             seriesGroup: seriesGroup,
-            markerTrackerGroup: this.renderer.g()
+            markerTrackerGroup: this.renderer.g(),
+            argumentAxis: new MockAxis({ renderer: this.renderer }),
+            valueAxis: new MockAxis({ renderer: this.renderer })
         });
 
-    series.draw(this.translators);
+    series.draw();
     series._segments = [[1, 2]];
 
     series.drawTrackers();
@@ -3856,7 +3838,9 @@ QUnit.test("Create invisible series", function(assert) {
             visibilityChanged: spy
         }, {
             seriesGroup: seriesGroup,
-            markerTrackerGroup: this.renderer.g()
+            markerTrackerGroup: this.renderer.g(),
+            argumentAxis: new MockAxis({ renderer: this.renderer }),
+            valueAxis: new MockAxis({ renderer: this.renderer })
         });
 
     series.draw();
@@ -3880,7 +3864,9 @@ QUnit.test("Hide visible series", function(assert) {
         }, {
             seriesGroup: seriesGroup,
             markerTrackerGroup: this.renderer.g(),
-            trackersGroup: this.renderer.g()
+            trackersGroup: this.renderer.g(),
+            argumentAxis: new MockAxis({ renderer: this.renderer }),
+            valueAxis: new MockAxis({ renderer: this.renderer })
         }),
         trigger = sinon.spy();
     series.updateData([{ arg: 1, val: 10 }, { arg: 2, val: 20 }, { arg: 3, val: 30 }, { arg: 4, val: 40 }]);
@@ -3917,18 +3903,20 @@ QUnit.test("show hidden series", function(assert) {
         }, {
             seriesGroup: seriesGroup,
             markerTrackerGroup: this.renderer.g(),
-            trackersGroup: this.renderer.g()
+            trackersGroup: this.renderer.g(),
+            argumentAxis: new MockAxis({ renderer: this.renderer }),
+            valueAxis: new MockAxis({ renderer: this.renderer })
         });
 
 
-    series.draw(this.translators);
+    series.draw();
     series.drawTrackers();
     series.hide();
-    series.draw(this.translators);
+    series.draw();
     series.drawTrackers();
 
     series.show();
-    series.draw(this.translators);
+    series.draw();
     series._segments = [[1, 2]];
 
     series.drawTrackers();
@@ -3960,7 +3948,9 @@ QUnit.test("Show invisible series", function(assert) {
             visibilityChanged: spy,
             point: { visible: false }
         }, {
-            seriesGroup: seriesGroup
+            seriesGroup: seriesGroup,
+            argumentAxis: new MockAxis({ renderer: this.renderer }),
+            valueAxis: new MockAxis({ renderer: this.renderer })
         }),
         trigger = sinon.spy();
     series.updateData([{ arg: 1, val: 10 }, { arg: 2, val: 20 }, { arg: 3, val: 30 }, { arg: 4, val: 40 }]);
@@ -4004,14 +3994,16 @@ QUnit.test("set visibility from options", function(assert) {
             visible: true,
             visibilityChanged: spy
         }, {
-            seriesGroup: seriesGroup
+            seriesGroup: seriesGroup,
+            argumentAxis: new MockAxis({ renderer: this.renderer }),
+            valueAxis: new MockAxis({ renderer: this.renderer })
         });
 
     series.updateOptions($.extend(true, {}, series._options, {
         visible: false
     }));
 
-    series.draw(this.translators);
+    series.draw();
 
     assert.equal(spy.callCount, 0);
     assert.ok(!series.isVisible());
@@ -4025,14 +4017,16 @@ QUnit.test("set visibility from options", function(assert) {
             visible: true,
             visibilityChanged: spy
         }, {
-            seriesGroup: seriesGroup
+            seriesGroup: seriesGroup,
+            argumentAxis: new MockAxis({ renderer: this.renderer }),
+            valueAxis: new MockAxis({ renderer: this.renderer })
         });
 
     series.updateOptions($.extend(true, {}, series._options, {
         visible: true
     }));
 
-    series.draw(this.translators);
+    series.draw();
 
     assert.equal(spy.callCount, 0);
     assert.ok(series.isVisible());
@@ -4078,10 +4072,13 @@ QUnit.module("API", {
 });
 
 QUnit.test("hide labels", function(assert) {
-    var series = createSeries();
+    var series = createSeries({}, {
+        argumentAxis: new MockAxis({ renderer: this.renderer }),
+        valueAxis: new MockAxis({ renderer: this.renderer })
+    });
 
     series.updateData(this.data);
-    series.draw(this.translators, false);
+    series.draw(false);
     series.hideLabels();
 
     $.each(series._points, function(_, point) {
@@ -4333,23 +4330,6 @@ QUnit.test("getOpacity", function(assert) {
     assert.strictEqual(series.getOpacity(), "seriesOpacity", "Opacity should be correct");
 });
 
-QUnit.test("check that range data didn't changed", function(assert) {
-    var series = createSeries({
-        visible: true,
-        type: 'line'
-    });
-
-    series.updateData([{ arg: 'one', val: 10 }, { arg: 'two', val: 5 }]);
-    var rangeData = { arg: { categories: ['one', 'two'] }, val: {} };
-    series._getRangeData = function() { return rangeData; };
-
-    var range = series.getRangeData(),
-        arg = range.arg;
-    arg.categories.push(1);
-
-    assert.deepEqual(series.getRangeData().arg.categories, ['one', 'two']);
-});
-
 QUnit.test("getTemplateFields returns templated fields for value, size and tag fields", function(assert) {
     //arrange
     var series = createSeries({ name: "SeriesName" }, this.renderOptions),
@@ -4375,6 +4355,15 @@ QUnit.test("getTemplateFields returns templated fields for value, size and tag f
         templateField: "sizeFieldSeriesName",
         originalField: "sizeField"
     }]);
+});
+
+QUnit.test("get axes", function(assert) {
+    var valueAxisStub = {},
+        argumentAxisStub = {},
+        series = createSeries({}, { valueAxis: valueAxisStub, argumentAxis: argumentAxisStub });
+
+    assert.strictEqual(series.getValueAxis(), valueAxisStub);
+    assert.strictEqual(series.getArgumentAxis(), argumentAxisStub);
 });
 
 QUnit.test("notification of series. allSeriesPoints mode", function(assert) {
@@ -4865,6 +4854,12 @@ QUnit.test("Call pointHover twice", function(assert) {
 });
 
 QUnit.module("Legend states", {
+    createSeries: function() {
+        return createSeries({}, {
+            argumentAxis: new MockAxis({ renderer: this.renderer }),
+            valueAxis: new MockAxis({ renderer: this.renderer })
+        });
+    },
     beforeEach: function() {
         this.legendCallback = sinon.stub();
         environment.beforeEach.call(this);
@@ -4882,40 +4877,40 @@ QUnit.module("Legend states", {
 });
 
 QUnit.test("Apply style", function(assert) {
-    var series = createSeries();
-    series.draw(this.translators, false, false, this.legendCallback);
+    var series = this.createSeries();
+    series.draw(false, false, this.legendCallback);
     series.hover();
     assert.equal(this.legendCallback.lastCall.args[0], "applyHover");
 });
 
 QUnit.test("None mode", function(assert) {
-    var series = createSeries();
-    series.draw(this.translators, false, false, this.legendCallback);
+    var series = this.createSeries();
+    series.draw(false, false, this.legendCallback);
     series.hover("none");
     assert.equal(this.legendCallback.callCount, 1);
     assert.equal(this.legendCallback.lastCall.args[0], "resetItem");
 });
 
 QUnit.test("Draw hovered series", function(assert) {
-    var series = createSeries();
+    var series = this.createSeries();
     series.hover();
-    series.draw(this.translators, false, false, this.legendCallback);
+    series.draw(false, false, this.legendCallback);
     assert.equal(this.legendCallback.lastCall.args[0], "applyHover");
 });
 
 QUnit.test("Pass legendCallback to point on hover point", function(assert) {
-    var series = createSeries();
+    var series = this.createSeries();
     series.updateData([{ arg: 1, val: 1 }]);
-    series.draw(this.translators, false, false, this.legendCallback);
+    series.draw(false, false, this.legendCallback);
 
     series.hoverPoint(series.getAllPoints()[0]);
     assert.strictEqual(series.getAllPoints()[0].applyView.lastCall.args[0], this.legendCallback);
 });
 
 QUnit.test("Pass legendCallback to point on clearPointHover", function(assert) {
-    var series = createSeries();
+    var series = this.createSeries();
     series.updateData([{ arg: 1, val: 1 }]);
-    series.draw(this.translators, false, false, this.legendCallback);
+    series.draw(false, false, this.legendCallback);
     var point = series.getAllPoints()[0];
     point.stub("isHovered").returns(true);
 
@@ -4924,18 +4919,18 @@ QUnit.test("Pass legendCallback to point on clearPointHover", function(assert) {
 });
 
 QUnit.test("Pass legendCallback to point on selectPoint", function(assert) {
-    var series = createSeries();
+    var series = this.createSeries();
     series.updateData([{ arg: 1, val: 1 }]);
-    series.draw(this.translators, false, false, this.legendCallback);
+    series.draw(false, false, this.legendCallback);
     series.selectPoint(series.getAllPoints()[0]);
     assert.strictEqual(series.getAllPoints()[0].applyView.lastCall.args[0], this.legendCallback);
 });
 
 
 QUnit.test("Pass legendCallback to point on deselect point", function(assert) {
-    var series = createSeries();
+    var series = this.createSeries();
     series.updateData([{ arg: 1, val: 1 }]);
-    series.draw(this.translators, false, false, this.legendCallback);
+    series.draw(false, false, this.legendCallback);
     var point = series.getAllPoints()[0];
     point.stub("isSelected").returns(true);
 
@@ -4944,7 +4939,7 @@ QUnit.test("Pass legendCallback to point on deselect point", function(assert) {
 });
 
 QUnit.test("Call legend callback on point hover argument", function(assert) {
-    var series = createSeries(),
+    var series = this.createSeries(),
         target = {
             argument: 1,
             getOptions: function() {
@@ -4954,7 +4949,7 @@ QUnit.test("Call legend callback on point hover argument", function(assert) {
             }
         };
     series.updateData([{ arg: 1, val: 1 }]);
-    series.draw(this.translators, false, false, this.legendCallback);
+    series.draw(false, false, this.legendCallback);
     series.notify({
         action: "pointHover",
         notifyLegend: true,
@@ -4965,7 +4960,7 @@ QUnit.test("Call legend callback on point hover argument", function(assert) {
 });
 
 QUnit.test("Not call legend callback on clear point hover argument", function(assert) {
-    var series = createSeries(),
+    var series = this.createSeries(),
         target = {
             argument: 1,
             getOptions: function() {
@@ -4975,7 +4970,7 @@ QUnit.test("Not call legend callback on clear point hover argument", function(as
             }
         };
     series.updateData([{ arg: 1, val: 1 }]);
-    series.draw(this.translators, false, false, this.legendCallback);
+    series.draw(false, false, this.legendCallback);
     series.notify({
         action: "clearPointHover",
         target: target
@@ -4984,7 +4979,7 @@ QUnit.test("Not call legend callback on clear point hover argument", function(as
 });
 
 QUnit.test("Call legend callback on clear point hover argument", function(assert) {
-    var series = createSeries(),
+    var series = this.createSeries(),
         target = {
             argument: 1,
             getOptions: function() {
@@ -4994,7 +4989,7 @@ QUnit.test("Call legend callback on clear point hover argument", function(assert
             }
         };
     series.updateData([{ arg: 1, val: 1 }]);
-    series.draw(this.translators, false, false, this.legendCallback);
+    series.draw(false, false, this.legendCallback);
     series.notify({
         action: "clearPointHover",
         notifyLegend: true,
@@ -5014,6 +5009,21 @@ QUnit.module("States with aggregation", {
                 return [that.createPoint(this, {}), that.createPoint(this, {})];
             }
         });
+
+        this.setupAggregation = function(min, max, start, end) {
+            var translator = getTranslator(min, max, start, end);
+
+            that.argumentAxis.getTranslator = function() { return translator; };
+            that.argumentAxis.getViewport.returns({
+                min: min,
+                max: max
+            });
+        };
+
+        this.argumentAxis = new MockAxis({
+            renderer: this.renderer
+        });
+
         that.series = createSeries({
             type: "seriesWithResample",
             hoverMode: "includePoints",
@@ -5021,7 +5031,8 @@ QUnit.module("States with aggregation", {
         }, {
             commonSeriesModes: {
                 pointSelectionMode: "single"
-            }
+            },
+            argumentAxis: this.argumentAxis
         });
     },
     afterEach: function() {
@@ -5033,7 +5044,8 @@ QUnit.module("States with aggregation", {
 QUnit.test("hover point with aggregation", function(assert) {
     var series = this.series;
     series.updateData([{ arg: 1, val: 1 }, { arg: 2, val: 2 }]);
-    series.resamplePoints(getTranslator(1, 2, 0, 15));
+    this.setupAggregation(1, 2);
+    series.resamplePoints(15);
     series.getPointByPos(0).isHovered.returns(true);
     series.clearPointHover();
     assert.equal(series.getPointByPos(0).applyView.callCount, 1);
@@ -5042,7 +5054,8 @@ QUnit.test("hover point with aggregation", function(assert) {
 QUnit.test("hover series with aggregation", function(assert) {
     var series = this.series;
     series.updateData([{ arg: 1, val: 1 }, { arg: 2, val: 2 }]);
-    series.resamplePoints(getTranslator(1, 2, 0, 15));
+    this.setupAggregation(1, 2);
+    series.resamplePoints(15);
     series.getPointByPos(0).isHovered.returns(true);
     series.hover();
     assert.equal(series.getPointByPos(0).setView.callCount, 1);
@@ -5051,7 +5064,8 @@ QUnit.test("hover series with aggregation", function(assert) {
 QUnit.test("reset hovered series with aggregation", function(assert) {
     var series = this.series;
     series.updateData([{ arg: 1, val: 1 }, { arg: 2, val: 2 }]);
-    series.resamplePoints(getTranslator(1, 2, 0, 15));
+    this.setupAggregation(1, 2);
+    series.resamplePoints(15);
     series.getPointByPos(0).isHovered.returns(true);
     series.hover();
     series.getPointByPos(0).resetView.reset();
@@ -5062,7 +5076,8 @@ QUnit.test("reset hovered series with aggregation", function(assert) {
 QUnit.test("select points with aggregation", function(assert) {
     var series = this.series;
     series.updateData([{ arg: 1, val: 1 }, { arg: 2, val: 2 }]);
-    series.resamplePoints(getTranslator(1, 2, 0, 15));
+    this.setupAggregation(1, 2);
+    series.resamplePoints(15);
     series.getPointByPos(0).getOptions.returns({ selectionMode: "onlyPoint" });
     series.getPointByPos(1).isSelected.returns(true);
 

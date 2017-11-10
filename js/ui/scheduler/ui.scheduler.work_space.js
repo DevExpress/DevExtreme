@@ -24,6 +24,9 @@ var COMPONENT_CLASS = "dx-scheduler-work-space",
 
     WORKSPACE_WITH_BOTH_SCROLLS_CLASS = "dx-scheduler-work-space-both-scrollbar",
 
+    WORKSPACE_GROUPED_ATTR = "dx-group-row-count",
+    WORKSPACE_WITH_ODD_CELLS_CLASS = "dx-scheduler-work-space-odd-cells",
+
     TIME_PANEL_CLASS = "dx-scheduler-time-panel",
     TIME_PANEL_CELL_CLASS = "dx-scheduler-time-panel-cell",
     TIME_PANEL_ROW_CLASS = "dx-scheduler-time-panel-row",
@@ -370,6 +373,7 @@ var SchedulerWorkSpace = Widget.inherit({
             case "groups":
                 this._cleanView();
                 this._toggleGroupedClass();
+                this._toggleWorkSpaceWithOddCells();
                 this._renderView();
                 break;
             case "showAllDayPanel":
@@ -379,6 +383,8 @@ var SchedulerWorkSpace = Widget.inherit({
                 this._changeAllDayVisibility();
                 this.notifyObserver("allDayPanelToggled");
                 this._attachTablesEvents();
+                this.headerPanelOffsetRecalculate();
+                this._updateScrollable();
                 break;
             case "onCellClick":
                 this._createCellClickAction();
@@ -402,6 +408,8 @@ var SchedulerWorkSpace = Widget.inherit({
         this.callBase();
 
         this._toggleHorizontalScrollClass();
+        this._toggleWorkSpaceWithOddCells();
+
         this.element()
             .addClass(COMPONENT_CLASS)
             .addClass(this._getElementClass());
@@ -415,6 +423,14 @@ var SchedulerWorkSpace = Widget.inherit({
 
     _toggleHorizontalScrollClass: function() {
         this.element().toggleClass(WORKSPACE_WITH_BOTH_SCROLLS_CLASS, this.option("crossScrollingEnabled"));
+    },
+
+    _toggleWorkSpaceWithOddCells: function() {
+        this.element().toggleClass(WORKSPACE_WITH_ODD_CELLS_CLASS, this._isWorkspaceWithOddCells());
+    },
+
+    _isWorkspaceWithOddCells: function() {
+        return this.option("hoursInterval") === 0.5;
     },
 
     _getTimePanelClass: function() {
@@ -496,13 +512,19 @@ var SchedulerWorkSpace = Widget.inherit({
 
         config.direction = "both";
         config.onScroll = (function(e) {
-            this._headerScrollWasHandled = true;
-            this._sidebarScrollable.scrollTo({
-                top: e.scrollOffset.top
-            });
-            this._headerScrollable.scrollTo({
-                left: e.scrollOffset.left
-            });
+            if(!this._dateTableScrollWasHandled) {
+                this._headerScrollWasHandled = true;
+                this._sideBarScrollWasHandled = true;
+
+                this._sidebarScrollable.scrollTo({
+                    top: e.scrollOffset.top
+                });
+                this._headerScrollable.scrollTo({
+                    left: e.scrollOffset.left
+                });
+            } else {
+                this._dateTableScrollWasHandled = false;
+            }
         }).bind(this);
         config.onEnd = (function() {
             this.notifyObserver("updateResizableArea", {});
@@ -575,9 +597,14 @@ var SchedulerWorkSpace = Widget.inherit({
             bounceEnabled: false,
             pushBackValue: 0,
             onScroll: (function(e) {
-                this._dateTableScrollable.scrollTo({
-                    top: e.scrollOffset.top
-                });
+                if(!this._sideBarScrollWasHandled) {
+                    this._dateTableScrollWasHandled = true;
+                    this._dateTableScrollable.scrollTo({
+                        top: e.scrollOffset.top
+                    });
+                } else {
+                    this._sideBarScrollWasHandled = false;
+                }
             }).bind(this)
         });
     },
@@ -790,6 +817,8 @@ var SchedulerWorkSpace = Widget.inherit({
             this._attachGroupCountAttr(groupRows.elements.length);
             $container.append(groupRows.elements);
             cellTemplates = groupRows.cellTemplates;
+        } else {
+            this._detachGroupCountAttr();
         }
 
         return cellTemplates;
@@ -801,8 +830,12 @@ var SchedulerWorkSpace = Widget.inherit({
         });
     },
 
+    _detachGroupCountAttr: function() {
+        this.element().removeAttr(WORKSPACE_GROUPED_ATTR);
+    },
+
     _attachGroupCountAttr: function(groupRowCount) {
-        this.element().attr("dx-group-row-count", groupRowCount);
+        this.element().attr(WORKSPACE_GROUPED_ATTR, groupRowCount);
     },
 
     headerPanelOffsetRecalculate: function() {
@@ -812,11 +845,19 @@ var SchedulerWorkSpace = Widget.inherit({
         }
 
         var headerPanelHeight = this.getHeaderPanelHeight(),
-            headerHeight = this.invoke("getHeaderHeight");
+            headerHeight = this.invoke("getHeaderHeight"),
+            allDayPanelHeight = this.supportAllDayRow() && this.option("showAllDayPanel") ? this.getAllDayHeight() : 0;
+
+        headerPanelHeight && this._headerScrollable && this._headerScrollable.element().height(headerPanelHeight + allDayPanelHeight);
 
         headerPanelHeight && this._dateTableScrollable.element().css({
-            "padding-bottom": headerPanelHeight + "px",
-            "margin-bottom": -1 * (parseInt(headerPanelHeight, 10)) + "px"
+            "padding-bottom": allDayPanelHeight + headerPanelHeight + "px",
+            "margin-bottom": -1 * ((parseInt(headerPanelHeight, 10)) + allDayPanelHeight) + "px"
+        });
+
+        headerPanelHeight && this._sidebarScrollable && this._sidebarScrollable.element().css({
+            "padding-bottom": allDayPanelHeight + headerPanelHeight + "px",
+            "marginBottom": -1 * ((parseInt(headerPanelHeight, 10)) + allDayPanelHeight) + "px"
         });
 
         this._$allDayTitle && this._$allDayTitle.css("top", headerHeight + headerPanelHeight + "px");
@@ -932,10 +973,19 @@ var SchedulerWorkSpace = Widget.inherit({
         this.element().toggleClass(WORKSPACE_WITH_ALL_DAY_CLASS, showAllDayPanel);
 
         this._changeAllDayVisibility();
+
+        showAllDayPanel && this._updateScrollable();
     },
 
     _changeAllDayVisibility: function() {
         this.element().toggleClass(WORKSPACE_WITH_COLLAPSED_ALL_DAY_CLASS, !this.option("allDayExpanded") && this.option("showAllDayPanel"));
+    },
+
+    _updateScrollable: function() {
+        this._dateTableScrollable.update();
+
+        this._headerScrollable && this._headerScrollable.update();
+        this._sidebarScrollable && this._sidebarScrollable.update();
     },
 
     _renderTimePanel: function() {
@@ -1397,8 +1447,7 @@ var SchedulerWorkSpace = Widget.inherit({
             hours = endDayHour - 1;
         }
 
-        currentDate.setHours(hours);
-        currentDate.setMinutes(minutes);
+        currentDate.setHours(hours, minutes, 0, 0);
 
         return this.getCoordinatesByDate(currentDate);
     },
@@ -1514,8 +1563,7 @@ var SchedulerWorkSpace = Widget.inherit({
         var cellDuration = this.getCellDuration(),
             currentDayStart = new Date(date);
 
-        currentDayStart.setMinutes(0);
-        currentDayStart.setHours(this.option("startDayHour"));
+        currentDayStart.setHours(this.option("startDayHour"), 0, 0, 0);
 
         return ((date.getTime() - currentDayStart.getTime()) % cellDuration) / cellDuration;
     },
@@ -1762,10 +1810,18 @@ var SchedulerWorkSpace = Widget.inherit({
     },
 
     scrollToTime: function(hours, minutes, date) {
+        var min = this.getStartViewDate(),
+            max = this.getEndViewDate();
+
+        if(date < min || date > max) {
+            errors.log("W1008", date);
+            return;
+        }
+
         var coordinates = this._getScrollCoordinates(hours, minutes, date),
             scrollable = this.getScrollable();
 
-        scrollable.scrollBy(coordinates.top - scrollable.scrollTop());
+        scrollable.scrollBy({ top: coordinates.top - scrollable.scrollTop(), left: 0 });
     },
 
     getDistanceBetweenCells: function(startIndex, endIndex) {

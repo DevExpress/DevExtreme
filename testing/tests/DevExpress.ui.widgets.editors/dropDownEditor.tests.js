@@ -306,6 +306,22 @@ QUnit.test("reset()", function(assert) {
     assert.strictEqual(dropDownEditor.option("value"), null, "Value should be reset");
 });
 
+QUnit.test("reset method should clear the input value", function(assert) {
+    var dropDownEditor = this.dropDownEditor,
+        $input = dropDownEditor.element().find("input");
+
+    dropDownEditor.option("value", null);
+    $input.val("456");
+
+    //act
+    dropDownEditor.reset();
+
+    //assert
+    assert.strictEqual(dropDownEditor.option("value"), null, "Value should be null");
+    assert.equal($input.val(), "", "Input value is correct");
+
+});
+
 QUnit.test("dx-state-hover class added after hover on element", function(assert) {
     this.dropDownEditor.option({
         value: "123",
@@ -371,6 +387,39 @@ QUnit.testInActiveWindow("editor should save focus on button clicking", function
             instance.option("opened", false);
         }
     });
+});
+
+QUnit.testInActiveWindow("editor should save focus on clearbutton clicking, fieldTemplate is used", function(assert) {
+    if(devices.real().platform !== "generic") {
+        assert.ok(true, "blur preventing unnecessary on mobile devices");
+        return;
+    }
+
+    var $dropDownEditor = $("#dropDownEditorLazy").dxDropDownEditor({
+        items: [{ "Name": "one", "ID": 1 }, { "Name": "two", "ID": 2 }, { "Name": "three", "ID": 3 }],
+        displayExpr: "Name",
+        valueExpr: "ID",
+        showClearButton: "true",
+        value: 1,
+        fieldTemplate: function(value) {
+            var $textBox = $("<div>").dxTextBox({
+                text: value,
+                focusStateEnabled: true
+            });
+            return $("<div>").text(value + this.option("value")).append($textBox);
+        },
+    });
+
+    $dropDownEditor.find(".dx-texteditor-input").focus();
+
+    assert.ok($dropDownEditor.find(".dx-texteditor").hasClass("dx-state-focused"), "Widget is focused");
+
+    var $buttonsContainer = $dropDownEditor.find(".dx-texteditor-buttons-container"),
+        $buttons = $buttonsContainer.children();
+
+    $buttons.eq(1).trigger("dxclick");
+
+    assert.ok($dropDownEditor.hasClass("dx-state-focused"), "Widget is focused after click on clearButton");
 });
 
 QUnit.testInActiveWindow("input is focused by click on dropDownButton", function(assert) {
@@ -742,6 +791,26 @@ QUnit.test("onValueChanged should be fired for each change by keyboard when fiel
     assert.equal(valueChangedSpy.callCount, 2, "onValueChanged is fired second time");
 });
 
+QUnit.test("field template should be correctly removed after it is been applied once", function(assert) {
+    var $dropDownEditor = $("#dropDownEditorLazy"),
+        dropDownEditor = $dropDownEditor.dxDropDownEditor({
+            items: [1, 2, 3],
+            opened: true,
+            value: [1],
+            searchEnabled: true,
+            fieldTemplate: function(itemData, $container) {
+                var $textBox = $("<div>").dxTextBox(),
+                    $field = $('<div>Test<div/>');
+
+                $container.append($field).append($textBox);
+            }
+        }).dxDropDownEditor("instance");
+
+    dropDownEditor.option("fieldTemplate", null);
+
+    assert.notEqual($dropDownEditor.text(), "Test", "fieldTemplate was correctly cleared");
+});
+
 QUnit.test("events should be rendered for input after value is changed when field template is specified (T399896)", function(assert) {
     var events = [
             "KeyDown", "KeyPress", "KeyUp",
@@ -808,6 +877,17 @@ QUnit.test("openOnFieldClick", function(assert) {
 
     $input.trigger("dxclick");
     assert.equal(dropDownEditor.option("opened"), false, "not opened by field click");
+});
+
+QUnit.testInActiveWindow("focus editor in the case when 'openOnFieldClick' is false", function(assert) {
+    var $dropDownEditor = $("#dropDownEditorLazy").dxDropDownEditor({
+            openOnFieldClick: false
+        }),
+        $input = $dropDownEditor.find(".dx-texteditor-input");
+
+    $input.trigger("dxclick");
+
+    assert.ok($dropDownEditor.hasClass("dx-state-focused"), "editor is focused on click");
 });
 
 QUnit.test("DropDownEditor doesn't opened on field click when it located in element with disabled state", function(assert) {
@@ -921,6 +1001,18 @@ QUnit.test("the popup 'fullScreen' option should be overridden (T295450)", funct
     }
 });
 
+QUnit.test("widget should work correctly when popup 'fullScreen' is true", function(assert) {
+    var $dropDownEditor = $("<div>").dxDropDownEditor({
+        opened: true
+    }).appendTo("body");
+
+    var popup = $dropDownEditor.find(".dx-popup").dxPopup("instance");
+    popup.option("fullScreen", true);
+
+    assert.ok(true, "Widget works correctly");
+
+    $dropDownEditor.remove();
+});
 
 QUnit.module("popup buttons", {
     beforeEach: function() {
@@ -1150,3 +1242,4 @@ QUnit.test("aria-owns should be removed when popup is not visible", function(ass
 
     assert.strictEqual($input.attr("aria-owns"), undefined, "owns does not exist");
 });
+

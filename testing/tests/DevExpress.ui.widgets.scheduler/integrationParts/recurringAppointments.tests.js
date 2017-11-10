@@ -871,3 +871,161 @@ QUnit.test("AllDay recurrence appointments should be rendered correctly after ch
     this.instance.option("currentDate", new Date(2015, 2, 23));
     assert.equal(this.instance.element().find(".dx-scheduler-appointment-recurrence").length, 7, "appointments are OK");
 });
+
+QUnit.test("AllDay recurrence appointments should be rendered correctly after changing currentDate, day view", function(assert) {
+    var tasks = [{
+        startDate: new Date(2015, 4, 25, 9, 30),
+        endDate: new Date(2015, 4, 26, 11, 30),
+        recurrenceRule: "FREQ=MONTHLY;BYMONTHDAY=26"
+    }];
+    var dataSource = new DataSource({
+        store: tasks
+    });
+    this.createInstance({
+        currentView: "day",
+        currentDate: new Date(2015, 4, 26),
+        dataSource: dataSource
+    });
+    assert.equal(this.instance.element().find(".dx-scheduler-appointment-recurrence").length, 1, "appointments are OK");
+    this.instance.option("currentDate", new Date(2015, 4, 27));
+    assert.equal(this.instance.element().find(".dx-scheduler-appointment-recurrence").length, 0, "appointments are OK");
+});
+
+QUnit.test("Recurring appt should be rendered correctly after changing of repeate count", function(assert) {
+    var task = { startDate: new Date(2017, 7, 9), endDate: new Date(2017, 7, 9, 0, 30), recurrenceRule: "FREQ=DAILY;COUNT=2" },
+        newTask = { startDate: new Date(2017, 7, 9), endDate: new Date(2017, 7, 9, 0, 30), recurrenceRule: "FREQ=DAILY;COUNT=4" };
+
+    this.createInstance({
+        dataSource: [task],
+        views: ["week"],
+        currentView: "week",
+        currentDate: new Date(2017, 7, 10),
+        recurrenceEditMode: "series"
+    });
+
+    this.instance.updateAppointment(task, newTask);
+    var appointments = this.instance.element().find(".dx-scheduler-appointment");
+
+    assert.equal(appointments.length, 4, "appt was rendered correctly");
+});
+
+QUnit.test("Recurring appt should be rendered correctly after setting recurrenceException", function(assert) {
+    var task = {
+            text: "Stand-up meeting",
+            startDate: new Date(2015, 4, 4, 9, 0),
+            endDate: new Date(2015, 4, 4, 9, 15),
+            recurrenceRule: "FREQ=DAILY;COUNT=3"
+        },
+        newTask = {
+            text: "Stand-up meeting",
+            startDate: new Date(2015, 4, 4, 9, 0),
+            endDate: new Date(2015, 4, 4, 9, 15),
+            recurrenceRule: "FREQ=DAILY;COUNT=3",
+            recurrenceException: "20150506T090000"
+        };
+
+    this.createInstance({
+        dataSource: [task],
+        views: ["month"],
+        currentView: "month",
+        currentDate: new Date(2015, 4, 25),
+        recurrenceEditMode: "single"
+    });
+
+    this.instance.updateAppointment(task, newTask);
+    var appointments = this.instance.element().find(".dx-scheduler-appointment");
+
+    assert.equal(appointments.length, 2, "appt was rendered correctly");
+});
+
+QUnit.test("The second appointment in recurring series in Month view should have correct width", function(assert) {
+    this.createInstance({
+        dataSource: [{
+            text: "Appointment 1",
+            startDate: new Date(2017, 9, 17, 9),
+            endDate: new Date(2017, 9, 18, 10),
+            recurrenceRule: "FREQ=WEEKLY;BYDAY=SU,MO,TU,WE,TH,FR,SA"
+        }],
+        currentDate: new Date(2017, 9, 17),
+        views: ["month"],
+        currentView: "month"
+    });
+
+    var $appointments = this.instance.element().find(".dx-scheduler-appointment"),
+        cellWidth = this.instance.element().find(".dx-scheduler-date-table-cell").outerWidth();
+
+    assert.equal($appointments.eq(1).outerWidth(), cellWidth * 2, "2d appt has correct width");
+});
+
+QUnit.test("The second appointment in recurring series in Week view should have correct width", function(assert) {
+    this.createInstance({
+        dataSource: [{
+            text: "Appointment 1",
+            startDate: new Date(2017, 9, 17, 9),
+            endDate: new Date(2017, 9, 18, 10),
+            recurrenceRule: "FREQ=WEEKLY;BYDAY=SU,MO,TU,WE,TH,FR,SA"
+        }],
+        currentDate: new Date(2017, 9, 17),
+        views: ["week"],
+        currentView: "week"
+    });
+
+    var $appointments = this.instance.element().find(".dx-scheduler-appointment"),
+        cellWidth = this.instance.element().find(".dx-scheduler-date-table-cell").outerWidth();
+
+    assert.roughEqual($appointments.eq(1).outerWidth(), cellWidth * 2, 1.001, "2d appt has correct width");
+});
+
+QUnit.test("Reduced reccuring appt should have right left position in first column in Month view", function(assert) {
+    this.createInstance({
+        dataSource: [{
+            text: "Appointment 1",
+            startDate: new Date(2017, 9, 17, 9),
+            endDate: new Date(2017, 9, 18, 10),
+            recurrenceRule: "FREQ=WEEKLY;BYDAY=SU,MO,TU,WE,TH,FR,SA"
+        }],
+        currentDate: new Date(2017, 9, 17),
+        views: ["month"],
+        currentView: "month"
+    });
+
+    var $appointment = this.instance.element().find(".dx-scheduler-appointment"),
+        $reducedAppointment = this.instance.element().find(".dx-scheduler-appointment-reduced"),
+        compactClass = "dx-scheduler-appointment-compact";
+
+    assert.equal($reducedAppointment.eq(1).position().left, 0, "first appt has right left position");
+    assert.notOk($appointment.eq(7).hasClass(compactClass), "next appt isn't compact");
+});
+
+QUnit.test("Reduced reccuring appt should have right left position in first column in grouped Month view", function(assert) {
+    this.createInstance({
+        dataSource: [{
+            text: "Appointment 1",
+            startDate: new Date(2017, 9, 17, 9),
+            endDate: new Date(2017, 9, 18, 10),
+            recurrenceRule: "FREQ=WEEKLY;BYDAY=SU,MO,TU,WE,TH,FR,SA",
+            ownerId: 2
+        }],
+        currentDate: new Date(2017, 9, 17),
+        views: ["month"],
+        currentView: "month",
+        groups: ["ownerId"],
+        resources: [
+            {
+                field: "ownerId",
+                dataSource: [
+                    { id: 1, text: "one" },
+                    { id: 2, text: "two" }
+                ]
+            }
+        ]
+    });
+
+    var $appointment = this.instance.element().find(".dx-scheduler-appointment"),
+        $reducedAppointment = this.instance.element().find(".dx-scheduler-appointment-reduced"),
+        compactClass = "dx-scheduler-appointment-compact",
+        cellWidth = this.instance.element().find(".dx-scheduler-date-table-cell").outerWidth();
+
+    assert.roughEqual($reducedAppointment.eq(1).position().left, cellWidth * 7, 1.001, "first appt in 2d group has right left position");
+    assert.notOk($appointment.eq(7).hasClass(compactClass), "appt isn't compact");
+});

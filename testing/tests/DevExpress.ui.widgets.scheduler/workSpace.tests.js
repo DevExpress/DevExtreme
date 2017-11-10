@@ -172,11 +172,30 @@ QUnit.testStart(function() {
         assert.ok($element.hasClass("dx-scheduler-work-space-all-day-collapsed"), "dxSchedulerWorkSpace has 'dx-scheduler-work-space-all-day-collapsed' css class");
     });
 
+    QUnit.test("Workspace should have specific css class, if hoursInterval = 0.5 ", function(assert) {
+        this.instance.option("hoursInterval", 0.5);
+
+        var $element = this.instance.element();
+        assert.ok($element.hasClass("dx-scheduler-work-space-odd-cells"), "dxSchedulerWorkSpace has 'dx-scheduler-work-space-odd-cells' css class");
+
+        this.instance.option("hoursInterval", 0.75);
+        assert.notOk($element.hasClass("dx-scheduler-work-space-odd-cells"), "dxSchedulerWorkSpace hasn't 'dx-scheduler-work-space-odd-cells' css class");
+    });
+
     QUnit.test("Scheduler workspace parts should be wrapped by scrollable", function(assert) {
         var $element = this.instance.element();
 
         assert.ok($element.find(".dx-scheduler-time-panel").parent().hasClass("dx-scrollable-content"), "Scrollable contains the time panel");
         assert.ok($element.find(".dx-scheduler-date-table").parent().hasClass("dx-scrollable-content"), "Scrollable contains date table");
+    });
+
+    QUnit.test("Scheduler workspace scrollables should be updated after allDayExpanded option changed", function(assert) {
+        this.instance.option("allDayExpanded", false);
+        var stub = sinon.stub(this.instance, "_updateScrollable");
+
+        this.instance.option("allDayExpanded", true);
+
+        assert.ok(stub.calledOnce, "Scrollables were updated");
     });
 
     QUnit.test("Time panel cells and rows should have special css classes", function(assert) {
@@ -231,6 +250,10 @@ QUnit.testStart(function() {
 
         assert.ok(this.instance.element().hasClass("dx-scheduler-work-space-grouped"), "'grouped' class is applied");
         assert.equal(this.instance.element().attr("dx-group-row-count"), 1, "'dx-group-row-count' is right");
+
+        this.instance.option("groups", []);
+        assert.ok(!this.instance.element().hasClass("dx-scheduler-work-space-grouped"), "'grouped' class is not applied");
+        assert.notOk(this.instance.element().attr("dx-group-row-count"), "'dx-group-row-count' isn't applied");
     });
 
     QUnit.test("Work space should not have 'grouped' class & group row count attr if groups exist but empty(T381796)", function(assert) {
@@ -538,6 +561,20 @@ QUnit.testStart(function() {
         position.top += $cell.outerHeight() * 0.5;
         assert.equal(coords.top, position.top, "Cell coordinates are right");
         assert.equal(coords.left, position.left, "Cell coordinates are right");
+    });
+
+    QUnit.test("Workspace should find cell coordinates by date with second precision", function(assert) {
+        var $element = this.instance.element();
+
+        this.instance.option("currentDate", new Date(2017, 5, 16));
+        this.instance.option("hoursInterval", 1);
+
+        var coords = this.instance.getCoordinatesByDate(new Date(2017, 5, 16, 1, 1, 30)),
+            $cell = $element.find(".dx-scheduler-date-table tbody td").eq(1),
+            top = $cell.position().top + (1.5 / 60) * $cell.outerHeight();
+
+        assert.equal(coords.top, top, "Cell coordinates are right");
+        assert.equal(coords.left, $cell.position().left, "Cell coordinates are right");
     });
 
     QUnit.test("Work space should find cell coordinates by date depend on start day hour", function(assert) {

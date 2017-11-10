@@ -116,7 +116,10 @@ var Editor = Widget.inherit({
         }
 
         this.callBase();
-        this._attachChildKeyboardEvents();
+
+        if(this._keyboardProcessor) {
+            this._attachChildKeyboardEvents();
+        }
     },
 
     _attachChildKeyboardEvents: commonUtils.noop,
@@ -189,6 +192,7 @@ var Editor = Widget.inherit({
                 .appendTo($element);
 
             this._validationMessage = this._createComponent(this._$validationMessage, Overlay, {
+                integrationOptions: {},
                 templatesRenderAsynchronously: false,
                 target: this._getValidationMessageTarget(),
                 shading: false,
@@ -262,7 +266,16 @@ var Editor = Widget.inherit({
 
     _setSubmitElementName: function(name) {
         var $submitElement = this._getSubmitElement();
-        $submitElement && $submitElement.attr("name", name);
+
+        if(!$submitElement) {
+            return;
+        }
+
+        if(name.length > 0) {
+            $submitElement.attr("name", name);
+        } else {
+            $submitElement.removeAttr("name");
+        }
     },
 
     _getSubmitElement: function() {

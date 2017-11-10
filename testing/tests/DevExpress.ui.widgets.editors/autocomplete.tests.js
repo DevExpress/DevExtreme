@@ -549,7 +549,7 @@ QUnit.test("key_up/key_down - prevent default", function(assert) {
         .keyDown(KEY_UP);
 });
 
-QUnit.test("enter - prevent default", function(assert) {
+QUnit.testInActiveWindow("enter - prevent default", function(assert) {
     assert.expect(1);
 
     if(devices.real().platform !== "generic") {
@@ -896,6 +896,7 @@ QUnit.module("Overlay integration", {
     beforeEach: function() {
         executeAsyncMock.setup();
         fx.off = true;
+        this.clock = sinon.useFakeTimers();
         this.element = $("#autocomplete").dxAutocomplete({
             value: "text",
             dataSource: ["item 1", "item 2", "item 3", "item 4", "item 5", "item 6"],
@@ -906,8 +907,6 @@ QUnit.module("Overlay integration", {
         this.$input = this.element.find("." + TEXTEDITOR_INPUT_CLASS);
         this.popup = this.instance._popup.element();
         this.keyboard = keyboardMock(this.$input);
-
-        this.clock = sinon.useFakeTimers();
     },
     afterEach: function() {
         executeAsyncMock.teardown();

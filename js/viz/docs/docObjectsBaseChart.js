@@ -18,7 +18,7 @@ var BaseBaseSeries = {
     /**
     * @name baseSeriesObjectmethods_deselectpoint
     * @publicName deselectPoint(point)
-    * @param1 point:Point
+    * @param1 point:basePointObject
     */
     deselectPoint: function() { },
     /**
@@ -61,9 +61,19 @@ var BaseBaseSeries = {
     /**
     * @name baseSeriesObjectmethods_selectpoint
     * @publicName selectPoint(point)
-    * @param1 point:Point
+    * @param1 point:basePointObject
     */
-    selectPoint: function() { },
+    selectPoint: function () { },
+    /**
+    * @name baseSeriesObjectmethods_hover
+    * @publicName hover()
+    */
+    hover: function () { },
+    /**
+    * @name baseSeriesObjectmethods_clearHover
+    * @publicName clearHover()
+    */
+    clearHover: function () { },
     /**
     * @name baseSeriesObjectmethods_isSelected
     * @publicName isSelected()
@@ -91,13 +101,13 @@ var BaseBaseSeries = {
     /**
     * @name baseSeriesObjectFields_name
     * @publicName name
-    * @type string
+    * @type any
     */
     name: null,
     /**
     * @name baseSeriesObjectFields_tag
     * @publicName tag
-    * @type string
+    * @type any
     */
     tag: null,
     /**
@@ -145,7 +155,17 @@ var BasePoint = {
     * @name basePointObjectmethods_select
     * @publicName select()
     */
-    select: function() { },
+    select: function () { },
+    /**
+    * @name basePointObjectmethods_hover
+    * @publicName hover()
+    */
+    hover: function () { },
+    /**
+    * @name basePointObjectmethods_clearHover
+    * @publicName clearHover()
+    */
+    clearHover: function() { },
     /**
    * @name basePointObjectmethods_isSelected
    * @publicName isSelected()
@@ -183,13 +203,13 @@ var BasePoint = {
     /**
     * @name basePointObjectFields_tag
     * @publicName tag
-    * @type string
+    * @type any
     */
     tag: null,
     /**
     * @name basePointObjectmethods_getlabel
     * @publicName getLabel()
-    * @return pointLabelObject|array
+    * @return baseLabelObject|array
     */
     getLabel: function() { }
 };

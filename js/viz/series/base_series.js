@@ -19,6 +19,8 @@ var $ = require("../../core/renderer"),
     _inArray = inArray,
     states = require("../components/consts").states,
 
+    rangeCalculator = require("./helpers/range_data_calculator"),
+
     scatterSeries = require("./scatter_series"),
     lineSeries = require("./line_series"),
     areaSeries = require("./area_series"),
@@ -163,6 +165,10 @@ function Series(settings, options) {
     that._eventTrigger = settings.eventTrigger;
     that._eventPipe = settings.eventPipe;
     that._seriesModes = settings.commonSeriesModes;
+    that._valueAxis = settings.valueAxis;
+
+    that.axis = that._valueAxis && that._valueAxis.name;
+    that._argumentAxis = settings.argumentAxis;
     that._legendCallback = _noop;
     that.updateOptions(options);
 }
@@ -259,7 +265,16 @@ Series.prototype = {
     },
 
     getRangeData: function(zoomArgs, calcIntervalFunction) {
-        return this._visible ? _extend(true, {}, this._getRangeData(zoomArgs, calcIntervalFunction)) : getEmptyBusinessRange();
+        if(this._visible) {
+            var range = this._getRangeData();
+            this._processRange(range);
+            return range;
+        }
+        return getEmptyBusinessRange();
+    },
+
+    getViewport: function() {
+        return rangeCalculator.getViewport(this);
     },
 
     _deleteGroup: function(groupName) {
@@ -313,7 +328,7 @@ Series.prototype = {
 
         that.name = newOptions.name;
         that.pane = newOptions.pane;
-        that.axis = newOptions.axis;
+
         that.tag = newOptions.tag;
 
         that._createStyles(newOptions);
@@ -362,10 +377,7 @@ Series.prototype = {
             lastPointIndex = 0,
             options = that._options,
             i = 0,
-            len = data.length,
-            lastPoint = null,
-            curPoint,
-            rangeCorrector = that.getErrorBarRangeCorrector();
+            len = data.length;
 
         that.pointsByArgument = {};
 
@@ -379,9 +391,6 @@ Series.prototype = {
 
         while(i < len) {
             if(that._createPoint(that._getPointData(data[i], options), points, lastPointIndex)) {
-                curPoint = points[lastPointIndex];
-                that._processRange(curPoint, lastPoint, rangeCorrector);
-                lastPoint = curPoint;
                 lastPointIndex++;
             }
             i++;
@@ -403,7 +412,7 @@ Series.prototype = {
         }, this);
     },
 
-    resamplePoints: function(argTranslator, min, max) {
+    resamplePoints: function(canvasLength) {
         var that = this,
             categories,
             sizePoint = that._getPointSize(),
@@ -411,13 +420,18 @@ Series.prototype = {
             discreteMin,
             discreteMax,
             count,
+            argumentAxis = that.getArgumentAxis(),
+            viewport = argumentAxis.getViewport(),
+            min = viewport && viewport.min,
+            max = viewport && viewport.max,
+            argTranslator = argumentAxis.getTranslator(),
             isDiscrete = that.argumentAxisType === DISCRETE || that.valueAxisType === DISCRETE,
             businessRange = argTranslator.getBusinessRange(),
             minMaxDefined = _isDefined(min) && _isDefined(max),
             tickInterval;
 
         if(pointsLength && pointsLength > 1) {
-            count = argTranslator.canvasLength / sizePoint;
+            count = canvasLength / sizePoint;
             count = count <= 1 ? 1 : count;
 
             if(isDiscrete) {
@@ -452,21 +466,21 @@ Series.prototype = {
         }
     },
 
-    draw: function(translators, animationEnabled, hideLayoutLabels, legendCallback) {
+    draw: function(animationEnabled, hideLayoutLabels, legendCallback) {
         var that = this,
             drawComplete;
 
         if(that._oldClearingAnimation && animationEnabled && that._firstDrawing) {
             drawComplete = function() {
-                that._draw(translators, true, hideLayoutLabels);
+                that._draw(true, hideLayoutLabels);
             };
-            that._oldClearingAnimation(translators, drawComplete);
+            that._oldClearingAnimation(drawComplete);
         } else {
-            that._draw(translators, animationEnabled, hideLayoutLabels, legendCallback);
+            that._draw(animationEnabled, hideLayoutLabels, legendCallback);
         }
     },
 
-    _draw: function(translators, animationEnabled, hideLayoutLabels, legendCallback) {
+    _draw: function(animationEnabled, hideLayoutLabels, legendCallback) {
         var that = this,
             points = that._points || [],
             segment = [],
@@ -487,7 +501,6 @@ Series.prototype = {
 
         that._appendInGroup();
 
-        that.translators = translators;
         that._applyVisibleArea();
         that._setGroupsSettings(animationEnabled, firstDrawing);
         that._segments = [];
@@ -500,7 +513,7 @@ Series.prototype = {
         };
 
         _each(points, function(i, p) {
-            p.translate(translators);
+            p.translate();
             if(p.hasValue()) {
                 that._drawPoint({ point: p, groups: groupForPoint, hasAnimation: animationEnabled, firstDrawing: firstDrawing });
                 segment.push(p);
@@ -1098,7 +1111,6 @@ Series.prototype = {
 
             that._rangeData =
             that._renderer =
-            that.translators =
             that._styles =
             that._options =
             that._pointOptions =
@@ -1133,5 +1145,13 @@ Series.prototype = {
     getPointByCoord: function(x, y) {
         var point = this.getNeighborPoint(x, y);
         return point && point.coordsIn(x, y) ? point : null;
+    },
+
+    getValueAxis: function() {
+        return this._valueAxis;
+    },
+
+    getArgumentAxis: function() {
+        return this._argumentAxis;
     }
 };

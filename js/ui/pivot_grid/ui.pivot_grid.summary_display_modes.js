@@ -89,11 +89,14 @@ var commonUtils = require("../../core/utils/common"),
         return prevCell;
     },
 
-    createRunningTotalExpr = function(getValue, allowCrossGroupCalculation, direction) {
-        direction = direction === COLUMN ? ROW : COLUMN;
+    createRunningTotalExpr = function(field) {
+        if(!field.runningTotal) {
+            return;
+        }
+        var direction = field.runningTotal === COLUMN ? ROW : COLUMN;
         return function(e) {
-            var prevCell = allowCrossGroupCalculation ? getPrevCellCrossGroup(e, direction) : e.prev(direction, false),
-                value = getValue(e),
+            var prevCell = field.allowCrossGroupCalculation ? getPrevCellCrossGroup(e, direction) : e.prev(direction, false),
+                value = e.value(true),
                 prevValue = prevCell && prevCell.value(true);
 
             if(isDefined(prevValue) && isDefined(value)) {
@@ -104,10 +107,6 @@ var commonUtils = require("../../core/utils/common"),
 
             return value;
         };
-    },
-
-    defaultExpr = function(e) {
-        return e.value();
     };
 
 function createCache() {
@@ -187,7 +186,7 @@ SummaryCell.prototype = extend(SummaryCell.prototype, {
     * @name dxPivotGridSummaryCell_parent
     * @publicName parent(direction)
     * @param1 direction:string
-    * @return SummaryCell
+    * @return dxPivotGridSummaryCell
     */
     parent: function(direction) {
         var path = this._getPath(direction).slice(),
@@ -226,13 +225,13 @@ SummaryCell.prototype = extend(SummaryCell.prototype, {
     * @name dxPivotGridSummaryCell_grandTotal
     * @publicName grandTotal(direction)
     * @param1 direction:string
-    * @return SummaryCell
+    * @return dxPivotGridSummaryCell
     */
 
     /**
    * @name dxPivotGridSummaryCell_grandTotal
    * @publicName grandTotal()
-   * @return SummaryCell
+   * @return dxPivotGridSummaryCell
    */
     grandTotal: function(direction) {
         var config = {},
@@ -254,7 +253,7 @@ SummaryCell.prototype = extend(SummaryCell.prototype, {
     * @name dxPivotGridSummaryCell_next
     * @publicName next(direction)
     * @param1 direction:string
-    * @return SummaryCell
+    * @return dxPivotGridSummaryCell
     */
 
     /**
@@ -262,7 +261,7 @@ SummaryCell.prototype = extend(SummaryCell.prototype, {
     * @publicName next(direction, allowCrossGroup)
     * @param1 direction:string
     * @param2 allowCrossGroup:bool
-    * @return SummaryCell
+    * @return dxPivotGridSummaryCell
     */
 
     next: function(direction, allowCrossGroup) {
@@ -298,7 +297,7 @@ SummaryCell.prototype = extend(SummaryCell.prototype, {
     * @name dxPivotGridSummaryCell_prev
     * @publicName prev(direction)
     * @param1 direction:string
-    * @return SummaryCell
+    * @return dxPivotGridSummaryCell
     */
 
     /**
@@ -306,7 +305,7 @@ SummaryCell.prototype = extend(SummaryCell.prototype, {
     * @publicName prev(direction, allowCrossGroup)
     * @param1 direction:string
     * @param2 allowCrossGroup:bool
-    * @return SummaryCell
+    * @return dxPivotGridSummaryCell
     */
 
     prev: function(direction, allowCrossGroup) {
@@ -346,7 +345,7 @@ SummaryCell.prototype = extend(SummaryCell.prototype, {
     * @name dxPivotGridSummaryCell_field
     * @publicName field(area)
     * @param1 area:string
-    * @return PivotGridField
+    * @return PivotGridDataSourceOptions_fields
     */
 
     field: function(area) {
@@ -362,7 +361,7 @@ SummaryCell.prototype = extend(SummaryCell.prototype, {
     * @publicName child(direction, fieldValue)
     * @param1 direction:string
     * @param2 fieldValue:number|string
-    * @return SummaryCell
+    * @return dxPivotGridSummaryCell
     */
     child: function(direction, fieldValue) {
         var children = this.children(direction),
@@ -380,9 +379,9 @@ SummaryCell.prototype = extend(SummaryCell.prototype, {
     /**
    * @name dxPivotGridSummaryCell_slice
    * @publicName slice(field, value)
-   * @param1 field:PivotGridField
+   * @param1 field:PivotGridDataSourceOptions_fields
    * @param2 value:number|string
-   * @return SummaryCell
+   * @return dxPivotGridSummaryCell
    */
     slice: function(field, value) {
         var that = this,
@@ -443,13 +442,13 @@ SummaryCell.prototype = extend(SummaryCell.prototype, {
     /**
    * @name dxPivotGridSummaryCell_value
    * @publicName value(field)
-   * @param1 field:PivotGridField
+   * @param1 field:PivotGridDataSourceOptions_fields
    * @return any
    */
     /**
   * @name dxPivotGridSummaryCell_value
   * @publicName value(field, isCalculatedValue)
-  * @param1 field:PivotGridField
+  * @param1 field:PivotGridDataSourceOptions_fields
   * @param2 isCalculatedValue:boolean
   * @return any
   */
@@ -502,12 +501,6 @@ function getExpression(field) {
             pivotGridUtils.setFieldProperty(field, "format", "percent");
         }
     }
-
-    if(field.runningTotal) {
-        expression = expression || defaultExpr;
-        return createRunningTotalExpr(expression, crossGroupCalculation, field.runningTotal);
-    }
-
     return expression;
 }
 
@@ -543,30 +536,62 @@ exports.applyDisplaySummaryMode = function(descriptions, data) {
                 field = valueFields[i];
                 expression = expressions[i] = (expressions[i] === undefined ? getExpression(field) : expressions[i]);
                 isEmptyCell = false;
-
                 if(expression) {
                     expressionArg = new SummaryCell(columnPath, rowPath, data, descriptions, i, fieldsCache);
                     cell = expressionArg.cell();
-
                     value = cell[i] = expression(expressionArg);
                     isEmptyCell = value === null || value === undefined;
                 }
-
                 if(columnItem.isEmpty[i] === undefined) {
                     columnItem.isEmpty[i] = true;
                 }
-
                 if(!isEmptyCell) {
                     columnItem.isEmpty[i] = false;
                     rowItem.isEmpty = false;
                 }
-
             }
         }, false);
     }, false);
 
     data.isEmptyGrandTotalRow = rowElements[0].isEmpty;
     data.isEmptyGrandTotalColumn = columnElements[0].isEmpty;
+};
+
+exports.applyRunningTotal = function(descriptions, data) {
+    var expressions = [],
+        columnElements = [{ index: data.grandTotalColumnIndex, children: data.columns }],
+        rowElements = [{ index: data.grandTotalRowIndex, children: data.rows }],
+        valueFields = descriptions.values,
+        fieldsCache = createCache();
+
+    data.values = data.values || [];
+
+    foreachTree(rowElements, function(rowPath) {
+        var rowItem = rowPath[0];
+        data.values[rowItem.index] = data.values[rowItem.index] || [];
+
+        foreachTree(columnElements, function(columnPath) {
+            var columnItem = columnPath[0],
+                expression,
+                expressionArg,
+                cell,
+                field,
+                value;
+
+            data.values[rowItem.index][columnItem.index] = data.values[rowItem.index][columnItem.index] || [];
+
+            for(var i = 0; i < valueFields.length; i++) {
+                field = valueFields[i];
+                expression = expressions[i] = (expressions[i] === undefined ? createRunningTotalExpr(field) : expressions[i]);
+
+                if(expression) {
+                    expressionArg = new SummaryCell(columnPath, rowPath, data, descriptions, i, fieldsCache);
+                    cell = expressionArg.cell();
+                    value = cell[i] = expression(expressionArg);
+                }
+            }
+        }, false);
+    }, false);
 };
 
 exports.createMockSummaryCell = function(descriptions, fields, indices) {

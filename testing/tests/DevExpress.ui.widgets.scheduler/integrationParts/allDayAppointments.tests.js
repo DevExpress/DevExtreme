@@ -655,6 +655,35 @@ QUnit.test("Many grouped allDay dropDown appts should be grouped correctly (T489
     assert.equal(secondDdAppointments.length, 3, "There are 3 drop down appts in 2d group");
 });
 
+QUnit.test("DropDown appointment should be removed correctly when needed", function(assert) {
+    this.createInstance({
+        currentDate: new Date(2015, 4, 25),
+        views: ["week"],
+        currentView: "week"
+    });
+
+    var items = [
+        { text: '1', startDate: new Date(2015, 4, 25), endDate: new Date(2015, 4, 25, 1), allDay: true },
+        { text: '2', startDate: new Date(2015, 4, 25), endDate: new Date(2015, 4, 25, 1), allDay: true },
+        { text: '3', startDate: new Date(2015, 4, 25), endDate: new Date(2015, 4, 25, 1), allDay: true },
+        { text: '4', startDate: new Date(2015, 4, 25), endDate: new Date(2015, 4, 25, 1), allDay: true },
+        { text: '5', startDate: new Date(2015, 4, 25), endDate: new Date(2015, 4, 25, 1), allDay: true },
+        { text: '6', startDate: new Date(2015, 4, 25), endDate: new Date(2015, 4, 25, 1), allDay: true },
+        { text: '7', startDate: new Date(2015, 4, 25), endDate: new Date(2015, 4, 25, 1), allDay: true },
+        { text: '8', startDate: new Date(2015, 4, 25), endDate: new Date(2015, 4, 25, 1), allDay: true }
+    ];
+
+    this.instance.option("dataSource", items);
+
+    var $dropDown = this.instance.element().find(".dx-scheduler-dropdown-appointments");
+    assert.equal($dropDown.length, 1, "Dropdown appointment was rendered");
+
+    this.instance.deleteAppointment(items[7]);
+
+    $dropDown = this.instance.element().find(".dx-scheduler-dropdown-appointments");
+    assert.equal($dropDown.length, 0, "Dropdown appointment was removed");
+});
+
 QUnit.test("If there are not groups, '.dx-scrollable-content' should be a resizable area for all-day appointment", function(assert) {
     this.createInstance({
         currentDate: new Date(2015, 6, 10),
@@ -1075,6 +1104,26 @@ QUnit.test("Multi-day appointment parts should have allDay class", function(asse
     assert.ok($appointment.hasClass("dx-scheduler-all-day-appointment"), "Appointment part has allDay class");
 });
 
+QUnit.test("Multi-day appointment parts should have correct reduced class", function(assert) {
+    var appointment = { startDate: new Date(2015, 1, 4, 0), endDate: new Date(2015, 1, 7, 0), text: "long appointment" };
+
+    this.createInstance({
+        currentDate: new Date(2015, 1, 5),
+        dataSource: [appointment],
+        currentView: "day"
+    });
+
+    var $appointment = this.instance.element().find(".dx-scheduler-all-day-appointments .dx-scheduler-appointment").eq(0);
+
+    assert.ok($appointment.hasClass("dx-scheduler-appointment-head"), "Appointment part has reduced class");
+
+    this.instance.option("currentDate", new Date(2015, 1, 6));
+
+    $appointment = this.instance.element().find(".dx-scheduler-all-day-appointments .dx-scheduler-appointment").eq(0);
+
+    assert.notOk($appointment.hasClass("dx-scheduler-appointment-head"), "Appointment part hasn't reduced class. It is tail");
+});
+
 QUnit.test("AllDay recurrent appointment should be rendered coorectly after changing currentDate", function(assert) {
     var appointment = {
         text: "Appointment",
@@ -1196,7 +1245,7 @@ QUnit.test("All-day & common appointments should have a right sorting", function
     assert.equal($appointments.eq(3).data("dxItemData").text, "Short 4", "Data is right");
 
     assert.roughEqual(translator.locate($simpleAppointment).left, 100, 1.001, "Appointment position is OK");
-    assert.roughEqual($simpleAppointment.outerWidth(), cellWidth - 15, 1.001, "Appointment size is OK");
+    assert.roughEqual($simpleAppointment.outerWidth(), cellWidth - 25, 1.001, "Appointment size is OK");
 });
 
 QUnit.test("All-day appointments should have a right sorting", function(assert) {

@@ -8,22 +8,6 @@ var $ = require("../../core/renderer"),
 
 exports.DataController = dataControllerModule.controllers.data.inherit((function() {
     return {
-        _getSpecificDataSourceOption: function() {
-            var dataSource = this.option("dataSource");
-
-            if(Array.isArray(dataSource)) {
-                return {
-                    store: {
-                        type: "array",
-                        data: dataSource,
-                        key: this.option("keyExpr")
-                    }
-                };
-            }
-
-            return dataSource;
-        },
-
         _getDataSourceAdapter: function() {
             return dataSourceAdapterProvider;
         },
@@ -83,7 +67,7 @@ exports.DataController = dataControllerModule.controllers.data.inherit((function
         },
 
         publicMethods: function() {
-            return this.callBase().concat(["expandRow", "collapseRow", "isRowExpanded", "getRootNode"]);
+            return this.callBase().concat(["expandRow", "collapseRow", "isRowExpanded", "getRootNode", "getNodeByKey"]);
         },
 
         changeRowExpand: function(key) {
@@ -120,6 +104,7 @@ exports.DataController = dataControllerModule.controllers.data.inherit((function
          * @name dxTreeListMethods_expandRow
          * @publicName expandRow(key)
          * @param1 key:any
+         * @return Promise
          */
         expandRow: function(key) {
             if(!this.isRowExpanded(key)) {
@@ -132,6 +117,7 @@ exports.DataController = dataControllerModule.controllers.data.inherit((function
          * @name dxTreeListMethods_collapseRow
          * @publicName collapseRow(key)
          * @param1 key:any
+         * @return Promise
          */
         collapseRow: function(key) {
             if(this.isRowExpanded(key)) {
@@ -152,7 +138,6 @@ exports.DataController = dataControllerModule.controllers.data.inherit((function
         optionChanged: function(args) {
             switch(args.name) {
                 case "rootValue":
-                case "keyExpr":
                 case "parentIdExpr":
                 case "itemsExpr":
                 case "filterMode":
@@ -170,9 +155,26 @@ exports.DataController = dataControllerModule.controllers.data.inherit((function
                     this._dataSource && !this._dataSource._isNodesInitializing && this._dataSource.load();
                     args.handled = true;
                     break;
+                case "maxFilterLengthInRequest":
+                    args.handled = true;
+                    break;
                 default:
                     this.callBase(args);
             }
+        },
+
+        /**
+         * @name dxTreeListMethods_getNodeByKey
+         * @publicName getNodeByKey(key)
+         * @param1 key:object|string|number
+         * @return dxTreeListNode
+         */
+        getNodeByKey: function(key) {
+            if(!this._dataSource) {
+                return;
+            }
+
+            return this._dataSource.getNodeByKey(key);
         }
     };
 })());
@@ -252,7 +254,8 @@ treeListCore.registerModule("data", {
             * @extends Action
             * @action
             */
-            onNodesInitialized: null
+            onNodesInitialized: null,
+            maxFilterLengthInRequest: 1500
         });
     },
     controllers: {

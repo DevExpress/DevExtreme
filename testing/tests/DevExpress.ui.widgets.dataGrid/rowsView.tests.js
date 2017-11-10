@@ -868,6 +868,90 @@ QUnit.test("Highlight searchText for lookup column (T449327)", function(assert) 
     assert.strictEqual(getNormalizeMarkup($cells.eq(0)), "Lookup<span class=" + searchTextClass + ">1</span>", "highlight text in cell");
 });
 
+//T534059
+QUnit.test("Highlighting search text for boolean column with set to 'trueText' option", function(assert) {
+    //arrange
+    var columns = [{
+            allowFiltering: true,
+            dataType: "boolean",
+            trueText: "Yes",
+            parseValue: function(text) {
+                if(text === this.trueText) {
+                    return true;
+                } else if(text === this.falseText) {
+                    return false;
+                }
+            },
+            customizeText: function(e) {
+                if(e.value === true) {
+                    return this.trueText || "true";
+                } else {
+                    return e.valueText || "";
+                }
+            }
+        }],
+        rowsView = this.createRowsView([
+            { data: { field: true }, values: [true], rowType: 'data', dataIndex: 0 }
+        ], null, columns),
+        $testElement = $("#container"),
+        searchTextClass = "dx-datagrid-search-text",
+        $cells;
+
+    this.options.searchPanel = {
+        highlightSearchText: true,
+        text: "Yes"
+    };
+
+    //act
+    rowsView.render($testElement);
+
+    //assert
+    $cells = $testElement.find(".dx-data-row").find("td");
+    assert.strictEqual(getNormalizeMarkup($cells.eq(0)), "<span class=" + searchTextClass + ">Yes</span>", "highlight text in cell");
+});
+
+//T534059
+QUnit.test("Highlighting search text for boolean column with set to 'falseText' option", function(assert) {
+    //arrange
+    var columns = [{
+            allowFiltering: true,
+            dataType: "boolean",
+            falseText: "No",
+            parseValue: function(text) {
+                if(text === this.trueText) {
+                    return true;
+                } else if(text === this.falseText) {
+                    return false;
+                }
+            },
+            customizeText: function(e) {
+                if(e.value === false) {
+                    return this.falseText || "false";
+                } else {
+                    return e.valueText || "";
+                }
+            }
+        }],
+        rowsView = this.createRowsView([
+            { data: { field: false }, values: [false], rowType: 'data', dataIndex: 0 }
+        ], null, columns),
+        $testElement = $("#container"),
+        searchTextClass = "dx-datagrid-search-text",
+        $cells;
+
+    this.options.searchPanel = {
+        highlightSearchText: true,
+        text: "No"
+    };
+
+    //act
+    rowsView.render($testElement);
+
+    //assert
+    $cells = $testElement.find(".dx-data-row").find("td");
+    assert.strictEqual(getNormalizeMarkup($cells.eq(0)), "<span class=" + searchTextClass + ">No</span>", "highlight text in cell");
+});
+
 QUnit.test('All rows are not isSelected by default', function(assert) {
     //arrange
     var rowsView = this.createRowsView(this.items),
@@ -1643,6 +1727,10 @@ QUnit.test('Selection on hold should not work when showCheckBoxesMode is always'
 
 //T355686
 QUnit.test('ContextMenu on hold when touch and when assign items in onContextMenuPreparing', function(assert) {
+    if(devices.real().deviceType === "desktop" && browser.msie && parseInt(browser.version) <= 10) {
+        assert.ok(true);
+        return;
+    }
     //arrange
     var rowInfos = this.items,
         dataController = new MockDataController({ items: rowInfos }),
@@ -1838,6 +1926,29 @@ QUnit.test('Free space row with a command column', function(assert) {
 
     //assert
     assert.ok(rowsView._getFreeSpaceRowElements().find("td").hasClass("dx-datagrid-group-space"), 'has class dx-datagrid-group-space');
+});
+
+QUnit.test('Free space row with a command column and cssClass', function(assert) {
+    //arrange
+    var dataController = new MockDataController({ items: this.items, virtualItemsCount: { begin: 20, end: 0 } }),
+        rowsView = this.createRowsView(this.items, dataController, [{ command: "expand", cssClass: "command-cell" }, { cssClass: "simple-cell" }, {}, {}]),
+        $testElement = $('#container');
+
+    //act
+    rowsView.render($testElement);
+    rowsView.height(400);
+    rowsView.resize();
+
+    //assert
+    var $cells = $testElement.find("table").last().find(".dx-freespace-row td"),
+        $commandCell = $cells.eq(0),
+        $simpleCellWithCssClass = $cells.eq(1),
+        $simpleCell = $cells.eq(2);
+
+    assert.ok($commandCell.hasClass("dx-datagrid-group-space"), "has class dx-datagrid-group-space");
+    assert.ok($commandCell.hasClass("command-cell"), "has custom css class");
+    assert.ok($simpleCellWithCssClass.hasClass("simple-cell"), "has custom css class");
+    assert.notOk($simpleCell.hasClass("simple-cell"), "doesn't have a custom css class");
 });
 
 //B233350
@@ -3765,6 +3876,21 @@ QUnit.test("Calculate widths when there is only group rows", function(assert) {
     assert.deepEqual(rowsView.getColumnWidths(), [30, 100, 100], "calculate widths");
 });
 
+QUnit.test("GetRowsElements method is called once when opacity is applied to rows", function(assert) {
+    //arrange
+    var rowsView = this.createRowsView(this.items);
+
+    rowsView.render($("#container"));
+
+    sinon.spy(rowsView, "_getRowElements");
+
+    //act
+    rowsView.setRowsOpacity(0, 0.01);
+
+    //assert
+    assert.ok(rowsView._getRowElements.calledOnce, "GetRowsElements method should called once");
+});
+
 QUnit.module('Rows view with real dataController and columnController', {
     beforeEach: function() {
         this.items = [
@@ -4852,6 +4978,37 @@ QUnit.test("Show master detail with rowTemplate", function(assert) {
     assert.equal($rowElements.eq(1).find(".test-detail").length, 1, "master detail template is rendered");
 });
 
+QUnit.test('Do not hide noData block placed inside the masterDetail template', function(assert) {
+    //arrange
+    var container = $('#container'),
+        noDataElements;
+
+    this.options.dataSource.store = [this.items[0]];
+    this.options.masterDetail = {
+        enabled: true,
+        template: function($container, options) {
+            $('<div>').addClass('dx-datagrid-nodata').appendTo($container);
+        }
+    };
+
+    //act
+    this.setupDataGridModules();
+    this.rowsView.render(container);
+    this.rowsView.resize();
+    this.expandRow(this.items[0]);
+
+    noDataElements = container.find('.dx-datagrid-nodata');
+
+    //assert
+    assert.equal(noDataElements.length, 2, "two no data containers were rendered");
+
+    //act
+    this.rowsView.resize();
+    noDataElements = container.find('.dx-datagrid-nodata');
+    assert.notOk(noDataElements.eq(0).hasClass('dx-hidden'), "block inside masterDetail is not hidden");
+    assert.ok(noDataElements.eq(1).hasClass('dx-hidden'), "datagrid's nodata block is hidden");
+});
+
 //T436424
 QUnit.test("Show load panel after replace dataSource when scrolling mode is 'virtual'", function(assert) {
     //arrange
@@ -5514,7 +5671,7 @@ QUnit.test('Render rows at end when infinite scrolling', function(assert) {
 
     assert.equal(options.viewportSize, Math.round(90 / lastRowHeight));
     assert.ok(rowHeight > 0);
-    assert.ok(rowHeight > lastRowHeight, 'row height updated after append'); //T129182
+    assert.ok(rowHeight >= lastRowHeight, 'row height after append'); //T129182
 
     assert.equal($bottomLoadPanel.length, 1, 'bottom load panel exists');
     assert.equal(content.length, 1);
@@ -5607,8 +5764,7 @@ QUnit.test('rowHeight/viewportSize calculation during Render rows with viewport'
     var content = testElement.find('.dx-scrollable-content').children();
 
     assert.equal(options.viewportSize, 2);
-
-    assert.ok(content.children().height() - rowHeight * 3 <= 1);
+    assert.ok((content.find("tbody")[0].offsetHeight - rowHeight * 3) <= 1);
 });
 
 QUnit.test('Update rowsView on changed', function(assert) {
@@ -6228,17 +6384,16 @@ QUnit.test("Get width of horizontal scrollbar when both scrollbars are shown", f
             { width: 200 },
             { width: 200 },
             { width: 200 }
-        ]),
-        device = devices.real();
+        ]);
 
     //act
     rowsView.render($('#container').css({ width: 100, height: 100 }));
 
     //arrange
-    if(device.ios || device.win) {
-        assert.strictEqual(rowsView.getScrollbarWidth(), 0, 'scrollbar width is 0 for mobile devices');
-    } else {
+    if(devices.real().deviceType === "desktop") {
         assert.ok(rowsView.getScrollbarWidth() > 0, 'scrollbar width more 0 for desktop');
+    } else {
+        assert.strictEqual(rowsView.getScrollbarWidth(), 0, 'scrollbar width is 0 for mobile devices');
     }
 });
 
@@ -6540,11 +6695,12 @@ QUnit.test('loadPanel options', function(assert) {
     assert.deepEqual(rowsView._loadPanel.option('container'), rowsView.element());
 });
 
-QUnit.test('Load Panel is not visible when Bottom Load Panel is visible', function(assert) {
+QUnit.test('Load Panel is not visible when Bottom Load Panel is visible and pageIndex is more then 0', function(assert) {
     //arrange
     var container = $('#container'),
         rows = [{ values: [1], data: { field: 1 } }],
         dataController = new MockDataController({
+            pageIndex: 1,
             items: rows,
             hasKnownLastPage: false,
             isLoaded: true
@@ -6567,6 +6723,37 @@ QUnit.test('Load Panel is not visible when Bottom Load Panel is visible', functi
     //assert
     assert.strictEqual(bottomLoadPanel.length, 1);
     assert.ok(!rowsView._loadPanel.option('visible'));
+});
+
+//T536324
+QUnit.test('Load Panel is visible when Bottom Load Panel is visible and pageIndex is 0', function(assert) {
+    //arrange
+    var container = $('#container'),
+        rows = [{ values: [1], data: { field: 1 } }],
+        dataController = new MockDataController({
+            pageIndex: 0,
+            items: rows,
+            hasKnownLastPage: false,
+            isLoaded: true
+        }),
+        rowsView = this.createRowsView(rows, dataController),
+        bottomLoadPanel;
+
+    this.options.loadPanel = {
+        enabled: true
+    };
+    this.options.scrolling = {
+        mode: 'infinite'
+    };
+    rowsView.render(container);
+
+    //act
+    rowsView.setLoading(true);
+    bottomLoadPanel = container.find(".dx-datagrid-bottom-load-panel");
+
+    //assert
+    assert.strictEqual(bottomLoadPanel.length, 1, "bottom load panel is rendered");
+    assert.ok(rowsView._loadPanel.option('visible'), "load panel is visible");
 });
 
 QUnit.test('Load Panel is visible and bottom load panel is not visible when data is not loaded', function(assert) {

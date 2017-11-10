@@ -17,12 +17,10 @@ require("generic_light.css!");
 require("ui/tree_list/ui.tree_list");
 
 var $ = require("jquery"),
-    browser = require("core/utils/browser"),
     fx = require("animation/fx"),
     treeListMocks = require("../../helpers/treeListMocks.js"),
     setupTreeListModules = treeListMocks.setupTreeListModules;
 
-browser.webkit = false;
 fx.off = true;
 
 var setupModule = function() {
@@ -44,14 +42,17 @@ var setupModule = function() {
     };
 
     that.setupTreeList = function() {
-        setupTreeListModules(that, ["data", "columns", "rows", "selection", "editorFactory", "columnHeaders", "filterRow"], {
+        setupTreeListModules(that, ["data", "columns", "rows", "selection", "editorFactory", "columnHeaders", "filterRow", "sorting"], {
             initViews: true
         });
     };
+
+    this.clock = sinon.useFakeTimers();
 };
 
 var teardownModule = function() {
     this.dispose();
+    this.clock.restore();
 };
 
 QUnit.module("Selection", { beforeEach: setupModule, afterEach: teardownModule });
@@ -107,8 +108,71 @@ QUnit.test("Select all rows", function(assert) {
     this.selectAll();
 
     //assert
-    assert.deepEqual(this.getSelectedRowKeys(), [1, 2]);
-    assert.deepEqual(this.option("selectedRowKeys"), [1, 2]);
+    assert.deepEqual(this.getController("selection").isSelectAll(), true, "select all state");
+    assert.deepEqual(this.getSelectedRowKeys(), [1], "only visible rows are selected");
+    assert.deepEqual(this.option("selectedRowKeys"), [1], "only visible rows are selected");
+
+    //act
+    this.expandRow(1);
+
+    //assert
+    assert.deepEqual(this.getController("selection").isSelectAll(), undefined, "select all state is changed after expand");
+});
+
+QUnit.test("Deselect all rows", function(assert) {
+   //arrange
+    var $testElement = $('#treeList');
+
+    this.options.selectedRowKeys = [1, 2];
+
+    this.setupTreeList();
+    this.rowsView.render($testElement);
+
+    //act
+    this.deselectAll();
+
+    //assert
+    assert.deepEqual(this.getController("selection").isSelectAll(), false, "select all state");
+    assert.deepEqual(this.getSelectedRowKeys(), [2], "visible rows are deselected");
+    assert.deepEqual(this.option("selectedRowKeys"), [2], "visible rows are deselected");
+});
+
+QUnit.test("Select all rows if autoExpandAll is true", function(assert) {
+   //arrange
+    var $testElement = $('#treeList');
+
+    this.options.autoExpandAll = true;
+
+    this.setupTreeList();
+    this.rowsView.render($testElement);
+
+    //act
+    this.selectAll();
+
+    //assert
+    assert.deepEqual(this.getSelectedRowKeys(), [1, 2], "all visible rows are selected");
+    assert.deepEqual(this.option("selectedRowKeys"), [1, 2], "all visible rows are selected");
+});
+
+QUnit.test("Select all rows if filter is applied", function(assert) {
+   //arrange
+    var $testElement = $('#treeList');
+
+    this.options.dataSource.push({ id: 3, parentId: 1, field1: 'test3', field2: 3, field3: new Date(2002, 1, 3) });
+
+    this.options.expandNodesOnFiltering = true;
+    this.options.columns[0].filterValue = "test2";
+
+    this.setupTreeList();
+    this.rowsView.render($testElement);
+
+    //act
+    this.selectAll();
+
+    //assert
+    assert.deepEqual(this.getController("selection").isSelectAll(), true, "select all state");
+    assert.deepEqual(this.getSelectedRowKeys(), [1, 2], "all visible rows are selected");
+    assert.deepEqual(this.option("selectedRowKeys"), [1, 2], "all visible rows are selected");
 });
 
 QUnit.test("Checkboxes should be rendered in right place", function(assert) {
@@ -124,6 +188,7 @@ QUnit.test("Checkboxes should be rendered in right place", function(assert) {
 
     //assert
     assert.equal($gridCell.find(".dx-select-checkbox").length, 1, "Select checkbox was rendered in right place");
+    assert.ok($gridCell.find(".dx-select-checkbox").parent().hasClass("dx-treelist-icon-container"), "Checkbox inside icon container");
 });
 
 QUnit.test("Checkboxes should not be rendered if selection is not multiple", function(assert) {
@@ -142,7 +207,7 @@ QUnit.test("Checkboxes should not be rendered if selection is not multiple", fun
 });
 
 QUnit.test("Click on select checkbox should works correctly", function(assert) {
-   //arrange
+    //arrange
     var $testElement = $('#treeList');
 
     this.options.selection = { mode: "multiple", showCheckBoxesMode: "always" };
@@ -176,7 +241,33 @@ QUnit.test("Click on selectAll checkbox should works correctly", function(assert
 
     //assert
     assert.equal($checkbox.dxCheckBox("instance").option("value"), true, "SelectAll checkbox value is OK");
-    assert.deepEqual(this.option("selectedRowKeys"), [1, 2], "Right rows are selected");
+    assert.deepEqual(this.option("selectedRowKeys"), [1], "Right rows are selected");
+});
+
+QUnit.test("Click on selectAll checkbox should works correctly when sorting is enabled", function(assert) {
+   //arrange
+    var $testElement = $('#treeList'),
+        clock = sinon.useFakeTimers();
+
+    this.options.showColumnHeaders = true;
+    this.options.sorting = {
+        mode: "single"
+    };
+    this.options.columns[0].allowSorting = true;
+    this.options.selection = { mode: 'multiple', showCheckBoxesMode: 'always', allowSelectAll: true };
+    this.setupTreeList();
+    this.columnHeadersView.render($testElement);
+    this.rowsView.render($testElement);
+
+    //act
+    var $checkbox = $('.dx-header-row').find('.dx-checkbox');
+    $checkbox.trigger("dxclick");
+    clock.tick();
+
+    //assert
+    assert.equal($checkbox.dxCheckBox("instance").option("value"), true, "SelectAll checkbox value is OK");
+    assert.equal($testElement.find("tbody > tr > td").first().find(".dx-sort-up, .dx-sort-down").length, 0, "sort not applied");
+    clock.restore();
 });
 
 QUnit.test("Click on selectAll checkbox should check row checkboxes", function(assert) {
@@ -298,4 +389,28 @@ QUnit.test("Not select row when click by expanding icon", function(assert) {
     //assert
     assert.equal(this.option("selectedRowKeys"), undefined, "checking the 'selectedRowKeys' option - should be empty");
     assert.notOk(this.dataController.items()[0].isSelected, "row isn't selected");
+});
+
+QUnit.testInActiveWindow("Focused border is not displayed around expandable cell when row is selected", function(assert) {
+    //arrange
+    var $testElement = $('#treeList');
+
+    this.element = function() {
+        return $testElement;
+    };
+
+    this.options.selection = { mode: "multiple", showCheckBoxesMode: "always" };
+
+    this.setupTreeList();
+    this.rowsView.render($testElement);
+
+    //act
+    var $expandableCell = $testElement.find(".dx-treelist-cell-expandable").first(),
+        $selectCheckbox = $expandableCell.find(".dx-select-checkbox").first();
+
+    $selectCheckbox.focus();
+    this.clock.tick();
+
+    //assert
+    assert.ok(!$expandableCell.hasClass("dx-focused"));
 });

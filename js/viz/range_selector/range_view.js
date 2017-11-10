@@ -1,27 +1,32 @@
 "use strict";
-
-var translator2DModule = require("../translators/translator2d");
-// This method exists only to wrap "top-height" ugliness
-function createTranslator(valueRange, screenRange) {
-    return new translator2DModule.Translator2D(valueRange, { top: screenRange[0], height: screenRange[1] });
-}
-
 // TODO: Move it inside the "SeriesDataSource"
-function drawSeriesView(root, seriesDataSource, translator, screenRange, isAnimationEnabled) {
+function drawSeriesView(root, seriesDataSource, translator, canvas, isAnimationEnabled) {
     var seriesList = seriesDataSource.getSeries(),
         series,
         i,
         ii = seriesList.length,
-        translators = {
-            x: translator,
-            // TODO: There should be something like "seriesDataSource.getValueRange()"
-            y: createTranslator(seriesDataSource.getBoundRange().val, screenRange)
-        };
-    seriesDataSource.adjustSeriesDimensions(translators);
+        valueAxis;
+
+    seriesDataSource.adjustSeriesDimensions();
+
+    if(!seriesList.length) {
+        return;
+    }
+
+    valueAxis = seriesList[0].getValueAxis();
+    valueAxis.setBusinessRange(seriesDataSource.getBoundRange().val);
+
+    //TODO looks wrong
+    valueAxis.updateCanvas({
+        top: canvas.top,
+        bottom: 0,
+        height: canvas.height + canvas.top
+    });
+
     for(i = 0; i < ii; ++i) {
         series = seriesList[i];
         series._extGroups.seriesGroup = series._extGroups.labelsGroup = root;
-        series.draw(translators, isAnimationEnabled);
+        series.draw(isAnimationEnabled);
     }
 }
 
@@ -41,14 +46,16 @@ RangeView.prototype = {
     update: function(backgroundOption, backgroundTheme, canvas, isCompactMode, isAnimationEnabled, seriesDataSource) {
         var renderer = this._params.renderer,
             root = this._params.root,
+            canvasWidth = canvas.width - canvas.left,
             seriesGroup;
+
         backgroundOption = backgroundOption || {};
         root.clear();
-        this._clipRect.attr({ x: canvas.left, y: canvas.top, width: canvas.width, height: canvas.height });
+        this._clipRect.attr({ x: canvas.left, y: canvas.top, width: canvasWidth, height: canvas.height });
         if(!isCompactMode) {
             if(merge(backgroundOption.visible, backgroundTheme.visible)) {
                 if(backgroundOption.color) {
-                    renderer.rect(canvas.left, canvas.top, canvas.width + 1, canvas.height).attr({
+                    renderer.rect(canvas.left, canvas.top, canvasWidth + 1, canvas.height).attr({
                         // Seems that "backgroundTheme.color" is never used and so can be removed both from here and from themes
                         // TODO: Check it (special attention to WidgetsGallery) and remove the option
                         fill: merge(backgroundOption.color, backgroundTheme.color),
@@ -56,14 +63,14 @@ RangeView.prototype = {
                     }).append(root);
                 }
                 if(backgroundOption.image && backgroundOption.image.url) {
-                    renderer.image(canvas.left, canvas.top, canvas.width + 1, canvas.height,
+                    renderer.image(canvas.left, canvas.top, canvasWidth + 1, canvas.height,
                         backgroundOption.image.url,
                         merge(backgroundOption.image.location, backgroundTheme.image.location)).append(root);
                 }
             }
             if(seriesDataSource && seriesDataSource.isShowChart()) {
                 seriesGroup = renderer.g().attr({ "class": "dxrs-series-group" }).append(root);
-                drawSeriesView(seriesGroup, seriesDataSource, this._params.translator, [canvas.top, canvas.top + canvas.height], isAnimationEnabled);
+                drawSeriesView(seriesGroup, seriesDataSource, this._params.translator, canvas, isAnimationEnabled);
             }
         }
     }

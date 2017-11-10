@@ -109,7 +109,7 @@ module.exports = errorUtils(errors.ERROR_MESSAGES, {
     */
     W2106: "The labels of the \"{0}\" axis were hidden due to the container size",
     /**
-    * @name Errors and Warnings_w2106
+    * @name Errors and Warnings_w2107
     * @publicName W2107
     */
     W2107: "The export menu was hidden due to the container size",

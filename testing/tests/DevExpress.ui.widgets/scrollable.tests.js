@@ -1,6 +1,7 @@
 "use strict";
 
 var $ = require("jquery"),
+    browser = require("core/utils/browser"),
     noop = require("core/utils/common").noop,
     support = require("core/utils/support"),
     translator = require("animation/translator"),
@@ -81,6 +82,9 @@ QUnit.testStart(function() {
             <div class="content1" style="height: 100px; width: 100px;"></div>\
             <div class="content2"></div>\
         </div>\
+        <div id="scrollableVary" style="height: auto">\
+            <div class="content3" style="height: 100px; width: 100px;"></div>\
+        </div>\
         <div id="scrollableNeighbour"></div>\
         <div id="scrollable1" style="height: 100px;">\
             <div id="scrollable2" style="height: 50px;">\
@@ -109,6 +113,15 @@ QUnit.test("scrollable render", function(assert) {
     assert.ok($content.children().eq(1).hasClass("content2"));
 });
 
+QUnit.test("scrollable - root element should has 'dx-scrollable-customizable-scrollbars' class (only for non-Mac desktops)", function(assert) {
+    var scrollable = new Scrollable($("#scrollable"));
+
+    if(devices.real().deviceType !== "desktop" || navigator.platform.indexOf('Mac') > -1 && browser.webkit) {
+        assert.notOk(scrollable.element().hasClass("dx-scrollable-customizable-scrollbars"), "root element hasn't 'dx-scrollable-customizable-scrollbars' class");
+    } else {
+        assert.ok(scrollable.element().hasClass("dx-scrollable-customizable-scrollbars"), "root element has 'dx-scrollable-customizable-scrollbars' class");
+    }
+});
 
 QUnit.module("rtl", moduleConfig);
 
@@ -127,6 +140,21 @@ QUnit.test("rtlEnabled scrolls to very right position", function(assert) {
     var $scrollable = $("#scrollable").dxScrollable({
         direction: "horizontal",
         rtlEnabled: true,
+        useNative: false
+    });
+
+    var scrollable = $scrollable.dxScrollable("instance");
+    var veryRightPosition = scrollable.content().width() - $scrollable.width();
+
+    assert.equal(scrollable.scrollLeft(), veryRightPosition, "scrolled to very right position");
+});
+
+QUnit.test("rtlEnabled scrolls to very right position after changing the size of the scrollable (T544872)", function(assert) {
+    var $scrollable = $("#scrollableVary").dxScrollable({
+        direction: "horizontal",
+        rtlEnabled: true,
+        width: 50,
+        height: 50,
         useNative: false
     });
 
@@ -529,7 +557,7 @@ QUnit.test("inertia calc distance", function(assert) {
         useNative: false,
         onEnd: function() {
             var location = getScrollOffset($scrollable);
-            assert.equal(location.top, Math.round(distance), "distance was calculated correctly");
+            assert.equal(Math.round(location.top), Math.round(distance), "distance was calculated correctly");
         }
     });
 
@@ -557,7 +585,7 @@ QUnit.test("no inertia when gesture end is deferred", function(assert) {
         useNative: false,
         onEnd: function() {
             var location = getScrollOffset($scrollable);
-            assert.equal(location.top, Math.round(moveDistance), "no inertia");
+            assert.equal(Math.round(location.top), Math.round(moveDistance), "no inertia");
         }
     });
 
@@ -608,7 +636,7 @@ QUnit.test("stop inertia on click", function(assert) {
             useNative: false,
             onStop: function() {
                 var location = getScrollOffset($scrollable);
-                assert.notEqual(location.top, Math.round(distance), "scroll was stopped");
+                assert.notEqual(Math.round(location.top), Math.round(distance), "scroll was stopped");
             }
         }),
         mouse = pointerMock($scrollable.find("." + SCROLLABLE_CONTENT_CLASS)).start();
@@ -838,7 +866,7 @@ QUnit.test("inertia calc distance out of bounds", function(assert) {
 
         onBounce: function() {
             var location = getScrollOffset($scrollable);
-            assert.ok(location.top < Math.round(distance), "distance was calculated wrong");
+            assert.ok(Math.round(location.top) < Math.round(distance), "distance was calculated wrong");
         },
 
         onEnd: function() {
@@ -1093,7 +1121,7 @@ QUnit.test("horizontal inertia calc distance", function(assert) {
         direction: "horizontal",
         onEnd: function() {
             var location = getScrollOffset($scrollable);
-            assert.equal(location.left, Math.round(distance), "distance was calculated correctly");
+            assert.equal(Math.round(location.left), Math.round(distance), "distance was calculated correctly");
         }
     });
 
@@ -1793,7 +1821,7 @@ QUnit.test("update", function(assert) {
         useNative: false,
         onEnd: function() {
             var location = getScrollOffset($scrollable);
-            assert.equal(location.top, Math.round(distance), "distance was calculated correctly");
+            assert.equal(Math.round(location.top), Math.round(distance), "distance was calculated correctly");
         }
     });
 
@@ -1821,7 +1849,7 @@ QUnit.test("scroll event should be triggered if scroll position changed", functi
 
     return new Promise(function(resolve) {
         $scrollable.dxScrollable("option", "onScroll", function() {
-            assert.equal(++called, 1, "scroll was fired on height change");
+            assert.ok(++called <= 2, "scroll was fired on height change");
             resolve();
         });
         $content.height(50);
@@ -2699,6 +2727,14 @@ QUnit.test("initViewport disables panning for non-native scrolling", function(as
 });
 
 QUnit.test("dxpointermove is prevented when scrolling is disabled (Q574378)", function(assert) {
+    var realDevice = devices.real(),
+        isWin10 = realDevice.platform === "win" && realDevice.version[0] === 10;
+
+    if(isWin10) {
+        assert.ok(true, "test is not relevant for win10 devices");
+        return;
+    }
+
     var $scrollable = $("#scrollable");
 
     $scrollable
@@ -2717,7 +2753,7 @@ QUnit.test("dxpointermove is prevented when scrolling is disabled (Q574378)", fu
         initMobileViewport({ allowZoom: true, allowPan: false });
 
         $(document).on("dxpointermove.initViewportIntegration", function(e) {
-            assert.equal(e.isDefaultPrevented(), true, "dxpointermove was prevented");
+            assert.equal(e.isDefaultPrevented(), true, "dxpointermove was prevented on non win10 devices");
         });
 
         pointerMock($scrollable.find("." + SCROLLABLE_CONTENT_CLASS))
@@ -3001,8 +3037,12 @@ QUnit.test("scroll by thumb", function(assert) {
     $content.height(contentHeight);
     $scrollable.dxScrollable("update");
 
-    mouse.down().move(0, distance);
+    mouse.down();
+    var downEvent = mouse.lastEvent();
+    mouse.move(0, distance);
     location = getScrollOffset($scrollable);
+
+    assert.notOk(downEvent.isDefaultPrevented(), "default is not prevented"); //T516691
     assert.equal(location.top, -distance / containerToContentRatio, "scroll follows pointer");
 
     mouse.move(0, distance);
@@ -3464,6 +3504,21 @@ QUnit.test("simulated scroll does not work when using native", function(assert) 
 
     var location = getScrollOffset($scrollable);
     assert.equal(location.top, startLocation.top, "scroll does not move");
+});
+
+QUnit.test("scroll action fired for simulated scroller during native scroll", function(assert) {
+    var done = assert.async();
+
+    var $scrollable = $("#scrollable").dxScrollable({
+        inertiaEnabled: false,
+        useNative: false,
+        onScroll: function(args) {
+            assert.equal(args.scrollOffset.top, 10, "scroll action fired with right offset");
+            done();
+        },
+    });
+
+    $scrollable.find("." + SCROLLABLE_CONTAINER_CLASS).scrollTop(10);
 });
 
 QUnit.test("scroll action fired when scrollable scrolling", function(assert) {
@@ -4416,11 +4471,11 @@ if(support.styleProp("touchAction")) {
 
         $content.width(50).height(100);
         scrollable.update();
-        assert.equal($container.css("touchAction"), "none");
+        assert.equal($container.css("touchAction"), "pan-x");
 
         $content.width(100).height(50);
         scrollable.update();
-        assert.equal($container.css("touchAction"), "none");
+        assert.equal($container.css("touchAction"), "pan-y");
 
         $content.width(50).height(50);
         scrollable.update();

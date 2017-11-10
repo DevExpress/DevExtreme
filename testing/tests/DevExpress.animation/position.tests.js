@@ -950,7 +950,7 @@ var testCollision = function(name, fixtureName, params, expectedHorzDist, expect
         assert.deepEqual(positionUtils.offset($event), { left: 100, top: 200 }, "position.offset() is correct");
     });
 
-    QUnit.test("position should return window.innerHeight for mobile safari", function(assert) {
+    QUnit.test("position should return window.innerHeight for mobile safari if window.outerHeight < window.innerHeight", function(assert) {
         if(browser.msie && parseInt(browser.version.split(".")[0]) <= 11) {
             //skip for ie because we can not write window.innerHeight in IE
             assert.expect(0);
@@ -958,10 +958,12 @@ var testCollision = function(name, fixtureName, params, expectedHorzDist, expect
         }
 
         var $what = $("#what").height(300),
-            initialInnerHeight = window.innerHeight;
+            initialInnerHeight = window.innerHeight,
+            initialOuterHeight = window.outerHeight;
 
         try {
             window.innerHeight = 500;
+            window.outerHeight = 200;
 
             var resultPosition = setupPosition($what, {
                 of: $(window)
@@ -970,6 +972,34 @@ var testCollision = function(name, fixtureName, params, expectedHorzDist, expect
             assert.roughEqual(resultPosition.v.location, 100, 50, "vertical location is correct");
         } finally {
             window.innerHeight = initialInnerHeight;
+            window.outerHeight = initialOuterHeight;
+        }
+    });
+
+    //T509285
+    QUnit.test("position should return window.innerWidth for mobile safari if window.outerWidth < window.innerWidth", function(assert) {
+        if(browser.msie && parseInt(browser.version.split(".")[0]) <= 11) {
+            //skip for ie because we can not write window.innerWidth in IE
+            assert.expect(0);
+            return;
+        }
+
+        var $what = $("#what").width(300),
+            initialInnerWidth = window.innerWidth,
+            initialOuterWidth = window.outerWidth;
+
+        try {
+            window.innerWidth = 500;
+            window.outerWidth = 200;
+
+            var resultPosition = setupPosition($what, {
+                of: $(window)
+            });
+
+            assert.roughEqual(resultPosition.h.location, 100, 50, "vertical location is correct");
+        } finally {
+            window.innerWidth = initialInnerWidth;
+            window.outerWidth = initialOuterWidth;
         }
     });
 })();

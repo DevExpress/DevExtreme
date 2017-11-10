@@ -20,55 +20,42 @@ function getMockElement() {
 renderers.DEBUG_set_getNextDefsSvgId(function() { return "DevExpressId"; });
 
 QUnit.testDone(function() {
-    renderers.SvgElement.reset();
+    renderers.SvgElement.reset && renderers.SvgElement.reset();
 });
 
-renderers.SvgElement = sinon.spy(vizMocks.stubClass(renderers.SvgElement, null, {
-    $constructor: function() {
-        this.renderer = arguments[0];
-        this.element = getMockElement();
-        this._settings = {};
-    },
-    $thisReturnFunctions: ["attr", "css", "append"]
-}));
+var elementsName = ["SvgElement", "RectSvgElement", "PathSvgElement", "ArcSvgElement", "TextSvgElement"];
 
-renderers.RectSvgElement = vizMocks.stubClass(renderers.RectSvgElement, null, {
-    $constructor: function() {
-        this.renderer = arguments[0];
-        this.element = getMockElement();
-    },
-    $thisReturnFunctions: ["attr", "css", "append"]
-});
+function setMockElements() {
+    function wrapElement(elementName) {
+        sinon.stub(renderers, elementName, vizMocks.stubClass(renderers[elementName], null, {
+            $constructor: function() {
+                this.renderer = arguments[0];
+                this.element = getMockElement();
+                this._settings = {};
+            },
+            $thisReturnFunctions: ["attr", "css", "append"]
+        }));
+    }
 
-renderers.PathSvgElement = vizMocks.stubClass(renderers.PathSvgElement, null, {
-    $constructor: function() {
-        this.renderer = arguments[0];
-        this.element = getMockElement();
-    },
-    $thisReturnFunctions: ["attr", "css", "append"]
-});
+    elementsName.forEach(function(elementName) {
+        wrapElement(elementName);
+    });
+}
 
-renderers.ArcSvgElement = vizMocks.stubClass(renderers.ArcSvgElement, null, {
-    $constructor: function() {
-        this.renderer = arguments[0];
-        this.element = getMockElement();
-    },
-    $thisReturnFunctions: ["attr", "css", "append"]
-});
-
-renderers.TextSvgElement = vizMocks.stubClass(renderers.TextSvgElement, null, {
-    $constructor: function() {
-        this.renderer = arguments[0];
-        this.element = getMockElement();
-    },
-    $thisReturnFunctions: ["attr", "css", "append"]
-});
+function resetMockElements() {
+    elementsName.forEach(function(elementName) {
+        renderers[elementName].restore();
+    });
+}
 
 animation.AnimationController = vizMocks.stubClass(animation.AnimationController);
 
 var Renderer = renderers.Renderer;
 
-QUnit.module('Renderer common API');
+QUnit.module('Renderer common API', {
+    before: setMockElements,
+    after: resetMockElements
+});
 
 QUnit.test('Creation', function(assert) {
     //arrange
@@ -313,6 +300,7 @@ QUnit.test('onEndAnimation', function(assert) {
 });
 
 QUnit.module("Locking", {
+    before: setMockElements,
     beforeEach: function() {
         this.container = document.createElement("div");
         this.renderer = new Renderer({ container: this.container });
@@ -322,6 +310,8 @@ QUnit.module("Locking", {
     afterEach: function() {
         renderers.DEBUG_removeBackupContainer();
     },
+
+    after: resetMockElements,
 
     appendContainer: function() {
         $("#qunit-fixture").append(this.container);
@@ -403,9 +393,13 @@ QUnit.test("Several renderers share same backup container", function(assert) {
 });
 
 QUnit.module('Renderer drawing API', {
+    before: setMockElements,
+
     beforeEach: function() {
         this.renderer = new Renderer({});
-    }
+    },
+
+    after: resetMockElements
 });
 
 QUnit.test("rect without params", function(assert) {
@@ -599,21 +593,6 @@ QUnit.test('pattern, with left hatching', function(assert) {
     //assert
     assert.strictEqual(pattern.path.stub("attr").callCount, 1, "pattern.path's attr called once");
     assert.strictEqual(pattern.path.stub("attr").firstCall.args[0].d, "M 0 0 L 3 3 M -1.5 1.5 L 1.5 4.5 M 1.5 -1.5 L 4.5 1.5", "pattern.path d param for left hatching");
-});
-
-QUnit.test('pattern, without hatching', function(assert) {
-    //act
-    var pattern = this.renderer.pattern('red', { direction: 'NoNe' });
-
-    //assert
-    assert.ok(pattern);
-    assert.ok(!(pattern instanceof renderers.SvgElement));
-    assert.ok($.isPlainObject(pattern));
-    assert.equal(pattern.id, 'red');
-    assert.ok($.isFunction(pattern.append));
-    assert.deepEqual(pattern.append(), pattern);
-    assert.ok($.isFunction(pattern.clear));
-    assert.ok($.isFunction(pattern.dispose));
 });
 
 QUnit.test('clipRect with params', function(assert) {
@@ -992,10 +971,14 @@ QUnit.test("text with params. text argument is null", function(assert) {
     assert.strictEqual(text.stub("append").callCount, 0, "text is not appended");
 });
 QUnit.module("Hatching", {
+    before: setMockElements,
+
     beforeEach: function() {
         this.renderer = new Renderer({});
         this.renderer.initHatching();
-    }
+    },
+
+    after: resetMockElements
 });
 
 QUnit.test("lock", function(assert) {
@@ -1035,3 +1018,44 @@ QUnit.test("init", function(assert) {
     assert.strictEqual(renderers.SvgElement.returnValues[2].dispose.callCount, 1, "pattern 1");
     assert.strictEqual(renderers.SvgElement.returnValues[3].dispose.callCount, 1, "pattern 2");
 });
+
+if("pushState" in history) {
+    QUnit.module("SvgElement. FuncIRI", {
+        beforeEach: function() {
+            this.refreshPaths = renderers.refreshPaths;
+            this.originalUrl = window.location.href;
+        },
+        afterEach: function() {
+            history.pushState("", document.title, this.originalUrl);
+        },
+
+        createRenderer: function(pathModified) {
+            return new renderers.Renderer({
+                container: document.createElement("div"),
+                pathModified: pathModified
+            });
+        }
+    });
+
+    QUnit.test("FixPath API. Do not fix IRIs on disposed elements", function(assert) {
+        //arrange
+        var renderer = this.createRenderer(true),
+            element = renderer.rect(0, 0, 0, 0).attr({
+                "fill": "DevExpress_12"
+            }).append(renderer.root),
+
+            href = window.location.href,
+            oldUrl = href.split("#")[0],
+            newUrl = href.split("?")[0] + "?testparam=2";
+
+        window.history.pushState("", document.title, newUrl);
+
+        renderer.dispose();
+
+        //act
+        this.refreshPaths();
+
+        //assert
+        assert.strictEqual(element.element.getAttribute("fill"), "url(" + oldUrl + "#DevExpress_12)");
+    });
+}

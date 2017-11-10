@@ -68,9 +68,8 @@ registerDecorator(
             var $itemElement = config.$itemElement,
                 control = this._controlWidget.getInstance($itemElement.find("." + this._controlClass));
 
-            $itemElement.on("stateChanged", (function() {
-                control.option("value", this._isSelected($itemElement));
-                this._updateSelectAllState();
+            $itemElement.on("stateChanged", (function(e, state) {
+                control.option("value", state);
             }).bind(this));
         },
 
@@ -82,10 +81,6 @@ registerDecorator(
             this._selectAllCheckBox.option("value", this._list.isSelectAll());
         },
 
-        handleDataSourceChanged: function() {
-            this._updateSelectAllState();
-        },
-
         afterRender: function() {
             if(this._list.option("selectionMode") !== "all") {
                 return;
@@ -93,6 +88,8 @@ registerDecorator(
 
             if(!this._$selectAll) {
                 this._renderSelectAll();
+            } else {
+                this._updateSelectAllState();
             }
         },
 

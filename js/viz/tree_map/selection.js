@@ -5,6 +5,7 @@ var proto = require("./tree_map.base").prototype,
 
     common = require("./common"),
 
+    _expand = require("../core/helpers").expand,
     _buildRectAppearance = common.buildRectAppearance,
     _normalizeEnum = require("../core/utils").normalizeEnum,
     _inArray = require("../../core/utils/array").inArray,
@@ -20,18 +21,18 @@ require("./states");
 
 proto._eventsMap.onSelectionChanged = { name: "selectionChanged" };
 
-common.expand(proto._handlers, "calculateAdditionalStates", function(states, options) {
+_expand(proto._handlers, "calculateAdditionalStates", function(states, options) {
     states[2] = options.selectionStyle ? _buildRectAppearance(options.selectionStyle) : {};
 });
 
 nodeProto.statesMap[2] = nodeProto.statesMap[3] = STATE_CODE;
 nodeProto.additionalStates.push(2);
 
-common.expand(proto, "_onNodesCreated", function() {
+_expand(proto, "_onNodesCreated", function() {
     this._selectionList.length = 0;
 });
 
-common.expand(proto, "_extendProxyType", function(proto) {
+_expand(proto, "_extendProxyType", function(proto) {
     var that = this;
 
     proto.select = function(state) {
@@ -67,7 +68,7 @@ require("./tree_map.base").addChange({
     option: "selectionMode"
 });
 
-common.expand(proto, "_applyTilesAppearance", function() {
+_expand(proto, "_applyTilesAppearance", function() {
     if(this._selectionList.length) {
         bringSelectedTilesToForeground(this._nodes, this._selectionList);
     }

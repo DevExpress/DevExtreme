@@ -8,10 +8,10 @@ var MONTH_APPOINTMENT_HEIGHT_RATIO = 0.6;
 
 var HorizontalMonthRenderingStrategy = HorizontalMonthLineAppointmentsStrategy.inherit({
 
-    _getAppointmentParts: function(appointmentGeometry, appointmentSettings, startDate, groupIndex) {
+    _getAppointmentParts: function(appointmentGeometry, appointmentSettings, startDate) {
         var deltaWidth = appointmentGeometry.sourceAppointmentWidth - appointmentGeometry.reducedWidth,
             height = appointmentGeometry.height,
-            fullWeekAppointmentWidth = this._getFullWeekAppointmentWidth(groupIndex),
+            fullWeekAppointmentWidth = this._getFullWeekAppointmentWidth(appointmentSettings.groupIndex),
             maxAppointmentWidth = this._getMaxAppointmentWidth(startDate),
             longPartCount = Math.ceil((deltaWidth) / fullWeekAppointmentWidth) - 1,
             tailWidth = Math.floor(deltaWidth % fullWeekAppointmentWidth) || fullWeekAppointmentWidth,
@@ -31,7 +31,8 @@ var HorizontalMonthRenderingStrategy = HorizontalMonthLineAppointmentsStrategy.i
                 height: height,
                 width: fullWeekAppointmentWidth,
                 appointmentReduced: "body",
-                rowIndex: ++appointmentSettings.rowIndex
+                rowIndex: ++appointmentSettings.rowIndex,
+                cellIndex: 0
             }));
 
             currentPartTop += this._defaultHeight;
@@ -49,7 +50,8 @@ var HorizontalMonthRenderingStrategy = HorizontalMonthLineAppointmentsStrategy.i
                 height: height,
                 width: tailWidth,
                 appointmentReduced: "tail",
-                rowIndex: ++appointmentSettings.rowIndex
+                rowIndex: ++appointmentSettings.rowIndex,
+                cellIndex: 0
             }));
         }
 

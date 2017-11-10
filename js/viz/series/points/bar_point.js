@@ -53,25 +53,19 @@ module.exports = _extend({}, symbolPoint, {
     _getLabelPosition: function() {
         var that = this,
             position,
-            translators = that.translators,
             initialValue = that.initialValue,
-            invertX = translators.x.getBusinessRange().invert,
-            invertY = translators.y.getBusinessRange().invert,
+            invert = that._getValTranslator().getBusinessRange().invert,
             isDiscreteValue = that.series.valueAxisType === "discrete",
             isFullStacked = that.series.isFullStackedSeries(),
-            notVerticalInverted = (!isDiscreteValue && ((initialValue >= 0 && !invertY) ||
-            (initialValue < 0 && invertY))) ||
-            (isDiscreteValue && !invertY) ||
-            (isFullStacked),
-            notHorizontalInverted = (!isDiscreteValue && ((initialValue >= 0 && !invertX) ||
-           (initialValue < 0 && invertX))) ||
-           (isDiscreteValue && !invertX) ||
-           (isFullStacked);
+            notAxisInverted = (!isDiscreteValue && ((initialValue >= 0 && !invert) ||
+                (initialValue < 0 && invert))) ||
+                (isDiscreteValue && !invert) ||
+                (isFullStacked);
 
         if(!that._options.rotated) {
-            position = notVerticalInverted ? TOP : BOTTOM;
+            position = notAxisInverted ? TOP : BOTTOM;
         } else {
-            position = notHorizontalInverted ? RIGHT : LEFT;
+            position = notAxisInverted ? RIGHT : LEFT;
         }
 
         return position;
@@ -208,21 +202,20 @@ module.exports = _extend({}, symbolPoint, {
 
     _getEdgeTooltipParams: function(x, y, width, height) {
         var isPositive = this.value >= 0,
-            invertedY = this.translators.y.getBusinessRange().invert,
-            invertedX = this.translators.x.getBusinessRange().invert,
             xCoord,
-            yCoord;
+            yCoord,
+            invertedBusinessRange = this._getValTranslator().getBusinessRange().invert;
 
         if(this._options.rotated) {
             yCoord = y + height / 2;
-            if(invertedX) {
+            if(invertedBusinessRange) {
                 xCoord = isPositive ? x : x + width;
             } else {
                 xCoord = isPositive ? x + width : x;
             }
         } else {
             xCoord = x + width / 2;
-            if(invertedY) {
+            if(invertedBusinessRange) {
                 yCoord = isPositive ? y + height : y;
             } else {
                 yCoord = isPositive ? y : y + height;
@@ -251,24 +244,23 @@ module.exports = _extend({}, symbolPoint, {
         return coord;
     },
 
-    _translateErrorBars: function(valueTranslator, argVisibleArea) {
-        symbolPoint._translateErrorBars.call(this, valueTranslator);
+    _translateErrorBars: function(argVisibleArea) {
+        symbolPoint._translateErrorBars.call(this);
         if(this._errorBarPos < argVisibleArea.min || this._errorBarPos > argVisibleArea.max) {
             this._errorBarPos = undefined;
         }
     },
 
     //TODO check & rework
-    _translate: function(translators) {
+    _translate: function() {
         var that = this,
-
             rotated = that._options.rotated,
             valAxis = rotated ? "x" : "y",
             argAxis = rotated ? "y" : "x",
             valIntervalName = rotated ? "width" : "height",
             argIntervalName = rotated ? "height" : "width",
-            argTranslator = translators[argAxis],
-            valTranslator = translators[valAxis],
+            argTranslator = that._getArgTranslator(),
+            valTranslator = that._getValTranslator(),
             argVisibleArea = argTranslator.getCanvasVisibleArea(),
             valVisibleArea = valTranslator.getCanvasVisibleArea(),
             arg,
@@ -300,7 +292,7 @@ module.exports = _extend({}, symbolPoint, {
         that[valAxis] = _min(val, minVal) + (that[valAxis + "Correction"] || 0);
         that["min" + valAxis.toUpperCase()] = minVal + (that[valAxis + "Correction"] || 0);
         that["default" + valAxis.toUpperCase()] = valTranslator.translate(CANVAS_POSITION_DEFAULT);
-        that._translateErrorBars(valTranslator, argVisibleArea);
+        that._translateErrorBars(argVisibleArea);
 
         if(that.inVisibleArea) {
             if(that[argAxis] < argVisibleArea.min) {

@@ -1151,6 +1151,25 @@ QUnit.test("Expand row on several levels & column", function(assert) {
     });
 });
 
+QUnit.test("Load with undefined value in the expanded path", function(assert) {
+    new LocalStore([
+        { a: undefined, b: 1 },
+        { a: undefined, b: 2 },
+        { a: "1", b: 2 }
+    ]).load({
+        rows: [
+            { dataField: "a" },
+            { dataField: "b" }
+        ],
+        columns: [],
+        values: [],
+        rowExpandedPaths: [[undefined]]
+    }).done(function(data) {
+        assert.strictEqual(data.rows.length, 2);
+        assert.strictEqual(data.rows[0].children.length, 2);
+    });
+});
+
 QUnit.test("getFields", function(assert) {
     var dataSource = [
             { "OrderID": 10248, Customer: { name: null }, "EmployeeID": undefined, "OrderDate": null, "Freight": "32.3800", "ShipName": "Vins et alcools Chevalier", "ShipRegion": null, "ShipPostalCode": null },
@@ -1467,7 +1486,7 @@ QUnit.test("Filter group field. Exclude Type", function(assert) {
         }, {
             index: 2,
             value: 1998
-        }]),
+        }]);
 
         assert.deepEqual(data.values, [
             [[105], [57], [48]],
@@ -1477,6 +1496,26 @@ QUnit.test("Filter group field. Exclude Type", function(assert) {
     });
 });
 
+QUnit.test("Filter dates without group interval", function(assert) {
+    var dataSource = window.orders.slice();
+    dataSource[10] = { OrderDate: null };
+
+    new LocalStore(dataSource).load({
+        rows: [],
+        columns: [
+            {
+                dataField: "OrderDate", dataType: 'date', filterValues: [
+                    new Date(window.orders[0].OrderDate),
+                    null
+                ], filterType: "include" }
+        ],
+        values: [{ summaryType: 'count' }]
+    }).done(function(data) {
+        assert.equal(data.columns.length, 2);
+        assert.equal(data.columns[0].value.valueOf(), new Date(window.orders[0].OrderDate).valueOf());
+        assert.equal(data.columns[1].value, null);
+    });
+});
 
 QUnit.test("complex dataField", function(assert) {
     var dataSource = [

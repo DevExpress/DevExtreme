@@ -183,7 +183,7 @@ function removeCacheItem(target) {
     delete widgetsCache[target._cache];
 }
 
-function refreshAll() {
+function refreshTheme() {
     _each(widgetsCache, function() {
         this.refresh();
     });
@@ -197,7 +197,7 @@ _extend(exports, {
     findTheme: findTheme,
     registerThemeAlias: registerThemeAlias,
     registerThemeSchemeAlias: registerThemeSchemeAlias,
-    refreshAll: refreshAll,
+    refreshTheme: refreshTheme,
     addCacheItem: addCacheItem,
     removeCacheItem: removeCacheItem
 });

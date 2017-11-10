@@ -142,8 +142,8 @@ var dxBullet = BaseSparkline.inherit({
     _getTargetParams: function() {
         var that = this,
             options = that._allOptions,
-            translatorY = that._translatorY,
-            x = that._translatorX.translate(options.target);
+            translatorY = that._valueAxis.getTranslator(),
+            x = that._argumentAxis.getTranslator().translate(options.target);
 
         return {
             points: [x, translatorY.translate(TARGET_MIN_Y), x, translatorY.translate(TARGET_MAX_Y)],
@@ -155,8 +155,8 @@ var dxBullet = BaseSparkline.inherit({
     _getBarValueParams: function() {
         var that = this,
             options = that._allOptions,
-            translatorX = that._translatorX,
-            translatorY = that._translatorY,
+            translatorX = that._argumentAxis.getTranslator(),
+            translatorY = that._valueAxis.getTranslator(),
             startLevel = options.startScaleValue,
             endLevel = options.endScaleValue,
             value = options.value,
@@ -184,8 +184,8 @@ var dxBullet = BaseSparkline.inherit({
 
     _getZeroLevelParams: function() {
         var that = this,
-            translatorY = that._translatorY,
-            x = that._translatorX.translate(0);
+            translatorY = that._valueAxis.getTranslator(),
+            x = that._argumentAxis.getTranslator().translate(0);
 
         return {
             points: [x, translatorY.translate(TARGET_MIN_Y), x, translatorY.translate(TARGET_MAX_Y)],

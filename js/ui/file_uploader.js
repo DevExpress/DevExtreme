@@ -401,7 +401,6 @@ var FileUploader = Editor.inherit({
     },
 
     _init: function() {
-        this.option("value", []);
         this.callBase.apply(this, arguments);
 
         this._initFileInput();
@@ -457,11 +456,39 @@ var FileUploader = Editor.inherit({
     },
 
     _shouldFileListBeExtended: function() {
-        return this.option("extendSelection") && this.option("multiple");
+        return this.option("uploadMode") !== "useForm" && this.option("extendSelection") && this.option("multiple");
+    },
+
+    _removeDuplicates: function(files, value) {
+        var result = [];
+
+        for(var i = 0; i < value.length; i++) {
+            if(!this._isFileInArray(files, value[i])) {
+                result.push(value[i]);
+            }
+        }
+
+        return result;
+    },
+
+    _isFileInArray: function(files, file) {
+        for(var i = 0; i < files.length; i++) {
+            var item = files[i];
+            if(item.size === file.size && item.name === file.name) {
+                return true;
+            }
+        }
+
+        return false;
     },
 
     _changeValue: function(value) {
         var files = this._shouldFileListBeExtended() ? this.option("value").slice() : [];
+
+        if(this.option("uploadMode") !== "instantly") {
+            value = this._removeDuplicates(files, value);
+        }
+
         this.option("value", files.concat(value));
     },
 

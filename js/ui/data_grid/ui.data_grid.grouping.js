@@ -13,6 +13,7 @@ var $ = require("../../core/renderer"),
 var DATAGRID_GROUP_PANEL_CLASS = "dx-datagrid-group-panel",
     DATAGRID_GROUP_PANEL_MESSAGE_CLASS = "dx-group-panel-message",
     DATAGRID_GROUP_PANEL_ITEM_CLASS = "dx-group-panel-item",
+    DATAGRID_GROUP_PANEL_LABEL_CLASS = "dx-toolbar-label",
     DATAGRID_GROUP_OPENED_CLASS = "dx-datagrid-group-opened",
     DATAGRID_GROUP_CLOSED_CLASS = "dx-datagrid-group-closed",
     DATAGRID_EXPAND_CLASS = "dx-datagrid-expand",
@@ -95,10 +96,9 @@ var GroupingDataSourceAdapterExtender = (function() {
                 dataSource = that._dataSource;
 
             if(dataSource.group()) {
-                //TODO remove access to _changeLoadingCount
-                dataSource._changeLoadingCount(1);
+                dataSource.beginLoading();
                 return that._changeRowExpandCore(path).always(function() {
-                    dataSource._changeLoadingCount(-1);
+                    dataSource.endLoading();
                 });
             }
         },
@@ -119,7 +119,7 @@ var GroupingDataSourceAdapterExtender = (function() {
                 }
             }
         },
-        _customizeRemoteOperations: function(options) {
+        _customizeRemoteOperations: function(options, isReload, operationTypes) {
             var remoteOperations = options.remoteOperations;
 
             if(options.storeLoadOptions.group) {
@@ -132,7 +132,10 @@ var GroupingDataSourceAdapterExtender = (function() {
                 if(!remoteOperations.grouping && (!remoteOperations.sorting || !remoteOperations.filtering || options.isCustomLoading || this._hasGroupLevelsExpandState(options.storeLoadOptions.group, false))) {
                     remoteOperations.paging = false;
                 }
+            } else if(!options.isCustomLoading && remoteOperations.paging && operationTypes.grouping) {
+                this.resetCache();
             }
+
             this.callBase.apply(this, arguments);
         },
         _handleDataLoading: function(options) {
@@ -281,6 +284,8 @@ var GroupingDataControllerExtender = (function() {
                     that.executeAction(expanded ? "onRowCollapsed" : "onRowExpanded", args);
                 });
             }
+
+            return $.Deferred().resolve();
         },
         _changeRowExpandCore: function(key) {
             var that = this,
@@ -311,6 +316,7 @@ var GroupingDataControllerExtender = (function() {
          * @name dxDataGridMethods_expandRow
          * @publicName expandRow(key)
          * @param1 key:any
+         * @return Promise
          */
         expandRow: function(key) {
             if(!this.isRowExpanded(key)) {
@@ -322,6 +328,7 @@ var GroupingDataControllerExtender = (function() {
          * @name dxDataGridMethods_collapseRow
          * @publicName collapseRow(key)
          * @param1 key:any
+         * @return Promise
          */
         collapseRow: function(key) {
             if(this.isRowExpanded(key)) {
@@ -365,41 +372,25 @@ var GroupingHeaderPanelExtender = (function() {
         },
 
         _appendGroupingItem: function(items) {
-            var that = this;
+            var that = this,
+                groupPanelRenderedCallback = function(e) {
+                    that._updateGroupPanelContent(e.itemElement.find("." + DATAGRID_GROUP_PANEL_CLASS));
+                };
 
             if(that._isGroupPanelVisible()) {
                 var toolbarItem = {
-                    template: function(data, index, $container) {
-                        var $groupPanel = $("<div />")
-                                .addClass(DATAGRID_GROUP_PANEL_CLASS)
-                                .appendTo($container);
-
-                        that._updateGroupPanelContent($groupPanel);
-                    },
+                    html: "<div class='" + DATAGRID_GROUP_PANEL_CLASS + "'></div>",
                     name: "groupPanel",
+                    onItemRendered: groupPanelRenderedCallback,
                     location: "before",
-                    locateInMenu: "never"
+                    locateInMenu: "never",
+                    sortIndex: 1
                 };
 
                 items.push(toolbarItem);
             }
 
             return items;
-        },
-
-        _updateGroupPanelContent: function($groupPanel) {
-            var that = this,
-                groupColumns = that.getController("columns").getGroupColumns(),
-                groupPanelOptions = that.option("groupPanel");
-
-            that._renderGroupPanelItems($groupPanel, groupColumns);
-
-            if(groupPanelOptions.allowColumnDragging && !groupColumns.length) {
-                $("<div />")
-                    .addClass(DATAGRID_GROUP_PANEL_MESSAGE_CLASS)
-                    .text(groupPanelOptions.emptyPanelText)
-                    .appendTo($groupPanel);
-            }
         },
 
         _isGroupPanelVisible: function() {
@@ -447,6 +438,24 @@ var GroupingHeaderPanelExtender = (function() {
                 }
             }
             this.callBase();
+        },
+
+        _updateGroupPanelContent: function($groupPanel) {
+            var that = this,
+                groupColumns = that.getController("columns").getGroupColumns(),
+                groupPanelOptions = that.option("groupPanel");
+
+            that._renderGroupPanelItems($groupPanel, groupColumns);
+
+            if(groupPanelOptions.allowColumnDragging && !groupColumns.length) {
+                $("<div />")
+                    .addClass(DATAGRID_GROUP_PANEL_MESSAGE_CLASS)
+                    .text(groupPanelOptions.emptyPanelText)
+                    .appendTo($groupPanel);
+
+                $groupPanel.closest("." + DATAGRID_GROUP_PANEL_LABEL_CLASS).css("maxWidth", "none");
+                that.updateToolbarDimensions();
+            }
         },
 
         allowDragging: function(column) {
@@ -559,7 +568,8 @@ var GroupingRowsViewExtender = (function() {
         _rowClick: function(e) {
             var that = this,
                 expandMode = that.option("grouping.expandMode"),
-                isGroupRowStateChanged = expandMode === "rowClick" && $(e.jQueryEvent.target).closest("." + DATAGRID_GROUP_ROW_CLASS).length,
+                scrollingMode = that.option("scrolling.mode"),
+                isGroupRowStateChanged = scrollingMode !== "infinite" && expandMode === "rowClick" && $(e.jQueryEvent.target).closest("." + DATAGRID_GROUP_ROW_CLASS).length,
                 isExpandButtonClicked = $(e.jQueryEvent.target).closest("." + DATAGRID_EXPAND_CLASS).length;
 
             if(isGroupRowStateChanged || isExpandButtonClicked) {

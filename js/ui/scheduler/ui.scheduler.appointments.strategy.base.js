@@ -81,11 +81,12 @@ var BaseRenderingStrategy = Class.inherit({
         var position = this._getAppointmentCoordinates(item),
             allDay = this.isAllDay(item),
             result = [],
-            startDate = new Date(this.instance.fire("getField", "startDate", item));
+            startDate = new Date(this.instance.fire("getField", "startDate", item)),
+            isRecurring = !!item.recurrenceRule;
 
         for(var j = 0; j < position.length; j++) {
             var height = this.calculateAppointmentHeight(item, position[j]),
-                width = this.calculateAppointmentWidth(item, position[j]),
+                width = this.calculateAppointmentWidth(item, position[j], isRecurring),
                 resultWidth = width,
                 appointmentReduced = null,
                 multiWeekAppointmentParts = [],
@@ -114,7 +115,7 @@ var BaseRenderingStrategy = Class.inherit({
                         sourceAppointmentWidth: width,
                         reducedWidth: resultWidth,
                         height: height
-                    }, position[j], startDate, j);
+                    }, position[j], startDate);
 
 
                     if(this._isRtl()) {
@@ -425,28 +426,43 @@ var BaseRenderingStrategy = Class.inherit({
         return startDate;
     },
 
-    _endDate: function(appointment, position) {
+    _endDate: function(appointment, position, isRecurring) {
         var endDate = this.instance._getEndDate(appointment),
             realStartDate = this._startDate(appointment, true),
             viewStartDate = this._startDate(appointment, false, position);
 
-        if(!endDate || realStartDate.getTime() >= endDate.getTime()) {
-            endDate = new Date(realStartDate.getTime() + this.instance.getAppointmentDurationInMinutes() * 60000);
-            this.instance.fire("setField", "endDate", appointment, endDate);
-        }
+        endDate = this._checkWrongEndDate(appointment, realStartDate, endDate);
 
-        if(viewStartDate >= endDate) {
+        if(viewStartDate.getTime() >= endDate.getTime() || isRecurring) {
             var recurrencePartStartDate = position ? position.startDate : realStartDate,
                 fullDuration = endDate.getTime() - realStartDate.getTime();
-            endDate = new Date(viewStartDate.getTime() + fullDuration);
 
-            if(!dateUtils.sameDate(realStartDate, endDate) && recurrencePartStartDate < viewStartDate) {
+            endDate = new Date((viewStartDate.getTime() >= recurrencePartStartDate.getTime() ? recurrencePartStartDate.getTime() : viewStartDate.getTime()) + fullDuration);
+
+            if(!dateUtils.sameDate(realStartDate, endDate) && recurrencePartStartDate.getTime() < viewStartDate.getTime()) {
                 var headDuration = dateUtils.trimTime(endDate).getTime() - recurrencePartStartDate.getTime(),
                     tailDuration = fullDuration - headDuration || fullDuration;
 
                 endDate = new Date(dateUtils.trimTime(viewStartDate).getTime() + tailDuration);
             }
 
+        }
+
+        if(!this.isAllDay(appointment)) {
+            var viewEndDate = dateUtils.roundToHour(this.instance.fire("getEndViewDate"));
+
+            if(endDate > viewEndDate) {
+                endDate = viewEndDate;
+            }
+        }
+
+        return endDate;
+    },
+
+    _checkWrongEndDate: function(appointment, startDate, endDate) {
+        if(!endDate || startDate.getTime() >= endDate.getTime()) {
+            endDate = new Date(startDate.getTime() + this.instance.getAppointmentDurationInMinutes() * 60000);
+            this.instance.fire("setField", "endDate", appointment, endDate);
         }
 
         return endDate;

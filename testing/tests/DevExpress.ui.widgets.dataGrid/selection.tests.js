@@ -334,8 +334,8 @@ QUnit.test("set selectedRows for single selection. Object with the level of embe
     this.selectionController.selectRows({ name: 'Alex', address: { country: { name: "USA", city: { name: "Chicago" } } } });
 
     //assert
-    assert.deepEqual(this.selectionController.getSelectedRowKeys(), [{ name: 'Alex', address: { country: { name: "USA", city: { name: "New York" } } } }, { name: 'Alex', address: { country: { name: "USA", city: { name: "Chicago" } } } }]);
-    assert.ok(this.dataController.items()[0].isSelected);
+    assert.deepEqual(this.selectionController.getSelectedRowKeys(), [{ name: 'Alex', address: { country: { name: "USA", city: { name: "Chicago" } } } }]);
+    assert.notOk(this.dataController.items()[0].isSelected);
     assert.ok(this.dataController.items()[1].isSelected);
 });
 
@@ -719,6 +719,26 @@ QUnit.test("Deselect selectedRows. Store with key", function(assert) {
     assert.ok(!this.dataController.items()[4].isSelected);
     assert.ok(!this.dataController.items()[5].isSelected);
     assert.ok(!this.dataController.items()[6].isSelected);
+});
+
+QUnit.test("Deselect all if key is defined", function(assert) {
+    //arrange
+    this.applyOptions({
+        selection: { mode: 'single' },
+        dataSource: { store: { type: 'array', data: this.array, key: 'age' } }
+    });
+
+    this.dataController.optionChanged({ name: 'dataSource' });
+
+
+    this.selectionController.selectRows([16, 18]);
+
+    //act
+    this.selectionController.deselectAll();
+
+    //assert
+    assert.deepEqual(this.selectionController.getSelectedRowKeys(), []);
+    assert.deepEqual(this.selectionController.getSelectedRowsData(), []);
 });
 
 QUnit.test("Deselect selectedRows. Object parameter", function(assert) {
@@ -1353,6 +1373,31 @@ QUnit.test("no selection column when not has columns", function(assert) {
     assert.ok(!visibleColumns.length, 'not has columns');
 });
 
+QUnit.test("selectRows with big array", function(assert) {
+    //arrange
+    var that = this;
+
+    that.applyOptions({
+        selection: {
+            maxFilterLengthInRequest: 1000
+        }
+    });
+
+    that.array = [];
+    for(var i = 1; i <= 10000; i++) {
+        that.array.push({ id: i, text: "text " + i });
+    }
+
+    that.dataSource = createDataSource(that.array, { key: "id" });
+    that.dataController.setDataSource(that.dataSource);
+    that.dataSource.load();
+
+    //act
+    var keys = that.array.filter(function(data) { return data.id <= 9000; }).map(function(data) { return data.id; });
+    that.selectRows(keys);
+    assert.equal(that.selectionController.getSelectedRowKeys().length, 9000, "selected row keys");
+});
+
 //T441847
 QUnit.test("selectRows with key as array of undefined", function(assert) {
     //arrange
@@ -1816,6 +1861,57 @@ QUnit.test("changeRowSelection with shift key. Change shift selection from up to
     assert.ok(this.dataController.items()[4].isSelected);
 });
 
+//T547950
+QUnit.test("changeRowSelection with shift key after filtering", function(assert) {
+    //arrange
+    this.applyOptions({
+        selection: {
+            mode: "multiple",
+            showCheckBoxesMode: "always"
+        }
+    });
+
+    this.dataController.filter(["age", "<", 18]);
+
+    //assert
+    assert.strictEqual(this.dataController.items().length, 3, "item count");
+
+    this.selectionController.changeItemSelection(1);
+    this.dataController.clearFilter("dataSource");
+
+    //assert
+    assert.strictEqual(this.dataController.items().length, 7, "item count");
+
+    //act
+    this.selectionController.changeItemSelection(5, { shift: true });
+
+    //assert
+    assert.deepEqual(this.selectionController.getSelectedRowKeys(), [2, 6], "selectedRowKeys");
+});
+
+//T547950
+QUnit.test("focusedItemIndex should be reset to -1 after change page index", function(assert) {
+    //arrange
+    this.applyOptions({
+        selection: {
+            mode: "multiple",
+            showCheckBoxesMode: "always"
+        }
+    });
+    this.pageSize(3);
+
+    this.selectionController.changeItemSelection(1);
+
+    //assert
+    assert.strictEqual(this.selectionController.focusedItemIndex(), 1, "focusedItemIndex");
+
+    //act
+    this.pageIndex(1);
+
+    //assert
+    assert.strictEqual(this.selectionController.focusedItemIndex(), -1, "focusedItemIndex");
+});
+
 QUnit.test("Rise events on changeRowSelection", function(assert) {
     var selectionChangedCount = 0;
 
@@ -2181,6 +2277,27 @@ QUnit.test("Select All for multiple selection when selectAllMode is page", funct
 
     //assert
     assert.deepEqual(this.selectionController.getSelectedRowKeys(), [2, 1, 3, 4]);
+    assert.strictEqual(this.selectionController.isSelectAll(), true, "select all is true");
+});
+
+QUnit.test("Select All for multiple selection when selectAllMode is page and data is grouped", function(assert) {
+    this.applyOptions({
+        columns: ["id", { dataField: "value", groupIndex: 0 }],
+        grouping: {
+            autoExpandAll: true
+        },
+        selection: {
+            mode: 'multiple',
+            allowSelectAll: true,
+            selectAllMode: "page"
+        }
+    });
+
+    //act
+    this.selectionController.selectAll();
+
+    //assert
+    assert.deepEqual(this.selectionController.getSelectedRowKeys(), [1, 2]);
     assert.strictEqual(this.selectionController.isSelectAll(), true, "select all is true");
 });
 
@@ -3376,6 +3493,66 @@ QUnit.test("change selectAllMode to 'allPages' at runtime", function(assert) {
             assert.strictEqual($(this).dxCheckBox("option", "value"), false, i + " checkbox value");
         }
     });
+});
+
+//T550013
+QUnit.test("Click on selected selection checkbox with shift key", function(assert) {
+    var testElement = $('#container');
+
+    this.options.selection.showCheckBoxesMode = 'onClick';
+    this.setup();
+    this.columnHeadersView.render(testElement);
+    this.rowsView.render(testElement);
+
+    //act
+    var $checkbox = testElement.find(".dx-data-row .dx-select-checkbox").eq(0);
+    $checkbox.trigger("dxclick");
+    $checkbox.trigger($.Event("dxclick", { shiftKey: true }));
+
+    //assert
+    assert.deepEqual(this.selectionController.getSelectedRowKeys(), [{ age: 15, name: "Alex" }], "one item is selected");
+    assert.strictEqual($checkbox.dxCheckBox("instance").option("value"), true, "checkbox is checked");
+});
+
+//T550013
+QUnit.test("Click on selected selection checkbox with shift key to select range", function(assert) {
+    var testElement = $('#container');
+
+    this.options.selection.showCheckBoxesMode = 'onClick';
+    this.setup();
+    this.columnHeadersView.render(testElement);
+    this.rowsView.render(testElement);
+
+    //act
+    var $checkboxes = testElement.find(".dx-data-row .dx-select-checkbox");
+    $checkboxes.eq(1).trigger("dxclick");
+    $checkboxes.eq(0).trigger("dxclick");
+    $checkboxes.eq(1).trigger($.Event("dxclick", { shiftKey: true }));
+
+    //assert
+    assert.deepEqual(this.selectionController.getSelectedRowKeys().length, 2, "two items are selected");
+    assert.strictEqual($checkboxes.eq(0).dxCheckBox("instance").option("value"), true, "checkbox 0 is checked");
+    assert.strictEqual($checkboxes.eq(1).dxCheckBox("instance").option("value"), true, "checkbox 1 is checked");
+});
+
+//T550013
+QUnit.test("Click on unselected selection checkbox with shift key", function(assert) {
+    var testElement = $('#container');
+
+    this.options.selection.showCheckBoxesMode = 'onClick';
+    this.setup();
+    this.columnHeadersView.render(testElement);
+    this.rowsView.render(testElement);
+
+    //act
+    var $checkbox = testElement.find(".dx-data-row .dx-select-checkbox").eq(0);
+    $checkbox.trigger("dxclick");
+    $checkbox.trigger("dxclick");
+    $checkbox.trigger($.Event("dxclick", { shiftKey: true }));
+
+    //assert
+    assert.deepEqual(this.selectionController.getSelectedRowKeys(), [{ age: 15, name: "Alex" }], "one item is selected");
+    assert.strictEqual($checkbox.dxCheckBox("instance").option("value"), true, "checkbox is checked");
 });
 
 QUnit.module("Deferred selection", {

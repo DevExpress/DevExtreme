@@ -375,7 +375,7 @@ var Menu = MenuBase.inherit({
     },
 
     _toggleAdaptiveMode: function(state) {
-        var $menuItemsContainer = this.element().find("." + DX_MENU_ITEMS_CONTAINER_CLASS),
+        var $menuItemsContainer = this.element().find("." + DX_MENU_HORIZONTAL_CLASS),
             $adaptiveElements = this.element().find("." + DX_ADAPTIVE_MODE_CLASS);
 
         if(state) {
@@ -418,9 +418,6 @@ var Menu = MenuBase.inherit({
             shading: false,
             animation: false,
             closeOnTargetScroll: true,
-            onPositioned: (function() {
-                this._overlay.option("height", this._overlay.content().outerHeight());
-            }).bind(this),
             onHidden: (function() {
                 this._toggleHamburgerActiveState(false);
             }).bind(this),
@@ -459,9 +456,16 @@ var Menu = MenuBase.inherit({
         });
 
         return extend(menuOptions, {
+            animationEnabled: !!this.option("animation"),
             onItemClick: that._treeviewItemClickHandler.bind(that),
-            onItemExpanded: (function(e) { this._actions["onSubmenuShown"](e); }).bind(that),
-            onItemCollapsed: (function(e) { this._actions["onSubmenuHidden"](e); }).bind(that),
+            onItemExpanded: (function(e) {
+                this._overlay.repaint();
+                this._actions["onSubmenuShown"](e);
+            }).bind(that),
+            onItemCollapsed: (function(e) {
+                this._overlay.repaint();
+                this._actions["onSubmenuHidden"](e);
+            }).bind(that),
             selectNodesRecursive: false,
             selectByClick: this.option("selectByClick"),
             expandEvent: "click"
@@ -570,8 +574,7 @@ var Menu = MenuBase.inherit({
             onLeftFirstItem: isMenuHorizontal ? null : this._moveMainMenuFocus.bind(this, PREVITEM_OPERATION),
             onLeftLastItem: isMenuHorizontal ? null : this._moveMainMenuFocus.bind(this, NEXTITEM_OPERATION),
             onCloseRootSubmenu: this._moveMainMenuFocus.bind(this, isMenuHorizontal ? PREVITEM_OPERATION : null),
-            onExpandLastSubmenu: isMenuHorizontal ? this._moveMainMenuFocus.bind(this, NEXTITEM_OPERATION) : null,
-            _hideDelimiter: this.option("_hideDelimiter")
+            onExpandLastSubmenu: isMenuHorizontal ? this._moveMainMenuFocus.bind(this, NEXTITEM_OPERATION) : null
         };
     },
 
@@ -939,8 +942,6 @@ var Menu = MenuBase.inherit({
             return;
         }
 
-        args.jQueryEvent.stopPropagation();
-
         currentSubmenu = this._getSubmenuByElement(args.itemElement, args.itemData);
 
         this._updateSelectedItemOnClick(actionArgs);
@@ -997,6 +998,12 @@ var Menu = MenuBase.inherit({
                 }
                 this.callBase(args);
                 this._dimensionChanged();
+                break;
+            case "animation":
+                if(this._isAdaptivityEnabled()) {
+                    this._treeView.option("animationEnabled", !!args.value);
+                }
+                this.callBase(args);
                 break;
             default:
                 if(this._isAdaptivityEnabled()) {

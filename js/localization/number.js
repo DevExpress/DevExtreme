@@ -90,6 +90,7 @@ var numberLocalization = dependencyInjector({
     },
     _formatNumber: function(value, formatObject, formatConfig) {
         var powerPostfix;
+        var result;
 
         if(formatObject.power === 'auto') {
             formatObject.power = this._calculateNumberPower(value, 1000, 0, MAX_LARGE_NUMBER_POWER);
@@ -101,7 +102,11 @@ var numberLocalization = dependencyInjector({
 
         powerPostfix = this.defaultLargeNumberFormatPostfixes[formatObject.power] || '';
 
-        return this._formatNumberCore(value, formatObject.formatType, formatConfig) + powerPostfix;
+        result = this._formatNumberCore(value, formatObject.formatType, formatConfig);
+
+        result = result.replace(/(\d|.$)(\D*)$/, "$1" + powerPostfix + "$2");
+
+        return result;
     },
 
     _formatNumberExponential: function(value, formatConfig) {

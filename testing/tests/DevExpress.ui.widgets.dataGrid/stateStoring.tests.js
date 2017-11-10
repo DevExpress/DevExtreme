@@ -7,6 +7,14 @@ var $ = require("jquery"),
     ArrayStore = require("data/array_store");
 
 require("ui/data_grid/ui.data_grid");
+require("common.css!");
+require("generic_light.css!");
+
+QUnit.testStart(function() {
+    var markup = '<div id="container" class="dx-datagrid"></div>';
+
+    $("#qunit-fixture").html(markup);
+});
 
 QUnit.module('Local storage', {
     beforeEach: function() {
@@ -424,7 +432,7 @@ QUnit.module('State Storing with real controllers', {
     beforeEach: function() {
         this.clock = sinon.useFakeTimers();
         this.setupDataGridModules = function(options, ignoreClockTick) {
-            setupDataGridModules(this, ['data', 'columns', 'stateStoring', 'filterRow', 'search', 'pager', 'selection'], {
+            setupDataGridModules(this, ['data', 'columns', 'rows', 'gridView', 'stateStoring', 'filterRow', 'search', 'pager', 'selection'], {
                 initDefaultOptions: true,
                 initViews: true,
                 options: options
@@ -1036,4 +1044,50 @@ QUnit.test("Update state when applying header filter", function(assert) {
         visible: true,
         visibleIndex: 0
     }]);
+});
+
+QUnit.test("Hide loading when dataSource is empty", function(assert) {
+    //arrange, act
+    this.element = function() {
+        return $("#container");
+    };
+
+    this.setupDataGridModules({
+        stateStoring: {
+            enabled: true,
+            type: 'custom',
+            customLoad: function() { return {}; },
+            customSave: function() { }
+        },
+        loadingTimeout: null
+    }, true);
+
+    this.gridView.render(this.element());
+    this.clock.tick(200);
+
+    //assert
+    assert.equal($(".dx-loadpanel-content.dx-state-invisible").length, 1, "loading panel should be hidden");
+});
+
+QUnit.test("Show NoData message when dataSource is empty and state is loaded", function(assert) {
+    //arrange, act
+    this.element = function() {
+        return $("#container");
+    };
+
+    this.setupDataGridModules({
+        stateStoring: {
+            enabled: true,
+            type: 'custom',
+            customLoad: function() { return {}; },
+            customSave: function() { }
+        },
+        loadingTimeout: null
+    }, true);
+
+    this.gridView.render(this.element());
+    this.clock.tick(200);
+
+    //assert
+    assert.equal($(".dx-datagrid-nodata").length, 1, "NoData message should be shown");
 });

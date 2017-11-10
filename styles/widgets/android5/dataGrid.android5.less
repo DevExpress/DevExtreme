@@ -2,6 +2,7 @@
 
 .dx-datagrid-group-panel {
     margin-bottom: @datagrid-header-panel-margin-bottom;
+    font-size: @ANDROID5_BASE_FONT_SIZE;
     .touch-action(pinch-zoom);
 
     .dx-group-panel-message {
@@ -22,6 +23,10 @@
         padding: @GRID_BASE_CELL_PADDING + 1px;
         background-color: @datagrid-selection-background;
     }
+}
+
+.dx-datagrid-header-panel .dx-toolbar-label {
+    padding: 0;
 }
 
 .dx-datagrid-rowsview {

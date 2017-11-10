@@ -1,8 +1,13 @@
 {
   "name": "devextreme",
-  "version": "17.1.2",
+  "version": "17.1.8",
+  "description": "HTML5 JavaScript Component Suite for Responsive Web Development",
+  "keywords": [ "html5", "controls", "widgets", "components", "jquery", "knockout", "angular", "web", "ui", "datagrid", "pivotgrid", "scheduler", "treelist", "chart" ],
   "homepage": "https://js.devexpress.com/",
-  "license": "https://js.devexpress.com/Licensing/",
+  "bugs": "https://www.devexpress.com/support/",
+  "author": "Developer Express Inc.",
+  "repository": "https://github.com/DevExpress/DevExtreme",
+  "license": "SEE LICENSE IN README.md",
   "dependencies": {
     "jszip": "^2.0.0 || ^3.0.0"
   },
@@ -41,7 +46,7 @@
     "qunitjs": "^2.0.1",
     "run-sequence": "^1.1.5",
     "systemjs": "<=0.19.41",
-    "systemjs-plugin-css": "^0.1.23",
+    "systemjs-plugin-css": "0.1.33",
     "systemjs-plugin-json": "0.2.2",
     "systemjs-plugin-text": "0.0.8",
     "through2": "^2.0.1",

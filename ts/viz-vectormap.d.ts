@@ -3,51 +3,51 @@
 /// <reference path="viz-core.d.ts" />
 
 declare module DevExpress.viz.map {
-    /** @docid mapLayer */
+    /** @docid MapLayer */
     export interface MapLayer {
-        /** @docid mapLayerfields_name */
+        /** @docid MapLayerfields_name */
         name: string;
 
-        /** @docid mapLayerfields_index */
+        /** @docid MapLayerfields_index */
         index: number;
 
-        /** @docid mapLayerfields_type */
+        /** @docid MapLayerfields_type */
         type: string;
 
-        /** @docid mapLayerfields_elementType */
+        /** @docid MapLayerfields_elementType */
         elementType: string;
 
-        /** @docid mapLayermethods_getElements */
+        /** @docid MapLayermethods_getElements */
         getElements(): Array<MapLayerElement>;
 
-        /** @docid mapLayermethods_clearSelection */
+        /** @docid MapLayermethods_clearSelection */
         clearSelection(): void;
 
-        /** @docid mapLayermethods_getDataSource */
+        /** @docid MapLayermethods_getDataSource */
         getDataSource(): DevExpress.data.DataSource;
     }
 
-    /** @docid mapLayerElement */
+    /** @docid MapLayerElement */
     export interface MapLayerElement {
-        /** @docid mapLayerElementfields_layer */
+        /** @docid MapLayerElementfields_layer */
         layer: MapLayer;
 
-        /** @docid mapLayerElementmethods_coordinates */
+        /** @docid MapLayerElementmethods_coordinates */
         coordinates(): Object;
 
-        /** @docid mapLayerElementmethods_attribute#attribute(name, value) */
+        /** @docid MapLayerElementmethods_attribute#attribute(name, value) */
         attribute(name: string, value: any): void;
 
-        /** @docid mapLayerElementmethods_attribute#attribute(name) */
+        /** @docid MapLayerElementmethods_attribute#attribute(name) */
         attribute(name: string): any;
 
-        /** @docid mapLayerElementmethods_selected#selected() */
+        /** @docid MapLayerElementmethods_selected#selected() */
         selected(): boolean;
 
-        /** @docid mapLayerElementmethods_selected#selected(state) */
+        /** @docid MapLayerElementmethods_selected#selected(state) */
         selected(state: boolean): void;
 
-        /** @docid mapLayerElementmethods_applySettings */
+        /** @docid MapLayerElementmethods_applySettings */
         applySettings(settings: any): void;
     }
 

@@ -16,20 +16,17 @@ QUnit.test("Pass rotation info to Business range (rotated = true)", function(ass
         rotated: true,
         argumentAxis: { mockRange: {} }
     });
-    assert.ok(chart.businessRanges);
-    assert.equal(chart.businessRanges.length, 1);
-    assert.strictEqual(chart.businessRanges[0].val.rotated, true);
-    assert.strictEqual(chart.businessRanges[0].arg.rotated, true);
+    assert.strictEqual(chart._valueAxes[0].setBusinessRange.lastCall.args[0].rotated, true);
+    assert.strictEqual(chart._argumentAxes[0].setBusinessRange.lastCall.args[0].rotated, true);
 });
 
 QUnit.test("Pass rotation info to Business range (rotated = false)", function(assert) {
     var chart = this.createChart({
         argumentAxis: { mockRange: {} }
     });
-    assert.ok(chart.businessRanges);
-    assert.equal(chart.businessRanges.length, 1);
-    assert.strictEqual(chart.businessRanges[0].val.rotated, false);
-    assert.strictEqual(chart.businessRanges[0].arg.rotated, false);
+
+    assert.strictEqual(chart._valueAxes[0].setBusinessRange.lastCall.args[0].rotated, false);
+    assert.strictEqual(chart._argumentAxes[0].setBusinessRange.lastCall.args[0].rotated, false);
 });
 
 QUnit.test("Pass stick info to Business range (axis is discrete)", function(assert) {
@@ -37,180 +34,7 @@ QUnit.test("Pass stick info to Business range (axis is discrete)", function(asse
         argumentAxis: { mockRange: { axisType: "discrete" } }
     });
 
-    chart.zoomArgument(0, 5, true);
-    assert.ok(chart.businessRanges);
-    assert.equal(chart.businessRanges.length, 1);
-    assert.strictEqual(chart.businessRanges[0].arg.stick, undefined);
-});
-
-QUnit.test("Pass min/max info to Business range (gesturesUsed = true && axis is not discrete)", function(assert) {
-    var chart = this.createChart({
-        argumentAxis: {
-            mockRange: {}
-        }
-    });
-
-    chart._argumentAxes[0].getTranslator = sinon.stub().returns({ getBusinessRange: sinon.stub().returns({ min: -5, max: 15 }) });
-
-    chart.zoomArgument(2, 5, true);
-    assert.ok(chart.businessRanges);
-    assert.equal(chart.businessRanges.length, 1);
-    assert.strictEqual(chart.businessRanges[0].arg.min, -5);
-    assert.strictEqual(chart.businessRanges[0].arg.max, 15);
-});
-
-QUnit.test("Pass min/max info to business range (range less then default values for empty axis and gesturesUsed = true), numeric", function(assert) {
-    var chart = this.createChart({
-        argumentAxis: {
-            mockRange: {}
-        }
-    });
-
-    chart._argumentAxes[0].getTranslator = sinon.stub().returns({ getBusinessRange: sinon.stub().returns({ min: 3, max: 5 }) });
-    chart.zoomArgument(3, 5, true);
-    assert.ok(chart.businessRanges);
-    assert.equal(chart.businessRanges.length, 1);
-    assert.equal(chart.businessRanges[0].arg.min, 3);
-    assert.equal(chart.businessRanges[0].arg.max, 5);
-});
-
-QUnit.test("Pass min/max info to business range (range less then default values for empty axis and gesturesUsed = true), datetime", function(assert) {
-    var chart = this.createChart({
-            argumentAxis: {
-                argumentType: "datetime",
-                mockRange: {}
-            }
-        }),
-        date1 = new Date(2015, 2, 1),
-        date2 = new Date(2015, 2, 9);
-
-    chart._argumentAxes[0].getTranslator = sinon.stub().returns({ getBusinessRange: sinon.stub().returns({ min: date1, max: date2 }) });
-    chart.zoomArgument(date1, date2, true);
-    assert.ok(chart.businessRanges);
-    assert.equal(chart.businessRanges.length, 1);
-    assert.equal(chart.businessRanges[0].arg.min, date1);
-    assert.equal(chart.businessRanges[0].arg.max, date2);
-});
-
-QUnit.test("Pass min/max info to business range (gesturesUsed = false)", function(assert) {
-    var chart = this.createChart({
-        argumentAxis: {
-            mockRange: {}
-        }
-    });
-
-    chart._argumentAxes[0].getTranslator = sinon.stub().returns({ getBusinessRange: sinon.stub().returns({ min: 2, max: 6 }) });
-    chart.zoomArgument(3, 5);
-    assert.ok(chart.businessRanges);
-    assert.equal(chart.businessRanges.length, 1);
-    assert.equal(chart.businessRanges[0].arg.min, 2);
-    assert.equal(chart.businessRanges[0].arg.max, 6);
-});
-
-QUnit.test("Pass stick info to Business range (gesturesUsed = true)", function(assert) {
-    var chart = this.createChart({
-        argumentAxis: { mockRange: {} }
-    });
-
-    chart.zoomArgument(0, 5, true);
-    assert.ok(chart.businessRanges);
-    assert.equal(chart.businessRanges.length, 1);
-    assert.strictEqual(chart.businessRanges[0].arg.stick, true);
-});
-
-QUnit.test("Pass stick info to Business range (gesturesUsed = false)", function(assert) {
-    var chart = this.createChart({
-        argumentAxis: { mockRange: {} }
-    });
-    chart.zoomArgument(0, 5);
-    assert.ok(chart.businessRanges);
-    assert.equal(chart.businessRanges.length, 1);
-    assert.strictEqual(chart.businessRanges[0].arg.stick, undefined);
-});
-
-QUnit.test("T178921. Pass min/max info to Business range (gesturesUsed = true)", function(assert) {
-    seriesMockData.series.push(new MockSeries({
-        range: {
-            val: {
-                min: 0,
-                max: 15
-            }
-        }
-    }));
-    var chart = this.createChart({
-            series: [{ type: "line" }],
-            argumentAxis: {
-                mockRange: {
-                    min: 5,
-                    max: 10,
-                    minVisible: 5,
-                    maxVisible: 10
-                }
-            }
-        }),
-        seriesSpy = sinon.spy(chart.getAllSeries()[0], "getRangeData"),
-        adjustZoomValuesSpy = sinon.spy(chart._argumentAxes[0], "zoom");
-
-    chart.zoomArgument(2, 12, true);
-
-    assert.equal(seriesSpy.lastCall.args[0].minArg, adjustZoomValuesSpy.lastCall.returnValue.min, "minArg to series");
-    assert.equal(seriesSpy.lastCall.args[0].maxArg, adjustZoomValuesSpy.lastCall.returnValue.max, "maxArg to series");
-    assert.ok(adjustZoomValuesSpy.calledOnce);
-    assert.deepEqual(adjustZoomValuesSpy.lastCall.args, [2, 12, true]);
-});
-
-QUnit.test("pass calcInterval callback", function(assert) {
-    //arrange
-    seriesMockData.series.push(new MockSeries({
-        range: {
-            val: {
-                min: 0,
-                max: 10
-            }
-        }
-    }));
-    seriesMockData.series.push(new MockSeries({
-        range: {
-            val: {
-                min: 101,
-                max: 151
-            }
-        }
-    }));
-    //act
-    var chart = this.createChart({
-        series: [{
-            pane: "topPane",
-            type: "line"
-        }, {
-            pane: "otherPane",
-            type: "line"
-        }],
-        valueAxis: {
-            minValueMargin: 0,
-            maxValueMargin: 0,
-            mockRange: {
-                minValueMargin: 0,
-                maxValueMargin: 0,
-                minValueMarginPriority: 50,
-                maxValueMarginPriority: 50
-            }
-        },
-        panes: [
-            {
-                name: "topPane",
-                position: "top"
-            }, {
-                name: "otherPane"
-            }
-        ]
-    });
-    chart._argumentAxes[0].calcInterval = "calc interval";
-    chart._argumentAxes[1].calcInterval = "calc interval";
-    chart._populateBusinessRange();
-    //assert
-    assert.equal(chart.series[0].calcInterval, "calc interval", "valid calc interval");
-    assert.equal(chart.series[1].calcInterval, "calc interval", "valid calc interval");
+    assert.strictEqual(chart._argumentAxes[0].setBusinessRange.lastCall.args[0].stick, undefined);
 });
 
 QUnit.test("Calculate business range for continuous without indent", function(assert) {
@@ -237,12 +61,10 @@ QUnit.test("Calculate business range for continuous without indent", function(as
             }
         }
     });
-    assert.ok(chart.businessRanges);
-    assert.equal(chart.businessRanges.length, 1);
-    assert.ok(!chart.businessRanges[0].arg.categories);
-    assert.ok(!chart.businessRanges[0].val.categories);
-    assert.equal(chart.businessRanges[0].val.min, 0);
-    assert.equal(chart.businessRanges[0].val.max, 10);
+    assert.ok(!chart._argumentAxes[0].setBusinessRange.lastCall.args[0].categories);
+    assert.ok(!chart._valueAxes[0].setBusinessRange.lastCall.args[0].categories);
+    assert.equal(chart._valueAxes[0].setBusinessRange.lastCall.args[0].min, 0);
+    assert.equal(chart._valueAxes[0].setBusinessRange.lastCall.args[0].max, 10);
 });
 
 QUnit.test("Calculate business range for continuous with default indent", function(assert) {
@@ -259,11 +81,10 @@ QUnit.test("Calculate business range for continuous with default indent", functi
             type: "line"
         }
     });
-    assert.ok(chart.businessRanges);
-    assert.equal(chart.businessRanges.length, 1);
-    var range = chart.businessRanges[0].val;
-    assert.ok(!chart.businessRanges[0].arg.categories);
-    assert.ok(!chart.businessRanges[0].val.categories);
+
+    var range = chart._valueAxes[0].setBusinessRange.lastCall.args[0];
+    assert.ok(!chart._argumentAxes[0].setBusinessRange.lastCall.args[0].categories);
+    assert.ok(!range.categories);
     assert.equal(range.min, -1);
     assert.equal(range.max, 9);
 });
@@ -282,10 +103,9 @@ QUnit.test("Calculate business range for categories from Axis and continuous val
             type: "line"
         }
     });
-    assert.ok(chart.businessRanges);
-    assert.equal(chart.businessRanges.length, 1);
-    assert.equal(chart.businessRanges[0].val.min, -1);
-    assert.equal(chart.businessRanges[0].val.max, 9);
+
+    assert.equal(chart._valueAxes[0].setBusinessRange.lastCall.args[0].min, -1);
+    assert.equal(chart._valueAxes[0].setBusinessRange.lastCall.args[0].max, 9);
 });
 
 QUnit.test("Calculate business range merged with Value Axis range (no indent)", function(assert) {
@@ -315,8 +135,8 @@ QUnit.test("Calculate business range merged with Value Axis range (no indent)", 
         series: { type: "line" }
     });
     assert.equal(chart.businessRanges.length, 1);
-    assert.equal(chart.businessRanges[0].val.min, -2);
-    assert.equal(chart.businessRanges[0].val.max, 12);
+    assert.equal(chart._valueAxes[0].setBusinessRange.lastCall.args[0].min, -2);
+    assert.equal(chart._valueAxes[0].setBusinessRange.lastCall.args[0].max, 12);
 });
 
 QUnit.test("Calculate business range merged with Argument Axis range (no indent)", function(assert) {
@@ -347,9 +167,8 @@ QUnit.test("Calculate business range merged with Argument Axis range (no indent)
             type: "line"
         }
     });
-    assert.ok(chart.businessRanges);
-    assert.equal(chart.businessRanges.length, 1);
-    var range = chart.businessRanges[0].arg;
+
+    var range = chart._argumentAxes[0].setBusinessRange.lastCall.args[0];
     assert.equal(range.min, -2);
     assert.equal(range.max, 12);
 });
@@ -404,10 +223,8 @@ QUnit.test("Two ranges for two panes - data from series, indents from common axi
 
     });
     //assert
-    assert.ok(chart.businessRanges);
-    assert.equal(chart.businessRanges.length, 2);
 
-    var range1 = chart.businessRanges[0].val;
+    var range1 = chart._valueAxes[0].setBusinessRange.lastCall.args[0];
     assertRange(assert, range1, {
         pane: "topPane",
         min: 0,
@@ -493,10 +310,8 @@ QUnit.test("Two ranges for two panes. One axis with showZero = true, another one
             { name: "otherPane" }]
     });
     //assert
-    assert.ok(chart.businessRanges);
-    assert.equal(chart.businessRanges.length, 3);
 
-    assertRange(assert, chart.businessRanges[0].val, {
+    assertRange(assert, chart._valueAxes[0].setBusinessRange.lastCall.args[0], {
         pane: "topPane",
         min: 0,
         max: 100
@@ -584,22 +399,20 @@ QUnit.test("Two ranges for two panes. One axis with showZero = true, another one
             { name: "otherPane" }]
     });
     //assert
-    assert.ok(chart.businessRanges);
-    assert.equal(chart.businessRanges.length, 3);
 
-    assertRange(assert, chart.businessRanges[0].val, {
+    assertRange(assert, chart._valueAxes[0].setBusinessRange.lastCall.args[0], {
         pane: "topPane",
         min: 0,
         max: 100
     });
 
-    assertRange(assert, chart.businessRanges[1].val, {
+    assertRange(assert, chart._valueAxes[1].setBusinessRange.lastCall.args[0], {
         pane: "otherPane",
         min: -100,
         max: 0
     });
 
-    assertRange(assert, chart.businessRanges[2].val, {
+    assertRange(assert, chart._valueAxes[2].setBusinessRange.lastCall.args[0], {
         pane: "otherPane",
         min: 20,
         max: 200
@@ -615,7 +428,7 @@ QUnit.test("Two Series, one of them is not visible", function(assert) {
         series: [{ type: "line" }, { type: "line" }]
     });
 
-    assert.deepEqual(chart.businessRanges[0].arg.categories, ["D", "E", "F"]);
+    assert.deepEqual(chart._argumentAxes[0].setBusinessRange.lastCall.args[0].categories, ["D", "E", "F"]);
 });
 
 QUnit.test("Categories in series is not sort", function(assert) {
@@ -626,7 +439,7 @@ QUnit.test("Categories in series is not sort", function(assert) {
         series: [{ type: "line" }]
     });
 
-    assert.deepEqual(chart.businessRanges[0].arg.categories, ["A", "C", "D", "E", "F"]);
+    assert.deepEqual(chart._argumentAxes[0].setBusinessRange.lastCall.args[0].categories, ["A", "C", "D", "E", "F"]);
 });
 
 //T474125
@@ -641,7 +454,7 @@ QUnit.test("Sort categories in series, dateTime", function(assert) {
         }
     });
 
-    assert.deepEqual(chart.businessRanges[0].arg.categories, [new Date(2017, 1, 2), new Date(2017, 2, 2), new Date(2017, 6, 2), new Date(2017, 8, 2)]);
+    assert.deepEqual(chart._argumentAxes[0].setBusinessRange.lastCall.args[0].categories, [new Date(2017, 1, 2), new Date(2017, 2, 2), new Date(2017, 6, 2), new Date(2017, 8, 2)]);
 });
 
 QUnit.test("Series is not discrete, argument axis has empty categories, category filtering should be successful", function(assert) {
@@ -652,7 +465,7 @@ QUnit.test("Series is not discrete, argument axis has empty categories, category
         series: [{ type: "line" }]
     });
 
-    assert.deepEqual(chart.businessRanges[0].arg.categories, []);
+    assert.deepEqual(chart._argumentAxes[0].setBusinessRange.lastCall.args[0].categories, []);
 });
 
 var assertRange = commonMethodsForTests.assertRange;
@@ -1048,4 +861,41 @@ QUnit.test("defaultPane specified, no panes with givenName - defaultPane is the 
     });
 
     assert.strictEqual(chart.defaultPane, "pane 2");
+});
+
+QUnit.module("Resample points", commons.environment);
+
+QUnit.test("Canvas length for rotated chart", function(assert) {
+    seriesMockData.series.push(new MockSeries());
+    var chart = this.createChart({
+        series: [{ }],
+        rotated: true,
+        useAggregation: true,
+        margin: {
+            left: 20,
+            right: 10,
+            top: 5,
+            bottom: 30
+        }
+    });
+
+    assert.ok(chart.getAllSeries()[0].resamplePoints.called);
+    assert.equal(chart.getAllSeries()[0].resamplePoints.args[0][0], 115);
+});
+
+QUnit.test("Canvas lenght for not rotated chart", function(assert) {
+    seriesMockData.series.push(new MockSeries());
+    var chart = this.createChart({
+        series: [{ }],
+        useAggregation: true,
+        margin: {
+            left: 20,
+            right: 10,
+            top: 5,
+            bottom: 30
+        }
+    });
+
+    assert.ok(chart.getAllSeries()[0].resamplePoints.called);
+    assert.equal(chart.getAllSeries()[0].resamplePoints.args[0][0], 270);
 });

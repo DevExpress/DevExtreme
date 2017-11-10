@@ -103,7 +103,8 @@ exports.FooterView = columnsView.ColumnsView.inherit((function() {
         },
 
         _handleDataChanged: function(e) {
-            if(e.changeType === "refresh") {
+            var changeType = e.changeType;
+            if(changeType === "refresh" || changeType === "append" || changeType === "prepend") {
                 this.render();
             }
         },
@@ -229,15 +230,16 @@ var SummaryDataSourceAdapterClientExtender = (function() {
         },
         _handleDataLoadedCore: function(options) {
             var that = this,
-                groups = dataUtils.normalizeSortingInfo(options.loadOptions.group || []),
+                groups = dataUtils.normalizeSortingInfo(options.storeLoadOptions.group || options.loadOptions.group || []),
                 remoteOperations = options.remoteOperations || {},
                 summary = that.summaryGetter()(remoteOperations),
                 totalAggregates;
 
             if(remoteOperations.summary) {
-                if(!remoteOperations.paging && !remoteOperations.grouping && groups.length && summary) {
-                    calculateAggregates(that, { groupAggregates: summary.groupAggregates }, options.data, groups.length);
-
+                if(!remoteOperations.paging && groups.length && summary) {
+                    if(!remoteOperations.grouping) {
+                        calculateAggregates(that, { groupAggregates: summary.groupAggregates }, options.data, groups.length);
+                    }
                     options.data = sortGroupsBySummary(options.data, groups, summary);
                 }
             } else if(!remoteOperations.paging) {
@@ -526,7 +528,7 @@ gridCore.registerModule("summary", {
             /**
              * @name dxDataGridOptions_sortByGroupSummaryInfo_summaryItem
              * @publicName summaryItem
-             * @type string
+             * @type string|number
              * @default undefined
              */
             /**
@@ -573,17 +575,18 @@ gridCore.registerModule("summary", {
                     },
 
                     _processGroupItems: function(items, groupCount, options) {
-                        var result = this.callBase.apply(this, arguments);
+                        var data = options && options.data,
+                            result = this.callBase.apply(this, arguments);
 
                         if(options) {
                             if(options.isGroupFooterVisible === undefined) {
                                 options.isGroupFooterVisible = this._isGroupFooterVisible();
                             }
 
-                            if(options.data && options.data.items && options.isGroupFooterVisible && (options.collectContinuationItems || !options.data.isContinuationOnNextPage)) {
+                            if(data && data.items && options.isGroupFooterVisible && (options.collectContinuationItems || !data.isContinuationOnNextPage)) {
                                 result.push({
                                     rowType: DATAGRID_GROUP_FOOTER_ROW_TYPE,
-                                    data: options.data,
+                                    data: data,
                                     groupIndex: options.path.length - 1,
                                     values: []
                                 });

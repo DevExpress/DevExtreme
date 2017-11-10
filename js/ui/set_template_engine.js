@@ -12,7 +12,7 @@
 * @publicName setTemplateEngine(options)
 * @param1 templateEngineOptions:object
 * @param1_field1 compile:function(html, $element)
-* @param1_field2 render:function(template, data)
+* @param1_field2 render:function(template, data, index)
 * @module ui/set_template_engine
 * @export default
 */

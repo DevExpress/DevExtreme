@@ -91,9 +91,7 @@ if(compareVersion($.fn.jquery, [3]) < 0) {
         $.event.fixHooks[name] = DX_EVENT_HOOKS;
     });
 
-    var fix = function(event) {
-        var originalEvent = event.originalEvent;
-
+    var fix = function(event, originalEvent) {
         var fixHook = $.event.fixHooks[originalEvent.type] || $.event.mouseHooks;
 
         var props = fixHook.props ? $.event.props.concat(fixHook.props) : $.event.props,
@@ -108,7 +106,7 @@ if(compareVersion($.fn.jquery, [3]) < 0) {
     };
 
     exports.copy = function(originalEvent) {
-        return fix($.Event(originalEvent));
+        return fix($.Event(originalEvent.type, originalEvent), originalEvent);
     };
 } else {
     $.each(touchPropsToHook, function(_, name) {

@@ -1538,4 +1538,27 @@ QUnit.module("predicate for manual option binding control", {
             [ "objectProperty.nestedProperty", "nestedProperty", vm.objectProperty ]
         ]);
     });
+
+    QUnit.test("options changing after component created", function(assert) {
+        var isBindingProperty = function() {
+            return false;
+        };
+
+        var vm = {
+            options: ko.observable({
+                isBindingProperty: isBindingProperty,
+                option1: true
+            })
+        };
+
+        var markup = $("<div></div>").attr("data-bind", "dxTest: $data").appendTo(FIXTURE_ELEMENT);
+        ko.applyBindings(vm.options, markup[0]);
+
+        vm.options({
+            isBindingProperty: isBindingProperty,
+            option1: false
+        });
+
+        assert.equal(markup.dxTest("option", "option1"), false);
+    });
 });

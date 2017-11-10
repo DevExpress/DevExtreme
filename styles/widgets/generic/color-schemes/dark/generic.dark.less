@@ -101,7 +101,7 @@
 */
 @base-icon-color: @base-text-color;
 
-@base-inverted-text-color: @base-bg;
+@base-inverted-text-color: #2a2a2a;
 @base-inverted-icon-color: @base-inverted-text-color;
 
 /**
@@ -791,6 +791,7 @@
 
 @list-group-header-border-bottom: 2px solid @list-border-color;
 @list-group-header-default-padding-top: 20px;
+@list-group-header-compact-padding-top: 10px;
 @list-item-chevron-icon-color: @base-icon-color;
 
 // Overlay
@@ -1255,6 +1256,7 @@
 * @group datagrid
 */
 @datagrid-border-color: @base-border-color;
+@datagrid-border: 1px solid @datagrid-border-color;
 /**
 * @name 20. Header text color
 * @type color
@@ -1398,7 +1400,7 @@
 * @type color
 * @group datagrid
 */
-@datagrid-row-error-bg: fade(@base-invalid-color, 60%);
+@datagrid-row-error-bg: mix(@base-invalid-color, @datagrid-base-background-color, 60%);
 
 /**
 * @name 40. Link color
@@ -1477,6 +1479,7 @@
 * @group treelist
 */
 @treelist-border-color: @base-border-color;
+@treelist-border: 1px solid @treelist-border-color;
 /**
 * @name 20. Header text color
 * @type color
@@ -1580,6 +1583,12 @@
 * @group treelist
 */
 @treelist-spin-icon-color: darken(@base-icon-color, 38.5%);
+/**
+* @name 152. Selection spin icon color
+* @type color
+* @group treelist
+*/
+@treelist-selection-spin-icon-color: @treelist-spin-icon-color;
 
 /**
 * @name 160. Highlighted text background color
@@ -1601,7 +1610,7 @@
 * @type color
 * @group treelist
 */
-@treelist-row-error-bg: fade(@base-invalid-color, 60%);
+@treelist-row-error-bg: mix(@base-invalid-color, @treelist-base-background-color, 60%);
 
 /**
 * @name 40. Link color
@@ -2080,8 +2089,8 @@
 
 //DateView
 @dateview-border-color: @base-border-color;
-@dateview-shadow-up: bottom, fade(@base-bg, 0%) 0%, fade(@base-bg, 80%) 60%;
-@dateview-shadow-down: top, fade(@base-bg, 0%) 0%, fade(@base-bg, 80%) 60%;
+@dateview-shadow-up: 0deg, fade(@base-bg, 0%) 0%, fade(@base-bg, 80%) 60%;
+@dateview-shadow-down: 180deg, fade(@base-bg, 0%) 0%, fade(@base-bg, 80%) 60%;
 @dateview-color: @base-text-color;
 
 //ColorView

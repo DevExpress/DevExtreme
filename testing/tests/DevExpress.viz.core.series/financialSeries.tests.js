@@ -5,7 +5,7 @@ var $ = require("jquery"),
     Series = require("viz/series/base_series").Series,
     pointModule = require("viz/series/points/base_point");
 
-/* global insertMockFactory, MockTranslator */
+/* global insertMockFactory, MockAxis */
 require("../../helpers/chartMocks.js");
 
 require("viz/chart");
@@ -30,16 +30,6 @@ var environment = {
         this.data = [
                 { date: "arg1", high: "high1", low: "low1", open: "open1", close: "close1" }
         ];
-        this.translators = {
-            x: new MockTranslator({
-                translate: { "First": 10, "Second": 20, "Third": 30, "Fourth": 40, "canvas_position_default": "defaultX" },
-                getCanvasVisibleArea: { min: 0, max: 700 }
-            }),
-            y: new MockTranslator({
-                translate: { 1: 100, 2: 200, 3: 300, 4: 400, "canvas_position_default": "defaultY" },
-                getCanvasVisibleArea: { min: 0, max: 500 }
-            })
-        };
         this.createPoint = sinon.stub(pointModule, "Point", function() {
             var stub = mockPoints[mockPointIndex++];
             stub.argument = 1;
@@ -182,7 +172,17 @@ var checkGroups = function(assert, series) {
         assert.equal(this.createPoint.firstCall.args[1].closeValue, -4, "Close value should be correct");
     });
 
-    QUnit.module("StockSeries series. Draw", environment);
+    QUnit.module("StockSeries series. Draw", {
+        beforeEach: environment.beforeEach,
+        afterEach: environment.afterEach,
+        createSeries: function(options) {
+            return createSeries(options, {
+                renderer: this.renderer,
+                argumentAxis: new MockAxis({ renderer: this.renderer }),
+                valueAxis: new MockAxis({ renderer: this.renderer })
+            });
+        },
+    });
 
     QUnit.test("Update template field", function(assert) {
         var series = createSeries({
@@ -226,13 +226,12 @@ var checkGroups = function(assert, series) {
     });
 
     QUnit.test("Draw without data", function(assert) {
-        var series = createSeries({
+        var series = this.createSeries({
             type: seriesType,
             point: { visible: false }
-
-        }, { renderer: this.renderer });
+        });
         //act
-        series.draw(this.translators, false);
+        series.draw(false);
         //assert
 
         checkGroups(assert, series);
@@ -240,18 +239,17 @@ var checkGroups = function(assert, series) {
     });
 
     QUnit.test("Draw simple data without animation", function(assert) {
-        var series = createSeries({
+        var series = this.createSeries({
             type: seriesType,
             point: { visible: false }
-
-        }, { renderer: this.renderer });
+        });
         series.updateData(this.data);
         $.each(series._points, function(i, pt) {
             pt.x = pt.argument;
             pt.y = pt.value;
         });
         //act
-        series.draw(this.translators, false);
+        series.draw(false);
         //assert
         checkGroups(assert, series);
         assert.ok(series._points.length, "points");
@@ -261,18 +259,17 @@ var checkGroups = function(assert, series) {
     });
 
     QUnit.test("Draw simple data with animation", function(assert) {
-        var series = createSeries({
+        var series = this.createSeries({
             type: seriesType,
             point: { visible: false }
-
-        }, { renderer: this.renderer });
+        });
         series.updateData(this.data);
         $.each(series._points, function(i, pt) {
             pt.x = pt.argument;
             pt.y = pt.value;
         });
         //act
-        series.draw(this.translators, true);
+        series.draw(true);
         //assert
         checkGroups(assert, series);
 
@@ -284,13 +281,12 @@ var checkGroups = function(assert, series) {
     });
 
     QUnit.test("Create groups without animation. T101152", function(assert) {
-        var series = createSeries({
+        var series = this.createSeries({
             type: seriesType,
             point: { visible: false }
-
-        }, { renderer: this.renderer });
+        });
         //act
-        series.draw(this.translators, false);
+        series.draw(false);
         //assert
 
         assert.ok(series._labelsGroup);
@@ -306,13 +302,12 @@ var checkGroups = function(assert, series) {
 
 
     QUnit.test("Create groups with animation. T101152", function(assert) {
-        var series = createSeries({
+        var series = this.createSeries({
             type: seriesType,
             point: { visible: false }
-
-        }, { renderer: this.renderer });
+        });
         //act
-        series.draw(this.translators, true);
+        series.draw(true);
         //assert
 
         assert.ok(series._labelsGroup);
@@ -335,7 +330,11 @@ var checkGroups = function(assert, series) {
             this.series = createSeries({
                 type: seriesType,
                 point: { visible: true }
-            }, { renderer: this.renderer });
+            }, {
+                renderer: this.renderer,
+                argumentAxis: new MockAxis({ renderer: this.renderer }),
+                valueAxis: new MockAxis({ renderer: this.renderer })
+            });
             this.series.updateData(this.data);
         },
         afterEach: environment.afterEach
@@ -344,7 +343,7 @@ var checkGroups = function(assert, series) {
     QUnit.test("Draw without animation", function(assert) {
         var series = this.series;
         //act
-        series.draw(this.translators, false);
+        series.draw(false);
         //assert
         assert.ok(series._points.length);
         $.each(series._points, function(i, p) {
@@ -358,7 +357,7 @@ var checkGroups = function(assert, series) {
     QUnit.test("Draw with animation", function(assert) {
         var series = this.series;
         //act
-        series.draw(this.translators, true);
+        series.draw(true);
         //assert
         assert.ok(series._points.length);
         $.each(series._points, function(i, p) {
@@ -627,9 +626,12 @@ var checkGroups = function(assert, series) {
             width: "n-width",
             reduction: { color: "reduction", level: "high" },
             innerColor: "innerColor"
+        }, {
+            argumentAxis: new MockAxis({ renderer: this.renderer }),
+            valueAxis: new MockAxis({ renderer: this.renderer })
         });
         series.updateData(this.data);
-        series.draw(this.translators, false);
+        series.draw(false);
 
         assert.deepEqual(series._markersGroup.defaultMarkersGroup._stored_settings, {
             "class": "default-markers",
@@ -1437,15 +1439,18 @@ var checkGroups = function(assert, series) {
 
     QUnit.test("Check draw complete", function(assert) {
         var data = [{ date: 1, open: 1, close: 1, low: 1, high: null }],
-            series = createSeries(this.options),
+            series = createSeries(this.options, {
+                argumentAxis: new MockAxis({ renderer: this.renderer }),
+                valueAxis: new MockAxis({ renderer: this.renderer })
+            }),
             newOptions = $.extend(true, {}, series.getOptions(), { type: "line" });
 
         series.updateData(data);
-        series.draw(this.translators, false);
+        series.draw(false);
 
         series.updateOptions(newOptions);
         var drawSpy = sinon.spy(series, "_draw");
-        series.draw(this.translators, true);
+        series.draw(true);
 
         assert.ok(drawSpy.calledOnce);
     });
@@ -1494,35 +1499,42 @@ var checkGroups = function(assert, series) {
 
     var seriesType = "candlestick";
 
-    QUnit.module("CandleStick series. Draw", environment);
+    QUnit.module("CandleStick series. Draw", {
+        beforeEach: environment.beforeEach,
+        afterEach: environment.afterEach,
+        createSeries: function(options) {
+            return createSeries(options, {
+                renderer: this.renderer,
+                argumentAxis: new MockAxis({ renderer: this.renderer }),
+                valueAxis: new MockAxis({ renderer: this.renderer })
+            });
+        }
+    });
 
     QUnit.test("Draw without data", function(assert) {
-        var series = createSeries({
+        var series = this.createSeries({
             type: seriesType,
             point: { visible: false }
-
-        }, { renderer: this.renderer });
+        });
         //act
-        series.draw(this.translators, false);
+        series.draw(false);
         //assert
 
         checkGroups(assert, series);
-
     });
 
     QUnit.test("Draw simple data without animation", function(assert) {
-        var series = createSeries({
+        var series = this.createSeries({
             type: seriesType,
             point: { visible: false }
-
-        }, { renderer: this.renderer });
+        });
         series.updateData(this.data);
         $.each(series._points, function(i, pt) {
             pt.x = pt.argument;
             pt.y = pt.value;
         });
         //act
-        series.draw(this.translators, false);
+        series.draw(false);
         //assert
         checkGroups(assert, series);
         assert.ok(series._points.length, "points");
@@ -1532,18 +1544,18 @@ var checkGroups = function(assert, series) {
     });
 
     QUnit.test("Draw simple data with animation", function(assert) {
-        var series = createSeries({
+        var series = this.createSeries({
             type: seriesType,
             point: { visible: false }
 
-        }, { renderer: this.renderer });
+        });
         series.updateData(this.data);
         $.each(series._points, function(i, pt) {
             pt.x = pt.argument;
             pt.y = pt.value;
         });
         //act
-        series.draw(this.translators, true);
+        series.draw(true);
         //assert
         checkGroups(assert, series);
 
@@ -1563,7 +1575,11 @@ var checkGroups = function(assert, series) {
             this.series = createSeries({
                 type: seriesType,
                 point: { visible: true }
-            }, { renderer: this.renderer });
+            }, {
+                renderer: this.renderer,
+                argumentAxis: new MockAxis({ renderer: this.renderer }),
+                valueAxis: new MockAxis({ renderer: this.renderer })
+            });
             this.series.updateData(this.data);
         },
         afterEach: environment.afterEach
@@ -1572,7 +1588,7 @@ var checkGroups = function(assert, series) {
     QUnit.test("Draw without animation", function(assert) {
         var series = this.series;
         //act
-        series.draw(this.translators, false);
+        series.draw(false);
         //assert
         assert.ok(series._points.length);
         $.each(series._points, function(i, p) {
@@ -1586,7 +1602,7 @@ var checkGroups = function(assert, series) {
     QUnit.test("Draw with animation", function(assert) {
         var series = this.series;
         //act
-        series.draw(this.translators, true);
+        series.draw(true);
         //assert
         assert.ok(series._points.length);
         $.each(series._points, function(i, p) {
@@ -1861,9 +1877,13 @@ var checkGroups = function(assert, series) {
             width: "n-width",
             reduction: { color: "reduction", level: "high" },
             innerColor: "innerColor"
+        }, {
+            renderer: this.renderer,
+            argumentAxis: new MockAxis({ renderer: this.renderer }),
+            valueAxis: new MockAxis({ renderer: this.renderer })
         });
         series.updateData(this.data);
-        series.draw(this.translators, false);
+        series.draw(false);
 
         assert.deepEqual(series._markersGroup.defaultMarkersGroup._stored_settings, {
             "class": "default-markers",

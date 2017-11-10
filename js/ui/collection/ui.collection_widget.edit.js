@@ -11,7 +11,12 @@ var $ = require("../../core/renderer"),
     Selection = require("../selection/selection"),
     when = require("../../integration/jquery/deferred").when;
 
-var ITEM_DELETING_DATA_KEY = "dxItemDeleting";
+var ITEM_DELETING_DATA_KEY = "dxItemDeleting",
+    NOT_EXISTING_INDEX = -1;
+
+var indexExists = function(index) {
+    return index !== NOT_EXISTING_INDEX;
+};
 
 var CollectionWidget = BaseCollectionWidget.inherit({
 
@@ -67,6 +72,8 @@ var CollectionWidget = BaseCollectionWidget.inherit({
              */
             selectedItemKeys: [],
 
+            maxFilterLengthInRequest: 1500,
+
             /**
              * @name CollectionWidgetOptions_keyExpr
              * @publicName keyExpr
@@ -81,7 +88,7 @@ var CollectionWidget = BaseCollectionWidget.inherit({
             * @type number
             * @default -1
             */
-            selectedIndex: -1,
+            selectedIndex: NOT_EXISTING_INDEX,
 
             /**
             * @name CollectionWidgetOptions_selectedItem
@@ -123,7 +130,7 @@ var CollectionWidget = BaseCollectionWidget.inherit({
             * @type_function_param1_field4 itemData:object
             * @type_function_param1_field5 itemElement:jQuery
             * @type_function_param1_field6 itemIndex:number | object
-            * @type_function_return Promise
+            * @type_function_param1_field7 cancel:boolean | Promise
             * @action
             * @hidden
             */
@@ -191,6 +198,10 @@ var CollectionWidget = BaseCollectionWidget.inherit({
         return !!(this._dataSource && this._dataSource.key());
     },
 
+    _getCombinedFilter: function() {
+        return this._dataSource && this._dataSource.filter();
+    },
+
     keyOf: function(item) {
         var key = item,
             store = this._dataSource && this._dataSource.store();
@@ -210,6 +221,7 @@ var CollectionWidget = BaseCollectionWidget.inherit({
 
         this._selection = new Selection({
             mode: this.option("selectionMode"),
+            maxFilterLengthInRequest: this.option("maxFilterLengthInRequest"),
             equalByReference: !this._isKeySpecified(),
             onSelectionChanged: function(args) {
                 if(args.addedItemKeys.length || args.removedItemKeys.length) {
@@ -217,9 +229,7 @@ var CollectionWidget = BaseCollectionWidget.inherit({
                     that._updateSelectedItems(args.addedItems, args.removedItems);
                 }
             },
-            filter: function() {
-                return that._dataSource && that._dataSource.filter();
-            },
+            filter: that._getCombinedFilter.bind(that),
             totalCount: function() {
                 var items = that.option("items");
                 var dataSource = that._dataSource;
@@ -264,7 +274,7 @@ var CollectionWidget = BaseCollectionWidget.inherit({
         $.each(keys, function(_, key) {
             var selectedIndex = that._getIndexByKey(key);
 
-            if(selectedIndex !== -1) {
+            if(indexExists(selectedIndex)) {
                 indices.push(selectedIndex);
             }
         });
@@ -284,6 +294,7 @@ var CollectionWidget = BaseCollectionWidget.inherit({
 
         var selectedItemIndices = this._getSelectedItemIndices();
         this._renderSelection(selectedItemIndices, []);
+
         this._rendering = false;
     },
 
@@ -318,7 +329,7 @@ var CollectionWidget = BaseCollectionWidget.inherit({
                 selectedItems = this.option("selectedItems") || [];
                 selectedIndex = this._editStrategy.getIndexByItemData(selectedItems[0]);
 
-                if(this.option("selectionRequired") && selectedIndex === -1) {
+                if(this.option("selectionRequired") && !indexExists(selectedIndex)) {
                     this._syncSelectionOptions("selectedIndex");
                     return;
                 }
@@ -331,7 +342,7 @@ var CollectionWidget = BaseCollectionWidget.inherit({
                 selectedItem = this.option("selectedItem");
                 selectedIndex = this._editStrategy.getIndexByItemData(selectedItem);
 
-                if(this.option("selectionRequired") && selectedIndex === -1) {
+                if(this.option("selectionRequired") && !indexExists(selectedIndex)) {
                     this._syncSelectionOptions("selectedIndex");
                     return;
                 }
@@ -343,21 +354,16 @@ var CollectionWidget = BaseCollectionWidget.inherit({
                 } else {
                     this._setOptionSilent("selectedItems", []);
                     this._setOptionSilent("selectedItemKeys", []);
-                    this._setOptionSilent("selectedIndex", -1);
+                    this._setOptionSilent("selectedIndex", NOT_EXISTING_INDEX);
                 }
                 break;
             case "selectedItemKeys":
-                if(this.option("selectionRequired")) {
-                    var selectedItemKeys = this.option("selectedItemKeys");
-                    selectedIndex = this._getIndexByKey(selectedItemKeys[0]);
-
-                    if(selectedIndex === -1) {
-                        this._syncSelectionOptions("selectedIndex");
-                        return;
-                    }
-                } else {
-                    this._selection.setSelection(this.option("selectedItemKeys"));
+                var selectedItemKeys = this.option("selectedItemKeys");
+                if(this.option("selectionRequired") && !indexExists(this._getIndexByKey(selectedItemKeys[0]))) {
+                    this._syncSelectionOptions("selectedIndex");
+                    return;
                 }
+                this._selection.setSelection(selectedItemKeys);
                 break;
         }
     },
@@ -379,6 +385,20 @@ var CollectionWidget = BaseCollectionWidget.inherit({
         }
 
         return optionName;
+    },
+
+    _compareKeys: function(oldKeys, newKeys) {
+        if(oldKeys.length !== newKeys.length) {
+            return false;
+        }
+
+        for(var i = 0; i < newKeys.length; i++) {
+            if(oldKeys[i] !== newKeys[i]) {
+                return false;
+            }
+        }
+
+        return true;
     },
 
     _normalizeSelectedItems: function() {
@@ -409,7 +429,11 @@ var CollectionWidget = BaseCollectionWidget.inherit({
                 this._selection.setSelection(this._getKeysByItems(newSelection));
             }
         } else {
-            this._selection.setSelection(this._getKeysByItems(this.option("selectedItems")));
+            var newKeys = this._getKeysByItems(this.option("selectedItems"));
+            var oldKeys = this._selection.getSelectedItemKeys();
+            if(!this._compareKeys(oldKeys, newKeys)) {
+                this._selection.setSelection(newKeys);
+            }
         }
     },
 
@@ -467,24 +491,21 @@ var CollectionWidget = BaseCollectionWidget.inherit({
         if(that._rendered && (addedItems.length || removedItems.length)) {
             var selectionChangePromise = that._selectionChangePromise;
             if(!that._rendering) {
-                var addedSelection = [];
-                var removedSelection = [];
-                var i;
+                var addedSelection = [],
+                    normalizedIndex, i,
+                    removedSelection = [];
 
                 for(i = 0; i < addedItems.length; i++) {
-                    addedSelection.push(that._getIndexByItemData(addedItems[i]));
+                    normalizedIndex = that._getIndexByItemData(addedItems[i]);
+                    addedSelection.push(normalizedIndex);
+                    that._addSelection(normalizedIndex);
                 }
 
                 for(i = 0; i < removedItems.length; i++) {
-                    removedSelection.push(that._getIndexByItemData(removedItems[i]));
-                }
-
-                $.each(removedSelection, function(_, normalizedIndex) {
+                    normalizedIndex = that._getIndexByItemData(removedItems[i]);
+                    removedSelection.push(normalizedIndex);
                     that._removeSelection(normalizedIndex);
-                });
-                $.each(addedSelection, function(_, normalizedIndex) {
-                    that._addSelection(normalizedIndex);
-                });
+                }
 
                 that._updateSelection(addedSelection, removedSelection);
             }
@@ -512,10 +533,10 @@ var CollectionWidget = BaseCollectionWidget.inherit({
     _removeSelection: function(normalizedIndex) {
         var $itemElement = this._editStrategy.getItemElement(normalizedIndex);
 
-        if(normalizedIndex !== -1) {
+        if(indexExists(normalizedIndex)) {
             $itemElement.removeClass(this._selectedItemClass());
             this._setAriaSelected($itemElement, "false");
-            $itemElement.triggerHandler("stateChanged");
+            $itemElement.triggerHandler("stateChanged", false);
         }
     },
 
@@ -527,10 +548,10 @@ var CollectionWidget = BaseCollectionWidget.inherit({
     _addSelection: function(normalizedIndex) {
         var $itemElement = this._editStrategy.getItemElement(normalizedIndex);
 
-        if(normalizedIndex !== -1) {
+        if(indexExists(normalizedIndex)) {
             $itemElement.addClass(this._selectedItemClass());
             this._setAriaSelected($itemElement, "true");
-            $itemElement.triggerHandler("stateChanged");
+            $itemElement.triggerHandler("stateChanged", true);
         }
     },
 
@@ -552,6 +573,13 @@ var CollectionWidget = BaseCollectionWidget.inherit({
                     this._invalidate();
                 }
                 break;
+            case "dataSource":
+                if(!args.value || !args.value.length) {
+                    this.option("selectedItemKeys", []);
+                }
+
+                this.callBase(args);
+                break;
             case "selectedIndex":
             case "selectedItem":
             case "selectedItems":
@@ -570,6 +598,7 @@ var CollectionWidget = BaseCollectionWidget.inherit({
             case "onItemDeleting":
             case "onItemDeleted":
             case "onItemReordered":
+            case "maxFilterLengthInRequest":
                 break;
             default:
                 this.callBase(args);
@@ -596,7 +625,8 @@ var CollectionWidget = BaseCollectionWidget.inherit({
         $itemElement.data(ITEM_DELETING_DATA_KEY, true);
 
         var deferred = $.Deferred(),
-            deletePromise = this._itemEventHandler($itemElement, "onItemDeleting", {}, { excludeValidators: ["disabled", "readOnly"] });
+            deletingActionArgs = { cancel: false },
+            deletePromise = this._itemEventHandler($itemElement, "onItemDeleting", deletingActionArgs, { excludeValidators: ["disabled", "readOnly"] });
 
         when(deletePromise).always((function(value) {
             var deletePromiseExists = !deletePromise,
@@ -605,9 +635,14 @@ var CollectionWidget = BaseCollectionWidget.inherit({
 
                 shouldDelete = deletePromiseExists || deletePromiseResolved && !argumentsSpecified || deletePromiseResolved && value;
 
-            $itemElement.data(ITEM_DELETING_DATA_KEY, false);
-
-            shouldDelete ? deferred.resolve() : deferred.reject();
+            when(deletingActionArgs.cancel)
+                .always(function() {
+                    $itemElement.data(ITEM_DELETING_DATA_KEY, false);
+                })
+                .done(function(cancel) {
+                    shouldDelete && !cancel ? deferred.resolve() : deferred.reject();
+                })
+                .fail(deferred.reject);
         }).bind(this));
 
         return deferred.promise();
@@ -702,7 +737,7 @@ var CollectionWidget = BaseCollectionWidget.inherit({
         if(this.option("selectionMode") === "none") return;
 
         var itemIndex = this._editStrategy.getNormalizedIndex(itemElement);
-        if(itemIndex === -1) {
+        if(!indexExists(itemIndex)) {
             return;
         }
 
@@ -729,7 +764,7 @@ var CollectionWidget = BaseCollectionWidget.inherit({
     */
     unselectItem: function(itemElement) {
         var itemIndex = this._editStrategy.getNormalizedIndex(itemElement);
-        if(itemIndex === -1) {
+        if(!indexExists(itemIndex)) {
             return;
         }
 
@@ -760,7 +795,7 @@ var CollectionWidget = BaseCollectionWidget.inherit({
             changingOption = this._dataSource ? "dataSource" : "items",
             itemResponseWaitClass = this._itemResponseWaitClass();
 
-        if(index > -1) {
+        if(indexExists(index)) {
             this._waitDeletingPrepare($item).done(function() {
                 $item.addClass(itemResponseWaitClass);
                 var deletedActionArgs = that._extendActionArgs($item);
@@ -814,7 +849,7 @@ var CollectionWidget = BaseCollectionWidget.inherit({
 
             changingOption = this._dataSource ? "dataSource" : "items";
 
-        var canMoveItems = movingIndex > -1 && destinationIndex > -1 && movingIndex !== destinationIndex;
+        var canMoveItems = indexExists(movingIndex) && indexExists(destinationIndex) && movingIndex !== destinationIndex;
         if(canMoveItems) {
             deferred.resolveWith(this);
         } else {
@@ -826,7 +861,7 @@ var CollectionWidget = BaseCollectionWidget.inherit({
 
             strategy.moveItemAtIndexToIndex(movingIndex, destinationIndex);
 
-            that.option("selectedItems", that._getItemsByKeys(that._selection.getSelectedItemKeys()));
+            that.option("selectedItems", that._getItemsByKeys(that._selection.getSelectedItemKeys(), that._selection.getSelectedItems()));
 
             if(changingOption === "items") {
                 that._simulateOptionChange(changingOption);

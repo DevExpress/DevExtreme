@@ -168,13 +168,19 @@ module.exports = Class.inherit({
         delete this._shiftFocusedItemIndex;
     },
 
+    _resetFocusedItemIndex: function() {
+        this._focusedItemIndex = -1;
+    },
+
     changeItemSelectionWhenShiftKeyPressed: function(itemIndex, items) {
         var isSelectedItemsChanged = false,
             itemIndexStep,
             index,
             keyOf = this.options.keyOf,
-            key = keyOf(items[this._focusedItemIndex].data),
-            isFocusedItemSelected = items[this._focusedItemIndex] && this.isItemSelected(key);
+            focusedItem = items[this._focusedItemIndex],
+            focusedData = this.options.getItemData(focusedItem),
+            focusedKey = keyOf(focusedData),
+            isFocusedItemSelected = focusedItem && this.isItemSelected(focusedKey);
 
         if(!commonUtils.isDefined(this._shiftFocusedItemIndex)) {
             this._shiftFocusedItemIndex = this._focusedItemIndex;
@@ -207,10 +213,8 @@ module.exports = Class.inherit({
             }
         }
 
-        if(this.isDataItem(items[this._focusedItemIndex]) && !isFocusedItemSelected) {
-            data = this.options.getItemData(items[index]);
-            itemKey = keyOf(data);
-            this._addSelectedItem(data, itemKey);
+        if(this.isDataItem(focusedItem) && !isFocusedItemSelected) {
+            this._addSelectedItem(focusedData, focusedKey);
             isSelectedItemsChanged = true;
         }
 
@@ -222,6 +226,8 @@ module.exports = Class.inherit({
     },
 
     selectAll: function(isOnePage) {
+        this._resetFocusedItemIndex();
+
         if(isOnePage) {
             return this._onePageSelectAll(false);
         } else {
@@ -230,6 +236,8 @@ module.exports = Class.inherit({
     },
 
     deselectAll: function(isOnePage) {
+        this._resetFocusedItemIndex();
+
         if(isOnePage) {
             return this._onePageSelectAll(true);
         } else {
@@ -240,17 +248,20 @@ module.exports = Class.inherit({
     _onePageSelectAll: function(isDeselect) {
         var items = this.options.plainItems();
         for(var i = 0; i < items.length; i++) {
-            var item = items[i],
-                itemData = this.options.getItemData(item),
-                itemKey = this.options.keyOf(itemData),
-                isSelected = this.isItemSelected(itemKey);
+            var item = items[i];
 
-            if(!isSelected && !isDeselect) {
-                this._addSelectedItem(itemData, itemKey);
-            }
+            if(this.isDataItem(item)) {
+                var itemData = this.options.getItemData(item),
+                    itemKey = this.options.keyOf(itemData),
+                    isSelected = this.isItemSelected(itemKey);
 
-            if(isSelected && isDeselect) {
-                this._removeSelectedItem(itemKey);
+                if(!isSelected && !isDeselect) {
+                    this._addSelectedItem(itemData, itemKey);
+                }
+
+                if(isSelected && isDeselect) {
+                    this._removeSelectedItem(itemKey);
+                }
             }
         }
 

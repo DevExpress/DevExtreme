@@ -65,8 +65,9 @@ var POPOVER_CLASS = "dx-popover",
         eventName = eventUtils.addNamespace(event, that.NAME);
         action = that._createAction((function() {
             delay = getEventDelay(that, name + "Event");
+            this._clearEventTimeout(name === "hide");
             if(delay) {
-                setTimeout(function() {
+                this._timeouts[name] = setTimeout(function() {
                     that[name]();
                 }, delay);
             } else {
@@ -339,6 +340,7 @@ var Popover = Popup.inherit({
         this.callBase();
 
         this._renderArrow();
+        this._timeouts = {};
 
         this.element().addClass(POPOVER_CLASS);
         this._wrapper().addClass(POPOVER_WRAPPER_CLASS);
@@ -370,6 +372,7 @@ var Popover = Popup.inherit({
         if(this._isOutsideClick(e)) {
             return this.callBase(e);
         }
+        return true;
     },
 
     _isOutsideClick: function(e) {
@@ -605,6 +608,10 @@ var Popover = Popup.inherit({
         return side === "left" || side === "right";
     },
 
+    _clearEventTimeout: function(visibility) {
+        clearTimeout(this._timeouts[visibility ? "show" : "hide"]);
+    },
+
     _clean: function() {
         this._detachEvents(this.option("target"));
         this.callBase.apply(this, arguments);
@@ -635,6 +642,10 @@ var Popover = Popup.inherit({
             case "showEvent":
             case "hideEvent":
                 this._invalidate();
+                break;
+            case "visible":
+                this._clearEventTimeout(args.value);
+                this.callBase(args);
                 break;
             default:
                 this.callBase(args);

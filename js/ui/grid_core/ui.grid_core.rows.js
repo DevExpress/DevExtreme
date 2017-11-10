@@ -492,6 +492,10 @@ module.exports = {
 
                         this.option("showColumnLines") && $row.addClass(COLUMN_LINES_CLASS);
 
+                        if(row.visible === false) {
+                            $row.hide();
+                        }
+
                         if(isGroup) {
                             $row.addClass(GROUP_ROW_CLASS);
                             isRowExpanded = row.isExpanded;
@@ -661,22 +665,23 @@ module.exports = {
                     return itemsCount > 0 && !this._rowHeight;
                 },
 
+                _getRowsHeight: function($tableElement) {
+                    var $rowElements = $tableElement.children("tbody").children().not("." + FREE_SPACE_CLASS);
+
+                    return $rowElements.toArray().reduce(function(sum, row) {
+                        return sum + row.offsetHeight;
+                    }, 0);
+                },
+
                 _updateRowHeight: function() {
                     var that = this,
-                        tableElement = that._getTableElement(),
-                        tableHeight,
-                        freeSpaceRowHeight,
-                        itemsCount = that._dataController.items().length,
-                        $freeSpaceRowElement;
+                        rowsHeight,
+                        $tableElement = that._getTableElement(),
+                        itemsCount = that._dataController.items().length;
 
-                    if(tableElement && that._needUpdateRowHeight(itemsCount)) {
-                        tableHeight = tableElement.outerHeight();
-                        $freeSpaceRowElement = that._getFreeSpaceRowElements().first();
-                        if($freeSpaceRowElement && $freeSpaceRowElement.is(":visible")) {
-                            freeSpaceRowHeight = parseFloat($freeSpaceRowElement[0].style.height) || 0;
-                            tableHeight -= freeSpaceRowHeight;
-                        }
-                        that._rowHeight = tableHeight / itemsCount;
+                    if($tableElement && that._needUpdateRowHeight(itemsCount)) {
+                        rowsHeight = that._getRowsHeight($tableElement);
+                        that._rowHeight = rowsHeight / itemsCount;
                     }
                 },
 
@@ -707,8 +712,6 @@ module.exports = {
                 _getNoDataText: function() {
                     return this.option("noDataText");
                 },
-
-                _renderNoDataText: gridCoreUtils.renderNoDataText,
 
                 _rowClick: function(e) {
                     var item = this._dataController.items()[e.rowIndex] || {};
@@ -848,6 +851,16 @@ module.exports = {
                     return $table;
                 },
 
+                _createTable: function() {
+                    var $table = this.callBase.apply(this, arguments);
+
+                    if(this.option("rowTemplate")) {
+                        $table.appendTo(this.component.element());
+                    }
+
+                    return $table;
+                },
+
                 _renderCore: function(change) {
                     var that = this,
                         $table,
@@ -904,6 +917,28 @@ module.exports = {
                     return parameters;
                 },
 
+                _setRowsOpacityCore: function($rows, visibleColumns, columnIndex, value) {
+                    var columnsController = this._columnsController,
+                        columns = columnsController.getColumns(),
+                        column = columns && columns[columnIndex],
+                        columnID = column && column.isBand && column.index;
+
+                    $.each($rows, function(rowIndex, row) {
+                        if(!$(row).hasClass(GROUP_ROW_CLASS)) {
+                            for(var i = 0; i < visibleColumns.length; i++) {
+                                if(commonUtils.isNumeric(columnID) && columnsController.isParentBandColumn(visibleColumns[i].index, columnID) || visibleColumns[i].index === columnIndex) {
+                                    $rows.eq(rowIndex).children().eq(i).css({ opacity: value });
+                                    if(!commonUtils.isNumeric(columnID)) {
+                                        break;
+                                    }
+                                }
+                            }
+                        }
+                    });
+                },
+
+                renderNoDataText: gridCoreUtils.renderNoDataText,
+
                 getCellOptions: function(rowIndex, columnIdentifier) {
                     var rowOptions = this._dataController.items()[rowIndex],
                         cellOptions,
@@ -938,6 +973,7 @@ module.exports = {
 
                 updateFreeSpaceRowHeight: function($table) {
                     var that = this,
+                        itemCount = that._dataController.items().length,
                         contentElement = that._findContentElement(),
                         freeSpaceRowElements = that._getFreeSpaceRowElements($table),
                         freeSpaceRowCount,
@@ -946,9 +982,9 @@ module.exports = {
                     if(freeSpaceRowElements && contentElement) {
                         var isFreeSpaceRowVisible = false;
 
-                        if(that._dataController.items().length > 0) {
+                        if(itemCount > 0) {
                             if(!that._hasHeight) {
-                                freeSpaceRowCount = that._dataController.pageSize() - that._dataController.items().length;
+                                freeSpaceRowCount = that._dataController.pageSize() - itemCount;
                                 scrollingMode = that.option("scrolling.mode");
 
                                 if(freeSpaceRowCount > 0 && that._dataController.pageCount() > 1 && scrollingMode !== "virtual" && scrollingMode !== "infinite") {
@@ -968,8 +1004,8 @@ module.exports = {
                                         elementHeightWithoutScrollbar = that.element().height() - scrollbarWidth,
                                         contentHeight = contentElement.outerHeight(),
                                         showFreeSpaceRow = (elementHeightWithoutScrollbar - contentHeight) > 0,
-                                        contentTableHeight = contentElement.children().first().outerHeight(),
-                                        resultHeight = elementHeightWithoutScrollbar - contentTableHeight;
+                                        rowsHeight = that._getRowsHeight(contentElement.children().first()),
+                                        resultHeight = elementHeightWithoutScrollbar - rowsHeight;
 
                                     if(showFreeSpaceRow) {
                                         commonUtils.deferRender(function() {
@@ -1005,7 +1041,7 @@ module.exports = {
                 /**
                  * @name GridBaseMethods_getScrollable
                  * @publicName getScrollable()
-                 * @return Scrollable
+                 * @return dxScrollable
                  */
                 getScrollable: function() {
                     return this._scrollable;
@@ -1119,7 +1155,7 @@ module.exports = {
                     that._updateRowHeight();
                     commonUtils.deferRender(function() {
                         that._renderScrollable();
-                        that._renderNoDataText();
+                        that.renderNoDataText();
                         that.updateFreeSpaceRowHeight();
                     });
                     that._updateScrollable();
@@ -1181,27 +1217,8 @@ module.exports = {
                 },
 
                 setRowsOpacity: function(columnIndex, value) {
-                    var that = this,
-                        i,
-                        columnsController = that._columnsController,
-                        visibleColumns = that.getColumns(),
-                        columns = columnsController.getColumns(),
-                        column = columns && columns[columnIndex],
-                        columnID = column && column.isBand && column.index,
-                        $rows = that._getRowElements().not("." + GROUP_ROW_CLASS) || [];
-
-                    $.each($rows, function(rowIndex, row) {
-                        if(!$(row).hasClass(GROUP_ROW_CLASS)) {
-                            for(i = 0; i < visibleColumns.length; i++) {
-                                if(commonUtils.isNumeric(columnID) && columnsController.isParentBandColumn(visibleColumns[i].index, columnID) || visibleColumns[i].index === columnIndex) {
-                                    that.getCellElements(rowIndex).eq(i).css({ opacity: value });
-                                    if(!commonUtils.isNumeric(columnID)) {
-                                        break;
-                                    }
-                                }
-                            }
-                        }
-                    });
+                    var $rows = this._getRowElements().not("." + GROUP_ROW_CLASS) || [];
+                    this._setRowsOpacityCore($rows, this.getColumns(), columnIndex, value);
                 },
 
                 _getCellElementsCore: function(rowIndex) {
@@ -1292,7 +1309,7 @@ module.exports = {
                             args.handled = true;
                             break;
                         case "noDataText":
-                            that._renderNoDataText();
+                            that.renderNoDataText();
                             args.handled = true;
                             break;
                     }

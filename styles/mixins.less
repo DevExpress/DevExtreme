@@ -17,6 +17,7 @@
     background-image:    -moz-linear-gradient(@options);
     background-image:     -ms-linear-gradient(@options);
     background-image:      -o-linear-gradient(@options);
+    background-image:      linear-gradient(@options);
 }
 
 .double-gradient-linear(@options1, @options2) {
@@ -25,93 +26,6 @@
     background-image:     -ms-linear-gradient(@options1), -ms-linear-gradient(@options2);
     background-image:      -o-linear-gradient(@options1), -o-linear-gradient(@options2);
     background-image:         linear-gradient(@options1), linear-gradient(@options2);
-}
-
-.gradient(@firstColor, @lastColor, @angle: -90) {
-    background-color: @firstColor;
-    background-repeat: no-repeat;
-    background-image: -webkit-linear-gradient(@angle + 0deg, @firstColor 0%, @lastColor 100%);
-    background-image:    -moz-linear-gradient(@angle + 0deg, @firstColor 0%, @lastColor 100%);
-    background-image:     -ms-linear-gradient(@angle + 0deg, @firstColor 0%, @lastColor 100%);
-    background-image:      -o-linear-gradient(@angle + 0deg, @firstColor 0%, @lastColor 100%);
-    background-image:         linear-gradient((90 - @angle) + 0deg, @firstColor 0%, @lastColor 100%);
-}
-
-.gradient4(@step1, @step2, @step3, @step4, @angle: -90) {
-    background-repeat: no-repeat;
-    background-image: -webkit-linear-gradient(@angle + 0deg,        @step1, @step2, @step3, @step4);
-    background-image:    -moz-linear-gradient(@angle + 0deg,        @step1, @step2, @step3, @step4);
-    background-image:     -ms-linear-gradient(@angle + 0deg,        @step1, @step2, @step3, @step4);
-    background-image:      -o-linear-gradient(@angle + 0deg,        @step1, @step2, @step3, @step4);
-    background-image:         linear-gradient((90 - @angle) + 0deg, @step1, @step2, @step3, @step4);
-}
-
-.gradient5(@step1, @step2, @step3, @step4, @step5, @angle: -90) {
-    background-repeat: no-repeat;
-    background-image: -webkit-linear-gradient(@angle + 0deg,        @step1, @step2, @step3, @step4, @step5);
-    background-image:    -moz-linear-gradient(@angle + 0deg,        @step1, @step2, @step3, @step4, @step5);
-    background-image:     -ms-linear-gradient(@angle + 0deg,        @step1, @step2, @step3, @step4, @step5);
-    background-image:      -o-linear-gradient(@angle + 0deg,        @step1, @step2, @step3, @step4, @step5);
-    background-image:         linear-gradient((90 - @angle) + 0deg, @step1, @step2, @step3, @step4, @step5);
-}
-
-.gradient6(@step1, @step2, @color: transparent, @angle: 270deg) {
-    background-color: @color;
-    background-repeat: no-repeat;
-    background-image: -webkit-linear-gradient(top, @step1, @step2);
-    background-image:    -moz-linear-gradient(top, @step1, @step2);
-    background-image:     -ms-linear-gradient(top, @step1, @step2);
-    background-image:      -o-linear-gradient(top, @step1, @step2);
-    background-image:         linear-gradient(top, @step1, @step2);
-}
-
-.gradient7(@step1, @pos1, @step2, @pos2, @step3, @pos3, @step4, @pos4, @angle: 270deg) {
-    background-repeat: no-repeat;
-    background-image: -webkit-linear-gradient(@angle, @step1 @pos1, @step2 @pos2, @step3 @pos3, @step4 @pos4);
-    background-image:    -moz-linear-gradient(@angle, @step1 @pos1, @step2 @pos2, @step3 @pos3, @step4 @pos4);
-    background-image:     -ms-linear-gradient(@angle, @step1 @pos1, @step2 @pos2, @step3 @pos3, @step4 @pos4);
-    background-image:      -o-linear-gradient(@angle, @step1 @pos1, @step2 @pos2, @step3 @pos3, @step4 @pos4);
-}
-
-.gradient-tizen(@position, @color1, @color2){
-    background: @color1;
-    background: -webkit-linear-gradient(@position, @color1, @color2);
-    background: -moz-linear-gradient(@position, @color1, @color2);
-    background: -o-linear-gradient(@position, @color1, @color2);
-    background: -ms-linear-gradient(@position, @color1, @color2);
-    background: linear-gradient(@position, @color1, @color2);
-}
-
-.gradient-radial-tizen(@step1, @step2, @step3, @step4, @from, @to){
-    background-color: @from;
-    background-image: -webkit-gradient(radial, @step1, @step2, @step3, @step4, from(@from), to(@to));
-    background-image:    -moz-gradient(radial, @step1, @step2, @step3, @step4, from(@from), to(@to));
-    background-image:     -ms-gradient(radial, @step1, @step2, @step3, @step4, from(@from), to(@to));
-    background-image:      -o-gradient(radial, @step1, @step2, @step3, @step4, from(@from), to(@to));
-}
-
-.gradient-ios-bar(@color) {
-    @firstColor:  @color + rgb(77, 65, 50);
-    @secondColor: @color + rgb(23, 23, 22);
-    @thirdColor:  @color + rgb(16, 17, 14);
-    background-color: @color;
-    background-image: -webkit-gradient(linear, 50% 0, 50% 100%, color-stop(0, @firstColor), color-stop(0.5, @secondColor), color-stop(0.5, @thirdColor), color-stop(1, @color));
-    background-image: -webkit-linear-gradient(top, @firstColor, @secondColor 50%, @thirdColor 50%, @color);
-    background-image:    -moz-linear-gradient(top, @firstColor, @secondColor 50%, @thirdColor 50%, @color);
-    background-image:     -ms-linear-gradient(top, @firstColor, @secondColor 50%, @thirdColor 50%, @color);
-    background-image:      -o-linear-gradient(top, @firstColor, @secondColor 50%, @thirdColor 50%, @color);
-    background-image:         linear-gradient(top, @firstColor, @secondColor 50%, @thirdColor 50%, @color);
-}
-
-.gradient-vertical-striped(@firstColor, @lastColor, @xsize, @ysize) {
-    background: @firstColor;
-    background-image: -webkit-gradient(linear, left top, right top, color-stop(0.25, @firstColor), color-stop(0.25, @lastColor));
-    background-image: -webkit-linear-gradient(left, @firstColor 25%, @lastColor 25%);
-    background-image:    -moz-linear-gradient(left, @firstColor 25%, @lastColor 25%);
-    background-image:     -ms-linear-gradient(left, @firstColor 25%, @lastColor 25%);
-    background-image:      -o-linear-gradient(left, @firstColor 25%, @lastColor 25%);
-    background-image:         linear-gradient(left, @firstColor 25%, @lastColor 25%);
-    .background-size(@xsize, @ysize);
 }
 
 .gradient-radial(@value) {
@@ -163,25 +77,25 @@
             background-size: @property;
 }
 
-.box-shadow (@value) {
+.box-shadow(@value) {
     -webkit-box-shadow: @value;
        -moz-box-shadow: @value;
             box-shadow: @value;
 }
 
-.box-shadow (@value1, @value2) {
+.box-shadow(@value1, @value2) {
     -webkit-box-shadow: @value1, @value2;
        -moz-box-shadow: @value1, @value2;
             box-shadow: @value1, @value2;
 }
 
-.box-shadow (@value1, @value2, @value3) {
+.box-shadow(@value1, @value2, @value3) {
     -webkit-box-shadow: @value1, @value2, @value3;
        -moz-box-shadow: @value1, @value2, @value3;
             box-shadow: @value1, @value2, @value3;
 }
 
-.text-shadow (@value) {
+.text-shadow(@value) {
     text-shadow: @value;
 }
 
@@ -195,18 +109,6 @@
     -moz-background-clip: @value;
     -webkit-background-clip: @value;
     background-clip: @value;
-}
-
-/* it`s not using, maybe remove ? */
-.box-orient(@value: inherit) {
-    -webkit-box-orient: @value;
-       -moz-box-orient: @value;
-            box-orient: @value;
-}
-.box-flex(@value: 1) {
-    -webkit-box-flex: @value;
-       -moz-box-flex: @value;
-            box-flex: @value;
 }
 
 /* border radius */
@@ -352,7 +254,7 @@
             transform: @string;
 }
 
-.scale (@factor) {
+.scale(@factor) {
     -webkit-transform: scale(@factor);
        -moz-transform: scale(@factor);
         -ms-transform: scale(@factor);
@@ -360,7 +262,7 @@
             transform: scale(@factor);
 }
 
-.rotate (@deg) {
+.rotate(@deg) {
     -webkit-transform: rotate(@deg);
        -moz-transform: rotate(@deg);
         -ms-transform: rotate(@deg);
@@ -368,7 +270,7 @@
             transform: rotate(@deg);
 }
 
-.rotate3d (@x, @y, @z, @deg) {
+.rotate3d(@x, @y, @z, @deg) {
     -webkit-transform: rotate3d(@x, @y, @z, @deg);
        -moz-transform: rotate3d(@x, @y, @z, @deg);
         -ms-transform: rotate3d(@x, @y, @z, @deg);
@@ -376,15 +278,7 @@
             transform: rotate3d(@x, @y, @z, @deg);
 }
 
-.skew (@deg, @deg2) {
-    -webkit-transform: skew(@deg, @deg2);
-       -moz-transform: skew(@deg, @deg2);
-        -ms-transform: skew(@deg, @deg2);
-         -o-transform: skew(@deg, @deg2);
-            transform: skew(@deg, @deg2);
-}
-
-.translate (@x, @y:0) {
+.translate(@x, @y:0) {
     -webkit-transform: translate(@x, @y);
        -moz-transform: translate(@x, @y);
         -ms-transform: translate(@x, @y);
@@ -392,7 +286,7 @@
              transform: translate(@x, @y);
 }
 
-.scale3d (@x, @y: 0, @z: 0) {
+.scale3d(@x, @y: 0, @z: 0) {
     -webkit-transform: scale3d(@x, @y, @z);
        -moz-transform: scale3d(@x, @y, @z);
         -ms-transform: scale3d(@x, @y, @z);
@@ -400,7 +294,7 @@
             transform: scale3d(@x, @y, @z);
 }
 
-.translate3d (@x, @y: 0, @z: 0) {
+.translate3d(@x, @y: 0, @z: 0) {
     -webkit-transform: translate3d(@x, @y, @z);
        -moz-transform: translate3d(@x, @y, @z);
         -ms-transform: translate3d(@x, @y, @z);

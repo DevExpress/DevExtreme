@@ -958,10 +958,13 @@ QUnit.test("one type for all series", function(assert) {
 });
 
 QUnit.test("adjustSeriesDimensions", function(assert) {
-    var seriesDataSource = new SeriesDataSource({
-            dataSource: [{ arg: 1, val: 3, arg1: 4, val1: 10 },
-                    { arg: 3, val: 6, arg1: 7, val1: 5 },
-                    { arg: 5, val: 12, arg1: 9, val1: 2 }],
+    var seriesDataSource = new SeriesDataSource(
+        {
+            dataSource: [
+                { arg: 1, val: 3, arg1: 4, val1: 10 },
+                { arg: 3, val: 6, arg1: 7, val1: 5 },
+                { arg: 5, val: 12, arg1: 9, val1: 2 }
+            ],
             chart: {
                 commonSeriesSettings: {
                     type: "area"
@@ -975,38 +978,33 @@ QUnit.test("adjustSeriesDimensions", function(assert) {
             },
             renderer: new vizMocks.Renderer()
         }),
-        translator = { x: {}, y: {} };
+        series = seriesDataSource.getSeries();
 
-    $.each(seriesDataSource._series, function(_, s) {
-        s.resamplePoints = function(tr) {
-            this.translator = tr;
-            this.pointResampled = true;
-        };
+    $.each(series, function(_, s) {
+        s.resamplePoints = sinon.stub();
     });
     $.each(seriesDataSource._seriesFamilies, function() {
         this.adjustSeriesDimensions = sinon.stub();
     });
-    seriesDataSource.adjustSeriesDimensions(translator);
+    seriesDataSource.adjustSeriesDimensions();
 
-    assert.equal(seriesDataSource._series.length, 2);
+    for(var i = 0; i < series.length; i++) {
+        assert.ok(!series[i].resamplePoints.called);
+    }
+
     assert.equal(seriesDataSource._seriesFamilies.length, 2);
-
-    assert.equal(seriesDataSource._series[0].translator, undefined);
-    assert.equal(seriesDataSource._series[1].translator, undefined);
-
-    assert.ok(!seriesDataSource._series[0].pointResampled);
-    assert.ok(!seriesDataSource._series[1].pointResampled);
     assert.ok(seriesDataSource._seriesFamilies[0].adjustedValues);
     assert.ok(seriesDataSource._seriesFamilies[1].adjustedValues);
-    assert.deepEqual(seriesDataSource._seriesFamilies[0].adjustSeriesDimensions.args[0][0], { arg: {}, val: {} });
-    assert.deepEqual(seriesDataSource._seriesFamilies[1].adjustSeriesDimensions.args[0][0], { arg: {}, val: {} });
 });
 
 QUnit.test("adjustSeriesDimensions with aggregation", function(assert) {
-    var seriesDataSource = new SeriesDataSource({
-            dataSource: [{ arg: 1, val: 3, arg1: 4, val1: 10 },
-                    { arg: 3, val: 6, arg1: 7, val1: 5 },
-                    { arg: 5, val: 12, arg1: 9, val1: 2 }],
+    var seriesDataSource = new SeriesDataSource(
+        {
+            dataSource: [
+                { arg: 1, val: 3, arg1: 4, val1: 10 },
+                { arg: 3, val: 6, arg1: 7, val1: 5 },
+                { arg: 5, val: 12, arg1: 9, val1: 2 }
+            ],
             chart: {
                 commonSeriesSettings: {
                     type: "area"
@@ -1019,25 +1017,21 @@ QUnit.test("adjustSeriesDimensions with aggregation", function(assert) {
                 }],
                 useAggregation: true
             },
-            renderer: new vizMocks.Renderer()
+            renderer: new vizMocks.Renderer(),
+            argumentAxis: { getTranslator: function() { return { canvasLength: "canvasLength" }; } }
         }),
-        translator = { x: { argTranslator: true } };
+        series = seriesDataSource.getSeries();
 
-    $.each(seriesDataSource._series, function(_, s) {
-        s.resamplePoints = function(tr) {
-            this.translator = tr;
-            this.pointResampled = true;
-        };
+    $.each(series, function(_, s) {
+        s.resamplePoints = sinon.stub();
     });
 
-    seriesDataSource.adjustSeriesDimensions(translator);
+    seriesDataSource.adjustSeriesDimensions();
 
-    assert.equal(seriesDataSource._series.length, 2);
-    assert.equal(seriesDataSource._series[0].translator, translator.x);
-    assert.equal(seriesDataSource._series[1].translator, translator.x);
-
-    assert.ok(seriesDataSource._series[0].pointResampled);
-    assert.ok(seriesDataSource._series[1].pointResampled);
+    for(var i = 0; i < series.length; i++) {
+        assert.ok(series[i].resamplePoints.called);
+        assert.equal(series[i].resamplePoints.args[0][0], "canvasLength");
+    }
 
     assert.equal(seriesDataSource._seriesFamilies.length, 2);
     assert.ok(seriesDataSource._seriesFamilies[0].adjustedValues);

@@ -1263,6 +1263,29 @@ QUnit.test('Select all is not work when allowSelectAll is false', function(asser
     assert.strictEqual(checkBox.dxCheckBox('instance').option('visible'), false, 'checkbox is not visible');
 });
 
+//T546876
+QUnit.test("onCellClick event should be fired after clicking on 'Select All' checkbox", function(assert) {
+    //arrange
+    var checkBox,
+        cellClickEventFired,
+        testElement = $('#container');
+
+    $.extend(this.columns, [{ command: 'select', dataType: 'boolean' }, { index: 0 }, { index: 1 }]);
+    this.options.selection = { allowSelectAll: true };
+    this.options.onCellClick = function() {
+        cellClickEventFired = true;
+    };
+    this.columnHeadersView.init();
+    this.columnHeadersView.render(testElement);
+
+    //act
+    checkBox = testElement.find('.dx-checkbox');
+    checkBox.trigger("dxclick");
+
+    //assert
+    assert.ok(cellClickEventFired, "onCellClick event is fired");
+});
+
 QUnit.test('Unselect all is completed', function(assert) {
     //arrange
     var testElement = $('#container');
@@ -1816,6 +1839,29 @@ QUnit.test("Header without sorting and headerFilter - alignment cell content", f
     assert.notOk($headerCellContent.eq(2).hasClass("dx-text-content-alignment-right"), "third cell content has margin left");
 });
 
+//T497346
+QUnit.test("Header should have alignment if there's no dataSource and sorting is enabled", function(assert) {
+    //arrange
+    var $headerCellContent,
+        $testElement = $("#container");
+
+    this.options.sorting = { mode: "single" };
+    $.extend(this.columns, [
+        { caption: 'Column 1', allowSorting: true },
+        { caption: 'Column 2', allowSorting: true },
+        { caption: 'Column 3', allowSorting: true }
+    ]);
+
+    //act
+    this.columnHeadersView.render($testElement);
+
+    //assert
+    $headerCellContent = $testElement.find(".dx-header-row .dx-datagrid-text-content");
+    assert.ok($headerCellContent.eq(0).hasClass("dx-text-content-alignment-left"), "alignment is left");
+    assert.ok($headerCellContent.eq(1).hasClass("dx-text-content-alignment-left"), "alignment is left");
+    assert.ok($headerCellContent.eq(2).hasClass("dx-text-content-alignment-left"), "alignment is left");
+});
+
 QUnit.module('Headers with grouping', {
     beforeEach: function() {
         this.clock = sinon.useFakeTimers();
@@ -2319,7 +2365,7 @@ QUnit.test("getColumnElements by band column with hidden children where filter r
     this.columnHeadersView.render($testElement);
 
     //act
-    $columnElements = this.columnHeadersView.getColumnElements(1, 4);
+    $columnElements = this.columnHeadersView.getColumnElements(1, 3);
 
     //assert
     assert.ok(!$columnElements, "no cells");

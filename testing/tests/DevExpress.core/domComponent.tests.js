@@ -498,6 +498,52 @@ QUnit.test("customizing default option rules", function(assert) {
     assert.notEqual(new TestComponent($("<div/>")).option("test"), "value", "test option is not customized for android");
 });
 
+QUnit.test("customizing default option rules applies only on the target component class", function(assert) {
+    var TestComponent1 = DOMComponent.inherit({
+        _getDefaultOptions: function() {
+            return $.extend(this.callBase(), {
+                test: "Initial value 1"
+            });
+        }
+    });
+
+    var TestComponent2 = TestComponent1.inherit({
+        _getDefaultOptions: function() {
+            return $.extend(this.callBase(), {
+                test: "Initial value 2"
+            });
+        }
+    });
+
+    registerComponent("TestComponent1", TestComponent1);
+    registerComponent("TestComponent2", TestComponent2);
+
+    TestComponent1.defaultOptions({
+        device: { platform: "ios" },
+        options: {
+            anotherOption: "Another option value"
+        }
+    });
+
+    TestComponent1.defaultOptions({
+        device: { platform: "ios" },
+        options: {
+            test: "Custom value 1"
+        }
+    });
+
+    TestComponent2.defaultOptions({
+        device: { platform: "ios" },
+        options: {
+            test: "Custom value 2"
+        }
+    });
+
+    devices._currentDevice = { platform: "ios" };
+    assert.equal(new TestComponent1($("<div/>")).option("test"), "Custom value 1", "Child rule should not affect on the parent");
+    assert.equal(new TestComponent1($("<div/>")).option("anotherOption"), "Another option value", "Multiple calls should not clean previous rules");
+});
+
 QUnit.test("DevExpress.rtlEnabled proxied to DOMComponent", function(assert) {
     assert.equal(coreConfig().rtlEnabled, false, "DevExpress.rtlEnabled equals false by default");
     assert.equal(new DOMComponent($("<div/>")).option("rtlEnabled"), false, "false by default");

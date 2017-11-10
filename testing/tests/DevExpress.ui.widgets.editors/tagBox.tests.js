@@ -21,7 +21,8 @@ QUnit.testStart(function() {
     $("#qunit-fixture").html(markup);
 });
 
-var LIST_ITEM_CLASS = "dx-list-item",
+var LIST_CLASS = "dx-list",
+    LIST_ITEM_CLASS = "dx-list-item",
     LIST_ITEM_SELECTED_CLASS = "dx-list-item-selected",
     TEXTBOX_CLASS = "dx-texteditor-input",
     EMPTY_INPUT_CLASS = "dx-texteditor-empty",
@@ -412,6 +413,15 @@ QUnit.test("tag should have correct value when item value is zero", function(ass
     $listItems.eq(1).trigger("dxclick");
 
     assert.equal($.trim($tagBox.find("." + TAGBOX_TAG_CONTAINER_CLASS).text()), "01", "selected first and second items");
+});
+
+QUnit.test("'text' option should have correct value when item value is zero", function(assert) {
+    var tagBox = $("#tagBox").dxTagBox({
+        value: [0],
+        items: [0, 1]
+    }).dxTagBox("instance");
+
+    assert.equal(tagBox.option("text"), "0");
 });
 
 QUnit.test("tag should have correct value when item value is an empty string", function(assert) {
@@ -1723,6 +1733,21 @@ QUnit.test("the focused tag should be removed after pressing the 'backspace' key
     assert.deepEqual(value, expectedValue, "the widget's value is correct");
 });
 
+QUnit.test("backspace should remove selected search text but not tag if any text is selected", function(assert) {
+    this.reinit({
+        items: ["item 1", "item 2"],
+        value: ["item 1"],
+        focusStateEnabled: true,
+        searchEnabled: true
+    });
+
+    this.$input.val("item");
+    this.keyboard.caret({ start: 0, end: 4 });
+    this.keyboard.press("backspace");
+
+    assert.equal(this.instance.option("value"), "item 1", "tag was not removed");
+});
+
 QUnit.test("the focused tag should be removed after pressing the 'delete' key", function(assert) {
     this.keyboard
         .focus()
@@ -2340,6 +2365,22 @@ QUnit.test("input should be cleared after list item is clicked", function(assert
     $(".dx-list-item").eq(0).trigger("dxclick");
 
     assert.equal($input.val(), "", "input is clear");
+});
+
+QUnit.test("input should not be cleared after list item is clicked when checkboxes are visible", function(assert) {
+    var $tagBox = $("#tagBox").dxTagBox({
+            items: ["one", "two"],
+            searchEnabled: true,
+            showSelectionControls: true,
+            searchTimeout: 0,
+            opened: true
+        }),
+        $input = $tagBox.find("input");
+
+    $input.val("one");
+    $(".dx-list-item").eq(0).trigger("dxclick");
+
+    assert.equal($input.val(), "one", "input was not cleared");
 });
 
 QUnit.test("input should not be cleared after tag is removed", function(assert) {
@@ -3082,6 +3123,7 @@ QUnit.test("the search should be cleared after pressing the 'OK' button", functi
     $(".dx-button.dx-popup-done").trigger("dxclick");
 
     assert.equal($input.val(), "", "the search is cleared");
+    assert.notOk(this.instance._dataSource.searchValue(), "The search value is cleared");
 });
 
 
@@ -3307,6 +3349,25 @@ QUnit.test("tags container should be scrolled to the end on focusin (T390041)", 
     assert.equal($container.scrollLeft(), $container.get(0).scrollWidth - $container.outerWidth(), "tags container is scrolled to the end");
 });
 
+QUnit.test("list should save it's scroll position after value changed", function(assert) {
+    this.instance.option({
+        opened: true,
+        showSelectionControls: true
+    });
+
+    var $content = this.instance.content(),
+        $list = $content.find("." + LIST_CLASS),
+        list = $list.dxList("instance"),
+        scrollView = $list.dxScrollView("instance");
+
+    this.instance._popup.option("height", 100);
+
+    list.scrollTo(2);
+    this.instance.option("value", [this.items[2]]);
+
+    assert.equal(scrollView.scrollTop(), 2, "list should not be scrolled to the top after value changed");
+});
+
 QUnit.testInActiveWindow("tag container should be scrolled to the start after rendering and focusout in the RTL mode (T390041)", function(assert) {
     this.instance.option("rtlEnabled", true);
 
@@ -3493,6 +3554,11 @@ QUnit.test("tags container should be scrolled to the start on value change in th
 });
 
 QUnit.test("the focused tag should be visible during keyboard navigation to the right in the RTL mode", function(assert) {
+    if(devices.real().platform !== "generic") {
+        assert.ok(true, "test is not relevant for mobile devices");
+        return;
+    }
+
     this.reinit({
         items: this.items,
         value: this.items,
@@ -3522,6 +3588,11 @@ QUnit.test("the focused tag should be visible during keyboard navigation to the 
 });
 
 QUnit.test("the focused tag should be visible during keyboard navigation to the left in the RTL mode", function(assert) {
+    if(devices.real().platform !== "generic") {
+        assert.ok(true, "test is not relevant for mobile devices");
+        return;
+    }
+
     this.reinit({
         items: this.items,
         value: this.items,
@@ -3635,6 +3706,23 @@ QUnit.test("first page should be displayed after search and tag select", functio
     assert.equal($.trim($(".dx-item").first().text()), "0", "first item loaded");
 });
 
+QUnit.test("'byKey' called once per 'value' item (T533200)", function(assert) {
+    var byKeySpy = sinon.spy(function(key) {
+        return key;
+    });
+
+    $("#tagBox").dxTagBox({
+        value: [1],
+        dataSource: {
+            load: function() {
+                return [1, 2];
+            },
+            byKey: byKeySpy
+        }
+    });
+
+    assert.equal(byKeySpy.callCount, 1);
+});
 
 QUnit.module("performance");
 
@@ -3653,6 +3741,77 @@ QUnit.test("selectionHandler should call twice on popup opening", function(asser
     assert.ok(selectionChangeHandlerSpy.callCount <= 2, "selection change handler called less than 2 (ListContentReady and SelectAll)");
 });
 
+QUnit.test("loadOptions.filter should be a filter expression when key is specified", function(assert) {
+    var load = sinon.stub().returns([{ id: 1, text: "item 1" }, { id: 2, text: "item 2" }]),
+        $tagBox = $("#tagBox").dxTagBox({
+            dataSource: {
+                load: load
+            },
+            valueExpr: "id",
+            displayExpr: "text",
+            opened: true,
+            hideSelectedItems: true
+        }),
+        tagBox = $tagBox.dxTagBox("instance"),
+        $item = $(tagBox._$list.find(".dx-list-item").eq(0));
+
+    $item.trigger("dxclick");
+
+    var filter = load.lastCall.args[0].filter;
+    assert.ok(Array.isArray(filter), "filter should be an array for serialization");
+    assert.deepEqual(filter, [["!", ["id", 1]]], "filter should be correct");
+});
+
+QUnit.test("loadOptions.filter should be a function when valueExpr is function", function(assert) {
+    var load = sinon.stub().returns([{ id: 1, text: "item 1" }, { id: 2, text: "item 2" }]),
+        $tagBox = $("#tagBox").dxTagBox({
+            dataSource: {
+                load: load
+            },
+            valueExpr: function() {
+                return "id";
+            },
+            displayExpr: "text",
+            opened: true,
+            hideSelectedItems: true
+        }),
+        tagBox = $tagBox.dxTagBox("instance"),
+        $item = $(tagBox._$list.find(".dx-list-item").eq(0));
+
+    $item.trigger("dxclick");
+
+    var filter = load.lastCall.args[0].filter;
+    assert.ok($.isFunction(filter), "filter is function");
+});
+
+QUnit.test("loadOptions.filter should be correct when user filter is also used", function(assert) {
+    var load = sinon.stub().returns([{ id: 1, text: "item 1" }, { id: 2, text: "item 2" }]),
+        $tagBox = $("#tagBox").dxTagBox({
+            dataSource: {
+                load: load,
+                filter: ["id", ">", 0]
+            },
+            valueExpr: "id",
+            displayExpr: "text",
+            opened: true,
+            hideSelectedItems: true
+        }),
+        tagBox = $tagBox.dxTagBox("instance"),
+        $item = $(tagBox._$list.find(".dx-list-item").eq(0));
+
+    $item.trigger("dxclick");
+
+    var filter = load.lastCall.args[0].filter;
+    assert.deepEqual(filter, [["!", ["id", 1]], ["id", ">", 0]], "filter is correct");
+
+    tagBox.option("opened", true);
+    $item = $(tagBox._$list.find(".dx-list-item").eq(1));
+
+    $item.trigger("dxclick");
+    filter = load.lastCall.args[0].filter;
+
+    assert.deepEqual(filter, [["!", ["id", 1]], ["!", ["id", 2]], ["id", ">", 0]], "filter is correct");
+});
 
 QUnit.module("deprecated options");
 
@@ -3787,4 +3946,46 @@ QUnit.test("T403756 - dxTagBox treats removing a dxTagBox item for the first tim
     this.clock.tick();
 
     assert.equal(tagBox.option("selectedItems").length, 1, "selectedItems was changed correctly");
+});
+
+QUnit.testInActiveWindow("Searching should work correctly in grouped tagBox (T516798)", function(assert) {
+    if(devices.real().platform !== "generic") {
+        assert.ok(true, "test does not actual for mobile devices");
+        return;
+    }
+
+    var items = [{
+        "ID": 1,
+        "Name": "Item1",
+        "Category": "Category1"
+    }, {
+        "ID": 3,
+        "Name": "Item3",
+        "Category": "Category2"
+    }];
+
+    var $tagBox = $("#tagBox").dxTagBox({
+        dataSource: new DataSource({
+            store: items,
+            group: "Category"
+        }),
+        valueExpr: "ID",
+        displayExpr: "Name",
+        value: [items[0].ID],
+        searchEnabled: true,
+        opened: true,
+        grouped: true
+    });
+
+    var $input = $tagBox.find("input"),
+        keyboard = keyboardMock($input);
+
+    keyboard.type("3");
+    this.clock.tick(TIME_TO_WAIT);
+    keyboard.press('enter');
+
+    var $tagContainer = $tagBox.find("." + TAGBOX_TAG_CONTAINER_CLASS);
+
+    assert.equal($tagContainer.find("." + TAGBOX_TAG_CONTENT_CLASS).length, 2, "selected tags rendered");
+    assert.equal($.trim($tagContainer.text()), "Item1Item3", "selected values are rendered");
 });

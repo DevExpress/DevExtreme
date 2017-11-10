@@ -12,7 +12,7 @@ Make sure that you properly configure your Git [username](https://help.github.co
 
 To set up a build environment, you need the following software installed:
 
-- [Node.js и npm](https://nodejs.org/en/download/). We recommend the LTS version.
+- [Node.js and npm](https://nodejs.org/en/download/). We recommend the LTS version.
 - [.NET Core SDK](https://www.microsoft.com/net/download/core).
 - A web browser for development. We recommend Google Chrome.
 

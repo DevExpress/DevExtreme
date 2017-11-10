@@ -87,10 +87,6 @@ exports.logarithmic = extend({}, tickManagerContinuous, {
         that._minorTickCount = count;
     },
 
-    _getMarginValue: function() {
-        return null;
-    },
-
     _getNextTickValue: function(value, tickInterval, isTickIntervalNegative, isTickIntervalWithPow) {
         var that = this,
             pow,

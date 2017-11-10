@@ -52,6 +52,26 @@ QUnit.test("showAppointmentPopup should render a popup only once", function(asse
     assert.equal($(".dx-scheduler-appointment-popup").length, 2, "Popup is rendered");
 });
 
+QUnit.test("showAppointmentPopup should work correctly after scheduler repainting", function(assert) {
+    this.instance.showAppointmentPopup({ startDate: new Date(2015, 1, 1), endDate: new Date(2015, 1, 2) });
+
+    assert.equal($(".dx-scheduler-appointment-popup").length, 2, "Popup is rendered");
+    this.instance.repaint();
+
+    this.instance.showAppointmentPopup({ startDate: new Date(2015, 1, 1), endDate: new Date(2015, 1, 2) });
+    assert.equal($(".dx-scheduler-appointment-popup").length, 2, "Popup is rendered");
+});
+
+QUnit.test("changing editing should work correctly after showing popup", function(assert) {
+    this.instance.showAppointmentPopup({ startDate: new Date(2015, 1, 1), endDate: new Date(2015, 1, 2) });
+    this.instance.hideAppointmentPopup(true);
+
+    this.instance.option("editing.allowUpdating", false);
+    this.instance.option("editing.allowUpdating", true);
+
+    assert.ok(true, "OK");
+});
+
 QUnit.test("hideAppointmentPopup should hide a popup", function(assert) {
     this.instance.showAppointmentPopup({ startDate: new Date(2015, 1, 1), endDate: new Date(2015, 1, 2) });
 
@@ -163,6 +183,21 @@ QUnit.test("Changing startDateBox value should change endDateBox value if needed
     assert.deepEqual(endDateBox.option("value"), new Date(2015, 1, 6), "endDate value is right");
 });
 
+QUnit.test("Changing startDateBox value should change endDateBox value if needed(when startDate and endDate are strings)", function(assert) {
+    this.instance.showAppointmentPopup({ startDate: "1/1/2015", endDate: "1/3/2015", text: "caption" });
+    var form = this.instance.getAppointmentDetailsForm(),
+        startDateBox = form.getEditor("startDate"),
+        endDateBox = form.getEditor("endDate");
+
+    startDateBox.option("value", new Date(2015, 1, 4));
+
+    assert.deepEqual(endDateBox.option("value"), new Date(2015, 1, 6), "endDate value is right");
+
+    startDateBox.option("value", new Date(2015, 1, 3));
+
+    assert.deepEqual(endDateBox.option("value"), new Date(2015, 1, 6), "endDate value is right");
+});
+
 QUnit.test("startDateBox value should be valid", function(assert) {
     this.instance.showAppointmentPopup({ startDate: new Date(2015, 1, 1), endDate: new Date(2015, 1, 3), text: "caption" });
     var form = this.instance.getAppointmentDetailsForm(),
@@ -187,6 +222,22 @@ QUnit.test("Changing endDateBox value should change startDateBox value if needed
     endDateBox.option("value", new Date(2015, 1, 10));
 
     assert.deepEqual(startDateBox.option("value"), new Date(2015, 1, 6), "startDate value is right");
+});
+
+QUnit.test("Changing endDateBox value should change startDateBox value if needed(when startDate and endDate are strings)", function(assert) {
+    this.instance.showAppointmentPopup({ startDate: "1/10/2015", endDate: "1/13/2015", text: "caption" });
+
+    var $popupContent = $(".dx-scheduler-appointment-popup .dx-popup-content"),
+        startDateBox = $popupContent.find(".dx-datebox").eq(0).dxDateBox("instance"),
+        endDateBox = $popupContent.find(".dx-datebox").eq(1).dxDateBox("instance");
+
+    endDateBox.option("value", new Date(2015, 0, 9));
+
+    assert.deepEqual(startDateBox.option("value"), new Date(2015, 0, 6), "startDate value is right");
+
+    endDateBox.option("value", new Date(2015, 0, 10));
+
+    assert.deepEqual(startDateBox.option("value"), new Date(2015, 0, 6), "startDate value is right");
 });
 
 QUnit.test("endDateBox value should be valid", function(assert) {
@@ -220,6 +271,7 @@ QUnit.test("Confirm dialog should be shown when showAppointmentPopup for recurre
     });
 
     assert.ok($(".dx-dialog.dx-overlay-modal").length, "Dialog was shown");
+    $(".dx-dialog-buttons .dx-button").eq(0).trigger("dxclick");
 });
 
 QUnit.test("Popup should contain recurrence editor", function(assert) {
@@ -253,9 +305,7 @@ QUnit.test("Popup should not contain recurrence editor, if recurrenceRuleExpr is
     };
 
     this.instance.option("recurrenceRuleExpr", null);
-
     this.instance.showAppointmentPopup(appointment);
-    $(".dx-dialog-buttons .dx-button").eq(0).trigger("dxclick");
 
     var $popupContent = $(".dx-scheduler-appointment-popup .dx-popup-content"),
         $recurrenceEditor = $popupContent.find(".dx-recurrence-editor");
@@ -282,9 +332,7 @@ QUnit.test("Popup should not contain recurrence editor, if recurrenceRuleExpr is
     };
 
     this.instance.option("recurrenceRuleExpr", '');
-
     this.instance.showAppointmentPopup(appointment);
-    $(".dx-dialog-buttons .dx-button").eq(0).trigger("dxclick");
 
     var $popupContent = $(".dx-scheduler-appointment-popup .dx-popup-content"),
         $recurrenceEditor = $popupContent.find(".dx-recurrence-editor");
@@ -536,6 +584,68 @@ QUnit.test("Validate works always before done click", function(assert) {
     $(".dx-scheduler-appointment-popup .dx-popup-done").trigger("dxclick");
 
     assert.ok(validation.calledOnce);
+});
+
+QUnit.test("Done button shouldn't be disabled if validation fail", function(assert) {
+    var data = new DataSource({
+        store: this.tasks
+    });
+
+    this.instance.option({ dataSource: data });
+    this.instance.option({
+        onAppointmentFormCreated: function(data) {
+            var form = data.form;
+
+            form.option("items", [{
+                name: "description",
+                dataField: "description",
+                editorType: "dxTextArea",
+                validationRules: [{
+                    type: "required",
+                    message: "Login is required"
+                }]
+            }]);
+        }
+    });
+    this.instance.showAppointmentPopup({ startDate: new Date(2015, 1, 1, 1), endDate: new Date(2015, 1, 1, 2), text: "caption" });
+
+    $(".dx-scheduler-appointment-popup .dx-popup-done").trigger("dxclick");
+
+    var doneButton = $(".dx-scheduler-appointment-popup .dx-popup-done.dx-button").dxButton("instance");
+    assert.equal(doneButton.option("disabled"), false, "done button is not disabled");
+});
+
+QUnit.test("Done button shouldn't be disabled if event validation fail", function(assert) {
+    var data = new DataSource({
+        store: this.tasks
+    });
+
+    this.instance.option({ dataSource: data });
+    this.instance.option({
+        onAppointmentFormAdding: function(e) {
+            e.cancel = true;
+        }
+    });
+    this.instance.showAppointmentPopup({ startDate: new Date(2015, 1, 1, 1), endDate: new Date(2015, 1, 1, 2), text: "caption" });
+
+    $(".dx-scheduler-appointment-popup .dx-popup-done").trigger("dxclick");
+
+    var doneButton = $(".dx-scheduler-appointment-popup .dx-popup-done.dx-button").dxButton("instance");
+    assert.equal(doneButton.option("disabled"), false, "done button is not disabled");
+});
+
+QUnit.test("Done button shouldn't be disabled at second appointment form opening", function(assert) {
+    var task = { startDate: new Date(2017, 1, 1), endDate: new Date(2017, 1, 1, 0, 10), text: "caption" };
+    this.instance.option({
+        dataSource: [task]
+    });
+
+    this.instance.showAppointmentPopup(task);
+    $(".dx-scheduler-appointment-popup .dx-popup-done").trigger("dxclick");
+    this.instance.showAppointmentPopup(task);
+    var doneButton = $(".dx-scheduler-appointment-popup .dx-popup-done.dx-button").dxButton("instance");
+
+    assert.equal(doneButton.option("disabled"), false, "done button is not disabled");
 });
 
 QUnit.test("startDateBox & endDateBox should have required validation rules", function(assert) {

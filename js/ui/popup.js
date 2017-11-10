@@ -477,11 +477,16 @@ var Popup = Overlay.inherit({
             toolbarTemplate = template instanceof EmptyTemplate;
 
         if(toolbarTemplate) {
+            var toolbarOptions = {
+                items: data,
+                rtlEnabled: this.option("rtlEnabled")
+            };
+
             this._getTemplate("dx-polymorph-widget").render({
                 container: $container,
                 model: {
                     widget: "dxToolbarBase",
-                    options: { items: data }
+                    options: toolbarOptions
                 }
             });
             var $toolbar = $container.children("div");
@@ -674,6 +679,8 @@ var Popup = Overlay.inherit({
     },
 
     _setContentHeight: function() {
+        (this.option("forceApplyBindings") || $.noop)();
+
         if(this._disallowUpdateContentHeight()) {
             return;
         }
@@ -727,6 +734,10 @@ var Popup = Overlay.inherit({
         }
     },
 
+    refreshPosition: function() {
+        this._renderPosition();
+    },
+
     _renderPosition: function() {
         if(this.option("fullScreen")) {
             translator.move(this._$content, {
@@ -734,6 +745,8 @@ var Popup = Overlay.inherit({
                 left: 0
             });
         } else {
+            (this.option("forceApplyBindings") || $.noop)();
+
             return this.callBase.apply(this, arguments);
         }
     },

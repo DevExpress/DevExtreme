@@ -112,13 +112,6 @@ var MultiView = CollectionWidget.inherit({
             deferRendering: true,
 
             /**
-            * @name dxMultiViewOptions_noDataText
-            * @publicName noDataText
-            * @hidden
-            * @extend_doc
-            */
-
-            /**
             * @name dxMultiViewOptions_selectedItems
             * @publicName selectedItems
             * @hidden

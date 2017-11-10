@@ -11,7 +11,10 @@ var $ = require("../../core/renderer"),
     Form = require("../form"),
     gridCoreUtils = require("./ui.grid_core.utils"),
 
-    COLUMN_VIEWS = ["columnHeadersView", "rowsView", "footerView"],
+    COLUMN_HEADERS_VIEW = "columnHeadersView",
+    ROWS_VIEW = "rowsView",
+    FOOTER_VIEW = "footerView",
+    COLUMN_VIEWS = [COLUMN_HEADERS_VIEW, ROWS_VIEW, FOOTER_VIEW],
 
     ADAPTIVE_NAMESPACE = "dxDataGridAdaptivity",
     HIDDEN_COLUMNS_WIDTH = "adaptiveHidden",
@@ -28,8 +31,10 @@ var $ = require("../../core/renderer"),
     ADAPTIVE_ITEM_TEXT_CLASS = "dx-adaptive-item-text",
     MASTER_DETAIL_CELL_CLASS = "dx-master-detail-cell",
     ADAPTIVE_COLUMN_NAME = "adaptive",
+    EDIT_MODE_BATCH = "batch",
     EDIT_MODE_ROW = "row",
-    EDIT_MODE_FORM = "form";
+    EDIT_MODE_FORM = "form",
+    EDIT_MODE_POPUP = "popup";
 
 function getColumnId(column) {
     return column.command ? "command:" + column.command : column.index;
@@ -39,11 +44,6 @@ var AdaptiveColumnsController = modules.ViewController.inherit({
     _isRowEditMode: function() {
         var editMode = this._editingController.getEditMode();
         return editMode === EDIT_MODE_ROW;
-    },
-
-    _isFormEditMode: function() {
-        var editMode = this._editingController.getEditMode();
-        return editMode === EDIT_MODE_FORM;
     },
 
     _isItemModified: function(item, cellOptions) {
@@ -58,14 +58,24 @@ var AdaptiveColumnsController = modules.ViewController.inherit({
         var that = this,
             column = item.column,
             cellValue = column.calculateCellValue(cellOptions.data),
+            focusAction = that.createAction(function() {
+                $container.trigger(clickEvent.name);
+            }),
             cellText;
 
         cellValue = gridCoreUtils.getDisplayValue(column, cellValue, cellOptions.data, cellOptions.rowType);
         cellText = gridCoreUtils.formatValue(cellValue, column);
 
+        if(column.allowEditing && that.option("useKeyboard")) {
+            $container
+                .attr("tabIndex", that.option("tabIndex"))
+                .off("focus", focusAction)
+                .on("focus", focusAction);
+        }
+
         if(column.cellTemplate) {
             var templateOptions = extend({}, cellOptions, { value: cellValue, text: cellText, column: column });
-            that._rowsView.renderTemplate($container, column.cellTemplate, templateOptions);
+            that._rowsView.renderTemplate($container, column.cellTemplate, templateOptions, !!$container.closest(document).length);
         } else {
             var container = $container.get(0);
             if(column.encodeHtml) {
@@ -154,26 +164,69 @@ var AdaptiveColumnsController = modules.ViewController.inherit({
         return commonUtils.isString(width) && width.slice(-1) === "%";
     },
 
-    _getNotTruncatedColumnWidth: function(column, containerWidth, columnsCount, columnsCanFit) {
+    _isColumnHidden: function(column) {
+        return this._hiddenColumns.filter(function(hiddenColumn) {
+            return hiddenColumn.index === column.index;
+        }).length > 0;
+    },
+
+    _getAverageColumnsWidth: function(containerWidth, columns, columnsCanFit) {
+        var that = this,
+            fixedColumnsWidth = 0,
+            columnsWithoutFixedWidthCount = 0;
+
+        columns.forEach(function(column) {
+            if(!that._isColumnHidden(column)) {
+                var width = column.width;
+                if(commonUtils.isDefined(width) && !isNaN(parseFloat(width))) {
+                    fixedColumnsWidth += that._isPercentWidth(width) ? that._calculatePercentWidth({
+                        visibleIndex: column.visibleIndex,
+                        columnsCount: columns.length,
+                        columnsCanFit: columnsCanFit,
+                        bestFitWidth: column.bestFitWidth,
+                        columnWidth: width,
+                        containerWidth: containerWidth
+                    }) : parseFloat(width);
+                } else {
+                    columnsWithoutFixedWidthCount++;
+                }
+            }
+        });
+        return (containerWidth - fixedColumnsWidth) / columnsWithoutFixedWidthCount;
+    },
+
+    _calculatePercentWidth: function(options) {
+        var columnFitted = (options.visibleIndex < options.columnsCount - 1) && options.columnsCanFit,
+            partialWidth = options.containerWidth * parseFloat(options.columnWidth) / 100,
+            resultWidth = options.columnsCanFit && (partialWidth < options.bestFitWidth) ? options.bestFitWidth : partialWidth;
+
+        return columnFitted ? this.component.element().width() * parseFloat(options.columnWidth) / 100 : resultWidth;
+    },
+
+    _getNotTruncatedColumnWidth: function(column, containerWidth, contentColumns, columnsCanFit) {
         var columnId = getColumnId(column),
             widthOption = this._columnsController.columnOption(columnId, "width"),
             bestFitWidth = this._columnsController.columnOption(columnId, "bestFitWidth"),
+            columnsCount = contentColumns.length,
             colWidth;
 
         if(widthOption && widthOption !== "auto") {
             if(this._isPercentWidth(widthOption)) {
-                var columnFitted = (column.visibleIndex < columnsCount - 1) && columnsCanFit,
-                    partialWidth = containerWidth * parseFloat(widthOption) / 100,
-                    resultWidth = columnsCanFit && (partialWidth < bestFitWidth) ? bestFitWidth : partialWidth;
-
-                colWidth = columnFitted ? this.component.element().width() * parseFloat(widthOption) / 100 : resultWidth;
+                colWidth = this._calculatePercentWidth({
+                    visibleIndex: column.visibleIndex,
+                    columnsCount: columnsCount,
+                    columnsCanFit: columnsCanFit,
+                    bestFitWidth: bestFitWidth,
+                    columnWidth: widthOption,
+                    containerWidth: containerWidth
+                });
             } else {
                 return widthOption;
             }
         } else {
             var columnAutoWidth = this.option("columnAutoWidth");
 
-            colWidth = columnAutoWidth || !!column.command ? bestFitWidth : containerWidth / columnsCount;
+            colWidth = columnAutoWidth || !!column.command ? bestFitWidth : this._getAverageColumnsWidth(containerWidth, contentColumns, columnsCanFit);
         }
 
         var isTruncated = colWidth < bestFitWidth;
@@ -206,7 +259,7 @@ var AdaptiveColumnsController = modules.ViewController.inherit({
     },
 
     _isItemEdited: function(item) {
-        if(this._isFormEditMode()) {
+        if(this.isFormEditMode()) {
             return false;
         }
 
@@ -281,25 +334,49 @@ var AdaptiveColumnsController = modules.ViewController.inherit({
     },
 
     _addCssClassToColumn: function(cssClassName, visibleIndex) {
-        var i,
-            view,
+        var that = this;
+        COLUMN_VIEWS.forEach(function(viewName) {
+            var view = that.getView(viewName);
+            view && that._addCssClassToViewColumn(view, cssClassName, visibleIndex);
+        });
+    },
+
+    _addCssClassToViewColumn: function(view, cssClassName, visibleIndex) {
+        var viewName = view.name,
             rowsCount,
             rowIndex,
             $cellElement,
+            currentVisibleIndex,
+            column = this._columnsController.getVisibleColumns()[visibleIndex],
             editFormRowIndex = this._editingController && this._editingController.getEditFormRowIndex();
 
-        for(i = 0; i < COLUMN_VIEWS.length; i++) {
-            view = this.getView(COLUMN_VIEWS[i]);
-            if(view && view.isVisible()) {
-                rowsCount = view.getRowsCount();
-                for(rowIndex = 0; rowIndex < rowsCount; rowIndex++) {
-                    if(rowIndex !== editFormRowIndex) {
-                        $cellElement = view.getCellElements(rowIndex).eq(visibleIndex);
+        if(view && view.isVisible() && column) {
+            rowsCount = view.getRowsCount();
+            var $rowElements = view._getRowElements();
+            for(rowIndex = 0; rowIndex < rowsCount; rowIndex++) {
+                if(rowIndex !== editFormRowIndex || viewName !== ROWS_VIEW) {
+                    currentVisibleIndex = viewName === COLUMN_HEADERS_VIEW ? this._columnsController.getVisibleIndex(column.index, rowIndex) : visibleIndex;
+                    if(currentVisibleIndex >= 0) {
+                        $cellElement = $rowElements.eq(rowIndex).children().eq(currentVisibleIndex);
                         this._isCellValid($cellElement) && $cellElement.addClass(cssClassName);
                     }
                 }
             }
         }
+    },
+
+    applyStylesForHiddenColumns: function(view) {
+        var that = this;
+        this._hiddenColumns.forEach(function(column) {
+            var visibleIndex = that._columnsController.getVisibleIndex(column.index);
+            that._addCssClassToViewColumn(view, that.addWidgetPrefix(HIDDEN_COLUMN_CLASS), visibleIndex);
+        });
+    },
+
+    isFormEditMode: function() {
+        var editMode = this._editingController.getEditMode();
+
+        return editMode === EDIT_MODE_FORM || editMode === EDIT_MODE_POPUP;
     },
 
     hideRedundantColumns: function(resultWidths, visibleColumns, hiddenQueue) {
@@ -330,7 +407,7 @@ var AdaptiveColumnsController = modules.ViewController.inherit({
                 for(i = 0; i < visibleColumns.length; i++) {
                     visibleColumn = visibleColumns[i];
 
-                    var columnWidth = that._getNotTruncatedColumnWidth(visibleColumn, rootElementWidth, contentColumnCount, columnsCanFit),
+                    var columnWidth = that._getNotTruncatedColumnWidth(visibleColumn, rootElementWidth, contentColumns, columnsCanFit),
                         columnId = getColumnId(visibleColumn),
                         widthOption = that._columnsController.columnOption(columnId, "width"),
                         columnBestFitWidth = that._columnsController.columnOption(columnId, "bestFitWidth");
@@ -383,9 +460,9 @@ var AdaptiveColumnsController = modules.ViewController.inherit({
         }
     },
 
-    toggleExpandAdaptiveDetailRow: function(key) {
-        if(!(this._isFormEditMode() && this._editingController.isEditing())) {
-            this.getController("data").toggleExpandAdaptiveDetailRow(key);
+    toggleExpandAdaptiveDetailRow: function(key, alwaysExpanded) {
+        if(!(this.isFormEditMode() && this._editingController.isEditing())) {
+            this.getController("data").toggleExpandAdaptiveDetailRow(key, alwaysExpanded);
         }
     },
 
@@ -444,6 +521,10 @@ var AdaptiveColumnsController = modules.ViewController.inherit({
 
         that._hidingColumnsQueue = [];
 
+        if(that.option("allowColumnResizing") && that.option("columnResizingMode") === "widget") {
+            return that._hidingColumnsQueue;
+        }
+
         for(i = 0; i < hideableColumns.length; i++) {
             if(commonUtils.isDefined(hideableColumns[i].hidingPriority) && hideableColumns[i].hidingPriority >= 0) {
                 columnsHasHidingPriority = true;
@@ -455,7 +536,7 @@ var AdaptiveColumnsController = modules.ViewController.inherit({
             that._hidingColumnsQueue.reverse();
         } else if(that.option("columnHidingEnabled")) {
             for(i = 0; i < hideableColumns.length; i++) {
-                var visibleIndex = that._columnsController.columnOption(getColumnId(hideableColumns[i]), "visibleIndex");
+                var visibleIndex = that._columnsController.getVisibleIndex(hideableColumns[i].index);
                 that._hidingColumnsQueue[visibleIndex] = hideableColumns[i];
             }
         }
@@ -484,14 +565,15 @@ var AdaptiveColumnsController = modules.ViewController.inherit({
 
         that._columnsController.addCommandColumn({
             command: ADAPTIVE_COLUMN_NAME,
-            visible: false,
+            visible: true,
+            adaptiveHidden: true,
             cssClass: ADAPTIVE_COLUMN_NAME_CLASS,
             width: "auto"
         });
 
         that._columnsController.columnsChanged.add(function() {
             var isAdaptiveVisible = !!that.updateHidingQueue(that._columnsController.getColumns()).length;
-            that._columnsController.columnOption("command:adaptive", "visible", isAdaptiveVisible, true);
+            that._columnsController.columnOption("command:adaptive", "adaptiveHidden", !isAdaptiveVisible, true);
         });
         that._editingController = that.getController("editing");
         that._hidingColumnsQueue = [];
@@ -503,7 +585,7 @@ var AdaptiveColumnsController = modules.ViewController.inherit({
 
     optionChanged: function(args) {
         if(args.name === "columnHidingEnabled") {
-            this._columnsController.columnOption("command:adaptive", "visible", args.value);
+            this._columnsController.columnOption("command:adaptive", "adaptiveHidden", !args.value);
         }
 
         this.callBase(args);
@@ -604,7 +686,7 @@ module.exports = {
                     return $row;
                 },
 
-                _getColumnIndexByElement: function($element) {
+                _getColumnIndexByElementCore: function($element) {
                     var $itemContent = $element.closest("." + FORM_ITEM_CONTENT_CLASS);
                     if($itemContent.length && $itemContent.closest(this.component.element()).length) {
                         var formItem = $itemContent.length ? $itemContent.first().data("dx-form-item") : null;
@@ -612,6 +694,11 @@ module.exports = {
                     } else {
                         return this.callBase($element);
                     }
+                },
+
+                _cellPrepared: function() {
+                    this.callBase.apply(this, arguments);
+                    this._adaptiveColumnsController.applyStylesForHiddenColumns(this);
                 },
 
                 getCellElement: function(rowIndex, columnIdentifier) {
@@ -674,6 +761,10 @@ module.exports = {
                 }
             },
             editing: {
+                _isRowEditMode: function() {
+                    return this.getEditMode() === EDIT_MODE_ROW;
+                },
+
                 _getFormEditItemTemplate: function(cellOptions, column) {
                     if(this.getEditMode() !== EDIT_MODE_ROW && cellOptions.rowType === "detailAdaptive") {
                         cellOptions.columnIndex = this._columnsController.getVisibleIndex(column.index);
@@ -695,7 +786,7 @@ module.exports = {
                 },
 
                 _beforeUpdateItems: function(rowIndices, rowIndex) {
-                    if(this.getEditMode() !== EDIT_MODE_FORM && this._adaptiveController.hasHiddenColumns()) {
+                    if(!this._adaptiveController.isFormEditMode() && this._adaptiveController.hasHiddenColumns()) {
                         var items = this._dataController.items(),
                             item = items[rowIndex],
                             oldExpandRowIndex = gridCoreUtils.getIndexByKey(this._dataController.adaptiveExpandedKey(), items);
@@ -717,14 +808,15 @@ module.exports = {
 
                 _afterInsertRow: function(options) {
                     this.callBase(options);
+
                     if(this._adaptiveController.hasHiddenColumns()) {
-                        this._adaptiveController.expandAdaptiveDetailRow(options.key);
+                        this._adaptiveController.toggleExpandAdaptiveDetailRow(options.key, this.isRowEditMode());
                         this._isForceRowAdaptiveExpand = true;
                     }
                 },
 
                 _collapseAdaptiveDetailRow: function() {
-                    if(this.getEditMode() === EDIT_MODE_ROW && this._isForceRowAdaptiveExpand) {
+                    if(this._isRowEditMode() && this._isForceRowAdaptiveExpand) {
                         this._adaptiveController.collapseAdaptiveDetailRow();
                         this._isForceRowAdaptiveExpand = false;
                     }
@@ -738,7 +830,8 @@ module.exports = {
 
                 _afterSaveEditData: function() {
                     this.callBase();
-                    if(this.getController("validating").validate(true)) {
+                    if(this._isRowEditMode() && this._adaptiveController.hasHiddenColumns()
+                        && this.getController("validating").validate(true)) {
                         this._cancelEditAdaptiveDetailRow();
                     }
                 },
@@ -771,7 +864,17 @@ module.exports = {
                 },
 
                 editRow: function(rowIndex) {
-                    if(this.getEditMode() === EDIT_MODE_FORM) {
+                    if(this._adaptiveController.isFormEditMode()) {
+                        this._adaptiveController.collapseAdaptiveDetailRow();
+                    }
+
+                    this.callBase(rowIndex);
+                },
+
+                deleteRow: function(rowIndex) {
+                    var rowKey = this._dataController.getKeyByRowIndex(rowIndex);
+
+                    if(this.getEditMode() === EDIT_MODE_BATCH && this._adaptiveController.isAdaptiveDetailRowExpanded(rowKey)) {
                         this._adaptiveController.collapseAdaptiveDetailRow();
                     }
 
@@ -784,8 +887,8 @@ module.exports = {
                 }
             },
             resizing: {
-                _isNeedToCalcBestFitWidths: function(needBestFit) {
-                    return this.callBase(needBestFit) || !!this._adaptiveColumnsController.getHidingColumnsQueue().length;
+                _needBestFit: function() {
+                    return this.callBase() || !!this._adaptiveColumnsController.getHidingColumnsQueue().length;
                 },
 
                 _correctColumnWidths: function(resultWidths, visibleColumns) {
@@ -868,13 +971,13 @@ module.exports = {
                     }
                 },
 
-                toggleExpandAdaptiveDetailRow: function(key) {
+                toggleExpandAdaptiveDetailRow: function(key, alwaysExpanded) {
                     var that = this;
 
                     var oldExpandRowIndex = gridCoreUtils.getIndexByKey(that._adaptiveExpandedKey, that._items);
                     var newExpandRowIndex = gridCoreUtils.getIndexByKey(key, that._items);
 
-                    if(oldExpandRowIndex >= 0 && oldExpandRowIndex === newExpandRowIndex) {
+                    if(oldExpandRowIndex >= 0 && oldExpandRowIndex === newExpandRowIndex && !alwaysExpanded) {
                         key = undefined;
                         newExpandRowIndex = -1;
                     }
@@ -907,8 +1010,29 @@ module.exports = {
                 _getTooltipsSelector: function() {
                     return this.callBase() + ", .dx-field-item-content .dx-tooltip";
                 }
-            }
+            },
+            columns: {
+                _isColumnVisible: function(column) {
+                    return this.callBase(column) && !column.adaptiveHidden;
+                }
+            },
+            keyboardNavigation: {
+                _isCellValid: function($cell) {
+                    return this.callBase($cell) && !$cell.hasClass(this.addWidgetPrefix(HIDDEN_COLUMN_CLASS));
+                },
 
+                _processNextCellInMasterDetail: function($nextCell) {
+                    this.callBase($nextCell);
+
+                    if(!this._isInsideEditForm($nextCell) && $nextCell) {
+                        var focusHandler = function() {
+                            $nextCell.off("focus", focusHandler);
+                            $nextCell.trigger("dxclick");
+                        };
+                        $nextCell.on("focus", focusHandler);
+                    }
+                }
+            }
         }
     }
 };

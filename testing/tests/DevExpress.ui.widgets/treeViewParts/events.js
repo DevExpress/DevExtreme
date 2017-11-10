@@ -5,6 +5,7 @@
 var $ = require("jquery"),
     commonUtils = require("core/utils/common"),
     holdEvent = require("events/hold"),
+    fx = require("animation/fx"),
     devices = require("core/devices"),
     contextMenuEvent = require("events/contextmenu"),
     dblclickEvent = require("events/dblclick"),
@@ -18,7 +19,17 @@ var $ = require("jquery"),
         assert.ok(e.node);
     };
 
-QUnit.module("Events");
+QUnit.module("Events", {
+    beforeEach: function() {
+        fx.off = true;
+        this.clock = sinon.useFakeTimers();
+    },
+
+    afterEach: function() {
+        fx.off = false;
+        this.clock.restore();
+    }
+});
 
 QUnit.test("onItemSelectionChanged event with unselected item", function(assert) {
     var handler = sinon.spy(function() { return; });
@@ -513,6 +524,7 @@ QUnit.test("T184799: expand item", function(assert) {
         var $rootItem = treeView.element().find("." + internals.ITEM_CLASS).eq(0);
 
         $rootItem.trigger(dblclickEvent.name);
+        this.clock.tick(0);
 
         var args = handler.getCall(0).args[0];
 
@@ -672,6 +684,26 @@ QUnit.test("Collapse event handler has correct arguments", function(assert) {
 
     assert.ok(treeView);
     $icon.trigger("dxclick");
+});
+
+QUnit.test("onItemExpanded should be called after animation completed", function(assert) {
+    try {
+        fx.off = false;
+        var onItemExpanded = sinon.stub(),
+            treeView = initTree({
+                items: [{ id: 1, text: "Item 1", items: [{ id: 2, text: "Nested items" }] }],
+                onItemExpanded: onItemExpanded
+            }).dxTreeView("instance");
+
+        treeView.expandItem(1);
+        this.clock.tick(50);
+        assert.equal(onItemExpanded.callCount, 0, "handler was not called yet");
+
+        this.clock.tick(450);
+        assert.equal(onItemExpanded.callCount, 1, "handler was called after animation completed");
+    } finally {
+        fx.off = true;
+    }
 });
 
 QUnit.test("Expand event handler has correct arguments", function(assert) {

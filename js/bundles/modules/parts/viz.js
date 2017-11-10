@@ -14,6 +14,7 @@ viz.getMarkup = require("../../../viz/export").getMarkup;
 viz.currentPalette = require("../../../viz/palette").currentPalette;
 viz.getPalette = require("../../../viz/palette").getPalette;
 viz.registerPalette = require("../../../viz/palette").registerPalette;
+viz.refreshTheme = require("../../../viz/themes").refreshTheme;
 
 /* Charts (dx.module-viz-charts.js) */
 viz.dxChart = require("../../../viz/chart");
@@ -56,7 +57,8 @@ core.registerPalette = require("../../../viz/palette").registerPalette;
 viz.BaseWidget = require("../../../viz/core/base_widget");
 
 viz.findTheme = require("../../../viz/themes").findTheme;
-viz.refreshAll = require("../../../viz/themes").refreshAll;
+//We need to keep this method as we suggested it to users
+viz.refreshAll = require("../../../viz/themes").refreshTheme;
 
 viz.refreshPaths = require("../../../viz/utils").refreshPaths;
 

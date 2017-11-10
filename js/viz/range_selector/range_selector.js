@@ -11,7 +11,6 @@ var $ = require("../../core/renderer"),
     dateToMilliseconds = dateUtils.dateToMilliseconds,
     getSequenceByInterval = dateUtils.getSequenceByInterval,
     rangeModule = require("../translators/range"),
-    translator2DModule = require("../translators/translator2d"),
     axisModule = require("../axes/base_axis"),
     patchFontOptions = vizUtils.patchFontOptions,
     parseUtils = require("../components/parse_utils"),
@@ -49,18 +48,7 @@ var $ = require("../../core/renderer"),
     LOGARITHMIC = "logarithmic",
     INVISIBLE_POS = -1000,
     SEMIDISCRETE_GRID_SPACING_FACTOR = 50,
-
     logarithmBase = 10;
-
-// This method exists only to wrap "{}, {}" ugliness
-function createTranslator() {
-    return new translator2DModule.Translator2D({}, {});
-}
-
-// This method exists only to wrap "left-width-isHorizontal" ugliness
-function updateTranslator(translator, valueRange, screenRange, interval) {
-    translator.update(valueRange, { left: screenRange[0], width: screenRange[1] }, { isHorizontal: true, interval: interval });
-}
 
 function calculateMarkerHeight(renderer, value, sliderMarkerOptions) {
     var formattedText = (value === undefined ? commonModule.consts.emptySliderMarkerText : commonModule.formatValue(value, sliderMarkerOptions)),
@@ -203,24 +191,15 @@ function checkLogarithmicOptions(options, defaultLogarithmBase, incidentOccurred
 }
 
 function calculateScaleAreaHeight(renderer, scaleOptions, visibleMarkers) {
-    var textBBox,
-        value = "0",
-        formatObject = {
-            value: 0,
-            valueText: value
-        },
-        labelScaleOptions = scaleOptions.label,
+    var labelScaleOptions = scaleOptions.label,
         markerScaleOptions = scaleOptions.marker,
-        customizeText = labelScaleOptions.customizeText,
         placeholderHeight = scaleOptions.placeholderHeight,
-        text = commonUtils.isFunction(customizeText) ? customizeText.call(formatObject, formatObject) : value,
-        visibleLabels = labelScaleOptions.visible;
+        text = commonModule.formatValue(scaleOptions.startValue, labelScaleOptions);
 
     if(placeholderHeight) {
         return placeholderHeight;
     } else {
-        textBBox = getTextBBox(renderer, text, labelScaleOptions.font);
-        return (visibleLabels ? labelScaleOptions.topIndent + textBBox.height : 0) +
+        return (labelScaleOptions.visible ? labelScaleOptions.topIndent + getTextBBox(renderer, text, labelScaleOptions.font).height : 0) +
             (visibleMarkers ? markerScaleOptions.topIndent + markerScaleOptions.separatorHeight : 0);
     }
 }
@@ -638,11 +617,17 @@ var dxRangeSelector = require("../core/base_widget").inherit({
         slidersGroup = renderer.g().attr({ "class": "dxrs-slidersContainer", "clip-path": that._clipRect.id }).append(root);
         scaleGroup = renderer.g().attr({ "class": "dxrs-scale", "clip-path": that._clipRect.id }).append(root);
         trackersGroup = renderer.g().attr({ "class": "dxrs-trackers" }).append(root);
-        that._translator = createTranslator();
+
+        that._axis = new AxisWrapper({
+            renderer: renderer,
+            root: scaleGroup,
+            updateSelectedRange: function(range) { that.setValue(parseSelectedRange(range)); }
+        });
+
         that._rangeView = new rangeViewModule.RangeView({
             renderer: renderer,
             root: rangeViewGroup,
-            translator: that._translator
+            translator: that._axis.getTranslator()
         });
 
         that._slidersController = new slidersControllerModule.SlidersController({
@@ -667,14 +652,9 @@ var dxRangeSelector = require("../core/base_widget").inherit({
                     previousValue: parseSelectedRange(lastSelectedRange)
                 });
             },
-            translator: that._translator
+            translator: that._axis.getTranslator()
         });
-        that._axis = new AxisWrapper({
-            renderer: renderer,
-            root: scaleGroup,
-            updateSelectedRange: function(range) { that.setValue(parseSelectedRange(range)); },
-            translator: that._translator
-        });
+
         that._tracker = new trackerModule.Tracker({
             renderer: renderer,
             controller: that._slidersController
@@ -774,9 +754,10 @@ var dxRangeSelector = require("../core/base_widget").inherit({
     },
 
     _validateRange: function(start, end) {
-        var that = this;
-        if(start !== null && !that._translator.isValid(start) ||
-            end !== null && !that._translator.isValid(end)) {
+        var that = this,
+            translator = that._axis.getTranslator();
+        if(start !== null && !translator.isValid(start) ||
+            end !== null && !translator.isValid(end)) {
             that._incidentOccurred("E2203");
         }
     },
@@ -869,10 +850,15 @@ var dxRangeSelector = require("../core/base_widget").inherit({
         rangeContainerCanvas = {
             left: canvas.left + indents.left,
             top: canvas.top + indents.top,
-            width: _max(canvas.width - indents.left - indents.right, 1),
-            height: _max(!isCompactMode ? canvas.height - indents.top - indents.bottom - scaleLabelsAreaHeight : commonModule.HEIGHT_COMPACT_MODE, 0)
+            width: canvas.left + indents.left + _max(canvas.width - indents.left - indents.right, 1),
+            height: _max(!isCompactMode ? canvas.height - indents.top - indents.bottom - scaleLabelsAreaHeight : commonModule.HEIGHT_COMPACT_MODE, 0),
+            right: 0,
+            bottom: 0
         };
-        updateTranslator(that._translator, argTranslatorRange, [rangeContainerCanvas.left, rangeContainerCanvas.left + rangeContainerCanvas.width], scaleOptions.minRange);
+
+         // TODO: There should be one call to some axis method (not 4 methods)
+
+        that._axis.update(scaleOptions, isCompactMode, rangeContainerCanvas, argTranslatorRange);
 
         scaleOptions.minorTickInterval = scaleOptions.isEmpty ? 0 : scaleOptions.minorTickInterval;
 
@@ -895,9 +881,6 @@ var dxRangeSelector = require("../core/base_widget").inherit({
         that._rangeView.update(that.option("background"), that._themeManager.theme("background"), canvas, isCompactMode,
             behavior.animationEnabled && that._renderer.animationEnabled(), seriesDataSource);
 
-        // TODO: There should be one call to some axis method (not 4 methods)
-        that._axis.update(scaleOptions, isCompactMode, canvas);
-
         // TODO: Is entire options bag really needed for SlidersContainer?
         that._isUpdating = true;
         that._slidersController.update([canvas.top, canvas.top + canvas.height], behavior, isCompactMode,
@@ -908,7 +891,7 @@ var dxRangeSelector = require("../core/base_widget").inherit({
 
         that._requestChange(["SLIDER_SELECTION"]);
         that._isUpdating = false;
-        that._tracker.update(!that._translator.isEmptyValueRange(), behavior);
+        that._tracker.update(!that._axis.getTranslator().isEmptyValueRange(), behavior);
     },
 
     _createSeriesDataSource: function(chartOptions) {
@@ -916,7 +899,17 @@ var dxRangeSelector = require("../core/base_widget").inherit({
             seriesDataSource,
             dataSource = that._dataSourceItems(),  // TODO: This code can be executed when data source is not loaded (it is an error)!
             scaleOptions = that._getOption("scale"),
-            valueType = scaleOptions.valueType || calculateValueType(scaleOptions.startValue, scaleOptions.endValue);
+            valueType = scaleOptions.valueType || calculateValueType(scaleOptions.startValue, scaleOptions.endValue),
+            valueAxis = new axisModule.Axis({
+                renderer: that._renderer,
+                axisType: "xyAxes",
+                drawingType: "linear"
+            });
+
+        valueAxis.updateOptions({
+            isHorizontal: false,
+            label: {},
+        });
 
         if(dataSource || (chartOptions && chartOptions.series)) {
             chartOptions = extend({}, chartOptions, {
@@ -930,7 +923,9 @@ var dxRangeSelector = require("../core/base_widget").inherit({
                 chart: chartOptions,
                 dataSourceField: that.option("dataSourceField"),
                 incidentOccurred: that._incidentOccurred,
-                categories: scaleOptions.categories
+                categories: scaleOptions.categories,
+                argumentAxis: that._axis,
+                valueAxis: valueAxis
             });
         }
         return seriesDataSource;
@@ -1010,12 +1005,6 @@ var dxRangeSelector = require("../core/base_widget").inherit({
     _setContentSize: function() {
         this.__isResizing = this._changes.count() === 2;
         this.callBase.apply(this, arguments);
-    },
-
-    render: function(isResizing) {
-        this.__isResizing = isResizing;
-        this.callBase.apply(this, arguments);
-        this._requestChange(["MOSTLY_TOTAL"]);
     }
 });
 
@@ -1044,6 +1033,8 @@ function prepareAxisOptions(scaleOptions, isCompactMode, height, axisPosition) {
     scaleOptions.argumentType = scaleOptions.valueType;
     scaleOptions.visible = isCompactMode;
     scaleOptions.minorTick.showCalculatedTicks = scaleOptions.isHorizontal = scaleOptions.stick = true;
+
+    scaleOptions.semiDiscreteInterval = scaleOptions.minRange;
 
     if(!isCompactMode) {
         scaleOptions.minorTick.length = scaleOptions.tick.length = height;
@@ -1078,7 +1069,6 @@ function AxisWrapper(params) {
         axisClass: "range-selector"
     });
     this._updateSelectedRangeCallback = params.updateSelectedRange;
-    this._translator = params.translator;
 }
 
 AxisWrapper.prototype = {
@@ -1088,18 +1078,13 @@ AxisWrapper.prototype = {
         this._axis.dispose();
     },
 
-    update: function(options, isCompactMode, canvas) {
+    update: function(options, isCompactMode, canvas, businessRange) {
         var axis = this._axis;
         axis.updateOptions(prepareAxisOptions(options, isCompactMode, canvas.height, canvas.height / 2 - Math.ceil(options.width / 2)));
-        axis.delta = { bottom: -canvas.height / 2 };    // TODO: Really? Just a public field?
-        // Translators could be passed to axis once (in constructor) but axis crashes when provided with not updated translator
-        axis.setTranslator(this._translator, {
-            // That is all what is actually required from the translator
-            translateSpecialCase: function() {
-                return canvas.top + canvas.height;
-            }
-        });
-        axis.draw();
+        axis.setBusinessRange(businessRange);
+
+        axis.draw(canvas);
+        axis.shift({ left: 0, bottom: -canvas.height / 2 + canvas.top });
         if(axis.getMarkerTrackers()) {
             // TODO: Check who is responsible for destroying events
             createDateMarkersEvent(options, axis.getMarkerTrackers(), this._updateSelectedRangeCallback);
@@ -1108,7 +1093,13 @@ AxisWrapper.prototype = {
 
     getFullTicks: function() {
         return this._axis.getFullTicks();
-    }
+    },
+
+    getTranslator: function() {
+        return this._axis.getTranslator();
+    },
+
+    getViewport: function() {}
 };
 
 registerComponent("dxRangeSelector", dxRangeSelector);

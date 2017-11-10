@@ -125,7 +125,7 @@ var Template = TemplateBase.inherit({
     },
 
     _renderCore: function(options) {
-        return $("<div>").append(currentTemplateEngine.render(this._compiledTemplate, options.model)).contents();
+        return $("<div>").append(currentTemplateEngine.render(this._compiledTemplate, options.model, options.index)).contents();
     },
 
     source: function() {

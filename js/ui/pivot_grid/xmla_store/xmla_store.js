@@ -7,12 +7,13 @@ var $ = require("../../../core/renderer"),
     commonUtils = require("../../../core/utils/common"),
     inArray = require("../../../core/utils/array").inArray,
     pivotGridUtils = require("../ui.pivot_grid.utils"),
-    when = require("../../../integration/jquery/deferred").when;
+    when = require("../../../integration/jquery/deferred").when,
+    getLanguageId = require("../../../localization/language_codes").getLanguageId;
 
 exports.XmlaStore = Class.inherit((function() {
 
-    var discover = '<Envelope xmlns="http://schemas.xmlsoap.org/soap/envelope/"><Body><Discover xmlns="urn:schemas-microsoft-com:xml-analysis"><RequestType>{2}</RequestType><Restrictions><RestrictionList><CATALOG_NAME>{0}</CATALOG_NAME><CUBE_NAME>{1}</CUBE_NAME></RestrictionList></Restrictions><Properties><PropertyList><Catalog>{0}</Catalog></PropertyList></Properties></Discover></Body></Envelope>',
-        execute = '<Envelope xmlns="http://schemas.xmlsoap.org/soap/envelope/"><Body><Execute xmlns="urn:schemas-microsoft-com:xml-analysis"><Command><Statement>{0}</Statement></Command><Properties><PropertyList><Catalog>{1}</Catalog><ShowHiddenCubes>True</ShowHiddenCubes><SspropInitAppName>Microsoft SQL Server Management Studio</SspropInitAppName><Timeout>3600</Timeout></PropertyList></Properties></Execute></Body></Envelope>',
+    var discover = '<Envelope xmlns="http://schemas.xmlsoap.org/soap/envelope/"><Body><Discover xmlns="urn:schemas-microsoft-com:xml-analysis"><RequestType>{2}</RequestType><Restrictions><RestrictionList><CATALOG_NAME>{0}</CATALOG_NAME><CUBE_NAME>{1}</CUBE_NAME></RestrictionList></Restrictions><Properties><PropertyList><Catalog>{0}</Catalog>{3}</PropertyList></Properties></Discover></Body></Envelope>',
+        execute = '<Envelope xmlns="http://schemas.xmlsoap.org/soap/envelope/"><Body><Execute xmlns="urn:schemas-microsoft-com:xml-analysis"><Command><Statement>{0}</Statement></Command><Properties><PropertyList><Catalog>{1}</Catalog><ShowHiddenCubes>True</ShowHiddenCubes><SspropInitAppName>Microsoft SQL Server Management Studio</SspropInitAppName><Timeout>3600</Timeout>{2}</PropertyList></Properties></Execute></Body></Envelope>',
         mdx = "SELECT {2} FROM {0} {1} CELL PROPERTIES VALUE, FORMAT_STRING, LANGUAGE, BACK_COLOR, FORE_COLOR, FONT_FLAGS",
         mdxFilterSelect = "(SELECT {0} FROM {1})",
         mdxWith = "{0} {1} as {2}",
@@ -51,6 +52,10 @@ exports.XmlaStore = Class.inherit((function() {
             var xml;
             try {
                 xml = $.parseXML(text);
+
+                if(!xml || xml.getElementsByTagName("parsererror").length) {
+                    throw new errors.Error("E4023", text);
+                }
             } catch(e) {
                 deferred.reject({
                     statusText: e.message,
@@ -62,6 +67,15 @@ exports.XmlaStore = Class.inherit((function() {
             deferred.resolve(xml);
         });
         return deferred;
+    }
+
+    function getLocaleIdProperty() {
+        var languageId = getLanguageId();
+
+        if(languageId !== undefined) {
+            return stringFormat("<LocaleIdentifier>{0}</LocaleIdentifier>", languageId);
+        }
+        return "";
     }
 
     function mdxDescendants(level, levelMember, nextLevel) {
@@ -222,7 +236,7 @@ exports.XmlaStore = Class.inherit((function() {
             result.push(declare(union(crossJoins), withArray, "[" + "DX_" + axisName + "]"));
         }
 
-        if(axisName === "columns" && cells.length) {
+        if(axisName === "columns" && cells.length && !options.skipValues) {
             result.push(cellsString);
         }
 
@@ -310,7 +324,7 @@ exports.XmlaStore = Class.inherit((function() {
             axisStrings = [],
             dataFields = prepareDataFields(withArray, values);
 
-        parseOptions.measureCount = values.length;
+        parseOptions.measureCount = options.skipValues ? 1 : values.length;
         parseOptions.visibleLevels = {};
 
         if(options.headerName && options.path) {
@@ -386,7 +400,7 @@ exports.XmlaStore = Class.inherit((function() {
         return getNodeText(getFirstChild(node, childTagName));
     }
 
-    function parseAxes(xml) {
+    function parseAxes(xml, skipValues) {
         var axes = [];
 
         each(xml.getElementsByTagName("Axis"), function(_, axisElement) {
@@ -404,7 +418,7 @@ exports.XmlaStore = Class.inherit((function() {
                         levelSum = 0,
                         members = [],
                         level,
-                        membersCount = tupleMembers.length - 1,
+                        membersCount = skipValues ? tupleMembers.length : tupleMembers.length - 1,
                         isAxisWithMeasure = axes.length === 1,
                         i;
 
@@ -670,7 +684,7 @@ exports.XmlaStore = Class.inherit((function() {
 
             measureCount = parseOptions.measureCount;
 
-        axes = parseAxes(xml);
+        axes = parseAxes(xml, parseOptions.skipValues);
 
         dataSource.grandTotalColumnIndex = fillDataSourceAxes(dataSource.columns, axes[0], measureCount, parseOptions.visibleLevels);
 
@@ -766,7 +780,7 @@ exports.XmlaStore = Class.inherit((function() {
 
     function sendQuery(storeOptions, mdxString) {
         mdxString = $("<div>").text(mdxString).html();
-        return execXMLA(storeOptions, stringFormat(execute, mdxString, storeOptions.catalog));
+        return execXMLA(storeOptions, stringFormat(execute, mdxString, storeOptions.catalog, getLocaleIdProperty()));
     }
 
 /**
@@ -811,10 +825,11 @@ exports.XmlaStore = Class.inherit((function() {
             var options = this._options,
                 catalog = options.catalog,
                 cube = options.cube,
-                dimensionsRequest = execXMLA(options, stringFormat(discover, catalog, cube, "MDSCHEMA_DIMENSIONS")),
-                measuresRequest = execXMLA(options, stringFormat(discover, catalog, cube, "MDSCHEMA_MEASURES")),
-                hierarchiesRequest = execXMLA(options, stringFormat(discover, catalog, cube, "MDSCHEMA_HIERARCHIES")),
-                levelsRequest = execXMLA(options, stringFormat(discover, catalog, cube, "MDSCHEMA_LEVELS")),
+                localeIdProperty = getLocaleIdProperty(),
+                dimensionsRequest = execXMLA(options, stringFormat(discover, catalog, cube, "MDSCHEMA_DIMENSIONS", localeIdProperty)),
+                measuresRequest = execXMLA(options, stringFormat(discover, catalog, cube, "MDSCHEMA_MEASURES", localeIdProperty)),
+                hierarchiesRequest = execXMLA(options, stringFormat(discover, catalog, cube, "MDSCHEMA_HIERARCHIES", localeIdProperty)),
+                levelsRequest = execXMLA(options, stringFormat(discover, catalog, cube, "MDSCHEMA_LEVELS", localeIdProperty)),
                 result = $.Deferred();
 
             when(dimensionsRequest, measuresRequest, hierarchiesRequest, levelsRequest).done(function(dimensionsResponse, measuresResponse, hierarchiesResponse, levelsResponse) {
@@ -845,7 +860,9 @@ exports.XmlaStore = Class.inherit((function() {
         load: function(options) {
             var result = $.Deferred(),
                 storeOptions = this._options,
-                parseOptions = {},
+                parseOptions = {
+                    skipValues: options.skipValues
+                },
                 mdxString = generateMDX(options, storeOptions.cube, parseOptions);
 
             if(mdxString) {

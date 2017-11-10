@@ -732,6 +732,8 @@ function getJQueryEvent(options) {
 
                 _resumeDeprecatedWarnings: noop,
 
+                updateDimensions: noop,
+
                 setAria: function(name, value, $target) {
                     var setAttribute = function(option) {
                         var attrName = ($.inArray(option.name, ["role", "id"]) + 1) ? option.name : "aria-" + option.name,
@@ -886,6 +888,58 @@ function getJQueryEvent(options) {
             { x: -9750, y: -10000, columnIndex: 1, index: 2 },
             { x: -9625, y: -10000, columnIndex: 2, index: 3 }
         ], 'column index 0');
+    });
+
+    QUnit.test('Get points by columns if columnResizingMode is widget', function(assert) {
+        //arrange
+        this.options.columnResizingMode = "widget";
+        var resizeController = this.createColumnsResizerViewController([
+                    { caption: 'Column 1', width: '125px' },
+                    { caption: 'Column 2', width: '125px' },
+                    { caption: 'Column 3', width: '125px' },
+                    { caption: 'Column 4', width: '125px' }
+            ]),
+            $container = $("#container");
+
+        //act
+        $container.css({ width: '500px', height: '500px' });
+        resizeController._columnHeadersView.render($container);
+        resizeController._columnsSeparatorView.render($container);
+
+        //assert
+        assert.deepEqual(resizeController.pointsByColumns(), [
+            { x: -9875, y: -10000, columnIndex: 0, index: 1 },
+            { x: -9750, y: -10000, columnIndex: 1, index: 2 },
+            { x: -9625, y: -10000, columnIndex: 2, index: 3 },
+            { x: -9500, y: -10000, columnIndex: 3, index: 4 }
+        ], 'points by columns');
+    });
+
+    QUnit.test('Get points by columns if columnResizingMode is widget and RTL', function(assert) {
+        //arrange
+        this.options.columnResizingMode = "widget";
+        this.options.rtlEnabled = true;
+        $("#container").css('direction', 'rtl');
+        var resizeController = this.createColumnsResizerViewController([
+                    { caption: 'Column 1', width: '125px' },
+                    { caption: 'Column 2', width: '125px' },
+                    { caption: 'Column 3', width: '125px' },
+                    { caption: 'Column 4', width: '125px' }
+            ]),
+            $container = $("#container");
+
+        //act
+        $container.css({ width: '500px', height: '500px' });
+        resizeController._columnHeadersView.render($container);
+        resizeController._columnsSeparatorView.render($container);
+
+        //assert
+        assert.deepEqual(resizeController.pointsByColumns(), [
+            { x: -9500, y: -10000, columnIndex: 0, index: 0 },
+            { x: -9625, y: -10000, columnIndex: 1, index: 1 },
+            { x: -9750, y: -10000, columnIndex: 2, index: 2 },
+            { x: -9875, y: -10000, columnIndex: 3, index: 3 }
+        ], 'points by columns');
     });
 
     QUnit.test('Get points by band columns', function(assert) {
@@ -1237,7 +1291,33 @@ function getJQueryEvent(options) {
             { columnIndex: 0, optionName: "visibleWidth", optionValue: undefined },
             { columnIndex: 0, optionName: "width", optionValue: 140 },
             { columnIndex: 1, optionName: "visibleWidth", optionValue: undefined },
-            { columnIndex: 1, optionName: "width", optionValue: 160 }
+            { columnIndex: 1, optionName: "width", optionValue: 160 },
+        ], 'update column options after resizing');
+    });
+
+    QUnit.test('Set new width of column in the separatorMoving callback function if RTL and columnResizingMode is widget', function(assert) {
+        //arrange
+        var resizeController = this.createColumnsResizerViewController();
+        this.options.rtlEnabled = true;
+        this.options.columnResizingMode = "widget";
+        this.component.updateDimensions = $.noop;
+        $("#container").css('direction', 'rtl');
+        //act
+        this.renderViews($("#container"));
+
+        resizeController._isResizing = true;
+        resizeController._targetPoint = { columnIndex: 0 };
+        resizeController._setupResizingInfo(-9850);
+        resizeController._moveSeparator(getJQueryEvent({
+            data: resizeController,
+            type: 'mousemove',
+            pageX: -9840
+        }));
+
+        //assert
+        assert.deepEqual(resizeController._columnsController.updateOptions, [
+            { columnIndex: 0, optionName: "visibleWidth", optionValue: undefined },
+            { columnIndex: 0, optionName: "width", optionValue: 160 }
         ], 'update column options after resizing');
     });
 
@@ -2194,12 +2274,8 @@ function getJQueryEvent(options) {
         var isGridViewResized = false,
             resizeController;
 
-        this.component._views.gridView = {
-            init: noop,
-            resize: function() {
-                isGridViewResized = true;
-            },
-            render: noop
+        this.component.updateDimensions = function() {
+            isGridViewResized = true;
         };
 
         resizeController = this.createColumnsResizerViewController();
@@ -2241,12 +2317,8 @@ function getJQueryEvent(options) {
         var isGridViewResized = false,
             resizeController;
 
-        this.component._views.gridView = {
-            init: noop,
-            resize: function() {
-                isGridViewResized = true;
-            },
-            render: noop
+        this.component.updateDimensions = function() {
+            isGridViewResized = true;
         };
 
         this.component._views.rowsView.getScrollbarWidth = function() {
@@ -3105,6 +3177,7 @@ function getJQueryEvent(options) {
         //act
         this.createDraggingHeaderViewController();
         draggingHeader = new TestDraggingHeader(this.component);
+        draggingHeader.init();
         draggingHeader.render(testElement);
         draggingHeader.dragHeader({
             columnElement: $('<td />', {
@@ -3140,6 +3213,7 @@ function getJQueryEvent(options) {
         //act
         this.createDraggingHeaderViewController();
         draggingHeader = new TestDraggingHeader(this.component);
+        draggingHeader.init();
         draggingHeader.render(testElement);
         draggingHeader.dragHeader({
             columnElement: $('<td />', {
@@ -4202,6 +4276,58 @@ function getJQueryEvent(options) {
         assert.equal(moveHeaderDataSelfArgs.length, 2);
         assert.ok(moveHeaderDataSelfArgs[0] === controller1._draggingHeaderView);
         assert.ok(moveHeaderDataSelfArgs[1] === controller2._draggingHeaderView);
+    });
+
+    QUnit.test("setRowsOpacity method of views should called only once for begin dragging", function(assert) {
+        //arrange
+        var testElement = $('#container'),
+            rowsView = new RowsView(this.component),
+            columnHeadersView = new ColumnHeadersView(this.component),
+            draggingHeader;
+
+        //act
+        var controller = this.createDraggingHeaderViewController();
+        controller._rowsView = rowsView;
+        controller._columnHeadersView = columnHeadersView;
+
+        draggingHeader = new TestDraggingHeader(this.component);
+        draggingHeader.init();
+        draggingHeader._rowsView = rowsView;
+        draggingHeader._columnHeadersView = columnHeadersView;
+        draggingHeader.render(testElement);
+
+        sinon.stub(rowsView, "setRowsOpacity");
+        sinon.stub(columnHeadersView, "setRowsOpacity");
+
+        draggingHeader.dragHeader({
+            columnElement: $('<td />', {
+                css: {
+                    textAlign: 'left',
+                    width: '100px',
+                    height: '50px'
+                }
+            }),
+            sourceLocation: "headers",
+            sourceColumn: {
+                caption: "TestDrag"
+            }
+        });
+        draggingHeader.moveHeader({
+            jQueryEvent: {
+                data: {
+                    that: draggingHeader,
+                    rootElement: testElement
+                },
+                preventDefault: function() { },
+                pageX: -9900,
+                pageY: 55,
+                type: 'mouse'
+            }
+        });
+
+        //assert
+        assert.ok(rowsView.setRowsOpacity.calledOnce, "setRowsOpacity of RowsView method should is called once");
+        assert.ok(columnHeadersView.setRowsOpacity.calledOnce, "setRowsOpacity of ColumnHeadersView method should is called once");
     });
 }());
 
@@ -5992,5 +6118,17 @@ function getJQueryEvent(options) {
 
         //assert
         assert.ok(!that.draggingPanels[0].element().find('.dx-header-row').first().hasClass("dx-datagrid-drop-highlight"), 'not has class dx-headers-drop-highlight');
+    });
+
+    QUnit.test('getColumns method should not be called when items of the column chooser not rendered', function(assert) {
+        //arrange
+        var $testElement = $('#container'),
+            handlerSpy = sinon.spy(this.columnChooserView, 'getColumns');
+
+        //act
+        this.headerPanel.render($testElement);
+
+        //assert
+        assert.ok(!handlerSpy.called, "getColumns was not called");
     });
 })();

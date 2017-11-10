@@ -107,10 +107,6 @@
             $(this.element).off.apply($(this.element), arguments);
             return this;
         },
-        data: function(a1, a2, a3) {
-            $(this.element).data.apply($(this.element), arguments);
-            return this;
-        },
         trigger: function(a1, a2, a3) {
             $(this.element).trigger.apply($(this.element), arguments);
             return this;
@@ -126,7 +122,7 @@
                 createSVGPoint: function() { return { matrixTransform: function() { return { x: 3, y: 5 }; } }; }
             };
         },
-        $thisReturnFunctions: ["toBackground", "sharp", "rotate", "enableLinks", "virtualLink", "linkOn", "linkOff", "linkAppend", "linkRemove"]
+        $thisReturnFunctions: ["toBackground", "sharp", "rotate", "enableLinks", "virtualLink", "linkOn", "linkOff", "linkAppend", "linkRemove", "data"]
     });
 
     var patternCounter = 0,

@@ -75,6 +75,15 @@ QUnit.test("Numbers. Categories.", function(assert) {
         "discrete", "numeric", "discrete", "numeric");
 });
 
+QUnit.test("Check Types with empty group", function(assert) {
+    var groupsData = createGroupsData();
+    groupsData.groups[1] = $.extend({}, groupsData.groups[0]);
+
+    groupsData.groups[0].series = [];
+    testValidateData([{ arg: "1000", val: "1" }, { arg: "2000", val: "2" }, { arg: "3000", val: "3" }], groupsData, null, null);
+    assert.strictEqual(groupsData.argumentAxisType, "discrete");
+});
+
 QUnit.test("DateTime. Categories.", function(assert) {
     var date1000 = new Date(1000),
         date2000 = new Date(2000),
@@ -1347,6 +1356,57 @@ QUnit.test("Numeric, series with same field, sortingMethod callback - sort data 
             val: [11, 22, 33, 44, 55],
             val1: [333, 222, 111, 555, 444],
             arg: [2, 4, 5, 3, 1]
+        }
+    }, { assert: assert });
+});
+
+QUnit.test("T532528. Different argumentFields, each dataSource item is only for one series, first arguemnt is 0", function(assert) {
+    var data = [
+        { arg: 1, val: 11 },
+        { arg: 0, val: 55 },
+        { arg: 4, val: 33 },
+        { arg: 3, val: 22 },
+        { arg: 2, val: 44 },
+        { arg: 5, val: 66 },
+        { arg1: 3, val1: 333 },
+        { arg1: 2, val1: 444 },
+        { arg1: 0, val1: 111 },
+        { arg1: 4, val1: 222 },
+        { arg1: 1, val1: 555 },
+        { arg1: 5, val1: 666 }
+        ],
+        group1 = createGroupsData({
+            argumentAxisType: "continuous",
+            argumentType: "numeric",
+            valueType: "numeric"
+        }),
+        group2 = createGroupsData({
+            argumentAxisType: "continuous",
+            argumentType: "numeric",
+            valueType: "numeric",
+            argumentField: "arg1",
+            valueFields: "val1"
+        }),
+        groups = {
+            groups: group1.groups.concat(group2.groups)
+        },
+        options = {
+            sortingMethod: true
+        },
+        result;
+
+    groups.argumentOptions = group1.argumentOptions;
+
+    result = testValidateData(data, groups, null, options);
+
+    checkParsedData(result, {
+        arg: {
+            val: [55, 11, 44, 22, 33, 66, undefined, undefined, undefined, undefined, undefined, undefined],
+            arg: [0, 1, 2, 3, 4, 5, undefined, undefined, undefined, undefined, undefined, undefined]
+        },
+        arg1: {
+            val1: [111, 555, 444, 333, 222, 666, undefined, undefined, undefined, undefined, undefined, undefined],
+            arg1: [0, 1, 2, 3, 4, 5, undefined, undefined, undefined, undefined, undefined, undefined]
         }
     }, { assert: assert });
 });

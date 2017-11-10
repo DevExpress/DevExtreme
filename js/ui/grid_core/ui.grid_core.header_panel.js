@@ -3,7 +3,8 @@
 var $ = require("../../core/renderer"),
     Toolbar = require("../toolbar"),
     columnsView = require("./ui.grid_core.columns_view"),
-    commonUtils = require("../../core/utils/common");
+    commonUtils = require("../../core/utils/common"),
+    domUtils = require("../../core/utils/dom");
 
 require("../drop_down_menu");
 var HEADER_PANEL_CLASS = "header-panel",
@@ -28,7 +29,14 @@ var HeaderPanel = columnsView.ColumnsView.inherit({
         var toolbarItems,
             options = {
                 toolbarOptions: {
-                    items: this._getToolbarItems()
+                    items: this._getToolbarItems(),
+                    onItemRendered: function(e) {
+                        var itemRenderedCallback = e.itemData.onItemRendered;
+
+                        if(itemRenderedCallback) {
+                            itemRenderedCallback(e);
+                        }
+                    }
                 }
             };
 
@@ -63,58 +71,29 @@ var HeaderPanel = columnsView.ColumnsView.inherit({
         this.callBase.apply(this, arguments);
     },
 
-    updateToolbarItemOption: function(name, optionName, optionValue) {
+    setToolbarItemDisabled: function(name, optionValue) {
         var toolbarInstance = this._toolbar;
 
         if(toolbarInstance) {
-            var items = toolbarInstance.option("items");
+            var items = toolbarInstance.option("items") || [],
+                itemIndex = items.indexOf(items.filter(function(item) {
+                    return item.name === name;
+                })[0]);
 
-            if(items && items.length) {
-                var itemIndex;
-
-                $.each(items, function(index, item) {
-                    if(item.name === name) {
-                        itemIndex = index;
-                        return false;
-                    }
-                });
-
-                if(itemIndex !== undefined) {
-                    if(commonUtils.isObject(optionName)) {
-                        toolbarInstance.option("items[" + itemIndex + "]", optionName);
-                    } else {
-                        toolbarInstance.option("items[" + itemIndex + "]." + optionName, optionValue);
-
-                        if(optionName === "disabled") {
-                            var widgetOptions = toolbarInstance.option("items[" + itemIndex + "].options") || {};
-
-                            widgetOptions.disabled = optionValue;
-                            toolbarInstance.option("items[" + itemIndex + "].options", widgetOptions);
-                        }
-                    }
+            if(itemIndex >= 0) {
+                var itemOptionPrefix = "items[" + itemIndex + "]";
+                if(toolbarInstance.option(itemOptionPrefix + ".options")) {
+                    toolbarInstance.option(itemOptionPrefix + ".options.disabled", optionValue);
+                } else {
+                    toolbarInstance.option(itemOptionPrefix + ".disabled", optionValue);
                 }
             }
         }
     },
 
-    getToolbarItemOption: function(name, optionName) {
-        var toolbarInstance = this._toolbar;
-
-        if(toolbarInstance) {
-            var items = toolbarInstance.option("items");
-
-            if(items && items.length) {
-                var optionValue;
-
-                $.each(items, function(index, item) {
-                    if(item.name === name) {
-                        optionValue = item[optionName];
-                        return false;
-                    }
-                });
-
-                return optionValue;
-            }
+    updateToolbarDimensions: function() {
+        if(this._toolbar) {
+            domUtils.triggerResizeEvent(this.getHeaderPanel());
         }
     },
 
@@ -157,5 +136,16 @@ module.exports = {
     },
     views: {
         headerPanel: HeaderPanel
+    },
+    extenders: {
+        controllers: {
+            resizing: {
+                _updateDimensionsCore: function() {
+                    this.callBase.apply(this, arguments);
+
+                    this.getView("headerPanel").updateToolbarDimensions();
+                }
+            }
+        }
     }
 };

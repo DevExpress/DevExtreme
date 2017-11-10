@@ -223,7 +223,7 @@
     .border-radius(@calendar-cell-contoured-border-radius);
 
     &.dx-calendar-today {
-        text-shadow: 0 1px 0 @calendar-color;
+        font-weight: bold;
     }
 
     &.dx-state-hover {
@@ -266,7 +266,6 @@
         &, &.dx-calendar-today {
             color: @base-selected-text-color;
             .box-shadow(inset 0px 0px 0px 1000px @calendar-cell-selected-bg);
-            text-shadow: 0 1px 0 @base-selected-text-color;
             font-weight: normal;
 
             &.dx-calendar-contoured-date {

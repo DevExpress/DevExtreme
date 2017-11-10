@@ -28,15 +28,15 @@ function OperationManager() {
 }
 
 OperationManager.prototype.constructor = OperationManager;
-OperationManager.prototype.add = function addOperation(deferred) {
+OperationManager.prototype.add = function(deferred) {
     this._counter += 1;
     this._deferreds[this._counter] = deferred;
     return this._counter;
 };
-OperationManager.prototype.remove = function removeOperation(operationId) {
+OperationManager.prototype.remove = function(operationId) {
     return delete this._deferreds[operationId];
 };
-OperationManager.prototype.cancel = function cancelOperation(operationId) {
+OperationManager.prototype.cancel = function(operationId) {
     if(operationId in this._deferreds) {
         this._deferreds[operationId].reject(CANCELED_TOKEN);
         return true;
@@ -44,8 +44,12 @@ OperationManager.prototype.cancel = function cancelOperation(operationId) {
 
     return false;
 };
-
-var operationManager = new OperationManager();
+OperationManager.prototype.cancelAll = function() {
+    while(this._counter > -1) {
+        this.cancel(this._counter);
+        this._counter--;
+    }
+};
 
 function isPending(deferred) {
     return deferred.state() === "pending";
@@ -327,6 +331,7 @@ var DataSource = Class.inherit({
                 }
             });
 
+        this._operationManager = new OperationManager();
         this._init();
     },
 
@@ -355,6 +360,8 @@ var DataSource = Class.inherit({
         if(this._delayedLoadTask) {
             this._delayedLoadTask.abort();
         }
+
+        this._operationManager.cancelAll();
 
         this._disposed = true;
     },
@@ -641,6 +648,14 @@ var DataSource = Class.inherit({
         return this._loadingCount > 0;
     },
 
+    beginLoading: function() {
+        this._changeLoadingCount(1);
+    },
+
+    endLoading: function() {
+        this._changeLoadingCount(-1);
+    },
+
     _createLoadQueue: function() {
         return queue.create();
     },
@@ -660,10 +675,10 @@ var DataSource = Class.inherit({
     _scheduleLoadCallbacks: function(deferred) {
         var that = this;
 
-        that._changeLoadingCount(1);
+        that.beginLoading();
 
         deferred.always(function() {
-            that._changeLoadingCount(-1);
+            that.endLoading();
         });
     },
 
@@ -783,12 +798,12 @@ var DataSource = Class.inherit({
     },
 
     _createLoadOperation: function(deferred) {
-        var id = operationManager.add(deferred),
+        var id = this._operationManager.add(deferred),
             options = this._createStoreLoadOptions();
 
         deferred.always(function() {
-            operationManager.remove(id);
-        });
+            this._operationManager.remove(id);
+        }.bind(this));
 
         return {
             operationId: id,
@@ -817,7 +832,7 @@ var DataSource = Class.inherit({
      * @return boolean
      */
     cancel: function(operationId) {
-        return operationManager.cancel(operationId);
+        return this._operationManager.cancel(operationId);
     },
 
     _addSearchOptions: function(storeLoadOptions) {

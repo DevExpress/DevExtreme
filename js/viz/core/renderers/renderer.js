@@ -659,7 +659,7 @@ function orderHtmlTree(list, line, node, parentStyle, parentClassName) {
         list.push({ value: node.wholeText, style: parentStyle, className: parentClassName /* EXPERIMENTAL */, line: line, height: parentStyle[KEY_FONT_SIZE] || 0 });
     } else if(node.tagName === "BR") {
         ++line;
-    } else {
+    } else if(node.nodeType === Node.ELEMENT_NODE) {
         extend(style = {}, parentStyle);
         switch(node.tagName) {
             case "B":
@@ -705,14 +705,15 @@ function adjustLineHeights(items) {
 }
 
 function removeExtraAttrs(html) {
-    var findTagAttrs = /(?:<[a-z0-9])+(?:[\s\S]*?>)/gi,
-        findStyleAttrWithValue = /(\S*\s*)=\s*(["'])(?:(?!\2).)*\2\s?/gi;
+    var findTagAttrs = /(?:(<[a-z0-9]+\s*))([\s\S]*?)(>|\/>)/gi,
+        findStyleAndClassAttrs = /(style|class)\s*=\s*(["'])(?:(?!\2).)*\2\s?/gi;
 
-    return html.replace(findTagAttrs, function(allTagAttrs) {
-        return allTagAttrs.replace(findStyleAttrWithValue, function(currentAttr, attrName) {
-            var lowerCaseAttrName = attrName.toLowerCase();
-            return lowerCaseAttrName === "style" || lowerCaseAttrName === "class" ? currentAttr : "";
-        });
+    return html.replace(findTagAttrs, function(allTagAttrs, p1, p2, p3) {
+        p2 = (p2 && p2.match(findStyleAndClassAttrs) || []).map(function(str) {
+            return str;
+        }).join(" ");
+
+        return p1 + p2 + p3;
     });
 }
 
@@ -747,76 +748,101 @@ function createTspans(items, element, fieldName) {
     }
 }
 
+function restoreText() {
+    if(this._hasEllipsis) {
+        this.attr({ text: this._settings.text });
+    }
+}
+
 function applyEllipsis(maxWidth) {
-    var element = this.element,
+    var that = this,
         lines,
-        width,
-        maxLength = 0,
-        requiredLength,
         hasEllipsis = false,
         i,
         ii,
         lineParts,
         j,
         jj,
-        text;
+        text,
+        ellipsis,
+        ellipsisWidth;
 
-    if(this._hasEllipsis) {
-        this.attr({ text: this._settings.text });
-    }
-    width = this.getBBox().width;
+    restoreText.call(that);
 
-    if(maxWidth < 0) {
-        maxWidth = 0;
-    }
-    if(width > maxWidth) {
-        lines = prepareLines(element, this._texts);
+    ellipsis = that.renderer.text("...").attr(that._styles).append(that.renderer.root);
+    ellipsisWidth = ellipsis.getBBox().width;
+    if(that._getElementBBox().width > maxWidth) {
+        if(maxWidth - ellipsisWidth < 0) {
+            maxWidth = 0;
+        } else {
+            maxWidth -= ellipsisWidth;
+        }
+        lines = prepareLines(that.element, that._texts, maxWidth);
+
         for(i = 0, ii = lines.length; i < ii; ++i) {
-            maxLength = mathMax(maxLength, lines[i].commonLength);
-        }
-        if(maxLength === 1) {
-            return false;
-        }
-        requiredLength = mathFloor(maxLength * maxWidth / width);
-        for(i = 0; i < ii; ++i) {
             lineParts = lines[i].parts;
+            if(lines[i].commonLength === 1) {
+                continue;
+            }
             for(j = 0, jj = lineParts.length; j < jj; ++j) {
                 text = lineParts[j];
-                if(text.startIndex <= requiredLength && text.endIndex > requiredLength) {
-                    setNewText(text, requiredLength - text.startIndex - 4);
+                if(_isDefined(text.endIndex)) {
+                    setNewText(text, text.endIndex);
                     hasEllipsis = true;
-                } else if(text.startIndex > requiredLength) {
+                } else if(text.startBox > maxWidth) {
                     removeTextSpan(text);
                 }
             }
         }
     }
-    this._hasEllipsis = hasEllipsis;
+
+    ellipsis.remove();
+    that._hasEllipsis = hasEllipsis;
+
     return hasEllipsis;
 }
 
-function prepareLines(element, texts) {
+function getIndexForEllipsis(text, maxWidth, startBox, endBox) {
+    var k,
+        kk;
+    if(startBox <= maxWidth && endBox > maxWidth) {
+        for(k = 1, kk = text.value.length; k <= kk; ++k) {
+            if(startBox + text.tspan.getSubStringLength(0, k) > maxWidth) {
+                return k - 1;
+            }
+        }
+    }
+}
+
+function prepareLines(element, texts, maxWidth) {
     var lines = [],
         i,
         ii,
-        text;
+        text,
+        startBox,
+        endBox;
 
     if(texts) {
         for(i = 0, ii = texts.length; i < ii; ++i) {
             text = texts[i];
             if(!lines[text.line]) {
-                text.startIndex = 0;
-                text.endIndex = text.value.length;
+                text.startBox = startBox = 0;
                 lines.push({ commonLength: text.value.length, parts: [text] });
             } else {
-                text.startIndex = lines[text.line].commonLength + 1;
-                text.endIndex = lines[text.line].commonLength + text.value.length;
+                text.startBox = startBox;
                 lines[text.line].parts.push(text);
                 lines[text.line].commonLength += text.value.length;
             }
+            endBox = startBox + text.tspan.getSubStringLength(0, text.value.length);
+            text.endIndex = getIndexForEllipsis(text, maxWidth, startBox, endBox);
+            startBox = endBox;
         }
     } else {
-        lines = [{ commonLength: element.textContent.length, parts: [{ value: element.textContent, tspan: element, startIndex: 0, endIndex: element.textContent.length }] }];
+        text = { value: element.textContent, tspan: element };
+        text.startBox = startBox = 0;
+        endBox = text.value.length ? startBox + text.tspan.getSubStringLength(0, text.value.length) : 0;
+        text.endIndex = getIndexForEllipsis(text, maxWidth, startBox, endBox);
+        lines = [{ commonLength: element.textContent.length, parts: [text] }];
     }
     return lines;
 }
@@ -842,7 +868,7 @@ function createTextNodes(wrapper, text, isStroked) {
     if(text === null) return;
 
     text = "" + text;
-    if(!wrapper.renderer.encodeHtml && (text.indexOf("<") !== -1 || text.indexOf("&") !== -1)) {
+    if(!wrapper.renderer.encodeHtml && (/<[a-z][\s\S]*>/i.test(text) || text.indexOf("&") !== -1)) {
         parsedHtml = removeExtraAttrs(text);
         items = parseHTML(parsedHtml);
         ///#DEBUG
@@ -1049,6 +1075,7 @@ SvgElement.prototype = {
             fixFuncIri(that, "clip-path");
             fixFuncIri(that, "filter");
         };
+        that._fixFuncIri.renderer = that.renderer;
         fixFuncIriCallbacks.add(that._fixFuncIri);
         that._addFixIRICallback = function() {};
     },
@@ -1163,7 +1190,7 @@ SvgElement.prototype = {
 
     smartAttr: function(attrs) {
         var that = this;
-        if(attrs.hatching) {
+        if(attrs.hatching && _normalizeEnum(attrs.hatching.direction) !== "none") {
             attrs = extend({}, attrs);
             attrs.fill = that._hatching = that.renderer.lockHatching(attrs.fill, attrs.hatching, that._hatching);
             delete attrs.hatching;
@@ -1256,17 +1283,21 @@ SvgElement.prototype = {
         return this;
     },
 
-    //TODO do we need to round results and consider rotation coordinates?
-    getBBox: function() {
+    _getElementBBox: function() {
         var elem = this.element,
-            transformation = this._settings,
             bBox;
 
         try {
             bBox = elem.getBBox && elem.getBBox();
         } catch(e) { }
 
-        bBox = bBox || { x: 0, y: 0, width: elem.offsetWidth || 0, height: elem.offsetHeight || 0 };
+        return bBox || { x: 0, y: 0, width: elem.offsetWidth || 0, height: elem.offsetHeight || 0 };
+    },
+
+    //TODO do we need to round results and consider rotation coordinates?
+    getBBox: function() {
+        var transformation = this._settings,
+            bBox = this._getElementBBox();
 
         if(transformation.rotate) {
             bBox = _rotateBBox(bBox, [
@@ -1386,7 +1417,8 @@ extend(TextSvgElement.prototype, {
     constructor: TextSvgElement,
     attr: textAttr,
     css: textCss,
-    applyEllipsis: applyEllipsis
+    applyEllipsis: applyEllipsis,
+    restoreText: restoreText
 });
 //TextSvgElement
 
@@ -1520,6 +1552,8 @@ Renderer.prototype = {
         that._defs.dispose();
         that._animationController.dispose();
 
+        fixFuncIriCallbacks.removeByRenderer(that);
+
         for(key in that) {
             that[key] = null;
         }
@@ -1614,16 +1648,11 @@ Renderer.prototype = {
             path,
             step = hatching.step || 6,
             stepTo2 = step / 2,
-            stepBy15 = step * 1.5,
-            direction = _normalizeEnum(hatching.direction);
-
-        if(direction !== "right" && direction !== "left") {
-            return { id: color, append: function() { return this; }, clear: function() { }, dispose: function() { }, remove: function() { } };
-        }
+            stepBy15 = step * 1.5;
 
         id = _id || getNextDefsSvgId();
 
-        d = (direction === "right" ?
+        d = (_normalizeEnum(hatching.direction) === "right" ?
             "M " + stepTo2 + " " + (-stepTo2) + " L " + (-stepTo2) + " " + stepTo2 + " M 0 " + step + " L " + step + " 0 M " + stepBy15 + " " + stepTo2 + " L " + stepTo2 + " " + stepBy15
             : "M 0 0 L " + step + " " + step + " M " + (-stepTo2) + " " + stepTo2 + " L " + stepTo2 + " " + stepBy15 + " M " + stepTo2 + " " + (-stepTo2) + " L " + stepBy15 + " " + stepTo2);
 
@@ -1806,6 +1835,9 @@ var fixFuncIriCallbacks = (function() {
         },
         remove: function(fn) {
             callbacks = callbacks.filter(function(el) { return el !== fn; });
+        },
+        removeByRenderer: function(renderer) {
+            callbacks = callbacks.filter(function(el) { return el.renderer !== renderer; });
         },
         fire: function() {
             callbacks.forEach(function(fn) { fn(); });

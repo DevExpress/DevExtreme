@@ -48,10 +48,10 @@ module.exports = _extend({}, barPoint, {
         return { x: x, y: y, offset: 0 };
     },
 
-    _translate: function(translator) {
+    _translate: function() {
         var that = this,
             barMethods = barPoint;
-        barMethods._translate.call(that, translator);
+        barMethods._translate.call(that);
 
         if(that._options.rotated) {
             that.width = that.width || 1;
@@ -103,5 +103,9 @@ module.exports = _extend({}, barPoint, {
 
     getLabels: rangeSymbolPointMethods.getLabels,
 
-    getBoundingRect: noop
+    getBoundingRect: noop,
+
+    getMinValue: rangeSymbolPointMethods.getMinValue,
+
+    getMaxValue: rangeSymbolPointMethods.getMaxValue
 });

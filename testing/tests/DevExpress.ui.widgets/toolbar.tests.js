@@ -136,6 +136,35 @@ QUnit.test("items - custom html", function(assert) {
     var label = this.element.find("b");
     assert.equal(label.length, 1);
     assert.equal(label.text(), "Label");
+    assert.ok(this.element.find("." + TOOLBAR_ITEM_CLASS).hasClass(TOOLBAR_LABEL_CLASS));
+});
+
+QUnit.test("items - long custom html", function(assert) {
+    this.element.dxToolbar({
+        items: [
+            { location: 'before', widget: 'button', options: { text: 'Before Button' } },
+            { location: 'before', widget: 'button', options: { text: 'Second Before Button' } },
+            { location: 'after', widget: 'button', options: { text: 'After Button' } },
+            { location: 'center', html: '<b>Very very very very very very very very very very very long label</b>' }
+        ],
+        width: 400
+    });
+
+    var $label = this.element.find("." + TOOLBAR_LABEL_CLASS);
+
+    assert.equal($label.children().eq(0).css("text-overflow"), "ellipsis");
+    assert.equal($label.children().eq(0).css("overflow"), "hidden");
+
+    var $centerSection = this.element.find("." + TOOLBAR_CENTER_CONTAINER_CLASS),
+        beforeSectionWidth = this.element.find("." + TOOLBAR_BEFORE_CONTAINER_CLASS)[0].getBoundingClientRect().width,
+        afterSectionWidth = this.element.find("." + TOOLBAR_AFTER_CONTAINER_CLASS)[0].getBoundingClientRect().width;
+
+    assert.roughEqual(parseFloat($centerSection.css("margin-left")), beforeSectionWidth, 0.1);
+    assert.roughEqual(parseFloat($centerSection.css("margin-right")), afterSectionWidth, 0.1);
+
+    var maxLabelWidth = this.element.width() - beforeSectionWidth - afterSectionWidth;
+
+    assert.ok(parseFloat($label.css("max-width")) < maxLabelWidth);
 });
 
 QUnit.test("items - location", function(assert) {
@@ -164,6 +193,19 @@ QUnit.test("items - location", function(assert) {
     $.each(["before", "after", "center"], function() {
         assert.equal(element.find("." + TOOLBAR_CLASS + "-" + this).text(), this);
     });
+});
+
+QUnit.test("Center element has correct margin with RTL", function(assert) {
+    var element = this.element.dxToolbar({
+            rtlEnabled: true,
+            items: [
+                { location: 'before', text: 'before' },
+                { location: 'center', text: 'center' }
+            ]
+        }),
+        margin = element.find("." + TOOLBAR_CLASS + "-center").get(0).style.margin;
+
+    assert.equal(margin, "0px auto", "aligned by center");
 });
 
 
@@ -1047,6 +1089,22 @@ QUnit.test("dropdown menu should be rendered if there is hidden overflow items",
 
     var $dropDownMenu = $element.find("." + DROP_DOWN_MENU_CLASS);
     assert.equal($dropDownMenu.length, 1);
+});
+
+QUnit.test("dropdown menu button should be invisible if there is hidden invisible overflow items", function(assert) {
+    var $element = $("#widget").dxToolbar({
+        items: [
+            { location: "before", template: function() { return $("<div>").width(100); } },
+            { location: "center", template: function() { return $("<div>").width(150); } },
+            { location: "after", locateInMenu: "auto", template: function() { return $("<div>").width(100); } },
+            { locateInMenu: "always", visible: false, template: function() { return $("<div>").width(100); } }
+        ]
+    });
+
+    var $dropDownMenu = $element.find("." + DROP_DOWN_MENU_CLASS);
+
+    assert.equal($dropDownMenu.length, 1, "button is rendered");
+    assert.notOk($dropDownMenu.is(":visible"), "button is invisible");
 });
 
 QUnit.test("all overflow items should be hidden on render", function(assert) {

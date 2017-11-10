@@ -2,6 +2,8 @@
 
 var $ = require("../../core/renderer"),
     ko = require("knockout"),
+    errors = require("../../core/errors"),
+    inflector = require("../../core/utils/inflector"),
     isPlainObject = require("../../core/utils/type").isPlainObject,
     registerComponent = require("../../core/component_registrator"),
     Widget = require("../../ui/widget/ui.widget"),
@@ -11,8 +13,7 @@ var $ = require("../../core/renderer"),
     config = require("../../core/config");
 
 var LOCKS_DATA_KEY = "dxKoLocks",
-    CREATED_WITH_KO_DATA_KEY = "dxKoCreation",
-    DX_POLYMORPH_WIDGET_TEMPLATE = "<!-- ko dxPolymorphWidget: { name: $data.widget, options: $data.options } --><!-- /ko -->";
+    CREATED_WITH_KO_DATA_KEY = "dxKoCreation";
 
 var editorsBindingHandlers = [];
 
@@ -83,7 +84,24 @@ var registerComponentKoBinding = function(componentName, componentClass) {
                             };
                         },
                         templates: {
-                            "dx-polymorph-widget": new KoTemplate(DX_POLYMORPH_WIDGET_TEMPLATE, this)
+                            "dx-polymorph-widget": {
+                                render: function(options) {
+                                    var widgetName = ko.utils.unwrapObservable(options.model.widget);
+                                    if(!widgetName) {
+                                        return;
+                                    }
+
+                                    if(widgetName === "button" || widgetName === "tabs" || widgetName === "dropDownMenu") {
+                                        var deprecatedName = widgetName;
+                                        widgetName = inflector.camelize("dx-" + widgetName);
+                                        errors.log("W0001", "dxToolbar - 'widget' item field", deprecatedName, "16.1", "Use: '" + widgetName + "' instead");
+                                    }
+
+                                    var markup = $("<div data-bind=\"" + widgetName + ": options\">").get(0);
+                                    options.container.append(markup);
+                                    ko.applyBindings(options.model, markup);
+                                }
+                            }
                         },
                         createTemplate: function(element) {
                             return new KoTemplate(element);
@@ -92,9 +110,9 @@ var registerComponentKoBinding = function(componentName, componentClass) {
                 },
                 optionNameToModelMap = {};
 
-            var applyModelValueToOption = function(optionName, modelValue) {
+            var applyModelValueToOption = function(optionName, modelValue, unwrap) {
                 var locks = $element.data(LOCKS_DATA_KEY),
-                    optionValue = ko.unwrap(modelValue); // must unwrap always to keep computeds alive
+                    optionValue = unwrap ? ko.unwrap(modelValue) : modelValue;
 
                 if(ko.isWriteableObservable(modelValue)) {
                     optionNameToModelMap[optionName] = modelValue;
@@ -167,7 +185,7 @@ var registerComponentKoBinding = function(componentName, componentClass) {
 
                     ko.computed(function() {
                         var propertyValue = currentModel[propertyName];
-                        applyModelValueToOption(propertyPath, propertyValue);
+                        applyModelValueToOption(propertyPath, propertyValue, true);
                         unwrappedPropertyValue = ko.unwrap(propertyValue);
                     }, null, { disposeWhenNodeIsRemoved: domNode });
 
@@ -177,7 +195,7 @@ var registerComponentKoBinding = function(componentName, componentClass) {
                         }
                     }
                 } else {
-                    ctorOptions[propertyPath] = currentModel[propertyName];
+                    applyModelValueToOption(propertyPath, currentModel[propertyName], false);
                 }
             };
 

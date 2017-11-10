@@ -660,15 +660,18 @@ QUnit.test("custom item templates", function(assert) {
 });
 
 QUnit.test("custom item renderer", function(assert) {
-    var $responsiveBox = $("#responsiveBox").dxResponsiveBox({
-        rows: [{}],
-        cols: [{}],
-        itemTemplate: function() {
-            return $("<div>test</div>");
-        },
-        items: [{ location: { row: 0, col: 0 } }]
-    });
+    var templateContext,
+        $responsiveBox = $("#responsiveBox").dxResponsiveBox({
+            rows: [{}],
+            cols: [{}],
+            itemTemplate: function() {
+                templateContext = this.NAME;
+                return $("<div>test</div>");
+            },
+            items: [{ location: { row: 0, col: 0 } }]
+        });
 
+    assert.equal(templateContext, "dxResponsiveBox", "Correct context");
     assert.equal($.trim($responsiveBox.text()), "test", "item rendered");
 });
 

@@ -13,6 +13,8 @@ var AGENDA_CLASS = "dx-scheduler-agenda",
     AGENDA_WEEK_DAY_CLASS = "dx-scheduler-agenda-week-day",
     GROUP_TABLE_CLASS = "dx-scheduler-group-table",
 
+    AGENDA_GROUPED_ATTR = "dx-group-column-count",
+
     TIME_PANEL_ROW_CLASS = "dx-scheduler-time-panel-row",
     TIME_PANEL_CELL_CLASS = "dx-scheduler-time-panel-cell",
     NODATA_CONTAINER_CLASS = "dx-scheduler-agenda-nodata",
@@ -52,6 +54,7 @@ var SchedulerAgenda = SchedulerWorkSpace.inherit({
                     if(this._$groupTable) {
                         this._$groupTable.remove();
                         this._$groupTable = null;
+                        this._detachGroupCountAttr();
                     }
                 } else {
                     if(!this._$groupTable) {
@@ -186,8 +189,12 @@ var SchedulerAgenda = SchedulerWorkSpace.inherit({
         return result;
     },
 
+    _detachGroupCountAttr: function() {
+        this.element().removeAttr(AGENDA_GROUPED_ATTR);
+    },
+
     _attachGroupCountAttr: function() {
-        this.element().attr("dx-group-column-count", this.option("groups").length);
+        this.element().attr(AGENDA_GROUPED_ATTR, this.option("groups").length);
     },
 
     _removeEmptyRows: function(rows) {

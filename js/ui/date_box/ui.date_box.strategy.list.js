@@ -61,6 +61,10 @@ var ListStrategy = DateBoxStrategy.inherit({
         return result;
     },
 
+    useCurrentDateByDefault: function() {
+        return true;
+    },
+
     _getPopupWidth: function() {
         var device = devices.current(),
             result = this.dateBox.element().outerWidth();
@@ -116,7 +120,16 @@ var ListStrategy = DateBoxStrategy.inherit({
         this._widget.option("focusedElement", null);
 
         this._setSelectedItemsByValue();
-        this._scrollToSelectedItem();
+        if(this._widget.option("templatesRenderAsynchronously")) {
+            this._asyncScrollTimeout = setTimeout(this._scrollToSelectedItem.bind(this));
+        } else {
+            this._scrollToSelectedItem();
+        }
+    },
+
+    dispose: function() {
+        this.callBase();
+        clearTimeout(this._asyncScrollTimeout);
     },
 
     _updateValue: function() {

@@ -1,6 +1,7 @@
 "use strict";
 
 var $ = require("../core/renderer"),
+    Config = require("./config"),
     extend = require("./utils/extend").extend,
     Class = require("./class"),
     Action = require("./action"),
@@ -91,15 +92,11 @@ var Component = Class.inherit({
         return [];
     },
 
-    _setOptionsByDevice: function(userRules) {
+    _setOptionsByDevice: function(customRules) {
         var rules = this._defaultOptionsRules();
 
-        if(this._customRules) {
-            rules = rules.concat(this._customRules);
-        }
-
-        if(Array.isArray(userRules)) {
-            rules = rules.concat(userRules);
+        if(Array.isArray(customRules)) {
+            rules = rules.concat(customRules);
         }
 
         var rulesOptions = this._convertRulesToOptions(rules);
@@ -142,12 +139,11 @@ var Component = Class.inherit({
     },
 
     _isInitialOptionValue: function(name) {
-        var isCustomOption = this._customRules && this._convertRulesToOptions(this._customRules).hasOwnProperty(name),
-            optionValue = this.option(name),
+        var optionValue = this.option(name),
             initialOptionValue = this.initialOption(name),
             isInitialOption = isFunction(optionValue) && isFunction(initialOptionValue) ? optionValue.toString() === initialOptionValue.toString() : commonUtils.equalByValue(optionValue, initialOptionValue);
 
-        return !isCustomOption && isInitialOption;
+        return isInitialOption;
     },
 
     _setOptionsByReference: function() {
@@ -437,11 +433,19 @@ var Component = Class.inherit({
                 action = that._createAction(actionFunc, config);
                 that._resumeDeprecatedWarnings();
             }
+
+            if(Config().wrapActionsBeforeExecute) {
+                var beforeActionExecute = that.option("beforeActionExecute") || noop;
+                action = beforeActionExecute(that, action, config) || action;
+            }
+
             return action.apply(that, arguments);
         };
 
-        var onActionCreated = that.option("onActionCreated") || noop;
-        result = onActionCreated(that, result, config) || result;
+        if(!Config().wrapActionsBeforeExecute) {
+            var onActionCreated = that.option("onActionCreated") || noop;
+            result = onActionCreated(that, result, config) || result;
+        }
 
         return result;
     },

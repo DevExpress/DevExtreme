@@ -59,6 +59,7 @@ exports.returnValue = returnValue;
 exports.environment = {
     beforeEach: function() {
         this.$container = createTestContainer("#test-container", { width: 300, height: 150 });
+        this.StubAxis = StubAxis;
 
         this.renderer = new vizMocks.Renderer();
         this.themeManager = new StubThemeManager();
@@ -67,6 +68,8 @@ exports.environment = {
         this.slidersController = new StubSlidersController();
         this.tracker = new StubTracker();
         this.axis = new StubAxis();
+
+        this.axis.stub("getTranslator").returns(this.translator);
         this.seriesDataSource = new StubSeriesDataSource();
 
         rendererModule.Renderer = returnValue(this.renderer);
@@ -93,9 +96,7 @@ exports.environment = {
                 label: {}
             }
         });
-        that.axis.getTranslator = sinon.spy(function() {
-            return that.translators[0];
-        });
+
         return that.$container.dxRangeSelector(options).dxRangeSelector("instance");
     }
 };

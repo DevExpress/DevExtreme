@@ -106,7 +106,7 @@ QUnit.test("no format value with empty data", function(assert) {
         }
     });
 
-    var range = this.translator.update.lastCall.args[0];
+    var range = this.axis.setBusinessRange.lastCall.args[0];
     assert.strictEqual(range.min, 0, "min");
     assert.strictEqual(range.max, 10, "max");
 });
@@ -132,7 +132,7 @@ QUnit.test("initialize with numeric inverted scale", function(assert) {
         }
     });
 
-    var range = this.translator.update.lastCall.args[0];
+    var range = this.axis.setBusinessRange.lastCall.args[0];
     assert.ok(range.invert, "invert");
     assert.equal(range.min, 2, "min");
     assert.equal(range.max, 50, "max");
@@ -146,7 +146,7 @@ QUnit.test("initialize with dateTime inverted scale", function(assert) {
         }
     });
 
-    var range = this.translator.update.lastCall.args[0];
+    var range = this.axis.setBusinessRange.lastCall.args[0];
     assert.ok(range.invert, "invert");
     assert.deepEqual(range.min, new Date(2010, 5, 1), "min");
     assert.deepEqual(range.max, new Date(2012, 1, 1), "max");
@@ -162,7 +162,7 @@ QUnit.test("initialize with logarithmic axis", function(assert) {
         }
     });
 
-    var range = this.translator.update.lastCall.args[0];
+    var range = this.axis.setBusinessRange.lastCall.args[0];
     assert.equal(range.min, 1, "min");
     assert.equal(range.max, 10, "max");
     assert.equal(range.axisType, "logarithmic", "axisType");
@@ -179,7 +179,7 @@ QUnit.test("correct sliders place holder size by values", function(assert) {
         }
     });
 
-    assert.deepEqual(this.rangeView.update.lastCall.args[2], { left: 0, top: 0, width: 299, height: 24 });
+    assert.deepEqual(this.rangeView.update.lastCall.args[2], { left: 0, top: 0, width: 299, height: 24, right: 0, bottom: 0 });
 });
 
 //T153827
@@ -197,7 +197,7 @@ QUnit.test("correct sliders place holder size by values (with set placeholderSiz
         }
     });
 
-    assert.deepEqual(this.rangeView.update.lastCall.args[2], { left: 10, top: 0, width: 280, height: 24 });
+    assert.deepEqual(this.rangeView.update.lastCall.args[2], { left: 10, top: 0, width: 290, height: 24, right: 0, bottom: 0 });
 });
 
 QUnit.test("Tracker creation", function(assert) {

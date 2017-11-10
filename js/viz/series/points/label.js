@@ -5,7 +5,9 @@ var $ = require("../../../core/renderer"),
     vizUtils = require("../../core/utils"),
     _degreesToRadians = vizUtils.degreesToRadians,
     _patchFontOptions = vizUtils.patchFontOptions,
-    _round = Math.round,
+    _math = Math,
+    _round = _math.round,
+    _floor = _math.floor,
     _getCosAndSin = vizUtils.getCosAndSin,
     _rotateBBox = vizUtils.rotateBBox,
 
@@ -174,10 +176,13 @@ Label.prototype = {
     },
 
     show: function() {
-        var that = this;
+        var that = this,
+            needToCorrectPosition = !that._group || !that._group.attr("visibility");
         if(that._point.hasValue()) {
             that._draw();
-            that._point.correctLabelPosition(that);
+            if(needToCorrectPosition) {
+                that._point.correctLabelPosition(that);
+            }
         }
     },
 
@@ -299,7 +304,7 @@ Label.prototype = {
             ],
                 [xc, yc], -that._options.rotationAngle || 0);
             labelPoint = getClosestCoord(strategy.getFigureCenter(figure), points);
-            labelPoint = [_round(labelPoint[0]), _round(labelPoint[1])];
+            labelPoint = [_floor(labelPoint[0]), _floor(labelPoint[1])];
             figurePoint = strategy.findFigurePoint(figure, labelPoint);
             points = figurePoint.concat(labelPoint);
         }

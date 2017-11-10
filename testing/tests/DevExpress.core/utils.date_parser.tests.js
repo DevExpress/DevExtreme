@@ -86,7 +86,7 @@ QUnit.test("date parsing with yyyy-MM-ddThh:mm:ss.SSSSSS", function(assert) {
 
     var parsedDate = dateSerialization.dateParser(stringValue);
 
-    assert.equal(parsedDate.toString(), value.toString());
+    assert.equal(parsedDate.getTime(), value.getTime());
 });
 
 QUnit.module("ISO8601 Time Only Formats", {

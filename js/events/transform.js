@@ -239,7 +239,7 @@ var TransformEmitter = Emitter.inherit({
  * @name ui events_dxzoomstart
  * @publicName dxzoomstart
  * @type EVENT
- * @deprecated
+ * @deprecated ui events_dxpinchstart
  * @type_function_param1 event:jQuery.event
  * @type_function_param1_field1 cancel:boolean
  * @module events/transform
@@ -248,7 +248,7 @@ var TransformEmitter = Emitter.inherit({
   * @name ui events_dxzoom
   * @publicName dxzoom
   * @type EVENT
-  * @deprecated
+  * @deprecated ui events_dxpinch
   * @type_function_param1 event:jQuery.event
   * @type_function_param1_field1 scale:number
   * @type_function_param1_field2 deltaScale:number
@@ -259,7 +259,7 @@ var TransformEmitter = Emitter.inherit({
   * @name ui events_dxzoomend
   * @publicName dxzoomend
   * @type EVENT
-  * @deprecated
+  * @deprecated ui events_dxpinchend
   * @type_function_param1 event:jQuery.event
   * @type_function_param1_field1 scale:number
   * @type_function_param1_field2 deltaScale:number

@@ -314,6 +314,41 @@ QUnit.test("items should be rendered with toolbarItems.toolbar='top' as default"
     assert.equal($titleToolbar.text(), "sample", "top toolbar has correct content");
 });
 
+QUnit.test("toolbar must receive 'rtlEnabled' option from dxPopup", function(assert) {
+    var $popup = $("#popup").dxPopup({
+            visible: true,
+            rtlEnabled: true,
+            toolbarItems: [
+            { 'widget': 'dxButton', 'toolbar': 'bottom', 'location': 'before', 'options': { 'text': 'Today', 'type': 'today' } },
+            { 'shortcut': 'done', 'options': { 'text': 'OK' }, 'toolbar': 'bottom', 'location': 'after' },
+            { 'shortcut': 'cancel', 'options': { 'text': 'Cancel' }, 'toolbar': 'bottom', 'location': 'after' }]
+
+        }),
+        instance = $popup.data("dxPopup"),
+        toolbarInstance = instance.content().parent().find(".dx-popup-bottom").dxToolbarBase("instance");
+
+    assert.ok(toolbarInstance.option("rtlEnabled"), "toolbar's 'rtlEnabled' option is true");
+});
+
+QUnit.test("toolbar must receive 'rtlEnabled' from dxPopup after optionChanged", function(assert) {
+    var $popup = $("#popup").dxPopup({
+            visible: true,
+            rtlEnabled: true,
+            deferRendering: false,
+            toolbarItems: [
+            { 'widget': 'dxButton', 'toolbar': 'bottom', 'location': 'before', 'options': { 'text': 'Today', 'type': 'today' } },
+            { 'shortcut': 'done', 'options': { 'text': 'OK' }, 'toolbar': 'bottom', 'location': 'after' },
+            { 'shortcut': 'cancel', 'options': { 'text': 'Cancel' }, 'toolbar': 'bottom', 'location': 'after' }]
+
+        }),
+        instance = $popup.data("dxPopup");
+
+    instance.option("rtlEnabled", false);
+
+    var toolbarInstance = instance.content().parent().find(".dx-popup-bottom").dxToolbarBase("instance");
+
+    assert.notOk(toolbarInstance.option("rtlEnabled"), "toolbar's 'rtlEnabled' option is false");
+});
 
 
 QUnit.module("dimensions");

@@ -55,7 +55,9 @@ function createUserFuncFailureHandler(pendingDeferred) {
             error = new Error(errorMessageFromXhr(arguments) || arg && String(arg) || "Unknown error");
         }
 
-        pendingDeferred.reject(error);
+        if(error.message !== dataUtils.XHR_ERROR_UNLOAD) {
+            pendingDeferred.reject(error);
+        }
     };
 }
 

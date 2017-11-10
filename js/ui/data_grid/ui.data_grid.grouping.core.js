@@ -27,12 +27,25 @@ exports.createOffsetFilter = function(path, storeLoadOptions) {
         i,
         j,
         filterElement,
+        selector,
         filter = [];
 
     for(i = 0; i < path.length; i++) {
         filterElement = [];
         for(j = 0; j <= i; j++) {
-            filterElement.push([groups[j].selector, i === j ? (groups[j].desc ? ">" : "<") : "=", path[j]]);
+            selector = groups[j].selector;
+            if(i === j && (path[j] === null || path[j] === false || path[j] === true)) {
+                if(path[j] === false) {
+                    filterElement.push([selector, "=", groups[j].desc ? true : null]);
+                } else if(path[j] ? !groups[j].desc : groups[j].desc) {
+                    filterElement.push([selector, "<>", path[j]]);
+                } else {
+                    filterElement.push([selector, "<>", null]);
+                    filterElement.push([selector, "=", null]);
+                }
+            } else {
+                filterElement.push([selector, i === j ? (groups[j].desc ? ">" : "<") : "=", path[j]]);
+            }
         }
         filter.push(gridCore.combineFilters(filterElement));
     }

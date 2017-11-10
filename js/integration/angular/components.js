@@ -31,7 +31,7 @@ ngModule.service("dxDigestCallbacks", ["$rootScope", function($rootScope) {
                 }
                 begin.add(callback);
             },
-            remove: begin.remove
+            remove: begin.remove.bind(begin)
         },
         end: end
     };

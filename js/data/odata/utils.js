@@ -206,7 +206,9 @@ var sendRequest = function(protocolVersion, request, options) {
             extra;
 
         if(error) {
-            d.reject(error);
+            if(error.message !== dataUtils.XHR_ERROR_UNLOAD) {
+                d.reject(error);
+            }
         } else if(options.countOnly) {
 
             if(isFinite(tuple.count)) {
@@ -215,7 +217,7 @@ var sendRequest = function(protocolVersion, request, options) {
                 d.reject(new errors.Error("E4018"));
             }
 
-        } else if(nextUrl) {
+        } else if(nextUrl && !options.isPaged) {
             if(!isAbsoluteUrl(nextUrl)) {
                 nextUrl = toAbsoluteUrl(ajaxOptions.url, nextUrl);
             }

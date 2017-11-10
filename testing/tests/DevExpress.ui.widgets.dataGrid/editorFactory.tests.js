@@ -32,6 +32,7 @@ require("common.css!");
 
 require("ui/data_grid/ui.data_grid");
 require("ui/lookup");
+var TextArea = require("ui/text_area");
 
 var pointerMock = require("../../helpers/pointerMock.js"),
     executeAsyncMock = require("../../helpers/executeAsyncMock.js"),
@@ -390,6 +391,8 @@ QUnit.test('Change editorOptions on editorPreparing', function(assert) {
     assert.ok($container.hasClass('dx-numberbox-spin'), 'numberbox render with spin buttons');
 });
 
+var DATAGRID_CHECKBOX_SIZE_CLASS = "dx-datagrid-checkbox-size";
+
 QUnit.test('Boolean editor', function(assert) {
     var $container = $('#container'),
         value = true;
@@ -407,6 +410,7 @@ QUnit.test('Boolean editor', function(assert) {
 
     //assert
     assert.ok(checkBox, 'dxCheckBox created');
+    assert.ok(checkBox.element().hasClass(DATAGRID_CHECKBOX_SIZE_CLASS), 'checkbox has dx-datagrid-checkbox-size class');
     assert.equal(checkBox.option('value'), true, 'checkbox editor value');
     assert.ok(checkBox.option('hoverStateEnabled'), 'hover enabled');
     assert.ok(checkBox.option('focusStateEnabled'), 'focus enabled');
@@ -417,6 +421,40 @@ QUnit.test('Boolean editor', function(assert) {
 
     //assert
     assert.equal(value, false, 'value after change');
+});
+
+QUnit.test('Boolean editor when inOnForm is true', function(assert) {
+    var $container = $('#container'),
+        value = true;
+
+    this.editorFactoryController.createEditor($container, {
+        dataType: 'boolean',
+        isOnForm: true,
+        value: value
+    });
+    //act
+    var checkBox = $container.dxCheckBox('instance');
+
+
+    //assert
+    assert.ok(checkBox, 'dxCheckBox created');
+    assert.notOk(checkBox.element().hasClass(DATAGRID_CHECKBOX_SIZE_CLASS), 'checkbox not have dx-datagrid-checkbox-size class');
+});
+
+QUnit.test('Add custom tabIndex to Boolean editor', function(assert) {
+    var $container = $('#container');
+
+    this.editorFactoryController.option("tabIndex", 7);
+
+    this.editorFactoryController.createEditor($container, {
+        dataType: 'boolean'
+    });
+
+    //act
+    var checkBox = $container.dxCheckBox('instance');
+
+    //assert
+    assert.equal(checkBox.element().attr("tabIndex"), "7", "tabIndex attr of checkBox");
 });
 
 QUnit.test('Boolean editor with null value should be intermediate', function(assert) {
@@ -1477,6 +1515,51 @@ QUnit.testInActiveWindow("Focus on dxLookup editor", function(assert) {
     //assert
     $cell = $testElement.find(".dx-datagrid-rowsview tbody > tr").eq(0).children().eq(0);
     assert.ok($cell.find(".dx-lookup-field").length, "has lookup field");
+    assert.ok($cell.hasClass("dx-focused"), "cell is focused");
+});
+
+//T531176
+QUnit.testInActiveWindow("Focus on dxTextArea editor", function(assert) {
+    if(devices.real().deviceType !== "desktop") {
+        assert.ok(true, "if device is not desktop we do not test the case");
+        return;
+    }
+
+    var that = this,
+        $cell,
+        $testElement = $('#container');
+
+    that.options = {
+        useKeyboard: true,
+        editing: {
+            mode: "batch",
+            allowUpdating: true
+        },
+        columns: [{ allowEditing: true, dataField: "name", editCellTemplate: function(container, options) {
+            new TextArea($("<div>").appendTo(container), {});
+        } }],
+        dataSource: [{ name: "Bob" }]
+    };
+
+    that.element = function() {
+        return $("#qunit-fixture");
+    };
+
+    setupDataGridModules(that, ["data", "columns", "rows", "editorFactory", "editing", "keyboardNavigation"], {
+        initViews: true
+    });
+
+    that.rowsView.render($testElement);
+
+    //act
+    $cell = $testElement.find(".dx-datagrid-rowsview tbody > tr").eq(0).children().eq(0);
+    $cell.trigger("dxpointerdown");
+    $cell.trigger("dxclick");
+    that.clock.tick();
+
+    //assert
+    $cell = $testElement.find(".dx-datagrid-rowsview tbody > tr").eq(0).children().eq(0);
+    assert.ok($cell.find("textarea").length, "has lookup field");
     assert.ok($cell.hasClass("dx-focused"), "cell is focused");
 });
 

@@ -17,6 +17,13 @@ var math = Math,
     TOP = "top",
     BOTTOM = "bottom";
 
+exports.getMargins = function() {
+    return {
+        x: LABEL_BACKGROUND_PADDING_X,
+        y: LABEL_BACKGROUND_PADDING_Y
+    };
+};
+
 function getRectangleBBox(bBox) {
     return {
         x: bBox.x - LABEL_BACKGROUND_PADDING_X,

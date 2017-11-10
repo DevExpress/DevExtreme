@@ -4,10 +4,12 @@
     @GENERIC_LIST_ITEM_VERTICAL_PADDING: 10px;
     @GENERIC_LIST_ITEM_HORIZONTAL_PADDING: 10px;
     @GENERIC_LIST_ITEM_BORDER_WIDTH: 1px;
+    @GENERIC_LIST_GROUP_HEADER_VERTICAL_PADDING: @list-group-header-default-padding-top;
 
     @GENERIC_LIST_DELETEBUTTON_PADDING: 3px;
 
     @GENERIC_LIST_SELECT_ALL_MARGIN_TOP: -1px;
+    @GENERIC_LIST_SELECT_ALL_MARGIN_RIGHT: 0px;
     @GENERIC_LIST_SELECT_ALL_LABEL_MARGIN_TOP: 3px;
 }
 
@@ -17,10 +19,12 @@
     @GENERIC_LIST_ITEM_VERTICAL_PADDING: 5px;
     @GENERIC_LIST_ITEM_HORIZONTAL_PADDING: 5px;
     @GENERIC_LIST_ITEM_BORDER_WIDTH: 0px;
+    @GENERIC_LIST_GROUP_HEADER_VERTICAL_PADDING: @list-group-header-compact-padding-top;
 
     @GENERIC_LIST_DELETEBUTTON_PADDING: 1px;
 
     @GENERIC_LIST_SELECT_ALL_MARGIN_TOP: 1px;
+    @GENERIC_LIST_SELECT_ALL_MARGIN_RIGHT: @GENERIC_LIST_ITEM_HORIZONTAL_PADDING;
     @GENERIC_LIST_SELECT_ALL_LABEL_MARGIN_TOP: 0;
 }
 
@@ -128,7 +132,7 @@
 
     .dx-list-group-header {
         font-weight: bold;
-        padding: @list-group-header-default-padding-top @item_horizontal_padding @GENERIC_LIST_ITEM_VERTICAL_PADDING @item_horizontal_padding;
+        padding: @GENERIC_LIST_GROUP_HEADER_VERTICAL_PADDING @item_horizontal_padding @GENERIC_LIST_ITEM_VERTICAL_PADDING @item_horizontal_padding;
 
         border-top: @GENERIC_LIST_ITEM_BORDER;
         border-bottom: @list-group-header-border-bottom;
@@ -249,14 +253,12 @@
 
     .dx-list-select-all-checkbox {
         float: left;
-        margin-top: -1px;
-        margin-bottom: -3px;
-        margin-left: @item_horizontal_padding;
+        margin: -1px @GENERIC_LIST_SELECT_ALL_MARGIN_RIGHT -3px @item_horizontal_padding;
     }
 
     .dx-list-select-all-label {
         line-height: 1;
-        padding: 0 6px;
+        padding: 0 @GENERIC_LIST_ITEM_HORIZONTAL_PADDING;
         margin-top: @GENERIC_LIST_SELECT_ALL_LABEL_MARGIN_TOP;
     }
 

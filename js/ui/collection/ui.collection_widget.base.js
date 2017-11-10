@@ -35,7 +35,7 @@ var COLLECTION_CLASS = "dx-collection",
     EMPTY_COLLECTION = "dx-empty-collection",
     TEMPLATE_WRAPPER_CLASS = "dx-template-wrapper",
 
-    ITEM_PATH_REGEX = /^([^.]+\[\d+\]\.)+(\w+)$/;
+    ITEM_PATH_REGEX = /^([^.]+\[\d+\]\.)+([\w\.]+)$/;
 
 var FOCUS_UP = "up",
     FOCUS_DOWN = "down",
@@ -60,7 +60,7 @@ var CollectionWidget = Widget.inherit({
     _activeStateUnit: "." + ITEM_CLASS,
 
     _supportedKeys: function() {
-        var click = function(e) {
+        var enter = function(e) {
                 var $itemElement = this.option("focusedElement");
 
                 if(!$itemElement) {
@@ -72,14 +72,18 @@ var CollectionWidget = Widget.inherit({
 
                 this._itemClickHandler(e);
             },
+            space = function(e) {
+                e.preventDefault();
+                enter.call(this, e);
+            },
             move = function(location, e) {
                 e.preventDefault();
                 e.stopPropagation();
                 this._moveFocus(location, e);
             };
         return extend(this.callBase(), {
-            space: click,
-            enter: click,
+            space: space,
+            enter: enter,
             leftArrow: move.bind(this, FOCUS_LEFT),
             rightArrow: move.bind(this, FOCUS_RIGHT),
             upArrow: move.bind(this, FOCUS_UP),
@@ -196,7 +200,7 @@ var CollectionWidget = Widget.inherit({
             /**
             * @name CollectionWidgetOptions_datasource
             * @publicName dataSource
-            * @type string|array|DataSource|DataSource configuration
+            * @type string|array|DataSource|DataSourceOptions
             * @default null
             */
             dataSource: null,
@@ -989,9 +993,9 @@ var CollectionWidget = Widget.inherit({
         return this._itemContainer();
     },
 
-    _renderEmptyMessage: function() {
+    _renderEmptyMessage: function(items) {
+        items = items || this.option("items");
         var noDataText = this.option("noDataText"),
-            items = this.option("items"),
             hideNoData = !noDataText || (items && items.length) || this._isDataSourceLoading();
 
         if(hideNoData && this._$noData) {
@@ -1031,8 +1035,10 @@ var CollectionWidget = Widget.inherit({
     },
 
     _itemEventHandlerImpl: function(initiator, action, actionArgs) {
-        var $itemElement = this._closestItemElement($(initiator));
-        return action(extend(this._extendActionArgs($itemElement), actionArgs));
+        var $itemElement = this._closestItemElement($(initiator)),
+            args = extend({}, actionArgs);
+
+        return action(extend(actionArgs, this._extendActionArgs($itemElement), args));
     },
 
     _extendActionArgs: function($itemElement) {

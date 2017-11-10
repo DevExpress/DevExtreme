@@ -27,7 +27,7 @@ var processItems = function(groupItems, field) {
 
     if(field.filterValues) {
         each(field.filterValues, function(_, filterValue) {
-            filterValues.push(Array.isArray(filterValue) ? filterValue.join("/") : filterValue);
+            filterValues.push(Array.isArray(filterValue) ? filterValue.join("/") : filterValue && filterValue.valueOf());
         });
     }
 
@@ -38,7 +38,7 @@ var processItems = function(groupItems, field) {
             preparedFilterValue;
 
         item.value = isTree ? path.slice(0) : (item.key || item.value);
-        preparedFilterValue = isTree ? path.join("/") : item.value;
+        preparedFilterValue = isTree ? path.join("/") : item.value && item.value.valueOf();
 
         if(item.children) {
             item.items = item.children;
@@ -65,7 +65,7 @@ var FieldChooserBase = Widget.inherit(columnStateMixin).inherit(sortingMixin).in
             allowFieldDragging: true,
             headerFilter: {
                 width: 252,
-                height: 300,
+                height: 325,
                 texts: {
                     emptyValue: messageLocalization.format("dxDataGrid-headerFilterEmptyValue"),
                     ok: messageLocalization.format("dxDataGrid-headerFilterOK"),

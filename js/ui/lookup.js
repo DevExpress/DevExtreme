@@ -64,6 +64,7 @@ var Lookup = DropDownList.inherit({
         extend(this._deprecatedOptions, {
             /**
             * @name dxLookupOptions_showNextButton
+            * @type boolean
             * @publicName showNextButton
             * @deprecated #pageLoadMode
             */
@@ -337,14 +338,6 @@ var Lookup = DropDownList.inherit({
             * @acceptValues 'scrollBottom'|'nextButton'
             */
             pageLoadMode: "scrollBottom",
-
-            /**
-            * @name dxLookupOptions_showNextButton
-            * @publicName showNextButton
-            * @type boolean
-            * @default undefined
-            */
-            showNextButton: undefined,
 
             /**
             * @name dxLookupOptions_nextButtonText
@@ -713,7 +706,7 @@ var Lookup = DropDownList.inherit({
 
     _renderInput: function() {
         var fieldClickAction = this._createAction((function() {
-            this._validatedOpening();
+            this._toggleOpenState();
         }).bind(this));
 
         this._$field = $("<div>")
@@ -829,7 +822,6 @@ var Lookup = DropDownList.inherit({
             fullScreen: false,
             shading: false,
             closeOnTargetScroll: true,
-            closeOnOutsideClick: true,
             width: this._isInitialOptionValue("popupWidth") ? (function() { return this.element().outerWidth(); }).bind(this) : this._popupConfig().width
         }));
 

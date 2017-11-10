@@ -157,7 +157,7 @@ QUnit.test("Check root layout width on init", function(assert) {
         rootLayoutManager = instance._rootLayoutManager;
 
     //assert
-    assert.equal(rootLayoutManager.option("width"), 100, "Correct width");
+    assert.equal(rootLayoutManager.element().width(), 100, "Correct width");
 });
 
 QUnit.test("Check root layout width on option change", function(assert) {
@@ -179,7 +179,7 @@ QUnit.test("Check root layout width on option change", function(assert) {
     assert.equal(rootLayoutManager.option("width"), 100, "Correct width");
 });
 
-QUnit.test("Form is refresh on dimension changed if colCount is auto", function(assert) {
+QUnit.test("Form isn't refresh on dimension changed if colCount is auto", function(assert) {
     //arrange, act
     var $formContainer = $("#form").dxForm({
             colCount: "auto",
@@ -196,7 +196,7 @@ QUnit.test("Form is refresh on dimension changed if colCount is auto", function(
     resizeCallbacks.fire();
 
     //assert
-    assert.equal(refreshStub.callCount, 1, "refresh on resize if colCount is auto");
+    assert.equal(refreshStub.callCount, 0, "don't refresh on resize if colCount is auto");
 });
 
 QUnit.test("Form doesn't refresh on dimension changed if colCount is not auto", function(assert) {
@@ -221,22 +221,29 @@ QUnit.test("Form doesn't refresh on dimension changed if colCount is not auto", 
 
 QUnit.testInActiveWindow("Form's inputs saves value on refresh", function(assert) {
     //arrange, act
-    var $formContainer = $("#form").dxForm({
-        colCount: "auto",
-        items: [
-            {
-                dataField: "name",
-                editorType: "dxTextBox"
-            }
-        ]
-    });
-
+    var screen = "md",
+        $formContainer = $("#form").dxForm({
+            screenByWidth: function() {
+                return screen;
+            },
+            colCountByScreen: {
+                sm: 1,
+                md: 2
+            },
+            items: [
+                {
+                    dataField: "name",
+                    editorType: "dxTextBox"
+                }
+            ]
+        });
 
     $("#form input")
         .first()
         .focus()
         .val("test");
 
+    screen = "sm";
     resizeCallbacks.fire();
 
     //assert
@@ -297,7 +304,7 @@ QUnit.test("Render form with colspan", function(assert) {
     assert.ok(fieldWidths.ID > fieldWidths.FirstName, "field with colspan 2 is wider than field without colspan");
 });
 
-QUnit.test("Read only change in inner components on option change", function(assert) {
+QUnit.test("'readOnly' is changed in inner components on optionChanged", function(assert) {
     //arrange, act
     var $formContainer = $("#form").dxForm({
         items: [
@@ -308,12 +315,32 @@ QUnit.test("Read only change in inner components on option change", function(ass
         ]
     });
 
-    assert.ok(!$formContainer.find("." + internals.FIELD_ITEM_CLASS + " .dx-texteditor").hasClass("dx-state-readonly"), "editor isn't read only");
+    assert.notOk($formContainer.find("." + internals.FIELD_ITEM_CLASS + " .dx-texteditor").hasClass("dx-state-readonly"), "editor isn't read only");
 
     $formContainer.dxForm("instance").option("readOnly", true);
 
     //assert
     assert.ok($formContainer.find("." + internals.FIELD_ITEM_CLASS + " .dx-texteditor").hasClass("dx-state-readonly"), "editor is read only");
+});
+
+QUnit.test("'disable' is changed in inner components on optionChanged", function(assert) {
+    //arrange, act
+    var $formContainer = $("#form").dxForm({
+        items: [
+            {
+                dataField: "name",
+                editorType: "dxTextBox"
+            }
+        ],
+        disabled: true
+    });
+
+    assert.ok($formContainer.find("." + internals.FIELD_ITEM_CLASS + " .dx-texteditor").hasClass("dx-state-disabled"), "editor is disabled");
+
+    $formContainer.dxForm("instance").option("disabled", false);
+
+    //assert
+    assert.notOk($formContainer.find("." + internals.FIELD_ITEM_CLASS + " .dx-texteditor").hasClass("dx-state-disabled"), "editor isn't disabled");
 });
 
 QUnit.test("Customize item event", function(assert) {
@@ -1264,6 +1291,30 @@ QUnit.test("Caption of group", function(assert) {
     assert.equal($captions.eq(0).text(), "Personal");
 });
 
+QUnit.test("helpText element didn't render for group item", function(assert) {
+    //arrange, act
+    var $formContainer = $("#form").dxForm({
+            formData: {
+                firstName: "John"
+            },
+            items: [
+                {
+                    itemType: "group",
+                    caption: "Personal",
+                    helpText: "Help Text",
+                    items: [
+                        {
+                            dataField: "firstName"
+                        }
+                    ]
+                }]
+        }),
+        $helpTextElement = $formContainer.find("." + internals.FIELD_ITEM_HELP_TEXT_CLASS);
+
+    //assert
+    assert.equal($helpTextElement.length, 0, "There is no helpText element");
+});
+
 QUnit.test("Group template", function(assert) {
     //arrange, act
     var $formContainer = $("#form").dxForm({
@@ -1755,6 +1806,68 @@ QUnit.test("Align labels in column when alignItemLabelsInAllGroups is disabled",
 
     $groups = form._getGroupElementsInColumn(testContainer, 1);
     assert.notEqual(findLabelTextsInColumn($groups.eq(0), 0).eq(0).width(), findLabelTextsInColumn($groups.eq(1), 0).eq(0).width(), "compare group1 with group2");
+});
+
+QUnit.test("Align labels in columns when there are rows", function(assert) {
+    //arrange, act
+    var testContainer = $("#form"),
+        form = testContainer.dxForm({
+            formData: this.testObject,
+            colCount: 4,
+            items: [{
+                name: "fieldFirstValue",
+                colSpan: 2,
+                editorType: "dxTextBox",
+                label: {
+                    text: "Field 1"
+                }
+            },
+            {
+                name: "fieldSecondValue",
+                colSpan: 2,
+                editorType: "dxTextBox",
+                label: {
+                    text: "Field 2"
+                }
+            },
+            {
+                name: "fieldThirdValue",
+                colSpan: 2,
+                editorType: "dxTextBox",
+                label: {
+                    text: "Field three"
+                }
+            },
+            {
+                name: "fieldFourthValue",
+                colSpan: 2,
+                editorType: "dxTextBox",
+                label: {
+                    text: "Field four"
+                }
+            }
+            ]
+        }).data("dxForm");
+
+    var $col1 = $(".dx-col-0"),
+        $col2 = $(".dx-col-2"),
+        $maxLabelWidth = getLabelWidth(testContainer, form, "Field three:"),
+        i,
+        labelWidth;
+
+    //assert
+    for(i = 0; i < 2; i++) {
+        labelWidth = $col1.eq(i).find("." + internals.FIELD_ITEM_LABEL_CONTENT_CLASS).first().width();
+
+        assert.roughEqual(labelWidth, $maxLabelWidth, 1, "col0 item " + i);
+    }
+
+    $maxLabelWidth = getLabelWidth(testContainer, form, "Field four:");
+    for(i = 0; i < 2; i++) {
+        labelWidth = $col2.eq(i).find("." + internals.FIELD_ITEM_LABEL_CONTENT_CLASS).first().width();
+
+        assert.roughEqual(labelWidth, $maxLabelWidth, 1, "col2 item " + i);
+    }
 });
 
 QUnit.test("Change option after group rendered (check for cycling template render)", function(assert) {
@@ -2748,6 +2861,95 @@ QUnit.test("Use 'itemOption' with tabs", function(assert) {
     assert.equal($testContainer.find("." + internals.FIELD_ITEM_LABEL_CLASS).eq(4).text(), "NEWLABEL:", "new label rendered");
 });
 
+QUnit.test("'itemOption' should get an item with several spaces in the caption", function(assert) {
+    //arrange
+    var $testContainer = $("#form").dxForm({
+            formData: { EmployeeID: 1, LastName: "John", FirstName: "Dow" },
+            items: [
+                "EmployeeID",
+                {
+                    itemType: "group",
+                    caption: "Test group item",
+                    items: [
+                        "FirstName", "LastName"
+                    ]
+                }
+            ] }
+        ),
+        form = $testContainer.dxForm("instance");
+
+    //act
+    var groupItem = form.itemOption("Testgroupitem"),
+        innerGroupItem = form.itemOption("Testgroupitem.FirstName");
+
+    assert.deepEqual(groupItem, {
+        itemType: "group",
+        caption: "Test group item",
+        items: [ { dataField: "FirstName" }, { dataField: "LastName" }]
+    }, "Correct group item");
+
+    form.itemOption("Testgroupitem.LastName", "label", { text: "NEWLABEL" });
+
+    //assert
+    assert.equal(innerGroupItem.dataField, "FirstName", "corrected item received");
+    assert.equal($testContainer.find("." + internals.FIELD_ITEM_LABEL_CLASS).last().text(), "NEWLABEL:", "new label rendered");
+});
+
+QUnit.test("'itemOption' should get an item with several spaces in the caption and long path", function(assert) {
+    //arrange
+    var $testContainer = $("#form").dxForm({
+            formData: { EmployeeID: 1, LastName: "John", FirstName: "Dow" },
+            items: [
+                "EmployeeID",
+                {
+                    itemType: "group",
+                    caption: "Test group 1",
+                    items: [{
+                        itemType: "group",
+                        caption: "Test group 2",
+                        items: ["FirstName", "LastName"]
+                    }]
+                }
+            ] }
+        ),
+        form = $testContainer.dxForm("instance");
+
+    //act
+    var innerGroupItem = form.itemOption("Testgroup1.Testgroup2.FirstName");
+
+    //assert
+    assert.deepEqual(innerGroupItem, { dataField: "FirstName" }, "corrected item received");
+});
+
+QUnit.test("'itemOption' should get an group inner item located into tabbed item", function(assert) {
+    //arrange
+    var $testContainer = $("#form").dxForm({
+            formData: { EmployeeID: 1, LastName: "John", FirstName: "Dow" },
+            items: [
+                {
+                    itemType: "tabbed",
+                    tabs: [{
+                        title: "Test Tab 1",
+                        items: ["EmployeeID"]
+                    }, {
+                        title: "Test Tab 2",
+                        items: [{
+                            itemType: "group",
+                            caption: "Test Group 1",
+                            items: ["FirstName", "LastName"]
+                        }]
+                    }]
+                }]
+        }),
+        form = $testContainer.dxForm("instance");
+
+    //act
+    var innerGroupItem = form.itemOption("TestTab2.TestGroup1.FirstName");
+
+    //assert
+    assert.deepEqual(innerGroupItem, { dataField: "FirstName" }, "corrected item received");
+});
+
 function getID(form, dataField) {
     return "dx_" + form.option("formID") + "_" + dataField;
 }
@@ -2972,6 +3174,62 @@ QUnit.test("Changing editorOptions of subitem change editor options (T316522)", 
     assert.equal(secondEditor.option("height"), 40, "Correct height");
 });
 
+QUnit.test("editorOptions correctly updates in case when only item name is defined", function(assert) {
+    //arrange
+    var form = $("#form").dxForm({
+        items: [
+            {
+                itemType: "group", items: [
+                    {
+                        itemType: "group", items: [
+                                { name: "firstName", editorType: "dxTextBox", editorOptions: { width: 100, height: 20 } },
+                                { name: "lastName", editorType: "dxTextBox", editorOptions: { width: 100, height: 20 } }
+                        ]
+                    }
+                ]
+            }
+        ]
+    }).dxForm("instance");
+
+    var invalidateSpy = sinon.spy(form, "_invalidate");
+
+    //act
+    form.option("items[0].items[0].items[1].editorOptions", { width: 80, height: 40 });
+
+    //assert
+    var secondEditor = $("#form .dx-textbox").last().dxTextBox("instance");
+
+    assert.equal(invalidateSpy.callCount, 0, "dxForm wasn't invalidated");
+    assert.equal(secondEditor.option("width"), 80, "Correct width");
+    assert.equal(secondEditor.option("height"), 40, "Correct height");
+});
+
+QUnit.test("widget invalidates in case we cannot change an editor options", function(assert) {
+    //arrange
+    var form = $("#form").dxForm({
+        items: [
+            {
+                itemType: "group", items: [
+                    {
+                        itemType: "group", items: [
+                                { editorType: "dxTextBox", editorOptions: { width: 100, height: 20 } },
+                                { editorType: "dxTextBox", editorOptions: { width: 100, height: 20 } }
+                        ]
+                    }
+                ]
+            }
+        ]
+    }).dxForm("instance");
+
+    var invalidateSpy = sinon.spy(form, "_invalidate");
+
+    //act
+    form.option("items[0].items[0].items[1].editorOptions", { width: 80, height: 40 });
+
+    //assert
+    assert.equal(invalidateSpy.callCount, 1, "dxForm invalidated");
+});
+
 QUnit.test("Reset editor's value", function(assert) {
         //arrange
     var form = $("#form").dxForm({
@@ -3014,6 +3272,7 @@ QUnit.test("One column screen should be customizable with screenByWidth option o
 
         //assert
     assert.equal($form.find(".dx-layout-manager-one-col").length, 1, "single column screen was changed");
+    assert.equal($form.find(".dx-single-column-item-content").length, 4, "There are 4 items in the column");
 });
 
 QUnit.test("One column screen should be customizable with screenByWidth option on option change", function(assert) {
@@ -3031,10 +3290,14 @@ QUnit.test("One column screen should be customizable with screenByWidth option o
             items: ["name", "lastName", "room", "isDeveloper"]
         }).data("dxForm");
 
-        //act
+
+    assert.equal($form.find(".dx-single-column-item-content").length, 0, "There are no single column items");
+
+    //act
     form.option("screenByWidth", function() { return "xs"; });
 
-        //assert
+    //assert
+    assert.equal($form.find(".dx-single-column-item-content").length, 4, "There are 4 items in the column");
     assert.equal($form.find(".dx-layout-manager-one-col").length, 1, "single column screen was changed");
 });
 
@@ -3313,4 +3576,67 @@ QUnit.test("Cached colCount options doesn't leak", function(assert) {
 
     //assert
     assert.equal(instance._cachedColCountOptions.length, 1, "only root colCount options cached");
+});
+
+QUnit.test("Form refreshes only one time on dimension changed with group layout", function(assert) {
+    //arrange
+    var $form = $("#form").width(300),
+        screen = "md",
+        form = $form.dxForm({
+            screenByWidth: function() {
+                return screen;
+            },
+            colCount: "auto",
+            minColWidth: 100,
+            items: [{
+                name: "test1",
+                editorType: "dxTextBox"
+            }, {
+                itemType: "group",
+                caption: "Test group",
+                colCount: "auto",
+                minColWidth: 200,
+                items: [
+                    { name: "test2", editorType: "dxTextBox" },
+                    { name: "test3", editorType: "dxTextBox" }
+                ]
+            }]
+        }).data("dxForm");
+
+    var refreshSpy = sinon.spy(form, "_refresh");
+
+    //act
+    $form.width(100);
+    resizeCallbacks.fire();
+    //assert
+    assert.equal(refreshSpy.callCount, 1, "form has been redraw layout one time");
+});
+
+QUnit.test("Form redraw layout when colCount is 'auto' and an calculated colCount changed", function(assert) {
+    //arrange
+    var $form = $("#form").width(300),
+        screen = "md",
+        form = $form.dxForm({
+            screenByWidth: function() {
+                return screen;
+            },
+            colCount: "auto",
+            minColWidth: 100,
+            items: [{
+                name: "test1",
+                editorType: "dxTextBox"
+            }, {
+                name: "test2",
+                editorType: "dxTextBox"
+            }]
+        }).data("dxForm");
+
+    var refreshSpy = sinon.spy(form, "_refresh");
+
+    //act
+    $form.width(100);
+    resizeCallbacks.fire();
+
+    //assert
+    assert.equal(refreshSpy.callCount, 1, "form has been redraw layout");
 });

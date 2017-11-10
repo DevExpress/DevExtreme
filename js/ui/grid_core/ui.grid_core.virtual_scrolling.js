@@ -378,7 +378,10 @@ var VirtualScrollingRowsViewExtender = (function() {
                 };
 
             for(i = 0; i < columns.length; i++) {
-                freeSpaceCellsHtml += columns[i].command === "expand" ? "<td class='" + that.addWidgetPrefix(GROUP_SPACE_CLASS) + "'/>" : "<td />";
+                var classes = that._getCellClasses(columns[i]),
+                    classString = classes.length ? " class='" + classes.join(" ") + "'" : "";
+
+                freeSpaceCellsHtml += "<td" + classString + "/>";
             }
 
             while(height > PIXELS_LIMIT) {
@@ -389,6 +392,17 @@ var VirtualScrollingRowsViewExtender = (function() {
 
             container.addClass(that.addWidgetPrefix(TABLE_CLASS));
             container.html(html);
+        },
+
+        _getCellClasses: function(column) {
+            var classes = [],
+                cssClass = column.cssClass,
+                isExpandColumn = column.command === "expand";
+
+            cssClass && classes.push(cssClass);
+            isExpandColumn && classes.push(this.addWidgetPrefix(GROUP_SPACE_CLASS));
+
+            return classes;
         },
 
         _findBottomLoadPanel: function() {
@@ -477,10 +491,21 @@ var VirtualScrollingRowsViewExtender = (function() {
             }
         },
 
+        updateFreeSpaceRowHeight: function() {
+            var result = this.callBase.apply(this, arguments);
+
+            if(result) {
+                this._updateContentPosition();
+            }
+
+            return result;
+        },
+
         setLoading: function(isLoading, messageText) {
             var that = this,
                 callBase = that.callBase,
-                hasBottomLoadPanel = !!that._findBottomLoadPanel() && that._dataController.isLoaded();
+                dataController = that._dataController,
+                hasBottomLoadPanel = dataController.pageIndex() > 0 && dataController.isLoaded() && !!that._findBottomLoadPanel();
 
             if(hasBottomLoadPanel) {
                 isLoading = false;

@@ -17,11 +17,13 @@ var CallBacks = function(options) {
         firingIndex,
         fireCore = function(context, args) {
             firing = true;
+            var oldFiringIndex = firingIndex;
             for(firingIndex = 0; firingIndex < list.length; firingIndex++) {
                 if(list[firingIndex] && list[firingIndex].apply(context, args) === false && options.stopOnFalse) {
                     break;
                 }
             }
+            firingIndex = oldFiringIndex;
             firing = false;
         },
         that = {

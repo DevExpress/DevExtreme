@@ -37,10 +37,10 @@
     @GENERIC_GRID_BASE_NODATA_FONT_SIZE: 17px;
     @GENERIC_GRID_BASE_ROW_BORDER: 1px solid transparent;
     @GENERIC_GRID_BASE_BORDER_COLOR: ~"@{@{widgetName}-border-color}";
-    @GENERIC_GRID_BASE_BORDER: 1px solid @GENERIC_GRID_BASE_BORDER_COLOR;
     @GENERIC_GRID_BASE_DRAG_HEADER_BORDER: 1px solid ~"@{@{widgetName}-drag-header-border-color}";
     @GENERIC_GRID_BASE_DRAG_HEADER_FIRST_SHADOW: 0px 0px 1px ~"@{@{widgetName}-drag-header-shadow-color}";
     @GENERIC_GRID_BASE_DRAG_HEADER_SECOND_SHADOW: 0px 1px 3px ~"@{@{widgetName}-drag-header-second-shadow-color}";
+    @GENERIC_GRID_BASE_CHECKBOX_ICON_SIZE: 16px;
 
     .dx-set-checkbox-border-color-as-background() when (@GENERIC_COLOR_POSTFIX = ".contrast") {
         .dx-selection .dx-checkbox-icon {
@@ -48,49 +48,7 @@
         }
     }
 
-    .dx-@{widgetName} {
-        line-height: inherit;
-
-        &.dx-@{widgetName}-borders {
-            > .dx-@{widgetName}-headers, > .dx-@{widgetName}-rowsview, > .dx-@{widgetName}-total-footer {
-                border-left: @GENERIC_GRID_BASE_BORDER;
-                border-right: @GENERIC_GRID_BASE_BORDER;
-            }
-
-            > .dx-@{widgetName}-rowsview, > .dx-@{widgetName}-total-footer {
-                border-bottom: @GENERIC_GRID_BASE_BORDER;
-            }
-
-            > .dx-@{widgetName}-pager, > .dx-@{widgetName}-headers, > .dx-@{widgetName}-rowsview {
-                border-top: @GENERIC_GRID_BASE_BORDER;
-            }
-        }
-
-        .dx-menu {
-            background-color: transparent;
-            height: 100%;
-
-            .dx-menu-item {
-                .dx-menu-item-content {
-                    padding: @GENERIC_GRID_BASE_MENU_ITEM_PADDING;
-
-                    .dx-icon {
-                        margin: 0px 3px;
-                    }
-                }
-            }
-        }
-
-        .dx-menu-item-has-submenu {
-            &.dx-state-hover {
-                background-color: transparent;
-            }
-
-            &.dx-menu-item-expanded.dx-state-hover {
-                background-color: ~"@{@{widgetName}-editor-bg}";
-            }
-        }
-
+    .dx-@{widgetName}, .dx-@{widgetName}-container {
         .dx-menu-item-has-icon {
             .dx-icon {
                 color: ~"@{@{widgetName}-menu-icon-color}";
@@ -166,6 +124,35 @@
         .dx-menu-items-container .dx-menu-item-has-icon.dx-menu-item-selected .dx-icon-filter-operation-between {
             background-image: ~"@{@{widgetName}-filter-operation-selected-bg}";
         }
+    }
+
+    .dx-@{widgetName} {
+        line-height: inherit;
+
+        .dx-menu {
+            background-color: transparent;
+            height: 100%;
+
+            .dx-menu-item {
+                .dx-menu-item-content {
+                    padding: @GENERIC_GRID_BASE_MENU_ITEM_PADDING;
+
+                    .dx-icon {
+                        margin: 0px 3px;
+                    }
+                }
+            }
+        }
+
+        .dx-menu-item-has-submenu {
+            &.dx-state-hover {
+                background-color: transparent;
+            }
+
+            &.dx-menu-item-expanded.dx-state-hover {
+                background-color: ~"@{@{widgetName}-editor-bg}";
+            }
+        }
 
         .dx-row-alt {
             & > td {
@@ -181,49 +168,36 @@
             color: ~"@{@{widgetName}-link-color}";
         }
 
-        .dx-checkbox-indeterminate {
-            .dx-checkbox-icon:before {
-                width: 6px;
-                height: 6px;
-                left: 4px;
-                top: 4px;
-            }
-        }
-
         .dx-row-lines > td {
-            border-bottom: @GENERIC_GRID_BASE_BORDER;
+            border-bottom: ~"@{@{widgetName}-border}";
         }
 
         .dx-column-lines > td {
-            border-left: @GENERIC_GRID_BASE_BORDER;
-            border-right: @GENERIC_GRID_BASE_BORDER;
+            border-left: ~"@{@{widgetName}-border}";
+            border-right: ~"@{@{widgetName}-border}";
         }
 
         .dx-error-row {
-            td {
-                background-color: ~"@{@{widgetName}-row-error-bg}";
-                color: ~"@{@{widgetName}-row-error-color}";
+            .dx-closebutton {
+                float: right;
+                margin: @GENERIC_GRID_BASE_CELL_PADDING + 2px;
+                .dx-icon-close;
+                .dx-icon-sizing(14px);
+            }
+
+            .dx-error-message {
                 padding: @GENERIC_GRID_BASE_CELL_PADDING;
-
-                .dx-error-message {
-                    white-space: normal;
-                    word-wrap: break-word;
-                    padding-right: 35px;
-                }
-
-                .dx-closebutton {
-                    float: right;
-                    margin-top: 2px;
-                    margin-right: 2px;
-                    .dx-icon-close;
-                    .dx-icon-sizing(14px);
-                }
+                padding-right: 35px;
             }
         }
 
         .dx-row > td {
             padding: @GENERIC_GRID_BASE_CELL_PADDING;
         }
+    }
+
+    .dx-@{widgetName}-edit-popup .dx-error-message {
+        padding: @GENERIC_GRID_BASE_CELL_PADDING;
     }
 
     .dx-@{widgetName}-headers, .dx-@{widgetName}-rowsview {
@@ -336,8 +310,17 @@
         line-height: normal;
 
         .dx-checkbox-icon {
-            height: 16px;
-            width: 16px;
+            height: @GENERIC_GRID_BASE_CHECKBOX_ICON_SIZE;
+            width: @GENERIC_GRID_BASE_CHECKBOX_ICON_SIZE;
+        }
+
+        &.dx-checkbox-indeterminate {
+            .dx-checkbox-icon:before {
+                width: 6px;
+                height: 6px;
+                left: 4px;
+                top: 4px;
+            }
         }
     }
 
@@ -383,7 +366,7 @@
                     background-color: ~"@{@{widgetName}-columnchooser-item-bg}";
                     color: ~"@{@{widgetName}-columnchooser-item-color}";
                     font-weight: ~"@{@{widgetName}-columnchooser-font-weight}";
-                    border: @GENERIC_GRID_BASE_BORDER;
+                    border: ~"@{@{widgetName}-border}";
                     padding: @GENERIC_GRID_BASE_CELL_PADDING;
                     .box-shadow(0px 1px 3px -1px ~"@{@{widgetName}-columnchooser-shadow-color}");
                 }
@@ -419,30 +402,6 @@
         border: 2px solid ~"@{@{widgetName}-focused-border-color}";
     }
 
-    .dx-data-row.dx-state-hover {
-        &:not(.dx-selection):not(.dx-row-inserted):not(.dx-row-removed):not(.dx-edit-row) {
-            & > td:not(.dx-focused) {
-                background-color: ~"@{@{widgetName}-hover-bg}";
-                color: ~"@{@{widgetName}-row-hovered-color}";
-
-                &.dx-@{widgetName}-group-space {
-                    border-right-color: ~"@{@{widgetName}-hover-bg}";
-                }
-            }
-
-            & > .dx-@{widgetName}-readonly .dx-texteditor {
-                .dx-texteditor-input {
-                    background-color: ~"@{@{widgetName}-hover-bg}";
-                    color: ~"@{@{widgetName}-row-hovered-color}";
-                }
-            }
-
-            & > td.dx-pointer-events-none {
-                background-color: transparent;
-            }
-        }
-    }
-
     .dx-@{widgetName}-table {
         .dx-row {
             .dx-command-select {
@@ -460,12 +419,41 @@
                 min-width: @GENERIC_GRID_BASE_COMMAND_EXPAND_COLUMN_WIDTH;
             }
         }
+
+        .dx-data-row.dx-state-hover {
+            &:not(.dx-selection):not(.dx-row-inserted):not(.dx-row-removed):not(.dx-edit-row) {
+                & > td:not(.dx-focused) {
+                    background-color: ~"@{@{widgetName}-hover-bg}";
+                    color: ~"@{@{widgetName}-row-hovered-color}";
+
+                    &.dx-@{widgetName}-group-space {
+                        border-right-color: ~"@{@{widgetName}-hover-bg}";
+                    }
+                }
+
+                & > .dx-@{widgetName}-readonly .dx-texteditor {
+                    .dx-texteditor-input {
+                        background-color: ~"@{@{widgetName}-hover-bg}";
+                        color: ~"@{@{widgetName}-row-hovered-color}";
+                    }
+                }
+
+                & > td.dx-pointer-events-none {
+                    background-color: transparent;
+                }
+            }
+        }
     }
 
     .dx-@{widgetName}-headers {
         color: ~"@{@{widgetName}-columnchooser-item-color}";
         font-weight: ~"@{@{widgetName}-columnchooser-font-weight}";
         .touch-action(pinch-zoom);
+        border-bottom: ~"@{@{widgetName}-border}";
+
+        .dx-@{widgetName}-content {
+            margin-bottom: -1px;
+        }
 
         .dx-@{widgetName}-table {
             .dx-@{widgetName}-borders & {
@@ -473,7 +461,7 @@
             }
 
             .dx-row > td {
-                border-bottom: @GENERIC_GRID_BASE_BORDER;
+                border-bottom: ~"@{@{widgetName}-border}";
             }
         }
     }
@@ -522,7 +510,7 @@
 
     .dx-@{widgetName}-filter-range-overlay {
         .dx-overlay-content {
-            border: @GENERIC_GRID_BASE_BORDER;
+            border: ~"@{@{widgetName}-border}";
             overflow: inherit;
             .box-shadow(2px 2px 3px ~"@{@{widgetName}-overlay-content-shadow-color}");
 
@@ -565,7 +553,7 @@
     }
 
     .dx-@{widgetName}-header-panel {
-        border-bottom: @GENERIC_GRID_BASE_BORDER;
+        border-bottom: ~"@{@{widgetName}-border}";
 
         .dx-toolbar {
             margin-bottom: @GENERIC_GRID_BASE_HEADER_PANEL_MARGIN_BOTTOM;
@@ -626,7 +614,7 @@
     }
 
     .dx-@{widgetName}-rowsview {
-        border-top: @GENERIC_GRID_BASE_BORDER;
+        border-top: ~"@{@{widgetName}-border}";
 
         .dx-row {
             border-top: @GENERIC_GRID_BASE_ROW_BORDER;
@@ -634,19 +622,19 @@
 
             &.dx-edit-row:first-child > td {
                 border-top-width: 0px;
-                border-bottom: @GENERIC_GRID_BASE_BORDER;
+                border-bottom: ~"@{@{widgetName}-border}";
             }
 
             &.dx-edit-row > td {
-                border-top: @GENERIC_GRID_BASE_BORDER;
-                border-bottom: @GENERIC_GRID_BASE_BORDER;
+                border-top: ~"@{@{widgetName}-border}";
+                border-bottom: ~"@{@{widgetName}-border}";
             }
         }
 
         .dx-master-detail-row {
             > .dx-@{widgetName}-group-space, .dx-master-detail-cell {
-                border-top: @GENERIC_GRID_BASE_BORDER;
-                border-bottom: @GENERIC_GRID_BASE_BORDER;
+                border-top: ~"@{@{widgetName}-border}";
+                border-bottom: ~"@{@{widgetName}-border}";
             }
         }
 
@@ -771,7 +759,7 @@
     }
 
     .dx-@{widgetName}-bottom-load-panel {
-        border-top: @GENERIC_GRID_BASE_BORDER;
+        border-top: ~"@{@{widgetName}-border}";
     }
 
     .dx-@{widgetName}-pager {
@@ -787,7 +775,7 @@
     }
 
     .dx-@{widgetName}-total-footer {
-        border-top: @GENERIC_GRID_BASE_BORDER;
+        border-top: ~"@{@{widgetName}-border}";
     }
 
     .dx-@{widgetName}-revert-tooltip {
@@ -801,7 +789,7 @@
             margin-left: 1px;
             .dx-button-styling-variant( @button-danger-bg, @button-danger-border-color, @button-danger-color, @button-danger-hover-bg, @button-danger-hover-border-color, @button-danger-focused-bg, @button-danger-focused-border-color, @button-danger-active-bg, @button-danger-active-border-color, @button-danger-color, @button-danger-icon-color );
             > .dx-button-content {
-                padding: @GENERIC_GRID_BASE_CELL_PADDING - 1;
+                padding: @GENERIC_GRID_BASE_CELL_PADDING;
             }
 
 

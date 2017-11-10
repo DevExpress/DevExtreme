@@ -50,7 +50,13 @@ function getCustomArrayStore(data) {
                     for(var i = 0; i < (loadOptions.groupSummary && loadOptions.groupSummary.length || 0); i++) {
                         if(item.items) {
                             item.summary = item.summary || [];
-                            item.summary.push(path.slice(0, level + 1).join("-") + ":" + getSummary(loadOptions.groupSummary[i]));
+
+                            var filterExpr = "";
+                            if(loadOptions.filter) {
+                                filterExpr = "(" + loadOptions.filter + ")";
+                            }
+
+                            item.summary.push(path.slice(0, level + 1).join("-") + ":" + getSummary(loadOptions.groupSummary[i]) + filterExpr);
                         }
                     }
                 });
@@ -1416,6 +1422,24 @@ QUnit.test("Expanded row after expanded item. when no column fields", function(a
     });
 });
 
+QUnit.test("Total should be correct when load initially expanded child on two level", function(assert) {
+    this.load({
+        rows: [
+            { dataField: "ShipCountry" },
+            { dataField: "ShipRegion" },
+            { dataField: "ShipCity" }
+        ],
+        rowExpandedPaths: [["USA", "AK"]],
+        columns: [],
+        values: [{ summaryType: "count" }]
+    }).done(function(data) {
+        assert.equal(getRowTotal(data, data.rows[19]), "USA:count");
+        assert.equal(getRowTotal(data, data.rows[19].children[0]), "USA-AK:count(ShipCountry,=,USA)");
+        assert.equal(getRowTotal(data, data.rows[19].children[0].children[0]), "USA-AK-Anchorage:count(ShipCountry,=,USA,and,ShipRegion,=,AK)");
+
+    });
+});
+
 QUnit.test("Expand row on several levels", function(assert) {
     this.load({
         rows: [{ dataField: "ShipCountry" }, { dataField: "ShipCity" }, { dataField: "ShipName" }],
@@ -1487,7 +1511,7 @@ QUnit.test("Expand first level when other item is expanded without rows", functi
 
         assert.ok(data.columns[8].children[1].children, "Berlin item should have children");
 
-        assert.strictEqual(getValue(data, undefined, data.columns[8].children[1].children[0]), "Germany-Berlin-1:count", "value of expanded item");
+        assert.strictEqual(getValue(data, undefined, data.columns[8].children[1].children[0]), "Germany-Berlin-1:count(ShipCountry,=,Germany,and,ShipCity,=,Berlin)", "value of expanded item");
     });
 });
 
@@ -1522,7 +1546,7 @@ QUnit.test("Expand first level when other item is expanded in columns", function
 
         assert.ok(data.columns[8].children[1].children, "Berlin item should have children");
 
-        assert.strictEqual(getValue(data, undefined, data.columns[8].children[1].children[0]), "Germany-Berlin-1:count", "value of expanded item");
+        assert.strictEqual(getValue(data, undefined, data.columns[8].children[1].children[0]), "Germany-Berlin-1:count(ShipCountry,=,Germany,and,ShipCity,=,Berlin)", "value of expanded item");
         assert.strictEqual(getValue(data, data.rows[0], data.columns[0].children[0]), "1-Argentina-Buenos Aires:count", "value of expanded item");
     });
 });
@@ -1542,7 +1566,7 @@ QUnit.test("Expand first level when other item is expanded in rows without colum
 
         assert.ok(data.rows[8].children[1].children, "Berlin item should have children");
 
-        assert.strictEqual(getValue(data, data.rows[8].children[1].children[0]), "Germany-Berlin-1:count", "value of expanded item");
+        assert.strictEqual(getValue(data, data.rows[8].children[1].children[0]), "Germany-Berlin-1:count(ShipCountry,=,Germany,and,ShipCity,=,Berlin)", "value of expanded item");
     });
 });
 
@@ -1562,7 +1586,7 @@ QUnit.test("Expand first level when other item is expanded in rows", function(as
 
         assert.ok(data.rows[8].children[1].children, "Berlin item should have children");
 
-        assert.strictEqual(getValue(data, data.rows[8].children[1].children[0]), "Germany-Berlin-1:count", "value of expanded item");
+        assert.strictEqual(getValue(data, data.rows[8].children[1].children[0]), "Germany-Berlin-1:count(ShipCountry,=,Germany,and,ShipCity,=,Berlin)", "value of expanded item");
         assert.strictEqual(getValue(data, data.rows[0].children[0], data.rows[0]), "Argentina-Buenos Aires-1:count", "value of expanded item");
     });
 });

@@ -25,7 +25,7 @@ var baseGauge = {
         * @type string
         * @default 'top-center'
         * @acceptValues 'top-left' | 'top-center' | 'top-right' | 'bottom-left' | 'bottom-center' | 'bottom-right'
-        * @deprecated
+        * @deprecated BaseWidgetOptions_title_horizontalalignment
         */
         position: undefined
     },
@@ -149,7 +149,7 @@ var baseGauge = {
         * @publicName hideFirstTick
         * @type boolean
         * @default false
-        * @deprecated
+        * @deprecated dxcirculargaugeoptions_scale_label_hideFirstOrLast
         */
         hideFirstTick: undefined,
         /**
@@ -157,7 +157,7 @@ var baseGauge = {
         * @publicName hideLastTick
         * @type boolean
         * @default false
-        * @deprecated
+        * @deprecated dxcirculargaugeoptions_scale_label_hideFirstOrLast
         */
         hideLastTick: undefined,
         /**
@@ -165,7 +165,7 @@ var baseGauge = {
         * @publicName hideFirstLabel
         * @type boolean
         * @default false
-        * @deprecated
+        * @deprecated dxcirculargaugeoptions_scale_label_hideFirstOrLast
         */
         hideFirstLabel: undefined,
         /**
@@ -173,7 +173,7 @@ var baseGauge = {
         * @publicName hideLastLabel
         * @type boolean
         * @default false
-        * @deprecated
+        * @deprecated dxcirculargaugeoptions_scale_label_hideFirstOrLast
         */
         hideLastLabel: undefined,
         /**
@@ -951,7 +951,7 @@ var dxBarGauge = {
         * @type string
         * @default 'top-center'
         * @acceptValues 'top-left' | 'top-center' | 'top-right' | 'bottom-left' | 'bottom-center' | 'bottom-right'
-        * @deprecated
+        * @deprecated BaseWidgetOptions_title_horizontalalignment
         */
         position: undefined
     },

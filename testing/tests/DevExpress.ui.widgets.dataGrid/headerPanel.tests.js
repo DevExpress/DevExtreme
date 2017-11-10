@@ -127,6 +127,7 @@ QUnit.test('Draw groupPanel without grouping', function(assert) {
     groupPanel = headerPanelElement.find(".dx-datagrid-group-panel");
     assert.ok(groupPanel.length);
     assert.equal(groupPanel.length, 1);
+    assert.ok(groupPanel.css("maxWidth"), "Group panel has an max width");
     assert.equal(groupPanel.find('.dx-group-panel-message').text(), 'Test');
 });
 

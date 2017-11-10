@@ -5,16 +5,20 @@
 QUnit.module("aria accessibility", {
     beforeEach: function() {
         this.$element = initTree({
+            animationEnabled: false,
             items: [{ id: 1, text: "Item 1", expanded: true, items: [{ id: 3, text: "Item 11" }, { id: 4, text: "Item 12" }] }, { id: 2, text: "Item 2", expanded: false }],
             selectNodesRecursive: true,
             showCheckBoxesMode: "normal"
-        }),
-            this.instance = this.$element.dxTreeView("instance");
+        });
+
+        this.instance = this.$element.dxTreeView("instance");
+        this.clock = sinon.useFakeTimers();
     },
 
     afterEach: function() {
         this.$treeView = undefined;
         this.instance = undefined;
+        this.clock.restore();
     }
 });
 
@@ -47,6 +51,7 @@ QUnit.test("aria expanded for items", function(assert) {
     assert.equal($item1.attr("aria-expanded"), "true", "expanded item has aria-expanded as true");
 
     this.instance.collapseItem($itemElements[0]);
+    this.clock.tick(0);
     assert.equal($item1.attr("aria-expanded"), "false", "aria-expanded changing on item collapsing");
 });
 
@@ -88,7 +93,9 @@ QUnit.test("'Expanded' attr should be applied correctly when item was expanded o
         $itemElements = this.instance.itemElements();
 
     this.instance.collapseItem($itemElements[0]);
+    this.clock.tick(0);
     this.instance.expandItem($itemElements[0]);
+    this.clock.tick(0);
 
     assert.equal($item1.attr("aria-expanded"), "true", "aria-expanded changing on item expanding");
 });
@@ -101,6 +108,7 @@ QUnit.test("'Expanded' attr should be applied correctly when item was expanded o
         $itemElements = this.instance.itemElements();
 
     this.instance.expandItem($itemElements[0]);
+    this.clock.tick(0);
 
     assert.equal($item1.attr("aria-expanded"), "true", "aria-expanded changing on item expanding");
 });

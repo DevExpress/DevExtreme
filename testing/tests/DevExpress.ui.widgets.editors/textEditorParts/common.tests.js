@@ -3,10 +3,9 @@
 var $ = require("jquery"),
     domUtils = require("core/utils/dom"),
     devices = require("core/devices"),
-    browser = require("core/utils/browser"),
-    caret = require("ui/text_box/utils.caret"),
     pointerMock = require("../../../helpers/pointerMock.js"),
-    keyboardMock = require("../../../helpers/keyboardMock.js");
+    keyboardMock = require("../../../helpers/keyboardMock.js"),
+    caretWorkaround = require("./caretWorkaround.js");
 
 require("ui/text_box/ui.text_editor");
 
@@ -24,17 +23,6 @@ var EVENTS = [
     "KeyDown", "KeyPress", "KeyUp",
     "Change", "Cut", "Copy", "Paste", "Input"
 ];
-
-var setCaretForEdge15 = function($input) {
-    //NOTE: We desided to return to this problem when the Edge will update to the 16 version
-    //Edge 15 sets caret to the end of the mask editor when iframe is used and focus was triggered by focus() method
-    var isEdge15 = browser.msie && browser.version >= 15 && browser.version < 16;
-
-    if(isEdge15) {
-        $input.focus();
-        caret($input, 0);
-    }
-};
 
 var moduleConfig = {
     beforeEach: function() {
@@ -72,6 +60,17 @@ QUnit.test("init with options", function(assert) {
     assert.equal(input.prop("placeholder") || element.find("." + PLACEHOLDER_CLASS).attr("data-dx_placeholder"), "enter value");
     assert.equal(input.prop("readOnly"), true);
     assert.equal(input.prop("tabindex"), 3);
+});
+
+QUnit.test("init with focusStateEnabled = false", function(assert) {
+    var element = $("#texteditor").dxTextEditor({
+        focusStateEnabled: false,
+        tabIndex: 3
+    });
+
+    var input = element.find("." + INPUT_CLASS);
+
+    assert.equal(input.prop("tabindex"), -1);
 });
 
 QUnit.test("repaint() should not drop any elements without any widget option changing", function(assert) {
@@ -452,6 +451,14 @@ QUnit.test("disabled", function(assert) {
     assert.ok(!this.input.prop("disabled"));
 });
 
+QUnit.test("focusStateEnabled", function(assert) {
+    this.instance.option("focusStateEnabled", false);
+    assert.equal(this.input.prop("tabIndex"), -1);
+
+    this.instance.option("focusStateEnabled", true);
+    assert.ok(!this.input.prop("tabIndex"));
+});
+
 QUnit.test("spellcheck", function(assert) {
     this.instance.option("spellcheck", true);
     assert.ok(this.input.prop("spellcheck"));
@@ -576,6 +583,8 @@ QUnit.test("'Clear' button visibility depends on value", function(assert) {
         instance = $element.dxTextEditor("instance"),
         $clearButton = $element.find(CLEAR_BUTTON_SELECTOR).eq(0);
 
+    caretWorkaround($element.find("input"));
+
     assert.ok($clearButton.is(":visible"), "TextEditor has clear button");
     instance.option("value", "");
     assert.ok($clearButton.is(":hidden"), "TextEditor has NO clear button");
@@ -593,6 +602,23 @@ QUnit.test("click on clear button should not reset active focus (T241583)", func
     $clearButton.on("dxpointerdown", function(e) {
         assert.ok(e.isDefaultPrevented());
     }).trigger(dxPointerDown);
+});
+
+QUnit.test("click on clear button should raise input event (T521817)", function(assert) {
+    var callCount = 0;
+
+    var $element = $("#texteditor").dxTextEditor({
+            showClearButton: true,
+            value: "foo",
+            onInput: function() {
+                callCount++;
+            }
+        }),
+        $clearButton = $element.find(CLEAR_BUTTON_SELECTOR).eq(0);
+
+    pointerMock($clearButton).click();
+
+    assert.equal(1, callCount, "onInput was called");
 });
 
 QUnit.test("tap on clear button should reset value (T310102)", function(assert) {
@@ -957,7 +983,7 @@ QUnit.test("TextEditor with mask option should firing the 'onChange' event", fun
         $input = $textEditor.find("input"),
         keyboard = keyboardMock($input);
 
-    setCaretForEdge15($input);
+    caretWorkaround($input);
 
     $input.triggerHandler("focus");
     keyboard.type("123").press("enter");

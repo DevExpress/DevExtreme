@@ -1,7 +1,6 @@
 "use strict";
 
 var $ = require("../../core/renderer"),
-    noop = require("../../core/utils/common").noop,
     _max = Math.max,
     _min = Math.min,
     _round = Math.round,
@@ -12,7 +11,6 @@ var $ = require("../../core/renderer"),
     dxBaseGauge = require("./base_gauge").dxBaseGauge,
     dxGauge = require("./common").dxGauge,
     _normalizeEnum = require("../core/utils").normalizeEnum,
-    translator2DModule = require("../translators/translator2d"),
     linearIndicatorsModule = require("./linear_indicators"),
     createIndicatorCreator = require("./common").createIndicatorCreator,
     LinearRangeContainer = require("./linear_range_container"),
@@ -30,21 +28,6 @@ var dxLinearGauge = dxGauge.inherit({
         type: "xyAxes",
         drawingType: "linear"
     },
-
-    _initScaleTranslator: function(range) {
-        var canvas = extend({}, this._canvas);
-
-        return {
-            val: new translator2DModule.Translator2D(range, canvas),
-            arg: new translator2DModule.Translator2D(range, canvas, { isHorizontal: true })
-        };
-    },
-
-    _getScaleTranslatorComponent: function(name) {
-        return this._scaleTranslator[(name === "arg") !== this._area.vertical ? "arg" : "val"];
-    },
-
-    _updateScaleAngles: noop,
 
     _getTicksOrientation: function(scaleOptions) {
         return scaleOptions.isHorizontal ? scaleOptions.verticalOrientation : scaleOptions.horizontalOrientation;
@@ -79,19 +62,13 @@ var dxLinearGauge = dxGauge.inherit({
         var that = this,
             canvas = extend({}, that._canvas),
             isHorizontal = scaleOptions.isHorizontal,
-            translator = that._getScaleTranslatorComponent("arg"),
-            additionalTranslator = that._getScaleTranslatorComponent("val"),
             scale = that._scale;
 
         canvas[isHorizontal ? "left" : "top"] = that._area[isHorizontal ? "startCoord" : "endCoord"];
         canvas[isHorizontal ? "right" : "bottom"] = canvas[isHorizontal ? "width" : "height"] - that._area[isHorizontal ? "endCoord" : "startCoord"];
 
-        translator.updateCanvas(canvas);
-        additionalTranslator.updateCanvas(canvas);
-        scale.setTranslator(translator, additionalTranslator);
-
-        scale.draw();
-        scale.shift(layout.x, layout.y);
+        scale.draw(canvas);
+        scale.shift({ left: -layout.x, top: -layout.y });
     },
 
     _setupCodomain: function() {

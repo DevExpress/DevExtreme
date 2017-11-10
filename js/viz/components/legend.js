@@ -50,15 +50,15 @@ function getState(state, color) {
     if(!state) {
         return;
     }
-    var direction = state.hatching.direction,
-        hatching,
-        colorFromAction = state.fill;
+    var colorFromAction = state.fill;
 
-    color = colorFromAction === NONE ? color : colorFromAction;
-    direction = (!direction || direction === NONE) ? RIGHT : direction;
-    hatching = _extend({}, state.hatching, { direction: direction, step: DEFAULT_MARKER_HATCHING_STEP, width: DEFAULT_MARKER_HATCHING_WIDTH });
-
-    return { fill: color, hatching: hatching };
+    return {
+        fill: colorFromAction === NONE ? color : colorFromAction,
+        hatching: _extend({}, state.hatching, {
+            step: DEFAULT_MARKER_HATCHING_STEP,
+            width: DEFAULT_MARKER_HATCHING_WIDTH
+        })
+    };
 }
 
 function parseMargins(options) {

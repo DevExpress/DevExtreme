@@ -7,7 +7,8 @@ var $ = require("jquery"),
     _SeriesDataSource = seriesDataSourceModule.SeriesDataSource,
     dateUtils = require("core/utils/date"),
     vizMocks = require("../../helpers/vizMocks.js"),
-    dataSource = vizMocks.stubClass(dataSourceModule.DataSource);
+    dataSource = vizMocks.stubClass(dataSourceModule.DataSource),
+    axisModule = require("viz/axes/base_axis");
 
 QUnit.module("LoadingIndicator", commons.environment);
 
@@ -56,13 +57,43 @@ var environmentWithDataSource = $.extend({}, commons.environment, {
 
 QUnit.module("Initialization from dataSource", $.extend({}, environmentWithDataSource, {
     getArgRange: function() {
-        return this.translator.update.lastCall.args[0];
+        return this.axis.setBusinessRange.lastCall.args[0];
     },
 
     getValRange: function() {
         return this.seriesDataSource.getBoundRange().val;
     }
 }));
+
+QUnit.test("Pass axes to seriesDataSource", function(assert) {
+    sinon.stub(axisModule, "Axis");
+    axisModule.Axis.returns(this.axis);
+
+    axisModule.Axis.onSecondCall().returns(new this.StubAxis());
+    var rangeSelector = this.createWidget({
+        dataSource: [
+            { x: 10, y1: 0 }
+        ],
+        chart: {
+            series: {
+                argumentField: "x",
+                valueField: "y1"
+            }
+        }
+    });
+    var series = this.seriesDataSource.getSeries()[0],
+        valueAxis = series.getValueAxis();
+
+    assert.strictEqual(series.getArgumentAxis(), rangeSelector._axis, "argument axis passed to series");
+    assert.deepEqual(valueAxis.updateOptions.lastCall.args[0], {
+        isHorizontal: false,
+        label: {}
+    }, "valueAxis options");
+
+    assert.strictEqual(axisModule.Axis.secondCall.args[0].renderer, this.renderer);
+    assert.strictEqual(axisModule.Axis.secondCall.args[0].drawingType, "linear");
+    assert.strictEqual(axisModule.Axis.secondCall.args[0].axisType, "xyAxes");
+});
 
 QUnit.test("range min/max from series", function(assert) {
     this.createWidget({
@@ -668,6 +699,20 @@ QUnit.test("range, discrete argument with dataSource", function(assert) {
     assert.deepEqual(range.categories, ["a1", "a2", "a3"]);
 });
 
+//T103203
+QUnit.test("pass dataType to translator", function(assert) {
+    this.createWidget({
+        scale: {
+            startValue: new Date(2011, 1, 1),
+            endValue: new Date(2011, 6, 1)
+        },
+        value: [new Date(2011, 1, 5),
+            new Date(2011, 2, 5)]
+    });
+
+    assert.strictEqual(this.getArgRange().dataType, "datetime");
+});
+
 //////// Tests on change all first level properties (KO support) ////////////////////
 QUnit.module("Options changing", $.extend({}, environmentWithDataSource, {
     beforeEach: function() {
@@ -758,7 +803,7 @@ QUnit.test("T319043. range updating indent", function(assert) {
 
     range.option("indent", { left: 50 });
 
-    assert.deepEqual(this.rangeView.update.lastCall.args[2], { left: 50, top: 0, width: 249, height: 24 });
+    assert.deepEqual(this.rangeView.update.lastCall.args[2], { left: 50, top: 0, width: 299, height: 24, right: 0, bottom: 0 });
 });
 
 QUnit.test("containerBackgroundColor updating", function(assert) {
@@ -984,19 +1029,6 @@ QUnit.test("scale.marker.label.customizeText is not a function", function(assert
     assert.ok(true);
 });
 
-//T103203
-QUnit.test("pass dataType to translator", function(assert) {
-    this.createWidget({
-        scale: {
-            startValue: new Date(2011, 1, 1),
-            endValue: new Date(2011, 6, 1)
-        },
-        value: [new Date(2011, 1, 5),
-            new Date(2011, 2, 5)]
-    });
-
-    assert.strictEqual(this.translator.update.lastCall.args[0].dataType, "datetime");
-});
 
 QUnit.test("pass containerBackgroundColor to slidersMarker options like border color", function(assert) {
     this.createWidget({

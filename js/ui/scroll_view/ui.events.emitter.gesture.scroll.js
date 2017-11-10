@@ -170,6 +170,7 @@ var PointerLocker = TimeoutLocker.inherit((function() {
                 this._locked = true;
 
                 var that = this;
+                animationFrame.cancelAnimationFrame(this._scrollFrame);
                 this._scrollFrame = animationFrame.requestAnimationFrame(function() {
                     that._locked = false;
                 });

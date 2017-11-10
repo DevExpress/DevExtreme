@@ -58,9 +58,6 @@ namespace Runner.Controllers
 
         public IActionResult RunSuite(string catName, string suiteName, string frame)
         {
-            if (_runFlags.IsContinuousIntegration && frame != null)
-                WorkerFrameStateHelper.NotifySuiteStarted(_env, frame, catName + "/" + suiteName);
-
             var model = new RunSuiteViewModel
             {
                 Title = suiteName,
@@ -174,15 +171,6 @@ namespace Runner.Controllers
         {
             Response.ContentType = "text/plain";
             LogMiscErrorCore(Request.Form["msg"]);
-        }
-
-        public void NotifyTestsStarted()
-        {
-            Response.ContentType = "text/plain";
-            if (_runFlags.IsContinuousIntegration)
-            {
-                IOFile.WriteAllText(Path.Combine(_env.ContentRootPath, "testing/TestStartedMarker.txt"), "");
-            }
         }
 
         void LogMiscErrorCore(string data)

@@ -30,6 +30,10 @@ module.exports = function($, gridCore, columnResizingReordering, domUtils, commo
 
             dataSource: function() {
                 return {
+                    beginLoading: function() {
+                    },
+                    endLoading: function() {
+                    },
                     remoteOperations: function() {
                         return {};
                     },
@@ -136,6 +140,10 @@ module.exports = function($, gridCore, columnResizingReordering, domUtils, commo
 
             itemsCount: function() {
                 return options.itemsCount;
+            },
+
+            totalItemsCount: function() {
+                return options.totalItemsCount;
             },
 
             isLoading: function() {
@@ -529,6 +537,10 @@ module.exports = function($, gridCore, columnResizingReordering, domUtils, commo
                 }
 
                 return firstDataColumnIndex;
+            },
+
+            refresh: function() {
+                return $.Deferred().resolve();
             }
         };
     };

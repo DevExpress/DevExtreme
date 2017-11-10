@@ -362,9 +362,14 @@ exports.SelectionController = gridCore.Controller.inherit((function() {
         },
 
         /**
-         * @name GridBaseMethods_getSelectedRowKeys
+         * @name dxDataGridMethods_getSelectedRowKeys
          * @publicName getSelectedRowKeys()
          * @return array | Promise
+         */
+        /**
+         * @name dxTreeListMethods_getSelectedRowKeys
+         * @publicName getSelectedRowKeys()
+         * @return array
          */
         getSelectedRowKeys: function() {
             return this._selection.getSelectedItemKeys();
@@ -609,16 +614,6 @@ module.exports = {
                     });
                 },
 
-                pageIndex: function(value) {
-                    var that = this,
-                        dataSource = that._dataSource;
-
-                    if(dataSource && value && dataSource.pageIndex() !== value) {
-                        that.getController("selection").focusedItemIndex(-1);
-                    }
-                    return that.callBase(value);
-                },
-
                 _processDataItem: function(item, options) {
                     var that = this,
                         selectionController = that.getController("selection"),
@@ -648,6 +643,14 @@ module.exports = {
                     }).fail(d.reject);
 
                     return d.promise();
+                },
+
+                _handleDataChanged: function(e) {
+                    this.callBase.apply(this, arguments);
+
+                    if(!e || e.changeType === "refresh") {
+                        this.getController("selection").focusedItemIndex(-1);
+                    }
                 }
             },
             contextMenu: {
@@ -749,7 +752,6 @@ module.exports = {
                         if(!$(event.target).closest("." + SELECT_CHECKBOX_CLASS).length) {
                             $(event.currentTarget).children().trigger(clickEvent.name);
                         }
-                        event.stopPropagation();
                         event.preventDefault();
                     }));
                 }
@@ -807,6 +809,13 @@ module.exports = {
                         if(rowIndex >= 0) {
                             selectionController.startSelectionWithCheckboxes();
                             selectionController.changeItemSelection(rowIndex, { shift: event.shiftKey });
+
+                            if($(event.target).closest("." + SELECT_CHECKBOX_CLASS).length) {
+                                this.getController("data").updateItems({
+                                    changeType: "updateSelection",
+                                    itemIndexes: [rowIndex]
+                                });
+                            }
                         }
                     }));
                 },
