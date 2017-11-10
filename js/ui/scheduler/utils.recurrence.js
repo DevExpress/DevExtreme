@@ -159,10 +159,15 @@ var dateInRecurrenceRange = function(options) {
     return !!result.length;
 };
 
-var normalizeInterval = function(freq, interval) {
-    var intervalObject = {},
+var normalizeInterval = function(rule) {
+    var interval = rule.interval,
+        freq = rule.freq,
+        intervalObject = {},
         intervalField = intervalMap[freq.toLowerCase()];
 
+    if(freq === "MONTHLY" && rule["byday"]) {
+        intervalField = intervalMap["daily"];
+    }
     intervalObject[intervalField] = interval;
 
     return intervalObject;
@@ -241,7 +246,7 @@ var getDatesByRecurrence = function(options) {
         return result;
     }
 
-    rule.interval = normalizeInterval(rule.freq, rule.interval);
+    rule.interval = normalizeInterval(rule);
     dateRules = splitDateRules(rule);
 
     var duration = options.end ? options.end.getTime() - options.start.getTime() : toMs("day");
@@ -350,7 +355,7 @@ var incrementDate = function(date, originalStartDate, rule, iterationStep) {
 
     date = dateUtils.addInterval(date, rule.interval);
 
-    if(rule.freq === "MONTHLY") {
+    if(rule.freq === "MONTHLY" && !rule["byday"]) {
         var expectedDate = originalStartDate.getDate();
 
         if(rule["bymonthday"]) {

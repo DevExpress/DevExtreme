@@ -453,7 +453,7 @@ var dxRangeSelector = {
         * @publicName padding
         * @type number
         * @default 6
-        * @deprecated
+        * @deprecated dxrangeselectoroptions_slidermarker_paddingleftright
         */
         padding: 6,
         /**
@@ -489,7 +489,7 @@ var dxRangeSelector = {
         * @publicName placeholderSize
         * @type number|object
         * @default undefined
-        * @deprecated
+        * @deprecated dxrangeselectoroptions_slidermarker_placeholderHeight
         */
         placeholderSize: {
             /**
@@ -626,7 +626,7 @@ var dxRangeSelector = {
     * @name dxrangeselectoroptions_selectedrange
     * @publicName selectedRange
     * @type object
-    * @deprecated
+    * @deprecated dxrangeselectoroptions_value
     */
     selectedRange: {
         /**
@@ -728,7 +728,7 @@ var dxRangeSelector = {
         * @type string
         * @default 'onMovingComplete'
         * @acceptValues 'onMovingComplete' | 'onMoving'
-        * @deprecated
+        * @deprecated dxrangeselectoroptions_behavior_callvaluechanged
         */
         callSelectedRangeChanged: "onMovingComplete",
         /**
@@ -968,7 +968,7 @@ var dxRangeSelector = {
     * @type_function_param1_field3 startValue:Date|Number
     * @type_function_param1_field4 endValue:Date|Number
     * @default null
-    * @deprecated
+    * @deprecated dxrangeselectoroptions_onvaluechanged
     * @notUsedInTheme
     * @action
     */
@@ -1021,7 +1021,7 @@ var dxRangeSelector = {
     * @name dxrangeselectormethods_getSelectedRange
     * @publicName getSelectedRange()
     * @return object
-    * @deprecated
+    * @deprecated dxrangeselectormethods_getValue
     */
     getSelectedRange: function() { },
     /**
@@ -1030,7 +1030,7 @@ var dxRangeSelector = {
     * @param1 selectedRange:object
     * @param1_field1 startValue:Date|Number|String
     * @param1_field2 endValue:Date|Number|String
-    * @deprecated
+    * @deprecated dxrangeselectormethods_setValue
     */
     setSelectedRange: function() { },
     /**

@@ -103,7 +103,8 @@ exports.FooterView = columnsView.ColumnsView.inherit((function() {
         },
 
         _handleDataChanged: function(e) {
-            if(e.changeType === "refresh") {
+            var changeType = e.changeType;
+            if(changeType === "refresh" || changeType === "append" || changeType === "prepend") {
                 this.render();
             }
         },

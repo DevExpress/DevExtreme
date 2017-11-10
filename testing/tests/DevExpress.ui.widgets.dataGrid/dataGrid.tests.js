@@ -551,6 +551,41 @@ QUnit.test("Check grouping context menu operability", function(assert) {
     clock.restore();
 });
 
+QUnit.test("Group panel should set correct 'max-width' after clear grouping", function(assert) {
+    var clock = sinon.useFakeTimers(),
+        dataGrid = $("#dataGrid").dxDataGrid({
+            dataSource: {
+                store: [
+                    { field1: "1", field2: "2", field3: "3", field4: "4", field5: "5" },
+                    { field1: "11", field2: "22", field3: "33", field4: "44", field5: "55" }]
+            },
+            width: 460,
+            groupPanel: {
+                emptyPanelText: "Long long long long long long long long long long long text",
+                visible: true
+            },
+            editing: { allowAdding: true, mode: "batch" },
+            columnChooser: {
+                enabled: true
+            }
+        }).dxDataGrid("instance"),
+        $dataGrid = dataGrid.element();
+
+    clock.tick();
+    assert.equal($dataGrid.find(".dx-toolbar-item-invisible").length, 4, "4 toolbar items are hidden, group panel has a long message");
+
+    dataGrid.columnOption("field2", "groupIndex", 0);
+    clock.tick();
+
+    assert.equal($dataGrid.find(".dx-toolbar-item-invisible").length, 0, "all toolbar items are visible, group panel has a group with short name");
+
+    dataGrid.clearGrouping();
+    clock.tick();
+    assert.equal($dataGrid.find(".dx-toolbar-item-invisible").length, 4, "4 toolbar items are hidden after clear grouping");
+
+    clock.restore();
+});
+
 QUnit.test("Check grouping context menu operability (ungroup one column)", function(assert) {
     var clock = sinon.useFakeTimers(),
         dataGrid = $("#dataGrid").dxDataGrid({
@@ -1791,6 +1826,42 @@ QUnit.test("width should be auto if minWidth is assigned to another column", fun
     assert.strictEqual($cols[0].style.width, "80px", "width is applied because width < minWidth");
     assert.strictEqual($cols[1].style.width, "auto", "width is auto");
     assert.strictEqual($cols[2].style.width, "auto", "width is auto");
+});
+
+QUnit.test("Apply minWidth when columns have 'auto' width but the last column hasn't width", function(assert) {
+    //arrange
+    $("#container").width(200);
+
+    $("#dataGrid").dxDataGrid({
+        loadingTimeout: undefined,
+        dataSource: [{
+            firstName: "First Name",
+            lastName: "Last Name",
+            description: "The DataGrid is a widget that represents data from a local or remote source in the form of a grid."
+        }],
+        columns: [
+            {
+                dataField: "firstName",
+                width: "auto"
+            }, {
+                dataField: "lastName",
+                width: "auto"
+            }, {
+                dataField: "description",
+                minWidth: 20
+            }
+        ]
+    });
+
+    var $colGroups = $(".dx-datagrid colgroup");
+    assert.strictEqual($colGroups.length, 2);
+
+    for(var i = 0; i < $colGroups.length; i++) {
+        var $cols = $colGroups.eq(i).find("col");
+
+        assert.strictEqual($cols.length, 3);
+        assert.strictEqual($cols[2].style.width, "20px", "minWidth is applied");
+    }
 });
 
 QUnit.test("Horizontal scrollbar is not displayed when columns width has float value", function(assert) {
@@ -3883,6 +3954,99 @@ QUnit.test("Custom toolbar item should be aligned", function(assert) {
     //assert
     assert.equal(toolbarItemOffset, dataGrid.element().find(".dx-datagrid-search-panel").offset().top, "toolbar sarch panel is aligned");
     assert.equal(toolbarItemOffset, dataGrid.element().find(".dx-toolbar .dx-datebox").offset().top, "toolbar custom item is aligned");
+});
+
+//T558301
+QUnit.testInActiveWindow("Height virtual table should be updated to show validation message when there is a single row and virtual scrolling is enabled", function(assert) {
+    //arrange
+    var $tableElements,
+        clock = sinon.useFakeTimers(),
+        dataGrid = createDataGrid({
+            loadingTimeout: undefined,
+            dataSource: [{ Test: "" }],
+            editing: {
+                mode: "batch",
+                allowUpdating: true
+            },
+            scrolling: {
+                mode: "virtual"
+            },
+            columns: [{
+                dataField: "Test",
+                validationRules: [{ type: "required" }]
+            }]
+        });
+
+    //assert
+    $tableElements = dataGrid.element().find(".dx-datagrid-rowsview").find("table");
+    assert.roughEqual($tableElements.eq(0).outerHeight(), 35, 3, "height main table");
+    assert.roughEqual($tableElements.eq(1).outerHeight(), 35, 3, "height virtual table");
+
+    //act
+    dataGrid.editCell(0, 0);
+    clock.tick();
+
+    //assert
+    $tableElements = dataGrid.element().find(".dx-datagrid-rowsview").find("table");
+    assert.roughEqual($tableElements.eq(0).outerHeight(), 68, 3, "height main table");
+    assert.roughEqual($tableElements.eq(1).outerHeight(), 68, 3, "height virtual table");
+
+    dataGrid.closeEditCell();
+    clock.tick();
+
+    //assert
+    $tableElements = dataGrid.element().find(".dx-datagrid-rowsview").find("table");
+    assert.roughEqual($tableElements.eq(0).outerHeight(), 35, 3, "height main table");
+    assert.roughEqual($tableElements.eq(1).outerHeight(), 35, 3, "height virtual table");
+    clock.restore();
+});
+
+QUnit.test("Error row is not hidden when rowKey is undefined by editMode is cell", function(assert) {
+    //arrange
+    var clock = sinon.useFakeTimers();
+    var dataGrid = createDataGrid({
+        loadingTimeout: undefined,
+        dataSource: [{
+            "ID": 1,
+            "FirstName": "John",
+            "LastName": "Heart",
+            "Prefix": "Mr.",
+            "Position": "CEO",
+            "BirthDate": "1964/03/16",
+            "HireDate": "1995/01/15",
+            "Address": "351 S Hill St.",
+            "StateID": 5
+        }],
+        keyExpr: 'myFakeKey',
+        paging: {
+            enabled: false
+        },
+        editing: {
+            mode: "cell",
+            allowUpdating: true
+        },
+        columns: ["Prefix", "FirstName"]
+    });
+
+    clock.tick();
+
+    //act
+    dataGrid.editCell(0, 0);
+    clock.tick();
+
+    $("input")
+        .val("new")
+        .change();
+
+    clock.tick();
+
+    dataGrid.editCell(0, 1);
+    clock.tick();
+
+    //assert
+    assert.equal($(".dx-error-message").length, 1, "Error message is shown");
+
+    clock.restore();
 });
 
 QUnit.module("Assign options", {
@@ -7243,6 +7407,33 @@ QUnit.test("Change page index when virtual scrolling is enabled", function(asser
 
     //assert
     assert.equal(dataGrid.pageIndex(), 3, "page index");
+});
+
+//T558189
+QUnit.test("Band columns should be displayed correctly after state is reset", function(assert) {
+    //arrange
+    var columns,
+        dataGrid = createDataGrid({
+            dataSource: [{ field1: 1, field2: 2, field3: 3, field4: 4 }],
+            paging: {
+                pageIndex: 0
+            },
+            customizeColumns: function() {},
+            columns: ["field1", "field2", { caption: "Band Column", columns: ["field3", "field4"] }]
+        });
+
+    this.clock.tick();
+
+    //act
+    dataGrid.state(null);
+    this.clock.tick();
+
+    //assert
+    columns = dataGrid.getVisibleColumns(0).map(function(column) { return column.caption; });
+    assert.deepEqual(columns, ["Field 1", "Field 2", "Band Column"], "columns of the first level");
+
+    columns = dataGrid.getVisibleColumns(1).map(function(column) { return column.caption; });
+    assert.deepEqual(columns, ["Field 3", "Field 4"], "columns of the second level");
 });
 
 

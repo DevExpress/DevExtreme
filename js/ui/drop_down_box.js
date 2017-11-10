@@ -174,9 +174,15 @@ var DropDownBox = DropDownEditor.inherit({
 
     _renderInputValue: function() {
         var callBase = this.callBase.bind(this),
-            currentValue = this._getCurrentValue(),
-            keys = commonUtils.ensureDefined(currentValue, []),
             values = [];
+
+        if(!this._dataSource) {
+            callBase(values);
+            return;
+        }
+
+        var currentValue = this._getCurrentValue(),
+            keys = commonUtils.ensureDefined(currentValue, []);
 
         keys = Array.isArray(keys) ? keys : [keys];
 
@@ -199,13 +205,30 @@ var DropDownBox = DropDownEditor.inherit({
     },
 
     _loadItem: function(value) {
+        var deferred = $.Deferred(),
+            that = this;
+
         var selectedItem = grep(this.option("items") || [], (function(item) {
             return this._isValueEquals(this._valueGetter(item), value);
         }).bind(this))[0];
 
-        return selectedItem !== undefined
-            ? $.Deferred().resolve(selectedItem).promise()
-            : this._loadValue(value);
+        if(selectedItem !== undefined) {
+            deferred.resolve(selectedItem);
+        } else {
+            this._loadValue(value)
+                .done(function(item) {
+                    deferred.resolve(item);
+                })
+                .fail(function(args) {
+                    if(that.option("acceptCustomValue")) {
+                        deferred.resolve(value);
+                    } else {
+                        deferred.reject();
+                    }
+                });
+        }
+
+        return deferred.promise();
     },
 
     _clearValueHandler: function(e) {

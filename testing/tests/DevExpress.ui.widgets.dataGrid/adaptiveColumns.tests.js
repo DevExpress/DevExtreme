@@ -20,21 +20,21 @@ var $ = require("jquery"),
     dataGridMocks = require("../../helpers/dataGridMocks.js"),
     CLICK_NAMESPACE = "dxclick.dxDataGridAdaptivity";
 
-function setupDataGrid(that) {
+function setupDataGrid(that, $dataGridContainer) {
     that.element = function() {
-        return $(".dx-datagrid");
+        return $dataGridContainer ? $dataGridContainer : $(".dx-datagrid");
     };
 
     if(that.columns !== null) {
         that.columns = that.columns || [
-                { dataField: 'firstName', index: 0, allowEditing: true, allowExporting: true },
-                { dataField: 'lastName', index: 1, allowEditing: true, allowExporting: true }
+            { dataField: 'firstName', index: 0, allowEditing: true, allowExporting: true },
+            { dataField: 'lastName', index: 1, allowEditing: true, allowExporting: true }
         ];
     }
 
     that.items = that.items || [
-            { firstName: 'Blablablablablablablablablabla', lastName: "Psy" },
-            { firstName: 'Super', lastName: "Star" }
+        { firstName: 'Blablablablablablablablablabla', lastName: "Psy" },
+        { firstName: 'Super', lastName: "Star" }
     ];
 
     that.options = $.extend({}, {
@@ -51,7 +51,7 @@ function setupDataGrid(that) {
     };
 
     dataGridMocks.setupDataGridModules(that, ['data', 'gridView', 'columns', 'columnHeaders', 'rows', 'editing', 'validating',
-        'virtualScrolling', 'editorFactory', 'grouping', 'masterDetail', 'export', 'adaptivity', 'columnsResizingReordering', 'summary', 'gridView'], that.setupOptions);
+        'virtualScrolling', 'editorFactory', 'grouping', 'masterDetail', 'export', 'adaptivity', 'columnsResizingReordering', 'keyboardNavigation', 'summary', 'gridView'], that.setupOptions);
 }
 
 QUnit.module("AdaptiveColumns", {
@@ -1483,6 +1483,19 @@ QUnit.test("Apply a hidden css class on cell prepared event of rows view", funct
 
     assert.ok(checkAdaptiveWidth(col.style.width));
     assert.ok($cells.eq(1).hasClass("dx-datagrid-hidden-column"));
+});
+
+QUnit.test("Row elements are should get only once when CSS for hidden column is applied", function(assert) {
+    //arrange, act
+    $(".dx-datagrid").width(200);
+    setupDataGrid(this);
+    this.rowsView.render($("#container"));
+    sinon.spy(this.rowsView, "_getRowElements");
+    this.resizingController.updateDimensions();
+    this.clock.tick();
+
+    //assert
+    assert.ok(this.rowsView._getRowElements.calledOnce);
 });
 
 QUnit.module("API", {
@@ -3264,7 +3277,7 @@ QUnit.test("Not collapse adaptive detail form when other row is deleted", functi
     this.editingController.addRow();
     this.editingController.addRow();
     this.editingController.addRow();
-    this.editingController.deleteRow(1);
+    this.editingController.deleteRow(2);
 
     //assert
     assert.equal($(".dx-adaptive-detail-row").length, 1, "adaptive detail form should be removed");
@@ -3302,6 +3315,44 @@ QUnit.test("Collapse adaptive detail form when single row is deleted", function(
     assert.equal($(".dx-adaptive-detail-row").length, 0, "adaptive detail form should be removed");
 });
 
+//T565727
+QUnit.test("Edit row. Re-render adaptive detail after re-inserting row", function(assert) {
+    //arrange
+    $(".dx-datagrid").width(400);
+
+    var args = [];
+
+    this.options = {
+        editing: {
+            mode: 'row',
+            allowUpdating: true,
+            allowAdding: true
+        },
+        onRowPrepared: function(e) {
+            if(e.inserted) {
+                args.push(e);
+            }
+        }
+    };
+    setupDataGrid(this);
+    this.rowsView.render($("#container"));
+    this.resizingController.updateDimensions();
+
+    this.editingController.addRow();
+
+    //assert
+    assert.strictEqual(args.length, 2, "onRowPrepared call count");
+    assert.strictEqual(args[0].rowType, "data", "data row");
+    assert.strictEqual(args[1].rowType, "detailAdaptive", "adaptive detail row");
+
+    //act
+    this.editingController.addRow();
+
+    assert.strictEqual(args.length, 4, "onRowPrepared call count");
+    assert.strictEqual(args[2].rowType, "data", "data row");
+    assert.strictEqual(args[3].rowType, "detailAdaptive", "adaptive detail row");
+});
+
 QUnit.module("Validation", {
     beforeEach: function() {
         this.clock = sinon.useFakeTimers();
@@ -3309,265 +3360,159 @@ QUnit.module("Validation", {
     afterEach: function() {
         this.clock.restore();
     }
-});
+}, function() {
+    QUnit.testInActiveWindow("Row edit mode", function(assert) {
+        //arrange
+        $(".dx-datagrid").width(200);
 
-QUnit.testInActiveWindow("Row edit mode", function(assert) {
-    //arrange
-    $(".dx-datagrid").width(200);
+        var dataSource = [
+            { firstName: 'Blablablablablablablablablabla', lastName: "ShumShumShum Shum" },
+            { firstName: 'Super', lastName: "Man" }
+        ];
 
-    var dataSource = [
-        { firstName: 'Blablablablablablablablablabla', lastName: "ShumShumShum Shum" },
-        { firstName: 'Super', lastName: "Man" }
-    ];
+        this.options = {
+            columns: [
+                { dataField: 'firstName', index: 0, allowEditing: true },
+                { dataField: 'lastName', index: 1, allowEditing: true, validationRules: [{ type: "required" }] }
+            ],
+            editing: {
+                mode: 'row',
+                allowUpdating: true
+            },
+            dataSource: {
+                asyncLoadEnabled: false,
+                store: dataSource
+            },
+            columnHidingEnabled: true
+        };
+        setupDataGrid(this);
+        this.rowsView.render($("#container"));
+        this.resizingController.updateDimensions();
+        this.clock.tick();
 
-    this.options = {
-        columns: [
-            { dataField: 'firstName', index: 0, allowEditing: true },
-            { dataField: 'lastName', index: 1, allowEditing: true, validationRules: [{ type: "required" }] }
-        ],
-        editing: {
-            mode: 'row',
-            allowUpdating: true
-        },
-        dataSource: {
-            asyncLoadEnabled: false,
-            store: dataSource
-        },
-        columnHidingEnabled: true
-    };
-    setupDataGrid(this);
-    this.rowsView.render($("#container"));
-    this.resizingController.updateDimensions();
-    this.clock.tick();
+        //act
+        this.adaptiveColumnsController.expandAdaptiveDetailRow(dataSource[0]);
+        this.editingController.editRow(0);
+        this.clock.tick();
 
-    //act
-    this.adaptiveColumnsController.expandAdaptiveDetailRow(dataSource[0]);
-    this.editingController.editRow(0);
-    this.clock.tick();
+        $(".dx-form .dx-texteditor input").first().focus();
 
-    $(".dx-form .dx-texteditor input").first().focus();
+        var editor = $(".dx-form .dx-texteditor").first().dxTextBox("instance");
+        editor.option("value", "");
+        this.clock.tick(10);
 
-    var editor = $(".dx-form .dx-texteditor").first().dxTextBox("instance");
-    editor.option("value", "");
-    this.clock.tick(10);
+        //assert
+        assert.ok($(".dx-field-item-content > .dx-widget.dx-validator").length === 1, "item element has a validation styles");
+        assert.equal($(".dx-invalid-message.dx-widget").length, 1, "Validation message is shown");
+    });
 
-    //assert
-    assert.ok($(".dx-field-item-content > .dx-widget.dx-validator").length === 1, "item element has a validation styles");
-    assert.equal($(".dx-invalid-message.dx-widget").length, 1, "Validation message is shown");
-});
+    QUnit.testInActiveWindow("The adaptive detail row is not collapsed when data is invalid for the row edit mode", function(assert) {
+        //arrange
+        $(".dx-datagrid").width(200);
 
-QUnit.testInActiveWindow("The adaptive detail row is not collapsed when data is invalid for the row edit mode", function(assert) {
-    //arrange
-    $(".dx-datagrid").width(200);
+        var dataSource = [
+            { firstName: 'Blablablablablablablablablabla', lastName: "ShumShumShum Shum" },
+            { firstName: 'Super', lastName: "Man" }
+        ];
 
-    var dataSource = [
-        { firstName: 'Blablablablablablablablablabla', lastName: "ShumShumShum Shum" },
-        { firstName: 'Super', lastName: "Man" }
-    ];
+        this.options = {
+            columns: [
+                { dataField: 'firstName', index: 0, allowEditing: true },
+                { dataField: 'lastName', index: 1, allowEditing: true, validationRules: [{ type: "required" }] }
+            ],
+            editing: {
+                mode: 'row',
+                allowUpdating: true
+            },
+            dataSource: {
+                asyncLoadEnabled: false,
+                store: dataSource
+            },
+            columnHidingEnabled: true
+        };
+        setupDataGrid(this);
+        this.rowsView.render($("#container"));
+        this.resizingController.updateDimensions();
+        this.clock.tick();
 
-    this.options = {
-        columns: [
-            { dataField: 'firstName', index: 0, allowEditing: true },
-            { dataField: 'lastName', index: 1, allowEditing: true, validationRules: [{ type: "required" }] }
-        ],
-        editing: {
-            mode: 'row',
-            allowUpdating: true
-        },
-        dataSource: {
-            asyncLoadEnabled: false,
-            store: dataSource
-        },
-        columnHidingEnabled: true
-    };
-    setupDataGrid(this);
-    this.rowsView.render($("#container"));
-    this.resizingController.updateDimensions();
-    this.clock.tick();
+        //act
+        this.editingController.editRow(0);
+        this.clock.tick();
 
-    //act
-    this.editingController.editRow(0);
-    this.clock.tick();
+        $(".dx-form .dx-texteditor input").first().focus();
 
-    $(".dx-form .dx-texteditor input").first().focus();
+        var editor = $(".dx-form .dx-texteditor").first().dxTextBox("instance");
+        editor.option("value", "");
+        this.clock.tick(10);
 
-    var editor = $(".dx-form .dx-texteditor").first().dxTextBox("instance");
-    editor.option("value", "");
-    this.clock.tick(10);
+        this.editingController.saveEditData();
+        this.clock.tick();
 
-    this.editingController.saveEditData();
-    this.clock.tick();
+        assert.ok(this.adaptiveColumnsController.isAdaptiveDetailRowExpanded(dataSource[0]), "the adaptive row is expanded");
+    });
 
-    assert.ok(this.adaptiveColumnsController.isAdaptiveDetailRowExpanded(dataSource[0]), "the adaptive row is expanded");
-});
+    QUnit.testInActiveWindow("Batch edit mode", function(assert) {
+        //arrange
+        $(".dx-datagrid").width(200);
 
-QUnit.testInActiveWindow("Batch edit mode", function(assert) {
-    //arrange
-    $(".dx-datagrid").width(200);
+        var dataSource = [
+            { firstName: 'Blablablablablablablablablabla', lastName: "ShumShumShum Shum" },
+            { firstName: 'Super', lastName: "Man" }
+        ];
 
-    var dataSource = [
-        { firstName: 'Blablablablablablablablablabla', lastName: "ShumShumShum Shum" },
-        { firstName: 'Super', lastName: "Man" }
-    ];
+        this.options = {
+            columns: [
+                { dataField: 'firstName', index: 0, allowEditing: true },
+                { dataField: 'lastName', index: 1, allowEditing: true, validationRules: [{ type: "required" }] }
+            ],
+            editing: {
+                mode: 'batch',
+                allowUpdating: true
+            },
+            dataSource: {
+                asyncLoadEnabled: false,
+                store: dataSource
+            },
+            columnHidingEnabled: true
+        };
+        setupDataGrid(this);
+        this.rowsView.render($("#container"));
+        this.resizingController.updateDimensions();
+        this.clock.tick();
 
-    this.options = {
-        columns: [
-            { dataField: 'firstName', index: 0, allowEditing: true },
-            { dataField: 'lastName', index: 1, allowEditing: true, validationRules: [{ type: "required" }] }
-        ],
-        editing: {
-            mode: 'batch',
-            allowUpdating: true
-        },
-        dataSource: {
-            asyncLoadEnabled: false,
-            store: dataSource
-        },
-        columnHidingEnabled: true
-    };
-    setupDataGrid(this);
-    this.rowsView.render($("#container"));
-    this.resizingController.updateDimensions();
-    this.clock.tick();
+        //act
+        this.adaptiveColumnsController.expandAdaptiveDetailRow(dataSource[0]);
 
-    //act
-    this.adaptiveColumnsController.expandAdaptiveDetailRow(dataSource[0]);
+        var $itemsContent = $(".dx-field-item-content"),
+            editor;
 
-    var $itemsContent = $(".dx-field-item-content"),
-        editor;
+        $itemsContent.first().trigger("dxclick");
+        this.clock.tick();
 
-    $itemsContent.first().trigger("dxclick");
-    this.clock.tick();
+        editor = $(".dx-form .dx-texteditor").first().dxTextBox("instance");
+        editor.option("value", "");
+        $(document).trigger("dxclick");
+        this.clock.tick();
 
-    editor = $(".dx-form .dx-texteditor").first().dxTextBox("instance");
-    editor.option("value", "");
-    $(document).trigger("dxclick");
-    this.clock.tick();
+        //assert
+        assert.ok($(".dx-field-item-content.dx-validator").length === 1, "item element has a validation styles");
+        assert.ok($(".dx-field-item-content.dx-datagrid-invalid").length === 1, "item element has a invalid css class");
 
-    //assert
-    assert.ok($(".dx-field-item-content.dx-validator").length === 1, "item element has a validation styles");
-    assert.ok($(".dx-field-item-content.dx-datagrid-invalid").length === 1, "item element has a invalid css class");
+        //act
+        $itemsContent = $(".dx-field-item-content");
+        $itemsContent.first().trigger("dxclick");
+        this.clock.tick();
 
-    //act
-    $itemsContent = $(".dx-field-item-content");
-    $itemsContent.first().trigger("dxclick");
-    this.clock.tick();
+        //assert
+        assert.ok($(".dx-field-item-content > .dx-widget.dx-validator").length === 1, "editor into a form item has a validation styles");
+        assert.equal($(".dx-invalid-message.dx-widget").length, 1, "Validation message is shown");
+    });
 
-    //assert
-    assert.ok($(".dx-field-item-content > .dx-widget.dx-validator").length === 1, "editor into a form item has a validation styles");
-    assert.equal($(".dx-invalid-message.dx-widget").length, 1, "Validation message is shown");
-});
+    QUnit.testInActiveWindow("Batch edit mode. Editor is not marked as invalid when row is created", function(assert) {
+        //arrange
+        $(".dx-datagrid").width(200);
 
-QUnit.testInActiveWindow("Batch edit mode. Editor is not marked as invalid when row is created", function(assert) {
-    //arrange
-    $(".dx-datagrid").width(200);
-
-    this.columns = [
-        {
-            dataField: 'firstName',
-            index: 0,
-            allowEditing: true
-        },
-        {
-            dataField: 'lastName',
-            index: 1,
-            allowEditing: true,
-            validationRules: [{ type: "required" }]
-        }
-    ];
-    this.options = {
-        editing: {
-            mode: 'batch',
-            allowUpdating: true,
-            allowAdding: true,
-            texts: {
-                editRow: 'Edit'
-            }
-        }
-    };
-    setupDataGrid(this);
-    this.rowsView.render($("#container"));
-    this.resizingController.updateDimensions();
-    this.clock.tick();
-
-    //act
-    this.editingController.addRow();
-    var $itemsContent = $(".dx-field-item-content");
-
-    $itemsContent.first().trigger("dxclick");
-    this.clock.tick();
-
-    //assert
-    assert.equal($(".dx-invalid-message.dx-widget").length, 0, "Validation message is not shown");
-});
-
-QUnit.testInActiveWindow("Cell edit mode", function(assert) {
-    //arrange
-    $(".dx-datagrid").width(200);
-
-    var dataSource = [
-        { firstName: 'Blablablablablablablablablabla', lastName: "ShumShumShum Shum" },
-        { firstName: 'Super', lastName: "Man" }
-    ];
-
-    this.options = {
-        columns: [
-            { dataField: 'firstName', index: 0, allowEditing: true },
-            { dataField: 'lastName', index: 1, allowEditing: true, validationRules: [{ type: "required" }] }
-        ],
-        editing: {
-            mode: 'cell',
-            allowUpdating: true
-        },
-        dataSource: {
-            asyncLoadEnabled: false,
-            store: dataSource
-        },
-        columnHidingEnabled: true
-    };
-    setupDataGrid(this);
-    this.rowsView.render($("#container"));
-    this.resizingController.updateDimensions();
-    this.clock.tick();
-    var showRevertButtonStub = sinon.stub(this.editorFactoryController, "_showRevertButton");
-
-    //act
-    this.adaptiveColumnsController.expandAdaptiveDetailRow(dataSource[0]);
-
-    var $itemsContent = $(".dx-field-item-content"),
-        editor;
-
-    $itemsContent.first().trigger("dxclick");
-    this.clock.tick();
-
-    editor = $(".dx-form .dx-texteditor").first().dxTextBox("instance");
-    editor.option("value", "");
-    $(document).trigger("dxclick");
-    this.clock.tick();
-
-    //assert
-    assert.ok($(".dx-field-item-content > .dx-widget.dx-validator").length === 1, "item element has a validation styles");
-    assert.equal($(".dx-invalid-message.dx-widget").length, 1, "Validation message is shown");
-    assert.ok(showRevertButtonStub.called, "revert button");
-});
-
-QUnit.testInActiveWindow("Tooltips selector for the revert button", function(assert) {
-    setupDataGrid(this);
-    var expected = ".dx-editor-cell .dx-tooltip, .dx-editor-cell .dx-invalid-message, .dx-field-item-content .dx-tooltip";
-    assert.equal(this.editorFactoryController._getTooltipsSelector(), expected, "tooltips selector");
-});
-
-QUnit.testInActiveWindow("Cell edit mode. Validation works only for editable form item with a validation rules", function(assert) {
-    //arrange
-    $(".dx-datagrid").width(200);
-
-    var dataSource = [
-        { firstName: 'Super', lastName: "Man", description: "Test Test Test" },
-        { firstName: 'Blablablablablablablablablabla', lastName: "ShumShumShum Shum", description: "Test Test Test" }
-    ];
-
-    this.options = {
-        columns: [
+        this.columns = [
             {
                 dataField: 'firstName',
                 index: 0,
@@ -3575,45 +3520,349 @@ QUnit.testInActiveWindow("Cell edit mode. Validation works only for editable for
             },
             {
                 dataField: 'lastName',
-                index: 1, allowEditing: true,
+                index: 1,
+                allowEditing: true,
                 validationRules: [{ type: "required" }]
-            },
-            { dataField: "description",
-                index: 2,
-                allowEditing: true
             }
-        ],
-        editing: {
-            mode: 'cell',
-            allowUpdating: true
-        },
-        dataSource: {
-            asyncLoadEnabled: false,
-            store: dataSource
-        },
-        columnHidingEnabled: true
-    };
-    setupDataGrid(this);
-    this.rowsView.render($("#container"));
-    this.resizingController.updateDimensions();
-    this.clock.tick();
+        ];
+        this.options = {
+            editing: {
+                mode: 'batch',
+                allowUpdating: true,
+                allowAdding: true,
+                texts: {
+                    editRow: 'Edit'
+                }
+            }
+        };
+        setupDataGrid(this);
+        this.rowsView.render($("#container"));
+        this.resizingController.updateDimensions();
+        this.clock.tick();
 
-    //act
-    this.adaptiveColumnsController.expandAdaptiveDetailRow(dataSource[0]);
+        //act
+        this.editingController.addRow();
+        var $itemsContent = $(".dx-field-item-content");
 
-    var $itemsContent = $(".dx-field-item-content"),
-        editor;
+        $itemsContent.first().trigger("dxclick");
+        this.clock.tick();
 
-    $itemsContent.eq(1).trigger("dxclick");
-    this.clock.tick();
+        //assert
+        assert.equal($(".dx-invalid-message.dx-widget").length, 0, "Validation message is not shown");
+    });
 
-    editor = $(".dx-form .dx-texteditor").first().dxTextBox("instance");
-    editor.option("value", "");
-    $(document).trigger("dxclick");
-    this.clock.tick();
+    QUnit.testInActiveWindow("Cell edit mode", function(assert) {
+        //arrange
+        $(".dx-datagrid").width(200);
 
-    $itemsContent = $(".dx-field-item-content");
+        var dataSource = [
+            { firstName: 'Blablablablablablablablablabla', lastName: "ShumShumShum Shum" },
+            { firstName: 'Super', lastName: "Man" }
+        ];
 
-    //assert
-    assert.ok(!$itemsContent.first().hasClass("dx-datagrid-invalid"), "invalid style should not be applied");
+        this.options = {
+            columns: [
+                { dataField: 'firstName', index: 0, allowEditing: true },
+                { dataField: 'lastName', index: 1, allowEditing: true, validationRules: [{ type: "required" }] }
+            ],
+            editing: {
+                mode: 'cell',
+                allowUpdating: true
+            },
+            dataSource: {
+                asyncLoadEnabled: false,
+                store: dataSource
+            },
+            columnHidingEnabled: true
+        };
+        setupDataGrid(this);
+        this.rowsView.render($("#container"));
+        this.resizingController.updateDimensions();
+        this.clock.tick();
+        var showRevertButtonStub = sinon.stub(this.editorFactoryController, "_showRevertButton");
+
+        //act
+        this.adaptiveColumnsController.expandAdaptiveDetailRow(dataSource[0]);
+
+        var $itemsContent = $(".dx-field-item-content"),
+            editor;
+
+        $itemsContent.first().trigger("dxclick");
+        this.clock.tick();
+
+        editor = $(".dx-form .dx-texteditor").first().dxTextBox("instance");
+        editor.option("value", "");
+        $(document).trigger("dxclick");
+        this.clock.tick();
+
+        //assert
+        assert.ok($(".dx-field-item-content > .dx-widget.dx-validator").length === 1, "item element has a validation styles");
+        assert.equal($(".dx-invalid-message.dx-widget").length, 1, "Validation message is shown");
+        assert.ok(showRevertButtonStub.called, "revert button");
+    });
+
+    QUnit.testInActiveWindow("Tooltips selector for the revert button", function(assert) {
+        setupDataGrid(this);
+        var expected = ".dx-editor-cell .dx-tooltip, .dx-editor-cell .dx-invalid-message, .dx-field-item-content .dx-tooltip";
+        assert.equal(this.editorFactoryController._getTooltipsSelector(), expected, "tooltips selector");
+    });
+
+    QUnit.testInActiveWindow("Cell edit mode. Validation works only for editable form item with a validation rules", function(assert) {
+        //arrange
+        $(".dx-datagrid").width(200);
+
+        var dataSource = [
+            { firstName: 'Super', lastName: "Man", description: "Test Test Test" },
+            {
+                firstName: 'Blablablablablablablablablabla',
+                lastName: "ShumShumShum Shum",
+                description: "Test Test Test"
+            }
+        ];
+
+        this.options = {
+            columns: [
+                {
+                    dataField: 'firstName',
+                    index: 0,
+                    allowEditing: true
+                },
+                {
+                    dataField: 'lastName',
+                    index: 1, allowEditing: true,
+                    validationRules: [{ type: "required" }]
+                },
+                {
+                    dataField: "description",
+                    index: 2,
+                    allowEditing: true
+                }
+            ],
+            editing: {
+                mode: 'cell',
+                allowUpdating: true
+            },
+            dataSource: {
+                asyncLoadEnabled: false,
+                store: dataSource
+            },
+            columnHidingEnabled: true
+        };
+        setupDataGrid(this);
+        this.rowsView.render($("#container"));
+        this.resizingController.updateDimensions();
+        this.clock.tick();
+
+        //act
+        this.adaptiveColumnsController.expandAdaptiveDetailRow(dataSource[0]);
+
+        var $itemsContent = $(".dx-field-item-content"),
+            editor;
+
+        $itemsContent.eq(1).trigger("dxclick");
+        this.clock.tick();
+
+        editor = $(".dx-form .dx-texteditor").first().dxTextBox("instance");
+        editor.option("value", "");
+        $(document).trigger("dxclick");
+        this.clock.tick();
+
+        $itemsContent = $(".dx-field-item-content");
+
+        //assert
+        assert.ok(!$itemsContent.first().hasClass("dx-datagrid-invalid"), "invalid style should not be applied");
+    });
+
+    QUnit.test("The onRowValidating event is not called twice if isValid is set to 'false'", function(assert) {
+        //arrange
+        $(".dx-datagrid").width(800);
+
+        var rowValidatingCounter = 0;
+
+        this.options = {
+            columns: [
+                { dataField: 'firstName', index: 0, allowEditing: true },
+                { dataField: 'lastName', index: 1, allowEditing: true, validationRules: [{ type: "required" }] }
+            ],
+            editing: {
+                mode: 'batch',
+                allowUpdating: true
+            },
+            dataSource: {
+                asyncLoadEnabled: false,
+                store: [{
+                    firstName: 'Test First Name',
+                    lastName: "Test Last Name"
+                }]
+            },
+            onRowValidating: function(e) {
+                rowValidatingCounter++;
+                e.isValid = false;
+            }
+        };
+        setupDataGrid(this);
+        this.rowsView.render($("#container"));
+
+        //act
+        this.editingController.editCell(0, 0);
+
+        $("input")
+            .val("new value")
+            .change();
+
+        this.editingController.saveEditData();
+
+        //assert
+        assert.equal(rowValidatingCounter, 1, "onRowValidating event should thrown once");
+    });
+});
+
+QUnit.module("Keyboard navigation", {
+    setupModule: function() {
+        this.$dataGrid = $(".dx-datagrid").width(200);
+
+        this.columns = this.columns || [
+            { dataField: 'firstName', index: 0, allowEditing: true, allowExporting: true },
+            { dataField: 'lastName', index: 1, allowEditing: true, allowExporting: true },
+            { dataField: 'fullName', index: 1, allowEditing: true, allowExporting: true }
+        ];
+
+        this.items = this.items || [
+            { firstName: 'Blablablablablablablablablabla', lastName: "Psy", fullName: "Full Name" },
+            { firstName: 'Super', lastName: "Star", fullName: "Full Name" }
+        ];
+
+        this.options = $.extend({
+            useKeyboard: true,
+            tabIndex: 0,
+            editing: {
+                mode: 'batch',
+                allowUpdating: true
+            }
+        }, this.options);
+        setupDataGrid(this, $("#container"));
+
+        this.gridView.render($("#container"));
+        this.adaptiveColumnsController.updateHidingQueue(this.columnsController.getColumns());
+        this.resizingController.updateDimensions();
+        this.clock.tick();
+
+        this.adaptiveColumnsController.expandAdaptiveDetailRow(this.items[0]);
+    },
+
+    getActiveInputElement: function() {
+        return this.$dataGrid.find("input");
+    },
+
+    triggerFormItemClick: function(index) {
+        $(".dx-field-item-content").eq(index).trigger("dxclick");
+        this.clock.tick();
+    },
+
+    beforeEach: function() {
+        this.clock = sinon.useFakeTimers();
+    },
+
+    afterEach: function() {
+        this.clock.restore();
+    }
+}, function() {
+    QUnit.testInActiveWindow("Edit next an adaptive detail item by tab key", function(assert) {
+        //arrange
+        this.setupModule();
+        this.triggerFormItemClick(0);
+
+        //assert
+        var $nextItemContent = this.getActiveInputElement().closest(".dx-item").next().find(".dx-field-item-content");
+        assert.equal($nextItemContent.text(), "Full Name", "next item text");
+        assert.equal($nextItemContent.attr("tabindex"), 0, "next item has tabindex");
+
+        //act
+        $nextItemContent.triggerHandler("focus");
+        this.clock.tick();
+
+        //assert
+        var $input = this.getActiveInputElement();
+        assert.equal($input.val(), "Full Name", "current input is correct");
+    });
+
+    QUnit.testInActiveWindow("Edit previous an adaptive detail item by shift + tab key", function(assert) {
+        //arrange
+        this.setupModule();
+        this.triggerFormItemClick(1);
+
+        //assert
+        var $nextItemContent = this.getActiveInputElement().closest(".dx-item").prev().find(".dx-field-item-content");
+        assert.equal($nextItemContent.text(), "Psy", "next item text");
+        assert.equal($nextItemContent.attr("tabindex"), 0, "next item has tabindex");
+
+        //act
+        $nextItemContent.triggerHandler("focus");
+        this.clock.tick();
+
+        //assert
+        var $input = this.getActiveInputElement();
+        assert.equal($input.val(), "Psy", "current input is correct");
+    });
+
+    QUnit.testInActiveWindow("Editable cell is closed when focus moving outside detail form", function(assert) {
+        //arrange
+        this.setupModule();
+        this.triggerFormItemClick(1);
+
+        //act
+        var e = $.Event('keydown');
+        e.which = 9;
+        this.getActiveInputElement().trigger(e);
+        this.clock.tick();
+
+        var $cell = this.$dataGrid.find("td:not([class])").eq(1);
+        $cell.triggerHandler("focus");
+        this.clock.tick();
+
+        var $input = this.getActiveInputElement();
+        assert.equal($input.val(), "Super", "current input is correct");
+    });
+
+    QUnit.testInActiveWindow("Skip hidden column when use a keyboard navigation via 'tab' key", function(assert) {
+        //arrange
+        this.setupModule();
+        this.editingController.editCell(0, 0);
+        this.clock.tick();
+
+        //act
+        var e = $.Event('keydown');
+        e.which = 9;
+        this.getActiveInputElement().trigger(e);
+
+        //assert
+        assert.equal(this.getActiveInputElement().val(), "Super");
+    });
+
+    QUnit.testInActiveWindow("Error is not thrown when via keyboard navigation to adaptive form for new row", function(assert) {
+        //arrange
+        this.items = [];
+        this.columns = [
+            { dataField: 'firstName', index: 0, allowEditing: true, width: 200 },
+            { dataField: 'lastName', index: 1, allowEditing: true, width: 200 },
+            { dataField: 'fullName', index: 1, allowEditing: true, width: 200 }
+        ];
+        this.options = {
+            editing: {
+                allowAdding: true,
+                mode: "row"
+            }
+        };
+        this.setupModule();
+        this.editingController.addRow();
+        this.clock.tick();
+
+        //act
+        var e = $.Event('keydown');
+        e.which = 9;
+        this.getActiveInputElement().trigger(e);
+
+        //assert
+        assert.deepEqual(this.keyboardNavigationController._focusedCellPosition, { columnIndex: 0, rowIndex: 0 });
+    });
 });

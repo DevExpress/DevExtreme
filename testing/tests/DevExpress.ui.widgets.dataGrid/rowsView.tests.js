@@ -3876,6 +3876,21 @@ QUnit.test("Calculate widths when there is only group rows", function(assert) {
     assert.deepEqual(rowsView.getColumnWidths(), [30, 100, 100], "calculate widths");
 });
 
+QUnit.test("GetRowsElements method is called once when opacity is applied to rows", function(assert) {
+    //arrange
+    var rowsView = this.createRowsView(this.items);
+
+    rowsView.render($("#container"));
+
+    sinon.spy(rowsView, "_getRowElements");
+
+    //act
+    rowsView.setRowsOpacity(0, 0.01);
+
+    //assert
+    assert.ok(rowsView._getRowElements.calledOnce, "GetRowsElements method should called once");
+});
+
 QUnit.module('Rows view with real dataController and columnController', {
     beforeEach: function() {
         this.items = [

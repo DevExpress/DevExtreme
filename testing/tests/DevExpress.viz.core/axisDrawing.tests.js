@@ -6514,6 +6514,125 @@ QUnit.test("Vertical axis. End value > start value", function(assert) {
     assert.deepEqual(renderer.rect.getCall(0).args, [10, 35, 80, 5], "points");
 });
 
+QUnit.test("Strips on categories", function(assert) {
+    //arrange
+    var renderer = this.renderer;
+    this.createAxis();
+    this.updateOptions({
+        isHorizontal: true,
+        strips: [{
+            startValue: "two",
+            endValue: "three",
+            color: "#111111"
+        }]
+    });
+
+    this.translator.stub("getBusinessRange").returns({
+        addRange: sinon.stub(),
+        categories: ["one", "two", "three"]
+    });
+    this.translator.stub("translate").withArgs("two", -1).returns(20);
+    this.translator.stub("translate").withArgs("three", 1).returns(40);
+    this.axis.parser = function(value) {
+        return value;
+    };
+    //act
+    this.axis.draw(this.canvas);
+
+    //assert
+    assert.equal(renderer.rect.callCount, 1);
+    assert.deepEqual(renderer.rect.getCall(0).args, [20, 30, 20, 40], "points");
+});
+
+QUnit.test("Strips on categories, startValue > endValue", function(assert) {
+    //arrange
+    var renderer = this.renderer;
+    this.createAxis();
+    this.updateOptions({
+        isHorizontal: true,
+        strips: [{
+            startValue: "three",
+            endValue: "two",
+            color: "#111111"
+        }]
+    });
+
+    this.translator.stub("getBusinessRange").returns({
+        addRange: sinon.stub(),
+        categories: ["one", "two", "three"]
+    });
+    this.translator.stub("translate").withArgs("two", -1).returns(20);
+    this.translator.stub("translate").withArgs("three", 1).returns(40);
+    this.axis.parser = function(value) {
+        return value;
+    };
+    //act
+    this.axis.draw(this.canvas);
+
+    //assert
+    assert.equal(renderer.rect.callCount, 1);
+    assert.deepEqual(renderer.rect.getCall(0).args, [20, 30, 20, 40], "points");
+});
+
+QUnit.test("Strips on categories, no such categories - strip is not drawn", function(assert) {
+    //arrange
+    var renderer = this.renderer;
+    this.createAxis();
+    this.updateOptions({
+        isHorizontal: true,
+        strips: [{
+            startValue: "some1",
+            endValue: "some2",
+            color: "#111111"
+        }]
+    });
+
+    this.translator.stub("getBusinessRange").returns({
+        addRange: sinon.stub(),
+        categories: ["one", "two", "three"]
+    });
+    this.translator.stub("translate").withArgs("two", -1).returns(20);
+    this.translator.stub("translate").withArgs("three", 1).returns(40);
+    this.axis.parser = function(value) {
+        return value;
+    };
+    //act
+    this.axis.draw(this.canvas);
+
+    //assert
+    assert.equal(renderer.stub("rect").callCount, 0);
+});
+
+QUnit.test("Strips on categories, datetime type", function(assert) {
+    //arrange
+    var renderer = this.renderer;
+    this.createAxis();
+    this.updateOptions({
+        isHorizontal: true,
+        strips: [{
+            startValue: new Date(2017, 4, 5),
+            endValue: new Date(2017, 4, 7),
+            color: "#111111"
+        }]
+    });
+
+    this.translator.stub("getBusinessRange").returns({
+        addRange: sinon.stub(),
+        categories: [new Date(2017, 4, 5), new Date(2017, 4, 7)]
+    });
+    this.translator.stub("translate").withArgs(new Date(2017, 4, 5), -1).returns(20);
+    this.translator.stub("translate").withArgs(new Date(2017, 4, 7), 1).returns(40);
+    this.axis.parser = function(value) {
+        return value;
+    };
+    //act
+    this.axis.draw(this.canvas);
+
+    //assert
+    assert.equal(renderer.rect.callCount, 1);
+    assert.deepEqual(renderer.rect.getCall(0).args, [20, 30, 20, 40], "points");
+});
+
 QUnit.test("Stub data - do not create strips", function(assert) {
     //arrange
     var renderer = this.renderer;

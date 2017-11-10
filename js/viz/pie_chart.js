@@ -368,13 +368,6 @@ var dxPieChart = BaseChart.inherit({
 
     getSizeGroupLayout: function() {
         return this._sizeGroupLayout;
-    },
-
-    setPieSize: function(layout) {
-        var drawOptions = this._sizeGroupLayout.drawOptions;
-        drawOptions.sizeGroupLayout = layout;
-
-        this._renderSeries(drawOptions, this._isRotated(), this._isLegendInside());
     }
 });
 
@@ -393,10 +386,9 @@ var pieSizeEqualizer = (function() {
             layout = pies.filter(function(p) { return p.getSizeGroupLayout().radius === minRadius; })[0].getSizeGroupLayout();
 
         pies.forEach(function(p) {
-            p.setPieSize({
-                x: layout.x,
-                y: layout.y,
-                radius: minRadius
+            p.render({
+                force: true,
+                sizeGroupLayout: layout
             });
         });
     }

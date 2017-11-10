@@ -73,20 +73,23 @@ QUnit.test("focus removed from list on type some text", function(assert) {
     assert.ok(!$firstItem.hasClass(STATE_FOCUSED_CLASS), "first list element is not focused");
 });
 
-QUnit.test("popup should not focus when we selecting an item", function(assert) {
-    assert.expect(1);
+QUnit.testInActiveWindow("popup should not focus when we selecting an item", function(assert) {
 
     this.instance.option("opened", true);
     var popupContent = this.instance._popup.content(),
-        isDefaultPrevented = false;
+        mouseDownStub = sinon.stub();
 
-    popupContent.on("mousedown", function(e) {
-        isDefaultPrevented = e.isDefaultPrevented();
-    });
+    popupContent.on("mousedown", mouseDownStub);
 
-    popupContent.trigger("mousedown");
+    popupContent
+        .trigger("mousedown")
+        .trigger("mouseup");
 
-    assert.ok(isDefaultPrevented === devices.real().generic, "input save focus on overlay pointerdown by preventing blur");
+    assert.notOk(mouseDownStub.getCall(0).args[0].isDefaultPrevented(), "mousedown isn't prevented");
+
+    if(devices.real().deviceType === "desktop") {
+        assert.ok(this.$element.hasClass(STATE_FOCUSED_CLASS), "element save focused state after click on popup content");
+    }
 });
 
 QUnit.test("hover and focus states for list should be initially disabled on mobile devices only", function(assert) {
@@ -142,11 +145,14 @@ QUnit.module("keyboard navigation", {
     }
 });
 
-QUnit.test("focusout on tab if popup is hidden", function(assert) {
-    this.$input.focusin();
-    assert.ok(this.$element.hasClass(STATE_FOCUSED_CLASS), "element is focused");
+QUnit.test("focusout should not be fired on input element", function(assert) {
+    var onFocusOutStub = sinon.stub();
+    this.instance.option("onFocusOut", onFocusOutStub);
+
+    this.$element.focusin();
     this.keyboard.keyDown("tab");
-    assert.ok(!this.$element.hasClass(STATE_FOCUSED_CLASS), "element is not focused");
+
+    assert.equal(onFocusOutStub.callCount, 0, "onFocusOut wasn't fired");
 });
 
 QUnit.testInActiveWindow("popup hides on tab", function(assert) {

@@ -1808,6 +1808,68 @@ QUnit.test("Align labels in column when alignItemLabelsInAllGroups is disabled",
     assert.notEqual(findLabelTextsInColumn($groups.eq(0), 0).eq(0).width(), findLabelTextsInColumn($groups.eq(1), 0).eq(0).width(), "compare group1 with group2");
 });
 
+QUnit.test("Align labels in columns when there are rows", function(assert) {
+    //arrange, act
+    var testContainer = $("#form"),
+        form = testContainer.dxForm({
+            formData: this.testObject,
+            colCount: 4,
+            items: [{
+                name: "fieldFirstValue",
+                colSpan: 2,
+                editorType: "dxTextBox",
+                label: {
+                    text: "Field 1"
+                }
+            },
+            {
+                name: "fieldSecondValue",
+                colSpan: 2,
+                editorType: "dxTextBox",
+                label: {
+                    text: "Field 2"
+                }
+            },
+            {
+                name: "fieldThirdValue",
+                colSpan: 2,
+                editorType: "dxTextBox",
+                label: {
+                    text: "Field three"
+                }
+            },
+            {
+                name: "fieldFourthValue",
+                colSpan: 2,
+                editorType: "dxTextBox",
+                label: {
+                    text: "Field four"
+                }
+            }
+            ]
+        }).data("dxForm");
+
+    var $col1 = $(".dx-col-0"),
+        $col2 = $(".dx-col-2"),
+        $maxLabelWidth = getLabelWidth(testContainer, form, "Field three:"),
+        i,
+        labelWidth;
+
+    //assert
+    for(i = 0; i < 2; i++) {
+        labelWidth = $col1.eq(i).find("." + internals.FIELD_ITEM_LABEL_CONTENT_CLASS).first().width();
+
+        assert.roughEqual(labelWidth, $maxLabelWidth, 1, "col0 item " + i);
+    }
+
+    $maxLabelWidth = getLabelWidth(testContainer, form, "Field four:");
+    for(i = 0; i < 2; i++) {
+        labelWidth = $col2.eq(i).find("." + internals.FIELD_ITEM_LABEL_CONTENT_CLASS).first().width();
+
+        assert.roughEqual(labelWidth, $maxLabelWidth, 1, "col2 item " + i);
+    }
+});
+
 QUnit.test("Change option after group rendered (check for cycling template render)", function(assert) {
     //arrange
     var $formContainer = $("#form").dxForm({
@@ -2799,6 +2861,95 @@ QUnit.test("Use 'itemOption' with tabs", function(assert) {
     assert.equal($testContainer.find("." + internals.FIELD_ITEM_LABEL_CLASS).eq(4).text(), "NEWLABEL:", "new label rendered");
 });
 
+QUnit.test("'itemOption' should get an item with several spaces in the caption", function(assert) {
+    //arrange
+    var $testContainer = $("#form").dxForm({
+            formData: { EmployeeID: 1, LastName: "John", FirstName: "Dow" },
+            items: [
+                "EmployeeID",
+                {
+                    itemType: "group",
+                    caption: "Test group item",
+                    items: [
+                        "FirstName", "LastName"
+                    ]
+                }
+            ] }
+        ),
+        form = $testContainer.dxForm("instance");
+
+    //act
+    var groupItem = form.itemOption("Testgroupitem"),
+        innerGroupItem = form.itemOption("Testgroupitem.FirstName");
+
+    assert.deepEqual(groupItem, {
+        itemType: "group",
+        caption: "Test group item",
+        items: [ { dataField: "FirstName" }, { dataField: "LastName" }]
+    }, "Correct group item");
+
+    form.itemOption("Testgroupitem.LastName", "label", { text: "NEWLABEL" });
+
+    //assert
+    assert.equal(innerGroupItem.dataField, "FirstName", "corrected item received");
+    assert.equal($testContainer.find("." + internals.FIELD_ITEM_LABEL_CLASS).last().text(), "NEWLABEL:", "new label rendered");
+});
+
+QUnit.test("'itemOption' should get an item with several spaces in the caption and long path", function(assert) {
+    //arrange
+    var $testContainer = $("#form").dxForm({
+            formData: { EmployeeID: 1, LastName: "John", FirstName: "Dow" },
+            items: [
+                "EmployeeID",
+                {
+                    itemType: "group",
+                    caption: "Test group 1",
+                    items: [{
+                        itemType: "group",
+                        caption: "Test group 2",
+                        items: ["FirstName", "LastName"]
+                    }]
+                }
+            ] }
+        ),
+        form = $testContainer.dxForm("instance");
+
+    //act
+    var innerGroupItem = form.itemOption("Testgroup1.Testgroup2.FirstName");
+
+    //assert
+    assert.deepEqual(innerGroupItem, { dataField: "FirstName" }, "corrected item received");
+});
+
+QUnit.test("'itemOption' should get an group inner item located into tabbed item", function(assert) {
+    //arrange
+    var $testContainer = $("#form").dxForm({
+            formData: { EmployeeID: 1, LastName: "John", FirstName: "Dow" },
+            items: [
+                {
+                    itemType: "tabbed",
+                    tabs: [{
+                        title: "Test Tab 1",
+                        items: ["EmployeeID"]
+                    }, {
+                        title: "Test Tab 2",
+                        items: [{
+                            itemType: "group",
+                            caption: "Test Group 1",
+                            items: ["FirstName", "LastName"]
+                        }]
+                    }]
+                }]
+        }),
+        form = $testContainer.dxForm("instance");
+
+    //act
+    var innerGroupItem = form.itemOption("TestTab2.TestGroup1.FirstName");
+
+    //assert
+    assert.deepEqual(innerGroupItem, { dataField: "FirstName" }, "corrected item received");
+});
+
 function getID(form, dataField) {
     return "dx_" + form.option("formID") + "_" + dataField;
 }
@@ -3021,6 +3172,62 @@ QUnit.test("Changing editorOptions of subitem change editor options (T316522)", 
 
     assert.equal(secondEditor.option("width"), 80, "Correct width");
     assert.equal(secondEditor.option("height"), 40, "Correct height");
+});
+
+QUnit.test("editorOptions correctly updates in case when only item name is defined", function(assert) {
+    //arrange
+    var form = $("#form").dxForm({
+        items: [
+            {
+                itemType: "group", items: [
+                    {
+                        itemType: "group", items: [
+                                { name: "firstName", editorType: "dxTextBox", editorOptions: { width: 100, height: 20 } },
+                                { name: "lastName", editorType: "dxTextBox", editorOptions: { width: 100, height: 20 } }
+                        ]
+                    }
+                ]
+            }
+        ]
+    }).dxForm("instance");
+
+    var invalidateSpy = sinon.spy(form, "_invalidate");
+
+    //act
+    form.option("items[0].items[0].items[1].editorOptions", { width: 80, height: 40 });
+
+    //assert
+    var secondEditor = $("#form .dx-textbox").last().dxTextBox("instance");
+
+    assert.equal(invalidateSpy.callCount, 0, "dxForm wasn't invalidated");
+    assert.equal(secondEditor.option("width"), 80, "Correct width");
+    assert.equal(secondEditor.option("height"), 40, "Correct height");
+});
+
+QUnit.test("widget invalidates in case we cannot change an editor options", function(assert) {
+    //arrange
+    var form = $("#form").dxForm({
+        items: [
+            {
+                itemType: "group", items: [
+                    {
+                        itemType: "group", items: [
+                                { editorType: "dxTextBox", editorOptions: { width: 100, height: 20 } },
+                                { editorType: "dxTextBox", editorOptions: { width: 100, height: 20 } }
+                        ]
+                    }
+                ]
+            }
+        ]
+    }).dxForm("instance");
+
+    var invalidateSpy = sinon.spy(form, "_invalidate");
+
+    //act
+    form.option("items[0].items[0].items[1].editorOptions", { width: 80, height: 40 });
+
+    //assert
+    assert.equal(invalidateSpy.callCount, 1, "dxForm invalidated");
 });
 
 QUnit.test("Reset editor's value", function(assert) {

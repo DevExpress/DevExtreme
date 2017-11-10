@@ -1754,6 +1754,46 @@ QUnit.test("Non-grid-aligned appointments should be resized correctly", function
     assert.deepEqual(this.instance.option("dataSource")[0].endDate, new Date(2015, 1, 9, 2), "End date is OK");
 });
 
+QUnit.test("Non-grid-aligned appointments should be resized correctly, when startDayHour is set", function(assert) {
+    this.createInstance({
+        currentDate: new Date(2015, 1, 9),
+        editing: true,
+        startDayHour: 9,
+        dataSource: [{
+            text: "a",
+            startDate: new Date(2015, 1, 9, 10, 25),
+            endDate: new Date(2015, 1, 9, 11)
+        }]
+    });
+
+    var cellHeight = this.instance.element().find(".dx-scheduler-date-table-cell").eq(0).outerHeight();
+
+    var pointer = pointerMock(this.instance.element().find(".dx-resizable-handle-top").eq(0)).start();
+    pointer.dragStart().drag(0, -3 * cellHeight).dragEnd();
+
+    assert.deepEqual(this.instance.option("dataSource")[0].startDate, new Date(2015, 1, 9, 9), "Start date is OK");
+});
+
+QUnit.test("Non-grid-aligned appointments should be resized correctly, when endDayHour is set", function(assert) {
+    this.createInstance({
+        currentDate: new Date(2015, 1, 9),
+        editing: true,
+        endDayHour: 15,
+        dataSource: [{
+            text: "a",
+            startDate: new Date(2015, 1, 9, 13),
+            endDate: new Date(2015, 1, 9, 14, 25)
+        }]
+    });
+
+    var cellHeight = this.instance.element().find(".dx-scheduler-date-table-cell").eq(0).outerHeight();
+
+    var pointer = pointerMock(this.instance.element().find(".dx-resizable-handle-bottom").eq(0)).start();
+    pointer.dragStart().drag(0, cellHeight).dragEnd();
+
+    assert.deepEqual(this.instance.option("dataSource")[0].endDate, new Date(2015, 1, 9, 15), "End date is OK");
+});
+
 QUnit.test("Appointment with custom timezone should be resized correctly(T390801)", function(assert) {
     var tzOffsetStub = sinon.stub(subscribes, "getClientTimezoneOffset").returns(-10800000);
 
@@ -4291,27 +4331,32 @@ QUnit.test("Long multiday appointment should have right position on timeline wee
 });
 
 QUnit.test("Appointment should have right width in workspace with timezone", function(assert) {
-    this.clock.restore();
-    this.createInstance({
-        dataSource: [],
-        currentDate: new Date(2016, 4, 1),
-        currentView: "month",
-        firstDayOfWeek: 1,
-        startDayHour: 3,
-        endDayHour: 24,
-        timeZone: "Asia/Ashkhabad"
-    });
+    var tzOffsetStub = sinon.stub(subscribes, "getClientTimezoneOffset").returns(-10800000);
+    try {
+        this.clock.restore();
+        this.createInstance({
+            dataSource: [],
+            currentDate: new Date(2017, 4, 1),
+            currentView: "month",
+            firstDayOfWeek: 1,
+            startDayHour: 3,
+            endDayHour: 24,
+            timeZone: "Asia/Ashkhabad"
+        });
 
-    this.instance.addAppointment({
-        text: "Task 1",
-        startDate: new Date(2016, 4, 4),
-        endDate: new Date(2016, 4, 5)
-    });
+        this.instance.addAppointment({
+            text: "Task 1",
+            startDate: new Date(2017, 4, 4),
+            endDate: new Date(2017, 4, 5)
+        });
 
-    var $appointment = this.instance.element().find(".dx-scheduler-work-space .dx-scheduler-appointment").eq(0),
-        $cell = this.instance.element().find(".dx-scheduler-work-space .dx-scheduler-date-table-cell").eq(9);
+        var $appointment = this.instance.element().find(".dx-scheduler-work-space .dx-scheduler-appointment").eq(0),
+            $cell = this.instance.element().find(".dx-scheduler-work-space .dx-scheduler-date-table-cell").eq(9);
 
-    assert.roughEqual($appointment.outerWidth(), $cell.outerWidth(), 1.001, "Task has a right width");
+        assert.roughEqual($appointment.outerWidth(), $cell.outerWidth(), 1.001, "Task has a right width");
+    } finally {
+        tzOffsetStub.restore();
+    }
 });
 
 QUnit.test("Appointment with zero-duration should be rendered correctly(T443143)", function(assert) {

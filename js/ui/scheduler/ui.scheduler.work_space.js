@@ -384,6 +384,7 @@ var SchedulerWorkSpace = Widget.inherit({
                 this.notifyObserver("allDayPanelToggled");
                 this._attachTablesEvents();
                 this.headerPanelOffsetRecalculate();
+                this._updateScrollable();
                 break;
             case "onCellClick":
                 this._createCellClickAction();
@@ -847,9 +848,16 @@ var SchedulerWorkSpace = Widget.inherit({
             headerHeight = this.invoke("getHeaderHeight"),
             allDayPanelHeight = this.supportAllDayRow() && this.option("showAllDayPanel") ? this.getAllDayHeight() : 0;
 
+        headerPanelHeight && this._headerScrollable && this._headerScrollable.element().height(headerPanelHeight + allDayPanelHeight);
+
         headerPanelHeight && this._dateTableScrollable.element().css({
             "padding-bottom": allDayPanelHeight + headerPanelHeight + "px",
             "margin-bottom": -1 * ((parseInt(headerPanelHeight, 10)) + allDayPanelHeight) + "px"
+        });
+
+        headerPanelHeight && this._sidebarScrollable && this._sidebarScrollable.element().css({
+            "padding-bottom": allDayPanelHeight + headerPanelHeight + "px",
+            "marginBottom": -1 * ((parseInt(headerPanelHeight, 10)) + allDayPanelHeight) + "px"
         });
 
         this._$allDayTitle && this._$allDayTitle.css("top", headerHeight + headerPanelHeight + "px");
@@ -965,10 +973,19 @@ var SchedulerWorkSpace = Widget.inherit({
         this.element().toggleClass(WORKSPACE_WITH_ALL_DAY_CLASS, showAllDayPanel);
 
         this._changeAllDayVisibility();
+
+        showAllDayPanel && this._updateScrollable();
     },
 
     _changeAllDayVisibility: function() {
         this.element().toggleClass(WORKSPACE_WITH_COLLAPSED_ALL_DAY_CLASS, !this.option("allDayExpanded") && this.option("showAllDayPanel"));
+    },
+
+    _updateScrollable: function() {
+        this._dateTableScrollable.update();
+
+        this._headerScrollable && this._headerScrollable.update();
+        this._sidebarScrollable && this._sidebarScrollable.update();
     },
 
     _renderTimePanel: function() {
@@ -1430,8 +1447,7 @@ var SchedulerWorkSpace = Widget.inherit({
             hours = endDayHour - 1;
         }
 
-        currentDate.setHours(hours);
-        currentDate.setMinutes(minutes);
+        currentDate.setHours(hours, minutes, 0, 0);
 
         return this.getCoordinatesByDate(currentDate);
     },
@@ -1547,8 +1563,7 @@ var SchedulerWorkSpace = Widget.inherit({
         var cellDuration = this.getCellDuration(),
             currentDayStart = new Date(date);
 
-        currentDayStart.setMinutes(0, 0, 0);
-        currentDayStart.setHours(this.option("startDayHour"));
+        currentDayStart.setHours(this.option("startDayHour"), 0, 0, 0);
 
         return ((date.getTime() - currentDayStart.getTime()) % cellDuration) / cellDuration;
     },
@@ -1806,7 +1821,7 @@ var SchedulerWorkSpace = Widget.inherit({
         var coordinates = this._getScrollCoordinates(hours, minutes, date),
             scrollable = this.getScrollable();
 
-        scrollable.scrollBy(coordinates.top - scrollable.scrollTop());
+        scrollable.scrollBy({ top: coordinates.top - scrollable.scrollTop(), left: 0 });
     },
 
     getDistanceBetweenCells: function(startIndex, endIndex) {

@@ -1869,6 +1869,38 @@ QUnit.test("loadTotalCount for CustomStore when no totalCount in extra", functio
     assert.strictEqual(totalCount, 10);
 });
 
+//T545211
+QUnit.test("Ungrouping with custom store - there are no exceptions when remote paging", function(assert) {
+    //arrange
+    var that = this,
+        dataSource = createDataSource({
+            load: function() {
+                return $.Deferred().resolve({
+                    data: that.array,
+                    totalCount: that.array.length
+                });
+            },
+            paginate: true,
+            requireTotalCount: true,
+            remoteOperations: { paging: true }
+        });
+
+    dataSource.group("field1");
+    dataSource.load();
+
+    try {
+        //act
+        dataSource.group(null);
+        dataSource.load();
+
+        //assert
+        assert.ok(true, "There are no exceptions");
+    } catch(error) {
+        //assert
+        assert.ok(false, "exception was threw:" + error);
+    }
+});
+
 
 QUnit.module("Grouping with basic remoteOperations. Second level", {
     beforeEach: function() {

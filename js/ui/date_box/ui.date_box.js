@@ -170,7 +170,7 @@ var DateBox = DropDownEditor.inherit({
             * @publicName useCalendar
             * @type boolean
             * @default false
-            * @deprecated
+            * @deprecated dxDateBoxOptions_pickerType
             */
             useCalendar: false,
 
@@ -213,7 +213,7 @@ var DateBox = DropDownEditor.inherit({
             * @publicName useNative
             * @type boolean
             * @default true
-            * @deprecated
+            * @deprecated dxDateBoxOptions_pickerType
             */
             useNative: true,
 

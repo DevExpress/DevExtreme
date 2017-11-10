@@ -491,6 +491,16 @@ var VirtualScrollingRowsViewExtender = (function() {
             }
         },
 
+        updateFreeSpaceRowHeight: function() {
+            var result = this.callBase.apply(this, arguments);
+
+            if(result) {
+                this._updateContentPosition();
+            }
+
+            return result;
+        },
+
         setLoading: function(isLoading, messageText) {
             var that = this,
                 callBase = that.callBase,

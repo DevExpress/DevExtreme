@@ -263,7 +263,6 @@ QUnit.test('No synchronization for non-number tickValues', function(assert) {
             {
                 range: {
                     axisType: 'continuous',
-                    isSynchronized: true,
                     min: 0,
                     minVisible: 0,
                     max: 10,
@@ -1185,7 +1184,6 @@ QUnit.test('Synchronization for 3 axis when first with stubData', function(asser
             {
                 range: {
                     axisType: 'continuous',
-                    isSynchronized: true,
                     min: 0,
                     minVisible: 0,
                     max: 10,
@@ -1198,12 +1196,12 @@ QUnit.test('Synchronization for 3 axis when first with stubData', function(asser
                 range: {
                     axisType: 'continuous',
                     isSynchronized: true,
-                    min: 0,
-                    minVisible: 0,
-                    max: 10,
-                    maxVisible: 10
+                    min: 2,
+                    minVisible: 2,
+                    max: 8,
+                    maxVisible: 8
                 },
-                tickValues: [0, 2, 4, 6, 8, 10]
+                tickValues: [2, 4, 6, 8]
             },
             {
                 range: {
@@ -1211,13 +1209,13 @@ QUnit.test('Synchronization for 3 axis when first with stubData', function(asser
                     isSynchronized: true,
                     min: 20,
                     minVisible: 20,
-                    max: 70,
-                    maxVisible: 70
+                    max: 50,
+                    maxVisible: 50
                 },
-                tickValues: [20, 30, 40, 50, 60, 70]
+                tickValues: [20, 30, 40, 50]
             }
         ],
-        syncIndexes: [[0, 1, 2]]
+        syncIndexes: [[ 1, 2]]
     });
 });
 
@@ -1418,113 +1416,6 @@ QUnit.test('Synchronization for 2 axis with synchronizedValue for one axis only'
     });
 });
 
-QUnit.test('Synchronization for 2 axis with synchronizedValue and second axis without data with synchronizedValue and tickInterval', function(assert) {
-    checkAxesSynchronization(assert, {
-        axesOptions: [
-            { range: { min: -6, max: 26, axisType: 'continuous' }, tickValues: [-3, 2, 7, 12, 17, 22], synchronizedValue: 0, tickInterval: 5 },
-            { range: { min: 0, max: 10, stubData: true, axisType: 'continuous' }, tickValues: [0, 2, 4, 6, 8, 10], synchronizedValue: 32, tickInterval: 9 }
-        ],
-        axesOptionsAfterSync: [
-            {
-                range: {
-                    axisType: 'continuous',
-                    isSynchronized: true,
-                    min: -6,
-                    minVisible: -6,
-                    max: 26,
-                    maxVisible: 26
-                },
-                tickValues: [-5, 0, 5, 10, 15, 20, 25]
-            },
-            {
-                range: {
-                    axisType: 'continuous',
-                    isSynchronized: true,
-                    min: 21.2,
-                    minVisible: 21.2,
-                    max: 78.8,
-                    maxVisible: 78.8,
-                    stubData: true
-                },
-                tickValues: [23, 32, 41, 50, 59, 68, 77]
-            }
-        ],
-        syncIndexes: [[0, 1]]
-    });
-});
-
-QUnit.test('Synchronization for 2 axis with synchronizedValue and second axis without data with synchronizedValue and without tickInterval', function(assert) {
-    checkAxesSynchronization(assert, {
-        axesOptions: [
-            { range: { min: -6, max: 26, axisType: 'continuous' }, tickValues: [-3, 2, 7, 12, 17, 22], synchronizedValue: 0, tickInterval: 5 },
-            { range: { min: 0, max: 10, stubData: true, axisType: 'continuous' }, tickValues: [0, 1, 2, 3, 4, 5, 6, 7, 8, 9, 10], synchronizedValue: 32, tickInterval: 1 }
-        ],
-        axesOptionsAfterSync: [
-            {
-                range: {
-                    axisType: 'continuous',
-                    isSynchronized: true,
-                    min: -6,
-                    minVisible: -6,
-                    max: 26,
-                    maxVisible: 26
-                },
-                tickValues: [-5, 0, 5, 10, 15, 20, 25]
-            },
-            {
-                range: {
-                    axisType: 'continuous',
-                    isSynchronized: true,
-                    min: 30.8,
-                    minVisible: 30.8,
-                    max: 37.2,
-                    maxVisible: 37.2,
-                    stubData: true
-                },
-                tickValues: [31, 32, 33, 34, 35, 36, 37]
-            }
-        ],
-        syncIndexes: [[0, 1]]
-    });
-});
-
-
-QUnit.test('Synchronization for 2 axis with synchronizedValue and second axis without data without synchronizedValue and without tickInterval', function(assert) {
-    checkAxesSynchronization(assert, {
-        rotated: false,
-        axesOptions: [
-            { range: { min: -6, max: 26, axisType: 'continuous' }, tickValues: [-3, 2, 7, 12, 17, 22], synchronizedValue: 0, tickInterval: 5 },
-            { range: { min: 0, max: 10, stubData: true, axisType: 'continuous' }, tickValues: [0, 2, 4, 6, 8, 10], tickInterval: 2 }
-        ],
-        axesOptionsAfterSync: [
-            {
-                range: {
-                    axisType: 'continuous',
-                    isSynchronized: true,
-                    min: -6,
-                    minVisible: -6,
-                    max: 26,
-                    maxVisible: 26
-                },
-                tickValues: [-5, 0, 5, 10, 15, 20, 25]
-            },
-            {
-                range: {
-                    axisType: 'continuous',
-                    isSynchronized: true,
-                    min: -2.4,
-                    minVisible: -2.4,
-                    max: 10.4,
-                    maxVisible: 10.4,
-                    stubData: true
-                },
-                tickValues: [-2, 0, 2, 4, 6, 8, 10]
-            }
-        ],
-        syncIndexes: [[0, 1]]
-    });
-});
-
 QUnit.test('Synchronization for 2 axis. One axis with zooming', function(assert) {
     checkAxesSynchronization(assert, {
         axesOptions: [
@@ -1612,7 +1503,6 @@ QUnit.test('No synchronization for 2 axis. Single axis has discrete type', funct
             {
                 range: {
                     axisType: 'continuous',
-                    isSynchronized: true,
                     min: 5,
                     minVisible: 5,
                     max: 11,

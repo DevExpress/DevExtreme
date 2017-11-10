@@ -37,7 +37,7 @@
 @SCHEDULER_APPOINTMENT_TOOLTIP_FONT_SIZE: 16px;
 
 @SCHEDULER_APPOINTMENT_CONTENT_PADDING: 5px 7px;
-@SCHEDULER_APPOINTMENT_REDUCED_CONTENT_PADDING: 5px 20px 5px 7px;
+@SCHEDULER_APPOINTMENT_REDUCED_CONTENT_PADDING: 5px 40px 5px 7px;
 @SCHEDULER_APPOINTMENT_RECURRENCE_CONTENT_PADDING: 5px 25px 5px 7px;
 @SCHEDULER_APPOINTMENT_RECURRENCE_CONTENT_PADDING_RTL: 5px 7px 5px 25px;
 
@@ -800,6 +800,11 @@
         .dx-scheduler-header-row .dx-scheduler-header-panel-cell {
             &:first-child {
                 border-left: none;
+                
+                .dx-rtl & {
+                    border-right: none;
+                    border-left: @SCHEDULER_BASE_BORDER;
+                }
             }
         }
 
@@ -837,6 +842,7 @@
 
             &:before {
                 height: @SCHEDULER_HEADER_PANEL_TABLE_CELL_HEIGHT * 2 + @SCHEDULER_HEADER_PANEL_TOP_GAP + 1;
+                margin-top: -(@SCHEDULER_HEADER_PANEL_TABLE_CELL_HEIGHT * 2 + @SCHEDULER_HEADER_PANEL_TOP_GAP + 1);
             }
         }
     }
@@ -1357,8 +1363,8 @@
 
     .dx-scheduler-appointment-head {
         .dx-scheduler-appointment-recurrence-icon {
-            top: 20px;
-            right: 5px;
+            top: calc(~'35% - 3px');
+            right: 20px;
         }
     }
 }
@@ -1949,13 +1955,15 @@
         }
     }
 
-    .dx-scheduler-date-table {
-        float: right;
-        margin-left: 0;
-        margin-right: -@SCHEDULER_LEFT_COLUMN_WIDTH;
+    .dx-scheduler-work-space:not(.dx-scheduler-timeline):not(.dx-scheduler-work-space-month) {
+        .dx-scheduler-date-table {
+            float: right;
+            margin-left: 0;
+            margin-right: -@SCHEDULER_LEFT_COLUMN_WIDTH;
 
-        .dx-scheduler-small & {
-            margin-right: -@SCHEDULER_LEFT_COLUMN_WIDTH * @SCHEDULER_SMALL_SIZE_FACTOR;
+            .dx-scheduler-small & {
+                margin-right: -@SCHEDULER_LEFT_COLUMN_WIDTH * @SCHEDULER_SMALL_SIZE_FACTOR;
+            }
         }
     }
 
@@ -1968,14 +1976,12 @@
         right: auto;
     }
     
-    .dx-scheduler-work-space-month,
-    .dx-scheduler-timeline {
-        .dx-scheduler-appointment-reduced {
-            .dx-scheduler-appointment-recurrence-icon {
-                left: 20px;
-                right: auto;
-            }
-        }
+    
+    .dx-scheduler-appointment-reduced {
+        .dx-scheduler-appointment-recurrence-icon {
+            left: 20px;
+            right: auto;
+        } 
     }
 
     .dx-scheduler-work-space-week .dx-scheduler-all-day-table-cell,

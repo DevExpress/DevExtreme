@@ -8,12 +8,13 @@ var $ = require("jquery"),
     Color = require("color"),
     AgendaAppointmentsStrategy = require("ui/scheduler/ui.scheduler.appointments.strategy.agenda"),
     DataSource = require("data/data_source/data_source").DataSource,
-    CustomStore = require("data/custom_store");
+    CustomStore = require("data/custom_store"),
+    subscribes = require("ui/scheduler/ui.scheduler.subscribes");
 
 require("ui/scheduler/ui.scheduler");
 
 function getDeltaTz(schedulerTz) {
-    var defaultTz = new Date().getTimezoneOffset() * 60000;
+    var defaultTz = -10800000;
     return schedulerTz * 3600000 + defaultTz;
 }
 
@@ -149,24 +150,6 @@ QUnit.test("Agenda should contain a right quantity of long-appointments", functi
     });
 
     assert.equal(this.instance.element().find(".dx-scheduler-appointment").length, 7, "Appointment count is OK");
-});
-
-QUnit.test("Long appointment parts should have a reduced-icon and reduced class", function(assert) {
-    this.createInstance({
-        views: ["agenda"],
-        currentView: "agenda",
-        currentDate: new Date(2016, 1, 24),
-        dataSource: [
-            { startDate: new Date(2016, 1, 22, 1), endDate: new Date(2016, 1, 28, 1, 30) }
-        ]
-    });
-
-    var $appointments = this.instance.element().find(".dx-scheduler-appointment");
-
-    assert.ok($appointments.eq(0).hasClass("dx-scheduler-appointment-reduced"), "Appointment part has a reduced-class");
-    assert.equal($appointments.eq(0).find(".dx-scheduler-appointment-reduced-icon").length, 1, "Appointment part has a reduced-icon");
-    assert.ok($appointments.eq(2).hasClass("dx-scheduler-appointment-reduced"), "Appointment part has a reduced-class");
-    assert.equal($appointments.eq(2).find(".dx-scheduler-appointment-reduced-icon").length, 1, "Appointment part has a reduced-icon");
 });
 
 QUnit.test("Long and recurrent appointment parts should not have a reduced-icon and reduced class", function(assert) {
@@ -799,7 +782,7 @@ QUnit.test("Long & recurrence appts should be sorted correctly", function(assert
             positionInArray = recurrenceApptsIndices.indexOf(index);
             assert.notOk($appt.hasClass("dx-scheduler-appointment-reduced"), "Recurrence appt doesn't have 'reduced' class");
 
-        } else if($appt.hasClass("dx-scheduler-appointment-reduced")) {
+        } else {
             positionInArray = longApptsIndices.indexOf(index);
         }
 
@@ -1094,26 +1077,31 @@ QUnit.test("The timeZone option should be processed correctly", function(assert)
 });
 
 QUnit.test("All-day appointment should not be duplicated with custom timezone", function(assert) {
-    this.clock.restore();
-    var timezoneDifference = getDeltaTz(5),
-        getDate = function(date) {
-            return new Date(date.getTime() - timezoneDifference);
-        };
+    var tzOffsetStub = sinon.stub(subscribes, "getClientTimezoneOffset").returns(-10800000);
+    try {
+        this.clock.restore();
+        var timezoneDifference = getDeltaTz(5),
+            getDate = function(date) {
+                return new Date(date.getTime() - timezoneDifference);
+            };
 
-    this.createInstance({
-        views: ["agenda"],
-        currentView: "agenda",
-        currentDate: new Date(2016, 4, 3),
-        timeZone: "Asia/Ashkhabad",
-        dataSource: [{
-            startDate: getDate(new Date(2016, 4, 4)),
-            endDate: getDate(new Date(2016, 4, 5))
-        }]
-    });
+        this.createInstance({
+            views: ["agenda"],
+            currentView: "agenda",
+            currentDate: new Date(2016, 4, 3),
+            timeZone: "Asia/Ashkhabad",
+            dataSource: [{
+                startDate: getDate(new Date(2016, 4, 4)),
+                endDate: getDate(new Date(2016, 4, 5))
+            }]
+        });
 
-    var $appts = this.instance.element().find(".dx-scheduler-appointment");
+        var $appts = this.instance.element().find(".dx-scheduler-appointment");
 
-    assert.equal($appts.length, 1, "Appt count is OK");
+        assert.equal($appts.length, 1, "Appt count is OK");
+    } finally {
+        tzOffsetStub.restore();
+    }
 });
 
 QUnit.test("All-day appointment should not be duplicated with custom timezone (T437288)", function(assert) {

@@ -395,7 +395,7 @@ var AdvancedChart = BaseChart.inherit({
 
     _groupSeries: function() {
         var that = this;
-        that._correctValueAxes();
+        that._correctValueAxes(false);
         that._groupsData = that._getGroupsData();
     },
 

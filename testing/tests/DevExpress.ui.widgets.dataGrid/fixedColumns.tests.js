@@ -2041,7 +2041,7 @@ QUnit.module("Headers reordering and resizing with fixed columns", {
             setupDataGridModules(that, ["data", "columns", "columnHeaders", "rows", "columnFixing", "columnsResizingReordering"], {
                 initViews: true,
                 controllers: {
-                    data: new MockDataController({ items: [] })
+                    data: new MockDataController({ items: that.items || [] })
                 }
             });
         };
@@ -2255,6 +2255,37 @@ QUnit.test('Reordering -  get points by columns with startColumnIndex for childr
     assert.equal(pointsByColumns[2].index, 4, 'index');
     assert.equal(pointsByColumns[2].x, -9075, 'x');
     assert.roughEqual(pointsByColumns[2].y, -9967, 5, 'y');
+});
+
+QUnit.test("Reordering - set rows opacity for fixed column", function(assert) {
+    //arrange
+    var testElement = $("#container").width(925);
+
+    this.columns = [
+        {
+            caption: "Column 1", dataField: "Column1", fixed: true, width: 100, allowReordering: true
+        },
+        {
+            caption: "Column 2", dataField: "Column2", width: 150, allowReordering: true
+        }
+    ];
+
+    this.items = [
+        { data: { Column1: 'test1', Column2: "test2" }, values: ['test1', "test2"], rowType: 'data', dataIndex: 0 },
+        { data: { Column1: 'test3', Column2: "test4" }, values: ['test3', "test4"], rowType: 'data', dataIndex: 1 }
+    ];
+
+    this.setupDataGrid();
+
+    this.rowsView.render(testElement);
+
+    //act
+    this.rowsView.setRowsOpacity(0, 0.5);
+
+    //assert
+    var $cells = $(".dx-datagrid-table-fixed").eq(1).find("td:first-child");
+    assert.equal($cells.eq(0).css("opacity"), "0.5", "opacity for cell 1 of column 1");
+    assert.equal($cells.eq(1).css("opacity"), "0.5", "opacity for cell 2 of column 1");
 });
 
 //T256629

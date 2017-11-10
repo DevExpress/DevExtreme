@@ -496,7 +496,10 @@ Axis.prototype = {
 
     _getStripPos: function(startValue, endValue, canvasStart, canvasEnd, range) {
         var isContinuous = !!(range.minVisible || range.maxVisible),
-            categories = range.categories || [],
+            categories = (range.categories || []).reduce(function(result, cat) {
+                result.push(cat.valueOf());
+                return result;
+            }, []),
             start,
             end,
             swap,
@@ -506,8 +509,8 @@ Axis.prototype = {
 
         if(!isContinuous) {
             if(_isDefined(startValue) && _isDefined(endValue)) {
-                startCategoryIndex = inArray(startValue, categories);
-                endCategoryIndex = inArray(endValue, categories);
+                startCategoryIndex = inArray(startValue.valueOf(), categories);
+                endCategoryIndex = inArray(endValue.valueOf(), categories);
                 if(startCategoryIndex === -1 || endCategoryIndex === -1) {
                     return { from: 0, to: 0 };
                 }
@@ -1356,7 +1359,8 @@ Axis.prototype = {
             rangeMin,
             rangeMax,
             rangeMinVisible,
-            rangeMaxVisible;
+            rangeMaxVisible,
+            synchronizedValue = options.synchronizedValue;
 
         if(type === constants.logarithmic) {
             min = min <= 0 ? undefined : min;
@@ -1372,6 +1376,11 @@ Axis.prototype = {
             }
             rangeMinVisible = _isDefined(zoomArgs.min) ? zoomArgs.min : rangeMin;
             rangeMaxVisible = _isDefined(zoomArgs.max) ? zoomArgs.max : rangeMax;
+
+            if(_isDefined(synchronizedValue)) {
+                rangeMin = _isDefined(rangeMin) && (rangeMin < synchronizedValue) ? rangeMin : synchronizedValue;
+                rangeMax = _isDefined(rangeMax) && (rangeMax > synchronizedValue) ? rangeMax : synchronizedValue;
+            }
         } else {
             rangeMinVisible = _isDefined(zoomArgs.min) ? zoomArgs.min : min;
             rangeMaxVisible = _isDefined(zoomArgs.max) ? zoomArgs.max : max;

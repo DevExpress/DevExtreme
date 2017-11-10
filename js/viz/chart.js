@@ -37,9 +37,19 @@ function getFirstAxisNameForPane(axes, paneName, defaultPane) {
     return result;
 }
 
+function changeVisibilityAxisGrids(axis, visible) {
+    var gridOpt = axis.getOptions().grid,
+        minorGridOpt = axis.getOptions().minorGrid;
+
+    gridOpt.visible = visible;
+    minorGridOpt && (minorGridOpt.visible = visible);
+}
+
 function hideGridsOnNonFirstValueAxisForPane(valAxes, paneName, synchronizeMultiAxes) {
     var axesForPane = [],
-        firstShownAxis;
+        axisShown = false,
+        hidedStubAxis = [];
+
     _each(valAxes, function(_, axis) {
         if(axis.pane === paneName) {
             axesForPane.push(axis);
@@ -47,15 +57,21 @@ function hideGridsOnNonFirstValueAxisForPane(valAxes, paneName, synchronizeMulti
     });
     if(axesForPane.length > 1 && synchronizeMultiAxes) {
         _each(axesForPane, function(_, axis) {
-            var gridOpt = axis.getOptions().grid,
-                minorGridOpt = axis.getOptions().minorGrid;
-            if(firstShownAxis && gridOpt && gridOpt.visible) {
-                gridOpt.visible = false;
-                minorGridOpt && (minorGridOpt.visible = false);
-            } else {
-                firstShownAxis = firstShownAxis ? firstShownAxis : gridOpt && gridOpt.visible;
+            var gridOpt = axis.getOptions().grid;
+
+            if(axisShown) {
+                changeVisibilityAxisGrids(axis, false);
+            } else if(gridOpt && gridOpt.visible) {
+                if(!axis.getTranslator().getBusinessRange().stubData) {
+                    axisShown = true;
+                } else {
+                    changeVisibilityAxisGrids(axis, false);
+                    hidedStubAxis.push(axis);
+                }
             }
         });
+
+        !axisShown && hidedStubAxis.length && changeVisibilityAxisGrids(hidedStubAxis[0], true);
     }
 }
 
@@ -355,7 +371,7 @@ var dxChart = AdvancedChart.inherit({
     },
 
     _correctAxes: function() {
-        this._correctValueAxes();
+        this._correctValueAxes(true);
     },
 
     _getExtraOptions: commonUtils.noop,
@@ -459,7 +475,7 @@ var dxChart = AdvancedChart.inherit({
         return axis;
     },
 
-    _correctValueAxes: function() {
+    _correctValueAxes: function(needHideGrids) {
         var that = this,
             synchronizeMultiAxes = that._themeManager.getOptions("synchronizeMultiAxes"),
             valueAxes = that._valueAxes,
@@ -475,7 +491,7 @@ var dxChart = AdvancedChart.inherit({
             if(!paneWithAxis[paneName]) {
                 that._getValueAxis(paneName); //creates an value axis if there is no one for pane
             }
-            hideGridsOnNonFirstValueAxisForPane(valueAxes, pane.name, synchronizeMultiAxes);
+            needHideGrids && hideGridsOnNonFirstValueAxisForPane(valueAxes, pane.name, synchronizeMultiAxes);
         });
 
         that._valueAxes = valueAxes.filter(function(axis) {
@@ -525,6 +541,7 @@ var dxChart = AdvancedChart.inherit({
             panesBorderOptions = that._createPanesBorderOptions(),
             useAggregation = that._options.useAggregation,
             canvas = that._canvas,
+            series = that._getVisibleSeries(),
             canvasLength = that._isRotated() ? canvas.height - canvas.top - canvas.bottom : canvas.width - canvas.left - canvas.right;
 
         that._createPanesBackground();
@@ -535,20 +552,20 @@ var dxChart = AdvancedChart.inherit({
         that._updatePanesCanvases(drawOptions);
 
         if(useAggregation) {
-            that.series.forEach(function(series) {
+            series.forEach(function(series) {
                 series.resamplePoints(canvasLength);
             });
         }
 
         if((useAggregation || _isDefined(that._zoomMinArg) || _isDefined(that._zoomMaxArg)) && that._themeManager.getOptions("adjustOnZoom")) {
             that._valueAxes.forEach(function(axis) {
-                var viewport = that.series.filter(function(s) {
+                var viewport = series.filter(function(s) {
                     return s.getValueAxis() === axis;
                 }).reduce(function(range, s) {
                     var seriesRange = s.getViewport();
 
-                    range.min = range.min < seriesRange.min ? range.min : seriesRange.min;
-                    range.max = range.max > seriesRange.max ? range.max : seriesRange.max;
+                    range.min = _isDefined(seriesRange.min) ? (range.min < seriesRange.min ? range.min : seriesRange.min) : range.min;
+                    range.max = _isDefined(seriesRange.max) ? (range.max > seriesRange.max ? range.max : seriesRange.max) : range.max;
                     return range;
                 }, {});
                 axis.zoom(viewport.min, viewport.max);
@@ -1079,7 +1096,10 @@ var dxChart = AdvancedChart.inherit({
             that._eventTrigger("zoomStart");
         }
 
-        zoomArg = that._argumentAxes[0].zoom(min, max, gesturesUsed);
+        that._argumentAxes.forEach(function(axis) {
+            zoomArg = axis.zoom(min, max, gesturesUsed);
+        });
+
         that._zoomMinArg = zoomArg.min;
         that._zoomMaxArg = zoomArg.max;
         that._notApplyMargins = gesturesUsed; //TODO

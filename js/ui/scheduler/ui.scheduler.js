@@ -335,7 +335,7 @@ var Scheduler = Widget.inherit({
                     /**
                     * @name dxSchedulerOptions_resources_field
                     * @publicName field
-                    * @deprecated
+                    * @deprecated dxSchedulerOptions_resources_fieldExpr
                     * @type String
                     * @default ""
                     */
@@ -371,7 +371,7 @@ var Scheduler = Widget.inherit({
                     /**
                     * @name dxSchedulerOptions_resources_mainColor
                     * @publicName mainColor
-                    * @deprecated
+                    * @deprecated dxSchedulerOptions_resources_useColorAsDefault
                     * @type Boolean
                     * @default false
                     */
@@ -2041,6 +2041,7 @@ var Scheduler = Widget.inherit({
             }
             this.addAppointment(formData);
         }
+        this._enableDoneButton();
 
         return true;
     },
@@ -2048,6 +2049,12 @@ var Scheduler = Widget.inherit({
     _disableDoneButton: function() {
         var toolbarItems = this._popup.option("toolbarItems");
         toolbarItems[0].options = { disabled: true };
+        this._popup.option("toolbarItems", toolbarItems);
+    },
+
+    _enableDoneButton: function() {
+        var toolbarItems = this._popup.option("toolbarItems");
+        toolbarItems[0].options = { disabled: false };
         this._popup.option("toolbarItems", toolbarItems);
     },
 
@@ -2148,9 +2155,7 @@ var Scheduler = Widget.inherit({
     },
 
     _getRecurrenceExceptionDate: function(exceptionDate, targetStartDate) {
-        exceptionDate.setHours(targetStartDate.getHours());
-        exceptionDate.setMinutes(targetStartDate.getMinutes());
-        exceptionDate.setSeconds(targetStartDate.getSeconds());
+        exceptionDate.setHours(targetStartDate.getHours(), targetStartDate.getMinutes(), targetStartDate.getSeconds(), targetStartDate.getMilliseconds());
 
         return dateSerialization.serializeDate(exceptionDate, "yyyyMMddTHHmmss");
     },
@@ -2267,8 +2272,7 @@ var Scheduler = Widget.inherit({
                 }
 
                 if(!options.skipHoursProcessing) {
-                    updatedStartDate.setHours(startDate.getHours());
-                    updatedStartDate.setMinutes(startDate.getMinutes());
+                    updatedStartDate.setHours(startDate.getHours(), startDate.getMinutes(), startDate.getSeconds(), startDate.getMilliseconds());
                 }
             }
         }

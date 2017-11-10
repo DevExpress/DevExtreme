@@ -42,8 +42,6 @@ var DropDownList = DropDownEditor.inherit({
                 if(this.option("opened") && this.option("applyValueMode") === "instantly") {
                     var $focusedItem = this._list.option("focusedElement");
                     $focusedItem && this._setSelectedElement($focusedItem);
-                } else {
-                    this._focusTarget().focusout();
                 }
 
                 parent.tab.apply(this, arguments);
@@ -363,9 +361,9 @@ var DropDownList = DropDownEditor.inherit({
         this._input().on("input", this._setFocusPolicy.bind(this));
     },
 
-    _preventFocusOnPopup: function(e) {
+    _saveFocusOnWidget: function(e) {
         if(this._list && this._list.initialOption("focusStateEnabled")) {
-            e.preventDefault();
+            this.focus();
         }
     },
 
@@ -373,8 +371,8 @@ var DropDownList = DropDownEditor.inherit({
         this.callBase();
         this._popup._wrapper().addClass(this._popupWrapperClass());
         this._popup.content()
-            .off("mousedown")
-            .on("mousedown", this._preventFocusOnPopup.bind(this));
+            .off("mouseup")
+            .on("mouseup", this._saveFocusOnWidget.bind(this));
     },
 
     _popupWrapperClass: function() {

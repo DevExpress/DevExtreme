@@ -74,7 +74,6 @@ exports.pie = _extend({}, barSeries, {
     _prepareSeriesToDrawing: _noop,
 
     _endUpdateData: function() {
-        this._arrayArguments = {};
         chartScatterSeries._prepareSeriesToDrawing.call(this);
     },
 
@@ -115,13 +114,7 @@ exports.pie = _extend({}, barSeries, {
     },
 
     _getMainColor: function(data) {
-        var that = this,
-            arr = that._arrayArguments || {},
-            argument = data.argument;
-
-        arr[argument] = ++arr[argument] || 0;
-        that._arrayArguments = arr;
-        return that._options.mainSeriesColor(argument, arr[argument]);
+        return this._options.mainSeriesColor(data.argument, data.index);
     },
 
     _getPointOptions: function(data) {

@@ -98,7 +98,7 @@ var SelectBox = DropDownList.inherit({
             },
             escape: function() {
                 parent.escape.apply(this, arguments);
-                if(!this._isEditable()) {
+                if(!this._isEditable() && this._list) {
                     this._focusListElement(null);
                     this._updateField(this.option("selectedItem"));
                 }
@@ -550,9 +550,11 @@ var SelectBox = DropDownList.inherit({
             return;
         }
 
-        if(!this._searchValue() && this.option("allowClearing")) {
-            this._clearTextValue();
-            return;
+        if(this.option("searchEnabled")) {
+            if(!this._searchValue() && this.option("allowClearing")) {
+                this._clearTextValue();
+                return;
+            }
         }
 
         var oldSelectedItem = this.option("selectedItem");

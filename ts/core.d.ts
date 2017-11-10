@@ -210,7 +210,7 @@ declare module DevExpress {
         }
 
         /** @docid fxmethods_animate */
-        export function animate(element: HTMLElement, config: AnimationOptions): Object;
+        export function animate(element: HTMLElement, config: AnimationOptions): JQueryPromise<void>;
 
         /** @docid fxmethods_isAnimating */
         export function isAnimating(element: HTMLElement): boolean;

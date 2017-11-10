@@ -831,6 +831,40 @@ QUnit.test("measure empty labels", function(assert) {
     }, "measurements");
 });
 
+QUnit.test("range data with synchronizedValue. synchronizedValue above max ", function(assert) {
+    var axis = this.createSimpleAxis({
+            min: 0,
+            max: 100,
+            synchronizedValue: 1000
+        }),
+        rangeData = axis.getRangeData();
+
+    assert.strictEqual(rangeData.min, 0);
+    assert.strictEqual(rangeData.max, 1000);
+});
+
+QUnit.test("range data with synchronizedValue. synchronizedValue less min", function(assert) {
+    var axis = this.createSimpleAxis({
+            synchronizedValue: -10,
+            min: 0,
+            max: 100
+        }),
+        rangeData = axis.getRangeData();
+
+    assert.strictEqual(rangeData.min, -10);
+    assert.strictEqual(rangeData.max, 100);
+});
+
+QUnit.test("range data with synchronizedValue and min/max were not set", function(assert) {
+    var axis = this.createSimpleAxis({
+            synchronizedValue: 10
+        }),
+        rangeData = axis.getRangeData();
+
+    assert.strictEqual(rangeData.min, 10);
+    assert.strictEqual(rangeData.max, 10);
+});
+
 QUnit.module("Label overlapping, 'hide' mode", overlappingEnvironment);
 
 QUnit.test("horizontal axis", function(assert) {

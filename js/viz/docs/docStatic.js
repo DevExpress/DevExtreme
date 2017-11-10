@@ -98,21 +98,21 @@ var staticMethods = {
     /**
     * @name viz_core
     * @publicName core
-    * @deprecated
+    * @deprecated viz
     */
     core: {
         /**
         * @name viz_coremethods_currentTheme
         * @publicName currentTheme(theme)
         * @param1 theme:string
-        * @deprecated
+        * @deprecated vizmethods_currentTheme
         */
         /**
         * @name viz_coremethods_currentTheme
         * @publicName currentTheme(platform, colorScheme)
         * @param1 platform:string
         * @param2 colorScheme:string
-        * @deprecated
+        * @deprecated vizmethods_currentTheme
         */
         currentTheme: function() { },
         /**
@@ -120,14 +120,14 @@ var staticMethods = {
         * @publicName registerTheme(customTheme, baseTheme)
         * @param1 customTheme:object
         * @param2 baseTheme:string
-        * @deprecated
+        * @deprecated vizmethods_registerTheme
         */
         registerTheme: function() { },
         /**
         * @name viz_coremethods_currentPalette
         * @publicName currentPalette(paletteName)
         * @param1 paletteName:string
-        * @deprecated
+        * @deprecated vizmethods_currentPalette
         */
         currentPalette: function() { },
         /**
@@ -135,7 +135,7 @@ var staticMethods = {
         * @publicName getPalette(paletteName)
         * @param1 paletteName:string
         * @return object
-        * @deprecated
+        * @deprecated vizmethods_getPalette
         */
         getPalette: function() { },
         /**
@@ -143,7 +143,7 @@ var staticMethods = {
         * @publicName registerPalette(paletteName, palette)
         * @param1 paletteName:string
         * @param2 palette:object
-        * @deprecated
+        * @deprecated vizmethods_registerPalette
         */
         registerPalette: function() { }
     },

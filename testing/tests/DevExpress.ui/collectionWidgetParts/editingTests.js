@@ -551,6 +551,77 @@ var runTests = function() {
         }
     });
 
+    QUnit.test("selectedItems should be cleared if datasource instance has been changed to null", function(assert) {
+        var instance = new TestComponent($("<div>"), {
+            selectionMode: "multiple",
+            dataSource: [1, 2, 3],
+            selectedItemKeys: [1, 2]
+        });
+
+        assert.deepEqual(instance.option("selectedItems"), [1, 2], "selectedItems is correct");
+        assert.deepEqual(instance.option("selectedItem"), 1, "selectedItem is correct");
+        assert.deepEqual(instance.option("selectedItemKeys"), [1, 2], "selectedItem is correct");
+
+        instance.option("dataSource", null);
+
+        assert.deepEqual(instance.option("selectedItems"), [], "selectedItems was cleared");
+        assert.strictEqual(instance.option("selectedItem"), undefined, "selectedItem was cleared");
+        assert.deepEqual(instance.option("selectedItemKeys"), [], "selectedItemKeys was cleared");
+    });
+
+    QUnit.test("selectedItems should be cleared if datasource instance has been changed to empty array", function(assert) {
+        var instance = new TestComponent($("<div>"), {
+            selectionMode: "multiple",
+            dataSource: [1, 2, 3],
+            selectedItemKeys: [1, 2]
+        });
+
+        assert.deepEqual(instance.option("selectedItems"), [1, 2], "selectedItems is correct");
+        assert.deepEqual(instance.option("selectedItem"), 1, "selectedItem is correct");
+        assert.deepEqual(instance.option("selectedItemKeys"), [1, 2], "selectedItem is correct");
+
+        instance.option("dataSource", []);
+
+        assert.deepEqual(instance.option("selectedItems"), [], "selectedItems was cleared");
+        assert.strictEqual(instance.option("selectedItem"), undefined, "selectedItem was cleared");
+        assert.deepEqual(instance.option("selectedItemKeys"), [], "selectedItemKeys was cleared");
+    });
+
+    QUnit.test("selectedItems should not be cleared if datasource instance has been changed", function(assert) {
+        var instance = new TestComponent($("<div>"), {
+            selectionMode: "multiple",
+            dataSource: [1, 2, 3],
+            selectedItemKeys: [1, 2]
+        });
+
+        assert.deepEqual(instance.option("selectedItems"), [1, 2], "selectedItems is correct");
+        assert.deepEqual(instance.option("selectedItem"), 1, "selectedItem is correct");
+        assert.deepEqual(instance.option("selectedItemKeys"), [1, 2], "selectedItem is correct");
+
+        instance.option("dataSource", [1, 2, 3, 4]);
+
+        assert.deepEqual(instance.option("selectedItems"), [1, 2], "selectedItems wasn't cleared");
+        assert.strictEqual(instance.option("selectedItem"), 1, "selectedItem wasn't cleared");
+        assert.deepEqual(instance.option("selectedItemKeys"), [1, 2], "selectedItemKeys wasn't cleared");
+    });
+
+    QUnit.test("option change should hsve correct arguments after deselecting a value", function(assert) {
+        assert.expect(3);
+
+        var instance = new TestComponent($("<div>"), {
+            selectionMode: "multiple",
+            dataSource: [1, 2, 3],
+            onOptionChanged: function(args) {
+                if(args.name !== "selectedItems") {
+                    return;
+                }
+                assert.ok(args.previousValue !== args.value, "values are not equal");
+            }
+        });
+
+        instance.selectItem(1);
+        instance.unselectItem(1);
+    });
 
     QUnit.module("selecting of item keys", {
         beforeEach: function() {

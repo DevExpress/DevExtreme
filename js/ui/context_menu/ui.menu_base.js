@@ -260,7 +260,7 @@ var MenuBase = HierarchicalCollectionWidget.inherit({
             * @name dxMenuBaseItemTemplate_iconSrc
             * @publicName iconSrc
             * @type String
-            * @deprecated
+            * @deprecated dxMenuBaseItemTemplate_icon
             */
             /**
             * @name dxMenuBaseItemTemplate_text
@@ -345,6 +345,12 @@ var MenuBase = HierarchicalCollectionWidget.inherit({
 
     _focusTarget: function() {
         return this._itemContainer();
+    },
+
+    _clean: function() {
+        this.option("focusedElement", null);
+
+        this.callBase();
     },
 
     _supportedKeys: function() {

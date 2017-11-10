@@ -204,6 +204,76 @@ QUnit.test("MultiAxis chart", function(assert) {
     assert.deepEqual(series2.getValueAxis().zoom.lastCall.args, [5, 12], "axis 2 viewport");
 });
 
+QUnit.test("Zoom all argument axis", function(assert) {
+    var series1 = new MockSeries({}),
+        series2 = new MockSeries({});
+
+    series1.getViewport.returns({
+        min: 8,
+        max: 15
+    });
+
+    series2.getViewport.returns({
+        min: 5,
+        max: 12
+    });
+
+    seriesMockData.series.push(series1, series2);
+
+    var chart = this.createChart({
+        series: [{
+            type: "line",
+            pane: "p1"
+        }, {
+            pane: "p2",
+            type: "line"
+        }],
+        panes: [{
+            name: "p1"
+        }, {
+            name: "p2"
+        }]
+    });
+    //act
+    chart.zoomArgument(10, 50);
+    //assert
+
+    assert.deepEqual(chart._argumentAxes[0].zoom.lastCall.args, [10, 50, undefined]);
+    assert.deepEqual(chart._argumentAxes[1].zoom.lastCall.args, [10, 50, undefined]);
+    assert.deepEqual(series1.getValueAxis().zoom.lastCall.args, [8, 15], "axis 1 viewport");
+    assert.deepEqual(series2.getValueAxis().zoom.lastCall.args, [5, 12], "axis 2 viewport");
+});
+
+QUnit.test("Zoom argument axis, two series, one of them is not visible", function(assert) {
+    var series1 = new MockSeries({ visible: false }),
+        series2 = new MockSeries({});
+
+    series1.getViewport.returns({
+        min: 8,
+        max: 15
+    });
+
+    series2.getViewport.returns({
+        min: 5,
+        max: 12
+    });
+
+    seriesMockData.series.push(series1, series2);
+
+    var chart = this.createChart({
+        series: [{
+            type: "line"
+        }, {
+            type: "line"
+        }]
+    });
+    //act
+    chart.zoomArgument(10, 50);
+    //assert
+
+    assert.deepEqual(series2.getValueAxis().zoom.lastCall.args, [5, 12], "axis 2 viewport");
+});
+
 QUnit.test("chart with single value with aggregation. Adjust on zoom = true", function(assert) {
     var series1 = new MockSeries({});
 
@@ -266,6 +336,35 @@ QUnit.test("Aggregation with min and max on argument axis, without zooming", fun
     //assert
     assert.strictEqual(series1.getValueAxis().zoom.callCount, 1);
     assert.deepEqual(series1.getValueAxis().zoom.lastCall.args, [50, 60], "zoom args");
+});
+
+//T557040
+QUnit.test("Aggregation. One of the series without points", function(assert) {
+    var series1 = new MockSeries({}),
+        series2 = new MockSeries({});
+
+    series1.getViewport.returns({
+        min: 0,
+        max: 15
+    });
+
+    series2.getViewport.returns({
+        min: null,
+        max: null
+    });
+
+    seriesMockData.series.push(series1, series2);
+
+    this.createChart({
+        useAggregation: true,
+        adjustOnZoom: true,
+        series: [{
+            type: "line"
+        }, {}]
+    });
+
+    assert.strictEqual(series1.getValueAxis().zoom.callCount, 1);
+    assert.deepEqual(series1.getValueAxis().zoom.lastCall.args, [0, 15], "zoom args");
 });
 
 QUnit.test("Event, zoomEnd", function(assert) {

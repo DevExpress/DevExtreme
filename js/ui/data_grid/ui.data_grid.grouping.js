@@ -13,6 +13,7 @@ var $ = require("../../core/renderer"),
 var DATAGRID_GROUP_PANEL_CLASS = "dx-datagrid-group-panel",
     DATAGRID_GROUP_PANEL_MESSAGE_CLASS = "dx-group-panel-message",
     DATAGRID_GROUP_PANEL_ITEM_CLASS = "dx-group-panel-item",
+    DATAGRID_GROUP_PANEL_LABEL_CLASS = "dx-toolbar-label",
     DATAGRID_GROUP_OPENED_CLASS = "dx-datagrid-group-opened",
     DATAGRID_GROUP_CLOSED_CLASS = "dx-datagrid-group-closed",
     DATAGRID_EXPAND_CLASS = "dx-datagrid-expand",
@@ -118,7 +119,7 @@ var GroupingDataSourceAdapterExtender = (function() {
                 }
             }
         },
-        _customizeRemoteOperations: function(options) {
+        _customizeRemoteOperations: function(options, isReload, operationTypes) {
             var remoteOperations = options.remoteOperations;
 
             if(options.storeLoadOptions.group) {
@@ -131,7 +132,10 @@ var GroupingDataSourceAdapterExtender = (function() {
                 if(!remoteOperations.grouping && (!remoteOperations.sorting || !remoteOperations.filtering || options.isCustomLoading || this._hasGroupLevelsExpandState(options.storeLoadOptions.group, false))) {
                     remoteOperations.paging = false;
                 }
+            } else if(!options.isCustomLoading && remoteOperations.paging && operationTypes.grouping) {
+                this.resetCache();
             }
+
             this.callBase.apply(this, arguments);
         },
         _handleDataLoading: function(options) {
@@ -280,6 +284,8 @@ var GroupingDataControllerExtender = (function() {
                     that.executeAction(expanded ? "onRowCollapsed" : "onRowExpanded", args);
                 });
             }
+
+            return $.Deferred().resolve();
         },
         _changeRowExpandCore: function(key) {
             var that = this,
@@ -310,6 +316,7 @@ var GroupingDataControllerExtender = (function() {
          * @name dxDataGridMethods_expandRow
          * @publicName expandRow(key)
          * @param1 key:any
+         * @return Promise
          */
         expandRow: function(key) {
             if(!this.isRowExpanded(key)) {
@@ -321,6 +328,7 @@ var GroupingDataControllerExtender = (function() {
          * @name dxDataGridMethods_collapseRow
          * @publicName collapseRow(key)
          * @param1 key:any
+         * @return Promise
          */
         collapseRow: function(key) {
             if(this.isRowExpanded(key)) {
@@ -444,6 +452,9 @@ var GroupingHeaderPanelExtender = (function() {
                     .addClass(DATAGRID_GROUP_PANEL_MESSAGE_CLASS)
                     .text(groupPanelOptions.emptyPanelText)
                     .appendTo($groupPanel);
+
+                $groupPanel.closest("." + DATAGRID_GROUP_PANEL_LABEL_CLASS).css("maxWidth", "none");
+                that.updateToolbarDimensions();
             }
         },
 

@@ -58,10 +58,20 @@ var AdaptiveColumnsController = modules.ViewController.inherit({
         var that = this,
             column = item.column,
             cellValue = column.calculateCellValue(cellOptions.data),
+            focusAction = that.createAction(function() {
+                $container.trigger(clickEvent.name);
+            }),
             cellText;
 
         cellValue = gridCoreUtils.getDisplayValue(column, cellValue, cellOptions.data, cellOptions.rowType);
         cellText = gridCoreUtils.formatValue(cellValue, column);
+
+        if(column.allowEditing && that.option("useKeyboard")) {
+            $container
+                .attr("tabIndex", that.option("tabIndex"))
+                .off("focus", focusAction)
+                .on("focus", focusAction);
+        }
 
         if(column.cellTemplate) {
             var templateOptions = extend({}, cellOptions, { value: cellValue, text: cellText, column: column });
@@ -342,11 +352,12 @@ var AdaptiveColumnsController = modules.ViewController.inherit({
 
         if(view && view.isVisible() && column) {
             rowsCount = view.getRowsCount();
+            var $rowElements = view._getRowElements();
             for(rowIndex = 0; rowIndex < rowsCount; rowIndex++) {
                 if(rowIndex !== editFormRowIndex || viewName !== ROWS_VIEW) {
                     currentVisibleIndex = viewName === COLUMN_HEADERS_VIEW ? this._columnsController.getVisibleIndex(column.index, rowIndex) : visibleIndex;
                     if(currentVisibleIndex >= 0) {
-                        $cellElement = view.getCellElements(rowIndex).eq(currentVisibleIndex);
+                        $cellElement = $rowElements.eq(rowIndex).children().eq(currentVisibleIndex);
                         this._isCellValid($cellElement) && $cellElement.addClass(cssClassName);
                     }
                 }
@@ -449,9 +460,9 @@ var AdaptiveColumnsController = modules.ViewController.inherit({
         }
     },
 
-    toggleExpandAdaptiveDetailRow: function(key) {
+    toggleExpandAdaptiveDetailRow: function(key, alwaysExpanded) {
         if(!(this.isFormEditMode() && this._editingController.isEditing())) {
-            this.getController("data").toggleExpandAdaptiveDetailRow(key);
+            this.getController("data").toggleExpandAdaptiveDetailRow(key, alwaysExpanded);
         }
     },
 
@@ -750,6 +761,10 @@ module.exports = {
                 }
             },
             editing: {
+                _isRowEditMode: function() {
+                    return this.getEditMode() === EDIT_MODE_ROW;
+                },
+
                 _getFormEditItemTemplate: function(cellOptions, column) {
                     if(this.getEditMode() !== EDIT_MODE_ROW && cellOptions.rowType === "detailAdaptive") {
                         cellOptions.columnIndex = this._columnsController.getVisibleIndex(column.index);
@@ -793,14 +808,15 @@ module.exports = {
 
                 _afterInsertRow: function(options) {
                     this.callBase(options);
+
                     if(this._adaptiveController.hasHiddenColumns()) {
-                        this._adaptiveController.expandAdaptiveDetailRow(options.key);
+                        this._adaptiveController.toggleExpandAdaptiveDetailRow(options.key, this.isRowEditMode());
                         this._isForceRowAdaptiveExpand = true;
                     }
                 },
 
                 _collapseAdaptiveDetailRow: function() {
-                    if(this.getEditMode() === EDIT_MODE_ROW && this._isForceRowAdaptiveExpand) {
+                    if(this._isRowEditMode() && this._isForceRowAdaptiveExpand) {
                         this._adaptiveController.collapseAdaptiveDetailRow();
                         this._isForceRowAdaptiveExpand = false;
                     }
@@ -814,7 +830,8 @@ module.exports = {
 
                 _afterSaveEditData: function() {
                     this.callBase();
-                    if(this.getController("validating").validate(true)) {
+                    if(this._isRowEditMode() && this._adaptiveController.hasHiddenColumns()
+                        && this.getController("validating").validate(true)) {
                         this._cancelEditAdaptiveDetailRow();
                     }
                 },
@@ -954,13 +971,13 @@ module.exports = {
                     }
                 },
 
-                toggleExpandAdaptiveDetailRow: function(key) {
+                toggleExpandAdaptiveDetailRow: function(key, alwaysExpanded) {
                     var that = this;
 
                     var oldExpandRowIndex = gridCoreUtils.getIndexByKey(that._adaptiveExpandedKey, that._items);
                     var newExpandRowIndex = gridCoreUtils.getIndexByKey(key, that._items);
 
-                    if(oldExpandRowIndex >= 0 && oldExpandRowIndex === newExpandRowIndex) {
+                    if(oldExpandRowIndex >= 0 && oldExpandRowIndex === newExpandRowIndex && !alwaysExpanded) {
                         key = undefined;
                         newExpandRowIndex = -1;
                     }
@@ -997,6 +1014,23 @@ module.exports = {
             columns: {
                 _isColumnVisible: function(column) {
                     return this.callBase(column) && !column.adaptiveHidden;
+                }
+            },
+            keyboardNavigation: {
+                _isCellValid: function($cell) {
+                    return this.callBase($cell) && !$cell.hasClass(this.addWidgetPrefix(HIDDEN_COLUMN_CLASS));
+                },
+
+                _processNextCellInMasterDetail: function($nextCell) {
+                    this.callBase($nextCell);
+
+                    if(!this._isInsideEditForm($nextCell) && $nextCell) {
+                        var focusHandler = function() {
+                            $nextCell.off("focus", focusHandler);
+                            $nextCell.trigger("dxclick");
+                        };
+                        $nextCell.on("focus", focusHandler);
+                    }
                 }
             }
         }

@@ -66,7 +66,8 @@ var ResizingController = modules.ViewController.inherit({
                         resizeDeferred = that.resize();
                     }
                 } else if(changeType === "update") {
-                    if(that._dataController.items().length > 1 || e.changeTypes[0] !== "insert") {
+                    if(that._dataController.items().length > 1 || e.changeTypes[0] !== "insert" ||
+                        !(that._dataController.items().length === 0 && e.changeTypes[0] === "remove")) {
                         that._rowsView.resize();
                     } else {
                         resizeDeferred = that.resize();
@@ -187,7 +188,7 @@ var ResizingController = modules.ViewController.inherit({
                 if(this.width !== "auto") {
                     if(this.width) {
                         resultWidths[index] = this.width;
-                    } else if(!columnAutoWidth && !this.minWidth) {
+                    } else if(!columnAutoWidth) {
                         resultWidths[index] = undefined;
                     }
                 }
@@ -217,6 +218,14 @@ var ResizingController = modules.ViewController.inherit({
         return this.option("columnAutoWidth") || this._maxHeightHappened;
     },
 
+    _getAverageColumnsWidth: function(resultWidths) {
+        var contentWidth = this._rowsView.contentWidth(),
+            totalWidth = this._getTotalWidth(resultWidths, contentWidth),
+            columnCountWithoutWidth = resultWidths.filter(function(width) { return width === undefined; }).length;
+
+        return (contentWidth - totalWidth) / columnCountWithoutWidth;
+    },
+
     _correctColumnWidths: function(resultWidths, visibleColumns) {
         var that = this,
             hasPercentWidth = false,
@@ -224,13 +233,22 @@ var ResizingController = modules.ViewController.inherit({
             isColumnWidthsCorrected = false,
             $element = that.component.element(),
             hasWidth = that._hasWidth,
+            averageColumnsWidth,
             lastColumnIndex;
 
         $.each(visibleColumns, function(index) {
             var isMinWidthApplied = false,
-                isHiddenColumn = resultWidths[index] === HIDDEN_COLUMNS_WIDTH;
+                isHiddenColumn = resultWidths[index] === HIDDEN_COLUMNS_WIDTH,
+                width = resultWidths[index];
 
-            if(resultWidths[index] < this.minWidth && !isHiddenColumn) {
+            if(width === undefined && this.minWidth) {
+                if(averageColumnsWidth === undefined) {
+                    averageColumnsWidth = that._getAverageColumnsWidth(resultWidths);
+                }
+                width = averageColumnsWidth;
+            }
+
+            if(width < this.minWidth && !isHiddenColumn) {
                 resultWidths[index] = this.minWidth;
                 isColumnWidthsCorrected = true;
                 isMinWidthApplied = true;

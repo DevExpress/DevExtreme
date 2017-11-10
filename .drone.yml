@@ -1,16 +1,14 @@
-# Install: http://readme.drone.io/0.5/install/cli/
-# Docs: http://readme.drone.io/0.5/
-# Local run: drone exec --matrix TARGET=test
+# https://github.com/drone/drone/
 
 pipeline:
-
-  clone:
-    image: plugins/git
 
   build:
     image: devexpress/devextreme-build:17_1
     pull: true
-    commands: ./docker-ci.sh
+    commands:
+      - ./drone-cache.sh restore
+      - ./docker-ci.sh
+      - ./drone-cache.sh rebuild
 
 matrix:
   include:

@@ -1022,6 +1022,11 @@ QUnit.test("not columns", function(assert) {
     assert.deepEqual(coord, { x: 10, y: 10 });
 });
 
+QUnit.test("Show hidden label in the correct position (using the 'resolveLabelOverlapping' option) after calling the 'show' method (T561563)", function(assert) {
+    var point = createPointWithStubLabelForDraw.call(this, { 0: 170, 10: 210, 20: 250 }, true);
+
+    assert.ok(point._label.clearVisibility.calledOnce);
+});
 
 QUnit.module("update Coord", {
     beforeEach: environmentWithStubLabels
