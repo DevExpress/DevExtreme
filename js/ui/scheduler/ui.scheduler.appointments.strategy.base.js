@@ -572,7 +572,7 @@ var BaseRenderingStrategy = Class.inherit({
         }
 
         var topOffset = (1 - ratio) * maxHeight;
-        if(overlappingMode === "auto") {
+        if(overlappingMode === "auto" || isNumeric(overlappingMode)) {
             ratio = 1;
             maxHeight = maxHeight - appointmentDefaultOffset;
             topOffset = appointmentDefaultOffset;
