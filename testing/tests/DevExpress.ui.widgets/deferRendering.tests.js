@@ -563,6 +563,45 @@ QUnit.test("stops on dispose (T315643)", function(assert) {
     assert.equal(stopLog[0][0], true, "T370098");
 });
 
+QUnit.test("stops animation on the 'renderWhen' option toggling (T574848)", function(assert) {
+    var options = {
+            animation: {
+                type: "test"
+            },
+            renderWhen: false
+        },
+        stopLog = [],
+        $test = $("#animation");
+
+    TransitionExecutorModule.TransitionExecutor = TransitionExecutorModule.TransitionExecutor.inherit({
+        enter: $.noop,
+        leave: $.noop,
+        start: function(config) {
+            return $.Deferred().resolve().promise();
+        },
+        stop: function() {
+            stopLog.push(arguments);
+            return $.Deferred().resolve().promise();
+        }
+    });
+
+    var deferRendering = $test
+        .find(".defer-rendering")
+        .dxDeferRendering(options)
+        .dxDeferRendering("instance");
+
+    assert.equal(stopLog.length, 0);
+
+    deferRendering.option("renderWhen", true);
+    assert.equal(stopLog.length, 0);
+
+    deferRendering.option("renderWhen", false);
+    deferRendering.option("renderWhen", true);
+    assert.equal(stopLog.length, 1, "T574848");
+
+    $test.remove();
+});
+
 QUnit.test("should support Promise/A+ standard", function(assert) {
     var resolve;
     var promise = new Promise(function(onResolve) {

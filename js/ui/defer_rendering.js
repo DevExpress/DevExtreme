@@ -148,6 +148,7 @@ var DeferRendering = Widget.inherit({
         $element.removeClass(PENDING_RENDERING_MANUAL_CLASS);
         $element.addClass(PENDING_RENDERING_ACTIVE_CLASS);
 
+        this._abortRenderTask();
         this._renderTask = commonUtils.executeAsync(function() {
             that._renderImpl()
                 .done(function() {
@@ -269,6 +270,7 @@ var DeferRendering = Widget.inherit({
                 if(previousValue === false && value === true) {
                     this._renderOrAnimate();
                 } else if(previousValue === true && value === false) {
+                    this.transitionExecutor.stop();
                     this._setLoadingState();
                 }
                 break;
@@ -298,11 +300,15 @@ var DeferRendering = Widget.inherit({
         return this._renderOrAnimate();
     },
 
-    _dispose: function() {
-        this.transitionExecutor.stop(true);
+    _abortRenderTask: function() {
         if(this._renderTask) {
             this._renderTask.abort();
         }
+    },
+
+    _dispose: function() {
+        this.transitionExecutor.stop(true);
+        this._abortRenderTask();
         this._actions = null;
         this._$initialContent = null;
         this.callBase();
