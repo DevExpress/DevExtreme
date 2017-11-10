@@ -1648,32 +1648,73 @@
 
 // FilterBuilder
 @filterbuilder-bg: @base-bg;
-@filterbuilder-plus-icon-color: #008709;
-@filterbuilder-plus-icon-hover-color: @filterbuilder-plus-icon-color;
-@filterbuilder-plus-icon-focus-color: @filterbuilder-plus-icon-color;
 
-@filterbuilder-remove-icon-color: #cf00d7;
-@filterbuilder-remove-icon-hover-color: @filterbuilder-remove-icon-color;
-@filterbuilder-remove-icon-focus-color: @filterbuilder-remove-icon-color;
+/**
+* @name 10. Plus icon color
+* @type color
+* @group filterbuilder
+*/
+@filterbuilder-plus-icon-color: fade(#008709, 30%);
+@filterbuilder-plus-icon-hover-color: fadein(@filterbuilder-plus-icon-color, 20%);
+@filterbuilder-plus-icon-focus-color: fadein(@filterbuilder-plus-icon-color, 70%);
 
-@filterbuilder-group-operation-color: @filterbuilder-remove-icon-color;
-@filterbuilder-group-operation-hover-color: @filterbuilder-remove-icon-hover-color;
-@filterbuilder-group-operation-focus-color: @filterbuilder-remove-icon-focus-color;
+/**
+* @name 10. Remove icon color
+* @type color
+* @group filterbuilder
+*/
+@filterbuilder-remove-icon-color: fade(#cf00d7, 30%);
+@filterbuilder-remove-icon-hover-color: fadein(@filterbuilder-remove-icon-color, 20%);
+@filterbuilder-remove-icon-focus-color: fadein(@filterbuilder-remove-icon-color, 70%);
 
-@filterbuilder-item-field-color: #3806ff;
-@filterbuilder-item-field-hover-color: @filterbuilder-item-field-color;
-@filterbuilder-item-field-focus-color: @filterbuilder-item-field-color;
+/**
+* @name 10. Group operation button color
+* @type color
+* @group filterbuilder
+*/
+@filterbuilder-group-operation-color: fade(#cf00d7, 30%);
+@filterbuilder-group-operation-hover-color: fadein(@filterbuilder-group-operation-color, 20%);
+@filterbuilder-group-operation-focus-color: fadein(@filterbuilder-group-operation-color, 70%);
 
-@filterbuilder-item-operator-color: @filterbuilder-plus-icon-color;
-@filterbuilder-item-operator-hover-color: @filterbuilder-plus-icon-hover-color;
-@filterbuilder-item-operator-focus-color: @filterbuilder-plus-icon-focus-color;
+/**
+* @name 10. Data field button color
+* @type color
+* @group filterbuilder
+*/
+@filterbuilder-item-field-color: fade(#3806ff, 30%);
+@filterbuilder-item-field-hover-color: fadein(@filterbuilder-item-field-color, 20%);
+@filterbuilder-item-field-focus-color: fadein(@filterbuilder-item-field-color, 70%);
+
+/**
+* @name 10. Operation button color
+* @type color
+* @group filterbuilder
+*/
+@filterbuilder-item-operator-color: fade(#008709, 30%);
+@filterbuilder-item-operator-hover-color: fadein(@filterbuilder-item-operator-color, 20%);
+@filterbuilder-item-operator-focus-color: fadein(@filterbuilder-item-operator-color, 70%);
 
 @filterbuilder-item-value-color: transparent;
 @filterbuilder-item-value-hover-color: @filterbuilder-item-value-color;
 @filterbuilder-item-value-focus-color: @filterbuilder-item-value-color;
 
-
+/**
+* @name 10. Text color
+* @type color
+* @group filterbuilder
+*/
 @filterbuilder-text-color: @base-text-color;
+
+/**
+* @name 10. Focused text color
+* @type color
+* @group filterbuilder
+*/
 @filterbuilder-text-focus-color: @base-text-color;
 
+/**
+* @name 10. Menu icon color
+* @type color
+* @group filterbuilder
+*/
 @filterbuilder-menu-icon-color: @base-icon-color;
