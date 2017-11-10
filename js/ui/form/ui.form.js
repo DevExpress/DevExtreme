@@ -1428,7 +1428,7 @@ var Form = Widget.inherit({
             } else {
                 break;
             }
-        } while(path.length && result !== false);
+        } while(path.length && !utils.isDefined(result));
 
         return result;
     },
@@ -1442,7 +1442,7 @@ var Form = Widget.inherit({
             result;
 
         $.each(items, function(index, groupItem) {
-            result = that._getItemByFieldPath(path, fieldName, groupItem);
+            result = that._getItemByFieldPath(path.slice(), fieldName, groupItem);
             if(result) {
                 return false;
             }
@@ -1456,7 +1456,7 @@ var Form = Widget.inherit({
     },
 
     _getTextWithoutSpaces: function(text) {
-        return text ? text.replace(" ", "") : undefined;
+        return text ? text.replace(/\s/g, '') : undefined;
     },
 
     _isExpectedItem: function(item, fieldName) {

@@ -605,6 +605,23 @@ var runTests = function() {
         assert.deepEqual(instance.option("selectedItemKeys"), [1, 2], "selectedItemKeys wasn't cleared");
     });
 
+    QUnit.test("option change should hsve correct arguments after deselecting a value", function(assert) {
+        assert.expect(3);
+
+        var instance = new TestComponent($("<div>"), {
+            selectionMode: "multiple",
+            dataSource: [1, 2, 3],
+            onOptionChanged: function(args) {
+                if(args.name !== "selectedItems") {
+                    return;
+                }
+                assert.ok(args.previousValue !== args.value, "values are not equal");
+            }
+        });
+
+        instance.selectItem(1);
+        instance.unselectItem(1);
+    });
 
     QUnit.module("selecting of item keys", {
         beforeEach: function() {
