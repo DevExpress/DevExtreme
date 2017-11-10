@@ -610,6 +610,25 @@ QUnit.test("Custom ticks", function(assert) {
     assert.deepEqual(this.axis._tickInterval, 6);
 });
 
+QUnit.test("T574873. Custom ticks with minor ticks calculation", function(assert) {
+    this.createAxis();
+    this.updateOptions({
+        argumentType: "numeric",
+        type: "continuous",
+        allowDecimals: true,
+        customTicks: [0, 6, 12, 18],
+        calculateMinors: true
+    });
+
+    this.axis.setBusinessRange({ minVisible: 0, maxVisible: 20, addRange: function() { } });
+
+    //act
+    this.axis.createTicks(canvas(200));
+
+    assert.deepEqual(this.axis._majorTicks.map(value), [0, 6, 12, 18]);
+    assert.deepEqual(this.axis._tickInterval, 6);
+});
+
 QUnit.test("Custom one tick", function(assert) {
     this.createAxis();
     this.updateOptions({
