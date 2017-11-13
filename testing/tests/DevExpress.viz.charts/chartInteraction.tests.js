@@ -576,6 +576,65 @@ QUnit.test("hide grids for second axis", function(assert) {
     assert.equal(verticalAxes[1].getOptions().minorGrid.visible, false, "second axis grid isn't visible");
 });
 
+QUnit.test("T570332. Do not show minor grid when it disabled and two stub axis", function(assert) {
+    //act
+    var chart = this.createChart({
+        series: [{ axis: "a1" }, { axis: "a2" }],
+        valueAxis: [{
+            name: "a2",
+            grid: {
+                visible: true
+            },
+            minorGrid: {
+                visible: false
+            }
+        }, {
+            name: "a1",
+            grid: {
+                visible: true
+            },
+            minorGrid: {
+                visible: false
+            }
+        }]
+    });
+    var verticalAxes = chart._valueAxes;
+
+    assert.equal(verticalAxes.length, 2, "chart must have two value axis");
+    assert.equal(verticalAxes[0].getOptions().minorGrid.visible, false, "first axis minor grid isn't visible");
+    assert.equal(verticalAxes[1].getOptions().minorGrid.visible, false, "second axis minor grid isn't visible");
+});
+
+QUnit.test("T570332. Make minor grid visible for first non stub axis", function(assert) {
+    //act
+    var chart = this.createChart({
+        dataSource: [{ arg: 1, val: 1 }],
+        series: [{ axis: "a1" }, { axis: "a2" }],
+        valueAxis: [{
+            name: "a2",
+            grid: {
+                visible: true
+            },
+            minorGrid: {
+                visible: false
+            }
+        }, {
+            name: "a1",
+            grid: {
+                visible: true
+            },
+            minorGrid: {
+                visible: true
+            }
+        }]
+    });
+    var verticalAxes = chart._valueAxes;
+
+    assert.equal(verticalAxes.length, 2, "chart must have two value axis");
+    assert.equal(verticalAxes[0].getOptions().minorGrid.visible, true, "first axis minor grid is visible");
+    assert.equal(verticalAxes[1].getOptions().minorGrid.visible, false, "second axis minor grid isn't visible");
+});
+
 QUnit.test("two stub axis", function(assert) {
     //act
     var chart = this.createChart({

@@ -37,41 +37,44 @@ function getFirstAxisNameForPane(axes, paneName, defaultPane) {
     return result;
 }
 
-function changeVisibilityAxisGrids(axis, visible) {
+function changeVisibilityAxisGrids(axis, gridVisibility, minorGridVisibility) {
     var gridOpt = axis.getOptions().grid,
         minorGridOpt = axis.getOptions().minorGrid;
 
-    gridOpt.visible = visible;
-    minorGridOpt && (minorGridOpt.visible = visible);
+    gridOpt.visible = gridVisibility;
+    minorGridOpt && (minorGridOpt.visible = minorGridVisibility);
 }
 
-function hideGridsOnNonFirstValueAxisForPane(valAxes, paneName, synchronizeMultiAxes) {
-    var axesForPane = [],
-        axisShown = false,
-        hidedStubAxis = [];
+function hideGridsOnNonFirstValueAxisForPane(axesForPane) {
+    var axisShown = false,
+        hiddenStubAxis = [],
+        minorGridVisibility = axesForPane.some(function(axis) {
+            var minorGridOptions = axis.getOptions().minorGrid;
+            return minorGridOptions && minorGridOptions.visible;
+        }),
+        gridVisibility = axesForPane.some(function(axis) {
+            var gridOptions = axis.getOptions().grid;
+            return gridOptions && gridOptions.visible;
+        });
 
-    _each(valAxes, function(_, axis) {
-        if(axis.pane === paneName) {
-            axesForPane.push(axis);
-        }
-    });
-    if(axesForPane.length > 1 && synchronizeMultiAxes) {
-        _each(axesForPane, function(_, axis) {
+    if(axesForPane.length > 1) {
+        axesForPane.forEach(function(axis) {
             var gridOpt = axis.getOptions().grid;
 
             if(axisShown) {
-                changeVisibilityAxisGrids(axis, false);
+                changeVisibilityAxisGrids(axis, false, false);
             } else if(gridOpt && gridOpt.visible) {
                 if(!axis.getTranslator().getBusinessRange().stubData) {
                     axisShown = true;
+                    changeVisibilityAxisGrids(axis, gridVisibility, minorGridVisibility);
                 } else {
-                    changeVisibilityAxisGrids(axis, false);
-                    hidedStubAxis.push(axis);
+                    changeVisibilityAxisGrids(axis, false, false);
+                    hiddenStubAxis.push(axis);
                 }
             }
         });
 
-        !axisShown && hidedStubAxis.length && changeVisibilityAxisGrids(hidedStubAxis[0], true);
+        !axisShown && hiddenStubAxis.length && changeVisibilityAxisGrids(hiddenStubAxis[0], gridVisibility, minorGridVisibility);
     }
 }
 
@@ -494,7 +497,11 @@ var dxChart = AdvancedChart.inherit({
             if(!paneWithAxis[paneName]) {
                 that._getValueAxis(paneName); //creates an value axis if there is no one for pane
             }
-            needHideGrids && hideGridsOnNonFirstValueAxisForPane(valueAxes, pane.name, synchronizeMultiAxes);
+            if(needHideGrids && synchronizeMultiAxes) {
+                hideGridsOnNonFirstValueAxisForPane(valueAxes.filter(function(axis) {
+                    return axis.pane === paneName;
+                }));
+            }
         });
 
         that._valueAxes = valueAxes.filter(function(axis) {
