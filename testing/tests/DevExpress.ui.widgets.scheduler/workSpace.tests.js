@@ -1443,6 +1443,20 @@ QUnit.testStart(function() {
         assert.ok($element.hasClass("dx-scheduler-work-space-month"), "dxSchedulerWorkSpaceMonth has 'dx-scheduler-workspace-month' css class");
     });
 
+    QUnit.test("Scheduler workspace month scrollable content should have a right css class", function(assert) {
+        var $scrollableContent = this.instance.getScrollable().$content();
+
+        assert.ok($scrollableContent.hasClass("dx-scheduler-scrollable-fixed-content"), "Scrollable content has 'dx-scheduler-scrollable-fixed-content' css class");
+    });
+
+    QUnit.test("Scheduler workspace month scrollable content should not have a right css class, if intervalCount is set", function(assert) {
+        this.instance.option("intervalCount", 2);
+
+        var $scrollableContent = this.instance.getScrollable().$content();
+
+        assert.notOk($scrollableContent.hasClass("dx-scheduler-scrollable-fixed-content"), "Scrollable content hasn't 'dx-scheduler-scrollable-fixed-content' css class");
+    });
+
     QUnit.test("Scheduler all day panel should not contain rows & cells", function(assert) {
         var $allDayPanel = this.instance.$element().find(".dx-scheduler-all-day-panel");
 
@@ -1578,26 +1592,26 @@ QUnit.testStart(function() {
         assert.equal($cells.length, 11, "Other-month cells count is correct");
     });
 
-    // QUnit.test("Scheduler workspace month view should have a dates with other-month class, if startDate is set", function(assert) {
-    //     var $element = this.instance.$element();
+    QUnit.test("Scheduler workspace month view should have a dates with other-month class, if startDate is set", function(assert) {
+        var $element = this.instance.$element();
 
-    //     this.instance.option("currentDate", new Date(2015, 2, 1));
-    //     this.instance.option("startDate", new Date(2015, 5, 1));
+        this.instance.option("currentDate", new Date(2015, 2, 1));
+        this.instance.option("startDate", new Date(2015, 5, 1));
 
-    //     var $cells = $element.find(".dx-scheduler-date-table-other-month");
-    //     assert.equal($cells.length, 12, "Other-month cells count is correct");
-    // });
+        var $cells = $element.find(".dx-scheduler-date-table-other-month");
+        assert.equal($cells.length, 11, "Other-month cells count is correct");
+    });
 
-    // QUnit.test("Scheduler workspace month view should have a dates with other-month class, if startDate & intervalCount is set", function(assert) {
-    //     var $element = this.instance.$element();
+    QUnit.test("Scheduler workspace month view should have a dates with other-month class, if startDate & intervalCount is set", function(assert) {
+        var $element = this.instance.$element();
 
-    //     this.instance.option("currentDate", new Date(2015, 2, 1));
-    //     this.instance.option("startDate", new Date(2015, 11, 1));
-    //     this.instance.option("intervalCount", 3);
+        this.instance.option("currentDate", new Date(2015, 2, 1));
+        this.instance.option("startDate", new Date(2015, 11, 1));
+        this.instance.option("intervalCount", 3);
 
-    //     var $cells = $element.find(".dx-scheduler-date-table-other-month");
-    //     assert.equal($cells.length, 7, "Other-month cells count is correct");
-    // });
+        var $cells = $element.find(".dx-scheduler-date-table-other-month");
+        assert.equal($cells.length, 6, "Other-month cells count is correct");
+    });
 
     QUnit.test("Scheduler workspace should have a right first day of week", function(assert) {
         var $element = this.instance.$element();

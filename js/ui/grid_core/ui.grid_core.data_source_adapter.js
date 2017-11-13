@@ -400,7 +400,9 @@ module.exports = gridCore.Controller.inherit((function() {
 
                 that._handleDataLoading(loadResult);
                 executeTask(function() {
-                    if(!dataSource.store()) return;
+                    if(!dataSource.store()) {
+                        return d.reject("canceled");
+                    }
 
                     when(loadResult.data || that.loadFromStore(loadResult.storeLoadOptions)).done(function(data, extra) {
                         loadResult.data = data;
