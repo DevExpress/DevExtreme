@@ -1166,6 +1166,31 @@ QUnit.test("marginOptions.checkInterval on valueAxis - ignore interval", functio
     });
 });
 
+QUnit.test("marginOptions.checkInterval on argumentAxis - correctly apply margins for uneven boundaries", function(assert) {
+    this.testMargins(assert, {
+        options: {
+            valueMarginsEnabled: true
+        },
+        marginOptions: {
+            checkInterval: true
+        },
+        range: {
+            min: 102.3,
+            max: 20105.5,
+            interval: 897.7
+        },
+        ticks: [ 200, 400, 600, 800, 1000, 1200, 1400, 1600, 1800, 2000],
+        expectedRange: {
+            min: -346.6,
+            max: 20500,
+            minVisible: -346.6,
+            maxVisible: 20500,
+            interval: 897.7
+        },
+        isArgumentAxis: true
+    });
+});
+
 QUnit.test("marginOptions.checkInterval and marginOptions.size, size more than interval - apply margins by size", function(assert) {
     this.testMargins(assert, {
         options: {
@@ -1643,6 +1668,59 @@ QUnit.test("Logarithmic axis. marginOptions.size - correctly apply margins", fun
             max: 1000000,
             minVisible: 1,
             maxVisible: 1000000
+        },
+        isArgumentAxis: true
+    });
+});
+
+QUnit.test("Logarithmic axis. Correctly apply margins for uneven boundaries", function(assert) {
+    this.testMargins(assert, {
+        options: {
+            type: "logarithmic",
+            logarithmBase: 10,
+            valueMarginsEnabled: true
+        },
+        range: {
+            min: 102.3,
+            max: 200105.5,
+            axisType: "logarithmic",
+            base: 10,
+            interval: 0.1
+        },
+        ticks: [1000, 100000],
+        expectedRange: {
+            min: 102.3,
+            max: 200105.5,
+            minVisible: 102.3,
+            maxVisible: 200105.5
+        },
+        isArgumentAxis: true
+    });
+});
+
+QUnit.test("Logarithmic axis. marginOptions.checkInterval - correctly apply margins for uneven boundaries", function(assert) {
+    this.testMargins(assert, {
+        options: {
+            type: "logarithmic",
+            logarithmBase: 10,
+            valueMarginsEnabled: true
+        },
+        marginOptions: {
+            checkInterval: true
+        },
+        range: {
+            min: 1.3,
+            max: 200105.5,
+            axisType: "logarithmic",
+            base: 10,
+            interval: 0.1
+        },
+        ticks: [10, 1000, 100000],
+        expectedRange: {
+            min: 1.15,
+            max: 224000,
+            minVisible: 1.15,
+            maxVisible: 224000
         },
         isArgumentAxis: true
     });
