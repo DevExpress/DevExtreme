@@ -723,13 +723,11 @@
     }
 }
 
+.dx-scheduler-scrollable-fixed-content {
+    height: 100%;
+}
+
 .dx-scheduler-work-space-month {
-    
-    &:not(.dx-scheduler-work-space-count) {
-        .dx-scrollable .dx-scrollable-content {
-            height: 100%;
-        }
-    }
 
     .dx-scheduler-all-day-title {
         display: none;
@@ -813,6 +811,9 @@
     &.dx-scheduler-work-space-count {
         .dx-scheduler-date-table-cell {
             height: @SCHEDULER_WORKSPACE_DATE_TABLE_CELL_HEIGHT * 1.5;
+        }
+        .dx-scheduler-scrollable-fixed-content {
+            height: auto;
         }
         .dx-scheduler-date-table-first-of-month {
             color: @SCHEDULER_WORKSPACE_ACCENT_COLOR;

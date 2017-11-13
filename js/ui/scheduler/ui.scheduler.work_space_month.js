@@ -11,12 +11,23 @@ var MONTH_CLASS = "dx-scheduler-work-space-month",
 
     DATE_TABLE_CURRENT_DATE_CLASS = "dx-scheduler-date-table-current-date",
     DATE_TABLE_FIRST_OF_MONTH_CLASS = "dx-scheduler-date-table-first-of-month",
-    DATE_TABLE_OTHER_MONTH_DATE_CLASS = "dx-scheduler-date-table-other-month";
+    DATE_TABLE_OTHER_MONTH_DATE_CLASS = "dx-scheduler-date-table-other-month",
+    DATE_TABLE_SCROLLABLE_FIXED_CLASS = "dx-scheduler-scrollable-fixed-content";
 
 var DAYS_IN_WEEK = 7,
     DAY_IN_MILLISECONDS = 86400000;
 
 var SchedulerWorkSpaceMonth = SchedulerWorkSpace.inherit({
+    _render: function() {
+        this.callBase();
+
+        this._addFixedScrollableClass();
+    },
+
+    _addFixedScrollableClass: function() {
+        this._dateTableScrollable.$content().addClass(DATE_TABLE_SCROLLABLE_FIXED_CLASS);
+    },
+
     _getElementClass: function() {
         return MONTH_CLASS;
     },

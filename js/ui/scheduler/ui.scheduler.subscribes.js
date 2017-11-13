@@ -287,6 +287,7 @@ var subscribes = {
     getRenderingStrategy: function() {
         return this._getAppointmentsRenderingStrategy();
     },
+
     correctAppointmentCoordinates: function(options) {
         var isAllDay = options.allDay,
             containerSign = options.isFixedContainer ? -1 : 1;
@@ -586,7 +587,6 @@ var subscribes = {
             each(rows[i], applyOffset);
         }
     },
-
 
     getTimezone: function() {
         return this._getTimezoneOffsetByOption();
