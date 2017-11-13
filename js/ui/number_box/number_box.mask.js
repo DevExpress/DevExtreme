@@ -144,7 +144,7 @@ var NumberBoxMask = NumberBoxBase.inherit({
 
         this._lastKey = e.originalEvent.key;
 
-        var newValue = this._tryParse(text, caret, e.originalEvent.key);
+        var newValue = this._tryParse(text, caret, this._lastKey);
         if(newValue === undefined) {
             e.originalEvent.preventDefault();
         } else {
@@ -386,8 +386,9 @@ var NumberBoxMask = NumberBoxBase.inherit({
     },
 
     _isStub: function(str, isString) {
-        var escapedDecimalSeparator = escapeRegExp(number.getDecimalSeparator());
-        var stubRegExp = new RegExp("^[^0-9" + escapedDecimalSeparator + "]+$", "g");
+        var escapedDecimalSeparator = escapeRegExp(number.getDecimalSeparator()),
+            stubRegExp = new RegExp("^[^0-9" + escapedDecimalSeparator + "]+$", "g");
+
         return stubRegExp.test(str) && (isString || this._isChar(str));
     },
 
@@ -449,8 +450,7 @@ var NumberBoxMask = NumberBoxBase.inherit({
             caret = this._caret(),
             decimalSeparator = number.getDecimalSeparator(),
             decimalSeparatorIndex = text.indexOf(decimalSeparator),
-            isFloatInput = decimalSeparatorIndex >= 0 && caret.start > decimalSeparatorIndex,
-            formatted,
+            caretOnFloatPart = decimalSeparatorIndex >= 0 && caret.start > decimalSeparatorIndex,
             caretDelta;
 
         if(this._formattedValue !== text) {
@@ -460,11 +460,13 @@ var NumberBoxMask = NumberBoxBase.inherit({
             }
         }
 
-        formatted = number.format(this._parsedValue, format) || "";
+        var formatted = number.format(this._parsedValue, format) || "",
+            isFirstInput = this._formattedValue === "",
+            isOneCharInput = Math.abs(formatted.length - text.length) === 1;
 
-        if((Math.abs(formatted.length - text.length) === 1 && isFloatInput) || this._formattedValue === "") {
+        if((isOneCharInput && caretOnFloatPart) || isFirstInput) {
             caretDelta = 0;
-        } else if(text.length === 1 && formatted.length && this._lastKey === text) {
+        } else if(formatted.length && this._lastKey === text) {
             caretDelta = formatted.indexOf(text) - caret.start + 1;
         } else {
             caretDelta = formatted.length - text.length;
