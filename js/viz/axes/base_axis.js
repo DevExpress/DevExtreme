@@ -13,12 +13,12 @@ var vizUtils = require("../core/utils"),
     rangeModule = require("../translators/range"),
     tick = require("./tick").tick,
     _format = require("./smart_formatter").smartFormatter,
-    isNumeric = require("../../core/utils/type").isNumeric,
     adjust = require("../../core/utils/math").adjust,
     convertTicksToValues = constants.convertTicksToValues,
 
     isDefined = typeUtils.isDefined,
     isFunction = typeUtils.isFunction,
+    isNumeric = typeUtils.isNumeric,
     patchFontOptions = vizUtils.patchFontOptions,
 
     _math = Math,
