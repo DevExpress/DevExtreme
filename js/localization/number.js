@@ -217,6 +217,23 @@ var numberLocalization = dependencyInjector({
         return this.format(1.2, { type: "fixedPoint", precision: 1 })[1];
     },
 
+    convertDigits: function(value, toStandard) {
+        var digits = this.format(90, "decimal");
+
+        if(typeof value !== "string" || digits[1] === "0") {
+            return value;
+        }
+
+        var fromFirstDigit = toStandard ? digits[1] : "0",
+            toFirstDigit = toStandard ? "0" : digits[1],
+            fromLastDigit = toStandard ? digits[0] : "9",
+            regExp = new RegExp("[" + fromFirstDigit + "-" + fromLastDigit + "]", "g");
+
+        return value.replace(regExp, function(char) {
+            return String.fromCharCode(char.charCodeAt(0) + (toFirstDigit.charCodeAt(0) - fromFirstDigit.charCodeAt(0)));
+        });
+    },
+
     format: function(value, format) {
         if(typeof value !== "number") {
             return value;
@@ -241,7 +258,7 @@ var numberLocalization = dependencyInjector({
         var numberConfig = this._parseNumberFormatString(format.type);
 
         if(!numberConfig) {
-            return ldmlNumber.getFormatter(format.type, this._getSeparators())(value);
+            return this.convertDigits(ldmlNumber.getFormatter(format.type, this._getSeparators())(value));
         }
 
         return this._formatNumber(value, numberConfig, format);
@@ -257,6 +274,7 @@ var numberLocalization = dependencyInjector({
         }
 
         if(typeof format === "string") {
+            text = this.convertDigits(text, true);
             return ldmlNumber.getParser(format, this._getSeparators())(text);
         }
 

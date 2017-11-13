@@ -8,6 +8,7 @@ var dependencyInjector = require("../core/utils/dependency_injector"),
     getLDMLDateFormat = require("./ldml/date.format").getFormat,
     getLDMLDateParser = require("./ldml/date.parser").getParser,
     defaultDateNames = require("./default_date_names"),
+    numberLocalization = require("./number"),
     errors = require("../core/errors");
 
 require("./core");
@@ -122,7 +123,7 @@ var dateLocalization = dependencyInjector({
             format = format.type || format;
             if(isString(format)) {
                 format = FORMATS_TO_PATTERN_MAP[format.toLowerCase()] || format;
-                return getLDMLDateFormatter(format, this)(date);
+                return numberLocalization.convertDigits(getLDMLDateFormatter(format, this)(date));
             }
         }
 
@@ -164,6 +165,7 @@ var dateLocalization = dependencyInjector({
         }
 
         if(ldmlFormat) {
+            text = numberLocalization.convertDigits(text, true);
             return getLDMLDateParser(ldmlFormat, this)(text);
         }
 
