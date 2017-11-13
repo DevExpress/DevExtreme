@@ -1544,7 +1544,6 @@ var Scheduler = Widget.inherit({
     _dispose: function() {
         this.hideAppointmentPopup();
         this.hideAppointmentTooltip();
-        this.option("templatesRenderAsynchronously") && clearTimeout(this._recalculateTimeout);
 
         clearTimeout(this._repaintTimer);
 
@@ -1685,16 +1684,8 @@ var Scheduler = Widget.inherit({
     _recalculateWorkspace: function() {
         this._workSpaceRecalculation = $.Deferred();
 
-        var recalculateHandler = (function() {
-            domUtils.triggerResizeEvent(this._workSpace.element());
-            this._workSpaceRecalculation.resolve();
-        }).bind(this);
-
-        if(this.option("templatesRenderAsynchronously")) {
-            this._recalculateTimeout = setTimeout(recalculateHandler);
-        } else {
-            recalculateHandler();
-        }
+        domUtils.triggerResizeEvent(this._workSpace.element());
+        this._workSpaceRecalculation.resolve();
     },
 
     _workSpaceConfig: function(groups) {
