@@ -106,6 +106,7 @@ var EditorFactory = modules.ViewController.inherit({
             that._$focusedElement && that._$focusedElement.removeClass(FOCUSED_ELEMENT_CLASS);
             that._$focusedElement = $element;
 
+            clearTimeout(that._focusTimeoutID);
             that._focusTimeoutID = setTimeout(function() {
                 delete that._focusTimeoutID;
                 var $focusOverlay = that._$focusOverlay = that._$focusOverlay || $("<div>")
