@@ -6,7 +6,6 @@ var $ = require("../../core/renderer"),
     TemplateBase = require("../../ui/widget/ui.template_base"),
     domUtils = require("../../core/utils/dom");
 
-
 var getParentContext = function(data) {
     var parentNode = document.createElement("div");
 
