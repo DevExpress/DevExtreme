@@ -25,7 +25,8 @@ function getClosestCoord(point, coords) {
             closestCoord = coord;
         }
     });
-    return closestCoord;
+
+    return [_floor(closestCoord[0]), _floor(closestCoord[1])];
 }
 
 // We could always conside center of label as label point (with appropriate connector path clipping). In that case we do not depend neither on background nor on rotation.
@@ -36,12 +37,26 @@ var barPointStrategy = {
         return labelPoint.x >= figure.x && labelPoint.x <= figure.x + figure.width && labelPoint.y >= figure.y && labelPoint.y <= figure.y + figure.height;
     },
 
-    prepareLabelPoints: function(points) {
-        return points;
+    prepareLabelPoints: function(bBox) {
+        var x1 = bBox.x,
+            xc = x1 + bBox.width / 2,
+            x2 = x1 + bBox.width - 1,
+            y1 = bBox.y,
+            y2 = y1 + bBox.height - 1;
+
+        return [
+            [x1, y1],
+            [xc, y1],
+            [x2, y1],
+
+            [x1, y2],
+            [xc, y2],
+            [x2, y2]
+        ];
     },
 
     getFigureCenter: function(figure) {
-        return [figure.x + figure.width / 2, figure.y + figure.height / 2];
+        return [_floor(figure.x + figure.width / 2), _floor(figure.y + figure.height / 2)];
     },
 
     findFigurePoint: function(figure, labelPoint) {
@@ -52,7 +67,20 @@ var barPointStrategy = {
                 [figure.x + figure.width, figureCenter[1]],
                 [figureCenter[0], figure.y]
             ]);
-        return [_round(point[0]), _round(point[1])];
+        return point;
+    },
+
+    adjustPoints: function(points) {
+        var lineIsVertical = Math.abs(points[1] - points[3]) <= 1,
+            lineIsHorizontal = Math.abs(points[0] - points[2]) <= 1;
+
+        if(lineIsHorizontal) {
+            points[0] = points[2];
+        }
+        if(lineIsVertical) {
+            points[1] = points[3];
+        }
+        return points;
     }
 };
 
@@ -70,7 +98,9 @@ var symbolPointStrategy = {
     findFigurePoint: function(figure, labelPoint) {
         var angle = Math.atan2(figure.y - labelPoint[1], labelPoint[0] - figure.x);
         return [_round(figure.x + figure.r * Math.cos(angle)), _round(figure.y - figure.r * Math.sin(angle))];
-    }
+    },
+
+    adjustPoints: barPointStrategy.adjustPoints
 };
 
 var piePointStrategy = {
@@ -78,15 +108,22 @@ var piePointStrategy = {
         return !isOutside;
     },
 
-    prepareLabelPoints: function(points, center, angle) {
-        var rotatedPoints = [],
-            x0 = center[0],
-            y0 = center[1],
+    prepareLabelPoints: function(bBox, textSize, angle) {
+        var xc = bBox.x + bBox.width / 2,
+            yc = bBox.y + bBox.height / 2,
+            points = [
+                [xc, yc - textSize[1] / 2],
+                [xc + textSize[0] / 2, yc],
+                [xc, yc + textSize[1] / 2],
+                [xc - textSize[0] / 2, yc],
+            ],
+            rotatedPoints = [],
             cosSin = _getCosAndSin(angle || 0);
+
         $.each(points, function(_, point) {
             rotatedPoints.push([
-                _round(((point[0] - x0) * cosSin.cos + (point[1] - y0) * cosSin.sin) + x0),
-                _round((-(point[0] - x0) * cosSin.sin + (point[1] - y0) * cosSin.cos) + y0)
+                _round(((point[0] - xc) * cosSin.cos + (point[1] - yc) * cosSin.sin) + xc),
+                _round((-(point[0] - xc) * cosSin.sin + (point[1] - yc) * cosSin.cos) + yc)
             ]);
         });
         return rotatedPoints;
@@ -101,6 +138,10 @@ var piePointStrategy = {
             point.push(_round(x), labelPoint[1]);
         }
         return point;
+    },
+
+    adjustPoints: function(points) {
+        return points;
     }
 };
 
@@ -286,25 +327,14 @@ Label.prototype = {
             bBox = that.getBoundingRect(),
             labelPoint,
             figurePoint,
-            xc,
-            yc,
             points = [];
         if(!strategy.isLabelInside(bBox, figure, that._options.position !== "inside")) {
-            xc = bBox.x + bBox.width / 2;
-            yc = bBox.y + bBox.height / 2;
-            points = strategy.prepareLabelPoints([
-                    [xc, yc - that._textSize[1] / 2],
-                    [xc + that._textSize[0] / 2, yc],
-                    [xc, yc + that._textSize[1] / 2],
-                    [xc - that._textSize[0] / 2, yc]
-            ],
-                [xc, yc], -that._options.rotationAngle || 0);
+            points = strategy.prepareLabelPoints(bBox, this._textSize, -that._options.rotationAngle || 0);
             labelPoint = getClosestCoord(strategy.getFigureCenter(figure), points);
-            labelPoint = [_floor(labelPoint[0]), _floor(labelPoint[1])];
             figurePoint = strategy.findFigurePoint(figure, labelPoint);
             points = figurePoint.concat(labelPoint);
         }
-        return points;
+        return strategy.adjustPoints(points);
     },
 
     // TODO: Should not be called when not invisible (check for "_textContent" is to be removed)
