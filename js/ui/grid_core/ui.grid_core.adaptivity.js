@@ -1025,10 +1025,6 @@ module.exports = {
                     return $row.find("td:not(.dx-datagrid-hidden-column, [class*='dx-command-'])");
                 },
 
-                _equalCellElements: function($cell1, $cell2) {
-                    return $cell1.get(0).cellIndex === $cell2.get(0).cellIndex;
-                },
-
                 _processNextCellInMasterDetail: function($nextCell) {
                     this.callBase($nextCell);
 
@@ -1049,15 +1045,13 @@ module.exports = {
                             $dataCells = this._getDataCellElements($row),
                             $targetCell = direction === "next" ? $dataCells.last() : $dataCells.first(),
                             rowIndex = $row.get(0).rowIndex,
-                            key = this._dataController.getKeyByRowIndex(direction === "next" ? rowIndex : rowIndex - 1);
+                            adaptiveController = this._adaptiveController,
+                            key = this._dataController.getKeyByRowIndex(direction === "next" ? rowIndex : rowIndex - 1),
+                            isCellElementsEquals = $currentCell && $targetCell && $currentCell.get(0) === $targetCell.get(0);
 
-                        return this._isAdaptiveDetailRowExpanded(key) && this._equalCellElements($currentCell, $targetCell);
+                        return adaptiveController.isAdaptiveDetailRowExpanded(key) && isCellElementsEquals;
                     }
                     return result;
-                },
-
-                _isAdaptiveDetailRowExpanded: function(key) {
-                    return this._adaptiveController.isAdaptiveDetailRowExpanded(key);
                 },
 
                 init: function() {
