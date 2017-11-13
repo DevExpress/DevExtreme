@@ -119,7 +119,7 @@ QUnit.test("List creation", function(assert) {
     assert.deepEqual(this.renderer.rect.getCall(0).returnValue.attr.getCall(1).args[0], {
         fill: "#f5f5f5",
         stroke: "#b6b6b6",
-        height: 90
+        height: 92
     }, "List rect style");
 
     assert.deepEqual(this.renderer.rect.getCall(0).returnValue.data.getCall(0).args[0], { "export-element-type": "list" }, "Rect data");
@@ -132,7 +132,7 @@ QUnit.test("List creation", function(assert) {
 
     assert.equal(this.renderer.path.getCall(1).args[1], "line", "List separator type");
     assert.deepEqual(this.renderer.path.getCall(1).returnValue.attr.getCall(0).args[0], {
-        d: "M -85 68 L 35 68",
+        d: "M -85 69 L 35 69",
         stroke: "#b6b6b6",
         "stroke-width": 1,
         sharp: "v",
@@ -154,7 +154,7 @@ QUnit.test("List creation", function(assert) {
     }, "Printing text style");
     assert.deepEqual(this.renderer.text.getCall(0).returnValue.attr.getCall(0).args[0], {
         "x": -70,
-        "y": 61,
+        "y": 62,
         align: "left"
     }, "Printing text attributes");
     assert.deepEqual(this.renderer.rect.getCall(2).returnValue.data.getCall(0).args[0], {
@@ -177,7 +177,7 @@ QUnit.test("List creation", function(assert) {
     }, "JPEG rect events data");
     assert.deepEqual(this.renderer.text.getCall(1).returnValue.attr.getCall(0).args[0], {
         x: -70,
-        y: 91,
+        y: 92,
         align: "left"
     }, "JPEG text attrs");
 
@@ -197,7 +197,7 @@ QUnit.test("List creation", function(assert) {
     }, "PNG rect events data");
     assert.deepEqual(this.renderer.text.getCall(2).returnValue.attr.getCall(0).args[0], {
         x: -70,
-        y: 121,
+        y: 122,
         align: "left"
     }, "PNG text attrs");
 });
@@ -218,7 +218,7 @@ QUnit.test("List creation, without printing", function(assert) {
     assert.deepEqual(this.renderer.rect.getCall(0).returnValue.attr.getCall(1).args[0], {
         fill: "#f5f5f5",
         stroke: "#b6b6b6",
-        height: 30
+        height: 32
     }, "list rect style");
 
     assert.equal(this.renderer.path.callCount, 1, "paths count");
@@ -227,7 +227,7 @@ QUnit.test("List creation, without printing", function(assert) {
     assert.deepEqual(this.renderer.text.getCall(0).args, ["JPEG file"], "jpeg text params");
     assert.deepEqual(this.renderer.text.getCall(0).returnValue.attr.getCall(0).args[0], {
         x: -70,
-        y: 61,
+        y: 62,
         align: "left"
     }, "JPEG text attrs");
     assert.deepEqual(this.renderer.text.getCall(0).returnValue.css.getCall(0).args[0], {
@@ -246,7 +246,7 @@ QUnit.test("List creation, without formats", function(assert) {
     this.createExportMenu();
 
     //assert
-    assert.deepEqual(this.renderer.rect.getCall(0).returnValue.attr.getCall(1).args[0].height, 30, "List rect");
+    assert.deepEqual(this.renderer.rect.getCall(0).returnValue.attr.getCall(1).args[0].height, 32, "List rect");
     assert.deepEqual(this.renderer.rect.getCall(2).returnValue.css.getCall(0).args[0], {
         cursor: "pointer",
         "pointer-events": "all"
@@ -258,7 +258,7 @@ QUnit.test("List creation, without formats", function(assert) {
     assert.deepEqual(this.renderer.text.getCall(0).args, ["Print"], "Printing text params");
     assert.deepEqual(this.renderer.text.getCall(0).returnValue.attr.getCall(0).args[0], {
         x: -70,
-        y: 61,
+        y: 62,
         align: "left"
     }, "Printing text attributes");
 
@@ -529,7 +529,7 @@ QUnit.test("Set options", function(assert) {
         height: 30,
         width: 118,
         x: -84,
-        y: 39
+        y: 40
     }, "List rect attributes");
 
     assert.deepEqual(this.renderer.rect.getCall(0).returnValue.css.getCall(0).args[0], {
@@ -540,7 +540,7 @@ QUnit.test("Set options", function(assert) {
     assert.deepEqual(this.renderer.text.getCall(0).args, ["PNG file"], "PNG text params");
     assert.deepEqual(this.renderer.text.getCall(0).returnValue.attr.getCall(0).args[0], {
         "x": -70,
-        "y": 61,
+        "y": 62,
         align: "left"
     }, "PNG text attributes");
     assert.deepEqual(this.renderer.text.getCall(0).returnValue.css.getCall(0).args[0], {
