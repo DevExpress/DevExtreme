@@ -88,3 +88,15 @@ QUnit.test("template binding works when model is not defined", function(assert) 
     assert.equal($container.children().text(), "1");
 });
 
+QUnit.test("bindingContext for container must have $root field (T561880)", function(assert) {
+    var vm = {
+        text: "test"
+    };
+    ko.applyBindings(vm, $("#qunit-fixture")[0]);
+    var $container = $("<div>");
+    var template = new KoTemplate($("<div data-bind='text: text + $root.text'>"));
+
+    template.render({ container: $container, model: vm });
+
+    assert.equal($container.children().text(), "testtest");
+});
