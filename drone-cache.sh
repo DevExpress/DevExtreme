@@ -17,8 +17,8 @@ if [ "$1" == "rebuild" ]; then
 
     for i in $CACHE_DIRS; do
         if [ -e $i ]; then
-            url="http://$CACHE_BUCKET.s3.amazonaws.com/$DRONE_REPO/$DRONE_BRANCH/$i.tgz"
-            if tar cfz - $i | curl -Lsf -X PUT -H "x-amz-acl: bucket-owner-full-control" --data-binary @- "$url"; then
+            url="http://$CACHE_BUCKET.s3.amazonaws.com/$DRONE_REPO/$DRONE_BRANCH/$i.tar.lz4"
+            if tar cf - $i | lz4 -1 | curl -Lsf -X PUT -H "x-amz-acl: bucket-owner-full-control" --data-binary @- "$url"; then
                 echo "Uploaded: $url"
             fi
         else
@@ -31,8 +31,8 @@ fi
 
 if [ "$1" == "restore" ]; then
     for i in $CACHE_DIRS; do
-        url="http://$CACHE_BUCKET.s3.amazonaws.com/$DRONE_REPO/$DRONE_BRANCH/$i.tgz"
-        if curl -Lsf "$url" | tar xzf - 2>/dev/null; then
+        url="http://$CACHE_BUCKET.s3.amazonaws.com/$DRONE_REPO/$DRONE_BRANCH/$i.tar.lz4"
+        if curl -Lsf "$url" | lz4 -d | tar xf - 2>/dev/null; then
             echo "Restored: $url"
         else
             echo "Unable to restore: $url"

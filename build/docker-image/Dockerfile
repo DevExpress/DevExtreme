@@ -34,6 +34,9 @@ RUN unlink ./chrome.deb
 # Utils for docker-ci.sh
 RUN apt-get install -y dbus-x11 git httping x11vnc xvfb
 
+# Utils for drone-cache.sh
+RUN apt-get install liblz4-tool
+
 # Yes :)
 RUN apt-get install -y mc
 
