@@ -1025,18 +1025,18 @@ module.exports = {
                 },
 
                 _getDataCellElements: function($row) {
-                    return $row.find("td:not(.dx-datagrid-hidden-column, [class*='dx-command-'])");
+                    return $row.find("td:not(.dx-datagrid-hidden-column):not([class*='dx-command-'])");
                 },
 
                 _processNextCellInMasterDetail: function($nextCell) {
                     this.callBase($nextCell);
 
-                    if(!this._isInsideEditForm(nextCell) && nextCell) {
+                    if(!this._isInsideEditForm($nextCell) && $nextCell) {
                         var focusHandler = function() {
-                            eventsEngine.off(nextCell, "focus", focusHandler);
-                            eventsEngine.trigger(nextCell, "dxclick");
+                            eventsEngine.off($nextCell, "focus", focusHandler);
+                            eventsEngine.trigger($nextCell, "dxclick");
                         };
-                        eventsEngine.on(nextCell, "focus", focusHandler);
+                        eventsEngine.on($nextCell, "focus", focusHandler);
                     }
                 },
 
