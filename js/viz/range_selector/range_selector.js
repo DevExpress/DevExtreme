@@ -197,11 +197,12 @@ function checkLogarithmicOptions(options, defaultLogarithmBase, incidentOccurred
     }
 }
 
-function calculateScaleAreaHeight(renderer, scaleOptions, visibleMarkers) {
+function calculateScaleAreaHeight(renderer, scaleOptions, visibleMarkers, tickIntervalsInfo) {
     var labelScaleOptions = scaleOptions.label,
         markerScaleOptions = scaleOptions.marker,
         placeholderHeight = scaleOptions.placeholderHeight,
-        text = commonModule.formatValue(scaleOptions.startValue, labelScaleOptions);
+        ticks = scaleOptions.type === "semidiscrete" ? scaleOptions.customTicks : tickIntervalsInfo.ticks,
+        text = commonModule.formatValue(ticks[0], labelScaleOptions);
 
     if(placeholderHeight) {
         return placeholderHeight;
@@ -882,7 +883,6 @@ var dxRangeSelector = require("../core/base_widget").inherit({
             tickIntervalsInfo = updateTickIntervals(scaleOptions, canvas.width, that._incidentOccurred, argTranslatorRange),
             sliderMarkerOptions,
             indents,
-            scaleLabelsAreaHeight,
             rangeContainerCanvas,
             chartThemeManager = seriesDataSource && seriesDataSource.isShowChart() && seriesDataSource.getThemeManager();
 
@@ -895,12 +895,13 @@ var dxRangeSelector = require("../core/base_widget").inherit({
         updateTranslatorRangeInterval(argTranslatorRange, scaleOptions);
         sliderMarkerOptions = that._prepareSliderMarkersOptions(scaleOptions, canvas.width, tickIntervalsInfo);
         indents = calculateIndents(that._renderer, scaleOptions, sliderMarkerOptions, that.option("indent"), tickIntervalsInfo);
-        scaleLabelsAreaHeight = calculateScaleAreaHeight(that._renderer, scaleOptions, showScaleMarkers(scaleOptions));
         rangeContainerCanvas = {
             left: canvas.left + indents.left,
             top: canvas.top + indents.top,
             width: canvas.left + indents.left + _max(canvas.width - indents.left - indents.right, 1),
-            height: _max(!isCompactMode ? canvas.height - indents.top - indents.bottom - scaleLabelsAreaHeight : commonModule.HEIGHT_COMPACT_MODE, 0),
+            height: _max(!isCompactMode
+                ? canvas.height - indents.top - indents.bottom - calculateScaleAreaHeight(that._renderer, scaleOptions, showScaleMarkers(scaleOptions), tickIntervalsInfo)
+                : commonModule.HEIGHT_COMPACT_MODE, 0),
             right: 0,
             bottom: 0
         };

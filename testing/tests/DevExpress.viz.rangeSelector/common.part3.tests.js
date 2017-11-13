@@ -8,8 +8,7 @@ var $ = require("jquery"),
     _SeriesDataSource = seriesDataSourceModule.SeriesDataSource,
     dataSourceModule = require("data/data_source/data_source"),
     dateLocalization = require("localization/date"),
-    axisModule = require("viz/axes/base_axis"),
-    typeUtils = require("core/utils/type");
+    axisModule = require("viz/axes/base_axis");
 
 var formatsAreEqual = function(format1, format2) {
     var testDate = new Date(0, 1, 2, 3, 4, 5, 6);
@@ -1370,34 +1369,6 @@ QUnit.test("rangeContainer canvas, it has image", function(assert) {
     assert.deepEqual(this.slidersController.update.lastCall.args[2], false, "compact mode");
 });
 
-QUnit.test("scaleLabelsAreaHeight if scale.placeholderHeight is not defined", function(assert) {
-    this.createWidget();
-
-    assert.deepEqual(this.rangeView.update.lastCall.args[2], { left: 0, top: 0, width: 299, height: 24, right: 0, bottom: 0 });
-});
-
-QUnit.test("scaleLabelsAreaHeight if scale.placeholderHeight is defined", function(assert) {
-    this.createWidget({
-        scale: {
-            placeholderHeight: 30
-        }
-    });
-
-    assert.deepEqual(this.rangeView.update.lastCall.args[2], { left: 0, top: 0, width: 299, height: 24, right: 0, bottom: 0 });
-});
-
-QUnit.test("scaleLabelsAreaHeight if scale.placeholderHeight is not defined and invisible labels", function(assert) {
-    this.createWidget({
-        scale: {
-            label: {
-                visible: false
-            }
-        }
-    });
-
-    assert.deepEqual(this.rangeView.update.lastCall.args[2], { left: 0, top: 0, width: 299, height: 24, right: 0, bottom: 0 });
-});
-
 QUnit.test("T214998. scale multi-line text label", function(assert) {
     this.createWidget({
         scale: {
@@ -1411,25 +1382,6 @@ QUnit.test("T214998. scale multi-line text label", function(assert) {
         }
     });
     assert.ok(true);
-});
-
-QUnit.test("Passing to customizeText dateTime values for dateTime axis", function(assert) {
-    var values = [];
-    this.createWidget({
-        scale: {
-            startValue: new Date(2017, 0, 1),
-            endValue: new Date(2018, 0, 1),
-            label: {
-                customizeText: function(e) {
-                    values.push(e.value);
-                }
-            }
-        }
-    });
-
-    values.forEach(function(v) {
-        assert.strictEqual(typeUtils.isDate(v), true);
-    });
 });
 
 QUnit.test("range selectedRangeChanged initialization", function(assert) {
@@ -1646,6 +1598,153 @@ QUnit.test("Generate minor ticks even if minorTicks are not visible", function(a
     });
 
     assert.strictEqual(this.axis.updateOptions.lastCall.args[0].calculateMinors, true);
+});
+
+QUnit.module("Scale labels rea height calculation", commons.environment);
+
+QUnit.test("Only labels visible", function(assert) {
+    this.createWidget({
+        background: { image: { url: "url" } }, //to prevent compact mode
+        scale: {
+            label: {
+                topIndent: 11,
+                visible: true
+            }
+        }
+    });
+
+    assert.deepEqual(this.rangeView.update.lastCall.args[2], { left: 10, top: 0, width: 300 - 10, height: 150 - 11 - 10, right: 0, bottom: 0 });
+});
+
+QUnit.test("Only markers visible", function(assert) {
+    this.createWidget({
+        background: { image: { url: "url" } }, //to prevent compact mode
+        scale: {
+            valueType: "dateTime",
+            marker: {
+                topIndent: 11,
+                separatorHeight: 33,
+                visible: true
+            }
+        }
+    });
+
+    assert.deepEqual(this.rangeView.update.lastCall.args[2], { left: 0, top: 0, width: 300 - 1, height: 150 - 11 - 33, right: 0, bottom: 0 });
+});
+
+QUnit.test("Labels and markers visible", function(assert) {
+    this.createWidget({
+        background: { image: { url: "url" } }, //to prevent compact mode
+        scale: {
+            valueType: "dateTime",
+            marker: {
+                topIndent: 11,
+                separatorHeight: 33,
+                visible: true
+            },
+            label: {
+                topIndent: 12,
+                visible: true
+
+            }
+        }
+    });
+
+    assert.deepEqual(this.rangeView.update.lastCall.args[2], { left: 10, top: 0, width: 300 - 10, height: 150 - 11 - 33 - 12 - 10, right: 0, bottom: 0 });
+});
+
+QUnit.test("Labels and markers visible, but placeholderHeight is specified - take placeholderHeight", function(assert) {
+    this.createWidget({
+        background: { image: { url: "url" } }, //to prevent compact mode
+        scale: {
+            placeholderHeight: 13,
+            valueType: "dateTime",
+            marker: {
+                topIndent: 11,
+                separatorHeight: 33,
+                visible: true
+            },
+            label: {
+                topIndent: 12,
+                visible: true
+
+            }
+        }
+    });
+
+    assert.deepEqual(this.rangeView.update.lastCall.args[2], { left: 10, top: 0, width: 300 - 10, height: 150 - 13, right: 0, bottom: 0 });
+});
+
+QUnit.test("Compact mode. all is visible - take constant height", function(assert) {
+    this.createWidget({
+        scale: {
+            placeholderHeight: 13,
+            valueType: "dateTime",
+            marker: {
+                topIndent: 11,
+                separatorHeight: 33,
+                visible: true
+            },
+            label: {
+                topIndent: 12,
+                visible: true
+
+            }
+        }
+    });
+
+    assert.deepEqual(this.rangeView.update.lastCall.args[2], { left: 10, top: 0, width: 300 - 10, height: 24, right: 0, bottom: 0 });
+});
+
+QUnit.test("Draw first tick to measure height. Numeric", function(assert) {
+    var spy = sinon.spy();
+    this.createWidget({
+        background: { image: { url: "url" } }, //to prevent compact mode
+        scale: {
+            startValue: 9.5,
+            endValue: 12,
+            label: {
+                customizeText: spy,
+                visible: true
+            }
+        }
+    });
+    assert.strictEqual(spy.getCall(2).args[0].value, 9.5);
+});
+
+QUnit.test("Draw first tick to measure height. DateTime", function(assert) {
+    var spy = sinon.spy();
+    this.createWidget({
+        background: { image: { url: "url" } }, //to prevent compact mode
+        scale: {
+            valueType: "dateTime",
+            startValue: new Date(2016, 5, 5),
+            endValue: new Date(2016, 7, 7),
+            label: {
+                customizeText: spy,
+                visible: true
+            }
+        }
+    });
+    assert.strictEqual(spy.getCall(2).args[0].value.getTime(), new Date(2016, 5, 5).getTime());
+});
+
+QUnit.test("Draw first tick to measure height. Semidiscrete", function(assert) {
+    var spy = sinon.spy();
+    this.createWidget({
+        background: { image: { url: "url" } }, //to prevent compact mode
+        scale: {
+            type: "semidiscrete",
+            minRange: 5,
+            startValue: 9.5,
+            endValue: 12,
+            label: {
+                customizeText: spy,
+                visible: true
+            }
+        }
+    });
+    assert.strictEqual(spy.getCall(2).args[0].value, 5);
 });
 
 QUnit.module("API", commons.environment);
