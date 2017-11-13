@@ -1,6 +1,7 @@
 "use strict";
 
-var browser = require("./browser");
+var browser = require("./browser"),
+    isExponential = require("./type").isExponential;
 
 var sign = function(value) {
     if(value === 0) {
@@ -25,21 +26,44 @@ var inRange = function(value, minValue, maxValue) {
 };
 
 function getExponent(value) {
-    return Math.abs(parseInt(value.toExponential().toString().split("e")[1]));
+    return Math.abs(parseInt(value.toExponential().split("e")[1]));
 }
 
 function getCoefficient(value) {
-    return Math.abs(parseFloat(value.toExponential().toString().split("e")[0]));
+    return Math.abs(parseFloat(value.toExponential().split("e")[0]));
 }
 
 function adjust(value, interval) {
-    var precision = getPrecision(interval || 0),
-        exponent = getExponent(value),
-        isEdge = browser.msie && browser.version >= 13;
+    var precision = getPrecision(interval || 0) + 2,
+        separatedValue = value.toString().split("."),
+        sourceValue = value,
+        absValue = Math.abs(value),
+        separatedAdjustedValue,
+        isEdge = browser.msie && browser.version >= 13,
+        isExponentValue = isExponential(value),
+        integerPart = absValue > 1 ? 10 : 0;
 
-    precision = ((isEdge && (exponent + getPrecision(getCoefficient(value)) > 7)) || precision > 7) ? 15 : 7; //fix toPrecision() bug in Edge (T570217)
+    if(separatedValue.length === 1) {
+        return value;
+    }
 
-    return parseFloat(value.toPrecision(precision));
+    if(!isExponentValue) {
+        if(isExponential(interval)) {
+            precision = separatedValue[0].length + getExponent(interval);
+        }
+        value = absValue;
+        value = value - Math.floor(value) + integerPart;
+    }
+
+    precision = ((isEdge && (getExponent(value) + getPrecision(getCoefficient(value)) > 7)) || precision > 7) ? 15 : 7; //fix toPrecision() bug in Edge (T570217)
+
+    if(!isExponentValue) {
+        separatedAdjustedValue = parseFloat(value.toPrecision(precision)).toString().split(".");
+        if(separatedAdjustedValue[0] === integerPart.toString()) {
+            return parseFloat(separatedValue[0] + "." + separatedAdjustedValue[1]);
+        }
+    }
+    return parseFloat(sourceValue.toPrecision(precision));
 }
 
 function getPrecision(value) {
