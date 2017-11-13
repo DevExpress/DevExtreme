@@ -977,8 +977,12 @@
                 }
                 this._tickManager = {
                     _tickInterval: this._options.mockTickInterval,
+                    _minorTickInterval: this._options.mockMinorTickInterval,
                     getTickInterval: function() {
                         return this._tickInterval;
+                    },
+                    getMinorTickInterval: function() {
+                        return this._minorTickInterval;
                     }
                 };
                 return {
