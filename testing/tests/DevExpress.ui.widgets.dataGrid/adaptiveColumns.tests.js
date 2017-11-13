@@ -3835,9 +3835,10 @@ QUnit.module("Keyboard navigation", {
         var e = $.Event('keydown');
         e.which = 9;
         this.getActiveInputElement().trigger(e);
+        $(".dx-field-item-content").first().focus();
 
         //assert
-        assert.equal(this.getActiveInputElement().val(), "Super");
+        assert.equal(this.getActiveInputElement().val(), "Psy");
     });
 
     QUnit.testInActiveWindow("Error is not thrown when via keyboard navigation to adaptive form for new row", function(assert) {
@@ -3865,5 +3866,36 @@ QUnit.module("Keyboard navigation", {
 
         //assert
         assert.deepEqual(this.keyboardNavigationController._focusedCellPosition, { columnIndex: 0, rowIndex: 0 });
+    });
+
+    QUnit.testInActiveWindow("Skip editing via 'shift + tab' key before entry to adaptive detail form", function(assert) {
+        //arrange
+        this.setupModule();
+        this.editingController.editCell(2, 0);
+        this.clock.tick();
+
+        //act
+        var e = $.Event('keydown');
+        e.which = 9;
+        e.shiftKey = true;
+        this.getActiveInputElement().trigger(e);
+
+        //assert
+        assert.equal(this.getActiveInputElement().val(), "Super");
+    });
+
+    QUnit.testInActiveWindow("Skip editing via 'tab' key before entry to adaptive detail form", function(assert) {
+        //arrange
+        this.setupModule();
+        this.editingController.editCell(0, 0);
+        this.clock.tick();
+
+        //act
+        var e = $.Event('keydown');
+        e.which = 9;
+        this.getActiveInputElement().trigger(e);
+
+        //assert
+        assert.equal(this.getActiveInputElement().val(), "Blablablablablablablablablabla");
     });
 });
