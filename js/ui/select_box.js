@@ -597,7 +597,7 @@ var SelectBox = DropDownList.inherit({
     },
 
     _fieldRenderData: function() {
-        var $listFocused = this._list && $(this._list.option("focusedElement"));
+        var $listFocused = this._list && this.option("opened") && $(this._list.option("focusedElement"));
 
         if($listFocused && $listFocused.length) {
             return this._list._getItemData($listFocused);
