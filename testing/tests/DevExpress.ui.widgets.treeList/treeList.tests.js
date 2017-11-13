@@ -528,3 +528,42 @@ QUnit.test("Change dataSource, selectedRowKeys and scrolling options together", 
     //assert
     assert.strictEqual(treeList.getVisibleRows().length, 1, "row count");
 });
+
+//T575440
+QUnit.test("Change options and call selectRows", function(assert) {
+    //arrange
+
+    var createOptions = function() {
+        return {
+            dataSource: [{
+                id: 1,
+                text: "Brazil"
+            }, {
+                id: 2,
+                text: "Spain"
+            }, {
+                id: 3,
+                text: "USA"
+            }],
+            selectedRowKeys: [1, 2, 3],
+            selection: {
+                mode: "multiple",
+                recursive: true
+            },
+            scrolling: {
+                mode: "virtual"
+            }
+        };
+    };
+
+    var treeList = createTreeList(createOptions());
+    this.clock.tick(30);
+
+    //act
+    treeList.option(createOptions());
+    treeList.selectRows([1, 2, 3]);
+    this.clock.tick(30);
+
+    //assert
+    assert.strictEqual(treeList.getSelectedRowsData().length, 3, "selected rows");
+});
