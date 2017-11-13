@@ -129,6 +129,7 @@ var populateAxesInfo = function(axes) {
                 logarithmicBase: businessRange.base,
                 tickValues: majorTicks,
                 minorValues: ticksValues.minorTicksValues,
+                minorTickInterval: axis._minorTickInterval,
                 minValue: minValue,
                 oldMinValue: minValue,
                 maxValue: maxValue,
@@ -371,6 +372,30 @@ var correctAfterSynchronize = function(axesInfo) {
         }
     });
 };
+
+function updateMinorTicks(axesInfo) {
+    axesInfo.forEach(function(axisInfo) {
+        if(!axisInfo.minorTickInterval) {
+            return;
+        }
+
+        var ticks = [];
+
+        var interval = axisInfo.minorTickInterval,
+            tickCount = axisInfo.tickInterval / interval - 1;
+
+        for(var i = 1; i < axisInfo.tickValues.length; i++) {
+            var tick = axisInfo.tickValues[i - 1];
+            for(var j = 0; j < tickCount; j++) {
+                tick += interval;
+                ticks.push(tick);
+            }
+        }
+
+        axisInfo.minorValues = ticks;
+    });
+}
+
 var multiAxesSynchronizer = {
     synchronize: function(valueAxes) {
         _each(getValueAxesPerPanes(valueAxes), function(_, axes) {
@@ -389,6 +414,9 @@ var multiAxesSynchronizer = {
                 correctAfterSynchronize(axesInfo);
 
                 updateTickValuesIfSynchronizedValueUsed(axesInfo);
+
+                updateMinorTicks(axesInfo);
+
                 _each(axesInfo, function() {
                     convertAxisInfo(this, logConverter);
                 });
