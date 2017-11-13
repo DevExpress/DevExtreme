@@ -29,10 +29,6 @@ function getExponent(value) {
     return Math.abs(parseInt(value.toExponential().split("e")[1]));
 }
 
-function getCoefficient(value) {
-    return Math.abs(parseFloat(value.toExponential().split("e")[0]));
-}
-
 function adjust(value, interval) {
     var precision = getPrecision(interval || 0) + 2,
         separatedValue = value.toString().split("."),
@@ -55,7 +51,7 @@ function adjust(value, interval) {
         value = value - Math.floor(value) + integerPart;
     }
 
-    precision = ((isEdge && (getExponent(value) + getPrecision(getCoefficient(value)) > 7)) || precision > 7) ? 15 : 7; //fix toPrecision() bug in Edge (T570217)
+    precision = ((isEdge && (getExponent(value) > 6)) || precision > 7) ? 15 : 7; //fix toPrecision() bug in Edge (T570217)
 
     if(!isExponentValue) {
         separatedAdjustedValue = parseFloat(value.toPrecision(precision)).toString().split(".");
