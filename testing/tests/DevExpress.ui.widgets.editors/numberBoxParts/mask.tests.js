@@ -112,17 +112,18 @@ QUnit.test("input should be fitted into range after value change", function(asse
     });
 
     this.instance.option("value", 5);
-    assert.equal(this.input.val(), "4", "text is correct on change");
-    assert.equal(this.instance.option("value"), 4, "value is correct on change");
+    assert.equal(this.input.val(), "5", "changing via api is customers responsibility");
+    assert.equal(this.instance.option("value"), 5, "changing via api is customers responsibility");
 
-    this.instance.option("value", -4);
-    assert.equal(this.input.val(), "1", "text is correct with negative value");
-    assert.equal(this.instance.option("value"), 1, "value is correct with negative value");
+    this.input.val("0");
+    this.keyboard.input("0").change();
+    assert.equal(this.input.val(), "1", "text is adjusted to min");
+    assert.equal(this.instance.option("value"), 1, "value is adjusted to min");
 
     this.input.val("8");
     this.keyboard.input("8").change();
-    assert.equal(this.input.val(), "4", "text is correct on input change event");
-    assert.equal(this.instance.option("value"), 4, "value is correct on input change event");
+    assert.equal(this.input.val(), "4", "text is adjusted to max");
+    assert.equal(this.instance.option("value"), 4, "value is adjusted to max");
 });
 
 QUnit.test("invert sign should be prevented if minimum is larger than 0", function(assert) {

@@ -488,7 +488,6 @@ var NumberBoxMask = NumberBoxBase.inherit({
 
         if(this._useMaskBehavior()) {
             this._parsedValue = this.option("value");
-            this.option("value", this._parseValue());
             this._formatValue();
         }
     },
