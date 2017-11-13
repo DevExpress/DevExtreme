@@ -1449,6 +1449,14 @@ QUnit.testStart(function() {
         assert.ok($scrollableContent.hasClass("dx-scheduler-scrollable-fixed-content"), "Scrollable content has 'dx-scheduler-scrollable-fixed-content' css class");
     });
 
+    QUnit.test("Scheduler workspace month scrollable content should not have a right css class, if intervalCount is set", function(assert) {
+        this.instance.option("intervalCount", 2);
+
+        var $scrollableContent = this.instance.getScrollable().$content();
+
+        assert.notOk($scrollableContent.hasClass("dx-scheduler-scrollable-fixed-content"), "Scrollable content hasn't 'dx-scheduler-scrollable-fixed-content' css class");
+    });
+
     QUnit.test("Scheduler all day panel should not contain rows & cells", function(assert) {
         var $allDayPanel = this.instance.$element().find(".dx-scheduler-all-day-panel");
 

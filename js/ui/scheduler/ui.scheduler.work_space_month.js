@@ -18,14 +18,8 @@ var DAYS_IN_WEEK = 7,
     DAY_IN_MILLISECONDS = 86400000;
 
 var SchedulerWorkSpaceMonth = SchedulerWorkSpace.inherit({
-    _render: function() {
-        this.callBase();
-
-        this._addFixedScrollableClass();
-    },
-
-    _addFixedScrollableClass: function() {
-        this._dateTableScrollable.$content().addClass(DATE_TABLE_SCROLLABLE_FIXED_CLASS);
+    _toggleFixedScrollableClass: function() {
+        this._dateTableScrollable.$content().toggleClass(DATE_TABLE_SCROLLABLE_FIXED_CLASS, !this._isWorkSpaceWithCount());
     },
 
     _getElementClass: function() {
