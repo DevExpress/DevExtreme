@@ -20,9 +20,6 @@ function run_test {
 
     [ -n "$CONSTEL" ] && url="$url&constellation=$CONSTEL"
 
-    Xvfb :99 -ac -screen 0 1200x600x24 &
-    x11vnc -display :99 2>/dev/null &
-
     npm i
     npm run build
 
@@ -44,14 +41,14 @@ function run_test {
 
         *)
             google-chrome-stable --version
-            dbus-launch google-chrome-stable \
+            google-chrome-stable \
                 --no-sandbox \
-                --no-first-run \
-                --no-default-browser-check \
                 --disable-gpu \
-                --disable-translate \
                 --user-data-dir=/tmp/chrome \
-                $url &
+                --headless \
+                --remote-debugging-address=0.0.0.0 \
+                --remote-debugging-port=9222 \
+                $url &>/dev/null &
         ;;
 
     esac

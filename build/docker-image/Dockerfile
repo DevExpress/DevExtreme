@@ -32,7 +32,7 @@ RUN gdebi -n ./chrome.deb
 RUN unlink ./chrome.deb
 
 # Utils for docker-ci.sh
-RUN apt-get install -y dbus-x11 httping x11vnc xvfb
+RUN apt-get install -y httping
 
 # Utils for drone-cache.sh
 RUN apt-get install liblz4-tool
@@ -64,7 +64,6 @@ COPY --from=builder / /
 ENV LC_ALL=en_US.UTF-8 \
     LANG=en_US.UTF-8 \
     TERM=xterm \
-    DISPLAY=:99 \
     NUGET_XMLDOC_MODE=skip \
     DOTNET_SKIP_FIRST_TIME_EXPERIENCE=1 \
     DOTNET_CLI_TELEMETRY_OPTOUT=1
