@@ -86,7 +86,7 @@ function getConnectorStrategy(options, inverted) {
             return !isOutsidePosition(options.position);
         },
         getFigureCenter: getFigureCenter,
-        prepareLabelPoints: function(points) {
+        prepareLabelPoints: function() {
             var bBox = this.getBoundingRect(),
                 x = bBox.x + connectorIndent,
                 y = bBox.y + verticalCorrection,
@@ -98,6 +98,10 @@ function getConnectorStrategy(options, inverted) {
 
         findFigurePoint: function(figure) {
             return getFigureCenter(figure);
+        },
+
+        adjustPoints: function(points) {
+            return points;
         }
     };
 }
