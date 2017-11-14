@@ -8,10 +8,10 @@ QUnit.module("Custom month names", {
         dateLocalization.inject({
             getMonthNames: function(format, type) {
                 if(format === "wide" && type === "standalone") {
-                    return ["январь", "февраль", "март"];
+                    return ["январь", "февраль", "март", "апрель", "май", "июнь", "июль", "август", "сентябрь", "октябрь", "ноябрь", "декабрь"];
                 }
                 if(format === "wide" && type === "format") {
-                    return ["января", "февраля", "марта"];
+                    return ["января", "февраля", "марта", "апреля", "май", "июня", "июля", "августа", "сентября", "октября", "ноября", "декабря"];
                 }
             }
         });
@@ -29,6 +29,13 @@ QUnit.test("format LDML pattern with month name", function(assert) {
 QUnit.test("parse LDML pattern with month name", function(assert) {
     assert.deepEqual(dateLocalization.parse("1 марта 2015", "d MMMM y"), new Date(2015, 2, 1));
     assert.deepEqual(dateLocalization.parse("март 2015", "LLLL y"), new Date(2015, 2, 1));
+});
+
+QUnit.test("parse predefined formats with month name", function(assert) {
+    assert.deepEqual(dateLocalization.parse("Sunday, марта 1, 2015", "longdate"), new Date(2015, 2, 1));
+    assert.deepEqual(dateLocalization.parse("март 2015", "monthAndYear"), new Date(2015, 2, 1));
+    assert.deepEqual(dateLocalization.parse("марта 8", "monthAndDay"), new Date(new Date().getFullYear(), 2, 8));
+    assert.deepEqual(dateLocalization.parse("март", "month").getMonth(), 2);
 });
 
 QUnit.module("Custom digits", {
