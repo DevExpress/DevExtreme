@@ -8,26 +8,23 @@ var FORMAT_TYPES = {
     "5": "narrow"
 };
 
+var createMonthRegExpGenerator = function(type) {
+    return function(count, dateParts) {
+        if(count > 2) {
+            return Object.keys(FORMAT_TYPES).map(function(count) {
+                return dateParts.getMonthNames(FORMAT_TYPES[count], type).join("|");
+            }).join("|");
+        }
+        return "0?[1-9]|1[012]";
+    };
+};
+
 var PATTERN_REGEXPS = {
     y: function(count) {
         return "[0-9]+";
     },
-    M: function(count, dateParts) {
-        if(count > 2) {
-            return [3, 4, 5].map(function(count) {
-                return dateParts.getMonthNames(FORMAT_TYPES[count], "format").join("|");
-            }).join("|");
-        }
-        return "0?[1-9]|1[012]";
-    },
-    L: function(count, dateParts) {
-        if(count > 2) {
-            return [3, 4, 5].map(function(count) {
-                return dateParts.getMonthNames(FORMAT_TYPES[count], "standalone").join("|");
-            }).join("|");
-        }
-        return "0?[1-9]|1[012]";
-    },
+    M: createMonthRegExpGenerator("format"),
+    L: createMonthRegExpGenerator("standalone"),
     Q: function(count, dateParts) {
         if(count > 2) {
             return dateParts.getQuarterNames(FORMAT_TYPES[count], "format").join("|");
