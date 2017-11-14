@@ -222,8 +222,10 @@ function valueOf(value) {
 function correctMarginExtremum(value, margins) {
     var maxDivider = 1;
 
-    if(!isNumeric(value) || value === 0 || (!margins.size && !margins.checkInterval)) {
+    if(!isNumeric(value) || value === 0) {
         return value;
+    } else if(!margins.size && !margins.checkInterval) {
+        return adjust(value);
     }
 
     maxDivider = _math.pow(10, _math.floor(_math.log10(_abs(value))) - 2);

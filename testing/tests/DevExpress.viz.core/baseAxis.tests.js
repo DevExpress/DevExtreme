@@ -1591,6 +1591,31 @@ QUnit.test("Do not calculate any margin for discrete axis", function(assert) {
     });
 });
 
+QUnit.test("Logarithmic axis. Correctly adjust boundary values", function(assert) {
+    this.testMargins(assert, {
+        options: {
+            type: "logarithmic",
+            logarithmBase: 2,
+            valueMarginsEnabled: true
+        },
+        range: {
+            min: 1,
+            max: 10,
+            axisType: "logarithmic",
+            base: 2,
+            interval: 0.1
+        },
+        ticks: [1, 2, 4, 8],
+        expectedRange: {
+            min: 1,
+            max: 10,
+            minVisible: 1,
+            maxVisible: 10
+        },
+        isArgumentAxis: true
+    });
+});
+
 QUnit.test("Logarithmic axis. minValueMargin and maxValueMargin - correctly apply margins", function(assert) {
     this.testMargins(assert, {
         options: {
