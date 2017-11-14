@@ -38,8 +38,8 @@ function run_test {
     case "$BROWSER" in
 
         "firefox")
-            firefox --version
-            firefox $url &
+            /opt/firefox/firefox --version
+            /opt/firefox/firefox $url &
         ;;
 
         *)
