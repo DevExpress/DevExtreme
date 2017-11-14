@@ -7,8 +7,11 @@ RUN apt-get update && apt-get -y upgrade
 # Curl
 RUN apt-get install -y ca-certificates curl
 
+# Fonts
+RUN apt-get install -y ttf-liberation
+
 # Build-time utils
-RUN apt-get install -y apt-transport-https gdebi-core gnupg2
+RUN apt-get install -y apt-transport-https bzip2 gdebi-core gnupg2
 
 # Node
 RUN curl -L https://deb.nodesource.com/setup_8.x | bash -
@@ -31,6 +34,17 @@ RUN curl -L https://www.slimjet.com/chrome/lnx/chrome64_61.0.3163.79.deb > chrom
 RUN gdebi -n ./chrome.deb
 RUN unlink ./chrome.deb
 
+# Firefox 
+RUN apt-get install -y libxt6
+RUN curl -L https://download-installer.cdn.mozilla.net/pub/firefox/releases/57.0/linux-x86_64/en-US/firefox-57.0.tar.bz2 | tar xfj - -C /opt
+RUN /opt/firefox/firefox -headless -CreateProfile default
+RUN cd ~/.mozilla/firefox/*.default \
+    && echo 'user_pref("font.name-list.sans-serif.x-western",           "Liberation Sans");'    >> prefs.js \
+    && echo 'user_pref("font.name-list.serif.x-western",                "Liberation Serif");'   >> prefs.js \
+    && echo 'user_pref("browser.shell.checkDefaultBrowser",             false);'                >> prefs.js \
+    && echo 'user_pref("datareporting.policy.dataSubmissionEnabled",    false);'                >> prefs.js \
+    && echo 'user_pref("layers.acceleration.disabled",                  true);'                 >> prefs.js
+
 # Utils for docker-ci.sh
 RUN apt-get install -y dbus-x11 httping x11vnc xvfb
 
@@ -48,7 +62,7 @@ RUN locale-gen en_US.UTF-8
 RUN [ "$(date +%Z)" = "UTC" ] || exit 1
 
 # Remove build-time utils
-RUN apt-get purge -y apt-transport-https gdebi-core gnupg2
+RUN apt-get purge -y apt-transport-https bzip2 gdebi-core gnupg2
 
 # Clean APT
 RUN apt-get autoremove -y --purge
