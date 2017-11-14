@@ -572,7 +572,6 @@ var DateBox = DropDownEditor.inherit({
         var popupConfig = this.callBase();
         return extend(this._strategy.popupConfig(popupConfig), {
             title: this._getPopupTitle(),
-            maxWidth: "100%",
             dragEnabled: false
         });
     },
