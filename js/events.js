@@ -14,6 +14,7 @@ var eventsEngine = require("./events/core/events_engine");
 * @param1 element:dxElement
 * @param2 extraParameters:object
 * @return boolean
+* @hidden
 */
 
 /**
