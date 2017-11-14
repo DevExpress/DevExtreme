@@ -2461,6 +2461,16 @@ QUnit.test("date box wrapper adaptivity class depends on the screen size", funct
     }
 });
 
+QUnit.test("date box popup should have maximum 100% width", function(assert) {
+    var instance = $("#dateBox").dxDateBox({
+        type: "date",
+        pickerType: "rollers",
+        opened: true
+    }).dxDateBox("instance");
+
+    assert.equal(instance._popup.option("maxWidth"), "100%", "popup width should be correct on 320px screens");
+});
+
 QUnit.test("format should be correct", function(assert) {
     var date = new Date($.now());
 
