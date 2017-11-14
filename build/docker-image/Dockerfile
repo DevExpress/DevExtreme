@@ -32,7 +32,7 @@ RUN gdebi -n ./chrome.deb
 RUN unlink ./chrome.deb
 
 # Utils for docker-ci.sh
-RUN apt-get install -y dbus-x11 git httping x11vnc xvfb
+RUN apt-get install -y dbus-x11 httping x11vnc xvfb
 
 # Utils for drone-cache.sh
 RUN apt-get install liblz4-tool
@@ -53,7 +53,7 @@ RUN apt-get purge -y apt-transport-https gdebi-core gnupg2
 # Clean APT
 RUN apt-get autoremove -y --purge
 RUN apt-get clean
-RUN rm -rf /var/lib/apt/lists/*
+RUN rm -rf /var/lib/apt/lists/* /etc/apt/sources.list.d/*
 
 #############################################################
 
