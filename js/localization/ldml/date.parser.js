@@ -59,6 +59,17 @@ var PATTERN_REGEXPS = {
 
 var parseNumber = Number;
 
+var createMonthPatternParser = function(type) {
+    return function(text, count, dateParts) {
+        if(count > 2) {
+            return Object.keys(FORMAT_TYPES).map(function(count) {
+                return dateParts.getMonthNames(FORMAT_TYPES[count], type).indexOf(text);
+            }).filter(function(index) { return index >= 0; })[0];
+        }
+        return parseNumber(text) - 1;
+    };
+};
+
 var PATTERN_PARSERS = {
     y: function(text, count) {
         var year = parseNumber(text);
@@ -67,22 +78,8 @@ var PATTERN_PARSERS = {
         }
         return year;
     },
-    M: function(text, count, dateParts) {
-        if(count > 2) {
-            return [3, 4, 5].map(function(count) {
-                return dateParts.getMonthNames(FORMAT_TYPES[count], "format").indexOf(text);
-            }).filter(function(index) { return index >= 0; })[0];
-        }
-        return parseNumber(text) - 1;
-    },
-    L: function(text, count, dateParts) {
-        if(count > 2) {
-            return [3, 4, 5].map(function(count) {
-                return dateParts.getMonthNames(FORMAT_TYPES[count], "standalone").indexOf(text);
-            }).filter(function(index) { return index >= 0; })[0];
-        }
-        return parseNumber(text) - 1;
-    },
+    M: createMonthPatternParser("format"),
+    L: createMonthPatternParser("standalone"),
     Q: function(text, count, dateParts) {
         if(count > 2) {
             return dateParts.getQuarterNames(FORMAT_TYPES[count], "format").indexOf(text);
