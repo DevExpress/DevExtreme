@@ -1603,13 +1603,13 @@ QUnit.testInActiveWindow("Page down should scroll page down when paging disabled
     var done = assert.async();
 
     this.options = {
-        height: 200
+        height: 199
     };
     setupModules(this);
 
     //act
     this.gridView.render($("#container"));
-    this.rowsView.height(200);
+    this.rowsView.height(199);
     this.rowsView.resize();
 
     this.focusFirstCell();
@@ -1627,7 +1627,7 @@ QUnit.testInActiveWindow("Page down should scroll page down when paging disabled
     });
 
     //assert
-    assert.equal(this.rowsView.getScrollable().scrollTop(), 200);
+    assert.equal(this.rowsView.getScrollable().scrollTop(), 199);
     assert.ok(isPreventDefaultCalled, "preventDefault is called");
 });
 
