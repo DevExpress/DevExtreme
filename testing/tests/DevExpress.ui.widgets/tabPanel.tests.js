@@ -582,7 +582,7 @@ QUnit.test("tabPanels focusedElement dependence on tabs focusedElement", functio
     assert.equal(tabsFocusedIndex, $(this.instance.option("focusedElement")).index(), "multiView focused element is equal tabs focused element");
 });
 
-QUnit.test("tabs focusedElement lose focused class", function(assert) {
+QUnit.testInActiveWindow("tabs focusedElement lose focused class", function(assert) {
     assert.expect(6);
 
     this.$element.find(toSelector(TABS_CLASS)).get(0).focus();

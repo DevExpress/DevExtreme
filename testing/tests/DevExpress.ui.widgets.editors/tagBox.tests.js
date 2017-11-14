@@ -2806,7 +2806,7 @@ QUnit.testInActiveWindow("input should be focused after click on field (searchEn
 
 QUnit.module("popup position and size", moduleSetup);
 
-QUnit.test("popup height should be depended from its content height", function(assert) {
+QUnit.testInActiveWindow("popup height should be depended from its content height", function(assert) {
     var $element = $("#tagBox").dxTagBox({
         dataSource: ["Antigua and Barbuda", "Albania", "American Samoa"],
         acceptCustomValue: true,
@@ -3358,7 +3358,7 @@ QUnit.test("the list selection should be updated after value is changed while ed
     assert.equal(this.getListInstance().option("selectedItems").length, 1, "list selection is updated after removing item");
 });
 
-QUnit.test("the value should be applied after search (T402855)", function(assert) {
+QUnit.testInActiveWindow("the value should be applied after search (T402855)", function(assert) {
     this.reinit({
         applyValueMode: "useButtons",
         items: ["aa", "ab", "bb", "ac", "bc"],

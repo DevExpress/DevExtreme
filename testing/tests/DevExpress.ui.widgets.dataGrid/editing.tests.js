@@ -5177,7 +5177,7 @@ QUnit.test('Error during save changes in batch mode', function(assert) {
 });
 
 //T555797
-QUnit.test('Focus position should be correct after editing in cell editing mode if data source is remote', function(assert) {
+QUnit.testInActiveWindow('Focus position should be correct after editing in cell editing mode if data source is remote', function(assert) {
     //arrange
     var that = this,
         rowsView = this.rowsView,
@@ -5223,7 +5223,7 @@ QUnit.test('Focus position should be correct after editing in cell editing mode 
     assert.ok($(this.getCellElement(0, 1)).hasClass("dx-focused"), "new edit cell is focused");
 });
 
-QUnit.test('Focus position should be retured after editing in cell editing mode if remote updating return error', function(assert) {
+QUnit.testInActiveWindow('Focus position should be retured after editing in cell editing mode if remote updating return error', function(assert) {
     //arrange
     var that = this,
         rowsView = this.rowsView,

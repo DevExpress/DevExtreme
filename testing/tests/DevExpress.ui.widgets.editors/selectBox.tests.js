@@ -3790,7 +3790,7 @@ QUnit.testInActiveWindow("value should be reset on the 'tab' press after input v
     assert.equal(selectBox.option("value"), null, "widget value is reset");
 });
 
-QUnit.test("value should be restored after the focusout when selection was not changed", function(assert) {
+QUnit.testInActiveWindow("value should be restored after the focusout when selection was not changed", function(assert) {
     if(devices.real().deviceType !== "desktop") {
         assert.ok(true, "not actual");
         return;
