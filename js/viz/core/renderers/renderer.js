@@ -731,7 +731,7 @@ function parseMultiline(text) {
         i = 0,
         items = [];
     for(; i < texts.length; i++) {
-        items.push({ value: texts[i], height: 0 });
+        items.push({ value: texts[i].trim(), height: 0 });
     }
     return items;
 }
@@ -877,7 +877,7 @@ function createTextNodes(wrapper, text, isStroked) {
     } else if(text.indexOf("\n") !== -1) {
         items = parseMultiline(text);
     } else if(isStroked) {
-        items = [{ value: text, height: 0 }];
+        items = [{ value: text.trim(), height: 0 }];
     }
     if(items) {
         if(items.length) {     // T227388
