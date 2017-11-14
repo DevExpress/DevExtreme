@@ -5,7 +5,9 @@ var noop = require("../../core/utils/common").noop,
     animationSettings = commonModule.utils.animationSettings,
     emptySliderMarkerText = commonModule.consts.emptySliderMarkerText,
     Slider = require("./slider"),
-    _normalizeEnum = require("../core/utils").normalizeEnum;
+    _normalizeEnum = require("../core/utils").normalizeEnum,
+    isNumeric = require("../../core/utils/type").isNumeric,
+    adjust = require("../../core/utils/math").adjust;
 
 function buildRectPoints(left, top, right, bottom) {
     return [left, top, right, top, right, bottom, left, bottom];
@@ -219,7 +221,11 @@ SlidersController.prototype = {
             translator = that._params.translator,
             startValue = translator.isValid(arg.startValue) ? translator.parse(arg.startValue) : translator.getRange()[0],
             endValue = translator.isValid(arg.endValue) ? translator.parse(arg.endValue) : translator.getRange()[1],
-            values = translator.to(startValue, -1) < translator.to(endValue, +1) ? [startValue, endValue] : [endValue, startValue];
+            values;
+
+        startValue = isNumeric(startValue) ? adjust(startValue) : startValue;
+        endValue = isNumeric(endValue) ? adjust(endValue) : endValue;
+        values = translator.to(startValue, -1) < translator.to(endValue, +1) ? [startValue, endValue] : [endValue, startValue];
         that._sliders[0].setDisplayValue(values[0]);
         that._sliders[1].setDisplayValue(values[1]);
         that._sliders[0]._position = translator.to(values[0], -1);
