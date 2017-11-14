@@ -33,6 +33,7 @@ QUnit.test("parse LDML pattern with month name", function(assert) {
 
 QUnit.test("parse predefined formats with month name", function(assert) {
     assert.deepEqual(dateLocalization.parse("Sunday, марта 1, 2015", "longdate"), new Date(2015, 2, 1));
+    assert.deepEqual(dateLocalization.parse("Wrongday, марта 1, 2015", "longdate"), new Date(2015, 2, 1));
     assert.deepEqual(dateLocalization.parse("март 2015", "monthAndYear"), new Date(2015, 2, 1));
     assert.deepEqual(dateLocalization.parse("марта 8", "monthAndDay"), new Date(new Date().getFullYear(), 2, 8));
     assert.deepEqual(dateLocalization.parse("март", "month").getMonth(), 2);
