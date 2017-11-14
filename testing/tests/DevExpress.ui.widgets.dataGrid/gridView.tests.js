@@ -522,7 +522,7 @@ function createGridView(options, userOptions) {
             }),
             $container = $('#container');
 
-        $container.height(100).width(1000);
+        $container.height(150).width(1000);
         gridView.render($container, $.extend(this.options, {
             scrolling: {},
             showColumnHeaders: true,
