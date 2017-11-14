@@ -15,6 +15,6 @@ QUnit.test("insertElement", function(assert) {
 
     domAdapter.insertElement(this.container, target);
 
-    assert.ok(this.container.childNodes.length === 1);
+    assert.equal(this.container.childNodes.length, 1);
 });
 
