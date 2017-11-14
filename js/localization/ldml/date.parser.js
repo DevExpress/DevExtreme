@@ -8,22 +8,23 @@ var FORMAT_TYPES = {
     "5": "narrow"
 };
 
+var createMonthRegExpGenerator = function(type) {
+    return function(count, dateParts) {
+        if(count > 2) {
+            return Object.keys(FORMAT_TYPES).map(function(count) {
+                return dateParts.getMonthNames(FORMAT_TYPES[count], type).join("|");
+            }).join("|");
+        }
+        return "0?[1-9]|1[012]";
+    };
+};
+
 var PATTERN_REGEXPS = {
     y: function(count) {
         return "[0-9]+";
     },
-    M: function(count, dateParts) {
-        if(count > 2) {
-            return dateParts.getMonthNames(FORMAT_TYPES[count], "format").join("|");
-        }
-        return "0?[1-9]|1[012]";
-    },
-    L: function(count, dateParts) {
-        if(count > 2) {
-            return dateParts.getMonthNames(FORMAT_TYPES[count], "standalone").join("|");
-        }
-        return "0?[1-9]|1[012]";
-    },
+    M: createMonthRegExpGenerator("format"),
+    L: createMonthRegExpGenerator("standalone"),
     Q: function(count, dateParts) {
         if(count > 2) {
             return dateParts.getQuarterNames(FORMAT_TYPES[count], "format").join("|");
@@ -58,6 +59,17 @@ var PATTERN_REGEXPS = {
 
 var parseNumber = Number;
 
+var createMonthPatternParser = function(type) {
+    return function(text, count, dateParts) {
+        if(count > 2) {
+            return Object.keys(FORMAT_TYPES).map(function(count) {
+                return dateParts.getMonthNames(FORMAT_TYPES[count], type).indexOf(text);
+            }).filter(function(index) { return index >= 0; })[0];
+        }
+        return parseNumber(text) - 1;
+    };
+};
+
 var PATTERN_PARSERS = {
     y: function(text, count) {
         var year = parseNumber(text);
@@ -66,18 +78,8 @@ var PATTERN_PARSERS = {
         }
         return year;
     },
-    M: function(text, count, dateParts) {
-        if(count > 2) {
-            return dateParts.getMonthNames(FORMAT_TYPES[count], "format").indexOf(text);
-        }
-        return parseNumber(text) - 1;
-    },
-    L: function(text, count, dateParts) {
-        if(count > 2) {
-            return dateParts.getMonthNames(FORMAT_TYPES[count], "standalone").indexOf(text);
-        }
-        return parseNumber(text) - 1;
-    },
+    M: createMonthPatternParser("format"),
+    L: createMonthPatternParser("standalone"),
     Q: function(text, count, dateParts) {
         if(count > 2) {
             return dateParts.getQuarterNames(FORMAT_TYPES[count], "format").indexOf(text);
