@@ -1,22 +1,20 @@
 "use strict";
 
-var $ = require("jquery"),
-    domAdapter = require("core/dom_adapter");
+var domAdapter = require("core/dom_adapter");
 
-QUnit.module("main", {
+QUnit.module("DOM Adapter", {
     beforeEach: function() {
-        $("#qunit-fixture").empty();
-        var markup = '<div id="container"></div>';
-        $("#qunit-fixture").html(markup);
+        var fixture = document.getElementById("qunit-fixture");
+        this.container = document.createElement("div");
+        fixture.appendChild(this.container);
     }
 });
 
-QUnit.test("registerActionExecutor/unregisterActionExecutor simple", function(assert) {
-    var $container = $("#container");
+QUnit.test("insertElement", function(assert) {
     var target = document.createElement("span");
 
-    domAdapter.insertElement($container[0], target);
+    domAdapter.insertElement(this.container, target);
 
-    assert.ok($container.children().length === 1);
+    assert.ok(this.container.childNodes.length === 1);
 });
 
