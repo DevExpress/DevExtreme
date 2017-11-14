@@ -1656,7 +1656,7 @@ QUnit.test("mask works when keypress fired after input", function(assert) {
     assert.equal($input.val(), "(x_)", "mask works correctly");
 });
 
-QUnit.test("Last char remove correctly when keypress fired after backspace", function(assert) {
+QUnit.testInActiveWindow("Last char remove correctly when keypress fired after backspace", function(assert) {
     var $textEditor = $("#texteditor").dxTextEditor({
         mask: "X-X",
         maskRules: {
