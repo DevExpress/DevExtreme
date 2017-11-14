@@ -14,13 +14,17 @@ var PATTERN_REGEXPS = {
     },
     M: function(count, dateParts) {
         if(count > 2) {
-            return dateParts.getMonthNames(FORMAT_TYPES[count], "format").join("|");
+            return [3, 4, 5].map(function(count) {
+                return dateParts.getMonthNames(FORMAT_TYPES[count], "format").join("|");
+            }).join("|");
         }
         return "0?[1-9]|1[012]";
     },
     L: function(count, dateParts) {
         if(count > 2) {
-            return dateParts.getMonthNames(FORMAT_TYPES[count], "standalone").join("|");
+            return [3, 4, 5].map(function(count) {
+                return dateParts.getMonthNames(FORMAT_TYPES[count], "standalone").join("|");
+            }).join("|");
         }
         return "0?[1-9]|1[012]";
     },
@@ -68,13 +72,17 @@ var PATTERN_PARSERS = {
     },
     M: function(text, count, dateParts) {
         if(count > 2) {
-            return dateParts.getMonthNames(FORMAT_TYPES[count], "format").indexOf(text);
+            return [3, 4, 5].map(function(count) {
+                return dateParts.getMonthNames(FORMAT_TYPES[count], "format").indexOf(text);
+            }).filter(function(index) { return index >= 0; })[0];
         }
         return parseNumber(text) - 1;
     },
     L: function(text, count, dateParts) {
         if(count > 2) {
-            return dateParts.getMonthNames(FORMAT_TYPES[count], "standalone").indexOf(text);
+            return [3, 4, 5].map(function(count) {
+                return dateParts.getMonthNames(FORMAT_TYPES[count], "standalone").indexOf(text);
+            }).filter(function(index) { return index >= 0; })[0];
         }
         return parseNumber(text) - 1;
     },
