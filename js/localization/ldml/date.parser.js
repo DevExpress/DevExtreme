@@ -31,7 +31,7 @@ var PATTERN_REGEXPS = {
         return "0?[1-4]";
     },
     E: function(count, dateParts) {
-        return dateParts.getDayNames(FORMAT_TYPES[count < 3 ? 3 : count], "format").join("|");
+        return "\\D*";
     },
     a: function(count, dateParts) {
         return dateParts.getPeriodNames(FORMAT_TYPES[count < 3 ? 3 : count], "format").join("|");
