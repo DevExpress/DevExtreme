@@ -545,6 +545,25 @@ QUnit.test("Add percent format for percent display type", function(assert) {
     setFieldProperty.reset();
 });
 
+QUnit.test("Second calculation leads to same results", function(assert) {
+    var summaryExpr = function(e) {
+        return e.value(true) + 1;
+    };
+
+    this.descriptions.values[0].calculateSummaryValue = summaryExpr;
+
+    this.descriptions.values[0].runningTotal = true;
+
+    applyDisplaySummaryMode(this.descriptions, this.data);
+    var value = this.data.values[0][6][0];
+
+    //act
+    applyDisplaySummaryMode(this.descriptions, this.data);
+    //assert
+    assert.deepEqual(value, "T61");
+    assert.deepEqual(this.data.values[0][6][0], value);
+});
+
 QUnit.test("Calculate cell value with empty data", function(assert) {
     var summaryExpr = sinon.stub();
     summaryExpr.returns("calculatedValue");
@@ -593,6 +612,19 @@ QUnit.test("RunningTotal", function(assert) {
 
     assert.deepEqual(values[0], [["GT"], ["T1"], ["T2"], ["T2T3"], ["T2T3T4"], ["T1T5"], ["T1T5T6"], ["T7"], ["T7T8"]]);
     assert.deepEqual(values[1], [[undefined], [1], [11], [23], [36], [3], [6], [31], [31]]);
+});
+
+QUnit.test("Second RunningTotal calculation leads to same results", function(assert) {
+    this.descriptions.values[0].runningTotal = true;
+
+    applyRunningTotal(this.descriptions, this.data);
+    var value = this.data.values[0][6][0];
+
+    //act
+    applyRunningTotal(this.descriptions, this.data);
+    //assert
+    assert.deepEqual(value, "T1T5T6");
+    assert.deepEqual(this.data.values[0][6][0], value);
 });
 
 QUnit.test("RunningTotal with 2 fields", function(assert) {
@@ -674,6 +706,27 @@ QUnit.test("RunningTotal with expression", function(assert) {
     //assert
     var values = this.data.values;
     assert.deepEqual(values[0], [[1], [1], [1], [2], [3], [2], [3], [1], [2]]);
+});
+
+QUnit.test("RunningTotal with expression. Second calculation leads to same results", function(assert) {
+    var summaryExpr = function(e) {
+        return e.value(true) + 1;
+    };
+
+    this.descriptions.values[0].calculateSummaryValue = summaryExpr;
+
+    this.descriptions.values[0].runningTotal = true;
+
+    applyDisplaySummaryMode(this.descriptions, this.data);
+    applyRunningTotal(this.descriptions, this.data);
+    var value = this.data.values[0][6][0];
+
+    //act
+    applyDisplaySummaryMode(this.descriptions, this.data);
+    applyRunningTotal(this.descriptions, this.data);
+    //assert
+    assert.deepEqual(value, "T11T51T61");
+    assert.deepEqual(this.data.values[0][6][0], value);
 });
 
 QUnit.test("RunningTotal with expression and crossGrouping", function(assert) {

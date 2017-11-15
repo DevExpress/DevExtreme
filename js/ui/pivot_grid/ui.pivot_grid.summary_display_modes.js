@@ -504,6 +504,23 @@ function getExpression(field) {
     return expression;
 }
 
+function processDataCell(data, rowIndex, columnIndex, allowResetting, forceReset) {
+    var values = data.values[rowIndex][columnIndex] = data.values[rowIndex][columnIndex] || [],
+        originalCell = values.originalCell;
+
+    if(!originalCell) {
+        return;
+    }
+    //T571071
+    if(originalCell.allowResetting || forceReset) {
+        originalCell.forEach(function(value, index) {
+            values[index] = value;
+        });
+    }
+
+    originalCell.allowResetting = allowResetting;
+}
+
 exports.applyDisplaySummaryMode = function(descriptions, data) {
     var expressions = [],
         columnElements = [{ index: data.grandTotalColumnIndex, children: data.columns }],
@@ -530,7 +547,8 @@ exports.applyDisplaySummaryMode = function(descriptions, data) {
                 value;
 
             columnItem.isEmpty = columnItem.isEmpty || [];
-            data.values[rowItem.index][columnItem.index] = data.values[rowItem.index][columnItem.index] || [];
+
+            processDataCell(data, rowItem.index, columnItem.index, false, true);
 
             for(var i = 0; i < valueFields.length; i++) {
                 field = valueFields[i];
@@ -578,7 +596,7 @@ exports.applyRunningTotal = function(descriptions, data) {
                 field,
                 value;
 
-            data.values[rowItem.index][columnItem.index] = data.values[rowItem.index][columnItem.index] || [];
+            processDataCell(data, rowItem.index, columnItem.index, true);
 
             for(var i = 0; i < valueFields.length; i++) {
                 field = valueFields[i];
