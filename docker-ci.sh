@@ -2,7 +2,9 @@
 
 # Run inside https://hub.docker.com/r/devexpress/devextreme-build/
 
-trap "echo 'Interrupted!' && exit 1" TERM INT
+# https://stackoverflow.com/a/22644006
+trap "exit" TERM INT
+trap "kill 0" EXIT
 
 export DEVEXTREME_DOCKER_CI=true
 export NUGET_PACKAGES=$PWD/dotnet_packages
