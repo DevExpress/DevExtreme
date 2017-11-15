@@ -8971,6 +8971,44 @@ QUnit.testInActiveWindow("Show validation message for CheckBox editor", function
     assert.equal(testElement.find(".dx-invalid-message.dx-overlay").length, 1, "validation message should be shown");
 });
 
+QUnit.testInActiveWindow("Empty validation message is not shown", function(assert) {
+    //arrange
+    var that = this,
+        rowsView = this.rowsView,
+        testElement = $('#container'),
+        inputElement;
+
+    rowsView.render(testElement);
+
+    that.applyOptions({
+        editing: {
+            mode: "batch"
+        },
+        columns: [{
+            dataField: 'name',
+            validationRules: [{
+                type: "required",
+                message: ""
+            }],
+            showEditorAlways: true
+        }]
+    });
+
+    //act
+
+    that.editCell(0, 0);
+
+    inputElement = getInputElements(testElement).first();
+    inputElement
+        .val("")
+        .trigger('change');
+
+    this.clock.tick();
+
+    //assert
+    assert.equal($(".dx-invalid-message.dx-invalid-message-always.dx-overlay").length, 0, "Validation message is not shown");
+});
+
 QUnit.module('Editing with real dataController with grouping, masterDetail', {
     beforeEach: function() {
         this.array = [

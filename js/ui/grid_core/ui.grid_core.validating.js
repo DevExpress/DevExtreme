@@ -663,7 +663,7 @@ module.exports = {
                             revertTooltip = that._showRevertButton($focus, $cell ? $focus.find("." + CELL_HIGHLIGHT_OUTLINE).first() : $focus);
                         }
                     }
-                    if(showValidationMessage && $cell && column) {
+                    if(showValidationMessage && $cell && column && validationResult.brokenRule.message) {
                         that._showValidationMessage($focus, validationResult.brokenRule.message, column.alignment, revertTooltip);
                     }
 
