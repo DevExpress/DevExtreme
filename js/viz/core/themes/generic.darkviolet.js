@@ -74,6 +74,9 @@ registerTheme({
             border: {
                 color: BORDER_COLOR
             }
+        },
+        commonAxisSettings: {
+            breakStyle: { color: "#575e6b" }
         }
     },
     funnel: {
@@ -99,6 +102,9 @@ registerTheme({
     rangeSelector: {
         shutter: {
             color: BACKGROUND_COLOR
+        },
+        scale: {
+            breakStyle: { color: "#575e6b" }
         }
     }
 }, "generic.dark");

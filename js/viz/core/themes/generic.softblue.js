@@ -74,6 +74,14 @@ registerTheme({
             border: {
                 color: BORDER_COLOR
             }
+        },
+        commonAxisSettings: {
+            breakStyle: { color: "#cfd2d3" }
+        }
+    },
+    rangeSelector: {
+        scale: {
+            breakStyle: { color: "#cfd2d3" }
         }
     },
     sparkline: {
