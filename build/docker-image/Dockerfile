@@ -11,7 +11,7 @@ RUN apt-get purge -y --allow-remove-essential init systemd
 RUN apt-get install -y ca-certificates curl
 
 # Build-time utils
-RUN DEBIAN_FRONTEND=noninteractive apt-get install -y apt-transport-https gdebi-core gnupg2 localepurge
+RUN DEBIAN_FRONTEND=noninteractive apt-get install -y apt-transport-https gdebi-core localepurge
 
 # Node
 RUN curl -L https://deb.nodesource.com/setup_8.x | bash -
@@ -55,7 +55,7 @@ RUN localepurge
 RUN [ "$(date +%Z)" = "UTC" ] || exit 1
 
 # Remove build-time utils
-RUN apt-get purge -y apt-transport-https gdebi-core gnupg2 localepurge
+RUN apt-get purge -y apt-transport-https gdebi-core localepurge
 
 # Clean APT
 RUN apt-get autoremove -y --purge
