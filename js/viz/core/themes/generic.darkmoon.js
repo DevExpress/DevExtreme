@@ -74,6 +74,9 @@ registerTheme({
             border: {
                 color: BORDER_COLOR
             }
+        },
+        commonAxisSettings: {
+            breakStyle: { color: "#73869e" }
         }
     },
     barGauge: {
@@ -107,6 +110,9 @@ registerTheme({
     rangeSelector: {
         shutter: {
             color: BACKGROUND_COLOR
+        },
+        scale: {
+            breakStyle: { color: "#73869e" }
         }
     }
 }, "generic.dark");
