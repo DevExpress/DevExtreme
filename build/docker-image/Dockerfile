@@ -8,7 +8,7 @@ RUN apt-get update && apt-get -y upgrade
 RUN apt-get install -y ca-certificates curl
 
 # Build-time utils
-RUN apt-get install -y apt-transport-https gdebi-core gnupg2
+RUN DEBIAN_FRONTEND=noninteractive apt-get install -y apt-transport-https gdebi-core gnupg2 localepurge
 
 # Node
 RUN curl -L https://deb.nodesource.com/setup_8.x | bash -
@@ -45,12 +45,14 @@ RUN apt-get install -y mc
 # Use UTF-8
 RUN apt-get install -y locales
 RUN locale-gen en_US.UTF-8
+RUN printf "MANDELETE\nen_US.UTF-8" > /etc/locale.nopurge
+RUN localepurge
 
 # Ensure UTC
 RUN [ "$(date +%Z)" = "UTC" ] || exit 1
 
 # Remove build-time utils
-RUN apt-get purge -y apt-transport-https gdebi-core gnupg2
+RUN apt-get purge -y apt-transport-https gdebi-core gnupg2 localepurge
 
 # Clean APT
 RUN apt-get autoremove -y --purge
