@@ -824,11 +824,17 @@ exports.XmlaStore = Class.inherit((function() {
         */
 
         /**
-        * @name XmlaStoreOptions_beforeSend
-        * @publicName beforeSend
-        * @type function(request)
-        * @type_function_param1 request:object
-        */
+         * @name XmlaStoreOptions_beforeSend
+         * @publicName beforeSend
+         * @type function
+         * @type_function_param1 options:object
+         * @type_function_param1_field1 url:string
+         * @type_function_param1_field2 method:string
+         * @type_function_param1_field3 headers:object
+         * @type_function_param1_field4 xhrFields:object
+         * @type_function_param1_field5 data:string
+         * @type_function_param1_field6 dataType:object
+         */
         },
 
         getFields: function() {
