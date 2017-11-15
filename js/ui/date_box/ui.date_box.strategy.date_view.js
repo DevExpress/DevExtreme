@@ -82,6 +82,8 @@ var DateViewStrategy = DateBoxStrategy.inherit({
                     },
                     options: {
                         width: 333,
+                        maxWidth: "100%",
+                        maxHeight: "100%",
                         height: "auto",
                         position: {
                             collision: "flipfit flip"
