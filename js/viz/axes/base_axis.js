@@ -219,8 +219,10 @@ function valueOf(value) {
     return value.valueOf();
 }
 
-function correctMarginExtremum(value, margins) {
-    var maxDivider = 1;
+function correctMarginExtremum(value, margins, maxMinDistance) {
+    var dividerPower,
+        distancePower,
+        maxDivider;
 
     if(!isNumeric(value) || value === 0) {
         return value;
@@ -228,10 +230,15 @@ function correctMarginExtremum(value, margins) {
         return adjust(value);
     }
 
-    maxDivider = _math.pow(10, _math.floor(_math.log10(_abs(value))) - 2);
-    if(maxDivider === 1) {
-        maxDivider = 0.1;
+    dividerPower = _math.floor(_math.log10(_abs(value))) - 2;
+    distancePower = _math.floor(_math.log10(_abs(maxMinDistance)));
+    if(dividerPower >= distancePower) {
+        dividerPower = distancePower - 2;
     }
+    if(dividerPower === 0) {
+        dividerPower = -1;
+    }
+    maxDivider = vizUtils.raiseTo(dividerPower, 10);
     return adjust(_math.floor(adjust(value / maxDivider)) * maxDivider);
 }
 
@@ -1272,8 +1279,11 @@ Axis.prototype = {
                     marginValue = _max(marginValue, maxMinDistance / ((that._getScreenDelta() / marginSize) - 1) / 2);
                 }
 
-                minVisible = correctMarginExtremum(addMargin(minVisible, -marginValue, minValueMargin), margins);
-                maxVisible = correctMarginExtremum(addMargin(maxVisible, marginValue, maxValueMargin), margins);
+                minVisible = addMargin(minVisible, -marginValue, minValueMargin);
+                maxVisible = addMargin(maxVisible, marginValue, maxValueMargin);
+                maxMinDistance = maxVisible - minVisible;
+                minVisible = correctMarginExtremum(minVisible, margins, maxMinDistance);
+                maxVisible = correctMarginExtremum(maxVisible, margins, maxMinDistance);
             }
 
             range.addRange({
