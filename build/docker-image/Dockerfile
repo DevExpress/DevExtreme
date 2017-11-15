@@ -4,6 +4,9 @@ FROM ubuntu:16.04 as builder
 RUN echo 'APT::Install-Recommends "0";' > /etc/apt/apt.conf.d/dx-no-recommends
 RUN apt-get update && apt-get -y upgrade
 
+# Remove init system
+RUN apt-get purge -y --allow-remove-essential init systemd
+
 # Curl
 RUN apt-get install -y ca-certificates curl
 
