@@ -46,7 +46,7 @@ function run_test {
 
         *)
             google-chrome-stable --version
-            dbus-launch google-chrome-stable \
+            dbus-launch --exit-with-session google-chrome-stable \
                 --no-sandbox \
                 --no-first-run \
                 --no-default-browser-check \
