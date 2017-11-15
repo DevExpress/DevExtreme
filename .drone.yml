@@ -5,6 +5,8 @@ pipeline:
   build:
     image: devexpress/devextreme-build:17_2
     pull: true
+    environment:
+      - HEADLESS=true
     commands:
       - ./drone-cache.sh restore
       - ./docker-ci.sh

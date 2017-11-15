@@ -4,11 +4,14 @@ FROM ubuntu:16.04 as builder
 RUN echo 'APT::Install-Recommends "0";' > /etc/apt/apt.conf.d/dx-no-recommends
 RUN apt-get update && apt-get -y upgrade
 
+# Remove init system
+RUN apt-get purge -y --allow-remove-essential init systemd
+
 # Curl
 RUN apt-get install -y ca-certificates curl
 
 # Build-time utils
-RUN apt-get install -y apt-transport-https gdebi-core gnupg2
+RUN DEBIAN_FRONTEND=noninteractive apt-get install -y apt-transport-https gdebi-core localepurge
 
 # Node
 RUN curl -L https://deb.nodesource.com/setup_8.x | bash -
@@ -30,6 +33,8 @@ RUN rm /usr/share/dotnet/sdk/*/nuGetPackagesArchive.lzma
 RUN curl -L https://www.slimjet.com/chrome/lnx/chrome64_61.0.3163.79.deb > chrome.deb
 RUN gdebi -n ./chrome.deb
 RUN unlink ./chrome.deb
+RUN rm -rf /opt/google/chrome/swiftshader
+RUN find /opt/google/chrome/locales -type f ! -name 'en-US.pak' -delete
 
 # Utils for docker-ci.sh
 RUN apt-get install -y dbus-x11 httping x11vnc xvfb
@@ -43,12 +48,14 @@ RUN apt-get install -y mc
 # Use UTF-8
 RUN apt-get install -y locales
 RUN locale-gen en_US.UTF-8
+RUN printf "MANDELETE\nen_US.UTF-8" > /etc/locale.nopurge
+RUN localepurge
 
 # Ensure UTC
 RUN [ "$(date +%Z)" = "UTC" ] || exit 1
 
 # Remove build-time utils
-RUN apt-get purge -y apt-transport-https gdebi-core gnupg2
+RUN apt-get purge -y apt-transport-https gdebi-core localepurge
 
 # Clean APT
 RUN apt-get autoremove -y --purge

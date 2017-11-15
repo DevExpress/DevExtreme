@@ -27,6 +27,7 @@ script:
 
   - >
     docker run -t
+    -e HEADLESS=true
     -e TARGET=$TARGET
     -e CONSTEL=$CONSTEL
     -v $TRAVIS_BUILD_DIR:/devextreme
