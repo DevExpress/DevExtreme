@@ -1191,6 +1191,31 @@ QUnit.test("marginOptions.checkInterval on argumentAxis - correctly apply margin
     });
 });
 
+QUnit.test("marginOptions.size on argumentAxis - correctly apply margins for uneven boundaries", function(assert) {
+    this.testMargins(assert, {
+        options: {
+            valueMarginsEnabled: true
+        },
+        marginOptions: {
+            size: 20
+        },
+        range: {
+            min: 1998,
+            max: 2005,
+            interval: 1
+        },
+        ticks: [ 1998, 1999, 2000, 2001, 2002, 2003, 2004, 2005],
+        expectedRange: {
+            min: 1997.75,
+            max: 2005.25,
+            minVisible: 1997.75,
+            maxVisible: 2005.25,
+            interval: 1
+        },
+        isArgumentAxis: true
+    });
+});
+
 QUnit.test("marginOptions.checkInterval and marginOptions.size, size more than interval - apply margins by size", function(assert) {
     this.testMargins(assert, {
         options: {
