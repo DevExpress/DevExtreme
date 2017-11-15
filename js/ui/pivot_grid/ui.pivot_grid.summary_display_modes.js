@@ -504,7 +504,7 @@ function getExpression(field) {
     return expression;
 }
 
-function processDataCell(data, rowIndex, columnIndex, allowResetting, forceReset) {
+function processDataCell(data, rowIndex, columnIndex, isRunningTotalCalculation) {
     var values = data.values[rowIndex][columnIndex] = data.values[rowIndex][columnIndex] || [],
         originalCell = values.originalCell;
 
@@ -512,13 +512,11 @@ function processDataCell(data, rowIndex, columnIndex, allowResetting, forceReset
         return;
     }
     //T571071
-    if(originalCell.allowResetting || forceReset) {
-        originalCell.forEach(function(value, index) {
-            values[index] = value;
-        });
+    if(values.allowResetting || !isRunningTotalCalculation) {
+        data.values[rowIndex][columnIndex] = originalCell.slice();
     }
 
-    originalCell.allowResetting = allowResetting;
+    data.values[rowIndex][columnIndex].allowResetting = isRunningTotalCalculation;
 }
 
 exports.applyDisplaySummaryMode = function(descriptions, data) {
@@ -548,7 +546,7 @@ exports.applyDisplaySummaryMode = function(descriptions, data) {
 
             columnItem.isEmpty = columnItem.isEmpty || [];
 
-            processDataCell(data, rowItem.index, columnItem.index, false, true);
+            processDataCell(data, rowItem.index, columnItem.index, false);
 
             for(var i = 0; i < valueFields.length; i++) {
                 field = valueFields[i];
