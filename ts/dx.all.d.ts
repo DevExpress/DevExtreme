@@ -1262,7 +1262,7 @@ declare module DevExpress.data {
     }
     export interface XmlaStoreOptions {
         /** A function used to customize a web request before it is sent. */
-        beforeSend?: ((options: { url?: string, method?: string, headers?: any, xhrFields?: any, data?: string, dataType?: any }) => any);
+        beforeSend?: ((options: { url?: string, method?: string, headers?: any, xhrFields?: any, data?: string, dataType?: string }) => any);
         /** The name of the database associated with the Store. */
         catalog?: string;
         /** The cube name. */
