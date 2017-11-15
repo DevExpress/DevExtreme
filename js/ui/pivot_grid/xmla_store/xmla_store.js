@@ -833,7 +833,7 @@ exports.XmlaStore = Class.inherit((function() {
          * @type_function_param1_field3 headers:object
          * @type_function_param1_field4 xhrFields:object
          * @type_function_param1_field5 data:string
-         * @type_function_param1_field6 dataType:object
+         * @type_function_param1_field6 dataType:string
          */
         },
 
