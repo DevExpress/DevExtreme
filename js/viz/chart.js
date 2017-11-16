@@ -578,7 +578,9 @@ var dxChart = AdvancedChart.inherit({
                     range.max = _isDefined(seriesRange.max) ? (range.max > seriesRange.max ? range.max : seriesRange.max) : range.max;
                     return range;
                 }, {});
-                axis.zoom(viewport.min, viewport.max);
+                if(_isDefined(viewport.min) && _isDefined(viewport.max)) {
+                    axis.zoom(viewport.min, viewport.max);
+                }
             });
         }
 
