@@ -30,6 +30,7 @@ require("../text_box");
 require("../number_box");
 require("../check_box");
 require("../date_box");
+require("../text_area");
 
 var FORM_EDITOR_BY_DEFAULT = "dxTextBox",
     FIELD_ITEM_CLASS = "dx-field-item",

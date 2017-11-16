@@ -26,7 +26,6 @@ require("ui/switch");
 require("ui/select_box");
 require("ui/tag_box");
 require("ui/lookup");
-require("ui/text_area");
 require("ui/radio_group");
 
 require("common.css!");
