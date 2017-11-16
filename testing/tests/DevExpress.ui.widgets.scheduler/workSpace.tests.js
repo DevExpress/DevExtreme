@@ -189,7 +189,6 @@ QUnit.testStart(function() {
         assert.ok($element.find(".dx-scheduler-date-table").parent().hasClass("dx-scrollable-content"), "Scrollable contains date table");
     });
 
-
     QUnit.test("Workspace scrollable should work correctly after changing currentDate", function(assert) {
         this.instance.option("height", 200);
         this.instance.option("currentDate", new Date());
