@@ -3,7 +3,7 @@
 var numberLocalization = require("localization/number"),
     dateLocalization = require("localization/date");
 
-QUnit.module("Custom month names", {
+QUnit.module("Custom date names", {
     beforeEach: function() {
         dateLocalization.inject({
             getMonthNames: function(format, type) {
@@ -14,6 +14,9 @@ QUnit.module("Custom month names", {
                     return ["января", "февраля", "марта", "апреля", "май", "июня", "июля", "августа", "сентября", "октября", "ноября", "декабря"];
                 }
                 return this.callBase(format, type);
+            },
+            getPeriodNames: function() {
+                return ["a. m.", "p. m."];
             }
         });
     },
@@ -39,7 +42,14 @@ QUnit.test("parse predefined formats with month name", function(assert) {
     assert.deepEqual(dateLocalization.parse("Wrongday, марта 1, 2015", "longdate"), new Date(2015, 2, 1));
     assert.deepEqual(dateLocalization.parse("март 2015", "monthAndYear"), new Date(2015, 2, 1));
     assert.deepEqual(dateLocalization.parse("марта 8", "monthAndDay"), new Date(new Date().getFullYear(), 2, 8));
+    assert.deepEqual(dateLocalization.parse("март 8", "monthAndDay"), new Date(new Date().getFullYear(), 2, 8));
     assert.deepEqual(dateLocalization.parse("март", "month").getMonth(), 2);
+    assert.deepEqual(dateLocalization.parse("марта", "month").getMonth(), 2);
+});
+
+QUnit.test("parse predefined formats with period name", function(assert) {
+    assert.deepEqual(dateLocalization.parse("1:23 p. m.", "shortTime").getHours(), 13);
+    assert.deepEqual(dateLocalization.parse("11/11/2015, 1:23 p. m.", "shortDateShortTime").getHours(), 13);
 });
 
 QUnit.module("Custom digits", {

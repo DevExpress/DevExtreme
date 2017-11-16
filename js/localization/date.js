@@ -157,7 +157,8 @@ var dateLocalization = dependencyInjector({
             ldmlFormat = format;
         } else {
             formatter = function(value) {
-                return that.format(value, format);
+                var text = that.format(value, format);
+                return numberLocalization.convertDigits(text, true);
             };
             try {
                 ldmlFormat = getLDMLDateFormat(formatter);
