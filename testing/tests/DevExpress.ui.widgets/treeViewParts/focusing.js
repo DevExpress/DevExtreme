@@ -208,7 +208,7 @@ QUnit.test("Scroll should not jump down when focusing on Select All (T517945)", 
     }
 });
 
-QUnit.test("Focusing widget when there is search editor", function(assert) {
+QUnit.testInActiveWindow("Focusing widget when there is search editor", function(assert) {
     var $treeView = initTree({
             items: $.extend(true, [], DATA[0]),
             searchEnabled: true
