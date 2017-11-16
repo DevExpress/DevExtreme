@@ -55,6 +55,23 @@ QUnit.test("chart pass common series viewport to value axis on zoom", function(a
     assert.strictEqual(series1.getValueAxis().zoom.lastCall.args[1], 15, "max passed in value axis");
 });
 
+QUnit.test("T576295. chart is not zoom value axis if series is not return their viewport", function(assert) {
+    var series = new MockSeries({});
+
+    series.getViewport.returns({});
+
+    seriesMockData.series.push(series);
+
+    var chart = this.createChart({
+        series: [{ type: "line" }]
+    });
+    //act
+
+    chart.zoomArgument(10, 50);
+    //assert
+    assert.ok(!series.getValueAxis().zoom.called);
+});
+
 QUnit.test("chart with single value axis. Zooming with all null/undefined values", function(assert) {
     seriesMockData.series.push(new MockSeries());
     var chart = this.createChart({
