@@ -235,7 +235,6 @@ var getOrderedFormatPatterns = function(formatPatterns) {
 };
 
 var getParser = function(format, dateParts) {
-
     var regExpInfo = getRegExpInfo(format, dateParts);
 
     return function(text) {
