@@ -700,8 +700,8 @@ var SchedulerWorkSpace = Widget.inherit({
 
         this._renderDateHeader();
 
-        this._renderAllDayPanel();
         this._renderTimePanel();
+        this._renderAllDayPanel();
         this._renderDateTable();
     },
 
