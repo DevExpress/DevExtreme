@@ -161,8 +161,8 @@ var DropDownBox = DropDownEditor.inherit({
 
     _render: function() {
         this._renderSubmitElement();
-        this.callBase();
         this.$element().addClass(DROP_DOWN_BOX_CLASS);
+        this.callBase();
     },
 
     _renderSubmitElement: function() {

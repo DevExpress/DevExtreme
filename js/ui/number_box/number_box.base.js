@@ -190,10 +190,12 @@ var NumberBoxBase = TextEditor.inherit({
     _render: function() {
         this._renderSubmitElement();
         this._setSubmitValue(this.option("value"));
-        this.callBase();
-
-        this.option("isValid") && this._validateValue(this.option("value"));
         this.$element().addClass(WIDGET_CLASS);
+        this.callBase();
+    },
+
+    _renderContentImpl: function() {
+        this.option("isValid") && this._validateValue(this.option("value"));
         this.setAria("role", "spinbutton");
         this._renderMouseWheelHandler();
     },

@@ -87,6 +87,21 @@ QUnit.test("expressions", function(assert) {
     assert.equal($input.val(), "Item 1", "expressions work");
 });
 
+QUnit.test("onContentReady fired after the widget is fully ready", function(assert) {
+    assert.expect(2);
+
+    this.$element.dxDropDownBox({
+        items: this.simpleItems,
+        valueExpr: "id",
+        displayExpr: "name",
+        value: 1,
+        onContentReady: function(e) {
+            assert.equal($(e.element).find("input").val(), "1");
+            assert.ok($(e.element).hasClass(DROP_DOWN_BOX_CLASS));
+        }
+    });
+});
+
 QUnit.test("array value should be supported", function(assert) {
     this.$element.dxDropDownBox({
         items: this.simpleItems,

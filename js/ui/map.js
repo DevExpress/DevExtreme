@@ -456,14 +456,14 @@ var Map = Widget.inherit({
     },
 
     _render: function() {
-        this.callBase();
-
         this._renderShield();
 
         this._saveRendered("markers");
         this._saveRendered("routes");
         this._provider = new PROVIDERS[this.option("provider")](this, this._$container);
         this._queueAsyncAction("render", this._rendered.markers, this._rendered.routes);
+
+        this.callBase();
     },
 
     _renderShield: function() {

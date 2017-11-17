@@ -46,9 +46,8 @@ var TrackBar = Editor.inherit({
         this._renderContainer();
         this._renderRange();
 
-        this.callBase();
-
         this._renderValue();
+        this.callBase();
     },
 
     _renderWrapper: function() {

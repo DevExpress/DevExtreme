@@ -328,8 +328,8 @@ var ColorBox = DropDownEditor.inherit({
     },
 
     _render: function() {
-        this.callBase();
         this.$element().addClass(COLOR_BOX_CLASS);
+        this.callBase();
     },
 
     _renderInput: function() {

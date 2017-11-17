@@ -40,6 +40,19 @@ QUnit.test("widget should be rendered", function(assert) {
     assert.ok($map.hasClass(MAP_CLASS), "widget class added");
 });
 
+QUnit.test("onContentReady fired after the widget is fully ready", function(assert) {
+    assert.expect(2);
+
+    $("#map").dxMap({
+        provider: "googleStatic",
+        disabled: true,
+        onContentReady: function(e) {
+            assert.ok($(e.element).hasClass(MAP_CLASS));
+            assert.ok($(e.element).find("." + MAP_SHIELD_CLASS).length);
+        }
+    });
+});
+
 QUnit.test("clicks inside map should be native (T349301)", function(assert) {
     var $map = $("#map").dxMap({
         provider: "googleStatic"
