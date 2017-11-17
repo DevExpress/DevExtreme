@@ -1144,6 +1144,9 @@ var PivotGrid = Widget.inherit({
                 },
                 onShown: function(e) {
                     that._createComponent(e.component.content(), PivotGridFieldChooser, fieldChooserComponentOptions);
+                },
+                onHidden: function(e) {
+                    e.component.$content().dxPivotGridFieldChooser("resetTreeView");
                 }
             };
 

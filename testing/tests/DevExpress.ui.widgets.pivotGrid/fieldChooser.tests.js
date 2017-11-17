@@ -1448,6 +1448,24 @@ QUnit.test("Enable search", function(assert) {
     assert.ok(!treeview.option("searchEnabled"), "treeview without search");
 });
 
+QUnit.test("resetTreeView works correct", function(assert) {
+    var fields = [
+        { dataField: "field1", caption: "Field 1", displayFolder: "Folder" },
+        { dataField: "field2", caption: "Field 2" },
+    ];
+
+    this.setup({ fields: fields }, { allowSearch: true });
+
+    var treeview = this.$container.find(".dx-treeview").dxTreeView("instance");
+    sinon.spy(treeview, "collapseAll");
+
+    treeview.option("searchValue", "1");
+    this.fieldChooser.resetTreeView();
+
+    assert.equal(treeview.option("searchValue"), "", "treeview was cleaned");
+    assert.ok(treeview.collapseAll.calledOnce, "treeview was collapsed");
+});
+
 
 QUnit.module("dxPivotGridFieldChooser context menu", {
     beforeEach: function() {

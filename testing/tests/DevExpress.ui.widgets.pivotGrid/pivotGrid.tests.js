@@ -651,6 +651,32 @@ QUnit.test("create field chooser with search", function(assert) {
     assert.ok(treeViewInstance.option("searchEnabled"), 'treeview with search');
 });
 
+QUnit.test("clear selection and filtering in field chooser treeview on popup hidding", function(assert) {
+    this.dataSource.fields[0].displayFolder = "Folder";
+    var pivotGrid = createPivotGrid({
+            dataSource: this.dataSource,
+            fieldChooser: {
+                allowSearch: true,
+            }
+        }, assert),
+        fieldChooserPopup = pivotGrid.getFieldChooserPopup();
+
+    this.clock.tick();
+
+    //act
+    fieldChooserPopup.show();
+    this.clock.tick(500);
+
+    var fieldChooser = fieldChooserPopup.$content().data("dxPivotGridFieldChooser"),
+        resetTreeView = sinon.spy(fieldChooser, "resetTreeView");
+
+    fieldChooserPopup.hide();
+    this.clock.tick(500);
+
+    //assert
+    assert.ok(resetTreeView.calledOnce, 'resetTreeView was called');
+});
+
 QUnit.test("Field panel should be updated on change headerFilter at runtime", function(assert) {
     var pivotGrid = createPivotGrid({
         dataSource: this.dataSource,

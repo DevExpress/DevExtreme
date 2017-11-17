@@ -661,6 +661,15 @@ var FieldChooser = BaseFieldChooser.inherit({
     _adjustSortableOnChangedArgs: function() {
     },
 
+    resetTreeView: function() {
+        var treeView = this.$element().find(".dx-treeview").dxTreeView("instance");
+
+        if(treeView) {
+            treeView.option("searchValue", "");
+            treeView.collapseAll();
+        }
+    },
+
     /**
     * @name dxPivotGridFieldChooserMethods_getDataSource
     * @publicName getDataSource()
