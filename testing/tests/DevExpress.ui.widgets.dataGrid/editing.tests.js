@@ -5615,6 +5615,31 @@ QUnit.test("Restore a height of rowsView when editing is canceled with empty dat
     assert.equal($(".dx-datagrid-rowsview").height(), rowsViewHeight, "height of rows view is not changed");
 });
 
+QUnit.test("Height of rowsView should more than height of editor form when row is inserted", function(assert) {
+    //arrange
+    var testElement = $('#container');
+
+    this.options.editing = {
+        allowAdding: true,
+        mode: 'form'
+    };
+    this.options.dataSource = [];
+    this.element = function() {
+        return testElement;
+    };
+    this.dataController.init();
+
+    this.gridView.render(testElement);
+    this.resizingController.updateDimensions();
+    this.clock.tick();
+
+    //act
+    this.addRow();
+
+    //assert
+    assert.ok($(".dx-datagrid-rowsview").height() >= $(".dx-datagrid-edit-form").height(), "height of rows view");
+});
+
 if(device.ios || device.android) {
     //T322738
     QUnit.testInActiveWindow("Native click is used when allowUpdating is true", function(assert) {
