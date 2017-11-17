@@ -1179,7 +1179,7 @@ QUnit.test("marginOptions.checkInterval on argumentAxis - correctly apply margin
             max: 20105.5,
             interval: 897.7
         },
-        ticks: [ 200, 400, 600, 800, 1000, 1200, 1400, 1600, 1800, 2000],
+        ticks: [200, 400, 600, 800, 1000, 1200, 1400, 1600, 1800, 2000],
         expectedRange: {
             min: -346.6,
             max: 20500,
@@ -1204,13 +1204,37 @@ QUnit.test("marginOptions.size on argumentAxis - correctly apply margins for une
             max: 2005,
             interval: 1
         },
-        ticks: [ 1998, 1999, 2000, 2001, 2002, 2003, 2004, 2005],
+        ticks: [1998, 1999, 2000, 2001, 2002, 2003, 2004, 2005],
         expectedRange: {
             min: 1997.75,
             max: 2005.25,
             minVisible: 1997.75,
             maxVisible: 2005.25,
             interval: 1
+        },
+        isArgumentAxis: true
+    });
+});
+
+QUnit.test("marginOptions.size on argumentAxis - correctly apply margins for uneven boundaries (large interval)", function(assert) {
+    this.testMargins(assert, {
+        options: {
+            valueMarginsEnabled: true
+        },
+        marginOptions: {
+            size: 20
+        },
+        range: {
+            min: 1950,
+            max: 2050,
+            interval: 20
+        },
+        ticks: [1950, 1970, 1990, 2010, 2030, 2050],
+        expectedRange: {
+            min: 1946.4,
+            max: 2053.5,
+            minVisible: 1946.4,
+            maxVisible: 2053.5
         },
         isArgumentAxis: true
     });
