@@ -16,6 +16,8 @@ require("generic_light.css!");
 require("ui/data_grid/ui.data_grid");
 
 var $ = require("jquery"),
+    devices = require("core/devices"),
+    device = devices.real(),
     noop = require("core/utils/common").noop,
     dataGridMocks = require("../../helpers/dataGridMocks.js"),
     CLICK_NAMESPACE = "dxclick.dxDataGridAdaptivity";
@@ -3826,7 +3828,18 @@ QUnit.module("Keyboard navigation", {
 
     QUnit.testInActiveWindow("Skip hidden column when use a keyboard navigation via 'tab' key", function(assert) {
         //arrange
+        this.columns = [
+            { dataField: 'firstName', index: 0, allowEditing: true },
+            { dataField: 'lastName', index: 1, allowEditing: true, hidingPriority: 1 },
+            { dataField: 'fullName', index: 1, allowEditing: true }
+        ];
+
         this.setupModule();
+
+        $(".dx-datagrid").width(500);
+        this.resizingController.updateDimensions();
+        this.clock.tick();
+
         this.editingController.editCell(0, 0);
         this.clock.tick();
 
@@ -3834,10 +3847,9 @@ QUnit.module("Keyboard navigation", {
         var e = $.Event('keydown');
         e.which = 9;
         this.getActiveInputElement().trigger(e);
-        $(".dx-field-item-content").first().focus();
 
         //assert
-        assert.equal(this.getActiveInputElement().val(), "Psy");
+        assert.equal(this.getActiveInputElement().val(), "Full Name");
     });
 
     QUnit.testInActiveWindow("Error is not thrown when via keyboard navigation to adaptive form for new row", function(assert) {
@@ -3867,34 +3879,36 @@ QUnit.module("Keyboard navigation", {
         assert.deepEqual(this.keyboardNavigationController._focusedCellPosition, { columnIndex: 0, rowIndex: 0 });
     });
 
-    QUnit.testInActiveWindow("Skip editing via 'shift + tab' key before entry to adaptive detail form", function(assert) {
-        //arrange
-        this.setupModule();
-        this.editingController.editCell(2, 0);
-        this.clock.tick();
+    if(device.deviceType === "desktop") {
+        QUnit.testInActiveWindow("Skip editing via 'shift + tab' key before entry to adaptive detail form", function(assert) {
+            //arrange
+            this.setupModule();
+            this.editingController.editCell(2, 0);
+            this.clock.tick();
 
-        //act
-        var e = $.Event('keydown');
-        e.which = 9;
-        e.shiftKey = true;
-        this.getActiveInputElement().trigger(e);
+            //act
+            var e = $.Event('keydown');
+            e.which = 9;
+            e.shiftKey = true;
+            this.getActiveInputElement().trigger(e);
 
-        //assert
-        assert.equal(this.getActiveInputElement().val(), "Super");
-    });
+            //assert
+            assert.equal(this.getActiveInputElement().val(), "Super");
+        });
 
-    QUnit.testInActiveWindow("Skip editing via 'tab' key before entry to adaptive detail form", function(assert) {
-        //arrange
-        this.setupModule();
-        this.editingController.editCell(0, 0);
-        this.clock.tick();
+        QUnit.testInActiveWindow("Skip editing via 'tab' key before entry to adaptive detail form", function(assert) {
+            //arrange
+            this.setupModule();
+            this.editingController.editCell(0, 0);
+            this.clock.tick();
 
-        //act
-        var e = $.Event('keydown');
-        e.which = 9;
-        this.getActiveInputElement().trigger(e);
+            //act
+            var e = $.Event('keydown');
+            e.which = 9;
+            this.getActiveInputElement().trigger(e);
 
-        //assert
-        assert.equal(this.getActiveInputElement().val(), "Blablablablablablablablablabla");
-    });
+            //assert
+            assert.equal(this.getActiveInputElement().val(), "Blablablablablablablablablabla");
+        });
+    }
 });
