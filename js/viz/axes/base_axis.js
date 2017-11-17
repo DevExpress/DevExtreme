@@ -230,11 +230,10 @@ function correctMarginExtremum(value, margins, maxMinDistance) {
         return adjust(value);
     }
 
-    dividerPower = _math.floor(_math.log10(_abs(value))) - 2;
-    distancePower = _math.floor(_math.log10(_abs(maxMinDistance)));
-    if(dividerPower >= distancePower) {
-        dividerPower = distancePower - 2;
-    }
+    dividerPower = _math.floor(vizUtils.getAdjustedLog10(_abs(value)));
+    distancePower = _math.floor(vizUtils.getAdjustedLog10(_abs(maxMinDistance)));
+    dividerPower = (dividerPower >= distancePower ? distancePower : dividerPower) - 2;
+
     if(dividerPower === 0) {
         dividerPower = -1;
     }

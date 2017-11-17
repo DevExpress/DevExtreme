@@ -4,6 +4,7 @@ var noop = require("../../core/utils/common").noop,
     typeUtils = require("../../core/utils/type"),
     extend = require("../../core/utils/extend").extend,
     each = require("../../core/utils/iterator").each,
+    adjust = require("../../core/utils/math").adjust,
     isDefined = typeUtils.isDefined,
     isNumber = typeUtils.isNumeric,
     isExponential = typeUtils.isExponential,
@@ -32,6 +33,10 @@ var getLog = function(value, base) {
         return NaN;
     }
     return Math.log(value) / Math.log(base);
+};
+
+var getAdjustedLog10 = function(value) {
+    return adjust(getLog(value, 10));
 };
 
 var raiseTo = function(power, base) {
@@ -391,6 +396,7 @@ extend(exports, {
 });
 
 exports.getLog = getLog;
+exports.getAdjustedLog10 = getAdjustedLog10;
 exports.raiseTo = raiseTo;
 
 exports.normalizeAngle = normalizeAngle;
