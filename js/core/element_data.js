@@ -82,8 +82,8 @@ exports.getDataStrategy = function() {
     return strategy;
 };
 
-exports.data = function(element, key, value) {
-    return strategy.data.call(this, element, key, value);
+exports.data = function() {
+    return strategy.data.apply(this, arguments);
 };
 
 exports.strategyChanging = strategyChanging;
