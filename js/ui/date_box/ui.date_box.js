@@ -287,17 +287,8 @@ var DateBox = DropDownEditor.inherit({
             * @type boolean
             * @default false
             */
-            adaptivityEnabled: false,
+            adaptivityEnabled: false
 
-            /**
-             * @name dxDateBoxOptions_onContentReady
-             * @publicName onContentReady
-             * @extends Action
-             * @hidden false
-             * @action
-             * @extend_doc
-             */
-            onContentReady: null
         });
     },
 

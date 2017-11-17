@@ -2287,8 +2287,6 @@ declare module DevExpress.ui {
         onCellHoverChanged?: ((e: { component?: DOMComponent, element?: DevExpress.core.dxElement, model?: any, eventType?: string, data?: any, key?: any, value?: any, text?: string, displayValue?: string, columnIndex?: number, rowIndex?: number, column?: dxDataGridColumn, rowType?: string, cellElement?: DevExpress.core.dxElement, row?: dxDataGridRowObject }) => any);
         /** A handler for the cellPrepared event. */
         onCellPrepared?: ((e: { component?: DOMComponent, element?: DevExpress.core.dxElement, model?: any, data?: any, key?: any, value?: any, displayValue?: string, text?: string, columnIndex?: number, column?: dxDataGridColumn, rowIndex?: number, rowType?: string, row?: dxDataGridRowObject, isSelected?: boolean, isExpanded?: boolean, cellElement?: DevExpress.core.dxElement }) => any);
-        /** A handler for the contentReady event. Executed when the widget's content is ready. This handler may be executed multiple times during the widget's lifetime depending on the number of times its content changes. */
-        onContentReady?: ((e: { component?: DOMComponent, element?: DevExpress.core.dxElement, model?: any }) => any);
         /** A handler for the contextMenuPreparing event. */
         onContextMenuPreparing?: ((e: { component?: DOMComponent, element?: DevExpress.core.dxElement, model?: any, items?: Array<any>, target?: string, targetElement?: DevExpress.core.dxElement, columnIndex?: number, column?: dxDataGridColumn, rowIndex?: number, row?: dxDataGridRowObject }) => any);
         /** A handler for the editingStart event. */
@@ -2466,8 +2464,6 @@ declare module DevExpress.ui {
         min?: Date | number | string;
         /** Specifies the minimal zoom level of a calendar, which is used to pick the date. */
         minZoomLevel?: string;
-        /** A handler for the contentReady event. Executed when the widget's content is ready. This handler may be executed multiple times during the widget's lifetime depending on the number of times its content changes. */
-        onContentReady?: ((e: { component?: DOMComponent, element?: DevExpress.core.dxElement, model?: any }) => any);
         /** Specifies the type of the date/time picker. */
         pickerType?: string;
         /** The text displayed by the widget when the widget value is not yet specified. This text is also used as a title of the date picker. */
@@ -2545,8 +2541,6 @@ declare module DevExpress.ui {
         itemTemplate?: template;
         /** A handler for the buttonClick event. */
         onButtonClick?: ((e: { component?: DOMComponent, element?: DevExpress.core.dxElement, model?: any, jQueryEvent?: JQueryEventObject, event?: event }) => any) | string;
-        /** A handler for the contentReady event. Executed when the widget's content is ready. This handler may be executed multiple times during the widget's lifetime depending on the number of times its content changes. */
-        onContentReady?: any;
         /** A handler for the itemClick event. */
         onItemClick?: ((e: { component?: DOMComponent, element?: DevExpress.core.dxElement, model?: any, itemData?: any, itemElement?: DevExpress.core.dxElement, itemIndex?: number }) => any) | string;
         /** Specifies whether or not the drop-down menu is displayed. */
@@ -2668,8 +2662,6 @@ declare module DevExpress.ui {
         labelLocation?: string;
         /** The minimum column width used for calculating column count in the form layout. */
         minColWidth?: number;
-        /** A handler for the contentReady event. Executed when the widget's content is ready. This handler may be executed multiple times during the widget's lifetime depending on the number of times its content changes. */
-        onContentReady?: ((e: { component?: DOMComponent, element?: DevExpress.core.dxElement, model?: any }) => any);
         /** A handler for the editorEnterKey event. */
         onEditorEnterKey?: ((e: { component?: DOMComponent, element?: DevExpress.core.dxElement, model?: any, dataField?: string }) => any);
         /** A handler for the fieldDataChanged event. */
@@ -3200,8 +3192,6 @@ declare module DevExpress.ui {
         minHeight?: number | string | (() => number | string);
         /** Specifies the minimum width the widget can reach while resizing. */
         minWidth?: number | string | (() => number | string);
-        /** A handler for the contentReady event. Executed when the widget's content is ready. This handler may be executed multiple times during the widget's lifetime depending on the number of times its content changes. */
-        onContentReady?: ((e: { component?: DOMComponent, element?: DevExpress.core.dxElement, model?: any }) => any);
         /** A handler for the hidden event. */
         onHidden?: ((e: { component?: DOMComponent, element?: DevExpress.core.dxElement, model?: any }) => any);
         /** A handler for the hiding event. */
@@ -3312,8 +3302,6 @@ declare module DevExpress.ui {
         onCellClick?: ((e: { component?: DOMComponent, element?: DevExpress.core.dxElement, model?: any, area?: string, cellElement?: DevExpress.core.dxElement, cell?: dxPivotGridPivotGridCell, rowIndex?: number, columnIndex?: number, columnFields?: Array<DevExpress.data.PivotGridDataSourceField>, rowFields?: Array<DevExpress.data.PivotGridDataSourceField>, dataFields?: Array<DevExpress.data.PivotGridDataSourceField>, jQueryEvent?: JQueryEventObject, event?: event, cancel?: boolean }) => any);
         /** A handler for the cellPrepared event. */
         onCellPrepared?: ((e: { component?: DOMComponent, element?: DevExpress.core.dxElement, model?: any, area?: string, cellElement?: DevExpress.core.dxElement, cell?: dxPivotGridPivotGridCell, rowIndex?: number, columnIndex?: number }) => any);
-        /** A handler for the contentReady event. Executed when the widget's content is ready. This handler may be executed multiple times during the widget's lifetime depending on the number of times its content changes. */
-        onContentReady?: ((e: { component?: DOMComponent, element?: DevExpress.core.dxElement, model?: any }) => any);
         /** A handler for the contextMenuPreparing event. */
         onContextMenuPreparing?: ((e: { component?: DOMComponent, element?: DevExpress.core.dxElement, model?: any, items?: Array<any>, area?: string, cell?: dxPivotGridPivotGridCell, cellElement?: DevExpress.core.dxElement, columnIndex?: number, rowIndex?: number, dataFields?: Array<DevExpress.data.PivotGridDataSourceField>, rowFields?: Array<DevExpress.data.PivotGridDataSourceField>, columnFields?: Array<DevExpress.data.PivotGridDataSourceField>, field?: DevExpress.data.PivotGridDataSourceField }) => any);
         /** A handler for the exported event. */
@@ -3373,8 +3361,6 @@ declare module DevExpress.ui {
         height?: number | string | (() => number | string);
         /** Specifies the field chooser layout. */
         layout?: number;
-        /** A handler for the contentReady event. Executed when the widget's content is ready. This handler may be executed multiple times during the widget's lifetime depending on the number of times its content changes. */
-        onContentReady?: ((e: { component?: DOMComponent, element?: DevExpress.core.dxElement, model?: any }) => any);
         /** A handler for the contextMenuPreparing event. */
         onContextMenuPreparing?: ((e: { component?: DOMComponent, element?: DevExpress.core.dxElement, model?: any, items?: Array<any>, area?: string, field?: DevExpress.data.PivotGridDataSourceField, jQueryEvent?: JQueryEventObject, event?: event }) => any);
         /** Strings that can be changed or localized in the PivotGridFieldChooser widget. */
@@ -3669,8 +3655,6 @@ declare module DevExpress.ui {
         onAppointmentUpdating?: ((e: { component?: DOMComponent, element?: DevExpress.core.dxElement, model?: any, oldData?: any, newData?: any, cancel?: boolean | Promise<boolean> | JQueryPromise<boolean> }) => any);
         /** A handler for the cellClick event. */
         onCellClick?: ((e: { component?: DOMComponent, element?: DevExpress.core.dxElement, model?: any, cellData?: any, cellElement?: DevExpress.core.dxElement, jQueryEvent?: JQueryEventObject, event?: event, cancel?: boolean }) => any) | string;
-        /** A handler for the contentReady event. */
-        onContentReady?: ((e: { component?: DOMComponent, element?: DevExpress.core.dxElement, model?: any }) => any);
         /** Specifies the edit mode for recurring appointments. */
         recurrenceEditMode?: string;
         /** Specifies the name of the data source item field that defines exceptions for the current recurring appointment. */
@@ -4145,8 +4129,6 @@ declare module DevExpress.ui {
         onCellHoverChanged?: ((e: { component?: DOMComponent, element?: DevExpress.core.dxElement, model?: any, eventType?: string, data?: any, key?: any, value?: any, text?: string, displayValue?: string, columnIndex?: number, rowIndex?: number, column?: dxTreeListColumn, rowType?: string, cellElement?: DevExpress.core.dxElement, row?: dxTreeListRowObject }) => any);
         /** A handler for the cellPrepared event. Executed after the widget creates a cell. */
         onCellPrepared?: ((e: { component?: DOMComponent, element?: DevExpress.core.dxElement, model?: any, data?: any, key?: any, value?: any, displayValue?: string, text?: string, columnIndex?: number, column?: dxTreeListColumn, rowIndex?: number, rowType?: string, row?: dxTreeListRowObject, isSelected?: boolean, isExpanded?: boolean, cellElement?: DevExpress.core.dxElement }) => any);
-        /** A handler for the contentReady event. Executed when the widget's content is ready. */
-        onContentReady?: ((e: { component?: DOMComponent, element?: DevExpress.core.dxElement, model?: any }) => any);
         /** A handler for the contextMenuPreparing event. Executed before a context menu is rendered. */
         onContextMenuPreparing?: ((e: { component?: DOMComponent, element?: DevExpress.core.dxElement, model?: any, items?: Array<any>, target?: string, targetElement?: DevExpress.core.dxElement, columnIndex?: number, column?: dxTreeListColumn, rowIndex?: number, row?: dxTreeListRowObject }) => any);
         /** A handler for editingStart. Executed before a cell or row switches to the editing state. */
@@ -4475,8 +4457,6 @@ declare module DevExpress.ui {
         keyExpr?: string | Function;
         /** The text or HTML markup displayed by the widget if the item collection is empty. */
         noDataText?: string;
-        /** A handler for the contentReady event. Executed when the widget's content is ready. This handler may be executed multiple times during the widget's lifetime depending on the number of times its content changes. */
-        onContentReady?: any;
         /** A handler for the itemClick event. */
         onItemClick?: ((e: { component?: DOMComponent, element?: DevExpress.core.dxElement, model?: any, itemData?: any, itemElement?: DevExpress.core.dxElement, itemIndex?: number, jQueryEvent?: JQueryEventObject, event?: event }) => any) | string;
         /** A handler for the itemContextMenu event. */
@@ -4611,8 +4591,6 @@ declare module DevExpress.ui {
         minSearchLength?: number;
         /** The text or HTML markup displayed by the widget if the item collection is empty. */
         noDataText?: string;
-        /** A handler for the contentReady event. Executed when the widget's content is ready. This handler may be executed multiple times during the widget's lifetime depending on the number of times its content changes. */
-        onContentReady?: ((e: { component?: DOMComponent, element?: DevExpress.core.dxElement, model?: any }) => any);
         /** A handler for the itemClick event. */
         onItemClick?: ((e: { component?: DOMComponent, element?: DevExpress.core.dxElement, model?: any, itemData?: any, itemElement?: any, itemIndex?: number | any }) => any);
         /** A handler for the selectionChanged event. */
@@ -5208,6 +5186,8 @@ declare module DevExpress.ui {
         hint?: string;
         /** Specifies whether the widget changes its state when a user pauses on it. */
         hoverStateEnabled?: boolean;
+        /** A handler for the contentReady event. Executed when the widget's content is ready. This handler may be executed multiple times during the widget's lifetime depending on the number of times its content changes. */
+        onContentReady?: ((e: { component?: DOMComponent, element?: DevExpress.core.dxElement, model?: any }) => any);
         /** Specifies the number of the element when the Tab key is used for navigating. */
         tabIndex?: number;
         /** Specifies whether the widget is visible. */
