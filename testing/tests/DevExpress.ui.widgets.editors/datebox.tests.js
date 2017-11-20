@@ -267,6 +267,23 @@ QUnit.test("T209347 - clear button should not be rendered if pickerType is 'nati
     assert.equal($clearButton.length, 0, "no clear buttons are rendered");
 });
 
+QUnit.test("clear button press should save value change event", function(assert) {
+    var onValueChanged = sinon.spy(),
+        $dateBox = $("#dateBox").dxDateBox({
+            type: "date",
+            pickerType: "calendar",
+            showClearButton: true,
+            onValueChanged: onValueChanged,
+            value: new Date()
+        }),
+        clearButton = $dateBox.find(".dx-clear-button-area");
+
+    $(clearButton).trigger("dxclick");
+
+    assert.equal(onValueChanged.callCount, 2, "value changed event was fired twice");
+    assert.ok(onValueChanged.getCall(1).args[0].jQueryEvent, "event was saved");
+});
+
 QUnit.test("invalid value should be cleared after clear button click", function(assert) {
     var $dateBox = $("#dateBox").dxDateBox({
         type: "date",
