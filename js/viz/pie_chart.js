@@ -234,6 +234,7 @@ var dxPieChart = BaseChart.inherit({
 
         if(!drawOptions.sizeGroupLayout && this.getSizeGroup()) {
             pieSizeEqualizer.queue(this);
+            this._clearCanvas();
             return;
         }
 

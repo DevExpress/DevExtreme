@@ -1126,3 +1126,31 @@ QUnit.test("select point after dataSource updating", function(assert) {
 
     assert.strictEqual(chart.getAllSeries()[0].getAllPoints()[1].isSelected(), true);
 });
+
+QUnit.test("T576725. Overlapping of the labels should be taken into account canvas with legend and title.", function(assert) {
+    //arrange
+    var dataSource = [],
+        chart,
+        visibleLabelCount = 0;
+
+    for(var i = 0; i < 15; i++) {
+        dataSource.push({ arg: i + "", val: i * 100 });
+    }
+
+    chart = this.createPieChart({
+        series: [{ label: { visible: true } }],
+        dataSource: dataSource,
+        legend: { visible: true, horizontalAlignment: "center" },
+        title: "Test pie chart",
+        size: { width: 400, height: 300 },
+        resolveLabelOverlapping: "shift"
+    });
+
+    chart.getAllSeries()[0].getAllPoints().forEach(function(point) {
+        if(point.getLabel().isVisible()) {
+            visibleLabelCount++;
+        }
+    });
+
+    assert.equal(visibleLabelCount, 11);
+});
