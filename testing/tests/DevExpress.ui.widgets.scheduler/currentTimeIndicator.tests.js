@@ -505,11 +505,13 @@ var stubInvokeMethod = function(instance, options) {
         var $element = this.instance.$element(),
             $shader = $element.find("." + SCHEDULER_DATE_TIME_SHADER_CLASS),
             $topShader = $element.find("." + SCHEDULER_DATE_TIME_SHADER_TOP_CLASS),
-            $bottomShader = $element.find("." + SCHEDULER_DATE_TIME_SHADER_BOTTOM_CLASS);
+            $bottomShader = $element.find("." + SCHEDULER_DATE_TIME_SHADER_BOTTOM_CLASS),
+            $allDayShader = $element.find("." + SCHEDULER_DATE_TIME_SHADER_ALL_DAY_CLASS);
 
         assert.roughEqual($shader.outerHeight(), 1000, 1.5, "Shader has correct height");
-
         assert.roughEqual($topShader.outerWidth(), this.instance._dateTableScrollable.$content().outerWidth(), 2, "TopShader has correct width");
+        assert.roughEqual($allDayShader.outerWidth(), this.instance._dateTableScrollable.$content().outerWidth(), 2, "AllDayShader has correct width");
+
         assert.roughEqual($topShader.outerHeight(), 1000, 1.5, "TopShader has correct height");
 
         assert.equal($bottomShader.length, 0, "BottomShader wasn't rendered for overdue view");
