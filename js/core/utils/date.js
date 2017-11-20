@@ -164,13 +164,13 @@ var correctDateWithUnitBeginning = function(date, dateInterval, withCorrection, 
 
     switch(dateUnitInterval) {
         case 'second':
-            date.setMilliseconds(0);
+            date = new Date(Math.floor(oldDate.getTime() / 1000) * 1000);
             break;
         case 'minute':
-            date.setSeconds(0, 0);
+            date = new Date(Math.floor(oldDate.getTime() / 60000) * 60000);
             break;
         case 'hour':
-            date.setMinutes(0, 0, 0);
+            date = new Date(Math.floor(oldDate.getTime() / 3600000) * 3600000);
             break;
         case 'year':
             date.setMonth(0);
@@ -224,6 +224,10 @@ var getDatesDifferences = function(date1, date2) {
             counter++;
         }
     });
+    if(counter === 0 && getTimezonesDifference(date1, date2) !== 0) {
+        differences.hour = true;
+        counter++;
+    }
 
     differences.count = counter;
     return differences;
@@ -248,16 +252,16 @@ function addDateInterval(value, interval, dir) {
         result.setDate(result.getDate() + intervalObject.days * dir);
     }
     if(intervalObject.hours) {
-        result.setHours(result.getHours() + intervalObject.hours * dir);
+        result.setTime(result.getTime() + intervalObject.hours * 3600000 * dir);
     }
     if(intervalObject.minutes) {
-        result.setMinutes(result.getMinutes() + intervalObject.minutes * dir);
+        result.setTime(result.getTime() + intervalObject.minutes * 60000 * dir);
     }
     if(intervalObject.seconds) {
-        result.setSeconds(result.getSeconds() + intervalObject.seconds * dir);
+        result.setTime(result.getTime() + intervalObject.seconds * 1000 * dir);
     }
     if(intervalObject.milliseconds) {
-        result.setMilliseconds(value.getMilliseconds() + intervalObject.milliseconds * dir);
+        result.setTime(result.getTime() + intervalObject.milliseconds * dir);
     }
     return result;
 }
