@@ -608,6 +608,11 @@ var DateBox = DropDownEditor.inherit({
         }
     },
 
+    _clearValueHandler: function(e) {
+        this.option("text", "");
+        this.callBase(e);
+    },
+
     _readOnlyPropValue: function() {
         return this.callBase() || this._pickerType === PICKER_TYPE.rollers;
     },

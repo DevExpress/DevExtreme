@@ -285,6 +285,23 @@ QUnit.test("invalid value should be cleared after clear button click", function(
     assert.equal($input.val(), "", "dateBox input is empty");
 });
 
+QUnit.test("clear button press should save value change event", function(assert) {
+    var onValueChanged = sinon.spy(),
+        $dateBox = $("#dateBox").dxDateBox({
+            type: "date",
+            pickerType: "calendar",
+            showClearButton: true,
+            onValueChanged: onValueChanged,
+            value: new Date()
+        }),
+        clearButton = $dateBox.find(".dx-clear-button-area");
+
+    $(clearButton).trigger("dxclick");
+
+    assert.equal(onValueChanged.callCount, 2, "value changed event was fired twice");
+    assert.ok(onValueChanged.getCall(1).args[0].jQueryEvent, "event was saved");
+});
+
 QUnit.test("out of range value should not be marked as invalid on init", function(assert) {
     var $dateBox = $("#widthRootStyle").dxDateBox({
             value: new Date(2015, 3, 20),
@@ -2496,6 +2513,7 @@ QUnit.test("T231015 - widget should set default date or time if only one widget'
 
     dateBox.open();
     var date = new Date();
+    date.setSeconds(0);
     dateBox._strategy._widget.option("value", new Date(2015, 3, 21));
     dateBox._popup._wrapper().find(".dx-popup-done").trigger("dxclick");
 
@@ -2506,10 +2524,11 @@ QUnit.test("T231015 - widget should set default date or time if only one widget'
     dateBox._strategy._widget.option("value", null);
     dateBox.open();
     date = new Date();
-    dateBox._strategy._timeView.option("value", new Date(2015, 3, 21, 15, 15, 34));
+    date.setSeconds(0);
+    dateBox._strategy._timeView.option("value", new Date(2015, 3, 21, 15, 15, 0));
     dateBox._popup._wrapper().find(".dx-popup-done").trigger("dxclick");
 
-    date.setHours(15, 15, 34);
+    date.setHours(15, 15, 0);
     assert.equal(Math.floor(dateBox.option("value").getTime() / 1000 / 10), Math.floor(date.getTime() / 1000 / 10), "value is correct if only timeView value is changed");
 });
 
@@ -2523,6 +2542,7 @@ QUnit.test("T253298 - widget should set default date and time if value is null a
 
     dateBox.open();
     var date = new Date();
+    date.setSeconds(0);
     dateBox._popup._wrapper().find(".dx-popup-done").trigger("dxclick");
 
     assert.equal(Math.round(dateBox.option("value").getTime() / 1000 / 10), Math.round(date.getTime() / 1000 / 10), "value is correct");
