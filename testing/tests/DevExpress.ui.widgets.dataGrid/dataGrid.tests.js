@@ -2467,8 +2467,7 @@ QUnit.test("resize on change visibility", function(assert) {
     $($dataGrid).trigger("dxshown");
 
     //assert
-    assert.ok(parseInt($dataGrid.find(".dx-datagrid-nodata").css("margin-left")) < 0, "nodata text left margin exists");
-    assert.ok(parseInt($dataGrid.find(".dx-datagrid-nodata").css("margin-top")) < 0, "nodata text top margin exists");
+    assert.equal($dataGrid.find(".dx-datagrid-nodata").length, 1, "nodata text is shown");
 });
 
 QUnit.test("Height of Data grid is not changed when allowResizing is false and allowReordering is true", function(assert) {

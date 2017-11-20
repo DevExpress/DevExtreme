@@ -209,8 +209,7 @@ module.exports = (function() {
             var noDataClass = that.addWidgetPrefix(NO_DATA_CLASS),
                 noDataElement = $element.find("." + noDataClass).last(),
                 isVisible = this._dataController.isEmpty(),
-                isLoading = this._dataController.isLoading(),
-                rtlEnabled = this.option("rtlEnabled");
+                isLoading = this._dataController.isLoading();
 
             if(!noDataElement.length) {
                 noDataElement = $("<span>")
@@ -219,22 +218,12 @@ module.exports = (function() {
             }
 
             if(isVisible && !isLoading) {
-                noDataElement.removeClass("dx-hidden").text(that._getNoDataText());
-                commonUtils.deferUpdate(function() {
-                    var noDataHeight = noDataElement.height(),
-                        noDataWidth = noDataElement.width();
-
-                    commonUtils.deferRender(function() {
-                        noDataElement
-                            .css({
-                                marginTop: -Math.floor(noDataHeight / 2),
-                                marginRight: rtlEnabled ? -Math.floor(noDataWidth / 2) : 0,
-                                marginLeft: rtlEnabled ? 0 : -Math.floor(noDataWidth / 2)
-                            });
-                    });
-                });
+                noDataElement
+                    .removeClass("dx-hidden")
+                    .text(that._getNoDataText());
             } else {
-                noDataElement.addClass("dx-hidden");
+                noDataElement
+                    .addClass("dx-hidden");
             }
         },
 

@@ -189,17 +189,12 @@ QUnit.test("No data", function(assert) {
         }, assert);
     assert.ok(pivotGrid);
 
-    var $noDataElement = $(pivotGrid.$element().find(".dx-pivotgrid-nodata")),
-        dataAreaCell = $(".dx-area-data-cell"),
-        dataAreaCellOffset = dataAreaCell.offset(),
-        noDataElementOffset = $noDataElement.offset();
+    var $noDataElement = pivotGrid.$element().find(".dx-pivotgrid-nodata");
 
     assert.equal($noDataElement.length, 1);
     assert.ok($noDataElement.is(":visible"));
     assert.equal($noDataElement.text(), 'No data');
     assert.ok(contentReadyCallback.calledOnce);
-
-    assert.roughEqual(noDataElementOffset.top - dataAreaCellOffset.top, (dataAreaCellOffset.top + dataAreaCell.outerHeight()) - (noDataElementOffset.top + $noDataElement.height()), 2.5, "no data element position");
 });
 
 QUnit.test("No data when pivot grid rendered to invisible container", function(assert) {

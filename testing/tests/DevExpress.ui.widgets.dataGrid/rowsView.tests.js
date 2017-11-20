@@ -6495,8 +6495,6 @@ QUnit.test('Update noDataText container', function(assert) {
     rowsView.resize();
     //assert
     noDataElement = container.find('.dx-datagrid-nodata');
-    assert.strictEqual(parseInt(noDataElement.css('marginLeft')), -Math.floor(noDataElement.width() / 2), 'valid margin left');
-    assert.strictEqual(parseInt(noDataElement.css('marginTop')), -Math.floor(noDataElement.height() / 2), 'valid margin top');
 
     assert.ok(noDataElement.is(":visible"), 'noDataElement is visible');
     assert.strictEqual(noDataElement.text(), noDataText);
