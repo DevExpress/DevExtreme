@@ -189,7 +189,7 @@ QUnit.test("No data", function(assert) {
         }, assert);
     assert.ok(pivotGrid);
 
-    var $noDataElement = pivotGrid.element().find(".dx-pivotgrid-nodata");
+    var $noDataElement = pivotGrid.$element().find(".dx-pivotgrid-nodata");
 
     assert.equal($noDataElement.length, 1);
     assert.ok($noDataElement.is(":visible"));
