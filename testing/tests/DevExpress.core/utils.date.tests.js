@@ -172,6 +172,18 @@ QUnit.test('addInterval date object', function(assert) {
     assert.deepEqual(newDate, new Date(2013, 3, 4, 5, 6, 7, 8));
 });
 
+QUnit.test('addInterval date object (with timezone)', function(assert) {
+    //arrange, act
+    var newDate = dateUtils.addInterval(new Date("2017-10-29T01:55:00+01:00"), {
+        minutes: 5,
+        seconds: 6,
+        milliseconds: 7
+    });
+
+    //assert
+    assert.deepEqual(newDate.getTime(), 1509238806007);
+});
+
 QUnit.test('addInterval date object overflow', function(assert) {
     //arrange, act
     var newDate = dateUtils.addInterval(new Date(2012, 12, 1, 1, 1, 1, 1), {
