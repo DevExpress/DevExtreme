@@ -181,6 +181,29 @@ QUnit.test("The ticks are not generated when previous tick and next tick are equ
     assert.deepEqual(ticks, [new Date(2010, 7, 30)], "result ticks");
 });
 
+QUnit.test("The Daylight Saving day on the Central European time zone", function(assert) {
+    //arrange
+    this.update({
+        min: new Date("2017-10-29T00:00:00+01:00"),
+        max: new Date("2017-10-29T05:00:00+00:00"),
+        screenDelta: 300
+    });
+    var ticks = this.tickManager.getTicks(),
+        expectedTicks = [
+            new Date("2017-10-29T00:00:00+01:00"),
+            new Date("2017-10-29T01:00:00+01:00"),
+            new Date("2017-10-29T01:00:00+00:00"),
+            new Date("2017-10-29T02:00:00+00:00"),
+            new Date("2017-10-29T03:00:00+00:00"),
+            new Date("2017-10-29T04:00:00+00:00"),
+            new Date("2017-10-29T05:00:00+00:00")
+        ];
+
+    assert.equal(ticks.length, 7, "Tick length");
+    assert.deepEqual(this.tickManager.getTickInterval(), { hours: 1 }, "Tick interval");
+    assert.deepEqual(getTickValues(ticks), getTickValues(expectedTicks), "Tick values");
+});
+
 QUnit.test("Custom gridSpacingFactor", function(assert) {
     this.update({
         min: new Date(2000, 6, 1),
