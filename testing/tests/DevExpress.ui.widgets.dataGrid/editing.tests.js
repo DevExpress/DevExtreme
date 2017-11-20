@@ -5690,7 +5690,7 @@ QUnit.test("Height of rowsView should more than height of editor form when row i
         mode: 'form'
     };
     this.options.dataSource = [];
-    this.element = function() {
+    this.$element = function() {
         return testElement;
     };
     this.dataController.init();
