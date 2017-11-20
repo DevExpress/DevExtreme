@@ -1890,6 +1890,28 @@ QUnit.test("Tick interval can be set as string value", function(assert) {
     assert.deepEqual(this.axis._tickInterval, { "days": 1 });
 });
 
+QUnit.test("The Daylight Saving day on the Central European time zone", function(assert) {
+    this.createAxis();
+    this.updateOptions({
+        valueType: "datetime",
+        type: "continuous"
+    });
+
+    this.axis.setBusinessRange({ minVisible: new Date("2017-10-28T23:55:00+01:00"), maxVisible: new Date("2017-10-29T05:05:00+00:00"), addRange: function() { } });
+
+    //act
+    this.axis.createTicks(canvas(400));
+
+    assert.deepEqual(this.axis._majorTicks.map(value), [new Date("2017-10-29T00:00:00+01:00"),
+        new Date("2017-10-29T01:00:00+01:00"),
+        new Date("2017-10-29T01:00:00+00:00"),
+        new Date("2017-10-29T02:00:00+00:00"),
+        new Date("2017-10-29T03:00:00+00:00"),
+        new Date("2017-10-29T04:00:00+00:00"),
+        new Date("2017-10-29T05:00:00+00:00")].map(function(d) { return d.valueOf(); }));
+    assert.deepEqual(this.axis._tickInterval, { "hours": 1 });
+});
+
 QUnit.module("DateTime. Minor ticks", environment);
 
 QUnit.test("tickInterval month - minorTickInterval can not be in weeks", function(assert) {
