@@ -509,10 +509,10 @@ var stubInvokeMethod = function(instance, options) {
 
         assert.roughEqual($shader.outerHeight(), 1000, 1.5, "Shader has correct height");
 
-        assert.roughEqual($topShader.outerWidth(), 896, 2, "TopShader has correct width");
+        assert.roughEqual($topShader.outerWidth(), this.instance._dateTableScrollable.$content().outerWidth(), 2, "TopShader has correct width");
         assert.roughEqual($topShader.outerHeight(), 1000, 1.5, "TopShader has correct height");
 
-        assert.roughEqual($bottomShader.outerHeight(), 0, 1.5, "BottomShader has correct height");
+        assert.equal($bottomShader.length, 0, "BottomShader wasn't rendered for overdue view");
     });
 
     QUnit.test("TimePanel currentTime cell should have specific class, Week view", function(assert) {
