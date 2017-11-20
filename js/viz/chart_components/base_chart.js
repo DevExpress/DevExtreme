@@ -168,7 +168,7 @@ function prepareOverlapStacks(rollingStocks) {
             rollingStocks[i + 1] = null;
             root = currentRollingStock;
         } else {
-            root = null;
+            root = rollingStocks[i + 1] || currentRollingStock;
         }
     }
 }
@@ -700,8 +700,6 @@ var BaseChart = BaseWidget.inherit({
                                         && !this._themeManager.getOptions("adaptiveLayout").keepLabels;
 
         this._updateSeriesDimensions(drawOptions);
-        // T207665, T336349, T503616
-        this._canvas = this.__originalCanvas;
     },
 
     _renderSeriesElements: function(drawOptions, isRotated, isLegendInside) {
@@ -728,8 +726,15 @@ var BaseChart = BaseWidget.inherit({
         that._renderTrackers(isLegendInside);
         that._tracker.repairTooltip();
 
+        that._clearCanvas();
+
         that._drawn();
         that._renderCompleteHandler();
+    },
+
+    _clearCanvas: function() {
+        // T207665, T336349, T503616
+        this._canvas = this.__originalCanvas;
     },
 
     _resolveLabelOverlapping: function(resolveLabelOverlapping) {
