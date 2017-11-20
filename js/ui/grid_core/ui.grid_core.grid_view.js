@@ -53,23 +53,25 @@ var getContainerHeight = function($container) {
 
 var ResizingController = modules.ViewController.inherit({
     _initPostRenderHandlers: function() {
-        var that = this;
+        var that = this,
+            dataController = that._dataController;
 
         if(!that._refreshSizesHandler) {
             that._refreshSizesHandler = function(e) {
-                that._dataController.changed.remove(that._refreshSizesHandler);
+                dataController.changed.remove(that._refreshSizesHandler);
 
                 var resizeDeferred,
                     changeType = e && e.changeType,
-                    isDelayed = e && e.isDelayed;
+                    isDelayed = e && e.isDelayed,
+                    items = dataController.items();
 
                 if(!e || changeType === "refresh" || changeType === "prepend" || changeType === "append") {
                     if(!isDelayed) {
                         resizeDeferred = that.resize();
                     }
                 } else if(changeType === "update") {
-                    if(that._dataController.items().length > 1 || e.changeTypes[0] !== "insert" ||
-                        !(that._dataController.items().length === 0 && e.changeTypes[0] === "remove")) {
+                    if((items.length > 1 || e.changeTypes[0] !== "insert") &&
+                        !(items.length === 0 && e.changeTypes[0] === "remove")) {
                         that._rowsView.resize();
                     } else {
                         resizeDeferred = that.resize();
