@@ -35,7 +35,7 @@ var VerticalCurrentTimeShader = Shader.inherit({
         this._$topShader = $("<div>").addClass(DATE_TIME_SHADER_TOP_CLASS);
         width && this._$topShader.width(width) && this._$topShader.height(height);
 
-        this._$topShader.css("marginTop", -this._$container.outerHeight() * i);
+        this._$topShader.css("marginTop", -this._$container.outerHeight() * (i > 0 ? 1 : 0));
         this._$topShader.css("left", this._getShaderOffset(i, width));
 
         $shader.append(this._$topShader);
