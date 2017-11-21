@@ -84,7 +84,7 @@ QUnit.test('getIntervalByString quarter', function(assert) {
 
 QUnit.test('getIntervalByString week', function(assert) {
     //act, assert
-    assert.deepEqual(this.getDateIntervalByString('week'), { days: 7 });
+    assert.deepEqual(this.getDateIntervalByString('week'), { weeks: 1 });
 });
 
 QUnit.test('getIntervalByString day', function(assert) {

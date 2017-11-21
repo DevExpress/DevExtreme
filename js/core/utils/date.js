@@ -414,7 +414,7 @@ var getDateIntervalByString = function(intervalString) {
             result.months = 3;
             break;
         case 'week':
-            result.days = 7;
+            result.weeks = 1;
             break;
         case 'day':
             result.days = 1;
