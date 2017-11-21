@@ -1359,6 +1359,26 @@ QUnit.test("LightMode.Next button is disabled when first page is chosen ", funct
     assert.ok(!isPageChanged);
 });
 
+QUnit.test("Pager is not re-rendered in the Light mode when width is not changed", function(assert) {
+    var pager = $("#container")
+            .width(PAGER_LIGHT_MODE_WIDTH)
+            .dxPager({
+                maxPagesCount: 8,
+                pageCount: 10,
+                pageSizes: [5, 10, 20],
+                showInfo: true,
+                totalCount: 86,
+                infoText: "Page {0} of {1} ({2} items)",
+                pagesCountText: "of"
+            }).dxPager("instance");
+
+    var spy = sinon.spy(pager, "_renderContentImpl");
+
+    pager._dimensionChanged();
+
+    assert.equal(spy.callCount, 0, "pager is not re-rendered");
+});
+
 QUnit.test("Navigate buttons with rtl", function(assert) {
     var $pager = $("#container").dxPager({
             maxPagesCount: 8,
