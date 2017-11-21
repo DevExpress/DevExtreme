@@ -175,7 +175,7 @@ var CalendarWithTimeStrategy = CalendarStrategy.inherit({
             time = this._timeView.option("value");
 
         date = date ? new Date(date) : new Date();
-        date.setHours(time.getHours(), time.getMinutes(), 0);
+        date.setHours(time.getHours(), time.getMinutes(), time.getSeconds());
 
         return date;
     },
