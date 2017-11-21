@@ -886,6 +886,7 @@ declare module DevExpress.data {
     }
     /** This section describes the loadOptions object's fields. */
     export interface LoadOptions {
+        /** An object for storing additional settings that should be sent to the server. Relevant to the ODataStore only. */
         customQueryParams?: any;
         /** An array of strings that represent the names of navigation properties to be loaded simultaneously with the ODataStore. */
         expand?: any;
@@ -893,13 +894,15 @@ declare module DevExpress.data {
         filter?: any;
         /** A group expression. */
         group?: any;
+        /** A group summary expression. */
         groupSummary?: any;
+        /** Indicates whether a top-level group count is required. */
         requireGroupCount?: boolean;
         /** Indicates whether the total count of data objects is needed. */
         requireTotalCount?: boolean;
-        /** A data field or an expression whose value is compared to the search value. */
+        /** A data field or expression whose value is compared to the search value. */
         searchExpr?: Function | Array<Function>;
-        /** A comparison operation. One of the following: "=", "<>", ">", ">=", "<", "<=", "startswith", "endswith", "contains", "notcontains", "isblank" and "isnotblank". */
+        /** A comparison operation. Can have one of the following values: "=", "<>", ">", ">=", "<", "<=", "startswith", "endswith", "contains", "notcontains", "isblank" and "isnotblank". */
         searchOperation?: string;
         /** The current search value. */
         searchValue?: any;
@@ -911,6 +914,7 @@ declare module DevExpress.data {
         sort?: any;
         /** The number of data objects to be loaded. In conjunction with skip, used to implement paging. */
         take?: number;
+        /** A total summary expression. */
         totalSummary?: any;
         /** An object for storing additional settings that should be sent to the server. */
         userData?: any;
@@ -2772,7 +2776,7 @@ declare module DevExpress.ui {
         collapsibleGroups?: boolean;
         /** Specifies whether the widget can be focused using keyboard navigation. */
         focusStateEnabled?: boolean;
-        /** A Boolean value specifying whether or not to display a grouped list. */
+        /** Specifies whether data items should be grouped. */
         grouped?: boolean;
         /** The template to be used for rendering item groups. Specifies a custom template for a group caption. */
         groupTemplate?: template;
@@ -5005,7 +5009,7 @@ declare module DevExpress.ui {
         scrollTop(): number;
         /** Returns the width of the scrollable content in pixels. */
         scrollWidth(): number;
-        /** Updates the dimensions of the scrollable contents. */
+        /** Updates the scrollable contents' dimensions. */
         update(): Promise<void> & JQueryPromise<void>;
     }
     export interface dxSliderBaseOptions extends dxTrackBarOptions {
@@ -7494,7 +7498,7 @@ declare module DevExpress.viz.charts {
         /** Specifies the direction that the pie chart segments will occupy. */
         segmentsDirection?: string;
         /** Specifies options for the series of the PieChart widget. */
-        series?: dxPieChartSeries;
+        series?: dxPieChartSeries | Array<dxPieChartSeries>;
         /** Defines options for the series template. */
         seriesTemplate?: { nameField?: string, customizeSeries?: ((seriesName: any) => dxPieChartSeries) };
         /** Allows you to display several adjoining pies in the same size. */
@@ -7566,7 +7570,7 @@ declare module DevExpress.viz.charts {
         /** Specifies how the chart must behave when series point labels overlap. */
         resolveLabelOverlapping?: string;
         /** Specifies options for PolarChart widget series. */
-        series?: dxPolarChartSeries;
+        series?: dxPolarChartSeries | Array<dxPolarChartSeries>;
         /** Specifies whether a single series or multiple series can be selected in the chart. */
         seriesSelectionMode?: string;
         /** Defines options for the series template. */
