@@ -48,7 +48,7 @@ var TextBox = TextEditor.inherit({
     },
 
     _render: function() {
-        this.$element().addClass(TEXTBOX_CLASS);
+        this.element().addClass(TEXTBOX_CLASS);
         this.callBase();
     },
 
