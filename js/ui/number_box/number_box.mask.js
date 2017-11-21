@@ -9,7 +9,8 @@ var eventsEngine = require("../../events/core/events_engine"),
     number = require("../../localization/number"),
     getLDMLFormat = require("../../localization/ldml/number").getFormat,
     NumberBoxBase = require("./number_box.base"),
-    eventUtils = require("../../events/utils");
+    eventUtils = require("../../events/utils"),
+    typeUtils = require("../../core/utils/type");
 
 var NUMBER_FORMATTER_NAMESPACE = "dxNumberFormatter",
     MOVE_FORWARD = 1,
@@ -298,7 +299,7 @@ var NumberBoxMask = NumberBoxBase.inherit({
             wasRemoved = newLength < oldLength,
             caretDelta = 0;
 
-        if(this._formattedValue === "" && this._parsedValue !== null) {
+        if(typeUtils.isDefined(this._parsedValue) && this._formattedValue === "" && this._parsedValue !== null) {
             var indexOfLastKey = text.indexOf(this._parsedValue.toString());
             caretDelta = indexOfLastKey !== -1 ? indexOfLastKey : 0;
         }
