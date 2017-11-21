@@ -384,6 +384,30 @@ QUnit.test("dimensions should be shrunk correctly with height = auto specified",
     assert.equal($content.height(), popupContentHeight + addedContent.height());
 });
 
+QUnit.test("dxPopup should render custom template with render function that returns dom node", function(assert) {
+    var $content = $("#popup").dxPopup({
+        visible: true,
+        width: "auto",
+        height: "auto",
+        integrationOptions: {
+            templates: {
+                "title": {
+                    render: function(args) {
+                        var $element = $("<span>")
+                            .addClass("dx-template-wrapper")
+                            .text("text");
+
+                        return $element.get(0);
+                    }
+                }
+            }
+        }
+    });
+
+
+    assert.equal($content.text(), "text", "container is correct");
+});
+
 QUnit.test("dimensions should be shrunk correctly with floating heights", function(assert) {
     var floatingTemplate = function() {
         var $result = $("<div>").width(20);
