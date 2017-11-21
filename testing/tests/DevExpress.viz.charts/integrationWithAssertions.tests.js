@@ -7,7 +7,8 @@ var $ = require("jquery"),
     legendModule = require("viz/components/legend"),
     titleModule = require("viz/core/title"),
     dxChart = require("viz/chart"),
-    dxPieChart = require("viz/pie_chart");
+    dxPieChart = require("viz/pie_chart"),
+    baseChartModule = require("viz/chart_components/base_chart");
 
 /* global setupSeriesFamily */
 require("../../helpers/chartMocks.js");
@@ -1130,37 +1131,18 @@ QUnit.test("select point after dataSource updating", function(assert) {
 QUnit.module("T576725", $.extend({}, moduleSetup, {
     beforeEach: function() {
         moduleSetup.beforeEach.call(this);
-        this.legendLayoutOptionsSpy = sinon.stub(legendModule.Legend.prototype, "getLayoutOptions").returns({
-            width: 200,
-            height: 110,
-            position: { horizontal: "center", vertical: "top" },
-            cutSide: "vertical",
-            cutLayoutSide: "top"
-        });
-        this.titleLayoutOptionsSpy = sinon.stub(titleModule.Title.prototype, "getLayoutOptions").returns({
-            width: 200,
-            height: 10,
-            position: { horizontal: "center", vertical: "top" },
-            cutSide: "vertical",
-            cutLayoutSide: "top"
-        });
-        sinon.spy(rendererModule, "Renderer", function() {
-            return new vizMocks.Renderer();
-        });
+        sinon.stub(baseChartModule.overlapping, "resolveLabelOverlappingInOneDirection");
     },
     afterEach: function() {
         moduleSetup.afterEach.call(this);
-        legendModule.Legend.prototype.getLayoutOptions.restore();
-        titleModule.Title.prototype.getLayoutOptions.restore();
-        rendererModule.Renderer.restore();
+        baseChartModule.overlapping.resolveLabelOverlappingInOneDirection.restore();
     }
 }));
 
 QUnit.test("Overlapping of the labels should be taken into account canvas with legend and title.", function(assert) {
     //arrange
     var dataSource = [],
-        chart,
-        visibleLabelCount = 0;
+        chart;
 
     for(var i = 0; i < 15; i++) {
         dataSource.push({ arg: i + "", val: i * 100 });
@@ -1174,11 +1156,5 @@ QUnit.test("Overlapping of the labels should be taken into account canvas with l
         resolveLabelOverlapping: "shift"
     });
 
-    chart.getAllSeries()[0].getAllPoints().forEach(function(point) {
-        if(point.getLabel().isVisible()) {
-            visibleLabelCount++;
-        }
-    });
-
-    assert.equal(visibleLabelCount, 12);
+    assert.ok(baseChartModule.overlapping.resolveLabelOverlappingInOneDirection.lastCall.args[1].top > 0);
 });

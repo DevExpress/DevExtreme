@@ -706,7 +706,6 @@ var BaseChart = BaseWidget.inherit({
                                         && !this._themeManager.getOptions("adaptiveLayout").keepLabels;
 
         this._updateSeriesDimensions(drawOptions);
-
     },
 
     _renderSeriesElements: function(drawOptions, isRotated, isLegendInside) {
