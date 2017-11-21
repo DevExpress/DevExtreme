@@ -121,7 +121,6 @@ var CheckBox = Editor.inherit({
 
     _render: function() {
         this._renderSubmitElement();
-        this.callBase();
 
         this._$container = $("<div>").addClass(CHECKBOX_CONTAINER_CLASS);
         this.setAria("role", "checkbox");
@@ -135,6 +134,7 @@ var CheckBox = Editor.inherit({
         this.element()
             .addClass(CHECKBOX_CLASS)
             .append(this._$container);
+        this.callBase();
     },
 
     _renderSubmitElement: function() {

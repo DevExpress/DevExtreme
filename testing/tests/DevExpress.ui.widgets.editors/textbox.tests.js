@@ -41,6 +41,16 @@ QUnit.test("markup init", function(assert) {
     assert.equal(element.find("." + CONTAINER_CLASS).length, 1);
 });
 
+QUnit.test("onContentReady fired after the widget is fully ready", function(assert) {
+    assert.expect(1);
+
+    $("#textbox").dxTextBox({
+        onContentReady: function(e) {
+            assert.ok($(e.element).hasClass(TEXTBOX_CLASS));
+        }
+    });
+});
+
 QUnit.test("init with options", function(assert) {
     assert.expect(4);
 

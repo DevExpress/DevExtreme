@@ -180,6 +180,13 @@ var Calendar = Editor.inherit({
             */
 
             /**
+            * @name dxCalendarOptions_onContentReady
+            * @publicName onContentReady
+            * @hidden true
+            * @action
+            */
+
+            /**
             * @name dxCalendarCellTemplate_text
             * @publicName text
             * @type String

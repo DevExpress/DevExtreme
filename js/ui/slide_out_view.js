@@ -103,6 +103,13 @@ var SlideOutView = Widget.inherit({
             contentOffset: 45
 
             /**
+            * @name dxSlideOutViewOptions_onContentReady
+            * @publicName onContentReady
+            * @hidden true
+            * @action
+            */
+
+            /**
             * @name dxSlideOutViewOptions_focusStateEnabled
             * @publicName focusStateEnabled
             * @hidden

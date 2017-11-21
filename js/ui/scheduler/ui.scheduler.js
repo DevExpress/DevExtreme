@@ -787,14 +787,6 @@ var Scheduler = Widget.inherit({
             allowMultipleCellSelection: true
 
                 /**
-                * @name dxSchedulerOptions_onContentReady
-                * @publicName onContentReady
-                * @extends Action
-                * @hidden false
-                * @action
-                */
-
-                /**
                 * @name dxSchedulerOptions_activeStateEnabled
                 * @publicName activeStateEnabled
                 * @hidden

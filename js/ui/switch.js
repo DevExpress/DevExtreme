@@ -168,12 +168,12 @@ var Switch = Editor.inherit({
         this._renderSubmitElement();
         this._renderSwipeable();
 
-        this.callBase();
-
         this._renderHandleWidth();
         this._getHandleOffset = this.option("useOldRendering") ? this._getPixelOffset : this._getCalcOffset;
         this._renderValue();
         this._renderClick();
+
+        this.callBase();
     },
 
     _renderHandleWidth: function() {

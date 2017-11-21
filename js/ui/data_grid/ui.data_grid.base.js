@@ -53,15 +53,6 @@ gridCore.registerModulesOrder([
     "export",
     "gridView"]);
 
-/**
-* @name dxDataGridOptions_onContentReady
-* @publicName onContentReady
-* @extends Action
-* @hidden false
-* @action
-* @extend_doc
-*/
-
 var DataGrid = Widget.inherit({
     _activeStateUnit: DATAGRID_ROW_SELECTOR,
 
