@@ -148,8 +148,25 @@ QUnit.test("Set value", function(assert) {
     assert.equal(returnValue, element, "Return element itself for empty element");
 });
 
-QUnit.module("addClass method");
+QUnit.test("method should set value when value is function (T577942)", function(assert) {
+    var $element = renderer("<div>");
+    document.getElementById("qunit-fixture").appendChild($element.get(0));
 
+    var size = function() {
+        assert.deepEqual(this, $element[0], "context is correct");
+        return 80;
+    };
+
+    $element.css({
+        width: size,
+        height: size
+    });
+
+    assert.equal($element.get(0).style.width, "80px");
+    assert.equal($element.get(0).style.height, "80px");
+});
+
+QUnit.module("addClass method");
 
 QUnit.test("class should be set for only an element node", function(assert) {
     var element = renderer("<div>"),
@@ -178,6 +195,38 @@ QUnit.test("width and height should take into consideration borders and paddings
 
     assert.equal($element.get(0).style.height, "94px");
     assert.equal($element.get(0).style.width, "96px");
+});
+
+QUnit.test("methods should set value when value is function (T577942)", function(assert) {
+    var $element = renderer("<div>");
+    document.getElementById("qunit-fixture").appendChild($element.get(0));
+
+    var size = function() {
+        assert.deepEqual(this, $element[0], "context is correct");
+        return 80;
+    };
+
+    $element.css("box-sizing", "border-box");
+    $element.css("padding", "3px 4px");
+    $element.css("border", "4px solid");
+
+    $element.width(size);
+    $element.height(size);
+
+    assert.equal($element.get(0).style.width, "96px");
+    assert.equal($element.get(0).style.height, "94px");
+
+    $element.outerWidth(size);
+    $element.outerHeight(size);
+
+    assert.equal($element.get(0).style.width, "80px");
+    assert.equal($element.get(0).style.height, "80px");
+
+    $element.innerWidth(size);
+    $element.innerHeight(size);
+
+    assert.equal($element.get(0).style.width, "88px");
+    assert.equal($element.get(0).style.height, "88px");
 });
 
 ["Width", "Height"].forEach(function(propName) {

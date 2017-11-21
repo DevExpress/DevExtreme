@@ -210,6 +210,10 @@ initRender.prototype.toggleClass = function(className, value) {
             return this;
         }
 
+        if(typeUtils.isFunction(value)) {
+            value = value.bind(element)();
+        }
+
         if(typeUtils.isNumeric(value)) {
             var elementStyles = window.getComputedStyle(element);
             var sizeAdjustment = sizeUtils.getElementBoxParams(propName, elementStyles);
@@ -285,6 +289,10 @@ var setCss = function(name, value) {
 
     name = styleUtils.styleProp(name);
     for(var i = 0; i < this.length; i++) {
+        if(typeUtils.isFunction(value)) {
+            value = value.bind(this[0])();
+        }
+
         if(typeUtils.isNumeric(value) && pxExceptions.indexOf(name) === -1) {
             value += "px";
         }

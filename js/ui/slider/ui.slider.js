@@ -3,6 +3,7 @@
 var $ = require("../../core/renderer"),
     eventsEngine = require("../../events/core/events_engine"),
     domUtils = require("../../core/utils/dom"),
+    typeUtils = require("../../core/utils/type"),
     numberLocalization = require("../../localization/number"),
     devices = require("../../core/devices"),
     extend = require("../../core/utils/extend").extend,
@@ -472,7 +473,13 @@ var Slider = TrackBar.inherit({
         this.callBase();
         if(this._$bar) {
             var barMarginWidth = this._$bar.outerWidth(true) - this._$bar.outerWidth();
-            this._$bar.width(this._getOptionValue("width") - barMarginWidth);
+            var barWidth = this.option("width");
+
+            if(typeUtils.isFunction(barWidth)) {
+                barWidth = barWidth.bind(this._$bar.get(0))();
+            }
+
+            this._$bar.width(barWidth - barMarginWidth);
         }
     },
 
