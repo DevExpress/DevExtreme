@@ -106,6 +106,13 @@ var SlideOutView = Widget.inherit({
             contentOffset: 45
 
             /**
+            * @name dxSlideOutViewOptions_onContentReady
+            * @publicName onContentReady
+            * @hidden true
+            * @action
+            */
+
+            /**
             * @name dxSlideOutViewOptions_focusStateEnabled
             * @publicName focusStateEnabled
             * @hidden
@@ -181,6 +188,15 @@ var SlideOutView = Widget.inherit({
         this._defaultTemplates["content"] = new EmptyTemplate(this);
     },
 
+    _render: function() {
+        this.callBase();
+
+        this._renderShield();
+        this._toggleMenuPositionClass();
+        this._initSwipeHandlers();
+        this._dimensionChanged();
+    },
+
     _renderContentImpl: function() {
         this._renderMarkup();
 
@@ -194,11 +210,6 @@ var SlideOutView = Widget.inherit({
             container: this.content(),
             noModel: true
         });
-
-        this._renderShield();
-        this._toggleMenuPositionClass();
-        this._initSwipeHandlers();
-        this._dimensionChanged();
     },
 
     _renderMarkup: function() {

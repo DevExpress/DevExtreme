@@ -114,6 +114,13 @@ var DropDownBox = DropDownEditor.inherit({
              */
 
             /**
+            * @name dxDropDownBoxOptions_onContentReady
+            * @publicName onContentReady
+            * @hidden true
+            * @action
+            */
+
+            /**
              * @name dxDropDownBoxOptions_spellcheck
              * @publicName spellcheck
              * @type boolean
@@ -161,8 +168,8 @@ var DropDownBox = DropDownEditor.inherit({
 
     _render: function() {
         this._renderSubmitElement();
-        this.$element().addClass(DROP_DOWN_BOX_CLASS);
         this.callBase();
+        this.$element().addClass(DROP_DOWN_BOX_CLASS);
     },
 
     _renderSubmitElement: function() {

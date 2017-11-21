@@ -1557,20 +1557,6 @@ QUnit.test("onCellClick should not be fired when zoomLevel change required (for 
     assert.equal(clickSpy.callCount, 0, "onCellClick was not fired");
 });
 
-QUnit.test("onContentReady fired after cellTemplate", function(assert) {
-    assert.expect(2);
-
-    this.reinit({
-        cellTemplate: function() {
-            return $("<div>").addClass("my-custom-cell");
-        },
-        onContentReady: function(e) {
-            assert.ok($(e.element).find(".my-custom-cell").length);
-            assert.ok($(e.element).hasClass(CALENDAR_CLASS));
-        }
-    });
-});
-
 QUnit.test("Calendar should not allow to select date in disabled state changed in runtime (T196663)", function(assert) {
     this.reinit({
         value: new Date(2013, 11, 15),

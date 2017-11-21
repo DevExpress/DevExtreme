@@ -99,6 +99,13 @@ var FilterBuilder = Widget.inherit({
             onEditorPrepared: null,
 
             /**
+            * @name dxFilterBuilderOptions_onContentReady
+            * @publicName onContentReady
+            * @hidden true
+            * @action
+            */
+
+            /**
             * @name dxFilterBuilderField
             * @publicName dxFilterBuilderField
             * @category Internal

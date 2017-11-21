@@ -8,8 +8,7 @@ var $ = require("jquery"),
 
 require("ui/filter_builder/filter_builder");
 
-var FILTER_BUILDER_CLASS = "dx-filterbuilder",
-    FILTER_BUILDER_ITEM_FIELD_CLASS = "dx-filterbuilder-item-field",
+var FILTER_BUILDER_ITEM_FIELD_CLASS = "dx-filterbuilder-item-field",
     FILTER_BUILDER_ITEM_OPERATION_CLASS = "dx-filterbuilder-item-operation",
     FILTER_BUILDER_ITEM_VALUE_CLASS = "dx-filterbuilder-item-value",
     FILTER_BUILDER_ITEM_VALUE_TEXT_CLASS = "dx-filterbuilder-item-value-text",
@@ -40,16 +39,6 @@ QUnit.module("Rendering", function() {
 
         var element = $("#container").dxFilterBuilder();
         assert.equal(element.parent().html(), $etalon.html());
-    });
-
-    QUnit.test("onContentReady fired after the widget is fully ready", function(assert) {
-        assert.expect(1);
-
-        $("#container").dxFilterBuilder({
-            onContentReady: function(e) {
-                assert.ok($(e.element).hasClass(FILTER_BUILDER_CLASS));
-            }
-        });
     });
 
     QUnit.test("filterbuilder is created by different values", function(assert) {

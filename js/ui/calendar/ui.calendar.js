@@ -194,6 +194,13 @@ var Calendar = Editor.inherit({
             */
 
             /**
+            * @name dxCalendarOptions_onContentReady
+            * @publicName onContentReady
+            * @hidden true
+            * @action
+            */
+
+            /**
             * @name dxCalendarCellTemplate_text
             * @publicName text
             * @type String
@@ -577,6 +584,7 @@ var Calendar = Editor.inherit({
 
     _render: function() {
         this._renderSubmitElement();
+        this.callBase();
 
         var $element = this.$element();
         $element.addClass(CALENDAR_CLASS);
@@ -604,7 +612,6 @@ var Calendar = Editor.inherit({
         this._setViewContoured(this.option("currentDate"));
 
         $element.append(this._navigator.$element());
-        this.callBase();
     },
 
     _renderBody: function() {

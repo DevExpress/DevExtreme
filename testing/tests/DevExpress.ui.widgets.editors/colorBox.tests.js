@@ -477,19 +477,6 @@ QUnit.test("Option changes", function(assert) {
     });
 });
 
-QUnit.test("onContentReady fired after the widget is fully ready", function(assert) {
-    assert.expect(2);
-
-    showColorBox.call(this, {
-        value: "#ff0000",
-        applyValueMode: "instantly",
-        onContentReady: function(e) {
-            assert.equal($(e.element).find("input").val(), "#ff0000");
-            assert.ok($(e.element).hasClass(COLOR_BOX_CLASS));
-        }
-    });
-});
-
 QUnit.test("'applyButtonText' and 'cancelButtonText' options change should update UI", function(assert) {
     var colorBox = showColorBox.call(this).dxColorBox("instance"),
         applyText = "Test Done",

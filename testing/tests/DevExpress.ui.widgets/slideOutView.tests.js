@@ -17,8 +17,7 @@ var SLIDEOUTVIEW_CLASS = "dx-slideoutview",
     SLIDEOUTVIEW_WRAPPER_CLASS = "dx-slideoutview-wrapper",
     SLIDEOUTVIEW_MENU_CONTENT_CLASS = "dx-slideoutview-menu-content",
     SLIDEOUTVIEW_CONTENT_CLASS = "dx-slideoutview-content",
-    SLIDEOUTVIEW_SHIELD_CLASS = "dx-slideoutview-shield",
-    TEMPLATE_WRAPPER_CLASS = "dx-template-wrapper";
+    SLIDEOUTVIEW_SHIELD_CLASS = "dx-slideoutview-shield";
 
 var position = function($element) {
     return $element.position().left;
@@ -104,18 +103,6 @@ QUnit.test("render slideoutView content", function(assert) {
         $content = $element.find("." + SLIDEOUTVIEW_CONTENT_CLASS);
 
     assert.equal($.trim($content.text()), "Test Content", "slideoutview content was rendered");
-});
-
-QUnit.test("onContentReady fired after the widget is fully ready", function(assert) {
-    assert.expect(2);
-
-    $("#contentTemplate").dxSlideOutView({
-        menuTemplate: "customMenu",
-        onContentReady: function(e) {
-            assert.ok($(e.element).hasClass(SLIDEOUTVIEW_CLASS));
-            assert.ok($(e.element).find("." + TEMPLATE_WRAPPER_CLASS).length);
-        }
-    });
 });
 
 QUnit.test("custom content template for menu should be rendered correctly", function(assert) {
