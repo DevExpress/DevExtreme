@@ -7514,7 +7514,7 @@ declare module DevExpress.viz.charts {
         /** Specifies the direction that the pie chart segments will occupy. */
         segmentsDirection?: string;
         /** Specifies options for the series of the PieChart widget. */
-        series?: dxPieChartSeries;
+        series?: dxPieChartSeries | Array<dxPieChartSeries>;
         /** Defines options for the series template. */
         seriesTemplate?: { nameField?: string, customizeSeries?: ((seriesName: any) => dxPieChartSeries) };
         /** Allows you to display several adjoining pies in the same size. */
@@ -7586,7 +7586,7 @@ declare module DevExpress.viz.charts {
         /** Specifies how the chart must behave when series point labels overlap. */
         resolveLabelOverlapping?: string;
         /** Specifies options for PolarChart widget series. */
-        series?: dxPolarChartSeries;
+        series?: dxPolarChartSeries | Array<dxPolarChartSeries>;
         /** Specifies whether a single series or multiple series can be selected in the chart. */
         seriesSelectionMode?: string;
         /** Defines options for the series template. */
