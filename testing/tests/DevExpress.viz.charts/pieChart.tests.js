@@ -1945,6 +1945,23 @@ var environment = {
         assert.ok(!points[1].getLabels()[0].shift.called);
     });
 
+    QUnit.test("T578429. Save initial labels' order after resolve overlapping", function(assert) {
+        var pie = this.createPieChartWithLabels([
+            { y: 10, x: 294, width: 10, height: 10, pointPosition: { y: 2, angle: 2 } },
+            { y: 0, x: 285, width: 10, height: 10, pointPosition: { y: 2, angle: 2 } },
+            { y: 0, x: 287, width: 10, height: 10, pointPosition: { y: 2, angle: 2 } },
+            { y: 0, x: 288, width: 10, height: 10, pointPosition: { y: 2, angle: 2 } },
+            { y: 0, x: 289, width: 10, height: 10, pointPosition: { y: 2, angle: 2 } }
+            ], "columns"),
+            points = pie.getAllSeries()[0].getVisiblePoints();
+
+        assert.equal(points[0].getLabels()[0].shift.lastCall.args[1], 40);
+        assert.equal(points[1].getLabels()[0].shift.lastCall.args[1], 30);
+        assert.equal(points[2].getLabels()[0].shift.lastCall.args[1], 20);
+        assert.equal(points[3].getLabels()[0].shift.lastCall.args[1], 10);
+        assert.ok(!points[4].getLabels()[0].shift.called);
+    });
+
     QUnit.module("resolveLabelOverlapping. shift. multipie", $.extend({}, overlappingEnvironment, {
         createPieChartWithLabels: function(BBox1, BBox2) {
             this.createFakeSeriesWithLabels(BBox1);
