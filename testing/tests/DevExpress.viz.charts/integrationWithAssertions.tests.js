@@ -649,9 +649,9 @@ var VALIDATE_GROUPS = [
     "dxc-strips-labels-group",
     "dxc-border",
     "dxc-series-group",
+    "dxc-scale-breaks",
     "dxc-labels-group",
     "dxc-crosshair-cursor",
-    "dxc-scale-breaks",
     //"dxc-title",
     "dxc-legend"
 ];
