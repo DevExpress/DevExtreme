@@ -680,7 +680,7 @@ var Pager = Widget.inherit({
             }
             commonUtils.deferUpdate(function() {
                 commonUtils.deferRender(function() {
-                    if(that.option("lightModeEnabled") && width >= that._previousWidth) {
+                    if(that.option("lightModeEnabled") && width > that._previousWidth) {
                         that.option("lightModeEnabled", false);
                     } else {
                         if(width < that._getMinPagerWidth()) {
