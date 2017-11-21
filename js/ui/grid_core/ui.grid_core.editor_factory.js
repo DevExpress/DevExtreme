@@ -28,13 +28,14 @@ var CHECKBOX_SIZE_CLASS = "checkbox-size",
     FOCUS_OVERLAY_CLASS = "focus-overlay",
     CONTENT_CLASS = "content",
     CELL_FOCUS_DISABLED_CLASS = "dx-cell-focus-disabled",
+    ROW_CLASS = "dx-row",
     EDITOR_INLINE_BLOCK = "dx-editor-inline-block",
     MODULE_NAMESPACE = "dxDataGridEditorFactory",
     UPDATE_FOCUS_EVENTS = addNamespace([pointerEvents.down, "focusin", clickEvent.name].join(" "), MODULE_NAMESPACE),
     FOCUSED_ELEMENT_CLASS = "dx-focused",
     POINTER_EVENTS_TARGET_CLASS = "dx-pointer-events-target",
     POINTER_EVENTS_NONE_CLASS = "dx-pointer-events-none",
-    FOCUSED_ELEMENT_SELECTOR = "td[tabindex]:focus, input:focus, textarea:focus, .dx-lookup-field:focus, .dx-checkbox:focus",
+    FOCUSED_ELEMENT_SELECTOR = "td[tabindex]:focus, tr[tabindex]:focus, input:focus, textarea:focus, .dx-lookup-field:focus, .dx-checkbox:focus",
     DX_HIDDEN = "dx-hidden",
     TAB_KEY = 9;
 
@@ -279,7 +280,7 @@ var EditorFactoryController = modules.ViewController.inherit((function() {
                 $focus = this._getFocusedElement($dataGridElement);
 
                 if($focus.length) {
-                    if(!$focus.hasClass(CELL_FOCUS_DISABLED_CLASS)) {
+                    if(!$focus.hasClass(CELL_FOCUS_DISABLED_CLASS) && !$focus.hasClass(ROW_CLASS)) {
                         $focusCell = $focus.closest(this._getFocusCellSelector() + ", ." + CELL_FOCUS_DISABLED_CLASS);
                         hideBorders = $focusCell.get(0) !== $focus.get(0) && $focusCell.hasClass(EDITOR_INLINE_BLOCK);
                         $focus = $focusCell;

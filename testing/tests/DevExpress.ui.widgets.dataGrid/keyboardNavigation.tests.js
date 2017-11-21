@@ -2989,6 +2989,48 @@ QUnit.testInActiveWindow("Focus first cell after tab key on rowsView", function(
     assert.ok(isPreventDefaultCalled, "preventDefault is called");
 });
 
+//T570999
+QUnit.testInActiveWindow("Move focus to first data cell after tab key on group row", function(assert) {
+    //arrange
+    this.columns = [
+        { visible: true, command: "expand" },
+        { caption: 'Column 1', visible: true, dataField: "Column1" },
+        { caption: 'Column 2', visible: true, dataField: "Column2" }
+    ];
+
+    this.dataControllerOptions = {
+        pageCount: 10,
+        pageIndex: 0,
+        pageSize: 10,
+        items: [
+            { values: ['group 1'], rowType: 'group', key: ['group 1'], groupIndex: 0 },
+            { values: [null, 'test1', 'test2'], rowType: 'data', key: 1 },
+            { values: [null, 'test1', 'test2'], rowType: 'data', key: 2 }
+        ]
+    };
+
+    setupModules(this);
+
+    //act
+    this.gridView.render($("#container"));
+
+    var $groupRow = $("#container").find(".dx-group-row");
+
+    $groupRow.focus();
+    this.clock.tick();
+
+    assert.ok($groupRow.hasClass("dx-focused"), "group row is focused");
+    assert.ok($("#container .dx-datagrid-focus-overlay:visible").length, "focus overlay is visible");
+
+    this.triggerKeyDown("tab", false, false, $groupRow);
+
+    assert.ok($(":focus").parent().hasClass("dx-data-row"), "data cell is focused");
+    assert.deepEqual(this.keyboardNavigationController._focusedCellPosition, {
+        rowIndex: 1,
+        columnIndex: 0
+    });
+});
+
 QUnit.testInActiveWindow("Do not prevent default on 'shift+tab' if the current cell is the first", function(assert) {
     //arrange
     this.columns = [
