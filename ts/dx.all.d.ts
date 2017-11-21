@@ -7041,7 +7041,7 @@ declare module DevExpress.viz.charts {
         /** A handler for the zoomStart event. */
         onZoomStart?: ((e: { component?: DOMComponent, element?: DevExpress.core.dxElement, model?: any }) => any);
         /** Declares a collection of panes. */
-        panes?: dxChartPanes;
+        panes?: dxChartPanes | Array<dxChartPanes>;
         /** Specifies how the chart must behave when series point labels overlap. */
         resolveLabelOverlapping?: string;
         /** Swaps the axes around making the value axis horizontal and the argument axis vertical. */
@@ -7051,7 +7051,7 @@ declare module DevExpress.viz.charts {
         /** Enables scrolling in your chart. */
         scrollingMode?: string;
         /** Specifies options for Chart widget series. */
-        series?: dxChartSeries;
+        series?: dxChartSeries | Array<dxChartSeries>;
         /** Specifies whether a single series or multiple series can be selected in the chart. */
         seriesSelectionMode?: string;
         /** Defines options for the series template. */
@@ -7063,7 +7063,7 @@ declare module DevExpress.viz.charts {
         /** Specifies whether or not to filter the series points depending on their quantity. */
         useAggregation?: boolean;
         /** Configures the value axis. */
-        valueAxis?: dxChartValueAxis;
+        valueAxis?: dxChartValueAxis | Array<dxChartValueAxis>;
         /** Enables zooming in your chart. */
         zoomingMode?: string;
     }
