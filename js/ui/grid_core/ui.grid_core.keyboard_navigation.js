@@ -112,10 +112,10 @@ var KeyboardNavigationController = core.ViewController.inherit({
             this._updateFocusedCellPosition($cell);
             if(!this._editingController.isEditing()) {
                 this._applyTabIndexToElement(data.view.element());
-                data.view.element().find(".dx-row > td[tabIndex]").removeAttr("tabIndex");
+                data.view.element().find(".dx-row[tabIndex], .dx-row > td[tabIndex]").removeAttr("tabIndex");
                 eventsEngine.trigger($cell, "focus");
             }
-        } else {
+        } else if($cell.is("td")) {
             this._resetFocusedCell();
         }
     },
@@ -138,7 +138,7 @@ var KeyboardNavigationController = core.ViewController.inherit({
                 view.renderCompleted.add(function() {
                     var $element = view.element();
                     eventsEngine.off($element, eventUtils.addNamespace(pointerEvents.down, "dxDataGridKeyboardNavigation"), clickAction);
-                    eventsEngine.on($element, eventUtils.addNamespace(pointerEvents.down, "dxDataGridKeyboardNavigation"), "." + ROW_CLASS + " td", {
+                    eventsEngine.on($element, eventUtils.addNamespace(pointerEvents.down, "dxDataGridKeyboardNavigation"), "." + ROW_CLASS + " td, ." + ROW_CLASS, {
                         viewIndex: index,
                         view: view
                     }, clickAction);
@@ -540,11 +540,14 @@ var KeyboardNavigationController = core.ViewController.inherit({
                     }
                 }
             } else {
-                $cell = $(eventTarget).closest(".dx-row > td");
+                $cell = this._getCellElementFromTarget(eventTarget);
                 var $lastInteractiveElement = this._getInteractiveElement($cell, !eventArgs.shift);
                 if($lastInteractiveElement.length && eventTarget !== $lastInteractiveElement.get(0)) {
                     isOriginalHandlerRequired = true;
                 } else {
+                    if(this._focusedCellPosition.rowIndex === undefined && $(eventTarget).hasClass(ROW_CLASS)) {
+                        this._updateFocusedCellPosition($(eventTarget).children().first());
+                    }
                     $cell = this._getNextCell(direction, this._getElementType(eventTarget));
                     this._focusCell($cell);
 
