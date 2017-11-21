@@ -137,7 +137,9 @@ function resolveLabelOverlappingInOneDirection(points, canvas, isRotated, shiftF
     if(hasStackedSeries) {
         !isRotated && rollingStocks.reverse();
     } else {
-        rollingStocks.sort(function(a, b) { return a.getInitialPosition() - b.getInitialPosition(); });
+        rollingStocks.sort(function(a, b) {
+            return (a.getInitialPosition() - b.getInitialPosition()) || (rollingStocks.indexOf(a) - rollingStocks.indexOf(b));
+        });
     }
 
     if(!checkStackOverlap(rollingStocks)) return;
