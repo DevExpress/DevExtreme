@@ -169,11 +169,12 @@ var TextArea = TextBox.inherit({
     },
 
     _renderDimensions: function() {
-        var width = this._getOptionValue("width"),
-            height = this._getOptionValue("height"),
-            minHeight = this.option("minHeight"),
-            maxHeight = this.option("maxHeight"),
-            $element = this.$element();
+        var $element = this.$element();
+        var element = $element.get(0);
+        var width = this._getOptionValue("width", element);
+        var height = this._getOptionValue("height", element);
+        var minHeight = this.option("minHeight");
+        var maxHeight = this.option("maxHeight");
 
         $element.css({
             "minHeight": minHeight !== undefined ? minHeight : "",

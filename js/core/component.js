@@ -648,11 +648,11 @@ var Component = Class.inherit({
         };
     })(),
 
-    _getOptionValue: function(name) {
+    _getOptionValue: function(name, context) {
         var value = this.option(name);
 
         if(isFunction(value)) {
-            return value();
+            return value.bind(context)();
         }
 
         return value;
