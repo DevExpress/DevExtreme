@@ -168,12 +168,10 @@ var DOMComponent = Component.inherit({
     },
 
     _renderDimensions: function() {
-        var width = this._getOptionValue("width"),
-            height = this._getOptionValue("height"),
-            $element = this.$element();
+        var $element = this.$element();
 
-        $element.outerWidth(width);
-        $element.outerHeight(height);
+        $element.outerWidth(this.option("width"));
+        $element.outerHeight(this.option("height"));
     },
 
     _attachDimensionChangeHandlers: function() {

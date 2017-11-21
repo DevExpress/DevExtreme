@@ -169,8 +169,8 @@ var TextArea = TextBox.inherit({
     },
 
     _renderDimensions: function() {
-        var width = this._getOptionValue("width"),
-            height = this._getOptionValue("height"),
+        var width = this.option("width"),
+            height = this.option("height"),
             minHeight = this.option("minHeight"),
             maxHeight = this.option("maxHeight"),
             $element = this.$element();
