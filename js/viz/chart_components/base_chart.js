@@ -726,7 +726,11 @@ var BaseChart = BaseWidget.inherit({
             );
         }
 
-        resolveLabelOverlapping !== "none" && that._resolveLabelOverlapping(resolveLabelOverlapping);
+        if(resolveLabelOverlapping !== "none") {
+            that._adjustSeries();
+            that._resolveLabelOverlapping(resolveLabelOverlapping);
+        }
+
         that._adjustSeries();
 
         that._renderTrackers(isLegendInside);
