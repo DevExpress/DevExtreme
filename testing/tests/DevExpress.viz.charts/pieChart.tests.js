@@ -1882,6 +1882,16 @@ var environment = {
         assert.ok(points[1].getLabels()[0].hide.calledOnce);
     });
 
+    QUnit.test("Adjust labels should be called before resolve oberlapping and after", function(assert) {
+        var pie = this.createPieChartWithLabels([{ x: 5, y: 10, width: 10, height: 10, pointPosition: { y: 1, angle: 1 } },
+            { x: 5, y: 10, width: 10, height: 10, pointPosition: { y: 2, angle: 2 } }]),
+            series = pie.getAllSeries()[0],
+            points = series.getVisiblePoints();
+
+        assert.ok(series.adjustLabels.calledBefore(points[1].getLabels()[0].hide));
+        assert.ok(series.adjustLabels.calledAfter(points[1].getLabels()[0].hide));
+    });
+
     QUnit.module("resolveLabelOverlapping. shift", $.extend({}, overlappingEnvironment, {
         createPieChartWithLabels: function(BBox, position) {
             this.createFakeSeriesWithLabels(BBox, position);
