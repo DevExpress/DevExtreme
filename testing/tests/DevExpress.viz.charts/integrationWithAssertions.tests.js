@@ -1127,7 +1127,36 @@ QUnit.test("select point after dataSource updating", function(assert) {
     assert.strictEqual(chart.getAllSeries()[0].getAllPoints()[1].isSelected(), true);
 });
 
-QUnit.test("T576725. Overlapping of the labels should be taken into account canvas with legend and title.", function(assert) {
+QUnit.module("T576725", $.extend({}, moduleSetup, {
+    beforeEach: function() {
+        moduleSetup.beforeEach.call(this);
+        this.legendLayoutOptionsSpy = sinon.stub(legendModule.Legend.prototype, "getLayoutOptions").returns({
+            width: 200,
+            height: 110,
+            position: { horizontal: "center", vertical: "top" },
+            cutSide: "vertical",
+            cutLayoutSide: "top"
+        });
+        this.titleLayoutOptionsSpy = sinon.stub(titleModule.Title.prototype, "getLayoutOptions").returns({
+            width: 200,
+            height: 10,
+            position: { horizontal: "center", vertical: "top" },
+            cutSide: "vertical",
+            cutLayoutSide: "top"
+        });
+        sinon.spy(rendererModule, "Renderer", function() {
+            return new vizMocks.Renderer();
+        });
+    },
+    afterEach: function() {
+        moduleSetup.afterEach.call(this);
+        legendModule.Legend.prototype.getLayoutOptions.restore();
+        titleModule.Title.prototype.getLayoutOptions.restore();
+        rendererModule.Renderer.restore();
+    }
+}));
+
+QUnit.test("Overlapping of the labels should be taken into account canvas with legend and title.", function(assert) {
     //arrange
     var dataSource = [],
         chart,
@@ -1136,13 +1165,12 @@ QUnit.test("T576725. Overlapping of the labels should be taken into account canv
     for(var i = 0; i < 15; i++) {
         dataSource.push({ arg: i + "", val: i * 100 });
     }
-
     chart = this.createPieChart({
         series: [{ label: { visible: true } }],
         dataSource: dataSource,
         legend: { visible: true, horizontalAlignment: "center" },
         title: "Test pie chart",
-        size: { width: 400, height: 290 },
+        size: { width: 400, height: 300 },
         resolveLabelOverlapping: "shift"
     });
 
@@ -1152,5 +1180,5 @@ QUnit.test("T576725. Overlapping of the labels should be taken into account canv
         }
     });
 
-    assert.equal(visibleLabelCount, 11);
+    assert.equal(visibleLabelCount, 12);
 });
