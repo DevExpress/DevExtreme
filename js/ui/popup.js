@@ -496,7 +496,7 @@ var Popup = Overlay.inherit({
             $container.replaceWith($toolbar);
             return $toolbar;
         } else {
-            var $result = template.render({ container: getPublicElement($container) });
+            var $result = $(template.render({ container: getPublicElement($container) }));
             if($result.hasClass(TEMPLATE_WRAPPER_CLASS)) {
                 $container.replaceWith($result);
                 $container = $result;
