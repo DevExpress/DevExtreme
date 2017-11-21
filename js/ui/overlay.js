@@ -1244,16 +1244,18 @@ var Overlay = Widget.inherit({
     },
 
     _renderDimensions: function() {
+        var content = this._$content.get(0);
+
         this._$content.css({
-            minWidth: this._getOptionValue("minWidth"),
-            maxWidth: this._getOptionValue("maxWidth"),
-            minHeight: this._getOptionValue("minHeight"),
-            maxHeight: this._getOptionValue("maxHeight")
+            minWidth: this._getOptionValue("minWidth", content),
+            maxWidth: this._getOptionValue("maxWidth", content),
+            minHeight: this._getOptionValue("minHeight", content),
+            maxHeight: this._getOptionValue("maxHeight", content)
         });
 
         this._$content
-            .outerWidth(this._getOptionValue("width"))
-            .outerHeight(this._getOptionValue("height"));
+            .outerWidth(this._getOptionValue("width", content))
+            .outerHeight(this._getOptionValue("height", content));
     },
 
     _renderPosition: function() {
