@@ -1142,7 +1142,7 @@ QUnit.test("T576725. Overlapping of the labels should be taken into account canv
         dataSource: dataSource,
         legend: { visible: true, horizontalAlignment: "center" },
         title: "Test pie chart",
-        size: { width: 400, height: 300 },
+        size: { width: 400, height: 290 },
         resolveLabelOverlapping: "shift"
     });
 
