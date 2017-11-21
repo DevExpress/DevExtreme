@@ -855,7 +855,7 @@ var ContextMenu = MenuBase.inherit((function() {
             $expandedItems.removeClass(DX_MENU_ITEM_EXPANDED_CLASS);
 
             each(shownSubmenus, function(_, $submenu) {
-                that._hideSubmenuCore($submenu);
+                that._hideSubmenu($submenu);
             });
         },
 
