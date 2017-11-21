@@ -236,15 +236,6 @@ var DropDownList = DropDownEditor.inherit({
             */
 
             /**
-            * @name dxDropDownListOptions_onContentReady
-            * @publicName onContentReady
-            * @extends Action
-            * @hidden false
-            * @action
-            * @extend_doc
-            */
-
-            /**
             * @name dxDropDownListOptions_fieldTemplate
             * @publicName fieldTemplate
             * @hidden

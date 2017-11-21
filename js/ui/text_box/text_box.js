@@ -56,12 +56,14 @@ var TextBox = TextEditor.inherit({
     },
 
     _render: function() {
-        this.callBase();
-
         this.$element().addClass(TEXTBOX_CLASS);
-        this.setAria("role", "textbox");
+        this.callBase();
+    },
 
+    _renderContentImpl: function() {
+        this.setAria("role", "textbox");
         this._renderMaxLengthHandlers();
+        this.callBase();
     },
 
     _renderInputType: function() {

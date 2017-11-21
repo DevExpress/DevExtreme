@@ -286,13 +286,16 @@ var Slider = TrackBar.inherit({
         this._renderSubmitElement();
 
         this.callBase();
+    },
 
+    _renderContentImpl: function() {
         this._renderLabels();
         this._renderStartHandler();
         this._renderAriaMinAndMax();
 
         this._repaintHandle();
         this.option("useInkRipple") && this._renderInkRipple();
+        this.callBase();
     },
 
     _renderSubmitElement: function() {

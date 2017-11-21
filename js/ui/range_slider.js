@@ -197,10 +197,13 @@ var RangeSlider = Slider.inherit({
     },
 
     _render: function() {
-        this.callBase();
         this.$element().addClass(RANGE_SLIDER_CLASS);
+        this.callBase();
+    },
 
+    _renderContentImpl: function() {
         this._callHandlerMethod("repaint");
+        this.callBase();
     },
 
     _renderHandle: function() {

@@ -46,6 +46,20 @@ QUnit.test("widget should be rendered", function(assert) {
     assert.ok($radioGroup.hasClass(RADIO_GROUP_CLASS), "widget class added");
 });
 
+QUnit.test("onContentReady fired after the widget is fully ready", function(assert) {
+    assert.expect(2);
+
+    $("#radioGroup").dxRadioGroup({
+        items: [
+            { text: "0" }
+        ],
+        onContentReady: function(e) {
+            assert.ok($(e.element).hasClass(RADIO_GROUP_CLASS));
+            assert.ok($(e.element).find("." + RADIO_BUTTON_CLASS).length);
+        }
+    });
+});
+
 QUnit.test("widget should generate buttons", function(assert) {
     var $radioGroup = $("#radioGroup").dxRadioGroup({
         items: [
