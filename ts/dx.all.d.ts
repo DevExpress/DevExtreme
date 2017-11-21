@@ -743,6 +743,7 @@ declare module DevExpress {
     }
     /** An object used to manage OData endpoints in your application. */
     export class EndpointSelector {
+        constructor(options: any);
         /** Returns an endpoint for the specified key. */
         urlFor(key: string): string;
     }
