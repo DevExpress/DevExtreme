@@ -24,21 +24,13 @@
 </head>
 
 <body>
-    <div id="clear"></div>
-    <div id="currency"></div>
+    <div id="button"></div>
 
     <script>
         $(function() {
-            $("#clear").dxButton({
-                text: 'clear',
-                onClick: function(){
-                $("#currency").dxNumberBox("instance").option("value", undefined);  
-                }
-            });
-            $("#currency").dxNumberBox({
-                format: "#0",
-                value: 667,
-                showClearButton: true
+            $("#button").dxButton({
+                text: 'Click me!',
+                onClick: function() { alert("clicked"); }
             });
         });
     </script>
