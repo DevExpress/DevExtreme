@@ -2513,7 +2513,6 @@ QUnit.test("T231015 - widget should set default date or time if only one widget'
 
     dateBox.open();
     var date = new Date();
-    date.setSeconds(0);
     dateBox._strategy._widget.option("value", new Date(2015, 3, 21));
     dateBox._popup._wrapper().find(".dx-popup-done").trigger("dxclick");
 
@@ -2524,11 +2523,10 @@ QUnit.test("T231015 - widget should set default date or time if only one widget'
     dateBox._strategy._widget.option("value", null);
     dateBox.open();
     date = new Date();
-    date.setSeconds(0);
-    dateBox._strategy._timeView.option("value", new Date(2015, 3, 21, 15, 15, 0));
+    dateBox._strategy._timeView.option("value", new Date(2015, 3, 21, 15, 15, 34));
     dateBox._popup._wrapper().find(".dx-popup-done").trigger("dxclick");
 
-    date.setHours(15, 15, 0);
+    date.setHours(15, 15, 34);
     assert.equal(Math.floor(dateBox.option("value").getTime() / 1000 / 10), Math.floor(date.getTime() / 1000 / 10), "value is correct if only timeView value is changed");
 });
 
@@ -2542,7 +2540,6 @@ QUnit.test("T253298 - widget should set default date and time if value is null a
 
     dateBox.open();
     var date = new Date();
-    date.setSeconds(0);
     dateBox._popup._wrapper().find(".dx-popup-done").trigger("dxclick");
 
     assert.equal(Math.round(dateBox.option("value").getTime() / 1000 / 10), Math.round(date.getTime() / 1000 / 10), "value is correct");
