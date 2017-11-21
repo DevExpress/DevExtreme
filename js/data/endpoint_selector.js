@@ -19,6 +19,12 @@ function isLocalHostName(url) {
 * @module data/endpoint_selector
 * @export default
 */
+/**
+* @name EndpointSelectorMethods_ctor
+* @publicName ctor(options)
+* @param1 options:Object
+* @hidden
+*/
 var EndpointSelector = function(config) {
     this.config = config;
 };
