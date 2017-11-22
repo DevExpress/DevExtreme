@@ -135,8 +135,9 @@ function resolveLabelOverlappingInOneDirection(points, canvas, isRotated, shiftF
     if(hasStackedSeries) {
         !isRotated && rollingStocks.reverse();
     } else {
+        var rollingStocksTmp = rollingStocks.slice();
         rollingStocks.sort(function(a, b) {
-            return (a.getInitialPosition() - b.getInitialPosition()) || (rollingStocks.indexOf(a) - rollingStocks.indexOf(b));
+            return (a.getInitialPosition() - b.getInitialPosition()) || (rollingStocksTmp.indexOf(a) - rollingStocksTmp.indexOf(b));
         });
     }
 
