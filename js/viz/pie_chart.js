@@ -282,7 +282,8 @@ var dxPieChart = BaseChart.inherit({
     _resolveLabelOverlappingShift: function() {
         var that = this,
             series = that.series,
-            center = that._center;
+            center = that._center,
+            inverseDirection = that.option("segmentsDirection") === "anticlockwise";
 
         _each(series, function(_, singleSeries) {
             if(singleSeries.getOptions().label.position === "inside") {
@@ -296,6 +297,12 @@ var dxPieChart = BaseChart.inherit({
                 var angle = vizUtils.normalizeAngle(point.middleAngle);
                 (angle <= 90 || angle >= 270 ? rPoints : lPoints).push(point);
             });
+
+            if(inverseDirection) {
+                lPoints.reverse();
+                rPoints.reverse();
+            }
+
             overlapping.resolveLabelOverlappingInOneDirection(lPoints, that._canvas, false, shiftFunction);
             overlapping.resolveLabelOverlappingInOneDirection(rPoints, that._canvas, false, shiftFunction);
         });

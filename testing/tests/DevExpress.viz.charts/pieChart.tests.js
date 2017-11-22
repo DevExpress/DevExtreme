@@ -1893,11 +1893,12 @@ var environment = {
     });
 
     QUnit.module("resolveLabelOverlapping. shift", $.extend({}, overlappingEnvironment, {
-        createPieChartWithLabels: function(BBox, position) {
+        createPieChartWithLabels: function(BBox, position, segmentsDirection) {
             this.createFakeSeriesWithLabels(BBox, position);
             this.pieChart = this.createPieChart({
                 resolveLabelOverlapping: "shift",
-                series: [{ type: "mockType" }]
+                series: [{ type: "mockType" }],
+                segmentsDirection: segmentsDirection
             });
             return this.pieChart;
         }
@@ -1945,14 +1946,14 @@ var environment = {
         assert.ok(!points[1].getLabels()[0].shift.called);
     });
 
-    QUnit.test("T578429. Save initial labels' order after resolve overlapping", function(assert) {
+    QUnit.test("T578429. Save initial labels' order after resolve overlapping, anticlockwise", function(assert) {
         var pie = this.createPieChartWithLabels([
             { y: 10, x: 294, width: 10, height: 10, pointPosition: { y: 2, angle: 2 } },
             { y: 0, x: 285, width: 10, height: 10, pointPosition: { y: 2, angle: 2 } },
             { y: 0, x: 287, width: 10, height: 10, pointPosition: { y: 2, angle: 2 } },
             { y: 0, x: 288, width: 10, height: 10, pointPosition: { y: 2, angle: 2 } },
             { y: 0, x: 289, width: 10, height: 10, pointPosition: { y: 2, angle: 2 } }
-            ], "columns"),
+            ], "columns", "anticlockwise"),
             points = pie.getAllSeries()[0].getVisiblePoints();
 
         assert.equal(points[0].getLabels()[0].shift.lastCall.args[1], 40);
