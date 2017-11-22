@@ -107,10 +107,14 @@ var TextArea = TextBox.inherit({
     },
 
     _render: function() {
-        this.callBase();
         this.element().addClass(TEXTAREA_CLASS);
+        this.callBase();
+    },
+
+    _renderContentImpl: function() {
         this.setAria("multiline", "true");
         this._updateInputHeight();
+        this.callBase();
     },
 
     _renderInput: function() {

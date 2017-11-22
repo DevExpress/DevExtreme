@@ -48,6 +48,16 @@ QUnit.test("rendered markup", function(assert) {
     assert.equal($progressBar.find(toSelector(PROGRESSBAR_STATUS_CLASS)).length, 1, "Status div has been created");
 });
 
+QUnit.test("onContentReady fired after the widget is fully ready", function(assert) {
+    assert.expect(1);
+
+    this.$element.dxProgressBar({
+        onContentReady: function(e) {
+            assert.ok($(e.element).hasClass(PROGRESSBAR_CLASS));
+        }
+    });
+});
+
 QUnit.module("options", {
     beforeEach: function() {
         this.$element = $("#progressbar");

@@ -73,6 +73,7 @@ declare module DevExpress.ui {
     }
 
     export interface dxSlideOutViewOptions extends WidgetOptions {
+        /** @docid_ignore dxSlideOutViewOptions_onContentReady */
         /** @docid_ignore dxSlideOutViewOptions_contentOffset */
         /** @docid_ignore dxSlideOutViewOptions_focusStateEnabled */
         /** @docid_ignore dxSlideOutViewOptions_accessKey */
@@ -256,7 +257,6 @@ declare module DevExpress.ui {
     }
 
     export interface dxDropDownMenuOptions extends WidgetOptions {
-        /** @docid_ignore dxDropDownMenuOptions_onContentReady */
 
         /** @docid dxDropDownMenuOptions_onButtonClick */
         onButtonClick?: any;

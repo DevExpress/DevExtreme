@@ -258,14 +258,6 @@ var Form = Widget.inherit({
              */
             validationGroup: undefined
             /**
-            * @name dxFormOptions_onContentReady
-            * @publicName onContentReady
-            * @extends Action
-            * @hidden false
-            * @action
-            * @extend_doc
-            */
-            /**
             * @name dxFormSimpleItem
             * @publicName SimpleItem
             * @section FormItems
