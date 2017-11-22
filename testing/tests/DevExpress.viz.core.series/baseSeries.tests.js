@@ -4357,9 +4357,8 @@ QUnit.test("getTemplateFields returns templated fields for value, size and tag f
     }]);
 });
 
-QUnit.test("getStackName returns axis' name", function(assert) {
-    assert.equal(createSeries({ axis: "axisName" }, this.renderOptions).getStackName(), "axis_axisName", "series with defined axis name");
-    assert.equal(createSeries({ }, this.renderOptions).getStackName(), "axis_default", "series with undefined axis name");
+QUnit.test("getStackName returns null", function(assert) {
+    assert.equal(createSeries({ axis: "axisName" }, this.renderOptions).getStackName(), null);
 });
 
 QUnit.test("get axes", function(assert) {

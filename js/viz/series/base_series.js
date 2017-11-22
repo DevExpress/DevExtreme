@@ -330,7 +330,7 @@ Series.prototype = {
 
         that._createStyles(newOptions);
 
-        that._stackName = "axis_" + (newOptions.axis || "default");
+        that._stackName = null;
 
         that._updateOptions(newOptions);
 
