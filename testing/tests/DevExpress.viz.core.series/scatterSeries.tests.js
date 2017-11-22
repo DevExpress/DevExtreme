@@ -2417,14 +2417,6 @@ var checkTwoGroups = function(assert, series) {
         assert.equal(series._options.tagField, "taglineSeries");
     });
 
-    QUnit.test("getStackName", function(assert) {
-        var series = createSeries({
-            type: seriesType
-        });
-
-        assert.strictEqual(series.getStackName(), null);
-    });
-
     QUnit.module("Check visible area", {
         beforeEach: function() {
             environment.beforeEach.call(this);
