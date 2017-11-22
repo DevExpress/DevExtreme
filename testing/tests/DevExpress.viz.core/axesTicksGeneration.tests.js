@@ -2238,7 +2238,7 @@ QUnit.test("Tune scale break values. Logarithmic", function(assert) {
         type: "logarithmic",
         logarithmBase: 10,
         breakStyle: { width: 0 },
-        breaks: [{ startValue: 0.1, endValue: 1000 }]
+        breaks: [{ startValue: 0.1, endValue: 10000 }]
     });
 
     this.axis.setBusinessRange({ minVisible: 0.0001, maxVisible: 100000, addRange: function() { return this; } });
@@ -2250,7 +2250,7 @@ QUnit.test("Tune scale break values. Logarithmic", function(assert) {
 
     assert.equal(this.axis._tickInterval, 2);
     assert.roughEqual(scaleBreak.from, 1, 0.001);
-    assert.roughEqual(scaleBreak.to, 100, 0.001);
+    assert.roughEqual(scaleBreak.to, 1000, 0.001);
 });
 
 QUnit.test("Tune scale break values when axis division factor is too big", function(assert) {
@@ -2330,16 +2330,17 @@ QUnit.test("Generate minor ticks when scale breaks at the begin and at the end",
         breakStyle: { width: 0 },
         allowDecimals: false,
         calculateMinors: true,
-        breaks: [{ startValue: 0, endValue: 25 }, { startValue: 85, endValue: 106 }]
+        minorTickInterval: 4,
+        breaks: [{ startValue: 0, endValue: 40 }, { startValue: 85, endValue: 106 }]
     });
 
     this.axis.setBusinessRange({ minVisible: 1, maxVisible: 105, addRange: function() { return this; } });
 
     //act
-    this.axis.createTicks(canvas(350));
+    this.axis.createTicks(canvas(370));
 
-    assert.equal(this.axis._tickInterval, 20);
-    assert.deepEqual(this.axis._minorTicks.map(value), [4, 8, 16, 24, 28, 32, 36, 44, 48, 52, 56, 64, 68, 72, 76, 84, 88, 92, 96, 104], "monir ticks");
+    assert.equal(this.axis._tickInterval, 10);
+    assert.deepEqual(this.axis._minorTicks.map(value), [4, 36, 44, 48, 54, 58, 64, 68, 74, 78, 84, 88, 104], "monir ticks");
 });
 
 QUnit.test("Move datetime ticks to work day", function(assert) {
@@ -2502,6 +2503,31 @@ QUnit.test("Remove scale break if it less than tickInterval", function(assert) {
         breakStyle: { width: 0 },
         allowDecimals: false,
         calculateMinors: true,
+        breaks: [{ startValue: 10, endValue: 200 }, { startValue: 350, endValue: 800 }]
+    });
+
+    this.axis.setBusinessRange({ minVisible: 0, maxVisible: 1000, addRange: function() { return this; } });
+
+    //act
+    this.axis.createTicks(canvas(200));
+
+    assert.equal(this.axis._tickInterval, 200, "interval");
+    assert.deepEqual(this.translator.updateBusinessRange.lastCall.args[0].breaks, [{
+        from: 450,
+        to: 700,
+        cumulativeWidth: 0
+    }]);
+});
+
+//T578577
+QUnit.test("Remove scale break if it is less than tickInterval after correction", function(assert) {
+    this.createAxis();
+    this.updateOptions({
+        argumentType: "numeric",
+        type: "continuous",
+        breakStyle: { width: 0 },
+        allowDecimals: false,
+        calculateMinors: true,
         breaks: [{ startValue: 10, endValue: 200 }, { startValue: 350, endValue: 751 }]
     });
 
@@ -2511,11 +2537,7 @@ QUnit.test("Remove scale break if it less than tickInterval", function(assert) {
     this.axis.createTicks(canvas(200));
 
     assert.equal(this.axis._tickInterval, 250, "interval");
-    assert.deepEqual(this.translator.updateBusinessRange.lastCall.args[0].breaks, [{
-        from: 475,
-        to: 626,
-        cumulativeWidth: 0
-    }]);
+    assert.deepEqual(this.translator.updateBusinessRange.lastCall.args[0].breaks, []);
 });
 
 QUnit.test("Remove scale break if it less than tickInterval, logarithmic", function(assert) {
