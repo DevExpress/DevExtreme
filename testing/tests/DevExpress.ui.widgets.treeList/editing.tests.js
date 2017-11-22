@@ -289,6 +289,36 @@ QUnit.test("AddRow method should expand row and add item after parent", function
     assert.strictEqual(rows[2].node.parent.key, 1, "row 2 node parent");
 });
 
+//T553905
+QUnit.test("Add item in node without children (Angular)", function(assert) {
+    //arrange
+    var $testElement = $('#treeList');
+
+    this.options.editing.allowAdding = true;
+    this.options.expandedRowKeys = [1];
+    this.options.loadingTimeout = 30;
+
+    this.setupTreeList();
+    this.rowsView.render($testElement);
+
+    //act
+    this.addRow(2);
+    this.dataController.optionChanged({ name: "expandedRowKeys", value: [1, 2], previousValue: [1, 2] }); // simulate the call from ngDoCheck hook
+    this.clock.tick(30);
+
+    //assert
+    var rows = this.getVisibleRows();
+    assert.strictEqual(rows.length, 3, "count row");
+    assert.strictEqual(rows[0].key, 1, "key of the first row");
+    assert.strictEqual(rows[0].isExpanded, true, "first row is expanded");
+    assert.strictEqual(rows[1].key, 2, "key of the second row");
+    assert.strictEqual(rows[1].node.parent.key, 1, "parent key of the second row");
+    assert.deepEqual(rows[2].key.parentKey, 2, "parent key of the third row");
+    assert.deepEqual(rows[2].key.rowIndex, 2, "rowIndex of the third row");
+    assert.deepEqual(rows[2].inserted, true, "third row is inserted");
+    assert.deepEqual(rows[2].data, { parentId: 2 }, "third row data should contain parentId");
+});
+
 QUnit.test("AddRow method witout parameters should add item at begin", function(assert) {
     //arrange
     var $testElement = $('#treeList');
