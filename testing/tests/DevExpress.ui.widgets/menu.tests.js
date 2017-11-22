@@ -759,6 +759,20 @@ QUnit.test("Fire submenu events for all levels", function(assert) {
     assert.equal(handlerHidden.callCount, 1);
 });
 
+QUnit.test("only visible submenu should be hidden on outside click", function(assert) {
+    var hiddenHandler = sinon.spy(),
+        menu = createMenu({
+            items: [{ text: "Item 1", items: [{ text: "Item 11" }] }],
+            onSubmenuHidden: hiddenHandler
+        }),
+        $rootItem = $(menu.element).find("." + DX_MENU_ITEM_CLASS).eq(0);
+
+    $($rootItem).trigger("dxclick");
+    $(document).trigger("dxpointerdown");
+
+    assert.equal(hiddenHandler.callCount, 1, "only 1 submenu was hidden");
+});
+
 QUnit.test("Do not show contextmenu on hover with pressed mouse button", function(assert) {
     var options = { showFirstSubmenuMode: "onHover", items: [{ text: "item1", items: [{ text: "item1-1" }] }] },
         menu = createMenu(options),
