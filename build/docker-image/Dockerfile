@@ -32,7 +32,7 @@ RUN DOTNET_SKIP_FIRST_TIME_EXPERIENCE=1 apt-get install -y dotnet-sdk-2.0.2
 RUN rm /usr/share/dotnet/sdk/*/nuGetPackagesArchive.lzma
 
 # Chrome, see https://stackoverflow.com/a/36906724
-RUN curl -L https://www.slimjet.com/chrome/lnx/chrome64_61.0.3163.79.deb > chrome.deb
+RUN curl -L https://www.slimjet.com/chrome/lnx/chrome64_62.0.3202.75.deb > chrome.deb
 RUN gdebi -n ./chrome.deb
 RUN unlink ./chrome.deb
 RUN rm -rf /opt/google/chrome/swiftshader
