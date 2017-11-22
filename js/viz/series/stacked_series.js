@@ -1,22 +1,23 @@
 "use strict";
 
 //there stackedline, fullstackedline, stackedbar, fullstackedbar, stackedarea, fullstackedarea
-var noop = require("../../core/utils/common").noop,
-    extend = require("../../core/utils/extend").extend,
+var _noop = require("../../core/utils/common").noop,
+    _extend = require("../../core/utils/extend").extend,
     each = require("../../core/utils/iterator").each,
     areaSeries = require("./area_series").chart,
     chartAreaSeries = areaSeries.area,
     barSeries = require("./bar_series"),
     chartBarSeries = barSeries.chart.bar,
     lineSeries = require("./line_series").chart,
-    _extend = extend,
     vizUtils = require("../core/utils"),
     objectUtils = require("../../core/utils/object"),
-    _noop = noop,
     baseStackedSeries = {
         getErrorBarRangeCorrector: _noop,
         _fillErrorBars: _noop,
-        _calculateErrorBars: _noop
+        _calculateErrorBars: _noop,
+        _updateOptions: function(options) {
+            this._stackName = "axis_" + (options.axis || "default");
+        }
     };
 
 exports.chart = {};
@@ -34,9 +35,16 @@ exports.chart["fullstackedspline"] = _extend({}, lineSeries["spline"], baseStack
     getValueRangeInitialValue: areaSeries.area.getValueRangeInitialValue
 });
 
-exports.chart["stackedbar"] = _extend({}, chartBarSeries, baseStackedSeries, {});
+var stackedBar = exports.chart["stackedbar"] = _extend({}, chartBarSeries, baseStackedSeries, {
+    _updateOptions: function(options) {
+        baseStackedSeries._updateOptions.call(this, options);
+        this._stackName = this._stackName + "_stack_" + (options.stack || "default");
+    }
+});
 
-exports.chart["fullstackedbar"] = _extend({}, chartBarSeries, baseStackedSeries);
+exports.chart["fullstackedbar"] = _extend({}, chartBarSeries, baseStackedSeries, {
+    _updateOptions: stackedBar._updateOptions
+});
 
 function clonePoint(point, value, minValue, position) {
     point = objectUtils.clone(point);
