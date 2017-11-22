@@ -16,6 +16,8 @@ RUN DEBIAN_FRONTEND=noninteractive apt-get install -y apt-transport-https gdebi-
 # Node
 RUN curl -L https://deb.nodesource.com/setup_8.x | bash -
 RUN apt-get install -y nodejs
+RUN npm i -g npm@4
+RUN npm cache clean
 RUN npm set progress=false
 RUN npm set loglevel=error
 RUN npm set depth=0
