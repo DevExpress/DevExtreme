@@ -3,7 +3,7 @@
 pipeline:
 
   build:
-    image: devexpress/devextreme-build:17_2_chrome62
+    image: devexpress/devextreme-build:17_2
     pull: true
     environment:
       - HEADLESS=true
