@@ -656,7 +656,7 @@ declare module DevExpress {
     export interface globalConfig {
         /** A decimal separator. Applies only if you do not use the Globalize or Intl library. */
         decimalSeparator?: string;
-        /** Specifies the default currency the widgets use. */
+        /** The default currency. Accepts a 3-letter code specified by ISO 4217. */
         defaultCurrency?: string;
         /** Specifies whether dates are parsed and serialized according to the ISO 8601 standard in all browsers. */
         forceIsoDateParsing?: boolean;
@@ -902,7 +902,7 @@ declare module DevExpress.data {
         /** Indicates whether the total count of data objects is needed. */
         requireTotalCount?: boolean;
         /** A data field or expression whose value is compared to the search value. */
-        searchExpr?: Function | Array<Function>;
+        searchExpr?: string | Function | Array<string | Function>;
         /** A comparison operation. Can have one of the following values: "=", "<>", ">", ">=", "<", "<=", "startswith", "endswith", "contains", "notcontains", "isblank" and "isnotblank". */
         searchOperation?: string;
         /** The current search value. */
@@ -972,7 +972,7 @@ declare module DevExpress.data {
         /** Specifies whether or not the DataSource instance requests the total count of items available in the storage. */
         requireTotalCount?: boolean;
         /** Specifies a value by which the required items are searched. */
-        searchExpr?: Function | Array<Function>;
+        searchExpr?: string | Function | Array<string | Function>;
         /** Specifies the comparison operation used to search for the required items. One of "=", "<>", ">", ">=", "<", "<=", "startswith", "endswith", "contains", "notcontains". */
         searchOperation?: string;
         /** Specifies the value to which the search expression is compared. */
@@ -1042,9 +1042,9 @@ declare module DevExpress.data {
         /** Sets the requireTotalCount option value. */
         requireTotalCount(value: boolean): void;
         /** Returns the searchExpr option value. */
-        searchExpr(): Function & Array<Function>;
+        searchExpr(): string & Function & Array<string | Function>;
         /** Sets the searchExpr option value. */
-        searchExpr(expr: Function | Array<Function>): void;
+        searchExpr(expr: string | Function | Array<string | Function>): void;
         /** Returns the currently specified search operation. */
         searchOperation(): string;
         /** Sets the current search operation. */
@@ -4608,7 +4608,7 @@ declare module DevExpress.ui {
         /** Specifies whether or not the widget supports searching. */
         searchEnabled?: boolean;
         /** Specifies the name of a data source item field or an expression whose value is compared to the search criterion. */
-        searchExpr?: Function | Array<Function>;
+        searchExpr?: string | Function | Array<string | Function>;
         /** Specifies the binary operation used to filter data. */
         searchMode?: string;
         /** Specifies the time delay, in milliseconds, after the last character has been typed in, before a search is executed. */
@@ -5157,10 +5157,10 @@ declare module DevExpress.ui {
     export interface SearchBoxMixinOptions {
         /** Configures the search panel. */
         searchEditorOptions?: dxTextBoxOptions;
-        /** Specifies whether searching is enabled. */
+        /** Specifies whether the search panel is visible. */
         searchEnabled?: boolean;
         /** Specifies a data object's field name or an expression whose value is compared to the search string. */
-        searchExpr?: Function | Array<Function>;
+        searchExpr?: string | Function | Array<string | Function>;
         /** Specifies whether the widget finds entries that contain your search string or entries that only start with it. */
         searchMode?: string;
         /** Specifies the current search string. */
@@ -5210,7 +5210,7 @@ declare module DevExpress.ui {
         /** Repaints the widget. Call it if you made modifications that changed the widget's state to invalid. */
         repaint(): void;
     }
-    /** A template notation used to specify a template for widget elements (item, title, content, etc.). */
+    /** A template notation used to specify templates for widget elements. */
     export type template = string | Function | Element | JQuery; 
     /** Formats values. */
     export type format = string | ((value: number | Date) => string) | { type?: string, precision?: number, currency?: string, formatter?: ((value: number | Date) => string), parser?: ((value: string) => number | Date) }; 
