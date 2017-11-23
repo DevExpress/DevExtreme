@@ -29,7 +29,7 @@ fi
 
 if [ "$1" == "restore" ]; then
     for i in $CACHE_DIRS; do
-        if curl -Lsf "$CACHE_URL/$i.tar.gz" | tar xf - 2>/dev/null; then
+        if curl -Lsf "$CACHE_URL/$i.tar.gz" | tar xfz - 2>/dev/null; then
             echo "Restored: $i"
         else
             echo "Failed to restore: $i"
