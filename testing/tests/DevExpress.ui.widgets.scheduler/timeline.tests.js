@@ -709,6 +709,22 @@ QUnit.test("Scheduler timeline week header cells should have right width if cros
     assert.roughEqual($lastHeaderCell.outerWidth(), $dateTableCell.outerWidth(), 1.5, "Last row cell has correct width");
 });
 
+QUnit.test("Scheduler timeline week cells should have right height if crossScrollingEnabled = true", function(assert) {
+    this.instance.option({
+        currentDate: new Date(2015, 9, 29),
+        crossScrollingEnabled: true,
+        groups: [{ name: "one", items: [{ id: 1, text: "a" }, { id: 2, text: "b" } ] }]
+    });
+
+    resizeCallbacks.fire();
+
+    var $element = this.instance.$element(),
+        $firstRowCell = $element.find(".dx-scheduler-date-table-cell").first(),
+        $lastRowCell = $element.find(".dx-scheduler-date-table-cell").eq(336);
+
+    assert.roughEqual($firstRowCell.outerHeight(), $lastRowCell.outerHeight(), 1.5, "Cells has correct height");
+});
+
 QUnit.test("Scheduler timeline week should have rigth first view date", function(assert) {
     this.instance.option({
         currentDate: new Date(2015, 9, 21),

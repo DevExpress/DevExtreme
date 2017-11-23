@@ -92,6 +92,18 @@ QUnit.test("changing the 'value' option must invoke the 'onValueChanged' action"
     checkbox.option("value", true);
 });
 
+QUnit.test("onContentReady fired after setting the value", function(assert) {
+    assert.expect(2);
+
+    $("#checkbox").dxCheckBox({
+        value: true,
+        onContentReady: function(e) {
+            assert.ok($(e.element).find("input").val());
+            assert.ok($(e.element).hasClass(CHECKBOX_CLASS));
+        }
+    });
+});
+
 
 QUnit.module("options");
 

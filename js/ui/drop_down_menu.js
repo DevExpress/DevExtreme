@@ -167,14 +167,6 @@ var DropDownMenu = Widget.inherit({
             popupHeight: "auto",
 
             /**
-            * @name dxDropDownMenuOptions_onContentReady
-            * @publicName onContentReady
-            * @hidden false
-            * @action
-            * @extend_doc
-            */
-
-            /**
              * @name dxDropDownMenuOptions_activeStateEnabled
              * @publicName activeStateEnabled
              * @type boolean

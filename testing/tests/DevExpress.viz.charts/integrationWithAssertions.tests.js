@@ -7,7 +7,8 @@ var $ = require("jquery"),
     legendModule = require("viz/components/legend"),
     titleModule = require("viz/core/title"),
     dxChart = require("viz/chart"),
-    dxPieChart = require("viz/pie_chart");
+    dxPieChart = require("viz/pie_chart"),
+    baseChartModule = require("viz/chart_components/base_chart");
 
 /* global setupSeriesFamily */
 require("../../helpers/chartMocks.js");
@@ -648,9 +649,9 @@ var VALIDATE_GROUPS = [
     "dxc-strips-labels-group",
     "dxc-border",
     "dxc-series-group",
+    "dxc-scale-breaks",
     "dxc-labels-group",
     "dxc-crosshair-cursor",
-    "dxc-scale-breaks",
     //"dxc-title",
     "dxc-legend"
 ];
@@ -1125,4 +1126,35 @@ QUnit.test("select point after dataSource updating", function(assert) {
     chart.getAllSeries()[0].getAllPoints()[1].select();
 
     assert.strictEqual(chart.getAllSeries()[0].getAllPoints()[1].isSelected(), true);
+});
+
+QUnit.module("T576725", $.extend({}, moduleSetup, {
+    beforeEach: function() {
+        moduleSetup.beforeEach.call(this);
+        sinon.stub(baseChartModule.overlapping, "resolveLabelOverlappingInOneDirection");
+    },
+    afterEach: function() {
+        moduleSetup.afterEach.call(this);
+        baseChartModule.overlapping.resolveLabelOverlappingInOneDirection.restore();
+    }
+}));
+
+QUnit.test("Overlapping of the labels should be taken into account canvas with legend and title.", function(assert) {
+    //arrange
+    var dataSource = [],
+        chart;
+
+    for(var i = 0; i < 15; i++) {
+        dataSource.push({ arg: i + "", val: i * 100 });
+    }
+    chart = this.createPieChart({
+        series: [{ label: { visible: true } }],
+        dataSource: dataSource,
+        legend: { visible: true, horizontalAlignment: "center" },
+        title: "Test pie chart",
+        size: { width: 400, height: 300 },
+        resolveLabelOverlapping: "shift"
+    });
+
+    assert.ok(baseChartModule.overlapping.resolveLabelOverlappingInOneDirection.lastCall.args[1].top > 0);
 });

@@ -10,23 +10,31 @@ var DATE_TIME_SHADER_ALL_DAY_CLASS = "dx-scheduler-date-time-shader-all-day",
 var VerticalCurrentTimeShader = Shader.inherit({
     _renderShader: function() {
         var shaderHeight = this._workspace.getIndicationHeight(),
-            maxHeight = this._$container.outerHeight();
+            maxHeight = this._$container.outerHeight(),
+            renderSolidShader = false;
 
         if(shaderHeight > maxHeight) {
             shaderHeight = maxHeight;
+            renderSolidShader = true;
         }
 
         if(shaderHeight >= 0) {
             this._$shader.height(shaderHeight);
 
             var groupCount = this._workspace._getGroupCount() || 1;
-            for(var i = 0; i < groupCount; i++) {
-                var shaderWidth = this._workspace.getIndicationWidth(i);
-                this._renderTopShader(this._$shader, shaderHeight, shaderWidth, i);
 
-                this._renderBottomShader(this._$shader, maxHeight - shaderHeight, shaderWidth, i);
+            if(renderSolidShader) {
+                this._renderTopShader(this._$shader, shaderHeight, this._$container.outerWidth(), 0);
+                this._renderAllDayShader(this._$container.outerWidth(), 0);
+            } else {
+                for(var i = 0; i < groupCount; i++) {
+                    var shaderWidth = this._workspace.getIndicationWidth(i);
+                    this._renderTopShader(this._$shader, shaderHeight, shaderWidth, i);
 
-                this._renderAllDayShader(shaderWidth, i);
+                    this._renderBottomShader(this._$shader, maxHeight - shaderHeight, shaderWidth, i);
+
+                    this._renderAllDayShader(shaderWidth, i);
+                }
             }
         }
     },
@@ -35,7 +43,7 @@ var VerticalCurrentTimeShader = Shader.inherit({
         this._$topShader = $("<div>").addClass(DATE_TIME_SHADER_TOP_CLASS);
         width && this._$topShader.width(width) && this._$topShader.height(height);
 
-        this._$topShader.css("marginTop", -this._$container.outerHeight() * i);
+        this._$topShader.css("marginTop", -this._$container.outerHeight() * (i > 0 ? 1 : 0));
         this._$topShader.css("left", this._getShaderOffset(i, width));
 
         $shader.append(this._$topShader);

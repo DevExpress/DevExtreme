@@ -154,6 +154,19 @@ QUnit.test("stack name of staked bar", function(assert) {
     assert.equal(series.getStackName(), "axis_default_stack_default");
 });
 
+QUnit.test("stack name of staked bar with custom axis and stack", function(assert) {
+    var series = this.createSeries({
+        type: "stackedbar",
+        axis: "axisName",
+        stack: "stackName",
+        point: {
+            visible: false
+        }
+    });
+
+    assert.equal(series.getStackName(), "axis_axisName_stack_stackName");
+});
+
 QUnit.test("stack name of fullstacked bar", function(assert) {
     var series = this.createSeries({
         type: "fullstackedbar",

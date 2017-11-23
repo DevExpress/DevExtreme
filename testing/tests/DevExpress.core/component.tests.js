@@ -53,6 +53,9 @@ var TestComponent = Component.inherit({
                 option: {
                     deprecatedAlias: "deprecatedValue"
                 }
+            },
+            funcOption: function() {
+                return this;
             }
         });
     },
@@ -992,6 +995,14 @@ QUnit.test("the isOptionDeprecated method", function(assert) {
     var instance = new TestComponent();
     assert.ok(instance.isOptionDeprecated("deprecated"), "it is correct for deprecated option");
     assert.ok(!instance.isOptionDeprecated("opt1"), "it is correct for an ordinary option");
+});
+
+QUnit.test("the _getOptionValue method sets the context for function option (T577942)", function(assert) {
+    var instance = new TestComponent();
+    var context = { contextField: 1 };
+
+    var value = instance._getOptionValue("funcOption", context);
+    assert.deepEqual(value, context, "context is correct");
 });
 
 

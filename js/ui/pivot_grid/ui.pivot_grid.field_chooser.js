@@ -91,14 +91,6 @@ function getScrollable(container) {
     return container.find(".dx-scrollable").dxScrollable("instance");
 }
 
-/**
-* @name dxPivotGridFieldChooserOptions_onContentReady
-* @publicName onContentReady
-* @extends Action
-* @hidden false
-* @action
-* @extend_doc
-*/
 var FieldChooser = BaseFieldChooser.inherit({
     _getDefaultOptions: function() {
         return extend(this.callBase(), {

@@ -656,7 +656,7 @@ declare module DevExpress {
     export interface globalConfig {
         /** A decimal separator. Applies only if you do not use the Globalize or Intl library. */
         decimalSeparator?: string;
-        /** Specifies the default currency the widgets use. */
+        /** The default currency. Accepts a 3-letter code specified by ISO 4217. */
         defaultCurrency?: string;
         /** Specifies whether dates are parsed and serialized according to the ISO 8601 standard in all browsers. */
         forceIsoDateParsing?: boolean;
@@ -743,6 +743,7 @@ declare module DevExpress {
     }
     /** An object used to manage OData endpoints in your application. */
     export class EndpointSelector {
+        constructor(options: any);
         /** Returns an endpoint for the specified key. */
         urlFor(key: string): string;
     }
@@ -886,6 +887,7 @@ declare module DevExpress.data {
     }
     /** This section describes the loadOptions object's fields. */
     export interface LoadOptions {
+        /** An object for storing additional settings that should be sent to the server. Relevant to the ODataStore only. */
         customQueryParams?: any;
         /** An array of strings that represent the names of navigation properties to be loaded simultaneously with the ODataStore. */
         expand?: any;
@@ -893,13 +895,15 @@ declare module DevExpress.data {
         filter?: any;
         /** A group expression. */
         group?: any;
+        /** A group summary expression. */
         groupSummary?: any;
+        /** Indicates whether a top-level group count is required. */
         requireGroupCount?: boolean;
         /** Indicates whether the total count of data objects is needed. */
         requireTotalCount?: boolean;
-        /** A data field or an expression whose value is compared to the search value. */
-        searchExpr?: Function | Array<Function>;
-        /** A comparison operation. One of the following: "=", "<>", ">", ">=", "<", "<=", "startswith", "endswith", "contains", "notcontains", "isblank" and "isnotblank". */
+        /** A data field or expression whose value is compared to the search value. */
+        searchExpr?: string | Function | Array<string | Function>;
+        /** A comparison operation. Can have one of the following values: "=", "<>", ">", ">=", "<", "<=", "startswith", "endswith", "contains", "notcontains", "isblank" and "isnotblank". */
         searchOperation?: string;
         /** The current search value. */
         searchValue?: any;
@@ -911,6 +915,7 @@ declare module DevExpress.data {
         sort?: any;
         /** The number of data objects to be loaded. In conjunction with skip, used to implement paging. */
         take?: number;
+        /** A total summary expression. */
         totalSummary?: any;
         /** An object for storing additional settings that should be sent to the server. */
         userData?: any;
@@ -967,7 +972,7 @@ declare module DevExpress.data {
         /** Specifies whether or not the DataSource instance requests the total count of items available in the storage. */
         requireTotalCount?: boolean;
         /** Specifies a value by which the required items are searched. */
-        searchExpr?: Function | Array<Function>;
+        searchExpr?: string | Function | Array<string | Function>;
         /** Specifies the comparison operation used to search for the required items. One of "=", "<>", ">", ">=", "<", "<=", "startswith", "endswith", "contains", "notcontains". */
         searchOperation?: string;
         /** Specifies the value to which the search expression is compared. */
@@ -1037,9 +1042,9 @@ declare module DevExpress.data {
         /** Sets the requireTotalCount option value. */
         requireTotalCount(value: boolean): void;
         /** Returns the searchExpr option value. */
-        searchExpr(): Function & Array<Function>;
+        searchExpr(): string & Function & Array<string | Function>;
         /** Sets the searchExpr option value. */
-        searchExpr(expr: Function | Array<Function>): void;
+        searchExpr(expr: string | Function | Array<string | Function>): void;
         /** Returns the currently specified search operation. */
         searchOperation(): string;
         /** Sets the current search operation. */
@@ -2287,8 +2292,6 @@ declare module DevExpress.ui {
         onCellHoverChanged?: ((e: { component?: DOMComponent, element?: DevExpress.core.dxElement, model?: any, eventType?: string, data?: any, key?: any, value?: any, text?: string, displayValue?: string, columnIndex?: number, rowIndex?: number, column?: dxDataGridColumn, rowType?: string, cellElement?: DevExpress.core.dxElement, row?: dxDataGridRowObject }) => any);
         /** A handler for the cellPrepared event. */
         onCellPrepared?: ((e: { component?: DOMComponent, element?: DevExpress.core.dxElement, model?: any, data?: any, key?: any, value?: any, displayValue?: string, text?: string, columnIndex?: number, column?: dxDataGridColumn, rowIndex?: number, rowType?: string, row?: dxDataGridRowObject, isSelected?: boolean, isExpanded?: boolean, cellElement?: DevExpress.core.dxElement }) => any);
-        /** A handler for the contentReady event. Executed when the widget's content is ready. This handler may be executed multiple times during the widget's lifetime depending on the number of times its content changes. */
-        onContentReady?: ((e: { component?: DOMComponent, element?: DevExpress.core.dxElement, model?: any }) => any);
         /** A handler for the contextMenuPreparing event. */
         onContextMenuPreparing?: ((e: { component?: DOMComponent, element?: DevExpress.core.dxElement, model?: any, items?: Array<any>, target?: string, targetElement?: DevExpress.core.dxElement, columnIndex?: number, column?: dxDataGridColumn, rowIndex?: number, row?: dxDataGridRowObject }) => any);
         /** A handler for the editingStart event. */
@@ -2466,8 +2469,6 @@ declare module DevExpress.ui {
         min?: Date | number | string;
         /** Specifies the minimal zoom level of a calendar, which is used to pick the date. */
         minZoomLevel?: string;
-        /** A handler for the contentReady event. Executed when the widget's content is ready. This handler may be executed multiple times during the widget's lifetime depending on the number of times its content changes. */
-        onContentReady?: ((e: { component?: DOMComponent, element?: DevExpress.core.dxElement, model?: any }) => any);
         /** Specifies the type of the date/time picker. */
         pickerType?: string;
         /** The text displayed by the widget when the widget value is not yet specified. This text is also used as a title of the date picker. */
@@ -2545,8 +2546,6 @@ declare module DevExpress.ui {
         itemTemplate?: template;
         /** A handler for the buttonClick event. */
         onButtonClick?: ((e: { component?: DOMComponent, element?: DevExpress.core.dxElement, model?: any, jQueryEvent?: JQueryEventObject, event?: event }) => any) | string;
-        /** A handler for the contentReady event. Executed when the widget's content is ready. This handler may be executed multiple times during the widget's lifetime depending on the number of times its content changes. */
-        onContentReady?: any;
         /** A handler for the itemClick event. */
         onItemClick?: ((e: { component?: DOMComponent, element?: DevExpress.core.dxElement, model?: any, itemData?: any, itemElement?: DevExpress.core.dxElement, itemIndex?: number }) => any) | string;
         /** Specifies whether or not the drop-down menu is displayed. */
@@ -2668,8 +2667,6 @@ declare module DevExpress.ui {
         labelLocation?: string;
         /** The minimum column width used for calculating column count in the form layout. */
         minColWidth?: number;
-        /** A handler for the contentReady event. Executed when the widget's content is ready. This handler may be executed multiple times during the widget's lifetime depending on the number of times its content changes. */
-        onContentReady?: ((e: { component?: DOMComponent, element?: DevExpress.core.dxElement, model?: any }) => any);
         /** A handler for the editorEnterKey event. */
         onEditorEnterKey?: ((e: { component?: DOMComponent, element?: DevExpress.core.dxElement, model?: any, dataField?: string }) => any);
         /** A handler for the fieldDataChanged event. */
@@ -2780,7 +2777,7 @@ declare module DevExpress.ui {
         collapsibleGroups?: boolean;
         /** Specifies whether the widget can be focused using keyboard navigation. */
         focusStateEnabled?: boolean;
-        /** A Boolean value specifying whether or not to display a grouped list. */
+        /** Specifies whether data items should be grouped. */
         grouped?: boolean;
         /** The template to be used for rendering item groups. Specifies a custom template for a group caption. */
         groupTemplate?: template;
@@ -3200,8 +3197,6 @@ declare module DevExpress.ui {
         minHeight?: number | string | (() => number | string);
         /** Specifies the minimum width the widget can reach while resizing. */
         minWidth?: number | string | (() => number | string);
-        /** A handler for the contentReady event. Executed when the widget's content is ready. This handler may be executed multiple times during the widget's lifetime depending on the number of times its content changes. */
-        onContentReady?: ((e: { component?: DOMComponent, element?: DevExpress.core.dxElement, model?: any }) => any);
         /** A handler for the hidden event. */
         onHidden?: ((e: { component?: DOMComponent, element?: DevExpress.core.dxElement, model?: any }) => any);
         /** A handler for the hiding event. */
@@ -3312,8 +3307,6 @@ declare module DevExpress.ui {
         onCellClick?: ((e: { component?: DOMComponent, element?: DevExpress.core.dxElement, model?: any, area?: string, cellElement?: DevExpress.core.dxElement, cell?: dxPivotGridPivotGridCell, rowIndex?: number, columnIndex?: number, columnFields?: Array<DevExpress.data.PivotGridDataSourceField>, rowFields?: Array<DevExpress.data.PivotGridDataSourceField>, dataFields?: Array<DevExpress.data.PivotGridDataSourceField>, jQueryEvent?: JQueryEventObject, event?: event, cancel?: boolean }) => any);
         /** A handler for the cellPrepared event. */
         onCellPrepared?: ((e: { component?: DOMComponent, element?: DevExpress.core.dxElement, model?: any, area?: string, cellElement?: DevExpress.core.dxElement, cell?: dxPivotGridPivotGridCell, rowIndex?: number, columnIndex?: number }) => any);
-        /** A handler for the contentReady event. Executed when the widget's content is ready. This handler may be executed multiple times during the widget's lifetime depending on the number of times its content changes. */
-        onContentReady?: ((e: { component?: DOMComponent, element?: DevExpress.core.dxElement, model?: any }) => any);
         /** A handler for the contextMenuPreparing event. */
         onContextMenuPreparing?: ((e: { component?: DOMComponent, element?: DevExpress.core.dxElement, model?: any, items?: Array<any>, area?: string, cell?: dxPivotGridPivotGridCell, cellElement?: DevExpress.core.dxElement, columnIndex?: number, rowIndex?: number, dataFields?: Array<DevExpress.data.PivotGridDataSourceField>, rowFields?: Array<DevExpress.data.PivotGridDataSourceField>, columnFields?: Array<DevExpress.data.PivotGridDataSourceField>, field?: DevExpress.data.PivotGridDataSourceField }) => any);
         /** A handler for the exported event. */
@@ -3373,8 +3366,6 @@ declare module DevExpress.ui {
         height?: number | string | (() => number | string);
         /** Specifies the field chooser layout. */
         layout?: number;
-        /** A handler for the contentReady event. Executed when the widget's content is ready. This handler may be executed multiple times during the widget's lifetime depending on the number of times its content changes. */
-        onContentReady?: ((e: { component?: DOMComponent, element?: DevExpress.core.dxElement, model?: any }) => any);
         /** A handler for the contextMenuPreparing event. */
         onContextMenuPreparing?: ((e: { component?: DOMComponent, element?: DevExpress.core.dxElement, model?: any, items?: Array<any>, area?: string, field?: DevExpress.data.PivotGridDataSourceField, jQueryEvent?: JQueryEventObject, event?: event }) => any);
         /** Strings that can be changed or localized in the PivotGridFieldChooser widget. */
@@ -3670,8 +3661,6 @@ declare module DevExpress.ui {
         onAppointmentUpdating?: ((e: { component?: DOMComponent, element?: DevExpress.core.dxElement, model?: any, oldData?: any, newData?: any, cancel?: boolean | Promise<boolean> | JQueryPromise<boolean> }) => any);
         /** A handler for the cellClick event. */
         onCellClick?: ((e: { component?: DOMComponent, element?: DevExpress.core.dxElement, model?: any, cellData?: any, cellElement?: DevExpress.core.dxElement, jQueryEvent?: JQueryEventObject, event?: event, cancel?: boolean }) => any) | string;
-        /** A handler for the contentReady event. */
-        onContentReady?: ((e: { component?: DOMComponent, element?: DevExpress.core.dxElement, model?: any }) => any);
         /** Specifies the edit mode for recurring appointments. */
         recurrenceEditMode?: string;
         /** Specifies the name of the data source item field that defines exceptions for the current recurring appointment. */
@@ -4146,8 +4135,6 @@ declare module DevExpress.ui {
         onCellHoverChanged?: ((e: { component?: DOMComponent, element?: DevExpress.core.dxElement, model?: any, eventType?: string, data?: any, key?: any, value?: any, text?: string, displayValue?: string, columnIndex?: number, rowIndex?: number, column?: dxTreeListColumn, rowType?: string, cellElement?: DevExpress.core.dxElement, row?: dxTreeListRowObject }) => any);
         /** A handler for the cellPrepared event. Executed after the widget creates a cell. */
         onCellPrepared?: ((e: { component?: DOMComponent, element?: DevExpress.core.dxElement, model?: any, data?: any, key?: any, value?: any, displayValue?: string, text?: string, columnIndex?: number, column?: dxTreeListColumn, rowIndex?: number, rowType?: string, row?: dxTreeListRowObject, isSelected?: boolean, isExpanded?: boolean, cellElement?: DevExpress.core.dxElement }) => any);
-        /** A handler for the contentReady event. Executed when the widget's content is ready. */
-        onContentReady?: ((e: { component?: DOMComponent, element?: DevExpress.core.dxElement, model?: any }) => any);
         /** A handler for the contextMenuPreparing event. Executed before a context menu is rendered. */
         onContextMenuPreparing?: ((e: { component?: DOMComponent, element?: DevExpress.core.dxElement, model?: any, items?: Array<any>, target?: string, targetElement?: DevExpress.core.dxElement, columnIndex?: number, column?: dxTreeListColumn, rowIndex?: number, row?: dxTreeListRowObject }) => any);
         /** A handler for editingStart. Executed before a cell or row switches to the editing state. */
@@ -4476,8 +4463,6 @@ declare module DevExpress.ui {
         keyExpr?: string | Function;
         /** The text or HTML markup displayed by the widget if the item collection is empty. */
         noDataText?: string;
-        /** A handler for the contentReady event. Executed when the widget's content is ready. This handler may be executed multiple times during the widget's lifetime depending on the number of times its content changes. */
-        onContentReady?: any;
         /** A handler for the itemClick event. */
         onItemClick?: ((e: { component?: DOMComponent, element?: DevExpress.core.dxElement, model?: any, itemData?: any, itemElement?: DevExpress.core.dxElement, itemIndex?: number, jQueryEvent?: JQueryEventObject, event?: event }) => any) | string;
         /** A handler for the itemContextMenu event. */
@@ -4612,8 +4597,6 @@ declare module DevExpress.ui {
         minSearchLength?: number;
         /** The text or HTML markup displayed by the widget if the item collection is empty. */
         noDataText?: string;
-        /** A handler for the contentReady event. Executed when the widget's content is ready. This handler may be executed multiple times during the widget's lifetime depending on the number of times its content changes. */
-        onContentReady?: ((e: { component?: DOMComponent, element?: DevExpress.core.dxElement, model?: any }) => any);
         /** A handler for the itemClick event. */
         onItemClick?: ((e: { component?: DOMComponent, element?: DevExpress.core.dxElement, model?: any, itemData?: any, itemElement?: any, itemIndex?: number | any }) => any);
         /** A handler for the selectionChanged event. */
@@ -4625,7 +4608,7 @@ declare module DevExpress.ui {
         /** Specifies whether or not the widget supports searching. */
         searchEnabled?: boolean;
         /** Specifies the name of a data source item field or an expression whose value is compared to the search criterion. */
-        searchExpr?: Function | Array<Function>;
+        searchExpr?: string | Function | Array<string | Function>;
         /** Specifies the binary operation used to filter data. */
         searchMode?: string;
         /** Specifies the time delay, in milliseconds, after the last character has been typed in, before a search is executed. */
@@ -5027,7 +5010,7 @@ declare module DevExpress.ui {
         scrollTop(): number;
         /** Returns the width of the scrollable content in pixels. */
         scrollWidth(): number;
-        /** Updates the dimensions of the scrollable contents. */
+        /** Updates the scrollable contents' dimensions. */
         update(): Promise<void> & JQueryPromise<void>;
     }
     export interface dxSliderBaseOptions extends dxTrackBarOptions {
@@ -5174,10 +5157,10 @@ declare module DevExpress.ui {
     export interface SearchBoxMixinOptions {
         /** Configures the search panel. */
         searchEditorOptions?: dxTextBoxOptions;
-        /** Specifies whether searching is enabled. */
+        /** Specifies whether the search panel is visible. */
         searchEnabled?: boolean;
         /** Specifies a data object's field name or an expression whose value is compared to the search string. */
-        searchExpr?: Function | Array<Function>;
+        searchExpr?: string | Function | Array<string | Function>;
         /** Specifies whether the widget finds entries that contain your search string or entries that only start with it. */
         searchMode?: string;
         /** Specifies the current search string. */
@@ -5209,6 +5192,8 @@ declare module DevExpress.ui {
         hint?: string;
         /** Specifies whether the widget changes its state when a user pauses on it. */
         hoverStateEnabled?: boolean;
+        /** A handler for the contentReady event. Executed when the widget's content is ready. This handler may be executed multiple times during the widget's lifetime depending on the number of times its content changes. */
+        onContentReady?: ((e: { component?: DOMComponent, element?: DevExpress.core.dxElement, model?: any }) => any);
         /** Specifies the number of the element when the Tab key is used for navigating. */
         tabIndex?: number;
         /** Specifies whether the widget is visible. */
@@ -5225,7 +5210,7 @@ declare module DevExpress.ui {
         /** Repaints the widget. Call it if you made modifications that changed the widget's state to invalid. */
         repaint(): void;
     }
-    /** A template notation used to specify a template for widget elements (item, title, content, etc.). */
+    /** A template notation used to specify templates for widget elements. */
     export type template = string | Function | Element | JQuery; 
     /** Formats values. */
     export type format = string | ((value: number | Date) => string) | { type?: string, precision?: number, currency?: string, formatter?: ((value: number | Date) => string), parser?: ((value: string) => number | Date) }; 
@@ -7041,7 +7026,7 @@ declare module DevExpress.viz.charts {
         /** A handler for the zoomStart event. */
         onZoomStart?: ((e: { component?: DOMComponent, element?: DevExpress.core.dxElement, model?: any }) => any);
         /** Declares a collection of panes. */
-        panes?: dxChartPanes;
+        panes?: dxChartPanes | Array<dxChartPanes>;
         /** Specifies how the chart must behave when series point labels overlap. */
         resolveLabelOverlapping?: string;
         /** Swaps the axes around making the value axis horizontal and the argument axis vertical. */
@@ -7051,7 +7036,7 @@ declare module DevExpress.viz.charts {
         /** Enables scrolling in your chart. */
         scrollingMode?: string;
         /** Specifies options for Chart widget series. */
-        series?: dxChartSeries;
+        series?: dxChartSeries | Array<dxChartSeries>;
         /** Specifies whether a single series or multiple series can be selected in the chart. */
         seriesSelectionMode?: string;
         /** Defines options for the series template. */
@@ -7063,7 +7048,7 @@ declare module DevExpress.viz.charts {
         /** Specifies whether or not to filter the series points depending on their quantity. */
         useAggregation?: boolean;
         /** Configures the value axis. */
-        valueAxis?: dxChartValueAxis;
+        valueAxis?: dxChartValueAxis | Array<dxChartValueAxis>;
         /** Enables zooming in your chart. */
         zoomingMode?: string;
     }
@@ -7514,7 +7499,7 @@ declare module DevExpress.viz.charts {
         /** Specifies the direction that the pie chart segments will occupy. */
         segmentsDirection?: string;
         /** Specifies options for the series of the PieChart widget. */
-        series?: dxPieChartSeries;
+        series?: dxPieChartSeries | Array<dxPieChartSeries>;
         /** Defines options for the series template. */
         seriesTemplate?: { nameField?: string, customizeSeries?: ((seriesName: any) => dxPieChartSeries) };
         /** Allows you to display several adjoining pies in the same size. */
@@ -7586,7 +7571,7 @@ declare module DevExpress.viz.charts {
         /** Specifies how the chart must behave when series point labels overlap. */
         resolveLabelOverlapping?: string;
         /** Specifies options for PolarChart widget series. */
-        series?: dxPolarChartSeries;
+        series?: dxPolarChartSeries | Array<dxPolarChartSeries>;
         /** Specifies whether a single series or multiple series can be selected in the chart. */
         seriesSelectionMode?: string;
         /** Defines options for the series template. */

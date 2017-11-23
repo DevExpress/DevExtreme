@@ -2993,12 +2993,16 @@ QUnit.module("Datetime scale breaks. Weekends and holidays", $.extend({}, enviro
         that.axis.validate();
     },
     updateOptions: function(opt) {
-        this.axis.updateOptions($.extend(true, this.options, {
+
+        var options = $.extend(true, this.options, {
             dataType: "datetime",
             breakStyle: { width: 0 },
-            workdaysOnly: true,
-            workWeek: [1, 2, 3, 4, 5]
-        }, opt));
+            workdaysOnly: true
+        }, opt);
+
+        options.workWeek = options.workWeek || [1, 2, 3, 4, 5];
+
+        this.axis.updateOptions(options);
         this.axis.setBusinessRange({ min: opt.min || new Date(2017, 8, 4, 8), max: opt.max || new Date(2017, 8, 11) });
     },
     afterEach: environment2DTranslator.afterEach
@@ -3018,6 +3022,35 @@ QUnit.test("Generate weekend breaks", function(assert) {
         to: new Date(2017, 8, 11),
         gapSize: {
             days: 2
+        },
+        cumulativeWidth: 0
+    }]);
+});
+
+QUnit.test("Generate weekend breaks for 3 days workweek", function(assert) {
+    this.updateOptions({
+        workdaysOnly: true,
+        workWeek: [2, 3, 4],
+        min: new Date(2017, 7, 31),
+        max: new Date(2017, 8, 11)
+    });
+
+    this.axis.createTicks(this.canvas);
+
+    var breaks = this.tickGeneratorSpy.lastCall.args[7];
+
+    assert.deepEqual(breaks, [{
+        from: new Date(2017, 8, 1),
+        to: new Date(2017, 8, 5),
+        gapSize: {
+            days: 4
+        },
+        cumulativeWidth: 0
+    }, {
+        from: new Date(2017, 8, 8),
+        to: new Date(2017, 8, 11),
+        gapSize: {
+            days: 3
         },
         cumulativeWidth: 0
     }]);

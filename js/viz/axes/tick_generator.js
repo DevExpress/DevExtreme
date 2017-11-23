@@ -5,6 +5,7 @@ var utils = require("../core/utils"),
     typeUtils = require("../../core/utils/type"),
     adjust = require("../../core/utils/math").adjust,
     vizUtils = require("../core/utils"),
+    extend = require("../../core/utils/extend").extend,
     convertDateUnitToMilliseconds = dateUtils.convertDateUnitToMilliseconds,
     dateToMilliseconds = dateUtils.dateToMilliseconds,
     getLog = utils.getLog,
@@ -25,6 +26,9 @@ var NUMBER_MULTIPLIERS = [1, 2, 2.5, 5],
         week: [1, 2],
         month: [1, 2, 3, 6]
     },
+    DATETIME_MULTIPLIERS_WITH_BIG_WEEKEND = extend({}, DATETIME_MULTIPLIERS, {
+        day: [1]
+    }),
     DATETIME_MINOR_MULTIPLIERS = {
         millisecond: [1, 2, 5, 10, 25, 50, 100, 250, 500],
         second: [1, 2, 3, 5, 10, 15, 20, 30],
@@ -168,13 +172,21 @@ function calculateTickIntervalLog(businessDelta, screenDelta, tickInterval, forc
     return tickInterval;
 }
 
-function calculateTickIntervalDateTime(businessDelta, screenDelta, tickInterval, forceTickInterval, axisDivisionFactor, multipliers, allowDecimals) {
+function getDataTimeMultipliers(gapSize) {
+    if(gapSize && gapSize > 2) {
+        return DATETIME_MULTIPLIERS_WITH_BIG_WEEKEND;
+    } else {
+        return DATETIME_MULTIPLIERS;
+    }
+}
+
+function calculateTickIntervalDateTime(businessDelta, screenDelta, tickInterval, forceTickInterval, axisDivisionFactor, multipliers, allowDecimals, addTickCount, gapSize) {
     var interval = getIntervalByFactor(businessDelta, screenDelta, axisDivisionFactor),
         result,
         factor,
         key;
 
-    multipliers = multipliers || DATETIME_MULTIPLIERS;
+    multipliers = multipliers || getDataTimeMultipliers(gapSize);
 
     function numbersReducer(interval, key) {
         return function(r, m) {
@@ -423,6 +435,9 @@ function generator(options, getBusinessDelta, calculateTickInterval, calculateMi
             return ticks;
         }
 
+        var gaps = breaks.filter(function(b) { return b.gapSize; }),
+            majorTicks;
+
         tickInterval = correctUserTickInterval(tickInterval, businessDelta, screenDelta);
         tickInterval = calculateTickInterval(
             businessDelta,
@@ -432,10 +447,11 @@ function generator(options, getBusinessDelta, calculateTickInterval, calculateMi
             options.axisDivisionFactor,
             options.numberMultipliers,
             options.allowDecimals,
-            breaks.length
+            breaks.length,
+            gaps[0] && gaps[0].gapSize.days
         );
 
-        var majorTicks = calculateTicks(data.min, data.max, tickInterval, options.endOnTick, breaks.filter(function(b) { return b.gapSize; }), breaks);
+        majorTicks = calculateTicks(data.min, data.max, tickInterval, options.endOnTick, gaps, breaks);
 
         breaks = processScaleBreaks(breaks, tickInterval, screenDelta, options.axisDivisionFactor);
 
@@ -497,15 +513,17 @@ function getScaleBreaksProcessor(convertTickInterval, getValue, addCorrection) {
             correction = maxTickCount > breaks.length ? interval / 2 : interval / 100;
 
         return breaks.reduce(function(result, b) {
-            if(getValue(b.to) - getValue(b.from) < interval && !b.gapSize) {
+            var from = addCorrection(b.from, correction),
+                to = addCorrection(b.to, -correction);
+            if(getValue(to) - getValue(from) < interval && !b.gapSize) {
                 return result;
             }
             if(b.gapSize) {
                 return result.concat([b]);
             }
             return result.concat([{
-                from: addCorrection(b.from, correction),
-                to: addCorrection(b.to, -correction),
+                from: from,
+                to: to,
                 cumulativeWidth: b.cumulativeWidth
             }]);
         }, []);

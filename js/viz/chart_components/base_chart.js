@@ -137,7 +137,10 @@ function resolveLabelOverlappingInOneDirection(points, canvas, isRotated, shiftF
     if(hasStackedSeries) {
         !isRotated && rollingStocks.reverse();
     } else {
-        rollingStocks.sort(function(a, b) { return a.getInitialPosition() - b.getInitialPosition(); });
+        var rollingStocksTmp = rollingStocks.slice();
+        rollingStocks.sort(function(a, b) {
+            return (a.getInitialPosition() - b.getInitialPosition()) || (rollingStocksTmp.indexOf(a) - rollingStocksTmp.indexOf(b));
+        });
     }
 
     if(!checkStackOverlap(rollingStocks)) return;
@@ -170,7 +173,7 @@ function prepareOverlapStacks(rollingStocks) {
             rollingStocks[i + 1] = null;
             root = currentRollingStock;
         } else {
-            root = null;
+            root = rollingStocks[i + 1] || currentRollingStock;
         }
     }
 }
@@ -433,9 +436,9 @@ var BaseChart = BaseWidget.inherit({
         that._labelAxesGroup = renderer.g().attr({ "class": "dxc-strips-labels-group" }).linkOn(root, "strips-labels");         // TODO: Must be created in the same place where used (advanced chart)
         that._panesBorderGroup = renderer.g().attr({ "class": "dxc-border" }).linkOn(root, "border");                           // TODO: Must be created in the same place where used (chart)
         that._seriesGroup = renderer.g().attr({ "class": "dxc-series-group" }).linkOn(root, "series");
+        that._scaleBreaksGroup = renderer.g().attr({ "class": "dxc-scale-breaks" }).linkOn(root, "scale-breaks");
         that._labelsGroup = renderer.g().attr({ "class": "dxc-labels-group" }).linkOn(root, "labels");
         that._crosshairCursorGroup = renderer.g().attr({ "class": "dxc-crosshair-cursor" }).linkOn(root, "crosshair");
-        that._scaleBreaksGroup = renderer.g().attr({ "class": "dxc-scale-breaks" }).linkOn(root, "scale-breaks");
         that._legendGroup = renderer.g().attr({ "class": "dxc-legend", "clip-path": that._getCanvasClipRectID() }).linkOn(root, "legend");
         that._scrollBarGroup = renderer.g().attr({ "class": "dxc-scroll-bar" }).linkOn(root, "scroll-bar");
     },
@@ -706,8 +709,6 @@ var BaseChart = BaseWidget.inherit({
                                         && !this._themeManager.getOptions("adaptiveLayout").keepLabels;
 
         this._updateSeriesDimensions(drawOptions);
-        // T207665, T336349, T503616
-        this._canvas = this.__originalCanvas;
     },
 
     _renderSeriesElements: function(drawOptions, isRotated, isLegendInside) {
@@ -728,14 +729,25 @@ var BaseChart = BaseWidget.inherit({
             );
         }
 
-        resolveLabelOverlapping !== "none" && that._resolveLabelOverlapping(resolveLabelOverlapping);
+        if(resolveLabelOverlapping !== "none") {
+            that._adjustSeries();
+            that._resolveLabelOverlapping(resolveLabelOverlapping);
+        }
+
         that._adjustSeries();
 
         that._renderTrackers(isLegendInside);
         that._tracker.repairTooltip();
 
+        that._clearCanvas();
+
         that._drawn();
         that._renderCompleteHandler();
+    },
+
+    _clearCanvas: function() {
+        // T207665, T336349, T503616
+        this._canvas = this.__originalCanvas;
     },
 
     _resolveLabelOverlapping: function(resolveLabelOverlapping) {

@@ -27,6 +27,7 @@ require("common.css!");
 
 var SLIDER_CLASS = "dx-slider",
     SLIDER_WRAPPER_CLASS = SLIDER_CLASS + "-wrapper",
+    SLIDER_LABEL_POSITION_CLASS_PREFIX = SLIDER_CLASS + "-label-position-",
     SLIDER_RANGE_CLASS = SLIDER_CLASS + "-range",
     SLIDER_RANGE_VISIBLE_CLASS = SLIDER_RANGE_CLASS + "-visible",
     SLIDER_BAR_CLASS = SLIDER_CLASS + "-bar",
@@ -62,6 +63,22 @@ QUnit.test("default", function(assert) {
     });
 
     assert.ok($sliderElement.hasClass(SLIDER_CLASS));
+});
+
+QUnit.test("onContentReady fired after the widget is fully ready", function(assert) {
+    assert.expect(2);
+    var position = "top";
+
+    $("#slider").dxSlider({
+        label: {
+            visible: true,
+            position: position
+        },
+        onContentReady: function(e) {
+            assert.ok($(e.element).hasClass(SLIDER_CLASS));
+            assert.ok($(e.element).hasClass(SLIDER_LABEL_POSITION_CLASS_PREFIX + position));
+        }
+    });
 });
 
 QUnit.test("Resize by option", function(assert) {

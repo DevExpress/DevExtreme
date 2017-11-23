@@ -231,7 +231,7 @@ QUnit.test('Render scrollable', function(assert) {
         testElement = $('#container');
 
     this.options.scrolling = {
-        useNative: true,
+        useNative: false,
         showScrollbar: "always",
         test: "test"
     };
@@ -242,13 +242,20 @@ QUnit.test('Render scrollable', function(assert) {
     rowsView.height(100);
     rowsView.resize();
 
-    var $scrollable = testElement.find(".dx-scrollable");
+    var $scrollable = testElement.find(".dx-scrollable"),
+        $scrollableContent = testElement.find(".dx-scrollable-content"),
+        $scrollableScrollbar = testElement.find(".dx-scrollable-scrollbar");
 
     //assert
     assert.equal($scrollable.length, 1, 'scrollable count');
+    assert.equal($scrollableContent.length, 1, 'scrollable content count');
+    assert.equal($scrollableScrollbar.length, 2, 'scrollable scrollbar count');
+    //T575726
+    assert.equal($scrollableContent.css("z-index"), "auto", 'scrollable content z-index');
+    assert.equal($scrollableScrollbar.css("z-index"), "auto", 'scrollable scrollbar z-index');
 
     var scrollable = $scrollable.dxScrollable("instance");
-    assert.strictEqual(scrollable.option("useNative"), true, 'scrollable useNative');
+    assert.strictEqual(scrollable.option("useNative"), false, 'scrollable useNative');
     assert.strictEqual(scrollable.option("showScrollbar"), "always", 'scrollable showScrollbar');
     assert.strictEqual(scrollable.option("test"), "test", 'scrollable test');
 });
@@ -6495,8 +6502,6 @@ QUnit.test('Update noDataText container', function(assert) {
     rowsView.resize();
     //assert
     noDataElement = container.find('.dx-datagrid-nodata');
-    assert.strictEqual(parseInt(noDataElement.css('marginLeft')), -Math.floor(noDataElement.width() / 2), 'valid margin left');
-    assert.strictEqual(parseInt(noDataElement.css('marginTop')), -Math.floor(noDataElement.height() / 2), 'valid margin top');
 
     assert.ok(noDataElement.is(":visible"), 'noDataElement is visible');
     assert.strictEqual(noDataElement.text(), noDataText);

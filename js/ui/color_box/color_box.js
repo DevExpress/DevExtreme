@@ -96,6 +96,13 @@ var ColorBox = DropDownEditor.inherit({
             */
 
             /**
+            * @name dxColorBoxOptions_onContentReady
+            * @publicName onContentReady
+            * @hidden true
+            * @action
+            */
+
+            /**
             * @name dxColorBoxOptions_cancelButtonText
             * @publicName cancelButtonText
             * @type string

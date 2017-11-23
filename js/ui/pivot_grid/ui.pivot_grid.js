@@ -143,15 +143,6 @@ function clickedOnFieldsArea($targetElement) {
 }
 
 /**
-* @name dxPivotGridOptions_onContentReady
-* @publicName onContentReady
-* @extends Action
-* @hidden false
-* @action
-* @extend_doc
-*/
-
-/**
 * @name dxPivotGridOptions_activeStateEnabled
 * @publicName activeStateEnabled
 * @hidden

@@ -361,6 +361,14 @@ var Map = Widget.inherit({
             */
             onReady: null,
 
+
+            /**
+            * @name dxMapOptions_onContentReady
+            * @publicName onContentReady
+            * @hidden true
+            * @action
+            */
+
             // for internal use only
             onUpdated: null,
 

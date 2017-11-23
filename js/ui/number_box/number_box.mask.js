@@ -9,7 +9,8 @@ var eventsEngine = require("../../events/core/events_engine"),
     number = require("../../localization/number"),
     getLDMLFormat = require("../../localization/ldml/number").getFormat,
     NumberBoxBase = require("./number_box.base"),
-    eventUtils = require("../../events/utils");
+    eventUtils = require("../../events/utils"),
+    typeUtils = require("../../core/utils/type");
 
 var NUMBER_FORMATTER_NAMESPACE = "dxNumberFormatter",
     MOVE_FORWARD = 1,
@@ -295,13 +296,7 @@ var NumberBoxMask = NumberBoxBase.inherit({
     _setInputText: function(text, position) {
         var oldLength = (this._formattedValue || "").length,
             newLength = text.length,
-            wasRemoved = newLength < oldLength,
-            caretDelta = 0;
-
-        if(this._formattedValue === "" && this._parsedValue !== null) {
-            var indexOfLastKey = text.indexOf(this._parsedValue.toString());
-            caretDelta = indexOfLastKey !== -1 ? indexOfLastKey : 0;
-        }
+            wasRemoved = newLength < oldLength;
 
         this._input().val(text);
         this._formattedValue = text;
@@ -310,8 +305,8 @@ var NumberBoxMask = NumberBoxBase.inherit({
             this._moveToClosestNonStub({ start: position, end: position });
         } else {
             this._caret({
-                start: position + caretDelta,
-                end: position + caretDelta
+                start: position,
+                end: position
             });
         }
     },
@@ -470,6 +465,11 @@ var NumberBoxMask = NumberBoxBase.inherit({
             caretDelta = formatted.indexOf(text) - caret.start + 1;
         } else {
             caretDelta = formatted.length - text.length;
+        }
+
+        if(typeUtils.isDefined(this._parsedValue) && this._formattedValue === "" && this._parsedValue !== null) {
+            var indexOfLastKey = formatted.indexOf(this._parsedValue.toString());
+            caretDelta = indexOfLastKey !== -1 ? indexOfLastKey : 0;
         }
 
         this._setInputText(formatted, caret.start + caretDelta);
