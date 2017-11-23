@@ -593,18 +593,17 @@ var TagBox = SelectBox.inherit({
         if(this._$tagsContainer) {
             eventsEngine.off(this._$tagsContainer, eventName);
             eventsEngine.on(this._$tagsContainer, eventName, function(e) {
-                e.preventDefault();
-            });
+                this._preventFocusOut = true;
+            }.bind(this));
         }
     },
 
     _renderTagRemoveAction: function() {
         var tagRemoveAction = this._createAction(this._removeTagHandler.bind(this));
         var eventName = eventUtils.addNamespace(clickEvent.name, "dxTagBoxTagRemove");
-        var $container = this.$element().find("." + TEXTEDITOR_CONTAINER_CLASS);
 
-        eventsEngine.off($container, eventName);
-        eventsEngine.on($container, eventName, "." + TAGBOX_TAG_REMOVE_BUTTON_CLASS, function(e) {
+        eventsEngine.off(this._$tagsContainer, eventName);
+        eventsEngine.on(this._$tagsContainer, eventName, "." + TAGBOX_TAG_REMOVE_BUTTON_CLASS, function(e) {
             tagRemoveAction({ event: e });
         });
 
@@ -668,7 +667,10 @@ var TagBox = SelectBox.inherit({
     },
 
     _focusOutHandler: function(e) {
-        if(this.option("opened") && this.option("applyValueMode") === "useButtons") {
+        var openedUseButtons = this.option("opened") && this.option("applyValueMode") === "useButtons";
+
+        if(openedUseButtons || this._preventFocusOut) {
+            this._preventFocusOut = false;
             return;
         }
 
@@ -1206,6 +1208,7 @@ var TagBox = SelectBox.inherit({
     _clean: function() {
         this.callBase();
         delete this._defaultTagTemplate;
+        delete this._preventFocusOut;
         delete this._tagTemplate;
     },
 
