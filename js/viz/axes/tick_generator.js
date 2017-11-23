@@ -513,15 +513,17 @@ function getScaleBreaksProcessor(convertTickInterval, getValue, addCorrection) {
             correction = maxTickCount > breaks.length ? interval / 2 : interval / 100;
 
         return breaks.reduce(function(result, b) {
-            if(getValue(b.to) - getValue(b.from) < interval && !b.gapSize) {
+            var from = addCorrection(b.from, correction),
+                to = addCorrection(b.to, -correction);
+            if(getValue(to) - getValue(from) < interval && !b.gapSize) {
                 return result;
             }
             if(b.gapSize) {
                 return result.concat([b]);
             }
             return result.concat([{
-                from: addCorrection(b.from, correction),
-                to: addCorrection(b.to, -correction),
+                from: from,
+                to: to,
                 cumulativeWidth: b.cumulativeWidth
             }]);
         }, []);

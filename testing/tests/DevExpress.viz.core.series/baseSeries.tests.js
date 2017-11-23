@@ -4357,6 +4357,10 @@ QUnit.test("getTemplateFields returns templated fields for value, size and tag f
     }]);
 });
 
+QUnit.test("getStackName returns null", function(assert) {
+    assert.equal(createSeries({ axis: "axisName" }, this.renderOptions).getStackName(), null);
+});
+
 QUnit.test("get axes", function(assert) {
     var valueAxisStub = {},
         argumentAxisStub = {},

@@ -123,6 +123,28 @@ QUnit.module("Rendering", function() {
         assert.equal(element.find("." + FILTER_BUILDER_GROUP_CONTENT_CLASS).html(), $etalon.html());
     });
 
+    QUnit.test("field menu test", function(assert) {
+        var container = $("#container");
+
+        container.dxFilterBuilder({
+            value: [
+                ["CompanyName", "=", "K&S Music"]
+            ],
+            fields: [{
+                dataField: "CompanyName"
+            }, {
+                dataField: "Budget",
+                visible: false //this is unavailable property but it available in grid. See T579785.
+            }]
+        });
+
+        var $fieldButton = container.find("." + FILTER_BUILDER_ITEM_FIELD_CLASS);
+        $fieldButton.click();
+
+        var $menuItem = $(".dx-menu-item-text").eq(1);
+        assert.equal($menuItem.text(), "Budget");
+    });
+
     QUnit.test("value and operations depend on selected field", function(assert) {
         var container = $("#container");
 

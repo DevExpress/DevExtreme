@@ -1733,6 +1733,58 @@ QUnit.test("correct scope as model for template", function(assert) {
     assert.equal(parentScope.vm.text, "New text 2");
 });
 
+QUnit.test("two-way binding works correct for inner component (T577900)", function(assert) {
+    var MyComponent = DOMComponent.inherit({
+        emulateAction: function() {
+            this._createActionByOption("onClick")();
+        }
+    });
+    registerComponent("dxComponentWithInnerComponent", MyComponent);
+
+    var $container = $("<div/>").appendTo(FIXTURE_ELEMENT()),
+        $controller = $("<div/>")
+            .attr("ng-controller", "my-controller as $ctrl")
+            .appendTo($container);
+    $("<inner-component></inner-component>").appendTo($controller);
+
+    this.testApp.controller("my-controller", function() {});
+
+    angular.module('testApp').component('innerComponent', {
+        controller: function() {
+            this.widgetSettings = {
+                onClick: function(args) {
+                    var prevText = args.component.option("text");
+                    args.component.option("text", prevText + "1");
+                },
+                bindingOptions: {
+                    text: '$ctrl.text'
+                }
+            };
+        },
+        template:
+            "<div id='test'>{{$ctrl.text}}</div>" +
+            "<div id='widget' dx-component-with-inner-component='$ctrl.widgetSettings'></div>"
+    });
+
+    angular.bootstrap($container, ["testApp"]);
+
+    var testField = $("#test"),
+        instance = $("#widget").dxComponentWithInnerComponent("instance");
+
+    assert.equal(testField.text(), "");
+    assert.equal(instance.option("text"), undefined);
+
+    instance.emulateAction();
+
+    assert.equal(testField.text(), "undefined1");
+    assert.equal(instance.option("text"), "undefined1");
+
+    instance.emulateAction();
+
+    assert.equal(testField.text(), "undefined11");
+    assert.equal(instance.option("text"), "undefined11");
+});
+
 QUnit.test("Directive is in DOM on linking (T306481)", function(assert) {
     assert.expect(1);
     var TestContainer = Widget.inherit({

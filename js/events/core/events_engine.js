@@ -197,7 +197,9 @@ var getHandlersController = function(element, eventName) {
 
                 if(shouldRemoveNativeListener) {
                     special.callMethod(eventName, "teardown", element, [ namespaces, removedHandler ]);
-                    element.removeEventListener(eventName, eventData.nativeHandler);
+                    if(eventData.nativeHandler) {
+                        element.removeEventListener(eventName, eventData.nativeHandler);
+                    }
                     delete elementData[eventName];
                 }
             };
