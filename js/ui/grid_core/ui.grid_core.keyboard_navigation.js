@@ -101,19 +101,19 @@ var KeyboardNavigationController = core.ViewController.inherit({
 
     _clickHandler: function(e) {
         var event = e.jQueryEvent,
-            $cell = $(event.currentTarget),
+            $target = $(event.currentTarget),
             $grid = $(event.target).closest("." + this.getWidgetContainerClass()).parent(),
             data = event.data;
 
-        if($grid.is(this.component.element()) && this._isCellValid($cell)) {
+        if($grid.is(this.component.element()) && this._isCellValid($target)) {
             this._focusView(data.view, data.viewIndex);
-            this._updateFocusedCellPosition($cell);
+            this._updateFocusedCellPosition($target);
             if(!this._editingController.isEditing()) {
                 this._applyTabIndexToElement(data.view.element());
                 data.view.element().find(".dx-row[tabIndex], .dx-row > td[tabIndex]").removeAttr("tabIndex");
-                $cell.focus();
+                $target.focus();
             }
-        } else if($cell.is("td")) {
+        } else if($target.is("td")) {
             this._resetFocusedCell();
         }
     },
