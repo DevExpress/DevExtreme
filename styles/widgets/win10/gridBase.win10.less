@@ -225,7 +225,17 @@
 
         .dx-dropdowneditor-button-visible {
             &.dx-show-clear-button .dx-texteditor-input {
-                padding-right: @WIN10_TEXTEDITOR_CLEAR_BUTTON_WIDTH;
+                padding-right: @WIN10_DROPDOWNEDITOR_DROPDOWN_BUTTON_WIDTH + @WIN10_TEXTEDITOR_CLEAR_BUTTON_WIDTH + @WIN10_TEXEDITOR_INPUT_PADDING_HORIZONTAL;
+
+                .dx-rtl&,
+                .dx-rtl & {
+                    padding-right: @WIN10_TEXEDITOR_INPUT_PADDING_HORIZONTAL;
+                    padding-left: @WIN10_DROPDOWNEDITOR_DROPDOWN_BUTTON_WIDTH + @WIN10_TEXTEDITOR_CLEAR_BUTTON_WIDTH + @WIN10_TEXEDITOR_INPUT_PADDING_HORIZONTAL;
+                }
+            }
+
+            .dx-texteditor-input {
+                padding-right: @WIN10_DROPDOWNEDITOR_DROPDOWN_BUTTON_WIDTH;
             }
         }
     }
@@ -456,6 +466,12 @@
             &.dx-edit-row > td {
                 border-top: ~"@{@{widgetName}-border}";
                 border-bottom: ~"@{@{widgetName}-border}";
+            }
+        }
+
+        .dx-editor-cell {
+            .dx-icon-clear {
+                left: 0px;
             }
         }
 
