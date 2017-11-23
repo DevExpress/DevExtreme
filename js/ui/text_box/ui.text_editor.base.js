@@ -316,11 +316,11 @@ var TextEditorBase = Editor.inherit({
         this._renderProps();
         this._renderPlaceholder();
 
-        this.callBase();
         this._refreshValueChangeEvent();
         this._renderEvents();
         this._renderEnterKeyAction();
         this._renderEmptinessEvent();
+        this.callBase();
     },
 
     _renderInput: function() {

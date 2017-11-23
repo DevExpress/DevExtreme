@@ -51,14 +51,6 @@ treeListCore.registerModulesOrder([
     "export",
     "gridView"]);
 
-/**
-* @name dxTreeListOptions_onContentReady
-* @publicName onContentReady
-* @extends Action
-* @hidden false
-* @action
-*/
-
 var TreeList = Widget.inherit({
     _activeStateUnit: DATAGRID_ROW_SELECTOR,
 

@@ -453,8 +453,6 @@ declare module DevExpress.ui {
         onCellClick?: any;
         /** @docid dxSchedulerOptions_onAppointmentFormCreated */
         onAppointmentFormCreated?: Function;
-        /** @docid dxSchedulerOptions_onContentReady */
-        onContentReady?: Function;
         /** @docid dxSchedulerOptions_horizontalScrollingEnabled */
         horizontalScrollingEnabled?: boolean;
         /** @docid dxSchedulerOptions_crossScrollingEnabled */
@@ -533,6 +531,7 @@ declare module DevExpress.ui {
 
     export interface dxColorBoxOptions extends dxDropDownEditorOptions {
         /** @docid_ignore dxColorBoxOptions_fieldEditEnabled */
+        /** @docid_ignore dxColorBoxOptions_onContentReady */
         /** @docid_ignore dxColorBoxOptions_maxLength */
         /** @docid_ignore dxColorBoxOptions_showClearButton */
         /** @docid_ignore dxColorBoxOptions_valueChangeEvent */
@@ -1449,9 +1448,6 @@ declare module DevExpress.ui {
         /** @docid dxDataGridOptions_columns */
         columns?: Array<dxDataGridColumn>;
 
-        /** @docid dxDataGridOptions_onContentReady */
-        onContentReady?: Function;
-
         /** @docid dxDataGridOptions_customizeColumns */
         customizeColumns?: (columns: Array<dxDataGridColumn>) => void;
 
@@ -1839,9 +1835,6 @@ declare module DevExpress.ui {
 
         /** @docid dxTreeListOptions_onCellPrepared */
         onCellPrepared?: (e: any) => void;
-
-        /** @docid dxTreeListOptions_onContentReady */
-        onContentReady?: Function;
 
         /** @docid dxTreeListOptions_customizeColumns */
         customizeColumns?: (columns: Array<dxTreeListColumn>) => void;
@@ -2502,9 +2495,6 @@ declare module DevExpress.ui {
         /** @docid_ignore dxPivotGridPivotGridCell_type */
         /** @docid_ignore dxPivotGridPivotGridCell_expanded */
 
-        /** @docid dxPivotGridOptions_onContentReady */
-        onContentReady?: Function;
-
         /** @docid dxPivotGridOptions_dataSource */
         dataSource?: any;
 
@@ -2774,9 +2764,6 @@ declare module DevExpress.ui {
 
         /** @docid dxPivotGridFieldChooserOptions_dataSource */
         dataSource?: DevExpress.data.PivotGridDataSource;
-
-        /** @docid dxPivotGridFieldChooserOptions_onContentReady */
-        onContentReady?: Function;
 
         /** @docid dxPivotGridFieldChooserOptions_onContextMenuPreparing */
         onContextMenuPreparing?: (e: any) => void;
