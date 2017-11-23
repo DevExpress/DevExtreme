@@ -4,6 +4,7 @@ var $ = require("../../core/renderer"),
     extend = require("../../core/utils/extend").extend,
     messageLocalization = require("../../localization/message"),
     TextBox = require("../text_box"),
+    DataSource = require("../../data/data_source/data_source").DataSource,
     errors = require("../widget/ui.errors");
 
 /**
@@ -66,6 +67,21 @@ module.exports = {
             searchOperation: this.option("searchMode"),
             searchExpr: this.option("searchExpr")
         });
+    },
+
+    _initDataSource: function() {
+        this.callBase();
+
+        if(this._applySourceOptions()) {
+            this.option("searchValue").length && this._dataSource.searchValue(this.option("searchValue"));
+            this.option("searchMode") !== "contains" && this._dataSource.searchOperation(this.option("searchMode"));
+            this.option("searchExpr") && this._dataSource.searchExpr(this.option("searchExpr"));
+        }
+    },
+
+    _applySourceOptions: function() {
+        var dataSourceOptions = this.option("dataSource");
+        return this._dataSource && dataSourceOptions && dataSourceOptions instanceof DataSource;
     },
 
     _render: function() {
