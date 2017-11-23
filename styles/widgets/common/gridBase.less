@@ -369,6 +369,7 @@
         .dx-row {
             .dx-editor-container {
                 overflow: hidden;
+                text-align: start;
             }
 
             .dx-cell-modified, .dx-@{widgetName}-invalid {
@@ -474,6 +475,16 @@
             vertical-align: middle;
             padding-top: @GRID_CELL_PADDING;
             padding-bottom: @GRID_CELL_PADDING;
+        }
+    }
+
+    .dx-row {
+        .dx-numberbox {
+            &.dx-show-clear-button {
+                .dx-texteditor-input {
+                    padding-right: @GRID_TEXTEDITOR_INPUT_PADDING;
+                }
+            }
         }
     }
 
