@@ -838,3 +838,56 @@ QUnit.test("routes option change should not render incorrect routes", function(a
     routes.push(ROUTES[1]);
     map.option("routes", routes);
 });
+
+
+QUnit.module("Change provider", {
+    beforeEach: function() {
+        var fakeURL = "/fakeGoogleUrl?";
+
+        GoogleStaticProvider.remapConstant(fakeURL);
+
+        ajaxMock.setup({
+            url: fakeURL,
+            responseText: ""
+        });
+    },
+    afterEach: function() {
+        ajaxMock.clear();
+    }
+});
+
+QUnit.test("change provider and async options", function(assert) {
+    var makeConfig = function(resolve) {
+        return {
+            provider: "googleStatic",
+            zoom: 1000,
+            markers: [{
+                iconSrc: null,
+                location: {
+                    lat: 40.755833,
+                    lng: -73.986389
+                }
+            }, {
+                iconSrc: null,
+                location: {
+                    lat: 40.7825,
+                    lng: -73.966111
+                }
+            }],
+            onReady: function(e) {
+                resolve(e.component);
+            }
+        };
+    };
+
+    return new Promise(function(resolve) {
+        new Map($("#map"), makeConfig(resolve));
+    }).then(function(map) {
+        map._options.provider = "bing";
+        return new Promise(function(resolve) {
+            map.option(makeConfig(resolve));
+        });
+    }).then(function(map) {
+        assert.deepEqual(map._suppressedAsyncActions, ["updateMarkers"]);
+    });
+});
