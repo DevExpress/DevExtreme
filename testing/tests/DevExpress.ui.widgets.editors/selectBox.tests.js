@@ -1148,6 +1148,36 @@ QUnit.test("Field should be updated if fieldTemplate is used", function(assert) 
 
 });
 
+QUnit.test("Field should be updated if value was changed and fieldTemplate is used (T568546)", function(assert) {
+    var $element = $("#selectBoxFieldTemplate").dxSelectBox({
+        dataSource: [
+            { name: 'First' },
+            { name: 'Second' },
+            { name: 'Third' }
+        ],
+        fieldTemplate: function(selectedItem) {
+            return $("<div id='myfield'>").dxTextBox({
+                value: selectedItem && selectedItem.name
+            });
+        },
+        value: "First",
+        valueExpr: "name",
+        opened: true
+    });
+
+    $(".dx-list .dx-list-item").eq(1).trigger("dxclick");
+
+    var $input = $(".dx-texteditor-input");
+
+    assert.equal($input.val(), "Second", "value is correct");
+
+    var instance = $element.dxSelectBox("instance");
+
+    instance.option("value", 'First');
+
+    assert.equal($(".dx-texteditor-input").val(), "First", "value is correct");
+});
+
 QUnit.test("dropdown button should not be hidden after the focusout when fieldTemplate and searchEnabled is used", function(assert) {
     var $element = $("#selectBoxFieldTemplate").dxSelectBox({
             items: [1, 2, 3],
@@ -3760,7 +3790,7 @@ QUnit.testInActiveWindow("value should be reset on the 'tab' press after input v
     assert.equal(selectBox.option("value"), null, "widget value is reset");
 });
 
-QUnit.test("value should be restored after the focusout when selection was not changed", function(assert) {
+QUnit.testInActiveWindow("value should be restored after the focusout when selection was not changed", function(assert) {
     if(devices.real().deviceType !== "desktop") {
         assert.ok(true, "not actual");
         return;

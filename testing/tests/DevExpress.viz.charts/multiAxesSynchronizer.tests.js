@@ -42,7 +42,6 @@ function checkAxesSynchronization(assert, options) {
                 width: 600,
                 height: 400
             };
-            options.tickValues && !options.tickValues.tickInterval && (options.tickValues.tickInterval = options.tickInterval);
             var range = new rangeModule.Range(options.range);
             var axis = new MockAxis({ renderer: new vizMocks.Renderer() });
             axis.updateOptions({
@@ -52,6 +51,7 @@ function checkAxesSynchronization(assert, options) {
                 mockTickInterval: options.tickInterval,
                 mockTickValues: options.tickValues,
                 mockMinorTicks: options.minorTickValues,
+                mockMinorTickInterval: options.minorTickInterval,
                 synchronizedValue: options.synchronizedValue,
                 type: options.type
             });
@@ -69,7 +69,7 @@ function checkAxesSynchronization(assert, options) {
         for(propertyName in object) {
             if(typeof object[propertyName] !== 'function') {
                 if(typeof object[propertyName] === 'number') {
-                    result[propertyName] = Number(object[propertyName].toFixed(5));
+                    result[propertyName] = Number(object[propertyName].toFixed(7));
                 } else {
                     result[propertyName] = object[propertyName];
                 }
@@ -518,8 +518,8 @@ QUnit.test('Synchronization for 2 axis if tickValues count = 1 (min==max) (logar
                     isSynchronized: true,
                     min: 0,
                     minVisible: 0,
-                    max: 20.66667,
-                    maxVisible: 20.66667
+                    max: 20.6666667,
+                    maxVisible: 20.6666667
                 },
                 tickValues: [20]
             }
@@ -1125,7 +1125,6 @@ QUnit.test('Synchronization for 3 axis with paddings and with different tickValu
     });
 });
 
-
 QUnit.test('Synchronization for 3 axis with different tickValues count. B254389', function(assert) {
     checkAxesSynchronization(assert, {
         axesOptions: [
@@ -1218,7 +1217,6 @@ QUnit.test('Synchronization for 3 axis when first with stubData', function(asser
         syncIndexes: [[ 1, 2]]
     });
 });
-
 
 QUnit.test('Synchronization for 4 axis in 2 panes', function(assert) {
     checkAxesSynchronization(assert, {
@@ -1600,8 +1598,87 @@ QUnit.test('Synchronization for 2 axis with zoom by value', function(assert) {
     });
 });
 
-QUnit.module('MultiAxis LogarithmicAxis Synchronization', { beforeEach: setupMocks });
+QUnit.test('Synchronization for 3 axis with different small ticks. T570230. #1 adjust range with paddings', function(assert) {
+    checkAxesSynchronization(assert, {
+        axesOptions: [
+            { synchronizedValue: 0, range: { min: -0.000002, max: 5e-7, axisType: 'continuous' }, tickValues: [-0.000002, -0.0000015, -0.000001, -5e-7, 0, 5e-7], tickInterval: 5e-7 },
+            { synchronizedValue: 0, range: { min: 0, max: 1, axisType: 'continuous' }, tickValues: [0, 0.2, 0.4, 0.6, 0.8, 1], tickInterval: 0.2 }
+        ],
+        axesOptionsAfterSync: [
+            {
+                range: {
+                    axisType: 'continuous',
+                    isSynchronized: true,
+                    min: -0.000002,
+                    minVisible: -0.000002,
+                    max: 0.0000025,
+                    maxVisible: 0.0000025
+                },
+                tickValues: [-0.000002, -1.5e-6, -1e-6, -5e-7, 0, 5e-7, 1e-6, 1.5e-6, 0.000002, 0.0000025]
+            },
+            {
+                range: {
+                    axisType: 'continuous',
+                    isSynchronized: true,
+                    min: -0.8,
+                    minVisible: -0.8,
+                    max: 1,
+                    maxVisible: 1
+                },
+                tickValues: [-0.8, -0.6, -0.4, -0.2, 0, 0.2, 0.4, 0.6, 0.8, 1]
+            }
+        ],
+        syncIndexes: [[0, 1]]
+    });
+});
 
+QUnit.test('Synchronization for 3 axis with different small ticks. T570230. #2 adjust ticks', function(assert) {
+    checkAxesSynchronization(assert, {
+        axesOptions: [
+            { synchronizedValue: 0, range: { min: 0, max: 10, axisType: 'continuous' }, tickValues: [0, 1, 2, 3, 4, 5, 6, 7, 8, 9, 10], tickInterval: 1 },
+            { synchronizedValue: 0, range: { min: 0, max: 0.01, axisType: 'continuous' }, tickValues: [0, 0.001, 0.002, 0.003, 0.004, 0.005, 0.006, 0.007, 0.008, 0.009, 0.01], tickInterval: 0.001 },
+            { synchronizedValue: 0, range: { min: 0, max: 0.16, axisType: 'continuous' }, tickValues: [0, 0.02, 0.04, 0.06, 0.08, 0.1, 0.12, 0.14, 0.16], tickInterval: 0.02 }
+        ],
+        axesOptionsAfterSync: [
+            {
+                range: {
+                    axisType: 'continuous',
+                    isSynchronized: true,
+                    min: 0,
+                    minVisible: 0,
+                    max: 10,
+                    maxVisible: 10
+                },
+                tickValues: [0, 1, 2, 3, 4, 5, 6, 7, 8, 9, 10]
+            },
+            {
+                range: {
+                    axisType: 'continuous',
+                    isSynchronized: true,
+                    min: 0,
+                    minVisible: 0,
+                    max: 0.01,
+                    maxVisible: 0.01
+                },
+                tickValues: [0, 0.001, 0.002, 0.003, 0.004, 0.005, 0.006, 0.007, 0.008, 0.009, 0.01]
+            },
+            {
+                range: {
+                    axisType: 'continuous',
+                    isSynchronized: true,
+                    min: 0,
+                    minVisible: 0,
+                    max: 0.2,
+                    maxVisible: 0.2
+                },
+                tickValues: [0, 0.02, 0.04, 0.06, 0.08, 0.1, 0.12, 0.14, 0.16, 0.18, 0.2]
+            }
+        ],
+        syncIndexes: [[0, 1, 2]]
+    });
+});
+
+QUnit.module('MultiAxis LogarithmicAxis Synchronization', { beforeEach: setupMocks });
 
 QUnit.test('Synchronization two logarithmic Axis. Small values', function(assert) {
     var tickValues1 = [0.000001, 0.00001, 0.0001],
@@ -1675,8 +1752,8 @@ QUnit.test('Synchronization two logarithmic Axis. Equal tick count', function(as
                     base: 10,
                     min: 1,
                     minVisible: 1,
-                    max: 31622.7766,
-                    maxVisible: 31622.7766
+                    max: 31622.7766017,
+                    maxVisible: 31622.7766017
                 },
                 tickValues: [100, 1000, 10000]
             }
@@ -1742,10 +1819,10 @@ QUnit.test('Synchronization logarithmic Axis with non logarithmic axis. B250542'
                     axisType: 'logarithmic',
                     isSynchronized: true,
                     base: 10,
-                    min: Number(Math.pow(10, -2.8).toFixed(5)),
-                    minVisible: Number(Math.pow(10, -2.8).toFixed(5)),
-                    max: Number(Math.pow(10, 6.8).toFixed(5)),
-                    maxVisible: Number(Math.pow(10, 6.8).toFixed(5))
+                    min: Number(Math.pow(10, -2.8).toFixed(7)),
+                    minVisible: Number(Math.pow(10, -2.8).toFixed(7)),
+                    max: Number(Math.pow(10, 6.8).toFixed(7)),
+                    maxVisible: Number(Math.pow(10, 6.8).toFixed(7))
                 },
                 tickValues: [10e-3, 10e-2, 10e-1, 10e0, 10e1, 10e2, 10e3, 10e4, 10e5]
             },
@@ -1798,6 +1875,44 @@ QUnit.test('Synchronization two continuous axis. B250542', function(assert) {
                     maxVisible: 98
                 },
                 tickValues: [10, 20, 30, 40, 50, 60, 70, 80, 90]
+            }
+        ],
+        syncIndexes: [[0, 1]]
+    });
+});
+
+QUnit.test("Add minor ticks", function(assert) {
+    var tickValues1 = [0, 1, 2],
+        tickValue2 = [0, 1, 2, 3];
+
+    checkAxesSynchronization(assert, {
+        axesOptions: [
+            { type: 'continuous', range: { min: 0, max: 2, minVisible: 0, maxVisible: 2, axisType: 'continuous' }, tickValues: tickValues1, tickInterval: 1, minorTickValues: [0.5, 1.5], minorTickInterval: 0.5 },
+            { type: 'continuous', range: { min: 0, max: 3, minVisible: 0, maxVisible: 3, axisType: 'continuous' }, tickValues: tickValue2, tickInterval: 1 }
+        ],
+        axesOptionsAfterSync: [
+            {
+                range: {
+                    axisType: 'continuous',
+                    isSynchronized: true,
+                    min: 0,
+                    minVisible: 0,
+                    max: 3,
+                    maxVisible: 3
+                },
+                tickValues: [0, 1, 2, 3],
+                minorTickValues: [0.5, 1.5, 2.5]
+            },
+            {
+                range: {
+                    axisType: 'continuous',
+                    isSynchronized: true,
+                    min: 0,
+                    minVisible: 0,
+                    max: 3,
+                    maxVisible: 3
+                },
+                tickValues: [0, 1, 2, 3]
             }
         ],
         syncIndexes: [[0, 1]]

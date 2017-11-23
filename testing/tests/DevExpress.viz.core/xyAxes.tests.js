@@ -2993,12 +2993,16 @@ QUnit.module("Datetime scale breaks. Weekends and holidays", $.extend({}, enviro
         that.axis.validate();
     },
     updateOptions: function(opt) {
-        this.axis.updateOptions($.extend(true, this.options, {
+
+        var options = $.extend(true, this.options, {
             dataType: "datetime",
             breakStyle: { width: 0 },
-            workdaysOnly: true,
-            workWeek: [1, 2, 3, 4, 5]
-        }, opt));
+            workdaysOnly: true
+        }, opt);
+
+        options.workWeek = options.workWeek || [1, 2, 3, 4, 5];
+
+        this.axis.updateOptions(options);
         this.axis.setBusinessRange({ min: opt.min || new Date(2017, 8, 4, 8), max: opt.max || new Date(2017, 8, 11) });
     },
     afterEach: environment2DTranslator.afterEach
@@ -3018,6 +3022,35 @@ QUnit.test("Generate weekend breaks", function(assert) {
         to: new Date(2017, 8, 11),
         gapSize: {
             days: 2
+        },
+        cumulativeWidth: 0
+    }]);
+});
+
+QUnit.test("Generate weekend breaks for 3 days workweek", function(assert) {
+    this.updateOptions({
+        workdaysOnly: true,
+        workWeek: [2, 3, 4],
+        min: new Date(2017, 7, 31),
+        max: new Date(2017, 8, 11)
+    });
+
+    this.axis.createTicks(this.canvas);
+
+    var breaks = this.tickGeneratorSpy.lastCall.args[7];
+
+    assert.deepEqual(breaks, [{
+        from: new Date(2017, 8, 1),
+        to: new Date(2017, 8, 5),
+        gapSize: {
+            days: 4
+        },
+        cumulativeWidth: 0
+    }, {
+        from: new Date(2017, 8, 8),
+        to: new Date(2017, 8, 11),
+        gapSize: {
+            days: 3
         },
         cumulativeWidth: 0
     }]);
@@ -3504,8 +3537,8 @@ QUnit.module("Auto scale breaks", $.extend({}, environment2DTranslator, {
 
 QUnit.test("Several series with not sorted values", function(assert) {
     this.series = [
-        this.stubSeries([3, 10, 100, 40]),
-        this.stubSeries([80, 120, 40])
+        this.stubSeries([[3, 10, 100, 40], []]),
+        this.stubSeries([[80, 120, 40], []])
     ];
     this.axis.setGroupSeries(this.series);
 
@@ -3521,7 +3554,7 @@ QUnit.test("Several series with not sorted values", function(assert) {
 
 QUnit.test("Very big difference beetwen the values", function(assert) {
     this.series = [
-        this.stubSeries([5500, 5100, 300, 5])
+        this.stubSeries([[5500, 5100, 300, 5], []])
     ];
     this.axis.setGroupSeries(this.series);
 
@@ -3539,7 +3572,7 @@ QUnit.test("Very big difference beetwen the values", function(assert) {
 
 QUnit.test("Small difference beetween the values, breaks are not generated", function(assert) {
     this.series = [
-        this.stubSeries([2, 3, 4, 5, 6, 7, 8, 9, 10])
+        this.stubSeries([[2, 3, 4, 5, 6, 7, 8, 9, 10], []])
     ];
     this.axis.setGroupSeries(this.series);
 
@@ -3568,7 +3601,7 @@ QUnit.test("maxCountOfBreaks option is set to zero. Without breaks", function(as
 
 QUnit.test("Argument axis. Without breaks", function(assert) {
     this.series = [
-        this.stubSeries([5500, 5100, 300, 5])
+        this.stubSeries([[5500, 5100, 300, 5], []])
     ];
     var axis = this.createSimpleAxis({
         isArgumentAxis: true
@@ -3627,7 +3660,7 @@ QUnit.test("Without breaks, autoScaleBreaks option is false", function(assert) {
 
 QUnit.test("Two values and range is equal to this values", function(assert) {
     this.series = [
-        this.stubSeries([3, 100]),
+        this.stubSeries([[3, 100], []]),
     ];
     this.axis.setGroupSeries(this.series);
 
@@ -3644,7 +3677,7 @@ QUnit.test("Two values and range is equal to this values", function(assert) {
 
 QUnit.test("Option maxCountOfBreaks is more than generated breaks", function(assert) {
     this.series = [
-        this.stubSeries([3, 100]),
+        this.stubSeries([[3, 100], []]),
     ];
     this.axis.setGroupSeries(this.series);
 
@@ -3660,8 +3693,8 @@ QUnit.test("Option maxCountOfBreaks is more than generated breaks", function(ass
 
 QUnit.test("Option maxCountOfBreaks is undefined", function(assert) {
     this.series = [
-        this.stubSeries([3, 10, 100, 40]),
-        this.stubSeries([80, 120, 40])
+        this.stubSeries([[3, 10, 100, 40], []]),
+        this.stubSeries([[80, 120, 40], []])
     ];
     this.axis.setGroupSeries(this.series);
 
@@ -3685,7 +3718,7 @@ QUnit.test("Option maxCountOfBreaks is undefined", function(assert) {
 
 QUnit.test("Logarithmic axis", function(assert) {
     this.series = [
-        this.stubSeries([0.1, 1, 10, 100, 1000, 10000000])
+        this.stubSeries([[0.1, 1, 10, 100, 1000, 10000000], []])
     ];
     this.axis.setGroupSeries(this.series);
 
@@ -3703,7 +3736,7 @@ QUnit.test("Logarithmic axis", function(assert) {
 
 QUnit.test("Breaks length should be less than visible range. T569737", function(assert) {
     this.series = [
-        this.stubSeries([0.001, 0.267, 19, 23, 145, 1009])
+        this.stubSeries([[0.001, 0.267, 19, 23, 145, 1009], []])
     ];
     this.axis.setGroupSeries(this.series);
 
@@ -3723,7 +3756,7 @@ QUnit.test("Breaks length should be less than visible range. T569737", function(
 
 QUnit.test("Breaks count is equal point range count if breaks length less than visible range. T569737", function(assert) {
     this.series = [
-        this.stubSeries([0.001, 0.267, 19, 23, 145, 1009])
+        this.stubSeries([[0.001, 0.267, 19, 23, 145, 1009], []])
     ];
     this.axis.setGroupSeries(this.series);
 
@@ -3743,7 +3776,7 @@ QUnit.test("Breaks count is equal point range count if breaks length less than v
 
 QUnit.test("Concatenate auto breaks with user breaks", function(assert) {
     this.series = [
-        this.stubSeries([3, 10, 35, 43, 45, 100, 40]),
+        this.stubSeries([[3, 10, 35, 43, 45, 100, 40], []]),
     ];
     this.axis.setGroupSeries(this.series);
 
@@ -3764,8 +3797,8 @@ QUnit.test("Concatenate auto breaks with user breaks", function(assert) {
 
 QUnit.test("Filter scalebreaks on zoom", function(assert) {
     this.series = [
-        this.stubSeries([3, 10, 100, 40]),
-        this.stubSeries([80, 120, 40])
+        this.stubSeries([[3, 10, 100, 40], []]),
+        this.stubSeries([[80, 120, 40], []])
     ];
     this.axis.setGroupSeries(this.series);
 
@@ -3785,8 +3818,8 @@ QUnit.test("Filter scalebreaks on zoom", function(assert) {
 
 QUnit.test("Recalculate scale breaks on zoom", function(assert) {
     this.axis.setGroupSeries([
-        this.stubSeries([3, 10, 40]),
-        this.stubSeries([80, 120, 40])
+        this.stubSeries([[3, 10, 40], []]),
+        this.stubSeries([[80, 120, 40], []])
     ]);
 
     this.updateOptions({
@@ -3797,8 +3830,8 @@ QUnit.test("Recalculate scale breaks on zoom", function(assert) {
     this.axis.createTicks(this.canvas);
 
     this.axis.setGroupSeries([
-        this.stubSeries([3, 10]),
-        this.stubSeries([80, 120, 40])
+        this.stubSeries([[3, 10], []]),
+        this.stubSeries([[80, 120, 40], []])
     ]);
 
     this.axis.zoom(50, 100);
@@ -3807,11 +3840,10 @@ QUnit.test("Recalculate scale breaks on zoom", function(assert) {
     assert.deepEqual(this.tickGeneratorSpy.lastCall.args[7], [{ from: 80, to: 100, cumulativeWidth: 0 }]);
 });
 
-
 QUnit.test("Reset zoom", function(assert) {
     this.series = [
-        this.stubSeries([3, 10, 100, 40]),
-        this.stubSeries([80, 120, 40])
+        this.stubSeries([[3, 10, 100, 40], []]),
+        this.stubSeries([[80, 120, 40], []])
     ];
     this.axis.setGroupSeries(this.series);
 
@@ -3831,8 +3863,8 @@ QUnit.test("Reset zoom", function(assert) {
 
 QUnit.test("Do not generate scale breaks on zooming if multiple axis", function(assert) {
     this.axis.setGroupSeries([
-        this.stubSeries([3, 10, 40]),
-        this.stubSeries([80, 120, 40])
+        this.stubSeries([[3, 10, 40], []]),
+        this.stubSeries([[80, 120, 40], []])
     ]);
 
     this.updateOptions({
@@ -3843,14 +3875,62 @@ QUnit.test("Do not generate scale breaks on zooming if multiple axis", function(
     this.axis.createTicks(this.canvas);
 
     this.axis.setGroupSeries([
-        this.stubSeries([3, 10]),
-        this.stubSeries([80, 120, 40])
+        this.stubSeries([[3, 10], []]),
+        this.stubSeries([[80, 120, 40], []])
     ]);
 
     this.axis.zoom(50, 100);
     this.axis.createTicks(this.canvas);
 
     assert.deepEqual(this.tickGeneratorSpy.lastCall.args[7], []);
+});
+
+QUnit.test("Generate the breaks take into account the edge points that out of the range", function(assert) {
+    this.series = [
+        this.stubSeries([[14, 50, 100], [20, 43]])
+    ];
+    this.axis.setGroupSeries(this.series);
+
+    this.updateOptions({
+        min: 0,
+        max: 100
+    });
+
+    this.axis.createTicks(this.canvas);
+
+    assert.deepEqual(this.tickGeneratorSpy.lastCall.args[7], [{ from: 20, to: 43, cumulativeWidth: 0 }, { from: 50, to: 100, cumulativeWidth: 0 }]);
+});
+
+QUnit.test("Generate the breaks take into account the edge points that out of the range, min range === min edge value", function(assert) {
+    this.series = [
+        this.stubSeries([[30, 100], [90, 2]])
+    ];
+    this.axis.setGroupSeries(this.series);
+
+    this.updateOptions({
+        min: 2,
+        max: 100
+    });
+
+    this.axis.createTicks(this.canvas);
+
+    assert.deepEqual(this.tickGeneratorSpy.lastCall.args[7], [{ from: 2, to: 30, cumulativeWidth: 0 }, { from: 30, to: 90, cumulativeWidth: 0 }]);
+});
+
+QUnit.test("Generate the breaks take into account the edge points that out of the range, edge point equal to point in the range", function(assert) {
+    this.series = [
+        this.stubSeries([[2, 30, 100], [30, 90]])
+    ];
+    this.axis.setGroupSeries(this.series);
+
+    this.updateOptions({
+        min: 2,
+        max: 100
+    });
+
+    this.axis.createTicks(this.canvas);
+
+    assert.deepEqual(this.tickGeneratorSpy.lastCall.args[7], [{ from: 2, to: 30, cumulativeWidth: 0 }, { from: 30, to: 90, cumulativeWidth: 0 }]);
 });
 
 QUnit.module("Margins calculation with scale breaks", environment2DTranslator);

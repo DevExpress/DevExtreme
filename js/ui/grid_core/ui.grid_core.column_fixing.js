@@ -17,6 +17,7 @@ var CONTENT_CLASS = "content",
     LAST_CELL_CLASS = "dx-last-cell",
     HOVER_STATE_CLASS = "dx-state-hover",
     FIXED_COL_CLASS = "dx-col-fixed",
+    FIXED_COLUMNS_CLASS = "dx-fixed-columns",
     POINTER_EVENTS_TARGET_CLASS = "dx-pointer-events-target",
     POINTER_EVENTS_NONE_CLASS = "dx-pointer-events-none",
 
@@ -623,7 +624,11 @@ var RowsViewFixedColumnsExtender = extend({}, baseFixedColumns, {
 
         this.callBase(change);
 
-        if(this.option("hoverStateEnabled") && this._isFixedColumns) {
+        var isFixedColumns = this._isFixedColumns;
+
+        this.element().toggleClass(FIXED_COLUMNS_CLASS, isFixedColumns);
+
+        if(this.option("hoverStateEnabled") && isFixedColumns) {
             this._attachHoverEvents();
         }
     },

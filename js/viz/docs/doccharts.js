@@ -1984,9 +1984,9 @@ var dxChart = {
         * @name dxchartoptions_valueaxis_maxautobreakcount
         * @publicName maxAutoBreakCount
         * @type numeric
-        * @default undefined
+        * @default 4
         */
-        maxAutoBreakCount: undefined,
+        maxAutoBreakCount: 4,
         /**
         * @name dxchartoptions_valueaxis_title
         * @publicName title

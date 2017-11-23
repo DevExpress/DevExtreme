@@ -99,6 +99,29 @@ QUnit.test("Find templates by links (nonexistent template)", function(assert) {
         });
 });
 
+QUnit.test("Find templates by links (right options for jquery.ajax)", function(assert) {
+    var done = assert.async(),
+        url = "../../helpers/someview.html";
+
+    ajaxMock.setup({
+        url: url,
+        status: 200,
+        callback: function(request) {
+            assert.equal(request.dataType, "html");
+            assert.equal(request.contentType, undefined);
+            done();
+        }
+    });
+
+    $("head").append('<li' + 'nk rel="dx-template" type="text/html" href="' + url + '"/>');
+    var engine = new ViewEngineTester({
+        $root: $("<div></div>"),
+        disableInit: true
+    });
+
+    engine.init();
+});
+
 QUnit.test("Load a dynamic view from url", function(assert) {
     var done = assert.async();
 

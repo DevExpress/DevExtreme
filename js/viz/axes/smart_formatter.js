@@ -5,7 +5,7 @@ var _format = require("../core/format"),
     typeUtils = require("../../core/utils/type"),
     dateUtils = require("../../core/utils/date"),
     mathUtils = require("../../core/utils/math"),
-    getLog = require("../core/utils").getLog,
+    log10 = require("../core/utils").getAdjustedLog10,
     isDefined = typeUtils.isDefined,
     isFunction = typeUtils.isFunction,
     isExponential = typeUtils.isExponential,
@@ -17,10 +17,6 @@ var _format = require("../core/format"),
     EXPONENTIAL = "exponential",
     formats = ["fixedPoint", "thousands", "millions", "billions", "trillions", EXPONENTIAL],
     dateUnitIntervals = ['millisecond', 'second', 'minute', 'hour', 'day', 'month', 'year'];
-
-function log10(value) {
-    return adjust(getLog(value, 10));
-}
 
 function getDatesDifferences(prevDate, curDate, nextDate, tickFormat) {
     var prevDifferences,

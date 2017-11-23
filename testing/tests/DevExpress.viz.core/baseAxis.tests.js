@@ -1166,6 +1166,80 @@ QUnit.test("marginOptions.checkInterval on valueAxis - ignore interval", functio
     });
 });
 
+QUnit.test("marginOptions.checkInterval on argumentAxis - correctly apply margins for uneven boundaries", function(assert) {
+    this.testMargins(assert, {
+        options: {
+            valueMarginsEnabled: true
+        },
+        marginOptions: {
+            checkInterval: true
+        },
+        range: {
+            min: 102.3,
+            max: 20105.5,
+            interval: 897.7
+        },
+        ticks: [200, 400, 600, 800, 1000, 1200, 1400, 1600, 1800, 2000],
+        expectedRange: {
+            min: -346.6,
+            max: 20500,
+            minVisible: -346.6,
+            maxVisible: 20500,
+            interval: 897.7
+        },
+        isArgumentAxis: true
+    });
+});
+
+QUnit.test("marginOptions.size on argumentAxis - correctly apply margins for uneven boundaries", function(assert) {
+    this.testMargins(assert, {
+        options: {
+            valueMarginsEnabled: true
+        },
+        marginOptions: {
+            size: 20
+        },
+        range: {
+            min: 1998,
+            max: 2005,
+            interval: 1
+        },
+        ticks: [1998, 1999, 2000, 2001, 2002, 2003, 2004, 2005],
+        expectedRange: {
+            min: 1997.75,
+            max: 2005.25,
+            minVisible: 1997.75,
+            maxVisible: 2005.25,
+            interval: 1
+        },
+        isArgumentAxis: true
+    });
+});
+
+QUnit.test("marginOptions.size on argumentAxis - correctly apply margins for uneven boundaries (large interval)", function(assert) {
+    this.testMargins(assert, {
+        options: {
+            valueMarginsEnabled: true
+        },
+        marginOptions: {
+            size: 20
+        },
+        range: {
+            min: 1950,
+            max: 2050,
+            interval: 20
+        },
+        ticks: [1950, 1970, 1990, 2010, 2030, 2050],
+        expectedRange: {
+            min: 1946.4,
+            max: 2053.5,
+            minVisible: 1946.4,
+            maxVisible: 2053.5
+        },
+        isArgumentAxis: true
+    });
+});
+
 QUnit.test("marginOptions.checkInterval and marginOptions.size, size more than interval - apply margins by size", function(assert) {
     this.testMargins(assert, {
         options: {
@@ -1566,6 +1640,31 @@ QUnit.test("Do not calculate any margin for discrete axis", function(assert) {
     });
 });
 
+QUnit.test("Logarithmic axis. Correctly adjust boundary values", function(assert) {
+    this.testMargins(assert, {
+        options: {
+            type: "logarithmic",
+            logarithmBase: 2,
+            valueMarginsEnabled: true
+        },
+        range: {
+            min: 1,
+            max: 10,
+            axisType: "logarithmic",
+            base: 2,
+            interval: 0.1
+        },
+        ticks: [1, 2, 4, 8],
+        expectedRange: {
+            min: 1,
+            max: 10,
+            minVisible: 1,
+            maxVisible: 10
+        },
+        isArgumentAxis: true
+    });
+});
+
 QUnit.test("Logarithmic axis. minValueMargin and maxValueMargin - correctly apply margins", function(assert) {
     this.testMargins(assert, {
         options: {
@@ -1643,6 +1742,59 @@ QUnit.test("Logarithmic axis. marginOptions.size - correctly apply margins", fun
             max: 1000000,
             minVisible: 1,
             maxVisible: 1000000
+        },
+        isArgumentAxis: true
+    });
+});
+
+QUnit.test("Logarithmic axis. Correctly apply margins for uneven boundaries", function(assert) {
+    this.testMargins(assert, {
+        options: {
+            type: "logarithmic",
+            logarithmBase: 10,
+            valueMarginsEnabled: true
+        },
+        range: {
+            min: 102.3,
+            max: 200105.5,
+            axisType: "logarithmic",
+            base: 10,
+            interval: 0.1
+        },
+        ticks: [1000, 100000],
+        expectedRange: {
+            min: 102.3,
+            max: 200105.5,
+            minVisible: 102.3,
+            maxVisible: 200105.5
+        },
+        isArgumentAxis: true
+    });
+});
+
+QUnit.test("Logarithmic axis. marginOptions.checkInterval - correctly apply margins for uneven boundaries", function(assert) {
+    this.testMargins(assert, {
+        options: {
+            type: "logarithmic",
+            logarithmBase: 10,
+            valueMarginsEnabled: true
+        },
+        marginOptions: {
+            checkInterval: true
+        },
+        range: {
+            min: 1.3,
+            max: 200105.5,
+            axisType: "logarithmic",
+            base: 10,
+            interval: 0.1
+        },
+        ticks: [10, 1000, 100000],
+        expectedRange: {
+            min: 1.15,
+            max: 224000,
+            minVisible: 1.15,
+            maxVisible: 224000
         },
         isArgumentAxis: true
     });

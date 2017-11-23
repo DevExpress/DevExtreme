@@ -675,17 +675,19 @@
         position: relative;
         overflow: hidden;
 
-        &.dx-scrollable .dx-scrollable-content {
-            z-index: 2;
+        &.dx-fixed-columns {
+            &.dx-scrollable .dx-scrollable-content {
+                z-index: 2;
+            }
+            .dx-scrollable-scrollbar {
+                z-index: 3;
+            }
         }
 
         .dx-@{widgetName}-content {
             overflow-anchor: none; /* Chrome 56+ */
         }
 
-        .dx-scrollable-scrollbar {
-            z-index: 3;
-        }
 
         &:focus{
             outline: 0;
@@ -766,6 +768,9 @@
         position: absolute;
         top: 50%;
         left: 50%;
+        width: 100%;
+        text-align: center;
+        transform: translate(-50%, -50%);
     }
 
     .dx-@{widgetName}-bottom-load-panel {

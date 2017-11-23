@@ -610,6 +610,25 @@ QUnit.test("Custom ticks", function(assert) {
     assert.deepEqual(this.axis._tickInterval, 6);
 });
 
+QUnit.test("T574873. Custom ticks with minor ticks calculation", function(assert) {
+    this.createAxis();
+    this.updateOptions({
+        argumentType: "numeric",
+        type: "continuous",
+        allowDecimals: true,
+        customTicks: [0, 6, 12, 18],
+        calculateMinors: true
+    });
+
+    this.axis.setBusinessRange({ minVisible: 0, maxVisible: 20, addRange: function() { } });
+
+    //act
+    this.axis.createTicks(canvas(200));
+
+    assert.deepEqual(this.axis._majorTicks.map(value), [0, 6, 12, 18]);
+    assert.deepEqual(this.axis._tickInterval, 6);
+});
+
 QUnit.test("Custom one tick", function(assert) {
     this.createAxis();
     this.updateOptions({
@@ -1871,6 +1890,28 @@ QUnit.test("Tick interval can be set as string value", function(assert) {
     assert.deepEqual(this.axis._tickInterval, { "days": 1 });
 });
 
+QUnit.test("The Daylight Saving day on the Central European time zone", function(assert) {
+    this.createAxis();
+    this.updateOptions({
+        valueType: "datetime",
+        type: "continuous"
+    });
+
+    this.axis.setBusinessRange({ minVisible: new Date("2017-10-28T23:55:00+01:00"), maxVisible: new Date("2017-10-29T05:05:00+00:00"), addRange: function() { } });
+
+    //act
+    this.axis.createTicks(canvas(400));
+
+    assert.deepEqual(this.axis._majorTicks.map(value), [new Date("2017-10-29T00:00:00+01:00"),
+        new Date("2017-10-29T01:00:00+01:00"),
+        new Date("2017-10-29T01:00:00+00:00"),
+        new Date("2017-10-29T02:00:00+00:00"),
+        new Date("2017-10-29T03:00:00+00:00"),
+        new Date("2017-10-29T04:00:00+00:00"),
+        new Date("2017-10-29T05:00:00+00:00")].map(function(d) { return d.valueOf(); }));
+    assert.deepEqual(this.axis._tickInterval, { "hours": 1 });
+});
+
 QUnit.module("DateTime. Minor ticks", environment);
 
 QUnit.test("tickInterval month - minorTickInterval can not be in weeks", function(assert) {
@@ -2197,7 +2238,7 @@ QUnit.test("Tune scale break values. Logarithmic", function(assert) {
         type: "logarithmic",
         logarithmBase: 10,
         breakStyle: { width: 0 },
-        breaks: [{ startValue: 0.1, endValue: 1000 }]
+        breaks: [{ startValue: 0.1, endValue: 10000 }]
     });
 
     this.axis.setBusinessRange({ minVisible: 0.0001, maxVisible: 100000, addRange: function() { return this; } });
@@ -2209,7 +2250,7 @@ QUnit.test("Tune scale break values. Logarithmic", function(assert) {
 
     assert.equal(this.axis._tickInterval, 2);
     assert.roughEqual(scaleBreak.from, 1, 0.001);
-    assert.roughEqual(scaleBreak.to, 100, 0.001);
+    assert.roughEqual(scaleBreak.to, 1000, 0.001);
 });
 
 QUnit.test("Tune scale break values when axis division factor is too big", function(assert) {
@@ -2289,16 +2330,17 @@ QUnit.test("Generate minor ticks when scale breaks at the begin and at the end",
         breakStyle: { width: 0 },
         allowDecimals: false,
         calculateMinors: true,
-        breaks: [{ startValue: 0, endValue: 25 }, { startValue: 85, endValue: 106 }]
+        minorTickInterval: 4,
+        breaks: [{ startValue: 0, endValue: 40 }, { startValue: 85, endValue: 106 }]
     });
 
     this.axis.setBusinessRange({ minVisible: 1, maxVisible: 105, addRange: function() { return this; } });
 
     //act
-    this.axis.createTicks(canvas(350));
+    this.axis.createTicks(canvas(370));
 
-    assert.equal(this.axis._tickInterval, 20);
-    assert.deepEqual(this.axis._minorTicks.map(value), [4, 8, 16, 24, 28, 32, 36, 44, 48, 52, 56, 64, 68, 72, 76, 84, 88, 92, 96, 104], "monir ticks");
+    assert.equal(this.axis._tickInterval, 10);
+    assert.deepEqual(this.axis._minorTicks.map(value), [4, 36, 44, 48, 54, 58, 64, 68, 74, 78, 84, 88, 104], "monir ticks");
 });
 
 QUnit.test("Move datetime ticks to work day", function(assert) {
@@ -2331,7 +2373,7 @@ QUnit.test("Correct first tick to work day", function(assert) {
         valueType: "datetime",
         type: "continuous",
         breakStyle: { width: 0 },
-        tickInterval: { hours: 14 },
+        tickInterval: { weeks: 1 },
         workdaysOnly: true,
         workWeek: [1, 2, 3, 4, 5]
     });
@@ -2347,6 +2389,50 @@ QUnit.test("Correct first tick to work day", function(assert) {
         new Date(1994, 2, 21).getTime(),
         new Date(1994, 2, 28).getTime(),
     ]);
+});
+
+QUnit.test("Correct first tick to work day. set tickInterval using string", function(assert) {
+    this.createAxis();
+    this.updateOptions({
+        valueType: "datetime",
+        type: "continuous",
+        breakStyle: { width: 0 },
+        tickInterval: "week",
+        workdaysOnly: true,
+        workWeek: [1, 2, 3, 4, 5],
+        axisDivisionFactor: 10
+    });
+
+    this.axis.setBusinessRange({ minVisible: new Date(1994, 2, 1), maxVisible: new Date(1994, 2, 31), addRange: function() { return this; } });
+
+    //act
+    this.axis.createTicks(canvas(500));
+
+    assert.deepEqual(this.axis._majorTicks.map(value), [
+        new Date(1994, 2, 7).getTime(),
+        new Date(1994, 2, 14).getTime(),
+        new Date(1994, 2, 21).getTime(),
+        new Date(1994, 2, 28).getTime()
+    ]);
+});
+
+QUnit.test("Do not give 2 days tick interval if big weekend", function(assert) {
+    this.createAxis();
+    this.updateOptions({
+        valueType: "datetime",
+        type: "continuous",
+        breakStyle: { width: 0 },
+        workdaysOnly: true,
+        workWeek: [2, 3, 4],
+        axisDivisionFactor: 10
+    });
+
+    this.axis.setBusinessRange({ minVisible: new Date(1994, 2, 1), maxVisible: new Date(1994, 5, 31), addRange: function() { return this; } });
+
+    //act
+    this.axis.createTicks(canvas(500));
+
+    assert.deepEqual(this.axis._tickInterval, { weeks: 1 });
 });
 
 QUnit.test("Move datetime ticks to work day. Tick interval data - move tick to start of work week", function(assert) {
@@ -2417,6 +2503,31 @@ QUnit.test("Remove scale break if it less than tickInterval", function(assert) {
         breakStyle: { width: 0 },
         allowDecimals: false,
         calculateMinors: true,
+        breaks: [{ startValue: 10, endValue: 200 }, { startValue: 350, endValue: 800 }]
+    });
+
+    this.axis.setBusinessRange({ minVisible: 0, maxVisible: 1000, addRange: function() { return this; } });
+
+    //act
+    this.axis.createTicks(canvas(200));
+
+    assert.equal(this.axis._tickInterval, 200, "interval");
+    assert.deepEqual(this.translator.updateBusinessRange.lastCall.args[0].breaks, [{
+        from: 450,
+        to: 700,
+        cumulativeWidth: 0
+    }]);
+});
+
+//T578577
+QUnit.test("Remove scale break if it is less than tickInterval after correction", function(assert) {
+    this.createAxis();
+    this.updateOptions({
+        argumentType: "numeric",
+        type: "continuous",
+        breakStyle: { width: 0 },
+        allowDecimals: false,
+        calculateMinors: true,
         breaks: [{ startValue: 10, endValue: 200 }, { startValue: 350, endValue: 751 }]
     });
 
@@ -2426,11 +2537,7 @@ QUnit.test("Remove scale break if it less than tickInterval", function(assert) {
     this.axis.createTicks(canvas(200));
 
     assert.equal(this.axis._tickInterval, 250, "interval");
-    assert.deepEqual(this.translator.updateBusinessRange.lastCall.args[0].breaks, [{
-        from: 475,
-        to: 626,
-        cumulativeWidth: 0
-    }]);
+    assert.deepEqual(this.translator.updateBusinessRange.lastCall.args[0].breaks, []);
 });
 
 QUnit.test("Remove scale break if it less than tickInterval, logarithmic", function(assert) {
@@ -2496,4 +2603,23 @@ QUnit.test("Use original scale breaks after recalculation ticks", function(asser
         to: 850,
         cumulativeWidth: 0
     }]);
+});
+
+QUnit.test("Generate sexy tick when there are breaks", function(assert) {
+    this.createAxis();
+    this.updateOptions({
+        argumentType: "numeric",
+        type: "continuous",
+        allowDecimals: false,
+        calculateMinors: true,
+        breakStyle: { width: 0 },
+        breaks: [{ startValue: 1, endValue: 14.6 }, { startValue: 17.2, endValue: 95 }, { startValue: 95, endValue: 318 }]
+    });
+
+    this.axis.setBusinessRange({ minVisible: 0, maxVisible: 318, addRange: function() { return this; } });
+
+    //act
+    this.axis.createTicks(canvas(600));
+
+    assert.deepEqual(this.axis._majorTicks.map(value), [0, 1, 15, 16, 17, 95, 318], "ticks");
 });

@@ -91,14 +91,6 @@ function getScrollable(container) {
     return container.find(".dx-scrollable").dxScrollable("instance");
 }
 
-/**
-* @name dxPivotGridFieldChooserOptions_onContentReady
-* @publicName onContentReady
-* @extends Action
-* @hidden false
-* @action
-* @extend_doc
-*/
 var FieldChooser = BaseFieldChooser.inherit({
     _getDefaultOptions: function() {
         return extend(this.callBase(), {
@@ -659,6 +651,15 @@ var FieldChooser = BaseFieldChooser.inherit({
     },
 
     _adjustSortableOnChangedArgs: function() {
+    },
+
+    resetTreeView: function() {
+        var treeView = this.$element().find(".dx-treeview").dxTreeView("instance");
+
+        if(treeView) {
+            treeView.option("searchValue", "");
+            treeView.collapseAll();
+        }
     },
 
     /**

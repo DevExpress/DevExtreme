@@ -2456,6 +2456,21 @@ QUnit.test("Positive points", function(assert) {
     assert.equal(rangeData.max, 45, "max Visible Y");
 });
 
+QUnit.test("Bar. In the range shouldn't be the points that out of the zoom area", function(assert) {
+    var data = [{ arg: 1, val: 10 }, { arg: 2, val: 20 }, { arg: 3, val: 30 }, { arg: 4, val: 40 }, { arg: 5, val: 50 }, { arg: 6, val: 60 }],
+        rangeData,
+        series = createSeries($.extend({}, this.defaultOptions, { type: "bar" }), { argumentAxis: this.argumentAxis });
+
+    series.updateData(data);
+
+    this.zoom(2, 4.5);
+
+    rangeData = series.getViewport();
+
+    assert.equal(rangeData.min, 0, "min Visible Y");
+    assert.equal(rangeData.max, 40, "max Visible Y");
+});
+
 QUnit.test("Negative points", function(assert) {
     var data = [{ arg: 1, val: -10 }, { arg: 2, val: -20 }, { arg: 3, val: -30 }, { arg: 4, val: -40 }, { arg: 5, val: -50 }, { arg: 6, val: -60 }],
         rangeData,
@@ -2541,7 +2556,7 @@ QUnit.test("Simple series with zoom. Do not include value of edge points if they
     this.zoomArgument(2, 5.5);
     this.zoomValue(35, 70);
 
-    assert.deepEqual(series.getPointsInViewPort(), [40, 50, 35, 70]);
+    assert.deepEqual(series.getPointsInViewPort(), [[40, 50], [35, 70]]);
 });
 
 QUnit.test("Include value of edge points that out of argument viewport but they are in valueAxis viewport", function(assert) {
@@ -2561,10 +2576,10 @@ QUnit.test("Include value of edge points that out of argument viewport but they 
     this.zoomArgument(2.5, 5.5);
     this.zoomValue(25, 70);
 
-    assert.deepEqual(series.getPointsInViewPort(), [44, 30, 40, 50, 60, 25, 70]);
+    assert.deepEqual(series.getPointsInViewPort(), [[30, 40, 50], [44, 60]]);
 });
 
-QUnit.test("Simple series without zoom", function(assert) {
+QUnit.test("Line series without zoom", function(assert) {
     var data = [
         { arg: 1, val: 10 },
         { arg: 2, val: 20 },
@@ -2578,10 +2593,30 @@ QUnit.test("Simple series without zoom", function(assert) {
 
     series.updateData(data);
 
-    assert.deepEqual(series.getPointsInViewPort(), [10, 20, 30, 40, 50, 60, 70]);
+    assert.deepEqual(series.getPointsInViewPort(), [[10, 20, 30, 40, 50, 60, 70], []]);
 });
 
-QUnit.test("Range series", function(assert) {
+QUnit.test("Range series. Area. With edge points", function(assert) {
+    var data = [
+            { arg: 1, val1: 10, val2: 25 },
+            { arg: 2, val1: 20, val2: 35 },
+            { arg: 3, val1: 30, val2: 45 },
+            { arg: 4, val1: 40, val2: 55 },
+            { arg: 5, val1: 50, val2: 65 },
+            { arg: 6, val1: 60, val2: 75 },
+            { arg: 7, val1: 70, val2: 85 }
+        ],
+        series = createSeries({ type: "rangearea", argumentAxisType: "continuous" }, { argumentAxis: this.argumentAxis, valueAxis: this.valueAxis });
+
+    series.updateData(data);
+
+    this.zoomArgument(2, 5.5);
+    this.zoomValue(25, 55);
+
+    assert.deepEqual(series.getPointsInViewPort(), [[35, 30, 45, 40, 55, 50], [25, 55]]);
+});
+
+QUnit.test("Bar series with zooming. Without edge points", function(assert) {
     var data = [
             { arg: 1, val1: 10, val2: 25 },
             { arg: 2, val1: 20, val2: 35 },
@@ -2598,5 +2633,5 @@ QUnit.test("Range series", function(assert) {
     this.zoomArgument(2, 5.5);
     this.zoomValue(25, 55);
 
-    assert.deepEqual(series.getPointsInViewPort(), [25, 35, 30, 45, 40, 55, 50, 25, 55]);
+    assert.deepEqual(series.getPointsInViewPort(), [[35, 30, 45, 40, 55, 50], []]);
 });

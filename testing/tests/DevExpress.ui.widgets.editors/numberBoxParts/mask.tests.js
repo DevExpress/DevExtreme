@@ -6,7 +6,8 @@ var $ = require("jquery"),
 
 require("ui/text_box/ui.text_editor");
 
-var INPUT_CLASS = "dx-texteditor-input";
+var INPUT_CLASS = "dx-texteditor-input",
+    MINUS_KEY = 189;
 
 var moduleConfig = {
     beforeEach: function() {
@@ -20,6 +21,7 @@ var moduleConfig = {
         this.keyboard = keyboardMock(this.input, true);
     }
 };
+
 
 QUnit.module("format: api value changing", moduleConfig);
 
@@ -56,8 +58,7 @@ QUnit.test("value should be reformatted when format option changed", function(as
 });
 
 QUnit.test("pressing '-' button should revert the number", function(assert) {
-    var NUMPAD_MINUS_KEY = 109,
-        MINUS_KEY = 189;
+    var NUMPAD_MINUS_KEY = 109;
 
     this.instance.option({
         format: "#.000",
@@ -86,8 +87,6 @@ QUnit.test("pressing '-' button should revert the number", function(assert) {
 });
 
 QUnit.test("pressing '-' button should revert zero number", function(assert) {
-    var MINUS_KEY = 189;
-
     this.instance.option({
         format: "#0",
         value: 0
@@ -102,31 +101,44 @@ QUnit.test("pressing '-' button should revert zero number", function(assert) {
     assert.equal(1 / this.instance.option("value"), Infinity, "value is positive");
 });
 
-QUnit.module("format: minimum and maximum", moduleConfig);
-
-QUnit.test("input should be prevented when digit is not in range", function(assert) {
+QUnit.test("setting value to undefined should work correctly", function(assert) {
     this.instance.option({
-        min: 5,
-        max: 10
+        format: "#0",
+        value: 667
     });
 
-    this.keyboard.type("4");
-    assert.equal(this.input.val(), "", "input for incorrect digit was prevented");
+    this.instance.option("value", "");
+    this.instance.option("value", undefined);
+
+    assert.strictEqual(this.input.val(), "", "value is correct");
+    assert.strictEqual(this.instance.option("value"), undefined, "value is correct");
 });
 
-QUnit.test("input should not be prevented if digit + '0' is in range", function(assert) {
+QUnit.module("format: minimum and maximum", moduleConfig);
+
+QUnit.test("input should be fitted into range after value change", function(assert) {
     this.instance.option({
-        min: 5,
-        max: 40
+        min: 1,
+        max: 4,
+        value: 0
     });
 
-    this.keyboard.type("4");
-    assert.equal(this.input.val(), "4", "input for digit was not prevented");
+    this.instance.option("value", 5);
+    assert.equal(this.input.val(), "5", "changing via api is customers responsibility");
+    assert.equal(this.instance.option("value"), 5, "changing via api is customers responsibility");
+
+    this.input.val("0");
+    this.keyboard.input("0").change();
+    assert.equal(this.input.val(), "1", "text is adjusted to min");
+    assert.equal(this.instance.option("value"), 1, "value is adjusted to min");
+
+    this.input.val("8");
+    this.keyboard.input("8").change();
+    assert.equal(this.input.val(), "4", "text is adjusted to max");
+    assert.equal(this.instance.option("value"), 4, "value is adjusted to max");
 });
 
 QUnit.test("invert sign should be prevented if minimum is larger than 0", function(assert) {
-    var MINUS_KEY = 189;
-
     this.instance.option({
         min: 0,
         value: 4

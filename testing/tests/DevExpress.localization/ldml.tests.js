@@ -4,6 +4,9 @@ var getNumberParser = require("localization/ldml/number").getParser;
 var getNumberFormatter = require("localization/ldml/number").getFormatter;
 var getNumberFormat = require("localization/ldml/number").getFormat;
 var getDateParser = require("localization/ldml/date.parser").getParser;
+var getDateFormatter = require("localization/ldml/date.formatter").getFormatter;
+var getDateFormat = require("localization/ldml/date.format").getFormat;
+var dateParts = require("localization/default_date_names");
 var numberLocalization = require("localization/number");
 
 require("localization/currency");
@@ -19,6 +22,44 @@ QUnit.test("parse dd/MM/yyyy format", function(assert) {
     assert.deepEqual(parser(""), null, "parse empty string");
     assert.deepEqual(parser("22:09:2017"), null, "parse with wrong separators");
     assert.deepEqual(parser("09/22/2017"), null, "parse with switched month and day");
+    //T574647
+    assert.deepEqual(parser("31/12/2017"), new Date(2017, 11, 31), "parse date with last day of month");
+});
+
+QUnit.test("getFormat", function(assert) {
+    var checkFormat = function(format, customDateParts) {
+        var formatter = getDateFormatter(format, customDateParts || dateParts);
+        assert.strictEqual(getDateFormat(formatter), format, format);
+    };
+
+    checkFormat("M d");
+    checkFormat("MM d");
+    checkFormat("MMM d");
+    checkFormat("MMMM d");
+    checkFormat("dd/MM/yyyy");
+    checkFormat("dd/MM/yyyy HH:mm:ss.SSS");
+    checkFormat("'M'MM d");
+    checkFormat("h:mm aaaa", {
+        getPeriodNames: function() {
+            return ["a. m.", "p. m."];
+        }
+    });
+    checkFormat("h:mm aaa", {
+        getPeriodNames: function() {
+            return ["PG", "PTG"]; //ms
+        }
+    });
+    checkFormat("h:mm aaaa", {
+        getPeriodNames: function() {
+            return ["म.पू.", "म.उ."]; //mr
+        }
+    });
+    checkFormat("EEEE", {
+        getDayNames: function() {
+            return ["quarta-feira", "quinta-feira", "sexta-feira", "sábado", "domingo", "segunda-feira", "terça-feira"]; //pt
+        }
+    });
+    checkFormat("yyyy 'm'. MMMM d");
 });
 
 QUnit.module("number parser");

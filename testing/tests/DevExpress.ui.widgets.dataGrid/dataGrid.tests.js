@@ -2467,8 +2467,7 @@ QUnit.test("resize on change visibility", function(assert) {
     $($dataGrid).trigger("dxshown");
 
     //assert
-    assert.ok(parseInt($dataGrid.find(".dx-datagrid-nodata").css("margin-left")) < 0, "nodata text left margin exists");
-    assert.ok(parseInt($dataGrid.find(".dx-datagrid-nodata").css("margin-top")) < 0, "nodata text top margin exists");
+    assert.equal($dataGrid.find(".dx-datagrid-nodata").length, 1, "nodata text is shown");
 });
 
 QUnit.test("Height of Data grid is not changed when allowResizing is false and allowReordering is true", function(assert) {
@@ -6658,7 +6657,7 @@ QUnit.test("Column hiding should works with masterDetail and column fixing", fun
     assert.notOk($masterDetailRows.is(":visible"), "master-detail rows are not visible");
 });
 
-QUnit.test("Scroll positioned correct with fixed columns and editing", function(assert) {
+QUnit.testInActiveWindow("Scroll positioned correct with fixed columns and editing", function(assert) {
     if(devices.real().deviceType !== "desktop") {
         assert.ok(true, "keyboard navigation is not actual for not desktop devices");
         return;

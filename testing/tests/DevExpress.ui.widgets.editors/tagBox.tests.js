@@ -2806,7 +2806,7 @@ QUnit.testInActiveWindow("input should be focused after click on field (searchEn
 
 QUnit.module("popup position and size", moduleSetup);
 
-QUnit.test("popup height should be depended from its content height", function(assert) {
+QUnit.testInActiveWindow("popup height should be depended from its content height", function(assert) {
     var $element = $("#tagBox").dxTagBox({
         dataSource: ["Antigua and Barbuda", "Albania", "American Samoa"],
         acceptCustomValue: true,
@@ -3358,7 +3358,7 @@ QUnit.test("the list selection should be updated after value is changed while ed
     assert.equal(this.getListInstance().option("selectedItems").length, 1, "list selection is updated after removing item");
 });
 
-QUnit.test("the value should be applied after search (T402855)", function(assert) {
+QUnit.testInActiveWindow("the value should be applied after search (T402855)", function(assert) {
     this.reinit({
         applyValueMode: "useButtons",
         items: ["aa", "ab", "bb", "ac", "bc"],
@@ -3688,15 +3688,18 @@ QUnit.test("tags container should be scrolled on mobile devices", function(asser
     }
 });
 
-QUnit.test("preventDefault should be called - T454876", function(assert) {
-    var spy = sinon.spy();
+QUnit.testInActiveWindow("focusOut should be prevented when tagContainer clicked - T454876", function(assert) {
+    var focusOutHandler = sinon.spy(),
+        $input = this.$element.find("input"),
+        $tagContainer = this.$element.find(".dx-tag-container");
 
-    $(this.$element).on("dxpointerdown", spy);
+    this.instance.on("focusOut", focusOutHandler);
 
-    $(this.$element.find(".dx-tag-container")).trigger("dxpointerdown");
+    $input.focus();
+    $tagContainer.trigger("dxpointerdown");
+    $input.blur();
 
-    var event = spy.args[0][0];
-    assert.ok(event.isDefaultPrevented(), "default is prevented");
+    assert.equal(focusOutHandler.callCount, 0, "focusout has been prevented");
 });
 
 

@@ -2,7 +2,7 @@
 
 # Run inside https://hub.docker.com/r/devexpress/devextreme-build/
 
-trap "echo 'Interrupted!' && exit 1" TERM INT
+trap "echo 'Interrupted!' && kill -9 0" TERM INT
 
 export DEVEXTREME_DOCKER_CI=true
 export NUGET_PACKAGES=$PWD/dotnet_packages
@@ -20,8 +20,10 @@ function run_test {
 
     [ -n "$CONSTEL" ] && url="$url&constellation=$CONSTEL"
 
-    Xvfb :99 -ac -screen 0 1200x600x24 &
-    x11vnc -display :99 2>/dev/null &
+    if [ "$HEADLESS" != "true" ]; then
+        Xvfb :99 -ac -screen 0 1200x600x24 &
+        x11vnc -display :99 2>/dev/null &
+    fi
 
     npm i
     npm run build
@@ -29,7 +31,7 @@ function run_test {
     # See https://github.com/DevExpress/DevExtreme/pull/1251
     chmod 755 $(find dotnet_packages -type d)
 
-    dotnet ./testing/runner/bin/Debug/dist/runner.dll --single-run & runner_pid=$!
+    dotnet ./testing/runner/bin/runner.dll --single-run & runner_pid=$!
 
     while ! httping -qc1 $url; do
         sleep 1
@@ -44,14 +46,26 @@ function run_test {
 
         *)
             google-chrome-stable --version
-            dbus-launch google-chrome-stable \
-                --no-sandbox \
-                --no-first-run \
-                --no-default-browser-check \
-                --disable-gpu \
-                --disable-translate \
-                --user-data-dir=/tmp/chrome \
-                $url &
+
+            if [ "$HEADLESS" == "true" ]; then
+                google-chrome-stable \
+                    --no-sandbox \
+                    --disable-gpu \
+                    --user-data-dir=/tmp/chrome \
+                    --headless \
+                    --remote-debugging-address=0.0.0.0 \
+                    --remote-debugging-port=9222 \
+                    $url &>headless-chrome.log &
+            else
+                dbus-launch --exit-with-session google-chrome-stable \
+                    --no-sandbox \
+                    --disable-gpu \
+                    --user-data-dir=/tmp/chrome \
+                    --no-first-run \
+                    --no-default-browser-check \
+                    --disable-translate \
+                    $url &
+            fi
         ;;
 
     esac

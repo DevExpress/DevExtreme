@@ -16,6 +16,8 @@
     <TargetFramework>netcoreapp2.0</TargetFramework>
     <StartupObject>StyleCompiler.Program</StartupObject>
     <OutputType>Exe</OutputType>
+    <OutputPath>bin/</OutputPath>
+    <AppendTargetFrameworkToOutputPath>false</AppendTargetFrameworkToOutputPath>
     <DebugType>portable</DebugType>
   </PropertyGroup>
 

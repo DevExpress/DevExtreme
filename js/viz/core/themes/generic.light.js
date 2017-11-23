@@ -676,7 +676,7 @@ registerTheme({
                 visible: true
             },
             autoBreaksEnabled: false,
-            maxAutoBreakCount: undefined
+            maxAutoBreakCount: 4
         },
         commonPaneSettings: {
             backgroundColor: NONE,

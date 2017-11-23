@@ -1020,20 +1020,46 @@ module.exports = {
                 }
             },
             keyboardNavigation: {
-                _isCellValid: function(cell) {
-                    return this.callBase(cell) && !cell.hasClass(this.addWidgetPrefix(HIDDEN_COLUMN_CLASS));
+                _isCellValid: function($cell) {
+                    return this.callBase($cell) && !$cell.hasClass(this.addWidgetPrefix(HIDDEN_COLUMN_CLASS));
                 },
 
-                _processNextCellInMasterDetail: function(nextCell) {
-                    this.callBase(nextCell);
+                _getDataCellElements: function($row) {
+                    return $row.find("td:not(.dx-datagrid-hidden-column):not([class*='dx-command-'])");
+                },
 
-                    if(!this._isInsideEditForm(nextCell) && nextCell) {
+                _processNextCellInMasterDetail: function($nextCell) {
+                    this.callBase($nextCell);
+
+                    if(!this._isInsideEditForm($nextCell) && $nextCell) {
                         var focusHandler = function() {
-                            eventsEngine.off(nextCell, "focus", focusHandler);
-                            eventsEngine.trigger(nextCell, "dxclick");
+                            eventsEngine.off($nextCell, "focus", focusHandler);
+                            eventsEngine.trigger($nextCell, "dxclick");
                         };
-                        eventsEngine.on(nextCell, "focus", focusHandler);
+                        eventsEngine.on($nextCell, "focus", focusHandler);
                     }
+                },
+
+                _handleTabKeyOnMasterDetailCell: function(eventTarget, direction) {
+                    var result = this.callBase(eventTarget, direction);
+                    if(!result) {
+                        var $currentCell = this._getFocusedCell(),
+                            $row = $currentCell.parent(),
+                            $dataCells = this._getDataCellElements($row),
+                            $targetCell = direction === "next" ? $dataCells.last() : $dataCells.first(),
+                            rowIndex = $row.get(0).rowIndex,
+                            adaptiveController = this._adaptiveController,
+                            key = this._dataController.getKeyByRowIndex(direction === "next" ? rowIndex : rowIndex - 1),
+                            isCellElementsEquals = $currentCell && $targetCell && $currentCell.get(0) === $targetCell.get(0);
+
+                        return adaptiveController.isAdaptiveDetailRowExpanded(key) && isCellElementsEquals;
+                    }
+                    return result;
+                },
+
+                init: function() {
+                    this.callBase();
+                    this._adaptiveController = this.getController("adaptiveColumns");
                 }
             }
         }

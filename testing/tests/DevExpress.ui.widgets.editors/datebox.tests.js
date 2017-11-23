@@ -286,6 +286,23 @@ QUnit.test("invalid value should be cleared after clear button click", function(
     assert.equal($input.val(), "", "dateBox input is empty");
 });
 
+QUnit.test("clear button press should save value change event", function(assert) {
+    var onValueChanged = sinon.spy(),
+        $dateBox = $("#dateBox").dxDateBox({
+            type: "date",
+            pickerType: "calendar",
+            showClearButton: true,
+            onValueChanged: onValueChanged,
+            value: new Date()
+        }),
+        clearButton = $dateBox.find(".dx-clear-button-area");
+
+    $(clearButton).trigger("dxclick");
+
+    assert.equal(onValueChanged.callCount, 2, "value changed event was fired twice");
+    assert.ok(onValueChanged.getCall(1).args[0].event, "event was saved");
+});
+
 QUnit.test("out of range value should not be marked as invalid on init", function(assert) {
     var $dateBox = $("#widthRootStyle").dxDateBox({
             value: new Date(2015, 3, 20),
@@ -2458,6 +2475,26 @@ QUnit.test("date box wrapper adaptivity class depends on the screen size", funct
         assert.ok(instance._popup._wrapper().hasClass(DATEBOX_ADAPTIVITY_MODE_CLASS), "there is the adaptivity class for the small screen");
     } finally {
         stub.restore();
+    }
+});
+
+QUnit.test("date box popup should have maximum 100% width", function(assert) {
+    var currentDevice = sinon.stub(devices, "current").returns({
+        platform: "generic",
+        phone: true
+    });
+
+    try {
+        var instance = $("#dateBox").dxDateBox({
+            type: "date",
+            pickerType: "rollers",
+            opened: true
+        }).dxDateBox("instance");
+
+        assert.equal(instance._popup.option("maxWidth"), "100%", "popup width should be correct on 320px screens");
+        assert.equal(instance._popup.option("maxHeight"), "100%", "popup height should be correct on 320px screens");
+    } finally {
+        currentDevice.restore();
     }
 });
 

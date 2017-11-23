@@ -9,6 +9,34 @@ var checkDigit = function(char) {
     return (char >= "0" && char <= "9") || (code >= ARABIC_ZERO_CODE && code < ARABIC_ZERO_CODE + 10);
 };
 
+var checkPatternContinue = function(text, index, isDigit) {
+    var char = text[index],
+        prevChar = text[index - 1],
+        nextChar = text[index + 1];
+
+    if(!isDigit) {
+        if(char === "." || (char === " " && prevChar === ".")) {
+            return true;
+        }
+        if(char === "-" && !checkDigit(nextChar)) {
+            return true;
+        }
+    }
+    return FORMAT_SEPARATORS.indexOf(char) < 0 && (isDigit === checkDigit(char));
+};
+
+var getPatternStartIndex = function(defaultPattern, index) {
+    if(!checkDigit(defaultPattern[index])) {
+        while(index > 0
+            && !checkDigit(defaultPattern[index - 1])
+            && (defaultPattern[index - 1] === "."
+            || FORMAT_SEPARATORS.indexOf(defaultPattern[index - 1]) < 0)) {
+            index--;
+        }
+    }
+    return index;
+};
+
 var getDifference = function(defaultPattern, patterns, processedIndexes, isDigit) {
     var i = 0,
         result = [];
@@ -23,6 +51,7 @@ var getDifference = function(defaultPattern, patterns, processedIndexes, isDigit
 
     for(i = 0; i < defaultPattern.length; i++) {
         if(processedIndexes.indexOf(i) < 0 && patterns.filter(patternsFilter).length) {
+            i = getPatternStartIndex(defaultPattern, i);
             do {
                 isDigit = checkDigit(defaultPattern[i]);
                 if(!result.length && !isDigit && checkDigit(patterns[0][i])) {
@@ -31,7 +60,7 @@ var getDifference = function(defaultPattern, patterns, processedIndexes, isDigit
                 result.push(i);
                 processedIndexes.unshift(i);
                 i++;
-            } while(defaultPattern[i] && (FORMAT_SEPARATORS.indexOf(defaultPattern[i]) < 0 && (isDigit === checkDigit(defaultPattern[i]))));
+            } while(defaultPattern[i] && checkPatternContinue(defaultPattern, i, isDigit));
             break;
         }
     }
@@ -118,7 +147,7 @@ var escapeChars = function(pattern, defaultPattern, processedIndexes, patternPos
     pattern = pattern.split("").map(function(char, index) {
         var result = char,
             isCurrentCharEscaped = escapeIndexes.indexOf(index) >= 0,
-            isPrevCharEscaped = escapeIndexes.indexOf(index - 1) >= 0,
+            isPrevCharEscaped = index > 0 && escapeIndexes.indexOf(index - 1) >= 0,
             isNextCharEscaped = escapeIndexes.indexOf(index + 1) >= 0;
 
         if(isCurrentCharEscaped) {
@@ -141,6 +170,7 @@ var getFormat = function(formatter) {
         defaultPattern = formatValue(new Date(2009, 8, 8, 6, 5, 4), formatter),
         patternPositions = defaultPattern.split("").map(function(_, index) { return index; }),
         result = defaultPattern,
+        replacedPatterns = {},
         datePatterns = [
             { date: new Date(2009, 8, 8, 6, 5, 4, 100), pattern: "S" },
             { date: new Date(2009, 8, 8, 6, 5, 2), pattern: "s" },
@@ -156,9 +186,11 @@ var getFormat = function(formatter) {
     if(!result) return;
 
     datePatterns.forEach(function(test) {
-        var diff = getDifference(defaultPattern, formatValue(test.date, formatter), processedIndexes, test.isDigit);
+        var diff = getDifference(defaultPattern, formatValue(test.date, formatter), processedIndexes, test.isDigit),
+            pattern = test.pattern === "M" && !replacedPatterns["d"] ? "L" : test.pattern;
 
-        result = replaceChars(result, diff, test.pattern, patternPositions);
+        result = replaceChars(result, diff, pattern, patternPositions);
+        replacedPatterns[pattern] = diff.length;
     });
 
     result = escapeChars(result, defaultPattern, processedIndexes, patternPositions);

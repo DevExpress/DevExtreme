@@ -8,8 +8,6 @@ function getWeekendDays(workdays) {
         return !workdays.some(function(workDay) {
             return workDay === day;
         });
-    }).map(function(day) {
-        return days.indexOf(day);
     });
 }
 
@@ -66,9 +64,15 @@ function separateBreak(scaleBreak, day) {
 }
 
 function getWeekEndDayIndices(workDays) {
-    return getWeekendDays(workDays).sort(function(day1, day2) {
-        return getNextDayIndex(day1) - getNextDayIndex(day2);
-    });
+    var indices = getWeekendDays(workDays);
+
+    if(indices.length < 7) {
+        while(getNextDayIndex(indices[indices.length - 1]) === indices[0]) {
+            indices.unshift(indices.pop());
+        }
+    }
+
+    return indices;
 }
 
 function generateDateBreaksForWeekend(min, max, weekendDayIndices) {

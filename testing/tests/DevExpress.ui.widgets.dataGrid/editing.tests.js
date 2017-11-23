@@ -5177,7 +5177,7 @@ QUnit.test('Error during save changes in batch mode', function(assert) {
 });
 
 //T555797
-QUnit.test('Focus position should be correct after editing in cell editing mode if data source is remote', function(assert) {
+QUnit.testInActiveWindow('Focus position should be correct after editing in cell editing mode if data source is remote', function(assert) {
     //arrange
     var that = this,
         rowsView = this.rowsView,
@@ -5223,7 +5223,7 @@ QUnit.test('Focus position should be correct after editing in cell editing mode 
     assert.ok($(this.getCellElement(0, 1)).hasClass("dx-focused"), "new edit cell is focused");
 });
 
-QUnit.test('Focus position should be retured after editing in cell editing mode if remote updating return error', function(assert) {
+QUnit.testInActiveWindow('Focus position should be retured after editing in cell editing mode if remote updating return error', function(assert) {
     //arrange
     var that = this,
         rowsView = this.rowsView,
@@ -5679,6 +5679,31 @@ QUnit.test("Restore a height of rowsView when editing is canceled with empty dat
 
     //assert
     assert.equal($(".dx-datagrid-rowsview").height(), rowsViewHeight, "height of rows view is not changed");
+});
+
+QUnit.test("Height of rowsView should more than height of editor form when row is inserted", function(assert) {
+    //arrange
+    var testElement = $('#container');
+
+    this.options.editing = {
+        allowAdding: true,
+        mode: 'form'
+    };
+    this.options.dataSource = [];
+    this.$element = function() {
+        return testElement;
+    };
+    this.dataController.init();
+
+    this.gridView.render(testElement);
+    this.resizingController.updateDimensions();
+    this.clock.tick();
+
+    //act
+    this.addRow();
+
+    //assert
+    assert.ok($(".dx-datagrid-rowsview").height() >= $(".dx-datagrid-edit-form").height(), "height of rows view");
 });
 
 if(device.ios || device.android) {
@@ -9140,6 +9165,44 @@ QUnit.testInActiveWindow("Show validation message for CheckBox editor", function
 
     //assert
     assert.equal(testElement.find(".dx-invalid-message.dx-overlay").length, 1, "validation message should be shown");
+});
+
+QUnit.testInActiveWindow("Empty validation message is not shown", function(assert) {
+    //arrange
+    var that = this,
+        rowsView = this.rowsView,
+        testElement = $('#container'),
+        inputElement;
+
+    rowsView.render(testElement);
+
+    that.applyOptions({
+        editing: {
+            mode: "batch"
+        },
+        columns: [{
+            dataField: 'name',
+            validationRules: [{
+                type: "required",
+                message: ""
+            }],
+            showEditorAlways: true
+        }]
+    });
+
+    //act
+
+    that.editCell(0, 0);
+
+    inputElement = getInputElements(testElement).first();
+    inputElement
+        .val("")
+        .trigger('change');
+
+    this.clock.tick();
+
+    //assert
+    assert.equal($(".dx-invalid-message.dx-invalid-message-always.dx-overlay").length, 0, "Validation message is not shown");
 });
 
 QUnit.module('Editing with real dataController with grouping, masterDetail', {

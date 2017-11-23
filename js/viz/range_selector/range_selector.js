@@ -114,10 +114,9 @@ function calculateIndents(renderer, scale, sliderMarkerOptions, indentOptions, t
         placeholderWidthRight = 0,
         placeholderHeight,
         parsedPlaceholderSize,
-        ticks = tickIntervalsInfo.ticks,
+        ticks = scale.type === "semidiscrete" ? scale.customTicks : tickIntervalsInfo.ticks,
         startTickValue,
-        endTickValue,
-        isDiscreteScale = scale.type === "discrete" || scale.type === "semidiscrete";
+        endTickValue;
 
     indentOptions = indentOptions || {};
     parsedPlaceholderSize = parseSliderMarkersPlaceholderSize(sliderMarkerOptions.placeholderSize);
@@ -144,8 +143,8 @@ function calculateIndents(renderer, scale, sliderMarkerOptions, indentOptions, t
     }
 
     if(scale.label.visible) {
-        startTickValue = !isDiscreteScale && _isDefined(scale.startValue) ? ticks[0] : undefined;
-        endTickValue = !isDiscreteScale && _isDefined(scale.endValue) ? ticks[ticks.length - 1] : undefined;
+        startTickValue = _isDefined(scale.startValue) ? ticks[0] : undefined;
+        endTickValue = _isDefined(scale.endValue) ? ticks[ticks.length - 1] : undefined;
         leftScaleLabelWidth = calculateScaleLabelHalfWidth(renderer, startTickValue, scale, tickIntervalsInfo);
         rightScaleLabelWidth = calculateScaleLabelHalfWidth(renderer, endTickValue, scale, tickIntervalsInfo);
     }
@@ -198,11 +197,12 @@ function checkLogarithmicOptions(options, defaultLogarithmBase, incidentOccurred
     }
 }
 
-function calculateScaleAreaHeight(renderer, scaleOptions, visibleMarkers) {
+function calculateScaleAreaHeight(renderer, scaleOptions, visibleMarkers, tickIntervalsInfo) {
     var labelScaleOptions = scaleOptions.label,
         markerScaleOptions = scaleOptions.marker,
         placeholderHeight = scaleOptions.placeholderHeight,
-        text = commonModule.formatValue(scaleOptions.startValue, labelScaleOptions);
+        ticks = scaleOptions.type === "semidiscrete" ? scaleOptions.customTicks : tickIntervalsInfo.ticks,
+        text = commonModule.formatValue(ticks[0], labelScaleOptions);
 
     if(placeholderHeight) {
         return placeholderHeight;
@@ -545,8 +545,8 @@ function prepareScaleOptions(scaleOption, seriesDataSource, incidentOccurred, co
         scaleOption.maxRange = undefined;
     }
 
-    scaleOption.axisDivisionFactor = scaleOption.axisDivisionFactor !== undefined ? scaleOption.axisDivisionFactor : DEFAULT_AXIS_DIVISION_FACTOR;
-    scaleOption.minorAxisDivisionFactor = scaleOption.minorAxisDivisionFactor !== undefined ? scaleOption.minorAxisDivisionFactor : DEFAULT_MINOR_AXIS_DIVISION_FACTOR;
+    scaleOption.axisDivisionFactor = _isDefined(scaleOption.axisDivisionFactor) ? scaleOption.axisDivisionFactor : DEFAULT_AXIS_DIVISION_FACTOR;
+    scaleOption.minorAxisDivisionFactor = _isDefined(scaleOption.minorAxisDivisionFactor) ? scaleOption.minorAxisDivisionFactor : DEFAULT_MINOR_AXIS_DIVISION_FACTOR;
     return scaleOption;
 }
 
@@ -883,7 +883,6 @@ var dxRangeSelector = require("../core/base_widget").inherit({
             tickIntervalsInfo = updateTickIntervals(scaleOptions, canvas.width, that._incidentOccurred, argTranslatorRange),
             sliderMarkerOptions,
             indents,
-            scaleLabelsAreaHeight,
             rangeContainerCanvas,
             chartThemeManager = seriesDataSource && seriesDataSource.isShowChart() && seriesDataSource.getThemeManager();
 
@@ -896,12 +895,13 @@ var dxRangeSelector = require("../core/base_widget").inherit({
         updateTranslatorRangeInterval(argTranslatorRange, scaleOptions);
         sliderMarkerOptions = that._prepareSliderMarkersOptions(scaleOptions, canvas.width, tickIntervalsInfo);
         indents = calculateIndents(that._renderer, scaleOptions, sliderMarkerOptions, that.option("indent"), tickIntervalsInfo);
-        scaleLabelsAreaHeight = calculateScaleAreaHeight(that._renderer, scaleOptions, showScaleMarkers(scaleOptions));
         rangeContainerCanvas = {
             left: canvas.left + indents.left,
             top: canvas.top + indents.top,
             width: canvas.left + indents.left + _max(canvas.width - indents.left - indents.right, 1),
-            height: _max(!isCompactMode ? canvas.height - indents.top - indents.bottom - scaleLabelsAreaHeight : commonModule.HEIGHT_COMPACT_MODE, 0),
+            height: _max(!isCompactMode
+                ? canvas.height - indents.top - indents.bottom - calculateScaleAreaHeight(that._renderer, scaleOptions, showScaleMarkers(scaleOptions), tickIntervalsInfo)
+                : commonModule.HEIGHT_COMPACT_MODE, 0),
             right: 0,
             bottom: 0
         };

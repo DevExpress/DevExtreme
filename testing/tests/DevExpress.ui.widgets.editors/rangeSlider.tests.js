@@ -58,6 +58,16 @@ QUnit.test("default", function(assert) {
     assert.ok(sliderElement.hasClass(SLIDER_CLASS));
 });
 
+QUnit.test("onContentReady fired after the widget is fully ready", function(assert) {
+    assert.expect(1);
+
+    $("#slider").dxRangeSlider({
+        onContentReady: function(e) {
+            assert.ok($(e.element).hasClass(RANGE_SLIDER_CLASS));
+        }
+    });
+});
+
 QUnit.test("render value", function(assert) {
     var el = $("#slider").css("width", 960);
 

@@ -199,7 +199,7 @@ var ComponentBuilder = Class.inherit({
                 return;
             }
 
-            var isActivePhase = that._scope.$$phase;
+            var isActivePhase = that._scope.$root.$$phase;
             var obtainOption = function() {
                 that._ngLocker.obtain(fullName);
             };

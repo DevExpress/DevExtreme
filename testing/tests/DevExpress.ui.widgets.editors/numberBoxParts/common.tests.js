@@ -61,6 +61,18 @@ QUnit.test("input should have correct type", function(assert) {
     assert.equal($element.find("." + INPUT_CLASS).prop("type"), checkInput("number") ? instance.option("mode") : "text");
 });
 
+QUnit.test("onContentReady fired after the widget is fully ready", function(assert) {
+    assert.expect(2);
+
+    $("#numberbox").dxNumberBox({
+        value: 25,
+        onContentReady: function(e) {
+            assert.equal($(e.element).find("input").val(), 25);
+            assert.ok($(e.element).hasClass(NUMBERBOX_CLASS));
+        }
+    });
+});
+
 QUnit.test("init with options", function(assert) {
     assert.expect(2);
 

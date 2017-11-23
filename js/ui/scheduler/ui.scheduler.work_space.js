@@ -406,6 +406,7 @@ var SchedulerWorkSpace = Widget.inherit({
             case "intervalCount":
                 this._cleanWorkSpace();
                 this._toggleWorkSpaceCountClass();
+                this._toggleFixedScrollableClass();
                 break;
             case "crossScrollingEnabled":
                 this._toggleHorizontalScrollClass();
@@ -735,6 +736,7 @@ var SchedulerWorkSpace = Widget.inherit({
         }
 
         this._toggleGroupedClass();
+        this._toggleFixedScrollableClass();
 
         this._renderView();
         this._attachEvents();
@@ -743,6 +745,8 @@ var SchedulerWorkSpace = Widget.inherit({
     _toggleGroupedClass: function() {
         this.$element().toggleClass(GROUPED_WORKSPACE_CLASS, this._getGroupCount() > 0);
     },
+
+    _toggleFixedScrollableClass: noop,
 
     _renderView: function() {
         this._setFirstViewDate();

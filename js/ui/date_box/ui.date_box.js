@@ -287,17 +287,8 @@ var DateBox = DropDownEditor.inherit({
             * @type boolean
             * @default false
             */
-            adaptivityEnabled: false,
+            adaptivityEnabled: false
 
-            /**
-             * @name dxDateBoxOptions_onContentReady
-             * @publicName onContentReady
-             * @extends Action
-             * @hidden false
-             * @action
-             * @extend_doc
-             */
-            onContentReady: null
         });
     },
 
@@ -620,6 +611,11 @@ var DateBox = DropDownEditor.inherit({
         if(visible) {
             this._updateSize();
         }
+    },
+
+    _clearValueHandler: function(e) {
+        this.option("text", "");
+        this.callBase(e);
     },
 
     _readOnlyPropValue: function() {

@@ -307,7 +307,7 @@ QUnit.test("onEnterKey (T107163)", function(assert) {
     assert.equal(enterKeyFired, 1, "onEnterKey fired once");
 });
 
-QUnit.test("minimal search length", function(assert) {
+QUnit.testInActiveWindow("minimal search length", function(assert) {
     var $list;
 
     this.element.dxAutocomplete({
@@ -936,7 +936,7 @@ QUnit.testInActiveWindow("list animation jumps to end", function(assert) {
     assert.equal($overlayContent.css("opacity"), 1, "when type, opacity is 1");
 });
 
-QUnit.test("popup height calculated correctly", function(assert) {
+QUnit.testInActiveWindow("popup height calculated correctly", function(assert) {
     this.element.dxAutocomplete({
         value: "",
         dataSource: ["item 10", "item 20", "item 30"]
@@ -1178,7 +1178,7 @@ QUnit.test("B233605 autocomplete shows on short time", function(assert) {
     assert.equal(showCounter, 0, "autocomplete menu should not be shown");
 });
 
-QUnit.test("B233600 dxAutocomplete - Sometimes autocomplete shows redundant items", function(assert) {
+QUnit.testInActiveWindow("B233600 dxAutocomplete - Sometimes autocomplete shows redundant items", function(assert) {
     assert.expect(5);
 
     executeAsyncMock.teardown();
@@ -1401,7 +1401,7 @@ QUnit.test("change width", function(assert) {
     assert.strictEqual($element.outerWidth(), customWidth, "outer width of the element must be equal to custom width");
 });
 
-QUnit.test("filter is not reset", function(assert) {
+QUnit.testInActiveWindow("filter is not reset", function(assert) {
     var $fixture = $("#qunit-fixture");
     var requiredCSS = $("<style>.dx-popup-content {padding: 0 !important;border: none !important;margin: 0 !important;</style>");
     requiredCSS.appendTo($fixture);

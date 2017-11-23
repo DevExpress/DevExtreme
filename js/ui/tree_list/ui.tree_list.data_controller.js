@@ -3,6 +3,7 @@
 var extend = require("../../core/utils/extend").extend,
     Deferred = require("../../core/utils/deferred").Deferred,
     treeListCore = require("./ui.tree_list.core"),
+    equalByValue = require("../../core/utils/common").equalByValue,
     dataSourceAdapterProvider = require("./ui.tree_list.data_source_adapter"),
     dataControllerModule = require("../grid_core/ui.grid_core.data_controller");
 
@@ -152,7 +153,9 @@ exports.DataController = dataControllerModule.controllers.data.inherit((function
                     break;
                 case "expandedRowKeys":
                 case "onNodesInitialized":
-                    this._dataSource && !this._dataSource._isNodesInitializing && this._dataSource.load();
+                    if(this._dataSource && !this._dataSource._isNodesInitializing && !equalByValue(args.value, args.previousValue)) {
+                        this._dataSource.load();
+                    }
                     args.handled = true;
                     break;
                 case "maxFilterLengthInRequest":

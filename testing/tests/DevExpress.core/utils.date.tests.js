@@ -84,7 +84,7 @@ QUnit.test('getIntervalByString quarter', function(assert) {
 
 QUnit.test('getIntervalByString week', function(assert) {
     //act, assert
-    assert.deepEqual(this.getDateIntervalByString('week'), { days: 7 });
+    assert.deepEqual(this.getDateIntervalByString('week'), { weeks: 1 });
 });
 
 QUnit.test('getIntervalByString day', function(assert) {
@@ -170,6 +170,18 @@ QUnit.test('addInterval date object', function(assert) {
 
     //assert
     assert.deepEqual(newDate, new Date(2013, 3, 4, 5, 6, 7, 8));
+});
+
+QUnit.test('addInterval date object (with timezone)', function(assert) {
+    //arrange, act
+    var newDate = dateUtils.addInterval(new Date("2017-10-29T01:55:00+01:00"), {
+        minutes: 5,
+        seconds: 6,
+        milliseconds: 7
+    });
+
+    //assert
+    assert.deepEqual(newDate.getTime(), 1509238806007);
 });
 
 QUnit.test('addInterval date object overflow', function(assert) {

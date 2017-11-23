@@ -114,6 +114,13 @@ var DropDownBox = DropDownEditor.inherit({
              */
 
             /**
+            * @name dxDropDownBoxOptions_onContentReady
+            * @publicName onContentReady
+            * @hidden true
+            * @action
+            */
+
+            /**
              * @name dxDropDownBoxOptions_spellcheck
              * @publicName spellcheck
              * @type boolean

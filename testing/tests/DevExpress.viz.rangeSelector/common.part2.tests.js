@@ -1057,6 +1057,43 @@ QUnit.test("Auto format for sliderMarker when minorTickInterval and tickInterval
     assert.strictEqual(this.slidersController.update.lastCall.args[4].format, "shortdate");
 });
 
+QUnit.test("T576618. axis division factors are null, no tick intervals - correctly calculate formats", function(assert) {
+    this.createWidget({
+        size: { width: 600 },
+        scale: {
+            startValue: new Date(2012, 2, 1),
+            endValue: new Date(2012, 2, 20),
+            marker: {
+                visible: true
+            },
+            axisDivisionFactor: null,
+            minorAxisDivisionFactor: null
+        }
+    });
+
+    assert.strictEqual(this.axis.updateOptions.lastCall.args[0].label.format, "day", "scale label");
+    assert.strictEqual(this.slidersController.update.lastCall.args[4].format, "shorttime", "slider marker");
+});
+
+QUnit.test("T576618. axis division factors are undefined, no tick intervals - correctly calculate formats", function(assert) {
+    this.createWidget({
+        size: { width: 600 },
+        scale: {
+            startValue: new Date(2012, 2, 1),
+            endValue: new Date(2012, 2, 20),
+            marker: {
+                visible: true
+            },
+            axisDivisionFactor: undefined,
+            minorAxisDivisionFactor: undefined
+        }
+    });
+
+    assert.strictEqual(this.axis.updateOptions.lastCall.args[0].label.format, "day", "scale label");
+    assert.strictEqual(this.slidersController.update.lastCall.args[4].format, "shorttime", "slider marker");
+});
+
+
 //B251771
 QUnit.test("scale.marker.label.customizeText is not a function", function(assert) {
     this.createWidget({
@@ -1074,7 +1111,6 @@ QUnit.test("scale.marker.label.customizeText is not a function", function(assert
 
     assert.ok(true);
 });
-
 
 QUnit.test("pass containerBackgroundColor to slidersMarker options like border color", function(assert) {
     this.createWidget({

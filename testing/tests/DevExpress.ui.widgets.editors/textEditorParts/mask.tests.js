@@ -635,7 +635,7 @@ QUnit.test("show mask always", function(assert) {
     assert.equal(textEditor.option("text"), "__", "editor is not empty");
 });
 
-QUnit.test("show mask on focus only", function(assert) {
+QUnit.testInActiveWindow("show mask on focus only", function(assert) {
     var $textEditor = $("#texteditor").dxTextEditor({
             mask: "XX",
             showMaskMode: "onFocus",
@@ -664,7 +664,7 @@ QUnit.test("show mask on focus only", function(assert) {
     assert.equal($input.val(), "", "input is empty");
 });
 
-QUnit.test("show mask on focus only with useMaskedValue and stub symbols", function(assert) {
+QUnit.testInActiveWindow("show mask on focus only with useMaskedValue and stub symbols", function(assert) {
     var $textEditor = $("#texteditor").dxTextEditor({
             mask: "0-0",
             useMaskedValue: true,
@@ -688,7 +688,7 @@ QUnit.test("show mask on focus only with useMaskedValue and stub symbols", funct
     assert.equal($input.val(), "", "input is empty");
 });
 
-QUnit.test("change mask visibility", function(assert) {
+QUnit.testInActiveWindow("change mask visibility", function(assert) {
     var $textEditor = $("#texteditor").dxTextEditor({
             mask: "XX",
             showMaskMode: "always",
@@ -1656,7 +1656,7 @@ QUnit.test("mask works when keypress fired after input", function(assert) {
     assert.equal($input.val(), "(x_)", "mask works correctly");
 });
 
-QUnit.test("Last char remove correctly when keypress fired after backspace", function(assert) {
+QUnit.testInActiveWindow("Last char remove correctly when keypress fired after backspace", function(assert) {
     var $textEditor = $("#texteditor").dxTextEditor({
         mask: "X-X",
         maskRules: {
