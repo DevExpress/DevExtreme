@@ -65,10 +65,15 @@ function adjustSizeArray(sizeArray, space) {
     }
 }
 
-function subscribeToScrollEvent(area, handler) {
+function unsubscribeScrollEvents(area) {
     area.off("scroll")
-        .off("stop")
-        .on('scroll', handler)
+        .off("stop");
+}
+
+function subscribeToScrollEvent(area, handler) {
+    unsubscribeScrollEvents(area);
+
+    area.on('scroll', handler)
         .on("stop", handler);
 }
 
@@ -131,15 +136,6 @@ function getCommonBorderWidth(elements, direction) {
 function clickedOnFieldsArea($targetElement) {
     return $targetElement.closest("." + FIELDS_CLASS).length || $targetElement.find("." + FIELDS_CLASS).length;
 }
-
-/**
-* @name dxPivotGridOptions_onContentReady
-* @publicName onContentReady
-* @extends Action
-* @hidden false
-* @action
-* @extend_doc
-*/
 
 /**
 * @name dxPivotGridOptions_activeStateEnabled
@@ -1556,6 +1552,10 @@ var PivotGrid = Widget.inherit({
             rowsArea.processScroll();
             columnsArea.processScroll();
         }
+
+        [dataArea, rowsArea, columnsArea].forEach(function(area) {
+            unsubscribeScrollEvents(area);
+        });
 
         updateHandler = function() {
             that.updateDimensions().done(function() {

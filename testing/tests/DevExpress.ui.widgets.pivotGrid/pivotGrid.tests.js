@@ -186,17 +186,12 @@ QUnit.test("No data", function(assert) {
         }, assert);
     assert.ok(pivotGrid);
 
-    var $noDataElement = pivotGrid.element().find(".dx-pivotgrid-nodata"),
-        dataAreaCell = $(".dx-area-data-cell"),
-        dataAreaCellOffset = dataAreaCell.offset(),
-        noDataElementOffset = $noDataElement.offset();
+    var $noDataElement = pivotGrid.element().find(".dx-pivotgrid-nodata");
 
     assert.equal($noDataElement.length, 1);
     assert.ok($noDataElement.is(":visible"));
     assert.equal($noDataElement.text(), 'No data');
     assert.ok(contentReadyCallback.calledOnce);
-
-    assert.roughEqual(noDataElementOffset.top - dataAreaCellOffset.top, (dataAreaCellOffset.top + dataAreaCell.outerHeight()) - (noDataElementOffset.top + $noDataElement.height()), 2.5, "no data element position");
 });
 
 QUnit.test("No data when pivot grid rendered to invisible container", function(assert) {
@@ -3512,6 +3507,74 @@ QUnit.test("Fields are draggable", function(assert) {
         .move(-20, -1);
 
     assert.strictEqual($(".dx-drag").length, 1);
+});
+
+QUnit.module("Tests with real timer", {});
+
+QUnit.test("Do not re-render continuously when virtual scrolling enabled", function(assert) {
+    function getRandomStore() {
+        function getRandomElement(dim, n) {
+            return dim + '_' + Math.floor((Math.random() * n) + 1);
+        }
+
+        function getRandomValue() {
+            return Math.floor((Math.random() * 1000) + 1);
+        }
+
+        var store = [];
+
+        for(var i = 0; i < 1000; i++) {
+            store.push({
+                d1: getRandomElement('d1', 5000),
+                d2: getRandomElement('d2', 8),
+                d3: getRandomElement('d3', 8),
+
+                v1: getRandomValue()
+            });
+        }
+        return store;
+    }
+
+    var done = assert.async(),
+        pivotGrid = createPivotGrid({
+            dataSource: {
+                fields: [
+                    { dataField: "d1", area: "row" },
+                    { dataField: "d2", area: "column", expanded: true },
+                    { dataField: "d3", area: "column" },
+                    { dataField: "v1", area: "data", summaryType: "sum", dataType: "number" }
+                ],
+                store: getRandomStore(),
+            },
+            height: 600,
+            width: 1000,
+            scrolling: {
+                mode: 'virtual',
+                renderingThreshold: 1,
+                timeout: 1,
+            }
+        }, assert);
+
+    pivotGrid.on("contentReady", function(e) {
+        e.component.off("contentReady");
+        pivotGrid._dataArea.scrollTo({ x: 600, y: 4000 });
+
+        var contentReadyCount = 0;
+
+        e.component.on("contentReady", function() {
+            if(contentReadyCount > 0) {
+                assert.equal(contentReadyCount, 1);
+                done();
+            }
+            contentReadyCount++;
+
+            if(contentReadyCount > 2) {
+                pivotGrid.element().remove();
+                assert.ok(false, "infinite rendering loop");
+            }
+        });
+    });
+
 });
 
 

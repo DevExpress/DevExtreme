@@ -398,6 +398,13 @@ QUnit.test("parse", function(assert) {
         ]
     };
 
+    var originalLoggerWarn = logger.warn,
+        warningFired = false;
+
+    logger.warn = function(text) {
+        warningFired = true;
+    };
+
     $.each(assertData, function(format, data) {
         data = $.makeArray(data);
 
@@ -412,6 +419,9 @@ QUnit.test("parse", function(assert) {
 
     assert.equal(dateLocalization.parse(dateLocalization.format(new Date(), "shortdate")), String(generateExpectedDate({ hours: 0 })), "without format");
     assert.notOk(dateLocalization.parse(), "without date");
+
+    assert.notOk(warningFired, "warning is not heppend while parsing date from supported formats");
+    logger.warn = originalLoggerWarn;
 });
 
 QUnit.test("parse with shortDate format (T478962, T511282)", function(assert) {

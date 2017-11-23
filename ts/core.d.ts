@@ -1087,9 +1087,11 @@ declare module DevExpress {
         /** @docid_ignore dxTemplateOptions_name */
 
         export interface WidgetOptions extends DOMComponentOptions {
-            /** @docid_ignore WidgetOptions_onContentReady */
             /** @docid_ignore WidgetOptions_onFocusIn */
             /** @docid_ignore WidgetOptions_onFocusOut */
+
+            /** @docid WidgetOptions_onContentReady */
+            onContentReady?: Function;
 
             /** @docid WidgetOptions_activeStateEnabled */
             activeStateEnabled?: boolean;
@@ -1156,9 +1158,6 @@ declare module DevExpress {
 
             /** @docid CollectionWidgetOptions_noDataText */
             noDataText?: string;
-
-            /** @docid CollectionWidgetOptions_onContentReady */
-            onContentReady?: any;
 
             /** @docid CollectionWidgetOptions_onItemClick */
             onItemClick?: any;

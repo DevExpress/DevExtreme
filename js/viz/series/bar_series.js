@@ -15,10 +15,6 @@ exports.chart = {};
 exports.polar = {};
 
 var baseBarSeriesMethods = {
-    _updateOptions: function(options) {
-        this._stackName = "axis_" + (options.axis || "default") + "_stack_" + (options.stack || "default");
-    },
-
     _createLegendState: function(styleOptions, defaultColor) {
         return {
             fill: styleOptions.color || defaultColor,

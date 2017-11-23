@@ -118,3 +118,18 @@ QUnit.test("LoadIndicator with custom indicator", function(assert) {
     instance.option("indicatorSrc", "");
     assert.ok($wrapper.css("background-image") !== "", "custom indicator changed successfully as image");
 });
+
+QUnit.test("onContentReady fired after the widget is fully ready", function(assert) {
+    var url = "../../testing/content/customLoadIndicator.png";
+
+    assert.expect(2);
+
+    $("#loadIndicator").dxLoadIndicator({
+        visible: true,
+        indicatorSrc: url,
+        onContentReady: function(e) {
+            assert.ok($(e.element).find("." + LOADINDICATOR_IMAGE).css("background-image"));
+            assert.ok($(e.element).hasClass(LOADINDICATOR_CLASS));
+        }
+    });
+});
