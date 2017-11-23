@@ -81,7 +81,13 @@ registerTheme({
     },
     rangeSelector: {
         scale: {
-            breakStyle: { color: "#c1c5c7" }
+            breakStyle: { color: "#c1c5c7" },
+            tick: {
+                opacity: 1
+            },
+            minorTick: {
+                opacity: 0.5
+            }
         }
     },
     sparkline: {
