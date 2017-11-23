@@ -524,11 +524,13 @@ var TagBox = SelectBox.inherit({
     _renderPreventBlur: function() {
         var eventName = eventUtils.addNamespace(pointerEvents.down, "dxTagBoxContainer");
 
-        this._$tagsContainer && this._$tagsContainer
-            .off(eventName)
-            .on(eventName, function(e) {
-                e.preventDefault();
-            });
+        if(this._$tagsContainer) {
+            this._$tagsContainer
+                .off(eventName)
+                .on(eventName, function() {
+                    this._preventFocusOut = true;
+                }.bind(this));
+        }
     },
 
     _renderTagRemoveAction: function() {
@@ -602,7 +604,10 @@ var TagBox = SelectBox.inherit({
     },
 
     _focusOutHandler: function(e) {
-        if(this.option("opened") && this.option("applyValueMode") === "useButtons") {
+        var openedUseButtons = this.option("opened") && this.option("applyValueMode") === "useButtons";
+
+        if(openedUseButtons || this._preventFocusOut) {
+            this._preventFocusOut = false;
             return;
         }
 
@@ -1091,6 +1096,7 @@ var TagBox = SelectBox.inherit({
     _clean: function() {
         this.callBase();
         delete this._defaultTagTemplate;
+        delete this._preventFocusOut;
         delete this._tagTemplate;
     },
 
