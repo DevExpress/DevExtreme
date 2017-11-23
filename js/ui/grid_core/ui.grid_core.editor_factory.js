@@ -334,6 +334,11 @@ var EditorFactoryController = modules.ViewController.inherit((function() {
             if($element === undefined) {
                 return that._$focusedElement;
             } else if($element) {
+                //TODO: this code should be before timeout else focus is not will move to adaptive form by shift + tab key
+                that._$focusedElement && that._$focusedElement.removeClass(FOCUSED_ELEMENT_CLASS);
+                that._$focusedElement = $element;
+
+                clearTimeout(that._focusTimeoutID);
                 that._focusTimeoutID = setTimeout(function() {
                     delete that._focusTimeoutID;
                     var $focusOverlay = that._$focusOverlay = that._$focusOverlay || $("<div>")
@@ -367,9 +372,7 @@ var EditorFactoryController = modules.ViewController.inherit((function() {
                         $focusOverlay.css("visibility", "visible"); // for ios
                     }
 
-                    that._$focusedElement && that._$focusedElement.removeClass(FOCUSED_ELEMENT_CLASS);
                     $element.addClass(FOCUSED_ELEMENT_CLASS);
-                    that._$focusedElement = $element;
                     that.focused.fire($element);
                 });
             }

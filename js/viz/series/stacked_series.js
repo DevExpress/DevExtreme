@@ -16,7 +16,10 @@ var $ = require("../../core/renderer"),
     baseStackedSeries = {
         getErrorBarRangeCorrector: _noop,
         _fillErrorBars: _noop,
-        _calculateErrorBars: _noop
+        _calculateErrorBars: _noop,
+        _updateOptions: function(options) {
+            this._stackName = "axis_" + (options.axis || "default");
+        }
     },
     baseFullStackedSeries = _extend({}, baseStackedSeries, {
         isFullStackedSeries: function() {
@@ -47,13 +50,19 @@ exports.chart["fullstackedspline"] = _extend({}, lineSeries["spline"], baseFullS
     getValueRangeInitialValue: areaSeries.area.getValueRangeInitialValue
 });
 
-exports.chart["stackedbar"] = _extend({}, chartBarSeries, baseStackedSeries, {});
+var stackedBar = exports.chart["stackedbar"] = _extend({}, chartBarSeries, baseStackedSeries, {
+    _updateOptions: function(options) {
+        baseStackedSeries._updateOptions.call(this, options);
+        this._stackName = this._stackName + "_stack_" + (options.stack || "default");
+    }
+});
 
 exports.chart["fullstackedbar"] = _extend({}, chartBarSeries, baseFullStackedSeries, {
     _processRange: function(range) {
         chartBarSeries._processRange.apply(this, arguments);
         range.val.percentStick = true;
     },
+    _updateOptions: stackedBar._updateOptions
 });
 
 function clonePoint(point, value, minValue, position) {

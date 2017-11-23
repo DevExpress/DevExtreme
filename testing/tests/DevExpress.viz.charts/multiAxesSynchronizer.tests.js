@@ -42,7 +42,6 @@ function checkAxesSynchronization(assert, options) {
                 width: 600,
                 height: 400
             };
-            options.tickValues && !options.tickValues.tickInterval && (options.tickValues.tickInterval = options.tickInterval);
             var range = new rangeModule.Range(options.range);
             var axis = new MockAxis({ renderer: new vizMocks.Renderer() });
             axis.updateOptions({
@@ -52,6 +51,7 @@ function checkAxesSynchronization(assert, options) {
                 mockTickInterval: options.tickInterval,
                 mockTickValues: options.tickValues,
                 mockMinorTicks: options.minorTickValues,
+                mockMinorTickInterval: options.minorTickInterval,
                 synchronizedValue: options.synchronizedValue,
                 type: options.type
             });
@@ -1798,6 +1798,44 @@ QUnit.test('Synchronization two continuous axis. B250542', function(assert) {
                     maxVisible: 98
                 },
                 tickValues: [10, 20, 30, 40, 50, 60, 70, 80, 90]
+            }
+        ],
+        syncIndexes: [[0, 1]]
+    });
+});
+
+QUnit.test("Add minor ticks", function(assert) {
+    var tickValues1 = [0, 1, 2],
+        tickValue2 = [0, 1, 2, 3];
+
+    checkAxesSynchronization(assert, {
+        axesOptions: [
+            { type: 'continuous', range: { min: 0, max: 2, minVisible: 0, maxVisible: 2, axisType: 'continuous' }, tickValues: tickValues1, tickInterval: 1, minorTickValues: [0.5, 1.5], minorTickInterval: 0.5 },
+            { type: 'continuous', range: { min: 0, max: 3, minVisible: 0, maxVisible: 3, axisType: 'continuous' }, tickValues: tickValue2, tickInterval: 1 }
+        ],
+        axesOptionsAfterSync: [
+            {
+                range: {
+                    axisType: 'continuous',
+                    isSynchronized: true,
+                    min: 0,
+                    minVisible: 0,
+                    max: 3,
+                    maxVisible: 3
+                },
+                tickValues: [0, 1, 2, 3],
+                minorTickValues: [0.5, 1.5, 2.5]
+            },
+            {
+                range: {
+                    axisType: 'continuous',
+                    isSynchronized: true,
+                    min: 0,
+                    minVisible: 0,
+                    max: 3,
+                    maxVisible: 3
+                },
+                tickValues: [0, 1, 2, 3]
             }
         ],
         syncIndexes: [[0, 1]]

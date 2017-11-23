@@ -212,14 +212,6 @@ var CollectionWidget = Widget.inherit({
             * @type_function_return string|jQuery
             */
 
-            /**
-            * @name CollectionWidgetOptions_onContentReady
-            * @publicName onContentReady
-            * @hidden false
-            * @action
-            * @extend_doc
-            */
-
             _itemAttributes: {},
             itemTemplateProperty: "template",
             focusOnSelectedItem: true,

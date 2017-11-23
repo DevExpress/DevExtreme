@@ -127,7 +127,6 @@ var Widget = DOMComponent.inherit({
             * @publicName onContentReady
             * @extends Action
             * @action
-            * @hidden
             */
             onContentReady: null,
 

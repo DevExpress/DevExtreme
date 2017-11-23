@@ -345,16 +345,6 @@ var Overlay = Widget.inherit({
             onResize: null,
             onResizeEnd: null,
 
-            /**
-            * @name dxOverlayOptions_onContentReady
-            * @publicName onContentReady
-            * @extends Action
-            * @hidden false
-            * @action
-            * @extend_doc
-            */
-            onContentReady: null,
-
             // NOTE: private options
 
             target: undefined,

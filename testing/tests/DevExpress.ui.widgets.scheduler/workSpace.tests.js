@@ -189,6 +189,15 @@ QUnit.testStart(function() {
         assert.ok($element.find(".dx-scheduler-date-table").parent().hasClass("dx-scrollable-content"), "Scrollable contains date table");
     });
 
+    QUnit.test("Workspace scrollable should work correctly after changing currentDate", function(assert) {
+        this.instance.option("height", 200);
+        this.instance.option("currentDate", new Date());
+
+        var $element = this.instance.element();
+
+        assert.notEqual($element.find(".dx-scrollable-scrollbar").css("display"), "none", "Scrollable works correctly");
+    });
+
     QUnit.test("Scheduler workspace scrollables should be updated after allDayExpanded option changed", function(assert) {
         this.instance.option("allDayExpanded", false);
         var stub = sinon.stub(this.instance, "_updateScrollable");

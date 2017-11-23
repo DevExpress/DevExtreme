@@ -1629,6 +1629,25 @@ $('<div id="chartContainer">').appendTo("#qunit-fixture");
         assert.ok(this.labels[5].hide.calledOnce);
     });
 
+    QUnit.test("Three overlapped labels. Kill middle label and shift last label", function(assert) {
+        this.createFakeSeriesWithLabels([
+            { x: 5, y: 0, width: 10, height: 10, value: 5 },
+            { x: 5, y: 1, width: 10, height: 10, value: 1 },
+            { x: 5, y: 2, width: 10, height: 10, value: 10 }
+        ]);
+
+        this.createChart({
+            size: { width: 100, height: 20 },
+            resolveLabelOverlapping: "stack",
+            series: [{ type: "mockType" }]
+        });
+
+        assert.ok(!this.labels[0].shift.called);
+        assert.ok(this.labels[1].hide.called);
+        assert.equal(this.labels[2].shift.callCount, 1);
+        assert.deepEqual(this.labels[2].shift.args[0], [5, 10]);
+    });
+
     QUnit.test("Two non overlapping labels. inverted position", function(assert) {
         this.createFakeSeriesWithLabels([{ x: 5, y: 30, width: 10, height: 10 }, { x: 5, y: 10, width: 10, height: 10 }]);
 

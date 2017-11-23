@@ -23,6 +23,7 @@ QUnit.testStart(function() {
 });
 
 var SWITCH_CLASS = "dx-switch",
+    SWITCH_ON_VALUE_CLASS = SWITCH_CLASS + "-on-value",
     WRAPPER_CLASS = "dx-switch-wrapper",
     CONTAINER_CLASS = "dx-switch-container",
     INNER_CLASS = "dx-switch-inner",
@@ -107,6 +108,18 @@ QUnit.test("markup", function(assert) {
 
     var labelOffEl = innerElems.eq(2);
     assert.ok(labelOffEl.hasClass(LABEL_OFF_CLASS));
+});
+
+QUnit.test("onContentReady fired after the widget is fully ready", function(assert) {
+    assert.expect(2);
+
+    $("#switch").dxSwitch({
+        value: true,
+        onContentReady: function(e) {
+            assert.ok($(e.element).hasClass(SWITCH_CLASS));
+            assert.ok($(e.element).hasClass(SWITCH_ON_VALUE_CLASS));
+        }
+    });
 });
 
 QUnit.test("default options", function(assert) {

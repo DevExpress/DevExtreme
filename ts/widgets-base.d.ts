@@ -214,9 +214,6 @@ declare module DevExpress.ui {
         /** @docid dxDropDownListOptions_onItemClick */
         onItemClick?: Function;
 
-        /** @docid dxDropDownListOptions_onContentReady */
-        onContentReady?: Function;
-
         /** @docid dxDropDownListOptions_grouped */
         grouped?: boolean;
 
@@ -971,9 +968,6 @@ declare module DevExpress.ui {
         /** @docid dxOverlayOptions_onShown */
         onShown?: Function;
 
-        /** @docid dxOverlayOptions_onContentReady */
-        onContentReady?: Function;
-
         /** @docid dxOverlayOptions_visible */
         visible?: boolean;
 
@@ -1141,6 +1135,7 @@ declare module DevExpress.ui {
         /** @docid dxMapOptions_autoAdjust */
         autoAdjust?: boolean;
 
+        /** @docid_ignore dxMapOptions_onContentReady */
         /** @docid_ignore dxMapOptions_bounds */
         /** @docid_ignore dxMapOptions_bounds_northEast */
         /** @docid_ignore dxMapOptions_bounds_northEast_lat */
@@ -1792,6 +1787,7 @@ declare module DevExpress.ui {
     }
 
     export interface dxDropDownBoxOptions extends dxDropDownEditorOptions, DataExpressionMixinOptions {
+        /** @docid_ignore dxDropDownBoxOptions_onContentReady */
         /** @docid_ignore dxDropDownBoxOptions_maxLength */
         /** @docid_ignore dxDropDownBoxOptions_spellcheck */
         /** @docid_ignore dxDropDownBoxOptions_applyValueMode */
@@ -1876,9 +1872,6 @@ declare module DevExpress.ui {
         /** @docid dxDateBoxOptions_adaptivityEnabled */
         adaptivityEnabled?: boolean;
 
-        /** @docid dxDateBoxOptions_onContentReady */
-        onContentReady?: Function;
-
         /** @docid dxDateBoxOptions_cancelButtonText */
         cancelButtonText?: string;
     }
@@ -1916,6 +1909,7 @@ declare module DevExpress.ui {
     }
 
     export interface dxCalendarOptions extends EditorOptions {
+        /** @docid_ignore dxCalendarOptions_onContentReady */
         /** @docid_ignore dxCalendarOptions_hoverStateEnabled */
         /** @docid_ignore dxCalendarOptions_focusStateEnabled */
         /** @docid_ignore dxCalendarCellTemplate_text */
@@ -2634,9 +2628,6 @@ declare module DevExpress.ui {
 
         /** @docid dxFormOptions_validationGroup */
         validationGroup?: string;
-
-        /** @docid dxFormOptions_onContentReady */
-        onContentReady?: Function;
     }
 
     /** @docid dxForm */

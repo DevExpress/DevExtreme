@@ -2681,4 +2681,9 @@ function setDiscreteType(series) {
         assert.strictEqual(this.createPoint.firstCall.args[1].lowError, undefined, "lowError not passed");
         assert.strictEqual(this.createPoint.firstCall.args[1].highError, undefined, "highError not passed");
     });
+
+    QUnit.test("getStackName returns axis' name", function(assert) {
+        assert.equal(createSeries({ axis: "axisName", stack: "stackName", type: "stackedLine" }, this.renderOptions).getStackName(), "axis_axisName", "series with defined axis name");
+        assert.equal(createSeries({ type: "stackedLine", stack: "stackName" }, this.renderOptions).getStackName(), "axis_default", "series with undefined axis name");
+    });
 })();

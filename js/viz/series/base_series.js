@@ -333,6 +333,8 @@ Series.prototype = {
 
         that._createStyles(newOptions);
 
+        that._stackName = null;
+
         that._updateOptions(newOptions);
 
         that._visible = newOptions.visible;
@@ -1139,7 +1141,7 @@ Series.prototype = {
     },
 
     getStackName: function() {
-        return (this.type === "stackedbar" || this.type === "fullstackedbar") ? this._stackName : null;
+        return this._stackName;
     },
 
     getPointByCoord: function(x, y) {

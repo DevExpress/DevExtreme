@@ -125,9 +125,10 @@ var ProgressBar = TrackBar.inherit({
     _render: function() {
         this._createCompleteAction();
         this._renderStatus();
-
         this.callBase();
+    },
 
+    _renderContentImpl: function() {
         this.element().addClass(PROGRESSBAR_CLASS);
         this.setAria("role", "progressbar");
         this._$wrapper.addClass(PROGRESSBAR_WRAPPER_CLASS);
@@ -136,6 +137,8 @@ var ProgressBar = TrackBar.inherit({
         $("<div>").addClass(PROGRESSBAR_RANGE_CONTAINER_CLASS).appendTo(this._$wrapper).append(this._$bar);
         this._$range.addClass(PROGRESSBAR_RANGE_CLASS);
         this._toggleStatus(this.option("showStatus"));
+
+        this.callBase();
     },
 
     _createCompleteAction: function() {

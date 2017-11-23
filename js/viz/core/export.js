@@ -80,7 +80,7 @@ function getItemAttributes(options, type, itemIndex) {
     var path,
         attr = {},
         x = BUTTON_SIZE - LIST_WIDTH,
-        y = BUTTON_SIZE + LIST_PADDING_TOP + itemIndex * MENU_ITEM_HEIGHT;
+        y = BUTTON_SIZE + LIST_PADDING_TOP + LIST_STROKE_WIDTH + itemIndex * MENU_ITEM_HEIGHT;
 
     attr.rect = {
         width: LIST_WIDTH - LIST_STROKE_WIDTH * 2,
@@ -462,7 +462,7 @@ _extend(exports.ExportMenu.prototype, {
         });
 
         that._overlay.attr({
-            height: items.length * MENU_ITEM_HEIGHT,
+            height: items.length * MENU_ITEM_HEIGHT + LIST_STROKE_WIDTH * 2,
             fill: buttonDefault.backgroundColor,
             stroke: buttonDefault.borderColor
         });
