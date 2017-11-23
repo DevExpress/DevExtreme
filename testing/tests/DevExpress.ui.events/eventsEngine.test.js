@@ -2,6 +2,7 @@
 
 var eventsEngine = require("events/core/events_engine");
 var keyboardMock = require("../../helpers/keyboardMock.js");
+var registerEvent = require("events/core/event_registrator");
 require("integration/jquery/events");
 
 QUnit.module("namespaces");
@@ -359,6 +360,28 @@ QUnit.test("nativeEvents should work for window", function(assert) {
 
     eventsEngine.trigger(windowMock, "focus");
     assert.equal(focusCount, 1, "focus called once");
+});
+
+QUnit.test("removeEventListener should not be called if native handler is not exist", function(assert) {
+    var eventName = "event-without-native-handler";
+
+    registerEvent(eventName, {
+        setup: function(element) {
+            return true;
+        }
+    });
+
+    var element = document.createElement("div");
+    var delListener = sinon.spy(HTMLElement.prototype, "removeEventListener");
+
+    var handler = function() { };
+
+    eventsEngine.on(element, eventName, handler);
+    eventsEngine.off(element, eventName);
+
+    assert.ok(delListener.notCalled);
+
+    delListener.restore();
 });
 
 QUnit.module("Memory");
