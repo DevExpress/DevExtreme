@@ -469,9 +469,18 @@ var PARSERS = {
 
         return date;
     },
+    "shortdateshorttime": function(text) {
+        return new Date(text);
+    },
 
     "longtime": function(text) {
         return parseTime(text);
+    },
+    "longdate": function(text) {
+        return new Date(text);
+    },
+    "longdatelongtime": function(text) {
+        return new Date(text);
     },
 
     "shorttime": function(text) {
