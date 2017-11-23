@@ -112,7 +112,13 @@ registerTheme({
             color: BACKGROUND_COLOR
         },
         scale: {
-            breakStyle: { color: "#73869e" }
+            breakStyle: { color: "#73869e" },
+            tick: {
+                opacity: 1
+            },
+            minorTick: {
+                opacity: 0.5
+            }
         }
     }
 }, "generic.dark");
