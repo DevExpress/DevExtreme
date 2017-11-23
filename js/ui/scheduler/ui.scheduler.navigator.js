@@ -295,7 +295,10 @@ var SchedulerNavigator = Widget.inherit({
         var min = this.option("min"),
             max = this.option("max");
 
-        this._prev.option("disabled", min && this._getNextDate(-1) <= min);
+        min = min ? dateUtils.trimTime(min) : min;
+        max = max ? dateUtils.trimTime(max) : max;
+
+        this._prev.option("disabled", min && this._getNextDate(-1) < min);
         this._next.option("disabled", max && this._getNextDate(1) >= max);
     },
 
