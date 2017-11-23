@@ -666,9 +666,8 @@ var FilterBuilder = Widget.inherit({
         }
     },
 
-    _createFieldButtonWithMenu: function(condition, field) {
+    _createFieldButtonWithMenu: function(fields, condition, field) {
         var that = this,
-            fields = this.option("fields"),
             allowHierarchicalFields = this.option("allowHierarchicalFields"),
             items = utils.getItems(fields, allowHierarchicalFields),
             item = utils.getField(field.dataField, items),
@@ -714,7 +713,8 @@ var FilterBuilder = Widget.inherit({
     _createConditionItem: function(condition, parent) {
         var that = this,
             $item = $("<div>").addClass(FILTER_BUILDER_GROUP_ITEM_CLASS),
-            field = utils.getField(condition[0], this.option("fields"));
+            fields = utils.getNormalizedFields(this.option("fields")),
+            field = utils.getField(condition[0], fields);
 
         this._createRemoveButton(function() {
             utils.removeItem(parent, condition);
@@ -723,7 +723,7 @@ var FilterBuilder = Widget.inherit({
                 that._updateFilter();
             }
         }).appendTo($item);
-        this._createFieldButtonWithMenu(condition, field).appendTo($item);
+        this._createFieldButtonWithMenu(fields, condition, field).appendTo($item);
         this._createOperationAndValueButtons(condition, field, $item);
         return $item;
     },

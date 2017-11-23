@@ -22,7 +22,19 @@ var DEFAULT_DATA_TYPE = "string",
     DEFAULT_FORMAT = {
         "date": "shortDate",
         "datetime": "shortDateShortTime"
-    };
+    },
+    AVAILABLE_FIELD_PROPERTIES = [
+        "caption",
+        "customizeText",
+        "dataField",
+        "dataType",
+        "editorTemplate",
+        "falseText",
+        "filterOperations",
+        "format",
+        "lookup",
+        "trueText"
+    ];
 
 function isNegationGroup(group) {
     return group
@@ -331,6 +343,18 @@ function convertToInnerStructure(value) {
     return convertToInnerGroup(value);
 }
 
+function getNormalizedFields(fields) {
+    return fields.map(function(field) {
+        var normalizedField = {};
+        for(var key in field) {
+            if(field[key] && AVAILABLE_FIELD_PROPERTIES.indexOf(key) > -1) {
+                normalizedField[key] = field[key];
+            }
+        }
+        return normalizedField;
+    });
+}
+
 function getNormalizedFilter(group, fields) {
     var criteria = getGroupCriteria(group),
         i;
@@ -548,6 +572,7 @@ exports.addItem = addItem;
 exports.getField = getField;
 exports.isGroup = isGroup;
 exports.isCondition = isCondition;
+exports.getNormalizedFields = getNormalizedFields;
 exports.getNormalizedFilter = getNormalizedFilter;
 exports.getGroupCriteria = getGroupCriteria;
 exports.convertToInnerStructure = convertToInnerStructure;
