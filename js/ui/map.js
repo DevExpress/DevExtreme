@@ -484,6 +484,8 @@ var Map = Widget.inherit({
         this._provider = null;
         this._lastAsyncAction = Promise.resolve();
         this.setOptionSilent("bounds", { northEast: null, southWest: null });
+
+        delete this._suppressAsyncAction;
     },
 
     _optionChanged: function(args) {
@@ -507,6 +509,7 @@ var Map = Widget.inherit({
                 this._dimensionChanged();
                 break;
             case "provider":
+                this._suppressAsyncAction = true;
                 this._invalidate();
                 break;
             case "key":
@@ -573,10 +576,18 @@ var Map = Widget.inherit({
     },
 
     _queueAsyncAction: function(name) {
-        var options = $.makeArray(arguments).slice(1);
+        var options = $.makeArray(arguments).slice(1),
+            isActionSuppressed = this._suppressAsyncAction;
 
         this._lastAsyncAction = this._lastAsyncAction.then(function() {
-            if(!this._provider) {
+            if(!this._provider || isActionSuppressed) {
+                ///#DEBUG
+                if(this._suppressedAsyncActions) {
+                    this._suppressedAsyncActions.push(name);
+                } else {
+                    this._suppressedAsyncActions = [name];
+                }
+                ///#ENDDEBUG
                 return Promise.resolve();
             }
 
