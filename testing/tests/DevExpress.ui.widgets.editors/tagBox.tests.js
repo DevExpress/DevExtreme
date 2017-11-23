@@ -3688,15 +3688,18 @@ QUnit.test("tags container should be scrolled on mobile devices", function(asser
     }
 });
 
-QUnit.test("preventDefault should be called - T454876", function(assert) {
-    var spy = sinon.spy();
+QUnit.testInActiveWindow("focusOut should be prevented when tagContainer clicked - T454876", function(assert) {
+    var focusOutHandler = sinon.spy(),
+        $input = this.$element.find("input"),
+        $tagContainer = this.$element.find(".dx-tag-container");
 
-    $(this.$element).on("dxpointerdown", spy);
+    this.instance.on("focusOut", focusOutHandler);
 
-    $(this.$element.find(".dx-tag-container")).trigger("dxpointerdown");
+    $input.focus();
+    $tagContainer.trigger("dxpointerdown");
+    $input.blur();
 
-    var event = spy.args[0][0];
-    assert.ok(event.isDefaultPrevented(), "default is prevented");
+    assert.equal(focusOutHandler.callCount, 0, "focusout has been prevented");
 });
 
 
