@@ -136,7 +136,8 @@ var moduleOptions = {
                     width: field.width || 0,
                     height: field.height || 0,
                     left: field.left || 0,
-                    top: field.top || 0
+                    top: field.top || 0,
+                    empty: field.empty || false
                 };
             }
         }, this);
@@ -200,7 +201,7 @@ var moduleOptions = {
                 startDate: new Date(2015, 1, 9, 11),
                 endDate: new Date(2015, 1, 9, 12)
             },
-            settings: [{ top: 0, left: 0 }]
+            settings: [{ top: 0, left: 0, empty: true }]
         }];
 
         this.width = 150;

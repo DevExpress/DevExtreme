@@ -296,7 +296,7 @@ QUnit.test("Collapsing appointments should have specific class", function(assert
         {
             currentDate: new Date(2015, 1, 9),
             currentView: "month",
-            height: 500,
+            height: 600,
             dataSource: [
                 { text: "Appointment 1", startDate: new Date(2015, 1, 9, 8), endDate: new Date(2015, 1, 9, 12) },
                 { text: "Appointment 2", startDate: new Date(2015, 1, 9, 9), endDate: new Date(2015, 1, 9, 12) },
@@ -304,6 +304,7 @@ QUnit.test("Collapsing appointments should have specific class", function(assert
             ]
         }
     );
+
     var $appointment = $(this.instance.$element().find(".dx-scheduler-appointment"));
     assert.ok(!$appointment.eq(0).hasClass("dx-scheduler-appointment-empty"), "appointment has not the class");
     assert.ok(!$appointment.eq(1).hasClass("dx-scheduler-appointment-empty"), "appointment has not the class");

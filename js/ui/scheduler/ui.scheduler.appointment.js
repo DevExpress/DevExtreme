@@ -145,7 +145,9 @@ var Appointment = DOMComponent.inherit({
     _renderEmptyClass: function() {
         var geometry = this.option("geometry");
 
-        this.$element().toggleClass(EMPTY_APPOINTMENT_CLASS, geometry.empty);
+        if(geometry.empty || this.option("isCompact")) {
+            this.$element().addClass(EMPTY_APPOINTMENT_CLASS);
+        }
     },
 
     _renderReducedAppointment: function() {

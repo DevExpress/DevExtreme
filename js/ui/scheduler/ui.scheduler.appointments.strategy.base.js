@@ -551,11 +551,15 @@ var BaseRenderingStrategy = Class.inherit({
 
         return {
             height: appointmentHeight,
-            empty: height < this._getAppointmentDefaultHeight(),
             width: width,
             top: top,
-            left: left
+            left: left,
+            empty: this._isAppointmentEmpty(height, width)
         };
+    },
+
+    _isAppointmentEmpty: function(height, width) {
+        return height < this._getAppointmentDefaultHeight() || width < this._getAppointmentDefaultWidth();
     },
 
     _calculateGeometryConfig: function(coordinates) {
@@ -638,6 +642,10 @@ var BaseRenderingStrategy = Class.inherit({
 
     _getAppointmentDefaultHeight: function() {
         return this._isCompactTheme() ? COMPACT_THEME_APPOINTMENT_DEFAULT_HEIGHT : APPOINTMENT_DEFAULT_HEIGHT;
+    },
+
+    _getAppointmentDefaultWidth: function() {
+        return 40;
     }
 });
 

@@ -124,7 +124,8 @@ var moduleOptions = {
                     width: field.width || 0,
                     height: field.height || 0,
                     left: field.left || 0,
-                    top: field.top || 0
+                    top: field.top || 0,
+                    empty: field.empty || false
                 };
             }
         }, this);
@@ -173,7 +174,7 @@ QUnit.test("Narrow rival appointments should have specific class", function(asse
             endDate: new Date(2015, 1, 9, 12),
             allDay: true
         },
-        settings: [{ count: 1, index: 0, width: 35, height: 100, allDay: true }]
+        settings: [{ count: 1, index: 0, width: 35, height: 100, allDay: true, empty: true }]
     }, {
         itemData: {
             text: "Appointment 2",
@@ -181,7 +182,7 @@ QUnit.test("Narrow rival appointments should have specific class", function(asse
             endDate: new Date(2015, 1, 9, 12),
             allDay: true
         },
-        settings: [{ count: 1, index: 0, width: 35, height: 100, allDay: true }]
+        settings: [{ count: 1, index: 0, width: 35, height: 100, allDay: true, empty: true }]
     }];
 
     this.items = items;
