@@ -1,7 +1,7 @@
 "use strict";
 
 var merge = require("./array").merge;
-
+var typeUtils = require("./type");
 var isTagName = (/<([a-z][^\/\0>\x20\t\r\n\f]+)/i);
 
 var tagWrappers = {
@@ -36,7 +36,7 @@ tagWrappers.tbody = tagWrappers.colgroup = tagWrappers.caption = tagWrappers.tfo
 tagWrappers.th = tagWrappers.td;
 
 var parseHTML = function(html) {
-    if(typeof html !== "string") {
+    if(typeof html !== "string" && !typeUtils.isNumeric(html)) {
         return null;
     }
 

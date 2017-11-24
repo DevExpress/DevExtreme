@@ -250,7 +250,7 @@ initRender.prototype.html = function(value) {
 var appendElements = function(element, nextSibling) {
     if(!this[0] || !element) return;
 
-    if(typeof element === "string") {
+    if(typeof element === "string" || typeUtils.isNumeric(element)) {
         element = htmlParser.parseHTML(element);
     } else if(element.nodeType) {
         element = [element];
