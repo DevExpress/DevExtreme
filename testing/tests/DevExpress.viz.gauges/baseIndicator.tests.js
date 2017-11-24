@@ -221,6 +221,23 @@ QUnit.test('Write - several times called (B219848)', function(assert) {
     assert.strictEqual(this.target._element._stored_settings.value, 5, 'state');
 });
 
+QUnit.test('Hide indicator with null value', function(assert) {
+    this.target.render({ currentValue: '20' }).resize();
+
+    this.target.value(null);
+
+    assert.strictEqual(this.target.value(), null);
+    assert.strictEqual(this.renderer.g.firstCall.returnValue.attr.lastCall.args[0].visibility, "hidden");
+});
+
+QUnit.test('Show indicator with not-null value', function(assert) {
+    this.target.render({ currentValue: '20' }).resize();
+
+    this.target.value(0);
+
+    assert.strictEqual(this.renderer.g.firstCall.returnValue.attr.lastCall.args[0].visibility, null);
+});
+
 QUnit.module('BaseIndicator - animation', {
     beforeEach: function() {
         this.animationController = new animation.AnimationController();

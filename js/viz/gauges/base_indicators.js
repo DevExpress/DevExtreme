@@ -120,8 +120,18 @@ var BaseIndicator = BaseElement.inherit({
 
     value: function(arg, _noAnimation) {
         var that = this,
-            val;
-        if(arg !== undefined) {
+            val,
+            rootElement = this._rootElement,
+            visibility = null;
+
+        if(arg === undefined) {
+            return that._currentValue;
+        }
+
+        if(arg === null) {
+            visibility = "hidden";
+            that._currentValue = arg;
+        } else {
             val = that._translator.adjust(arg);
             if(that._currentValue !== val && _isFinite(val)) {
                 that._currentValue = val;
@@ -135,9 +145,10 @@ var BaseIndicator = BaseElement.inherit({
                     }
                 }
             }
-            return that;
         }
-        return that._currentValue;
+
+        rootElement.attr({ visibility: visibility });
+        return that;
     },
 
     _isEnabled: null,
