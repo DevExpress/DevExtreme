@@ -2185,7 +2185,7 @@ var Scheduler = Widget.inherit({
         }
 
         if(oldData) {
-            this._convertDatesByTimezoneBack(formData, formData, false);
+            this._convertDatesByTimezoneBack(false, formData);
         }
 
         if(oldData && !recData) {
@@ -2206,7 +2206,9 @@ var Scheduler = Widget.inherit({
         return true;
     },
 
-    _convertDatesByTimezoneBack: function(sourceAppointmentData, targetAppointmentData, applyAppointmentTimezone) {
+    _convertDatesByTimezoneBack: function(applyAppointmentTimezone, sourceAppointmentData, targetAppointmentData) {
+        targetAppointmentData = targetAppointmentData || sourceAppointmentData;
+
         var processedStartDate = this.fire(
             "convertDateByTimezoneBack",
             this.fire("getField", "startDate", sourceAppointmentData),
