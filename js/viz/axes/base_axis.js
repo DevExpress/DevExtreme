@@ -769,6 +769,7 @@ Axis.prototype = {
             cTop = canvas.top,
             cRight = canvas.width - canvas.right,
             cBottom = canvas.height - canvas.bottom,
+            edgeMarginCorrection = _max(options.grid.visible && options.grid.width || 0, options.tick.visible && options.tick.width || 0),
             boxes = [that._axisElementsGroup, that._axisConstantLineGroups.outside1, that._axisConstantLineGroups.outside2]
                 .map(function(group) { return group && group.getBBox(); })
                 .concat((function(group) {
@@ -808,6 +809,15 @@ Axis.prototype = {
 
         if(placeholderSize) {
             margins[position] = placeholderSize;
+        }
+
+        if(edgeMarginCorrection) {
+            if(that._isHorizontal && canvas.right < edgeMarginCorrection && margins.right < edgeMarginCorrection) {
+                margins.right = edgeMarginCorrection;
+            }
+            if(!that._isHorizontal && canvas.bottom < edgeMarginCorrection && margins.bottom < edgeMarginCorrection) {
+                margins.bottom = edgeMarginCorrection;
+            }
         }
 
         return margins;
