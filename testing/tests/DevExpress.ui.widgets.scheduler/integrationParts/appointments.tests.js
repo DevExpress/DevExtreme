@@ -1971,7 +1971,7 @@ QUnit.test("Arguments in event args should be correct when timezone is set(T5794
             dataSource: [appointment]
         });
 
-        var $appointment = $(this.instance.$element()).find(".dx-scheduler-appointment").eq(0);
+        var $appointment = $(this.instance.element()).find(".dx-scheduler-appointment").eq(0);
         $appointment.trigger("dxclick");
 
     } finally {
