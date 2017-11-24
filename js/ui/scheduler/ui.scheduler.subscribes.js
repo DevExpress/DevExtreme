@@ -104,7 +104,7 @@ var subscribes = {
             startDate = this.fire("getField", "startDate", singleAppointment),
             updatedData = extend(true, {}, options.data);
 
-        this._convertDatesByTimezoneBack(updatedData, true);
+        this._convertDatesByTimezoneBack(updatedData, updatedData, true);
 
         this._checkRecurringAppointment(targetAppointment, singleAppointment, startDate, (function() {
             this._updateAppointment(targetAppointment, updatedData, function() {
@@ -130,7 +130,7 @@ var subscribes = {
         if((newCellIndex !== oldCellIndex) || movedBetweenAllDayAndSimple) {
             this._checkRecurringAppointment(target, appointment, cellData.startDate, (function() {
 
-                this._convertDatesByTimezoneBack(updatedData, true, appointment);
+                this._convertDatesByTimezoneBack(updatedData, appointment, true);
 
                 this._updateAppointment(target, appointment, function() {
                     this._appointments.moveAppointmentBack();
@@ -643,7 +643,7 @@ var subscribes = {
             }),
             result = {};
 
-        this._convertDatesByTimezoneBack(recurringData, false);
+        this._convertDatesByTimezoneBack(recurringData, recurringData, false);
 
         extend(true, result, appointmentData, recurringData);
 

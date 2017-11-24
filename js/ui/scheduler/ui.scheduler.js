@@ -2185,7 +2185,7 @@ var Scheduler = Widget.inherit({
         }
 
         if(oldData) {
-            this._convertDatesByTimezoneBack(formData, false);
+            this._convertDatesByTimezoneBack(formData, formData, false);
         }
 
         if(oldData && !recData) {
@@ -2206,19 +2206,17 @@ var Scheduler = Widget.inherit({
         return true;
     },
 
-    _convertDatesByTimezoneBack: function(appointmentData, applyAppointmentTimezone, targetAppointmentData) {
-        targetAppointmentData = targetAppointmentData || appointmentData;
-
+    _convertDatesByTimezoneBack: function(sourceAppointmentData, targetAppointmentData, applyAppointmentTimezone) {
         var processedStartDate = this.fire(
             "convertDateByTimezoneBack",
-            this.fire("getField", "startDate", appointmentData),
-            applyAppointmentTimezone && this.fire("getField", "startDateTimeZone", appointmentData)
+            this.fire("getField", "startDate", sourceAppointmentData),
+            applyAppointmentTimezone && this.fire("getField", "startDateTimeZone", sourceAppointmentData)
             );
 
         var processedEndDate = this.fire(
             "convertDateByTimezoneBack",
-            this.fire("getField", "endDate", appointmentData),
-            applyAppointmentTimezone && this.fire("getField", "endDateTimeZone", appointmentData)
+            this.fire("getField", "endDate", sourceAppointmentData),
+            applyAppointmentTimezone && this.fire("getField", "endDateTimeZone", sourceAppointmentData)
             );
 
         this.fire("setField", "startDate", targetAppointmentData, processedStartDate);
