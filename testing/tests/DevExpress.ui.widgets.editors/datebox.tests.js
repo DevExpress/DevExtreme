@@ -940,6 +940,18 @@ QUnit.test("dateView 'type' option matches dateBox 'type' option", function(asse
     assert.equal(getInstanceWidget(this.instance).option("type"), "time");
 });
 
+QUnit.test("dateView should be updated on popup opening and closing (T578764)", function(assert) {
+    this.instance.close();
+    this.instance.option("value", new Date(2000, 2, 2));
+
+    this.instance.open();
+    assert.deepEqual(this.dateView().option("value"), new Date(2000, 2, 2), "update on opening when value changed via api");
+
+    this.dateView().option("value", new Date(2001, 1, 3));
+    this.instance.close();
+    assert.deepEqual(this.dateView().option("value"), new Date(2000, 2, 2), "update on closing when value was not applied");
+});
+
 QUnit.test("dateView should not update dateBox value after closing using 'close' method", function(assert) {
     this.instance.option("value", new Date(2000, 1, 1));
     this.instance.open();
