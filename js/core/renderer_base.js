@@ -250,10 +250,12 @@ initRender.prototype.html = function(value) {
 var appendElements = function(element, nextSibling) {
     if(!this[0] || !element) return;
 
-    if(typeof element === "string" || typeUtils.isNumeric(element)) {
+    if(typeof element === "string") {
         element = htmlParser.parseHTML(element);
     } else if(element.nodeType) {
         element = [element];
+    } else if(typeUtils.isNumeric(element)) {
+        element = [domAdapter.createElement("#text", element)];
     }
 
     for(var i = 0; i < element.length; i++) {
