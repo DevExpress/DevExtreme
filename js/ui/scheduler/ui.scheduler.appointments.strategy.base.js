@@ -551,6 +551,7 @@ var BaseRenderingStrategy = Class.inherit({
 
         return {
             height: appointmentHeight,
+            empty: height < this._getAppointmentDefaultHeight(),
             width: width,
             top: top,
             left: left
