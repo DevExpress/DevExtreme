@@ -149,10 +149,6 @@ var DateViewStrategy = DateBoxStrategy.inherit({
                 this._widget = null;
             }).bind(this)
         };
-    },
-
-    _updateValue: function() {
-        this._widget && this._widget.option("value", this.dateBoxValue());
     }
 });
 
