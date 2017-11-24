@@ -273,6 +273,17 @@ QUnit.test("resourcesManager.getResourceTreeLeaves should work correctly when re
     }, this));
 });
 
+QUnit.test("Set resources to item", function(assert) {
+    this.createInstance(resourceData);
+    var item = { text: "Item 1", startDate: new Date() };
+
+    this.instance.setResourcesToItem(item, { roomId: 1 });
+    this.instance.setResourcesToItem(item, { ownerId: 1 });
+
+    assert.strictEqual(item.roomId, 1, "Single resource has scalar value");
+    assert.deepEqual(item.ownerId, [1], "Multiple resource has array value");
+});
+
 QUnit.test("Get resources from item that has no resources", function(assert) {
     this.createInstance(resourceData);
     var item = { text: "Item 1", startDate: new Date() },
