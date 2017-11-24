@@ -867,7 +867,6 @@ var DateBox = DropDownEditor.inherit({
                 break;
             case "value":
                 this._validateValue(this.dateOption("value"));
-                this._strategy._updateValue();
                 this.callBase.apply(this, arguments);
                 break;
             case "showDropDownButton":
