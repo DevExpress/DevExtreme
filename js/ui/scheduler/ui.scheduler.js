@@ -2442,11 +2442,6 @@ var Scheduler = Widget.inherit({
                     }
                 }
 
-                updatedStartDate = this.fire(
-                    "convertDateByTimezoneBack",
-                    updatedStartDate
-                    );
-
                 if(!options.skipHoursProcessing) {
                     updatedStartDate.setHours(startDate.getHours(), startDate.getMinutes(), startDate.getSeconds(), startDate.getMilliseconds());
                 }

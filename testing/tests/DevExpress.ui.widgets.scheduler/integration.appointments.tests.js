@@ -1961,6 +1961,38 @@ QUnit.test("Recurrence appointment with custom tz that isn't equal to scheduler 
     }
 });
 
+QUnit.test("Arguments in event args should be correct when timezone is set(T579457)", function(assert) {
+    var tzOffsetStub = sinon.stub(subscribes, "getClientTimezoneOffset").returns(-10800000);
+    try {
+        var appointment = {
+            startDate: new Date('2017-11-22T14:30:00.000Z'),
+            endDate: new Date('2017-11-22T15:00:00.000Z'),
+            allDay: false,
+            recurrenceRule: "FREQ=DAILY;COUNT=3",
+            text: ""
+        };
+
+        this.createInstance({
+            currentDate: new Date(2017, 10, 22),
+            views: ["week"],
+            currentView: "week",
+            firstDayOfWeek: 1,
+            onAppointmentClick: function(args) {
+                assert.equal(args.appointmentData.startDate.getTime(), args.targetedAppointmentData.startDate.getTime(), "Arguments are OK");
+                assert.equal(args.appointmentData.endDate.getTime(), args.targetedAppointmentData.endDate.getTime(), "Arguments are OK");
+            },
+            timeZone: 'Etc/UTC',
+            dataSource: [appointment]
+        });
+
+        var $appointment = $(this.instance.$element()).find(".dx-scheduler-appointment").eq(0);
+        $appointment.trigger("dxclick");
+
+    } finally {
+        tzOffsetStub.restore();
+    }
+});
+
 QUnit.test("Recurrence appointment with the same custom timezones should be opened correctly(T390801)", function(assert) {
     var tzOffsetStub = sinon.stub(subscribes, "getClientTimezoneOffset").returns(-10800000);
     try {

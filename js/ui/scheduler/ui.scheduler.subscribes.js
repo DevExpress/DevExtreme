@@ -664,9 +664,29 @@ var subscribes = {
     getTargetedAppointmentData: function(appointmentData, appointmentElement, appointmentIndex) {
         var recurringData = this._getSingleAppointmentData(appointmentData, {
                 skipDateCalculation: true,
-                $appointment: $(appointmentElement)
+                $appointment: $(appointmentElement),
+                skipHoursProcessing: true
             }),
-            result = {};
+            result = {},
+            startDate = this.fire("getField", "startDate", recurringData),
+            endDate = this.fire("getField", "endDate", recurringData),
+            processedStartDate,
+            processedEndDate;
+
+        processedStartDate = this.fire(
+            "convertDateByTimezoneBack",
+            startDate
+            );
+
+        processedEndDate = this.fire(
+            "convertDateByTimezoneBack",
+            endDate
+            );
+
+
+        this.fire("setField", "startDate", recurringData, processedStartDate);
+        this.fire("setField", "endDate", recurringData, processedEndDate);
+
 
         extend(true, result, appointmentData, recurringData);
 
