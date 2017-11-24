@@ -259,3 +259,13 @@ QUnit.test("shouldn process functions", function(assert) {
 
     assert.equal(element[0].textContent, "text", "the value that the function returns");
 });
+
+QUnit.module("append method");
+
+QUnit.test("shouldn insert number value", function(assert) {
+    var element = renderer("<div>");
+
+    element.append(1);
+
+    assert.equal(element[0].textContent, "1", "number value");
+});
