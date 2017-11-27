@@ -1029,6 +1029,12 @@ module.exports = {
 
                     return isCellEditing;
                 },
+                editRow: function(rowIndex) {
+                    if(this.option("editing.mode") === EDIT_MODE_FORM) {
+                        this._keyboardNavigationController._resetFocusedCell();
+                    }
+                    this.callBase(rowIndex);
+                },
                 addRow: function(parentKey) {
                     this.getController("keyboardNavigation").setupFocusedView();
 
@@ -1043,6 +1049,10 @@ module.exports = {
                     }
 
                     return $cell;
+                },
+                init: function() {
+                    this.callBase();
+                    this._keyboardNavigationController = this.getController("keyboardNavigation");
                 }
             }
         }
