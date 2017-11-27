@@ -1,9 +1,11 @@
 @model RunSuiteViewModel
 @{
     var isNoJQueryTest = Model.ScriptVirtualPath.Contains("nojquery");
-    var isSelfSufficientTest  = Model.ScriptVirtualPath.Contains("bundled")
-        || Model.ScriptVirtualPath.Contains("angular")
-        || Model.ScriptVirtualPath.Contains("framework");
+    var isSelfSufficientTest  = Model.ScriptVirtualPath.Contains("_bundled")
+        || Model.ScriptVirtualPath.Contains("Bundles")
+        || Model.ScriptVirtualPath.Contains("DevExpress.angular")
+        || Model.ScriptVirtualPath.Contains("DevExpress.framework")
+        || Model.ScriptVirtualPath.Contains("DevExpress.jquery");
 
     string GetJQueryUrl() {
         if(isNoJQueryTest)
