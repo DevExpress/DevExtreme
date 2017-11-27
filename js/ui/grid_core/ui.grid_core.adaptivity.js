@@ -1041,10 +1041,11 @@ module.exports = {
                 },
 
                 _handleTabKeyOnMasterDetailCell: function(eventTarget, direction) {
-                    var result = this.callBase(eventTarget, direction);
-                    if(!result) {
-                        var $currentCell = this._getFocusedCell(),
-                            $row = $currentCell.parent(),
+                    var result = this.callBase(eventTarget, direction),
+                        $currentCell = this._getFocusedCell();
+
+                    if(!result && $currentCell) {
+                        var $row = $currentCell.parent(),
                             $dataCells = this._getDataCellElements($row),
                             $targetCell = direction === "next" ? $dataCells.last() : $dataCells.first(),
                             rowIndex = $row.get(0).rowIndex,
