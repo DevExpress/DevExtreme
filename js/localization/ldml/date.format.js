@@ -1,6 +1,6 @@
 "use strict";
 
-var FORMAT_SEPARATORS = " .,:;/\\<>()-",
+var FORMAT_SEPARATORS = " .,:;/\\<>()-\u060C",
     ARABIC_ZERO_CODE = 1632;
 
 var checkDigit = function(char) {
