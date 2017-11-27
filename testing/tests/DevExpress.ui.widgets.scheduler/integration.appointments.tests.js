@@ -4559,7 +4559,7 @@ QUnit.test("Small appointment should have hidden content information but visible
             text: "Meeting",
             startDate: new Date(2016, 8, 16),
             endDate: new Date(2016, 8, 16, 0, 5),
-            recurrenceRule: "FREQ:DAILY"
+            recurrenceRule: "FREQ=DAILY"
         }],
         currentDate: new Date(2016, 8, 16),
         currentView: "day",
