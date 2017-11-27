@@ -221,7 +221,7 @@ var moduleOptions = {
                 startDate: new Date(2015, 1, 9, 8),
                 endDate: new Date(2015, 1, 9, 12)
             },
-            settings: [{ top: 0, left: 0, height: 50, width: 39.5 }]
+            settings: [{ top: 0, left: 0, height: 50, width: 39.5, empty: true }]
         }];
 
         this.items = items;
@@ -239,7 +239,7 @@ var moduleOptions = {
                 startDate: new Date(2015, 1, 9, 8),
                 endDate: new Date(2015, 1, 9, 12)
             },
-            settings: [{ top: 0, left: 0, height: 18.5, width: 10 }]
+            settings: [{ top: 0, left: 0, height: 18.5, width: 10, empty: true }]
         }];
 
         this.items = items;
