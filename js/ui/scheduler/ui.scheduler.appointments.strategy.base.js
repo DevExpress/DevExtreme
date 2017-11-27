@@ -333,7 +333,7 @@ var BaseRenderingStrategy = Class.inherit({
                     count: indexes.length,
                     i: current.i,
                     j: current.j,
-                    sortedIndex: sortedIndex++
+                    sortedIndex: this._skipSortedIndex(position) ? null : sortedIndex++
                 });
 
                 if(intersectPositionCount < indexes.length) {
@@ -367,6 +367,10 @@ var BaseRenderingStrategy = Class.inherit({
                 rowCondition = a.i - b.i;
             return rowCondition ? rowCondition : columnCondition;
         });
+    },
+
+    _skipSortedIndex: function(index) {
+        return this.instance.fire("getMaxAppointmentsPerCell") && index > this._getMaxAppointmentCountPerCell() - 1;
     },
 
     _findIndexByKey: function(arr, iKey, jKey, iValue, jValue) {

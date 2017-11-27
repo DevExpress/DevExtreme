@@ -224,6 +224,7 @@ QUnit.test("Compact parts of long appointment shouldn't have sortedIndex", funct
             focusStateEnabled: true,
             views: ["month"],
             currentView: "month",
+            height: 500,
             dataSource: [
                 { text: "Appointment 1", startDate: new Date(2015, 2, 4, 2), endDate: new Date(2015, 2, 5, 3), allDay: true },
                 { text: "Appointment 2", startDate: new Date(2015, 2, 4, 2), endDate: new Date(2015, 2, 5, 12), allDay: true },
@@ -241,7 +242,6 @@ QUnit.test("Compact parts of long appointment shouldn't have sortedIndex", funct
     assert.equal(dataUtils.data($appointments.get(4), "dxAppointmentSettings").sortedIndex, null, "app has sortedIndex");
     assert.equal(dataUtils.data($appointments.get(5), "dxAppointmentSettings").sortedIndex, null, "app has sortedIndex");
     assert.equal(dataUtils.data($appointments.get(6), "dxAppointmentSettings").sortedIndex, 3, "app has sortedIndex");
-
 });
 
 QUnit.test("AllDay appointment should be displayed right when endDate > startDate and duration < 24", function(assert) {
@@ -1553,6 +1553,37 @@ QUnit.testInActiveWindow("Apps should be focused in right order", function(asser
 
     keyboard.keyDown("tab");
     assert.deepEqual($appointments.get(3), $(apptInstance.option("focusedElement")).get(0), "app 3 in focus");
+});
+
+QUnit.testInActiveWindow("Apps should be focused in right order on month view with ddAppointments", function(assert) {
+    this.createInstance({
+        focusStateEnabled: true,
+        currentView: "month",
+        views: [{
+            type: "month",
+            name: "MONTH",
+            maxAppointmentsPerCell: "auto"
+        }],
+        height: 600,
+        currentDate: new Date(2015, 9, 16),
+        dataSource: [{ text: "Appointment 1", startDate: new Date(2015, 9, 11, 9), endDate: new Date(2015, 9, 11, 11) },
+                    { text: "Appointment 2", startDate: new Date(2015, 9, 11, 8), endDate: new Date(2015, 9, 11, 10) },
+                    { text: "Appointment 3", startDate: new Date(2015, 9, 11, 8), endDate: new Date(2015, 9, 11, 10) },
+                    { text: "Appointment 4", startDate: new Date(2015, 9, 12, 8), endDate: new Date(2015, 9, 12, 10) }]
+    });
+
+    var $appointments = $(this.instance.$element().find(".dx-scheduler-appointment")),
+        apptInstance = this.instance.getAppointmentsInstance();
+
+    $($appointments.eq(0)).trigger("focusin");
+    this.clock.tick();
+
+    var keyboard = keyboardMock($appointments.eq(0));
+    keyboard.keyDown("tab");
+    assert.deepEqual($appointments.get(1), $(apptInstance.option("focusedElement")).get(0), "app 1 in focus");
+
+    keyboard.keyDown("tab");
+    assert.deepEqual($appointments.get(2), $(apptInstance.option("focusedElement")).get(0), "app 0 in focus");
 });
 
 QUnit.testInActiveWindow("Apps should be focused in back order while press shift+tab", function(assert) {
