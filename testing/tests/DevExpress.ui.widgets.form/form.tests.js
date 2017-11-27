@@ -1340,7 +1340,7 @@ QUnit.test("Group template", function(assert) {
                     itemType: "group",
                     caption: "Bio",
                     template: function(data, container) {
-                        assert.deepEqual(typeUtils.isRenderer(container), config().useJQuery, "container is correct");
+                        assert.deepEqual(typeUtils.isRenderer(container), !!config().useJQuery, "container is correct");
                         $("<div>")
                             .text(data.formData.biography)
                             .addClass("template-biography")
@@ -2441,7 +2441,7 @@ QUnit.test("tabElement argument of tabTemplate option is correct", function(asse
                     {
                         items: ["firstName"],
                         tabTemplate: function(tabData, tabIndex, tabElement) {
-                            assert.equal(typeUtils.isRenderer(tabElement), config().useJQuery, "tabElement is correct");
+                            assert.equal(typeUtils.isRenderer(tabElement), !!config().useJQuery, "tabElement is correct");
                         }
                     }]
             }]
@@ -2461,7 +2461,7 @@ QUnit.test("tabElement argument of tabs.template option is correct", function(as
                     {
                         items: ["firstName"],
                         template: function(tabData, tabIndex, tabElement) {
-                            assert.equal(typeUtils.isRenderer(tabElement), config().useJQuery, "tabElement is correct");
+                            assert.equal(typeUtils.isRenderer(tabElement), !!config().useJQuery, "tabElement is correct");
                         }
                     }]
             }]

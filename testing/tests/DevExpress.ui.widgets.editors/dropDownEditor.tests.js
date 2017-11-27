@@ -348,7 +348,7 @@ QUnit.test("field method returning overlay content", function(assert) {
     var dropDownEditor = this.dropDownEditor,
         $field = $(dropDownEditor.field());
 
-    assert.equal(isRenderer(dropDownEditor.field()), config().useJQuery, "fieldElement is correct");
+    assert.equal(isRenderer(dropDownEditor.field()), !!config().useJQuery, "fieldElement is correct");
     assert.ok($field.hasClass("dx-texteditor-input"), "field has class dx-texteditor-input");
     assert.ok($field.hasClass("dx-texteditor-input"), "field has class dx-texteditor-input");
 });
@@ -602,7 +602,7 @@ QUnit.testInActiveWindow("Focus policy with field template", function(assert) {
 
 QUnit.test("Drop button template should be rendered correctly", function(assert) {
     var buttonTemplate = function(buttonData, contentElement) {
-        assert.equal(isRenderer(contentElement), config().useJQuery, "contentElement is correct");
+        assert.equal(isRenderer(contentElement), !!config().useJQuery, "contentElement is correct");
 
         return "<div>Template</div>";
     };
@@ -762,7 +762,7 @@ QUnit.test("fieldTemplate as render", function(assert) {
 QUnit.test("contentTemplate as render", function(assert) {
     $("#dropDownEditorLazy").dxDropDownEditor({
         contentTemplate: function(data, content) {
-            assert.equal(isRenderer(content), config().useJQuery, "contentElement is correct");
+            assert.equal(isRenderer(content), !!config().useJQuery, "contentElement is correct");
             $(content).addClass("drop-down-editor-content");
             return $("<div>").text(data.component.option("value"));
         },
@@ -808,7 +808,7 @@ QUnit.test("field template should be correctly removed after it is been applied 
                 var $textBox = $("<div>").dxTextBox(),
                     $field = $('<div>Test<div/>');
 
-                assert.equal(isRenderer(container), config().useJQuery, "container is correct");
+                assert.equal(isRenderer(container), !!config().useJQuery, "container is correct");
                 $(container).append($field).append($textBox);
             }
         }).dxDropDownEditor("instance");

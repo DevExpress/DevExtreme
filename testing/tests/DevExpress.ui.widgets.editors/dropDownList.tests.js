@@ -69,7 +69,7 @@ QUnit.test("focus removed from list on type some text", function(assert) {
     this.clock.tick(500);
     this.keyboard.keyDown("down");
     var $firstItem = this.instance._$list.find(LIST_ITEM_SELECTOR).eq(0);
-    assert.equal(isRenderer(this.instance._list.option("focusedElement")), config().useJQuery, "focusedElement is correct");
+    assert.equal(isRenderer(this.instance._list.option("focusedElement")), !!config().useJQuery, "focusedElement is correct");
     assert.ok($firstItem.hasClass(STATE_FOCUSED_CLASS), "first list element is focused");
 
     this.keyboard.type("some text");
@@ -1083,7 +1083,7 @@ QUnit.test("itemElement argument of groupTemplate option is correct", function(a
         opened: true,
         grouped: true,
         groupTemplate: function(itemData, itemIndex, itemElement) {
-            assert.equal(isRenderer(itemElement), config().useJQuery, "itemElement is correct");
+            assert.equal(isRenderer(itemElement), !!config().useJQuery, "itemElement is correct");
             return $("<div>");
         }
     }).dxDropDownList("instance");

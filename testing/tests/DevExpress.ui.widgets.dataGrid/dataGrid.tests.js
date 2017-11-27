@@ -343,7 +343,7 @@ QUnit.test("Change row expand state on row click", function(assert) {
             columns: ["field1", "field2"],
             loadingTimeout: undefined,
             onRowPrepared: function(args) {
-                assert.equal(typeUtils.isRenderer(args.rowElement), config().useJQuery, "rowElement is correct");
+                assert.equal(typeUtils.isRenderer(args.rowElement), !!config().useJQuery, "rowElement is correct");
                 if(args.rowType === 'group') {
                     if(isRowClicked) {
                         assert.ok(!args.component.isRowExpanded(args.key), "after click on group row it's closed");
@@ -743,7 +743,7 @@ QUnit.test("dataGrid first data rendering", function(assert) {
     var templatesRenderedCount = 0;
     $("#dataGrid").dxDataGrid({
         columns: [{ dataField: "field1", cellTemplate: function(cellElement) {
-            assert.equal(typeUtils.isRenderer(cellElement), config().useJQuery, "cellElement is correct");
+            assert.equal(typeUtils.isRenderer(cellElement), !!config().useJQuery, "cellElement is correct");
             templatesRenderedCount++;
         } }],
         loadingTimeout: undefined,
@@ -761,7 +761,7 @@ QUnit.test("headerCellTemplate when no dataSource", function(assert) {
     //act
     var $element = $("#dataGrid").dxDataGrid({
         columns: [{ dataField: "field1", headerCellTemplate: function(container) {
-            assert.equal(typeUtils.isRenderer(container), config().useJQuery, "headerCellElement is correct");
+            assert.equal(typeUtils.isRenderer(container), !!config().useJQuery, "headerCellElement is correct");
             $(container).addClass("field1-header"); templatesRenderedCount++;
         } }]
     });
@@ -1351,7 +1351,7 @@ QUnit.test("Get correct column and column index in the onCellHoverChanged event 
             dataSource: dataSource,
             columns: ["firstName", "lastName"],
             onCellHoverChanged: function(e) {
-                assert.equal(typeUtils.isRenderer(e.cellElement), config().useJQuery, "cellElement is correct");
+                assert.equal(typeUtils.isRenderer(e.cellElement), !!config().useJQuery, "cellElement is correct");
                 eventArgs.push({
                     column: e.column,
                     columnIndex: e.columnIndex
@@ -1390,7 +1390,7 @@ QUnit.test("Get correct column and column index in the onCellClick event when ev
             dataSource: dataSource,
             columns: ["firstName", "lastName"],
             onCellClick: function(e) {
-                assert.equal(typeUtils.isRenderer(e.cellElement), config().useJQuery, "cellElement is correct");
+                assert.equal(typeUtils.isRenderer(e.cellElement), !!config().useJQuery, "cellElement is correct");
                 column = e.column;
                 columnIndex = e.columnIndex;
             }
@@ -1900,7 +1900,7 @@ QUnit.test("column headers visibility when hide removing row in batch editing mo
                 allowDeleting: true
             },
             onCellPrepared: function(e) {
-                assert.equal(typeUtils.isRenderer(e.cellElement), config().useJQuery, "cellElement is correct");
+                assert.equal(typeUtils.isRenderer(e.cellElement), !!config().useJQuery, "cellElement is correct");
                 if(e.rowType === "data" && e.column.command === "edit" && e.row.removed) {
                     $(e.cellElement).parent().css({ display: 'none' });
                 }
@@ -5646,7 +5646,7 @@ QUnit.test("CellTemplate and master-detail template cells has correct text-align
                 enabled: true,
                 autoExpandAll: true,
                 template: function(container, options) {
-                    assert.equal(typeUtils.isRenderer(container), config().useJQuery, "container is correct");
+                    assert.equal(typeUtils.isRenderer(container), !!config().useJQuery, "container is correct");
                     var $container = $(container);
                     $container.height(100);
                     $('<div />').dxButton({
@@ -6292,7 +6292,7 @@ QUnit.test("getRowElement", function(assert) {
 
     //act, assert
     $rowElement = $(dataGrid.getRowElement(1));
-    assert.equal(typeUtils.isRenderer(dataGrid.getRowElement(1)), config().useJQuery, "rowElement is correct");
+    assert.equal(typeUtils.isRenderer(dataGrid.getRowElement(1)), !!config().useJQuery, "rowElement is correct");
     assert.equal($rowElement.length, 1, "count row");
     assert.deepEqual($rowElement[0], $("#dataGrid").find(".dx-datagrid-rowsview").find("tbody > tr")[1], "correct row element");
 });
@@ -7649,7 +7649,7 @@ QUnit.test("rowElement argument of rowTemplate option is correct", function(asse
     //arrange, act
     createDataGrid({
         rowTemplate: function(rowElement) {
-            assert.equal(typeUtils.isRenderer(rowElement), config().useJQuery, "rowElement is correct");
+            assert.equal(typeUtils.isRenderer(rowElement), !!config().useJQuery, "rowElement is correct");
         },
         dataSource: [{ column1: "test1", column2: "test2" }],
         columns: [{ dataField: "column1" }, { dataField: "column2" }]
