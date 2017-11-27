@@ -33,11 +33,9 @@ treeListCore.registerModule("selection", extend(true, {}, selectionModule, {
             data: {
                 _handleDataChanged: function(e) {
                     var selectionController = this.getController("selection"),
-                        dataSource = this.dataSource(),
-                        remoteOperations = dataSource && dataSource.remoteOperations(),
                         isRecursiveSelection = selectionController.isRecursiveSelection();
 
-                    if(remoteOperations.filtering && isRecursiveSelection && (!e || e.changeType !== "updateSelectionState")) {
+                    if(isRecursiveSelection && (!e || e.changeType !== "updateSelectionState")) {
                         selectionController.updateSelectionState({
                             selectedItemKeys: this.option("selectedRowKeys")
                         });
