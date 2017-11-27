@@ -920,6 +920,14 @@ QUnit.test("Value indicators preserve their value on resize", function(assert) {
     resizeCallbacks.fire();
 });
 
+QUnit.test("Can set value to null", function(assert) {
+    var gauge = this.createTestGauge({
+        value: null
+    });
+
+    assert.strictEqual(gauge.value(), null);
+});
+
 //  B252892
 QUnit.test("Value indicators preserve their value on resize (hard mode)", function(assert) {
     assert.expect(4);

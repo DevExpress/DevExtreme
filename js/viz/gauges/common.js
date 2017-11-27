@@ -30,6 +30,9 @@ var dxBaseGauge = require("./base_gauge").dxBaseGauge,
     DEFAULT_NUMBER_MULTIPLIERS = [1, 2, 5];
 
 function processValue(value, fallbackValue) {
+    if(value === null) {
+        return value;
+    }
     return _isFinite(value) ? _Number(value) : fallbackValue;
 }
 
