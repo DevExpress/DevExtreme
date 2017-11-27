@@ -109,22 +109,12 @@ function getMultiplierFactor(interval, factorDelta) {
 
 function calculateTickInterval(businessDelta, screenDelta, tickInterval, forceTickInterval, axisDivisionFactor, multipliers, allowDecimals, addTickCount) {
     var interval = getIntervalByFactor(businessDelta, screenDelta, axisDivisionFactor, addTickCount),
-        factor = getMultiplierFactor(interval, -1),
         result = 1,
         onlyIntegers = allowDecimals === false;
 
-    multipliers = multipliers || NUMBER_MULTIPLIERS;
-
     if(!forceTickInterval || !tickInterval) {
         if(interval >= 1 || (!onlyIntegers && interval > 0)) {
-            interval /= factor;
-            result = multipliers.concat(multipliers[0] * 10).map(function(m) { return 10 * m; }).reduce(function(r, m) {
-                if(factor === 0.1 && onlyIntegers && m === 25) {
-                    return r;
-                }
-                return r < interval ? m : r;
-            }, 0);
-            result = adjust(result * factor, factor);
+            result = adjustInterval(interval, multipliers, onlyIntegers);
         }
 
         if(!tickInterval || (!forceTickInterval && tickInterval < result)) {
@@ -133,6 +123,25 @@ function calculateTickInterval(businessDelta, screenDelta, tickInterval, forceTi
     }
 
     return tickInterval;
+}
+
+function adjustInterval(interval, multipliers, onlyIntegers) {
+    var factor = getMultiplierFactor(interval, -1),
+        result = 1;
+
+    multipliers = multipliers || NUMBER_MULTIPLIERS;
+
+    if(interval > 0) {
+        interval /= factor;
+        result = multipliers.concat(multipliers[0] * 10).map(function(m) { return 10 * m; }).reduce(function(r, m) {
+            if(factor === 0.1 && onlyIntegers && m === 25) {
+                return r;
+            }
+            return r < interval ? m : r;
+        }, 0);
+        result = adjust(result * factor, factor);
+    }
+    return result;
 }
 
 function calculateMinorTickInterval(businessDelta, screenDelta, tickInterval, axisDivisionFactor) {
@@ -149,19 +158,11 @@ function calculateMinorTickInterval(businessDelta, screenDelta, tickInterval, ax
 
 function calculateTickIntervalLog(businessDelta, screenDelta, tickInterval, forceTickInterval, axisDivisionFactor, multipliers, allowDecimals) {
     var interval = getIntervalByFactor(businessDelta, screenDelta, axisDivisionFactor),
-        factor = getMultiplierFactor(interval),
         result = 0;
 
-    multipliers = multipliers || LOGARITHMIC_MULTIPLIERS;
-
-    if(factor < 1) {
-        factor = 1;
-    }
     if(!forceTickInterval || !tickInterval) {
         if(interval > 0) {
-            result = multipliers.concat(multipliers[0] * 10).reduce(function(r, m) {
-                return r < interval ? m * factor : r;
-            }, 0);
+            result = adjustIntervalLog(interval, multipliers);
         }
 
         if(!tickInterval || (!forceTickInterval && tickInterval < result)) {
@@ -172,6 +173,19 @@ function calculateTickIntervalLog(businessDelta, screenDelta, tickInterval, forc
     return tickInterval;
 }
 
+function adjustIntervalLog(interval, multipliers) {
+    var factor = getMultiplierFactor(interval);
+
+    multipliers = multipliers || LOGARITHMIC_MULTIPLIERS;
+
+    if(factor < 1) {
+        factor = 1;
+    }
+    return multipliers.concat(multipliers[0] * 10).reduce(function(r, m) {
+        return r < interval ? m * factor : r;
+    }, 0);
+}
+
 function getDataTimeMultipliers(gapSize) {
     if(gapSize && gapSize > 2) {
         return DATETIME_MULTIPLIERS_WITH_BIG_WEEKEND;
@@ -180,49 +194,32 @@ function getDataTimeMultipliers(gapSize) {
     }
 }
 
+function numbersReducer(interval, key) {
+    return function(r, m) {
+        if(!r && interval <= convertDateUnitToMilliseconds(key, m)) {
+            r = {};
+            r[key + 's'] = m;
+        }
+        return r;
+    };
+}
+
+function yearsReducer(interval, factor) {
+    return function(r, m) {
+        var years = factor * m;
+        if(!r && interval <= convertDateUnitToMilliseconds('year', years) && years !== 2.5) {
+            r = { years: years };
+        }
+        return r;
+    };
+}
+
 function calculateTickIntervalDateTime(businessDelta, screenDelta, tickInterval, forceTickInterval, axisDivisionFactor, multipliers, allowDecimals, addTickCount, gapSize) {
     var interval = getIntervalByFactor(businessDelta, screenDelta, axisDivisionFactor),
-        result,
-        factor,
-        key;
-
-    multipliers = multipliers || getDataTimeMultipliers(gapSize);
-
-    function numbersReducer(interval, key) {
-        return function(r, m) {
-            if(!r && interval <= convertDateUnitToMilliseconds(key, m)) {
-                r = {};
-                r[key + 's'] = m;
-            }
-            return r;
-        };
-    }
-
-    function yearsReducer(interval, factor) {
-        return function(r, m) {
-            var years = factor * m;
-            if(!r && interval <= convertDateUnitToMilliseconds('year', years) && years !== 2.5) {
-                r = { years: years };
-            }
-            return r;
-        };
-    }
+        result;
 
     if(!forceTickInterval || !tickInterval) {
-        for(key in multipliers) {
-            result = multipliers[key].reduce(numbersReducer(interval, key), result);
-            if(result) {
-                break;
-            }
-        }
-        if(!result) {
-            for(factor = 1; ; factor *= 10) {
-                result = NUMBER_MULTIPLIERS.reduce(yearsReducer(interval, factor), result);
-                if(result) {
-                    break;
-                }
-            }
-        }
+        result = adjustIntervalDateTime(interval, multipliers, null, gapSize);
 
         if(!tickInterval || (!forceTickInterval && dateToMilliseconds(tickInterval) <= dateToMilliseconds(result))) {
             tickInterval = result;
@@ -230,6 +227,30 @@ function calculateTickIntervalDateTime(businessDelta, screenDelta, tickInterval,
     }
 
     return tickInterval;
+}
+
+function adjustIntervalDateTime(interval, multipliers, _, gapSize) {
+    var result,
+        factor,
+        key;
+
+    multipliers = multipliers || getDataTimeMultipliers(gapSize);
+
+    for(key in multipliers) {
+        result = multipliers[key].reduce(numbersReducer(interval, key), result);
+        if(result) {
+            break;
+        }
+    }
+    if(!result) {
+        for(factor = 1; ; factor *= 10) {
+            result = NUMBER_MULTIPLIERS.reduce(yearsReducer(interval, factor), result);
+            if(result) {
+                break;
+            }
+        }
+    }
+    return result;
 }
 
 function calculateMinorTickIntervalDateTime(businessDelta, screenDelta, tickInterval, axisDivisionFactor) {
@@ -280,8 +301,8 @@ function addIntervalWithBreaks(addInterval, breaks, correctValue) {
     };
 }
 
-function calculateTicks(addInterval, correctMinValue) {
-    return function(min, max, tickInterval, endOnTick, gaps, breaks) {
+function calculateTicks(addInterval, correctMinValue, adjustInterval) {
+    return function(min, max, tickInterval, endOnTick, gaps, breaks, businessDelta) {
         var correctTickValue = correctTickValueOnGapSize(addInterval, gaps),
             cur = correctMinValue(min, tickInterval, min),
             ticks = [];
@@ -291,7 +312,7 @@ function calculateTicks(addInterval, correctMinValue) {
         }
 
         if(cur > max) {
-            cur = min;
+            cur = correctMinValue(min, adjustInterval(businessDelta / 2), min);
         }
         cur = correctTickValue(cur);
 
@@ -451,7 +472,7 @@ function generator(options, getBusinessDelta, calculateTickInterval, calculateMi
             gaps[0] && gaps[0].gapSize.days
         );
 
-        majorTicks = calculateTicks(data.min, data.max, tickInterval, options.endOnTick, gaps, breaks);
+        majorTicks = calculateTicks(data.min, data.max, tickInterval, options.endOnTick, gaps, breaks, businessDelta);
 
         breaks = processScaleBreaks(breaks, tickInterval, screenDelta, options.axisDivisionFactor);
 
@@ -543,7 +564,7 @@ function numericGenerator(options) {
         calculateTickIntervalByCustomTicks,
         calculateTickIntervalByCustomTicks,
         getValue,
-        calculateTicks(addInterval, options.endOnTick ? floor : ceil),
+        calculateTicks(addInterval, options.endOnTick ? floor : ceil, adjustInterval),
         calculateMinorTicks(getValue, addInterval, floor, addInterval, getValue),
         getScaleBreaksProcessor(getValue, getValue, function(value, correction) {
             return value + correction;
@@ -571,7 +592,7 @@ function logarithmicGenerator(options) {
         getTickIntervalByCustomTicks(log, getValue),
         getTickIntervalByCustomTicks(getValue, getValue),
         getValue,
-        calculateTicks(addIntervalLog(base), options.endOnTick ? floor : ceil),
+        calculateTicks(addIntervalLog(base), options.endOnTick ? floor : ceil, adjustIntervalLog),
         calculateMinorTicks(updateTickInterval, addInterval, floor, ceilNumber, ceil),
         getScaleBreaksProcessor(getValue, log, function(value, correction) {
             return raise(log(value) + correction);
@@ -628,7 +649,7 @@ function dateGenerator(options) {
         calculateTickIntervalByCustomTicks,
         calculateTickIntervalByCustomTicks,
         dateToMilliseconds,
-        calculateTicks(addIntervalDate, options.endOnTick ? floor : ceil),
+        calculateTicks(addIntervalDate, options.endOnTick ? floor : ceil, adjustIntervalDateTime),
         calculateMinorTicks(getValue, addIntervalDate, floor, addIntervalDate, getValue),
         getScaleBreaksProcessor(dateToMilliseconds, getValue, function(value, correction) {
             return new Date(value.getTime() + correction);

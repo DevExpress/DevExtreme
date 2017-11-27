@@ -538,7 +538,7 @@ QUnit.test("Custom tickInterval is very small - ignore tickInterval and raise W2
     assert.deepEqual(this.axis._tickInterval, 10);
 });
 
-QUnit.test("tickInterval > businessDelta, no data as multiplier of tickInterval - take min as tick", function(assert) {
+QUnit.test("tickInterval > businessDelta, no data as multiplier of tickInterval", function(assert) {
     this.createAxis();
     this.updateOptions({
         argumentType: "numeric",
@@ -552,7 +552,7 @@ QUnit.test("tickInterval > businessDelta, no data as multiplier of tickInterval 
     //act
     this.axis.createTicks(canvas(200));
 
-    assert.deepEqual(this.axis._majorTicks.map(value), [13]);
+    assert.deepEqual(this.axis._majorTicks.map(value), [15]);
     assert.deepEqual(this.axis._tickInterval, 100);
 });
 
@@ -1076,10 +1076,10 @@ QUnit.test("Minor ticks when there is only one major tick on min (big tickInterv
     //act
     this.axis.createTicks(canvas(200));
 
-    assert.deepEqual(this.axis._minorTicks.map(value), [23, 33]);
+    assert.deepEqual(this.axis._minorTicks.map(value), [30, 40]);
     assert.deepEqual(this.axis._minorTickInterval, 10);
 
-    assert.deepEqual(this.axis._majorTicks.map(value), [13]);
+    assert.deepEqual(this.axis._majorTicks.map(value), [20]);
     assert.deepEqual(this.axis._tickInterval, 100);
 });
 
@@ -1448,19 +1448,19 @@ QUnit.test("Minor ticks when there is only one major tick on min (big tickInterv
         argumentType: "numeric",
         type: "logarithmic",
         logarithmBase: 10,
-        allowDecimals: true,
+        tickInterval: 10,
         minorTick: {
             visible: true
         }
     });
 
-    this.axis.setBusinessRange({ minVisible: 26, maxVisible: 99, addRange: function() { } });
+    this.axis.setBusinessRange({ minVisible: 0.1, maxVisible: 100, addRange: function() { } });
 
     //act
     this.axis.createTicks(canvas(60));
 
-    assert.deepEqual(this.axis._minorTicks.map(value), [50, 75]);
-    assert.deepEqual(this.axis._minorTickInterval, 0.25);
+    assert.deepEqual(this.axis._minorTicks.map(value), [0.1, 0.2, 0.3, 0.4, 0.5, 0.6, 0.7, 0.8, 0.9]);
+    assert.deepEqual(this.axis._minorTickInterval, 1);
 });
 
 QUnit.test("Minor ticks when there is only one major tick in the middle (big tickInterval)", function(assert) {
@@ -1965,7 +1965,7 @@ QUnit.test("Minor ticks when there is only one major tick on min (big tickInterv
     //act
     this.axis.createTicks(canvas(75));
 
-    assert.deepEqual(this.axis._minorTicks.map(value), [new Date(2012, 3, 17), new Date(2012, 3, 24)].map(function(d) { return d.valueOf(); }));
+    assert.deepEqual(this.axis._minorTicks.map(value), [new Date(2012, 3, 15), new Date(2012, 3, 29)].map(function(d) { return d.valueOf(); }));
     assert.deepEqual(this.axis._minorTickInterval, { days: 7 });
 });
 
