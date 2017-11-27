@@ -1121,19 +1121,15 @@ QUnit.test("searchEditorOptions", function(assert) {
 });
 
 QUnit.test("apply list search options if dataSource set as dataSource instance", function(assert) {
-    var data = [{ expr: "test1" }, { expr: "2test" }],
-        getDataSource = function() {
-            return new DataSource({
+    var instance = $("#list").dxList({
+            dataSource: new DataSource({
                 store: new ArrayStore({
-                    data: data,
+                    data: [],
                 }),
                 searchExpr: "test",
                 searchValue: "1",
                 searchOperation: "contains"
-            });
-        },
-        instance = $("#list").dxList({
-            dataSource: getDataSource(),
+            }),
             searchExpr: "expr",
             searchValue: "2",
             searchMode: "startsWith"
@@ -1146,19 +1142,15 @@ QUnit.test("apply list search options if dataSource set as dataSource instance",
 });
 
 QUnit.test("apply dataSource options if list search options are default", function(assert) {
-    var data = [{ expr: "1test" }, { expr: "2test" }],
-        getDataSource = function() {
-            return new DataSource({
+    var instance = $("#list").dxList({
+            dataSource: new DataSource({
                 store: new ArrayStore({
-                    data: data,
+                    data: [{ expr: "1test" }, { expr: "2test" }],
                 }),
                 searchExpr: "expr",
                 searchValue: "2",
                 searchOperation: "startsWith"
-            });
-        },
-        instance = $("#list").dxList({
-            dataSource: getDataSource(),
+            })
         }).dxList("instance"),
         ds = instance.getDataSource();
 
