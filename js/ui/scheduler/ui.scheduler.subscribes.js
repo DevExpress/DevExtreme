@@ -641,8 +641,6 @@ var subscribes = {
             }),
             result = {};
 
-        this._convertDatesByTimezoneBack(false, recurringData);
-
         extend(true, result, appointmentData, recurringData);
 
         this._convertDatesByTimezoneBack(false, result);
