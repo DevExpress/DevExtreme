@@ -7,10 +7,6 @@ var $ = require("jquery"),
     Component = require("core/component"),
     ajaxMock = require("../../helpers/ajaxMock.js");
 
-if(QUnit.urlParams["nojquery"]) {
-    return;
-}
-
 QUnit.testStart(function() {
     var markup = require("./frameworkParts/html_viewEngine.markup.html!text");
 

@@ -15,10 +15,6 @@ var $ = require("jquery"),
 
 require("ui/toolbar");
 
-if(QUnit.urlParams["nojquery"]) {
-    return;
-}
-
 QUnit.testStart(function() {
     var markup = require("./frameworkParts/html_commandManager.markup.html!text");
 

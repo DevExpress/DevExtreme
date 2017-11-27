@@ -1,5 +1,7 @@
 "use strict";
 
+require("../../integration/jquery");
+
 var $ = require("jquery"),
     version = require("../../core/version"),
     Class = require("../../core/class"),

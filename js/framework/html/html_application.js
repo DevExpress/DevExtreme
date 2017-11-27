@@ -1,5 +1,7 @@
 "use strict";
 
+require("../../integration/jquery");
+
 var $ = require("jquery"),
     commonUtils = require("../../core/utils/common"),
     Component = require("../../core/component"),

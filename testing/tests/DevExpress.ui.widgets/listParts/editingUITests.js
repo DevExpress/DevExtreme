@@ -1028,7 +1028,7 @@ QUnit.test("menu item action should be fired after item click", function(assert)
             {
                 text: "menu",
                 action: function(e) {
-                    assert.equal(isRenderer(e.itemElement), config().useJQuery, "itemElement is correct");
+                    assert.equal(isRenderer(e.itemElement), !!config().useJQuery, "itemElement is correct");
                     assert.equal($(e.itemElement).get(0), $item.get(0));
                 }
             }

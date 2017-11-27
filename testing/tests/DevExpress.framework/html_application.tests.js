@@ -23,10 +23,6 @@ var $ = require("jquery"),
 require("spa.css!");
 require("common.css!");
 
-if(QUnit.urlParams["nojquery"]) {
-    return;
-}
-
 QUnit.testStart(function() {
     var markup = $('<div id="view-templates">                                                                   \
                 <div data-options="dxView: { name: \'test-view\'}">                                             \
