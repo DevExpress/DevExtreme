@@ -1,6 +1,6 @@
 "use strict";
 
-require("integration/jquery");
+require("../../integration/jquery");
 
 var $ = require("jquery"),
     MarkupComponent = require("./markup_component").MarkupComponent,
