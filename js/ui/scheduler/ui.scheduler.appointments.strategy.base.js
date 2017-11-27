@@ -13,6 +13,7 @@ var abstract = Class.abstract;
 var APPOINTMENT_MIN_SIZE = 2,
     COMPACT_APPOINTMENT_DEFAULT_SIZE = 15,
     APPOINTMENT_DEFAULT_HEIGHT = 20,
+    APPOINTMENT_DEFAULT_WIDTH = 40,
     COMPACT_THEME_APPOINTMENT_DEFAULT_HEIGHT = 18,
     APPOINTMENT_DEFAULT_OFFSET = 26,
     COMPACT_THEME_APPOINTMENT_DEFAULT_OFFSET = 22,
@@ -645,7 +646,7 @@ var BaseRenderingStrategy = Class.inherit({
     },
 
     _getAppointmentDefaultWidth: function() {
-        return 40;
+        return APPOINTMENT_DEFAULT_WIDTH;
     }
 });
 
