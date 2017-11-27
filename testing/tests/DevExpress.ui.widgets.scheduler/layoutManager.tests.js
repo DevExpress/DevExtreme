@@ -1720,6 +1720,40 @@ QUnit.test("Full-size appointment should have correct height, 'auto' mode", func
     assert.roughEqual($appointment.eq(1).outerHeight(), 21, 1, "appointment height is ok");
 });
 
+QUnit.test("Full-size appointment should not have empty class in 'auto' mode", function(assert) {
+    var items = [ { text: "Task 1", startDate: new Date(2015, 2, 4, 2, 0), endDate: new Date(2015, 2, 4, 3, 0) },
+        { text: "Task 2", startDate: new Date(2015, 2, 4, 7, 0), endDate: new Date(2015, 2, 4, 12, 0) } ];
+
+    this.createInstance(
+        {
+            currentDate: new Date(2015, 2, 4),
+            currentView: "month",
+            views: [{
+                type: "month",
+                maxAppointmentsPerCell: 'auto'
+            }],
+            height: 500,
+            dataSource: []
+        }
+    );
+
+    var getHeightStub = sinon.stub(this.instance.getRenderingStrategyInstance(), "_getAppointmentDefaultHeight", function() {
+        return 18;
+    });
+
+    try {
+        this.instance.option("dataSource", items);
+
+        var $firstAppointment = $(this.instance.$element().find(".dx-scheduler-appointment")).eq(0),
+            $secondAppointment = $(this.instance.$element().find(".dx-scheduler-appointment")).eq(1);
+
+        assert.ok(!$firstAppointment.hasClass("dx-scheduler-appointment-empty"), "appointment has not the class");
+        assert.ok(!$secondAppointment.eq(1).hasClass("dx-scheduler-appointment-empty"), "appointment has not the class");
+    } finally {
+        getHeightStub.restore();
+    }
+});
+
 QUnit.test("Full-size appointment should have correct height, 'numeric' mode", function(assert) {
     var items = [ { text: "Task 1", startDate: new Date(2015, 2, 4, 2, 0), endDate: new Date(2015, 2, 4, 3, 0) },
         { text: "Task 2", startDate: new Date(2015, 2, 4, 7, 0), endDate: new Date(2015, 2, 4, 12, 0) },
