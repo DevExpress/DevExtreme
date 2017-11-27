@@ -1017,3 +1017,38 @@ QUnit.test("Select all after filtering data", function(assert) {
     //assert
     assert.deepEqual(this.option("selectedRowKeys"), [1, 4, 5], "selected row keys");
 });
+
+//T558153
+QUnit.test("Selection state should be updated correctly after options are changed", function(assert) {
+    //arrange
+    var items,
+        $testElement = $('#treeList'),
+        clock = sinon.useFakeTimers();
+
+    try {
+        this.options.loadingTimeout = 30;
+        this.setupTreeList();
+        this.rowsView.render($testElement);
+
+        this.options.selectedRowKeys = [2, 4];
+        this.options.dataSource = [
+            { id: 1, field1: 'test1', field2: 1, field3: new Date(2001, 0, 1) },
+            { id: 2, parentId: 1, field1: 'test2', field2: 2, field3: new Date(2002, 1, 2) },
+            { id: 3, field1: 'test3', field2: 3, field3: new Date(2002, 1, 3) },
+            { id: 4, parentId: 3, field1: 'test4', field2: 4, field3: new Date(2002, 1, 4) }
+        ];
+
+        //act
+        this.selectionController.optionChanged({ name: "selectedRowKeys", value: this.options.selectedRowKeys });
+        this.dataController.optionChanged({ name: "dataSource" });
+        clock.tick(30);
+
+        //assert
+        items = this.dataController.items();
+        assert.strictEqual(items.length, 2, "count row");
+        assert.ok(items[0].isSelected, "first row is selected");
+        assert.ok(items[1].isSelected, "second row is selected");
+    } finally {
+        clock.restore();
+    }
+});
