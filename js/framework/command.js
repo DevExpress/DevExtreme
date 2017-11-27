@@ -1,5 +1,7 @@
 "use strict";
 
+require("integration/jquery");
+
 var $ = require("jquery"),
     errors = require("./errors"),
     extend = require("../core/utils/extend").extend,

@@ -29,10 +29,6 @@ require("ui/tabs");
 require("ui/text_box");
 require("ui/toolbar");
 
-if(QUnit.urlParams["nojquery"]) {
-    return;
-}
-
 var FILTERING_TIMEOUT = 700;
 
 fx.off = true;

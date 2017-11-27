@@ -14,10 +14,6 @@ var $ = require("jquery"),
     executeAsyncMock = require("../../helpers/executeAsyncMock.js"),
     frameworkMocks = require("../../helpers/frameworkMocks.js");
 
-if(QUnit.urlParams["nojquery"]) {
-    return;
-}
-
 QUnit.module("Application", {
     beforeEach: function() {
         executeAsyncMock.setup();

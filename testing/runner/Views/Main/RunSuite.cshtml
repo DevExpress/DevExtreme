@@ -1,7 +1,9 @@
 @model RunSuiteViewModel
 @{
     var isNoJQueryTest = Model.ScriptVirtualPath.Contains("nojquery");
-    var isBundledTest = Model.ScriptVirtualPath.Contains("bundled");
+    var isSelfSufficientTest  = Model.ScriptVirtualPath.Contains("bundled")
+        || Model.ScriptVirtualPath.Contains("angular")
+        || Model.ScriptVirtualPath.Contains("framework");
 
     string GetJQueryUrl() {
         if(isNoJQueryTest)
@@ -15,7 +17,7 @@
     }
 
     IEnumerable<string> GetJQueryIntegrationImports() {
-        if(!isBundledTest) {
+        if(!isSelfSufficientTest) {
             if(!Model.NoJQuery && !isNoJQueryTest) {
                 yield return Url.Content("~/js/integration/jquery.js");
             } else {
@@ -154,13 +156,6 @@
                         return address + ( address.indexOf('?') === -1 ? '?' : '&') + cacheBuster;
                     });
                 }
-            }
-
-            if(@Html.Raw(Json.Serialize(Model.NoJQuery))) {
-                window.DevExpress = window.DevExpress || {};
-                window.DevExpress.config = {
-                    useJQuery: false
-                };
             }
 
             SystemJS.config({

@@ -28,10 +28,6 @@
     }
 }(this, function($, Component, dxCommand, fx, pointerMock, layoutHelper, PivotLayoutController) {
 
-    if(QUnit.urlParams["nojquery"]) {
-        return;
-    }
-
     includeLayout("Pivot");
 
     QUnit.testStart(function() {

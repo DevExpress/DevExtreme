@@ -25,10 +25,6 @@
     }
 }(this, function($, devices, SimpleLayoutController, layoutHelper) {
 
-    if(QUnit.urlParams["nojquery"]) {
-        return;
-    }
-
     includeLayout("Simple");
 
     QUnit.testStart(function() {

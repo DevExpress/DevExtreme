@@ -1,5 +1,7 @@
 "use strict";
 
+require("integration/jquery");
+
 var $ = require("jquery"),
     eventsEngine = require("../../events/core/events_engine"),
     Class = require("../../core/class"),
