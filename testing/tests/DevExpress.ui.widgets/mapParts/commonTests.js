@@ -888,6 +888,6 @@ QUnit.test("change provider and async options", function(assert) {
             map.option(makeConfig(resolve));
         });
     }).then(function(map) {
-        assert.deepEqual(map._suppressedAsyncActions, ["updateMarkers"]);
+        assert.ok(map._asyncActionSuppressed);
     });
 });

@@ -593,11 +593,7 @@ var Map = Widget.inherit({
         this._lastAsyncAction = this._lastAsyncAction.then(function() {
             if(!this._provider || isActionSuppressed) {
                 ///#DEBUG
-                if(this._suppressedAsyncActions) {
-                    this._suppressedAsyncActions.push(name);
-                } else {
-                    this._suppressedAsyncActions = [name];
-                }
+                this._asyncActionSuppressed = true;
                 ///#ENDDEBUG
                 return Promise.resolve();
             }
