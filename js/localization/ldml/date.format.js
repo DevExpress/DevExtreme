@@ -1,6 +1,7 @@
 "use strict";
 
-var FORMAT_SEPARATORS = " .,:;/\\<>()-\u060C",
+var ARABIC_COMMA = "\u060C",
+    FORMAT_SEPARATORS = " .,:;/\\<>()-" + ARABIC_COMMA,
     ARABIC_ZERO_CODE = 1632;
 
 var checkDigit = function(char) {
