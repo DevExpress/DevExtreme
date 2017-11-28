@@ -60,8 +60,17 @@ var NumberBoxMask = NumberBoxBase.inherit({
             leftArrow: that._arrowHandler.bind(that, MOVE_FORWARD),
             rightArrow: that._arrowHandler.bind(that, MOVE_BACKWARD),
             home: that._moveCaretToBoundary.bind(that, MOVE_FORWARD),
+            enter: that._formatValue.bind(that),
             end: that._moveCaretToBoundary.bind(that, MOVE_BACKWARD)
         });
+    },
+
+    _focusOutHandler: function(e) {
+        if(this._useMaskBehavior()) {
+            this._formatValue();
+        }
+
+        this.callBase(e);
     },
 
     _arrowHandler: function(step, e) {
