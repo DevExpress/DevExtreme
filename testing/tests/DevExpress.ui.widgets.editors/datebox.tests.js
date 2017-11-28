@@ -2592,11 +2592,6 @@ QUnit.test("DateBox should have time part when pickerType is rollers", function(
 });
 
 QUnit.test("DateBox with time should be rendered correctly in IE, templatesRenderAsynchronously=true", function(assert) {
-    if(!browser.msie) {
-        assert.expect(0);
-        return;
-    }
-
     var clock = sinon.useFakeTimers();
     try {
         var dateBox = $("#dateBox").dxDateBox({
