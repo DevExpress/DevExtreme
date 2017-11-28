@@ -1866,19 +1866,22 @@ QUnit.module("Draw label", {
     beforeEach: function() {
         var that = this;
         this.translators = {
-            x: new MockTranslator({
+            arg: new MockTranslator({
                 translate: { 1: 11 },
                 failOnWrongData: true,
                 getCanvasVisibleArea: { min: 0, max: 110 }
             }),
-            y: new MockTranslator({
+            val: new MockTranslator({
                 translate: { 1: 52, 2: 35, 3: 10, 4: 5 },
                 failOnWrongData: true,
                 getCanvasVisibleArea: { min: 0, max: 210 }
             })
         };
         this.sinonFactory = sinon.stub(labelModule, "Label", function() {
-            return sinon.createStubInstance(originalLabel);
+            var label = sinon.createStubInstance(originalLabel);
+            label.getBoundingRect.returns({});
+            label.getLayoutOptions.returns({});
+            return label;
         });
         this.renderer = new vizMocks.Renderer();
         this.renderer.bBoxTemplate = { x: 55, y: 40, height: 10, width: 20 };
@@ -1913,6 +1916,7 @@ QUnit.module("Draw label", {
             isFullStackedSeries: function() { return false; },
             areLabelsVisible: function() { return true; },
             getLabelVisibility: function() { return true; },
+            getVisibleArea: function() { return { minX: 1, maxX: 100, minY: 2, maxY: 210 }; },
             getValueAxis: function() { return { getTranslator: function() { return that.translators.val; } }; },
             getArgumentAxis: function() { return { getTranslator: function() { return that.translators.arg; } }; }
         };
@@ -2048,7 +2052,7 @@ QUnit.test("Draw label if point isn't reduction", function(assert) {
 
     point._drawLabel(this.renderer, this.group);
 
-    assert.ok(point._label.show.called);
+    assert.deepEqual(point._label.draw.lastCall.args, [true]);
     assert.ok(!point._label.setColor.called);
 });
 
@@ -2068,7 +2072,7 @@ QUnit.test("Draw label if point is reduction", function(assert) {
 
     point._drawLabel(this.renderer, this.group);
 
-    assert.ok(point._label.show.called);
+    assert.deepEqual(point._label.draw.lastCall.args, [true]);
     assert.ok(point._label.setColor.args[0][0], "red");
 });
 
@@ -2091,7 +2095,7 @@ QUnit.test("Update label from reduction to non-reduction", function(assert) {
     point.updateOptions(this.options);
     point._drawLabel(this.renderer, this.group);
 
-    assert.ok(point._label.show.called);
+    assert.deepEqual(point._label.draw.lastCall.args, [true]);
     assert.ok(!point._label.setColor.called);
 });
 
@@ -2106,7 +2110,7 @@ QUnit.test("Draw label. Stock", function(assert) {
 
     point._drawLabel(this.renderer, this.group);
 
-    assert.ok(point._label.show.called);
+    assert.deepEqual(point._label.draw.lastCall.args, [true]);
 });
 
 QUnit.test("Draw label. Candlestick", function(assert) {
@@ -2120,7 +2124,7 @@ QUnit.test("Draw label. Candlestick", function(assert) {
 
     point._drawLabel(this.renderer, this.group);
 
-    assert.ok(point._label.show.called);
+    assert.deepEqual(point._label.draw.lastCall.args, [true]);
 });
 
 QUnit.module("get point radius", {

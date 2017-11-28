@@ -524,8 +524,11 @@ QUnit.module("Draw", {
             attributes: { r: 6 },
             symbol: "circle"
         };
-        this.sinonFactory = sinon.stub(labelModule, "Label", function() {
-            return sinon.createStubInstance(originalLabel);
+        sinon.stub(labelModule, "Label", function() {
+            var label = sinon.createStubInstance(originalLabel);
+            label.getBoundingRect.returns({});
+            label.getLayoutOptions.returns({});
+            return label;
         });
         this.series = {
             isFullStackedSeries: function() { return false; },
@@ -649,7 +652,8 @@ QUnit.test("Draw label. Visible", function(assert) {
     point.draw(this.renderer, this.groups);
 
     assert.ok(point._label);
-    assert.ok(point._label.show.calledOnce);
+    assert.ok(point._label.draw.calledOnce);
+    assert.deepEqual(point._label.draw.lastCall.args, [true]);
 });
 
 QUnit.test("Draw label. Common visible = false", function(assert) {
@@ -660,7 +664,7 @@ QUnit.test("Draw label. Common visible = false", function(assert) {
     point.draw(this.renderer, this.groups);
 
     assert.ok(point._label);
-    assert.ok(!point._label.show.called);
+    assert.deepEqual(point._label.draw.lastCall.args, [false]);
 });
 
 QUnit.test("Draw label. Invisible", function(assert) {
@@ -672,7 +676,7 @@ QUnit.test("Draw label. Invisible", function(assert) {
     point.draw(this.renderer, this.groups);
 
     assert.ok(point._label);
-    assert.ok(!point._label.show.called);
+    assert.deepEqual(point._label.draw.lastCall.args, [false]);
 });
 
 QUnit.test("Update label. Visible", function(assert) {
@@ -710,7 +714,7 @@ QUnit.test("Update data with null value after data with value", function(assert)
 
     assert.deepEqual(point._label.setOptions.lastCall.args[0], this.options.label);
     assert.strictEqual(point.graphic._stored_settings.visibility, "hidden");
-    assert.ok(point._label.hide.calledOnce);
+    assert.deepEqual(point._label.draw.lastCall.args, [false]);
     assert.ok(point.setInvisibility.calledOnce);
 });
 
@@ -1264,8 +1268,11 @@ QUnit.module("Dispose", {
             attributes: { r: 6 },
             symbol: "circle"
         };
-        this.sinonFactory = sinon.stub(labelModule, "Label", function() {
-            return sinon.createStubInstance(originalLabel);
+        sinon.stub(labelModule, "Label", function() {
+            var label = sinon.createStubInstance(originalLabel);
+            label.getBoundingRect.returns({});
+            label.getLayoutOptions.returns({});
+            return label;
         });
         this.series = {
             isFullStackedSeries: function() { return false; },

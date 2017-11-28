@@ -1752,9 +1752,7 @@ QUnit.test("Clear visibility", function(assert) {
     point.clearVisibility();
 
     assert.strictEqual(point.graphic.topMarker._stored_settings.visibility, null);
-    assert.ok(point._topLabel.clearVisibility.called);
     assert.strictEqual(point.graphic.bottomMarker._stored_settings.visibility, null);
-    assert.ok(point._bottomLabel.clearVisibility.called);
 });
 
 QUnit.test("Hide marker when marker is visible", function(assert) {
@@ -1774,12 +1772,12 @@ QUnit.test("Hide marker when marker is visible", function(assert) {
     assert.equal(point.graphic.topMarker.stub("attr").callCount, 2);
     assert.deepEqual(point.graphic.topMarker.stub("attr").firstCall.args[0], "visibility");
     assert.deepEqual(point.graphic.topMarker.stub("attr").lastCall.args[0].visibility, "hidden");
-    assert.ok(point._topLabel.hide.calledOnce);
+    assert.deepEqual(point._topLabel.draw.lastCall.args, [false]);
 
     assert.equal(point.graphic.bottomMarker.stub("attr").callCount, 2);
     assert.deepEqual(point.graphic.bottomMarker.stub("attr").firstCall.args[0], "visibility");
     assert.deepEqual(point.graphic.bottomMarker.stub("attr").lastCall.args[0].visibility, "hidden");
-    assert.ok(point._bottomLabel.hide.calledOnce);
+    assert.deepEqual(point._bottomLabel.draw.lastCall.args, [false]);
 });
 
 QUnit.test("Hide marker when marker has no visibility setting", function(assert) {
@@ -1798,12 +1796,12 @@ QUnit.test("Hide marker when marker has no visibility setting", function(assert)
     assert.equal(point.graphic.topMarker.stub("attr").callCount, 2);
     assert.deepEqual(point.graphic.topMarker.stub("attr").firstCall.args[0], "visibility");
     assert.deepEqual(point.graphic.topMarker.stub("attr").lastCall.args[0].visibility, "hidden");
-    assert.ok(point._topLabel.hide.calledOnce);
+    assert.deepEqual(point._topLabel.draw.lastCall.args, [false]);
 
     assert.equal(point.graphic.bottomMarker.stub("attr").callCount, 2);
     assert.deepEqual(point.graphic.bottomMarker.stub("attr").firstCall.args[0], "visibility");
     assert.deepEqual(point.graphic.bottomMarker.stub("attr").lastCall.args[0].visibility, "hidden");
-    assert.ok(point._bottomLabel.hide.calledOnce);
+    assert.deepEqual(point._bottomLabel.draw.lastCall.args, [false]);
 });
 
 QUnit.test("Hide marker when marker is hidden", function(assert) {
@@ -1825,12 +1823,12 @@ QUnit.test("Hide marker when marker is hidden", function(assert) {
     assert.strictEqual(point.graphic.topMarker._stored_settings.visibility, "hidden");
     assert.equal(point.graphic.topMarker.stub("attr").callCount, 1);
     assert.deepEqual(point.graphic.topMarker.stub("attr").firstCall.args[0], "visibility");
-    assert.ok(point._topLabel.hide.called);
+    assert.deepEqual(point._topLabel.draw.lastCall.args, [false]);
 
     assert.strictEqual(point.graphic.bottomMarker._stored_settings.visibility, "hidden");
     assert.equal(point.graphic.bottomMarker.stub("attr").callCount, 1);
     assert.deepEqual(point.graphic.bottomMarker.stub("attr").firstCall.args[0], "visibility");
-    assert.ok(point._bottomLabel.hide.called);
+    assert.deepEqual(point._bottomLabel.draw.lastCall.args, [false]);
 });
 
 QUnit.test("Apply style when top marker is invisible", function(assert) {
@@ -2893,8 +2891,8 @@ QUnit.test("Visible", function(assert) {
 
     assert.ok(labels.tl);
     assert.ok(labels.bl);
-    assert.equal(labels.tl.show.callCount, 1);
-    assert.equal(labels.bl.show.callCount, 1);
+    assert.deepEqual(labels.tl.draw.lastCall.args, [true]);
+    assert.deepEqual(labels.bl.draw.lastCall.args, [true]);
 });
 
 QUnit.test("Null value and minValue", function(assert) {
@@ -2904,8 +2902,8 @@ QUnit.test("Null value and minValue", function(assert) {
 
     assert.ok(labels.tl);
     assert.ok(labels.bl);
-    assert.equal(labels.tl.show.callCount, 0);
-    assert.equal(labels.bl.show.callCount, 0);
+    assert.deepEqual(labels.tl.draw.lastCall.args, [false]);
+    assert.deepEqual(labels.bl.draw.lastCall.args, [false]);
 });
 
 QUnit.test("Null value", function(assert) {
@@ -2914,8 +2912,8 @@ QUnit.test("Null value", function(assert) {
 
     assert.ok(labels.tl);
     assert.ok(labels.bl);
-    assert.equal(labels.tl.show.callCount, 0);
-    assert.equal(labels.bl.show.callCount, 0);
+    assert.deepEqual(labels.tl.draw.lastCall.args, [false]);
+    assert.deepEqual(labels.bl.draw.lastCall.args, [false]);
 });
 
 QUnit.test("Null minValue", function(assert) {
@@ -2924,11 +2922,11 @@ QUnit.test("Null minValue", function(assert) {
 
     assert.ok(labels.tl);
     assert.ok(labels.bl);
-    assert.equal(labels.tl.show.callCount, 0);
-    assert.equal(labels.bl.show.callCount, 0);
+    assert.deepEqual(labels.tl.draw.lastCall.args, [false]);
+    assert.deepEqual(labels.bl.draw.lastCall.args, [false]);
 });
 
-QUnit.test("hide label on draw if it invisible", function(assert) {
+QUnit.test("Hide label on draw if it invisible", function(assert) {
     var point = createPoint(this.series, this.data, this.options);
     point.x = 33;
     point.y = 32;
@@ -2944,8 +2942,8 @@ QUnit.test("hide label on draw if it invisible", function(assert) {
 
     point._drawLabel(this.renderer, this.group);
 
-    assert.equal(point._topLabel.hide.callCount, 1);
-    assert.equal(point._bottomLabel.hide.callCount, 1);
+    assert.deepEqual(point._topLabel.draw.lastCall.args, [false]);
+    assert.deepEqual(point._bottomLabel.draw.lastCall.args, [false]);
 });
 
 QUnit.test("CustomizeLabel visibility is true, series labels are not visible", function(assert) {
@@ -2959,8 +2957,8 @@ QUnit.test("CustomizeLabel visibility is true, series labels are not visible", f
 
     point._drawLabel(this.renderer, this.group);
 
-    assert.ok(point.getLabels()[0].show.called);
-    assert.ok(point.getLabels()[1].show.called);
+    assert.deepEqual(point.getLabels()[0].draw.lastCall.args, [true]);
+    assert.deepEqual(point.getLabels()[1].draw.lastCall.args, [true]);
 });
 
 QUnit.test("CustomizeLabel visibility is false, series labels are visible", function(assert) {
@@ -2971,15 +2969,15 @@ QUnit.test("CustomizeLabel visibility is false, series labels are visible", func
 
     point._drawLabel(this.renderer, this.group);
 
-    assert.ok(!point.getLabels()[0].show.called);
-    assert.ok(!point.getLabels()[1].show.called);
+    assert.deepEqual(point.getLabels()[0].draw.lastCall.args, [false]);
+    assert.deepEqual(point.getLabels()[1].draw.lastCall.args, [false]);
 });
 
 QUnit.test("Value < minValue, not rotated", function(assert) {
     var labels = createLabels.call(this, 33, 54, 35);
 
-    assert.equal(labels.tl.show.callCount, 1);
-    assert.equal(labels.bl.show.callCount, 1);
+    assert.deepEqual(labels.tl.draw.lastCall.args, [true]);
+    assert.deepEqual(labels.bl.draw.lastCall.args, [true]);
     assert.equal(labels.tl.pointPosition, "bottom");
     assert.equal(labels.bl.pointPosition, "top");
 });
@@ -2987,8 +2985,8 @@ QUnit.test("Value < minValue, not rotated", function(assert) {
 QUnit.test("Value > minValue, not rotated", function(assert) {
     var labels = createLabels.call(this, 33, 35, 54);
 
-    assert.equal(labels.tl.show.callCount, 1);
-    assert.equal(labels.bl.show.callCount, 1);
+    assert.deepEqual(labels.tl.draw.lastCall.args, [true]);
+    assert.deepEqual(labels.bl.draw.lastCall.args, [true]);
     assert.equal(labels.tl.pointPosition, "top");
     assert.equal(labels.bl.pointPosition, "bottom");
 });
@@ -2997,8 +2995,8 @@ QUnit.test("Value < minValue, rotated", function(assert) {
     this.options.rotated = true;
     var labels = createLabels.call(this, 33, 54, 35);
 
-    assert.equal(labels.tl.show.callCount, 1);
-    assert.equal(labels.bl.show.callCount, 1);
+    assert.deepEqual(labels.tl.draw.lastCall.args, [true]);
+    assert.deepEqual(labels.bl.draw.lastCall.args, [true]);
     assert.equal(labels.tl.pointPosition, "bottom");
     assert.equal(labels.bl.pointPosition, "top");
 });
@@ -3007,8 +3005,8 @@ QUnit.test("Value > minValue, rotated", function(assert) {
     this.options.rotated = true;
     var labels = createLabels.call(this, 33, 35, 54);
 
-    assert.equal(labels.tl.show.callCount, 1);
-    assert.equal(labels.bl.show.callCount, 1);
+    assert.deepEqual(labels.tl.draw.lastCall.args, [true]);
+    assert.deepEqual(labels.bl.draw.lastCall.args, [true]);
     assert.equal(labels.tl.pointPosition, "bottom");
     assert.equal(labels.bl.pointPosition, "top");
 });
@@ -3019,8 +3017,8 @@ QUnit.test("Value axis contains categories", function(assert) {
     this.data.minValue = "7";
     var labels = createLabels.call(this, 46, 90, 100);
 
-    assert.equal(labels.tl.show.callCount, 1);
-    assert.equal(labels.bl.show.callCount, 1);
+    assert.deepEqual(labels.tl.draw.lastCall.args, [true]);
+    assert.deepEqual(labels.bl.draw.lastCall.args, [true]);
     assert.equal(labels.tl.pointPosition, "top");
     assert.equal(labels.bl.pointPosition, "bottom");
 });
@@ -3382,13 +3380,18 @@ QUnit.test("Default, inside, not rotated. Overlay corrections", function(assert)
 
     point._drawLabel(this.renderer, this.group);
 
-    assert.ok(topLabel.shift.calledOnce);
-    assert.ok(bottomLabel.shift.calledOnce);
+    assert.equal(topLabel.shift.callCount, 2);
+    assert.equal(bottomLabel.shift.callCount, 2);
 
     assert.equal(topLabel.shift.firstCall.args[0], 33 - 10);
-    assert.equal(topLabel.shift.firstCall.args[1], 44);
+    assert.equal(topLabel.shift.firstCall.args[1], 64);
     assert.equal(bottomLabel.shift.firstCall.args[0], 33 - 10);
-    assert.equal(bottomLabel.shift.firstCall.args[1], 54);
+    assert.equal(bottomLabel.shift.firstCall.args[1], 35);
+
+    assert.equal(topLabel.shift.lastCall.args[0], 33 - 10);
+    assert.equal(topLabel.shift.lastCall.args[1], 44);
+    assert.equal(bottomLabel.shift.lastCall.args[0], 33 - 10);
+    assert.equal(bottomLabel.shift.lastCall.args[1], 54);
 });
 
 QUnit.test("Default, inside, rotated. Overlay corrections", function(assert) {
@@ -3407,13 +3410,18 @@ QUnit.test("Default, inside, rotated. Overlay corrections", function(assert) {
 
     point._drawLabel(this.renderer, this.group);
 
-    assert.ok(topLabel.shift.calledOnce);
-    assert.ok(bottomLabel.shift.calledOnce);
+    assert.equal(topLabel.shift.callCount, 2);
+    assert.equal(bottomLabel.shift.callCount, 2);
 
-    assert.equal(topLabel.shift.firstCall.args[0], 71);
+    assert.equal(topLabel.shift.firstCall.args[0], 47);
     assert.equal(topLabel.shift.firstCall.args[1], 12 - 5);
-    assert.equal(bottomLabel.shift.firstCall.args[0], 51);
+    assert.equal(bottomLabel.shift.firstCall.args[0], 75);
     assert.equal(bottomLabel.shift.firstCall.args[1], 12 - 5);
+
+    assert.equal(topLabel.shift.lastCall.args[0], 71);
+    assert.equal(topLabel.shift.lastCall.args[1], 12 - 5);
+    assert.equal(bottomLabel.shift.lastCall.args[0], 51);
+    assert.equal(bottomLabel.shift.lastCall.args[1], 12 - 5);
 });
 
 QUnit.test("Value < minValue, inside. Overlay corrections", function(assert) {
@@ -3433,13 +3441,18 @@ QUnit.test("Value < minValue, inside. Overlay corrections", function(assert) {
 
     point._drawLabel(this.renderer, this.group);
 
-    assert.ok(topLabel.shift.calledOnce);
-    assert.ok(bottomLabel.shift.calledOnce);
+    assert.equal(topLabel.shift.callCount, 2);
+    assert.equal(bottomLabel.shift.callCount, 2);
 
     assert.equal(bottomLabel.shift.firstCall.args[0], 33 - 10);
-    assert.equal(bottomLabel.shift.firstCall.args[1], 44);
+    assert.equal(bottomLabel.shift.firstCall.args[1], 64);
     assert.equal(topLabel.shift.firstCall.args[0], 33 - 10);
-    assert.equal(topLabel.shift.firstCall.args[1], 54);
+    assert.equal(topLabel.shift.firstCall.args[1], 35);
+
+    assert.equal(bottomLabel.shift.lastCall.args[0], 33 - 10);
+    assert.equal(bottomLabel.shift.lastCall.args[1], 44);
+    assert.equal(topLabel.shift.lastCall.args[0], 33 - 10);
+    assert.equal(topLabel.shift.lastCall.args[1], 54);
 });
 
 QUnit.test("Value < minValue, inside, rotated. Overlay corrections", function(assert) {
@@ -3460,13 +3473,18 @@ QUnit.test("Value < minValue, inside, rotated. Overlay corrections", function(as
 
     point._drawLabel(this.renderer, this.group);
 
-    assert.ok(topLabel.shift.calledOnce);
-    assert.ok(bottomLabel.shift.calledOnce);
+    assert.equal(topLabel.shift.callCount, 2);
+    assert.equal(bottomLabel.shift.callCount, 2);
 
-    assert.equal(topLabel.shift.firstCall.args[0], 34);
+    assert.equal(topLabel.shift.firstCall.args[0], 63);
     assert.equal(topLabel.shift.firstCall.args[1], 12 - 5);
-    assert.equal(bottomLabel.shift.firstCall.args[0], 54);
+    assert.equal(bottomLabel.shift.firstCall.args[0], 25);
     assert.equal(bottomLabel.shift.firstCall.args[1], 12 - 5);
+
+    assert.equal(topLabel.shift.lastCall.args[0], 34);
+    assert.equal(topLabel.shift.lastCall.args[1], 12 - 5);
+    assert.equal(bottomLabel.shift.lastCall.args[0], 54);
+    assert.equal(bottomLabel.shift.lastCall.args[1], 12 - 5);
 });
 
 QUnit.test("Default, not rotated. Left alignment", function(assert) {
@@ -3561,8 +3579,8 @@ QUnit.test("Default, not rotated. Null value", function(assert) {
     this.data.minValue = null;
     var l = createCorrectionBarLabels.call(this, { x: 33, y: 54, height: 10, width: 20 }, 33, 54, 20, 10, "bottom", "top");
 
-    assert.ok(l.topLabel.hide.called);
-    assert.ok(l.bottomLabel.hide.called);
+    assert.deepEqual(l.topLabel.draw.lastCall.args, [false]);
+    assert.deepEqual(l.bottomLabel.draw.lastCall.args, [false]);
 });
 
 QUnit.test("Default, inside, not rotated", function(assert) {

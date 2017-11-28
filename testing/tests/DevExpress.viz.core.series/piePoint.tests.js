@@ -760,12 +760,12 @@ QUnit.test("Hide marker when marker is visible", function(assert) {
     point.translate();
     point.draw(this.renderer, this.groups);
 
-    var labelSpy = sinon.spy(point._label, "hide");
+    var labelSpy = sinon.spy(point._label, "draw");
 
     point.setInvisibility();
 
     assert.strictEqual(point.graphic._stored_settings.visibility, "visible");
-    assert.ok(labelSpy.calledOnce);
+    assert.deepEqual(labelSpy.lastCall.args, [false]);
 });
 
 QUnit.test("Hide marker when marker has no visibility setting", function(assert) {
@@ -774,12 +774,12 @@ QUnit.test("Hide marker when marker has no visibility setting", function(assert)
     point.translate();
     point.draw(this.renderer, this.groups);
 
-    var labelSpy = sinon.spy(point._label, "hide");
+    var labelSpy = sinon.spy(point._label, "draw");
 
     point.setInvisibility();
 
     assert.strictEqual(point.graphic._stored_settings.visibility, undefined);
-    assert.ok(labelSpy.calledOnce);
+    assert.deepEqual(labelSpy.lastCall.args, [false]);
 });
 
 QUnit.test("Draw point if option visible is false", function(assert) {
@@ -965,7 +965,7 @@ QUnit.test("hide label on draw if it invisible", function(assert) {
     point.updateOptions(this.options);
     point._drawLabel();
 
-    assert.ok(point._label.hide.called);
+    assert.deepEqual(point._label.draw.lastCall.args, [false]);
 });
 
 QUnit.test("Set label tracker data", function(assert) {
@@ -1020,12 +1020,6 @@ QUnit.test("not columns", function(assert) {
     var coord = point._getColumnsCoord({ x: 10, y: 10 });
 
     assert.deepEqual(coord, { x: 10, y: 10 });
-});
-
-QUnit.test("Show hidden label in the correct position (using the 'resolveLabelOverlapping' option) after calling the 'show' method (T561563)", function(assert) {
-    var point = createPointWithStubLabelForDraw.call(this, { 0: 170, 10: 210, 20: 250 }, true);
-
-    assert.ok(point._label.clearVisibility.calledOnce);
 });
 
 QUnit.module("update Coord", {

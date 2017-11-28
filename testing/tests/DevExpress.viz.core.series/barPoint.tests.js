@@ -1333,7 +1333,7 @@ QUnit.test("Value = null", function(assert) {
 
     point._drawLabel(this.renderer, this.group);
 
-    assert.ok(point._label.hide.called);
+    assert.deepEqual(point._label.draw.lastCall.args, [false]);
 });
 
 QUnit.test("Get bbox for point", function(assert) {
@@ -1560,7 +1560,7 @@ QUnit.test("Default, label with zero value, showForZeroValues is true", function
 
     point._drawLabel(this.renderer, this.group);
 
-    assert.ok(point._label.show.called);
+    assert.deepEqual(point._label.draw.lastCall.args, [true]);
 });
 
 QUnit.test("Default, label with zero value, showForZeroValues is false", function(assert) {
@@ -1570,7 +1570,7 @@ QUnit.test("Default, label with zero value, showForZeroValues is false", functio
 
     point._drawLabel(this.renderer, this.group);
 
-    assert.ok(point._label.hide.called);
+    assert.deepEqual(point._label.draw.lastCall.args, [false]);
 });
 
 QUnit.test("Default, double draw, hidden to visible", function(assert) {
@@ -1590,7 +1590,7 @@ QUnit.test("Default, double draw, hidden to visible", function(assert) {
     this.options.resolveLabelsOverlapping = false;
     point.correctLabelPosition(label);
 
-    assert.equal(label.hide.callCount, 1);
+    assert.deepEqual(point._label.draw.lastCall.args, [false]);
     assert.equal(label.shift.callCount, 1);
 });
 
@@ -1626,7 +1626,7 @@ QUnit.test("Default, inside, not rotated, label height > point height", function
     assert.equal(label.shift.firstCall.args[0], 33);
     assert.equal(label.shift.firstCall.args[1], 21);
 
-    assert.ok(!label.hide.called);
+    assert.equal(point._label.draw.callCount, 0);
 });
 
 QUnit.test("Inside, not rotated, label height > point height with resolveLabelOverlapping", function(assert) {
@@ -1645,7 +1645,7 @@ QUnit.test("Inside, not rotated, label height > point height with resolveLabelOv
     point.correctLabelPosition(label);
 
     assert.ok(!label.shift.called);
-    assert.ok(label.hide.called);
+    assert.deepEqual(point._label.draw.lastCall.args, [false]);
 });
 
 QUnit.test("Inside, not rotated, label width > point width with resolveLabelOverlapping", function(assert) {
@@ -1664,7 +1664,7 @@ QUnit.test("Inside, not rotated, label width > point width with resolveLabelOver
     point.correctLabelPosition(label);
 
     assert.ok(!label.shift.called);
-    assert.ok(label.hide.called);
+    assert.deepEqual(point._label.draw.lastCall.args, [false]);
 });
 
 QUnit.test("Default, inside, not rotated with negative value", function(assert) {
@@ -1742,7 +1742,7 @@ QUnit.test("Default, inside, not rotated, label width > point width", function(a
     assert.equal(label.shift.firstCall.args[0], 32);
     assert.equal(label.shift.firstCall.args[1], 22);
 
-    assert.ok(!label.hide.called);
+    assert.equal(point._label.draw.callCount, 0);
 });
 
 
@@ -1762,7 +1762,7 @@ QUnit.test("Inside, rotated, label width > point width with resolveLabelOverlapp
     point.correctLabelPosition(label);
 
     assert.ok(!label.shift.called);
-    assert.ok(label.hide.called);
+    assert.deepEqual(point._label.draw.lastCall.args, [false]);
 });
 
 QUnit.test("Outside, rotated, label width > point width with resolveLabelOverlapping", function(assert) {
@@ -1787,7 +1787,7 @@ QUnit.test("Outside, rotated, label width > point width with resolveLabelOverlap
     assert.equal(label.shift.firstCall.args[0], 63);
     assert.equal(label.shift.firstCall.args[1], 22);
 
-    assert.ok(!label.hide.called);
+    assert.equal(point._label.draw.callCount, 0);
 });
 
 QUnit.test("Inside, rotated, label height > point height with resolveLabelOverlapping", function(assert) {
@@ -1806,7 +1806,7 @@ QUnit.test("Inside, rotated, label height > point height with resolveLabelOverla
     point.correctLabelPosition(label);
 
     assert.ok(!label.shift.called);
-    assert.ok(label.hide.called);
+    assert.deepEqual(point._label.draw.lastCall.args, [false]);
 });
 
 QUnit.test("Default, inside, rotated with negative value", function(assert) {
