@@ -660,7 +660,7 @@ declare module DevExpress {
         defaultCurrency?: string;
         /** Specifies whether dates are parsed and serialized according to the ISO 8601 standard in all browsers. */
         forceIsoDateParsing?: boolean;
-        /** Specifies whether the widgets support a right-to-left representation. */
+        /** Specifies whether the widgets support a right-to-left representation. Available for individual widgets as well. */
         rtlEnabled?: boolean;
         /** The decimal separator that is used when submitting a value to the server. */
         serverDecimalSeparator?: string;
@@ -669,7 +669,7 @@ declare module DevExpress {
     }
     /** Gets the current global configuration object. */
     export function config(): globalConfig;
-    /** Sets the global configuration object. */
+    /** Configures your application before its launch. */
     export function config(config: globalConfig): void;
     /** The device object defines the device on which the application is running. */
     export interface Device {
@@ -2526,6 +2526,8 @@ declare module DevExpress.ui {
     export class dxDropDownBox extends dxDropDownEditor {
         constructor(element: Element, options?: dxDropDownBoxOptions)
         constructor(element: JQuery, options?: dxDropDownBoxOptions)
+        /** Gets the DataSource instance. */
+        getDataSource(): DevExpress.data.DataSource;
     }
     export interface dxDropDownMenuOptions extends WidgetOptions {
         /** Specifies whether or not the widget changes its state when interacting with a user. */
@@ -3520,6 +3522,8 @@ declare module DevExpress.ui {
     export class dxRadioGroup extends Editor {
         constructor(element: Element, options?: dxRadioGroupOptions)
         constructor(element: JQuery, options?: dxRadioGroupOptions)
+        /** Gets the DataSource instance. */
+        getDataSource(): DevExpress.data.DataSource;
     }
     export interface dxRangeSliderOptions extends dxSliderBaseOptions {
         /** The right edge of the interval currently selected using the range slider. */
@@ -4626,6 +4630,8 @@ declare module DevExpress.ui {
     export class dxDropDownList extends dxDropDownEditor {
         constructor(element: Element, options?: dxDropDownListOptions)
         constructor(element: JQuery, options?: dxDropDownListOptions)
+        /** Gets the DataSource instance. */
+        getDataSource(): DevExpress.data.DataSource;
     }
     export interface EditorOptions extends WidgetOptions {
         /** Specifies whether the editor's value is valid. */
