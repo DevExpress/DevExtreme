@@ -1248,7 +1248,7 @@ QUnit.testInActiveWindow("Update focus when row is editing with form_T306378", f
     this.clock.tick();
 
     //assert
-    assert.equal(this.keyboardNavigationController._focusedCellPosition.rowIndex, 0);
+    assert.equal($(".dx-datagrid-edit-form input:focus").length, 1);
 });
 
 QUnit.testInActiveWindow("Right, left, top, down arrow keys when row or cell is editing", function(assert) {
@@ -4765,4 +4765,86 @@ QUnit.test("Apply custom tabIndex to rows view on click", function(assert) {
     rowsView.render(testElement);
     $(rowsView.element().find("td").first()).trigger(CLICK_EVENT);
     assert.equal(rowsView.element().attr("tabIndex"), 5, "tabIndex of rowsView");
+});
+
+QUnit.module("Keyboard navigation with real dataController and columnsController", {
+    setupModule: function() {
+        this.data = [
+            { name: "Alex", phone: "555555", room: 1 },
+            { name: "Dan", phone: "553355", room: 2 }
+        ];
+
+        this.columns = this.columns || ["name", "phone", "room"];
+
+        this.options = $.extend(true, {
+            useKeyboard: true,
+            showColumnHeaders: true,
+            editing: {
+                allowUpdating: true,
+                mode: "row",
+                texts: {
+                    editRow: "Edit"
+                }
+            },
+            commonColumnSettings: {
+                allowEditing: true
+            },
+            columns: this.columns,
+            dataSource: {
+                asyncLoadEnabled: false,
+                store: this.data,
+                paginate: true
+            }
+        }, this.options);
+
+        setupDataGridModules(this, ["data", "columns", "columnHeaders", "rows", "editorFactory", "gridView", "editing", "keyboardNavigation", "masterDetail"], {
+            initViews: true
+        });
+    },
+    beforeEach: function() {
+        this.clock = sinon.useFakeTimers();
+    },
+    afterEach: function() {
+        this.clock.restore();
+    }
+}, function() {
+    QUnit.testInActiveWindow("First input is focused when row is edited from a cell template", function(assert) {
+        //arrange
+        var that = this;
+        that.$element = function() {
+            return $("#container");
+        };
+        that.options = {
+            editing: {
+                mode: "form"
+            }
+        };
+
+        that.columns = [ "name", "phone",
+            { dataField: "room",
+                cellTemplate: function($element, options) {
+                    $("<div/>")
+                        .appendTo($element)
+                        .attr("id", "editButton")
+                        .text("edit")
+                        .click(function() {
+                            that.editingController.editRow(options.row.rowIndex);
+                        });
+                }
+            }
+        ];
+
+        this.setupModule();
+
+        //act
+        that.gridView.render($("#container"));
+        $("#editButton")
+            .trigger("dxpointerdown.dxDataGridKeyboardNavigation")
+            .click();
+
+        this.clock.tick();
+
+        //assert
+        assert.equal($("input:focus").val(), "Alex", "value of first editor");
+    });
 });
