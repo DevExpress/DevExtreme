@@ -561,8 +561,6 @@ var CollectionWidget = Widget.inherit({
                 this._createItemRenderAction();
                 break;
             case "onItemPointerDown":
-                this._createItemPointerDownAction();
-                break;
             case "onItemClick":
                 break;
             case "onItemHold":
@@ -706,7 +704,6 @@ var CollectionWidget = Widget.inherit({
 
         this.$element().addClass(COLLECTION_CLASS);
 
-        this._createItemPointerDownAction();
         this._attachClickEvent();
         this._attachHoldEvent();
         this._attachContextMenuEvent();
@@ -720,19 +717,21 @@ var CollectionWidget = Widget.inherit({
         eventsEngine.off(this._itemContainer(), clickEventNamespace, itemSelector);
         eventsEngine.off(this._itemContainer(), pointerDownEventNamespace, itemSelector);
         eventsEngine.on(this._itemContainer(), clickEventNamespace, itemSelector, (function(e) { this._itemClickHandler(e); }).bind(this));
-        eventsEngine.on(this._itemContainer(), pointerDownEventNamespace, itemSelector, this._itemPointerDownAction.bind(this));
-    },
-
-    _createItemPointerDownAction: function() {
-        this._itemPointerDownAction = this._createActionByOption("onItemPointerDown", {
-            beforeExecute: function(actionArgs) {
-                this._itemPointerDownHandler(actionArgs.args[0].actionValue);
-            }
-        });
+        eventsEngine.on(this._itemContainer(), pointerDownEventNamespace, itemSelector, (function(e) {
+            this._itemPointerDown(e);
+        }).bind(this));
     },
 
     _itemClickHandler: function(e, args, config) {
         this._itemDXEventHandler(e, "onItemClick", args, config);
+    },
+
+    _itemPointerDown: function(e, args, config) {
+        this._itemDXEventHandler(e, "onItemPointerDown", args, extend(config, {
+            beforeExecute: function(actionArgs) {
+                this._itemPointerDownHandler(actionArgs.args[0].event);
+            }
+        }));
     },
 
     _itemPointerDownHandler: function(e) {
