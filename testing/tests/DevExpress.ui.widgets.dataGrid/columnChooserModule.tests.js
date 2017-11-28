@@ -993,3 +993,41 @@ QUnit.test("CheckBox mode - update treeview when changing the column options", f
     //assert
     assert.strictEqual(this.columnChooserView._renderTreeView.callCount, 1, "update treeview");
 });
+
+
+//T571469
+QUnit.test("Filter value should be reset after disabled search", function(assert) {
+    //arrange
+    var $testElement = $("#container"),
+        popupInstance,
+        treeViewInstance;
+
+    $.extend(this.columns, [
+        { caption: "Column 1", index: 0, visible: false },
+        { caption: "Column 2", index: 1, visible: false }
+    ]);
+    this.options.columnChooser.allowSearch = true;
+    this.setTestElement($testElement);
+    this.renderColumnChooser();
+
+    popupInstance = this.columnChooserView._popupContainer;
+    popupInstance.option("visible", true);
+    this.clock.tick();
+
+    //assert
+    assert.strictEqual($(popupInstance.content()).find(".dx-column-chooser-item").length, 2, "hidden column count");
+
+    //arrange
+    treeViewInstance = this.columnChooserView._columnChooserList;
+    treeViewInstance.option("searchValue", "test");
+
+    //assert
+    assert.strictEqual($(popupInstance.content()).find(".dx-column-chooser-item").length, 0, "hidden column count");
+
+    //act
+    this.options.columnChooser.allowSearch = false;
+    this.columnChooserView.optionChanged({ name: "columnChooser" });
+
+    //assert
+    assert.strictEqual($(popupInstance.content()).find(".dx-column-chooser-item").length, 2, "hidden column count");
+});
