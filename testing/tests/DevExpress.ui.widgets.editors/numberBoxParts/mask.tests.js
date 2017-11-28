@@ -118,7 +118,7 @@ QUnit.test("widget should not crash when it is disposing on change (T578115)", f
     this.instance.option({
         value: 1,
         onValueChanged: function(e) {
-            e.component._dispose();
+            e.component.dispose();
         }
     });
 
