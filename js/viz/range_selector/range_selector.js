@@ -544,8 +544,8 @@ function prepareScaleOptions(scaleOption, seriesDataSource, incidentOccurred, co
         scaleOption.maxRange = undefined;
     }
 
-    scaleOption.axisDivisionFactor = scaleOption.axisDivisionFactor !== undefined ? scaleOption.axisDivisionFactor : DEFAULT_AXIS_DIVISION_FACTOR;
-    scaleOption.minorAxisDivisionFactor = scaleOption.minorAxisDivisionFactor !== undefined ? scaleOption.minorAxisDivisionFactor : DEFAULT_MINOR_AXIS_DIVISION_FACTOR;
+    scaleOption.axisDivisionFactor = _isDefined(scaleOption.axisDivisionFactor) ? scaleOption.axisDivisionFactor : DEFAULT_AXIS_DIVISION_FACTOR;
+    scaleOption.minorAxisDivisionFactor = _isDefined(scaleOption.minorAxisDivisionFactor) ? scaleOption.minorAxisDivisionFactor : DEFAULT_MINOR_AXIS_DIVISION_FACTOR;
     return scaleOption;
 }
 

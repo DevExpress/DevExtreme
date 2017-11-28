@@ -248,7 +248,7 @@ function addIntervalDate(value, interval) {
     return addInterval(value, interval);
 }
 
-function addIntervalWithBreaks(addInterval, breaks) {
+function addIntervalWithBreaks(addInterval, breaks, correctValue) {
     breaks = breaks.filter(function(b) { return !b.gapSize; });
 
     return function(value, interval) {
@@ -262,7 +262,7 @@ function addIntervalWithBreaks(addInterval, breaks) {
             }
             return !breakSize;
         })) {
-            value = addInterval(value, breakSize);
+            value = correctValue(addInterval(value, breakSize), interval);
         }
         return value;
     };
@@ -275,7 +275,7 @@ function calculateTicks(addInterval, correctMinValue) {
             ticks = [];
 
         if(breaks && breaks.length) {
-            addInterval = addIntervalWithBreaks(addInterval, breaks);
+            addInterval = addIntervalWithBreaks(addInterval, breaks, correctMinValue);
         }
 
         if(cur > max) {
@@ -302,7 +302,7 @@ function calculateMinorTicks(updateTickInterval, addInterval, correctMinValue, c
             tickBalance = maxCount - 1;
 
         if(breaks && breaks.length) {
-            addInterval = addIntervalWithBreaks(addInterval, breaks);
+            addInterval = addIntervalWithBreaks(addInterval, breaks, correctMinValue);
         }
 
         minorTickInterval = updateTickInterval(minorTickInterval, firstMajor, factor);
@@ -419,6 +419,7 @@ function generator(options, getBusinessDelta, calculateTickInterval, calculateMi
 
     function generateMajorTicks(ticks, data, businessDelta, screenDelta, tickInterval, forceTickInterval, customTicks, breaks) {
         if(customTicks.majors && !options.showCalculatedTicks) { //DEPRECATED IN 15_2
+            ticks.breaks = breaks;
             return ticks;
         }
 
@@ -446,7 +447,7 @@ function generator(options, getBusinessDelta, calculateTickInterval, calculateMi
         return ticks;
     }
 
-    function generateMinorTicks(ticks, data, businessDelta, screenDelta, tickInterval, minorTickInterval, minorTickCount, customTicks, breaks) {
+    function generateMinorTicks(ticks, data, businessDelta, screenDelta, minorTickInterval, minorTickCount, customTicks) {
         if(!options.calculateMinors) {
             return ticks;
         }
@@ -456,7 +457,8 @@ function generator(options, getBusinessDelta, calculateTickInterval, calculateMi
 
         var minorBusinessDelta = convertTickInterval(ticks.tickInterval),
             minorScreenDelta = screenDelta * minorBusinessDelta / businessDelta,
-            majorTicks = ticks.ticks;
+            majorTicks = ticks.ticks,
+            breaks = ticks.breaks;
 
         if(!minorTickInterval && minorTickCount) {
             minorTickInterval = getMinorTickIntervalByCustomTicks([minorBusinessDelta / (minorTickCount + 1), minorBusinessDelta / (minorTickCount + 1) * 2]);
@@ -467,7 +469,7 @@ function generator(options, getBusinessDelta, calculateTickInterval, calculateMi
         minorTickInterval = correctUserTickInterval(minorTickInterval, minorBusinessDelta, minorScreenDelta);
 
         minorTickInterval = calculateMinorTickInterval(minorBusinessDelta, minorScreenDelta, minorTickInterval, options.minorAxisDivisionFactor);
-        ticks.minorTicks = filterTicks(ticks.minorTicks.concat(calculateMinorTicks(data.min, data.max, majorTicks, minorTickInterval, tickInterval, breaks, minorTickCount)), breaks);
+        ticks.minorTicks = filterTicks(ticks.minorTicks.concat(calculateMinorTicks(data.min, data.max, majorTicks, minorTickInterval, ticks.tickInterval, breaks, minorTickCount)), breaks);
         ticks.minorTickInterval = minorTickInterval;
 
         return ticks;
@@ -481,7 +483,7 @@ function generator(options, getBusinessDelta, calculateTickInterval, calculateMi
 
         if(!isNaN(businessDelta)) {
             result = generateMajorTicks(result, data, businessDelta, screenDelta, tickInterval, forceTickInterval, customTicks, breaks || []);
-            result = generateMinorTicks(result, data, businessDelta, screenDelta, result.tickInterval, minorTickInterval, minorTickCount, customTicks, result.breaks);
+            result = generateMinorTicks(result, data, businessDelta, screenDelta, minorTickInterval, minorTickCount, customTicks);
         }
 
         return result;

@@ -220,13 +220,9 @@ var moduleOptions = {
                 startDate: new Date(2015, 1, 9, 8),
                 endDate: new Date(2015, 1, 9, 12)
             },
-            settings: [{ top: 0, left: 0 }]
+            settings: [{ top: 0, left: 0, height: 50, width: 39.5 }]
         }];
 
-        this.getCoordinates = function() {
-            return [{ top: 0, left: 0 }];
-        };
-        this.width = 20;
         this.items = items;
         this.instance.option("renderingStrategy", "horizontalMonth");
         this.instance.option("items", items);
@@ -242,14 +238,9 @@ var moduleOptions = {
                 startDate: new Date(2015, 1, 9, 8),
                 endDate: new Date(2015, 1, 9, 12)
             },
-            settings: [{ top: 0, left: 0 }]
+            settings: [{ top: 0, left: 0, height: 18.5, width: 10 }]
         }];
 
-        this.getCoordinates = function() {
-            return [{ top: 0, left: 0 }];
-        };
-        this.width = 400;
-        this.height = 30;
         this.items = items;
         this.instance.option("renderingStrategy", "horizontalMonth");
         this.instance.option("items", items);

@@ -1124,7 +1124,7 @@ declare module DevExpress.data {
     }
     export interface ODataContextOptions {
         /** A function used to customize a web request before it is sent. */
-        beforeSend?: Function;
+        beforeSend?: ((options: { url?: string, async?: boolean, method?: string, timeout?: number, params?: any, payload?: any, headers?: any }) => any);
         /** Specifies whether or not dates in a response are deserialized. */
         deserializeDates?: boolean;
         /** Specifies the list of entities to be accessed with the ODataContext. */
@@ -1262,7 +1262,7 @@ declare module DevExpress.data {
     }
     export interface XmlaStoreOptions {
         /** A function used to customize a web request before it is sent. */
-        beforeSend?: ((request: any) => any);
+        beforeSend?: ((options: { url?: string, method?: string, headers?: any, xhrFields?: any, data?: string, dataType?: string }) => any);
         /** The name of the database associated with the Store. */
         catalog?: string;
         /** The cube name. */
@@ -1318,7 +1318,7 @@ declare module DevExpress.data {
         filterType?: string;
         /** Specifies by which values the field is filtered. */
         filterValues?: Array<any>;
-        /** Specifies a display format for field values. */
+        /** Formats field values before they are displayed. */
         format?: DevExpress.ui.format;
         /** The index of the field within a group. */
         groupIndex?: number;
@@ -2041,7 +2041,7 @@ declare module DevExpress.ui {
         fixed?: boolean;
         /** Specifies the widget's edge to which the column is fixed. Applies only if columns].[fixed is true. */
         fixedPosition?: string;
-        /** Specifies a format for the values displayed in the column. */
+        /** Formats a value before it is displayed in a column cell. */
         format?: format;
         /** Configures the form item produced by this column in the editing state. Used only if editing.mode is "form" or "popup". */
         formItem?: dxFormSimpleItem;
@@ -2271,7 +2271,7 @@ declare module DevExpress.ui {
         customizeExportData?: ((columns: Array<dxDataGridColumn>, rows: Array<dxDataGridRowObject>) => any);
         /** Configures editing. */
         editing?: dxDataGridEditing;
-        /** Configures client-side export. */
+        /** Configures client-side exporting. */
         export?: { texts?: any, enabled?: boolean, fileName?: string, excelFilterEnabled?: boolean, excelWrapTextEnabled?: boolean, proxyUrl?: string, allowExportSelectedData?: boolean };
         /** Specifies grouping settings and the behavior of grouped grid records. */
         grouping?: { groupContinuedMessage?: any, groupContinuesMessage?: any, autoExpandAll?: boolean, allowCollapsing?: boolean, contextMenuEnabled?: boolean, expandMode?: string, texts?: any };
@@ -3296,7 +3296,7 @@ declare module DevExpress.ui {
         dataFieldArea?: string;
         /** Specifies a data source for the pivot grid. */
         dataSource?: Array<any> | DevExpress.data.PivotGridDataSource | DevExpress.data.PivotGridDataSourceOptions;
-        /** Configures client-side export. */
+        /** Configures client-side exporting. */
         export?: { enabled?: boolean, fileName?: string, proxyUrl?: string };
         /** The Field Chooser configuration options. */
         fieldChooser?: { enabled?: boolean, allowSearch?: boolean, layout?: number, title?: string, width?: number, height?: number, texts?: any };
@@ -3638,6 +3638,7 @@ declare module DevExpress.ui {
         groups?: Array<string>;
         /** @deprecated */
         horizontalScrollingEnabled?: any;
+        /** Specifies the time interval between when the date-time indicator changes its position, in milliseconds. */
         indicatorUpdateInterval?: number;
         /** The latest date the widget allows you to select. */
         max?: Date | number | string;
@@ -5355,7 +5356,7 @@ declare module DevExpress.viz {
         enabled?: boolean;
         /** Specifies tooltips' font options. */
         font?: Font;
-        /** Specifies the format of the value a tooltip displays. */
+        /** Formats a value before it is displayed it in a tooltip. */
         format?: DevExpress.ui.format;
         /** Specifies tooltips' transparency. */
         opacity?: number;
@@ -6235,7 +6236,7 @@ declare module DevExpress.viz {
         customizeText?: ((indicatedValue: { value?: number, valueText?: string }) => string);
         /** Specifies font options for the text displayed by the indicator. */
         font?: Font;
-        /** Specifies a format for the text displayed in an indicator. */
+        /** Formats a value before it is displayed in an indicator. Accepts only numeric formats. */
         format?: DevExpress.ui.format;
         /** Specifies the range bar's label indent in pixels. */
         indent?: number;
@@ -6776,7 +6777,7 @@ declare module DevExpress.viz {
         customizeText?: ((pointInfo: any) => string);
         /** Specifies font options for the text displayed in point labels. */
         font?: Font;
-        /** Specifies a format for the text displayed by point labels. */
+        /** Formats a value before it is displayed in a point label. */
         format?: DevExpress.ui.format;
         /** Specifies a label position in bar-like series. */
         position?: string;
@@ -6888,7 +6889,7 @@ declare module DevExpress.viz {
         /** Resets the drill down level. */
         resetDrillDown(): void;
     }
-    /** The VectorMap is a widget that visualize geographical locations. This widget represents a geographical map that contains areas and markers. Areas embody continents and countries. Markers flag specific points on the map, for example, towns, cities or capitals. */
+    /** The VectorMap is a widget that visualizes geographical locations. This widget represents a geographical map that contains areas and markers. Areas embody continents and countries. Markers flag specific points on the map, for example, towns, cities or capitals. */
     export class dxVectorMap extends BaseWidget {
         constructor(element: Element, options?: DevExpress.viz.map.dxVectorMapOptions)
         constructor(element: JQuery, options?: DevExpress.viz.map.dxVectorMapOptions)
@@ -7080,7 +7081,7 @@ declare module DevExpress.viz.charts {
         constantLines?: Array<dxChartArgumentAxisConstantLines>;
         /** Specifies the appearance of those constant lines that belong to the argument axis. */
         constantLineStyle?: dxChartArgumentAxisConstantLineStyle;
-        /** Days to be excluded from the axis when workdaysOnly is true. */
+        /** Dates to be excluded from the axis when workdaysOnly is true. */
         holidays?: Array<Date | string> | Array<number>;
         /** Specifies chart elements to be highlighted when a user points to an axis label. */
         hoverMode?: string;
@@ -7098,7 +7099,7 @@ declare module DevExpress.viz.charts {
         minorTickInterval?: any;
         /** Relocates the argument axis. */
         position?: string;
-        /** Days to be included in the axis when workdaysOnly is true. */
+        /** Dates to be included on the axis when workdaysOnly is true. */
         singleWorkdays?: Array<Date | string> | Array<number>;
         /** Declares a collection of strips belonging to the argument axis. */
         strips?: Array<dxChartArgumentAxisStrips>;
@@ -7147,7 +7148,7 @@ declare module DevExpress.viz.charts {
         customizeHint?: ((argument: { value?: Date | number | string, valueText?: string }) => string);
         /** Customizes the text displayed by axis labels. */
         customizeText?: ((argument: { value?: Date | number | string, valueText?: string }) => string);
-        /** Specifies the format of the arguments displayed by axis labels. */
+        /** Formats a value before it is displayed in an axis label. */
         format?: DevExpress.ui.format;
         /** @deprecated Use the argumentAxis.label.format.precision option instead. */
         precision?: number;
@@ -7465,7 +7466,7 @@ declare module DevExpress.viz.charts {
         customizeHint?: ((axisValue: { value?: Date | number | string, valueText?: string }) => string);
         /** Customizes the text displayed by axis labels. */
         customizeText?: ((axisValue: { value?: Date | number | string, valueText?: string }) => string);
-        /** Specifies the format of the values displayed by axis labels. */
+        /** Formats a value before it is displayed in an axis label. */
         format?: DevExpress.ui.format;
         /** @deprecated Use the valueAxis.label.format.precision option instead. */
         precision?: number;
@@ -7657,7 +7658,7 @@ declare module DevExpress.viz.charts {
         customizeHint?: ((argument: { value?: Date | number | string, valueText?: string }) => string);
         /** Specifies a callback function that returns the text to be displayed by argument axis labels. */
         customizeText?: ((argument: { value?: Date | number | string, valueText?: string }) => string);
-        /** Specifies a format for the text displayed by axis labels. */
+        /** Formats a value before it is displayed in an axis label. */
         format?: DevExpress.ui.format;
         /** @deprecated Use the argumentAxis.label.format.precision option instead. */
         precision?: number;
@@ -7856,7 +7857,7 @@ declare module DevExpress.viz.charts {
         customizeHint?: ((axisValue: { value?: Date | number | string, valueText?: string }) => string);
         /** Specifies a callback function that returns the text to be displayed in value axis labels. */
         customizeText?: ((axisValue: { value?: Date | number | string, valueText?: string }) => string);
-        /** Specifies a format for the text displayed by axis labels. */
+        /** Formats a value before it is displayed in an axis label. */
         format?: DevExpress.ui.format;
         /** @deprecated Use the valueAxis.label.format.precision option instead. */
         precision?: number;
@@ -8109,7 +8110,7 @@ declare module DevExpress.viz.gauges {
         customizeText?: ((scaleValue: { value?: number, valueText?: string }) => string);
         /** Specifies font options for the text displayed in the scale labels of the gauge. */
         font?: Font;
-        /** Specifies a format for the text displayed in scale labels. */
+        /** Formats a value before it is displayed in a scale label. Accepts only numeric formats. */
         format?: DevExpress.ui.format;
         /** Decides how to arrange scale labels when there is not enough space to keep all of them. */
         overlappingBehavior?: string | BaseGaugeScaleLabelOverlappingBehavior;

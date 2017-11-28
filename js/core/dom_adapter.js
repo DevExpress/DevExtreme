@@ -19,7 +19,11 @@ module.exports = {
 
     insertElement: function(parentElement, newElement, nextSiblingElement) {
         if(parentElement && newElement && parentElement !== newElement) {
-            parentElement.insertBefore(newElement, nextSiblingElement);
+            if(nextSiblingElement) {
+                parentElement.insertBefore(newElement, nextSiblingElement);
+            } else {
+                parentElement.appendChild(newElement);
+            }
         }
     },
 

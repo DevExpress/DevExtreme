@@ -141,6 +141,7 @@ var getFormat = function(formatter) {
         defaultPattern = formatValue(new Date(2009, 8, 8, 6, 5, 4), formatter),
         patternPositions = defaultPattern.split("").map(function(_, index) { return index; }),
         result = defaultPattern,
+        replacedPatterns = {},
         datePatterns = [
             { date: new Date(2009, 8, 8, 6, 5, 4, 100), pattern: "S" },
             { date: new Date(2009, 8, 8, 6, 5, 2), pattern: "s" },
@@ -156,9 +157,11 @@ var getFormat = function(formatter) {
     if(!result) return;
 
     datePatterns.forEach(function(test) {
-        var diff = getDifference(defaultPattern, formatValue(test.date, formatter), processedIndexes, test.isDigit);
+        var diff = getDifference(defaultPattern, formatValue(test.date, formatter), processedIndexes, test.isDigit),
+            pattern = test.pattern === "M" && !replacedPatterns["d"] ? "L" : test.pattern;
 
-        result = replaceChars(result, diff, test.pattern, patternPositions);
+        result = replaceChars(result, diff, pattern, patternPositions);
+        replacedPatterns[pattern] = diff.length;
     });
 
     result = escapeChars(result, defaultPattern, processedIndexes, patternPositions);

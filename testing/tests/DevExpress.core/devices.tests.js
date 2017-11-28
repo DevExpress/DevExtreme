@@ -277,6 +277,46 @@ QUnit.test("win10 by device name", function(assert) {
     assert.equal(device.deviceType, "desktop", "correct deviceType");
 });
 
+QUnit.test("win10Phone forcing deprecated theme warnings", function(assert) {
+    var originalLog = errors.log;
+
+    try {
+        var logList = [];
+
+        errors.log = function() {
+            logList.push($.makeArray(arguments));
+            return originalLog.apply(errors, arguments);
+        };
+
+        devices.current("win10Phone");
+        assert.equal(logList[0][0], "W0010");
+    } finally {
+        errors.log = originalLog;
+    }
+});
+
+QUnit.test("win10 forcing by config deprecated theme warnings", function(assert) {
+    var originalLog = errors.log;
+
+    try {
+        var logList = [];
+
+        errors.log = function() {
+            logList.push($.makeArray(arguments));
+            return originalLog.apply(errors, arguments);
+        };
+
+        devices.current({
+            platform: "win",
+            version: [10]
+        });
+
+        assert.equal(logList[0][0], "W0010");
+    } finally {
+        errors.log = originalLog;
+    }
+});
+
 QUnit.test("msSurface by device name (T463075)", function(assert) {
     devices.current("msSurface");
     var device = devices.current();

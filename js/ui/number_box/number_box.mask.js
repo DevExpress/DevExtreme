@@ -144,7 +144,7 @@ var NumberBoxMask = NumberBoxBase.inherit({
 
         this._lastKey = e.originalEvent.key;
 
-        var newValue = this._tryParse(text, caret, e.originalEvent.key);
+        var newValue = this._tryParse(text, caret, this._lastKey);
         if(newValue === undefined) {
             e.originalEvent.preventDefault();
         } else {
@@ -282,19 +282,14 @@ var NumberBoxMask = NumberBoxBase.inherit({
                             ensureDefined(lightParsed, noLeadingZeros)
             )));
 
-        if(!this._isValueInRange(value)) {
-            return;
-        }
-
         return value;
     },
 
     _isValueInRange: function(value) {
         var min = ensureDefined(this.option("min"), -Infinity),
-            max = ensureDefined(this.option("max"), Infinity),
-            nextValue = value * 10;
+            max = ensureDefined(this.option("max"), Infinity);
 
-        return inRange(value, min, max) || inRange(nextValue, min, max);
+        return inRange(value, min, max);
     },
 
     _setInputText: function(text, position) {
@@ -391,8 +386,9 @@ var NumberBoxMask = NumberBoxBase.inherit({
     },
 
     _isStub: function(str, isString) {
-        var escapedDecimalSeparator = escapeRegExp(number.getDecimalSeparator());
-        var stubRegExp = new RegExp("^[^0-9" + escapedDecimalSeparator + "]+$", "g");
+        var escapedDecimalSeparator = escapeRegExp(number.getDecimalSeparator()),
+            stubRegExp = new RegExp("^[^0-9" + escapedDecimalSeparator + "]+$", "g");
+
         return stubRegExp.test(str) && (isString || this._isChar(str));
     },
 
@@ -413,7 +409,12 @@ var NumberBoxMask = NumberBoxBase.inherit({
         if(!this._useMaskBehavior()) {
             return this.callBase(text);
         }
-        return this._parsedValue;
+
+        if(!isNumeric(this._parsedValue)) {
+            return this._parsedValue;
+        }
+
+        return fitIntoRange(this._parsedValue, this.option("min"), this.option("max"));
     },
 
     _isIncomplete: function(string) {
@@ -449,8 +450,7 @@ var NumberBoxMask = NumberBoxBase.inherit({
             caret = this._caret(),
             decimalSeparator = number.getDecimalSeparator(),
             decimalSeparatorIndex = text.indexOf(decimalSeparator),
-            isFloatInput = decimalSeparatorIndex >= 0 && caret.start > decimalSeparatorIndex,
-            formatted,
+            caretOnFloatPart = decimalSeparatorIndex >= 0 && caret.start > decimalSeparatorIndex,
             caretDelta;
 
         if(this._formattedValue !== text) {
@@ -460,11 +460,13 @@ var NumberBoxMask = NumberBoxBase.inherit({
             }
         }
 
-        formatted = number.format(this._parsedValue, format) || "";
+        var formatted = number.format(this._parsedValue, format) || "",
+            isFirstInput = this._formattedValue === "",
+            isOneCharInput = Math.abs(formatted.length - text.length) === 1;
 
-        if((Math.abs(formatted.length - text.length) === 1 && isFloatInput) || this._formattedValue === "") {
+        if((isOneCharInput && caretOnFloatPart) || isFirstInput) {
             caretDelta = 0;
-        } else if(text.length === 1 && formatted.length && this._lastKey === text) {
+        } else if(formatted.length && this._lastKey === text) {
             caretDelta = formatted.indexOf(text) - caret.start + 1;
         } else {
             caretDelta = formatted.length - text.length;
@@ -496,7 +498,7 @@ var NumberBoxMask = NumberBoxBase.inherit({
         }
 
         this._lastKey = null;
-        this.option("value", this._parsedValue);
+        this.option("value", this._parseValue());
         this._formatValue();
     },
 

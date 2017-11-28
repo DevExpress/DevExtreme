@@ -610,6 +610,25 @@ QUnit.test("Custom ticks", function(assert) {
     assert.deepEqual(this.axis._tickInterval, 6);
 });
 
+QUnit.test("T574873. Custom ticks with minor ticks calculation", function(assert) {
+    this.createAxis();
+    this.updateOptions({
+        argumentType: "numeric",
+        type: "continuous",
+        allowDecimals: true,
+        customTicks: [0, 6, 12, 18],
+        calculateMinors: true
+    });
+
+    this.axis.setBusinessRange({ minVisible: 0, maxVisible: 20, addRange: function() { } });
+
+    //act
+    this.axis.createTicks(canvas(200));
+
+    assert.deepEqual(this.axis._majorTicks.map(value), [0, 6, 12, 18]);
+    assert.deepEqual(this.axis._tickInterval, 6);
+});
+
 QUnit.test("Custom one tick", function(assert) {
     this.createAxis();
     this.updateOptions({
@@ -2496,4 +2515,23 @@ QUnit.test("Use original scale breaks after recalculation ticks", function(asser
         to: 850,
         cumulativeWidth: 0
     }]);
+});
+
+QUnit.test("Generate sexy tick when there are breaks", function(assert) {
+    this.createAxis();
+    this.updateOptions({
+        argumentType: "numeric",
+        type: "continuous",
+        allowDecimals: false,
+        calculateMinors: true,
+        breakStyle: { width: 0 },
+        breaks: [{ startValue: 1, endValue: 14.6 }, { startValue: 17.2, endValue: 95 }, { startValue: 95, endValue: 318 }]
+    });
+
+    this.axis.setBusinessRange({ minVisible: 0, maxVisible: 318, addRange: function() { return this; } });
+
+    //act
+    this.axis.createTicks(canvas(600));
+
+    assert.deepEqual(this.axis._majorTicks.map(value), [0, 1, 15, 16, 17, 95, 318], "ticks");
 });

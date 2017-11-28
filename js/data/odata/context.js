@@ -34,6 +34,14 @@ var ODataContext = Class.inherit({
          * @name ODataContextOptions_beforeSend
          * @publicName beforeSend
          * @type function
+         * @type_function_param1 options:object
+         * @type_function_param1_field1 url:string
+         * @type_function_param1_field2 async:boolean
+         * @type_function_param1_field3 method:string
+         * @type_function_param1_field4 timeout:number
+         * @type_function_param1_field5 params:object
+         * @type_function_param1_field6 payload:object
+         * @type_function_param1_field7 headers:object
          */
         /**
          * @name ODataContextOptions_jsonp

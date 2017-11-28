@@ -27,6 +27,7 @@ var typeUtils = require("../core/utils/type"),
 
 var PERIOD_REGEXP = /a+/g,
     DAY_REGEXP = /E/g,
+    STANDALONE_MONTH_REGEXP = /L/g,
     HOUR_REGEXP = /h/g,
     SLASH_REGEXP = /\//g,
     ANY_REGEXP = /./g;
@@ -71,6 +72,7 @@ var excelFormatConverter = module.exports = {
                 return datePart
                     .replace(PERIOD_REGEXP, "AM/PM")
                     .replace(DAY_REGEXP, "d")
+                    .replace(STANDALONE_MONTH_REGEXP, "M")
                     .replace(HOUR_REGEXP, "H");
             } if(datePart) {
                 return datePart.replace(ANY_REGEXP, "\\$&");
