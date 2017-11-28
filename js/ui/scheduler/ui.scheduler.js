@@ -1837,6 +1837,7 @@ var Scheduler = Widget.inherit({
 
         this._recalculateWorkspace();
 
+        this._workSpace._refreshDateTimeIndication();
         countConfig.startDate && this._header && this._header.option("currentDate", this._workSpace.getStartViewDate());
     },
 
