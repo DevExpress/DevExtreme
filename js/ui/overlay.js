@@ -18,6 +18,7 @@ var $ = require("../core/renderer"),
     typeUtils = require("../core/utils/type"),
     each = require("../core/utils/iterator").each,
     devices = require("../core/devices"),
+    browser = require("../core/utils/browser"),
     registerComponent = require("../core/component_registrator"),
     Widget = require("./widget/ui.widget"),
     KeyboardProcessor = require("./widget/ui.keyboard_processor"),
@@ -54,13 +55,14 @@ var OVERLAY_CLASS = "dx-overlay",
 var realDevice = devices.real(),
     realVersion = realDevice.version,
 
+    FireFoxDesktop = browser.mozilla && realDevice.deviceType === "desktop",
     iOS = realDevice.platform === "ios",
     iOS7_0andBelow = iOS && compareVersions(realVersion, [7, 1]) < 0,
     android4_0nativeBrowser = realDevice.platform === "android" && compareVersions(realVersion, [4, 0], 2) === 0 && navigator.userAgent.indexOf("Chrome") === -1;
 
 var forceRepaint = function($element) {
-    // NOTE: force layout recalculation on iOS 6 & iOS 7.0 (B254713)
-    if(iOS7_0andBelow) {
+    // NOTE: force layout recalculation on iOS 6 & iOS 7.0 (B254713) and FF desktop (T581681)
+    if(iOS7_0andBelow || FireFoxDesktop) {
         $element.width();
     }
 
