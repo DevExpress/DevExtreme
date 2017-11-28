@@ -1123,9 +1123,7 @@ QUnit.test("searchEditorOptions", function(assert) {
 QUnit.test("apply list search options if dataSource set as dataSource instance", function(assert) {
     var instance = $("#list").dxList({
             dataSource: new DataSource({
-                store: new ArrayStore({
-                    data: [],
-                }),
+                store: [],
                 searchExpr: "test",
                 searchValue: "1",
                 searchOperation: "contains"
@@ -1144,9 +1142,7 @@ QUnit.test("apply list search options if dataSource set as dataSource instance",
 QUnit.test("apply dataSource options if list search options are default", function(assert) {
     var instance = $("#list").dxList({
             dataSource: new DataSource({
-                store: new ArrayStore({
-                    data: [{ expr: "1test" }, { expr: "2test" }],
-                }),
+                store: [],
                 searchExpr: "expr",
                 searchValue: "2",
                 searchOperation: "startsWith"
