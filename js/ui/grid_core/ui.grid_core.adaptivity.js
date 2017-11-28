@@ -7,6 +7,7 @@ var $ = require("../../core/renderer"),
     commonUtils = require("../../core/utils/common"),
     typeUtils = require("../../core/utils/type"),
     each = require("../../core/utils/iterator").each,
+    browser = require("../../core/utils/browser"),
     extend = require("../../core/utils/extend").extend,
     equalByValue = commonUtils.equalByValue,
     Guid = require("../../core/guid"),
@@ -33,6 +34,7 @@ var $ = require("../../core/renderer"),
     ADAPTIVE_DETAIL_ROW_CLASS = "dx-adaptive-detail-row",
     ADAPTIVE_ITEM_TEXT_CLASS = "dx-adaptive-item-text",
     MASTER_DETAIL_CELL_CLASS = "dx-master-detail-cell",
+    LAST_DATA_CELL_CLASS = "dx-last-data-cell",
     ADAPTIVE_COLUMN_NAME = "adaptive",
     EDIT_MODE_BATCH = "batch",
     EDIT_MODE_ROW = "row",
@@ -41,6 +43,10 @@ var $ = require("../../core/renderer"),
 
 function getColumnId(column) {
     return column.command ? "command:" + column.command : column.index;
+}
+
+function getDataCellElements($row) {
+    return $row.find("td:not(.dx-datagrid-hidden-column):not([class*='dx-command-'])");
 }
 
 var AdaptiveColumnsController = modules.ViewController.inherit({
@@ -689,6 +695,17 @@ module.exports = {
                     return $row;
                 },
 
+                _renderCells: function($row, options) {
+                    this.callBase($row, options);
+
+                    var hidingColumnsQueueLength = this._adaptiveColumnsController.getHidingColumnsQueue().length,
+                        hiddenColumnsLength = this._adaptiveColumnsController.getHiddenColumns().length;
+
+                    if(hidingColumnsQueueLength && !hiddenColumnsLength) {
+                        getDataCellElements($row).last().addClass(LAST_DATA_CELL_CLASS);
+                    }
+                },
+
                 _getColumnIndexByElementCore: function($element) {
                     var $itemContent = $element.closest("." + FORM_ITEM_CONTENT_CLASS);
                     if($itemContent.length && $itemContent.closest(this.component.$element()).length) {
@@ -894,8 +911,19 @@ module.exports = {
                     return this.callBase() || !!this._adaptiveColumnsController.getHidingColumnsQueue().length;
                 },
 
+                _updateScrollableForIE: function() {
+                    var that = this;
+
+                    if(browser.msie && parseInt(browser.version) <= 11) {
+                        setTimeout(function() {
+                            that.getView("rowsView")._updateScrollable();
+                        });
+                    }
+                },
+
                 _correctColumnWidths: function(resultWidths, visibleColumns) {
                     var adaptiveController = this._adaptiveColumnsController,
+                        columnAutoWidth = this.option("columnAutoWidth"),
                         oldHiddenColumns = adaptiveController.getHiddenColumns(),
                         hiddenColumns,
                         hidingColumnsQueue = adaptiveController.updateHidingQueue(this._columnsController.getColumns());
@@ -909,6 +937,11 @@ module.exports = {
                     }
 
                     !hiddenColumns.length && adaptiveController.collapseAdaptiveDetailRow();
+
+                    if(columnAutoWidth && hidingColumnsQueue.length && !hiddenColumns.length) {
+                        this._updateScrollableForIE();
+                    }
+
                     return this.callBase(resultWidths, visibleColumns);
                 },
 
@@ -1024,10 +1057,6 @@ module.exports = {
                     return this.callBase($cell) && !$cell.hasClass(this.addWidgetPrefix(HIDDEN_COLUMN_CLASS));
                 },
 
-                _getDataCellElements: function($row) {
-                    return $row.find("td:not(.dx-datagrid-hidden-column):not([class*='dx-command-'])");
-                },
-
                 _processNextCellInMasterDetail: function($nextCell) {
                     this.callBase($nextCell);
 
@@ -1046,7 +1075,7 @@ module.exports = {
 
                     if(!result && $currentCell) {
                         var $row = $currentCell.parent(),
-                            $dataCells = this._getDataCellElements($row),
+                            $dataCells = getDataCellElements($row),
                             $targetCell = direction === "next" ? $dataCells.last() : $dataCells.first(),
                             rowIndex = $row.get(0).rowIndex,
                             adaptiveController = this._adaptiveController,
