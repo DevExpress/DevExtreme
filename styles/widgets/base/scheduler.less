@@ -1910,17 +1910,17 @@
     color: @SCHEDULER_APPOINTMENT_TEXT_COLOR;
 
     &.dx-button,
-    &.dx-button.dx-state-hover,
     &.dx-button.dx-state-active,
     &.dx-button.dx-state-focused {
         background-color: @SCHEDULER_APPOINTMENT_BASE_COLOR;
+        color: @SCHEDULER_APPOINTMENT_TEXT_COLOR;
         border: none;
         .box-shadow(none);
 
         .dx-button-content {
             line-height: inherit;
-            }
         }
+    }
 
     &.dx-button.dx-state-hover {
         &:before {
