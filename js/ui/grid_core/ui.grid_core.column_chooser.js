@@ -214,7 +214,7 @@ var ColumnChooserView = columnsView.ColumnsView.inherit({
         extend(treeViewConfig, isSelectMode ? this._prepareSelectModeConfig() : this._prepareDragModeConfig());
 
         if(this._columnChooserList) {
-            if(!treeViewConfig.searchEnabled && this._columnChooserList.option("searchValue")) {
+            if(!treeViewConfig.searchEnabled) {
                 treeViewConfig.searchValue = "";
             }
 
