@@ -114,6 +114,20 @@ QUnit.test("setting value to undefined should work correctly", function(assert) 
     assert.strictEqual(this.instance.option("value"), undefined, "value is correct");
 });
 
+QUnit.test("widget should not crash when it is disposing on change", function(assert) {
+    this.instance.option({
+        value: 1,
+        onValueChanged: function(e) {
+            e.component._dispose();
+        }
+    });
+
+    this.keyboard.type("2").change();
+
+    assert.ok(true, "there was no exceptions");
+});
+
+
 QUnit.module("format: minimum and maximum", moduleConfig);
 
 QUnit.test("input should be fitted into range after value change", function(assert) {
