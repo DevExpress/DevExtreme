@@ -487,8 +487,6 @@ var SelectBox = DropDownList.inherit({
     },
 
     _listFocusedItemChangeHandler: function(e) {
-        this._preventFocusOut = true;
-
         if(this._preventInputValueRender) {
             return;
         }
