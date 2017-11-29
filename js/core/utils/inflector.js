@@ -47,6 +47,8 @@ var titleize = function(text) {
     }).join(" ");
 };
 
+var DIGIT_CHARS = ["0", "1", "2", "3", "4", "5", "6", "7", "8", "9"];
+
 var captionize = function(name) {
     var captionList = [],
         i,
@@ -56,7 +58,7 @@ var captionize = function(name) {
 
     for(i = 0; i < name.length; i++) {
         char = name.charAt(i);
-        isNewWord = (char === char.toUpperCase()) || (char in ["0", "1", "2", "3", "4", "5", "6", "7", "8", "9"]);
+        isNewWord = (char === char.toUpperCase() && char !== "-" && char !== ")") || (char in DIGIT_CHARS);
         if(char === "_" || char === ".") {
             char = " ";
             isNewWord = true;
