@@ -60,6 +60,7 @@ var $ = require("jquery"),
     commonUtils = require("core/utils/common"),
     typeUtils = require("core/utils/type"),
     devices = require("core/devices"),
+    browser = require("core/utils/browser"),
     gridCore = require("ui/data_grid/ui.data_grid.core"),
     DataSource = require("data/data_source/data_source").DataSource,
     messageLocalization = require("localization/message"),
@@ -4052,6 +4053,39 @@ QUnit.test("Error row is not hidden when rowKey is undefined by editMode is cell
 
     clock.restore();
 });
+
+if(browser.msie && parseInt(browser.version) <= 11) {
+    QUnit.test("Update the scrollable for IE browsers when the adaptive column is hidden", function(assert) {
+        //arrange
+        var clock = sinon.useFakeTimers();
+
+        var dataGrid = createDataGrid({
+            dataSource: [{
+                "ID": 4,
+                "OrderNumber": 35711,
+                "OrderDate": "2014/01/12"
+            }],
+            columnAutoWidth: true,
+            columnHidingEnabled: true,
+            columns: ["ID", "OrderNumber", "OrderDate"]
+        });
+
+        clock.tick();
+
+        //act
+        var scrollable = dataGrid.element().find(".dx-scrollable").data("dxScrollable");
+        sinon.spy(scrollable, "update");
+        dataGrid.updateDimensions();
+        clock.tick();
+
+        //assert
+        var $lastDataCell = dataGrid.element().find(".dx-last-data-cell");
+        assert.equal($lastDataCell.text(), "2014/01/12", "text of last data cell");
+        assert.equal(scrollable.update.callCount, 2);
+
+        clock.restore();
+    });
+}
 
 QUnit.module("Assign options", {
     beforeEach: function() {
