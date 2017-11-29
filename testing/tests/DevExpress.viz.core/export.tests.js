@@ -154,8 +154,7 @@ QUnit.test("List creation", function(assert) {
     }, "Printing text style");
     assert.deepEqual(this.renderer.text.getCall(0).returnValue.attr.getCall(0).args[0], {
         "x": -70,
-        "y": 62,
-        align: "left"
+        "y": 62
     }, "Printing text attributes");
     assert.deepEqual(this.renderer.rect.getCall(2).returnValue.data.getCall(0).args[0], {
         "export-element-type": "printing"
@@ -177,8 +176,7 @@ QUnit.test("List creation", function(assert) {
     }, "JPEG rect events data");
     assert.deepEqual(this.renderer.text.getCall(1).returnValue.attr.getCall(0).args[0], {
         x: -70,
-        y: 92,
-        align: "left"
+        y: 92
     }, "JPEG text attrs");
 
     //PNG group
@@ -197,8 +195,7 @@ QUnit.test("List creation", function(assert) {
     }, "PNG rect events data");
     assert.deepEqual(this.renderer.text.getCall(2).returnValue.attr.getCall(0).args[0], {
         x: -70,
-        y: 122,
-        align: "left"
+        y: 122
     }, "PNG text attrs");
 });
 
@@ -227,8 +224,7 @@ QUnit.test("List creation, without printing", function(assert) {
     assert.deepEqual(this.renderer.text.getCall(0).args, ["JPEG file"], "jpeg text params");
     assert.deepEqual(this.renderer.text.getCall(0).returnValue.attr.getCall(0).args[0], {
         x: -70,
-        y: 62,
-        align: "left"
+        y: 62
     }, "JPEG text attrs");
     assert.deepEqual(this.renderer.text.getCall(0).returnValue.css.getCall(0).args[0], {
         "font-size": 16,
@@ -258,8 +254,7 @@ QUnit.test("List creation, without formats", function(assert) {
     assert.deepEqual(this.renderer.text.getCall(0).args, ["Print"], "Printing text params");
     assert.deepEqual(this.renderer.text.getCall(0).returnValue.attr.getCall(0).args[0], {
         x: -70,
-        y: 62,
-        align: "left"
+        y: 62
     }, "Printing text attributes");
 
     assert.deepEqual(this.renderer.text.getCall(0).returnValue.css.getCall(0).args[0], {
@@ -540,8 +535,7 @@ QUnit.test("Set options", function(assert) {
     assert.deepEqual(this.renderer.text.getCall(0).args, ["PNG file"], "PNG text params");
     assert.deepEqual(this.renderer.text.getCall(0).returnValue.attr.getCall(0).args[0], {
         "x": -70,
-        "y": 62,
-        align: "left"
+        "y": 62
     }, "PNG text attributes");
     assert.deepEqual(this.renderer.text.getCall(0).returnValue.css.getCall(0).args[0], {
         "font-size": 16,
@@ -758,6 +752,30 @@ QUnit.test("List opening", function(assert) {
     assert.equal(this.renderer.g.getCall(2).returnValue.append.callCount, 2, "showing call count");
     assert.deepEqual(this.renderer.g.getCall(2).returnValue.append.getCall(0).args[0], this.renderer.g.getCall(2).returnValue.append.getCall(1).args[0], "visible list");
     assert.deepEqual(this.renderer.rect.getCall(1).returnValue.attr.getCall(0).args[0], { fill: "#e6e6e6", stroke: "#9d9d9d" }, "selected button has focused state style");
+});
+
+QUnit.test("Correct texts positions on list opening", function(assert) {
+    //assert
+    this.createExportMenu();
+
+    //act
+    this.renderer.root.on.getCall(0).args[1]({ target: { "export-element-type": "button" } });
+
+    //assert
+    assert.deepEqual(this.renderer.text.getCall(0).returnValue.move.lastCall.args, [-71]);
+});
+
+QUnit.test("Correct texts positions on list opening. RTL", function(assert) {
+    //assert
+    this.options.rtl = true;
+    this.options.printingEnabled = false;
+    this.createExportMenu();
+
+    //act
+    this.renderer.root.on.getCall(0).args[1]({ target: { "export-element-type": "button" } });
+
+    //assert
+    assert.deepEqual(this.renderer.text.getCall(0).returnValue.move.lastCall.args, [-1]);
 });
 
 QUnit.test("List closing by menu button", function(assert) {
