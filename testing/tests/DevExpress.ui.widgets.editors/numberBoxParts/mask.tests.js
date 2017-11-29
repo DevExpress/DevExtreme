@@ -114,6 +114,38 @@ QUnit.test("setting value to undefined should work correctly", function(assert) 
     assert.strictEqual(this.instance.option("value"), undefined, "value is correct");
 });
 
+QUnit.test("widget should not crash when it is disposing on change (T578115)", function(assert) {
+    this.instance.option({
+        value: 1,
+        onValueChanged: function(e) {
+            e.component.dispose();
+        }
+    });
+
+    this.keyboard.type("2").change();
+
+    assert.ok(true, "there was no exceptions");
+});
+
+QUnit.test("it should be possible to input decimal point when valueChangeEvent is input (T580162)", function(assert) {
+    this.instance.option("valueChangeEvent", "input");
+    this.keyboard.type("1.5");
+
+    assert.equal(this.input.val(), "1.5", "value is correct");
+});
+
+QUnit.test("enter should remove incomplete value chars from input", function(assert) {
+    this.keyboard.type("123.").press("enter");
+    assert.equal(this.input.val(), "123", "input was reformatted");
+});
+
+QUnit.testInActiveWindow("focusout should remove incomplete value chars from input", function(assert) {
+    this.instance.option("value", 123);
+    this.keyboard.caret(3).type(".").change().blur();
+    assert.equal(this.input.val(), "123", "input was reformatted");
+});
+
+
 QUnit.module("format: minimum and maximum", moduleConfig);
 
 QUnit.test("input should be fitted into range after value change", function(assert) {
