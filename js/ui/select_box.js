@@ -470,6 +470,9 @@ var SelectBox = DropDownList.inherit({
             pageLoadMode: "scrollBottom",
             onSelectionChanged: this._getSelectionChangeHandler(),
             selectedItem: this.option("selectedItem"),
+            onItemPointerDown: function() {
+                this._preventFocusOut = true;
+            }.bind(this),
             onFocusedItemChanged: this._listFocusedItemChangeHandler.bind(this)
         });
 
@@ -577,6 +580,11 @@ var SelectBox = DropDownList.inherit({
     },
 
     _focusOutHandler: function(e) {
+        if(this._preventFocusOut) {
+            this._preventFocusOut = false;
+            return;
+        }
+
         this.callBase(e);
 
         this._restoreInputText();
@@ -803,6 +811,11 @@ var SelectBox = DropDownList.inherit({
             endPosition = inputElement.value.length;
         inputElement.selectionStart = endPosition;
         inputElement.selectionEnd = endPosition;
+    },
+
+    _clean: function() {
+        this.callBase();
+        delete this._preventFocusOut;
     },
 
     _dispose: function() {

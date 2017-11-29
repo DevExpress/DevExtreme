@@ -495,6 +495,27 @@ QUnit.testInActiveWindow("input focused after click on drop button", function(as
     assert.ok($selectBox.find("." + TEXTEDITOR_INPUT_CLASS).is(":focus"), "input focused");
 });
 
+QUnit.testInActiveWindow("focusout should not fire after list item click", function(assert) {
+    if(devices.real().deviceType !== "desktop") {
+        assert.ok(true, "focus is not actual for mobile devices");
+        return;
+    }
+
+    var focusOutHandler = sinon.spy(),
+        $selectBox = $("#selectBox").dxSelectBox({
+            items: [1],
+            onFocusOut: focusOutHandler,
+            opened: true
+        }),
+        $input = $selectBox.find("." + TEXTEDITOR_INPUT_CLASS);
+
+    $input.focus();
+    $(".dx-list-item").eq(0).trigger("dxpointerdown");
+    $input.blur();
+
+    assert.equal(focusOutHandler.callCount, 0, "focusout was not called");
+});
+
 QUnit.test("dataSource loaded after create dxSelectBox", function(assert) {
     var timeout = 1000;
     var dataSource = new DataSource({
