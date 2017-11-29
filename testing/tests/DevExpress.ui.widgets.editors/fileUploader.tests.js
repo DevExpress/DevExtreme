@@ -1848,6 +1848,48 @@ QUnit.test("the 'accept' option should not be ignored on drag&drop (T384800)", f
     assert.deepEqual(fileUploader.option("value"), [], "value is empty");
 });
 
+QUnit.test("the 'accept' option is case insensitive (T570224)", function(assert) {
+    var $fileUploader = $('#fileuploader').dxFileUploader({
+            useDragOver: true,
+            accept: ".jpg"
+        }),
+        fileUploader = $fileUploader.dxFileUploader("instance"),
+        $inputWrapper = $fileUploader.find('.' + FILEUPLOADER_INPUT_WRAPPER_CLASS),
+        files = [{
+            name: "fakefile.JPG",
+        }],
+        event = $.Event($.Event("drop", { dataTransfer: { files: files } }));
+
+    $inputWrapper.trigger(event);
+    assert.deepEqual(fileUploader.option("value"), files, "file is chosen");
+
+    files = [{
+        name: "fakefile.JPG",
+        type: "IMAGE/JPEG"
+    }],
+    fileUploader.option("accept", "image/*");
+    event = $.Event($.Event("drop", { dataTransfer: { files: files } }));
+    $inputWrapper.trigger(event);
+    assert.deepEqual(fileUploader.option("value"), files, "file is chosen");
+});
+
+QUnit.test("the 'accept' option check an extension only at the end of the file (T570224)", function(assert) {
+    var $fileUploader = $('#fileuploader').dxFileUploader({
+            useDragOver: true,
+            accept: ".jpg"
+        }),
+        fileUploader = $fileUploader.dxFileUploader("instance"),
+        $inputWrapper = $fileUploader.find('.' + FILEUPLOADER_INPUT_WRAPPER_CLASS),
+        files = [{
+            name: "fakefile.jpg.bak",
+            type: "image/text",
+        }],
+        event = $.Event($.Event("drop", { dataTransfer: { files: files } }));
+
+    $inputWrapper.trigger(event);
+    assert.deepEqual(fileUploader.option("value"), [], "value is empty");
+});
+
 QUnit.test("the 'accept' option with multiple types should work correctly on drag&drop", function(assert) {
     var fakeFile2 = {
         name: "fakefile2",
