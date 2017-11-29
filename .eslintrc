@@ -111,6 +111,7 @@
                     mockjax,    // JS library
                     moz,        // Vendor prefix
                     mozilla,
+                    firefox,
                     msie,
                     odata,      // OData
                     rtl,        // Right-to-Left
