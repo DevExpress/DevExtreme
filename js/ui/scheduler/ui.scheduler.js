@@ -1146,7 +1146,8 @@ var Scheduler = Widget.inherit({
                     items: [],
                     allowDrag: this._allowDragging(),
                     allowResize: this._allowResizing(),
-                    appointmentDurationInMinutes: this._getCurrentViewOption("cellDuration")
+                    appointmentDurationInMinutes: this._getCurrentViewOption("cellDuration"),
+                    itemTemplate: this._getAppointmentTemplate("appointmentTemplate")
                 });
                 this._header.option("intervalCount", viewCountConfig.intervalCount);
                 this._header.option("startDate", viewCountConfig.startDate || new Date(this.option("currentDate")));
@@ -1155,6 +1156,7 @@ var Scheduler = Widget.inherit({
                 this._header.option("currentDate", this._dateOption("currentDate"));
                 this._header.option("firstDayOfWeek", this._getCurrentViewOption("firstDayOfWeek"));
                 this._header.option("currentView", this._currentView);
+
                 this._loadResources().done((function(resources) {
                     this.getLayoutManager().initRenderingStrategy(this._getAppointmentsRenderingStrategy());
                     this._refreshWorkSpace(resources);
