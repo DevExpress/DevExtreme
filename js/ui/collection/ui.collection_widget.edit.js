@@ -561,14 +561,6 @@ var CollectionWidget = BaseCollectionWidget.inherit({
         return this._selection.isItemSelected(key);
     },
 
-    _dataSourceChangedHandler: function(newItems) {
-        if(!newItems.length) {
-            this.option("selectedItemKeys", []);
-        }
-
-        this.callBase(newItems);
-    },
-
     _optionChanged: function(args) {
         if(this._cancelOptionChange === args.name) {
             return;
@@ -583,7 +575,7 @@ var CollectionWidget = BaseCollectionWidget.inherit({
                 }
                 break;
             case "dataSource":
-                if(!args.value) {
+                if(!args.value || Array.isArray(args.value) && !args.value.length) {
                     this.option("selectedItemKeys", []);
                 }
 
