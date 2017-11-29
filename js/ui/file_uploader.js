@@ -996,13 +996,13 @@ var FileUploader = Editor.inherit({
             if(allowedType[0] === ".") {
                 allowedType = allowedType.replace(".", "\\.");
 
-                if(file.name.match(allowedType)) {
+                if(file.name.match(new RegExp(allowedType + "$", "i"))) {
                     return true;
                 }
             } else {
                 allowedType = allowedType.replace("*", "");
 
-                if(file.type.match(allowedType)) {
+                if(file.type.match(new RegExp(allowedType, "i"))) {
                     return true;
                 }
             }
