@@ -2635,3 +2635,23 @@ QUnit.test("Search when searchMode is specified", function(assert) {
     assert.strictEqual(instance.option("searchValue"), "2", "search value");
     assert.strictEqual(instance.getDataSource().searchOperation(), "startswith", "search operation");
 });
+
+//T582179
+QUnit.test("Selection should not be cleared after searching", function(assert) {
+    var $element = $("#list").dxList({
+            dataSource: [1, 2, 3],
+            searchEnabled: true,
+            searchExpr: "this",
+            showSelectionControls: true,
+            selectionMode: "all"
+        }),
+        instance = $element.dxList("instance");
+
+    instance.selectAll();
+
+    assert.deepEqual(instance.option("selectedItemKeys"), [1, 2, 3], "selectedItemKeys");
+
+    instance.option("searchValue", "4");
+
+    assert.deepEqual(instance.option("selectedItemKeys"), [1, 2, 3], "selectedItemKeys");
+});
