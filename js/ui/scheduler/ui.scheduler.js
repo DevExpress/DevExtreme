@@ -1865,6 +1865,8 @@ var Scheduler = Widget.inherit({
         this._workSpaceRecalculation = new Deferred();
 
         domUtils.triggerResizeEvent(this._workSpace.$element());
+        this._workSpace._refreshDateTimeIndication();
+
         this._workSpaceRecalculation.resolve();
     },
 

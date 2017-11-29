@@ -770,6 +770,7 @@ var SchedulerWorkSpace = Widget.inherit({
 
     _renderDateTimeIndication: noop,
     _setIndicationUpdateInterval: noop,
+    _refreshDateTimeIndication: noop,
 
     _setFirstViewDate: function() {
         this._firstViewDate = dateUtils.getFirstWeekDate(this._getViewStartByOptions(), this._firstDayOfWeek() || dateLocalization.firstDayOfWeekIndex());
