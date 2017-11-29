@@ -605,6 +605,7 @@ var runTests = function() {
         assert.deepEqual(instance.option("selectedItemKeys"), [1, 2], "selectedItemKeys wasn't cleared");
     });
 
+    //T579731
     QUnit.test("selectedItems should not be cleared if datasource instance has been changed to a dataSource config", function(assert) {
         var instance = new TestComponent($("<div>"), {
             selectionMode: "multiple",
@@ -621,24 +622,6 @@ var runTests = function() {
         assert.deepEqual(instance.option("selectedItems"), [1, 2], "selectedItems wasn't cleared");
         assert.strictEqual(instance.option("selectedItem"), 1, "selectedItem wasn't cleared");
         assert.deepEqual(instance.option("selectedItemKeys"), [1, 2], "selectedItemKeys wasn't cleared");
-    });
-
-    QUnit.test("selectedItems should be cleared if datasource instance has been changed to dataSource config with empty store", function(assert) {
-        var instance = new TestComponent($("<div>"), {
-            selectionMode: "multiple",
-            dataSource: [1, 2, 3],
-            selectedItemKeys: [1, 2]
-        });
-
-        assert.deepEqual(instance.option("selectedItems"), [1, 2], "selectedItems is correct");
-        assert.deepEqual(instance.option("selectedItem"), 1, "selectedItem is correct");
-        assert.deepEqual(instance.option("selectedItemKeys"), [1, 2], "selectedItem is correct");
-
-        instance.option("dataSource", { store: [] });
-
-        assert.deepEqual(instance.option("selectedItems"), [], "selectedItems was cleared");
-        assert.strictEqual(instance.option("selectedItem"), undefined, "selectedItem was cleared");
-        assert.deepEqual(instance.option("selectedItemKeys"), [], "selectedItemKeys was cleared");
     });
 
 
