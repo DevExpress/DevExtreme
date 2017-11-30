@@ -290,7 +290,6 @@ module.exports = {
             isVisible = that._showForZeroValues() && that.hasValue() && customVisibility !== false && (that.series.getLabelVisibility() || customVisibility);
 
         label.draw(!!isVisible);
-        label.isVisible() && that.correctLabelPosition(label);
     },
 
     correctLabelPosition: function(label) {

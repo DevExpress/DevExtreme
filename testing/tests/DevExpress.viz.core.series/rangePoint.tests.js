@@ -3380,18 +3380,13 @@ QUnit.test("Default, inside, not rotated. Overlay corrections", function(assert)
 
     point._drawLabel(this.renderer, this.group);
 
-    assert.equal(topLabel.shift.callCount, 2);
-    assert.equal(bottomLabel.shift.callCount, 2);
+    assert.ok(topLabel.shift.calledOnce);
+    assert.ok(bottomLabel.shift.calledOnce);
 
     assert.equal(topLabel.shift.firstCall.args[0], 33 - 10);
-    assert.equal(topLabel.shift.firstCall.args[1], 64);
+    assert.equal(topLabel.shift.firstCall.args[1], 44);
     assert.equal(bottomLabel.shift.firstCall.args[0], 33 - 10);
-    assert.equal(bottomLabel.shift.firstCall.args[1], 35);
-
-    assert.equal(topLabel.shift.lastCall.args[0], 33 - 10);
-    assert.equal(topLabel.shift.lastCall.args[1], 44);
-    assert.equal(bottomLabel.shift.lastCall.args[0], 33 - 10);
-    assert.equal(bottomLabel.shift.lastCall.args[1], 54);
+    assert.equal(bottomLabel.shift.firstCall.args[1], 54);
 });
 
 QUnit.test("Default, inside, rotated. Overlay corrections", function(assert) {
@@ -3410,18 +3405,13 @@ QUnit.test("Default, inside, rotated. Overlay corrections", function(assert) {
 
     point._drawLabel(this.renderer, this.group);
 
-    assert.equal(topLabel.shift.callCount, 2);
-    assert.equal(bottomLabel.shift.callCount, 2);
+    assert.ok(topLabel.shift.calledOnce);
+    assert.ok(bottomLabel.shift.calledOnce);
 
-    assert.equal(topLabel.shift.firstCall.args[0], 47);
+    assert.equal(topLabel.shift.firstCall.args[0], 71);
     assert.equal(topLabel.shift.firstCall.args[1], 12 - 5);
-    assert.equal(bottomLabel.shift.firstCall.args[0], 75);
+    assert.equal(bottomLabel.shift.firstCall.args[0], 51);
     assert.equal(bottomLabel.shift.firstCall.args[1], 12 - 5);
-
-    assert.equal(topLabel.shift.lastCall.args[0], 71);
-    assert.equal(topLabel.shift.lastCall.args[1], 12 - 5);
-    assert.equal(bottomLabel.shift.lastCall.args[0], 51);
-    assert.equal(bottomLabel.shift.lastCall.args[1], 12 - 5);
 });
 
 QUnit.test("Value < minValue, inside. Overlay corrections", function(assert) {
@@ -3441,18 +3431,14 @@ QUnit.test("Value < minValue, inside. Overlay corrections", function(assert) {
 
     point._drawLabel(this.renderer, this.group);
 
-    assert.equal(topLabel.shift.callCount, 2);
-    assert.equal(bottomLabel.shift.callCount, 2);
+    assert.ok(topLabel.shift.calledOnce);
+    assert.ok(bottomLabel.shift.calledOnce);
 
     assert.equal(bottomLabel.shift.firstCall.args[0], 33 - 10);
-    assert.equal(bottomLabel.shift.firstCall.args[1], 64);
+    assert.equal(bottomLabel.shift.firstCall.args[1], 44);
     assert.equal(topLabel.shift.firstCall.args[0], 33 - 10);
-    assert.equal(topLabel.shift.firstCall.args[1], 35);
+    assert.equal(topLabel.shift.firstCall.args[1], 54);
 
-    assert.equal(bottomLabel.shift.lastCall.args[0], 33 - 10);
-    assert.equal(bottomLabel.shift.lastCall.args[1], 44);
-    assert.equal(topLabel.shift.lastCall.args[0], 33 - 10);
-    assert.equal(topLabel.shift.lastCall.args[1], 54);
 });
 
 QUnit.test("Value < minValue, inside, rotated. Overlay corrections", function(assert) {
@@ -3473,18 +3459,13 @@ QUnit.test("Value < minValue, inside, rotated. Overlay corrections", function(as
 
     point._drawLabel(this.renderer, this.group);
 
-    assert.equal(topLabel.shift.callCount, 2);
-    assert.equal(bottomLabel.shift.callCount, 2);
+    assert.ok(topLabel.shift.calledOnce);
+    assert.ok(bottomLabel.shift.calledOnce);
 
-    assert.equal(topLabel.shift.firstCall.args[0], 63);
+    assert.equal(topLabel.shift.firstCall.args[0], 34);
     assert.equal(topLabel.shift.firstCall.args[1], 12 - 5);
-    assert.equal(bottomLabel.shift.firstCall.args[0], 25);
+    assert.equal(bottomLabel.shift.firstCall.args[0], 54);
     assert.equal(bottomLabel.shift.firstCall.args[1], 12 - 5);
-
-    assert.equal(topLabel.shift.lastCall.args[0], 34);
-    assert.equal(topLabel.shift.lastCall.args[1], 12 - 5);
-    assert.equal(bottomLabel.shift.lastCall.args[0], 54);
-    assert.equal(bottomLabel.shift.lastCall.args[1], 12 - 5);
 });
 
 QUnit.test("Default, not rotated. Left alignment", function(assert) {

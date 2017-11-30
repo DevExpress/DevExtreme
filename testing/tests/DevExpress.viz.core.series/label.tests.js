@@ -163,6 +163,7 @@ QUnit.test("Show", function(assert) {
     assert.equal(label._group.stub("attr").callCount, 1);
     assert.deepEqual(label._group.stub("attr").lastCall.args[0], { visibility: "visible" });
     assert.equal(label._point.correctLabelPosition.callCount, 1);
+    assert.equal(label._point.correctLabelPosition.lastCall.args[0], label);
 });
 
 QUnit.test("Hide", function(assert) {
@@ -217,14 +218,18 @@ QUnit.test("Draw(true) - draw label", function(assert) {
 
     assert.deepEqual(this.renderer.text.lastCall.returnValue.attr.firstCall.args, [{ text: "15", align: "left" }], "text attr");
     assert.deepEqual(label._group.stub("attr").lastCall.args[0], { visibility: "visible" });
+    assert.equal(label._point.correctLabelPosition.callCount, 1);
+    assert.equal(label._point.correctLabelPosition.lastCall.args[0], label);
 });
 
 QUnit.test("Draw() - hide label", function(assert) {
     var label = this.createLabel().draw(true);
+    label._point.correctLabelPosition.reset();
 
     label.draw();
 
     assert.deepEqual(label._group.stub("attr").lastCall.args[0], { visibility: "hidden" });
+    assert.equal(label._point.correctLabelPosition.callCount, 0);
 });
 
 QUnit.test("Draw(true) after hide() - draw label", function(assert) {
