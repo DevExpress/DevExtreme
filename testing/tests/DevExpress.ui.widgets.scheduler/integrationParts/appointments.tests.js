@@ -4588,7 +4588,7 @@ QUnit.test("FormData should be reset on saveChanges, dateSerializationFormat is 
     $(".dx-scheduler-appointment-popup .dx-popup-done").trigger("dxclick").trigger("dxclick");
     this.clock.tick(300);
 
-    var $appointments = this.instance.$element().find(".dx-scheduler-appointment");
+    var $appointments = this.instance.element().find(".dx-scheduler-appointment");
 
     assert.deepEqual($appointments.eq(1).data("dxItemData").EndDate, "2016-05-25T11:30:00", "Appointment EndDate is OK");
 });
