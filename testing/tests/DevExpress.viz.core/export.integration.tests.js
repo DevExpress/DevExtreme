@@ -255,13 +255,15 @@ QUnit.test('Export menu creation', function(assert) {
     //arrange, act
     var incidentOccurred = sinon.spy();
     this.createWidget({
-        incidentOccurred: incidentOccurred
+        incidentOccurred: incidentOccurred,
+        rtlEnabled: "rtl option"
     });
 
     //assert
     assert.equal(exportModule.ExportMenu.lastCall.args[0].renderer, this.renderer);
     assert.ok(typeof exportModule.ExportMenu.lastCall.args[0].svgMethod === "function");
     assert.ok(typeof exportModule.ExportMenu.lastCall.args[0].incidentOccurred === "function");
+    assert.strictEqual(this.exportMenu.setOptions.getCall(0).args[0].rtl, "rtl option");
 });
 
 QUnit.test("Export menu disposing", function(assert) {
