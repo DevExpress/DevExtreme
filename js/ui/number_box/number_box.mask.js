@@ -15,7 +15,7 @@ var eventsEngine = require("../../events/core/events_engine"),
 var NUMBER_FORMATTER_NAMESPACE = "dxNumberFormatter",
     MOVE_FORWARD = 1,
     MOVE_BACKWARD = -1,
-    MAXIMUM_FLOAT_LIMIT = 999999999999999;
+    MAXIMUM_FLOAT_LENGTH = 15;
 
 var ensureDefined = function(value, defaultValue) {
     return value === undefined ? defaultValue : value;
@@ -234,7 +234,18 @@ var NumberBoxMask = NumberBoxBase.inherit({
         return edited;
     },
 
+    _isNumberVeryLong: function(text) {
+        var decimalSeparator = number.getDecimalSeparator(),
+            regExp = new RegExp("[^0-9" + decimalSeparator + "]", "g");
+
+        return text.replace(regExp, "").length > MAXIMUM_FLOAT_LENGTH;
+    },
+
     _parseNumber: function(text) {
+        if(this._isNumberVeryLong(text)) {
+            return undefined;
+        }
+
         var format = this._getFormatPattern();
         return number.parse(text, format);
     },
@@ -404,9 +415,12 @@ var NumberBoxMask = NumberBoxBase.inherit({
     },
 
     _lightParse: function(text) {
+        if(this._isNumberVeryLong(text)) {
+            return undefined;
+        }
         var value = +text;
         if(text === "") return null;
-        return isNaN(value) || Math.abs(value) > MAXIMUM_FLOAT_LIMIT ? undefined : value;
+        return isNaN(value) ? undefined : value;
     },
 
     _parseValue: function(text) {
