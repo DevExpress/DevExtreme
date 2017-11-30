@@ -312,6 +312,7 @@ Label.prototype = {
     draw: function(isVisible) {
         if(this._getLabelVisibility(isVisible)) {
             this._show();
+            this._point && this._point.correctLabelPosition(this);
         } else {
             this._drawn = false;
             this._hide();

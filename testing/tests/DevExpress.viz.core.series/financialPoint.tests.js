@@ -1823,11 +1823,8 @@ QUnit.module("Draw label", {
                 getCanvasVisibleArea: { min: 0, max: 210 }
             })
         };
-        sinon.stub(labelModule, "Label", function() {
-            var label = sinon.createStubInstance(originalLabel);
-            label.getBoundingRect.returns({});
-            label.getLayoutOptions.returns({});
-            return label;
+        this.sinonFactory = sinon.stub(labelModule, "Label", function() {
+            return sinon.createStubInstance(originalLabel);
         });
         this.renderer = new vizMocks.Renderer();
         this.renderer.bBoxTemplate = { x: 55, y: 40, height: 10, width: 20 };
@@ -1862,7 +1859,6 @@ QUnit.module("Draw label", {
             isFullStackedSeries: function() { return false; },
             areLabelsVisible: function() { return true; },
             getLabelVisibility: function() { return true; },
-            getVisibleArea: function() { return { minX: 1, maxX: 100, minY: 2, maxY: 210 }; },
             getValueAxis: function() { return { getTranslator: function() { return that.translators.val; } }; },
             getArgumentAxis: function() { return { getTranslator: function() { return that.translators.arg; } }; }
         };

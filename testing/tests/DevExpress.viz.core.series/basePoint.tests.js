@@ -524,11 +524,8 @@ QUnit.module("Draw", {
             attributes: { r: 6 },
             symbol: "circle"
         };
-        sinon.stub(labelModule, "Label", function() {
-            var label = sinon.createStubInstance(originalLabel);
-            label.getBoundingRect.returns({});
-            label.getLayoutOptions.returns({});
-            return label;
+        this.sinonFactory = sinon.stub(labelModule, "Label", function() {
+            return sinon.createStubInstance(originalLabel);
         });
         this.series = {
             isFullStackedSeries: function() { return false; },
@@ -1268,11 +1265,8 @@ QUnit.module("Dispose", {
             attributes: { r: 6 },
             symbol: "circle"
         };
-        sinon.stub(labelModule, "Label", function() {
-            var label = sinon.createStubInstance(originalLabel);
-            label.getBoundingRect.returns({});
-            label.getLayoutOptions.returns({});
-            return label;
+        this.sinonFactory = sinon.stub(labelModule, "Label", function() {
+            return sinon.createStubInstance(originalLabel);
         });
         this.series = {
             isFullStackedSeries: function() { return false; },

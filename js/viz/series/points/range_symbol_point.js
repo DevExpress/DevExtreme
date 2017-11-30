@@ -234,7 +234,6 @@ module.exports = _extend({}, symbolPoint, {
 
             $.each(labels, function(_, label) {
                 label.draw(true);
-                that.correctLabelPosition(label);
             });
 
             that._checkLabelsOverlay(that._topLabel.pointPosition);

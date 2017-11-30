@@ -2951,7 +2951,7 @@ function createLabel(labelBBox) {
         label = point._label;
 
     point._getSymbolBBox = function() { return labelBBox; };
-    point._drawLabel(this.renderer, this.group);
+    point.correctLabelPosition(label);
 
     return label;
 }
@@ -3065,14 +3065,6 @@ QUnit.test("Draw label, rotated, point is abroad on the bottom", function(assert
 
     assert.equal(label.shift.firstCall.args[0], 35);
     assert.equal(label.shift.firstCall.args[1], 0);
-});
-
-QUnit.test("Do not correct label position if label is invisible", function(assert) {
-    this.series.getLabelVisibility = function() { return false; };
-    var label = createLabel.call(this, { x: 10, y: 40, height: 0, width: 0 });
-
-    assert.equal(label.shift.callCount, 0);
-    assert.equal(label.shift.callCount, 0);
 });
 
 QUnit.module("Update label", {
