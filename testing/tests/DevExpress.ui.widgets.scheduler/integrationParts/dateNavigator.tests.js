@@ -127,7 +127,7 @@ QUnit.test("Date navigator should have a correct step on the Agenda view", funct
     assert.equal(navigator.option("step"), "agenda", "Step is OK");
 });
 
-QUnit.test("Previous button shouldn't be disabled if current date is next day after min", function(assert) {
+QUnit.test("Previous button shouldn't be disabled if current date is next day after min and equal new Date()", function(assert) {
     this.createInstance({
         views: ["day"],
         currentView: "day",
@@ -141,5 +141,19 @@ QUnit.test("Previous button shouldn't be disabled if current date is next day af
 
     var prevButton = $scheduler.find(".dx-scheduler-navigator-previous").dxButton("instance");
     assert.notOk(prevButton.option("disabled"), "previous button isn't disabled");
+});
+
+QUnit.test("Next button shouldn't be disabled if current date is previous day before max", function(assert) {
+    this.createInstance({
+        views: ["day"],
+        currentView: "day",
+        currentDate: new Date(2017, 11, 30),
+        max: new Date(2017, 11, 31)
+    });
+
+    var $scheduler = this.instance.element(),
+        nextButton = $scheduler.find(".dx-scheduler-navigator-next").dxButton("instance");
+
+    assert.notOk(nextButton.option("disabled"), "next button isn't disabled");
 });
 
