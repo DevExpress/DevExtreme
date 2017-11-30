@@ -15,7 +15,8 @@ var $ = require("jquery"),
     keyboardMock = require("../../helpers/keyboardMock.js"),
     config = require("core/config"),
     browser = require("core/utils/browser"),
-    dateSerialization = require("core/utils/date_serialization");
+    dateSerialization = require("core/utils/date_serialization"),
+    dateLocalization = require("localization/date");
 
 var camelize = inflector.camelize;
 
@@ -1866,6 +1867,23 @@ QUnit.test("Current view should be set correctly, after click on other view cell
         fx.off = true;
         this.clock.restore();
     }
+});
+
+QUnit.test("Month names should be shown in 'abbreviated' format when ZoomLevel is Year", function(assert) {
+    var getMonthNamesStub = sinon.stub(dateLocalization, "getMonthNames");
+
+    getMonthNamesStub.returns([ "leden", "únor", "březen", "duben", "květen", "červen", "červenec", "srpen", "září", "říjen", "listopad", "prosinec" ]);
+    getMonthNamesStub.withArgs("abbreviated").returns([ "led", "úno", "bře", "dub", "kvě", "čvn", "čvc", "srp", "zář", "říj", "lis", "pro" ]);
+
+    var calendar = this.$element.dxCalendar({
+        zoomLevel: "year",
+        value: new Date(2017, 10, 20)
+    }).dxCalendar("instance");
+
+    var $cells = getCurrentViewInstance(calendar).element().find(".dx-calendar-cell");
+
+    assert.equal($cells.eq(5).text().trim(), "čvn");
+    assert.equal($cells.eq(6).text().trim(), "čvc");
 });
 
 
