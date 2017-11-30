@@ -1985,7 +1985,7 @@ var Scheduler = Widget.inherit({
 
         disableButton && this._disableDoneButton();
 
-        var formData = this._appointmentForm.option("formData"),
+        var formData = this._getFormData(),
             oldData = this._editAppointmentData,
             recData = this._updatedRecAppointment;
 
@@ -2016,6 +2016,17 @@ var Scheduler = Widget.inherit({
         this._enableDoneButton();
 
         return true;
+    },
+
+    _getFormData: function() {
+        var formData = this._appointmentForm.option("formData"),
+            startDate = this.fire("getField", "startDate", formData),
+            endDate = this.fire("getField", "endDate", formData);
+
+        this.fire("setField", "startDate", formData, startDate);
+        this.fire("setField", "endDate", formData, endDate);
+
+        return formData;
     },
 
     _convertDatesByTimezoneBack: function(applyAppointmentTimezone, sourceAppointmentData, targetAppointmentData) {
