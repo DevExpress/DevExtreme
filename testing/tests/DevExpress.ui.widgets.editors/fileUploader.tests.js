@@ -1850,6 +1850,7 @@ QUnit.test("the 'accept' option should not be ignored on drag&drop (T384800)", f
 
 QUnit.test("the 'accept' option is case insensitive (T570224)", function(assert) {
     var $fileUploader = $('#fileuploader').dxFileUploader({
+            uploadMode: "instantly",
             useDragOver: true,
             accept: ".jpg"
         }),
@@ -1875,6 +1876,7 @@ QUnit.test("the 'accept' option is case insensitive (T570224)", function(assert)
 
 QUnit.test("the 'accept' option check an extension only at the end of the file (T570224)", function(assert) {
     var $fileUploader = $('#fileuploader').dxFileUploader({
+            uploadMode: "instantly",
             useDragOver: true,
             accept: ".jpg"
         }),
