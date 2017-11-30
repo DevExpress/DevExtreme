@@ -756,7 +756,7 @@ Series.prototype = {
 
     hideLabels: function() {
         _each(this._points, function(_, point) {
-            point._label.hide();
+            point._label.draw(false);
         });
     },
 

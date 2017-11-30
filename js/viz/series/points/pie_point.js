@@ -157,7 +157,6 @@ module.exports = _extend({}, symbolPoint, {
 
         // this function is called for drawing labels without points for checking size of labels
         this._isLabelDrawingWithoutPoints = true;
-        this._label.clearVisibility();
         this._drawLabel();
         this._isLabelDrawingWithoutPoints = false;
     },
@@ -328,7 +327,7 @@ module.exports = _extend({}, symbolPoint, {
     },
 
     setInvisibility: function() {
-        this._label.hide();
+        this._label.draw(false);
     },
 
     isVisible: function() {

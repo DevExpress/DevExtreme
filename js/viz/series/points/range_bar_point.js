@@ -17,8 +17,6 @@ module.exports = _extend({}, barPoint, {
         if(graphic && graphic.attr("visibility")) {
             graphic.attr({ visibility: null });
         }
-        this._topLabel.clearVisibility();
-        this._bottomLabel.clearVisibility();
     },
 
     setInvisibility: function() {
@@ -27,8 +25,8 @@ module.exports = _extend({}, barPoint, {
         if(graphic && graphic.attr("visibility") !== "hidden") {
             graphic.attr({ visibility: "hidden" });
         }
-        this._topLabel.hide();
-        this._bottomLabel.hide();
+        this._topLabel.draw(false);
+        this._bottomLabel.draw(false);
     },
 
     getTooltipParams: function(location) {
