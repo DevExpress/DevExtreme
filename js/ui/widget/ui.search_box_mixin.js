@@ -68,16 +68,6 @@ module.exports = {
         });
     },
 
-    _initDataSource: function() {
-        this.callBase();
-
-        if(this._dataSource && this.NAME === "dxList") {
-            this.option("searchValue").length && this._dataSource.searchValue(this.option("searchValue"));
-            this.option("searchMode") !== "contains" && this._dataSource.searchOperation(this.option("searchMode"));
-            this.option("searchExpr") && this._dataSource.searchExpr(this.option("searchExpr"));
-        }
-    },
-
     _render: function() {
         this._renderSearch();
         this.callBase();
