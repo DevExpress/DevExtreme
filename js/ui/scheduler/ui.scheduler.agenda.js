@@ -47,7 +47,7 @@ var SchedulerAgenda = SchedulerWorkSpace.inherit({
                 break;
             case "noDataText":
             case "rowHeight":
-                this._cleanView();
+                this.invoke("reloadDataSource");
                 this._renderView();
                 break;
             case "groups":

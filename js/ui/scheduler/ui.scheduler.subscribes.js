@@ -17,6 +17,10 @@ var $ = require("../../core/renderer"),
 var toMs = dateUtils.dateToMilliseconds;
 
 var subscribes = {
+    reloadDataSource: function() {
+        this._reloadDataSource();
+    },
+
     currentViewUpdated: function(currentView) {
         this.option("currentView", currentView);
     },
