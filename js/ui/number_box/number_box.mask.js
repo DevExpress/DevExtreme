@@ -245,19 +245,6 @@ var NumberBoxMask = NumberBoxBase.inherit({
         return edited;
     },
 
-    // _cleanParse: function(text){
-    //     var decimalSeparator = number.getDecimalSeparator(),
-    //         regExp = new RegExp("[^-0-9"+ decimalSeparator +"]", "g"),
-    //         cleanedText = text.replace(regExp, "").replace(decimalSeparator, ".");
-    //
-    //     if (cleanedText.length > 15) return undefined;
-    //     if (cleanedText === "") return null;
-    //
-    //     var parsed = +cleanedText;
-    //
-    //     return isNaN(parsed) ? undefined : parsed;
-    // },
-
     _tryParse: function(text, selection, char) {
         var editedText = this._getEditedText(text, selection, char),
             parsed = number.parse(editedText);
