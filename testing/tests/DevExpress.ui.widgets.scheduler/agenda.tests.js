@@ -289,19 +289,14 @@ QUnit.test("Time panel rows should have a right height when rowHeight is changed
     assert.roughEqual($timePanelRows.eq(3).outerHeight(), rowHeight + 20, 2.001, "Row height is OK");
 });
 
-QUnit.test("Agenda should reload dataSource correctly after rowHeight changed", function(assert) {
+QUnit.test("Agenda should be recalculated after rowHeight changed", function(assert) {
     this.createInstance();
 
-    this.instance.invoke = function(subject) {
-        if(subject === "reloadDataSource") {
-            assert.ok(true, "DataSource was reloaded");
-        }
-        if(subject === "getAgendaRows") {
-            return $.Deferred().resolve([]).promise();
-        }
-    };
+    var recalculateStub = sinon.stub(this.instance, "_recalculateAgenda");
 
     this.instance.option("rowHeight", 100);
+
+    assert.ok(recalculateStub.called, "Agenda was recalculated");
 });
 
 QUnit.test("Agenda should not contain all-day stuff", function(assert) {

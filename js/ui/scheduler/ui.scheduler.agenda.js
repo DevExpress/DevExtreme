@@ -47,8 +47,7 @@ var SchedulerAgenda = SchedulerWorkSpace.inherit({
                 break;
             case "noDataText":
             case "rowHeight":
-                this.invoke("reloadDataSource");
-                this._renderView();
+                this._recalculateAgenda(this._rows);
                 break;
             case "groups":
                 if(!value || !value.length) {
@@ -118,32 +117,36 @@ var SchedulerAgenda = SchedulerWorkSpace.inherit({
     },
 
     _renderView: function() {
-        var cellTemplates = [];
         this._setFirstViewDate();
         this._rows = [];
         this.invoke("getAgendaRows", {
             agendaDuration: this.option("agendaDuration"),
             currentDate: new Date(this.option("currentDate"))
         }).done((function(rows) {
-            this._cleanView();
-
-            if(this._rowsIsEmpty(rows)) {
-                this._renderNoData();
-                return;
-            }
-            this._rows = rows;
-
-            if(this._$groupTable) {
-                cellTemplates = this._renderGroupHeader();
-                this._setGroupHeaderCellsHeight();
-            }
-
-            this._renderTimePanel();
-            this._renderDateTable();
-            this.invoke("agendaIsReady", rows, INNER_CELL_MARGIN, OUTER_CELL_MARGIN);
-            this._applyCellTemplates(cellTemplates);
-            this._dateTableScrollable.update();
+            this._recalculateAgenda(rows);
         }).bind(this));
+    },
+
+    _recalculateAgenda: function(rows) {
+        var cellTemplates = [];
+        this._cleanView();
+
+        if(this._rowsIsEmpty(rows)) {
+            this._renderNoData();
+            return;
+        }
+        this._rows = rows;
+
+        if(this._$groupTable) {
+            cellTemplates = this._renderGroupHeader();
+            this._setGroupHeaderCellsHeight();
+        }
+
+        this._renderTimePanel();
+        this._renderDateTable();
+        this.invoke("agendaIsReady", rows, INNER_CELL_MARGIN, OUTER_CELL_MARGIN);
+        this._applyCellTemplates(cellTemplates);
+        this._dateTableScrollable.update();
     },
 
     _renderNoData: function() {
