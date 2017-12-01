@@ -709,9 +709,7 @@
                 this.minY = options.minY;
                 this._visible = options.visible;
                 this._label = {
-                    hide: function() {
-                        this._isLabelHidden = true;
-                    }
+                    draw: sinon.spy()
                 };
                 this.highError = options.highError;
                 this.lowError = options.lowError;

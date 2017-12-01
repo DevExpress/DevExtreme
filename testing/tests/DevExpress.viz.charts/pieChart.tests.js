@@ -198,7 +198,7 @@ var environment = {
                 var label = new LabelCtor();
                 label.getBoundingRect.returns(BBox);
                 label.isVisible = sinon.spy(function() {
-                    return !this.hide.called;
+                    return !this.draw.calledWith(false);
                 });
                 labels.push(label);
             });
@@ -211,7 +211,7 @@ var environment = {
                 assert.equal(label.getBoundingRect().x, position[0], "boundingRect x");
                 assert.equal(label.getBoundingRect().y, position[1], "boundingRect y");
             }
-            assert.ok(!label.hide.called, "label not should be hidden");
+            assert.ok(!label.draw.calledWith(false), "label should not be hidden");
         }
     });
 
@@ -1878,8 +1878,8 @@ var environment = {
             { x: 5, y: 10, width: 10, height: 10, pointPosition: { y: 2, angle: 2 } }]),
             points = pie.getAllSeries()[0].getVisiblePoints();
 
-        assert.ok(!points[0].getLabels()[0].hide.called);
-        assert.ok(points[1].getLabels()[0].hide.calledOnce);
+        assert.strictEqual(points[0].getLabels()[0].draw.callCount, 0);
+        assert.deepEqual(points[1].getLabels()[0].draw.lastCall.args, [false]);
     });
 
     QUnit.test("Adjust labels should be called before resolve oberlapping and after", function(assert) {
@@ -1888,8 +1888,8 @@ var environment = {
             series = pie.getAllSeries()[0],
             points = series.getVisiblePoints();
 
-        assert.ok(series.adjustLabels.calledBefore(points[1].getLabels()[0].hide));
-        assert.ok(series.adjustLabels.calledAfter(points[1].getLabels()[0].hide));
+        assert.ok(series.adjustLabels.getCall(0).calledBefore(points[1].getLabels()[0].draw.withArgs(false).lastCall));
+        assert.ok(series.adjustLabels.getCall(1).calledAfter(points[1].getLabels()[0].draw.withArgs(false).lastCall));
     });
 
     QUnit.module("resolveLabelOverlapping. shift", $.extend({}, overlappingEnvironment, {

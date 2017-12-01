@@ -162,11 +162,20 @@ declare module DevExpress.viz.charts {
         /** @docid baseLabelObjectmethods_getboundingrect*/
         getBoundingRect(): { x: number; y: number; width: number; height: number; };
 
-        /** @docid baseLabelObjectmethods_hide */
+        /** @docid baseLabelObjectmethods_hide#hide() */
         hide(): void;
 
-        /** @docid baseLabelObjectmethods_show */
+        /** @docid baseLabelObjectmethods_hide#hide(holdInvisible) */
+        hide(holdInvisible: boolean): void;
+
+        /** @docid baseLabelObjectmethods_show#show() */
         show(): void;
+
+        /** @docid baseLabelObjectmethods_show#show(holdVisible) */
+        show(holdVisible: boolean): void;
+
+        /** @docid baseLabelObjectmethods_isvisible */
+        isVisible(): boolean;
     }
 
     /** @docid pieChartSeriesObject */

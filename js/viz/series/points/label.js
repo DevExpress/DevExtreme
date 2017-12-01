@@ -200,37 +200,6 @@ function Label(renderSettings) {
 Label.prototype = {
     constructor: Label,
 
-    _setVisibility: function(value, state) {
-        this._group && this._group.attr({ visibility: value });
-        this._visible = state;
-    },
-
-    // The following method is required because we support partial visibility for labels
-    // entire labels group can be hidden and any particular label can be visible at the same time
-    // in order to do that label must have visibility:"visible" attribute
-    clearVisibility: function() {
-        this._setVisibility(null, true);
-    },
-
-    hide: function() {
-        this._setVisibility("hidden", false);
-    },
-
-    show: function() {
-        var that = this,
-            needToCorrectPosition = !that._group || !that._group.attr("visibility");
-        if(that._point.hasValue()) {
-            that._draw();
-            if(needToCorrectPosition) {
-                that._point.correctLabelPosition(that);
-            }
-        }
-    },
-
-    isVisible: function() {
-        return this._visible;
-    },
-
     setColor: function(color) {
         this._color = color;
     },
@@ -263,13 +232,43 @@ Label.prototype = {
         that._data = that._options = that._textContent = that._visible = that._insideGroup = that._text = that._background = that._connector = that._figure = null;
     },
 
-    _draw: function() {
+    // The following method is required because we support partial visibility for labels
+    // entire labels group can be hidden and any particular label can be visible at the same time
+    // in order to do that label must have visibility:"visible" attribute
+    _setVisibility: function(value, state) {
+        this._group && this._group.attr({ visibility: value });
+        this._visible = state;
+    },
+
+    isVisible: function() {
+        return this._visible;
+    },
+
+    hide: function(holdInvisible) {
+        this._holdVisibility = !!holdInvisible;
+        this._hide();
+    },
+
+    _hide: function() {
+        this._setVisibility("hidden", false);
+    },
+
+    show: function(holdVisible) {
+        var correctPosition = !this._drawn;
+        if(this._point.hasValue()) {
+            this._holdVisibility = !!holdVisible;
+            this._show();
+            correctPosition && this._point.correctLabelPosition(this);
+        }
+    },
+
+    _show: function() {
         var that = this,
             renderer = that._renderer,
             container = that._container,
             options = that._options || {},
             text = that._textContent = formatText(that._data, that._options) || null;
-        that.clearVisibility();
+
         if(text) {
             if(!that._group) {
                 that._group = renderer.g().append(container);
@@ -299,10 +298,26 @@ Label.prototype = {
             that._text.attr({ text: text });
             that._updateBackground(that._text.getBBox());
             that._setVisibility("visible", true);
+            that._drawn = true;
         } else {
-            that.hide();
+            that._hide();
         }
         return that;
+    },
+
+    _getLabelVisibility: function(isVisible) {
+        return this._holdVisibility ? this.isVisible() : isVisible;
+    },
+
+    draw: function(isVisible) {
+        if(this._getLabelVisibility(isVisible)) {
+            this._show();
+            this._point && this._point.correctLabelPosition(this);
+        } else {
+            this._drawn = false;
+            this._hide();
+        }
+        return this;
     },
 
     _updateBackground: function(bBox) {
