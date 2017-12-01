@@ -341,7 +341,7 @@ QUnit.test("delete key", function(assert) {
     this.keyboard.caret(5).keyDown("del");
     assert.notOk(this.keyboard.event.isDefaultPrevented(), "delete should not be prevented");
     this.keyboard.input("del");
-    assert.equal(this.input.val(), "$ 23.05 d", "required digit should be replaced to 0 after removing");
+    assert.equal(this.input.val(), "$ 23.50 d", "required digit should be replaced to 0 after removing");
 });
 
 QUnit.test("backspace key", function(assert) {
@@ -365,7 +365,7 @@ QUnit.test("backspace key", function(assert) {
     this.keyboard.caret(6).keyDown("backspace");
     assert.notOk(this.keyboard.event.isDefaultPrevented(), "delete should not be prevented");
     this.keyboard.input("backspace");
-    assert.equal(this.input.val(), "$ 23.05 d", "required digit should be replaced to 0 after removing");
+    assert.equal(this.input.val(), "$ 23.50 d", "required digit should be replaced to 0 after removing");
 });
 
 QUnit.test("removing non required char with negative value", function(assert) {
@@ -427,12 +427,11 @@ QUnit.test("removing with group separators using backspace key", function(assert
     assert.equal(this.input.val(), "$ 2,390 d", "value is correct");
 });
 
-QUnit.test("removing required last char should replace it to 0", function(assert) {
+QUnit.test("removing required last char should not replace it to 0", function(assert) {
     this.instance.option("value", 1);
-    this.keyboard.caret(1).press("backspace").input("backspace");
+    this.keyboard.caret(1).press("backspace");
 
-    assert.equal(this.input.val(), "0", "value is correct");
-    assert.deepEqual(this.keyboard.caret(), { start: 1, end: 1 }, "caret position is correct");
+    assert.equal(this.input.val(), "", "value is correct");
 });
 
 QUnit.test("removing required last char should replace it to 0 if percent format", function(assert) {
@@ -549,7 +548,7 @@ QUnit.test("removing decimal separator if decimal separator is not default", fun
             value: 1
         });
 
-        this.keyboard.caret(2).press("backspace").input("backspace");
+        this.keyboard.caret(2).press("backspace");
 
         assert.equal(this.input.val(), "1,00", "text is correct");
         assert.deepEqual(this.keyboard.caret(), { start: 1, end: 1 }, "caret is moved");
