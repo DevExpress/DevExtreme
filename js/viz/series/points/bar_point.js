@@ -106,7 +106,7 @@ module.exports = _extend({}, symbolPoint, {
 
         if(that._options.resolveLabelsOverlapping && label.getLayoutOptions().position === "inside") {
             if(labelBBox.width > graphicBBox.width || labelBBox.height > graphicBBox.height) {
-                label.hide();
+                label.draw(false);
                 return true;
             }
         }

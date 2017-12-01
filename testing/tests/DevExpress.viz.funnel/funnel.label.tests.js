@@ -37,7 +37,7 @@ QUnit.test("Create labels", function(assert) {
     assert.equal(labelModule.Label.callCount, 2, "two labels are created");
     assert.equal(labelModule.Label.getCall(0).args[0].renderer, this.renderer);
     assert.equal(labelModule.Label.getCall(0).args[0].labelsGroup, labelsGroup);
-    assert.ok(label.draw.calledOnce);
+    assert.deepEqual(label.draw.firstCall.args, [true]);
 
     assert.equal(label.setData.lastCall.args[0].value, 5, "value");
     assert.equal(label.setData.lastCall.args[0].percent, 1, "percent");
@@ -184,8 +184,8 @@ QUnit.test("Hide labels for zero values id showForZeroValues is set to false", f
     });
 
     assert.equal(labelModule.Label.callCount, 2);
-    assert.ok(!labelModule.Label.getCall(0).returnValue.stub("hide").called);
-    assert.ok(labelModule.Label.getCall(1).returnValue.stub("hide").called);
+    assert.ok(!labelModule.Label.getCall(0).returnValue.stub("draw").calledWith(false));
+    assert.ok(labelModule.Label.getCall(1).returnValue.stub("draw").calledWith(false));
 });
 
 QUnit.test("Reserve space for labels if position outside", function(assert) {
@@ -893,9 +893,9 @@ QUnit.test("Hide labels", function(assert) {
     });
 
     assert.deepEqual(this.items()[0].attr.firstCall.args[0].points, [0, 0, 240, 600]);
-    assert.ok(labelModule.Label.getCall(0).returnValue.hide.called);
-    assert.ok(labelModule.Label.getCall(1).returnValue.hide.called);
-    assert.ok(!labelModule.Label.getCall(0).returnValue.clearVisibility.called);
+    assert.ok(labelModule.Label.getCall(0).returnValue.draw.calledWith(false));
+    assert.ok(labelModule.Label.getCall(1).returnValue.draw.calledWith(false));
+    assert.deepEqual(labelModule.Label.getCall(0).returnValue.draw.firstCall.args, [true]);
 });
 
 QUnit.test("Show hidden labels", function(assert) {
@@ -913,8 +913,8 @@ QUnit.test("Show hidden labels", function(assert) {
         }),
         label = labelModule.Label.getCall(0).returnValue;
 
-    label.hide.reset();
     label.resetEllipsis.reset();
+    label.draw.reset();
 
     funnel.option({
         size: {
@@ -923,8 +923,8 @@ QUnit.test("Show hidden labels", function(assert) {
     });
 
     assert.deepEqual(this.items()[0].attr.firstCall.args[0].points, [0, 0, 295, 600]);
-    assert.ok(!label.hide.called);
-    assert.ok(label.clearVisibility.called);
+    assert.ok(!label.draw.calledWith(false));
+    assert.deepEqual(label.draw.lastCall.args, [true]);
     assert.ok(label.resetEllipsis.called);
 });
 
@@ -943,8 +943,8 @@ QUnit.test("Do not hide labels if keepLabels true", function(assert) {
     });
 
     assert.deepEqual(this.items()[0].attr.firstCall.args[0].points, [0, 0, 150, 600]);
-    assert.ok(!labelModule.Label.getCall(0).returnValue.hide.called);
-    assert.ok(!labelModule.Label.getCall(1).returnValue.hide.called);
+    assert.ok(!labelModule.Label.getCall(0).returnValue.draw.calledWith(false));
+    assert.ok(!labelModule.Label.getCall(1).returnValue.draw.calledWith(false));
 });
 
 QUnit.test("Do not hide labels if keepLabels true. Container width less than adaptiveLayout", function(assert) {
@@ -965,8 +965,8 @@ QUnit.test("Do not hide labels if keepLabels true. Container width less than ada
     });
 
     assert.deepEqual(this.items()[0].attr.firstCall.args[0].points, [0, 0, 140, 600]);
-    assert.ok(!labelModule.Label.getCall(0).returnValue.hide.called);
-    assert.ok(!labelModule.Label.getCall(1).returnValue.hide.called);
+    assert.ok(!labelModule.Label.getCall(0).returnValue.draw.calledWith(false));
+    assert.ok(!labelModule.Label.getCall(1).returnValue.draw.calledWith(false));
 });
 
 QUnit.test("Apply label ellipsis and correct label coordinates", function(assert) {

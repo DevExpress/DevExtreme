@@ -91,7 +91,7 @@ function findAndKillSmallValue(rollingStocks) {
         index: undefined
     });
 
-    smallestObject.rollingStock.getLabels()[0].hide();
+    smallestObject.rollingStock.getLabels()[0].draw(false);
     width = smallestObject.rollingStock.getBoundingRect().width;
     rollingStocks[smallestObject.index] = null;
 
@@ -801,7 +801,7 @@ var BaseChart = BaseWidget.inherit({
                 nextLabel = labels[j];
                 nextLabelRect = nextLabel.getBoundingRect();
                 if(checkOverlapping(currentLabelRect, nextLabelRect)) {
-                    nextLabel.hide();
+                    nextLabel.draw(false);
                 }
             }
         }

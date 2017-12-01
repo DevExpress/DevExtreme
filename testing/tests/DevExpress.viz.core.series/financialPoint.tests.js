@@ -1866,12 +1866,12 @@ QUnit.module("Draw label", {
     beforeEach: function() {
         var that = this;
         this.translators = {
-            x: new MockTranslator({
+            arg: new MockTranslator({
                 translate: { 1: 11 },
                 failOnWrongData: true,
                 getCanvasVisibleArea: { min: 0, max: 110 }
             }),
-            y: new MockTranslator({
+            val: new MockTranslator({
                 translate: { 1: 52, 2: 35, 3: 10, 4: 5 },
                 failOnWrongData: true,
                 getCanvasVisibleArea: { min: 0, max: 210 }
@@ -2048,7 +2048,7 @@ QUnit.test("Draw label if point isn't reduction", function(assert) {
 
     point._drawLabel(this.renderer, this.group);
 
-    assert.ok(point._label.show.called);
+    assert.deepEqual(point._label.draw.lastCall.args, [true]);
     assert.ok(!point._label.setColor.called);
 });
 
@@ -2068,7 +2068,7 @@ QUnit.test("Draw label if point is reduction", function(assert) {
 
     point._drawLabel(this.renderer, this.group);
 
-    assert.ok(point._label.show.called);
+    assert.deepEqual(point._label.draw.lastCall.args, [true]);
     assert.ok(point._label.setColor.args[0][0], "red");
 });
 
@@ -2091,7 +2091,7 @@ QUnit.test("Update label from reduction to non-reduction", function(assert) {
     point.updateOptions(this.options);
     point._drawLabel(this.renderer, this.group);
 
-    assert.ok(point._label.show.called);
+    assert.deepEqual(point._label.draw.lastCall.args, [true]);
     assert.ok(!point._label.setColor.called);
 });
 
@@ -2106,7 +2106,7 @@ QUnit.test("Draw label. Stock", function(assert) {
 
     point._drawLabel(this.renderer, this.group);
 
-    assert.ok(point._label.show.called);
+    assert.deepEqual(point._label.draw.lastCall.args, [true]);
 });
 
 QUnit.test("Draw label. Candlestick", function(assert) {
@@ -2120,7 +2120,7 @@ QUnit.test("Draw label. Candlestick", function(assert) {
 
     point._drawLabel(this.renderer, this.group);
 
-    assert.ok(point._label.show.called);
+    assert.deepEqual(point._label.draw.lastCall.args, [true]);
 });
 
 QUnit.module("get point radius", {

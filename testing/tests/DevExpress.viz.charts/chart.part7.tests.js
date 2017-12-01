@@ -1184,7 +1184,7 @@ $('<div id="chartContainer">').appendTo("#qunit-fixture");
                 var label = new commons.LabelCtor();
                 label.getBoundingRect.returns(BBox);
                 label.isVisible = sinon.spy(function() {
-                    return !this.hide.called;
+                    return !this.draw.calledWith(false);
                 });
                 label.shift = sinon.spy(function(x, y) {
                     var BBox = label.getBoundingRect();
@@ -1204,8 +1204,8 @@ $('<div id="chartContainer">').appendTo("#qunit-fixture");
             resolveLabelOverlapping: "hide",
             series: [{ type: "mockType" }]
         });
-        assert.ok(!this.labels[0].hide.called);
-        assert.ok(this.labels[1].hide.calledOnce);
+        assert.strictEqual(this.labels[0].draw.callCount, 0);
+        assert.deepEqual(this.labels[1].draw.lastCall.args, [false]);
     });
 
     QUnit.test("two overlapping label, series not visible", function(assert) {
@@ -1217,8 +1217,8 @@ $('<div id="chartContainer">').appendTo("#qunit-fixture");
             series: [{ type: "mockType" }]
         });
 
-        assert.ok(!this.labels[0].hide.called);
-        assert.ok(!this.labels[1].hide.called);
+        assert.strictEqual(this.labels[0].draw.callCount, 0);
+        assert.strictEqual(this.labels[1].draw.callCount, 0);
     });
 
     QUnit.test("two non-overlapping label", function(assert) {
@@ -1229,8 +1229,8 @@ $('<div id="chartContainer">').appendTo("#qunit-fixture");
             series: [{ type: "mockType" }]
         });
 
-        assert.ok(!this.labels[0].hide.called);
-        assert.ok(!this.labels[1].hide.called);
+        assert.strictEqual(this.labels[0].draw.callCount, 0);
+        assert.strictEqual(this.labels[1].draw.callCount, 0);
     });
 
     QUnit.test("first and third labels overlapping", function(assert) {
@@ -1243,9 +1243,9 @@ $('<div id="chartContainer">').appendTo("#qunit-fixture");
             series: [{ type: "mockType" }]
         });
 
-        assert.ok(!this.labels[0].hide.called);
-        assert.ok(!this.labels[1].hide.called);
-        assert.ok(this.labels[2].hide.calledOnce);
+        assert.strictEqual(this.labels[0].draw.callCount, 0);
+        assert.strictEqual(this.labels[1].draw.callCount, 0);
+        assert.deepEqual(this.labels[2].draw.lastCall.args, [false]);
     });
 
     QUnit.test("skip hidden labels", function(assert) {
@@ -1259,10 +1259,10 @@ $('<div id="chartContainer">').appendTo("#qunit-fixture");
             series: [{ type: "mockType" }]
         });
 
-        assert.ok(!this.labels[0].hide.called);
-        assert.ok(!this.labels[1].hide.called);
-        assert.ok(this.labels[2].hide.calledOnce);
-        assert.ok(!this.labels[3].hide.called);
+        assert.strictEqual(this.labels[0].draw.callCount, 0);
+        assert.strictEqual(this.labels[1].draw.callCount, 0);
+        assert.deepEqual(this.labels[2].draw.lastCall.args, [false]);
+        assert.strictEqual(this.labels[3].draw.callCount, 0);
     });
 
     QUnit.test("two overlapping label from two series", function(assert) {
@@ -1274,8 +1274,8 @@ $('<div id="chartContainer">').appendTo("#qunit-fixture");
             series: [{ type: "mockType" }]
         });
 
-        assert.ok(!this.labels[0].hide.called);
-        assert.ok(this.labels[1].hide.calledOnce);
+        assert.strictEqual(this.labels[0].draw.callCount, 0);
+        assert.deepEqual(this.labels[1].draw.lastCall.args, [false]);
     });
 
     QUnit.test("two overlapping label from rangeSeries", function(assert) {
@@ -1286,8 +1286,8 @@ $('<div id="chartContainer">').appendTo("#qunit-fixture");
             series: [{ type: "mockType" }]
         });
 
-        assert.ok(!this.labels[0].hide.called);
-        assert.ok(this.labels[1].hide.calledOnce);
+        assert.strictEqual(this.labels[0].draw.callCount, 0);
+        assert.deepEqual(this.labels[1].draw.lastCall.args, [false]);
     });
 
     QUnit.test("Change resolveLabelOverlapping option only - option changed, series and axes are not recreated", function(assert) {
@@ -1308,8 +1308,8 @@ $('<div id="chartContainer">').appendTo("#qunit-fixture");
             resolveLabelOverlapping: "hide"
         });
 
-        assert.ok(!this.labels[0].hide.called);
-        assert.ok(this.labels[1].hide.calledOnce);
+        assert.strictEqual(this.labels[0].draw.callCount, 0);
+        assert.deepEqual(this.labels[1].draw.lastCall.args, [false]);
 
         assert.ok(series === chart.getAllSeries()[0], "Series should not be recreated");
         assert.ok(valAxis === chart._valueAxes[0], "Val axis should not be recreated");
@@ -1345,7 +1345,7 @@ $('<div id="chartContainer">').appendTo("#qunit-fixture");
                 label.getData.returns({ value: BBox.value });
                 label.getBoundingRect.returns(BBox);
                 label.isVisible = sinon.spy(function() {
-                    return !this.hide.called;
+                    return !this.draw.calledWith(false);
                 });
                 label.shift = sinon.spy(function(x, y) {
                     var BBox = label.getBoundingRect();
@@ -1361,7 +1361,7 @@ $('<div id="chartContainer">').appendTo("#qunit-fixture");
             $.each(position, function(index, value) {
                 assert.equal(label.shift.lastCall.args[index], value);
             });
-            assert.ok(!label.hide.called, "label not should be hidden");
+            assert.strictEqual(label.draw.callCount, 0, "label not should be hidden");
         }
     }));
 
@@ -1386,9 +1386,9 @@ $('<div id="chartContainer">').appendTo("#qunit-fixture");
         });
 
         assert.ok(!this.labels[0].shift.called);
-        assert.ok(!this.labels[0].hide.called);
+        assert.strictEqual(this.labels[0].draw.callCount, 0);
         assert.ok(!this.labels[1].shift.called);
-        assert.ok(!this.labels[1].hide.called);
+        assert.strictEqual(this.labels[1].draw.callCount, 0);
     });
 
     //T545134
@@ -1401,9 +1401,9 @@ $('<div id="chartContainer">').appendTo("#qunit-fixture");
         });
 
         assert.ok(!this.labels[0].shift.called);
-        assert.ok(!this.labels[0].hide.called);
+        assert.strictEqual(this.labels[0].draw.callCount, 0);
         assert.ok(!this.labels[1].shift.called);
-        assert.ok(!this.labels[1].hide.called);
+        assert.strictEqual(this.labels[1].draw.callCount, 0);
     });
 
     //T545134
@@ -1417,9 +1417,9 @@ $('<div id="chartContainer">').appendTo("#qunit-fixture");
         });
 
         assert.ok(!this.labels[0].shift.called);
-        assert.ok(!this.labels[0].hide.called);
+        assert.strictEqual(this.labels[0].draw.callCount, 0);
         assert.ok(!this.labels[1].shift.called);
-        assert.ok(!this.labels[1].hide.called);
+        assert.strictEqual(this.labels[1].draw.callCount, 0);
     });
 
     QUnit.test("First label to the right of the second label, second label should be shifted", function(assert) {
@@ -1431,9 +1431,9 @@ $('<div id="chartContainer">').appendTo("#qunit-fixture");
         });
 
         assert.ok(!this.labels[0].shift.called);
-        assert.ok(!this.labels[0].hide.called);
+        assert.strictEqual(this.labels[0].draw.callCount, 0);
         assert.ok(this.labels[1].shift.called);
-        assert.ok(!this.labels[1].hide.called);
+        assert.strictEqual(this.labels[1].draw.callCount, 0);
     });
 
     QUnit.test("First label to the left of the second label, second label should be shifted", function(assert) {
@@ -1445,9 +1445,9 @@ $('<div id="chartContainer">').appendTo("#qunit-fixture");
         });
 
         assert.ok(!this.labels[0].shift.called);
-        assert.ok(!this.labels[0].hide.called);
+        assert.strictEqual(this.labels[0].draw.callCount, 0);
         assert.ok(this.labels[1].shift.called);
-        assert.ok(!this.labels[1].hide.called);
+        assert.strictEqual(this.labels[1].draw.callCount, 0);
     });
 
     QUnit.test("Three overlapping labels. start", function(assert) {
@@ -1604,7 +1604,7 @@ $('<div id="chartContainer">').appendTo("#qunit-fixture");
         });
 
         assert.ok(!this.labels[0].shift.called);
-        assert.ok(this.labels[1].hide.calledOnce);
+        assert.deepEqual(this.labels[1].draw.lastCall.args, [false]);
     });
 
     QUnit.test("kill labels. two gaps", function(assert) {
@@ -1625,8 +1625,8 @@ $('<div id="chartContainer">').appendTo("#qunit-fixture");
         this.checkLabelPosition(assert, this.labels[1], [5, 25]);
         this.checkLabelPosition(assert, this.labels[2], [5, 50]);
         this.checkLabelPosition(assert, this.labels[3], [5, 75]);
-        assert.ok(this.labels[4].hide.calledOnce);
-        assert.ok(this.labels[5].hide.calledOnce);
+        assert.deepEqual(this.labels[4].draw.lastCall.args, [false]);
+        assert.deepEqual(this.labels[5].draw.lastCall.args, [false]);
     });
 
     QUnit.test("Three overlapped labels. Kill middle label and shift last label", function(assert) {
@@ -1643,7 +1643,7 @@ $('<div id="chartContainer">').appendTo("#qunit-fixture");
         });
 
         assert.ok(!this.labels[0].shift.called);
-        assert.ok(this.labels[1].hide.called);
+        assert.ok(this.labels[1].draw.lastCall.calledWith(false));
         assert.equal(this.labels[2].shift.callCount, 1);
         assert.deepEqual(this.labels[2].shift.args[0], [5, 10]);
     });
@@ -1687,9 +1687,9 @@ $('<div id="chartContainer">').appendTo("#qunit-fixture");
         });
 
         assert.ok(!this.labels[0].shift.called);
-        assert.ok(this.labels[1].hide.calledOnce);
+        assert.deepEqual(this.labels[1].draw.lastCall.args, [false]);
         assert.ok(!this.labels[2].shift.called);
-        assert.ok(!this.labels[2].hide.called, "label not should be hidden");
+        assert.strictEqual(this.labels[2].draw.callCount, 0, "label not should be hidden");
     });
 
     QUnit.test("Resolve overlapping with axis. T173627", function(assert) {
@@ -1707,9 +1707,9 @@ $('<div id="chartContainer">').appendTo("#qunit-fixture");
         });
 
         assert.ok(!this.labels[0].shift.called);
-        assert.ok(this.labels[1].hide.calledOnce);
+        assert.deepEqual(this.labels[1].draw.lastCall.args, [false]);
         assert.ok(!this.labels[2].shift.called);
-        assert.ok(!this.labels[2].hide.called, "label not should be hidden");
+        assert.strictEqual(this.labels[2].draw.callCount, 0, "label not should be hidden");
     });
 
     //T514690
@@ -1810,7 +1810,7 @@ $('<div id="chartContainer">').appendTo("#qunit-fixture");
                 label.getData.returns({ value: bBox.value });
                 label.getBoundingRect.returns(bBox);
                 label.isVisible = sinon.spy(function() {
-                    return !bBox.hidden && !this.hide.called;
+                    return !bBox.hidden && !this.draw.calledWith(false);
                 });
                 label.shift = sinon.spy(function(x, y) {
                     var BBox = label.getBoundingRect();
@@ -1824,7 +1824,7 @@ $('<div id="chartContainer">').appendTo("#qunit-fixture");
             $.each(position, function(index, value) {
                 assert.equal(label.shift.lastCall.args[index], value);
             });
-            assert.ok(!label.hide.called, "label not should be hidden");
+            assert.strictEqual(label.draw.callCount, 0, "label not should be hidden");
         }
     }));
 
@@ -1871,8 +1871,8 @@ $('<div id="chartContainer">').appendTo("#qunit-fixture");
             size: { width: 100, height: 100 }
         });
 
-        assert.ok(this.labels[0].hide.calledOnce);
-        assert.ok(this.labels[1].hide.calledOnce);
+        assert.deepEqual(this.labels[0].draw.lastCall.args, [false]);
+        assert.deepEqual(this.labels[1].draw.lastCall.args, [false]);
         assert.ok(!this.labels[2].shift.called);
         assert.ok(!this.labels[3].shift.called);
     });
@@ -1892,9 +1892,9 @@ $('<div id="chartContainer">').appendTo("#qunit-fixture");
         assert.ok(!this.labels[1].shift.called);
         assert.ok(!this.labels[2].shift.called);
         assert.ok(!this.labels[3].shift.called);
-        assert.ok(!this.labels[0].hide.called);
-        assert.ok(!this.labels[1].hide.called);
-        assert.ok(!this.labels[2].hide.called);
-        assert.ok(!this.labels[3].hide.called);
+        assert.strictEqual(this.labels[0].draw.callCount, 0);
+        assert.strictEqual(this.labels[1].draw.callCount, 0);
+        assert.strictEqual(this.labels[2].draw.callCount, 0);
+        assert.strictEqual(this.labels[3].draw.callCount, 0);
     });
 })();
