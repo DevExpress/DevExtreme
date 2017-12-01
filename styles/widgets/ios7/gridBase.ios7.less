@@ -138,14 +138,8 @@
                     .border-radius(0px);
                     border-width: 0px;
                     background: ~"@{@{widgetName}-editor-background}";
-                }
-
-                &.dx-numberbox-spin .dx-texteditor-input {
-                    padding-right: @SPIN_BUTTON_AREA_WIDTH;
-                }
-
-                &.dx-numberbox-spin-touch-friendly .dx-texteditor-input {
-                    padding-right: @TOUCH_FRIENDLY_SPIN_CONTAINER_WIDTH;
+                    margin-left: -1px;
+                    margin-right: -1px;
                 }
 
                 &.dx-searchbox {
@@ -226,17 +220,9 @@
 
     .dx-@{widgetName}-headers, .dx-@{widgetName}-rowsview {
         .dx-texteditor-input {
-           padding: @GRID_BASE_CELL_PADDING;
-        }
+           padding-top: @GRID_BASE_CELL_PADDING;
+           padding-bottom: @GRID_BASE_CELL_PADDING;
 
-        .dx-dropdowneditor-button-visible {
-            &.dx-show-clear-button .dx-texteditor-input {
-                padding-right: @DROPDOWNEDITOR_BUTTON_WIDTH + @CLEAR_ICON_SIZE + @CLEAR_ICON_RIGHT;
-            }
-
-            .dx-texteditor-input {
-                padding-right: @DROPDOWNEDITOR_BUTTON_WIDTH;
-            }
         }
     }
 
@@ -681,15 +667,6 @@
                     .dx-menu-item-content {
                         padding: 8px 11px 7px 0px;
                     }
-                }
-            }
-        }
-
-        .dx-editor-cell {
-            .dx-texteditor.dx-numberbox-spin,
-            .dx-dropdowneditor.dx-dropdowneditor-button-visible {
-                .dx-texteditor-input {
-                    padding-right: @GRID_BASE_CELL_PADDING;
                 }
             }
         }
