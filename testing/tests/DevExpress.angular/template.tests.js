@@ -8,10 +8,6 @@ var $ = require("jquery"),
 
 require("integration/angular");
 
-if(QUnit.urlParams["nojquery"]) {
-    return;
-}
-
 QUnit.module("simple component tests", {
     beforeEach: function() {
         registerComponent("testWidget", Widget.inherit({}));

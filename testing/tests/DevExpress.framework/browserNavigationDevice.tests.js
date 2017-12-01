@@ -7,10 +7,6 @@ var HistoryBasedNavigationDevice = require("framework/navigation_devices").Histo
     SESSION_KEY = "dxPhoneJSApplication",
     ROOT_PAGE_URL = "__root__";
 
-if(QUnit.urlParams["nojquery"]) {
-    return;
-}
-
 QUnit.module("browserNavigationDevice", {
     beforeEach: function() {
         sessionStorage.removeItem(SESSION_KEY);

@@ -423,6 +423,7 @@ var stubInvokeMethod = function(instance, options) {
                 currentDate: new Date(2017, 8, 5),
                 startDayHour: 8,
             }).dxSchedulerWorkSpaceWeek("instance");
+            stubInvokeMethod(this.instance);
         }
     });
 
@@ -453,6 +454,19 @@ var stubInvokeMethod = function(instance, options) {
         this.instance.option("currentDate", new Date(2017, 8, 15));
 
         assert.equal($element.find("." + SCHEDULER_DATE_TIME_INDICATOR_CLASS).length, 0, "Indicator wasn't rendered");
+    });
+
+    QUnit.test("Indicator should have correct positions after dimensionChanged", function(assert) {
+        this.instance.option({
+            indicatorTime: new Date(2017, 8, 5, 12, 45),
+            crossScrollingEnabled: true,
+            groups: [{ name: "a", items: [{ id: 1, text: "a.1" }, { id: 2, text: "a.2" }] }]
+        });
+
+        resizeCallbacks.fire();
+
+        var $element = this.instance.$element();
+        assert.roughEqual($element.find("." + SCHEDULER_DATE_TIME_INDICATOR_CLASS).position().top, 475, 2, "Indicator has correct position");
     });
 
     QUnit.test("Shader on allDayPanel should have correct height & width, Week view", function(assert) {

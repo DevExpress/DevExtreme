@@ -39,6 +39,7 @@ QUnit.test("getFormat", function(assert) {
     checkFormat("dd/MM/yyyy");
     checkFormat("dd/MM/yyyy HH:mm:ss.SSS");
     checkFormat("'M'MM d");
+    checkFormat("EEE، d MMM yyyy");
     checkFormat("h:mm aaaa", {
         getPeriodNames: function() {
             return ["a. m.", "p. m."];

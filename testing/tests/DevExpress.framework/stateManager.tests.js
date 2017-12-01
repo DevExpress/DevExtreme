@@ -3,10 +3,6 @@
 var StateManager = require("framework/state_manager"),
     frameworkMocks = require("../../helpers/frameworkMocks.js");
 
-if(QUnit.urlParams["nojquery"]) {
-    return;
-}
-
 QUnit.module("StateManager");
 
 QUnit.test("Add and remove source", function(assert) {

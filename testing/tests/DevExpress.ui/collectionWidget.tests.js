@@ -159,7 +159,7 @@ QUnit.test("custom render func, returns jquery", function(assert) {
             testProp: 5
         }],
         itemTemplate: function(item, index, itemElement) {
-            assert.equal(isRenderer(itemElement), config().useJQuery, "itemElemenet is correct");
+            assert.equal(isRenderer(itemElement), !!config().useJQuery, "itemElemenet is correct");
             $(itemElement).append($("<span />").html("Text is: " + String(item.testProp) + ";"));
         }
     });
@@ -665,10 +665,28 @@ QUnit.test("onItemClick should be fired when item is clicked", function(assert) 
 
     $item.trigger("dxclick");
     assert.ok(actionFired, "action fired");
-    assert.equal(isRenderer(actionData.itemElement), config().useJQuery, "correct element passed");
+    assert.equal(isRenderer(actionData.itemElement), !!config().useJQuery, "correct element passed");
     assert.strictEqual($(actionData.itemElement)[0], $item[0], "correct element passed");
     assert.strictEqual(actionData.itemData, "1", "correct element passed");
     assert.strictEqual(actionData.itemIndex, 1, "correct element itemIndex passed");
+});
+
+QUnit.test("onItemPointerDown should be fired on pointerdown event", function(assert) {
+    var $element = $("#cmp"),
+        pointerDownHandler = sinon.spy(),
+        newPointerDownHandler = sinon.spy(),
+        instance = new TestComponent($element, {
+            items: [1],
+            onItemPointerDown: pointerDownHandler
+        });
+
+    $element.find(".item").eq(0).trigger("dxpointerdown");
+    assert.equal(pointerDownHandler.callCount, 1, "action was called");
+
+    instance.option("onItemPointerDown", newPointerDownHandler);
+    $element.find(".item").eq(0).trigger("dxpointerdown");
+    assert.equal(pointerDownHandler.callCount, 1, "old action was not called twice");
+    assert.equal(newPointerDownHandler.callCount, 1, "new action was called after option changed");
 });
 
 QUnit.test("onItemClick should have correct item index when placed near another collection", function(assert) {
@@ -1097,7 +1115,7 @@ QUnit.test("focused item changed after press right/left arrows", function(assert
     keyboard.keyDown("right");
 
     $item = $item.next();
-    assert.equal(isRenderer(instance.option("focusedElement")), config().useJQuery, "focusedElement is correct");
+    assert.equal(isRenderer(instance.option("focusedElement")), !!config().useJQuery, "focusedElement is correct");
     assert.ok($item.hasClass(FOCUSED_ITEM_CLASS), "press right arrow on item change focused item on next");
 
     keyboard.keyDown("left");
@@ -1525,7 +1543,7 @@ QUnit.test("focusedElement is set for item when nested element selected by dxpoi
 
     $item.trigger($.Event("dxpointerdown", { target: $item.find("span").get(0) }));
     this.clock.tick();
-    assert.equal(isRenderer(instance.option("focusedElement")), config().useJQuery, "focusedElement is correct");
+    assert.equal(isRenderer(instance.option("focusedElement")), !!config().useJQuery, "focusedElement is correct");
     assert.equal($(instance.option("focusedElement")).get(0), $item.get(0), "focus set to first item");
 });
 
@@ -1635,7 +1653,7 @@ QUnit.test("item is focused after focusing on element", function(assert) {
 
     $element.focusin();
 
-    assert.equal(isRenderer(instance.option("focusedElement")), config().useJQuery, "focusedElement is correct");
+    assert.equal(isRenderer(instance.option("focusedElement")), !!config().useJQuery, "focusedElement is correct");
     assert.ok($item.hasClass(FOCUSED_ITEM_CLASS), "item is focused");
 });
 

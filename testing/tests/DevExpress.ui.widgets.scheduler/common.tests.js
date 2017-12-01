@@ -2317,7 +2317,7 @@ QUnit.testStart(function() {
             maxAppointmentsPerCell: null,
             currentDate: new Date(2015, 2, 9),
             onAppointmentClick: function(e) {
-                assert.deepEqual(isRenderer(e.appointmentElement), config().useJQuery, "appointmentElement is correct");
+                assert.deepEqual(isRenderer(e.appointmentElement), !!config().useJQuery, "appointmentElement is correct");
                 assert.deepEqual($(e.appointmentElement)[0], $item[0], "appointmentElement is correct");
                 assert.strictEqual(e.appointmentData, items[0], "appointmentData is correct");
             }
@@ -3243,7 +3243,7 @@ QUnit.testStart(function() {
             views: [{
                 type: "week",
                 dateCellTemplate: function(item, index, container) {
-                    assert.equal(isRenderer(container), config().useJQuery, "element is correct");
+                    assert.equal(isRenderer(container), !!config().useJQuery, "element is correct");
                     countCallTemplate2++;
                 }
             }],
@@ -3324,7 +3324,7 @@ QUnit.testStart(function() {
             views: [{
                 type: "week",
                 appointmentTemplate: function(item, index, container) {
-                    assert.deepEqual(isRenderer(container), config().useJQuery, "appointmentElement is correct");
+                    assert.deepEqual(isRenderer(container), !!config().useJQuery, "appointmentElement is correct");
                     countCallTemplate2++;
                 }
             }],
@@ -3335,6 +3335,40 @@ QUnit.testStart(function() {
         });
 
         assert.equal(countCallTemplate1, 0, "count call first template");
+        assert.notEqual(countCallTemplate2, 0, "count call second template");
+    });
+
+    QUnit.test("Scheduler should have specific appointmentTemplate setting of the view after current view changing", function(assert) {
+        var countCallTemplate1 = 0,
+            countCallTemplate2 = 0;
+
+        this.createInstance({
+            dataSource: [{
+                startDate: new Date(2015, 4, 26, 9, 10),
+                endDate: new Date(2015, 4, 26, 11, 1)
+            }],
+            currentDate: new Date(2015, 4, 26),
+            views: [{
+                type: "week",
+                name: "Week",
+                appointmentTemplate: function(item, index, container) {
+                    assert.deepEqual(isRenderer(container), !!config().useJQuery, "appointmentElement is correct");
+                    countCallTemplate1++;
+                }
+            }, {
+                type: "workWeek",
+                name: "WorkWeek",
+                appointmentTemplate: function(item, index, container) {
+                    assert.deepEqual(isRenderer(container), !!config().useJQuery, "appointmentElement is correct");
+                    countCallTemplate2++;
+                }
+            }],
+            currentView: "Week"
+        });
+
+        this.instance.option("currentView", "WorkWeek");
+
+        assert.notEqual(countCallTemplate1, 0, "count call first template");
         assert.notEqual(countCallTemplate2, 0, "count call second template");
     });
 
@@ -3363,7 +3397,7 @@ QUnit.testStart(function() {
             views: [{
                 type: "month",
                 dropDownAppointmentTemplate: function(item, index, container) {
-                    assert.deepEqual(isRenderer(container), config().useJQuery, "appointmentElement is correct");
+                    assert.deepEqual(isRenderer(container), !!config().useJQuery, "appointmentElement is correct");
                     countCallTemplate2++;
                 }
             }],
@@ -3392,7 +3426,7 @@ QUnit.testStart(function() {
             views: [{
                 type: "week",
                 appointmentTooltipTemplate: function(item, container) {
-                    assert.equal(isRenderer(container), config().useJQuery, "element is correct");
+                    assert.equal(isRenderer(container), !!config().useJQuery, "element is correct");
                     countCallTemplate2++;
                 }
             }],

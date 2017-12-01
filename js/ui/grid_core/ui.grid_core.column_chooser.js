@@ -214,6 +214,10 @@ var ColumnChooserView = columnsView.ColumnsView.inherit({
         extend(treeViewConfig, isSelectMode ? this._prepareSelectModeConfig() : this._prepareDragModeConfig());
 
         if(this._columnChooserList) {
+            if(!treeViewConfig.searchEnabled) {
+                treeViewConfig.searchValue = "";
+            }
+
             this._columnChooserList.option(treeViewConfig);
         } else {
             this._columnChooserList = this._createComponent($container, TreeView, treeViewConfig);

@@ -1368,7 +1368,7 @@ QUnit.test("select item when space pressed", function(assert) {
         .keyDown("space");
 
     //assert
-    assert.equal(isRenderer(this.menu.instance.option("focusedElement")), config().useJQuery, "focusedElement is correct");
+    assert.equal(isRenderer(this.menu.instance.option("focusedElement")), !!config().useJQuery, "focusedElement is correct");
     assert.equal(this.menu.instance.option("selectedItem").text, "item3", "correct item is selected");
 });
 
@@ -1405,7 +1405,7 @@ QUnit.test("select item when space pressed on inner level", function(assert) {
         .keyDown("space");
 
     //assert
-    assert.equal(isRenderer(this.menu.instance.option("focusedElement")), config().useJQuery, "focusedElement is correct");
+    assert.equal(isRenderer(this.menu.instance.option("focusedElement")), !!config().useJQuery, "focusedElement is correct");
     assert.equal(this.menu.instance.option("selectedItem").text, "item2-3", "correct item is selected");
 });
 

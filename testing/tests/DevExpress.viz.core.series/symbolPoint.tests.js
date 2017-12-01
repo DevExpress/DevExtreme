@@ -29,6 +29,10 @@ var environment = {
             };
 
             this.label = sinon.createStubInstance(labelModule.Label);
+            this.label.isVisible = sinon.spy(function() {
+                return !this.draw.calledWith(false);
+            });
+
             this.labelFactory = labelModule.Label = sinon.spy(function() {
                 return that.label;
             });
@@ -2138,8 +2142,6 @@ QUnit.test("Clear visibility", function(assert) {
     point.translate();
     point.draw(this.renderer, this.groups);
 
-    var labelSpy = sinon.spy(point._label, "clearVisibility");
-
     point.graphic.stub("attr").reset();
 
     point.clearVisibility();
@@ -2147,7 +2149,6 @@ QUnit.test("Clear visibility", function(assert) {
     assert.equal(point.graphic.stub("attr").callCount, 2);
     assert.deepEqual(point.graphic.stub("attr").firstCall.args[0], "visibility");
     assert.deepEqual(point.graphic.stub("attr").lastCall.args[0], { visibility: null });
-    assert.ok(labelSpy.calledOnce);
 });
 
 QUnit.test("Check clearing marker on customize point", function(assert) {
@@ -2173,7 +2174,7 @@ QUnit.test("Hide marker when marker is visible", function(assert) {
     point.translate();
     point.draw(this.renderer, this.groups);
 
-    var labelSpy = sinon.spy(point._label, "hide");
+    var labelSpy = sinon.spy(point._label, "draw");
     point.graphic.stub("attr").reset();
 
     point.setInvisibility();
@@ -2181,7 +2182,7 @@ QUnit.test("Hide marker when marker is visible", function(assert) {
     assert.equal(point.graphic.stub("attr").callCount, 2);
     assert.deepEqual(point.graphic.stub("attr").firstCall.args[0], "visibility");
     assert.strictEqual(point.graphic.stub("attr").lastCall.args[0].visibility, "hidden");
-    assert.ok(labelSpy.calledOnce);
+    assert.deepEqual(labelSpy.lastCall.args, [false]);
 });
 
 QUnit.test("Hide marker when marker has no visibility setting", function(assert) {
@@ -2190,7 +2191,7 @@ QUnit.test("Hide marker when marker has no visibility setting", function(assert)
     point.translate();
     point.draw(this.renderer, this.groups);
 
-    var labelSpy = sinon.spy(point._label, "hide");
+    var labelSpy = sinon.spy(point._label, "draw");
     point.graphic.stub("attr").reset();
 
     point.setInvisibility();
@@ -2198,7 +2199,7 @@ QUnit.test("Hide marker when marker has no visibility setting", function(assert)
     assert.equal(point.graphic.stub("attr").callCount, 2);
     assert.deepEqual(point.graphic.stub("attr").firstCall.args[0], "visibility");
     assert.strictEqual(point.graphic.stub("attr").lastCall.args[0].visibility, "hidden");
-    assert.ok(labelSpy.calledOnce);
+    assert.deepEqual(labelSpy.lastCall.args, [false]);
 });
 
 QUnit.test("Hide marker when marker is hidden", function(assert) {
@@ -2208,7 +2209,7 @@ QUnit.test("Hide marker when marker is hidden", function(assert) {
     point.translate();
     point.draw(this.renderer, this.groups);
 
-    var labelSpy = sinon.spy(point._label, "hide");
+    var labelSpy = sinon.spy(point._label, "draw");
     point.graphic.stub("attr").reset();
 
     point.setInvisibility();
@@ -2216,7 +2217,7 @@ QUnit.test("Hide marker when marker is hidden", function(assert) {
     assert.equal(point.graphic.stub("attr").callCount, 1);
     assert.deepEqual(point.graphic.stub("attr").firstCall.args[0], "visibility");
     assert.strictEqual(point.graphic._stored_settings.visibility, "hidden");
-    assert.ok(labelSpy.calledOnce);
+    assert.deepEqual(labelSpy.lastCall.args, [false]);
 });
 
 QUnit.test("Apply style for visible point (in visible area)", function(assert) {
@@ -2810,7 +2811,7 @@ QUnit.test("show label on draw", function(assert) {
     var point = createPoint(this.series, this.data, this.options);
     point._drawLabel(this.renderer, this.group);
 
-    assert.strictEqual(point._label.show.calledOnce, true);
+    assert.deepEqual(point._label.draw.lastCall.args, [true]);
 });
 
 QUnit.test("hide label on draw if it invisible", function(assert) {
@@ -2822,7 +2823,7 @@ QUnit.test("hide label on draw if it invisible", function(assert) {
     };
     point._drawLabel(this.renderer, this.group);
 
-    assert.strictEqual(point._label.hide.calledOnce, true);
+    assert.deepEqual(point._label.draw.lastCall.args, [false]);
 });
 
 QUnit.test("hide label if hasValue is false", function(assert) {
@@ -2831,7 +2832,7 @@ QUnit.test("hide label if hasValue is false", function(assert) {
 
     point._drawLabel(this.renderer, this.group);
 
-    assert.ok(!point.getLabels()[0].show.called);
+    assert.deepEqual(point.getLabels()[0].draw.lastCall.args, [false]);
 });
 
 QUnit.test("CustomizeLabel visibility is true, series labels are not visible", function(assert) {
@@ -2845,7 +2846,7 @@ QUnit.test("CustomizeLabel visibility is true, series labels are not visible", f
 
     point._drawLabel(this.renderer, this.group);
 
-    assert.ok(point.getLabels()[0].show.called);
+    assert.deepEqual(point.getLabels()[0].draw.lastCall.args, [true]);
 });
 
 QUnit.test("CustomizeLabel visibility is false, series labels are visible", function(assert) {
@@ -2856,7 +2857,7 @@ QUnit.test("CustomizeLabel visibility is false, series labels are visible", func
 
     point._drawLabel(this.renderer, this.group);
 
-    assert.ok(!point.getLabels()[0].show.called);
+    assert.deepEqual(point.getLabels()[0].draw.lastCall.args, [false]);
 });
 
 QUnit.module("Correct Label position", environment);

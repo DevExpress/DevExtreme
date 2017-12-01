@@ -457,7 +457,7 @@
     color: @SCHEDULER_CURRENT_TIME_CELL_COLOR;
     &:before {
             position: absolute;
-            bottom: 0;
+            top: @SCHEDULER_HEADER_PANEL_TABLE_CELL_HEIGHT - @SCHEDULER_CURRENT_TIME_CELL_BORDER_SIZE - 1;
             right: 0;
             width: 100%;
             height: @SCHEDULER_CURRENT_TIME_CELL_BORDER_SIZE;
@@ -1910,22 +1910,17 @@
     color: @SCHEDULER_APPOINTMENT_TEXT_COLOR;
 
     &.dx-button,
-    &.dx-button.dx-state-hover,
     &.dx-button.dx-state-active,
     &.dx-button.dx-state-focused {
         background-color: @SCHEDULER_APPOINTMENT_BASE_COLOR;
+        color: @SCHEDULER_APPOINTMENT_TEXT_COLOR;
         border: none;
         .box-shadow(none);
 
-        .dx-scheduler-dropdown-appointments-content {
-            color: @SCHEDULER_APPOINTMENT_TEXT_COLOR;
-            opacity: .99;
-        }
-
         .dx-button-content {
             line-height: inherit;
-            }
         }
+    }
 
     &.dx-button.dx-state-hover {
         &:before {
@@ -1938,6 +1933,11 @@
             bottom: 0;
             background-color: @SCHEDULER_APPOINTMENT_START_COLOR;
             opacity: .98;
+        }
+
+        .dx-scheduler-dropdown-appointments-content {
+            color: @SCHEDULER_DD_APPOINTMENT_HOVER_TEXT_COLOR;
+            opacity: .99;
         }
     }
 }

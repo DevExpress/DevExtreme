@@ -104,20 +104,7 @@ var subscribes = {
             startDate = this.fire("getField", "startDate", singleAppointment),
             updatedData = extend(true, {}, options.data);
 
-        var processedStartDate = this.fire(
-            "convertDateByTimezoneBack",
-            this.fire("getField", "startDate", updatedData),
-            this.fire("getField", "startDateTimeZone", updatedData)
-                );
-
-        var processedEndDate = this.fire(
-            "convertDateByTimezoneBack",
-            this.fire("getField", "endDate", updatedData),
-            this.fire("getField", "endDateTimeZone", updatedData)
-                );
-
-        this.fire("setField", "startDate", updatedData, processedStartDate);
-        this.fire("setField", "endDate", updatedData, processedEndDate);
+        this._convertDatesByTimezoneBack(true, updatedData);
 
         this._checkRecurringAppointment(targetAppointment, singleAppointment, startDate, (function() {
             this._updateAppointment(targetAppointment, updatedData, function() {
@@ -143,20 +130,7 @@ var subscribes = {
         if((newCellIndex !== oldCellIndex) || movedBetweenAllDayAndSimple) {
             this._checkRecurringAppointment(target, appointment, cellData.startDate, (function() {
 
-                var processedStartDate = this.fire(
-                    "convertDateByTimezoneBack",
-                    this.fire("getField", "startDate", updatedData),
-                    this.fire("getField", "startDateTimeZone", updatedData)
-                    );
-
-                var processedEndDate = this.fire(
-                    "convertDateByTimezoneBack",
-                    this.fire("getField", "endDate", updatedData),
-                    this.fire("getField", "endDateTimeZone", updatedData)
-                    );
-
-                this.fire("setField", "startDate", appointment, processedStartDate);
-                this.fire("setField", "endDate", appointment, processedEndDate);
+                this._convertDatesByTimezoneBack(true, updatedData, appointment);
 
                 this._updateAppointment(target, appointment, function() {
                     this._appointments.moveAppointmentBack();
@@ -664,11 +638,14 @@ var subscribes = {
     getTargetedAppointmentData: function(appointmentData, appointmentElement, appointmentIndex) {
         var recurringData = this._getSingleAppointmentData(appointmentData, {
                 skipDateCalculation: true,
-                $appointment: $(appointmentElement)
+                $appointment: $(appointmentElement),
+                skipHoursProcessing: true
             }),
             result = {};
 
         extend(true, result, appointmentData, recurringData);
+
+        this._convertDatesByTimezoneBack(false, result);
 
             //TODO: _getSingleAppointmentData already uses a related cell data for appointment that contains info about resources
         this.setTargetedAppointmentResources(result, appointmentElement, appointmentIndex);

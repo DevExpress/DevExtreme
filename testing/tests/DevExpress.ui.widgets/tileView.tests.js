@@ -535,7 +535,7 @@ $.each(configs, function(direction, config) {
         this.clock.tick();
         keyboard.keyDown("right");
 
-        assert.equal(isRenderer(instance.option("focusedElement")), globalConfig().useJQuery, "focusedElement is correct");
+        assert.equal(isRenderer(instance.option("focusedElement")), !!globalConfig().useJQuery, "focusedElement is correct");
         assert.ok($element.find(TILEVIEW_ITEM_SELECTOR).eq(testConfig.end).hasClass("dx-state-focused"), "right element obtained dx-state-focused after press right arrow");
     });
 

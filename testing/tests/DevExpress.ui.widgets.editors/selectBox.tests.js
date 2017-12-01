@@ -495,6 +495,27 @@ QUnit.testInActiveWindow("input focused after click on drop button", function(as
     assert.ok($selectBox.find("." + TEXTEDITOR_INPUT_CLASS).is(":focus"), "input focused");
 });
 
+QUnit.testInActiveWindow("focusout should not fire after list item click", function(assert) {
+    if(devices.real().deviceType !== "desktop") {
+        assert.ok(true, "focus is not actual for mobile devices");
+        return;
+    }
+
+    var focusOutHandler = sinon.spy(),
+        $selectBox = $("#selectBox").dxSelectBox({
+            items: [1],
+            onFocusOut: focusOutHandler,
+            opened: true
+        }),
+        $input = $selectBox.find("." + TEXTEDITOR_INPUT_CLASS);
+
+    $input.focus();
+    $(".dx-list-item").eq(0).trigger("dxpointerdown");
+    $input.blur();
+
+    assert.equal(focusOutHandler.callCount, 0, "focusout was not called");
+});
+
 QUnit.test("dataSource loaded after create dxSelectBox", function(assert) {
     var timeout = 1000;
     var dataSource = new DataSource({
@@ -541,7 +562,7 @@ QUnit.test("list item obtained focus only after press on control key", function(
 
     keyboardMock($input).press("down");
     var $firstItemList = $(".dx-list-item").eq(0);
-    assert.equal(isRenderer(selectBox._list.option("focusedElement")), config().useJQuery, "focusedElement is correct");
+    assert.equal(isRenderer(selectBox._list.option("focusedElement")), !!config().useJQuery, "focusedElement is correct");
     assert.ok($firstItemList.hasClass("dx-state-focused"), "first list item obtained focus");
 });
 
@@ -1093,7 +1114,7 @@ QUnit.test("the 'fieldTemplate' function should be called only once on init and 
     var instance = $("#selectBoxWithItemTemplate").dxSelectBox({
         items: [1, 2],
         fieldTemplate: function(value, element) {
-            assert.equal(isRenderer(element), config().useJQuery, "element is correct");
+            assert.equal(isRenderer(element), !!config().useJQuery, "element is correct");
 
             callCount++;
             return $("<div>").dxTextBox();

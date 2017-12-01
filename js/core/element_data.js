@@ -21,7 +21,7 @@ var setDataStrategy = exports.setDataStrategy = function(value) {
     strategy.cleanData = function(nodes) {
         beforeCleanData(nodes);
 
-        var result = cleanData.apply(this, arguments);
+        var result = cleanData.call(this, nodes);
 
         afterCleanData(nodes);
 
@@ -30,7 +30,11 @@ var setDataStrategy = exports.setDataStrategy = function(value) {
 };
 
 setDataStrategy({
-    data: function(element, key, value) {
+    data: function() {
+        var element = arguments[0];
+        var key = arguments[1];
+        var value = arguments[2];
+
         if(!element) return;
 
         var elementData = dataMap.get(element);
@@ -93,11 +97,11 @@ exports.afterCleanData = function(callback) {
 };
 
 exports.cleanData = function(nodes) {
-    return strategy.cleanData.apply(this, arguments);
+    return strategy.cleanData.call(this, nodes);
 };
 
-exports.removeData = function() {
-    return strategy.removeData.apply(this, arguments);
+exports.removeData = function(element, key) {
+    return strategy.removeData.call(this, element, key);
 };
 
 exports.cleanDataRecursive = function(element, cleanSelf) {

@@ -7651,6 +7651,15 @@ QUnit.module("XY linear axis. Get margins", $.extend(true, {}, environment, {
         this.createAxis();
 
         this.renderer.bBoxTemplate = { x: 0, y: 0, width: 0, height: 0, isEmpty: true };
+
+        this.gridCorrectionCanvas = {
+            left: 1,
+            right: 1,
+            top: 1,
+            bottom: 1,
+            width: 1000,
+            height: 800
+        };
     },
     afterEach: function() {
         environment.afterEach.call(this);
@@ -7922,6 +7931,184 @@ QUnit.test("Constant line with invisible label", function(assert) {
 
     //assert
     assert.strictEqual(margins.bottom, 0, "bottom");
+    assert.strictEqual(margins.left, 0, "left");
+    assert.strictEqual(margins.right, 0, "right");
+    assert.strictEqual(margins.top, 0, "top");
+});
+
+QUnit.test("Add correction to right margin for grid width if right is less than grid width. Horizontal axis", function(assert) {
+    //arrange
+    this.updateOptions({
+        grid: {
+            visible: true,
+            width: 3
+        },
+        tick: {
+            visible: true,
+            width: 2
+        },
+        label: {
+            visible: false
+        }
+    });
+    //act
+    this.axis.draw(this.gridCorrectionCanvas);
+
+    var margins = this.axis.getMargins();
+
+    //assert
+    assert.strictEqual(margins.bottom, 0, "bottom");
+    assert.strictEqual(margins.left, 0, "left");
+    assert.strictEqual(margins.right, 3, "right");
+    assert.strictEqual(margins.top, 0, "top");
+});
+
+QUnit.test("Add correction to right margin for grid width if right is less than tick width. Horizontal axis", function(assert) {
+    //arrange
+    this.updateOptions({
+        grid: {
+            visible: true,
+            width: 3
+        },
+        label: {
+            visible: false
+        },
+        tick: {
+            visible: true,
+            width: 5
+        },
+    });
+    //act
+    this.axis.draw(this.gridCorrectionCanvas);
+
+    var margins = this.axis.getMargins();
+
+    //assert
+    assert.strictEqual(margins.bottom, 0, "bottom");
+    assert.strictEqual(margins.left, 0, "left");
+    assert.strictEqual(margins.right, 5, "right");
+    assert.strictEqual(margins.top, 0, "top");
+});
+
+
+QUnit.test("Do not add correction to right margin for grid width if right margin is greter than grid width. Horizontal axis", function(assert) {
+    //arrange
+    this.updateOptions({
+        grid: {
+            visible: true,
+            width: 3
+        },
+        label: {
+            visible: false
+        }
+    });
+    //act
+    this.axis.draw(this.canvas);
+
+    var margins = this.axis.getMargins();
+
+    //assert
+    assert.strictEqual(margins.bottom, 0, "bottom");
+    assert.strictEqual(margins.left, 0, "left");
+    assert.strictEqual(margins.right, 0, "right");
+    assert.strictEqual(margins.top, 0, "top");
+});
+
+QUnit.test("Add correction to top margin for grid width if top margin is less than grid width. Vertical axis", function(assert) {
+    //arrange
+    this.updateOptions({
+        grid: {
+            visible: true,
+            width: 3
+        },
+        label: {
+            visible: false
+        },
+        isHorizontal: false
+    });
+    //act
+    this.axis.draw(this.gridCorrectionCanvas);
+
+    var margins = this.axis.getMargins();
+
+    //assert
+    assert.strictEqual(margins.bottom, 3, "bottom");
+    assert.strictEqual(margins.left, 0, "left");
+    assert.strictEqual(margins.right, 0, "right");
+    assert.strictEqual(margins.top, 0, "top");
+});
+
+QUnit.test("Do not add correction to top margin for grid width if top margin is greter than grid width. Vertical axis", function(assert) {
+    //arrange
+    this.updateOptions({
+        grid: {
+            visible: true,
+            width: 3
+        },
+        label: {
+            visible: false
+        },
+        isHorizontal: false
+    });
+    //act
+    this.axis.draw(this.canvas);
+
+    var margins = this.axis.getMargins();
+
+    //assert
+    assert.strictEqual(margins.bottom, 0, "bottom");
+    assert.strictEqual(margins.left, 0, "left");
+    assert.strictEqual(margins.right, 0, "right");
+    assert.strictEqual(margins.top, 0, "top");
+});
+
+QUnit.test("Do not add correction to right margin for grid width if right calculated margin is greter than grid width. Horizontal axis", function(assert) {
+    //arrange
+    this.updateOptions({
+        title: "Title text",
+        grid: {
+            visible: true,
+            width: 3
+        },
+        label: {
+            visible: false
+        },
+        isHorizontal: true
+    });
+    this.renderer.g.getCall(3).returnValue.getBBox = sinon.stub().returns({ x: 20, y: 80, width: 1000, height: 40 }); //elements (labels) group
+    //act
+    this.axis.draw(this.gridCorrectionCanvas);
+
+    var margins = this.axis.getMargins();
+
+    //assert
+    assert.strictEqual(margins.bottom, 0, "bottom");
+    assert.strictEqual(margins.left, 0, "left");
+    assert.strictEqual(margins.right, 21, "right");
+    assert.strictEqual(margins.top, 0, "top");
+});
+
+QUnit.test("Do not add correction to top margin for grid width if calculated top margin is greter than grid width. Vertical axis", function(assert) {
+    //arrange
+    this.updateOptions({
+        grid: {
+            visible: true,
+            width: 3
+        },
+        label: {
+            visible: false
+        },
+        isHorizontal: false
+    });
+
+    this.renderer.g.getCall(3).returnValue.getBBox = sinon.stub().returns({ x: 20, y: 850, width: 100, height: 40 }); //elements (labels) group
+    //act
+    this.axis.draw(this.gridCorrectionCanvas);
+
+    var margins = this.axis.getMargins();
+
+    //assert
+    assert.strictEqual(margins.bottom, 91, "bottom");
     assert.strictEqual(margins.left, 0, "left");
     assert.strictEqual(margins.right, 0, "right");
     assert.strictEqual(margins.top, 0, "top");

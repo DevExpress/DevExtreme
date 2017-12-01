@@ -245,7 +245,7 @@ QUnit.test("groupTemplate returning string", function(assert) {
         grouped: true,
 
         groupTemplate: function(group, index, itemElement) {
-            assert.equal(isRenderer(itemElement), config().useJQuery, "itemElement is correct");
+            assert.equal(isRenderer(itemElement), !!config().useJQuery, "itemElement is correct");
             return index + ": " + group.key;
         }
     });
@@ -267,7 +267,7 @@ QUnit.test("groupTemplate returning jquery", function(assert) {
         grouped: true,
 
         groupTemplate: function(group, index, element) {
-            assert.equal(isRenderer(element), config().useJQuery, "element is correct");
+            assert.equal(isRenderer(element), !!config().useJQuery, "element is correct");
             return $("<span />");
         }
     });
@@ -359,7 +359,7 @@ QUnit.test("focus should move to first group's item when group expands", functio
 
     $headers.eq(1).trigger("dxclick");
     $headers.eq(1).trigger("dxclick");
-    assert.equal(isRenderer(instance.option("focusedElement")), config().useJQuery, "focusedElement is correct");
+    assert.equal(isRenderer(instance.option("focusedElement")), !!config().useJQuery, "focusedElement is correct");
     assert.ok($items.eq(2).hasClass("dx-state-focused"), "first item of the second group is focused");
     assert.notOk($items.eq(0).hasClass("dx-state-focused"), "first item of the first group lost focus");
 });
@@ -1332,7 +1332,7 @@ QUnit.test("onGroupRendered should fired with correct params", function(assert) 
         });
 
     assert.equal(groupRendered, 1, "event triggered");
-    assert.strictEqual(isRenderer(eventData.groupElement), config().useJQuery, "groupElement is correct");
+    assert.strictEqual(isRenderer(eventData.groupElement), !!config().useJQuery, "groupElement is correct");
     assert.strictEqual($(eventData.groupElement)[0], $list.find(".dx-list-group")[0], "groupElement is correct");
     assert.strictEqual(eventData.groupData, items[0], "groupData is correct");
     assert.strictEqual(eventData.groupIndex, 0, "groupIndex is correct");
@@ -2447,7 +2447,7 @@ QUnit.test("list scroll to focused item after press pageDown", function(assert) 
 
     keyboard.keyDown("pageDown");
 
-    assert.equal(isRenderer(instance.option("focusedElement")), config().useJQuery, "focusedElement is correct");
+    assert.equal(isRenderer(instance.option("focusedElement")), !!config().useJQuery, "focusedElement is correct");
     assert.roughEqual(instance.scrollTop(), 0, 1.0001, "list is not scrolled, when focusedItem is not last visible item on this page");
     assert.ok($items.eq(2).hasClass("dx-state-focused"), "focused item change to last visible item on this page");
 
@@ -2691,4 +2691,24 @@ QUnit.test("Search when searchMode is specified", function(assert) {
     assert.deepEqual(instance.option("items"), [23], "items");
     assert.strictEqual(instance.option("searchValue"), "2", "search value");
     assert.strictEqual(instance.getDataSource().searchOperation(), "startswith", "search operation");
+});
+
+//T582179
+QUnit.test("Selection should not be cleared after searching", function(assert) {
+    var $element = $("#list").dxList({
+            dataSource: [1, 2, 3],
+            searchEnabled: true,
+            searchExpr: "this",
+            showSelectionControls: true,
+            selectionMode: "all"
+        }),
+        instance = $element.dxList("instance");
+
+    instance.selectAll();
+
+    assert.deepEqual(instance.option("selectedItemKeys"), [1, 2, 3], "selectedItemKeys");
+
+    instance.option("searchValue", "4");
+
+    assert.deepEqual(instance.option("selectedItemKeys"), [1, 2, 3], "selectedItemKeys");
 });

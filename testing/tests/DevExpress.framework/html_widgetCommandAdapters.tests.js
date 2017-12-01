@@ -21,10 +21,6 @@ require("ui/nav_bar");
 require("ui/toolbar");
 require("ui/pivot");
 
-if(QUnit.urlParams["nojquery"]) {
-    return;
-}
-
 QUnit.testStart(function() {
     var markup = require("./frameworkParts/html_widgetCommandAdapters.markup.html!text");
 

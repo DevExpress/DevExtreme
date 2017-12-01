@@ -1183,7 +1183,7 @@ module.exports = Class.inherit((function() {
         * @param1_field2 rowPath:Array<string, number, Date>
         * @param1_field3 dataIndex:number
         * @param1_field4 maxRowCount:number
-        * @param1_field5 customColumns:Array<string, number, Date>
+        * @param1_field5 customColumns:Array<string>
         * @return DataSource
         */
         createDrillDownDataSource: function(params) {
@@ -1421,7 +1421,7 @@ module.exports = Class.inherit((function() {
          * @name PivotGridDataSourceMethods_collapseHeaderItem
          * @publicName collapseHeaderItem(area, path)
          * @param1 area:string
-         * @param2 path:string
+         * @param2 path:Array<string, number, Date>
          */
         collapseHeaderItem: function(area, path) {
             var that = this,

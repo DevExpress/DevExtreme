@@ -289,6 +289,16 @@ QUnit.test("Time panel rows should have a right height when rowHeight is changed
     assert.roughEqual($timePanelRows.eq(3).outerHeight(), rowHeight + 20, 2.001, "Row height is OK");
 });
 
+QUnit.test("Agenda should be recalculated after rowHeight changed", function(assert) {
+    this.createInstance();
+
+    var recalculateStub = sinon.stub(this.instance, "_recalculateAgenda");
+
+    this.instance.option("rowHeight", 100);
+
+    assert.ok(recalculateStub.called, "Agenda was recalculated");
+});
+
 QUnit.test("Agenda should not contain all-day stuff", function(assert) {
     this.createInstance({
         currentDate: new Date(2016, 1, 17).toString()

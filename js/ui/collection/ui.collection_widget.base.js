@@ -9,7 +9,6 @@ var $ = require("../../core/renderer"),
     extend = require("../../core/utils/extend").extend,
     inArray = require("../../core/utils/array").inArray,
     iteratorUtils = require("../../core/utils/iterator"),
-    Action = require("../../core/action"),
     Guid = require("../../core/guid"),
     domUtils = require("../../core/utils/dom"),
     dataUtils = require("../../core/utils/data"),
@@ -198,6 +197,8 @@ var CollectionWidget = Widget.inherit({
             * @action
             */
             onItemContextMenu: null,
+
+            onItemPointerDown: null,
 
             onFocusedItemChanged: null,
 
@@ -559,6 +560,7 @@ var CollectionWidget = Widget.inherit({
             case "onItemRendered":
                 this._createItemRenderAction();
                 break;
+            case "onItemPointerDown":
             case "onItemClick":
                 break;
             case "onItemHold":
@@ -710,27 +712,26 @@ var CollectionWidget = Widget.inherit({
     _attachClickEvent: function() {
         var itemSelector = this._itemSelector(),
             clickEventNamespace = eventUtils.addNamespace(clickEvent.name, this.NAME),
-            pointerDownEventNamespace = eventUtils.addNamespace(pointerEvents.down, this.NAME),
-            that = this;
-
-        var pointerDownAction = new Action(function(args) {
-            var event = args.event;
-            that._itemPointerDownHandler(event);
-        });
+            pointerDownEventNamespace = eventUtils.addNamespace(pointerEvents.down, this.NAME);
 
         eventsEngine.off(this._itemContainer(), clickEventNamespace, itemSelector);
         eventsEngine.off(this._itemContainer(), pointerDownEventNamespace, itemSelector);
         eventsEngine.on(this._itemContainer(), clickEventNamespace, itemSelector, (function(e) { this._itemClickHandler(e); }).bind(this));
-        eventsEngine.on(this._itemContainer(), pointerDownEventNamespace, itemSelector, function(e) {
-            pointerDownAction.execute({
-                element: $(e.target),
-                event: e
-            });
-        });
+        eventsEngine.on(this._itemContainer(), pointerDownEventNamespace, itemSelector, (function(e) {
+            this._itemPointerDown(e);
+        }).bind(this));
     },
 
     _itemClickHandler: function(e, args, config) {
         this._itemDXEventHandler(e, "onItemClick", args, config);
+    },
+
+    _itemPointerDown: function(e, args, config) {
+        this._itemDXEventHandler(e, "onItemPointerDown", args, extend(config, {
+            beforeExecute: function(actionArgs) {
+                this._itemPointerDownHandler(actionArgs.args[0].event);
+            }
+        }));
     },
 
     _itemPointerDownHandler: function(e) {

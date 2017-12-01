@@ -667,10 +667,7 @@ var TagBox = SelectBox.inherit({
     },
 
     _focusOutHandler: function(e) {
-        var openedUseButtons = this.option("opened") && this.option("applyValueMode") === "useButtons";
-
-        if(openedUseButtons || this._preventFocusOut) {
-            this._preventFocusOut = false;
+        if(this.option("opened") && this.option("applyValueMode") === "useButtons") {
             return;
         }
 
@@ -1208,7 +1205,6 @@ var TagBox = SelectBox.inherit({
     _clean: function() {
         this.callBase();
         delete this._defaultTagTemplate;
-        delete this._preventFocusOut;
         delete this._tagTemplate;
     },
 

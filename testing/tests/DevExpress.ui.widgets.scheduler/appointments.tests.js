@@ -1108,7 +1108,7 @@ QUnit.testInActiveWindow("Focused element should be changed on focusin", functio
     });
     var $appointments = $(".dx-scheduler-appointment");
     $appointments.get(0).focus();
-    assert.equal(isRenderer(this.instance.option("focusedElement")), config().useJQuery, "focusedElement is correct");
+    assert.equal(isRenderer(this.instance.option("focusedElement")), !!config().useJQuery, "focusedElement is correct");
     assert.deepEqual($appointments.get(0), $(this.instance.option("focusedElement")).get(0), "right element is focused");
 
     $appointments.get(1).focus();

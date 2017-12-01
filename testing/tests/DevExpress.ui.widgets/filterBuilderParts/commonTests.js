@@ -181,7 +181,7 @@ QUnit.module("Rendering", function() {
                 ["CompanyName", "=", "DevExpress"]
             ],
             onEditorPreparing: function(e) {
-                assert.equal(isRenderer(e.editorElement), config().useJQuery, "editorElement is correct");
+                assert.equal(isRenderer(e.editorElement), !!config().useJQuery, "editorElement is correct");
             },
             fields: fields
         });

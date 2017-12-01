@@ -35,7 +35,7 @@ var environment = {
         return label;
     },
     createAndDrawLabel: function() {
-        return this.createLabel().draw();
+        return this.createLabel().draw(true);
     },
     getConnectorElement: function() {
         return this.renderer.path.returnValues[0];
@@ -53,7 +53,7 @@ var environment = {
         } else {
             this.renderer.bBoxTemplate = BBox;
         }
-        label.draw();
+        label.draw(true);
         label.setFigureToDrawConnector(figure);
         return label;
     }
@@ -163,6 +163,7 @@ QUnit.test("Show", function(assert) {
     assert.equal(label._group.stub("attr").callCount, 1);
     assert.deepEqual(label._group.stub("attr").lastCall.args[0], { visibility: "visible" });
     assert.equal(label._point.correctLabelPosition.callCount, 1);
+    assert.equal(label._point.correctLabelPosition.lastCall.args[0], label);
 });
 
 QUnit.test("Hide", function(assert) {
@@ -178,21 +179,32 @@ QUnit.test("Hide", function(assert) {
     assert.deepEqual(label._group.stub("attr").lastCall.args[0], { visibility: "hidden" });
 });
 
-QUnit.test("Show hidden label in the correct position (using the 'resolveLabelOverlapping' option) after calling the 'show' method (T561563)", function(assert) {
+QUnit.test("T561563. Show already shown label - do not correct label position", function(assert) {
     var label = this.createLabel();
     label.show();
-
     label.hide();
+    label._point.correctLabelPosition.reset();
     label.show();
 
-    assert.equal(label._group.stub("attr").callCount, 5);
-    assert.deepEqual(label._group.stub("attr").getCall(1).args[0], { visibility: "hidden" });
+    assert.equal(label._group.stub("attr").callCount, 3);
+    assert.deepEqual(label._group.stub("attr").lastCall.args[0], { visibility: "visible" });
+    assert.equal(label._point.correctLabelPosition.callCount, 0);
+});
+
+QUnit.test("Draw(true) -> draw(false) -> show - correct label position (container resize problem)", function(assert) {
+    var label = this.createLabel();
+    label.draw(true);
+    label.draw(false);
+    label._point.correctLabelPosition.reset();
+    label.show();
+
+    assert.equal(label._group.stub("attr").callCount, 3);
     assert.deepEqual(label._group.stub("attr").lastCall.args[0], { visibility: "visible" });
     assert.equal(label._point.correctLabelPosition.callCount, 1);
 });
 
-QUnit.test("Draw label", function(assert) {
-    var label = this.createAndDrawLabel();
+QUnit.test("Draw(true) - draw label", function(assert) {
+    var label = this.createLabel().draw(true);
 
     assert.ok(label._group);
     assert.ok(label._insideGroup);
@@ -205,6 +217,59 @@ QUnit.test("Draw label", function(assert) {
     assert.deepEqual(this.renderer.text.lastCall.args, ["", 0, 0], "text args");
 
     assert.deepEqual(this.renderer.text.lastCall.returnValue.attr.firstCall.args, [{ text: "15", align: "left" }], "text attr");
+    assert.deepEqual(label._group.stub("attr").lastCall.args[0], { visibility: "visible" });
+    assert.equal(label._point.correctLabelPosition.callCount, 1);
+    assert.equal(label._point.correctLabelPosition.lastCall.args[0], label);
+});
+
+QUnit.test("Draw() - hide label", function(assert) {
+    var label = this.createLabel().draw(true);
+    label._point.correctLabelPosition.reset();
+
+    label.draw();
+
+    assert.deepEqual(label._group.stub("attr").lastCall.args[0], { visibility: "hidden" });
+    assert.equal(label._point.correctLabelPosition.callCount, 0);
+});
+
+QUnit.test("Draw(true) after hide() - draw label", function(assert) {
+    var label = this.createAndDrawLabel();
+
+    //act
+    label.hide();
+    label.draw(true);
+
+    assert.deepEqual(label._group.stub("attr").lastCall.args[0], { visibility: "visible" });
+});
+
+QUnit.test("Draw(true) after hide(true) - keep hidden state", function(assert) {
+    var label = this.createAndDrawLabel();
+
+    //act
+    label.hide(true);
+    label.draw(true);
+
+    assert.deepEqual(label._group.stub("attr").lastCall.args[0], { visibility: "hidden" });
+});
+
+QUnit.test("Draw() after show() - hide label", function(assert) {
+    var label = this.createAndDrawLabel();
+
+    //act
+    label.show();
+    label.draw();
+
+    assert.deepEqual(label._group.stub("attr").lastCall.args[0], { visibility: "hidden" });
+});
+
+QUnit.test("Draw() after show(true) - keep visible state", function(assert) {
+    var label = this.createAndDrawLabel();
+
+    //act
+    label.show(true);
+    label.draw();
+
+    assert.deepEqual(label._group.stub("attr").lastCall.args[0], { visibility: "visible" });
 });
 
 QUnit.test("Draw label with zero point size", function(assert) {
@@ -638,7 +703,7 @@ QUnit.test("Use external connector strategy", function(assert) {
     label.setOptions(this.options);
     label.setData(this.data.formatObject);
 
-    label.draw();
+    label.draw(true);
 
     label.setFigureToDrawConnector({ x: 100, y: 100, width: 0, height: 0 });
     label.shift(100, 50);
@@ -735,7 +800,7 @@ QUnit.test("Set options on empty text", function(assert) {
     label.setOptions(this.options);
     label.show();
 
-    assert.strictEqual(label._group.stub("attr").callCount, 3);
+    assert.strictEqual(label._group.stub("attr").callCount, 1);
     assert.deepEqual(label._group.stub("attr").lastCall.args[0], { visibility: "hidden" });
 });
 

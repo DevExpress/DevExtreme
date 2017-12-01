@@ -3,7 +3,6 @@
 var eventsEngine = require("events/core/events_engine");
 var keyboardMock = require("../../helpers/keyboardMock.js");
 var registerEvent = require("events/core/event_registrator");
-require("integration/jquery/events");
 
 QUnit.module("namespaces");
 

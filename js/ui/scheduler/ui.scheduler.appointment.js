@@ -19,8 +19,6 @@ var REDUCED_APPOINTMENT_POINTERENTER_EVENT_NAME = eventUtils.addNamespace(pointe
     REDUCED_APPOINTMENT_POINTERLEAVE_EVENT_NAME = eventUtils.addNamespace(pointerEvents.leave, "dxSchedulerAppointment");
 
 var EMPTY_APPOINTMENT_CLASS = "dx-scheduler-appointment-empty",
-    EMPTY_APPOINTMENT_MAX_WIDTH = 40,
-    EMPTY_APPOINTMENT_MAX_HEIGHT = 19,
 
     APPOINTMENT_ALL_DAY_ITEM_CLASS = "dx-scheduler-all-day-appointment",
     DIRECTION_APPOINTMENT_CLASSES = {
@@ -147,7 +145,7 @@ var Appointment = DOMComponent.inherit({
     _renderEmptyClass: function() {
         var geometry = this.option("geometry");
 
-        if(geometry.width < EMPTY_APPOINTMENT_MAX_WIDTH || geometry.height < EMPTY_APPOINTMENT_MAX_HEIGHT) {
+        if(geometry.empty || this.option("isCompact")) {
             this.$element().addClass(EMPTY_APPOINTMENT_CLASS);
         }
     },

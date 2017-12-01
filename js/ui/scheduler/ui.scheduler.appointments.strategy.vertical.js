@@ -155,7 +155,7 @@ var VerticalRenderingStrategy = BaseAppointmentsStrategy.inherit({
             top = coordinates.top,
             left = coordinates.left + (coordinates.index * width);
 
-        return { height: height, width: width, top: top, left: left };
+        return { height: height, width: width, top: top, left: left, empty: this._isAppointmentEmpty(height, width) };
     },
 
     isAllDay: function(appointmentData) {

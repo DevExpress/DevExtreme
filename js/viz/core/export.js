@@ -89,9 +89,8 @@ function getItemAttributes(options, type, itemIndex) {
         y: y
     };
     attr.text = {
-        x: x + HORIZONTAL_TEXT_MARGIN,
-        y: y + MENU_ITEM_HEIGHT - VERTICAL_TEXT_MARGIN,
-        align: "left"
+        x: x + (options.rtl ? LIST_WIDTH - HORIZONTAL_TEXT_MARGIN : HORIZONTAL_TEXT_MARGIN),
+        y: y + MENU_ITEM_HEIGHT - VERTICAL_TEXT_MARGIN
     };
 
     if(type === "printing") {
@@ -155,6 +154,12 @@ function createMenuItem(renderer, options, settings) {
         rect: rect,
         resetState: function() {
             rect.attr({ fill: null });
+        },
+        fixPosition: function() {
+            var textBBox = text.getBBox(),
+                x = attr.text.x - textBBox.x;
+            options.rtl && (x -= textBBox.width);
+            text.move(x);
         }
     };
 }
@@ -360,6 +365,9 @@ _extend(exports.ExportMenu.prototype, {
     _showList: function() {
         this._listGroup.append(this._group);
         this._listShown = true;
+        this._menuItems.forEach(function(item) {
+            item.fixPosition();
+        });
     },
 
     _setButtonState: function(state) {
@@ -531,7 +539,7 @@ exports.plugin = {
             var userOptions = this._getOption("export") || {},
                 options = getExportOptions(this, userOptions);
 
-            return _extend({}, userOptions, { exportOptions: options });
+            return _extend({}, userOptions, { exportOptions: options, rtl: this._getOption("rtlEnabled", true) });
         },
         exportTo: function(fileName, format) {
             var that = this,

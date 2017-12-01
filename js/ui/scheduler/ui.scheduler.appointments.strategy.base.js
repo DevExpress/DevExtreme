@@ -13,6 +13,7 @@ var abstract = Class.abstract;
 var APPOINTMENT_MIN_SIZE = 2,
     COMPACT_APPOINTMENT_DEFAULT_SIZE = 15,
     APPOINTMENT_DEFAULT_HEIGHT = 20,
+    APPOINTMENT_DEFAULT_WIDTH = 40,
     COMPACT_THEME_APPOINTMENT_DEFAULT_HEIGHT = 18,
     APPOINTMENT_DEFAULT_OFFSET = 26,
     COMPACT_THEME_APPOINTMENT_DEFAULT_OFFSET = 22,
@@ -332,7 +333,7 @@ var BaseRenderingStrategy = Class.inherit({
                     count: indexes.length,
                     i: current.i,
                     j: current.j,
-                    sortedIndex: sortedIndex++
+                    sortedIndex: this._skipSortedIndex(position) ? null : sortedIndex++
                 });
 
                 if(intersectPositionCount < indexes.length) {
@@ -366,6 +367,10 @@ var BaseRenderingStrategy = Class.inherit({
                 rowCondition = a.i - b.i;
             return rowCondition ? rowCondition : columnCondition;
         });
+    },
+
+    _skipSortedIndex: function(index) {
+        return this.instance.fire("getMaxAppointmentsPerCell") && index > this._getMaxAppointmentCountPerCell() - 1;
     },
 
     _findIndexByKey: function(arr, iKey, jKey, iValue, jValue) {
@@ -553,8 +558,13 @@ var BaseRenderingStrategy = Class.inherit({
             height: appointmentHeight,
             width: width,
             top: top,
-            left: left
+            left: left,
+            empty: this._isAppointmentEmpty(height, width)
         };
+    },
+
+    _isAppointmentEmpty: function(height, width) {
+        return height < this._getAppointmentDefaultHeight() || width < this._getAppointmentDefaultWidth();
     },
 
     _calculateGeometryConfig: function(coordinates) {
@@ -637,6 +647,10 @@ var BaseRenderingStrategy = Class.inherit({
 
     _getAppointmentDefaultHeight: function() {
         return this._isCompactTheme() ? COMPACT_THEME_APPOINTMENT_DEFAULT_HEIGHT : APPOINTMENT_DEFAULT_HEIGHT;
+    },
+
+    _getAppointmentDefaultWidth: function() {
+        return APPOINTMENT_DEFAULT_WIDTH;
     }
 });
 

@@ -171,6 +171,17 @@ var ResourceManager = Class.inherit({
         return result.promise();
     },
 
+    setResourcesToItem: function(itemData, resources) {
+        var resourcesSetter = this._dataAccessors.setter;
+
+        for(var name in resources) {
+            if(resources.hasOwnProperty(name)) {
+                var resourceData = resources[name];
+                resourcesSetter[name](itemData, this._isMultipleResource(name) ? arrayUtils.wrapToArray(resourceData) : resourceData);
+            }
+        }
+    },
+
     getResourcesFromItem: function(itemData, wrapOnlyMultipleResources) {
         var that = this,
             result = null;
