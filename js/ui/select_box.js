@@ -167,11 +167,13 @@ var SelectBox = DropDownList.inherit({
             * @publicName onCustomItemCreating
             * @extends Action
             * @type_function_param1_field4 text:string
-            * @type_function_return object|Promise
+            * @type_function_param1_field5 customItem:string|object|Promise
+            * @type_function_return string|object|Promise
             * @action
+            * @default function(e) { e.customItem = e.text; }
             */
             onCustomItemCreating: function(e) {
-                return e.text;
+                e.customItem = e.text;
             },
 
             /**
@@ -675,9 +677,11 @@ var SelectBox = DropDownList.inherit({
 
     _customItemAddedHandler: function() {
         var searchValue = this._searchValue(),
-            item = this._customItemCreatingAction({
+            params = {
                 text: searchValue
-            }),
+            },
+            actionResult = this._customItemCreatingAction(params),
+            item = commonUtils.ensureDefined(actionResult, params.customItem),
             isDeferred = item && item.promise && item.done && item.fail;
 
         if(item === undefined) {
