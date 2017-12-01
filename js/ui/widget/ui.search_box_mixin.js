@@ -60,14 +60,6 @@ module.exports = {
         });
     },
 
-    _dataSourceOptions: function() {
-        return extend(this.callBase(), {
-            searchValue: this.option("searchValue"),
-            searchOperation: this.option("searchMode"),
-            searchExpr: this.option("searchExpr")
-        });
-    },
-
     _render: function() {
         this._renderSearch();
         this.callBase();
