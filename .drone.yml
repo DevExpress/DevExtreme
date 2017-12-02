@@ -9,7 +9,6 @@ pipeline:
 
   build:
     image: devexpress/devextreme-build:16_2
-    pull: true
     commands:
       - ./drone-cache.sh restore
       - ./docker-ci.sh
