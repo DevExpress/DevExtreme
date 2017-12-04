@@ -1,263 +1,266 @@
 /// <reference path="core.d.ts" />
 declare module DevExpress.data {
     export interface XmlaStoreOptions {
-        /** @docid XmlaStoreOptions_url */
+        /** The HTTP address to an XMLA OLAP server. */
         url?: string;
-        /** @docid XmlaStoreOptions_catalog */
+        /** The name of the database associated with the Store. */
         catalog?: string;
-        /** @docid XmlaStoreOptions_cube */
+        /** The cube name. */
         cube?: string;
-        /** @docid XmlaStoreOptions_beforeSend */
+        /** A function used to customize a web request before it is sent. */
         beforeSend?: (request: Object) => void;
     }
 
-    /** @docid XmlaStore */
+    /** A Store that provides access to an OLAP cube using the XMLA standard. */
     export class XmlaStore {
         constructor(options: XmlaStoreOptions);
     }
 
     export interface PivotGridField {
-        /** @docid PivotGridDataSourceOptions_fields_index */
+        
         index?: number;
 
-        /** @docid PivotGridDataSourceOptions_fields_visible */
+        /** A boolean value specifying whether or not the field is visible in the pivot grid and the Field Chooser. */
         visible?: boolean;
 
-        /** @docid PivotGridDataSourceOptions_fields_dataField */
+        /** Name of the data source field containing data for the pivot grid field. */
         dataField?: string;
 
-        /** @docid PivotGridDataSourceOptions_fields_caption */
+        /** A caption that will be displayed in the pivot grid's field chooser and field panel to identify the field. */
         caption?: string;
 
-        /** @docid PivotGridDataSourceOptions_fields_dataType */
+        /** Casts field values to a specific data type. */
         dataType?: string;
 
-        /** @docid PivotGridDataSourceOptions_fields_groupInterval */
+        /** Specifies how the values of the current field are combined into groups. Cannot be used for the XmlaStore store type. */
         groupInterval?: any;
 
-        /** @docid PivotGridDataSourceOptions_fields_summaryType */
+        /** Specifies how to aggregate field data. Cannot be used for the XmlaStore store type. */
         summaryType?: string;
 
-        /** @docid PivotGridDataSourceOptions_fields_calculateCustomSummary*/
+        /** Allows you to use a custom aggregate function to calculate the summary values. Cannot be used for the XmlaStore store type. */
         calculateCustomSummary?: (options: {
             summaryProcess?: string;
             value?: any;
             totalValue?: any;
         }) => void;
 
-        /** @docid PivotGridDataSourceOptions_fields_selector */
+        /** Specifies the function that determines how to split data from the data source into ranges for header items. Cannot be used for the XmlaStore store type and along with remote operations. */
         selector?: (data: Object) => any;
 
-        /** @docid PivotGridDataSourceOptions_fields_area */
+        /** Type of the area where the field is located. */
         area?: string;
 
-        /** @docid PivotGridDataSourceOptions_fields_areaIndex */
+        /** Index among the other fields displayed within the same area. */
         areaIndex?: number;
 
-        /** @docid PivotGridDataSourceOptions_fields_displayFolder */
+        /** The name of the folder in which the field is located. */
         displayFolder?: string;
 
-        /** @docid PivotGridDataSourceOptions_fields_groupName */
+        /** The name of the group to which the field belongs. */
         groupName?: string;
 
-        /** @docid PivotGridDataSourceOptions_fields_groupIndex */
+        /** The index of the field within a group. */
         groupIndex?: number;
 
-        /** @docid PivotGridDataSourceOptions_fields_sortOrder */
+        /** Specifies the sort order of field values. */
         sortOrder?: string;
 
-        /** @docid PivotGridDataSourceOptions_fields_sortBy */
+        /** Specifies how field data should be sorted. Can be used for the XmlaStore store type only. */
         sortBy?: string;
 
-        /** @docid PivotGridDataSourceOptions_fields_sortBySummaryField */
+        /** Sorts the header items of this field by the summary values of another field. */
         sortBySummaryField?: string;
 
-        /** @docid PivotGridDataSourceOptions_fields_sortBySummaryPath */
+        /** The array of field names that specify a path to column/row whose summary field is used for sorting of this field's header items. */
         sortBySummaryPath?: Array<any>;
 
-        /** @docid PivotGridDataSourceOptions_fields_filterValues */
+        /** Specifies by which values the field is filtered. */
         filterValues?: Array<any>;
 
-        /** @docid PivotGridDataSourceOptions_fields_filterType */
+        /** Specifies whether a user can change the current filter by including (selecting) or excluding (clearing the selection) values. Applies only if allowFiltering is true. */
         filterType?: string;
 
-        /** @docid PivotGridDataSourceOptions_fields_expanded */
+        /** Indicates whether all header items of the field's header level are expanded. */
         expanded?: boolean;
 
-        /** @docid PivotGridDataSourceOptions_fields_isMeasure */
+        /** Specifies whether the field should be treated as a Data Field. */
         isMeasure?: boolean;
 
-        /** @docid PivotGridDataSourceOptions_fields_wordWrapEnabled */
+        /** Specifies whether or not long text in header items should be wrapped. */
         wordWrapEnabled?: boolean;
 
-        /** @docid PivotGridDataSourceOptions_fields_format */
+        /** Specifies a display format for field values. */
         format?: any;
 
-        /** @docid PivotGridDataSourceOptions_fields_customizeText */
+        /** Specifies a callback function that returns the text to be displayed in the cells of a field. */
         customizeText?: (cellInfo: { value: any; valueText: string }) => string;
 
-        /** @docid PivotGridDataSourceOptions_fields_precision */
+        /**
+           * Specifies a precision for formatted field values.
+           * @deprecated Use the format.precision option instead.
+           */
         precision?: number;
 
-        /** @docid PivotGridDataSourceOptions_fields_sortingMethod */
+        /** Specifies how to sort header items. */
         sortingMethod?: (a: Object, b: Object) => number;
 
-        /** @docid PivotGridDataSourceOptions_fields_allowSorting */
+        /** Allows an end-user to change sorting options. */
         allowSorting?: boolean;
 
-        /** @docid PivotGridDataSourceOptions_fields_allowSortingBySummary */
+        /** Allows an end-user to sort columns by summary values. */
         allowSortingBySummary?: boolean;
 
-        /** @docid PivotGridDataSourceOptions_fields_allowFiltering */
+        /** Allows a user to filter fields by selecting or deselecting values in the popup menu. */
         allowFiltering?: boolean;
 
-        /** @docid PivotGridDataSourceOptions_fields_allowExpandAll */
+        /** Allows an end-user to expand/collapse all header items within a header level. */
         allowExpandAll?: boolean;
 
-        /** @docid PivotGridDataSourceOptions_fields_width */
+        /** Specifies the absolute width of the field in the pivot grid. */
         width?: number;
 
-        /** @docid PivotGridDataSourceOptions_fields_summaryDisplayMode */
+        /** Specifies the summary post-processing algorithm. */
         summaryDisplayMode?: string;
 
-        /** @docid PivotGridDataSourceOptions_fields_runningTotal */
+        /** Specifies whether to summarize each next summary value with the previous one by rows or columns. */
         runningTotal?: string;
 
-        /** @docid PivotGridDataSourceOptions_fields_allowCrossGroupCalculation */
+        /** Specifies whether to allow the predefined summary post-processing functions ('absoluteVariation' and 'percentVariation') and runningTotal to take values of different groups into account. */
         allowCrossGroupCalculation?: boolean;
 
-        /** @docid PivotGridDataSourceOptions_fields_calculateSummaryValue */
+        /** Specifies a callback function that allows you to modify summary values after they are calculated. */
         calculateSummaryValue?: (e: Object) => number;
 
-        /** @docid PivotGridDataSourceOptions_fields_showTotals */
+        /** Specifies whether or not to display Total values for the field. */
         showTotals?: boolean;
 
-        /** @docid PivotGridDataSourceOptions_fields_showGrandTotals */
+        /** Specifies whether or not to display Grand Total values for the field. */
         showGrandTotals?: boolean;
     }
 
     export class SummaryCell {
-        /** @docid dxPivotGridSummaryCell_parent */
+        /** Gets the parent cell in a specified direction. */
         parent(direction: string): SummaryCell;
 
-        /** @docid dxPivotGridSummaryCell_children */
+        /** Gets all child cells in a specified direction. */
         children(direction: string): Array<SummaryCell>;
 
-        /** @docid dxPivotGridSummaryCell_grandTotal#grandTotal(direction) */
+        /** Gets a partial Grand Total cell of a row or column. */
         grandTotal(direction: string): SummaryCell;
-        /** @docid dxPivotGridSummaryCell_grandTotal#grandTotal() */
+        /** Gets the Grand Total of the entire pivot grid. */
         grandTotal(): SummaryCell;
 
-        /** @docid dxPivotGridSummaryCell_next#next(direction) */
+        /** Gets the cell next to the current one in a specified direction. */
         next(direction: string): SummaryCell;
-        /** @docid dxPivotGridSummaryCell_next#next(direction, allowCrossGroup) */
+        /** Gets the cell next to current in a specified direction. */
         next(direction: string, allowCrossGroup: boolean): SummaryCell;
 
-        /** @docid dxPivotGridSummaryCell_prev#prev(direction) */
+        /** Gets the cell prior to the current one in a specified direction. */
         prev(direction: string): SummaryCell;
-        /** @docid dxPivotGridSummaryCell_prev#prev(direction, allowCrossGroup) */
+        /** Gets the cell previous to current in a specified direction. */
         prev(direction: string, allowCrossGroup: boolean): SummaryCell;
 
-        /** @docid dxPivotGridSummaryCell_child */
+        /** Gets the child cell in a specified direction. */
         child(direction: string, fieldValue: any): SummaryCell;
 
-        /** @docid dxPivotGridSummaryCell_slice */
+        /** Gets the cell located by the path of the source cell with one field value changed. */
         slice(field: PivotGridField, value: any): SummaryCell;
 
-        /** @docid dxPivotGridSummaryCell_field */
+        /** Gets the row or column field to which the current cell belongs. */
         field(area: string): PivotGridField;
 
-        /** @docid dxPivotGridSummaryCell_value#value() */
+        /** Gets the value of the current cell. */
         value(): any;
-        /** @docid dxPivotGridSummaryCell_value#value(isCalculatedValue) */
+        /** Gets the value of the current cell. */
         value(isCalculatedValue: boolean): any;
-        /** @docid dxPivotGridSummaryCell_value#value(field) */
+        /** Gets the value of any field linked with the current cell. */
         value(field: PivotGridField): any;
-        /** @docid dxPivotGridSummaryCell_value#value(field, isCalculatedValue) */
+        /** Gets the value of any field linked with the current cell. */
         value(field: PivotGridField, isCalculatedValue: boolean): any;
     }
 
     export interface PivotGridDataSourceOptions {
-        /** @docid_ignore PivotGridDataSourceOptions_store_type */
+        
 
-        /** @docid PivotGridDataSourceOptions_store */
+        /** Specifies the underlying Store instance used to access data. */
         store?: any;
 
-        /** @docid PivotGridDataSourceOptions_retrieveFields */
+        /** Indicates whether or not the automatic field generation from data in the Store is enabled. */
         retrieveFields?: boolean;
 
-        /** @docid PivotGridDataSourceOptions_filter */
+        /** Specifies data filtering conditions. Cannot be used for the XmlaStore store type. */
         filter?: Object;
 
-        /** @docid PivotGridDataSourceOptions_fields */
+        /** An array of pivot grid fields. */
         fields?: Array<PivotGridField>;
 
-        /** @docid PivotGridDataSourceOptions_remoteOperations */
+        /** Specifies whether or not all the operations (filtering, grouping and summary calculation) are performed remotely. */
         remoteOperations?: boolean;
 
-        /** @docid PivotGridDataSourceOptions_onChanged */
+        /** A handler for the changed event. */
         onChanged?: () => void;
 
-        /** @docid PivotGridDataSourceOptions_onLoadingChanged */
+        /** A handler for the loadingChanged event. */
         onLoadingChanged?: (isLoading: boolean) => void;
 
-        /** @docid PivotGridDataSourceOptions_onLoadError */
+        /** A handler for the loadError event. */
         onLoadError?: (e?: Object) => void;
 
-        /** @docid PivotGridDataSourceOptions_onFieldsPrepared */
+        /** A handler for the fieldsPrepared event. */
         onFieldsPrepared?: (e?: Array<PivotGridField>) => void;
     }
 
-    /** @docid PivotGridDataSource */
+    /** An object that provides access to data for the PivotGrid widget. */
     export class PivotGridDataSource implements EventsMixin<PivotGridDataSource> {
         constructor(options?: PivotGridDataSourceOptions);
-        /** @docid PivotGridDataSourceMethods_reload */
+        /** Starts reloading data from any store and updating the data source. */
         reload(): JQueryPromise<any>;
 
-        /** @docid PivotGridDataSourceMethods_load */
+        /** Starts updating the data source. Reloads data from the XMLA store only. */
         load(): JQueryPromise<any>;
 
-        /** @docid PivotGridDataSourceMethods_isLoading */
+        /** Indicates whether or not the PivotGridDataSource is currently being loaded. */
         isLoading(): boolean;
 
-        /** @docid PivotGridDataSourceMethods_getData */
+        /** Gets data displayed in a PivotGrid. */
         getData(): Object;
 
-        /** @docid PivotGridDataSourceMethods_getAreaFields */
+        /** Gets all fields within a specified area. */
         getAreaFields(area: string, collectGroups: boolean): Array<PivotGridField>;
 
-        /** @docid PivotGridDataSourceMethods_fields#fields() */
+        /** Gets all fields from the data source. */
         fields(): Array<PivotGridField>;
-        /** @docid PivotGridDataSourceMethods_fields#fields(fields) */
+        /** Sets the fields option. */
         fields(fields: Array<PivotGridField>): void;
 
-        /** @docid PivotGridDataSourceMethods_field#field(id) */
+        /** Gets current options of a specified field. */
         field(id: any): PivotGridField;
-        /** @docid PivotGridDataSourceMethods_field#field(id, options) */
+        /** Sets one or more options of a specified field. */
         field(id: any, field: PivotGridField): void;
 
-        /** @docid PivotGridDataSourceMethods_collapseHeaderItem */
+        /** Collapses a specified header item. */
         collapseHeaderItem(area: string, path: Array<any>): void;
 
-        /** @docid PivotGridDataSourceMethods_expandHeaderItem */
+        /** Expands a specified header item. */
         expandHeaderItem(area: string, path: Array<any>): void;
 
-        /** @docid PivotGridDataSourceMethods_expandAll */
+        /** Expands all header items of a field. */
         expandAll(id: any): void;
 
-        /** @docid PivotGridDataSourceMethods_collapseAll */
+        /** Collapses all header items of a field. */
         collapseAll(id: any): void;
 
-        /** @docid PivotGridDataSourceMethods_dispose */
+        /** Disposes of all resources associated with this PivotGridDataSource. */
         dispose(): void;
 
-        /** @docid PivotGridDataSourceMethods_filter#filter() */
+        /** Gets the current filter expression. Cannot be used for the XmlaStore store type. */
         filter(): Object;
 
-        /** @docid PivotGridDataSourceMethods_filter#filter(filterExpr) */
+        /** Applies a new filter expression. Cannot be used for the XmlaStore store type. */
         filter(filterExpr: Object): void;
 
-        /** @docid PivotGridDataSourceMethods_createDrillDownDataSource */
+        /** Provides access to a list of records (facts) that were used to calculate a specific summary. */
         createDrillDownDataSource(options: {
             columnPath?: Array<any>;
             rowPath?: Array<any>;
@@ -266,10 +269,10 @@ declare module DevExpress.data {
             customColumns?: Array<string>;
         }): DevExpress.data.DataSource;
 
-        /** @docid PivotGridDataSourceMethods_state#state() */
+        /** Gets the current PivotGridDataSource state (fields configuration, sorting, filters, expanded headers, etc.) */
         state(): Object;
 
-        /** @docid PivotGridDataSourceMethods_state#state(state) */
+        /** Sets the PivotGridDataSource state. */
         state(state: Object): void;
 
         on(eventName: string, eventHandler: Function): PivotGridDataSource;
@@ -281,416 +284,428 @@ declare module DevExpress.data {
 
 declare module DevExpress.ui {
     export interface dxSchedulerViewOptions {
-        /** @docid dxSchedulerOptions_views_type */
+        /** The name of the view. */
         type?: string;
 
-        /** @docid dxSchedulerOptions_views_firstDayOfWeek */
+        /** The first day of a week. */
         firstDayOfWeek?: number;
 
-        /** @docid dxSchedulerOptions_views_groups */
+        /** The resource kinds by which appointments are grouped. */
         groups?: Array<string>;
 
-        /** @docid dxSchedulerOptions_views_startDayHour */
+        /** The start hour of the view time scale. */
         startDayHour?: number;
 
-        /** @docid dxSchedulerOptions_views_endDayHour */
+        /** The end hour of the view time scale. */
         endDayHour?: number;
 
-        /** @docid dxSchedulerOptions_views_cellDuration */
+        /** The cell duration in minutes. */
         cellDuration?: number;
 
-        /** @docid dxSchedulerOptions_views_agendaDuration */
+        /** Specifies the number of dates that can be shown at a time in the agenda view. */
         agendaDuration?: number;
 
-        /** @docid dxSchedulerOptions_views_appointmentTemplate */
+        /** Specifies a custom template for an appointment. */
         appointmentTemplate?: any;
 
-        /** @docid dxSchedulerOptions_views_appointmentTooltipTemplate */
+        /** The template to be used for rendering an appointment tooltip. */
         appointmentTooltipTemplate?: any;
 
-        /** @docid dxSchedulerOptions_views_dataCellTemplate */
+        /** The template to be used for rendering table cells. */
         dataCellTemplate?: any;
 
-        /** @docid dxSchedulerOptions_views_timeCellTemplate */
+        /** The template to be used for rendering time scale items. */
         timeCellTemplate?: any;
 
-        /** @docid dxSchedulerOptions_views_dateCellTemplate */
+        /** The template to be used for rendering date scale items. */
         dateCellTemplate?: any;
 
-        /** @docid dxSchedulerOptions_views_resourceCellTemplate */
+        /** The template to be used for rendering resource headers. */
         resourceCellTemplate?: any;
     }
 
     export interface dxSchedulerOptions extends WidgetOptions {
-        /** @docid_ignore dxSchedulerAppointmentTemplate_text */
-        /** @docid_ignore dxSchedulerAppointmentTemplate_startDate */
-        /** @docid_ignore dxSchedulerAppointmentTemplate_endDate */
-        /** @docid_ignore dxSchedulerAppointmentTemplate_description */
-        /** @docid_ignore dxSchedulerAppointmentTemplate_recurrenceRule */
-        /** @docid_ignore dxSchedulerAppointmentTemplate_recurrenceException */
-        /** @docid_ignore dxSchedulerAppointmentTemplate_allDay */
-        /** @docid_ignore dxSchedulerAppointmentTemplate_html */
-        /** @docid_ignore dxSchedulerAppointmentTemplate_disabled */
-        /** @docid_ignore dxSchedulerAppointmentTemplate_visible */
-        /** @docid_ignore dxSchedulerAppointmentTemplate_template */
-        /** @docid_ignore dxSchedulerAppointmentTemplate_startDateTimeZone */
-        /** @docid_ignore dxSchedulerAppointmentTemplate_endDateTimeZone */
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
 
-        /** @docid_ignore dxSchedulerAppointmentTooltipTemplate_text */
-        /** @docid_ignore dxSchedulerAppointmentTooltipTemplate_startDate */
-        /** @docid_ignore dxSchedulerAppointmentTooltipTemplate_endDate */
-        /** @docid_ignore dxSchedulerAppointmentTooltipTemplate_description */
-        /** @docid_ignore dxSchedulerAppointmentTooltipTemplate_recurrenceRule */
-        /** @docid_ignore dxSchedulerAppointmentTooltipTemplate_recurrenceException */
-        /** @docid_ignore dxSchedulerAppointmentTooltipTemplate_allDay */
-        /** @docid_ignore dxSchedulerAppointmentTooltipTemplate_startDateTimeZone */
-        /** @docid_ignore dxSchedulerAppointmentTooltipTemplate_endDateTimeZone */
+        
+        
+        
+        
+        
+        
+        
+        
+        
 
-        /** @docid_ignore dxSchedulerOptions_focusStateEnabled */
-        /** @docid_ignore dxSchedulerOptions_appointmentPopupTemplate */
+        
+        
 
-        /** @docid_ignore dxSchedulerOptions_activeStateEnabled */
-        /** @docid_ignore dxSchedulerOptions_hoverStateEnabled */
+        
+        
 
-        /** @docid dxSchedulerOptions_dateSerializationFormat */
+        /** Specifies the date-time values' serialization format. Use it only if you do not specify the dataSource at design time. */
         dateSerializationFormat?: string;
-        /** @docid dxSchedulerOptions_currentDate */
+        /** Specifies a date displayed on the current scheduler view by default. */
         currentDate?: any;
-        /** @docid dxSchedulerOptions_min */
+        /** The earliest date the widget allows you to select. */
         min?: any;
-        /** @docid dxSchedulerOptions_max */
+        /** The latest date the widget allows you to select. */
         max?: any;
-        /** @docid dxSchedulerOptions_currentView */
+        /** Specifies the view used in the scheduler by default. */
         currentView?: string;
-        /** @docid dxSchedulerOptions_dataSource */
+        /** Specifies the origin of data for the widget. */
         dataSource?: any;
-        /** @docid dxSchedulerOptions_firstDayOfWeek */
+        /** Specifies the first day of a week. */
         firstDayOfWeek?: number;
-        /** @docid dxSchedulerOptions_appointmentTemplate */
+        /** The template to be used for rendering appointments. */
         appointmentTemplate?: any;
-        /** @docid dxSchedulerOptions_appointmentTooltipTemplate */
+        /** The template to be used for rendering an appointment tooltip. */
         appointmentTooltipTemplate?: any;
-        /** @docid dxSchedulerOptions_dataCellTemplate */
+        /** The template to be used for rendering table cells. */
         dataCellTemplate?: any;
-        /** @docid dxSchedulerOptions_timeCellTemplate */
+        /** The template to be used for rendering time scale items. */
         timeCellTemplate?: any;
-        /** @docid dxSchedulerOptions_dateCellTemplate */
+        /** The template used for rendering day scale items. */
         dateCellTemplate?: any;
-        /** @docid dxSchedulerOptions_resourceCellTemplate */
+        /** The template to be used for rendering resource headers. */
         resourceCellTemplate?: any;
-        /** @docid dxSchedulerOptions_views */
+        /** Configures individual views. */
         views?: Array<any>;
-        /** @docid dxSchedulerOptions_groups */
+        /** Specifies the resource kinds by which the scheduler's appointments are grouped in a timetable. */
         groups?: Array<string>;
-        /** @docid dxSchedulerOptions_startDayHour */
+        /** Specifies a start hour in the scheduler view's time interval. */
         startDayHour?: number;
-        /** @docid dxSchedulerOptions_endDayHour */
+        /** Specifies an end hour in the scheduler view's time interval. */
         endDayHour?: number;
-        /** @docid dxSchedulerOptions_showAllDayPanel */
+        /** Specifies the "All-day" panel's visibility. Setting this option to false hides the panel along with the all-day appointments. */
         showAllDayPanel?: boolean;
-        /** @docid dxSchedulerOptions_cellDuration */
+        /** Specifies cell duration in minutes. */
         cellDuration?: number;
-        /** @docid dxSchedulerOptions_recurrenceEditMode */
+        /** Specifies the edit mode for recurring appointments. */
         recurrenceEditMode?: string;
-        /** @docid dxSchedulerOptions_editing */
+        /** Specifies which editing operations an end-user can perform on appointments. */
         editing?: {
-            /** @docid dxSchedulerOptions_editing_allowAdding */
+            /** Specifies whether or not an end-user can add appointments. */
             allowAdding?: boolean;
-            /** @docid dxSchedulerOptions_editing_allowUpdating */
+            /** Specifies whether or not an end-user can change appointment options. */
             allowUpdating?: boolean;
-            /** @docid dxSchedulerOptions_editing_allowDeleting */
+            /** Specifies whether or not an end-user can delete appointments. */
             allowDeleting?: boolean;
-            /** @docid dxSchedulerOptions_editing_allowResizing */
+            /** Specifies whether or not an end-user can change an appointment duration. */
             allowResizing?: boolean;
-            /** @docid dxSchedulerOptions_editing_allowDragging */
+            /** Specifies whether or not an end-user can drag appointments. */
             allowDragging?: boolean;
         }
-        /** @docid dxSchedulerOptions_resources */
+        /** Specifies an array of resources available in the scheduler. */
         resources?: Array<{
-            /** @docid dxSchedulerOptions_resources_allowMultiple */
+            /** Indicates whether or not several resources of this kind can be assigned to an appointment. */
             allowMultiple?: boolean;
-            /** @docid dxSchedulerOptions_resources_mainColor */
+            /**
+          * Indicates whether or not resources of this kind have priority in the color identification of the appointments that have resources of different kinds assigned.
+          * @deprecated Use the useColorAsDefault option instead.
+          */
             mainColor?: boolean;
-            /** @docid dxSchedulerOptions_resources_useColorAsDefault */
+            /** Specifies whether appointments are colored like this resource kind. */
             useColorAsDefault?: boolean;
-            /** @docid dxSchedulerOptions_resources_dataSource */
+            /** A data source used to fetch resources to be available in the scheduler. */
             dataSource?: any;
-            /** @docid dxSchedulerOptions_resources_displayExpr */
+            /** Specifies the resource object field whose value is displayed by the Resource editor in the Appointment popup window. */
             displayExpr?: any;
-            /** @docid dxSchedulerOptions_resources_valueExpr */
+            /** Specifies the resource object field that is used as a value of the Resource editor in the Appointment popup window. */
             valueExpr?: any;
-            /** @docid dxSchedulerOptions_resources_field */
+            /**
+         * The name of the appointment object field that specifies a resource of this kind.
+         * @deprecated Use the fieldExpr option instead.
+         */
             field?: string;
-            /** @docid dxSchedulerOptions_resources_fieldExpr */
+            /** The name of the appointment object field that specifies a resource of this kind. */
             fieldExpr?: string;
-            /** @docid dxSchedulerOptions_resources_colorExpr */
+            /** Specifies the resource object field that is used as a resource color. */
             colorExpr?: string;
-            /** @docid dxSchedulerOptions_resources_label */
+            /** Specifies the label of the Appointment popup window field that allows end users to assign a resource of this kind. */
             label?: string;
         }>;
-        /** @docid dxSchedulerOptions_onAppointmentAdding */
+        /** A handler for the AppointmentAdding event. */
         onAppointmentAdding?: Function;
-        /** @docid dxSchedulerOptions_onAppointmentAdded */
+        /** A handler for the appointmentAdded event. */
         onAppointmentAdded?: Function;
-        /** @docid dxSchedulerOptions_onAppointmentUpdating */
+        /** A handler for the AppointmentUpdating event. */
         onAppointmentUpdating?: Function;
-        /** @docid dxSchedulerOptions_onAppointmentUpdated */
+        /** A handler for the appointmentUpdated event. */
         onAppointmentUpdated?: Function;
-        /** @docid dxSchedulerOptions_onAppointmentDeleting */
+        /** A handler for the AppointmentDeleting event. */
         onAppointmentDeleting?: Function;
-        /** @docid dxSchedulerOptions_onAppointmentDeleted */
+        /** A handler for the appointmentDeleted event. */
         onAppointmentDeleted?: Function;
-        /** @docid dxSchedulerOptions_onAppointmentRendered */
+        /** A handler for the appointmentRendered event. */
         onAppointmentRendered?: Function;
-        /** @docid dxSchedulerOptions_onAppointmentClick */
+        /** A handler for the appointmentClick event. */
         onAppointmentClick?: any;
-        /** @docid dxSchedulerOptions_onAppointmentDblClick */
+        /** A handler for the appointmentDblClick event. */
         onAppointmentDblClick?: any;
-        /** @docid dxSchedulerOptions_onCellClick */
+        /** A handler for the cellClick event. */
         onCellClick?: any;
-        /** @docid dxSchedulerOptions_onAppointmentFormCreated */
+        /** A handler for the appointmentFormCreated event. */
         onAppointmentFormCreated?: Function;
-        /** @docid dxSchedulerOptions_onContentReady */
+        
         onContentReady?: Function;
-        /** @docid dxSchedulerOptions_horizontalScrollingEnabled */
+        
         horizontalScrollingEnabled?: boolean;
-        /** @docid dxSchedulerOptions_crossScrollingEnabled */
+        /** Specifies whether or not an end-user can scroll the view in both directions at the same time. */
         crossScrollingEnabled?: boolean;
-        /** @docid dxSchedulerOptions_useDropDownViewSwitcher */
+        /** Specifies whether a user can switch views using tabs or a drop-down menu. */
         useDropDownViewSwitcher?: boolean;
-        /** @docid dxSchedulerOptions_startDateExpr */
+        /** Specifies the name of the data source item field that defines the start of an appointment. */
         startDateExpr?: string;
-        /** @docid dxSchedulerOptions_endDateExpr */
+        /** Specifies the name of the data source item field that defines the ending of an appointment. */
         endDateExpr?: string;
-        /** @docid dxSchedulerOptions_textExpr */
+        /** Specifies the name of the data source item field that holds the subject of an appointment. */
         textExpr?: string;
-        /** @docid dxSchedulerOptions_descriptionExpr */
+        /** Specifies the name of the data source item field whose value holds the description of the corresponding appointment. */
         descriptionExpr?: string;
-        /** @docid dxSchedulerOptions_allDayExpr */
+        /** Specifies the name of the data source item field whose value defines whether or not the corresponding appointment is an all-day appointment. */
         allDayExpr?: string;
-        /** @docid dxSchedulerOptions_recurrenceRuleExpr */
+        /** Specifies the name of the data source item field that defines a recurrence rule for generating recurring appointments. */
         recurrenceRuleExpr?: string;
-        /** @docid dxSchedulerOptions_recurrenceExceptionExpr */
+        /** Specifies the name of the data source item field that defines exceptions for the current recurring appointment. */
         recurrenceExceptionExpr?: string;
-        /** @docid dxSchedulerOptions_startDateTimeZoneExpr */
+        /** Specifies the name of the data source item field that defines the timezone of the appointment start date. */
         startDateTimeZoneExpr?: string;
-        /** @docid dxSchedulerOptions_endDateTimeZoneExpr */
+        /** Specifies the name of the data source item field that defines the timezone of the appointment end date. */
         endDateTimeZoneExpr?: string;
-        /** @docid dxSchedulerOptions_remoteFiltering */
+        /** Specifies whether filtering is performed on the server or client side. */
         remoteFiltering?: boolean;
-        /** @docid dxSchedulerOptions_timeZone */
+        /** Specifies the timezone of the widget. */
         timeZone?: string;
-        /** @docid dxSchedulerOptions_noDataText */
+        /** The text or HTML markup displayed by the widget if the item collection is empty. Available for the Agenda view only. */
         noDataText?: string;
     }
 
-    /** @docid dxScheduler */
+    /** The Scheduler is a widget that represents scheduled data and allows a user to manage and edit it. */
     export class dxScheduler extends Widget
     implements DataHelperMixin
     {
-        /** @docid_ignore dxSchedulerMethods_registerKeyHandler */
+        
 
         constructor(element: JQuery, options?: dxSchedulerOptions);
         constructor(element: Element, options?: dxSchedulerOptions);
 
-        /** @docid dxSchedulerMethods_addAppointment */
+        /** Add the appointment defined by the object passed as a parameter to the data associated with the widget. */
         addAppointment(appointment: Object): void;
 
-        /** @docid dxSchedulerMethods_updateAppointment */
+        /** Updates the appointment specified by the first method parameter by the appointment object specified by the second method parameter in the data associated with the widget. */
         updateAppointment(target: Object, appointment: Object): void;
 
-        /** @docid dxSchedulerMethods_deleteAppointment */
+        /** Deletes the appointment defined by the parameter from the data associated with the widget. */
         deleteAppointment(appointment: Object): void;
 
-        /** @docid dxSchedulerMethods_scrollToTime */
+        /** Scrolls the scheduler work space to the specified time of the specified day. */
         scrollToTime(hours: number, minutes: number, date: Date): void;
 
-        /** @docid dxSchedulerMethods_showAppointmentPopup */
+        /** Displays the Appointment Details popup. */
         showAppointmentPopup(appointmentData: Object, createNewAppointment?: boolean, currentAppointmentData?: Object): void;
 
-        /** @docid dxSchedulerMethods_hideAppointmentPopup */
+        /** Hides an appointment details popup. */
         hideAppointmentPopup(saveChanges?: boolean): void;
 
-        /** @docid dxSchedulerMethods_showAppointmentTooltip */
+        /** Displays the appointment tooltip for the specified target element. */
         showAppointmentTooltip(appointmentData: Object, target?: JQuery, currentAppointmentData?: Object): void;
         showAppointmentTooltip(appointmentData: Object, target?: Element, currentAppointmentData?: Object): void;
         showAppointmentTooltip(appointmentData: Object, target?: string, currentAppointmentData?: Object): void;
 
-        /** @docid dxSchedulerMethods_hideAppointmentTooltip */
+        /** Hides an appointment tooltip. */
         hideAppointmentTooltip(): void;
 
-        /** @docid dxSchedulerMethods_getStartViewDate */
+        /** Returns the start date of the current view. */
         getStartViewDate(): Date;
 
-        /** @docid dxSchedulerMethods_getEndViewDate */
+        /** Returns the end date of the current view. */
         getEndViewDate(): Date;
 
         getDataSource(): DevExpress.data.DataSource;
     }
 
     export interface dxColorBoxOptions extends dxDropDownEditorOptions {
-        /** @docid_ignore dxColorBoxOptions_fieldEditEnabled */
-        /** @docid_ignore dxColorBoxOptions_maxLength */
-        /** @docid_ignore dxColorBoxOptions_showClearButton */
-        /** @docid_ignore dxColorBoxOptions_valueChangeEvent */
-        /** @docid_ignore dxColorBoxOptions_value */
-        /** @docid_ignore dxColorBoxOptions_spellcheck */
+        
+        
+        
+        
+        
+        
 
-        /** @docid dxColorBoxOptions_applyButtonText */
+        /** Specifies the text displayed on the button that applies changes and closes the drop-down editor. */
         applyButtonText?: string;
 
-        /** @docid dxColorBoxOptions_applyValueMode */
+        
         applyValueMode?: string;
 
-        /** @docid dxColorBoxOptions_cancelButtonText */
+        /** Specifies the text displayed on the button that cancels changes and closes the drop-down editor. */
         cancelButtonText?: string;
 
-        /** @docid dxColorBoxOptions_editAlphaChannel */
+        /** Specifies whether or not the widget value includes the alpha channel component. */
         editAlphaChannel?: boolean;
 
-        /** @docid dxColorBoxOptions_keyStep */
+        /** Specifies the size of a step by which a handle is moved using a keyboard shortcut. */
         keyStep?: number;
 
-        /** @docid dxColorBoxOptions_fieldTemplate */
+        /** The template to be used for rendering the widget input field. */
         fieldTemplate?: any;
     }
 
-    /** @docid dxColorBox */
+    /** The ColorBox is a widget that allows an end user to enter a color or pick it out from the drop-down editor. */
     export class dxColorBox extends dxDropDownEditor {
         constructor(element: JQuery, options?: dxColorBoxOptions);
         constructor(element: Element, options?: dxColorBoxOptions);
     }
 
     export interface HierarchicalCollectionWidgetOptions extends CollectionWidgetOptions {
-        /** @docid HierarchicalCollectionWidgetOptions_displayExpr */
+        /** Specifies the name of the data source item field whose value is displayed by the widget. */
         displayExpr?: any;
 
-        /** @docid HierarchicalCollectionWidgetOptions_keyExpr */
+        /** Specifies which data field provides keys for TreeView items. */
         keyExpr?: any;
 
-        /** @docid HierarchicalCollectionWidgetOptions_selectedExpr */
+        /** Specifies the name of the data source item field whose value defines whether or not the corresponding widget items is selected. */
         selectedExpr?: any;
 
-        /** @docid HierarchicalCollectionWidgetOptions_itemsExpr */
+        /** Specifies the name of the data source item field that contains an array of nested items. */
         itemsExpr?: any;
 
-        /** @docid HierarchicalCollectionWidgetOptions_disabledExpr */
+        /** Specifies the name of the data source item field whose value defines whether or not the corresponding widget item is disabled. */
         disabledExpr?: any;
 
-        /** @docid HierarchicalCollectionWidgetOptions_hoverStateEnabled */
+        
         hoverStateEnabled?: boolean;
 
-        /** @docid HierarchicalCollectionWidgetOptions_focusStateEnabled */
+        
         focusStateEnabled?: boolean;
     }
 
-    /** @docid HierarchicalCollectionWidget */
+    
     export class HierarchicalCollectionWidget extends CollectionWidget {
     }
 
     export interface dxTreeViewOptions extends HierarchicalCollectionWidgetOptions {
-        /** @docid_ignore dxTreeViewItemTemplate_icon */
-        /** @docid_ignore dxTreeViewItemTemplate_iconSrc */
-        /** @docid_ignore dxTreeViewItemTemplate_selected */
-        /** @docid_ignore dxTreeViewItemTemplate_expanded */
-        /** @docid_ignore dxTreeViewItemTemplate_items */
-        /** @docid_ignore dxTreeViewItemTemplate_parentId */
-        /** @docid_ignore dxTreeViewItemTemplate_hasItems */
-        /** @docid_ignore dxTreeViewOptions_selectedItems */
-        /** @docid_ignore dxTreeViewOptions_selectedItemKeys */
-        /** @docid_ignore dxTreeViewOptions_selectedItem */
-        /** @docid_ignore dxTreeViewOptions_selectedIndex */
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
 
-        /** @docid dxTreeViewOptions_animationEnabled */
+        /** Specifies whether or not to animate item collapsing and expanding. */
         animationEnabled?: boolean;
 
-        /** @docid dxTreeViewOptions_dataStructure */
+        /** Specifies whether a nested or plain array is used as a data source. */
         dataStructure?: string;
 
-        /** @docid dxTreeViewOptions_expandAllEnabled */
+        /** Specifies whether or not a user can expand all tree view items by the "*" hot key. */
         expandAllEnabled?: boolean;
 
-        /** @docid dxTreeViewOptions_showCheckBoxes */
+        /**
+        * Specifies whether or not a check box is displayed at each tree view item.
+        * @deprecated Use the showCheckBoxesMode options instead.
+        */
         showCheckBoxes?: boolean;
 
-        /** @docid dxTreeViewOptions_showCheckBoxesMode */
+        /** Specifies the current check boxes display mode. */
         showCheckBoxesMode?: string;
 
-        /** @docid dxTreeViewOptions_expandedExpr */
+        /** Specifies the name of the data source item field whose value defines whether or not the corresponding widget item is displayed expanded. */
         expandedExpr?: any;
 
-        /** @docid dxTreeViewOptions_selectNodesRecursive */
+        /** Specifies whether or not to select nodes recursively. */
         selectNodesRecursive?: boolean;
 
-        /** @docid dxTreeViewOptions_expandNodesRecursive */
+        /** Specifies whether or not all parent nodes of an initially expanded node are displayed expanded. */
         expandNodesRecursive?: boolean;
 
-        /** @docid dxTreeViewOptions_selectAllEnabled */
+        /**
+       * Specifies whether the "Select All" check box is displayed over the tree view.
+       * @deprecated Use the showCheckBoxesMode options instead.
+       */
         selectAllEnabled?: boolean;
 
-        /** @docid dxTreeViewOptions_selectByClick */
+        /** Specifies whether or not an item becomes selected if a user clicks it. */
         selectByClick?: boolean;
 
-        /** @docid dxTreeViewOptions_selectionMode */
+        /** Specifies item selection mode. */
         selectionMode?: string;
 
-        /** @docid dxTreeViewOptions_selectAllText */
+        /** Specifies the text displayed at the "Select All" check box. */
         selectAllText?: string;
 
-        /** @docid dxTreeViewOptions_hasItemsExpr */
+        /** Specifies the name of the data source item field whose value defines whether or not the corresponding node includes child nodes. */
         hasItemsExpr?: any;
 
-        /** @docid dxTreeViewOptions_parentIdExpr */
+        /** Specifies the name of the data source item field for holding the parent key of the corresponding node. */
         parentIdExpr?: any;
 
-        /** @docid dxTreeViewOptions_virtualModeEnabled */
+        /** Specifies if the virtual mode is enabled. */
         virtualModeEnabled?: boolean;
 
-        /** @docid dxTreeViewOptions_rootValue */
+        /** Specifies the parent ID value of the root item. */
         rootValue?: Object;
 
-        /** @docid dxTreeViewOptions_searchValue */
+        /** Specifies the current value used to filter tree view items. */
         searchValue?: string;
 
-        /** @docid dxTreeViewOptions_scrollDirection */
+        /** A string value specifying available scrolling directions. */
         scrollDirection?: string;
 
-        /** @docid_ignore dxTreeViewOptions_onItemSelected */
+        
 
-        /** @docid dxTreeViewOptions_onItemSelectionChanged */
+        /** A handler for the itemSelectionChanged event. */
         onItemSelectionChanged?: Function;
 
-        /** @docid dxTreeViewOptions_onItemExpanded */
+        /** A handler for the itemExpanded event. */
         onItemExpanded?: Function;
 
-        /** @docid dxTreeViewOptions_onItemCollapsed */
+        /** A handler for the itemCollapsed event. */
         onItemCollapsed?: Function;
 
-        /** @docid dxTreeViewOptions_onItemClick */
+        
         onItemClick?: Function;
 
-        /** @docid dxTreeViewOptions_onItemContextMenu */
+        
         onItemContextMenu?: Function;
 
-        /** @docid dxTreeViewOptions_onItemRendered */
+        
         onItemRendered?: Function;
 
-        /** @docid dxTreeViewOptions_onItemHold */
+        
         onItemHold?: Function;
 
-        /** @docid dxTreeViewOptions_createChildren */
+        /** Allows you to load nodes manually. */
         createChildren?: Function;
     }
 
     export interface dxTreeViewNode {
-        /** @docid_ignore dxTreeViewNode_children */
-        /** @docid_ignore dxTreeViewNode_disabled */
-        /** @docid_ignore dxTreeViewNode_expanded */
-        /** @docid_ignore dxTreeViewNode_itemData */
-        /** @docid_ignore dxTreeViewNode_key */
-        /** @docid_ignore dxTreeViewNode_parent */
-        /** @docid_ignore dxTreeViewNode_selected */
-        /** @docid_ignore dxTreeViewNode_text */
+        
+        
+        
+        
+        
+        
+        
+        
 
         children: Array<dxTreeViewNode>;
 
@@ -709,281 +724,284 @@ declare module DevExpress.ui {
         text: string;
     }
 
-    /** @docid dxTreeView */
+    /** The TreeView widget is a tree-like representation of textual data. */
     export class dxTreeView extends HierarchicalCollectionWidget {
 
-        /** @docid_ignore dxTreeViewOptions_onSelectionChanged */
+        
 
         constructor(element: JQuery, options?: dxTreeViewOptions);
         constructor(element: Element, options?: dxTreeViewOptions);
 
-        /** @docid dxTreeViewMethods_updateDimensions */
+        /** Updates the tree view scrollbars according to the current size of the widget content. */
         updateDimensions(): JQueryPromise<void>;
 
-        /** @docid dxTreeViewMethods_selectItem#selectItem(itemElement) */
+        /** Selects an item found using an HTML element. */
         selectItem(itemElement: Node): void;
 
-        /** @docid dxTreeViewMethods_selectItem#selectItem(itemData) */
+        /** Selects an item found using a data object. */
         selectItem(itemData: Object): void;
 
-        /** @docid dxTreeViewMethods_selectItem#selectItem(key) */
+        /** Selects an item found using a key. */
         selectItem(key: any): void;
 
-        /** @docid dxTreeViewMethods_unselectItem#unselectItem(itemElement) */
+        /** Clears the selection of an item found using an HTML element. */
         unselectItem(itemElement: Node): void;
 
-        /** @docid dxTreeViewMethods_unselectItem#unselectItem(itemData) */
+        /** Clears the selection of an item found using a data object. */
         unselectItem(itemData: Object): void;
 
-        /** @docid dxTreeViewMethods_unselectItem#unselectItem(key) */
+        /** Clears the selection of an item found using a key. */
         unselectItem(key: any): void;
 
-        /** @docid dxTreeViewMethods_expandItem#expandItem(itemElement) */
+        /** Expands an item found using an HTML element. */
         expandItem(itemElement: Node): void;
 
-        /** @docid dxTreeViewMethods_expandItem#expandItem(itemData) */
+        /** Expands an item found using a data object. */
         expandItem(itemData: Object): void;
 
-        /** @docid dxTreeViewMethods_expandItem#expandItem(key) */
+        /** Expands an item found using a key. */
         expandItem(key: any): void;
 
-        /** @docid dxTreeViewMethods_collapseItem#collapseItem(itemElement) */
+        /** Collapses an item found using an HTML element. */
         collapseItem(itemElement: Node): void;
 
-        /** @docid dxTreeViewMethods_collapseItem#collapseItem(itemData) */
+        /** Collapses an item found using a key. */
         collapseItem(itemData: Object): void;
 
-        /** @docid dxTreeViewMethods_collapseItem#collapseItem(key) */
+        /** Collapses an item found using a key. */
         collapseItem(key: any): void;
 
-        /** @docid dxTreeViewMethods_getNodes */
+        /** Returns all nodes of the tree view. */
         getNodes(): Array<Object>;
 
-        /** @docid dxTreeViewMethods_selectAll */
+        /** Selects all widget items. */
         selectAll(): void;
 
-        /** @docid dxTreeViewMethods_unselectAll */
+        /** Unselects all widget items. */
         unselectAll(): void;
     }
 
     export interface dxMenuBaseOptions extends HierarchicalCollectionWidgetOptions {
-        /** @docid_ignore dxMenuBaseOptions_itemHoldTimeout */
-        /** @docid_ignore dxMenuBaseOptions_onItemHold */
-        /** @docid_ignore dxMenuBaseOptions_noDataText */
-        /** @docid_ignore dxMenuBaseOptions_selectedIndex */
-        /** @docid_ignore dxMenuBaseOptions_selectedItemKeys */
-        /** @docid_ignore dxMenuBaseOptions_keyExpr */
-        /** @docid_ignore dxMenuBaseOptions_parentIdExpr */
-        /** @docid_ignore dxMenuBaseOptions_expandedExpr */
-        /** @docid_ignore dxMenuBaseItemTemplate_beginGroup */
+        
+        
+        
+        
+        
+        
+        
+        
+        
 
-        /** @docid dxMenuBaseOptions_animation */
+        /** Configures widget visibility animations. This object contains two fields: show and hide. */
         animation?: {
-            /** @docid dxMenuBaseOptions_animation_show */
+            /** An object that defines the animation options used when the widget is being shown. */
             show?: fx.AnimationOptions;
 
-            /** @docid dxMenuBaseOptions_animation_hide */
+            /** An object that defines the animation options used when the widget is being hidden. */
             hide?: fx.AnimationOptions;
         };
 
-        /** @docid dxMenuBaseOptions_activeStateEnabled */
+        /** A Boolean value specifying whether or not the widget changes its state when interacting with a user. */
         activeStateEnabled?: boolean;
 
-        /** @docid dxMenuBaseOptions_cssClass */
+        /** Specifies the name of the CSS class to be applied to the root menu level and all submenus. */
         cssClass?: string;
 
-        /** @docid dxMenuBaseOptions_items */
+        /** Holds an array of menu items. */
         items?: Array<any>;
 
-        /** @docid dxMenuBaseOptions_selectionByClick */
+        /**
+      * Specifies whether or not an item becomes selected if an end-user clicks it.
+      * @deprecated Use the selectByClick option instead.
+      */
         selectionByClick?: boolean;
 
-        /** @docid dxMenuBaseOptions_selectByClick */
+        /** Specifies whether or not an item becomes selected if a user clicks it. */
         selectByClick?: boolean;
 
-        /** @docid dxMenuBaseOptions_selectionMode */
+        /** Specifies the selection mode supported by the menu. */
         selectionMode?: string;
 
-        /** @docid dxMenuBaseOptions_showSubmenuMode */
+        /** Specifies options of submenu showing and hiding. */
         showSubmenuMode?: {
-            /** @docid dxMenuBaseOptions_showSubmenuMode_name */
+            /** Specifies the mode name. */
             name?: string;
 
-            /** @docid dxMenuBaseOptions_showSubmenuMode_delay */
+            /** Specifies the delay of submenu show and hiding. */
             delay?: {
-                /** @docid dxMenuBaseOptions_showSubmenuMode_delay_show */
+                /** The time span after which the submenu is shown. */
                 show?: number;
 
-                /** @docid dxMenuBaseOptions_showSubmenuMode_delay_hide */
+                /** The time span after which the submenu is hidden. */
                 hide?: number;
             };
         };
     }
 
-    /** @docid dxMenuBase */
+    
     export class dxMenuBase extends HierarchicalCollectionWidget {
         constructor(element: JQuery, options?: dxMenuBaseOptions);
         constructor(element: Element, options?: dxMenuBaseOptions);
 
-        /** @docid dxMenuBaseMethods_selectItem */
+        /** Selects the specified item. */
         selectItem(itemElement: any): void;
 
-        /** @docid dxMenuBaseMethods_unselectItem */
+        /** Cancels the selection of the specified item. */
         unselectItem(itemElement: any): void;
     }
 
     export interface dxMenuOptions extends dxMenuBaseOptions {
-        /** @docid_ignore dxMenuOptions_onItemReordered */
-        /** @docid_ignore dxMenuOptions_onSelectionChange */
-        /** @docid_ignore dxMenuOptions_selectedItems */
+        
+        
+        
 
-        /** @docid dxMenuOptions_hideSubmenuOnMouseLeave */
+        /** Specifies whether or not the submenu is hidden when the mouse pointer leaves it. */
         hideSubmenuOnMouseLeave?: boolean;
 
-        /** @docid dxMenuOptions_orientation */
+        /** Specifies whether the menu has horizontal or vertical orientation. */
         orientation?: string;
 
-        /** @docid dxMenuOptions_showFirstSubmenuMode */
+        /** Specifies options for showing and hiding the first level submenu. */
         showFirstSubmenuMode?: {
-            /** @docid dxMenuOptions_showFirstSubmenuMode_name */
+            /** Specifies the mode name. */
             name?: string;
 
-            /** @docid dxMenuOptions_showFirstSubmenuMode_delay */
+            /** Specifies the delay in submenu showing and hiding. */
             delay?: {
-                /** @docid dxMenuOptions_showFirstSubmenuMode_delay_show */
+                /** The time span after which the submenu is shown. */
                 show?: number;
 
-                /** @docid dxMenuOptions_showFirstSubmenuMode_delay_hide */
+                /** The time span after which the submenu is hidden. */
                 hide?: number;
             };
         };
 
-        /** @docid dxMenuOptions_submenuDirection */
+        /** Specifies the direction at which the submenus are displayed. */
         submenuDirection?: string;
 
-        /** @docid dxMenuOptions_onSubmenuHidden */
+        /** A handler for the submenuHidden event. */
         onSubmenuHidden?: Function;
 
-        /** @docid dxMenuOptions_adaptivityEnabled */
+        /** Specifies whether adaptive widget rendering is enabled on small screens. Applies only if the orientation is "horizontal". */
         adaptivityEnabled?: boolean;
 
-        /** @docid dxMenuOptions_onSubmenuHiding */
+        /** A handler for the submenuHiding event. */
         onSubmenuHiding?: Function;
 
-        /** @docid dxMenuOptions_onSubmenuShowing */
+        /** A handler for the submenuShowing event. */
         onSubmenuShowing?: Function;
 
-        /** @docid dxMenuOptions_onSubmenuShown */
+        /** A handler for the submenuShown event. */
         onSubmenuShown?: Function;
     }
 
-    /** @docid dxMenu */
+    /** The Menu widget is a panel with clickable items. A click on an item opens a drop-down menu, which can contain several submenus. */
     export class dxMenu extends dxMenuBase {
         constructor(element: JQuery, options?: dxMenuOptions);
         constructor(element: Element, options?: dxMenuOptions);
 
-        /** @docid_ignore dxMenuBaseItemTemplate_disabled */
-        /** @docid_ignore dxMenuBaseItemTemplate_html */
-        /** @docid_ignore dxMenuBaseItemTemplate_icon */
-        /** @docid_ignore dxMenuBaseItemTemplate_iconSrc */
-        /** @docid_ignore dxMenuBaseItemTemplate_items */
-        /** @docid_ignore dxMenuBaseItemTemplate_selectable */
-        /** @docid_ignore dxMenuBaseItemTemplate_selected */
-        /** @docid_ignore dxMenuBaseItemTemplate_text */
-        /** @docid_ignore dxMenuBaseItemTemplate_visible */
-        /** @docid_ignore dxMenuBaseItemTemplate_closeMenuOnClick */
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
     }
 
     export interface dxContextMenuOptions extends dxMenuBaseOptions {
-        /** @docid_ignore dxContextMenuOptions_itemHoldAction */
-        /** @docid_ignore dxContextMenuOptions_onItemReordered */
+        
+        
 
-        /** @docid dxContextMenuOptions_showEvent */
+        /** Specifies options for displaying the widget. */
         showEvent?: {
-            /** @docid dxContextMenuOptions_showEvent_name */
+            /** Specifies the event names on which the widget is shown. */
             name?: String;
 
-            /** @docid dxContextMenuOptions_showEvent_delay */
+            /** The delay in milliseconds after which the widget is displayed. */
             delay?: Number;
         };
 
-        /** @docid dxContextMenuOptions_closeOnOutsideClick */
+        /** A Boolean value specifying whether or not the widget is closed if a user clicks outside of the context menu. */
         closeOnOutsideClick?: any;
 
-        /** @docid dxContextMenuOptions_onHidden */
+        /** A handler for the hidden event. */
         onHidden?: Function;
 
-        /** @docid dxContextMenuOptions_onHiding */
+        /** A handler for the hiding event. */
         onHiding?: Function;
 
-        /** @docid dxContextMenuOptions_onPositioning */
+        /** A handler for the positioning event. */
         onPositioning?: Function;
 
-        /** @docid dxContextMenuOptions_onShowing */
+        /** A handler for the showing event. */
         onShowing?: Function;
 
-        /** @docid dxContextMenuOptions_onShown */
+        /** A handler for the shown event. */
         onShown?: Function;
 
-        /** @docid dxContextMenuOptions_position */
+        /** An object defining widget positioning options. */
         position?: PositionOptions;
 
-        /** @docid dxContextMenuOptions_submenuDirection */
+        /** Specifies the direction at which submenus are displayed. */
         submenuDirection?: string;
 
-        /** @docid dxContextMenuOptions_target */
+        /** The target element associated with the context menu. */
         target?: any;
 
-        /** @docid dxContextMenuOptions_visible */
+        /** A Boolean value specifying whether or not the widget is visible. */
         visible?: boolean;
     }
 
-    /** @docid dxContextMenu */
+    /** The ContextMenu widget displays a single- or multi-level context menu. An end user invokes this menu by a right click or a long press. */
     export class dxContextMenu extends dxMenuBase {
         constructor(element: JQuery, options?: dxContextMenuOptions);
         constructor(element: Element, options?: dxContextMenuOptions);
 
-        /** @docid dxContextMenuMethods_toggle */
+        /** Toggles the visibility of the widget. */
         toggle(showing: boolean): JQueryPromise<void>;
 
-        /** @docid dxContextMenuMethods_show */
+        /** Shows the widget. */
         show(): JQueryPromise<void>;
 
-        /** @docid dxContextMenuMethods_hide */
+        /** Hides the widget. */
         hide(): JQueryPromise<void>;
 
     }
 
     export interface dxRemoteOperations {
-        /** @docid dxDataGridOptions_remoteOperations_filtering */
+        /** Specifies whether or not filtering must be performed on the server side. */
         filtering?: boolean;
 
-        /** @docid dxDataGridOptions_remoteOperations_paging */
+        /** Specifies whether or not paging must be performed on the server side. */
         paging?: boolean;
 
-        /** @docid dxDataGridOptions_remoteOperations_sorting */
+        /** Specifies whether or not sorting must be performed on the server side. */
         sorting?: boolean;
 
-        /** @docid dxDataGridOptions_remoteOperations_grouping */
+        /** Specifies whether or not grouping must be performed on the server side. */
         grouping?: boolean;
 
-        /** @docid dxDataGridOptions_remoteOperations_groupPaging */
+        /** Specifies whether or not paging by groups must be performed on the server side. */
         groupPaging?: boolean;
 
-        /** @docid dxDataGridOptions_remoteOperations_summary */
+        /** Specifies whether or not summaries calculation must be performed on the server. */
         summary?: boolean;
     }
 
     export interface dxDataGridRow {
-        /** @docid_ignore dxDataGridRowObject_data */
-        /** @docid_ignore dxDataGridRowObject_key */
-        /** @docid_ignore dxDataGridRowObject_rowIndex */
-        /** @docid_ignore dxDataGridRowObject_rowType */
-        /** @docid_ignore dxDataGridRowObject_groupIndex */
-        /** @docid_ignore dxDataGridRowObject_isExpanded */
-        /** @docid_ignore dxDataGridRowObject_isSelected */
-        /** @docid_ignore dxDataGridRowObject_isEditing */
-        /** @docid_ignore dxDataGridRowObject_values */
+        
+        
+        
+        
+        
+        
+        
+        
+        
 
         data: Object;
 
@@ -1005,355 +1023,358 @@ declare module DevExpress.ui {
     }
 
     export interface dxDataGridColumn {
-        /** @docid_ignore dxDataGridOptions_columns_resized*/
-        /** @docid_ignore dxDataGridOptions_columns_grouped*/
+        
+        
 
-        /** @docid dxDataGridOptions_columns_alignment */
+        
         alignment?: string;
 
-        /** @docid dxDataGridOptions_columns_allowEditing */
+        
         allowEditing?: boolean;
 
-        /** @docid dxDataGridOptions_columns_allowFiltering */
+        
         allowFiltering?: boolean;
 
-        /** @docid dxDataGridOptions_columns_allowHeaderFiltering */
+        
         allowHeaderFiltering?: boolean;
 
-        /** @docid dxDataGridOptions_columns_allowFixing */
+        
         allowFixing?: boolean;
 
-        /** @docid dxDataGridOptions_columns_allowSearch */
+        
         allowSearch?: boolean;
 
-        /** @docid dxDataGridOptions_columns_allowGrouping */
+        /** Specifies whether the user can group data by values of this column. Applies only when grouping is enabled. */
         allowGrouping?: boolean;
 
-        /** @docid dxDataGridOptions_columns_allowHiding */
+        
         allowHiding?: boolean;
 
-        /** @docid dxDataGridOptions_columns_allowReordering */
+        
         allowReordering?: boolean;
 
-        /** @docid dxDataGridOptions_columns_allowResizing */
+        
         allowResizing?: boolean;
 
-        /** @docid dxDataGridOptions_columns_allowSorting */
+        
         allowSorting?: boolean;
 
-        /** @docid dxDataGridOptions_columns_allowExporting */
+        /** Specifies whether data from this column should be exported. */
         allowExporting?: boolean;
 
-        /** @docid dxDataGridOptions_columns_autoExpandGroup */
+        /** Specifies whether groups appear expanded or not when records are grouped by a specific column. Setting this option makes sense only when grouping is allowed for this column. */
         autoExpandGroup?: boolean;
 
-        /** @docid dxDataGridOptions_columns_calculateCellValue */
+        
         calculateCellValue?: (rowData: Object) => string;
 
-        /** @docid dxDataGridOptions_columns_setCellValue */
+        
         setCellValue?: (rowData: Object, value: any) => void;
 
-        /** @docid dxDataGridOptions_columns_calculateFilterExpression */
+        
         calculateFilterExpression?: (filterValue: any, selectedFilterOperation: string, target: string) => any;
 
-        /** @docid dxDataGridOptions_columns_caption */
+        
         caption?: string;
 
-        /** @docid dxDataGridOptions_columns_cellTemplate */
+        
         cellTemplate?: any;
 
-        /** @docid dxDataGridOptions_columns_cssClass */
+        
         cssClass?: string;
 
-        /** @docid dxDataGridOptions_columns_calculateDisplayValue */
+        
         calculateDisplayValue?: any;
 
-        /** @docid dxDataGridOptions_columns_calculateGroupValue */
+        /** Specifies a field name or a function that returns a field name or a value to be used for grouping column cells. */
         calculateGroupValue?: any;
 
-        /** @docid dxDataGridOptions_columns_calculateSortValue */
+        
         calculateSortValue?: any;
 
-        /** @docid dxDataGridOptions_columns_customizeText */
+        
         customizeText?: (cellInfo: { value: any; valueText: string; target: string; groupInterval: any }) => string;
 
-        /** @docid dxDataGridOptions_columns_dataField */
+        
         dataField?: string;
 
-        /** @docid dxDataGridOptions_columns_dataType */
+        
         dataType?: string;
 
-        /** @docid dxDataGridOptions_columns_editCellTemplate */
+        
         editCellTemplate?: any;
 
-        /** @docid dxDataGridOptions_columns_editorOptions */
+        
         editorOptions?: Object;
 
-        /** @docid dxDataGridOptions_columns_encodeHtml */
+        
         encodeHtml?: boolean;
 
-        /** @docid dxDataGridOptions_columns_falseText */
+        
         falseText?: string;
 
-        /** @docid dxDataGridOptions_columns_filterOperations */
+        
         filterOperations?: Array<any>;
 
-        /** @docid dxDataGridOptions_columns_filterValue */
+        
         filterValue?: any;
 
-        /** @docid dxDataGridOptions_columns_filterValues */
+        
         filterValues?: Array<any>;
 
-        /** @docid dxDataGridOptions_columns_filterType */
+        
         filterType?: string;
 
-        /** @docid dxDataGridOptions_columns_fixed */
+        
         fixed?: boolean;
 
-        /** @docid dxDataGridOptions_columns_hidingPriority */
+        
         hidingPriority?: number;
 
-        /** @docid dxDataGridOptions_columns_fixedPosition */
+        
         fixedPosition?: string;
 
-        /** @docid dxDataGridOptions_columns_format */
+        
         format?: any;
 
-        /** @docid dxDataGridOptions_columns_groupCellTemplate */
+        /** Specifies a custom template for the group cell of a grid column. */
         groupCellTemplate?: any;
 
-        /** @docid dxDataGridOptions_columns_groupIndex */
+        /** Specifies the index of a column when grid records are grouped by the values of this column. */
         groupIndex?: number;
 
-        /** @docid dxDataGridOptions_columns_headerCellTemplate */
+        
         headerCellTemplate?: any;
 
-        /** @docid dxDataGridOptions_columns_lookup */
+        
         lookup?: {
-            /** @docid dxDataGridOptions_columns_lookup_allowClearing */
+            
             allowClearing?: boolean;
 
-            /** @docid dxDataGridOptions_columns_lookup_dataSource */
+            
             dataSource?: any;
 
-            /** @docid dxDataGridOptions_columns_lookup_displayExpr */
+            
             displayExpr?: any;
 
-            /** @docid dxDataGridOptions_columns_lookup_valueExpr */
+            
             valueExpr?: string;
         };
 
-        /** @docid dxDataGridOptions_columns_headerFilter */
+        
         headerFilter?: {
-            /** @docid dxDataGridOptions_columns_headerFilter_dataSource */
+            
             dataSource?: any;
 
-            /** @docid dxDataGridOptions_columns_headerFilter_groupInterval */
+            
             groupInterval?: any;
         };
 
-        /** @docid dxDataGridOptions_columns_precision */
+        /**
+     * Specifies a precision for formatted values displayed in a column.
+     * @deprecated Use the format.precision option instead.
+     */
         precision?: number;
 
-        /** @docid dxDataGridOptions_columns_selectedFilterOperation */
+        
         selectedFilterOperation?: string;
 
-        /** @docid dxDataGridOptions_columns_showEditorAlways */
+        
         showEditorAlways?: boolean;
 
-        /** @docid dxDataGridOptions_columns_showWhenGrouped */
+        /** Specifies whether or not to display the column when grid records are grouped by it. */
         showWhenGrouped?: boolean;
 
-        /** @docid dxDataGridOptions_columns_sortIndex */
+        
         sortIndex?: number;
 
-        /** @docid dxDataGridOptions_columns_sortOrder */
+        
         sortOrder?: string;
 
-        /** @docid dxDataGridOptions_columns_trueText */
+        
         trueText?: string;
 
-        /** @docid dxDataGridOptions_columns_visible */
+        
         visible?: boolean;
 
-        /** @docid dxDataGridOptions_columns_visibleIndex */
+        
         visibleIndex?: number;
 
-        /** @docid dxDataGridOptions_columns_width */
+        
         width?: any;
 
-        /** @docid dxDataGridOptions_columns_validationRules */
+        
         validationRules?: Array<Object>;
 
-        /** @docid dxDataGridOptions_columns_showInColumnChooser */
+        
         showInColumnChooser?: boolean;
 
-        /** @docid dxDataGridOptions_columns_name */
+        
         name?: string;
 
-        /** @docid dxDataGridOptions_columns_formItem */
+        
         formItem?: DevExpress.ui.dxFormItem;
 
-        /** @docid dxDataGridOptions_columns_columns */
+        /** An array of grid columns. */
         columns?: Array<dxDataGridColumn>;
 
-        /** @docid dxDataGridOptions_columns_ownerBand */
+        
         ownerBand?: number;
 
-        /** @docid dxDataGridOptions_columns_isBand */
+        
         isBand?: boolean;
     }
 
     export interface dxDataGridOptions extends WidgetOptions {
-        /** @docid_ignore dxDataGridOptions_regenerateColumnsByVisibleItems */
+        
 
-        /** @docid dxDataGridOptions_showBorders */
+        
         showBorders?: boolean;
-        /** @docid dxDataGridOptions_errorRowEnabled */
+        
         errorRowEnabled?: boolean;
 
-        /** @docid dxDataGridOptions_onRowValidating */
+        
         onRowValidating?: (e: Object) => void;
 
-        /** @docid dxDataGridOptions_onContextMenuPreparing */
+        /** A handler for the contextMenuPreparing event. */
         onContextMenuPreparing?: (e: Object) => void;
 
-        /** @docid dxDataGridOptions_onToolbarPreparing */
+        
         onToolbarPreparing?: (e: Object) => void;
 
-        /** @docid dxDataGridOptions_onInitNewRow */
+        
         onInitNewRow?: (e: { data: Object }) => void;
 
-        /** @docid dxDataGridOptions_onRowInserted */
+        
         onRowInserted?: (e: { data: Object; key: any }) => void;
 
-        /** @docid dxDataGridOptions_onRowInserting */
+        
         onRowInserting?: (e: { data: Object; cancel: any }) => void;
 
-        /** @docid dxDataGridOptions_onRowRemoved */
+        
         onRowRemoved?: (e: { data: Object; key: any }) => void;
 
-        /** @docid dxDataGridOptions_onRowRemoving */
+        
         onRowRemoving?: (e: { data: Object; key: any; cancel: any }) => void;
 
-        /** @docid dxDataGridOptions_onRowUpdated */
+        
         onRowUpdated?: (e: { data: Object; key: any }) => void;
 
-        /** @docid dxDataGridOptions_onRowUpdating */
+        
         onRowUpdating?: (e: { oldData: Object; newData: Object; key: any; cancel: any }) => void;
 
-        /** @docid dxDataGridOptions_cellHintEnabled */
+        
         cellHintEnabled?: boolean;
 
-        /** @docid dxDataGridOptions_columnHidingEnabled */
+        
         columnHidingEnabled?: boolean;
 
-        /** @docid dxDataGridOptions_allowColumnReordering */
+        
         allowColumnReordering?: boolean;
 
-        /** @docid dxDataGridOptions_allowColumnResizing */
+        
         allowColumnResizing?: boolean;
 
-        /** @docid dxDataGridOptions_onCellClick */
+        /** A handler for the cellClick event. */
         onCellClick?: any;
 
-        /** @docid dxDataGridOptions_onCellHoverChanged */
+        /** A handler for the cellHoverChanged event. */
         onCellHoverChanged?: (e: Object) => void;
 
-        /** @docid dxDataGridOptions_onCellPrepared */
+        /** A handler for the cellPrepared event. */
         onCellPrepared?: (e: Object) => void;
 
-        /** @docid dxDataGridOptions_onAdaptiveDetailRowPreparing */
+        
         onAdaptiveDetailRowPreparing?: (e: Object) => void;
 
-        /** @docid dxDataGridOptions_columnAutoWidth */
+        
         columnAutoWidth?: boolean;
 
-        /** @docid dxDataGridOptions_columnChooser */
+        
         columnChooser?: {
-            /** @docid dxDataGridOptions_columnChooser_emptyPanelText */
+            
             emptyPanelText?: string;
 
-            /** @docid dxDataGridOptions_columnChooser_enabled */
+            
             enabled?: boolean;
 
-            /** @docid dxDataGridOptions_columnChooser_mode */
+            
             mode?: string;
 
-            /** @docid dxDataGridOptions_columnChooser_height */
+            
             height?: number;
 
-            /** @docid dxDataGridOptions_columnChooser_title */
+            
             title?: string;
 
-            /** @docid dxDataGridOptions_columnChooser_width */
+            
             width?: number;
         };
 
-        /** @docid dxDataGridOptions_columnFixing */
+        
         columnFixing?: {
-            /** @docid dxDataGridOptions_columnFixing_enabled */
+            
             enabled?: boolean;
 
-            /** @docid dxDataGridOptions_columnFixing_texts */
+            
             texts?: {
-                /** @docid dxDataGridOptions_columnFixing_texts_fix */
+                
                 fix?: string;
 
-                /** @docid dxDataGridOptions_columnFixing_texts_unfix */
+                
                 unfix?: string;
 
-                /** @docid dxDataGridOptions_columnFixing_texts_leftPosition */
+                
                 leftPosition?: string;
 
-                /** @docid dxDataGridOptions_columnFixing_texts_rightPosition */
+                
                 rightPosition?: string;
             };
         };
 
-        /** @docid dxDataGridOptions_headerFilter */
+        
         headerFilter?: {
-            /** @docid dxDataGridOptions_headerFilter_visible */
+            
             visible?: boolean;
 
-            /** @docid dxDataGridOptions_headerFilter_height */
+            
             height?: number;
 
-            /** @docid dxDataGridOptions_headerFilter_width */
+            
             width?: number;
 
-            /** @docid dxDataGridOptions_headerFilter_texts */
+            
             texts?: {
-                /** @docid dxDataGridOptions_headerFilter_texts_emptyValue */
+                
                 emptyValue?: string;
 
-                /** @docid dxDataGridOptions_headerFilter_texts_ok */
+                
                 ok?: string;
 
-                /** @docid dxDataGridOptions_headerFilter_texts_cancel */
+                
                 cancel?: string;
             }
         };
 
-        /** @docid dxDataGridOptions_columns */
+        /** An array of grid columns. */
         columns?: Array<dxDataGridColumn>;
 
-        /** @docid dxDataGridOptions_onContentReady */
+        
         onContentReady?: Function;
 
-        /** @docid dxDataGridOptions_customizeColumns */
+        /** Specifies a function that customizes grid columns after they are created. */
         customizeColumns?: (columns: Array<dxDataGridColumn>) => void;
 
-        /** @docid dxDataGridOptions_customizeExportData */
+        /** Customizes grid columns and data before exporting. */
         customizeExportData?: (columns: Array<dxDataGridColumn>, rows: Array<dxDataGridRow>) => void;
 
-        /** @docid dxDataGridOptions_dataSource */
+        
         dataSource?: any;
 
-        /** @docid dxDataGridOptions_cacheEnabled */
+        
         cacheEnabled?: boolean;
 
-        /** @docid dxDataGridOptions_onEditingStart */
+        /** A handler for the editingStart event. */
         onEditingStart?: (e: {
             data: Object;
             key: any;
@@ -1361,392 +1382,392 @@ declare module DevExpress.ui {
             column: dxDataGridColumn
         }) => void;
 
-        /** @docid dxDataGridOptions_onEditorPrepared */
+        /** A handler for the editorPrepared event. */
         onEditorPrepared?: (e: Object) => void;
 
-        /** @docid dxDataGridOptions_onEditorPreparing */
+        /** A handler for the editorPreparing event. */
         onEditorPreparing?: (e: Object) => void;
 
-        /** @docid dxDataGridOptions_editing */
+        /** Configures editing. */
         editing?: {
-            /** @docid dxDataGridOptions_editing_editMode */
+            
             editMode?: string;
 
-            /** @docid dxDataGridOptions_editing_editEnabled */
+            
             editEnabled?: boolean;
 
-            /** @docid dxDataGridOptions_editing_insertEnabled */
+            
             insertEnabled?: boolean;
 
-            /** @docid dxDataGridOptions_editing_removeEnabled */
+            
             removeEnabled?: boolean;
 
-            /** @docid dxDataGridOptions_editing_mode */
+            
             mode?: string;
 
-            /** @docid dxDataGridOptions_editing_allowUpdating */
+            
             allowUpdating?: boolean;
 
-            /** @docid dxDataGridOptions_editing_allowAdding */
+            
             allowAdding?: boolean;
 
-            /** @docid dxDataGridOptions_editing_allowDeleting */
+            
             allowDeleting?: boolean;
 
-            /** @docid dxDataGridOptions_editing_form */
+            
             form?: DevExpress.ui.dxFormOptions;
 
-            /** @docid dxDataGridOptions_editing_texts */
+            /** Contains options that specify texts for editing-related UI elements. */
             texts?: {
-                /** @docid dxDataGridOptions_editing_texts_saveAllChanges */
+                
                 saveAllChanges?: string;
 
-                /** @docid dxDataGridOptions_editing_texts_cancelRowChanges */
+                
                 cancelRowChanges?: string;
 
-                /** @docid dxDataGridOptions_editing_texts_cancelAllChanges */
+                
                 cancelAllChanges?: string;
 
-                /** @docid dxDataGridOptions_editing_texts_confirmDeleteMessage */
+                
                 confirmDeleteMessage?: string;
 
-                /** @docid dxDataGridOptions_editing_texts_confirmDeleteTitle */
+                
                 confirmDeleteTitle?: string;
 
-                /** @docid dxDataGridOptions_editing_texts_validationCancelChanges */
+                
                 validationCancelChanges?: string;
 
-                /** @docid dxDataGridOptions_editing_texts_deleteRow */
+                
                 deleteRow?: string;
 
-                /** @docid dxDataGridOptions_editing_texts_addRow */
+                
                 addRow?: string;
 
-                /** @docid dxDataGridOptions_editing_texts_editRow */
+                
                 editRow?: string;
 
-                /** @docid dxDataGridOptions_editing_texts_saveRowChanges */
+                
                 saveRowChanges?: string;
 
-                /** @docid dxDataGridOptions_editing_texts_undeleteRow */
+                
                 undeleteRow?: string;
             };
         };
 
-        /** @docid dxDataGridOptions_filterRow */
+        
         filterRow?: {
 
-            /** @docid dxDataGridOptions_filterRow_applyFilter */
+            
             applyFilter?: string;
 
-            /** @docid dxDataGridOptions_filterRow_applyFilterText */
+            
             applyFilterText?: string;
 
-            /** @docid dxDataGridOptions_filterRow_operationDescriptions */
+            
             operationDescriptions?: {
-                /** @docid dxDataGridOptions_filterRow_operationDescriptions_equal */
+                
                 equal?: string;
-                /** @docid dxDataGridOptions_filterRow_operationDescriptions_notEqual */
+                
                 notEqual?: string;
-                /** @docid dxDataGridOptions_filterRow_operationDescriptions_lessThan */
+                
                 lessThan?: string;
-                /** @docid dxDataGridOptions_filterRow_operationDescriptions_lessThanOrEqual */
+                
                 lessThanOrEqual?: string;
-                /** @docid dxDataGridOptions_filterRow_operationDescriptions_greaterThan */
+                
                 greaterThan?: string;
-                /** @docid dxDataGridOptions_filterRow_operationDescriptions_greaterThanOrEqual */
+                
                 greaterThanOrEqual?: string;
-                /** @docid dxDataGridOptions_filterRow_operationDescriptions_startsWith */
+                
                 startsWith?: string;
-                /** @docid dxDataGridOptions_filterRow_operationDescriptions_contains */
+                
                 contains?: string;
-                /** @docid dxDataGridOptions_filterRow_operationDescriptions_notContains */
+                
                 notContains?: string;
-                /** @docid dxDataGridOptions_filterRow_operationDescriptions_endsWith */
+                
                 endsWith?: string;
-                /** @docid dxDataGridOptions_filterRow_operationDescriptions_between */
+                
                 between?: string;
             };
 
-            /** @docid dxDataGridOptions_filterRow_resetOperationText */
+            
             resetOperationText?: string;
 
-            /** @docid dxDataGridOptions_filterRow_showAllText */
+            
             showAllText?: string;
 
-            /** @docid dxDataGridOptions_filterRow_betweenStartText */
+            
             betweenStartText?: string;
 
-            /** @docid dxDataGridOptions_filterRow_betweenEndText */
+            
             betweenEndText?: string;
 
-            /** @docid dxDataGridOptions_filterRow_showOperationChooser */
+            
             showOperationChooser?: boolean;
 
-            /** @docid dxDataGridOptions_filterRow_visible */
+            
             visible?: boolean;
         };
 
-        /** @docid dxDataGridOptions_grouping */
+        /** Specifies grouping settings and the behavior of grouped grid records. */
         grouping?: {
-            /** @docid dxDataGridOptions_grouping_allowCollapsing */
+            /** Specifies whether the user can collapse grouped records in a grid or not. */
             allowCollapsing?: boolean;
 
-            /** @docid dxDataGridOptions_grouping_autoExpandAll */
+            /** Specifies whether groups appear expanded or not. */
             autoExpandAll?: boolean;
 
-            /** @docid dxDataGridOptions_grouping_contextMenuEnabled */
+            /** Enables the user to group data using the context menu. */
             contextMenuEnabled?: boolean;
 
-            /** @docid dxDataGridOptions_grouping_expandMode */
+            /** Specifies the event on which a group will be expanded/collapsed. */
             expandMode?: string;
 
-            /** @docid dxDataGridOptions_grouping_groupContinuedMessage */
+            
                 groupContinuedMessage?: string;
 
-            /** @docid dxDataGridOptions_grouping_groupContinuesMessage */
+            
             groupContinuesMessage?: string;
 
-            /** @docid dxDataGridOptions_grouping_texts */
+            /** Defines the texts of grouping-related visual elements. */
             texts?: {
-                /** @docid dxDataGridOptions_grouping_texts_groupContinuedMessage */
+                /** Specifies the message displayed in a group row when the corresponding group is continued from the previous page. */
                 groupContinuedMessage?: string;
 
-                /** @docid dxDataGridOptions_grouping_texts_groupContinuesMessage */
+                /** Specifies the message displayed in a group row when the corresponding group continues on the next page. */
                 groupContinuesMessage?: string;
 
-                /** @docid dxDataGridOptions_grouping_texts_groupByThisColumn */
+                /** Specifies the text of the context menu item that groups data by a specific column. */
                 groupByThisColumn?: string;
 
-                /** @docid dxDataGridOptions_grouping_texts_ungroup */
+                /** Specifies the text of the context menu item that clears grouping settings of a specific column. */
                 ungroup?: string;
 
-                /** @docid dxDataGridOptions_grouping_texts_ungroupAll */
+                /** Specifies the text of the context menu item that clears grouping settings of all columns. */
                 ungroupAll?: string;
             }
         };
 
-        /** @docid dxDataGridOptions_groupPanel */
+        /** Configures the group panel. */
         groupPanel?: {
-            /** @docid dxDataGridOptions_groupPanel_allowColumnDragging */
+            /** Specifies whether columns can be dragged onto or from the group panel. */
             allowColumnDragging?: boolean;
 
-            /** @docid dxDataGridOptions_groupPanel_emptyPanelText */
+            /** Specifies text displayed by the group panel when it does not contain any columns. */
             emptyPanelText?: string;
 
-            /** @docid dxDataGridOptions_groupPanel_visible */
+            /** Specifies whether the group panel is visible or not. */
             visible?: any;
         };
 
-        /** @docid dxDataGridOptions_loadPanel */
+        
         loadPanel?: {
-            /** @docid dxDataGridOptions_loadPanel_enabled */
+            
             enabled?: any;
 
-            /** @docid dxDataGridOptions_loadPanel_height */
+            
             height?: number;
 
-            /** @docid dxDataGridOptions_loadPanel_indicatorSrc */
+            
             indicatorSrc?: string;
 
-            /** @docid dxDataGridOptions_loadPanel_showIndicator */
+            
             showIndicator?: boolean;
 
-            /** @docid dxDataGridOptions_loadPanel_showPane */
+            
             showPane?: boolean;
 
-            /** @docid dxDataGridOptions_loadPanel_text */
+            
             text?: string;
 
-            /** @docid dxDataGridOptions_loadPanel_width */
+            
             width?: number;
         };
 
-        /** @docid dxDataGridOptions_noDataText */
+        
         noDataText?: string;
 
-        /** @docid dxDataGridOptions_pager */
+        /** Specifies the options of a grid pager. */
         pager?: {
-            /** @docid dxDataGridOptions_pager_allowedPageSizes */
+            /** Specifies the page sizes that can be selected at runtime. */
             allowedPageSizes?: any;
 
-            /** @docid dxDataGridOptions_pager_showPageSizeSelector */
+            /** Specifies whether to show the page size selector or not. */
             showPageSizeSelector?: boolean;
 
-            /** @docid dxDataGridOptions_pager_visible */
+            /** Specifies whether to show the pager or not. */
             visible?: any;
 
-            /** @docid dxDataGridOptions_pager_infoText */
+            /** Specifies the text accompanying the page navigator. */
             infoText?: string;
 
-            /** @docid dxDataGridOptions_pager_showInfo */
+            /** Specifies whether or not to display the text accompanying the page navigator. This text is specified by the infoText option. */
             showInfo?: boolean;
 
-            /** @docid dxDataGridOptions_pager_showNavigationButtons */
+            /** Specifies whether or not to display buttons that switch the grid to the previous or next page. */
             showNavigationButtons?: boolean;
         };
 
-        /** @docid dxDataGridOptions_paging */
+        /** Specifies paging options. */
         paging?: {
-            /** @docid dxDataGridOptions_paging_enabled */
+            /** Specifies whether DataGrid loads data page by page or all at once. */
             enabled?: boolean;
 
-            /** @docid dxDataGridOptions_paging_pageIndex */
+            /** Specifies the grid page that should be displayed by default. */
             pageIndex?: number;
 
-            /** @docid dxDataGridOptions_paging_pageSize */
+            /** Specifies the size of grid pages. */
             pageSize?: number;
         };
 
-        /** @docid dxDataGridOptions_rowAlternationEnabled */
+        
         rowAlternationEnabled?: boolean;
 
-        /** @docid dxDataGridOptions_twoWayBindingEnabled */
+        
         twoWayBindingEnabled?: boolean;
 
-        /** @docid dxDataGridOptions_onRowClick */
+        /** A handler for the rowClick event. */
         onRowClick?: any;
 
-        /** @docid dxDataGridOptions_onRowPrepared */
+        /** A handler for the rowPrepared event. */
         onRowPrepared?: (e: Object) => void;
 
-        /** @docid dxDataGridOptions_rowTemplate */
+        /** Specifies a custom template for grid rows. */
         rowTemplate?: any;
 
-        /** @docid dxDataGridOptions_scrolling */
+        /** Configures scrolling. */
         scrolling?: {
-            /** @docid dxDataGridOptions_scrolling_mode */
+            /** Specifies the scrolling mode. */
             mode?: string;
 
-            /** @docid dxDataGridOptions_scrolling_preloadEnabled */
+            
             preloadEnabled?: boolean;
 
-            /** @docid dxDataGridOptions_scrolling_useNative */
+            
             useNative?: any;
 
-            /** @docid dxDataGridOptions_scrolling_showScrollbar */
+            
             showScrollbar?: string;
 
-            /** @docid dxDataGridOptions_scrolling_scrollByContent */
+            
             scrollByContent?: boolean;
 
-            /** @docid dxDataGridOptions_scrolling_scrollByThumb */
+            
             scrollByThumb?: boolean;
         };
 
-        /** @docid dxDataGridOptions_searchPanel */
+        
         searchPanel?: {
-            /** @docid dxDataGridOptions_searchPanel_highlightSearchText */
+            
             highlightSearchText?: boolean;
 
-            /** @docid dxDataGridOptions_searchPanel_highlightCaseSensitive */
+            
             highlightCaseSensitive?: boolean;
 
-            /** @docid dxDataGridOptions_searchPanel_placeholder */
+            
             placeholder?: string;
 
-            /** @docid dxDataGridOptions_searchPanel_visible */
+            
             visible?: boolean;
 
-            /** @docid dxDataGridOptions_searchPanel_searchVisibleColumnsOnly */
+            
             searchVisibleColumnsOnly?: boolean;
 
-            /** @docid dxDataGridOptions_searchPanel_width */
+            
             width?: number;
 
-            /** @docid dxDataGridOptions_searchPanel_text */
+            
             text?: string;
         };
 
-        /** @docid dxDataGridOptions_remoteOperations */
+        /** Specifies the operations that must be performed on the server side. */
         remoteOperations?: any;
 
-        /** @docid dxDataGridOptions_sortByGroupSummaryInfo */
+        /** Allows you to sort groups according to the values of group summary items. */
         sortByGroupSummaryInfo?: Array<{
-            /** @docid dxDataGridOptions_sortByGroupSummaryInfo_summaryItem */
+            /** Specifies the group summary item whose values must be used to sort groups. */
             summaryItem?: any;
 
-            /** @docid dxDataGridOptions_sortByGroupSummaryInfo_groupColumn */
+            /** Specifies the identifier of the column that must be used in grouping so that sorting by group summary item values be applied. */
             groupColumn?: string;
 
-            /** @docid dxDataGridOptions_sortByGroupSummaryInfo_sortOrder */
+            /** Specifies the sort order of group summary item values. */
             sortOrder?: string;
         }>;
 
-        /** @docid dxDataGridOptions_masterDetail */
+        /** Allows you to build a master-detail interface in the grid. */
         masterDetail?: {
-            /** @docid dxDataGridOptions_masterDetail_enabled */
+            /** Enables an end-user to expand/collapse detail sections. */
             enabled?: boolean;
 
-            /** @docid dxDataGridOptions_masterDetail_autoExpandAll */
+            /** Specifies whether detail sections appear expanded or collapsed. */
             autoExpandAll?: boolean;
 
-            /** @docid dxDataGridOptions_masterDetail_template */
+            /** Specifies the template for detail sections. */
             template?: any;
         };
 
-        /** @docid dxDataGridOptions_export */
+        /** Configures client-side export. */
         export?: {
-            /** @docid dxDataGridOptions_export_enabled */
+            /** Enables the client-side exporting feature. */
             enabled?: boolean;
-            /** @docid dxDataGridOptions_export_fileName */
+            /** Specifies a default name for the file to which grid data is exported. */
             fileName?: string;
-            /** @docid dxDataGridOptions_export_excelFilterEnabled */
+            /** Specifies whether to enable Excel filtering for the exported data in the resulting XLSX file. */
             excelFilterEnabled?: boolean;
-            /** @docid dxDataGridOptions_export_excelWrapTextEnabled */
+            /** Specifies whether to enable word wrapping for the exported data in the resulting XLSX file. */
             excelWrapTextEnabled?: boolean;
-            /** @docid dxDataGridOptions_export_proxyUrl */
+            /** Specifies the URL of the server-side proxy that streams the resulting file to the end user to enable export in IE9 and Safari browsers. */
             proxyUrl?: string;
-            /** @docid dxDataGridOptions_export_allowExportSelectedData */
+            /** Allows an end user to export selected rows only. */
             allowExportSelectedData?: boolean;
-            /** @docid dxDataGridOptions_export_texts */
+            /** Contains options that specify texts for the export-related commands and hints. */
             texts?: {
-                /** @docid dxDataGridOptions_export_texts_exportTo */
+                /** Specifies the hint of the Export button when the allowExportSelectedData option is true. */
                 exportTo?: string;
-                /** @docid dxDataGridOptions_export_texts_exportToExcel */
+                
                 exportToExcel?: string;
-                /** @docid dxDataGridOptions_export_texts_excelFormat */
+                
                 excelFormat?: string;
-                /** @docid dxDataGridOptions_export_texts_selectedRows */
+                
                 selectedRows?: string;
-                /** @docid dxDataGridOptions_export_texts_exportAll */
+                /** Specifies the text of the command that exports all data. */
                 exportAll?: string;
-                /** @docid dxDataGridOptions_export_texts_exportSelectedRows */
+                /** Specifies the text of the drop-down menu command that exports selected rows. */
                 exportSelectedRows?: string;
             }
         };
 
-        /** @docid dxDataGridOptions_selectedRowKeys */
+        
         selectedRowKeys?: Array<any>;
 
-        /** @docid dxDataGridOptions_selectionFilter */
+        /** Specifies filters for the rows that must be selected initially. Applies only if selection.deferred is true. */
         selectionFilter?: Object;
 
-        /** @docid dxDataGridOptions_selection */
+        /** Configures runtime selection. */
         selection?: {
-            /** @docid dxDataGridOptions_selection_showCheckBoxesMode*/
+            /** Specifies when to display check boxes in rows. Applies only if selection.mode is "multiple". */
             showCheckBoxesMode?: string;
 
-            /** @docid dxDataGridOptions_selection_allowSelectAll */
+            
             allowSelectAll?: boolean;
 
-            /** @docid dxDataGridOptions_selection_mode */
+            
             mode?: string;
 
-            /** @docid dxDataGridOptions_selection_maxFilterLengthInRequest */
+            
             maxFilterLengthInRequest?: number;
 
-            /** @docid dxDataGridOptions_selection_selectAllMode */
+            /** Specifies the mode in which all the records are selected. Applies only if selection.allowSelectAll is true. */
             selectAllMode?: string;
 
-            /** @docid dxDataGridOptions_selection_deferred */
+            /** Makes selection deferred. */
             deferred?: boolean;
         };
 
-        /** @docid dxDataGridOptions_onDataErrorOccurred */
+        
         onDataErrorOccurred?: (e: { error: Error }) => void;
 
-        /** @docid dxDataGridOptions_onSelectionChanged */
+        
         onSelectionChanged?: (e: {
             currentSelectedRowKeys: Array<any>;
             currentDeselectedRowKeys: Array<any>;
@@ -1754,13 +1775,13 @@ declare module DevExpress.ui {
             selectedRowsData: Array<any>;
         }) => void;
 
-        /** @docid dxDataGridOptions_onExporting */
+        /** A handler for the exporting event. */
         onExporting?: (e: {
             fileName: string;
             cancel: boolean;
         }) => void;
 
-        /** @docid dxDataGridOptions_onFileSaving */
+        /** A handler for the fileSaving event. */
         onFileSaving?: (e: {
             fileName: string;
             format: string;
@@ -1768,184 +1789,190 @@ declare module DevExpress.ui {
             cancel: boolean;
         }) => void;
 
-        /** @docid dxDataGridOptions_onExported */
+        /** A handler for the exported event. */
         onExported?: (e: Object) => void;
 
-        /** @docid dxDataGridOptions_onKeyDown */
+        
         onKeyDown?: (e: Object) => void;
 
-        /** @docid dxDataGridOptions_onRowExpanding */
+        
         onRowExpanding?: (e: Object) => void;
 
-        /** @docid dxDataGridOptions_onRowExpanded */
+        
         onRowExpanded?: (e: Object) => void;
 
-        /** @docid dxDataGridOptions_onRowCollapsing */
+        
         onRowCollapsing?: (e: Object) => void;
 
-        /** @docid dxDataGridOptions_onRowCollapsed */
+        
         onRowCollapsed?: (e: Object) => void;
 
 
-        /** @docid dxDataGridOptions_showColumnHeaders */
+        
         showColumnHeaders?: boolean;
 
-        /** @docid dxDataGridOptions_showColumnLines */
+        
         showColumnLines?: boolean;
 
-        /** @docid dxDataGridOptions_showRowLines */
+        
         showRowLines?: boolean;
 
-        /** @docid dxDataGridOptions_sorting */
+        
         sorting?: {
-            /** @docid dxDataGridOptions_sorting_ascendingText */
+            
             ascendingText?: string;
 
-            /** @docid dxDataGridOptions_sorting_clearText */
+            
             clearText?: string;
 
-            /** @docid dxDataGridOptions_sorting_descendingText */
+            
             descendingText?: string;
 
-            /** @docid dxDataGridOptions_sorting_sortingMode */
+            
             mode?: string;
         };
 
-        /** @docid dxDataGridOptions_stateStoring */
+        /** Specifies options of state storing. */
         stateStoring?: {
-            /** @docid dxDataGridOptions_stateStoring_customLoad */
+            /** Specifies a callback function that performs specific actions on state loading. */
             customLoad?: () => JQueryPromise<Object>;
 
-            /** @docid dxDataGridOptions_stateStoring_customSave */
+            /** Specifies a callback function that performs specific actions on state saving. */
             customSave?: (state: Object) => void;
 
-            /** @docid dxDataGridOptions_stateStoring_enabled */
+            /** Specifies whether or not a grid saves its state. */
             enabled?: boolean;
 
-            /** @docid dxDataGridOptions_stateStoring_savingTimeout */
+            /** Specifies the delay between the last change of a grid state and the operation of saving this state in milliseconds. */
             savingTimeout?: number;
 
-            /** @docid dxDataGridOptions_stateStoring_storageKey */
+            /** Specifies a unique key to be used for storing the grid state. */
             storageKey?: string;
 
-            /** @docid dxDataGridOptions_stateStoring_type */
+            /** Specifies the type of storage to be used for state storing. */
             type?: string;
         };
 
-        /** @docid dxDataGridOptions_summary */
+        /** Specifies the options of the grid summary. */
         summary?: {
-            /** @docid dxDataGridOptions_summary_texts */
+            /** Contains options that specify text patterns for summary items. */
             texts?: {
-                /** @docid dxDataGridOptions_summary_texts_sum */
+                /** Specifies a pattern for the 'sum' summary items when they are displayed in the parent column. */
                 sum?: string;
 
-                /** @docid dxDataGridOptions_summary_texts_sumOtherColumn */
+                /** Specifies a pattern for the 'sum' summary items displayed in a group row or in any other column rather than the parent one. */
                 sumOtherColumn?: string;
 
-                /** @docid dxDataGridOptions_summary_texts_min */
+                /** Specifies a pattern for the 'min' summary items when they are displayed in the parent column. */
                 min?: string;
 
-                /** @docid dxDataGridOptions_summary_texts_minOtherColumn */
+                /** Specifies a pattern for the 'min' summary items displayed in a group row or in any other column rather than the parent one. */
                 minOtherColumn?: string;
 
-                /** @docid dxDataGridOptions_summary_texts_max */
+                /** Specifies a pattern for the 'max' summary items when they are displayed in the parent column. */
                 max?: string;
 
-                /** @docid dxDataGridOptions_summary_texts_maxOtherColumn */
+                /** Specifies a pattern for the 'max' summary items displayed in a group row or in any other column rather than the parent one. */
                 maxOtherColumn?: string;
 
-                /** @docid dxDataGridOptions_summary_texts_avg */
+                /** Specifies a pattern for the 'avg' summary items when they are displayed in the parent column. */
                 avg?: string;
 
-                /** @docid dxDataGridOptions_summary_texts_avgOtherColumn */
+                /** Specifies a pattern for the 'avg' summary items displayed in a group row or in any other column rather than the parent one. */
                 avgOtherColumn?: string;
 
-                /** @docid dxDataGridOptions_summary_texts_count */
+                /** Specifies a pattern for the 'count' summary items. */
                 count?: string;
             };
 
-            /** @docid dxDataGridOptions_summary_groupItems */
+            /** Specifies items of the group summary. */
             groupItems?: Array<{
-                /** @docid dxDataGridOptions_summary_groupItems_name */
+                /** Specifies the identifier of a summary item. */
                 name?: string;
 
-                /** @docid dxDataGridOptions_summary_groupItems_column */
+                /** Specifies the column that provides data for a group summary item. */
                 column?: string;
 
-                /** @docid dxDataGridOptions_summary_groupItems_customizeText */
+                /** Customizes the text to be displayed in the summary item. */
                 customizeText?: (itemInfo: {
                     value: any;
                     valueText: string;
                 }) => string;
 
-                /** @docid dxDataGridOptions_summary_groupItems_displayFormat */
+                /** Specifies a pattern for the summary item text. */
                 displayFormat?: string;
 
-                /** @docid dxDataGridOptions_summary_groupItems_precision */
+                /**
+    * Specifies a precision for the summary item value of a numeric format.
+    * @deprecated Use the valueFormat.precision option instead.
+    */
                 precision?: number;
 
-                /** @docid dxDataGridOptions_summary_groupItems_showInGroupFooter */
+                /** Specifies whether or not a summary item must be displayed in the group footer. */
                 showInGroupFooter?: boolean;
 
-                /** @docid dxDataGridOptions_summary_groupItems_alignByColumn */
+                /** Indicates whether to display group summary items in parentheses after the group row header or to align them by the corresponding columns within the group row. */
                 alignByColumn?: boolean;
 
-                /** @docid dxDataGridOptions_summary_groupItems_showInColumn */
+                /** Specifies the column that must hold the summary item when this item is displayed in the group footer or aligned by a column in the group row. */
                 showInColumn?: string;
 
-                /** @docid dxDataGridOptions_summary_groupItems_summaryType */
+                /** Specifies how to aggregate data for a summary item. */
                 summaryType?: string;
 
-                /** @docid dxDataGridOptions_summary_groupItems_valueFormat */
+                /** Specifies a format for the summary item value. */
                 valueFormat?: any;
 
-                /** @docid dxDataGridOptions_summary_groupItems_skipEmptyValues */
+                /** Specifies whether or not to skip empty strings, null and undefined values when calculating a summary. */
                 skipEmptyValues?: boolean;
             }>;
 
-            /** @docid dxDataGridOptions_summary_totalItems */
+            /** Specifies items of the total summary. */
             totalItems?: Array<{
-                /** @docid dxDataGridOptions_summary_totalItems_name */
+                /** Specifies the identifier of a summary item. */
                 name?: string;
 
-                /** @docid dxDataGridOptions_summary_totalItems_alignment */
+                /** Specifies the alignment of a summary item. */
                 alignment?: string;
 
-                /** @docid dxDataGridOptions_summary_totalItems_column */
+                /** Specifies the column that provides data for a summary item. */
                 column?: string;
 
-                /** @docid dxDataGridOptions_summary_totalItems_cssClass */
+                /** Specifies a CSS class to be applied to a summary item. */
                 cssClass?: string;
 
-                /** @docid dxDataGridOptions_summary_totalItems_customizeText */
+                /** Customizes the text to be displayed in the summary item. */
                 customizeText?: (itemInfo: {
                     value: any;
                     valueText: string;
                 }) => string;
 
-                /** @docid dxDataGridOptions_summary_totalItems_displayFormat */
+                /** Specifies a pattern for the summary item text. */
                 displayFormat?: string;
 
-                /** @docid dxDataGridOptions_summary_totalItems_precision */
+                /**
+   * Specifies a precision for the summary item value of a numeric format.
+   * @deprecated Use the valueFormat.precision option instead.
+   */
                 precision?: number;
 
-                /** @docid dxDataGridOptions_summary_totalItems_showInColumn */
+                /** Specifies the column that must hold the summary item. */
                 showInColumn?: string;
 
-                /** @docid dxDataGridOptions_summary_totalItems_summaryType */
+                /** Specifies how to aggregate data for a summary item. */
                 summaryType?: string;
 
-                /** @docid dxDataGridOptions_summary_totalItems_valueFormat */
+                /** Specifies a format for the summary item value. */
                 valueFormat?: any;
 
-                /** @docid dxDataGridOptions_summary_totalItems_skipEmptyValues */
+                /** Specifies whether or not to skip empty strings, null and undefined values when calculating a summary. */
                 skipEmptyValues?: boolean;
             }>;
 
-            /** @docid dxDataGridOptions_summary_skipEmptyValues */
+            /** Specifies whether or not to skip empty strings, null and undefined values when calculating a summary. */
             skipEmptyValues?: boolean;
 
-            /** @docid dxDataGridOptions_summary_calculateCustomSummary */
+            /** Allows you to use a custom aggregate function to calculate the value of a summary item. */
             calculateCustomSummary?: (options: {
                 component: dxDataGrid;
                 name?: string;
@@ -1955,479 +1982,485 @@ declare module DevExpress.ui {
             }) => void;
         };
 
-        /** @docid dxDataGridOptions_wordWrapEnabled */
+        
         wordWrapEnabled?: boolean;
 
-        /** @docid dxDataGridOptions_dateSerializationFormat */
+        
         dateSerializationFormat?: string;
     }
 
-    /** @docid dxdataGrid */
+    /** The DataGrid is a widget that represents data from a local or remote source in the form of a grid. This widget offers such basic features as sorting, grouping, filtering, as well as more advanced capabilities, like state storing, export to Excel, master-detail interface, and many others. */
     export class dxDataGrid extends Widget implements DataHelperMixin {
         constructor(element: JQuery, options?: dxDataGridOptions);
         constructor(element: Element, options?: dxDataGridOptions);
 
-        /** @docid_ignore dxDataGridMethods_stopSelectionWithCheckboxes */
+        
 
-        /** @docid dxDataGridMethods_clearGrouping */
+        /** Ungroups grid records. */
         clearGrouping(): void;
 
-        /** @docid dxDataGridMethods_clearSorting */
+        
         clearSorting(): void;
 
-        /** @docid dxDataGridMethods_getCellElement#getCellElement(rowIndex,dataField) */
+        
         getCellElement(rowIndex: number, dataField: string): any;
 
-        /** @docid dxDataGridMethods_getCellElement#getCellElement(rowIndex,visibleColumnIndex) */
+        
         getCellElement(rowIndex: number, visibleColumnIndex: number): any;
 
-        /** @docid dxDataGridMethods_getRowElement */
+        
         getRowElement(rowIndex: number): any;
 
-        /** @docid dxDataGridMethods_state#state() */
+        /** Returns the current state of the grid. */
         state(): Object;
 
-        /** @docid dxDataGridMethods_state#state(state) */
+        /** Sets the grid state. */
         state(state: Object): void;
 
-        /** @docid dxDataGridMethods_getRowIndexByKey */
+        
         getRowIndexByKey(key: any): number;
 
-        /** @docid dxDataGridMethods_getKeyByRowIndex */
+        
         getKeyByRowIndex(rowIndex: number): any;
 
-        /** @docid dxDataGridMethods_addColumn */
+        /** Adds a new column to the widget. */
         addColumn(columnOptions: dxDataGridColumn): void;
 
-        /** @docid dxDataGridMethods_deleteColumn */
+        
         deleteColumn(id: any): void;
 
-        /** @docid dxDataGridMethods_beginCustomLoading */
+        
         beginCustomLoading(messageText: string): void;
 
-        /** @docid dxDataGridMethods_cancelEditData */
+        
         cancelEditData(): void;
 
-        /** @docid dxDataGridMethods_hasEditData */
+        
         hasEditData(): boolean;
 
-        /** @docid dxDataGridMethods_clearFilter#clearFilter() */
+        
         clearFilter(): void;
 
-        /** @docid dxDataGridMethods_clearFilter#clearFilter(filterName) */
+        
         clearFilter(filterName: string): void;
 
-        /** @docid dxDataGridMethods_clearSelection */
+        
         clearSelection(): void;
 
-        /** @docid dxDataGridMethods_closeEditCell */
+        
         closeEditCell(): void;
 
-        /** @docid dxDataGridMethods_collapseAll */
+        /** Collapses groups or master rows in a grid. */
         collapseAll(groupIndex?: number): void;
 
-        /** @docid dxDataGridMethods_columnCount */
+        
         columnCount(): number;
 
-        /** @docid dxDataGridMethods_columnOption#columnOption(id,optionName) */
+        
         columnOption(id: any, optionName: string): any;
 
-        /** @docid dxDataGridMethods_columnOption#columnOption(id,optionName,optionValue) */
+        
         columnOption(id: any, optionName: string, optionValue: any): void;
 
-        /** @docid dxDataGridMethods_columnOption#columnOption(id) */
+        
         columnOption(id: any): Object;
 
-        /** @docid dxDataGridMethods_columnOption#columnOption(id,options) */
+        
         columnOption(id: any, options: Object): void;
 
-        /** @docid dxDataGridMethods_getVisibleColumns#getVisibleColumns() */
+        /** Gets all visible columns. */
         getVisibleColumns(): Array<dxDataGridColumn>;
 
-        /** @docid dxDataGridMethods_getVisibleColumns#getVisibleColumns(headerLevel) */
+        /** Gets all visible columns at a specific hierarchical level of column headers. Use it to access banded columns. */
         getVisibleColumns(headerLevel?: number): Array<dxDataGridColumn>;
 
-        /** @docid dxDataGridMethods_getVisibleRows */
+        /** Gets currently rendered rows. */
         getVisibleRows(): Array<dxDataGridRow>;
 
-        /** @docid dxDataGridMethods_editCell#editCell(rowIndex,visibleColumnIndex) */
+        
         editCell(rowIndex: number, visibleColumnIndex: number): void;
 
-        /** @docid dxDataGridMethods_editCell#editCell(rowIndex,dataField) */
+        
         editCell(rowIndex: number, dataField: string): void;
 
-        /** @docid dxDataGridMethods_editRow */
+        
         editRow(rowIndex: number): void;
 
-        /** @docid dxDataGridMethods_cellValue#cellValue(rowIndex,dataField) */
+        
         cellValue(rowIndex: number, dataField: string): any;
 
-        /** @docid dxDataGridMethods_cellValue#cellValue(rowIndex,visibleColumnIndex) */
+        
         cellValue(rowIndex: number, visibleColumnIndex: number): any;
 
-        /** @docid dxDataGridMethods_cellValue#cellValue(rowIndex,dataField,value) */
+        
         cellValue(rowIndex: number, dataField: string, value: any): void;
 
-        /** @docid dxDataGridMethods_cellValue#cellValue(rowIndex,visibleColumnIndex,value) */
+        
         cellValue(rowIndex: number, visibleColumnIndex: number, value: any): void;
 
-        /** @docid dxDataGridMethods_endCustomLoading */
+        
         endCustomLoading(): void;
 
-        /** @docid dxDataGridMethods_expandAll */
+        /** Expands groups or master rows in a grid. */
         expandAll(groupIndex: number): void;
 
-        /** @docid dxDataGridMethods_isRowExpanded */
+        /** Checks whether a specific group or master row is expanded or collapsed. */
         isRowExpanded(key: any): boolean;
 
-        /** @docid dxDataGridMethods_expandRow */
+        /** Allows you to expand a specific group or master row by its key. */
         expandRow(key: any): void;
 
-        /** @docid dxDataGridMethods_collapseRow */
+        /** Allows you to collapse a specific group or master row by its key. */
         collapseRow(key: any): void;
 
-        /** @docid dxDataGridMethods_isAdaptiveDetailRowExpanded */
+        
         isAdaptiveDetailRowExpanded(key: any): void;
 
-        /** @docid dxDataGridMethods_expandAdaptiveDetailRow */
+        
         expandAdaptiveDetailRow(key: any): void;
 
-        /** @docid dxDataGridMethods_collapseAdaptiveDetailRow */
+        
         collapseAdaptiveDetailRow(): void;
 
-        /** @docid dxDataGridMethods_filter#filter(filterExpr) */
+        
         filter(filterExpr?: any): void;
 
-        /** @docid dxDataGridMethods_filter#filter() */
+        
         filter(): any;
 
-        /** @docid dxDataGridMethods_getCombinedFilter#getCombinedFilter() */
+        
         getCombinedFilter(): any;
 
-        /** @docid dxDataGridMethods_getCombinedFilter#getCombinedFilter(returnDataField) */
+        
         getCombinedFilter(returnDataField?: boolean): any;
 
-        /** @docid dxDataGridMethods_getSelectedRowKeys */
+        /** Gets the keys of the currently selected rows. */
         getSelectedRowKeys(): any;
 
-        /** @docid dxDataGridMethods_getSelectedRowsData */
+        /** Gets data objects of currently selected rows. */
         getSelectedRowsData(): any;
 
-        /** @docid dxDataGridMethods_hideColumnChooser */
+        
         hideColumnChooser(): void;
 
-        /** @docid dxDataGridMethods_addRow */
+        /** Adds an empty data row. */
         addRow(): void;
 
-        /** @docid dxDataGridMethods_insertRow */
+        /**
+  * Adds a new data row to a grid.
+  * @deprecated Use the addRow() method instead.
+  */
         insertRow(): void;
 
-        /** @docid dxDataGridMethods_keyOf */
+        
         keyOf(obj: Object): any;
 
-        /** @docid dxDataGridMethods_pageIndex#pageIndex(newIndex) */
+        /** Switches a grid to a specified page. */
         pageIndex(newIndex: number): void;
 
-        /** @docid dxDataGridMethods_pageIndex#pageIndex() */
+        /** Gets the index of the current page. */
         pageIndex(): number;
 
-        /** @docid dxDataGridMethods_pageSize#pageSize(value) */
+        /** Sets the page size. */
         pageSize(value: number): void;
 
-        /** @docid dxDataGridMethods_pageSize#pageSize() */
+        /** Gets the current page size. */
         pageSize(): number;
 
-        /** @docid dxDataGridMethods_refresh */
+        
         refresh(): JQueryPromise<any>;
 
-        /** @docid dxDataGridMethods_deleteRow */
+        
         deleteRow(rowIndex: number): void;
 
-        /** @docid dxDataGridMethods_removeRow */
+        /**
+ * Removes a specific row from a grid.
+ * @deprecated Use the deleteRow(rowIndex) method instead.
+ */
         removeRow(rowIndex: number): void;
 
-        /** @docid dxDataGridMethods_saveEditData */
+        
         saveEditData(): JQueryPromise<any>;
 
-        /** @docid dxDataGridMethods_searchByText */
+        
         searchByText(text: string): void;
 
-        /** @docid dxDataGridMethods_selectAll */
+        
         selectAll(): JQueryPromise<any>;
 
-        /** @docid dxDataGridMethods_deselectAll */
+        
         deselectAll(): JQueryPromise<any>;
 
-        /** @docid dxDataGridMethods_selectRows */
+        
         selectRows(keys: Array<any>, preserve: boolean): JQueryPromise<any>;
 
-        /** @docid dxDataGridMethods_deselectRows */
+        
         deselectRows(keys: Array<any>): JQueryPromise<any>;
 
-        /** @docid dxDataGridMethods_selectRowsByIndexes */
+        
         selectRowsByIndexes(indexes: Array<any>): JQueryPromise<any>;
 
-        /** @docid_ignore dxDataGridMethods_isRowSelected(key) */
-        /** @docid dxDataGridMethods_isRowSelected(data) */
+        
+        /** Checks whether the row that represents a specific data object is selected. Takes effect only if selection.deferred is true. */
         isRowSelected(arg: any): boolean;
 
-        /** @docid dxDataGridMethods_showColumnChooser */
+        
         showColumnChooser(): void;
 
-        /** @docid dxDataGridMethods_startSelectionWithCheckboxes */
+        
         startSelectionWithCheckboxes(): boolean;
 
-        /** @docid dxDataGridMethods_pageCount */
+        /** Returns how many pages the grid contains. */
         pageCount(): number;
 
-        /** @docid dxDataGridMethods_totalCount */
+        /** Returns the number of records currently held by a grid. */
         totalCount(): number;
 
-        /** @docid dxDataGridMethods_undeleteRow */
+        
         undeleteRow(rowIndex: number): void;
 
-        /** @docid dxDataGridMethods_byKey */
+        
         byKey(key: any): JQueryPromise<any>;
 
-        /** @docid dxDataGridMethods_getTotalSummaryValue */
+        /** Gets the value of a total summary item. */
         getTotalSummaryValue(summaryItemName: string): any;
 
-        /** @docid dxDataGridMethods_exportToExcel */
+        /** Exports grid data to Excel. */
         exportToExcel(selectionOnly: boolean): void;
 
-        /** @docid dxDataGridMethods_updateDimensions */
+        
         updateDimensions(): void;
 
-        /** @docid dxDataGridMethods_focus */
+        
         focus(element?: JQuery): void;
 
         getDataSource(): DevExpress.data.DataSource;
 
-        /** @docid dxDataGridMethods_getScrollable */
+        
         getScrollable(): dxScrollable;
 
-        /** @docid dxDataGridMethods_repaintRows */
+        
         repaintRows(rowIndexes: Array<number>): void;
     }
 
 
     export interface dxPivotGridOptions extends WidgetOptions {
-        /** @docid_ignore dxPivotGridOptions_activeStateEnabled */
-        /** @docid_ignore dxPivotGridOptions_hoverStateEnabled */
-        /** @docid_ignore dxPivotGridOptions_focusStateEnabled */
-        /** @docid_ignore dxPivotGridOptions_accessKey */
+        
+        
+        
+        
 
-        /** @docid_ignore dxPivotGridPivotGridCell_text */
-        /** @docid_ignore dxPivotGridPivotGridCell_value */
-        /** @docid_ignore dxPivotGridPivotGridCell_rowPath */
-        /** @docid_ignore dxPivotGridPivotGridCell_columnPath */
-        /** @docid_ignore dxPivotGridPivotGridCell_dataIndex */
-        /** @docid_ignore dxPivotGridPivotGridCell_path */
-        /** @docid_ignore dxPivotGridPivotGridCell_columnType */
-        /** @docid_ignore dxPivotGridPivotGridCell_rowType */
-        /** @docid_ignore dxPivotGridPivotGridCell_type */
-        /** @docid_ignore dxPivotGridPivotGridCell_expanded */
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
 
-        /** @docid dxPivotGridOptions_onContentReady */
+        
         onContentReady?: Function;
 
-        /** @docid dxPivotGridOptions_dataSource */
+        /** Specifies a data source for the pivot grid. */
         dataSource?: any;
 
-        /** @docid dxPivotGridOptions_useNativeScrolling */
+        
         useNativeScrolling?: any;
 
-        /** @docid dxPivotGridOptions_scrolling */
+        /** A configuration object specifying scrolling options. */
         scrolling?: {
-            /** @docid dxPivotGridOptions_scrolling_mode */
+            /** Specifies the scrolling mode. */
             mode?: string;
 
-            /** @docid dxPivotGridOptions_scrolling_useNative */
+            /** Specifies whether or not the widget uses native scrolling. */
             useNative?: any;
         };
 
-        /** @docid dxPivotGridOptions_allowSorting */
+        /** Allows an end-user to change sorting options. */
         allowSorting?: boolean;
 
-        /** @docid dxPivotGridOptions_allowSortingBySummary */
+        /** Allows an end-user to sort columns by summary values. */
         allowSortingBySummary?: boolean;
 
-        /** @docid dxPivotGridOptions_allowFiltering */
+        /** Allows a user to filter fields by selecting or deselecting values in the popup menu. */
         allowFiltering?: boolean;
 
-        /** @docid dxPivotGridOptions_dataFieldArea */
+        /** Specifies the area to which data field headers must belong. */
         dataFieldArea?: string;
 
-         /** @docid dxPivotGridOptions_fieldPanel */
+         /** Configures the field panel. */
         fieldPanel?: {
-            /** @docid dxPivotGridOptions_fieldPanel_allowFieldDragging */
+            /** Makes fields on the field panel draggable. */
             allowFieldDragging?: boolean;
 
-            /** @docid dxPivotGridOptions_fieldPanel_showFilterFields */
+            /** Shows/hides filter fields on the field panel. */
             showFilterFields?: boolean;
 
-            /** @docid dxPivotGridOptions_fieldPanel_showDataFields */
+            /** Shows/hides data fields on the field panel. */
             showDataFields?: boolean;
 
-            /** @docid dxPivotGridOptions_fieldPanel_showColumnFields */
+            /** Shows/hides column fields on the field panel. */
             showColumnFields?: boolean;
 
-            /** @docid dxPivotGridOptions_fieldPanel_showRowFields */
+            /** Shows/hides row fields on the field panel. */
             showRowFields?: boolean;
 
-            /** @docid dxPivotGridOptions_fieldPanel_visible */
+            /** Shows/hides the field panel. */
             visible?: boolean;
 
-            /** @docid dxPivotGridOptions_fieldPanel_texts */
+            /** Specifies the placeholders of the field areas. */
             texts?: {
-                /** @docid dxPivotGridOptions_fieldPanel_texts_columnFieldArea */
+                /** Specifies the placeholder of the column field area. */
                 columnFieldArea?: string;
-                /** @docid dxPivotGridOptions_fieldPanel_texts_rowFieldArea */
+                /** Specifies the placeholder of the row field area. */
                 rowFieldArea?: string;
-                /** @docid dxPivotGridOptions_fieldPanel_texts_filterFieldArea */
+                /** Specifies the placeholder of the filter field area. */
                 filterFieldArea?: string;
-                /** @docid dxPivotGridOptions_fieldPanel_texts_dataFieldArea */
+                /** Specifies the placeholder of the data field area. */
                 dataFieldArea?: string;
             }
         }
 
-        /** @docid dxPivotGridOptions_allowExpandAll */
+        /** Allows an end-user to expand/collapse all header items within a header level. */
         allowExpandAll?: boolean;
 
-        /** @docid dxPivotGridOptions_wordWrapEnabled */
+        /** Specifies whether long text in header items should be wrapped. */
         wordWrapEnabled?: boolean;
 
-        /** @docid dxPivotGridOptions_showRowTotals */
+        /** Specifies whether to display the Total rows. Applies only if rowHeaderLayout is "standard". */
         showRowTotals?: boolean;
 
-        /** @docid dxPivotGridOptions_showRowGrandTotals */
+        /** Specifies whether to display the Grand Total row. */
         showRowGrandTotals?: boolean;
 
-        /** @docid dxPivotGridOptions_showColumnTotals */
+        /** Specifies whether to display the Total columns. */
         showColumnTotals?: boolean;
 
-        /** @docid dxPivotGridOptions_showColumnGrandTotals */
+        /** Specifies whether to display the Grand Total column. */
         showColumnGrandTotals?: boolean;
 
-        /** @docid dxPivotGridOptions_hideEmptySummaryCells */
+        /** Specifies whether or not to hide rows and columns with no data. */
         hideEmptySummaryCells?: boolean;
 
-        /** @docid dxPivotGridOptions_showTotalsPrior*/
+        /** Specifies where to show the total rows or columns. Applies only if rowHeaderLayout is "standard". */
         showTotalsPrior?: string;
 
-        /** @docid dxPivotGridOptions_rowHeaderLayout*/
+        /** Specifies the layout of items in the row header. */
         rowHeaderLayout?: string;
 
-        /** @docid dxPivotGridOptions_showBorders */
+        /** Specifies whether the outer borders of the grid are visible or not. */
         showBorders?: boolean;
 
-        /** @docid dxPivotGridOptions_fieldChooser */
+        /** The Field Chooser configuration options. */
         fieldChooser?: {
-            /** @docid dxPivotGridOptions_fieldChooser_enabled */
+            /** Enables or disables the field chooser. */
             enabled?: boolean;
 
-            /** @docid dxPivotGridOptions_fieldChooser_layout */
+            /** Specifies the field chooser layout. */
             layout?: number;
 
-            /** @docid dxPivotGridOptions_fieldChooser_title */
+            /** Specifies the text to display as a title of the field chooser popup window. */
             title?: string;
 
-            /** @docid dxPivotGridOptions_fieldChooser_width */
+            /** Specifies the field chooser width. */
             width?: number;
 
-            /** @docid dxPivotGridOptions_fieldChooser_height */
+            /** Specifies the field chooser height. */
             height?: number;
 
-            /** @docid dxPivotGridOptions_fieldChooser_texts */
+            /** Strings that can be changed or localized in the pivot grid's integrated Field Chooser. */
             texts?: {
-                /** @docid dxPivotGridOptions_fieldChooser_texts_rowFields */
+                /** The string to display instead of Row Fields. */
                 rowFields?: string;
-                /** @docid dxPivotGridOptions_fieldChooser_texts_columnFields */
+                /** The string to display instead of Column Fields. */
                 columnFields?: string;
-                /** @docid dxPivotGridOptions_fieldChooser_texts_dataFields */
+                /** The string to display instead of Data Fields. */
                 dataFields?: string;
-                /** @docid dxPivotGridOptions_fieldChooser_texts_filterFields */
+                /** The string to display instead of Filter Fields. */
                 filterFields?: string;
-                /** @docid dxPivotGridOptions_fieldChooser_texts_allFields */
+                /** The string to display instead of All Fields. */
                 allFields?: string;
             };
         }
-        /** @docid dxPivotGridOptions_texts */
+        /** Strings that can be changed or localized in the PivotGrid widget. */
         texts?: {
-            /** @docid dxPivotGridOptions_texts_grandTotal */
+            /** The string to display as a header of the Grand Total row and column. */
             grandTotal?: string;
-            /** @docid dxPivotGridOptions_texts_total */
+            /** The string to display as a header of the Total row and column. */
             total?: string;
-            /** @docid dxPivotGridOptions_texts_noData */
+            /** Specifies the text displayed when a pivot grid does not contain any fields. */
             noData?: string;
-            /** @docid dxPivotGridOptions_texts_showFieldChooser */
+            /** The string to display as a Show Field Chooser context menu item. */
             showFieldChooser?: string;
-            /** @docid dxPivotGridOptions_texts_expandAll */
+            /** The string to display as an Expand All context menu item. */
             expandAll?: string;
-            /** @docid dxPivotGridOptions_texts_collapseAll */
+            /** The string to display as a Collapse All context menu item. */
             collapseAll?: string;
-            /** @docid dxPivotGridOptions_texts_sortColumnBySummary */
+            /** The string to display as a Sort Column by Summary Value context menu item. */
             sortColumnBySummary?: string;
-            /** @docid dxPivotGridOptions_texts_sortRowBySummary */
+            /** The string to display as a Sort Row by Summary Value context menu item. */
             sortRowBySummary?: string;
-            /** @docid dxPivotGridOptions_texts_removeAllSorting */
+            /** The string to display as a Remove All Sorting context menu item. */
             removeAllSorting?: string;
-            /** @docid dxPivotGridOptions_texts_exportToExcel */
+            /** The string to display as an Export to Excel file context menu item. */
             exportToExcel?: string;
-            /** @docid dxPivotGridOptions_texts_dataNotAvailable */
+            /** Specifies text displayed in a cell when its data is unavailable for some reason. */
             dataNotAvailable?: string;
         };
 
-        /** @docid dxPivotGridOptions_loadPanel */
+        /** Specifies options configuring the load panel. */
         loadPanel?: {
-            /** @docid dxPivotGridOptions_loadPanel_enabled */
+            /** Enables or disables the load panel. */
             enabled?: boolean;
 
-            /** @docid dxPivotGridOptions_loadPanel_height */
+            /** Specifies the height of the load panel. */
             height?: number;
 
-            /** @docid dxPivotGridOptions_loadPanel_indicatorSrc */
+            /** Specifies the URL pointing to an image that will be used as a load indicator. */
             indicatorSrc?: string;
 
-            /** @docid dxPivotGridOptions_loadPanel_showIndicator */
+            /** Specifies whether or not to show a load indicator. */
             showIndicator?: boolean;
 
-            /** @docid dxPivotGridOptions_loadPanel_showPane */
+            /** Specifies whether or not to show load panel background. */
             showPane?: boolean;
 
-            /** @docid dxPivotGridOptions_loadPanel_text */
+            /** Specifies the text to display inside a load panel. */
             text?: string;
 
-            /** @docid dxPivotGridOptions_loadPanel_width */
+            /** Specifies the width of the load panel. */
             width?: number;
         };
 
-        /** @docid dxPivotGridOptions_onCellClick */
+        /** A handler for the cellClick event. */
         onCellClick?: (e: any) => void;
 
-        /** @docid dxPivotGridOptions_onCellPrepared */
+        /** A handler for the cellPrepared event. */
         onCellPrepared?: (e: any) => void;
 
-        /** @docid dxPivotGridOptions_onContextMenuPreparing */
+        /** A handler for the contextMenuPreparing event. */
         onContextMenuPreparing?: (e: Object) => void;
 
-        /** @docid dxPivotGridOptions_export */
+        /** Configures client-side export. */
         export?: {
-            /** @docid dxPivotGridOptions_export_enabled */
+            /** Enables client-side export. */
             enabled?: boolean;
-            /** @docid dxPivotGridOptions_export_fileName */
+            /** Specifies a default name for the file to which grid data is exported. */
             fileName?: string;
-            /** @docid dxPivotGridOptions_export_proxyUrl */
+            /** Specifies the URL of the server-side proxy that streams the resulting file to the end user to enable export in IE9 and Safari browsers. */
             proxyUrl?: string;
         };
 
-        /** @docid dxPivotGridOptions_onExporting */
+        /** A handler for the exporting event. */
         onExporting?: (e: {
             fileName: string;
             cancel: boolean;
         }) => void;
 
-        /** @docid dxPivotGridOptions_onFileSaving */
+        /** A handler for the fileSaving event. */
         onFileSaving?: (e: {
             fileName: string;
             format: string;
@@ -2435,50 +2468,50 @@ declare module DevExpress.ui {
             cancel: boolean;
         }) => void;
 
-        /** @docid dxPivotGridOptions_onExported */
+        /** A handler for the exported event. */
         onExported?: (e: Object) => void;
 
-        /** @docid dxPivotGridOptions_stateStoring */
+        /** A configuration object specifying options related to state storing. */
         stateStoring?: {
-            /** @docid dxPivotGridOptions_stateStoring_customLoad */
+            /** Specifies a callback function that performs specific actions on state loading. */
             customLoad?: () => JQueryPromise<Object>;
 
-            /** @docid dxPivotGridOptions_stateStoring_customSave */
+            /** Specifies a callback function that performs specific actions on state saving. */
             customSave?: (gridState: Object) => void;
 
-            /** @docid dxPivotGridOptions_stateStoring_enabled */
+            /** Specifies whether or not a grid saves its state. */
             enabled?: boolean;
 
-            /** @docid dxPivotGridOptions_stateStoring_savingTimeout */
+            /** Specifies the delay between the last change of a grid state and the operation of saving this state in milliseconds. */
             savingTimeout?: number;
 
-            /** @docid dxPivotGridOptions_stateStoring_storageKey */
+            /** Specifies a unique key to be used for storing the grid state. */
             storageKey?: string;
 
-            /** @docid dxPivotGridOptions_stateStoring_type */
+            /** Specifies the type of storage to be used for state storing. */
             type?: string;
         };
     }
 
 
-    /** @docid dxPivotGrid */
+    /** The PivotGrid is a widget that allows you to display and analyze multi-dimensional data from a local storage or an OLAP cube. */
     export class dxPivotGrid extends Widget {
         constructor(element: JQuery, options?: dxPivotGridOptions);
         constructor(element: Element, options?: dxPivotGridOptions);
 
-        /** @docid dxPivotGridMethods_getDataSource */
+        /** Gets the PivotGridDataSource instance. */
         getDataSource(): DevExpress.data.PivotGridDataSource;
 
-        /** @docid dxPivotGridMethods_getFieldChooserPopup */
+        /** Gets the Popup instance of the field chooser window. */
         getFieldChooserPopup(): DevExpress.ui.dxPopup;
 
-        /** @docid dxPivotGridMethods_updateDimensions */
+        /** Updates the widget to the size of its content. */
         updateDimensions(): void;
 
-        /** @docid dxPivotGridMethods_exportToExcel */
+        /** Exports pivot grid data to the Excel file. */
         exportToExcel(): void;
 
-        /** @docid dxPivotGridMethods_bindChart */
+        /** Binds a Chart to the PivotGrid. */
         bindChart(chart: any, integrationOptions?: {
             inverted?: boolean;
             dataFieldsDisplayMode?: string;
@@ -2492,45 +2525,45 @@ declare module DevExpress.ui {
 
     export interface dxPivotGridFieldChooserOptions extends WidgetOptions {
 
-        /** @docid dxPivotGridFieldChooserOptions_height*/
+        /** Specifies the height of the widget. */
         height?: any;
 
-        /** @docid dxPivotGridFieldChooserOptions_layout */
+        /** Specifies the field chooser layout. */
         layout?: number;
 
-        /** @docid dxPivotGridFieldChooserOptions_dataSource */
+        /** The data source of a PivotGrid widget. */
         dataSource?: DevExpress.data.PivotGridDataSource;
 
-        /** @docid dxPivotGridFieldChooserOptions_onContentReady */
+        
         onContentReady?: Function;
 
-        /** @docid dxPivotGridFieldChooserOptions_onContextMenuPreparing */
+        /** A handler for the contextMenuPreparing event. */
         onContextMenuPreparing?: (e: Object) => void;
 
-        /** @docid dxPivotGridFieldChooserOptions_texts */
+        /** Strings that can be changed or localized in the PivotGridFieldChooser widget. */
         texts?: {
-            /** @docid dxPivotGridFieldChooserOptions_texts_rowFields */
+            /** The string to display instead of Row Fields. */
             rowFields?: string;
-            /** @docid dxPivotGridFieldChooserOptions_texts_columnFields */
+            /** The string to display instead of Column Fields. */
             columnFields?: string;
-            /** @docid dxPivotGridFieldChooserOptions_texts_dataFields */
+            /** The string to display instead of Data Fields. */
             dataFields?: string;
-            /** @docid dxPivotGridFieldChooserOptions_texts_filterFields */
+            /** The string to display instead of Filter Fields. */
             filterFields?: string;
-            /** @docid dxPivotGridFieldChooserOptions_texts_allFields */
+            /** The string to display instead of All Fields. */
             allFields?: string;
         };
     }
 
-    /** @docid dxPivotGridFieldChooser */
+    /** A complementary widget for the PivotGrid that allows you to manage data displayed in the PivotGrid. */
     export class dxPivotGridFieldChooser extends Widget {
         constructor(element: JQuery, options?: dxPivotGridFieldChooserOptions);
         constructor(element: Element, options?: dxPivotGridFieldChooserOptions);
 
-        /** @docid dxPivotGridFieldChooserMethods_updateDimensions */
+        /** Updates the widget to the size of its content. */
         updateDimensions(): void;
 
-        /** @docid dxPivotGridFieldChooserMethods_getDataSource */
+        /** Gets the PivotGridDataSource instance. */
         getDataSource(): DevExpress.data.PivotGridDataSource;
     }
 
