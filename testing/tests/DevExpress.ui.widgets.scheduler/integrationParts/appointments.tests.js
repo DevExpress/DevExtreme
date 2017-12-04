@@ -4560,8 +4560,7 @@ QUnit.test("FormData should be reset on saveChanges, dateSerializationFormat is 
                         onValueChanged: function(args) {
                             startDate = args.value;
                             form.getEditor("EndDate")
-                                .option("value", new Date(new Date(startDate).getTime() +
-                                60 * 1000 * 50));
+                                .option("value", new Date("2016-05-25T11:30:00"));
                         }
                     }
                 }, {
