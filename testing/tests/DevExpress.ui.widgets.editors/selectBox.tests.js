@@ -1834,6 +1834,30 @@ QUnit.test("The 'onCustomItemCreating' option", function(assert) {
     assert.equal($input.val(), "display " + customValue, "displayed value is correct");
 });
 
+QUnit.test("creating custom item via the 'customItem' event parameter", function(assert) {
+    var $selectBox = $("#selectBox").dxSelectBox({
+            acceptCustomValue: true,
+            displayExpr: "display",
+            valueExpr: "value",
+            onCustomItemCreating: function(e) {
+                e.customItem = {
+                    display: "display " + e.text,
+                    value: "value " + e.text
+                };
+            }
+        }),
+        $input = $selectBox.find(".dx-texteditor-input"),
+        keyboard = keyboardMock($input),
+        customValue = "Custom value";
+
+    keyboard
+        .type(customValue)
+        .change();
+
+    assert.equal($selectBox.dxSelectBox("option", "value"), "value " + customValue, "value is correct");
+    assert.equal($input.val(), "display " + customValue, "displayed value is correct");
+});
+
 QUnit.test("The 'onCustomItemCreating' option with Deferred", function(assert) {
     var deferred = $.Deferred(),
         $selectBox = $("#selectBox").dxSelectBox({
