@@ -1184,6 +1184,22 @@ QUnit.testInActiveWindow("Up arrow to group footer", function(assert) {
     assert.ok(!this.rowsView.element().find(".dx-row").eq(rowIndex).hasClass("dx-datagrid-group-footer"), "not group footer");
 });
 
+QUnit.testInActiveWindow("Ctrl+RightArrow do not expand master detail row if master detail is not enabled (T576946)", function(assert) {
+    //arrange
+    setupModules(this);
+
+    //act
+    this.gridView.render($("#container"));
+
+    this.focusCell(1, 1);
+
+    this.dataController.expandRow = sinon.spy();
+    this.triggerKeyDown("rightArrow", true);
+
+    //assert
+    assert.strictEqual(this.dataController.expandRow.callCount, 0, "grid does not open master detail");
+});
+
 /*test("Down arrow for master detail", function () {
     //act
     this.options.masterDetail = {
