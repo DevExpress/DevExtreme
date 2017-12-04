@@ -26,7 +26,7 @@ var $ = require("../../core/renderer"),
     normalizeDataSourceOptions = DataSourceModule.normalizeDataSourceOptions;
 
 var USER_STATE_FIELD_NAMES_15_1 = ["filterValues", "filterType", "fixed", "fixedPosition"],
-    USER_STATE_FIELD_NAMES = ["visibleIndex", "dataField", "name", "dataType", "width", "visible", "sortOrder", "sortIndex", "groupIndex", "filterValue", "selectedFilterOperation", "added"].concat(USER_STATE_FIELD_NAMES_15_1),
+    USER_STATE_FIELD_NAMES = ["visibleIndex", "dataField", "name", "dataType", "width", "visible", "sortOrder", "sortIndex", "groupIndex", "filterValue", "selectedFilterOperation", "added", "ownerBand"].concat(USER_STATE_FIELD_NAMES_15_1),
     COMMAND_EXPAND_CLASS = "dx-command-expand";
 
 module.exports = {
