@@ -1418,21 +1418,6 @@ QUnit.test("tag should not be removed when editor looses focus", function(assert
     assert.equal($tagBox.find(".dx-tag").length, 1, "tag is present");
 });
 
-QUnit.test("tags should not be rerendered when editor looses focus", function(assert) {
-    var $tagBox = $("#tagBox").dxTagBox({
-            items: [1, 2, 3],
-            focusStateEnabled: true
-        }),
-        tagBox = $tagBox.dxTagBox("instance");
-
-    var renderTagsStub = sinon.stub(tagBox, "_renderTags");
-
-    $($tagBox.find("input")).trigger("focusin");
-    $($tagBox.find("input")).trigger("focusout");
-
-    assert.equal(renderTagsStub.callCount, 0, "tags weren't rerendered");
-});
-
 QUnit.test("list 'select all' checkbox state should be correct if all items are selected on init and data source paging is enabled", function(assert) {
     var items = function() {
         var items = [];
