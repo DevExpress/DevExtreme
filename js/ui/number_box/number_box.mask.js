@@ -235,10 +235,7 @@ var NumberBoxMask = NumberBoxBase.inherit({
     },
 
     _isNumberVeryLong: function(text) {
-        var decimalSeparator = number.getDecimalSeparator(),
-            regExp = new RegExp("[^0-9" + decimalSeparator + "]", "g");
-
-        return text.replace(regExp, "").length > MAXIMUM_FLOAT_LENGTH;
+        return text.replace(/[^0-9]/g, "").length > MAXIMUM_FLOAT_LENGTH;
     },
 
     _parseNumber: function(text) {
