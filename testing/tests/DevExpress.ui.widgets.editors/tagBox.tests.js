@@ -426,7 +426,7 @@ QUnit.test("tags should remove after clear values", function(assert) {
     assert.equal($tagBox.find(".dx-tag").length, 0, "zero item rendered");
 });
 
-QUnit.test("tags should not be rerendered when editor looses focus", function(assert) {
+QUnit.testInActiveWindow("tags should not be rerendered when editor looses focus", function(assert) {
     var $tagBox = $("#tagBox").dxTagBox({
             items: [1, 2, 3],
             focusStateEnabled: true
@@ -1401,7 +1401,7 @@ QUnit.test("tag rendered after click on selections control", function(assert) {
     assert.equal($tagBox.find(".dx-tag").length, 1, "tag rendered");
 });
 
-QUnit.test("tag should not be removed when editor looses focus", function(assert) {
+QUnit.testInActiveWindow("tag should not be removed when editor looses focus", function(assert) {
     var $tagBox = $("#tagBox").dxTagBox({
         items: [1, 2, 3],
         showSelectionControls: true,
@@ -2236,7 +2236,7 @@ QUnit.test("keyboard navigation should work after removing the last tag with the
     assert.ok($lastTag.hasClass(FOCUSED_CLASS), "the last tag is focused");
 });
 
-QUnit.test("the 'focused' class should be removed from the focused tag when the widget loses focus", function(assert) {
+QUnit.testInActiveWindow("the 'focused' class should be removed from the focused tag when the widget loses focus", function(assert) {
     this.keyboard
         .focus()
         .press("left");
@@ -2247,7 +2247,7 @@ QUnit.test("the 'focused' class should be removed from the focused tag when the 
     assert.equal(focusedTagsCount, 0, "there are no focused tags");
 });
 
-QUnit.test("the should be no focused tags on when the widget gets focus", function(assert) {
+QUnit.testInActiveWindow("the should be no focused tags on when the widget gets focus", function(assert) {
     this.keyboard
         .focus()
         .press("left");

@@ -842,12 +842,7 @@ var TagBox = SelectBox.inherit({
         this._renderInputAddons();
 
         this.option("selectedItems", this._selectedItems.slice());
-
-        if(!this._multiTagRequired()) {
-            this._cleanTags();
-        } else {
-            this._tagElements().remove();
-        }
+        this._cleanTags();
 
         var $multiTag = this._multiTagRequired() && this._renderMultiTag(this._input()),
             showMultiTagOnly = this.option("showMultiTagOnly"),
@@ -865,17 +860,21 @@ var TagBox = SelectBox.inherit({
     },
 
     _cleanTags: function() {
-        var $tags = this._tagElements(),
-            values = this._getValue();
+        if(this._multiTagRequired()) {
+            this._tagElements().remove();
+        } else {
+            var $tags = this._tagElements(),
+                values = this._getValue();
 
-        each($tags, function(_, tag) {
-            var $tag = $(tag),
-                index = inArray($tag.data(TAGBOX_TAG_DATA_KEY), values);
+            each($tags, function(_, tag) {
+                var $tag = $(tag),
+                    index = inArray($tag.data(TAGBOX_TAG_DATA_KEY), values);
 
-            if(index < 0) {
-                $tag.remove();
-            }
-        });
+                if(index < 0) {
+                    $tag.remove();
+                }
+            });
+        }
     },
 
     _renderEmptyState: function() {
