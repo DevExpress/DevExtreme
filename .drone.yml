@@ -1,10 +1,14 @@
 # https://github.com/drone/drone/
 
+clone:
+  git:
+    image: plugins/git
+    depth: 50
+
 pipeline:
 
   build:
     image: devexpress/devextreme-build:17_2
-    pull: true
     environment:
       - HEADLESS=true
     commands:

@@ -31,6 +31,7 @@ require('./build/gulp/style-compiler');
 gulp.task('default', function(callback) {
     runSequence(
         'clean',
+        'localization',
         [
             'js-bundles-debug',
             'js-bundles-prod',
@@ -39,8 +40,7 @@ gulp.task('default', function(callback) {
             'aspnet',
             'vendor',
             'ts',
-            'layouts',
-            'localization'
+            'layouts'
         ],
         'style-compiler-themes',
         'npm',
