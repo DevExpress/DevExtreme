@@ -1,228 +1,181 @@
 /// <reference path="core.d.ts" />
 
 declare module DevExpress.ui {
-    /** @docid_ignore template */
-
+    
     export interface dxValidatorValidationAdapter {
-        /** @docid dxValidatorOptions_adapter_getValue */
+        /** A function that returns the value to be validated. */
         getValue?: Function;
 
-        /** @docid dxValidatorOptions_adapter_validationRequestsCallbacks */
+        /** The jQuery.Callbacks() object that is fired when the specified value should be validated. */
         validationRequestsCallbacks?: JQueryCallback;
 
-        /** @docid dxValidatorOptions_adapter_applyValidationResults */
+        /** A function that the Validator widget calls after validating a specified value. */
         applyValidationResults?: (params: validationEngine.ValidatorValidationResult) => void;
 
-        /** @docid dxValidatorOptions_adapter_reset */
+        /** A function that resets the validated values. */
         reset?: Function;
 
-        /** @docid dxValidatorOptions_adapter_focus */
+        /** A function that sets focus to a validated editor when the corresponding ValidationSummary item is focused. */
         focus?: Function;
 
-        /** @docid dxValidatorOptions_adapter_bypass */
+        /** A function that returns a Boolean value specifying whether or not to bypass validation. */
         bypass?: Function;
     }
 
     export interface dxValidatorOptions extends DOMComponentOptions {
-        /** @docid dxValidatorOptions_validationRules */
+        /** An array of validation rules to be checked for the editor with which the dxValidator object is associated. */
         validationRules?: Array<any>;
 
-        /** @docid dxValidatorOptions_name */
+        /** Specifies the editor name to be used in the validation default messages. */
         name?: string;
 
-        /** @docid dxValidatorOptions_adapter */
+        /** An object that specifies what and when to validate, and how to apply the validation result. */
         adapter?: dxValidatorValidationAdapter;
 
-        /** @docid dxValidatorOptions_validationGroup */
+        /** Specifies the validation group the editor will be related to. */
         validationGroup?: string;
 
-        /** @docid dxValidatorOptions_onValidated */
+        /** A handler for the validated event. */
         onValidated?: (params: validationEngine.ValidatorValidationResult) => void;
     }
 
 
-    /** @docid dxValidator */
+    /** A widget that is used to validate the associated DevExtreme editors against the defined validation rules. */
     export class dxValidator extends DOMComponent implements validationEngine.IValidator {
         constructor(element: JQuery, options?: dxValidatorOptions);
         constructor(element: Element, options?: dxValidatorOptions);
 
-        /** @docid_ignore dxValidatorMethods_beginUpdate */
-        /** @docid_ignore dxValidatorMethods_defaultOptions */
-        /** @docid_ignore dxValidatorMethods_endUpdate */
-        /** @docid_ignore dxValidatorOptions_rtlEnabled */
-
-        /** @docid dxValidatorMethods_validate */
+        
+        /** Validates the value of the editor that is controlled by the current Validator object against the list of the specified validation rules. */
         validate(): validationEngine.ValidatorValidationResult;
-        /** @docid dxValidatorMethods_reset */
+        /** Resets the value and validation result of the editor associated with the current Validator object. */
         reset(): void;
-        /** @docid dxValidatorMethods_focus */
+        /** Sets focus to the editor associated with the current Validator object. */
         focus(): void;
     }
 
     export interface dxValidationGroupOptions extends DOMComponentOptions { }
 
-    /** @docid dxValidationGroup */
+    /** The widget that is used in the Knockout and AngularJS approaches to combine the editors to be validated. */
     export class dxValidationGroup extends DOMComponent {
         constructor(element: JQuery, options?: dxValidationGroupOptions);
         constructor(element: Element, options?: dxValidationGroupOptions);
 
-        /** @docid_ignore dxValidationGroupMethods_beginUpdate */
-        /** @docid_ignore dxValidationGroupMethods_defaultOptions */
-        /** @docid_ignore dxValidationGroupMethods_endUpdate */
-        /** @docid_ignore dxValidationGroupOptions_rtlEnabled */
-
-        /** @docid dxValidationGroupMethods_validate */
+        
+        /** Validates rules of the validators that belong to the current validation group. */
         validate(): validationEngine.ValidationGroupValidationResult;
-        /** @docid dxValidationGroupMethods_reset */
+        /** Resets the value and validation result of the editors that are included to the current validation group. */
         reset(): void;
     }
 
     export interface dxValidationSummaryOptions extends CollectionWidgetOptions {
-        /** @docid_ignore dxValidationSummaryOptions_focusStateEnabled */
-        /** @docid_ignore dxValidationSummaryOptions_noDataText */
-        /** @docid_ignore dxValidationSummaryOptions_itemRender */
-        /** @docid_ignore dxValidationSummaryOptions_activeStateEnabled */
-        /** @docid_ignore dxValidationSummaryOptions_dataSource */
-        /** @docid_ignore dxValidationSummaryOptions_disabled */
-        /** @docid_ignore dxValidationSummaryOptions_height */
-        /** @docid_ignore dxValidationSummaryOptions_hint */
-        /** @docid_ignore dxValidationSummaryOptions_itemHoldTimeout */
-        /** @docid_ignore dxValidationSummaryOptions_onItemContextMenu */
-        /** @docid_ignore dxValidationSummaryOptions_onItemHold */
-        /** @docid_ignore dxValidationSummaryOptions_onItemRendered */
-        /** @docid_ignore dxValidationSummaryOptions_onItemSelect */
-        /** @docid_ignore dxValidationSummaryOptions_onSelectionChanged */
-        /** @docid_ignore dxValidationSummaryOptions_rtlEnabled */
-        /** @docid_ignore dxValidationSummaryOptions_selectedIndex */
-        /** @docid_ignore dxValidationSummaryOptions_selectedItem */
-        /** @docid_ignore dxValidationSummaryOptions_selectedItems */
-        /** @docid_ignore dxValidationSummaryOptions_selectedItemKeys */
-        /** @docid_ignore dxValidationSummaryOptions_keyExpr */
-        /** @docid_ignore dxValidationSummaryOptions_visible */
-        /** @docid_ignore dxValidationSummaryOptions_width */
-        /** @docid_ignore dxValidationSummaryOptions_accessKey */
-        /** @docid_ignore dxValidationSummaryOptions_tabIndex */
-
-        /** @docid dxValidationSummaryOptions_validationGroup */
+        
+        /** Specifies the validation group for which summary should be generated. */
         validationGroup?: string;
     }
 
-    /** @docid dxValidationSummary */
+    /** A widget for displaying the result of checking validation rules for editors. */
     export class dxValidationSummary extends CollectionWidget {
         constructor(element: JQuery, options?: dxValidationSummaryOptions);
         constructor(element: Element, options?: dxValidationSummaryOptions);
-
-        /** @docid_ignore dxValidationSummaryMethods_registerKeyHandler */
-        /** @docid_ignore dxValidationSummaryMethods_focus */
-
-        /** @docid_ignore dxValidationSummaryMethods_getDataSource */
+       
     }
 
     export interface dxResizableOptions extends DOMComponentOptions {
-        /** @docid_ignore dxResizableOptions_stepPrecision */
-
-        /** @docid dxResizableOptions_handles */
+        
+        /** Specifies which borders of the widget element are used as a handle. */
         handles?: string;
 
-        /** @docid dxResizableOptions_minWidth */
+        /** Specifies the lower width boundary for resizing. */
         minWidth?: number;
 
-        /** @docid dxResizableOptions_maxWidth */
+        /** Specifies the upper width boundary for resizing. */
         maxWidth?: number;
 
-        /** @docid dxResizableOptions_minHeight */
+        /** Specifies the lower height boundary for resizing. */
         minHeight?: number;
 
-        /** @docid dxResizableOptions_maxHeight */
+        /** Specifies the upper height boundary for resizing. */
         maxHeight?: number;
 
-        /** @docid dxResizableOptions_onResizeStart */
+        /** A handler for the resizeStart event. */
         onResizeStart?: Function;
 
-        /** @docid dxResizableOptions_onResize */
+        /** A handler for the resize event. */
         onResize?: Function;
 
-        /** @docid dxResizableOptions_onResizeEnd */
+        /** A handler for the resizeEnd event. */
         onResizeEnd?: Function;
     }
 
-    /** @docid dxResizable */
+    /** The Resizable widget enables its content to be resizable in the UI. */
     export class dxResizable extends DOMComponent {
         constructor(element: JQuery, options?: dxResizableOptions);
         constructor(element: Element, options?: dxResizableOptions);
     }
 
     export interface dxTooltipOptions extends dxPopoverOptions {
-        /** @docid_ignore dxTooltipOptions_showtitle*/
-        /** @docid_ignore dxTooltipOptions_title*/
-        /** @docid_ignore dxTooltipOptions_titleTemplate */
-        /** @docid_ignore dxTooltipOptions_toolbarItems*/
-        /** @docid_ignore dxTooltipOptions_showCloseButton*/
-        /** @docid_ignore dxTooltipOptions_onTitleRendered */
     }
 
-    /** @docid dxTooltip */
+    /** The Tooltip widget displays a tooltip for a specified element on the page. */
     export class dxTooltip extends dxPopover {
         constructor(element: JQuery, options?: dxTooltipOptions);
         constructor(element: Element, options?: dxTooltipOptions);
     }
 
     export interface dxDropDownListOptions extends dxDropDownEditorOptions, DataExpressionMixinOptions {
-        /** @docid_ignore dxDropDownListOptions_fieldTemplate*/
-        /** @docid_ignore dxDropDownListOptions_fieldRender*/
-        /** @docid_ignore dxDropDownListOptions_contentTemplate*/
-        /** @docid_ignore dxDropDownListOptions_contentRender*/
-        /** @docid_ignore dxDropDownListOptions_applyValueMode*/
-        /** @docid_ignore dxDropDownListOptions_value*/
-
-        /** @docid dxDropDownListOptions_displayValue */
+        
+        /** Returns the value currently displayed by the widget. */
         displayValue?: string;
 
-        /** @docid dxDropDownListOptions_minSearchLength */
+        /** The minimum number of characters that must be entered into the text box to begin a search. Applies only if searchEnabled is true. */
         minSearchLength?: number;
 
-        /** @docid dxDropDownListOptions_showDataBeforeSearch */
+        /** Specifies whether or not the widget displays unfiltered values until a user types a number of characters exceeding the minSearchLength option value. */
         showDataBeforeSearch?: boolean;
 
-        /** @docid dxDropDownListOptions_searchExpr */
+        /** Specifies the name of a data source item field or an expression whose value is compared to the search criterion. */
         searchExpr?: any;
 
-        /** @docid dxDropDownListOptions_searchMode */
+        /** Specifies the binary operation used to filter data. */
         searchMode?: string;
 
-        /** @docid dxDropDownListOptions_searchTimeout */
+        /** Specifies the time delay, in milliseconds, after the last character has been typed in, before a search is executed. */
         searchTimeout?: number;
 
-        /** @docid dxDropDownListOptions_onValueChanged */
+        /** A handler for the valueChanged event. */
         onValueChanged?: Function;
 
-        /** @docid dxDropDownListOptions_valueChangeEvent */
+        /** Specifies DOM event names that update a widget's value. */
         valueChangeEvent?: string;
 
-        /** @docid dxDropDownListOptions_searchEnabled */
+        /** Specifies whether or not the widget supports searching. */
         searchEnabled?: boolean;
 
-        /** @docid dxDropDownListOptions_pagingEnabled */
+        /**
+         * Specifies whether or not the widget displays items by pages.
+         * @deprecated Use the DataSource paging opportunities instead.
+         */
         pagingEnabled?: boolean;
 
-        /** @docid dxDropDownListOptions_noDataText */
+        /** The text or HTML markup displayed by the widget if the item collection is empty. */
         noDataText?: string;
 
-        /** @docid dxDropDownListOptions_onSelectionChanged */
+        /** A handler for the selectionChanged event. */
         onSelectionChanged?: Function;
 
-        /** @docid dxDropDownListOptions_onItemClick */
+        /** A handler for the itemClick event. */
         onItemClick?: Function;
 
-        /** @docid dxDropDownListOptions_grouped */
+        /** Specifies whether data items should be grouped. */
         grouped?: boolean;
 
-        /** @docid dxDropDownListOptions_groupTemplate */
+        /** Specifies a custom template for group captions. */
         groupTemplate?: any;
 
     }
 
-    /** @docid dxDropDownList */
+    /** A base class for drop-down list widgets. */
     export class dxDropDownList extends dxDropDownEditor implements DataHelperMixin  {
         constructor(element: JQuery, options?: dxDropDownListOptions);
         constructor(element: Element, options?: dxDropDownListOptions);
@@ -231,417 +184,346 @@ declare module DevExpress.ui {
     }
 
     export interface dxToolbarOptions extends CollectionWidgetOptions {
-        /** @docid_ignore dxToolbarOptions_activeStateEnabled */
-        /** @docid_ignore dxToolbarOptions_selectedIndex */
-        /** @docid_ignore dxToolbarOptions_selectedItem */
-        /** @docid_ignore dxToolbarOptions_selectedItems */
-        /** @docid_ignore dxToolbarOptions_selectedItemKeys */
-        /** @docid_ignore dxToolbarOptions_keyExpr */
-        /** @docid_ignore dxToolbarOptions_submenuType */
-        /** @docid_ignore dxToolbarOptions_onSelectionChanged */
-        /** @docid_ignore dxToolbarOptions_focusStateEnabled */
-        /** @docid_ignore dxToolbarOptions_accessKey */
-        /** @docid_ignore dxToolbarOptions_tabIndex */
-
-        /** @docid dxToolbarOptions_menuItemTemplate */
+        
+        /** The template used to render menu items.
+            Specifies a custom template for a menu item. */
         menuItemTemplate?: any;
 
-        /** @docid dxToolbarOptions_renderAs */
+        /** Informs the widget about its location in a view HTML markup. */
         renderAs?: string;
     }
 
-    /** @docid dxToolbar */
+    /** The Toolbar is a widget containing items that usually manage screen content. Those items can be plain text or widgets. */
     export class dxToolbar extends CollectionWidget {
         constructor(element: JQuery, options?: dxToolbarOptions);
         constructor(element: Element, options?: dxToolbarOptions);
 
-        /** @docid_ignore dxToolbarItemTemplate_location */
-        /** @docid_ignore dxToolbarItemTemplate_locateInMenu */
-        /** @docid_ignore dxToolbarItemTemplate_showText */
-        /** @docid_ignore dxToolbarItemTemplate_menuItemTemplate */
-        /** @docid_ignore dxToolbarItemTemplate_options */
-        /** @docid_ignore dxToolbarItemTemplate_widget */
-
-        /** @docid_ignore dxToolbarMethods_registerKeyHandler */
-        /** @docid_ignore dxToolbarMethods_focus */
+        
     }
 
     export interface dxToastOptions extends dxOverlayOptions {
-        /** @docid_ignore dxToastOptions_disabled */
-        /** @docid_ignore dxToastOptions_dragEnabled */
-        /** @docid_ignore dxToastOptions_resizeEnabled */
-        /** @docid_ignore dxToastOptions_closeOnOutsideClick */
-
-        /** @docid dxToastOptions_animation */
+               
         animation?: {
-            /** @docid dxToastOptions_animation_show */
+            /** An object that defines the animation options used when the widget is being shown. */
             show?: fx.AnimationOptions;
 
-            /** @docid dxToastOptions_animation_hide */
+            /** An object that defines the animation options used when the widget is being hidden. */
             hide?: fx.AnimationOptions;
         };
 
-        /** @docid dxToastOptions_displaytime */
+        /** The time span in milliseconds during which the Toast widget is visible. */
         displayTime?: number;
-
-        /** @docid dxToastOptions_height */
+       
         height?: any;
 
-        /** @docid dxToastOptions_message */
+        /** The Toast message text. */
         message?: string;
-
-        /** @docid dxToastOptions_position */
+       
         position?: PositionOptions;
-
-        /** @docid dxToastOptions_shading */
+     
         shading?: boolean;
 
-        /** @docid dxToastOptions_type */
+        /** Specifies the Toast widget type. */
         type?: string;
-
-        /** @docid dxToastOptions_width */
+       
         width?: any;
-
-        /** @docid dxToastOptions_closeOnBackButton */
+        
         closeOnBackButton?: boolean;
 
-        /** @docid dxToastOptions_closeOnSwipe */
+        /** A Boolean value specifying whether or not the toast is closed if a user swipes it out of the screen boundaries. */
         closeOnSwipe?: boolean;
 
-        /** @docid dxToastOptions_closeOnClick */
+        /** A Boolean value specifying whether or not the toast is closed if a user clicks it. */
         closeOnClick?: boolean;
     }
 
-    /** @docid dxToast */
+    /** The Toast is a widget that provides pop-up notifications. */
     export class dxToast extends dxOverlay {
         constructor(element: JQuery, options?: dxToastOptions);
         constructor(element: Element, options?: dxToastOptions);
     }
 
     export interface dxTextEditorOptions extends EditorOptions {
-        /** @docid dxTextEditorOptions_onChange */
+        /** A handler for the change event. */
         onChange?: Function;
 
-        /** @docid dxTextEditorOptions_onCopy */
+        /** A handler for the copy event. */
         onCopy?: Function;
 
-        /** @docid dxTextEditorOptions_onCut */
+        /** A handler for the cut event. */
         onCut?: Function;
 
-        /** @docid dxTextEditorOptions_onEnterKey */
+        /** A handler for the enterKey event. */
         onEnterKey?: Function;
 
-        /** @docid dxTextEditorOptions_onFocusIn */
+        /** A handler for the focusIn event. */
         onFocusIn?: Function;
 
-        /** @docid dxTextEditorOptions_onFocusOut */
+        /** A handler for the focusOut event. */
         onFocusOut?: Function;
 
-        /** @docid dxTextEditorOptions_onInput */
+        /** A handler for the input event. */
         onInput?: Function;
 
-        /** @docid dxTextEditorOptions_onKeyDown */
+        /** A handler for the keyDown event. */
         onKeyDown?: Function;
 
-        /** @docid dxTextEditorOptions_onKeyPress */
+        /** A handler for the keyPress event. */
         onKeyPress?: Function;
 
-        /** @docid dxTextEditorOptions_onKeyUp */
+        /** A handler for the keyUp event. */
         onKeyUp?: Function;
 
-        /** @docid dxTextEditorOptions_onPaste */
+        /** A handler for the paste event. */
         onPaste?: Function;
 
-        /** @docid dxTextEditorOptions_placeholder */
+        /** The text displayed by the widget when the widget value is empty. */
         placeholder?: string;
 
-        /** @docid dxTextEditorOptions_showClearButton */
+        /** Specifies whether to display the Clear button in the widget. */
         showClearButton?: boolean;
 
-        /** @docid dxTextEditorOptions_value */
+        /** Specifies the current value displayed by the widget. */
         value?: any;
 
-        /** @docid dxTextEditorOptions_valueChangeEvent */
+        /** Specifies DOM event names that update a widget's value. */
         valueChangeEvent?: string;
 
-        /** @docid dxTextEditorOptions_spellcheck */
+        /** Specifies whether or not the widget checks the inner text for spelling mistakes. */
         spellcheck?: boolean;
 
-        /** @docid dxTextEditorOptions_attr */
+        
         attr?: Object;
 
-        /** @docid dxTextEditorOptions_inputAttr */
+        /** Specifies the attributes to be passed on to the underlying HTML element. */
         inputAttr?: Object;
 
-        /** @docid dxTextEditorOptions_text */
+        /** The read-only option that holds the text displayed by the widget input element. */
         text?: string;
-
-        /** @docid dxTextEditorOptions_focusStateEnabled */
+      
         focusStateEnabled?: boolean;
-
-        /** @docid dxTextEditorOptions_hoverStateEnabled */
+        
         hoverStateEnabled?: boolean;
 
-        /** @docid dxTextEditorOptions_mask */
+        /** The editor mask that specifies the format of the entered string. */
         mask?: string;
 
-        /** @docid dxTextEditorOptions_maskChar */
+        /** Specifies a mask placeholder character. */
         maskChar?: string;
 
-        /** @docid dxTextEditorOptions_maskRules */
+        /** Specifies custom mask rules. */
         maskRules?: Object;
 
-        /** @docid dxTextEditorOptions_maskInvalidMessage */
+        /** A message displayed when the entered text does not match the specified pattern. */
         maskInvalidMessage?: string;
 
-        /** @docid dxTextEditorOptions_useMaskedValue */
+        /** Specifies whether the value should contain mask characters or not. */
         useMaskedValue?: boolean;
 
-        /** @docid dxTextEditorOptions_name */
+        
         name?: string;
     }
 
-    /** @docid dxTextEditor */
+    /** A base class for text editing widgets. */
     export class dxTextEditor extends Editor {
         constructor(element: JQuery, options?: dxTextEditorOptions);
         constructor(element: Element, options?: dxTextEditorOptions);
 
-        /** @docid dxTextEditorMethods_blur */
+        /** Removes focus from the input element. */
         blur(): void;
 
-        /** @docid dxTextEditorMethods_focus */
+        /** Sets focus to the input element representing the widget. */
         focus(): void;
     }
 
     export interface dxTextBoxOptions extends dxTextEditorOptions {
-        /** @docid dxTextBoxOptions_maxlength */
+        /** Specifies the maximum number of characters you can enter into the textbox. */
         maxLength?: any;
 
-        /** @docid dxTextBoxOptions_mode */
+        /** The "mode" attribute value of the actual HTML input element representing the text box. */
         mode?: string;
     }
 
-    /** @docid dxTextbox */
+    /** The TextBox is a widget that enables a user to enter and edit a single line of text. */
     export class dxTextBox extends dxTextEditor {
         constructor(element: JQuery, options?: dxTextBoxOptions);
         constructor(element: Element, options?: dxTextBoxOptions);
     }
 
     export interface dxTextAreaOptions extends dxTextBoxOptions {
-        /** @docid_ignore dxTextAreaOptions_mode */
-        /** @docid_ignore dxTextAreaOptions_showClearButton */
-        /** @docid_ignore dxTextAreaOptions_mask */
-        /** @docid_ignore dxTextAreaOptions_maskChar */
-        /** @docid_ignore dxTextAreaOptions_maskRules */
-        /** @docid_ignore dxTextAreaOptions_maskInvalidMessage */
-        /** @docid_ignore dxTextAreaOptions_useMaskedValue */
-
-        /** @docid dxTextAreaOptions_spellcheck */
+        
+        /** Specifies whether or not the widget checks the inner text for spelling mistakes. */
         spellcheck?: boolean;
 
-        /** @docid dxTextAreaOptions_minHeight */
+        /** Specifies the minimum height of the widget. */
         minHeight?: any;
 
-        /** @docid dxTextAreaOptions_maxHeight */
+        /** Specifies the maximum height of the widget. */
         maxHeight?: any;
 
-        /** @docid dxTextAreaOptions_autoResizeEnabled */
+        /** A Boolean value specifying whether or not the auto resizing mode is enabled. */
         autoResizeEnabled?: boolean;
     }
 
-    /** @docid dxTextArea */
+    /** The TextArea is a widget that enables a user to enter and edit a multi-line text. */
     export class dxTextArea extends dxTextBox {
         constructor(element: JQuery, options?: dxTextAreaOptions);
         constructor(element: Element, options?: dxTextAreaOptions);
     }
 
     export interface dxTabsOptions extends CollectionWidgetOptions {
-        /** @docid_ignore dxTabsOptions_activeStateEnabled*/
-        /** @docid_ignore dxTabsOptions_noDataText */
-        /** @docid_ignore dxTabsOptions_selectedItems */
-        /** @docid_ignore dxTabsOptions_hoverStateEnabled */
-        /** @docid_ignore dxTabsOptions_focusStateEnabled */
-
-        /** @docid dxTabsOptions_selectionMode */
+        
+        /** Specifies whether the widget enables an end-user to select only a single item or multiple items. */
         selectionMode?: string;
 
-        /** @docid dxTabsOptions_scrollByContent */
+        /** Specifies whether or not an end-user can scroll tabs by swiping. */
         scrollByContent?: boolean;
 
-        /** @docid dxTabsOptions_scrollingEnabled */
+        /** Specifies whether or not an end-user can scroll tabs. */
         scrollingEnabled?: boolean;
 
-        /** @docid dxTabsOptions_showNavButtons */
+        /** A Boolean value that specifies the availability of navigation buttons. */
         showNavButtons?: boolean;
     }
 
-    /** @docid dxTabs */
+    /** The Tabs is a tab strip used to switch between pages or views. This widget is included in the TabPanel widget, but you can use the Tabs separately as well. */
     export class dxTabs extends CollectionWidget {
         constructor(element: JQuery, options?: dxTabsOptions);
         constructor(element: Element, options?: dxTabsOptions);
 
-        /** @docid_ignore dxTabsItemTemplate_icon */
-        /** @docid_ignore dxTabsItemTemplate_iconSrc */
-        /** @docid_ignore dxTabsItemTemplate_badge */
     }
 
     export interface dxTabPanelOptions extends dxMultiViewOptions {
-        /** @docid_ignore dxTabPanelItemTemplate_title */
-        /** @docid_ignore dxTabPanelOptions_animationEnabled */
-        /** @docid_ignore dxTabPanelOptions_hoverStateEnabled */
-        /** @docid_ignore dxTabPanelOptions_focusStateEnabled */
-        /** @docid_ignore dxTabPanelOptions_swipeEnabled */
-
-        /** @docid dxTabPanelOptions_onTitleClick */
+        
+        /** A handler for the titleClick event. */
         onTitleClick?: any;
 
-        /** @docid dxTabPanelOptions_onTitleHold */
+        /** A handler for the titleHold event. */
         onTitleHold?: Function;
 
-        /** @docid dxTabPanelOptions_onTitleRendered */
+        /** A handler for the titleRendered event. */
         onTitleRendered?: Function;
 
-        /** @docid dxTabPanelOptions_itemTitleTemplate */
+        /** Specifies a custom template for an item title. */
         itemTitleTemplate?: any;
 
-        /** @docid dxTabPanelOptions_scrollByContent */
+        /** A Boolean value specifying if tabs in the title are scrolled by content. */
         scrollByContent?: boolean;
 
-        /** @docid dxTabPanelOptions_scrollingEnabled */
+        /** A Boolean indicating whether or not to add scrolling support for tabs in the title. */
         scrollingEnabled?: boolean;
 
-        /** @docid dxTabPanelOptions_showNavButtons */
+        /** A Boolean value that specifies the availability of navigation buttons. */
         showNavButtons?: boolean;
     }
 
-    /** @docid dxTabPanel */
+    /** The TabPanel is a widget consisting of the Tabs and MultiView widgets. It automatically synchronizes the selected tab with the currently displayed view and vice versa. */
     export class dxTabPanel extends dxMultiView {
         constructor(element: JQuery, options?: dxTabPanelOptions);
         constructor(element: Element, options?: dxTabPanelOptions);
 
-        /** @docid_ignore dxTabPanelItemTemplate_icon */
-        /** @docid_ignore dxTabPanelItemTemplate_iconSrc */
-        /** @docid_ignore dxTabPanelItemTemplate_badge */
-        /** @docid_ignore dxTabPanelItemTemplate_visible */
-        /** @docid_ignore dxTabPanelItemTemplate_tabtemplate */
     }
 
     export interface dxSelectBoxOptions extends dxDropDownListOptions {
-        /** @docid_ignore dxSelectBoxOptions_autocompletionEnabled */
-        /** @docid_ignore dxSelectBoxOptions_allowClearing */
 
-        /** @docid dxSelectBoxOptions_valueChangeEvent */
+        /** Specifies DOM event names that update a widget's value. */
         valueChangeEvent?: string;
 
-        /** @docid dxSelectBoxOptions_fieldTemplate */
+        /** The template to be used for rendering the widget text field. Must contain the TextBox widget. */
         fieldTemplate?: any;
 
-        /** @docid dxSelectBoxOptions_placeholder */
+        /** The text that is provided as a hint in the select box editor. */
         placeholder?: string;
 
-        /** @docid dxSelectBoxOptions_acceptCustomValue */
+        /** Specifies whether the widget allows a user to enter a custom value. Requires the onCustomItemCreating handler implementation. */
         acceptCustomValue?: boolean;
 
-        /** @docid dxSelectBoxOptions_showSelectionControls */
+        /** Specifies whether or not to display selection controls. */
         showSelectionControls?: boolean;
 
-        /** @docid dxSelectBoxOptions_onCustomItemCreating */
+        /** A handler for the customItemCreating event. Executed when a user adds a custom item. Requires acceptCustomValue to be set to true. */
         onCustomItemCreating?: Function;
     }
 
-    /** @docid dxSelectbox */
+    /** The SelectBox widget is an editor that allows an end user to select an item from a drop-down list. */
     export class dxSelectBox extends dxDropDownList {
         constructor(element: JQuery, options?: dxSelectBoxOptions);
         constructor(element: Element, options?: dxSelectBoxOptions);
     }
 
     export interface dxTagBoxOptions extends dxSelectBoxOptions {
-        /** @docid_ignore dxTagBoxOptions_closeAction */
-        /** @docid_ignore dxTagBoxOptions_hiddenAction */
-        /** @docid_ignore dxTagBoxOptions_itemRender */
-        /** @docid_ignore dxTagBoxOptions_openAction */
-        /** @docid_ignore dxTagBoxOptions_shownAction */
-        /** @docid_ignore dxTagBoxOptions_maxLength */
-        /** @docid_ignore dxTagBoxOptions_onCopy */
-        /** @docid_ignore dxTagBoxOptions_onCut */
-        /** @docid_ignore dxTagBoxOptions_onPaste */
-        /** @docid_ignore dxTagBoxOptions_spellcheck */
-        /** @docid_ignore dxTagBoxOptions_displayValue */
-        /** @docid_ignore dxTagBoxOptions_valueChangeEvent */
-        /** @docid_ignore dxTagBoxOptions_selectedItem */
 
-        /** @docid dxTagBoxOptions_values */
         values?: Array<any>;
 
-        /** @docid dxTagBoxOptions_value */
+        /** Specifies the selected items. */
         value?: Array<any>;
 
-        /** @docid dxTagBoxOptions_selectedItems */
+        /** Gets the currently selected items. */
         selectedItems?: Array<any>;
 
-        /** @docid dxTagBoxOptions_applyValueMode */
+        /** Specifies how the widget applies values. */
         applyValueMode?: string;
 
-        /** @docid dxTagBoxOptions_hideSelectedItems */
+        /** A Boolean value specifying whether or not to hide selected items. */
         hideSelectedItems?: boolean;
 
-        /** @docid dxTagBoxOptions_selectAllMode */
+        /** Specifies the mode in which all items are selected. */
         selectAllMode?: string;
 
-        /** @docid dxTagBoxOptions_onSelectAllValueChanged */
+        /** A handler for the selectAllValueChanged event. */
         onSelectAllValueChanged?: Function;
 
-        /** @docid dxTagBoxOptions_multiline */
+        /** A Boolean value specifying whether or not the widget is multiline. */
         multiline?: boolean;
 
-        /** @docid dxTagBoxOptions_onSelectionChanged */
+        /** A handler for the selectionChanged event. */
         onSelectionChanged?: Function;
 
-        /** @docid dxTagBoxOptions_tagTemplate */
+        /** Specifies a custom template for a tag. */
         tagTemplate?: any;
     }
 
-    /** @docid dxTagBox */
+    /** The TagBox widget is an editor that allows an end user to select multiple items from a drop-down list. */
     export class dxTagBox extends dxSelectBox {
         constructor(element: JQuery, options?: dxTagBoxOptions);
         constructor(element: Element, options?: dxTagBoxOptions);
     }
 
     export interface dxScrollViewOptions extends dxScrollableOptions {
-        /** @docid dxScrollViewOptions_onPullDown */
+        /** A handler for the pullDown event. */
         onPullDown?: Function;
 
-        /** @docid dxScrollViewOptions_pulledDownText */
+        /** Specifies the text shown in the pullDown panel when pulling the content down lowers the refresh threshold. */
         pulledDownText?: string;
 
-        /** @docid dxScrollViewOptions_pullingDownText */
+        /** Specifies the text shown in the pullDown panel while pulling the content down to the refresh threshold. */
         pullingDownText?: string;
 
-        /** @docid dxScrollViewOptions_onReachBottom */
+        /** A handler for the reachBottom event. */
         onReachBottom?: Function;
 
-        /** @docid dxScrollViewOptions_reachBottomText */
+        /** Specifies the text shown in the pullDown panel displayed when content is scrolled to the bottom. */
         reachBottomText?: string;
 
-        /** @docid dxScrollViewOptions_refreshingText */
+        /** Specifies the text shown in the pullDown panel displayed when the content is being refreshed. */
         refreshingText?: string;
     }
 
-    /** @docid dxscrollview */
+    /** The ScrollView is a widget that enables a user to scroll its content. */
     export class dxScrollView extends dxScrollable {
         constructor(element: JQuery, options?: dxScrollViewOptions);
         constructor(element: Element, options?: dxScrollViewOptions);
 
-        /** @docid dxscrollviewmethods_isFull */
+        /** Returns a value indicating if the scrollView content is larger then the widget container. */
         isFull(): boolean;
 
-        /** @docid dxscrollviewmethods_refresh */
+        /** Locks the widget until the release(preventScrollBottom) method is called and executes the function passed to the onPullDown option and the handler assigned to the pullDown event. */
         refresh(): void;
 
-        /** @docid dxscrollviewmethods_release */
+        /** Notifies the scroll view that data loading is finished. */
         release(preventScrollBottom: boolean): JQueryPromise<void>;
 
-        /** @docid dxscrollviewmethods_toggleLoading */
+        /** Toggles the loading state of the widget. */
         toggleLoading(showOrHide: boolean): void;
     }
 
@@ -651,2039 +533,1814 @@ declare module DevExpress.ui {
     }
 
     export interface dxScrollableOptions extends DOMComponentOptions {
-        /** @docid dxScrollableOptions_direction */
+        /** A string value specifying the available scrolling directions. */
         direction?: string;
 
-        /** @docid dxScrollableOptions_disabled */
+        /** A Boolean value specifying whether or not the widget can respond to user interaction. */
         disabled?: boolean;
 
-        /** @docid dxScrollableOptions_onScroll */
+        /** A handler for the scroll event. */
         onScroll?: Function;
 
-        /** @docid dxScrollableOptions_showScrollbar */
+        /** Specifies when the widget shows the scrollbar. */
         showScrollbar?: string;
 
-        /** @docid dxScrollableOptions_onUpdated */
+        /** A handler for the update event. */
         onUpdated?: Function;
 
-        /** @docid dxScrollableOptions_useNative */
+        /** Indicates whether to use native or simulated scrolling. */
         useNative?: boolean;
 
-        /** @docid dxScrollableOptions_bounceEnabled */
+        /** A Boolean value specifying whether to enable or disable the bounce-back effect. */
         bounceEnabled?: boolean;
 
-        /** @docid dxScrollableOptions_scrollByContent */
+        /** A Boolean value specifying whether or not an end-user can scroll the widget content swiping it up or down. Applies only if useNative is false */
         scrollByContent?: boolean;
 
-        /** @docid dxScrollableOptions_scrollByThumb */
+        /** A Boolean value specifying whether or not an end-user can scroll the widget content using the scrollbar. */
         scrollByThumb?: boolean;
     }
 
-    /** @docid dxscrollable */
+    /** A widget used to display scrollable content. */
     export class dxScrollable extends DOMComponent {
         constructor(element: JQuery, options?: dxScrollableOptions);
         constructor(element: Element, options?: dxScrollableOptions);
 
-        /** @docid dxscrollablemethods_clientHeight */
+        /** Returns the height of the scrollable widget in pixels. */
         clientHeight(): number;
 
-        /** @docid dxscrollablemethods_clientWidth */
+        /** Returns the width of the scrollable widget in pixels. */
         clientWidth(): number;
 
-        /** @docid dxscrollablemethods_content */
+        /** Returns an HTML element of the widget. */
         content(): JQuery;
 
-        /** @docid dxscrollablemethods_scrollBy#scrollBy(distance) */
+        /** Scrolls the widget content by the specified number of pixels. */
         scrollBy(distance: number): void;
 
-        /** @docid dxscrollablemethods_scrollBy#scrollBy(distanceObject) */
+        /** Scrolls widget content by the specified number of pixels in horizontal and vertical directions. */
         scrollBy(distanceObject: dxScrollableLocation): void;
 
-        /** @docid dxscrollablemethods_scrollHeight */
+        /** Returns the height of the scrollable content in pixels. */
         scrollHeight(): number;
 
-        /** @docid dxscrollablemethods_scrollLeft */
+        /** Returns the current scroll position against the leftmost position. */
         scrollLeft(): number;
 
-        /** @docid dxscrollablemethods_scrollOffset */
+        /** Returns how far the scrollable content is scrolled from the top and from the left. */
         scrollOffset(): dxScrollableLocation;
 
-        /** @docid dxscrollablemethods_scrollTo#scrollTo(targetLocation) */
+        /** Scrolls widget content to the specified position. */
         scrollTo(targetLocation: number): void;
 
-        /** @docid dxscrollablemethods_scrollTo#scrollTo(targetLocationObject) */
+        /** Scrolls widget content to a specified position. */
         scrollTo(targetLocation: dxScrollableLocation): void;
 
-        /** @docid dxscrollablemethods_scrollToElement */
+        /** Scrolls widget content to the specified element. */
         scrollToElement(element: Element): void;
 
-        /** @docid dxscrollablemethods_scrollTop */
+        /** Returns the current scroll position against the topmost position. */
         scrollTop(): number;
 
-        /** @docid dxscrollablemethods_scrollWidth */
+        /** Returns the width of the scrollable content in pixels. */
         scrollWidth(): number;
 
-        /** @docid dxscrollablemethods_update */
+        /** Updates the dimensions of the scrollable contents. */
         update(): JQueryPromise<void>;
     }
 
     export interface dxRadioGroupOptions extends EditorOptions, DataExpressionMixinOptions {
-        /** @docid_ignore dxRadioGroupOptions_hoverStateEnabled */
-        /** @docid_ignore dxRadioGroupOptions_focusStateEnabled */
-        /** @docid_ignore dxRadioGroupOptions_value */
 
-        /** @docid dxRadioGroupOptions_activeStateEnabled */
         activeStateEnabled?: boolean;
 
-        /** @docid dxRadioGroupOptions_layout */
+        /** Specifies the radio group layout. */
         layout?: string;
 
-        /** @docid dxRadioGroupOptions_name */
         name?: string;
     }
 
-    /** @docid_ignore dxRadioButton */
-    /** @docid dxRadioGroup */
+    
+    /** The RadioGroup is a widget that contains a set of radio buttons and allows an end user to make a single selection from the set. */
     export class dxRadioGroup extends CollectionWidget {
         constructor(element: JQuery, options?: dxRadioGroupOptions);
         constructor(element: Element, options?: dxRadioGroupOptions);
     }
 
     export interface dxPopupToolbarItemOptions {
-        /** @docid dxPopupOptions_toolbarItems_disabled */
+        /** Specifies whether or not a toolbar item must be displayed disabled. */
         disabled?: boolean;
 
-        /** @docid dxPopupOptions_toolbarItems_html */
+        /** Specifies html code inserted into the toolbar item element. */
         html?: string;
 
-        /** @docid dxPopupOptions_toolbarItems_location */
+        /** Specifies a location for the item on the toolbar. */
         location?: string;
 
-        /** @docid dxPopupOptions_toolbarItems_options */
+        /** Specifies a configuration object for the widget that presents a toolbar item. */
         options?: Object;
 
-        /** @docid dxPopupOptions_toolbarItems_template */
+        /** Specifies an item template that should be used to render this item only. */
         template?: any;
 
-        /** @docid dxPopupOptions_toolbarItems_text */
+        /** Specifies text displayed for the toolbar item. */
         text?: string;
 
-        /** @docid dxPopupOptions_toolbarItems_toolbar */
+        /** Specifies whether the item is displayed on a top or bottom toolbar. */
         toolbar?: string;
 
-        /** @docid dxPopupOptions_toolbarItems_visible */
+        /** Specifies whether or not a widget item must be displayed. */
         visible?: boolean;
 
-        /** @docid dxPopupOptions_toolbarItems_widget */
+        /** A widget that presents a toolbar item. */
         widget?: string;
     }
 
     export interface dxPopupOptions extends dxOverlayOptions {
-        /** @docid_ignore dxPopupOptions_focusStateEnabled * /
-        /** @docid_ignore dxPopupOptions_animation */
-        /** @docid_ignore dxPopupOptions_animation_show */
-        /** @docid_ignore dxPopupOptions_animation_hide */
 
-        /** @docid dxPopupOptions_dragEnabled */
+        /** Specifies whether or not to allow a user to drag the popup window. */
         dragEnabled?: boolean;
 
-        /** @docid dxPopupOptions_resizeEnabled */
+        /** Specifies whether or not an end user can resize the widget. */
         resizeEnabled?: boolean;
 
-        /** @docid dxPopupOptions_onResizeStart */
+        /** A handler for the resizeStart event. */
         onResizeStart?: Function;
 
-        /** @docid dxPopupOptions_onResize */
+        /** A handler for the resize event. */
         onResize?: Function;
 
-        /** @docid dxPopupOptions_onResizeEnd */
+        /** A handler for the resizeEnd event. */
         onResizeEnd?: Function;
 
-        /** @docid dxPopupOptions_fullScreen */
+        /** A Boolean value specifying whether or not to display the widget in full-screen mode. */
         fullScreen?: boolean;
 
-        /** @docid dxPopupOptions_position */
+        
         position?: PositionOptions;
 
-        /** @docid dxPopupOptions_showtitle */
+        /** A Boolean value specifying whether or not to display the title in the popup window. */
         showTitle?: boolean;
 
-        /** @docid dxPopupOptions_title */
+        /** The title in the overlay window. */
         title?: string;
 
-        /** @docid dxPopupOptions_titleTemplate */
+        /** A template to be used for rendering the widget title. */
         titleTemplate?: any;
 
-        /** @docid dxPopupOptions_width */
+        
         width?: any;
 
-        /** @docid_ignore dxPopupOptions_buttons */
+        
 
-        /** @docid dxPopupOptions_toolbarItems */
+        /** Specifies items displayed on the top or bottom toolbar of the popup window. */
         toolbarItems?: Array<dxPopupToolbarItemOptions>;
 
-        /** @docid dxPopupOptions_showCloseButton */
+        /** Specifies whether or not the widget displays the Close button. */
         showCloseButton?: boolean;
 
-        /** @docid dxPopupOptions_onTitleRendered */
+        /** A handler for the titleRendered event. */
         onTitleRendered?: Function;
     }
 
-    /** @docid dxPopup */
+    /** The Popup widget is a pop-up window overlaying the current view. */
     export class dxPopup extends dxOverlay {
         constructor(element: JQuery, options?: dxPopupOptions);
         constructor(element: Element, options?: dxPopupOptions);
     }
 
     export interface dxPopoverOptions extends dxPopupOptions {
-        /** @docid_ignore dxPopoverOptions_closeOnOutsideClick*/
-        /** @docid_ignore dxPopoverOptions_dragEnabled*/
-        /** @docid_ignore dxPopoverOptions_resizeEnabled*/
-        /** @docid_ignore dxPopoverOptions_onResizeStart*/
-        /** @docid_ignore dxPopoverOptions_onResize*/
-        /** @docid_ignore dxPopoverOptions_onResizeEnd*/
-        /** @docid_ignore dxPopoverOptions_fullScreen*/
-        /** @docid_ignore dxPopoverOptions_focusStateEnabled */
-        /** @docid_ignore dxPopoverOptions_accessKey */
-        /** @docid_ignore dxPopoverOptions_tabIndex */
 
-        /** @docid dxPopoverOptions_animation */
+        /** Configures widget visibility animations. This object contains two fields: show and hide. */
         animation?: {
-            /** @docid dxPopoverOptions_animation_show */
+            /** An object that defines the animation options used when the widget is being shown. */
             show?: fx.AnimationOptions;
 
-            /** @docid dxPopoverOptions_animation_hide */
+            /** An object that defines the animation options used when the widget is being hidden. */
             hide?: fx.AnimationOptions;
         };
 
-        /** @docid dxPopoverOptions_height */
+        /** Specifies the widget's height. */
         height?: any;
 
-        /** @docid dxPopoverOptions_position */
+        /** An object defining widget positioning options. */
         position?: PositionOptions;
 
-        /** @docid dxPopoverOptions_shading */
         shading?: boolean;
 
-        /** @docid dxPopoverOptions_showtitle */
+        /** A Boolean value specifying whether or not to display the title in the overlay window. */
         showTitle?: boolean;
 
-        /** @docid dxPopoverOptions_target */
+        /** The target element associated with a popover. */
         target?: any;
 
-        /** @docid dxPopoverOptions_width */
+        /** Specifies the widget's width. */
         width?: any;
 
-        /** @docid dxPopoverOptions_showEvent */
+        /** Specifies options for displaying the widget. */
         showEvent?: {
-        /** @docid dxPopoverOptions_showEvent_name */
+        /** Specifies the event names on which the widget is shown. */
             name?: String;
 
-            /** @docid dxPopoverOptions_showEvent_delay */
+            /** The delay in milliseconds after which the widget is displayed. */
             delay?: Number;
         };
 
-        /** @docid dxPopoverOptions_hideEvent */
+        /** Specifies options of popover hiding. */
         hideEvent?: {
-        /** @docid dxPopoverOptions_hideEvent_name */
+        /** Specifies the event names on which the widget is hidden. */
             name?: String;
 
-            /** @docid dxPopoverOptions_hideEvent_delay */
+            /** The delay in milliseconds after which the widget is hidden. */
             delay?: Number;
         };
     }
 
-    /** @docid dxPopover */
+    /** The Popover is a widget that shows notifications within a box with an arrow pointing to a specified UI element. */
     export class dxPopover extends dxPopup {
         constructor(element: JQuery, options?: dxPopoverOptions);
         constructor(element: Element, options?: dxPopoverOptions);
 
-        /** @docid dxPopoverMethods_show */
+        /** Displays the widget for the specified target element. */
         show(target?: any): JQueryPromise<void>;
 
-        /** @docid_ignore dxPopoverMethods_registerKeyHandler */
-        /** @docid_ignore dxPopoverMethods_focus */
     }
 
     export interface dxOverlayOptions extends WidgetOptions {
-        /** @docid_ignore dxOverlayOptions_activeStateEnabled*/
 
-        /** @docid dxOverlayOptions_animation */
+        /** Configures widget visibility animations. This object contains two fields: show and hide. */
         animation?: {
-            /** @docid dxOverlayOptions_animation_show */
+            /** An object that defines the animation options used when the widget is being shown. */
             show?: fx.AnimationOptions;
 
-            /** @docid dxOverlayOptions_animation_hide */
+            /** An object that defines the animation options used when the widget is being hidden. */
             hide?: fx.AnimationOptions;
         };
 
-        /** @docid dxOverlayOptions_closeOnBackButton */
+        /** A Boolean value specifying whether or not the widget is closed if a user presses the Back hardware button. */
         closeOnBackButton?: boolean;
 
-        /** @docid dxOverlayOptions_closeOnOutsideClick */
+        /** A Boolean value specifying whether or not the widget is closed if a user clicks outside of the overlapping window. */
         closeOnOutsideClick?: any;
 
-        /** @docid dxOverlayOptions_contentTemplate */
+        /** A template to be used for rendering widget content. */
         contentTemplate?: any;
 
-        /** @docid dxOverlayOptions_deferRendering */
+        /** Specifies whether widget content is rendered when the widget is shown or when rendering the widget. */
         deferRendering?: boolean;
 
-        /** @docid dxOverlayOptions_dragEnabled */
+        /** Specifies whether or not an end-user can drag the widget. */
         dragEnabled?: boolean;
 
-        /** @docid dxOverlayOptions_height */
+        /** The height of the widget in pixels. */
         height?: any;
 
-        /** @docid dxOverlayOptions_maxHeight */
+        /** Specifies the maximum height the widget can reach while resizing. */
         maxHeight?: any;
 
-        /** @docid dxOverlayOptions_maxWidth */
+        /** Specifies the maximum width the widget can reach while resizing. */
         maxWidth?: any;
 
-        /** @docid dxOverlayOptions_minHeight */
+        /** Specifies the minimum height the widget can reach while resizing. */
         minHeight?: any;
 
-        /** @docid dxOverlayOptions_minWidth */
+        /** Specifies the minimum width the widget can reach while resizing. */
         minWidth?: any;
 
-        /** @docid dxOverlayOptions_onHidden */
+        /** A handler for the hidden event. */
         onHidden?: Function;
 
-        /** @docid dxOverlayOptions_onHiding */
+        /** A handler for the hiding event. */
         onHiding?: Function;
 
-        /** @docid dxOverlayOptions_position */
+        /** An object defining widget positioning options. */
         position?: PositionOptions;
 
-        /** @docid dxOverlayOptions_shading */
+        /** A Boolean value specifying whether or not the main screen is inactive while the widget is active. */
         shading?: boolean;
 
-        /** @docid dxOverlayOptions_shadingColor */
+        /** Specifies the shading color. */
         shadingColor?: string;
 
-        /** @docid dxOverlayOptions_onShowing */
+        /** A handler for the showing event. */
         onShowing?: Function;
 
-        /** @docid dxOverlayOptions_onShown */
+        /** A handler for the shown event. */
         onShown?: Function;
 
-        /** @docid dxOverlayOptions_visible */
+        /** A Boolean value specifying whether or not the widget is visible. */
         visible?: boolean;
 
-        /** @docid dxOverlayOptions_width */
+        /** The widget width in pixels. */
         width?: any;
     }
 
-    /** @docid dxOverlay */
+    /** A widget displaying the required content in an overlay window. */
     export class dxOverlay extends Widget {
         constructor(element: JQuery, options?: dxOverlayOptions);
         constructor(element: Element, options?: dxOverlayOptions);
 
-        /** @docid dxOverlaymethods_content */
+        /** An HTML element of the widget. */
         content(): JQuery;
 
-        /** @docid dxOverlaymethods_hide */
+        /** Hides the widget. */
         hide(): JQueryPromise<void>;
 
-        /** @docid dxOverlaymethods_repaint */
+        /** Recalculates the overlay's size and position. */
         repaint(): void;
 
-        /** @docid dxOverlaymethods_show */
+        /** Shows the widget. */
         show(): JQueryPromise<void>;
 
-        /** @docid dxOverlaymethods_toggle */
+        /** Toggles the visibility of the widget. */
         toggle(showing: boolean): JQueryPromise<void>;
 
-        /** @docid ui_dxOverlay */
-        /** @docid ui_dxOverlayMethods_baseZIndex */
+        /** An object that serves as a namespace for static methods that affect overlay widgets. */
+        /** A static method that specifies the base z-index for all overlay widgets. */
         static baseZIndex(zIndex: number): void;
     }
 
     export interface dxNumberBoxOptions extends dxTextEditorOptions {
-        /** @docid_ignore dxNumberBoxOptions_mask */
-        /** @docid_ignore dxNumberBoxOptions_maskChar */
-        /** @docid_ignore dxNumberBoxOptions_maskRules */
-        /** @docid_ignore dxNumberBoxOptions_maskInvalidMessage */
-        /** @docid_ignore dxNumberBoxOptions_useMaskedValue */
-        /** @docid_ignore dxNumberBoxOptions_spellcheck */
 
-        /** @docid dxNumberBoxOptions_max */
+        /** The maximum value accepted by the number box. */
         max?: number;
 
-        /** @docid dxNumberBoxOptions_min */
+        /** The minimum value accepted by the number box. */
         min?: number;
 
-        /** @docid dxNumberBoxOptions_showSpinButtons */
+        /** Specifies whether to show the buttons that change the value by a step. */
         showSpinButtons?: boolean;
 
-        /** @docid dxNumberBoxOptions_useLargeSpinButtons */
+        /** Specifies whether to use touch friendly spin buttons. Applies only if showSpinButtons is true. */
         useLargeSpinButtons?: boolean;
 
-        /** @docid dxNumberBoxOptions_step */
+        /** Specifies by which value the widget value changes when a spin button is clicked. */
         step?: number;
 
-        /** @docid dxNumberBoxOptions_value */
+        /** The current number box value. */
         value?: number;
 
-        /** @docid dxNumberBoxOptions_mode */
+        /** Specifies the value to be passed to the type attribute of the underlying `<input>` element. */
         mode?: string;
 
-        /** @docid dxNumberBoxOptions_invalidValueMessage */
+        /** Specifies the text of the message displayed if the specified value is not a number. */
         invalidValueMessage?: string;
     }
 
-    /** @docid dxNumberBox */
+    /** The NumberBox is a widget that displays a numeric value and allows a user to modify it by typing in a value, and incrementing or decrementing it using the keyboard or mouse. */
     export class dxNumberBox extends dxTextEditor {
         constructor(element: JQuery, options?: dxNumberBoxOptions);
         constructor(element: Element, options?: dxNumberBoxOptions);
     }
 
     export interface dxNavBarOptions extends dxTabsOptions {
-        /** @docid dxNavBarOptions_scrollingEnabled */
+        
         scrollingEnabled?: boolean;
 
-        /** @docid_ignore dxNavBarOptions_showNavButtons */
-        /** @docid_ignore dxNavBarOptions_scrollByContent */
+        
+        
     }
 
-    /** @docid dxNavBar */
+    /** The NavBar is a widget that navigates the application views. */
     export class dxNavBar extends dxTabs {
         constructor(element: JQuery, options?: dxNavBarOptions);
         constructor(element: Element, options?: dxNavBarOptions);
 
-        /** @docid_ignore dxNavBarItemTemplate_badge */
+        
     }
 
     export interface dxMultiViewOptions extends CollectionWidgetOptions {
-        /** @docid_ignore dxMultiViewOptions_selectedItems */
-        /** @docid_ignore dxMultiViewOptions_selectedItemKeys */
-        /** @docid_ignore dxMultiViewOptions_keyExpr */
-        /** @docid_ignore dxMultiViewOptions_focusStateEnabled */
 
-        /** @docid dxMultiViewOptions_animationenabled */
+        /** Specifies whether or not to animate the displayed item change. */
         animationEnabled?: boolean;
 
-        /** @docid dxMultiViewOptions_loop */
+        /** A Boolean value specifying whether or not to scroll back to the first item after the last item is swiped. */
         loop?: boolean;
 
-        /** @docid dxMultiViewOptions_selectedIndex */
+        /** The index of the currently displayed item. */
         selectedIndex?: number;
 
-        /** @docid dxMultiViewOptions_swipeenabled */
+        /** A Boolean value specifying whether or not to allow users to change the selected index by swiping. */
         swipeEnabled?: boolean;
 
-        /** @docid dxMultiViewOptions_deferRendering */
+        /** Specifies whether widget content is rendered when the widget is shown or when rendering the widget. */
         deferRendering?: boolean;
     }
 
-    /** @docid dxMultiView */
+    /** The MultiView is a widget that contains several views. An end user navigates through the views by swiping them in the horizontal direction. */
     export class dxMultiView extends CollectionWidget {
         constructor(element: JQuery, options?: dxMultiViewOptions);
         constructor(element: Element, options?: dxMultiViewOptions);
 
-        /** @docid_ignore dxMultiViewItemTemplate_visible */
+        
     }
 
-    /** @docid MapLocation */
+    
     export interface dxMapLocation {
-        /** @docid MapLocation_lat */
+        /** The latitude location of the widget. */
         lat?: number;
 
-        /** @docid MapLocation_lng */
+        /** The longitude location of the widget. */
         lng?: number;
     }
 
     export interface dxMapMarker {
-        /** @docid dxMapOptions_markers_iconSrc */
+        /** A URL pointing to the custom icon to be used for the marker. */
         iconSrc?: string;
 
-        /** @docid dxMapOptions_markers_location */
+        /** Specifies the marker location. */
         location?: dxMapLocation;
 
-        /** @docid dxMapOptions_markers_onClick */
+        /** A callback function performed when the marker is clicked. */
         onClick?: Function;
 
-        /** @docid dxMapOptions_markers_tooltip */
+        /** A tooltip to be used for the marker. */
         tooltip?: {
-            /** @docid dxMapOptions_markers_tooltip_isShown */
+            /** Specifies whether a tooltip is visible by default or not. */
             isShown?: boolean;
 
-            /** @docid dxMapOptions_markers_tooltip_text */
+            /** Specifies the tooltip text. */
             text?: string;
         }
     }
 
     export interface dxMapRoute {
-        /** @docid dxMapOptions_routes_color */
+        /** Specifies the color of the line displaying the route. */
         color?: string;
 
-        /** @docid dxMapOptions_routes_mode */
+        /** Specifies a transportation mode to be used in the displayed route. */
         mode?: string;
 
-        /** @docid dxMapOptions_routes_opacity */
+        /** Specifies the opacity of the line displaying the route. */
         opacity?: number;
 
-        /** @docid dxMapOptions_routes_locations */
+        /** Contains an array of objects making up the route. */
         locations?: Array<dxMapLocation>;
 
-        /** @docid dxMapOptions_routes_weight */
+        /** Specifies the thickness of the line displaying the route in pixels. */
         weight?: number;
     }
 
     export interface dxMapOptions extends WidgetOptions {
-        /** @docid dxMapOptions_autoAdjust */
+        /** Specifies whether or not the widget automatically adjusts center and zoom option values when adding a new marker or route, or when creating a widget if it initially contains markers or routes. */
         autoAdjust?: boolean;
 
-        /** @docid_ignore dxMapOptions_onContentReady */
-        /** @docid_ignore dxMapOptions_bounds */
-        /** @docid_ignore dxMapOptions_bounds_northEast */
-        /** @docid_ignore dxMapOptions_bounds_northEast_lat */
-        /** @docid_ignore dxMapOptions_bounds_northEast_lng */
-        /** @docid_ignore dxMapOptions_bounds_southWest */
-        /** @docid_ignore dxMapOptions_bounds_southWest_lat */
-        /** @docid_ignore dxMapOptions_bounds_southWest_lng */
-        /** @docid_ignore dxMapOptions_focusStateEnabled  * /
-
-        /** @docid dxMapOptions_center */
         center?: dxMapLocation;
 
-        /** @docid dxMapOptions_onClick */
+        /** A handler for the click event. */
         onClick?: any;
 
-        /** @docid dxMapOptions_controls */
+        /** Specifies whether or not map widget controls are available. */
         controls?: boolean;
 
-        /** @docid dxMapOptions_height */
+        /** Specifies the widget's height. */
         height?: any;
 
-        /** @docid dxMapOptions_key */
+        /** A key used to authenticate the application within the required map provider. */
         key?: {
-            /** @docid dxMapOptions_key_bing */
+            /** A key used to authenticate the application within the "Bing" map provider. */
             bing?: string;
 
-            /** @docid dxMapOptions_key_google */
+            /** A key used to authenticate the application within the "Google" map provider. */
             google?: string;
 
-            /** @docid dxMapOptions_key_googleStatic */
+            /** A key used to authenticate the application within the "Google Static" map provider. */
             googleStatic?: string;
         }
 
-        /** @docid dxMapOptions_onMarkerAdded */
+        /** A handler for the markerAdded event. */
         onMarkerAdded?: Function;
 
-        /** @docid dxMapOptions_markerIconSrc */
+        /** A URL pointing to the custom icon to be used for map markers. */
         markerIconSrc?: string;
 
-        /** @docid dxMapOptions_onMarkerRemoved */
+        /** A handler for the markerRemoved event. */
         onMarkerRemoved?: Function;
 
-        /** @docid dxMapOptions_markers */
+        /** An array of markers displayed on a map. */
         markers?: Array<dxMapMarker>;
 
-        /** @docid dxMapOptions_provider */
+        /** The name of the current map data provider. */
         provider?: string;
 
-        /** @docid dxMapOptions_onReady */
+        /** A handler for the ready event. */
         onReady?: Function;
 
-        /** @docid dxMapOptions_onRouteAdded */
+        /** A handler for the routeAdded event. */
         onRouteAdded?: Function;
 
-        /** @docid dxMapOptions_onRouteRemoved */
+        /** A handler for the routeRemoved event. */
         onRouteRemoved?: Function;
 
-        /** @docid dxMapOptions_routes */
+        /** An array of routes shown on the map. */
         routes?: Array<dxMapRoute>;
 
-        /** @docid dxMapOptions_type */
+        /** The type of a map to display. */
         type?: string;
 
-        /** @docid dxMapOptions_width */
+        /** Specifies the widget's width. */
         width?: any;
 
-        /** @docid dxMapOptions_zoom */
+        /** The zoom level of the map. */
         zoom?: number;
     }
 
-    /** @docid dxmap */
+    /** The Map is an interactive widget that displays a geographic map with markers and routes. */
     export class dxMap extends Widget {
         constructor(element: JQuery, options?: dxMapOptions);
         constructor(element: Element, options?: dxMapOptions);
 
-        /** @docid dxmapmethods_addmarker */
+        /** Adds a marker to the map. */
         addMarker(markerOptions: Object): JQueryPromise<Object>;
 
-        /** @docid dxmapmethods_addroute */
+        /** Adds a route to the map. */
         addRoute(routeOptions: Object): JQueryPromise<Object>;
 
-        /** @docid dxmapmethods_removemarker */
+        /** Removes a marker from the map. */
         removeMarker(marker: Object): JQueryPromise<void>;
 
-        /** @docid dxmapmethods_removeroute */
+        /** Removes a route from the map. */
         removeRoute(route: any): JQueryPromise<void>;
     }
 
     export interface dxLookupOptions extends dxDropDownListOptions {
-        /** @docid_ignore dxLookupOptions_onChange*/
-        /** @docid_ignore dxLookupOptions_onCopy*/
-        /** @docid_ignore dxLookupOptions_onCut*/
-        /** @docid_ignore dxLookupOptions_onEnterKey*/
-        /** @docid_ignore dxLookupOptions_onFocusIn*/
-        /** @docid_ignore dxLookupOptions_onFocusOut*/
-        /** @docid_ignore dxLookupOptions_onInput*/
-        /** @docid_ignore dxLookupOptions_onKeyDown*/
-        /** @docid_ignore dxLookupOptions_onKeyPress*/
-        /** @docid_ignore dxLookupOptions_onKeyUp*/
-        /** @docid_ignore dxLookupOptions_maxlength*/
-        /** @docid_ignore dxLookupOptions_showClearButton*/
-        /** @docid_ignore dxLookupOptions_onPaste*/
-        /** @docid_ignore dxLookupOptions_readOnly*/
-        /** @docid_ignore dxLookupOptions_pagingEnabled */
-        /** @docid_ignore dxLookupOptions_fieldEditEnabled */
-        /** @docid_ignore dxLookupOptions_acceptCustomValue */
-        /** @docid_ignore dxLookupOptions_spellcheck */
 
-        /** @docid dxLookupOptions_applyValueMode */
         applyValueMode?: string;
 
-        /** @docid dxLookupOptions_animation */
+        /** Configures widget visibility animations. This object contains two fields: show and hide. */
         animation?: {
-            /** @docid dxLookupOptions_animation_show */
+            /** An object that defines the animation options used when the widget is being shown. */
             show?: fx.AnimationOptions;
-            /** @docid dxLookupOptions_animation_hide */
+            /** An object that defines the animation options used when the widget is being hidden. */
             hide?: fx.AnimationOptions;
         };
 
-        /** @docid dxLookupOptions_cancelButtonText */
+        /** The text displayed on the Cancel button. */
         cancelButtonText?: string;
 
-        /** @docid dxLookupOptions_clearButtonText */
+        /** The text displayed on the Clear button. */
         clearButtonText?: string;
 
-        /** @docid dxLookupOptions_cleanSearchOnOpening */
+        /** Specifies whether or not the widget cleans the search box when the popup window is displayed. */
         cleanSearchOnOpening?: boolean;
 
-        /** @docid dxLookupOptions_closeOnOutsideClick */
+        /** A Boolean value specifying whether or not a widget is closed if a user clicks outside of the overlaying window. */
         closeOnOutsideClick?: any;
 
-        /** @docid dxLookupOptions_applyButtonText */
+        /** The text displayed on the Apply button. */
         applyButtonText?: string;
 
-        /** @docid dxLookupOptions_fullScreen */
+        /** A Boolean value specifying whether or not to display the lookup in full-screen mode. */
         fullScreen?: boolean;
 
-        /** @docid dxLookupOptions_focusStateEnabled */
+        
         focusStateEnabled?: boolean;
 
-        /** @docid dxLookupOptions_grouped */
+        /** A Boolean value specifying whether or not to group widget items. */
         grouped?: boolean;
 
-        /** @docid dxLookupOptions_groupTemplate */
+        /** Specifies a custom template for a group caption. */
         groupTemplate?: any;
 
-        /** @docid dxLookupOptions_nextButtonText */
+        /** The text displayed on the button used to load the next page from the data source. */
         nextButtonText?: string;
 
-        /** @docid dxLookupOptions_onPageLoading */
+        /** A handler for the pageLoading event. */
         onPageLoading?: Function;
 
-        /** @docid dxLookupOptions_pageLoadMode */
+        /** Specifies whether the next page is loaded when a user scrolls the widget to the bottom or when the "next" button is clicked. */
         pageLoadMode?: string;
 
-        /** @docid dxLookupOptions_pageLoadingText */
+        /** Specifies the text shown in the pullDown panel, which is displayed when the widget is scrolled to the bottom. */
         pageLoadingText?: string;
 
-        /** @docid dxLookupOptions_placeholder */
+        /** The text displayed by the widget when nothing is selected. */
         placeholder?: string;
 
-        /** @docid dxLookupOptions_popupHeight */
+        /** The height of the widget popup element. */
         popupHeight?: any;
 
-        /** @docid dxLookupOptions_popupWidth */
+        /** The width of the widget popup element. */
         popupWidth?: any;
 
-        /** @docid dxLookupOptions_position */
+        /** An object defining widget positioning options. */
         position?: PositionOptions;
 
-        /** @docid dxLookupOptions_pulledDownText */
+        /** Specifies the text displayed in the pullDown panel when the widget is pulled below the refresh threshold. */
         pulledDownText?: string;
 
-        /** @docid dxLookupOptions_pullingDownText */
+        /** Specifies the text shown in the pullDown panel while the list is being pulled down to the refresh threshold. */
         pullingDownText?: string;
 
-        /** @docid dxLookupOptions_onPullRefresh */
+        /** A handler for the pullRefresh event. */
         onPullRefresh?: Function;
 
-        /** @docid dxLookupOptions_pullRefreshEnabled */
+        /** A Boolean value specifying whether or not the widget supports the "pull down to refresh" gesture. */
         pullRefreshEnabled?: boolean;
 
-        /** @docid dxLookupOptions_refreshingText */
+        /** Specifies the text displayed in the pullDown panel while the widget is being refreshed. */
         refreshingText?: string;
 
-        /** @docid dxLookupOptions_onScroll */
+        /** A handler for the scroll event. */
         onScroll?: Function;
 
-        /** @docid dxLookupOptions_searchEnabled */
+        /** A Boolean value specifying whether or not the search bar is visible. */
         searchEnabled?: boolean;
 
-        /** @docid dxLookupOptions_searchPlaceholder */
+        /** The text that is provided as a hint in the lookup's search bar. */
         searchPlaceholder?: string;
 
-        /** @docid dxLookupOptions_shading */
+        /** A Boolean value specifying whether or not the main screen is inactive while the lookup is active. */
         shading?: boolean;
 
-        /** @docid dxLookupOptions_showCancelButton */
+        /** Specifies whether to display the Cancel button in the lookup window. */
         showCancelButton?: boolean;
 
-        /** @docid dxLookupOptions_showNextButton */
+        /**
+         * A Boolean value specifying whether the widget loads the next page automatically when you reach the bottom of the list or when a button is clicked.
+         * @deprecated Use the pageLoadMode option instead.
+         */
         showNextButton?: boolean;
 
-        /** @docid dxLookupOptions_title */
+        /** The title of the lookup window. */
         title?: string;
 
-        /** @docid dxLookupOptions_titleTemplate */
+        /** A template to be used for rendering the widget title. */
         titleTemplate?: any;
 
-        /** @docid dxLookupOptions_useNativeScrolling */
+        /** Specifies whether or not the widget uses native scrolling. */
         useNativeScrolling?: boolean;
 
-        /** @docid dxLookupOptions_usePopover */
+        /** Specifies whether or not to show lookup contents in a Popover widget. */
         usePopover?: boolean;
 
-        /** @docid dxLookupOptions_onValueChanged */
+        /** A handler for the valueChanged event. */
         onValueChanged?: Function;
 
-        /** @docid dxLookupOptions_onTitleRendered */
+        /** A handler for the titleRendered event. */
         onTitleRendered?: Function;
 
-        /** @docid dxLookupOptions_showPopupTitle */
+        /** A Boolean value specifying whether or not to display the title in the popup window. */
         showPopupTitle?: boolean;
 
-        /** @docid dxLookupOptions_fieldTemplate */
+        /** The template to be used for rendering the widget text field. */
         fieldTemplate?: any;
     }
 
-    /** @docid dxlookup */
+    /** The Lookup is a widget that allows an end user to search for an item in a collection shown in a drop-down menu. */
     export class dxLookup extends dxDropDownList {
         constructor(element: JQuery, options?: dxLookupOptions);
         constructor(element: Element, options?: dxLookupOptions);
     }
 
     export interface dxLoadPanelOptions extends dxOverlayOptions {
-        /** @docid_ignore dxLoadPanelOptions_closeOnBackButton */
-        /** @docid_ignore dxLoadPanelOptions_disabled */
-        /** @docid_ignore dxLoadPanelOptions_dragEnabled */
-        /** @docid_ignore dxLoadPanelOptions_resizeEnabled */
-        /** @docid_ignore dxLoadPanelOptions_contentTemplate */
-        /** @docid_ignore dxLoadPanelOptions_accessKey */
-        /** @docid_ignore dxLoadPanelOptions_tabIndex */
-        /** @docid_ignore dxLoadPanelOptions_shadingColor */
 
-        /** @docid dxLoadPanelOptions_animation */
+        /** Configures widget visibility animations. This object contains two fields: show and hide. */
         animation?: {
-            /** @docid dxLoadPanelOptions_animation_show */
+            
             show?: fx.AnimationOptions;
 
-            /** @docid dxLoadPanelOptions_animation_hide */
+            
             hide?: fx.AnimationOptions;
         };
 
-        /** @docid dxLoadPanelOptions_delay */
+        /** The delay in milliseconds after which the load panel is displayed. */
         delay?: number;
 
-        /** @docid dxLoadPanelOptions_height */
+        /** The height of the widget. */
         height?: number;
 
-        /** @docid dxLoadPanelOptions_indicatorSrc */
+        /** A URL pointing to an image to be used as a load indicator. */
         indicatorSrc?: string;
 
-        /** @docid dxLoadPanelOptions_message */
+        /** The text displayed in the load panel. */
         message?: string;
 
-        /** @docid dxLoadPanelOptions_showIndicator */
+        /** A Boolean value specifying whether or not to show a load indicator. */
         showIndicator?: boolean;
 
-        /** @docid dxLoadPanelOptions_showPane */
+        /** A Boolean value specifying whether or not to show the pane behind the load indicator. */
         showPane?: boolean;
 
-        /** @docid dxLoadPanelOptions_width */
+        /** Specifies the widget's width. */
         width?: number;
 
-        /** @docid dxLoadPanelOptions_focusStateEnabled */
+        /** Specifies whether or not the widget can be focused. */
         focusStateEnabled?: boolean;
     }
 
-    /** @docid dxLoadPanel */
+    /** The LoadPanel is an overlay widget notifying the viewer that loading is in progress. */
     export class dxLoadPanel extends dxOverlay {
         constructor(element: JQuery, options?: dxLoadPanelOptions);
         constructor(element: Element, options?: dxLoadPanelOptions);
 
-        /** @docid_ignore dxLoadPanelMethods_registerKeyHandler */
-        /** @docid_ignore dxLoadPanelMethods_focus */
     }
 
     export interface dxLoadIndicatorOptions extends WidgetOptions {
-        /** @docid_ignore dxLoadIndicatoroptions_disabled */
-        /** @docid_ignore dxLoadIndicatoroptions_hoverStateEnabled */
-        /** @docid_ignore dxLoadIndicatoroptions_activeStateEnabled */
-        /** @docid_ignore dxLoadIndicatoroptions_focusStateEnabled */
-        /** @docid_ignore dxLoadIndicatoroptions_accessKey */
-        /** @docid_ignore dxLoadIndicatoroptions_tabIndex */
 
-        /** @docid dxLoadIndicatoroptions_indicatorsrc */
+        /** Specifies the path to an image used as the indicator. */
         indicatorSrc?: string;
     }
 
-    /** @docid dxLoadIndicator */
+    /** The LoadIndicator is a UI element notifying the viewer that a process is in progress. */
     export class dxLoadIndicator extends Widget {
         constructor(element: JQuery, options?: dxLoadIndicatorOptions);
         constructor(element: Element, options?: dxLoadIndicatorOptions);
 
-        /** @docid_ignore dxLoadIndicatorMethods_registerKeyHandler */
-        /** @docid_ignore dxLoadIndicatorMethods_focus */
     }
 
     export interface ListOptionsMenuItem {
-        /** @docid dxListOptions_menuItems_text */
+        /** Specifies the menu item text. */
         text?: string;
 
-        /** @docid dxListOptions_menuItems_action */
+        /** Holds on a function called when the item is clicked. */
         action?: (itemElement: Element, itemData: any) => void;
     }
 
     export interface dxListOptions extends CollectionWidgetOptions {
-        /** @docid_ignore dxListOptions_selectedIndex */
-        /** @docid_ignore dxListOptions_selectedItem */
-        /** @docid_ignore dxListOptions_focusStateEnabled */
 
-        /** @docid_ignore dxListOptions_autoPagingEnabled */
-        /** @docid_ignore dxListOptions_showNextButton */
-
-        /** @docid_ignore dxListOptions_hoverStateEnabled */
-
-        /** @docid dxListOptions_grouped */
+        /** Specifies whether data items should be grouped. */
         grouped?: boolean;
 
-        /** @docid dxListOptions_groupTemplate */
+        /** The template to be used for rendering item groups.
+            Specifies a custom template for a group caption. */
         groupTemplate?: any;
 
-        /** @docid dxListOptions_onItemDeleting */
+        
         onItemDeleting?: Function;
 
-        /** @docid dxListOptions_onItemDeleted */
+        /** A handler for the itemDeleted event. */
         onItemDeleted?: Function;
 
-        /** @docid dxListOptions_onGroupRendered */
+        /** A handler for the groupRendered event. */
         onGroupRendered?: Function;
 
-        /** @docid dxListOptions_onItemReordered */
+        /** A handler for the itemReordered event. */
         onItemReordered?: Function;
 
-        /** @docid dxListOptions_onItemClick */
+        /** A handler for the itemClick event. */
         onItemClick?: any;
 
-        /** @docid dxListOptions_onItemSwipe */
+        /** A handler for the itemSwipe event. */
         onItemSwipe?: Function;
 
-        /** @docid dxListOptions_nextButtonText */
+        /** The text displayed on the button used to load the next page from the data source. */
         nextButtonText?: string;
 
-        /** @docid dxListOptions_onPageLoading */
+        /** A handler for the pageLoading event. */
         onPageLoading?: Function;
 
-        /** @docid dxListOptions_pageLoadingText */
+        /** Specifies the text shown in the pullDown panel, which is displayed when the list is scrolled to the bottom. */
         pageLoadingText?: string;
 
-        /** @docid dxListOptions_pulledDownText */
+        /** Specifies the text displayed in the pullDown panel when the list is pulled below the refresh threshold. */
         pulledDownText?: string;
 
-        /** @docid dxListOptions_pullingDownText */
+        /** Specifies the text shown in the pullDown panel while the list is being pulled down to the refresh threshold. */
         pullingDownText?: string;
 
-        /** @docid dxListOptions_onPullRefresh */
+        /** A handler for the pullRefresh event. */
         onPullRefresh?: Function;
 
-        /** @docid dxListOptions_pullRefreshEnabled */
+        /** A Boolean value specifying whether or not the widget supports the "pull down to refresh" gesture. */
         pullRefreshEnabled?: boolean;
 
-        /** @docid dxListOptions_refreshingText */
+        /** Specifies the text displayed in the pullDown panel while the list is being refreshed. */
         refreshingText?: string;
 
-        /** @docid dxListOptions_onScroll */
+        /** A handler for the scroll event. */
         onScroll?: Function;
 
-        /** @docid dxListOptions_scrollingEnabled */
+        /** A Boolean value specifying whether to enable or disable list scrolling. */
         scrollingEnabled?: boolean;
 
-        /** @docid dxListOptions_showScrollbar */
+        /** Specifies when the widget shows the scrollbar. */
         showScrollbar?: string;
 
-        /** @docid dxListOptions_useNativeScrolling */
+        /** Specifies whether or not the widget uses native scrolling. */
         useNativeScrolling?: boolean;
 
-        /** @docid dxListOptions_bounceEnabled */
+        /** A Boolean value specifying whether to enable or disable the bounce-back effect. */
         bounceEnabled?: boolean;
 
-        /** @docid dxListOptions_scrollByContent */
+        /** A Boolean value specifying if the list is scrolled by content. */
         scrollByContent?: boolean;
 
-        /** @docid dxListOptions_scrollByThumb */
+        /** A Boolean value specifying if the list is scrolled using the scrollbar. */
         scrollByThumb?: boolean;
 
-        /** @docid dxListOptions_onItemContextMenu */
+        
         onItemContextMenu?: Function;
 
-        /** @docid dxListOptions_onItemHold */
+        
         onItemHold?: Function;
 
-        /** @docid dxListOptions_collapsibleGroups */
+        /** Specifies whether or not an end-user can collapse groups. */
         collapsibleGroups?: boolean;
 
-        /** @docid dxListOptions_pageLoadMode */
+        /** Specifies whether the next page is loaded when a user scrolls the widget to the bottom or when the "next" button is clicked. */
         pageLoadMode?: string;
 
-        /** @docid dxListOptions_showSelectionControls */
+        /** Specifies whether or not to display controls used to select list items. */
         showSelectionControls?: boolean;
 
-        /** @docid dxListOptions_selectionMode */
+        /** Specifies item selection mode. */
         selectionMode?: string;
 
-        /** @docid dxListOptions_selectAllMode */
+        /** Specifies the mode in which all items are selected. */
         selectAllMode?: string;
 
-        /** @docid dxListOptions_selectAllText */
+        
         selectAllText?: string;
 
-        /** @docid dxListOptions_onSelectAllValueChanged */
+        /** A handler for the selectAllValueChanged event. */
         onSelectAllValueChanged?: Function;
 
-        /** @docid dxListOptions_menuItems */
+        /** Specifies the array of items for a context menu called for a list item. */
         menuItems?: Array<ListOptionsMenuItem>;
 
-        /** @docid dxListOptions_menuMode */
+        /** Specifies whether an item context menu is shown when a user holds or swipes an item. */
         menuMode?: string;
 
-        /** @docid dxListOptions_allowItemDeleting */
+        /** Specifies whether or not an end user can delete list items. */
         allowItemDeleting?: boolean;
 
-        /** @docid dxListOptions_itemDeleteMode */
+        /** Specifies the way a user can delete items from the list. */
         itemDeleteMode?: string;
 
-        /** @docid dxListOptions_allowItemReordering */
+        /** Specifies whether or not an end user can reorder list items. */
         allowItemReordering?: boolean;
 
-        /** @docid dxListOptions_indicateLoading */
+        /** Specifies whether or not to show the loading panel when the DataSource bound to the widget is loading data. */
         indicateLoading?: boolean;
 
-        /** @docid dxListOptions_activeStateEnabled */
+        
         activeStateEnabled?: boolean;
     }
 
-    /** @docid dxList */
+    /** The List is a widget that represents a collection of items in a scrollable list. */
     export class dxList extends CollectionWidget {
         constructor(element: JQuery, options?: dxListOptions);
         constructor(element: Element, options?: dxListOptions);
 
-        /** @docid_ignore dxListItemTemplate_key */
-        /** @docid_ignore dxListItemTemplate_badge */
-        /** @docid_ignore dxListItemTemplate_showChevron */
-        /** @docid_ignore dxListMethods_getFlatIndexByItemElement */
-        /** @docid_ignore dxListMethods_getItemByIndex */
-        /** @docid_ignore dxListMethods_getItemElementByFlatIndex */
-
-        /** @docid dxListMethods_clientHeight */
+        /** Returns the height of the widget in pixels. */
         clientHeight(): number;
 
-        /** @docid dxListMethods_deleteItem#deleteItem(itemIndex) */
+        /** Removes the specified item from the list. */
         deleteItem(itemIndex: any): JQueryPromise<void>;
 
-        /** @docid dxListMethods_deleteItem#deleteItem(itemElement) */
+        /** Removes the specified item from the list. */
         deleteItem(itemElement: Element): JQueryPromise<void>;
 
-        /** @docid dxListMethods_isItemSelected#isItemSelected(itemIndex) */
+        /** Returns a Boolean value that indicates whether or not the specified item is selected. */
         isItemSelected(itemIndex: any): boolean;
 
-        /** @docid dxListMethods_isItemSelected#isItemSelected(itemElement) */
+        /** Returns a Boolean value that indicates whether or not the specified item is selected. */
         isItemSelected(itemElement: Element): boolean;
 
-        /** @docid dxListMethods_reload */
+        /** Reloads list data. */
         reload(): void;
 
-        /** @docid dxListMethods_reorderItem#reorderItem(itemElement,toItemElement) */
+        /** Moves the specified item to the specified position in the list. */
         reorderItem(itemElement: Element, toItemElement: Element): JQueryPromise<void>;
 
-        /** @docid dxListMethods_reorderItem#reorderItem(itemIndex,toItemIndex) */
+        /** Moves the specified item to the specified position in the list. */
         reorderItem(itemIndex: any, toItemIndex: any): JQueryPromise<void>;
 
-        /** @docid dxListMethods_scrollBy */
+        /** Scrolls the list content by the specified number of pixels. */
         scrollBy(distance: number): void;
 
-        /** @docid dxListMethods_scrollHeight */
+        /** Returns the height of the list content in pixels. */
         scrollHeight(): number;
 
-        /** @docid dxListMethods_scrollTo */
+        /** Scrolls list content to the specified position. */
         scrollTo(location: number): void;
 
-        /** @docid dxListMethods_scrollToItem#scrollToItem(itemElement) */
+        /** Scrolls the list to the specified item. */
         scrollToItem(itemElement: Element): void;
 
-        /** @docid dxListMethods_scrollToItem#scrollToItem(itemIndex) */
+        /** Scrolls the list to the specified item. */
         scrollToItem(itemIndex: any): void;
 
-        /** @docid dxListMethods_scrollTop */
+        /** Returns how far the list content is scrolled from the top. */
         scrollTop(): number;
 
-        /** @docid dxListMethods_selectAll */
+        /** Selects all items. */
         selectAll(): void;
 
-        /** @docid dxListMethods_unselectAll */
+        /** Clears selection of all items. */
         unselectAll(): void;
 
-        /** @docid dxListMethods_selectItem#selectItem(itemElement) */
+        /** Selects the specified item. */
         selectItem(itemElement: Element): void;
 
-        /** @docid dxListMethods_selectItem#selectItem(itemIndex) */
+        /** Selects the specified item from the list. */
         selectItem(itemIndex: any): void;
 
-        /** @docid dxListMethods_unselectItem#unselectItem(itemElement) */
+        /** Clears selection of the specified item. */
         unselectItem(itemElement: Element): void;
 
-        /** @docid dxListMethods_unselectItem#unselectItem(itemIndex) */
+        /** Clears selection of the specified item from the list. */
         unselectItem(itemIndex: any): void;
 
-        /** @docid dxListMethods_updateDimensions */
+        /** Updates the widget scrollbar according to widget content size. */
         updateDimensions(): JQueryPromise<void>;
 
-        /** @docid dxListMethods_expandGroup */
+        /** Expands the specified group. */
         expandGroup(groupIndex: number): JQueryPromise<void>;
 
-        /** @docid dxListMethods_collapseGroup */
+        /** Collapses the specified group. */
         collapseGroup(groupIndex: number): JQueryPromise<void>;
     }
 
     export interface dxGalleryOptions extends CollectionWidgetOptions {
-        /** @docid_ignore dxGalleryOptions_activeStateEnabled */
-        /** @docid_ignore dxGalleryOptions_focusStateEnabled */
-        /** @docid_ignore dxGalleryOptions_noDataText */
-        /** @docid_ignore dxGalleryOptions_selectedItems */
-        /** @docid_ignore dxGalleryOptions_selectedItemKeys */
-        /** @docid_ignore dxGalleryOptions_keyExpr */
 
-        /** @docid dxGalleryOptions_animationDuration */
+        /** The time, in milliseconds, spent on slide animation. */
         animationDuration?: number;
 
-        /** @docid dxGalleryOptions_animationEnabled */
+        /** Specifies whether or not to animate the displayed item change. */
         animationEnabled?: boolean;
 
-        /** @docid dxGalleryOptions_indicatorEnabled */
+        /** A Boolean value specifying whether or not to allow users to switch between items by clicking an indicator. */
         indicatorEnabled?: boolean;
 
-        /** @docid dxGalleryOptions_loop */
+        /** A Boolean value specifying whether or not to scroll back to the first item after the last item is swiped. */
         loop?: boolean;
 
-        /** @docid dxGalleryOptions_selectedindex */
+        /** The index of the currently active gallery item. */
         selectedIndex?: number;
 
-        /** @docid dxGalleryOptions_showIndicator */
+        /** A Boolean value specifying whether or not to display an indicator that points to the selected gallery item. */
         showIndicator?: boolean;
 
-        /** @docid dxGalleryOptions_showNavButtons */
+        /** A Boolean value that specifies the availability of the "Forward" and "Back" navigation buttons. */
         showNavButtons?: boolean;
 
-        /** @docid dxGalleryOptions_slideshowdelay */
+        /** The time interval in milliseconds, after which the gallery switches to the next item. */
         slideshowDelay?: number;
 
-        /** @docid dxGalleryOptions_swipeEnabled */
+        /** A Boolean value specifying whether or not to allow users to switch between items by swiping. */
         swipeEnabled?: boolean;
 
-        /** @docid dxGalleryOptions_wrapAround */
+        /** Specifies whether or not to display parts of previous and next images along the sides of the current image. */
         wrapAround?: boolean;
 
-        /** @docid dxGalleryOptions_stretchImages */
+        /** Specifies if the widget stretches images to fit the total gallery width. */
         stretchImages?: boolean;
 
-        /** @docid dxGalleryOptions_initialItemWidth */
+        /** Specifies the width of an area used to display a single image. */
         initialItemWidth?: number;
     }
 
-    /** @docid dxgallery */
+    /** The Gallery is a widget that displays a collection of images in a carousel. The widget is supplied with various navigation controls that allow a user to switch between images. */
     export class dxGallery extends CollectionWidget {
         constructor(element: JQuery, options?: dxGalleryOptions);
         constructor(element: Element, options?: dxGalleryOptions);
 
-        /** @docid_ignore dxGalleryItemTemplate_imageSrc */
-        /** @docid_ignore dxGalleryItemTemplate_imageAlt */
-        /** @docid_ignore dxGalleryItemTemplate_visible */
-
-        /** @docid dxgallerymethods_goToItem */
+        /** Shows the specified gallery item. */
         goToItem(itemIndex: number, animation: boolean): JQueryPromise<any>;
 
-        /** @docid dxgallerymethods_nextItem */
+        /** Shows the next gallery item. */
         nextItem(animation: boolean): JQueryPromise<any>;
 
-        /** @docid dxgallerymethods_prevItem */
+        /** Shows the previous gallery item. */
         prevItem(animation: boolean): JQueryPromise<any>;
     }
 
     export interface dxDropDownEditorOptions extends dxTextBoxOptions {
-        /** @docid_ignore dxDropDownEditorOptions_mask */
-        /** @docid_ignore dxDropDownEditorOptions_maskChar */
-        /** @docid_ignore dxDropDownEditorOptions_maskRules */
-        /** @docid_ignore dxDropDownEditorOptions_maskInvalidMessage */
-        /** @docid_ignore dxDropDownEditorOptions_useMaskedValue */
-        /** @docid_ignore dxDropDownEditorOptions_mode */
 
-        /** @docid dxDropDownEditorOptions_value */
+        /** Specifies the currently selected value. */
         value?: any;
 
-        /** @docid dxDropDownEditorOptions_onClosed */
+        /** A handler for the closed event. */
         onClosed?: Function;
 
-        /** @docid dxDropDownEditorOptions_onOpened */
+        /** A handler for the opened event. */
         onOpened?: Function;
 
-        /** @docid dxDropDownEditorOptions_opened */
+        /** Specifies whether or not the drop-down editor is displayed. */
         opened?: boolean;
 
-        /** @docid dxDropDownEditorOptions_fieldEditEnabled */
+        
         fieldEditEnabled?: boolean;
 
-        /** @docid dxDropDownEditorOptions_acceptCustomValue */
+        /** Specifies whether or not the widget allows an end-user to enter a custom value. */
         acceptCustomValue?: boolean;
 
-        /** @docid dxDropDownEditorOptions_applyValueMode */
+        /** Specifies the way an end-user applies the selected value. */
         applyValueMode?: string;
 
-        /** @docid dxDropDownEditorOptions_deferRendering */
+        /** Specifies whether widget content is rendered when the widget is shown or when rendering the widget. */
         deferRendering?: boolean;
 
-        /** @docid dxDropDownEditorOptions_activeStateEnabled */
+        
         activeStateEnabled?: boolean;
 
-        /** @docid dxDropDownEditorOptions_dropDownButtonTemplate */
+        /** Specifies a custom template for the drop-down button. */
         dropDownButtonTemplate?: any;
     }
 
-    /** @docid dxDropDownEditor */
+    /** A drop-down editor widget. */
     export class dxDropDownEditor extends dxTextBox {
         constructor(element: JQuery, options?: dxDropDownEditorOptions);
         constructor(element: Element, options?: dxDropDownEditorOptions);
 
-        /** @docid dxDropDownEditorMethods_close */
+        /** Closes the drop-down editor. */
         close(): void;
 
-        /** @docid dxDropDownEditorMethods_open */
+        /** Opens the drop-down editor. */
         open(): void;
 
-        /** @docid dxDropDownEditorMethods_reset */
+        /** Resets the widget's value to null. */
         reset(): void;
 
-        /** @docid dxDropDownEditorMethods_field */
+        /** Returns an &lt;input&gt; element of the widget. */
         field(): JQuery;
 
-        /** @docid dxDropDownEditorMethods_content */
+        /** Returns an HTML element of the popup window content. */
         content(): JQuery;
     }
 
     export interface dxDropDownBoxOptions extends dxDropDownEditorOptions, DataExpressionMixinOptions {
-        /** @docid_ignore dxDropDownBoxOptions_onContentReady */
-        /** @docid_ignore dxDropDownBoxOptions_maxLength */
-        /** @docid_ignore dxDropDownBoxOptions_spellcheck */
-        /** @docid_ignore dxDropDownBoxOptions_applyValueMode */
-        /** @docid_ignore dxDropDownBoxOptions_itemTemplate */
-        /** @docid_ignore dxDropDownBoxOptions_fieldEditEnabled */
-        /** @docid_ignore dxDropDownBoxOptions_attr */
 
-        /** @docid dxDropDownBoxOptions_contentTemplate */
+        /** Specifies a custom template for the drop-down content. */
         contentTemplate?: any;
 
-        /** @docid dxDropDownBoxOptions_acceptCustomValue */
+        /** Specifies whether the widget allows a user to enter a custom value. */
         acceptCustomValue?: boolean;
 
-        /** @docid dxDropDownBoxOptions_dropDownOptions */
+        /** Configures the drop-down field which holds the content. */
         dropDownOptions?: DevExpress.ui.dxPopupOptions;
 
-        /** @docid dxDropDownBoxOptions_valueChangeEvent */
+        /** Specifies after which DOM events the widget updates the value. */
         valueChangeEvent?: string;
     }
 
-    /** @docid dxDropDownBox */
+    /** The DropDownBox widget consists of a text field, which displays the current value, and a drop-down field, which can contain any UI element. */
     export class dxDropDownBox extends dxDropDownEditor {
         constructor(element: JQuery, options?: dxDropDownBoxOptions);
         constructor(element: Element, options?: dxDropDownBoxOptions);
     }
 
     export interface dxDateBoxOptions extends dxDropDownEditorOptions {
-        /** @docid dxDateBoxOptions_formatString */
+        
         formatString?: any;
 
-        /** @docid dxDateBoxOptions_displayFormat */
+        /** Specifies the date display format. Ignored if the pickerType option is 'native' */
         displayFormat?: any;
 
-        /** @docid dxDateBoxOptions_format */
+        
         format?: string;
 
-        /** @docid dxDateBoxOptions_type */
+        /** A format used to display date/time information. */
         type?: string;
 
-        /** @docid dxDateBoxOptions_max */
+        /** The last date that can be selected within the widget. */
         max?: any;
 
-        /** @docid dxDateBoxOptions_min */
+        /** The minimum date that can be selected within the widget. */
         min?: any;
 
-        /** @docid dxDateBoxOptions_placeholder */
+        /** The text displayed by the widget when the widget value is not yet specified. This text is also used as a title of the date picker. */
         placeholder?: string;
 
-        /** @docid dxDateBoxOptions_useCalendar */
+        /**
+        * Specifies whether or not a user can pick out a date using the drop-down calendar.
+        * @deprecated Use the pickerType option instead.
+        */
         useCalendar?: boolean;
 
-        /** @docid dxDateBoxOptions_dateSerializationFormat */
+        /** Specifies the date-time value serialization format. Use it only if you do not specify the value at design time. */
         dateSerializationFormat?: string;
 
-        /** @docid dxDateBoxOptions_value */
+        /** An object or a value specifying the date and time currently selected using the date box. */
         value?: any;
 
-        /** @docid dxDateBoxOptions_useNative */
+        /**
+         * Specifies whether or not the widget uses the native HTML input element.
+         * @deprecated Use the pickerType option instead.
+         */
         useNative?: boolean;
 
-        /** @docid dxDateBoxOptions_interval */
+        /** Specifies the interval between neighboring values in the popup list in minutes. */
         interval?: number;
 
-        /** @docid dxDateBoxOptions_maxZoomLevel */
+        /** Specifies the maximum zoom level of a calendar, which is used to pick the date. */
         maxZoomLevel?: string;
 
-        /** @docid dxDateBoxOptions_minZoomLevel */
+        /** Specifies the minimal zoom level of a calendar, which is used to pick the date. */
         minZoomLevel?: string;
 
-        /** @docid dxDateBoxOptions_pickerType */
+        /** Specifies the type of the date/time picker. */
         pickerType?: string;
 
-        /** @docid dxDateBoxOptions_invalidDateMessage */
+        /** Specifies the message displayed if the typed value is not a valid date or time. */
         invalidDateMessage?: string;
 
-        /** @docid dxDateBoxOptions_dateOutOfRangeMessage */
+        /** Specifies the message displayed if the specified date is later than the max value or earlier than the min value. */
         dateOutOfRangeMessage?: string;
 
-        /** @docid dxDateBoxOptions_applyButtonText */
+        /** The text displayed on the Apply button. */
         applyButtonText?: string;
 
-        /** @docid dxDateBoxOptions_adaptivityEnabled */
+        /** Specifies whether or not adaptive widget rendering is enabled on a small screen. */
         adaptivityEnabled?: boolean;
 
-        /** @docid dxDateBoxOptions_cancelButtonText */
+        /** The text displayed on the Cancel button. */
         cancelButtonText?: string;
     }
 
-    /** @docid dxDateBox */
+    /** The DateBox is a widget that displays date and time in a specified format, and enables a user to pick or type in the required date/time value. */
     export class dxDateBox extends dxDropDownEditor {
-        /** @docid_ignore dxDateBoxMethods_open */
-        /** @docid_ignore dxDateBoxMethods_close */
 
         constructor(element: JQuery, options?: dxDateBoxOptions);
         constructor(element: Element, options?: dxDateBoxOptions);
     }
 
     export interface dxCheckBoxOptions extends EditorOptions {
-        /** @docid_ignore dxCheckBoxOptions_hoverStateEnabled */
-        /** @docid_ignore dxCheckBoxOptions_focusStateEnabled */
 
-        /** @docid dxCheckBoxOptions_activeStateEnabled */
         activeStateEnabled?: boolean;
 
-        /** @docid dxCheckBoxOptions_value */
+        /** Specifies the widget state. */
         value?: boolean;
 
-        /** @docid dxCheckBoxOptions_text */
+        /** Specifies the text displayed by the check box. */
         text?: string;
 
-        /** @docid dxCheckBoxOptions_name */
+        
         name?: string;
     }
 
-    /** @docid dxcheckbox */
+    /** The CheckBox is a small box, which when selected by the end user, shows that a particular feature has been enabled or a specific option has been chosen. */
     export class dxCheckBox extends Editor {
         constructor(element: JQuery, options?: dxCheckBoxOptions);
         constructor(element: Element, options?: dxCheckBoxOptions);
     }
 
     export interface dxCalendarOptions extends EditorOptions {
-        /** @docid_ignore dxCalendarOptions_onContentReady */
-        /** @docid_ignore dxCalendarOptions_hoverStateEnabled */
-        /** @docid_ignore dxCalendarOptions_focusStateEnabled */
-        /** @docid_ignore dxCalendarCellTemplate_text */
-        /** @docid_ignore dxCalendarCellTemplate_date */
-        /** @docid_ignore dxCalendarCellTemplate_view */
 
-        /** @docid dxCalendarOptions_activeStateEnabled */
         activeStateEnabled?: boolean;
 
-        /** @docid dxCalendarOptions_currentDate */
+        /** Specifies a date displayed on the current calendar page. */
         currentDate?: Date;
 
-        /** @docid dxCalendarOptions_firstDayOfWeek */
+        /** Specifies the first day of a week. */
         firstDayOfWeek?: number;
 
-        /** @docid dxCalendarOptions_dateSerializationFormat */
+        /** Specifies the date-time value serialization format. Use it only if you do not specify the value at design time. */
         dateSerializationFormat?: string;
 
-        /** @docid dxCalendarOptions_value */
+        /** An object or a value specifying the date and time currently selected in the calendar. */
         value?: any;
 
-        /** @docid dxCalendarOptions_max */
+        /** The latest date the widget allows to select. */
         max?: any;
 
-        /** @docid dxCalendarOptions_min */
+        /** The earliest date the widget allows to select. */
         min?: any;
 
-        /** @docid dxCalendarOptions_showTodayButton */
+        /** Specifies whether or not the widget displays a button that selects the current date. */
         showTodayButton?: boolean;
 
-        /** @docid dxCalendarOptions_zoomLevel */
+        /** Specifies the current calendar zoom level. */
         zoomLevel?: string;
 
-        /** @docid dxCalendarOptions_maxZoomLevel */
+        /** Specifies the maximum zoom level of the calendar. */
         maxZoomLevel?: string;
 
-        /** @docid dxCalendarOptions_minZoomLevel */
+        /** Specifies the minimum zoom level of the calendar. */
         minZoomLevel?: string;
 
-        /** @docid dxCalendarOptions_cellTemplate */
+        /** The template to be used for rendering calendar cells. */
         cellTemplate?: any;
 
-        /** @docid dxCalendarOptions_name */
+        
         name?: string;
     }
 
-    /** @docid dxCalendar */
+    /** The Calendar is a widget that displays a calendar and allows an end user to select the required date within a specified date range. */
     export class dxCalendar extends Editor {
         constructor(element: JQuery, options?: dxCalendarOptions);
         constructor(element: Element, options?: dxCalendarOptions);
     }
 
     export interface dxButtonOptions extends WidgetOptions {
-        /** @docid_ignore dxButtonDefaultTemplate_text */
-        /** @docid_ignore dxButtonDefaultTemplate_icon */
-        /** @docid_ignore dxButtonOptions_hoverStateEnabled */
-        /** @docid_ignore dxButtonOptions_focusStateEnabled  */
 
-        /** @docid dxButtonOptions_activeStateEnabled */
+        /** A Boolean value specifying whether or not the widget changes its state when interacting with a user. */
         activeStateEnabled?: boolean;
 
-        /** @docid dxButtonOptions_onClick */
+        /** A handler for the click event. */
         onClick?: any;
 
-        /** @docid dxButtonOptions_icon */
+        /** Specifies the icon to be displayed on the button. */
         icon?: string;
 
-        /** @docid dxbuttonoptions_iconSrc */
+        
         iconSrc?: string;
 
-        /** @docid dxButtonOptions_template */
+        /** A template to be used for rendering the Button widget. */
         template?: any;
 
-        /** @docid dxButtonOptions_text */
+        /** The text displayed on the button. */
         text?: string;
 
-        /** @docid dxButtonOptions_type */
+        /** Specifies the button type. */
         type?: string;
 
-        /** @docid dxButtonOptions_validationgroup */
+        /** Specifies the name of the validation group to be accessed in the click event handler. */
         validationGroup?: string;
 
-        /** @docid dxButtonOptions_useSubmitBehavior */
+        /** Specifies whether or not the button must submit an HTML form. */
         useSubmitBehavior?: boolean;
     }
 
-    /** @docid dxbutton */
+    /** The Button widget is a simple button that performs specified commands when a user clicks it. */
     export class dxButton extends Widget {
         constructor(element: JQuery, options?: dxButtonOptions);
         constructor(element: Element, options?: dxButtonOptions);
     }
 
     export interface dxBoxOptions extends CollectionWidgetOptions {
-        /** @docid_ignore dxBoxOptions_focusStateEnabled */
-        /** @docid_ignore dxBoxOptions_activeStateEnabled */
-        /** @docid_ignore dxBoxOptions_hint */
-        /** @docid_ignore dxBoxOptions_noDataText */
-        /** @docid_ignore dxBoxOptions_onSelectionChanged */
-        /** @docid_ignore dxBoxOptions_selectedIndex */
-        /** @docid_ignore dxBoxOptions_selectedItem */
-        /** @docid_ignore dxBoxOptions_selectedItems */
-        /** @docid_ignore dxBoxOptions_selectedItemKeys */
-        /** @docid_ignore dxBoxOptions_keyExpr */
-        /** @docid_ignore dxBoxOptions_tabIndex */
-        /** @docid_ignore dxBoxOptions_accessKey */
-
-        /** @docid dxBoxOptions_align */
+        /** Specifies how widget items are aligned along the main direction. */
         align?: string;
 
-        /** @docid dxBoxOptions_direction */
+        /** Specifies the direction of item positioning in the widget. */
         direction?: string;
 
-        /** @docid dxBoxOptions_crossAlign */
+        /** Specifies how widget items are aligned cross-wise. */
         crossAlign?: string;
 
-        /** @docid_ignore dxBoxItemTemplate_ratio */
-        /** @docid_ignore dxBoxItemTemplate_baseSize */
-        /** @docid_ignore dxBoxItemTemplate_box */
     }
 
-    /** @docid dxBox */
+    /** The Box widget allows you to arrange various elements within it. Separate and adaptive, the Box widget acts as a building block for the layout. */
     export class dxBox extends CollectionWidget {
         constructor(element: JQuery, options?: dxBoxOptions);
         constructor(element: Element, options?: dxBoxOptions);
 
-        /** @docid_ignore dxBoxMethods_registerKeyHandler */
-        /** @docid_ignore dxBoxMethods_focus */
     }
 
     export interface dxResponsiveBoxOptions extends CollectionWidgetOptions {
-        /** @docid_ignore dxResponsiveBoxOptions_activeStateEnabled */
-        /** @docid_ignore dxResponsiveBoxOptions_focusStateEnabled */
-        /** @docid_ignore dxResponsiveBoxOptions_hint */
-        /** @docid_ignore dxResponsiveBoxOptions_noDataText */
-        /** @docid_ignore dxResponsiveBoxOptions_onSelectionChanged */
-        /** @docid_ignore dxResponsiveBoxOptions_selectedIndex */
-        /** @docid_ignore dxResponsiveBoxOptions_selectedItem */
-        /** @docid_ignore dxResponsiveBoxOptions_selectedItems */
-        /** @docid_ignore dxResponsiveBoxOptions_selectedItemKeys */
-        /** @docid_ignore dxResponsiveBoxOptions_keyExpr */
-        /** @docid_ignore dxResponsiveBoxOptions_tabIndex */
-        /** @docid_ignore dxResponsiveBoxOptions_width */
-        /** @docid_ignore dxResponsiveBoxOptions_height */
-        /** @docid_ignore dxResponsiveBoxOptions_accessKey */
 
-        /** @docid dxResponsiveBoxOptions_rows */
+        /** Specifies the collection of rows for the grid used to position layout elements. */
         rows?: Array<Object>;
 
-        /** @docid dxResponsiveBoxOptions_cols */
+        /** Specifies the collection of columns for the grid used to position layout elements. */
         cols?: Array<Object>;
 
-        /** @docid dxResponsiveBoxOptions_screenByWidth */
+        /** Specifies the function returning the size qualifier depending on the screen's width. */
         screenByWidth?: (width: number) => string;
 
-        /** @docid dxResponsiveBoxOptions_singleColumnScreen */
+        /** Decides on which screens all layout elements should be arranged in a single column. */
         singleColumnScreen?: string;
 
-        /** @docid_ignore dxResponsiveBoxItemTemplate_location */
-        /** @docid_ignore dxResponsiveBoxItemTemplate_location_colspan */
-        /** @docid_ignore dxResponsiveBoxItemTemplate_location_row */
-        /** @docid_ignore dxResponsiveBoxItemTemplate_location_col */
-        /** @docid_ignore dxResponsiveBoxItemTemplate_location_rowspan */
-        /** @docid_ignore dxResponsiveBoxItemTemplate_location_screen */
-        /** @docid_ignore dxResponsiveBoxOptions_cols_baseSize */
-        /** @docid_ignore dxResponsiveBoxOptions_cols_ratio */
-        /** @docid_ignore dxResponsiveBoxOptions_cols_screen */
-        /** @docid_ignore dxResponsiveBoxOptions_rows_baseSize */
-        /** @docid_ignore dxResponsiveBoxOptions_rows_ratio */
-        /** @docid_ignore dxResponsiveBoxOptions_rows_screen */
     }
 
-    /** @docid dxResponsiveBox */
+    /** The ResponsiveBox widget allows you to create an application or a website with a layout adapted to different screen sizes. */
     export class dxResponsiveBox extends CollectionWidget {
         constructor(element: JQuery, options?: dxBoxOptions);
         constructor(element: Element, options?: dxBoxOptions);
-
-        /** @docid_ignore dxResponsiveBoxMethods_registerKeyHandler */
-        /** @docid_ignore dxResponsiveBoxMethods_focus */
     }
 
     export interface dxAutocompleteOptions extends dxDropDownListOptions {
-        /** @docid_ignore dxAutocompleteOptions_searchEnabled */
-        /** @docid_ignore dxAutocompleteOptions_fieldEditEnabled */
-        /** @docid_ignore dxAutocompleteOptions_acceptCustomValue */
-        /** @docid_ignore dxAutocompleteOptions_noDataText */
-        /** @docid_ignore dxAutocompleteOptions_showDataBeforeSearch */
-        /** @docid_ignore dxAutocompleteOptions_displayExpr */
 
-        /** @docid dxAutocompleteOptions_value */
+        /** Specifies the current value displayed by the widget. */
         value?: string;
 
-        /** @docid dxAutocompleteOptions_minSearchLength */
+        /** The minimum number of characters that must be entered into the text box to begin a search. */
         minSearchLength?: number;
 
-        /** @docid dxAutocompleteOptions_maxItemCount */
+        /** Specifies the maximum count of items displayed by the widget. */
         maxItemCount?: number;
 
-        /** @docid dxDropDownListOptions_selectedItem */
+        /** Gets the currently selected item. */
         selectedItem?: any;
     }
 
-    /** @docid dxAutocomplete */
+    /** The Autocomplete widget is a textbox that provides suggestions while a user types into it. */
     export class dxAutocomplete extends dxDropDownList {
         constructor(element: JQuery, options?: dxAutocompleteOptions);
         constructor(element: Element, options?: dxAutocompleteOptions);
 
-        /** @docid_ignore dxAutocompleteOptions_pagingEnabled */
-
-        /** @docid dxAutocompletemethods_open */
+        /** Opens the drop-down editor. */
         open(): void;
 
-        /** @docid dxAutocompletemethods_close */
+        /** Closes the drop-down editor. */
         close(): void;
     }
 
     export interface dxAccordionOptions extends CollectionWidgetOptions {
-        /** @docid_ignore dxAccordionItemTemplate_title */
-        /** @docid_ignore dxAccordionOptions_hoverStateEnabled */
-        /** @docid_ignore dxAccordionOptions_focusStateEnabled */
 
-        /** @docid dxAccordionOptions_animationDuration */
+        /** A number specifying the time in milliseconds spent on the animation of the expanding or collapsing of a panel. */
         animationDuration?: number;
 
-        /** @docid dxAccordionOptions_height */
+        /** Specifies the widget's height. */
         height?: any;
 
-        /** @docid dxAccordionOptions_collapsible */
+        /** Specifies whether all items can be collapsed or whether at least one item must always be expanded. */
         collapsible?: boolean;
 
-        /** @docid dxAccordionOptions_multiple */
+        /** Specifies whether the widget can expand several items or only a single item at once. */
         multiple?: boolean;
 
-        /** @docid dxAccordionOptions_itemTemplate */
+        /** Specifies a custom template for an item. */
         itemTemplate?: any;
 
-        /** @docid dxAccordionOptions_onItemTitleClick */
+        /** A handler for the itemTitleClick event. */
         onItemTitleClick?: any;
 
-        /** @docid dxAccordionOptions_itemTitleTemplate */
+        /** Specifies a custom template for an item title. */
         itemTitleTemplate?: any;
 
-        /** @docid dxAccordionOptions_selectedIndex */
+        /** The index number of the currently selected item. */
         selectedIndex?: number;
 
-        /** @docid dxAccordionOptions_deferRendering */
+        /** Specifies whether widget content is rendered when the widget is shown or when rendering the widget. */
         deferRendering?: boolean;
 
     }
 
-    /** @docid dxAccordion */
+    /** The Accordion widget contains several panels displayed one under another. These panels can be collapsed or expanded by an end user, which makes this widget very useful for presenting information in a limited amount of space. */
     export class dxAccordion extends CollectionWidget {
         constructor(element: JQuery, options?: dxAccordionOptions);
         constructor(element: Element, options?: dxAccordionOptions);
 
-        /** @docid_ignore dxAccordionItemTemplate_icon */
-        /** @docid_ignore dxAccordionItemTemplate_iconSrc */
+        
+        
 
-        /** @docid dxAccordionMethods_collapseItem */
+        /** Collapses the specified item. */
         collapseItem(index: number): JQueryPromise<dxAccordion>;
 
-        /** @docid dxAccordionMethods_expandItem */
+        /** Expands the specified item. */
         expandItem(index: number): JQueryPromise<dxAccordion>;
 
-        /** @docid dxAccordionMethods_updateDimensions */
+        /** Updates the dimensions of the widget contents. */
         updateDimensions(): JQueryPromise<dxAccordion>;
     }
 
     export interface dxFileUploaderOptions extends EditorOptions {
-        /** @docid_ignore dxFileUploaderOptions_focusStateEnabled */
-        /** @docid_ignore dxFileUploaderOptions_validationMessageMode */
-        /** @docid_ignore dxFileUploaderOptions_extendSelection */
 
-        /** @docid dxFileUploaderOptions_value */
+        /** Specifies a File instance representing the selected file. Read-only when uploadMode is "useForm". */
         value?: Array<File>;
 
-        /** @docid dxFileUploaderOptions_values */
         values?: Array<File>;
 
-        /** @docid dxFileUploaderOptions_buttonText */
         buttonText?: string;
 
-        /** @docid dxFileUploaderOptions_selectButtonText */
+        /** The text displayed on the button that opens the file browser. */
         selectButtonText?: string;
 
-        /** @docid dxFileUploaderOptions_uploadButtonText */
+        /** The text displayed on the button that starts uploading. */
         uploadButtonText?: string;
 
-        /** @docid dxFileUploaderOptions_labelText */
+        /** Specifies the text displayed on the area to which an end-user can drop a file. */
         labelText?: string;
 
-        /** @docid dxFileUploaderOptions_name */
+        /** Specifies the value passed to the name attribute of the underlying input element. */
         name?: string;
 
-        /** @docid dxFileUploaderOptions_multiple */
+        /** Specifies whether the widget enables an end-user to select a single file or multiple files. */
         multiple?: boolean;
 
-        /** @docid dxFileUploaderOptions_accept */
+        /** Specifies a file type or several types accepted by the widget. */
         accept?: string;
 
-        /** @docid dxFileUploaderOptions_uploadUrl */
+        /** Specifies a target Url for the upload request. */
         uploadUrl?: string;
 
-        /** @docid dxFileUploaderOptions_allowCanceling */
+        /** Specifies if an end user can remove a file from the selection and interrupt uploading. */
         allowCanceling?: boolean;
 
-        /** @docid dxFileUploaderOptions_showFileList */
+        /** Specifies whether or not the widget displays the list of selected files. */
         showFileList?: boolean;
 
-        /** @docid dxFileUploaderOptions_progress */
+        /** Gets the current progress in percentages. */
         progress?: number;
 
-        /** @docid dxFileUploaderOptions_readyToUploadMessage */
+        /** The message displayed by the widget when it is ready to upload the specified files. */
         readyToUploadMessage?: string;
 
-        /** @docid dxFileUploaderOptions_uploadedMessage */
+        /** The message displayed by the widget when uploading is finished. */
         uploadedMessage?: string;
 
-        /** @docid dxFileUploaderOptions_uploadFailedMessage */
+        /** The message displayed by the widget on uploading failure. */
         uploadFailedMessage?: string;
 
-        /** @docid dxFileUploaderOptions_uploadMode */
+        /** Specifies how the widget uploads files. */
         uploadMode?: string;
 
-        /** @docid dxFileUploaderOptions_uploadMethod */
+        /** Specifies the method for the upload request. */
         uploadMethod?: string;
 
-        /** @docid dxFileUploaderOptions_uploadHeaders */
+        /** Specifies headers for the upload request. */
         uploadHeaders?: Object;
 
-        /** @docid dxFileUploaderOptions_onUploadStarted */
+        /** A handler for the uploadStarted event. */
         onUploadStarted?: Function;
 
-        /** @docid dxFileUploaderOptions_onUploaded */
+        /** A handler for the uploaded event. */
         onUploaded?: Function;
 
-        /** @docid dxFileUploaderOptions_onProgress */
+        /** A handler for the uploaded event. */
         onProgress?: Function;
 
-        /** @docid dxFileUploaderOptions_onUploadError */
+        /** A handler for the uploadError event. */
         onUploadError?: Function;
 
-        /** @docid dxFileUploaderOptions_onUploadAborted */
+        /** A handler for the uploadAborted event. */
         onUploadAborted?: Function;
 
-        /** @docid dxFileUploaderOptions_onValueChanged */
+        /** A handler for the valueChanged event. */
         onValueChanged?: Function;
     }
 
-    /** @docid dxFileUploader */
+    /** The FileUploader widget enables an end user to upload files to the server. An end user can select files in the file explorer or drag and drop files to the FileUploader area on the page. */
     export class dxFileUploader extends Editor {
         constructor(element: JQuery, options?: dxFileUploaderOptions);
         constructor(element: Element, options?: dxFileUploaderOptions);
     }
 
     export interface dxTrackBarOptions extends EditorOptions {
-        /** @docid dxTrackBarOptions_min */
+        /** The minimum value the widget can accept. */
         min?: number;
 
-        /** @docid dxTrackBarOptions_max */
+        /** The maximum value the widget can accept. */
         max?: number;
     }
 
-    /** @docid dxTrackBar */
+    /** A base class for track bar widgets. */
     export class dxTrackBar extends Editor {
         constructor(element: JQuery, options?: dxTrackBarOptions);
         constructor(element: Element, options?: dxTrackBarOptions);
     }
 
     export interface dxProgressBarOptions extends dxTrackBarOptions {
-        /** @docid_ignore dxProgressBarOptions_activeStateEnabled */
-        /** @docid_ignore dxProgressBarOptions_focusStateEnabled */
-        /** @docid_ignore dxProgressBarOptions_accessKey */
-        /** @docid_ignore dxProgressBarOptions_tabIndex */
 
-        /** @docid dxProgressBarOptions_statusFormat */
+        /** Specifies a format for the progress status. */
         statusFormat?: any;
 
-        /** @docid dxProgressBarOptions_showStatus */
+        /** Specifies whether or not the widget displays a progress status. */
         showStatus?: boolean;
 
-        /** @docid dxProgressBarOptions_onComplete */
+        /** A handler for the complete event. */
         onComplete?: Function;
 
-        /** @docid dxProgressBarOptions_value */
+        /** The current widget value. */
         value?: number;
     }
 
-    /** @docid dxProgressBar */
+    /** The ProgressBar is a widget that shows current progress. */
     export class dxProgressBar extends dxTrackBar {
         constructor(element: JQuery, options?: dxProgressBarOptions);
         constructor(element: Element, options?: dxProgressBarOptions);
-
-        /** @docid_ignore dxProgressBarMethods_registerKeyHandler */
-        /** @docid_ignore dxProgressBarMethods_focus */
     }
 
     export interface dxSliderBaseOptions extends dxTrackBarOptions {
-        /** @docid_ignore dxSliderOptions_hoverStateEnabled */
-        /** @docid_ignore dxSliderOptions_focusStateEnabled */
 
-        /** @docid dxSliderOptions_activeStateEnabled */
         activeStateEnabled?: boolean;
 
-        /** @docid dxSliderOptions_step */
+        /** The slider step size. */
         step?: number;
 
-        /** @docid dxSliderOptions_showRange */
+        /** Specifies whether or not to highlight a range selected within the widget. */
         showRange?: boolean;
 
-        /** @docid dxSliderOptions_keyStep */
+        /** Specifies the size of a step by which a slider handle is moved when a user uses the Page up or Page down keyboard shortcuts. */
         keyStep?: number;
 
-        /** @docid dxSliderOptions_tooltip */
+        /** Specifies options for the slider tooltip. */
         tooltip?: {
-            /** @docid dxSliderOptions_tooltip_enabled */
+            /** Specifies whether or not the tooltip is enabled. */
             enabled?: boolean;
 
-            /** @docid dxSliderOptions_tooltip_format */
+            /** Specifies format for the tooltip. */
             format?: any;
 
-            /** @docid dxSliderOptions_tooltip_position */
+            /** Specifies whether the tooltip is located over or under the slider. */
             position?: string;
 
-            /** @docid dxSliderOptions_tooltip_showMode */
+            /** Specifies whether the widget always shows a tooltip or only when a pointer is over the slider. */
             showMode?: string;
         };
 
-        /** @docid dxSliderOptions_label */
+        /** Specifies options for labels displayed at the min and max values. */
         label?: {
-            /** @docid dxSliderOptions_label_visible */
+            /** Specifies whether or not slider labels are visible. */
             visible?: boolean;
 
-            /** @docid dxSliderOptions_label_position */
+            /** Specifies whether labels are located over or under the scale. */
             position?: string;
 
-            /** @docid dxSliderOptions_label_format */
+            /** Specifies a format for labels. */
             format?: any;
         };
 
-        /** @docid dxSliderOptions_name */
+        
         name?: string;
     }
 
     export interface dxSliderOptions extends dxSliderBaseOptions {
-        /** @docid dxSliderOptions_value */
+        /** The current slider value. */
         value?: number;
     }
 
-    /** @docid dxSlider */
+    /** The Slider is a widget that allows an end user to set a numeric value on a continuous range of possible values. */
     export class dxSlider extends dxTrackBar {
         constructor(element: JQuery, options?: dxSliderOptions);
         constructor(element: Element, options?: dxSliderOptions);
     }
 
     export interface dxRangeSliderOptions extends dxSliderBaseOptions {
-        /** @docid_ignore dxRangeSliderOptions_onValueChanged */
-        /** @docid_ignore dxRangeSliderOptions_name */
 
-        /** @docid dxRangeSliderOptions_start */
+        /** The left edge of the interval currently selected using the range slider. */
         start?: number;
 
-        /** @docid dxRangeSliderOptions_end */
+        /** The right edge of the interval currently selected using the range slider. */
         end?: number;
 
-        /** @docid dxRangeSliderOptions_startName */
+        /** The value to be assigned to the name attribute of the underlying `<input>` element. */
         startName?: string;
 
-        /** @docid dxRangeSliderOptions_endName */
+        /** The value to be assigned to the name attribute of the underlying `<input>` element. */
         endName?: string;
 
-        /** @docid dxRangeSliderOptions_value */
+        
         value?: Array<number>;
     }
 
-    /** @docid dxRangeSlider */
+    /** The RangeSlider is a widget that allows an end user to choose a range of numeric values. */
     export class dxRangeSlider extends dxSlider {
         constructor(element: JQuery, options?: dxRangeSliderOptions);
         constructor(element: Element, options?: dxRangeSliderOptions);
     }
 
     export interface dxFormItemLabel {
-        /** @docid dxFormSimpleItemOptions_label_text */
+        /** Specifies the label text. */
         text?: string;
 
-        /** @docid dxFormSimpleItemOptions_label_visible */
+        /** Specifies whether or not the label is visible. */
         visible?: boolean;
 
-        /** @docid dxFormSimpleItemOptions_label_showColon */
+        /** Specifies whether or not a colon is displayed at the end of the current label. */
         showColon?: boolean;
 
-        /** @docid dxFormSimpleItemOptions_label_location */
+        /** Specifies the location of a label against the editor. */
         location?: string;
 
-        /** @docid dxFormSimpleItemOptions_label_alignment */
+        /** Specifies the label's horizontal alignment. */
         alignment?: string;
     }
 
     export interface dxFormItem {
-        /**
-         * @docid dxFormEmptyItemOptions_itemType
-         * @docid dxFormGroupItemOptions_itemType
-         * @docid dxFormTabbedItemOptions_itemType
-         * @docid dxFormSimpleItemOptions_itemType
-        */
+        /** Specifies the type of the current item. */
         itemType?: string;
 
-        /**
-         * @docid dxFormEmptyItemOptions_visible
-         * @docid dxFormGroupItemOptions_visible
-         * @docid dxFormTabbedItemOptions_visible
-         * @docid dxFormSimpleItemOptions_visible
-        */
+        /** Specifies whether or not the current form item is visible. */
         visible?: boolean;
 
-        /**
-         * @docid dxFormEmptyItemOptions_visibleIndex
-         * @docid dxFormGroupItemOptions_visibleIndex
-         * @docid dxFormTabbedItemOptions_visibleIndex
-         * @docid dxFormSimpleItemOptions_visibleIndex
-        */
+        /** Specifies the sequence number of the item in a form, group or tab. */
         visibleIndex?: number;
 
-        /**
-         * @docid dxFormEmptyItemOptions_cssClass
-         * @docid dxFormGroupItemOptions_cssClass
-         * @docid dxFormTabbedItemOptions_cssClass
-         * @docid dxFormSimpleItemOptions_cssClass
-        */
+        /** Specifies a CSS class to be applied to the form item. */
         cssClass?: string;
 
-        /**
-         * @docid dxFormEmptyItemOptions_colSpan
-         * @docid dxFormSimpleItemOptions_colSpan
-         * @docid dxFormGroupItemOptions_colSpan
-         * @docid dxFormTabbedItemOptions_colSpan
-         */
+        /** Specifies the number of columns spanned by the item. */
         colSpan?: number;
     }
 
-    /** @docid dxFormEmptyItem */
+    /** This article describes configuration options of an empty form item. */
     export interface dxFormEmptyItem extends dxFormItem {
-        /** @docid dxFormEmptyItemOptions_name */
+        /** Specifies the form item name. */
         name?: string;
     }
 
-    /** @docid dxFormSimpleItem */
+    /** This article describes configuration options of a simple form item. */
     export interface dxFormSimpleItem extends dxFormItem {
-        /** @docid dxFormSimpleItemOptions_dataField */
+        /** Specifies the path to the formData object field bound to the current form item. */
         dataField?: string;
 
-        /** @docid dxFormSimpleItemOptions_name */
+        /** Specifies the form item name. */
         name?: string;
 
-        /** @docid dxFormSimpleItemOptions_editorType */
+        /** Specifies which editor widget is used to display and edit the form item value. */
         editorType?: string;
 
-        /** @docid dxFormSimpleItemOptions_editorOptions */
+        /** Specifies configuration options for the editor widget of the current form item. */
         editorOptions?: Object;
 
-        /** @docid dxFormSimpleItemOptions_template */
+        /** A template to be used for rendering the form item. */
         template?: any;
 
-        /** @docid dxFormSimpleItemOptions_helpText */
+        /** Specifies the help text displayed for the current form item. */
         helpText?: string;
 
-        /** @docid dxFormSimpleItemOptions_isRequired */
+        /** Specifies whether the current form item is required. */
         isRequired?: boolean;
 
-        /** @docid dxFormSimpleItemOptions_label */
+        /** Specifies options for the form item label. */
         label?: dxFormItemLabel;
 
-        /** @docid dxFormSimpleItemOptions_validationRules */
+        /** An array of validation rules to be checked for the form item editor. */
         validationRules?: Array<any>;
     }
 
-    /** @docid ColCountResponsible */
+    /** Specifies dependency between the screen factor and the count of columns. */
     export interface ColCountResponsible {
-        /** @docid ColCountResponsible_xs */
+        /** The count of columns for an extra small-sized screen. */
         xs?: number;
 
-        /** @docid ColCountResponsible_sm */
+        /** The count of columns for a small-sized screen. */
         sm?: number;
 
-        /** @docid ColCountResponsible_md */
+        /** The count of columns for a middle-sized screen. */
         md?: number;
 
-        /** @docid ColCountResponsible_lg */
+        /** The count of columns for a large screen size. */
         lg?: number;
     }
 
-    /** @docid dxFormGroupItem */
+    /** This article describes configuration options of a group form item. */
     export interface dxFormGroupItem extends dxFormItem {
-        /** @docid dxFormGroupItemOptions_caption */
+        /** Specifies the group caption. */
         caption?: string;
 
-        /** @docid dxFormGroupItemOptions_template */
+        /** A template to be used for rendering a group item. */
         template?: any;
 
-        /** @docid dxFormGroupItemOptions_colCount */
+        /** The count of columns in the group layout. */
         colCount?: number;
 
-        /** @docid dxFormTabbedItemOptions_tabs_colCountByScreen */
+        /** Specifies dependency between the screen factor and the count of columns in the tab layout. */
         colCountByScreen?: ColCountResponsible;
 
-        /** @docid dxFormGroupItemOptions_alignItemLabels */
+        /** Specifies whether or not all group item labels are aligned. */
         alignItemLabels?: boolean;
 
-        /** @docid dxFormGroupItemOptions_items */
+        /** Holds an array of form items displayed within the group. */
         items?: Array<dxFormItem>;
     }
 
     export interface dxFormTab {
-        /** @docid dxFormTabbedItemOptions_tabs_title */
+        /** Specifies the tab title. */
         title?: string;
 
-        /** @docid dxFormTabbedItemOptions_tabs_colCount */
+        /** The count of columns in the tab layout. */
         colCount?: number;
 
-        /** @docid dxFormGroupItemOptions_colCountByScreen */
+        /** Specifies dependency between the screen factor and the count of columns in the group layout. */
         colCountByScreen?: ColCountResponsible;
 
-        /** @docid dxFormTabbedItemOptions_tabs_alignItemLabels */
+        /** Specifies whether or not labels of items displayed within the current tab are aligned. */
         alignItemLabels?: boolean;
 
-        /** @docid dxFormTabbedItemOptions_tabs_items */
+        /** Holds an array of form items displayed within the tab. */
         items?: Array<dxFormItem>;
 
-        /** @docid dxFormTabbedItemOptions_tabs_badge */
+        /** Specifies a badge text for the tab. */
         badge?: string;
 
-        /** @docid dxFormTabbedItemOptions_tabs_disabled */
+        /** A Boolean value specifying whether or not the tab can respond to user interaction. */
         disabled?: boolean;
 
-        /** @docid dxFormTabbedItemOptions_tabs_icon */
+        /** Specifies the icon to be displayed on the tab. */
         icon?: string;
 
-        /** @docid dxFormTabbedItemOptions_tabs_tabTemplate */
+        /** The template to be used for rendering the tab. */
         tabTemplate?: any;
 
-        /** @docid dxFormTabbedItemOptions_tabs_template */
+        /** The template to be used for rendering the tab content. */
         template?: any;
     }
 
-    /** @docid dxFormTabbedItem */
+    /** This article describes configuration options of a tabbed form item. */
     export interface dxFormTabbedItem extends dxFormItem {
-        /** @docid dxFormTabbedItemOptions_tabPanelOptions */
+        /** Holds a configuration object for the TabPanel widget used to display the current form item. */
         tabPanelOptions?: DevExpress.ui.dxTabPanelOptions;
 
-        /** @docid dxFormTabbedItemOptions_tabs */
+        /** An array of tab configuration objects. */
         tabs?: Array<dxFormTab>;
     }
 
     export interface dxFormOptions extends WidgetOptions {
-        /** @docid dxFormOptions_formData */
+        /** An object providing data for the form. */
         formData?: Object;
 
-        /** @docid dxFormOptions_colCount */
+        /** The count of columns in the form layout. */
         colCount?: any;
 
-        /** @docid dxFormOptions_colCountByScreen */
+        /** Specifies dependency between the screen factor and the count of columns in the form layout. */
         colCountByScreen?: ColCountResponsible;
 
-        /** @docid dxFormOptions_screenByWidth */
+        /** Specifies the function returning the screen factor depending on the screen width. */
         screenByWidth?: (width: number) => string;
 
-        /** @docid dxFormOptions_labelLocation */
+        /** Specifies the location of a label against the editor. */
         labelLocation?: string;
 
-        /** @docid dxFormOptions_readOnly */
+        /** Specifies whether all editors on the form are read-only. Applies only to non-templated items. */
         readOnly?: boolean;
 
-        /** @docid dxFormOptions_onFieldDataChanged */
+        /** A handler for the fieldDataChanged event. */
         onFieldDataChanged?: (e: Object) => void;
 
-        /** @docid dxFormOptions_onEditorEnterKey */
+        /** A handler for the editorEnterKey event. */
         onEditorEnterKey?: (e: Object) => void;
 
-        /** @docid dxFormOptions_customizeItem */
+        /** Specifies a function that customizes a form item after it has been created. */
         customizeItem?: Function;
 
-        /** @docid dxFormOptions_minColWidth */
+        /** The minimum column width used for calculating column count in the form layout. */
         minColWidth?: number;
 
-        /** @docid dxFormOptions_alignItemLabels */
+        /** Specifies whether or not all root item labels are aligned. */
         alignItemLabels?: boolean;
 
-        /** @docid dxFormOptions_alignItemLabelsInAllGroups */
+        /** Specifies whether or not item labels in all groups are aligned. */
         alignItemLabelsInAllGroups?: boolean;
 
-        /** @docid dxFormOptions_showColonAfterLabel */
+        /** Specifies whether or not a colon is displayed at the end of form labels. */
         showColonAfterLabel?: boolean;
 
-        /** @docid dxFormOptions_showRequiredMark */
+        /** Specifies whether or not the required mark is displayed for required fields. */
         showRequiredMark?: boolean;
 
-        /** @docid dxFormOptions_showOptionalMark */
+        /** Specifies whether or not the optional mark is displayed for optional fields. */
         showOptionalMark?: boolean;
 
-        /** @docid dxFormOptions_requiredMark */
+        /** The text displayed for required fields. */
         requiredMark?: string;
 
-        /** @docid dxFormOptions_optionalMark */
+        /** The text displayed for optional fields. */
         optionalMark?: string;
 
-        /** @docid dxFormOptions_requiredMessage */
+        /** Specifies the message that is shown for end-users if a required field value is not specified. */
         requiredMessage?: string;
 
-        /** @docid dxFormOptions_showValidationSummary */
+        /** Specifies whether or not the total validation summary is displayed on the form. */
         showValidationSummary?: boolean;
 
-        /** @docid dxFormOptions_items */
+        /** Holds an array of form items. */
         items?: Array<dxFormItem>;
 
-        /** @docid dxFormOptions_scrollingEnabled */
+        /** A Boolean value specifying whether to enable or disable form scrolling. */
         scrollingEnabled?: boolean;
 
-        /** @docid dxFormOptions_validationGroup */
+        /** Gives a name to the internal validation group. */
         validationGroup?: string;
     }
 
-    /** @docid dxForm */
+    /** The Form widget represents fields of a data object as a collection of label-editor pairs. These pairs can be arranged in several groups, tabs and columns. */
     export class dxForm extends Widget {
         constructor(element: JQuery, options?: dxFormOptions);
         constructor(element: Element, options?: dxFormOptions);
 
-        /** @docid dxFormMethods_updateData#updateData(dataField,value) */
+        /** Updates the specified field of the formData object and the corresponding editor on the form. */
         updateData(dataField: string, value: any): void;
 
-        /** @docid dxFormMethods_updateData#updateData(data) */
+        /** Updates the specified fields of the formData object and the corresponding editors on the form. */
         updateData(data: Object): void;
 
-        /** @docid dxFormMethods_itemOption#itemOption(field,option,value) */
+        /** Updates the value of a form item option. */
         itemOption(field: string, option: string, value: any): void;
 
-        /** @docid dxFormMethods_itemOption#itemOption(field,options) */
+        /** Updates the values of form item options. */
         itemOption(field: string, options: Object): void;
 
-        /** @docid dxFormMethods_itemOption#itemOption(field) */
+        /** Gets the value of the form item option. */
         itemOption(field: string): any;
 
-        /** @docid dxFormMethods_getEditor */
+        /** Returns an editor instance associated with the specified formData field or name of the form item. */
         getEditor(field: string): any;
 
-        /** @docid dxFormMethods_updateDimensions */
+        /** Updates the dimensions of the widget contents. */
         updateDimensions(): JQueryPromise<void>;
 
-        /** @docid dxFormMethods_validate */
+        /** Validates the values of all editors on the form against the list of the validation rules specified for each form item. */
         validate(): Object;
 
-        /** @docid dxFormMethods_resetValues */
+        /** Resets the editor's value to undefined. */
         resetValues(): void;
     }
 
     export interface dxDeferRenderingOptions extends WidgetOptions {
-        /** @docid dxDeferRenderingOptions_showLoadIndicator */
+        /** Indicates if a load indicator should be shown until the widget's content is rendered. */
         showLoadIndicator?: boolean;
 
-        /** @docid dxDeferRenderingOptions_renderWhen */
+        /** Specifies the jQuery.Promise or boolean value, which when resolved, forces widget content to render. */
         renderWhen?: any;
 
-        /** @docid dxDeferRenderingOptions_animation */
+        /** Specifies the animation to be used to show the rendered content. */
         animation?: fx.AnimationOptions;
 
-        /** @docid dxDeferRenderingOptions_staggerItemSelector */
+        /** Specifies a jQuery selector of items that should be rendered using a staggered animation. */
         staggerItemSelector?: string;
 
-        /** @docid dxDeferRenderingOptions_onRendered */
+        /** Specifies a callback function that is called when the widget's content has finished rendering but is not yet shown. */
         onRendered?: Function;
 
-        /** @docid dxDeferRenderingOptions_onShown */
+        /** Specifies a callback function that is called when widget content is shown and animation has completed. */
         onShown?: Function;
     }
 
-    /** @docid dxDeferRendering */
+    /** The DeferRendering is a widget that waits for its content to be ready before rendering it. While the content is getting ready, the DeferRendering displays a loading indicator. */
     export class dxDeferRendering extends Widget {
         constructor(element: JQuery, options?: dxDeferRenderingOptions);
         constructor(element: Element, options?: dxDeferRenderingOptions);
