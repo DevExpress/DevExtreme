@@ -131,14 +131,21 @@ var compileSetter = function(expr) {
     expr = bracketsToDots(expr);
 
     var pos = expr.lastIndexOf("."),
-        targetGetter = compileGetter(expr.substr(0, pos)),
+        targetGetterPath = expr.substr(0, pos),
+        targetGetter = compileGetter(targetGetterPath),
         targetPropName = expr.substr(1 + pos);
 
     return function(obj, value, options) {
         options = prepareOptions(options);
 
-        var target = targetGetter(obj, { functionsAsIs: options.functionsAsIs, unwrapObservables: options.unwrapObservables }),
-            prevTargetValue = readPropValue(target, targetPropName);
+        var target = targetGetter(obj, { functionsAsIs: options.functionsAsIs, unwrapObservables: options.unwrapObservables });
+
+        if(!target) {
+            target = {};
+            compileSetter(targetGetterPath)(obj, target, {});
+        }
+
+        var prevTargetValue = readPropValue(target, targetPropName);
 
         if(!options.functionsAsIs && typeUtils.isFunction(prevTargetValue) && !isWrapped(prevTargetValue)) {
             target[targetPropName](value);

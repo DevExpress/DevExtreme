@@ -379,6 +379,13 @@ QUnit.test("plain objects are cloned if previous value is null (T521407)", funct
     assert.equal(dataSource1.store, "Store 1");
 });
 
+QUnit.test("non existing multi-level prop", function(assert) {
+    var obj = {};
+
+    SETTER("prop.subProp1.subProp2")(obj, "Nested value");
+    assert.equal(obj.prop.subProp1.subProp2, "Nested value");
+});
+
 QUnit.module("setter with wrapped variables", {
     beforeEach: function() {
         variableWrapper.inject(mockVariableWrapper);
