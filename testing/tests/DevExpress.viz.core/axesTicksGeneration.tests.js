@@ -534,6 +534,7 @@ QUnit.test("Custom tickInterval is very small - ignore tickInterval and raise W2
     //act
     this.axis.createTicks(canvas(199));
 
+    assert.strictEqual(this.incidentOccurred.callCount, 1);
     assert.deepEqual(this.incidentOccurred.lastCall.args, ["W2003"]);
     assert.deepEqual(this.axis._tickInterval, 10);
 });

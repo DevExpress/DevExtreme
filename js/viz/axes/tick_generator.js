@@ -472,14 +472,16 @@ function generator(options, getBusinessDelta, calculateTickInterval, calculateMi
             gaps[0] && gaps[0].gapSize.days
         );
 
-        majorTicks = calculateTicks(data.min, data.max, tickInterval, options.endOnTick, gaps, breaks, businessDelta);
+        if(!options.skipTickGeneration) {
+            majorTicks = calculateTicks(data.min, data.max, tickInterval, options.endOnTick, gaps, breaks, businessDelta);
 
-        breaks = processScaleBreaks(breaks, tickInterval, screenDelta, options.axisDivisionFactor);
+            breaks = processScaleBreaks(breaks, tickInterval, screenDelta, options.axisDivisionFactor);
 
-        majorTicks = filterTicks(majorTicks, breaks);
-        ticks.breaks = breaks;
+            majorTicks = filterTicks(majorTicks, breaks);
+            ticks.breaks = breaks;
 
-        ticks.ticks = ticks.ticks.concat(majorTicks);
+            ticks.ticks = ticks.ticks.concat(majorTicks);
+        }
         ticks.tickInterval = tickInterval;
         return ticks;
     }
@@ -520,7 +522,9 @@ function generator(options, getBusinessDelta, calculateTickInterval, calculateMi
 
         if(!isNaN(businessDelta)) {
             result = generateMajorTicks(result, data, businessDelta, screenDelta, tickInterval, forceTickInterval, customTicks, breaks || []);
-            result = generateMinorTicks(result, data, businessDelta, screenDelta, minorTickInterval, minorTickCount, customTicks);
+            if(!options.skipTickGeneration) {
+                result = generateMinorTicks(result, data, businessDelta, screenDelta, minorTickInterval, minorTickCount, customTicks);
+            }
         }
 
         return result;
