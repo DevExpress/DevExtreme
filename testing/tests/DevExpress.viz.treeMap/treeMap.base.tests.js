@@ -1265,15 +1265,9 @@ QUnit.test("ellipsis label in header does not fit in width", function(assert) {
 });
 
 QUnit.test("label in header does not fit in width, but fit after ellipsis", function(assert) {
-    var idx = 0;
-    this.renderer.bBoxTemplate = function() {
-        return [
-            { x: 0, y: 0, width: 10, height: 5 },
-            { x: 0, y: 0, width: 10, height: 5 },
-            { x: 0, y: 0, width: 10, height: 5 },
-            { x: 0, y: 0, width: 5, height: 5 }
-        ][idx++];
-    };
+    this.renderer.bBoxTemplate = sinon.stub();
+    this.renderer.bBoxTemplate.onCall(3).returns({ x: 6, y: 0, width: 5, height: 5 });
+    this.renderer.bBoxTemplate.returns({ x: 6, y: 0, width: 10, height: 5 });
 
     common.createWidget({
         size: {
@@ -1525,15 +1519,9 @@ QUnit.test("position of labels", function(assert) {
 });
 
 QUnit.test("Correct label position using bBox after ellipsis", function(assert) {
-    var idx = 0;
-    this.renderer.bBoxTemplate = function() {
-        return [
-            { x: 6, y: 0, width: 10, height: 5 },
-            { x: 6, y: 0, width: 10, height: 5 },
-            { x: 6, y: 0, width: 10, height: 5 },
-            { x: 4, y: 0, width: 5, height: 5 }
-        ][idx++];
-    };
+    this.renderer.bBoxTemplate = sinon.stub();
+    this.renderer.bBoxTemplate.onCall(3).returns({ x: 4, y: 0, width: 5, height: 5 });
+    this.renderer.bBoxTemplate.returns({ x: 6, y: 0, width: 10, height: 5 });
 
     this.create({
         size: {
