@@ -109,6 +109,7 @@ var environment = {
                 discreteAxisDivisionMode: "crossLabels"
             };
 
+            this.incidentOccurred = sinon.spy();
             this.renderSettings = {
                 stripsGroup: this.renderer.g(),
                 labelAxesGroup: this.renderer.g(),
@@ -117,7 +118,8 @@ var environment = {
                 gridGroup: this.renderer.g(),
                 renderer: this.renderer,
                 axisType: "xyAxes",
-                drawingType: "linear"
+                drawingType: "linear",
+                incidentOccurred: this.incidentOccurred
             };
             this.range = new RangeStubCtor();
             this.range.min = 0;
@@ -619,6 +621,16 @@ QUnit.test("measure empty labels", function(assert) {
         x: 0,
         y: 0
     }, "measurements");
+});
+
+QUnit.test("IncidentOccured on measure labels", function(assert) {
+    this.renderSettings.isArgumentAxis = true;
+    var axis = this.createSimpleAxis({ label: { visible: true } });
+
+    axis.setMarginOptions({ checkInterval: true });
+    axis.measureLabels(this.canvas);
+
+    assert.ok(this.tickGenerator.lastCall.args[0].incidentOccurred !== this.incidentOccurred);
 });
 
 QUnit.test("range data with synchronizedValue. synchronizedValue above max ", function(assert) {

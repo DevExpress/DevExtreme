@@ -5,89 +5,97 @@
 var gulp = require('gulp');
 var path = require('path');
 var rename = require('gulp-rename');
-var header = require('gulp-header');
-var footer = require('gulp-footer');
 var template = require('gulp-template');
 var fs = require('fs');
 
 var headerPipes = require('./header-pipes.js');
 var compressionPipes = require('./compression-pipes.js');
+var context = require('./context.js');
 
-function getLocales(directory) {
-    var locales = [];
-    var files = fs.readdirSync(directory);
+var RESULT_PATH = path.join(context.RESULT_JS_PATH, 'localization');
+var DICTIONARY_SOURCE_FOLDER = 'js/localization/messages';
 
-    files.forEach(file => {
-        var locale = file.split('.')[0];
-        locales.push(locale);
+var getLocales = function(directory) {
+    return fs.readdirSync(directory).map(file => {
+        return file.split('.')[0];
     });
+};
 
-    return locales;
-}
+var serializeObject = function(obj, shift) {
+    var tab = '    ';
+    var result = JSON.stringify(obj, null, tab);
 
-function getMessages(directory, locale) {
+    if(shift) {
+        result = result.replace(/(\n)/g, '$1' + tab);
+    }
+
+    return result;
+};
+
+var getMessages = function(directory, locale) {
     var json = require(path.join('../../', directory, locale + '.json'));
 
-    return JSON.stringify(json, null, '    ');
-}
+    return serializeObject(json, true);
+};
 
-gulp.task('localization', function() {
-    var streams = [],
-        directory = 'js/localization/messages';
 
-    var locales = getLocales(directory);
+gulp.task('localization', ['localization-messages', 'localization-messages-legacy', 'localization-generated-sources']);
 
-    ['de', 'ja', 'ru'].forEach(locale => {
-        var messages = getMessages(directory, locale);
-
-        ['mobile', 'web', 'all'].forEach(distribution => {
-            streams.push(
-                gulp
-                    .src('build/gulp/localization-template.jst')
-                    .pipe(template({
-                        json: messages,
-                        isDeprecated: true,
-                        distribution: distribution,
-                        locale: locale
-                    }))
-                    .pipe(rename(['dx', distribution, locale, 'js'].join('.')))
-                    .pipe(compressionPipes.beautify())
-                    .pipe(headerPipes.useStrict())
-                    .pipe(headerPipes.bangLicense())
-                    .pipe(gulp.dest('artifacts/js/localization'))
-            );
-        });
+gulp.task('localization-messages', function() {
+    return getLocales(DICTIONARY_SOURCE_FOLDER).map(locale => {
+        return gulp
+            .src('build/gulp/localization-template.jst')
+            .pipe(template({
+                json: getMessages(DICTIONARY_SOURCE_FOLDER, locale),
+                isDeprecated: false
+            }))
+            .pipe(rename(['dx', 'messages', locale, 'js'].join('.')))
+            .pipe(compressionPipes.beautify())
+            .pipe(headerPipes.useStrict())
+            .pipe(headerPipes.bangLicense())
+            .pipe(gulp.dest(RESULT_PATH));
     });
+});
 
-    locales.forEach(locale => {
-        var messages = getMessages(directory, locale);
-
-        streams.push(
-            gulp
+gulp.task('localization-messages-legacy', function() {
+    return ['de', 'ja', 'ru'].map(locale => {
+        ['mobile', 'web', 'all'].forEach(distribution => {
+            return gulp
                 .src('build/gulp/localization-template.jst')
                 .pipe(template({
-                    json: messages,
-                    isDeprecated: false
+                    json: getMessages(DICTIONARY_SOURCE_FOLDER, locale),
+                    isDeprecated: true,
+                    distribution: distribution,
+                    locale: locale
                 }))
-                .pipe(rename(['dx', 'messages', locale, 'js'].join('.')))
+                .pipe(rename(['dx', distribution, locale, 'js'].join('.')))
                 .pipe(compressionPipes.beautify())
                 .pipe(headerPipes.useStrict())
                 .pipe(headerPipes.bangLicense())
-                .pipe(gulp.dest('artifacts/js/localization'))
-        );
+                .pipe(gulp.dest(RESULT_PATH));
+        });
     });
+});
 
-    streams.push(
+gulp.task('localization-generated-sources', function() {
+    return [
+        {
+            data: require('../../js/localization/messages/en.json'),
+            filename: 'default_messages.js',
+            destination: 'js/localization'
+        },
+        {
+            data: require('../../node_modules/cldr-core/supplemental/parentLocales.json').supplemental.parentLocales.parentLocale,
+            filename: 'parentLocales.js',
+            destination: 'js/localization/cldr-data'
+        }
+    ].map(source => {
         gulp
-            .src('js/localization/messages/en.json')
-            .pipe(rename('default_messages.js'))
-            .pipe(header('module.exports = '))
-            .pipe(footer(';'))
-            .pipe(compressionPipes.beautify())
-            .pipe(headerPipes.useStrict())
-            .pipe(header('// !!! AUTO-GENERATED FILE, DO NOT EDIT\n'))
-            .pipe(gulp.dest('js/localization'))
-    );
-
-    return streams;
+            .src('build/gulp/cldr-data-template.jst')
+            .pipe(template({
+                json: serializeObject(source.data)
+            }))
+            .pipe(rename(source.filename))
+            .pipe(gulp.dest(source.destination));
+    });
 });

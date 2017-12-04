@@ -16,15 +16,14 @@
 }(this, function(localization<%
     if(isDeprecated) {
         %>, errors<%
-    } %>) {
-    <%
+    } %>) {<%
     if(isDeprecated) {
-        %>errors.log("W0013", "devextreme/dist/js/localization/dx.<%=
-            distribution %>.<%=
-            locale %>.js", "16.2", "Use the 'devextreme/dist/js/localization/dx.messages.<%=
-            locale %>.js' file instead.");
+    %>
+    errors.log("W0013", "devextreme/dist/js/localization/dx.<%=
+        distribution %>.<%=
+        locale %>.js", "16.2", "Use the 'devextreme/dist/js/localization/dx.messages.<%=
+        locale %>.js' file instead.");
 <%
     } %>
     localization.loadMessages(<%= json %>);
-
 }));

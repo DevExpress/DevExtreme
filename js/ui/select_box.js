@@ -177,11 +177,13 @@ var SelectBox = DropDownList.inherit({
             * @type function(e)
             * @type_function_param1 e:object
             * @type_function_param1_field4 text:string
-            * @type_function_return object|Promise<object>
+            * @type_function_param1_field5 customItem:string|object|Promise<any>
+            * @type_function_return string|object|Promise<any>
             * @action
+            * @default function(e) { e.customItem = e.text; }
             */
             onCustomItemCreating: function(e) {
-                return e.text;
+                e.customItem = e.text;
             },
 
             /**
@@ -693,9 +695,11 @@ var SelectBox = DropDownList.inherit({
 
     _customItemAddedHandler: function() {
         var searchValue = this._searchValue(),
-            item = this._customItemCreatingAction({
+            params = {
                 text: searchValue
-            });
+            },
+            actionResult = this._customItemCreatingAction(params),
+            item = commonUtils.ensureDefined(actionResult, params.customItem);
 
         if(item === undefined) {
             this._renderValue();

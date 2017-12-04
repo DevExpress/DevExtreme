@@ -44,6 +44,9 @@ define(function(require, exports, module) {
         dateLocalization = require("localization/date"),
         messageLocalization = require("localization/message");
 
+    var likelySubtags = require("../../../node_modules/cldr-core/supplemental/likelySubtags.json!");
+    Globalize.load(likelySubtags);
+
     var NBSP = String.fromCharCode(160);
 
     require("./localization.base.tests.js");
