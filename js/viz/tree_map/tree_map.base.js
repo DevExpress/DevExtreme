@@ -607,7 +607,7 @@ function layoutTextNode(node, params) {
 var ThemeManager = require("../core/base_theme_manager").BaseThemeManager.inherit({
     _themeSection: "treeMap",
     _fontFields: ["tile.label.font", "group.label.font",
-        "loadingIndicator.font", "title.font", "title.subtitle.font", "tooltip.font"]
+        "loadingIndicator.font", "title.font", "title.subtitle.font", "tooltip.font", "export.font"]
 });
 
 require("../../core/component_registrator")("dxTreeMap", dxTreeMap);
