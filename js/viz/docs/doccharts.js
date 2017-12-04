@@ -2638,8 +2638,7 @@ var dxPolarChart = {
     * @type_function_param1_field1 component:object
     * @type_function_param1_field2 element:object
     * @type_function_param1_field3 jQueryEvent:jQuery-event object
-    * @type_function_param1_field4 target:object
-    * @type_function_param1_field5 argument:Date|Number|string
+    * @type_function_param1_field4 argument:Date|Number|string
     * @notUsedInTheme
     * @action
     */
