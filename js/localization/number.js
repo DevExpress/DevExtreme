@@ -4,7 +4,6 @@ var dependencyInjector = require("../core/utils/dependency_injector"),
     inArray = require("../core/utils/array").inArray,
     each = require("../core/utils/iterator").each,
     isPlainObject = require("../core/utils/type").isPlainObject,
-    escapeRegExp = require("../core/utils/common").escapeRegExp,
     ldmlNumber = require("./ldml/number"),
     config = require("../core/config"),
     errors = require("../core/errors");
@@ -273,20 +272,27 @@ var numberLocalization = dependencyInjector({
             return format.parser(text);
         }
 
-        if(typeof format === "string") {
-            text = this.convertDigits(text, true);
-            return ldmlNumber.getParser(format, this._getSeparators())(text);
-        }
+        text = this.convertDigits(text, true);
 
         if(format) {
             errors.log("W0011");
         }
 
-        var textParts = text.split(config().decimalSeparator);
+        var decimalSeparator = this.getDecimalSeparator(),
+            regExp = new RegExp("[^-0-9" + decimalSeparator + "]", "g"),
+            cleanedText = text
+                .replace(regExp, "")
+                .replace(decimalSeparator, ".")
+                .replace(/^\.|\.$/g, "");
 
-        textParts[0] = textParts[0].replace(new RegExp("^\\D+|" + escapeRegExp(config().thousandsSeparator) + "+", "g"), "");
+        if(cleanedText.length > 15) {
+            return NaN;
+        }
+        if(cleanedText === "") {
+            return null;
+        }
 
-        return parseFloat(textParts[0] + (textParts[1] ? "." + textParts[1] : ""));
+        return +cleanedText;
     }
 });
 

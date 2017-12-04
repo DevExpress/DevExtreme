@@ -143,6 +143,13 @@ var NumberBoxMask = NumberBoxBase.inherit({
         });
     },
 
+    _goToDecimalPart: function(text, caret) {
+        var decimalSeparator = number.getDecimalSeparator(),
+            isDecimalSeparatorNext = text.charAt(caret.end) === decimalSeparator;
+
+        return this._lastKey === decimalSeparator && isDecimalSeparatorNext;
+    },
+
     _keyboardHandler: function(e) {
         if(!this._shouldHandleKey(e.originalEvent)) {
             this._lastKey = null;
@@ -157,6 +164,10 @@ var NumberBoxMask = NumberBoxBase.inherit({
         var newValue = this._tryParse(text, caret, this._lastKey);
         if(newValue === undefined) {
             e.originalEvent.preventDefault();
+
+            if(this._goToDecimalPart(text, caret)) {
+                this._moveCaret(1);
+            }
         } else {
             this._parsedValue = newValue;
         }
@@ -238,66 +249,17 @@ var NumberBoxMask = NumberBoxBase.inherit({
         return text.replace(/[^0-9]/g, "").length > MAXIMUM_FLOAT_LENGTH;
     },
 
-    _parseNumber: function(text) {
-        if(!this._isNumberVeryLong(text)) {
-            return number.parse(text, this._getFormatPattern());
-        }
-    },
-
-    _tryInsert: function(text, selection, char) {
-        return this._parseNumber(this._getEditedText(text, selection, char));
-    },
-
-    _tryReplace: function(text, selection, char) {
-        var start = selection.start,
-            end = selection.start === selection.end ? selection.end + 1 : selection.end,
-            replacement = selection.start === selection.end ? char : "0",
-            replaced = this._getEditedText(text, { start: start, end: end }, replacement);
-
-        return this._parseNumber(replaced);
-    },
-
-    _tryRemoveLeadingZero: function(text, selection, char) {
-        var escapedDecimalSeparator = escapeRegExp(number.getDecimalSeparator()),
-            inserted = this._getEditedText(text, selection, char),
-            regExp = new RegExp("^([^0-9" + escapedDecimalSeparator + "]*)0", "g"),
-            cleared = inserted.replace(regExp, "$1");
-
-        return this._parseNumber(cleared);
-    },
-
-    _tryAddLeadingZero: function(text, selection, char) {
-        var escapedDecimalSeparator = escapeRegExp(number.getDecimalSeparator()),
-            inserted = this._getEditedText(text, selection, char),
-            regExp = new RegExp("^([^0-9" + escapedDecimalSeparator + "]*)([0-9])", "g"),
-            leadingZeroAdded = inserted.replace(regExp, "$10$2");
-
-        return this._parseNumber(leadingZeroAdded);
-    },
-
-    _tryLightParse: function(text, selection, char) {
-        var textBefore = text.slice(0, selection.start),
-            textAfter = text.slice(selection.end),
-            inserted = textBefore + char + textAfter,
-            value = this._lightParse(inserted);
-
-        return this._isPercentFormat() ? (value && value / 100) : value;
-    },
-
     _tryParse: function(text, selection, char) {
-        var inserted = this._tryInsert(text, selection, char),
-            leadingZeroAdded = this._tryAddLeadingZero(text, selection, char),
-            replaced = this._tryReplace(text, selection, char),
-            lightParsed = this._tryLightParse(text, selection, char),
-            noLeadingZeros = this._tryRemoveLeadingZero(text, selection, char),
-            value =
-                ensureDefined(inserted,
-                    ensureDefined(leadingZeroAdded,
-                        ensureDefined(replaced,
-                            ensureDefined(lightParsed, noLeadingZeros)
-            )));
+        var editedText = this._getEditedText(text, selection, char),
+            parsed = number.parse(editedText);
 
-        return value;
+        if(editedText === "") {
+            return null;
+        }
+
+        parsed = isNaN(parsed) ? undefined : parsed;
+
+        return this._isPercentFormat() ? (parsed && parsed / 100) : parsed;
     },
 
     _isValueInRange: function(value) {
