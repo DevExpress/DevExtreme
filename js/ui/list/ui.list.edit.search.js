@@ -23,12 +23,16 @@ var ListSearch = ListEdit.inherit(searchBoxMixin).inherit({
     },
 
     _initDataSource: function() {
+        var value = this.option("searchValue"),
+            expr = this.option("searchExpr"),
+            mode = this.option("searchMode");
+
         this.callBase();
 
         if(this._dataSource) {
-            this.option("searchValue").length && this._dataSource.searchValue(this.option("searchValue"));
-            this.option("searchMode") !== "contains" && this._dataSource.searchOperation(this.option("searchMode"));
-            this.option("searchExpr") && this._dataSource.searchExpr(this.option("searchExpr"));
+            value && value.length && this._dataSource.searchValue(value);
+            mode.length && this._dataSource.searchOperation(mode);
+            expr && this._dataSource.searchExpr(expr);
         }
     }
 });

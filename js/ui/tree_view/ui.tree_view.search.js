@@ -51,7 +51,7 @@ var TreeViewSearch = TreeViewBase.inherit(searchBoxMixin).inherit({
     _getDataAdapterOptions: function() {
         return extend(this.callBase(), {
             searchValue: this.option("searchValue"),
-            searchMode: this.option("searchMode"),
+            searchMode: this.option("searchMode") || "contains",
             searchExpr: this.option("searchExpr")
         });
     },

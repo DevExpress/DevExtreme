@@ -24,7 +24,7 @@ module.exports = {
             * @default 'contains'
             * @acceptValues "contains"|"startswith"
             */
-            searchMode: "contains",
+            searchMode: "",
 
             /**
             * @name SearchBoxMixinOptions_searchExpr
