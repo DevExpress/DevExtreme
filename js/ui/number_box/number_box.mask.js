@@ -239,12 +239,9 @@ var NumberBoxMask = NumberBoxBase.inherit({
     },
 
     _parseNumber: function(text) {
-        if(this._isNumberVeryLong(text)) {
-            return undefined;
+        if(!this._isNumberVeryLong(text)) {
+            return number.parse(text, this._getFormatPattern());
         }
-
-        var format = this._getFormatPattern();
-        return number.parse(text, format);
     },
 
     _tryInsert: function(text, selection, char) {
