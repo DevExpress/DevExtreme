@@ -180,18 +180,26 @@ QUnit.test("invert sign should be prevented if minimum is larger than 0", functi
     assert.equal(this.input.val(), "4", "reverting was prevented");
 });
 
-QUnit.test("17-digit value should not be parsed", function(assert) {
+QUnit.test("integer should not be longer than 15 digit", function(assert) {
     this.instance.option("value", 999999999999999);
-    this.keyboard.type("9");
+    this.keyboard.caret(15).type("5");
 
     assert.equal(this.input.val(), "999999999999999", "input was prevented");
 });
 
-QUnit.test("17-digit negative value should not be parsed", function(assert) {
+QUnit.test("negative integer should not be longer than 15 digit", function(assert) {
     this.instance.option("value", -999999999999999);
-    this.keyboard.type("9");
+    this.keyboard.caret(16).type("5");
 
     assert.equal(this.input.val(), "-999999999999999", "input was prevented");
+});
+
+QUnit.test("15-digit value with decimal part should be parsed", function(assert) {
+    this.instance.option("format", "#0.####");
+    this.instance.option("value", 9999999999.999);
+    this.keyboard.caret(14).type("9");
+
+    assert.equal(this.input.val(), "9999999999.9999", "input was not prevented");
 });
 
 

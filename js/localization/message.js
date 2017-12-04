@@ -10,7 +10,42 @@ var $ = require("../core/renderer"),
 
 require("./core");
 
+var PARENT_LOCALE_SEPARATOR = "-";
+
 var baseDictionary = extend(true, {}, require("./default_messages"));
+
+var parentLocales = require("./cldr-data/parentLocales");
+
+var getParentLocale = function(locale) {
+    var parentLocale = parentLocales[locale];
+
+    if(parentLocale) {
+        return parentLocale !== "root" && parentLocale;
+    }
+
+    return locale.substr(0, locale.lastIndexOf(PARENT_LOCALE_SEPARATOR));
+};
+
+var getDataByLocale = function(localeData, locale) {
+    return localeData[locale] || {};
+};
+
+var getValueByClosestLocale = function(localeData, locale, key) {
+    var value = getDataByLocale(localeData, locale)[key],
+        isRootLocale;
+
+    while(!value && !isRootLocale) {
+        locale = getParentLocale(locale);
+
+        if(locale) {
+            value = getDataByLocale(localeData, locale)[key];
+        } else {
+            isRootLocale = true;
+        }
+    }
+
+    return value;
+};
 
 var newMessages = {};
 
@@ -49,7 +84,7 @@ var messageLocalization = dependencyInjector({
     },
 
     _messageLoaded: function(key, locale) {
-        return this._dictionary[locale || coreLocalization.locale()][key] !== undefined;
+        return getValueByClosestLocale(this._dictionary, locale || coreLocalization.locale(), key) !== undefined;
     },
 
     localizeNode: function(node) {
@@ -98,8 +133,7 @@ var messageLocalization = dependencyInjector({
     },
 
     _getFormatterBase: function(key, locale) {
-        var localeMessages = this._dictionary[locale || coreLocalization.locale()],
-            message = localeMessages && localeMessages[key];
+        var message = getValueByClosestLocale(this._dictionary, locale || coreLocalization.locale(), key);
 
         if(message) {
             return function() {

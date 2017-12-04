@@ -505,6 +505,26 @@ QUnit.test("format", function(assert) {
     }
 });
 
+QUnit.test("format using parent locales", function(assert) {
+    try {
+        localization.loadMessages({
+            "pt": {
+                ptTestKey: "ptTestValue",
+                ptPtTestKey: "shouldNotBeDisplayed"
+            },
+            "pt-PT": {
+                ptPtTestKey: "ptPtTestValue"
+            }
+        });
+        localization.locale("pt-AO");
+
+        assert.equal(messageLocalization.format("ptTestKey"), "ptTestValue");
+        assert.equal(messageLocalization.format("ptPtTestKey"), "ptPtTestValue");
+    } finally {
+        localization.locale("en");
+    }
+});
+
 QUnit.test("getFormatter", function(assert) {
     assert.equal(messageLocalization.getFormatter("hello")(["Ivan", "Ivanov"]), "Hello, Ivan Ivanov");
     assert.equal(messageLocalization.getFormatter("hello")("Ivan", "Ivanov"), "Hello, Ivan Ivanov");

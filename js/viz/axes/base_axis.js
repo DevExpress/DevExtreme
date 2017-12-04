@@ -14,6 +14,7 @@ var vizUtils = require("../core/utils"),
     tick = require("./tick").tick,
     _format = require("./smart_formatter").smartFormatter,
     adjust = require("../../core/utils/math").adjust,
+    dateToMilliseconds = require("../../core/utils/date").dateToMilliseconds,
     convertTicksToValues = constants.convertTicksToValues,
 
     isDefined = typeUtils.isDefined,
@@ -43,7 +44,7 @@ var vizUtils = require("../core/utils"),
 
     Axis;
 
-function getTickGenerator(options, incidentOccurred) {
+function getTickGenerator(options, incidentOccurred, skipTickGeneration) {
     return tickGeneratorModule.tickGenerator({
         axisType: options.type,
         dataType: options.dataType,
@@ -60,6 +61,7 @@ function getTickGenerator(options, incidentOccurred) {
         incidentOccurred: incidentOccurred,
 
         firstDayOfWeek: options.workWeek && options.workWeek[0],
+        skipTickGeneration: skipTickGeneration,
 
         showCalculatedTicks: options.tick.showCalculatedTicks, //DEPRECATED IN 15_2
         showMinorCalculatedTicks: options.minorTick.showCalculatedTicks //DEPRECATED IN 15_2
@@ -1102,13 +1104,13 @@ Axis.prototype = {
         this._minorTicks = (ticks.minorTicks || []).map(createMinorTick(this, this._renderer));
     },
 
-    _getTicks: function(viewPort) {
+    _getTicks: function(viewPort, incidentOccurred, skipTickGeneration) {
         var that = this,
             options = that._options,
             customTicks = options.customTicks,
             customMinorTicks = options.customMinorTicks;
 
-        return getTickGenerator(options, that._incidentOccurred)(
+        return getTickGenerator(options, incidentOccurred || that._incidentOccurred, skipTickGeneration)(
             {
                 min: viewPort.minVisible,
                 max: viewPort.maxVisible,
@@ -1127,11 +1129,11 @@ Axis.prototype = {
         );
     },
 
-    _createTicksAndLabelFormat: function(range) {
+    _createTicksAndLabelFormat: function(range, incidentOccurred) {
         var options = this._options,
             ticks;
 
-        ticks = this._getTicks(range);
+        ticks = this._getTicks(range, incidentOccurred, false);
 
         if(options.type === constants.discrete && options.dataType === "datetime" && !this._hasLabelFormat && ticks.ticks.length) {
             options.label.format = formatHelper.getDateFormatByTicks(ticks.ticks);
@@ -1154,6 +1156,8 @@ Axis.prototype = {
         that._majorTicks = that._minorTicks = null;
 
         that.updateCanvas(canvas);
+
+        that._estimatedTickInterval = that._getTicks(new rangeModule.Range(this._seriesData), _noop, true).tickInterval;
         range = that._getViewportRange();
 
         ticks = that._createTicksAndLabelFormat(range);
@@ -1181,10 +1185,10 @@ Axis.prototype = {
 
         that.correctTicksOnDeprecated();
 
-        that.reinitTranslator(range);
+        that._reinitTranslator(range);
     },
 
-    reinitTranslator: function(range) {
+    _reinitTranslator: function(range) {
         var that = this,
             minVisible = range.minVisible,
             maxVisible = range.maxVisible,
@@ -1205,7 +1209,7 @@ Axis.prototype = {
                 }
             }
 
-            interval = this._calculateRangeInterval(that.calculateInterval(maxVisible, minVisible), interval);
+            interval = that._calculateRangeInterval(that.calculateInterval(maxVisible, minVisible), interval);
 
             range.addRange({
                 minVisible: minVisible,
@@ -1240,8 +1244,17 @@ Axis.prototype = {
     },
 
     _calculateRangeInterval: function(dataLength, interval) {
-        var intervalByDivision = (this._options.axisDivisionFactor || DEFAULT_AXIS_DIVISION_FACTOR) * dataLength / this._getScreenDelta();
-        return isDefined(interval) ? _min(interval, intervalByDivision) : intervalByDivision;
+        var isDateTime = this._options.dataType === "datetime",
+            minArgs = [],
+            addToArgs = function(value) {
+                isDefined(value) && minArgs.push(isDateTime ? dateToMilliseconds(value) : value);
+            };
+
+        addToArgs(this._tickInterval);
+        addToArgs(this._estimatedTickInterval);
+        isDefined(interval) && minArgs.push(interval);
+
+        return _min.apply(this, minArgs);
     },
 
     _applyMargins: function(range) {
@@ -1382,7 +1395,7 @@ Axis.prototype = {
         var that = this;
 
         that.updateCanvas(canvas);
-        that.reinitTranslator(this._getViewportRange());
+        that._reinitTranslator(this._getViewportRange());
 
         var canvasStartEnd = that._getCanvasStartEnd();
 
@@ -1591,7 +1604,7 @@ Axis.prototype = {
             ticks = convertTicksToValues(that._majorTicks);
         } else {
             this.updateCanvas(canvas);
-            ticks = that._createTicksAndLabelFormat(this._getViewportRange());
+            ticks = that._createTicksAndLabelFormat(this._getViewportRange(), _noop);
             tickInterval = ticks.tickInterval;
             ticks = ticks.ticks;
         }
