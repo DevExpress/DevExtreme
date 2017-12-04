@@ -5932,6 +5932,37 @@ QUnit.test("Add column", function(assert) {
     assert.equal(columns[1].dataField, "TestColumn");
 });
 
+QUnit.test("Add column for band columns", function(assert) {
+    //arrange
+    var that = this,
+        options = {
+            dataField: 'Custom Caption',
+            columns: [ 'A1', 'A2']
+        };
+
+    that.applyOptions({
+        columns: [{ dataField: 'TestField', dataType: 'string' }]
+    });
+    that.columnsController.applyDataSource(createMockDataSource([{ TestField: 'test' }]));
+
+    //act
+    that.columnsController.addColumn(options);
+
+    //assert
+    var columns = that.columnsController.getVisibleColumns(0);
+    assert.equal(columns.length, 2);
+    assert.equal(columns[1].dataField, "Custom Caption");
+    assert.deepEqual(columns[1].added, options);
+
+    columns = that.columnsController.getVisibleColumns(1);
+    assert.equal(columns.length, 2);
+    assert.equal(columns[0].dataField, "A1");
+    assert.equal(columns[1].dataField, "A2");
+    assert.deepEqual(columns[0].added, options.columns[0]);
+    assert.deepEqual(columns[1].added, options.columns[1]);
+
+});
+
     //T387546
 QUnit.test("Dynamically added column must be kept after change editing.mode option", function(assert) {
         //arrange

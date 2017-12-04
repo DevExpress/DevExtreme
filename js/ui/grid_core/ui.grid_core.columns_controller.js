@@ -1236,6 +1236,35 @@ module.exports = {
                 return str;
             };
 
+            var getChildCount = function(columns) {
+                var result = 0;
+
+                columns.forEach(function(column) {
+                    result++;
+                    if(column.columns && column.columns.length) {
+                        result += getChildCount(column.columns);
+                    }
+                });
+
+                return result;
+            };
+
+            var setAddedOption = function(that, index, columns) {
+                var column;
+
+                for(var i = 0; i < columns.length; i++) {
+                    column = columns[i];
+                    that._columns[index].added = column;
+
+                    if(column.columns && column.columns.length) {
+                        setAddedOption(that, index + 1, column.columns);
+                        index += getChildCount(column.columns) + 1;
+                    } else {
+                        index++;
+                    }
+                }
+            };
+
             return {
                 _getFirstItems: function(dataSource) {
                     var groupsCount,
@@ -2377,11 +2406,17 @@ module.exports = {
                  */
                 addColumn: function(options) {
                     var that = this,
-                        column = createColumn(that, options);
-
-                    column.added = options;
+                        column = createColumn(that, options),
+                        index = that._columns.length;
 
                     that._columns.push(column);
+
+                    if(column.isBand) {
+                        that._columns = createColumnsFromOptions(that, that._columns);
+                        column = that._columns[index];
+                    }
+
+                    setAddedOption(that, index, [options]);
                     updateIndexes(that, column);
                     that.updateColumns(that._dataSource);
                 },
