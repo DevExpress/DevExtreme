@@ -715,7 +715,6 @@ declare module DevExpress.viz.map {
         }
     }
 
-ы
     export var projection: ProjectionCreator;
 
     export interface ProjectionCreator {
