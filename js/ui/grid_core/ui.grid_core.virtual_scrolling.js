@@ -72,7 +72,7 @@ var VirtualScrollingDataSourceAdapterExtender = (function() {
                     return dataSource.pageIndex(index);
                 },
                 isLoading: function() {
-                    return dataSource.isLoading();
+                    return dataSource.isLoading() && !that.isCustomLoading();
                 },
                 pageCount: function() {
                     return that.pageCount();

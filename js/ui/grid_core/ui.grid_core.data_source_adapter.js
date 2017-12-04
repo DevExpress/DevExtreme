@@ -322,6 +322,14 @@ module.exports = gridCore.Controller.inherit((function() {
                 this.component._optionCache = undefined;
             }
         },
+        _scheduleCustomLoadCallbacks: function(deferred) {
+            var that = this;
+
+            that._isCustomLoading = true;
+            deferred.always(function() {
+                that._isCustomLoading = false;
+            });
+        },
         isLastPage: function() {
             return this._isLastPage;
         },
@@ -371,6 +379,9 @@ module.exports = gridCore.Controller.inherit((function() {
 
             return d;
         },
+        isCustomLoading: function() {
+            return !!this._isCustomLoading;
+        },
         load: function(options) {
             var that = this,
                 store,
@@ -393,11 +404,14 @@ module.exports = gridCore.Controller.inherit((function() {
                     }
                 });
 
+                that._scheduleCustomLoadCallbacks(d);
                 dataSource._scheduleLoadCallbacks(d);
 
                 that._handleDataLoading(loadResult);
                 executeTask(function() {
-                    if(!dataSource.store()) return;
+                    if(!dataSource.store()) {
+                        return d.reject("canceled");
+                    }
 
                     when(loadResult.data || that.loadFromStore(loadResult.storeLoadOptions)).done(function(data, extra) {
                         loadResult.data = data;
