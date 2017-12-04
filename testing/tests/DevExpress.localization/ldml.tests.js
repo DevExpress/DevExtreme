@@ -256,6 +256,13 @@ QUnit.test("float with precision formatting", function(assert) {
     assert.strictEqual(formatter(-123.57), "-123.57", "format negative float");
 });
 
+QUnit.test("extra large float part formatting", function(assert) {
+    var formatter = getNumberFormatter("#0.####################");
+
+    assert.strictEqual(formatter(1.1), "1.1", "float format is correct");
+    assert.strictEqual(formatter(1), "1", "integer format is correct");
+});
+
 QUnit.test("float with precision formatting and required integer digit", function(assert) {
     var formatter = getNumberFormatter("#0.00");
 

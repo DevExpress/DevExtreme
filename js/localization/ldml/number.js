@@ -1,9 +1,11 @@
 "use strict";
 
-var escapeRegExp = require("../../core/utils/common").escapeRegExp;
+var escapeRegExp = require("../../core/utils/common").escapeRegExp,
+    fitIntoRange = require("../../core/utils/math").fitIntoRange;
 
 var DEFAULT_CONFIG = { thousandsSeparator: ",", decimalSeparator: "." },
     ESCAPING_CHAR = "'",
+    MAXIMUM_NUMBER_LENGTH = 15,
     MAX_SAFE_INTEGER = Number.MAX_SAFE_INTEGER || Math.pow(2, 53) - 1;
 
 function getGroupSizes(formatString) {
@@ -199,9 +201,11 @@ function getFormatter(format, config) {
             maxFloatPrecision = minFloatPrecision + getNonRequiredDigitCount(floatFormatParts[1]),
             minIntegerPrecision = getRequiredDigitCount(floatFormatParts[0]),
             maxIntegerPrecision = getNonRequiredDigitCount(floatFormatParts[0]) ? undefined : minIntegerPrecision,
+            integerLength = Math.floor(value).toString().length,
+            floatPrecision = fitIntoRange(maxFloatPrecision, 0, MAXIMUM_NUMBER_LENGTH - integerLength),
             groupSizes = getGroupSizes(floatFormatParts[0]).reverse();
 
-        var valueParts = value.toFixed(maxFloatPrecision).split(".");
+        var valueParts = value.toFixed(floatPrecision < 0 ? 0 : floatPrecision).split(".");
 
         var valueIntegerPart = normalizeValueString(reverseString(valueParts[0]), minIntegerPrecision, maxIntegerPrecision),
             valueFloatPart = normalizeValueString(valueParts[1], minFloatPrecision, maxFloatPrecision);
