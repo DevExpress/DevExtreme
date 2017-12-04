@@ -20,6 +20,20 @@ var ListSearch = ListEdit.inherit(searchBoxMixin).inherit({
         }
 
         return filter;
+    },
+
+    _initDataSource: function() {
+        var value = this.option("searchValue"),
+            expr = this.option("searchExpr"),
+            mode = this.option("searchMode");
+
+        this.callBase();
+
+        if(this._dataSource) {
+            value && value.length && this._dataSource.searchValue(value);
+            mode.length && this._dataSource.searchOperation(mode);
+            expr && this._dataSource.searchExpr(expr);
+        }
     }
 });
 
