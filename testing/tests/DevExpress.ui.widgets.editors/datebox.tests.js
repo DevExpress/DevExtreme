@@ -1599,7 +1599,7 @@ QUnit.test("calendar value should depend on datebox text option when calendar is
         calendar = instance._strategy._widget;
 
     kb
-        .press('end')
+        .caret(9)
         .press('backspace')
         .type('4');
 
@@ -2023,7 +2023,7 @@ QUnit.test("Calendar should update it value accordingly 'text' option if it is v
     this.fixture.dateBox.open();
 
     keyboardMock(this.fixture.input)
-        .press("end")
+        .caret(9)
         .press("backspace")
         .type("5");
 
@@ -2046,7 +2046,7 @@ QUnit.test("Calendar should not be closed after datebox value has been changed b
     this.fixture.dateBox.open();
 
     keyboardMock(this.fixture.input)
-        .press("end")
+        .caret(9)
         .press("backspace")
         .type("5");
 
@@ -2147,7 +2147,7 @@ QUnit.test("Popup should not be hidden after value change using keyboard", funct
     assert.equal($input.val(), "1/29/2015", "correct input value");
 
     kb
-        .press("end")
+        .caret(9)
         .press("backspace")
         .type("6")
         .change();
@@ -2218,7 +2218,7 @@ QUnit.test("T208825 - tapping on the 'enter' should change value if popup is ope
     dateBox.open();
 
     kb
-        .press('end')
+        .caret(9)
         .press('backspace')
         .type('4')
         .press('enter');
