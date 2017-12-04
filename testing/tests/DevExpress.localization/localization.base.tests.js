@@ -666,7 +666,7 @@ QUnit.test("parse with custom separators", function(assert) {
 
     try {
         assert.equal(numberLocalization.parse("1,2"), 1.2);
-        assert.equal(numberLocalization.parse("1.2"), NaN);
+        assert.equal(numberLocalization.parse("1.2"), 12);
         assert.equal(numberLocalization.parse("12.000"), 12000);
     } finally {
         config({
