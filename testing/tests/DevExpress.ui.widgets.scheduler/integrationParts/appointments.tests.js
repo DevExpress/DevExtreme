@@ -16,7 +16,8 @@ var $ = require("jquery"),
     dragEvents = require("events/drag"),
     DataSource = require("data/data_source/data_source").DataSource,
     CustomStore = require("data/custom_store"),
-    subscribes = require("ui/scheduler/ui.scheduler.subscribes");
+    subscribes = require("ui/scheduler/ui.scheduler.subscribes"),
+    dateSerialization = require("core/utils/date_serialization");
 
 require("ui/scheduler/ui.scheduler");
 require("ui/switch");
@@ -4589,7 +4590,8 @@ QUnit.test("FormData should be reset on saveChanges, dateSerializationFormat is 
 
     var $appointments = this.instance.element().find(".dx-scheduler-appointment");
 
-    assert.deepEqual($appointments.eq(1).data("dxItemData").EndDate, "2016-05-25T11:10:00", "Appointment EndDate is OK");
+    var endDateFormat = dateSerialization.getDateSerializationFormat($appointments.eq(1).data("dxItemData").EndDate);
+    assert.deepEqual(endDateFormat, "yyyy-MM-ddTHH:mm:ss", "Appointment EndDate format is OK");
 });
 
 QUnit.test("Scheduler should add only one appointment at multiple 'done' button clicks on appointment form", function(assert) {
