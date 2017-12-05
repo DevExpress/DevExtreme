@@ -1005,6 +1005,9 @@ module.exports = {
                             column = createColumn(that, columnUserState.added);
                             applyFieldsState(column, columnUserState);
                             resultColumns.push(column);
+                            if(columnUserState.added.columns) {
+                                resultColumns = createColumnsFromOptions(that, resultColumns);
+                            }
                         }
                     }
 
@@ -2377,11 +2380,17 @@ module.exports = {
                  */
                 addColumn: function(options) {
                     var that = this,
-                        column = createColumn(that, options);
-
-                    column.added = options;
+                        column = createColumn(that, options),
+                        index = that._columns.length;
 
                     that._columns.push(column);
+
+                    if(column.isBand) {
+                        that._columns = createColumnsFromOptions(that, that._columns);
+                        column = that._columns[index];
+                    }
+
+                    column.added = options;
                     updateIndexes(that, column);
                     that.updateColumns(that._dataSource);
                 },

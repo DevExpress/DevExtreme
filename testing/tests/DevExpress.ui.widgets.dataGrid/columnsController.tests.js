@@ -5932,6 +5932,36 @@ QUnit.test("Add column", function(assert) {
     assert.equal(columns[1].dataField, "TestColumn");
 });
 
+QUnit.test("Add column for band columns", function(assert) {
+    //arrange
+    var that = this,
+        options = {
+            dataField: 'Custom Caption',
+            columns: [ 'A1', 'A2']
+        };
+
+    that.applyOptions({
+        columns: [{ dataField: 'TestField', dataType: 'string' }]
+    });
+    that.columnsController.applyDataSource(createMockDataSource([{ TestField: 'test' }]));
+
+    //act
+    that.columnsController.addColumn(options);
+
+    //assert
+    var columns = that.columnsController.getVisibleColumns(0);
+    assert.equal(columns.length, 2);
+    assert.equal(columns[1].dataField, "Custom Caption");
+    assert.deepEqual(columns[1].added, options);
+
+    columns = that.columnsController.getVisibleColumns(1);
+    assert.equal(columns.length, 2);
+    assert.equal(columns[0].dataField, "A1");
+    assert.equal(columns[1].dataField, "A2");
+    assert.notOk(columns[0].added);
+    assert.notOk(columns[1].added);
+});
+
     //T387546
 QUnit.test("Dynamically added column must be kept after change editing.mode option", function(assert) {
         //arrange
@@ -6250,6 +6280,56 @@ QUnit.test('Apply user state for dynamically added column', function(assert) {
     assert.deepEqual(columns[0], { "dataField": "TestField1", "visible": true, "width": 50, "sortOrder": "desc", sortIndex: 0, "filterValue": "Test1", "selectedFilterOperation": "startswith", index: 0, caption: 'Test Field 1', dataType: 'string', alignment: 'left', defaultSelectedFilterOperation: '=', showEditorAlways: false });
     assert.deepEqual(columns[1], { "dataField": "TestField2", "visible": false, "width": 150, "sortOrder": "desc", sortIndex: 1, "filterValue": "Test2", "selectedFilterOperation": "=", index: 1, caption: 'Test Field 2', dataType: 'string', alignment: 'left', showEditorAlways: false, added: { dataField: "TestField2", dataType: "string" } });
 });
+
+QUnit.test('Apply user state for dynamically added band column', function(assert) {
+    //arrange
+    var that = this,
+        columns;
+
+    //act
+    that.columnsController.setUserState([
+        { dataField: "TestField1", visibleIndex: 0, visible: true, "width": 50, sortOrder: "desc", filterValue: "Test1", selectedFilterOperation: "startswith" },
+        { dataField: "TestField2", visibleIndex: 1, visible: true, isBand: true, added: { caption: "TestField2", columns: ["TestField21", "TestField22"] } },
+        { dataField: "TestField21", visibleIndex: 2, visible: true, ownerBand: 1 },
+        { dataField: "TestField22", visibleIndex: 3, visible: true, ownerBand: 1 }
+    ]);
+
+    that.applyOptions({
+        columns: [
+            { dataField: 'TestField1', dataType: 'string', width: 100, sortOrder: 'asc', filterValue: 'TestFilter1', selectedFilterOperation: '=' }
+        ]
+    });
+
+    columns = this.getColumns();
+
+    //assert
+    assert.equal(columns.length, 4);
+    assert.deepEqual(columns[0], { "dataField": "TestField1", "visible": true, "width": 50, "sortOrder": "desc", sortIndex: 0, "filterValue": "Test1", "selectedFilterOperation": "startswith", index: 0, caption: 'Test Field 1', dataType: 'string', alignment: 'left', defaultSelectedFilterOperation: '=', showEditorAlways: false });
+    assert.deepEqual(columns[1], {
+        dataField: "TestField2",
+        visible: true,
+        index: 1,
+        caption: 'TestField2',
+        allowSorting: false,
+        isBand: true,
+        added: { caption: "TestField2", columns: ["TestField21", "TestField22"] }
+    });
+    assert.deepEqual(columns[2], {
+        dataField: "TestField21",
+        visible: true,
+        index: 2,
+        caption: 'Test Field 21',
+        ownerBand: 1
+    });
+    assert.deepEqual(columns[3], {
+        dataField: "TestField22",
+        visible: true,
+        index: 3,
+        caption: 'Test Field 22',
+        ownerBand: 1
+    });
+});
+
 
 //T282665
 QUnit.test('Apply user state when operations is not allowed', function(assert) {
@@ -7231,10 +7311,10 @@ QUnit.test("Initialization band columns with user state", function(assert) {
     });
 
     this.columnsController.setUserState([
-        { dataField: "TestField1", sortOrder: "desc", sortIndex: 0 },
-        { caption: "Band Column 1" },
-        { dataField: "TestField2" },
-        { dataField: "TestField2" }
+        { dataField: "TestField1", sortOrder: "desc", sortIndex: 0, index: 0 },
+        { caption: "Band Column 1", index: 1 },
+        { dataField: "TestField2", index: 2 },
+        { dataField: "TestField3", index: 3 }
     ]);
 
     //assert
