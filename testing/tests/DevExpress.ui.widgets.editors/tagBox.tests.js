@@ -331,6 +331,34 @@ QUnit.test("Selected item should be removed from list if 'hideSelectedItems' opt
     assert.equal($list.find("." + LIST_ITEM_CLASS).length, dataSource.length - 1, "items count is correct after the second tag is removed");
 });
 
+QUnit.test("Selected item tag should be correct if hideSelectedItems is set (T580639)", function(assert) {
+    var dataSource = [{
+            "ID": 1,
+            "Name": "Item 1"
+        }, {
+            "ID": 2,
+            "Name": "Item 2"
+        }],
+        $tagBox = $("#tagBox").dxTagBox({
+            dataSource: dataSource,
+            opened: true,
+            hideSelectedItems: true,
+            displayExpr: "Name",
+            valueExpr: "ID",
+        }),
+        tagBox = $tagBox.dxTagBox("instance"),
+        $list = tagBox._$list;
+
+    $($list.find(".dx-list-item").eq(0)).trigger("dxclick");
+
+    assert.equal($tagBox.find("." + TAGBOX_TAG_CLASS).eq(0).text(), "Item 1", "tag is correct after selection");
+
+    $($list.find(".dx-list-item").eq(0)).trigger("dxclick");
+
+    assert.equal($tagBox.find("." + TAGBOX_TAG_CLASS).eq(0).text(), "Item 1", "tag is correct after selection");
+    assert.equal($tagBox.find("." + TAGBOX_TAG_CLASS).eq(1).text(), "Item 2", "tag is correct after selection");
+});
+
 QUnit.test("Items should be hidden on init if hideSelectedItems is true", function(assert) {
     var $tagBox = $("#tagBox").dxTagBox({
             items: [1, 2, 3, 4, 5],
@@ -396,6 +424,21 @@ QUnit.test("tags should remove after clear values", function(assert) {
 
     $tagBox.dxTagBox("option", "value", []);
     assert.equal($tagBox.find(".dx-tag").length, 0, "zero item rendered");
+});
+
+QUnit.testInActiveWindow("tags should not be rerendered when editor looses focus", function(assert) {
+    var $tagBox = $("#tagBox").dxTagBox({
+            items: [1, 2, 3],
+            focusStateEnabled: true
+        }),
+        tagBox = $tagBox.dxTagBox("instance");
+
+    var renderTagsStub = sinon.stub(tagBox, "_renderTags");
+
+    $($tagBox.find("input")).trigger("focusin");
+    $($tagBox.find("input")).trigger("focusout");
+
+    assert.equal(renderTagsStub.callCount, 0, "tags weren't rerendered");
 });
 
 QUnit.test("tagBox field is not cleared on blur", function(assert) {
@@ -1358,7 +1401,7 @@ QUnit.test("tag rendered after click on selections control", function(assert) {
     assert.equal($tagBox.find(".dx-tag").length, 1, "tag rendered");
 });
 
-QUnit.test("tag should not be removed when editor looses focus", function(assert) {
+QUnit.testInActiveWindow("tag should not be removed when editor looses focus", function(assert) {
     var $tagBox = $("#tagBox").dxTagBox({
         items: [1, 2, 3],
         showSelectionControls: true,
@@ -2193,7 +2236,7 @@ QUnit.test("keyboard navigation should work after removing the last tag with the
     assert.ok($lastTag.hasClass(FOCUSED_CLASS), "the last tag is focused");
 });
 
-QUnit.test("the 'focused' class should be removed from the focused tag when the widget loses focus", function(assert) {
+QUnit.testInActiveWindow("the 'focused' class should be removed from the focused tag when the widget loses focus", function(assert) {
     this.keyboard
         .focus()
         .press("left");
@@ -2204,7 +2247,7 @@ QUnit.test("the 'focused' class should be removed from the focused tag when the 
     assert.equal(focusedTagsCount, 0, "there are no focused tags");
 });
 
-QUnit.test("the should be no focused tags on when the widget gets focus", function(assert) {
+QUnit.testInActiveWindow("the should be no focused tags on when the widget gets focus", function(assert) {
     this.keyboard
         .focus()
         .press("left");
