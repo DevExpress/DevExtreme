@@ -160,14 +160,6 @@
                     background: ~"@{@{widgetName}-editor-background}";
                 }
 
-                &.dx-numberbox-spin .dx-texteditor-input {
-                    padding-right: @NUMBERBOX_SPIN_CONTAINER_WIDTH;
-                }
-
-                &.dx-numberbox-spin-touch-friendly .dx-texteditor-input {
-                    padding-right: @TOUCH_FRIENDLY_SPIN_CONTAINER_WIDTH;
-                }
-
                 &.dx-searchbox {
                     .dx-texteditor-input,
                     .dx-placeholder:before {
@@ -348,8 +340,14 @@
         color: ~"@{@{widgetName}-headers-color}";
         .touch-action(pinch-zoom);
 
-        .dx-texteditor-input, .dx-placeholder::before {
+        .dx-placeholder::before {
            padding: @GRID_BASE_CELL_PADDING;
+        }
+
+        .dx-texteditor-input {
+            padding-left: @GRID_BASE_CELL_PADDING;
+            padding-top: @GRID_BASE_CELL_PADDING;
+            padding-bottom: @GRID_BASE_CELL_PADDING;
         }
 
         .dx-@{widgetName}-table {
@@ -502,7 +500,9 @@
 
     .dx-@{widgetName}-rowsview {
         .dx-texteditor-input {
-           padding: @GRID_BASE_CELL_PADDING;
+            padding-left: @GRID_BASE_CELL_PADDING;
+            padding-top: @GRID_BASE_CELL_PADDING;
+            padding-bottom: @GRID_BASE_CELL_PADDING;
         }
 
         .dx-row {

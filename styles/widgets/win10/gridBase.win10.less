@@ -18,7 +18,6 @@
     }
 
     .dx-@{widgetName}-content .dx-@{widgetName}-table .dx-row .dx-editor-cell .dx-dropdowneditor {
-        margin-left: 0;
         padding-left: 0;
     }
 
@@ -152,6 +151,10 @@
         }
 
         .dx-editor-cell {
+            .dx-texteditor {
+                margin: -2px;
+            }
+
             .dx-texteditor-input {
                 margin: 0px;
                 border: 0px;
@@ -173,14 +176,6 @@
             .dx-numberbox-spin-down-icon,
             .dx-dropdowneditor-icon {
                 color: @WIN10_BASE_TEXT_COLOR;
-            }
-
-            .dx-numberbox-spin .dx-texteditor-input {
-                padding-right: @WIN10_NUMBERBOX_SPIN_CONTAINER_WIDTH;
-            }
-
-            .dx-numberbox-spin-touch-friendly .dx-texteditor-input {
-                padding-right: @WIN10_NUMBERBOX_TOUCH_FRIENDLY_SPIN_CONTAINER_WIDTH;
             }
 
             .dx-timebox-date .dx-dropdowneditor-icon {
@@ -222,12 +217,6 @@
     .dx-@{widgetName}-headers, .dx-@{widgetName}-rowsview {
         .dx-texteditor-input {
            padding: @GRID_BASE_CELL_PADDING;
-        }
-
-        .dx-dropdowneditor-button-visible {
-            &.dx-show-clear-button .dx-texteditor-input {
-                padding-right: @WIN10_TEXTEDITOR_CLEAR_BUTTON_WIDTH;
-            }
         }
     }
 
