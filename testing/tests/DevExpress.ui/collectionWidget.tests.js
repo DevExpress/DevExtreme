@@ -671,24 +671,6 @@ QUnit.test("onItemClick should be fired when item is clicked", function(assert) 
     assert.strictEqual(actionData.itemIndex, 1, "correct element itemIndex passed");
 });
 
-QUnit.test("onItemPointerDown should be fired on pointerdown event", function(assert) {
-    var $element = $("#cmp"),
-        pointerDownHandler = sinon.spy(),
-        newPointerDownHandler = sinon.spy(),
-        instance = new TestComponent($element, {
-            items: [1],
-            onItemPointerDown: pointerDownHandler
-        });
-
-    $element.find(".item").eq(0).trigger("dxpointerdown");
-    assert.equal(pointerDownHandler.callCount, 1, "action was called");
-
-    instance.option("onItemPointerDown", newPointerDownHandler);
-    $element.find(".item").eq(0).trigger("dxpointerdown");
-    assert.equal(pointerDownHandler.callCount, 1, "old action was not called twice");
-    assert.equal(newPointerDownHandler.callCount, 1, "new action was called after option changed");
-});
-
 QUnit.test("onItemClick should have correct item index when placed near another collection", function(assert) {
     var actionFired,
         actionData;
