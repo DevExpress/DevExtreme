@@ -2297,6 +2297,23 @@ QUnit.test("Numeric. zooming args between points.", function(assert) {
     assert.equal(rangeData.max, 40, "max y");
 });
 
+
+//T583086
+QUnit.test("Zooming points with null values", function(assert) {
+    var data = getOriginalData([{ arg: 1, val: null }, { arg: 1, val: 16 }, { arg: 2, val: 90 }, { arg: 3, val: 100 }, { arg: 4, val: 100 }]),
+        rangeData,
+        series = createSeries(this.defaultOptions, { argumentAxis: this.argumentAxis });
+
+    series.updateData(data);
+    this.zoom(0.5, 4.5);
+
+    rangeData = series.getViewport();
+
+    assert.ok(rangeData, "Returned object");
+    assert.equal(rangeData.min, 16, "min y");
+    assert.equal(rangeData.max, 100, "max y");
+});
+
 QUnit.test("Numeric. Area", function(assert) {
     this.defaultOptions.type = "area";
 
