@@ -10770,7 +10770,7 @@ QUnit.testInActiveWindow("Focus on lookup column should be preserved after chang
         }
     }, ];
     this.setupModules(this);
-    this.keyboardNavigationController.component.element = function() {
+    this.keyboardNavigationController.component.$element = function() {
         return $(".dx-datagrid").parent();
     };
     this.rowsView.render($('#container'));
