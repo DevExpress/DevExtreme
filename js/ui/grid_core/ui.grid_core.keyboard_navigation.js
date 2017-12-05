@@ -345,20 +345,10 @@ var KeyboardNavigationController = core.ViewController.inherit({
     _leftRightKeysHandler: function(eventArgs, isEditing) {
         var rowIndex = this._getFocusedRowIndex(),
             $row = this._focusedView && this._focusedView.getRow(rowIndex),
-            dataController = this._dataController,
-            key,
             directionCode,
             $cell;
 
-        if(eventArgs.ctrl) {
-            directionCode = this._getDirectionCodeByKey(eventArgs.key);
-            key = dataController.getKeyByRowIndex(rowIndex);
-            if(directionCode === "nextInRow") {
-                dataController.expandRow(key);
-            } else {
-                dataController.collapseRow(key);
-            }
-        } else if(!isEditing && $row && !isGroupRow($row) && !isDetailRow($row)) {
+        if(!isEditing && $row && !isGroupRow($row) && !isDetailRow($row)) {
             directionCode = this._getDirectionCodeByKey(eventArgs.key);
             $cell = this._getNextCell(directionCode);
             if($cell && this._isCellValid($cell)) {

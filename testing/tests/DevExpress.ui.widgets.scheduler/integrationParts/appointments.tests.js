@@ -4560,8 +4560,7 @@ QUnit.test("FormData should be reset on saveChanges, dateSerializationFormat is 
                         onValueChanged: function(args) {
                             startDate = args.value;
                             form.getEditor("EndDate")
-                                .option("value", new Date(new Date(startDate).getTime() +
-                                60 * 1000 * 50));
+                                .option("value", new Date(1464160900000));
                         }
                     }
                 }, {
@@ -4590,7 +4589,7 @@ QUnit.test("FormData should be reset on saveChanges, dateSerializationFormat is 
 
     var $appointments = this.instance.element().find(".dx-scheduler-appointment");
 
-    assert.deepEqual($appointments.eq(1).data("dxItemData").EndDate, "2016-05-25T11:30:00", "Appointment EndDate is OK");
+    assert.deepEqual($appointments.eq(1).data("dxItemData").EndDate, "2016-05-25T11:10:00", "Appointment EndDate is OK");
 });
 
 QUnit.test("Scheduler should add only one appointment at multiple 'done' button clicks on appointment form", function(assert) {
