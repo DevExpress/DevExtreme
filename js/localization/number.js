@@ -3,6 +3,7 @@
 var dependencyInjector = require("../core/utils/dependency_injector"),
     inArray = require("../core/utils/array").inArray,
     each = require("../core/utils/iterator").each,
+    escapeRegExp = require("../core/utils/common").escapeRegExp,
     isPlainObject = require("../core/utils/type").isPlainObject,
     ldmlNumber = require("./ldml/number"),
     config = require("../core/config"),
@@ -54,6 +55,24 @@ var numberLocalization = dependencyInjector({
 
         if(formatObject.formatType) {
             return formatObject;
+        }
+    },
+
+    _getSign: function(text, format) {
+        format = format || "#";
+
+        var separators = this._getSeparators(),
+            regExpString = escapeRegExp(format.replace(/[#0,\.]+/g, "_d_"))
+                .replace(/_d_/g, "[0-9" + escapeRegExp(separators.thousandsSeparator + separators.decimalSeparator) + "]*"),
+
+            signParts = regExpString.split(";");
+
+        signParts[1] = signParts[1] || "-" + signParts[0];
+
+        if(text.match(new RegExp("^" + signParts[0] + "$"))) {
+            return 1;
+        } else if(text.match(new RegExp("^" + signParts[1] + "$"))) {
+            return -1;
         }
     },
 
@@ -274,12 +293,12 @@ var numberLocalization = dependencyInjector({
 
         text = this.convertDigits(text, true);
 
-        if(format) {
+        if(format && typeof format !== "string") {
             errors.log("W0011");
         }
 
         var decimalSeparator = this.getDecimalSeparator(),
-            regExp = new RegExp("[^-0-9" + decimalSeparator + "]", "g"),
+            regExp = new RegExp("[^0-9" + decimalSeparator + "]", "g"),
             cleanedText = text
                 .replace(regExp, "")
                 .replace(decimalSeparator, ".")
@@ -292,7 +311,7 @@ var numberLocalization = dependencyInjector({
             return null;
         }
 
-        return +cleanedText;
+        return +cleanedText * this._getSign(text, format);
     }
 });
 

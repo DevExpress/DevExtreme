@@ -653,8 +653,13 @@ QUnit.test("input attr 'type' was not localized (Q588810)", function(assert) {
 
 QUnit.module("Localization number");
 
+QUnit.test("parse different positive and negative parts", function(assert) {
+    assert.equal(numberLocalization.parse("(10)", "#0;(#0)"), -10);
+    assert.equal(numberLocalization.parse("-10"), -10);
+    assert.ok(isNaN(numberLocalization.parse("-10", "#0;(#0)")), "don't parse incorrect value");
+});
+
 QUnit.test("format: base", function(assert) {
-    //assert.equal(numberLocalization.format(1.2), "1.2");
     assert.equal(numberLocalization.format(12), "12");
     assert.equal(numberLocalization.format(1, { type: "decimal", precision: 2 }), "01");
     assert.equal(numberLocalization.format(1, { type: "decimal", precision: 3 }), "001");
