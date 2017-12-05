@@ -196,7 +196,7 @@ var excelFormatConverter = module.exports = {
                 { date: new Date(2009, 8, 8, 2, 5, 4), pattern: "H" },
                 { date: new Date(2009, 8, 8, 18, 5, 4), pattern: "AM/PM" },
                 { date: new Date(2009, 8, 1, 6, 5, 4), pattern: "d" },
-                { date: [new Date(2009, 8, 2, 6, 5, 4), new Date(2009, 8, 3, 6, 5, 4), new Date(2009, 8, 4, 6, 5, 4)], pattern: "d" },
+                { date: [new Date(2009, 8, 2, 6, 5, 4), new Date(2009, 8, 3, 6, 5, 4), new Date(2009, 8, 4, 6, 5, 4)], pattern: "E" },
                 { date: new Date(2009, 9, 6, 6, 5, 4), pattern: "M" },
                 { date: new Date(1998, 8, 8, 6, 5, 4), pattern: "y" }];
 
@@ -209,6 +209,9 @@ var excelFormatConverter = module.exports = {
         });
 
         result = that._escapeChars(result, defaultPattern, processedIndexes, patternPositions);
+        //T573609
+        result = result.replace(/dE+/g, "d");
+        result = result.replace(/E/g, "d");
 
         result = that._getLanguageInfo(defaultPattern) + result;
 
