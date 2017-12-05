@@ -189,6 +189,12 @@ var DataSource = Class.inherit({
     */
     /**
     * @name DataSourceMethods_ctor
+    * @publicName ctor(store)
+    * @param1 store:Store
+    * @hidden
+    */
+    /**
+    * @name DataSourceMethods_ctor
     * @publicName ctor(options)
     * @param1 options:CustomStoreOptions|DataSourceOptions
     * @hidden
