@@ -38,7 +38,6 @@ var COMPONENT_CLASS = "dx-scheduler-work-space",
     TIME_PANEL_CLASS = "dx-scheduler-time-panel",
     TIME_PANEL_CELL_CLASS = "dx-scheduler-time-panel-cell",
     TIME_PANEL_ROW_CLASS = "dx-scheduler-time-panel-row",
-    TIME_PANEL_ODD_ROW_COUNT_CLASS = "dx-scheduler-time-panel-odd-row-count",
 
     ALL_DAY_PANEL_CLASS = "dx-scheduler-all-day-panel",
     ALL_DAY_TABLE_CLASS = "dx-scheduler-all-day-table",
@@ -1093,11 +1092,9 @@ var SchedulerWorkSpace = Widget.inherit({
     },
 
     _renderTimePanel: function() {
-        var rowCount = this._getTimePanelRowCount();
-        this._$timePanel.toggleClass(TIME_PANEL_ODD_ROW_COUNT_CLASS, rowCount % 2 > 0);
         this._renderTableBody({
             container: getPublicElement(this._$timePanel),
-            rowCount: rowCount,
+            rowCount: this._getTimePanelRowCount(),
             cellCount: 1,
             cellClass: this._getTimeCellClass.bind(this),
             rowClass: TIME_PANEL_ROW_CLASS,
