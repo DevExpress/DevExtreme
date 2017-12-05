@@ -31,7 +31,7 @@ var $ = require("../../core/renderer"),
     normalizeDataSourceOptions = DataSourceModule.normalizeDataSourceOptions;
 
 var USER_STATE_FIELD_NAMES_15_1 = ["filterValues", "filterType", "fixed", "fixedPosition"],
-    USER_STATE_FIELD_NAMES = ["visibleIndex", "dataField", "name", "dataType", "width", "visible", "sortOrder", "sortIndex", "groupIndex", "filterValue", "selectedFilterOperation", "added", "ownerBand"].concat(USER_STATE_FIELD_NAMES_15_1),
+    USER_STATE_FIELD_NAMES = ["visibleIndex", "dataField", "name", "dataType", "width", "visible", "sortOrder", "sortIndex", "groupIndex", "filterValue", "selectedFilterOperation", "added"].concat(USER_STATE_FIELD_NAMES_15_1),
     COMMAND_EXPAND_CLASS = "dx-command-expand";
 
 module.exports = {
@@ -1031,6 +1031,9 @@ module.exports = {
                             column = createColumn(that, columnUserState.added);
                             applyFieldsState(column, columnUserState);
                             resultColumns.push(column);
+                            if(columnUserState.added.columns) {
+                                resultColumns = createColumnsFromOptions(that, resultColumns);
+                            }
                         }
                     }
 
@@ -1260,35 +1263,6 @@ module.exports = {
                 }
 
                 return str;
-            };
-
-            var getChildCount = function(columns) {
-                var result = 0;
-
-                columns.forEach(function(column) {
-                    result++;
-                    if(column.columns && column.columns.length) {
-                        result += getChildCount(column.columns);
-                    }
-                });
-
-                return result;
-            };
-
-            var setAddedOption = function(that, index, columns) {
-                var column;
-
-                for(var i = 0; i < columns.length; i++) {
-                    column = columns[i];
-                    that._columns[index].added = column;
-
-                    if(column.columns && column.columns.length) {
-                        setAddedOption(that, index + 1, column.columns);
-                        index += getChildCount(column.columns) + 1;
-                    } else {
-                        index++;
-                    }
-                }
             };
 
             return {
@@ -2447,7 +2421,7 @@ module.exports = {
                         column = that._columns[index];
                     }
 
-                    setAddedOption(that, index, [options]);
+                    column.added = options;
                     updateIndexes(that, column);
                     that.updateColumns(that._dataSource);
                 },
