@@ -140,9 +140,9 @@ var compileSetter = function(expr) {
 
         var target = targetGetter(obj, { functionsAsIs: options.functionsAsIs, unwrapObservables: options.unwrapObservables });
 
-        if(!target) {
+        if(target === undefined) {
             target = {};
-            compileSetter(targetGetterPath)(obj, target, {});
+            compileSetter(targetGetterPath)(unwrapVariable(obj), target);
         }
 
         var prevTargetValue = readPropValue(target, targetPropName);
