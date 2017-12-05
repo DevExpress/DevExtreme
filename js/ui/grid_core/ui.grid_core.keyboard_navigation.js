@@ -106,6 +106,7 @@ var KeyboardNavigationController = core.ViewController.inherit({
             data = event.data;
 
         if($grid.is(this.component.element()) && this._isCellValid($target)) {
+            $target = this._isInsideEditForm($target) ? $(event.target) : $target;
             this._focusView(data.view, data.viewIndex);
             this._updateFocusedCellPosition($target);
             if(!this._editingController.isEditing()) {
