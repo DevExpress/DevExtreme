@@ -232,18 +232,6 @@ QUnit.testStart(function() {
         assert.ok($cell.hasClass(VERTICAL_SIZES_CLASS), "Css class of cell is correct");
     });
 
-
-    QUnit.test("Time panel should have special css class when difference between endDayHour and startDayHour is odd", function(assert) {
-        var $element = this.instance.$element(),
-            $timePanel = $element.find(".dx-scheduler-time-panel");
-
-        this.instance.option("startDayHour", 5.5);
-        assert.ok($timePanel.hasClass("dx-scheduler-time-panel-odd-row-count"), "Time panel has css class");
-
-        this.instance.option("startDayHour", 6);
-        assert.notOk($timePanel.hasClass("dx-scheduler-time-panel-odd-row-count"), "Time panel has no css class");
-    });
-
     QUnit.test("All day panel row should have special css class", function(assert) {
         this.instance.option("showAllDayPanel", true);
 
