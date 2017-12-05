@@ -61,19 +61,16 @@ var numberLocalization = dependencyInjector({
     _getSign: function(text, format) {
         format = format || "#";
 
-        var separators = this._getSeparators(),
-            regExpString = escapeRegExp(format.replace(/[#0,\.]+/g, "_d_"))
-                .replace(/_d_/g, "[0-9" + escapeRegExp(separators.thousandsSeparator + separators.decimalSeparator) + "]*"),
+        var separators = this._getSeparators();
 
-            signParts = regExpString.split(";");
+        text = text.replace(new RegExp("[0-9" + separators.decimalSeparator + separators.thousandsSeparator + "]+", "g"), "1");
+
+        var regexpString = escapeRegExp(format.replace(/[#0\.,]+/g, "1")),
+            signParts = regexpString.split(";");
 
         signParts[1] = signParts[1] || "-" + signParts[0];
 
-        if(text.match(new RegExp("^" + signParts[0] + "$"))) {
-            return 1;
-        } else if(text.match(new RegExp("^" + signParts[1] + "$"))) {
-            return -1;
-        }
+        return text.match(new RegExp("^" + signParts[1] + "$")) ? -1 : 1;
     },
 
     _calculateNumberPower: function(value, base, minPower, maxPower) {

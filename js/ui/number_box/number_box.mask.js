@@ -161,8 +161,8 @@ var NumberBoxMask = NumberBoxBase.inherit({
 
         this._lastKey = e.originalEvent.key;
 
-        var newValue = this._tryParse(text, caret, this._lastKey);
-        if(newValue === undefined) {
+        var newValue = this._tryParse(text, caret, this._lastKey === "-" ? "" : this._lastKey);
+        if(newValue === undefined || this._parsedValue === newValue) {
             e.originalEvent.preventDefault();
 
             if(this._goToDecimalPart(text, caret)) {
@@ -251,7 +251,7 @@ var NumberBoxMask = NumberBoxBase.inherit({
 
     _tryParse: function(text, selection, char) {
         var editedText = this._getEditedText(text, selection, char),
-            parsed = number.parse(editedText);
+            parsed = number.parse(editedText, this._getFormatPattern());
 
         if(editedText === "") {
             return null;
