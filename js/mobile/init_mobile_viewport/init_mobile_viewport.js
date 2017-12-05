@@ -79,7 +79,11 @@ var initMobileViewport = function(options) {
     if(realDevice.android) {
         resizeCallbacks.add(function() {
             setTimeout(function() {
-                document.activeElement.scrollIntoViewIfNeeded();
+                var activeElement = document.activeElement;
+
+                activeElement.scrollIntoViewIfNeeded ?
+                    activeElement.scrollIntoViewIfNeeded() :
+                    activeElement.scrollIntoView(false);
             });
         });
     }
