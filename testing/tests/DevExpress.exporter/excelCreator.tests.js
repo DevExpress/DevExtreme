@@ -129,6 +129,34 @@ QUnit.test("Date time format as function converting", function(assert) {
     }
 });
 
+//T573609
+QUnit.test("Date time format if formatter is defined with moment Do pattern", function(assert) {
+    // arrange
+    var month_names_short = ['Jan', 'Feb', 'Mar', 'Apr', 'May', 'Jun', 'Jul', 'Aug', 'Sep', 'Oct', 'Nov', 'Dec'];
+
+    var format = {
+        formatter: function(date) {
+            var monthName = month_names_short[date.getMonth()],
+                day = date.getDate(),
+                dayPostfix = "th";
+            if(day === 1) {
+                dayPostfix = "st";
+            } else if(day === 2) {
+                dayPostfix = "nd";
+            } else if(day === 3) {
+                dayPostfix = "rd";
+            }
+            return monthName + " " + day + dayPostfix + ", " + date.getFullYear();
+        }
+    };
+
+    var convertDate = function(formatter) {
+        return excelCreator.formatConverter.convertFormat(formatter, null, "date");
+    };
+
+    assert.strictEqual(convertDate(format), "[$-9]MMM d, yyyy", "format with formatter");
+});
+
 //T457272
 QUnit.test("shortDate format for user language", function(assert) {
     var oldLocale = coreLocalization.locale();
@@ -767,6 +795,22 @@ QUnit.test("EncodeHtml for sharedStrings", function(assert) {
     // assert
     assert.equal(this.excelCreator._stringArray.length, 1, "stringArray length");
     assert.equal(this.excelCreator._stringArray[0], "&lt;div cssClass=&quot;myCss&quot; data=&#39;dfsdf&#39;&gt;&lt;p&gt;La &amp; la &amp; ba&lt;/p&gt;&lt;/div&gt;");
+});
+
+//T573609
+QUnit.test("Date format with formatter", function(assert) {
+    var format = {
+        type: "date",
+        formatter: function(date) {
+            return date.getDate() + "-" + (date.getMonth() + 1) + "-" + date.getFullYear();
+        }
+    };
+    // act
+    this.excelCreator._appendFormat(format, undefined, "date");
+
+    // assert
+    assert.equal(this.excelCreator._styleFormat.length, 1);
+    assert.equal(this.excelCreator._styleFormat[0], "[$-9]d-M-yyyy", "excel format by formatter");
 });
 
 QUnit.test("Percent format", function(assert) {

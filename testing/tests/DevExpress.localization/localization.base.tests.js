@@ -686,39 +686,8 @@ QUnit.test("parse with custom separators", function(assert) {
 
     try {
         assert.equal(numberLocalization.parse("1,2"), 1.2);
+        assert.equal(numberLocalization.parse("1.2"), 12);
         assert.equal(numberLocalization.parse("12.000"), 12000);
-    } finally {
-        config({
-            decimalSeparator: oldDecimalSeparator,
-            thousandsSeparator: oldThousandsSeparator
-        });
-        localization.locale(oldLocale);
-    }
-});
-
-QUnit.test("parse with LDML format", function(assert) {
-    assert.equal(numberLocalization.parse("1.2", "#"), null);
-    assert.equal(numberLocalization.parse("1.2", "#.##"), 1.2);
-    assert.equal(numberLocalization.parse("123", "$ #"), null);
-    assert.equal(numberLocalization.parse("$ 123", "$ #"), 123);
-});
-
-QUnit.test("parse with LDML format and with custom separators", function(assert) {
-    var oldDecimalSeparator = config().decimalSeparator,
-        oldThousandsSeparator = config().thousandsSeparator,
-        oldLocale = localization.locale();
-
-    config({
-        decimalSeparator: ",",
-        thousandsSeparator: "\xa0"
-    });
-    localization.locale("ru");
-
-    try {
-        assert.equal(numberLocalization.parse("1.2", "#.##"), null);
-        assert.equal(numberLocalization.parse("1,2", "#.##"), 1.2);
-        assert.equal(numberLocalization.parse("1,234", "#,###"), null);
-        assert.equal(numberLocalization.parse("1\xa0234", "#,###"), 1234);
     } finally {
         config({
             decimalSeparator: oldDecimalSeparator,

@@ -94,7 +94,10 @@ exports.ExcelCreator = Class.inherit({
         };
 
         if(typeUtils.isObject(format)) {
-            return extend(result, format, { format: format.type, currency: format.currency });
+            return extend(result, format, {
+                format: format.formatter || format.type,
+                currency: format.currency
+            });
         }
 
         return result;

@@ -228,8 +228,10 @@ QUnit.test("Update labels", function(assert) {
     }
     assert.deepEqual(this.renderer.text.getCall(0).args, ["new 1"], "node 1 text");
     assert.deepEqual(this.renderer.text.getCall(1).args, ["new 2"], "node 2 text");
-    assert.deepEqual(this.renderer.text.returnValues[0].attr.getCall(1).args, [{ x: 405, y: 2, visibility: "visible" }], "node 1 position");
-    assert.deepEqual(this.renderer.text.returnValues[1].attr.getCall(1).args, [{ x: 5, y: 2, visibility: "visible" }], "node 2 position");
+    assert.deepEqual(this.renderer.text.returnValues[0].attr.getCall(1).args, [{ visibility: "visible" }], "node 1 position");
+    assert.deepEqual(this.renderer.text.returnValues[0].move.getCall(0).args, [404, 2], "node 1 position correction");
+    assert.deepEqual(this.renderer.text.returnValues[1].attr.getCall(1).args, [{ visibility: "visible" }], "node 2 position");
+    assert.deepEqual(this.renderer.text.returnValues[1].move.getCall(0).args, [4, 2], "node 2 position correction");
 });
 
 QUnit.test("Reset nodes", function(assert) {

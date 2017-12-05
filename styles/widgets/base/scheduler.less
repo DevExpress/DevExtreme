@@ -668,6 +668,12 @@
         .dx-scheduler-date-table-row:first-child .dx-scheduler-date-table-cell {
             border-top: none;
         }
+
+        .dx-scheduler-time-panel-row:nth-child(2n) .dx-scheduler-time-panel-cell {
+            &:after {
+                background-color: @SCHEDULER_ACCENT_BORDER_COLOR;
+            }
+        }
     }
 }
 
@@ -1412,12 +1418,6 @@
             background-color: @SCHEDULER_BASE_BORDER_COLOR;
     }
 
-    .dx-scheduler-time-panel-row:nth-child(2n) & {
-         &:after {
-            background-color: @SCHEDULER_ACCENT_BORDER_COLOR;
-        }
-    }
-
     &.dx-scheduler-time-panel-current-time-cell {
         color: @SCHEDULER_CURRENT_TIME_CELL_COLOR;
         &:before {
@@ -1430,12 +1430,10 @@
             background-color: @SCHEDULER_TIME_INDICATOR_COLOR;
         }
     }
-}
 
-.dx-scheduler-time-panel-odd-row-count {
-    .dx-scheduler-time-panel-row:nth-child(2n) .dx-scheduler-time-panel-cell {
+    .dx-scheduler-time-panel-row:last-child & {
          &:after {
-            background-color: @SCHEDULER_BASE_BORDER_COLOR;
+            display: none;
         }
     }
 }

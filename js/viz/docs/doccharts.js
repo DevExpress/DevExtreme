@@ -2796,8 +2796,7 @@ var dxPolarChart = {
     * @type_function_param1 e:object
     * @type_function_param1_field4 jQueryEvent:jQuery.Event:deprecated(event)
     * @type_function_param1_field5 event:event
-    * @type_function_param1_field6 target:object
-    * @type_function_param1_field7 argument:Date|Number|string
+    * @type_function_param1_field6 argument:Date|Number|string
     * @notUsedInTheme
     * @action
     */

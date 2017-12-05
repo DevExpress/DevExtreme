@@ -91,7 +91,7 @@ var dxTreeMap = require("../core/base_widget").inherit({
 
         that._createProxyType();
         that._tilesGroup = renderer.g().linkOn(renderer.root, "tiles").linkAppend();
-        that._labelsGroup = renderer.g().attr({ align: "left" }).linkOn(renderer.root, "labels").linkAppend();
+        that._labelsGroup = renderer.g().linkOn(renderer.root, "labels").linkAppend();
     },
 
     _createProxyType: _noop,
@@ -309,10 +309,7 @@ var dxTreeMap = require("../core/base_widget").inherit({
         settings.labelState = _buildTextAppearance(options, filter);
         settings.labelState.visible = !("visible" in options) || !!options.visible;
         settings.labelParams = {
-            unitWidth: bBox.width,
             height: bBox.height,
-            hOffset: paddingLeftRight,
-            vOffset: -bBox.y + paddingTopBottom,
             rtlEnabled: this._getOption("rtlEnabled", true),
             paddingTopBottom: paddingTopBottom,
             paddingLeftRight: paddingLeftRight,
@@ -502,7 +499,6 @@ function createLabel(context, currentNode, settings, params) {
     if(textData) {
         currentNode.text = context.renderer.text(textData).attr(settings.attr).css(settings.css).append(context.group);
         context.setTrackerData(currentNode, currentNode.text);
-        currentNode.textWidth = params.unitWidth * textData.length;
     }
 }
 
@@ -580,29 +576,38 @@ function processLabelsLayout(context, node) {
 
 function layoutTextNode(node, params) {
     var rect = node.rect,
-        hOffset = params.hOffset,
-        effectiveWidth = rect[2] - rect[0] - params.paddingLeftRight,
-        fitByHeight = params.height + params.paddingTopBottom <= rect[3] - rect[1],
-        fitByWidth = node.textWidth <= effectiveWidth;
+        text = node.text,
+        bBox = text.getBBox(),
+        paddingLeftRight = params.paddingLeftRight,
+        paddingTopBottom = params.paddingTopBottom,
+        effectiveWidth = rect[2] - rect[0] - paddingLeftRight,
+        fitByHeight = params.height + paddingTopBottom <= rect[3] - rect[1],
+        fitByWidth = bBox.width <= effectiveWidth;
 
     if(params.resolveLabelOverflow === "ellipsis" && fitByHeight) {
-        node.text.applyEllipsis(effectiveWidth);
+        text.applyEllipsis(effectiveWidth);
         if(!fitByWidth) {
-            fitByWidth = node.text.getBBox().width <= effectiveWidth;
+            bBox = text.getBBox();
+            fitByWidth = bBox.width <= effectiveWidth;
         }
     }
 
-    node.text.attr({
-        x: params.rtlEnabled ? rect[2] - hOffset : rect[0] + hOffset,
-        y: rect[1] + params.vOffset,
+    text.attr({
         visibility: fitByHeight && fitByWidth ? "visible" : "hidden"
     });
+
+    if(fitByHeight && fitByWidth) {
+        text.move(
+            params.rtlEnabled ? (rect[2] - paddingLeftRight - bBox.x - bBox.width) : (rect[0] + paddingLeftRight - bBox.x),
+            rect[1] + paddingTopBottom - bBox.y
+        );
+    }
 }
 
 var ThemeManager = require("../core/base_theme_manager").BaseThemeManager.inherit({
     _themeSection: "treeMap",
     _fontFields: ["tile.label.font", "group.label.font",
-        "loadingIndicator.font", "title.font", "title.subtitle.font", "tooltip.font"]
+        "loadingIndicator.font", "title.font", "title.subtitle.font", "tooltip.font", "export.font"]
 });
 
 require("../../core/component_registrator")("dxTreeMap", dxTreeMap);
