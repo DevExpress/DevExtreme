@@ -417,6 +417,7 @@ var baseTrackerPrototype = {
     },
 
     _pointerOnPoint: function(point, x, y) {
+        this._resetHoveredArgument();
         this._setHoveredPoint(point);
         this._pointerComplete(point, x, y);
     },
