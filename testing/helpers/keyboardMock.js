@@ -436,13 +436,19 @@ var browser;
 
                 $.each(keys, function(index, key) {
                     var keyCode = this in KEYS_MAPS.SPECIAL_KEYS ? KEYS_MAPS.SPECIAL_KEYS[key] : key;
-                    that.keyDown(keyCode).keyPress(keyCode);
+                    that.keyDown(keyCode);
 
-                    if(shortcuts[key]) {
-                        shortcuts[key](element);
+                    if(!that.event.isDefaultPrevented()) {
+                        that.keyPress(keyCode);
+
+                        if(shortcuts[key]) {
+                            shortcuts[key](element);
+                        }
                     }
 
-                    that.keyUp(keyCode);
+                    if(!that.event.isDefaultPrevented()) {
+                        that.keyUp(keyCode);
+                    }
                 });
 
                 return this;

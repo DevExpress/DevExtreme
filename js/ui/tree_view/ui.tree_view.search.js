@@ -7,7 +7,7 @@ var registerComponent = require("../../core/component_registrator"),
 
 var NODE_CONTAINER_CLASS = "dx-treeview-node-container";
 
-var TreeViewSearch = TreeViewBase.inherit(extend({}, searchBoxMixin, { _dataSourceOptions: function() {} })).inherit({
+var TreeViewSearch = TreeViewBase.inherit(searchBoxMixin).inherit({
     _addWidgetPrefix: function(className) {
         return "dx-treeview-" + className;
     },
@@ -51,7 +51,7 @@ var TreeViewSearch = TreeViewBase.inherit(extend({}, searchBoxMixin, { _dataSour
     _getDataAdapterOptions: function() {
         return extend(this.callBase(), {
             searchValue: this.option("searchValue"),
-            searchMode: this.option("searchMode"),
+            searchMode: this.option("searchMode") || "contains",
             searchExpr: this.option("searchExpr")
         });
     },

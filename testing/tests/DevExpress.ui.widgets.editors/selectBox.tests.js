@@ -495,27 +495,6 @@ QUnit.testInActiveWindow("input focused after click on drop button", function(as
     assert.ok($selectBox.find("." + TEXTEDITOR_INPUT_CLASS).is(":focus"), "input focused");
 });
 
-QUnit.testInActiveWindow("focusout should not fire after list item click", function(assert) {
-    if(devices.real().deviceType !== "desktop") {
-        assert.ok(true, "focus is not actual for mobile devices");
-        return;
-    }
-
-    var focusOutHandler = sinon.spy(),
-        $selectBox = $("#selectBox").dxSelectBox({
-            items: [1],
-            onFocusOut: focusOutHandler,
-            opened: true
-        }),
-        $input = $selectBox.find("." + TEXTEDITOR_INPUT_CLASS);
-
-    $input.focus();
-    $(".dx-list-item").eq(0).trigger("dxpointerdown");
-    $input.blur();
-
-    assert.equal(focusOutHandler.callCount, 0, "focusout was not called");
-});
-
 QUnit.test("dataSource loaded after create dxSelectBox", function(assert) {
     var timeout = 1000;
     var dataSource = new DataSource({
@@ -1874,6 +1853,30 @@ QUnit.test("The 'onCustomItemCreating' option", function(assert) {
             valueExpr: "value",
             onCustomItemCreating: function(e) {
                 return {
+                    display: "display " + e.text,
+                    value: "value " + e.text
+                };
+            }
+        }),
+        $input = $selectBox.find(".dx-texteditor-input"),
+        keyboard = keyboardMock($input),
+        customValue = "Custom value";
+
+    keyboard
+        .type(customValue)
+        .change();
+
+    assert.equal($selectBox.dxSelectBox("option", "value"), "value " + customValue, "value is correct");
+    assert.equal($input.val(), "display " + customValue, "displayed value is correct");
+});
+
+QUnit.test("creating custom item via the 'customItem' event parameter", function(assert) {
+    var $selectBox = $("#selectBox").dxSelectBox({
+            acceptCustomValue: true,
+            displayExpr: "display",
+            valueExpr: "value",
+            onCustomItemCreating: function(e) {
+                e.customItem = {
                     display: "display " + e.text,
                     value: "value " + e.text
                 };

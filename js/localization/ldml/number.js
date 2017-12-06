@@ -1,10 +1,10 @@
 "use strict";
 
-var escapeRegExp = require("../../core/utils/common").escapeRegExp;
+var fitIntoRange = require("../../core/utils/math").fitIntoRange;
 
 var DEFAULT_CONFIG = { thousandsSeparator: ",", decimalSeparator: "." },
     ESCAPING_CHAR = "'",
-    MAX_SAFE_INTEGER = Number.MAX_SAFE_INTEGER || Math.pow(2, 53) - 1;
+    MAXIMUM_NUMBER_LENGTH = 15;
 
 function getGroupSizes(formatString) {
     return formatString.split(",").slice(1).map(function(str) {
@@ -12,41 +12,6 @@ function getGroupSizes(formatString) {
             return char === "#" || char === "0";
         }).length;
     });
-}
-
-function getIntegerPartRegExp(formatString, thousandsSeparator) {
-    var result = escapeRegExp(formatString);
-    result = result.replace(new RegExp("([0#,]+)"), "($1)");
-
-    var groupSizes = getGroupSizes(formatString);
-
-    result = result.replace(/0/g, "\\d");
-
-    if(formatString.indexOf("#,") >= 0 && groupSizes.length) {
-        result = result.replace(new RegExp("[#,]+"), "([" + thousandsSeparator + "]*[1-9][\\d\\" + thousandsSeparator + "]*)?");
-    } else {
-        result = result.replace(/#+/g, "([1-9]\\d*)?");
-    }
-    return result;
-}
-
-function getFloatPartRegExp(formatString, decimalSeparator) {
-    if(!formatString) return "()";
-
-    var result = escapeRegExp(decimalSeparator + formatString);
-    result = result.replace(new RegExp("^(" + escapeRegExp(escapeRegExp(decimalSeparator)) + "0[0#]*)"), "($1)");
-    result = result.replace(new RegExp("^(" + escapeRegExp(escapeRegExp(decimalSeparator)) + "[0#]*)"), "($1)?");
-    result = result.replace(/0/g, "\\d");
-    result = result.replace(/#/g, "\\d?");
-    return result;
-}
-
-function getRegExp(config, formatString) {
-    var floatParts = formatString.split("."),
-        integerRegexp = getIntegerPartRegExp(floatParts[0], config.thousandsSeparator),
-        floatRegExp = getFloatPartRegExp(floatParts[1], config.decimalSeparator);
-
-    return integerRegexp + floatRegExp;
 }
 
 function getSignParts(format) {
@@ -57,59 +22,6 @@ function getSignParts(format) {
     }
 
     return signParts;
-}
-
-function checkParserArguments(format, text) {
-    return format && text && typeof format === "string" && typeof text === "string";
-}
-
-function isPercentFormat(format) {
-    return format.slice(-1) === "%";
-}
-
-function getParser(format, config) {
-    config = config || DEFAULT_CONFIG;
-
-    return function(text) {
-        if(!checkParserArguments(format, text)) {
-            return;
-        }
-
-        var signParts = getSignParts(format),
-            regExpText = signParts.map(getRegExp.bind(null, config)).join("|"),
-            parseResult = new RegExp("^(" + regExpText + ")$").exec(text);
-
-        if(!parseResult) {
-            return;
-        }
-
-        var signPartResultCount = parseResult.length / 2 - 1,
-            isNegative = parseResult[signPartResultCount + 2],
-            integerResultIndex = isNegative ? signPartResultCount + 2 : 2,
-            floatResultIndex = integerResultIndex + signPartResultCount - 1,
-            integerPart = parseResult[integerResultIndex].replace(new RegExp(escapeRegExp(config.thousandsSeparator), "g"), ""),
-            floatPart = parseResult[floatResultIndex];
-
-        var value = parseInt(integerPart) || 0;
-
-        if(value > MAX_SAFE_INTEGER) {
-            return;
-        }
-
-        if(floatPart) {
-            value += parseFloat(floatPart.replace(config.decimalSeparator, ".")) || 0;
-        }
-
-        if(isNegative) {
-            value = -value;
-        }
-
-        if(isPercentFormat(format)) {
-            value = value / 100;
-        }
-
-        return value;
-    };
 }
 
 function reverseString(str) {
@@ -165,7 +77,7 @@ function applyGroups(valueString, groupSizes, thousandsSeparator) {
     return groups.join(thousandsSeparator);
 }
 
-function formatNumberPart(format, valueString, minDigitCount, maxDigitCount) {
+function formatNumberPart(format, valueString) {
     return format.split(ESCAPING_CHAR).map(function(formatPart, escapeIndex) {
         var isEscape = escapeIndex % 2;
         if(!formatPart && isEscape) {
@@ -199,9 +111,11 @@ function getFormatter(format, config) {
             maxFloatPrecision = minFloatPrecision + getNonRequiredDigitCount(floatFormatParts[1]),
             minIntegerPrecision = getRequiredDigitCount(floatFormatParts[0]),
             maxIntegerPrecision = getNonRequiredDigitCount(floatFormatParts[0]) ? undefined : minIntegerPrecision,
+            integerLength = Math.floor(value).toString().length,
+            floatPrecision = fitIntoRange(maxFloatPrecision, 0, MAXIMUM_NUMBER_LENGTH - integerLength),
             groupSizes = getGroupSizes(floatFormatParts[0]).reverse();
 
-        var valueParts = value.toFixed(maxFloatPrecision).split(".");
+        var valueParts = value.toFixed(floatPrecision < 0 ? 0 : floatPrecision).split(".");
 
         var valueIntegerPart = normalizeValueString(reverseString(valueParts[0]), minIntegerPrecision, maxIntegerPrecision),
             valueFloatPart = normalizeValueString(valueParts[1], minFloatPrecision, maxFloatPrecision);
@@ -284,6 +198,5 @@ function getFormat(formatter) {
     return negativeFormat === "-" + positiveFormat ? positiveFormat : positiveFormat + ";" + negativeFormat;
 }
 
-exports.getParser = getParser;
 exports.getFormatter = getFormatter;
 exports.getFormat = getFormat;

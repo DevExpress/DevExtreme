@@ -213,6 +213,25 @@ QUnit.testStart(function() {
         assert.ok($element.find(".dx-scheduler-date-table").parent().hasClass("dx-scrollable-content"), "Scrollable contains date table");
     });
 
+    QUnit.test("Workspace scrollable should work correctly after changing currentDate", function(assert) {
+        this.instance.option("height", 200);
+        this.instance.option("currentDate", new Date());
+
+        var $element = this.instance.$element();
+
+        assert.notEqual($element.find(".dx-scrollbar-vertical").css("display"), "none", "Scrollable works correctly");
+    });
+
+    QUnit.test("Workspace scrollable should work correctly after changing currentDate, crossScrollingEnabled = true", function(assert) {
+        this.instance.option("crossScrollingEnabled", true);
+        this.instance.option("height", 200);
+        this.instance.option("currentDate", new Date());
+
+        var $element = this.instance.$element();
+
+        assert.notEqual($element.find(".dx-scrollbar-vertical").css("display"), "none", "Scrollable works correctly");
+    });
+
     QUnit.test("Scheduler workspace scrollables should be updated after allDayExpanded option changed", function(assert) {
         this.instance.option("allDayExpanded", false);
         var stub = sinon.stub(this.instance, "_updateScrollable");
@@ -230,18 +249,6 @@ QUnit.testStart(function() {
         assert.ok($row.hasClass("dx-scheduler-time-panel-row"), "Css class of row is correct");
         assert.ok($cell.hasClass("dx-scheduler-time-panel-cell"), "Css class of cell is correct");
         assert.ok($cell.hasClass(VERTICAL_SIZES_CLASS), "Css class of cell is correct");
-    });
-
-
-    QUnit.test("Time panel should have special css class when difference between endDayHour and startDayHour is odd", function(assert) {
-        var $element = this.instance.$element(),
-            $timePanel = $element.find(".dx-scheduler-time-panel");
-
-        this.instance.option("startDayHour", 5.5);
-        assert.ok($timePanel.hasClass("dx-scheduler-time-panel-odd-row-count"), "Time panel has css class");
-
-        this.instance.option("startDayHour", 6);
-        assert.notOk($timePanel.hasClass("dx-scheduler-time-panel-odd-row-count"), "Time panel has no css class");
     });
 
     QUnit.test("All day panel row should have special css class", function(assert) {

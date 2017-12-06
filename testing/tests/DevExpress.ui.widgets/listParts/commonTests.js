@@ -1120,6 +1120,63 @@ QUnit.test("searchEditorOptions", function(assert) {
     assert.strictEqual(searchEditorInstance.option("placeholder"), "Test", "placeholder of the search box");
 });
 
+QUnit.test("apply list search options if dataSource set as dataSource instance", function(assert) {
+    var instance = $("#list").dxList({
+            dataSource: new DataSource({
+                store: [],
+                searchExpr: "test",
+                searchValue: "1",
+                searchOperation: "contains"
+            }),
+            searchExpr: "expr",
+            searchValue: "2",
+            searchMode: "startsWith"
+        }).dxList("instance"),
+        ds = instance.getDataSource();
+
+    assert.strictEqual(ds.searchExpr(), "expr", "search expression is applied");
+    assert.strictEqual(ds.searchValue(), "2", "search value is applied");
+    assert.strictEqual(ds.searchOperation(), "startsWith", "search operation is applied");
+});
+
+QUnit.test("apply dataSource options if list search options are default", function(assert) {
+    var instance = $("#list").dxList({
+            dataSource: new DataSource({
+                store: [],
+                searchExpr: "expr",
+                searchValue: "2",
+                searchOperation: "startsWith"
+            })
+        }).dxList("instance"),
+        ds = instance.getDataSource();
+
+    assert.strictEqual(ds.searchExpr(), "expr", "search expression is applied");
+    assert.strictEqual(ds.searchValue(), "2", "search value is applied");
+    assert.strictEqual(ds.searchOperation(), "startsWith", "search operation is applied");
+});
+
+QUnit.test("dataSource change should save filter", function(assert) {
+    var getDataSource = function(data) {
+        return new DataSource({
+            store: new ArrayStore({
+                data: data
+            })
+        });
+    };
+    var data1 = [{ text: "test 1" }, { text: "test 2" }],
+        data2 = [{ text: "item 1" }, { text: "item 2" }],
+        instance = $("#list").dxList({
+            dataSource: getDataSource(data1),
+            searchExpr: "text",
+            searchValue: "2",
+        }).dxList("instance");
+
+    assert.deepEqual(instance.option("items"), [{ text: "test 2" }], "initial items");
+
+    instance.option("dataSource", getDataSource(data2));
+
+    assert.deepEqual(instance.option("items"), [{ text: "item 2" }], "updated items");
+});
 
 QUnit.module("selection", moduleSetup);
 
@@ -2634,4 +2691,24 @@ QUnit.test("Search when searchMode is specified", function(assert) {
     assert.deepEqual(instance.option("items"), [23], "items");
     assert.strictEqual(instance.option("searchValue"), "2", "search value");
     assert.strictEqual(instance.getDataSource().searchOperation(), "startswith", "search operation");
+});
+
+//T582179
+QUnit.test("Selection should not be cleared after searching", function(assert) {
+    var $element = $("#list").dxList({
+            dataSource: [1, 2, 3],
+            searchEnabled: true,
+            searchExpr: "this",
+            showSelectionControls: true,
+            selectionMode: "all"
+        }),
+        instance = $element.dxList("instance");
+
+    instance.selectAll();
+
+    assert.deepEqual(instance.option("selectedItemKeys"), [1, 2, 3], "selectedItemKeys");
+
+    instance.option("searchValue", "4");
+
+    assert.deepEqual(instance.option("selectedItemKeys"), [1, 2, 3], "selectedItemKeys");
 });

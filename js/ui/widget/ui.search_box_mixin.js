@@ -24,7 +24,7 @@ module.exports = {
             * @default 'contains'
             * @acceptValues "contains"|"startswith"
             */
-            searchMode: "contains",
+            searchMode: "",
 
             /**
             * @name SearchBoxMixinOptions_searchExpr
@@ -57,14 +57,6 @@ module.exports = {
              * @default {}
              */
             searchEditorOptions: {}
-        });
-    },
-
-    _dataSourceOptions: function() {
-        return extend(this.callBase(), {
-            searchValue: this.option("searchValue"),
-            searchOperation: this.option("searchMode"),
-            searchExpr: this.option("searchExpr")
         });
     },
 

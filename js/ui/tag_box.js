@@ -22,7 +22,9 @@ var $ = require("../core/renderer"),
     when = deferredUtils.when,
     Deferred = deferredUtils.Deferred,
     pointerEvents = require("../events/pointer"),
-    BindableTemplate = require("./widget/bindable_template");
+    BindableTemplate = require("./widget/bindable_template"),
+    inArray = require("../core/utils/array").inArray,
+    each = require("../core/utils/iterator").each;
 
 var TAGBOX_TAG_DATA_KEY = "dxTagData";
 
@@ -667,11 +669,13 @@ var TagBox = SelectBox.inherit({
     },
 
     _focusOutHandler: function(e) {
-        if(this.option("opened") && this.option("applyValueMode") === "useButtons") {
+        var openedUseButtons = this.option("opened") && this.option("applyValueMode") === "useButtons";
+
+        if(openedUseButtons || this._preventFocusOut) {
+            this._preventFocusOut = false;
             return;
         }
 
-        this.callBase(e);
         this._clearTextValue();
         this._clearTagFocus();
 
@@ -841,7 +845,7 @@ var TagBox = SelectBox.inherit({
         this._renderInputAddons();
 
         this.option("selectedItems", this._selectedItems.slice());
-        this._tagElements().remove();
+        this._cleanTags();
 
         var $multiTag = this._multiTagRequired() && this._renderMultiTag(this._input()),
             showMultiTagOnly = this.option("showMultiTagOnly"),
@@ -856,6 +860,24 @@ var TagBox = SelectBox.inherit({
 
         this._scrollContainer("end");
         this._refreshTagElements();
+    },
+
+    _cleanTags: function() {
+        if(this._multiTagRequired()) {
+            this._tagElements().remove();
+        } else {
+            var $tags = this._tagElements(),
+                values = this._getValue();
+
+            each($tags, function(_, tag) {
+                var $tag = $(tag),
+                    index = inArray($tag.data(TAGBOX_TAG_DATA_KEY), values);
+
+                if(index < 0) {
+                    $tag.remove();
+                }
+            });
+        }
     },
 
     _renderEmptyState: function() {
@@ -896,20 +918,22 @@ var TagBox = SelectBox.inherit({
             $tag = this._getTag(value);
 
         if($tag) {
-            if(!$tag.hasClass(TAGBOX_CUSTOM_TAG_CLASS)) {
-                return new Deferred().resolve();
+            var displayValue = this._displayGetter(item);
+
+            if(isDefined(displayValue)) {
+                this._applyTagTemplate(item, $tag);
             }
 
             $tag.removeClass(TAGBOX_CUSTOM_TAG_CLASS);
         } else {
             $tag = this._createTag(value, $input);
-        }
 
-        if(isDefined(item)) {
-            this._applyTagTemplate(item, $tag);
-        } else {
-            $tag.addClass(TAGBOX_CUSTOM_TAG_CLASS);
-            this._applyTagTemplate(value, $tag);
+            if(isDefined(item)) {
+                this._applyTagTemplate(item, $tag);
+            } else {
+                $tag.addClass(TAGBOX_CUSTOM_TAG_CLASS);
+                this._applyTagTemplate(value, $tag);
+            }
         }
     },
 
@@ -1132,13 +1156,13 @@ var TagBox = SelectBox.inherit({
         if(typeUtils.isString(valueGetterExpr) && valueGetterExpr !== "this") {
             var filter = this._dataSourceFilterExpr();
 
-            if(!this._userFilter) {
-                this._userFilter = dataSource.filter();
+            if(this._userFilter === undefined) {
+                this._userFilter = dataSource.filter() || null;
             }
 
             this._userFilter && filter.push(this._userFilter);
 
-            filter.length && dataSource.filter(filter);
+            filter.length ? dataSource.filter(filter) : dataSource.filter(null);
 
         } else {
             dataSource.filter(this._dataSourceFilterFunction.bind(this));
@@ -1205,6 +1229,7 @@ var TagBox = SelectBox.inherit({
     _clean: function() {
         this.callBase();
         delete this._defaultTagTemplate;
+        delete this._preventFocusOut;
         delete this._tagTemplate;
     },
 

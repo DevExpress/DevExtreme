@@ -164,8 +164,17 @@ declare module DevExpress.viz.charts {
         /** Hides the point label. */
         hide(): void;
 
+        /** Hides the point label. If called with "true", holds the label invisible until show() is called. */
+        hide(holdInvisible: boolean): void;
+
         /** Shows the point label. */
         show(): void;
+
+        /** Shows the point label. If called with "true", holds the label visible until hide() is called. */
+        show(holdVisible: boolean): void;
+
+        /** Provides information about the visibility state of a label. */
+        isVisible(): boolean;
     }
 
     /** This section describes the Series object, which represents a series. */
@@ -206,7 +215,7 @@ declare module DevExpress.viz.charts {
 
     /** This section describes the Point object, which represents a series point. */
     export interface PolarPoint extends BasePoint {
-        
+
 
         series: PolarSeries;
     }
@@ -229,7 +238,7 @@ declare module DevExpress.viz.charts {
         endValue?: any;
     }
 
-    
+
 
     // Series
 
@@ -271,7 +280,7 @@ declare module DevExpress.viz.charts {
         /** Specifies a format for the text displayed by point labels. */
         format?: any;
 
-        
+
         position?: string;
 
         /**
@@ -313,12 +322,12 @@ declare module DevExpress.viz.charts {
         /** Specifies the data source field that provides arguments for series points. */
         argumentField?: string;
 
-        
+
         axis?: string;
 
-        
+
         label?: ChartSeriesConfigLabel;
-        
+
         border?: viz.core.DashedBorder;
 
         /** Specifies a series color. */
@@ -330,10 +339,10 @@ declare module DevExpress.viz.charts {
         /** Specifies series elements to be highlighted when a user points to the series. */
         hoverMode?: string;
 
-        
+
         hoverStyle?: {
 
-            
+
             border?: viz.core.DashedBorder;
 
             /** <p>Sets a color for a series when it is hovered over.</p> */
@@ -342,7 +351,7 @@ declare module DevExpress.viz.charts {
             /** Specifies the dash style for the line in a hovered series. */
             dashStyle?: string;
 
-            
+
             hatching?: viz.core.Hatching;
 
             /** Specifies the width of a line in a hovered series. */
@@ -364,10 +373,10 @@ declare module DevExpress.viz.charts {
         /** Specifies series elements to be highlighted when a user selects a point. */
         selectionMode?: string;
 
-        
+
         selectionStyle?: {
 
-            
+
             border?: viz.core.DashedBorder;
 
             /** Sets a color for a series when it is selected. */
@@ -376,7 +385,7 @@ declare module DevExpress.viz.charts {
             /** Specifies the dash style for the line in a selected series. */
             dashStyle?: string;
 
-            
+
             hatching?: viz.core.Hatching;
 
             /** Specifies the width of a line in a selected series. */
@@ -476,7 +485,7 @@ declare module DevExpress.viz.charts {
         /** Specifies a symbol for presenting points of the line and area series. */
         symbol?: string;
 
-        
+
         visible?: boolean;
     }
 
@@ -487,20 +496,20 @@ declare module DevExpress.viz.charts {
             /** Specifies the height of the image used instead of a point marker. */
             height?: any;
 
-            
-            
+
+
 
             /** Specifies the URL of the image to be used as a point marker. */
             url?: any;
 
-            
-            
+
+
 
             /** Specifies the width of an image that is used as a point marker. */
             width?: any;
 
-            
-            
+
+
         };
     }
 
@@ -543,7 +552,7 @@ declare module DevExpress.viz.charts {
         /** Specifies which pane the series should belong to. Accepts the name of the pane. */
         pane?: string;
 
-        
+
         point?: ChartCommonPointOptions;
 
         /** Coupled with the rangeValue2Field option, specifies which data source field provides values for a range-like series. */
@@ -658,10 +667,10 @@ declare module DevExpress.viz.charts {
         /** Specifies whether or not to close the chart by joining the end point with the first point. */
         closed?: boolean;
 
-        
+
         label?: SeriesConfigLabel;
 
-        
+
         point?: PolarCommonPointOptions;
     }
 
@@ -696,34 +705,34 @@ declare module DevExpress.viz.charts {
         type?: string;
     }
 
-    
-    
-    
-    
-    
-    
-    
-    
-    
-    
-    
-    
-    
-    
-    
-    
-    
-    
-    
-    
-    
-    
-    
-    
-    
-    
-    
-    
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
 
     export interface PieSeriesConfigLabel extends BaseSeriesConfigLabel {
         /** Specifies how to shift labels from their initial position in a radial direction in pixels. */
@@ -854,8 +863,8 @@ declare module DevExpress.viz.charts {
         tag?: any;
     }
 
-    
-    
+
+
 
     export interface SeriesTemplate {
         /** Specifies a callback function that returns a series object with individual series settings. */
@@ -942,9 +951,9 @@ declare module DevExpress.viz.charts {
         /** Aligns axis labels in relation to ticks. */
         alignment?: string;
 
-        
-        
-        
+
+
+
         /** Decides how to arrange axis labels when there is not enough space to keep all of them. */
         overlappingBehavior?: any;
 
@@ -1337,9 +1346,9 @@ declare module DevExpress.viz.charts {
         /** Specifies a coefficient that determines the spacing between the minimum series point and the axis. */
         minValueMargin?: number;
 
-        
+
         tick?: {
-            
+
             visible?: boolean;
         }
     }
@@ -1402,7 +1411,7 @@ declare module DevExpress.viz.charts {
         percentPrecision?: number;
     }
 
-    
+
     export interface BaseChartOptions<TPoint> extends viz.core.BaseWidgetOptions, viz.core.MarginOptions, viz.core.RedrawOnResizeOptions, viz.core.TitleOptions, viz.core.LoadingIndicatorOptions, viz.core.ExportOptions {
         /** Specifies adaptive layout options. */
         adaptiveLayout?: {
@@ -1595,7 +1604,7 @@ declare module DevExpress.viz.charts {
         /** Specifies the kind of information to display in a tooltip. */
         shared?: boolean;
     }
-    
+
     export interface dxChartOptions extends AdvancedOptions<ChartPoint, ChartSeries> {
         /** Indicates whether or not to synchronize value axes when they are displayed on a single pane. */
         synchronizeMultiAxes?: boolean;
@@ -1706,7 +1715,7 @@ declare module DevExpress.viz.charts {
         /** Defines options for the series template. */
         seriesTemplate?: SeriesTemplate;
 
-        
+
         tooltip?: ChartTooltip;
 
         /** Configures the value axis. */
@@ -1776,14 +1785,14 @@ declare module DevExpress.viz.charts {
 
     }
 
-    
+
     export interface dxPolarChartOptions extends AdvancedOptions<PolarPoint, PolarSeries> {
         /** Specifies adaptive layout options. */
         adaptiveLayout?: {
-            
+
             width?: number;
 
-            
+
             height?: number;
         };
         /** Indicates whether or not to display a "spider web". */
@@ -1807,7 +1816,7 @@ declare module DevExpress.viz.charts {
         /** Defines options for the series template. */
         seriesTemplate?: PolarSeriesTemplate;
 
-        
+
         tooltip?: PolarChartTooltip;
 
         /** Specifies value axis options for the PolarChart widget. */
@@ -1829,11 +1838,11 @@ declare module DevExpress.viz.charts {
         customizeText?: (pointInfo: { pointName: any; pointIndex: number; pointColor: string; }) => string;
     }
 
-    
+
     export interface dxPieChartOptions extends BaseChartOptions<PiePoint> {
         /** Specifies adaptive layout options. */
         adaptiveLayout?: {
-            
+
             keepLabels?: boolean;
         };
         /** Specifies PieChart legend options. */

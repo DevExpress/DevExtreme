@@ -37,7 +37,7 @@ module.exports = _extend({}, symbolPoint, {
             marker.attr({ visibility: "hidden" });
         }
 
-        label.hide();
+        label.draw(false);
     },
 
     setInvisibility: function() {
@@ -57,9 +57,6 @@ module.exports = _extend({}, symbolPoint, {
         if(bottomMarker && bottomMarker.attr("visibility")) {
             bottomMarker.attr({ visibility: null });
         }
-
-        that._topLabel.clearVisibility();
-        that._bottomLabel.clearVisibility();
     },
 
     clearMarker: function() {
@@ -236,13 +233,13 @@ module.exports = _extend({}, symbolPoint, {
             that.visibleBottomMarker !== false && labels.push(bottomLabel);
 
             each(labels, function(_, label) {
-                label.show();
+                label.draw(true);
             });
 
             that._checkLabelsOverlay(that._topLabel.pointPosition);
         } else {
-            topLabel.hide();
-            bottomLabel.hide();
+            topLabel.draw(false);
+            bottomLabel.draw(false);
         }
     },
 

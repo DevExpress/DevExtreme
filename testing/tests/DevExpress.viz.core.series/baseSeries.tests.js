@@ -207,9 +207,7 @@ var environmentWithSinonStubPoint = {
             stub.coordsIn.returns(false);
             stub._label = {
                 hasText: function() { return false; },
-                hide: function() {
-                    stub._isLabelHidden = true;
-                }
+                draw: sinon.spy()
             };
             return stub;
         });
@@ -4082,7 +4080,7 @@ QUnit.test("hide labels", function(assert) {
     series.hideLabels();
 
     $.each(series._points, function(_, point) {
-        assert.ok(point._isLabelHidden);
+        assert.deepEqual(point._label.draw.lastCall.args, [false]);
     });
 });
 

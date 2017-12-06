@@ -30,7 +30,8 @@ var $ = require("jquery"),
     DataSource = require("data/data_source/data_source").DataSource,
     CustomStore = require("data/custom_store"),
     subscribes = require("ui/scheduler/ui.scheduler.subscribes"),
-    dataUtils = require("core/element_data");
+    dataUtils = require("core/element_data"),
+    dateSerialization = require("core/utils/date_serialization");
 
 require("ui/scheduler/ui.scheduler");
 require("ui/switch");
@@ -4674,6 +4675,65 @@ QUnit.test("Exception should not be thrown on second details view opening if for
     } catch(e) {
         assert.ok(false, "Exception: " + e);
     }
+});
+
+QUnit.test("FormData should be reset on saveChanges, dateSerializationFormat is set in initial appointment data (T569673)", function(assert) {
+    var task = { text: "Task", StartDate: "2016-05-25T09:40:00",
+        EndDate: "2016-05-25T10:40:00" };
+
+    this.createInstance({
+        dataSource: [task],
+        currentDate: new Date(2016, 4, 25),
+        currentView: "week",
+        views: ["week"],
+        startDateExpr: "StartDate",
+        endDateExpr: "EndDate",
+        onAppointmentFormCreated: function(data) {
+            var form = data.form,
+                startDate = data.appointmentData.StartDate,
+                endDate = data.appointmentData.EndDate;
+
+            form.option("items", [
+                {
+                    dataField: "StartDate",
+                    editorType: "dxDateBox",
+                    editorOptions: {
+                        value: startDate,
+                        type: "datetime",
+                        onValueChanged: function(args) {
+                            startDate = args.value;
+                            form.getEditor("EndDate")
+                                .option("value", new Date(1464160900000));
+                        }
+                    }
+                }, {
+                    name: "EndDate",
+                    dataField: "EndDate",
+                    editorType: "dxDateBox",
+                    editorOptions: {
+                        value: endDate,
+                        type: "datetime",
+                        readOnly: true
+                    }
+                }
+            ]);
+        }
+    });
+
+    this.instance.showAppointmentPopup(task, true);
+
+    var detailsForm = this.instance.getAppointmentDetailsForm(),
+        startDateEditor = detailsForm.getEditor("StartDate");
+
+    startDateEditor.option("value", "2016-05-25T10:40:00");
+
+    $(".dx-scheduler-appointment-popup .dx-popup-done").trigger("dxclick").trigger("dxclick");
+    this.clock.tick(300);
+
+    var $appointments = this.instance.$element().find(".dx-scheduler-appointment");
+
+    var endDateFormat = dateSerialization.getDateSerializationFormat(dataUtils.data($appointments[1], "dxItemData").EndDate);
+    assert.deepEqual(endDateFormat, "yyyy-MM-ddTHH:mm:ss", "Appointment EndDate format is OK");
 });
 
 QUnit.test("Appointments should be rendered correctly, Day view with intervalCount", function(assert) {

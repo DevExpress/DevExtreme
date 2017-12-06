@@ -192,7 +192,7 @@ exports.plugin = {
 
             if(!adaptiveLayout.keepLabels && width - labelWidth < adaptiveLayout.width) {
                 this._labels.forEach(function(label) {
-                    label.hide();
+                    label.draw(false);
                 });
                 return;
             } else {
@@ -201,7 +201,7 @@ exports.plugin = {
                     labelWidth = labelWidth > 0 ? labelWidth : 0;
                 }
                 this._labels.forEach(function(label) {
-                    label.clearVisibility();
+                    label.draw(true);
                 });
             }
 
@@ -250,7 +250,7 @@ exports.plugin = {
                         return coord;
                     }) : item.coords;
                 if(!options.showForZeroValues && item.value === 0) {
-                    label.hide();
+                    label.draw(false);
                     return;
                 }
 
@@ -308,7 +308,7 @@ exports.plugin = {
                     percent: item.percent
                 });
 
-                label.draw();
+                label.draw(true);
 
                 return label;
             });

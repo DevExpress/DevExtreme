@@ -177,11 +177,13 @@ var SelectBox = DropDownList.inherit({
             * @type function(e)
             * @type_function_param1 e:object
             * @type_function_param1_field4 text:string
-            * @type_function_return object|Promise<object>
+            * @type_function_param1_field5 customItem:string|object|Promise<any>
+            * @type_function_return string|object|Promise<any>
             * @action
+            * @default function(e) { e.customItem = e.text; }
             */
             onCustomItemCreating: function(e) {
-                return e.text;
+                e.customItem = e.text;
             },
 
             /**
@@ -470,9 +472,6 @@ var SelectBox = DropDownList.inherit({
             pageLoadMode: "scrollBottom",
             onSelectionChanged: this._getSelectionChangeHandler(),
             selectedItem: this.option("selectedItem"),
-            onItemPointerDown: function() {
-                this._preventFocusOut = true;
-            }.bind(this),
             onFocusedItemChanged: this._listFocusedItemChangeHandler.bind(this)
         });
 
@@ -580,11 +579,6 @@ var SelectBox = DropDownList.inherit({
     },
 
     _focusOutHandler: function(e) {
-        if(this._preventFocusOut) {
-            this._preventFocusOut = false;
-            return;
-        }
-
         this.callBase(e);
 
         this._restoreInputText();
@@ -693,9 +687,11 @@ var SelectBox = DropDownList.inherit({
 
     _customItemAddedHandler: function() {
         var searchValue = this._searchValue(),
-            item = this._customItemCreatingAction({
+            params = {
                 text: searchValue
-            });
+            },
+            actionResult = this._customItemCreatingAction(params),
+            item = commonUtils.ensureDefined(actionResult, params.customItem);
 
         if(item === undefined) {
             this._renderValue();
@@ -811,11 +807,6 @@ var SelectBox = DropDownList.inherit({
             endPosition = inputElement.value.length;
         inputElement.selectionStart = endPosition;
         inputElement.selectionEnd = endPosition;
-    },
-
-    _clean: function() {
-        this.callBase();
-        delete this._preventFocusOut;
     },
 
     _dispose: function() {

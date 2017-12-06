@@ -9,6 +9,7 @@
     @GRID_BASE_ADAPTIVE_TEXT_PADDING: 8px;
     @GRID_BASE_CHECKBOX_ICON_SIZE: 20px;
     @GRID_BASE_TREEVIEW_SEARCH_MARGIN: 10px;
+    @DROPDOWNEDITOR_BUTTON_WITH_CLEAR_PADDING: 1.5 * @DROPDOWNEDITOR_BUTTON_WIDTH + @CLEAR_ICON_SIZE + @CLEAR_ICON_RIGHT;
 
     .dx-@{widgetName}-checkbox-size {
         .dx-checkbox-icon {
@@ -230,8 +231,32 @@
         }
 
         .dx-dropdowneditor-button-visible {
-            &.dx-show-clear-button .dx-texteditor-input {
-                padding-right: @DROPDOWNEDITOR_BUTTON_WIDTH + @CLEAR_ICON_SIZE + @CLEAR_ICON_RIGHT;
+            &.dx-show-clear-button  {
+                .dx-texteditor-input {
+                    padding-right: @DROPDOWNEDITOR_BUTTON_WITH_CLEAR_PADDING;
+                }
+
+                &.dx-invalid {
+                    .dx-texteditor-input {
+                        padding-right: @TEXTEDITOR_INVALID_BADGE_WIDTH + @DROPDOWNEDITOR_BUTTON_WITH_CLEAR_PADDING;
+                    }
+
+                    &.dx-rtl .dx-texteditor-input {
+                        padding: @GRID_BASE_CELL_PADDING;
+                        padding-left: @TEXTEDITOR_INVALID_BADGE_WIDTH + @DROPDOWNEDITOR_BUTTON_WITH_CLEAR_PADDING;
+                    }
+                }
+            }
+
+            &.dx-invalid {
+                .dx-texteditor-input {
+                    padding-right: @DROPDOWNEDITOR_BUTTON_WIDTH + @TEXTEDITOR_INVALID_BADGE_WIDTH;
+                }
+
+                &.dx-rtl .dx-texteditor-input {
+                    padding: @GRID_BASE_CELL_PADDING;
+                    padding-left: @DROPDOWNEDITOR_BUTTON_WIDTH + @TEXTEDITOR_INVALID_BADGE_WIDTH;
+                }
             }
 
             .dx-texteditor-input {

@@ -9285,11 +9285,10 @@ QUnit.test("When showing dxDataGrid in detail, 'select all' function of master g
         showCheckBoxesMode: "always"
     };
 
-    this.editingController._editRowIndex = 0;
-
     //act
     this.rowsView.render(testElement);
     this.dataController.expandRow(this.dataController.getKeyByRowIndex(2));
+    this.editingController.editRow(0);
     this.clock.tick();
     this.selectAll();
 
@@ -9297,6 +9296,21 @@ QUnit.test("When showing dxDataGrid in detail, 'select all' function of master g
     assert.ok(!testElement.find('.' + rowClass).first().hasClass(rowSelectionClass), 'row that editing now has no selection class');
     assert.equal(testElement.find('.' + rowClass).length, 13, "1 header row, 7 content rows, 3 detail row (1 header and 2 content), 2 freespace row");
     assert.equal(testElement.find('.' + rowSelectionClass).length, 6, "7 rows - 1 row that edit, 2 detail row doesn't selected");
+});
+
+//T579296
+QUnit.test("cancel edit row after expand row", function(assert) {
+    var testElement = $('#container');
+
+    this.rowsView.render(testElement);
+
+    this.editingController.editRow(2);
+
+    assert.ok(this.editingController.isEditing(), "editable row is showed");
+
+    this.dataController.expandRow(1);
+
+    assert.notOk(this.editingController.isEditing(), "editable row is removed");
 });
 
 //T174302
@@ -9960,7 +9974,7 @@ QUnit.module('Edit Form', {
         };
 
         this.setupModules = function(that) {
-            setupDataGridModules(that, ['data', 'columns', 'rows', 'masterDetail', 'editing', 'editorFactory', 'selection', 'headerPanel', 'columnFixing', 'validating'], {
+            setupDataGridModules(that, ['data', 'columns', 'rows', 'masterDetail', 'editing', 'editorFactory', 'selection', 'headerPanel', 'columnFixing', 'validating', 'keyboardNavigation'], {
                 initViews: true
             });
         };
@@ -10750,6 +10764,49 @@ QUnit.test("Render detail form row - creation а validator should not throw an e
     }
 });
 
+//T554950
+QUnit.testInActiveWindow("Focus on lookup column should be preserved after changing a value in lookup", function(assert) {
+    //arrange
+    this.options.useKeyboard = true;
+    this.options.dataSource.store = [{ name: "Bob", state: 1 }];
+    this.options.columns = ["name", {
+        dataField: "state",
+        setCellValue: function(rowData, value) {
+            rowData.state = value;
+        },
+        lookup: {
+            dataSource: [
+                { id: 1, state: "Alabama" },
+                { id: 2, state: "California" }
+            ],
+            valueExpr: "id",
+            displayExpr: "state"
+        }
+    }, ];
+    this.setupModules(this);
+    this.keyboardNavigationController.component.$element = function() {
+        return $(".dx-datagrid").parent();
+    };
+    this.rowsView.render($('#container'));
+
+    this.editRow(0);
+    this.clock.tick();
+
+    this.keyboardNavigationController.focus(this.getCellElement(0, 1));
+    this.clock.tick();
+
+    //assert
+    var $selectBoxElement = $(this.getCellElement(0, 1)).find(".dx-selectbox").first();
+    assert.ok($selectBoxElement.hasClass("dx-state-focused"), "second cell is focused");
+
+    //act
+    $selectBoxElement.trigger("dxpointerdown");
+    $selectBoxElement.dxSelectBox("instance").option("value", 2);
+    this.clock.tick();
+
+    //assert
+    assert.ok($(this.getCellElement(0, 1)).find(".dx-selectbox").hasClass("dx-state-focused"), "second cell is focused");
+});
 
 
 QUnit.module('Editing - "popup" mode', {

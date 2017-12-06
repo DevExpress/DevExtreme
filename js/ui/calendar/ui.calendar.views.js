@@ -163,7 +163,7 @@ var Views = {
         },
 
         _getCellText: function(cellDate) {
-            return dateLocalization.getMonthNames()[cellDate.getMonth()].slice(0, 3);
+            return dateLocalization.getMonthNames("abbreviated")[cellDate.getMonth()];
         },
 
         _getFirstCellData: function() {

@@ -4073,13 +4073,13 @@ if(browser.msie && parseInt(browser.version) <= 11) {
         clock.tick();
 
         //act
-        var scrollable = dataGrid.element().find(".dx-scrollable").data("dxScrollable");
+        var scrollable = dataGrid.$element().find(".dx-scrollable").data("dxScrollable");
         sinon.spy(scrollable, "update");
         dataGrid.updateDimensions();
         clock.tick();
 
         //assert
-        var $lastDataCell = dataGrid.element().find(".dx-last-data-cell");
+        var $lastDataCell = dataGrid.$element().find(".dx-last-data-cell");
         assert.equal($lastDataCell.text(), "2014/01/12", "text of last data cell");
         assert.equal(scrollable.update.callCount, 2);
 

@@ -30,9 +30,18 @@ QUnit.test("humanize", function(assert) {
 
 QUnit.test("titleize", function(assert) {
     assert.equal(inflector.titleize("buy-me-candy"), "Buy Me Candy");
+    assert.equal(inflector.titleize("testField1"), "Test Field1");
     assert.equal(inflector.titleize(), "");
     assert.equal(inflector.titleize(null), "");
     assert.equal(inflector.titleize(123), "123");
+});
+
+QUnit.test("captionize", function(assert) {
+    assert.equal(inflector.captionize("simple"), "Simple");
+    assert.equal(inflector.captionize("buy-me-candy"), "Buy-me-candy");
+    assert.equal(inflector.captionize("testField1"), "Test Field 1");
+    //T573115
+    assert.equal(inflector.captionize("CompanyName(test)"), "Company Name (test)");
 });
 
 QUnit.test("underscore", function(assert) {

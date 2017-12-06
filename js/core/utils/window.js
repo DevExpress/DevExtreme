@@ -35,9 +35,8 @@ var resizeCallbacks = (function() {
         }
 
         prevSize = now;
-        setTimeout(function() {
-            callbacks.fire(changedDimension);
-        });
+
+        callbacks.fire(changedDimension);
     };
     prevSize = formatSize();
 

@@ -198,6 +198,11 @@ var ResizingController = modules.ViewController.inherit({
                 }
             });
 
+            if(resetBestFitMode) {
+                that._toggleBestFitMode(false);
+                resetBestFitMode = false;
+            }
+
             isColumnWidthsCorrected = that._correctColumnWidths(resultWidths, visibleColumns);
 
             if(columnAutoWidth) {
@@ -206,11 +211,6 @@ var ResizingController = modules.ViewController.inherit({
             }
 
             commonUtils.deferRender(function() {
-                if(resetBestFitMode) {
-                    that._toggleBestFitMode(false);
-                    resetBestFitMode = false;
-                }
-
                 if(needBestFit || isColumnWidthsCorrected) {
                     that._setVisibleWidths(visibleColumns, resultWidths);
                 }
