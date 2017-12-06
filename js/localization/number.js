@@ -3,7 +3,6 @@
 var dependencyInjector = require("../core/utils/dependency_injector"),
     inArray = require("../core/utils/array").inArray,
     each = require("../core/utils/iterator").each,
-    escapeRegExp = require("../core/utils/common").escapeRegExp,
     isPlainObject = require("../core/utils/type").isPlainObject,
     ldmlNumber = require("./ldml/number"),
     config = require("../core/config"),
@@ -56,25 +55,6 @@ var numberLocalization = dependencyInjector({
         if(formatObject.formatType) {
             return formatObject;
         }
-    },
-
-    _getSign: function(text, format) {
-        format = format || "#";
-
-        if(typeof format !== "string") {
-            return 1;
-        }
-
-        var separators = this._getSeparators();
-
-        text = text.replace(new RegExp("[0-9" + separators.decimalSeparator + separators.thousandsSeparator + "]+", "g"), "1");
-
-        var regexpString = escapeRegExp(format.replace(/[#0\.,]+/g, "1")),
-            signParts = regexpString.split(";");
-
-        signParts[1] = signParts[1] || "-" + signParts[0];
-
-        return text.match(new RegExp("^" + signParts[1] + "$")) ? -1 : 1;
     },
 
     _calculateNumberPower: function(value, base, minPower, maxPower) {
@@ -312,7 +292,12 @@ var numberLocalization = dependencyInjector({
             return null;
         }
 
-        return +cleanedText * this._getSign(text, format);
+        var parsed = +cleanedText,
+            isNegativeSimple = text.charAt(0) === "-",
+            isNegativeByFormat = !!format && text === this.format(-1 * parsed, format),
+            sign = isNegativeSimple || isNegativeByFormat ? -1 : 1;
+
+        return parsed * sign;
     }
 });
 
