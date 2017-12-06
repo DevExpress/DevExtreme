@@ -61,6 +61,10 @@ var numberLocalization = dependencyInjector({
     _getSign: function(text, format) {
         format = format || "#";
 
+        if(typeof format !== "string") {
+            return 1;
+        }
+
         var separators = this._getSeparators();
 
         text = text.replace(new RegExp("[0-9" + separators.decimalSeparator + separators.thousandsSeparator + "]+", "g"), "1");
