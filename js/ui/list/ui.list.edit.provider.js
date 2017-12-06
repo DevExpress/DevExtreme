@@ -92,7 +92,8 @@ var LIST_ITEM_BEFORE_BAG_CLASS = "dx-list-item-before-bag",
     DECORATOR_BEFORE_BAG_CREATE_METHOD = "beforeBag",
     DECORATOR_AFTER_BAG_CREATE_METHOD = "afterBag",
     DECORATOR_MODIFY_ELEMENT_METHOD = "modifyElement",
-    DECORATOR_AFTER_RENDER_METHOD = "afterRender";
+    DECORATOR_AFTER_RENDER_METHOD = "afterRender",
+    DECORATOR_GET_EXCLUDED_SELECTORS_METHOD = "getExcludedSelectors";
 
 var EditProvider = Class.inherit({
 
@@ -233,6 +234,14 @@ var EditProvider = Class.inherit({
 
     handleContextMenu: function($itemElement, e) {
         return this._eventHandler("handleContextMenu", $itemElement, e);
+    },
+
+    getExcludedItemSelectors: function() {
+        var excludedSelectors = [];
+
+        this._applyDecorators(DECORATOR_GET_EXCLUDED_SELECTORS_METHOD, excludedSelectors);
+
+        return excludedSelectors.join(",");
     }
 });
 

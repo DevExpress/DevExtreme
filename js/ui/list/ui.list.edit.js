@@ -63,6 +63,16 @@ var ListEdit = ListBase.inherit({
         this.callBase();
     },
 
+    _refreshItemElements: function() {
+        this.callBase();
+
+        var excludedSelectors = this._editProvider.getExcludedItemSelectors();
+
+        if(excludedSelectors.length) {
+            this._itemElementsCache = this._itemElementsCache.not(excludedSelectors);
+        }
+    },
+
     _getDefaultOptions: function() {
         return extend(this.callBase(), {
             /**
