@@ -759,10 +759,11 @@ var SchedulerWorkSpace = Widget.inherit({
         this._renderTimePanel();
 
         this._renderDateTable();
+
         this._renderAllDayPanel();
+
         this._shader = new VerticalShader();
         this._renderDateTimeIndication();
-
         this._setIndicationUpdateInterval();
     },
 
