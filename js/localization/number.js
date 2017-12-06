@@ -274,12 +274,12 @@ var numberLocalization = dependencyInjector({
 
         text = this.convertDigits(text, true);
 
-        if(format) {
+        if(format && typeof format !== "string") {
             errors.log("W0011");
         }
 
         var decimalSeparator = this.getDecimalSeparator(),
-            regExp = new RegExp("[^-0-9" + decimalSeparator + "]", "g"),
+            regExp = new RegExp("[^0-9" + decimalSeparator + "]", "g"),
             cleanedText = text
                 .replace(regExp, "")
                 .replace(decimalSeparator, ".")
@@ -292,7 +292,12 @@ var numberLocalization = dependencyInjector({
             return null;
         }
 
-        return +cleanedText;
+        var parsed = +cleanedText,
+            isNegativeSimple = text.charAt(0) === "-",
+            isNegativeByFormat = !!format && text === this.format(-1 * parsed, format),
+            sign = isNegativeSimple || isNegativeByFormat ? -1 : 1;
+
+        return parsed * sign;
     }
 });
 

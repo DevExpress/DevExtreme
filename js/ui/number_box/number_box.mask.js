@@ -161,7 +161,9 @@ var NumberBoxMask = NumberBoxBase.inherit({
 
         this._lastKey = e.originalEvent.key;
 
-        var newValue = this._tryParse(text, caret, this._lastKey);
+        var enteredChar = this._lastKey === "-" ? "" : this._lastKey,
+            newValue = this._tryParse(text, caret, enteredChar);
+
         if(newValue === undefined) {
             e.originalEvent.preventDefault();
 
@@ -251,7 +253,11 @@ var NumberBoxMask = NumberBoxBase.inherit({
 
     _tryParse: function(text, selection, char) {
         var editedText = this._getEditedText(text, selection, char),
-            parsed = number.parse(editedText);
+            parsed = number.parse(editedText, this._getFormatPattern());
+
+        if(parsed === this._parsedValue && !this._isValueIncomplete(editedText)) {
+            return undefined;
+        }
 
         if(editedText === "") {
             return null;
@@ -260,6 +266,18 @@ var NumberBoxMask = NumberBoxBase.inherit({
         parsed = isNaN(parsed) ? undefined : parsed;
 
         return this._isPercentFormat() ? (parsed && parsed / 100) : parsed;
+    },
+
+    _isValueIncomplete: function(text) {
+        if(!this._useMaskBehavior()) {
+            return this.callBase(text);
+        }
+
+        var decimalSeparator = number.getDecimalSeparator(),
+            clearRegExp = new RegExp("[^0-9" + decimalSeparator + "]", "g"),
+            cleanedText = text.replace(clearRegExp, "").replace(decimalSeparator, ".");
+
+        return cleanedText.match(/\.0*$/);
     },
 
     _isValueInRange: function(value) {

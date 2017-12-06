@@ -4,6 +4,7 @@ var $ = require("jquery"),
     numberLocalization = require("localization/number"),
     dateLocalization = require("localization/date"),
     messageLocalization = require("localization/message"),
+    errors = require("core/errors"),
     localization = require("localization"),
     config = require("core/config"),
     logger = require("core/utils/console").logger;
@@ -653,8 +654,13 @@ QUnit.test("input attr 'type' was not localized (Q588810)", function(assert) {
 
 QUnit.module("Localization number");
 
+QUnit.test("parse different positive and negative parts", function(assert) {
+    assert.equal(numberLocalization.parse("(10)", "#0;(#0)"), -10);
+    assert.equal(numberLocalization.parse("-10"), -10);
+    assert.equal(numberLocalization.parse("-10", "#0;(#0)"), -10);
+});
+
 QUnit.test("format: base", function(assert) {
-    //assert.equal(numberLocalization.format(1.2), "1.2");
     assert.equal(numberLocalization.format(12), "12");
     assert.equal(numberLocalization.format(1, { type: "decimal", precision: 2 }), "01");
     assert.equal(numberLocalization.format(1, { type: "decimal", precision: 3 }), "001");
@@ -802,7 +808,6 @@ QUnit.test("format as LDML pattern with custom separators", function(assert) {
 QUnit.module("Localization currency");
 
 QUnit.test("format: base", function(assert) {
-    //assert.equal(currencyLocalization.format(1.2), "$1.2");
     assert.equal(numberLocalization.format(12, { type: "currency" }), "$12");
     assert.equal(numberLocalization.format(1, { type: "currency", precision: 2 }), "$1.00");
     assert.equal(numberLocalization.format(1, { type: "currency", precision: 2, currency: "USD" }), "$1.00");
@@ -895,4 +900,11 @@ QUnit.test('formatter has higher priority than a type', function(assert) {
     var someDate = new Date(1999, 1, 1);
 
     assert.equal(dateLocalization.format(someDate, format), "Y 1999");
+});
+
+QUnit.test("string format without a parser should not rise a warning", function(assert) {
+    var errorHandler = sinon.spy(errors, "log");
+    numberLocalization.parse("1", "#0");
+
+    assert.equal(errorHandler.callCount, 0, "warning was not rised");
 });

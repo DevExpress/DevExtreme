@@ -101,6 +101,21 @@ QUnit.test("pressing '-' button should revert zero number", function(assert) {
     assert.equal(1 / this.instance.option("value"), Infinity, "value is positive");
 });
 
+QUnit.test("pressing '-' with different positive and negative parts", function(assert) {
+    this.instance.option({
+        format: "$ #0;($ #0)",
+        value: 123
+    });
+
+    this.keyboard.keyDown(MINUS_KEY);
+    assert.equal(this.input.val(), "($ 123)", "text is correct");
+    assert.equal(this.instance.option("value"), -123, "value is negative");
+
+    this.keyboard.keyDown(MINUS_KEY);
+    assert.equal(this.input.val(), "$ 123", "text is correct");
+    assert.equal(this.instance.option("value"), 123, "value is positive");
+});
+
 QUnit.test("setting value to undefined should work correctly", function(assert) {
     this.instance.option({
         format: "#0",
