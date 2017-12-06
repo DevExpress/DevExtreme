@@ -2003,7 +2003,6 @@ QUnit.test("virtual items when virtual scrolling enabled", function(assert) {
 });
 
 QUnit.test("virtual items at begin", function(assert) {
-    this.dataController.setViewportItemIndex(0);
     var virtualItemsCount = this.dataController.virtualItemsCount();
     assert.ok(virtualItemsCount);
     assert.deepEqual(virtualItemsCount, {
@@ -4264,7 +4263,6 @@ QUnit.test("Apply search for string and number column when change dataSource", f
     that.dataController.searchByText('20');
 
     that.dataSource = new DataSource({
-        _preferSync: true,
         store: [
             { stringField: 'Test150', numberField: 20 },
             { stringField: 'Test200', numberField: 200 },
@@ -4274,11 +4272,51 @@ QUnit.test("Apply search for string and number column when change dataSource", f
 
     that.dataController.setDataSource(that.dataSource);
 
+    sinon.spy(errors, "log");
+
     that.dataSource.load();
     //assert
+    assert.equal(errors.log.lastCall.args[0], "W1005", "Warning about double loading is raised");
     assert.equal(that.dataController.items().length, 2);
     assert.equal(that.dataController.items()[0].data.numberField, 20, '20 equals searchText "20"');
     assert.equal(that.dataController.items()[1].data.stringField, 'Test200', '200 contains searchText "20"');
+
+    errors.log.restore();
+});
+
+QUnit.test("Apply search when one empty column is without dataType", function(assert) {
+    //arrange
+    var that = this;
+
+    //act
+    this.applyOptions({
+        searchPanel: { text: '20' },
+        columns: [
+            { dataField: 'stringField', dataType: 'string' },
+            { caption: "Empty" },
+            { dataField: 'numberField', dataType: 'number' }]
+    });
+
+    that.dataSource = new DataSource({
+        store: [
+            { stringField: 'Test150', numberField: 20 },
+            { stringField: 'Test200', numberField: 200 },
+            { stringField: 'Test350', numberField: 2000 }
+        ]
+    });
+
+    that.dataController.setDataSource(that.dataSource);
+
+    sinon.spy(errors, "log");
+
+    that.dataSource.load();
+    //assert
+    assert.strictEqual(errors.log.callCount, 0, "Warning about double loading is not raised");
+    assert.equal(that.dataController.items().length, 2);
+    assert.equal(that.dataController.items()[0].data.numberField, 20, '20 equals searchText "20"');
+    assert.equal(that.dataController.items()[1].data.stringField, 'Test200', '200 contains searchText "20"');
+
+    errors.log.restore();
 });
 
 QUnit.test("Apply search for string column without reloading when all dataTypes defined", function(assert) {

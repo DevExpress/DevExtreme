@@ -188,6 +188,7 @@ var VirtualScrollingDataSourceAdapterExtender = (function() {
 
             if(isReload || operationTypes.reload) {
                 that._virtualScrollController.reset();
+                dataSource.items().length = 0;
                 that._isLoaded = false;
 
                 updateLoading(that);
