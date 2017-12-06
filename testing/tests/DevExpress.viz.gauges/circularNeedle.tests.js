@@ -96,6 +96,58 @@ QUnit.test('getTooltipParameters', function(assert) {
     assert.deepEqual(needle.render(options).resize(this.layout).getTooltipParameters(), { x: x, y: y, offset: 2, color: 'black', value: 25 });
 });
 
+QUnit.test('render. when offset is defined', function(assert) {
+    options.offset = 10;
+
+    needle.render(options).resize(this.layout);
+
+    assert.deepEqual(needle._element._stored_settings, { points: [198, 91, 198, 30, 202, 30, 202, 91], type: 'area' }, '_element settings');
+});
+
+QUnit.test('Dicrease offsets and spindle size if radius is less than minRadius', function(assert) {
+    options.minRadius = 160;
+    options.offset = 10;
+
+    needle.render(options).resize(this.layout);
+
+    assert.deepEqual(needle._element._stored_settings, { points: [198, 96, 198, 25, 202, 25, 202, 96], type: 'area' }, '_element settings');
+    assert.deepEqual(needle._spindleOuter._stored_settings, { cx: 200, cy: 100, r: 3, 'class': 'dxg-spindle-border' }, '_spindleOuter settings');
+    assert.deepEqual(needle._spindleInner._stored_settings, { cx: 200, cy: 100, r: 2, fill: 'green', 'class': 'dxg-spindle-hole' }, '_spindleInner settings');
+
+    assert.deepEqual(needle._trackerElement._stored_settings, { points: [190, 25, 190, 96, 210, 96, 210, 25], type: 'area' }, '_tracker settings');
+});
+
+QUnit.test('Do not dicrease offsets and spindle size if radius is greater than minRadius', function(assert) {
+    options.minRadius = 60;
+
+    needle.render(options).resize(this.layout);
+
+    assert.deepEqual(needle._element._stored_settings, { points: [198, 91, 198, 20, 202, 20, 202, 91], type: 'area' }, '_element settings');
+    assert.deepEqual(needle._spindleOuter._stored_settings, { cx: 200, cy: 100, r: 6, 'class': 'dxg-spindle-border' }, '_spindleOuter settings');
+    assert.deepEqual(needle._spindleInner._stored_settings, { cx: 200, cy: 100, r: 4, fill: 'green', 'class': 'dxg-spindle-hole' }, '_spindleInner settings');
+});
+
+QUnit.test('getTooltipParameters when dicresed offsets', function(assert) {
+    var x = 200 + Math.cos(Math.PI * 0.75) * 42,
+        y = 100 - Math.sin(Math.PI * 0.75) * 42;
+    options.minRadius = 160;
+
+    assert.deepEqual(needle.render(options).resize(this.layout).getTooltipParameters(), { x: x, y: y, offset: 2, color: 'black', value: 25 });
+});
+
+QUnit.test('not valid (offsets too big)', function(assert) {
+    options.offset = 40;
+    options.indentFromCenter = 40;
+    assert.ok(!needle.render(options).resize(this.layout).visible);
+});
+
+QUnit.test('valid (offsets is dicreased if minRadius is set)', function(assert) {
+    options.offset = 40;
+    options.indentFromCenter = 40;
+    options.minRadius = 160;
+    assert.ok(needle.render(options).resize(this.layout).visible);
+});
+
 QUnit.module('TriangleNeedle', {
     beforeEach: function() {
         renderer = new vizMocks.Renderer();
@@ -178,6 +230,14 @@ QUnit.test('getTooltipParameters', function(assert) {
     var x = 200 + Math.cos(Math.PI * 0.75) * 44.5,
         y = 100 - Math.sin(Math.PI * 0.75) * 44.5;
     assert.deepEqual(needle.render(options).resize(this.layout).getTooltipParameters(), { x: x, y: y, offset: 2, color: 'black', value: 25 });
+});
+
+QUnit.test('Dicrease offsets and spindle size if radius is less than minRadius', function(assert) {
+    options.minRadius = 160;
+
+    needle.render(options).resize(this.layout);
+
+    assert.deepEqual(needle._element._stored_settings, { points: [198, 96, 200, 20, 202, 96], type: 'area' }, '_element settings');
 });
 
 QUnit.module('TwoColorRectangleNeedle', {
@@ -291,4 +351,13 @@ QUnit.test('getTooltipParameters', function(assert) {
     var x = 200 + Math.cos(Math.PI * 0.75) * 44.5,
         y = 100 - Math.sin(Math.PI * 0.75) * 44.5;
     assert.deepEqual(needle.render(options).resize(this.layout).getTooltipParameters(), { x: x, y: y, offset: 2, color: 'black', value: 25 });
+});
+
+QUnit.test('Dicrease offsets and spindle size if radius is less than minRadius', function(assert) {
+    options.minRadius = 160;
+
+    needle.render(options).resize(this.layout);
+
+    assert.deepEqual(needle._firstElement._stored_settings, { points: [198, 96, 198, 42, 202, 42, 202, 96], type: 'area' }, '_firstElement settings');
+    assert.deepEqual(needle._secondElement._stored_settings, { points: [198, 39, 198, 20, 202, 20, 202, 39], fill: 'white', 'class': 'dxg-part', type: 'area' }, '_secondElement settings');
 });

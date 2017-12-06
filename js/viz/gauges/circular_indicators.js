@@ -29,40 +29,19 @@ var SimpleIndicator = BaseIndicator.inherit({
 
     _getTrackerSettings: function() {
         var options = this._options,
-            x = options.x, y = options.y - (options.radius + _Number(options.indentFromCenter)) / 2,
+            radius = this._getRadius(),
+            indentFromCenter = this._getIndentFromCenter(),
+            x = options.x, y = options.y - (radius + indentFromCenter) / 2,
             width = options.width / 2,
-            length = (options.radius - _Number(options.indentFromCenter)) / 2;
+            length = (radius - indentFromCenter) / 2;
         width > 10 || (width = 10);
         length > 10 || (length = 10);
         return { points: [x - width, y - length, x - width, y + length, x + width, y + length, x + width, y - length] };
     },
 
-    _renderSpindle: function() {
-        var that = this,
-            options = that._options,
-            gapSize;
-
-        if(options.spindleSize > 0) {
-            gapSize = _Number(options.spindleGapSize) || 0;
-            if(gapSize > 0) {
-                gapSize = gapSize <= options.spindleSize ? gapSize : _Number(options.spindleSize);
-            }
-            that._spindleOuter = that._spindleOuter || that._renderer.circle().append(that._rootElement);
-            that._spindleInner = that._spindleInner || that._renderer.circle().append(that._rootElement);
-            that._spindleOuter.attr({ 'class': 'dxg-spindle-border', cx: options.x, cy: options.y, r: options.spindleSize / 2 });
-            that._spindleInner.attr({ 'class': 'dxg-spindle-hole', cx: options.x, cy: options.y, r: gapSize / 2, fill: options.containerBackgroundColor });
-        }
-    },
-
     _render: function() {
         var that = this;
         that._renderPointer();
-        that._renderSpindle();
-    },
-
-    _clearSpindle: function() {
-        delete this._spindleOuter;
-        delete this._spindleInner;
     },
 
     _clearPointer: function() {
@@ -71,7 +50,14 @@ var SimpleIndicator = BaseIndicator.inherit({
 
     _clear: function() {
         this._clearPointer();
-        this._clearSpindle();
+    },
+
+    _getIndentFromCenter: function(radius) {
+        return Number(this._options.indentFromCenter) || 0;
+    },
+
+    _getRadius: function() {
+        return 0;
     },
 
     measure: function(layout) {
@@ -85,17 +71,84 @@ var SimpleIndicator = BaseIndicator.inherit({
     getTooltipParameters: function() {
         var options = this._options,
             cosSin = _getCosAndSin(this._actualPosition),
-            r = (options.radius + _Number(options.indentFromCenter)) / 2;
+            r = (this._getRadius() + this._getIndentFromCenter()) / 2;
         return { x: options.x + cosSin.cos * r, y: options.y - cosSin.sin * r, value: this._currentValue, color: options.color, offset: options.width / 2 };
     }
 });
 
-var rectangleNeedle = SimpleIndicator.inherit({
+var NeedleIndicator = SimpleIndicator.inherit({
+    _isVisible: function(layout) {
+        var indentFromCenter = this._adjustOffset(Number(this._options.indentFromCenter), layout.radius),
+            offset = this._adjustOffset(Number(this._options.offset), layout.radius);
+
+        return layout.radius - indentFromCenter - offset > 0;
+    },
+
+    getOffset: function() {
+        return 0;
+    },
+
+    _adjustOffset: function(value, radius) {
+        var options = this._options,
+            minRadius = Number(options.minRadius),
+            diff = radius / minRadius;
+
+        if(diff < 1) {
+            value = Math.floor(value * diff);
+        }
+
+        return value || 0;
+    },
+
+    _getIndentFromCenter: function(radius) {
+        return this._adjustOffset(Number(this._options.indentFromCenter), this._options.radius);
+    },
+
+    _getRadius: function() {
+        var options = this._options;
+
+        return options.radius - this._adjustOffset(Number(options.offset), options.radius);
+    },
+
+    _renderSpindle: function() {
+        var that = this,
+            options = that._options,
+            radius = options.radius,
+            spindleSize = this._adjustOffset(_Number(options.spindleSize) / 2, radius) * 2,
+            gapSize;
+
+        gapSize = this._adjustOffset(_Number(options.spindleGapSize) / 2, radius) * 2 || 0;
+        if(gapSize > 0) {
+            gapSize = gapSize <= spindleSize ? gapSize : spindleSize;
+        }
+
+        if(spindleSize > 0) {
+            that._spindleOuter = that._spindleOuter || that._renderer.circle().append(that._rootElement);
+            that._spindleInner = that._spindleInner || that._renderer.circle().append(that._rootElement);
+            that._spindleOuter.attr({ 'class': 'dxg-spindle-border', cx: options.x, cy: options.y, r: spindleSize / 2 });
+            that._spindleInner.attr({ 'class': 'dxg-spindle-hole', cx: options.x, cy: options.y, r: gapSize / 2, fill: options.containerBackgroundColor });
+        }
+    },
+
+    _render: function() {
+        var that = this;
+        that.callBase();
+        that._renderSpindle();
+    },
+
+    _clear: function() {
+        this.callBase();
+        delete this._spindleOuter;
+        delete this._spindleInner;
+    }
+});
+
+var rectangleNeedle = NeedleIndicator.inherit({
     _renderPointer: function() {
         var that = this,
             options = that._options,
-            y2 = options.y - options.radius,
-            y1 = options.y - _Number(options.indentFromCenter),
+            y2 = options.y - this._getRadius(),
+            y1 = options.y - this._getIndentFromCenter(),
             x1 = options.x - options.width / 2,
             x2 = x1 + _Number(options.width);
 
@@ -104,12 +157,12 @@ var rectangleNeedle = SimpleIndicator.inherit({
     }
 });
 
-var triangleNeedle = SimpleIndicator.inherit({
+var triangleNeedle = NeedleIndicator.inherit({
     _renderPointer: function() {
         var that = this,
             options = that._options,
-            y2 = options.y - options.radius,
-            y1 = options.y - _Number(options.indentFromCenter),
+            y2 = options.y - this._getRadius(),
+            y1 = options.y - this._getIndentFromCenter(),
             x1 = options.x - options.width / 2,
             x2 = options.x + options.width / 2;
 
@@ -118,14 +171,14 @@ var triangleNeedle = SimpleIndicator.inherit({
     }
 });
 
-var twoColorNeedle = SimpleIndicator.inherit({
+var twoColorNeedle = NeedleIndicator.inherit({
     _renderPointer: function() {
         var that = this,
             options = that._options,
             x1 = options.x - options.width / 2,
             x2 = options.x + options.width / 2,
-            y4 = options.y - options.radius,
-            y1 = options.y - _Number(options.indentFromCenter),
+            y4 = options.y - this._getRadius(),
+            y1 = options.y - this._getIndentFromCenter(),
             fraction = _Number(options.secondFraction) || 0,
             y2,
             y3;
