@@ -98,6 +98,8 @@ var EditDecorator = Class.inherit({
 
     visibilityChange: noop,
 
+    getExcludedSelectors: noop,
+
     dispose: noop
 
 });
