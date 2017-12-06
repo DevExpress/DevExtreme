@@ -4082,6 +4082,35 @@ if(browser.msie && parseInt(browser.version) <= 11) {
     });
 }
 
+QUnit.test("search text when scrolling mode virtual and one column is not defined", function(assert) {
+    //arrange, act
+
+    var dataSource = [
+        { "CompanyName": "K&S Music" },
+        { "CompanyName": "Super Mart of the West" },
+        { "CompanyName": "Electronics Depot" },
+        { "CompanyName": "K&S Music" },
+        { "CompanyName": "Kiwi Market" }
+    ];
+
+    var dataGrid = createDataGrid({
+        dataSource: dataSource,
+        loadingTimeout: undefined,
+        scrolling: {
+            mode: "virtual"
+        },
+        searchPanel: {
+            text: 'Kiwi'
+        },
+        paging: {
+            pageSize: 2
+        },
+        columns: ["CompanyName", "Undefined"] }
+    );
+
+    assert.equal(dataGrid.getVisibleRows().length, 1, "items were filtered");
+});
+
 QUnit.module("Assign options", {
     beforeEach: function() {
         this.clock = sinon.useFakeTimers();
