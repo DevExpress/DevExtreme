@@ -1463,6 +1463,9 @@ module.exports = {
                     }
 
                     for(i = 0; i < columns.length; i++) {
+                        if(!columns[i].dataField && columns[i].calculateCellValue === columns[i].defaultCalculateCellValue) {
+                            continue;
+                        }
                         if(!columns[i].dataType || (checkSerializers && columns[i].deserializeValue && columns[i].serializationFormat === undefined)) {
                             return false;
                         }
