@@ -928,7 +928,6 @@ function createGridView(options, userOptions) {
     });
 }());
 
-
 ///Synchronize columns module///
 (function() {
     QUnit.module('Synchronize columns', {
@@ -1679,6 +1678,29 @@ function createGridView(options, userOptions) {
 
         //assert
         assert.strictEqual(colWidths, totalWidths, "synchronize widths by columns");
+    });
+
+    QUnit.test("Disable the bestFit mode before correctColumnWidths", function(assert) {
+        //arrange
+        var defaultOptions = {
+                columnsController: new MockColumnsController([{ caption: 'Column 1' }, { caption: 'Column 2' }, { caption: 'Column 3' }]),
+                dataController: new MockDataController({
+                    items: [{ values: [10, 12, 'test 1'] }]
+                })
+            },
+            gridView = this.createGridView(defaultOptions, { columnAutoWidth: true }),
+            testElement = $('<div />').width(300).appendTo($('#container'));
+
+        var stub = sinon.stub(this.resizingController, "_correctColumnWidths", function() {
+            var $tables = gridView.element().find(".dx-datagrid-table");
+            assert.ok($tables.hasClass("dx-datagrid-table-fixed"), "the best fit mode is disabled");
+        });
+
+        //act
+        gridView.render(testElement);
+
+        //assert
+        assert.ok(stub.calledOnce);
     });
 }());
 
