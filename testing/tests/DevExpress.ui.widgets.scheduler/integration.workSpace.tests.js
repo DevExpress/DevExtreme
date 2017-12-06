@@ -734,7 +734,7 @@ QUnit.test("dataCellTemplate should have correct options", function(assert) {
             }
         ],
         dataCellTemplate: function(itemData, index, $container) {
-            if(index === 3) templateOptions = itemData;
+            if(index === 3 && $($container).hasClass("dx-scheduler-date-table-cell")) templateOptions = itemData;
         }
     });
 
