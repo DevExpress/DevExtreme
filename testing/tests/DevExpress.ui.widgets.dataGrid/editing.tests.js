@@ -9960,7 +9960,7 @@ QUnit.module('Edit Form', {
         };
 
         this.setupModules = function(that) {
-            setupDataGridModules(that, ['data', 'columns', 'rows', 'masterDetail', 'editing', 'editorFactory', 'selection', 'headerPanel', 'columnFixing', 'validating'], {
+            setupDataGridModules(that, ['data', 'columns', 'rows', 'masterDetail', 'editing', 'editorFactory', 'selection', 'headerPanel', 'columnFixing', 'validating', 'keyboardNavigation'], {
                 initViews: true
             });
         };
@@ -10750,6 +10750,49 @@ QUnit.test("Render detail form row - creation а validator should not throw an e
     }
 });
 
+//T554950
+QUnit.testInActiveWindow("Focus on lookup column should be preserved after changing a value in lookup", function(assert) {
+    //arrange
+    this.options.useKeyboard = true;
+    this.options.dataSource.store = [{ name: "Bob", state: 1 }];
+    this.options.columns = ["name", {
+        dataField: "state",
+        setCellValue: function(rowData, value) {
+            rowData.state = value;
+        },
+        lookup: {
+            dataSource: [
+                { id: 1, state: "Alabama" },
+                { id: 2, state: "California" }
+            ],
+            valueExpr: "id",
+            displayExpr: "state"
+        }
+    }, ];
+    this.setupModules(this);
+    this.keyboardNavigationController.component.$element = function() {
+        return $(".dx-datagrid").parent();
+    };
+    this.rowsView.render($('#container'));
+
+    this.editRow(0);
+    this.clock.tick();
+
+    this.keyboardNavigationController.focus(this.getCellElement(0, 1));
+    this.clock.tick();
+
+    //assert
+    var $selectBoxElement = $(this.getCellElement(0, 1)).find(".dx-selectbox").first();
+    assert.ok($selectBoxElement.hasClass("dx-state-focused"), "second cell is focused");
+
+    //act
+    $selectBoxElement.trigger("dxpointerdown");
+    $selectBoxElement.dxSelectBox("instance").option("value", 2);
+    this.clock.tick();
+
+    //assert
+    assert.ok($(this.getCellElement(0, 1)).find(".dx-selectbox").hasClass("dx-state-focused"), "second cell is focused");
+});
 
 
 QUnit.module('Editing - "popup" mode', {
