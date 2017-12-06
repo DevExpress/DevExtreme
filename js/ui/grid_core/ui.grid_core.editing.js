@@ -1932,6 +1932,13 @@ module.exports = {
                         editingController.resetRowAndPageIndices(true);
                     });
                 },
+                changeRowExpand: function(key) {
+                    var editingController = this.getController("editing");
+                    if(editingController.isEditing()) {
+                        editingController.cancelEditData();
+                    }
+                    return this.callBase.apply(this, arguments);
+                },
                 _updateItemsCore: function(change) {
                     this.callBase(change);
 
