@@ -448,6 +448,22 @@ QUnit.test("onValueChanged callback", function(assert) {
     assert.equal(called, 4);
 });
 
+QUnit.test("onValueChanged callback shouldn't have event if value was changed programmatically", function(assert) {
+    var textEditor = $("#texteditor").dxTextEditor({
+        valueChangeEvent: 'keyup change',
+    }).dxTextEditor("instance");
+
+    this.keyboard
+        .type("123")
+        .change();
+
+    textEditor.option("onValueChanged", function(args) {
+        assert.equal(args.event, undefined, "Event wasn't passed to callback");
+    });
+
+    textEditor.option("value", "value is set programmatically");
+});
+
 QUnit.test("disabled", function(assert) {
     this.instance.option("disabled", true);
     assert.ok(this.input.prop("disabled"));
