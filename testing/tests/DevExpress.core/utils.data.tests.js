@@ -397,6 +397,24 @@ QUnit.test("multi-level prop instead of primitives", function(assert) {
     });
 });
 
+QUnit.test("multi-level prop instead of function", function(assert) {
+    var called = 0;
+
+    var obj = {
+        prop: function() {
+            called++;
+            return {
+                subProp: function() {
+                    called++;
+                }
+            };
+        }
+    };
+
+    SETTER("prop.subProp.subProp2")(obj, function() { }, { functionsAsIs: true });
+    assert.equal(called, 0);
+});
+
 QUnit.module("setter with wrapped variables", {
     beforeEach: function() {
         variableWrapper.inject(mockVariableWrapper);
