@@ -474,3 +474,19 @@ QUnit.test("multi-level prop into the wrapped value", function(assert) {
     setter(obj, "New value");
     assert.equal(obj().prop().subProp, "New value");
 });
+
+QUnit.test("multi-level prop instead of wrapped value without unwrapping", function(assert) {
+    assert.expect(0);
+    variableWrapper.inject({
+        unwrap: function() {
+            assert.ok(false, "'unwrap' should not be called");
+            return this.callBase.apply(this, arguments);
+        }
+    });
+    var mockWrapper = variableWrapper.wrap,
+        obj = mockWrapper({
+            prop: mockWrapper(undefined)
+        });
+
+    SETTER("prop.subProp")(obj, "Nested value", { unwrapObservables: false });
+});

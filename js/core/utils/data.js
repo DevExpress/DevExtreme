@@ -142,7 +142,7 @@ var compileSetter = function(expr) {
 
         if(target === undefined) {
             target = {};
-            compileSetter(targetGetterPath)(unwrapVariable(obj), target, options);
+            compileSetter(targetGetterPath)(unwrap(obj, options), target, options);
         }
 
         var prevTargetValue = readPropValue(target, targetPropName);
