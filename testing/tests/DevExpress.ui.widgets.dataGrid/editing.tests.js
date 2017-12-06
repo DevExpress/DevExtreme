@@ -9285,11 +9285,10 @@ QUnit.test("When showing dxDataGrid in detail, 'select all' function of master g
         showCheckBoxesMode: "always"
     };
 
-    this.editingController._editRowIndex = 0;
-
     //act
     this.rowsView.render(testElement);
     this.dataController.expandRow(this.dataController.getKeyByRowIndex(2));
+    this.editingController.editRow(0);
     this.clock.tick();
     this.selectAll();
 
@@ -9297,6 +9296,21 @@ QUnit.test("When showing dxDataGrid in detail, 'select all' function of master g
     assert.ok(!testElement.find('.' + rowClass).first().hasClass(rowSelectionClass), 'row that editing now has no selection class');
     assert.equal(testElement.find('.' + rowClass).length, 13, "1 header row, 7 content rows, 3 detail row (1 header and 2 content), 2 freespace row");
     assert.equal(testElement.find('.' + rowSelectionClass).length, 6, "7 rows - 1 row that edit, 2 detail row doesn't selected");
+});
+
+//T579296
+QUnit.test("cancel edit row after expand row", function(assert) {
+    var testElement = $('#container');
+
+    this.rowsView.render(testElement);
+
+    this.editingController.editRow(2);
+
+    assert.ok(this.editingController.isEditing(), "editable row is showed");
+
+    this.dataController.expandRow(1);
+
+    assert.notOk(this.editingController.isEditing(), "editable row is removed");
 });
 
 //T174302
