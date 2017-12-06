@@ -4163,6 +4163,30 @@ QUnit.test("loadOptions.filter should be correct when user filter is also used",
     assert.deepEqual(filter, [["!", ["id", 1]], ["!", ["id", 2]], ["id", ">", 0]], "filter is correct");
 });
 
+QUnit.test("loadOptions.filter should be correct after some items selecting/deselecting", function(assert) {
+    var load = sinon.stub().returns([{ id: 1, text: "item 1" }, { id: 2, text: "item 2" }]),
+        $tagBox = $("#tagBox").dxTagBox({
+            dataSource: {
+                load: load
+            },
+            valueExpr: "id",
+            displayExpr: "text",
+            opened: true,
+            hideSelectedItems: true
+        }),
+        tagBox = $tagBox.dxTagBox("instance");
+
+    $(tagBox._$list.find(".dx-list-item").eq(0)).trigger("dxclick");
+
+    var filter = load.lastCall.args[0].filter;
+    assert.deepEqual(filter, [["!", ["id", 1]]], "filter is correct");
+
+    $($tagBox.find(".dx-tag-remove-button").eq(0)).trigger("dxclick");
+
+    filter = load.lastCall.args[0].filter;
+    assert.deepEqual(filter, null, "filter is correct");
+});
+
 QUnit.module("deprecated options");
 
 QUnit.test("the 'values' option should work correctly", function(assert) {

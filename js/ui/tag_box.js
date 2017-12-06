@@ -1156,13 +1156,13 @@ var TagBox = SelectBox.inherit({
         if(typeUtils.isString(valueGetterExpr) && valueGetterExpr !== "this") {
             var filter = this._dataSourceFilterExpr();
 
-            if(!this._userFilter) {
-                this._userFilter = dataSource.filter();
+            if(this._userFilter === undefined) {
+                this._userFilter = dataSource.filter() || null;
             }
 
             this._userFilter && filter.push(this._userFilter);
 
-            filter.length && dataSource.filter(filter);
+            filter.length ? dataSource.filter(filter) : dataSource.filter(null);
 
         } else {
             dataSource.filter(this._dataSourceFilterFunction.bind(this));
