@@ -2557,6 +2557,26 @@ QUnit.test("list item should be duplicated on drag start", function(assert) {
     assert.equal($items.length, 1, "duplicate item was removed");
 });
 
+QUnit.test("cached items doesn't contains a ghost item after reordering", function(assert) {
+    var $list = $("#list").dxList({
+            items: ["0", "1", "2"],
+            allowItemReordering: true
+        }),
+        list = $list.dxList("instance");
+
+    var $items = $list.find(toSelector(LIST_ITEM_CLASS)),
+        pointer = reorderingPointerMock($items.first(), this.clock);
+
+    pointer.dragStart(0.5).drag(0.6);
+    this.clock.tick();
+    pointer.dragEnd();
+
+    var cachedItems = list._itemElements();
+
+    assert.equal(cachedItems.length, 3, "Cached items contains 3 items");
+    assert.notOk(cachedItems.hasClass(REOREDERING_ITEM_GHOST_CLASS), "Cached items isn't contain a ghost item");
+});
+
 QUnit.test("ghost item should be moved by drag", function(assert) {
     var $list = $("#templated-list").dxList({
         items: ["0"],
