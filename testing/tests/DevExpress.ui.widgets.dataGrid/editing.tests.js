@@ -9306,11 +9306,11 @@ QUnit.test("cancel edit row after expand row", function(assert) {
 
     this.editingController.editRow(2);
 
-    assert.strictEqual(this.editingController._editRowIndex, 2);
+    assert.ok(this.editingController.isEditing(), "editable row is showed");
 
     this.dataController.expandRow(1);
 
-    assert.strictEqual(this.editingController._editRowIndex, -1);
+    assert.notOk(this.editingController.isEditing(), "editable row is removed");
 });
 
 //T174302
