@@ -65,25 +65,33 @@ QUnit.test("pressing '-' button should revert the number", function(assert) {
         value: 123.456
     });
 
-    this.keyboard.caret(3).keyDown(NUMPAD_MINUS_KEY);
+    this.keyboard.caret(3).keyDown(NUMPAD_MINUS_KEY).input("-");
     assert.equal(this.input.val(), "-123.456", "value is correct");
-    assert.equal(this.instance.option("value"), -123.456, "value is correct");
+    assert.equal(this.instance.option("value"), 123.456, "value should not be changed before valueChange event");
     assert.deepEqual(this.keyboard.caret(), { start: 4, end: 4 }, "caret is correct");
+    this.keyboard.change();
+    assert.equal(this.instance.option("value"), -123.456, "value has been changed after valueChange event");
 
-    this.keyboard.keyDown(NUMPAD_MINUS_KEY);
+    this.keyboard.keyDown(NUMPAD_MINUS_KEY).input("-");
     assert.equal(this.input.val(), "123.456", "value is correct");
-    assert.equal(this.instance.option("value"), 123.456, "value is correct");
+    assert.equal(this.instance.option("value"), -123.456, "value should not be changed before valueChange event");
     assert.deepEqual(this.keyboard.caret(), { start: 3, end: 3 }, "caret is correct");
+    this.keyboard.change();
+    assert.equal(this.instance.option("value"), 123.456, "value has been changed after valueChange event");
 
-    this.keyboard.keyDown(MINUS_KEY);
+    this.keyboard.caret(3).keyDown(MINUS_KEY).input("-");
     assert.equal(this.input.val(), "-123.456", "value is correct");
-    assert.equal(this.instance.option("value"), -123.456, "value is correct");
+    assert.equal(this.instance.option("value"), 123.456, "value should not be changed before valueChange event");
     assert.deepEqual(this.keyboard.caret(), { start: 4, end: 4 }, "caret is correct");
+    this.keyboard.change();
+    assert.equal(this.instance.option("value"), -123.456, "value has been changed after valueChange event");
 
-    this.keyboard.keyDown(MINUS_KEY);
+    this.keyboard.keyDown(MINUS_KEY).input("-");
     assert.equal(this.input.val(), "123.456", "value is correct");
-    assert.equal(this.instance.option("value"), 123.456, "value is correct");
+    assert.equal(this.instance.option("value"), -123.456, "value should not be changed before valueChange event");
     assert.deepEqual(this.keyboard.caret(), { start: 3, end: 3 }, "caret is correct");
+    this.keyboard.change();
+    assert.equal(this.instance.option("value"), 123.456, "value has been changed after valueChange event");
 });
 
 QUnit.test("pressing '-' button should revert zero number", function(assert) {
@@ -92,11 +100,11 @@ QUnit.test("pressing '-' button should revert zero number", function(assert) {
         value: 0
     });
 
-    this.keyboard.keyDown(MINUS_KEY);
+    this.keyboard.keyDown(MINUS_KEY).input("-").change();
     assert.equal(this.input.val(), "-0", "text is correct");
     assert.equal(1 / this.instance.option("value"), -Infinity, "value is negative");
 
-    this.keyboard.keyDown(MINUS_KEY);
+    this.keyboard.keyDown(MINUS_KEY).input("-").change();
     assert.equal(this.input.val(), "0", "text is correct");
     assert.equal(1 / this.instance.option("value"), Infinity, "value is positive");
 });
@@ -107,11 +115,11 @@ QUnit.test("pressing '-' with different positive and negative parts", function(a
         value: 123
     });
 
-    this.keyboard.keyDown(MINUS_KEY);
+    this.keyboard.keyDown(MINUS_KEY).input("-").change();
     assert.equal(this.input.val(), "($ 123)", "text is correct");
     assert.equal(this.instance.option("value"), -123, "value is negative");
 
-    this.keyboard.keyDown(MINUS_KEY);
+    this.keyboard.keyDown(MINUS_KEY).input("-").change();
     assert.equal(this.input.val(), "$ 123", "text is correct");
     assert.equal(this.instance.option("value"), 123, "value is positive");
 });
