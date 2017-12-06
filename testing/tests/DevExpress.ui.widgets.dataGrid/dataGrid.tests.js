@@ -4100,6 +4100,7 @@ QUnit.test("search text when scrolling mode virtual and one column is not define
 
     var dataGrid = createDataGrid({
         dataSource: dataSource,
+        loadingTimeout: undefined,
         scrolling: {
             mode: "virtual"
         },
@@ -4111,8 +4112,6 @@ QUnit.test("search text when scrolling mode virtual and one column is not define
         },
         columns: ["CompanyName", "Undefined"] }
     );
-
-    this.clock.tick();
 
     assert.equal(dataGrid.getVisibleRows().length, 1, "items were filtered");
 });
