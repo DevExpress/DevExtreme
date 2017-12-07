@@ -50,11 +50,10 @@ gulp.task('js-bundles-prod', function() {
 var createDebugBundlesStream = function(watch) {
     var debugConfig = Object.assign({}, webpackConfig);
     debugConfig.watch = watch;
-    debugConfig.debug = true;
     debugConfig.output = Object.assign({}, webpackConfig.output);
     debugConfig.output['pathinfo'] = true;
     if(!context.uglify) {
-        debugConfig.devtool = 'eval-sourcemap';
+        debugConfig.devtool = 'eval';
     }
 
     return gulp.src(DEBUG_BUNDLES)
