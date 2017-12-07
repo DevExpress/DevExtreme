@@ -438,7 +438,7 @@ var NumberBoxMask = NumberBoxBase.inherit({
         var text = this._input().val(),
             caret = this._caret();
 
-        if(this._lastKey === MINUS) {
+        if(this._lastKey === MINUS && text.charAt(caret.start - 1) === MINUS) {
             text = this._getEditedText(text, { start: caret.start - 1, end: caret.start }, "");
         }
 

@@ -124,6 +124,18 @@ QUnit.test("pressing '-' with different positive and negative parts", function(a
     assert.equal(this.instance.option("value"), 123, "value is positive");
 });
 
+QUnit.test("focusout after inverting sign should not lead to value changing", function(assert) {
+    this.instance.option("value", -123);
+
+    //note: keyboard mock keyDown send wrong key for '-' and can not be used here
+    this.input.trigger($.Event("keydown", { keyCode: MINUS_KEY, which: MINUS_KEY, key: "-" }));
+    this.keyboard.caret(3).input("-");
+    this.keyboard.blur().change();
+
+    assert.equal(this.input.val(), "123", "text is correct");
+    assert.equal(this.instance.option("value"), 123, "value is correct");
+});
+
 QUnit.test("setting value to undefined should work correctly", function(assert) {
     this.instance.option({
         format: "#0",
