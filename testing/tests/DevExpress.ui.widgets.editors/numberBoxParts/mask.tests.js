@@ -331,6 +331,14 @@ QUnit.test("percent format should work properly on value change", function(asser
     assert.equal(this.instance.option("value"), 0.45, "value is correct");
 });
 
+QUnit.test("escaped percent should be parsed correctly", function(assert) {
+    this.instance.option("format", "#0'%'");
+    this.keyboard.type("123").change();
+
+    assert.equal(this.input.val(), "123%", "text is correct");
+    assert.equal(this.instance.option("value"), 123, "value is correct");
+});
+
 QUnit.test("non-ldml percent format should work properly on value change", function(assert) {
     this.instance.option("value", "");
     this.instance.option("format", "percent");
