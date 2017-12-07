@@ -134,6 +134,10 @@ var dropDownAppointments = Class.inherit({
                     });
                 }),
                 onItemRendered: function(args) {
+                    if(!that.instance._allowDragging()) {
+                        return;
+                    }
+
                     var $item = args.itemElement,
                         itemData = args.itemData;
 

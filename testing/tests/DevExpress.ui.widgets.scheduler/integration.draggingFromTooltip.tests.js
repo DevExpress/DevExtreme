@@ -42,14 +42,14 @@ QUnit.module("Integration: Dragging from Tooltip", {
         ];
 
         this.createInstance = function(options) {
-            this.instance = $("#scheduler").dxScheduler($.extend(options, {
+            this.instance = $("#scheduler").dxScheduler($.extend({
                 editing: true,
                 height: 600,
                 views: ["month"],
                 currentView: "month",
                 dataSource: this.tasks,
                 currentDate: new Date(2015, 1, 9)
-            })).dxScheduler("instance");
+            }, options)).dxScheduler("instance");
         };
 
         this.clock = sinon.useFakeTimers();
@@ -58,6 +58,25 @@ QUnit.module("Integration: Dragging from Tooltip", {
         fx.off = false;
         this.clock.restore();
     }
+});
+
+QUnit.test("DropDownAppointment shouldn't be draggable if editing.allowDragging is false", function(assert) {
+    this.createInstance({
+        editing: {
+            allowDragging: false
+        }
+    });
+
+    var dropDown = this.instance.$element().find(".dx-scheduler-dropdown-appointments").dxDropDownMenu("instance");
+
+    dropDown.open();
+    var $ddAppointment = $(dropDown._list.$element().find(".dx-list-item").eq(0));
+
+    var apptsInstance = this.instance.getAppointmentsInstance(),
+        renderStub = sinon.stub(apptsInstance, "_renderItem");
+
+    $ddAppointment.trigger("dxdragstart");
+    assert.notOk(renderStub.calledOnce, "Phanton item was not rendered");
 });
 
 QUnit.test("Phantom appointment should be rendered after tooltip item dragStart", function(assert) {
