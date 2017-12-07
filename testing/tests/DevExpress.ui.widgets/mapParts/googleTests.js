@@ -304,6 +304,30 @@ QUnit.test("center with geocode error", function(assert) {
     });
 });
 
+QUnit.test("'center' option is null", function(assert) {
+    var done = assert.async(),
+        d1 = $.Deferred(),
+        map = $("#map").dxMap({
+            provider: "google",
+            center: null,
+            onReady: function() {
+                assert.equal(window.google.geocodeCalled, 0, "geocode not used");
+                assert.deepEqual(window.google.assignedCenter, window.geocodedWithErrorLocation, "center changed");
+
+                d1.resolve();
+            }
+        }).dxMap("instance");
+
+    d1.done(function() {
+        map.option("onUpdated", function() {
+            assert.equal(window.google.geocodeCalled, 1, "geocode used");
+            assert.deepEqual(window.google.assignedCenter, window.geocodedLocation, "center changed");
+            done();
+        });
+        map.option("center", LOCATIONS[0]);
+    });
+});
+
 QUnit.test("geocode should be called once for equal locations", function(assert) {
     var done = assert.async();
     var d1 = $.Deferred(),
