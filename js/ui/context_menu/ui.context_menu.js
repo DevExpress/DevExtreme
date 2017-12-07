@@ -988,7 +988,7 @@ var ContextMenu = MenuBase.inherit((function() {
 
         /**
         * @name dxContextMenuMethods_toggle
-         * @publicName toggle(showing)
+        * @publicName toggle(showing)
         * @param1 showing:boolean
         * @return Promise<void>
         */
