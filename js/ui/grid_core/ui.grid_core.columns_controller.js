@@ -1841,7 +1841,6 @@ module.exports = {
                                 targetGroupIndex--;
                             }
                             delete column.groupIndex;
-                            delete column.sortOrder;
                             updateColumnGroupIndexes(that);
                         }
 
