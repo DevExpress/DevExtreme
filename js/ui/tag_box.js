@@ -5,7 +5,8 @@ var $ = require("../core/renderer"),
     dataUtils = require("../core/element_data"),
     getPublicElement = require("../core/utils/dom").getPublicElement,
     devices = require("../core/devices"),
-    noop = require("../core/utils/common").noop,
+    commonUtils = require("../core/utils/common"),
+    noop = commonUtils.noop,
     isDefined = require("../core/utils/type").isDefined,
     arrayUtils = require("../core/utils/array"),
     typeUtils = require("../core/utils/type"),
@@ -914,7 +915,7 @@ var TagBox = SelectBox.inherit({
     },
 
     _renderTag: function(item, $input) {
-        var value = this._valueGetter(item) || item,
+        var value = commonUtils.ensureDefined(this._valueGetter(item), item),
             $tag = this._getTag(value);
 
         if($tag) {

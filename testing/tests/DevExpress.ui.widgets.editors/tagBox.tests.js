@@ -254,6 +254,26 @@ QUnit.test("option elements should be updated on value change", function(assert)
     });
 });
 
+QUnit.test("unselect item with value '0'", function(assert) {
+    var items = [{ id: 0, text: "eins" }, { id: 1, text: "zwei" }, { id: 2, text: "drei" }],
+        value = [0, 1],
+        $tagBox = $("#tagBox"),
+        tagBoxInstance = $tagBox
+            .dxTagBox({
+                items: items,
+                value: value,
+                valueExpr: "id",
+                displayExpr: "text"
+            }).dxTagBox("instance");
+
+    $tagBox
+        .find("." + TAGBOX_TAG_REMOVE_BUTTON_CLASS)
+        .first()
+        .trigger("dxclick");
+
+    assert.deepEqual(tagBoxInstance.option("value"), [1]);
+});
+
 
 QUnit.module("the 'name' option");
 
