@@ -5508,7 +5508,7 @@ QUnit.test("change editing.allowAdding with onCellPrepared and dataSource option
     this.clock.tick();
 
     //assert
-    var $addRowButton = dataGrid.element().find(".dx-datagrid-addrow-button");
+    var $addRowButton = dataGrid.$element().find(".dx-datagrid-addrow-button");
     assert.strictEqual($addRowButton.length, 1, "add row button is rendered");
 });
 
