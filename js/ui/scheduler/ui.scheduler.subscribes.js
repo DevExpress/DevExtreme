@@ -375,6 +375,19 @@ var subscribes = {
         options.callback(groupCount);
     },
 
+    mapAppointmentFields: function(config) {
+        var result = {
+            appointmentData: config.itemData,
+            appointmentElement: config.itemElement
+        };
+
+        if(config.itemData) {
+            result.targetedAppointmentData = this.fire("getTargetedAppointmentData", config.itemData, config.itemElement, config.itemIndex);
+        }
+
+        return result;
+    },
+
     updateResizableArea: function() {
         var $allResizableElements = this.$element().find(".dx-scheduler-appointment.dx-resizable");
 

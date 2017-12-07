@@ -281,6 +281,26 @@ QUnit.test("Click on the remove button should trigger the 'deleteAppointment' me
 
 });
 
+QUnit.test("Click on the item should trigger the 'mapAppointmentFields' method", function(assert) {
+    var notifyObserverStub = sinon.stub(this.widgetMock, "fire");
+    this.renderDropDownAppointmentsContainer().trigger("dxclick");
+
+    var dropDownMenu = $(".dx-scheduler-dropdown-appointments").dxDropDownMenu("instance"),
+        $dropDownAppointment = $(".dx-dropdownmenu-list .dx-scheduler-dropdown-appointment").first();
+
+    dropDownMenu.open();
+
+    $($dropDownAppointment).trigger("dxclick");
+
+    assert.ok(notifyObserverStub.called, "Observer was notified");
+    assert.equal(notifyObserverStub.getCall(4).args[0], "mapAppointmentFields", "The 'mapAppointmentFields' method was called");
+
+    assert.deepEqual(notifyObserverStub.getCall(4).args[1].itemData, {
+        startDate: new Date(2015, 1, 1),
+        text: "a"
+    }, "The 'mapAppointmentFields' method was called with correct args");
+});
+
 QUnit.test("Click on the item should trigger the 'showEditAppointmentPopup' method", function(assert) {
     var notifyObserverStub = sinon.stub(this.widgetMock, "fire");
     this.renderDropDownAppointmentsContainer().trigger("dxclick");
@@ -293,13 +313,7 @@ QUnit.test("Click on the item should trigger the 'showEditAppointmentPopup' meth
     $($dropDownAppointment).trigger("dxclick");
 
     assert.ok(notifyObserverStub.called, "Observer was notified");
-    assert.equal(notifyObserverStub.getCall(4).args[0], "showEditAppointmentPopup", "The 'showAppointmentPopup' method was called");
-    assert.deepEqual(notifyObserverStub.getCall(4).args[1], {
-        "data": {
-            text: "a",
-            startDate: new Date(2015, 1, 1)
-        }
-    }, "The 'showAppointmentPopup' method was called with correct args");
+    assert.equal(notifyObserverStub.getCall(5).args[0], "showEditAppointmentPopup", "The 'showAppointmentPopup' method was called");
 });
 
 QUnit.test("Click on list item should not close menu", function(assert) {

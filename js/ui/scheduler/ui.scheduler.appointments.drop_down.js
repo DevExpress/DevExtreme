@@ -35,12 +35,13 @@ var dropDownAppointments = Class.inherit({
         var $menu = $("<div>").addClass(DROPDOWN_APPOINTMENTS_CLASS)
             .appendTo(options.$container);
 
+        this._createAppointmentClickAction();
+
         this._createDropDownMenu({
             $element: $menu,
             items: items,
             itemTemplate: options.itemTemplate,
-            buttonWidth: options.buttonWidth,
-            onAppointmentClick: options.onAppointmentClick
+            buttonWidth: options.buttonWidth
         });
 
         this._paintMenuButton($menu, options.buttonColor, items);
@@ -95,10 +96,22 @@ var dropDownAppointments = Class.inherit({
         $element.css("box-shadow", "inset " + $element.outerWidth() + "px 0 0 0 rgba(0, 0, 0, 0.3)");
     },
 
+    _createAppointmentClickAction: function() {
+        this._appointmentClickAction = this.instance._createActionByOption("onAppointmentClick", {
+            afterExecute: (function(e) {
+                var config = e.args[0];
+
+                config.event.stopPropagation();
+                var mappedData = this.instance.fire("mapAppointmentFields", config);
+
+                this.instance.fire("showEditAppointmentPopup", { data: mappedData && mappedData.appointmentData });
+            }
+            ).bind(this)
+        });
+    },
     _createDropDownMenu: function(config) {
         var $menu = config.$element,
             items = config.items,
-            onAppointmentClick = config.onAppointmentClick,
             that = this;
 
         if(!DropDownMenu.getInstance($menu)) {
@@ -116,13 +129,7 @@ var dropDownAppointments = Class.inherit({
                 buttonWidth: config.buttonWidth,
                 onItemClick: function(args) {
                     args.component.open();
-
-                    if(typeUtils.isFunction(onAppointmentClick)) {
-                        onAppointmentClick.call(that.instance._appointments, args);
-                    }
-
-                    args.event.stopPropagation();
-                    that.instance.fire("showEditAppointmentPopup", { data: args.itemData });
+                    that._appointmentClickAction(args);
                 },
                 activeStateEnabled: false,
                 focusStateEnabled: false,
