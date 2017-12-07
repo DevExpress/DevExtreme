@@ -15,6 +15,7 @@ var eventsEngine = require("../../events/core/events_engine"),
 var NUMBER_FORMATTER_NAMESPACE = "dxNumberFormatter",
     MOVE_FORWARD = 1,
     MOVE_BACKWARD = -1,
+    MINUS = "-",
     MAXIMUM_FLOAT_LENGTH = 15;
 
 var ensureDefined = function(value, defaultValue) {
@@ -161,11 +162,11 @@ var NumberBoxMask = NumberBoxBase.inherit({
 
         this._lastKey = e.originalEvent.key;
 
-        var enteredChar = this._lastKey === "-" ? "" : this._lastKey,
+        var enteredChar = this._lastKey === MINUS ? "" : this._lastKey,
             newValue = this._tryParse(text, caret, enteredChar);
 
         if(newValue === undefined) {
-            if(this._lastKey !== "-") {
+            if(this._lastKey !== MINUS) {
                 e.originalEvent.preventDefault();
             }
 
@@ -256,10 +257,9 @@ var NumberBoxMask = NumberBoxBase.inherit({
     _tryParse: function(text, selection, char) {
         var editedText = this._getEditedText(text, selection, char),
             parsed = number.parse(editedText, this._getFormatPattern()),
-            minusPressed = char === "-",
             isValueChanged = parsed !== this._parsedValue;
 
-        if(!isValueChanged && !minusPressed && !this._isValueIncomplete(editedText)) {
+        if(!isValueChanged && char !== MINUS && !this._isValueIncomplete(editedText)) {
             return undefined;
         }
 
@@ -438,7 +438,7 @@ var NumberBoxMask = NumberBoxBase.inherit({
         var text = this._input().val(),
             caret = this._caret();
 
-        if(this._lastKey === "-") {
+        if(this._lastKey === MINUS) {
             text = this._getEditedText(text, { start: caret.start - 1, end: caret.start }, "");
         }
 
