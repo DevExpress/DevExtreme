@@ -15,6 +15,7 @@ var eventsEngine = require("../../events/core/events_engine"),
 var NUMBER_FORMATTER_NAMESPACE = "dxNumberFormatter",
     MOVE_FORWARD = 1,
     MOVE_BACKWARD = -1,
+    MINUS = "-",
     MAXIMUM_FLOAT_LENGTH = 15;
 
 var ensureDefined = function(value, defaultValue) {
@@ -161,11 +162,13 @@ var NumberBoxMask = NumberBoxBase.inherit({
 
         this._lastKey = e.originalEvent.key;
 
-        var enteredChar = this._lastKey === "-" ? "" : this._lastKey,
+        var enteredChar = this._lastKey === MINUS ? "" : this._lastKey,
             newValue = this._tryParse(text, caret, enteredChar);
 
         if(newValue === undefined) {
-            e.originalEvent.preventDefault();
+            if(this._lastKey !== MINUS) {
+                e.originalEvent.preventDefault();
+            }
 
             if(this._goToDecimalPart(text, caret)) {
                 this._moveCaret(1);
@@ -253,9 +256,10 @@ var NumberBoxMask = NumberBoxBase.inherit({
 
     _tryParse: function(text, selection, char) {
         var editedText = this._getEditedText(text, selection, char),
-            parsed = number.parse(editedText, this._getFormatPattern());
+            parsed = number.parse(editedText, this._getFormatPattern()),
+            isValueChanged = parsed !== this._parsedValue;
 
-        if(parsed === this._parsedValue && !this._isValueIncomplete(editedText)) {
+        if(!isValueChanged && char !== MINUS && !this._isValueIncomplete(editedText)) {
             return undefined;
         }
 
@@ -426,12 +430,17 @@ var NumberBoxMask = NumberBoxBase.inherit({
         var newValue = -1 * ensureDefined(this._parsedValue, null);
 
         if(this._isValueInRange(newValue)) {
-            this.option("value", newValue);
+            this._parsedValue = newValue;
         }
     },
 
     _formatValue: function() {
-        var text = this._input().val();
+        var text = this._input().val(),
+            caret = this._caret();
+
+        if(this._lastKey === MINUS) {
+            text = this._getEditedText(text, { start: caret.start - 1, end: caret.start }, "");
+        }
 
         if(this._isIncomplete(text)) {
             this._formattedValue = text;
@@ -439,7 +448,6 @@ var NumberBoxMask = NumberBoxBase.inherit({
         }
 
         var format = this._getFormatPattern(),
-            caret = this._caret(),
             decimalSeparator = number.getDecimalSeparator(),
             decimalSeparatorIndex = text.indexOf(decimalSeparator),
             caretOnFloatPart = decimalSeparatorIndex >= 0 && caret.start > decimalSeparatorIndex,
