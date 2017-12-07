@@ -297,6 +297,38 @@ QUnit.test("dxDataGrid - highlight timer was cleared on disposing for dataGrid w
     initMarkup($markup, controller, this);
 });
 
+//T576310
+QUnit.test("dxDataGrid - row template should rendered correctly with grouping", function(assert) {
+    var $markup = $(
+        "<div dx-data-grid=\"gridOptions\" dx-item-alias=\"employee\"></div>\
+        <script id=\"gridRow\" type=\"text/html\">\
+            <tr class=\"myrow\">\
+                <td>{{employee.data.value}}</td>\
+            </tr>\
+        </script>"
+    );
+    var controller = function($scope) {
+        $scope.gridOptions = {
+            dataSource: [{
+                value: "text1"
+            }, {
+                value: "text2"
+            }],
+            columns: [{ dataField: "value", groupIndex: 0 }],
+            rowTemplate: $("#gridRow")
+        };
+    };
+
+    initMarkup($markup, controller, this);
+    this.clock.tick(30);
+
+    var $rows = $(".dx-datagrid-rowsview tr");
+
+    assert.ok($rows.length, 3);
+    assert.ok($rows.eq(0).hasClass("dx-group-row"));
+    assert.ok($rows.eq(1).hasClass("myrow"));
+});
+
 QUnit.module("dxDataGrid", {
     beforeEach: function() {
         QUnit.timerIgnoringCheckers.register(ignoreAngularBrowserDeferTimer);
