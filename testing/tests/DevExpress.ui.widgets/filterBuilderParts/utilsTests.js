@@ -139,6 +139,7 @@ QUnit.module("Utils", function() {
     QUnit.test("isGroup", function(assert) {
         assert.ok(utils.isGroup([[], "and", []]));
         assert.ok(utils.isGroup(["and"]));
+        assert.ok(utils.isGroup([]));
     });
 
     QUnit.test("isEmptyGroup", function(assert) {
@@ -773,6 +774,14 @@ QUnit.module("Filter normalization", function() {
         group = utils.getNormalizedFilter(group, fields);
 
         assert.equal(group, null);
+    });
+
+    QUnit.test("get normalized filter from group with condition and empty inner group", function(assert) {
+        var group = [condition1, "or", []];
+
+        group = utils.getNormalizedFilter(group, fields);
+
+        assert.equal(group, condition1);
     });
 
     QUnit.test("get normalized filter from group with many inner groups", function(assert) {
