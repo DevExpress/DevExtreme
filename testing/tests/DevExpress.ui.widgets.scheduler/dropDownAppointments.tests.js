@@ -40,6 +40,9 @@ QUnit.module("Common", {
             _getAppointmentTemplate: function(template) {
                 return this._getTemplateByOption(template);
             },
+            _allowDragging: function() {
+                return true;
+            },
             fire: noop,
             deleteAppointment: noop,
             showAppointmentPopup: noop
