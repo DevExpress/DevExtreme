@@ -10,11 +10,11 @@ var $ = require("../../core/renderer"),
     DynamicProvider = require("./provider.dynamic"),
     errors = require("../widget/ui.errors"),
     Color = require("../../color"),
-    ajax = require("../../core/utils/ajax");
+    ajax = require("../../core/utils/ajax"),
+    isDefined = require("../../core/utils/type").isDefined;
 
 var GOOGLE_MAP_READY = "_googleScriptReady",
-    GOOGLE_URL = "https://maps.google.com/maps/api/js?sensor=false&callback=" + GOOGLE_MAP_READY;
-
+    GOOGLE_URL = "https://maps.googleapis.com/maps/api/js?callback=" + GOOGLE_MAP_READY;
 
 var CustomMarker;
 
@@ -108,6 +108,11 @@ var GoogleProvider = DynamicProvider.inherit({
     _geocodedLocations: {},
     _geocodeLocationImpl: function(location) {
         return new Promise(function(resolve) {
+            if(!isDefined(location)) {
+                resolve(new google.maps.LatLng(0, 0));
+                return;
+            }
+
             var geocoder = new google.maps.Geocoder();
             geocoder.geocode({ 'address': location }, function(results, status) {
                 if(status === google.maps.GeocoderStatus.OK) {
