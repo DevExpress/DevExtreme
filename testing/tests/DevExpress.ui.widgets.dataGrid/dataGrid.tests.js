@@ -5491,6 +5491,26 @@ QUnit.test("Hide group panel and search panel when calculateDisplayValue is defi
     assert.strictEqual(visibleColumns[1].groupIndex, 1, "groupIndex of the second column");
 });
 
+//T582855
+QUnit.test("change editing.allowAdding with onCellPrepared and dataSource options should update add row button", function(assert) {
+    //arrange
+    var dataGrid = createDataGrid({});
+
+    //act
+    dataGrid.option({
+        editing: {
+            allowAdding: true
+        },
+        onCellPrepared: function() {},
+        dataSource: []
+    });
+
+    this.clock.tick();
+
+    //assert
+    var $addRowButton = dataGrid.element().find(".dx-datagrid-addrow-button");
+    assert.strictEqual($addRowButton.length, 1, "add row button is rendered");
+});
 
 QUnit.module("API methods", {
     beforeEach: function() {
