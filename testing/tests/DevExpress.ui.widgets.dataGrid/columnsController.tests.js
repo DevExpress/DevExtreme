@@ -4200,6 +4200,20 @@ QUnit.test("getVisibleIndex when there is group column that is shown", function(
 
 });
 
+//T556327
+QUnit.test("sortOrder should be not reset after move column from group panel to headers", function(assert) {
+    //arrange
+    this.applyOptions({ columns: [{ dataField: "field1", groupIndex: 0, sortOrder: "desc" }, "field2", "field3"] });
+
+    //act
+    this.columnsController.moveColumn(0, 0, "group", "headers");
+
+    //assert
+    assert.strictEqual(this.columnsController.getVisibleColumns()[0].dataField, "field1");
+    assert.strictEqual(this.columnsController.getVisibleColumns()[0].sortOrder, "desc");
+    assert.strictEqual(this.columnsController.getVisibleColumns()[0].groupIndex, undefined);
+});
+
 QUnit.module("Column Option", { beforeEach: setupModule, afterEach: teardownModule });
 
 QUnit.test("update exist column parameter", function(assert) {
