@@ -138,7 +138,7 @@ var normalizeTemplateElement = function(element) {
 
     if($element.length === 1) {
         if($element.is("script")) {
-            $element = normalizeTemplateElement($element.html());
+            $element = normalizeTemplateElement($element.html().trim());
         } else if($element.is("table")) {
             $element = $element.children("tbody").contents();
         }
