@@ -101,10 +101,9 @@ var dropDownAppointments = Class.inherit({
         this._appointmentClickAction = this.instance._createActionByOption("onAppointmentClick", {
             afterExecute: (function(e) {
                 var config = e.args[0];
-
                 config.event.stopPropagation();
 
-                this.instance.fire("showEditAppointmentPopup", { data: config });
+                this.instance.fire("showEditAppointmentPopup", { data: config.appointmentData });
             }
             ).bind(this)
         });

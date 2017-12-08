@@ -155,7 +155,7 @@ var moduleOptions = {
                 };
 
                 return result;
-            },
+            }
         };
 
         var observer = {
