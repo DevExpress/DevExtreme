@@ -4364,7 +4364,7 @@ QUnit.testInActiveWindow("Searching should work correctly in grouped tagBox (T51
     assert.equal($.trim($tagContainer.text()), "Item1Item3", "selected values are rendered");
 });
 
-QUnit.test("focusout event should remove focus class from the widget", function(assert) {
+QUnit.testInActiveWindow("focusout event should remove focus class from the widget", function(assert) {
     var $tagBox = $("#tagBox").dxTagBox({}),
         $input = $tagBox.find("input");
 
