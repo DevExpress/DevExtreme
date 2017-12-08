@@ -326,7 +326,7 @@ QUnit.test("dxDataGrid - row template should rendered correctly with grouping", 
 
     var $rows = $(".dx-datagrid-rowsview tr");
 
-    assert.ok($rows.length, 3);
+    assert.equal($rows.length, 5);
     assert.ok($rows.eq(0).hasClass("dx-group-row"));
     assert.ok($rows.eq(1).hasClass("myrow"));
 });
