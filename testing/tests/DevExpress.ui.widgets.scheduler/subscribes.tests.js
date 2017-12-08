@@ -339,6 +339,28 @@ QUnit.test("'updateAppointmentStartDate' should work correct with custom data fi
     });
 });
 
+QUnit.test("'mapAppointmentFields' should call getTargetedAppointmentData", function(assert) {
+    this.createInstance();
+
+    var stub = sinon.stub(this.instance._subscribes, "getTargetedAppointmentData");
+
+    this.instance.fire("mapAppointmentFields", {
+        itemData: {
+            startDate: new Date(2015, 1, 1),
+            endDate: new Date(2015, 1, 1, 1),
+            allDay: true
+        }
+    });
+
+    var appointmentData = stub.getCall(0).args[0];
+
+    assert.deepEqual(appointmentData, {
+        startDate: new Date(2015, 1, 1),
+        endDate: new Date(2015, 1, 1, 1),
+        allDay: true
+    }, "Appointment data is OK");
+});
+
 QUnit.test("'formatDates' should work correct with custom data fields", function(assert) {
     this.createInstance({
         startDateExpr: "Start",
