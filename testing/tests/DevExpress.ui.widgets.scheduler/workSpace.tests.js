@@ -88,6 +88,19 @@ QUnit.testStart(function() {
 });
 
 (function() {
+    QUnit.test("Workspace week should set first day by firstDayOfWeek option if it is setted and this is different in localization", function(assert) {
+        var dateLocalizationSpy = sinon.spy(dateLocalization, "firstDayOfWeekIndex");
+
+        $("#scheduler-work-space").dxSchedulerWorkSpaceWeek({
+            views: ["week"],
+            currentView: "week",
+            currentDate: new Date(2017, 4, 25),
+            firstDayOfWeek: 0
+        }).dxSchedulerWorkSpaceWeek("instance");
+
+        assert.notOk(dateLocalizationSpy.called, "dateLocalization.firstDayOfWeekIndex wasn't called");
+    });
+
     QUnit.module("Work Space Base", {
         beforeEach: function() {
             this.instance = $("#scheduler-work-space").dxSchedulerWorkSpace().dxSchedulerWorkSpace("instance");
