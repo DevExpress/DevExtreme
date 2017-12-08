@@ -668,7 +668,10 @@ var TagBox = SelectBox.inherit({
         this._scrollContainer("end");
     },
 
-    _restoreInputText: noop,
+    _restoreInputText: function() {
+        this._clearTextValue();
+        this._clearFilter();
+    },
 
     _focusOutHandler: function(e) {
         var openedUseButtons = this.option("opened") && this.option("applyValueMode") === "useButtons";
@@ -680,7 +683,6 @@ var TagBox = SelectBox.inherit({
 
         this.callBase(e);
 
-        this._clearTextValue();
         this._clearTagFocus();
 
         this._scrollContainer("start");

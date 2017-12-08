@@ -4374,3 +4374,26 @@ QUnit.testInActiveWindow("focusout event should remove focus class from the widg
     $input.blur();
     assert.notOk($tagBox.hasClass(FOCUSED_CLASS), "focused class was removed");
 });
+
+QUnit.test("search filter should be cleared on close", function(assert) {
+    var $tagBox = $("#tagBox").dxTagBox({
+            items: ["111", "222", "333"],
+            searchTimeout: 0,
+            opened: true,
+            searchEnabled: true
+        }),
+        instance = $tagBox.dxTagBox("instance"),
+        $tagContainer = $tagBox.find("." + TAGBOX_TAG_CONTAINER_CLASS),
+        $input = $tagBox.find("input"),
+        kb = keyboardMock($input);
+
+    kb.type("111");
+    this.clock.tick();
+    assert.equal($(instance.content()).find("." + LIST_ITEM_CLASS).length, 1, "filter was applied");
+
+    $tagContainer.trigger("dxclick");
+    $tagContainer.trigger("dxclick");
+
+    assert.equal($input.val(), "", "input was cleared");
+    assert.equal($(instance.content()).find("." + LIST_ITEM_CLASS).length, 3, "filter was cleared");
+});
