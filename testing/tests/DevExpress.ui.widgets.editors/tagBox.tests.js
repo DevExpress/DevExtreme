@@ -4363,3 +4363,14 @@ QUnit.testInActiveWindow("Searching should work correctly in grouped tagBox (T51
     assert.equal($tagContainer.find("." + TAGBOX_TAG_CONTENT_CLASS).length, 2, "selected tags rendered");
     assert.equal($.trim($tagContainer.text()), "Item1Item3", "selected values are rendered");
 });
+
+QUnit.test("focusout event should remove focus class from the widget", function(assert) {
+    var $tagBox = $("#tagBox").dxTagBox({}),
+        $input = $tagBox.find("input");
+
+    $input.focus();
+    assert.ok($tagBox.hasClass(FOCUSED_CLASS), "focused class was applied");
+
+    $input.blur();
+    assert.notOk($tagBox.hasClass(FOCUSED_CLASS), "focused class was removed");
+});
