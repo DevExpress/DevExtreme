@@ -1008,16 +1008,23 @@ var dxRangeSelector = {
         * @name dxrangeselectoroptions_chart_equalbarwidth
         * @publicName equalBarWidth
         * @type boolean
-        * @default true
+        * @deprecated dxChartSeriesTypes_CommonSeries_ignoreEmptyPoints
         */
         equalBarWidth: true,
         /**
         * @name dxrangeselectoroptions_chart_barwidth
         * @publicName barWidth
         * @type number
-        * @default undefined
+        * @deprecated dxChartSeriesTypes_CommonSeries_barPadding
         */
         barWidth: undefined,
+        /**
+        * @name dxrangeselectoroptions_chart_bargrouppadding
+        * @publicName barGroupPadding
+        * @type number
+        * @default 0.3
+        */
+        barGroupPadding: 0.3,
         /**
         * @name dxrangeselectoroptions_chart_negativesaszeroes
         * @publicName negativesAsZeroes

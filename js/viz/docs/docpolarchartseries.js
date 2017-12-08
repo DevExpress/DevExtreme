@@ -633,6 +633,20 @@ var CommonPolarChartSeries = {
 		*/
     ignoreEmptyPoints: false,
     /**
+    * @name dxPolarChartSeriesTypes_CommonPolarChartSeries_barpadding
+    * @publicName barPadding
+    * @type number
+    * @default undefined
+    */
+    barPadding: undefined,
+    /**
+    * @name dxPolarChartSeriesTypes_CommonPolarChartSeries_barwidth
+    * @publicName barWidth
+    * @type number
+    * @default undefined
+    */
+    barWidth: undefined,
+    /**
 	* @name dxPolarChartSeriesTypes_CommonPolarChartSeries_label
 	* @publicName label
 	* @type object

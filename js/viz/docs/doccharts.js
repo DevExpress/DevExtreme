@@ -89,16 +89,23 @@ var dxChart = {
     * @name dxchartoptions_equalbarwidth
     * @publicName equalBarWidth
     * @type boolean
-    * @default true
+    * @deprecated dxChartSeriesTypes_CommonSeries_ignoreEmptyPoints
     */
     equalBarWidth: true,
     /**
     * @name dxchartoptions_barwidth
     * @publicName barWidth
     * @type number
-    * @default undefined
+    * @deprecated dxChartSeriesTypes_CommonSeries_barPadding
     */
     barWidth: undefined,
+    /**
+    * @name dxchartoptions_bargrouppadding
+    * @publicName barGroupPadding
+    * @type number
+    * @default 0.3
+    */
+    barGroupPadding: 0.3,
     /**
     * @name dxchartoptions_negativesaszeroes
     * @publicName negativesAsZeroes
@@ -2692,16 +2699,23 @@ var dxPolarChart = {
     * @name dxpolarchartoptions_equalbarwidth
     * @publicName equalBarWidth
     * @type boolean
-    * @default true
+    * @deprecated dxPolarChartSeriesTypes_CommonPolarChartSeries_ignoreEmptyPoints
     */
     equalBarWidth: true,
     /**
     * @name dxpolarchartoptions_barwidth
     * @publicName barWidth
     * @type number
-    * @default undefined
+    * @deprecated dxPolarChartSeriesTypes_CommonPolarChartSeries_barPadding
     */
     barWidth: undefined,
+    /**
+    * @name dxpolarchartoptions_bargrouppadding
+    * @publicName barGroupPadding
+    * @type number
+    * @default 0.3
+    */
+    barGroupPadding: 0.3,
     /**
     * @name dxpolarchartoptions_negativesaszeroes
     * @publicName negativesAsZeroes
