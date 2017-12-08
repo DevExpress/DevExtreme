@@ -16,7 +16,7 @@ var createThemeManager = function(chartOptions) {
     return new ChartThemeManager(chartOptions, 'rangeSelector.chart');
 };
 
-var processSeriesFamilies = function(series, equalBarWidth, minBubbleSize, maxBubbleSize, barWidth, negativesAsZeroes) {
+var processSeriesFamilies = function(series, equalBarWidth, minBubbleSize, maxBubbleSize, barWidth, barGroupPadding, negativesAsZeroes) {
     var families = [],
         types = [];
 
@@ -33,6 +33,7 @@ var processSeriesFamilies = function(series, equalBarWidth, minBubbleSize, maxBu
             minBubbleSize: minBubbleSize,
             maxBubbleSize: maxBubbleSize,
             barWidth: barWidth,
+            barGroupPadding: barGroupPadding,
             negativesAsZeroes: negativesAsZeroes
         });
         family.add(series);
@@ -92,6 +93,7 @@ SeriesDataSource = function(options) {
         themeManager.getOptions('minBubbleSize'),
         themeManager.getOptions('maxBubbleSize'),
         themeManager.getOptions('barWidth'),
+        themeManager.getOptions('barGroupPadding'),
         typeUtils.isDefined(negativesAsZeroes) ? negativesAsZeroes : negativesAsZeros);
 };
 

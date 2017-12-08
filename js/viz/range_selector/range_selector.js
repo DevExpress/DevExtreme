@@ -626,6 +626,12 @@ var dxRangeSelector = require("../core/base_widget").inherit({
             },
             "scale.useTicksAutoArrangement": {
                 since: "17.1", message: "Use the 'scale.label.overlappingBehavior' option instead"
+            },
+            "chart.barWidth": {
+                since: "17.2", message: "Use the 'chart.commonSeriesSettings.barPadding' or 'chart.series.barPadding' option instead"
+            },
+            "chart.equalBarWidth": {
+                since: "17.2", message: "Use the 'chart.commonSeriesSettings.ignoreEmptyPoints' or 'chart.series.ignoreEmptyPoints' option instead"
             }
         });
     },

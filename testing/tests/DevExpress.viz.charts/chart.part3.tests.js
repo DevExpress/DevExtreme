@@ -1909,7 +1909,8 @@ QUnit.test("pass to ctor", function(assert) {
         series: [{ name: "name1", type: "line" }, { name: "name2", type: "bar" }],
         maxBubbleSize: "someMaxBubbleSize",
         minBubbleSize: "someMinBubbleSize",
-        negativesAsZeroes: "someNegativesAsZeroes"
+        negativesAsZeroes: "someNegativesAsZeroes",
+        barGroupPadding: "barGroupPadding-option"
     });
 
     assert.deepEqual(this.createSeriesFamily.args[0][0], {
@@ -1920,7 +1921,8 @@ QUnit.test("pass to ctor", function(assert) {
         pane: "default",
         rotated: "rotated-option",
         barWidth: "barWidth-option",
-        negativesAsZeroes: "someNegativesAsZeroes"
+        negativesAsZeroes: "someNegativesAsZeroes",
+        barGroupPadding: "barGroupPadding-option"
     });
 });
 

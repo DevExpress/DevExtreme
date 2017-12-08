@@ -1139,7 +1139,20 @@ QUnit.test("seriesDataSource with equalBarWidth option", function(assert) {
         renderer: new vizMocks.Renderer()
     });
     assert.equal(seriesDataSource._seriesFamilies[0].options.equalBarWidth, true);
+});
 
+QUnit.test("seriesDataSource with barGroupPadding option", function(assert) {
+    var seriesDataSource = new SeriesDataSource({
+        dataSource: [{ arg: "a", val: 3 }],
+        chart: {
+            barGroupPadding: 0.6,
+            series: [{
+                type: "line"
+            }]
+        },
+        renderer: new vizMocks.Renderer()
+    });
+    assert.equal(seriesDataSource._seriesFamilies[0].options.barGroupPadding, 0.6);
 });
 
 QUnit.test("seriesDataSource with equalBarWidth option is false", function(assert) {
