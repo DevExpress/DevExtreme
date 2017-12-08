@@ -148,6 +148,14 @@ var moduleOptions = {
 
                 return startDateCopy.getTime() !== endDateCopy.getTime();
             },
+            mapAppointmentFields: function(config) {
+                var result = {
+                    appointmentData: config.itemData,
+                    appointmentElement: config.itemElement
+                };
+
+                return result;
+            },
         };
 
         var observer = {

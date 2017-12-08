@@ -10,7 +10,8 @@ var $ = require("../../core/renderer"),
     Button = require("../button"),
     DropDownMenu = require("../drop_down_menu"),
     FunctionTemplate = require("../widget/function_template"),
-    messageLocalization = require("../../localization/message");
+    messageLocalization = require("../../localization/message"),
+    extendFromObject = require("../../core/utils/extend").extendFromObject;
 
 var DROPDOWN_APPOINTMENTS_CLASS = "dx-scheduler-dropdown-appointments",
     DROPDOWN_APPOINTMENTS_CONTENT_CLASS = "dx-scheduler-dropdown-appointments-content",
@@ -102,9 +103,8 @@ var dropDownAppointments = Class.inherit({
                 var config = e.args[0];
 
                 config.event.stopPropagation();
-                var mappedData = this.instance.fire("mapAppointmentFields", config);
 
-                this.instance.fire("showEditAppointmentPopup", { data: mappedData && mappedData.appointmentData });
+                this.instance.fire("showEditAppointmentPopup", { data: config });
             }
             ).bind(this)
         });
@@ -129,7 +129,9 @@ var dropDownAppointments = Class.inherit({
                 buttonWidth: config.buttonWidth,
                 onItemClick: function(args) {
                     args.component.open();
-                    that._appointmentClickAction(args);
+                    var mappedData = that.instance.fire("mapAppointmentFields", args);
+
+                    that._appointmentClickAction(extendFromObject(mappedData, args, false));
                 },
                 activeStateEnabled: false,
                 focusStateEnabled: false,

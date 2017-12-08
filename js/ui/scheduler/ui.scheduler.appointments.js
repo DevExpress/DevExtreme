@@ -422,6 +422,12 @@ var SchedulerAppointments = CollectionWidget.inherit({
         }).bind(this), 300);
     },
 
+    _extendActionArgs: function() {
+        var args = this.callBase.apply(this, arguments);
+
+        return this.invoke("mapAppointmentFields", args);
+    },
+
     _render: function() {
         this.callBase.apply(this, arguments);
 

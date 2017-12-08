@@ -378,7 +378,10 @@ var subscribes = {
     mapAppointmentFields: function(config) {
         var result = {
             appointmentData: config.itemData,
-            appointmentElement: config.itemElement
+            appointmentElement: config.itemElement,
+            itemData: undefined,
+            itemElement: undefined,
+            itemIndex: undefined
         };
 
         if(config.itemData) {
