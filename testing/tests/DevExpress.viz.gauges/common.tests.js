@@ -629,6 +629,29 @@ QUnit.test("Subvalue indicators are rendered", function(assert) {
     assert.strictEqual(gauge._themeManager.stub("createPalette").called, false);
 });
 
+QUnit.test("Use sample indicator instance for getting offset", function(assert) {
+    sinon.stub(TestElement.prototype, "getOffset").returns(0);
+
+    var gauge = this.createTestGauge({
+        animation: {
+            enabled: true,
+            duration: 50
+        },
+        containerBackgroundColor: "green",
+        scale: { startValue: -100, endValue: -500 },
+        subvalueIndicator: {
+            type: "TRIANGLEMARKER",
+            offset: -15,
+            color: "red"
+        },
+        subvalues: [-400]
+    });
+
+    assert.deepEqual(gauge._subvalueIndicatorsSet._indicators[0].options.position, 400);
+
+    TestElement.prototype.getOffset.restore();
+});
+
 QUnit.test("Subvalue indicators can be not rendered", function(assert) {
     var gauge = this.createTestGauge({
         scale: { startValue: -100, endValue: -500 },

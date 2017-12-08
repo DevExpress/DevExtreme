@@ -911,7 +911,8 @@ registerTheme({
                     indentFromCenter: 0,
                     width: 2,
                     spindleSize: 14,
-                    spindleGapSize: 10
+                    spindleGapSize: 10,
+                    minRadius: 50
                 },
                 "triangleneedle": {
                     width: 4
