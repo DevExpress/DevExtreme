@@ -161,8 +161,6 @@ QUnit.test("Patched properties on register theme", function(assert) {
     assert.deepEqual(theme.polar.commonAxisSettings.minorGrid.color, theme.axisColor, "axisColor");
     assert.deepEqual(theme.polar.commonAxisSettings.tick.color, theme.axisColor, "axisColor");
     assert.deepEqual(theme.polar.commonAxisSettings.minorTick.color, theme.axisColor, "axisColor");
-    assert.deepEqual(theme.rangeSelector.scale.tick.color, theme.axisColor, "axisColor");
-    assert.deepEqual(theme.rangeSelector.scale.minorTick.color, theme.axisColor, "axisColor");
 
     //axisLabelColor
     assert.strictEqual(theme.gauge.scale.label.font.color, theme.axisLabelColor, "axisLabelColor");
