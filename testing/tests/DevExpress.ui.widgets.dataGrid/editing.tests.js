@@ -5749,7 +5749,7 @@ if(!devices.win8) {
         var $focusOverlay = testElement.find('.dx-datagrid-focus-overlay');
         assert.equal($focusOverlay.length, 1, 'focus overlay count');
 
-        assert.equal(testElement.find('.dx-datagrid-content-fixed tbody > tr').first().find("td").first()[0].clientWidth, browser.mozilla ? $focusOverlay.outerWidth() : $focusOverlay.outerWidth() - 1, 'width focus overlay');
+        assert.equal(testElement.find('.dx-datagrid-content-fixed tbody > tr').first().find("td").first().outerWidth(), browser.mozilla ? $focusOverlay.outerWidth() : $focusOverlay.outerWidth() - 1, 'width focus overlay');
 
         //T192066
         var $editor = testElement.find('.dx-datagrid-content-fixed tbody > tr').first().find('td.dx-focused');
