@@ -3222,6 +3222,34 @@ QUnit.testStart(function() {
         assert.deepEqual(this.instance.getDateRange(), [new Date(2015, 2, 15, 0, 0), new Date(2015, 3, 11, 23, 59)], "Range is OK");
     });
 
+    QUnit.test("WorkSpace Week view cells should have right class when intervalCount and groups", function(assert) {
+        this.instance.option("intervalCount", 3);
+        this.instance.option("groups", [{ name: "a", items: [{ id: 1, text: "a.1" }, { id: 2, text: "a.2" }] }]);
+
+        this.instance.$element().find(".dx-scheduler-date-table-cell").each(function(index) {
+            if((index + 1) % 21 === 0) {
+                assert.ok($(this).hasClass("dx-scheduler-last-group-cell"), "Date table cell has last-group class");
+            } else {
+                assert.notOk($(this).hasClass("dx-scheduler-last-group-cell"), "Date tale cell hasn't last-group class");
+            }
+        });
+
+        this.instance.$element().find(ALL_DAY_TABLE_CELL_CLASS).each(function(index) {
+            if((index + 1) % 21 === 0) {
+                assert.ok($(this).hasClass("dx-scheduler-last-group-cell"), "AllDay panel cell has last-group class");
+            } else {
+                assert.notOk($(this).hasClass("dx-scheduler-last-group-cell"), "AllDay panel cell hasn't last-group class");
+            }
+        });
+
+        this.instance.$element().find(".dx-scheduler-header-panel-cell").each(function(index) {
+            if((index + 1) % 21 === 0) {
+                assert.ok($(this).hasClass("dx-scheduler-last-group-cell"), "Header panel cell has last-group class");
+            } else {
+                assert.notOk($(this).hasClass("dx-scheduler-last-group-cell"), "Header panel cell hasn't last-group class");
+            }
+        });
+    });
 })("Work Space Week with intervalCount");
 
 (function() {
