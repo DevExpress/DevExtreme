@@ -358,7 +358,7 @@ var EditorFactoryController = modules.ViewController.inherit((function() {
                             .removeClass(DX_HIDDEN)
                             .appendTo($content)
                             .outerWidth(elemCoord.right - elemCoord.left + 1)
-                            .outerHeight($element.outerHeight() + 1);
+                            .outerHeight(elemCoord.bottom - elemCoord.top + 1);
 
                         focusOverlayPosition = {
                             precise: compareVersion($.fn.jquery, [3]) >= 0,
