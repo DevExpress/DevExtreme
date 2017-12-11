@@ -379,15 +379,22 @@ QUnit.test("plain objects are cloned if previous value is null (T521407)", funct
     assert.equal(dataSource1.store, "Store 1");
 });
 
-QUnit.test("non existing multi-level prop", function(assert) {
+QUnit.test("non existing multi-level prop (w/ merge = false)", function(assert) {
     var obj = {};
 
-    SETTER("prop.subProp1.subProp2")(obj, "Nested value");
+    SETTER("prop.subProp1.subProp2")(obj, "Nested value", { merge: false });
+    assert.equal(obj.prop.subProp1.subProp2, "Nested value");
+});
+
+QUnit.test("non existing multi-level prop (w/ merge = true)", function(assert) {
+    var obj = {};
+
+    SETTER("prop.subProp1.subProp2")(obj, "Nested value", { merge: true });
     assert.equal(obj.prop.subProp1.subProp2, "Nested value");
 });
 
 QUnit.test("multi-level prop instead of primitives", function(assert) {
-    var primitives = [ false, 0, "", null, true, 1, "someValue"];
+    var primitives = [ false, 0, "", true, 1, "someValue"];
 
     primitives.forEach(function(primitive) {
         var obj = { prop: primitive };

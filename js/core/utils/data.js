@@ -47,6 +47,20 @@ var unwrap = function(value, options) {
     return options.unwrapObservables ? unwrapVariable(value) : value;
 };
 
+var walk = function(object, path, accessor) {
+    var result;
+    for(var level = 0, depth = path.length; level < depth; level++) {
+        var key = path[level];
+        object = accessor(object, key, level);
+        if(object === undefined) {
+            break;
+        }
+        result = object;
+    }
+
+    return result;
+};
+
 var compileGetter = function(expr) {
     if(arguments.length > 1) {
         expr = [].slice.call(arguments);
@@ -63,22 +77,23 @@ var compileGetter = function(expr) {
 
         return function(obj, options) {
             options = prepareOptions(options);
-            var functionAsIs = options.functionsAsIs,
-                current = unwrap(obj, options);
+            var functionAsIs = options.functionsAsIs;
 
-            for(var i = 0; i < path.length; i++) {
-                if(!current) break;
+            return walk(unwrap(obj, options), path, function(currentObject, currentPropertyName) {
+                var value;
 
-                var next = unwrap(current[path[i]], options);
+                if(!currentObject) {
+                    value = currentObject;
+                } else {
+                    value = readPropValue(currentObject, currentPropertyName, options);
 
-                if(!functionAsIs && typeUtils.isFunction(next)) {
-                    next = next.call(current);
+                    if(!functionAsIs && typeUtils.isFunction(value)) {
+                        value = value.call(currentObject);
+                    }
                 }
 
-                current = next;
-            }
-
-            return current;
+                return value;
+            });
         };
     }
 
@@ -126,63 +141,38 @@ var combineGetters = function(getters) {
     };
 };
 
-var createTarget = function(obj, targetPathArray, options) {
-    var target = unwrap(obj, options);
-
-    targetPathArray.forEach(function(pathPart) {
-        var partValue = readPropValue(target, pathPart, options);
-
-        if(partValue === undefined) {
-            partValue = {};
-            assignPropValue(target, pathPart, partValue, options);
-        }
-
-        target = partValue;
-    });
-
-    return target;
-};
-
 var compileSetter = function(expr) {
-    expr = expr || "this";
-    expr = bracketsToDots(expr);
-
-    var pos = expr.lastIndexOf("."),
-        targetGetterPath = expr.substr(0, pos),
-        targetGetterPathArray = targetGetterPath && targetGetterPath.split(".") || [],
-        targetGetter = compileGetter(targetGetterPath),
-        targetPropName = expr.substr(1 + pos);
+    expr = bracketsToDots(expr || "this").split(".");
+    var exprDepth = expr.length;
 
     return function(obj, value, options) {
         options = prepareOptions(options);
 
-        var target = targetGetter(obj, { functionsAsIs: options.functionsAsIs, unwrapObservables: options.unwrapObservables });
+        walk(unwrap(obj, options), expr, function(currentObject, currentPropertyName, currentLevel) {
+            var result = readPropValue(currentObject, currentPropertyName, options),
+                isFunc = !options.functionsAsIs && typeUtils.isFunction(result) && !isWrapped(result);
 
-        if(target === undefined) {
-            target = createTarget(obj, targetGetterPathArray, options);
-        }
-
-        var prevTargetValue = readPropValue(target, targetPropName);
-
-        if(!options.functionsAsIs && typeUtils.isFunction(prevTargetValue) && !isWrapped(prevTargetValue)) {
-            target[targetPropName](value);
-        } else {
-            prevTargetValue = unwrap(prevTargetValue, options);
-
-            if(
-                options.merge &&
-                typeUtils.isPlainObject(value) &&
-                (!typeUtils.isDefined(prevTargetValue) || typeUtils.isPlainObject(prevTargetValue))
-            ) {
-                if(!prevTargetValue) {
-                    assignPropValue(target, targetPropName, {}, options);
-                }
-                target = unwrap(readPropValue(target, targetPropName), options);
-                objectUtils.deepExtendArraySafe(target, value, false, true);
-            } else {
-                assignPropValue(target, targetPropName, value, options);
+            if(!typeUtils.isDefined(result)) {
+                result = { };
+                assignPropValue(currentObject, currentPropertyName, result, options);
             }
-        }
+
+            if(currentLevel === exprDepth - 1) {
+                if(isFunc) {
+                    currentObject[currentPropertyName](value);
+                } else {
+                    if(options.merge && typeUtils.isPlainObject(value) && typeUtils.isPlainObject(result)) {
+                        objectUtils.deepExtendArraySafe(result, value, false, true);
+                    } else {
+                        assignPropValue(currentObject, currentPropertyName, value, options);
+                    }
+                }
+            } else if(isFunc) {
+                result = result.call(currentObject);
+            }
+
+            return result;
+        });
     };
 };
 
