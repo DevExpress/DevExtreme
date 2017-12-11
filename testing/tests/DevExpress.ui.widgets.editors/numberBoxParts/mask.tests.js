@@ -717,3 +717,20 @@ QUnit.test("move caret to the end when only stubs remain in the input", function
 
     assert.deepEqual(this.keyboard.caret(), { start: 2, end: 2 }, "caret was adjusted");
 });
+
+QUnit.test("move caret to the start when only stubs remain in the input", function(assert) {
+    this.instance.option({
+        format: "# p",
+        value: 1
+    });
+
+    this.keyboard.caret(1)
+        .keyDown("backspace")
+        .input("backspace");
+
+    assert.equal(this.input.val(), " p", "text is correct");
+
+    this.input.trigger("dxclick");
+
+    assert.deepEqual(this.keyboard.caret(), { start: 0, end: 0 }, "caret was adjusted");
+});
