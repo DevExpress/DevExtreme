@@ -286,6 +286,36 @@ QUnit.testInActiveWindow("Cell is focused when clicked on self", function(assert
     assert.ok(navigationController._keyDownProcessor, "keyDownProcessor");
 });
 
+// T579521
+QUnit.testInActiveWindow("Master detail cell is not focused when clicked on self", function(assert) {
+    //arrange
+    var navigationController,
+        isFocused = false,
+        $masterDetailCell,
+        $rowsElement = $("<div />").append($("<tr class='dx-row'><td class='dx-master-detail-cell'><td/></tr>")).appendTo("#container");
+
+    this.getView("rowsView").element = function() {
+        return $rowsElement;
+    };
+
+    //act
+    navigationController = new KeyboardNavigationController(this.component);
+    navigationController.init();
+
+    callViewsRenderCompleted(this.component._views);
+
+    $masterDetailCell = $rowsElement.find("td")[0];
+
+    $masterDetailCell.focus = function() {
+        isFocused = true;
+    };
+
+    $($masterDetailCell).trigger(CLICK_EVENT);
+
+    //assert
+    assert.notOk(isFocused, "master detail cell is not focused");
+});
+
 //T281701
 QUnit.testInActiveWindow("Cell is not focused when clicked it in another grid", function(assert) {
     //arrange
