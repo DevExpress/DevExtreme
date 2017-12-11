@@ -19,6 +19,7 @@ var $ = require("jquery"),
     noop = require("core/utils/common").noop,
     ODataStore = require("data/odata/store"),
     devices = require("core/devices"),
+    DataSource = require("data/data_source/data_source").DataSource,
     invertFilterExpression = require("ui/grid_core/ui.grid_core.header_filter").invertFilterExpression,
     dragEvents = require("events/drag"),
     dataGridMocks = require("../../helpers/dataGridMocks.js"),
@@ -143,6 +144,83 @@ QUnit.test("invertFilterExpression", function(assert) {
     assert.deepEqual(invertFilterExpression([["Test", ">", 1], "and", ["Test", "<", 2]]), [["Test", "<=", 1], "or", ["Test", ">=", 2]], "and group operation");
     assert.deepEqual(invertFilterExpression([["Test", ">", 1], "or", ["Test", "<", 2]]), [["Test", "<=", 1], "and", ["Test", ">=", 2]], "and group operation");
     assert.deepEqual(invertFilterExpression([["Test", ">", 1], "and", ["Test", "<", 2], "or", ["Test", "=", 3]]), [["Test", "<=", 1], "or", ["Test", ">=", 2], "and", ["Test", "<>", 3]], "and and or group operation");
+});
+
+//T585671
+QUnit.test("Header filter with custom dataSource - postProcess should not be ignored", function(assert) {
+    //arrange
+    var items,
+        dataSource;
+
+    this.setupDataGrid({
+        dataSource: [],
+        columns: [{ dataField: "Test", headerFilter: {
+            dataSource: {
+                store: [
+                    { field: 1 }
+                ],
+                postProcess: function(items) {
+                    return items.map(function(item) {
+                        return {
+                            text: "test" + item.field,
+                            value: item.field
+                        };
+                    });
+                }
+            }
+        } }]
+    });
+
+    //act
+    dataSource = new DataSource(this.headerFilterController.getDataSource(this.getVisibleColumns()[0]));
+    dataSource.load().done(function(data) {
+        items = data;
+    });
+    this.clock.tick();
+
+    //assert
+    assert.deepEqual(items, [{ text: "test1", value: 1 }]);
+});
+
+//T585671
+QUnit.test("Header filter with dataSource as function - postProcess should not be ignored (for a lookup column)", function(assert) {
+    //arrange
+    var items,
+        dataSource;
+
+    this.setupDataGrid({
+        dataSource: [],
+        headerFilter: {
+            texts: {
+                emptyValue: "blank"
+            }
+        },
+        columns: [{ dataField: "Test", lookup: {
+            dataSource: [{ field: 1 }],
+            valueExpr: "field",
+            displayExpr: "field"
+        }, headerFilter: {
+            dataSource: function(options) {
+                options.dataSource.postProcess = function(items) {
+                    return items.forEach(function(item) {
+                        if(item.value) {
+                            item.text = "test" + item.text;
+                        }
+                    });
+                };
+            }
+        } }]
+    });
+
+    //act
+    dataSource = new DataSource(this.headerFilterController.getDataSource(this.getVisibleColumns()[0]));
+    dataSource.load().done(function(data) {
+        items = data;
+    });
+    this.clock.tick();
+
+    //assert
+    assert.deepEqual(items, [{ text: "blank", value: null }, { field: 1, text: "test1", value: 1 }]);
 });
 
 
