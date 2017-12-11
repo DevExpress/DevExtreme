@@ -772,7 +772,9 @@ var SchedulerWorkSpace = Widget.inherit({
     _refreshDateTimeIndication: noop,
 
     _setFirstViewDate: function() {
-        this._firstViewDate = dateUtils.getFirstWeekDate(this._getViewStartByOptions(), this._firstDayOfWeek() || dateLocalization.firstDayOfWeekIndex());
+        var firstDayOfWeek = isDefined(this._firstDayOfWeek()) ? this._firstDayOfWeek() : dateLocalization.firstDayOfWeekIndex();
+
+        this._firstViewDate = dateUtils.getFirstWeekDate(this._getViewStartByOptions(), firstDayOfWeek);
         this._setStartDayHour(this._firstViewDate);
     },
 
