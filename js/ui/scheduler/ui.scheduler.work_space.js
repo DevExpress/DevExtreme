@@ -62,6 +62,8 @@ var COMPONENT_CLASS = "dx-scheduler-work-space",
     GROUP_HEADER_CLASS = "dx-scheduler-group-header",
     GROUP_HEADER_CONTENT_CLASS = "dx-scheduler-group-header-content",
 
+    LAST_GROUP_CELL_CLASS = "dx-scheduler-last-group-cell",
+
     DATE_TABLE_CLASS = "dx-scheduler-date-table",
     DATE_TABLE_CELL_CLASS = "dx-scheduler-date-table-cell",
     DATE_TABLE_ROW_CLASS = "dx-scheduler-date-table-row",
@@ -488,8 +490,18 @@ var SchedulerWorkSpace = Widget.inherit({
         return DATE_TABLE_ROW_CLASS;
     },
 
-    _getDateTableCellClass: function() {
-        return DATE_TABLE_CELL_CLASS + " " + HORIZONTAL_SIZES_CLASS + " " + VERTICAL_SIZES_CLASS;
+    _getDateTableCellClass: function(i, j) {
+        var cellClass = DATE_TABLE_CELL_CLASS + " " + HORIZONTAL_SIZES_CLASS + " " + VERTICAL_SIZES_CLASS;
+
+        return this._addLastGroupCellClass(cellClass, j + 1);
+    },
+
+    _addLastGroupCellClass: function(cellClass, index) {
+        if(index % this._getCellCount() === 0) {
+            return cellClass + " " + LAST_GROUP_CELL_CLASS;
+        }
+
+        return cellClass;
     },
 
     _getGroupRowClass: function() {
@@ -1015,8 +1027,10 @@ var SchedulerWorkSpace = Widget.inherit({
         return $headerRow;
     },
 
-    _getHeaderPanelCellClass: function() {
-        return HEADER_PANEL_CELL_CLASS + " " + HORIZONTAL_SIZES_CLASS;
+    _getHeaderPanelCellClass: function(i) {
+        var cellClass = HEADER_PANEL_CELL_CLASS + " " + HORIZONTAL_SIZES_CLASS;
+
+        return this._addLastGroupCellClass(cellClass, i + 1);
     },
 
     _calculateHeaderCellRepeatCount: function() {
@@ -1040,8 +1054,10 @@ var SchedulerWorkSpace = Widget.inherit({
         this._applyCellTemplates(cellTemplates);
     },
 
-    _getAllDayPanelCellClass: function() {
-        return ALL_DAY_TABLE_CELL_CLASS + " " + HORIZONTAL_SIZES_CLASS;
+    _getAllDayPanelCellClass: function(i, j) {
+        var cellClass = ALL_DAY_TABLE_CELL_CLASS + " " + HORIZONTAL_SIZES_CLASS;
+
+        return this._addLastGroupCellClass(cellClass, j + 1);
     },
 
     _getAllDayCellData: function(cell, rowIndex, cellIndex) {
