@@ -901,8 +901,8 @@ var ContextMenu = MenuBase.inherit((function() {
             showing ? this._show() : this._hide();
         },
 
-        _show: function(jQEvent) {
-            var args = { jQEvent: jQEvent },
+        _show: function(event) {
+            var args = { jQEvent: event },
                 promise = new Deferred().reject().promise();
 
             this._actions.onShowing(args);
@@ -911,7 +911,7 @@ var ContextMenu = MenuBase.inherit((function() {
                 return promise;
             }
 
-            var position = this._positionContextMenu(jQEvent);
+            var position = this._positionContextMenu(event);
 
             if(position) {
                 if(!this._overlay) {
@@ -926,6 +926,7 @@ var ContextMenu = MenuBase.inherit((function() {
                 this._setOptionSilent("visible", true);
                 this._overlay.option("position", position);
                 promise = this._overlay.show();
+                event && event.stopPropagation();
 
                 var id = "dx-" + new Guid();
                 this._overlay.$content().attr({ "id": id, role: "menu" });
