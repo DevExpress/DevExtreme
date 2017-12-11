@@ -16,12 +16,12 @@ var bracketsToDots = function(expr) {
         .replace(/\]/g, "");
 };
 
-var readPropValue = function(obj, propName) {
+var readPropValue = function(obj, propName, options) {
+    options = options || { };
     if(propName === "this") {
-        return obj;
+        return unwrap(obj, options);
     }
-
-    return obj[propName];
+    return unwrap(obj[propName], options);
 };
 
 var assignPropValue = function(obj, propName, value, options) {
@@ -126,12 +126,30 @@ var combineGetters = function(getters) {
     };
 };
 
+var createTarget = function(obj, targetPathArray, options) {
+    var target = unwrap(obj, options);
+
+    targetPathArray.forEach(function(pathPart) {
+        var partValue = readPropValue(target, pathPart, options);
+
+        if(partValue === undefined) {
+            partValue = {};
+            assignPropValue(target, pathPart, partValue, options);
+        }
+
+        target = partValue;
+    });
+
+    return target;
+};
+
 var compileSetter = function(expr) {
     expr = expr || "this";
     expr = bracketsToDots(expr);
 
     var pos = expr.lastIndexOf("."),
         targetGetterPath = expr.substr(0, pos),
+        targetGetterPathArray = targetGetterPath && targetGetterPath.split(".") || [],
         targetGetter = compileGetter(targetGetterPath),
         targetPropName = expr.substr(1 + pos);
 
@@ -141,8 +159,7 @@ var compileSetter = function(expr) {
         var target = targetGetter(obj, { functionsAsIs: options.functionsAsIs, unwrapObservables: options.unwrapObservables });
 
         if(target === undefined) {
-            target = {};
-            compileSetter(targetGetterPath)(unwrap(obj, options), target, options);
+            target = createTarget(obj, targetGetterPathArray, options);
         }
 
         var prevTargetValue = readPropValue(target, targetPropName);
