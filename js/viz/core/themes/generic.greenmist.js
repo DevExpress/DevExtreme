@@ -104,7 +104,10 @@ registerTheme({
             color: BACKGROUND_COLOR
         },
         scale: {
-            breakStyle: { color: "#c1c1c1" }
+            breakStyle: { color: "#c1c1c1" },
+            tick: {
+                opacity: 0.12
+            }
         },
         selectedRangeColor: ACCENT_COLOR,
         sliderMarker: {
