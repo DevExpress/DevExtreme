@@ -69,6 +69,8 @@ var calculateWidth = function(value, $input, $element) {
         "font-size": $input.css("font-size"),
         "font-family": $input.css("font-family"),
         "letter-spacing": $input.css("letter-spacing"),
+        "padding-left": $input.css("padding-left"),
+        "padding-right": $input.css("padding-right"),
         "border": $input.css("border"),
         "visibility": "hidden",
         "white-space": "nowrap",
@@ -77,11 +79,7 @@ var calculateWidth = function(value, $input, $element) {
     });
 
     $longestValueElement.appendTo($element);
-    var elementWidth = parseFloat(window.getComputedStyle($longestValueElement.get(0)).width),
-        rightPadding = parseFloat(window.getComputedStyle($input.get(0)).paddingRight),
-        leftPadding = parseFloat(window.getComputedStyle($input.get(0)).paddingLeft);
-
-    var width = elementWidth + rightPadding + leftPadding + IE_ROUNDING_ERROR + ($input.prop("type") !== "text" ? NATIVE_BUTTONS_WIDTH : 0);
+    var width = $longestValueElement.outerWidth() + IE_ROUNDING_ERROR + ($input.prop("type") !== "text" ? NATIVE_BUTTONS_WIDTH : 0);
     $longestValueElement.remove();
 
     return width;
