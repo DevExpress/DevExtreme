@@ -18,9 +18,18 @@ var FILTER_BUILDER_ITEM_FIELD_CLASS = "dx-filterbuilder-item-field",
     FILTER_BUILDER_GROUP_OPERATION_CLASS = "dx-filterbuilder-group-operation",
     ACTIVE_CLASS = "dx-state-active";
 
+var getSelectedMenuText = function() {
+    return $(".dx-treeview-node.dx-state-selected").text();
+};
+
+var selectMenuItem = function(menuItemIndex) {
+    $(".dx-treeview-item").eq(menuItemIndex).trigger("dxclick");
+};
+
 var clickByButtonAndSelectMenuItem = function($button, menuItemIndex) {
     $button.click();
-    $(".dx-menu-item-text").eq(menuItemIndex).trigger("dxclick");
+    selectMenuItem(menuItemIndex)
+    $(".dx-treeview-item").eq(menuItemIndex).trigger("dxclick");
 };
 
 QUnit.module("Rendering", function() {
@@ -141,7 +150,7 @@ QUnit.module("Rendering", function() {
         var $fieldButton = container.find("." + FILTER_BUILDER_ITEM_FIELD_CLASS);
         $fieldButton.click();
 
-        var $menuItem = $(".dx-menu-item-text").eq(1);
+        var $menuItem = $(".dx-treeview-item").eq(1);
         assert.equal($menuItem.text(), "Budget");
     });
 
@@ -227,13 +236,12 @@ QUnit.module("Rendering", function() {
         var $fieldButton = container.find("." + FILTER_BUILDER_ITEM_FIELD_CLASS);
         $fieldButton.click();
 
-        assert.equal($(".dx-menu-item-selected").text(), "State");
+        assert.equal(getSelectedMenuText(), "State");
 
-        var $menuItem = $(".dx-menu-item-text").eq(1);
-        $menuItem.trigger("dxclick");
+        selectMenuItem(1);
 
         $fieldButton.click();
-        assert.equal($(".dx-menu-item-selected").text(), "Date");
+        assert.equal(getSelectedMenuText(), "Date");
     });
 
     QUnit.test("selected element must change in group operation menu after click", function(assert) {
@@ -250,15 +258,14 @@ QUnit.module("Rendering", function() {
         $groupButton.click();
 
         assert.ok($(".dx-filterbuilder-group-operations").length > 0);
-        assert.equal($(".dx-menu-item-selected").text(), "And");
+        assert.equal(getSelectedMenuText(), "And");
 
-        var $menuItem = $(".dx-menu-item-text").eq(3);
-        $menuItem.trigger("dxclick");
+        selectMenuItem(3);
 
         assert.ok($(".dx-filterbuilder-group-operations").length === 0);
 
         $groupButton.click();
-        assert.equal($(".dx-menu-item-selected").text(), "Not Or");
+        assert.equal(getSelectedMenuText(), "Not Or");
     });
 
     QUnit.test("selected element must change in filter operation menu after click", function(assert) {
@@ -275,16 +282,15 @@ QUnit.module("Rendering", function() {
         $operationButton.click();
 
         assert.ok($(".dx-filterbuilder-operations").length > 0);
-        assert.equal($(".dx-menu-item-selected").text(), "Equals");
+        assert.equal(getSelectedMenuText(), "Equals");
 
-        var $menuItem = $(".dx-menu-item-text").eq(3);
-        $menuItem.trigger("dxclick");
+        selectMenuItem(3);
 
         assert.ok($(".dx-filterbuilder-operations").length === 0);
         assert.equal(container.find("." + FILTER_BUILDER_ITEM_VALUE_CLASS).length, 1);
 
         $operationButton.click();
-        assert.equal($(".dx-menu-item-selected").text(), "Greater than");
+        assert.equal(getSelectedMenuText(), "Greater than");
     });
 
     QUnit.test("hide value field for isblank & isNotBlank", function(assert) {
@@ -474,7 +480,7 @@ QUnit.module("Rendering", function() {
 
         assert.ok($(".dx-filterbuilder-add-condition").length > 0);
 
-        $(".dx-menu-item-text").eq(0).trigger("dxclick");
+        selectMenuItem(0);
 
         assert.ok($(".dx-filterbuilder-add-condition").length === 0);
         assert.deepEqual(instance._model, [["State", "<>", "Test"], ["CompanyName", "contains", ""]]);
@@ -682,8 +688,7 @@ QUnit.module("Short condition", function() {
                 fields: fields
             }).dxFilterBuilder("instance");
 
-        container.find("." + FILTER_BUILDER_ITEM_OPERATION_CLASS).click();
-        $(".dx-menu-item-text").eq(3).trigger("dxclick");
+        clickByButtonAndSelectMenuItem(container.find("." + FILTER_BUILDER_ITEM_OPERATION_CLASS), 3);
 
         assert.equal(container.find("." + FILTER_BUILDER_ITEM_VALUE_TEXT_CLASS).text(), "K&S Music");
         assert.deepEqual(instance.option("value"), ["CompanyName", "endswith", "K&S Music"]);
