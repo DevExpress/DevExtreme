@@ -2,7 +2,7 @@
 
 var themeModule = require("../../themes"),
     registerTheme = themeModule.registerTheme,
-
+    ACCENT_COLOR = "#9c63ff",
     BACKGROUND_COLOR = "#17171f",
     TITLE_COLOR = "#f5f6f7",
     SUBTITLE_COLOR = "#fff",
@@ -111,6 +111,17 @@ registerTheme({
             minorTick: {
                 opacity: 0.5
             }
+        }
+    },
+    map: {
+        "layer:marker:dot": {
+            color: ACCENT_COLOR
+        },
+        "layer:marker:bubble": {
+            color: ACCENT_COLOR
+        },
+        legend: {
+            markerColor: ACCENT_COLOR
         }
     }
 }, "generic.dark");
