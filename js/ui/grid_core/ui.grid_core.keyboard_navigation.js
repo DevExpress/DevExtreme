@@ -111,7 +111,7 @@ var KeyboardNavigationController = core.ViewController.inherit({
             $target = this._isInsideEditForm($target) ? $(event.target) : $target;
             this._focusView(data.view, data.viewIndex);
             this._updateFocusedCellPosition($target);
-            if(!this._editingController.isEditing()) {
+            if(!this._editingController.isEditing() && !this._isMasterDetailCell($target)) {
                 this._applyTabIndexToElement(data.view.element());
                 data.view.element().find(".dx-row[tabIndex], .dx-row > td[tabIndex]").removeAttr("tabIndex");
                 eventsEngine.trigger($target, "focus");
