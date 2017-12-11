@@ -187,9 +187,11 @@ registerTheme({
     rangeSelector: {
         scale: {
             tick: {
+                color: WHITE,
                 opacity: 0.4
             },
             minorTick: {
+                color: WHITE,
                 opacity: 0.12
             },
             breakStyle: {
