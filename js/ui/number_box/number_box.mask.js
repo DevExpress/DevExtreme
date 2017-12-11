@@ -489,12 +489,12 @@ var NumberBoxMask = NumberBoxBase.inherit({
     },
 
     _renderValue: function() {
-        this.callBase();
-
         if(this._useMaskBehavior()) {
             this._parsedValue = this.option("value");
             this._formatValue();
         }
+
+        this.callBase();
     },
 
     _valueChangeEventHandler: function(e) {
