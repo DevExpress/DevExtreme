@@ -124,6 +124,11 @@ var NumberBoxMask = NumberBoxBase.inherit({
         e && e.preventDefault();
     },
 
+    _getDefaultCaretPosition: function() {
+        var formatted = number.format(1, this._getFormatPattern());
+        return formatted.indexOf("1");
+    },
+
     _moveToClosestNonStub: function(position) {
         position = isNumeric(position) ? { start: position, end: position } : position;
 
@@ -135,8 +140,11 @@ var NumberBoxMask = NumberBoxBase.inherit({
 
         var text = this._input().val(),
             startPosition = fitIntoRange(caret.start, 0, text.length),
-            afterIndex = this._getClosestNonStubIndex(MOVE_FORWARD, startPosition),
-            index = afterIndex < text.length ? afterIndex : this._getClosestNonStubIndex(MOVE_BACKWARD, startPosition);
+            index = this._getClosestNonStubIndex(MOVE_FORWARD, startPosition);
+
+        if(index >= text.length) {
+            index = this._getClosestNonStubIndex(MOVE_BACKWARD, startPosition) || this._getDefaultCaretPosition();
+        }
 
         this._caret({
             start: index,
