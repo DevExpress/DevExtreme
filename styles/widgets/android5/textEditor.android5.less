@@ -54,10 +54,6 @@
     .validation-icon-position();
     .dx-icons-dark;
 
-    &.dx-show-clear-button:not(.dx-texteditor-empty) {
-        .validation-icon-position(@ANDROID5_TEXTEDITOR_CLEAR_BUTTON_WIDTH);
-    }
-
     &.dx-invalid {
         .dx-texteditor-container {
             border-bottom: @ANDROID5_TEXTEDITOR_FADED_INVALID_BORDER;
@@ -118,8 +114,14 @@
     }
 }
 
-.dx-show-clear-button .dx-texteditor-input {
-    padding-right: @ANDROID5_TEXTEDITOR_CLEAR_BUTTON_WIDTH;
+.dx-show-clear-button {
+    .dx-texteditor-input {
+        padding-right: @ANDROID5_TEXTEDITOR_CLEAR_BUTTON_WIDTH;
+    }
+
+    &:not(.dx-texteditor-empty) {
+        .validation-icon-position(@ANDROID5_TEXTEDITOR_CLEAR_BUTTON_WIDTH);
+    }
 }
 
 .dx-clear-button-area {
