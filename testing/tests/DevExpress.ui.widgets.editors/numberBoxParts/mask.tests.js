@@ -7,6 +7,7 @@ var $ = require("jquery"),
 require("ui/text_box/ui.text_editor");
 
 var INPUT_CLASS = "dx-texteditor-input",
+    PLACEHOLDER_CLASS = "dx-placeholder",
     MINUS_KEY = 189;
 
 var moduleConfig = {
@@ -178,6 +179,22 @@ QUnit.testInActiveWindow("focusout should remove incomplete value chars from inp
     this.instance.option("value", 123);
     this.keyboard.caret(3).type(".").change().blur();
     assert.equal(this.input.val(), "123", "input was reformatted");
+});
+
+QUnit.test("api value changing should hide a placeholder", function(assert) {
+    this.instance.option({
+        format: "$ #0",
+        placeholder: "Enter number"
+    });
+
+    var $placeholder = this.$element.find("." + PLACEHOLDER_CLASS);
+
+    assert.ok($placeholder.is(":visible"), "placeholder is visible");
+
+    this.instance.option("value", 1);
+
+    assert.equal(this.input.val(), "$ 1", "text is correct");
+    assert.notOk($placeholder.is(":visible"), "placeholder is hidden");
 });
 
 
