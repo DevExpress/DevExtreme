@@ -28,7 +28,7 @@ var selectMenuItem = function(menuItemIndex) {
 
 var clickByButtonAndSelectMenuItem = function($button, menuItemIndex) {
     $button.click();
-    selectMenuItem(menuItemIndex)
+    selectMenuItem(menuItemIndex);
     $(".dx-treeview-item").eq(menuItemIndex).trigger("dxclick");
 };
 
