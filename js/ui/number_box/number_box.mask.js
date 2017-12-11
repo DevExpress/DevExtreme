@@ -139,8 +139,8 @@ var NumberBoxMask = NumberBoxBase.inherit({
             index = afterIndex < text.length ? afterIndex : this._getClosestNonStubIndex(MOVE_BACKWARD, startPosition);
 
         this._caret({
-            start: index,
-            end: index
+            start: index || afterIndex,
+            end: index || afterIndex
         });
     },
 
