@@ -356,7 +356,7 @@ var EditorFactoryController = modules.ViewController.inherit((function() {
                         $focusOverlay
                             .removeClass(DX_HIDDEN)
                             .appendTo($content)
-                            .outerWidth($element.outerWidth() + 1)
+                            .outerWidth($element[0].clientWidth + 1)
                             .outerHeight($element.outerHeight() + 1);
 
                         focusOverlayPosition = {
