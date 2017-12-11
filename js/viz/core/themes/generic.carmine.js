@@ -83,11 +83,16 @@ registerTheme({
         scale: {
             breakStyle: { color: "#c1c5c7" },
             tick: {
-                opacity: 1
-            },
-            minorTick: {
-                opacity: 0.5
+                opacity: 0.12
             }
+        },
+        selectedRangeColor: ACCENT_COLOR,
+        sliderMarker: {
+            color: ACCENT_COLOR
+        },
+        sliderHandle: {
+            color: ACCENT_COLOR,
+            opacity: 0.5
         }
     },
     sparkline: {

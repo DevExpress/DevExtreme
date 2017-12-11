@@ -158,8 +158,6 @@ function patchAxes(theme) {
     mergeScalar(theme.gauge.scale.label.font, colorFieldName, null, theme.axisLabelColor);
     mergeScalar(theme.gauge.scale.tick, colorFieldName, null, theme.backgroundColor);
     mergeScalar(theme.gauge.scale.minorTick, colorFieldName, null, theme.backgroundColor);
-    mergeScalar(theme.rangeSelector.scale.tick, colorFieldName, null, theme.axisColor);
-    mergeScalar(theme.rangeSelector.scale.minorTick, colorFieldName, null, theme.axisColor);
     mergeScalar(theme.rangeSelector.scale.label.font, colorFieldName, null, theme.axisLabelColor);
 }
 

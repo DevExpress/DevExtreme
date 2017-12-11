@@ -104,13 +104,15 @@ registerTheme({
             color: BACKGROUND_COLOR
         },
         scale: {
-            breakStyle: { color: "#c1c1c1" },
-            tick: {
-                opacity: 1
-            },
-            minorTick: {
-                opacity: 0.5
-            }
+            breakStyle: { color: "#c1c1c1" }
+        },
+        selectedRangeColor: ACCENT_COLOR,
+        sliderMarker: {
+            color: ACCENT_COLOR
+        },
+        sliderHandle: {
+            color: ACCENT_COLOR,
+            opacity: 0.5
         }
     },
     map: {

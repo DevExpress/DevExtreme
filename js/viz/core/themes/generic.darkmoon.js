@@ -127,11 +127,19 @@ registerTheme({
         scale: {
             breakStyle: { color: "#73869e" },
             tick: {
-                opacity: 1
-            },
-            minorTick: {
-                opacity: 0.5
+                opacity: 0.2
             }
+        },
+        selectedRangeColor: ACCENT_COLOR,
+        sliderMarker: {
+            color: ACCENT_COLOR,
+            font: {
+                color: "#000"
+            }
+        },
+        sliderHandle: {
+            color: ACCENT_COLOR,
+            opacity: 0.5
         }
     }
 }, "generic.dark");
