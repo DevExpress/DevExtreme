@@ -4201,9 +4201,14 @@ QUnit.test("getVisibleIndex when there is group column that is shown", function(
 });
 
 //T556327
-QUnit.test("sortOrder should be not reset after move column from group panel to headers", function(assert) {
+QUnit.test("sortOrder should be not reset after column is ungrouped", function(assert) {
     //arrange
-    this.applyOptions({ columns: [{ dataField: "field1", groupIndex: 0, sortOrder: "desc" }, "field2", "field3"] });
+    this.applyOptions({ columns: [{ dataField: "field1", sortOrder: "desc" }, "field2", "field3"] });
+    this.columnsController.moveColumn(0, 0, "headers", "group");
+    this.columnsController.columnOption(0, "sortOrder", "asc");
+
+    //assert
+    assert.strictEqual(this.columnsController.getVisibleColumns()[0].sortOrder, "asc");
 
     //act
     this.columnsController.moveColumn(0, 0, "group", "headers");
@@ -4763,6 +4768,26 @@ QUnit.test("Reset columns cache when the columnOption method is fired with the n
     this.columnsController.columnOption("field3", "visible", true, true);
 
     assert.equal(this.columnsController.getVisibleColumns().length, 3, "visible columns count");
+});
+
+//T556327
+QUnit.test("Sorting should be reset to the initialized state after a column is ungrouped", function(assert) {
+    //arrange
+    this.applyOptions({ columns: [{ dataField: "field1", sortOrder: "desc" }, "field2", "field3"] });
+
+    this.columnsController.columnOption(0, "groupIndex", 0);
+    this.columnsController.columnOption(0, "sortOrder", "asc");
+
+    //assert
+    assert.strictEqual(this.columnsController.getColumns()[0].groupIndex, 0, "groupIndex");
+    assert.strictEqual(this.columnsController.getColumns()[0].sortOrder, "asc", "sortOrder");
+    assert.strictEqual(this.columnsController.getColumns()[0].lastSortOrder, "desc", "sortOrder");
+
+    //act
+    this.columnsController.columnOption(0, "groupIndex", -1);
+
+    //assert
+    assert.strictEqual(this.columnsController.getColumns()[0].sortOrder, "desc", "sortOrder");
 });
 
 QUnit.module("Sorting/Grouping", { beforeEach: setupModule, afterEach: teardownModule });

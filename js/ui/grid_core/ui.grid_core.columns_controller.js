@@ -26,7 +26,7 @@ var $ = require("../../core/renderer"),
     normalizeDataSourceOptions = DataSourceModule.normalizeDataSourceOptions;
 
 var USER_STATE_FIELD_NAMES_15_1 = ["filterValues", "filterType", "fixed", "fixedPosition"],
-    USER_STATE_FIELD_NAMES = ["visibleIndex", "dataField", "name", "dataType", "width", "visible", "sortOrder", "sortIndex", "groupIndex", "filterValue", "selectedFilterOperation", "added"].concat(USER_STATE_FIELD_NAMES_15_1),
+    USER_STATE_FIELD_NAMES = ["visibleIndex", "dataField", "name", "dataType", "width", "visible", "sortOrder", "lastSortOrder", "sortIndex", "groupIndex", "filterValue", "selectedFilterOperation", "added"].concat(USER_STATE_FIELD_NAMES_15_1),
     COMMAND_EXPAND_CLASS = "dx-command-expand";
 
 module.exports = {
@@ -919,7 +919,7 @@ module.exports = {
                         groupIndex = Math.max(groupIndex, groupColumns[i].groupIndex + 1);
                     }
                 }
-                column.groupIndex = groupIndex;
+                columnOptionCore(that, column, "groupIndex", groupIndex, true);
             };
 
             var checkUserStateColumn = function(column, userStateColumn) {
@@ -1085,6 +1085,14 @@ module.exports = {
                 }
             };
 
+            var updateSortOrder = function(column, groupIndex) {
+                if(groupIndex >= 0) {
+                    column.lastSortOrder = column.sortOrder;
+                } else {
+                    column.sortOrder = column.lastSortOrder;
+                }
+            };
+
             var columnOptionCore = function(that, column, optionName, value, notFireEvent) {
                 var optionGetter = dataCoreUtils.compileGetter(optionName),
                     columnIndex = column.index,
@@ -1100,6 +1108,7 @@ module.exports = {
                 if(prevValue !== value) {
                     if(optionName === "groupIndex") {
                         changeType = "grouping";
+                        updateSortOrder(column, value);
                     } else if(optionName === "sortIndex" || optionName === "sortOrder") {
                         changeType = "sorting";
                     } else {
@@ -1809,7 +1818,7 @@ module.exports = {
                             if(targetGroupIndex > column.groupIndex) {
                                 targetGroupIndex--;
                             }
-                            delete column.groupIndex;
+                            columnOptionCore(that, column, "groupIndex", undefined, true);
                             updateColumnGroupIndexes(that);
                         }
 
