@@ -710,7 +710,7 @@ var SchedulerWorkSpace = Widget.inherit({
     _setFirstViewDate: function() {
         var firstDayOfWeek = commonUtils.isDefined(this._firstDayOfWeek()) ? this._firstDayOfWeek() : dateLocalization.firstDayOfWeekIndex();
 
-        this._firstViewDate = dateUtils.getFirstWeekDate(this._getViewStartByOptions(), firstDayOfWeek);
+        this._firstViewDate = dateUtils.getFirstWeekDate(this.option("currentDate"), firstDayOfWeek);
         this._setStartDayHour(this._firstViewDate);
     },
 
