@@ -17,10 +17,10 @@
 
 @base-border-color: #fff;
 @base-border-radius: 4px;
-@base-contrast-color: #cf00d7;
+@base-accent: #cf00d7;
 
-@base-hover-color: @base-contrast-color;
-@base-focus-color: @base-contrast-color;
+@base-hover-color: @base-accent;
+@base-focus-color: @base-accent;
 @base-shadow-color: transparent;
 
 @base-default: #52BBE7;
@@ -100,7 +100,7 @@
 * @type color
 * @group badges
 */
-@badge-bg: @base-contrast-color;
+@badge-bg: @base-accent;
 
 // TextEditor
 /**
@@ -690,7 +690,7 @@
 * @type color
 * @group scrollview
 */
-@scrollable-scrollbar-active-bg: fade(@base-contrast-color, 80%);
+@scrollable-scrollbar-active-bg: fade(@base-accent, 80%);
 
 
 // Toolbar
@@ -758,7 +758,7 @@
 * @group sliders
 * @paletteColorOpacity 1
 */
-@slider-range-bg: @base-contrast-color;
+@slider-range-bg: @base-accent;
 @slider-range-border-color: @slider-range-bg;
 @slider-handle-bg: @base-inverted-bg;
 @slider-handle-border-color: #fff - @base-border-color;
@@ -776,7 +776,7 @@
 * @group progressbars
 */
 @progressbar-bg: @base-bg;
-@progressbar-border-color: @base-contrast-color;
+@progressbar-border-color: @base-accent;
 
 /**
 * @name 20. Selected range background color
@@ -784,11 +784,11 @@
 * @group progressbars
 * @paletteColorOpacity 1
 */
-@progressbar-range-bg: @base-contrast-color;
-@progressbar-range-border-color: @base-contrast-color;
+@progressbar-range-bg: @base-accent;
+@progressbar-range-border-color: @base-accent;
 
-@progressbar-range-disabled-bg: fade(@base-contrast-color, 60%);
-@progressbar-range-indeterminate-color: @base-contrast-color;
+@progressbar-range-disabled-bg: fade(@base-accent, 60%);
+@progressbar-range-indeterminate-color: @base-accent;
 
 // Switch
 
@@ -1035,7 +1035,7 @@
 * @group datagrid
 * @paletteColorOpacity 1
 */
-@datagrid-focused-border-color: @base-contrast-color;
+@datagrid-focused-border-color: @base-accent;
 /**
 * @name 131. Editor background
 * @type color
@@ -1226,7 +1226,7 @@
 * @group treelist
 * @paletteColorOpacity 1
 */
-@treelist-focused-border-color: @base-contrast-color;
+@treelist-focused-border-color: @base-accent;
 /**
 * @name 131. Editor background
 * @type color
@@ -1297,7 +1297,7 @@
 @PIVOTGRID_HIERARCHY_IMAGE: url(images/widgets/generic/color-schemes/contrast/grid/hierarchy.png);
 
 @PIVOTGRID_FIELD_AREA_TEXT_COLOR: @PIVOTGRID_AREA_COLOR;
-@PIVOTGRID_POSITION_INDICATOR_COLOR: @base-contrast-color;
+@PIVOTGRID_POSITION_INDICATOR_COLOR: @base-accent;
 /**
 * @name 70. Spin icon color
 * @type color
@@ -1319,13 +1319,13 @@
 
 @SCHEDULER_DROPPABLE_CELL_BACKGROUND_COLOR: @base-bg;
 
-@SCHEDULER_APPOINTMENT_BASE_COLOR: @base-contrast-color;
+@SCHEDULER_APPOINTMENT_BASE_COLOR: @base-accent;
 @SCHEDULER_APPOINTMENT_TEXT_COLOR: @base-text-color;
 @SCHEDULER_DD_APPOINTMENT_HOVER_TEXT_COLOR: @base-inverted-text-color;
 @scheduler-appointment-focus-color: #fff - @base-text-color;
 @SCHEDULER_APPOINTMENT_START_COLOR: @base-inverted-bg;
 
-@SCHEDULER_WORKSPACE_FOCUSED_CELL_COLOR: lighten(@base-contrast-color, 5%);
+@SCHEDULER_WORKSPACE_FOCUSED_CELL_COLOR: lighten(@base-accent, 5%);
 
 @SCHEDULER_PANEL_TEXT_COLOR: @base-text-color;
 @SCHEDULER_WORKSPACE_MONTH_TEXT_COLOR: @base-text-color;
@@ -1333,7 +1333,7 @@
 @scheduler-dropdown-appointment-date-color: @base-text-color;
 
 @SCHEDULER_WORKSPACE_BACKGROUND_COLOR: @base-bg;
-@SCHEDULER_WORKSPACE_ACCENT_COLOR: @base-contrast-color;
+@SCHEDULER_WORKSPACE_ACCENT_COLOR: @base-accent;
 
 @scheduler-popup-title-bg: @SCHEDULER_WORKSPACE_BACKGROUND_COLOR;
 
@@ -1354,7 +1354,7 @@
 @SCHEDULER_OTHER_MONTH_CELL_OPACITY: 1;
 @SCHEDULER_FILL_FOCUSED_APPOINTMENT: true;
 @SCHEDULER_TIME_INDICATOR_BACKGROUND_COLOR: @SCHEDULER_BASE_BORDER_COLOR;
-@SCHEDULER_CURRENT_TIME_CELL_COLOR: @base-contrast-color;
+@SCHEDULER_CURRENT_TIME_CELL_COLOR: @base-accent;
 @SCHEDULER_TIME_INDICATOR_COLOR: @SCHEDULER_CURRENT_TIME_CELL_COLOR;
 @SCHEDULER_FIRST_MONTH_CELL_BACKGROUND_COLOR: @base-bg;
 
@@ -1422,7 +1422,7 @@
 * @type color
 * @group editors.calendar
 */
-@calendar-cell-other-color: @base-contrast-color;
+@calendar-cell-other-color: @base-accent;
 /**
 * @name 40. Background color
 * @type color
@@ -1450,7 +1450,7 @@
 * @type color
 * @group editors.calendar
 */
-@calendar-cell-active-bg: @base-contrast-color;
+@calendar-cell-active-bg: @base-accent;
 /**
 * @name 80. Border color
 * @type color
@@ -1609,7 +1609,7 @@
 */
 @form-group-border-color: @base-border-color;
 @form-field-required-color: saturate(darken(@base-text-color, 40.8%), 80%);
-@form-field-mark-color: @base-contrast-color;
+@form-field-mark-color: @base-accent;
 
 // Images
 @list-item-icon-toggle-delete-bg: url(images/widgets/generic/color-schemes/contrast/list/delete.png);
@@ -1635,7 +1635,7 @@
 @desktop-layout-menu-selected-bg: @base-inverted-bg;
 
 @desktop-layout-toolbar-border-color: @base-border-color;
-@desktop-layout-menu-hover-bg: @base-contrast-color;
+@desktop-layout-menu-hover-bg: @base-accent;
 @desktop-layout-copyright-color: @base-text-color;
 
 // Master-detail
