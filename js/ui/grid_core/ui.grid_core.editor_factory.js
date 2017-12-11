@@ -119,12 +119,13 @@ var EditorFactory = modules.ViewController.inherit({
                 } else {
                     // align "left bottom" for IE, align "right bottom" for Mozilla
                     var align = browser.msie ? "left bottom" : browser.mozilla ? "right bottom" : "left top",
-                        $content = $element.closest("." + that.addWidgetPrefix(CONTENT_CLASS));
+                        $content = $element.closest("." + that.addWidgetPrefix(CONTENT_CLASS)),
+                        elemCoord = $element[0].getBoundingClientRect();
 
                     $focusOverlay
                         .removeClass(DX_HIDDEN)
                         .appendTo($content)
-                        .outerWidth($element.outerWidth() + 1)
+                        .outerWidth(elemCoord.right - elemCoord.left + 1)
                         .outerHeight($element.outerHeight() + 1);
 
                     focusOverlayPosition = {
