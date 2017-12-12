@@ -4201,7 +4201,7 @@ QUnit.test("getVisibleIndex when there is group column that is shown", function(
 });
 
 //T556327
-QUnit.test("sortOrder should be not reset after column is ungrouped", function(assert) {
+QUnit.test("sortOrder should not be reset after column is ungrouped", function(assert) {
     //arrange
     this.applyOptions({ columns: [{ dataField: "field1", sortOrder: "desc" }, "field2", "field3"] });
     this.columnsController.moveColumn(0, 0, "headers", "group");
@@ -4217,6 +4217,34 @@ QUnit.test("sortOrder should be not reset after column is ungrouped", function(a
     assert.strictEqual(this.columnsController.getVisibleColumns()[0].dataField, "field1");
     assert.strictEqual(this.columnsController.getVisibleColumns()[0].sortOrder, "desc");
     assert.strictEqual(this.columnsController.getVisibleColumns()[0].groupIndex, undefined);
+});
+
+
+QUnit.test("lastSortOrder should not be updated after changing the group index", function(assert) {
+    //arrange
+    this.applyOptions({ columns: [{ dataField: "field1", sortOrder: "desc" }, { dataField: "field2", groupIndex: 1 }, "field3"] });
+    this.columnsController.moveColumn(1, 0, "headers", "group");
+    this.columnsController.columnOption(0, "sortOrder", "asc");
+
+    //assert
+    assert.strictEqual(this.columnsController.getVisibleColumns()[0].dataField, "field1");
+    assert.strictEqual(this.columnsController.getVisibleColumns()[0].sortOrder, "asc");
+
+    //arrange
+    this.columnsController.moveColumn(0, 2, "group", "group");
+
+    //assert
+    assert.strictEqual(this.columnsController.getVisibleColumns()[1].dataField, "field1");
+    assert.strictEqual(this.columnsController.getVisibleColumns()[1].sortOrder, "asc");
+    assert.strictEqual(this.columnsController.getVisibleColumns()[1].groupIndex, 1);
+
+    //act
+    this.columnsController.moveColumn(1, 0, "group", "headers");
+
+    //assert
+    assert.strictEqual(this.columnsController.getVisibleColumns()[1].dataField, "field1");
+    assert.strictEqual(this.columnsController.getVisibleColumns()[1].sortOrder, "desc");
+    assert.strictEqual(this.columnsController.getVisibleColumns()[1].groupIndex, undefined);
 });
 
 QUnit.module("Column Option", { beforeEach: setupModule, afterEach: teardownModule });

@@ -919,7 +919,7 @@ module.exports = {
                         groupIndex = Math.max(groupIndex, groupColumns[i].groupIndex + 1);
                     }
                 }
-                columnOptionCore(that, column, "groupIndex", groupIndex, true);
+                column.groupIndex = groupIndex;
             };
 
             var checkUserStateColumn = function(column, userStateColumn) {
@@ -1085,9 +1085,13 @@ module.exports = {
                 }
             };
 
-            var updateSortOrder = function(column, groupIndex) {
+            var updateSortOrderWhenGrouping = function(column, groupIndex, prevGroupIndex) {
+                var columnWasGrouped = prevGroupIndex >= 0;
+
                 if(groupIndex >= 0) {
-                    column.lastSortOrder = column.sortOrder;
+                    if(!columnWasGrouped) {
+                        column.lastSortOrder = column.sortOrder;
+                    }
                 } else {
                     column.sortOrder = column.lastSortOrder;
                 }
@@ -1108,7 +1112,7 @@ module.exports = {
                 if(prevValue !== value) {
                     if(optionName === "groupIndex") {
                         changeType = "grouping";
-                        updateSortOrder(column, value);
+                        updateSortOrderWhenGrouping(column, value, prevValue);
                     } else if(optionName === "sortIndex" || optionName === "sortOrder") {
                         changeType = "sorting";
                     } else {
@@ -1818,7 +1822,7 @@ module.exports = {
                             if(targetGroupIndex > column.groupIndex) {
                                 targetGroupIndex--;
                             }
-                            columnOptionCore(that, column, "groupIndex", undefined, true);
+                            delete column.groupIndex;
                             updateColumnGroupIndexes(that);
                         }
 
@@ -1849,6 +1853,10 @@ module.exports = {
                             updateColumnChanges(that, changeType, "visible", column.index);
                         } else {
                             updateColumnChanges(that, changeType);
+                        }
+
+                        if(sourceLocation === GROUP_LOCATION ^ targetLocation === GROUP_LOCATION) {
+                            updateSortOrderWhenGrouping(column, column.groupIndex, -1);
                         }
 
                         fireColumnsChanged(that);
