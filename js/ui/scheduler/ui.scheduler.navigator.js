@@ -14,7 +14,8 @@ var $ = require("../../core/renderer"),
     Popover = require("../popover"),
     Popup = require("../popup"),
     publisherMixin = require("./ui.scheduler.publisher_mixin"),
-    dateLocalization = require("../../localization/date");
+    dateLocalization = require("../../localization/date"),
+    isDefined = require("../../core/utils/type").isDefined;
 
 var ELEMENT_CLASS = "dx-scheduler-navigator",
     CALENDAR_CLASS = "dx-scheduler-navigator-calendar",
@@ -60,15 +61,20 @@ var getCaptionFormat = function(short, intervalCount, duration) {
 };
 
 var getWeekCaption = function(date, shift, rejectWeekend) {
-    var firstWeekDate = dateUtils.getFirstWeekDate(date, this.option("firstDayOfWeek") || getDefaultFirstDayOfWeekIndex(shift)),
+    var firstDayOfWeek = this.option("firstDayOfWeek"),
+        firstDayOfWeekIndex = isDefined(firstDayOfWeek) ? firstDayOfWeek : getDefaultFirstDayOfWeekIndex(shift);
+
+    if(firstDayOfWeekIndex === 0 && rejectWeekend) firstDayOfWeekIndex = MONDAY_INDEX;
+
+    var firstWeekDate = dateUtils.getFirstWeekDate(date, firstDayOfWeekIndex),
         weekendDuration = 2;
 
     if(rejectWeekend) {
         firstWeekDate = dateUtils.normalizeDateByWeek(firstWeekDate, date);
     }
 
-    if(this.option("firstDayOfWeek") >= 6 && rejectWeekend) {
-        firstWeekDate.setDate(firstWeekDate.getDate() + (7 - this.option("firstDayOfWeek") + 1));
+    if(firstDayOfWeek >= 6 && rejectWeekend) {
+        firstWeekDate.setDate(firstWeekDate.getDate() + (7 - firstDayOfWeek + 1));
     }
 
     var lastWeekDate = new Date(firstWeekDate),

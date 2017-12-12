@@ -7,7 +7,8 @@ var $ = require("jquery"),
     Views = require("ui/calendar/ui.calendar.views"),
     pointerMock = require("../../helpers/pointerMock.js"),
     fx = require("animation/fx"),
-    dateSerialization = require("core/utils/date_serialization");
+    dateSerialization = require("core/utils/date_serialization"),
+    dateLocalization = require("localization/date");
 
 require("common.css!");
 require("ui/calendar");
@@ -103,6 +104,17 @@ QUnit.test("onCellClick should not be fired on out of range cells", function(ass
     }
 });
 
+QUnit.test("Calendar should set first day by firstDayOfWeek option if it is setted and this is different in localization", function(assert) {
+    var $element = $("<div>").appendTo("body"),
+        spy = sinon.spy(dateLocalization, "firstDayOfWeekIndex");
+
+    this.view = new Views["month"]($element, {
+        date: new Date(2017, 11, 11),
+        firstDayOfWeek: 0
+    });
+
+    assert.notOk(spy.called, "firstDayOfWeekIndex wasn't called");
+});
 
 QUnit.module("MonthView", {
     beforeEach: function() {
