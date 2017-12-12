@@ -76,16 +76,6 @@
             }
         }
 
-
-        .dx-menu-horizontal {
-            height: 100%;
-
-            .dx-menu-item-text,
-            .dx-menu-item-popout {
-                display: none;
-            }
-        }
-
         .dx-menu-subitem {
             ul li {
                 padding-top: 0;
@@ -658,6 +648,15 @@
     .dx-@{widgetName}-filter-row {
        .dx-menu {
             overflow: visible;
+
+            .dx-menu-horizontal {
+                height: 100%;
+
+                .dx-menu-item-text,
+                .dx-menu-item-popout {
+                    display: none;
+                }
+            }
        }
     }
 
