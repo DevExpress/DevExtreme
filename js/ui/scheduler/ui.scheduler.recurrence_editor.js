@@ -136,7 +136,7 @@ var SchedulerRecurrenceEditor = Editor.inherit({
     },
 
     _getFirstDayOfWeek: function() {
-        return this.option("firstDayOfWeek") || dateLocalization.firstDayOfWeekIndex();
+        return isDefined(this.option("firstDayOfWeek")) ? this.option("firstDayOfWeek") : dateLocalization.firstDayOfWeekIndex();
     },
 
     _createComponent: function(element, name, config) {

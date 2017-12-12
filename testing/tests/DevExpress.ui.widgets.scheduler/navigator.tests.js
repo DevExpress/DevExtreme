@@ -14,6 +14,7 @@ require("generic_light.css!");
 QUnit.testStart(function() {
     $("#qunit-fixture").html('<div id="scheduler-navigator"></div>');
 });
+
 QUnit.module("Navigator", {
     beforeEach: function() {
         devices.current({ platform: "generic" });
@@ -901,4 +902,18 @@ QUnit.test("Popup should be used on mobile devices", function(assert) {
     assert.ok(popup.option("fullScreen"), "Popup takes full screen");
     assert.deepEqual(popup.option("toolbarItems"), [{ shortcut: "cancel" }], "Cancel button exists");
 
+});
+
+QUnit.module("FirstDayOfWeek option");
+
+QUnit.test("Navigator should set firstDayOfWeek by option if it is setted and this is different in localization", function(assert) {
+    var spy = sinon.spy(dateLocalization, "firstDayOfWeekIndex");
+
+    $("#scheduler-navigator").dxSchedulerNavigator({
+        step: "week",
+        date: new Date(2017, 11, 10),
+        firstDayOfWeek: 0
+    }).dxSchedulerNavigator("instance");
+
+    assert.notOk(spy.called, "firstDayOfWeekIndex wasn't called");
 });

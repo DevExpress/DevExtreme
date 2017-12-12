@@ -3,7 +3,8 @@
 var $ = require("jquery"),
     dateUtils = require("core/utils/date"),
     SchedulerRecurrenceEditor = require("ui/scheduler/ui.scheduler.recurrence_editor"),
-    recurrenceUtils = require("ui/scheduler/utils.recurrence");
+    recurrenceUtils = require("ui/scheduler/utils.recurrence"),
+    dateLocalization = require("localization/date");
 
 var SWITCH_EDITOR = "dx-recurrence-switch",
     RECURRENCE_EDITOR_CONTAINER = "dx-recurrence-editor-container",
@@ -816,6 +817,14 @@ QUnit.test("Recurrence editor should have correct firstDayOfWeek default value",
     this.createInstance();
 
     assert.strictEqual(this.instance.option("firstDayOfWeek"), undefined, "default value is correct");
+});
+
+QUnit.test("Recurrence editor should have correct firstDayOfWeek value if this is different in localization", function(assert) {
+    var spy = sinon.spy(dateLocalization, "firstDayOfWeekIndex");
+
+    this.createInstance({ firstDayOfWeek: 0 });
+
+    assert.notOk(spy.called, "firstDayOfWeekIndex wasn't called");
 });
 
 QUnit.test("Repeat-until dateBox should have right firstDayOfWeek", function(assert) {

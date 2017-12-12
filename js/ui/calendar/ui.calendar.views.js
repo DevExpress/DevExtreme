@@ -6,7 +6,8 @@ var $ = require("../../core/renderer"),
     dateUtils = require("../../core/utils/date"),
     extend = require("../../core/utils/extend").extend,
     dateLocalization = require("../../localization/date"),
-    dateSerialization = require("../../core/utils/date_serialization");
+    dateSerialization = require("../../core/utils/date_serialization"),
+    typeUtils = require("../../core/utils/type");
 
 var CALENDAR_OTHER_MONTH_CLASS = "dx-calendar-other-month",
     CALENDAR_OTHER_VIEW_CLASS = "dx-calendar-other-view";
@@ -120,7 +121,7 @@ var Views = {
         },
 
         _getFirstDayOfWeek: function() {
-            return this.option("firstDayOfWeek") || dateLocalization.firstDayOfWeekIndex();
+            return typeUtils.isDefined(this.option("firstDayOfWeek")) ? this.option("firstDayOfWeek") : dateLocalization.firstDayOfWeekIndex();
         },
 
         _getCellByDate: function(date) {
