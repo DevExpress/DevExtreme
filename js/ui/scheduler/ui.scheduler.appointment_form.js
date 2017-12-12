@@ -223,6 +223,26 @@ var SchedulerAppointmentForm = {
 
     concatResources: function(resources) {
         this._editors = this._editors.concat(resources);
+    },
+
+    checkEditorsType: function(form, startDateExpr, endDateExpr, allDay) {
+        var startDateFormItem = form.itemOption(startDateExpr),
+            endDateFormItem = form.itemOption(endDateExpr);
+
+
+        if(startDateFormItem && endDateFormItem) {
+            var startDateEditorOptions = startDateFormItem.editorOptions,
+                endDateEditorOptions = endDateFormItem.editorOptions;
+
+            if(allDay) {
+                startDateEditorOptions.type = endDateEditorOptions.type = "date";
+            } else {
+                startDateEditorOptions.type = endDateEditorOptions.type = "datetime";
+            }
+
+            form.itemOption(startDateExpr, "editorOptions", startDateEditorOptions);
+            form.itemOption(endDateExpr, "editorOptions", endDateEditorOptions);
+        }
     }
 };
 
