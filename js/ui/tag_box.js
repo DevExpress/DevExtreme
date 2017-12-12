@@ -914,8 +914,13 @@ var TagBox = SelectBox.inherit({
     },
 
     _renderTag: function(item, $input) {
-        var value = this._valueGetter(item) || item,
-            $tag = this._getTag(value);
+        var value = this._valueGetter(item);
+
+        if(!isDefined(value)) {
+            return;
+        }
+
+        var $tag = this._getTag(value);
 
         if($tag) {
             var displayValue = this._displayGetter(item);

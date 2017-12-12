@@ -146,6 +146,19 @@ QUnit.test("tags container should use native click (T400944)", function(assert) 
     assert.ok($tagContainer.hasClass(NATIVE_CLICK_CLASS));
 });
 
+QUnit.test("tagBox should not render an empty tag when item is not found in the dataSource", function(assert) {
+    var $tagBox = $("#tagBox").dxTagBox({
+            items: [{ id: 1, text: "item 1" }],
+            valueExpr: "id",
+            displayExpr: "text",
+            value: [1, 4]
+        }),
+        $tags = $tagBox.find("." + TAGBOX_TAG_CLASS);
+
+    assert.equal($tags.length, 1, "only one tag should be rendered");
+    assert.equal($tags.text(), "item 1", "first tag should be rendered");
+});
+
 
 QUnit.module("select element");
 
@@ -813,7 +826,6 @@ QUnit.test("tagbox should show count of selected items when only first page is l
     assert.equal($tagBox.dxTagBox("option", "value").length, 5, "first page is selected");
     assert.equal($tagBox.find("." + TAGBOX_MULTI_TAG_CLASS).text(), "5 selected", "text is correct");
 });
-
 
 
 QUnit.module("the 'value' option", moduleSetup);
