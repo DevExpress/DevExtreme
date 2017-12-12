@@ -66,10 +66,6 @@
     }
 
     .validation-icon-position();
-
-    &.dx-show-clear-button:not(.dx-texteditor-empty) {
-        .validation-icon-position(@GENERIC_TEXTEDITOR_ICON_CONTAINER_SIZE);
-    }
 }
 
 .dx-show-clear-button {
@@ -91,6 +87,10 @@
         color: @texteditor-button-clear-icon-color;
         .dx-texteditor-icon();
         .dx-icon-sizing(@GENERIC_TEXTEDITOR_CLEAR_ICON_SIZE - @GENERIC_TEXTEDITOR_CLEAR_ICON_OVERSIZE, @GENERIC_TEXTEDITOR_ICON_CONTAINER_SIZE);
+    }
+
+    &:not(.dx-texteditor-empty) {
+        .validation-icon-position(@GENERIC_TEXTEDITOR_ICON_CONTAINER_SIZE);
     }
 }
 

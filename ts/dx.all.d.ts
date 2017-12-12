@@ -820,7 +820,7 @@ declare module DevExpress.data {
     export interface StoreOptions {
         /** Specifies the function called when the Store causes an error. */
         errorHandler?: Function;
-        /** Specifies the key properties within the data associated with the Store. */
+        /** Specifies the key property or properties. */
         key?: string | Array<string>;
         /** A handler for the inserted event. */
         onInserted?: ((values: any, key: any | string | number) => any);
@@ -874,7 +874,7 @@ declare module DevExpress.data {
         update(key: any | string | number, values: any): Promise<any> & JQueryPromise<any>;
     }
     export interface ArrayStoreOptions extends StoreOptions {
-        /** Specifies the array associated with this Store. */
+        /** Specifies the array associated with the Store. */
         data?: Array<any>;
     }
     /** A Store accessing an in-memory array. */
@@ -949,11 +949,11 @@ declare module DevExpress.data {
     export interface DataSourceOptions {
         /** The bag of custom parameters passed to the query executed when the DataSource load operation is invoked. */
         customQueryParams?: any;
-        /** An array of the strings that represent the names of the navigation properties to be loaded simultaneously with the OData store's entity. */
+        /** Specifies the navigation properties that are loaded with the OData entity. Available only for the ODataStore. */
         expand?: Array<string> | string;
         /** Specifies data filtering conditions. */
         filter?: string | Array<any>;
-        /** Specifies data grouping conditions. */
+        /** Specifies data grouping options. */
         group?: string | Array<any>;
         /** The item mapping function. */
         map?: ((dataItem: any) => any);
@@ -971,15 +971,15 @@ declare module DevExpress.data {
         postProcess?: ((data: Array<any>) => Array<any>);
         /** Specifies whether or not the DataSource instance requests the total count of items available in the storage. */
         requireTotalCount?: boolean;
-        /** Specifies a value by which the required items are searched. */
+        /** Specifies the fields to search. */
         searchExpr?: string | Function | Array<string | Function>;
-        /** Specifies the comparison operation used to search for the required items. One of "=", "<>", ">", ">=", "<", "<=", "startswith", "endswith", "contains", "notcontains". */
+        /** Specifies the comparison operation used in searching. The following values are accepted: "=", "<>", ">", ">=", "<", "<=", "startswith", "endswith", "contains", "notcontains". */
         searchOperation?: string;
         /** Specifies the value to which the search expression is compared. */
         searchValue?: any;
-        /** Specifies the initial select option value. */
+        /** Specifies the fields to select from data objects. */
         select?: string | Array<any>;
-        /** Specifies the initial sort option value. */
+        /** Specifies data sorting options. */
         sort?: string | Array<any>;
         /** Specifies the underlying Store instance used to access data. */
         store?: Store | StoreOptions | Array<any> | any;
@@ -1121,23 +1121,23 @@ declare module DevExpress.data {
         sum(): Promise<number> & JQueryPromise<number>;
         /** Calculates the sum of item getter values in the current Query. */
         sum(getter: any): Promise<number> & JQueryPromise<number>;
-        /** Adds one more sorting condition to the current Query. */
+        /** Adds one more sorting option to the current Query. */
         thenBy(getter: any): Query;
-        /** Adds one more sorting condition to the current Query. */
+        /** Adds one more sorting option to the current Query. */
         thenBy(getter: any, desc: boolean): Query;
         /** Returns the array of current Query items. */
         toArray(): Array<any>;
     }
     export interface ODataContextOptions {
-        /** A function used to customize a web request before it is sent. */
+        /** Specifies a function used to customize a web request before it is sent. */
         beforeSend?: ((options: { url?: string, async?: boolean, method?: string, timeout?: number, params?: any, payload?: any, headers?: any }) => any);
-        /** Specifies whether or not dates in a response are deserialized. */
+        /** Specifies whether to deserialize dates found in the response. */
         deserializeDates?: boolean;
         /** Specifies the list of entities to be accessed with the ODataContext. */
         entities?: any;
         /** Specifies the function called if the ODataContext causes an error. */
         errorHandler?: Function;
-        /** Specifies whether the ODataStore uses the JSONP approach to access non-CORS-compatible remote services. */
+        /** Specifies whether to use JSONP to access CORS-incompatiable remote services. */
         jsonp?: boolean;
         /** Specifies the URL of the data service being accessed via the current ODataContext. */
         url?: string;
@@ -1165,15 +1165,15 @@ declare module DevExpress.data {
         fieldTypes?: any;
         /** Specifies whether the ODataStore uses the JSONP approach to access non-CORS-compatible remote services. */
         jsonp?: boolean;
-        /** Specifies the type of the ODataStore key property. The following key types are supported out of the box: String, Int32, Int64, Boolean, Single, Decimal and Guid. */
+        /** Specifies the type of the key property or properties. */
         keyType?: string | any;
         /** A handler for the loading event. */
         onLoading?: any;
-        /** Specifies the URL of the entity being accessed via the current ODataStore. */
+        /** Specifies the URL of the OData entity to access. */
         url?: string;
         /** Specifies the version of the OData protocol used to interact with the data service. */
         version?: number;
-        /** Specifies the value of the withCredentials field of the underlying jqXHR object. */
+        /** Specifies whether to send cookies and authorization headers to foreign domains in a cross-origin request. */
         withCredentials?: boolean;
     }
     /** A Store providing access to a separate OData web service entity. */
@@ -1267,16 +1267,16 @@ declare module DevExpress.data {
         state(state: any): void;
     }
     export interface XmlaStoreOptions {
-        /** A function used to customize a web request before it is sent. */
+        /** Specifies a function used to customize a web request before it is sent. */
         beforeSend?: ((options: { url?: string, method?: string, headers?: any, xhrFields?: any, data?: string, dataType?: string }) => any);
-        /** The name of the database associated with the Store. */
+        /** Specifies the database that contains the OLAP cube to use. */
         catalog?: string;
-        /** The cube name. */
+        /** Specifies the name of the OLAP cube to use from the catalog. */
         cube?: string;
-        /** The HTTP address to an XMLA OLAP server. */
+        /** Specifies the URL to the OLAP server. */
         url?: string;
     }
-    /** A Store that provides access to an OLAP cube using the XMLA standard. */
+    /** A Store that provides access to an OLAP cube according to the XMLA standard. */
     export class XmlaStore {
         constructor(options?: XmlaStoreOptions)
     }
@@ -1884,7 +1884,6 @@ declare module DevExpress.ui {
         hide(): Promise<void> & JQueryPromise<void>;
         /** Shows the widget. */
         show(): Promise<void> & JQueryPromise<void>;
-        /** Toggles the visibility of the widget. */
         toggle(showing: boolean): Promise<void> & JQueryPromise<void>;
     }
     export interface GridBaseOptions extends WidgetOptions {
@@ -2472,7 +2471,7 @@ declare module DevExpress.ui {
         minZoomLevel?: string;
         /** Specifies the type of the date/time picker. */
         pickerType?: string;
-        /** The text displayed by the widget when the widget value is not yet specified. This text is also used as a title of the date picker. */
+        /** Specifies a placeholder for the input field. */
         placeholder?: string;
         /** A format used to display date/time information. */
         type?: string;
@@ -3006,7 +3005,6 @@ declare module DevExpress.ui {
         pullRefreshEnabled?: boolean;
         /** Specifies the text displayed in the pullDown panel while the widget is being refreshed. */
         refreshingText?: string;
-        /** Specifies whether to allow searching. */
         searchEnabled?: boolean;
         /** The text that is provided as a hint in the lookup's search bar. */
         searchPlaceholder?: string;

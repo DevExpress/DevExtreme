@@ -3597,6 +3597,45 @@ QUnit.test("DropDown appointment should raise the onAppointmentClick event", fun
     $(dropDown._list.$element()).find(".dx-list-item").eq(2).trigger("dxclick");
 });
 
+QUnit.test("DropDown appointment should process the onAppointmentClick event correctly if e.cancel = true", function(assert) {
+    var spy = sinon.spy();
+    this.createInstance({
+        currentDate: new Date(2015, 2, 4),
+        views: ["month"],
+        width: 840,
+        currentView: "month",
+        firstDayOfWeek: 1,
+        onAppointmentClick: function(e) {
+            e.cancel = true;
+        }
+    });
+    var showAppointmentPopup = this.instance.showAppointmentPopup;
+    this.instance.showAppointmentPopup = spy;
+    try {
+        var appointments = [
+            { startDate: new Date(2015, 2, 4), text: "a", endDate: new Date(2015, 2, 4, 0, 30) },
+            { startDate: new Date(2015, 2, 4), text: "b", endDate: new Date(2015, 2, 4, 0, 30) },
+            { startDate: new Date(2015, 2, 4), text: "c", endDate: new Date(2015, 2, 4, 0, 30) },
+            { startDate: new Date(2015, 2, 4), text: "d", endDate: new Date(2015, 2, 4, 0, 30) },
+            { startDate: new Date(2015, 2, 4), text: "e", endDate: new Date(2015, 2, 4, 0, 30) },
+            { startDate: new Date(2015, 2, 4), text: "f", endDate: new Date(2015, 2, 4, 0, 30) },
+            { startDate: new Date(2015, 2, 4), text: "g", endDate: new Date(2015, 2, 4, 0, 30) }
+        ];
+
+        var instance = this.instance;
+
+        instance.option("dataSource", appointments);
+
+        var dropDown = instance.$element().find(".dx-scheduler-dropdown-appointments").dxDropDownMenu("instance");
+        dropDown.open();
+        $(dropDown._list.$element()).find(".dx-list-item").eq(2).trigger("dxclick");
+
+        assert.notOk(spy.calledOnce, "showAppointmentPopup wasn't called");
+    } finally {
+        this.instance.showAppointmentPopup = showAppointmentPopup;
+    }
+});
+
 QUnit.test("DropDown appointment should be painted depend on resource color", function(assert) {
     var appointments = [
         { startDate: new Date(2015, 2, 4), text: "a", endDate: new Date(2015, 2, 4, 0, 30), roomId: 1 },

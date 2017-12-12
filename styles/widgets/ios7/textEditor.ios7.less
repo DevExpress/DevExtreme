@@ -83,6 +83,10 @@
     .dx-texteditor-input {
         padding-right: @CLEAR_ICON_SIZE + @CLEAR_ICON_RIGHT * 2;
     }
+
+    &:not(.dx-texteditor-empty) {
+        .validation-icon-position(@CLEAR_ICON_SIZE + @CLEAR_ICON_RIGHT);
+    }
 }
 
 .dx-clear-button-area {
@@ -140,10 +144,6 @@
                 .dx-invalid-ios7-badge();
             }
         }
-
-    }
-    &.dx-show-clear-button:not(.dx-texteditor-empty) {
-        .validation-icon-position(@CLEAR_ICON_SIZE + @CLEAR_ICON_RIGHT);
     }
 }
 

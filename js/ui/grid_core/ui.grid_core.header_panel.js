@@ -62,6 +62,12 @@ var HeaderPanel = columnsView.ColumnsView.inherit({
 
     _columnOptionChanged: noop,
 
+    _handleDataChanged: function() {
+        if(this._requireReady) {
+            this.render();
+        }
+    },
+
     init: function() {
         this.callBase();
         this.createAction("onToolbarPreparing", { excludeValidators: ["designMode", "disabled", "readOnly"] });

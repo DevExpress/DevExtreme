@@ -164,8 +164,7 @@ var commonIndicator = {
 	* @name commonIndicatoroptions_offset
 	* @publicName offset
 	* @type number
-	* @custom_default_for_value_indicators 20
-	* @custom_default_for_subvalue_indicators 6
+	* @default 20
 	*/
     offset: 20,
     /**
@@ -176,6 +175,14 @@ var commonIndicator = {
 	* @propertyOf circularTwoColorNeedle,circularRectangleNeedle,circularTriangleNeedle
 	*/
     indentFromCenter: 0,
+    /**
+	* @name commonIndicatoroptions_beginAdaptingAtRadius
+	* @publicName beginAdaptingAtRadius
+	* @type number
+	* @default 50
+	* @propertyOf circularTwoColorNeedle,circularRectangleNeedle,circularTriangleNeedle
+	*/
+    beginAdaptingAtRadius: 50,
     /**
 	* @name commonIndicatoroptions_secondColor
 	* @publicName secondColor

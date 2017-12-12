@@ -5,7 +5,8 @@ var $ = require("../core/renderer"),
     dataUtils = require("../core/element_data"),
     getPublicElement = require("../core/utils/dom").getPublicElement,
     devices = require("../core/devices"),
-    noop = require("../core/utils/common").noop,
+    commonUtils = require("../core/utils/common"),
+    noop = commonUtils.noop,
     isDefined = require("../core/utils/type").isDefined,
     arrayUtils = require("../core/utils/array"),
     typeUtils = require("../core/utils/type"),
@@ -668,6 +669,11 @@ var TagBox = SelectBox.inherit({
         this._scrollContainer("end");
     },
 
+    _restoreInputText: function() {
+        this._clearTextValue();
+        this._clearFilter();
+    },
+
     _focusOutHandler: function(e) {
         var openedUseButtons = this.option("opened") && this.option("applyValueMode") === "useButtons";
 
@@ -676,7 +682,8 @@ var TagBox = SelectBox.inherit({
             return;
         }
 
-        this._clearTextValue();
+        this.callBase(e);
+
         this._clearTagFocus();
 
         this._scrollContainer("start");

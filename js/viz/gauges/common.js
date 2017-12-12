@@ -617,7 +617,7 @@ ValueIndicatorsSet.prototype = {
     },
 
     getOffset: function() {
-        return _Number(this._options.offset) || 0;
+        return this._sample.getOffset();
     },
 
     resize: function(layout) {

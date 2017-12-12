@@ -283,7 +283,7 @@ function isGroup(criteria) {
         return false;
     }
 
-    return criteria.length === 1 || criteria.some(function(item) {
+    return criteria.length < 2 || criteria.some(function(item) {
         return Array.isArray(item);
     });
 }

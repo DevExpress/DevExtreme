@@ -267,6 +267,26 @@ QUnit.test("option elements should be updated on value change", function(assert)
     });
 });
 
+QUnit.test("unselect item with value '0'", function(assert) {
+    var items = [{ id: 0, text: "eins" }, { id: 1, text: "zwei" }, { id: 2, text: "drei" }],
+        value = [0, 1],
+        $tagBox = $("#tagBox"),
+        tagBoxInstance = $tagBox
+            .dxTagBox({
+                items: items,
+                value: value,
+                valueExpr: "id",
+                displayExpr: "text"
+            }).dxTagBox("instance");
+
+    $tagBox
+        .find("." + TAGBOX_TAG_REMOVE_BUTTON_CLASS)
+        .first()
+        .trigger("dxclick");
+
+    assert.deepEqual(tagBoxInstance.option("value"), [1]);
+});
+
 
 QUnit.module("the 'name' option");
 
@@ -4374,4 +4394,38 @@ QUnit.testInActiveWindow("Searching should work correctly in grouped tagBox (T51
 
     assert.equal($tagContainer.find("." + TAGBOX_TAG_CONTENT_CLASS).length, 2, "selected tags rendered");
     assert.equal($.trim($tagContainer.text()), "Item1Item3", "selected values are rendered");
+});
+
+QUnit.testInActiveWindow("focusout event should remove focus class from the widget", function(assert) {
+    var $tagBox = $("#tagBox").dxTagBox({}),
+        $input = $tagBox.find("input");
+
+    $input.focus();
+    assert.ok($tagBox.hasClass(FOCUSED_CLASS), "focused class was applied");
+
+    $input.blur();
+    assert.notOk($tagBox.hasClass(FOCUSED_CLASS), "focused class was removed");
+});
+
+QUnit.test("search filter should be cleared on close", function(assert) {
+    var $tagBox = $("#tagBox").dxTagBox({
+            items: ["111", "222", "333"],
+            searchTimeout: 0,
+            opened: true,
+            searchEnabled: true
+        }),
+        instance = $tagBox.dxTagBox("instance"),
+        $tagContainer = $tagBox.find("." + TAGBOX_TAG_CONTAINER_CLASS),
+        $input = $tagBox.find("input"),
+        kb = keyboardMock($input);
+
+    kb.type("111");
+    this.clock.tick();
+    assert.equal($(instance.content()).find("." + LIST_ITEM_CLASS).length, 1, "filter was applied");
+
+    $tagContainer.trigger("dxclick");
+    $tagContainer.trigger("dxclick");
+
+    assert.equal($input.val(), "", "input was cleared");
+    assert.equal($(instance.content()).find("." + LIST_ITEM_CLASS).length, 3, "filter was cleared");
 });

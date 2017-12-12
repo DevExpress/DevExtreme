@@ -7,6 +7,7 @@ var $ = require("jquery"),
 require("ui/text_box/ui.text_editor");
 
 var INPUT_CLASS = "dx-texteditor-input",
+    PLACEHOLDER_CLASS = "dx-placeholder",
     MINUS_KEY = 189;
 
 var moduleConfig = {
@@ -124,6 +125,18 @@ QUnit.test("pressing '-' with different positive and negative parts", function(a
     assert.equal(this.instance.option("value"), 123, "value is positive");
 });
 
+QUnit.test("focusout after inverting sign should not lead to value changing", function(assert) {
+    this.instance.option("value", -123);
+
+    //note: keyboard mock keyDown send wrong key for '-' and can not be used here
+    this.input.trigger($.Event("keydown", { keyCode: MINUS_KEY, which: MINUS_KEY, key: "-" }));
+    this.keyboard.caret(3).input("-");
+    this.keyboard.blur().change();
+
+    assert.equal(this.input.val(), "123", "text is correct");
+    assert.equal(this.instance.option("value"), 123, "value is correct");
+});
+
 QUnit.test("setting value to undefined should work correctly", function(assert) {
     this.instance.option({
         format: "#0",
@@ -166,6 +179,22 @@ QUnit.testInActiveWindow("focusout should remove incomplete value chars from inp
     this.instance.option("value", 123);
     this.keyboard.caret(3).type(".").change().blur();
     assert.equal(this.input.val(), "123", "input was reformatted");
+});
+
+QUnit.test("api value changing should hide a placeholder", function(assert) {
+    this.instance.option({
+        format: "$ #0",
+        placeholder: "Enter number"
+    });
+
+    var $placeholder = this.$element.find("." + PLACEHOLDER_CLASS);
+
+    assert.ok($placeholder.is(":visible"), "placeholder is visible");
+
+    this.instance.option("value", 1);
+
+    assert.equal(this.input.val(), "$ 1", "text is correct");
+    assert.notOk($placeholder.is(":visible"), "placeholder is hidden");
 });
 
 
@@ -329,6 +358,14 @@ QUnit.test("percent format should work properly on value change", function(asser
 
     assert.equal(this.input.val(), "45%", "text is correct");
     assert.equal(this.instance.option("value"), 0.45, "value is correct");
+});
+
+QUnit.test("escaped percent should be parsed correctly", function(assert) {
+    this.instance.option("format", "#0'%'");
+    this.keyboard.type("123").change();
+
+    assert.equal(this.input.val(), "123%", "text is correct");
+    assert.equal(this.instance.option("value"), 123, "value is correct");
 });
 
 QUnit.test("non-ldml percent format should work properly on value change", function(assert) {
@@ -699,4 +736,38 @@ QUnit.test("moving caret to closest non stub on click - backward direction", fun
     this.input.trigger("dxclick");
 
     assert.deepEqual(this.keyboard.caret(), { start: 1, end: 1 }, "caret was adjusted");
+});
+
+QUnit.test("move caret to the end when only stubs remain in the input", function(assert) {
+    this.instance.option({
+        format: "$ #",
+        value: 1
+    });
+
+    this.keyboard.caret(3)
+        .keyDown("backspace")
+        .input("backspace");
+
+    assert.equal(this.input.val(), "$ ", "text is correct");
+
+    this.input.trigger("dxclick");
+
+    assert.deepEqual(this.keyboard.caret(), { start: 2, end: 2 }, "caret was adjusted");
+});
+
+QUnit.test("move caret to the start when only stubs remain in the input", function(assert) {
+    this.instance.option({
+        format: "# p",
+        value: 1
+    });
+
+    this.keyboard.caret(1)
+        .keyDown("backspace")
+        .input("backspace");
+
+    assert.equal(this.input.val(), " p", "text is correct");
+
+    this.input.trigger("dxclick");
+
+    assert.deepEqual(this.keyboard.caret(), { start: 0, end: 0 }, "caret was adjusted");
 });

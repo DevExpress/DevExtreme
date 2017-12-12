@@ -773,6 +773,12 @@ var Box = CollectionWidget.inherit({
 * @default 0
 */
 /**
+* @name dxBoxItemTemplate_shrink
+* @publicName shrink
+* @type number
+* @default 1
+*/
+/**
 * @name dxBoxItemTemplate_box
 * @publicName box
 * @type dxBoxOptions

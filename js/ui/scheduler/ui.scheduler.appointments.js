@@ -425,20 +425,7 @@ var SchedulerAppointments = CollectionWidget.inherit({
     _extendActionArgs: function() {
         var args = this.callBase.apply(this, arguments);
 
-        return this._mapAppointmentFields(args);
-    },
-
-    _mapAppointmentFields: function(args) {
-        var result = {
-            appointmentData: args.itemData,
-            appointmentElement: args.itemElement
-        };
-
-        if(args.itemData) {
-            result.targetedAppointmentData = this.invoke("getTargetedAppointmentData", args.itemData, args.itemElement, args.itemIndex);
-        }
-
-        return result;
+        return this.invoke("mapAppointmentFields", args);
     },
 
     _render: function() {
@@ -837,8 +824,7 @@ var SchedulerAppointments = CollectionWidget.inherit({
 
     _renderDropDownAppointments: function() {
         var buttonWidth = this.invoke("getCompactAppointmentGroupMaxWidth"),
-            rtlOffset = 0,
-            that = this;
+            rtlOffset = 0;
 
         if(this.option("rtlEnabled")) {
             rtlOffset = buttonWidth;
@@ -861,10 +847,7 @@ var SchedulerAppointments = CollectionWidget.inherit({
                 buttonColor: virtualGroup.buttonColor,
                 itemTemplate: this.option("itemTemplate"),
                 buttonWidth: buttonWidth,
-                onAppointmentClick: function(args) {
-                    var mappedAppointmentFields = that._mapAppointmentFields(args);
-                    that._itemDXEventHandler(args.event, "onItemClick", mappedAppointmentFields);
-                }
+                onAppointmentClick: this.option("onItemClick")
             });
         }).bind(this));
     },

@@ -1047,6 +1047,18 @@ QUnit.test("default browser menu should not be prevented if context menu positio
     assert.notOk(e.isDefaultPrevented(), "default behavior should not be prevented");
 });
 
+QUnit.test("show event should not be handled by other menus targeted on the parent div", function(assert) {
+    new ContextMenu(this.$element, {
+        items: [{ text: 1 }],
+        target: "#menuTarget"
+    });
+
+    var e = $.Event("dxcontextmenu");
+
+    $("#menuTarget").trigger(e);
+    assert.ok(e.isPropagationStopped(), "propagation was stopped");
+});
+
 QUnit.test("disabling for nested item should work correctly", function(assert) {
     var instance = new ContextMenu(this.$element, {
             items: [{ text: 1, items: [{ text: 11 }] }],

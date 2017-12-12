@@ -229,6 +229,8 @@ declare module DevExpress.viz.gauges {
         /** Sets the array of colors to be used for coloring subvalue indicators. */
         palette?: any;
 
+        beginAdaptingAtRadius?: number;
+
         /** Specifies the distance between the needle and the center of a gauge for the indicator of a needle-like type. */
         indentFromCenter?: number;
 
