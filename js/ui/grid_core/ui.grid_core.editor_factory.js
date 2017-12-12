@@ -116,7 +116,7 @@ var EditorFactory = modules.ViewController.inherit({
 
                 if(hideBorder) {
                     that._$focusOverlay && that._$focusOverlay.addClass(DX_HIDDEN);
-                } else {
+                } else if($element.length) {
                     // align "left bottom" for IE, align "right bottom" for Mozilla
                     var align = browser.msie ? "left bottom" : browser.mozilla ? "right bottom" : "left top",
                         $content = $element.closest("." + that.addWidgetPrefix(CONTENT_CLASS)),
