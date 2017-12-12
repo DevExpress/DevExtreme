@@ -8,7 +8,6 @@ var $ = require("../../core/renderer"),
     extend = require("../../core/utils/extend").extend,
     messageLocalization = require("../../localization/message"),
     utils = require("./utils"),
-    ContextMenu = require("../context_menu"),
     TreeView = require("../tree_view"),
     Popup = require("../popup"),
     EditorFactoryMixin = require("../shared/ui.editor_factory_mixin");
@@ -604,13 +603,7 @@ var FilterBuilder = Widget.inherit({
         });
         this._subscribeOnClickAndEnterKey($button, function() {
             removeMenu();
-            if(options.menu.treeViewEnabled) {
-                that._createPopupWithTreeView(options, that.$element());
-            } else {
-                that._createContextMenu(options.menu)
-                    .appendTo(that.$element())
-                    .dxContextMenu("show");
-            }
+            that._createPopupWithTreeView(options, that.$element());
             $button.addClass(ACTIVE_CLASS);
         });
         return $button;
@@ -682,7 +675,6 @@ var FilterBuilder = Widget.inherit({
                 dataStructure: "plain",
                 keyExpr: "dataField",
                 displayExpr: "caption",
-                treeViewEnabled: allowHierarchicalFields,
                 onItemClick: function(e) {
                     if(item !== e.itemData) {
                         item = e.itemData;
@@ -916,12 +908,6 @@ var FilterBuilder = Widget.inherit({
             showTitle: false,
             deferRendering: false
         });
-    },
-
-    _createContextMenu: function(options) {
-        var $container = $("<div>");
-        this._createComponent($container, ContextMenu, options);
-        return $container;
     },
 
     _subscribeOnClickAndEnterKey: function($button, handler, keyEvent) {
