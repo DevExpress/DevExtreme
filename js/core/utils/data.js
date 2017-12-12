@@ -47,20 +47,6 @@ var unwrap = function(value, options) {
     return options.unwrapObservables ? unwrapVariable(value) : value;
 };
 
-var walk = function(object, path, accessor) {
-    var result;
-    for(var level = 0, depth = path.length; level < depth; level++) {
-        var key = path[level];
-        object = accessor(object, key, level);
-        if(object === undefined) {
-            break;
-        }
-        result = object;
-    }
-
-    return result;
-};
-
 var compileGetter = function(expr) {
     if(arguments.length > 1) {
         expr = [].slice.call(arguments);
@@ -77,23 +63,22 @@ var compileGetter = function(expr) {
 
         return function(obj, options) {
             options = prepareOptions(options);
-            var functionAsIs = options.functionsAsIs;
+            var functionAsIs = options.functionsAsIs,
+                current = unwrap(obj, options);
 
-            return walk(unwrap(obj, options), path, function(currentObject, currentPropertyName) {
-                var value;
+            for(var i = 0; i < path.length; i++) {
+                if(!current) break;
 
-                if(!currentObject) {
-                    value = currentObject;
-                } else {
-                    value = readPropValue(currentObject, currentPropertyName, options);
+                var next = unwrap(current[path[i]], options);
 
-                    if(!functionAsIs && typeUtils.isFunction(value)) {
-                        value = value.call(currentObject);
-                    }
+                if(!functionAsIs && typeUtils.isFunction(next)) {
+                    next = next.call(current);
                 }
 
-                return value;
-            });
+                current = next;
+            }
+
+            return current;
         };
     }
 
@@ -148,30 +133,32 @@ var compileSetter = function(expr) {
     return function(obj, value, options) {
         options = prepareOptions(options);
 
-        walk(unwrap(obj, options), expr, function(currentObject, currentPropertyName, currentLevel) {
-            var result = readPropValue(currentObject, currentPropertyName, options),
-                isFunc = !options.functionsAsIs && typeUtils.isFunction(result) && !isWrapped(result);
+        var currentObject = unwrap(obj, options);
 
-            if(!typeUtils.isDefined(result)) {
-                result = { };
-                assignPropValue(currentObject, currentPropertyName, result, options);
+        expr.forEach(function(currentPropertyName, currentLevel) {
+            var prevTargetValue = readPropValue(currentObject, currentPropertyName, options),
+                isFunc = !options.functionsAsIs && typeUtils.isFunction(prevTargetValue) && !isWrapped(prevTargetValue);
+
+            if(!typeUtils.isDefined(prevTargetValue)) {
+                prevTargetValue = { };
+                assignPropValue(currentObject, currentPropertyName, prevTargetValue, options);
             }
 
             if(currentLevel === exprDepth - 1) {
                 if(isFunc) {
                     currentObject[currentPropertyName](value);
                 } else {
-                    if(options.merge && typeUtils.isPlainObject(value) && typeUtils.isPlainObject(result)) {
-                        objectUtils.deepExtendArraySafe(result, value, false, true);
+                    if(options.merge && typeUtils.isPlainObject(value) && typeUtils.isPlainObject(prevTargetValue)) {
+                        objectUtils.deepExtendArraySafe(prevTargetValue, value, false, true);
                     } else {
                         assignPropValue(currentObject, currentPropertyName, value, options);
                     }
                 }
             } else if(isFunc) {
-                result = result.call(currentObject);
+                prevTargetValue = prevTargetValue.call(currentObject);
             }
 
-            return result;
+            currentObject = prevTargetValue;
         });
     };
 };
