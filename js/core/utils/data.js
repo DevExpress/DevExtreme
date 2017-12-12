@@ -128,37 +128,35 @@ var combineGetters = function(getters) {
 
 var compileSetter = function(expr) {
     expr = bracketsToDots(expr || "this").split(".");
-    var exprDepth = expr.length;
+    var lastLevelIndex = expr.length - 1;
 
     return function(obj, value, options) {
         options = prepareOptions(options);
+        var currentValue = unwrap(obj, options);
 
-        var currentObject = unwrap(obj, options);
+        expr.forEach(function(propertyName, levelIndex) {
+            var propertyValue = readPropValue(currentValue, propertyName, options),
+                isPropertyFunc = !options.functionsAsIs && typeUtils.isFunction(propertyValue) && !isWrapped(propertyValue);
 
-        expr.forEach(function(currentPropertyName, currentLevel) {
-            var prevTargetValue = readPropValue(currentObject, currentPropertyName, options),
-                isFunc = !options.functionsAsIs && typeUtils.isFunction(prevTargetValue) && !isWrapped(prevTargetValue);
-
-            if(!typeUtils.isDefined(prevTargetValue)) {
-                prevTargetValue = { };
-                assignPropValue(currentObject, currentPropertyName, prevTargetValue, options);
+            if(!typeUtils.isDefined(propertyValue)) {
+                propertyValue = { };
+                assignPropValue(currentValue, propertyName, propertyValue, options);
             }
 
-            if(currentLevel === exprDepth - 1) {
-                if(isFunc) {
-                    currentObject[currentPropertyName](value);
+            if(levelIndex === lastLevelIndex) {
+                if(options.merge && typeUtils.isPlainObject(value) && typeUtils.isPlainObject(propertyValue)) {
+                    objectUtils.deepExtendArraySafe(propertyValue, value, false, true);
+                } else if(isPropertyFunc) {
+                    currentValue[propertyName](value);
                 } else {
-                    if(options.merge && typeUtils.isPlainObject(value) && typeUtils.isPlainObject(prevTargetValue)) {
-                        objectUtils.deepExtendArraySafe(prevTargetValue, value, false, true);
-                    } else {
-                        assignPropValue(currentObject, currentPropertyName, value, options);
-                    }
+                    assignPropValue(currentValue, propertyName, value, options);
                 }
-            } else if(isFunc) {
-                prevTargetValue = prevTargetValue.call(currentObject);
+            } else {
+                if(isPropertyFunc) {
+                    propertyValue = propertyValue.call(currentValue);
+                }
+                currentValue = propertyValue;
             }
-
-            currentObject = prevTargetValue;
         });
     };
 };
