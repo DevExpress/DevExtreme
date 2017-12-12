@@ -31,7 +31,7 @@ var $ = require("../../core/renderer"),
     normalizeDataSourceOptions = DataSourceModule.normalizeDataSourceOptions;
 
 var USER_STATE_FIELD_NAMES_15_1 = ["filterValues", "filterType", "fixed", "fixedPosition"],
-    USER_STATE_FIELD_NAMES = ["visibleIndex", "dataField", "name", "dataType", "width", "visible", "sortOrder", "sortIndex", "groupIndex", "filterValue", "selectedFilterOperation", "added"].concat(USER_STATE_FIELD_NAMES_15_1),
+    USER_STATE_FIELD_NAMES = ["visibleIndex", "dataField", "name", "dataType", "width", "visible", "sortOrder", "lastSortOrder", "sortIndex", "groupIndex", "filterValue", "selectedFilterOperation", "added"].concat(USER_STATE_FIELD_NAMES_15_1),
     COMMAND_EXPAND_CLASS = "dx-command-expand";
 
 module.exports = {
@@ -1111,6 +1111,18 @@ module.exports = {
                 }
             };
 
+            var updateSortOrderWhenGrouping = function(column, groupIndex, prevGroupIndex) {
+                var columnWasGrouped = prevGroupIndex >= 0;
+
+                if(groupIndex >= 0) {
+                    if(!columnWasGrouped) {
+                        column.lastSortOrder = column.sortOrder;
+                    }
+                } else {
+                    column.sortOrder = column.lastSortOrder;
+                }
+            };
+
             var columnOptionCore = function(that, column, optionName, value, notFireEvent) {
                 var optionGetter = dataCoreUtils.compileGetter(optionName),
                     columnIndex = column.index,
@@ -1126,6 +1138,7 @@ module.exports = {
                 if(prevValue !== value) {
                     if(optionName === "groupIndex") {
                         changeType = "grouping";
+                        updateSortOrderWhenGrouping(column, value, prevValue);
                     } else if(optionName === "sortIndex" || optionName === "sortOrder") {
                         changeType = "sorting";
                     } else {
@@ -1841,7 +1854,6 @@ module.exports = {
                                 targetGroupIndex--;
                             }
                             delete column.groupIndex;
-                            delete column.sortOrder;
                             updateColumnGroupIndexes(that);
                         }
 
@@ -1872,6 +1884,10 @@ module.exports = {
                             updateColumnChanges(that, changeType, "visible", column.index);
                         } else {
                             updateColumnChanges(that, changeType);
+                        }
+
+                        if(sourceLocation === GROUP_LOCATION ^ targetLocation === GROUP_LOCATION) {
+                            updateSortOrderWhenGrouping(column, column.groupIndex, -1);
                         }
 
                         fireColumnsChanged(that);
