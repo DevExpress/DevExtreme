@@ -136,16 +136,6 @@
             }
         }
 
-        .dx-menu-item-has-submenu {
-            &.dx-state-hover {
-                background-color: transparent;
-            }
-
-            &.dx-menu-item-expanded.dx-state-hover {
-                background-color: ~"@{@{widgetName}-editor-bg}";
-            }
-        }
-
         .dx-row-alt {
             & > td {
                 background-color: ~"@{@{widgetName}-row-alternation-bg}";
@@ -484,6 +474,16 @@
                         border-color: transparent;
                     }
                 }
+            }
+        }
+
+        .dx-menu-item-has-submenu {
+            &.dx-state-hover {
+                background-color: transparent;
+            }
+
+            &.dx-menu-item-expanded.dx-state-hover {
+                background-color: ~"@{@{widgetName}-editor-bg}";
             }
         }
 
