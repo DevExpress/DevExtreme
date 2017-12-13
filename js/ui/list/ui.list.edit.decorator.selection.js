@@ -4,6 +4,7 @@ var $ = require("../../core/renderer"),
     eventsEngine = require("../../events/core/events_engine"),
     clickEvent = require("../../events/click"),
     extend = require("../../core/utils/extend").extend,
+    errors = require("../widget/ui.errors"),
     CheckBox = require("../check_box"),
     RadioButton = require("../radio_group/radio_button"),
     eventUtils = require("../../events/utils"),
@@ -135,11 +136,26 @@ registerDecorator(
             }
         },
 
+        _checkSelectAllCapability: function() {
+            var list = this._list,
+                dataSource = list.getDataSource();
+
+            if(list.option("selectAllMode") === "allPages" && list.option("grouped") && (!dataSource || !dataSource.group())) {
+                errors.log("W1010");
+                return false;
+            }
+            return true;
+        },
+
         _selectAllItems: function() {
+            if(!this._checkSelectAllCapability()) return;
+
             this._list._selection.selectAll(this._list.option("selectAllMode") === "page");
         },
 
         _unselectAllItems: function() {
+            if(!this._checkSelectAllCapability()) return;
+
             this._list._selection.deselectAll(this._list.option("selectAllMode") === "page");
         },
 

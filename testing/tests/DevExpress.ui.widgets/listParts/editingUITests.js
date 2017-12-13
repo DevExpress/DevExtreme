@@ -5,6 +5,7 @@ require("ui/action_sheet");
 var $ = require("jquery"),
     renderer = require("core/renderer"),
     fx = require("animation/fx"),
+    errors = require("ui/widget/ui.errors"),
     translator = require("animation/translator"),
     animationFrame = require("animation/frame"),
     holdEvent = require("events/hold"),
@@ -2082,6 +2083,47 @@ QUnit.test("more button is shown if selectAllMode was changed after load allpage
     $moreButton = $list.find(".dx-list-next-button > .dx-button").eq(0);
 
     assert.ok($moreButton.length, "morebutton is shown");
+});
+
+QUnit.test("selectAll and unselectAll should log warning if selectAllMode is allPages and data is grouped", function(assert) {
+    var ds = new DataSource({
+        store: [{ key: "1", items: ["1_1", "1_2"] }, { key: "2", items: ["2_1", "2_2"] }],
+        pageSize: 2,
+        paginate: true
+    });
+
+    var $list = $("#list").dxList({
+        dataSource: ds,
+        grouped: true,
+        showSelectionControls: true,
+        selectionMode: "all",
+        selectAllMode: "allPages"
+    });
+
+    var $selectAll = $list.find(".dx-list-select-all .dx-checkbox");
+
+    sinon.spy(errors, "log");
+
+    //act
+    $selectAll.trigger("dxclick");
+
+    //assert
+    assert.equal(errors.log.callCount, 1);
+    assert.equal(errors.log.lastCall.args[0], "W1010", "Warning about selectAllMode allPages and grouped data");
+    assert.equal($selectAll.dxCheckBox("option", "value"), true, "selectAll checkbox is in selected state");
+    assert.equal($list.dxList("option", "selectedItems").length, 0, "items are not selected");
+
+
+    //act
+    $selectAll.trigger("dxclick");
+
+    //assert
+    assert.equal(errors.log.callCount, 2);
+    assert.equal(errors.log.lastCall.args[0], "W1010", "Warning about selectAllMode allPages and grouped data");
+    assert.equal($selectAll.dxCheckBox("option", "value"), false, "selectAll checkbox is in selected state");
+    assert.equal($list.dxList("option", "selectedItems").length, 0, "items are not selected");
+
+    errors.log.restore();
 });
 
 
