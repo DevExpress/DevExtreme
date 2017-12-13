@@ -686,6 +686,7 @@ QUnit.test("format: precision", function(assert) {
 QUnit.test("parse: base", function(assert) {
     assert.equal(numberLocalization.parse("1.2"), 1.2);
     assert.equal(numberLocalization.parse("12,000"), 12000);
+    assert.ok(isNaN(numberLocalization.parse("1.236", "#0.00")));
 });
 
 QUnit.test("parse with custom separators", function(assert) {
