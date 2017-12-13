@@ -159,9 +159,7 @@ QUnit.test('Disposing', function(assert) {
     palette.dispose();
 
     //assert
-    assert.strictEqual(palette._originalPalette, null, '_originalPalette');
-    assert.strictEqual(palette._palette, null, '_palette');
-    assert.strictEqual(palette._paletteSteps, null, '_paletteSteps');
+    assert.strictEqual(palette._extensionStrategy, null);
 });
 
 QUnit.test('Custom palette by name', function(assert) {
@@ -170,8 +168,8 @@ QUnit.test('Custom palette by name', function(assert) {
         indicatingSet: ['d1', 'd2']
     });
 
-    this.checkPalette(assert, new this.Palette('Custom Palette'), ['c1', 'c2', 'c3'], 'simpleSet');
-    this.checkPalette(assert, new this.Palette('Custom Palette', { type: 'indicatingSet' }), ['d1', 'd2'], 'indicatingSet');
+    this.checkPalette(assert, new this.Palette('Custom Palette', { extensionMode: "repeat" }), ['c1', 'c2', 'c3'], 'simpleSet');
+    this.checkPalette(assert, new this.Palette('Custom Palette', { type: 'indicatingSet', extensionMode: "repeat" }), ['d1', 'd2'], 'indicatingSet');
 });
 
 QUnit.test('Custom palette by unknown name', function(assert) {
@@ -180,16 +178,16 @@ QUnit.test('Custom palette by unknown name', function(assert) {
         indicatingSet: ['d1', 'd2']
     });
 
-    this.checkPalette(assert, new this.Palette('Custom Palette 2'), this.palettes['default'].simpleSet, 'simpleSet');
+    this.checkPalette(assert, new this.Palette('Custom Palette 2', { extensionMode: "repeat" }), this.palettes['default'].simpleSet, 'simpleSet');
 });
 
 QUnit.test('Custom palette by array', function(assert) {
-    this.checkPalette(assert, new this.Palette(['a1', 'a2', 'a3']), ['a1', 'a2', 'a3']);
+    this.checkPalette(assert, new this.Palette(['a1', 'a2', 'a3'], { extensionMode: "repeat" }), ['a1', 'a2', 'a3']);
 });
 
 QUnit.test('Lightening palette', function(assert) {
     //act
-    var palette = new this.Palette(['green', 'red'], { useHighlight: true });
+    var palette = new this.Palette(['green', 'red'], { useHighlight: true, extensionMode: "repeat" });
 
     //assert
     assert.strictEqual(palette.getNextColor(), 'green');
@@ -200,7 +198,7 @@ QUnit.test('Lightening palette', function(assert) {
 
 QUnit.test('Darkening palette after lightening', function(assert) {
     //act
-    var palette = new this.Palette(['green', 'red'], { useHighlight: true });
+    var palette = new this.Palette(['green', 'red'], { useHighlight: true, extensionMode: "repeat" });
 
     //assert
     assert.strictEqual(palette.getNextColor(), 'green');
@@ -216,9 +214,88 @@ QUnit.test('Darkening palette after lightening', function(assert) {
     assert.strictEqual(palette.getNextColor(), "red");
 });
 
+QUnit.test('Extrapolate without passing count', function(assert) {
+    //act
+    var palette = new this.Palette(['green', 'red'], { extensionMode: "extrapolate" });
+
+    //assert
+    assert.strictEqual(palette.getNextColor(), 'green');
+    assert.strictEqual(palette.getNextColor(), 'red');
+    assert.strictEqual(palette.getNextColor(), "green");
+    assert.strictEqual(palette.getNextColor(), "red");
+});
+
+QUnit.test('Extrapolate with passing count', function(assert) {
+    //act
+    var palette = new this.Palette(['green', 'red'], { extensionMode: "extrapolate" });
+
+    //assert
+    assert.strictEqual(palette.getNextColor(6), '#007300');
+    assert.strictEqual(palette.getNextColor(6), '#e60000');
+    assert.strictEqual(palette.getNextColor(6), "#008000");
+    assert.strictEqual(palette.getNextColor(6), "#ff0000");
+    assert.strictEqual(palette.getNextColor(6), "#99ff99");
+    assert.strictEqual(palette.getNextColor(6), "#ff9999");
+});
+
+QUnit.test('Blend without passing count', function(assert) {
+    //act
+    var palette = new this.Palette(['green', 'red', "yellow"], { extensionMode: "blend" });
+
+    //assert
+    assert.strictEqual(palette.getNextColor(), 'green');
+    assert.strictEqual(palette.getNextColor(), 'red');
+    assert.strictEqual(palette.getNextColor(), "yellow");
+    assert.strictEqual(palette.getNextColor(), "green");
+});
+
+
+QUnit.test('Blend with passing count', function(assert) {
+    //act
+    var palette = new this.Palette(['green', 'red', "yellow"], { extensionMode: "blend" });
+
+    //assert
+    assert.strictEqual(palette.getNextColor(6), 'green');
+    assert.strictEqual(palette.getNextColor(6), '#804000');
+    assert.strictEqual(palette.getNextColor(6), "red");
+    assert.strictEqual(palette.getNextColor(6), "#ff8000");
+    assert.strictEqual(palette.getNextColor(6), "yellow");
+    assert.strictEqual(palette.getNextColor(6), "#80c000");
+});
+
+QUnit.test('Recalculate palette if extension count is changed', function(assert) {
+    //act
+    var palette = new this.Palette(['green', 'red', "yellow"], { extensionMode: "blend" });
+    palette.getNextColor(6);
+    palette.reset();
+
+    //assert
+    assert.strictEqual(palette.getNextColor(8), 'green');
+    assert.strictEqual(palette.getNextColor(8), "#555500");
+    assert.strictEqual(palette.getNextColor(8), "#aa2b00");
+    assert.strictEqual(palette.getNextColor(8), "red");
+    assert.strictEqual(palette.getNextColor(8), "#ff5500");
+    assert.strictEqual(palette.getNextColor(8), "#ffaa00");
+    assert.strictEqual(palette.getNextColor(8), "yellow");
+    assert.strictEqual(palette.getNextColor(8), "#80c000");
+});
+
+QUnit.test('Blend with passing count. Keep last color in the end', function(assert) {
+    //act
+    var palette = new this.Palette(['green', 'red', "yellow"], { extensionMode: "blend", keepLastColorInEnd: true });
+
+    //assert
+    assert.strictEqual(palette.getNextColor(6), 'green');
+    assert.strictEqual(palette.getNextColor(6), "#555500");
+    assert.strictEqual(palette.getNextColor(6), "#aa2b00");
+    assert.strictEqual(palette.getNextColor(6), "red");
+    assert.strictEqual(palette.getNextColor(6), "#ff8000");
+    assert.strictEqual(palette.getNextColor(6), "yellow");
+});
+
 QUnit.test('Lightening palette when color is too light', function(assert) {
     //act
-    var palette = new this.Palette(['white'], { useHighlight: true });
+    var palette = new this.Palette(['white'], { useHighlight: true, extensionMode: "repeat" });
 
     //assert
     assert.strictEqual(palette.getNextColor(), 'white');
@@ -227,7 +304,7 @@ QUnit.test('Lightening palette when color is too light', function(assert) {
 
 QUnit.test('Darken palette when color is too dark', function(assert) {
     //act
-    var palette = new this.Palette(['black'], { useHighlight: true });
+    var palette = new this.Palette(['black'], { useHighlight: true, extensionMode: "repeat" });
 
     //assert
     assert.strictEqual(palette.getNextColor(), 'black');
@@ -238,7 +315,7 @@ QUnit.test('Darken palette when color is too dark', function(assert) {
 
 QUnit.test('Reset palette', function(assert) {
     //arrange
-    var palette = new this.Palette(['green', 'red'], { useHighlight: true });
+    var palette = new this.Palette(['green', 'red'], { useHighlight: true, extensionMode: "repeat" });
     palette.getNextColor();
     palette.getNextColor();
     palette.getNextColor();
@@ -247,9 +324,6 @@ QUnit.test('Reset palette', function(assert) {
     palette.reset();
 
     //assert
-    assert.strictEqual(palette._currentColor, 0);
-    assert.deepEqual(palette._palette, ['green', 'red']);
-
     assert.strictEqual(palette.getNextColor(), 'green');
     assert.strictEqual(palette.getNextColor(), 'red');
 
@@ -462,7 +536,7 @@ QUnit.test('Create palette with current case', function(assert) {
 
     this.currentPalette('Current Palette');
 
-    var p = new this.Palette(undefined, {});
+    var p = new this.Palette(undefined, { extensionMode: "repeat" });
 
     assert.strictEqual(p.getNextColor(), 'c1');
 
@@ -475,14 +549,14 @@ QUnit.test('Lightening palette', function(assert) {
 
     var $div = $('<div>').appendTo(document.body);
     //act
-    var palette = new paletteModule.Palette('default', { useHighlight: true });
+    var palette = new paletteModule.Palette('default', { useHighlight: true, extensionMode: "blend" });
 
     for(var i = 0; i < 70; i++) {
         $('<div>', {
             css: {
                 width: 50,
                 height: 50,
-                backgroundColor: palette.getNextColor(),
+                backgroundColor: palette.getNextColor(70),
                 float: 'left'
             }
         }).appendTo($div);

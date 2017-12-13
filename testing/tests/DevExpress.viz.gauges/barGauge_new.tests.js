@@ -33,17 +33,51 @@ QUnit.module("Misc", {
     }
 });
 
-QUnit.test("palette", function(assert) {
+QUnit.test("palette in repeat mode", function(assert) {
     this.create({
-        values: [1, 2, 3]
+        values: [1, 2, 3, 4],
+        paletteExtensionMode: "repeat"
     });
     this.renderer.arc.reset();
 
-    this.widget.option("palette", ["c1", "c2", "c3"]);
+    this.widget.option("palette", ["red", "green", "yellow"]);
 
-    assert.deepEqual(this.bar(0).attr.getCall(2).args, [{ fill: "c1" }], "bar 1 color");
-    assert.deepEqual(this.bar(1).attr.getCall(2).args, [{ fill: "c2" }], "bar 2 color");
-    assert.deepEqual(this.bar(2).attr.getCall(2).args, [{ fill: "c3" }], "bar 3 color");
+    assert.deepEqual(this.bar(0).attr.getCall(2).args, [{ fill: "red" }], "bar 1 color");
+    assert.deepEqual(this.bar(1).attr.getCall(2).args, [{ fill: "green" }], "bar 2 color");
+    assert.deepEqual(this.bar(2).attr.getCall(2).args, [{ fill: "yellow" }], "bar 3 color");
+    assert.deepEqual(this.bar(3).attr.getCall(2).args, [{ fill: "#ff3232" }], "bar 4 color");
+});
+
+QUnit.test("palette in blend mode", function(assert) {
+    this.create({
+        values: [1, 2, 3, 4],
+        paletteExtensionMode: "blend"
+    });
+    this.renderer.arc.reset();
+
+    this.widget.option("palette", ["red", "green", "yellow"]);
+
+    assert.deepEqual(this.bar(0).attr.getCall(2).args, [{ fill: "red" }], "bar 1 color");
+    assert.deepEqual(this.bar(1).attr.getCall(2).args, [{ fill: "green" }], "bar 2 color");
+    assert.deepEqual(this.bar(2).attr.getCall(2).args, [{ fill: "#80c000" }], "bar 3 color");
+    assert.deepEqual(this.bar(3).attr.getCall(2).args, [{ fill: "yellow" }], "bar 4 color");
+});
+
+
+QUnit.test("palette extension mode can be changed", function(assert) {
+    this.create({
+        values: [1, 2, 3, 4],
+        paletteExtensionMode: "blend",
+        palette: ["red", "green", "yellow"]
+    });
+    this.renderer.arc.reset();
+
+    this.widget.option({ paletteExtensionMode: "repeat" });
+
+    assert.deepEqual(this.bar(0).attr.getCall(2).args, [{ fill: "red" }], "bar 1 color");
+    assert.deepEqual(this.bar(1).attr.getCall(2).args, [{ fill: "green" }], "bar 2 color");
+    assert.deepEqual(this.bar(2).attr.getCall(2).args, [{ fill: "yellow" }], "bar 3 color");
+    assert.deepEqual(this.bar(3).attr.getCall(2).args, [{ fill: "#ff3232" }], "bar 4 color");
 });
 
 QUnit.test("Animation after false resizing", function(assert) {

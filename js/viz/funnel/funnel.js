@@ -34,6 +34,7 @@ var dxFunnel = require("../core/base_widget").inherit({
         argumentField: NODES_CREATE_CHANGE,
         colorField: NODES_CREATE_CHANGE,
         palette: NODES_CREATE_CHANGE,
+        paletteExtensionMode: NODES_CREATE_CHANGE,
         sortData: NODES_CREATE_CHANGE
     },
 
@@ -215,25 +216,28 @@ var dxFunnel = require("../core/base_widget").inherit({
     _buildNodes: function() {
         var that = this,
             data = that._getData(),
-            palette = that._themeManager.createPalette(that._getOption("palette", true), { useHighlight: true }),
+            palette = that._themeManager.createPalette(that._getOption("palette", true), {
+                useHighlight: true,
+                extensionMode: that._getOption("paletteExtensionMode", true)
+            }),
             algorithm = tiling.getAlgorithm(that._getOption("algorithm", true)),
             percents = algorithm.normalizeValues(data),
-            itemOptions = that._getOption("item");
+            itemOptions = that._getOption("item"),
+            figures = algorithm.getFigures(percents, that._getOption("neckWidth", true), that._getOption("neckHeight", true));
 
-        that._items = algorithm.getFigures(percents, that._getOption("neckWidth", true), that._getOption("neckHeight", true))
-            .map(function(figure, index) {
-                var curData = data[index],
-                    node = new Item(that, {
-                        figure: figure,
-                        data: curData,
-                        percent: percents[index],
-                        id: index,
-                        color: curData.color || palette.getNextColor(),
-                        itemOptions: itemOptions
-                    });
+        that._items = figures.map(function(figure, index) {
+            var curData = data[index],
+                node = new Item(that, {
+                    figure: figure,
+                    data: curData,
+                    percent: percents[index],
+                    id: index,
+                    color: curData.color || palette.getNextColor(figures.length),
+                    itemOptions: itemOptions
+                });
 
-                return node;
-            });
+            return node;
+        });
 
         if(that._getOption("inverted", true)) {
             that._items.forEach(function(item) {

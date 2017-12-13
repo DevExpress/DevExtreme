@@ -280,21 +280,25 @@ QUnit.test("palette", function(assert) {
 
     stubAlgorithm.normalizeValues.returns([1, 1]);
     stubAlgorithm.getFigures.returns([
-        [1], [1]
+        [1], [1], [1]
     ]);
 
     createFunnel({
         algorithm: "stub",
-        dataSource: [{ value: 1 }, { value: 1 }],
-        palette: ["red", "blue"]
+        dataSource: [{ value: 1 }, { value: 1 }, { value: 1 }],
+        palette: ["green", "red"],
+        paletteExtensionMode: "blend"
     });
 
     var items = this.items();
 
-    assert.deepEqual(items[0].smartAttr.lastCall.args[0].fill, "red");
-    assert.deepEqual(items[1].smartAttr.lastCall.args[0].fill, "blue");
+    assert.deepEqual(items[0].smartAttr.lastCall.args[0].fill, "green");
+    assert.deepEqual(items[1].smartAttr.lastCall.args[0].fill, "red");
+    assert.deepEqual(items[2].smartAttr.lastCall.args[0].fill, "#804000");
+
     assert.deepEqual(paletteModule.Palette.lastCall.args[1], {
-        useHighlight: true
+        useHighlight: true,
+        extensionMode: "blend"
     }, "useHighlight");
 
     //teardown
@@ -471,6 +475,27 @@ QUnit.test("Update palette", function(assert) {
 
     assert.deepEqual(items[0].smartAttr.lastCall.args[0].fill, "green");
     assert.deepEqual(items[1].smartAttr.lastCall.args[0].fill, "orange");
+});
+
+QUnit.test("Update paletteExtenstionMode", function(assert) {
+    stubAlgorithm.normalizeValues.returns([1, 1, 1]);
+    stubAlgorithm.getFigures.returns([
+        [1], [1], [1]
+    ]);
+
+    var funnel = createFunnel({
+        algorithm: "stub",
+        dataSource: [{ value: 1 }, { value: 1 }, { value: 1 }],
+        palette: ["green", "red"]
+    });
+
+    funnel.option({ paletteExtensionMode: "repeat" });
+
+    var items = this.items();
+
+    assert.deepEqual(items[0].smartAttr.lastCall.args[0].fill, "green");
+    assert.deepEqual(items[1].smartAttr.lastCall.args[0].fill, "red");
+    assert.deepEqual(items[2].smartAttr.lastCall.args[0].fill, "#32b232");
 });
 
 QUnit.test("SortData option", function(assert) {

@@ -225,6 +225,51 @@ function createThemeManager(options, themeGroupName) {
         assert.equal(theme.widgetType, 'chart');
     });
 
+    QUnit.test('Pass series count to palette', function(assert) {
+        //arrange
+        var themeManager = createThemeManager({
+            palette: ["red", "green"]
+        });
+        themeManager.setTheme({});
+        //act
+        themeManager.getOptions("series", {
+            type: "line"
+        }, 3);
+
+        themeManager.getOptions("series", {
+            type: "line"
+        }, 3);
+
+        var theme = themeManager.getOptions("series", {
+            type: "line"
+        }, 3);
+
+        assert.strictEqual(theme.mainSeriesColor, "#804000");
+    });
+
+    QUnit.test('Pass paletteExtensionMode to palette params', function(assert) {
+        //arrange
+        var themeManager = createThemeManager({
+            palette: ["red", "green"],
+            paletteExtensionMode: "repeat"
+        });
+        themeManager.setTheme({});
+        //act
+        themeManager.getOptions("series", {
+            type: "line"
+        }, 3);
+
+        themeManager.getOptions("series", {
+            type: "line"
+        }, 3);
+
+        var theme = themeManager.getOptions("series", {
+            type: "line"
+        }, 3);
+
+        assert.strictEqual(theme.mainSeriesColor, "#ff3232");
+    });
+
     QUnit.test('First series theme', function(assert) {
         //arrange
         var themeManager = createThemeManager({});
@@ -345,13 +390,17 @@ function createThemeManager(options, themeGroupName) {
     QUnit.test('Change theme palette dynamically', function(assert) {
         //arrange
         var palette = 'Soft Pastel',
-            themeManager = createThemeManager({
+            options = {
                 palette: palette
-            });
+            },
+            themeManager = createThemeManager(options);
+
         themeManager.setTheme({});
 
         //act
-        themeManager.updatePalette(['#ffffff']);
+        options.palette = ['#ffffff'];
+        themeManager.resetOptions("palette");
+        themeManager.updatePalette();
         //assert series theme
         var theme = themeManager.getOptions("series", {});
         assert.ok(theme);
@@ -360,31 +409,6 @@ function createThemeManager(options, themeGroupName) {
         assert.ok(theme.point.hoverStyle);
         assert.equal(theme.mainSeriesColor, '#ffffff');
         assert.equal(theme.color, undefined);
-        assert.equal(theme.hoverStyle.color, undefined);
-        assert.equal(theme.selectionStyle.color, undefined);
-        assert.equal(theme.point.color, undefined);
-        assert.equal(theme.point.hoverStyle.color, undefined);
-        assert.equal(theme.point.selectionStyle.color, undefined);
-    });
-
-    QUnit.test('Change theme palette dynamically to preset', function(assert) {
-        //arrange
-        var palette = ['red'],
-            themeManager = createThemeManager({
-                palette: palette
-            });
-        themeManager.setTheme({});
-        //act
-        themeManager.updatePalette('Soft Pastel');
-        //assert series theme
-        var theme = themeManager.getOptions("series", {});
-        assert.ok(theme);
-        assert.ok(theme.hoverStyle);
-        assert.ok(theme.point);
-        assert.ok(theme.point.hoverStyle);
-        assert.equal(theme.mainSeriesColor, '#60a69f');
-        assert.equal(theme.color, undefined);
-
         assert.equal(theme.hoverStyle.color, undefined);
         assert.equal(theme.selectionStyle.color, undefined);
         assert.equal(theme.point.color, undefined);
@@ -1106,23 +1130,6 @@ function createThemeManager(options, themeGroupName) {
         assert.ok(theme.point.visible, "point visibility");
     });
 
-    QUnit.test('default step highlight in palette', function(assert) {
-        //arrange
-        var palette = 'Soft Pastel';
-
-        //act
-        var themeManager = createThemeManager({
-            palette: palette
-        });
-        themeManager.setTheme({});
-        //assert
-        assert.ok(themeManager);
-        assert.equal(themeManager.palette._paletteSteps.next(), 50, 'default stepHighlight in palette');
-        assert.equal(themeManager.palette._paletteSteps.next(), -50, 'default stepHighlight in palette');
-        assert.equal(themeManager.palette._paletteSteps.next(), 0, 'default stepHighlight in palette');
-        assert.equal(themeManager.palette._paletteSteps.next(), 50, 'default stepHighlight in palette');
-    });
-
     QUnit.test('Theme chart manager for custom theme group', function(assert) {
         //arrange
         themeModule.registerTheme({
@@ -1369,6 +1376,20 @@ function createThemeManager(options, themeGroupName) {
 
         assert.strictEqual(seriesSettings.mainSeriesColor("a", 1), "#5f8b95");
         assert.strictEqual(seriesSettings.mainSeriesColor("c", 3), "#af8a53");
+    });
+
+    QUnit.test('series options for pie. mainSeriesColor. Pass series count to palette.getNextColor', function(assert) {
+        //arrange
+        var themeManager = createThemeManager({
+            palette: ["red", "green"],
+        }, "pie");
+        themeManager.setTheme({});
+        var seriesSettings = themeManager.getOptions("series", { type: "pie" });
+
+        //assert pie theme
+        assert.strictEqual(seriesSettings.mainSeriesColor("a", 1, 3), "red");
+        assert.strictEqual(seriesSettings.mainSeriesColor("b", 2, 3), "green");
+        assert.strictEqual(seriesSettings.mainSeriesColor("c", 3, 3), "#804000");
     });
 
     QUnit.module("Theme Manager - life cycle");

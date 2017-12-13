@@ -307,6 +307,23 @@ $('<div id="chartContainer">').appendTo("#qunit-fixture");
         assert.ok(seriesMockData.args[0][1], "Options passed");
     });
 
+    QUnit.test("Pass series count to themeManager", function(assert) {
+        //arrange
+        seriesMockData.series.push(new MockSeries({}), new MockSeries({}));
+        //act
+        this.createChart({
+            series: [{
+                type: "line"
+            }, {
+                type: "line"
+            }]
+        });
+        //assert
+        assert.strictEqual(this.themeManager.getOptions.withArgs("series").getCall(0).args[2], 2);
+        assert.strictEqual(this.themeManager.getOptions.withArgs("series").getCall(1).args[2], 2);
+    });
+
+
     QUnit.test("dxChart with two Series which belongs to different panes (with default pane)", function(assert) {
         //arrange
         var stubSeries1 = new MockSeries({}),

@@ -52,10 +52,6 @@ var ThemeManager = BaseThemeManager.inherit((function() {
         this._multiPieColors = {};
     };
 
-    var updatePalette = function(palette) {
-        this.palette = this.createPalette(palette, { useHighlight: true });
-    };
-
     var processTitleOptions = function(options) {
         return _isString(options) ? { text: options } : options;
     };
@@ -118,7 +114,7 @@ var ThemeManager = BaseThemeManager.inherit((function() {
             return mergeOptions.call(this, "valueAxis");
         },
         valueAxis: applyParticularAxisOptions,
-        series: function(name, userOptions) {
+        series: function(name, userOptions, seriesCount) {
             var that = this,
                 theme = that._theme,
                 userCommonSettings = that._userOptions.commonSeriesSettings || {},
@@ -148,13 +144,15 @@ var ThemeManager = BaseThemeManager.inherit((function() {
             settings.type = type;
             settings.widgetType = widgetType;
             settings.containerBackgroundColor = containerBackgroundColor;
+
             if(widgetType !== "pie") {
-                mainSeriesColor = settings.color || palette.getNextColor();
+                mainSeriesColor = settings.color || palette.getNextColor(seriesCount);
             } else {
-                mainSeriesColor = function(argument, index) {
+
+                mainSeriesColor = function(argument, index, count) {
                     var cat = argument + index;
                     if(!that._multiPieColors[cat]) {
-                        that._multiPieColors[cat] = palette.getNextColor();
+                        that._multiPieColors[cat] = palette.getNextColor(count);
                     }
                     return that._multiPieColors[cat];
                 };
@@ -190,7 +188,7 @@ var ThemeManager = BaseThemeManager.inherit((function() {
         _initializeTheme: function() {
             var that = this;
             that.callBase.apply(that, arguments);
-            that.updatePalette(that.getOptions("palette"));
+            that.updatePalette();
         },
         resetOptions: function(name) {
             this._mergedSettings[name] = null;
@@ -198,7 +196,13 @@ var ThemeManager = BaseThemeManager.inherit((function() {
         update: function(options) {
             this._userOptions = options;
         },
-        updatePalette: updatePalette
+        updatePalette: function() {
+            var that = this;
+            that.palette = that.createPalette(that.getOptions("palette"), {
+                useHighlight: true,
+                extensionMode: that.getOptions("paletteExtensionMode")
+            });
+        }
     };
 })());
 

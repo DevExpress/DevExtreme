@@ -23,7 +23,8 @@ QUnit.test("Discrete", function(assert) {
         }],
         colorizer: {
             type: "Discrete",
-            palette: ["#020202", "#060606", "#0a0a0a"]
+            palette: ["#020202", "#060606", "#0a0a0a"],
+            paletteExtensionMode: "repeat"
         }
     });
 
@@ -32,6 +33,26 @@ QUnit.test("Discrete", function(assert) {
     assert.strictEqual(this.tile(2).attr.getCall(0).args[0].fill, "#0a0a0a", "tile 3");
     assert.strictEqual(this.tile(3).attr.getCall(0).args[0].fill, "#000000", "tile 4");
     assert.strictEqual(this.tile(4).attr.getCall(0).args[0].fill, "#383838", "tile 5");
+});
+
+QUnit.test("Discrete. Pass correct leafs count to palette", function(assert) {
+    common.createWidget({
+        dataSource: [{
+            value: 1
+        }, {
+            value: 2
+        }, {
+            value: 3
+        }],
+        colorizer: {
+            type: "Discrete",
+            palette: ["green", "red"]
+        }
+    });
+
+    assert.strictEqual(this.tile(0).attr.getCall(0).args[0].fill, "green", "tile 1");
+    assert.strictEqual(this.tile(1).attr.getCall(0).args[0].fill, "red", "tile 2");
+    assert.strictEqual(this.tile(2).attr.getCall(0).args[0].fill, "#804000", "tile 3");
 });
 
 QUnit.test("Gradient", function(assert) {
@@ -135,7 +156,8 @@ QUnit.test("Discrete group", function(assert) {
         colorizer: {
             type: "Discrete",
             palette: ["#020202", "#060606", "#0a0a0a"],
-            colorizeGroups: true
+            colorizeGroups: true,
+            paletteExtensionMode: "repeat"
         }
     });
 
@@ -143,6 +165,28 @@ QUnit.test("Discrete group", function(assert) {
     assert.strictEqual(this.tile(3).attr.getCall(0).args[0].fill, "#020202", "tile 2");
     assert.strictEqual(this.tile(6).attr.getCall(0).args[0].fill, "#060606", "tile 3");
     assert.strictEqual(this.tile(7).attr.getCall(0).args[0].fill, "#060606", "tile 4");
+});
+
+QUnit.test("Discrete group. Pass correct group count to palette", function(assert) {
+    common.createWidget({
+        dataSource: [
+            { items: [{ value: 1 }, { value: 2 }] },
+            { items: [{ value: 1 }, { value: 2 }] },
+            { items: [{ value: 1 }, { value: 2 }] }
+        ],
+        colorizer: {
+            type: "Discrete",
+            palette: ["red", "green"],
+            colorizeGroups: true
+        }
+    });
+
+    assert.strictEqual(this.tile(2).attr.getCall(0).args[0].fill, "red", "tile 1");
+    assert.strictEqual(this.tile(3).attr.getCall(0).args[0].fill, "red", "tile 2");
+    assert.strictEqual(this.tile(6).attr.getCall(0).args[0].fill, "green", "tile 3");
+    assert.strictEqual(this.tile(7).attr.getCall(0).args[0].fill, "green", "tile 4");
+    assert.strictEqual(this.tile(10).attr.getCall(0).args[0].fill, "#804000", "tile 5");
+    assert.strictEqual(this.tile(11).attr.getCall(0).args[0].fill, "#804000", "tile 6");
 });
 
 QUnit.test("Gradient group", function(assert) {
@@ -232,7 +276,8 @@ QUnit.test("Complex discrete group", function(assert) {
         }],
         colorizer: {
             colorizeGroups: true,
-            palette: ["c1", "c2", "c3", "c4", "c5", "c6", "c7"]
+            palette: ["c1", "c2", "c3", "c4", "c5", "c6", "c7"],
+            paletteExtensionMode: "repeat"
         }
     });
 

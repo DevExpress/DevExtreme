@@ -172,7 +172,10 @@ var dxBarGauge = dxBaseGauge.inherit({
             radius,
             area = that._area;
 
-        that._palette = that._themeManager.createPalette(options.palette, { useHighlight: true });
+        that._palette = that._themeManager.createPalette(options.palette, {
+            useHighlight: true,
+            extensionMode: options.paletteExtensionMode
+        });
         relativeInnerRadius = options.relativeInnerRadius > 0 && options.relativeInnerRadius < 1 ? _Number(options.relativeInnerRadius) : 0.1;
         radius = area.radius;
         if(that._context.textEnabled) {    //  B253614
@@ -214,7 +217,7 @@ var dxBarGauge = dxBaseGauge.inherit({
         for(i = 0; i < _count; ++i, radius -= unitOffset) {
             that._bars[i].arrange({
                 radius: radius,
-                color: that._palette.getNextColor()
+                color: that._palette.getNextColor(_count)
             });
         }
     },
@@ -319,6 +322,7 @@ var dxBarGauge = dxBaseGauge.inherit({
         barSpacing: "MOSTLY_TOTAL",
         label: "MOSTLY_TOTAL",
         palette: "MOSTLY_TOTAL",
+        paletteExtensionMode: "MOSTLY_TOTAL",
         values: "VALUES"
     },
 

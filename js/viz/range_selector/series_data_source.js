@@ -135,7 +135,7 @@ SeriesDataSource.prototype = {
 
             data = particularSeriesOptions.data || options.dataSource;
 
-            seriesTheme = chartThemeManager.getOptions("series", particularSeriesOptions);
+            seriesTheme = chartThemeManager.getOptions("series", particularSeriesOptions, allSeriesOptions.length);
             seriesTheme.argumentField = seriesTheme.argumentField || options.dataSourceField;//B253068
             if(data && data.length > 0) {
                 //TODO

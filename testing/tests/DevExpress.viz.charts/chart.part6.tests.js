@@ -759,7 +759,41 @@ QUnit.test("palette option changed", function(assert) {
         palette: "Soft Pastel"
     });
     //assert
-    assert.ok(chart._themeManager.updatePalette.calledWith("Soft Pastel"), "palette");
+    assert.ok(chart._themeManager.updatePalette.calledOnce, "palette");
+    assert.ok(chart.seriesDisposed, "Series should be disposed");
+    assert.ok(chart.seriesFamiliesDisposed, "SeriesFamilies should be disposed");
+    assert.equal(commons.getTrackerStub().stub("updateSeries").lastCall.args[0], chart.series, "series updating for tracker");
+    assert.ok(!chart.horizontalAxesDisposed, "Horizontal Axes should not be disposed");
+    assert.ok(!chart.verticalAxesDisposed, "Vertical Axes should not be disposed");
+    assert.strictEqual(this.validateData.callCount, 1, "validation");
+    assert.ok(chart.seriesFamilies[0].adjustSeriesValues.calledOnce, "SeriesFamilies should adjust series values");
+});
+
+QUnit.test("paletteExtensionMode option changed", function(assert) {
+    //arrange
+    var stubSeries1 = new MockSeries({ range: { arg: { min: 15, max: 80 }, val: { min: -1, max: 10 } } });
+    var stubSeries2 = new MockSeries({ range: { arg: { min: 15, max: 80 }, val: { min: -1, max: 10 } } });
+    seriesMockData.series.push(stubSeries1, stubSeries2);
+    var chart = this.createChart({
+        palette: "default",
+        paletteExtensionMode: "blend",
+        series: { name: "series1", type: "line" }
+    });
+
+    $.each(chart.series, function(_, series) { series.dispose = function() { chart.seriesDisposed = true; }; });
+    $.each(chart.seriesFamilies, function(_, family) { family.dispose = function() { chart.seriesFamiliesDisposed = true; }; });
+    $.each(chart._argumentAxes, function(_, axis) { axis.dispose = function() { chart.horizontalAxesDisposed = true; }; });
+    $.each(chart._valueAxes, function(_, axis) { axis.dispose = function() { chart.verticalAxesDisposed = true; }; });
+
+    this.validateData.reset();
+    chart.seriesFamilies[0].adjustSeriesValues.reset();
+
+    //Act
+    chart.option({
+        paletteExtensionMode: "repeat"
+    });
+    //assert
+    assert.ok(chart._themeManager.updatePalette.calledOnce, "palette");
     assert.ok(chart.seriesDisposed, "Series should be disposed");
     assert.ok(chart.seriesFamiliesDisposed, "SeriesFamilies should be disposed");
     assert.equal(commons.getTrackerStub().stub("updateSeries").lastCall.args[0], chart.series, "series updating for tracker");
@@ -792,7 +826,7 @@ QUnit.test("palette option changed. palette as array", function(assert) {
     });
     //assert
     assert.deepEqual(chart._options.palette, ["black", "blue"], "palette");
-    assert.ok(chart._themeManager.updatePalette.calledWith(["black", "blue"]), "palette");
+    assert.ok(chart._themeManager.updatePalette.calledOnce, "palette updated");
     assert.ok(chart.seriesDisposed, "Series should be disposed");
     assert.ok(chart.seriesFamiliesDisposed, "SeriesFamilies should be disposed");
     assert.equal(commons.getTrackerStub().stub("updateSeries").lastCall.args[0], chart.series, "series updating for tracker");

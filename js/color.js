@@ -534,7 +534,18 @@ Color.prototype = {
         return true;
     },
 
-    colorIsInvalid: false
+    colorIsInvalid: false,
+
+    fromHSL: function(hsl) {
+        var color = new Color(),
+            rgb = hslToRgb(hsl.h, hsl.s, hsl.l);
+
+        color.r = rgb[0];
+        color.g = rgb[1];
+        color.b = rgb[2];
+
+        return color;
+    }
 };
 
 module.exports = Color;

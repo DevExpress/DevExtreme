@@ -75,6 +75,14 @@ var dxFunnel = {
     */
     palette: [],
     /**
+    * @name dxFunneloptions_paletteextensionmode
+    * @publicName paletteExtensionMode
+    * @type string
+    * @default 'blend'
+    * @acceptValues 'blend' | 'repeat' | 'extrapolate'
+    */
+    paletteExtensionMode: 'blend',
+    /**
     * @name dxFunneloptions_hoverenabled
     * @publicName hoverEnabled
     * @type boolean
