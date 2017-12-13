@@ -296,11 +296,14 @@ var numberLocalization = dependencyInjector({
         }
 
         var decimalSeparator = this.getDecimalSeparator(),
-            regExp = new RegExp("[^0-9" + decimalSeparator + "]", "g"),
+            regExp = new RegExp("[^0-9" + escapeRegExp(decimalSeparator) + "]", "g"),
             cleanedText = text
                 .replace(regExp, "")
                 .replace(decimalSeparator, ".")
-                .replace(/^\.|\.$/g, "");
+                .replace(/\.$/g, ""),
+            parsed = +cleanedText;
+
+        cleanedText = cleanedText.replace(/^\./g, "");
 
         if(cleanedText.length > 15) {
             return NaN;
@@ -309,7 +312,7 @@ var numberLocalization = dependencyInjector({
             return null;
         }
 
-        return +cleanedText * this._getSign(text, format);
+        return parsed * this._getSign(text, format);
     }
 });
 
