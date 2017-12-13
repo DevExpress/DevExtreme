@@ -31,8 +31,8 @@ QUnit.testStart(function() {
         </div>\
         <div id="container2">\
             <div id="customMultiView">\
-                <div data-options="dxTemplate: { name: \'template1\' }" style="height: 50px;"><p>Test1</p></div>\
-                <div data-options="dxTemplate: { name: \'template2\' }" style="height: 100px;"><p>Test2</p></div>\
+                <div data-options="dxTemplate: { name: \'template1\' }" style="height: 50px;"></div>\
+                <div data-options="dxTemplate: { name: \'template2\' }" style="height: 100px;"></div>\
             </div>\
         </div>\
         <div id="container3">\
