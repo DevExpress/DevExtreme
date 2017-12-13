@@ -16,12 +16,12 @@ var bracketsToDots = function(expr) {
         .replace(/\]/g, "");
 };
 
-var readPropValue = function(obj, propName) {
+var readPropValue = function(obj, propName, options) {
+    options = options || { };
     if(propName === "this") {
-        return obj;
+        return unwrap(obj, options);
     }
-
-    return obj[propName];
+    return unwrap(obj[propName], options);
 };
 
 var assignPropValue = function(obj, propName, value, options) {
@@ -127,38 +127,37 @@ var combineGetters = function(getters) {
 };
 
 var compileSetter = function(expr) {
-    expr = expr || "this";
-    expr = bracketsToDots(expr);
-
-    var pos = expr.lastIndexOf("."),
-        targetGetter = compileGetter(expr.substr(0, pos)),
-        targetPropName = expr.substr(1 + pos);
+    expr = bracketsToDots(expr || "this").split(".");
+    var lastLevelIndex = expr.length - 1;
 
     return function(obj, value, options) {
         options = prepareOptions(options);
+        var currentValue = unwrap(obj, options);
 
-        var target = targetGetter(obj, { functionsAsIs: options.functionsAsIs, unwrapObservables: options.unwrapObservables }),
-            prevTargetValue = readPropValue(target, targetPropName);
+        expr.forEach(function(propertyName, levelIndex) {
+            var propertyValue = readPropValue(currentValue, propertyName, options),
+                isPropertyFunc = !options.functionsAsIs && typeUtils.isFunction(propertyValue) && !isWrapped(propertyValue);
 
-        if(!options.functionsAsIs && typeUtils.isFunction(prevTargetValue) && !isWrapped(prevTargetValue)) {
-            target[targetPropName](value);
-        } else {
-            prevTargetValue = unwrap(prevTargetValue, options);
-
-            if(
-                options.merge &&
-                typeUtils.isPlainObject(value) &&
-                (!typeUtils.isDefined(prevTargetValue) || typeUtils.isPlainObject(prevTargetValue))
-            ) {
-                if(!prevTargetValue) {
-                    assignPropValue(target, targetPropName, {}, options);
-                }
-                target = unwrap(readPropValue(target, targetPropName), options);
-                objectUtils.deepExtendArraySafe(target, value, false, true);
-            } else {
-                assignPropValue(target, targetPropName, value, options);
+            if(!typeUtils.isDefined(propertyValue)) {
+                propertyValue = { };
+                assignPropValue(currentValue, propertyName, propertyValue, options);
             }
-        }
+
+            if(levelIndex === lastLevelIndex) {
+                if(options.merge && typeUtils.isPlainObject(value) && typeUtils.isPlainObject(propertyValue)) {
+                    objectUtils.deepExtendArraySafe(propertyValue, value, false, true);
+                } else if(isPropertyFunc) {
+                    currentValue[propertyName](value);
+                } else {
+                    assignPropValue(currentValue, propertyName, value, options);
+                }
+            } else {
+                if(isPropertyFunc) {
+                    propertyValue = propertyValue.call(currentValue);
+                }
+                currentValue = propertyValue;
+            }
+        });
     };
 };
 

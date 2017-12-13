@@ -379,6 +379,49 @@ QUnit.test("plain objects are cloned if previous value is null (T521407)", funct
     assert.equal(dataSource1.store, "Store 1");
 });
 
+QUnit.test("non existing multi-level prop (w/ merge = false)", function(assert) {
+    var obj = {};
+
+    SETTER("prop.subProp1.subProp2")(obj, "Nested value", { merge: false });
+    assert.equal(obj.prop.subProp1.subProp2, "Nested value");
+});
+
+QUnit.test("non existing multi-level prop (w/ merge = true)", function(assert) {
+    var obj = {};
+
+    SETTER("prop.subProp1.subProp2")(obj, "Nested value", { merge: true });
+    assert.equal(obj.prop.subProp1.subProp2, "Nested value");
+});
+
+QUnit.test("multi-level prop instead of primitives", function(assert) {
+    var primitives = [ false, 0, "", true, 1, "someValue"];
+
+    primitives.forEach(function(primitive) {
+        var obj = { prop: primitive };
+        assert.throws(function() {
+            SETTER("prop.subProp")(obj, "Nested value");
+        }, /TypeError/);
+    });
+});
+
+QUnit.test("multi-level prop instead of function", function(assert) {
+    var called = 0;
+
+    var obj = {
+        prop: function() {
+            called++;
+            return {
+                subProp: function() {
+                    called++;
+                }
+            };
+        }
+    };
+
+    SETTER("prop.subProp.subProp2")(obj, function() { }, { functionsAsIs: true });
+    assert.equal(called, 0);
+});
+
 QUnit.module("setter with wrapped variables", {
     beforeEach: function() {
         variableWrapper.inject(mockVariableWrapper);
@@ -426,4 +469,31 @@ QUnit.test("wrap with merge and functions unwrapping", function(assert) {
     setter(obj, { b: 2 }, { functionsAsIs: false, merge: true });
 
     assert.deepEqual(obj.prop(), { a: 1, b: 2 });
+});
+
+QUnit.test("multi-level prop into the wrapped value", function(assert) {
+    var mockWrapper = variableWrapper.wrap,
+        obj = mockWrapper({
+            prop: mockWrapper(undefined)
+        });
+
+    var setter = SETTER("prop.subProp");
+    setter(obj, "New value");
+    assert.equal(obj().prop().subProp, "New value");
+});
+
+QUnit.test("multi-level prop instead of wrapped value without unwrapping", function(assert) {
+    assert.expect(0);
+    variableWrapper.inject({
+        unwrap: function() {
+            assert.ok(false, "'unwrap' should not be called");
+            return this.callBase.apply(this, arguments);
+        }
+    });
+    var mockWrapper = variableWrapper.wrap,
+        obj = mockWrapper({
+            prop: mockWrapper(undefined)
+        });
+
+    SETTER("prop.subProp")(obj, "Nested value", { unwrapObservables: false });
 });
