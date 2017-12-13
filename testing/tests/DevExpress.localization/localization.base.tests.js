@@ -665,6 +665,8 @@ QUnit.test("parse different positive and negative parts with groups", function(a
     assert.equal(numberLocalization.parse("(12,345)", "#,##0.##;(#,##0.##)"), -12345, "negative");
     assert.equal(numberLocalization.parse("12,34", "#,##0.##;(#,##0.##)"), 1234, "positive after removing one char");
     assert.equal(numberLocalization.parse("(12,34)", "#,##0.##;(#,##0.##)"), -1234, "negative after removing one char");
+    assert.equal(numberLocalization.parse("(01)", "#,##0.##;(#,##0.##)"), -1, "negative with leading zero");
+    assert.equal(numberLocalization.parse("(12,34.56)", "#,##0.##;(#,##0.##)"), -1234.56, "negative with removed digit and decimal part");
 });
 
 QUnit.test("format: base", function(assert) {
