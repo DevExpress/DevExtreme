@@ -2,6 +2,7 @@
 
 var dependencyInjector = require("../core/utils/dependency_injector"),
     inArray = require("../core/utils/array").inArray,
+    escapeRegExp = require("../core/utils/common").escapeRegExp,
     each = require("../core/utils/iterator").each,
     isPlainObject = require("../core/utils/type").isPlainObject,
     ldmlNumber = require("./ldml/number"),
@@ -233,6 +234,22 @@ var numberLocalization = dependencyInjector({
         });
     },
 
+    _getSign: function(text, format) {
+        if(text.charAt(0) === "-") {
+            return -1;
+        }
+        if(!format) {
+            return 1;
+        }
+
+        var negativeEtalon = this.format(-1, format),
+            separators = this._getSeparators(),
+            regExp = new RegExp("[0-9" + escapeRegExp(separators.decimalSeparator + separators.thousandsSeparator) + "]+", "g"),
+            cleanedText = text.replace(regExp, "1");
+
+        return cleanedText === negativeEtalon ? -1 : 1;
+    },
+
     format: function(value, format) {
         if(typeof value !== "number") {
             return value;
@@ -292,12 +309,7 @@ var numberLocalization = dependencyInjector({
             return null;
         }
 
-        var parsed = +cleanedText,
-            isNegativeSimple = text.charAt(0) === "-",
-            isNegativeByFormat = !!format && text === this.format(-1 * parsed, format),
-            sign = isNegativeSimple || isNegativeByFormat ? -1 : 1;
-
-        return parsed * sign;
+        return +cleanedText * this._getSign(text, format);
     }
 });
 
