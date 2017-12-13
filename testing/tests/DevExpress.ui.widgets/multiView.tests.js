@@ -31,9 +31,15 @@ QUnit.testStart(function() {
         </div>\
         <div id="container2">\
             <div id="customMultiView">\
-                <div data-options="dxTemplate: { name: \'template1\' }" style="height: 50px;"></div>\
-                <div data-options="dxTemplate: { name: \'template2\' }" style="height: 100px;"></div>\
+                <div data-options="dxTemplate: { name: \'template1\' }" style="height: 50px;"><p>Test1</p></div>\
+                <div data-options="dxTemplate: { name: \'template2\' }" style="height: 100px;"><p>Test2</p></div>\
             </div>\
+        </div>\
+        <div id="container3">\
+            <div id="customMultiViewWithTemplate">\
+            </div>\
+            <div id="template1"><p>Test1</p></div>\
+            <div id="template2"><p>Test2</p></div>\
         </div>';
 
     $("#qunit-fixture").html(markup);
@@ -153,6 +159,19 @@ QUnit.test("height should be correctly updated on dxshown event", function(asser
     }
 });
 
+QUnit.test("item content should be rendered correctly when template was changed (T585645)", function(assert) {
+    var $multiView = $("#customMultiViewWithTemplate").dxMultiView({
+            items: [{ template: $("#template1") }, { template: $("#template1") }],
+            selectedIndex: 0
+        }),
+        multiView = $multiView.dxMultiView("instance");
+
+    multiView.option("items[1].template", $("#template2"));
+    multiView.option("selectedIndex", 1);
+
+    var $items = $multiView.find(toSelector(MULTIVIEW_ITEM_CLASS));
+    assert.equal($items.eq(1).text(), "Test2", "element has correct content");
+});
 
 QUnit.module("nested multiview");
 
