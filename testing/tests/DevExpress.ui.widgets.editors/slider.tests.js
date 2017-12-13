@@ -683,7 +683,7 @@ QUnit.test("tooltip renders correct after value length changed", function(assert
         var centerSlider = $sliderHandle.offset().left + $sliderHandle.outerWidth() / 2;
         var centerTooltipContent = $tooltipContent.offset().left + $tooltipContent.outerWidth() / 2;
         assert.roughEqual(Math.abs(centerSlider), Math.abs(centerTooltipContent), 0.1, "center slider equals center tooltip");
-        assert.roughEqual($tooltipContent.width(), $popupContent.outerWidth(), 2, "popupcontent is stretched");
+        assert.roughEqual($tooltipContent.width(), $popupContent.outerWidth(), 2.1, "popupcontent is stretched");
     } finally {
         fx.off = originalFX;
     }
