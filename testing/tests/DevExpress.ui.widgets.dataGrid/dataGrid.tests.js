@@ -4116,6 +4116,66 @@ QUnit.test("search text when scrolling mode virtual and one column is not define
     assert.equal(dataGrid.getVisibleRows().length, 1, "items were filtered");
 });
 
+//T583229
+QUnit.test("The same page should not load when scrolling in virtual mode", function(assert) {
+    var dataGrid,
+        pageIndexesForLoad = [],
+        clock = sinon.useFakeTimers(),
+        generateDataSource = function(count) {
+            var result = [],
+                i;
+
+            for(i = 0; i < count; ++i) {
+                result.push({ firstName: "test name" + i, lastName: "test lastName" + i, room: 100 + i, cash: 101 + i * 10 });
+            }
+
+            return result;
+        },
+        data = generateDataSource(100);
+
+    try {
+        dataGrid = createDataGrid({
+            height: 300,
+            remoteOperations: true,
+            dataSource: {
+                load: function(loadOptions) {
+                    var d = $.Deferred();
+
+                    pageIndexesForLoad.push(loadOptions.skip / 20);
+                    setTimeout(function() {
+                        d.resolve({
+                            data: data.slice(loadOptions.skip, loadOptions.skip + loadOptions.take),
+                            totalCount: 100
+                        });
+                    }, 100);
+
+                    return d.promise();
+                }
+            },
+            scrolling: {
+                mode: "virtual"
+            }
+        });
+
+        clock.tick(200);
+
+        //assert
+        assert.deepEqual(pageIndexesForLoad, [0, 1]);
+        assert.strictEqual(dataGrid.getVisibleRows().length, 40);
+
+        dataGrid.getScrollable().scrollTo({ y: 700 });
+        clock.tick(10);
+        dataGrid.getScrollable().scrollTo({ y: 1400 });
+        clock.tick(200);
+
+        //assert
+        assert.deepEqual(pageIndexesForLoad, [0, 1, 2, 3]);
+        assert.strictEqual(dataGrid.getVisibleRows().length, 80);
+    } finally {
+        clock.restore();
+    }
+});
+
 QUnit.module("Assign options", {
     beforeEach: function() {
         this.clock = sinon.useFakeTimers();
