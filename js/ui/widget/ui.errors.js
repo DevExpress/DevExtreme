@@ -291,5 +291,10 @@ module.exports = errorUtils(errors.ERROR_MESSAGES, {
      * @name Errors and Warnings_W1009
      * @publicName W1009
      */
-    W1009: "Searching works only if data is specified using the dataSource option"
+    W1009: "Searching works only if data is specified using the dataSource option",
+    /**
+     * @name Errors and Warnings_W1010
+     * @publicName W1010
+     */
+    W1010: "The capability to select all rows works with source data of plain structure only"
 });
