@@ -660,6 +660,13 @@ QUnit.test("parse different positive and negative parts", function(assert) {
     assert.equal(numberLocalization.parse("-10", "#0;(#0)"), -10);
 });
 
+QUnit.test("parse different positive and negative parts with groups", function(assert) {
+    assert.equal(numberLocalization.parse("12,345", "#,##0.##;(#,##0.##)"), 12345, "positive");
+    assert.equal(numberLocalization.parse("(12,345)", "#,##0.##;(#,##0.##)"), -12345, "negative");
+    assert.equal(numberLocalization.parse("12,34", "#,##0.##;(#,##0.##)"), 1234, "positive after removing one char");
+    assert.equal(numberLocalization.parse("(12,34)", "#,##0.##;(#,##0.##)"), -1234, "negative after removing one char");
+});
+
 QUnit.test("format: base", function(assert) {
     assert.equal(numberLocalization.format(12), "12");
     assert.equal(numberLocalization.format(1, { type: "decimal", precision: 2 }), "01");
