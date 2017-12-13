@@ -96,8 +96,8 @@ QUnit.testStart(function() {
 
     QUnit.test("Header & work space currentDate should not contain information about hours, minutes, seconds", function(assert) {
         var currentDate = this.instance.option("currentDate"),
-            header = this.instance.$element().find(".dx-scheduler-header").dxSchedulerHeader("instance"),
-            workSpace = this.instance.$element().find(".dx-scheduler-work-space").dxSchedulerWorkSpaceDay("instance"),
+            header = this.instance.getHeader(),
+            workSpace = this.instance.getWorkSpace(),
             headerCurrentDate = header.option("currentDate"),
             workSpaceCurrentDate = workSpace.option("currentDate");
 
@@ -156,50 +156,57 @@ QUnit.testStart(function() {
     });
 
     QUnit.test("Data expressions should be recompiled on optionChanged", function(assert) {
-        this.instance.option({
-            "startDateExpr": "_startDate",
-            "endDateExpr": "_endDate",
-            "startDateTimeZoneExpr": "_startDateTimeZone",
-            "endDateTimeZoneExpr": "_endDateTimeZone",
-            "textExpr": "_text",
-            "descriptionExpr": "_description",
-            "allDayExpr": "_allDay",
-            "recurrenceRuleExpr": "_recurrenceRule",
-            "recurrenceExceptionExpr": "_recurrenceException"
-        });
-        var data = {
-            startDate: new Date(2017, 2, 22),
-            endDate: new Date(2017, 2, 23),
-            startDateTimeZone: "America/Los_Angeles",
-            endDateTimeZone: "America/Los_Angeles",
-            text: "a",
-            description: "b",
-            allDay: true,
-            recurrenceRule: "abc",
-            recurrenceException: "def"
-        };
-        var appointment = {
-            _startDate: data.startDate,
-            _endDate: data.endDate,
-            _startDateTimeZone: data.startDateTimeZone,
-            _endDateTimeZone: data.endDateTimeZone,
-            _text: data.text,
-            _description: data.description,
-            _allDay: data.allDay,
-            _recurrenceRule: data.recurrenceRule,
-            _recurrenceException: data.recurrenceException
-        };
+        var repaintStub = sinon.stub(this.instance, "repaint");
 
-        var dataAccessors = this.instance._dataAccessors;
+        try {
+            this.instance.option({
+                "startDateExpr": "_startDate",
+                "endDateExpr": "_endDate",
+                "startDateTimeZoneExpr": "_startDateTimeZone",
+                "endDateTimeZoneExpr": "_endDateTimeZone",
+                "textExpr": "_text",
+                "descriptionExpr": "_description",
+                "allDayExpr": "_allDay",
+                "recurrenceRuleExpr": "_recurrenceRule",
+                "recurrenceExceptionExpr": "_recurrenceException"
+            });
 
-        $.each(dataAccessors.getter, function(name, getter) {
-            assert.equal(dataAccessors.getter[name](appointment), data[name], "getter for " + name + " is OK");
-        });
+            var data = {
+                startDate: new Date(2017, 2, 22),
+                endDate: new Date(2017, 2, 23),
+                startDateTimeZone: "America/Los_Angeles",
+                endDateTimeZone: "America/Los_Angeles",
+                text: "a",
+                description: "b",
+                allDay: true,
+                recurrenceRule: "abc",
+                recurrenceException: "def"
+            };
+            var appointment = {
+                _startDate: data.startDate,
+                _endDate: data.endDate,
+                _startDateTimeZone: data.startDateTimeZone,
+                _endDateTimeZone: data.endDateTimeZone,
+                _text: data.text,
+                _description: data.description,
+                _allDay: data.allDay,
+                _recurrenceRule: data.recurrenceRule,
+                _recurrenceException: data.recurrenceException
+            };
 
-        $.each(dataAccessors.setter, function(name, getter) {
-            dataAccessors.setter[name](appointment, "xyz");
-            assert.equal(appointment["_" + name], "xyz", "setter for " + name + " is OK");
-        });
+            var dataAccessors = this.instance._dataAccessors;
+
+            $.each(dataAccessors.getter, function(name, getter) {
+                assert.equal(dataAccessors.getter[name](appointment), data[name], "getter for " + name + " is OK");
+            });
+
+            $.each(dataAccessors.setter, function(name, getter) {
+                dataAccessors.setter[name](appointment, "xyz");
+                assert.equal(appointment["_" + name], "xyz", "setter for " + name + " is OK");
+            });
+        } finally {
+            repaintStub.restore();
+        }
     });
 
     QUnit.test("RecurrenceRule expression should not be compiled, if recurrenceRuleExpr = null", function(assert) {
@@ -229,9 +236,12 @@ QUnit.testStart(function() {
 
     QUnit.module("Methods", {
         beforeEach: function() {
-            this.instance = $("#scheduler").dxScheduler({
-                showCurrentTimeIndicator: false
-            }).dxScheduler("instance");
+            this.createInstance = function(options) {
+                this.instance = $("#scheduler").dxScheduler($.extend({
+                    showCurrentTimeIndicator: false
+                }, options)).dxScheduler("instance");
+            };
+
             this.clock = sinon.useFakeTimers();
 
             fx.off = true;
@@ -259,7 +269,11 @@ QUnit.testStart(function() {
             store: this.tasks
         });
 
-        this.instance.option({ currentDate: new Date(2015, 1, 9), dataSource: data });
+        this.createInstance({
+            currentDate: new Date(2015, 1, 9),
+            dataSource: data
+        });
+
         this.clock.tick();
 
         this.instance.addAppointment({ startDate: new Date(2015, 1, 9, 16), endDate: new Date(2015, 1, 9, 17), text: "caption" });
@@ -272,7 +286,11 @@ QUnit.testStart(function() {
             store: this.tasks
         });
 
-        this.instance.option({ currentDate: new Date(2015, 1, 9), dataSource: data });
+        this.createInstance({
+            currentDate: new Date(2015, 1, 9),
+            dataSource: data
+        });
+
         this.clock.tick();
 
         this.instance.addAppointment({ startDate: new Date(2015, 1, 9, 16), endDate: new Date(2015, 1, 9, 17) });
@@ -288,11 +306,10 @@ QUnit.testStart(function() {
             var data = [],
                 deltaTz = getDeltaTz(5);
 
-            this.instance.option("timeZone", 5);
-
-            this.instance.option({
+            this.createInstance({
                 currentDate: new Date(2015, 1, 9),
-                dataSource: data
+                dataSource: data,
+                timeZone: 5
             });
 
             this.instance.addAppointment({ startDate: new Date(2015, 1, 9, 16), endDate: new Date(2015, 1, 9, 17), text: "first" });
@@ -314,13 +331,13 @@ QUnit.testStart(function() {
         var data = [],
             deltaTz = getDeltaTz(10);
 
-        this.instance.option("startDayHour", 3),
-        this.instance.option("endDayHour", 20),
-        this.instance.option("timeZone", 10);
-
-        this.instance.option({
+        this.createInstance({
             currentDate: new Date(2015, 1, 9),
-            dataSource: data
+            dataSource: data,
+            timezone: 5,
+            startDayHour: 3,
+            endDayHour: 20,
+            timeZone: 10
         });
 
         this.instance.addAppointment({ startDate: new Date(2015, 1, 9, 16), endDate: new Date(2015, 1, 9, 17), text: "first" });
@@ -343,11 +360,10 @@ QUnit.testStart(function() {
             var data = [],
                 deltaTz = getDeltaTz(-7);
 
-            this.instance.option("timeZone", -7);
-
-            this.instance.option({
+            this.createInstance({
                 currentDate: new Date(2015, 1, 9),
-                dataSource: data
+                dataSource: data,
+                timeZone: -7
             });
 
             this.instance.addAppointment({
@@ -373,13 +389,13 @@ QUnit.testStart(function() {
         var data = [],
             deltaTz = getDeltaTz(-7);
 
-        this.instance.option("startDayHour", 3),
-        this.instance.option("endDayHour", 20),
-        this.instance.option("timeZone", -7);
-
-        this.instance.option({
+        this.createInstance({
             currentDate: new Date(2015, 1, 9),
-            dataSource: data
+            dataSource: data,
+            timezone: 5,
+            startDayHour: 3,
+            endDayHour: 20,
+            timeZone: -7
         });
 
         this.instance.addAppointment({
@@ -403,11 +419,10 @@ QUnit.testStart(function() {
         var data = [],
             deltaTz = getDeltaTz(4);
 
-        this.instance.option("timeZone", "Asia/Muscat");
-
-        this.instance.option({
+        this.createInstance({
             currentDate: new Date(2015, 1, 9),
-            dataSource: data
+            dataSource: data,
+            timeZone: "Asia/Muscat"
         });
 
         this.instance.addAppointment({ startDate: new Date(2015, 1, 9, 16), endDate: new Date(2015, 1, 9, 17) });
@@ -421,7 +436,11 @@ QUnit.testStart(function() {
             store: this.tasks
         });
 
-        this.instance.option({ currentDate: new Date(2015, 1, 9), dataSource: data });
+        this.createInstance({
+            currentDate: new Date(2015, 1, 9),
+            dataSource: data
+        });
+
         this.clock.tick();
 
         var newTask = { startDate: new Date(2015, 1, 9, 16), endDate: new Date(2015, 1, 9, 17), text: "caption" };
@@ -437,12 +456,15 @@ QUnit.testStart(function() {
             store: this.tasks
         });
 
-        this.instance.option({ currentDate: new Date(2015, 1, 9), dataSource: data });
-        this.clock.tick();
-
-        this.instance.option("onAppointmentRendered", function() {
-            assert.ok(true, "Updated item was rerendered");
+        this.createInstance({
+            currentDate: new Date(2015, 1, 9),
+            dataSource: data,
+            onAppointmentRendered: function() {
+                assert.ok(true, "Updated item was rerendered");
+            }
         });
+
+        this.clock.tick();
 
         var newTask = {
             text: "Task 11",
@@ -458,7 +480,11 @@ QUnit.testStart(function() {
             store: this.tasks
         });
 
-        this.instance.option({ currentDate: new Date(2015, 1, 9), dataSource: data });
+        this.createInstance({
+            currentDate: new Date(2015, 1, 9),
+            dataSource: data
+        });
+
         this.clock.tick();
 
         var newTask = { startDate: new Date(2015, 1, 9, 2, 0), endDate: new Date(2015, 1, 9, 3, 0), text: "caption" },
@@ -480,23 +506,12 @@ QUnit.testStart(function() {
             store: this.tasks
         });
 
-        this.instance.option({ currentDate: new Date(2015, 1, 9), dataSource: data, timeZone: 5 });
-        this.clock.tick();
-
-        var newTask = { startDate: new Date(2015, 1, 9, 16), endDate: new Date(2015, 1, 9, 17), text: "caption" };
-
-        this.instance.updateAppointment(this.tasks[0], newTask);
-        this.clock.tick();
-
-        assert.deepEqual(this.instance.option("dataSource").items()[0], newTask, "item is updated");
-    });
-
-    QUnit.test("Update item when custom timeZone was set", function(assert) {
-        var data = new DataSource({
-            store: this.tasks
+        this.createInstance({
+            currentDate: new Date(2015, 1, 9),
+            dataSource: data,
+            timeZone: 5
         });
 
-        this.instance.option({ currentDate: new Date(2015, 1, 9), dataSource: data, timeZone: 5 });
         this.clock.tick();
 
         var newTask = { startDate: new Date(2015, 1, 9, 16), endDate: new Date(2015, 1, 9, 17), text: "caption" };
@@ -512,7 +527,12 @@ QUnit.testStart(function() {
             store: this.tasks
         });
 
-        this.instance.option({ currentDate: new Date(2015, 1, 9), dataSource: data, timeZone: "Asia/Muscat" });
+        this.createInstance({
+            currentDate: new Date(2015, 1, 9),
+            dataSource: data,
+            timeZone: "Asia/Muscat"
+        });
+
         this.clock.tick();
 
         var newTask = { startDate: new Date(2015, 1, 9, 16), endDate: new Date(2015, 1, 9, 17), text: "caption" };
@@ -538,7 +558,12 @@ QUnit.testStart(function() {
                 key: "id"
             })
         });
-        this.instance.option({ currentDate: new Date(2015, 1, 9), dataSource: dataSource });
+
+        this.createInstance({
+            currentDate: new Date(2015, 1, 9),
+            dataSource: dataSource
+        });
+
         this.clock.tick();
 
         this.instance.updateAppointment(data[0], {});
@@ -559,7 +584,10 @@ QUnit.testStart(function() {
             })
         });
 
-        this.instance.option({ currentDate: new Date(2015, 1, 9), dataSource: dataSource });
+        this.createInstance({
+            currentDate: new Date(2015, 1, 9),
+            dataSource: dataSource
+        });
         this.clock.tick();
 
         this.instance.updateAppointment(data[0], {});
@@ -570,7 +598,11 @@ QUnit.testStart(function() {
             store: this.tasks
         });
 
-        this.instance.option({ currentDate: new Date(2015, 1, 9), dataSource: data });
+        this.createInstance({
+            currentDate: new Date(2015, 1, 9),
+            dataSource: data
+        });
+
         this.clock.tick();
 
         var lastTask = this.tasks[1];
@@ -585,7 +617,10 @@ QUnit.testStart(function() {
             store: this.tasks
         });
 
-        this.instance.option({ currentDate: new Date(2015, 1, 9), dataSource: data });
+        this.createInstance({
+            currentDate: new Date(2015, 1, 9),
+            dataSource: data
+        });
         this.clock.tick();
 
         var lastTask = this.tasks[1];
@@ -615,7 +650,10 @@ QUnit.testStart(function() {
             })
         });
 
-        this.instance.option({ currentDate: new Date(2015, 1, 9), dataSource: dataSource });
+        this.createInstance({
+            currentDate: new Date(2015, 1, 9),
+            dataSource: dataSource
+        });
         this.clock.tick();
 
         this.instance.deleteAppointment(data[0]);
@@ -636,13 +674,19 @@ QUnit.testStart(function() {
             })
         });
 
-        this.instance.option({ currentDate: new Date(2015, 1, 9), dataSource: dataSource });
+        this.createInstance({
+            currentDate: new Date(2015, 1, 9),
+            dataSource: dataSource
+        });
         this.clock.tick();
 
         this.instance.deleteAppointment(data[0]);
     });
 
     QUnit.test("Check appointment takes all day", function(assert) {
+        this.createInstance({
+            dataSource: []
+        });
         var result = this.instance.appointmentTakesAllDay({
             startDate: new Date(2015, 5, 4, 0),
             endDate: new Date(2015, 5, 5, 0)
@@ -665,7 +709,8 @@ QUnit.testStart(function() {
     });
 
     QUnit.test("Check appointment takes all day if start & end hours are defined", function(assert) {
-        this.instance.option({
+        this.createInstance({
+            dataSource: [],
             startDayHour: 5,
             endDayHour: 10
         });
@@ -690,152 +735,14 @@ QUnit.testStart(function() {
         assert.ok(!result, "Appointment doesn't take all day");
     });
 
-    QUnit.test("Check scrolling to time", function(assert) {
-        this.instance.option({
-            currentView: "week",
-            currentDate: new Date(2015, 1, 9),
-            height: 500
-        });
-
-        var scrollable = this.instance.getWorkSpace().$element().find(".dx-scrollable").dxScrollable("instance"),
-            scrollBy = sinon.spy(scrollable, "scrollBy");
-
-        this.instance.scrollToTime(9, 5);
-
-        assert.roughEqual(scrollBy.getCall(0).args[0].top, this.instance._workSpace.getCoordinatesByDate(new Date(2015, 1, 9, 9, 5)).top, 1.001, "scrollBy was called with right distance");
-        assert.equal(scrollBy.getCall(0).args[0].left, 0, "scrollBy was called with right distance");
-    });
-
-    QUnit.test("Check scrolling to time, if startDayHour is not 0", function(assert) {
-        this.instance.option({
-            currentView: "week",
-            currentDate: new Date(2015, 1, 9),
-            height: 500,
-            startDayHour: 3
-        });
-
-        var scrollable = this.instance.getWorkSpace().$element().find(".dx-scrollable").dxScrollable("instance"),
-            scrollBy = sinon.spy(scrollable, "scrollBy");
-
-        this.instance.scrollToTime(2, 0);
-
-        assert.roughEqual(scrollBy.getCall(0).args[0].top, 0, 2.001, "scrollBy was called with right distance");
-
-        this.instance.scrollToTime(5, 0);
-
-        assert.roughEqual(scrollBy.getCall(1).args[0].top, this.instance._workSpace.getCoordinatesByDate(new Date(2015, 1, 9, 5, 0)).top, 1.001, "scrollBy was called with right distance");
-    });
-
-    QUnit.test("Check scrolling to time, if 'hours' argument greater than the 'endDayHour' option", function(assert) {
-        this.instance.option({
-            currentView: "week",
-            currentDate: new Date(2015, 1, 9),
-            height: 500,
-            endDayHour: 10
-        });
-
-        var scrollable = this.instance.getWorkSpace().$element().find(".dx-scrollable").dxScrollable("instance"),
-            scrollBy = sinon.spy(scrollable, "scrollBy");
-
-        this.instance.scrollToTime(12, 0);
-
-        assert.roughEqual(scrollBy.getCall(0).args[0].top, this.instance._workSpace.getCoordinatesByDate(new Date(2015, 1, 9, 9, 0)).top, 1.001, "scrollBy was called with right distance");
-    });
-
-    QUnit.test("Scrolling to date which doesn't locate on current view should call console warning", function(assert) {
-        this.instance.option({
-            currentView: "week",
-            currentDate: new Date(2015, 1, 9),
-            height: 500
-        });
-
-        var warningHandler = sinon.spy(errors, "log");
-
-        this.instance.scrollToTime(12, 0, new Date(2015, 1, 16));
-
-        assert.equal(warningHandler.callCount, 1, "warning has been called once");
-        assert.equal(warningHandler.getCall(0).args[0], "W1008", "warning has correct error id");
-    });
-
-    QUnit.test("Check scrolling to time for timeline view", function(assert) {
-        this.instance.option({
-            views: ["timelineWeek"],
-            currentView: "timelineWeek",
-            currentDate: new Date(2015, 1, 9),
-            width: 500
-        });
-
-        var scrollable = this.instance.getWorkSpace().$element().find(".dx-scheduler-date-table-scrollable").dxScrollable("instance"),
-            scrollBy = sinon.spy(scrollable, "scrollBy");
-
-        this.instance.scrollToTime(9, 5);
-
-        assert.roughEqual(scrollBy.getCall(0).args[0].left, this.instance._workSpace.getCoordinatesByDate(new Date(2015, 1, 9, 9, 5)).left, 1.001, "scrollBy was called with right distance");
-    });
-
-    QUnit.test("Check scrolling to time for timeline view, rtl mode", function(assert) {
-        this.instance.option({
-            views: ["timelineWeek"],
-            currentView: "timelineWeek",
-            currentDate: new Date(2015, 1, 9),
-            width: 500,
-            rtlEnabled: true
-        });
-
-        var scrollable = this.instance.getWorkSpace().$element().find(".dx-scheduler-date-table-scrollable").dxScrollable("instance"),
-            scrollLeft = scrollable.scrollLeft(),
-            scrollBy = sinon.spy(scrollable, "scrollBy"),
-            offset = this.instance.getWorkSpace().getScrollableContainer().outerWidth();
-
-        this.instance.scrollToTime(9, 5);
-
-        assert.roughEqual(scrollBy.getCall(0).args[0].left, this.instance._workSpace.getCoordinatesByDate(new Date(2015, 1, 9, 9, 5)).left - scrollLeft - offset, 1.001, "scrollBy was called with right distance");
-    });
-
-    QUnit.test("Check scrolling to time for timeline view if date was set", function(assert) {
-        this.instance.option({
-            views: ["timelineWeek"],
-            currentView: "timelineWeek",
-            currentDate: new Date(2015, 1, 9),
-            width: 500,
-            firstDayOfWeek: 1
-        });
-
-        var scrollable = this.instance.getWorkSpace().$element().find(".dx-scheduler-date-table-scrollable").dxScrollable("instance"),
-            scrollBy = sinon.spy(scrollable, "scrollBy");
-
-        this.instance.scrollToTime(9, 5, new Date(2015, 1, 11, 10, 30));
-
-        assert.roughEqual(scrollBy.getCall(0).args[0].left, this.instance._workSpace.getCoordinatesByDate(new Date(2015, 1, 11, 9, 5)).left, 1.001, "scrollBy was called with right distance");
-    });
-
-    QUnit.test("Check scrolling to time for timeline view if date was set, rtl mode", function(assert) {
-        this.instance.option({
-            views: ["timelineWeek"],
-            currentView: "timelineWeek",
-            currentDate: new Date(2015, 1, 9),
-            width: 500,
-            firstDayOfWeek: 1,
-            rtlEnabled: true
-        });
-
-        var scrollable = this.instance.getWorkSpace().$element().find(".dx-scheduler-date-table-scrollable").dxScrollable("instance"),
-            scrollLeft = scrollable.scrollLeft(),
-            scrollBy = sinon.spy(scrollable, "scrollBy"),
-            offset = this.instance.getWorkSpace().getScrollableContainer().outerWidth();
-
-        this.instance.scrollToTime(9, 5, new Date(2015, 1, 11, 10, 30));
-
-        assert.roughEqual(scrollBy.getCall(0).args[0].left, this.instance._workSpace.getCoordinatesByDate(new Date(2015, 1, 11, 9, 5)).left - scrollLeft - offset, 1.001, "scrollBy was called with right distance");
-    });
-
     QUnit.test("Scheduler focus method should call workspace focus method when appointment wasn't updated", function(assert) {
-        this.instance.option({
+        this.createInstance({
+            dataSource: [],
             currentView: "day",
             currentDate: new Date(2015, 10, 3)
         });
 
-        var workspace = this.instance.$element().find(".dx-scheduler-work-space").dxSchedulerWorkSpaceDay("instance"),
+        var workspace = this.instance.getWorkSpace(),
             spy = sinon.spy(workspace, "focus");
 
         this.instance.focus();
@@ -844,31 +751,33 @@ QUnit.testStart(function() {
     });
 
     QUnit.test("Scheduler focus method should call appointments focus method when appointment was updated", function(assert) {
-        this.instance.option({
-            dataSource: [{
-                text: "a",
-                startDate: new Date(2015, 6, 8, 8, 0),
-                endDate: new Date(2015, 6, 8, 17, 0),
-                allDay: true
-            }],
+        var tasks = [{
+            text: "a",
+            startDate: new Date(2015, 6, 8, 8, 0),
+            endDate: new Date(2015, 6, 8, 17, 0),
+            allDay: true
+        }];
+
+        this.createInstance({
+            dataSource: tasks,
             currentDate: new Date(2015, 6, 8)
         });
 
         var appointments = this.instance.getAppointmentsInstance(),
             focusSpy = sinon.spy(appointments, "focus");
 
-        $(this.instance.$element()).find(".dx-scheduler-appointment").eq(0).trigger("dxclick").trigger("dxclick");
-
+        this.instance._editAppointmentData = tasks[0];
         this.instance.focus();
 
         assert.ok(focusSpy.calledOnce, "focus is called");
     });
 
     QUnit.test("Scheduler getWorkSpaceDateTableOffset should return right dateTable offset", function(assert) {
-        this.instance.option({
-            currentView: "day",
+        this.createInstance({
+            dataSource: "day",
             currentDate: new Date(2015, 10, 3)
         });
+
         var timePanelWidth = this.instance.$element().find(".dx-scheduler-time-panel").eq(0).outerWidth(),
             offset = this.instance.getWorkSpaceDateTableOffset();
 
@@ -876,23 +785,25 @@ QUnit.testStart(function() {
     });
 
     QUnit.test("Scheduler getWorkSpaceDateTableOffset should return right dateTable offset, crossScrollingEnabled=true", function(assert) {
-        this.instance.option({
-            currentView: "day",
+        this.createInstance({
+            dataSource: "day",
             currentDate: new Date(2015, 10, 3),
             crossScrollingEnabled: true
         });
+
         var offset = this.instance.getWorkSpaceDateTableOffset();
 
         assert.equal(offset, 0, "Date Table offset is correct");
     });
 
     QUnit.test("Scheduler getWorkSpaceDateTableOffset should return right dateTable offset, crossScrollingEnabled=true, rtl mode", function(assert) {
-        this.instance.option({
-            currentView: "day",
+        this.createInstance({
+            dataSource: "day",
             currentDate: new Date(2015, 10, 3),
             crossScrollingEnabled: true,
             rtlEnabled: true
         });
+
         var timePanelWidth = this.instance.$element().find(".dx-scheduler-time-panel").eq(0).outerWidth(),
             offset = this.instance.getWorkSpaceDateTableOffset();
 
@@ -922,11 +833,171 @@ QUnit.testStart(function() {
 
 (function() {
 
-    var checkDate = function($element, assert) {
+    QUnit.module("Scrolling to time", {
+        beforeEach: function() {
+            this.createInstance = function(options) {
+                this.instance = $("#scheduler").dxScheduler($.extend({
+                    showCurrentTimeIndicator: false
+                }, options)).dxScheduler("instance");
+            };
 
-        var workSpace = $element.find(".dx-scheduler-work-space").dxSchedulerWorkSpaceDay("instance"),
+            this.clock = sinon.useFakeTimers();
+
+            fx.off = true;
+        },
+        afterEach: function() {
+            this.clock.restore();
+            fx.off = false;
+        }
+    });
+
+    QUnit.test("Check scrolling to time", function(assert) {
+        this.createInstance({
+            currentView: "week",
+            currentDate: new Date(2015, 1, 9),
+            height: 500
+        });
+
+        var scrollable = this.instance.getWorkSpaceScrollable(),
+            scrollBy = sinon.spy(scrollable, "scrollBy");
+
+        this.instance.scrollToTime(9, 5);
+
+        assert.roughEqual(scrollBy.getCall(0).args[0].top, this.instance._workSpace.getCoordinatesByDate(new Date(2015, 1, 9, 9, 5)).top, 1.001, "scrollBy was called with right distance");
+        assert.equal(scrollBy.getCall(0).args[0].left, 0, "scrollBy was called with right distance");
+    });
+
+    QUnit.test("Check scrolling to time, if startDayHour is not 0", function(assert) {
+        this.createInstance({
+            currentView: "week",
+            currentDate: new Date(2015, 1, 9),
+            height: 500,
+            startDayHour: 3
+        });
+
+        var scrollable = this.instance.getWorkSpaceScrollable(),
+            scrollBy = sinon.spy(scrollable, "scrollBy");
+
+        this.instance.scrollToTime(2, 0);
+
+        assert.roughEqual(scrollBy.getCall(0).args[0].top, 0, 2.001, "scrollBy was called with right distance");
+
+        this.instance.scrollToTime(5, 0);
+
+        assert.roughEqual(scrollBy.getCall(1).args[0].top, this.instance._workSpace.getCoordinatesByDate(new Date(2015, 1, 9, 5, 0)).top, 1.001, "scrollBy was called with right distance");
+    });
+
+    QUnit.test("Check scrolling to time, if 'hours' argument greater than the 'endDayHour' option", function(assert) {
+        this.createInstance({
+            currentView: "week",
+            currentDate: new Date(2015, 1, 9),
+            height: 500,
+            endDayHour: 10
+        });
+
+        var scrollable = this.instance.getWorkSpaceScrollable(),
+            scrollBy = sinon.spy(scrollable, "scrollBy");
+
+        this.instance.scrollToTime(12, 0);
+
+        assert.roughEqual(scrollBy.getCall(0).args[0].top, this.instance._workSpace.getCoordinatesByDate(new Date(2015, 1, 9, 9, 0)).top, 1.001, "scrollBy was called with right distance");
+    });
+
+    QUnit.test("Scrolling to date which doesn't locate on current view should call console warning", function(assert) {
+        this.createInstance({
+            currentView: "week",
+            currentDate: new Date(2015, 1, 9),
+            height: 500
+        });
+
+        var warningHandler = sinon.spy(errors, "log");
+
+        this.instance.scrollToTime(12, 0, new Date(2015, 1, 16));
+
+        assert.equal(warningHandler.callCount, 1, "warning has been called once");
+        assert.equal(warningHandler.getCall(0).args[0], "W1008", "warning has correct error id");
+    });
+
+    QUnit.test("Check scrolling to time for timeline view", function(assert) {
+        this.createInstance({
+            views: ["timelineWeek"],
+            currentView: "timelineWeek",
+            currentDate: new Date(2015, 1, 9),
+            width: 500
+        });
+
+        var scrollable = this.instance.getWorkSpaceScrollable(),
+            scrollBy = sinon.spy(scrollable, "scrollBy");
+
+        this.instance.scrollToTime(9, 5);
+
+        assert.roughEqual(scrollBy.getCall(0).args[0].left, this.instance._workSpace.getCoordinatesByDate(new Date(2015, 1, 9, 9, 5)).left, 1.001, "scrollBy was called with right distance");
+    });
+
+    QUnit.test("Check scrolling to time for timeline view, rtl mode", function(assert) {
+        this.createInstance({
+            views: ["timelineWeek"],
+            currentView: "timelineWeek",
+            currentDate: new Date(2015, 1, 9),
+            width: 500,
+            rtlEnabled: true
+        });
+
+        var scrollable = this.instance.getWorkSpaceScrollable(),
+            scrollLeft = scrollable.scrollLeft(),
+            scrollBy = sinon.spy(scrollable, "scrollBy"),
+            offset = this.instance.getWorkSpace().getScrollableContainer().outerWidth();
+
+        this.instance.scrollToTime(9, 5);
+
+        assert.roughEqual(scrollBy.getCall(0).args[0].left, this.instance._workSpace.getCoordinatesByDate(new Date(2015, 1, 9, 9, 5)).left - scrollLeft - offset, 1.001, "scrollBy was called with right distance");
+    });
+
+    QUnit.test("Check scrolling to time for timeline view if date was set", function(assert) {
+        this.createInstance({
+            views: ["timelineWeek"],
+            currentView: "timelineWeek",
+            currentDate: new Date(2015, 1, 9),
+            width: 500,
+            firstDayOfWeek: 1
+        });
+
+        var scrollable = this.instance.getWorkSpaceScrollable(),
+            scrollBy = sinon.spy(scrollable, "scrollBy");
+
+        this.instance.scrollToTime(9, 5, new Date(2015, 1, 11, 10, 30));
+
+        assert.roughEqual(scrollBy.getCall(0).args[0].left, this.instance._workSpace.getCoordinatesByDate(new Date(2015, 1, 11, 9, 5)).left, 1.001, "scrollBy was called with right distance");
+    });
+
+    QUnit.test("Check scrolling to time for timeline view if date was set, rtl mode", function(assert) {
+        this.createInstance({
+            views: ["timelineWeek"],
+            currentView: "timelineWeek",
+            currentDate: new Date(2015, 1, 9),
+            width: 500,
+            firstDayOfWeek: 1,
+            rtlEnabled: true
+        });
+
+        var scrollable = this.instance.getWorkSpaceScrollable(),
+            scrollLeft = scrollable.scrollLeft(),
+            scrollBy = sinon.spy(scrollable, "scrollBy"),
+            offset = this.instance.getWorkSpace().getScrollableContainer().outerWidth();
+
+        this.instance.scrollToTime(9, 5, new Date(2015, 1, 11, 10, 30));
+
+        assert.roughEqual(scrollBy.getCall(0).args[0].left, this.instance._workSpace.getCoordinatesByDate(new Date(2015, 1, 11, 9, 5)).left - scrollLeft - offset, 1.001, "scrollBy was called with right distance");
+    });
+})("Scrolling to time");
+
+(function() {
+
+    var checkDate = function(instance, assert) {
+
+        var workSpace = instance.getWorkSpace(),
             workSpaceCurrentDate = workSpace.option("currentDate"),
-            header = $element.find(".dx-scheduler-header").dxSchedulerHeader("instance"),
+            header = instance.getHeader(),
             headerCurrentDate = header.option("currentDate");
 
         assert.ok(workSpaceCurrentDate instanceof Date, "date is instance of Date constructor");
@@ -957,14 +1028,14 @@ QUnit.testStart(function() {
             currentDate: 1431515985596
         });
 
-        checkDate(this.instance.$element(), assert);
+        checkDate(this.instance, assert);
     });
 
     QUnit.test("It should be possible to change currentDate using timestamp", function(assert) {
         this.createInstance();
 
         this.instance.option("currentDate", 1431515985596);
-        checkDate(this.instance.$element(), assert);
+        checkDate(this.instance, assert);
     });
 
     QUnit.test("Custom store should be loaded only once on the first rendering", function(assert) {
@@ -1183,7 +1254,7 @@ QUnit.testStart(function() {
             }]
         });
 
-        var workSpaceWeek = this.instance.$element().find(".dx-scheduler-work-space").dxSchedulerWorkSpaceWeek("instance"),
+        var workSpaceWeek = this.instance.getWorkSpace(),
             header = this.instance.getHeader(),
             navigator = header._navigator;
 
@@ -1257,7 +1328,7 @@ QUnit.testStart(function() {
             }]
         });
 
-        var workSpaceWeek = this.instance.$element().find(".dx-scheduler-work-space").dxSchedulerWorkSpaceWeek("instance"),
+        var workSpaceWeek = this.instance.getWorkSpace(),
             header = this.instance.getHeader(),
             navigator = header._navigator;
 
@@ -1309,7 +1380,7 @@ QUnit.testStart(function() {
         });
 
         this.instance.option("currentView", "week");
-        var workSpaceWeek = this.instance.$element().find(".dx-scheduler-work-space").dxSchedulerWorkSpaceWeek("instance"),
+        var workSpaceWeek = this.instance.getWorkSpace(),
             header = this.instance.getHeader(),
             navigator = header._navigator;
 
@@ -1356,7 +1427,7 @@ QUnit.testStart(function() {
             cellDuration: 60
         });
 
-        var workSpaceWeek = this.instance.$element().find(".dx-scheduler-work-space").dxSchedulerWorkSpaceWeek("instance"),
+        var workSpaceWeek = this.instance.getWorkSpace(),
             appointments = this.instance.getAppointmentsInstance();
 
         assert.equal(workSpaceWeek.option("hoursInterval") * 60, this.instance.option("cellDuration"), "workspace has correct cellDuration");
@@ -1374,7 +1445,7 @@ QUnit.testStart(function() {
             accessKey: "o"
         });
 
-        var workSpaceMonth = this.instance.$element().find(".dx-scheduler-work-space").dxSchedulerWorkSpaceMonth("instance");
+        var workSpaceMonth = this.instance.getWorkSpace();
         assert.equal(workSpaceMonth.option("accessKey"), this.instance.option("accessKey"), "workspace has correct accessKey");
 
         this.instance.option("accessKey", "k");
@@ -1415,7 +1486,6 @@ QUnit.testStart(function() {
         assert.strictEqual(this.instance.getWorkSpace().option("width"), undefined, "option is OK");
     });
 
-    //TODO: move this to default option tests
     QUnit.test("Editing default option value", function(assert) {
         var defaultEditing = { allowAdding: true, allowUpdating: true, allowDeleting: true, allowResizing: true, allowDragging: true };
 
@@ -2112,7 +2182,7 @@ QUnit.testStart(function() {
         });
 
         this.instance.option("onAppointmentRendered", function() { return 2; });
-        var appointmentsCollection = this.instance.$element().find(".dx-scheduler-scrollable-appointments").dxSchedulerAppointments("instance");
+        var appointmentsCollection = this.instance.getAppointmentsInstance();
 
         assert.equal(appointmentsCollection.option("onItemRendered")(), 2, "option is updated correctly");
     });
@@ -2477,7 +2547,7 @@ QUnit.testStart(function() {
             currentView: 'month',
             onCellClick: sinon.stub().returns(1)
         });
-        var workspaceMonth = this.instance.$element().find(".dx-scheduler-work-space").dxSchedulerWorkSpaceMonth("instance");
+        var workspaceMonth = this.instance.getWorkSpace();
 
         assert.deepEqual(workspaceMonth.option("onCellClick")(), this.instance.option("onCellClick")(), "scheduler has correct onCellClick");
 
@@ -2549,7 +2619,7 @@ QUnit.testStart(function() {
                             startDate: new Date(2016, 2, 15, 1).toString(),
                             endDate: new Date(2016, 2, 15, 2).toString()
                         }]);
-                    }, 300);
+                    }, 100);
 
                     return d.promise();
                 }
@@ -2563,9 +2633,10 @@ QUnit.testStart(function() {
             width: 800,
             dataSource: dataSource,
             onContentReady: function(e) {
-                var $element = $(e.component.$element()),
-                    $header = $element.find(".dx-scheduler-header"),
-                    $workSpace = $element.find(".dx-scheduler-work-space"),
+                var element = e.component,
+                    $element = $(e.component.$element()),
+                    $header = element.getHeader().$element(),
+                    $workSpace = element.getWorkSpace().$element(),
                     $appointment = $element.find(".dx-scheduler-appointment"),
                     appointmentPosition = translator.locate($appointment);
 
@@ -2673,9 +2744,9 @@ QUnit.testStart(function() {
 
     QUnit.test("Focus options should be passed to scheduler parts", function(assert) {
         this.createInstance({ focusStateEnabled: true, tabIndex: 1, currentView: "day" });
-        var header = this.instance.$element().find(".dx-scheduler-header").dxSchedulerHeader("instance"),
-            workspace = this.instance.$element().find(".dx-scheduler-work-space-day").dxSchedulerWorkSpaceDay("instance"),
-            appointments = this.instance.$element().find(".dx-scheduler-scrollable-appointments").dxSchedulerAppointments("instance");
+        var header = this.instance.getHeader(),
+            workspace = this.instance.getWorkSpace(),
+            appointments = this.instance.getAppointmentsInstance();
 
         assert.equal(this.instance.$element().attr("tabindex"), null, "scheduler has no tabIndex");
 
@@ -2691,9 +2762,9 @@ QUnit.testStart(function() {
 
     QUnit.test("Focus options should be passed to scheduler parts after option changed", function(assert) {
         this.createInstance({ focusStateEnabled: true, tabIndex: 1, currentView: "day" });
-        var header = this.instance.$element().find(".dx-scheduler-header").dxSchedulerHeader("instance"),
-            workspace = this.instance.$element().find(".dx-scheduler-work-space-day").dxSchedulerWorkSpaceDay("instance"),
-            appointments = this.instance.$element().find(".dx-scheduler-scrollable-appointments").dxSchedulerAppointments("instance");
+        var header = this.instance.getHeader(),
+            workspace = this.instance.getWorkSpace(),
+            appointments = this.instance.getAppointmentsInstance();
 
         this.instance.option("tabIndex", 2);
 
@@ -2711,7 +2782,7 @@ QUnit.testStart(function() {
 
     QUnit.test("AllowMultipleCellSelection option should be passed to scheduler workspace", function(assert) {
         this.createInstance({ focusStateEnabled: true, allowMultipleCellSelection: false });
-        var workspace = this.instance.$element().find(".dx-scheduler-work-space-day").dxSchedulerWorkSpaceDay("instance");
+        var workspace = this.instance.getWorkSpace();
 
         assert.equal(workspace.option("allowMultipleCellSelection"), false, "allowMultipleCellSelection");
 
@@ -2759,8 +2830,6 @@ QUnit.testStart(function() {
 
         this.instance.option("currentView", "week");
         assert.equal(this.instance.$element().find(".dx-loadpanel-wrapper").length, 1, "loading panel is shown");
-
-        this.clock.tick(100);
     });
 
     QUnit.test("Loading panel should hide", function(assert) {
@@ -2777,9 +2846,6 @@ QUnit.testStart(function() {
         this.instance.option("currentView", "week");
         var loadingInstance = $(".dx-loadpanel").last().dxLoadPanel("instance");
         assert.deepEqual(loadingInstance.option("position.of").get(0), this.instance.$element().get(0), "loading panel is shown in right place");
-
-        this.clock.tick(100);
-
     });
 
 })("Loading");

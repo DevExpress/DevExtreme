@@ -1295,7 +1295,7 @@ QUnit.test("Add new appointment with delay and an error(T381444)", function(asse
                 d.reject();
                 assert.ok(popup.option("visible"), "Popup is still visible");
                 done();
-            }, 300);
+            }, 100);
 
             return d.promise();
         }
@@ -3557,6 +3557,7 @@ QUnit.test("DropDown appointment buttons should have correct quantity with multi
 });
 
 QUnit.test("DropDown appointment should raise the onAppointmentClick event", function(assert) {
+    var spy = sinon.spy();
     var appointments = [
         { startDate: new Date(2015, 2, 4), text: "a", endDate: new Date(2015, 2, 4, 0, 30) },
         { startDate: new Date(2015, 2, 4), text: "b", endDate: new Date(2015, 2, 4, 0, 30) },
@@ -3573,7 +3574,6 @@ QUnit.test("DropDown appointment should raise the onAppointmentClick event", fun
         currentView: "month",
         firstDayOfWeek: 1,
         onAppointmentClick: function(args) {
-
             assert.equal(args.component, instance, "dxScheduler is 'component'");
             assert.equal(args.element, instance.element(), "dxScheduler element is 'element'");
             assert.deepEqual(args.appointmentData, appointments[4], "Appointment data is OK");
@@ -3586,15 +3586,22 @@ QUnit.test("DropDown appointment should raise the onAppointmentClick event", fun
         }
     });
 
-    var instance = this.instance;
+    var showAppointmentPopup = this.instance.showAppointmentPopup;
+    this.instance.showAppointmentPopup = spy;
+    try {
+        var instance = this.instance;
 
-    sinon.stub(instance.getRenderingStrategyInstance(), "_getMaxNeighborAppointmentCount").returns(4);
+        sinon.stub(instance.getRenderingStrategyInstance(), "_getMaxNeighborAppointmentCount").returns(4);
 
-    instance.option("dataSource", appointments);
+        instance.option("dataSource", appointments);
 
-    var dropDown = instance.$element().find(".dx-scheduler-dropdown-appointments").dxDropDownMenu("instance");
-    dropDown.open();
-    $(dropDown._list.$element()).find(".dx-list-item").eq(2).trigger("dxclick");
+        var dropDown = instance.$element().find(".dx-scheduler-dropdown-appointments").dxDropDownMenu("instance");
+        dropDown.open();
+        $(dropDown._list.$element()).find(".dx-list-item").eq(2).trigger("dxclick");
+
+    } finally {
+        this.instance.showAppointmentPopup = showAppointmentPopup;
+    }
 });
 
 QUnit.test("DropDown appointment should process the onAppointmentClick event correctly if e.cancel = true", function(assert) {
@@ -4633,18 +4640,20 @@ QUnit.test("Appointment startDate should be preprocessed before position calcula
     assert.equal($appointment.length, 2, "appointment is rendered");
 });
 
-QUnit.test("Appointment startDate and endDate should have correct format in the details view after allDay appoitment opening, (T505119)", function(assert) {
+QUnit.test("Appointment startDate and endDate should have correct format in the details view after allDay appoitment opening (T505119)", function(assert) {
+    var tasks = [{
+        text: "AllDay task",
+        start: new Date(2017, 2, 13),
+        end: new Date(2017, 2, 13, 0, 30),
+        AllDay: true
+    }, {
+        text: "Short task",
+        start: new Date(2017, 2, 13),
+        end: new Date(2017, 2, 13, 0, 30)
+    }];
+
     this.createInstance({
-        dataSource: [{
-            text: "AllDay task",
-            start: new Date(2017, 2, 13),
-            end: new Date(2017, 2, 13, 0, 30),
-            AllDay: true
-        }, {
-            text: "Short task",
-            start: new Date(2017, 2, 13),
-            end: new Date(2017, 2, 13, 0, 30)
-        }],
+        dataSource: tasks,
         currentDate: new Date(2017, 2, 13),
         currentView: "week",
         views: ["week"],
@@ -4652,12 +4661,9 @@ QUnit.test("Appointment startDate and endDate should have correct format in the 
         endDateExpr: "end",
         allDayExpr: "AllDay"
     });
-
-    pointerMock(this.instance.$element().find(".dx-scheduler-all-day-appointment").eq(0)).start().click().click();
-    var $popup = $(".dx-scheduler-appointment-popup");
-    $popup.hide();
-
-    pointerMock(this.instance.$element().find(".dx-scheduler-appointment").eq(1)).start().click().click();
+    this.instance.showAppointmentPopup(tasks[0]);
+    this.instance.hideAppointmentPopup();
+    this.instance.showAppointmentPopup(tasks[1]);
 
     var detailsForm = this.instance.getAppointmentDetailsForm(),
         startDateEditor = detailsForm.getEditor("start"),
@@ -4767,7 +4773,6 @@ QUnit.test("FormData should be reset on saveChanges, dateSerializationFormat is 
     startDateEditor.option("value", "2016-05-25T10:40:00");
 
     $(".dx-scheduler-appointment-popup .dx-popup-done").trigger("dxclick").trigger("dxclick");
-    this.clock.tick(300);
 
     var $appointments = this.instance.$element().find(".dx-scheduler-appointment");
 
