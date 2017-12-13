@@ -234,6 +234,32 @@ var numberLocalization = dependencyInjector({
         });
     },
 
+    _getDecimalPrecision: function(text) {
+        if(!text) {
+            return 0;
+        }
+
+        var cleanedText = text.replace(/[^0-9#\\.]/g, ""),
+            signParts = cleanedText.split(".");
+
+        return signParts[1] && signParts[1].length || 0;
+    },
+
+    _isLDMLFormat: function(format) {
+        return typeof format === "string" && !!format.match(/[0#]/g);
+    },
+
+    _isFloatOverflow: function(text, format) {
+        if(!this._isLDMLFormat(format)) {
+            return false;
+        }
+
+        var maxDecimalPrecision = this._getDecimalPrecision(format),
+            textPrecision = this._getDecimalPrecision(text);
+
+        return textPrecision > maxDecimalPrecision;
+    },
+
     _getSign: function(text, format) {
         if(text.charAt(0) === "-") {
             return -1;
@@ -296,15 +322,18 @@ var numberLocalization = dependencyInjector({
         }
 
         var decimalSeparator = this.getDecimalSeparator(),
+
             regExp = new RegExp("[^0-9" + decimalSeparator + "]", "g"),
             cleanedText = text
                 .replace(regExp, "")
                 .replace(decimalSeparator, ".")
-                .replace(/^\.|\.$/g, "");
+                .replace(/^\.|\.$/g, ""),
+            isFloatOverflow = this._isFloatOverflow(cleanedText.replace(/0+$/, ""), format);
 
-        if(cleanedText.length > 15) {
+        if(cleanedText.length > 15 || isFloatOverflow) {
             return NaN;
         }
+
         if(cleanedText === "") {
             return null;
         }

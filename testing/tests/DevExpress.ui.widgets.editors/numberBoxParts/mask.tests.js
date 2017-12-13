@@ -259,7 +259,7 @@ QUnit.module("format: text input", moduleConfig);
 
 QUnit.test("invalid chars should be prevented on keydown", function(assert) {
     this.keyboard.type("12e*3.456");
-    assert.equal(this.input.val(), "123.46", "value is correct");
+    assert.equal(this.input.val(), "123.45", "value is correct");
 });
 
 QUnit.test("input should be correct with group separators", function(assert) {
@@ -625,6 +625,7 @@ QUnit.test("removing decimal separator if decimal separator is not default", fun
     }
 });
 
+
 QUnit.module("format: caret boundaries", moduleConfig);
 
 QUnit.test("right arrow limitation", function(assert) {
@@ -770,4 +771,14 @@ QUnit.test("move caret to the start when only stubs remain in the input", functi
     this.input.trigger("dxclick");
 
     assert.deepEqual(this.keyboard.caret(), { start: 0, end: 0 }, "caret was adjusted");
+});
+
+QUnit.test("caret motion should be prevented if result length is equal to initial", function(assert) {
+    this.instance.option({
+        format: "#0.## kg",
+        value: 1.15
+    });
+
+    this.keyboard.caret(4).type("2");
+    assert.deepEqual(this.keyboard.caret(), { start: 4, end: 4 }, "caret should not be moved");
 });
