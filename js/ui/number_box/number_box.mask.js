@@ -280,16 +280,20 @@ var NumberBoxMask = NumberBoxBase.inherit({
         return this._isPercentFormat() ? (parsed && parsed / 100) : parsed;
     },
 
+    _cleanText: function(text) {
+        var decimalSeparator = number.getDecimalSeparator(),
+            clearRegExp = new RegExp("[^0-9" + decimalSeparator + "]", "g"),
+            cleanedText = text.replace(clearRegExp, "").replace(decimalSeparator, ".");
+
+        return cleanedText;
+    },
+
     _isValueIncomplete: function(text) {
         if(!this._useMaskBehavior()) {
             return this.callBase(text);
         }
 
-        var decimalSeparator = number.getDecimalSeparator(),
-            clearRegExp = new RegExp("[^0-9" + decimalSeparator + "]", "g"),
-            cleanedText = text.replace(clearRegExp, "").replace(decimalSeparator, ".");
-
-        return cleanedText.match(/\.0*$/);
+        return this._cleanText(text).match(/\.0*$/);
     },
 
     _isValueInRange: function(value) {
