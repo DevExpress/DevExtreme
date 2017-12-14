@@ -271,20 +271,17 @@ var NumberBoxMask = NumberBoxBase.inherit({
         return this._isPercentFormat() ? (parsed && parsed / 100) : parsed;
     },
 
-    _cleanText: function(text) {
-        var decimalSeparator = number.getDecimalSeparator(),
-            clearRegExp = new RegExp("[^0-9" + decimalSeparator + "]", "g"),
-            cleanedText = text.replace(clearRegExp, "").replace(decimalSeparator, ".");
-
-        return cleanedText;
-    },
-
     _isValueIncomplete: function(text) {
         if(!this._useMaskBehavior()) {
             return this.callBase(text);
         }
 
-        return this._cleanText(text).match(/\.0*$/);
+        var decimalSeparator = number.getDecimalSeparator(),
+            escapedSeparator = escapeRegExp(decimalSeparator),
+            regExp = new RegExp("[^" + escapedSeparator + "]" + escapedSeparator + "0*[^0-9" + escapedSeparator + "]*$", "ig"),
+            lastKeyIncomplete = this._lastKey === decimalSeparator || this._lastKey === "0";
+
+        return lastKeyIncomplete && regExp.test(text);
     },
 
     _isValueInRange: function(value) {
@@ -400,15 +397,6 @@ var NumberBoxMask = NumberBoxBase.inherit({
         return fitIntoRange(this._parsedValue, this.option("min"), this.option("max"));
     },
 
-    _isIncomplete: function(string) {
-        var decimalSeparator = number.getDecimalSeparator(),
-            escapedSeparator = escapeRegExp(decimalSeparator),
-            regExp = new RegExp("[^" + escapedSeparator + "]" + escapedSeparator + "0*[^0-9" + escapedSeparator + "]*$", "ig"),
-            lastKeyIncomplete = this._lastKey === decimalSeparator || this._lastKey === "0";
-
-        return lastKeyIncomplete && regExp.test(string);
-    },
-
     _revertSign: function() {
         if(!this._useMaskBehavior()) {
             return;
@@ -429,7 +417,7 @@ var NumberBoxMask = NumberBoxBase.inherit({
             text = this._getEditedText(text, { start: caret.start - 1, end: caret.start }, "");
         }
 
-        if(this._isIncomplete(text)) {
+        if(this._isValueIncomplete(text)) {
             this._formattedValue = text;
             return;
         }
