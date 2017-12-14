@@ -461,7 +461,7 @@ var ResponsiveBox = CollectionWidget.inherit({
     },
 
     _rootBoxConfig: function(items) {
-        var rootItems = iteratorUtils.each(items, (function(index, item) {
+        var rootItems = $.each(items, (function(index, item) {
             this._needApplyAutoBaseSize(item) && extend(item, { baseSize: "auto" });
         }).bind(this));
 
