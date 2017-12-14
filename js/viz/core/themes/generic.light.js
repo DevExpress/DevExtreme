@@ -25,6 +25,7 @@ var WHITE = "#ffffff",
 
 registerTheme({
     name: "generic.light",
+    isDefault: true,
     font: {
         color: SECONDARY_TITLE_COLOR,
         family: "'Segoe UI', 'Helvetica Neue', 'Trebuchet MS', Verdana",
@@ -1547,8 +1548,6 @@ registerTheme({
         }
     }
 });
-
-themeModule.currentTheme("generic.light");
 
 // DEPRECATED_15_1 / "desktop" name
 registerThemeAlias("desktop.light", "generic.light");

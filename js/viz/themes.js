@@ -3,6 +3,7 @@
 var extend = require("../core/utils/extend").extend,
     each = require("../core/utils/iterator").each,
     vizUtils = require("./core/utils"),
+    uiThemes = require("../ui/themes"),
     themes = {},
     themesMapping = {},
     themesSchemeMapping = {},
@@ -10,12 +11,13 @@ var extend = require("../core/utils/extend").extend,
     _each = each,
     _normalizeEnum = vizUtils.normalizeEnum,
     currentThemeName = null,
+    defaultTheme,
     nextCacheUid = 0,
     widgetsCache = {};
 
 function findTheme(themeName) {
     var name = _normalizeEnum(themeName);
-    return themes[name] || themes[themesMapping[name] || currentThemeName];
+    return themes[name] || themes[themesMapping[name] || currentTheme()];
 }
 
 function findThemeNameByName(name, scheme) {
@@ -28,7 +30,7 @@ function findThemeNameByPlatform(platform, version, scheme) {
 
 function currentTheme(themeName, colorScheme) {
     if(!arguments.length) {
-        return currentThemeName;
+        return currentThemeName || uiThemes.current() || defaultTheme;
     }
 
     var scheme = _normalizeEnum(colorScheme);
@@ -57,6 +59,7 @@ function registerThemeName(themeName, targetThemeName) {
 function registerTheme(theme, baseThemeName) {
     var themeName = _normalizeEnum(theme && theme.name);
     if(themeName) {
+        theme.isDefault && (defaultTheme = themeName);
         registerThemeName(themeName, themeName);
         themes[themeName] = _extend(true, {}, findTheme(baseThemeName), patchTheme(theme));
     }
@@ -188,6 +191,8 @@ function refreshTheme() {
     // For chaining only
     return this;
 }
+
+uiThemes.changed(refreshTheme);
 
 _extend(exports, {
     currentTheme: currentTheme,

@@ -1,7 +1,8 @@
 "use strict";
 
 var $ = require("jquery"),
-    themeModule = require("viz/themes");
+    themeModule = require("viz/themes"),
+    uiThemeModule = require("ui/themes");
 
 require("viz/core/themes/generic.light");
 require("viz/core/themes/generic.dark");
@@ -250,7 +251,6 @@ QUnit.test("Patched properties on register theme", function(assert) {
     assert.strictEqual(theme.treeMap.group.selectionStyle.border.color, theme.primaryTitleColor, "treeMap - group.selectionStyle.border.color");
 });
 
-
 QUnit.module("Themes functions");
 
 QUnit.test("findTheme", function(assert) {
@@ -267,7 +267,9 @@ QUnit.test("findTheme not exists", function(assert) {
 QUnit.module("currentTheme method.");
 
 QUnit.test("Get default theme", function(assert) {
-    assert.strictEqual(themeModule.currentTheme(), "generic.light", "valid default theme");
+    var currentTheme = themeModule.currentTheme();
+
+    assert.strictEqual(currentTheme, "generic.light", "valid default theme");
 });
 
 QUnit.test("get platform with version", function(assert) {
@@ -306,13 +308,18 @@ QUnit.test("not exist version", function(assert) {
     assert.equal(themeModule.currentTheme(), "platform");
 });
 
-QUnit.module("currentTheme method. deprecated arguments");
-
-QUnit.test("Get default theme", function(assert) {
+QUnit.test("currentTheme return registered default theme", function(assert) {
+    themeModule.resetCurrentTheme();
+    themeModule.registerTheme({
+        name: "custom default theme",
+        isDefault: true
+    });
     var currentTheme = themeModule.currentTheme();
 
-    assert.strictEqual(currentTheme, "generic.light", "valid default theme");
+    assert.strictEqual(currentTheme, "custom default theme");
 });
+
+QUnit.module("currentTheme method. deprecated arguments");
 
 QUnit.test("Get/set custom theme(ios)", function(assert) {
     themeModule.currentTheme("ios");
@@ -409,4 +416,63 @@ QUnit.test("removed items are not refreshed", function(assert) {
     assert.ok(item1.refreshed, "item 1");
     assert.ok(!item2.refreshed, "item 2");
     assert.ok(item3.refreshed, "item 3");
+});
+
+QUnit.module('Interaction with ui.themes', {
+    beforeEach: function() {
+        themeModule.resetCurrentTheme();
+        this.$frame = $("<iframe></iframe>").appendTo("body");
+    },
+    afterEach: function() {
+        this.$frame.remove();
+    },
+
+    frameDoc: function() {
+        return this.$frame[0].contentWindow.document;
+    },
+    writeToFrame: function writeToFrame(markup) {
+        this.frameDoc().write(markup);
+    },
+    createItem: function() {
+        return {
+            refresh: function() {
+                this.refreshed = true;
+            }
+        };
+    }
+});
+
+QUnit.test("currentTheme returns theme from ui.themes", function(assert) {
+    this.writeToFrame("<link rel='dx-theme' href='style1.css' data-theme='platform2' />");
+    uiThemeModule.init({ theme: "platform2", context: this.frameDoc() });
+
+    //act
+    var currentTheme = themeModule.currentTheme();
+
+    assert.strictEqual(currentTheme, "platform2");
+});
+
+QUnit.test("currentTheme returns previously set theme, regardles of what ui theme is set", function(assert) {
+    this.writeToFrame("<link rel='dx-theme' href='style1.css' data-theme='platform2' />");
+    uiThemeModule.init({ theme: "platform2", context: this.frameDoc() });
+    themeModule.currentTheme("generic");
+
+    //act
+    var currentTheme = themeModule.currentTheme();
+
+    assert.strictEqual(currentTheme, "generic.light");
+});
+
+QUnit.test("Setting theme through ui.themes.current leads to refreshing themes", function(assert) {
+    this.writeToFrame("<link rel='dx-theme' href='style1.css' data-theme='platform1' />");
+    this.writeToFrame("<link rel='dx-theme' href='style1.css' data-theme='platform2' />");
+    var item = this.createItem();
+    themeModule.addCacheItem(item);
+
+    uiThemeModule.init({ theme: "platform1", context: this.frameDoc() });
+
+    //act
+    uiThemeModule.current("platform2");
+
+    assert.ok(item.refreshed);
 });
