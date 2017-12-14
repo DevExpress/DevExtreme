@@ -716,6 +716,7 @@ declare module DevExpress {
     }
     export var devices: DevicesObject;
     export interface DOMComponentOptions extends ComponentOptions {
+        bindingOptions?: any;
         /** Specifies the attributes to be attached to the widget's root element. */
         elementAttr?: any;
         /** Specifies the widget's height. */
@@ -1739,6 +1740,8 @@ declare module DevExpress.ui {
         box?: dxBoxOptions;
         /** Specifies the ratio value used to count the item element size along the main direction. */
         ratio?: number;
+        /** A factor that defines how much an item shrinks when all the items do not fit into the container. */
+        shrink?: number;
     }
     export interface dxButtonOptions extends WidgetOptions {
         /** A Boolean value specifying whether or not the widget changes its state when interacting with a user. */
@@ -1884,6 +1887,7 @@ declare module DevExpress.ui {
         hide(): Promise<void> & JQueryPromise<void>;
         /** Shows the widget. */
         show(): Promise<void> & JQueryPromise<void>;
+        /** Shows or hides the widget depending on the argument. */
         toggle(showing: boolean): Promise<void> & JQueryPromise<void>;
     }
     export interface GridBaseOptions extends WidgetOptions {
@@ -3005,6 +3009,7 @@ declare module DevExpress.ui {
         pullRefreshEnabled?: boolean;
         /** Specifies the text displayed in the pullDown panel while the widget is being refreshed. */
         refreshingText?: string;
+        /** Specifies whether the search box is visible. */
         searchEnabled?: boolean;
         /** The text that is provided as a hint in the lookup's search bar. */
         searchPlaceholder?: string;
@@ -3624,7 +3629,7 @@ declare module DevExpress.ui {
         endDateTimeZoneExpr?: string;
         /** Specifies an end hour in the scheduler view's time interval. */
         endDayHour?: number;
-        /** Specifies the first day of a week. */
+        /** Specifies the first day of a week. Does not apply to the agenda view. */
         firstDayOfWeek?: number;
         /** Specifies whether the widget can be focused using keyboard navigation. */
         focusStateEnabled?: boolean;
@@ -6191,6 +6196,8 @@ declare module DevExpress.viz {
         backgroundColor?: string;
         /** Specifies the base value for the indicator of the rangeBar type. */
         baseValue?: number;
+        /** Specifies a radius small enough for the indicator to begin adapting. */
+        beginAdaptingAtRadius?: number;
         /** Specifies a color of the indicator. */
         color?: string;
         /** Specifies the orientation of the rangeBar indicator. Applies only if the geometry.orientation option is "vertical". */
@@ -6437,10 +6444,13 @@ declare module DevExpress.viz {
         getBoundingRect(): any;
         /** Hides the point label. */
         hide(): void;
+        /** Hides the point label and keeps it invisible until the show() method is called. */
         hide(holdInvisible: boolean): void;
+        /** Checks whether the point label is visible. */
         isVisible(): boolean;
         /** Shows the point label. */
         show(): void;
+        /** Shows the point label and keeps it visible until the hide() method is called. */
         show(holdVisible: boolean): void;
     }
     /** This section describes the Series object, which represents a series. */
