@@ -15,8 +15,7 @@ var eventsEngine = require("../../events/core/events_engine"),
 var NUMBER_FORMATTER_NAMESPACE = "dxNumberFormatter",
     MOVE_FORWARD = 1,
     MOVE_BACKWARD = -1,
-    MINUS = "-",
-    MAXIMUM_FLOAT_LENGTH = 15;
+    MINUS = "-";
 
 var ensureDefined = function(value, defaultValue) {
     return value === undefined ? defaultValue : value;
@@ -41,10 +40,6 @@ var NumberBoxMask = NumberBoxBase.inherit({
 
     _isDeleteKey: function(key) {
         return key === "Delete" || key === "Del";
-    },
-
-    _isBackspaceKey: function(key) {
-        return key === "Backspace";
     },
 
     _supportedKeys: function() {
@@ -258,10 +253,6 @@ var NumberBoxMask = NumberBoxBase.inherit({
         return edited;
     },
 
-    _isNumberVeryLong: function(text) {
-        return text.replace(/[^0-9]/g, "").length > MAXIMUM_FLOAT_LENGTH;
-    },
-
     _tryParse: function(text, selection, char) {
         var editedText = this._getEditedText(text, selection, char),
             parsed = number.parse(editedText, this._getFormatPattern()),
@@ -395,22 +386,6 @@ var NumberBoxMask = NumberBoxBase.inherit({
             stubRegExp = new RegExp("^[^0-9" + escapedDecimalSeparator + "]+$", "g");
 
         return stubRegExp.test(str) && (isString || this._isChar(str));
-    },
-
-    _escapePercentFormat: function(format) {
-        return format
-            .replace(/'([^']*)%([^']*)'/g, "'$1|$2'")
-            .replace("%", "'%'")
-            .replace("|", "%");
-    },
-
-    _lightParse: function(text) {
-        if(this._isNumberVeryLong(text)) {
-            return undefined;
-        }
-        var value = +text;
-        if(text === "") return null;
-        return isNaN(value) ? undefined : value;
     },
 
     _parseValue: function(text) {
