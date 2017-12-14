@@ -4153,7 +4153,8 @@ QUnit.test("The same page should not load when scrolling in virtual mode", funct
                 }
             },
             scrolling: {
-                mode: "virtual"
+                mode: "virtual",
+                useNative: false
             }
         });
 
