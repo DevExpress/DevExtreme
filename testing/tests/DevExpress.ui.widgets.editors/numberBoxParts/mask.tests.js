@@ -58,6 +58,50 @@ QUnit.test("value should be reformatted when format option changed", function(as
     assert.equal(this.input.val(), "123.00", "value was reformatted");
 });
 
+QUnit.test("setting value to undefined should work correctly", function(assert) {
+    this.instance.option({
+        format: "#0",
+        value: 667
+    });
+
+    this.instance.option("value", "");
+    this.instance.option("value", undefined);
+
+    assert.strictEqual(this.input.val(), "", "value is correct");
+    assert.strictEqual(this.instance.option("value"), undefined, "value is correct");
+});
+
+QUnit.test("widget should not crash when it is disposing on change (T578115)", function(assert) {
+    this.instance.option({
+        value: 1,
+        onValueChanged: function(e) {
+            e.component.dispose();
+        }
+    });
+
+    this.keyboard.type("2").change();
+
+    assert.ok(true, "there was no exceptions");
+});
+
+QUnit.test("api value changing should hide a placeholder", function(assert) {
+    this.instance.option({
+        format: "$ #0",
+        placeholder: "Enter number"
+    });
+
+    var $placeholder = this.$element.find("." + PLACEHOLDER_CLASS);
+
+    assert.ok($placeholder.is(":visible"), "placeholder is visible");
+
+    this.instance.option("value", 1);
+
+    assert.equal(this.input.val(), "$ 1", "text is correct");
+    assert.notOk($placeholder.is(":visible"), "placeholder is hidden");
+});
+
+QUnit.module("format: sign and minus button");
+
 QUnit.test("pressing '-' button should revert the number", function(assert) {
     var NUMPAD_MINUS_KEY = 109;
 
@@ -135,66 +179,6 @@ QUnit.test("focusout after inverting sign should not lead to value changing", fu
 
     assert.equal(this.input.val(), "123", "text is correct");
     assert.equal(this.instance.option("value"), 123, "value is correct");
-});
-
-QUnit.test("setting value to undefined should work correctly", function(assert) {
-    this.instance.option({
-        format: "#0",
-        value: 667
-    });
-
-    this.instance.option("value", "");
-    this.instance.option("value", undefined);
-
-    assert.strictEqual(this.input.val(), "", "value is correct");
-    assert.strictEqual(this.instance.option("value"), undefined, "value is correct");
-});
-
-QUnit.test("widget should not crash when it is disposing on change (T578115)", function(assert) {
-    this.instance.option({
-        value: 1,
-        onValueChanged: function(e) {
-            e.component.dispose();
-        }
-    });
-
-    this.keyboard.type("2").change();
-
-    assert.ok(true, "there was no exceptions");
-});
-
-QUnit.test("it should be possible to input decimal point when valueChangeEvent is input (T580162)", function(assert) {
-    this.instance.option("valueChangeEvent", "input");
-    this.keyboard.type("1.5");
-
-    assert.equal(this.input.val(), "1.5", "value is correct");
-});
-
-QUnit.test("enter should remove incomplete value chars from input", function(assert) {
-    this.keyboard.type("123.").press("enter");
-    assert.equal(this.input.val(), "123", "input was reformatted");
-});
-
-QUnit.testInActiveWindow("focusout should remove incomplete value chars from input", function(assert) {
-    this.instance.option("value", 123);
-    this.keyboard.caret(3).type(".").change().blur();
-    assert.equal(this.input.val(), "123", "input was reformatted");
-});
-
-QUnit.test("api value changing should hide a placeholder", function(assert) {
-    this.instance.option({
-        format: "$ #0",
-        placeholder: "Enter number"
-    });
-
-    var $placeholder = this.$element.find("." + PLACEHOLDER_CLASS);
-
-    assert.ok($placeholder.is(":visible"), "placeholder is visible");
-
-    this.instance.option("value", 1);
-
-    assert.equal(this.input.val(), "$ 1", "text is correct");
-    assert.notOk($placeholder.is(":visible"), "placeholder is hidden");
 });
 
 
@@ -349,6 +333,24 @@ QUnit.test("leading zeros should not be replaced if input is before them", funct
     assert.equal(this.input.val(), "120 d", "value is correct");
 });
 
+QUnit.test("it should be possible to input decimal point when valueChangeEvent is input (T580162)", function(assert) {
+    this.instance.option("valueChangeEvent", "input");
+    this.keyboard.type("1.5");
+
+    assert.equal(this.input.val(), "1.5", "value is correct");
+});
+
+QUnit.test("enter should remove incomplete value chars from input", function(assert) {
+    this.keyboard.type("123.").press("enter");
+    assert.equal(this.input.val(), "123", "input was reformatted");
+});
+
+QUnit.testInActiveWindow("focusout should remove incomplete value chars from input", function(assert) {
+    this.instance.option("value", 123);
+    this.keyboard.caret(3).type(".").change().blur();
+    assert.equal(this.input.val(), "123", "input was reformatted");
+});
+
 
 QUnit.module("format: percent format", moduleConfig);
 
@@ -377,7 +379,7 @@ QUnit.test("non-ldml percent format should work properly on value change", funct
     assert.equal(this.instance.option("value"), 0.45, "value is correct");
 });
 
-QUnit.test("input before leading zero", function(assert) {
+QUnit.test("input before leading zero in percent format", function(assert) {
     this.instance.option("format", "#0%");
     this.instance.option("value", 0);
 
