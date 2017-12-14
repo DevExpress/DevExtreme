@@ -100,7 +100,7 @@ QUnit.test("api value changing should hide a placeholder", function(assert) {
     assert.notOk($placeholder.is(":visible"), "placeholder is hidden");
 });
 
-QUnit.module("format: sign and minus button");
+QUnit.module("format: sign and minus button", moduleConfig);
 
 QUnit.test("pressing '-' button should revert the number", function(assert) {
     var NUMPAD_MINUS_KEY = 109;
@@ -388,6 +388,7 @@ QUnit.test("input before leading zero in percent format", function(assert) {
     assert.equal(this.input.val(), "450%", "text is correct");
 });
 
+
 QUnit.module("format: removing", moduleConfig);
 
 QUnit.test("delete key", function(assert) {
@@ -626,6 +627,7 @@ QUnit.test("removing decimal separator if decimal separator is not default", fun
         config({ decimalSeparator: oldDecimalSeparator });
     }
 });
+
 
 QUnit.module("format: caret boundaries", moduleConfig);
 
