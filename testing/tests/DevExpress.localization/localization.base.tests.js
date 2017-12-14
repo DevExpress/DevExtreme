@@ -685,6 +685,7 @@ QUnit.test("format: precision", function(assert) {
 
 QUnit.test("parse: base", function(assert) {
     assert.equal(numberLocalization.parse("1.2"), 1.2);
+    assert.equal(numberLocalization.parse(".2", "#0.#"), 0.2);
     assert.equal(numberLocalization.parse("12,000"), 12000);
 });
 
