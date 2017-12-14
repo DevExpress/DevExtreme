@@ -2,7 +2,7 @@
 
 var themeModule = require("../../themes"),
     registerTheme = themeModule.registerTheme,
-
+    ACCENT_COLOR = "#9c63ff",
     BACKGROUND_COLOR = "#17171f",
     TITLE_COLOR = "#f5f6f7",
     SUBTITLE_COLOR = "#fff",
@@ -106,11 +106,30 @@ registerTheme({
         scale: {
             breakStyle: { color: "#575e6b" },
             tick: {
-                opacity: 1
-            },
-            minorTick: {
-                opacity: 0.5
+                opacity: 0.2
             }
+        },
+        selectedRangeColor: ACCENT_COLOR,
+        sliderMarker: {
+            color: ACCENT_COLOR,
+            font: {
+                color: "#fff"
+            }
+        },
+        sliderHandle: {
+            color: ACCENT_COLOR,
+            opacity: 0.5
+        }
+    },
+    map: {
+        "layer:marker:dot": {
+            color: ACCENT_COLOR
+        },
+        "layer:marker:bubble": {
+            color: ACCENT_COLOR
+        },
+        legend: {
+            markerColor: ACCENT_COLOR
         }
     }
 }, "generic.dark");
