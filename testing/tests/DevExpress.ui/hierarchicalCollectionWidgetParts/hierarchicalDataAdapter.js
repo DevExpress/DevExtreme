@@ -1033,3 +1033,32 @@ QUnit.test("Searching with special symbols should not crash the regular expressi
 
     assert.deepEqual(breakingSymbols, [], "breaking symbols array should be empty");
 });
+
+QUnit.test("search should consider sorting", function(assert) {
+    var items = [
+            { id: 1, parentId: 0, text: "Bikes" },
+            { id: 4, parentId: 3, text: "BMW" },
+            { id: 3, parentId: 0, text: "Cars" },
+            { id: 11, parentId: 10, text: "YX 1" },
+            { id: 12, parentId: 10, text: "YX 2" },
+            { id: 2, parentId: 0, text: "Motobikes" },
+            { id: 5, parentId: 4, text: "X1" },
+            { id: 6, parentId: 4, text: "X5" },
+            { id: 7, parentId: 4, text: "X6" },
+            { id: 10, parentId: 2, text: "Yamaha" },
+            { id: 8, parentId: 1, text: "Stels" },
+            { id: 9, parentId: 2, text: "Honda" }
+        ],
+        dataAdapter = initDataAdapter({
+            items: items,
+            dataType: "plain",
+            sort: "text",
+            searchExpr: ["value", "text"]
+        }),
+        result = dataAdapter.search("1"),
+        expectedValues = ["BMW", "Cars", "Motobikes", "X1", "Yamaha", "YX 1"];
+
+    $.each(result, function(index, item) {
+        assert.equal(item.text, expectedValues[index], "Correct item");
+    });
+});
