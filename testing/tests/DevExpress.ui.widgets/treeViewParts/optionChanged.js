@@ -88,7 +88,7 @@ QUnit.test("searchValue from value to empty", function(assert) {
     assert.equal($items.length, 6, "6 items were rendered after filtration");
 });
 
-QUnit.test("search should consider dataSource simple sorting", function(assert) {
+QUnit.test("search should consider dataSource sorting", function(assert) {
     var data = [
             { id: 1, parentId: 0, text: "Bikes" },
             { id: 4, parentId: 3, text: "BMW" },
@@ -117,41 +117,6 @@ QUnit.test("search should consider dataSource simple sorting", function(assert) 
 
     var $items = treeView.element().find(".dx-treeview-item"),
         expectedValues = ["Cars", "Audi", "A1", "BMW", "X1", "Motobikes", "Yamaha", "YX 1"];
-
-    $.each($items, function(index, item) {
-        assert.equal($(item).text(), expectedValues[index], "Correct item");
-    });
-});
-
-QUnit.test("search should consider dataSource sorting expression", function(assert) {
-    var data = [
-            { id: 1, parentId: 0, text: "Bikes" },
-            { id: 4, parentId: 3, text: "BMW" },
-            { id: 13, parentId: 3, text: "Audi" },
-            { id: 3, parentId: 0, text: "Cars" },
-            { id: 11, parentId: 10, text: "YX 1" },
-            { id: 12, parentId: 10, text: "YX 2" },
-            { id: 14, parentId: 13, text: "A1" },
-            { id: 15, parentId: 13, text: "A5" },
-            { id: 2, parentId: 0, text: "Motobikes" },
-            { id: 5, parentId: 4, text: "X1" },
-            { id: 6, parentId: 4, text: "X5" },
-            { id: 7, parentId: 4, text: "X6" },
-            { id: 10, parentId: 2, text: "Yamaha" },
-            { id: 8, parentId: 1, text: "Stels" },
-            { id: 9, parentId: 2, text: "Honda" }
-        ],
-        treeView = initTree({
-            dataSource: { store: data, sort: { field: "text", desc: true } },
-            dataStructure: "plain",
-            parentIdExpr: "parentId",
-            keyExpr: "id"
-        }).dxTreeView("instance");
-
-    treeView.option("searchValue", "1");
-
-    var $items = treeView.element().find(".dx-treeview-item"),
-        expectedValues = ["Motobikes", "Yamaha", "YX 1", "Cars", "BMW", "X1", "Audi", "A1"];
 
     $.each($items, function(index, item) {
         assert.equal($(item).text(), expectedValues[index], "Correct item");
