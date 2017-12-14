@@ -1233,7 +1233,7 @@ var TagBox = SelectBox.inherit({
     _renderOpenedState: function() {
         this.callBase();
 
-        if(this.option("applyValueMode" === "useButtons" && !this.option("opened"))) {
+        if(this.option("applyValueMode") === "useButtons" && !this.option("opened")) {
             this._refreshSelected();
         }
     },
