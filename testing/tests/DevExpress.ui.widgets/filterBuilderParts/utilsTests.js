@@ -6,7 +6,9 @@ var utils = require("ui/filter_builder/utils");
 
 var condition1 = ["CompanyName", "=", "Super Mart of the West"],
     condition2 = ["CompanyName", "=", "and"],
-    condition3 = ["CompanyName", "=", "Super Mart of the West3"];
+    condition3 = ["CompanyName", "=", "Super Mart of the West3"],
+    condition4 = ["CompanyName", "=", "Super Mart of the West4"],
+    condition5 = ["CompanyName", "=", "Super Mart of the West5"];
 
 var groupOperations = [{
         text: "And",
@@ -639,6 +641,25 @@ QUnit.module("Remove item", function() {
     });
 
     QUnit.test("from normalized group", function(assert) {
+        var group = [
+            condition1,
+            condition2,
+            condition3,
+            condition4,
+            condition5
+        ];
+
+        group = utils.removeItem(group, condition2);
+
+        assert.deepEqual(group, [
+            condition1,
+            condition3,
+            condition4,
+            condition5
+        ]);
+    });
+
+    QUnit.test("from normalized negative group", function(assert) {
         var group = ["!", [
             condition1,
             condition2,

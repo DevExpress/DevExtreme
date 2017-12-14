@@ -202,7 +202,8 @@ function createCondition(field) {
 
 function removeItem(group, item) {
     var criteria = getGroupCriteria(group),
-        index = criteria.indexOf(item);
+        index = criteria.indexOf(item),
+        groupValue = getGroupValue(criteria);
 
     criteria.splice(index, 1);
 
@@ -211,16 +212,13 @@ function removeItem(group, item) {
         if(index > lastIndex) {
             index = lastIndex;
         }
-        criteria.splice(index, 1);
-    } else if(criteria.length === 2) {
-        var groupValue = getGroupValue(criteria),
-            lastItemIsGroupOperation = criteria[group.length - 1] === groupValue,
-            firstItemIsGroupOperation = criteria[0] === groupValue;
-        if(!lastItemIsGroupOperation && firstItemIsGroupOperation) {
-            var groupOperation = criteria[0];
-            criteria[0] = criteria[1];
-            criteria[1] = groupOperation;
+        if(criteria[index] === groupValue) {
+            criteria.splice(index, 1);
         }
+    } else if(criteria.length === 2 && criteria[0] === groupValue) {
+        var groupOperation = criteria[0];
+        criteria[0] = criteria[1];
+        criteria[1] = groupOperation;
     }
     return group;
 }
