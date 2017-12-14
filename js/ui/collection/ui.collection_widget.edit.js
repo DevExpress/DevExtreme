@@ -776,6 +776,10 @@ var CollectionWidget = BaseCollectionWidget.inherit({
 
         var key = this._getKeyByIndex(itemIndex);
 
+        if(!this._selection.isItemSelected(key)) {
+            return;
+        }
+
         this._selection.deselect([key]);
     },
 
