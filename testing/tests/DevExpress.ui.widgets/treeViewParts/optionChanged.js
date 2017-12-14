@@ -112,7 +112,7 @@ QUnit.test("treeView consider store sorting", function(assert) {
             parentIdExpr: "parentId",
             keyExpr: "id"
         }).dxTreeView("instance"),
-        $items = treeView.element().find(".dx-treeview-item"),
+        $items = $(treeView.$element()).find(".dx-treeview-item"),
         expectedValues = ["Bikes", "Stels", "Cars", "Audi", "BMW", "Motobikes", "Honda", "Yamaha" ];
 
     $.each($items, function(index, item) {
