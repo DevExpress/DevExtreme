@@ -812,12 +812,12 @@ var TagBox = SelectBox.inherit({
     _loadTagData: function() {
         var values = this._getValue(),
             tagData = new Deferred(),
+            cache = {},
             items = [];
 
         this._selectedItems = [];
-
         var itemLoadDeferreds = iteratorUtils.map(values, (function(value) {
-            return this._loadItem(value).always((function(item) {
+            return this._loadItem(value, cache).always((function(item) {
                 var valueIndex = values.indexOf(value);
 
                 if(isDefined(item)) {
@@ -1080,14 +1080,28 @@ var TagBox = SelectBox.inherit({
         this.option("value", values);
     },
 
-    _isSelectedValue: function(value) {
-        return this._valueIndex(value) > -1;
+    _isSelectedValue: function(value, cache) {
+        return this._valueIndex(value, null, cache) > -1;
     },
 
-    _valueIndex: function(value, values) {
+    _valueIndex: function(value, values, cache) {
+        var result = -1;
+
+        if(cache && typeof value !== "object") {
+            if(!cache.indexByValues) {
+                cache.indexByValues = {};
+                values = values || this._getValue();
+                values.forEach(function(value, index) {
+                    cache.indexByValues[value] = index;
+                });
+            }
+            if(value in cache.indexByValues) {
+                return cache.indexByValues[value];
+            }
+        }
+
         values = values || this._getValue();
 
-        var result = -1;
 
         iteratorUtils.each(values, (function(index, selectedValue) {
             if(this._isValueEquals(value, selectedValue)) {

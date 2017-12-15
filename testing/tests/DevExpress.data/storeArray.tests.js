@@ -369,6 +369,35 @@ QUnit.test("byKey", function(assert) {
     });
 });
 
+QUnit.test("byKey with cache", function(assert) {
+    var items = [
+        { k: 1, v: "a" },
+        { k: 2, v: "b" },
+        { k: 3, v: "c" },
+    ];
+
+    var store = new ArrayStore({
+        key: "k",
+        data: items
+    });
+
+    sinon.spy(store, "keyOf");
+
+    var cache = {},
+        results = [];
+
+    //act
+    items.forEach(function(item) {
+        store.byKey(item.k, cache).done(function(r) {
+            results.push(r);
+        });
+    });
+
+    //assert
+    assert.deepEqual(results, items);
+    assert.equal(store.keyOf.callCount, 6);
+});
+
 QUnit.test("byKey called with unknown id", function(assert) {
     assert.expect(2);
 
