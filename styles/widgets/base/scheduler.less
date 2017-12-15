@@ -1055,16 +1055,14 @@
     }
 }
 
-.dx-scheduler-work-space-day:not(.dx-scheduler-work-space-count):not(.dx-scheduler-work-space-grouped)  {
+.dx-scheduler-work-space-day {
     .dx-scheduler-header-panel-cell,
     .dx-scheduler-date-table-cell,
     .dx-scheduler-all-day-table-cell {
-        &:nth-child(1n) {
-            border-right: none;
+        border-right: none;
 
-            .dx-rtl & {
-                border-left: none;
-            }
+        .dx-rtl & {
+            border-left: none;
         }
     }
 }
