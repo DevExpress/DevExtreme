@@ -16,6 +16,8 @@ var ISO8601_PATTERN = /^(\d{4,})(-)?(\d{2})(-)?(\d{2})(?:T(\d{2})(:)?(\d{2})?(:)
 var ISO8601_TIME_PATTERN = /^(\d{2}):(\d{2})(:(\d{2}))?$/;
 var ISO8601_PATTERN_PARTS = ["", "yyyy", "", "MM", "", "dd", "THH", "", "mm", "", "ss", ".SSS"];
 
+var MILLISECOND_LENGHT = 3;
+
 var dateParser = function(text, skipISO8601Parsing) {
     var result;
     var parsedValue;
@@ -65,7 +67,11 @@ var parseISO8601String = function(text) {
     var hour = timePart(parts[6]) - timeZoneHour,
         minute = timePart(parts[8]) - timeZoneMinute,
         second = timePart(parts[10]),
-        millisecond = timePart(parts[11]);
+        parseMilliseconds = function(part) {
+            part = part || "";
+            return timePart(part) * Math.pow(10, MILLISECOND_LENGHT - part.length);
+        },
+        millisecond = parseMilliseconds(parts[11]);
 
     if(!!parts[12]) {
         return new Date(Date.UTC(year, month, day, hour, minute, second, millisecond));
