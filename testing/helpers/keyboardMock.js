@@ -442,7 +442,11 @@ var browser;
                         that.keyPress(keyCode);
 
                         if(shortcuts[key]) {
+                            var oldValue = $element.val();
                             shortcuts[key](element);
+                            if($element.val() !== oldValue) {
+                                that.input(keyCode);
+                            }
                         }
                     }
 
