@@ -88,38 +88,6 @@ QUnit.test("searchValue from value to empty", function(assert) {
     assert.equal($items.length, 6, "6 items were rendered after filtration");
 });
 
-QUnit.test("treeView consider store sorting", function(assert) {
-    var data = [
-            { id: 1, parentId: 0, text: "Bikes", expanded: true },
-            { id: 4, parentId: 3, text: "BMW" },
-            { id: 13, parentId: 3, text: "Audi" },
-            { id: 3, parentId: 0, text: "Cars", expanded: true },
-            { id: 11, parentId: 10, text: "YX 1" },
-            { id: 12, parentId: 10, text: "YX 2" },
-            { id: 14, parentId: 13, text: "A1" },
-            { id: 15, parentId: 13, text: "A5" },
-            { id: 2, parentId: 0, text: "Motobikes", expanded: true },
-            { id: 5, parentId: 4, text: "X1" },
-            { id: 6, parentId: 4, text: "X5" },
-            { id: 7, parentId: 4, text: "X6" },
-            { id: 10, parentId: 2, text: "Yamaha" },
-            { id: 8, parentId: 1, text: "Stels" },
-            { id: 9, parentId: 2, text: "Honda" }
-        ],
-        treeView = initTree({
-            dataSource: { store: data, sort: "text" },
-            dataStructure: "plain",
-            parentIdExpr: "parentId",
-            keyExpr: "id"
-        }).dxTreeView("instance"),
-        $items = $(treeView.$element()).find(".dx-treeview-item"),
-        expectedValues = ["Bikes", "Stels", "Cars", "Audi", "BMW", "Motobikes", "Honda", "Yamaha" ];
-
-    $.each($items, function(index, item) {
-        assert.equal($(item).text(), expectedValues[index], "Correct item");
-    });
-});
-
 QUnit.test("search should consider dataSource sorting", function(assert) {
     var data = [
             { id: 1, parentId: 0, text: "Bikes" },
