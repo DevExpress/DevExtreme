@@ -43,6 +43,12 @@ var ResponsiveBox = CollectionWidget.inherit({
             * @default 0
             */
             /**
+            * @name dxResponsiveBoxOptions_rows_shrink
+            * @publicName shrink
+            * @type number
+            * @default 1
+            */
+            /**
             * @name dxResponsiveBoxOptions_rows_ratio
             * @publicName ratio
             * @type number
@@ -67,6 +73,12 @@ var ResponsiveBox = CollectionWidget.inherit({
             * @type number | string
             * @acceptValues 'auto'
             * @default 0
+            */
+            /**
+            * @name dxResponsiveBoxOptions_cols_shrink
+            * @publicName shrink
+            * @type number
+            * @default 1
             */
             /**
             * @name dxResponsiveBoxOptions_cols_ratio
