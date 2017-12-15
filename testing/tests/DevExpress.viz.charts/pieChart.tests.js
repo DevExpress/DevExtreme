@@ -1892,6 +1892,15 @@ var environment = {
         assert.ok(series.adjustLabels.getCall(1).calledAfter(points[1].getLabels()[0].draw.withArgs(false).lastCall));
     });
 
+    QUnit.test("T586419. Adjust labels without moving them from center", function(assert) {
+        var pie = this.createPieChartWithLabels([{ x: 5, y: 10, width: 10, height: 10, pointPosition: { y: 1, angle: 1 } },
+            { x: 5, y: 10, width: 10, height: 10, pointPosition: { y: 2, angle: 2 } }]),
+            series = pie.getAllSeries()[0];
+
+        assert.deepEqual(series.adjustLabels.getCall(0).args, [false]);
+        assert.deepEqual(series.adjustLabels.getCall(1).args, [false]);
+    });
+
     QUnit.module("resolveLabelOverlapping. shift", $.extend({}, overlappingEnvironment, {
         createPieChartWithLabels: function(BBox, position, segmentsDirection) {
             this.createFakeSeriesWithLabels(BBox, position);
@@ -1961,6 +1970,15 @@ var environment = {
         assert.equal(points[2].getLabels()[0].shift.lastCall.args[1], 20);
         assert.equal(points[3].getLabels()[0].shift.lastCall.args[1], 10);
         assert.ok(!points[4].getLabels()[0].shift.called);
+    });
+
+    QUnit.test("T586419. Adjust labels with moving them from center", function(assert) {
+        var pie = this.createPieChartWithLabels([{ x: 5, y: 10, width: 10, height: 10, pointPosition: { y: 1, angle: 1 } },
+            { x: 5, y: 10, width: 10, height: 10, pointPosition: { y: 2, angle: 2 } }]),
+            series = pie.getAllSeries()[0];
+
+        assert.deepEqual(series.adjustLabels.getCall(0).args, [true]);
+        assert.deepEqual(series.adjustLabels.getCall(1).args, [true]);
     });
 
     QUnit.module("resolveLabelOverlapping. shift. multipie", $.extend({}, overlappingEnvironment, {
