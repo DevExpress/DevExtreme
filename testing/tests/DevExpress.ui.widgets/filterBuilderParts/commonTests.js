@@ -366,7 +366,6 @@ QUnit.module("Rendering", function() {
         textBoxInstance.option("value", "Test");
         $input.trigger("blur");
         assert.notOk(container.find("input").length, "hasn't input");
-        assert.deepEqual(instance._model, [["State", "<>", "Test"]]);
         assert.deepEqual(instance.option("value"), ["State", "<>", "Test"]);
     });
 
@@ -463,7 +462,6 @@ QUnit.module("Rendering", function() {
 
         $valueButton = container.find("." + FILTER_BUILDER_ITEM_VALUE_TEXT_CLASS);
         assert.strictEqual($valueButton.text(), "Test2", "filter value");
-        assert.deepEqual(instance._model, [["Field", "=", "Test2"]]);
         assert.deepEqual(instance.option("value"), ["Field", "=", "Test2"]);
         assert.notOk(container.find("input").length, "hasn't input");
     });
@@ -483,13 +481,10 @@ QUnit.module("Rendering", function() {
         selectMenuItem(0);
 
         assert.ok($(".dx-filterbuilder-add-condition").length === 0);
-        assert.deepEqual(instance._model, [["State", "<>", "Test"], ["CompanyName", "contains", ""]]);
         assert.deepEqual(instance.option("value"), [["State", "<>", "Test"], ["CompanyName", "contains", ""]]);
 
         $("." + FILTER_BUILDER_IMAGE_REMOVE_CLASS).eq(1).click();
-        assert.deepEqual(instance._model, [["State", "<>", "Test"]]);
         assert.deepEqual(instance.option("value"), ["State", "<>", "Test"]);
-        assert.notEqual(instance.option("value"), instance._model[0]);
     });
 
     QUnit.test("Add and remove group", function(assert) {
@@ -501,13 +496,10 @@ QUnit.module("Rendering", function() {
             }).dxFilterBuilder("instance");
 
         clickByButtonAndSelectMenuItem($("." + FILTER_BUILDER_IMAGE_ADD_CLASS), 1);
-        assert.deepEqual(instance._model, [["State", "<>", "Test"], ["and"]]);
         assert.deepEqual(instance.option("value"), ["State", "<>", "Test"]);
 
         $("." + FILTER_BUILDER_IMAGE_REMOVE_CLASS).eq(1).click();
-        assert.deepEqual(instance._model, [["State", "<>", "Test"]]);
         assert.deepEqual(instance.option("value"), ["State", "<>", "Test"]);
-        assert.notEqual(instance.option("value"), instance._model[0]);
     });
 
     QUnit.test("show editor on keyup event", function(assert) {
@@ -786,7 +778,6 @@ QUnit.module("on value changed", function() {
 
     QUnit.test("add/remove condition for field without datatype", function(assert) {
         var container = $("#container"),
-            value = [["Field", "=", "1"]],
             instance = container.dxFilterBuilder({
                 fields: [{ dataField: "Field" }]
             }).dxFilterBuilder("instance");
@@ -797,7 +788,6 @@ QUnit.module("on value changed", function() {
         assert.deepEqual(instance.option("value"), ["Field", "contains", ""]);
 
         //remove condition
-        value = instance.option("value");
         clickByButtonAndSelectMenuItem($("." + FILTER_BUILDER_IMAGE_REMOVE_CLASS).eq(0), 0);
 
         assert.deepEqual(instance.option("value"), null);

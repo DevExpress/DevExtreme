@@ -114,32 +114,23 @@ QUnit.module("Utils", function() {
     });
 
     QUnit.test("setGroupValue", function(assert) {
-        var group = [condition1, "and", condition2, "and", condition3];
+        var group = [condition1, "and", condition2, "and", condition3, "and"];
         group = utils.setGroupValue(group, "or");
-        assert.deepEqual(group, [condition1, "or", condition2, "or", condition3]);
+        assert.deepEqual(group, [condition1, "or", condition2, "or", condition3, "or"]);
 
         group = utils.setGroupValue(group, "!or");
-        assert.deepEqual(group, ["!", [condition1, "or", condition2, "or", condition3]]);
+        assert.deepEqual(group, ["!", [condition1, "or", condition2, "or", condition3, "or"]]);
 
         group = utils.setGroupValue(group, "and");
-        assert.deepEqual(group, [condition1, "and", condition2, "and", condition3]);
+        assert.deepEqual(group, [condition1, "and", condition2, "and", condition3, "and"]);
 
-        group = [condition1, condition2];
+        group = [condition1, "and", condition2, "and"];
         group = utils.setGroupValue(group, "!or");
-        assert.deepEqual(group, ["!", [condition1, "or", condition2]]);
-    });
-
-    QUnit.test("setGroupValue for empty group", function(assert) {
-        var group = [];
-        group = utils.setGroupValue(group, "!or");
-        assert.deepEqual(group, ["!", ["or"]]);
-
-        group = utils.setGroupValue(group, "and");
-        assert.deepEqual(group, ["and"]);
+        assert.deepEqual(group, ["!", [condition1, "or", condition2, "or"]]);
     });
 
     QUnit.test("isGroup", function(assert) {
-        assert.ok(utils.isGroup([[], "and", []]));
+        assert.ok(utils.isGroup([["and"], "and", ["and"], "and"]));
         assert.ok(utils.isGroup(["and"]));
         assert.ok(utils.isGroup([]));
     });
@@ -147,7 +138,7 @@ QUnit.module("Utils", function() {
     QUnit.test("isEmptyGroup", function(assert) {
         assert.ok(utils.isEmptyGroup([]));
         assert.ok(utils.isEmptyGroup(["and"]));
-        assert.ok(utils.isEmptyGroup([[], "and", []]));
+        assert.ok(utils.isEmptyGroup([["and"], "and", ["and"], "and"]));
         assert.notOk(utils.isEmptyGroup(["CompanyName", "=", "DevExpress"]));
         assert.notOk(utils.isEmptyGroup([["CompanyName", "=", "DevExpress"]]));
         assert.notOk(utils.isEmptyGroup([["CompanyName", "=", "DevExpress"], "and", ["CompanyName", "=", "DevExpress"]]));
@@ -478,8 +469,7 @@ QUnit.module("Add item", function() {
         group = utils.addItem(condition1, group);
 
         assert.equal(group[0], condition1);
-        assert.equal(group[1], "and");
-        assert.equal(group.length, 2);
+        assert.deepEqual(group, [condition1, "and"]);
     });
 
     QUnit.test("to group without conditions", function(assert) {
@@ -488,8 +478,7 @@ QUnit.module("Add item", function() {
         group = utils.addItem(condition1, group);
 
         assert.equal(group[0], condition1);
-        assert.equal(group[1], "and");
-        assert.equal(group.length, 2);
+        assert.deepEqual(group, [condition1, "and"]);
     });
 
     QUnit.test("to group with condition", function(assert) {
@@ -498,55 +487,47 @@ QUnit.module("Add item", function() {
         group = utils.addItem(condition2, group);
 
         assert.equal(group[0], condition1);
-        assert.equal(group[1], "and");
         assert.equal(group[2], condition2);
-        assert.equal(group.length, 3);
+        assert.deepEqual(group, [condition1, "and", condition2, "and"]);
     });
 
     QUnit.test("to group with several conditions", function(assert) {
-        var group = [condition1, "and", condition2];
+        var group = [condition1, "and", condition2, "and"];
 
         group = utils.addItem(condition3, group);
 
         assert.equal(group[0], condition1);
-        assert.equal(group[1], "and");
         assert.equal(group[2], condition2);
-        assert.equal(group[3], "and");
         assert.equal(group[4], condition3);
-        assert.equal(group.length, 5);
+        assert.deepEqual(group, [condition1, "and", condition2, "and", condition3, "and"]);
+    });
+
+    QUnit.test("to empty negative group", function(assert) {
+        var group = ["!", ["and"]];
+
+        group = utils.addItem(condition1, group);
+
+        assert.equal(group[1][0], condition1);
+        assert.deepEqual(group, ["!", [condition1, "and"]]);
     });
 
     QUnit.test("to negative group", function(assert) {
-        var group = ["!", [condition1, "and", condition2]];
+        var group = ["!", [condition1, "and", condition2, "and"]];
 
         group = utils.addItem(condition3, group);
 
-        assert.equal(group[0], "!");
-        assert.equal(group.length, 2);
-        assert.equal(group[1][3], "and");
         assert.equal(group[1][4], condition3);
-        assert.equal(group[1].length, 5);
-    });
-
-    QUnit.test("to normalized group", function(assert) {
-        var group = ["!", [condition1, condition2]];
-
-        group = utils.addItem(condition3, group);
-
-        assert.equal(group[0], "!");
-        assert.equal(group.length, 2);
-        assert.equal(group[1][2], condition3);
-        assert.equal(group[1].length, 3);
+        assert.deepEqual(group, ["!", [condition1, "and", condition2, "and", condition3, "and"]]);
     });
 
     QUnit.test("to inner group", function(assert) {
         var innerGroup = ["and"],
-            group = [condition1, innerGroup];
+            group = [condition1, "and", innerGroup, "and"];
 
         utils.addItem(condition2, innerGroup);
 
-        assert.deepEqual(group, [condition1, [condition2, "and"]]);
-        assert.equal(innerGroup, group[1]);
+        assert.deepEqual(group, [condition1, "and", [condition2, "and"], "and"]);
+        assert.equal(innerGroup, group[2]);
     });
 });
 
@@ -557,23 +538,21 @@ QUnit.module("Remove item", function() {
             "and",
             condition2,
             "and",
-            condition3
+            condition3,
+            "and"
         ];
         group = utils.removeItem(group, condition1);
         // assert
         assert.equal(group[0], condition2);
-        assert.equal(group[1], "and");
         assert.equal(group[2], condition3);
-        assert.equal(group.length, 3);
+        assert.deepEqual(group, [condition2, "and", condition3, "and"]);
 
         group = utils.removeItem(group, condition2);
         assert.equal(group[0], condition3);
-        assert.equal(group[1], "and");
-        assert.equal(group.length, 2);
+        assert.deepEqual(group, [condition3, "and"]);
 
         group = utils.removeItem(group, condition3);
-        assert.equal(group[0], "and");
-        assert.equal(group.length, 1);
+        assert.deepEqual(group, ["and"]);
     });
 
     QUnit.test("from end", function(assert) {
@@ -582,24 +561,22 @@ QUnit.module("Remove item", function() {
             "and",
             condition2,
             "and",
-            condition3
+            condition3,
+            "and"
         ];
 
         group = utils.removeItem(group, condition3);
         // assert
         assert.equal(group[0], condition1);
-        assert.equal(group[1], "and");
         assert.equal(group[2], condition2);
-        assert.equal(group.length, 3);
+        assert.deepEqual(group, [condition1, "and", condition2, "and"]);
 
         group = utils.removeItem(group, condition2);
         assert.equal(group[0], condition1);
-        assert.equal(group[1], "and");
-        assert.equal(group.length, 2);
+        assert.deepEqual(group, [condition1, "and"]);
 
         group = utils.removeItem(group, condition1);
-        assert.equal(group[0], "and");
-        assert.equal(group.length, 1);
+        assert.deepEqual(group, ["and"]);
     });
 
     QUnit.test("from middle", function(assert) {
@@ -608,16 +585,27 @@ QUnit.module("Remove item", function() {
             "and",
             condition2,
             "and",
-            condition3
+            condition3,
+            "and",
+            condition4,
+            "and",
+            condition5,
+            "and"
         ];
 
-        group = utils.removeItem(group, condition2);
+        group = utils.removeItem(group, condition3);
 
         // assert
-        assert.equal(group[0], condition1);
-        assert.equal(group[1], "and");
-        assert.equal(group[2], condition3);
-        assert.equal(group.length, 3);
+        assert.deepEqual(group, [
+            condition1,
+            "and",
+            condition2,
+            "and",
+            condition4,
+            "and",
+            condition5,
+            "and"
+        ]);
     });
 
     QUnit.test("from middle when group is negative", function(assert) {
@@ -626,81 +614,50 @@ QUnit.module("Remove item", function() {
             "and",
             condition2,
             "and",
-            condition3
+            condition3,
+            "and"
         ]];
 
         group = utils.removeItem(group, condition2);
 
         // assert
-        assert.equal(group[0], "!");
-        assert.equal(group.length, 2);
         assert.equal(group[1][0], condition1);
-        assert.equal(group[1][1], "and");
         assert.equal(group[1][2], condition3);
-        assert.equal(group[1].length, 3);
-    });
-
-    QUnit.test("from normalized group", function(assert) {
-        var group = [
-            condition1,
-            condition2,
-            condition3,
-            condition4,
-            condition5
-        ];
-
-        group = utils.removeItem(group, condition2);
-
-        assert.deepEqual(group, [
-            condition1,
-            condition3,
-            condition4,
-            condition5
-        ]);
-    });
-
-    QUnit.test("from normalized negative group", function(assert) {
-        var group = ["!", [
-            condition1,
-            condition2,
-            condition3
-        ]];
-
-        group = utils.removeItem(group, condition2);
-
-        //assert
-        assert.equal(group[0], "!");
-        assert.equal(group.length, 2);
-        assert.equal(group[1][0], condition1);
-        assert.equal(group[1][1], condition3);
-        assert.equal(group[1].length, 2);
+        assert.deepEqual(group, ["!", [condition1, "and", condition3, "and"]]);
     });
 });
 
 QUnit.module("Convert to inner structure", function() {
     QUnit.test("from null", function(assert) {
-        assert.deepEqual(utils.convertToInnerStructure(null), []);
+        assert.deepEqual(utils.convertToInnerStructure(null), ["and"]);
     });
 
     QUnit.test("from empty array", function(assert) {
-        assert.deepEqual(utils.convertToInnerStructure([]), []);
+        assert.deepEqual(utils.convertToInnerStructure([]), ["and"]);
     });
 
     QUnit.test("from condition", function(assert) {
         var model = utils.convertToInnerStructure(condition1);
-        assert.deepEqual(model, [condition1]);
+        assert.deepEqual(model, [condition1, "and"]);
         assert.notEqual(model[0], condition1);
+    });
+
+    QUnit.test("from short group with two conditions", function(assert) {
+        var model = utils.convertToInnerStructure([condition1, condition2]);
+        assert.deepEqual(model, [condition1, "and", condition2, "and"]);
+        assert.notEqual(model[0], condition1);
+        assert.notEqual(model[2], condition2);
     });
 
     QUnit.test("from short condition", function(assert) {
         var shortCondition = ["CompanyName", "DevExpress"],
             model = utils.convertToInnerStructure(shortCondition);
-        assert.deepEqual(model, [["CompanyName", "=", "DevExpress"]]);
+        assert.deepEqual(model, [["CompanyName", "=", "DevExpress"], "and"]);
     });
 
     QUnit.test("from negative group with one condition", function(assert) {
         var model = utils.convertToInnerStructure(["!", condition1]);
-        assert.deepEqual(model, ["!", [condition1]]);
+        assert.deepEqual(model, ["!", [condition1, "and"]]);
         assert.notEqual(model[1][0], condition1);
     });
 
@@ -708,28 +665,48 @@ QUnit.module("Convert to inner structure", function() {
         var filter = [condition1, "or", condition2],
             model = utils.convertToInnerStructure(filter);
         assert.notEqual(model, filter);
-        assert.deepEqual(model, filter);
+        assert.deepEqual(model, [condition1, "or", condition2, "or"]);
         assert.notEqual(model[0], filter[0]);
         assert.notEqual(model[2], filter[2]);
     });
 
-    QUnit.test("from group with several short conditions", function(assert) {
+    QUnit.test("from short group with several short conditions", function(assert) {
         var filter = [["CompanyName", "DevExpress"], ["CompanyName", "DevExpress"], ["!", ["CompanyName", "DevExpress"]]],
             model = utils.convertToInnerStructure(filter);
 
         assert.deepEqual(model, [
             ["CompanyName", "=", "DevExpress"],
+            "and",
             ["CompanyName", "=", "DevExpress"],
+            "and",
             ["!",
-                ["CompanyName", "=", "DevExpress"]
-            ]
+                [["CompanyName", "=", "DevExpress"], "and"]
+            ],
+            "and"
         ]);
     });
 
     QUnit.test("check lowercase group", function(assert) {
-        var filter = [condition1, "Or", condition2, [condition1, "And", ["!", [condition1, "Or", condition2]]]],
+        var filter = [condition1, "Or", condition2, "Or", [condition1, "And", ["!", [condition1, "Or", condition2]]]],
             model = utils.convertToInnerStructure(filter);
-        assert.deepEqual(model, [condition1, "or", condition2, [condition1, "and", ["!", [condition1, "or", condition2]]]]);
+        assert.deepEqual(model, [
+            condition1,
+            "or",
+            condition2,
+            "or",
+            [condition1,
+                "and",
+                ["!",
+                    [condition1,
+                        "or",
+                        condition2,
+                        "or"
+                    ]
+                ],
+                "and"
+            ],
+            "or"
+        ]);
     });
 });
 
@@ -753,36 +730,36 @@ QUnit.module("Filter normalization", function() {
     });
 
     QUnit.test("get normalized filter from group with short condition", function(assert) {
-        var group = [["CompanyName", "DevExpress"]];
+        var group = [["CompanyName", "DevExpress"], "and"];
 
         assert.equal(utils.getNormalizedFilter(group, fields), group[0]);
     });
 
     QUnit.test("get normalized filter from inner group with one condition", function(assert) {
-        var group = [[condition1]];
+        var group = [[condition1, "and"], "and"];
 
         assert.equal(utils.getNormalizedFilter(group, fields), condition1);
     });
 
     QUnit.test("get normalized filter from group with inner group", function(assert) {
-        var group = [condition1, "and", [condition2, "and"]];
+        var group = [condition1, "and", [condition2, "and"], "and"];
 
         group = utils.getNormalizedFilter(group, fields);
 
         assert.equal(group[0], condition1);
         assert.equal(group[1], condition2);
 
-        group = [condition1, "or", [condition2, "or"]];
+        group = [condition1, "or", [condition2, "or"], "or"];
         group = utils.getNormalizedFilter(group, fields);
 
         assert.deepEqual(group, [condition1, "or", condition2]);
 
-        group = [condition1, "and", condition2, "and", ["and"]];
+        group = [condition1, "and", condition2, "and", ["and"], "and"];
         group = utils.getNormalizedFilter(group, fields);
 
         assert.deepEqual(group, [condition1, condition2]);
 
-        group = [condition1, "and", ["and"]];
+        group = [condition1, "and", ["and"], "and"];
         group = utils.getNormalizedFilter(group, fields);
 
         assert.deepEqual(group, condition1);
@@ -790,7 +767,7 @@ QUnit.module("Filter normalization", function() {
 
 
     QUnit.test("get normalized filter from group with empty inner group", function(assert) {
-        var group = [[]];
+        var group = [["and"], "and"];
 
         group = utils.getNormalizedFilter(group, fields);
 
@@ -798,7 +775,7 @@ QUnit.module("Filter normalization", function() {
     });
 
     QUnit.test("get normalized filter from group with condition and empty inner group", function(assert) {
-        var group = [condition1, "or", []];
+        var group = [condition1, "or", ["and"], "or"];
 
         group = utils.getNormalizedFilter(group, fields);
 
@@ -806,7 +783,7 @@ QUnit.module("Filter normalization", function() {
     });
 
     QUnit.test("get normalized filter from group with many inner groups", function(assert) {
-        var group = [condition1, "and", condition2, "and", ["and"], "and", ["and"], "and", ["and"], "and", ["and"]];
+        var group = [condition1, "and", condition2, "and", ["and"], "and", ["and"], "and", ["and"], "and", ["and"], "and"];
 
         group = utils.getNormalizedFilter(group, fields);
 
@@ -815,13 +792,13 @@ QUnit.module("Filter normalization", function() {
     });
 
     QUnit.test("get normalized filter from negative group", function(assert) {
-        var group = ["!", [condition1, "and", ["and"]]];
+        var group = ["!", [condition1, "and", ["and"], "and"]];
 
         group = utils.getNormalizedFilter(group, fields);
 
         assert.deepEqual(group, ["!", condition1]);
 
-        group = ["!", [condition1, "and", condition2]];
+        group = ["!", [condition1, "and", condition2, "and"]];
         group = utils.getNormalizedFilter(group, fields);
 
         assert.deepEqual(group, ["!", [condition1, condition2]]);
@@ -830,7 +807,12 @@ QUnit.module("Filter normalization", function() {
 
     QUnit.test("get normalized filter from group which contains some not valid conditions", function(assert) {
         var notValidCondition = ["Zipcode", "=", ""],
-            group = [notValidCondition, [notValidCondition, "and", condition2], ["!", [condition3, "and", notValidCondition]]];
+            group = [notValidCondition,
+                "and",
+                [notValidCondition, "and", condition2, "and"],
+                "and",
+                ["!", [condition3, "and", notValidCondition, "and"]],
+                "and"];
 
         group = utils.getNormalizedFilter(group, fields);
 
@@ -839,7 +821,7 @@ QUnit.module("Filter normalization", function() {
 
     QUnit.test("get normalized filter from group with one not valid condition", function(assert) {
         var notValidCondition = ["Zipcode", "=", ""],
-            group = [notValidCondition];
+            group = [notValidCondition, "and"];
 
         group = utils.getNormalizedFilter(group, fields);
 
@@ -856,7 +838,12 @@ QUnit.module("Filter normalization", function() {
     });
 
     QUnit.test("get normalized filter from normalized group which contains not normalized groups", function(assert) {
-        var group = [[condition1, "and", condition2], [condition3, "and", condition2]];
+        var group = [
+            [condition1, "and", condition2, "and"],
+            "and",
+            [condition3, "and", condition2, "and"],
+            "and"
+        ];
 
         group = utils.getNormalizedFilter(group, fields);
 
