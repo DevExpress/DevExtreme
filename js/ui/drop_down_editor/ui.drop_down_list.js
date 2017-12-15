@@ -422,7 +422,7 @@ var DropDownList = DropDownEditor.inherit({
     _getPlainItems: function(items) {
         var plainItems = [];
 
-        items = items || this.option("items");
+        items = items || this.option("items") || [];
 
         for(var i = 0; i < items.length; i++) {
             if(items[i] && items[i].items) {
