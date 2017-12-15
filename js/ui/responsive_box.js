@@ -481,7 +481,7 @@ var ResponsiveBox = CollectionWidget.inherit({
     },
 
     _needApplyAutoBaseSize: function(item) {
-        return !item.baseSize && (!item.minSize || item.minSize === "auto") && (!item.maxSize || item.maxSize === "auto");
+        return !item.baseSize && (!item.minSize || item.minSize === "none") && (!item.maxSize || item.maxSize === "none");
     },
 
     _prepareBoxConfig: function(config) {
@@ -613,8 +613,8 @@ var ResponsiveBox = CollectionWidget.inherit({
             result.maxSize += sizeConfig.maxSize;
         }
 
-        result.minSize = result.minSize ? result.minSize : "auto";
-        result.maxSize = result.maxSize ? result.maxSize : "auto";
+        result.minSize = result.minSize ? result.minSize : "none";
+        result.maxSize = result.maxSize ? result.maxSize : "none";
 
         this._isSingleColumnScreen() && (result.baseSize = 'auto');
 
