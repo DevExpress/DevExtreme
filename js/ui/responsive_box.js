@@ -468,16 +468,21 @@ var ResponsiveBox = CollectionWidget.inherit({
         });
 
         var rootBox = this._prepareBoxConfig(result.box || { direction: "row", items: [extend(result, { ratio: 1 })] });
-        extend(rootBox, this._rootBoxConfig());
+        extend(rootBox, this._rootBoxConfig(rootBox.items));
 
         this._$root = $("<div>").appendTo(this._itemContainer());
         this._createComponent(this._$root, Box, rootBox);
     },
 
-    _rootBoxConfig: function() {
+    _rootBoxConfig: function(items) {
+        var rootItems = iteratorUtils.each(items, (function(index, item) {
+            this._needApplyAutoBaseSize(item) && extend(item, { baseSize: "auto" });
+        }).bind(this));
+
         return extend({
             width: "100%",
             height: "100%",
+            items: rootItems,
             itemTemplate: this._getTemplateByOption("itemTemplate"),
             itemHoldTimeout: this.option("itemHoldTimeout"),
             onItemHold: this._createActionByOption("onItemHold"),
@@ -485,6 +490,10 @@ var ResponsiveBox = CollectionWidget.inherit({
             onItemContextMenu: this._createActionByOption("onItemContextMenu"),
             onItemRendered: this._createActionByOption("onItemRendered")
         }, { _layoutStrategy: this.option("_layoutStrategy") });
+    },
+
+    _needApplyAutoBaseSize: function(item) {
+        return !item.baseSize && (!item.minSize) && (!item.maxSize || item.maxSize === "none");
     },
 
     _prepareBoxConfig: function(config) {
@@ -616,8 +625,8 @@ var ResponsiveBox = CollectionWidget.inherit({
             result.maxSize += sizeConfig.maxSize;
         }
 
-        result.minSize = result.minSize ? result.minSize : "auto";
-        result.maxSize = result.maxSize ? result.maxSize : "auto";
+        result.minSize = result.minSize ? result.minSize : 0;
+        result.maxSize = result.maxSize ? result.maxSize : "none";
 
         this._isSingleColumnScreen() && (result.baseSize = 'auto');
 

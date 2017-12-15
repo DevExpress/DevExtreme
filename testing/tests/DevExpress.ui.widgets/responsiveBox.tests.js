@@ -150,6 +150,33 @@ QUnit.test("grid with items", function(assert) {
     assert.equal($secondRow.eq(1).height(), rows[1].baseSize + heightRatioUnit * rows[1].ratio, "item22 height");
 });
 
+QUnit.test("root box and it's items should have correct height (T566515)", function(assert) {
+    var rows = [{}, {}];
+    var cols = [{ ratio: 1 }, { ratio: 1 }];
+
+    var $responsiveBox = $("#responsiveBox").dxResponsiveBox({
+        rows: rows,
+        cols: cols,
+        items: [
+            { location: { row: 0, col: 0 }, text: "item11" },
+            { location: { row: 1, col: 1 }, text: "item22" },
+            { location: { row: 1, col: 0 }, text: "item21" },
+            { location: { row: 0, col: 1 }, text: "item12" }
+        ],
+        height: "auto"
+    });
+
+    var $boxes = $responsiveBox.find("." + BOX_CLASS);
+
+    var $rootBox = $boxes.eq(0);
+    assert.notEqual($rootBox.height(), 0, "Height of the rootBox is OK");
+
+    var $rootItems = $rootBox.find("." + BOX_ITEM_CLASS);
+
+    assert.roughEqual($rootItems.eq(0).height(), 16, 2, "Height of the root item is OK");
+    assert.roughEqual($rootItems.eq(1).height(), 16, 2, "Height of the root item is OK");
+});
+
 QUnit.test("grid with factors", function(assert) {
     // screen:   xs      sm           md          lg
     //  width: <768    768-<992    992-<1200    >1200
