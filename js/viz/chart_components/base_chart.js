@@ -650,8 +650,8 @@ var BaseChart = BaseWidget.inherit({
             drawElements,
             that._canvas,
             function(sizeShortage) {
-                that._renderAxes(drawOptions, preparedOptions, isRotated);
-                sizeShortage && that._shrinkAxes(drawOptions, sizeShortage);
+                var panesCanvases = that._renderAxes(drawOptions, preparedOptions, isRotated);
+                sizeShortage && that._shrinkAxes(drawOptions, sizeShortage, panesCanvases);
             },
             layoutTargets,
             isRotated

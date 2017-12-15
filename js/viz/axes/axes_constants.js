@@ -57,12 +57,12 @@ module.exports = {
             hasHorizontalOverlapping,
             hasVerticalOverlapping;
 
-        if(alignment === "center") {
+        if(alignment === "left") {
+            x1 += width1 / 2;
+            x2 += width2 / 2;
+        } else if(alignment === "right") {
             x1 -= width1 / 2;
             x2 -= width2 / 2;
-        } else if(alignment === "right") {
-            x1 -= width1;
-            x2 -= width2;
         }
 
         hasHorizontalOverlapping = horizontalInverted ? (x2 + width2 + spacing) > x1 : (x1 + width1 + spacing) > x2;
