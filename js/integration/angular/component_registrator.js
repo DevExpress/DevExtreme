@@ -34,6 +34,13 @@ var safeApply = function(func, scope) {
     }
 };
 
+/**
+ * @name domcomponentoptions_bindingOptions
+ * @publicName bindingOptions
+ * @type object
+ * @default {}
+ */
+
 var ComponentBuilder = Class.inherit({
 
     ctor: function(options) {
