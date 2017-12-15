@@ -777,7 +777,8 @@ var TreeViewBase = HierarchicalCollectionWidget.inherit({
             multipleSelection: !this._isSingleSelection(),
             recursiveSelection: this._isRecursiveSelection(),
             recursiveExpansion: this.option("expandNodesRecursive"),
-            dataType: this.option("dataStructure")
+            dataType: this.option("dataStructure"),
+            sort: this._dataSource && this._dataSource.sort()
         };
     },
 
