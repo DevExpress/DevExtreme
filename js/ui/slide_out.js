@@ -35,7 +35,7 @@ var SlideOut = CollectionWidget.inherit({
         /**
         * @name dxSlideOutItemTemplate_menutemplate
         * @publicName menuTemplate
-        * @type template
+        * @type template|function
         * @type_function_return string|jQuery
         */
 
@@ -51,7 +51,7 @@ var SlideOut = CollectionWidget.inherit({
             /**
             * @name dxSlideOutOptions_menuItemTemplate
             * @publicName menuItemTemplate
-            * @type template
+            * @type template|function
             * @default "menuItem"
             * @type_function_param1 itemData:object
             * @type_function_param2 itemIndex:number
@@ -97,7 +97,7 @@ var SlideOut = CollectionWidget.inherit({
             /**
             * @name dxSlideOutOptions_menuGroupTemplate
             * @publicName menuGroupTemplate
-            * @type template
+            * @type template|function
             * @default "menuGroup"
             * @type_function_param1 groupData:object
             * @type_function_param2 groupIndex:number
@@ -125,7 +125,7 @@ var SlideOut = CollectionWidget.inherit({
             /**
             * @name dxSlideOutOptions_contentTemplate
             * @publicName contentTemplate
-            * @type template
+            * @type template|function
             * @default "content"
             * @type_function_param1 container:dxElement
             * @type_function_return string|Node|jQuery

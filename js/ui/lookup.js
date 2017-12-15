@@ -97,7 +97,7 @@ var Lookup = DropDownList.inherit({
             /**
             * @name dxLookupOptions_titleTemplate
             * @publicName titleTemplate
-            * @type template
+            * @type template|function
             * @default "title"
             * @type_function_param1 titleElement:dxElement
             * @type_function_return string|Node|jQuery
@@ -367,7 +367,7 @@ var Lookup = DropDownList.inherit({
             /**
             * @name dxLookupOptions_groupTemplate
             * @publicName groupTemplate
-            * @type template
+            * @type template|function
             * @default "group"
             * @type_function_param1 itemData:object
             * @type_function_param2 itemIndex:number
@@ -419,7 +419,7 @@ var Lookup = DropDownList.inherit({
             /**
             * @name dxLookupOptions_fieldTemplate
             * @publicName fieldTemplate
-            * @type template
+            * @type template|function
             * @default null
             * @type_function_param1 selectedItem:object
             * @type_function_param2 fieldElement:dxElement

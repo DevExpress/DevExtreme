@@ -126,7 +126,7 @@ var CollectionWidget = Widget.inherit({
             /**
             * @name CollectionWidgetOptions_itemTemplate
             * @publicName itemTemplate
-            * @type template
+            * @type template|function
             * @default "item"
             * @type_function_param1 itemData:object
             * @type_function_param2 itemIndex:number
@@ -220,7 +220,7 @@ var CollectionWidget = Widget.inherit({
             /**
             * @name CollectionWidgetItemTemplate_template
             * @publicName template
-            * @type template
+            * @type template|function
             * @type_function_return string|jQuery
             */
 

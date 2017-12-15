@@ -64,7 +64,7 @@ var Accordion = CollectionWidget.inherit({
             /**
             * @name dxAccordionOptions_itemTitleTemplate
             * @publicName itemTitleTemplate
-            * @type template
+            * @type template|function
             * @default "title"
             * @type_function_param1 itemData:object
             * @type_function_param2 itemIndex:number
@@ -129,7 +129,7 @@ var Accordion = CollectionWidget.inherit({
             /**
             * @name dxAccordionOptions_itemTemplate
             * @publicName itemTemplate
-            * @type template
+            * @type template|function
             * @default "item"
             * @type_function_param1 itemData:object
             * @type_function_param2 itemIndex:number

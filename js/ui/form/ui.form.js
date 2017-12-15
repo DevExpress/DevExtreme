@@ -328,7 +328,7 @@ var Form = Widget.inherit({
             /**
              * @name dxFormSimpleItem_template
              * @publicName template
-             * @type template
+             * @type template|function
              * @type_function_param1 data:object
              * @type_function_param2 itemElement:dxElement
              * @type_function_return string|Node|jQuery
@@ -454,7 +454,7 @@ var Form = Widget.inherit({
             /**
              * @name dxFormGroupItem_template
              * @publicName template
-             * @type template
+             * @type template|function
              * @type_function_param1 data:object
              * @type_function_param2 itemElement:dxElement
              * @type_function_return string|Node|jQuery
@@ -566,7 +566,7 @@ var Form = Widget.inherit({
             /**
              * @name dxFormTabbedItem_tabs_tabTemplate
              * @publicName tabTemplate
-             * @type template
+             * @type template|function
              * @type_function_param1 tabData:object
              * @type_function_param2 tabIndex:number
              * @type_function_param3 tabElement:dxElement
@@ -575,7 +575,7 @@ var Form = Widget.inherit({
             /**
              * @name dxFormTabbedItem_tabs_template
              * @publicName template
-             * @type template
+             * @type template|function
              * @type_function_param1 tabData:object
              * @type_function_param2 tabIndex:number
              * @type_function_param3 tabElement:dxElement

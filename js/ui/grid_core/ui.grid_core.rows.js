@@ -264,7 +264,7 @@ module.exports = {
             /**
              * @name dxDataGridOptions_rowTemplate
              * @publicName rowTemplate
-             * @type template
+             * @type template|function
              * @type_function_param1 rowElement:dxElement
              * @type_function_param2 rowInfo:object
              */

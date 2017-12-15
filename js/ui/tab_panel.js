@@ -32,7 +32,7 @@ var TabPanel = MultiView.inherit({
             /**
             * @name dxTabPanelOptions_itemTitleTemplate
             * @publicName itemTitleTemplate
-            * @type template
+            * @type template|function
             * @default "title"
             * @type_function_param1 itemData:object
             * @type_function_param2 itemIndex:number
@@ -113,7 +113,7 @@ var TabPanel = MultiView.inherit({
             /**
             * @name dxTabPanelItemTemplate_tabtemplate
             * @publicName tabTemplate
-            * @type template
+            * @type template|function
             * @type_function_return string|jQuery
             */
 

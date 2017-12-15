@@ -103,7 +103,7 @@ var Pivot = CollectionWidget.inherit({
             /**
             * @name dxPivotOptions_itemTitleTemplate
             * @publicName itemTitleTemplate
-            * @type template
+            * @type template|function
             * @default "title"
             * @type_function_param1 itemData:object
             * @type_function_param2 itemIndex:number
@@ -115,7 +115,7 @@ var Pivot = CollectionWidget.inherit({
             /**
             * @name dxPivotOptions_contentTemplate
             * @publicName contentTemplate
-            * @type template
+            * @type template|function
             * @default "content"
             * @type_function_param1 container:dxElement
             * @type_function_return string|Node|jQuery
@@ -180,7 +180,7 @@ var Pivot = CollectionWidget.inherit({
             /**
             * @name dxPivotItemTemplate_titleTemplate
             * @publicName titleTemplate
-            * @type template
+            * @type template|function
             * @type_function_return string|jQuery
             */
 
