@@ -133,7 +133,7 @@ var Scheduler = Widget.inherit({
 
                 /**
                 * @pseudo AppointmentTemplate
-                * @type template
+                * @type template|function
                 * @default "item"
                 * @type_function_param1 itemData:object
                 * @type_function_param2 itemIndex:number
@@ -143,7 +143,7 @@ var Scheduler = Widget.inherit({
 
                 /**
                 * @pseudo AppointmentTooltipTemplate
-                * @type template
+                * @type template|function
                 * @default "appointmentTooltip"
                 * @type_function_param1 appointmentData:object
                 * @type_function_param2 contentElement:dxElement
@@ -152,7 +152,7 @@ var Scheduler = Widget.inherit({
 
                 /**
                 * @pseudo DateCellTemplate
-                * @type template
+                * @type template|function
                 * @default null
                 * @type_function_param1 itemData:object
                 * @type_function_param2 itemIndex:number
@@ -162,7 +162,7 @@ var Scheduler = Widget.inherit({
 
                 /**
                 * @pseudo DataCellTemplate
-                * @type template
+                * @type template|function
                 * @default null
                 * @type_function_param1 itemData:object
                 * @type_function_param2 itemIndex:number
@@ -172,7 +172,7 @@ var Scheduler = Widget.inherit({
 
                 /**
                 * @pseudo TimeCellTemplate
-                * @type template
+                * @type template|function
                 * @default null
                 * @type_function_param1 itemData:object
                 * @type_function_param2 itemIndex:number
@@ -182,7 +182,7 @@ var Scheduler = Widget.inherit({
 
                 /**
                 * @pseudo ResourceCellTemplate
-                * @type template
+                * @type template|function
                 * @default null
                 * @type_function_param1 itemData:object
                 * @type_function_param2 itemIndex:number
@@ -778,7 +778,7 @@ var Scheduler = Widget.inherit({
                 * @hidden
                 * @name dxSchedulerOptions_appointmentPopupTemplate
                 * @publicName appointmentPopupTemplate
-                * @type template
+                * @type template|function
                 * @default "appointmentPopup"
                 * @type_function_param1 appointmentData:object
                 * @type_function_param2 contentElement:dxElement

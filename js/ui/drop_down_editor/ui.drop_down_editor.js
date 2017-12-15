@@ -181,7 +181,7 @@ var DropDownEditor = TextBox.inherit({
             /**
              * @name dxDropDownEditorOptions_dropDownButtonTemplate
              * @publicName dropDownButtonTemplate
-             * @type template
+             * @type template|function
              * @default "dropDownButton"
              * @type_function_param1 buttonData:object
              * @type_function_param1_field1 text:string

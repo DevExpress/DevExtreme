@@ -330,7 +330,7 @@ var ListBase = CollectionWidget.inherit({
             /**
             * @name dxListOptions_groupTemplate
             * @publicName groupTemplate
-            * @type template
+            * @type template|function
             * @default "group"
             * @type_function_param1 groupData:object
             * @type_function_param2 groupIndex:number

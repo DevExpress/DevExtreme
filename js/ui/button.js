@@ -134,7 +134,7 @@ var Button = Widget.inherit({
             /**
             * @name dxButtonOptions_template
             * @publicName template
-            * @type template
+            * @type template|function
             * @default "content"
             * @type_function_param1 buttonData:object
             * @type_function_param1_field1 text:string
