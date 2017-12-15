@@ -483,7 +483,7 @@ QUnit.test("removing with group separators using backspace key", function(assert
 
     assert.equal(this.input.val(), "$ 1,234,567,890 d", "value is correct");
 
-    this.keyboard.caret(3).press("backspace");
+    this.keyboard.caret(3).keyDown("backspace");
     assert.notOk(this.keyboard.event.isDefaultPrevented(), "delete should not be prevented");
     this.keyboard.input("backspace");
     assert.equal(this.input.val(), "$ 234,567,890 d", "value is correct");
