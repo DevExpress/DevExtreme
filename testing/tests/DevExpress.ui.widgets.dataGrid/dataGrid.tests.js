@@ -5334,6 +5334,28 @@ QUnit.test("Correct update group panel items runtime", function(assert) {
     assert.equal($groupPanelItems.length, 1, "count of group panel items");
 });
 
+QUnit.test("Check group panel items are draggable when toolbar items updated runtime", function(assert) {
+    //arrange
+    var dataGrid = $("#dataGrid").dxDataGrid({
+        columns: [{ dataField: "field1", groupIndex: 0 }, "field2"],
+        groupPanel: { visible: true },
+        dataSource: {
+            store: [{ field1: "1", field2: "2" }, { field1: "3", field2: "4" }, { field1: "5", field2: "6" }]
+        }
+    }).dxDataGrid("instance");
+
+    this.clock.tick();
+
+    //act
+    var toolbar = dataGrid.$element().find(".dx-toolbar").dxToolbar("instance");
+    toolbar.option("items", toolbar.option("items"));
+    this.clock.tick();
+
+    //assert
+    var $groupPanelItems = $("#dataGrid").find(".dx-toolbar .dx-datagrid-drag-action");
+    assert.equal($groupPanelItems.length, 1, "count of group panel items");
+});
+
 //T113684
 QUnit.test("Height rows view = height content", function(assert) {
     //arrange, act
