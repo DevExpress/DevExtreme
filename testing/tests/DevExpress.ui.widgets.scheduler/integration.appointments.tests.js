@@ -1257,7 +1257,7 @@ QUnit.test("Add new appointment with delay(T381444)", function(assert) {
                 assert.notOk(popup.option("visible"), "Popup isn't visible");
                 done();
 
-            }, 300);
+            }, 50);
 
             return d.promise();
         }
@@ -1325,7 +1325,7 @@ QUnit.test("Scheduler should not update scroll position if appointment is visibl
     });
 
     var appointment = { startDate: new Date(2015, 1, 9), endDate: new Date(2015, 1, 9, 1), text: "caption" },
-        workSpace = this.instance.$element().find(".dx-scheduler-work-space").dxSchedulerWorkSpaceWeek("instance"),
+        workSpace = this.instance.getWorkSpace(),
         scrollToTimeSpy = sinon.spy(workSpace, "scrollToTime");
 
     try {
@@ -1356,7 +1356,7 @@ QUnit.test("Scheduler should not update scroll position if appointment is visibl
 
         this.instance.getWorkSpaceScrollable().scrollBy(170);
 
-        workSpace = this.instance.$element().find(".dx-scheduler-work-space").dxSchedulerWorkSpaceWeek("instance");
+        workSpace = this.instance.getWorkSpace();
 
         var appointment = { startDate: new Date(Date.UTC(2015, 1, 9, 3)).toJSON(), endDate: new Date(Date.UTC(2015, 1, 9, 3, 30)).toJSON(), text: "caption" },
             scrollToTimeSpy = sinon.spy(workSpace, "scrollToTime");
@@ -1381,7 +1381,7 @@ QUnit.test("Scheduler should update scroll position if appointment was added to 
     });
 
     var appointment = { startDate: new Date(2015, 1, 9, 21), endDate: new Date(2015, 1, 9, 22), text: "caption 2" },
-        workSpace = this.instance.$element().find(".dx-scheduler-work-space").dxSchedulerWorkSpaceWeek("instance"),
+        workSpace = this.instance.getWorkSpace(),
         scrollToTimeSpy = sinon.spy(workSpace, "scrollToTime");
 
     try {
@@ -1406,7 +1406,7 @@ QUnit.test("Scheduler should update scroll position if appointment was added to 
     });
 
     var appointment = { startDate: new Date(2015, 1, 9, 21), endDate: new Date(2015, 1, 9, 22), text: "caption 2" },
-        workSpace = this.instance.$element().find(".dx-scheduler-work-space").dxSchedulerWorkSpaceWeek("instance"),
+        workSpace = this.instance.getWorkSpace(),
         scrollToTimeSpy = sinon.spy(workSpace, "scrollToTime");
 
     try {
@@ -1455,7 +1455,7 @@ QUnit.test("Scheduler should update scroll position if appointment is not visibl
     });
 
     var appointment = { startDate: new Date(2015, 1, 12, 7), endDate: new Date(2015, 1, 12, 1, 8), text: "caption" },
-        workSpace = this.instance.$element().find(".dx-scheduler-work-space").dxSchedulerTimelineWeek("instance"),
+        workSpace = this.instance.getWorkSpace(),
         scrollToTimeSpy = sinon.spy(workSpace, "scrollToTime");
 
     try {
@@ -1481,7 +1481,7 @@ QUnit.test("Scheduler should update scroll position if appointment was added to 
     this.instance.getWorkSpaceScrollable().scrollBy(220);
 
     var appointment = { startDate: new Date(2015, 1, 9), endDate: new Date(2015, 1, 9, 0, 30), text: "caption" },
-        workSpace = this.instance.$element().find(".dx-scheduler-work-space").dxSchedulerWorkSpaceWeek("instance"),
+        workSpace = this.instance.getWorkSpace(),
         scrollToTimeSpy = sinon.spy(workSpace, "scrollToTime");
 
     try {
@@ -1507,7 +1507,7 @@ QUnit.test("Scheduler should update scroll position if appointment was added to 
     this.instance.getWorkSpaceScrollable().scrollBy(220);
 
     var appointment = { startDate: new Date(2015, 1, 9, 2), endDate: new Date(2015, 1, 9, 2, 30), text: "caption" },
-        workSpace = this.instance.$element().find(".dx-scheduler-work-space").dxSchedulerWorkSpaceWeek("instance"),
+        workSpace = this.instance.getWorkSpace(),
         scrollToTimeSpy = sinon.spy(workSpace, "scrollToTime");
 
     try {
@@ -1534,7 +1534,7 @@ QUnit.test("Scheduler should update scroll position if appointment was added to 
     this.instance.getWorkSpaceScrollable().scrollBy(140);
 
     var appointment = { startDate: new Date(2015, 1, 9, 5, 45), endDate: new Date(2015, 1, 9, 6, 30), text: "caption" },
-        workSpace = this.instance.$element().find(".dx-scheduler-work-space").dxSchedulerWorkSpaceWeek("instance"),
+        workSpace = this.instance.getWorkSpace(),
         scrollToTimeSpy = sinon.spy(workSpace, "scrollToTime");
 
     try {
@@ -2828,7 +2828,7 @@ QUnit.test("Task should be placed in right group", function(assert) {
         width: 700
     });
 
-    var workSpace = this.instance.$element().find(".dx-scheduler-work-space").dxSchedulerWorkSpaceDay("instance"),
+    var workSpace = this.instance.getWorkSpace(),
         spy = sinon.spy(workSpace, "getCoordinatesByDateInGroup");
 
     this.instance.option("dataSource", data);
@@ -3057,7 +3057,7 @@ QUnit.test("Appointment width should depend on cell width", function(assert) {
         currentDate: new Date(2015, 2, 18)
     });
 
-    var workSpace = this.instance.$element().find(".dx-scheduler-work-space").dxSchedulerWorkSpaceDay("instance"),
+    var workSpace = this.instance.getWorkSpace(),
         defaultGetCellWidthMethod = workSpace.getCellWidth,
         CELL_WIDTH = 777;
 
