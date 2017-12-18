@@ -1513,6 +1513,22 @@ QUnit.testStart(function() {
         assert.equal(repaintStub.getCall(0).args[0], this.instance.$element(), "Argument is OK");
     });
 
+    QUnit.test("Scheduler should be repainted after currentTime indication toggling", function(assert) {
+        this.createInstance({
+            showCurrentTimeIndicator: true,
+            currentDate: new Date(2017, 11, 18),
+            indicatorTime: new Date(2017, 11, 18, 16, 45),
+            views: ["timelineWeek"],
+            view: "timelineWeek"
+        });
+
+        var repaintStub = sinon.stub(this.instance, "repaint");
+
+        this.instance.option("showCurrentTimeIndicator", false);
+
+        assert.ok(repaintStub.calledOnce, "Sheduler was repainted");
+    });
+
     QUnit.test("Appointment popup should have right defaultOptionsRules", function(assert) {
         this.createInstance();
         this.instance.showAppointmentPopup({ startDate: new Date(2015, 1, 1), endDate: new Date(2015, 1, 2) });
