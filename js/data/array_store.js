@@ -156,7 +156,7 @@ var ArrayStore = Store.inherit({
             keyExpr = this.key(),
             i;
 
-        if(cache && typeof keyExpr === "string") {
+        if(cache && keyExpr && typeof key !== "object") {
             if(!cache.indexByKey) {
                 cache.indexByKey = {};
                 for(i = 0, arrayLength = this._array.length; i < arrayLength; i++) {
