@@ -276,7 +276,7 @@ QUnit.test('Change item content in runtime', function(assert) {
 QUnit.test('Remove extra classes from item frame if content is changed', function(assert) {
     //arrange
     var menuBase = createMenu({ items: [{ text: "item" }] }),
-        $item;
+        $item = menuBase.element.find('.' + DX_MENU_ITEM_WRAPPER_CLASS).children();
 
     assert.ok($item.hasClass(DX_ITEM_HAS_TEXT), 'item has dx-menu-item-has-text class');
 
