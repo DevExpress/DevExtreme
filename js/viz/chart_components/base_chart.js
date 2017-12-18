@@ -730,11 +730,11 @@ var BaseChart = BaseWidget.inherit({
         }
 
         if(resolveLabelOverlapping !== "none") {
-            that._adjustSeries();
+            that._adjustSeries(resolveLabelOverlapping === "shift");
             that._resolveLabelOverlapping(resolveLabelOverlapping);
         }
 
-        that._adjustSeries();
+        that._adjustSeries(resolveLabelOverlapping === "shift");
 
         that._renderTrackers(isLegendInside);
         that._tracker.repairTooltip();
