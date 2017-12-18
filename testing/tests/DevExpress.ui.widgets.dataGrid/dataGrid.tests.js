@@ -5336,7 +5336,13 @@ QUnit.test("Correct update group panel items runtime", function(assert) {
 
 QUnit.test("Check group panel items are draggable when toolbar items updated runtime", function(assert) {
     //arrange
+    var renderCompletedCallCount = 0;
     var dataGrid = $("#dataGrid").dxDataGrid({
+        onInitialized: function(e) {
+            e.component.getView("headerPanel").renderCompleted.add(function() {
+                renderCompletedCallCount++;
+            });
+        },
         columns: [{ dataField: "field1", groupIndex: 0 }, "field2"],
         groupPanel: { visible: true },
         dataSource: {
@@ -5354,6 +5360,7 @@ QUnit.test("Check group panel items are draggable when toolbar items updated run
     //assert
     var $groupPanelItems = $("#dataGrid").find(".dx-toolbar .dx-datagrid-drag-action");
     assert.equal($groupPanelItems.length, 1, "count of group panel items");
+    assert.equal(renderCompletedCallCount, 3, "renderCompleted call count");
 });
 
 //T113684
