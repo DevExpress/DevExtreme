@@ -662,7 +662,7 @@ var MenuBase = HierarchicalCollectionWidget.inherit({
         $itemFrame.toggleClass(DX_ITEM_HAS_ICON, hasIcon);
         this.hasIcons = hasIcon;
 
-        $itemFrame.addClass(DX_ITEM_HAS_SUBMENU, hasSubmenu);
+        $itemFrame.toggleClass(DX_ITEM_HAS_SUBMENU, hasSubmenu);
     },
 
     _getItemContent: function($itemFrame) {
