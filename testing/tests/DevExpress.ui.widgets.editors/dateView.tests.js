@@ -305,6 +305,21 @@ QUnit.test("check state rollers", function(assert) {
     assert.equal(rollers.year.option("selectedIndex"), date.getFullYear() - minDate.getFullYear());
 });
 
+//T584111
+QUnit.test("rollers are able to select a date in January when the min and max options allow choosing a date in the subsequent year", function(assert) {
+    this.instance.option({
+        value: new Date("2017-12-07"),
+        minDate: new Date("2017-12-05"),
+        maxDate: new Date("2018-01-31")
+    });
+
+    var rollers = this.instance._rollers;
+    assert.deepEqual(rollers.month.option("items"), ["December"]);
+
+    rollers.year.option("selectedIndex", 1);
+    assert.deepEqual(rollers.month.option("items"), ["January"]);
+});
+
 QUnit.test("'value' option should depend on rollers position", function(assert) {
     var date = new Date(2012, 9, 10),
         minDate = new Date(2000, 1);
