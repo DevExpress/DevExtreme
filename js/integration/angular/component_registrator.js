@@ -242,7 +242,7 @@ var ComponentBuilder = Class.inherit({
             };
 
             if(isActivePhase) {
-                that._digestCallbacks.end.add(releaseOption);
+                that._digestCallbacks.end.addPrioritized(releaseOption);
             } else {
                 releaseOption();
             }
