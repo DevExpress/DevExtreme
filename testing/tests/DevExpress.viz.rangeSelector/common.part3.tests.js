@@ -1137,7 +1137,8 @@ QUnit.test("During indents estimation, format scale labels the same way the axis
             tickInterval: 2,
             label: {
                 visible: true
-            }
+            },
+            endOnTick: false
         }
     });
 

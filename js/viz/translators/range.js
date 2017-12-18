@@ -61,6 +61,9 @@ _Range.prototype = {
         checkField("invert");
         checkField(axisTypeSelector);
         checkField("dataType");
+        checkField("isSpacedMargin"),
+        checkField("checkMinDataVisibility");
+        checkField("checkMaxDataVisibility");
 
         if(that[axisTypeSelector] === "logarithmic") {
             checkField(baseSelector);

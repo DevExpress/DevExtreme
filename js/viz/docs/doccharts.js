@@ -1913,7 +1913,15 @@ var dxChart = {
         * @default 'none'
         * @acceptValues 'none' | 'allArgumentPoints'
         */
-        hoverMode: 'none'
+        hoverMode: 'none',
+        /**
+        * @name dxchartoptions_argumentaxis_endontick
+        * @publicName endOnTick
+        * @type boolean
+        * @default false
+        * @extend_doc
+        */
+        endOnTick: false
     },
     /**
     * @name dxchartoptions_valueaxis
@@ -2238,10 +2246,10 @@ var dxChart = {
         * @name dxchartoptions_valueaxis_endontick
         * @publicName endOnTick
         * @type boolean
-        * @default true
+        * @default undefined
         * @extend_doc
         */
-        endOnTick: true
+        endOnTick: undefined
     },
     /**
     * @name dxchartoptions_tooltip
@@ -3714,7 +3722,15 @@ var dxPolarChart = {
         * @default undefined
         * @acceptValues 'numeric' | 'datetime' | 'string'
         */
-        valueType: undefined
+        valueType: undefined,
+         /**
+        * @name dxpolarchartoptions_valueaxis_endontick
+        * @publicName endOnTick
+        * @type boolean
+        * @default false
+        * @extend_doc
+        */
+        endOnTick: false
     },
     /**
     * @name dxpolarchartoptions_tooltip

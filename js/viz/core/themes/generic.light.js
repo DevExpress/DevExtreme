@@ -668,10 +668,10 @@ registerTheme({
             constantLines: []
         },
         argumentAxis: {
+            endOnTick: false,
             workWeek: [1, 2, 3, 4, 5]
         },
         valueAxis: {
-            endOnTick: true,
             grid: {
                 visible: true
             },
@@ -1042,7 +1042,8 @@ registerTheme({
             },
             logarithmBase: 10,
             workWeek: [1, 2, 3, 4, 5],
-            breakStyle: { width: 5, color: "#ababab", line: "waved" }
+            breakStyle: { width: 5, color: "#ababab", line: "waved" },
+            endOnTick: false
         },
         selectedRangeColor: "#606060",
         sliderMarker: {
@@ -1441,6 +1442,7 @@ registerTheme({
             period: undefined
         },
         valueAxis: {
+            endOnTick: false,
             tick: {
                 visible: false
             }

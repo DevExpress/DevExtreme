@@ -221,7 +221,7 @@ function valueOf(value) {
     return value.valueOf();
 }
 
-function correctMarginExtremum(value, margins, maxMinDistance) {
+function correctMarginExtremum(value, margins, maxMinDistance, roundingMethod) {
     var dividerPower,
         distancePower,
         maxDivider;
@@ -240,7 +240,7 @@ function correctMarginExtremum(value, margins, maxMinDistance) {
         dividerPower = -1;
     }
     maxDivider = vizUtils.raiseTo(dividerPower, 10);
-    return adjust(_math.floor(adjust(value / maxDivider)) * maxDivider);
+    return adjust(roundingMethod.call(this, adjust(value / maxDivider)) * maxDivider);
 }
 
 Axis = exports.Axis = function(renderSettings) {
@@ -1114,7 +1114,10 @@ Axis.prototype = {
             {
                 min: viewPort.minVisible,
                 max: viewPort.maxVisible,
-                categories: viewPort.categories
+                categories: viewPort.categories,
+                isSpacedMargin: viewPort.isSpacedMargin,
+                checkMinDataVisibility: viewPort.checkMinDataVisibility,
+                checkMaxDataVisibility: viewPort.checkMaxDataVisibility
             },
             that._getScreenDelta(),
             that._translator.getBusinessRange().stubData ? null : options.tickInterval,
@@ -1274,7 +1277,9 @@ Axis.prototype = {
             maxMinDistance = that.calculateInterval(maxVisible, minVisible) - (that._breaks || []).reduce(function(sum, b) {
                 return sum += that.calculateInterval(b.to, b.from);
             }, 0),
-            isArgumentAxis = this.isArgumentAxis;
+            isArgumentAxis = this.isArgumentAxis,
+            isBarValueAxis = !isArgumentAxis && margins.checkInterval,
+            marginSizeMultiplier;
 
         function addMargin(value, margin, marginOption) {
             if(!isDefined(marginOption) && !(margins.percentStick && _abs(value) === 1 && !isArgumentAxis)) {
@@ -1298,20 +1303,24 @@ Axis.prototype = {
                 }
 
                 if(marginSize) {
-                    marginValue = _max(marginValue, maxMinDistance / ((that._getScreenDelta() / marginSize) - 1) / 2);
+                    marginSizeMultiplier = 1 / ((that._getScreenDelta() / marginSize) - 1) / 2;
+                    marginValue = _max(marginValue, maxMinDistance * (marginSizeMultiplier > 1 ? marginSizeMultiplier / 10 : marginSizeMultiplier));
                 }
 
                 minVisible = addMargin(minVisible, -marginValue, minValueMargin);
                 maxVisible = addMargin(maxVisible, marginValue, maxValueMargin);
                 maxMinDistance = maxVisible - minVisible;
-                minVisible = correctMarginExtremum(minVisible, margins, maxMinDistance);
-                maxVisible = correctMarginExtremum(maxVisible, margins, maxMinDistance);
+                minVisible = correctMarginExtremum(minVisible, margins, maxMinDistance, _math.floor);
+                maxVisible = correctMarginExtremum(maxVisible, margins, maxMinDistance, _math.ceil);
             }
 
             range.addRange({
                 minVisible: minVisible,
                 maxVisible: maxVisible,
-                interval: interval
+                interval: interval,
+                isSpacedMargin: marginValue !== 0,
+                checkMinDataVisibility: isBarValueAxis && !isDefined(options.min) && minVisible.valueOf() > 0,
+                checkMaxDataVisibility: isBarValueAxis && !isDefined(options.max) && maxVisible.valueOf() < 0
             });
         }
 
