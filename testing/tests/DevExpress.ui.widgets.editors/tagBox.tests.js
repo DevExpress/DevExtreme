@@ -4219,7 +4219,7 @@ QUnit.test("loadOptions.filter should be correct after some items selecting/dese
     assert.deepEqual(filter, null, "filter is correct");
 });
 
-QUnit.test("Assign many values should works fast", function(assert) {
+QUnit.test("Assign many values should use cache", function(assert) {
     var items = [],
         keyGetterCounter = 0;
 
@@ -4258,7 +4258,7 @@ QUnit.test("Assign many values should works fast", function(assert) {
     assert.equal(keyGetterCounter, 30, "key getter call count");
 });
 
-QUnit.test("Select All should works fast", function(assert) {
+QUnit.test("Select All should use cache", function(assert) {
     var items = [],
         keyGetterCounter = 0;
 
