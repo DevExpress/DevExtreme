@@ -232,10 +232,13 @@ var DateView = Editor.inherit({
         if(monthRoller) {
             this._createRollerConfig(ROLLER_TYPE.month);
             var monthRollerConfig = this._rollerConfigs[ROLLER_TYPE.month];
-            monthRoller.option({
-                items: monthRollerConfig.displayItems,
-                selectedIndex: monthRollerConfig.selectedIndex
-            });
+
+            if(monthRollerConfig.displayItems.toString() !== monthRoller.option("items").toString()) {
+                monthRoller.option({
+                    items: monthRollerConfig.displayItems,
+                    selectedIndex: monthRollerConfig.selectedIndex
+                });
+            }
         }
     },
 
