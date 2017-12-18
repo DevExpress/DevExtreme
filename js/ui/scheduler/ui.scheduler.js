@@ -1275,6 +1275,7 @@ var Scheduler = Widget.inherit({
             case "indicatorUpdateInterval":
             case "shadeUntilCurrentTime":
                 this._updateOption("workSpace", name, value);
+                this.repaint();
                 break;
             case "appointmentTooltipTemplate":
             case "appointmentPopupTemplate":
