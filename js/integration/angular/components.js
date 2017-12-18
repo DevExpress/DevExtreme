@@ -5,6 +5,7 @@ var Callbacks = require("../../core/utils/callbacks"),
 
 ngModule.service("dxDigestCallbacks", ["$rootScope", function($rootScope) {
     var begin = Callbacks(),
+        prioritizedEnd = Callbacks(),
         end = Callbacks();
 
     var digestPhase = false;
@@ -19,6 +20,7 @@ ngModule.service("dxDigestCallbacks", ["$rootScope", function($rootScope) {
 
         $rootScope.$$postDigest(function() {
             digestPhase = false;
+            prioritizedEnd.fire();
             end.fire();
         });
     });
@@ -33,6 +35,10 @@ ngModule.service("dxDigestCallbacks", ["$rootScope", function($rootScope) {
             },
             remove: begin.remove.bind(begin)
         },
-        end: end
+        end: {
+            add: end.add.bind(end),
+            addPrioritized: prioritizedEnd.add.bind(prioritizedEnd),
+            remove: end.remove.bind(end)
+        }
     };
 }]);
