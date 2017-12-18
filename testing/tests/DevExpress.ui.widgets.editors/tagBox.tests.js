@@ -4045,14 +4045,13 @@ QUnit.testInActiveWindow("Searching should work correctly in grouped tagBox (T51
 });
 
 QUnit.test("Items is not selected when values is set on the onSelectAllValueChanged event", function(assert) {
-    var dataSource = ["Test 1", "Test 2", "Test 3", "Test 4"];
+    var dataSource = ["Item 1", "item 2", "item 3", "item 4"];
 
     $("#tagBox").dxTagBox({
         opened: true,
         dataSource: {
             paginate: true,
             pageSize: 2,
-            requireTotalCount: true,
             store: dataSource
         },
         selectAllMode: 'page',
@@ -4066,7 +4065,6 @@ QUnit.test("Items is not selected when values is set on the onSelectAllValueChan
     });
 
     $(".dx-list-select-all-checkbox").trigger("dxclick");
-    this.clock.tick(TIME_TO_WAIT);
 
     var selectedItems = $(".dx-list").dxList("instance").option("selectedItems");
     assert.equal(selectedItems.length, 4, "selected items");
