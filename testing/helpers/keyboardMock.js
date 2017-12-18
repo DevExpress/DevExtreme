@@ -293,6 +293,7 @@ var browser;
             deleteSelection();
         } else if(caretStartPosition < value.length) {
             $element.val(value.substring(0, caretStartPosition) + value.substring(caretStartPosition + 1, value.length));
+            caret.setPosition(caretStartPosition);
         }
     };
 
