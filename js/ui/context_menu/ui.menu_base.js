@@ -624,20 +624,15 @@ var MenuBase = HierarchicalCollectionWidget.inherit({
             $itemFrame.addClass(DX_MENU_SELECTED_ITEM_CLASS);
         }
 
-        this._addContentClasses(node, $itemFrame);
-
         $itemFrame.attr("tabindex", -1);
 
         if(this._hasSubmenu(node)) this.setAria("haspopup", "true", $itemFrame);
     },
 
     _renderItemFrame: function(index, itemData, $container) {
-        var $itemFrame = $container.children(".dx-menu-item");
-        if(!$itemFrame || !$itemFrame.length) {
-            $itemFrame = this.callBase.apply(this, arguments);
-        }
+        var $itemFrame = $container.children("." + ITEM_CLASS);
 
-        return $itemFrame;
+        return $itemFrame.length ? $itemFrame : this.callBase.apply(this, arguments);
     },
 
     _itemOptionChanged: function(item, property, value) {
@@ -655,25 +650,19 @@ var MenuBase = HierarchicalCollectionWidget.inherit({
     },
 
     _addContentClasses: function(node, $itemFrame) {
-        if(this._displayGetter(node)) {
-            $itemFrame.addClass(DX_ITEM_HAS_TEXT);
-        } else {
-            $itemFrame.removeClass(DX_ITEM_HAS_TEXT);
-        }
+        var displayGetter = this._displayGetter(node),
+            itemsGetter = this._itemsGetter(node),
+            hasText = displayGetter ? !!displayGetter.length : false,
+            hasIcon = !!(node.icon || node.iconSrc),
+            hasSubmenu = itemsGetter ? !!itemsGetter.length : false;
+
+        $itemFrame.toggleClass(DX_ITEM_HAS_TEXT, hasText);
 
         // deprecated since 15.1 (itemData.iconSrc)
-        if(node.icon || node.iconSrc) {
-            $itemFrame.addClass(DX_ITEM_HAS_ICON);
-            this.hasIcons = true;
-        } else {
-            $itemFrame.removeClass(DX_ITEM_HAS_ICON);
-        }
+        $itemFrame.toggleClass(DX_ITEM_HAS_ICON, hasIcon);
+        this.hasIcons = hasIcon;
 
-        if(this._hasSubmenu(node) || (this._itemsGetter(node) && this._itemsGetter(node).length)) {
-            $itemFrame.addClass(DX_ITEM_HAS_SUBMENU);
-        } else {
-            $itemFrame.removeClass(DX_ITEM_HAS_SUBMENU);
-        }
+        $itemFrame.addClass(DX_ITEM_HAS_SUBMENU, hasSubmenu);
     },
 
     _getItemContent: function($itemFrame) {
