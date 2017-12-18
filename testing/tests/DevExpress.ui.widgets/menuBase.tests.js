@@ -269,7 +269,6 @@ QUnit.test('Change item content in runtime', function(assert) {
     $item = menuBase.element.find('.' + DX_MENU_ITEM_WRAPPER_CLASS).children();
 
     //assert
-    assert.equal($item.length, 1, 'there is 1 item in menu');
     assert.ok($item.hasClass(DX_ITEM_HAS_ICON), 'item has dx-menu-item-has-icon class');
 });
 
@@ -286,7 +285,6 @@ QUnit.test('Remove extra classes from item frame if content is changed', functio
 
     //assert
     assert.notOk($item.hasClass(DX_ITEM_HAS_TEXT), 'dx-menu-item-has-text class was removed');
-    assert.ok($item.hasClass(DX_ITEM_HAS_ICON), 'item has dx-menu-item-has-icon class');
 });
 
 

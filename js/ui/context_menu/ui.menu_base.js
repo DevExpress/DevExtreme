@@ -566,7 +566,7 @@ var MenuBase = HierarchicalCollectionWidget.inherit({
     },
 
     _hasSubmenu: function(node) {
-        return node.internalFields && node.internalFields.childrenKeys.length;
+        return node.internalFields.childrenKeys.length;
     },
 
     _renderContentImpl: function() {
@@ -629,31 +629,25 @@ var MenuBase = HierarchicalCollectionWidget.inherit({
         if(this._hasSubmenu(node)) this.setAria("haspopup", "true", $itemFrame);
     },
 
-    _renderItemFrame: function(index, itemData, $container) {
-        var $itemFrame = $container.children("." + ITEM_CLASS);
+    _renderItemFrame: function(index, itemData, $itemContainer) {
+        var $itemFrame = $itemContainer.children("." + ITEM_CLASS);
 
         return $itemFrame.length ? $itemFrame : this.callBase.apply(this, arguments);
     },
 
-    _itemOptionChanged: function(item, property, value) {
-        var $item = this._findItemElementByItem(item);
-        if(!$item.length) {
-            return;
-        }
-        if(!this.constructor.ItemClass.getInstance($item).setDataField(property, value)) {
-            var node = this._dataAdapter.getNodeByItem(item),
-                index = $item.data(this._itemIndexKey()),
-                $nodeContainer = $item.closest("ul"),
-                $nodeElement = $item.closest("li");
-            this._renderItem(index, node, $nodeContainer, $nodeElement);
-        }
+    _renderNewItem: function($item, item) {
+        var node = this._dataAdapter.getNodeByItem(item),
+            index = $item.data(this._itemIndexKey()),
+            $nodeContainer = $item.closest("ul"),
+            $nodeElement = $item.closest("li");
+        this._renderItem(index, node, $nodeContainer, $nodeElement);
     },
 
-    _addContentClasses: function(node, $itemFrame) {
-        var displayGetter = this._displayGetter(node),
-            itemsGetter = this._itemsGetter(node),
+    _addContentClasses: function(itemData, $itemFrame) {
+        var displayGetter = this._displayGetter(itemData),
+            itemsGetter = this._itemsGetter(itemData),
             hasText = displayGetter ? !!displayGetter.length : false,
-            hasIcon = !!(node.icon || node.iconSrc),
+            hasIcon = !!(itemData.icon || itemData.iconSrc),
             hasSubmenu = itemsGetter ? !!itemsGetter.length : false;
 
         $itemFrame.toggleClass(DX_ITEM_HAS_TEXT, hasText);
