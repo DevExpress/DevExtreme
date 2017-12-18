@@ -350,7 +350,7 @@ function addIntervalWithBreaks(addInterval, breaks, correctValue) {
             }
             return !breakSize;
         })) {
-            value = correctValue(addInterval(value, breakSize, isNegative), interval);
+            value = correctValue(addInterval(value, breakSize), interval);
         }
         return value;
     };
@@ -388,10 +388,10 @@ function calculateTicks(addInterval, correctMinValue, adjustInterval, resolveEnd
         }
         if(ticks.length > 0) {
             if(ticks[0].valueOf() > 0 && resolveExtraTickForHiddenDataPoint(data.checkMinDataVisibility, min, ticks[0], businessViewInfo, true)) {
-                cur = correctTickValue(addInterval(ticks[0], tickInterval, true), true);
+                cur = addInterval(ticks[0], tickInterval, true);
                 ticks.unshift(cur);
             } else if(ticks[ticks.length - 1].valueOf() < 0 && resolveExtraTickForHiddenDataPoint(data.checkMaxDataVisibility, max, ticks[ticks.length - 1], businessViewInfo, false)) {
-                cur = correctTickValue(addInterval(ticks[ticks.length - 1], tickInterval));
+                cur = addInterval(ticks[ticks.length - 1], tickInterval);
                 ticks.push(cur);
             }
         }
@@ -487,7 +487,7 @@ function filterTicks(ticks, breaks) {
 }
 
 function correctTickValueOnGapSize(addInterval, breaks) {
-    return function(value, isNegative) {
+    return function(value) {
         var gapSize;
 
         if(!breaks.every(function(item) {
@@ -497,7 +497,7 @@ function correctTickValueOnGapSize(addInterval, breaks) {
             }
             return !gapSize;
         })) {
-            value = addInterval(value, gapSize, isNegative);
+            value = addInterval(value, gapSize);
         }
 
         return value;

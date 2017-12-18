@@ -240,7 +240,7 @@ function correctMarginExtremum(value, margins, maxMinDistance, roundingMethod) {
         dividerPower = -1;
     }
     maxDivider = vizUtils.raiseTo(dividerPower, 10);
-    return adjust(roundingMethod.call(this, adjust(value / maxDivider)) * maxDivider);
+    return adjust(roundingMethod(adjust(value / maxDivider)) * maxDivider);
 }
 
 Axis = exports.Axis = function(renderSettings) {
