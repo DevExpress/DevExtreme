@@ -566,7 +566,7 @@ var MenuBase = HierarchicalCollectionWidget.inherit({
     },
 
     _hasSubmenu: function(node) {
-        return node.internalFields.childrenKeys.length;
+        return node.internalFields && node.internalFields.childrenKeys.length;
     },
 
     _renderContentImpl: function() {
@@ -605,16 +605,14 @@ var MenuBase = HierarchicalCollectionWidget.inherit({
         return $node;
     },
 
-    _renderItem: function(index, node, $nodeContainer) {
-
+    _renderItem: function(index, node, $nodeContainer, $nodeElement) {
         var items = this.option("items"),
             $itemFrame;
 
         this._renderSeparator(node, index, $nodeContainer);
 
         if(node.internalFields.item.visible === false) return;
-
-        var $node = this._createDOMElement($nodeContainer);
+        var $node = $nodeElement || this._createDOMElement($nodeContainer);
 
         if(items[index + 1] && items[index + 1].beginGroup) {
             $node.addClass(DX_MENU_ITEM_LAST_GROUP_ITEM);
@@ -633,20 +631,57 @@ var MenuBase = HierarchicalCollectionWidget.inherit({
         if(this._hasSubmenu(node)) this.setAria("haspopup", "true", $itemFrame);
     },
 
+    _renderItemFrame: function(index, itemData, $container) {
+        var $itemFrame = $container.children(".dx-menu-item");
+        if(!$itemFrame || !$itemFrame.length) {
+            $itemFrame = this.callBase.apply(this, arguments);
+        }
+
+        return $itemFrame;
+    },
+
+    _itemOptionChanged: function(item, property, value) {
+        var $item = this._findItemElementByItem(item);
+        if(!$item.length) {
+            return;
+        }
+        if(!this.constructor.ItemClass.getInstance($item).setDataField(property, value)) {
+            var node = this._dataAdapter.getNodeByItem(item),
+                index = $item.data(this._itemIndexKey()),
+                $nodeContainer = $item.closest("ul"),
+                $nodeElement = $item.closest("li");
+            this._renderItem(index, node, $nodeContainer, $nodeElement);
+        }
+    },
+
     _addContentClasses: function(node, $itemFrame) {
         if(this._displayGetter(node)) {
             $itemFrame.addClass(DX_ITEM_HAS_TEXT);
+        } else {
+            $itemFrame.removeClass(DX_ITEM_HAS_TEXT);
         }
 
         // deprecated since 15.1 (itemData.iconSrc)
         if(node.icon || node.iconSrc) {
             $itemFrame.addClass(DX_ITEM_HAS_ICON);
             this.hasIcons = true;
+        } else {
+            $itemFrame.removeClass(DX_ITEM_HAS_ICON);
         }
 
-        if(this._hasSubmenu(node)) {
+        if(this._hasSubmenu(node) || (this._itemsGetter(node) && this._itemsGetter(node).length)) {
             $itemFrame.addClass(DX_ITEM_HAS_SUBMENU);
+        } else {
+            $itemFrame.removeClass(DX_ITEM_HAS_SUBMENU);
         }
+    },
+
+    _getItemContent: function($itemFrame) {
+        var $itemContent = this.callBase($itemFrame);
+        if(!$itemContent.length) {
+            $itemContent = $itemFrame.children("." + ITEM_CLASS + "-content");
+        }
+        return $itemContent;
     },
 
     _postprocessRenderItem: function(args) {
