@@ -124,31 +124,42 @@ module.exports = _extend({}, symbolPoint, {
         };
     },
 
-    _getColumnsCoord: function(coord) {
+    _correctLabelCoord: function(coord, moveLabelsFromCenter) {
         var that = this,
             label = that._label,
             bBox = label.getBoundingRect(),
+            labelWidth = bBox.width,
             options = label.getLayoutOptions(),
             rad = that.radiusLabels + options.radialOffset,
             visibleArea = that._getVisibleArea(),
-            rightBorderX = visibleArea.maxX - bBox.width,
+            rightBorderX = visibleArea.maxX - labelWidth,
             leftBorderX = visibleArea.minX,
             angleOfPoint = _normalizeAngle(that.middleAngle),
-            x;
+            centerX = that.centerX,
+            x = coord.x;
 
-        if(options.position !== 'columns') {
-            return coord;
+        if(options.position === "columns") {
+            rad += CONNECTOR_LENGTH;
+            if(angleOfPoint <= 90 || angleOfPoint >= 270) {
+                x = that._maxLabelLength ? centerX + rad + that._maxLabelLength - labelWidth : rightBorderX;
+                x = x > rightBorderX ? rightBorderX : x;
+            } else {
+                x = that._maxLabelLength ? centerX - rad - that._maxLabelLength : leftBorderX;
+                x = x < leftBorderX ? leftBorderX : x;
+            }
+            coord.x = x;
+        } else if(moveLabelsFromCenter) {
+            if(angleOfPoint <= 90 || angleOfPoint >= 270) {
+                if(x < centerX) {
+                    x = centerX;
+                }
+            } else {
+                if(x + labelWidth > centerX) {
+                    x = centerX - labelWidth;
+                }
+            }
+            coord.x = x;
         }
-
-        rad += CONNECTOR_LENGTH;
-        if(angleOfPoint < 90 || angleOfPoint >= 270) {
-            x = that._maxLabelLength ? that.centerX + rad + that._maxLabelLength - bBox.width : rightBorderX;
-            x = x > rightBorderX ? rightBorderX : x;
-        } else {
-            x = that._maxLabelLength ? that.centerX - rad - that._maxLabelLength : leftBorderX;
-            x = x < leftBorderX ? leftBorderX : x;
-        }
-        coord.x = x;
         return coord;
     },
 
@@ -161,10 +172,10 @@ module.exports = _extend({}, symbolPoint, {
         this._isLabelDrawingWithoutPoints = false;
     },
 
-    updateLabelCoord: function() {
+    updateLabelCoord: function(moveLabelsFromCenter) {
         var that = this,
             bBox = that._label.getBoundingRect(),
-            coord = that._getColumnsCoord(bBox);
+            coord = that._correctLabelCoord(bBox, moveLabelsFromCenter);
 
         coord = that._checkHorizontalLabelPosition(coord, bBox, that._getVisibleArea());
         that._label.shift(_round(coord.x), _round(bBox.y));

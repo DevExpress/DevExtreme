@@ -267,9 +267,9 @@ var dxPieChart = BaseChart.inherit({
         };
     },
 
-    _adjustSeries: function() {
+    _adjustSeries: function(moveLabelsFromCenter) {
         _each(this.series, function(_, singleSeries) {
-            singleSeries.adjustLabels();
+            singleSeries.adjustLabels(moveLabelsFromCenter);
         });
     },
 
