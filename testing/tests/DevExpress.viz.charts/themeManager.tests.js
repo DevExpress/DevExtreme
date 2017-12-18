@@ -2027,7 +2027,7 @@ function createThemeManager(options, themeGroupName) {
 
         var valueOptions = themeManager.getOptions('valueAxisRangeSelector');
 
-        assert.equal(valueOptions.endOnTick, true);
+        assert.equal(valueOptions.endOnTick, undefined);
         assert.deepEqual(valueOptions.grid, {
             visible: true
         });
@@ -2044,7 +2044,7 @@ function createThemeManager(options, themeGroupName) {
         themeManager.setTheme("getOptionsTheme");
         var valueOptions = themeManager.getOptions('valueAxisRangeSelector');
 
-        assert.equal(valueOptions.endOnTick, true);
+        assert.equal(valueOptions.endOnTick, undefined);
         assert.deepEqual(valueOptions.grid, {
             visible: true
         });

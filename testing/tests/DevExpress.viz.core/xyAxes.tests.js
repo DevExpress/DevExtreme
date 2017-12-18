@@ -4016,9 +4016,12 @@ QUnit.test("Apply margins taking into account breakStyle.width", function(assert
     });
 
     assert.deepEqual(this.tickGeneratorSpy.lastCall.args[0], {
-        min: 0,
+        categories: undefined,
+        isSpacedMargin: true,
+        checkMaxDataVisibility: undefined,
+        checkMinDataVisibility: undefined,
         max: 1050,
-        categories: undefined
+        min: 0
     });
 });
 
@@ -4044,8 +4047,11 @@ QUnit.test("Apply margins taking into account breaks range size", function(asser
     });
 
     assert.deepEqual(this.tickGeneratorSpy.lastCall.args[0], {
-        min: 98,
+        categories: undefined,
+        isSpacedMargin: false,
+        checkMaxDataVisibility: undefined,
+        checkMinDataVisibility: undefined,
         max: 204,
-        categories: undefined
+        min: 98
     });
 });
