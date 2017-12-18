@@ -4043,3 +4043,29 @@ QUnit.testInActiveWindow("Searching should work correctly in grouped tagBox (T51
     assert.equal($tagContainer.find("." + TAGBOX_TAG_CONTENT_CLASS).length, 2, "selected tags rendered");
     assert.equal($.trim($tagContainer.text()), "Item1Item3", "selected values are rendered");
 });
+
+QUnit.test("Items is not selected when values is set on the onSelectAllValueChanged event", function(assert) {
+    var dataSource = ["Item 1", "item 2", "item 3", "item 4"];
+
+    $("#tagBox").dxTagBox({
+        opened: true,
+        dataSource: {
+            paginate: true,
+            pageSize: 2,
+            store: dataSource
+        },
+        selectAllMode: 'page',
+        showSelectionControls: true,
+        pageLoadMode: 'scrollBottom',
+        onSelectAllValueChanged: function(e) {
+            if(e.value === true) {
+                e.component.option("value", dataSource);
+            }
+        }
+    });
+
+    $(".dx-list-select-all-checkbox").trigger("dxclick");
+
+    var selectedItems = $(".dx-list").dxList("instance").option("selectedItems");
+    assert.equal(selectedItems.length, 4, "selected items");
+});

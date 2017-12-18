@@ -1756,7 +1756,7 @@ var checkTwoGroups = function(assert, series) {
 
         //act
         series.draw();
-        series.adjustLabels();
+        series.adjustLabels(true);
 
         //assert
         $.each(series.getPoints(), function(i, point) {
@@ -1764,6 +1764,7 @@ var checkTwoGroups = function(assert, series) {
             assert.ok(point.setLabelTrackerData.called, "label tracker data, point " + i);
             assert.equal(point.setMaxLabelLength.lastCall.args[0], 20, "label length, point " + i);
             assert.ok(point.updateLabelCoord.called, "label coords, point " + i);
+            assert.deepEqual(point.updateLabelCoord.lastCall.args, [true], "move labels from center");
         });
     });
 
