@@ -416,7 +416,7 @@ var DropDownList = DropDownEditor.inherit({
 
         return selectedItem !== undefined
             ? new Deferred().resolve(selectedItem).promise()
-            : this._loadValue(value, cache);
+            : this._loadValue(value);
     },
 
     _getPlainItems: function(items) {
