@@ -214,7 +214,7 @@ var ResponsiveBox = CollectionWidget.inherit({
             * @hidden
             * @extend_doc
             */
-           
+
             onLayoutChanged: null,
             currentScreenFactor: undefined
         });
