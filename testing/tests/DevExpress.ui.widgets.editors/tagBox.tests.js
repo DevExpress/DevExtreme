@@ -4259,7 +4259,7 @@ QUnit.test("Select All should use cache", function(assert) {
     $(".dx-list-select-all-checkbox").trigger("dxclick");
 
     //assert
-    assert.equal(keyGetterCounter, 132, "key getter call count");
+    assert.equal(keyGetterCounter, 144, "key getter call count");
     assert.equal(isValueEqualsSpy.callCount, 0, "_isValueEquals is not called");
 });
 
