@@ -791,7 +791,6 @@ var Lookup = DropDownList.inherit({
             if(this.option("searchEnabled") && this._searchBox.option("value")) {
                 this._searchBox.option("value", "");
                 this._searchCanceled();
-                this._searchDataSource();
             }
             this._list && this._list.option("focusedElement", null);
         }

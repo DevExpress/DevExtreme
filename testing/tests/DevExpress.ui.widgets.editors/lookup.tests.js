@@ -277,6 +277,33 @@ QUnit.test("search value should be cleared after popup close for better UX (T253
     assert.equal(instance._list.option("items").length, 3, "filter reset immediately");
 });
 
+QUnit.test("search value should be cleared without excess dataSource filtering ", function(assert) {
+    var searchTimeout = 300,
+        loadCalledCount = 0;
+
+    var instance = $("#thirdLookup").dxLookup({
+        dataSource: new DataSource({
+            load: function(options) {
+                loadCalledCount++;
+            }
+        }),
+        searchTimeout: searchTimeout,
+        animation: null,
+        cleanSearchOnOpening: true,
+        opened: true
+    }).dxLookup("instance");
+
+    assert.equal(loadCalledCount, 1, "DataSource was loaded on init");
+
+    instance._searchBox.option("value", "2");
+    this.clock.tick(searchTimeout);
+    assert.equal(loadCalledCount, 2, "DataSource was loaded after searching");
+
+    instance.close();
+    instance.open();
+    assert.equal(loadCalledCount, 3, "Loading dataSource count is OK");
+});
+
 QUnit.test("onContentReady fire with lookup's option 'minSearchLength' at first show (Q575560)", function(assert) {
     var count = 0;
     this.element
