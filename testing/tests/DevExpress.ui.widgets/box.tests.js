@@ -70,7 +70,7 @@ QUnit.test("render", function(assert) {
 
 QUnit.test("strategy class", function(assert) {
     var $box = $("#box").dxBox({
-        _layoutStrategy: "test"
+        layoutStrategy: "test"
     });
 
     assert.ok($box.hasClass("dx-box-test"), "class attached");
@@ -439,15 +439,15 @@ QUnit.test("render box in dxBox", function(assert) {
     assert.ok(innerBox instanceof Box, "box was created inside box");
 });
 
-QUnit.test("box pass _layoutStrategy to children box", function(assert) {
+QUnit.test("box pass layoutStrategy to children box", function(assert) {
     var $box = $("#box").dxBox({
-        _layoutStrategy: 'test',
+        layoutStrategy: 'test',
         items: [{ box: {} }]
     });
 
     var innerBox = $box.find(".dx-box").dxBox("instance");
 
-    assert.equal(innerBox.option("_layoutStrategy"), "test", "_layoutStrategy was passed to children box");
+    assert.equal(innerBox.option("layoutStrategy"), "test", "layoutStrategy was passed to children box");
 });
 
 QUnit.test("minSize & maxSize", function(assert) {
@@ -490,7 +490,7 @@ QUnit.test("rendering after visibility changing", function(assert) {
             direction: "row",
             items: [{ ratio: 1, baseSize: 0 }, { ratio: 1, baseSize: 0 }],
             visible: false,
-            _layoutStrategy: 'fallback'
+            layoutStrategy: 'fallback'
         });
 
         clock.tick();
@@ -592,7 +592,7 @@ QUnit.test("total baseSize should be used when size is zero", function(assert) {
     var baseSize2 = 200;
 
     var $box = $("#box").dxBox({
-        _layoutStrategy: "fallback",
+        layoutStrategy: "fallback",
         direction: "col",
         items: [{ baseSize: baseSize1, ratio: 2 }, { baseSize: baseSize2, ratio: 1 }],
         height: "auto"
@@ -604,7 +604,7 @@ QUnit.test("total baseSize should be used when size is zero", function(assert) {
 QUnit.test("baseSize in % in invisible area", function(assert) {
     var $box = $("#box").hide().dxBox({
         height: 100,
-        _layoutStrategy: "fallback",
+        layoutStrategy: "fallback",
         direction: "col",
         items: [{ baseSize: "50%", ratio: 0 }, { baseSize: "50%", ratio: 0 }]
     });
@@ -623,7 +623,7 @@ QUnit.test("items size should be changed after dxupdate event inside fieldset", 
     $wrapper.width(400);
 
     $box.dxBox({
-        _layoutStrategy: "fallback",
+        layoutStrategy: "fallback",
         direction: "row",
         items: [{ baseSize: 0, ratio: 1 }, { baseSize: 0, ratio: 1 }]
     });
@@ -649,7 +649,7 @@ QUnit.test("align for row direction", function(assert) {
         items: [{ baseSize: baseSize }, { baseSize: baseSize }],
         width: boxSize,
         rtlEnabled: true,
-        _layoutStrategy: "fallback"
+        layoutStrategy: "fallback"
     });
 
     var $boxItems = $box.find("." + BOX_ITEM_CLASS);
@@ -690,7 +690,7 @@ QUnit.test("crossAlign for column direction", function(assert) {
         items: [{ html: "<div style='width: " + size + "px'></div>" }],
         width: boxSize,
         rtlEnabled: true,
-        _layoutStrategy: "fallback"
+        layoutStrategy: "fallback"
     });
     var box = $box.dxBox("instance");
 
