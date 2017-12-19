@@ -110,6 +110,69 @@ QUnit.test('Merge data type', function(assert) {
     checkRules(undefined, undefined, undefined);
 });
 
+QUnit.test('Merge isSpacedMargin', function(assert) {
+    var that = this;
+
+    var checkRules = function(isSpacedMargin, otherIsSpacedMargin, expected) {
+        //arrange
+        that.createRange({ isSpacedMargin: isSpacedMargin });
+
+        //act
+        var returnValue = that.range.addRange({ isSpacedMargin: otherIsSpacedMargin });
+
+        //assert
+        assert.strictEqual(that.range, returnValue);
+        assert.strictEqual(that.range.isSpacedMargin, expected);
+    };
+
+    checkRules(true, true, true);
+    checkRules(false, true, true);
+    checkRules(true, false, true);
+    checkRules(false, false, false);
+});
+
+QUnit.test('Merge checkMinDataVisibility', function(assert) {
+    var that = this;
+
+    var checkRules = function(checkMinDataVisibility, otherCheckMinDataVisibility, expected) {
+        //arrange
+        that.createRange({ checkMinDataVisibility: checkMinDataVisibility });
+
+        //act
+        var returnValue = that.range.addRange({ checkMinDataVisibility: otherCheckMinDataVisibility });
+
+        //assert
+        assert.strictEqual(that.range, returnValue);
+        assert.strictEqual(that.range.checkMinDataVisibility, expected);
+    };
+
+    checkRules(true, true, true);
+    checkRules(false, true, true);
+    checkRules(true, false, true);
+    checkRules(false, false, false);
+});
+
+QUnit.test('Merge checkMaxDataVisibility', function(assert) {
+    var that = this;
+
+    var checkRules = function(checkMaxDataVisibility, otherCheckMaxDataVisibility, expected) {
+        //arrange
+        that.createRange({ checkMaxDataVisibility: checkMaxDataVisibility });
+
+        //act
+        var returnValue = that.range.addRange({ checkMaxDataVisibility: otherCheckMaxDataVisibility });
+
+        //assert
+        assert.strictEqual(that.range, returnValue);
+        assert.strictEqual(that.range.checkMaxDataVisibility, expected);
+    };
+
+    checkRules(true, true, true);
+    checkRules(false, true, true);
+    checkRules(true, false, true);
+    checkRules(false, false, false);
+});
+
 QUnit.test('Merge base', function(assert) {
     var that = this;
 

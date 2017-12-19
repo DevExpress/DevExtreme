@@ -888,13 +888,43 @@ QUnit.test("There is no real overlap of the labels", function(assert) {
     assert.deepEqual(this.arrayRemovedElements, []);
 });
 
+QUnit.test("There is no real overlap of the labels. Alignment value is left", function(assert) {
+    var markersBBoxes = [
+        { x: 0, y: 0, width: 10, height: 5 },
+        { x: 10, y: 0, width: 20, height: 5 },
+        { x: 40, y: 0, width: 10, height: 5 },
+        { x: 60, y: 0, width: 10, height: 5 },
+        { x: 80, y: 0, width: 10, height: 5 }
+    ];
+    this.renderer.text = spyRendererText.call(this, markersBBoxes);
+    this.drawAxisWithOptions({ min: 1, max: 10, label: { overlappingBehavior: { mode: "hide" }, alignment: "left" } });
+
+    assert.equal(this.renderer.text.callCount, 5);
+    assert.deepEqual(this.arrayRemovedElements, []);
+});
+
+QUnit.test("There is real overlap of the labels. Alignment value is left", function(assert) {
+    var markersBBoxes = [
+        { x: 0, y: 0, width: 10, height: 5 },
+        { x: 8, y: 0, width: 10, height: 5 },
+        { x: 16, y: 0, width: 10, height: 5 },
+        { x: 24, y: 0, width: 10, height: 5 },
+        { x: 32, y: 0, width: 10, height: 5 }
+    ];
+    this.renderer.text = spyRendererText.call(this, markersBBoxes);
+    this.drawAxisWithOptions({ min: 1, max: 10, label: { overlappingBehavior: { mode: "hide" }, alignment: "left" } });
+
+    assert.equal(this.renderer.text.callCount, 5);
+    assert.deepEqual(this.arrayRemovedElements, ["3", "7"]);
+});
+
 QUnit.test("There is real overlap of the labels. Alignment value is center", function(assert) {
     var markersBBoxes = [
         { x: 0, y: 0, width: 10, height: 5 },
+        { x: 10, y: 0, width: 10, height: 5 },
         { x: 20, y: 0, width: 10, height: 5 },
-        { x: 40, y: 0, width: 10, height: 5 },
-        { x: 60, y: 0, width: 10, height: 5 },
-        { x: 80, y: 0, width: 30, height: 5 }
+        { x: 30, y: 0, width: 10, height: 5 },
+        { x: 40, y: 0, width: 30, height: 5 }
     ];
     this.renderer.text = spyRendererText.call(this, markersBBoxes);
     this.drawAxisWithOptions({ min: 1, max: 10, label: { overlappingBehavior: { mode: "hide" }, alignment: "center" } });
@@ -906,16 +936,31 @@ QUnit.test("There is real overlap of the labels. Alignment value is center", fun
 QUnit.test("There is real overlap of the labels. Alignment value is right", function(assert) {
     var markersBBoxes = [
         { x: 0, y: 0, width: 10, height: 5 },
+        { x: 10, y: 0, width: 10, height: 5 },
         { x: 20, y: 0, width: 10, height: 5 },
-        { x: 40, y: 0, width: 10, height: 5 },
-        { x: 60, y: 0, width: 10, height: 5 },
-        { x: 80, y: 0, width: 40, height: 5 }
+        { x: 30, y: 0, width: 10, height: 5 },
+        { x: 40, y: 0, width: 10, height: 5 }
     ];
     this.renderer.text = spyRendererText.call(this, markersBBoxes);
     this.drawAxisWithOptions({ min: 1, max: 10, label: { overlappingBehavior: { mode: "hide" }, alignment: "right" } });
 
     assert.equal(this.renderer.text.callCount, 5);
-    assert.deepEqual(this.arrayRemovedElements, ["3", "5", "7", "9"]);
+    assert.deepEqual(this.arrayRemovedElements, ["3", "7"]);
+});
+
+QUnit.test("There is not real overlap of the labels. Alignment value is right", function(assert) {
+    var markersBBoxes = [
+        { x: 0, y: 0, width: 20, height: 5 },
+        { x: 20, y: 0, width: 10, height: 5 },
+        { x: 40, y: 0, width: 10, height: 5 },
+        { x: 55, y: 0, width: 10, height: 5 },
+        { x: 70, y: 0, width: 10, height: 5 }
+    ];
+    this.renderer.text = spyRendererText.call(this, markersBBoxes);
+    this.drawAxisWithOptions({ min: 1, max: 10, label: { overlappingBehavior: { mode: "hide" }, alignment: "right" } });
+
+    assert.equal(this.renderer.text.callCount, 5);
+    assert.deepEqual(this.arrayRemovedElements, []);
 });
 
 QUnit.module("Label overlapping, 'rotate' mode", overlappingEnvironment);
@@ -3971,9 +4016,12 @@ QUnit.test("Apply margins taking into account breakStyle.width", function(assert
     });
 
     assert.deepEqual(this.tickGeneratorSpy.lastCall.args[0], {
-        min: 0,
+        categories: undefined,
+        isSpacedMargin: true,
+        checkMaxDataVisibility: undefined,
+        checkMinDataVisibility: undefined,
         max: 1050,
-        categories: undefined
+        min: 0
     });
 });
 
@@ -3999,8 +4047,11 @@ QUnit.test("Apply margins taking into account breaks range size", function(asser
     });
 
     assert.deepEqual(this.tickGeneratorSpy.lastCall.args[0], {
-        min: 98,
+        categories: undefined,
+        isSpacedMargin: false,
+        checkMaxDataVisibility: undefined,
+        checkMinDataVisibility: undefined,
         max: 204,
-        categories: undefined
+        min: 98
     });
 });

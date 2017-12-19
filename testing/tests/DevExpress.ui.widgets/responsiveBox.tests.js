@@ -173,8 +173,8 @@ QUnit.test("root box and it's items should have correct height (T566515)", funct
 
     var $rootItems = $rootBox.find("." + BOX_ITEM_CLASS);
 
-    assert.roughEqual($rootItems.eq(0).height(), 16, 2, "Height of the root item is OK");
-    assert.roughEqual($rootItems.eq(1).height(), 16, 2, "Height of the root item is OK");
+    assert.roughEqual($rootItems.eq(0).height(), 16, 2.1, "Height of the root item is OK");
+    assert.roughEqual($rootItems.eq(1).height(), 16, 2.1, "Height of the root item is OK");
 });
 
 QUnit.test("grid with factors", function(assert) {
@@ -364,11 +364,11 @@ QUnit.test("overlapping rowspan and colspan", function(assert) {
 
     var $rowBox = $responsiveBox.find("." + BOX_CLASS).eq(1);
 
-    assert.equal($rowBox.height(), 3 * size, "first row box height");
+    assert.roughEqual($rowBox.height(), 3 * size, 0.1, "first row box height");
 
     var $colBox = $rowBox.find("." + BOX_CLASS).eq(1);
 
-    assert.equal($colBox.width(), 3 * size, "second col box width");
+    assert.roughEqual($colBox.width(), 3 * size, 0.1, "second col box width");
 });
 
 QUnit.test("recalculation on size changing", function(assert) {

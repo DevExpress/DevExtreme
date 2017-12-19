@@ -283,7 +283,7 @@ var TagBox = SelectBox.inherit({
             /**
             * @name dxTagBoxOptions_tagTemplate
             * @publicName tagTemplate
-            * @type template
+            * @type template|function
             * @default "tag"
             * @type_function_param1 itemData:object
             * @type_function_param2 itemElement:dxElement
@@ -693,12 +693,6 @@ var TagBox = SelectBox.inherit({
         return this.option("showSelectionControls")
             ? this._popup._wrapper().find("." + LIST_SELECT_ALL_CHECKBOX_CLASS)
             : this.callBase();
-    },
-
-    _suppressingSelectionChanged: function(callback) {
-        this._setListOption("onSelectionChanged", noop);
-        callback.call(this);
-        this._setListOption("onSelectionChanged", this._getSelectionChangeHandler());
     },
 
     _initSelectAllValueChangedAction: function() {
@@ -1148,9 +1142,7 @@ var TagBox = SelectBox.inherit({
     },
 
     _refreshSelected: function() {
-        this._list && this._suppressingSelectionChanged(function() {
-            this.callBase();
-        });
+        this._list && this._list.option("selectedItems", this._selectedItems);
     },
 
     _resetListDataSourceFilter: function() {

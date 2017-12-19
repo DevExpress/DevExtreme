@@ -42,7 +42,7 @@ var Toolbar = ToolbarBase.inherit({
             /**
             * @name dxToolbarOptions_menuItemTemplate
             * @publicName menuItemTemplate
-            * @type template
+            * @type template|function
             * @default "menuItem"
             * @type_function_param1 itemData:object
             * @type_function_param2 itemIndex:number
@@ -88,7 +88,7 @@ var Toolbar = ToolbarBase.inherit({
             /**
             * @name dxToolbarItemTemplate_menuItemTemplate
             * @publicName menuItemTemplate
-            * @type template
+            * @type template|function
             * @type_function_return string|jQuery
             */
 

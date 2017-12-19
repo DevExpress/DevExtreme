@@ -83,11 +83,15 @@ var environment = {
 
 function createAxisStubs() {
     var axisFakes = {
+        updateSizeArgs: [],
         estimateMargins: sinon.stub(),
         getMargins: sinon.stub(),
         createTicks: sinon.spy(function(arg) { this.createTicks_test_arg = $.extend({}, arg); }),
         draw: sinon.spy(function(arg) { this.draw_test_arg = $.extend({}, arg); }),
-        updateSize: sinon.spy(function(arg) { this.updateSize_test_arg = $.extend({}, arg); }),
+        updateSize: sinon.spy(function(arg) {
+            this.updateSize_test_arg = $.extend({}, arg);
+            this.updateSizeArgs.push(this.updateSize_test_arg);
+        }),
         shift: sinon.spy(function(arg) { this.shift_test_arg = $.extend({}, arg); }),
         hideTitle: sinon.spy(),
         drawScaleBreaks: sinon.spy(),
@@ -2250,6 +2254,20 @@ QUnit.test("Update axes size and shift with new margins (there is also scrollBar
         right: 0
     });
 
+    assert.deepEqual(this.axisStub.getCall(1).returnValue.updateSizeArgs.length, 4);
+    assert.deepEqual(this.axisStub.getCall(1).returnValue.updateSizeArgs[2], {
+        bottom: 0,
+        height: 110,
+        left: 0,
+        originalBottom: 0,
+        originalLeft: 0,
+        originalRight: 0,
+        originalTop: 0,
+        right: 0,
+        top: 0,
+        width: 220
+    }); //T587219
+
     //valAxis_outer
     assert.deepEqual(this.axisStub.getCall(2).returnValue.updateSize_test_arg, {
         left: 18,
@@ -2269,6 +2287,19 @@ QUnit.test("Update axes size and shift with new margins (there is also scrollBar
         left: 7,
         right: 0
     });
+
+    assert.deepEqual(this.axisStub.getCall(2).returnValue.updateSizeArgs[2], {
+        bottom: 0,
+        height: 110,
+        left: 0,
+        originalBottom: 0,
+        originalLeft: 0,
+        originalRight: 0,
+        originalTop: 0,
+        right: 0,
+        top: 0,
+        width: 220
+    }); //T587219
     //argAxis
     assert.deepEqual(this.axisStub.getCall(0).returnValue.updateSize_test_arg, {
         left: 18,
@@ -2301,4 +2332,17 @@ QUnit.test("Update axes size and shift with new margins (there is also scrollBar
         width: 220,
         height: 110
     });
+
+    assert.deepEqual(this.axisStub.getCall(0).returnValue.updateSizeArgs[2], {
+        bottom: 0,
+        height: 110,
+        left: 0,
+        originalBottom: 0,
+        originalLeft: 0,
+        originalRight: 0,
+        originalTop: 0,
+        right: 0,
+        top: 0,
+        width: 220
+    }); //T587219
 });

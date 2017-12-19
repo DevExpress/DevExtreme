@@ -1448,7 +1448,7 @@ QUnit.test("First and last labels are not overlap, hideFirstOrLast = first", fun
         { x: 60, y: 2, width: 20, height: 14 },
         { x: 85, y: 2, width: 20, height: 15 },
         { x: 110, y: 2, width: 20, height: 10 },
-        { x: -20, y: 2, width: 17, height: 10 }
+        { x: -30, y: 2, width: 17, height: 10 }
     ];
     this.renderer.text = spyRendererText.call(this, markersBBoxes);
     this.createDrawnAxis();

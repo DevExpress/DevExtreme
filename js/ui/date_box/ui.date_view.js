@@ -233,7 +233,7 @@ var DateView = Editor.inherit({
             this._createRollerConfig(ROLLER_TYPE.month);
             var monthRollerConfig = this._rollerConfigs[ROLLER_TYPE.month];
 
-            if(monthRollerConfig.displayItems.length !== monthRoller.option("items").length) {
+            if(monthRollerConfig.displayItems.toString() !== monthRoller.option("items").toString()) {
                 monthRoller.option({
                     items: monthRollerConfig.displayItems,
                     selectedIndex: monthRollerConfig.selectedIndex

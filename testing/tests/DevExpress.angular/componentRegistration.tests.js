@@ -1281,6 +1281,45 @@ QUnit.test("Binding with several nested options with same parent should work cor
     assert.equal(instance.option("root.child2"), false);
 });
 
+QUnit.test("Components should not affect on eachother lock engines", function(assert) {
+    var needUpdating;
+    var TestComponentWithEndUpdateAction = DOMComponent.inherit({
+        endUpdate: function() {
+            if(needUpdating) {
+                needUpdating = false;
+                this._createActionByOption("onUpdate")();
+            }
+            this.callBase.apply(this, arguments);
+        }
+    });
+
+    registerComponent("dxTestWithAction", TestComponentWithEndUpdateAction);
+
+    var $testElement = $("<div>").attr("dx-test", "{ bindingOptions: { text: 'prop' } }"),
+        $badNeighbor = $("<div>").attr("dx-test-with-action", "{ onUpdate: onUpdate }");
+
+    this.$controller.append($badNeighbor).append($testElement);
+
+    this.testApp.controller("my-controller", function($scope) {
+        $scope.prop = "value 1";
+        $scope.onUpdate = function() {};
+    });
+
+    angular.bootstrap(this.$container, ["testApp"]);
+
+    var scope = this.$controller.scope(),
+        instance = $testElement.dxTest("instance");
+
+    scope.$apply(function() {
+        instance.option("text", "value 2");
+        needUpdating = true;
+    });
+
+    instance.option("text", "value 3");
+
+    assert.equal(scope.prop, "value 3");
+});
+
 QUnit.module("nested Widget with templates enabled", {
     beforeEach: function() {
         var TestContainer = Widget.inherit({

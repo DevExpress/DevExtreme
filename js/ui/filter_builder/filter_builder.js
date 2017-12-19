@@ -238,7 +238,7 @@ var FilterBuilder = Widget.inherit({
              /**
              * @name dxFilterBuilderField_editorTemplate
              * @publicName editorTemplate
-             * @type template
+             * @type template|function
              * @type_function_param1 conditionInfo:object
              * @type_function_param1_field1 value:string|number|date
              * @type_function_param1_field2 filterOperation:string

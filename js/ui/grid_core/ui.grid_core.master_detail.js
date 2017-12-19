@@ -38,7 +38,7 @@ module.exports = {
                 /**
                  * @name dxDataGridOptions_masterDetail_template
                  * @publicName template
-                 * @type template
+                 * @type template|function
                  * @type_function_param1 detailElement:dxElement
                  * @type_function_param2 detailInfo:object
                  * @type_function_param2_field1 key:any

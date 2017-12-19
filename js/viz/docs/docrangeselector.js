@@ -495,9 +495,9 @@ var dxRangeSelector = {
         * @name dxrangeselectoroptions_scale_endontick
         * @publicName endOnTick
         * @type boolean
-        * @default undefined
+        * @default false
         */
-        endOnTick: undefined
+        endOnTick: false
     },
     /**
     * @name dxrangeselectoroptions_slidermarker

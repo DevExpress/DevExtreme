@@ -662,9 +662,10 @@ var dxChart = AdvancedChart.inherit({
         that._updatePanesCanvases(drawOptions);
 
         var panesCanvases = that.panes.reduce(function(canvases, pane) {
-            canvases[pane.name] = _extend({}, pane.canvas);
-            return canvases;
-        }, {});
+                canvases[pane.name] = _extend({}, pane.canvas);
+                return canvases;
+            }, {}),
+            cleanPanesCanvases = _extend(true, {}, panesCanvases);
 
 
         if(!drawOptions.adjustAxes) {
@@ -700,25 +701,23 @@ var dxChart = AdvancedChart.inherit({
         that.panes.forEach(function(pane) {
             _extend(pane.canvas, panesCanvases[pane.name]);
         });
+
+        return cleanPanesCanvases;
     },
 
-    _shrinkAxes: function(drawOptions, sizeShortage) {
+    _shrinkAxes: function(drawOptions, sizeShortage, panesCanvases) {
         var that = this,
             rotated = that._isRotated(),
             extendedArgAxes = (that._scrollBar ? [that._scrollBar] : []).concat(that._argumentAxes),
             verticalAxes = rotated ? extendedArgAxes : that._valueAxes,
             horizontalAxes = rotated ? that._valueAxes : extendedArgAxes,
-            allAxes = verticalAxes.concat(horizontalAxes),
-            panesCanvases;
+            allAxes = verticalAxes.concat(horizontalAxes);
 
         if(sizeShortage.width || sizeShortage.height) {
-            panesCanvases = that.panes.reduce(function(canvases, pane) {
-                canvases[pane.name] = _extend({}, pane.canvas);
-                return canvases;
-            }, {});
-
             checkUsedSpace(sizeShortage, "height", horizontalAxes, getHorizontalAxesMargins);
             checkUsedSpace(sizeShortage, "width", verticalAxes, getVerticalAxesMargins);
+
+            performActionOnAxes(allAxes, "updateSize", panesCanvases);
 
             panesCanvases = shrinkCanvases(rotated, panesCanvases, getVerticalAxesMargins(verticalAxes), getHorizontalAxesMargins(horizontalAxes, getAxisMargins));
             performActionOnAxes(allAxes, "updateSize", panesCanvases);

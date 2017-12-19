@@ -206,7 +206,7 @@ var DropDownList = DropDownEditor.inherit({
             /**
             * @name dxDropDownListOptions_groupTemplate
             * @publicName groupTemplate
-            * @type template
+            * @type template|function
             * @default "group"
             * @type_function_param1 itemData:object
             * @type_function_param2 itemIndex:number

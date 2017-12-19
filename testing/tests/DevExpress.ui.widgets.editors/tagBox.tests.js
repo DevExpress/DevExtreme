@@ -4473,3 +4473,29 @@ QUnit.test("search filter should be cleared on close", function(assert) {
     assert.equal($input.val(), "", "input was cleared");
     assert.equal($(instance.content()).find("." + LIST_ITEM_CLASS).length, 3, "filter was cleared");
 });
+
+QUnit.test("Items is not selected when values is set on the onSelectAllValueChanged event", function(assert) {
+    var dataSource = ["Item 1", "item 2", "item 3", "item 4"];
+
+    $("#tagBox").dxTagBox({
+        opened: true,
+        dataSource: {
+            paginate: true,
+            pageSize: 2,
+            store: dataSource
+        },
+        selectAllMode: 'page',
+        showSelectionControls: true,
+        pageLoadMode: 'scrollBottom',
+        onSelectAllValueChanged: function(e) {
+            if(e.value === true) {
+                e.component.option("value", dataSource);
+            }
+        }
+    });
+
+    $(".dx-list-select-all-checkbox").trigger("dxclick");
+
+    var selectedItems = $(".dx-list").dxList("instance").option("selectedItems");
+    assert.equal(selectedItems.length, 4, "selected items");
+});

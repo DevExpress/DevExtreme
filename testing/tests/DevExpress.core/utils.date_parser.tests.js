@@ -146,6 +146,16 @@ QUnit.test("date parsing with yyyy-MM-ddThh:mm:ssZ", function(assert) {
     assert.equal(parsedDate.toString(), value.toString());
 });
 
+QUnit.test("date parsing with yyyy-MM-ddThh:mm:ss.SSSZ", function(assert) {
+    var value = new Date(Date.UTC(2017, 0, 20, 11, 12, 13, 100)),
+        stringValue = "2017-01-20T11:12:13.1Z";
+
+    var parsedDate = dateSerialization.dateParser(stringValue);
+
+    assert.equal(parsedDate.toString(), value.toString());
+    assert.equal(parsedDate.toISOString(), value.toISOString());
+});
+
 QUnit.module("UTC Time Formats with plus(-) timezone");
 
 QUnit.test("date parsing with yyyy-MM-ddThh-hh", function(assert) {

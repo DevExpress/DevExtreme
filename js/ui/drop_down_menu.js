@@ -101,7 +101,7 @@ var DropDownMenu = Widget.inherit({
             /**
             * @name dxDropDownMenuOptions_itemTemplate
             * @publicName itemTemplate
-            * @type template
+            * @type template|function
             * @default "item"
             * @type_function_param1 itemData:object
             * @type_function_param2 itemIndex:number

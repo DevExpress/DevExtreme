@@ -36,7 +36,7 @@ exports.pie = _extend({}, barSeries, {
         point.isSelected() && legendCallback();
     },
 
-    adjustLabels: function() {
+    adjustLabels: function(moveLabelsFromCenter) {
         var that = this,
             points = that._points || [],
             maxLabelLength,
@@ -58,7 +58,7 @@ exports.pie = _extend({}, barSeries, {
         _each(points, function(_, point) {
             if(point._label.isVisible() && point._label.getLayoutOptions().position !== INSIDE) {
                 point.setMaxLabelLength(maxLabelLength);
-                point.updateLabelCoord();
+                point.updateLabelCoord(moveLabelsFromCenter);
             }
         });
     },
