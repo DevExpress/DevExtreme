@@ -505,11 +505,11 @@ var CollectionWidget = Widget.inherit({
             return;
         }
         if(!this.constructor.ItemClass.getInstance($item).setDataField(property, value)) {
-            this._renderNewItem($item, item);
+            this._refreshItem($item, item);
         }
     },
 
-    _renderNewItem: function($item) {
+    _refreshItem: function($item) {
         var itemData = this._getItemData($item),
             index = $item.data(this._itemIndexKey());
         this._renderItem(index, itemData, null, $item);

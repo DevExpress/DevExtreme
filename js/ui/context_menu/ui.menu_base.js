@@ -14,6 +14,7 @@ var DX_MENU_CLASS = "dx-menu",
     DX_MENU_NO_ICONS_CLASS = DX_MENU_CLASS + "-no-icons",
     DX_MENU_BASE_CLASS = "dx-menu-base",
     ITEM_CLASS = DX_MENU_CLASS + "-item",
+    DX_ITEM_CONTENT_CLASS = ITEM_CLASS + "-content",
     DX_MENU_SELECTED_ITEM_CLASS = ITEM_CLASS + "-selected",
     DX_MENU_ITEM_WRAPPER_CLASS = ITEM_CLASS + "-wrapper",
     DX_MENU_ITEMS_CONTAINER_CLASS = DX_MENU_CLASS + "-items-container",
@@ -635,7 +636,7 @@ var MenuBase = HierarchicalCollectionWidget.inherit({
         return $itemFrame.length ? $itemFrame : this.callBase.apply(this, arguments);
     },
 
-    _renderNewItem: function($item, item) {
+    _refreshItem: function($item, item) {
         var node = this._dataAdapter.getNodeByItem(item),
             index = $item.data(this._itemIndexKey()),
             $nodeContainer = $item.closest("ul"),
@@ -662,7 +663,7 @@ var MenuBase = HierarchicalCollectionWidget.inherit({
     _getItemContent: function($itemFrame) {
         var $itemContent = this.callBase($itemFrame);
         if(!$itemContent.length) {
-            $itemContent = $itemFrame.children("." + ITEM_CLASS + "-content");
+            $itemContent = $itemFrame.children("." + DX_ITEM_CONTENT_CLASS);
         }
         return $itemContent;
     },
