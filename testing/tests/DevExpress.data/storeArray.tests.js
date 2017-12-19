@@ -369,66 +369,6 @@ QUnit.test("byKey", function(assert) {
     });
 });
 
-QUnit.test("byKey with cache", function(assert) {
-    var items = [
-        { k: 1, v: "a" },
-        { k: 2, v: "b" },
-        { k: 3, v: "c" },
-    ];
-
-    var store = new ArrayStore({
-        key: "k",
-        data: items
-    });
-
-    sinon.spy(store, "keyOf");
-
-    var cache = {},
-        results = [];
-
-    //act
-    items.forEach(function(item) {
-        store.byKey(item.k, null, cache).done(function(r) {
-            results.push(r);
-        });
-    });
-
-    //assert
-    assert.deepEqual(results, items);
-    assert.equal(store.keyOf.callCount, items.length, "cache is used");
-    assert.notDeepEqual(cache, {}, "cache is not empty");
-});
-
-QUnit.test("byKey does not use cache if key is object", function(assert) {
-    var items = [
-        { k: new Date(1), v: "a" },
-        { k: new Date(2), v: "b" },
-        { k: new Date(3), v: "c" },
-    ];
-
-    var store = new ArrayStore({
-        key: "k",
-        data: items
-    });
-
-    sinon.spy(store, "keyOf");
-
-    var cache = {},
-        results = [];
-
-    //act
-    items.forEach(function(item) {
-        store.byKey(item.k, null, cache).done(function(r) {
-            results.push(r);
-        });
-    });
-
-    //assert
-    assert.deepEqual(results, items);
-    assert.equal(store.keyOf.callCount, 6, "cache is not used");
-    assert.deepEqual(cache, {}, "cache is empty");
-});
-
 QUnit.test("byKey called with unknown id", function(assert) {
     assert.expect(2);
 

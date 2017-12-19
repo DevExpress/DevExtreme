@@ -110,9 +110,9 @@ var DataHelperMixin = {
         }
     },
 
-    _loadSingle: function(key, value, cache) {
+    _loadSingle: function(key, value) {
         key = key === "this" ? this._dataSource.key() || "this" : key;
-        return this._dataSource.loadSingle(key, value, cache);
+        return this._dataSource.loadSingle(key, value);
     },
 
     _isLastPage: function() {

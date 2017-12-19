@@ -111,7 +111,7 @@ var DataExpressionMixin = extend(DataHelperMixin, {
         return this.option("valueExpr") || "this";
     },
 
-    _loadValue: function(value, cache) {
+    _loadValue: function(value) {
         var deferred = new Deferred();
         value = this._unwrappedValue(value);
 
@@ -119,7 +119,7 @@ var DataExpressionMixin = extend(DataHelperMixin, {
             return deferred.reject().promise();
         }
 
-        this._loadSingle(this._valueGetterExpr(), value, cache)
+        this._loadSingle(this._valueGetterExpr(), value)
             .done((function(item) {
                 this._isValueEquals(this._valueGetter(item), value)
                     ? deferred.resolve(item)

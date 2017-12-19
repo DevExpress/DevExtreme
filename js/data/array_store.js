@@ -76,8 +76,8 @@ var ArrayStore = Store.inherit({
         });
     },
 
-    _byKeyImpl: function(key, extraOptions, cache) {
-        var index = this._indexByKey(key, cache);
+    _byKeyImpl: function(key) {
+        var index = this._indexByKey(key);
 
         if(index === -1) {
             return rejectedPromise(errors.Error("E4009"));
@@ -151,24 +151,9 @@ var ArrayStore = Store.inherit({
         return trivialPromise(key);
     },
 
-    _indexByKey: function(key, cache) {
-        var arrayLength,
-            keyExpr = this.key(),
-            i;
-
-        if(cache && keyExpr && typeof key !== "object") {
-            if(!cache.indexByKey) {
-                cache.indexByKey = {};
-                for(i = 0, arrayLength = this._array.length; i < arrayLength; i++) {
-                    cache.indexByKey[this.keyOf(this._array[i])] = i;
-                }
-            }
-            if(key in cache.indexByKey) {
-                return cache.indexByKey[key];
-            }
-        }
-        for(i = 0, arrayLength = this._array.length; i < arrayLength; i++) {
-            if(keysEqual(keyExpr, this.keyOf(this._array[i]), key)) {
+    _indexByKey: function(key) {
+        for(var i = 0, arrayLength = this._array.length; i < arrayLength; i++) {
+            if(keysEqual(this.key(), this.keyOf(this._array[i]), key)) {
                 return i;
             }
         }

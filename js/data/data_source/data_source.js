@@ -731,7 +731,7 @@ var DataSource = Class.inherit({
         });
     },
 
-    loadSingle: function(propName, propValue, cache) {
+    loadSingle: function(propName, propValue) {
         var that = this;
 
         var d = new Deferred(),
@@ -770,7 +770,7 @@ var DataSource = Class.inherit({
 
             // NOTE for CustomStore always using byKey for backward compatibility with "old user datasource"
             if(propName === key || shouldForceByKey()) {
-                return store.byKey(propValue, options, cache);
+                return store.byKey(propValue, options);
             }
 
             options.take = 1;

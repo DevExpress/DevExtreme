@@ -247,8 +247,8 @@ var Store = Class.inherit({
     * @param1 key:object|string|number
     * @return Promise<any>
     */
-    byKey: function(key, extraOptions, cache) {
-        return this._addFailHandlers(this._withLock(this._byKeyImpl(key, extraOptions, cache)));
+    byKey: function(key, extraOptions) {
+        return this._addFailHandlers(this._withLock(this._byKeyImpl(key, extraOptions)));
     },
 
     _byKeyImpl: abstract,
