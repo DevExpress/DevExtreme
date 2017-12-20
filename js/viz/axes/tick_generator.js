@@ -95,10 +95,7 @@ function resolveEndOnTick(curValue, tickValue, interval, businessViewInfo) {
         potentialTickScreenDiff = math.round(businessViewInfo.screenDelta / (businessViewInfo.businessDelta + interval) * prevTickDataDiff),
         delimiterMultiplier = (businessViewInfo.isSpacedMargin ? 2 : 1) * (businessRatio * interval / businessViewInfo.axisDivisionFactor),
         screenDelimiter = math.round(VISIBILITY_DELIMITER * delimiterMultiplier);
-    if(businessViewInfo.businessDelta / interval >= 2 && potentialTickScreenDiff >= screenDelimiter) {
-        return true;
-    }
-    return false;
+    return businessViewInfo.businessDelta > businessViewInfo.interval && potentialTickScreenDiff >= screenDelimiter;
 }
 
 function resolveEndOnTickLog(base) {
@@ -365,7 +362,8 @@ function calculateTicks(addInterval, correctMinValue, adjustInterval, resolveEnd
                 screenDelta: screenDelta,
                 businessDelta: businessDelta,
                 axisDivisionFactor: axisDivisionFactor,
-                isSpacedMargin: data.isSpacedMargin
+                isSpacedMargin: data.isSpacedMargin,
+                interval: tickInterval
             },
             cur = correctMinValue(min, tickInterval, businessViewInfo),
             ticks = [];
