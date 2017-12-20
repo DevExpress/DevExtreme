@@ -322,7 +322,8 @@ QUnit.test("boundary value should correctly apply after second try to set overfl
     this.input.val("");
     this.keyboard
         .type("6")
-        .press("enter");
+        .press("enter")
+        .change();
 
     assert.equal(this.input.val(), "4", "text is adjusted to max");
     assert.equal(this.instance.option("value"), 4, "value is adjusted to max");
@@ -330,7 +331,8 @@ QUnit.test("boundary value should correctly apply after second try to set overfl
     this.input.val("");
     this.keyboard
         .type("7")
-        .press("enter");
+        .press("enter")
+        .change();
 
     assert.equal(this.input.val(), "4", "text is adjusted to max second time");
     assert.equal(this.instance.option("value"), 4, "value is adjusted to max second time");
@@ -338,7 +340,8 @@ QUnit.test("boundary value should correctly apply after second try to set overfl
     this.input.val("");
     this.keyboard
         .type("0")
-        .press("enter");
+        .press("enter")
+        .change();
 
     assert.equal(this.input.val(), "1", "text is adjusted to min");
     assert.equal(this.instance.option("value"), 1, "value is adjusted to min");

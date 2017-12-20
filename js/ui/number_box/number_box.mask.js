@@ -493,7 +493,8 @@ var NumberBoxMask = NumberBoxBase.inherit({
     _setTextByParsedValue: function() {
         var format = this._getFormatPattern(),
             caret = this._caret(),
-            formatted = number.format(this._parsedValue, format) || "";
+            parsed = this._parseValue(),
+            formatted = number.format(parsed, format) || "";
 
         this._setInputText(formatted, caret.start + this._getCaretDelta(formatted));
     },
@@ -545,11 +546,8 @@ var NumberBoxMask = NumberBoxBase.inherit({
         this._lastKey = null;
 
         var parsedValue = this._parseValue();
-
         this.option("value", parsedValue);
-        this._applyValueBoundaries(String(this._parsedValue), parsedValue);
     },
-
 
     _optionChanged: function(args) {
         switch(args.name) {
