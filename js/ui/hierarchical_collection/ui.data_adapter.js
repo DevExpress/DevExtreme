@@ -398,8 +398,8 @@ var DataAdapter = Class.inherit({
             }
 
             that._setFieldState(node, SELECTED, state);
-            that._selectedNodesKeys = that._updateNodesKeysArray(SELECTED);
         });
+        that._selectedNodesKeys = that._updateNodesKeysArray(SELECTED);
     },
 
     isAllSelected: function() {
