@@ -1841,7 +1841,8 @@ QUnit.test("Checking the 'hasChildren' property of the node when it specified", 
 //T585731
 QUnit.test("Checking the 'hasChildren' property of the node after expand when key as Guid", function(assert) {
     //arrange
-    var keys = [new Guid("26992b5c-7d63-89ec-2138-33dd5d244798"), new Guid("1c88aa8d-eaf7-d7b6-4906-ce07a3bdc1cb")];
+    var items,
+        keys = [new Guid("26992b5c-7d63-89ec-2138-33dd5d244798"), new Guid("1c88aa8d-eaf7-d7b6-4906-ce07a3bdc1cb")];
 
     this.setupTreeList({
         dataSource: [
@@ -1850,14 +1851,14 @@ QUnit.test("Checking the 'hasChildren' property of the node after expand when ke
         ]
     });
 
-    //assert
-    assert.ok(this.dataController.items()[0].node.hasChildren, "item has children");
-
     //act
     this.expandRow(keys[0]);
 
     //assert
-    assert.ok(this.dataController.items()[1].node.hasChildren, "item has children");
+    items = this.dataController.items();
+    assert.strictEqual(items.length, 2, "item count");
+    assert.ok(items[0].node.hasChildren, "fist item has children");
+    assert.ok(items[1].node.hasChildren, "second item has children");
 });
 
 QUnit.test("loadDescendants", function(assert) {

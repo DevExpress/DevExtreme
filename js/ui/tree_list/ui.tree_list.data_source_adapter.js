@@ -367,7 +367,7 @@ DataSourceAdapter = DataSourceAdapter.inherit((function() {
                     for(var dataIndex = 0; dataIndex < data.length; dataIndex++) {
                         var parentId = this._parentIdGetter(data[dataIndex]);
 
-                        if(dataCoreUtils.toComparable(parentId) === dataCoreUtils.toComparable(parentIds[i])) {
+                        if(dataCoreUtils.toComparable(parentId, true) === dataCoreUtils.toComparable(parentIds[i], true)) {
                             this._hasItemsMap[parentIds[i]] = true;
                             break;
                         }
