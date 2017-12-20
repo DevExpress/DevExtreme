@@ -10315,6 +10315,40 @@ QUnit.test("Custom item with name", function(assert) {
     assert.equal(formItems[0].column.name, "test", "form item 0 column name");
 });
 
+//T575811
+QUnit.test("Group item should not be merged with band item", function(assert) {
+    var that = this,
+        testElement = $('#container');
+
+    that.options.columns.push({ caption: "band" });
+
+    that.options.editing = {
+        mode: "form",
+        allowUpdating: true,
+        form: {
+            items: [{
+                itemType: 'group',
+                caption: "group"
+            }]
+        }
+    };
+
+    that.setupModules(that);
+
+    that.rowsView.render(testElement);
+
+    //act
+    that.editRow(0);
+
+    //assert
+    var formItems = testElement.find(".dx-form").dxForm("instance")._testResultItems;
+
+    assert.equal(formItems.length, 1, "form item count");
+    assert.notOk(formItems[0].column, "column is not defined for group item");
+    assert.notOk(formItems[0].label, "label is not defined for group item");
+    assert.equal(formItems[0].caption, "group", "caption for group item is correct");
+});
+
 QUnit.test("Save and cancel buttons", function(assert) {
     this.setupModules(this);
 
