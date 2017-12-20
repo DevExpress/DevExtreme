@@ -290,10 +290,13 @@ var NumberBoxBase = TextEditor.inherit({
     _forceValueRender: function() {
         var value = this.option("value"),
             number = Number(value),
-            valueFormat = this.option("valueFormat"),
-            formattedValue = isNaN(number) ? "" : valueFormat(value);
+            formattedValue = isNaN(number) ? "" : this._applyValueFormat(value);
 
         this._renderDisplayText(formattedValue);
+    },
+
+    _applyValueFormat: function(value) {
+        return this.option("valueFormat")(value);
     },
 
     _renderProps: function() {
@@ -445,23 +448,20 @@ var NumberBoxBase = TextEditor.inherit({
         }
 
         var $input = this._input(),
-            valueFormat = this.option("valueFormat");
+            formattedValue = this._applyValueFormat(this.option("value"));
 
         $input.val(null);
-        $input.val(valueFormat(this.option("value")));
+        $input.val(formattedValue);
     },
 
     _valueChangeEventHandler: function(e) {
         var $input = this._input(),
             inputValue = this._normalizeText(),
-            valueFormat = this.option("valueFormat"),
             value = this._parseValue(inputValue),
-            valueHasDigits = inputValue !== "." && inputValue !== "-",
-            isValueIncomplete = this._isValueIncomplete(inputValue),
-            isValueCorrect = this._isValueInRange(inputValue);
+            valueHasDigits = inputValue !== "." && inputValue !== "-";
 
         if(this._isValueValid() && !this._validateValue(value)) {
-            $input.val(valueFormat(value));
+            $input.val(this._applyValueFormat(value));
             return;
         }
 
@@ -469,16 +469,23 @@ var NumberBoxBase = TextEditor.inherit({
             this.callBase(e, isNaN(value) ? null : value);
         }
 
-        if(!isValueIncomplete && !isValueCorrect && value !== null) {
-            if(Number(inputValue) !== value) {
-                $input.val(valueFormat(value));
-            }
-        }
+        this._applyValueBoundaries(inputValue, value);
 
         this.validationRequest.fire({
             value: value,
             editor: this
         });
+    },
+
+    _applyValueBoundaries: function(inputValue, parsedValue) {
+        var isValueIncomplete = this._isValueIncomplete(inputValue),
+            isValueCorrect = this._isValueInRange(inputValue);
+
+        if(!isValueIncomplete && !isValueCorrect && parsedValue !== null) {
+            if(Number(inputValue) !== parsedValue) {
+                this._input().val(this._applyValueFormat(parsedValue));
+            }
+        }
     },
 
     _replaceCommaWithPoint: function(value) {

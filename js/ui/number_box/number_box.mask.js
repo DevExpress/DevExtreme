@@ -515,7 +515,11 @@ var NumberBoxMask = NumberBoxBase.inherit({
         }
 
         this._lastKey = null;
-        this.option("value", this._parseValue());
+
+        var parsedValue = this._parseValue();
+
+        this.option("value", parsedValue);
+        this._applyValueBoundaries(String(this._parsedValue), parsedValue);
     },
 
     _optionChanged: function(args) {
