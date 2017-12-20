@@ -126,7 +126,7 @@ var CollectionWidget = Widget.inherit({
             /**
             * @name CollectionWidgetOptions_itemTemplate
             * @publicName itemTemplate
-            * @type template
+            * @type template|function
             * @default "item"
             * @type_function_param1 itemData:object
             * @type_function_param2 itemIndex:number
@@ -220,7 +220,7 @@ var CollectionWidget = Widget.inherit({
             /**
             * @name CollectionWidgetItemTemplate_template
             * @publicName template
-            * @type template
+            * @type template|function
             * @type_function_return string|jQuery
             */
 
@@ -518,10 +518,14 @@ var CollectionWidget = Widget.inherit({
             return;
         }
         if(!this.constructor.ItemClass.getInstance($item).setDataField(property, value)) {
-            var itemData = this._getItemData($item),
-                index = $item.data(this._itemIndexKey());
-            this._renderItem(index, itemData, null, $item);
+            this._refreshItem($item, item);
         }
+    },
+
+    _refreshItem: function($item) {
+        var itemData = this._getItemData($item),
+            index = $item.data(this._itemIndexKey());
+        this._renderItem(index, itemData, null, $item);
     },
 
     _optionChanged: function(args) {
@@ -851,9 +855,7 @@ var CollectionWidget = Widget.inherit({
         this._setElementData($itemFrame, itemData, index);
         $itemFrame.attr(this.option("_itemAttributes"));
         this._attachItemClickEvent(itemData, $itemFrame);
-
-        var $itemContent = $itemFrame.find("." + ITEM_CONTENT_PLACEHOLDER_CLASS);
-        $itemContent.removeClass(ITEM_CONTENT_PLACEHOLDER_CLASS);
+        var $itemContent = this._getItemContent($itemFrame);
 
         var renderContentPromise = this._renderItemContent({
             index: index,
@@ -876,6 +878,12 @@ var CollectionWidget = Widget.inherit({
         });
 
         return $itemFrame;
+    },
+
+    _getItemContent: function($itemFrame) {
+        var $itemContent = $itemFrame.find("." + ITEM_CONTENT_PLACEHOLDER_CLASS);
+        $itemContent.removeClass(ITEM_CONTENT_PLACEHOLDER_CLASS);
+        return $itemContent;
     },
 
     _attachItemClickEvent: function(itemData, $itemElement) {

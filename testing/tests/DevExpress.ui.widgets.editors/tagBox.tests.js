@@ -4219,6 +4219,50 @@ QUnit.test("loadOptions.filter should be correct after some items selecting/dese
     assert.deepEqual(filter, null, "filter is correct");
 });
 
+QUnit.test("Select All should use cache", function(assert) {
+    var items = [],
+        keyGetterCounter = 0;
+
+    var getter = function() {
+        keyGetterCounter++;
+        return this._id;
+    };
+    for(var i = 1; i <= 10; i++) {
+        var item = { _id: i, text: "item " + i };
+        Object.defineProperty(item, "id", {
+            get: getter,
+            enumerable: true,
+            configurable: true
+        });
+        items.push(item);
+    }
+
+    var arrayStore = new ArrayStore({
+        data: items,
+        key: "id"
+    });
+
+    var tagBox = $("#tagBox").dxTagBox({
+        dataSource: arrayStore,
+        valueExpr: "id",
+        opened: true,
+        showSelectionControls: true,
+        selectionMode: "all",
+        selectAllMode: "allPages",
+        displayExpr: "text"
+    }).dxTagBox("instance");
+
+    var isValueEqualsSpy = sinon.spy(tagBox, "_isValueEquals");
+
+    //act
+    keyGetterCounter = 0;
+    $(".dx-list-select-all-checkbox").trigger("dxclick");
+
+    //assert
+    assert.equal(keyGetterCounter, 144, "key getter call count");
+    assert.equal(isValueEqualsSpy.callCount, 0, "_isValueEquals is not called");
+});
+
 QUnit.module("deprecated options");
 
 QUnit.test("the 'values' option should work correctly", function(assert) {
@@ -4428,4 +4472,30 @@ QUnit.test("search filter should be cleared on close", function(assert) {
 
     assert.equal($input.val(), "", "input was cleared");
     assert.equal($(instance.content()).find("." + LIST_ITEM_CLASS).length, 3, "filter was cleared");
+});
+
+QUnit.test("Items is not selected when values is set on the onSelectAllValueChanged event", function(assert) {
+    var dataSource = ["Item 1", "item 2", "item 3", "item 4"];
+
+    $("#tagBox").dxTagBox({
+        opened: true,
+        dataSource: {
+            paginate: true,
+            pageSize: 2,
+            store: dataSource
+        },
+        selectAllMode: 'page',
+        showSelectionControls: true,
+        pageLoadMode: 'scrollBottom',
+        onSelectAllValueChanged: function(e) {
+            if(e.value === true) {
+                e.component.option("value", dataSource);
+            }
+        }
+    });
+
+    $(".dx-list-select-all-checkbox").trigger("dxclick");
+
+    var selectedItems = $(".dx-list").dxList("instance").option("selectedItems");
+    assert.equal(selectedItems.length, 4, "selected items");
 });

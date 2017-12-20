@@ -79,7 +79,7 @@ var DropDownBox = DropDownEditor.inherit({
             /**
              * @name dxDropDownBoxOptions_contentTemplate
              * @publicName contentTemplate
-             * @type template
+             * @type template|function
              * @default null
              * @type_function_param1 templateData:object
              * @type_function_param2 contentElement:dxElement
@@ -98,7 +98,7 @@ var DropDownBox = DropDownEditor.inherit({
             /**
              * @name dxDropDownBoxOptions_fieldTemplate
              * @publicName fieldTemplate
-             * @type template
+             * @type template|function
              * @default null
              * @type_function_param1 value:object
              * @type_function_param2 fieldElement:dxElement

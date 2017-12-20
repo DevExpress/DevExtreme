@@ -157,7 +157,7 @@ var Calendar = Editor.inherit({
             /**
             * @name dxCalendarOptions_cellTemplate
             * @publicName cellTemplate
-            * @type template
+            * @type template|function
             * @default "cell"
             * @type_function_param1 itemData:object
             * @type_function_param2 itemIndex:number

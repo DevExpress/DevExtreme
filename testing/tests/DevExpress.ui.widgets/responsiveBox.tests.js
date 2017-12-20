@@ -150,6 +150,33 @@ QUnit.test("grid with items", function(assert) {
     assert.equal($secondRow.eq(1).height(), rows[1].baseSize + heightRatioUnit * rows[1].ratio, "item22 height");
 });
 
+QUnit.test("root box and it's items should have correct height (T566515)", function(assert) {
+    var rows = [{}, {}];
+    var cols = [{ ratio: 1 }, { ratio: 1 }];
+
+    var $responsiveBox = $("#responsiveBox").dxResponsiveBox({
+        rows: rows,
+        cols: cols,
+        items: [
+            { location: { row: 0, col: 0 }, text: "item11" },
+            { location: { row: 1, col: 1 }, text: "item22" },
+            { location: { row: 1, col: 0 }, text: "item21" },
+            { location: { row: 0, col: 1 }, text: "item12" }
+        ],
+        height: "auto"
+    });
+
+    var $boxes = $responsiveBox.find("." + BOX_CLASS);
+
+    var $rootBox = $boxes.eq(0);
+    assert.notEqual($rootBox.height(), 0, "Height of the rootBox is OK");
+
+    var $rootItems = $rootBox.find("." + BOX_ITEM_CLASS);
+
+    assert.roughEqual($rootItems.eq(0).height(), 16, 2.1, "Height of the root item is OK");
+    assert.roughEqual($rootItems.eq(1).height(), 16, 2.1, "Height of the root item is OK");
+});
+
 QUnit.test("grid with factors", function(assert) {
     // screen:   xs      sm           md          lg
     //  width: <768    768-<992    992-<1200    >1200
@@ -337,11 +364,11 @@ QUnit.test("overlapping rowspan and colspan", function(assert) {
 
     var $rowBox = $responsiveBox.find("." + BOX_CLASS).eq(1);
 
-    assert.equal($rowBox.height(), 3 * size, "first row box height");
+    assert.roughEqual($rowBox.height(), 3 * size, 0.1, "first row box height");
 
     var $colBox = $rowBox.find("." + BOX_CLASS).eq(1);
 
-    assert.equal($colBox.width(), 3 * size, "second col box width");
+    assert.roughEqual($colBox.width(), 3 * size, 0.1, "second col box width");
 });
 
 QUnit.test("recalculation on size changing", function(assert) {
@@ -616,7 +643,7 @@ QUnit.test("dxUpdate should not be bubbling to parent container", function(asser
             rows: [{ ratio: 1, baseSize: "auto" }],
             cols: [{ ratio: 1, baseSize: "auto" }],
             items: [{ location: { row: 0, col: 0 } }],
-            _layoutStrategy: "fallback"
+            layoutStrategy: "fallback"
         });
         $responsiveBox.appendTo($parentContainer);
 
@@ -880,19 +907,19 @@ QUnit.test("currentScreenFactor", function(assert) {
     assert.equal(responsiveBox.option("currentScreenFactor"), "sm", "currentScreenFactor update after restart");
 });
 
-QUnit.test("_layoutStrategy pass to internal box", function(assert) {
+QUnit.test("layoutStrategy pass to internal box", function(assert) {
     var $responsiveBox = $("#responsiveBox").dxResponsiveBox({
         rows: [{}],
         cols: [{}],
         items: [
             { location: { row: 0, col: 0 } }
         ],
-        _layoutStrategy: "test"
+        layoutStrategy: "test"
     });
 
     var box = $responsiveBox.find(".dx-box").eq(0).dxBox("instance");
 
-    assert.equal(box.option("_layoutStrategy"), "test", "_layoutStrategy was passed to internal box");
+    assert.equal(box.option("layoutStrategy"), "test", "layoutStrategy was passed to internal box");
 });
 
 QUnit.test("Changing visibility should update simulated strategy", function(assert) {
@@ -900,7 +927,7 @@ QUnit.test("Changing visibility should update simulated strategy", function(asse
     try {
         var $responsiveBox = $("#responsiveBox").dxResponsiveBox({
             visible: false,
-            _layoutStrategy: "fallback",
+            layoutStrategy: "fallback",
             height: 400,
             rows: [
                 { ratio: 1 },

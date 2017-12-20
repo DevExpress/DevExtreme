@@ -34,6 +34,13 @@ var safeApply = function(func, scope) {
     }
 };
 
+/**
+ * @name domcomponentoptions_bindingOptions
+ * @publicName bindingOptions
+ * @type object
+ * @default {}
+ */
+
 var ComponentBuilder = Class.inherit({
 
     ctor: function(options) {
@@ -235,7 +242,7 @@ var ComponentBuilder = Class.inherit({
             };
 
             if(isActivePhase) {
-                that._digestCallbacks.end.add(releaseOption);
+                that._digestCallbacks.end.addPrioritized(releaseOption);
             } else {
                 releaseOption();
             }

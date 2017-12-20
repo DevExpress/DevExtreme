@@ -1246,9 +1246,9 @@ QUnit.test("marginOptions.checkInterval on argumentAxis - correctly apply margin
         ticks: [200, 400, 600, 800, 1000, 1200, 1400, 1600, 1800, 2000],
         expectedRange: {
             min: -346.6,
-            max: 20500,
+            max: 20600,
             minVisible: -346.6,
-            maxVisible: 20500,
+            maxVisible: 20600,
             interval: 897.7
         },
         isArgumentAxis: true
@@ -1296,9 +1296,9 @@ QUnit.test("marginOptions.size on argumentAxis - correctly apply margins for une
         ticks: [1950, 1970, 1990, 2010, 2030, 2050],
         expectedRange: {
             min: 1946.4,
-            max: 2053.5,
+            max: 2053.6,
             minVisible: 1946.4,
-            maxVisible: 2053.5
+            maxVisible: 2053.6
         },
         isArgumentAxis: true
     });
@@ -1593,9 +1593,12 @@ QUnit.test("Calculate ticks on range with margins", function(assert) {
     axis.createTicks(this.canvas);
 
     assert.deepEqual(this.tickGeneratorSpy.lastCall.args[0], {
-        min: 90,
+        categories: undefined,
+        isSpacedMargin: false,
+        checkMaxDataVisibility: false,
+        checkMinDataVisibility: false,
         max: 220,
-        categories: undefined
+        min: 90
     });
 });
 
@@ -1856,9 +1859,9 @@ QUnit.test("Logarithmic axis. marginOptions.checkInterval - correctly apply marg
         ticks: [10, 1000, 100000],
         expectedRange: {
             min: 1.15,
-            max: 224000,
+            max: 225000,
             minVisible: 1.15,
-            maxVisible: 224000
+            maxVisible: 225000
         },
         isArgumentAxis: true
     });

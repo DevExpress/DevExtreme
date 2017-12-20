@@ -10,6 +10,7 @@ var dataErrors = require("../../data/errors").errors,
     filterOperationsDictionary = require("./ui.filter_operations_dictionary");
 
 var DEFAULT_DATA_TYPE = "string",
+    AND_GROUP_OPERATION = "and",
     DATATYPE_OPERATIONS = {
         "number": ["=", "<>", "<", ">", "<=", ">=", "isblank", "isnotblank"],
         "string": ["contains", "notcontains", "startswith", "endswith", "=", "<>", "isblank", "isnotblank"],
@@ -94,29 +95,11 @@ function setGroupValue(group, value) {
                     criteria[i] = value;
                 }
             }
-        },
-        addValueToCriteria = function(criteria, value) {
-            if(criteria.length === 0) {
-                criteria.push(value);
-            } else {
-                var oldCriteria = criteria.slice(0);
-                criteria.length = 0;
-                for(i = 0; i < oldCriteria.length; i++) {
-                    criteria.push(oldCriteria[i]);
-                    if(i !== oldCriteria.length - 1) {
-                        criteria.push(value);
-                    }
-                }
-            }
         };
 
     value = getNormalizedGroupValue(value);
+    changeCriteriaValue(criteria, value);
 
-    if(isCriteriaContainValueItem(criteria)) {
-        changeCriteriaValue(criteria, value);
-    } else {
-        addValueToCriteria(criteria, value);
-    }
     return group;
 }
 
@@ -128,9 +111,8 @@ function getGroupMenuItem(group, availableGroups) {
     })[0];
 }
 
-function getGroupValue(group) {
-    var value = "",
-        criteria = getGroupCriteria(group);
+function getCriteriaOperation(criteria) {
+    var value = "";
 
     for(var i = 0; i < criteria.length; i++) {
         var item = criteria[i];
@@ -141,19 +123,21 @@ function getGroupValue(group) {
             value = item;
         }
     }
+
+    return value;
+}
+
+function getGroupValue(group) {
+    var criteria = getGroupCriteria(group),
+        value = getCriteriaOperation(criteria);
+
     if(!value) {
-        value = "and";
+        value = AND_GROUP_OPERATION;
     }
     if(criteria !== group) {
         value = "!" + value;
     }
     return value;
-}
-
-function isCriteriaContainValueItem(criteria) {
-    return criteria.some(function(item) {
-        return !Array.isArray(item);
-    });
 }
 
 function getFilterOperations(field) {
@@ -206,21 +190,8 @@ function removeItem(group, item) {
 
     criteria.splice(index, 1);
 
-    if(criteria.length > 2) {
-        var lastIndex = criteria.length - 1;
-        if(index > lastIndex) {
-            index = lastIndex;
-        }
+    if(criteria.length !== 1) {
         criteria.splice(index, 1);
-    } else if(criteria.length === 2) {
-        var groupValue = getGroupValue(criteria),
-            lastItemIsGroupOperation = criteria[group.length - 1] === groupValue,
-            firstItemIsGroupOperation = criteria[0] === groupValue;
-        if(!lastItemIsGroupOperation && firstItemIsGroupOperation) {
-            var groupOperation = criteria[0];
-            criteria[0] = criteria[1];
-            criteria[1] = groupOperation;
-        }
     }
     return group;
 }
@@ -247,19 +218,8 @@ function addItem(item, group) {
     var criteria = getGroupCriteria(group),
         groupValue = getGroupValue(criteria);
 
-    if(criteria.length === 0) {
-        criteria.push(item, groupValue);
-    } else {
-        var lastItemIsGroupOperation = criteria[criteria.length - 1] === groupValue;
-        if(lastItemIsGroupOperation) {
-            criteria[criteria.length === 1 ? "unshift" : "push"](item);
-        } else {
-            if(isCriteriaContainValueItem(criteria)) {
-                criteria.push(groupValue);
-            }
-            criteria.push(item);
-        }
-    }
+    criteria.length === 1 ? criteria.unshift(item) : criteria.push(item, groupValue);
+
     return group;
 }
 
@@ -299,24 +259,31 @@ function isCondition(criteria) {
 }
 
 function removeAndOperationFromGroup(group) {
-    var index = group.indexOf("and");
+    var index = group.indexOf(AND_GROUP_OPERATION);
     while(index !== -1) {
         group.splice(index, 1);
-        index = group.indexOf("and");
+        index = group.indexOf(AND_GROUP_OPERATION);
     }
 }
 
 function convertToInnerGroup(group) {
+    var groupOperation = getCriteriaOperation(group).toLowerCase() || AND_GROUP_OPERATION,
+        innerGroup = [];
     for(var i = 0; i < group.length; i++) {
         if(isGroup(group[i])) {
-            convertToInnerGroup(group[i]);
+            innerGroup.push(convertToInnerStructure(group[i]));
+            innerGroup.push(groupOperation);
         } else if(isCondition(group[i])) {
-            convertToInnerCondition(group[i]);
-        } else if(!Array.isArray(group[i])) {
-            group[i] = group[i].toLowerCase();
+            innerGroup.push(convertToInnerCondition(group[i]));
+            innerGroup.push(groupOperation);
         }
     }
-    return group;
+
+    if(innerGroup.length === 0) {
+        innerGroup.push(groupOperation);
+    }
+
+    return innerGroup;
 }
 
 function convertToInnerCondition(condition) {
@@ -329,16 +296,16 @@ function convertToInnerCondition(condition) {
 
 function convertToInnerStructure(value) {
     if(!value) {
-        return [];
+        return [AND_GROUP_OPERATION];
     }
 
     value = extend(true, [], value);
 
     if(isCondition(value)) {
-        return [convertToInnerCondition(value)];
+        return [convertToInnerCondition(value), AND_GROUP_OPERATION];
     }
     if(isNegationGroup(value)) {
-        return ["!", isCondition(value[1]) ? [convertToInnerCondition(value[1])] : convertToInnerGroup(value[1])];
+        return ["!", isCondition(value[1]) ? [convertToInnerCondition(value[1]), AND_GROUP_OPERATION] : convertToInnerGroup(value[1])];
     }
     return convertToInnerGroup(value);
 }
@@ -383,15 +350,11 @@ function getNormalizedFilter(group, fields) {
         removeItem(criteria, itemsForRemove[i]);
     }
 
-    var groupValue = getGroupValue(criteria);
-    var lastItemIsGroupOperation = criteria[criteria.length - 1] === groupValue;
-    if((criteria.length === 1) && (lastItemIsGroupOperation)) {
+    if((criteria.length === 1)) {
         return null;
     }
 
-    if(lastItemIsGroupOperation) {
-        criteria.splice(criteria.length - 1, 1);
-    }
+    criteria.splice(criteria.length - 1, 1);
 
     if(criteria.length === 1) {
         group = setGroupCriteria(group, criteria[0]);

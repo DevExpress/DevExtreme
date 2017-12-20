@@ -15,6 +15,7 @@ var DX_MENU_CLASS = "dx-menu",
     DX_MENU_NO_ICONS_CLASS = DX_MENU_CLASS + "-no-icons",
     DX_MENU_BASE_CLASS = "dx-menu-base",
     ITEM_CLASS = DX_MENU_CLASS + "-item",
+    DX_ITEM_CONTENT_CLASS = ITEM_CLASS + "-content",
     DX_MENU_SELECTED_ITEM_CLASS = ITEM_CLASS + "-selected",
     DX_MENU_ITEM_WRAPPER_CLASS = ITEM_CLASS + "-wrapper",
     DX_MENU_ITEMS_CONTAINER_CLASS = DX_MENU_CLASS + "-items-container",
@@ -600,16 +601,14 @@ var MenuBase = HierarchicalCollectionWidget.inherit({
         return $node;
     },
 
-    _renderItem: function(index, node, $nodeContainer) {
-
+    _renderItem: function(index, node, $nodeContainer, $nodeElement) {
         var items = this.option("items"),
             $itemFrame;
 
         this._renderSeparator(node, index, $nodeContainer);
 
         if(node.internalFields.item.visible === false) return;
-
-        var $node = this._createDOMElement($nodeContainer);
+        var $node = $nodeElement || this._createDOMElement($nodeContainer);
 
         if(items[index + 1] && items[index + 1].beginGroup) {
             $node.addClass(DX_MENU_ITEM_LAST_GROUP_ITEM);
@@ -621,27 +620,47 @@ var MenuBase = HierarchicalCollectionWidget.inherit({
             $itemFrame.addClass(DX_MENU_SELECTED_ITEM_CLASS);
         }
 
-        this._addContentClasses(node, $itemFrame);
-
         $itemFrame.attr("tabIndex", -1);
 
         if(this._hasSubmenu(node)) this.setAria("haspopup", "true", $itemFrame);
     },
 
-    _addContentClasses: function(node, $itemFrame) {
-        if(this._displayGetter(node)) {
-            $itemFrame.addClass(DX_ITEM_HAS_TEXT);
-        }
+    _renderItemFrame: function(index, itemData, $itemContainer) {
+        var $itemFrame = $itemContainer.children("." + ITEM_CLASS);
+
+        return $itemFrame.length ? $itemFrame : this.callBase.apply(this, arguments);
+    },
+
+    _refreshItem: function($item, item) {
+        var node = this._dataAdapter.getNodeByItem(item),
+            index = $item.data(this._itemIndexKey()),
+            $nodeContainer = $item.closest("ul"),
+            $nodeElement = $item.closest("li");
+        this._renderItem(index, node, $nodeContainer, $nodeElement);
+    },
+
+    _addContentClasses: function(itemData, $itemFrame) {
+        var displayGetter = this._displayGetter(itemData),
+            itemsGetter = this._itemsGetter(itemData),
+            hasText = displayGetter ? !!displayGetter.length : false,
+            hasIcon = !!(itemData.icon || itemData.iconSrc),
+            hasSubmenu = itemsGetter ? !!itemsGetter.length : false;
+
+        $itemFrame.toggleClass(DX_ITEM_HAS_TEXT, hasText);
 
         // deprecated since 15.1 (itemData.iconSrc)
-        if(node.icon || node.iconSrc) {
-            $itemFrame.addClass(DX_ITEM_HAS_ICON);
-            this.hasIcons = true;
-        }
+        $itemFrame.toggleClass(DX_ITEM_HAS_ICON, hasIcon);
+        this.hasIcons = hasIcon;
 
-        if(this._hasSubmenu(node)) {
-            $itemFrame.addClass(DX_ITEM_HAS_SUBMENU);
+        $itemFrame.toggleClass(DX_ITEM_HAS_SUBMENU, hasSubmenu);
+    },
+
+    _getItemContent: function($itemFrame) {
+        var $itemContent = this.callBase($itemFrame);
+        if(!$itemContent.length) {
+            $itemContent = $itemFrame.children("." + DX_ITEM_CONTENT_CLASS);
         }
+        return $itemContent;
     },
 
     _postprocessRenderItem: function(args) {

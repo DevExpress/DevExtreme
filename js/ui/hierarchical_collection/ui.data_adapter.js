@@ -9,6 +9,7 @@ var Class = require("../../core/class"),
     errors = require("../../ui/widget/ui.errors"),
     inArray = require("../../core/utils/array").inArray,
     query = require("../../data/query"),
+    storeHelper = require("../../data/store_helper"),
     HierarchicalDataConverter = require("./ui.data_converter");
 
 var EXPANDED = "expanded",
@@ -50,7 +51,8 @@ var DataAdapter = Class.inherit({
             dataType: "tree",
             searchMode: "contains",
             dataConverter: new HierarchicalDataConverter(),
-            onNodeChanged: commonUtils.noop
+            onNodeChanged: commonUtils.noop,
+            sort: null
         };
     },
 
@@ -484,6 +486,12 @@ var DataAdapter = Class.inherit({
 
         lookForParents(matches, 0);
 
+        if(this.options.sort) {
+            matches = storeHelper
+                .queryByOptions(query(matches), { sort: this.options.sort })
+                .toArray();
+        }
+
         dataConverter._indexByKey = {};
         each(matches, function(index, node) {
             node.internalFields.childrenKeys = [];
@@ -494,7 +502,6 @@ var DataAdapter = Class.inherit({
         dataConverter.setChildrenKeys();
 
         return dataConverter._dataStructure;
-
     }
 
 });

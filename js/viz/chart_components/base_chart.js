@@ -650,8 +650,8 @@ var BaseChart = BaseWidget.inherit({
             drawElements,
             that._canvas,
             function(sizeShortage) {
-                that._renderAxes(drawOptions, preparedOptions, isRotated);
-                sizeShortage && that._shrinkAxes(drawOptions, sizeShortage);
+                var panesCanvases = that._renderAxes(drawOptions, preparedOptions, isRotated);
+                sizeShortage && that._shrinkAxes(drawOptions, sizeShortage, panesCanvases);
             },
             layoutTargets,
             isRotated
@@ -730,11 +730,11 @@ var BaseChart = BaseWidget.inherit({
         }
 
         if(resolveLabelOverlapping !== "none") {
-            that._adjustSeries();
+            that._adjustSeries(resolveLabelOverlapping === "shift");
             that._resolveLabelOverlapping(resolveLabelOverlapping);
         }
 
-        that._adjustSeries();
+        that._adjustSeries(resolveLabelOverlapping === "shift");
 
         that._renderTrackers(isLegendInside);
         that._tracker.repairTooltip();

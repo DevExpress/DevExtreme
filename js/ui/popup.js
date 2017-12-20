@@ -118,7 +118,7 @@ var Popup = Overlay.inherit({
             /**
             * @name dxPopupOptions_titleTemplate
             * @publicName titleTemplate
-            * @type template
+            * @type template|function
             * @default "title"
             * @type_function_param1 titleElement:dxElement
             * @type_function_return string|Node|jQuery

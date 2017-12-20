@@ -146,7 +146,7 @@ var SelectBox = DropDownList.inherit({
             /**
             * @name dxSelectBoxOptions_fieldTemplate
             * @publicName fieldTemplate
-            * @type template
+            * @type template|function
             * @default null
             * @type_function_param1 selectedItem:object
             * @type_function_param2 fieldElement:dxElement
@@ -647,11 +647,11 @@ var SelectBox = DropDownList.inherit({
         this.reset();
     },
 
-    _loadItem: function(value) {
+    _loadItem: function(value, cache) {
         var that = this,
             deferred = new Deferred();
 
-        this.callBase(value)
+        this.callBase(value, cache)
             .done(function(item) {
                 deferred.resolve(item);
             })

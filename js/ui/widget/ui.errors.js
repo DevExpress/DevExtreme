@@ -296,5 +296,5 @@ module.exports = errorUtils(errors.ERROR_MESSAGES, {
      * @name Errors and Warnings_W1010
      * @publicName W1010
      */
-    W1010: "The capability to select all rows works with source data of plain structure only"
+    W1010: "The capability to select all items works with source data of plain structure only"
 });

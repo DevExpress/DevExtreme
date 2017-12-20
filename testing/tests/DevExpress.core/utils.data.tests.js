@@ -394,13 +394,17 @@ QUnit.test("non existing multi-level prop (w/ merge = true)", function(assert) {
 });
 
 QUnit.test("multi-level prop instead of primitives", function(assert) {
-    var primitives = [ false, 0, "", true, 1, "someValue"];
+    var primitives = [ false, 0, "", true, 1, "someValue" ];
 
     primitives.forEach(function(primitive) {
         var obj = { prop: primitive };
-        assert.throws(function() {
+        try {
             SETTER("prop.subProp")(obj, "Nested value");
-        }, /TypeError/);
+        } catch(e) {
+            // Ignore exceptions in strict mode
+        } finally {
+            assert.equal(obj.prop, primitive, "primitive was not changed");
+        }
     });
 });
 

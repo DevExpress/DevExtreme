@@ -238,6 +238,22 @@ QUnit.test("15-digit value with decimal part should be parsed", function(assert)
     assert.equal(this.input.val(), "9999999999.9999", "input was not prevented");
 });
 
+QUnit.test("boundary value should correctly apply after second try to set overflow value", function(assert) {
+    this.instance.option({
+        min: 1,
+        max: 4,
+        value: 2
+    });
+
+    this.keyboard
+        .type("6")
+        .change()
+        .type("7")
+        .change();
+
+    assert.equal(this.input.val(), "4", "max value reached");
+});
+
 
 QUnit.module("format: text input", moduleConfig);
 
