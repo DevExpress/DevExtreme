@@ -2770,6 +2770,41 @@ QUnit.test("selected items should be correct if the list item is unselected", fu
     assert.deepEqual(tagBox.option("selectedItems"), [items[1], items[2]], "the 'selectedItems' option value is correct");
 });
 
+QUnit.test("all items are selected correctly when the last item is deselected from an editor", function(assert) {
+    var selectedItems,
+        tagBox = $("#tagBox").dxTagBox({
+            dataSource: {
+                paginate: true,
+                pageSize: 1,
+                store: [1, 2, 3, 4, 5, 6]
+            },
+            selectAllMode: "allPages",
+            showSelectionControls: true,
+            maxDisplayedTags: 3,
+            onMultiTagPreparing: function(args) {
+                selectedItems = args.selectedItems;
+
+                if(selectedItems.length < 6) {
+                    args.cancel = true;
+                } else {
+                    args.text = "All selected (" + selectedItems.length + ")";
+                }
+            }
+        }).dxTagBox("instance");
+
+    tagBox.option("opened", true);
+    this.clock.tick(TIME_TO_WAIT);
+
+    $(".dx-list-select-all-checkbox").trigger("dxclick");
+
+    $(".dx-list-select-checkbox").first().trigger("dxclick");
+    $(".dx-tag-remove-button").last().trigger("dxclick");
+
+    $(".dx-list-select-all-checkbox").trigger("dxclick");
+
+    assert.equal(selectedItems.length, 6, "All items should be selected");
+});
+
 
 QUnit.module("the 'onSelectionChanged' option", moduleSetup);
 
