@@ -1455,7 +1455,10 @@ var EditingController = modules.ViewController.inherit((function() {
                     formID: "dx-" + new Guid(),
                     validationGroup: editData,
                     customizeItem: function(item) {
-                        var column = item.column || that._columnsController.columnOption(item.name ? "name:" + item.name : "dataField:" + item.dataField);
+                        var column;
+                        if(item.dataField || item.name) {
+                            column = item.column || that._columnsController.columnOption(item.name ? "name:" + item.name : "dataField:" + item.dataField);
+                        }
                         if(column) {
                             item.label = item.label || {};
                             item.label.text = item.label.text || column.caption;
