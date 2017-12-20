@@ -927,6 +927,7 @@ var TagBox = SelectBox.inherit({
             var displayValue = this._displayGetter(item);
 
             if(isDefined(displayValue)) {
+                $tag.empty();
                 this._applyTagTemplate(item, $tag);
             }
 

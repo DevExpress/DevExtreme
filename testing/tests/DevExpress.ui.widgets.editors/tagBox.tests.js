@@ -1229,6 +1229,29 @@ QUnit.test("tag template should get item in arguments even if the 'displayExpr' 
     });
 });
 
+QUnit.test("tag template should be applied correctly after item selection (T589269)", function(assert) {
+    var items = [{ id: 1, text: "one" }, { id: 2, text: "two" }];
+
+    var $element = $("#tagBox").dxTagBox({
+            items: items,
+            displayExpr: "text",
+            valueExpr: "id",
+            opened: true,
+            tagTemplate: function(tagData, tagElement) {
+                return "<div class='custom-item'><div class='product-name'>" + tagData.text + "</div>";
+            }
+        }),
+        list = $element.dxTagBox("instance")._list,
+        $list = list.$element();
+
+    $($list.find(".dx-list-item").eq(0)).trigger("dxclick");
+    $($list.find(".dx-list-item").eq(1)).trigger("dxclick");
+
+    var $tagContainer = $element.find("." + TAGBOX_TAG_CONTAINER_CLASS);
+
+    assert.equal($.trim($tagContainer.text()), "onetwo", "selected values are rendered correctly");
+});
+
 QUnit.test("value should be correct if the default tag template is used and the displayExpr is specified", function(assert) {
     var items = [{ id: 1, text: "one" }];
 
