@@ -5,6 +5,7 @@ require("ui/tree_list/ui.tree_list");
 var $ = require("jquery"),
     DataSource = require("data/data_source/data_source").DataSource,
     ArrayStore = require("data/array_store"),
+    Guid = require("core/guid"),
     query = require("data/query"),
     treeListMocks = require("../../helpers/treeListMocks.js"),
     setupTreeListModules = treeListMocks.setupTreeListModules;
@@ -1835,6 +1836,29 @@ QUnit.test("Checking the 'hasChildren' property of the node when it specified", 
 
     //assert
     assert.notOk(this.dataController.items()[2].node.hasChildren, "third item hasn't children");
+});
+
+//T585731
+QUnit.test("Checking the 'hasChildren' property of the node after expand when key as Guid", function(assert) {
+    //arrange
+    var items,
+        keys = [new Guid("26992b5c-7d63-89ec-2138-33dd5d244798"), new Guid("1c88aa8d-eaf7-d7b6-4906-ce07a3bdc1cb")];
+
+    this.setupTreeList({
+        dataSource: [
+            { id: keys[0], parentId: 0 },
+            { id: keys[1], parentId: new Guid(keys[0]) }
+        ]
+    });
+
+    //act
+    this.expandRow(keys[0]);
+
+    //assert
+    items = this.dataController.items();
+    assert.strictEqual(items.length, 2, "item count");
+    assert.ok(items[0].node.hasChildren, "fist item has children");
+    assert.ok(items[1].node.hasChildren, "second item has children");
 });
 
 
