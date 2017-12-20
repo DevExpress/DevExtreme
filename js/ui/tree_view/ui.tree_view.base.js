@@ -110,7 +110,7 @@ var TreeViewBase = HierarchicalCollectionWidget.inherit({
     },
 
     _getNodeElement: function(node, cache) {
-        var normalizeKey = commonUtils.normalizeKey(node.internalFields.key);
+        var normalizedKey = commonUtils.normalizeKey(node.internalFields.key);
         if(cache) {
             if(!cache.$nodeByKey) {
                 cache.$nodeByKey = {};
@@ -120,9 +120,9 @@ var TreeViewBase = HierarchicalCollectionWidget.inherit({
                     cache.$nodeByKey[key] = $node;
                 });
             }
-            return cache.$nodeByKey[normalizeKey] || $();
+            return cache.$nodeByKey[normalizedKey] || $();
         }
-        return this.$element().find("[" + DATA_ITEM_ID + "='" + normalizeKey + "']");
+        return this.$element().find("[" + DATA_ITEM_ID + "='" + normalizedKey + "']");
     },
 
     _activeStateUnit: "." + ITEM_CLASS,
