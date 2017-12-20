@@ -1795,6 +1795,8 @@ declare module DevExpress.ui {
         /** Specifies how widget items are aligned cross-wise. */
         crossAlign?: string;
 
+        /** Specifies the layout strategy. */
+        layoutStrategy?: string;
     }
 
     /** The Box widget allows you to arrange various elements within it. Separate and adaptive, the Box widget acts as a building block for the layout. */
@@ -1818,6 +1820,8 @@ declare module DevExpress.ui {
         /** Decides on which screens all layout elements should be arranged in a single column. */
         singleColumnScreen?: string;
 
+        /** Specifies the layout strategy. */
+        layoutStrategy?: string;
     }
 
     /** The ResponsiveBox widget allows you to create an application or a website with a layout adapted to different screen sizes. */

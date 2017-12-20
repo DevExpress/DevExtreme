@@ -355,7 +355,7 @@ QUnit.test("Layout strategy when flex is not supported", function(assert) {
     layoutManager.option("items", items);
 
     //assert
-    assert.equal(layoutManager._responsiveBox.option("_layoutStrategy"), "fallback");
+    assert.equal(layoutManager._responsiveBox.option("layoutStrategy"), "fallback");
     assert.equal($testContainer.find("." + internals.FIELD_ITEM_CLASS + "." + internals.FLEX_LAYOUT_CLASS).length, 0, "flex layout class");
 });
 
@@ -394,7 +394,7 @@ QUnit.test("Layout strategy when flex is supported", function(assert) {
     layoutManager.option("items", items);
 
     //assert
-    assert.equal(layoutManager._responsiveBox.option("_layoutStrategy"), "flex");
+    assert.equal(layoutManager._responsiveBox.option("layoutStrategy"), "flex");
     assert.equal($testContainer.find("." + internals.FIELD_ITEM_CLASS + "." + internals.FLEX_LAYOUT_CLASS).length, 5, "flex layout class");
 });
 

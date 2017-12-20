@@ -467,6 +467,18 @@ var Box = CollectionWidget.inherit({
             crossAlign: "stretch",
 
             /**
+            * @name dxBoxOptions_layoutStrategy
+            * @publicName layoutStrategy
+            * @type string
+            * @default "flex"
+            * @custom_default_for_Internet_Explorer "fallback"
+            * @custom_default_for_android_below_version_4 "fallback"
+            * @custom_default_for_ios_below_version_7 "fallback"
+            * @acceptValues "flex"|"fallback"
+            */
+            layoutStrategy: "flex",
+
+            /**
             * @name dxBoxOptions_activeStateEnabled
             * @publicName activeStateEnabled
             * @hidden
@@ -484,7 +496,6 @@ var Box = CollectionWidget.inherit({
 
             onItemStateChanged: undefined,
 
-            _layoutStrategy: "flex",
             _queue: undefined
 
             /**
@@ -560,7 +571,7 @@ var Box = CollectionWidget.inherit({
                     return device.platform === "win" || browser["msie"] || isOldAndroid || isOldIos;
                 },
                 options: {
-                    _layoutStrategy: "fallback"
+                    layoutStrategy: "fallback"
                 }
             }
         ]);
@@ -580,13 +591,13 @@ var Box = CollectionWidget.inherit({
 
     _init: function() {
         this.callBase();
-        this.$element().addClass(BOX_CLASS + "-" + this.option("_layoutStrategy"));
+        this.$element().addClass(BOX_CLASS + "-" + this.option("layoutStrategy"));
         this._initLayout();
         this._initBoxQueue();
     },
 
     _initLayout: function() {
-        this._layout = (this.option("_layoutStrategy") === "fallback") ?
+        this._layout = (this.option("layoutStrategy") === "fallback") ?
             new FallbackLayoutStrategy(this.$element(), this.option.bind(this)) :
             new FlexLayoutStrategy(this.$element(), this.option.bind(this));
     },
@@ -631,7 +642,7 @@ var Box = CollectionWidget.inherit({
         while(this._queueIsNotEmpty()) {
             var item = this._shiftItemFromQueue();
             this._createComponent(item.$item, Box, extend({
-                _layoutStrategy: this.option("_layoutStrategy"),
+                layoutStrategy: this.option("layoutStrategy"),
                 itemTemplate: this.option("itemTemplate"),
                 itemHoldTimeout: this.option("itemHoldTimeout"),
                 onItemHold: this.option("onItemHold"),
@@ -713,7 +724,7 @@ var Box = CollectionWidget.inherit({
 
     _optionChanged: function(args) {
         switch(args.name) {
-            case "_layoutStrategy":
+            case "layoutStrategy":
             case "_queue":
             case "direction":
                 this._invalidate();

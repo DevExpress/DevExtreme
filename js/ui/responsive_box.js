@@ -127,6 +127,15 @@ var ResponsiveBox = CollectionWidget.inherit({
             width: "100%",
 
             /**
+            * @name dxResponsiveBoxOptions_layoutStrategy
+            * @publicName layoutStrategy
+            * @type string
+            * @default undefined
+            * @acceptValues "flex"|"fallback"
+            */
+            layoutStrategy: undefined,
+
+            /**
             * @name dxResponsiveBoxOptions_activeStateEnabled
             * @publicName activeStateEnabled
             * @hidden
@@ -207,10 +216,7 @@ var ResponsiveBox = CollectionWidget.inherit({
             */
 
             onLayoutChanged: null,
-            currentScreenFactor: undefined,
-
-            _layoutStrategy: undefined
-
+            currentScreenFactor: undefined
         });
     },
 
@@ -489,7 +495,7 @@ var ResponsiveBox = CollectionWidget.inherit({
             onItemClick: this._createActionByOption("onItemClick"),
             onItemContextMenu: this._createActionByOption("onItemContextMenu"),
             onItemRendered: this._createActionByOption("onItemRendered")
-        }, { _layoutStrategy: this.option("_layoutStrategy") });
+        }, { layoutStrategy: this.option("layoutStrategy") });
     },
 
     _needApplyAutoBaseSize: function(item) {
@@ -683,7 +689,7 @@ var ResponsiveBox = CollectionWidget.inherit({
             case "rows":
             case "cols":
             case "screenByWidth":
-            case "_layoutStrategy":
+            case "layoutStrategy":
             case "singleColumnScreen":
                 this._clearItemNodeTemplates();
                 this._invalidate();
