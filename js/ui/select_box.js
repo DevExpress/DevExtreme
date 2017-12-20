@@ -647,11 +647,11 @@ var SelectBox = DropDownList.inherit({
         this.reset();
     },
 
-    _loadItem: function(value) {
+    _loadItem: function(value, cache) {
         var that = this,
             deferred = new Deferred();
 
-        this.callBase(value)
+        this.callBase(value, cache)
             .done(function(item) {
                 deferred.resolve(item);
             })

@@ -392,11 +392,27 @@ var DropDownList = DropDownEditor.inherit({
         return this._loadItem(value).always(callback);
     },
 
-    _loadItem: function(value) {
-        var plainItems = this._getPlainItems(this.option("items")),
+    _loadItem: function(value, cache) {
+        var plainItems,
+            selectedItem;
+
+        if(cache && typeof value !== "object") {
+            if(!cache.itemByValue) {
+                cache.itemByValue = {};
+                plainItems = this._getPlainItems();
+                plainItems.forEach(function(item) {
+                    cache.itemByValue[this._valueGetter(item)] = item;
+                }, this);
+            }
+            selectedItem = cache.itemByValue[value];
+        }
+
+        if(!selectedItem) {
+            plainItems = this._getPlainItems();
             selectedItem = commonUtils.grep(plainItems, (function(item) {
                 return this._isValueEquals(this._valueGetter(item), value);
             }).bind(this))[0];
+        }
 
         return selectedItem !== undefined
             ? new Deferred().resolve(selectedItem).promise()
@@ -406,7 +422,7 @@ var DropDownList = DropDownEditor.inherit({
     _getPlainItems: function(items) {
         var plainItems = [];
 
-        items = items || [];
+        items = items || this.option("items") || [];
 
         for(var i = 0; i < items.length; i++) {
             if(items[i] && items[i].items) {
@@ -430,11 +446,12 @@ var DropDownList = DropDownEditor.inherit({
     },
 
     _refreshSelected: function() {
+        var cache = {};
         this._listItemElements().each((function(_, itemElement) {
             var $itemElement = $(itemElement);
             var itemValue = this._valueGetter($itemElement.data(LIST_ITEM_DATA_KEY));
 
-            var isItemSelected = this._isSelectedValue(itemValue);
+            var isItemSelected = this._isSelectedValue(itemValue, cache);
 
             if(isItemSelected) {
                 this._list.selectItem($itemElement);
