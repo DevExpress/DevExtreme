@@ -275,9 +275,10 @@ var NumberBoxMask = NumberBoxBase.inherit({
         }
 
         var precision = this._getMaxPrecision(format, parsed),
-            pow = Math.pow(10, precision);
+            pow = Math.pow(10, precision),
+            value = (parsed === null ? this._parsedValue : parsed);
 
-        parsed = Math.round((parsed === null ? this._parsedValue : parsed) * pow) / pow;
+        parsed = Math.round(value * pow) / pow;
 
         return this._isPercentFormat() ? (parsed && parsed / 100) : parsed;
     },
