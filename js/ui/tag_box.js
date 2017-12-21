@@ -927,6 +927,7 @@ var TagBox = SelectBox.inherit({
             var displayValue = this._displayGetter(item);
 
             if(isDefined(displayValue)) {
+                $tag.empty();
                 this._applyTagTemplate(item, $tag);
             }
 
@@ -949,8 +950,10 @@ var TagBox = SelectBox.inherit({
         var result = false;
 
         for(var i = 0; i < tagsLength; i++) {
-            var $tag = $tags[i];
-            if(value === dataUtils.data($tag, TAGBOX_TAG_DATA_KEY)) {
+            var $tag = $tags[i],
+                tagData = dataUtils.data($tag, TAGBOX_TAG_DATA_KEY);
+
+            if(value === tagData || (commonUtils.equalByValue(value, tagData))) {
                 result = $($tag);
                 break;
             }
