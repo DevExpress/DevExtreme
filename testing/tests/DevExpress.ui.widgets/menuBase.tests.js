@@ -36,6 +36,7 @@ var DX_MENU_CLASS = 'dx-menu',
     DX_ITEM_SELECTED_CLASS = 'dx-menu-item-selected',
     DX_STATE_DISABLED_CLASS = 'dx-state-disabled',
 
+    DX_ITEM_HAS_TEXT = DX_MENU_ITEM_CLASS + '-has-text',
     DX_ITEM_HAS_ICON = DX_MENU_ITEM_CLASS + '-has-icon',
     DX_ITEM_HAS_SUBMENU = DX_MENU_ITEM_CLASS + '-has-submenu';
 
@@ -195,14 +196,17 @@ QUnit.test('Render item with expressions', function(assert) {
             displayExpr: "name",
             selectionMode: "single",
             selectedExpr: "isSelected",
+            itemsExpr: "children",
             disabledExpr: "active",
-            items: [{ name: "a", active: true }, { name: "a", isSelected: true }]
+            items: [{ name: "a", active: true, children: [{ name: "a1" }] }, { name: "a", isSelected: true }]
         }),
         $items = menuBase.element.find('.' + DX_MENU_ITEM_CLASS);
 
     assert.equal($items.length, 2, 'there are 2 items in menu');
     assert.equal($items.eq(0).text(), "a", 'text is right');
 
+    assert.ok($items.eq(0).hasClass(DX_ITEM_HAS_TEXT), "item has correct content class");
+    assert.ok($items.eq(0).hasClass(DX_ITEM_HAS_SUBMENU), "item has correct content class");
     assert.ok($items.eq(0).hasClass(DX_STATE_DISABLED_CLASS), 'item is disabled');
     assert.ok($items.eq(1).hasClass(DX_ITEM_SELECTED_CLASS), 'item is selected');
 });
@@ -256,6 +260,34 @@ QUnit.test("item container should not have dx-menu-no-icons class when at least 
         $itemsContainer = $(menuBase.element.find("." + DX_MENU_ITEMS_CONTAINER_CLASS));
 
     assert.notOk($itemsContainer.hasClass(DX_MENU_NO_ICONS_CLASS), "item container has not icon class");
+});
+
+QUnit.test('Change item content in runtime', function(assert) {
+    //arrange
+    var menuBase = createMenu({ items: [{ text: "item" }] }),
+        $item;
+
+    //act
+    menuBase.instance.option("items[0].icon", "add");
+    $item = menuBase.element.find('.' + DX_MENU_ITEM_WRAPPER_CLASS).children();
+
+    //assert
+    assert.ok($item.hasClass(DX_ITEM_HAS_ICON), 'item has dx-menu-item-has-icon class');
+});
+
+QUnit.test('Remove extra classes from item frame if content is changed', function(assert) {
+    //arrange
+    var menuBase = createMenu({ items: [{ text: "item" }] }),
+        $item = menuBase.element.find('.' + DX_MENU_ITEM_WRAPPER_CLASS).children();
+
+    assert.ok($item.hasClass(DX_ITEM_HAS_TEXT), 'item has dx-menu-item-has-text class');
+
+    //act
+    menuBase.instance.option("items[0]", { text: "", icon: "add" });
+    $item = menuBase.element.find('.' + DX_MENU_ITEM_WRAPPER_CLASS).children();
+
+    //assert
+    assert.notOk($item.hasClass(DX_ITEM_HAS_TEXT), 'dx-menu-item-has-text class was removed');
 });
 
 

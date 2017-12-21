@@ -624,12 +624,6 @@ var TagBox = SelectBox.inherit({
             : this.callBase();
     },
 
-    _suppressingSelectionChanged: function(callback) {
-        this._setListOption("onSelectionChanged", commonUtils.noop);
-        callback.call(this);
-        this._setListOption("onSelectionChanged", this._getSelectionChangeHandler());
-    },
-
     _initSelectAllValueChangedAction: function() {
         this._selectAllValueChangeAction = this._createActionByOption("onSelectAllValueChanged");
     },
@@ -990,9 +984,7 @@ var TagBox = SelectBox.inherit({
     },
 
     _refreshSelected: function() {
-        this._list && this._suppressingSelectionChanged(function() {
-            this.callBase();
-        });
+        this._list && this._list.option("selectedItems", this._selectedItems);
     },
 
     _resetListDataSourceFilter: function() {
@@ -1024,14 +1016,13 @@ var TagBox = SelectBox.inherit({
         if(commonUtils.isString(valueGetterExpr) && valueGetterExpr !== "this") {
             var filter = this._dataSourceFilterExpr();
 
-            if(!this._userFilter) {
-                this._userFilter = dataSource.filter();
+            if(this._userFilter === undefined) {
+                this._userFilter = dataSource.filter() || null;
             }
 
             this._userFilter && filter.push(this._userFilter);
 
-            filter.length && dataSource.filter(filter);
-
+            filter.length ? dataSource.filter(filter) : dataSource.filter(null);
         } else {
             dataSource.filter(this._dataSourceFilterFunction.bind(this));
         }
@@ -1088,7 +1079,7 @@ var TagBox = SelectBox.inherit({
     _renderOpenedState: function() {
         this.callBase();
 
-        if(this.option("applyValueMode" === "useButtons" && !this.option("opened"))) {
+        if(this.option("applyValueMode") === "useButtons" && !this.option("opened")) {
             this._refreshSelected();
         }
     },

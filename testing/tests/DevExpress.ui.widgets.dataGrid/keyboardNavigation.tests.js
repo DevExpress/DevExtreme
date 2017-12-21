@@ -286,6 +286,36 @@ QUnit.testInActiveWindow("Cell is focused when clicked on self", function(assert
     assert.ok(navigationController._keyDownProcessor, "keyDownProcessor");
 });
 
+// T579521
+QUnit.testInActiveWindow("Master detail cell is not focused when clicked on self", function(assert) {
+    //arrange
+    var navigationController,
+        isFocused = false,
+        $masterDetailCell,
+        $rowsElement = $("<div />").append($("<tr class='dx-row'><td class='dx-master-detail-cell'><td/></tr>")).appendTo("#container");
+
+    this.getView("rowsView").element = function() {
+        return $rowsElement;
+    };
+
+    //act
+    navigationController = new KeyboardNavigationController(this.component);
+    navigationController.init();
+
+    callViewsRenderCompleted(this.component._views);
+
+    $masterDetailCell = $rowsElement.find("td")[0];
+
+    $masterDetailCell.focus = function() {
+        isFocused = true;
+    };
+
+    $($masterDetailCell).trigger(CLICK_EVENT);
+
+    //assert
+    assert.notOk(isFocused, "master detail cell is not focused");
+});
+
 //T281701
 QUnit.testInActiveWindow("Cell is not focused when clicked it in another grid", function(assert) {
     //arrange
@@ -1171,6 +1201,22 @@ QUnit.testInActiveWindow("Up arrow to group footer", function(assert) {
     assert.ok(!this.rowsView.element().find(".dx-row").eq(rowIndex).hasClass("dx-datagrid-group-footer"), "not group footer");
 });
 
+QUnit.testInActiveWindow("Ctrl+RightArrow do not expand master detail row if master detail is not enabled (T576946)", function(assert) {
+    //arrange
+    setupModules(this);
+
+    //act
+    this.gridView.render($("#container"));
+
+    this.focusCell(1, 1);
+
+    this.dataController.expandRow = sinon.spy();
+    this.triggerKeyDown("rightArrow", true);
+
+    //assert
+    assert.strictEqual(this.dataController.expandRow.callCount, 0, "grid does not open master detail");
+});
+
 /*test("Down arrow for master detail", function () {
     //act
     this.options.masterDetail = {
@@ -1235,7 +1281,7 @@ QUnit.testInActiveWindow("Update focus when row is editing with form_T306378", f
     this.clock.tick();
 
     //assert
-    assert.equal(this.keyboardNavigationController._focusedCellPosition.rowIndex, 0);
+    assert.equal($(".dx-datagrid-edit-form input:focus").length, 1);
 });
 
 QUnit.testInActiveWindow("Right, left, top, down arrow keys when row or cell is editing", function(assert) {
@@ -2989,6 +3035,48 @@ QUnit.testInActiveWindow("Focus first cell after tab key on rowsView", function(
     assert.ok(isPreventDefaultCalled, "preventDefault is called");
 });
 
+//T570999
+QUnit.testInActiveWindow("Move focus to first data cell after tab key on group row", function(assert) {
+    //arrange
+    this.columns = [
+        { visible: true, command: "expand" },
+        { caption: 'Column 1', visible: true, dataField: "Column1" },
+        { caption: 'Column 2', visible: true, dataField: "Column2" }
+    ];
+
+    this.dataControllerOptions = {
+        pageCount: 10,
+        pageIndex: 0,
+        pageSize: 10,
+        items: [
+            { values: ['group 1'], rowType: 'group', key: ['group 1'], groupIndex: 0 },
+            { values: [null, 'test1', 'test2'], rowType: 'data', key: 1 },
+            { values: [null, 'test1', 'test2'], rowType: 'data', key: 2 }
+        ]
+    };
+
+    setupModules(this);
+
+    //act
+    this.gridView.render($("#container"));
+
+    var $groupRow = $("#container").find(".dx-group-row");
+
+    $groupRow.focus();
+    this.clock.tick();
+
+    assert.ok($groupRow.hasClass("dx-focused"), "group row is focused");
+    assert.ok($("#container .dx-datagrid-focus-overlay:visible").length, "focus overlay is visible");
+
+    this.triggerKeyDown("tab", false, false, $groupRow);
+
+    assert.ok($(":focus").parent().hasClass("dx-data-row"), "data cell is focused");
+    assert.deepEqual(this.keyboardNavigationController._focusedCellPosition, {
+        rowIndex: 1,
+        columnIndex: 0
+    });
+});
+
 QUnit.testInActiveWindow("Do not prevent default on 'shift+tab' if the current cell is the first", function(assert) {
     //arrange
     this.columns = [
@@ -4711,4 +4799,86 @@ QUnit.test("Apply custom tabIndex to rows view on click", function(assert) {
     rowsView.element().find("td").first().trigger(CLICK_EVENT);
 
     assert.equal(rowsView.element().attr("tabIndex"), 5, "tabIndex of rowsView");
+});
+
+QUnit.module("Keyboard navigation with real dataController and columnsController", {
+    setupModule: function() {
+        this.data = [
+            { name: "Alex", phone: "555555", room: 1 },
+            { name: "Dan", phone: "553355", room: 2 }
+        ];
+
+        this.columns = this.columns || ["name", "phone", "room"];
+
+        this.options = $.extend(true, {
+            useKeyboard: true,
+            showColumnHeaders: true,
+            editing: {
+                allowUpdating: true,
+                mode: "row",
+                texts: {
+                    editRow: "Edit"
+                }
+            },
+            commonColumnSettings: {
+                allowEditing: true
+            },
+            columns: this.columns,
+            dataSource: {
+                asyncLoadEnabled: false,
+                store: this.data,
+                paginate: true
+            }
+        }, this.options);
+
+        setupDataGridModules(this, ["data", "columns", "columnHeaders", "rows", "editorFactory", "gridView", "editing", "keyboardNavigation", "masterDetail"], {
+            initViews: true
+        });
+    },
+    beforeEach: function() {
+        this.clock = sinon.useFakeTimers();
+    },
+    afterEach: function() {
+        this.clock.restore();
+    }
+}, function() {
+    QUnit.testInActiveWindow("First input is focused when row is edited from a cell template", function(assert) {
+        //arrange
+        var that = this;
+        that.element = function() {
+            return $("#container");
+        };
+        that.options = {
+            editing: {
+                mode: "form"
+            }
+        };
+
+        that.columns = [ "name", "phone",
+            { dataField: "room",
+                cellTemplate: function($element, options) {
+                    $("<div/>")
+                        .appendTo($element)
+                        .attr("id", "editButton")
+                        .text("edit")
+                        .click(function() {
+                            that.editingController.editRow(options.row.rowIndex);
+                        });
+                }
+            }
+        ];
+
+        this.setupModule();
+
+        //act
+        that.gridView.render($("#container"));
+        $("#editButton")
+            .trigger("dxpointerdown.dxDataGridKeyboardNavigation")
+            .click();
+
+        this.clock.tick();
+
+        //assert
+        assert.equal($("input:focus").val(), "Alex", "value of first editor");
+    });
 });

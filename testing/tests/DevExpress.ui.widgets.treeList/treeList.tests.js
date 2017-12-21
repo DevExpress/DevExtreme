@@ -528,3 +528,33 @@ QUnit.test("Change dataSource, selectedRowKeys and scrolling options together", 
     //assert
     assert.strictEqual(treeList.getVisibleRows().length, 1, "row count");
 });
+
+//T576806
+QUnit.test("Pages should be correctly loaded after change dataSource and selectedRowKeys options", function(assert) {
+    var treeList = createTreeList({
+            autoExpandAll: true
+        }),
+        generateData = function(count) {
+            var i = 1,
+                result = [];
+
+            while(i < count * 2) {
+                result.push({ id: i }, { id: i + 1, parentId: i });
+                i += 2;
+            }
+
+            return result;
+        };
+
+    this.clock.tick(30);
+
+    //act
+    treeList.option({
+        dataSource: generateData(20),
+        selectedRowKeys: [1]
+    });
+    this.clock.tick(60);
+
+    //assert
+    assert.strictEqual(treeList.getVisibleRows().length, 40, "row count");
+});

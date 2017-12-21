@@ -208,6 +208,9 @@ module.exports = function($, gridCore, columnResizingReordering, domUtils, commo
             addRow: function() {
                 this.addRowCallCount++;
             },
+            getFirstEditableCellInRow: function() {
+                return $([]);
+            },
             deleteRow: function(rowIndex) {
                 this.rowIndex = rowIndex;
                 this.deleteRowCallCount++;

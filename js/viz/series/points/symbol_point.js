@@ -94,7 +94,6 @@ module.exports = {
         if(graphic && graphic.attr("visibility")) {
             graphic.attr({ visibility: null });
         }
-        that._label.clearVisibility();
     },
 
     isVisible: function() {
@@ -108,7 +107,7 @@ module.exports = {
             graphic.attr({ visibility: "hidden" });
         }
         that._errorBar && that._errorBar.attr({ visibility: "hidden" });
-        that._label.hide();
+        that._label.draw(false);
     },
 
     clearMarker: function() {
@@ -283,13 +282,10 @@ module.exports = {
     _drawLabel: function() {
         var that = this,
             customVisibility = that._getCustomLabelVisibility(),
-            label = that._label;
+            label = that._label,
+            isVisible = that._showForZeroValues() && that.hasValue() && customVisibility !== false && (that.series.getLabelVisibility() || customVisibility);
 
-        if(that._showForZeroValues() && that.hasValue() && customVisibility !== false && (that.series.getLabelVisibility() || customVisibility)) {
-            label.show();
-        } else {
-            label.hide();
-        }
+        label.draw(!!isVisible);
     },
 
     correctLabelPosition: function(label) {

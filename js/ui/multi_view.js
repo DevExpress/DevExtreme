@@ -246,7 +246,7 @@ var MultiView = CollectionWidget.inherit({
             renderContentDeferred.resolve($itemContent);
         });
 
-        this._deferredItems.push(deferred);
+        this._deferredItems[args.index] = deferred;
         this.option("deferRendering") || deferred.resolve();
 
         return renderContentDeferred.promise();

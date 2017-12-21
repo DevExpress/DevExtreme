@@ -1985,7 +1985,7 @@ var Scheduler = Widget.inherit({
 
         disableButton && this._disableDoneButton();
 
-        var formData = this._appointmentForm.option("formData"),
+        var formData = this._getFormData(),
             oldData = this._editAppointmentData,
             recData = this._updatedRecAppointment;
 
@@ -1997,18 +1997,7 @@ var Scheduler = Widget.inherit({
         }
 
         if(oldData) {
-            var processedStartDate = this.fire(
-                "convertDateByTimezoneBack",
-                this.fire("getField", "startDate", formData)
-                );
-
-            var processedEndDate = this.fire(
-                "convertDateByTimezoneBack",
-                this.fire("getField", "endDate", formData)
-                );
-
-            this.fire("setField", "startDate", formData, processedStartDate);
-            this.fire("setField", "endDate", formData, processedEndDate);
+            this._convertDatesByTimezoneBack(false, formData);
         }
 
         if(oldData && !recData) {
@@ -2027,6 +2016,36 @@ var Scheduler = Widget.inherit({
         this._enableDoneButton();
 
         return true;
+    },
+
+    _getFormData: function() {
+        var formData = this._appointmentForm.option("formData"),
+            startDate = this.fire("getField", "startDate", formData),
+            endDate = this.fire("getField", "endDate", formData);
+
+        this.fire("setField", "startDate", formData, startDate);
+        this.fire("setField", "endDate", formData, endDate);
+
+        return formData;
+    },
+
+    _convertDatesByTimezoneBack: function(applyAppointmentTimezone, sourceAppointmentData, targetAppointmentData) {
+        targetAppointmentData = targetAppointmentData || sourceAppointmentData;
+
+        var processedStartDate = this.fire(
+            "convertDateByTimezoneBack",
+            this.fire("getField", "startDate", sourceAppointmentData),
+            applyAppointmentTimezone && this.fire("getField", "startDateTimeZone", sourceAppointmentData)
+            );
+
+        var processedEndDate = this.fire(
+            "convertDateByTimezoneBack",
+            this.fire("getField", "endDate", sourceAppointmentData),
+            applyAppointmentTimezone && this.fire("getField", "endDateTimeZone", sourceAppointmentData)
+            );
+
+        this.fire("setField", "startDate", targetAppointmentData, processedStartDate);
+        this.fire("setField", "endDate", targetAppointmentData, processedEndDate);
     },
 
     _disableDoneButton: function() {
@@ -2198,15 +2217,8 @@ var Scheduler = Widget.inherit({
 
         this.fire("setField", "endDate", updatedData, endDate);
 
-        var groups = cellData.groups;
-
-        var resourcesSetter = this._resourcesManager._dataAccessors.setter;
-
-        for(var name in groups) {
-            if(groups.hasOwnProperty(name)) {
-                resourcesSetter[name](target, groups[name]);
-            }
-        }
+        //NOTE: set resources to updatedData after fix T577053
+        this._resourcesManager.setResourcesToItem(target, cellData.groups);
 
         return updatedData;
     },

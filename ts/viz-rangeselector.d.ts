@@ -5,303 +5,317 @@
 declare module DevExpress.viz.rangeSelector {
 
     export interface dxRangeSelectorOptions extends viz.core.BaseWidgetOptions, viz.core.MarginOptions, viz.core.RedrawOnResizeOptions, viz.core.TitleOptions, viz.core.LoadingIndicatorOptions, viz.core.ExportOptions {
-        /** @docid_ignore dxrangeselectoroptions_tooltip */
+        
 
-        /** @docid dxrangeselectoroptions_background */
+        /** Specifies the options for the range selector's background. */
         background?: {
 
-            /** @docid dxrangeselectoroptions_background_color */
+            /** Specifies the background color for the RangeSelector. */
             color?: string;
 
-            /** @docid dxrangeselectoroptions_background_image */
+            /** Specifies image options. */
             image?: {
 
-                /** @docid dxrangeselectoroptions_background_image_location */
+                /** Specifies a location for the image in the background of a range selector. */
                 location?: string;
 
-                /** @docid dxrangeselectoroptions_background_image_url */
+                /** Specifies the image's URL. */
                 url?: string;
             };
 
-            /** @docid dxrangeselectoroptions_background_visible */
+            /** Indicates whether or not the background (background color and/or image) is visible. */
             visible?: boolean;
         };
 
-        /** @docid dxrangeselectoroptions_behavior */
+        /** Specifies the RangeSelector's behavior options. */
         behavior?: {
 
-            /** @docid dxrangeselectoroptions_behavior_allowslidersswap */
+            /** Indicates whether or not you can swap sliders. */
             allowSlidersSwap?: boolean;
 
-            /** @docid dxrangeselectoroptions_behavior_animationenabled */
+            /** Indicates whether or not animation is enabled. */
             animationEnabled?: boolean;
 
-            /** @docid dxrangeselectoroptions_behavior_callselectedrangechanged */
+            /**
+            * Specifies when to call the onSelectedRangeChanged function.
+            * @deprecated Use the callValueChanged option instead.
+            */
             callSelectedRangeChanged?: string;
 
-            /** @docid dxrangeselectoroptions_behavior_callvaluechanged */
+            /** Specifies when to call the onValueChanged function. */
             callValueChanged?: string;
 
-            /** @docid dxrangeselectoroptions_behavior_manualrangeselectionenabled */
+            /** Indicates whether or not an end user can specify the range using a mouse, without the use of sliders. */
             manualRangeSelectionEnabled?: boolean;
 
-            /** @docid dxrangeselectoroptions_behavior_moveselectedrangebyclick */
+            /** Indicates whether or not an end user can shift the selected range to the required location on a scale by clicking. */
             moveSelectedRangeByClick?: boolean;
 
-            /** @docid dxrangeselectoroptions_behavior_snaptoticks */
+            /** Indicates whether to snap a slider to ticks. */
             snapToTicks?: boolean;
         };
 
-        /** @docid dxrangeselectoroptions_chart */
+        /** Specifies the options required to display a chart as the range selector's background. */
         chart?: {
 
-            /** @docid dxrangeselectoroptions_chart_bottomindent */
+            /** Specifies a coefficient for determining an indent from the bottom background boundary to the lowest chart point. */
             bottomIndent?: number;
 
-            /** @docid dxrangeselectoroptions_chart_commonseriessettings */
+            /** An object defining the common configuration options for the chart’s series. */
             commonSeriesSettings?: viz.charts.CommonSeriesSettings;
 
-            /** @docid dxrangeselectoroptions_chart_dataPrepareSettings */
+            /** An object providing options for managing data from a data source. */
             dataPrepareSettings?: {
 
-                /** @docid dxrangeselectoroptions_chart_dataPrepareSettings_checkTypeForAllData */
+                /** Specifies whether or not to validate values from a data source. */
                 checkTypeForAllData?: boolean;
 
-                /** @docid dxrangeselectoroptions_chart_dataPrepareSettings_convertToAxisDataType */
+                /** Specifies whether or not to convert the values from a data source into the data type of an axis. */
                 convertToAxisDataType?: boolean;
 
-                /** @docid dxrangeselectoroptions_chart_dataPrepareSettings_sortingMethod */
+                /** Specifies how to sort series points. */
                 sortingMethod?: any;
             };
 
-            /** @docid dxrangeselectoroptions_chart_equalbarwidth */
+            /** Specifies whether all bars in a series must have the same width, or may have different widths if any points in other series are missing. */
             equalBarWidth?: boolean;
 
-            /** @docid dxrangeselectoroptions_chart_barwidth */
+            /** Specifies a common bar width as a percentage from 0 to 1. */
             barWidth?: number;
 
-            /** @docid dxrangeselectoroptions_chart_negativesaszeroes */
+            /** Forces the widget to treat negative values as zeroes. Applies to stacked-like series only. */
             negativesAsZeroes?: boolean;
 
-            /** @docid dxrangeselectoroptions_chart_palette */
+            /** Sets the name of the palette to be used in the range selector's chart. Alternatively, an array of colors can be set as a custom palette to be used within this chart. */
             palette?: any;
 
-            /** @docid dxrangeselectoroptions_chart_series */
+            /** An object defining the chart’s series. */
             series?: Array<viz.charts.SeriesConfig>;
 
-            /** @docid dxrangeselectoroptions_chart_seriestemplate */
+            /** Defines options for the series template. */
             seriesTemplate?: viz.charts.SeriesTemplate;
 
-            /** @docid dxrangeselectoroptions_chart_topindent */
+            /** Specifies a coefficient for determining an indent from the background's top boundary to the topmost chart point. */
             topIndent?: number;
 
-            /** @docid dxrangeselectoroptions_chart_useAggregation */
+            /** Specifies whether or not to filter the series points depending on their quantity. */
             useAggregation?: boolean;
 
-            /** @docid dxrangeselectoroptions_chart_valueaxis */
+            /** Configures the chart value axis. */
             valueAxis?: {
 
-                /** @docid dxrangeselectoroptions_chart_valueaxis_inverted */
+                /** Indicates whether or not the chart's value axis must be inverted. */
                 inverted?: boolean;
 
-                /** @docid dxrangeselectoroptions_chart_valueaxis_logarithmbase */
+                /** Specifies the value to be raised to a power when generating ticks for a logarithmic value axis. */
                 logarithmBase?: number;
 
-                /** @docid dxrangeselectoroptions_chart_valueaxis_max */
+                /** Specifies the maximum value of the chart's value axis. */
                 max?: number;
 
-                /** @docid dxrangeselectoroptions_chart_valueaxis_min */
+                /** Specifies the minimum value of the chart's value axis. */
                 min?: number;
 
-                /** @docid dxrangeselectoroptions_chart_valueaxis_type */
+                /** Specifies the type of the value axis. */
                 type?: string;
 
-                /** @docid dxrangeselectoroptions_chart_valueaxis_valuetype */
+                /** Specifies the desired type of axis values. */
                 valueType?: string;
             };
         };
 
-        /** @docid dxrangeselectoroptions_containerbackgroundcolor */
+        /** Specifies the color of the parent page element. */
         containerBackgroundColor?: string;
 
-        /** @docid dxrangeselectoroptions_datasource */
+        /** Specifies a data source for the scale values and for the chart at the background. */
         dataSource?: any;
 
-        /** @docid dxrangeselectoroptions_datasourcefield */
+        /** Specifies the data source field that provides data for the scale. */
         dataSourceField?: string;
 
-        /** @docid dxrangeselectoroptions_scale */
+        /** Specifies options of the range selector's scale. */
         scale?: {
 
-            /** @docid dxrangeselectoroptions_scale_endvalue */
+            /** Specifies the scale's end value. */
             endValue?: any;
 
-            /** @docid dxrangeselectoroptions_scale_label */
+            /** Specifies common options for scale labels. */
             label?: {
 
-                /** @docid dxrangeselectoroptions_scale_label_customizetext */
+                /** Specifies a callback function that returns the text to be displayed in scale labels. */
                 customizeText?: (scaleValue: { value: any; valueText: string; }) => string;
 
-                /** @docid dxrangeselectoroptions_scale_label_font */
+                /** Specifies font options for the text displayed in the range selector's scale labels. */
                 font?: viz.core.Font;
 
-                /** @docid dxrangeselectoroptions_scale_label_format */
+                /** Specifies a format for the text displayed in scale labels. */
                 format?: any;
 
-                /** @docid dxrangeselectoroptions_scale_label_precision */
+                /**
+                 * Specifies a precision for the formatted value displayed in the scale labels.
+                 * @deprecated Use the scale.label.format.precision option instead.
+                 */
                 precision?: number;
 
-                /** @docid dxrangeselectoroptions_scale_label_topindent */
+                /** Specifies a spacing between scale labels and the background bottom edge. */
                 topIndent?: number;
 
-                /** @docid dxrangeselectoroptions_scale_label_visible */
+                /** Specifies whether or not the scale's labels are visible. */
                 visible?: boolean;
 
-                /** @docid dxrangeselectoroptions_scale_label_overlappingbehavior */
+                /** Decides how to arrange scale labels when there is not enough space to keep all of them. */
                 overlappingBehavior?: string;
             };
 
-            /** @docid dxrangeselectoroptions_scale_logarithmbase */
+            /** Specifies the value to be raised to a power when generating ticks for a logarithmic scale. */
             logarithmBase?: number;
 
-            /** @docid dxrangeselectoroptions_scale_majortickinterval */
+            /**
+            * Specifies an interval between major ticks.
+            * @deprecated Use the tickInterval option instead.
+            */
             majorTickInterval?: any;
 
-            /** @docid_ignore dxrangeselectoroptions_scale_majortickinterval_years */
-            /** @docid_ignore dxrangeselectoroptions_scale_majortickinterval_months */
-            /** @docid_ignore dxrangeselectoroptions_scale_majortickinterval_days */
-            /** @docid_ignore dxrangeselectoroptions_scale_majortickinterval_hours */
-            /** @docid_ignore dxrangeselectoroptions_scale_majortickinterval_minutes */
-            /** @docid_ignore dxrangeselectoroptions_scale_majortickinterval_seconds */
-            /** @docid_ignore dxrangeselectoroptions_scale_majortickinterval_milliseconds */
-
-            /** @docid dxrangeselectoroptions_scale_tickinterval */
+            
+            /** Specifies an interval between axis ticks. */
             tickInterval?: any;
 
-            /** @docid dxrangeselectoroptions_scale_marker */
+            /** Specifies options for the date-time scale's markers. */
             marker?: {
 
-                /** @docid dxrangeselectoroptions_scale_marker_label */
+                /** Defines the options that can be set for the text that is displayed by the scale markers. */
                 label?: {
 
-                    /** @docid dxrangeselectoroptions_scale_marker_label_customizeText */
+                    /** Specifies a callback function that returns the text to be displayed in scale markers. */
                     customizeText?: (markerValue: { value: any; valueText: string }) => string;
 
-                    /** @docid dxrangeselectoroptions_scale_marker_label_format */
+                    /** Specifies a format for the text displayed in scale markers. */
                     format?: any;
                 };
 
-                /** @docid dxrangeselectoroptions_scale_marker_separatorheight */
+                /** Specifies the height of the marker's separator. */
                 separatorHeight?: number;
 
-                /** @docid dxrangeselectoroptions_scale_marker_textleftindent */
+                /** Specifies the space between the marker label and the marker separator. */
                 textLeftIndent?: number;
 
-                /** @docid dxrangeselectoroptions_scale_marker_texttopindent */
+                /** Specifies the space between the marker's label and the top edge of the marker's separator. */
                 textTopIndent?: number;
 
-                /** @docid dxrangeselectoroptions_scale_marker_topindent */
+                /** Specified the indent between the marker and the scale labels. */
                 topIndent?: number;
 
-                /** @docid dxrangeselectoroptions_scale_marker_visible */
+                /** Indicates whether scale markers are visible. */
                 visible?: boolean;
             };
 
-            /** @docid dxrangeselectoroptions_scale_maxrange */
+            /** Specifies the maximum range that can be selected. */
             maxRange?: any;
 
-            /** @docid dxrangeselectoroptions_scale_minorTickCount */
+            /** Specifies the number of minor ticks between neighboring major ticks. */
             minorTickCount?: number;
 
-            /** @docid dxrangeselectoroptions_scale_minortickinterval */
+            /** Specifies an interval between minor ticks. */
             minorTickInterval?: any;
 
-            /** @docid dxrangeselectoroptions_scale_minrange */
+            /** Specifies the minimum range that can be selected. */
             minRange?: any;
 
-            /** @docid dxrangeselectoroptions_scale_placeholderheight */
+            /** Specifies the height of the space reserved for the scale in pixels. */
             placeholderHeight?: number;
 
-            /** @docid dxrangeselectoroptions_scale_setticksatunitbeginning */
+            /** Indicates whether or not to set ticks of a date-time scale at the beginning of each date-time interval. */
             setTicksAtUnitBeginning?: boolean;
 
-            /** @docid dxrangeselectoroptions_scale_showBoundaryTicks */
+            /** Specifies whether or not to show ticks for the boundary scale values, when neither major ticks nor minor ticks are created for these values. */
             showCustomBoundaryTicks?: boolean;
 
-            /** @docid dxrangeselectoroptions_scale_showminorticks */
+            /**
+             * Indicates whether or not to show minor ticks on the scale.
+             * @deprecated Use the minorTick.visible option instead.
+             */
             showMinorTicks?: boolean;
 
-            /** @docid dxrangeselectoroptions_scale_startvalue */
+            /** Specifies the scale's start value. */
             startValue?: any;
 
-            /** @docid dxrangeselectoroptions_scale_tick */
+            /** Specifies options defining the appearance of scale ticks. */
             tick?: {
 
-                /** @docid dxrangeselectoroptions_scale_tick_color */
+                /** Specifies the color of scale ticks (both major and minor ticks). */
                 color?: string;
 
-                /** @docid dxrangeselectoroptions_scale_tick_opacity */
+                /** Specifies the opacity of scale ticks (both major and minor ticks). */
                 opacity?: number;
 
-                /** @docid dxrangeselectoroptions_scale_tick_width */
+                /** Specifies the width of the scale's ticks (both major and minor ticks). */
                 width?: number;
             };
 
-            /** @docid dxrangeselectoroptions_scale_minortick */
+            /** Specifies options of the range selector's minor ticks. */
             minorTick?: {
 
-                /** @docid dxrangeselectoroptions_scale_minortick_color */
+                /** Specifies the color of the scale's minor ticks. */
                 color?: string;
 
-                /** @docid dxrangeselectoroptions_scale_minortick_opacity */
+                /** Specifies the opacity of the scale's minor ticks. */
                 opacity?: number;
 
-                /** @docid dxrangeselectoroptions_scale_minortick_width */
+                /** Specifies the width of the scale's minor ticks. */
                 width?: number;
 
-                /** @docid dxrangeselectoroptions_scale_minortick_visible */
+                /** Indicates whether scale minor ticks are visible or not. */
                 visible?: boolean;
             };
 
-            /** @docid dxrangeselectoroptions_scale_type */
+            /** Specifies the type of the scale. */
             type?: string;
 
-            /** @docid dxrangeselectoroptions_scale_useticksautoarrangement */
+            /**
+            * Specifies whether or not to expand the current tick interval if labels overlap each other.
+            * @deprecated Use the overlappingBehavior option instead.
+            */
             useTicksAutoArrangement?: boolean;
 
-            /** @docid dxrangeselectoroptions_scale_valueType */
+            /** Specifies the type of values on the scale. */
             valueType?: string;
 
-            /** @docid dxrangeselectoroptions_scale_categories */
+            /** Specifies the order of arguments on a discrete scale. */
             categories?: Array<any>;
         };
 
-        /** @docid dxrangeselectoroptions_selectedrange */
+        /**
+         * Specifies the range to be selected when displaying the RangeSelector.
+         * @deprecated Use the value option instead.
+         */
         selectedRange?: {
 
-            /** @docid dxrangeselectoroptions_selectedrange_startvalue */
+            /** Specifies the start value of the range to be selected when displaying the RangeSelector widget on a page. */
             startValue?: any;
 
-            /** @docid dxrangeselectoroptions_selectedrange_endvalue */
+            /** Specifies the end value of the range to be selected when displaying the RangeSelector widget on a page. */
             endValue?: any;
         };
 
-        /** @docid dxrangeselectoroptions_value */
+        /** The selected range, initial or current. */
         value?: Array<any>;
 
-        /** @docid dxrangeselectoroptions_selectedrangecolor */
+        /** Specifies the color of the selected range. */
         selectedRangeColor?: string;
 
-        /** @docid dxrangeselectoroptions_indent */
+        /** Range selector's indent options. */
         indent?: {
-            /** @docid dxrangeselectoroptions_indent_left */
+            /** Specifies range selector's left indent. */
             left?: number;
 
-            /** @docid dxrangeselectoroptions_indent_right */
+            /** Specifies range selector's right indent. */
             right?: number;
         };
 
-        /** @docid dxrangeselectoroptions_onselectedrangechanged */
+        /**
+        * A handler for the selectedRangeChanged event.
+        * @deprecated Use the onValueChanged option instead.
+        */
         onSelectedRangeChanged?: (e: {
             startValue: any;
             endValue: any;
@@ -309,7 +323,7 @@ declare module DevExpress.viz.rangeSelector {
             element: Element;
         }) => void;
 
-        /** @docid dxrangeselectoroptions_onvaluechanged */
+        /** A handler for the valueChanged event. */
         onValueChanged?: (e: {
             value: Array<any>;
             previousValue: Array<any>;
@@ -317,80 +331,89 @@ declare module DevExpress.viz.rangeSelector {
             element: Element;
         }) => void;
 
-        /** @docid dxrangeselectoroptions_shutter */
+        /** Specifies range selector shutter options. */
         shutter?: {
 
-            /** @docid dxrangeselectoroptions_shutter_color */
+            /** Specifies shutter color. */
             color?: string;
 
-            /** @docid dxrangeselectoroptions_shutter_opacity */
+            /** Specifies the opacity of the color of shutters. */
             opacity?: number;
         };
 
-        /** @docid dxrangeselectoroptions_sliderhandle */
+        /** Specifies the appearance of the range selector's slider handles. */
         sliderHandle?: {
 
-            /** @docid dxrangeselectoroptions_sliderhandle_color */
+            /** Specifies the color of the slider handles. */
             color?: string;
 
-            /** @docid dxrangeselectoroptions_sliderhandle_opacity */
+            /** Specifies the opacity of the slider handles. */
             opacity?: number;
 
-            /** @docid dxrangeselectoroptions_sliderhandle_width */
+            /** Specifies the width of the slider handles. */
             width?: number;
         };
 
-        /** @docid dxrangeselectoroptions_slidermarker */
+        /** Defines the options of the range selector slider markers. */
         sliderMarker?: {
 
-            /** @docid dxrangeselectoroptions_slidermarker_color */
+            /** Specifies the color of the slider markers. */
             color?: string;
 
-            /** @docid dxrangeselectoroptions_slidermarker_customizetext */
+            /** Specifies a callback function that returns the text to be displayed by slider markers. */
             customizeText?: (scaleValue: { value: any; valueText: any; }) => string;
 
-            /** @docid dxrangeselectoroptions_slidermarker_font */
+            /** Specifies font options for the text displayed by the range selector slider markers. */
             font?: viz.core.Font;
 
-            /** @docid dxrangeselectoroptions_slidermarker_format */
+            /** Specifies a format for the text displayed in slider markers. */
             format?: any;
 
-            /** @docid dxrangeselectoroptions_slidermarker_invalidrangecolor */
+            /** Specifies the color used for the slider marker text when the currently selected range does not match the minRange and maxRange values. */
             invalidRangeColor?: string;
 
-            /** @docid dxrangeselectoroptions_slidermarker_padding */
+            /**
+             * Specifies the empty space between the marker's border and the marker’s text.
+             * @deprecated Use the paddingTopBottom and paddingLeftRight options instead.
+             */
             padding?: number;
 
-            /** @docid dxrangeselectoroptions_slidermarker_paddingtopbottom */
+            /** Specifies the empty space between the marker's top and bottom borders and the marker's text. */
             paddingTopBottom?: number;
 
-            /** @docid dxrangeselectoroptions_slidermarker_paddingleftright */
+            /** Specifies the empty space between the marker's left and right borders and the marker's text. */
             paddingLeftRight?: number;
 
-            /** @docid dxrangeselectoroptions_slidermarker_placeholderHeight */
+            /** Specifies the placeholder height of the slider marker. */
             placeholderHeight?: number;
 
-            /** @docid dxrangeselectoroptions_slidermarker_placeholdersize */
+            /**
+            * Specifies in pixels the height and width of the space reserved for the range selector slider markers.
+            * @deprecated Use the placeholderHeight and indent options instead.
+            */
             placeholderSize?: {
 
-                /** @docid dxrangeselectoroptions_slidermarker_placeholdersize_height */
+                /** Specifies the height of the placeholder for the left and right slider markers. */
                 height?: number;
 
-                /** @docid dxrangeselectoroptions_slidermarker_placeholdersize_width */
+                /** Specifies the width of the placeholder for the left and right slider markers. */
                 width?: {
 
-                    /** @docid dxrangeselectoroptions_slidermarker_placeholdersize_width_left */
+                    /** Specifies the width of the left slider marker's placeholder. */
                     left?: number;
 
-                    /** @docid dxrangeselectoroptions_slidermarker_placeholdersize_width_right */
+                    /** Specifies the width of the right slider marker's placeholder. */
                     right?: number;
                 };
             };
 
-            /** @docid dxrangeselectoroptions_slidermarker_precision */
+            /**
+             * Specifies a precision for the formatted value displayed in slider markers.
+             * @deprecated Use the sliderMarker.format.precision option instead.
+             */
             precision?: number;
 
-            /** @docid dxrangeselectoroptions_slidermarker_visible */
+            /** Indicates whether or not the slider markers are visible. */
             visible?: boolean;
         };
 
@@ -399,7 +422,7 @@ declare module DevExpress.viz.rangeSelector {
 }
 
 declare module DevExpress.viz {
-    /** @docid dxrangeselector */
+    /** The RangeSelector is a widget that allows a user to select a range of values on a scale. */
     export class dxRangeSelector extends viz.core.BaseWidget implements viz.core.LoadingIndicatorMethods {
         constructor(element: JQuery, options?: DevExpress.viz.rangeSelector.dxRangeSelectorOptions);
         constructor(element: Element, options?: DevExpress.viz.rangeSelector.dxRangeSelectorOptions);
@@ -408,22 +431,28 @@ declare module DevExpress.viz {
 
         hideLoadingIndicator(): void;
 
-        /** @docid dxrangeselectormethods_render */
+        /** Redraws a widget. */
         render(skipChartAnimation?: boolean): void;
 
-        /** @docid dxrangeselectormethods_getSelectedRange */
+        /**
+        * Returns the currently selected range.
+        * @deprecated Use the getValue() method instead.
+        */
         getSelectedRange(): { startValue: any; endValue: any; };
 
-        /** @docid dxrangeselectormethods_setSelectedRange */
+        /**
+         * Sets a specified range.
+         * @deprecated Use the setValue(value) method instead.
+         */
         setSelectedRange(selectedRange: { startValue: any; endValue: any; }): void;
 
-        /** @docid dxrangeselectormethods_getValue */
+        /** Gets the currently selected range. */
         getValue(): Array<any>;
 
-        /** @docid dxrangeselectormethods_setValue */
+        /** Selects a specific range. */
         setValue(value: Array<any>): void;
 
-        /** @docid dxrangeselectormethods_getdatasource */
+        /** Returns the DataSource instance. */
         getDataSource(): DevExpress.data.DataSource;
     }
 }
