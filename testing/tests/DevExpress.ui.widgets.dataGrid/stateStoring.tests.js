@@ -913,6 +913,46 @@ QUnit.test('Save user state when columns changed', function(assert) {
     });
 });
 
+QUnit.test('Save user state when grouping a column', function(assert) {
+    //arrange, act
+    var userState,
+        customSaveCallCount = 0;
+
+    this.setupDataGridModules({
+        stateStoring: {
+            enabled: true,
+            type: 'custom',
+            customLoad: function() {
+                return {};
+            },
+            customSave: function(state) {
+                customSaveCallCount++;
+                userState = state;
+            }
+        },
+        loadingTimeout: null,
+        dataSource: {
+            store: [{ id: 1 }, { id: 2 }, { id: 3 }]
+        },
+        columns: [{ dataField: "id", sortOrder: "asc" }]
+    });
+
+    //act
+    this.columnsController.columnOption(0, "groupIndex", 0);
+
+    this.clock.tick(2000);
+
+    //assert
+    assert.strictEqual(customSaveCallCount, 1, 'customSave call count');
+    assert.deepEqual(userState, {
+        columns: [{ groupIndex: 0, sortOrder: 'asc', lastSortOrder: 'asc', visibleIndex: 0, dataField: 'id', visible: true, sortIndex: 0, dataType: 'number' }],
+        pageIndex: 0,
+        pageSize: 20,
+        allowedPageSizes: [10, 20, 40],
+        searchText: ''
+    });
+});
+
 //T308264
 QUnit.test("Not save user state when the visibleWidth option in column changed", function(assert) {
     //arrange, act

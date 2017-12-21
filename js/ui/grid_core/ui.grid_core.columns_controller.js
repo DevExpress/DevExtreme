@@ -26,7 +26,7 @@ var $ = require("../../core/renderer"),
     normalizeDataSourceOptions = DataSourceModule.normalizeDataSourceOptions;
 
 var USER_STATE_FIELD_NAMES_15_1 = ["filterValues", "filterType", "fixed", "fixedPosition"],
-    USER_STATE_FIELD_NAMES = ["visibleIndex", "dataField", "name", "dataType", "width", "visible", "sortOrder", "sortIndex", "groupIndex", "filterValue", "selectedFilterOperation", "added"].concat(USER_STATE_FIELD_NAMES_15_1),
+    USER_STATE_FIELD_NAMES = ["visibleIndex", "dataField", "name", "dataType", "width", "visible", "sortOrder", "lastSortOrder", "sortIndex", "groupIndex", "filterValue", "selectedFilterOperation", "added"].concat(USER_STATE_FIELD_NAMES_15_1),
     COMMAND_EXPAND_CLASS = "dx-command-expand";
 
 module.exports = {
@@ -1005,6 +1005,9 @@ module.exports = {
                             column = createColumn(that, columnUserState.added);
                             applyFieldsState(column, columnUserState);
                             resultColumns.push(column);
+                            if(columnUserState.added.columns) {
+                                resultColumns = createColumnsFromOptions(that, resultColumns);
+                            }
                         }
                     }
 
@@ -1082,6 +1085,18 @@ module.exports = {
                 }
             };
 
+            var updateSortOrderWhenGrouping = function(column, groupIndex, prevGroupIndex) {
+                var columnWasGrouped = prevGroupIndex >= 0;
+
+                if(groupIndex >= 0) {
+                    if(!columnWasGrouped) {
+                        column.lastSortOrder = column.sortOrder;
+                    }
+                } else {
+                    column.sortOrder = column.lastSortOrder;
+                }
+            };
+
             var columnOptionCore = function(that, column, optionName, value, notFireEvent) {
                 var optionGetter = dataCoreUtils.compileGetter(optionName),
                     columnIndex = column.index,
@@ -1097,6 +1112,7 @@ module.exports = {
                 if(prevValue !== value) {
                     if(optionName === "groupIndex") {
                         changeType = "grouping";
+                        updateSortOrderWhenGrouping(column, value, prevValue);
                     } else if(optionName === "sortIndex" || optionName === "sortOrder") {
                         changeType = "sorting";
                     } else {
@@ -1434,6 +1450,9 @@ module.exports = {
                     }
 
                     for(i = 0; i < columns.length; i++) {
+                        if(!columns[i].dataField && columns[i].calculateCellValue === columns[i].defaultCalculateCellValue) {
+                            continue;
+                        }
                         if(!columns[i].dataType || (checkSerializers && columns[i].deserializeValue && columns[i].serializationFormat === undefined)) {
                             return false;
                         }
@@ -1804,7 +1823,6 @@ module.exports = {
                                 targetGroupIndex--;
                             }
                             delete column.groupIndex;
-                            delete column.sortOrder;
                             updateColumnGroupIndexes(that);
                         }
 
@@ -1835,6 +1853,10 @@ module.exports = {
                             updateColumnChanges(that, changeType, "visible", column.index);
                         } else {
                             updateColumnChanges(that, changeType);
+                        }
+
+                        if(sourceLocation === GROUP_LOCATION ^ targetLocation === GROUP_LOCATION) {
+                            updateSortOrderWhenGrouping(column, column.groupIndex, -1);
                         }
 
                         fireColumnsChanged(that);
@@ -2377,11 +2399,17 @@ module.exports = {
                  */
                 addColumn: function(options) {
                     var that = this,
-                        column = createColumn(that, options);
-
-                    column.added = options;
+                        column = createColumn(that, options),
+                        index = that._columns.length;
 
                     that._columns.push(column);
+
+                    if(column.isBand) {
+                        that._columns = createColumnsFromOptions(that, that._columns);
+                        column = that._columns[index];
+                    }
+
+                    column.added = options;
                     updateIndexes(that, column);
                     that.updateColumns(that._dataSource);
                 },

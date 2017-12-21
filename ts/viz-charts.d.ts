@@ -6,123 +6,123 @@ declare module DevExpress.viz.charts {
 
     // Chart Elements
 
-    /** @docid baseSeriesObject*/
+    /** This section describes the Series object, which represents a series. */
     export interface BaseSeries {
-        /** @docid baseSeriesObjectFields_fullstate */
+        /** Provides information about the state of the series object. */
         fullState: number;
 
-        /** @docid baseSeriesObjectFields_type */
+        /** Returns the type of the series. */
         type: string;
 
-        /** @docid baseSeriesObjectmethods_clearselection */
+        /** Unselects all the selected points of the series. The points are displayed in an initial style. */
         clearSelection(): void;
 
-        /** @docid baseSeriesObjectmethods_getcolor */
+        /** Gets the color of a particular series. */
         getColor(): string;
 
-        /** @docid baseSeriesObjectmethods_getpointsbyarg */
+        /** Gets points from the series point collection based on the specified argument. */
         getPointsByArg(pointArg: any): Array<BasePoint>;
 
-        /** @docid baseSeriesObjectmethods_getpointbypos */
+        /** Gets a point from the series point collection based on the specified point position. */
         getPointByPos(positionIndex: number): Object;
 
-        /** @docid baseSeriesObjectmethods_select */
+        /** Selects the series. The series is displayed in a 'selected' style until another series is selected or the current series is deselected programmatically. */
         select(): void;
 
-        /** @docid baseSeriesObjectmethods_selectpoint */
+        /** Selects the specified point. The point is displayed in a 'selected' style. */
         selectPoint(point: BasePoint): void;
 
-        /** @docid baseSeriesObjectmethods_deselectpoint */
+        /** Deselects the specified point. The point is displayed in an initial style. */
         deselectPoint(point: BasePoint): void;
 
-        /** @docid baseSeriesObjectmethods_hover */
+        /** Switches the series into the hover state, the same as when a user places the mouse pointer on it. */
         hover(): void;
 
-        /** @docid baseSeriesObjectmethods_clearHover */
+        /** Switches the series from the hover state back to normal. */
         clearHover(): void;
 
-        /** @docid baseSeriesObjectmethods_getallpoints */
+        /** Returns an array of all points in the series. */
         getAllPoints(): Array<BasePoint>;
 
-        /** @docid baseSeriesObjectmethods_getvisiblepoints */
+        /** Returns visible series points. */
         getVisiblePoints(): Array<BasePoint>;
 
-        /** @docid baseSeriesObjectFields_name */
+        /** Returns the name of the series. */
         name: any;
 
-        /** @docid baseSeriesObjectFields_tag */
+        /** Returns the tag of the series. */
         tag: any;
 
-        /** @docid baseSeriesObjectmethods_hide */
+        /** Hides a series. */
         hide(): void;
 
-        /** @docid baseSeriesObjectmethods_isHovered */
+        /** Provides information about the hover state of a series. */
         isHovered(): boolean;
 
-        /** @docid baseSeriesObjectmethods_isSelected */
+        /** Provides information about the selection state of a series. */
         isSelected(): boolean;
 
-        /** @docid baseSeriesObjectmethods_isvisible */
+        /** Provides information about the visibility state of a series. */
         isVisible(): boolean;
 
-        /** @docid baseSeriesObjectmethods_show */
+        /** Makes a particular series visible. */
         show(): void;
     }
 
-    /** @docid basePointObject */
+    /** This section describes the Point object, which represents a series point. */
     export interface BasePoint {
-        /** @docid basePointObjectFields_fullstate */
+        /** Provides information about the state of the point object. */
         fullState: number;
 
-        /** @docid basePointObjectFields_originalArgument */
+        /** Returns the point's argument value that was set in the data source. */
         originalArgument: any;
 
-        /** @docid basePointObjectFields_originalValue */
+        /** Returns the point's value that was set in the data source. */
         originalValue: any;
 
-        /** @docid basePointObjectFields_tag */
+        /** Returns the tag of the point. */
         tag: any;
 
-        /** @docid basePointObjectmethods_clearselection */
+        /** Deselects the point. */
         clearSelection(): void;
 
-        /** @docid basePointObjectmethods_getcolor */
+        /** Gets the color of a particular point. */
         getColor(): string;
 
-        /** @docid basePointObjectmethods_hideTooltip */
+        /** Hides the tooltip of the point. */
         hideTooltip(): void;
 
-        /** @docid basePointObjectmethods_isHovered */
+        /** Provides information about the hover state of a point. */
         isHovered(): boolean;
 
-        /** @docid basePointObjectmethods_isSelected */
+        /** Provides information about the selection state of a point. */
         isSelected(): boolean;
 
-        /** @docid basePointObjectmethods_select */
+        /** Selects the point. The point is displayed in a 'selected' style until another point is selected or the current point is deselected programmatically. */
         select(): void;
 
-        /** @docid basePointObjectmethods_hover */
+        /** Switches the point into the hover state, the same as when a user places the mouse pointer on it. */
         hover(): void;
 
-        /** @docid basePointObjectmethods_clearHover */
+        /** Switches the point from the hover state back to normal. */
         clearHover(): void;
 
-        /** @docid basePointObjectmethods_showTooltip */
+        /** Shows the tooltip of the point. */
         showTooltip(): void;
 
-        /** @docid basePointObjectmethods_getlabel */
+        /** Allows you to obtain the label(s) of the series point. */
         getLabel(): any;
 
-        /** @docid basePointObjectFields_series */
+        /** Returns the series object to which the point belongs. */
         series: BaseSeries;
     }
 
-    /** @docid chartSeriesObject */
+    /** This section describes the Series object, which represents a series. */
     export interface ChartSeries extends BaseSeries {
-        /** @docid chartSeriesObjectFields_pane */
+        /** Returns the name of the series pane. */
         pane: string;
 
-        /** @docid chartSeriesObjectFields_axis */
+        /** Returns the name of the value axis of the series. */
         axis: string;
 
         selectPoint(point: ChartPoint): void;
@@ -131,76 +131,82 @@ declare module DevExpress.viz.charts {
         getVisiblePoints(): Array<ChartPoint>;
     }
 
-    /** @docid chartPointObject */
+    /** This section describes the Point object, which represents a series point. */
     export interface ChartPoint extends BasePoint {
-        /** @docid chartPointObjectFields_originalCloseValue */
+        /** Contains the close value of the point. This field is useful for points belonging to a series of the candle stick or stock type only. */
         originalCloseValue: any;
 
-        /** @docid chartPointObjectFields_originalHighValue */
+        /** Contains the high value of the point. This field is useful for points belonging to a series of the candle stick or stock type only. */
         originalHighValue: any;
 
-        /** @docid chartPointObjectFields_originalLowValue */
+        /** Contains the low value of the point. This field is useful for points belonging to a series of the candle stick or stock type only. */
         originalLowValue: any;
 
-        /** @docid chartPointObjectFields_originalMinValue */
+        /** Contains the first value of the point. This field is useful for points belonging to a series of the range area or range bar type only. */
         originalMinValue: any;
 
-        /** @docid chartPointObjectFields_originalOpenValue */
+        /** Contains the open value of the point. This field is useful for points belonging to a series of the candle stick or stock type only. */
         originalOpenValue: any;
 
-        /** @docid chartPointObjectFields_size */
+        /** Contains the size of the bubble as it was set in the data source. This field is useful for points belonging to a series of the bubble type only. */
         size: any;
 
-        /** @docid chartPointObjectmethods_getboundingrect */
+        /** Gets the parameters of the point's minimum bounding rectangle (MBR). */
         getBoundingRect(): { x: number; y: number; width: number; height: number; };
 
         series: ChartSeries;
     }
 
-    /** @docid baseLabelObject */
+    /** This section describes the Label object, which represents a point label. */
     export interface Label {
-        /** @docid baseLabelObjectmethods_getboundingrect*/
+        /** Gets the parameters of the label's minimum bounding rectangle (MBR). */
         getBoundingRect(): { x: number; y: number; width: number; height: number; };
 
-        /** @docid baseLabelObjectmethods_hide */
+        /** Hides the point label. */
         hide(): void;
 
-        /** @docid baseLabelObjectmethods_show */
+        
+        hide(holdInvisible: boolean): void;
+
+        /** Shows the point label. */
         show(): void;
+
+        
+        show(holdVisible: boolean): void;
+
+        
+        isVisible(): boolean;
     }
 
-    /** @docid pieChartSeriesObject */
+    /** This section describes the Series object, which represents a series. */
     export interface PieSeries extends BaseSeries {
-        /** @docid_ignore pieChartSeriesObjectmethods_hover */
-        /** @docid_ignore pieChartSeriesObjectmethods_clearHover */
-        /** @docid_ignore pieChartSeriesObjectmethods_isHovered */
-
+        
         selectPoint(point: PiePoint): void;
         deselectPoint(point: PiePoint): void;
         getAllPoints(): Array<PiePoint>;
         getVisiblePoints(): Array<PiePoint>;
     }
 
-    /** @docid piePointObject */
+    /** This section describes the Point object, which represents a series point. */
     export interface PiePoint extends BasePoint {
-        /** @docid piePointObjectFields_percent */
+        /** Gets the percentage value of the specific point. */
         percent: any;
 
-        /** @docid piePointObjectmethods_isvisible */
+        /** Provides information about the visibility state of a point. */
         isVisible(): boolean;
 
-        /** @docid piePointObjectmethods_show */
+        /** Makes a specific point visible. */
         show(): void;
 
-        /** @docid piePointObjectmethods_hide */
+        /** Hides a specific point. */
         hide(): void;
 
         series: PieSeries;
     }
 
-    /** @docid polarChartSeriesObject */
+    /** This section describes the Series object, which represents a series. */
     export interface PolarSeries extends BaseSeries {
-        /** @docid polarChartSeriesObjectFields_axis */
+        /** Returns the name of the value axis of the series. */
         axis: string;
 
         selectPoint(point: PolarPoint): void;
@@ -209,53 +215,27 @@ declare module DevExpress.viz.charts {
         getVisiblePoints(): Array<PolarPoint>;
     }
 
-    /** @docid polarPointObject */
+    /** This section describes the Point object, which represents a series point. */
     export interface PolarPoint extends BasePoint {
-        /** @docid_ignore polarPointObjectmethods_getboundingrect */
-
+        
         series: PolarSeries;
     }
 
     export interface Strip {
-        /**
-          * @docid dxchartoptions_argumentaxis_strips_color
-          * @docid dxchartoptions_valueaxis_strips_color
-          * @docid dxpolarchartoptions_argumentaxis_strips_color
-          * @docid dxpolarchartoptions_valueaxis_strips_color
-          */
+        /** Specifies a color for a strip. */
         color?: string;
 
-        /**
-          * @docid dxchartoptions_argumentaxis_strips_label
-          * @docid dxchartoptions_valueaxis_strips_label
-          * @docid dxpolarchartoptions_argumentaxis_strips_label
-          * @docid dxpolarchartoptions_valueaxis_strips_label
-          */
+        /** An object that defines the label configuration options of a strip. */
         label?: {
 
-            /**
-              * @docid dxchartoptions_argumentaxis_strips_label_text
-              * @docid dxchartoptions_valueaxis_strips_label_text
-              * @docid dxpolarchartoptions_argumentaxis_strips_label_text
-              * @docid dxpolarchartoptions_valueaxis_strips_label_text
-              */
+            /** Specifies the text displayed in a strip. */
             text?: string;
         };
 
-        /**
-          * @docid dxchartoptions_argumentaxis_strips_startvalue
-          * @docid dxchartoptions_valueaxis_strips_startvalue
-          * @docid dxpolarchartoptions_argumentaxis_strips_startvalue
-          * @docid dxpolarchartoptions_valueaxis_strips_startvalue
-          */
+        /** Specifies a start value for a strip. */
         startValue?: any;
 
-        /**
-          * @docid dxchartoptions_argumentaxis_strips_endvalue
-          * @docid dxchartoptions_valueaxis_strips_endvalue
-          * @docid dxpolarchartoptions_argumentaxis_strips_endvalue
-          * @docid dxpolarchartoptions_valueaxis_strips_endvalue
-          */
+        /** Specifies an end value for a strip. */
         endValue?: any;
     }
 
@@ -263,1416 +243,884 @@ declare module DevExpress.viz.charts {
     // Series
 
     export interface BaseSeriesConfigLabel {
-        /**
-        * @docid dxChartSeriesTypes_CommonSeries_label_argumentFormat
-        * @docid dxPieChartSeriesTypes_CommonPieChartSeries_label_argumentFormat
-        * @docid dxPolarChartSeriesTypes_CommonPolarChartSeries_label_argumentFormat
-        */
+        /** Specifies a format for arguments displayed by point labels. */
         argumentFormat?: any;
 
         /**
-        * @docid dxChartSeriesTypes_CommonSeries_label_argumentprecision
-        * @docid dxPieChartSeriesTypes_CommonPieChartSeries_label_argumentprecision
-        * @docid dxPolarChartSeriesTypes_CommonPolarChartSeries_label_argumentprecision
-        */
+         * Specifies a precision for formatted point arguments displayed in point labels.
+         * @deprecated Use the series.label.argumentFormat.precision instead.
+         */
         argumentPrecision?: number;
 
-        /**
-        * @docid dxChartSeriesTypes_CommonSeries_label_backgroundcolor
-        * @docid dxPieChartSeriesTypes_CommonPieChartSeries_label_backgroundcolor
-        * @docid dxPolarChartSeriesTypes_CommonPolarChartSeries_label_backgroundcolor
-        */
+        /** Specifies a background color for point labels. */
         backgroundColor?: string;
 
-        /**
-        * @docid dxChartSeriesTypes_CommonSeries_label_border
-        * @docid dxPieChartSeriesTypes_CommonPieChartSeries_label_border
-        * @docid dxPolarChartSeriesTypes_CommonPolarChartSeries_label_border
-        */
+        /** Specifies border options for point labels. */
         border?: viz.core.DashedBorder;
 
-        /**
-        * @docid dxChartSeriesTypes_CommonSeries_label_connector
-        * @docid dxPieChartSeriesTypes_CommonPieChartSeries_label_connector
-        * @docid dxPolarChartSeriesTypes_CommonPolarChartSeries_label_connector
-        */
+        /** Specifies connector options for series point labels. */
         connector?: {
 
-            /**
-            * @docid dxChartSeriesTypes_CommonSeries_label_connector_color
-            * @docid dxPieChartSeriesTypes_CommonPieChartSeries_label_connector_color
-            * @docid dxPolarChartSeriesTypes_CommonPolarChartSeries_label_connector_color
-            */
+            /** Specifies the color of label connectors. */
             color?: string;
 
-            /**
-            * @docid dxChartSeriesTypes_CommonSeries_label_connector_visible
-            * @docid dxPieChartSeriesTypes_CommonPieChartSeries_label_connector_visible
-            * @docid dxPolarChartSeriesTypes_CommonPolarChartSeries_label_connector_visible
-            */
+            /** Indicates whether or not label connectors are visible. */
             visible?: boolean;
 
-            /**
-            * @docid dxChartSeriesTypes_CommonSeries_label_connector_width
-            * @docid dxPieChartSeriesTypes_CommonPieChartSeries_label_connector_width
-            * @docid dxPolarChartSeriesTypes_CommonPolarChartSeries_label_connector_width
-            */
+            /** Specifies the width of label connectors. */
             width?: number;
         };
 
-        /**
-          * @docid dxChartSeriesTypes_CommonSeries_label_customizetext
-          * @docid dxChartSeriesTypes_areaseries_label_customizetext
-          * @docid dxChartSeriesTypes_barseries_label_customizetext
-          * @docid dxChartSeriesTypes_bubbleseries_label_customizetext
-          * @docid dxChartSeriesTypes_candlestickseries_label_customizetext
-          * @docid dxChartSeriesTypes_fullstackedareaseries_label_customizetext
-          * @docid dxChartSeriesTypes_fullstackedbarseries_label_customizetext
-          * @docid dxChartSeriesTypes_fullstackedlineseries_label_customizetext
-          * @docid dxChartSeriesTypes_fullstackedsplineareaseries_label_customizetext
-          * @docid dxChartSeriesTypes_fullstackedsplineseries_label_customizetext
-          * @docid dxChartSeriesTypes_lineseries_label_customizetext
-          * @docid dxChartSeriesTypes_rangeareaseries_label_customizetext
-          * @docid dxChartSeriesTypes_rangebarseries_label_customizetext
-          * @docid dxChartSeriesTypes_scatterseries_label_customizetext
-          * @docid dxChartSeriesTypes_splineareaseries_label_customizetext
-          * @docid dxChartSeriesTypes_splineseries_label_customizetext
-          * @docid dxChartSeriesTypes_stackedareaseries_label_customizetext
-          * @docid dxChartSeriesTypes_stackedbarseries_label_customizetext
-          * @docid dxChartSeriesTypes_stackedlineseries_label_customizetext
-          * @docid dxChartSeriesTypes_stackedsplineareaseries_label_customizetext
-          * @docid dxChartSeriesTypes_stackedsplineseries_label_customizetext
-          * @docid dxChartSeriesTypes_stepareaseries_label_customizetext
-          * @docid dxChartSeriesTypes_steplineseries_label_customizetext
-          * @docid dxChartSeriesTypes_stockseries_label_customizetext
-          * @docid dxPieChartSeriesTypes_CommonPieChartSeries_label_customizetext
-          * @docid dxPolarChartSeriesTypes_CommonPolarChartSeries_label_customizetext
-          */
+        /** Specifies a callback function that returns the text to be displayed by point labels. */
         customizeText?: (pointInfo: Object) => string;
 
-        /**
-          * @docid dxChartSeriesTypes_CommonSeries_label_font
-          * @docid dxPieChartSeriesTypes_CommonPieChartSeries_label_font
-          * @docid dxPolarChartSeriesTypes_CommonPolarChartSeries_label_font
-          */
+        /** Specifies font options for the text displayed in point labels. */
         font?: viz.core.Font;
 
-        /**
-          * @docid dxChartSeriesTypes_CommonSeries_label_format
-          * @docid dxPieChartSeriesTypes_CommonPieChartSeries_label_format
-          * @docid dxPolarChartSeriesTypes_CommonPolarChartSeries_label_format
-          */
+        /** Specifies a format for the text displayed by point labels. */
         format?: any;
 
-        /**
-          * @docid dxChartSeriesTypes_CommonSeries_label_position
-          * @docid dxChartSeriesTypes_fullstackedbarseries_label_position
-          * @docid dxChartSeriesTypes_stackedbarseries_label_position
-          * @docid dxPieChartSeriesTypes_CommonPieChartSeries_label_position
-          * @docid dxPolarChartSeriesTypes_CommonPolarChartSeries_label_position
-          * @docid dxPolarChartSeriesTypes_stackedbarpolarseries_label_position
-          */
+        
         position?: string;
 
         /**
-          * @docid dxChartSeriesTypes_CommonSeries_label_precision
-          * @docid dxPieChartSeriesTypes_CommonPieChartSeries_label_precision
-          * @docid dxPolarChartSeriesTypes_CommonPolarChartSeries_label_precision
-          */
+        * Specifies a precision for formatted point values displayed in point labels.
+        * @deprecated Use the series.label.format.precision option instead.
+        */
         precision?: number;
 
-        /**
-          * @docid dxChartSeriesTypes_CommonSeries_label_rotationangle
-          * @docid dxPieChartSeriesTypes_CommonPieChartSeries_label_rotationangle
-          * @docid dxPolarChartSeriesTypes_CommonPolarChartSeries_label_rotationangle
-          */
+        /** Specifies the angle used to rotate point labels from their initial position. */
         rotationAngle?: number;
 
-        /**
-          * @docid dxChartSeriesTypes_CommonSeries_label_visible
-          * @docid dxPieChartSeriesTypes_CommonPieChartSeries_label_visible
-          * @docid dxPolarChartSeriesTypes_CommonPolarChartSeries_label_visible
-          */
+        /** Specifies the visibility of point labels. */
         visible?: boolean;
     }
 
     export interface SeriesConfigLabel extends BaseSeriesConfigLabel {
-        /**
-         * @docid dxPolarChartSeriesTypes_CommonPolarChartSeries_label_showforzerovalues
-         * @docid dxChartSeriesTypes_CommonSeries_label_showforzerovalues
-         */
+        /** Specifies whether or not to show labels for points with zero value. Applies only to bar-like series. */
         showForZeroValues?: boolean;
     }
 
     export interface ChartSeriesConfigLabel extends SeriesConfigLabel {
-        /**
-        * @docid dxChartSeriesTypes_CommonSeries_label_alignment
-        */
+        /** Aligns point labels in relation to their points. */
         alignment?: string;
 
-        /**
-        * @docid dxChartSeriesTypes_CommonSeries_label_horizontaloffset
-        */
+        /** Along with verticalOffset, shifts point labels from their initial positions. */
         horizontalOffset?: number;
 
-        /**
-        * @docid dxChartSeriesTypes_CommonSeries_label_verticaloffset
-        */
+        /** Along with horizontalOffset, shifts point labels from their initial positions. */
         verticalOffset?: number;
 
-        /** * @docid dxChartSeriesTypes_CommonSeries_label_percentprecision */
+        /**
+         * Specifies a precision for the percentage values displayed in the labels of a full-stacked-like series.
+         * @deprecated Use the series.label.format.percentPrecision instead.
+         */
         percentPrecision?: number;
     }
 
     export interface BaseCommonSeriesConfig {
-        /**
-          * @docid dxChartSeriesTypes_CommonSeries_argumentfield
-          * @docid dxChartSeriesTypes_candlestickseries_argumentfield
-          * @docid dxChartSeriesTypes_stockseries_argumentfield
-          * @docid dxPolarChartSeriesTypes_CommonPolarChartSeries_argumentfield
-          */
+        /** Specifies the data source field that provides arguments for series points. */
         argumentField?: string;
 
-        /**
-        * @docid dxChartSeriesTypes_CommonSeries_axis
-        * @docid dxPolarChartSeriesTypes_CommonPolarChartSeries_axis
-        */
         axis?: string;
 
-        /**
-        * @docid dxChartSeriesTypes_CommonSeries_label
-        * @docid dxChartSeriesTypes_areaseries_label
-        * @docid dxChartSeriesTypes_barseries_label
-        * @docid dxChartSeriesTypes_bubbleseries_label
-        * @docid dxChartSeriesTypes_candlestickseries_label
-        * @docid dxChartSeriesTypes_fullstackedareaseries_label
-        * @docid dxChartSeriesTypes_fullstackedbarseries_label
-        * @docid dxChartSeriesTypes_fullstackedlineseries_label
-        * @docid dxChartSeriesTypes_fullstackedsplineareaseries_label
-        * @docid dxChartSeriesTypes_fullstackedsplineseries_label
-        * @docid dxChartSeriesTypes_lineseries_label
-        * @docid dxChartSeriesTypes_rangeareaseries_label
-        * @docid dxChartSeriesTypes_rangebarseries_label
-        * @docid dxChartSeriesTypes_scatterseries_label
-        * @docid dxChartSeriesTypes_splineareaseries_label
-        * @docid dxChartSeriesTypes_splineseries_label
-        * @docid dxChartSeriesTypes_stackedareaseries_label
-        * @docid dxChartSeriesTypes_stackedbarseries_label
-        * @docid dxChartSeriesTypes_stackedlineseries_label
-        * @docid dxChartSeriesTypes_stackedsplineareaseries_label
-        * @docid dxChartSeriesTypes_stackedsplineseries_label
-        * @docid dxChartSeriesTypes_stepareaseries_label
-        * @docid dxChartSeriesTypes_steplineseries_label
-        * @docid dxChartSeriesTypes_stockseries_label
-        */
         label?: ChartSeriesConfigLabel;
-        /**
-        * @docid dxChartSeriesTypes_CommonSeries_border
-        * @docid dxPolarChartSeriesTypes_CommonPolarChartSeries_border
-        * @docid dxChartSeriesTypes_stepareaseries_border
-        */
+        
         border?: viz.core.DashedBorder;
 
-        /**
-        * @docid dxChartSeriesTypes_CommonSeries_color
-        * @docid dxPolarChartSeriesTypes_CommonPolarChartSeries_color
-        */
+        /** Specifies a series color. */
         color?: string;
 
-        /**
-        * @docid dxChartSeriesTypes_CommonSeries_dashstyle
-        * @docid dxPolarChartSeriesTypes_CommonPolarChartSeries_dashstyle
-        */
+        /** Specifies the dash style of the series' line. */
         dashStyle?: string;
 
-        /**
-          * @docid dxChartSeriesTypes_CommonSeries_hovermode
-          * @docid dxChartSeriesTypes_areaseries_hovermode
-          * @docid dxChartSeriesTypes_barseries_hovermode
-          * @docid dxChartSeriesTypes_bubbleseries_hovermode
-          * @docid dxChartSeriesTypes_candlestickseries_hovermode
-          * @docid dxChartSeriesTypes_fullstackedareaseries_hovermode
-          * @docid dxChartSeriesTypes_fullstackedbarseries_hovermode
-          * @docid dxChartSeriesTypes_fullstackedlineseries_hovermode
-          * @docid dxChartSeriesTypes_fullstackedsplineareaseries_hovermode
-          * @docid dxChartSeriesTypes_fullstackedsplineseries_hovermode
-          * @docid dxChartSeriesTypes_lineseries_hovermode
-          * @docid dxChartSeriesTypes_rangeareaseries_hovermode
-          * @docid dxChartSeriesTypes_rangebarseries_hovermode
-          * @docid dxChartSeriesTypes_splineareaseries_hovermode
-          * @docid dxChartSeriesTypes_splineseries_hovermode
-          * @docid dxChartSeriesTypes_stackedareaseries_hovermode
-          * @docid dxChartSeriesTypes_stackedbarseries_hovermode
-          * @docid dxChartSeriesTypes_stackedlineseries_hovermode
-          * @docid dxChartSeriesTypes_stackedsplineareaseries_hovermode
-          * @docid dxChartSeriesTypes_stackedsplineseries_hovermode
-          * @docid dxChartSeriesTypes_stepareaseries_hovermode
-          * @docid dxChartSeriesTypes_steplineseries_hovermode
-          * @docid dxChartSeriesTypes_stockseries_hovermode
-          * @docid dxPolarChartSeriesTypes_CommonPolarChartSeries_hovermode
-          * @docid dxPolarChartSeriesTypes_areapolarseries_hovermode
-          * @docid dxPolarChartSeriesTypes_barpolarseries_hovermode
-          * @docid dxPolarChartSeriesTypes_linepolarseries_hovermode
-          * @docid dxPolarChartSeriesTypes_stackedbarpolarseries_hovermode
-          */
+        /** Specifies series elements to be highlighted when a user points to the series. */
         hoverMode?: string;
 
-        /**
-        * @docid dxChartSeriesTypes_CommonSeries_hoverstyle
-        * @docid dxPolarChartSeriesTypes_CommonPolarChartSeries_hoverstyle
-        * @docid dxChartSeriesTypes_stepareaseries_hoverstyle
-        * @docid dxChartSeriesTypes_candlestickseries_hoverstyle
-        */
         hoverStyle?: {
 
-            /**
-            * @docid dxChartSeriesTypes_CommonSeries_hoverstyle_border
-            * @docid dxPolarChartSeriesTypes_CommonPolarChartSeries_hoverstyle_border
-            * @docid dxChartSeriesTypes_stepareaseries_hoverstyle_border
-            */
             border?: viz.core.DashedBorder;
 
-            /**
-            * @docid dxChartSeriesTypes_CommonSeries_hoverstyle_color
-            * @docid dxPolarChartSeriesTypes_CommonPolarChartSeries_hoverstyle_color
-            */
+            /** <p>Sets a color for a series when it is hovered over.</p> */
             color?: string;
 
-            /**
-            * @docid dxChartSeriesTypes_CommonSeries_hoverstyle_dashstyle
-            * @docid dxPolarChartSeriesTypes_CommonPolarChartSeries_hoverstyle_dashstyle
-            */
+            /** Specifies the dash style for the line in a hovered series. */
             dashStyle?: string;
 
-            /**
-            * @docid dxChartSeriesTypes_CommonSeries_hoverstyle_hatching
-            * @docid dxPolarChartSeriesTypes_CommonPolarChartSeries_hoverstyle_hatching
-            * @docid dxChartSeriesTypes_candlestickseries_hoverstyle_hatching
-            */
+            
             hatching?: viz.core.Hatching;
 
-            /**
-            * @docid dxChartSeriesTypes_CommonSeries_hoverstyle_width
-            * @docid dxPolarChartSeriesTypes_CommonPolarChartSeries_hoverstyle_width
-            */
+            /** Specifies the width of a line in a hovered series. */
             width?: number;
         };
 
-        /**
-        * @docid dxChartSeriesTypes_CommonSeries_ignoreemptypoints
-        * @docid dxPolarChartSeriesTypes_CommonPolarChartSeries_ignoreemptypoints
-        */
+        /** Specifies whether a chart ignores null data points or not. */
         ignoreEmptyPoints?: boolean;
 
-        /**
-        * @docid dxChartSeriesTypes_CommonSeries_maxlabelcount
-        * @docid dxPolarChartSeriesTypes_CommonPolarChartSeries_maxlabelcount
-        */
+        /** Specifies how many points are acceptable to be in a series to display all labels for these points. Otherwise, the labels will not be displayed. */
         maxLabelCount?: number;
 
-        /**
-        * @docid dxChartSeriesTypes_CommonSeries_minbarsize
-        * @docid dxPolarChartSeriesTypes_CommonPolarChartSeries_minbarsize
-        */
+        /** Specifies the minimal length of a displayed bar in pixels. */
         minBarSize?: number;
 
-        /**
-        * @docid dxChartSeriesTypes_CommonSeries_opacity
-        * @docid dxPolarChartSeriesTypes_CommonPolarChartSeries_opacity
-        */
+        /** Specifies opacity for a series. */
         opacity?: number;
 
-        /**
-          * @docid dxPolarChartSeriesTypes_CommonPolarChartSeries_selectionmode
-          * @docid dxPolarChartSeriesTypes_areapolarseries_selectionmode
-          * @docid dxPolarChartSeriesTypes_barpolarseries_selectionmode
-          * @docid dxPolarChartSeriesTypes_linepolarseries_selectionmode
-          * @docid dxPolarChartSeriesTypes_stackedbarpolarseries_selectionmode
-          * @docid dxChartSeriesTypes_CommonSeries_selectionmode
-          * @docid dxChartSeriesTypes_areaseries_selectionmode
-          * @docid dxChartSeriesTypes_barseries_selectionmode
-          * @docid dxChartSeriesTypes_bubbleseries_selectionmode
-          * @docid dxChartSeriesTypes_candlestickseries_selectionmode
-          * @docid dxChartSeriesTypes_fullstackedareaseries_selectionmode
-          * @docid dxChartSeriesTypes_fullstackedbarseries_selectionmode
-          * @docid dxChartSeriesTypes_fullstackedlineseries_selectionmode
-          * @docid dxChartSeriesTypes_fullstackedsplineareaseries_selectionmode
-          * @docid dxChartSeriesTypes_fullstackedsplineseries_selectionmode
-          * @docid dxChartSeriesTypes_lineseries_selectionmode
-          * @docid dxChartSeriesTypes_rangeareaseries_selectionmode
-          * @docid dxChartSeriesTypes_rangebarseries_selectionmode
-          * @docid dxChartSeriesTypes_splineareaseries_selectionmode
-          * @docid dxChartSeriesTypes_splineseries_selectionmode
-          * @docid dxChartSeriesTypes_stackedareaseries_selectionmode
-          * @docid dxChartSeriesTypes_stackedbarseries_selectionmode
-          * @docid dxChartSeriesTypes_stackedlineseries_selectionmode
-          * @docid dxChartSeriesTypes_stackedsplineareaseries_selectionmode
-          * @docid dxChartSeriesTypes_stackedsplineseries_selectionmode
-          * @docid dxChartSeriesTypes_stepareaseries_selectionmode
-          * @docid dxChartSeriesTypes_steplineseries_selectionmode
-          * @docid dxChartSeriesTypes_stockseries_selectionmode
-          */
+        /** Specifies series elements to be highlighted when a user selects a point. */
         selectionMode?: string;
 
-        /**
-        * @docid dxChartSeriesTypes_CommonSeries_selectionstyle
-        * @docid dxPolarChartSeriesTypes_CommonPolarChartSeries_selectionstyle
-        * @docid dxChartSeriesTypes_stepareaseries_selectionStyle
-        * @docid dxChartSeriesTypes_candlestickseries_selectionstyle
-        */
+        
         selectionStyle?: {
 
-            /**
-            * @docid dxChartSeriesTypes_CommonSeries_selectionstyle_border
-            * @docid dxPolarChartSeriesTypes_CommonPolarChartSeries_selectionstyle_border
-            * @docid dxChartSeriesTypes_stepareaseries_selectionStyle_border
-            */
+            
             border?: viz.core.DashedBorder;
 
-            /**
-            * @docid dxChartSeriesTypes_CommonSeries_selectionstyle_color
-            * @docid dxPolarChartSeriesTypes_CommonPolarChartSeries_selectionstyle_color
-            */
+            /** Sets a color for a series when it is selected. */
             color?: string;
 
-            /**
-            * @docid dxChartSeriesTypes_CommonSeries_selectionstyle_dashstyle
-            * @docid dxPolarChartSeriesTypes_CommonPolarChartSeries_selectionstyle_dashstyle
-            */
+            /** Specifies the dash style for the line in a selected series. */
             dashStyle?: string;
 
-            /**
-            * @docid dxChartSeriesTypes_CommonSeries_selectionstyle_hatching
-            * @docid dxPolarChartSeriesTypes_CommonPolarChartSeries_selectionstyle_hatching
-            * @docid dxChartSeriesTypes_candlestickseries_selectionstyle_hatching
-            */
+            
             hatching?: viz.core.Hatching;
 
-            /**
-            * @docid dxChartSeriesTypes_CommonSeries_selectionstyle_width
-            * @docid dxPolarChartSeriesTypes_CommonPolarChartSeries_selectionstyle_width
-            */
+            /** Specifies the width of a line in a selected series. */
             width?: number;
         };
 
-        /**
-        * @docid dxChartSeriesTypes_CommonSeries_showinlegend
-        * @docid dxPolarChartSeriesTypes_CommonPolarChartSeries_showinlegend
-        */
+        /** Specifies whether or not to show the series in the chart's legend. */
         showInLegend?: boolean;
 
-        /**
-        * @docid dxChartSeriesTypes_CommonSeries_stack
-        * @docid dxPolarChartSeriesTypes_CommonPolarChartSeries_stack
-        */
+        /** Specifies the name of the stack where the values of the _stackedBar_ series must be located. */
         stack?: string;
 
-        /**
-        * @docid dxChartSeriesTypes_CommonSeries_tagfield
-        * @docid dxPolarChartSeriesTypes_CommonPolarChartSeries_tagfield
-        */
+        /** Specifies the name of the data source field that provides data about a point. */
         tagField?: string;
 
-        /**
-        * @docid dxChartSeriesTypes_CommonSeries_valuefield
-        * @docid dxPolarChartSeriesTypes_CommonPolarChartSeries_valuefield
-        */
+        /** Specifies the data source field that provides values for series points. */
         valueField?: string;
 
-        /**
-        * @docid dxChartSeriesTypes_CommonSeries_visible
-        * @docid dxPolarChartSeriesTypes_CommonPolarChartSeries_visible
-        */
+        /** Specifies the visibility of a series. */
         visible?: boolean;
 
-        /**
-        * @docid dxChartSeriesTypes_CommonSeries_width
-        * @docid dxPolarChartSeriesTypes_CommonPolarChartSeries_width
-        */
+        /** Specifies a line width. */
         width?: number;
 
-        /**
-        * @docid dxChartSeriesTypes_CommonSeries_valueerrorbar
-        * @docid dxPolarChartSeriesTypes_CommonPolarChartSeries_valueerrorbar
-        */
+        /** Configures error bars. */
         valueErrorBar?: {
-            /**
-            * @docid dxChartSeriesTypes_CommonSeries_valueerrorbar_displaymode
-            * @docid dxPolarChartSeriesTypes_CommonPolarChartSeries_valueerrorbar_displaymode
-            */
+            /** Specifies whether error bars must be displayed in full or partially. */
             displayMode?: string;
 
-            /**
-            * @docid dxChartSeriesTypes_CommonSeries_valueerrorbar_lowvaluefield
-            * @docid dxPolarChartSeriesTypes_CommonPolarChartSeries_valueerrorbar_lowvaluefield
-            */
+            /** Specifies the data field that provides data for low error values. */
             lowValueField?: string;
 
-            /**
-            * @docid dxChartSeriesTypes_CommonSeries_valueerrorbar_highvaluefield
-            * @docid dxPolarChartSeriesTypes_CommonPolarChartSeries_valueerrorbar_highvaluefield
-            */
+            /** Specifies the data field that provides data for high error values. */
             highValueField?: string;
 
-            /**
-            * @docid dxChartSeriesTypes_CommonSeries_valueerrorbar_type
-            * @docid dxPolarChartSeriesTypes_CommonPolarChartSeries_valueerrorbar_type
-            */
+            /** Specifies how error bar values must be calculated. */
             type?: string;
 
-            /**
-            * @docid dxChartSeriesTypes_CommonSeries_valueerrorbar_value
-            * @docid dxPolarChartSeriesTypes_CommonPolarChartSeries_valueerrorbar_value
-            */
+            /** Specifies the value to be used for generating error bars. */
             value?: number;
 
-            /**
-            * @docid dxChartSeriesTypes_CommonSeries_valueerrorbar_color
-            * @docid dxPolarChartSeriesTypes_CommonPolarChartSeries_valueerrorbar_color
-            */
+            /** Specifies the color of error bars. */
             color?: string;
 
-            /**
-            * @docid dxChartSeriesTypes_CommonSeries_valueerrorbar_opacity
-            * @docid dxPolarChartSeriesTypes_CommonPolarChartSeries_valueerrorbar_opacity
-            */
+            /** Specifies the opacity of error bars. */
             opacity?: number;
 
-            /**
-            * @docid dxChartSeriesTypes_CommonSeries_valueerrorbar_edgelength
-            * @docid dxPolarChartSeriesTypes_CommonPolarChartSeries_valueerrorbar_edgelength
-            */
+            /** Specifies the length of the lines that indicate the error bar edges. */
             edgeLength?: number;
-            /**
-            * @docid dxChartSeriesTypes_CommonSeries_valueerrorbar_linewidth
-            * @docid dxPolarChartSeriesTypes_CommonPolarChartSeries_valueerrorbar_linewidth
-            */
+            /** Specifies the width of the error bar line. */
             lineWidth?: number;
         };
     }
 
     export interface CommonPointOptions {
-        /**
-        * @docid dxChartSeriesTypes_CommonSeries_point_border
-        * @docid dxPolarChartSeriesTypes_CommonPolarChartSeries_point_border
-        */
+        /** Specifies border options for points in the line and area series. */
         border?: viz.core.Border;
 
-        /**
-        * @docid dxChartSeriesTypes_CommonSeries_point_color
-        * @docid dxPolarChartSeriesTypes_CommonPolarChartSeries_point_color
-        */
+        /** Specifies the points color. */
         color?: string;
 
-        /**
-        * @docid dxChartSeriesTypes_CommonSeries_point_hovermode
-        * @docid dxPolarChartSeriesTypes_CommonPolarChartSeries_point_hovermode
-        */
+        /** Specifies what series points to highlight when a point is hovered over. */
         hoverMode?: string;
 
-        /**
-        * @docid dxChartSeriesTypes_CommonSeries_point_hoverstyle
-        * @docid dxPolarChartSeriesTypes_CommonPolarChartSeries_point_hoverstyle
-        */
+        /** An object defining configuration options for a hovered point. */
         hoverStyle?: {
 
-            /**
-            * @docid dxChartSeriesTypes_CommonSeries_point_hoverstyle_border
-            * @docid dxPolarChartSeriesTypes_CommonPolarChartSeries_point_hoverstyle_border
-            */
+            /** An object defining the border options for a hovered point. */
             border?: viz.core.Border;
 
-            /**
-            * @docid dxChartSeriesTypes_CommonSeries_point_hoverstyle_color
-            * @docid dxPolarChartSeriesTypes_CommonPolarChartSeries_point_hoverstyle_color
-            */
+            /** Sets a color for a point when it is hovered over. */
             color?: string;
 
-            /**
-            * @docid dxChartSeriesTypes_CommonSeries_point_hoverstyle_size
-            * @docid dxPolarChartSeriesTypes_CommonPolarChartSeries_point_hoverstyle_size
-            */
+            /** Specifies the diameter of a hovered point in the series that represents data points as symbols (not as bars for instance). */
             size?: number;
         };
 
-        /**
-        * @docid dxChartSeriesTypes_CommonSeries_point_selectionmode
-        * @docid dxPolarChartSeriesTypes_CommonPolarChartSeries_point_selectionmode
-        */
+        /** Specifies what series points to highlight when a point is selected. */
         selectionMode?: string;
 
-        /**
-        * @docid dxChartSeriesTypes_CommonSeries_point_selectionstyle
-        * @docid dxPolarChartSeriesTypes_CommonPolarChartSeries_point_selectionstyle
-        */
+        /** An object defining configuration options for a selected point. */
         selectionStyle?: {
 
-            /**
-            * @docid dxChartSeriesTypes_CommonSeries_point_selectionstyle_border
-            * @docid dxPolarChartSeriesTypes_CommonPolarChartSeries_point_selectionstyle_border
-            */
+            /** An object defining the border options for a selected point. */
             border?: viz.core.Border;
 
-            /**
-            * @docid dxChartSeriesTypes_CommonSeries_point_selectionstyle_color
-            * @docid dxPolarChartSeriesTypes_CommonPolarChartSeries_point_selectionstyle_color
-            */
+            /** <p>Sets a color for a point when it is selected.</p> */
             color?: string;
 
-            /**
-            * @docid dxChartSeriesTypes_CommonSeries_point_selectionstyle_size
-            * @docid dxPolarChartSeriesTypes_CommonPolarChartSeries_point_selectionstyle_size
-            */
+            /** Specifies the diameter of a selected point in the series that represents data points as symbols (not as bars for instance). */
             size?: number;
         };
 
-        /**
-        * @docid dxChartSeriesTypes_CommonSeries_point_size
-        * @docid dxPolarChartSeriesTypes_CommonPolarChartSeries_point_size
-        */
+        /** Specifies the point diameter in pixels for those series that represent data points as symbols (not as bars for instance). */
         size?: number;
 
-        /**
-        * @docid dxChartSeriesTypes_CommonSeries_point_symbol
-        * @docid dxPolarChartSeriesTypes_CommonPolarChartSeries_point_symbol
-        */
+        /** Specifies a symbol for presenting points of the line and area series. */
         symbol?: string;
 
-        /**
-          * @docid dxChartSeriesTypes_CommonSeries_point_visible
-          * @docid dxPolarChartSeriesTypes_CommonPolarChartSeries_point_visible
-          * @docid dxChartSeriesTypes_areaseries_point_visible
-          * @docid dxChartSeriesTypes_fullstackedareaseries_point_visible
-          * @docid dxChartSeriesTypes_fullstackedsplineareaseries_point_visible
-          * @docid dxChartSeriesTypes_rangeareaseries_point_visible
-          * @docid dxChartSeriesTypes_splineareaseries_point_visible
-          * @docid dxChartSeriesTypes_stackedareaseries_point_visible
-          * @docid dxChartSeriesTypes_stackedsplineareaseries_point_visible
-          * @docid dxChartSeriesTypes_stepareaseries_point_visible
-          * @docid dxPolarChartSeriesTypes_areapolarseries_point_visible
-          */
+        
         visible?: boolean;
     }
 
     export interface ChartCommonPointOptions extends CommonPointOptions {
-        /** @docid dxChartSeriesTypes_CommonSeries_point_image */
+        /** Substitutes the standard point symbols with an image. */
         image?: {
 
-            /** @docid dxChartSeriesTypes_CommonSeries_point_image_height */
+            /** Specifies the height of the image used instead of a point marker. */
             height?: any;
 
-            /** @docid_ignore dxChartSeriesTypes_CommonSeries_point_image_height_rangemaxpoint */
-            /** @docid_ignore dxChartSeriesTypes_CommonSeries_point_image_height_rangeminpoint */
-
-            /** @docid dxChartSeriesTypes_CommonSeries_point_image_url */
+            
+            /** Specifies the URL of the image to be used as a point marker. */
             url?: any;
 
-            /** @docid_ignore dxChartSeriesTypes_CommonSeries_point_image_url_rangemaxpoint */
-            /** @docid_ignore dxChartSeriesTypes_CommonSeries_point_image_url_rangeminpoint */
-
-            /** @docid dxChartSeriesTypes_CommonSeries_point_image_width */
+            
+            /** Specifies the width of an image that is used as a point marker. */
             width?: any;
 
-            /** @docid_ignore dxChartSeriesTypes_CommonSeries_point_image_width_rangemaxpoint */
-            /** @docid_ignore dxChartSeriesTypes_CommonSeries_point_image_width_rangeminpoint */
         };
     }
 
     export interface PolarCommonPointOptions extends CommonPointOptions {
-        /** @docid dxPolarChartSeriesTypes_CommonPolarChartSeries_point_image */
+        /** An object specifying the parameters of an image that is used as a point marker. */
         image?: {
 
-            /** @docid dxPolarChartSeriesTypes_CommonPolarChartSeries_point_image_height */
+            /** Specifies the height of an image that is used as a point marker. */
             height?: number;
 
-            /** @docid dxPolarChartSeriesTypes_CommonPolarChartSeries_point_image_url */
+            /** Specifies a URL leading to the image to be used as a point marker. */
             url?: string;
 
-            /** @docid dxPolarChartSeriesTypes_CommonPolarChartSeries_point_image_width */
+            /** Specifies the width of an image that is used as a point marker. */
             width?: number;
         };
     }
 
-    /** @docid dxChartSeriesTypes_CommonSeries */
+    /** An object that defines configuration options for chart series. */
     export interface CommonSeriesConfig extends BaseCommonSeriesConfig {
 
-        /** @docid dxChartSeriesTypes_CommonSeries_closevaluefield */
+        /** Specifies which data source field provides close values for points of a financial series. */
         closeValueField?: string;
 
-        /** @docid dxChartSeriesTypes_CommonSeries_cornerradius */
+        /** Makes bars look rounded. Applies only to bar-like series. */
         cornerRadius?: number;
 
-        /** @docid dxChartSeriesTypes_CommonSeries_highvaluefield */
+        /** Specifies which data source field provides high values for points of a financial series. */
         highValueField?: string;
 
-        /** @docid dxChartSeriesTypes_CommonSeries_innercolor */
+        /** Specifies a filling color for the body of a series point that visualizes a non-reduced value. Applies only to candlestick series. */
         innerColor?: string;
 
-        /** @docid dxChartSeriesTypes_CommonSeries_lowvaluefield */
+        /** Specifies which data source field provides low values for points of a financial series. */
         lowValueField?: string;
 
-        /** @docid dxChartSeriesTypes_CommonSeries_openvaluefield */
+        /** Specifies which data source field provides open values for points of a financial series. */
         openValueField?: string;
 
-        /** @docid dxChartSeriesTypes_CommonSeries_pane */
+        /** Specifies which pane the series should belong to. Accepts the name of the pane. */
         pane?: string;
 
-        /**
-        * @docid dxChartSeriesTypes_CommonSeries_point
-        * @docid dxChartSeriesTypes_fullstackedareaseries_point
-        * @docid dxChartSeriesTypes_fullstackedsplineareaseries_point
-        * @docid dxChartSeriesTypes_rangeareaseries_point
-        * @docid dxChartSeriesTypes_splineareaseries_point
-        * @docid dxChartSeriesTypes_stackedareaseries_point
-        * @docid dxChartSeriesTypes_stackedsplineareaseries_point
-        * @docid dxChartSeriesTypes_stepareaseries_point
-        * @docid dxChartSeriesTypes_areaseries_point
-        */
         point?: ChartCommonPointOptions;
 
-        /** @docid dxChartSeriesTypes_CommonSeries_rangevalue1field */
+        /** Coupled with the rangeValue2Field option, specifies which data source field provides values for a range-like series. */
         rangeValue1Field?: string;
 
-        /** @docid dxChartSeriesTypes_CommonSeries_rangevalue2field */
+        /** Coupled with the rangeValue1Field option, specifies which data source field provides values for a range-like series. */
         rangeValue2Field?: string;
 
-        /** @docid dxChartSeriesTypes_CommonSeries_reduction */
+        /** Specifies reduction options for financial series. */
         reduction?: {
 
-            /** @docid dxChartSeriesTypes_CommonSeries_reduction_color */
+            /** Specifies a color for the points whose price has decreased in comparison to the price of the previous point. */
             color?: string;
 
-            /** @docid dxChartSeriesTypes_CommonSeries_reduction_level */
+            /** Specifies whether high, low, open or close prices of points should be compared. */
             level?: string;
         };
 
-        /** @docid dxChartSeriesTypes_CommonSeries_sizefield */
+        /** Specifies which data source field provides size values for bubbles. Required by and applies only to bubble series. */
         sizeField?: string;
     }
 
     export interface CommonSeriesSettings extends CommonSeriesConfig {
-        /** @docid dxchartoptions_commonseriessettings_area */
+        /** Defines common settings for all area series. */
         area?: CommonSeriesConfig;
 
-        /** @docid dxchartoptions_commonseriessettings_bar */
+        /** Defines common settings for all bar series. */
         bar?: CommonSeriesConfig;
 
-        /** @docid dxchartoptions_commonseriessettings_bubble */
+        /** Defines common settings for all bubble series. */
         bubble?: CommonSeriesConfig;
 
-        /** @docid dxchartoptions_commonseriessettings_candlestick */
+        /** Defines common settings for all candlestick series. */
         candlestick?: CommonSeriesConfig;
 
-        /** @docid dxchartoptions_commonseriessettings_fullstackedarea */
+        /** Defines common settings for all full-stacked area series. */
         fullstackedarea?: CommonSeriesConfig;
 
-        /** @docid dxchartoptions_commonseriessettings_fullstackedsplinearea */
+        /** Defines common settings for all full-stacked spline area series. */
         fullstackedsplinearea?: CommonSeriesConfig;
 
-        /** @docid dxchartoptions_commonseriessettings_fullstackedbar */
+        /** Defines common settings for all full-stacked bar series. */
         fullstackedbar?: CommonSeriesConfig;
 
-        /** @docid dxchartoptions_commonseriessettings_fullstackedline */
+        /** Defines common settings for all full-stacked line series. */
         fullstackedline?: CommonSeriesConfig;
 
-        /** @docid dxchartoptions_commonseriessettings_fullstackedspline */
+        /** Defines common settings for all full-stacked spline series. */
         fullstackedspline?: CommonSeriesConfig;
 
-        /** @docid dxchartoptions_commonseriessettings_line */
+        /** Defines common settings for all line series. */
         line?: CommonSeriesConfig;
 
-        /** @docid dxchartoptions_commonseriessettings_rangearea */
+        /** Defines common settings for all range area series. */
         rangearea?: CommonSeriesConfig;
 
-        /** @docid dxchartoptions_commonseriessettings_rangebar */
+        /** Defines common settings for all range bar series. */
         rangebar?: CommonSeriesConfig;
 
-        /** @docid dxchartoptions_commonseriessettings_scatter */
+        /** Defines common settings for all scatter series. */
         scatter?: CommonSeriesConfig;
 
-        /** @docid dxchartoptions_commonseriessettings_spline */
+        /** Defines common settings for all spline series. */
         spline?: CommonSeriesConfig;
 
-        /** @docid dxchartoptions_commonseriessettings_splinearea */
+        /** Defines common settings for all spline area series. */
         splinearea?: CommonSeriesConfig;
 
-        /** @docid dxchartoptions_commonseriessettings_stackedarea */
+        /** Defines common settings for all stacked area series. */
         stackedarea?: CommonSeriesConfig;
 
-        /** @docid dxchartoptions_commonseriessettings_stackedsplinearea */
+        /** Defines common settings for all stacked spline area series. */
         stackedsplinearea?: CommonSeriesConfig;
 
-        /** @docid dxchartoptions_commonseriessettings_stackedbar */
+        /** Defines common settings for all stacked bar series. */
         stackedbar?: CommonSeriesConfig;
 
-        /** @docid dxchartoptions_commonseriessettings_stackedline */
+        /** Defines common settings for all stacked line series. */
         stackedline?: CommonSeriesConfig;
 
-        /** @docid dxchartoptions_commonseriessettings_stackedspline */
+        /** Defines common settings for all stacked spline series. */
         stackedspline?: CommonSeriesConfig;
 
-        /** @docid dxchartoptions_commonseriessettings_steparea */
+        /** Defines common settings for all step area series. */
         steparea?: CommonSeriesConfig;
 
-        /** @docid dxchartoptions_commonseriessettings_stepline */
+        /** Defines common settings for all step line series. */
         stepline?: CommonSeriesConfig;
 
-        /** @docid dxchartoptions_commonseriessettings_stock */
+        /** Defines common settings for all stock series. */
         stock?: CommonSeriesConfig;
 
-        /** @docid dxchartoptions_commonseriessettings_type */
+        /** Specifies the type of the series. */
         type?: string;
     }
 
     export interface SeriesConfig extends CommonSeriesConfig {
-        /** @docid dxchartoptions_series_name */
+        /** Specifies the name that identifies the series. */
         name?: string;
 
-        /** @docid dxchartoptions_series_tag */
+        /** Specifies data about a series. */
         tag?: any;
 
-        /** @docid dxchartoptions_series_type */
+        /** Sets the series type. */
         type?: string;
     }
 
 
 
-    /** @docid dxPolarChartSeriesTypes_CommonPolarChartSeries */
+    /** An object that defines configuration options for polar chart series. */
     export interface CommonPolarSeriesConfig extends BaseCommonSeriesConfig {
-        /** @docid dxPolarChartSeriesTypes_CommonPolarChartSeries_closed */
+        /** Specifies whether or not to close the chart by joining the end point with the first point. */
         closed?: boolean;
 
-        /**
-         * @docid dxPolarChartSeriesTypes_CommonPolarChartSeries_label
-         * @docid dxPolarChartSeriesTypes_stackedbarpolarseries_label
-         */
+        
         label?: SeriesConfigLabel;
 
-        /**
-        * @docid dxPolarChartSeriesTypes_CommonPolarChartSeries_point
-        * @docid dxPolarChartSeriesTypes_areapolarseries_point
-        */
+        
         point?: PolarCommonPointOptions;
     }
 
     export interface CommonPolarSeriesSettings extends CommonPolarSeriesConfig {
-        /** @docid dxpolarchartoptions_commonseriessettings_area */
+        /** An object that specifies configuration options for all series of the area type in the chart. */
         area?: CommonPolarSeriesConfig;
 
-        /** @docid dxpolarchartoptions_commonseriessettings_bar */
+        /** An object that specifies configuration options for all series of the _bar_ type in the chart. */
         bar?: CommonPolarSeriesConfig;
 
-        /** @docid dxpolarchartoptions_commonseriessettings_line */
+        /** An object that specifies configuration options for all series of the _line_ type in the chart. */
         line?: CommonPolarSeriesConfig;
 
-        /** @docid dxpolarchartoptions_commonseriessettings_scatter */
+        /** An object that specifies configuration options for all series of the _scatter_ type in the chart. */
         scatter?: CommonPolarSeriesConfig;
 
-        /** @docid dxpolarchartoptions_commonseriessettings_stackedbar */
+        /** An object that specifies configuration options for all series of the _stackedBar_ type in the chart. */
         stackedbar?: CommonPolarSeriesConfig;
 
-        /** @docid dxpolarchartoptions_commonseriessettings_type */
+        /** Sets a series type. */
         type?: string;
     }
 
     export interface PolarSeriesConfig extends CommonPolarSeriesConfig {
-        /** @docid dxpolarchartoptions_series_name */
+        /** Specifies the name that identifies the series. */
         name?: string;
 
-        /** @docid dxpolarchartoptions_series_tag */
+        /** Specifies data about a series. */
         tag?: any;
 
-        /** @docid dxpolarchartoptions_series_type */
+        /** Sets the series type. */
         type?: string;
     }
 
-    /** @docid_ignore dxChartSeriesTypes_areaseries */
-    /** @docid_ignore dxChartSeriesTypes_barseries */
-    /** @docid_ignore dxChartSeriesTypes_bubbleseries */
-    /** @docid_ignore dxChartSeriesTypes_candlestickseries */
-    /** @docid_ignore dxChartSeriesTypes_fullstackedareaseries */
-    /** @docid_ignore dxChartSeriesTypes_fullstackedbarseries */
-    /** @docid_ignore dxChartSeriesTypes_fullstackedlineseries */
-    /** @docid_ignore dxChartSeriesTypes_fullstackedsplineareaseries */
-    /** @docid_ignore dxChartSeriesTypes_fullstackedsplineseries */
-    /** @docid_ignore dxChartSeriesTypes_lineseries */
-    /** @docid_ignore dxChartSeriesTypes_rangeareaseries */
-    /** @docid_ignore dxChartSeriesTypes_rangebarseries */
-    /** @docid_ignore dxChartSeriesTypes_scatterseries */
-    /** @docid_ignore dxChartSeriesTypes_splineareaseries */
-    /** @docid_ignore dxChartSeriesTypes_splineseries */
-    /** @docid_ignore dxChartSeriesTypes_stackedareaseries */
-    /** @docid_ignore dxChartSeriesTypes_stackedbarseries */
-    /** @docid_ignore dxChartSeriesTypes_stackedlineseries */
-    /** @docid_ignore dxChartSeriesTypes_stackedsplineareaseries */
-    /** @docid_ignore dxChartSeriesTypes_stackedsplineseries */
-    /** @docid_ignore dxChartSeriesTypes_stepareaseries */
-    /** @docid_ignore dxChartSeriesTypes_steplineseries */
-    /** @docid_ignore dxChartSeriesTypes_stockseries */
-    /** @docid_ignore dxPolarChartSeriesTypes_areapolarseries */
-    /** @docid_ignore dxPolarChartSeriesTypes_barpolarseries */
-    /** @docid_ignore dxPolarChartSeriesTypes_linepolarseries */
-    /** @docid_ignore dxPolarChartSeriesTypes_scatterpolarseries */
-    /** @docid_ignore dxPolarChartSeriesTypes_stackedbarpolarseries */
-
+    
     export interface PieSeriesConfigLabel extends BaseSeriesConfigLabel {
-        /** @docid dxPieChartSeriesTypes_CommonPieChartSeries_label_radialoffset */
+        /** Specifies how to shift labels from their initial position in a radial direction in pixels. */
         radialOffset?: number;
 
-        /** @docid dxPieChartSeriesTypes_CommonPieChartSeries_label_percentprecision */
+        /**
+            * Specifies a precision for the percentage values displayed in labels.
+            * @deprecated Use the series.label.format.percentPrecision instead.
+            */
         percentPrecision?: number;
     }
 
-    /** @docid dxPieChartSeriesTypes_CommonPieChartSeries */
+    /** An object that defines configuration options for chart series. */
     export interface CommonPieSeriesConfig {
-        /** @docid dxPieChartSeriesTypes_CommonPieChartSeries_argumentfield */
+        /** Specifies the data source field that provides arguments for series points. */
         argumentField?: string;
 
-        /** @docid dxPieChartSeriesTypes_CommonPieChartSeries_argumentType */
+        /** Specifies the required type for series arguments. */
         argumentType?: string;
 
-        /** @docid dxPieChartSeriesTypes_CommonPieChartSeries_border */
+        /** An object defining the series border configuration options. */
         border?: viz.core.DashedBorder;
 
-        /** @docid dxPieChartSeriesTypes_CommonPieChartSeries_color */
+        /** Specifies a series color. */
         color?: string;
 
-        /** @docid dxPieChartSeriesTypes_CommonPieChartSeries_hovermode */
+        /** Specifies the chart elements to highlight when a series is hovered over. */
         hoverMode?: string;
 
-        /** @docid dxPieChartSeriesTypes_CommonPieChartSeries_hoverstyle */
+        /** An object defining configuration options for a hovered series. */
         hoverStyle?: {
 
-            /** @docid dxPieChartSeriesTypes_CommonPieChartSeries_hoverstyle_border */
+            /** An object defining the border options for a hovered series. */
             border?: viz.core.DashedBorder;
 
-            /** @docid dxPieChartSeriesTypes_CommonPieChartSeries_hoverstyle_color */
+            /** Sets a color for the series when it is hovered over. */
             color?: string;
 
-            /** @docid dxPieChartSeriesTypes_CommonPieChartSeries_hoverstyle_hatching */
+            /** Specifies the hatching options to be applied when a point is hovered over. */
             hatching?: viz.core.Hatching;
         };
 
-        /** @docid dxPieChartSeriesTypes_CommonPieChartSeries_innerradius */
+        /**
+         * Specifies the fraction of the inner radius relative to the total radius in the series of the 'doughnut' type.
+         * @deprecated Use the innerRadius option instead.
+         */
         innerRadius?: number;
 
-        /** @docid dxPieChartSeriesTypes_CommonPieChartSeries_label */
+        /** An object defining the label configuration options. */
         label?: PieSeriesConfigLabel;
 
-        /** @docid dxPieChartSeriesTypes_CommonPieChartSeries_maxlabelcount */
+        /** Specifies how many points are acceptable to be in a series to display all labels for these points. Otherwise, the labels will not be displayed. */
         maxLabelCount?: number;
 
-        /** @docid dxPieChartSeriesTypes_CommonPieChartSeries_minsegmentsize */
+        /** Specifies a minimal size of a displayed pie segment. */
         minSegmentSize?: number;
 
-        /** @docid dxPieChartSeriesTypes_CommonPieChartSeries_segmentsdirection */
+        /**
+          * Specifies the direction in which the PieChart series points are located.
+          * @deprecated Use the segmentsDirection option instead.
+          */
         segmentsDirection?: string;
 
-        /** @docid dxPieChartSeriesTypes_CommonPieChartSeries_selectionmode */
+        /** <p>Specifies the chart elements to highlight when the series is selected.</p> */
         selectionMode?: string;
 
-        /** @docid dxPieChartSeriesTypes_CommonPieChartSeries_selectionstyle */
+        /** An object defining configuration options for the series when it is selected. */
         selectionStyle?: {
 
-            /** @docid dxPieChartSeriesTypes_CommonPieChartSeries_selectionstyle_border */
+            /** An object defining the border options for a selected series. */
             border?: viz.core.DashedBorder;
 
-            /** @docid dxPieChartSeriesTypes_CommonPieChartSeries_selectionstyle_color */
+            /** Sets a color for a series when it is selected. */
             color?: string;
 
-            /** @docid dxPieChartSeriesTypes_CommonPieChartSeries_selectionstyle_hatching */
+            /** Specifies the hatching options to be applied when a point is selected. */
             hatching?: viz.core.Hatching;
         };
 
-        /** @docid dxPieChartSeriesTypes_CommonPieChartSeries_smallvaluesgrouping */
+        /** Specifies chart segment grouping options. */
         smallValuesGrouping?: {
 
-            /** @docid dxPieChartSeriesTypes_CommonPieChartSeries_smallvaluesgrouping_groupname */
+            /** Specifies the name of the grouped chart segment. This name represents the segment in the chart legend. */
             groupName?: string;
 
-            /** @docid dxPieChartSeriesTypes_CommonPieChartSeries_smallvaluesgrouping_mode */
+            /** Specifies the segment grouping mode. */
             mode?: string;
 
-            /** @docid dxPieChartSeriesTypes_CommonPieChartSeries_smallvaluesgrouping_threshold */
+            /** Specifies a threshold for segment values. */
             threshold?: number;
 
-            /** @docid dxPieChartSeriesTypes_CommonPieChartSeries_smallvaluesgrouping_topcount */
+            /** Specifies how many segments must not be grouped. */
             topCount?: number;
         };
 
-        /** @docid dxPieChartSeriesTypes_CommonPieChartSeries_startangle */
+        /**
+         * Specifies a start angle for a pie chart in arc degrees.
+         * @deprecated Use the startAngle option instead.
+         */
         startAngle?: number;
 
-        /** @docid dxPieChartSeriesTypes_CommonPieChartSeries_tagfield */
+        /** <p>Specifies the name of the data source field that provides data about a point.</p> */
         tagField?: string;
 
-        /** @docid dxPieChartSeriesTypes_CommonPieChartSeries_valuefield */
+        /** Specifies the data source field that provides values for series points. */
         valueField?: string;
     }
 
     export interface CommonPieSeriesSettings extends CommonPieSeriesConfig {
-        /** @docid dxpiechartoptions_commonseriessettings_type */
+        /**
+        * Specifies the type of the pie chart series.
+        * @deprecated Use the type option instead.
+        */
         type?: string;
     }
 
     export interface PieSeriesConfig extends CommonPieSeriesConfig {
-        /** @docid dxpiechartoptions_series_type */
+        /**
+       * Sets the series type.
+       * @deprecated Use the type option instead.
+       */
         type?: string;
 
-        /** @docid dxpiechartoptions_series_name */
+        /** Specifies the name that identifies the series. */
         name?: string;
 
-        /** @docid dxpiechartoptions_series_tag */
+        /** Specifies data about a series. */
         tag?: any;
     }
 
-    /** @docid_ignore dxPieChartSeriesTypes_PieSeries */
-    /** @docid_ignore dxPieChartSeriesTypes_DoughnutSeries */
-
     export interface SeriesTemplate {
-        /**
-          * @docid dxchartoptions_seriestemplate_customizeSeries
-          * @docid dxrangeselectoroptions_chart_seriestemplate_customizeSeries
-          */
+        /** Specifies a callback function that returns a series object with individual series settings. */
         customizeSeries?: (seriesName: any) => SeriesConfig;
 
-        /**
-          * @docid dxchartoptions_seriestemplate_nameField
-          * @docid dxrangeselectoroptions_chart_seriestemplate_nameField
-          */
+        /** Specifies a data source field that represents the series name. */
         nameField?: string;
     }
 
     export interface PolarSeriesTemplate {
-        /** @docid dxpolarchartoptions_seriestemplate_customizeSeries */
+        /** Specifies a callback function that returns a series object with individual series settings. */
         customizeSeries?: (seriesName: any) => PolarSeriesConfig;
 
-        /** @docid dxpolarchartoptions_seriestemplate_nameField */
+        /** Specifies a data source field that represents the series name. */
         nameField?: string;
     }
 
     export interface PieSeriesTemplate {
-        /** @docid dxpiechartoptions_seriestemplate_customizeSeries */
+        /** Specifies a callback function that returns a series object with individual series settings. */
         customizeSeries?: (seriesName: any) => PieSeriesConfig;
 
-        /** @docid dxpiechartoptions_seriestemplate_nameField */
+        /** Specifies a data source field that represents the series name. */
         nameField?: string;
     }
 
     // Axes
 
     export interface ChartCommonConstantLineLabel {
-        /** @docid dxchartoptions_commonaxissettings_constantlinestyle_label_font */
+        /** Specifies font options for constant line labels. */
         font?: viz.core.Font;
 
-        /** @docid dxchartoptions_commonaxissettings_constantlinestyle_label_position */
+        /** Specifies the position of constant line labels on the chart plot. */
         position?: string;
-        /** @docid dxchartoptions_commonaxissettings_constantlinestyle_label_visible */
+        /** Makes constant line labels visible. */
         visible?: boolean;
     }
 
     export interface PolarCommonConstantLineLabel {
-        /** @docid dxpolarchartoptions_commonaxissettings_constantlinestyle_label_visible */
+        /** Indicates whether or not to display labels for the axis constant lines. */
         visible?: boolean;
-        /** @docid dxpolarchartoptions_commonaxissettings_constantlinestyle_label_font */
+        /** Specifies font options for a constant line label. */
         font?: viz.core.Font;
     }
 
     export interface ConstantLineStyle {
-        /**
-        * @docid dxchartoptions_commonaxissettings_constantlinestyle_color
-        * @docid dxpolarchartoptions_commonaxissettings_constantlinestyle_color
-        */
+        /** Specifies a color for a constant line. */
         color?: string;
 
-        /**
-        * @docid dxchartoptions_commonaxissettings_constantlinestyle_dashstyle
-        * @docid dxpolarchartoptions_commonaxissettings_constantlinestyle_dashstyle
-        */
+        /** Specifies a dash style for a constant line. */
         dashStyle?: string;
 
-        /**
-        * @docid dxchartoptions_commonaxissettings_constantlinestyle_width
-        * @docid dxpolarchartoptions_commonaxissettings_constantlinestyle_width
-        */
+        /** Specifies a constant line width in pixels. */
         width?: number;
     }
 
     export interface ChartCommonConstantLineStyle extends ConstantLineStyle {
-        /** @docid dxchartoptions_commonaxissettings_constantlinestyle_label */
+        /** Configures constant line labels. */
         label?: ChartCommonConstantLineLabel;
 
-        /** @docid dxchartoptions_commonaxissettings_constantlinestyle_paddingleftright */
+        /** Generates a pixel-measured empty space between the left/right side of a constant line and the constant line label. */
         paddingLeftRight?: number;
 
-        /** @docid dxchartoptions_commonaxissettings_constantlinestyle_paddingtopbottom */
+        /** Generates a pixel-measured empty space between the top/bottom side of a constant line and the constant line label. */
         paddingTopBottom?: number;
     }
 
     export interface PolarCommonConstantLineStyle extends ConstantLineStyle {
-        /** @docid dxpolarchartoptions_commonaxissettings_constantlinestyle_label */
+        /** An object defining constant line label options. */
         label?: PolarCommonConstantLineLabel;
     }
 
     export interface CommonAxisLabel {
-        /**
-        * @docid dxchartoptions_commonaxissettings_label_font
-        * @docid dxpolarchartoptions_commonaxissettings_label_font
-        */
+        /** Specifies font options for axis labels. */
         font?: viz.core.Font;
 
-        /**
-        * @docid dxchartoptions_commonaxissettings_label_indentfromaxis
-        * @docid dxpolarchartoptions_commonaxissettings_label_indentfromaxis
-        */
+        /** Specifies the spacing between an axis and its labels in pixels. */
         indentFromAxis?: number;
 
-        /**
-        * @docid dxchartoptions_commonaxissettings_label_visible
-        * @docid dxpolarchartoptions_commonaxissettings_label_visible
-        */
+        /** Indicates whether or not axis labels are visible. */
         visible?: boolean;
     }
 
     export interface ChartCommonAxisLabel extends CommonAxisLabel {
-        /** @docid dxchartoptions_commonaxissettings_label_alignment */
+        /** Aligns axis labels in relation to ticks. */
         alignment?: string;
 
-        /** @docid_ignore dxchartoptions_commonaxissettings_label_overlappingBehavior_mode */
-        /** @docid_ignore dxchartoptions_commonaxissettings_label_overlappingBehavior_rotationangle */
-        /** @docid_ignore dxchartoptions_commonaxissettings_label_overlappingBehavior_staggeringSpacing */
-        /** @docid dxchartoptions_commonaxissettings_label_overlappingBehavior */
+        /** Decides how to arrange axis labels when there is not enough space to keep all of them. */
         overlappingBehavior?: any;
 
-        /** @docid dxchartoptions_commonaxissettings_label_displaymode */
+        /** Allows you to rotate or stagger axis labels. Applies to the horizontal axis only. */
         displayMode?: string;
 
-        /** @docid dxchartoptions_commonaxissettings_label_rotationangle */
+        /** Specifies the rotation angle of axis labels. Applies only if displayMode or overlappingBehavior is "rotate". */
         rotationAngle?: number;
 
-        /** @docid dxchartoptions_commonaxissettings_label_staggeringspacing */
+        /** Adds a pixel-measured empty space between two staggered rows of axis labels. Applies only if displayMode or overlappingBehavior is "stagger". */
         staggeringSpacing?: number;
     }
 
     export interface PolarCommonAxisLabel extends CommonAxisLabel {
-        /** @docid dxpolarchartoptions_commonaxissettings_label_overlappingBehavior */
+        /** Decides how to arrange axis labels when there is not enough space to keep all of them. */
         overlappingBehavior?: string;
     }
 
     export interface CommonAxisTitle {
-        /** @docid dxchartoptions_commonaxissettings_title_font */
+        /** Specifies font options for the axis title. */
         font?: viz.core.Font;
 
-        /** @docid dxchartoptions_commonaxissettings_title_margin */
+        /** Adds a pixel-measured empty space between the axis title and axis labels. */
         margin?: number;
     }
 
     export interface BaseCommonAxisSettings {
-        /**
-        * @docid dxchartoptions_commonaxissettings_color
-        * @docid dxpolarchartoptions_commonaxissettings_color
-        */
+        /** Specifies the color of the line that represents an axis. */
         color?: string;
 
-        /**
-        * @docid dxchartoptions_commonaxissettings_discreteaxisdivisionMode
-        * @docid dxpolarchartoptions_commonaxissettings_discreteaxisdivisionMode
-        */
+        /** Specifies whether ticks/grid lines of a discrete axis are located between labels or cross the labels. */
         discreteAxisDivisionMode?: string;
 
-        /**
-        * @docid dxchartoptions_commonaxissettings_grid
-        * @docid dxpolarchartoptions_commonaxissettings_grid
-        */
+        /** An object defining the configuration options for the grid lines of an axis in the PolarChart widget. */
         grid?: {
 
-            /**
-            * @docid dxchartoptions_commonaxissettings_grid_color
-            * @docid dxpolarchartoptions_commonaxissettings_grid_color
-            */
+            /** Specifies a color for grid lines. */
             color?: string;
 
-            /**
-            * @docid dxchartoptions_commonaxissettings_grid_opacity
-            * @docid dxpolarchartoptions_commonaxissettings_grid_opacity
-            */
+            /** Specifies an opacity for grid lines. */
             opacity?: number;
 
-            /**
-            * @docid dxchartoptions_commonaxissettings_grid_visible
-            * @docid dxpolarchartoptions_commonaxissettings_grid_visible
-            */
+            /** Indicates whether or not the grid lines of an axis are visible. */
             visible?: boolean;
 
-            /**
-            * @docid dxchartoptions_commonaxissettings_grid_width
-            * @docid dxpolarchartoptions_commonaxissettings_grid_width
-            */
+            /** Specifies the width of grid lines. */
             width?: number;
         };
 
-        /**
-        * @docid dxchartoptions_commonaxissettings_minorgrid
-        * @docid dxpolarchartoptions_commonaxissettings_minorgrid
-        */
+        /** Specifies the options of the minor grid. */
         minorGrid?: {
 
-            /**
-            * @docid dxchartoptions_commonaxissettings_minorgrid_color
-            * @docid dxpolarchartoptions_commonaxissettings_minorgrid_color
-            */
+            /** Specifies a color for the lines of the minor grid. */
             color?: string;
 
-            /**
-            * @docid dxchartoptions_commonaxissettings_minorgrid_opacity
-            * @docid dxpolarchartoptions_commonaxissettings_minorgrid_opacity
-            */
+            /** Specifies an opacity for the lines of the minor grid. */
             opacity?: number;
 
-            /**
-            * @docid dxchartoptions_commonaxissettings_minorgrid_visible
-            * @docid dxpolarchartoptions_commonaxissettings_minorgrid_visible
-            */
+            /** Indicates whether the minor grid is visible or not. */
             visible?: boolean;
 
-            /**
-            * @docid dxchartoptions_commonaxissettings_minorgrid_width
-            * @docid dxpolarchartoptions_commonaxissettings_minorgrid_width
-            */
+            /** Specifies a width for the lines of the minor grid. */
             width?: number;
         };
 
-        /**
-        * @docid dxchartoptions_commonaxissettings_inverted
-        * @docid dxpolarchartoptions_commonaxissettings_inverted
-        */
+        /** Indicates whether or not an axis is inverted. */
         inverted?: boolean;
 
-        /**
-        * @docid dxchartoptions_commonaxissettings_opacity
-        * @docid dxpolarchartoptions_commonaxissettings_opacity
-        */
+        /** Specifies the opacity of the line that represents an axis. */
         opacity?: number;
 
-        /**
-        * @docid dxchartoptions_commonaxissettings_setticksatunitbeginning
-        * @docid dxpolarchartoptions_commonaxissettings_setticksatunitbeginning
-        */
+        /** Indicates whether or not to set ticks/grid lines of a continuous axis of the 'date-time' type at the beginning of each date-time interval. */
         setTicksAtUnitBeginning?: boolean;
 
-        /**
-        * @docid dxchartoptions_commonaxissettings_tick
-        * @docid dxpolarchartoptions_commonaxissettings_tick
-        */
+        /** An object defining the configuration options for axis ticks. */
         tick?: {
 
-            /**
-            * @docid dxchartoptions_commonaxissettings_tick_color
-            * @docid dxpolarchartoptions_commonaxissettings_tick_color
-            */
+            /** Specifies ticks color. */
             color?: string;
 
-            /**
-            * @docid dxchartoptions_commonaxissettings_tick_opacity
-            * @docid dxpolarchartoptions_commonaxissettings_tick_opacity
-            */
+            /** Specifies tick opacity. */
             opacity?: number;
 
-            /**
-            * @docid dxchartoptions_commonaxissettings_tick_visible
-            * @docid dxpolarchartoptions_commonaxissettings_tick_visible
-            */
+            /** Indicates whether or not ticks are visible on an axis. */
             visible?: boolean;
 
-            /**
-            * @docid dxchartoptions_commonaxissettings_tick_width
-            * @docid dxpolarchartoptions_commonaxissettings_tick_width
-            */
+            /** Specifies tick width. */
             width?: number;
 
-            /**
-            * @docid dxchartoptions_commonaxissettings_tick_length
-            * @docid dxpolarchartoptions_commonaxissettings_tick_length
-            */
+            /** Specifies tick length. */
             length?: number;
         };
 
-        /**
-        * @docid dxchartoptions_commonaxissettings_minortick
-        * @docid dxpolarchartoptions_commonaxissettings_minortick
-        */
+        /** Specifies the options of the minor ticks. */
         minorTick?: {
 
-            /**
-            * @docid dxchartoptions_commonaxissettings_minortick_color
-            * @docid dxpolarchartoptions_commonaxissettings_minortick_color
-            */
+            /** Specifies a color for the minor ticks. */
             color?: string;
 
-            /**
-            * @docid dxchartoptions_commonaxissettings_minortick_opacity
-            * @docid dxpolarchartoptions_commonaxissettings_minortick_opacity
-            */
+            /** Specifies an opacity for the minor ticks. */
             opacity?: number;
 
-            /**
-            * @docid dxchartoptions_commonaxissettings_minortick_visible
-            * @docid dxpolarchartoptions_commonaxissettings_minortick_visible
-            */
+            /** Indicates whether or not the minor ticks are displayed on an axis. */
             visible?: boolean;
 
-            /**
-            * @docid dxchartoptions_commonaxissettings_minortick_width
-            * @docid dxpolarchartoptions_commonaxissettings_minortick_width
-            */
+            /** Specifies minor tick width. */
             width?: number;
 
-            /**
-            * @docid dxchartoptions_commonaxissettings_minortick_length
-            * @docid dxpolarchartoptions_commonaxissettings_minortick_length
-            */
+            /** Specifies minor tick length. */
             length?: number;
         };
 
-        /**
-        * @docid dxchartoptions_commonaxissettings_visible
-        * @docid dxpolarchartoptions_commonaxissettings_visible
-        */
+        /** Indicates whether or not the line that represents an axis in a chart is visible. */
         visible?: boolean;
 
-        /**
-        * @docid dxchartoptions_commonaxissettings_width
-        * @docid dxpolarchartoptions_commonaxissettings_width
-        */
+        /** Specifies the width of the line that represents an axis in the chart. */
         width?: number;
     }
 
     export interface ChartCommonAxisSettings extends BaseCommonAxisSettings {
-        /** @docid dxchartoptions_commonaxissettings_constantlinestyle */
+        /** Configures the appearance of all constant lines in the widget. */
         constantLineStyle?: ChartCommonConstantLineStyle;
 
-        /** @docid dxchartoptions_commonaxissettings_label */
+        /** Configures axis labels. */
         label?: ChartCommonAxisLabel;
 
-        /** @docid dxchartoptions_commonaxissettings_maxvaluemargin */
+        /** Controls the empty space between the maximum series points and the axis. Applies only to the axes of the "continuous" and "logarithmic" type. */
         maxValueMargin?: number;
 
-        /** @docid dxchartoptions_commonaxissettings_minvaluemargin */
+        /** Controls the empty space between the minimum series points and the axis. Applies only to the axes of the "continuous" and "logarithmic" type. */
         minValueMargin?: number;
 
-        /** @docid dxchartoptions_commonaxissettings_placeholdersize */
+        /** Reserves a pixel-measured space for the axis. */
         placeholderSize?: number;
 
-        /** @docid dxchartoptions_commonaxissettings_stripstyle */
+        /** Configures the appearance of strips. */
         stripStyle?: {
 
-            /** @docid dxchartoptions_commonaxissettings_stripstyle_label */
+            /** Configures the appearance of strip labels. */
             label?: {
-                /** @docid dxchartoptions_commonaxissettings_stripstyle_label_font */
+                /** Specifies font options for strip labels. */
                 font?: viz.core.Font;
 
-                /** @docid dxchartoptions_commonaxissettings_stripstyle_label_horizontalalignment */
+                /** Aligns strip labels in the horizontal direction. */
                 horizontalAlignment?: string;
 
-                /** @docid dxchartoptions_commonaxissettings_stripstyle_label_verticalalignment */
+                /** Aligns strip labels in the vertical direction. */
                 verticalAlignment?: string;
             };
 
-            /** @docid dxchartoptions_commonaxissettings_stripstyle_paddingleftright */
+            /** Generates a pixel-measured empty space between the left/right border of a strip and the strip label. */
             paddingLeftRight?: number;
 
-            /** @docid dxchartoptions_commonaxissettings_stripstyle_paddingtopbottom */
+            /** Generates a pixel-measured empty space between the top/bottom border of a strip and the strip label. */
             paddingTopBottom?: number;
         };
 
-        /** @docid dxchartoptions_commonaxissettings_title */
+        /** Configures axis titles. */
         title?: CommonAxisTitle;
 
-        /** @docid dxchartoptions_commonaxissettings_valuemarginsenabled */
+        /** Adds an empty space between the axis and the minimum and maximum series points. */
         valueMarginsEnabled?: boolean;
     }
 
     export interface PolarCommonAxisSettings extends BaseCommonAxisSettings {
-        /** @docid dxpolarchartoptions_commonaxissettings_constantlinestyle */
+        /** Specifies the appearance of all the widget's constant lines. */
         constantLineStyle?: PolarCommonConstantLineStyle;
 
-        /** @docid dxpolarchartoptions_commonaxissettings_label */
+        /** An object defining the label configuration options that are common for all axes in the PolarChart widget. */
         label?: PolarCommonAxisLabel;
 
-        /** @docid dxpolarchartoptions_commonaxissettings_stripstyle */
+        /** An object defining configuration options for strip style. */
         stripStyle?: {
 
-            /** @docid dxpolarchartoptions_commonaxissettings_stripstyle_label */
+            /** An object defining the configuration options for a strip label style. */
             label?: {
-                /** @docid dxpolarchartoptions_commonaxissettings_stripstyle_label_font */
+                /** Specifies font options for a strip label. */
                 font?: viz.core.Font;
             };
         };
     }
 
     export interface ChartConstantLineLabel extends ChartCommonConstantLineLabel {
-        /**
-        * @docid dxchartoptions_argumentaxis_constantlinestyle_label_horizontalalignment
-        * @docid dxchartoptions_argumentaxis_constantlines_label_horizontalalignment
-        * @docid dxchartoptions_valueaxis_constantlinestyle_label_horizontalalignment
-        * @docid dxchartoptions_valueaxis_constantlines_label_horizontalalignment
-        */
+        /** Aligns constant line labels in the horizontal direction. */
         horizontalAlignment?: string;
 
-        /**
-        * @docid dxchartoptions_argumentaxis_constantlinestyle_label_verticalalignment
-        * @docid dxchartoptions_argumentaxis_constantlines_label_verticalalignment
-        * @docid dxchartoptions_valueaxis_constantlinestyle_label_verticalalignment
-        * @docid dxchartoptions_valueaxis_constantlines_label_verticalalignment
-        */
+        /** Aligns constant line labels in the vertical direction. */
         verticalAlignment?: string;
 
-        /**
-        * @docid dxchartoptions_argumentaxis_constantlines_label_text
-        * @docid dxchartoptions_valueaxis_constantlines_label_text
-        */
+        /** Specifies the text of a constant line label. By default, equals to the value of the constant line. */
         text?: string;
     }
 
     export interface PolarConstantLineLabel extends PolarCommonConstantLineLabel {
-        /**
-        * @docid dxpolarchartoptions_argumentaxis_constantlines_label_text
-        * @docid dxpolarchartoptions_valueaxis_constantlines_label_text
-        */
+        /** Specifies the text to be displayed in a constant line label. */
         text?: string;
     }
 
     export interface AxisLabel {
-        /**
-        * @docid dxchartoptions_argumentaxis_label_customizehint
-        * @docid dxchartoptions_valueaxis_label_customizehint
-        * @docid dxpolarchartoptions_argumentaxis_label_customizehint
-        * @docid dxpolarchartoptions_valueaxis_label_customizehint
-        */
+        /** Specifies the text for a hint that appears when a user hovers the mouse pointer over a label on the value axis. */
         customizeHint?: (argument: { value: any; valueText: string }) => string;
 
-        /**
-        * @docid dxchartoptions_argumentaxis_label_customizetext
-        * @docid dxchartoptions_valueaxis_label_customizetext
-        * @docid dxpolarchartoptions_argumentaxis_label_customizetext
-        * @docid dxpolarchartoptions_valueaxis_label_customizetext
-        */
+        /** Specifies a callback function that returns the text to be displayed in value axis labels. */
         customizeText?: (argument: { value: any; valueText: string }) => string;
 
-        /**
-        * @docid dxchartoptions_argumentaxis_label_format
-        * @docid dxchartoptions_valueaxis_label_format
-        * @docid dxpolarchartoptions_argumentaxis_label_format
-        * @docid dxpolarchartoptions_valueaxis_label_format
-        */
+        /** Specifies a format for the text displayed by axis labels. */
         format?: any;
 
         /**
-        * @docid dxchartoptions_argumentaxis_label_precision
-        * @docid dxchartoptions_valueaxis_label_precision
-        * @docid dxpolarchartoptions_argumentaxis_label_precision
-        * @docid dxpolarchartoptions_valueaxis_label_precision
-        */
+      * Specifies a precision for the formatted value displayed in the axis labels.
+      * @deprecated Use the valueAxis.label.format.precision option instead.
+      */
         precision?: number;
     }
 
@@ -1681,245 +1129,144 @@ declare module DevExpress.viz.charts {
     export interface PolarAxisLabel extends PolarCommonAxisLabel, AxisLabel { }
 
     export interface AxisTitle extends CommonAxisTitle {
-        /**
-        * @docid dxchartoptions_argumentaxis_title_text
-        * @docid dxchartoptions_valueaxis_title_text
-        */
+        /** Specifies the text of the axis title. */
         text?: string;
     }
 
     export interface ChartConstantLineStyle extends ChartCommonConstantLineStyle {
-        /**
-        * @docid dxchartoptions_argumentaxis_constantlinestyle_label
-        * @docid dxchartoptions_valueaxis_constantlinestyle_label
-        */
+        /** Specifies the appearance of the labels of those constant lines that belong to the value axis. */
         label?: ChartConstantLineLabel;
     }
 
     export interface ChartConstantLine extends ChartConstantLineStyle {
-        /**
-        * @docid dxchartoptions_argumentaxis_constantlines_label
-        * @docid dxchartoptions_valueaxis_constantlines_label
-        */
+        /** Configures the constant line label. */
         label?: ChartConstantLineLabel;
 
-        /**
-        * @docid dxchartoptions_argumentaxis_constantlines_value
-        * @docid dxchartoptions_valueaxis_constantlines_value
-        */
+        /** Specifies the value indicated by a constant line. Setting this option is necessary. */
         value?: any;
     }
 
     export interface PolarConstantLine extends PolarCommonConstantLineStyle {
-        /**
-            * @docid dxpolarchartoptions_argumentaxis_constantlines_label
-            * @docid dxpolarchartoptions_valueaxis_constantlines_label
-            */
+        /** An object defining constant line label options. */
         label?: PolarConstantLineLabel;
 
-        /**
-        * @docid dxpolarchartoptions_argumentaxis_constantlines_value
-        * @docid dxpolarchartoptions_valueaxis_constantlines_value
-        */
+        /** Specifies a value to be displayed by a constant line. */
         value?: any;
     }
 
     export interface Axis {
-        /**
-        * @docid dxchartoptions_argumentaxis_axisdivisionfactor
-        * @docid dxchartoptions_valueaxis_axisdivisionfactor
-        * @docid dxpolarchartoptions_argumentaxis_axisdivisionfactor
-        * @docid dxpolarchartoptions_valueaxis_axisdivisionfactor
-        */
+        /** Specifies a coefficient for dividing the value axis. */
         axisDivisionFactor?: number;
 
-        /**
-        * @docid dxchartoptions_argumentaxis_categories
-        * @docid dxchartoptions_valueaxis_categories
-        * @docid dxpolarchartoptions_argumentaxis_categories
-        * @docid dxpolarchartoptions_valueaxis_categories
-        */
+        /** Specifies the order in which discrete values are arranged on the value axis. */
         categories?: Array<any>;
 
-        /**
-        * @docid dxchartoptions_argumentaxis_logarithmbase
-        * @docid dxchartoptions_valueaxis_logarithmbase
-        * @docid dxpolarchartoptions_argumentaxis_logarithmbase
-        * @docid dxpolarchartoptions_valueaxis_logarithmbase
-        */
+        /** Specifies the value to be raised to a power when generating ticks for a logarithmic axis. */
         logarithmBase?: number;
 
-        /**
-        * @docid dxchartoptions_argumentaxis_tickInterval
-        * @docid dxchartoptions_valueaxis_tickInterval
-        * @docid dxpolarchartoptions_argumentaxis_tickInterval
-        * @docid dxpolarchartoptions_valueaxis_tickInterval
-        */
+        /** Specifies an interval between axis ticks/grid lines. */
         tickInterval?: any;
 
-        /**
-          * @docid dxchartoptions_argumentaxis_minortickinterval
-          * @docid dxchartoptions_valueaxis_minortickinterval
-          * @docid dxpolarchartoptions_argumentaxis_minortickinterval
-          * @docid dxpolarchartoptions_valueaxis_minortickinterval
-          */
+        /** Specifies the interval between minor ticks. */
         minorTickInterval?: any;
 
-        /**
-        * @docid dxchartoptions_argumentaxis_minortickcount
-        * @docid dxchartoptions_valueaxis_minortickcount
-        * @docid dxpolarchartoptions_argumentaxis_minortickcount
-        * @docid dxpolarchartoptions_valueaxis_minortickcount
-        */
+        /** Specifies the number of minor ticks between two neighboring major ticks. */
         minorTickCount?: number;
 
-        /**
-          * @docid dxchartoptions_argumentaxis_type
-          * @docid dxchartoptions_valueaxis_type
-          * @docid dxpolarchartoptions_argumentaxis_type
-          * @docid dxpolarchartoptions_valueaxis_type
-          */
+        /** Specifies the required type of the value axis. */
         type?: string;
 
-        /**
-          * @docid dxchartoptions_valueaxis_pane
-          */
+        /** Binds the value axis to a pane. */
         pane?: string;
 
-        /**
-        * @docid dxchartoptions_argumentaxis_strips
-        * @docid dxchartoptions_valueaxis_strips
-        * @docid dxpolarchartoptions_argumentaxis_strips
-        * @docid dxpolarchartoptions_valueaxis_strips
-        */
+        /** Specifies options for value axis strips. */
         strips?: Array<Strip>;
     }
 
     export interface ChartAxis extends ChartCommonAxisSettings, Axis {
-        /**
-          * @docid dxchartoptions_argumentaxis_constantlines
-          * @docid dxchartoptions_valueaxis_constantlines
-          */
+        /** Declares a collection of constant lines belonging to the value axis. */
         constantLines?: Array<ChartConstantLine>;
 
-        /**
-          * @docid dxchartoptions_argumentaxis_constantlinestyle
-          * @docid dxchartoptions_valueaxis_constantlinestyle
-          */
+        /** Specifies the appearance of those constant lines that belong to the value axis. */
         constantLineStyle?: ChartCommonConstantLineStyle;
 
-        /**
-          * @docid dxchartoptions_argumentaxis_label
-          * @docid dxchartoptions_valueaxis_label
-          */
+        /** Configures the labels of the value axis. */
         label?: ChartAxisLabel;
 
-        /**
-          * @docid dxchartoptions_argumentaxis_max
-          * @docid dxchartoptions_valueaxis_max
-          */
+        /** Coupled with the min option, focuses the widget on a specific chart segment. Applies only to the axes of the "continuous" and "logarithmic" type. */
         max?: any;
 
-        /**
-          * @docid dxchartoptions_argumentaxis_min
-          * @docid dxchartoptions_valueaxis_min
-          */
+        /** Coupled with the max option, focuses the widget on a specific chart segment. Applies only to the axes of the "continuous" and "logarithmic" type. */
         min?: any;
 
-        /**
-          * @docid dxchartoptions_argumentaxis_position
-          * @docid dxchartoptions_valueaxis_position
-          */
+        /** Relocates the value axis. */
         position?: string;
 
-        /**
-          * @docid dxchartoptions_argumentaxis_title
-          * @docid dxchartoptions_valueaxis_title
-          */
+        /** Configures the axis title. */
         title?: any;
     }
 
     export interface PolarAxis extends PolarCommonAxisSettings, Axis {
-        /**
-          * @docid dxpolarchartoptions_argumentaxis_constantlines
-          * @docid dxpolarchartoptions_valueaxis_constantlines
-          */
+        /** Defines an array of the value axis constant lines. */
         constantLines?: Array<PolarConstantLine>;
 
-        /**
-          * @docid dxpolarchartoptions_argumentaxis_label
-          * @docid dxpolarchartoptions_valueaxis_label
-          */
+        /** Specifies options for value axis labels. */
         label?: PolarAxisLabel;
     }
 
     export interface ArgumentAxis {
-        /**
-        * @docid dxchartoptions_argumentaxis_argumenttype
-        * @docid dxpolarchartoptions_argumentaxis_argumenttype
-        */
+        /** Specifies the desired type of axis values. */
         argumentType?: string;
 
-        /**
-        * @docid dxchartoptions_argumentaxis_hovermode
-        * @docid dxpolarchartoptions_argumentaxis_hovermode
-        */
+        /** Specifies the elements that will be highlighted when the argument axis is hovered over. */
         hoverMode?: string;
     }
 
     export interface ChartArgumentAxis extends ChartAxis, ArgumentAxis { }
     export interface PolarArgumentAxis extends PolarAxis, ArgumentAxis {
-        /** @docid dxpolarchartoptions_argumentaxis_startangle */
+        /** Specifies the angle in arc degrees to which the argument axis should be rotated. The positive values rotate the axis clockwise. */
         startAngle?: number;
 
-        /** @docid dxpolarchartoptions_argumentaxis_firstpointonstartangle */
+        /** Specifies whether or not to display the first point at the angle specified by the startAngle option. */
         firstPointOnStartAngle?: boolean;
 
-        /** @docid dxpolarchartoptions_argumentaxis_originvalue */
+        /** Specifies the value to be used as the origin for the argument axis. */
         originValue?: number;
 
-        /** @docid dxpolarchartoptions_argumentaxis_period */
+        /** Specifies the period of the argument values in the data source. */
         period?: number;
     }
 
     export interface ValueAxis {
-        /** @docid dxchartoptions_valueaxis_name */
+        /** Specifies the name of the value axis. */
         name?: string;
 
-        /**
-        * @docid dxchartoptions_valueaxis_showZero
-        * @docid dxpolarchartoptions_valueaxis_showZero
-        */
+        /** Specifies whether or not to indicate a zero value on the value axis. */
         showZero?: boolean;
 
-        /**
-        * @docid dxchartoptions_valueaxis_valuetype
-        * @docid dxpolarchartoptions_valueaxis_valuetype
-        */
+        /** Specifies the desired type of axis values. */
         valueType?: string;
     }
 
     export interface ChartValueAxis extends ChartAxis, ValueAxis {
-        /** @docid dxchartoptions_valueaxis_multipleaxesspacing */
+        /** Adds a pixel-measured empty space between two side-by-side value axes. Applies if several value axes are located on one side of the chart. */
         multipleAxesSpacing?: number;
 
-        /** @docid dxchartoptions_valueaxis_synchronizedvalue */
+        /** Synchronizes two or more value axes with each other at a specific value. */
         synchronizedValue?: number;
     }
 
     export interface PolarValueAxis extends PolarAxis, ValueAxis {
-        /** @docid dxpolarchartoptions_valueaxis_valuemarginsenabled */
+        /** Indicates whether to display series with indents from axis boundaries. */
         valueMarginsEnabled?: boolean;
 
-        /** @docid dxpolarchartoptions_valueaxis_maxvaluemargin */
+        /** Specifies a coefficient that determines the spacing between the maximum series point and the axis. */
         maxValueMargin?: number;
 
-        /** @docid dxpolarchartoptions_valueaxis_minvaluemargin */
+        /** Specifies a coefficient that determines the spacing between the minimum series point and the axis. */
         minValueMargin?: number;
 
-        /** @docid dxpolarchartoptions_valueaxis_tick */
         tick?: {
-            /** @docid dxpolarchartoptions_valueaxis_tick_visible */
             visible?: boolean;
         }
     }
@@ -1928,15 +1275,15 @@ declare module DevExpress.viz.charts {
     // Panes
 
     export interface CommonPane {
-        /** @docid dxchartoptions_commonpanesettings_backgroundcolor */
+        /** Specifies the color of the pane's background. */
         backgroundColor?: string;
 
-        /** @docid dxchartoptions_commonpanesettings_border */
+        /** Configures the pane border. */
         border?: PaneBorder;
     }
 
     export interface Pane extends CommonPane {
-        /** @docid dxchartoptions_panes_name */
+        /** Specifies the name of the pane. */
         name?: string;
     }
 
@@ -1944,21 +1291,21 @@ declare module DevExpress.viz.charts {
     // Misc code re-use
 
     export interface PaneBorder extends viz.core.DashedBorderWithOpacity {
-        /** @docid dxchartoptions_commonpanesettings_border_bottom */
+        /** Shows/hides the bottom border of the pane. Applies only when the border.visible option is true. */
         bottom?: boolean;
 
-        /** @docid dxchartoptions_commonpanesettings_border_left */
+        /** Shows/hides the left border of the pane. Applies only when the border.visible option is true. */
         left?: boolean;
 
-        /** @docid dxchartoptions_commonpanesettings_border_right */
+        /** Shows/hides the right border of the pane. Applies only when the border.visible option is true. */
         right?: boolean;
 
-        /** @docid dxchartoptions_commonpanesettings_border_top */
+        /** Shows/hides the top border of the pane. Applies only when the border.visible option is true. */
         top?: boolean;
     }
 
     export interface ChartAnimation extends viz.core.Animation {
-        /** @docid basechartoptions_animation_maxpointcountsupported */
+        /** Specifies how many series points the widget should have before the animation will be disabled. */
         maxPointCountSupported?: number;
     }
 
@@ -1966,90 +1313,93 @@ declare module DevExpress.viz.charts {
     // BaseChart
 
     export interface BaseChartTooltip extends viz.core.Tooltip {
-        /** @docid basechartoptions_tooltip_argumentformat */
+        /** Specifies a format for arguments of the chart's series points. */
         argumentFormat?: any;
 
-        /** @docid basechartoptions_tooltip_argumentprecision */
+        /**
+         * Specifies a precision for formatted arguments displayed in tooltips.
+         * @deprecated Use the tooltip.argumentFormat.precision option instead.
+         */
         argumentPrecision?: number;
 
-        /** @docid basechartoptions_tooltip_percentprecision */
+        /**
+        * Specifies a precision for a percent value displayed in tooltips for stacked series and PieChart series.
+        * @deprecated Use the tooltip.format.percentPrecision option instead.
+        */
         percentPrecision?: number;
     }
 
     export interface BaseChartOptions<TPoint> extends viz.core.BaseWidgetOptions, viz.core.MarginOptions, viz.core.RedrawOnResizeOptions, viz.core.TitleOptions, viz.core.LoadingIndicatorOptions, viz.core.ExportOptions {
-        /** @docid basechartoptions_adaptiveLayout */
+        /** Specifies adaptive layout options. */
         adaptiveLayout?: {
-            /** @docid basechartoptions_adaptiveLayout_width */
+            /** Specifies the widget's width small enough for the layout to begin adapting. */
             width?: number;
 
-            /** @docid basechartoptions_adaptiveLayout_height */
+            /** Specifies the widget's height small enough for the layout to begin adapting. */
             height?: number;
 
-            /** @docid basechartoptions_adaptiveLayout_keepLabels */
+            /** Specifies whether or not point labels should be kept when the layout is adapting. */
             keepLabels?: boolean;
         };
 
-        /** @docid basechartoptions_animation */
+        /** Specifies animation options. */
         animation?: ChartAnimation;
 
-        /** @docid basechartoptions_customizelabel */
+        /** Customizes the appearance of an individual point label. */
         customizeLabel?: (pointInfo: any) => Object;
 
-        /** @docid basechartoptions_customizepoint */
+        /** Customizes the appearance of an individual series point. */
         customizePoint?: (pointInfo: any) => Object;
 
-        /** @docid basechartoptions_datasource */
+        /** Specifies the origin of data for the widget. */
         dataSource?: any;
 
-        /** @docid basechartoptions_legend */
+        /** Specifies options of the legend. */
         legend?: core.BaseLegend;
 
-        /**
-          * @docid basechartoptions_palette
-          * @docid dxpiechartoptions_palette
-          */
+        /** Sets the name of the palette to be used in the chart. Alternatively, an array of colors can be set as a custom palette to be used within this chart. */
         palette?: any;
 
-        /** @docid basechartoptions_ondone */
+        /** A handler for the done event. */
         onDone?: (e: {
             component: BaseChart;
             element: Element;
         }) => void;
 
-        /** @docid basechartoptions_onpointclick */
+        /** A handler for the pointClick event. */
         onPointClick?: any;
 
-        /** @docid basechartoptions_onpointhoverchanged */
+        /** A handler for the pointHoverChanged event. */
         onPointHoverChanged?: (e: {
             component: BaseChart;
             element: Element;
             target: TPoint;
         }) => void;
 
-        /** @docid basechartoptions_onpointselectionchanged */
+        /** A handler for the pointSelectionChanged event. */
         onPointSelectionChanged?: (e: {
             component: BaseChart;
             element: Element;
             target: TPoint;
         }) => void;
 
-        /** @docid basechartoptions_pointSelectionMode */
+        /** Specifies whether a single point or multiple points can be selected in the chart. */
         pointSelectionMode?: string;
 
-        /** @docid basechartoptions_series */
+        /** Specifies options for series. */
         series?: any;
 
-        /** @docid basechartoptions_tooltip */
+        /** Configures tooltips. */
         tooltip?: BaseChartTooltip;
 
-        /** @docid basechartoptions_ontooltipshown */
+        /** A handler for the tooltipShown event. */
         onTooltipShown?: (e: {
             component: BaseChart;
             element: Element;
             target: BasePoint;
         }) => void;
 
-        /** @docid basechartoptions_ontooltiphidden */
+        /** A handler for the tooltipHidden event. */
         onTooltipHidden?: (e: {
             component: BaseChart;
             element: Element;
@@ -2057,32 +1407,32 @@ declare module DevExpress.viz.charts {
         }) => void;
     }
 
-    /** @docid basechart **/
+    /** A base class for all chart widgets included in the ChartJS library. */
     export class BaseChart extends viz.core.BaseWidget implements viz.core.LoadingIndicatorMethods {
 
-        /** @docid basechartmethods_clearselection */
+        /** Deselects the chart's selected series. The series is displayed in an initial style. */
         clearSelection(): void;
 
-        /** @docid basechartmethods_getallseries */
+        /** Returns an array of all series in the chart. */
         getAllSeries(): Array<BaseSeries>;
 
-        /** @docid basechartmethods_getseriesbyname */
+        /** Gets a series within the chart's series collection by the specified name (see the name option). */
         getSeriesByName(seriesName: any): BaseSeries;
 
-        /** @docid basechartmethods_getseriesbypos */
+        /** Gets a series within the chart's series collection by its position number. */
         getSeriesByPos(seriesIndex: number): BaseSeries;
 
-        /** @docid basechartmethods_getdatasource */
+        /** Returns the DataSource instance. */
         getDataSource(): DevExpress.data.DataSource;
 
-        /** @docid basechartmethods_hideTooltip */
+        /** Hides all widget tooltips. */
         hideTooltip(): void;
 
         showLoadingIndicator(): void;
 
         hideLoadingIndicator(): void;
 
-        /** @docid basechartmethods_render */
+        /** Redraws a widget. */
         render(renderOptions?: {
             force?: boolean;
             animate?: boolean;
@@ -2092,233 +1442,182 @@ declare module DevExpress.viz.charts {
 
     //AdvancedChart
     export interface AdvancedLegend extends core.BaseLegend {
-        /**
-        * @docid dxchartoptions_legend_customizehint
-        * @docid dxpolarchartoptions_legend_customizehint
-        */
+        /** Specifies the text for a hint that appears when a user hovers the mouse pointer over a legend item. */
         customizeHint?: (seriesInfo: { seriesName: any; seriesIndex: number; seriesColor: string; }) => string;
 
-        /**
-        * @docid dxchartoptions_legend_customizetext
-        * @docid dxpolarchartoptions_legend_customizetext
-        */
+        /** <p>Specifies a callback function that returns the text to be displayed by legend items.</p> */
         customizeText?: (seriesInfo: { seriesName: any; seriesIndex: number; seriesColor: string; }) => string;
 
-        /**
-        * @docid dxchartoptions_legend_hovermode
-        * @docid dxpolarchartoptions_legend_hovermode
-        */
+        /** Specifies what series elements to highlight when a corresponding item in the legend is hovered over. */
         hoverMode?: string;
     }
 
     export interface AdvancedOptions<TPoint, TSeries> extends BaseChartOptions<TPoint> {
-        /**
-        * @docid dxchartoptions_onargumentaxisclick
-        * @docid dxpolarchartoptions_onargumentaxisclick
-        */
+        /** A handler for the argumentAxisClick event. */
         onArgumentAxisClick?: any;
 
-        /**
-        *  @docid dxchartoptions_containerbackgroundcolor
-        *  @docid dxpolarchartoptions_containerbackgroundcolor
-        */
+        /** Specifies the color of the parent page element. */
         containerBackgroundColor?: string;
 
-        /**
-        * @docid dxchartoptions_dataPrepareSettings
-        * @docid dxpolarchartoptions_dataPrepareSettings
-        */
+        /** An object providing options for managing data from a data source. */
         dataPrepareSettings?: {
 
-            /**
-            * @docid dxchartoptions_dataPrepareSettings_checkTypeForAllData
-            * @docid dxpolarchartoptions_dataPrepareSettings_checkTypeForAllData
-            */
+            /** Specifies whether or not to validate the values from a data source. */
             checkTypeForAllData?: boolean;
 
-            /**
-            * @docid dxchartoptions_dataPrepareSettings_convertToAxisDataType
-            * @docid dxpolarchartoptions_dataPrepareSettings_convertToAxisDataType
-            */
+            /** Specifies whether or not to convert the values from a data source into the data type of an axis. */
             convertToAxisDataType?: boolean;
 
-            /**
-            * @docid dxchartoptions_dataPrepareSettings_sortingMethod
-            * @docid dxpolarchartoptions_dataPrepareSettings_sortingMethod
-            */
+            /** Specifies how to sort the series points. */
             sortingMethod?: any;
         };
 
-        /**
-        * @docid dxchartoptions_onlegendclick
-        * @docid dxpolarchartoptions_onlegendclick
-        */
+        /** A handler for the legendClick event. */
         onLegendClick?: any;
 
-        /**
-        * @docid dxchartoptions_onseriesclick
-        * @docid dxpolarchartoptions_onseriesclick
-        */
+        /** A handler for the seriesClick event. */
         onSeriesClick?: any;
 
-        /**
-        * @docid dxchartoptions_onserieshoverchanged
-        * @docid dxpolarchartoptions_onserieshoverchanged
-        */
+        /** A handler for the seriesHoverChanged event. */
         onSeriesHoverChanged?: (e: {
             component: BaseChart;
             element: Element;
             target: TSeries;
         }) => void;
 
-        /**
-        * @docid dxchartoptions_onseriesselectionchanged
-        * @docid dxpolarchartoptions_onseriesselectionchanged
-        */
+        /** A handler for the seriesSelectionChanged event. */
         onSeriesSelectionChanged?: (e: {
             component: BaseChart;
             element: Element;
             target: TSeries;
         }) => void;
 
-        /**
-        * @docid dxchartoptions_seriesSelectionMode
-        * @docid dxpolarchartoptions_seriesSelectionMode
-        */
+        /** Specifies whether a single series or multiple series can be selected in the chart. */
         seriesSelectionMode?: string;
-        /**
-        * @docid dxchartoptions_resolvelabeloverlapping
-        * @docid dxpolarchartoptions_resolvelabeloverlapping
-        */
+        /** Specifies how the chart must behave when series point labels overlap. */
         resolveLabelOverlapping?: string;
 
-        /**
-        * @docid dxchartoptions_equalbarwidth
-        * @docid dxpolarchartoptions_equalbarwidth
-        */
+        /** Specifies whether or not all bars in a series must have the same angle, or may have different angles if any points in other series are missing. */
         equalBarWidth?: boolean;
 
-        /**
-        * @docid dxchartoptions_barwidth
-        * @docid dxpolarchartoptions_barwidth
-        */
+        /** Specifies a common bar width as a percentage from 0 to 1. */
         barWidth?: number;
 
-        /**
-        * @docid dxchartoptions_negativesaszeroes
-        * @docid dxpolarchartoptions_negativesaszeroes
-        */
+        /** Forces the widget to treat negative values as zeroes. Applies to stacked-like series only. */
         negativesAsZeroes?: boolean;
     }
 
     // Chart
 
     export interface Legend extends AdvancedLegend {
-        /** @docid dxchartoptions_legend_position */
+        /** Specifies whether the legend is located outside or inside the chart's plot. */
         position?: string;
     }
 
     export interface ChartTooltip extends BaseChartTooltip {
-        /** @docid dxchartoptions_tooltip_location */
+        /** Specifies whether the tooltip must be located in the center of a series point or on its edge. Applies to bar-like and bubble series only. */
         location?: string;
 
-        /** @docid dxchartoptions_tooltip_shared */
+        /** Specifies the kind of information to display in a tooltip. */
         shared?: boolean;
     }
 
     export interface dxChartOptions extends AdvancedOptions<ChartPoint, ChartSeries> {
-        /** @docid dxchartoptions_synchronizemultiaxes */
+        /** Indicates whether or not to synchronize value axes when they are displayed on a single pane. */
         synchronizeMultiAxes?: boolean;
 
-        /** @docid dxchartoptions_useAggregation */
+        /** Specifies whether or not to filter the series points depending on their quantity. */
         useAggregation?: boolean;
 
-        /** @docid dxchartoptions_adjustonzoom */
+        /** Specifies whether or not to adjust the value axis when zooming the widget. */
         adjustOnZoom?: boolean;
 
-        /** @docid dxchartoptions_argumentaxis */
+        /** Configures the argument axis. */
         argumentAxis?: ChartArgumentAxis;
 
-        /** @docid dxchartoptions_commonaxissettings */
+        /** Defines common settings for both the argument and value axis in a chart. */
         commonAxisSettings?: ChartCommonAxisSettings;
 
-        /** @docid dxchartoptions_commonpanesettings */
+        /** Defines common settings for all panes in a chart. */
         commonPaneSettings?: CommonPane;
 
-        /** @docid dxchartoptions_commonseriessettings */
+        /** Specifies settings common for all series in the chart. */
         commonSeriesSettings?: CommonSeriesSettings;
 
-        /** @docid dxchartoptions_crosshair */
+        /** Configures the crosshair feature. */
         crosshair?: {
 
-            /** @docid dxchartoptions_crosshair_color */
+            /** Specifies the color of the crosshair lines. */
             color?: string;
 
-            /** @docid dxchartoptions_crosshair_dashstyle */
+            /** Specifies the dash style of the crosshair lines. */
             dashStyle?: string;
 
-            /** @docid dxchartoptions_crosshair_enabled */
+            /** Enables the crosshair. */
             enabled?: boolean;
 
-            /** @docid dxchartoptions_crosshair_opacity */
+            /** Specifies how transparent the crosshair lines should be. */
             opacity?: number;
 
-            /** @docid dxchartoptions_crosshair_width */
+            /** Specifies the width of the crosshair lines. */
             width?: number;
 
-            /** @docid dxchartoptions_crosshair_horizontalline */
+            /** Configures the horizontal crosshair line individually. */
             horizontalLine?: CrosshairWithLabel;
 
-            /** @docid dxchartoptions_crosshair_verticalline */
+            /** Configures the vertical crosshair line individually. */
             verticalLine?: CrosshairWithLabel;
 
-            /** @docid dxchartoptions_crosshair_label */
+            /** Configures the crosshair labels. */
             label?: {
-                /** @docid dxchartoptions_crosshair_label_backgroundcolor */
+                /** Paints the background of the crosshair labels. */
                 backgroundColor?: string;
 
-                /** @docid dxchartoptions_crosshair_label_visible */
+                /** Makes the crosshair labels visible. Applies only if the crosshair feature is enabled. */
                 visible?: boolean;
 
-                /** @docid dxchartoptions_crosshair_label_font */
+                /** Specifies font options for the crosshair labels. */
                 font?: viz.core.Font;
 
-                /** @docid dxchartoptions_crosshair_label_format */
+                /** Formats the point value/argument before it will be displayed in the crosshair label. */
                 format?: any;
 
-                /** @docid dxchartoptions_crosshair_label_precision */
+                /**
+                 * Specifies a precision for formatted values.
+                 * @deprecated Use the crosshair.label.format.precision option instead.
+                 */
                 precision?: number;
 
-                /** @docid dxchartoptions_crosshair_label_customizetext */
+                /** Customizes the text displayed by the crosshair labels. */
                 customizeText?: (info: { value: any; valueText: string; point: ChartPoint; }) => string;
             }
         };
 
-        /** @docid dxchartoptions_defaultpane */
+        /** Specifies which pane should be used by default. */
         defaultPane?: string;
 
-        /** @docid dxchartoptions_maxbubblesize */
+        /** Specifies a coefficient determining the diameter of the largest bubble. */
         maxBubbleSize?: number;
 
-        /** @docid dxchartoptions_minbubblesize */
+        /** Specifies the diameter of the smallest bubble measured in pixels. */
         minBubbleSize?: number;
 
-        /** @docid dxchartoptions_panes */
+        /** Declares a collection of panes. */
         panes?: Array<Pane>;
 
-        /** @docid dxchartoptions_rotated */
+        /** Swaps the axes around making the value axis horizontal and the argument axis vertical. */
         rotated?: boolean;
 
-        /** @docid dxchartoptions_legend */
+        /** Specifies the options of a chart's legend. */
         legend?: Legend;
 
-        /** @docid dxchartoptions_onzoomstart */
+        /** A handler for the zoomStart event. */
         onZoomStart?: (e: {
             component: BaseChart;
             element: Element;
         }) => void;
 
-        /** @docid dxchartoptions_onzoomend */
+        /** A handler for the zoomEnd event. */
         onZoomEnd?: (e: {
             component: BaseChart;
             element: Element;
@@ -2327,42 +1626,42 @@ declare module DevExpress.viz.charts {
         }) => void;
 
 
-        /** @docid dxchartoptions_series */
+        /** Specifies options for Chart widget series. */
         series?: Array<SeriesConfig>;
 
-        /** @docid dxchartoptions_seriestemplate */
+        /** Defines options for the series template. */
         seriesTemplate?: SeriesTemplate;
 
-        /** @docid dxchartoptions_tooltip */
+        
         tooltip?: ChartTooltip;
 
-        /** @docid dxchartoptions_valueaxis */
+        /** Configures the value axis. */
         valueAxis?: Array<ChartValueAxis>;
 
-        /** @docid dxchartoptions_scrollingmode */
+        /** Enables scrolling in your chart. */
         scrollingMode?: string;
 
-        /** @docid dxchartoptions_zoomingmode */
+        /** Enables zooming in your chart. */
         zoomingMode?: string;
 
-        /** @docid dxchartoptions_scrollbar */
+        /** Specifies the settings of the scroll bar. */
         scrollBar?: {
-            /** @docid dxchartoptions_scrollbar_visible */
+            /** Specifies whether the scroll bar is visible or not. */
             visible?: boolean;
 
-            /** @docid dxchartoptions_scrollbar_offset */
+            /** Specifies the spacing between the scroll bar and the chart's plot in pixels. */
             offset?: number;
 
-            /** @docid dxchartoptions_scrollbar_color */
+            /** Specifies the color of the scroll bar. */
             color?: string;
 
-            /** @docid dxchartoptions_scrollbar_width */
+            /** Specifies the width of the scroll bar in pixels. */
             width?: number;
 
-            /** @docid dxchartoptions_scrollbar_opacity */
+            /** Specifies the opacity of the scroll bar. */
             opacity?: number;
 
-            /** @docid dxchartoptions_scrollbar_position */
+            /** Specifies the position of the scroll bar in the chart. */
             position?: string;
         };
     }
@@ -2370,45 +1669,27 @@ declare module DevExpress.viz.charts {
 
 
     interface CrosshairWithLabel extends viz.core.DashedBorderWithOpacity {
-        /**
-        * @docid dxchartoptions_crosshair_verticalline_label
-        * @docid dxchartoptions_crosshair_horizontalline_label
-        */
+        /** Configures the label that belongs to the horizontal crosshair line. */
         label?: {
-            /**
-            * @docid dxchartoptions_crosshair_verticalline_label_backgroundcolor
-            * @docid dxchartoptions_crosshair_horizontalline_label_backgroundcolor
-            */
+            /** Paints the background of the label that belongs to the horizontal crosshair line. */
             backgroundColor?: string;
 
-            /**
-            * @docid dxchartoptions_crosshair_verticalline_label_visible
-            * @docid dxchartoptions_crosshair_horizontalline_label_visible
-            */
+            /** Makes the label of the horizontal crosshair line visible. Applies only if the crosshair feature is enabled and the horizontal line is visible. */
             visible?: boolean;
 
-            /**
-            * @docid dxchartoptions_crosshair_verticalline_label_font
-            * @docid dxchartoptions_crosshair_horizontalline_label_font
-            */
+            /** Specifies font options for the label of the horizontal crosshair line. */
             font?: viz.core.Font;
 
-            /**
-            * @docid dxchartoptions_crosshair_verticalline_label_format
-            * @docid dxchartoptions_crosshair_horizontalline_label_format
-            */
+            /** Formats the point value before it will be displayed in the crosshair label. */
             format?: any;
 
             /**
-            * @docid dxchartoptions_crosshair_verticalline_label_precision
-            * @docid dxchartoptions_crosshair_horizontalline_label_precision
-            */
+  * Specifies a precision for formatted values.
+  * @deprecated Use the crosshair.horizontalLine.label.format.precision option instead.
+  */
             precision?: number;
 
-            /**
-            * @docid dxchartoptions_crosshair_verticalline_label_customizetext
-            * @docid dxchartoptions_crosshair_horizontalline_label_customizetext
-            */
+            /** Customizes the text displayed by the label that belongs to the horizontal crosshair line. */
             customizeText?: (info: { value: any; valueText: string; point: ChartPoint; }) => string;
         }
     }
@@ -2416,45 +1697,45 @@ declare module DevExpress.viz.charts {
     // PolarChart
 
     export interface PolarChartTooltip extends BaseChartTooltip {
-        /** @docid dxpolarchartoptions_tooltip_shared */
+        /** Specifies the kind of information to display in a tooltip. */
         shared?: boolean;
 
     }
 
     export interface dxPolarChartOptions extends AdvancedOptions<PolarPoint, PolarSeries> {
-        /** @docid dxpolarchartoptions_adaptiveLayout */
+        /** Specifies adaptive layout options. */
         adaptiveLayout?: {
-            /** @docid dxpolarchartoptions_adaptiveLayout_width */
+            
             width?: number;
 
-            /** @docid dxpolarchartoptions_adaptiveLayout_height */
+            
             height?: number;
         };
-        /** @docid dxpolarchartoptions_usespiderweb */
+        /** Indicates whether or not to display a "spider web". */
         useSpiderWeb?: boolean;
 
-        /** @docid dxpolarchartoptions_argumentaxis */
+        /** Specifies argument axis options for the PolarChart widget. */
         argumentAxis?: PolarArgumentAxis;
 
-        /** @docid dxpolarchartoptions_commonaxissettings */
+        /** An object defining the configuration options that are common for all axes of the PolarChart widget. */
         commonAxisSettings?: PolarCommonAxisSettings;
 
-        /** @docid dxpolarchartoptions_commonseriessettings */
+        /** An object defining the configuration options that are common for all series of the PolarChart widget. */
         commonSeriesSettings?: CommonPolarSeriesSettings;
 
-        /** @docid dxpolarchartoptions_legend */
+        /** Specifies the options of a chart's legend. */
         legend?: AdvancedLegend;
 
-        /** @docid dxpolarchartoptions_series */
+        /** Specifies options for PolarChart widget series. */
         series?: Array<PolarSeriesConfig>;
 
-        /** @docid dxpolarchartoptions_seriestemplate */
+        /** Defines options for the series template. */
         seriesTemplate?: PolarSeriesTemplate;
 
-        /** @docid dxpolarchartoptions_tooltip */
+        
         tooltip?: PolarChartTooltip;
 
-        /** @docid dxpolarchartoptions_valueaxis */
+        /** Specifies value axis options for the PolarChart widget. */
         valueAxis?: PolarValueAxis;
     }
 
@@ -2463,59 +1744,59 @@ declare module DevExpress.viz.charts {
     // PieChart
 
     export interface PieLegend extends core.BaseLegend {
-        /** @docid dxpiechartoptions_legend_hovermode */
+        /** Specifies what chart elements to highlight when a corresponding item in the legend is hovered over. */
         hoverMode?: string;
 
-        /** @docid dxpiechartoptions_legend_customizehint */
+        /** Specifies the text for a hint that appears when a user hovers the mouse pointer over a legend item. */
         customizeHint?: (pointInfo: { pointName: any; pointIndex: number; pointColor: string; }) => string;
 
-        /** @docid dxpiechartoptions_legend_customizetext */
+        /** Specifies a callback function that returns the text to be displayed by a legend item. */
         customizeText?: (pointInfo: { pointName: any; pointIndex: number; pointColor: string; }) => string;
     }
 
     export interface dxPieChartOptions extends BaseChartOptions<PiePoint> {
-        /** @docid dxpiechartoptions_adaptiveLayout */
+        /** Specifies adaptive layout options. */
         adaptiveLayout?: {
-            /** @docid dxpiechartoptions_adaptiveLayout_keepLabels */
+            
             keepLabels?: boolean;
         };
-        /** @docid dxpiechartoptions_legend */
+        /** Specifies PieChart legend options. */
         legend?: PieLegend;
 
-        /** @docid dxpiechartoptions_series */
+        /** Specifies options for the series of the PieChart widget. */
         series?: Array<PieSeriesConfig>;
 
-        /** @docid dxpiechartoptions_diameter */
+        /** Specifies the diameter of the pie. */
         diameter?: number;
 
-        /** @docid dxpiechartoptions_mindiameter */
+        /** Specifies the minimum diameter of the pie. */
         minDiameter?: number;
 
-        /** @docid dxpiechartoptions_segmentsdirection */
+        /** Specifies the direction that the pie chart segments will occupy. */
         segmentsDirection?: string;
 
-        /** @docid dxpiechartoptions_startangle */
+        /** Specifies the angle in arc degrees from which the first segment of a pie chart should start. */
         startAngle?: number;
 
-        /** @docid dxpiechartoptions_innerradius */
+        /** Specifies the fraction of the inner radius relative to the total radius in the series of the 'doughnut' type. The value should be between 0 and 1. */
         innerRadius?: number;
 
-        /** @docid dxpiechartoptions_onlegendclick */
+        /** A handler for the legendClick event. */
         onLegendClick?: any;
 
-        /** @docid dxpiechartoptions_resolvelabeloverlapping */
+        /** Specifies how a chart must behave when point labels overlap. */
         resolveLabelOverlapping?: string;
 
-        /** @docid dxpiechartoptions_commonseriessettings */
+        /** An object defining the configuration options that are common for all series of the PieChart widget. */
         commonSeriesSettings?: CommonPieSeriesSettings;
 
-        /** @docid dxpiechartoptions_seriestemplate */
+        /** Defines options for the series template. */
         seriesTemplate?: PieSeriesTemplate;
 
-        /** @docid dxpiechartoptions_type */
+        /** Specifies the type of the pie chart series. */
         type?: string;
 
-        /** @docid dxpiechartoptions_sizegroup */
+        /** Allows you to display several adjoining pies in the same size. */
         sizeGroup?: string;
     }
 
@@ -2524,25 +1805,28 @@ declare module DevExpress.viz.charts {
 }
 
 declare module DevExpress.viz {
-    /** @docid dxchart */
+    /** The Chart is a widget that visualizes data from a local or remote storage using a great variety of series types along with different interactive elements, such as tooltips, crosshair pointer, legend, etc. */
     export class dxChart extends DevExpress.viz.charts.BaseChart {
         constructor(element: JQuery, options?: DevExpress.viz.charts.dxChartOptions);
         constructor(element: Element, options?: DevExpress.viz.charts.dxChartOptions);
 
-        /** @docid dxchartmethods_zoomargument */
+        /** Sets the specified start and end values for the chart's argument axis. */
         zoomArgument(startValue: any, endValue: any): void;
     }
 
-    /** @docid dxpiechart */
+    /** The PieChart is a widget that visualizes data as a circle divided into sectors that each represents a portion of the whole. */
     export class dxPieChart extends DevExpress.viz.charts.BaseChart {
         constructor(element: JQuery, options?: DevExpress.viz.charts.dxPieChartOptions);
         constructor(element: Element, options?: DevExpress.viz.charts.dxPieChartOptions);
 
-        /** @docid dxpiechartmethods_getseries */
+        /**
+         * Provides access to the PieChart series.
+         * @deprecated Use the getAllSeries() method instead.
+         */
         getSeries(): DevExpress.viz.charts.PieSeries;
     }
 
-    /** @docid dxpolarchart */
+    /** The PolarChart is a widget that visualizes data in a polar coordinate system. */
     export class dxPolarChart extends DevExpress.viz.charts.BaseChart {
         constructor(element: JQuery, options?: DevExpress.viz.charts.dxPolarChartOptions);
         constructor(element: Element, options?: DevExpress.viz.charts.dxPolarChartOptions);

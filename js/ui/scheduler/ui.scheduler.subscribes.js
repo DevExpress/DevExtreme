@@ -641,9 +641,9 @@ var subscribes = {
             }),
             result = {};
 
-        this._convertDatesByTimezoneBack(false, recurringData);
-
         extend(true, result, appointmentData, recurringData);
+
+        this._convertDatesByTimezoneBack(false, result);
 
             //TODO: _getSingleAppointmentData already uses a related cell data for appointment that contains info about resources
         this.setTargetedAppointmentResources(result, appointmentElement, appointmentIndex);

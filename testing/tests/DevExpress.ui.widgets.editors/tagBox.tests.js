@@ -708,6 +708,33 @@ QUnit.test("using the 'onCustomItemCreating' option", function(assert) {
     assert.equal($tags.eq(0).text(), "display " + customValue);
 });
 
+QUnit.test("creating custom item via the 'customItem' event parameter", function(assert) {
+    var $tagBox = $("#tagBox").dxTagBox({
+            acceptCustomValue: true,
+            displayExpr: "display",
+            valueExpr: "value",
+            onCustomItemCreating: function(e) {
+                e.customItem = {
+                    display: "display " + e.text,
+                    value: "value " + e.text
+                };
+            }
+        }),
+        $input = $tagBox.find(".dx-texteditor-input"),
+        keyboard = keyboardMock($input),
+        customValue = "Custom value";
+
+    keyboard
+        .type(customValue)
+        .press('enter');
+
+    var $tags = $tagBox.find(".dx-tag");
+
+    assert.deepEqual($tagBox.dxTagBox("option", "value"), ["value " + customValue]);
+    assert.equal($tags.length, 1, "tag is added");
+    assert.equal($tags.eq(0).text(), "display " + customValue);
+});
+
 QUnit.test("the 'onCustomItemCreating' option with Deferred", function(assert) {
     var deferred = $.Deferred(),
         $tagBox = $("#tagBox").dxTagBox({
@@ -3816,6 +3843,30 @@ QUnit.test("loadOptions.filter should be correct when user filter is also used",
     assert.deepEqual(filter, [["!", ["id", 1]], ["!", ["id", 2]], ["id", ">", 0]], "filter is correct");
 });
 
+QUnit.test("loadOptions.filter should be correct after some items selecting/deselecting", function(assert) {
+    var load = sinon.stub().returns([{ id: 1, text: "item 1" }, { id: 2, text: "item 2" }]),
+        $tagBox = $("#tagBox").dxTagBox({
+            dataSource: {
+                load: load
+            },
+            valueExpr: "id",
+            displayExpr: "text",
+            opened: true,
+            hideSelectedItems: true
+        }),
+        tagBox = $tagBox.dxTagBox("instance");
+
+    $(tagBox._$list.find(".dx-list-item").eq(0)).trigger("dxclick");
+
+    var filter = load.lastCall.args[0].filter;
+    assert.deepEqual(filter, [["!", ["id", 1]]], "filter is correct");
+
+    $($tagBox.find(".dx-tag-remove-button").eq(0)).trigger("dxclick");
+
+    filter = load.lastCall.args[0].filter;
+    assert.deepEqual(filter, null, "filter is correct");
+});
+
 QUnit.module("deprecated options");
 
 QUnit.test("the 'values' option should work correctly", function(assert) {
@@ -3991,4 +4042,30 @@ QUnit.testInActiveWindow("Searching should work correctly in grouped tagBox (T51
 
     assert.equal($tagContainer.find("." + TAGBOX_TAG_CONTENT_CLASS).length, 2, "selected tags rendered");
     assert.equal($.trim($tagContainer.text()), "Item1Item3", "selected values are rendered");
+});
+
+QUnit.test("Items is not selected when values is set on the onSelectAllValueChanged event", function(assert) {
+    var dataSource = ["Item 1", "item 2", "item 3", "item 4"];
+
+    $("#tagBox").dxTagBox({
+        opened: true,
+        dataSource: {
+            paginate: true,
+            pageSize: 2,
+            store: dataSource
+        },
+        selectAllMode: 'page',
+        showSelectionControls: true,
+        pageLoadMode: 'scrollBottom',
+        onSelectAllValueChanged: function(e) {
+            if(e.value === true) {
+                e.component.option("value", dataSource);
+            }
+        }
+    });
+
+    $(".dx-list-select-all-checkbox").trigger("dxclick");
+
+    var selectedItems = $(".dx-list").dxList("instance").option("selectedItems");
+    assert.equal(selectedItems.length, 4, "selected items");
 });

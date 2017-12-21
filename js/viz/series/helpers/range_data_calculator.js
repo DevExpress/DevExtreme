@@ -73,7 +73,7 @@ function processCategories(range) {
 }
 
 function getValueForArgument(point, extraPoint, x) {
-    if(extraPoint) {
+    if(extraPoint && _isDefined(extraPoint.value)) {
         var y1 = point.value,
             y2 = extraPoint.value,
             x1 = point.argument,

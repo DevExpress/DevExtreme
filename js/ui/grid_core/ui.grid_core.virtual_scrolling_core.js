@@ -133,6 +133,14 @@ exports.VirtualScrollController = Class.inherit((function() {
         return pageCount;
     };
 
+    var currentPageIsLoaded = function(that) {
+        var currentPageIndex = that._dataSource.pageIndex();
+
+        return that._cache.some(function(cacheItem) {
+            return cacheItem.pageIndex === currentPageIndex;
+        });
+    };
+
     var getPageIndexForLoad = function(that) {
         var result = -1,
             needToLoadNextPage,
@@ -141,8 +149,12 @@ exports.VirtualScrollController = Class.inherit((function() {
             beginPageIndex = getBeginPageIndex(that),
             dataSource = that._dataSource;
 
-        if(beginPageIndex < 0 || !that._cache[that._pageIndex - beginPageIndex]) {
+        if(beginPageIndex < 0) {
             result = that._pageIndex;
+        } else if(!that._cache[that._pageIndex - beginPageIndex]) {
+            if(currentPageIsLoaded(that)) {
+                result = that._pageIndex;
+            }
         } else if(beginPageIndex >= 0 && that._viewportSize >= 0) {
             if(beginPageIndex > 0) {
                 needToLoadPageBeforeLast = getEndPageIndex(that) + 1 === dataSource.pageCount() && that._cache.length < getPreloadPageCount(that) + 1;

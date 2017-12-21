@@ -4,6 +4,7 @@ require("ui/action_sheet");
 
 var $ = require("jquery"),
     fx = require("animation/fx"),
+    errors = require("ui/widget/ui.errors"),
     translator = require("animation/translator"),
     animationFrame = require("animation/frame"),
     holdEvent = require("events/hold"),
@@ -2079,6 +2080,47 @@ QUnit.test("more button is shown if selectAllMode was changed after load allpage
     assert.ok($moreButton.length, "morebutton is shown");
 });
 
+QUnit.test("selectAll and unselectAll should log warning if selectAllMode is allPages and data is grouped", function(assert) {
+    var ds = new DataSource({
+        store: [{ key: "1", items: ["1_1", "1_2"] }, { key: "2", items: ["2_1", "2_2"] }],
+        pageSize: 2,
+        paginate: true
+    });
+
+    var $list = $("#list").dxList({
+        dataSource: ds,
+        grouped: true,
+        showSelectionControls: true,
+        selectionMode: "all",
+        selectAllMode: "allPages"
+    });
+
+    var $selectAll = $list.find(".dx-list-select-all .dx-checkbox");
+
+    sinon.spy(errors, "log");
+
+    //act
+    $selectAll.trigger("dxclick");
+
+    //assert
+    assert.equal(errors.log.callCount, 1);
+    assert.equal(errors.log.lastCall.args[0], "W1010", "Warning about selectAllMode allPages and grouped data");
+    assert.equal($selectAll.dxCheckBox("option", "value"), true, "selectAll checkbox is in selected state");
+    assert.equal($list.dxList("option", "selectedItems").length, 0, "items are not selected");
+
+
+    //act
+    $selectAll.trigger("dxclick");
+
+    //assert
+    assert.equal(errors.log.callCount, 2);
+    assert.equal(errors.log.lastCall.args[0], "W1010", "Warning about selectAllMode allPages and grouped data");
+    assert.equal($selectAll.dxCheckBox("option", "value"), false, "selectAll checkbox is in selected state");
+    assert.equal($list.dxList("option", "selectedItems").length, 0, "items are not selected");
+
+    errors.log.restore();
+});
+
 
 QUnit.module("item select decorator with all selection mode");
 
@@ -2555,6 +2597,26 @@ QUnit.test("list item should be duplicated on drag start", function(assert) {
     pointer.dragEnd();
     $ghostItem = $list.find(toSelector(REOREDERING_ITEM_GHOST_CLASS));
     assert.equal($items.length, 1, "duplicate item was removed");
+});
+
+QUnit.test("cached items doesn't contains a ghost item after reordering", function(assert) {
+    var $list = $("#list").dxList({
+            items: ["0", "1", "2"],
+            allowItemReordering: true
+        }),
+        list = $list.dxList("instance");
+
+    var $items = $list.find(toSelector(LIST_ITEM_CLASS)),
+        pointer = reorderingPointerMock($items.first(), this.clock);
+
+    pointer.dragStart(0.5).drag(0.6);
+    this.clock.tick();
+    pointer.dragEnd();
+
+    var cachedItems = list._itemElements();
+
+    assert.equal(cachedItems.length, 3, "Cached items contains 3 items");
+    assert.notOk(cachedItems.hasClass(REOREDERING_ITEM_GHOST_CLASS), "Cached items isn't contain a ghost item");
 });
 
 QUnit.test("ghost item should be moved by drag", function(assert) {

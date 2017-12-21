@@ -6,153 +6,153 @@ declare module DevExpress.viz.sparklines {
 
     export interface SparklineTooltip extends viz.core.Tooltip {
 
-        /** @docid basesparklineoptions_tooltip_horizontalalignment */
+        /**
+        * Specifies how a tooltip is horizontally aligned relative to the graph.
+        * @deprecated Tooltip alignment is no longer useful because the tooltips are aligned automatically.
+        */
         horizontalAlignment?: string;
 
-        /** @docid basesparklineoptions_tooltip_verticalalignment */
+        /**
+         * Specifies how a tooltip is vertically aligned relative to the graph.
+         * @deprecated Tooltip alignment is no longer useful because the tooltips are aligned automatically.
+         */
         verticalAlignment?: string;
     }
 
     export interface BaseSparklineOptions extends viz.core.BaseWidgetOptions, viz.core.MarginOptions {
-        /** @docid_ignore basesparklineoptions_redrawOnResize */
-        /** @docid_ignore basesparklineoptions_title */
-        /** @docid_ignore basesparklineoptions_export */
-        /** @docid_ignore basesparklineoptions_loadingIndicator */
-
-        /** @docid basesparklineoptions_tooltip */
+        
+        /** Configures the tooltip. */
         tooltip?: SparklineTooltip;
 
-        /** @docid basesparklineoptions_ontooltipshown */
+        /** A handler for the tooltipShown event. */
         onTooltipShown?: (e: {
             component: BaseSparkline;
             element: Element;
         }) => void;
 
-        /** @docid basesparklineoptions_ontooltiphidden */
+        /** A handler for the tooltipHidden event. */
         onTooltipHidden?: (e: {
             component: BaseSparkline;
             element: Element;
         }) => void;
     }
 
-    /** @docid_ignore basesparklinemethods_showLoadingIndicator */
-    /** @docid_ignore basesparklinemethods_hideLoadingIndicator */
-
-    /** @docid basesparkline */
+    
+    /** Overridden by descriptions for particular widgets. */
     export class BaseSparkline extends viz.core.BaseWidget {
     }
 
     export interface dxBulletOptions extends BaseSparklineOptions {
-        /** @docid dxbulletoptions_color */
+        /** Specifies a color for the bullet bar. */
         color?: string;
 
-        /** @docid dxbulletoptions_endscalevalue */
+        /** Specifies an end value for the invisible scale. */
         endScaleValue?: number;
 
-        /** @docid dxbulletoptions_showtarget */
+        /** Specifies whether or not to show the target line. */
         showTarget?: boolean;
 
-        /** @docid dxbulletoptions_showzerolevel */
+        /** Specifies whether or not to show the line indicating zero on the invisible scale. */
         showZeroLevel?: boolean;
 
-        /** @docid dxbulletoptions_startscalevalue */
+        /** Specifies a start value for the invisible scale. */
         startScaleValue?: number;
 
-        /** @docid dxbulletoptions_target */
+        /** Specifies the value indicated by the target line. */
         target?: number;
 
-        /** @docid dxbulletoptions_targetcolor */
+        /** Specifies a color for both the target and zero level lines. */
         targetColor?: string;
 
-        /** @docid dxbulletoptions_targetwidth */
+        /** Specifies the width of the target line. */
         targetWidth?: number;
 
-        /** @docid dxbulletoptions_value */
+        /** Specifies the primary value indicated by the bullet bar. */
         value?: number;
     }
 
     export interface dxSparklineOptions extends BaseSparklineOptions {
-        /** @docid dxsparklineoptions_argumentfield */
+        /** Specifies the data source field that provides arguments for a sparkline. */
         argumentField?: string;
 
-        /** @docid dxsparklineoptions_barnegativecolor */
+        /** Sets a color for the bars indicating negative values. Available for a sparkline of the bar type only. */
         barNegativeColor?: string;
 
-        /** @docid dxsparklineoptions_barpositivecolor */
+        /** Sets a color for the bars indicating positive values. Available for a sparkline of the bar type only. */
         barPositiveColor?: string;
 
-        /** @docid dxsparklineoptions_datasource */
+        /** Specifies a data source for the sparkline. */
         dataSource?: any;
 
-        /** @docid dxsparklineoptions_firstlastcolor */
+        /** Sets a color for the boundary of both the first and last points on a sparkline. */
         firstLastColor?: string;
 
-        /** @docid dxsparklineoptions_ignoreemptypoints */
+        /** Specifies whether a sparkline ignores null data points or not. */
         ignoreEmptyPoints?: boolean;
 
-        /** @docid dxsparklineoptions_linecolor */
+        /** Sets a color for a line on a sparkline. Available for the sparklines of the line- and area-like types. */
         lineColor?: string;
 
-        /** @docid dxsparklineoptions_linewidth */
+        /** Specifies a width for a line on a sparkline. Available for the sparklines of the line- and area-like types. */
         lineWidth?: number;
 
-        /** @docid dxsparklineoptions_losscolor */
+        /** Sets a color for the bars indicating the values that are less than the winloss threshold. Available for a sparkline of the winloss type only. */
         lossColor?: string;
 
-        /** @docid dxsparklineoptions_maxcolor */
+        /** Sets a color for the boundary of the maximum point on a sparkline. */
         maxColor?: string;
 
-        /** @docid dxsparklineoptions_mincolor */
+        /** Sets a color for the boundary of the minimum point on a sparkline. */
         minColor?: string;
 
-        /** @docid dxsparklineoptions_pointcolor */
+        /** Sets a color for points on a sparkline. Available for the sparklines of the line- and area-like types. */
         pointColor?: string;
 
-        /** @docid dxsparklineoptions_pointsize */
+        /** Specifies the diameter of sparkline points in pixels. Available for the sparklines of line- and area-like types. */
         pointSize?: number;
 
-        /** @docid dxsparklineoptions_pointsymbol */
+        /** Specifies a symbol to use as a point marker on a sparkline. Available for the sparklines of the line- and area-like types. */
         pointSymbol?: string;
 
-        /** @docid dxsparklineoptions_showfirstlast */
+        /** Specifies whether or not to indicate both the first and last values on a sparkline. */
         showFirstLast?: boolean;
 
-        /** @docid dxsparklineoptions_showminmax */
+        /** Specifies whether or not to indicate both the minimum and maximum values on a sparkline. */
         showMinMax?: boolean;
 
-        /** @docid dxsparklineoptions_type */
+        /** Determines the type of a sparkline. */
         type?: string;
 
-        /** @docid dxsparklineoptions_valuefield */
+        /** Specifies the data source field that provides values for a sparkline. */
         valueField?: string;
 
-        /** @docid dxsparklineoptions_wincolor */
+        /** Sets a color for the bars indicating the values greater than a winloss threshold. Available for a sparkline of the winloss type only. */
         winColor?: string;
 
-        /** @docid dxsparklineoptions_winlossthreshold */
+        /** Specifies a value that serves as a threshold for the sparkline of the winloss type. */
         winlossThreshold?: number;
 
-        /** @docid dxsparklineoptions_minvalue*/
+        /** Specifies the minimum value of the sparkline value axis. */
         minValue?: number;
 
-        /** @docid dxsparklineoptions_maxvalue */
+        /** Specifies the maximum value of the sparkline's value axis. */
         maxValue?: number;
     }
 }
 
 declare module DevExpress.viz {
-    /** @docid dxbullet */
+    /** The Bullet widget is useful when you need to compare a single measure to a target value. The widget comprises a horizontal bar indicating the measure and a vertical line indicating the target value. */
     export class dxBullet extends DevExpress.viz.sparklines.BaseSparkline {
         constructor(element: JQuery, options?: DevExpress.viz.sparklines.dxBulletOptions);
         constructor(element: Element, options?: DevExpress.viz.sparklines.dxBulletOptions);
     }
 
-    /** @docid dxsparkline */
+    /** The Sparkline widget is a compact chart that contains only one series. Owing to their size, sparklines occupy very little space and can be easily collected in a table or embedded straight in text. */
     export class dxSparkline extends DevExpress.viz.sparklines.BaseSparkline {
         constructor(element: JQuery, options?: DevExpress.viz.sparklines.dxSparklineOptions);
         constructor(element: Element, options?: DevExpress.viz.sparklines.dxSparklineOptions);
 
-        /** @docid dxsparklinemethods_getdatasource */
+        /** Returns the DataSource instance. */
         getDataSource(): DevExpress.data.DataSource;
     }
 }

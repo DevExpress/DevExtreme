@@ -130,12 +130,15 @@ var HierarchicalCollectionWidget = CollectionWidget.inherit({
     _getDataAdapterOptions: noop,
 
     _initDynamicTemplates: function() {
+        var that = this;
+
         this._defaultTemplates["item"] = new BindableTemplate(function($container, itemData) {
             $container
                 .html(itemData.html)
                 .append(this._getIconContainer(itemData))
                 .append(this._getTextContainer(itemData))
                 .append(this._getPopoutContainer(itemData));
+            that._addContentClasses(itemData, $container.parent());
         }.bind(this), ["text", "html", "items", "icon", "iconSrc"], this.option("integrationOptions.watchMethod"), {
             "text": this._displayGetter,
             "items": this._itemsGetter
@@ -153,6 +156,8 @@ var HierarchicalCollectionWidget = CollectionWidget.inherit({
     },
 
     _getPopoutContainer: noop,
+
+    _addContentClasses: noop,
 
     _initAccessors: function() {
         var that = this;
