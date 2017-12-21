@@ -198,14 +198,17 @@ QUnit.test('Render item with expressions', function(assert) {
             displayExpr: "name",
             selectionMode: "single",
             selectedExpr: "isSelected",
+            itemsExpr: "children",
             disabledExpr: "active",
-            items: [{ name: "a", active: true }, { name: "a", isSelected: true }]
+            items: [{ name: "a", active: true, children: [{ name: "a1" }] }, { name: "a", isSelected: true }]
         }),
         $items = menuBase.element.find('.' + DX_MENU_ITEM_CLASS);
 
     assert.equal($items.length, 2, 'there are 2 items in menu');
     assert.equal($items.eq(0).text(), "a", 'text is right');
 
+    assert.ok($items.eq(0).hasClass(DX_ITEM_HAS_TEXT), "item has correct content class");
+    assert.ok($items.eq(0).hasClass(DX_ITEM_HAS_SUBMENU), "item has correct content class");
     assert.ok($items.eq(0).hasClass(DX_STATE_DISABLED_CLASS), 'item is disabled');
     assert.ok($items.eq(1).hasClass(DX_ITEM_SELECTED_CLASS), 'item is selected');
 });
