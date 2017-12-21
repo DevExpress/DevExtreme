@@ -42,7 +42,7 @@ declare module DevExpress {
             reset(): void;
         }
 
-        
+
         export interface ValidatorValidationResult {
             isValid: boolean;
             name?: string;
@@ -117,10 +117,10 @@ declare module DevExpress {
     /** Registers a new component in the specified namespace as a jQuery plugin, AngularJS directive and Knockout binding. */
     export function registerComponent(name: string, namespace: Object, componentClass: Object): void;
 
-    
+
     export function requestAnimationFrame(callback: Function): number;
 
-    
+
     export function cancelAnimationFrame(requestID: number): void;
 
     /** Custom Knockout binding that links an HTML element with a specific action. */
@@ -260,7 +260,7 @@ declare module DevExpress {
         /** Returns information about the current device. */
         current(): Device;
 
-        
+
         orientationChanged: JQueryCallback;
 
         /** Returns the current device orientation. */
@@ -286,7 +286,7 @@ declare module DevExpress {
 
     /** The position object specifies the widget positioning options. */
     export interface PositionOptions {
-        
+
 
         /** The target element position that the widget is positioned against. */
         at?: any;
@@ -358,8 +358,8 @@ declare module DevExpress {
     }
 
     export interface DOMComponentOptionsBase extends ComponentOptions {
-        
-        
+
+
 
         /** Switches the widget to a right-to-left representation. */
         rtlEnabled?: boolean;
@@ -596,7 +596,7 @@ declare module DevExpress {
         }
 
         export interface DataSourceOptions {
-            
+
 
             /** Specifies data filtering conditions. */
             filter?: Object;
@@ -850,7 +850,7 @@ declare module DevExpress {
         }
 
         export interface ODataStoreOptions extends StoreOptions {
-            
+
 
             /** A function used to customize a web request before it is sent. */
             beforeSend?: (request: {
@@ -887,7 +887,7 @@ declare module DevExpress {
 
         /** A Store providing access to a separate OData web service entity. */
         export class ODataStore extends Store {
-            
+
 
             constructor(options?: ODataStoreOptions);
 
@@ -1050,7 +1050,7 @@ declare module DevExpress {
 
         /** The base class for widgets. */
         export class Widget extends DOMComponent {
-            
+
 
             constructor(options?: WidgetOptions);
 
@@ -1078,7 +1078,7 @@ declare module DevExpress {
             /** Specifies a custom template for an item. */
             itemTemplate?: any;
 
-            
+
             loopItemFocus?: boolean;
 
             /** The text or HTML markup displayed by the widget if the item collection is empty. */
@@ -1124,7 +1124,7 @@ declare module DevExpress {
             onItemReordered?: Function;
         }
 
-        
+
         export interface DataHelperMixin {
             /** Gets the DataSource instance. */
             getDataSource(): DevExpress.data.DataSource;
@@ -1136,7 +1136,7 @@ declare module DevExpress {
             constructor(element: JQuery, options?: CollectionWidgetOptions);
             constructor(element: HTMLElement, options?: CollectionWidgetOptions);
 
-           
+
             selectItem(itemElement: any): void;
 
             unselectItem(itemElement: any): void;

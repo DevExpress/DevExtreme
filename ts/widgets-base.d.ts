@@ -1,7 +1,7 @@
 /// <reference path="core.d.ts" />
 
 declare module DevExpress.ui {
-    
+
     export interface dxValidatorValidationAdapter {
         /** A function that returns the value to be validated. */
         getValue?: Function;
@@ -45,7 +45,7 @@ declare module DevExpress.ui {
         constructor(element: JQuery, options?: dxValidatorOptions);
         constructor(element: Element, options?: dxValidatorOptions);
 
-        
+
         /** Validates the value of the editor that is controlled by the current Validator object against the list of the specified validation rules. */
         validate(): validationEngine.ValidatorValidationResult;
         /** Resets the value and validation result of the editor associated with the current Validator object. */
@@ -61,7 +61,7 @@ declare module DevExpress.ui {
         constructor(element: JQuery, options?: dxValidationGroupOptions);
         constructor(element: Element, options?: dxValidationGroupOptions);
 
-        
+
         /** Validates rules of the validators that belong to the current validation group. */
         validate(): validationEngine.ValidationGroupValidationResult;
         /** Resets the value and validation result of the editors that are included to the current validation group. */
@@ -69,7 +69,7 @@ declare module DevExpress.ui {
     }
 
     export interface dxValidationSummaryOptions extends CollectionWidgetOptions {
-        
+
         /** Specifies the validation group for which summary should be generated. */
         validationGroup?: string;
     }
@@ -78,11 +78,11 @@ declare module DevExpress.ui {
     export class dxValidationSummary extends CollectionWidget {
         constructor(element: JQuery, options?: dxValidationSummaryOptions);
         constructor(element: Element, options?: dxValidationSummaryOptions);
-       
+
     }
 
     export interface dxResizableOptions extends DOMComponentOptions {
-        
+
         /** Specifies which borders of the widget element are used as a handle. */
         handles?: string;
 
@@ -124,7 +124,7 @@ declare module DevExpress.ui {
     }
 
     export interface dxDropDownListOptions extends dxDropDownEditorOptions, DataExpressionMixinOptions {
-        
+
         /** Returns the value currently displayed by the widget. */
         displayValue?: string;
 
@@ -184,7 +184,7 @@ declare module DevExpress.ui {
     }
 
     export interface dxToolbarOptions extends CollectionWidgetOptions {
-        
+
         /** The template used to render menu items.
             Specifies a custom template for a menu item. */
         menuItemTemplate?: any;
@@ -198,11 +198,11 @@ declare module DevExpress.ui {
         constructor(element: JQuery, options?: dxToolbarOptions);
         constructor(element: Element, options?: dxToolbarOptions);
 
-        
+
     }
 
     export interface dxToastOptions extends dxOverlayOptions {
-               
+
         animation?: {
             /** An object that defines the animation options used when the widget is being shown. */
             show?: fx.AnimationOptions;
@@ -213,21 +213,21 @@ declare module DevExpress.ui {
 
         /** The time span in milliseconds during which the Toast widget is visible. */
         displayTime?: number;
-       
+
         height?: any;
 
         /** The Toast message text. */
         message?: string;
-       
+
         position?: PositionOptions;
-     
+
         shading?: boolean;
 
         /** Specifies the Toast widget type. */
         type?: string;
-       
+
         width?: any;
-        
+
         closeOnBackButton?: boolean;
 
         /** A Boolean value specifying whether or not the toast is closed if a user swipes it out of the screen boundaries. */
@@ -292,7 +292,7 @@ declare module DevExpress.ui {
         /** Specifies whether or not the widget checks the inner text for spelling mistakes. */
         spellcheck?: boolean;
 
-        
+
         attr?: Object;
 
         /** Specifies the attributes to be passed on to the underlying HTML element. */
@@ -300,9 +300,9 @@ declare module DevExpress.ui {
 
         /** The read-only option that holds the text displayed by the widget input element. */
         text?: string;
-      
+
         focusStateEnabled?: boolean;
-        
+
         hoverStateEnabled?: boolean;
 
         /** The editor mask that specifies the format of the entered string. */
@@ -320,7 +320,7 @@ declare module DevExpress.ui {
         /** Specifies whether the value should contain mask characters or not. */
         useMaskedValue?: boolean;
 
-        
+
         name?: string;
     }
 
@@ -351,7 +351,7 @@ declare module DevExpress.ui {
     }
 
     export interface dxTextAreaOptions extends dxTextBoxOptions {
-        
+
         /** Specifies whether or not the widget checks the inner text for spelling mistakes. */
         spellcheck?: boolean;
 
@@ -372,7 +372,7 @@ declare module DevExpress.ui {
     }
 
     export interface dxTabsOptions extends CollectionWidgetOptions {
-        
+
         /** Specifies whether the widget enables an end-user to select only a single item or multiple items. */
         selectionMode?: string;
 
@@ -394,7 +394,7 @@ declare module DevExpress.ui {
     }
 
     export interface dxTabPanelOptions extends dxMultiViewOptions {
-        
+
         /** A handler for the titleClick event. */
         onTitleClick?: any;
 
@@ -619,7 +619,7 @@ declare module DevExpress.ui {
         name?: string;
     }
 
-    
+
     /** The RadioGroup is a widget that contains a set of radio buttons and allows an end user to make a single selection from the set. */
     export class dxRadioGroup extends CollectionWidget {
         constructor(element: JQuery, options?: dxRadioGroupOptions);
@@ -675,7 +675,7 @@ declare module DevExpress.ui {
         /** A Boolean value specifying whether or not to display the widget in full-screen mode. */
         fullScreen?: boolean;
 
-        
+
         position?: PositionOptions;
 
         /** A Boolean value specifying whether or not to display the title in the popup window. */
@@ -687,10 +687,9 @@ declare module DevExpress.ui {
         /** A template to be used for rendering the widget title. */
         titleTemplate?: any;
 
-        
+
         width?: any;
 
-        
 
         /** Specifies items displayed on the top or bottom toolbar of the popup window. */
         toolbarItems?: Array<dxPopupToolbarItemOptions>;
@@ -893,11 +892,10 @@ declare module DevExpress.ui {
     }
 
     export interface dxNavBarOptions extends dxTabsOptions {
-        
+
         scrollingEnabled?: boolean;
 
-        
-        
+
     }
 
     /** The NavBar is a widget that navigates the application views. */
@@ -905,7 +903,7 @@ declare module DevExpress.ui {
         constructor(element: JQuery, options?: dxNavBarOptions);
         constructor(element: Element, options?: dxNavBarOptions);
 
-        
+
     }
 
     export interface dxMultiViewOptions extends CollectionWidgetOptions {
@@ -931,10 +929,10 @@ declare module DevExpress.ui {
         constructor(element: JQuery, options?: dxMultiViewOptions);
         constructor(element: Element, options?: dxMultiViewOptions);
 
-        
+
     }
 
-    
+
     export interface dxMapLocation {
         /** The latitude location of the widget. */
         lat?: number;
@@ -1092,7 +1090,7 @@ declare module DevExpress.ui {
         /** A Boolean value specifying whether or not to display the lookup in full-screen mode. */
         fullScreen?: boolean;
 
-        
+
         focusStateEnabled?: boolean;
 
         /** A Boolean value specifying whether or not to group widget items. */
@@ -1196,10 +1194,10 @@ declare module DevExpress.ui {
 
         /** Configures widget visibility animations. This object contains two fields: show and hide. */
         animation?: {
-            
+
             show?: fx.AnimationOptions;
 
-            
+
             hide?: fx.AnimationOptions;
         };
 
@@ -1265,7 +1263,7 @@ declare module DevExpress.ui {
             Specifies a custom template for a group caption. */
         groupTemplate?: any;
 
-        
+
         onItemDeleting?: Function;
 
         /** A handler for the itemDeleted event. */
@@ -1328,10 +1326,10 @@ declare module DevExpress.ui {
         /** A Boolean value specifying if the list is scrolled using the scrollbar. */
         scrollByThumb?: boolean;
 
-        
+
         onItemContextMenu?: Function;
 
-        
+
         onItemHold?: Function;
 
         /** Specifies whether or not an end-user can collapse groups. */
@@ -1349,7 +1347,7 @@ declare module DevExpress.ui {
         /** Specifies the mode in which all items are selected. */
         selectAllMode?: string;
 
-        
+
         selectAllText?: string;
 
         /** A handler for the selectAllValueChanged event. */
@@ -1373,7 +1371,7 @@ declare module DevExpress.ui {
         /** Specifies whether or not to show the loading panel when the DataSource bound to the widget is loading data. */
         indicateLoading?: boolean;
 
-        
+
         activeStateEnabled?: boolean;
     }
 
@@ -1520,7 +1518,7 @@ declare module DevExpress.ui {
         /** Specifies whether or not the drop-down editor is displayed. */
         opened?: boolean;
 
-        
+
         fieldEditEnabled?: boolean;
 
         /** Specifies whether or not the widget allows an end-user to enter a custom value. */
@@ -1532,7 +1530,7 @@ declare module DevExpress.ui {
         /** Specifies whether widget content is rendered when the widget is shown or when rendering the widget. */
         deferRendering?: boolean;
 
-        
+
         activeStateEnabled?: boolean;
 
         /** Specifies a custom template for the drop-down button. */
@@ -1582,13 +1580,13 @@ declare module DevExpress.ui {
     }
 
     export interface dxDateBoxOptions extends dxDropDownEditorOptions {
-        
+
         formatString?: any;
 
         /** Specifies the date display format. Ignored if the pickerType option is 'native' */
         displayFormat?: any;
 
-        
+
         format?: string;
 
         /** A format used to display date/time information. */
@@ -1666,7 +1664,7 @@ declare module DevExpress.ui {
         /** Specifies the text displayed by the check box. */
         text?: string;
 
-        
+
         name?: string;
     }
 
@@ -1713,7 +1711,7 @@ declare module DevExpress.ui {
         /** The template to be used for rendering calendar cells. */
         cellTemplate?: any;
 
-        
+
         name?: string;
     }
 
@@ -1734,7 +1732,7 @@ declare module DevExpress.ui {
         /** Specifies the icon to be displayed on the button. */
         icon?: string;
 
-        
+
         iconSrc?: string;
 
         /** A template to be used for rendering the Button widget. */
@@ -1863,8 +1861,6 @@ declare module DevExpress.ui {
         constructor(element: JQuery, options?: dxAccordionOptions);
         constructor(element: Element, options?: dxAccordionOptions);
 
-        
-        
 
         /** Collapses the specified item. */
         collapseItem(index: number): JQueryPromise<dxAccordion>;
@@ -2033,7 +2029,7 @@ declare module DevExpress.ui {
             format?: any;
         };
 
-        
+
         name?: string;
     }
 
@@ -2062,7 +2058,7 @@ declare module DevExpress.ui {
         /** The value to be assigned to the name attribute of the underlying `<input>` element. */
         endName?: string;
 
-        
+
         value?: Array<number>;
     }
 
@@ -2070,6 +2066,8 @@ declare module DevExpress.ui {
     export class dxRangeSlider extends dxSlider {
         constructor(element: JQuery, options?: dxRangeSliderOptions);
         constructor(element: Element, options?: dxRangeSliderOptions);
+
+        reset(): void;
     }
 
     export interface dxFormItemLabel {

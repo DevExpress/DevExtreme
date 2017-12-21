@@ -1145,6 +1145,7 @@ QUnit.test("B238710 dxRangeSlider: click on left side of element sets up value t
     assert.equal(this.instance.option("start"), 0);
 });
 
+
 QUnit.module("RTL", moduleOptions);
 
 QUnit.test("render value", function(assert) {
@@ -1323,6 +1324,18 @@ QUnit.test("Exception shouldn't be throw when start value more than end value", 
     } catch(error) {
         assert.ok(false, "exception was threw:" + error);
     }
+});
+
+QUnit.test("reset method should set value to default", function(assert) {
+    $("#slider").dxRangeSlider({
+        value: [10, 30]
+    });
+
+    var instance = $("#slider").dxRangeSlider("instance");
+
+    instance.reset();
+
+    assert.deepEqual(instance.option("value"), [40, 60], "value was reset to default");
 });
 
 
