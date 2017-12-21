@@ -645,11 +645,9 @@ var MenuBase = HierarchicalCollectionWidget.inherit({
     },
 
     _addContentClasses: function(itemData, $itemFrame) {
-        var displayGetter = this._displayGetter(itemData),
-            itemsGetter = this._itemsGetter(itemData),
-            hasText = displayGetter ? !!displayGetter.length : false,
+        var hasText = itemData.text ? !!itemData.text.length : false,
             hasIcon = !!(itemData.icon || itemData.iconSrc),
-            hasSubmenu = itemsGetter ? !!itemsGetter.length : false;
+            hasSubmenu = itemData.items ? !!itemData.items.length : false;
 
         $itemFrame.toggleClass(DX_ITEM_HAS_TEXT, hasText);
 
