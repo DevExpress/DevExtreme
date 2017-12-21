@@ -1202,13 +1202,6 @@ declare module DevExpress {
             reset(): void;
         }
 
-        /** @docid RangeSlider */
-        export class RangeSlider extends Editor {
-
-            /** @docid dxRangeSliderMethods_reset */
-            reset(): void;
-        }
-
         /** An object that serves as a namespace for methods displaying a message in an application/site. */
         export var dialog: {
             /** Creates an alert dialog message containing a single "OK" button. */
