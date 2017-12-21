@@ -574,7 +574,9 @@ var NumberBoxMask = NumberBoxBase.inherit({
         var decimalSeparator = number.getDecimalSeparator(),
             regExp = new RegExp("[^0-9" + decimalSeparator + "]+", "g");
 
-        return (text || this._input().val()).replace(regExp, "");
+        text = text || this._input().val();
+
+        return text.replace(regExp, "");
     },
 
     _clearCache: function() {
