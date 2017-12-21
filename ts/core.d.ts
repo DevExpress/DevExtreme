@@ -1296,6 +1296,13 @@ declare module DevExpress {
             reset(): void;
         }
 
+        /** @docid RangeSlider */
+        export class RangeSlider extends Editor {
+
+            /** @docid dxRangeSliderMethods_reset */
+            reset(): void;
+        }
+
         /** @docid ui_dialog */
         export var dialog: {
             /** @docid ui_dialogmethods_alert */
