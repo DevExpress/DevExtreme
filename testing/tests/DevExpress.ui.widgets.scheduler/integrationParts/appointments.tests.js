@@ -16,7 +16,8 @@ var $ = require("jquery"),
     dragEvents = require("events/drag"),
     DataSource = require("data/data_source/data_source").DataSource,
     CustomStore = require("data/custom_store"),
-    subscribes = require("ui/scheduler/ui.scheduler.subscribes");
+    subscribes = require("ui/scheduler/ui.scheduler.subscribes"),
+    dateSerialization = require("core/utils/date_serialization");
 
 require("ui/scheduler/ui.scheduler");
 require("ui/switch");
@@ -1941,6 +1942,38 @@ QUnit.test("Recurrence appointment with custom tz that isn't equal to scheduler 
 
         assert.equal(updatedPosition.top, initialPosition.top, "Top is updated correctly");
         assert.equal(updatedPosition.left, initialPosition.left, "Left is updated correctly");
+
+    } finally {
+        tzOffsetStub.restore();
+    }
+});
+
+QUnit.test("Arguments in event args should be correct when timezone is set(T579457)", function(assert) {
+    var tzOffsetStub = sinon.stub(subscribes, "getClientTimezoneOffset").returns(-10800000);
+    try {
+        var appointment = {
+            startDate: new Date('2017-11-22T14:30:00.000Z'),
+            endDate: new Date('2017-11-22T15:00:00.000Z'),
+            allDay: false,
+            recurrenceRule: "FREQ=DAILY;COUNT=3",
+            text: ""
+        };
+
+        this.createInstance({
+            currentDate: new Date(2017, 10, 22),
+            views: ["week"],
+            currentView: "week",
+            firstDayOfWeek: 1,
+            onAppointmentClick: function(args) {
+                assert.equal(args.appointmentData.startDate.getTime(), args.targetedAppointmentData.startDate.getTime(), "Arguments are OK");
+                assert.equal(args.appointmentData.endDate.getTime(), args.targetedAppointmentData.endDate.getTime(), "Arguments are OK");
+            },
+            timeZone: 'Etc/UTC',
+            dataSource: [appointment]
+        });
+
+        var $appointment = $(this.instance.element()).find(".dx-scheduler-appointment").eq(0);
+        $appointment.trigger("dxclick");
 
     } finally {
         tzOffsetStub.restore();
@@ -4501,6 +4534,64 @@ QUnit.test("Exception should not be thrown on second details view opening if for
     } catch(e) {
         assert.ok(false, "Exception: " + e);
     }
+});
+
+QUnit.test("FormData should be reset on saveChanges, dateSerializationFormat is set in initial appointment data (T569673)", function(assert) {
+    var task = { text: "Task", StartDate: "2016-05-25T09:40:00", EndDate: "2016-05-25T10:40:00" };
+
+    this.createInstance({
+        dataSource: [task],
+        currentDate: new Date(2016, 4, 25),
+        currentView: "week",
+        views: ["week"],
+        startDateExpr: "StartDate",
+        endDateExpr: "EndDate",
+        onAppointmentFormCreated: function(data) {
+            var form = data.form,
+                startDate = data.appointmentData.StartDate,
+                endDate = data.appointmentData.EndDate;
+
+            form.option("items", [
+                {
+                    dataField: "StartDate",
+                    editorType: "dxDateBox",
+                    editorOptions: {
+                        value: startDate,
+                        type: "datetime",
+                        onValueChanged: function(args) {
+                            startDate = args.value;
+                            form.getEditor("EndDate")
+                                .option("value", new Date(1464160900000));
+                        }
+                    }
+                }, {
+                    name: "EndDate",
+                    dataField: "EndDate",
+                    editorType: "dxDateBox",
+                    editorOptions: {
+                        value: endDate,
+                        type: "datetime",
+                        readOnly: true
+                    }
+                }
+            ]);
+        }
+    });
+
+    this.instance.showAppointmentPopup(task, true);
+
+    var detailsForm = this.instance.getAppointmentDetailsForm(),
+        startDateEditor = detailsForm.getEditor("StartDate");
+
+    startDateEditor.option("value", "2016-05-25T10:40:00");
+
+    $(".dx-scheduler-appointment-popup .dx-popup-done").trigger("dxclick").trigger("dxclick");
+    this.clock.tick(300);
+
+    var $appointments = this.instance.element().find(".dx-scheduler-appointment");
+
+    var endDateFormat = dateSerialization.getDateSerializationFormat($appointments.eq(1).data("dxItemData").EndDate);
+    assert.deepEqual(endDateFormat, "yyyy-MM-ddTHH:mm:ss", "Appointment EndDate format is OK");
 });
 
 QUnit.test("Scheduler should add only one appointment at multiple 'done' button clicks on appointment form", function(assert) {

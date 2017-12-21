@@ -912,6 +912,7 @@ var ContextMenu = MenuBase.inherit((function() {
                 this._setOptionSilent("visible", true);
                 this._overlay.option("position", position);
                 promise = this._overlay.show();
+                jQEvent && jQEvent.stopPropagation();
 
                 var id = "dx-" + new Guid();
                 this._overlay.content().attr({ "id": id, role: "menu" });
@@ -974,7 +975,7 @@ var ContextMenu = MenuBase.inherit((function() {
 
         /**
         * @name dxContextMenuMethods_toggle
-        * @publicName toggle()
+        * @publicName toggle(showing)
         * @param1 showing:boolean
         * @return Promise
         */

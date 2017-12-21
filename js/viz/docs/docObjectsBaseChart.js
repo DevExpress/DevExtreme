@@ -229,10 +229,26 @@ var BaseLabel = {
     * @name baseLabelObjectmethods_hide
     * @publicName hide()
     */
-    hide: function() { },
+    /**
+    * @name baseLabelObjectmethods_hide
+    * @publicName hide(holdInvisible)
+    * @param1 holdInvisible:boolean
+    */
+    hide: function(holdInvisible) { },
     /**
     * @name baseLabelObjectmethods_show
     * @publicName show()
     */
-    show: function() { }
+    /**
+    * @name baseLabelObjectmethods_show
+    * @publicName show(holdVisible)
+    * @param1 holdVisible:boolean
+    */
+    show: function(holdVisible) { },
+    /**
+    * @name baseLabelObjectmethods_isvisible
+    * @publicName isVisible()
+    * @return boolean
+    */
+    isVisible: function() { }
 }

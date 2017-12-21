@@ -5,9 +5,6 @@ var $ = require("jquery"),
 
 QUnit.module('resizeCallbacks', {
     beforeEach: function() {
-        var clock = sinon.useFakeTimers();
-        this.clock = clock;
-
         this.__width = $.fn.width;
         this.__height = $.fn.height;
         var test = this;
@@ -23,7 +20,6 @@ QUnit.module('resizeCallbacks', {
                 ++test.height;
             }
             $window.trigger('resize');
-            clock.tick(1);
         };
         this.callbacks.add(function() { });
         this.triggerResize();   //  to reset size cache
@@ -36,7 +32,6 @@ QUnit.module('resizeCallbacks', {
         delete this.callbacks;
         this.triggerResize();   //  to reset size cache
         delete this.triggerResize;
-        this.clock.restore();
     }
 });
 

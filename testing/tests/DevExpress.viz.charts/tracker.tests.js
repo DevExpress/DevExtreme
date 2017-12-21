@@ -2712,6 +2712,19 @@ QUnit.test("mousemove without point over", function(assert) {
     assert.ok(!this.series.stub("clearPointHover").called);
 });
 
+//T582760
+QUnit.test("hover point after hover legend", function(assert) {
+    this.legend.coordsIn.withArgs(87, 35).returns(true);
+    this.legend.getItemByCoord.withArgs(87, 35).returns({ id: 0, argument: "argument1", argumentIndex: 11 });
+
+    $(this.renderer.root.element).trigger(getEvent("dxpointermove", { pageX: 90, pageY: 40 }));
+
+    $(this.renderer.root.element).trigger(getEvent("dxpointermove", { pageX: 100, pageY: 50, target: this.seriesGroup.element }));
+
+    assert.strictEqual(this.series.notify.callCount, 2);
+    assert.strictEqual(this.series.notify.lastCall.args[0].action, "clearPointHover");
+});
+
 QUnit.test("mouseover on point", function(assert) {
     //Act
     $(this.renderer.root.element).trigger(getEvent("dxpointermove", { pageX: 100, pageY: 50, target: this.seriesGroup.element }));

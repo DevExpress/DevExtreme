@@ -1385,7 +1385,7 @@ module.exports = Class.inherit((function() {
          * @name PivotGridDataSourceMethods_collapseHeaderItem
          * @publicName collapseHeaderItem(area, path)
          * @param1 area:string
-         * @param2 path:string
+         * @param2 path:array
          */
         collapseHeaderItem: function(area, path) {
             var that = this,

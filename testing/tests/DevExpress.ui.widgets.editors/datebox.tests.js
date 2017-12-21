@@ -24,7 +24,8 @@ require("ui/validator");
 
 QUnit.testStart(function() {
     var markup =
-        '<div id="dateBox"></div>\
+        '<div id="parent-div"></div>\
+        <div id="dateBox"></div>\
         <div id="dateBoxWithPicker"></div>\
         <div id="widthRootStyle" style="width: 300px;"></div>';
 
@@ -957,6 +958,18 @@ QUnit.test("dateView 'type' option matches dateBox 'type' option", function(asse
     assert.equal(getInstanceWidget(this.instance).option("type"), "time");
 });
 
+QUnit.test("dateView should be updated on popup opening and closing (T578764)", function(assert) {
+    this.instance.close();
+    this.instance.option("value", new Date(2000, 2, 2));
+
+    this.instance.open();
+    assert.deepEqual(this.dateView().option("value"), new Date(2000, 2, 2), "update on opening when value changed via api");
+
+    this.dateView().option("value", new Date(2001, 1, 3));
+    this.instance.close();
+    assert.deepEqual(this.dateView().option("value"), new Date(2000, 2, 2), "update on closing when value was not applied");
+});
+
 QUnit.test("dateView should not update dateBox value after closing using 'close' method", function(assert) {
     this.instance.option("value", new Date(2000, 1, 1));
     this.instance.open();
@@ -1256,6 +1269,23 @@ QUnit.test("component should have special css class when the user set the width 
 
     component.option("width", undefined);
     assert.ok($element.hasClass(DX_AUTO_WIDTH_CLASS), "component has class");
+});
+
+QUnit.test("component should have correct width when it was rendered in a scaled container (T584097)", function(assert) {
+    var $parent = $("#parent-div");
+    $parent.css("width", 200);
+
+    var $element = $("#dateBox").appendTo($parent),
+        component = $("#dateBox").dxDateBox({
+            width: undefined
+        }).dxDateBox("instance"),
+        initialWidth = $element.outerWidth();
+
+    $parent.css("transform", "scale(0.5)");
+    component.repaint();
+    $parent.css("transform", "scale(1)");
+
+    assert.equal(component.element().outerWidth(), initialWidth, "component has correct width");
 });
 
 QUnit.test("constructor", function(assert) {
@@ -2580,11 +2610,6 @@ QUnit.test("DateBox should have time part when pickerType is rollers", function(
 });
 
 QUnit.test("DateBox with time should be rendered correctly in IE, templatesRenderAsynchronously=true", function(assert) {
-    if(!browser.msie) {
-        assert.expect(0);
-        return;
-    }
-
     var clock = sinon.useFakeTimers();
     try {
         var dateBox = $("#dateBox").dxDateBox({

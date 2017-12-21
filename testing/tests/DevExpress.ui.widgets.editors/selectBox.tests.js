@@ -1142,6 +1142,36 @@ QUnit.test("Field should be updated if fieldTemplate is used", function(assert) 
 
 });
 
+QUnit.test("Field should be updated if value was changed and fieldTemplate is used (T568546, T586329)", function(assert) {
+    var $element = $("#selectBoxFieldTemplate").dxSelectBox({
+        dataSource: [
+            { name: 'First' },
+            { name: 'Second' },
+            { name: 'Third' }
+        ],
+        fieldTemplate: function(selectedItem) {
+            return $("<div id='myfield'>").dxTextBox({
+                value: selectedItem && selectedItem.name
+            });
+        },
+        value: "First",
+        valueExpr: "name",
+        opened: true
+    });
+
+    $(".dx-list .dx-list-item").eq(1).trigger("dxclick");
+
+    var $input = $(".dx-texteditor-input");
+
+    assert.equal($input.val(), "Second", "value is correct");
+
+    var instance = $element.dxSelectBox("instance");
+
+    instance.option("value", 'First');
+
+    assert.equal($(".dx-texteditor-input").val(), "First", "value is correct");
+});
+
 QUnit.test("dropdown button should not be hidden after the focusout when fieldTemplate and searchEnabled is used", function(assert) {
     var $element = $("#selectBoxFieldTemplate").dxSelectBox({
             items: [1, 2, 3],
@@ -1817,6 +1847,30 @@ QUnit.test("The 'onCustomItemCreating' option", function(assert) {
             valueExpr: "value",
             onCustomItemCreating: function(e) {
                 return {
+                    display: "display " + e.text,
+                    value: "value " + e.text
+                };
+            }
+        }),
+        $input = $selectBox.find(".dx-texteditor-input"),
+        keyboard = keyboardMock($input),
+        customValue = "Custom value";
+
+    keyboard
+        .type(customValue)
+        .change();
+
+    assert.equal($selectBox.dxSelectBox("option", "value"), "value " + customValue, "value is correct");
+    assert.equal($input.val(), "display " + customValue, "displayed value is correct");
+});
+
+QUnit.test("creating custom item via the 'customItem' event parameter", function(assert) {
+    var $selectBox = $("#selectBox").dxSelectBox({
+            acceptCustomValue: true,
+            displayExpr: "display",
+            valueExpr: "value",
+            onCustomItemCreating: function(e) {
+                e.customItem = {
                     display: "display " + e.text,
                     value: "value " + e.text
                 };

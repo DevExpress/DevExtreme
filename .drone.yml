@@ -1,10 +1,14 @@
 # https://github.com/drone/drone/
 
+clone:
+  git:
+    image: plugins/git
+    depth: 50
+
 pipeline:
 
   build:
     image: devexpress/devextreme-build:17_1
-    pull: true
     commands:
       - ./drone-cache.sh restore
       - ./docker-ci.sh

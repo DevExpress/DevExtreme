@@ -52,9 +52,7 @@ var DateBoxStrategy = Class.inherit({
     renderInputMinMax: noop,
 
     renderOpenedState: function() {
-        if(this.dateBox.option("opened")) {
-            this._updateValue();
-        }
+        this._updateValue();
     },
 
     popupConfig: abstract,

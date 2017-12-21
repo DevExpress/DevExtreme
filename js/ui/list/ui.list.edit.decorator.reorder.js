@@ -360,6 +360,10 @@ registerDecorator(
             return mathUtils.fitIntoRange(minIndex, 0, Math.max(maxIndex, 0));
         },
 
+        getExcludedSelectors: function(selectors) {
+            selectors.push("." + REOREDERING_ITEM_GHOST_CLASS);
+        },
+
         dispose: function() {
             clearTimeout(this._createGhostTimeout);
             this.callBase.apply(this, arguments);

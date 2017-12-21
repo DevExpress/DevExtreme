@@ -274,7 +274,7 @@ var Accordion = CollectionWidget.inherit({
         var deferred = $.Deferred();
         this._deferredItems.push(deferred);
 
-        if(!this.option("deferRendering")) {
+        if(!this.option("deferRendering") || this._getSelectedItemIndices().indexOf(args.index) >= 0) {
             deferred.resolve();
         }
 

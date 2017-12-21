@@ -76,16 +76,6 @@
             }
         }
 
-
-        .dx-menu-horizontal {
-            height: 100%;
-
-            .dx-menu-item-text,
-            .dx-menu-item-popout {
-                display: none;
-            }
-        }
-
         .dx-menu-subitem {
             ul li {
                 padding-top: 0;
@@ -357,7 +347,6 @@
         .dx-row {
             .dx-editor-container {
                 overflow: hidden;
-                text-align: start;
             }
 
             .dx-cell-modified, .dx-@{widgetName}-invalid {
@@ -413,6 +402,14 @@
 
         td {
             .box-sizing(content-box);
+        }
+
+        .dx-row > .dx-last-data-cell {
+            border-right: none;
+        }
+
+        .dx-row > .dx-command-adaptive-hidden {
+            border-left: none;
         }
     }
 
@@ -639,6 +636,15 @@
     .dx-@{widgetName}-filter-row {
        .dx-menu {
             overflow: visible;
+
+            .dx-menu-horizontal {
+                height: 100%;
+
+                .dx-menu-item-text,
+                .dx-menu-item-popout {
+                    display: none;
+                }
+            }
        }
     }
 

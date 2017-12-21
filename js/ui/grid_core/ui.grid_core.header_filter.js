@@ -162,33 +162,13 @@ var HeaderFilterController = modules.ViewController.inherit((function() {
             if(!dataSource) return;
 
             if(commonUtils.isDefined(headerFilterDataSource) && !commonUtils.isFunction(headerFilterDataSource)) {
-                dataSource = normalizeDataSourceOptions(headerFilterDataSource);
-                dataSource.postProcess = function(items) {
-                    that._updateSelectedState(items, column);
-                    return items;
-                };
-                return dataSource;
-            }
-            if(column.lookup) {
+                options.dataSource = normalizeDataSourceOptions(headerFilterDataSource);
+            } else if(column.lookup) {
                 dataSource = column.lookup.dataSource;
                 if(commonUtils.isFunction(dataSource) && !isWrapped(dataSource)) {
                     dataSource = dataSource({});
                 }
                 dataSource = normalizeDataSourceOptions(dataSource);
-                dataSource.postProcess = function(items) {
-                    if(this.pageIndex() === 0) {
-                        items = items.slice(0);
-                        items.unshift(null);
-                    }
-                    that._processGroupItems(items, null, null, {
-                        level: 0,
-                        column: column,
-                        headerFilterOptions: headerFilterOptions
-                    });
-                    that._updateSelectedState(items, column);
-                    return items;
-                };
-
                 options.dataSource = dataSource;
             } else {
                 cutoffLevel = Array.isArray(group) ? group.length - 1 : 0;
@@ -211,7 +191,6 @@ var HeaderFilterController = modules.ViewController.inherit((function() {
                                 column: column,
                                 headerFilterOptions: headerFilterOptions
                             });
-                            that._updateSelectedState(data, column);
                             d.resolve(data);
                         }).fail(d.reject);
 
@@ -222,14 +201,28 @@ var HeaderFilterController = modules.ViewController.inherit((function() {
 
             if(commonUtils.isFunction(headerFilterDataSource)) {
                 headerFilterDataSource.call(column, options);
-                origPostProcess = options.dataSource.postProcess;
-                options.dataSource.postProcess = function(data) {
-                    var items = origPostProcess && origPostProcess.apply(this, arguments) || data;
-
-                    that._updateSelectedState(items, column);
-                    return items;
-                };
             }
+
+            origPostProcess = options.dataSource.postProcess;
+            options.dataSource.postProcess = function(data) {
+                var items = data;
+
+                if(column.lookup) {
+                    if(this.pageIndex() === 0) {
+                        items = items.slice(0);
+                        items.unshift(null);
+                    }
+                    that._processGroupItems(items, null, null, {
+                        level: 0,
+                        column: column,
+                        headerFilterOptions: headerFilterOptions
+                    });
+                }
+
+                items = origPostProcess && origPostProcess.call(this, items) || items;
+                that._updateSelectedState(items, column);
+                return items;
+            };
 
             return options.dataSource;
         },

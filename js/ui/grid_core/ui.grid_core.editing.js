@@ -1450,7 +1450,10 @@ var EditingController = modules.ViewController.inherit((function() {
                     formID: "dx-" + new Guid(),
                     validationGroup: editData,
                     customizeItem: function(item) {
-                        var column = item.column || that._columnsController.columnOption(item.name ? "name:" + item.name : "dataField:" + item.dataField);
+                        var column;
+                        if(item.dataField || item.name) {
+                            column = item.column || that._columnsController.columnOption(item.name ? "name:" + item.name : "dataField:" + item.dataField);
+                        }
                         if(column) {
                             item.label = item.label || {};
                             item.label.text = item.label.text || column.caption;
@@ -1931,6 +1934,13 @@ module.exports = {
                     return d && d.done(function() {
                         editingController.resetRowAndPageIndices(true);
                     });
+                },
+                changeRowExpand: function(key) {
+                    var editingController = this.getController("editing");
+                    if(editingController.isEditing()) {
+                        editingController.cancelEditData();
+                    }
+                    return this.callBase.apply(this, arguments);
                 },
                 _updateItemsCore: function(change) {
                     this.callBase(change);

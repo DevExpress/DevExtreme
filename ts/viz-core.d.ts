@@ -1,351 +1,183 @@
-/** @docid_ignore viz_coremethods_currentTheme#currentTheme(theme) */
-/** @docid_ignore viz_coremethods_currentTheme#currentTheme(platform, colorScheme) */
-/** @docid_ignore viz_coremethods_registerTheme */
-/** @docid_ignore viz_coremethods_currentPalette */
-/** @docid_ignore viz_coremethods_getPalette */
-/** @docid_ignore viz_coremethods_registerPalette */
 
 declare module DevExpress.viz.core {
-    /** @docid_ignore viz_core */
-
+    
     export interface Border {
 
-        /**
-          * @docid dxChartSeriesTypes_CommonSeries_border_color
-          * @docid dxChartSeriesTypes_CommonSeries_hoverstyle_border_color
-          * @docid dxChartSeriesTypes_CommonSeries_label_border_color
-          * @docid dxChartSeriesTypes_CommonSeries_point_border_color
-          * @docid dxChartSeriesTypes_CommonSeries_point_hoverstyle_border_color
-          * @docid dxChartSeriesTypes_CommonSeries_point_selectionstyle_border_color
-          * @docid dxChartSeriesTypes_CommonSeries_selectionstyle_border_color
-          * @docid basechartoptions_legend_border_color
-          * @docid dxvectormapoptions_legends_border_color
-          * @docid BaseWidgetOptions_tooltip_border_color
-          * @docid dxchartoptions_commonpanesettings_border_color
-          * @docid dxchartoptions_crosshair_horizontalline_color
-          * @docid dxchartoptions_crosshair_verticalline_color
-          * @docid dxPieChartSeriesTypes_CommonPieChartSeries_border_color
-          * @docid dxPieChartSeriesTypes_CommonPieChartSeries_hoverstyle_border_color
-          * @docid dxPieChartSeriesTypes_CommonPieChartSeries_label_border_color
-          * @docid dxPieChartSeriesTypes_CommonPieChartSeries_selectionstyle_border_color
-          * @docid dxPolarChartSeriesTypes_CommonPolarChartSeries_border_color
-          * @docid dxPolarChartSeriesTypes_CommonPolarChartSeries_hoverstyle_border_color
-          * @docid dxPolarChartSeriesTypes_CommonPolarChartSeries_label_border_color
-          * @docid dxPolarChartSeriesTypes_CommonPolarChartSeries_point_border_color
-          * @docid dxPolarChartSeriesTypes_CommonPolarChartSeries_point_hoverstyle_border_color
-          * @docid dxPolarChartSeriesTypes_CommonPolarChartSeries_point_selectionstyle_border_color
-          * @docid dxPolarChartSeriesTypes_CommonPolarChartSeries_selectionstyle_border_color
-          */
+        /** Sets a border color for a selected series. */
         color?: string;
 
-        /**
-          * @docid dxChartSeriesTypes_CommonSeries_border_visible
-          * @docid dxChartSeriesTypes_CommonSeries_hoverstyle_border_visible
-          * @docid dxChartSeriesTypes_CommonSeries_label_border_visible
-          * @docid dxChartSeriesTypes_CommonSeries_point_border_visible
-          * @docid dxChartSeriesTypes_CommonSeries_point_hoverstyle_border_visible
-          * @docid dxChartSeriesTypes_CommonSeries_point_selectionstyle_border_visible
-          * @docid dxChartSeriesTypes_CommonSeries_selectionstyle_border_visible
-          * @docid basechartoptions_legend_border_visible
-          * @docid dxvectormapoptions_legends_border_visible
-          * @docid BaseWidgetOptions_tooltip_border_visible
-          * @docid dxchartoptions_commonpanesettings_border_visible
-          * @docid dxchartoptions_crosshair_horizontalline_visible
-          * @docid dxchartoptions_crosshair_verticalline_visible
-          * @docid dxChartSeriesTypes_stepareaseries_selectionstyle_border_visible
-          * @docid dxChartSeriesTypes_stepareaseries_hoverstyle_border_visible
-          * @docid dxChartSeriesTypes_stepareaseries_border_visible
-          * @docid dxPieChartSeriesTypes_CommonPieChartSeries_border_visible
-          * @docid dxPieChartSeriesTypes_CommonPieChartSeries_hoverstyle_border_visible
-          * @docid dxPieChartSeriesTypes_CommonPieChartSeries_label_border_visible
-          * @docid dxPieChartSeriesTypes_CommonPieChartSeries_selectionstyle_border_visible
-          * @docid dxPolarChartSeriesTypes_CommonPolarChartSeries_border_visible
-          * @docid dxPolarChartSeriesTypes_CommonPolarChartSeries_hoverstyle_border_visible
-          * @docid dxPolarChartSeriesTypes_CommonPolarChartSeries_label_border_visible
-          * @docid dxPolarChartSeriesTypes_CommonPolarChartSeries_point_border_visible
-          * @docid dxPolarChartSeriesTypes_CommonPolarChartSeries_point_hoverstyle_border_visible
-          * @docid dxPolarChartSeriesTypes_CommonPolarChartSeries_point_selectionstyle_border_visible
-          * @docid dxPolarChartSeriesTypes_CommonPolarChartSeries_selectionstyle_border_visible
-          */
+        /** Sets border visibility for a selected series. */
         visible?: boolean;
 
-        /**
-          * @docid dxChartSeriesTypes_CommonSeries_border_width
-          * @docid dxChartSeriesTypes_CommonSeries_hoverstyle_border_width
-          * @docid dxChartSeriesTypes_CommonSeries_label_border_width
-          * @docid dxChartSeriesTypes_CommonSeries_point_border_width
-          * @docid dxChartSeriesTypes_CommonSeries_point_hoverstyle_border_width
-          * @docid dxChartSeriesTypes_CommonSeries_point_selectionstyle_border_width
-          * @docid dxChartSeriesTypes_CommonSeries_selectionstyle_border_width
-          * @docid basechartoptions_legend_border_width
-          * @docid dxvectormapoptions_legends_border_width
-          * @docid BaseWidgetOptions_tooltip_border_width
-          * @docid dxchartoptions_commonpanesettings_border_width
-          * @docid dxchartoptions_crosshair_horizontalline_width
-          * @docid dxchartoptions_crosshair_verticalline_width
-          * @docid dxPieChartSeriesTypes_CommonPieChartSeries_border_width
-          * @docid dxPieChartSeriesTypes_CommonPieChartSeries_hoverstyle_border_width
-          * @docid dxPieChartSeriesTypes_CommonPieChartSeries_label_border_width
-          * @docid dxPieChartSeriesTypes_CommonPieChartSeries_selectionstyle_border_width
-          * @docid dxPolarChartSeriesTypes_CommonPolarChartSeries_border_width
-          * @docid dxPolarChartSeriesTypes_CommonPolarChartSeries_hoverstyle_border_width
-          * @docid dxPolarChartSeriesTypes_CommonPolarChartSeries_label_border_width
-          * @docid dxPolarChartSeriesTypes_CommonPolarChartSeries_point_border_width
-          * @docid dxPolarChartSeriesTypes_CommonPolarChartSeries_point_hoverstyle_border_width
-          * @docid dxPolarChartSeriesTypes_CommonPolarChartSeries_point_selectionstyle_border_width
-          * @docid dxPolarChartSeriesTypes_CommonPolarChartSeries_selectionstyle_border_width
-          */
+        /** Sets a border width for a selected series. */
         width?: number;
     }
 
     export interface DashedBorder extends Border {
 
-        /**
-          * @docid dxChartSeriesTypes_CommonSeries_border_dashstyle
-          * @docid dxChartSeriesTypes_CommonSeries_label_border_dashstyle
-          * @docid basechartoptions_legend_border_dashstyle
-          * @docid dxvectormapoptions_legends_border_dashstyle
-          * @docid BaseWidgetOptions_tooltip_border_dashstyle
-          * @docid dxchartoptions_commonpanesettings_border_dashstyle
-          * @docid dxchartoptions_crosshair_horizontalline_dashstyle
-          * @docid dxchartoptions_crosshair_verticalline_dashstyle
-          * @docid dxPieChartSeriesTypes_CommonPieChartSeries_label_border_dashstyle
-          * @docid dxChartSeriesTypes_CommonSeries_hoverstyle_border_dashstyle
-          * @docid dxChartSeriesTypes_CommonSeries_selectionstyle_border_dashstyle
-          * @docid dxPolarChartSeriesTypes_CommonPolarChartSeries_border_dashstyle
-          * @docid dxPolarChartSeriesTypes_CommonPolarChartSeries_label_border_dashstyle
-          * @docid dxPolarChartSeriesTypes_CommonPolarChartSeries_hoverstyle_border_dashstyle
-          * @docid dxPolarChartSeriesTypes_CommonPolarChartSeries_selectionstyle_border_dashstyle
-          * @docid dxPieChartSeriesTypes_CommonPieChartSeries_border_dashstyle
-          * @docid dxPieChartSeriesTypes_CommonPieChartSeries_hoverstyle_border_dashstyle
-          * @docid dxPieChartSeriesTypes_CommonPieChartSeries_selectionstyle_border_dashstyle
-          */
+        /** Specifies a dash style for the border of a selected series point. */
         dashStyle?: string;
     }
 
     export interface DashedBorderWithOpacity extends DashedBorder {
-        /**
-          * @docid basechartoptions_legend_border_opacity
-          * @docid dxvectormapoptions_legends_border_opacity
-          * @docid dxchartoptions_commonpanesettings_border_opacity
-          * @docid BaseWidgetOptions_tooltip_border_opacity
-          * @docid dxchartoptions_crosshair_horizontalline_opacity
-          * @docid dxchartoptions_crosshair_verticalline_opacity
-          */
+        /** Specifies how transparent the vertical crosshair line should be. */
         opacity?: number;
     }
 
     export interface Font {
 
-        /** @docid Font_color */
+        /** Specifies a font color. */
         color?: string;
 
-        /** @docid Font_family */
+        /** Specifies a font family. */
         family?: string;
 
-        /** @docid Font_opacity */
+        /** Specifies a font opacity. */
         opacity?: number;
 
-        /** @docid Font_size */
+        /** Specifies a font size. */
         size?: any;
 
-        /** @docid Font_weight */
+        /** Specifies a font weight. */
         weight?: number;
     }
 
     export interface Hatching {
 
-        /**
-          * @docid dxChartSeriesTypes_CommonSeries_hoverstyle_hatching_direction
-          * @docid dxChartSeriesTypes_CommonSeries_selectionstyle_hatching_direction
-          * @docid dxPieChartSeriesTypes_CommonPieChartSeries_hoverstyle_hatching_direction
-          * @docid dxPieChartSeriesTypes_CommonPieChartSeries_selectionstyle_hatching_direction
-          * @docid dxPolarChartSeriesTypes_CommonPolarChartSeries_hoverstyle_hatching_direction
-          * @docid dxPolarChartSeriesTypes_CommonPolarChartSeries_selectionstyle_hatching_direction
-          * @docid dxChartSeriesTypes_candlestickseries_hoverstyle_hatching_direction
-          * @docid dxChartSeriesTypes_candlestickseries_selectionstyle_hatching_direction
-          */
+        
         direction?: string;
 
-        /**
-          * @docid dxChartSeriesTypes_CommonSeries_hoverstyle_hatching_opacity
-          * @docid dxChartSeriesTypes_CommonSeries_selectionstyle_hatching_opacity
-          * @docid dxPieChartSeriesTypes_CommonPieChartSeries_hoverstyle_hatching_opacity
-          * @docid dxPieChartSeriesTypes_CommonPieChartSeries_selectionstyle_hatching_opacity
-          * @docid dxPolarChartSeriesTypes_CommonPolarChartSeries_hoverstyle_hatching_opacity
-          * @docid dxPolarChartSeriesTypes_CommonPolarChartSeries_selectionstyle_hatching_opacity
-          */
+        /** Specifies the opacity of hatching lines. */
         opacity?: number;
 
-        /**
-          * @docid dxChartSeriesTypes_CommonSeries_hoverstyle_hatching_step
-          * @docid dxChartSeriesTypes_CommonSeries_selectionstyle_hatching_step
-          * @docid dxPieChartSeriesTypes_CommonPieChartSeries_hoverstyle_hatching_step
-          * @docid dxPieChartSeriesTypes_CommonPieChartSeries_selectionstyle_hatching_step
-          * @docid dxPolarChartSeriesTypes_CommonPolarChartSeries_hoverstyle_hatching_step
-          * @docid dxPolarChartSeriesTypes_CommonPolarChartSeries_selectionstyle_hatching_step
-          */
+        /** Specifies the distance between hatching lines in pixels. */
         step?: number;
 
-        /**
-          * @docid dxChartSeriesTypes_CommonSeries_hoverstyle_hatching_width
-          * @docid dxChartSeriesTypes_CommonSeries_selectionstyle_hatching_width
-          * @docid dxPieChartSeriesTypes_CommonPieChartSeries_hoverstyle_hatching_width
-          * @docid dxPieChartSeriesTypes_CommonPieChartSeries_selectionstyle_hatching_width
-          * @docid dxPolarChartSeriesTypes_CommonPolarChartSeries_hoverstyle_hatching_width
-          * @docid dxPolarChartSeriesTypes_CommonPolarChartSeries_selectionstyle_hatching_width
-          */
+        /** Specifies the width of hatching lines in pixels. */
         width?: number;
     }
 
     export interface Margins {
-        /**
-          * @docid BaseWidgetOptions_margin_bottom
-          * @docid basechartoptions_legend_margin_bottom
-          * @docid BaseWidgetOptions_title_margin_bottom
-          * @docid dxvectormapoptions_legends_margin_bottom
-          */
+        /** Specifies the legend's bottom margin in pixels. */
         bottom?: number;
 
-        /**
-          * @docid BaseWidgetOptions_margin_left
-          * @docid basechartoptions_legend_margin_left
-          * @docid BaseWidgetOptions_title_margin_left
-          * @docid dxvectormapoptions_legends_margin_left
-          */
+        /** Specifies the legend's left margin in pixels. */
         left?: number;
 
-        /**
-          * @docid BaseWidgetOptions_margin_right
-          * @docid basechartoptions_legend_margin_right
-          * @docid BaseWidgetOptions_title_margin_right
-          * @docid dxvectormapoptions_legends_margin_right
-          */
+        /** Specifies the legend's right margin in pixels. */
         right?: number;
 
-        /**
-          * @docid BaseWidgetOptions_margin_top
-          * @docid basechartoptions_legend_margin_top
-          * @docid BaseWidgetOptions_title_margin_top
-          * @docid dxvectormapoptions_legends_margin_top
-          */
+        /** Specifies the legend's bottom margin in pixels. */
         top?: number;
     }
 
     export interface MarginOptions {
-        /** @docid BaseWidgetOptions_margin */
+        /** Generates space around the widget. */
         margin?: Margins;
     }
 
     export interface RedrawOnResizeOptions {
-        /** @docid BaseWidgetOptions_redrawonresize */
+        /** Specifies whether to redraw the widget when the size of the parent browser window changes or a mobile device rotates. */
         redrawOnResize?: boolean;
     }
 
     export interface TitleOptions {
-        /** @docid BaseWidgetOptions_title */
+        /** Specifies the widget title. */
         title?: Title;
     }
 
     export interface ExportOptions {
-        /** @docid BaseWidgetOptions_export */
+        /** Configures the exporting and printing features. */
         export?: Export;
     }
 
     export interface LoadingIndicatorOptions {
-        /** @docid BaseWidgetOptions_loadingindicator */
+        /** Configures the loading indicator. */
         loadingIndicator?: LoadingIndicator;
     }
 
     export interface LoadingIndicatorMethods {
-        /** @docid BaseWidgetMethods_showLoadingIndicator */
+        /** Displays the loading indicator. */
         showLoadingIndicator(): void;
 
-        /** @docid BaseWidgetMethods_hideLoadingIndicator */
+        /** Conceals the loading indicator. */
         hideLoadingIndicator(): void;
     }
 
     export interface Size {
-        /** @docid BaseWidgetOptions_size_width */
+        /** Specifies the width of the widget in pixels. */
         width?: number;
 
-        /** @docid BaseWidgetOptions_size_height */
+        /** Specifies the height of the widget in pixels. */
         height?: number;
     }
 
     export interface Title {
-        /** @docid BaseWidgetOptions_title_font */
+        /** Specifies font options for the title. */
         font?: viz.core.Font;
 
-        /** @docid BaseWidgetOptions_title_horizontalalignment */
+        /** Specifies the title's alignment in a horizontal direction. */
         horizontalAlignment?: string;
 
-       /** @docid BaseWidgetOptions_title_verticalalignment */
+       /** Specifies the title's alignment in a vertical direction. */
         verticalAlignment?: string;
 
-        /** @docid BaseWidgetOptions_title_margin */
+        /** Generates space around the title. */
         margin?: Margins;
 
-         /** @docid BaseWidgetOptions_title_placeholdersize */
+         /** Specifies the minimum height that the title occupies. */
         placeholderSize?: number;
 
-        /** @docid BaseWidgetOptions_title_text */
+        /** Specifies the title text. */
         text?: string;
 
-        /** @docid BaseWidgetOptions_title_subtitle */
+        /** Specifies the widget subtitle. */
         subtitle?: {
-            /** @docid BaseWidgetOptions_title_subtitle_font */
+            /** Specifies font options for the subtitle. */
             font?: viz.core.Font;
 
-           /** @docid BaseWidgetOptions_title_subtitle_text */
+           /** Specifies text for the subtitle. */
             text?: string;
         }
     }
 
     export interface Export {
-        /** @docid BaseWidgetOptions_export_enabled */
+        /** Enables the client-side exporting in the widget. */
         enabled?: boolean;
 
-        /** @docid BaseWidgetOptions_export_printingenabled */
+        /** Enables the printing feature in the widget. Applies only if the export.enabled option is true. */
         printingEnabled?: boolean;
 
-        /** @docid BaseWidgetOptions_export_formats*/
+        /** Specifies a set of formats available for exporting into. */
         formats?: Array<string>;
 
-        /** @docid BaseWidgetOptions_export_filename*/
+        /** Specifies a default name for the file to which the widget will be exported. */
         fileName?: string;
 
-        /** @docid BaseWidgetOptions_export_proxyurl*/
+        /** Specifies the URL of the server-side proxy that streams the resulting file to the end user to enable exporting in IE9 and Safari browsers. */
         proxyUrl?: string;
 
-        /** @docid BaseWidgetOptions_export_backgroundcolor*/
+        /** Specifies the color that will fill transparent regions in the resulting file or document. */
         backgroundColor?: string;
     }
 
     export interface Tooltip {
-        /** @docid BaseWidgetOptions_tooltip_arrowlength */
+        /** Specifies the length of the tooltip's arrow in pixels. */
         arrowLength?: number;
 
-        /** @docid BaseWidgetOptions_tooltip_border */
+        /** Specifies the appearance of the tooltip's border. */
         border?: DashedBorderWithOpacity;
 
-        /** @docid BaseWidgetOptions_tooltip_color */
+        /** Specifies the color of tooltips. */
         color?: string;
 
-        /** @docid BaseWidgetOptions_tooltip_zindex */
+        /** Specifies the z-index of tooltips. */
         zIndex?: number;
 
-        /** @docid BaseWidgetOptions_tooltip_container */
+        /** Specifies the container to draw tooltips inside of it. */
         container?: any;
 
-        /**
-          * @docid basechartoptions_tooltip_customizetooltip
-          * @docid basegaugeoptions_tooltip_customizetooltip
-          * @docid dxbargaugeoptions_tooltip_customizetooltip
-          * @docid basesparklineoptions_tooltip_customizetooltip
-          * @docid dxvectormapoptions_tooltip_customizetooltip
-          * @docid dxtreemapoptions_tooltip_customizetooltip
-          */
+        /** Allows you to change tooltip appearance. */
         customizeTooltip?: (arg: any) => {
             color?: string;
             text?: string;
@@ -354,212 +186,145 @@ declare module DevExpress.viz.core {
             borderColor?: string;
         };
 
-        /**
-          * @docid BaseWidgetOptions_tooltip_enabled
-          * @docid basesparklineoptions_tooltip_enabled
-          */
+        
         enabled?: boolean;
 
-        /** @docid BaseWidgetOptions_tooltip_font */
+        /** Specifies the font of the text displayed by a tooltip. */
         font?: Font;
 
-        /** @docid BaseWidgetOptions_tooltip_format */
+        /** Specifies the format of the value displayed by a tooltip. */
         format?: any;
 
-        /** @docid BaseWidgetOptions_tooltip_opacity */
+        /** Specifies the opacity of tooltips. */
         opacity?: number;
 
-        /** @docid BaseWidgetOptions_tooltip_paddingleftright */
+        /** Generates space on the left and the right of the text displayed by a tooltip. */
         paddingLeftRight?: number;
 
-        /** @docid BaseWidgetOptions_tooltip_paddingtopbottom */
+        /** Generates space above and below the text displayed by a tooltip. */
         paddingTopBottom?: number;
 
-        /** @docid BaseWidgetOptions_tooltip_precision */
+        /**
+         * Specifies the precision of formatted values in a tooltip.
+         * @deprecated Use the tooltip.format.precision option instead.
+         */
         precision?: number;
 
-        /** @docid BaseWidgetOptions_tooltip_shadow */
+        /** Specifies the appearance of the tooltip's shadow. */
         shadow?: {
 
-            /** @docid BaseWidgetOptions_tooltip_shadow_blur */
+            /** Specifies the blur distance of the tooltip's shadow. */
             blur?: number;
 
-            /** @docid BaseWidgetOptions_tooltip_shadow_color */
+            /** Specifies the color of the tooltip's shadow. */
             color?: string;
 
-            /** @docid BaseWidgetOptions_tooltip_shadow_offsetx */
+            /** Specifies the horizontal offset of the tooltip's shadow relative to the tooltip itself measured in pixels. */
             offsetX?: number;
 
-            /** @docid BaseWidgetOptions_tooltip_shadow_offsety */
+            /** Specifies the vertical offset of the tooltip's shadow relative to the tooltip itself measured in pixels. */
             offsetY?: number;
 
-            /** @docid BaseWidgetOptions_tooltip_shadow_opacity */
+            /** Specifies the opacity of the tooltip's shadow. */
             opacity?: number;
         };
     }
 
     export interface Animation {
-        /**
-          * @docid basechartoptions_animation_duration
-          * @docid basegaugeoptions_animation_duration
-          */
+        /** Determines how long animation runs. */
         duration?: number;
 
-        /**
-          * @docid basechartoptions_animation_easing
-          * @docid basegaugeoptions_animation_easing
-          */
+        /** Specifies the animation easing mode. */
         easing?: string;
 
-        /**
-          * @docid basechartoptions_animation_enabled
-          * @docid basegaugeoptions_animation_enabled
-          */
+        /** Indicates whether or not animation is enabled. */
         enabled?: boolean;
     }
 
     export interface LoadingIndicator {
-        /** @docid BaseWidgetOptions_loadingindicator_backgroundcolor */
+        /** Colors the background of the loading indicator. */
         backgroundColor?: string;
 
-        /** @docid BaseWidgetOptions_loadingindicator_font */
+        /** Specifies font options for the loading indicator. */
         font?: viz.core.Font;
 
-        /** @docid BaseWidgetOptions_loadingindicator_show */
+        /** Specifies whether to show the loading indicator or not. */
         show?: boolean;
 
-        /** @docid BaseWidgetOptions_loadingindicator_text */
+        /** Specifies the text to be displayed by the loading indicator. */
         text?: string;
     }
 
     export interface LegendBorder extends viz.core.DashedBorderWithOpacity {
-        /**
-          * @docid basechartoptions_legend_border_cornerradius
-          * @docid dxvectormapoptions_legends_border_cornerradius
-          */
+        /** Specifies a radius for the corners of the legend border. */
         cornerRadius?: number;
     }
 
     export interface BaseLegend {
-        /**
-          * @docid basechartoptions_legend_backgroundcolor
-          * @docid dxvectormapoptions_legends_backgroundcolor
-          */
+        /** Specifies the color of the legend's background. */
         backgroundColor?: string;
 
-        /**
-          * @docid basechartoptions_legend_border
-          * @docid dxvectormapoptions_legends_border
-          */
+        /** Specifies legend border settings. */
         border?: viz.core.LegendBorder;
 
-        /**
-          * @docid basechartoptions_legend_columncount
-          * @docid dxvectormapoptions_legends_columncount
-          */
+        /** Specifies how many columns must be taken to arrange legend items. */
         columnCount?: number;
 
-        /**
-          * @docid basechartoptions_legend_columnitemspacing
-          * @docid dxvectormapoptions_legends_columnitemspacing
-          */
+        /** Specifies the spacing between a pair of neighboring legend columns in pixels. */
         columnItemSpacing?: number;
 
-        /**
-          * @docid basechartoptions_legend_font
-          * @docid dxvectormapoptions_legends_font
-          */
+        /** Specifies font options for legend items. */
         font?: viz.core.Font;
 
-        /**
-          * @docid basechartoptions_legend_horizontalalignment
-          * @docid dxvectormapoptions_legends_horizontalalignment
-          */
+        /** Specifies the legend's position on the map. */
         horizontalAlignment?: string;
 
-        /**
-          * @docid basechartoptions_legend_itemsalignment
-          * @docid dxvectormapoptions_legends_itemsalignment
-          */
+        /** Specifies the alignment of legend items. */
         itemsAlignment?: string;
 
-        /**
-          * @docid basechartoptions_legend_itemtextposition
-          * @docid dxvectormapoptions_legends_itemtextposition
-          */
+        /** Specifies the position of text relative to the item marker. */
         itemTextPosition?: string;
 
-        /**
-          * @docid basechartoptions_legend_margin
-          * @docid dxvectormapoptions_legends_margin
-          */
+        /** Specifies the distance between the legend and the container borders in pixels. */
         margin?: viz.core.Margins;
 
-        /**
-          * @docid basechartoptions_legend_markersize
-          * @docid dxvectormapoptions_legends_markerSize
-          */
+        /** Specifies the size of item markers in the legend in pixels. */
         markerSize?: number;
 
-        /**
-          * @docid basechartoptions_legend_orientation
-          * @docid dxvectormapoptions_legends_orientation
-          */
+        /** Specifies whether to arrange legend items horizontally or vertically. */
         orientation?: string;
 
-        /**
-          * @docid basechartoptions_legend_paddingleftright
-          * @docid dxvectormapoptions_legends_paddingleftright
-          */
+        /** Specifies the spacing between the legend left/right border and legend items in pixels. */
         paddingLeftRight?: number;
 
-        /**
-          * @docid basechartoptions_legend_paddingtopbottom
-          * @docid dxvectormapoptions_legends_paddingtopbottom
-          */
+        /** Specifies the spacing between the legend top/bottom border and legend items in pixels. */
         paddingTopBottom?: number;
 
-        /**
-          * @docid basechartoptions_legend_rowcount
-          * @docid dxvectormapoptions_legends_rowcount
-          */
+        /** Specifies how many rows must be taken to arrange legend items. */
         rowCount?: number;
 
-        /**
-          * @docid basechartoptions_legend_rowitemspacing
-          * @docid dxvectormapoptions_legends_rowitemspacing
-          */
+        /** Specifies the spacing between a pair of neighboring legend rows in pixels. */
         rowItemSpacing?: number;
 
-        /**
-          * @docid basechartoptions_legend_verticalalignment
-          * @docid dxvectormapoptions_legends_verticalalignment
-          */
+        /** Specifies the legend's position on the map. */
         verticalAlignment?: string;
 
-        /**
-          * @docid basechartoptions_legend_visible
-          * @docid dxvectormapoptions_legends_visible
-          */
+        /** Specifies whether or not the legend is visible on the map. */
         visible?: boolean;
     }
 
     export interface BaseWidgetOptions extends DOMComponentOptionsBase {
-        /** @docid_ignore BaseWidgetOptions_width */
-        /** @docid_ignore BaseWidgetOptions_height */
 
-        /** @docid_ignore BaseWidgetOptions_tooltip */
-
-        /** @docid BaseWidgetOptions_size */
+        /** Specifies the size of the widget in pixels. */
         size?: Size;
 
-        /** @docid BaseWidgetOptions_onDrawn */
+        /** A handler for the drawn event. */
         onDrawn?: (e: {
             component: BaseWidget;
             element: Element;
         }) => void;
 
-        /** @docid BaseWidgetOptions_onIncidentoccurred */
+        /** A handler for the incidentOccurred event. */
         onIncidentOccurred?: (
         component: BaseWidget,
         element: Element,
@@ -573,14 +338,14 @@ declare module DevExpress.viz.core {
         }
         ) => void;
 
-        /** @docid BaseWidgetOptions_onexporting */
+        /** A handler for the exporting event. */
         onExporting?: (e: {
             fileName: string;
             cancel: boolean;
             format: string;
         }) => void;
 
-        /** @docid BaseWidgetOptions_onfilesaving */
+        /** A handler for the fileSaving event. */
         onFileSaving?: (e: {
             fileName: string;
             format: string;
@@ -588,49 +353,38 @@ declare module DevExpress.viz.core {
             cancel: boolean;
         }) => void;
 
-        /** @docid BaseWidgetOptions_onexported */
+        /** A handler for the exported event. */
         onExported?: (e: any) => void;
 
-        /** @docid BaseWidgetOptions_pathmodified */
+        /** Notifies the widget that it is embedded into an HTML page that uses a tag modifying the path. */
         pathModified?: boolean;
 
-        /** @docid BaseWidgetOptions_rtlEnabled */
+        /** Specifies whether or not the widget supports right-to-left representation. */
         rtlEnabled?: boolean;
 
-        /** @docid BaseWidgetOptions_theme */
+        /** Sets the name of the theme to be used in the widget. */
         theme?: string;
     }
 
-    /** @docid BaseWidget */
+    /** This section describes options and methods that are common to all widgets. */
     export class BaseWidget extends DOMComponent {
-        /** @docid_ignore BaseWidgetMethods_defaultOptions */
+        
 
-        /** @docid BaseWidgetMethods_svg */
+        /** Returns the widget's SVG markup. */
         svg(): string;
 
-        /** @docid BaseWidgetMethods_getSize */
+        /** Gets the current size of the widget. */
         getSize(): { width: number; height: number };
 
-        /** @docid BaseWidgetMethods_exportTo */
+        /** Exports the widget into a document with a specified name and format. */
         exportTo(fileName: string, format: string): void;
 
-        /** @docid BaseWidgetMethods_print */
+        /** Opens the browser's print window. */
         print(): void;
 
-        /** @docid BaseWidgetMethods_render */
+        /** Redraws the widget. */
         render(): void;
     }
-
-    /** @docid_ignore VizTimeInterval */
-    /** @docid_ignore VizTimeInterval_years */
-    /** @docid_ignore VizTimeInterval_quarters */
-    /** @docid_ignore VizTimeInterval_months */
-    /** @docid_ignore VizTimeInterval_weeks */
-    /** @docid_ignore VizTimeInterval_days */
-    /** @docid_ignore VizTimeInterval_hours */
-    /** @docid_ignore VizTimeInterval_minutes */
-    /** @docid_ignore VizTimeInterval_seconds */
-    /** @docid_ignore VizTimeInterval_milliseconds */
 
 }
 
