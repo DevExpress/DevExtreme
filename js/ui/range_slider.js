@@ -353,6 +353,15 @@ var RangeSlider = Slider.inherit({
         this.option("value", [start, end]);
     },
 
+    /**
+     * @name RangeSliderMethods_reset
+     * @publicName reset()
+     */
+    reset: function() {
+        var defaultOptions = this._getDefaultOptions();
+        this.option("value", defaultOptions.value);
+    },
+
     _optionChanged: function(args) {
         switch(args.name) {
             case "value":
