@@ -128,43 +128,6 @@ var ToolbarBase = CollectionWidget.inherit({
         });
     },
 
-    // _arrangeItems: function(elementWidth) {
-    //     debugger;
-    //     elementWidth = elementWidth || this.$element().width();
-
-    //     this._$centerSection.css({
-    //         margin: "0 auto",
-    //         float: "none"
-    //     });
-
-    //     var beforeRect = this._$beforeSection.get(0).getBoundingClientRect(),
-    //         afterRect = this._$afterSection.get(0).getBoundingClientRect();
-
-    //     this._alignCenterSection(beforeRect, afterRect);
-
-    //     var $label = this._$toolbarItemsContainer.find(TOOLBAR_LABEL_SELECTOR).eq(0),
-    //         $section = $label.parent();
-
-    //     if(!$label.length) {
-    //         return;
-    //     }
-
-    //     var labelOffset = beforeRect.width ? beforeRect.width : $label.position().left,
-    //         widthBeforeSection = $section.hasClass(TOOLBAR_BEFORE_CLASS) ? 0 : labelOffset,
-    //         widthAfterSection = $section.hasClass(TOOLBAR_AFTER_CLASS) ? 0 : afterRect.width,
-    //         elemsAtSectionWidth = 0;
-
-    //     $section.children().not(TOOLBAR_LABEL_SELECTOR).each(function() {
-    //         elemsAtSectionWidth += $(this).outerWidth();
-    //     });
-
-    //     var freeSpace = elementWidth - elemsAtSectionWidth,
-    //         labelPaddings = $label.outerWidth() - $label.width(),
-    //         labelMaxWidth = Math.max(freeSpace - widthBeforeSection - widthAfterSection - labelPaddings, 0);
-
-    //     $label.css("maxWidth", labelMaxWidth);
-    // },
-
     _arrangeItems: function(elementWidth) {
         elementWidth = elementWidth || this.$element().width();
 
@@ -174,12 +137,7 @@ var ToolbarBase = CollectionWidget.inherit({
         });
 
         var beforeRect = this._$beforeSection.get(0).getBoundingClientRect(),
-            afterRect = this._$afterSection.get(0).getBoundingClientRect(),
-            centerRect = this._$centerSection.get(0).getBoundingClientRect();
-
-        if(centerRect.width > elementWidth - beforeRect.width - afterRect.width) {
-            this._alignSection(this._$centerSection, elementWidth - beforeRect.width - afterRect.width);
-        }
+            afterRect = this._$afterSection.get(0).getBoundingClientRect();
 
         this._alignCenterSectionByRects(beforeRect, afterRect, elementWidth);
 
@@ -239,6 +197,25 @@ var ToolbarBase = CollectionWidget.inherit({
 
                 $($label).css("maxWidth", labelMaxWidth);
             }
+        } else {
+            for(i = 0; i < labels.length; i++) {
+                $label = $(labels[i]);
+                currentLabelWidth = $($label).outerWidth();
+                $($label).css("maxWidth", "inherit");
+
+                var fullLabelWidth = $($label).outerWidth();
+
+                if(fullLabelWidth < difference) {
+                    difference = difference - fullLabelWidth;
+                    labelMaxWidth = fullLabelWidth;
+                } else {
+                    labelMaxWidth = currentLabelWidth + difference;
+                    $($label).css("maxWidth", labelMaxWidth);
+                    break;
+                }
+
+                $($label).css("maxWidth", labelMaxWidth);
+            }
         }
     },
 
@@ -253,15 +230,13 @@ var ToolbarBase = CollectionWidget.inherit({
     },
 
     _alignCenterSectionByRects: function(beforeRect, afterRect, elementWidth) {
+        this._alignSection(this._$centerSection, elementWidth - beforeRect.width - afterRect.width);
+
         var isRTL = this.option("rtlEnabled"),
             leftRect = isRTL ? afterRect : beforeRect,
             rightRect = isRTL ? beforeRect : afterRect,
-            centerRect = this._$centerSection.get(0).getBoundingClientRect(),
-            centerMaxWidth = elementWidth - leftRect.width - rightRect.width;
+            centerRect = this._$centerSection.get(0).getBoundingClientRect();
 
-        if(centerMaxWidth > centerRect.width) {
-
-        }
         if(leftRect.right > centerRect.left || centerRect.right > rightRect.left) {
             this._$centerSection.css({
                 marginLeft: leftRect.width,
@@ -269,7 +244,6 @@ var ToolbarBase = CollectionWidget.inherit({
                 float: leftRect.width > rightRect.width ? "none" : "right"
             });
         }
-        
     },
 
     _renderItem: function(index, item, itemContainer, $after) {
