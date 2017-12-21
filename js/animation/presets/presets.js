@@ -396,6 +396,10 @@ exports.PresetCollection = AnimationPresetCollection;
 */
 /**
 * @name animationPresetsMethods_clear
+* @publicName clear()
+*/
+/**
+* @name animationPresetsMethods_clear
 * @publicName clear(name)
 * @param1 name:string
 */
@@ -415,6 +419,7 @@ exports.PresetCollection = AnimationPresetCollection;
 * @name animationPresetsMethods_getPreset
 * @publicName getPreset(name)
 * @param1 name:string
+* @return any
 */
 /**
 * @name animationPresetsMethods_registerDefaultPresets
