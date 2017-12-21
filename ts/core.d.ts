@@ -202,6 +202,7 @@ declare module DevExpress {
     export class AnimationPresetCollection {
         /** Resets all the changes made in the animation repository. */
         resetToDefaults(): void;
+        clear(): void;
         /** Deletes the specified animation or clears all the animation repository, if an animation name is not passed. */
         clear(name: string): void;
         /** Adds the specified animation preset to the animation repository by the specified name. */
@@ -209,7 +210,7 @@ declare module DevExpress {
         /** Applies the changes made in the animation repository. */
         applyChanges(): void;
         /** Returns the configuration of the animation found in the animation repository by the specified name for the current device. */
-        getPreset(name: string): void;
+        getPreset(name: string): any;
         /** Registers predefined animations in the animation repository. */
         registerDefaultPresets(): void;
     }
