@@ -4369,6 +4369,65 @@ QUnit.test("tagBox should not fail when asynchronous data source is used in the 
     assert.expect(0);
 });
 
+QUnit.test("tagBox should not render duplicated tags after searching", function(assert) {
+    var data = [{ "id": 1, "Name": "Item14" }, { "id": 2, "Name": "Item21" }, { "id": 3, "Name": "Item31" }, { "id": 4, "Name": "Item41" }];
+
+    var tagBox = $("#tagBox").dxTagBox({
+        dataSource: new CustomStore({
+            key: "id",
+            load: function(loadOptions) {
+                var loadedItems = [];
+                if(!loadOptions.searchValue) return data;
+
+                var d = $.Deferred();
+                setTimeout(function(i) {
+                    data.forEach(function(i) {
+                        if(i.Name.indexOf(loadOptions.searchValue) >= 0) {
+                            loadedItems.push(i);
+                        }
+                    });
+
+                    if(loadedItems.length) {
+                        return d.resolve(loadedItems);
+                    }
+                });
+
+                return d.promise();
+            },
+            byKey: function(key) {
+                var d = $.Deferred();
+                setTimeout(function(i) {
+                    data.forEach(function(i) {
+                        if(i.id === key) {
+                            d.resolve(i);
+                            return;
+                        }
+                    });
+                });
+                return d.promise();
+            }
+        }),
+        searchTimeout: 0,
+        displayExpr: 'Name',
+        opened: true,
+        searchEnabled: true
+    }).dxTagBox("instance");
+
+    $(tagBox._$list.find(".dx-list-item").eq(0)).trigger("dxclick");
+
+    var $input = tagBox.$element().find("input"),
+        kb = keyboardMock($input);
+
+    kb.type("4");
+    this.clock.tick(TIME_TO_WAIT);
+
+    $(tagBox._$list.find(".dx-list-item").eq(1)).trigger("dxclick");
+
+    var $tagContainer = tagBox.$element().find("." + TAGBOX_TAG_CONTAINER_CLASS);
+
+    assert.equal($.trim($tagContainer.text()), "Item14Item41", "selected values are rendered correctly");
+});
+
 QUnit.test("T403756 - dxTagBox treats removing a dxTagBox item for the first time as removing the item", function(assert) {
     var items = [
         { id: 1, text: "Item 1" },
