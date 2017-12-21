@@ -1715,3 +1715,43 @@ QUnit.test("T430159 dropdown menu should be closed after click on item if locati
     assert.ok(!dropDown.option("opened"), "dropdown is closed");
     assert.equal(onClickActionStub.callCount, 1, "onClick was fired");
 });
+
+QUnit.module("adaptivity", {
+    beforeEach: function() {
+        this.element = $("#toolbar");
+    }
+});
+
+QUnit.test("items in before section should have correct sizes", function(assert) {
+    var toolBar = this.element.dxToolbar({
+        items: [
+            { location: 'before', text: 'before1' },
+            { location: 'before', text: 'before2' },
+            { location: 'before', text: 'before3' }
+        ],
+        width: 250,
+        height: 50
+    }).dxToolbar("instance");
+
+    $.each(this.element.find("." + TOOLBAR_ITEM_CLASS), function(index, $item) {
+        assert.equal($($item).outerWidth(), 59, "Width is correct");
+    });
+
+    toolBar.option("width", 170);
+
+    $.each(this.element.find("." + TOOLBAR_ITEM_CLASS), function(index, $item) {
+        if(index < 2) {
+            assert.equal($($item).outerWidth(), 59, "Width is correct");
+        } else {
+            assert.equal($($item).outerWidth(), 52, "Width is correct");
+        }
+    });
+
+    toolBar.option("width", 100);
+
+    var $toolbarItems = this.element.find("." + TOOLBAR_ITEM_CLASS);
+
+    assert.equal($toolbarItems.eq(0).outerWidth(), 59, "Width of the first item is correct");
+    assert.equal($toolbarItems.eq(1).outerWidth(), 41, "Width of the second item is correct");
+    assert.equal($toolbarItems.eq(2).outerWidth(), 10, "Width of the third item is correct");
+});

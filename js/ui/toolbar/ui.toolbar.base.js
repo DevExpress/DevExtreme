@@ -128,6 +128,43 @@ var ToolbarBase = CollectionWidget.inherit({
         });
     },
 
+    // _arrangeItems: function(elementWidth) {
+    //     debugger;
+    //     elementWidth = elementWidth || this.$element().width();
+
+    //     this._$centerSection.css({
+    //         margin: "0 auto",
+    //         float: "none"
+    //     });
+
+    //     var beforeRect = this._$beforeSection.get(0).getBoundingClientRect(),
+    //         afterRect = this._$afterSection.get(0).getBoundingClientRect();
+
+    //     this._alignCenterSection(beforeRect, afterRect);
+
+    //     var $label = this._$toolbarItemsContainer.find(TOOLBAR_LABEL_SELECTOR).eq(0),
+    //         $section = $label.parent();
+
+    //     if(!$label.length) {
+    //         return;
+    //     }
+
+    //     var labelOffset = beforeRect.width ? beforeRect.width : $label.position().left,
+    //         widthBeforeSection = $section.hasClass(TOOLBAR_BEFORE_CLASS) ? 0 : labelOffset,
+    //         widthAfterSection = $section.hasClass(TOOLBAR_AFTER_CLASS) ? 0 : afterRect.width,
+    //         elemsAtSectionWidth = 0;
+
+    //     $section.children().not(TOOLBAR_LABEL_SELECTOR).each(function() {
+    //         elemsAtSectionWidth += $(this).outerWidth();
+    //     });
+
+    //     var freeSpace = elementWidth - elemsAtSectionWidth,
+    //         labelPaddings = $label.outerWidth() - $label.width(),
+    //         labelMaxWidth = Math.max(freeSpace - widthBeforeSection - widthAfterSection - labelPaddings, 0);
+
+    //     $label.css("maxWidth", labelMaxWidth);
+    // },
+
     _arrangeItems: function(elementWidth) {
         elementWidth = elementWidth || this.$element().width();
 
@@ -137,9 +174,14 @@ var ToolbarBase = CollectionWidget.inherit({
         });
 
         var beforeRect = this._$beforeSection.get(0).getBoundingClientRect(),
-            afterRect = this._$afterSection.get(0).getBoundingClientRect();
+            afterRect = this._$afterSection.get(0).getBoundingClientRect(),
+            centerRect = this._$centerSection.get(0).getBoundingClientRect();
 
-        this._alignCenterSection(beforeRect, afterRect);
+        if(centerRect.width > elementWidth - beforeRect.width - afterRect.width) {
+            this._alignSection(this._$centerSection, elementWidth - beforeRect.width - afterRect.width);
+        }
+
+        this._alignCenterSectionByRects(beforeRect, afterRect, elementWidth);
 
         var $label = this._$toolbarItemsContainer.find(TOOLBAR_LABEL_SELECTOR).eq(0),
             $section = $label.parent();
@@ -161,15 +203,65 @@ var ToolbarBase = CollectionWidget.inherit({
             labelPaddings = $label.outerWidth() - $label.width(),
             labelMaxWidth = Math.max(freeSpace - widthBeforeSection - widthAfterSection - labelPaddings, 0);
 
+        if($section.hasClass(TOOLBAR_BEFORE_CLASS)) {
+            this._alignSection(this._$beforeSection, labelMaxWidth);
+            return;
+        }
         $label.css("maxWidth", labelMaxWidth);
     },
 
-    _alignCenterSection: function(beforeRect, afterRect) {
+    _alignSection: function($section, maxWidth) {
+        var $labels = $section.find(TOOLBAR_LABEL_SELECTOR),
+            labels = $labels.toArray(),
+            currentWidth = this._getCurrentLabelsWidth(labels),
+            difference = Math.abs(currentWidth - maxWidth),
+            i,
+            $label,
+            currentLabelWidth,
+            labelMaxWidth;
+
+        if(maxWidth < currentWidth) {
+            labels = labels.reverse();
+            for(i = 0; i < labels.length; i++) {
+                $label = $(labels[i]);
+
+                currentLabelWidth = $($label).outerWidth();
+                labelMaxWidth = currentLabelWidth;
+
+                if(currentLabelWidth < difference) {
+                    labelMaxWidth = 0;
+                    difference = difference - currentLabelWidth;
+                } else {
+                    labelMaxWidth = currentLabelWidth - difference;
+                    $($label).css("maxWidth", labelMaxWidth);
+                    break;
+                }
+
+                $($label).css("maxWidth", labelMaxWidth);
+            }
+        }
+    },
+
+    _getCurrentLabelsWidth: function(labels) {
+        var width = 0;
+
+        labels.forEach(function($label, index) {
+            width += $($label).outerWidth();
+        });
+
+        return width;
+    },
+
+    _alignCenterSectionByRects: function(beforeRect, afterRect, elementWidth) {
         var isRTL = this.option("rtlEnabled"),
             leftRect = isRTL ? afterRect : beforeRect,
             rightRect = isRTL ? beforeRect : afterRect,
-            centerRect = this._$centerSection.get(0).getBoundingClientRect();
+            centerRect = this._$centerSection.get(0).getBoundingClientRect(),
+            centerMaxWidth = elementWidth - leftRect.width - rightRect.width;
 
+        if(centerMaxWidth > centerRect.width) {
+
+        }
         if(leftRect.right > centerRect.left || centerRect.right > rightRect.left) {
             this._$centerSection.css({
                 marginLeft: leftRect.width,
@@ -177,6 +269,7 @@ var ToolbarBase = CollectionWidget.inherit({
                 float: leftRect.width > rightRect.width ? "none" : "right"
             });
         }
+        
     },
 
     _renderItem: function(index, item, itemContainer, $after) {
