@@ -2067,7 +2067,6 @@ declare module DevExpress.ui {
         constructor(element: JQuery, options?: dxRangeSliderOptions);
         constructor(element: Element, options?: dxRangeSliderOptions);
 
-        /** @docid dxRangeSliderMethods_reset */
         reset(): void;
     }
 
