@@ -654,11 +654,12 @@ var EditingController = modules.ViewController.inherit((function() {
 
         _getPopupEditFormTemplate: function(rowIndex) {
             var that = this,
-                rowData = that.component.getVisibleRows()[rowIndex],
+                row = that.component.getVisibleRows()[rowIndex],
                 templateOptions = {
-                    row: rowData,
-                    rowType: rowData.rowType,
-                    key: rowData.key
+                    row: row,
+                    data: row.data,
+                    rowType: row.rowType,
+                    key: row.key
                 };
 
             return function($container) {
@@ -1285,8 +1286,8 @@ var EditingController = modules.ViewController.inherit((function() {
             that._updateEditButtons();
         },
 
-        _getRowIndicesForCascadeUpdating: function(row) {
-            return [row.rowIndex];
+        _getRowIndicesForCascadeUpdating: function(row, skipCurrentRow) {
+            return skipCurrentRow ? [] : [row.rowIndex];
         },
 
         updateFieldValue: function(options, value, text, forceUpdateRow) {
@@ -1330,42 +1331,51 @@ var EditingController = modules.ViewController.inherit((function() {
                 }
             }
         },
-
-        _updateEditRow: function(row, forceUpdateRow) {
+        _updateEditRowCore: function(row, skipCurrentRow) {
             var that = this,
+                editForm = that._editForm,
                 editMode = getEditMode(that);
 
             if(editMode === EDIT_MODE_POPUP) {
-                setTimeout(this._updatePopupForm.bind(this, forceUpdateRow));
+                editForm && editForm.repaint();
             } else {
-                this._dataController.updateItems({
+                that._dataController.updateItems({
                     changeType: "update",
-                    rowIndices: this._getRowIndicesForCascadeUpdating(row)
+                    rowIndices: that._getRowIndicesForCascadeUpdating(row, skipCurrentRow)
                 });
-                if(!forceUpdateRow) {
-                    this._focusEditingCell();
-                }
             }
         },
 
-        _updatePopupForm: function(forceUpdateRow) {
-            var columnIndex,
-                $focusedItemElement,
-                rowsView = this._rowsView,
-                rowIndex = this.getEditFormRowIndex();
+        _updateEditRow: function(row, forceUpdateRow) {
+            var that = this;
 
-            if(rowIndex >= 0 && this._editForm) {
+            if(forceUpdateRow || !isRowEditMode(that)) {
+                that._updateEditRowCore(row, !forceUpdateRow);
                 if(!forceUpdateRow) {
-                    $focusedItemElement = this._editForm.$element().find(".dx-state-focused");
-                    columnIndex = rowsView.getCellIndex($focusedItemElement, rowIndex);
+                    that._focusEditingCell();
                 }
+            } else {
+                setTimeout(function() {
+                    var $focusedElement = $(":focus"),
+                        columnIndex = that._rowsView.getCellIndex($focusedElement, row.rowIndex),
+                        focusedElement = $focusedElement.get(0),
+                        selectionStart = focusedElement && focusedElement.selectionStart,
+                        selectionEnd = focusedElement && focusedElement.selectionEnd;
 
-                this._editForm.repaint();
+                    that._updateEditRowCore(row);
 
-                if(columnIndex >= 0) {
-                    $focusedItemElement = rowsView._getCellElement(rowIndex, columnIndex);
-                    this._delayedInputFocus($focusedItemElement);
-                }
+                    if(columnIndex >= 0) {
+                        var $focusedItem = that._rowsView._getCellElement(row.rowIndex, columnIndex);
+                        that._delayedInputFocus($focusedItem, function() {
+                            setTimeout(function() {
+                                focusedElement = $(":focus").get(0);
+                                if(focusedElement && focusedElement.setSelectionRange && selectionStart >= 0) {
+                                    focusedElement.setSelectionRange(selectionStart, selectionEnd);
+                                }
+                            });
+                        });
+                    }
+                });
             }
         },
 

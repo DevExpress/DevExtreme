@@ -5618,6 +5618,91 @@ QUnit.testInActiveWindow("The lookup column should keep focus after changing val
     assert.ok($cellElement.hasClass("dx-focused"), "cell is focused");
 });
 
+QUnit.testInActiveWindow("The focus should be saved after changing value in cascade non-lookup column in row editing mode", function(assert) {
+    //arrange
+    var that = this,
+        $cellElement,
+        rowsView = that.rowsView,
+        $testElement = $("#container");
+
+    that.options.columns[0] = {
+        dataField: "name",
+        setCellValue: function(rowData, value) {
+            this.defaultSetCellValue(rowData, value);
+        }
+    };
+    that.options.editing = {
+        allowUpdating: true,
+        mode: "row"
+    };
+    that.$element = function() {
+        return $testElement;
+    };
+    rowsView.render($testElement);
+    that.columnsController.init();
+
+    that.editRow(0);
+    that.clock.tick();
+
+    var $input1 = $(rowsView.getCellElement(0, 0)).find(".dx-texteditor-input");
+    var $input2 = $(rowsView.getCellElement(0, 1)).find(".dx-texteditor-input");
+
+    //act
+    $input1.val('Test name');
+    $input2.focus().get(0).setSelectionRange(1, 2);
+    $input1.trigger('change');
+    that.clock.tick();
+
+    //assert
+    $cellElement = $(rowsView.getCellElement(0, 1));
+    $input2 = $cellElement.find('.dx-texteditor-input');
+    assert.ok($cellElement.hasClass("dx-focused"), "second cell is focused");
+    assert.equal($input2.get(0).selectionStart, 1, "selectionStart is correct");
+    assert.equal($input2.get(0).selectionEnd, 2, "selectionEnd is correct");
+});
+
+QUnit.testInActiveWindow("The focus should be saved after changing value in cascade non-lookup column in batch editing mode", function(assert) {
+    //arrange
+    var that = this,
+        rowsView = that.rowsView,
+        $testElement = $("#container");
+
+    that.options.columns[0] = {
+        dataField: "name",
+        setCellValue: function(rowData, value) {
+            this.defaultSetCellValue(rowData, value);
+        }
+    };
+    that.options.editing = {
+        allowUpdating: true,
+        mode: "batch"
+    };
+    that.$element = function() {
+        return $testElement;
+    };
+    rowsView.render($testElement);
+    that.columnsController.init();
+
+    that.editCell(0, 0);
+    that.clock.tick();
+
+    var $input = $(rowsView.getCellElement(0, 0)).find('.dx-texteditor-input');
+
+    $input.val('Test name');
+    var $secondCell = $(rowsView.getCellElement(0, 1));
+    var mouse = pointerMock($secondCell).start();
+
+    //act
+    mouse.down();
+    $input.trigger('change');
+    mouse.up();
+    that.clock.tick();
+
+    //assert
+    $secondCell = $(rowsView.getCellElement(0, 1));
+    assert.ok($secondCell.hasClass("dx-focused"), "second cell is focused");
+});
+
 QUnit.test("Batch mode - Correct insert row index for a new row when a previous new row is deleted_T541129", function(assert) {
     //arrange
     var that = this,
@@ -6057,6 +6142,7 @@ if(!devices.win8) {
         //act
         testElement.find('tbody > tr').first().find('input').eq(0).val('Test name');
         testElement.find('tbody > tr').first().find('input').eq(0).trigger('change');
+        this.clock.tick();
 
         //assert
         assert.equal(testElement.find('tbody > tr').first().find('input').eq(0).val(), "Test name");
