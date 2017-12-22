@@ -352,7 +352,7 @@ var RangeSlider = Slider.inherit({
     },
 
     /**
-     * @name RangeSliderMethods_reset
+     * @name dxRangeSliderMethods_reset
      * @publicName reset()
      */
     reset: function() {
