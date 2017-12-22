@@ -36,6 +36,7 @@ exports.labelEnvironment = $.extend({}, environment, {
         sinon.stub(labelModule, "Label", function() {
             var stub = new stubLabel();
             stub.stub("getBoundingRect").returns(labelBoxes[(labelBoxesIndex++) % labelBoxes.length]);
+            stub.stub("getBackgroundPadding").returns(5);
             return stub;
         });
 

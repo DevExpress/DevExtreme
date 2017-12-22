@@ -988,7 +988,7 @@ QUnit.test("Apply label ellipsis and correct label coordinates", function(assert
         }
     });
 
-    assert.equal(labelModule.Label.getCall(0).returnValue.fit.lastCall.args[0], 45);
+    assert.equal(labelModule.Label.getCall(0).returnValue.fit.lastCall.args[0], 40);
     assert.ok(!labelModule.Label.getCall(1).returnValue.stub("fit").called);
 });
 
@@ -1013,7 +1013,7 @@ QUnit.test("Apply label ellipsis and correct label coordinates. Right horizontal
         }
     });
 
-    assert.equal(labelModule.Label.getCall(0).returnValue.fit.lastCall.args[0], 45);
+    assert.equal(labelModule.Label.getCall(0).returnValue.fit.lastCall.args[0], 40);
     assert.ok(!labelModule.Label.getCall(1).returnValue.stub("fit").called);
 });
 

@@ -211,7 +211,7 @@ var environment = {
                 assert.equal(label.getBoundingRect().x, position[0], "boundingRect x");
                 assert.equal(label.getBoundingRect().y, position[1], "boundingRect y");
             }
-            assert.ok(!label.draw.calledWith(false), "label should not be hidden");
+            assert.ok(!label.draw.calledWith(false), "label should no tbe hidden");
         }
     });
 
@@ -1882,15 +1882,23 @@ var environment = {
         assert.deepEqual(points[1].getLabels()[0].draw.lastCall.args, [false]);
     });
 
-    QUnit.test("Adjust labels only before overlapping resolve, without moving from center (T586419)", function(assert) {
+    QUnit.test("Adjust labels should be called before resolve oberlapping and after", function(assert) {
         var pie = this.createPieChartWithLabels([{ x: 5, y: 10, width: 10, height: 10, pointPosition: { y: 1, angle: 1 } },
             { x: 5, y: 10, width: 10, height: 10, pointPosition: { y: 2, angle: 2 } }]),
             series = pie.getAllSeries()[0],
             points = series.getVisiblePoints();
 
-        assert.equal(series.adjustLabels.callCount, 1);
         assert.ok(series.adjustLabels.getCall(0).calledBefore(points[1].getLabels()[0].draw.withArgs(false).lastCall));
-        assert.deepEqual(series.adjustLabels.getCall(0).args, [false], "Do not move from center (T586419)");
+        assert.ok(series.adjustLabels.getCall(1).calledAfter(points[1].getLabels()[0].draw.withArgs(false).lastCall));
+    });
+
+    QUnit.test("T586419. Adjust labels without moving them from center", function(assert) {
+        var pie = this.createPieChartWithLabels([{ x: 5, y: 10, width: 10, height: 10, pointPosition: { y: 1, angle: 1 } },
+            { x: 5, y: 10, width: 10, height: 10, pointPosition: { y: 2, angle: 2 } }]),
+            series = pie.getAllSeries()[0];
+
+        assert.deepEqual(series.adjustLabels.getCall(0).args, [false]);
+        assert.deepEqual(series.adjustLabels.getCall(1).args, [false]);
     });
 
     QUnit.module("resolveLabelOverlapping. shift", $.extend({}, overlappingEnvironment, {
@@ -1964,36 +1972,19 @@ var environment = {
         assert.ok(!points[4].getLabels()[0].shift.called);
     });
 
-    QUnit.test("Adjust labels before and after resolve overlapping with moving from center (T586419)", function(assert) {
+    QUnit.test("T586419. Adjust labels with moving them from center", function(assert) {
         var pie = this.createPieChartWithLabels([{ x: 5, y: 10, width: 10, height: 10, pointPosition: { y: 1, angle: 1 } },
             { x: 5, y: 10, width: 10, height: 10, pointPosition: { y: 2, angle: 2 } }]),
-            series = pie.getAllSeries()[0],
-            points = series.getVisiblePoints();
+            series = pie.getAllSeries()[0];
 
-        //assert
-        assert.equal(series.adjustLabels.callCount, 2);
-
-        assert.ok(series.adjustLabels.getCall(0).calledBefore(points[1].getLabels()[0].shift.lastCall));
-        assert.deepEqual(series.adjustLabels.getCall(0).args, [true], "Move from center (T586419)");
-
-        assert.ok(series.adjustLabels.getCall(1).calledAfter(points[1].getLabels()[0].shift.lastCall));
-        assert.deepEqual(series.adjustLabels.getCall(1).args, [true], "Move from center (T586419)");
-    });
-
-    QUnit.test("Do not Adjust labels after resolve overlapping in columns position", function(assert) {
-        var pie = this.createPieChartWithLabels([{ x: 5, y: 10, width: 10, height: 10, pointPosition: { y: 1, angle: 1 } },
-            { x: 5, y: 10, width: 10, height: 10, pointPosition: { y: 2, angle: 2 } }], "columns"),
-            series = pie.getAllSeries()[0],
-            points = series.getVisiblePoints();
-
-        assert.equal(series.adjustLabels.callCount, 1);
-        assert.ok(!series.adjustLabels.lastCall.calledAfter(points[1].getLabels()[0].shift.lastCall));
+        assert.deepEqual(series.adjustLabels.getCall(0).args, [true]);
+        assert.deepEqual(series.adjustLabels.getCall(1).args, [true]);
     });
 
     QUnit.module("resolveLabelOverlapping. shift. multipie", $.extend({}, overlappingEnvironment, {
-        createPieChartWithLabels: function(BBox1, BBox2, position) {
-            this.createFakeSeriesWithLabels(BBox1, position);
-            this.createFakeSeriesWithLabels(BBox2, position);
+        createPieChartWithLabels: function(BBox1, BBox2) {
+            this.createFakeSeriesWithLabels(BBox1);
+            this.createFakeSeriesWithLabels(BBox2);
             this.pieChart = this.createPieChart({
                 resolveLabelOverlapping: "shift",
                 series: [{ type: "pie" }, { type: "pie" }]
@@ -2002,37 +1993,16 @@ var environment = {
         }
     }));
 
-    QUnit.test("two series - all labels are resolved together (in two directions)", function(assert) {
-        var pie = this.createPieChartWithLabels([
-            { x: 150, y: 50, width: 10, height: 10, pointPosition: { y: 1, angle: 1 } },
-            { x: 150, y: 50, width: 10, height: 10, pointPosition: { y: 2, angle: 2 } }
-            ], [
-            { x: 150, y: 45, width: 10, height: 10, pointPosition: { y: 1, angle: 1 } },
-            { x: 150, y: 55, width: 10, height: 10, pointPosition: { y: 2, angle: 2 } }
-            ]),
+    QUnit.test("two series", function(assert) {
+        var pie = this.createPieChartWithLabels([{ x: 5, y: 10, width: 10, height: 10, pointPosition: { y: 1, angle: 1 } },
+            { x: 5, y: 10, width: 10, height: 10, pointPosition: { y: 2, angle: 2 } }], [{ x: 5, y: 9, width: 10, height: 10, pointPosition: { y: 1, angle: 1 } },
+            { x: 5, y: 11, width: 10, height: 10, pointPosition: { y: 2, angle: 2 } }]),
             points1 = pie.getAllSeries()[0].getVisiblePoints(),
             points2 = pie.getAllSeries()[1].getVisiblePoints();
 
-        this.checkLabelPosition(assert, points1[0].getLabels()[0], [163, 55]);
-        this.checkLabelPosition(assert, points1[1].getLabels()[0], [182, 65]);
-        this.checkLabelPosition(assert, points2[0].getLabels()[0], [150, 45]);
-        this.checkLabelPosition(assert, points2[1].getLabels()[0], [189, 75]);
-    });
-
-    QUnit.test("two series, columns - labels are resolved by series (vertically only)", function(assert) {
-        var pie = this.createPieChartWithLabels([
-            { x: 150, y: 50, width: 10, height: 10, pointPosition: { y: 1, angle: 1 } },
-            { x: 150, y: 50, width: 10, height: 10, pointPosition: { y: 2, angle: 2 } }
-            ], [
-            { x: 155, y: 49, width: 10, height: 10, pointPosition: { y: 1, angle: 1 } },
-            { x: 155, y: 51, width: 10, height: 10, pointPosition: { y: 2, angle: 2 } }
-            ], "columns"),
-            points1 = pie.getAllSeries()[0].getVisiblePoints(),
-            points2 = pie.getAllSeries()[1].getVisiblePoints();
-
-        this.checkLabelPosition(assert, points1[0].getLabels()[0], [150, 50]);
-        this.checkLabelPosition(assert, points1[1].getLabels()[0], [150, 60]);
-        this.checkLabelPosition(assert, points2[0].getLabels()[0], [155, 49]);
-        this.checkLabelPosition(assert, points2[1].getLabels()[0], [155, 59]);
+        this.checkLabelPosition(assert, points1[0].getLabels()[0], [5, 10]);
+        this.checkLabelPosition(assert, points1[1].getLabels()[0], [-15, 20]);
+        this.checkLabelPosition(assert, points2[0].getLabels()[0], [5, 9]);
+        this.checkLabelPosition(assert, points2[1].getLabels()[0], [-11, 19]);
     });
 })();

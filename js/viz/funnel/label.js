@@ -278,7 +278,7 @@ exports.plugin = {
                 maxWidth = maxX - minX;
 
             if(label.getBoundingRect().width > maxWidth) {
-                label.fit(maxWidth);
+                label.fit(maxWidth - label.getBackgroundPadding());
             }
         },
 
