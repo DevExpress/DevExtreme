@@ -139,7 +139,7 @@ var ToolbarBase = CollectionWidget.inherit({
         var beforeRect = this._$beforeSection.get(0).getBoundingClientRect(),
             afterRect = this._$afterSection.get(0).getBoundingClientRect();
 
-        this._alignCenterSectionByRects(beforeRect, afterRect, elementWidth);
+        this._alignCenterSection(beforeRect, afterRect, elementWidth);
 
         var $label = this._$toolbarItemsContainer.find(TOOLBAR_LABEL_SELECTOR).eq(0),
             $section = $label.parent();
@@ -158,25 +158,30 @@ var ToolbarBase = CollectionWidget.inherit({
         });
 
         var freeSpace = elementWidth - elemsAtSectionWidth,
-            labelPaddings = $label.outerWidth() - $label.width(),
-            labelMaxWidth = Math.max(freeSpace - widthBeforeSection - widthAfterSection - labelPaddings, 0);
+            sectionMaxWidth = Math.max(freeSpace - widthBeforeSection - widthAfterSection, 0);
 
         if($section.hasClass(TOOLBAR_BEFORE_CLASS)) {
-            this._alignSection(this._$beforeSection, labelMaxWidth);
+            this._alignSection(this._$beforeSection, sectionMaxWidth);
             return;
         }
-        $label.css("maxWidth", labelMaxWidth);
+
+        var labelPaddings = $label.outerWidth() - $label.width();
+        $label.css("maxWidth", sectionMaxWidth - labelPaddings);
     },
 
     _alignSection: function($section, maxWidth) {
         var $labels = $section.find(TOOLBAR_LABEL_SELECTOR),
-            labels = $labels.toArray(),
-            currentWidth = this._getCurrentLabelsWidth(labels),
+            labels = $labels.toArray();
+
+        maxWidth = maxWidth - this._getCurrentLabelsPaddings(labels);
+
+        var currentWidth = this._getCurrentLabelsWidth(labels),
             difference = Math.abs(currentWidth - maxWidth),
             i,
             $label,
             currentLabelWidth,
             labelMaxWidth;
+
 
         if(maxWidth < currentWidth) {
             labels = labels.reverse();
@@ -229,7 +234,17 @@ var ToolbarBase = CollectionWidget.inherit({
         return width;
     },
 
-    _alignCenterSectionByRects: function(beforeRect, afterRect, elementWidth) {
+    _getCurrentLabelsPaddings: function(labels) {
+        var padding = 0;
+
+        labels.forEach(function($label, index) {
+            padding += ($($label).outerWidth() - $($label).width());
+        });
+
+        return padding;
+    },
+
+    _alignCenterSection: function(beforeRect, afterRect, elementWidth) {
         this._alignSection(this._$centerSection, elementWidth - beforeRect.width - afterRect.width);
 
         var isRTL = this.option("rtlEnabled"),
