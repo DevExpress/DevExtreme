@@ -1131,45 +1131,16 @@ QUnit.test("Draw label (area of label < minX area of canvas), first drawing", fu
     assert.equal(label.shift.args[0][1], 295);
 });
 
+
 QUnit.module("set label ellipsis", {
     beforeEach: environmentWithStubLabels
 });
 
-QUnit.test("Single series, label is outside right bound - fit in reduced space", function(assert) {
-    var point = createPointWithStubLabel.call(this, { 0: 300, 10: 270, 20: 240 }, { x: 590, width: 20, y: 10, height: 30 });
+QUnit.test("set label ellipsis", function(assert) {
+    var point = createPointWithStubLabel.call(this, { 0: 300, 10: 270, 20: 240 });
     point.setLabelEllipsis();
 
-    assert.deepEqual(point._label.fit.args[0][0], 10);
-});
-
-QUnit.test("Single series, label is outside left bound - fit in reduced space", function(assert) {
-    var point = createPointWithStubLabel.call(this, { 0: 300, 10: 270, 20: 240 }, { x: -15, width: 30, y: 10, height: 30 });
-    point.setLabelEllipsis();
-
-    assert.deepEqual(point._label.fit.args[0][0], 15);
-});
-
-QUnit.test("Single series, label is inside bounds - do not fit", function(assert) {
-    var point = createPointWithStubLabel.call(this, { 0: 300, 10: 270, 20: 240 }, { x: 400, width: 30, y: 10, height: 30 });
-    point.setLabelEllipsis();
-
-    assert.strictEqual(point._label.fit.callCount, 0);
-});
-
-QUnit.test("Multiple series, first series, columns, label is outside right bound - fit in reduced space", function(assert) {
-    this.series.index = 0;
-    var point = createPointWithStubLabel.call(this, { 0: 300, 10: 270, 20: 240 }, { x: 590, width: 20, y: 10, height: 30 });
-    point.setLabelEllipsis();
-
-    assert.deepEqual(point._label.fit.args[0][0], 10);
-});
-
-QUnit.test("Multiple series, non-first series, columns - fit in column width", function(assert) {
-    this.series.index = 1;
-    var point = createPointWithStubLabel.call(this, { 0: 300, 10: 270, 20: 240 }, { x: 590, width: 185, y: 10, height: 30 });
-    point.setLabelEllipsis();
-
-    assert.deepEqual(point._label.fit.args[0][0], 180);
+    assert.deepEqual(point._label.fit.args[0][0], 20);
 });
 
 QUnit.test("set label ellipsis. not drawn point", function(assert) {
@@ -1178,6 +1149,7 @@ QUnit.test("set label ellipsis. not drawn point", function(assert) {
     point.setLabelEllipsis();
     point.updateLabelCoord();
 });
+
 
 QUnit.module("Connector", {
     beforeEach: function() {

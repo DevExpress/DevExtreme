@@ -1062,6 +1062,25 @@ QUnit.test("getBoundingRect after shift", function(assert) {
     }, "equal bbox");
 });
 
+QUnit.test("getBackgroundPadding", function(assert) {
+    var label = this.createLabel();
+
+    label.show();
+
+    assert.equal(label.getBackgroundPadding(), 16);
+});
+
+QUnit.test("getBackgroundPadding. No background", function(assert) {
+    this.options.background = {
+        fill: "none"
+    };
+    var label = this.createLabel();
+
+    label.show();
+
+    assert.equal(label.getBackgroundPadding(), 0);
+});
+
 QUnit.test("getBoundingRect after double shift", function(assert) {
     var label = this.createLabel(),
         innerGroup,
@@ -1101,26 +1120,13 @@ QUnit.test("getLayoutOptions", function(assert) {
     });
 });
 
-QUnit.test("fit without background", function(assert) {
-    this.options.background = { fill: "none" };
-
-    var label = this.createAndDrawLabel();
-
-    label.shift(-7, -2);
-    label.fit(15);
-
-    var text = this.renderer.text.getCall(0).returnValue;
-
-    assert.equal(text.applyEllipsis.args[0], 15, "Max width param");
-});
-
-QUnit.test("fit with background", function(assert) {
+QUnit.test("fit", function(assert) {
     this.options.background = { fill: "red" };
 
     var label = this.createAndDrawLabel();
 
     label.shift(-7, -2);
-    label.fit(31);
+    label.fit(15);
 
     var text = this.renderer.text.getCall(0).returnValue,
         background = this.renderer.rect.getCall(0).returnValue;
