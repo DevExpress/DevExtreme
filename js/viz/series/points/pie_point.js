@@ -207,13 +207,25 @@ module.exports = _extend({}, symbolPoint, {
         return { x: x, y: y };
     },
 
-
     setLabelEllipsis: function() {
         var that = this,
-            bBox = that._label.getBoundingRect(),
-            coord = that._checkHorizontalLabelPosition(bBox, bBox, that._getVisibleArea());
+            label = that._label,
+            box = label.getBoundingRect(),
+            visibleArea = that._getVisibleArea(),
+            width = box.width;
 
-        that._label.fit(bBox.width - _abs(coord.x - bBox.x));
+        if(label.getLayoutOptions().position === "columns" && that.series.index > 0) {
+            width = visibleArea.maxX - that.centerX - that.radiusLabels;
+        } else {
+            if(box.x + width > visibleArea.maxX) {
+                width = visibleArea.maxX - box.x;
+            } else if(box.x < visibleArea.minX) {
+                width = box.x + width - visibleArea.minX;
+            }
+        }
+        if(width < box.width) {
+            label.fit(width);
+        }
     },
 
     setLabelTrackerData: function() {
