@@ -501,7 +501,7 @@ var AdvancedChart = BaseChart.inherit({
 
     _legendDataField: "series",
 
-    _adjustSeries: _noop,
+    _adjustSeriesLabels: _noop,
 
     _correctValueAxes: _noop
 });
