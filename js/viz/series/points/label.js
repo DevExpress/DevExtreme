@@ -338,13 +338,6 @@ Label.prototype = {
         that._bBox = bBox;
     },
 
-    getBackgroundPadding: function() {
-        if(this._background) {
-            return 2 * LABEL_BACKGROUND_PADDING_X;
-        }
-        return 0;
-    },
-
     _getConnectorPoints: function() {
         var that = this,
             figure = that._figure,
@@ -364,7 +357,8 @@ Label.prototype = {
 
     // TODO: Should not be called when not invisible (check for "_textContent" is to be removed)
     fit: function(maxWidth) {
-        this._text && this._text.applyEllipsis(maxWidth);
+        var padding = this._background ? 2 * LABEL_BACKGROUND_PADDING_X : 0;
+        this._text && this._text.applyEllipsis(maxWidth - padding);
         this._updateBackground(this._text.getBBox());
     },
 

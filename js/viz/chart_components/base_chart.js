@@ -728,13 +728,10 @@ var BaseChart = BaseWidget.inherit({
                 that._getLegendCallBack(singleSeries)
             );
         }
-
+        that._adjustSeriesLabels(resolveLabelOverlapping === "shift");
         if(resolveLabelOverlapping !== "none") {
-            that._adjustSeries(resolveLabelOverlapping === "shift");
             that._resolveLabelOverlapping(resolveLabelOverlapping);
         }
-
-        that._adjustSeries(resolveLabelOverlapping === "shift");
 
         that._renderTrackers(isLegendInside);
         that._tracker.repairTooltip();
