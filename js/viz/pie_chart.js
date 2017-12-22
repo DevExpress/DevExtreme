@@ -267,9 +267,9 @@ var dxPieChart = BaseChart.inherit({
         };
     },
 
-    _adjustSeries: function(moveLabelsFromCenter) {
-        _each(this.series, function(_, singleSeries) {
-            singleSeries.adjustLabels(moveLabelsFromCenter);
+    _adjustSeriesLabels: function(moveLabelsFromCenter) {
+        this.series.forEach(function(series) {
+            series.adjustLabels(moveLabelsFromCenter);
         });
     },
 
@@ -285,29 +285,47 @@ var dxPieChart = BaseChart.inherit({
             center = that._center,
             inverseDirection = that.option("segmentsDirection") === "anticlockwise";
 
-        _each(series, function(_, singleSeries) {
-            if(singleSeries.getOptions().label.position === "inside") {
-                return;
-            }
-            var points = singleSeries.getVisiblePoints(),
-                lPoints = [],
-                rPoints = [];
-
-            each(points, function(_, point) {
-                var angle = vizUtils.normalizeAngle(point.middleAngle);
-                (angle <= 90 || angle >= 270 ? rPoints : lPoints).push(point);
-            });
-
-            if(inverseDirection) {
-                lPoints.reverse();
-                rPoints.reverse();
-            }
-
-            overlapping.resolveLabelOverlappingInOneDirection(lPoints, that._canvas, false, shiftFunction);
-            overlapping.resolveLabelOverlappingInOneDirection(rPoints, that._canvas, false, shiftFunction);
+        var columnsSeries = series.filter(function(s) { return s.getOptions().label.position === "columns"; });
+        var outsideSeries = series.filter(function(s) {
+            var p = s.getOptions().label.position;
+            return p !== "inside" && p !== "columns";
         });
+
+        columnsSeries.forEach(function(singleSeries) {
+            resolve(dividePoints(singleSeries), shiftInColumnFunction);
+        });
+
+        if(outsideSeries.length > 0) {
+            resolve(outsideSeries.reduce(function(r, singleSeries) {
+                return dividePoints(singleSeries, r);
+            }, null), shiftFunction);
+            that._adjustSeriesLabels(true);
+        }
+
+        function dividePoints(series, points) {
+            return series.getVisiblePoints().reduce(function(r, point) {
+                var angle = vizUtils.normalizeAngle(point.middleAngle);
+                (angle <= 90 || angle >= 270 ? r.right : r.left).push(point);
+                return r;
+            }, points || { left: [], right: [] });
+        }
+
+        function resolve(points, shiftCallback) {
+            if(inverseDirection) {
+                points.left.reverse();
+                points.right.reverse();
+            }
+
+            overlapping.resolveLabelOverlappingInOneDirection(points.left, that._canvas, false, shiftCallback);
+            overlapping.resolveLabelOverlappingInOneDirection(points.right, that._canvas, false, shiftCallback);
+        }
+
         function shiftFunction(box, length) {
             return _getVerticallyShiftedAngularCoords(box, -length, center);
+        }
+
+        function shiftInColumnFunction(box, length) {
+            return { x: box.x, y: box.y - length };
         }
     },
 
