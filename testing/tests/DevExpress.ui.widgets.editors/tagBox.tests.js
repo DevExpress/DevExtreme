@@ -1229,6 +1229,29 @@ QUnit.test("tag template should get item in arguments even if the 'displayExpr' 
     });
 });
 
+QUnit.test("tag template should be applied correctly after item selection (T589269)", function(assert) {
+    var items = [{ id: 1, text: "one" }, { id: 2, text: "two" }];
+
+    var $element = $("#tagBox").dxTagBox({
+            items: items,
+            displayExpr: "text",
+            valueExpr: "id",
+            opened: true,
+            tagTemplate: function(tagData, tagElement) {
+                return "<div class='custom-item'><div class='product-name'>" + tagData.text + "</div>";
+            }
+        }),
+        list = $element.dxTagBox("instance")._list,
+        $list = list.$element();
+
+    $($list.find(".dx-list-item").eq(0)).trigger("dxclick");
+    $($list.find(".dx-list-item").eq(1)).trigger("dxclick");
+
+    var $tagContainer = $element.find("." + TAGBOX_TAG_CONTAINER_CLASS);
+
+    assert.equal($.trim($tagContainer.text()), "onetwo", "selected values are rendered correctly");
+});
+
 QUnit.test("value should be correct if the default tag template is used and the displayExpr is specified", function(assert) {
     var items = [{ id: 1, text: "one" }];
 
@@ -3120,6 +3143,41 @@ QUnit.test("selected items should be correct if the list item is unselected", fu
     assert.deepEqual(tagBox.option("selectedItems"), [items[1], items[2]], "the 'selectedItems' option value is correct");
 });
 
+QUnit.test("all items are selected correctly when the last item is deselected from an editor", function(assert) {
+    var selectedItems,
+        tagBox = $("#tagBox").dxTagBox({
+            dataSource: {
+                paginate: true,
+                pageSize: 1,
+                store: [1, 2, 3, 4, 5, 6]
+            },
+            selectAllMode: "allPages",
+            showSelectionControls: true,
+            maxDisplayedTags: 3,
+            onMultiTagPreparing: function(args) {
+                selectedItems = args.selectedItems;
+
+                if(selectedItems.length < 6) {
+                    args.cancel = true;
+                } else {
+                    args.text = "All selected (" + selectedItems.length + ")";
+                }
+            }
+        }).dxTagBox("instance");
+
+    tagBox.option("opened", true);
+    this.clock.tick(TIME_TO_WAIT);
+
+    $(".dx-list-select-all-checkbox").trigger("dxclick");
+
+    $(".dx-list-select-checkbox").first().trigger("dxclick");
+    $(".dx-tag-remove-button").last().trigger("dxclick");
+
+    $(".dx-list-select-all-checkbox").trigger("dxclick");
+
+    assert.equal(selectedItems.length, 6, "All items should be selected");
+});
+
 
 QUnit.module("the 'onSelectionChanged' option", moduleSetup);
 
@@ -4344,6 +4402,65 @@ QUnit.test("tagBox should not fail when asynchronous data source is used in the 
 
     this.clock.tick(timeToWait);
     assert.expect(0);
+});
+
+QUnit.test("tagBox should not render duplicated tags after searching", function(assert) {
+    var data = [{ "id": 1, "Name": "Item14" }, { "id": 2, "Name": "Item21" }, { "id": 3, "Name": "Item31" }, { "id": 4, "Name": "Item41" }];
+
+    var tagBox = $("#tagBox").dxTagBox({
+        dataSource: new CustomStore({
+            key: "id",
+            load: function(loadOptions) {
+                var loadedItems = [];
+                if(!loadOptions.searchValue) return data;
+
+                var d = $.Deferred();
+                setTimeout(function(i) {
+                    data.forEach(function(i) {
+                        if(i.Name.indexOf(loadOptions.searchValue) >= 0) {
+                            loadedItems.push(i);
+                        }
+                    });
+
+                    if(loadedItems.length) {
+                        return d.resolve(loadedItems);
+                    }
+                });
+
+                return d.promise();
+            },
+            byKey: function(key) {
+                var d = $.Deferred();
+                setTimeout(function(i) {
+                    data.forEach(function(i) {
+                        if(i.id === key) {
+                            d.resolve(i);
+                            return;
+                        }
+                    });
+                });
+                return d.promise();
+            }
+        }),
+        searchTimeout: 0,
+        displayExpr: 'Name',
+        opened: true,
+        searchEnabled: true
+    }).dxTagBox("instance");
+
+    $(tagBox._$list.find(".dx-list-item").eq(0)).trigger("dxclick");
+
+    var $input = tagBox.$element().find("input"),
+        kb = keyboardMock($input);
+
+    kb.type("4");
+    this.clock.tick(TIME_TO_WAIT);
+
+    $(tagBox._$list.find(".dx-list-item").eq(1)).trigger("dxclick");
+
+    var $tagContainer = tagBox.$element().find("." + TAGBOX_TAG_CONTAINER_CLASS);
+
+    assert.equal($.trim($tagContainer.text()), "Item14Item41", "selected values are rendered correctly");
 });
 
 QUnit.test("T403756 - dxTagBox treats removing a dxTagBox item for the first time as removing the item", function(assert) {

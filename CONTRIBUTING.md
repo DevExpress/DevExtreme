@@ -2,7 +2,7 @@
 
 ## Issues and Feature Requests
 
-Important: **We do not provide customer support on Github** 
+Important: **We do not provide customer support on GitHub.** 
 
 Although we monitor issues reported on GitHub, we cannot guarantee to process them as soon and in the same manner as tickets submitted to the [Support Center](https://www.devexpress.com/sc).
 
@@ -15,6 +15,8 @@ If you find a security bug, please report it by sending an email to info@devexpr
 [This guide](README_DEVELOPERS.md) describes how to build DevExtreme and run tests.
 
 ## Contributing Code and Content
+
+Important: **Read Section 5 of the [LICENSE AGREEMENT](LICENSE.md#5-submission-of-contributions) before submitting any contribution.** 
 
 Please keep in mind that DevExtreme has a development schedule; we are unable to accept every pull request from non-DevExpress contributors.
 

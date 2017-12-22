@@ -355,7 +355,7 @@ var LayoutManager = Widget.inherit({
 
         return {
             onItemStateChanged: this._itemStateChangedHandler.bind(this),
-            layoutStrategy: that._hasBrowserFlex() ? LAYOUT_STRATEGY_FLEX : LAYOUT_STRATEGY_FALLBACK,
+            _layoutStrategy: that._hasBrowserFlex() ? LAYOUT_STRATEGY_FLEX : LAYOUT_STRATEGY_FALLBACK,
             onLayoutChanged: function() {
                 var onLayoutChanged = that.option("onLayoutChanged"),
                     isSingleColumnMode = that.isSingleColumnMode();

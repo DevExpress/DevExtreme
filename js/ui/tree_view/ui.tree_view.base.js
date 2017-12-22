@@ -109,8 +109,20 @@ var TreeViewBase = HierarchicalCollectionWidget.inherit({
         }
     },
 
-    _getNodeElement: function(node) {
-        return this.$element().find("[" + DATA_ITEM_ID + "='" + commonUtils.normalizeKey(node.internalFields.key) + "']");
+    _getNodeElement: function(node, cache) {
+        var normalizedKey = commonUtils.normalizeKey(node.internalFields.key);
+        if(cache) {
+            if(!cache.$nodeByKey) {
+                cache.$nodeByKey = {};
+                this.$element().find(".dx-treeview-node").each(function() {
+                    var $node = $(this),
+                        key = $node.attr(DATA_ITEM_ID);
+                    cache.$nodeByKey[key] = $node;
+                });
+            }
+            return cache.$nodeByKey[normalizedKey] || $();
+        }
+        return this.$element().find("[" + DATA_ITEM_ID + "='" + normalizedKey + "']");
     },
 
     _activeStateUnit: "." + ITEM_CLASS,
@@ -1372,10 +1384,11 @@ var TreeViewBase = HierarchicalCollectionWidget.inherit({
     },
 
     _updateItemsUI: function() {
-        var that = this;
+        var that = this,
+            cache = {};
 
         each(this._dataAdapter.getData(), function(_, node) {
-            var $node = that._getNodeElement(node),
+            var $node = that._getNodeElement(node, cache),
                 nodeSelection = node.internalFields.selected;
 
             if(!$node.length) {

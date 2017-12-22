@@ -643,7 +643,7 @@ QUnit.test("dxUpdate should not be bubbling to parent container", function(asser
             rows: [{ ratio: 1, baseSize: "auto" }],
             cols: [{ ratio: 1, baseSize: "auto" }],
             items: [{ location: { row: 0, col: 0 } }],
-            layoutStrategy: "fallback"
+            _layoutStrategy: "fallback"
         });
         $responsiveBox.appendTo($parentContainer);
 
@@ -907,19 +907,19 @@ QUnit.test("currentScreenFactor", function(assert) {
     assert.equal(responsiveBox.option("currentScreenFactor"), "sm", "currentScreenFactor update after restart");
 });
 
-QUnit.test("layoutStrategy pass to internal box", function(assert) {
+QUnit.test("_layoutStrategy pass to internal box", function(assert) {
     var $responsiveBox = $("#responsiveBox").dxResponsiveBox({
         rows: [{}],
         cols: [{}],
         items: [
             { location: { row: 0, col: 0 } }
         ],
-        layoutStrategy: "test"
+        _layoutStrategy: "test"
     });
 
     var box = $responsiveBox.find(".dx-box").eq(0).dxBox("instance");
 
-    assert.equal(box.option("layoutStrategy"), "test", "layoutStrategy was passed to internal box");
+    assert.equal(box.option("_layoutStrategy"), "test", "_layoutStrategy was passed to internal box");
 });
 
 QUnit.test("Changing visibility should update simulated strategy", function(assert) {
@@ -927,7 +927,7 @@ QUnit.test("Changing visibility should update simulated strategy", function(asse
     try {
         var $responsiveBox = $("#responsiveBox").dxResponsiveBox({
             visible: false,
-            layoutStrategy: "fallback",
+            _layoutStrategy: "fallback",
             height: 400,
             rows: [
                 { ratio: 1 },

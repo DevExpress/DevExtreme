@@ -593,6 +593,24 @@ QUnit.test("tickInterval > businessDelta, no data as multiplier of tickInterval 
     assert.deepEqual(this.axis._tickInterval, 100);
 });
 
+QUnit.test(" 2*tickInterval > businessDelta > tickInterval, no data as multiplier of tickInterval (endOnTick == undefined)", function(assert) {
+    this.createAxis();
+    this.updateOptions({
+        argumentType: "numeric",
+        type: "continuous",
+        allowDecimals: true,
+        tickInterval: 50
+    });
+
+    this.axis.setBusinessRange({ minVisible: 3, maxVisible: 89, addRange: function() { } });
+
+    //act
+    this.axis.createTicks(canvas(200));
+
+    assert.deepEqual(this.axis._majorTicks.map(value), [0, 50, 100]);
+    assert.deepEqual(this.axis._tickInterval, 50);
+});
+
 QUnit.test("tickInterval > businessDelta, no data as multiplier of tickInterval (endOnTick == true)", function(assert) {
     this.createAxis();
     this.updateOptions({
@@ -2732,7 +2750,8 @@ QUnit.test("Pass correct range in translator when value margins are enabled. Mar
         valueMarginsEnabled: true,
         minValueMargin: 0.1,
         maxValueMargin: 0.2,
-        breaks: [{ startValue: 100, endValue: 900 }]
+        breaks: [{ startValue: 100, endValue: 900 }],
+        endOnTick: false
     });
 
     this.axis.setBusinessRange(new rangeModule.Range({ minVisible: 50, maxVisible: 1000 }));

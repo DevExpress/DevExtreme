@@ -186,7 +186,7 @@ testComponentDefaults(DateViewRoller,
 
 testComponentDefaults(Box,
     {},
-    { layoutStrategy: 'fallback' },
+    { _layoutStrategy: 'fallback' },
     function() {
         this._origDevice = devices.real();
 
@@ -199,7 +199,7 @@ testComponentDefaults(Box,
 
 testComponentDefaults(Box,
     {},
-    { layoutStrategy: 'fallback' },
+    { _layoutStrategy: 'fallback' },
     function() {
         this._origDevice = devices.real();
 
@@ -212,7 +212,7 @@ testComponentDefaults(Box,
 
 testComponentDefaults(Box,
     {},
-    { layoutStrategy: 'fallback' },
+    { _layoutStrategy: 'fallback' },
     function() {
         this._origMSIE = browser.msie;
         browser.msie = true;
