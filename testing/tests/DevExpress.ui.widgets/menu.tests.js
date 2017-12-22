@@ -42,6 +42,7 @@ var DX_MENU_CLASS = "dx-menu",
     DX_MENU_ITEM_TEXT_CLASS = "dx-menu-item-text",
     DX_CONTEXT_MENU_CLASS = "dx-context-menu",
     DX_CONTEXT_MENU_DELIMETER_CLASS = "dx-context-menu-content-delimiter",
+    DX_CONTEXT_MENU_CONTAINER_BORDER_CLASS = "dx-context-menu-container-border",
     DX_MENU_HORIZONTAL = "dx-menu-horizontal",
     DX_MENU_ITEM_POPOUT_CLASS = DX_MENU_ITEM_CLASS + "-popout",
     DX_ADAPTIVE_HAMBURGER_BUTTON_CLASS = DX_MENU_CLASS + "-hamburger-button",
@@ -156,6 +157,38 @@ QUnit.test("Render vertical rtl content delimiter", function(assert) {
     assert.notEqual(delimiter.height(), 0, "ok");
     assert.roughEqual(rootMenuItem.offset().left - 1, delimiter.offset().left, 1, "ok");
     assert.roughEqual($(submenu._overlay.content()).offset().top + 1, delimiter.offset().top, 1, "ok");
+});
+
+QUnit.test("container border should not be hidden when non-top level submenu hides", function(assert) {
+    var menu = createMenuInWindow({
+            showSubmenuMode: "onHover",
+            items: [{
+                text: "item 1", items: [
+                    { text: "item 11", items: [{ text: "item 111" }] },
+                    { text: "item 12" }
+                ]
+            }]
+        }),
+        $rootMenuItem = menu.element.find("." + DX_MENU_ITEM_CLASS).eq(0);
+
+    //Opening all submenu levels
+    $rootMenuItem.trigger("dxclick");
+    var firstLevelSubmenu = getSubMenuInstance($rootMenuItem);
+
+    hoverSubmenuItemByIndex(firstLevelSubmenu, 0);
+    this.clock.tick(ANIMATION_TIMEOUT);
+
+    var $items = firstLevelSubmenu.itemElements(),
+        $border = $rootMenuItem.find("." + DX_CONTEXT_MENU_CONTAINER_BORDER_CLASS);
+
+    assert.equal($items.length, 3, "all menus are rendered");
+    assert.ok($border.is(":visible"), "border is visible");
+
+    //Closing second level submenu
+    hoverSubmenuItemByIndex(firstLevelSubmenu, 2);
+    this.clock.tick(ANIMATION_TIMEOUT);
+
+    assert.ok($border.is(":visible"), "border is still visible after second level submenu closed");
 });
 
 QUnit.module("Menu rendering", {
@@ -2476,6 +2509,14 @@ function createMenu(options) {
 function getSubMenuInstance($rootItem) {
     var $el = $rootItem.children("." + DX_CONTEXT_MENU_CLASS);
     return $el.length && Submenu.getInstance($el);
+}
+
+function hoverSubmenuItemByIndex(submenu, itemIndex) {
+    var $itemContainer = $(submenu.itemsContainer()),
+        $item = $itemContainer.find("." + DX_MENU_ITEM_CLASS).eq(itemIndex);
+
+    $itemContainer.trigger($.Event("dxhoverstart", { target: $item.get(0) }));
+    $item.trigger("dxpointermove");
 }
 
 function createMenuInWindow(options) {
