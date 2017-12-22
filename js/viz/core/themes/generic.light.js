@@ -709,7 +709,7 @@ registerTheme({
     },
     pie: {
         innerRadius: 0.5,
-        minDiameter: 0.7,
+        minDiameter: 0.5,
         type: "pie",
         commonSeriesSettings: {
             pie: {
