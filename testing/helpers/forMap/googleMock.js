@@ -106,6 +106,9 @@ var google = window.google = {
                     google.fitBoundsCallback();
                 }
             };
+            this.get = function(option) {
+                return google[option];
+            };
             this.getBounds = function() {
                 if(!google.boundsValue) {
                     return new google.maps.LatLngBounds();
@@ -144,6 +147,7 @@ var google = window.google = {
                 google.assignedOptions.zoomControl = options.zoomControl;
                 google.assignedOptions.mapTypeControl = options.mapTypeControl;
                 google.assignedOptions.streetViewControl = options.streetViewControl;
+                google.gestureHandling = options.gestureHandling;
             };
             this.setStreetView = function() {};
             this.setTilt = function() {};
