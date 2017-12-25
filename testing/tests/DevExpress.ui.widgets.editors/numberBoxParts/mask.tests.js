@@ -2,7 +2,8 @@
 
 var $ = require("jquery"),
     config = require("core/config"),
-    keyboardMock = require("../../../helpers/keyboardMock.js");
+    keyboardMock = require("../../../helpers/keyboardMock.js"),
+    browser = require("core/utils/browser");
 
 require("ui/text_box/ui.text_editor");
 
@@ -445,6 +446,21 @@ QUnit.testInActiveWindow("focusout should remove incomplete value chars from inp
     assert.equal(this.input.val(), "123", "input was reformatted");
 });
 
+QUnit.test("valueChanged event fires on value apply", function(assert) {
+    if(!browser.msie) {
+        //You can remove this test once issue noted below will resolved
+        //https://developer.microsoft.com/en-us/microsoft-edge/platform/issues/15181565/
+        assert.ok(true, "It is IE and Edge specific test");
+        return;
+    }
+
+    var valueChangedSpy = sinon.spy();
+
+    this.instance.on("valueChanged", valueChangedSpy);
+    this.keyboard.caret(0).type("123").press("enter");
+
+    assert.ok(valueChangedSpy.calledOnce, "valueChanged event called once");
+});
 
 QUnit.module("format: percent format", moduleConfig);
 
