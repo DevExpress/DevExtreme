@@ -5649,7 +5649,9 @@ QUnit.testInActiveWindow("The focus should be saved after changing value in casc
 
     //act
     $input1.val('Test name');
-    $input2.focus().get(0).setSelectionRange(1, 2);
+    if(device.deviceType === "desktop") {
+        $input2.focus().get(0).setSelectionRange(1, 2);
+    }
     $input1.trigger('change');
     that.clock.tick();
 
@@ -5657,8 +5659,10 @@ QUnit.testInActiveWindow("The focus should be saved after changing value in casc
     $cellElement = $(rowsView.getCellElement(0, 1));
     $input2 = $cellElement.find('.dx-texteditor-input');
     assert.ok($cellElement.hasClass("dx-focused"), "second cell is focused");
-    assert.equal($input2.get(0).selectionStart, 1, "selectionStart is correct");
-    assert.equal($input2.get(0).selectionEnd, 2, "selectionEnd is correct");
+    if(device.deviceType === "desktop") {
+        assert.equal($input2.get(0).selectionStart, 1, "selectionStart is correct");
+        assert.equal($input2.get(0).selectionEnd, 2, "selectionEnd is correct");
+    }
 });
 
 QUnit.testInActiveWindow("The focus should be saved after changing value in cascade non-lookup column in batch editing mode", function(assert) {
