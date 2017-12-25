@@ -82,6 +82,7 @@ var Submenu = ContextMenu.inherit({
 
     _hideSubmenu: function($rootItem) {
         this._actions.onHiding({
+            cancel: true,
             rootItem: getPublicElement($rootItem),
             submenu: this
         });
