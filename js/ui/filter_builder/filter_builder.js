@@ -827,7 +827,7 @@ var FilterBuilder = Widget.inherit({
         $container.empty();
 
         var options = {
-            value: field.dataType === "date" && value === "" ? null : value,
+            value: value === "" ? null : value,
             filterOperation: utils.getOperationValue(item),
             isValueChanged: true,
             setValue: function(data, e) {
