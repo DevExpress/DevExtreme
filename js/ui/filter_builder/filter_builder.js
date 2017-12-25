@@ -932,11 +932,11 @@ var FilterBuilder = Widget.inherit({
         });
     },
 
-    _subscribeOnClickAndEnterKey: function($button, handler, keyEvent) {
+    _subscribeOnClickAndEnterKey: function($button, handler) {
         eventsEngine.on($button, "click", handler);
-        eventsEngine.on($button, keyEvent || "keydown", function(e) {
-            if(e.keyCode === 13) {
-                handler();
+        eventsEngine.on($button, "keydown", function(e) {
+            if(e.keyCode === ENTER_KEY) {
+                handler(e);
             }
         });
     }
