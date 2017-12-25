@@ -80,7 +80,7 @@ QUnit.test("DateBox should localize whole date in arabic locale", function(asser
         });
 
         var date = $dateBox.find(TEXTEDITOR_INPUT_SELECTOR).val();
-        assert.equal(date, "١٠‏/١١‏/٢٠١٥", "date is localized");
+        assert.equal(date, "١٠/١١/٢٠١٥", "date is localized");
     } finally {
         Globalize.locale(originalCulture);
     }
