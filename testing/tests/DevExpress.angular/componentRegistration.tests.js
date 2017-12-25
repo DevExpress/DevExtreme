@@ -12,7 +12,6 @@ var $ = require("jquery"),
     CollectionWidget = require("ui/collection/ui.collection_widget.edit");
 
 require("integration/angular");
-require("angular-route");
 
 require("ui/list");
 require("ui/button");
