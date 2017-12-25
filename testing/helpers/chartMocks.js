@@ -649,6 +649,7 @@
                 return (this._options.errorBars || {}).visible;
             },
             adjustLabels: sinon.spy(),
+            checkLabelsOverflow: sinon.spy(),
             correctPosition: sinon.spy(),
             correctRadius: sinon.spy(),
             updateDataType: sinon.spy(),

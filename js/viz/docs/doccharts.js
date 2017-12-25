@@ -2547,9 +2547,9 @@ var dxPieChart = {
     * @name dxpiechartoptions_mindiameter
     * @publicName minDiameter
     * @type number
-    * @default 0.7
+    * @default 0.5
     */
-    minDiameter: 0.7,
+    minDiameter: 0.5,
     /**
    * @name dxpiechartoptions_segmentsdirection
    * @publicName segmentsDirection
