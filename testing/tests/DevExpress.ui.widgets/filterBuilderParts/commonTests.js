@@ -7,6 +7,8 @@ var $ = require("jquery"),
     config = require("core/config");
 
 require("ui/filter_builder/filter_builder");
+require("ui/drop_down_box");
+require("ui/button");
 
 var FILTER_BUILDER_ITEM_FIELD_CLASS = "dx-filterbuilder-item-field",
     FILTER_BUILDER_ITEM_OPERATION_CLASS = "dx-filterbuilder-item-operation",
@@ -16,7 +18,11 @@ var FILTER_BUILDER_ITEM_FIELD_CLASS = "dx-filterbuilder-item-field",
     FILTER_BUILDER_IMAGE_ADD_CLASS = "dx-icon-plus",
     FILTER_BUILDER_IMAGE_REMOVE_CLASS = "dx-icon-remove",
     FILTER_BUILDER_GROUP_OPERATION_CLASS = "dx-filterbuilder-group-operation",
-    ACTIVE_CLASS = "dx-state-active";
+    ACTIVE_CLASS = "dx-state-active",
+
+    TAB_KEY = 9,
+    ENTER_KEY = 13,
+    ESCAPE_KEY = 27;
 
 var getSelectedMenuText = function() {
     return $(".dx-treeview-node.dx-state-selected").text();
@@ -385,10 +391,9 @@ QUnit.module("Rendering", function() {
 
         var selectBoxInstance = $container.find(".dx-selectbox").dxSelectBox("instance");
         selectBoxInstance.open();
-        $(".dx-list-item").eq(2).trigger("dxclick");
-        assert.ok($input.is(":focus"));
 
-        selectBoxInstance.blur();
+        $(".dx-list-item").eq(1).trigger("dxclick");
+
         assert.notOk($container.find("input").length, "hasn't input");
         assert.deepEqual(instance.option("value"), ["CompanyName", "<>", "Super Mart of the West"]);
     });
@@ -408,9 +413,7 @@ QUnit.module("Rendering", function() {
 
         var selectBoxInstance = $container.find(".dx-selectbox").dxSelectBox("instance");
         selectBoxInstance.open();
-        $(".dx-list-item").eq(2).trigger("dxclick");
-
-        selectBoxInstance.blur();
+        $(".dx-list-item").eq(1).trigger("dxclick");
 
         assert.equal($container.find("." + FILTER_BUILDER_ITEM_VALUE_TEXT_CLASS).text(), "PivotGrid");
         assert.deepEqual(instance.option("value"), ["Product", "=", 2]);
@@ -466,6 +469,56 @@ QUnit.module("Rendering", function() {
         assert.notOk(container.find("input").length, "hasn't input");
     });
 
+    //T588221
+    QUnit.testInActiveWindow("click by dropdownbox specified editorTemplate", function(assert) {
+        var container = $("#container"),
+            INNER_ELEMENT_CLASS = "test-inner-element",
+            VALUE = "Value after click by button";
+
+        container.dxFilterBuilder({
+            value: ["Field", "=", "Test1"],
+            fields: [{
+                dataField: "Field",
+                editorTemplate: function(options, $container) {
+                    $("<div>")
+                        .appendTo($container)
+                        .dxDropDownBox({
+                            value: 3,
+                            valueExpr: "ID",
+                            contentTemplate: function(e) {
+                                var dropDownContent = $("<div>");
+                                $("<div>")
+                                    .addClass(INNER_ELEMENT_CLASS)
+                                    .appendTo(dropDownContent);
+                                $("<div>")
+                                    .appendTo(dropDownContent)
+                                    .dxButton({
+                                        onClick: function() {
+                                            options.setValue(VALUE);
+                                        }
+                                    });
+
+                                return dropDownContent;
+                            }
+                        });
+                }
+            }]
+        });
+
+        container.find("." + FILTER_BUILDER_ITEM_VALUE_TEXT_CLASS).click();
+        assert.equal($("." + FILTER_BUILDER_ITEM_VALUE_TEXT_CLASS).length, 0, "hide button");
+        assert.equal($(".dx-dropdowneditor-button").length, 1, "has one dropdowneditor button");
+
+        $(".dx-dropdowneditor-button").trigger("dxclick");
+        assert.equal($("." + INNER_ELEMENT_CLASS).length, 1, "dropdown opened");
+
+        $("." + INNER_ELEMENT_CLASS).trigger("dxclick");
+        assert.equal($("." + INNER_ELEMENT_CLASS).length, 1, "dropdown opened after click by its inner element");
+
+        $(".dx-button").trigger("dxclick");
+        assert.equal($("." + FILTER_BUILDER_ITEM_VALUE_TEXT_CLASS).text(), VALUE);
+    });
+
     QUnit.test("Add and remove condition", function(assert) {
         var container = $("#container"),
             instance = container.dxFilterBuilder({
@@ -502,7 +555,7 @@ QUnit.module("Rendering", function() {
         assert.deepEqual(instance.option("value"), ["State", "<>", "Test"]);
     });
 
-    QUnit.test("show editor on keyup event", function(assert) {
+    QUnit.test("show editor on keydown event", function(assert) {
         var container = $("#container");
 
         container.dxFilterBuilder({
@@ -511,10 +564,31 @@ QUnit.module("Rendering", function() {
         });
 
         var $valueButton = container.find("." + FILTER_BUILDER_ITEM_VALUE_TEXT_CLASS);
-        $valueButton.trigger($.Event("keyup", { keyCode: 13 }));
+        $valueButton.trigger($.Event("keydown", { keyCode: ENTER_KEY }));
 
         assert.notOk(container.find("." + FILTER_BUILDER_ITEM_VALUE_TEXT_CLASS).length);
         assert.ok(container.find(".dx-texteditor").length);
+    });
+
+    QUnit.test("skip first enter keyup after enter keydown by value button", function(assert) {
+        var container = $("#container");
+
+        container.dxFilterBuilder({
+            value: ["Zipcode", "<>", 123],
+            fields: fields
+        });
+        var $valueButton = container.find("." + FILTER_BUILDER_ITEM_VALUE_TEXT_CLASS);
+        $valueButton.trigger($.Event("keydown", { keyCode: ENTER_KEY }));
+
+        container.find(".dx-texteditor").trigger($.Event("keyup", { keyCode: ENTER_KEY }));
+
+        assert.ok(container.find(".dx-texteditor").length);
+
+        container.find(".dx-texteditor").trigger($.Event("keydown", { keyCode: ENTER_KEY }));
+        container.find(".dx-texteditor").trigger($.Event("keyup", { keyCode: ENTER_KEY }));
+
+        assert.notOk(container.find(".dx-texteditor").length);
+        assert.ok(container.find("." + FILTER_BUILDER_ITEM_VALUE_TEXT_CLASS).length);
     });
 });
 
@@ -703,12 +777,12 @@ QUnit.module("Short condition", function() {
 });
 
 QUnit.module("on value changed", function() {
-    var changeValueAndTriggerEvent = function(container, newValue, event) {
+    var changeValue = function(container, newValue) {
         container.find("." + FILTER_BUILDER_ITEM_VALUE_TEXT_CLASS).click();
         var $textBoxContainer = container.find("." + FILTER_BUILDER_ITEM_VALUE_CLASS + " .dx-textbox"),
             textBoxInstance = $textBoxContainer.dxTextBox("instance");
         textBoxInstance.option("value", "Test");
-        $textBoxContainer.find("input").trigger(event);
+        return $textBoxContainer;
     };
 
     QUnit.test("add/remove empty group", function(assert) {
@@ -849,7 +923,7 @@ QUnit.module("on value changed", function() {
         assert.equal(instance.option("value"), value);
     });
 
-    QUnit.testInActiveWindow("change condition value by focusout", function(assert) {
+    QUnit.testInActiveWindow("change condition value by outer click", function(assert) {
         var container = $("#container"),
             value = [["State", "=", ""]],
             instance = container.dxFilterBuilder({
@@ -857,14 +931,17 @@ QUnit.module("on value changed", function() {
                 fields: fields
             }).dxFilterBuilder("instance");
 
-        changeValueAndTriggerEvent(container, "Test", "blur");
+        changeValue(container, "Test");
+        $("body").click();
 
         assert.notEqual(instance.option("value"), value);
         assert.equal(container.find("." + FILTER_BUILDER_ITEM_VALUE_TEXT_CLASS).length, 1);
 
         value = instance.option("value");
 
-        changeValueAndTriggerEvent(container, "Test", "blur");
+        changeValue(container, "Test");
+        document.activeElement.blur();
+        $("body").click();
 
         assert.equal(instance.option("value"), value);
         assert.equal(container.find("." + FILTER_BUILDER_ITEM_VALUE_TEXT_CLASS).length, 1);
@@ -880,13 +957,15 @@ QUnit.module("on value changed", function() {
 
         container.find("." + FILTER_BUILDER_ITEM_VALUE_TEXT_CLASS).click();
 
-        changeValueAndTriggerEvent(container, "Test", $.Event("keyup", { keyCode: 27 }));
+        var $input = container.find("." + FILTER_BUILDER_ITEM_VALUE_CLASS + " .dx-textbox input");
+        $input.val("Test");
+        $input.trigger($.Event("keyup", { keyCode: ESCAPE_KEY }));
 
         assert.equal(instance.option("value"), value);
         assert.equal(container.find("." + FILTER_BUILDER_ITEM_VALUE_TEXT_CLASS).length, 1);
     });
 
-    QUnit.test("change condition value by enter click", function(assert) {
+    QUnit.test("change condition value after tab press", function(assert) {
         var container = $("#container"),
             value = [["State", "=", ""]],
             instance = container.dxFilterBuilder({
@@ -894,14 +973,41 @@ QUnit.module("on value changed", function() {
                 fields: fields
             }).dxFilterBuilder("instance");
 
-        changeValueAndTriggerEvent(container, "Test", $.Event("keyup", { keyCode: 13 }));
+        container.find("." + FILTER_BUILDER_ITEM_VALUE_TEXT_CLASS).click();
+
+        var $textBox = container.find("." + FILTER_BUILDER_ITEM_VALUE_CLASS + " .dx-textbox");
+        $textBox.dxTextBox("instance").option("value", "Test");
+        $textBox.trigger($.Event("keydown", { keyCode: TAB_KEY }));
+
+        assert.notEqual(instance.option("value"), value);
+        assert.equal(container.find("." + FILTER_BUILDER_ITEM_VALUE_TEXT_CLASS).length, 1);
+    });
+
+    QUnit.test("change condition value after enter click", function(assert) {
+        var container = $("#container"),
+            value = [["State", "=", ""]],
+            instance = container.dxFilterBuilder({
+                value: value,
+                fields: fields
+            }).dxFilterBuilder("instance");
+
+        container.find("." + FILTER_BUILDER_ITEM_VALUE_TEXT_CLASS).click();
+
+        var $textBox = container.find("." + FILTER_BUILDER_ITEM_VALUE_CLASS + " .dx-textbox");
+        $textBox.dxTextBox("instance").option("value", "Test");
+        $textBox.trigger($.Event("keydown", { keyCode: ENTER_KEY }));
 
         assert.notEqual(instance.option("value"), value);
         assert.equal(container.find("." + FILTER_BUILDER_ITEM_VALUE_TEXT_CLASS).length, 1);
 
         value = instance.option("value");
 
-        changeValueAndTriggerEvent(container, "Test", $.Event("keyup", { keyCode: 13 }));
+        container.find("." + FILTER_BUILDER_ITEM_VALUE_TEXT_CLASS).click();
+
+        $textBox = container.find("." + FILTER_BUILDER_ITEM_VALUE_CLASS + " .dx-textbox");
+        $textBox.dxTextBox("instance").option("value", "Test");
+        $textBox.trigger($.Event("keydown", { keyCode: ENTER_KEY }));
+        $textBox.trigger($.Event("keyup", { keyCode: ENTER_KEY }));
 
         assert.equal(instance.option("value"), value);
         assert.equal(container.find("." + FILTER_BUILDER_ITEM_VALUE_TEXT_CLASS).length, 1);
