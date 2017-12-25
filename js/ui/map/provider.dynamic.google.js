@@ -266,7 +266,7 @@ var GoogleProvider = DynamicProvider.inherit({
     },
 
     isEventsCanceled: function() {
-        var gestureHandling = this._map.get("gestureHandling");
+        var gestureHandling = this._map && this._map.get("gestureHandling");
         if(devices.real().deviceType !== "desktop" && gestureHandling === "cooperative") {
             return false;
         }

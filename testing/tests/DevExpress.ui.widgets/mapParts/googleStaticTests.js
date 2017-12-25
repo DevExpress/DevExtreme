@@ -472,7 +472,7 @@ QUnit.test("click", function(assert) {
     });
 });
 
-QUnit.test("StopPropagation is not called on the pointer down event", function(assert) {
+QUnit.test("the pointer down event propagation should be canceled", function(assert) {
     var isPropagationStopped;
     return new Promise(function(resolve) {
         new Map($("#map"), {
