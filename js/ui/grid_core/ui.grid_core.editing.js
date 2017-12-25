@@ -1359,13 +1359,8 @@ var EditingController = modules.ViewController.inherit((function() {
                     var $focusedElement = $(":focus"),
                         columnIndex = that._rowsView.getCellIndex($focusedElement, row.rowIndex),
                         focusedElement = $focusedElement.get(0),
-                        selectionStart,
-                        selectionEnd;
-
-                    try {
-                        selectionStart = focusedElement && focusedElement.selectionStart;
+                        selectionStart = focusedElement && focusedElement.selectionStart,
                         selectionEnd = focusedElement && focusedElement.selectionEnd;
-                    } catch(e) {}
 
                     that._updateEditRowCore(row);
 
@@ -1375,7 +1370,9 @@ var EditingController = modules.ViewController.inherit((function() {
                             setTimeout(function() {
                                 focusedElement = $(":focus").get(0);
                                 if(selectionStart >= 0 && focusedElement && focusedElement.setSelectionRange) {
-                                    focusedElement.setSelectionRange(selectionStart, selectionEnd);
+                                    try {
+                                        focusedElement.setSelectionRange(selectionStart, selectionEnd);
+                                    } catch(e) {}
                                 }
                             });
                         });
