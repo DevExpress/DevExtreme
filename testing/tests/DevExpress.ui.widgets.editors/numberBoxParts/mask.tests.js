@@ -100,6 +100,7 @@ QUnit.test("api value changing should hide a placeholder", function(assert) {
     assert.notOk($placeholder.is(":visible"), "placeholder is hidden");
 });
 
+
 QUnit.module("format: sign and minus button", moduleConfig);
 
 QUnit.test("pressing '-' button should revert the number", function(assert) {
