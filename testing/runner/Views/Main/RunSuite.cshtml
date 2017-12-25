@@ -168,9 +168,7 @@
                     'cldr': '@Url.Content("~/vendor/cldr/cldr")',
                     'jquery': '@GetJQueryUrl()',
                     'knockout': '@Url.Content("~/vendor/knockout/knockout-3.4.0.debug.js")',
-                    'angular': '@Url.Content("~/vendor/angular-1.5/angular.js")',
-                    'angular-route': '@Url.Content("~/vendor/angular-1.5/angular-route.js")',
-                    'angular-sanitize': '@Url.Content("~/vendor/angular-1.5/angular-sanitize.js")',
+                    'angular': '@Url.Content("~/artifacts/js/angular.js")',
                     'jszip': '@Url.Content("~/vendor/jszip/jszip.js")',
 
                     // Global CSS
@@ -212,18 +210,8 @@
                         exports: 'ko'
                     },
 
-                    '@Url.Content("~/vendor/angular-1.5/angular.js")': {
+                    '@Url.Content("~/artifacts/js/angular.js")': {
                         deps: ['jquery'],
-                        format: 'global',
-                        expots: 'angular'
-                    },
-                    '@Url.Content("~/vendor/angular-1.5/angular-sanitize.js")': {
-                        deps: ['angular'],
-                        format: 'global',
-                        expots: 'angular'
-                    },
-                    '@Url.Content("~/vendor/angular-1.5/angular-route.js")': {
-                        deps: ['angular'],
                         format: 'global',
                         expots: 'angular'
                     }

@@ -9,7 +9,8 @@ gulp.task('vendor', function() {
     return merge(
         gulp.src('./vendor/angular-1.2/*').pipe(gulp.dest('artifacts/js/angular-1.2')),
         gulp.src([
-            './vendor/angular-1.5/*',
+            './node_modules/angular/angular?(.min).js',
+            './vendor/angular-route/*',
             './vendor/cldr/**',
             './vendor/globalize/**',
             './vendor/jquery/*',
