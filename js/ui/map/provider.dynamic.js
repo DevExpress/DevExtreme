@@ -7,9 +7,6 @@ var $ = require("../../core/renderer"),
     abstract = Provider.abstract;
 
 var DynamicProvider = Provider.inherit({
-
-    cancelEvents: true,
-
     _geocodeLocation: function(location) {
         return new Promise(function(resolve) {
             var cache = this._geocodedLocations,
@@ -199,6 +196,10 @@ var DynamicProvider = Provider.inherit({
 
     adjustViewport: function() {
         return this._fitBounds();
+    },
+
+    isEventsCanceled: function() {
+        return true;
     },
 
     _fitBounds: abstract,

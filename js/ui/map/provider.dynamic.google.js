@@ -4,6 +4,7 @@
 
 var $ = require("../../core/renderer"),
     noop = require("../../core/utils/common").noop,
+    devices = require("../../core/devices"),
     Promise = require("../../core/polyfills/promise"),
     extend = require("../../core/utils/extend").extend,
     DynamicProvider = require("./provider.dynamic"),
@@ -262,6 +263,14 @@ var GoogleProvider = DynamicProvider.inherit({
         });
 
         return Promise.resolve();
+    },
+
+    isEventsCanceled: function() {
+        var gestureHandling = this._map.get("gestureHandling");
+        if(devices.real().deviceType !== "desktop" && gestureHandling === "cooperative") {
+            return false;
+        }
+        return this.callBase();
     },
 
     _renderMarker: function(options) {
