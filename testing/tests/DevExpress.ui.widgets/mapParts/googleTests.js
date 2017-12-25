@@ -4,6 +4,7 @@
 
 var $ = require("jquery"),
     testing = require("./utils.js"),
+    devices = require("core/devices"),
     errors = require("ui/widget/ui.errors"),
     GoogleProvider = require("ui/map/provider.dynamic.google");
 
@@ -1350,5 +1351,65 @@ QUnit.test("changing provider should reset bounds", function(assert) {
         });
 
         map.option("provider", "google");
+    });
+});
+
+QUnit.test("StopPropagation is called on the pointer down event", function(assert) {
+    var done = assert.async();
+    var d = $.Deferred(),
+        isPropagationStopped;
+
+    var $map = $("#map").dxMap({
+        provider: "google",
+        width: 400,
+        height: 500,
+        onReady: function() {
+            d.resolve();
+        }
+    });
+
+    $map.on("dxpointerdown", function(e) {
+        isPropagationStopped = e.isPropagationStopped();
+    });
+
+    d.done(function() {
+        $map.children().trigger("dxpointerdown");
+        assert.ok(isPropagationStopped);
+        done();
+    });
+});
+
+QUnit.test("StopPropagation is not called when gestureHandling of map is cooperative", function(assert) {
+    var done = assert.async();
+    var d = $.Deferred(),
+        real = devices.real,
+        isPropagationStopped;
+
+    devices.real = function() {
+        return {
+            deviceType: "tablet"
+        };
+    };
+
+    var $map = $("#map").dxMap({
+        provider: "google",
+        width: 400,
+        height: 500,
+        onReady: function(e) {
+            e.originalMap.setOptions({ gestureHandling: 'cooperative' });
+            d.resolve();
+        }
+    });
+
+    $map.on("dxpointerdown", function(e) {
+        isPropagationStopped = e.isPropagationStopped();
+    });
+
+    d.done(function() {
+        $map.children().trigger("dxpointerdown");
+        assert.ok(!isPropagationStopped);
+
+        devices.real = real;
+        done();
     });
 });
