@@ -320,8 +320,8 @@ Globalize.load({
                         "dateFormats": {
                             "full": "EEEE، d MMMM، y",
                             "long": "d MMMM، y",
-                            "medium": "dd‏/MM‏/y",
-                            "short": "d‏/M‏/y"
+                            "medium": "dd/MM/y",
+                            "short": "d/M/y"
                         },
                         "timeFormats": {
                             "full": "h:mm:ss a zzzz",
@@ -357,9 +357,9 @@ Globalize.load({
                                 "hmv": "h:mm a v",
                                 "Hmv": "HH:mm v",
                                 "M": "L",
-                                "Md": "d/‏M",
+                                "Md": "d/M",
                                 "MEd": "E، d/M",
-                                "MMdd": "dd‏/MM",
+                                "MMdd": "dd/MM",
                                 "MMM": "LLL",
                                 "MMMd": "d MMM",
                                 "MMMEd": "E، d MMM",
@@ -367,10 +367,10 @@ Globalize.load({
                                 "MMMMEd": "E، d MMMM",
                                 "ms": "mm:ss",
                                 "y": "y",
-                                "yM": "M‏/y",
-                                "yMd": "d‏/M‏/y",
-                                "yMEd": "E، d/‏M/‏y",
-                                "yMM": "MM‏/y",
+                                "yM": "M/y",
+                                "yMd": "d/M/y",
+                                "yMEd": "E، d/M/y",
+                                "yMM": "MM/y",
                                 "yMMM": "MMM y",
                                 "yMMMd": "d MMM، y",
                                 "yMMMEd": "E، d MMM، y",
@@ -436,8 +436,8 @@ Globalize.load({
                                     "M": "M/d – M/d"
                                 },
                                 "MEd": {
-                                    "d": "E، d/‏M –‏ E، d/‏M",
-                                    "M": "E، d/‏M – E، d/‏M"
+                                    "d": "E، d/M – E، d/M",
+                                    "M": "E، d/M – E، d/M"
                                 },
                                 "MMM": {
                                     "M": "MMM–MMM"
@@ -457,18 +457,18 @@ Globalize.load({
                                     "y": "y–y"
                                 },
                                 "yM": {
-                                    "M": "M‏/y – M‏/y",
-                                    "y": "M‏/y – M‏/y"
+                                    "M": "M/y – M/y",
+                                    "y": "M/y – M/y"
                                 },
                                 "yMd": {
-                                    "d": "d‏/M‏/y – d‏/M‏/y",
-                                    "M": "d‏/M‏/y – d‏/M‏/y",
-                                    "y": "d‏/M‏/y – d‏/M‏/y"
+                                    "d": "d/M/y – d/M/y",
+                                    "M": "d/M/y – d/M/y",
+                                    "y": "d/M/y – d/M/y"
                                 },
                                 "yMEd": {
-                                    "d": "E، dd‏/MM‏/y – E، dd‏/MM‏/y",
-                                    "M": "E، d‏/M‏/y – E، d‏/M‏/y",
-                                    "y": "E، d‏/M‏/y – E، d‏/M‏/y"
+                                    "d": "E، dd/MM/y – E، dd/MM/y",
+                                    "M": "E، d/M/y – E، d/M/y",
+                                    "y": "E، d/M/y – E، d/M/y"
                                 },
                                 "yMMM": {
                                     "M": "MMM – MMM، y",

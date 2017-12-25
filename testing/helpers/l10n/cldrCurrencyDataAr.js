@@ -26,7 +26,7 @@ Globalize.load({
                         "displayName-count-few": "درهم إماراتي",
                         "displayName-count-many": "درهم إماراتي",
                         "displayName-count-other": "درهم إماراتي",
-                        "symbol": "د.إ.‏"
+                        "symbol": "د.إ."
                     },
                     "AFA": {
                         "displayName": "أفغاني - 1927-2002",
@@ -248,7 +248,7 @@ Globalize.load({
                         "displayName-count-few": "دينار بحريني",
                         "displayName-count-many": "دينار بحريني",
                         "displayName-count-other": "دينار بحريني",
-                        "symbol": "د.ب.‏"
+                        "symbol": "د.ب."
                     },
                     "BIF": {
                         "displayName": "فرنك بروندي",
@@ -624,7 +624,7 @@ Globalize.load({
                         "displayName-count-few": "دينارات جزائرية",
                         "displayName-count-many": "دينارًا جزائريًا",
                         "displayName-count-other": "دينار جزائري",
-                        "symbol": "د.ج.‏"
+                        "symbol": "د.ج."
                     },
                     "ECS": {
                         "displayName": "ECS",
@@ -646,7 +646,7 @@ Globalize.load({
                         "displayName-count-few": "جنيهات مصرية",
                         "displayName-count-many": "جنيهًا مصريًا",
                         "displayName-count-other": "جنيه مصري",
-                        "symbol": "ج.م.‏",
+                        "symbol": "ج.م.",
                         "symbol-alt-narrow": "E£"
                     },
                     "ERN": {
@@ -949,7 +949,7 @@ Globalize.load({
                         "displayName-count-few": "دينار عراقي",
                         "displayName-count-many": "دينار عراقي",
                         "displayName-count-other": "دينار عراقي",
-                        "symbol": "د.ع.‏"
+                        "symbol": "د.ع."
                     },
                     "IRR": {
                         "displayName": "ريال إيراني",
@@ -999,7 +999,7 @@ Globalize.load({
                         "displayName-count-few": "دينار أردني",
                         "displayName-count-many": "دينار أردني",
                         "displayName-count-other": "دينار أردني",
-                        "symbol": "د.أ.‏"
+                        "symbol": "د.أ."
                     },
                     "JPY": {
                         "displayName": "ين ياباني",
@@ -1092,7 +1092,7 @@ Globalize.load({
                         "displayName-count-few": "دينار كويتي",
                         "displayName-count-many": "دينار كويتي",
                         "displayName-count-other": "دينار كويتي",
-                        "symbol": "د.ك.‏"
+                        "symbol": "د.ك."
                     },
                     "KYD": {
                         "displayName": "دولار جزر كيمن",
@@ -1135,7 +1135,7 @@ Globalize.load({
                         "displayName-count-few": "جنيه لبناني",
                         "displayName-count-many": "جنيه لبناني",
                         "displayName-count-other": "جنيه لبناني",
-                        "symbol": "ل.ل.‏",
+                        "symbol": "ل.ل.",
                         "symbol-alt-narrow": "L£"
                     },
                     "LKR": {
@@ -1214,7 +1214,7 @@ Globalize.load({
                         "displayName-count-few": "دينارات ليبية",
                         "displayName-count-many": "دينارًا ليبيًا",
                         "displayName-count-other": "دينار ليبي",
-                        "symbol": "د.ل.‏"
+                        "symbol": "د.ل."
                     },
                     "MAD": {
                         "displayName": "درهم مغربي",
@@ -1224,7 +1224,7 @@ Globalize.load({
                         "displayName-count-few": "دراهم مغربية",
                         "displayName-count-many": "درهمًا مغربيًا",
                         "displayName-count-other": "درهم مغربي",
-                        "symbol": "د.م.‏"
+                        "symbol": "د.م."
                     },
                     "MAF": {
                         "displayName": "فرنك مغربي",
@@ -1321,7 +1321,7 @@ Globalize.load({
                         "displayName-count-few": "أوقية موريتانية",
                         "displayName-count-many": "أوقية موريتانية",
                         "displayName-count-other": "أوقية موريتانية",
-                        "symbol": "أ.م.‏"
+                        "symbol": "أ.م."
                     },
                     "MTL": {
                         "displayName": "ليرة مالطية",
@@ -1496,7 +1496,7 @@ Globalize.load({
                         "displayName-count-few": "ريال عماني",
                         "displayName-count-many": "ريال عماني",
                         "displayName-count-other": "ريال عماني",
-                        "symbol": "ر.ع.‏"
+                        "symbol": "ر.ع."
                     },
                     "PAB": {
                         "displayName": "بالبوا بنمي",
@@ -1596,7 +1596,7 @@ Globalize.load({
                         "displayName-count-few": "ريال قطري",
                         "displayName-count-many": "ريال قطري",
                         "displayName-count-other": "ريال قطري",
-                        "symbol": "ر.ق.‏"
+                        "symbol": "ر.ق."
                     },
                     "RHD": {
                         "displayName": "دولار روديسي",
@@ -1662,7 +1662,7 @@ Globalize.load({
                         "displayName-count-few": "ريال سعودي",
                         "displayName-count-many": "ريال سعودي",
                         "displayName-count-other": "ريال سعودي",
-                        "symbol": "ر.س.‏"
+                        "symbol": "ر.س."
                     },
                     "SBD": {
                         "displayName": "دولار جزر سليمان",
@@ -1687,7 +1687,7 @@ Globalize.load({
                     },
                     "SDD": {
                         "displayName": "دينار سوداني",
-                        "symbol": "د.س.‏"
+                        "symbol": "د.س."
                     },
                     "SDG": {
                         "displayName": "جنيه سوداني",
@@ -1821,7 +1821,7 @@ Globalize.load({
                         "displayName-count-few": "ليرة سورية",
                         "displayName-count-many": "ليرة سورية",
                         "displayName-count-other": "ليرة سورية",
-                        "symbol": "ل.س.‏",
+                        "symbol": "ل.س.",
                         "symbol-alt-narrow": "£"
                     },
                     "SZL": {
@@ -1881,7 +1881,7 @@ Globalize.load({
                         "displayName-count-few": "دينارات تونسية",
                         "displayName-count-many": "دينارًا تونسيًا",
                         "displayName-count-other": "دينار تونسي",
-                        "symbol": "د.ت.‏"
+                        "symbol": "د.ت."
                     },
                     "TOP": {
                         "displayName": "بانغا تونغا",
@@ -1987,11 +1987,11 @@ Globalize.load({
                         "symbol-alt-narrow": "US$"
                     },
                     "USN": {
-                        "displayName": "دولار أمريكي (اليوم التالي)‏",
+                        "displayName": "دولار أمريكي (اليوم التالي)",
                         "symbol": "USN"
                     },
                     "USS": {
-                        "displayName": "دولار أمريكي (نفس اليوم)‏",
+                        "displayName": "دولار أمريكي (نفس اليوم)",
                         "symbol": "USS"
                     },
                     "UYI": {
@@ -2200,7 +2200,7 @@ Globalize.load({
                         "displayName-count-few": "ريال يمني",
                         "displayName-count-many": "ريال يمني",
                         "displayName-count-other": "ريال يمني",
-                        "symbol": "ر.ي.‏"
+                        "symbol": "ر.ي."
                     },
                     "YUD": {
                         "displayName": "دينار يوغسلافي",
