@@ -18,7 +18,11 @@ var FILTER_BUILDER_ITEM_FIELD_CLASS = "dx-filterbuilder-item-field",
     FILTER_BUILDER_IMAGE_ADD_CLASS = "dx-icon-plus",
     FILTER_BUILDER_IMAGE_REMOVE_CLASS = "dx-icon-remove",
     FILTER_BUILDER_GROUP_OPERATION_CLASS = "dx-filterbuilder-group-operation",
-    ACTIVE_CLASS = "dx-state-active";
+    ACTIVE_CLASS = "dx-state-active",
+
+    TAB_KEY = 9,
+    ENTER_KEY = 13,
+    ESCAPE_KEY = 27;
 
 var getSelectedMenuText = function() {
     return $(".dx-treeview-node.dx-state-selected").text();
@@ -560,10 +564,31 @@ QUnit.module("Rendering", function() {
         });
 
         var $valueButton = container.find("." + FILTER_BUILDER_ITEM_VALUE_TEXT_CLASS);
-        $valueButton.trigger($.Event("keydown", { keyCode: 13 }));
+        $valueButton.trigger($.Event("keydown", { keyCode: ENTER_KEY }));
 
         assert.notOk(container.find("." + FILTER_BUILDER_ITEM_VALUE_TEXT_CLASS).length);
         assert.ok(container.find(".dx-texteditor").length);
+    });
+
+    QUnit.test("skip first enter keyup after enter keydown by value button", function(assert) {
+        var container = $("#container");
+
+        container.dxFilterBuilder({
+            value: ["Zipcode", "<>", 123],
+            fields: fields
+        });
+        var $valueButton = container.find("." + FILTER_BUILDER_ITEM_VALUE_TEXT_CLASS);
+        $valueButton.trigger($.Event("keydown", { keyCode: ENTER_KEY }));
+
+        container.find(".dx-texteditor").trigger($.Event("keyup", { keyCode: ENTER_KEY }));
+
+        assert.ok(container.find(".dx-texteditor").length);
+
+        container.find(".dx-texteditor").trigger($.Event("keydown", { keyCode: ENTER_KEY }));
+        container.find(".dx-texteditor").trigger($.Event("keyup", { keyCode: ENTER_KEY }));
+
+        assert.notOk(container.find(".dx-texteditor").length);
+        assert.ok(container.find("." + FILTER_BUILDER_ITEM_VALUE_TEXT_CLASS).length);
     });
 });
 
@@ -934,7 +959,7 @@ QUnit.module("on value changed", function() {
 
         var $input = container.find("." + FILTER_BUILDER_ITEM_VALUE_CLASS + " .dx-textbox input");
         $input.val("Test");
-        $input.trigger($.Event("keyup", { keyCode: 27 }));
+        $input.trigger($.Event("keyup", { keyCode: ESCAPE_KEY }));
 
         assert.equal(instance.option("value"), value);
         assert.equal(container.find("." + FILTER_BUILDER_ITEM_VALUE_TEXT_CLASS).length, 1);
@@ -952,7 +977,7 @@ QUnit.module("on value changed", function() {
 
         var $textBox = container.find("." + FILTER_BUILDER_ITEM_VALUE_CLASS + " .dx-textbox");
         $textBox.dxTextBox("instance").option("value", "Test");
-        $textBox.trigger($.Event("keydown", { keyCode: 9 }));
+        $textBox.trigger($.Event("keydown", { keyCode: TAB_KEY }));
 
         assert.notEqual(instance.option("value"), value);
         assert.equal(container.find("." + FILTER_BUILDER_ITEM_VALUE_TEXT_CLASS).length, 1);
@@ -970,7 +995,7 @@ QUnit.module("on value changed", function() {
 
         var $textBox = container.find("." + FILTER_BUILDER_ITEM_VALUE_CLASS + " .dx-textbox");
         $textBox.dxTextBox("instance").option("value", "Test");
-        $textBox.trigger($.Event("keydown", { keyCode: 13 }));
+        $textBox.trigger($.Event("keydown", { keyCode: ENTER_KEY }));
 
         assert.notEqual(instance.option("value"), value);
         assert.equal(container.find("." + FILTER_BUILDER_ITEM_VALUE_TEXT_CLASS).length, 1);
@@ -981,8 +1006,8 @@ QUnit.module("on value changed", function() {
 
         $textBox = container.find("." + FILTER_BUILDER_ITEM_VALUE_CLASS + " .dx-textbox");
         $textBox.dxTextBox("instance").option("value", "Test");
-        $textBox.trigger($.Event("keydown", { keyCode: 13 }));
-        $textBox.trigger($.Event("keyup", { keyCode: 13 }));
+        $textBox.trigger($.Event("keydown", { keyCode: ENTER_KEY }));
+        $textBox.trigger($.Event("keyup", { keyCode: ENTER_KEY }));
 
         assert.equal(instance.option("value"), value);
         assert.equal(container.find("." + FILTER_BUILDER_ITEM_VALUE_TEXT_CLASS).length, 1);

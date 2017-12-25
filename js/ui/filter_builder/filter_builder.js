@@ -31,7 +31,11 @@ var FILTER_BUILDER_CLASS = "dx-filterbuilder",
     FILTER_BUILDER_GROUP_OPERATIONS_CLASS = "dx-filterbuilder-group-operations",
     FILTER_BUILDER_FIELDS_CLASS = "dx-filterbuilder-fields",
     FILTER_BUILDER_ADD_CONDITION_CLASS = "dx-filterbuilder-add-condition",
-    ACTIVE_CLASS = "dx-state-active";
+    ACTIVE_CLASS = "dx-state-active",
+
+    TAB_KEY = 9,
+    ENTER_KEY = 13,
+    ESCAPE_KEY = 27;
 
 var ACTIONS = [{
         name: "onEditorPreparing",
@@ -788,7 +792,7 @@ var FilterBuilder = Widget.inherit({
 
         that._subscribeOnClickAndEnterKey($text, function() {
             that._createValueEditorWithEvents(item, field, $container);
-        }, "keydown");
+        });
 
         return $text;
     },
@@ -850,7 +854,7 @@ var FilterBuilder = Widget.inherit({
         eventsEngine.on(document, "click", documentClickHandler);
 
         var documentKeyUpHandler = function(e) {
-            if(e.keyCode === 9) {
+            if(e.keyCode === TAB_KEY) {
                 if(isFocusOnEditorParts()) {
                     return;
                 }
@@ -859,7 +863,7 @@ var FilterBuilder = Widget.inherit({
                     eventsEngine.trigger($container.prev(), "focus");
                 }
             }
-            if(e.keyCode === 27) {
+            if(e.keyCode === ESCAPE_KEY) {
                 options.setValue(value);
             }
             if(enterClicked) {
@@ -867,9 +871,8 @@ var FilterBuilder = Widget.inherit({
             }
         };
         eventsEngine.on(document, "keyup", documentKeyUpHandler);
-
         eventsEngine.on($editor, "keydown", function(e) {
-            if(e.keyCode === 13) {
+            if(e.keyCode === ENTER_KEY) {
                 enterClicked = true;
             }
         });
