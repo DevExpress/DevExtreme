@@ -57,6 +57,7 @@ var CalendarStrategy = DateBoxStrategy.inherit({
 
         return extend(this.dateBox.option("calendarOptions"), {
             value: this.dateBoxValue() || null,
+            dateSerializationFormat: null,
             _keyboardProcessor: this._widgetKeyboardProcessor,
             min: this.dateBox.dateOption("min"),
             max: this.dateBox.dateOption("max"),

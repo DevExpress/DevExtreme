@@ -9,6 +9,7 @@ var $ = require("jquery"),
     uiDateUtils = require("ui/date_box/ui.date_utils"),
     devices = require("core/devices"),
     DateBox = require("ui/date_box"),
+    Calendar = require("ui/calendar"),
     Box = require("ui/box"),
     pointerMock = require("../../helpers/pointerMock.js"),
     keyboardMock = require("../../helpers/keyboardMock.js"),
@@ -3993,3 +3994,26 @@ QUnit.test("onValueChanged should not be fired when on popup opening", function(
     assert.ok(!isValueChangedCalled, "onValueChanged is not called");
 });
 
+QUnit.test("value should be changed on cell click in calendar with defined dateSerializationFormat via defaultOptions", function(assert) {
+    Calendar.defaultOptions({
+        options: { dateSerializationFormat: 'yyyy-MM-dd' }
+    });
+
+    var $dateBox = $("#dateBox").dxDateBox({
+        value: new Date(2017, 11, 25),
+        pickerType: "calendar"
+    });
+
+    var dateBox = $dateBox.dxDateBox("instance");
+    dateBox.open();
+
+    //act
+    $(".dx-calendar-cell").eq(0).trigger("dxclick");
+
+    //assert
+    assert.deepEqual(dateBox.option("value"), new Date(2017, 10, 26), "value is changed");
+
+    Calendar.defaultOptions({
+        options: { dateSerializationFormat: null }
+    });
+});
