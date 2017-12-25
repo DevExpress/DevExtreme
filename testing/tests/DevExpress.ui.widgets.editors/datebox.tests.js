@@ -1624,7 +1624,7 @@ QUnit.test("calendar value should depend on datebox text option when calendar is
     assert.deepEqual(new Date(2014, 4, 12), calendar.option("value"), "calendar value is correct");
 
     kb.press('backspace');
-    assert.deepEqual(new Date(2014, 4, 12), calendar.option("value"), "calendar value is correct");
+    assert.deepEqual(new Date(201, 4, 12), calendar.option("value"), "calendar value is correct");
 
     kb.type('3');
     assert.deepEqual(new Date(2013, 4, 12), calendar.option("value"), "calendar value is correct");

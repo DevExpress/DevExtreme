@@ -15,8 +15,7 @@ var eventsEngine = require("../../events/core/events_engine"),
 var NUMBER_FORMATTER_NAMESPACE = "dxNumberFormatter",
     MOVE_FORWARD = 1,
     MOVE_BACKWARD = -1,
-    MINUS = "-",
-    MAXIMUM_FLOAT_LENGTH = 15;
+    MINUS = "-";
 
 var ensureDefined = function(value, defaultValue) {
     return value === undefined ? defaultValue : value;
@@ -43,10 +42,6 @@ var NumberBoxMask = NumberBoxBase.inherit({
         return key === "Delete" || key === "Del";
     },
 
-    _isBackspaceKey: function(key) {
-        return key === "Backspace";
-    },
-
     _supportedKeys: function() {
         if(!this._useMaskBehavior()) {
             return this.callBase();
@@ -61,14 +56,14 @@ var NumberBoxMask = NumberBoxBase.inherit({
             leftArrow: that._arrowHandler.bind(that, MOVE_FORWARD),
             rightArrow: that._arrowHandler.bind(that, MOVE_BACKWARD),
             home: that._moveCaretToBoundary.bind(that, MOVE_FORWARD),
-            enter: that._formatValue.bind(that),
+            enter: that._setTextByParsedValue.bind(that),
             end: that._moveCaretToBoundary.bind(that, MOVE_BACKWARD)
         });
     },
 
     _focusOutHandler: function(e) {
         if(this._useMaskBehavior()) {
-            this._formatValue();
+            this._setTextByParsedValue();
         }
 
         this.callBase(e);
@@ -152,11 +147,14 @@ var NumberBoxMask = NumberBoxBase.inherit({
         });
     },
 
-    _goToDecimalPart: function(text, caret) {
+    _shouldMoveCaret: function(text, caret) {
         var decimalSeparator = number.getDecimalSeparator(),
-            isDecimalSeparatorNext = text.charAt(caret.end) === decimalSeparator;
+            isDecimalSeparatorNext = text.charAt(caret.end) === decimalSeparator,
+            isZeroNext = text.charAt(caret.end) === "0",
+            moveToFloat = this._lastKey === decimalSeparator && isDecimalSeparatorNext,
+            zeroToZeroReplace = this._lastKey === "0" && isZeroNext;
 
-        return this._lastKey === decimalSeparator && isDecimalSeparatorNext;
+        return moveToFloat || zeroToZeroReplace;
     },
 
     _keyboardHandler: function(e) {
@@ -178,7 +176,7 @@ var NumberBoxMask = NumberBoxBase.inherit({
                 e.originalEvent.preventDefault();
             }
 
-            if(this._goToDecimalPart(text, caret)) {
+            if(this._shouldMoveCaret(text, caret)) {
                 this._moveCaret(1);
             }
         } else {
@@ -258,13 +256,10 @@ var NumberBoxMask = NumberBoxBase.inherit({
         return edited;
     },
 
-    _isNumberVeryLong: function(text) {
-        return text.replace(/[^0-9]/g, "").length > MAXIMUM_FLOAT_LENGTH;
-    },
-
     _tryParse: function(text, selection, char) {
         var editedText = this._getEditedText(text, selection, char),
-            parsed = number.parse(editedText, this._getFormatPattern()),
+            format = this._getFormatPattern(),
+            parsed = number.parse(editedText, format),
             isValueChanged = parsed !== this._parsedValue;
 
         if(!isValueChanged && char !== MINUS && !this._isValueIncomplete(editedText)) {
@@ -275,17 +270,17 @@ var NumberBoxMask = NumberBoxBase.inherit({
             return null;
         }
 
-        parsed = isNaN(parsed) ? undefined : parsed;
+        if(isNaN(parsed)) {
+            return undefined;
+        }
+
+        var precision = this._getMaxPrecision(format, parsed),
+            pow = Math.pow(10, precision),
+            value = (parsed === null ? this._parsedValue : parsed);
+
+        parsed = Math.round(value * pow) / pow;
 
         return this._isPercentFormat() ? (parsed && parsed / 100) : parsed;
-    },
-
-    _cleanText: function(text) {
-        var decimalSeparator = number.getDecimalSeparator(),
-            clearRegExp = new RegExp("[^0-9" + decimalSeparator + "]", "g"),
-            cleanedText = text.replace(clearRegExp, "").replace(decimalSeparator, ".");
-
-        return cleanedText;
     },
 
     _isValueIncomplete: function(text) {
@@ -293,7 +288,34 @@ var NumberBoxMask = NumberBoxBase.inherit({
             return this.callBase(text);
         }
 
-        return this._cleanText(text).match(/\.0*$/);
+        var formatParts = this._getFormatPattern().split(";")[0].split("."),
+            isFloatPartAllowed = formatParts.length === 2;
+
+        if(!isFloatPartAllowed) {
+            return false;
+        }
+
+        var clearedText = this._removeStubInText(text),
+            decimalSeparator = number.getDecimalSeparator(),
+            decimalSeparatorIndex = clearedText.indexOf(decimalSeparator),
+            separatorIsFirst = decimalSeparatorIndex === 0,
+            lastChar = clearedText.charAt(clearedText.length - 1),
+            onlyOneSeparatorExists = decimalSeparatorIndex === clearedText.length - 1;
+
+        if(separatorIsFirst) {
+            return false;
+        }
+        if(lastChar === decimalSeparator && onlyOneSeparatorExists) {
+            return true;
+        }
+        if(lastChar !== "0") {
+            return false;
+        }
+
+        var caret = this._caret(),
+            textAfterCaret = this._input().val().slice(caret.start);
+
+        return !textAfterCaret || this._isStub(textAfterCaret, true);
     },
 
     _isValueInRange: function(value) {
@@ -397,22 +419,6 @@ var NumberBoxMask = NumberBoxBase.inherit({
         return stubRegExp.test(str) && (isString || this._isChar(str));
     },
 
-    _escapePercentFormat: function(format) {
-        return format
-            .replace(/'([^']*)%([^']*)'/g, "'$1|$2'")
-            .replace("%", "'%'")
-            .replace("|", "%");
-    },
-
-    _lightParse: function(text) {
-        if(this._isNumberVeryLong(text)) {
-            return undefined;
-        }
-        var value = +text;
-        if(text === "") return null;
-        return isNaN(value) ? undefined : value;
-    },
-
     _parseValue: function(text) {
         if(!this._useMaskBehavior()) {
             return this.callBase(text);
@@ -422,16 +428,17 @@ var NumberBoxMask = NumberBoxBase.inherit({
             return this._parsedValue;
         }
 
-        return fitIntoRange(this._parsedValue, this.option("min"), this.option("max"));
+        this._parsedValue = fitIntoRange(this._parsedValue, this.option("min"), this.option("max"));
+
+        return this._parsedValue;
     },
 
-    _isIncomplete: function(string) {
-        var decimalSeparator = number.getDecimalSeparator(),
-            escapedSeparator = escapeRegExp(decimalSeparator),
-            regExp = new RegExp("[^" + escapedSeparator + "]" + escapedSeparator + "0*[^0-9" + escapedSeparator + "]*$", "ig"),
-            lastKeyIncomplete = this._lastKey === decimalSeparator || this._lastKey === "0";
+    _getMaxPrecision: function(format, value) {
+        var signParts = format.split(";"),
+            currentFormat = signParts[value >= 0 ? 0 : 1] || signParts[0],
+            floatPart = currentFormat.split(".")[1] || "";
 
-        return lastKeyIncomplete && regExp.test(string);
+        return floatPart.length;
     },
 
     _revertSign: function() {
@@ -446,37 +453,23 @@ var NumberBoxMask = NumberBoxBase.inherit({
         }
     },
 
-    _formatValue: function() {
+    _isCaretOnFloat: function() {
         var text = this._input().val(),
-            caret = this._caret();
-
-        if(this._lastKey === MINUS && text.charAt(caret.start - 1) === MINUS) {
-            text = this._getEditedText(text, { start: caret.start - 1, end: caret.start }, "");
-        }
-
-        if(this._isIncomplete(text)) {
-            this._formattedValue = text;
-            return;
-        }
-
-        var format = this._getFormatPattern(),
+            caret = this._caret(),
             decimalSeparator = number.getDecimalSeparator(),
-            decimalSeparatorIndex = text.indexOf(decimalSeparator),
-            caretOnFloatPart = decimalSeparatorIndex >= 0 && caret.start > decimalSeparatorIndex,
-            caretDelta;
+            decimalSeparatorIndex = text.indexOf(decimalSeparator);
 
-        if(this._formattedValue !== text) {
-            var parsedValueByText = this._tryParse(text, caret, "");
-            if(parsedValueByText !== undefined && parsedValueByText !== null) {
-                this._parsedValue = parsedValueByText;
-            }
-        }
+        return decimalSeparatorIndex >= 0 && caret.start > decimalSeparatorIndex;
+    },
 
-        var formatted = number.format(this._parsedValue, format) || "",
+    _getCaretDelta: function(formatted) {
+        var text = this._input().val(),
+            caret = this._caret(),
+            caretDelta = 0,
             isFirstInput = this._formattedValue === "",
             isOneCharInput = Math.abs(formatted.length - text.length) === 1;
 
-        if((isOneCharInput && caretOnFloatPart) || isFirstInput) {
+        if((isOneCharInput && this._isCaretOnFloat()) || isFirstInput) {
             caretDelta = 0;
         } else if(formatted.length && this._lastKey === text) {
             caretDelta = formatted.indexOf(text) - caret.start + 1;
@@ -489,7 +482,44 @@ var NumberBoxMask = NumberBoxBase.inherit({
             caretDelta = indexOfLastKey !== -1 ? indexOfLastKey : 0;
         }
 
-        this._setInputText(formatted, caret.start + caretDelta);
+        return caretDelta;
+    },
+
+    _removeMinusFromText: function(text, caret) {
+        var isMinusPressed = this._lastKey === MINUS && text.charAt(caret.start - 1) === MINUS;
+
+        return isMinusPressed ? this._getEditedText(text, { start: caret.start - 1, end: caret.start }, "") : text;
+    },
+
+    _setTextByParsedValue: function() {
+        var format = this._getFormatPattern(),
+            caret = this._caret(),
+            parsed = this._parseValue(),
+            formatted = number.format(parsed, format) || "";
+
+        this._setInputText(formatted, caret.start + this._getCaretDelta(formatted));
+    },
+
+    _formatValue: function() {
+        var text = this._input().val(),
+            caret = this._caret();
+
+        text = this._removeMinusFromText(text, caret);
+
+        if(this._isValueIncomplete(text)) {
+            this._formattedValue = text;
+            return;
+        }
+
+        var textWasChanged = this._formattedValue !== text;
+        if(textWasChanged) {
+            var value = this._tryParse(text, caret, "");
+            if(typeUtils.isDefined(value)) {
+                this._parsedValue = value;
+            }
+        }
+
+        this._setTextByParsedValue();
     },
 
     _renderDisplayText: function() {
@@ -503,7 +533,7 @@ var NumberBoxMask = NumberBoxBase.inherit({
     _renderValue: function() {
         if(this._useMaskBehavior()) {
             this._parsedValue = this.option("value");
-            this._formatValue();
+            this._setTextByParsedValue();
         }
 
         this.callBase();
@@ -517,9 +547,7 @@ var NumberBoxMask = NumberBoxBase.inherit({
         this._lastKey = null;
 
         var parsedValue = this._parseValue();
-
         this.option("value", parsedValue);
-        this._applyValueBoundaries(String(this._parsedValue), parsedValue);
     },
 
     _optionChanged: function(args) {
@@ -528,7 +556,7 @@ var NumberBoxMask = NumberBoxBase.inherit({
             case "useMaskBehavior":
                 this._renderFormatter();
                 this._parsedValue = this.option("value");
-                this._formatValue();
+                this._setTextByParsedValue();
                 break;
             default:
                 this.callBase(args);
@@ -540,6 +568,15 @@ var NumberBoxMask = NumberBoxBase.inherit({
             return (1 / oldValue) === (1 / newValue);
         }
         return this.callBase.apply(this, arguments);
+    },
+
+    _removeStubInText: function(text) {
+        var decimalSeparator = number.getDecimalSeparator(),
+            regExp = new RegExp("[^0-9" + decimalSeparator + "]+", "g");
+
+        text = text || this._input().val();
+
+        return text.replace(regExp, "");
     },
 
     _clearCache: function() {
