@@ -34,8 +34,6 @@ var dateUtils = {
 
     SUPPORTED_FORMATS: ["date", "time", "datetime"],
 
-    DEFAULT_FORMATTER: function(value) { return value; },
-
     // TODO: move to dateView
     DATE_COMPONENT_TEXT_FORMATTER: function(value, name) {
         var $container = $("<div>").addClass("dx-dateview-formatter-container");
@@ -197,7 +195,11 @@ dateUtils.DATE_COMPONENTS_INFO = {
     "year": {
         getter: "getFullYear",
         setter: "setFullYear",
-        formatter: dateUtils.DEFAULT_FORMATTER,
+        formatter: function(value, showNames, date) {
+            var formatDate = new Date(date.getTime());
+            formatDate.setFullYear(value);
+            return dateLocalization.format(formatDate, "yyyy");
+        },
         startValue: undefined,
         endValue: undefined
     },
@@ -206,12 +208,12 @@ dateUtils.DATE_COMPONENTS_INFO = {
         getter: "getDate",
         setter: "setDate",
         formatter: function(value, showNames, date) {
-            if(!showNames) {
-                return value;
-            }
-
             var formatDate = new Date(date.getTime());
             formatDate.setDate(value);
+
+            if(!showNames) {
+                return dateLocalization.format(formatDate, "d");
+            }
 
             return dateUtils.DATE_COMPONENT_TEXT_FORMATTER(value, dateLocalization.getDayNames()[formatDate.getDay()]);
         },
