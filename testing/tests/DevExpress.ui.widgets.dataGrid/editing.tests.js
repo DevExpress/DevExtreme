@@ -5649,8 +5649,9 @@ QUnit.testInActiveWindow("The focus should be saved after changing value in casc
 
     //act
     $input1.val('Test name');
+    $input2.focus();
     if(device.deviceType === "desktop") {
-        $input2.focus().get(0).setSelectionRange(1, 2);
+        $input2.get(0).setSelectionRange(1, 2);
     }
     $input1.trigger('change');
     that.clock.tick();
