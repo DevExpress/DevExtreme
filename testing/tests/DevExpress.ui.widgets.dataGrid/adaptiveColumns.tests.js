@@ -1907,6 +1907,7 @@ QUnit.test("Edit row. Cascade update detailAdaptive row when modify data row", f
 
     //act
     editor.option("value", "Man");
+    this.clock.tick();
 
     //assert
     var $editors = $(".dx-texteditor");
@@ -1942,6 +1943,7 @@ QUnit.test("Edit row. Cascade update data row when modify detailAdaptive row", f
 
     //act
     editor.option("value", "Man");
+    this.clock.tick();
 
     //assert
     var $editors = $(".dx-texteditor");

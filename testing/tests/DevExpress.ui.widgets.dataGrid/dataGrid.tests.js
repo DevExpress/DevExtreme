@@ -6924,10 +6924,11 @@ QUnit.testInActiveWindow("'Form' edit mode correctly change focus after edit a f
     $input.val("Josh");
     triggerTabPress($input);
     $($input).trigger("change");
+    $(dataGrid.$element()).find(".dx-form .dx-texteditor-input").eq(1).focus();
     clock.tick();
 
     //assert
-    var $secondEditor = $($(dataGrid.$element()).find(".dx-form .dx-texteditor").eq(1));
+    var $secondEditor = $(dataGrid.$element()).find(".dx-form .dx-texteditor").eq(1);
 
     assert.deepEqual(
         dataGrid.getController("keyboardNavigation")._focusedCellPosition,
