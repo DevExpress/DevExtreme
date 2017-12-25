@@ -788,7 +788,7 @@ var FilterBuilder = Widget.inherit({
 
         that._subscribeOnClickAndEnterKey($text, function() {
             that._createValueEditorWithEvents(item, field, $container);
-        }, "keyup");
+        }, "keydown");
 
         return $text;
     },
@@ -806,52 +806,71 @@ var FilterBuilder = Widget.inherit({
 
     _createValueEditorWithEvents: function(item, field, $container) {
         var that = this,
-            value = item[2];
+            value = item[2],
+            enterClicked = false,
+            removeEvents = function() {
+                eventsEngine.off(document, "keyup", documentKeyUpHandler);
+                eventsEngine.off(document, "click", documentClickHandler);
+                eventsEngine.off($editor, "keyup");
+            },
+            isFocusOnEditorParts = function() {
+                var activeElement = document.activeElement;
+                return $(activeElement).closest($editor.children()).length
+                    || $(activeElement).closest(".dx-dropdowneditor-overlay").length;
+            },
+            createValueText = function() {
+                $container.empty();
+                removeEvents();
+                return that._createValueText(item, field, $container);
+            };
 
         $container.empty();
-        var $editor = that._createValueEditor($container, field, {
-            value: value,
+
+        var options = {
+            value: field.dataType === "date" && value === "" ? null : value,
             filterOperation: utils.getOperationValue(item),
-            setValue: function(data) {
+            isValueChanged: true,
+            setValue: function(data, e) {
                 value = data === null ? "" : data;
+                that._updateConditionValue(item, value, function() {
+                    eventsEngine.trigger(createValueText(), "focus");
+                });
             }
-        });
+        };
+
+        var $editor = that._createValueEditor($container, field, options);
 
         eventsEngine.trigger($editor.find("input"), "focus");
-        eventsEngine.on($editor, "focusout", function(e) {
-            // TODO: remove it after fix T566807
-            if($container.find(".dx-selectbox").length > 0) {
-                var $hoveredItem = $(".dx-selectbox-popup-wrapper .dx-state-hover");
-                if($hoveredItem.length > 0) {
-                    eventsEngine.trigger($hoveredItem, "click");
-                } else {
-                    var $activeItem = $(".dx-selectbox-popup-wrapper .dx-state-active");
-                    if($activeItem.length > 0) {
-                        eventsEngine.trigger($activeItem, "click");
-                    }
+
+        var documentClickHandler = function(e) {
+            if(!isFocusOnEditorParts()) {
+                createValueText();
+            }
+        };
+        eventsEngine.on(document, "click", documentClickHandler);
+
+        var documentKeyUpHandler = function(e) {
+            if(e.keyCode === 9) {
+                if(isFocusOnEditorParts()) {
+                    return;
+                }
+                createValueText();
+                if(e.shiftKey) {
+                    eventsEngine.trigger($container.prev(), "focus");
                 }
             }
+            if(e.keyCode === 27) {
+                options.setValue(value);
+            }
+            if(enterClicked) {
+                options.setValue(value);
+            }
+        };
+        eventsEngine.on(document, "keyup", documentKeyUpHandler);
 
-            $container.empty();
-            that._updateConditionValue(item, value, function() {
-                that._createValueText(item, field, $container);
-            });
-        });
-        eventsEngine.on($editor, "keyup", function(e) {
-            if(e.keyCode === 13 || e.keyCode === 27) {
-                eventsEngine.off($editor, "focusout");
-                $container.empty();
-
-                var createValueText = function() {
-                    var $newTextElement = that._createValueText(item, field, $container);
-                    eventsEngine.trigger($newTextElement, "focus");
-                };
-
-                if(e.keyCode === 13) {
-                    that._updateConditionValue(item, value, createValueText);
-                } else {
-                    createValueText();
-                }
+        eventsEngine.on($editor, "keydown", function(e) {
+            if(e.keyCode === 13) {
+                enterClicked = true;
             }
         });
     },
@@ -876,7 +895,7 @@ var FilterBuilder = Widget.inherit({
             });
         } else {
             this._editorFactory.createEditor.call(this, $editor, extend({}, field, options, {
-                parentType: "filterRow",
+                parentType: "filterBuilder",
                 lookup: field.lookup
             }));
         }
