@@ -374,6 +374,27 @@ QUnit.test("the 'inputAttr' option", function(assert) {
     }
 });
 
+QUnit.test("name option should not conflict with inputAttr.name option", function(assert) {
+    this.instance.option("inputAttr", { name: "some_name" });
+
+    assert.equal(this.input.attr("name"), "some_name", "inputAttr should be applied");
+
+    this.instance.option("name", "new_name");
+    assert.equal(this.input.attr("name"), "new_name", "inputAttr should be redefined by name");
+
+    this.instance.option("name", "");
+    assert.equal(this.input.attr("name"), "some_name", "inputAttr should be restored");
+
+    this.instance.option("inputAttr", { name: null });
+    assert.notOk(this.input.get(0).hasAttribute("name"), "name attribute has been removed");
+
+    this.instance.option("name", "test_name");
+    assert.equal(this.input.attr("name"), "test_name", "name should be applied");
+
+    this.instance.option("name", "");
+    assert.notOk(this.input.get(0).hasAttribute("name"), "name attribute has been removed");
+});
+
 QUnit.test("the 'inputAttr' option should preserve widget specific classes", function(assert) {
     var $element = $("<div>").appendTo("body");
 

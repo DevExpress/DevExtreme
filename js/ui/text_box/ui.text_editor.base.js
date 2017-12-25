@@ -371,6 +371,11 @@ var TextEditorBase = Editor.inherit({
         return $input;
     },
 
+    _setSubmitElementName: function(name) {
+        var inputAttrName = this.option("inputAttr.name");
+        return this.callBase(name || inputAttrName || "");
+    },
+
     _applyInputAttributes: function($input, customAttributes) {
         $input.attr("autocomplete", "off")
             .attr(customAttributes)
