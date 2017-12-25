@@ -431,6 +431,23 @@ QUnit.test("endOnTick is undefined - calculate ticks outside data bounds", funct
     assert.deepEqual(this.axis._tickInterval, 1);
 });
 
+QUnit.test("endOnTick is undefined - calculate ticks outside data bounds (large tickInterval)", function(assert) {
+    this.createAxis();
+    this.updateOptions({
+        argumentType: "numeric",
+        type: "continuous",
+        tickInterval: 1
+    });
+
+    this.axis.setBusinessRange({ minVisible: 0.95, maxVisible: 3.05, addRange: function() { } });
+
+    //act
+    this.axis.createTicks(canvas(1100));
+
+    assert.deepEqual(this.axis._majorTicks.map(value), [0, 1, 2, 3, 4]);
+    assert.deepEqual(this.axis._tickInterval, 1);
+});
+
 QUnit.test("endOnTick === false - calculate ticks as multipliers of tickInterval", function(assert) {
     this.createAxis();
     this.updateOptions({

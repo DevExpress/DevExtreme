@@ -91,9 +91,11 @@ function correctMinValueByEndOnTick(floorFunc, ceilFunc, resolveEndOnTick, endOn
 
 function resolveEndOnTick(curValue, tickValue, interval, businessViewInfo) {
     var prevTickDataDiff = interval - mathAbs(tickValue - curValue),
-        businessRatio = businessViewInfo.screenDelta / businessViewInfo.businessDelta,
-        potentialTickScreenDiff = math.round(businessViewInfo.screenDelta / (businessViewInfo.businessDelta + interval) * prevTickDataDiff),
-        delimiterMultiplier = (businessViewInfo.isSpacedMargin ? 2 : 1) * (businessRatio * interval / businessViewInfo.axisDivisionFactor),
+        intervalCount = math.max(mathCeil(businessViewInfo.businessDelta / interval), 2),
+        businessRatio = businessViewInfo.screenDelta / (intervalCount * interval),
+        potentialTickScreenDiff = math.round(businessRatio * prevTickDataDiff),
+        delimiterFactor = getLog(businessRatio * interval / businessViewInfo.axisDivisionFactor, 2) + 1,
+        delimiterMultiplier = (businessViewInfo.isSpacedMargin ? 2 : 1) * delimiterFactor,
         screenDelimiter = math.round(VISIBILITY_DELIMITER * delimiterMultiplier);
     return businessViewInfo.businessDelta > businessViewInfo.interval && potentialTickScreenDiff >= screenDelimiter;
 }
