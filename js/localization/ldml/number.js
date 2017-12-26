@@ -87,6 +87,21 @@ function formatNumberPart(format, valueString) {
     }).join("");
 }
 
+function getFloatPointIndex(format) {
+    var isEscape = false;
+
+    for(var index = 0; index < format.length; index++) {
+        if(format[index] === "'") {
+            isEscape = !isEscape;
+        }
+        if(format[index] === "." && !isEscape) {
+            return index;
+        }
+    }
+
+    return format.length;
+}
+
 function getFormatter(format, config) {
     config = config || DEFAULT_CONFIG;
 
@@ -106,7 +121,8 @@ function getFormatter(format, config) {
             value = -value;
         }
 
-        var floatFormatParts = numberFormat.split("."),
+        var floatPointIndex = getFloatPointIndex(numberFormat),
+            floatFormatParts = [numberFormat.substr(0, floatPointIndex), numberFormat.substr(floatPointIndex + 1)],
             minFloatPrecision = getRequiredDigitCount(floatFormatParts[1]),
             maxFloatPrecision = minFloatPrecision + getNonRequiredDigitCount(floatFormatParts[1]),
             minIntegerPrecision = getRequiredDigitCount(floatFormatParts[0]),
