@@ -256,8 +256,8 @@ QUnit.test("getFormat for build-in number formats", function(assert) {
     checkFormat({ type: "fixedpoint", precision: 2 }, "#,##0.00");
     checkFormat("percent", "#,###,##0%");
     checkFormat({ type: "percent", precision: 2 }, "#,###,##0.00%");
-    checkFormat("currency", "$#,##0;$-#,##0");
-    checkFormat({ type: "currency", precision: 2 }, "$#,##0.00;$-#,##0.00");
+    checkFormat("currency", "$#,##0");
+    checkFormat({ type: "currency", precision: 2 }, "$#,##0.00");
 });
 
 QUnit.test("getFormat for function number formats", function(assert) {
