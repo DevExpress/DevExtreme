@@ -160,6 +160,10 @@ QUnit.test("Render vertical rtl content delimiter", function(assert) {
 });
 
 QUnit.test("container border should not be hidden when non-top level submenu hides", function(assert) {
+    if(!isDeviceDesktop(assert)) {
+        return;
+    }
+
     var menu = createMenuInWindow({
             showSubmenuMode: "onHover",
             items: [{
