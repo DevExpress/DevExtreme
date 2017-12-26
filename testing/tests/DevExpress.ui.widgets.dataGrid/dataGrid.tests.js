@@ -5254,6 +5254,59 @@ QUnit.test("onContentReady after change page", function(assert) {
     assert.equal(contentReadyCallCount, 2);
 });
 
+
+QUnit.test("pageIndex return deferred when change page", function(assert) {
+    var doneCalled = false;
+
+    //act
+    var dataGrid = createDataGrid({
+        dataSource: {
+            pageSize: 2,
+            store: [{ id: 1 }, { id: 2 }, { id: 3 }, { id: 4 }]
+        },
+    });
+
+    this.clock.tick();
+
+    //act
+    dataGrid.pageIndex(1).done(function() {
+        doneCalled = true;
+    });
+
+    this.clock.tick();
+
+    //assert
+    assert.equal(doneCalled, true);
+    var visibleRows = dataGrid.getVisibleRows();
+    assert.equal(visibleRows.length, 2);
+    assert.equal(visibleRows[0].data.id, 3);
+});
+
+QUnit.test("pageIndex return deferred when set same pageIndex", function(assert) {
+    var doneCalled = false;
+
+    //act
+    var dataGrid = createDataGrid({
+        dataSource: {
+            pageSize: 2,
+            store: [{ id: 1 }, { id: 2 }, { id: 3 }, { id: 4 }]
+        },
+    });
+
+    this.clock.tick();
+
+    //act
+    dataGrid.pageIndex(0).done(function() {
+        doneCalled = true;
+    });
+
+    //assert
+    assert.equal(doneCalled, true);
+    var visibleRows = dataGrid.getVisibleRows();
+    assert.equal(visibleRows.length, 2);
+    assert.equal(visibleRows[0].data.id, 1);
+});
+
 QUnit.test("onContentReady after render", function(assert) {
     var contentReadyCallCount = 0;
 
