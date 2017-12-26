@@ -7,7 +7,13 @@ numberLocalization.inject({
     _formatNumberCore: function(value, format, formatConfig) {
         if(format === "currency") {
             formatConfig.precision = formatConfig.precision || 0;
-            return this.getCurrencySymbol().symbol + this.format(value, extend({}, formatConfig, { type: "fixedpoint" }));
+
+            var result = this.format(value, extend({}, formatConfig, { type: "fixedpoint" })),
+                currencyPart = this.getCurrencySymbol().symbol.replace("$", "$$$$");
+
+            result = result.replace(/^(\D*)(\d.*)/, "$1" + currencyPart + "$2");
+
+            return result;
         }
 
         return this.callBase.apply(this, arguments);
