@@ -326,3 +326,23 @@ QUnit.test("checkbox should have disabled class when item was disabled at runtim
     instance.option("items[0].disable", false);
     assert.notOk($checkbox.hasClass("dx-state-disabled"), "checkbox should not be disabled");
 });
+
+QUnit.test("save selection after clean searchValue if selectNodesRecursive: false", function(assert) {
+    var $treeView = initTree({
+            items: [
+                { key: 1, text: "Item 1", selected: true },
+                { key: 2, parentId: 1, text: "Item 2" },
+            ],
+            dataStructure: "plain",
+            showCheckBoxesMode: "normal",
+            selectNodesRecursive: false,
+            searchValue: "2"
+        }),
+        instance = $treeView.dxTreeView("instance");
+
+    instance.option("searchValue", "");
+
+    var items = instance.option("items");
+    assert.ok(items[0].selected, "selection is saved");
+});
+
