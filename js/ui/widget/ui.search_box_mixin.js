@@ -6,6 +6,8 @@ var $ = require("../../core/renderer"),
     TextBox = require("../text_box"),
     errors = require("../widget/ui.errors");
 
+var FILTERING_TIMEOUT = 500;
+
 /**
 * @name SearchBoxMixin
 * @publicName SearchBoxMixin
@@ -105,6 +107,7 @@ module.exports = {
             tabIndex: that.option("tabIndex"),
             value: that.option("searchValue"),
             valueChangeEvent: "input",
+            updateValueTimeout: FILTERING_TIMEOUT,
             onValueChanged: function(e) {
                 that.option("searchValue", e.value);
             }

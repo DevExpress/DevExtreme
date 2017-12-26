@@ -18,7 +18,9 @@ var READONLY_STATE_CLASS = "dx-state-readonly",
 
     VALIDATION_TARGET = "dx-validation-target",
 
-    VALIDATION_MESSAGE_MIN_WIDTH = 100;
+    VALIDATION_MESSAGE_MIN_WIDTH = 100,
+
+    FILTERING_TIMEOUT = 0;
 
 /**
 * @name Editor
@@ -111,7 +113,9 @@ var Editor = Widget.inherit({
 
             validationBoundary: undefined,
 
-            validationMessageOffset: { h: 0, v: 0 }
+            validationMessageOffset: { h: 0, v: 0 },
+
+            updateValueTimeout: FILTERING_TIMEOUT
         });
     },
 
@@ -175,6 +179,10 @@ var Editor = Widget.inherit({
 
     _saveValueChangeEvent: function(e) {
         this._valueChangeEventInstance = e;
+    },
+
+    getValueChangeEvent: function() {
+        return this._valueChangeEventInstance;
     },
 
     _renderValidationState: function() {
@@ -287,7 +295,27 @@ var Editor = Widget.inherit({
         return null;
     },
 
+    _valueOptionChange: function(args) {
+        if(!this._valueChangeActionSuppressed) {
+            this._raiseValueChangeAction(args.value, args.previousValue);
+            this._saveValueChangeEvent(undefined);
+        }
+        if(args.value != args.previousValue) { // jshint ignore:line
+            this.validationRequest.fire({
+                value: args.value,
+                editor: this
+            });
+        }
+    },
+
+    _clean: function() {
+        clearTimeout(this._valueChangeTimeout);
+        this.callBase();
+    },
+
     _optionChanged: function(args) {
+        var that = this;
+
         switch(args.name) {
             case "onValueChanged":
                 this._createValueChangeAction();
@@ -303,15 +331,16 @@ var Editor = Widget.inherit({
                 this._refreshFocusState();
                 break;
             case "value":
-                if(!this._valueChangeActionSuppressed) {
-                    this._raiseValueChangeAction(args.value, args.previousValue);
-                    this._saveValueChangeEvent(undefined);
-                }
-                if(args.value != args.previousValue) { // jshint ignore:line
-                    this.validationRequest.fire({
-                        value: args.value,
-                        editor: this
-                    });
+                var argument;
+                window.clearTimeout(that._valueChangeTimeout);
+
+                if(args.value !== "" && that.option("updateValueTimeout")) {
+                    argument = args;
+                    that._valueChangeTimeout = window.setTimeout(function() {
+                        that._valueOptionChange(argument);
+                    }, that.option("updateValueTimeout"));
+                } else {
+                    this._valueOptionChange(args);
                 }
                 break;
             case "width":
@@ -320,6 +349,8 @@ var Editor = Widget.inherit({
                 break;
             case "name":
                 this._setSubmitElementName(args.value);
+                break;
+            case "updateValueTimeout":
                 break;
             default:
                 this.callBase(args);

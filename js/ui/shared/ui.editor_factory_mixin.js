@@ -39,33 +39,35 @@ var EditorFactoryMixin = (function() {
 
     var getTextEditorConfig = function(options) {
         var isValueChanged = false,
-            data = {},
-            isEnterBug = checkEnterBug(),
-            sharedData = options.sharedData || data;
+            isEnterBug = checkEnterBug();
 
         return getResultConfig({
             placeholder: options.placeholder,
             width: options.width,
             value: options.value,
+            updateValueTimeout: 0,
+            onOptionChanged: function(args) {
+                var changeEvent,
+                    updateValueTimeout;
+
+                if(args.name === "value") {
+                    changeEvent = args.component.getValueChangeEvent();
+                    if(changeEvent && changeEvent.type === "keyup" && !options.updateValueImmediately) {
+                        updateValueTimeout = typeUtils.isDefined(options.updateValueTimeout) ? options.updateValueTimeout : 0;
+                        args.component.option("updateValueTimeout", updateValueTimeout);
+                    }
+                }
+            },
             onValueChanged: function(e) {
-                var updateValue = function(e, notFireEvent) {
+                var updateValue = function(e) {
                     isValueChanged = false;
-                    options && options.setValue(e.value, notFireEvent);
+                    options && options.setValue(e.value);
                 };
 
-                window.clearTimeout(data.valueChangeTimeout);
-
-                if(e.event && e.event.type === "keyup" && !options.updateValueImmediately) {
-                    if(options.parentType === "filterRow" || options.parentType === "searchPanel") {
-                        sharedData.valueChangeTimeout = data.valueChangeTimeout = window.setTimeout(function() {
-                            updateValue(e, data.valueChangeTimeout !== sharedData.valueChangeTimeout);
-                        }, typeUtils.isDefined(options.updateValueTimeout) ? options.updateValueTimeout : 0);
-                    } else {
-                        isValueChanged = true;
-                    }
-                } else {
-                    updateValue(e);
+                if(options.parentType !== "filterRow" && options.parentType !== "searchPanel") {
+                    isValueChanged = true;
                 }
+                updateValue(e);
             },
             onFocusOut: function(e) {
                 if(isEnterBug && isValueChanged) {
