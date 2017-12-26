@@ -162,11 +162,27 @@ var ToolbarBase = CollectionWidget.inherit({
 
         if($section.hasClass(TOOLBAR_BEFORE_CLASS)) {
             this._alignSection(this._$beforeSection, sectionMaxWidth);
-            return;
+        } else {
+            var labelPaddings = $label.outerWidth() - $label.width();
+            $label.css("maxWidth", sectionMaxWidth - labelPaddings);
         }
+    },
 
-        var labelPaddings = $label.outerWidth() - $label.width();
-        $label.css("maxWidth", sectionMaxWidth - labelPaddings);
+    _alignCenterSection: function(beforeRect, afterRect, elementWidth) {
+        this._alignSection(this._$centerSection, elementWidth - beforeRect.width - afterRect.width);
+
+        var isRTL = this.option("rtlEnabled"),
+            leftRect = isRTL ? afterRect : beforeRect,
+            rightRect = isRTL ? beforeRect : afterRect,
+            centerRect = this._$centerSection.get(0).getBoundingClientRect();
+
+        if(leftRect.right > centerRect.left || centerRect.right > rightRect.left) {
+            this._$centerSection.css({
+                marginLeft: leftRect.width,
+                marginRight: rightRect.width,
+                float: leftRect.width > rightRect.width ? "none" : "right"
+            });
+        }
     },
 
     _alignSection: function($section, maxWidth) {
@@ -176,53 +192,40 @@ var ToolbarBase = CollectionWidget.inherit({
         maxWidth = maxWidth - this._getCurrentLabelsPaddings(labels);
 
         var currentWidth = this._getCurrentLabelsWidth(labels),
-            difference = Math.abs(currentWidth - maxWidth),
-            i,
-            $label,
-            currentLabelWidth,
-            labelMaxWidth;
+            difference = Math.abs(currentWidth - maxWidth);
 
 
         if(maxWidth < currentWidth) {
             labels = labels.reverse();
-            for(i = 0; i < labels.length; i++) {
-                $label = $(labels[i]);
-
-                currentLabelWidth = $($label).outerWidth();
-                labelMaxWidth = currentLabelWidth;
-
-                if(currentLabelWidth < difference) {
-                    labelMaxWidth = 0;
-                    difference = difference - currentLabelWidth;
-                } else {
-                    labelMaxWidth = currentLabelWidth - difference;
-                    $($label).css("maxWidth", labelMaxWidth);
-                    break;
-                }
-
-                $($label).css("maxWidth", labelMaxWidth);
-            }
+            this._alignSectionLabels(labels, difference, false);
         } else {
-            for(i = 0; i < labels.length; i++) {
-                $label = $(labels[i]);
-                currentLabelWidth = $($label).outerWidth();
-                $($label).css("maxWidth", "inherit");
-
-                var fullLabelWidth = $($label).outerWidth();
-
-                if(fullLabelWidth < difference) {
-                    difference = difference - fullLabelWidth;
-                    labelMaxWidth = fullLabelWidth;
-                } else {
-                    labelMaxWidth = currentLabelWidth + difference;
-                    $($label).css("maxWidth", labelMaxWidth);
-                    break;
-                }
-
-                $($label).css("maxWidth", labelMaxWidth);
-            }
+            this._alignSectionLabels(labels, difference, true);
         }
     },
+
+    _alignSectionLabels: function(labels, difference, expanding) {
+        for(var i = 0; i < labels.length; i++) {
+            var $label = $(labels[i]),
+                currentLabelWidth = $($label).outerWidth(),
+                labelMaxWidth;
+
+            expanding && $($label).css("maxWidth", "inherit");
+
+            var possibleLabelWidth = expanding ? $($label).outerWidth() : currentLabelWidth;
+
+            if(possibleLabelWidth < difference) {
+                labelMaxWidth = expanding ? possibleLabelWidth : 0;
+                difference = difference - possibleLabelWidth;
+            } else {
+                labelMaxWidth = expanding ? currentLabelWidth + difference : currentLabelWidth - difference;
+                $($label).css("maxWidth", labelMaxWidth);
+                break;
+            }
+
+            $($label).css("maxWidth", labelMaxWidth);
+        }
+    },
+
 
     _getCurrentLabelsWidth: function(labels) {
         var width = 0;
@@ -242,23 +245,6 @@ var ToolbarBase = CollectionWidget.inherit({
         });
 
         return padding;
-    },
-
-    _alignCenterSection: function(beforeRect, afterRect, elementWidth) {
-        this._alignSection(this._$centerSection, elementWidth - beforeRect.width - afterRect.width);
-
-        var isRTL = this.option("rtlEnabled"),
-            leftRect = isRTL ? afterRect : beforeRect,
-            rightRect = isRTL ? beforeRect : afterRect,
-            centerRect = this._$centerSection.get(0).getBoundingClientRect();
-
-        if(leftRect.right > centerRect.left || centerRect.right > rightRect.left) {
-            this._$centerSection.css({
-                marginLeft: leftRect.width,
-                marginRight: rightRect.width,
-                float: leftRect.width > rightRect.width ? "none" : "right"
-            });
-        }
     },
 
     _renderItem: function(index, item, itemContainer, $after) {
