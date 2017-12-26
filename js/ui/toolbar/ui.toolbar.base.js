@@ -219,7 +219,7 @@ var ToolbarBase = CollectionWidget.inherit({
                 difference = difference - possibleLabelWidth;
             } else {
                 labelMaxWidth = expanding ? currentLabelWidth + difference : currentLabelWidth - difference;
-                $($label).css("maxWidth", labelMaxWidth);
+                $label.css("maxWidth", labelMaxWidth);
                 break;
             }
 
