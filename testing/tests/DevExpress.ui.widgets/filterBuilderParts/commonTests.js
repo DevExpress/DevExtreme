@@ -590,6 +590,17 @@ QUnit.module("Rendering", function() {
         assert.notOk(container.find(".dx-texteditor").length);
         assert.ok(container.find("." + FILTER_BUILDER_ITEM_VALUE_TEXT_CLASS).length);
     });
+
+    //T589531
+    QUnit.test("datebox returns null when a date value is specified as an empty string", function(assert) {
+        $("#container").dxFilterBuilder({
+            value: ["Date", "=", ""],
+            fields: fields
+        });
+
+        $("." + FILTER_BUILDER_ITEM_VALUE_TEXT_CLASS).click();
+        assert.equal($(".dx-datebox").dxDateBox("instance").option("value"), null);
+    });
 });
 
 QUnit.module("Create editor by field dataType", function() {
