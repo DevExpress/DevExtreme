@@ -194,7 +194,6 @@ var ToolbarBase = CollectionWidget.inherit({
         var currentWidth = this._getCurrentLabelsWidth(labels),
             difference = Math.abs(currentWidth - maxWidth);
 
-
         if(maxWidth < currentWidth) {
             labels = labels.reverse();
             this._alignSectionLabels(labels, difference, false);
