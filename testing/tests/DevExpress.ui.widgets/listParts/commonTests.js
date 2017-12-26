@@ -2629,6 +2629,8 @@ QUnit.test("Render search editor", function(assert) {
 });
 
 QUnit.test("Search", function(assert) {
+    this.clock = sinon.useFakeTimers();
+
     var searchEditor,
         $element = $("#list").dxList({
             dataSource: [1, 2, 3],
@@ -2640,8 +2642,12 @@ QUnit.test("Search", function(assert) {
     searchEditor = $element.children().first().dxTextBox("instance");
     searchEditor.option("value", "2");
 
+    this.clock.tick(500);
+
     assert.deepEqual(instance.option("items"), [2], "items");
     assert.strictEqual(instance.option("searchValue"), "2", "search value");
+
+    this.clock.restore();
 });
 
 QUnit.testInActiveWindow("Focusing widget when there is search editor", function(assert) {
@@ -2676,6 +2682,7 @@ QUnit.test("Show warning when dataSource is not specified", function(assert) {
 });
 
 QUnit.test("Search when searchMode is specified", function(assert) {
+    this.clock = sinon.useFakeTimers();
     var searchEditor,
         $element = $("#list").dxList({
             dataSource: [1, 12, 23],
@@ -2687,10 +2694,13 @@ QUnit.test("Search when searchMode is specified", function(assert) {
 
     searchEditor = $element.children().first().dxTextBox("instance");
     searchEditor.option("value", "2");
+    this.clock.tick(500);
 
     assert.deepEqual(instance.option("items"), [23], "items");
     assert.strictEqual(instance.option("searchValue"), "2", "search value");
     assert.strictEqual(instance.getDataSource().searchOperation(), "startswith", "search operation");
+
+    this.clock.restore();
 });
 
 //T582179
