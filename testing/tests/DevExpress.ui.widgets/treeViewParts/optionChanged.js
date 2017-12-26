@@ -335,12 +335,11 @@ QUnit.test("save selection after clean searchValue if selectNodesRecursive: fals
             selectNodesRecursive: false,
             searchValue: "2"
         }),
-        instance = $treeView.dxTreeView("instance"),
-        items;
+        instance = $treeView.dxTreeView("instance");
 
     instance.option("searchValue", "");
 
-    items = instance.option("items");
+    var items = instance.option("items");
     assert.ok(items[0].selected, "selection is saved");
 });
 
