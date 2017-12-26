@@ -205,10 +205,12 @@ var ToolbarBase = CollectionWidget.inherit({
     _alignSectionLabels: function(labels, difference, expanding) {
         for(var i = 0; i < labels.length; i++) {
             var $label = $(labels[i]),
-                currentLabelWidth = $($label).outerWidth(),
+                currentLabelWidth = $label.outerWidth(),
                 labelMaxWidth;
 
-            expanding && $($label).css("maxWidth", "inherit");
+            if(expanding) {
+                $label.css("maxWidth", "inherit");
+            }
 
             var possibleLabelWidth = expanding ? $($label).outerWidth() : currentLabelWidth;
 
@@ -221,7 +223,7 @@ var ToolbarBase = CollectionWidget.inherit({
                 break;
             }
 
-            $($label).css("maxWidth", labelMaxWidth);
+            $label.css("maxWidth", labelMaxWidth);
         }
     },
 
@@ -229,8 +231,8 @@ var ToolbarBase = CollectionWidget.inherit({
     _getCurrentLabelsWidth: function(labels) {
         var width = 0;
 
-        labels.forEach(function($label, index) {
-            width += $($label).outerWidth();
+        labels.forEach(function(label, index) {
+            width += $(label).outerWidth();
         });
 
         return width;
@@ -239,8 +241,8 @@ var ToolbarBase = CollectionWidget.inherit({
     _getCurrentLabelsPaddings: function(labels) {
         var padding = 0;
 
-        labels.forEach(function($label, index) {
-            padding += ($($label).outerWidth() - $($label).width());
+        labels.forEach(function(label, index) {
+            padding += ($(label).outerWidth() - $(label).width());
         });
 
         return padding;
