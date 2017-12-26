@@ -700,10 +700,11 @@ module.exports = {
 
             var getColumnByIndexes = function(that, columnIndexes) {
                 var result,
-                    columns = that._columns,
                     callbackFilter = function(column) {
-                        return column.ownerBand === result.index;
-                    };
+                        var ownerBand = result ? result.index : undefined;
+                        return column.ownerBand === ownerBand;
+                    },
+                    columns = that._columns.filter(callbackFilter);
 
                 for(var i = 0; i < columnIndexes.length; i++) {
                     result = columns[columnIndexes[i]];
