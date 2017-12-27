@@ -98,7 +98,7 @@ var NumberBoxBase = TextEditor.inherit({
              * @publicName mode
              * @type string
              * @default "text"
-             * @acceptValues 'text'|'number'
+             * @acceptValues 'text'|'number'|'tel'
              */
             mode: "text",
 

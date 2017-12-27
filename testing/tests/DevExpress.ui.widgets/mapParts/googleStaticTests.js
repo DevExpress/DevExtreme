@@ -470,3 +470,24 @@ QUnit.test("click", function(assert) {
         assert.equal(eventFired, 1);
     });
 });
+
+QUnit.test("the pointer down event propagation should be canceled", function(assert) {
+    var isPropagationStopped;
+    return new Promise(function(resolve) {
+        new Map($("#map"), {
+            provider: "googleStatic",
+            width: 400,
+            height: 500,
+            onReady: function(e) {
+                $(e.element).on("dxpointerdown", function(e) {
+                    isPropagationStopped = e.isPropagationStopped();
+                });
+                $(e.element).children().trigger("dxpointerdown");
+
+                resolve();
+            }
+        });
+    }).then(function() {
+        assert.ok(!isPropagationStopped);
+    });
+});

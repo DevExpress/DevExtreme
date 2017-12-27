@@ -1907,6 +1907,7 @@ QUnit.test("Edit row. Cascade update detailAdaptive row when modify data row", f
 
     //act
     editor.option("value", "Man");
+    this.clock.tick();
 
     //assert
     var $editors = $(".dx-texteditor");
@@ -1942,6 +1943,7 @@ QUnit.test("Edit row. Cascade update data row when modify detailAdaptive row", f
 
     //act
     editor.option("value", "Man");
+    this.clock.tick();
 
     //assert
     var $editors = $(".dx-texteditor");
@@ -3611,7 +3613,7 @@ QUnit.module("Validation", {
 
     QUnit.testInActiveWindow("Tooltips selector for the revert button", function(assert) {
         setupDataGrid(this);
-        var expected = ".dx-editor-cell .dx-tooltip, .dx-editor-cell .dx-invalid-message, .dx-field-item-content .dx-tooltip";
+        var expected = ".dx-editor-cell .dx-datagrid-revert-tooltip, .dx-editor-cell .dx-datagrid-invalid-message, .dx-field-item-content .dx-datagrid-revert-tooltip";
         assert.equal(this.editorFactoryController._getTooltipsSelector(), expected, "tooltips selector");
     });
 

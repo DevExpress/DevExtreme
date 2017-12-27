@@ -5254,6 +5254,59 @@ QUnit.test("onContentReady after change page", function(assert) {
     assert.equal(contentReadyCallCount, 2);
 });
 
+
+QUnit.test("pageIndex return deferred when change page", function(assert) {
+    var doneCalled = false;
+
+    //act
+    var dataGrid = createDataGrid({
+        dataSource: {
+            pageSize: 2,
+            store: [{ id: 1 }, { id: 2 }, { id: 3 }, { id: 4 }]
+        },
+    });
+
+    this.clock.tick();
+
+    //act
+    dataGrid.pageIndex(1).done(function() {
+        doneCalled = true;
+    });
+
+    this.clock.tick();
+
+    //assert
+    assert.equal(doneCalled, true);
+    var visibleRows = dataGrid.getVisibleRows();
+    assert.equal(visibleRows.length, 2);
+    assert.equal(visibleRows[0].data.id, 3);
+});
+
+QUnit.test("pageIndex return deferred when set same pageIndex", function(assert) {
+    var doneCalled = false;
+
+    //act
+    var dataGrid = createDataGrid({
+        dataSource: {
+            pageSize: 2,
+            store: [{ id: 1 }, { id: 2 }, { id: 3 }, { id: 4 }]
+        },
+    });
+
+    this.clock.tick();
+
+    //act
+    dataGrid.pageIndex(0).done(function() {
+        doneCalled = true;
+    });
+
+    //assert
+    assert.equal(doneCalled, true);
+    var visibleRows = dataGrid.getVisibleRows();
+    assert.equal(visibleRows.length, 2);
+    assert.equal(visibleRows[0].data.id, 1);
+});
+
 QUnit.test("onContentReady after render", function(assert) {
     var contentReadyCallCount = 0;
 
@@ -6924,10 +6977,11 @@ QUnit.testInActiveWindow("'Form' edit mode correctly change focus after edit a f
     $input.val("Josh");
     triggerTabPress($input);
     $($input).trigger("change");
+    $(dataGrid.$element()).find(".dx-form .dx-texteditor-input").eq(1).focus();
     clock.tick();
 
     //assert
-    var $secondEditor = $($(dataGrid.$element()).find(".dx-form .dx-texteditor").eq(1));
+    var $secondEditor = $(dataGrid.$element()).find(".dx-form .dx-texteditor").eq(1);
 
     assert.deepEqual(
         dataGrid.getController("keyboardNavigation")._focusedCellPosition,
@@ -7877,6 +7931,59 @@ QUnit.test("totalCount", function(assert) {
 
     //assert
     assert.equal(totalCount, 5, "totalCount");
+});
+
+//T587150
+QUnit.testInActiveWindow("DataGrid with inside grid in masterDetail - the invalid message of the datebox should not be removed when focusing cell", function(assert) {
+    //arrange
+    var $dateBoxInput,
+        dataGrid = createDataGrid({
+            loadingTimeout: undefined,
+            dataSource: {
+                store: {
+                    type: "array",
+                    data: [{ name: "Grid Item" }],
+                    key: "name"
+                }
+            },
+            masterDetail: {
+                enabled: true,
+                template: function($container, options) {
+                    $("<div/>")
+                        .addClass("inside-grid")
+                        .dxDataGrid({
+                            dataSource: [{ name: "Inside Grid Item" }],
+                            columns: [{ dataField: "name", dataType: "date" }],
+                            filterRow: {
+                                visible: true
+                            }
+                        }).appendTo($container);
+                }
+            }
+        }),
+        clock = sinon.useFakeTimers();
+
+    try {
+        dataGrid.expandRow("Grid Item");
+        clock.tick();
+
+        $dateBoxInput = $(".inside-grid").find(".dx-datagrid-filter-row .dx-texteditor-input");
+        $dateBoxInput.val("abc");
+        $dateBoxInput.trigger("change");
+        clock.tick();
+
+        //assert
+        assert.strictEqual($(".inside-grid").find(".dx-datagrid-filter-row > td").find(".dx-overlay.dx-invalid-message").length, 1, "has invalid message");
+
+        //act
+        $dateBoxInput.focus();
+        clock.tick();
+
+        //assert
+        assert.strictEqual($(".inside-grid").find(".dx-datagrid-filter-row > td").find(".dx-overlay.dx-invalid-message").length, 1, "has invalid message");
+    } finally {
+        clock.restore();
+    }
 });
 
 QUnit.module("API methods");

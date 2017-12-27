@@ -19,7 +19,8 @@ var TreeViewSearch = TreeViewBase.inherit(searchBoxMixin).inherit({
 
         switch(name) {
             case "searchValue":
-                if((!value.length || (value < previousValue)) && this.option("showCheckBoxesMode") !== "none") {
+                var isDeleting = !value.length || (value < previousValue);
+                if(isDeleting && this.option("showCheckBoxesMode") !== "none" && this._isRecursiveSelection()) {
                     this._removeSelection();
                 }
 

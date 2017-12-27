@@ -24,8 +24,6 @@ var Provider = Class.inherit({
         return "#0000FF";
     },
 
-    cancelEvents: false,
-
     ctor: function(map, $container) {
         this._mapWidget = map;
         this._$container = $container;
@@ -90,6 +88,10 @@ var Provider = Class.inherit({
 
     map: function() {
         return this._map;
+    },
+
+    isEventsCanceled: function() {
+        return false;
     },
 
     _option: function(name, value) {

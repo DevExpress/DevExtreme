@@ -1005,6 +1005,7 @@ module.exports = {
                 * @name dxDataGridMethods_pageIndex
                 * @publicName pageIndex(newIndex)
                 * @param1 newIndex:numeric
+                * @return Promise<void>
                 */
                 pageIndex: function(value) {
                     var that = this,
@@ -1020,6 +1021,7 @@ module.exports = {
                                 }
                                 return dataSource.load().done(that.pageChanged.fire.bind(that.pageChanged));
                             }
+                            return Deferred().resolve().promise();
                         }
                         return dataSource.pageIndex();
                     }

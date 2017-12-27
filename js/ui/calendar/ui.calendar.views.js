@@ -92,7 +92,7 @@ var Views = {
         },
 
         _getCellText: function(cellDate) {
-            return cellDate.getDate();
+            return dateLocalization.format(cellDate, "d");
         },
 
         _getDayCaption: function(day) {
@@ -194,7 +194,7 @@ var Views = {
         },
 
         getNavigatorCaption: function() {
-            return this.option("date").getFullYear();
+            return dateLocalization.format(this.option("date"), "yyyy");
         },
 
         isBoundary: function(date) {
@@ -227,7 +227,7 @@ var Views = {
         },
 
         _getCellText: function(cellDate) {
-            return cellDate.getFullYear();
+            return dateLocalization.format(cellDate, "yyyy");
         },
 
         _getFirstCellData: function() {
@@ -242,9 +242,15 @@ var Views = {
         },
 
         getNavigatorCaption: function() {
-            var year = dateUtils.getFirstYearInDecade(this.option("date"));
+            var currentDate = this.option("date"),
+                firstYearInDecade = dateUtils.getFirstYearInDecade(currentDate),
+                startDate = new Date(currentDate),
+                endDate = new Date(currentDate);
 
-            return year + "-" + (year + 9);
+            startDate.setFullYear(firstYearInDecade);
+            endDate.setFullYear(firstYearInDecade + 9);
+
+            return dateLocalization.format(startDate, "yyyy") + "-" + dateLocalization.format(endDate, "yyyy");
         },
 
         _isValueOnCurrentView: function(currentDate, value) {
@@ -290,9 +296,12 @@ var Views = {
         },
 
         _getCellText: function(cellDate) {
-            var decade = cellDate.getFullYear();
+            var startDate = dateLocalization.format(cellDate, "yyyy"),
+                endDate = new Date(cellDate);
 
-            return decade + " - " + (decade + 9);
+            endDate.setFullYear(endDate.getFullYear() + 9);
+
+            return startDate + " - " + dateLocalization.format(endDate, "yyyy");
         },
 
         _getFirstCellData: function() {
@@ -316,9 +325,15 @@ var Views = {
         },
 
         getNavigatorCaption: function() {
-            var decade = dateUtils.getFirstDecadeInCentury(this.option("date"));
+            var currentDate = this.option("date"),
+                firstDecadeInCentury = dateUtils.getFirstDecadeInCentury(currentDate),
+                startDate = new Date(currentDate),
+                endDate = new Date(currentDate);
 
-            return decade + "-" + (decade + 99);
+            startDate.setFullYear(firstDecadeInCentury);
+            endDate.setFullYear(firstDecadeInCentury + 99);
+
+            return dateLocalization.format(startDate, "yyyy") + "-" + dateLocalization.format(endDate, "yyyy");
         },
 
         isBoundary: function(date) {

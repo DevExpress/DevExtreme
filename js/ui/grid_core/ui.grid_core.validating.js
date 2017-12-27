@@ -22,6 +22,7 @@ var INVALIDATE_CLASS = "invalid",
     REVERT_TOOLTIP_CLASS = "revert-tooltip",
     ROWS_VIEW_CLASS = "rowsview",
     INVALID_MESSAGE_CLASS = "dx-invalid-message",
+    WIDGET_INVALID_MESSAGE_CLASS = "invalid-message",
     INVALID_MESSAGE_ALWAYS_CLASS = "dx-invalid-message-always",
     REVERT_BUTTON_CLASS = "dx-revert-button",
     CELL_HIGHLIGHT_OUTLINE = "dx-highlight-outline",
@@ -578,6 +579,7 @@ module.exports = {
                     new Overlay($("<div>")
                         .addClass(INVALID_MESSAGE_CLASS)
                         .addClass(INVALID_MESSAGE_ALWAYS_CLASS)
+                        .addClass(that.addWidgetPrefix(WIDGET_INVALID_MESSAGE_CLASS))
                         .text(message)
                         .appendTo($cell),
                         {
@@ -623,7 +625,7 @@ module.exports = {
                 },
 
                 _getTooltipsSelector: function() {
-                    return ".dx-editor-cell .dx-tooltip, .dx-editor-cell .dx-invalid-message";
+                    return ".dx-editor-cell ." + this.addWidgetPrefix(REVERT_TOOLTIP_CLASS) + ", .dx-editor-cell ." + this.addWidgetPrefix(WIDGET_INVALID_MESSAGE_CLASS);
                 },
 
                 init: function() {
@@ -691,7 +693,7 @@ module.exports = {
                         $freeSpaceRowElement,
                         $freeSpaceRowElements,
                         $element = that.element(),
-                        $tooltipContent = $element && $element.find(".dx-invalid-message .dx-overlay-content");
+                        $tooltipContent = $element && $element.find("." + that.addWidgetPrefix(WIDGET_INVALID_MESSAGE_CLASS) + " .dx-overlay-content");
 
                     that.callBase($table);
 

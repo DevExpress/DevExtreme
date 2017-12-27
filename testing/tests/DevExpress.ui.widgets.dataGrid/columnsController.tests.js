@@ -3223,6 +3223,32 @@ QUnit.test("Change column option via option method (for band columns)", function
     assert.strictEqual(visibleColumns[3].dataField, "field5");
 });
 
+QUnit.test("Change column visibility via option method when band column placed before it", function(assert) {
+    var visibleColumns;
+
+    this.applyOptions({ columns: [
+        { dataField: "field1" },
+        { caption: "Band", columns: [
+            { dataField: "field2" },
+            { dataField: "field3" }]
+        },
+        { dataField: "field4" },
+        { dataField: "field5" }
+    ] });
+    this.columnsController.applyDataSource(createMockDataSource([{ field1: "test1", field2: "test2", field3: "test3", field4: "test4", field5: "test5" }]));
+
+    //act
+    this.columnsController.optionChanged({ name: "columns", fullName: "columns[2].visible", value: false });
+
+    //assert
+    visibleColumns = this.columnsController.getVisibleColumns();
+    assert.strictEqual(visibleColumns.length, 4, "columns state is not reset");
+    assert.strictEqual(visibleColumns[0].dataField, "field1");
+    assert.strictEqual(visibleColumns[1].dataField, "field2");
+    assert.strictEqual(visibleColumns[2].dataField, "field3");
+    assert.strictEqual(visibleColumns[3].dataField, "field5");
+});
+
 QUnit.test("Change column option via option method when option value as object", function(assert) {
     var visibleColumns;
     this.applyOptions({ columns: [{ dataField: "field1" }, { dataField: "field2" }] });

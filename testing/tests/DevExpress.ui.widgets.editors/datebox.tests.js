@@ -9,6 +9,7 @@ var $ = require("jquery"),
     uiDateUtils = require("ui/date_box/ui.date_utils"),
     devices = require("core/devices"),
     DateBox = require("ui/date_box"),
+    Calendar = require("ui/calendar"),
     Box = require("ui/box"),
     pointerMock = require("../../helpers/pointerMock.js"),
     keyboardMock = require("../../helpers/keyboardMock.js"),
@@ -1624,7 +1625,7 @@ QUnit.test("calendar value should depend on datebox text option when calendar is
     assert.deepEqual(new Date(2014, 4, 12), calendar.option("value"), "calendar value is correct");
 
     kb.press('backspace');
-    assert.deepEqual(new Date(2014, 4, 12), calendar.option("value"), "calendar value is correct");
+    assert.deepEqual(new Date(201, 4, 12), calendar.option("value"), "calendar value is correct");
 
     kb.type('3');
     assert.deepEqual(new Date(2013, 4, 12), calendar.option("value"), "calendar value is correct");
@@ -3993,3 +3994,26 @@ QUnit.test("onValueChanged should not be fired when on popup opening", function(
     assert.ok(!isValueChangedCalled, "onValueChanged is not called");
 });
 
+QUnit.test("value should be changed on cell click in calendar with defined dateSerializationFormat via defaultOptions", function(assert) {
+    Calendar.defaultOptions({
+        options: { dateSerializationFormat: 'yyyy-MM-dd' }
+    });
+
+    var $dateBox = $("#dateBox").dxDateBox({
+        value: new Date(2017, 11, 25),
+        pickerType: "calendar"
+    });
+
+    var dateBox = $dateBox.dxDateBox("instance");
+    dateBox.open();
+
+    //act
+    $(".dx-calendar-cell").eq(0).trigger("dxclick");
+
+    //assert
+    assert.deepEqual(dateBox.option("value"), new Date(2017, 10, 26), "value is changed");
+
+    Calendar.defaultOptions({
+        options: { dateSerializationFormat: null }
+    });
+});

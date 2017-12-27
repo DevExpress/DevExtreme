@@ -204,6 +204,13 @@ var ContextMenu = MenuBase.inherit((function() {
                 * @extend_doc
                 */
 
+                /**
+                * @name dxContextMenuOptions_selectedItems
+                * @publicName selectedItems
+                * @hidden
+                * @extend_doc
+                */
+
 
                 onLeftFirstItem: null,
                 onLeftLastItem: null,

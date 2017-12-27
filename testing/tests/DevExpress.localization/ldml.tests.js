@@ -147,6 +147,12 @@ QUnit.test("escaping format", function(assert) {
     assert.strictEqual(formatter(15), "15x #0% x", "special chars was escaped");
 });
 
+QUnit.test("escaped point in format", function(assert) {
+    assert.strictEqual(getNumberFormatter("#0 руб'.'")(15), "15 руб.", "special chars was escaped");
+    assert.strictEqual(getNumberFormatter("#0.## руб'.'")(15), "15 руб.", "special chars was escaped");
+    assert.strictEqual(getNumberFormatter("#0.00 руб'.'")(15), "15.00 руб.", "special chars was escaped");
+});
+
 QUnit.test("percent formatting with leading zero", function(assert) {
     var formatter = getNumberFormatter("#0.#%;(#0.#%)");
 
@@ -250,8 +256,8 @@ QUnit.test("getFormat for build-in number formats", function(assert) {
     checkFormat({ type: "fixedpoint", precision: 2 }, "#,##0.00");
     checkFormat("percent", "#,###,##0%");
     checkFormat({ type: "percent", precision: 2 }, "#,###,##0.00%");
-    checkFormat("currency", "$#,##0;$-#,##0");
-    checkFormat({ type: "currency", precision: 2 }, "$#,##0.00;$-#,##0.00");
+    checkFormat("currency", "$#,##0");
+    checkFormat({ type: "currency", precision: 2 }, "$#,##0.00");
 });
 
 QUnit.test("getFormat for function number formats", function(assert) {

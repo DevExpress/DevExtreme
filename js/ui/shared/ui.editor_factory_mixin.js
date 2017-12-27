@@ -132,7 +132,7 @@ var EditorFactoryMixin = (function() {
     };
 
     var prepareBooleanEditor = function(options) {
-        if(options.parentType === "filterRow") {
+        if(options.parentType === "filterRow" || options.parentType === "filterBuilder") {
             prepareSelectBox(extend(options, {
                 lookup: {
                     displayExpr: function(data) {
