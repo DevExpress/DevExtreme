@@ -324,6 +324,25 @@ QUnit.test("searchExpr", function(assert) {
     assert.strictEqual($items.last().text(), "Item 2", "text of the second item");
 });
 
+QUnit.test("save selection after clean searchValue if selectNodesRecursive: false", function(assert) {
+    var $treeView = initTree({
+            items: [
+                { key: 1, text: "Item 1", selected: true },
+                { key: 2, parentId: 1, text: "Item 2" },
+            ],
+            dataStructure: "plain",
+            showCheckBoxesMode: "normal",
+            selectNodesRecursive: false,
+            searchValue: "2"
+        }),
+        instance = $treeView.dxTreeView("instance");
+
+    instance.option("searchValue", "");
+
+    var items = instance.option("items");
+    assert.ok(items[0].selected, "selection is saved");
+});
+
 QUnit.test("searchEditorOptions", function(assert) {
     var $treeView = initTree({
             items: $.extend(true, [], DATA[1]),
