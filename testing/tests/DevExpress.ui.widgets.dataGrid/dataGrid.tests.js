@@ -7830,6 +7830,59 @@ QUnit.test("totalCount", function(assert) {
     assert.equal(totalCount, 5, "totalCount");
 });
 
+//T587150
+QUnit.testInActiveWindow("DataGrid with inside grid in masterDetail - the invalid message of the datebox should not be removed when focusing cell", function(assert) {
+    //arrange
+    var $dateBoxInput,
+        dataGrid = createDataGrid({
+            loadingTimeout: undefined,
+            dataSource: {
+                store: {
+                    type: "array",
+                    data: [{ name: "Grid Item" }],
+                    key: "name"
+                }
+            },
+            masterDetail: {
+                enabled: true,
+                template: function($container, options) {
+                    $("<div/>")
+                        .addClass("inside-grid")
+                        .dxDataGrid({
+                            dataSource: [{ name: "Inside Grid Item" }],
+                            columns: [{ dataField: "name", dataType: "date" }],
+                            filterRow: {
+                                visible: true
+                            }
+                        }).appendTo($container);
+                }
+            }
+        }),
+        clock = sinon.useFakeTimers();
+
+    try {
+        dataGrid.expandRow("Grid Item");
+        clock.tick();
+
+        $dateBoxInput = $(".inside-grid").find(".dx-datagrid-filter-row .dx-texteditor-input");
+        $dateBoxInput.val("abc");
+        $dateBoxInput.trigger("change");
+        clock.tick();
+
+        //assert
+        assert.strictEqual($(".inside-grid").find(".dx-datagrid-filter-row > td").find(".dx-overlay.dx-invalid-message").length, 1, "has invalid message");
+
+        //act
+        $dateBoxInput.focus();
+        clock.tick();
+
+        //assert
+        assert.strictEqual($(".inside-grid").find(".dx-datagrid-filter-row > td").find(".dx-overlay.dx-invalid-message").length, 1, "has invalid message");
+    } finally {
+        clock.restore();
+    }
+});
+
 QUnit.module("API methods");
 
 QUnit.test("get methods for grid without options", function(assert) {

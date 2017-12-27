@@ -7094,6 +7094,7 @@ QUnit.test("Show tooltip on focus with set validate in column and edit mode batc
     $overlayElement = $cells.eq(1).find(".dx-overlay");
     assert.equal(getInputElements($testElement).length, 1, "has input");
     assert.equal($overlayElement.length, 1, "has overlay element");
+    assert.ok($overlayElement.hasClass("dx-datagrid-invalid-message"), "overlay has class 'dx-datagrid-invalid-message'"); //T587150
 
     //T335660
     overlayInstance = $overlayElement.dxOverlay("instance");
