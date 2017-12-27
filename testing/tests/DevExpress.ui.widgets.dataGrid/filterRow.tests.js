@@ -1413,6 +1413,7 @@ QUnit.test("Not apply filter when changed filter operation with empty filter val
     //act
     filterRowInput.val("test");
     filterRowInput.trigger("change");
+    this.clock.tick(700);
 
     //assert
     assert.equal(countApplyFilter, 1, "apply filter");
@@ -1928,6 +1929,7 @@ QUnit.test("filter by 0 value for number column", function(assert) {
     //act
     $filterRowInput.val("0");
     $($filterRowInput).trigger("change");
+    this.clock.tick(700);
 
     $filterRowInput = testElement.find(TEXTEDITOR_INPUT_SELECTOR).eq(1);
 

@@ -145,23 +145,6 @@ var Fixture = Class.inherit({
         editor.option("value", newValue);
     });
 
-    QUnit.test("Update value after updateValueTimeout", function(assert) {
-        this.clock = sinon.useFakeTimers();
-
-        var valueChanged = sinon.spy(),
-            editor = this.fixture.createEditor({
-                updateValueTimeout: 500,
-                onValueChanged: valueChanged
-            });
-
-        editor.option("value", "123");
-        assert.equal(valueChanged.callCount, 0, "valueChange event is not fired yet");
-
-        this.clock.tick(500);
-        assert.equal(valueChanged.callCount, 1, "valueChange event is fired after timeout");
-        this.clock.restore();
-    });
-
     QUnit.test("keyboardProcessor is not defined for readOnly editor", function(assert) {
         var editor = this.fixture.createEditor({ focusStateEnabled: true, readOnly: true });
 

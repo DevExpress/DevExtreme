@@ -39,23 +39,17 @@ var EditorFactoryMixin = (function() {
 
     var getTextEditorConfig = function(options) {
         var isValueChanged = false,
-            isEnterBug = checkEnterBug();
+            isEnterBug = checkEnterBug(),
+            valueChangeTimeout = typeUtils.isDefined(options.updateValueTimeout) ? options.updateValueTimeout : 0;
 
         return getResultConfig({
             placeholder: options.placeholder,
             width: options.width,
             value: options.value,
-            updateValueTimeout: 0,
+            valueChangeTimeout: valueChangeTimeout,
             onOptionChanged: function(args) {
-                var changeEvent,
-                    updateValueTimeout;
-
-                if(args.name === "value") {
-                    changeEvent = args.component.getValueChangeEvent();
-                    if(changeEvent && changeEvent.type === "keyup" && !options.updateValueImmediately) {
-                        updateValueTimeout = typeUtils.isDefined(options.updateValueTimeout) ? options.updateValueTimeout : 0;
-                        args.component.option("updateValueTimeout", updateValueTimeout);
-                    }
+                if(args.name === "value" && options.updateValueImmediately) {
+                    args.component.option("valueChangeTimeout", 0);
                 }
             },
             onValueChanged: function(e) {
