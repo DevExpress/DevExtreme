@@ -307,7 +307,7 @@ var Editor = Widget.inherit({
                     this._raiseValueChangeAction(args.value, args.previousValue);
                     this._saveValueChangeEvent(undefined);
                 }
-                if(value != previousValue) { // jshint ignore:line
+                if(args.value != args.previousValue) { // jshint ignore:line
                     this.validationRequest.fire({
                         value: args.value,
                         editor: this
