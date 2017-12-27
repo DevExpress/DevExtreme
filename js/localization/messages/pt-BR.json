@@ -204,7 +204,7 @@
         "dxColorView-ariaAlpha": "Transparência",
         "dxColorView-ariaHex": "Código de cor",
         "dxTagBox-selected": "{0} selecionados",
-        "dxTagBox-allSelected": "All selected ({0})",
+        "dxTagBox-allSelected": "Todos selecionados ({0})",
         "dxTagBox-moreSelected": "{0} +",
         "vizExport-printingButtonText": "Imprimir",
         "vizExport-titleMenuText": "Exportar/Imprimir",
