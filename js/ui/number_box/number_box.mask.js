@@ -599,6 +599,7 @@ var NumberBoxMask = NumberBoxBase.inherit({
         delete this._formattedValue;
         delete this._lastKey;
         delete this._parsedValue;
+        delete this._isInputTriggered;
     },
 
     _clean: function() {
