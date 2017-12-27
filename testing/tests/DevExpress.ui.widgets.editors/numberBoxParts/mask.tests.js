@@ -867,3 +867,25 @@ QUnit.test("move caret to the start when only stubs remain in the input", functi
 
     assert.deepEqual(this.keyboard.caret(), { start: 0, end: 0 }, "caret was adjusted");
 });
+
+QUnit.test("caret should not move out of the boundaries when decimal separator was typed in percent format", function(assert) {
+    this.instance.option({
+        format: "#0%",
+        value: 0.01
+    });
+
+    this.keyboard.caret(1).type(".");
+
+    assert.equal(this.keyboard.caret().start, 1, "caret should not move when decimal part is disabled");
+});
+
+QUnit.test("caret should not move out of the boundaries when non-available digit was typed", function(assert) {
+    this.instance.option({
+        format: "#0.00 kg",
+        value: 1.23
+    });
+
+    this.keyboard.caret(4).type("1");
+
+    assert.equal(this.keyboard.caret().start, 4, "caret should not move");
+});
