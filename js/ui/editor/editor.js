@@ -287,19 +287,6 @@ var Editor = Widget.inherit({
         return null;
     },
 
-    _valueOptionChange: function(value, previousValue) {
-        if(!this._valueChangeActionSuppressed) {
-            this._raiseValueChangeAction(value, previousValue);
-            this._saveValueChangeEvent(undefined);
-        }
-        if(value != previousValue) { // jshint ignore:line
-            this.validationRequest.fire({
-                value: value,
-                editor: this
-            });
-        }
-    },
-
     _optionChanged: function(args) {
         switch(args.name) {
             case "onValueChanged":
@@ -316,7 +303,16 @@ var Editor = Widget.inherit({
                 this._refreshFocusState();
                 break;
             case "value":
-                this._valueOptionChange(args.value, args.previousValue);
+                if(!this._valueChangeActionSuppressed) {
+                    this._raiseValueChangeAction(args.value, args.previousValue);
+                    this._saveValueChangeEvent(undefined);
+                }
+                if(value != previousValue) { // jshint ignore:line
+                    this.validationRequest.fire({
+                        value: args.value,
+                        editor: this
+                    });
+                }
                 break;
             case "width":
                 this.callBase(args);
