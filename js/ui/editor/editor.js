@@ -177,10 +177,6 @@ var Editor = Widget.inherit({
         this._valueChangeEventInstance = e;
     },
 
-    getValueChangeEvent: function() {
-        return this._valueChangeEventInstance;
-    },
-
     _renderValidationState: function() {
         var isValid = this.option("isValid"),
             validationError = this.option("validationError"),
