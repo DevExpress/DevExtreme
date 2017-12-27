@@ -74,13 +74,14 @@ var NumberBoxMask = NumberBoxBase.inherit({
         this._setTextByParsedValue();
 
         if(this._isValueDirty()) {
+            this._isInputTriggered = false;
             eventsEngine.trigger(this._input(), "change");
         }
     },
 
     _isValueDirty: function() {
         //https://developer.microsoft.com/en-us/microsoft-edge/platform/issues/15181565/
-        return browser.msie && this._parsedValue !== this._formattedValue;
+        return browser.msie && this._isInputTriggered;
     },
 
     _arrowHandler: function(step, e) {
@@ -518,6 +519,7 @@ var NumberBoxMask = NumberBoxBase.inherit({
         var text = this._input().val(),
             caret = this._caret();
 
+        this._isInputTriggered = true;
         text = this._removeMinusFromText(text, caret);
 
         if(this._isValueIncomplete(text)) {
