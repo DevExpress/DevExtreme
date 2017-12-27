@@ -467,9 +467,10 @@ var NumberBoxMask = NumberBoxBase.inherit({
             caret = this._caret(),
             caretDelta = 0,
             isFirstInput = this._formattedValue === "",
+            allStubsAfterCaret = this._isStub(text.slice(caret.start), true),
             isOneCharInput = Math.abs(formatted.length - text.length) === 1;
 
-        if((isOneCharInput && this._isCaretOnFloat()) || isFirstInput) {
+        if((isOneCharInput && this._isCaretOnFloat() && !allStubsAfterCaret) || isFirstInput) {
             caretDelta = 0;
         } else if(formatted.length && this._lastKey === text) {
             caretDelta = formatted.indexOf(text) - caret.start + 1;
@@ -495,9 +496,10 @@ var NumberBoxMask = NumberBoxBase.inherit({
         var format = this._getFormatPattern(),
             caret = this._caret(),
             parsed = this._parseValue(),
-            formatted = number.format(parsed, format) || "";
+            formatted = number.format(parsed, format) || "",
+            newCaret = caret.start + this._getCaretDelta(formatted);
 
-        this._setInputText(formatted, caret.start + this._getCaretDelta(formatted));
+        this._setInputText(formatted, newCaret);
     },
 
     _formatValue: function() {
