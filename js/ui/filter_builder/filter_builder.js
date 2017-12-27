@@ -156,6 +156,12 @@ var FilterBuilder = Widget.inherit({
              */
 
             /**
+             * @name dxFilterBuilderField_editorOptions
+             * @publicName editorOptions
+             * @type object
+             */
+
+            /**
              * @name dxFilterBuilderField_format
              * @publicName format
              * @type format
@@ -898,8 +904,7 @@ var FilterBuilder = Widget.inherit({
             });
         } else {
             this._editorFactory.createEditor.call(this, $editor, extend({}, field, options, {
-                parentType: "filterBuilder",
-                lookup: field.lookup
+                parentType: "filterBuilder"
             }));
         }
         return $editor;

@@ -601,6 +601,44 @@ QUnit.module("Rendering", function() {
         $("." + FILTER_BUILDER_ITEM_VALUE_TEXT_CLASS).click();
         assert.equal($(".dx-datebox").dxDateBox("instance").option("value"), null);
     });
+
+    //T589341
+    QUnit.test("the formatter is applied to a field with the date type", function(assert) {
+        $("#container").dxFilterBuilder({
+            value: ["Date", "=", ""],
+            fields: [{
+                dataField: "Date",
+                dataType: "date",
+                format: "dd.MM.yyyy"
+            }]
+        });
+
+        $("." + FILTER_BUILDER_ITEM_VALUE_TEXT_CLASS).click();
+        $(".dx-datebox input").val("12/12/2017");
+        $(".dx-datebox input").trigger("change");
+        assert.equal($("." + FILTER_BUILDER_ITEM_VALUE_TEXT_CLASS).text(), "12.12.2017");
+    });
+
+    //T589341
+    QUnit.test('NumberBox with custom format', function(assert) {
+        var $container = $("#container");
+
+        $container.dxFilterBuilder({
+            value: ["Weight", "=", 3.14],
+            fields: [{
+                dataField: "Weight",
+                dataType: 'number',
+                editorOptions: {
+                    format: "#0.## kg"
+                }
+            }]
+        });
+
+        $("." + FILTER_BUILDER_ITEM_VALUE_TEXT_CLASS).click();
+
+        //assert
+        assert.equal($container.find(".dx-texteditor-input").val(), "3.14 kg", 'numberbox formatted value');
+    });
 });
 
 QUnit.module("Create editor by field dataType", function() {
