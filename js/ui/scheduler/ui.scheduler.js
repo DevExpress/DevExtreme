@@ -2394,9 +2394,7 @@ var Scheduler = Widget.inherit({
         }
 
         this.fire("setField", "endDate", updatedData, endDate);
-
-        //NOTE: set resources to updatedData after fix T577053
-        this._resourcesManager.setResourcesToItem(target, cellData.groups);
+        this._resourcesManager.setResourcesToItem(updatedData, cellData.groups);
 
         return updatedData;
     },
