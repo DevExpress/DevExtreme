@@ -597,3 +597,26 @@ QUnit.test("Pages should be correctly loaded after change dataSource and selecte
     //assert
     assert.strictEqual(treeList.getVisibleRows().length, 40, "row count");
 });
+
+//T591390
+QUnit.test("Change expandedRowKeys", function(assert) {
+    //arrange
+    var treeList = createTreeList({
+        dataSource: [
+            { id: 1, parentId: 0, name: "Name 1", age: 16 },
+            { id: 2, parentId: 1, name: "Name 2", age: 17 },
+            { id: 3, parentId: 2, name: "Name 3", age: 18 }
+        ]
+    });
+    this.clock.tick(30);
+
+    //assert
+    assert.strictEqual(treeList.getVisibleRows().length, 1, "row count");
+
+    //act
+    treeList.option("expandedRowKeys", [1, 2]);
+    this.clock.tick(30);
+
+    //assert
+    assert.strictEqual(treeList.getVisibleRows().length, 3, "row count");
+});
