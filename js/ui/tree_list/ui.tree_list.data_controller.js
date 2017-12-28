@@ -42,6 +42,10 @@ exports.DataController = dataControllerModule.controllers.data.inherit((function
             dataSource.requireTotalCount(true);
         },
 
+        _loadOnOptionChange: function() {
+            this._dataSource.load();
+        },
+
         init: function() {
             this.createAction("onRowExpanding");
             this.createAction("onRowExpanded");
@@ -154,7 +158,7 @@ exports.DataController = dataControllerModule.controllers.data.inherit((function
                 case "expandedRowKeys":
                 case "onNodesInitialized":
                     if(this._dataSource && !this._dataSource._isNodesInitializing && !equalByValue(args.value, args.previousValue)) {
-                        this._dataSource.load();
+                        this._loadOnOptionChange();
                     }
                     args.handled = true;
                     break;
