@@ -4,6 +4,7 @@
 
 var $ = require("jquery"),
     isRenderer = require("core/utils/type").isRenderer,
+    devices = require("core/devices"),
     config = require("core/config");
 
 require("ui/filter_builder/filter_builder");
@@ -604,6 +605,11 @@ QUnit.module("Rendering", function() {
 
     //T589341
     QUnit.test("the formatter is applied to a field with the date type", function(assert) {
+        if(devices.real().deviceType !== "desktop") {
+            assert.ok(true, "This test is not actual for mobile devices");
+            return;
+        }
+
         $("#container").dxFilterBuilder({
             value: ["Date", "=", ""],
             fields: [{
@@ -616,6 +622,7 @@ QUnit.module("Rendering", function() {
         $("." + FILTER_BUILDER_ITEM_VALUE_TEXT_CLASS).click();
         $(".dx-datebox input").val("12/12/2017");
         $(".dx-datebox input").trigger("change");
+
         assert.equal($("." + FILTER_BUILDER_ITEM_VALUE_TEXT_CLASS).text(), "12.12.2017");
     });
 
