@@ -60,7 +60,8 @@ var createDebugBundlesStream = function(watch) {
     return gulp.src(DEBUG_BUNDLES)
         .pipe(namedDebug())
         .pipe(gulpIf(watch, plumber({
-            errorHandler: notify.onError('Error: <%= error.message %>').bind()
+            errorHandler: notify.onError('Error: <%= error.message %>')
+                .bind() // bind call is necessary to prevent firing 'end' event in notify.onError implementation
         })))
         .pipe(webpackStream(debugConfig, webpack, muteWebPack))
         .pipe(headerPipes.useStrict())
