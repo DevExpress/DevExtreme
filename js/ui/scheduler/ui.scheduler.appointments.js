@@ -499,7 +499,7 @@ var SchedulerAppointments = CollectionWidget.inherit({
             allDay = settings.allDay;
         this.invoke("setCellDataCacheAlias", this._currentAppointmentSettings, geometry);
 
-        var color = this._getAppointmentColor($appointment, data, settings);
+        var color = this._getAppointmentColor($appointment, settings.groupIndex);
 
         if(settings.virtual) {
             this._processVirtualAppointment(settings, $appointment, data, color);
