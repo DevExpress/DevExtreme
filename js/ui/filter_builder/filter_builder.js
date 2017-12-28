@@ -840,10 +840,13 @@ var FilterBuilder = Widget.inherit({
             value: value === "" ? null : value,
             filterOperation: utils.getOperationValue(item),
             isValueChanged: true,
-            setValue: function(data, e) {
+            setValue: function(data) {
                 value = data === null ? "" : data;
                 that._updateConditionValue(item, value, function() {
-                    eventsEngine.trigger(createValueText(), "focus");
+                    var $textButton = createValueText();
+                    if(enterClicked) {
+                        eventsEngine.trigger($textButton, "focus");
+                    }
                 });
             }
         };
@@ -870,7 +873,7 @@ var FilterBuilder = Widget.inherit({
                 }
             }
             if(e.keyCode === ESCAPE_KEY) {
-                options.setValue(value);
+                eventsEngine.trigger(createValueText(), "focus");
             }
             if(enterClicked) {
                 options.setValue(value);

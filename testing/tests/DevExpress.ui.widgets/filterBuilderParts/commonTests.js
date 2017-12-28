@@ -353,6 +353,24 @@ QUnit.module("Rendering", function() {
         assert.equal(container.find("." + FILTER_BUILDER_ITEM_VALUE_CLASS).length, 1);
     });
 
+    QUnit.testInActiveWindow("value button loses focus after value change and outside click", function(assert) {
+        var container = $("#container");
+
+        container.dxFilterBuilder({
+            value: ["State", "<>", "K&S Music"],
+            fields: fields
+        }).dxFilterBuilder("instance");
+
+        container.find("." + FILTER_BUILDER_ITEM_VALUE_TEXT_CLASS).click();
+
+        var textBoxInstance = $(".dx-textbox").dxTextBox("instance");
+        textBoxInstance.option("value", "Test");
+
+        var valueButton = container.find("." + FILTER_BUILDER_ITEM_VALUE_TEXT_CLASS);
+        assert.equal(valueButton.text(), "Test");
+        assert.notOk(valueButton.is(":focus"));
+    });
+
     QUnit.testInActiveWindow("change filter value", function(assert) {
         var container = $("#container"),
             instance = container.dxFilterBuilder({
@@ -553,42 +571,6 @@ QUnit.module("Rendering", function() {
 
         $("." + FILTER_BUILDER_IMAGE_REMOVE_CLASS).eq(1).click();
         assert.deepEqual(instance.option("value"), ["State", "<>", "Test"]);
-    });
-
-    QUnit.test("show editor on keydown event", function(assert) {
-        var container = $("#container");
-
-        container.dxFilterBuilder({
-            value: ["Zipcode", "<>", 123],
-            fields: fields
-        });
-
-        var $valueButton = container.find("." + FILTER_BUILDER_ITEM_VALUE_TEXT_CLASS);
-        $valueButton.trigger($.Event("keydown", { keyCode: ENTER_KEY }));
-
-        assert.notOk(container.find("." + FILTER_BUILDER_ITEM_VALUE_TEXT_CLASS).length);
-        assert.ok(container.find(".dx-texteditor").length);
-    });
-
-    QUnit.test("skip first enter keyup after enter keydown by value button", function(assert) {
-        var container = $("#container");
-
-        container.dxFilterBuilder({
-            value: ["Zipcode", "<>", 123],
-            fields: fields
-        });
-        var $valueButton = container.find("." + FILTER_BUILDER_ITEM_VALUE_TEXT_CLASS);
-        $valueButton.trigger($.Event("keydown", { keyCode: ENTER_KEY }));
-
-        container.find(".dx-texteditor").trigger($.Event("keyup", { keyCode: ENTER_KEY }));
-
-        assert.ok(container.find(".dx-texteditor").length);
-
-        container.find(".dx-texteditor").trigger($.Event("keydown", { keyCode: ENTER_KEY }));
-        container.find(".dx-texteditor").trigger($.Event("keyup", { keyCode: ENTER_KEY }));
-
-        assert.notOk(container.find(".dx-texteditor").length);
-        assert.ok(container.find("." + FILTER_BUILDER_ITEM_VALUE_TEXT_CLASS).length);
     });
 
     //T589531
@@ -995,70 +977,113 @@ QUnit.module("on value changed", function() {
         assert.equal(instance.option("value"), value);
         assert.equal(container.find("." + FILTER_BUILDER_ITEM_VALUE_TEXT_CLASS).length, 1);
     });
+});
+
+QUnit.module("Keyboard navigation", {
+    beforeEach: function() {
+        this.container = $("#container");
+
+        this.instance = this.container.dxFilterBuilder({
+            value: [["State", "=", ""]],
+            fields: fields
+        }).dxFilterBuilder("instance");
+
+        this.triggerEvent = function(element, eventType, keyCode) {
+            element.trigger($.Event(eventType, { keyCode: keyCode }));
+        };
+
+        this.getValueButtonElement = function() {
+            return this.container.find("." + FILTER_BUILDER_ITEM_VALUE_TEXT_CLASS);
+        };
+
+        this.getTextEditorElement = function() {
+            return this.container.find(".dx-texteditor");
+        };
+
+        this.changeValueAndPressKey = function(keyCode, eventType) {
+            this.getValueButtonElement().click();
+
+            var $input = this.getTextEditorElement().find("input");
+            $input.val("Test");
+            this.triggerEvent($input, eventType || "keydown", keyCode);
+            $input.trigger("change");
+        };
+    }
+}, function() {
+    QUnit.test("show editor on keydown event", function(assert) {
+        this.instance.option("value", ["Zipcode", "<>", 123]);
+
+        this.triggerEvent(this.getValueButtonElement(), "keydown", ENTER_KEY);
+
+        assert.notOk(this.getValueButtonElement().length);
+        assert.ok(this.getTextEditorElement().length);
+    });
+
+    QUnit.test("skip first enter keyup after enter keydown by value button", function(assert) {
+        this.instance.option("value", ["Zipcode", "<>", 123]);
+
+        this.triggerEvent(this.getValueButtonElement(), "keydown", ENTER_KEY);
+        this.triggerEvent(this.getTextEditorElement(), "keyup", ENTER_KEY);
+
+        assert.ok(this.getTextEditorElement().length);
+
+        this.triggerEvent(this.getTextEditorElement(), "keydown", ENTER_KEY);
+        this.triggerEvent(this.getTextEditorElement(), "keyup", ENTER_KEY);
+
+        assert.notOk(this.getTextEditorElement().length);
+        assert.ok(this.getValueButtonElement().length);
+    });
 
     QUnit.test("condition isn't changed after escape click", function(assert) {
-        var container = $("#container"),
-            value = [["State", "=", ""]],
-            instance = container.dxFilterBuilder({
-                value: value,
-                fields: fields
-            }).dxFilterBuilder("instance");
+        var value = this.instance.option("value");
 
-        container.find("." + FILTER_BUILDER_ITEM_VALUE_TEXT_CLASS).click();
+        this.changeValueAndPressKey(ESCAPE_KEY, "keyup");
 
-        var $input = container.find("." + FILTER_BUILDER_ITEM_VALUE_CLASS + " .dx-textbox input");
-        $input.val("Test");
-        $input.trigger($.Event("keyup", { keyCode: ESCAPE_KEY }));
-
-        assert.equal(instance.option("value"), value);
-        assert.equal(container.find("." + FILTER_BUILDER_ITEM_VALUE_TEXT_CLASS).length, 1);
+        assert.equal(this.instance.option("value"), value);
+        assert.equal(this.getValueButtonElement().length, 1);
     });
 
     QUnit.test("change condition value after tab press", function(assert) {
-        var container = $("#container"),
-            value = [["State", "=", ""]],
-            instance = container.dxFilterBuilder({
-                value: value,
-                fields: fields
-            }).dxFilterBuilder("instance");
+        this.changeValueAndPressKey(TAB_KEY, "keyup");
 
-        container.find("." + FILTER_BUILDER_ITEM_VALUE_TEXT_CLASS).click();
+        assert.equal(this.getValueButtonElement().text(), "Test");
+    });
 
-        var $textBox = container.find("." + FILTER_BUILDER_ITEM_VALUE_CLASS + " .dx-textbox");
-        $textBox.dxTextBox("instance").option("value", "Test");
-        $textBox.trigger($.Event("keydown", { keyCode: TAB_KEY }));
+    QUnit.test("tab press without change a condition", function(assert) {
+        this.getValueButtonElement().click();
 
-        assert.notEqual(instance.option("value"), value);
-        assert.equal(container.find("." + FILTER_BUILDER_ITEM_VALUE_TEXT_CLASS).length, 1);
+        var $input = this.getTextEditorElement().find("input");
+        document.activeElement.blur();
+        this.triggerEvent($input, "keyup", TAB_KEY);
+        assert.equal(this.getValueButtonElement().text(), "<enter a value>");
     });
 
     QUnit.test("change condition value after enter click", function(assert) {
-        var container = $("#container"),
-            value = [["State", "=", ""]],
-            instance = container.dxFilterBuilder({
-                value: value,
-                fields: fields
-            }).dxFilterBuilder("instance");
+        var value = this.instance.option("value");
 
-        container.find("." + FILTER_BUILDER_ITEM_VALUE_TEXT_CLASS).click();
+        this.changeValueAndPressKey(ENTER_KEY);
 
-        var $textBox = container.find("." + FILTER_BUILDER_ITEM_VALUE_CLASS + " .dx-textbox");
-        $textBox.dxTextBox("instance").option("value", "Test");
-        $textBox.trigger($.Event("keydown", { keyCode: ENTER_KEY }));
+        assert.notEqual(this.instance.option("value"), value);
+        assert.equal(this.getValueButtonElement().length, 1);
 
-        assert.notEqual(instance.option("value"), value);
-        assert.equal(container.find("." + FILTER_BUILDER_ITEM_VALUE_TEXT_CLASS).length, 1);
+        value = this.instance.option("value");
 
-        value = instance.option("value");
+        this.changeValueAndPressKey(ENTER_KEY);
+        this.triggerEvent(this.getTextEditorElement(), "keyup", ENTER_KEY);
 
-        container.find("." + FILTER_BUILDER_ITEM_VALUE_TEXT_CLASS).click();
+        assert.equal(this.instance.option("value"), value);
+        assert.equal(this.getValueButtonElement().length, 1);
+    });
 
-        $textBox = container.find("." + FILTER_BUILDER_ITEM_VALUE_CLASS + " .dx-textbox");
-        $textBox.dxTextBox("instance").option("value", "Test");
-        $textBox.trigger($.Event("keydown", { keyCode: ENTER_KEY }));
-        $textBox.trigger($.Event("keyup", { keyCode: ENTER_KEY }));
+    QUnit.testInActiveWindow("value button gets focus after enter click", function(assert) {
+        this.changeValueAndPressKey(ENTER_KEY);
 
-        assert.equal(instance.option("value"), value);
-        assert.equal(container.find("." + FILTER_BUILDER_ITEM_VALUE_TEXT_CLASS).length, 1);
+        assert.ok(this.getValueButtonElement().is(":focus"));
+    });
+
+    QUnit.testInActiveWindow("value button gets focus after escape click", function(assert) {
+        this.changeValueAndPressKey(ESCAPE_KEY, "keyup");
+
+        assert.ok(this.getValueButtonElement().is(":focus"));
     });
 });
