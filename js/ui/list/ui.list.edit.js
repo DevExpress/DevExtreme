@@ -162,10 +162,10 @@ var ListEdit = ListBase.inherit({
             * @name dxListOptions_itemDeleteMode
             * @publicName itemDeleteMode
             * @type string
-            * @default 'toggle'
+             * @default 'static'
             * @acceptValues 'static'|'toggle'|'slideButton'|'slideItem'|'swipe'|'context'
             */
-            itemDeleteMode: "toggle",
+            itemDeleteMode: "static",
 
             /**
             * @name dxListOptions_allowItemReordering
@@ -262,17 +262,6 @@ var ListEdit = ListBase.inherit({
                     * @custom_default_for_windows 'context'
                     */
                     itemDeleteMode: "context"
-                }
-            },
-            {
-                device: { platform: "generic" },
-                options: {
-                    /**
-                    * @name dxListOptions_itemDeleteMode
-                    * @publicName itemDeleteMode
-                    * @custom_default_for_generic 'static'
-                    */
-                    itemDeleteMode: "static"
                 }
             }
         ]);
