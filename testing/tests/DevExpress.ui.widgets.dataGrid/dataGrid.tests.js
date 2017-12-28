@@ -7850,7 +7850,7 @@ QUnit.testInActiveWindow("DataGrid with inside grid in masterDetail - the invali
                         .addClass("inside-grid")
                         .dxDataGrid({
                             dataSource: [{ name: "Inside Grid Item" }],
-                            columns: [{ dataField: "name", dataType: "date" }],
+                            columns: [{ dataField: "name", dataType: "date", editorOptions: { mode: "text" } }],
                             filterRow: {
                                 visible: true
                             }
