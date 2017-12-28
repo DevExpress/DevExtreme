@@ -6026,6 +6026,7 @@ QUnit.testInActiveWindow("Tab key should open editor in next cell when virtual s
 
     //act
     this.clock.tick();
+    dataGrid.getScrollable().update();
     dataGrid.getScrollable().scrollTo({ x: 0, y: 10000 });
 
     this.clock.tick();
