@@ -109,6 +109,25 @@ QUnit.test("Changing the 'value' option must invoke the 'onValueChanged' action"
     assert.ok(handler.calledOnce, "Handler should be called once");
 });
 
+QUnit.test("Update value after valueChangeTimeout", function(assert) {
+    this.clock = sinon.useFakeTimers();
+
+    var valueChanged = sinon.spy(),
+        $textEditor = $("#texteditor").dxTextEditor({
+            valueChangeTimeout: 500,
+            onValueChanged: valueChanged
+        }),
+        $input = $textEditor.find("input");
+
+    $input.val('910').trigger('change');
+
+    assert.equal(valueChanged.callCount, 0, "valueChange event is not fired yet");
+
+    this.clock.tick(500);
+    assert.equal(valueChanged.callCount, 1, "valueChange event is fired after timeout");
+    this.clock.restore();
+});
+
 QUnit.test("tabIndex option change", function(assert) {
     var $element = $("#texteditor").dxTextEditor({
             tabIndex: 1

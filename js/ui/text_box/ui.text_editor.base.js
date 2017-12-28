@@ -23,7 +23,9 @@ var TEXTEDITOR_CLASS = "dx-texteditor",
     TEXTEDITOR_ICON_CLASS = "dx-icon",
     TEXTEDITOR_CLEAR_ICON_CLASS = "dx-icon-clear",
     TEXTEDITOR_CLEAR_BUTTON_CLASS = "dx-clear-button-area",
-    TEXTEDITOR_EMPTY_INPUT_CLASS = "dx-texteditor-empty";
+    TEXTEDITOR_EMPTY_INPUT_CLASS = "dx-texteditor-empty",
+
+    VALUE_CHANGE_TIMEOUT = 0;
 
 var EVENTS_LIST = [
     "KeyDown", "KeyPress", "KeyUp",
@@ -120,6 +122,8 @@ var TextEditorBase = Editor.inherit({
             * @default "change"
             */
             valueChangeEvent: "change",
+
+            valueChangeTimeout: VALUE_CHANGE_TIMEOUT,
 
             /**
             * @name dxTextEditorOptions_placeholder
@@ -652,8 +656,19 @@ var TextEditorBase = Editor.inherit({
     },
 
     _valueChangeEventHandler: function(e, formattedValue) {
+        var that = this,
+            value = arguments.length > 1 ? formattedValue : that._input().val();
+
         this._saveValueChangeEvent(e);
-        this.option("value", arguments.length > 1 ? formattedValue : this._input().val());
+
+        window.clearTimeout(that._valueChangeTimeout);
+        if(that.option("valueChangeTimeout") && value !== "") {
+            that._valueChangeTimeout = window.setTimeout(function() {
+                that.option("value", value);
+            }, that.option("valueChangeTimeout"));
+        } else {
+            this.option("value", value);
+        }
         this._saveValueChangeEvent(undefined);
     },
 
@@ -692,6 +707,11 @@ var TextEditorBase = Editor.inherit({
         return this._input();
     },
 
+    _clean: function() {
+        clearTimeout(this._valueChangeTimeout);
+        this.callBase();
+    },
+
     _optionChanged: function(args) {
         var name = args.name;
 
@@ -705,6 +725,8 @@ var TextEditorBase = Editor.inherit({
                 this._refreshValueChangeEvent();
                 this._refreshFocusEvent();
                 this._refreshEvents();
+                break;
+            case "valueChangeTimeout":
                 break;
             case "onValueChanged":
                 this._createValueChangeAction();
