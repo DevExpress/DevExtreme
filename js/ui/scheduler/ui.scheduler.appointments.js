@@ -499,7 +499,7 @@ var SchedulerAppointments = CollectionWidget.inherit({
             allDay = settings.allDay;
         this.invoke("setCellDataCacheAlias", this._currentAppointmentSettings, geometry);
 
-        var color = this._applyAppointmentColor($appointment, data, settings);
+        var color = this._getAppointmentColor($appointment, data, settings);
 
         if(settings.virtual) {
             this._processVirtualAppointment(settings, $appointment, data, color);
@@ -520,15 +520,16 @@ var SchedulerAppointments = CollectionWidget.inherit({
                 resizableConfig: this._resizableConfig(data, settings)
             });
 
+            color.done(function(color) {
+                if(color) {
+                    $appointment.css("background-color", color);
+                }
+            });
+
             this._renderDraggable($appointment, allDay);
         }
     },
 
-    _applyAppointmentColor: function($appointment, appointmentData, settings) {
-        var deferredColor = this._paintAppointment($appointment, settings.groupIndex);
-
-        return deferredColor;
-    },
 
     _applyResourceDataAttr: function($appointment) {
         this.notifyObserver("getResourcesFromItem", {
@@ -680,16 +681,13 @@ var SchedulerAppointments = CollectionWidget.inherit({
         return result;
     },
 
-    _paintAppointment: function($appointment, groupIndex) {
+    _getAppointmentColor: function($appointment, groupIndex) {
         var res = new Deferred();
         this.notifyObserver("getAppointmentColor", {
             itemData: this._getItemData($appointment),
             groupIndex: groupIndex,
             callback: function(d) {
                 d.done(function(color) {
-                    if(color) {
-                        $appointment.css("background-color", color);
-                    }
                     res.resolve(color);
                 });
             }

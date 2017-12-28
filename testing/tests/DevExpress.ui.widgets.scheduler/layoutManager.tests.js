@@ -15,7 +15,6 @@ var $ = require("jquery"),
     HorizontalMonthLineAppointmentsStrategy = require("ui/scheduler/ui.scheduler.appointments.strategy.horizontal_month_line"),
     Color = require("color"),
     dataUtils = require("core/element_data"),
-    DataSource = require("data/data_source/data_source").DataSource,
     CustomStore = require("data/custom_store");
 
 var APPOINTMENT_DEFAULT_OFFSET = 25;
@@ -678,20 +677,18 @@ QUnit.test("Grouped appointments schould have correct colors when resourses stor
                 {
                     field: "roomId",
                     allowMultiple: true,
-                    dataSource: new DataSource({
-                        store: new CustomStore({
-                            load: function() {
-                                var d = $.Deferred();
-                                setTimeout(function() {
-                                    d.resolve([
-                                        { id: 1, text: "Room 1", color: "#ff0000" },
-                                        { id: 2, text: "Room 2", color: "#0000ff" }
-                                    ]);
-                                }, 300);
+                    dataSource: new CustomStore({
+                        load: function() {
+                            var d = $.Deferred();
+                            setTimeout(function() {
+                                d.resolve([
+                                    { id: 1, text: "Room 1", color: "#ff0000" },
+                                    { id: 2, text: "Room 2", color: "#0000ff" }
+                                ]);
+                            }, 300);
 
-                                return d.promise();
-                            }
-                        })
+                            return d.promise();
+                        }
                     })
                 }
             ]
