@@ -63,5 +63,30 @@ module.exports = {
         return raiseTo(numericTranslator._add(getLog(value, b), diff, dir), b);
     },
 
-    isValueProlonged: numericTranslator.isValueProlonged
+    isValueProlonged: numericTranslator.isValueProlonged,
+
+    getMinBarSize: function(minBarSize) {
+        var visibleArea = this.getCanvasVisibleArea(),
+            minValue = this.untranslate(visibleArea.min + minBarSize),
+            canvasOptions = this._canvasOptions;
+
+        return Math.pow(canvasOptions.base, canvasOptions.rangeMinVisible + getLog(this.untranslate(visibleArea.min), canvasOptions.base) - getLog((!isDefined(minValue) ? this.untranslate(visibleArea.max) : minValue), canvasOptions.base));
+    },
+
+    checkMinBarSize: function(initialValue, minShownValue, stackValue) {
+        var canvasOptions = this._canvasOptions,
+            prevValue = stackValue - initialValue,
+            baseMethod = this.constructor.prototype.checkMinBarSize,
+            minBarSize,
+            updateValue;
+
+        if(isDefined(minShownValue) && prevValue > 0) {
+            minBarSize = baseMethod(vizUtils.getLog(stackValue / prevValue, canvasOptions.base), vizUtils.getLog(minShownValue, canvasOptions.base) - canvasOptions.rangeMinVisible);
+            updateValue = Math.pow(canvasOptions.base, vizUtils.getLog(prevValue, canvasOptions.base) + minBarSize) - prevValue;
+        } else {
+            updateValue = baseMethod(initialValue, minShownValue);
+        }
+
+        return updateValue;
+    }
 };
