@@ -2517,6 +2517,46 @@ QUnit.test("Appointment should have correct position while dragging from group",
     assert.deepEqual(appointmentData.ownerId, { id: [2] }, "Resources is correct");
 });
 
+QUnit.test("Appointment should push correct data to the onAppointmentUpdating event on changing group by drag'n'drop ", function(assert) {
+    this.createInstance({
+        currentDate: new Date(2015, 4, 25),
+        editing: true,
+        views: ["workWeek"],
+        currentView: "workWeek",
+        dataSource: [{
+            text: "Test appointment",
+            priorityId: 1,
+            startDate: new Date(2015, 4, 25, 14, 30),
+            endDate: new Date(2015, 4, 25, 15, 30)
+        }],
+        groups: ["priorityId"],
+        resources: [
+            {
+                fieldExpr: "priorityId",
+                allowMultiple: false,
+                dataSource: [
+                    { text: "Low Priority", id: 1 },
+                    { text: "High Priority", id: 2 }
+                ],
+                label: "Priority"
+            }
+        ],
+        onAppointmentUpdating: function(e) {
+            assert.equal(e.oldData.priorityId, 1, "Appointment was located in the first group");
+            assert.equal(e.newData.priorityId, 2, "Appointment located in the second group now");
+        },
+        width: 800
+    });
+    var $appointment = $(this.instance.$element().find(".dx-scheduler-appointment")).eq(0);
+
+    $appointment.trigger(dragEvents.start);
+    $(this.instance.$element().find(".dx-scheduler-date-table-cell")).eq(7).trigger(dragEvents.enter);
+    $appointment.trigger(dragEvents.end);
+
+    assert.expect(2);
+    this.clock.tick();
+});
+
 QUnit.test("Appointments should be repainted if the 'crossScrollingEnabled' is changed", function(assert) {
     this.createInstance({
         currentDate: new Date(2015, 6, 10),
