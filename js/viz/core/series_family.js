@@ -139,6 +139,12 @@ function getAbsStackSumByArg(stackKeepers, stackName, argument) {
     return positiveStackValue + negativeStackValue;
 }
 
+function getStackSumByArg(stackKeepers, stackName, argument) {
+    var positiveStackValue = (stackKeepers.positive[stackName] || {})[argument] || 0,
+        negativeStackValue = (stackKeepers.negative[stackName] || {})[argument] || 0;
+    return positiveStackValue + negativeStackValue;
+}
+
 function getSeriesStackIndexCallback(rotated, series, stackIndexes) {
     if(!rotated) {
         return function(seriesIndex) { return stackIndexes ? stackIndexes[series[seriesIndex].getStackName()] : seriesIndex; };
@@ -244,8 +250,11 @@ function adjustStackedSeriesValues() {
     that._stackKeepers = stackKeepers;
     _each(series, function(_, singleSeries) {
         _each(singleSeries.getPoints(), function(_, point) {
-            var argument = point.argument.valueOf();
-            point.setPercentValue(getAbsStackSumByArg(stackKeepers, singleSeries.getStackName(), argument), that.fullStacked, holesStack.left[argument], holesStack.right[argument]);
+            var argument = point.argument.valueOf(),
+                absTotal = getAbsStackSumByArg(stackKeepers, singleSeries.getStackName(), argument),
+                total = getStackSumByArg(stackKeepers, singleSeries.getStackName(), argument);
+
+            point.setPercentValue(absTotal, total, holesStack.left[argument], holesStack.right[argument]);
         });
     });
 }
