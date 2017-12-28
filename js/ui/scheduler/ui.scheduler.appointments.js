@@ -499,26 +499,29 @@ var SchedulerAppointments = CollectionWidget.inherit({
             allDay = settings.allDay;
         this.invoke("setCellDataCacheAlias", this._currentAppointmentSettings, geometry);
 
-        !settings.virtual && this._createComponent($appointment, Appointment, {
-            observer: this.option("observer"),
-            data: data,
-            geometry: geometry,
-            direction: settings.direction || "vertical",
-            allowResize: allowResize,
-            allowDrag: allowDrag,
-            allDay: allDay,
-            reduced: settings.appointmentReduced,
-            isCompact: settings.isCompact,
-            startDate: settings.startDate,
-            cellWidth: this.invoke("getCellWidth"),
-            cellHeight: this.invoke("getCellHeight"),
-            resizableConfig: this._resizableConfig(data, settings)
-        });
-
         var color = this._applyAppointmentColor($appointment, data, settings);
-        settings.virtual && this._processVirtualAppointment(settings, $appointment, data, color);
 
-        this._renderDraggable($appointment, allDay);
+        if(settings.virtual) {
+            this._processVirtualAppointment(settings, $appointment, data, color);
+        } else {
+            this._createComponent($appointment, Appointment, {
+                observer: this.option("observer"),
+                data: data,
+                geometry: geometry,
+                direction: settings.direction || "vertical",
+                allowResize: allowResize,
+                allowDrag: allowDrag,
+                allDay: allDay,
+                reduced: settings.appointmentReduced,
+                isCompact: settings.isCompact,
+                startDate: settings.startDate,
+                cellWidth: this.invoke("getCellWidth"),
+                cellHeight: this.invoke("getCellHeight"),
+                resizableConfig: this._resizableConfig(data, settings)
+            });
+
+            this._renderDraggable($appointment, allDay);
+        }
     },
 
     _applyAppointmentColor: function($appointment, appointmentData, settings) {
