@@ -48,4 +48,6 @@ gulp.task('default', function(callback) {
         callback);
 });
 
-gulp.task('dev', ['bundler-config-dev', 'js-bundles-dev']);
+gulp.task('dev', function(callback) {
+    runSequence('bundler-config-dev', ['js-bundles-dev', 'style-compiler-themes-dev'], callback);
+});
