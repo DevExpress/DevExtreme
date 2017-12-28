@@ -449,6 +449,9 @@
             getMinBarSize: function() {
                 return arguments[0];
             },
+            checkMinBarSize: function() {
+                return Math.abs(arguments[0]) < arguments[1] ? arguments[0] >= 0 ? arguments[1] : -arguments[1] : arguments[0];
+            },
             reinit: commonUtils.noop
         };
     };
