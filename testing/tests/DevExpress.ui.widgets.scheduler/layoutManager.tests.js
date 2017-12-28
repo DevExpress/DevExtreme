@@ -14,7 +14,9 @@ var $ = require("jquery"),
     HorizontalAppointmentsStrategy = require("ui/scheduler/ui.scheduler.appointments.strategy.horizontal"),
     HorizontalMonthLineAppointmentsStrategy = require("ui/scheduler/ui.scheduler.appointments.strategy.horizontal_month_line"),
     Color = require("color"),
-    dataUtils = require("core/element_data");
+    dataUtils = require("core/element_data"),
+    DataSource = require("data/data_source/data_source").DataSource,
+    CustomStore = require("data/custom_store");
 
 var APPOINTMENT_DEFAULT_OFFSET = 25;
 
@@ -535,7 +537,16 @@ QUnit.test("Start date of appointment should be changed when resize is finished,
     });
 });
 
-QUnit.module("Horizontal Month Strategy", moduleOptions);
+QUnit.module("Horizontal Month Strategy", {
+    beforeEach: function() {
+        moduleOptions.beforeEach.apply(this);
+        this.clock = sinon.useFakeTimers();
+    },
+    afterEach: function() {
+        moduleOptions.afterEach.apply(this);
+        this.clock.restore();
+    }
+});
 
 QUnit.test("Start date of the long-time reduced appointment should be changed correctly when resize is finished", function(assert) {
     var items = [{
@@ -639,8 +650,60 @@ QUnit.test("Grouped appointments schould have correct colors", function(assert) 
     var $appointment = $(this.instance.$element().find(".dx-scheduler-appointment"));
     assert.equal($appointment.length, 2, "Cloned appointments are grouped");
 
-    var $dropDownMenu = $(this.instance.$element()).find(".dx-scheduler-dropdown-appointments").trigger("dxclick");
+    var $dropDownMenu = $(this.instance.$element()).find(".dx-scheduler-dropdown-appointments");
 
+    assert.equal(new Color($dropDownMenu.css("background-color")).toHex(), "#0000ff", "ddAppointment is rendered");
+});
+
+QUnit.test("Grouped appointments schould have correct colors when resourses store is asynchronous", function(assert) {
+    var items = [], i = 2;
+
+    while(i > 0) {
+        items.push({ text: i, startDate: new Date(2015, 1, 9), endDate: new Date(2015, 1, 9, 1), roomId: 1 });
+        i--;
+    }
+    i = 10;
+    while(i > 0) {
+        items.push({ text: i, startDate: new Date(2015, 1, 9), endDate: new Date(2015, 1, 9, 1), roomId: 2 });
+        i--;
+    }
+
+    this.createInstance(
+        {
+            currentDate: new Date(2015, 1, 9),
+            currentView: "month",
+            height: 500,
+            dataSource: items,
+            resources: [
+                {
+                    field: "roomId",
+                    allowMultiple: true,
+                    dataSource: new DataSource({
+                        store: new CustomStore({
+                            load: function() {
+                                var d = $.Deferred();
+                                setTimeout(function() {
+                                    d.resolve([
+                                        { id: 1, text: "Room 1", color: "#ff0000" },
+                                        { id: 2, text: "Room 2", color: "#0000ff" }
+                                    ]);
+                                }, 300);
+
+                                return d.promise();
+                            }
+                        })
+                    })
+                }
+            ]
+        }
+    );
+
+    this.clock.tick(300);
+    var $appointment = $(this.instance.$element().find(".dx-scheduler-appointment"));
+    assert.equal($appointment.length, 2, "Cloned appointments are grouped");
+
+    var $dropDownMenu = $(this.instance.$element()).find(".dx-scheduler-dropdown-appointments");
+    this.clock.tick(300);
     assert.equal(new Color($dropDownMenu.css("background-color")).toHex(), "#0000ff", "ddAppointment is rendered");
 });
 
