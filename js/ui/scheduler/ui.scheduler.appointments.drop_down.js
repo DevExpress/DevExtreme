@@ -93,7 +93,6 @@ var dropDownAppointments = Class.inherit({
                 $menu.css("background-color", color);
             }
         }).bind(this));
-
     },
 
     _createButtonTemplate: function(appointmentCount) {
