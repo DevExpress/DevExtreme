@@ -11,7 +11,9 @@ var $ = require("../../core/renderer"),
     DropDownMenu = require("../drop_down_menu"),
     FunctionTemplate = require("../widget/function_template"),
     messageLocalization = require("../../localization/message"),
-    extendFromObject = require("../../core/utils/extend").extendFromObject;
+    extendFromObject = require("../../core/utils/extend").extendFromObject,
+    deferredUtils = require("../../core/utils/deferred"),
+    when = deferredUtils.when;
 
 var DROPDOWN_APPOINTMENTS_CLASS = "dx-scheduler-dropdown-appointments",
     DROPDOWN_APPOINTMENTS_CONTENT_CLASS = "dx-scheduler-dropdown-appointments-content",
@@ -45,10 +47,11 @@ var dropDownAppointments = Class.inherit({
             buttonWidth: options.buttonWidth
         });
 
-        var deferredButtonColor = options.buttonColor;
+        var deferredButtonColor = options.buttonColor,
+            deferredItemsColors = options.items.colors;
 
-        deferredButtonColor && deferredButtonColor.done((function(color) {
-            this._paintMenuButton($menu, color, items);
+        when.apply(null, deferredItemsColors).done((function() {
+            this._paintMenuButton($menu, deferredButtonColor, arguments);
         }).bind(this));
 
         this._applyInnerShadow($menu, options.buttonWidth);
@@ -68,27 +71,29 @@ var dropDownAppointments = Class.inherit({
         });
     },
 
-    _paintMenuButton: function($menu, color, menuItems) {
+    _paintMenuButton: function($menu, color, itemsColors) {
         var paintButton = true,
-            itemsColors = menuItems.colors,
             itemColorCount = itemsColors.length,
             currentItemColor;
 
-        if(itemColorCount) {
-            currentItemColor = itemsColors[0];
+        color && color.done((function(color) {
+            if(itemColorCount) {
+                currentItemColor = itemsColors[0];
 
-            for(var i = 1; i < itemColorCount; i++) {
-                if(currentItemColor !== itemsColors[i]) {
-                    paintButton = false;
-                    break;
+                for(var i = 1; i < itemColorCount; i++) {
+                    if(currentItemColor !== itemsColors[i]) {
+                        paintButton = false;
+                        break;
+                    }
+                    currentItemColor = color;
                 }
-                currentItemColor = itemsColors[i];
             }
-        }
 
-        if(color && paintButton) {
-            $menu.css("background-color", color);
-        }
+            if(color && paintButton) {
+                $menu.css("background-color", color);
+            }
+        }).bind(this));
+
     },
 
     _createButtonTemplate: function(appointmentCount) {
