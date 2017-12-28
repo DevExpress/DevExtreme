@@ -82,6 +82,7 @@ var Submenu = ContextMenu.inherit({
     _hideSubmenu: function($rootItem) {
         this._actions.onHiding({
             rootItem: $rootItem,
+            cancel: true,
             submenu: this
         });
         this.callBase($rootItem);
