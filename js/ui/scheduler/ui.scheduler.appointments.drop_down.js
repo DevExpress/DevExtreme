@@ -45,7 +45,11 @@ var dropDownAppointments = Class.inherit({
             buttonWidth: options.buttonWidth
         });
 
-        this._paintMenuButton($menu, options.buttonColor, items);
+        var deferredButtonColor = options.buttonColor;
+
+        deferredButtonColor.done((function(color) {
+            this._paintMenuButton($menu, color, items);
+        }).bind(this));
 
         this._applyInnerShadow($menu, options.buttonWidth);
 
@@ -256,9 +260,9 @@ var dropDownAppointments = Class.inherit({
             borderSide = "right";
         }
 
-        if(color) {
+        color.done((function(color) {
             appointmentElement.css("border-" + borderSide + "-color", color);
-        }
+        }).bind(this));
 
         var startDate = this.instance.fire("getField", "startDate", appointmentData),
             endDate = this.instance.fire("getField", "endDate", appointmentData);

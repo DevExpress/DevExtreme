@@ -254,7 +254,7 @@ var SchedulerAppointments = CollectionWidget.inherit({
     _clearDropDownItems: function() {
         this._virtualAppointments = {};
 
-        var $items = this._itemContainer().find(".dx-scheduler-dropdown-appointments");
+        var $items = this._getDropDownAppointments();
         if(!$items.length) {
             return;
         }
@@ -263,6 +263,10 @@ var SchedulerAppointments = CollectionWidget.inherit({
             $($item).detach();
             $($item).remove();
         });
+    },
+
+    _getDropDownAppointments: function() {
+        return this._itemContainer().find(".dx-scheduler-dropdown-appointments");
     },
 
     _findItemElementByItem: function(item) {
@@ -495,7 +499,7 @@ var SchedulerAppointments = CollectionWidget.inherit({
             allDay = settings.allDay;
         this.invoke("setCellDataCacheAlias", this._currentAppointmentSettings, geometry);
 
-        this._createComponent($appointment, Appointment, {
+        !settings.virtual && this._createComponent($appointment, Appointment, {
             observer: this.option("observer"),
             data: data,
             geometry: geometry,
@@ -511,17 +515,16 @@ var SchedulerAppointments = CollectionWidget.inherit({
             resizableConfig: this._resizableConfig(data, settings)
         });
 
-        this._applyAppointmentColor($appointment, data, settings);
+        var color = this._applyAppointmentColor($appointment, data, settings);
+        settings.virtual && this._processVirtualAppointment(settings, $appointment, data, color);
+
         this._renderDraggable($appointment, allDay);
     },
 
     _applyAppointmentColor: function($appointment, appointmentData, settings) {
         var deferredColor = this._paintAppointment($appointment, settings.groupIndex);
-        if(settings.virtual) {
-            deferredColor.done((function(color) {
-                this._processVirtualAppointment(settings, $appointment, appointmentData, color);
-            }).bind(this));
-        }
+
+        return deferredColor;
     },
 
     _applyResourceDataAttr: function($appointment) {
