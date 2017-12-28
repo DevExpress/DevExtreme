@@ -614,8 +614,9 @@ QUnit.module("Rendering", function() {
         });
 
         $("." + FILTER_BUILDER_ITEM_VALUE_TEXT_CLASS).click();
-        $(".dx-datebox input").val("12/12/2017");
+        $(".dx-datebox input").val("2017-12-12");
         $(".dx-datebox input").trigger("change");
+
         assert.equal($("." + FILTER_BUILDER_ITEM_VALUE_TEXT_CLASS).text(), "12.12.2017");
     });
 
