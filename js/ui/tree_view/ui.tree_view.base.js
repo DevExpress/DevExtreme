@@ -1583,6 +1583,7 @@ var TreeViewBase = HierarchicalCollectionWidget.inherit({
                 var $prevItem = this._prevItem($items);
 
                 this.option("focusedElement", getPublicElement($prevItem));
+
                 if(e.shiftKey && this._showCheckboxes()) {
                     this._updateItemSelection(true, $prevItem.find("." + ITEM_CLASS).get(0));
                 }

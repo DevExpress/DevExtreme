@@ -4,6 +4,7 @@
 
 var $ = require("jquery"),
     isRenderer = require("core/utils/type").isRenderer,
+    fx = require("animation/fx"),
     config = require("core/config");
 
 require("ui/filter_builder/filter_builder");
@@ -1085,5 +1086,13 @@ QUnit.module("Keyboard navigation", {
         this.changeValueAndPressKey(ESCAPE_KEY, "keyup");
 
         assert.ok(this.getValueButtonElement().is(":focus"));
+    });
+
+    QUnit.testInActiveWindow("menu has focus after open by enter", function(assert) {
+        fx.off = true;
+        this.triggerEvent($("." + FILTER_BUILDER_GROUP_OPERATION_CLASS), "keydown", ENTER_KEY);
+        fx.off = false;
+
+        assert.ok($(".dx-treeview").is(":focus"));
     });
 });

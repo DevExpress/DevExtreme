@@ -931,6 +931,9 @@ var FilterBuilder = Widget.inherit({
             },
             visible: true,
             focusStateEnabled: false,
+            onShown: function(e) {
+                e.component.content().find(".dx-treeview").focus();
+            },
             closeOnOutsideClick: true,
             shading: false,
             width: "auto",
