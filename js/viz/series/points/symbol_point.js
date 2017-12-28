@@ -483,10 +483,10 @@ module.exports = {
         };
     },
 
-    setPercentValue: function(total, fullStacked, leftHoleTotal, rightHoleTotal) {
+    setPercentValue: function(absTotal, total, leftHoleTotal, rightHoleTotal) {
         var that = this,
-            valuePercent = (that.value / total) || 0,
-            minValuePercent = (that.minValue / total) || 0,
+            valuePercent = (that.value / absTotal) || 0,
+            minValuePercent = (that.minValue / absTotal) || 0,
             percent = valuePercent - minValuePercent;
 
         that._label.setDataField("percent", percent);
@@ -494,12 +494,12 @@ module.exports = {
 
         if(that.series.isFullStackedSeries() && that.hasValue()) {
             if(that.leftHole) {
-                that.leftHole /= total - leftHoleTotal;
-                that.minLeftHole /= total - leftHoleTotal;
+                that.leftHole /= absTotal - leftHoleTotal;
+                that.minLeftHole /= absTotal - leftHoleTotal;
             }
             if(that.rightHole) {
-                that.rightHole /= total - rightHoleTotal;
-                that.minRightHole /= total - rightHoleTotal;
+                that.rightHole /= absTotal - rightHoleTotal;
+                that.minRightHole /= absTotal - rightHoleTotal;
             }
             that.value = valuePercent;
             that.minValue = !minValuePercent ? that.minValue : minValuePercent;
