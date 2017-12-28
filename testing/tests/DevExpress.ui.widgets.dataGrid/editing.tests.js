@@ -9829,6 +9829,8 @@ QUnit.test("Position of the inserted row if top visible row is master detail", f
 
     this.expandRow(this.options.dataSource[8]);
 
+    this.rowsView.resize();
+
     this.rowsView.scrollTo({ y: 10000 });
 
     //act
@@ -9859,6 +9861,8 @@ QUnit.test("Position of the inserted row if top visible row is adaptive detail",
     this.rowsView.resize();
 
     this.expandAdaptiveDetailRow(this.options.dataSource[6]);
+
+    this.rowsView.resize();
 
     this.rowsView.scrollTo({ y: 10000 });
 
