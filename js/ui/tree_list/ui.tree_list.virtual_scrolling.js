@@ -3,22 +3,17 @@
 var gridCore = require("./ui.tree_list.core"),
     dataSourceAdapter = require("./ui.tree_list.data_source_adapter"),
     virtualScrollingModule = require("../grid_core/ui.grid_core.virtual_scrolling"),
-    extend = require("../../core/utils/extend").extend,
-    equalByValue = require("../../core/utils/common").equalByValue;
+    extend = require("../../core/utils/extend").extend;
 
 var oldDefaultOptions = virtualScrollingModule.defaultOptions,
     originalDataControllerExtender = virtualScrollingModule.extenders.controllers.data;
 
 virtualScrollingModule.extenders.controllers.data = extend({}, originalDataControllerExtender, {
-    optionChanged: function(args) {
-        var dataSource = this.dataSource(),
-            virtualScrollController = dataSource && dataSource._virtualScrollController;
+    _loadOnOptionChange: function() {
+        var virtualScrollController = this._dataSource && this._dataSource._virtualScrollController;
 
-        if(args.name === "expandedRowKeys" && dataSource && !dataSource._isNodesInitializing && !equalByValue(args.value, args.previousValue)) {
-            virtualScrollController && virtualScrollController.reset();
-        }
-
-        this.callBase(args);
+        virtualScrollController && virtualScrollController.reset();
+        this.callBase();
     }
 });
 
