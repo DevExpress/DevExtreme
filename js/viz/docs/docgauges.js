@@ -758,6 +758,7 @@ var dxCircularGauge = {
     * @publicName valueIndicator
     * @inherits CommonIndicator
     * @type object
+    * @inheritAll
     */
     valueIndicator: {
         /**
@@ -774,6 +775,7 @@ var dxCircularGauge = {
     * @publicName subvalueIndicator
     * @inherits CommonIndicator
     * @type object
+    * @inheritAll
     */
     subvalueIndicator: {
         /**
@@ -921,6 +923,7 @@ var dxLinearGauge = {
     * @publicName valueIndicator
     * @inherits CommonIndicator
     * @type object
+    * @inheritAll
     */
     valueIndicator: {
         /**
@@ -937,6 +940,7 @@ var dxLinearGauge = {
     * @publicName subvalueIndicator
     * @inherits CommonIndicator
     * @type object
+    * @inheritAll
     */
     subvalueIndicator: {
         /**
