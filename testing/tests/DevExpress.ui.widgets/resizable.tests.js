@@ -2,7 +2,8 @@
 
 var $ = require("jquery"),
     translator = require("animation/translator"),
-    pointerMock = require("../../helpers/pointerMock.js");
+    pointerMock = require("../../helpers/pointerMock.js"),
+    domUtils = require("core/utils/dom");
 
 require("common.css!");
 require("ui/resizable");
@@ -888,6 +889,26 @@ QUnit.test("onResize action should be fired during resize", function(assert) {
         pointer = pointerMock($handle).start();
 
     pointer.dragStart().drag(10, 0);
+});
+
+QUnit.test("dxresize event should be fired during resize", function(assert) {
+    var $resizable = $("#resizable").dxResizable(),
+        $handle = $resizable.find("." + RESIZABLE_HANDLE_CORNER_CLASS + "-bottom-right"),
+        pointer = pointerMock($handle).start();
+
+    var triggerFunction = domUtils.triggerResizeEvent;
+    assert.expect(1);
+
+    try {
+        domUtils.triggerResizeEvent = function() {
+            assert.ok(true, "event triggered");
+        };
+
+        pointer.dragStart().drag(10, 0);
+
+    } finally {
+        domUtils.triggerResizeEvent = triggerFunction;
+    }
 });
 
 QUnit.test("onResize action should be fired with correct args when oversizing", function(assert) {
