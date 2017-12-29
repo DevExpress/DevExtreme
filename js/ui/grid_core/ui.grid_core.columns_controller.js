@@ -1398,6 +1398,9 @@ module.exports = {
 
                     if(column) {
                         this.columnOption(column.index, columnOptionValue);
+                        if(columnOptionName === "width") {
+                            this.component._requireResize = true;
+                        }
                     }
                 },
 

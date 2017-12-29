@@ -1087,6 +1087,24 @@ QUnit.test("Resize grid after column resizing", function(assert) {
 
 });
 
+//T590907
+QUnit.test("Change column width via option method", function(assert) {
+    //arrange
+    var dataGrid = $("#dataGrid").dxDataGrid({
+        loadingTimeout: undefined,
+        dataSource: [{}],
+        columns: [{ dataField: "column1", width: 100 }, { dataField: "column2", width: 100 }]
+    }).dxDataGrid("instance");
+
+    //act
+    dataGrid.option("columns[0].width", 1);
+
+    //assert
+    assert.strictEqual(dataGrid.$element().width(), 101);
+    assert.strictEqual(dataGrid.columnOption(0, "visibleWidth"), 1);
+    assert.strictEqual(dataGrid.columnOption(1, "visibleWidth"), "auto");
+});
+
 function isColumnHidden($container, index) {
     var $colsHeadersView = $container.find(".dx-datagrid-headers col"),
         $colsRowsView = $container.find(".dx-datagrid-headers col"),
