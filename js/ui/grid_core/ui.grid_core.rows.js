@@ -1164,8 +1164,10 @@ module.exports = {
                         that._renderScrollable();
                         that.renderNoDataText();
                         that.updateFreeSpaceRowHeight();
+                        commonUtils.deferUpdate(function() {
+                            that._updateScrollable();
+                        });
                     });
-                    that._updateScrollable();
                     that.setLoading(that._dataController.isLoading());
                 },
 
