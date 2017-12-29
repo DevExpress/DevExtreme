@@ -578,7 +578,6 @@ var FilterBuilder = Widget.inherit({
         var that = this,
             removeMenu = function() {
                 that.$element().find("." + ACTIVE_CLASS).removeClass(ACTIVE_CLASS);
-                that.$element().find(".dx-has-context-menu").remove();
                 that.$element().find(".dx-overlay .dx-treeview").remove();
                 that.$element().find(".dx-overlay").remove();
             },
@@ -603,7 +602,7 @@ var FilterBuilder = Widget.inherit({
                 $button.removeClass(ACTIVE_CLASS);
             },
             position: { my: position + " top", at: position + " bottom", offset: "0 1" },
-            animation: { show: { type: 'fade', from: 1, to: 1, delay: 0 }, hide: { type: 'fade', from: 0, to: 0, delay: 0 } },
+            animation: null,
             onHidden: function() {
                 removeMenu();
             },
@@ -611,6 +610,23 @@ var FilterBuilder = Widget.inherit({
             target: $button,
             rtlEnabled: rtlEnabled
         });
+
+        options.popup = {
+            onShown: function(info) {
+                var treeViewElement = $(info.component.content()).find(".dx-treeview"),
+                    treeView = treeViewElement.dxTreeView("instance");
+                eventsEngine.on(treeViewElement, "keydown", function(e) {
+                    if(e.keyCode === ESCAPE_KEY || e.keyCode === TAB_KEY) {
+                        info.component.hide();
+                        eventsEngine.trigger(options.menu.target, "focus");
+                    }
+                });
+
+                treeView.focus();
+                treeView.option("focusedElement", null);
+            }
+        };
+
         this._subscribeOnClickAndEnterKey($button, function() {
             removeMenu();
             that._createPopupWithTreeView(options, that.$element());
@@ -817,11 +833,9 @@ var FilterBuilder = Widget.inherit({
     _createValueEditorWithEvents: function(item, field, $container) {
         var that = this,
             value = item[2],
-            enterClicked = false,
             removeEvents = function() {
                 eventsEngine.off(document, "keyup", documentKeyUpHandler);
                 eventsEngine.off(document, "click", documentClickHandler);
-                eventsEngine.off($editor, "keyup");
             },
             isFocusOnEditorParts = function() {
                 var activeElement = document.activeElement;
@@ -843,8 +857,9 @@ var FilterBuilder = Widget.inherit({
             setValue: function(data) {
                 value = data === null ? "" : data;
                 that._updateConditionValue(item, value, function() {
-                    var $textButton = createValueText();
-                    if(enterClicked) {
+                    var isEditorFocused = $(":focus").closest($editor).length,
+                        $textButton = createValueText();
+                    if(isEditorFocused) {
                         eventsEngine.trigger($textButton, "focus");
                     }
                 });
@@ -875,16 +890,8 @@ var FilterBuilder = Widget.inherit({
             if(e.keyCode === ESCAPE_KEY) {
                 eventsEngine.trigger(createValueText(), "focus");
             }
-            if(enterClicked) {
-                options.setValue(value);
-            }
         };
         eventsEngine.on(document, "keyup", documentKeyUpHandler);
-        eventsEngine.on($editor, "keydown", function(e) {
-            if(e.keyCode === ENTER_KEY) {
-                enterClicked = true;
-            }
-        });
     },
 
     _createValueButton: function(item, field) {
@@ -931,10 +938,8 @@ var FilterBuilder = Widget.inherit({
             },
             visible: true,
             focusStateEnabled: false,
-            onShown: function(e) {
-                e.component.content().find(".dx-treeview").focus();
-            },
             closeOnOutsideClick: true,
+            onShown: options.popup.onShown,
             shading: false,
             width: "auto",
             height: "auto",

@@ -4,7 +4,6 @@
 
 var $ = require("jquery"),
     isRenderer = require("core/utils/type").isRenderer,
-    fx = require("animation/fx"),
     config = require("core/config");
 
 require("ui/filter_builder/filter_builder");
@@ -19,11 +18,7 @@ var FILTER_BUILDER_ITEM_FIELD_CLASS = "dx-filterbuilder-item-field",
     FILTER_BUILDER_IMAGE_ADD_CLASS = "dx-icon-plus",
     FILTER_BUILDER_IMAGE_REMOVE_CLASS = "dx-icon-remove",
     FILTER_BUILDER_GROUP_OPERATION_CLASS = "dx-filterbuilder-group-operation",
-    ACTIVE_CLASS = "dx-state-active",
-
-    TAB_KEY = 9,
-    ENTER_KEY = 13,
-    ESCAPE_KEY = 27;
+    ACTIVE_CLASS = "dx-state-active";
 
 var getSelectedMenuText = function() {
     return $(".dx-treeview-node.dx-state-selected").text();
@@ -980,119 +975,3 @@ QUnit.module("on value changed", function() {
     });
 });
 
-QUnit.module("Keyboard navigation", {
-    beforeEach: function() {
-        this.container = $("#container");
-
-        this.instance = this.container.dxFilterBuilder({
-            value: [["State", "=", ""]],
-            fields: fields
-        }).dxFilterBuilder("instance");
-
-        this.triggerEvent = function(element, eventType, keyCode) {
-            element.trigger($.Event(eventType, { keyCode: keyCode }));
-        };
-
-        this.getValueButtonElement = function() {
-            return this.container.find("." + FILTER_BUILDER_ITEM_VALUE_TEXT_CLASS);
-        };
-
-        this.getTextEditorElement = function() {
-            return this.container.find(".dx-texteditor");
-        };
-
-        this.changeValueAndPressKey = function(keyCode, eventType) {
-            this.getValueButtonElement().click();
-
-            var $input = this.getTextEditorElement().find("input");
-            $input.val("Test");
-            this.triggerEvent($input, eventType || "keydown", keyCode);
-            $input.trigger("change");
-        };
-    }
-}, function() {
-    QUnit.test("show editor on keydown event", function(assert) {
-        this.instance.option("value", ["Zipcode", "<>", 123]);
-
-        this.triggerEvent(this.getValueButtonElement(), "keydown", ENTER_KEY);
-
-        assert.notOk(this.getValueButtonElement().length);
-        assert.ok(this.getTextEditorElement().length);
-    });
-
-    QUnit.test("skip first enter keyup after enter keydown by value button", function(assert) {
-        this.instance.option("value", ["Zipcode", "<>", 123]);
-
-        this.triggerEvent(this.getValueButtonElement(), "keydown", ENTER_KEY);
-        this.triggerEvent(this.getTextEditorElement(), "keyup", ENTER_KEY);
-
-        assert.ok(this.getTextEditorElement().length);
-
-        this.triggerEvent(this.getTextEditorElement(), "keydown", ENTER_KEY);
-        this.triggerEvent(this.getTextEditorElement(), "keyup", ENTER_KEY);
-
-        assert.notOk(this.getTextEditorElement().length);
-        assert.ok(this.getValueButtonElement().length);
-    });
-
-    QUnit.test("condition isn't changed after escape click", function(assert) {
-        var value = this.instance.option("value");
-
-        this.changeValueAndPressKey(ESCAPE_KEY, "keyup");
-
-        assert.equal(this.instance.option("value"), value);
-        assert.equal(this.getValueButtonElement().length, 1);
-    });
-
-    QUnit.test("change condition value after tab press", function(assert) {
-        this.changeValueAndPressKey(TAB_KEY, "keyup");
-
-        assert.equal(this.getValueButtonElement().text(), "Test");
-    });
-
-    QUnit.test("tab press without change a condition", function(assert) {
-        this.getValueButtonElement().click();
-
-        var $input = this.getTextEditorElement().find("input");
-        document.activeElement.blur();
-        this.triggerEvent($input, "keyup", TAB_KEY);
-        assert.equal(this.getValueButtonElement().text(), "<enter a value>");
-    });
-
-    QUnit.test("change condition value after enter click", function(assert) {
-        var value = this.instance.option("value");
-
-        this.changeValueAndPressKey(ENTER_KEY);
-
-        assert.notEqual(this.instance.option("value"), value);
-        assert.equal(this.getValueButtonElement().length, 1);
-
-        value = this.instance.option("value");
-
-        this.changeValueAndPressKey(ENTER_KEY);
-        this.triggerEvent(this.getTextEditorElement(), "keyup", ENTER_KEY);
-
-        assert.equal(this.instance.option("value"), value);
-        assert.equal(this.getValueButtonElement().length, 1);
-    });
-
-    QUnit.testInActiveWindow("value button gets focus after enter click", function(assert) {
-        this.changeValueAndPressKey(ENTER_KEY);
-
-        assert.ok(this.getValueButtonElement().is(":focus"));
-    });
-
-    QUnit.testInActiveWindow("value button gets focus after escape click", function(assert) {
-        this.changeValueAndPressKey(ESCAPE_KEY, "keyup");
-
-        assert.ok(this.getValueButtonElement().is(":focus"));
-    });
-
-    QUnit.testInActiveWindow("menu has focus after open by enter", function(assert) {
-        fx.off = true;
-        this.triggerEvent($("." + FILTER_BUILDER_GROUP_OPERATION_CLASS), "keydown", ENTER_KEY);
-        fx.off = false;
-
-        assert.ok($(".dx-treeview").is(":focus"));
-    });
-});
