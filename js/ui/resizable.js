@@ -13,7 +13,8 @@ var $ = require("../core/renderer"),
     eventUtils = require("../events/utils"),
     dragEvents = require("../events/drag"),
     isPlainObject = typeUtils.isPlainObject,
-    isFunction = commonUtils.isFunction;
+    isFunction = commonUtils.isFunction,
+    domUtils = require("../core/utils/dom");
 
 var RESIZABLE = "dxResizable",
     RESIZABLE_CLASS = "dx-resizable",
@@ -283,6 +284,8 @@ var Resizable = DOMComponent.inherit({
             height: this.option("height") || height,
             handles: this._movingSides
         });
+
+        domUtils.triggerResizeEvent($element);
     },
 
     _getOffset: function(e) {
