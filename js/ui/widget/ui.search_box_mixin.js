@@ -6,6 +6,8 @@ var $ = require("../../core/renderer"),
     TextBox = require("../text_box"),
     errors = require("../widget/ui.errors");
 
+var SEARCH_TIMEOUT = 0;
+
 /**
 * @name SearchBoxMixin
 * @publicName SearchBoxMixin
@@ -56,7 +58,15 @@ module.exports = {
              * @type dxTextBoxOptions
              * @default {}
              */
-            searchEditorOptions: {}
+            searchEditorOptions: {},
+
+            /**
+            * @name SearchBoxMixinOptions_searchTimeout
+            * @publicName searchTimeout
+            * @type number
+            * @default 0
+            */
+            searchTimeout: SEARCH_TIMEOUT
         });
     },
 
@@ -106,7 +116,15 @@ module.exports = {
             value: that.option("searchValue"),
             valueChangeEvent: "input",
             onValueChanged: function(e) {
-                that.option("searchValue", e.value);
+                window.clearTimeout(that._valueChangeTimeout);
+
+                if(e.event && e.event.type === "input") {
+                    that._valueChangeTimeout = setTimeout(function() {
+                        that.option("searchValue", e.value);
+                    }, that.option("searchTimeout"));
+                } else {
+                    that.option("searchValue", e.value);
+                }
             }
         }, userEditorOptions);
     },
@@ -145,6 +163,8 @@ module.exports = {
                 }
                 this._dataSource[args.name === "searchMode" ? "searchOperation" : args.name](args.value);
                 this._dataSource.load();
+                break;
+            case "searchTimeout":
                 break;
             default:
                 this.callBase(args);

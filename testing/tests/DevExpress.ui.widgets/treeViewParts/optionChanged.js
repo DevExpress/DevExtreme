@@ -362,6 +362,52 @@ QUnit.test("searchEditorOptions", function(assert) {
     assert.strictEqual(searchEditorInstance.option("placeholder"), "Test", "placeholder of the search editor");
 });
 
+QUnit.test("search immediately if searchTimeout was set, but searchValue is changed by option", function(assert) {
+    var data = $.extend(true, [], DATA[5]);
+    data[0].items[1].items[0].expanded = true;
+
+    var treeView = initTree({
+            items: data,
+            searchTimeout: 500
+        }).dxTreeView("instance"),
+        $items = $(treeView.$element()).find(".dx-treeview-item");
+
+    assert.equal($items.length, 6, "6 items were rendered");
+
+    treeView.option("searchValue", "2");
+
+    $items = $(treeView.$element()).find(".dx-treeview-item");
+    assert.equal($items.length, 4, "filter was applied immediately");
+});
+
+QUnit.test("apply search after searchTimeout", function(assert) {
+    this.clock = sinon.useFakeTimers();
+    var data = $.extend(true, [], DATA[5]);
+    data[0].items[1].items[0].expanded = true;
+
+    var $treeView = initTree({
+            items: data,
+            searchEnabled: true,
+            searchTimeout: 500
+        }),
+        $items = $treeView.find(".dx-treeview-item");
+
+    assert.equal($items.length, 6, "6 items were rendered");
+
+    var $input = $treeView.find("input");
+
+    $input.val("2").trigger("input");
+
+    this.clock.tick(100);
+    $items = $treeView.find(".dx-treeview-item");
+    assert.equal($items.length, 6, "still all items");
+
+    this.clock.tick(500);
+    $items = $treeView.find(".dx-treeview-item");
+    assert.equal($items.length, 4, "filter was applied after timeout");
+    this.clock.restore();
+});
+
 QUnit.test("parentIdExpr should work correctly when it was dynamically changed", function(assert) {
     var $treeView = initTree({
             items: [{ text: "item 1", id: 1, parentId: 0, expanded: true }, { text: "item 11", id: 2, parentId: 1 }],
