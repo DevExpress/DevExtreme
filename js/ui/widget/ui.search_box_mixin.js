@@ -116,12 +116,13 @@ module.exports = {
             value: that.option("searchValue"),
             valueChangeEvent: "input",
             onValueChanged: function(e) {
+                var searchTimeout = that.option("searchTimeout");
                 window.clearTimeout(that._valueChangeTimeout);
 
-                if(e.event && e.event.type === "input") {
+                if(e.event && e.event.type === "input" && searchTimeout) {
                     that._valueChangeTimeout = setTimeout(function() {
                         that.option("searchValue", e.value);
-                    }, that.option("searchTimeout"));
+                    }, searchTimeout);
                 } else {
                     that.option("searchValue", e.value);
                 }
