@@ -264,7 +264,7 @@ var Slider = TrackBar.inherit({
                     /**
                     * @name dxSliderBaseOptions_focusStateEnabled
                     * @publicName focusStateEnabled
-                    * @custom_default_for_generic true
+                    * @custom_default_for_desktop true
                     * @extend_doc
                     */
                     focusStateEnabled: true
