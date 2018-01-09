@@ -246,21 +246,6 @@ var Popup = Overlay.inherit({
     _defaultOptionsRules: function() {
         return this.callBase().concat([
             {
-                device: function() {
-                    var currentTheme = (themes.current() || "").split(".")[0];
-                    return currentTheme === "win8";
-                },
-                options: {
-                    /**
-                    * @name dxPopupOptions_width
-                    * @publicName width
-                    * @custom_default_for_windows_8 function() { return $(window).width(); }
-                    * @extend_doc
-                    */
-                    width: function() { return $(window).width(); }
-                }
-            },
-            {
                 device: function(device) {
                     var currentTheme = (themes.current() || "").split(".")[0];
                     return device.phone && currentTheme === "win8";
@@ -343,7 +328,7 @@ var Popup = Overlay.inherit({
                     * @name dxPopupOptions_focusStateEnabled
                     * @publicName focusStateEnabled
                     * @type boolean
-                    * @custom_default_for_generic true
+                    * @custom_default_for_desktop true
                     * @extend_doc
                     */
                     focusStateEnabled: true

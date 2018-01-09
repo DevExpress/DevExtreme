@@ -10,7 +10,8 @@ var eventsEngine = require("../../events/core/events_engine"),
     getLDMLFormat = require("../../localization/ldml/number").getFormat,
     NumberBoxBase = require("./number_box.base"),
     eventUtils = require("../../events/utils"),
-    typeUtils = require("../../core/utils/type");
+    typeUtils = require("../../core/utils/type"),
+    browser = require("../../core/utils/browser");
 
 var NUMBER_FORMATTER_NAMESPACE = "dxNumberFormatter",
     MOVE_FORWARD = 1,
@@ -56,17 +57,31 @@ var NumberBoxMask = NumberBoxBase.inherit({
             leftArrow: that._arrowHandler.bind(that, MOVE_FORWARD),
             rightArrow: that._arrowHandler.bind(that, MOVE_BACKWARD),
             home: that._moveCaretToBoundary.bind(that, MOVE_FORWARD),
-            enter: that._setTextByParsedValue.bind(that),
+            enter: that._updateFormattedValue.bind(that),
             end: that._moveCaretToBoundary.bind(that, MOVE_BACKWARD)
         });
     },
 
     _focusOutHandler: function(e) {
         if(this._useMaskBehavior()) {
-            this._setTextByParsedValue();
+            this._updateFormattedValue();
         }
 
         this.callBase(e);
+    },
+
+    _updateFormattedValue: function() {
+        this._setTextByParsedValue();
+
+        if(this._isValueDirty()) {
+            this._isInputTriggered = false;
+            eventsEngine.trigger(this._input(), "change");
+        }
+    },
+
+    _isValueDirty: function() {
+        //https://developer.microsoft.com/en-us/microsoft-edge/platform/issues/15181565/
+        return browser.msie && this._isInputTriggered;
     },
 
     _arrowHandler: function(step, e) {
@@ -467,9 +482,10 @@ var NumberBoxMask = NumberBoxBase.inherit({
             caret = this._caret(),
             caretDelta = 0,
             isFirstInput = this._formattedValue === "",
+            allStubsAfterCaret = this._isStub(text.slice(caret.start), true),
             isOneCharInput = Math.abs(formatted.length - text.length) === 1;
 
-        if((isOneCharInput && this._isCaretOnFloat()) || isFirstInput) {
+        if((isOneCharInput && this._isCaretOnFloat() && !allStubsAfterCaret) || isFirstInput) {
             caretDelta = 0;
         } else if(formatted.length && this._lastKey === text) {
             caretDelta = formatted.indexOf(text) - caret.start + 1;
@@ -495,15 +511,17 @@ var NumberBoxMask = NumberBoxBase.inherit({
         var format = this._getFormatPattern(),
             caret = this._caret(),
             parsed = this._parseValue(),
-            formatted = number.format(parsed, format) || "";
+            formatted = number.format(parsed, format) || "",
+            newCaret = caret.start + this._getCaretDelta(formatted);
 
-        this._setInputText(formatted, caret.start + this._getCaretDelta(formatted));
+        this._setInputText(formatted, newCaret);
     },
 
     _formatValue: function() {
         var text = this._input().val(),
             caret = this._caret();
 
+        this._isInputTriggered = true;
         text = this._removeMinusFromText(text, caret);
 
         if(this._isValueIncomplete(text)) {
@@ -583,6 +601,7 @@ var NumberBoxMask = NumberBoxBase.inherit({
         delete this._formattedValue;
         delete this._lastKey;
         delete this._parsedValue;
+        delete this._isInputTriggered;
     },
 
     _clean: function() {

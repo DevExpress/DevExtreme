@@ -2517,6 +2517,46 @@ QUnit.test("Appointment should have correct position while dragging from group",
     assert.deepEqual(appointmentData.ownerId, { id: [2] }, "Resources is correct");
 });
 
+QUnit.test("Appointment should push correct data to the onAppointmentUpdating event on changing group by drag'n'drop ", function(assert) {
+    this.createInstance({
+        currentDate: new Date(2015, 4, 25),
+        editing: true,
+        views: ["workWeek"],
+        currentView: "workWeek",
+        dataSource: [{
+            text: "Test appointment",
+            priorityId: 1,
+            startDate: new Date(2015, 4, 25, 14, 30),
+            endDate: new Date(2015, 4, 25, 15, 30)
+        }],
+        groups: ["priorityId"],
+        resources: [
+            {
+                fieldExpr: "priorityId",
+                allowMultiple: false,
+                dataSource: [
+                    { text: "Low Priority", id: 1 },
+                    { text: "High Priority", id: 2 }
+                ],
+                label: "Priority"
+            }
+        ],
+        onAppointmentUpdating: function(e) {
+            assert.equal(e.oldData.priorityId, 1, "Appointment was located in the first group");
+            assert.equal(e.newData.priorityId, 2, "Appointment located in the second group now");
+        },
+        width: 800
+    });
+    var $appointment = $(this.instance.$element().find(".dx-scheduler-appointment")).eq(0);
+
+    $appointment.trigger(dragEvents.start);
+    $(this.instance.$element().find(".dx-scheduler-date-table-cell")).eq(7).trigger(dragEvents.enter);
+    $appointment.trigger(dragEvents.end);
+
+    assert.expect(2);
+    this.clock.tick();
+});
+
 QUnit.test("Appointments should be repainted if the 'crossScrollingEnabled' is changed", function(assert) {
     this.createInstance({
         currentDate: new Date(2015, 6, 10),
@@ -3675,6 +3715,63 @@ QUnit.test("DropDown appointment should be painted depend on resource color", fu
 
     this.instance.option("dataSource", appointments);
 
+    var dropDown = this.instance.$element().find(".dx-scheduler-dropdown-appointments").dxDropDownMenu("instance");
+
+    dropDown.open();
+    var ddAppointments = dropDown._list.$element().find(".dx-scheduler-dropdown-appointment");
+
+    assert.equal(this.getAppointmentColor(ddAppointments.eq(0), "border-left-color"), "#ff0000", "Appointment color is OK");
+    assert.equal(this.getAppointmentColor(ddAppointments.eq(1), "border-left-color"), "#ff0000", "Appointment color is OK");
+    assert.equal(this.getAppointmentColor(ddAppointments.eq(2), "border-left-color"), "#0000ff", "Appointment color is OK");
+    assert.equal(this.getAppointmentColor(ddAppointments.eq(3), "border-left-color"), "#0000ff", "Appointment color is OK");
+    assert.equal(this.getAppointmentColor(ddAppointments.eq(4), "border-left-color"), "#0000ff", "Appointment color is OK");
+});
+
+QUnit.test("DropDown appointment should be painted depend on resource color when resourses store is asynchronous", function(assert) {
+    var appointments = [
+        { startDate: new Date(2015, 2, 4), text: "a", endDate: new Date(2015, 2, 4, 0, 30), roomId: 1 },
+        { startDate: new Date(2015, 2, 4), text: "b", endDate: new Date(2015, 2, 4, 0, 30), roomId: 1 },
+
+        { startDate: new Date(2015, 2, 4), text: "c", endDate: new Date(2015, 2, 4, 0, 30), roomId: 1 },
+        { startDate: new Date(2015, 2, 4), text: "d", endDate: new Date(2015, 2, 4, 0, 30), roomId: 1 },
+        { startDate: new Date(2015, 2, 4), text: "e", endDate: new Date(2015, 2, 4, 0, 30), roomId: 2 },
+        { startDate: new Date(2015, 2, 4), text: "f", endDate: new Date(2015, 2, 4, 0, 30), roomId: 2 },
+        { startDate: new Date(2015, 2, 4), text: "g", endDate: new Date(2015, 2, 4, 0, 30), roomId: 2 }
+    ];
+    this.createInstance({
+        currentDate: new Date(2015, 2, 4),
+        views: ["month"],
+        width: 840,
+        currentView: "month",
+        firstDayOfWeek: 1,
+        resources: [
+            {
+                field: "roomId",
+                allowMultiple: true,
+                dataSource: new DataSource({
+                    store: new CustomStore({
+                        load: function() {
+                            var d = $.Deferred();
+                            setTimeout(function() {
+                                d.resolve([
+                                    { id: 1, text: "Room 1", color: "#ff0000" },
+                                    { id: 2, text: "Room 2", color: "#0000ff" }
+                                ]);
+                            }, 300);
+
+                            return d.promise();
+                        }
+                    })
+                })
+            }
+        ]
+    });
+
+    sinon.stub(this.instance.getRenderingStrategyInstance(), "_getMaxNeighborAppointmentCount").returns(4);
+
+    this.instance.option("dataSource", appointments);
+
+    this.clock.tick(300);
     var dropDown = this.instance.$element().find(".dx-scheduler-dropdown-appointments").dxDropDownMenu("instance");
 
     dropDown.open();

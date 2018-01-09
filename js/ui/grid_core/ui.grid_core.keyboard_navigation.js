@@ -855,6 +855,7 @@ var KeyboardNavigationController = core.ViewController.inherit({
 
     _scrollToElement: function($element, offset) {
         var scrollable = this._focusedView.getScrollable();
+        scrollable && scrollable.update();
         scrollable && scrollable.scrollToElement($element, offset);
     },
 

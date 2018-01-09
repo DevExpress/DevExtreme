@@ -19,7 +19,6 @@ gulp.task('legacy-exporter', function() {
             .pipe(rename(function(path) {
                 path.basename = 'dx.' + path.basename + '.debug';
             }))
-            .pipe(headerPipes.useStrict())
             .pipe(headerPipes.bangLicense())
             .pipe(compressionPipes.beautify())
             .pipe(gulp.dest(context.RESULT_JS_PATH)),
@@ -28,7 +27,6 @@ gulp.task('legacy-exporter', function() {
             .pipe(rename(function(path) {
                 path.basename = 'dx.' + path.basename;
             }))
-            .pipe(headerPipes.useStrict())
             .pipe(headerPipes.bangLicense())
             .pipe(compressionPipes.minify())
             .pipe(gulp.dest(context.RESULT_JS_PATH))

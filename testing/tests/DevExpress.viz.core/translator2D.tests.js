@@ -1,7 +1,8 @@
 "use strict";
 
 var $ = require("jquery"),
-    translator2DModule = require("viz/translators/translator2d");
+    translator2DModule = require("viz/translators/translator2d"),
+    adjust = require("core/utils/math").adjust;
 
 function prepareScaleBreaks(array, breakSize) {
     var breaks = [],
@@ -2985,4 +2986,41 @@ QUnit.test("min bar size more visible area", function(assert) {
 
     assert.equal(translator.getMinBarSize(1500), 80);
     assert.equal(translator.getMinBarSize(2000), 80);
+});
+
+QUnit.test('Simple use (logarithmic translator)', function(assert) {
+    var range = $.extend({}, logarithmicRange, { min: 1, max: 1000, minVisible: 1, maxVisible: 1000, invert: false }),
+        canvas = $.extend({}, canvasTemplate),
+        translator;
+
+    translator = this.createTranslator(range, canvas, { isHorizontal: false });
+
+    assert.equal(adjust(translator.getMinBarSize(110)), 10);
+    assert.equal(adjust(translator.getMinBarSize(330)), 1000);
+});
+
+QUnit.test('Simple use (logarithmic translator, negative exponent)', function(assert) {
+    var range = $.extend({}, logarithmicRange, { min: 0.01, max: 10, minVisible: 0.01, maxVisible: 10, invert: false }),
+        canvas = $.extend({}, canvasTemplate),
+        translator;
+
+    translator = this.createTranslator(range, canvas, { isHorizontal: false });
+
+    assert.equal(adjust(translator.getMinBarSize(110)), 0.1);
+    assert.equal(adjust(translator.getMinBarSize(330)), 10);
+});
+
+QUnit.module("checkMinBarSize", environment);
+
+QUnit.test('Simple use (logarithmic translator)', function(assert) {
+    var range = $.extend({}, logarithmicRange, { min: 1, max: 1000, minVisible: 1, maxVisible: 1000, invert: false }),
+        canvas = $.extend({}, canvasTemplate),
+        translator;
+
+    translator = this.createTranslator(range, canvas, { isHorizontal: false });
+
+    assert.equal(adjust(translator.checkMinBarSize(5, 2, 5)), 5);
+    assert.equal(adjust(translator.checkMinBarSize(5, 7, 5)), 7);
+    assert.equal(adjust(translator.checkMinBarSize(5, 2, 8)), 5);
+    assert.equal(adjust(translator.checkMinBarSize(5, 7, 12)), 42);
 });

@@ -123,10 +123,6 @@ function correctPointCoordinates(points, width, offset) {
     });
 }
 
-function checkMinBarSize(value, minShownValue) {
-    return _abs(value) < minShownValue ? value >= 0 ? minShownValue : -minShownValue : value;
-}
-
 function getValueType(value) {
     return (value >= 0) ? "positive" : "negative";
 }
@@ -140,6 +136,12 @@ function getVisibleSeries(that) {
 function getAbsStackSumByArg(stackKeepers, stackName, argument) {
     var positiveStackValue = (stackKeepers.positive[stackName] || {})[argument] || 0,
         negativeStackValue = (-(stackKeepers.negative[stackName] || {})[argument]) || 0;
+    return positiveStackValue + negativeStackValue;
+}
+
+function getStackSumByArg(stackKeepers, stackName, argument) {
+    var positiveStackValue = (stackKeepers.positive[stackName] || {})[argument] || 0,
+        negativeStackValue = (stackKeepers.negative[stackName] || {})[argument] || 0;
     return positiveStackValue + negativeStackValue;
 }
 
@@ -248,8 +250,11 @@ function adjustStackedSeriesValues() {
     that._stackKeepers = stackKeepers;
     _each(series, function(_, singleSeries) {
         _each(singleSeries.getPoints(), function(_, point) {
-            var argument = point.argument.valueOf();
-            point.setPercentValue(getAbsStackSumByArg(stackKeepers, singleSeries.getStackName(), argument), that.fullStacked, holesStack.left[argument], holesStack.right[argument]);
+            var argument = point.argument.valueOf(),
+                absTotal = getAbsStackSumByArg(stackKeepers, singleSeries.getStackName(), argument),
+                total = getStackSumByArg(stackKeepers, singleSeries.getStackName(), argument);
+
+            point.setPercentValue(absTotal, total, holesStack.left[argument], holesStack.right[argument]);
         });
     });
 }
@@ -264,7 +269,8 @@ function updateStackedSeriesValues() {
         };
     _each(series, function(_, singleSeries) {
         var minBarSize = singleSeries.getOptions().minBarSize,
-            minShownBusinessValue = minBarSize && singleSeries.getValueAxis().getTranslator().getMinBarSize(minBarSize),
+            valueAxisTranslator = singleSeries.getValueAxis().getTranslator(),
+            minShownBusinessValue = minBarSize && valueAxisTranslator.getMinBarSize(minBarSize),
             stackName = singleSeries.getStackName();
 
         _each(singleSeries.getPoints(), function(index, point) {
@@ -281,7 +287,7 @@ function updateStackedSeriesValues() {
                 value = ((value / (getAbsStackSumByArg(stack, stackName, argument))) || 0);
             }
 
-            updateValue = checkMinBarSize(value, minShownBusinessValue);
+            updateValue = valueAxisTranslator.checkMinBarSize(value, minShownBusinessValue, point.value);
             valueType = getValueType(updateValue);
             currentStack = stackKeepers[valueType][stackName] = stackKeepers[valueType][stackName] || {};
 
@@ -317,12 +323,13 @@ function updateFullStackedSeriesValues(series, stackKeepers) {
 function updateBarSeriesValues() {
     _each(this.series, function(_, singleSeries) {
         var minBarSize = singleSeries.getOptions().minBarSize,
-            minShownBusinessValue = minBarSize && singleSeries.getValueAxis().getTranslator().getMinBarSize(minBarSize);
+            valueAxisTranslator = singleSeries.getValueAxis().getTranslator(),
+            minShownBusinessValue = minBarSize && valueAxisTranslator.getMinBarSize(minBarSize);
 
         if(minShownBusinessValue) {
             _each(singleSeries.getPoints(), function(index, point) {
                 if(point.hasValue()) {
-                    point.value = checkMinBarSize(point.initialValue, minShownBusinessValue);
+                    point.value = valueAxisTranslator.checkMinBarSize(point.initialValue, minShownBusinessValue);
                 }
             });
         }

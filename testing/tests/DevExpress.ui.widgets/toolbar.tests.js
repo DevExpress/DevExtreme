@@ -778,7 +778,7 @@ QUnit.test("text should crop in the label inside the toolbar on toolbar's width 
 
     instance.option("width", 100);
 
-    assert.strictEqual($before.outerWidth(), 100 - $after.outerWidth(), "width of before element should be changed");
+    assert.roughEqual($before.outerWidth(), 100 - $after.outerWidth(), 1, "width of before element should be changed");
 });
 
 QUnit.test("text should crop in the label inside the toolbar on window's width changing", function(assert) {
@@ -794,7 +794,7 @@ QUnit.test("text should crop in the label inside the toolbar on window's width c
     $element.width(100);
     resizeCallbacks.fire();
 
-    assert.strictEqual($before.outerWidth(), 100 - $after.outerWidth(), "width of before element should be changed");
+    assert.roughEqual($before.outerWidth(), 100 - $after.outerWidth(), 1, "width of before element should be changed");
 });
 
 QUnit.test("label should positioned correctly inside the toolbar if toolbar-before section is empty", function(assert) {
@@ -1716,7 +1716,7 @@ QUnit.test("T430159 dropdown menu should be closed after click on item if locati
     assert.equal(onClickActionStub.callCount, 1, "onClick was fired");
 });
 
-QUnit.module("adaptivity", {
+QUnit.module("adaptivity without hiding in menu", {
     beforeEach: function() {
         this.element = $("#toolbar");
         this.getToolbarItems = function() {
@@ -1744,17 +1744,17 @@ QUnit.test("items in before section should have correct sizes, width decreases",
 
     $.each(this.getToolbarItems(), function(index, $item) {
         if(index < 2) {
-            assert.roughEqual($($item).outerWidth(), 59, 2, "Width is correct");
+            assert.roughEqual($($item).outerWidth(), 59, 1, "Width is correct");
         } else {
-            assert.roughEqual($($item).outerWidth(), 42, 2, "Width is correct");
+            assert.roughEqual($($item).outerWidth(), 42, 1, "Width is correct");
         }
     });
 
     toolBar.option("width", 100);
 
-    assert.roughEqual(this.getToolbarItems().eq(0).outerWidth(), 59, 2, "Width of the first item is correct");
-    assert.roughEqual(this.getToolbarItems().eq(1).outerWidth(), 21, 2, "Width of the second item is correct");
-    assert.roughEqual(this.getToolbarItems().eq(2).outerWidth(), 10, 2, "Width of the third item is correct");
+    assert.roughEqual(this.getToolbarItems().eq(0).outerWidth(), 59, 1, "Width of the first item is correct");
+    assert.roughEqual(this.getToolbarItems().eq(1).outerWidth(), 21, 1, "Width of the second item is correct");
+    assert.roughEqual(this.getToolbarItems().eq(2).outerWidth(), 10, 1, "Width of the third item is correct");
 });
 
 QUnit.test("items in center section should have correct sizes, width decreases", function(assert) {
@@ -1776,9 +1776,9 @@ QUnit.test("items in center section should have correct sizes, width decreases",
 
     $.each(this.getToolbarItems(), function(index, $item) {
         if(index < 2) {
-            assert.roughEqual($($item).outerWidth(), 58, 2, "Width is correct");
+            assert.roughEqual($($item).outerWidth(), 58, 1, "Width is correct");
         } else {
-            assert.roughEqual($($item).outerWidth(), 10, 2, "Width is correct");
+            assert.roughEqual($($item).outerWidth(), 10, 1, "Width is correct");
         }
     });
 
@@ -1786,9 +1786,9 @@ QUnit.test("items in center section should have correct sizes, width decreases",
 
     var $toolbarItems = this.getToolbarItems();
 
-    assert.roughEqual($toolbarItems.eq(0).outerWidth(), 58, 2, "Width of the first item is correct");
+    assert.roughEqual($toolbarItems.eq(0).outerWidth(), 58, 1, "Width of the first item is correct");
     assert.roughEqual($toolbarItems.eq(1).outerWidth(), 22, 2, "Width of the second item is correct");
-    assert.roughEqual($toolbarItems.eq(2).outerWidth(), 10, 2, "Width of the third item is correct");
+    assert.roughEqual($toolbarItems.eq(2).outerWidth(), 10, 1, "Width of the third item is correct");
 });
 
 QUnit.test("items in before section should have correct sizes, width increases", function(assert) {
@@ -1806,17 +1806,17 @@ QUnit.test("items in before section should have correct sizes, width increases",
 
     var $toolbarItems = this.getToolbarItems();
 
-    assert.roughEqual($toolbarItems.eq(0).outerWidth(), 59, 2, "Width of the first item is correct");
-    assert.roughEqual($toolbarItems.eq(1).outerWidth(), 32, 2, "Width of the second item is correct");
-    assert.roughEqual($toolbarItems.eq(2).outerWidth(), 10, 2, "Width of the third item is correct");
+    assert.roughEqual($toolbarItems.eq(0).outerWidth(), 59, 1, "Width of the first item is correct");
+    assert.roughEqual($toolbarItems.eq(1).outerWidth(), 32, 1, "Width of the second item is correct");
+    assert.roughEqual($toolbarItems.eq(2).outerWidth(), 10, 1, "Width of the third item is correct");
 
     toolBar.option("width", 250);
 
     $toolbarItems = this.getToolbarItems();
 
-    assert.roughEqual($toolbarItems.eq(0).outerWidth(), 59, 2, "Width of the first item is correct");
-    assert.roughEqual($toolbarItems.eq(1).outerWidth(), 59, 2, "Width of the second item is correct");
-    assert.roughEqual($toolbarItems.eq(2).outerWidth(), 21, 2, "Width of the third item is correct");
+    assert.roughEqual($toolbarItems.eq(0).outerWidth(), 59, 1, "Width of the first item is correct");
+    assert.roughEqual($toolbarItems.eq(1).outerWidth(), 59, 1, "Width of the second item is correct");
+    assert.roughEqual($toolbarItems.eq(2).outerWidth(), 21, 1, "Width of the third item is correct");
 });
 
 QUnit.test("items in center section should have correct sizes, width increases", function(assert) {
@@ -1826,7 +1826,7 @@ QUnit.test("items in center section should have correct sizes, width increases",
             { location: 'center', text: 'center1' },
             { location: 'center', text: 'center3' }
         ],
-        width: 100,
+        width: 50,
         height: 50
     }).dxToolbar("instance");
 
@@ -1834,15 +1834,15 @@ QUnit.test("items in center section should have correct sizes, width increases",
 
     var $toolbarItems = this.getToolbarItems();
 
-    assert.roughEqual($toolbarItems.eq(0).outerWidth(), 59, 2, "Width of the first item is correct");
-    assert.roughEqual($toolbarItems.eq(1).outerWidth(), 22, 2, "Width of the second item is correct");
-    assert.roughEqual($toolbarItems.eq(2).outerWidth(), 10, 2, "Width of the third item is correct");
+    assert.roughEqual($toolbarItems.eq(0).outerWidth(), 58, 1, "Width of the first item is correct");
+    assert.roughEqual($toolbarItems.eq(1).outerWidth(), 10, 1, "Width of the second item is correct");
+    assert.roughEqual($toolbarItems.eq(2).outerWidth(), 10, 1, "Width of the third item is correct");
 
     toolBar.option("width", 250);
 
     $toolbarItems = this.getToolbarItems();
 
-    assert.roughEqual($toolbarItems.eq(0).outerWidth(), 59, 2, "Width of the first item is correct");
-    assert.roughEqual($toolbarItems.eq(1).outerWidth(), 59, 2, "Width of the second item is correct");
-    assert.roughEqual($toolbarItems.eq(2).outerWidth(), 34, 2, "Width of the third item is correct");
+    assert.roughEqual($toolbarItems.eq(0).outerWidth(), 58, 1, "Width of the first item is correct");
+    assert.roughEqual($toolbarItems.eq(1).outerWidth(), 58, 1, "Width of the second item is correct");
+    assert.roughEqual($toolbarItems.eq(2).outerWidth(), 46, 1, "Width of the third item is correct");
 });
