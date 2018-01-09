@@ -313,7 +313,9 @@ exports.ExportController = dataGridCore.ViewController.inherit({}).include(expor
             result.push([]);
             columns = columnsController.getVisibleColumns(i);
             for(j = 0; j < columns.length; j++) {
-                column = extend({}, columns[j]);
+                column = extend({}, columns[j], {
+                    dataType: columns[j].dataType === "datetime" ? "date" : columns[j].dataType
+                });
 
                 if(column.allowExporting && !column.command) {
                     if(i === rowCount && columnWidths && columnWidths.length) {
