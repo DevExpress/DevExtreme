@@ -9,7 +9,7 @@ var $ = require("jquery"),
     fx = require("animation/fx"),
     devices = require("core/devices"),
     contextMenuEvent = require("events/contextmenu"),
-    dblclickEvent = require("events/double_click"),
+    dblclickEvent = require("events/dblclick"),
     checkEventArgs = function(assert, e) {
         assert.ok(e.component);
         assert.ok(e.element);
