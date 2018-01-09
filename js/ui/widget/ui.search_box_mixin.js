@@ -6,8 +6,6 @@ var $ = require("../../core/renderer"),
     TextBox = require("../text_box"),
     errors = require("../widget/ui.errors");
 
-var SEARCH_TIMEOUT = 0;
-
 /**
 * @name SearchBoxMixin
 * @publicName SearchBoxMixin
@@ -66,7 +64,6 @@ module.exports = {
             * @type number
             * @default 0
             */
-            searchTimeout: SEARCH_TIMEOUT
         });
     },
 
