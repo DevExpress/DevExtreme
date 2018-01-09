@@ -212,7 +212,6 @@ QUnit.test("Empty store", function(assert) {
         }),
         pivotGrid = createPivotGrid(testOptions, assert);
     this.clock.tick();
-    assert.ok(pivotGrid);
 
     var $columnCell = pivotGrid.$element().find(".dx-area-column-cell"),
         $rowCell = pivotGrid.$element().find(".dx-area-row-cell");
