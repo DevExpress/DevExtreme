@@ -197,6 +197,30 @@ QUnit.test("No data", function(assert) {
     assert.ok(contentReadyCallback.calledOnce);
 });
 
+QUnit.test("Empty store", function(assert) {
+    var testOptions = $.extend(this.testOptions, {
+            showColumnGrandTotals: false,
+            showRowGrandTotals: false,
+            fieldChooser: { enabled: false },
+            dataSource: {
+                fields: [
+                    { dataField: "field1", area: "row" },
+                    { dataField: "field2", area: "column" },
+                    { dataField: "field3", area: "data" }],
+                store: []
+            }
+        }),
+        pivotGrid = createPivotGrid(testOptions, assert);
+    this.clock.tick();
+    assert.ok(pivotGrid);
+
+    var $columnCell = pivotGrid.$element().find(".dx-area-column-cell"),
+        $rowCell = pivotGrid.$element().find(".dx-area-row-cell");
+
+    assert.equal($columnCell.find("span")[0].innerHTML, "&nbsp;");
+    assert.equal($rowCell.find("span")[0].innerHTML, "&nbsp;");
+});
+
 QUnit.test("No data when pivot grid rendered to invisible container", function(assert) {
     var $pivotGridElement = $("#pivotGrid").hide().addClass("container-height-200px"),
         pivotGrid = createPivotGrid({
