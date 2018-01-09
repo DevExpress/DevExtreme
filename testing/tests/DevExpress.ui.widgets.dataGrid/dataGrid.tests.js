@@ -7689,6 +7689,28 @@ QUnit.test("Band columns should be displayed correctly after state is reset", fu
     assert.deepEqual(columns, ["Field 3", "Field 4"], "columns of the second level");
 });
 
+//T592655
+QUnit.test("Sorting should not throw an exception when headers are hidden", function(assert) {
+    //arrange
+    var dataGrid = createDataGrid({
+        showColumnHeaders: false,
+        dataSource: [{ field1: 1, field2: 2, field3: 3 }, { field1: 4, field2: 5, field3: 6 }]
+    });
+
+    this.clock.tick();
+
+    try {
+        //act
+        dataGrid.columnOption("field2", "sortOrder", "desc");
+        this.clock.tick();
+
+        //assert
+        assert.ok(true, "no exceptions");
+    } catch(e) {
+        //assert
+        assert.ok(false, "exception");
+    }
+});
 
 QUnit.module("templates");
 
