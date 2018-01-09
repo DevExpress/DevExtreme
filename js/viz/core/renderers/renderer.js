@@ -2,6 +2,7 @@
 
 var $ = require("../../../core/renderer"),
     eventsEngine = require("../../../events/core/events_engine"),
+    browser = require("../../../core/utils/browser"),
     getSvgMarkup = require("../../../core/utils/svg").getSvgMarkup,
     doc = document,
     animation = require("./animation"),
@@ -1488,6 +1489,7 @@ function Renderer(options) {
     that.pathModified = !!options.pathModified;
     that._$container = $(options.container);
     that.root.append({ element: options.container });
+    that.fixPlacement();
     that._locker = 0;
     that._backed = false;
 }
@@ -1503,6 +1505,24 @@ Renderer.prototype = {
 
         that._animationController = new animation.AnimationController(that.root.element);
         that._animation = { enabled: true, duration: 1000, easing: "easeOutCubic" };
+    },
+
+    fixPlacement: function() {
+        if(!browser.mozilla && !browser.msie) {
+            return;
+        }
+
+        var box = this._$container.get(0).getBoundingClientRect(),
+            dx = roundValue(box.left % 1, 2),
+            dy = roundValue(box.top % 1, 2);
+
+        if(browser.msie) {
+            this.root.css({
+                transform: "translate(" + -dx + "px," + -dy + "px)"
+            });
+        } else if(browser.mozilla) {
+            this.root.move(-dx, -dy);
+        }
     },
 
     setOptions: function(options) {
@@ -1540,6 +1560,7 @@ Renderer.prototype = {
         if(that._locker === 0) {
             if(that._backed) {
                 restoreRoot(that.root, that._$container[0]);
+                that.fixPlacement();
             }
             that._backed = false;
         }
