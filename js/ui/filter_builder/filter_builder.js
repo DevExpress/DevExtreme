@@ -585,9 +585,8 @@ var FilterBuilder = Widget.inherit({
             menuOnItemClickWrapper = function(handler) {
                 return function(e) {
                     handler(e);
-                    removeMenu();
-                    if(e.event.type === "keydown") {
-                        eventsEngine.trigger(options.menu.target, "focus");
+                    if(e.event.type === "dxclick") {
+                        removeMenu();
                     }
                 };
             },
@@ -615,8 +614,9 @@ var FilterBuilder = Widget.inherit({
             onShown: function(info) {
                 var treeViewElement = $(info.component.content()).find(".dx-treeview"),
                     treeView = treeViewElement.dxTreeView("instance");
-                eventsEngine.on(treeViewElement, "keydown", function(e) {
-                    if(e.keyCode === ESCAPE_KEY || e.keyCode === TAB_KEY) {
+                eventsEngine.on(treeViewElement, "keyup keydown", function(e) {
+                    if((e.type === "keydown" && e.keyCode === TAB_KEY)
+                            || (e.type === "keyup" && (e.keyCode === ESCAPE_KEY || e.keyCode === ENTER_KEY))) {
                         info.component.hide();
                         eventsEngine.trigger(options.menu.target, "focus");
                     }
@@ -812,7 +812,10 @@ var FilterBuilder = Widget.inherit({
             setText(utils.getCurrentValueText(field, value));
         }
 
-        that._subscribeOnClickAndEnterKey($text, function() {
+        that._subscribeOnClickAndEnterKey($text, function(e) {
+            if(e.type === "keyup") {
+                e.stopPropagation();
+            }
             that._createValueEditorWithEvents(item, field, $container);
         });
 
@@ -835,7 +838,7 @@ var FilterBuilder = Widget.inherit({
             value = item[2],
             removeEvents = function() {
                 eventsEngine.off(document, "keyup", documentKeyUpHandler);
-                eventsEngine.off(document, "click", documentClickHandler);
+                eventsEngine.off(document, "click touchstart", documentClickHandler);
             },
             isFocusOnEditorParts = function() {
                 var activeElement = document.activeElement;
@@ -856,13 +859,6 @@ var FilterBuilder = Widget.inherit({
             isValueChanged: true,
             setValue: function(data) {
                 value = data === null ? "" : data;
-                that._updateConditionValue(item, value, function() {
-                    var isEditorFocused = $(":focus").closest($editor).length,
-                        $textButton = createValueText();
-                    if(isEditorFocused) {
-                        eventsEngine.trigger($textButton, "focus");
-                    }
-                });
             }
         };
 
@@ -872,23 +868,32 @@ var FilterBuilder = Widget.inherit({
 
         var documentClickHandler = function(e) {
             if(!isFocusOnEditorParts()) {
-                createValueText();
+                that._updateConditionValue(item, value, function() {
+                    createValueText();
+                });
             }
         };
-        eventsEngine.on(document, "click", documentClickHandler);
+        eventsEngine.on(document, "click touchstart", documentClickHandler);
 
         var documentKeyUpHandler = function(e) {
             if(e.keyCode === TAB_KEY) {
                 if(isFocusOnEditorParts()) {
                     return;
                 }
-                createValueText();
-                if(e.shiftKey) {
-                    eventsEngine.trigger($container.prev(), "focus");
-                }
+                that._updateConditionValue(item, value, function() {
+                    createValueText();
+                    if(e.shiftKey) {
+                        eventsEngine.trigger($container.prev(), "focus");
+                    }
+                });
             }
             if(e.keyCode === ESCAPE_KEY) {
                 eventsEngine.trigger(createValueText(), "focus");
+            }
+            if(e.keyCode === ENTER_KEY) {
+                that._updateConditionValue(item, value, function() {
+                    eventsEngine.trigger(createValueText(), "focus");
+                });
             }
         };
         eventsEngine.on(document, "keyup", documentKeyUpHandler);
@@ -950,7 +955,7 @@ var FilterBuilder = Widget.inherit({
 
     _subscribeOnClickAndEnterKey: function($button, handler) {
         eventsEngine.on($button, "click", handler);
-        eventsEngine.on($button, "keydown", function(e) {
+        eventsEngine.on($button, "keyup", function(e) {
             if(e.keyCode === ENTER_KEY) {
                 handler(e);
             }

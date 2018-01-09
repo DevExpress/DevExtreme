@@ -47,36 +47,29 @@ QUnit.module("Keyboard navigation", {
         this.changeValueAndPressKey = function(key, eventType) {
             this.getValueButtonElement().click();
 
-            var $input = this.getTextEditorElement().find("input");
-            $input.val("Test");
+            var textEditorElement = this.getTextEditorElement();
+            textEditorElement.dxTextBox("instance").option("value", "Test");
 
-            if(eventType === "keyup") {
-                keyboardMock($input).keyUp(key);
-            } else {
-                keyboardMock($input).keyDown(key);
-            }
-            $input.trigger("change");
+            keyboardMock(this.getTextEditorElement()).keyUp(key);
         };
     }
 }, function() {
-    QUnit.test("show editor on keydown event", function(assert) {
+    QUnit.test("show editor on keyup event", function(assert) {
         this.instance.option("value", ["Zipcode", "<>", 123]);
 
-        keyboardMock(this.getValueButtonElement()).keyDown(ENTER_KEY);
+        keyboardMock(this.getValueButtonElement()).keyUp(ENTER_KEY);
 
         assert.notOk(this.getValueButtonElement().length);
         assert.ok(this.getTextEditorElement().length);
     });
 
-    QUnit.test("skip first enter keyup after enter keydown by value button", function(assert) {
+    QUnit.test("enter keyup for value button and editor", function(assert) {
         this.instance.option("value", ["Zipcode", "<>", 123]);
 
-        keyboardMock(this.getValueButtonElement()).keyDown(ENTER_KEY);
-        keyboardMock(this.getTextEditorElement()).keyUp(ENTER_KEY);
+        keyboardMock(this.getValueButtonElement()).keyUp(ENTER_KEY);
 
         assert.ok(this.getTextEditorElement().length);
 
-        keyboardMock(this.getTextEditorElement()).keyDown(ENTER_KEY);
         keyboardMock(this.getTextEditorElement()).keyUp(ENTER_KEY);
 
         assert.notOk(this.getTextEditorElement().length);
@@ -93,7 +86,13 @@ QUnit.module("Keyboard navigation", {
     });
 
     QUnit.test("change condition value after tab press", function(assert) {
-        this.changeValueAndPressKey(TAB_KEY, "keyup");
+        this.getValueButtonElement().click();
+
+        var textEditorElement = this.getTextEditorElement();
+        textEditorElement.dxTextBox("instance").option("value", "Test");
+        document.activeElement.blur();
+
+        keyboardMock(this.getTextEditorElement()).keyUp(TAB_KEY);
 
         assert.equal(this.getValueButtonElement().text(), "Test");
     });
@@ -110,15 +109,14 @@ QUnit.module("Keyboard navigation", {
     QUnit.test("change condition value after enter key press", function(assert) {
         var value = this.instance.option("value");
 
-        this.changeValueAndPressKey("enter");
+        this.changeValueAndPressKey(ENTER_KEY);
 
         assert.notEqual(this.instance.option("value"), value);
         assert.equal(this.getValueButtonElement().length, 1);
 
         value = this.instance.option("value");
 
-        this.changeValueAndPressKey("enter");
-        keyboardMock(this.getTextEditorElement()).keyUp(ENTER_KEY);
+        this.changeValueAndPressKey(ENTER_KEY);
 
         assert.equal(this.instance.option("value"), value);
         assert.equal(this.getValueButtonElement().length, 1);
@@ -131,31 +129,31 @@ QUnit.module("Keyboard navigation", {
     });
 
     QUnit.testInActiveWindow("value button gets focus after escape key press", function(assert) {
-        this.changeValueAndPressKey(ESCAPE_KEY, "keyup");
+        this.changeValueAndPressKey(ESCAPE_KEY);
 
         assert.ok(this.getValueButtonElement().is(":focus"));
     });
 
     //T591055
     QUnit.testInActiveWindow("menu has focus after open by enter key press", function(assert) {
-        keyboardMock(this.getOperationButtonElement()).keyDown(ENTER_KEY);
+        keyboardMock(this.getOperationButtonElement()).keyUp(ENTER_KEY);
 
         assert.ok(this.getMenuElement().is(":focus"));
     });
 
     QUnit.testInActiveWindow("close menu after escape key press", function(assert) {
-        keyboardMock(this.getOperationButtonElement()).keyDown(ENTER_KEY);
+        keyboardMock(this.getOperationButtonElement()).keyUp(ENTER_KEY);
 
         assert.ok(this.getMenuElement().is(":focus"));
 
-        keyboardMock(this.getMenuElement()).keyDown(ESCAPE_KEY);
+        keyboardMock(this.getMenuElement()).keyUp(ESCAPE_KEY);
 
         assert.notOk(this.getMenuElement().length);
         assert.ok(this.getOperationButtonElement().is(":focus"));
     });
 
     QUnit.testInActiveWindow("select item in menu", function(assert) {
-        this.triggerEvent(this.getOperationButtonElement(), "keydown", ENTER_KEY);
+        keyboardMock(this.getOperationButtonElement()).keyUp(ENTER_KEY);
 
         var menuKeyboard = keyboardMock(this.getMenuElement());
 
@@ -164,6 +162,7 @@ QUnit.module("Keyboard navigation", {
         assert.equal($(".dx-treeview-node.dx-state-focused").text(), "Contains");
 
         menuKeyboard.keyDown(ENTER_KEY);
+        menuKeyboard.keyUp(ENTER_KEY);
 
         assert.ok(this.getOperationButtonElement().is(":focus"));
         assert.equal(this.getOperationButtonElement().text(), "Contains");

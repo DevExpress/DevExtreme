@@ -24,6 +24,11 @@ var getSelectedMenuText = function() {
     return $(".dx-treeview-node.dx-state-selected").text();
 };
 
+var clickByOutside = function() {
+    document.activeElement.blur();
+    $("body").trigger("click");
+};
+
 var selectMenuItem = function(menuItemIndex) {
     $(".dx-treeview-item").eq(menuItemIndex).trigger("dxclick");
 };
@@ -361,9 +366,9 @@ QUnit.module("Rendering", function() {
 
         var textBoxInstance = $(".dx-textbox").dxTextBox("instance");
         textBoxInstance.option("value", "Test");
+        clickByOutside();
 
         var valueButton = container.find("." + FILTER_BUILDER_ITEM_VALUE_TEXT_CLASS);
-        assert.equal(valueButton.text(), "Test");
         assert.notOk(valueButton.is(":focus"));
     });
 
@@ -385,7 +390,9 @@ QUnit.module("Rendering", function() {
 
         textBoxInstance.option("value", "Test");
         $input.trigger("blur");
-        assert.notOk(container.find("input").length, "hasn't input");
+        assert.ok(container.find("input").length, "has input");
+        assert.notDeepEqual(instance.option("value"), ["State", "<>", "Test"]);
+        clickByOutside();
         assert.deepEqual(instance.option("value"), ["State", "<>", "Test"]);
     });
 
@@ -408,7 +415,9 @@ QUnit.module("Rendering", function() {
 
         $(".dx-list-item").eq(1).trigger("dxclick");
 
-        assert.notOk($container.find("input").length, "hasn't input");
+        assert.ok($container.find("input").length, "has input");
+        assert.notDeepEqual(instance.option("value"), ["CompanyName", "<>", "Super Mart of the West"]);
+        clickByOutside();
         assert.deepEqual(instance.option("value"), ["CompanyName", "<>", "Super Mart of the West"]);
     });
 
@@ -428,6 +437,7 @@ QUnit.module("Rendering", function() {
         var selectBoxInstance = $container.find(".dx-selectbox").dxSelectBox("instance");
         selectBoxInstance.open();
         $(".dx-list-item").eq(1).trigger("dxclick");
+        clickByOutside();
 
         assert.equal($container.find("." + FILTER_BUILDER_ITEM_VALUE_TEXT_CLASS).text(), "PivotGrid");
         assert.deepEqual(instance.option("value"), ["Product", "=", 2]);
@@ -443,11 +453,9 @@ QUnit.module("Rendering", function() {
 
         container.find("." + FILTER_BUILDER_ITEM_VALUE_TEXT_CLASS).click();
 
-        var $editorContainer = container.find("." + FILTER_BUILDER_ITEM_VALUE_CLASS + " > div"),
-            editorInstance = $editorContainer.dxNumberBox("instance"),
-            $input = $editorContainer.find("input");
+        var editorInstance = container.find("." + FILTER_BUILDER_ITEM_VALUE_CLASS + " > div").dxNumberBox("instance");
         editorInstance.option("value", 0);
-        $input.trigger("blur");
+        clickByOutside();
         assert.deepEqual(instance.option("value"), ["Zipcode", "<>", 0]);
     });
 
@@ -475,7 +483,7 @@ QUnit.module("Rendering", function() {
 
         $input.val("Test2");
         $input.trigger("change");
-        $input.trigger("blur");
+        clickByOutside();
 
         $valueButton = container.find("." + FILTER_BUILDER_ITEM_VALUE_TEXT_CLASS);
         assert.strictEqual($valueButton.text(), "Test2", "filter value");
@@ -530,6 +538,8 @@ QUnit.module("Rendering", function() {
         assert.equal($("." + INNER_ELEMENT_CLASS).length, 1, "dropdown opened after click by its inner element");
 
         $(".dx-button").trigger("dxclick");
+        clickByOutside();
+
         assert.equal($("." + FILTER_BUILDER_ITEM_VALUE_TEXT_CLASS).text(), VALUE);
     });
 
@@ -594,6 +604,8 @@ QUnit.module("Rendering", function() {
         $("." + FILTER_BUILDER_ITEM_VALUE_TEXT_CLASS).click();
         $(".dx-datebox input").val("12/12/2017");
         $(".dx-datebox input").trigger("change");
+        clickByOutside();
+
         assert.equal($("." + FILTER_BUILDER_ITEM_VALUE_TEXT_CLASS).text(), "12.12.2017");
     });
 
@@ -959,7 +971,7 @@ QUnit.module("on value changed", function() {
             }).dxFilterBuilder("instance");
 
         changeValue(container, "Test");
-        $("body").click();
+        clickByOutside();
 
         assert.notEqual(instance.option("value"), value);
         assert.equal(container.find("." + FILTER_BUILDER_ITEM_VALUE_TEXT_CLASS).length, 1);
@@ -967,8 +979,7 @@ QUnit.module("on value changed", function() {
         value = instance.option("value");
 
         changeValue(container, "Test");
-        document.activeElement.blur();
-        $("body").click();
+        clickByOutside();
 
         assert.equal(instance.option("value"), value);
         assert.equal(container.find("." + FILTER_BUILDER_ITEM_VALUE_TEXT_CLASS).length, 1);
