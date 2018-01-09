@@ -77,7 +77,7 @@ exports.AreaItem = Class.inherit({
 
     _getCellText: function(cell, encodeHtml) {
 
-        var cellText = cell.isWhiteSpace ? "&nbsp" : cell.text || '&nbsp';
+        var cellText = cell.isWhiteSpace ? "&nbsp" : cell.text || "&nbsp";
 
         if(encodeHtml && (cellText.indexOf("<") !== -1 || cellText.indexOf(">") !== -1)) {
             cellText = $("<div>").text(cellText).html();
