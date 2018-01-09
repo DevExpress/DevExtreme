@@ -77,6 +77,66 @@ var DeferRendering = Widget.inherit({
             * @action
             */
             onShown: null
+            /**
+            * @name dxDeferRenderingOptions_accessKey
+            * @publicName accessKey
+            * @hidden
+            */
+            /**
+            * @name dxDeferRenderingOptions_activeStateEnabled
+            * @publicName activeStateEnabled
+            * @hidden
+            */
+            /**
+            * @name dxDeferRenderingOptions_disabled
+            * @publicName disabled
+            * @hidden
+            */
+            /**
+            * @name dxDeferRenderingOptions_elementAttr
+            * @publicName elementAttr
+            * @hidden
+            */
+            /**
+            * @name dxDeferRenderingOptions_focusStateEnabled
+            * @publicName focusStateEnabled
+            * @hidden
+            */
+            /**
+            * @name dxDeferRenderingOptions_height
+            * @publicName height
+            * @hidden
+            */
+            /**
+            * @name dxDeferRenderingOptions_hint
+            * @publicName hint
+            * @hidden
+            */
+            /**
+            * @name dxDeferRenderingOptions_hoverStateEnabled
+            * @publicName hoverStateEnabled
+            * @hidden
+            */
+            /**
+            * @name dxDeferRenderingOptions_onContentReady
+            * @publicName onContentReady
+            * @hidden
+            */
+            /**
+            * @name dxDeferRenderingOptions_onDisposing
+            * @publicName onDisposing
+            * @hidden
+            */
+            /**
+            * @name dxDeferRenderingOptions_onInitialized
+            * @publicName onInitialized
+            * @hidden
+            */
+            /**
+            * @name dxDeferRenderingOptions_onOptionChanged
+            * @publicName onOptionChanged
+            * @hidden
+            */
         });
     },
 
