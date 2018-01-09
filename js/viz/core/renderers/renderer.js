@@ -129,6 +129,14 @@ function roundValue(value, exp) {
     return +(value[0] + 'e' + (value[1] ? (+value[1] - exp) : -exp));
 }
 
+function getBoundingClientRect(element) {
+    var box;
+    try {
+        box = element.getBoundingClientRect();
+    } catch(e) {}
+    return box || { left: 0, top: 0 };
+}
+
 var preserveAspectRatioMap = {
     "full": NONE,
     "lefttop": "xMinYMin",
@@ -1512,7 +1520,7 @@ Renderer.prototype = {
             return;
         }
 
-        var box = this._$container.get(0).getBoundingClientRect(),
+        var box = getBoundingClientRect(this._$container.get(0)),
             dx = roundValue(box.left % 1, 2),
             dy = roundValue(box.top % 1, 2);
 
