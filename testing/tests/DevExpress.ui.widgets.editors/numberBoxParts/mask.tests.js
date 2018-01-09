@@ -718,6 +718,19 @@ QUnit.test("removing digit if decimal format with prefix", function(assert) {
     assert.deepEqual(this.keyboard.caret(), { start: 6, end: 6 }, "caret is correct");
 });
 
+QUnit.test("removing decimal separator should be possible if float part is not required", function(assert) {
+    this.instance.option({
+        format: "#0.## kg",
+        value: "12.3"
+    });
+
+    this.keyboard.caret(4)
+        .press("backspace")
+        .press("backspace");
+
+    assert.equal(this.input.val(), "12 kg", "decimal separator has been removed");
+});
+
 QUnit.test("removing decimal separator if decimal separator is not default", function(assert) {
     var oldDecimalSeparator = config().decimalSeparator;
 

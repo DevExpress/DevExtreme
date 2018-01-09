@@ -220,11 +220,16 @@ var NumberBoxMask = NumberBoxBase.inherit({
             return;
         }
 
-        if(char === number.getDecimalSeparator()) {
-            this._moveCaret(this._isDeleteKey(e.key) ? 1 : -1);
-            e.preventDefault();
+        var decimalSeparator = number.getDecimalSeparator();
+        if(char === decimalSeparator) {
+            var decimalSeparatorIndex = text.indexOf(decimalSeparator);
+            if(this._isNonStubAfter(decimalSeparatorIndex + 1)) {
+                this._moveCaret(this._isDeleteKey(e.key) ? 1 : -1);
+                e.preventDefault();
+            }
             return;
         }
+
 
         if(end - start < text.length) {
             var editedText = this._getEditedText(text, { start: start, end: end }, ""),
@@ -425,6 +430,11 @@ var NumberBoxMask = NumberBoxBase.inherit({
         if(!this._useMaskBehavior()) {
             return this.callBase();
         }
+    },
+
+    _isNonStubAfter: function(index, text) {
+        text = (text || this._input().val()).slice(index);
+        return text && !this._isStub(text, true);
     },
 
     _isStub: function(str, isString) {
