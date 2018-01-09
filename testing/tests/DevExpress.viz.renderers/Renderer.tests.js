@@ -3,7 +3,8 @@
 var $ = require("jquery"),
     animation = require("viz/core/renderers/animation"),
     renderers = require("viz/core/renderers/renderer"),
-    vizMocks = require("../../helpers/vizMocks.js");
+    vizMocks = require("../../helpers/vizMocks.js"),
+    browser = require("core/utils/browser");
 
 $("<div>")
     .attr("id", "qunit-fixture")
@@ -84,18 +85,25 @@ var Renderer = renderers.Renderer;
 
 QUnit.module('Renderer common API', {
     before: setMockElements,
-    after: resetMockElements
+    after: resetMockElements,
+    beforeEach: function() {
+        this.container = document.createElement("div");
+    },
+    createRenderer: function(params) {
+        return new Renderer($.extend({
+            container: this.container
+        }, params));
+    }
 });
 
 QUnit.test('Creation', function(assert) {
     //arrange
     //act
-    var container = { tag: "container" },
-        renderer = new Renderer({
-            cssClass: "my-super-class",
-            pathModified: "yes",
-            container: container
-        });
+    var renderer = this.createRenderer({
+        cssClass: "my-super-class",
+        pathModified: "yes",
+        container: this.container
+    });
 
     //assert
     assert.ok(renderer.root, "root element is created");
@@ -114,7 +122,6 @@ QUnit.test('Creation', function(assert) {
     assert.deepEqual(renderer.root.attr.secondCall.args, [{
         "class": "my-super-class",
     }], "root's class");
-    assert.strictEqual(renderer.root.css.callCount, 1, "root's css called once");
     assert.deepEqual(renderer.root.css.firstCall.args[0], {
         "-webkit-tap-highlight-color": "rgba(0, 0, 0, 0)",
         "-moz-user-select": "none",
@@ -129,13 +136,13 @@ QUnit.test('Creation', function(assert) {
     assert.deepEqual(renderer._animationController.ctorArgs, [renderer.root.element], "animationController is created");
     assert.strictEqual(renderer.pathModified, true, "pathModified");
 
-    assert.strictEqual(renderer.root.append.lastCall.args[0].element, container, "root is appended");
+    assert.strictEqual(renderer.root.append.lastCall.args[0].element, this.container, "root is appended");
     assert.deepEqual(renderers.SvgElement.getCall(1).returnValue.append.lastCall.args, [renderer.root], "defs is appended");
 });
 
 QUnit.test('setOptions', function(assert) {
     //arrange
-    var renderer = new Renderer({
+    var renderer = this.createRenderer({
         rtl: "yes",
         encodeHtml: "yes",
         cssClass: "my-super-class",
@@ -167,7 +174,7 @@ QUnit.test('setOptions', function(assert) {
 
 QUnit.test('Update animation options', function(assert) {
     //arrange
-    var renderer = new Renderer({}),
+    var renderer = this.createRenderer(),
         result;
     renderer.setOptions({ animation: { enabled: false, duration: 2000, easing: "linear" } });
 
@@ -181,8 +188,8 @@ QUnit.test('Update animation options', function(assert) {
 
 QUnit.test('Animation enabled', function(assert) {
     //arrange
-    var renderer1 = new Renderer({}),
-        renderer2 = new Renderer({});
+    var renderer1 = this.createRenderer(),
+        renderer2 = this.createRenderer();
     renderer2.setOptions({ animation: { enabled: false } });
 
     //act/assert
@@ -192,8 +199,8 @@ QUnit.test('Animation enabled', function(assert) {
 
 QUnit.test('stopAllAnimations', function(assert) {
     //arrange
-    var renderer1 = new Renderer({}),
-        renderer2 = new Renderer({}),
+    var renderer1 = this.createRenderer(),
+        renderer2 = this.createRenderer(),
         result1,
         result2;
 
@@ -215,7 +222,7 @@ QUnit.test('animateElement', function(assert) {
     var element = { a: 'a' },
         params = { b: 'b' },
         options = { c: 'c' },
-        renderer = new Renderer({}),
+        renderer = this.createRenderer(),
         result;
 
     //act
@@ -231,7 +238,7 @@ QUnit.test('animateElement', function(assert) {
 
 QUnit.test('Resize with wrong size', function(assert) {
     //arrange
-    var renderer = new Renderer({}),
+    var renderer = this.createRenderer(),
         result;
 
     renderer.root.stub("attr").reset();
@@ -246,7 +253,7 @@ QUnit.test('Resize with wrong size', function(assert) {
 
 QUnit.test('Resize with good size', function(assert) {
     //arrange
-    var renderer = new Renderer({}),
+    var renderer = this.createRenderer(),
         result;
 
     renderer.root.stub("attr").reset();
@@ -263,7 +270,7 @@ QUnit.test('Resize with good size', function(assert) {
 //Q558365
 QUnit.test('Svg method', function(assert) {
     //arrange
-    var renderer = new Renderer({}),
+    var renderer = this.createRenderer(),
         svgString;
 
     renderer.root.stub("markup").returns("root's markup");
@@ -278,7 +285,7 @@ QUnit.test('Svg method', function(assert) {
 
 QUnit.test("getRootOffset", function(assert) {
     //arrange
-    var renderer = new Renderer({}),
+    var renderer = this.createRenderer(),
         offset;
 
     renderer.root.stub("getOffset").returns({ top: 5, left: 10 });
@@ -292,7 +299,7 @@ QUnit.test("getRootOffset", function(assert) {
 });
 
 QUnit.test('Disposing', function(assert) {
-    var renderer = new Renderer({ container: { tag: "container" } }),
+    var renderer = this.createRenderer(),
         animationControllerDisposed = false,
         rootDispose,
         defsDispose;
@@ -315,7 +322,7 @@ QUnit.test('Disposing', function(assert) {
 
 QUnit.test('onEndAnimation', function(assert) {
     //arrange
-    var renderer = new Renderer({}),
+    var renderer = this.createRenderer(),
         endAnimation = 'endAnimation',
         animationControllerEndAnimationStub;
 
@@ -422,11 +429,97 @@ QUnit.test("Several renderers share same backup container", function(assert) {
     assert.ok(!container.parentNode, "container is removed after second renderer");
 });
 
+QUnit.module('Fix sharping', {
+    before: setMockElements,
+    after: resetMockElements,
+    beforeEach: function() {
+        var that = this;
+        this.boundingRect = { left: 123.76, top: 2.15 };
+        this.container = document.createElement("div");
+        sinon.stub(this.container, "getBoundingClientRect", function() {
+            return that.boundingRect;
+        });
+    }
+});
+
+QUnit.test('Compensate root coordinates on creation', function(assert) {
+    //arrange
+    //act
+    var renderer = new Renderer({
+        container: this.container
+    });
+
+    //assert
+    if(browser.mozilla) {
+        assert.deepEqual(renderer.root.move.firstCall.args, [-0.76, -0.15]);
+    } else if(browser.msie) {
+        assert.deepEqual(renderer.root.css.getCall(1).args, [{
+            transform: "translate(-0.76px,-0.15px)"
+        }]);
+    } else {
+        assert.deepEqual(renderer.root.stub("move").callCount, 0);
+        assert.deepEqual(renderer.root.css.callCount, 1);
+    }
+});
+
+QUnit.test('Compensate root coordinates on Unlock', function(assert) {
+    //arrange
+    var renderer = new Renderer({
+        container: this.container
+    });
+    renderer.lock();
+    $("#qunit-fixture").append(this.container);
+    this.boundingRect = { left: 123.34, top: 2.5 };
+
+    //act
+    renderer.unlock();
+
+    //assert
+    if(browser.mozilla) {
+        assert.deepEqual(renderer.root.move.callCount, 2);
+        assert.deepEqual(renderer.root.move.lastCall.args, [-0.34, -0.5]);
+    } else if(browser.msie) {
+        assert.deepEqual(renderer.root.css.callCount, 3);
+        assert.deepEqual(renderer.root.css.getCall(2).args, [{
+            transform: "translate(-0.34px,-0.5px)"
+        }]);
+    } else {
+        assert.deepEqual(renderer.root.stub("move").callCount, 0);
+        assert.deepEqual(renderer.root.css.callCount, 1);
+    }
+});
+
+QUnit.test('Compensate root coordinates on fixPlacement call', function(assert) {
+    //arrange
+    var renderer = new Renderer({
+        container: this.container
+    });
+    this.boundingRect = { left: 123.34, top: 2.5 };
+
+    //act
+    renderer.fixPlacement();
+
+    //assert
+    if(browser.mozilla) {
+        assert.deepEqual(renderer.root.move.callCount, 2);
+        assert.deepEqual(renderer.root.move.lastCall.args, [-0.34, -0.5]);
+    } else if(browser.msie) {
+        assert.deepEqual(renderer.root.css.callCount, 3);
+        assert.deepEqual(renderer.root.css.getCall(2).args, [{
+            transform: "translate(-0.34px,-0.5px)"
+        }]);
+    } else {
+        assert.deepEqual(renderer.root.stub("move").callCount, 0);
+        assert.deepEqual(renderer.root.css.callCount, 1);
+    }
+});
+
 QUnit.module('Renderer drawing API', {
     before: setMockElements,
 
     beforeEach: function() {
-        this.renderer = new Renderer({});
+        var container = document.createElement("div");
+        this.renderer = new Renderer({ container: container });
     },
 
     after: resetMockElements
@@ -1098,7 +1191,8 @@ QUnit.module("Hatching", {
     before: setMockElements,
 
     beforeEach: function() {
-        this.renderer = new Renderer({});
+        var container = document.createElement("div");
+        this.renderer = new Renderer({ container: container });
         this.renderer.initHatching();
     },
 

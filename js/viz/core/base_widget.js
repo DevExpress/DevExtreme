@@ -316,6 +316,8 @@ module.exports = DOMComponent.inherit({
     _updateSize: function() {
         var that = this,
             canvas = that._calculateCanvas();
+
+        that._renderer.fixPlacement();
         if(areCanvasesDifferent(that._canvas, canvas) || that.__forceRender /*for charts*/) {
             that._canvas = canvas;
             that._renderer.resize(canvas.width, canvas.height);
@@ -357,21 +359,21 @@ module.exports = DOMComponent.inherit({
     },
 
     _setupResizeHandler: function() {
-        if(_parseScalar(this._getOption("redrawOnResize", true), true)) {
-            this._addResizeHandler();
-        } else {
-            this._removeResizeHandler();
-        }
-    },
+        var that = this,
+            redrawOnResize = _parseScalar(this._getOption("redrawOnResize", true), true);
 
-    _addResizeHandler: function() {
-        var that = this;
-        if(!that._resizeHandler) {
-            that._resizeHandler = createResizeHandler(function() {
-                that._requestChange(["CONTAINER_SIZE"]);
-            });
-            _windowResizeCallbacks.add(that._resizeHandler);
+        if(that._resizeHandler) {
+            that._removeResizeHandler();
         }
+
+        that._resizeHandler = createResizeHandler(function() {
+            if(redrawOnResize) {
+                that._requestChange(["CONTAINER_SIZE"]);
+            } else {
+                that._renderer.fixPlacement();
+            }
+        });
+        _windowResizeCallbacks.add(that._resizeHandler);
     },
 
     _removeResizeHandler: function() {
