@@ -62,7 +62,7 @@ module.exports = {
             * @name SearchBoxMixinOptions_searchTimeout
             * @publicName searchTimeout
             * @type number
-            * @default 0
+            * @default undefined
             */
         });
     },
