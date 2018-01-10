@@ -578,7 +578,6 @@ var FilterBuilder = Widget.inherit({
         var that = this,
             removeMenu = function() {
                 that.$element().find("." + ACTIVE_CLASS).removeClass(ACTIVE_CLASS);
-                that.$element().find(".dx-has-context-menu").remove();
                 that.$element().find(".dx-overlay .dx-treeview").remove();
                 that.$element().find(".dx-overlay").remove();
             },
@@ -586,9 +585,8 @@ var FilterBuilder = Widget.inherit({
             menuOnItemClickWrapper = function(handler) {
                 return function(e) {
                     handler(e);
-                    removeMenu();
-                    if(e.event.type === "keydown") {
-                        eventsEngine.trigger(options.menu.target, "focus");
+                    if(e.event.type === "dxclick") {
+                        removeMenu();
                     }
                 };
             },
@@ -603,7 +601,7 @@ var FilterBuilder = Widget.inherit({
                 $button.removeClass(ACTIVE_CLASS);
             },
             position: { my: position + " top", at: position + " bottom", offset: "0 1" },
-            animation: { show: { type: 'fade', from: 1, to: 1, delay: 0 }, hide: { type: 'fade', from: 0, to: 0, delay: 0 } },
+            animation: null,
             onHidden: function() {
                 removeMenu();
             },
@@ -611,6 +609,24 @@ var FilterBuilder = Widget.inherit({
             target: $button,
             rtlEnabled: rtlEnabled
         });
+
+        options.popup = {
+            onShown: function(info) {
+                var treeViewElement = $(info.component.content()).find(".dx-treeview"),
+                    treeView = treeViewElement.dxTreeView("instance");
+                eventsEngine.on(treeViewElement, "keyup keydown", function(e) {
+                    if((e.type === "keydown" && e.keyCode === TAB_KEY)
+                            || (e.type === "keyup" && (e.keyCode === ESCAPE_KEY || e.keyCode === ENTER_KEY))) {
+                        info.component.hide();
+                        eventsEngine.trigger(options.menu.target, "focus");
+                    }
+                });
+
+                treeView.focus();
+                treeView.option("focusedElement", null);
+            }
+        };
+
         this._subscribeOnClickAndEnterKey($button, function() {
             removeMenu();
             that._createPopupWithTreeView(options, that.$element());
@@ -796,7 +812,10 @@ var FilterBuilder = Widget.inherit({
             setText(utils.getCurrentValueText(field, value));
         }
 
-        that._subscribeOnClickAndEnterKey($text, function() {
+        that._subscribeOnClickAndEnterKey($text, function(e) {
+            if(e.type === "keyup") {
+                e.stopPropagation();
+            }
             that._createValueEditorWithEvents(item, field, $container);
         });
 
@@ -817,11 +836,9 @@ var FilterBuilder = Widget.inherit({
     _createValueEditorWithEvents: function(item, field, $container) {
         var that = this,
             value = item[2],
-            enterClicked = false,
             removeEvents = function() {
                 eventsEngine.off(document, "keyup", documentKeyUpHandler);
-                eventsEngine.off(document, "click", documentClickHandler);
-                eventsEngine.off($editor, "keyup");
+                eventsEngine.off(document, "dxclick", documentClickHandler);
             },
             isFocusOnEditorParts = function() {
                 var activeElement = document.activeElement;
@@ -840,11 +857,8 @@ var FilterBuilder = Widget.inherit({
             value: value === "" ? null : value,
             filterOperation: utils.getOperationValue(item),
             isValueChanged: true,
-            setValue: function(data, e) {
+            setValue: function(data) {
                 value = data === null ? "" : data;
-                that._updateConditionValue(item, value, function() {
-                    eventsEngine.trigger(createValueText(), "focus");
-                });
             }
         };
 
@@ -854,34 +868,35 @@ var FilterBuilder = Widget.inherit({
 
         var documentClickHandler = function(e) {
             if(!isFocusOnEditorParts()) {
-                createValueText();
+                that._updateConditionValue(item, value, function() {
+                    createValueText();
+                });
             }
         };
-        eventsEngine.on(document, "click", documentClickHandler);
+        eventsEngine.on(document, "dxclick", documentClickHandler);
 
         var documentKeyUpHandler = function(e) {
             if(e.keyCode === TAB_KEY) {
                 if(isFocusOnEditorParts()) {
                     return;
                 }
-                createValueText();
-                if(e.shiftKey) {
-                    eventsEngine.trigger($container.prev(), "focus");
-                }
+                that._updateConditionValue(item, value, function() {
+                    createValueText();
+                    if(e.shiftKey) {
+                        eventsEngine.trigger($container.prev(), "focus");
+                    }
+                });
             }
             if(e.keyCode === ESCAPE_KEY) {
-                options.setValue(value);
+                eventsEngine.trigger(createValueText(), "focus");
             }
-            if(enterClicked) {
-                options.setValue(value);
+            if(e.keyCode === ENTER_KEY) {
+                that._updateConditionValue(item, value, function() {
+                    eventsEngine.trigger(createValueText(), "focus");
+                });
             }
         };
         eventsEngine.on(document, "keyup", documentKeyUpHandler);
-        eventsEngine.on($editor, "keydown", function(e) {
-            if(e.keyCode === ENTER_KEY) {
-                enterClicked = true;
-            }
-        });
     },
 
     _createValueButton: function(item, field) {
@@ -929,6 +944,7 @@ var FilterBuilder = Widget.inherit({
             visible: true,
             focusStateEnabled: false,
             closeOnOutsideClick: true,
+            onShown: options.popup.onShown,
             shading: false,
             width: "auto",
             height: "auto",
@@ -938,8 +954,8 @@ var FilterBuilder = Widget.inherit({
     },
 
     _subscribeOnClickAndEnterKey: function($button, handler) {
-        eventsEngine.on($button, "click", handler);
-        eventsEngine.on($button, "keydown", function(e) {
+        eventsEngine.on($button, "dxclick", handler);
+        eventsEngine.on($button, "keyup", function(e) {
             if(e.keyCode === ENTER_KEY) {
                 handler(e);
             }
