@@ -255,7 +255,6 @@ var Popup = Overlay.inherit({
                     * @name dxPopupOptions_position
                     * @publicName position
                     * @type positionConfig
-                    * @custom_default_for_windows_phone_8 { my: 'top center', at: 'top center', of: window, offset: '0 0' }
                     * @extend_doc
                     */
                     position: {

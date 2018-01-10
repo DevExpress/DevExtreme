@@ -555,7 +555,9 @@ var Lookup = DropDownList.inherit({
                     /**
                     * @name dxLookupOptions_useNativeScrolling
                     * @publicName useNativeScrolling
-                    * @custom_default_for_android_below_version_4 false
+                    * @custom_default_for_desktop false
+                    * @custom_default_for_mac_desktop true
+
                     */
                     useNativeScrolling: false
                 }
@@ -568,14 +570,12 @@ var Lookup = DropDownList.inherit({
                     /**
                     * @name dxLookupOptions_usePopover
                     * @publicName usePopover
-                    * @custom_default_for_android_below_version_4 true
                     * @custom_default_for_desktop true
                     */
                     usePopover: true,
                     /**
                     * @name dxLookupOptions_popupHeight
                     * @publicName popupHeight
-                    * @custom_default_for_android_below_version_4 "auto"
                     * @custom_default_for_desktop "auto"
                     */
                     popupHeight: "auto"
@@ -589,13 +589,11 @@ var Lookup = DropDownList.inherit({
                     /**
                     * @name dxLookupOptions_showCancelButton
                     * @publicName showCancelButton
-                    * @custom_default_for_windows_phone_8 false
                     */
                     showCancelButton: false,
                     /**
                     * @name dxLookupOptions_fullScreen
                     * @publicName fullScreen
-                    * @custom_default_for_windows_phone_8 true
                     */
                     fullScreen: true
                 }
