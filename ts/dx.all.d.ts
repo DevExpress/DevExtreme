@@ -2090,7 +2090,7 @@ declare module DevExpress.ui {
         trueText?: string;
         /** Specifies validation rules to be checked on updating cell values. */
         validationRules?: Array<RequiredRule | NumericRule | RangeRule | StringLengthRule | CustomRule | CompareRule | PatternRule | EmailRule>;
-        /** Specifies whether the column is visible or not. */
+        /** Specifies whether the column is visible, that is, occupies space in the table. */
         visible?: boolean;
         /** Specifies the position of the column regarding other columns in the resulting widget. */
         visibleIndex?: number;
@@ -3459,8 +3459,6 @@ declare module DevExpress.ui {
         titleTemplate?: template | ((titleElement: DevExpress.core.dxElement) => string | Element | JQuery);
         /** Specifies items displayed on the top or bottom toolbar of the popup window. */
         toolbarItems?: Array<dxPopupToolbarItem>;
-        /** Specifies the widget's width in pixels. */
-        width?: any;
     }
     /** Configures widget visibility animations. This object contains two fields: show and hide. */
     export interface dxPopupAnimation extends dxOverlayAnimation {
@@ -4710,7 +4708,7 @@ declare module DevExpress.ui {
         falseText?: string;
         /** Specifies a set of available filter operations. */
         filterOperations?: Array<string>;
-        /** Specifies the input value's format. */
+        /** Formats a value before it is displayed. */
         format?: format;
         /** Configures the lookup field. */
         lookup?: { dataSource?: Array<any> | DevExpress.data.DataSourceOptions, valueExpr?: string | Function, displayExpr?: string | ((data: any) => any), allowClearing?: boolean };
@@ -5189,6 +5187,7 @@ declare module DevExpress.ui {
         searchExpr?: string | Function | Array<string | Function>;
         /** Specifies whether the widget finds entries that contain your search string or entries that only start with it. */
         searchMode?: string;
+        searchTimeout?: number;
         /** Specifies the current search string. */
         searchValue?: string;
     }
@@ -6205,7 +6204,8 @@ declare module DevExpress.viz {
         /** Hides all widget tooltips. */
         hideTooltip(): void;
     }
-    export interface CommonIndicatorOptions {
+    /** A base object for gauge value and subvalue indicators. Includes the options of indicators of all types. */
+    export interface CommonIndicator {
         /** Specifies the length of an arrow for the indicator of the textCloud type in pixels. */
         arrowLength?: number;
         /** Specifies the background color for the indicator of the rangeBar type. */
@@ -6256,21 +6256,15 @@ declare module DevExpress.viz {
         /** @deprecated Use the text.format.precision option instead. */
         precision?: number;
     }
-    /** A base object for gauge value and subvalue indicators. Includes the options of indicators of all types. */
-    export class CommonIndicator {
-        constructor(options?: CommonIndicatorOptions)
-    }
-    interface circularTriangleMarkerOptions extends CommonIndicatorOptions {
+    /** An object that defines a gauge indicator of the triangleMarker type. */
+    interface circularTriangleMarker extends CommonIndicator {
         /** Specifies the indicator length. */
         length?: number;
         /** Specifies the width of an indicator in pixels. */
         width?: number;
     }
-    /** An object that defines a gauge indicator of the triangleMarker type. */
-    class circularTriangleMarker extends CommonIndicator {
-        constructor(options?: circularTriangleMarkerOptions)
-    }
-    interface circularTextCloudOptions extends CommonIndicatorOptions {
+    /** An object that defines a gauge indicator of the textCloud type. */
+    interface circularTextCloud extends CommonIndicator {
         /** Specifies the appearance of the text displayed in an indicator of the rangeBar type. */
         text?: circularTextCloudText;
     }
@@ -6279,47 +6273,32 @@ declare module DevExpress.viz {
         /** Specifies font options for the text displayed by the indicator. */
         font?: Font;
     }
-    /** An object that defines a gauge indicator of the textCloud type. */
-    class circularTextCloud extends CommonIndicator {
-        constructor(options?: circularTextCloudOptions)
-    }
-    export interface linearRectangleOptions extends CommonIndicatorOptions {
+    /** An object defining a gauge indicator of the rectangle type. */
+    export interface linearRectangle extends CommonIndicator {
         /** Specifies the distance between the indicator and the invisible scale line. */
         offset?: number;
         /** Specifies the width of an indicator in pixels. */
         width?: number;
-    }
-    /** An object defining a gauge indicator of the rectangle type. */
-    export class linearRectangle extends CommonIndicator {
-        constructor(options?: linearRectangleOptions)
-    }
-    export interface linearCircleOptions extends CommonIndicatorOptions {
-        /** Specifies the distance between the indicator and the invisible scale line. */
-        offset?: number;
     }
     /** An object that defines a gauge indicator of the circle type. */
-    export class linearCircle extends CommonIndicator {
-        constructor(options?: linearCircleOptions)
+    export interface linearCircle extends CommonIndicator {
+        /** Specifies the distance between the indicator and the invisible scale line. */
+        offset?: number;
     }
-    export interface linearRhombusOptions extends CommonIndicatorOptions {
+    /** An object defining a gauge indicator of the rhombus type. */
+    export interface linearRhombus extends CommonIndicator {
         /** Specifies the distance between the indicator and the invisible scale line. */
         offset?: number;
         /** Specifies the width of an indicator in pixels. */
         width?: number;
     }
-    /** An object defining a gauge indicator of the rhombus type. */
-    export class linearRhombus extends CommonIndicator {
-        constructor(options?: linearRhombusOptions)
-    }
-    export interface linearRangeBarOptions extends CommonIndicatorOptions {
+    /** An object that defines a gauge indicator of the rangeBar type. */
+    export interface linearRangeBar extends CommonIndicator {
         /** Specifies the distance between the indicator and the invisible scale line. */
         offset?: number;
     }
-    /** An object that defines a gauge indicator of the rangeBar type. */
-    export class linearRangeBar extends CommonIndicator {
-        constructor(options?: linearRangeBarOptions)
-    }
-    export interface linearTriangleMarkerOptions extends CommonIndicatorOptions {
+    /** An object that defines a gauge indicator of the triangleMarker type. */
+    export interface linearTriangleMarker extends CommonIndicator {
         /** Specifies the indicator length. */
         length?: number;
         /** Specifies the distance between the indicator and the invisible scale line. */
@@ -6327,11 +6306,8 @@ declare module DevExpress.viz {
         /** Specifies the width of an indicator in pixels. */
         width?: number;
     }
-    /** An object that defines a gauge indicator of the triangleMarker type. */
-    export class linearTriangleMarker extends CommonIndicator {
-        constructor(options?: linearTriangleMarkerOptions)
-    }
-    export interface linearTextCloudOptions extends CommonIndicatorOptions {
+    /** An object that defines a gauge indicator of the textCloud type. */
+    export interface linearTextCloud extends CommonIndicator {
         /** Specifies the distance between the indicator and the invisible scale line. */
         offset?: number;
         /** Specifies the appearance of the text displayed in an indicator of the rangeBar type. */
@@ -6341,10 +6317,6 @@ declare module DevExpress.viz {
     export interface linearTextCloudText extends CommonIndicatorText {
         /** Specifies font options for the text displayed by the indicator. */
         font?: Font;
-    }
-    /** An object that defines a gauge indicator of the textCloud type. */
-    export class linearTextCloud extends CommonIndicator {
-        constructor(options?: linearTextCloudOptions)
     }
     /** A gauge widget. */
     export class BaseGauge extends BaseWidget {

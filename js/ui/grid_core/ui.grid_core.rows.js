@@ -966,9 +966,12 @@ module.exports = {
                 },
 
                 getRow: function(index) {
-                    var rows = this._getRowElements();
-                    if(rows.length > index) {
-                        return $(rows[index]);
+                    if(index >= 0) {
+                        var rows = this._getRowElements();
+
+                        if(rows.length > index) {
+                            return $(rows[index]);
+                        }
                     }
                 },
 
@@ -1164,8 +1167,10 @@ module.exports = {
                         that._renderScrollable();
                         that.renderNoDataText();
                         that.updateFreeSpaceRowHeight();
+                        commonUtils.deferUpdate(function() {
+                            that._updateScrollable();
+                        });
                     });
-                    that._updateScrollable();
                     that.setLoading(that._dataController.isLoading());
                 },
 

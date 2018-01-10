@@ -616,6 +616,32 @@ QUnit.test("Done button shouldn't be disabled if validation fail", function(asse
     assert.equal(doneButton.option("disabled"), false, "done button is not disabled");
 });
 
+QUnit.test("Done button custom configuration should be correct", function(assert) {
+    var data = new DataSource({
+        store: this.tasks
+    });
+
+    this.instance.option({ dataSource: data });
+    this.instance.option({
+        onAppointmentFormCreated: function(e) {
+            var buttons = e.component._popup.option('toolbarItems');
+            buttons[0].options = { text: 'Text 1' };
+            e.component._popup.option('toolbarItems', buttons);
+        },
+        onAppointmentAdding: function(e) {
+            e.cancel = true;
+        }
+    });
+    this.instance.showAppointmentPopup({ startDate: new Date(2015, 1, 1, 1), endDate: new Date(2015, 1, 1, 2), text: "caption" });
+
+    $(".dx-scheduler-appointment-popup .dx-popup-done").trigger("dxclick");
+
+    var doneButton = $(".dx-scheduler-appointment-popup .dx-popup-done.dx-button").dxButton("instance");
+
+    assert.equal(doneButton.option("disabled"), false, "done button is not disabled");
+    assert.equal(doneButton.option("text"), "Text 1", "done button text is ok");
+});
+
 QUnit.test("Done button shouldn't be disabled if event validation fail", function(assert) {
     var data = new DataSource({
         store: this.tasks

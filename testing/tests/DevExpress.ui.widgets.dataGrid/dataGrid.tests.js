@@ -67,6 +67,7 @@ var $ = require("jquery"),
     setTemplateEngine = require("ui/set_template_engine"),
     fx = require("animation/fx"),
     config = require("core/config"),
+    keyboardMock = require("../../helpers/keyboardMock.js"),
     ajaxMock = require("../../helpers/ajaxMock.js"),
 
     DX_STATE_HOVER_CLASS = "dx-state-hover",
@@ -1085,6 +1086,24 @@ QUnit.test("Resize grid after column resizing", function(assert) {
         assert.strictEqual(headersCols[1].style.width, "auto");
     }
 
+});
+
+//T590907
+QUnit.test("Change column width via option method", function(assert) {
+    //arrange
+    var dataGrid = $("#dataGrid").dxDataGrid({
+        loadingTimeout: undefined,
+        dataSource: [{}],
+        columns: [{ dataField: "column1", width: 100 }, { dataField: "column2", width: 100 }]
+    }).dxDataGrid("instance");
+
+    //act
+    dataGrid.option("columns[0].width", 1);
+
+    //assert
+    assert.strictEqual(dataGrid.$element().width(), 101);
+    assert.strictEqual(dataGrid.columnOption(0, "visibleWidth"), 1);
+    assert.strictEqual(dataGrid.columnOption(1, "visibleWidth"), "auto");
 });
 
 function isColumnHidden($container, index) {
@@ -6061,7 +6080,6 @@ QUnit.testInActiveWindow("Tab key should open editor in next cell when virtual s
 
     //act
     this.clock.tick();
-    dataGrid.getScrollable().update();
     dataGrid.getScrollable().scrollTo({ x: 0, y: 10000 });
 
     this.clock.tick();
@@ -7707,6 +7725,28 @@ QUnit.test("Band columns should be displayed correctly after state is reset", fu
     assert.deepEqual(columns, ["Field 3", "Field 4"], "columns of the second level");
 });
 
+//T592655
+QUnit.test("Sorting should not throw an exception when headers are hidden", function(assert) {
+    //arrange
+    var dataGrid = createDataGrid({
+        showColumnHeaders: false,
+        dataSource: [{ field1: 1, field2: 2, field3: 3 }, { field1: 4, field2: 5, field3: 6 }]
+    });
+
+    this.clock.tick();
+
+    try {
+        //act
+        dataGrid.columnOption("field2", "sortOrder", "desc");
+        this.clock.tick();
+
+        //assert
+        assert.ok(true, "no exceptions");
+    } catch(e) {
+        //assert
+        assert.ok(false, "exception");
+    }
+});
 
 QUnit.module("templates");
 
@@ -8611,6 +8651,60 @@ QUnit.test("Focus row element should support native DOM", function(assert) {
         rowIndex: 2
     }, "Check that correct cell is focused");
 });
+
+//T592731
+QUnit.test("Pressing arrow keys inside editor of the internal grid does not call preventDefault", function(assert) {
+    //arrange
+    var keyboard,
+        $dateBoxInput,
+        preventDefaultCalled,
+        eventOptions = {
+            preventDefault: function() {
+                preventDefaultCalled = true;
+            }
+        };
+
+    this.dataGrid.option({
+        dataSource: {
+            store: {
+                type: "array",
+                data: [{ id: 0, value: "value 1", text: "Awesome" }],
+                key: "id"
+            }
+        },
+        masterDetail: {
+            enabled: true,
+            template: function(container, options) {
+                $("<div>")
+                    .addClass("internal-grid")
+                    .dxDataGrid({
+                        filterRow: {
+                            visible: true
+                        },
+                        columns: [{ dataField: "field1", filterValue: "test" }, "field2"],
+                        dataSource: [{ field1: "test1", field2: "test2" }]
+                    }).appendTo(container);
+            }
+        }
+    });
+    this.dataGrid.expandRow(0);
+    this.clock.tick();
+
+    $dateBoxInput = $(this.dataGrid.$element()).find(".internal-grid .dx-datagrid-filter-row").find(".dx-texteditor-input").first();
+    $dateBoxInput.focus();
+    this.clock.tick();
+    keyboard = keyboardMock($dateBoxInput);
+
+    //act
+    keyboard.keyDown("left", eventOptions);
+    keyboard.keyDown("right", eventOptions);
+    keyboard.keyDown("up", eventOptions);
+    keyboard.keyDown("down", eventOptions);
+
+    //assert
+    assert.notOk(preventDefaultCalled, "preventDefault is not called");
+});
+
 
 QUnit.module("Formatting");
 

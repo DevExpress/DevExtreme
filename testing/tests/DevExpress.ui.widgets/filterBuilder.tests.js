@@ -104,3 +104,4 @@ QUnit.testStart(function() {
 require("./filterBuilderParts/commonTests.js");
 require("./filterBuilderParts/utilsTests.js");
 require("./filterBuilderParts/eventsTests.js");
+require("./filterBuilderParts/keyboardNavigation.js");

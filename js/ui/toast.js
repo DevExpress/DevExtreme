@@ -206,7 +206,6 @@ var Toast = Overlay.inherit({
                     /**
                     * @name dxToastOptions_position
                     * @publicName position
-                    * @custom_default_for_windows_8 "top center"
                     * @extend_doc
                     */
                     position: "top center",
@@ -214,7 +213,6 @@ var Toast = Overlay.inherit({
                     /**
                     * @name dxToastOptions_width
                     * @publicName width
-                    * @custom_default_for_windows_8 function() { return $(window).width(); }
                     * @extend_doc
                     */
                     width: function() { return $(window).width(); }

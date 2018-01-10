@@ -180,7 +180,7 @@ var Tabs = CollectionWidget.inherit({
                     * @name dxTabsOptions_focusStateEnabled
                     * @publicName focusStateEnabled
                     * @type boolean
-                    * @custom_default_for_generic true
+                    * @custom_default_for_desktop true
                     * @extend_doc
                     */
                     focusStateEnabled: true
