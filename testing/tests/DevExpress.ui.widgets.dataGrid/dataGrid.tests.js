@@ -65,6 +65,7 @@ var $ = require("jquery"),
     messageLocalization = require("localization/message"),
     setTemplateEngine = require("ui/set_template_engine"),
     fx = require("animation/fx"),
+    keyboardMock = require("../../helpers/keyboardMock.js"),
     DX_STATE_HOVER_CLASS = "dx-state-hover",
     TEXTEDITOR_INPUT_SELECTOR = ".dx-texteditor-input";
 
@@ -8475,6 +8476,124 @@ QUnit.test("Focus row element", function(assert) {
         columnIndex: 0,
         rowIndex: 2
     }, "Check that correct cell is focused");
+});
+
+//T592731
+QUnit.test("Pressing the left/right arrow key inside editor of the internal grid does not call preventDefault", function(assert) {
+    //arrange
+    var keyboard,
+        $dateBoxInput,
+        preventDefaultCalled;
+
+    this.dataGrid.option({
+        dataSource: {
+            store: {
+                type: "array",
+                data: [{ id: 0, value: "value 1", text: "Awesome" }],
+                key: "id"
+            }
+        },
+        masterDetail: {
+            enabled: true,
+            template: function(container, options) {
+                $("<div>")
+                    .addClass("internal-grid")
+                    .dxDataGrid({
+                        filterRow: {
+                            visible: true
+                        },
+                        columns: [{ dataField: "field1", dataType: "date", filterValue: new Date(2018, 0, 10) }, "field2"],
+                        dataSource: [{ field1: "test1", field2: "test2" }]
+                    }).appendTo(container);
+            }
+        }
+    });
+    this.dataGrid.expandRow(0);
+    this.clock.tick();
+
+    $dateBoxInput = this.dataGrid.element().find(".internal-grid .dx-datagrid-filter-row").find(".dx-texteditor-input").first();
+    $dateBoxInput.focus();
+    this.clock.tick();
+    keyboard = keyboardMock($dateBoxInput);
+
+    //act
+    keyboard.keyDown("left", {
+        preventDefault: function() {
+            preventDefaultCalled = true;
+        }
+    });
+
+    //assert
+    assert.notOk(preventDefaultCalled, "preventDefault is not called");
+
+    //act
+    keyboard.keyDown("right", {
+        preventDefault: function() {
+            preventDefaultCalled = true;
+        }
+    });
+
+    //assert
+    assert.notOk(preventDefaultCalled, "preventDefault is not called");
+});
+
+//T592731
+QUnit.test("Pressing the up/down arrow key inside editor of the internal grid does not call preventDefault", function(assert) {
+    //arrange
+    var keyboard,
+        $textBoxInput,
+        preventDefaultCalled;
+
+    this.dataGrid.option({
+        dataSource: {
+            store: {
+                type: "array",
+                data: [{ id: 0, value: "value 1", text: "Awesome" }],
+                key: "id"
+            }
+        },
+        masterDetail: {
+            enabled: true,
+            template: function(container, options) {
+                $("<div>")
+                    .addClass("internal-grid")
+                    .dxDataGrid({
+                        filterRow: {
+                            visible: true
+                        },
+                        columns: [{ dataField: "field1", filterValue: "test" }, "field2"],
+                        dataSource: [{ field1: "test1", field2: "test2" }]
+                    }).appendTo(container);
+            }
+        }
+    });
+    this.dataGrid.expandRow(0);
+    this.clock.tick();
+
+    $textBoxInput = this.dataGrid.element().find(".internal-grid .dx-datagrid-filter-row").find(".dx-texteditor-input").first();
+    $textBoxInput.focus();
+    this.clock.tick();
+    keyboard = keyboardMock($textBoxInput);
+
+    //act
+    keyboard.keyDown("up", {
+        preventDefault: function() {
+            preventDefaultCalled = true;
+        }
+    });
+
+    //assert
+    assert.notOk(preventDefaultCalled, "preventDefault is not called");
+
+    //act
+    keyboard.keyDown("down", {
+        preventDefault: function() {
+            preventDefaultCalled = true;
+        }
+    });
+
+    //assert
+    assert.notOk(preventDefaultCalled, "preventDefault is not called");
 });
 
 QUnit.module("Formatting");

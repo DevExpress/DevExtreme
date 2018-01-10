@@ -376,7 +376,7 @@ var KeyboardNavigationController = core.ViewController.inherit({
             $row = this._focusedView && this._focusedView.getRow(rowIndex),
             $cell;
 
-        if(!isEditing && !isDetailRow($row)) {
+        if(!isEditing && $row && !isDetailRow($row)) {
             $cell = this._getNextCell(eventArgs.key);
             if($cell && this._isCellValid($cell)) {
                 this._focus($cell);
