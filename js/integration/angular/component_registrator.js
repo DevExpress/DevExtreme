@@ -533,7 +533,7 @@ ComponentBuilder = ComponentBuilder.inherit({
         var that = this;
 
         var clearNgModelWatcher = this._scope.$watch(this._ngModel, function(newValue, oldValue) {
-            if(that._ngLocker.locked(that._ngModelOption())) {
+            if(that._ngLocker.locked("value")) {
                 return;
             }
 
@@ -541,33 +541,25 @@ ComponentBuilder = ComponentBuilder.inherit({
                 return;
             }
 
-            that._component.option(that._ngModelOption(), newValue);
+            that._component.option("value", newValue);
         });
 
         that._optionChangedCallbacks.add(function(args) {
-            that._ngLocker.obtain(that._ngModelOption());
+            that._ngLocker.obtain("value");
             try {
-                if(args.name !== that._ngModelOption()) {
+                if(args.name !== "value") {
                     return;
                 }
 
                 that._ngModelController.$setViewValue(args.value);
             } finally {
-                if(that._ngLocker.locked(that._ngModelOption())) {
-                    that._ngLocker.release(that._ngModelOption());
+                if(that._ngLocker.locked("value")) {
+                    that._ngLocker.release("value");
                 }
             }
         });
 
         this._componentDisposing.add(clearNgModelWatcher);
-    },
-
-    _ngModelOption: function() {
-        if(inArray(this._componentName, ["dxFileUploader", "dxTagBox"]) > -1) {
-            return "values";
-        }
-
-        return "value";
     },
 
     _evalOptions: function() {
@@ -576,7 +568,7 @@ ComponentBuilder = ComponentBuilder.inherit({
         }
 
         var result = this.callBase.apply(this, arguments);
-        result[this._ngModelOption()] = this._parse(this._ngModel)(this._scope);
+        result["value"] = this._parse(this._ngModel)(this._scope);
         return result;
     }
 
