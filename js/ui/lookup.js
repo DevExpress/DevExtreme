@@ -557,7 +557,6 @@ var Lookup = DropDownList.inherit({
                     * @publicName useNativeScrolling
                     * @custom_default_for_desktop false
                     * @custom_default_for_mac_desktop true
-
                     */
                     useNativeScrolling: false
                 }
