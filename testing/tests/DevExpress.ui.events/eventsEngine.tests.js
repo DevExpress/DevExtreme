@@ -408,7 +408,7 @@ QUnit.test("removing subscriptions should not remove data from elementDataMap if
     assert.equal(eventsEngine.elementDataMap.has(div), hasData);
 });
 
-QUnit.module("strategy");
+QUnit.module("Strategy");
 
 QUnit.test("it should be possible to set only one method for strategy", function(assert) {
     assert.expect(1);
@@ -428,4 +428,30 @@ QUnit.test("it should be possible to set only one method for strategy", function
     eventsEngine.set({
         "on": originalOn
     });
+});
+
+QUnit.module("Delegate subscribtion");
+
+QUnit.test("delegate subscribtion should handle all matched elements", function(assert) {
+    var container = document.createElement("div");
+    var target = document.createElement("span");
+    var nestedContainer = document.createElement("div");
+    var nestedTarget = document.createElement("span");
+
+    var log = [];
+
+    var handler = function() {
+        log.push(arguments);
+    };
+
+    container.appendChild(target);
+    target.appendChild(nestedContainer);
+    nestedContainer.appendChild(nestedTarget);
+
+    eventsEngine.on(container, "testEvent", "span", handler);
+    eventsEngine.on(nestedContainer, "testEvent", "span", handler);
+
+    eventsEngine.trigger(nestedTarget, "testEvent");
+
+    assert.equal(log.length, 3);
 });
