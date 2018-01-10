@@ -2313,7 +2313,7 @@ QUnit.testStart(function() {
     });
 
     QUnit.test("All appointments should be rerendered after cellDuration changed", function(assert) {
-        assert.expect(4);
+        assert.expect(6);
 
         this.createInstance({
             dataSource: new DataSource({
@@ -2335,9 +2335,16 @@ QUnit.testStart(function() {
             },
             currentDate: new Date(2015, 1, 9)
         });
+        var appointments = this.instance.getAppointmentsInstance(),
+            initialItems = appointments.option("items");
 
         this.instance.option("cellDuration", 100);
         this.clock.tick();
+
+        var changedItems = appointments.option("items");
+
+        assert.notDeepEqual(initialItems[0].settings, changedItems[0].settings, "Item's settings were changed");
+        assert.notDeepEqual(initialItems[1].settings, changedItems[1].settings, "Item's settings were changed");
     });
 
     QUnit.test("targetedAppointmentData should return correct allDay appointmentData", function(assert) {
