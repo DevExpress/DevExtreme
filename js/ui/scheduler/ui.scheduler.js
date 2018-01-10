@@ -1028,7 +1028,7 @@ var Scheduler = Widget.inherit({
                     items: [],
                     allowDrag: this._allowDragging(),
                     allowResize: this._allowResizing(),
-                    appointmentDurationInMinutes: this._getCurrentViewOption("cellDuration")
+                    itemTemplate: this._getAppointmentTemplate("appointmentTemplate")
                 });
                 this._header.option("min", this._dateOption("min"));
                 this._header.option("max", this._dateOption("max"));
@@ -1108,8 +1108,9 @@ var Scheduler = Widget.inherit({
                 }).bind(this));
                 break;
             case "cellDuration":
+                this._appointments.option("items", []);
                 this._updateOption("workSpace", "hoursInterval", value / 60);
-                this._appointments.option("appointmentDurationInMinutes", value);
+                this._appointments.option("items", this._getAppointmentsToRepaint());
                 break;
             case "tabIndex":
             case "focusStateEnabled":
@@ -1411,8 +1412,8 @@ var Scheduler = Widget.inherit({
 
     _dataSourceChangedHandler: function(result) {
         this._workSpaceRecalculation.done((function() {
-            var isAgenda = this._getAppointmentsRenderingStrategy() === "agenda",
-                appointmentsToRepaint = result;
+            var isAgenda = this._getAppointmentsRenderingStrategy() === "agenda";
+
             this._filteredItems = this.fire("prerenderFilter");
             this._workSpace.option("allDayExpanded", this._isAllDayExpanded(this._filteredItems));
 
@@ -1421,9 +1422,7 @@ var Scheduler = Widget.inherit({
             }
 
             if(this._filteredItems.length && this._isVisible()) {
-                var appointments = this._layoutManager.createAppointmentsMap(this._filteredItems);
-                appointmentsToRepaint = this._layoutManager.markRepaintedAppointments(appointments, this.getAppointmentsInstance().option("items"));
-                this._appointments.option("items", appointmentsToRepaint);
+                this._appointments.option("items", this._getAppointmentsToRepaint());
 
                 delete this.instance._updatedAppointment;
             } else {
@@ -1435,6 +1434,11 @@ var Scheduler = Widget.inherit({
                 this._dataSourceLoadedCallback.fireWith(this, [result]);
             }
         }).bind(this));
+    },
+
+    _getAppointmentsToRepaint: function() {
+        var appointments = this._layoutManager.createAppointmentsMap(this._filteredItems);
+        return this._layoutManager.markRepaintedAppointments(appointments, this.getAppointmentsInstance().option("items"));
     },
 
     _initExpressions: function(fields) {
@@ -1638,7 +1642,6 @@ var Scheduler = Widget.inherit({
             onAppointmentDblClick: this._createActionByOption("onAppointmentDblClick"),
             tabIndex: this.option("tabIndex"),
             focusStateEnabled: this.option("focusStateEnabled"),
-            appointmentDurationInMinutes: this._getCurrentViewOption("cellDuration"),
             allowDrag: this._allowDragging(),
             allowDelete: this._editing.allowUpdating && this._editing.allowDeleting,
             allowResize: this._allowResizing(),
