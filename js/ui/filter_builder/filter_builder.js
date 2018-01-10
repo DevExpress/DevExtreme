@@ -838,7 +838,7 @@ var FilterBuilder = Widget.inherit({
             value = item[2],
             removeEvents = function() {
                 eventsEngine.off(document, "keyup", documentKeyUpHandler);
-                eventsEngine.off(document, "click touchstart", documentClickHandler);
+                eventsEngine.off(document, "dxclick", documentClickHandler);
             },
             isFocusOnEditorParts = function() {
                 var activeElement = document.activeElement;
@@ -873,7 +873,7 @@ var FilterBuilder = Widget.inherit({
                 });
             }
         };
-        eventsEngine.on(document, "click touchstart", documentClickHandler);
+        eventsEngine.on(document, "dxclick", documentClickHandler);
 
         var documentKeyUpHandler = function(e) {
             if(e.keyCode === TAB_KEY) {
@@ -954,7 +954,7 @@ var FilterBuilder = Widget.inherit({
     },
 
     _subscribeOnClickAndEnterKey: function($button, handler) {
-        eventsEngine.on($button, "click", handler);
+        eventsEngine.on($button, "dxclick", handler);
         eventsEngine.on($button, "keyup", function(e) {
             if(e.keyCode === ENTER_KEY) {
                 handler(e);

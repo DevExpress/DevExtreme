@@ -45,7 +45,7 @@ QUnit.module("Keyboard navigation", {
         };
 
         this.changeValueAndPressKey = function(key, eventType) {
-            this.getValueButtonElement().click();
+            this.getValueButtonElement().trigger("dxclick");
 
             var textEditorElement = this.getTextEditorElement();
             textEditorElement.dxTextBox("instance").option("value", "Test");
@@ -86,7 +86,7 @@ QUnit.module("Keyboard navigation", {
     });
 
     QUnit.test("change condition value after tab press", function(assert) {
-        this.getValueButtonElement().click();
+        this.getValueButtonElement().trigger("dxclick");
 
         var textEditorElement = this.getTextEditorElement();
         textEditorElement.dxTextBox("instance").option("value", "Test");
@@ -98,7 +98,7 @@ QUnit.module("Keyboard navigation", {
     });
 
     QUnit.test("tab press without change a condition", function(assert) {
-        this.getValueButtonElement().click();
+        this.getValueButtonElement().trigger("dxclick");
 
         document.activeElement.blur();
         keyboardMock(this.getTextEditorElement().find("input")).keyUp(TAB_KEY);
