@@ -27,11 +27,13 @@ QUnit.module("API methods", {
         stub1.probeDraw = sinon.spy();
         stub1.draw = sinon.spy();
         stub1.shift = sinon.spy();
+        stub1.freeSpace = sinon.spy();
 
         stub2.getLayoutOptions = sinon.stub().returns(null);
         stub2.probeDraw = sinon.spy();
         stub2.draw = sinon.spy();
         stub2.shift = sinon.spy();
+        stub2.freeSpace = sinon.spy();
 
         stub3.getLayoutOptions = sinon.stub().returns({
             width: 70,
@@ -46,6 +48,7 @@ QUnit.module("API methods", {
         stub3.probeDraw = sinon.spy();
         stub3.draw = sinon.spy();
         stub3.shift = sinon.spy();
+        stub3.freeSpace = sinon.spy();
 
         this.laidOutElements = [stub1, stub2, stub3];
     }
@@ -190,12 +193,12 @@ QUnit.test("Probe draw", function(assert) {
 
     //assert
     assert.equal(this.laidOutElements[0].probeDraw.callCount, 1, "first element with probe draw");
-    assert.deepEqual(this.laidOutElements[0].probeDraw.getCall(0).args, [100, 20], "first element with probe draw");
+    assert.deepEqual(this.laidOutElements[0].probeDraw.getCall(0).args, [100, 20, undefined], "first element with probe draw");
 
     assert.equal(this.laidOutElements[1].probeDraw.callCount, 0, "second element with probe draw");
 
     assert.equal(this.laidOutElements[2].probeDraw.callCount, 1, "third element with probe draw");
-    assert.deepEqual(this.laidOutElements[2].probeDraw.getCall(0).args, [70, 20], "third element with probe draw");
+    assert.deepEqual(this.laidOutElements[2].probeDraw.getCall(0).args, [70, 20, undefined], "third element with probe draw");
 });
 
 QUnit.test("Draw", function(assert) {
@@ -216,6 +219,40 @@ QUnit.test("Draw", function(assert) {
 
     assert.equal(this.laidOutElements[2].draw.callCount, 1, "third element with draw");
     assert.deepEqual(this.laidOutElements[2].draw.getCall(0).args, [70, 20, { width: 30 }], "third element with draw");
+});
+
+QUnit.test("Hide all element if at least one of them is hidden", function(assert) {
+    //arrange
+    this.laidOutElements[1].getLayoutOptions.returns({ width: 0 });
+    var headerBlock = new headerBlockModule.HeaderBlock(),
+        layout;
+
+    headerBlock.update(this.laidOutElements, { width: 30 });
+
+    //act
+    layout = headerBlock.draw(100, 20);
+
+    //assert
+    assert.equal(this.laidOutElements[0].freeSpace.callCount, 1, "first element is hidden");
+    assert.equal(this.laidOutElements[1].freeSpace.callCount, 1, "second element is hidden");
+    assert.equal(this.laidOutElements[2].freeSpace.callCount, 1, "third element is hidden");
+});
+
+QUnit.test("Hide all element if common elements width greater then allowed with", function(assert) {
+    //arrange
+    this.laidOutElements[1].getLayoutOptions.returns({ width: 30 });
+    var headerBlock = new headerBlockModule.HeaderBlock(),
+        layout;
+
+    headerBlock.update(this.laidOutElements, { width: 30 });
+
+    //act
+    layout = headerBlock.draw(70, 20);
+
+    //assert
+    assert.equal(this.laidOutElements[0].freeSpace.callCount, 1, "first element is hidden");
+    assert.equal(this.laidOutElements[1].freeSpace.callCount, 1, "second element is hidden");
+    assert.equal(this.laidOutElements[2].freeSpace.callCount, 1, "third element is hidden");
 });
 
 QUnit.test("Shift", function(assert) {
