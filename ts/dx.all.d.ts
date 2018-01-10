@@ -2090,7 +2090,7 @@ declare module DevExpress.ui {
         trueText?: string;
         /** Specifies validation rules to be checked on updating cell values. */
         validationRules?: Array<RequiredRule | NumericRule | RangeRule | StringLengthRule | CustomRule | CompareRule | PatternRule | EmailRule>;
-        /** Specifies whether the column is visible or not. */
+        /** Specifies whether the column is visible, that is, occupies space in the table. */
         visible?: boolean;
         /** Specifies the position of the column regarding other columns in the resulting widget. */
         visibleIndex?: number;
@@ -4708,7 +4708,7 @@ declare module DevExpress.ui {
         falseText?: string;
         /** Specifies a set of available filter operations. */
         filterOperations?: Array<string>;
-        /** Specifies the input value's format. */
+        /** Formats a value before it is displayed. */
         format?: format;
         /** Configures the lookup field. */
         lookup?: { dataSource?: Array<any> | DevExpress.data.DataSourceOptions, valueExpr?: string | Function, displayExpr?: string | ((data: any) => any), allowClearing?: boolean };
@@ -5187,6 +5187,7 @@ declare module DevExpress.ui {
         searchExpr?: string | Function | Array<string | Function>;
         /** Specifies whether the widget finds entries that contain your search string or entries that only start with it. */
         searchMode?: string;
+        searchTimeout?: number;
         /** Specifies the current search string. */
         searchValue?: string;
     }
