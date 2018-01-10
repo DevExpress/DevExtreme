@@ -22,7 +22,8 @@ var $ = require("../../core/renderer"),
     errors = require("../../core/errors");
 
 var ITEM_ALIAS_ATTRIBUTE_NAME = "dxItemAlias",
-    SKIP_APPLY_ACTION_CATEGORIES = ["rendering"];
+    SKIP_APPLY_ACTION_CATEGORIES = ["rendering"],
+    NG_MODEL_OPTION = "value";
 
 var safeApply = function(func, scope) {
     if(scope.$root.$$phase) {
@@ -533,7 +534,7 @@ ComponentBuilder = ComponentBuilder.inherit({
         var that = this;
 
         var clearNgModelWatcher = this._scope.$watch(this._ngModel, function(newValue, oldValue) {
-            if(that._ngLocker.locked("value")) {
+            if(that._ngLocker.locked(NG_MODEL_OPTION)) {
                 return;
             }
 
@@ -541,20 +542,20 @@ ComponentBuilder = ComponentBuilder.inherit({
                 return;
             }
 
-            that._component.option("value", newValue);
+            that._component.option(NG_MODEL_OPTION, newValue);
         });
 
         that._optionChangedCallbacks.add(function(args) {
-            that._ngLocker.obtain("value");
+            that._ngLocker.obtain(NG_MODEL_OPTION);
             try {
-                if(args.name !== "value") {
+                if(args.name !== NG_MODEL_OPTION) {
                     return;
                 }
 
                 that._ngModelController.$setViewValue(args.value);
             } finally {
-                if(that._ngLocker.locked("value")) {
-                    that._ngLocker.release("value");
+                if(that._ngLocker.locked(NG_MODEL_OPTION)) {
+                    that._ngLocker.release(NG_MODEL_OPTION);
                 }
             }
         });
@@ -568,7 +569,7 @@ ComponentBuilder = ComponentBuilder.inherit({
         }
 
         var result = this.callBase.apply(this, arguments);
-        result["value"] = this._parse(this._ngModel)(this._scope);
+        result[NG_MODEL_OPTION] = this._parse(this._ngModel)(this._scope);
         return result;
     }
 
