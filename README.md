@@ -1,6 +1,6 @@
 # DevExtreme
 
-[![Build Status](https://devextreme-ci.devexpress.com/api/badges/DevExpress/DevExtreme/status.svg?branch=17_2)](https://devextreme-ci.devexpress.com/DevExpress/DevExtreme)
+[![Build Status](https://devextreme-ci.devexpress.com/api/badges/DevExpress/DevExtreme/status.svg?branch=18_1)](https://devextreme-ci.devexpress.com/DevExpress/DevExtreme)
 
 Voted the best cross-platform component suite containing everything you need to create responsive web apps for touch devices and traditional desktops: data grid, interactive charts, data editors, navigation and multi-purpose widgets that are designed to look great and provide powerful functionality in any browser.
 
@@ -34,7 +34,7 @@ $(function () {
 });
 ```
 
-DevExtreme supports deep integration with the following client-side technologies: 
+DevExtreme supports deep integration with the following client-side technologies:
 
 - [jQuery plugins](https://js.devexpress.com/Documentation/Guide/Getting_Started/Widget_Basics_-_jQuery/Create_and_Configure_a_Widget/)
 - [Knockout bindings](https://js.devexpress.com/Documentation/Guide/Getting_Started/Widget_Basics_-_Knockout/Create_and_Configure_a_Widget/)
