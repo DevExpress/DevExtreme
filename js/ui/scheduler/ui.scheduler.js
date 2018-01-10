@@ -2053,13 +2053,13 @@ var Scheduler = Widget.inherit({
 
     _disableDoneButton: function() {
         var toolbarItems = this._popup.option("toolbarItems");
-        toolbarItems[0].options = { disabled: true };
+        toolbarItems[0].options = extend(toolbarItems[0].options, { disabled: true });
         this._popup.option("toolbarItems", toolbarItems);
     },
 
     _enableDoneButton: function() {
         var toolbarItems = this._popup.option("toolbarItems");
-        toolbarItems[0].options = { disabled: false };
+        toolbarItems[0].options = extend(toolbarItems[0].options, { disabled: false });
         this._popup.option("toolbarItems", toolbarItems);
     },
 
