@@ -1122,6 +1122,23 @@ var TagBox = SelectBox.inherit({
         }
     },
 
+    _prepareSearchValue: function() {
+        return this.callBase() || this._searchValue();
+    },
+
+    _clearFilter: function() {
+        if(this.option("opened") && this.option("showSelectionControls")) {
+            return;
+        }
+
+        this.callBase();
+    },
+
+    _popupHidingHandler: function() {
+        this.callBase();
+        this._clearFilter();
+    },
+
     reset: function() {
         this.option("value", []);
 
