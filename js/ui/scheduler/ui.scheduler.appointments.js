@@ -140,7 +140,6 @@ var SchedulerAppointments = CollectionWidget.inherit({
             activeStateEnabled: true,
             hoverStateEnabled: true,
             tabIndex: 0,
-            appointmentDurationInMinutes: 30,
             fixedContainer: null,
             allDayContainer: null,
             allowDrag: true,
@@ -168,7 +167,6 @@ var SchedulerAppointments = CollectionWidget.inherit({
             case "allowDrag":
             case "allowResize":
             case "allowAllDayResize":
-            case "appointmentDurationInMinutes":
                 this._invalidate();
                 break;
             case "focusedElement":

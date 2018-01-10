@@ -37,7 +37,7 @@ var BaseRenderingStrategy = Class.inherit({
     createTaskPositionMap: function(items) {
         delete this._maxAppointmentCountPerCell;
 
-        var length = items.length;
+        var length = items && items.length;
         if(!length) return;
 
         this._defaultWidth = this.instance._cellWidth;

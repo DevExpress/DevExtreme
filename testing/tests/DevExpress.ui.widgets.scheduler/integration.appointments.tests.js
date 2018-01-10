@@ -278,7 +278,7 @@ QUnit.test("Tasks should be filtered by end day hour before render", function(as
     assert.deepEqual(dataUtils.data($appointments.get(2), "dxItemData"), tasks[2], "Appointment data is OK");
 });
 
-QUnit.test("getsks, d be filtered by resources before render", function(assert) {
+QUnit.test("tasks should be filtered by resources before render", function(assert) {
     var tasks = [
         { text: "a", startDate: new Date(2015, 2, 16), endDate: new Date(2015, 2, 16, 0, 30), ownerId: [1, 2] }, // false
         { text: "b", startDate: new Date(2015, 2, 16), endDate: new Date(2015, 2, 16, 0, 30), ownerId: 1, roomId: [1, 2], managerId: 4 }, // true
