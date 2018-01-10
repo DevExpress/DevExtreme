@@ -132,7 +132,6 @@ var getHandlersController = function(element, eventName) {
                         if(matchesSafe(currentTarget, selector)) {
                             e.currentTarget = currentTarget;
                             callHandler(e, extraParameters);
-                            return;
                         }
                         currentTarget = currentTarget.parentNode;
                     }
