@@ -265,13 +265,15 @@ LayoutManager.prototype = {
         function processCanvases(item, layoutOptions, side) {
             if(!item.getLayoutOptions()[side]) {
                 canvas[layoutOptions.cutLayoutSide] -= layoutOptions[side];
-                size[side] = Math.max(size[side] - layoutOptions[side], 0);
+                size[side] = size[side] - layoutOptions[side];
             }
         }
 
         items.slice().reverse().forEach(function(item) {
-            var layoutOptions = extend({}, item.getLayoutOptions()),
-                sizeObject;
+            var layoutOptions = item.getLayoutOptions(),
+                needRedraw = false,
+                sizeObject,
+                cutSide;
 
             if(!layoutOptions) {
                 return;
@@ -279,14 +281,29 @@ LayoutManager.prototype = {
 
             sizeObject = extend({}, layoutOptions);
 
-            if(layoutOptions.cutSide === "vertical" && size.height) {
-                item.draw(sizeObject.width, sizeObject.height - size.height);
-                processCanvases(item, layoutOptions, "height");
+            needRedraw =
+                layoutOptions.cutSide === "vertical" && size.width < 0 ||
+                layoutOptions.cutSide === "horizontal" && size.height < 0 ||
+                layoutOptions.cutSide === "vertical" && size.height > 0 ||
+                layoutOptions.cutSide === "horizontal" && size.width > 0;
+
+            cutSide = layoutOptions.cutSide === "horizontal" ? "width" : "height";
+
+            if(needRedraw) {
+                var width = sizeObject.width - size.width;
+                var height = sizeObject.height - size.height;
+
+                if(cutSide === "height" && size.width < 0) {
+                    width = canvas.width - canvas.left - canvas.right;
+                }
+                if(cutSide === "width" && size.height < 0) {
+                    height = canvas.height - canvas.top - canvas.bottom;
+                }
+                item.draw(width, height);
+
             }
-            if(layoutOptions.cutSide === "horizontal" && size.width) {
-                item.draw(sizeObject.width - size.width, sizeObject.height);
-                processCanvases(item, layoutOptions, "width");
-            }
+            processCanvases(item, layoutOptions, cutSide);
+
         });
 
         funcAxisDrawer(size);
