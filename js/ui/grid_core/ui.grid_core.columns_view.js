@@ -171,6 +171,8 @@ exports.ColumnsView = modules.View.inherit(columnStateMixin).inherit({
                 options = rowOptions && rowOptions.cells && rowOptions.cells[$cell.index()],
                 resultOptions;
 
+            if(!$cell.closest("table").is(event.delegateTarget)) return;
+
             resultOptions = extend({}, options, {
                 cellElement: getPublicElement($cell),
                 event: event,
@@ -189,14 +191,18 @@ exports.ColumnsView = modules.View.inherit(columnStateMixin).inherit({
         };
 
         eventsEngine.on($table, "mouseover", ".dx-row > td", function(e) {
-            that.executeAction("onCellHoverChanged", getOptions(e));
+            var options = getOptions(e);
+            options && that.executeAction("onCellHoverChanged", options);
         });
+
         eventsEngine.on($table, "mouseout", ".dx-row > td", function(e) {
-            that.executeAction("onCellHoverChanged", getOptions(e));
+            var options = getOptions(e);
+            options && that.executeAction("onCellHoverChanged", options);
         });
 
         eventsEngine.on($table, clickEvent.name, ".dx-row > td", function(e) {
-            that.executeAction("onCellClick", getOptions(e));
+            var options = getOptions(e);
+            options && that.executeAction("onCellClick", options);
         });
 
         eventsEngine.on($table, clickEvent.name, ".dx-row", { useNative: that._isNativeClick() }, that.createAction(function(e) {

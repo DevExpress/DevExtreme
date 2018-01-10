@@ -1429,6 +1429,41 @@ QUnit.test("Get correct column and column index in the onCellClick event when ev
     clock.restore();
 });
 
+//T592757
+QUnit.test("onCellClick event should have correct row parameters when event is occurred in detail grid", function(assert) {
+    //arrange
+    var cellClickArgs = [],
+        $dataGrid = $("#dataGrid").dxDataGrid({
+            loadingTimeout: undefined,
+            dataSource: [{ id: 1, text: "Text 1" }],
+            keyExpr: "id",
+            onCellClick: function(e) {
+                cellClickArgs.push(e);
+            },
+            masterDetail: {
+                template: function(container, e) {
+                    $("<div>").addClass("detail-grid").appendTo(container).dxDataGrid({
+                        loadingTimeout: undefined,
+                        keyExpr: "id",
+                        dataSource: [
+                            { id: 2, text: "Text 2" },
+                            { id: 3, text: "Text 3" }
+                        ]
+                    });
+                }
+            }
+        });
+
+    $dataGrid.dxDataGrid("instance").expandRow(1);
+
+    //act
+    $dataGrid.find(".detail-grid .dx-data-row").eq(1).children().eq(0).trigger("dxclick");
+
+    //assert
+    assert.equal(cellClickArgs.length, 1, "cellClick fired once");
+    assert.equal(cellClickArgs[0].key, 1, "clicked row key");
+});
+
 QUnit.test("Edit row with the underscore template when the editForm mode is enabled", function(assert) {
     //arrange
     var clock = sinon.useFakeTimers(),
