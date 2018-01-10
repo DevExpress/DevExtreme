@@ -966,9 +966,12 @@ module.exports = {
                 },
 
                 getRow: function(index) {
-                    var rows = this._getRowElements();
-                    if(rows.length > index) {
-                        return $(rows[index]);
+                    if(index >= 0) {
+                        var rows = this._getRowElements();
+
+                        if(rows.length > index) {
+                            return $(rows[index]);
+                        }
                     }
                 },
 
