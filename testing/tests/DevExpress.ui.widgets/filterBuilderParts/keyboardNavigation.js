@@ -90,7 +90,7 @@ QUnit.module("Keyboard navigation", {
 
         var textEditorElement = this.getTextEditorElement();
         textEditorElement.dxTextBox("instance").option("value", "Test");
-        document.activeElement.blur();
+        window.setFocusToBody();
 
         keyboardMock(this.getTextEditorElement()).keyUp(TAB_KEY);
 
@@ -100,7 +100,7 @@ QUnit.module("Keyboard navigation", {
     QUnit.test("tab press without change a condition", function(assert) {
         this.getValueButtonElement().trigger("dxclick");
 
-        document.activeElement.blur();
+        window.setFocusToBody();
         keyboardMock(this.getTextEditorElement().find("input")).keyUp(TAB_KEY);
 
         assert.equal(this.getValueButtonElement().text(), "<enter a value>");
