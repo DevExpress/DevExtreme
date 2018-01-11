@@ -1,5 +1,7 @@
 "use strict";
 
+var window = require("../../core/dom_adapter").getWindow();
+
 var getSessionStorage = function() {
     var sessionStorage;
 

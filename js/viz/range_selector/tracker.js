@@ -2,6 +2,7 @@
 
 var eventsEngine = require("../../events/core/events_engine"),
     pointerEvents = require("../../events/pointer"),
+    window = require("../../core/dom_adapter").getWindow(),
     each = require("../../core/utils/iterator").each,
     msPointerEnabled = require("../../core/utils/support").pointer,
 

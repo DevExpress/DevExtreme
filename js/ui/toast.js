@@ -4,6 +4,7 @@
 // 1. animation
 
 var $ = require("../core/renderer"),
+    window = require("../core/dom_adapter").getWindow(),
     eventsEngine = require("../events/core/events_engine"),
     commonUtils = require("../core/utils/common"),
     typeUtils = require("../core/utils/type"),

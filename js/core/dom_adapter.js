@@ -73,5 +73,9 @@ module.exports = {
 
     setStyle: function(element, name, value) {
         element.style[name] = value || '';
+    },
+
+    getWindow: function() {
+        return window;
     }
 };

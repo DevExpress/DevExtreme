@@ -2,6 +2,7 @@
 
 var BaseStrategy = require("./base"),
     Observer = require("./observer"),
+    window = require("../../core/dom_adapter").getWindow(),
     extend = require("../../core/utils/extend").extend,
     onlyMSPointerSupport = !window.PointerEvent && window.MSPointerEvent;
 
