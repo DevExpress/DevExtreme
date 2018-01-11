@@ -635,6 +635,11 @@ var TagBox = SelectBox.inherit({
         return this.callBase() + " " + TAGBOX_POPUP_WRAPPER_CLASS;
     },
 
+    _renderInput: function() {
+        this.callBase();
+        this._renderPreventBlur(this._inputWrapper());
+    },
+
     _renderInputValueImpl: function() {
         this._renderMultiSelect();
     },
