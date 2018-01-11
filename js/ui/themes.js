@@ -221,9 +221,7 @@ function current(options) {
             }
         }
 
-        if(currentThemeChangedCallback.has()) {
-            currentThemeChangedCallback.fire();
-        }
+        currentThemeChangedCallback.fire();
     } else {
         if(isAutoInit) {
             themeReadyCallback.fire();
