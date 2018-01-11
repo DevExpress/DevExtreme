@@ -26,7 +26,7 @@ var getSelectedMenuText = function() {
 };
 
 var clickByOutside = function() {
-    document.activeElement.blur();
+    window.setFocusToBody();
     $("body").trigger("dxclick");
 };
 
@@ -42,6 +42,10 @@ var clickByButtonAndSelectMenuItem = function($button, menuItemIndex) {
 
 QUnit.module("Rendering", function() {
     QUnit.test("markup init", function(assert) {
+        if(devices.real().deviceType !== "desktop") {
+            assert.ok(true, "This test is not actual for mobile devices, dxclick add onclick='void(0)' to every button in mobile");
+            return;
+        }
         var $etalon = $("<div/>").html(
             '<div id="container" class="dx-filterbuilder dx-widget">'
                 + '<div class="dx-filterbuilder-group">'
@@ -80,6 +84,10 @@ QUnit.module("Rendering", function() {
     });
 
     QUnit.test("filter Content init by one condition", function(assert) {
+        if(devices.real().deviceType !== "desktop") {
+            assert.ok(true, "This test is not actual for mobile devices, dxclick add onclick='void(0)' to every button in mobile");
+            return;
+        }
         var $etalon = $("<div/>").html(
             '<div class=\"dx-filterbuilder-group\">'
                 + '<div class=\"dx-filterbuilder-group-item\">'
@@ -110,6 +118,10 @@ QUnit.module("Rendering", function() {
     });
 
     QUnit.test("filter Content init by several conditions", function(assert) {
+        if(devices.real().deviceType !== "desktop") {
+            assert.ok(true, "This test is not actual for mobile devices, because dxclick add onclick='void(0)' to every button in mobile");
+            return;
+        }
         var $etalon = $("<div/>").html(
             '<div class="dx-filterbuilder-group">'
                 + '<div class=\"dx-filterbuilder-group-item\">'
