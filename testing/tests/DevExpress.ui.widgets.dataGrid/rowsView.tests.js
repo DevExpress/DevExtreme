@@ -4010,10 +4010,14 @@ QUnit.test('Touch click on cell should raise rowClick with correct target argume
 
     this.rowsView.render(testElement);
 
-    //act
     var $targetTouchCell = testElement.find('tbody > tr').eq(1).children().eq(1);
     var $targetClickCell = testElement.find('tbody > tr').eq(0).children().eq(1);
 
+    pointerMock($targetClickCell)
+        .start()
+        .down();
+
+    //act
     nativePointerMock($targetTouchCell).start().touchStart().touchEnd();
     nativePointerMock($targetClickCell).start().click(true);
 
