@@ -38,22 +38,27 @@ var barPointStrategy = {
         return labelPoint.x >= figure.x && labelPoint.x <= figure.x + figure.width && labelPoint.y >= figure.y && labelPoint.y <= figure.y + figure.height;
     },
 
-    prepareLabelPoints: function(bBox) {
+    prepareLabelPoints: function(bBox, isRotated) {
         var x1 = bBox.x,
             xc = x1 + bBox.width / 2,
             x2 = x1 + bBox.width - 1,
             y1 = bBox.y,
+            yc = y1 + bBox.height / 2,
             y2 = y1 + bBox.height - 1;
 
         return [
             [x1, y1],
-            [xc, y1],
+            [isRotated ? x1 : xc, isRotated ? yc : y1],
             [x2, y1],
 
             [x1, y2],
-            [xc, y2],
+            [isRotated ? x2 : xc, isRotated ? yc : y2],
             [x2, y2]
         ];
+    },
+    
+    isRotated: function(bBox, figure) {
+        return (bBox.x > figure.x + figure.width) || (bBox.x + bBox.width < figure.x);
     },
 
     getFigureCenter: function(figure) {
@@ -92,6 +97,10 @@ var symbolPointStrategy = {
 
     prepareLabelPoints: barPointStrategy.prepareLabelPoints,
 
+    isRotated: function(bBox, figure) {
+        return (bBox.x > figure.x + figure.r) || (bBox.x + bBox.width < figure.x - figure.r);
+    },
+
     getFigureCenter: function(figure) {
         return [figure.x, figure.y];
     },
@@ -109,7 +118,7 @@ var piePointStrategy = {
         return !isOutside;
     },
 
-    prepareLabelPoints: function(bBox, textSize, angle) {
+    prepareLabelPoints: function(bBox, isRotated, textSize, angle) {
         var xc = bBox.x + bBox.width / 2,
             yc = bBox.y + bBox.height / 2,
             points = [
@@ -128,6 +137,8 @@ var piePointStrategy = {
         });
         return rotatedPoints;
     },
+
+    isRotated: function() { return false; },
 
     getFigureCenter: symbolPointStrategy.getFigureCenter,
 
@@ -347,7 +358,7 @@ Label.prototype = {
             figurePoint,
             points = [];
         if(!strategy.isLabelInside(bBox, figure, that._options.position !== "inside")) {
-            points = strategy.prepareLabelPoints.call(this, bBox, this._textSize, -that._options.rotationAngle || 0);
+            points = strategy.prepareLabelPoints.call(this, bBox, strategy.isRotated(bBox, figure), this._textSize, -that._options.rotationAngle || 0);
             labelPoint = getClosestCoord(strategy.getFigureCenter(figure), points);
             figurePoint = strategy.findFigurePoint(figure, labelPoint);
             points = figurePoint.concat(labelPoint);
