@@ -590,6 +590,7 @@ module.exports = {
                             height: 'auto',
                             visible: true,
                             animation: false,
+                            propagateOutsideClick: true,
                             closeOnOutsideClick: false,
                             closeOnTargetScroll: false,
                             position: {
