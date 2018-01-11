@@ -1,6 +1,7 @@
 "use strict";
 
-var extendUtils = require("./utils/extend");
+var extendUtils = require("./utils/extend"),
+    window = require("./dom_adapter").getWindow();
 /**
 * @name globalConfig
 * @section commonObjectStructures

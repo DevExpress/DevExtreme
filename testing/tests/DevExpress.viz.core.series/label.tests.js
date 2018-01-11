@@ -537,6 +537,38 @@ QUnit.test("bar with odd height. Horizontal connector", function(assert) {
     assert.deepEqual(label._connector._stored_settings.points, [151, 343, 161, 343]);
 });
 
+QUnit.test("bar. Horizontal connector. Central point. Connector to the left side", function(assert) {
+    var label = this.createLabelWithBBox({ x: 0, y: 0, height: 20, width: 10 }, { x: 59, y: 306, width: 92, height: 97 });
+
+    label.shift(161, 343);
+
+    assert.deepEqual(label._connector._stored_settings.points, [151, 353, 161, 353]);
+});
+
+QUnit.test("bar. Horizontal connector. Central point. Connector to the right side", function(assert) {
+    var label = this.createLabelWithBBox({ x: 0, y: 0, height: 20, width: 10 }, { x: -141, y: 306, width: 92, height: 97 });
+
+    label.shift(-161, 343);
+
+    assert.deepEqual(label._connector._stored_settings.points, [-141, 353, -152, 353]);
+});
+
+QUnit.test("point. Horizontal connector. Central point. Connector to the left side", function(assert) {
+    var label = this.createLabelWithBBox({ x: 0, y: 0, height: 20, width: 10 }, { x: 145, y: 353, r: 6 });
+
+    label.shift(161, 343);
+
+    assert.deepEqual(label._connector._stored_settings.points, [151, 353, 161, 353]);
+});
+
+QUnit.test("point. Horizontal connector. Central point. Connector to the right side", function(assert) {
+    var label = this.createLabelWithBBox({ x: 0, y: 0, height: 20, width: 10 }, { x: 187, y: 353, r: 6 });
+
+    label.shift(161, 343);
+
+    assert.deepEqual(label._connector._stored_settings.points, [181, 353, 170, 353]);
+});
+
 QUnit.test("Inside", function(assert) {
     var label = this.createAndDrawLabel();
 
@@ -690,7 +722,9 @@ QUnit.test("Use external connector strategy", function(assert) {
                     prepareLabelPointsThisArg = this;
                     return [[100, 55]];
                 },
-
+                isRotated: function(bBox, figure) {
+                    return false;
+                },
                 findFigurePoint: function(figure, labelPoint) {
                     return [10, 10];
                 },

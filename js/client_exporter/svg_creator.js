@@ -2,6 +2,7 @@
 
 var $ = require("../core/renderer"),
     ajax = require("../core/utils/ajax"),
+    window = require("../core/dom_adapter").getWindow(),
     isFunction = require("../core/utils/type").isFunction,
     each = require("../core/utils/iterator").each,
     getSvgMarkup = require("../core/utils/svg").getSvgMarkup,

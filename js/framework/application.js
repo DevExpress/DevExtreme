@@ -4,6 +4,7 @@ require("../integration/jquery");
 
 var $ = require("jquery"),
     Class = require("../core/class"),
+    window = require("../core/dom_adapter").getWindow(),
     abstract = Class.abstract,
     Action = require("../core/action"),
     commonUtils = require("../core/utils/common"),

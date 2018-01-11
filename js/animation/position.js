@@ -119,6 +119,7 @@
 var $ = require("../core/renderer"),
     commonUtils = require("../core/utils/common"),
     each = require("../core/utils/iterator").each,
+    window = require("../core/dom_adapter").getWindow(),
     isWindow = require("../core/utils/type").isWindow,
     stringUtils = require("../core/utils/string"),
     extend = require("../core/utils/extend").extend,

@@ -16,7 +16,9 @@ var eventsEngine = require("../../events/core/events_engine"),
 var NUMBER_FORMATTER_NAMESPACE = "dxNumberFormatter",
     MOVE_FORWARD = 1,
     MOVE_BACKWARD = -1,
-    MINUS = "-";
+    MINUS = "-",
+    NUMPUD_MINUS_KEY_IE = "Subtract",
+    INPUT_EVENT = "input";
 
 var ensureDefined = function(value, defaultValue) {
     return value === undefined ? defaultValue : value;
@@ -422,7 +424,7 @@ var NumberBoxMask = NumberBoxBase.inherit({
     _attachFormatterEvents: function() {
         var $input = this._input();
 
-        eventsEngine.on($input, eventUtils.addNamespace("input", NUMBER_FORMATTER_NAMESPACE), this._formatValue.bind(this));
+        eventsEngine.on($input, eventUtils.addNamespace(INPUT_EVENT, NUMBER_FORMATTER_NAMESPACE), this._formatValue.bind(this));
         eventsEngine.on($input, eventUtils.addNamespace("dxclick", NUMBER_FORMATTER_NAMESPACE), this._moveToClosestNonStub.bind(this, null));
     },
 
@@ -466,7 +468,7 @@ var NumberBoxMask = NumberBoxBase.inherit({
         return floatPart.length;
     },
 
-    _revertSign: function() {
+    _revertSign: function(e) {
         if(!this._useMaskBehavior()) {
             return;
         }
@@ -475,6 +477,10 @@ var NumberBoxMask = NumberBoxBase.inherit({
 
         if(this._isValueInRange(newValue)) {
             this._parsedValue = newValue;
+
+            if(e.key === NUMPUD_MINUS_KEY_IE) { //Workaround for IE (T592690)
+                eventsEngine.trigger(this._input(), INPUT_EVENT);
+            }
         }
     },
 

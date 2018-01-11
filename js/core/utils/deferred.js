@@ -51,6 +51,10 @@ var Deferred = function() {
         return this.done(handler).fail(handler);
     };
 
+    this._promise.catch = function(handler) {
+        return this.then(null, handler);
+    };
+
     this._promise.then = function(resolve, reject) {
         var result = new Deferred();
 

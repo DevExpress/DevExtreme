@@ -2,14 +2,11 @@
 
 var LayoutElementModule = require("../core/layout_element"),
     extend = require("../../core/utils/extend").extend,
-    iteratorUtils = require("../../core/utils/iterator"),
-
-    _extend = extend,
-    _each = iteratorUtils.each;
+    iteratorUtils = require("../../core/utils/iterator");
 
 function HeaderBlock() { }
 
-_extend(HeaderBlock.prototype, LayoutElementModule.LayoutElement.prototype, {
+extend(HeaderBlock.prototype, LayoutElementModule.LayoutElement.prototype, {
 
     update: function(elements, canvas) {
         this._elements = iteratorUtils.map(elements, function(element) {
@@ -33,7 +30,7 @@ _extend(HeaderBlock.prototype, LayoutElementModule.LayoutElement.prototype, {
                 alignment: [layoutOptions.horizontalAlignment, layoutOptions.verticalAlignment],
                 side: 1
             };
-            _each(that._elements, function(_, elem) {
+            that._elements.forEach(function(elem) {
                 elem.draw(layoutOptions.width, layoutOptions.height, that._canvas);
             });
         }
@@ -55,7 +52,7 @@ _extend(HeaderBlock.prototype, LayoutElementModule.LayoutElement.prototype, {
         }
 
         firstElement = elements[0];
-        layout = _extend(true, {}, firstElement.getLayoutOptions());
+        layout = extend(true, {}, firstElement.getLayoutOptions());
         layout.position = layout.position || {};
 
         for(i; i < length; i++) {
@@ -73,24 +70,32 @@ _extend(HeaderBlock.prototype, LayoutElementModule.LayoutElement.prototype, {
         return layout;
     },
 
-    probeDraw: function(width, height) {
+    _render: function(width, height, drawMethod) {
+        var canvas = this._canvas;
+        var isHidden = false;
+
         this._elements.forEach(function(e) {
-            e.probeDraw(width, height);
-            width -= e.getLayoutOptions().width;
+            e[drawMethod](width, height, canvas);
+            var elementWidth = e.getLayoutOptions().width;
+            width -= elementWidth;
+            isHidden = isHidden || elementWidth === 0 || width < 0;
         });
+
+        if(isHidden) {
+            this._elements.forEach(function(e) { e.freeSpace(); });
+        }
+    },
+
+    probeDraw: function(width, height) {
+        this._render(width, height, "probeDraw");
     },
 
     draw: function(width, height) {
-        var canvas = this._canvas;
-
-        this._elements.forEach(function(e) {
-            e.draw(width, height, canvas);
-            width -= e.getLayoutOptions().width;
-        });
+        this._render(width, height, "draw");
     },
 
     shift: function(x, y) {
-        _each(this._elements, function(_, elem) {
+        this._elements.forEach(function(elem) {
             elem.shift(x, y);
         });
     }

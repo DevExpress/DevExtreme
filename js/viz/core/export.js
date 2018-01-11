@@ -2,6 +2,7 @@
 
 var extend = require("../../core/utils/extend").extend,
     inArray = require("../../core/utils/array").inArray,
+    window = require("../../core/dom_adapter").getWindow(),
     patchFontOptions = require("./utils").patchFontOptions,
     _extend = extend,
 
@@ -248,7 +249,7 @@ _extend(exports.ExportMenu.prototype, {
 
     getLayoutOptions: function() {
         if(this._hiddenDueToLayout) {
-            return { width: 0, height: 0 };
+            return { width: 0, height: 0, cutSide: "vertical", cutLayoutSide: "top" };
         }
         var bBox = this._buttonGroup.getBBox();
 

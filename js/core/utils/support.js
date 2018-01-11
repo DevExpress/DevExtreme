@@ -1,6 +1,7 @@
 "use strict";
 
 var inArray = require("./array").inArray,
+    window = require("../../core/dom_adapter").getWindow(),
     devices = require("../devices"),
     styleUtils = require("./style");
 

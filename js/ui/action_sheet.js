@@ -1,6 +1,7 @@
 "use strict";
 
 var $ = require("../core/renderer"),
+    window = require("../core/dom_adapter").getWindow(),
     noop = require("../core/utils/common").noop,
     messageLocalization = require("../localization/message"),
     registerComponent = require("../core/component_registrator"),

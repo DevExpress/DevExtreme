@@ -138,7 +138,7 @@ var browser;
             40: "ArrowDown",
             45: "Insert",
             46: "Delete",
-            109: "minus"
+            109: "-"
         },
 
         CHAR_CODE_EXCEPTIONS: {
@@ -191,6 +191,12 @@ var browser;
             40: "Down",
             45: "Ins",
             46: "Del"
+        });
+    }
+
+    if(browser.msie) {
+        $.extend(KEYS_MAPS.KEY_VALUES_BY_CODE, {
+            109: "Subtract"
         });
     }
 

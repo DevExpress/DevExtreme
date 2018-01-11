@@ -1,5 +1,7 @@
 "use strict";
 
+var window = require("../core/dom_adapter").getWindow();
+
 var FRAME_ANIMATION_STEP_TIME = 1000 / 60,
 
     request = function(callback) {

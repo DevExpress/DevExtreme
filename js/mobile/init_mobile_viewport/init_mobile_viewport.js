@@ -1,6 +1,7 @@
 "use strict";
 
 var $ = require("../../core/renderer"),
+    window = require("../../core/dom_adapter").getWindow(),
     eventsEngine = require("../../events/core/events_engine"),
     extend = require("../../core/utils/extend").extend,
     resizeCallbacks = require("../../core/utils/window").resizeCallbacks,

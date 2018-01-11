@@ -3,6 +3,7 @@
 var eventsEngine = require("../../events/core/events_engine"),
     _abs = Math.abs,
     Class = require("../../core/class"),
+    window = require("../../core/dom_adapter").getWindow(),
     wheelEvent = require("../../events/core/wheel"),
 
     TOOLTIP_SHOW_DELAY = 300,

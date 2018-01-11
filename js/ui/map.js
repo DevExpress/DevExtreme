@@ -1,6 +1,7 @@
 "use strict";
 
 var $ = require("../core/renderer"),
+    window = require("../core/dom_adapter").getWindow(),
     eventsEngine = require("../events/core/events_engine"),
     Promise = require("../core/polyfills/promise"),
     fromPromise = require("../core/utils/deferred").fromPromise,

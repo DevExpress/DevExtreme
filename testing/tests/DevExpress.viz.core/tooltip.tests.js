@@ -272,6 +272,25 @@ QUnit.test("Append tooltip to container on shown", function(assert) {
     assert.strictEqual($(".test-tooltip").parent().get(0), $(".tooltip-container").get(0));
 });
 
+QUnit.test("Tooltip should be appended in the closest element to root", function(assert) {
+    $("#qunit-fixture")
+        .append("<div class='tooltip-container far'></div>")
+        .append("<div class='tooltip-container'><div id='root'></div></div>");
+
+    var et = { eventTrigger: function() { }, cssClass: "test-tooltip", widgetRoot: $("#root").get(0) },
+        tooltip = new Tooltip(et);
+
+    this.options.container = ".tooltip-container";
+
+    tooltip.setOptions(this.options);
+
+    tooltip.show({ valueText: "text" }, {});
+    //act
+    var $tooltipContainer = $(".test-tooltip").parent().eq(0);
+    assert.ok($tooltipContainer.hasClass("tooltip-container"));
+    assert.ok(!$tooltipContainer.hasClass("far"));
+});
+
 QUnit.test("Set options. customizeTooltip", function(assert) {
     var et = { event: "trigger" },
         tooltip = new Tooltip({ eventTrigger: et }),
@@ -448,8 +467,9 @@ QUnit.test("Update", function(assert) {
 
 QUnit.test("Disposing", function(assert) {
     var et = { event: "trigger" },
-        tooltip = new Tooltip({ eventTrigger: et });
+        tooltip = new Tooltip({ eventTrigger: et, widgetRoot: $("#qunit-fixture") });
     tooltip._wrapper.remove && (tooltip._wrapper.remove = sinon.spy());
+
     //act
     tooltip.dispose();
 
@@ -457,6 +477,7 @@ QUnit.test("Disposing", function(assert) {
     assert.equal(tooltip._renderer.dispose.callCount, 1);
     assert.equal(tooltip._wrapper.remove.callCount, 1);
     assert.equal(tooltip._options, null);
+    assert.equal(tooltip._widgetRoot, null);
 });
 
 QUnit.test("formatValue. Default format", function(assert) {
@@ -2047,7 +2068,7 @@ QUnit.module("Movements. Out of visible borders", {
             tooltip._renderer.stub("resize").reset();
         };
 
-        that.canvas = { left: 10, top: 20, width: 800, height: 600, fullWidth: 3010, fullHeight: 2020 };
+        that.canvas = { left: 10, top: 20, width: 800, height: 600, fullWidth: 3000, fullHeight: 2000 };
         tooltip._getCanvas = function() { return that.canvas; };
     },
     afterEach: function() {
@@ -2100,6 +2121,7 @@ QUnit.test("Out of bounds vertically. L side of page", function(assert) {
 
     assert.equal(this.tooltip._wrapper.css("left"), "30px"); //x - lm
     assert.equal(this.tooltip._wrapper.css("top"), "11px"); //canvas.top - tm
+    assert.equal(this.tooltip._wrapper.css("width"), "90px");
 });
 
 QUnit.test("Out of bounds vertically. C of page", function(assert) {
@@ -2146,6 +2168,7 @@ QUnit.test("Out of bounds vertically. C of page", function(assert) {
 
     assert.equal(this.tooltip._wrapper.css("left"), "360px"); //x - bBox.width / 2 - lm
     assert.equal(this.tooltip._wrapper.css("top"), "11px"); //canvas.top - tm
+    assert.equal(this.tooltip._wrapper.css("width"), "90px");
 });
 
 QUnit.test("Out of bounds vertically. R side of page", function(assert) {
@@ -2192,6 +2215,7 @@ QUnit.test("Out of bounds vertically. R side of page", function(assert) {
 
     assert.equal(this.tooltip._wrapper.css("left"), "700px"); //x - bBox.width - lm
     assert.equal(this.tooltip._wrapper.css("top"), "11px"); //canvas.top - tm
+    assert.equal(this.tooltip._wrapper.css("width"), "90px");
 });
 
 QUnit.test("Out of bounds horizontally. T side of page", function(assert) {
@@ -2234,10 +2258,11 @@ QUnit.test("Out of bounds horizontally. T side of page", function(assert) {
     assert.deepEqual(this.tooltip._cloud.move.lastCall.args, [bBox.lm, bBox.tm]);
 
     assert.equal(this.tooltip._renderer.resize.callCount, 1, "renderer resize");
-    assert.deepEqual(this.tooltip._renderer.resize.firstCall.args, [3000, 40 + 9 + 21 + this.options.arrowLength]);
+    assert.deepEqual(this.tooltip._renderer.resize.firstCall.args, [3010, 40 + 9 + 21 + this.options.arrowLength]);
 
     assert.equal(this.tooltip._wrapper.css("left"), "0px"); //canvas.left - lm
     assert.equal(this.tooltip._wrapper.css("top"), "101px"); //y + offset - tm
+    assert.equal(this.tooltip._wrapper.css("width"), "3010px");
 });
 
 QUnit.test("Out of bounds horizontally. C of page", function(assert) {
@@ -2280,10 +2305,11 @@ QUnit.test("Out of bounds horizontally. C of page", function(assert) {
     assert.deepEqual(this.tooltip._cloud.move.lastCall.args, [bBox.lm, bBox.tm]);
 
     assert.equal(this.tooltip._renderer.resize.callCount, 1, "renderer resize");
-    assert.deepEqual(this.tooltip._renderer.resize.firstCall.args, [3000, 40 + 9 + 21 + this.options.arrowLength]);
+    assert.deepEqual(this.tooltip._renderer.resize.firstCall.args, [3010, 40 + 9 + 21 + this.options.arrowLength]);
 
     assert.equal(this.tooltip._wrapper.css("left"), "0px"); //canvas.left - lm
     assert.equal(this.tooltip._wrapper.css("top"), "211px"); //y - (bBox.height + arrowLength) - offset - tm
+    assert.equal(this.tooltip._wrapper.css("width"), "3010px");
 });
 
 QUnit.module("Movements. Deprecated options for sparklines", {

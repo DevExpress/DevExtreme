@@ -1,6 +1,7 @@
 "use strict";
 
 var $ = require("../../core/renderer"),
+    window = require("../../core/dom_adapter").getWindow(),
     eventsEngine = require("../../events/core/events_engine"),
     Guid = require("../../core/guid"),
     registerComponent = require("../../core/component_registrator"),
@@ -608,7 +609,7 @@ var DropDownList = DropDownEditor.inherit({
             indicateLoading: false,
             keyExpr: this._getListKeyExpr(),
             groupTemplate: this.option("groupTemplate"),
-            tabIndex: -1,
+            tabIndex: null,
             onItemClick: this._listItemClickAction.bind(this),
             dataSource: this._getDataSource(),
             _keyboardProcessor: this._childKeyboardProcessor,
