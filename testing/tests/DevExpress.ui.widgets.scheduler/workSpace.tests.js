@@ -791,7 +791,7 @@ QUnit.testStart(function() {
             hoursInterval: 2.5
         });
 
-        assert.equal($element.find(".dx-scheduler-date-table tbody td").length, 5, "Cell count is OK");
+        assert.equal($element.find(".dx-scheduler-date-table-cell").length, 5, "Cell count is OK");
     });
 })("Work Space Day");
 
