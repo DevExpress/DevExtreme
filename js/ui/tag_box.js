@@ -22,7 +22,6 @@ var $ = require("../core/renderer"),
     deferredUtils = require("../core/utils/deferred"),
     when = deferredUtils.when,
     Deferred = deferredUtils.Deferred,
-    pointerEvents = require("../events/pointer"),
     BindableTemplate = require("./widget/bindable_template"),
     inArray = require("../core/utils/array").inArray,
     each = require("../core/utils/iterator").each;
@@ -567,10 +566,6 @@ var TagBox = SelectBox.inherit({
 
         this.callBase();
 
-        if(isSingleLineMode) {
-            this._renderPreventBlur();
-        }
-
         this._renderTagRemoveAction();
         this._renderSingleLineScroll();
         this._scrollContainer("start");
@@ -588,17 +583,6 @@ var TagBox = SelectBox.inherit({
             .toggleClass(TAGBOX_CUSTOM_FIELD_TEMPLATE_CLASS, !isDefaultFieldTemplate);
 
         this.callBase();
-    },
-
-    _renderPreventBlur: function() {
-        var eventName = eventUtils.addNamespace(pointerEvents.down, "dxTagBoxContainer");
-
-        if(this._$tagsContainer) {
-            eventsEngine.off(this._$tagsContainer, eventName);
-            eventsEngine.on(this._$tagsContainer, eventName, function(e) {
-                this._preventFocusOut = true;
-            }.bind(this));
-        }
     },
 
     _renderTagRemoveAction: function() {
@@ -651,6 +635,11 @@ var TagBox = SelectBox.inherit({
         return this.callBase() + " " + TAGBOX_POPUP_WRAPPER_CLASS;
     },
 
+    _renderInput: function() {
+        this.callBase();
+        this._renderPreventBlur(this._inputWrapper());
+    },
+
     _renderInputValueImpl: function() {
         this._renderMultiSelect();
     },
@@ -675,13 +664,6 @@ var TagBox = SelectBox.inherit({
     },
 
     _focusOutHandler: function(e) {
-        var openedUseButtons = this.option("opened") && this.option("applyValueMode") === "useButtons";
-
-        if(openedUseButtons || this._preventFocusOut) {
-            this._preventFocusOut = false;
-            return;
-        }
-
         this.callBase(e);
 
         this._clearTagFocus();
@@ -1250,7 +1232,6 @@ var TagBox = SelectBox.inherit({
     _clean: function() {
         this.callBase();
         delete this._defaultTagTemplate;
-        delete this._preventFocusOut;
         delete this._tagTemplate;
     },
 
