@@ -56,7 +56,7 @@ var barPointStrategy = {
             [x2, y2]
         ];
     },
-    
+
     isRotated: function(bBox, figure) {
         return (bBox.x > figure.x + figure.width) || (bBox.x + bBox.width < figure.x);
     },
