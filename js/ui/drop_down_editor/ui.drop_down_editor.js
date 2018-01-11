@@ -460,7 +460,7 @@ var DropDownEditor = TextBox.inherit({
 
     _renderOpenHandler: function() {
         var that = this,
-            $inputWrapper = that.$element().find("." + DROP_DOWN_EDITOR_INPUT_WRAPPER_CLASS),
+            $inputWrapper = that._inputWrapper(),
             eventName = eventUtils.addNamespace(clickEvent.name, that.NAME),
             openOnFieldClick = that.option("openOnFieldClick");
 
@@ -498,7 +498,10 @@ var DropDownEditor = TextBox.inherit({
             return false;
         }
 
-        eventsEngine.trigger(this._input(), "focus");
+        if(!this._input().is(":focus")) {
+            eventsEngine.trigger(this._input(), "focus");
+        }
+
         return true;
     },
 

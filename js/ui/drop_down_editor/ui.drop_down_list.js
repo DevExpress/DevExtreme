@@ -381,6 +381,11 @@ var DropDownList = DropDownEditor.inherit({
         return DROPDOWNLIST_POPUP_WRAPPER_CLASS;
     },
 
+    _renderInput: function() {
+        this.callBase();
+        this._renderPreventBlur(this._inputWrapper());
+    },
+
     _renderInputValue: function() {
         var value = this._getCurrentValue();
 
@@ -561,6 +566,17 @@ var DropDownList = DropDownEditor.inherit({
         this._refreshList();
 
         this._setAriaTargetForList();
+
+        this._renderPreventBlur(this._$list);
+    },
+
+    _renderPreventBlur: function($target) {
+        var eventName = eventUtils.addNamespace("pointerdown pointerup", "dxSelectBoxList");
+
+        eventsEngine.off($target, eventName);
+        eventsEngine.on($target, eventName, function(e) {
+            e.preventDefault();
+        }.bind(this));
     },
 
     _renderOpenedState: function() {
