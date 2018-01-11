@@ -19,7 +19,7 @@ http://rafael.xavier.blog.br
 https://github.com/rxaviers/cldrjs/blob/master/LICENSE
 
 CLDR - Unicode Common Locale Data Repository
-Copyright (C) 1991-2017 Unicode, Inc
+Copyright (C) 1991-2018 Unicode, Inc
 http://unicode.org/copyright.html
 
 AngularJS JavaScript Library (Open Source - MIT License)
