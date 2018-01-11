@@ -272,6 +272,17 @@ QUnit.test("always handler should be called after reject", function(assert) {
     deferred.reject(3, 5);
 });
 
+QUnit.test("catch handler should be called after reject", function(assert) {
+    var deferred = new Deferred();
+
+    deferred.catch(function(value) {
+        assert.equal(this, deferred.promise(), "deferred handler has correct context");
+        assert.equal(value, 3, "argument is correct");
+    });
+
+    deferred.reject(3);
+});
+
 QUnit.test("then.resolve handler should be called after resolve", function(assert) {
     var deferred = new Deferred();
 
