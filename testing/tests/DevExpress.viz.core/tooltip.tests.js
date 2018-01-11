@@ -272,6 +272,25 @@ QUnit.test("Append tooltip to container on shown", function(assert) {
     assert.strictEqual($(".test-tooltip").parent().get(0), $(".tooltip-container").get(0));
 });
 
+QUnit.test("Tooltip should be appended in the closest element to root", function(assert) {
+    $("#qunit-fixture")
+        .append("<div class='tooltip-container far'></div>")
+        .append("<div class='tooltip-container'><div id='root'></div></div>");
+
+    var et = { eventTrigger: function() { }, cssClass: "test-tooltip", widgetRoot: $("#root").get(0) },
+        tooltip = new Tooltip(et);
+
+    this.options.container = ".tooltip-container";
+
+    tooltip.setOptions(this.options);
+
+    tooltip.show({ valueText: "text" }, {});
+    //act
+    var $tooltipContainer = $(".test-tooltip").parent().eq(0);
+    assert.ok($tooltipContainer.hasClass("tooltip-container"));
+    assert.ok(!$tooltipContainer.hasClass("far"));
+});
+
 QUnit.test("Set options. customizeTooltip", function(assert) {
     var et = { event: "trigger" },
         tooltip = new Tooltip({ eventTrigger: et }),
@@ -448,8 +467,9 @@ QUnit.test("Update", function(assert) {
 
 QUnit.test("Disposing", function(assert) {
     var et = { event: "trigger" },
-        tooltip = new Tooltip({ eventTrigger: et });
+        tooltip = new Tooltip({ eventTrigger: et, widgetRoot: $("#qunit-fixture") });
     tooltip._wrapper.remove && (tooltip._wrapper.remove = sinon.spy());
+
     //act
     tooltip.dispose();
 
@@ -457,6 +477,7 @@ QUnit.test("Disposing", function(assert) {
     assert.equal(tooltip._renderer.dispose.callCount, 1);
     assert.equal(tooltip._wrapper.remove.callCount, 1);
     assert.equal(tooltip._options, null);
+    assert.equal(tooltip._widgetRoot, null);
 });
 
 QUnit.test("formatValue. Default format", function(assert) {

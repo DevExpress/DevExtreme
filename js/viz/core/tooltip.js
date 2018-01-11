@@ -37,6 +37,7 @@ function Tooltip(params) {
         root;
 
     that._eventTrigger = params.eventTrigger;
+    that._widgetRoot = params.widgetRoot;
 
     that._wrapper = $("<div>")
         .css({ position: "absolute", overflow: "visible", height: "1px", "pointerEvents": "none" })  // T265557, T447623
@@ -64,11 +65,15 @@ Tooltip.prototype = {
     dispose: function() {
         this._wrapper.remove();
         this._renderer.dispose();
-        this._options = null;
+        this._options = this._widgetRoot = null;
     },
 
     _getContainer: function() {
-        var container = $(this._options.container);
+        var options = this._options,
+            container = $(this._widgetRoot).closest(options.container);
+        if(container.length === 0) {
+            container = $(options.container);
+        }
         return (container.length ? container : $("body")).get(0);
     },
 
@@ -486,7 +491,8 @@ exports.plugin = {
             this._tooltip = new exports.Tooltip({
                 cssClass: this._rootClassPrefix + "-tooltip",
                 eventTrigger: this._eventTrigger,
-                pathModified: this.option("pathModified")
+                pathModified: this.option("pathModified"),
+                widgetRoot: this.element()
             });
         },
         // The method exists only to be overridden in sparklines.
