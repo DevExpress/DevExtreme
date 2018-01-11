@@ -9035,6 +9035,65 @@ QUnit.testInActiveWindow("Empty validation message is not shown", function(asser
     assert.equal($(".dx-invalid-message.dx-invalid-message-always.dx-overlay").length, 0, "Validation message is not shown");
 });
 
+//T593542
+QUnit.testInActiveWindow("SelectBox should be closed on focus another editor if its value is not valid", function(assert) {
+    //arrange
+    var that = this,
+        $cellElements,
+        $selectBoxInput,
+        rowsView = this.rowsView,
+        $testElement = $('#container');
+
+    fx.off = true;
+
+    try {
+        that.applyOptions({
+            dataSource: {
+                asyncLoadEnabled: false,
+                store: [{ name: 1, age: 15 }, { name: 2, age: 16 }, { name: 3, age: 17 }],
+                paginate: true
+            },
+            columns: [{
+                dataField: "name",
+                lookup: {
+                    displayExpr: "name",
+                    valueExpr: "id",
+                    dataSource: [{ id: 1, name: "Alex" }, { id: 2, name: "Bob" }, { id: 3, name: "Tom" }]
+                },
+                validationRules: [{ type: "required" }]
+            }, "age"]
+        });
+        rowsView.render($testElement);
+
+        this.addRow();
+        this.clock.tick();
+
+        this.saveEditData();
+        this.clock.tick();
+
+        $cellElements = $testElement.find(".dx-row-inserted").children();
+        $selectBoxInput = $cellElements.find(".dx-texteditor-input").first();
+        $selectBoxInput.trigger("dxclick");
+        this.clock.tick();
+
+        //assert
+        assert.strictEqual($cellElements.first().find(".dx-overlay.dx-datagrid-invalid-message").length, 1, "has invalid message");
+        assert.strictEqual($(".dx-selectbox-popup-wrapper").length, 1, "has selectbox popup");
+
+        //act
+        $cellElements.find(".dx-texteditor-input").last().focus();
+        $cellElements.find(".dx-texteditor-input").last().trigger("dxpointerdown");
+        this.clock.tick();
+
+        //assert
+        assert.strictEqual($cellElements.first().find(".dx-overlay.dx-datagrid-invalid-message").length, 0, "hasn't invalid message");
+        assert.strictEqual($(".dx-selectbox-popup-wrapper").length, 0, "hasn't selectbox popup");
+    } finally {
+        fx.off = false;
+    }
+});
+
+
 QUnit.module('Editing with real dataController with grouping, masterDetail', {
     beforeEach: function() {
         this.array = [
