@@ -194,7 +194,7 @@ var browser;
         });
     }
 
-    if(browser.msie && parseInt(browser.version) < 12) {
+    if(browser.msie) {
         $.extend(KEYS_MAPS.KEY_VALUES_BY_CODE, {
             109: "Subtract"
         });
