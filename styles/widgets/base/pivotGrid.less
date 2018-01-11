@@ -3,6 +3,7 @@
 @PIVOTGRID_DRAG_HEADER_SECOND_SHADOW: 0px 1px 3px @PIVOTGRID_DRAG_HEADER_SECOND_SHADOW_COLOR;
 @PIVOTGRID_BORDER_WIDTH: 1px;
 @PIVOTGRID_BORDER: @PIVOTGRID_BORDER_WIDTH solid @PIVOTGRID_BORDER_COLOR;
+@PIVOTGRID_ICON_SIZE: 14px;
 
 .dx-pivotgrid-fields-container {
 
@@ -35,6 +36,8 @@
 
     .dx-sort {
         color: @PIVOTGRID_AREA_COLOR;
+        font-size: @PIVOTGRID_ICON_SIZE;
+        width: @PIVOTGRID_ICON_SIZE;
     }
 
     .dx-sort-up {
@@ -48,6 +51,8 @@
     .dx-header-filter {
         color: @HEADER_FILTER_COLOR;
         .dx-icon-filter;
+        font-size: @PIVOTGRID_ICON_SIZE;
+        width: @PIVOTGRID_ICON_SIZE;
     }
 
     .dx-header-filter-empty{
