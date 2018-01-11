@@ -158,6 +158,19 @@ QUnit.test("focusout should not be fired on input element", function(assert) {
     assert.equal(onFocusOutStub.callCount, 0, "onFocusOut wasn't fired");
 });
 
+QUnit.test("list should not have tab index to prevent its focusing when scrollbar clicked", function(assert) {
+    this.instance.option({
+        items: [1, 2, 3, 4, 5, 6],
+        opened: true,
+        value: null
+    });
+
+    var $content = $(this.instance.content()),
+        $list = $content.find(".dx-list");
+
+    assert.notOk($list.attr("tabIndex"), "list have no tabindex");
+});
+
 QUnit.testInActiveWindow("popup hides on tab", function(assert) {
     this.$input.focusin();
     assert.ok(this.$element.hasClass(STATE_FOCUSED_CLASS), "element is focused");
