@@ -1,6 +1,7 @@
 "use strict";
 
 var eventsEngine = require("../../events/core/events_engine"),
+    window = require("../../core/dom_adapter").getWindow(),
     modules = require("./ui.grid_core.modules"),
     errors = require("../widget/ui.errors"),
     browser = require("../../core/utils/browser"),

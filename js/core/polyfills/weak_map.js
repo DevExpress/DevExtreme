@@ -1,6 +1,7 @@
 "use strict";
 
 var inArray = require("../../core/utils/array").inArray,
+    window = require("../../core/dom_adapter").getWindow(),
     WeakMap = window.WeakMap;
 
 if(!WeakMap) {

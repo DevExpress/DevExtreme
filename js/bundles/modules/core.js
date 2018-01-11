@@ -1,5 +1,7 @@
 "use strict";
 
+var window = require("../../core/dom_adapter").getWindow();
+
 var DevExpress = window.DevExpress = window.DevExpress || {};
 
 var errors = DevExpress.errors = require("../../core/errors");

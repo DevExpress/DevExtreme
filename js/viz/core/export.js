@@ -2,6 +2,7 @@
 
 var extend = require("../../core/utils/extend").extend,
     inArray = require("../../core/utils/array").inArray,
+    window = require("../../core/dom_adapter").getWindow(),
     patchFontOptions = require("./utils").patchFontOptions,
     _extend = extend,
 

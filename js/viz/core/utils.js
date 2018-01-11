@@ -3,6 +3,7 @@
 var noop = require("../../core/utils/common").noop,
     typeUtils = require("../../core/utils/type"),
     extend = require("../../core/utils/extend").extend,
+    window = require("../../core/dom_adapter").getWindow(),
     each = require("../../core/utils/iterator").each,
     adjust = require("../../core/utils/math").adjust,
     isDefined = typeUtils.isDefined,

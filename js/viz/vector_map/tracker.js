@@ -1,6 +1,7 @@
 "use strict";
 
 var eventsEngine = require("../../events/core/events_engine"),
+    window = require("../../core/dom_adapter").getWindow(),
     _math = Math,
     _abs = _math.abs,
     _sqrt = _math.sqrt,

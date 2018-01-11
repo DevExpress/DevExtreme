@@ -3,6 +3,7 @@
 /* global google */
 
 var $ = require("../../core/renderer"),
+    window = require("../../core/dom_adapter").getWindow(),
     noop = require("../../core/utils/common").noop,
     devices = require("../../core/devices"),
     Promise = require("../../core/polyfills/promise"),

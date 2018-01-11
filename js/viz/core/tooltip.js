@@ -1,6 +1,7 @@
 "use strict";
 
-var doc = document,
+var window = require("../../core/dom_adapter").getWindow(),
+    doc = document,
     win = window,
     $ = require("../../core/renderer"),
     rendererModule = require("./renderers/renderer"),

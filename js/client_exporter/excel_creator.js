@@ -1,6 +1,7 @@
 "use strict";
 
 var Class = require("../core/class"),
+    window = require("../core/dom_adapter").getWindow(),
     typeUtils = require("../core/utils/type"),
     extend = require("../core/utils/extend").extend,
     inArray = require("../core/utils/array").inArray,
