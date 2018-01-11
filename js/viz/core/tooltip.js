@@ -9,7 +9,9 @@ var doc = document,
     HALF_ARROW_WIDTH = 10,
     vizUtils = require("./utils"),
     _format = require("./format"),
-    mathCeil = Math.ceil;
+    mathCeil = Math.ceil,
+    mathMax = Math.max,
+    mathMin = Math.min;
 
 function hideElement($element) {
     $element.css({ left: "-9999px" }).detach();
@@ -253,8 +255,8 @@ Tooltip.prototype = {
             } else {
                 that._textGroup.move(-contentSize.x + contentSize.lm, -contentSize.y + contentSize.tm + coords.correction);
             }
-            that._renderer.resize(coords.hp === "out" ? canvas.fullWidth - canvas.left : contentSize.fullWidth,
-                coords.vp === "out" ? canvas.fullHeight - canvas.top : contentSize.fullHeight);
+            that._renderer.resize(coords.hp === "out" ? canvas.fullWidth + contentSize.lm : contentSize.fullWidth,
+                coords.vp === "out" ? canvas.fullHeight : contentSize.fullHeight);
         }
 
         //move wrapper
@@ -262,7 +264,7 @@ Tooltip.prototype = {
         that._wrapper.css({
             left: coords.x - offset.left,
             top: coords.y - offset.top,
-            width: contentSize.fullWidth//T486487
+            width: coords.hp === "out" ? canvas.fullWidth + contentSize.lm : contentSize.fullWidth//T486487
         });
     },
 
@@ -422,28 +424,48 @@ Tooltip.prototype = {
     },
 
     _getCanvas: function() {
-        var html = doc.documentElement,
-            body = doc.body;
+        var container = this._getContainer(),
+            containerBox = container.getBoundingClientRect(),
+            html = doc.documentElement,
+            body = doc.body,
+            left = win.pageXOffset || html.scrollLeft || 0,
+            top = win.pageYOffset || html.scrollTop || 0;
 
-        return {
-            left: win.pageXOffset || html.scrollLeft || 0,
-            top: win.pageYOffset || html.scrollTop || 0,
+        var box = {
+            left: left,
+            top: top,
             width: html.clientWidth || 0,
             height: html.clientHeight || 0,
 
             /*scrollWidth*/
-            fullWidth: Math.max(
+            fullWidth: mathMax(
                 body.scrollWidth, html.scrollWidth,
                 body.offsetWidth, html.offsetWidth,
                 body.clientWidth, html.clientWidth
-            ),
+            ) - left,
             /*scrollHeight*/
-            fullHeight: Math.max(
+            fullHeight: mathMax(
                 body.scrollHeight, html.scrollHeight,
                 body.offsetHeight, html.offsetHeight,
                 body.clientHeight, html.clientHeight
-            )
+            ) - top
         };
+
+        if(container !== body) {
+            left = mathMax(box.left, box.left + containerBox.left);
+            top = mathMax(box.top, box.top + containerBox.top);
+
+            box.width = mathMin(box.width + box.left - left, containerBox.width + (containerBox.left > 0 ? 0 : containerBox.left));
+            box.height = mathMin(box.height + box.top - top, containerBox.height + (containerBox.top > 0 ? 0 : containerBox.top));
+
+            box.fullWidth = box.width;
+            box.fullHeight = box.height;
+
+            box.left = left;
+            box.top = top;
+        }
+
+        return box;
     }
 };
 
