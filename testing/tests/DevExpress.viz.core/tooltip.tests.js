@@ -2047,7 +2047,7 @@ QUnit.module("Movements. Out of visible borders", {
             tooltip._renderer.stub("resize").reset();
         };
 
-        that.canvas = { left: 10, top: 20, width: 800, height: 600, fullWidth: 3010, fullHeight: 2020 };
+        that.canvas = { left: 10, top: 20, width: 800, height: 600, fullWidth: 3000, fullHeight: 2000 };
         tooltip._getCanvas = function() { return that.canvas; };
     },
     afterEach: function() {
@@ -2100,6 +2100,7 @@ QUnit.test("Out of bounds vertically. L side of page", function(assert) {
 
     assert.equal(this.tooltip._wrapper.css("left"), "30px"); //x - lm
     assert.equal(this.tooltip._wrapper.css("top"), "11px"); //canvas.top - tm
+    assert.equal(this.tooltip._wrapper.css("width"), "90px");
 });
 
 QUnit.test("Out of bounds vertically. C of page", function(assert) {
@@ -2146,6 +2147,7 @@ QUnit.test("Out of bounds vertically. C of page", function(assert) {
 
     assert.equal(this.tooltip._wrapper.css("left"), "360px"); //x - bBox.width / 2 - lm
     assert.equal(this.tooltip._wrapper.css("top"), "11px"); //canvas.top - tm
+    assert.equal(this.tooltip._wrapper.css("width"), "90px");
 });
 
 QUnit.test("Out of bounds vertically. R side of page", function(assert) {
@@ -2192,6 +2194,7 @@ QUnit.test("Out of bounds vertically. R side of page", function(assert) {
 
     assert.equal(this.tooltip._wrapper.css("left"), "700px"); //x - bBox.width - lm
     assert.equal(this.tooltip._wrapper.css("top"), "11px"); //canvas.top - tm
+    assert.equal(this.tooltip._wrapper.css("width"), "90px");
 });
 
 QUnit.test("Out of bounds horizontally. T side of page", function(assert) {
@@ -2234,10 +2237,11 @@ QUnit.test("Out of bounds horizontally. T side of page", function(assert) {
     assert.deepEqual(this.tooltip._cloud.move.lastCall.args, [bBox.lm, bBox.tm]);
 
     assert.equal(this.tooltip._renderer.resize.callCount, 1, "renderer resize");
-    assert.deepEqual(this.tooltip._renderer.resize.firstCall.args, [3000, 40 + 9 + 21 + this.options.arrowLength]);
+    assert.deepEqual(this.tooltip._renderer.resize.firstCall.args, [3010, 40 + 9 + 21 + this.options.arrowLength]);
 
     assert.equal(this.tooltip._wrapper.css("left"), "0px"); //canvas.left - lm
     assert.equal(this.tooltip._wrapper.css("top"), "101px"); //y + offset - tm
+    assert.equal(this.tooltip._wrapper.css("width"), "3010px");
 });
 
 QUnit.test("Out of bounds horizontally. C of page", function(assert) {
@@ -2280,10 +2284,11 @@ QUnit.test("Out of bounds horizontally. C of page", function(assert) {
     assert.deepEqual(this.tooltip._cloud.move.lastCall.args, [bBox.lm, bBox.tm]);
 
     assert.equal(this.tooltip._renderer.resize.callCount, 1, "renderer resize");
-    assert.deepEqual(this.tooltip._renderer.resize.firstCall.args, [3000, 40 + 9 + 21 + this.options.arrowLength]);
+    assert.deepEqual(this.tooltip._renderer.resize.firstCall.args, [3010, 40 + 9 + 21 + this.options.arrowLength]);
 
     assert.equal(this.tooltip._wrapper.css("left"), "0px"); //canvas.left - lm
     assert.equal(this.tooltip._wrapper.css("top"), "211px"); //y - (bBox.height + arrowLength) - offset - tm
+    assert.equal(this.tooltip._wrapper.css("width"), "3010px");
 });
 
 QUnit.module("Movements. Deprecated options for sparklines", {
