@@ -781,6 +781,18 @@ QUnit.testStart(function() {
         assert.strictEqual($element.find("." + CELL_CLASS).first().data("dxCellData").cellCustomField, undefined, "Cell data is not affected");
     });
 
+    QUnit.test("Cell count should depend on start/end day hour & hoursInterval", function(assert) {
+        var $element = this.instance.$element();
+
+        this.instance.option({
+            currentDate: new Date(2015, 2, 1),
+            startDayHour: 8,
+            endDayHour: 20,
+            hoursInterval: 2.5
+        });
+
+        assert.equal($element.find(".dx-scheduler-date-table-cell").length, 5, "Cell count is OK");
+    });
 })("Work Space Day");
 
 (function() {

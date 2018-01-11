@@ -430,9 +430,9 @@ QUnit.test("it should be possible to set only one method for strategy", function
     });
 });
 
-QUnit.module("Delegate subscribtion");
+QUnit.module("Delegate subscription");
 
-QUnit.test("delegate subscribtion should handle all matched elements", function(assert) {
+QUnit.test("delegate subscription should handle all matched elements", function(assert) {
     var container = document.createElement("div");
     var target = document.createElement("span");
     var nestedContainer = document.createElement("div");

@@ -632,6 +632,19 @@ QUnit.test("Scheduler timeline day should correctly process startDayHour=0", fun
     assert.deepEqual(this.instance.getStartViewDate(), new Date(2015, 5, 30, 0), "First view date is correct");
 });
 
+QUnit.test("Cell count should depend on start/end day hour & hoursInterval", function(assert) {
+    var $element = this.instance.$element();
+
+    this.instance.option({
+        currentDate: new Date(2015, 2, 1),
+        startDayHour: 8,
+        endDayHour: 20,
+        hoursInterval: 2.5
+    });
+
+    assert.equal($element.find(".dx-scheduler-date-table-cell").length, 5, "Cell count is OK");
+});
+
 QUnit.module("Timeline Week", {
     beforeEach: function() {
         this.instance = $("#scheduler-timeline").dxSchedulerTimelineWeek().dxSchedulerTimelineWeek("instance");
@@ -808,7 +821,7 @@ QUnit.test("The part of long appointment should have right coordinates on curren
 
 });
 
-QUnit.test("Timeline should find cell coordinates by date depend on start/end day hour & cellDuration", function(assert) {
+QUnit.test("Timeline should find cell coordinates by date depend on start/end day hour & hoursInterval", function(assert) {
     var $element = this.instance.$element();
 
     this.instance.option({
@@ -820,8 +833,23 @@ QUnit.test("Timeline should find cell coordinates by date depend on start/end da
     });
 
     var coords = this.instance.getCoordinatesByDate(new Date(2015, 2, 2, 8, 0));
-    assert.equal(coords.top, $element.find(".dx-scheduler-date-table tbody td").eq(10).position().top, "Cell coordinates are right");
-    assert.equal(coords.left, $element.find(".dx-scheduler-date-table tbody td").eq(10).position().left, "Cell coordinates are right");
+
+    assert.equal(coords.top, $element.find(".dx-scheduler-date-table-cell").eq(11).position().top, "Cell coordinates are right");
+    assert.equal(coords.left, $element.find(".dx-scheduler-date-table-cell").eq(11).position().left, "Cell coordinates are right");
+});
+
+QUnit.test("Cell count should depend on start/end day hour & hoursInterval", function(assert) {
+    var $element = this.instance.$element();
+
+    this.instance.option({
+        currentDate: new Date(2015, 2, 1),
+        firstDayOfWeek: 0,
+        startDayHour: 5,
+        endDayHour: 10,
+        hoursInterval: 0.75
+    });
+
+    assert.equal($element.find(".dx-scheduler-date-table-cell").length, 49, "Cell count is OK");
 });
 
 QUnit.test("Get visible bounds for timelineWeek on init", function(assert) {
