@@ -3856,8 +3856,7 @@ QUnit.testInActiveWindow("focusOut should be prevented when tagContainer clicked
     this.instance.on("focusOut", focusOutHandler);
 
     $input.focus();
-    $tagContainer.trigger("dxpointerdown");
-    $input.blur();
+    $tagContainer.trigger("dxclick");
 
     assert.equal(focusOutHandler.callCount, 0, "focusout has been prevented");
 });

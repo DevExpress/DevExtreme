@@ -364,7 +364,7 @@ var DropDownList = DropDownEditor.inherit({
 
     _saveFocusOnWidget: function(e) {
         if(this._list && this._list.initialOption("focusStateEnabled")) {
-            this.focus();
+            this._focusInput();
         }
     },
 
