@@ -685,7 +685,7 @@ var Lookup = DropDownList.inherit({
     },
 
     _inputWrapper: function() {
-        return this._$fieldWrapper;
+        return this.$element().find("." + LOOKUP_FIELD_WRAPPER_CLASS);
     },
 
     _render: function() {
