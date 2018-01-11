@@ -282,7 +282,7 @@ var DropDownEditor = TextBox.inherit({
     },
 
     _inputWrapper: function() {
-        return this.$element().find("." + DROP_DOWN_EDITOR_INPUT_WRAPPER_CLASS);
+        return this._$inputWrapper;
     },
 
     _init: function() {
@@ -328,7 +328,8 @@ var DropDownEditor = TextBox.inherit({
     _renderInput: function() {
         this.callBase();
 
-        this.$element().wrapInner($("<div>").addClass(DROP_DOWN_EDITOR_INPUT_WRAPPER_CLASS));
+        this._$inputWrapper = $("<div>").addClass(DROP_DOWN_EDITOR_INPUT_WRAPPER_CLASS);
+        this.$element().wrapInner(this._$inputWrapper);
         this._$container = this.$element().children().eq(0);
 
         this.setAria({
