@@ -16,7 +16,8 @@ QUnit.module("Tooltip", {
     },
 
     createWidget: function(options) {
-        return this.$container.dxTreeMap(options).dxTreeMap("instance");
+        this.widget = this.$container.dxTreeMap(options).dxTreeMap("instance");
+        return this.widget;
     }
 });
 
@@ -29,6 +30,7 @@ QUnit.test("Creation", function(assert) {
     assert.strictEqual(params.cssClass, "dxtm-tooltip", "param - css class");
     assert.strictEqual(params.pathModified, "pathModified-option", "param - path modified");
     assert.ok(typeof params.eventTrigger === "function", "param - event trigger");
+    assert.equal(params.widgetRoot, this.widget.element());
 });
 
 QUnit.test("Destruction", function(assert) {

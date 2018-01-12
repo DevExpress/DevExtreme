@@ -159,7 +159,7 @@ var DataGrid = Widget.inherit({
                     * @name GridBaseOptions_showRowLines
                     * @publicName showRowLines
                     * @type boolean
-                    * @custom_default_for_ios true
+                    * @custom_default_for_iOS true
                     */
                     showRowLines: true
                 }
