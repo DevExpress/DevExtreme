@@ -3,6 +3,7 @@
 var $ = require("../../core/renderer"),
     window = require("../../core/dom_adapter").getWindow(),
     navigator = window.navigator,
+    document = window.document,
     eventsEngine = require("../../events/core/events_engine"),
     support = require("../../core/utils/support"),
     browser = require("../../core/utils/browser"),

@@ -1,6 +1,6 @@
 "use strict";
 
-/* global DevExpress, jQuery, window */
+/* global DevExpress, jQuery, window, document */
 (function() {
     var $ = jQuery,
         BaseWidget = DevExpress.viz.BaseWidget,

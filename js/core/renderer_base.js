@@ -4,6 +4,7 @@ var dataUtils = require("./element_data");
 var domAdapter = require("./dom_adapter");
 var window = domAdapter.getWindow();
 var Node = window.Node;
+var document = window.document;
 var typeUtils = require("./utils/type");
 var styleUtils = require("./utils/style");
 var sizeUtils = require("./utils/size");

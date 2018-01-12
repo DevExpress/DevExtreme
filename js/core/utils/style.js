@@ -1,6 +1,7 @@
 "use strict";
 
-var camelize = require("./inflector").camelize;
+var camelize = require("./inflector").camelize,
+    document = require("../dom_adapter").getWindow().document;
 
 var jsPrefixes = ["", "Webkit", "Moz", "O", "Ms"],
     cssPrefixes = {

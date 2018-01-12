@@ -2,6 +2,7 @@
 
 var eventsEngine = require("../events/core/events_engine"),
     domUtils = require("../core/utils/dom"),
+    document = require("../core/dom_adapter").getWindow().document,
     Class = require("../core/class"),
     registerEvent = require("./core/event_registrator"),
     clickEvent = require("./click"),

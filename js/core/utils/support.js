@@ -2,6 +2,7 @@
 
 var inArray = require("./array").inArray,
     window = require("../../core/dom_adapter").getWindow(),
+    document = window.document,
     devices = require("../devices"),
     styleUtils = require("./style");
 

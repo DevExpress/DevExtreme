@@ -3,6 +3,7 @@
 var eventsEngine = require("../../events/core/events_engine"),
     window = require("../../core/dom_adapter").getWindow(),
     navigator = window.navigator,
+    document = window.document,
     _math = Math,
     _abs = _math.abs,
     _sqrt = _math.sqrt,
