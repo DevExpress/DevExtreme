@@ -41,6 +41,48 @@ var appendElementTemplate = {
     }
 };
 
+var subscribeToRowClick = function(that, $table) {
+    var touchTarget,
+        touchCurrentTarget,
+        timeoutId;
+
+    function clearTouchTargets(timeout) {
+        return setTimeout(function() {
+            touchTarget = touchCurrentTarget = null;
+        }, timeout);
+    }
+
+    eventsEngine.on($table, "touchstart touchend", ".dx-row", function(e) {
+        clearTimeout(timeoutId);
+        if(e.type === "touchstart") {
+            touchTarget = e.target;
+            touchCurrentTarget = e.currentTarget;
+            timeoutId = clearTouchTargets(1000);
+        } else {
+            timeoutId = clearTouchTargets();
+        }
+    });
+
+    eventsEngine.on($table, "dxclick", ".dx-row", { useNative: that._isNativeClick() }, that.createAction(function(e) {
+        var dxEvent = e.event;
+
+        if(touchTarget) {
+            dxEvent.target = touchTarget;
+            dxEvent.currentTarget = touchCurrentTarget;
+        }
+
+        if(!$(dxEvent.target).closest("a").length) {
+            e.rowIndex = that.getRowIndex(dxEvent.currentTarget);
+
+            if(e.rowIndex >= 0) {
+                e.rowElement = getPublicElement($(dxEvent.currentTarget));
+                e.columns = that.getColumns();
+                that._rowClick(e);
+            }
+        }
+    }));
+};
+
 exports.ColumnsView = modules.View.inherit(columnStateMixin).inherit({
     _createScrollableOptions: function() {
         var that = this,
@@ -206,19 +248,7 @@ exports.ColumnsView = modules.View.inherit(columnStateMixin).inherit({
             options && that.executeAction("onCellClick", options);
         });
 
-        eventsEngine.on($table, clickEvent.name, ".dx-row", { useNative: that._isNativeClick() }, that.createAction(function(e) {
-            var dxEvent = e.event;
-
-            if(!$(dxEvent.target).closest("a").length) {
-                e.rowIndex = that.getRowIndex(dxEvent.currentTarget);
-
-                if(e.rowIndex >= 0) {
-                    e.rowElement = getPublicElement($(dxEvent.currentTarget));
-                    e.columns = that.getColumns();
-                    that._rowClick(e);
-                }
-            }
-        }));
+        subscribeToRowClick(that, $table);
 
         return $table;
     },
