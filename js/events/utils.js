@@ -3,6 +3,7 @@
 var $ = require("../core/renderer");
 var eventsEngine = require("./core/events_engine");
 var errors = require("../core/errors");
+var focused = require("../ui/widget/selectors").focused;
 var extend = require("../core/utils/extend").extend;
 var each = require("../core/utils/iterator").each;
 
@@ -105,7 +106,7 @@ var needSkipEvent = function(e) {
         return touchInInput || e.which > 1; // only left mouse button
     }
     if(isTouchEvent(e)) {
-        return touchInInput && $target.is(":focus");
+        return touchInInput && focused($target);
     }
 };
 
