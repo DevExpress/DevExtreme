@@ -3,6 +3,7 @@
 /* global Windows */
 var $ = require("../core/renderer"),
     window = require("../core/dom_adapter").getWindow(),
+    navigator = window.navigator,
     eventsEngine = require("../events/core/events_engine"),
     errors = require("../ui/widget/ui.errors"),
     browser = require("../core/utils/browser"),
