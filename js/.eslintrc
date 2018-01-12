@@ -13,7 +13,6 @@
         "Event": true,
         "FormData": true,
         "history": true,
-        "HTMLCollection": true,
 
         "setInterval": true,
         "setTimeout": true,
