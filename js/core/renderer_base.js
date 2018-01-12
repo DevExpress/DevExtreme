@@ -39,7 +39,7 @@ var initRender = function(selector, context) {
         this[0] = selector;
         this.length = 1;
         return this;
-    } else if(selector instanceof HTMLCollection || selector instanceof NodeList || Array.isArray(selector)) {
+    } else if(selector instanceof HTMLCollection || selector instanceof window.NodeList || Array.isArray(selector)) {
         [].push.apply(this, selector);
         return this;
     }

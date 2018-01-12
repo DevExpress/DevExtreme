@@ -19,7 +19,6 @@
         "localStorage": true,
         "location": true,
         "Node": true,
-        "NodeList": true,
 
         "setInterval": true,
         "setTimeout": true,
