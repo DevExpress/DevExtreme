@@ -36,7 +36,7 @@ var SlideOut = CollectionWidget.inherit({
         * @name dxSlideOutItemTemplate_menutemplate
         * @publicName menuTemplate
         * @type template|function
-        * @type_function_return string|jQuery
+        * @type_function_return string|Node|jQuery
         */
 
         return extend(this.callBase(), {
