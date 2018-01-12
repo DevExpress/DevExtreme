@@ -3848,18 +3848,16 @@ QUnit.test("tags container should be scrolled on mobile devices", function(asser
     }
 });
 
-QUnit.testInActiveWindow("focusOut should be prevented when tagContainer clicked - T454876", function(assert) {
-    var focusOutHandler = sinon.spy(),
-        $input = this.$element.find("input"),
-        $tagContainer = this.$element.find(".dx-tag-container");
+QUnit.test("focusOut should be prevented when tagContainer clicked - T454876", function(assert) {
+    assert.expect(1);
 
-    this.instance.on("focusOut", focusOutHandler);
+    var $inputWrapper = this.$element.find(".dx-dropdowneditor-input-wrapper");
 
-    $input.focus();
-    $tagContainer.trigger("dxpointerdown");
-    $input.blur();
+    $inputWrapper.on("dxpointerdown", function(e) {
+        assert.ok(e.isDefaultPrevented(), "pointerdown was prevented and lead to focusout prevent");
+    });
 
-    assert.equal(focusOutHandler.callCount, 0, "focusout has been prevented");
+    $inputWrapper.trigger("dxpointerdown");
 });
 
 
