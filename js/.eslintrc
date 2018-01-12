@@ -10,8 +10,6 @@
     },
     "globals": {
         "Element": true,
-        "Event": true,
-
         "setInterval": true,
         "setTimeout": true,
         "clearInterval": true,
