@@ -50,6 +50,7 @@ var AppointmentLayoutManager = Class.inherit({
         this._positionMap = this._renderingStrategyInstance.createTaskPositionMap(items);
 
         each(items, (function(index, itemData) {
+            this.renderingStrategy !== "agenda" && delete itemData.settings;
             var appointmentSettings = this._positionMap[index];
 
             each(appointmentSettings, (function(_, settings) {
