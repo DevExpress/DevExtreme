@@ -17,7 +17,6 @@
         "HTMLCollection": true,
         "HTMLElement": true,
         "localStorage": true,
-        "location": true,
 
         "setInterval": true,
         "setTimeout": true,
