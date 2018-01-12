@@ -894,7 +894,7 @@ QUnit.test("Resizing columns should work correctly when scrolling mode is 'virtu
         resizeController._targetPoint = { columnIndex: 1 };
         resizeController._setupResizingInfo(-9900);
         resizeController._moveSeparator({
-            jQueryEvent: {
+            event: {
                 data: resizeController,
                 type: "mousemove",
                 pageX: -9600,
@@ -902,7 +902,7 @@ QUnit.test("Resizing columns should work correctly when scrolling mode is 'virtu
             }
         });
         resizeController._endResizing({
-            jQueryEvent: {
+            event: {
                 data: resizeController
             }
         });
