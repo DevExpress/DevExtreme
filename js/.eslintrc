@@ -15,7 +15,6 @@
         "FormData": true,
         "history": true,
         "HTMLCollection": true,
-        "HTMLElement": true,
 
         "setInterval": true,
         "setTimeout": true,
