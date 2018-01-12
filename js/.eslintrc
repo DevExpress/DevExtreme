@@ -15,7 +15,6 @@
         "history": true,
         "HTMLCollection": true,
         "HTMLElement": true,
-        "localStorage": true,
 
         "setInterval": true,
         "setTimeout": true,
