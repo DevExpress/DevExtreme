@@ -51,7 +51,7 @@ function createCanvas(width, height, withoutMargins) {
 
 function getStringFromCanvas(canvas, mimeType) {
     var dataURL = canvas.toDataURL(mimeType, IMAGE_QUALITY),
-        imageData = atob(dataURL.substring(("data:" + mimeType + ";base64,").length));
+        imageData = window.atob(dataURL.substring(("data:" + mimeType + ";base64,").length));
 
     return imageData;
 }
@@ -139,7 +139,7 @@ function drawRect(context, options) {
 
 function drawImage(context, options) {
     var d = new Deferred(),
-        image = new Image();
+        image = new window.Image();
 
     image.onload = function() {
         context.save();
@@ -608,7 +608,7 @@ function drawBackground(context, width, height, backgroundColor) {
 function getCanvasFromSvg(markup, width, height, backgroundColor) {
     var canvas = createCanvas(width, height),
         context = canvas.getContext("2d"),
-        parser = new DOMParser(),
+        parser = new window.DOMParser(),
         elem = parser.parseFromString(markup, "image/svg+xml"),
         svgElem = elem.childNodes[0];
 
@@ -677,7 +677,7 @@ exports.imageCreator = {
             dataArray[i] = binaryData.charCodeAt(i);
         }
 
-        return new Blob([dataArray.buffer], { type: mimeType });
+        return new window.Blob([dataArray.buffer], { type: mimeType });
     },
 
     _getBase64: function(binaryData) {

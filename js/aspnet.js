@@ -1,7 +1,7 @@
 "use strict";
 
 (function(factory) {
-    /* global define, DevExpress */
+    /* global define, DevExpress, window */
     if(typeof define === "function" && define.amd) {
         define(function(require, exports, module) {
             module.exports = factory(

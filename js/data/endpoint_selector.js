@@ -1,5 +1,6 @@
 "use strict";
 
+/* global Debug*/
 var errors = require("../core/errors"),
     window = require("../core/dom_adapter").getWindow(),
     proxyUrlFormatter = require("./proxy_url_formatter");

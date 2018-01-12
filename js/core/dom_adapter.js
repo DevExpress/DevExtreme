@@ -1,5 +1,6 @@
 "use strict";
 
+/* global window */
 module.exports = {
     createElement: function(tagName, text, context) {
         context = context || document;
