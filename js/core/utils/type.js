@@ -1,5 +1,7 @@
 "use strict";
 
+var Element = require("../dom_adapter").getWindow().Element;
+
 var types = {
     "[object Array]": "array",
     "[object Date]": "date",

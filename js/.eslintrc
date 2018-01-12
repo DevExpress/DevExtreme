@@ -9,7 +9,6 @@
         "no-undef": "error"
     },
     "globals": {
-        "Element": true,
         "Event": true,
         "FormData": true,
         "history": true,
