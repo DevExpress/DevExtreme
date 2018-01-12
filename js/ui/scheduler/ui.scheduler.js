@@ -147,7 +147,7 @@ var Scheduler = Widget.inherit({
                 * @default "appointmentTooltip"
                 * @type_function_param1 appointmentData:object
                 * @type_function_param2 contentElement:dxElement
-                * @type_function_return string|jQuery
+                * @type_function_return string|Node|jQuery
                 */
 
                 /**
@@ -782,7 +782,7 @@ var Scheduler = Widget.inherit({
                 * @default "appointmentPopup"
                 * @type_function_param1 appointmentData:object
                 * @type_function_param2 contentElement:dxElement
-                * @type_function_return string|jQuery
+                * @type_function_return string|Node|jQuery
                 */
             appointmentPopupTemplate: "appointmentPopup",
 

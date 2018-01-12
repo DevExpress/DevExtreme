@@ -89,7 +89,7 @@ var Toolbar = ToolbarBase.inherit({
             * @name dxToolbarItemTemplate_menuItemTemplate
             * @publicName menuItemTemplate
             * @type template|function
-            * @type_function_return string|jQuery
+            * @type_function_return string|Node|jQuery
             */
 
             /**
