@@ -542,7 +542,7 @@ var ListBase = CollectionWidget.inherit({
         this._refreshItemElements();
     },
 
-    _deleteItem: function(itemElement) {
+    deleteItem: function(itemElement) {
         this.callBase(itemElement);
         this._refreshItemElements();
     },
