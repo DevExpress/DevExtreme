@@ -4013,6 +4013,7 @@ QUnit.test('Touch click on cell should raise rowClick with correct target argume
     var $targetTouchCell = testElement.find('tbody > tr').eq(1).children().eq(1);
     var $targetClickCell = testElement.find('tbody > tr').eq(0).children().eq(1);
 
+    //fix wrong clickEmitter prevented state after running another tests
     pointerMock($targetClickCell)
         .start()
         .down();
