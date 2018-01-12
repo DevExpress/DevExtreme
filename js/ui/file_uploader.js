@@ -1223,7 +1223,7 @@ var FileUploader = Editor.inherit({
     },
 
     _createFormData: function(fieldName, fieldValue) {
-        var formData = new FormData();
+        var formData = new window.FormData();
         formData.append(fieldName, fieldValue);
         return formData;
     },

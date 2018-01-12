@@ -9,12 +9,6 @@
         "no-undef": "error"
     },
     "globals": {
-        "Event": true,
-        "FormData": true,
-        "history": true,
-        "HTMLCollection": true,
-        "HTMLElement": true,
-
         "setInterval": true,
         "setTimeout": true,
         "clearInterval": true,
