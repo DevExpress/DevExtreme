@@ -839,6 +839,81 @@ QUnit.test("Resize columns", function(assert) {
     assert.equal($(rowsCols[2]).css("width"), "50px", "width of three column - rows view");
 });
 
+//T571282
+QUnit.test("Resizing columns should work correctly when scrolling mode is 'virtual' and wordWrapEnabled is true", function(assert) {
+    //arrange
+    var generateData = function(count) {
+        var result = [],
+            i;
+
+        for(i = 0; i < count; i++) {
+            result.push({ name: "name" + i, description: "test test test test test test test test" });
+        }
+
+        return result;
+    };
+
+    var rowHeight,
+        resizeController,
+        done = assert.async(),
+        dataGrid = $("#dataGrid").dxDataGrid({
+            width: 200,
+            height: 200,
+            wordWrapEnabled: true,
+            allowColumnResizing: true,
+            loadingTimeout: undefined,
+            columnResizingMode: "widget",
+            dataSource: {
+                store: generateData(60),
+                pageSize: 2
+            },
+            columns: [{ dataField: "name", width: 100 }, "description"],
+            scrolling: {
+                mode: "virtual"
+            }
+        }),
+        instance = dataGrid.dxDataGrid("instance"),
+        rowsView = instance.getView("rowsView");
+
+    //assert
+    rowHeight = rowsView._rowHeight;
+    assert.ok(rowHeight > 50, "rowHeight > 50");
+    assert.strictEqual(instance.getVisibleRows().length, 4, "row count");
+
+    //arrange
+    instance.pageIndex(10);
+
+    setTimeout(function() {
+        //act
+        resizeController = instance.getController("columnsResizer");
+        resizeController._isResizing = true;
+        resizeController._targetPoint = { columnIndex: 1 };
+        resizeController._setupResizingInfo(-9900);
+        resizeController._moveSeparator({
+            jQueryEvent: {
+                data: resizeController,
+                type: "mousemove",
+                pageX: -9600,
+                preventDefault: commonUtils.noop
+            }
+        });
+        resizeController._endResizing({
+            jQueryEvent: {
+                data: resizeController
+            }
+        });
+
+        setTimeout(function() {
+            //assert
+            assert.notStrictEqual(rowsView._rowHeight, rowHeight, "row height has changed");
+            assert.ok(rowsView._rowHeight < 50, "rowHeight < 50");
+            assert.strictEqual(instance.getVisibleRows().length, 8, "row count");
+            assert.strictEqual(instance.pageIndex(), 10, "current page index");
+            done();
+        }, 100);
+    });
+});
+
 //T527538
 QUnit.test("Grid's height should be updated during column resizing if column headers height is changed", function(assert) {
     //arrange
@@ -1512,6 +1587,11 @@ QUnit.test("Resize grid after column resizing to left when columnResizingMode is
             preventDefault: commonUtils.noop
         }
     });
+    resizeController._endResizing({ //T571282
+        jQueryEvent: {
+            data: resizeController
+        }
+    });
 
     //assert
     assert.strictEqual(instance.element().children().width(), 280);
@@ -1568,6 +1648,11 @@ QUnit.test("Resize grid after column resizing to left when columnResizingMode is
             type: "mousemove",
             pageX: startPosition - 60,
             preventDefault: commonUtils.noop
+        }
+    });
+    resizeController._endResizing({ //T571282
+        jQueryEvent: {
+            data: resizeController
         }
     });
 
@@ -1677,6 +1762,11 @@ QUnit.test("Resize grid after column resizing to left when columnResizingMode is
             type: "mousemove",
             pageX: startPosition - 20,
             preventDefault: commonUtils.noop
+        }
+    });
+    resizeController._endResizing({ //T571282
+        jQueryEvent: {
+            data: resizeController
         }
     });
 
