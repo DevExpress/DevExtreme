@@ -1647,7 +1647,7 @@ QUnit.test("Resize grid after column resizing to left when columnResizingMode is
         }
     });
     resizeController._endResizing({ //T571282
-        jQueryEvent: {
+        event: {
             data: resizeController
         }
     });
@@ -1710,7 +1710,7 @@ QUnit.test("Resize grid after column resizing to left when columnResizingMode is
         }
     });
     resizeController._endResizing({ //T571282
-        jQueryEvent: {
+        event: {
             data: resizeController
         }
     });
@@ -1824,7 +1824,7 @@ QUnit.test("Resize grid after column resizing to left when columnResizingMode is
         }
     });
     resizeController._endResizing({ //T571282
-        jQueryEvent: {
+        event: {
             data: resizeController
         }
     });
