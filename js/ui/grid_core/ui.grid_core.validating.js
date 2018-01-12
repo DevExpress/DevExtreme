@@ -8,6 +8,7 @@ var $ = require("../../core/renderer"),
     each = require("../../core/utils/iterator").each,
     typeUtils = require("../../core/utils/type"),
     extend = require("../../core/utils/extend").extend,
+    focused = require("../../core/utils/dom").focused,
     deepExtendArraySafe = require("../../core/utils/object").deepExtendArraySafe,
     equalByValue = commonUtils.equalByValue,
     messageLocalization = require("../../localization/message"),
@@ -175,7 +176,7 @@ var ValidatingController = modules.Controller.inherit((function() {
                         if(!options.isValid) {
                             var $focus = $container.find(":focus");
                             editingController.showHighlighting($container, true);
-                            if(!$focus.is(":focus")) {
+                            if(!focused($focus)) {
                                 eventsEngine.trigger($focus, "focus");
                                 eventsEngine.trigger($focus, pointerEvents.down);
                             }

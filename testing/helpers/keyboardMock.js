@@ -1,15 +1,17 @@
 "use strict";
 
-var browser;
+var browser, focused;
 
 (function(root, factory) {
     if(typeof define === 'function' && define.amd) {
         define(function(require, exports, module) {
             browser = require("core/utils/browser");
+            focused = require("core/utils/dom").focused;
             root.keyboardMock = module.exports = factory(require("jquery"));
         });
     } else {
         browser = DevExpress.require("core/utils/browser");
+        focused = DevExpress.require("core/utils/dom").focused;
         root.keyboardMock = factory(root.jQuery);
     }
 }(window, function($, undefined) {
@@ -395,7 +397,7 @@ var browser;
             },
 
             focus: function() {
-                !$element.is(":focus") && this.triggerEvent("focus");
+                !focused($element) && this.triggerEvent("focus");
                 return this;
             },
 

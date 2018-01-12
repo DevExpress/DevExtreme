@@ -558,7 +558,7 @@ var TextEditorBase = Editor.inherit({
         this._valueChangeEventHandler(e);
         this.reset();
 
-        !$input.is(":focus") && eventsEngine.trigger($input, "focus");
+        !domUtils.focused($input) && eventsEngine.trigger($input, "focus");
         eventsEngine.trigger($input, "input");
     },
 

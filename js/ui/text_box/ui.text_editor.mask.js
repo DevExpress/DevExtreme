@@ -304,7 +304,7 @@ var TextEditorMask = TextEditorBase.inherit({
         var showMaskMode = this.option("showMaskMode");
 
         if(showMaskMode === "onFocus") {
-            return this._input().is(":focus") || !this._isValueEmpty();
+            return domUtils.focused(this._input()) || !this._isValueEmpty();
         }
 
         return true;
