@@ -3942,7 +3942,7 @@ QUnit.module('Rows view with real dataController and columnController', {
         };
     },
     afterEach: function() {
-        this.dispose();
+        this.dispose && this.dispose();
     }
 });
 
