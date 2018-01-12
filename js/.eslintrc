@@ -18,7 +18,6 @@
         "HTMLElement": true,
         "localStorage": true,
         "location": true,
-        "Node": true,
 
         "setInterval": true,
         "setTimeout": true,

@@ -2,6 +2,7 @@
 
 var $ = require("../../../core/renderer"),
     window = require("../../../core/dom_adapter").getWindow(),
+    Node = window.Node,
     eventsEngine = require("../../../events/core/events_engine"),
     browser = require("../../../core/utils/browser"),
     getSvgMarkup = require("../../../core/utils/svg").getSvgMarkup,
