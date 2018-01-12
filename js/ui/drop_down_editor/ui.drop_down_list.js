@@ -10,6 +10,7 @@ var $ = require("../../core/renderer"),
     List = require("../list"),
     errors = require("../widget/ui.errors"),
     eventUtils = require("../../events/utils"),
+    pointerEvents = require("../../events/pointer"),
     devices = require("../../core/devices"),
     DataExpressionMixin = require("../editor/ui.data_expression"),
     messageLocalization = require("../../localization/message"),
@@ -354,7 +355,7 @@ var DropDownList = DropDownEditor.inherit({
 
     _saveFocusOnWidget: function(e) {
         if(this._list && this._list.initialOption("focusStateEnabled")) {
-            this.focus();
+            this._focusInput();
         }
     },
 
@@ -533,6 +534,18 @@ var DropDownList = DropDownEditor.inherit({
         this._refreshList();
 
         this._setAriaTargetForList();
+
+        this._renderPreventBlur(this._$list);
+    },
+
+    _renderPreventBlur: function($target) {
+        var eventName = eventUtils.addNamespace(pointerEvents.down, "dxDropDownList");
+
+        $target
+            .off(eventName)
+            .on(eventName, function(e) {
+                e.preventDefault();
+            }.bind(this));
     },
 
     _renderOpenedState: function() {
@@ -580,7 +593,7 @@ var DropDownList = DropDownEditor.inherit({
             indicateLoading: false,
             keyExpr: this._getListKeyExpr(),
             groupTemplate: this.option("groupTemplate"),
-            tabIndex: -1,
+            tabIndex: null,
             onItemClick: this._listItemClickAction.bind(this),
             dataSource: this._getDataSource(),
             _keyboardProcessor: this._childKeyboardProcessor,

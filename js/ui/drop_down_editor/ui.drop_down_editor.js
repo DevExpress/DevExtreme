@@ -349,7 +349,7 @@ var DropDownEditor = TextBox.inherit({
     },
 
     _renderTemplatedField: function(fieldTemplate, data) {
-        var isFocused = this._input().is(":focus");
+        var isFocused = this._isFocused(this._input());
         this._resetFocus(isFocused);
 
         var $container = this._$container;
@@ -449,7 +449,7 @@ var DropDownEditor = TextBox.inherit({
 
     _renderOpenHandler: function() {
         var that = this,
-            $inputWrapper = that.element().find("." + DROP_DOWN_EDITOR_INPUT_WRAPPER_CLASS),
+            $inputWrapper = that._inputWrapper(),
             eventName = eventUtils.addNamespace(clickEvent.name, that.NAME),
             openOnFieldClick = that.option("openOnFieldClick");
 
@@ -484,12 +484,19 @@ var DropDownEditor = TextBox.inherit({
         return this._input();
     },
 
+    _isFocused: function(element) {
+        return document.activeElement === $(element).get(0);
+    },
+
     _focusInput: function() {
         if(this.option("disabled")) {
             return false;
         }
 
-        this._input().focus();
+        if(!this._isFocused(this._input())) {
+            this._input().focus();
+        }
+
         return true;
     },
 

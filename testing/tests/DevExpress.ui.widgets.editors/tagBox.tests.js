@@ -3438,18 +3438,16 @@ QUnit.test("tags container should be scrolled on mobile devices", function(asser
     }
 });
 
-QUnit.testInActiveWindow("focusOut should be prevented when tagContainer clicked - T454876", function(assert) {
-    var focusOutHandler = sinon.spy(),
-        $input = this.$element.find("input"),
-        $tagContainer = this.$element.find(".dx-tag-container");
+QUnit.test("focusOut should be prevented when tagContainer clicked - T454876", function(assert) {
+    assert.expect(1);
 
-    this.instance.on("focusOut", focusOutHandler);
+    var $inputWrapper = this.$element.find(".dx-dropdowneditor-input-wrapper");
 
-    $input.focus();
-    $tagContainer.trigger("dxpointerdown");
-    $input.blur();
+    $inputWrapper.on("dxpointerdown", function(e) {
+        assert.ok(e.isDefaultPrevented(), "pointerdown was prevented and lead to focusout prevent");
+    });
 
-    assert.equal(focusOutHandler.callCount, 0, "focusout has been prevented");
+    $inputWrapper.trigger("dxpointerdown");
 });
 
 
@@ -4068,4 +4066,38 @@ QUnit.test("Items is not selected when values is set on the onSelectAllValueChan
 
     var selectedItems = $(".dx-list").dxList("instance").option("selectedItems");
     assert.equal(selectedItems.length, 4, "selected items");
+});
+
+QUnit.testInActiveWindow("focusout event should remove focus class from the widget", function(assert) {
+    var $tagBox = $("#tagBox").dxTagBox({}),
+        $input = $tagBox.find("input");
+
+    $input.focus();
+    assert.ok($tagBox.hasClass(FOCUSED_CLASS), "focused class was applied");
+
+    $input.blur();
+    assert.notOk($tagBox.hasClass(FOCUSED_CLASS), "focused class was removed");
+});
+
+QUnit.test("search filter should be cleared on close", function(assert) {
+    var $tagBox = $("#tagBox").dxTagBox({
+            items: ["111", "222", "333"],
+            searchTimeout: 0,
+            opened: true,
+            searchEnabled: true
+        }),
+        instance = $tagBox.dxTagBox("instance"),
+        $tagContainer = $tagBox.find("." + TAGBOX_TAG_CONTAINER_CLASS),
+        $input = $tagBox.find("input"),
+        kb = keyboardMock($input);
+
+    kb.type("111");
+    this.clock.tick();
+    assert.equal($(instance.content()).find("." + LIST_ITEM_CLASS).length, 1, "filter was applied");
+
+    $tagContainer.trigger("dxclick");
+    $tagContainer.trigger("dxclick");
+
+    assert.equal($input.val(), "", "input was cleared");
+    assert.equal($(instance.content()).find("." + LIST_ITEM_CLASS).length, 3, "filter was cleared");
 });
