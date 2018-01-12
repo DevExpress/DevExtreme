@@ -4,6 +4,7 @@ var $ = require("../../core/renderer"),
     eventsEngine = require("../../events/core/events_engine"),
     caret = require("./utils.caret"),
     domUtils = require("../../core/utils/dom"),
+    focused = require("../widget/selectors").focused,
     isDefined = require("../../core/utils/type").isDefined,
     stringUtils = require("../../core/utils/string"),
     inArray = require("../../core/utils/array").inArray,
@@ -304,7 +305,7 @@ var TextEditorMask = TextEditorBase.inherit({
         var showMaskMode = this.option("showMaskMode");
 
         if(showMaskMode === "onFocus") {
-            return domUtils.focused(this._input()) || !this._isValueEmpty();
+            return focused(this._input()) || !this._isValueEmpty();
         }
 
         return true;

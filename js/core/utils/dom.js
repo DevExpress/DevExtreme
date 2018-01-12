@@ -178,12 +178,6 @@ var setPublicElementWrapper = function(value) {
     elementStrategy = value;
 };
 
-//note: use this method instead of is(":focus")
-var focused = function($element) {
-    var element = $($element).get(0);
-    return document.activeElement === element;
-};
-
 setPublicElementWrapper(function(element) {
     return element && element.get(0);
 });
@@ -204,4 +198,3 @@ exports.clipboardText = clipboardText;
 exports.toggleAttr = toggleAttr;
 exports.contains = contains;
 exports.getPublicElement = getPublicElement;
-exports.focused = focused;

@@ -6,6 +6,7 @@ var $ = require("../../core/renderer"),
     registerComponent = require("../../core/component_registrator"),
     commonUtils = require("../../core/utils/common"),
     domUtils = require("../../core/utils/dom"),
+    focused = require("../widget/selectors").focused,
     each = require("../../core/utils/iterator").each,
     isDefined = require("../../core/utils/type").isDefined,
     extend = require("../../core/utils/extend").extend,
@@ -360,7 +361,7 @@ var DropDownEditor = TextBox.inherit({
     },
 
     _renderTemplatedField: function(fieldTemplate, data) {
-        var isFocused = domUtils.focused(this._input());
+        var isFocused = focused(this._input());
         this._resetFocus(isFocused);
 
         var $container = this._$container;
@@ -498,7 +499,7 @@ var DropDownEditor = TextBox.inherit({
             return false;
         }
 
-        if(!domUtils.focused(this._input())) {
+        if(!focused(this._input())) {
             eventsEngine.trigger(this._input(), "focus");
         }
 

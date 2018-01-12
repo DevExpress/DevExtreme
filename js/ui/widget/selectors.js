@@ -38,6 +38,11 @@ module.exports = {
     tabbable: function(index, element) {
         var tabIndex = $(element).attr("tabIndex");
         return (isNaN(tabIndex) || tabIndex >= 0) && focusable(element, tabIndex);
+    },
+    //note: use this method instead of is(":focus")
+    focused: function($element) {
+        var element = $($element).get(0);
+        return document.activeElement === element;
     }
 };
 

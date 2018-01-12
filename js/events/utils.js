@@ -3,7 +3,7 @@
 var $ = require("../core/renderer");
 var eventsEngine = require("./core/events_engine");
 var errors = require("../core/errors");
-var focused = require("../core/utils/dom").focused;
+var focused = require("../ui/widget/selectors").focused;
 var extend = require("../core/utils/extend").extend;
 var each = require("../core/utils/iterator").each;
 
