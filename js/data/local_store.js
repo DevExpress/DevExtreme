@@ -2,6 +2,7 @@
 
 var eventsEngine = require("../events/core/events_engine"),
     window = require("../core/dom_adapter").getWindow(),
+    document = window.document,
     Class = require("../core/class"),
     abstract = Class.abstract,
     errors = require("./errors").errors,

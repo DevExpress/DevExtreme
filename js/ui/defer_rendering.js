@@ -2,6 +2,7 @@
 
 var $ = require("../core/renderer"),
     window = require("../core/dom_adapter").getWindow(),
+    document = window.document,
     eventsEngine = require("../events/core/events_engine"),
     registerComponent = require("../core/component_registrator"),
     commonUtils = require("../core/utils/common"),

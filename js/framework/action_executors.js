@@ -3,6 +3,7 @@
 require("../integration/jquery");
 
 var $ = require("jquery"),
+    document = require("../core/dom_adapter").getWindow().document,
     dataCoreUtils = require("../core/utils/data"),
     extend = require("../core/utils/extend").extend,
     isPlainObject = require("../core/utils/type").isPlainObject,

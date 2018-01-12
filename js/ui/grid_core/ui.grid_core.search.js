@@ -1,6 +1,7 @@
 "use strict";
 
 var $ = require("../../core/renderer"),
+    document = require("../../core/dom_adapter").getWindow().document,
     isDefined = require("../../core/utils/type").isDefined,
     compileGetter = require("../../core/utils/data").compileGetter,
     each = require("../../core/utils/iterator").each,

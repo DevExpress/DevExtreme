@@ -1,6 +1,7 @@
 "use strict";
 
 var $ = require("../../core/renderer"),
+    document = require("../../core/dom_adapter").getWindow().document,
     noop = require("../../core/utils/common").noop,
     each = require("../../core/utils/iterator").each,
     getPublicElement = require("../../core/utils/dom").getPublicElement,

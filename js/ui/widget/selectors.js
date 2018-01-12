@@ -1,6 +1,7 @@
 "use strict";
 
-var $ = require("../../core/renderer");
+var $ = require("../../core/renderer"),
+    document = require("../../core/dom_adapter").getWindow().document;
 
 var focusable = function(element, tabIndex) {
     if(!visible(element)) {

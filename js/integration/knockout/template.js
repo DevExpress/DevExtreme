@@ -1,6 +1,7 @@
 "use strict";
 
 var $ = require("../../core/renderer"),
+    document = require("../../core/dom_adapter").getWindow().document,
     ko = require("knockout"),
     typeUtils = require("../../core/utils/type"),
     TemplateBase = require("../../ui/widget/ui.template_base"),
