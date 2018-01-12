@@ -229,7 +229,7 @@ var sendRequest = function(options) {
         return ajaxStrategy(options);
     }
 
-    var xhr = new XMLHttpRequest(),
+    var xhr = new window.XMLHttpRequest(),
         d = new Deferred(),
         result = d.promise(),
         async = isDefined(options.async) ? options.async : true,

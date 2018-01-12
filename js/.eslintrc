@@ -9,26 +9,25 @@
         "no-undef": "error"
     },
     "globals": {
-        "clearInterval": true,
-        "clearTimeout": true,
         "document": true,
         "Element": true,
         "Event": true,
-        "exports": true,
         "FormData": true,
         "history": true,
         "HTMLCollection": true,
         "HTMLElement": true,
-        "isFunction": true,
         "localStorage": true,
         "location": true,
-        "module": true,
         "navigator": true,
         "Node": true,
         "NodeList": true,
-        "require": true,
+
         "setInterval": true,
         "setTimeout": true,
-        "XMLHttpRequest": true
+        "clearInterval": true,
+        "clearTimeout": true,
+        "require": true,
+        "module": true,
+        "exports": true
     }
 }
