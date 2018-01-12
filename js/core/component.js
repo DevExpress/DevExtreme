@@ -1,7 +1,7 @@
 "use strict";
 
 var Config = require("./config"),
-    window = require("dom_adapter").getWindow(),
+    window = require("./dom_adapter").getWindow(),
     extend = require("./utils/extend").extend,
     Class = require("./class"),
     Action = require("./action"),
