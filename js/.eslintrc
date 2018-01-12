@@ -11,8 +11,6 @@
     "globals": {
         "Element": true,
         "Event": true,
-        "FormData": true,
-        "history": true,
 
         "setInterval": true,
         "setTimeout": true,
