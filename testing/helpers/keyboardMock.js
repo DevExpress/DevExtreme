@@ -6,12 +6,12 @@ var browser, focused;
     if(typeof define === 'function' && define.amd) {
         define(function(require, exports, module) {
             browser = require("core/utils/browser");
-            focused = require("core/utils/dom").focused;
+            focused = require("ui/widget/selectors").focused;
             root.keyboardMock = module.exports = factory(require("jquery"));
         });
     } else {
         browser = DevExpress.require("core/utils/browser");
-        focused = DevExpress.require("core/utils/dom").focused;
+        focused = DevExpress.require("ui/widget/selectors").focused;
         root.keyboardMock = factory(root.jQuery);
     }
 }(window, function($, undefined) {
