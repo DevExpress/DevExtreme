@@ -3990,6 +3990,11 @@ QUnit.test("onCellHoverChanged event handling", function(assert) {
 });
 
 QUnit.test('Touch click on cell should raise rowClick with correct target arguments (T593150)', function(assert) {
+    if(devices.real().deviceType !== "desktop") {
+        assert.ok(true, "The test is not actual for mobile devices");
+        return;
+    }
+
     var rowClickCount = 0,
         clock = sinon.useFakeTimers();
 
