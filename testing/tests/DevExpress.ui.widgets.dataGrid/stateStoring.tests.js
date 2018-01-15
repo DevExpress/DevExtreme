@@ -4,7 +4,8 @@ var $ = require("jquery"),
     dataGridMocks = require("../../helpers/dataGridMocks.js"),
     setupDataGridModules = dataGridMocks.setupDataGridModules,
     MockDataController = dataGridMocks.MockDataController,
-    ArrayStore = require("data/array_store");
+    ArrayStore = require("data/array_store"),
+    Promise = require("core/polyfills/promise");
 
 require("ui/data_grid/ui.data_grid");
 require("common.css!");
@@ -197,6 +198,31 @@ QUnit.test('Custom function load', function(assert) {
     //assert
     assert.deepEqual(this.stateStoringController.state(), { key: 'TestNameSpace' });
     assert.ok(!localStorage.getItem('TestNameSpace'));
+});
+
+QUnit.test("customLoad with native Promise", function(assert) {
+    //arrange
+    this.clock.restore();
+
+    var that = this,
+        done = assert.async();
+
+    that.applyOptions({
+        type: 'custom',
+        customLoad: function() {
+            return new Promise(function(resolve) {
+                setTimeout(function() {
+                    resolve({ test: "ok" });
+                });
+            });
+        }
+    });
+
+    //act, assert
+    that.stateStoringController.load().done(function() {
+        assert.deepEqual(that.stateStoringController.state(), { test: "ok" });
+        done();
+    });
 });
 
 //T298535
