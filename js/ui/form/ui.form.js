@@ -1505,9 +1505,10 @@ var Form = Widget.inherit({
     },
 
     _resetValues: function() {
-        var validationGroup = ValidationEngine.getGroupConfig(this);
+        var validationGroup = this._getValidationGroup(),
+            validationGroupConfig = ValidationEngine.getGroupConfig(validationGroup);
 
-        validationGroup && validationGroup.reset();
+        validationGroupConfig && validationGroupConfig.reset();
         each(this._editorInstancesByField, function(dataField, editor) {
             editor.reset();
             editor.option("isValid", true);
