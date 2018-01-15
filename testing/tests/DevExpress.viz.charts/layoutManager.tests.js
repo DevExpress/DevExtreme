@@ -908,17 +908,21 @@ QUnit.test("One horizontal element", function(assert) {
     assert.ok(!this.checkLayoutElementVisibility(layoutElement));
 });
 
-QUnit.test("Perpendicular elements", function(assert) {
+QUnit.test("Perpendicular elements. Vertical is hidden", function(assert) {
     var layoutManager = this.createLayoutManager({ width: 80, height: 90 }),
         layoutElement1 = this.createLayoutElement({
             position: { horizontal: "left", vertical: "top" },
             cutSide: "horizontal",
-            cutLayoutSide: "left"
+            cutLayoutSide: "left",
+            width: 20,
+            height: 30
         }),
         layoutElement2 = this.createLayoutElement({
             position: { horizontal: "left", vertical: "top" },
             cutSide: "vertical",
-            cutLayoutSide: "top"
+            cutLayoutSide: "top",
+            width: 20,
+            height: 30
         });
 
     layoutManager.layoutElements(
@@ -932,7 +936,42 @@ QUnit.test("Perpendicular elements", function(assert) {
 
     assert.ok(this.checkLayoutElementVisibility(layoutElement1));
     assert.ok(!this.checkLayoutElementVisibility(layoutElement2));
+    assert.deepEqual(layoutElement1.draw.lastCall.args, [20, 100]);
+    assert.equal(this.canvas.top, 0);
     assert.equal(this.canvas.left, 20);
+});
+
+QUnit.test("Perpendicular elements. Horizontal is hidden", function(assert) {
+    var layoutManager = this.createLayoutManager({ width: 90, height: 80 }),
+        layoutElement1 = this.createLayoutElement({
+            position: { horizontal: "left", vertical: "top" },
+            cutSide: "horizontal",
+            cutLayoutSide: "left",
+            width: 30,
+            height: 30
+        }),
+        layoutElement2 = this.createLayoutElement({
+            position: { horizontal: "left", vertical: "top" },
+            cutSide: "vertical",
+            cutLayoutSide: "top",
+            width: 30,
+            height: 20
+        });
+
+    layoutManager.layoutElements(
+            [layoutElement2, layoutElement1],
+        this.canvas,
+        noop,
+            [{ canvas: this.canvas }],
+        false,
+            {}
+    );
+
+    assert.ok(!this.checkLayoutElementVisibility(layoutElement1));
+    assert.ok(this.checkLayoutElementVisibility(layoutElement2));
+    assert.deepEqual(layoutElement1.draw.lastCall.args, [10, 30]);
+    assert.deepEqual(layoutElement2.draw.lastCall.args, [100, 20]);
+    assert.equal(this.canvas.top, 20);
 });
 
 QUnit.test("Check axis drawing params", function(assert) {

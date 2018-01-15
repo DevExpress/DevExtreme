@@ -1,15 +1,17 @@
 "use strict";
 
-var browser;
+var browser, focused;
 
 (function(root, factory) {
     if(typeof define === 'function' && define.amd) {
         define(function(require, exports, module) {
             browser = require("core/utils/browser");
+            focused = require("ui/widget/selectors").focused;
             root.keyboardMock = module.exports = factory(require("jquery"));
         });
     } else {
         browser = DevExpress.require("core/utils/browser");
+        focused = DevExpress.require("ui/widget/selectors").focused;
         root.keyboardMock = factory(root.jQuery);
     }
 }(window, function($, undefined) {
@@ -138,7 +140,7 @@ var browser;
             40: "ArrowDown",
             45: "Insert",
             46: "Delete",
-            109: "minus"
+            109: "-"
         },
 
         CHAR_CODE_EXCEPTIONS: {
@@ -191,6 +193,12 @@ var browser;
             40: "Down",
             45: "Ins",
             46: "Del"
+        });
+    }
+
+    if(browser.msie) {
+        $.extend(KEYS_MAPS.KEY_VALUES_BY_CODE, {
+            109: "Subtract"
         });
     }
 
@@ -389,7 +397,7 @@ var browser;
             },
 
             focus: function() {
-                !$element.is(":focus") && this.triggerEvent("focus");
+                !focused($element) && this.triggerEvent("focus");
                 return this;
             },
 

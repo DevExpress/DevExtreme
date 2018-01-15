@@ -324,6 +324,25 @@ QUnit.test("searchExpr", function(assert) {
     assert.strictEqual($items.last().text(), "Item 2", "text of the second item");
 });
 
+QUnit.test("save selection after clean searchValue if selectNodesRecursive: false", function(assert) {
+    var $treeView = initTree({
+            items: [
+                { key: 1, text: "Item 1", selected: true },
+                { key: 2, parentId: 1, text: "Item 2" },
+            ],
+            dataStructure: "plain",
+            showCheckBoxesMode: "normal",
+            selectNodesRecursive: false,
+            searchValue: "2"
+        }),
+        instance = $treeView.dxTreeView("instance");
+
+    instance.option("searchValue", "");
+
+    var items = instance.option("items");
+    assert.ok(items[0].selected, "selection is saved");
+});
+
 QUnit.test("searchEditorOptions", function(assert) {
     var $treeView = initTree({
             items: $.extend(true, [], DATA[1]),
@@ -341,6 +360,52 @@ QUnit.test("searchEditorOptions", function(assert) {
 
     searchEditorInstance = $treeView.children().first().dxTextBox("instance"),
     assert.strictEqual(searchEditorInstance.option("placeholder"), "Test", "placeholder of the search editor");
+});
+
+QUnit.test("search immediately if searchTimeout was set, but searchValue is changed by option", function(assert) {
+    var data = $.extend(true, [], DATA[5]);
+    data[0].items[1].items[0].expanded = true;
+
+    var treeView = initTree({
+            items: data,
+            searchTimeout: 500
+        }).dxTreeView("instance"),
+        $items = $(treeView.$element()).find(".dx-treeview-item");
+
+    assert.equal($items.length, 6, "6 items were rendered");
+
+    treeView.option("searchValue", "2");
+
+    $items = $(treeView.$element()).find(".dx-treeview-item");
+    assert.equal($items.length, 4, "filter was applied immediately");
+});
+
+QUnit.test("apply search after searchTimeout", function(assert) {
+    this.clock = sinon.useFakeTimers();
+    var data = $.extend(true, [], DATA[5]);
+    data[0].items[1].items[0].expanded = true;
+
+    var $treeView = initTree({
+            items: data,
+            searchEnabled: true,
+            searchTimeout: 500
+        }),
+        $items = $treeView.find(".dx-treeview-item");
+
+    assert.equal($items.length, 6, "6 items were rendered");
+
+    var $input = $treeView.find("input");
+
+    $input.val("2").trigger("input");
+
+    this.clock.tick(100);
+    $items = $treeView.find(".dx-treeview-item");
+    assert.equal($items.length, 6, "still all items");
+
+    this.clock.tick(500);
+    $items = $treeView.find(".dx-treeview-item");
+    assert.equal($items.length, 4, "filter was applied after timeout");
+    this.clock.restore();
 });
 
 QUnit.test("parentIdExpr should work correctly when it was dynamically changed", function(assert) {

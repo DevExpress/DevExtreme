@@ -6,6 +6,7 @@ var $ = require("../../core/renderer"),
     mathUtils = require("../../core/utils/math"),
     extend = require("../../core/utils/extend").extend,
     inArray = require("../../core/utils/array").inArray,
+    focused = require("../widget/selectors").focused,
     devices = require("../../core/devices"),
     TextEditor = require("../text_box/ui.text_editor"),
     eventUtils = require("../../events/utils"),
@@ -218,7 +219,7 @@ var NumberBoxBase = TextEditor.inherit({
         this.callBase(e);
 
         var ch = e.key || String.fromCharCode(e.which),
-            validCharRegExp = /[\d.,eE\-+]/,
+            validCharRegExp = /[\d.,eE\-+]|Subtract/, //Workaround for IE (T592690)
             isInputCharValid = validCharRegExp.test(ch);
 
         if(!isInputCharValid) {
@@ -248,7 +249,7 @@ var NumberBoxBase = TextEditor.inherit({
     },
 
     _mouseWheelHandler: function(dxEvent) {
-        if(!this._input().is(":focus")) {
+        if(!focused(this._input())) {
             return;
         }
 

@@ -42,7 +42,6 @@ QUnit.begin(function() {
         _getAnimationOptions: vizMocks.environmentMethodInvoker('onGetAnimationOptions'),
         _initCore: vizMocks.environmentMethodInvoker('onInitCore'),
         _disposeCore: vizMocks.environmentMethodInvoker('onDisposeCore'),
-        _getOption: vizMocks.environmentMethodInvoker('onGetOption'),
         _getDefaultSize: vizMocks.environmentMethodInvoker('onGetDefaultSize'),
         _applySize: vizMocks.environmentMethodInvoker('onApplySize'),
         _clean: vizMocks.environmentMethodInvoker('onClean'),
@@ -79,9 +78,6 @@ var environment = {
     createWidget: function(options) {
         this.widget = new dxBaseWidgetTester(this.$container, options);
         return this.widget;
-    },
-    onGetOption: function(name) {
-        return this.option(name) || {};
     },
     onCreateThemeManager: function() {
         return currentTest().themeManager;
@@ -152,11 +148,6 @@ QUnit.test("Theme manager callback", function(assert) {
         rtlEnabled: "rtl-enabled-option",
         encodeHtml: "encode-html-option"
     });
-    // This is for loading indicator (it overrides widget options on showing)
-    var onGetOption = this.onGetOption;
-    this.onGetOption = function(name) {
-        return name !== "loadingIndicator" ? onGetOption.apply(this, arguments) : "loading-indicator-option";
-    };
     this.renderer.lock.reset();
     this.renderer.unlock.reset();
 
@@ -314,11 +305,6 @@ QUnit.test("encodeHtml", function(assert) {
         rtlEnabled: "rtl-enabled-option",
         pathModified: "path-modified-option"
     });
-    // This is for loading indicator (it overrides widget options on showing)
-    var onGetOption = this.onGetOption;
-    this.onGetOption = function(name) {
-        return name !== "loadingIndicator" ? onGetOption.apply(this, arguments) : "loading-indicator-option";
-    };
     this.widget.option({ encodeHtml: "encode-html-option" });
     this.themeManager.setCallback.lastCall.args[0]();
 
@@ -813,14 +799,6 @@ QUnit.module('Redraw on resize', $.extend({}, environment, {
         this.tick(100);
     },
 
-    onGetOption: function(name) {
-        if(name === 'redrawOnResize') {
-            return this.option(name);
-        } else {
-            return this.option(name) || {};
-        }
-    },
-
     createWidget: function() {
         var result = environment.createWidget.apply(this, arguments);
         this.onApplySize.reset();
@@ -908,6 +886,49 @@ QUnit.test('Show', function(assert) {
     this.$container.show().trigger('dxshown');
 
     assert.strictEqual(this.renderStub.callCount, 1);
+});
+
+QUnit.module('Fix renderer root placement for sharping', $.extend({}, environment, {
+    beforeEach: function() {
+        environment.beforeEach.apply(this, arguments);
+    },
+
+    triggerResizeCallback: function() {
+        this.$container.width(this.$container.width() + 1);
+        resizeCallbacks.fire();
+        this.tick(100);
+    },
+
+    createWidget: function() {
+        return environment.createWidget.apply(this, arguments);
+    }
+}));
+
+QUnit.test('Call renderer.fixPlacement on window resize', function(assert) {
+    this.createWidget();
+
+    this.triggerResizeCallback();
+
+    assert.strictEqual(this.renderer.fixPlacement.callCount, 1);
+});
+
+QUnit.test('Call renderer.fixPlacement on window resize even if redrawOnResize false', function(assert) {
+    this.createWidget({ redrawOnResize: false });
+
+    this.triggerResizeCallback();
+
+    assert.strictEqual(this.renderer.fixPlacement.callCount, 1);
+});
+
+QUnit.test('Call renderer.fixPlacement on container visibility change (show)', function(assert) {
+    //arrange
+    this.createWidget();
+    this.$container.trigger('dxhiding').hide();
+
+    //act
+    this.$container.show().trigger('dxshown');
+
+    assert.strictEqual(this.renderer.fixPlacement.callCount, 2);
 });
 
 QUnit.module("Incident occurred", $.extend({}, environment, {

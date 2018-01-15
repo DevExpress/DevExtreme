@@ -28,6 +28,10 @@ var BaseRenderingStrategy = Class.inherit({
         return APPOINTMENT_MIN_SIZE;
     },
 
+    keepAppointmentSettings: function() {
+        return false;
+    },
+
     getDeltaTime: abstract,
 
     getAppointmentGeometry: function(coordinates) {
@@ -37,7 +41,7 @@ var BaseRenderingStrategy = Class.inherit({
     createTaskPositionMap: function(items) {
         delete this._maxAppointmentCountPerCell;
 
-        var length = items.length;
+        var length = items && items.length;
         if(!length) return;
 
         this._defaultWidth = this.instance._cellWidth;

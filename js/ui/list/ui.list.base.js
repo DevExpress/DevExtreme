@@ -435,9 +435,8 @@ var ListBase = CollectionWidget.inherit({
         /**
         * @name dxListOptions_useNativeScrolling
         * @publicName useNativeScrolling
-        * @custom_default_for_android_below_version_4 false
         * @custom_default_for_desktop false
-        * @custom_default_for_mac_desktop true
+        * @custom_default_for_Mac true
         */
         return this.callBase().concat(deviceDependentOptions(), [
             {
@@ -462,7 +461,6 @@ var ListBase = CollectionWidget.inherit({
                     /**
                     * @name dxListOptions_showScrollbar
                     * @publicName showScrollbar
-                    * @custom_default_for_android_below_version_4 "onHover"
                     * @custom_default_for_desktop "onHover"
                     */
                     showScrollbar: "onHover",
@@ -470,7 +468,6 @@ var ListBase = CollectionWidget.inherit({
                     /**
                     * @name dxListOptions_pageLoadMode
                     * @publicName pageLoadMode
-                    * @custom_default_for_android_below_version_4 "nextButton"
                     * @custom_default_for_desktop "nextButton"
                     */
                     pageLoadMode: "nextButton"
@@ -485,7 +482,7 @@ var ListBase = CollectionWidget.inherit({
                     * @name dxListOptions_focusStateEnabled
                     * @publicName focusStateEnabled
                     * @type boolean
-                    * @custom_default_for_generic true
+                    * @custom_default_for_desktop true
                     * @extend_doc
                     */
                     focusStateEnabled: true
@@ -545,9 +542,10 @@ var ListBase = CollectionWidget.inherit({
         this._refreshItemElements();
     },
 
-    _deleteItem: function(itemElement) {
-        this.callBase(itemElement);
+    deleteItem: function(itemElement) {
+        var promise = this.callBase(itemElement);
         this._refreshItemElements();
+        return promise;
     },
 
     _itemElements: function() {

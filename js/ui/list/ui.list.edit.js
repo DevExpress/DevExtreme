@@ -162,10 +162,10 @@ var ListEdit = ListBase.inherit({
             * @name dxListOptions_itemDeleteMode
             * @publicName itemDeleteMode
             * @type string
-            * @default 'toggle'
+             * @default 'static'
             * @acceptValues 'static'|'toggle'|'slideButton'|'slideItem'|'swipe'|'context'
             */
-            itemDeleteMode: "toggle",
+            itemDeleteMode: "static",
 
             /**
             * @name dxListOptions_allowItemReordering
@@ -230,14 +230,14 @@ var ListEdit = ListBase.inherit({
                     /**
                     * @name dxListOptions_menuMode
                     * @publicName menuMode
-                    * @custom_default_for_ios 'slide'
+                    * @custom_default_for_iOS 'slide'
                     */
                     menuMode: "slide",
 
                     /**
                     * @name dxListOptions_itemDeleteMode
                     * @publicName itemDeleteMode
-                    * @custom_default_for_ios 'slideItem'
+                    * @custom_default_for_iOS 'slideItem'
                     */
                     itemDeleteMode: "slideItem"
                 }
@@ -248,7 +248,7 @@ var ListEdit = ListBase.inherit({
                     /**
                     * @name dxListOptions_itemDeleteMode
                     * @publicName itemDeleteMode
-                    * @custom_default_for_android 'swipe'
+                    * @custom_default_for_Android 'swipe'
                     */
                     itemDeleteMode: "swipe"
                 }
@@ -259,20 +259,9 @@ var ListEdit = ListBase.inherit({
                     /**
                     * @name dxListOptions_itemDeleteMode
                     * @publicName itemDeleteMode
-                    * @custom_default_for_windows 'context'
+                    * @custom_default_for_Windows_Mobile 'context'
                     */
                     itemDeleteMode: "context"
-                }
-            },
-            {
-                device: { platform: "generic" },
-                options: {
-                    /**
-                    * @name dxListOptions_itemDeleteMode
-                    * @publicName itemDeleteMode
-                    * @custom_default_for_generic 'static'
-                    */
-                    itemDeleteMode: "static"
                 }
             }
         ]);

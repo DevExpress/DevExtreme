@@ -74,7 +74,7 @@ QUnit.module("Common", {
                 coordinates: { top: 0, left: 0 },
                 items: items,
                 buttonWidth: this.buttonWidth,
-                buttonColor: this.color
+                buttonColor: $.Deferred().resolve(this.color)
             }), this.widgetMock));
         };
     },

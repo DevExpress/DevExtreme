@@ -2240,6 +2240,37 @@ QUnit.test("data wrapText enabled. wrapTextEnabled option is set to true", funct
     assert.strictEqual(styles[dataProvider.getStyleId(1, 0)].wrapText, false, "data");
 });
 
+//T592026
+QUnit.test("Get columns from data provider when there is datetime column", function(assert) {
+    //arrange
+    this.setupModules({
+        showColumnHeaders: true,
+        columns: [{
+            dataField: 'TestField1', width: 100, dataType: "string"
+        }, {
+            dataField: 'TestField2', width: 40, dataType: "number"
+        }, {
+            dataField: 'TestField3', width: 50, dataType: "date"
+        }, {
+            dataField: 'TestField4', width: 90, dataType: "datetime"
+        }]
+    });
+
+    //act
+    var dataProvider = this.exportController.getDataProvider(),
+        columns;
+
+    dataProvider.ready();
+    columns = dataProvider.getColumns();
+
+    //assert
+    assert.equal(columns.length, 4, "columns length");
+    assert.ok(columnCompare(columns[0], { width: 100, dataType: "string", alignment: "left", caption: "Test Field 1" }), "column 1");
+    assert.ok(columnCompare(columns[1], { width: 40, dataType: "number", alignment: "right", caption: "Test Field 2" }), "column 2");
+    assert.ok(columnCompare(columns[2], { width: 50, dataType: "date", format: "shortDate", alignment: "left", caption: "Test Field 3" }), "column 3");
+    assert.ok(columnCompare(columns[3], { width: 90, dataType: "date", format: "shortDateShortTime", alignment: "left", caption: "Test Field 4" }), "column 4");
+});
+
 
 QUnit.module("Export menu", {
     beforeEach: function() {

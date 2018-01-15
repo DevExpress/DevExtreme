@@ -221,7 +221,7 @@ var CollectionWidget = Widget.inherit({
             * @name CollectionWidgetItemTemplate_template
             * @publicName template
             * @type template|function
-            * @type_function_return string|jQuery
+            * @type_function_return string|Node|jQuery
             */
 
             _itemAttributes: {},
@@ -754,7 +754,7 @@ var CollectionWidget = Widget.inherit({
                 $closestItem = $target.closest(this._itemElements()),
                 $closestFocusable = this._closestFocusable($target);
 
-            if($closestItem.length && inArray($closestFocusable.get(0), this._focusTarget()) !== -1) {
+            if($closestItem.length && $closestFocusable && inArray($closestFocusable.get(0), this._focusTarget()) !== -1) {
                 this.option("focusedElement", getPublicElement($closestItem));
             }
         }.bind(this);
@@ -767,7 +767,7 @@ var CollectionWidget = Widget.inherit({
             return $target;
         } else {
             $target = $target.parent();
-            while($target.length) {
+            while($target.length && !$target.is(document)) {
                 if($target.is(selectors.focusable)) {
                     return $target;
                 }

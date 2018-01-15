@@ -821,6 +821,12 @@ QUnit.test("format: base", function(assert) {
     assert.equal(numberLocalization.format(12, { type: "currency" }), "$12");
     assert.equal(numberLocalization.format(1, { type: "currency", precision: 2 }), "$1.00");
     assert.equal(numberLocalization.format(1, { type: "currency", precision: 2, currency: "USD" }), "$1.00");
+    var negativeCurrency = numberLocalization.format(-1, { type: "currency", precision: 2 }),
+        normalStyle = "-$1.00",
+        // NOTE: We use accounting style for currencies in Globalize by default
+        accountingStyle = "($1.00)";
+
+    assert.ok(negativeCurrency === normalStyle || negativeCurrency === accountingStyle);
 });
 QUnit.test("format: several words", function(assert) {
     assert.equal(numberLocalization.format(0, { type: "currency thousands", currency: undefined, precision: 0 }), "$0K");

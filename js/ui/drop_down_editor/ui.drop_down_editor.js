@@ -6,6 +6,7 @@ var $ = require("../../core/renderer"),
     registerComponent = require("../../core/component_registrator"),
     commonUtils = require("../../core/utils/common"),
     domUtils = require("../../core/utils/dom"),
+    focused = require("../widget/selectors").focused,
     each = require("../../core/utils/iterator").each,
     isDefined = require("../../core/utils/type").isDefined,
     extend = require("../../core/utils/extend").extend,
@@ -187,7 +188,7 @@ var DropDownEditor = TextBox.inherit({
              * @type_function_param1_field1 text:string
              * @type_function_param1_field2 icon:string
              * @type_function_param2 contentElement:dxElement
-             * @type_function_return string|jQuery
+             * @type_function_return string|Node|jQuery
              */
             dropDownButtonTemplate: 'dropDownButton',
 
@@ -360,7 +361,7 @@ var DropDownEditor = TextBox.inherit({
     },
 
     _renderTemplatedField: function(fieldTemplate, data) {
-        var isFocused = this._input().is(":focus");
+        var isFocused = focused(this._input());
         this._resetFocus(isFocused);
 
         var $container = this._$container;
@@ -460,7 +461,7 @@ var DropDownEditor = TextBox.inherit({
 
     _renderOpenHandler: function() {
         var that = this,
-            $inputWrapper = that.$element().find("." + DROP_DOWN_EDITOR_INPUT_WRAPPER_CLASS),
+            $inputWrapper = that._inputWrapper(),
             eventName = eventUtils.addNamespace(clickEvent.name, that.NAME),
             openOnFieldClick = that.option("openOnFieldClick");
 
@@ -498,7 +499,10 @@ var DropDownEditor = TextBox.inherit({
             return false;
         }
 
-        eventsEngine.trigger(this._input(), "focus");
+        if(!focused(this._input())) {
+            eventsEngine.trigger(this._input(), "focus");
+        }
+
         return true;
     },
 

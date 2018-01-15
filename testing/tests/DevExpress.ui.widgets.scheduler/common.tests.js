@@ -1421,22 +1421,19 @@ QUnit.testStart(function() {
         assert.notOk($workSpace.hasClass("dx-scheduler-work-space-overlapping"), "workspace hasn't class");
     });
 
-    QUnit.test("cellDuration is passed to appointments & workspace", function(assert) {
+    QUnit.test("cellDuration is passed to workspace", function(assert) {
         this.createInstance({
             currentView: "week",
             cellDuration: 60
         });
 
-        var workSpaceWeek = this.instance.getWorkSpace(),
-            appointments = this.instance.getAppointmentsInstance();
+        var workSpaceWeek = this.instance.getWorkSpace();
 
         assert.equal(workSpaceWeek.option("hoursInterval") * 60, this.instance.option("cellDuration"), "workspace has correct cellDuration");
-        assert.equal(appointments.option("appointmentDurationInMinutes"), this.instance.option("cellDuration"), "appointments has correct cellDuration");
 
         this.instance.option("cellDuration", 20);
 
         assert.equal(workSpaceWeek.option("hoursInterval") * 60, this.instance.option("cellDuration"), "workspace has correct cellDuration after change");
-        assert.equal(appointments.option("appointmentDurationInMinutes"), this.instance.option("cellDuration"), "appointments has correct cellDuration after change");
     });
 
     QUnit.test("accessKey is passed to workspace", function(assert) {
@@ -2315,6 +2312,41 @@ QUnit.testStart(function() {
         this.clock.tick();
     });
 
+    QUnit.test("All appointments should be rerendered after cellDuration changed", function(assert) {
+        assert.expect(6);
+
+        this.createInstance({
+            dataSource: new DataSource({
+                store: [{
+                    startDate: new Date(2015, 1, 10),
+                    endDate: new Date(2015, 1, 11),
+                    text: "caption1"
+                }, {
+                    startDate: new Date(2015, 1, 12, 10),
+                    endDate: new Date(2015, 1, 13, 20),
+                    text: "caption2"
+                }],
+            }),
+            views: ["timelineWeek"],
+            currentView: "timelineWeek",
+            cellDuration: 60,
+            onAppointmentRendered: function(args) {
+                assert.ok(true, "Appointment was rendered");
+            },
+            currentDate: new Date(2015, 1, 9)
+        });
+        var appointments = this.instance.getAppointmentsInstance(),
+            initialItems = appointments.option("items");
+
+        this.instance.option("cellDuration", 100);
+        this.clock.tick();
+
+        var changedItems = appointments.option("items");
+
+        assert.notDeepEqual(initialItems[0].settings, changedItems[0].settings, "Item's settings were changed");
+        assert.notDeepEqual(initialItems[1].settings, changedItems[1].settings, "Item's settings were changed");
+    });
+
     QUnit.test("targetedAppointmentData should return correct allDay appointmentData", function(assert) {
         this.createInstance({
             dataSource: new DataSource([
@@ -2352,8 +2384,8 @@ QUnit.testStart(function() {
                 var targetedAppointmentData = e.targetedAppointmentData,
                     appointmentIndex = $(e.appointmentElement).index();
 
-                assert.equal(targetedAppointmentData.settings.startDate.getTime(), new Date(2015, 1, 9 + appointmentIndex, 16).getTime(), "Start date is OK");
-                assert.equal(targetedAppointmentData.settings.endDate.getTime(), new Date(2015, 1, 9 + appointmentIndex, 17).getTime(), "End date is OK");
+                assert.equal(targetedAppointmentData.startDate.getTime(), new Date(2015, 1, 9 + appointmentIndex, 16).getTime(), "Start date is OK");
+                assert.equal(targetedAppointmentData.endDate.getTime(), new Date(2015, 1, 9 + appointmentIndex, 17).getTime(), "End date is OK");
             },
             currentDate: new Date(2015, 1, 9),
             views: ["agenda"],
@@ -3190,19 +3222,15 @@ QUnit.testStart(function() {
             currentView: "day"
         });
 
-        var workSpace = this.instance.getWorkSpace(),
-            appointments = this.instance.getAppointmentsInstance();
+        var workSpace = this.instance.getWorkSpace();
 
         assert.equal(workSpace.option("hoursInterval") * 60, viewCellDuration, "value of the cellDuration");
-        assert.equal(appointments.option("appointmentDurationInMinutes"), viewCellDuration, "appointments has correct cellDuration");
 
         this.instance.option("currentView", "week");
 
         workSpace = this.instance.getWorkSpace();
-        appointments = this.instance.getAppointmentsInstance();
 
         assert.equal(workSpace.option("hoursInterval") * 60, this.instance.option("cellDuration"), "workspace has correct cellDuration after change");
-        assert.equal(appointments.option("appointmentDurationInMinutes"), this.instance.option("cellDuration"), "appointments has correct cellDuration after change");
 
     });
 

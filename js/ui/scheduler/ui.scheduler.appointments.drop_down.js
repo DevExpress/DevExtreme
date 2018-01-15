@@ -11,7 +11,9 @@ var $ = require("../../core/renderer"),
     DropDownMenu = require("../drop_down_menu"),
     FunctionTemplate = require("../widget/function_template"),
     messageLocalization = require("../../localization/message"),
-    extendFromObject = require("../../core/utils/extend").extendFromObject;
+    extendFromObject = require("../../core/utils/extend").extendFromObject,
+    deferredUtils = require("../../core/utils/deferred"),
+    when = deferredUtils.when;
 
 var DROPDOWN_APPOINTMENTS_CLASS = "dx-scheduler-dropdown-appointments",
     DROPDOWN_APPOINTMENTS_CONTENT_CLASS = "dx-scheduler-dropdown-appointments-content",
@@ -45,7 +47,12 @@ var dropDownAppointments = Class.inherit({
             buttonWidth: options.buttonWidth
         });
 
-        this._paintMenuButton($menu, options.buttonColor, items);
+        var deferredButtonColor = options.buttonColor,
+            deferredItemsColors = options.items.colors;
+
+        when.apply(null, deferredItemsColors).done((function() {
+            this._paintMenuButton($menu, deferredButtonColor, arguments);
+        }).bind(this));
 
         this._applyInnerShadow($menu, options.buttonWidth);
 
@@ -64,27 +71,28 @@ var dropDownAppointments = Class.inherit({
         });
     },
 
-    _paintMenuButton: function($menu, color, menuItems) {
+    _paintMenuButton: function($menu, color, itemsColors) {
         var paintButton = true,
-            itemsColors = menuItems.colors,
             itemColorCount = itemsColors.length,
             currentItemColor;
 
-        if(itemColorCount) {
-            currentItemColor = itemsColors[0];
+        color && color.done((function(color) {
+            if(itemColorCount) {
+                currentItemColor = itemsColors[0];
 
-            for(var i = 1; i < itemColorCount; i++) {
-                if(currentItemColor !== itemsColors[i]) {
-                    paintButton = false;
-                    break;
+                for(var i = 1; i < itemColorCount; i++) {
+                    if(currentItemColor !== itemsColors[i]) {
+                        paintButton = false;
+                        break;
+                    }
+                    currentItemColor = color;
                 }
-                currentItemColor = itemsColors[i];
             }
-        }
 
-        if(color && paintButton) {
-            $menu.css("background-color", color);
-        }
+            if(color && paintButton) {
+                $menu.css("background-color", color);
+            }
+        }).bind(this));
     },
 
     _createButtonTemplate: function(appointmentCount) {
@@ -147,9 +155,11 @@ var dropDownAppointments = Class.inherit({
                     }
 
                     var $item = args.itemElement,
-                        itemData = args.itemData;
+                        itemData = args.itemData,
+                        settings = itemData.settings;
 
-                    eventsEngine.on($item, DRAG_START_EVENT_NAME, that._dragStartHandler.bind(that, $item, itemData, itemData.settings, $menu));
+
+                    eventsEngine.on($item, DRAG_START_EVENT_NAME, that._dragStartHandler.bind(that, $item, itemData, settings, $menu));
 
                     eventsEngine.on($item, DRAG_UPDATE_EVENT_NAME, (function(e) {
                         DropDownMenu.getInstance($menu).close();
@@ -187,7 +197,7 @@ var dropDownAppointments = Class.inherit({
             return;
         }
 
-        this._$draggedItem = $items.length > 1 ? this._getRecurrencePart($items, itemData.settings[0].startDate) : $items[0];
+        this._$draggedItem = $items.length > 1 ? this._getRecurrencePart($items, appointmentData.settings[0].startDate) : $items[0];
 
         var menuPosition = translator.locate($menu),
             itemPosition = translator.locate(this._$draggedItem);
@@ -256,9 +266,9 @@ var dropDownAppointments = Class.inherit({
             borderSide = "right";
         }
 
-        if(color) {
+        color && color.done((function(color) {
             appointmentElement.css("border-" + borderSide + "-color", color);
-        }
+        }).bind(this));
 
         var startDate = this.instance.fire("getField", "startDate", appointmentData),
             endDate = this.instance.fire("getField", "endDate", appointmentData);

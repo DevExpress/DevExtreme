@@ -97,6 +97,12 @@ window.fields = [{
     }
 }];
 
+window.setFocusToBody = function() {
+    if(document.activeElement && document.activeElement.nodeName.toLowerCase() !== "body") {
+        document.activeElement.blur();
+    }
+};
+
 QUnit.testStart(function() {
     $("#qunit-fixture").html('<div id="container"></div>');
 });
@@ -104,3 +110,4 @@ QUnit.testStart(function() {
 require("./filterBuilderParts/commonTests.js");
 require("./filterBuilderParts/utilsTests.js");
 require("./filterBuilderParts/eventsTests.js");
+require("./filterBuilderParts/keyboardNavigation.js");

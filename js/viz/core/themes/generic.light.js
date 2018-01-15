@@ -834,7 +834,8 @@ registerTheme({
                 hideFirstOrLast: "last",
                 overlappingBehavior: "hide"
             },
-            position: TOP
+            position: TOP,
+            endOnTick: false
         },
         rangeContainer: {
             offset: 0,

@@ -4,6 +4,7 @@
 
 var $ = require("jquery"),
     isRenderer = require("core/utils/type").isRenderer,
+    devices = require("core/devices"),
     config = require("core/config");
 
 require("ui/filter_builder/filter_builder");
@@ -18,14 +19,15 @@ var FILTER_BUILDER_ITEM_FIELD_CLASS = "dx-filterbuilder-item-field",
     FILTER_BUILDER_IMAGE_ADD_CLASS = "dx-icon-plus",
     FILTER_BUILDER_IMAGE_REMOVE_CLASS = "dx-icon-remove",
     FILTER_BUILDER_GROUP_OPERATION_CLASS = "dx-filterbuilder-group-operation",
-    ACTIVE_CLASS = "dx-state-active",
-
-    TAB_KEY = 9,
-    ENTER_KEY = 13,
-    ESCAPE_KEY = 27;
+    ACTIVE_CLASS = "dx-state-active";
 
 var getSelectedMenuText = function() {
     return $(".dx-treeview-node.dx-state-selected").text();
+};
+
+var clickByOutside = function() {
+    window.setFocusToBody();
+    $("body").trigger("dxclick");
 };
 
 var selectMenuItem = function(menuItemIndex) {
@@ -33,13 +35,17 @@ var selectMenuItem = function(menuItemIndex) {
 };
 
 var clickByButtonAndSelectMenuItem = function($button, menuItemIndex) {
-    $button.click();
+    $button.trigger("dxclick");
     selectMenuItem(menuItemIndex);
     $(".dx-treeview-item").eq(menuItemIndex).trigger("dxclick");
 };
 
 QUnit.module("Rendering", function() {
     QUnit.test("markup init", function(assert) {
+        if(devices.real().deviceType !== "desktop") {
+            assert.ok(true, "This test is not actual for mobile devices, dxclick add onclick='void(0)' to every button in mobile");
+            return;
+        }
         var $etalon = $("<div/>").html(
             '<div id="container" class="dx-filterbuilder dx-widget">'
                 + '<div class="dx-filterbuilder-group">'
@@ -78,6 +84,10 @@ QUnit.module("Rendering", function() {
     });
 
     QUnit.test("filter Content init by one condition", function(assert) {
+        if(devices.real().deviceType !== "desktop") {
+            assert.ok(true, "This test is not actual for mobile devices, dxclick add onclick='void(0)' to every button in mobile");
+            return;
+        }
         var $etalon = $("<div/>").html(
             '<div class=\"dx-filterbuilder-group\">'
                 + '<div class=\"dx-filterbuilder-group-item\">'
@@ -108,6 +118,10 @@ QUnit.module("Rendering", function() {
     });
 
     QUnit.test("filter Content init by several conditions", function(assert) {
+        if(devices.real().deviceType !== "desktop") {
+            assert.ok(true, "This test is not actual for mobile devices, because dxclick add onclick='void(0)' to every button in mobile");
+            return;
+        }
         var $etalon = $("<div/>").html(
             '<div class="dx-filterbuilder-group">'
                 + '<div class=\"dx-filterbuilder-group-item\">'
@@ -154,7 +168,7 @@ QUnit.module("Rendering", function() {
         });
 
         var $fieldButton = container.find("." + FILTER_BUILDER_ITEM_FIELD_CLASS);
-        $fieldButton.click();
+        $fieldButton.trigger("dxclick");
 
         var $menuItem = $(".dx-treeview-item").eq(1);
         assert.equal($menuItem.text(), "Budget");
@@ -172,7 +186,7 @@ QUnit.module("Rendering", function() {
         });
 
         var $fieldButton = container.find("." + FILTER_BUILDER_ITEM_FIELD_CLASS);
-        $fieldButton.click();
+        $fieldButton.trigger("dxclick");
         assert.ok($fieldButton.hasClass(ACTIVE_CLASS));
 
         assert.ok($(".dx-filterbuilder-fields").length > 0);
@@ -203,7 +217,7 @@ QUnit.module("Rendering", function() {
 
         //act
         companyNameValueField = $("." + FILTER_BUILDER_ITEM_VALUE_CLASS).eq(0);
-        companyNameValueField.find("." + FILTER_BUILDER_ITEM_VALUE_TEXT_CLASS).click();
+        companyNameValueField.find("." + FILTER_BUILDER_ITEM_VALUE_TEXT_CLASS).trigger("dxclick");
     });
 
     QUnit.test("operations are changed after field change", function(assert) {
@@ -220,7 +234,7 @@ QUnit.module("Rendering", function() {
         assert.equal(container.find("." + FILTER_BUILDER_ITEM_OPERATION_CLASS).text(), "Does not equal");
 
         var $fieldButton = container.find("." + FILTER_BUILDER_ITEM_FIELD_CLASS);
-        $fieldButton.click();
+        $fieldButton.trigger("dxclick");
 
         var $menuItem = $(".dx-treeview-item").eq(5);
         $menuItem.trigger("dxclick");
@@ -240,13 +254,13 @@ QUnit.module("Rendering", function() {
         });
 
         var $fieldButton = container.find("." + FILTER_BUILDER_ITEM_FIELD_CLASS);
-        $fieldButton.click();
+        $fieldButton.trigger("dxclick");
 
         assert.equal(getSelectedMenuText(), "State");
 
         selectMenuItem(1);
 
-        $fieldButton.click();
+        $fieldButton.trigger("dxclick");
         assert.equal(getSelectedMenuText(), "Date");
     });
 
@@ -261,7 +275,7 @@ QUnit.module("Rendering", function() {
         });
 
         var $groupButton = container.find("." + FILTER_BUILDER_GROUP_OPERATION_CLASS);
-        $groupButton.click();
+        $groupButton.trigger("dxclick");
 
         assert.ok($(".dx-filterbuilder-group-operations").length > 0);
         assert.equal(getSelectedMenuText(), "And");
@@ -270,7 +284,7 @@ QUnit.module("Rendering", function() {
 
         assert.ok($(".dx-filterbuilder-group-operations").length === 0);
 
-        $groupButton.click();
+        $groupButton.trigger("dxclick");
         assert.equal(getSelectedMenuText(), "Not Or");
     });
 
@@ -285,7 +299,7 @@ QUnit.module("Rendering", function() {
         });
 
         var $operationButton = container.find("." + FILTER_BUILDER_ITEM_OPERATION_CLASS);
-        $operationButton.click();
+        $operationButton.trigger("dxclick");
 
         assert.ok($(".dx-filterbuilder-operations").length > 0);
         assert.equal(getSelectedMenuText(), "Equals");
@@ -295,7 +309,7 @@ QUnit.module("Rendering", function() {
         assert.ok($(".dx-filterbuilder-operations").length === 0);
         assert.equal(container.find("." + FILTER_BUILDER_ITEM_VALUE_CLASS).length, 1);
 
-        $operationButton.click();
+        $operationButton.trigger("dxclick");
         assert.equal(getSelectedMenuText(), "Greater than");
     });
 
@@ -353,6 +367,24 @@ QUnit.module("Rendering", function() {
         assert.equal(container.find("." + FILTER_BUILDER_ITEM_VALUE_CLASS).length, 1);
     });
 
+    QUnit.testInActiveWindow("value button loses focus after value change and outside click", function(assert) {
+        var container = $("#container");
+
+        container.dxFilterBuilder({
+            value: ["State", "<>", "K&S Music"],
+            fields: fields
+        }).dxFilterBuilder("instance");
+
+        container.find("." + FILTER_BUILDER_ITEM_VALUE_TEXT_CLASS).trigger("dxclick");
+
+        var textBoxInstance = $(".dx-textbox").dxTextBox("instance");
+        textBoxInstance.option("value", "Test");
+        clickByOutside();
+
+        var valueButton = container.find("." + FILTER_BUILDER_ITEM_VALUE_TEXT_CLASS);
+        assert.notOk(valueButton.is(":focus"));
+    });
+
     QUnit.testInActiveWindow("change filter value", function(assert) {
         var container = $("#container"),
             instance = container.dxFilterBuilder({
@@ -362,7 +394,7 @@ QUnit.module("Rendering", function() {
             }).dxFilterBuilder("instance");
 
         var $valueButton = container.find("." + FILTER_BUILDER_ITEM_VALUE_TEXT_CLASS);
-        $valueButton.click();
+        $valueButton.trigger("dxclick");
 
         var $textBoxContainer = container.find("." + FILTER_BUILDER_ITEM_VALUE_CLASS + " .dx-textbox"),
             textBoxInstance = $textBoxContainer.dxTextBox("instance"),
@@ -371,7 +403,9 @@ QUnit.module("Rendering", function() {
 
         textBoxInstance.option("value", "Test");
         $input.trigger("blur");
-        assert.notOk(container.find("input").length, "hasn't input");
+        assert.ok(container.find("input").length, "has input");
+        assert.notDeepEqual(instance.option("value"), ["State", "<>", "Test"]);
+        clickByOutside();
         assert.deepEqual(instance.option("value"), ["State", "<>", "Test"]);
     });
 
@@ -384,7 +418,7 @@ QUnit.module("Rendering", function() {
             }).dxFilterBuilder("instance");
 
         var $valueButton = $container.find("." + FILTER_BUILDER_ITEM_VALUE_TEXT_CLASS);
-        $valueButton.click();
+        $valueButton.trigger("dxclick");
 
         var $input = $container.find("." + FILTER_BUILDER_ITEM_VALUE_CLASS).find("input");
         assert.ok($input.is(":focus"));
@@ -394,7 +428,9 @@ QUnit.module("Rendering", function() {
 
         $(".dx-list-item").eq(1).trigger("dxclick");
 
-        assert.notOk($container.find("input").length, "hasn't input");
+        assert.ok($container.find("input").length, "has input");
+        assert.notDeepEqual(instance.option("value"), ["CompanyName", "<>", "Super Mart of the West"]);
+        clickByOutside();
         assert.deepEqual(instance.option("value"), ["CompanyName", "<>", "Super Mart of the West"]);
     });
 
@@ -409,11 +445,12 @@ QUnit.module("Rendering", function() {
         assert.equal($container.find("." + FILTER_BUILDER_ITEM_VALUE_TEXT_CLASS).text(), "DataGrid");
 
         var $valueButton = $container.find("." + FILTER_BUILDER_ITEM_VALUE_TEXT_CLASS);
-        $valueButton.click();
+        $valueButton.trigger("dxclick");
 
         var selectBoxInstance = $container.find(".dx-selectbox").dxSelectBox("instance");
         selectBoxInstance.open();
         $(".dx-list-item").eq(1).trigger("dxclick");
+        clickByOutside();
 
         assert.equal($container.find("." + FILTER_BUILDER_ITEM_VALUE_TEXT_CLASS).text(), "PivotGrid");
         assert.deepEqual(instance.option("value"), ["Product", "=", 2]);
@@ -427,13 +464,11 @@ QUnit.module("Rendering", function() {
                 fields: fields
             }).dxFilterBuilder("instance");
 
-        container.find("." + FILTER_BUILDER_ITEM_VALUE_TEXT_CLASS).click();
+        container.find("." + FILTER_BUILDER_ITEM_VALUE_TEXT_CLASS).trigger("dxclick");
 
-        var $editorContainer = container.find("." + FILTER_BUILDER_ITEM_VALUE_CLASS + " > div"),
-            editorInstance = $editorContainer.dxNumberBox("instance"),
-            $input = $editorContainer.find("input");
+        var editorInstance = container.find("." + FILTER_BUILDER_ITEM_VALUE_CLASS + " > div").dxNumberBox("instance");
         editorInstance.option("value", 0);
-        $input.trigger("blur");
+        clickByOutside();
         assert.deepEqual(instance.option("value"), ["Zipcode", "<>", 0]);
     });
 
@@ -454,14 +489,14 @@ QUnit.module("Rendering", function() {
         var $valueButton = container.find("." + FILTER_BUILDER_ITEM_VALUE_TEXT_CLASS);
         assert.strictEqual($valueButton.text(), "Test1", "filter value");
 
-        $valueButton.click();
+        $valueButton.trigger("dxclick");
 
         var $input = container.find("input");
         assert.ok($input.is(":focus"));
 
         $input.val("Test2");
         $input.trigger("change");
-        $input.trigger("blur");
+        clickByOutside();
 
         $valueButton = container.find("." + FILTER_BUILDER_ITEM_VALUE_TEXT_CLASS);
         assert.strictEqual($valueButton.text(), "Test2", "filter value");
@@ -505,7 +540,7 @@ QUnit.module("Rendering", function() {
             }]
         });
 
-        container.find("." + FILTER_BUILDER_ITEM_VALUE_TEXT_CLASS).click();
+        container.find("." + FILTER_BUILDER_ITEM_VALUE_TEXT_CLASS).trigger("dxclick");
         assert.equal($("." + FILTER_BUILDER_ITEM_VALUE_TEXT_CLASS).length, 0, "hide button");
         assert.equal($(".dx-dropdowneditor-button").length, 1, "has one dropdowneditor button");
 
@@ -516,6 +551,8 @@ QUnit.module("Rendering", function() {
         assert.equal($("." + INNER_ELEMENT_CLASS).length, 1, "dropdown opened after click by its inner element");
 
         $(".dx-button").trigger("dxclick");
+        clickByOutside();
+
         assert.equal($("." + FILTER_BUILDER_ITEM_VALUE_TEXT_CLASS).text(), VALUE);
     });
 
@@ -527,7 +564,7 @@ QUnit.module("Rendering", function() {
                 fields: fields
             }).dxFilterBuilder("instance");
 
-        $("." + FILTER_BUILDER_IMAGE_ADD_CLASS).click();
+        $("." + FILTER_BUILDER_IMAGE_ADD_CLASS).trigger("dxclick");
 
         assert.ok($(".dx-filterbuilder-add-condition").length > 0);
 
@@ -536,7 +573,7 @@ QUnit.module("Rendering", function() {
         assert.ok($(".dx-filterbuilder-add-condition").length === 0);
         assert.deepEqual(instance.option("value"), [["State", "<>", "Test"], ["CompanyName", "contains", ""]]);
 
-        $("." + FILTER_BUILDER_IMAGE_REMOVE_CLASS).eq(1).click();
+        $("." + FILTER_BUILDER_IMAGE_REMOVE_CLASS).eq(1).trigger("dxclick");
         assert.deepEqual(instance.option("value"), ["State", "<>", "Test"]);
     });
 
@@ -551,44 +588,8 @@ QUnit.module("Rendering", function() {
         clickByButtonAndSelectMenuItem($("." + FILTER_BUILDER_IMAGE_ADD_CLASS), 1);
         assert.deepEqual(instance.option("value"), ["State", "<>", "Test"]);
 
-        $("." + FILTER_BUILDER_IMAGE_REMOVE_CLASS).eq(1).click();
+        $("." + FILTER_BUILDER_IMAGE_REMOVE_CLASS).eq(1).trigger("dxclick");
         assert.deepEqual(instance.option("value"), ["State", "<>", "Test"]);
-    });
-
-    QUnit.test("show editor on keydown event", function(assert) {
-        var container = $("#container");
-
-        container.dxFilterBuilder({
-            value: ["Zipcode", "<>", 123],
-            fields: fields
-        });
-
-        var $valueButton = container.find("." + FILTER_BUILDER_ITEM_VALUE_TEXT_CLASS);
-        $valueButton.trigger($.Event("keydown", { keyCode: ENTER_KEY }));
-
-        assert.notOk(container.find("." + FILTER_BUILDER_ITEM_VALUE_TEXT_CLASS).length);
-        assert.ok(container.find(".dx-texteditor").length);
-    });
-
-    QUnit.test("skip first enter keyup after enter keydown by value button", function(assert) {
-        var container = $("#container");
-
-        container.dxFilterBuilder({
-            value: ["Zipcode", "<>", 123],
-            fields: fields
-        });
-        var $valueButton = container.find("." + FILTER_BUILDER_ITEM_VALUE_TEXT_CLASS);
-        $valueButton.trigger($.Event("keydown", { keyCode: ENTER_KEY }));
-
-        container.find(".dx-texteditor").trigger($.Event("keyup", { keyCode: ENTER_KEY }));
-
-        assert.ok(container.find(".dx-texteditor").length);
-
-        container.find(".dx-texteditor").trigger($.Event("keydown", { keyCode: ENTER_KEY }));
-        container.find(".dx-texteditor").trigger($.Event("keyup", { keyCode: ENTER_KEY }));
-
-        assert.notOk(container.find(".dx-texteditor").length);
-        assert.ok(container.find("." + FILTER_BUILDER_ITEM_VALUE_TEXT_CLASS).length);
     });
 
     //T589531
@@ -598,8 +599,53 @@ QUnit.module("Rendering", function() {
             fields: fields
         });
 
-        $("." + FILTER_BUILDER_ITEM_VALUE_TEXT_CLASS).click();
+        $("." + FILTER_BUILDER_ITEM_VALUE_TEXT_CLASS).trigger("dxclick");
         assert.equal($(".dx-datebox").dxDateBox("instance").option("value"), null);
+    });
+
+    //T589341
+    QUnit.test("the formatter is applied to a field with the date type", function(assert) {
+        if(devices.real().deviceType !== "desktop") {
+            assert.ok(true, "This test is not actual for mobile devices");
+            return;
+        }
+
+        $("#container").dxFilterBuilder({
+            value: ["Date", "=", ""],
+            fields: [{
+                dataField: "Date",
+                dataType: "date",
+                format: "dd.MM.yyyy"
+            }]
+        });
+
+        $("." + FILTER_BUILDER_ITEM_VALUE_TEXT_CLASS).trigger("dxclick");
+        $(".dx-datebox input").val("12/12/2017");
+        $(".dx-datebox input").trigger("change");
+        clickByOutside();
+
+        assert.equal($("." + FILTER_BUILDER_ITEM_VALUE_TEXT_CLASS).text(), "12.12.2017");
+    });
+
+    //T589341
+    QUnit.test('NumberBox with custom format', function(assert) {
+        var $container = $("#container");
+
+        $container.dxFilterBuilder({
+            value: ["Weight", "=", 3.14],
+            fields: [{
+                dataField: "Weight",
+                dataType: 'number',
+                editorOptions: {
+                    format: "#0.## kg"
+                }
+            }]
+        });
+
+        $("." + FILTER_BUILDER_ITEM_VALUE_TEXT_CLASS).trigger("dxclick");
+
+        //assert
+        assert.equal($container.find(".dx-texteditor-input").val(), "3.14 kg", 'numberbox formatted value');
     });
 });
 
@@ -613,7 +659,7 @@ QUnit.module("Create editor by field dataType", function() {
             fields: fields
         });
         var valueField = $("." + FILTER_BUILDER_ITEM_VALUE_CLASS).eq(0);
-        valueField.find("." + FILTER_BUILDER_ITEM_VALUE_TEXT_CLASS).click();
+        valueField.find("." + FILTER_BUILDER_ITEM_VALUE_TEXT_CLASS).trigger("dxclick");
         assert.ok(valueField.find(".dx-numberbox").dxNumberBox("instance"));
     });
 
@@ -627,7 +673,7 @@ QUnit.module("Create editor by field dataType", function() {
         });
 
         var valueField = $("." + FILTER_BUILDER_ITEM_VALUE_CLASS).eq(0);
-        valueField.find("." + FILTER_BUILDER_ITEM_VALUE_TEXT_CLASS).click();
+        valueField.find("." + FILTER_BUILDER_ITEM_VALUE_TEXT_CLASS).trigger("dxclick");
         assert.ok(valueField.find(".dx-textbox").dxTextBox("instance"));
     });
 
@@ -642,7 +688,7 @@ QUnit.module("Create editor by field dataType", function() {
         });
 
         var valueField = $("." + FILTER_BUILDER_ITEM_VALUE_CLASS).eq(0);
-        valueField.find("." + FILTER_BUILDER_ITEM_VALUE_TEXT_CLASS).click();
+        valueField.find("." + FILTER_BUILDER_ITEM_VALUE_TEXT_CLASS).trigger("dxclick");
         dateBoxInstance = valueField.find(".dx-datebox").dxDateBox("instance");
         assert.strictEqual(dateBoxInstance.option("type"), "date");
     });
@@ -658,7 +704,7 @@ QUnit.module("Create editor by field dataType", function() {
         });
 
         var valueField = $("." + FILTER_BUILDER_ITEM_VALUE_CLASS).eq(0);
-        valueField.find("." + FILTER_BUILDER_ITEM_VALUE_TEXT_CLASS).click();
+        valueField.find("." + FILTER_BUILDER_ITEM_VALUE_TEXT_CLASS).trigger("dxclick");
         dateBoxInstance = valueField.find(".dx-datebox").dxDateBox("instance");
         assert.strictEqual(dateBoxInstance.option("type"), "datetime");
     });
@@ -673,7 +719,7 @@ QUnit.module("Create editor by field dataType", function() {
         });
 
         var valueField = $("." + FILTER_BUILDER_ITEM_VALUE_CLASS).eq(0);
-        valueField.find("." + FILTER_BUILDER_ITEM_VALUE_TEXT_CLASS).click();
+        valueField.find("." + FILTER_BUILDER_ITEM_VALUE_TEXT_CLASS).trigger("dxclick");
         assert.ok(valueField.find(".dx-selectbox").dxSelectBox("instance"));
     });
 
@@ -700,7 +746,7 @@ QUnit.module("Create editor by field dataType", function() {
         });
 
         var valueField = $("." + FILTER_BUILDER_ITEM_VALUE_CLASS).eq(0);
-        valueField.find("." + FILTER_BUILDER_ITEM_VALUE_TEXT_CLASS).click();
+        valueField.find("." + FILTER_BUILDER_ITEM_VALUE_TEXT_CLASS).trigger("dxclick");
         assert.ok(valueField.find(".dx-selectbox").dxSelectBox("instance"));
     });
 
@@ -723,7 +769,7 @@ QUnit.module("Create editor by field dataType", function() {
         });
 
         var valueField = $("." + FILTER_BUILDER_ITEM_VALUE_CLASS).eq(0);
-        valueField.find("." + FILTER_BUILDER_ITEM_VALUE_TEXT_CLASS).click();
+        valueField.find("." + FILTER_BUILDER_ITEM_VALUE_TEXT_CLASS).trigger("dxclick");
         assert.ok(valueField.find("input").hasClass("my-editor"));
 
         assert.strictEqual(args.value, "value", "filter value");
@@ -753,7 +799,7 @@ QUnit.module("Short condition", function() {
             fields: fields
         });
 
-        container.find("." + FILTER_BUILDER_ITEM_VALUE_TEXT_CLASS).click();
+        container.find("." + FILTER_BUILDER_ITEM_VALUE_TEXT_CLASS).trigger("dxclick");
 
         assert.equal(container.find("input").val(), "K&S Music");
     });
@@ -779,9 +825,9 @@ QUnit.module("Short condition", function() {
             fields: fields
         });
 
-        container.find("." + FILTER_BUILDER_ITEM_OPERATION_CLASS).click();
+        container.find("." + FILTER_BUILDER_ITEM_OPERATION_CLASS).trigger("dxclick");
         $(".dx-menu-item-text").eq(3).trigger("dxclick");
-        container.find("." + FILTER_BUILDER_ITEM_VALUE_TEXT_CLASS).click();
+        container.find("." + FILTER_BUILDER_ITEM_VALUE_TEXT_CLASS).trigger("dxclick");
 
         assert.equal(container.find("input").val(), "K&S Music");
     });
@@ -789,7 +835,7 @@ QUnit.module("Short condition", function() {
 
 QUnit.module("on value changed", function() {
     var changeValue = function(container, newValue) {
-        container.find("." + FILTER_BUILDER_ITEM_VALUE_TEXT_CLASS).click();
+        container.find("." + FILTER_BUILDER_ITEM_VALUE_TEXT_CLASS).trigger("dxclick");
         var $textBoxContainer = container.find("." + FILTER_BUILDER_ITEM_VALUE_CLASS + " .dx-textbox"),
             textBoxInstance = $textBoxContainer.dxTextBox("instance");
         textBoxInstance.option("value", "Test");
@@ -943,7 +989,7 @@ QUnit.module("on value changed", function() {
             }).dxFilterBuilder("instance");
 
         changeValue(container, "Test");
-        $("body").click();
+        clickByOutside();
 
         assert.notEqual(instance.option("value"), value);
         assert.equal(container.find("." + FILTER_BUILDER_ITEM_VALUE_TEXT_CLASS).length, 1);
@@ -951,76 +997,10 @@ QUnit.module("on value changed", function() {
         value = instance.option("value");
 
         changeValue(container, "Test");
-        document.activeElement.blur();
-        $("body").click();
-
-        assert.equal(instance.option("value"), value);
-        assert.equal(container.find("." + FILTER_BUILDER_ITEM_VALUE_TEXT_CLASS).length, 1);
-    });
-
-    QUnit.test("condition isn't changed after escape click", function(assert) {
-        var container = $("#container"),
-            value = [["State", "=", ""]],
-            instance = container.dxFilterBuilder({
-                value: value,
-                fields: fields
-            }).dxFilterBuilder("instance");
-
-        container.find("." + FILTER_BUILDER_ITEM_VALUE_TEXT_CLASS).click();
-
-        var $input = container.find("." + FILTER_BUILDER_ITEM_VALUE_CLASS + " .dx-textbox input");
-        $input.val("Test");
-        $input.trigger($.Event("keyup", { keyCode: ESCAPE_KEY }));
-
-        assert.equal(instance.option("value"), value);
-        assert.equal(container.find("." + FILTER_BUILDER_ITEM_VALUE_TEXT_CLASS).length, 1);
-    });
-
-    QUnit.test("change condition value after tab press", function(assert) {
-        var container = $("#container"),
-            value = [["State", "=", ""]],
-            instance = container.dxFilterBuilder({
-                value: value,
-                fields: fields
-            }).dxFilterBuilder("instance");
-
-        container.find("." + FILTER_BUILDER_ITEM_VALUE_TEXT_CLASS).click();
-
-        var $textBox = container.find("." + FILTER_BUILDER_ITEM_VALUE_CLASS + " .dx-textbox");
-        $textBox.dxTextBox("instance").option("value", "Test");
-        $textBox.trigger($.Event("keydown", { keyCode: TAB_KEY }));
-
-        assert.notEqual(instance.option("value"), value);
-        assert.equal(container.find("." + FILTER_BUILDER_ITEM_VALUE_TEXT_CLASS).length, 1);
-    });
-
-    QUnit.test("change condition value after enter click", function(assert) {
-        var container = $("#container"),
-            value = [["State", "=", ""]],
-            instance = container.dxFilterBuilder({
-                value: value,
-                fields: fields
-            }).dxFilterBuilder("instance");
-
-        container.find("." + FILTER_BUILDER_ITEM_VALUE_TEXT_CLASS).click();
-
-        var $textBox = container.find("." + FILTER_BUILDER_ITEM_VALUE_CLASS + " .dx-textbox");
-        $textBox.dxTextBox("instance").option("value", "Test");
-        $textBox.trigger($.Event("keydown", { keyCode: ENTER_KEY }));
-
-        assert.notEqual(instance.option("value"), value);
-        assert.equal(container.find("." + FILTER_BUILDER_ITEM_VALUE_TEXT_CLASS).length, 1);
-
-        value = instance.option("value");
-
-        container.find("." + FILTER_BUILDER_ITEM_VALUE_TEXT_CLASS).click();
-
-        $textBox = container.find("." + FILTER_BUILDER_ITEM_VALUE_CLASS + " .dx-textbox");
-        $textBox.dxTextBox("instance").option("value", "Test");
-        $textBox.trigger($.Event("keydown", { keyCode: ENTER_KEY }));
-        $textBox.trigger($.Event("keyup", { keyCode: ENTER_KEY }));
+        clickByOutside();
 
         assert.equal(instance.option("value"), value);
         assert.equal(container.find("." + FILTER_BUILDER_ITEM_VALUE_TEXT_CLASS).length, 1);
     });
 });
+

@@ -756,7 +756,9 @@ var dxCircularGauge = {
     /**
     * @name dxcirculargaugeoptions_valueIndicator
     * @publicName valueIndicator
+    * @inherits CommonIndicator
     * @type object
+    * @inheritAll
     */
     valueIndicator: {
         /**
@@ -771,7 +773,9 @@ var dxCircularGauge = {
     /**
     * @name dxcirculargaugeoptions_subvalueIndicator
     * @publicName subvalueIndicator
+    * @inherits CommonIndicator
     * @type object
+    * @inheritAll
     */
     subvalueIndicator: {
         /**
@@ -917,7 +921,9 @@ var dxLinearGauge = {
     /**
     * @name dxlineargaugeoptions_valueIndicator
     * @publicName valueIndicator
+    * @inherits CommonIndicator
     * @type object
+    * @inheritAll
     */
     valueIndicator: {
         /**
@@ -932,7 +938,9 @@ var dxLinearGauge = {
     /**
     * @name dxlineargaugeoptions_subvalueIndicator
     * @publicName subvalueIndicator
+    * @inherits CommonIndicator
     * @type object
+    * @inheritAll
     */
     subvalueIndicator: {
         /**

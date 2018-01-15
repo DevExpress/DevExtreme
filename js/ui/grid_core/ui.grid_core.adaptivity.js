@@ -39,7 +39,8 @@ var $ = require("../../core/renderer"),
     EDIT_MODE_BATCH = "batch",
     EDIT_MODE_ROW = "row",
     EDIT_MODE_FORM = "form",
-    EDIT_MODE_POPUP = "popup";
+    EDIT_MODE_POPUP = "popup",
+    REVERT_TOOLTIP_CLASS = "revert-tooltip";
 
 function getColumnId(column) {
     return column.command ? "command:" + column.command : column.index;
@@ -1044,7 +1045,7 @@ module.exports = {
                 },
 
                 _getTooltipsSelector: function() {
-                    return this.callBase() + ", .dx-field-item-content .dx-tooltip";
+                    return this.callBase() + ", .dx-field-item-content ." + this.addWidgetPrefix(REVERT_TOOLTIP_CLASS);
                 }
             },
             columns: {

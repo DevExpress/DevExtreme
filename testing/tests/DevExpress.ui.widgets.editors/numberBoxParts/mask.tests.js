@@ -2,13 +2,15 @@
 
 var $ = require("jquery"),
     config = require("core/config"),
-    keyboardMock = require("../../../helpers/keyboardMock.js");
+    keyboardMock = require("../../../helpers/keyboardMock.js"),
+    browser = require("core/utils/browser");
 
 require("ui/text_box/ui.text_editor");
 
 var INPUT_CLASS = "dx-texteditor-input",
     PLACEHOLDER_CLASS = "dx-placeholder",
-    MINUS_KEY = 189;
+    MINUS_KEY = 189,
+    NUMPAD_MINUS_KEYCODE = 109;
 
 var moduleConfig = {
     beforeEach: function() {
@@ -104,21 +106,19 @@ QUnit.test("api value changing should hide a placeholder", function(assert) {
 QUnit.module("format: sign and minus button", moduleConfig);
 
 QUnit.test("pressing '-' button should revert the number", function(assert) {
-    var NUMPAD_MINUS_KEY = 109;
-
     this.instance.option({
         format: "#.000",
         value: 123.456
     });
 
-    this.keyboard.caret(3).keyDown(NUMPAD_MINUS_KEY).input("-");
+    this.keyboard.caret(3).keyDown(NUMPAD_MINUS_KEYCODE).input("-");
     assert.equal(this.input.val(), "-123.456", "value is correct");
     assert.equal(this.instance.option("value"), 123.456, "value should not be changed before valueChange event");
     assert.deepEqual(this.keyboard.caret(), { start: 4, end: 4 }, "caret is correct");
     this.keyboard.change();
     assert.equal(this.instance.option("value"), -123.456, "value has been changed after valueChange event");
 
-    this.keyboard.keyDown(NUMPAD_MINUS_KEY).input("-");
+    this.keyboard.keyDown(NUMPAD_MINUS_KEYCODE).input("-");
     assert.equal(this.input.val(), "123.456", "value is correct");
     assert.equal(this.instance.option("value"), -123.456, "value should not be changed before valueChange event");
     assert.deepEqual(this.keyboard.caret(), { start: 3, end: 3 }, "caret is correct");
@@ -138,6 +138,29 @@ QUnit.test("pressing '-' button should revert the number", function(assert) {
     assert.deepEqual(this.keyboard.caret(), { start: 3, end: 3 }, "caret is correct");
     this.keyboard.change();
     assert.equal(this.instance.option("value"), 123.456, "value has been changed after valueChange event");
+});
+
+QUnit.test("pressing numpad minus button should revert the number", function(assert) {
+    this.instance.option({
+        format: "#.000",
+        value: 123.456
+    });
+
+    this.keyboard
+        .caret(3)
+        .keyDown(NUMPAD_MINUS_KEYCODE)
+        .keyPress(NUMPAD_MINUS_KEYCODE)
+        .keyUp(NUMPAD_MINUS_KEYCODE);
+
+    if(!browser.msie) {
+        this.keyboard.input();
+    }
+
+    assert.equal(this.input.val(), "-123.456", "value is correct");
+    assert.equal(this.instance.option("value"), 123.456, "value should not be changed before valueChange event");
+    assert.deepEqual(this.keyboard.caret(), { start: 4, end: 4 }, "caret is correct");
+    this.keyboard.change();
+    assert.equal(this.instance.option("value"), -123.456, "value has been changed after valueChange event");
 });
 
 QUnit.test("pressing '-' button should revert zero number", function(assert) {
@@ -445,6 +468,21 @@ QUnit.testInActiveWindow("focusout should remove incomplete value chars from inp
     assert.equal(this.input.val(), "123", "input was reformatted");
 });
 
+QUnit.test("valueChanged event fires on value apply", function(assert) {
+    if(!browser.msie) {
+        //You can remove this test once issue noted below will resolved
+        //https://developer.microsoft.com/en-us/microsoft-edge/platform/issues/15181565/
+        assert.ok(true, "It is IE and Edge specific test");
+        return;
+    }
+
+    var valueChangedSpy = sinon.spy();
+
+    this.instance.on("valueChanged", valueChangedSpy);
+    this.keyboard.caret(0).type("123").press("enter");
+
+    assert.ok(valueChangedSpy.calledOnce, "valueChanged event called once");
+});
 
 QUnit.module("format: percent format", moduleConfig);
 
@@ -702,6 +740,19 @@ QUnit.test("removing digit if decimal format with prefix", function(assert) {
     assert.deepEqual(this.keyboard.caret(), { start: 6, end: 6 }, "caret is correct");
 });
 
+QUnit.test("removing decimal separator should be possible if float part is not required", function(assert) {
+    this.instance.option({
+        format: "#0.## kg",
+        value: "12.3"
+    });
+
+    this.keyboard.caret(4)
+        .press("backspace")
+        .press("backspace");
+
+    assert.equal(this.input.val(), "12 kg", "decimal separator has been removed");
+});
+
 QUnit.test("removing decimal separator if decimal separator is not default", function(assert) {
     var oldDecimalSeparator = config().decimalSeparator;
 
@@ -866,4 +917,26 @@ QUnit.test("move caret to the start when only stubs remain in the input", functi
     this.input.trigger("dxclick");
 
     assert.deepEqual(this.keyboard.caret(), { start: 0, end: 0 }, "caret was adjusted");
+});
+
+QUnit.test("caret should not move out of the boundaries when decimal separator was typed in percent format", function(assert) {
+    this.instance.option({
+        format: "#0%",
+        value: 0.01
+    });
+
+    this.keyboard.caret(1).type(".");
+
+    assert.equal(this.keyboard.caret().start, 1, "caret should not move when decimal part is disabled");
+});
+
+QUnit.test("caret should not move out of the boundaries when non-available digit was typed", function(assert) {
+    this.instance.option({
+        format: "#0.00 kg",
+        value: 1.23
+    });
+
+    this.keyboard.caret(4).type("1");
+
+    assert.equal(this.keyboard.caret().start, 4, "caret should not move");
 });

@@ -56,7 +56,14 @@ module.exports = {
              * @type dxTextBoxOptions
              * @default {}
              */
-            searchEditorOptions: {}
+            searchEditorOptions: {},
+
+            /**
+            * @name SearchBoxMixinOptions_searchTimeout
+            * @publicName searchTimeout
+            * @type number
+            * @default undefined
+            */
         });
     },
 
@@ -106,7 +113,16 @@ module.exports = {
             value: that.option("searchValue"),
             valueChangeEvent: "input",
             onValueChanged: function(e) {
-                that.option("searchValue", e.value);
+                var searchTimeout = that.option("searchTimeout");
+                window.clearTimeout(that._valueChangeTimeout);
+
+                if(e.event && e.event.type === "input" && searchTimeout) {
+                    that._valueChangeTimeout = setTimeout(function() {
+                        that.option("searchValue", e.value);
+                    }, searchTimeout);
+                } else {
+                    that.option("searchValue", e.value);
+                }
             }
         }, userEditorOptions);
     },
@@ -145,6 +161,8 @@ module.exports = {
                 }
                 this._dataSource[args.name === "searchMode" ? "searchOperation" : args.name](args.value);
                 this._dataSource.load();
+                break;
+            case "searchTimeout":
                 break;
             default:
                 this.callBase(args);

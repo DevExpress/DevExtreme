@@ -67,6 +67,7 @@ var $ = require("jquery"),
     setTemplateEngine = require("ui/set_template_engine"),
     fx = require("animation/fx"),
     config = require("core/config"),
+    keyboardMock = require("../../helpers/keyboardMock.js"),
     ajaxMock = require("../../helpers/ajaxMock.js"),
 
     DX_STATE_HOVER_CLASS = "dx-state-hover",
@@ -842,6 +843,81 @@ QUnit.test("Resize columns", function(assert) {
     assert.equal($(rowsCols[2]).css("width"), "50px", "width of three column - rows view");
 });
 
+//T571282
+QUnit.test("Resizing columns should work correctly when scrolling mode is 'virtual' and wordWrapEnabled is true", function(assert) {
+    //arrange
+    var generateData = function(count) {
+        var result = [],
+            i;
+
+        for(i = 0; i < count; i++) {
+            result.push({ name: "name" + i, description: "test test test test test test test test" });
+        }
+
+        return result;
+    };
+
+    var rowHeight,
+        resizeController,
+        done = assert.async(),
+        dataGrid = $("#dataGrid").dxDataGrid({
+            width: 200,
+            height: 200,
+            wordWrapEnabled: true,
+            allowColumnResizing: true,
+            loadingTimeout: undefined,
+            columnResizingMode: "widget",
+            dataSource: {
+                store: generateData(60),
+                pageSize: 2
+            },
+            columns: [{ dataField: "name", width: 100 }, "description"],
+            scrolling: {
+                mode: "virtual"
+            }
+        }),
+        instance = dataGrid.dxDataGrid("instance"),
+        rowsView = instance.getView("rowsView");
+
+    //assert
+    rowHeight = rowsView._rowHeight;
+    assert.ok(rowHeight > 50, "rowHeight > 50");
+    assert.strictEqual(instance.getVisibleRows().length, 4, "row count");
+
+    //arrange
+    instance.pageIndex(10);
+
+    setTimeout(function() {
+        //act
+        resizeController = instance.getController("columnsResizer");
+        resizeController._isResizing = true;
+        resizeController._targetPoint = { columnIndex: 1 };
+        resizeController._setupResizingInfo(-9900);
+        resizeController._moveSeparator({
+            event: {
+                data: resizeController,
+                type: "mousemove",
+                pageX: -9600,
+                preventDefault: commonUtils.noop
+            }
+        });
+        resizeController._endResizing({
+            event: {
+                data: resizeController
+            }
+        });
+
+        setTimeout(function() {
+            //assert
+            assert.notStrictEqual(rowsView._rowHeight, rowHeight, "row height has changed");
+            assert.ok(rowsView._rowHeight < 50, "rowHeight < 50");
+            assert.strictEqual(instance.getVisibleRows().length, 8, "row count");
+            assert.strictEqual(instance.pageIndex(), 10, "current page index");
+            done();
+        }, 100);
+    });
+});
+
 //T527538
 QUnit.test("Grid's height should be updated during column resizing if column headers height is changed", function(assert) {
     //arrange
@@ -1085,6 +1161,24 @@ QUnit.test("Resize grid after column resizing", function(assert) {
         assert.strictEqual(headersCols[1].style.width, "auto");
     }
 
+});
+
+//T590907
+QUnit.test("Change column width via option method", function(assert) {
+    //arrange
+    var dataGrid = $("#dataGrid").dxDataGrid({
+        loadingTimeout: undefined,
+        dataSource: [{}],
+        columns: [{ dataField: "column1", width: 100 }, { dataField: "column2", width: 100 }]
+    }).dxDataGrid("instance");
+
+    //act
+    dataGrid.option("columns[0].width", 1);
+
+    //assert
+    assert.strictEqual(dataGrid.$element().width(), 101);
+    assert.strictEqual(dataGrid.columnOption(0, "visibleWidth"), 1);
+    assert.strictEqual(dataGrid.columnOption(1, "visibleWidth"), "auto");
 });
 
 function isColumnHidden($container, index) {
@@ -1410,6 +1504,41 @@ QUnit.test("Get correct column and column index in the onCellClick event when ev
     clock.restore();
 });
 
+//T592757
+QUnit.test("onCellClick event should have correct row parameters when event is occurred in detail grid", function(assert) {
+    //arrange
+    var cellClickArgs = [],
+        $dataGrid = $("#dataGrid").dxDataGrid({
+            loadingTimeout: undefined,
+            dataSource: [{ id: 1, text: "Text 1" }],
+            keyExpr: "id",
+            onCellClick: function(e) {
+                cellClickArgs.push(e);
+            },
+            masterDetail: {
+                template: function(container, e) {
+                    $("<div>").addClass("detail-grid").appendTo(container).dxDataGrid({
+                        loadingTimeout: undefined,
+                        keyExpr: "id",
+                        dataSource: [
+                            { id: 2, text: "Text 2" },
+                            { id: 3, text: "Text 3" }
+                        ]
+                    });
+                }
+            }
+        });
+
+    $dataGrid.dxDataGrid("instance").expandRow(1);
+
+    //act
+    $dataGrid.find(".detail-grid .dx-data-row").eq(1).children().eq(0).trigger("dxclick");
+
+    //assert
+    assert.equal(cellClickArgs.length, 1, "cellClick fired once");
+    assert.equal(cellClickArgs[0].key, 1, "clicked row key");
+});
+
 QUnit.test("Edit row with the underscore template when the editForm mode is enabled", function(assert) {
     //arrange
     var clock = sinon.useFakeTimers(),
@@ -1517,6 +1646,11 @@ QUnit.test("Resize grid after column resizing to left when columnResizingMode is
             preventDefault: commonUtils.noop
         }
     });
+    resizeController._endResizing({ //T571282
+        event: {
+            data: resizeController
+        }
+    });
 
     //assert
     assert.strictEqual(instance.$element().children().width(), 280);
@@ -1573,6 +1707,11 @@ QUnit.test("Resize grid after column resizing to left when columnResizingMode is
             type: "mousemove",
             pageX: startPosition - 60,
             preventDefault: commonUtils.noop
+        }
+    });
+    resizeController._endResizing({ //T571282
+        event: {
+            data: resizeController
         }
     });
 
@@ -1682,6 +1821,11 @@ QUnit.test("Resize grid after column resizing to left when columnResizingMode is
             type: "mousemove",
             pageX: startPosition - 20,
             preventDefault: commonUtils.noop
+        }
+    });
+    resizeController._endResizing({ //T571282
+        event: {
+            data: resizeController
         }
     });
 
@@ -7671,6 +7815,28 @@ QUnit.test("Band columns should be displayed correctly after state is reset", fu
     assert.deepEqual(columns, ["Field 3", "Field 4"], "columns of the second level");
 });
 
+//T592655
+QUnit.test("Sorting should not throw an exception when headers are hidden", function(assert) {
+    //arrange
+    var dataGrid = createDataGrid({
+        showColumnHeaders: false,
+        dataSource: [{ field1: 1, field2: 2, field3: 3 }, { field1: 4, field2: 5, field3: 6 }]
+    });
+
+    this.clock.tick();
+
+    try {
+        //act
+        dataGrid.columnOption("field2", "sortOrder", "desc");
+        this.clock.tick();
+
+        //assert
+        assert.ok(true, "no exceptions");
+    } catch(e) {
+        //assert
+        assert.ok(false, "exception");
+    }
+});
 
 QUnit.module("templates");
 
@@ -7931,6 +8097,59 @@ QUnit.test("totalCount", function(assert) {
 
     //assert
     assert.equal(totalCount, 5, "totalCount");
+});
+
+//T587150
+QUnit.testInActiveWindow("DataGrid with inside grid in masterDetail - the invalid message of the datebox should not be removed when focusing cell", function(assert) {
+    //arrange
+    var $dateBoxInput,
+        dataGrid = createDataGrid({
+            loadingTimeout: undefined,
+            dataSource: {
+                store: {
+                    type: "array",
+                    data: [{ name: "Grid Item" }],
+                    key: "name"
+                }
+            },
+            masterDetail: {
+                enabled: true,
+                template: function($container, options) {
+                    $("<div/>")
+                        .addClass("inside-grid")
+                        .dxDataGrid({
+                            dataSource: [{ name: "Inside Grid Item" }],
+                            columns: [{ dataField: "name", dataType: "date", editorOptions: { mode: "text" } }],
+                            filterRow: {
+                                visible: true
+                            }
+                        }).appendTo($container);
+                }
+            }
+        }),
+        clock = sinon.useFakeTimers();
+
+    try {
+        dataGrid.expandRow("Grid Item");
+        clock.tick();
+
+        $dateBoxInput = $(".inside-grid").find(".dx-datagrid-filter-row .dx-texteditor-input");
+        $dateBoxInput.val("abc");
+        $dateBoxInput.trigger("change");
+        clock.tick();
+
+        //assert
+        assert.strictEqual($(".inside-grid").find(".dx-datagrid-filter-row > td").find(".dx-overlay.dx-invalid-message").length, 1, "has invalid message");
+
+        //act
+        $dateBoxInput.focus();
+        clock.tick();
+
+        //assert
+        assert.strictEqual($(".inside-grid").find(".dx-datagrid-filter-row > td").find(".dx-overlay.dx-invalid-message").length, 1, "has invalid message");
+    } finally {
+        clock.restore();
+    }
 });
 
 QUnit.module("API methods");
@@ -8522,6 +8741,60 @@ QUnit.test("Focus row element should support native DOM", function(assert) {
         rowIndex: 2
     }, "Check that correct cell is focused");
 });
+
+//T592731
+QUnit.test("Pressing arrow keys inside editor of the internal grid does not call preventDefault", function(assert) {
+    //arrange
+    var keyboard,
+        $dateBoxInput,
+        preventDefaultCalled,
+        eventOptions = {
+            preventDefault: function() {
+                preventDefaultCalled = true;
+            }
+        };
+
+    this.dataGrid.option({
+        dataSource: {
+            store: {
+                type: "array",
+                data: [{ id: 0, value: "value 1", text: "Awesome" }],
+                key: "id"
+            }
+        },
+        masterDetail: {
+            enabled: true,
+            template: function(container, options) {
+                $("<div>")
+                    .addClass("internal-grid")
+                    .dxDataGrid({
+                        filterRow: {
+                            visible: true
+                        },
+                        columns: [{ dataField: "field1", filterValue: "test" }, "field2"],
+                        dataSource: [{ field1: "test1", field2: "test2" }]
+                    }).appendTo(container);
+            }
+        }
+    });
+    this.dataGrid.expandRow(0);
+    this.clock.tick();
+
+    $dateBoxInput = $(this.dataGrid.$element()).find(".internal-grid .dx-datagrid-filter-row").find(".dx-texteditor-input").first();
+    $dateBoxInput.focus();
+    this.clock.tick();
+    keyboard = keyboardMock($dateBoxInput);
+
+    //act
+    keyboard.keyDown("left", eventOptions);
+    keyboard.keyDown("right", eventOptions);
+    keyboard.keyDown("up", eventOptions);
+    keyboard.keyDown("down", eventOptions);
+
+    //assert
+    assert.notOk(preventDefaultCalled, "preventDefault is not called");
+});
+
 
 QUnit.module("Formatting");
 

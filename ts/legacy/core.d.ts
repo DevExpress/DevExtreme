@@ -1295,6 +1295,9 @@ declare module DevExpress {
 
             /** Configures the search panel. */
             searchEditorOptions?: DevExpress.ui.dxTextBoxOptions;
+
+            /** Specifies the time delay, in milliseconds, after the last character has been typed in, before a search is executed. */
+            searchTimeout?: number;
         }
 
         export interface EditorOptions extends WidgetOptions {

@@ -331,7 +331,7 @@ QUnit.test("Reset correction", function(assert) {
 QUnit.test("setPercentValue", function(assert) {
     var point = createPoint(this.series, this.data, this.options);
 
-    point.setPercentValue(40);
+    point.setPercentValue(40, 30);
 
     assert.equal(point.value, 10);
     assert.equal(point.minValue, "canvas_position_default");
@@ -339,14 +339,14 @@ QUnit.test("setPercentValue", function(assert) {
     assert.equal(point.argument, 1);
     assert.equal(point.initialValue, 10);
     assert.equal(point._label._data.percent, 0.25);
-    assert.equal(point._label._data.total, 40);
+    assert.equal(point._label._data.total, 30);
 });
 
 QUnit.test("setPercentValue. Point with negative value", function(assert) {
     this.data.value = -10;
     var point = createPoint(this.series, this.data, this.options);
 
-    point.setPercentValue(40);
+    point.setPercentValue(40, 30);
 
     assert.equal(point.value, -10);
     assert.equal(point.minValue, "canvas_position_default");
@@ -354,14 +354,14 @@ QUnit.test("setPercentValue. Point with negative value", function(assert) {
     assert.equal(point.argument, 1);
     assert.equal(point.initialValue, -10);
     assert.equal(point._label._data.percent, -0.25);
-    assert.equal(point._label._data.total, 40);
+    assert.equal(point._label._data.total, 30);
 });
 
 QUnit.test("setPercentValue after correctValue", function(assert) {
     var point = createPoint(this.series, this.data, this.options);
 
     point.correctValue(10);
-    point.setPercentValue(50);
+    point.setPercentValue(50, 30);
 
     assert.equal(point.value, 20);
     assert.equal(point.minValue, 10);
@@ -369,7 +369,7 @@ QUnit.test("setPercentValue after correctValue", function(assert) {
     assert.equal(point.argument, 1);
     assert.equal(point.initialValue, 10);
     assert.equal(point._label._data.percent, 0.2);
-    assert.equal(point._label._data.total, 50);
+    assert.equal(point._label._data.total, 30);
 });
 
 QUnit.test("setPercentValue after correctValue. Point with negative value", function(assert) {
@@ -390,7 +390,7 @@ QUnit.test("setPercentValue when series is fullStacked and has value", function(
     this.series.isFullStackedSeries = function() { return true; };
     var point = createPoint(this.series, this.data, this.options);
 
-    point.setPercentValue(40);
+    point.setPercentValue(40, 30);
 
     assert.equal(point.value, 0.25);
     assert.equal(point.minValue, "canvas_position_default");
@@ -398,7 +398,7 @@ QUnit.test("setPercentValue when series is fullStacked and has value", function(
     assert.equal(point.argument, 1);
     assert.equal(point.initialValue, 10);
     assert.equal(point._label._data.percent, 0.25);
-    assert.equal(point._label._data.total, 40);
+    assert.equal(point._label._data.total, 30);
 });
 
 QUnit.test("setPercentValue when series is fullStacked with left hole", function(assert) {
@@ -407,15 +407,10 @@ QUnit.test("setPercentValue when series is fullStacked with left hole", function
     point.correctValue(10);
     point.setHole(5, "left");
 
-    point.setPercentValue(40, true, 20, 20);
+    point.setPercentValue(40, 30, 20, 20);
 
     assert.equal(point.value, 0.5);
     assert.equal(point.minValue, 0.25);
-
-    assert.equal(point.argument, 1);
-    assert.equal(point.initialValue, 10);
-    assert.equal(point._label._data.percent, 0.25);
-    assert.equal(point._label._data.total, 40);
 
     assert.strictEqual(point.leftHole, 0.75);
     assert.strictEqual(point.minLeftHole, 0.25);
@@ -430,15 +425,10 @@ QUnit.test("setPercentValue when series is fullStacked with right hole", functio
     point.correctValue(10);
     point.setHole(5, "right");
 
-    point.setPercentValue(40, true, 20, 20);
+    point.setPercentValue(40, 30, 20, 20);
 
     assert.equal(point.value, 0.5);
     assert.equal(point.minValue, 0.25);
-
-    assert.equal(point.argument, 1);
-    assert.equal(point.initialValue, 10);
-    assert.equal(point._label._data.percent, 0.25);
-    assert.equal(point._label._data.total, 40);
 
     assert.strictEqual(point.leftHole, undefined);
     assert.strictEqual(point.minLeftHole, undefined);
@@ -454,15 +444,10 @@ QUnit.test("setPercentValue when series is fullStacked with right&left holes", f
     point.setHole(5, "right");
     point.setHole(10, "left");
 
-    point.setPercentValue(40, true, 20, 20);
+    point.setPercentValue(40, 30, 20, 20);
 
     assert.equal(point.value, 0.5);
     assert.equal(point.minValue, 0.25);
-
-    assert.equal(point.argument, 1);
-    assert.equal(point.initialValue, 10);
-    assert.equal(point._label._data.percent, 0.25);
-    assert.equal(point._label._data.total, 40);
 
     assert.strictEqual(point.leftHole, 0.5);
     assert.strictEqual(point.minLeftHole, 0);
@@ -476,7 +461,7 @@ QUnit.test("setPercentValue when series is fullStacked and has no value", functi
     this.data.value = null;
     var point = createPoint(this.series, this.data, this.options);
 
-    point.setPercentValue(40);
+    point.setPercentValue(40, 30);
 
     assert.equal(point.value, null);
     assert.equal(point.minValue, "canvas_position_default");
@@ -484,7 +469,7 @@ QUnit.test("setPercentValue when series is fullStacked and has no value", functi
     assert.equal(point.argument, 1);
     assert.equal(point.initialValue, null);
     assert.equal(point._label._data.percent, 0);
-    assert.equal(point._label._data.total, 40);
+    assert.equal(point._label._data.total, 30);
 });
 
 QUnit.test("Reset value to zero", function(assert) {
@@ -2412,25 +2397,25 @@ QUnit.test("Get tooltip format object, stackPoints is created", function(assert)
         };
 
     point.stackPoints = [createPoint($.extend({}, this.series, { name: "series1" }), data1, options1), createPoint($.extend({}, this.series, { name: "series2" }), data2, options2)];
-    point.setPercentValue(40);
+    point.setPercentValue(40, 30);
 
     $.each(point.stackPoints, function(i, point) {
-        point.setPercentValue(40);
+        point.setPercentValue(40, 30);
         point.inVisibleArea = true;
     });
 
     var formatObject = point.getTooltipFormatObject(this.tooltip);
 
     assert.equal(formatObject.argument, 1);
-    assert.equal(formatObject.total, 40);
+    assert.equal(formatObject.total, 30);
     assert.equal(formatObject.argumentText, "1:argument");
-    assert.equal(formatObject.totalText, "40:undefined");
+    assert.equal(formatObject.totalText, "30:undefined");
     assert.ok(!formatObject.stackName);
 
     assert.equal(formatObject.points.length, 2);
 
-    checkTooltipFormatObject(assert, formatObject.points[0], data1.argument, data1.value, data1.originalValue, data1.originalArgument, "series1", 0.375, 40);
-    checkTooltipFormatObject(assert, formatObject.points[1], data2.argument, data2.value, data2.originalValue, data2.originalArgument, "series2", 0.5, 40);
+    checkTooltipFormatObject(assert, formatObject.points[0], data1.argument, data1.value, data1.originalValue, data1.originalArgument, "series1", 0.375, 30);
+    checkTooltipFormatObject(assert, formatObject.points[1], data2.argument, data2.value, data2.originalValue, data2.originalArgument, "series2", 0.5, 30);
 });
 
 QUnit.test("Get tooltip format object, points no visible", function(assert) {
@@ -2454,7 +2439,7 @@ QUnit.test("Get tooltip format object, points no visible", function(assert) {
     point.setPercentValue(40);
 
     $.each(point.stackPoints, function(i, point) {
-        point.setPercentValue(40);
+        point.setPercentValue(40, 30);
         point.inVisibleArea = false;
     });
 
@@ -2513,23 +2498,23 @@ QUnit.test("Get tooltip format object, stackPoints with stackName is created", f
 
     point.stackPoints = [createPoint($.extend({}, this.series, { name: "series1" }), data1, options1), createPoint($.extend({}, this.series, { name: "series2" }), data2, options2)];
     point.stackPoints.stackName = "stackName";
-    point.setPercentValue(40);
+    point.setPercentValue(40, 30);
 
     $.each(point.stackPoints, function(i, point) {
-        point.setPercentValue(40);
+        point.setPercentValue(40, 30);
         point.inVisibleArea = true;
     });
 
     var formatObject = point.getTooltipFormatObject(this.tooltip);
 
     assert.equal(formatObject.argument, 1);
-    assert.equal(formatObject.total, 40);
+    assert.equal(formatObject.total, 30);
     assert.equal(formatObject.stackName, "stackName");
 
     assert.equal(formatObject.points.length, 2);
 
-    checkTooltipFormatObject(assert, formatObject.points[0], data1.argument, data1.value, data1.originalValue, data1.originalArgument, "series1", 0.375, 40);
-    checkTooltipFormatObject(assert, formatObject.points[1], data2.argument, data2.value, data2.originalValue, data2.originalArgument, "series2", 0.5, 40);
+    checkTooltipFormatObject(assert, formatObject.points[0], data1.argument, data1.value, data1.originalValue, data1.originalArgument, "series1", 0.375, 30);
+    checkTooltipFormatObject(assert, formatObject.points[1], data2.argument, data2.value, data2.originalValue, data2.originalArgument, "series2", 0.5, 30);
 });
 
 var checkTooltipFormatObject = function(assert, point, argument, value, originalValue, originalArgument, seriesName, percent, total) {
@@ -2685,7 +2670,7 @@ QUnit.test("Label format object percent argument", function(assert) {
     this.series.seriesName = "series";
     var pt = createPoint(this.series, this.data, this.options);
 
-    pt.setPercentValue(50);
+    pt.setPercentValue(50, 30);
 
     assert.ok(this.labelFactory.calledOnce);
 
@@ -2703,7 +2688,7 @@ QUnit.test("Label format object percent argument", function(assert) {
 
     assert.ok(label.setDataField.calledTwice);
     assert.deepEqual(label.setDataField.firstCall.args, ["percent", 0.08]);
-    assert.deepEqual(label.setDataField.lastCall.args, ["total", 50]);
+    assert.deepEqual(label.setDataField.lastCall.args, ["total", 30]);
 });
 
 QUnit.test("Label format object percent argument when value = 0 total = 0", function(assert) {
@@ -2713,7 +2698,7 @@ QUnit.test("Label format object percent argument when value = 0 total = 0", func
     var pt = createPoint(this.series, this.data, this.options),
         label = pt._label;
 
-    pt.setPercentValue(0);
+    pt.setPercentValue(0, 0);
 
     assert.ok(label.setDataField.calledTwice);
     assert.deepEqual(label.setDataField.firstCall.args, ["percent", 0]);
@@ -2728,11 +2713,11 @@ QUnit.test("Label format object percent argument when total = 0 minValue = 0", f
         label = pt._label;
 
     pt.minValue = 0;
-    pt.setPercentValue(40);
+    pt.setPercentValue(40, 30);
 
     assert.ok(label.setDataField.calledTwice);
     assert.deepEqual(label.setDataField.firstCall.args, ["percent", 0.1]);
-    assert.deepEqual(label.setDataField.lastCall.args, ["total", 40]);
+    assert.deepEqual(label.setDataField.lastCall.args, ["total", 30]);
 });
 
 QUnit.test("Get graphic bbox when point is with radius", function(assert) {

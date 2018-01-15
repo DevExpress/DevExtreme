@@ -140,7 +140,6 @@ var SchedulerAppointments = CollectionWidget.inherit({
             activeStateEnabled: true,
             hoverStateEnabled: true,
             tabIndex: 0,
-            appointmentDurationInMinutes: 30,
             fixedContainer: null,
             allDayContainer: null,
             allowDrag: true,
@@ -168,7 +167,6 @@ var SchedulerAppointments = CollectionWidget.inherit({
             case "allowDrag":
             case "allowResize":
             case "allowAllDayResize":
-            case "appointmentDurationInMinutes":
                 this._invalidate();
                 break;
             case "focusedElement":
@@ -227,16 +225,20 @@ var SchedulerAppointments = CollectionWidget.inherit({
             return;
         }
 
-        var $items = this._findItemElementByItem(item.itemData),
-            that = this;
+        var $items = this._findItemElementByItem(item.itemData);
 
         if(!$items.length) {
             return;
         }
 
-        each($items, function(index, $item) {
-            that._applyAppointmentColor($item, item.itemData, item.settings[index]);
-        });
+        each($items, (function(index, $item) {
+            var deferredColor = this._getAppointmentColor($item, item.settings[index].groupIndex);
+            deferredColor.done(function(color) {
+                if(color) {
+                    $item.css("background-color", color);
+                }
+            });
+        }).bind(this));
     },
 
     _clearItem: function(item) {
@@ -254,7 +256,7 @@ var SchedulerAppointments = CollectionWidget.inherit({
     _clearDropDownItems: function() {
         this._virtualAppointments = {};
 
-        var $items = this._itemContainer().find(".dx-scheduler-dropdown-appointments");
+        var $items = this._getDropDownAppointments();
         if(!$items.length) {
             return;
         }
@@ -263,6 +265,10 @@ var SchedulerAppointments = CollectionWidget.inherit({
             $($item).detach();
             $($item).remove();
         });
+    },
+
+    _getDropDownAppointments: function() {
+        return this._itemContainer().find(".dx-scheduler-dropdown-appointments");
     },
 
     _findItemElementByItem: function(item) {
@@ -495,34 +501,37 @@ var SchedulerAppointments = CollectionWidget.inherit({
             allDay = settings.allDay;
         this.invoke("setCellDataCacheAlias", this._currentAppointmentSettings, geometry);
 
-        this._createComponent($appointment, Appointment, {
-            observer: this.option("observer"),
-            data: data,
-            geometry: geometry,
-            direction: settings.direction || "vertical",
-            allowResize: allowResize,
-            allowDrag: allowDrag,
-            allDay: allDay,
-            reduced: settings.appointmentReduced,
-            isCompact: settings.isCompact,
-            startDate: settings.startDate,
-            cellWidth: this.invoke("getCellWidth"),
-            cellHeight: this.invoke("getCellHeight"),
-            resizableConfig: this._resizableConfig(data, settings)
-        });
+        var deferredColor = this._getAppointmentColor($appointment, settings.groupIndex);
 
-        this._applyAppointmentColor($appointment, data, settings);
-        this._renderDraggable($appointment, allDay);
-    },
-
-    _applyAppointmentColor: function($appointment, appointmentData, settings) {
-        var deferredColor = this._paintAppointment($appointment, settings.groupIndex);
         if(settings.virtual) {
-            deferredColor.done((function(color) {
-                this._processVirtualAppointment(settings, $appointment, appointmentData, color);
-            }).bind(this));
+            this._processVirtualAppointment(settings, $appointment, data, deferredColor);
+        } else {
+            this._createComponent($appointment, Appointment, {
+                observer: this.option("observer"),
+                data: data,
+                geometry: geometry,
+                direction: settings.direction || "vertical",
+                allowResize: allowResize,
+                allowDrag: allowDrag,
+                allDay: allDay,
+                reduced: settings.appointmentReduced,
+                isCompact: settings.isCompact,
+                startDate: settings.startDate,
+                cellWidth: this.invoke("getCellWidth"),
+                cellHeight: this.invoke("getCellHeight"),
+                resizableConfig: this._resizableConfig(data, settings)
+            });
+
+            deferredColor.done(function(color) {
+                if(color) {
+                    $appointment.css("background-color", color);
+                }
+            });
+
+            this._renderDraggable($appointment, allDay);
         }
     },
+
 
     _applyResourceDataAttr: function($appointment) {
         this.notifyObserver("getResourcesFromItem", {
@@ -674,16 +683,13 @@ var SchedulerAppointments = CollectionWidget.inherit({
         return result;
     },
 
-    _paintAppointment: function($appointment, groupIndex) {
+    _getAppointmentColor: function($appointment, groupIndex) {
         var res = new Deferred();
         this.notifyObserver("getAppointmentColor", {
             itemData: this._getItemData($appointment),
             groupIndex: groupIndex,
             callback: function(d) {
                 d.done(function(color) {
-                    if(color) {
-                        $appointment.css("background-color", color);
-                    }
                     res.resolve(color);
                 });
             }

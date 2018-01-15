@@ -410,6 +410,9 @@ _Translator2d.prototype = {
 
         return _abs(this.untranslate(visibleArea.min) - (!isDefined(minValue) ? this.untranslate(visibleArea.max) : minValue));
     },
+    checkMinBarSize: function(value, minShownValue, stackValue) {
+        return _abs(value) < minShownValue ? value >= 0 ? minShownValue : -minShownValue : value;
+    },
     translate: _noop,
     untranslate: _noop,
     getInterval: _noop,

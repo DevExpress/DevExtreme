@@ -2618,6 +2618,26 @@ QUnit.test("Set three series in three groups - matching points", function(assert
     checkFullStackedPoints(assert, mixedPoints3);
 });
 
+QUnit.test("Pass correct tatal and absTotal values to setPercentValue", function(assert) {
+    var mixedPoints1 = pointsForStacking.mixedPoints1(),
+        series1 = createSeries({
+            points: mixedPoints1
+        }),
+        mixedPoints2 = pointsForStacking.mixedPoints2(),
+        series2 = createSeries({
+            points: mixedPoints2
+        });
+
+    mixedPoints1.forEach(function(p) {
+        sinon.spy(p, "setPercentValue");
+    });
+
+    createSeriesFamily("fullstackedbar", [series1, series2], { equalBarWidth: true });
+
+    assert.strictEqual(mixedPoints1[0].setPercentValue.lastCall.args[0], 30);
+    assert.strictEqual(mixedPoints1[0].setPercentValue.lastCall.args[1], 10);
+});
+
 QUnit.module("Bar series common");
 
 QUnit.test("Translator interval is too small - bar width is 1px", function(assert) {

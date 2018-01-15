@@ -584,20 +584,22 @@ declare module DevExpress {
     export class animationPresets {
         /** Applies the changes made in the animation repository. */
         applyChanges(): void;
-        /** Deletes the specified animation or clears all the animation repository, if an animation name is not passed. */
+        /** Removes all animations from the repository. */
+        clear(): void;
+        /** Deletes an animation with a specific name. */
         clear(name: string): void;
-        /** Returns the configuration of the animation found in the animation repository by the specified name for the current device. */
-        getPreset(name: string): void;
+        /** Gets the configuration of an animation with a specific name. */
+        getPreset(name: string): any;
         /** Registers predefined animations in the animation repository. */
         registerDefaultPresets(): void;
-        /** Adds the specified animation preset to the animation repository by the specified name. */
+        /** Adds an animation with a specific name to the animation repository. */
         registerPreset(name: string, config: { animation?: animationConfig, device?: Device }): void;
-        /** Resets all the changes made in the animation repository. */
+        /** Deletes all custom animations. */
         resetToDefaults(): void;
     }
     /** The manager that performs several specified animations at a time. */
     export class TransitionExecutor {
-        /** Registers a set of elements that should be animated as "entering" using the specified animation configuration. */
+        /** Registers the set of elements that should be animated as "entering" using the specified animation configuration. */
         enter(elements: JQuery, animation: animationConfig | string): void;
         /** Registers a set of elements that should be animated as "leaving" using the specified animation configuration. */
         leave(elements: JQuery, animation: animationConfig | string): void;
@@ -629,23 +631,23 @@ declare module DevExpress {
         beginUpdate(): void;
         /** Refreshes the widget after a call of the beginUpdate() method. */
         endUpdate(): void;
-        /** Returns this widget's instance. Use it to access other methods of the widget. */
+        /** Gets the widget's instance. Use it to access other methods of the widget. */
         instance(): Component;
-        /** Detaches all event handlers from the specified event. */
+        /** Detaches all event handlers from a single event. */
         off(eventName: string): any;
-        /** Detaches a particular event handler from the specified event. */
+        /** Detaches a particular event handler from a single event. */
         off(eventName: string, eventHandler: Function): any;
-        /** Subscribes to a specified event. */
+        /** Subscribes to an event. */
         on(eventName: string, eventHandler: Function): any;
-        /** Subscribes to the specified events. */
+        /** Subscribes to events. */
         on(events: any): any;
-        /** Gets the widget's options. */
+        /** Gets all widget options. */
         option(): any;
-        /** Gets a specific option value. */
+        /** Gets the value of a single option. */
         option(optionName: string): any;
-        /** Assigns a new value to a specific option. */
+        /** Updates the value of a single option. */
         option(optionName: string, optionValue: any): void;
-        /** Sets one or more options. */
+        /** Updates the values of several options. */
         option(options: any): void;
     }
     /** Registers a new component in the DevExpress.ui namespace. */
@@ -667,7 +669,7 @@ declare module DevExpress {
         /** A group separator. Applies only if you do not use the Globalize or Intl library. */
         thousandsSeparator?: string;
     }
-    /** Gets the current global configuration object. */
+    /** Gets the current global configuration. */
     export function config(): globalConfig;
     /** Configures your application before its launch. */
     export function config(config: globalConfig): void;
@@ -697,17 +699,17 @@ declare module DevExpress {
     /** An object that serves as a namespace for the methods and events specifying information on the current device. */
     export class DevicesObject {
         constructor(options: { window?: Window });
-        /** Returns information about the current device. */
+        /** Gets information on the current device. */
         current(): Device;
         /** Overrides actual device information to force the application to operate as if it was running on a specified device. */
         current(deviceName: string | Device): void;
-        /** Detaches all event handlers from the specified event. */
+        /** Detaches all event handlers from a single event. */
         off(eventName: string): any;
-        /** Detaches a particular event handler from the specified event. */
+        /** Detaches a particular event handler from a single event. */
         off(eventName: string, eventHandler: Function): any;
-        /** Subscribes to a specified event. */
+        /** Subscribes to an event. */
         on(eventName: string, eventHandler: Function): any;
-        /** Subscribes to the specified events. */
+        /** Subscribes to events. */
         on(events: any): any;
         /** Returns the current device orientation. */
         orientation(): string;
@@ -737,22 +739,22 @@ declare module DevExpress {
         static defaultOptions(rule: { device?: any | Array<any> | Function, options?: any }): void;
         /** Removes the widget from the DOM. */
         dispose(): void;
-        /** Gets the root element of the widget. */
+        /** Gets the root widget element. */
         element(): DevExpress.core.dxElement;
-        /** Gets the widget's instance using a DOM element. */
+        /** Gets the instance of a widget found using its DOM node. */
         static getInstance(element: Element | JQuery): DOMComponent;
     }
     /** An object used to manage OData endpoints in your application. */
     export class EndpointSelector {
         constructor(options: any);
-        /** Returns an endpoint for the specified key. */
+        /** Gets an endpoint with a specific key. */
         urlFor(key: string): string;
     }
     /** An object that serves as a namespace for the methods required to perform validation. */
     export class validationEngine {
-        /** Provides access to the object that represents the default validation group. */
+        /** Gets the default validation group. */
         static getGroupConfig(): any;
-        /** Provides access to the object that represents the specified validation group. */
+        /** Gets a validation group with a specific key. */
         static getGroupConfig(group: string | any): any;
         /** Registers all the Validator objects extending fields of the specified ViewModel. */
         static registerModelForValidation(model: any): void;
@@ -762,11 +764,11 @@ declare module DevExpress {
         static resetGroup(group: string | any): void;
         /** Unregisters all the Validator objects extending fields of the specified ViewModel. */
         static unregisterModelForValidation(model: any): void;
-        /** Validates rules of the validators that belong to the default validation group. */
+        /** Validates editors from the default validation group. */
         static validateGroup(): any;
-        /** Validates rules of the validators that belong to the specified validation group. */
+        /** Validates editors from a specific validation group. */
         static validateGroup(group: string | any): any;
-        /** Validates the rules that are defined within the dxValidator objects that are registered for the specified ViewModel. */
+        /** Validates a view model. */
         static validateModel(model: any): any;
     }
     /** Hides the last displayed overlay widget. */
@@ -779,7 +781,7 @@ declare module DevExpress {
         static notify(message: string, type?: string, displayTime?: number): void;
         /** Creates a toast message. */
         static notify(options: any, type?: string, displayTime?: number): void;
-        /** Sets a specified template engine. */
+        /** Sets a template engine. */
         static setTemplateEngine(templateEngineName: string): void;
         /** Sets a custom template engine defined via custom compile and render functions. */
         static setTemplateEngine(templateEngineOptions: { compile?: Function, render?: Function }): void;
@@ -796,7 +798,7 @@ declare module DevExpress {
         static exportFromMarkup(markup: string, options: { fileName?: string, format?: string, backgroundColor?: string, proxyUrl?: string, width?: number, height?: number, onExporting?: Function, onExported?: Function, onFileSaving?: Function }): void;
         /** Gets the SVG markup of specific widgets for their subsequent export. */
         static getMarkup(widgetInstances: Array<DOMComponent>): string;
-        /** Obtains the color sets of a predefined or registered palette. */
+        /** Gets the color sets of a predefined or registered palette. */
         static getPalette(paletteName: string): any;
         /** The method to be called every time the active entry in the browser history is modified without reloading the current page. */
         static refreshPaths(): void;
@@ -813,9 +815,9 @@ declare module DevExpress.data {
     export class Guid {
         constructor();
         constructor(value: string);
-        /** Returns a string representation of the Guid instance. */
+        /** Gets a Guid converted to a string. */
         toString(): string;
-        /** Returns a string representation of the Guid instance. */
+        /** Gets a Guid converted to a string. */
         valueOf(): string;
     }
     export interface StoreOptions {
@@ -847,29 +849,29 @@ declare module DevExpress.data {
     /** The base class for all Stores. */
     export class Store {
         constructor(options?: StoreOptions)
-        /** Returns the data item specified by the key. */
+        /** Gets a data item with a specific key. */
         byKey(key: any | string | number): Promise<any> & JQueryPromise<any>;
-        /** Adds an item to the data associated with this Store. */
+        /** Adds an item to the Store's data. */
         insert(values: any): Promise<any> & JQueryPromise<any>;
-        /** Returns the key expression specified via the key configuration option. */
+        /** Gets the key option's value. */
         key(): any;
-        /** Returns the key of the Store item that matches the specified object. */
+        /** Gets the key value of an item found using its data object. */
         keyOf(obj: any): any;
         /** Starts loading data. */
         load(): Promise<any> & JQueryPromise<any>;
         /** Starts loading data. */
         load(options: LoadOptions): Promise<any> & JQueryPromise<any>;
-        /** Detaches all event handlers from the specified event. */
+        /** Detaches all event handlers from a single event. */
         off(eventName: string): any;
-        /** Detaches a particular event handler from the specified event. */
+        /** Detaches a particular event handler from a single event. */
         off(eventName: string, eventHandler: Function): any;
-        /** Subscribes to a specified event. */
+        /** Subscribes to an event. */
         on(eventName: string, eventHandler: Function): any;
-        /** Subscribes to the specified events. */
+        /** Subscribes to events. */
         on(events: any): any;
-        /** Removes the data item specified by the key. */
+        /** Removes a data item with a specific key. */
         remove(key: any | string | number): Promise<void> & JQueryPromise<void>;
-        /** Obtains the total count of items that will be returned by the load() function. */
+        /** Gets the total count of items the load() function returns. */
         totalCount(obj: { filter?: any, group?: any }): Promise<number> & JQueryPromise<number>;
         /** Updates the data item specified by the key. */
         update(key: any | string | number, values: any): Promise<any> & JQueryPromise<any>;
@@ -922,21 +924,21 @@ declare module DevExpress.data {
         userData?: any;
     }
     export interface CustomStoreOptions extends StoreOptions {
-        /** The user implementation of the byKey(key, extraOptions) method. */
+        /** Specifies a custom implementation of the byKey(key, extraOptions) method. */
         byKey?: ((key: any | string | number) => Promise<any> | JQueryPromise<any>);
         /** Specifies whether raw data should be saved in the cache. Applies only if loadMode is "raw". */
         cacheRawData?: boolean;
-        /** The user implementation of the insert(values) method. */
+        /** Specifies a custom implementation of the insert(values) method. */
         insert?: ((values: any) => Promise<any> | JQueryPromise<any>);
-        /** The user implementation of the load(options) method. */
+        /** Specifies a custom implementation of the load(options) method. */
         load?: ((options: LoadOptions) => Promise<any> | JQueryPromise<any>);
         /** Specifies how data returned by the load function is treated. */
         loadMode?: string;
-        /** The user implementation of the remove(key) method. */
+        /** Specifies a custom implementation of the remove(key) method. */
         remove?: ((key: any | string | number) => Promise<void> | JQueryPromise<void>);
-        /** The user implementation of the totalCount(options) method. */
+        /** Specifies a custom implementation of the totalCount(options) method. */
         totalCount?: ((loadOptions: { filter?: any, group?: any }) => Promise<number> | JQueryPromise<number>);
-        /** The user implementation of the update(key, values) method. */
+        /** Specifies a custom implementation of the update(key, values) method. */
         update?: ((key: any | string | number, values: any) => Promise<any> | JQueryPromise<any>);
         /** Specifies whether or not the store combines the search expression with the filter expression. */
         useDefaultSearch?: boolean;
@@ -956,7 +958,7 @@ declare module DevExpress.data {
         filter?: string | Array<any>;
         /** Specifies data grouping options. */
         group?: string | Array<any>;
-        /** The item mapping function. */
+        /** Specifies an item mapping function. */
         map?: ((dataItem: any) => any);
         /** A handler for the changed event. */
         onChanged?: Function;
@@ -968,7 +970,7 @@ declare module DevExpress.data {
         pageSize?: number;
         /** Specifies whether a DataSource loads data by pages, or all items at once. */
         paginate?: boolean;
-        /** The data post processing function. */
+        /** Specifies a post processing function. */
         postProcess?: ((data: Array<any>) => Array<any>);
         /** Specifies whether or not the DataSource instance requests the total count of items available in the storage. */
         requireTotalCount?: boolean;
@@ -991,79 +993,79 @@ declare module DevExpress.data {
         constructor(data: Array<any>);
         constructor(store: Store);
         constructor(options: CustomStoreOptions | DataSourceOptions);
-        /** Cancels the load operation associated with the specified identifier. */
+        /** Cancels the load operation with a specific identifier. */
         cancel(): boolean;
         /** Disposes all resources associated with this DataSource. */
         dispose(): void;
-        /** Returns the current filter option value. */
+        /** Gets the filter option's value. */
         filter(): any;
-        /** Sets the filter option value. */
+        /** Sets the filter option's value. */
         filter(filterExpr: any): void;
-        /** Returns the current group option value. */
+        /** Gets the group option's value. */
         group(): any;
-        /** Sets the group option value. */
+        /** Sets the group option's value. */
         group(groupExpr: any): void;
-        /** Indicates whether or not the current page contains fewer items than the number of items specified by the pageSize configuration option. */
+        /** Checks whether the count of items on the current page is less than the pageSize. Takes effect only with enabled paging. */
         isLastPage(): boolean;
-        /** Indicates whether or not at least one load() method execution has successfully finished. */
+        /** Checks whether data is loaded in the DataSource. */
         isLoaded(): boolean;
-        /** Indicates whether or not the DataSource is currently being loaded. */
+        /** Checks whether the DataSource is being loaded. */
         isLoading(): boolean;
-        /** Returns the array of items currently operated by the DataSource. */
+        /** Gets data items the DataSource currently operate. */
         items(): Array<any>;
-        /** Returns the key expression specified by the key configuration option of the underlying Store. */
+        /** Gets the value of the underlying Store's key option. */
         key(): any & string & number;
         /** Starts loading data. */
         load(): Promise<any> & JQueryPromise<any>;
         /** Returns an object that would be passed to the load() method of the underlying Store according to the current data shaping option values of the current DataSource instance. */
         loadOptions(): any;
-        /** Detaches all event handlers from the specified event. */
+        /** Detaches all event handlers from a single event. */
         off(eventName: string): any;
-        /** Detaches a particular event handler from the specified event. */
+        /** Detaches a particular event handler from a single event. */
         off(eventName: string, eventHandler: Function): any;
-        /** Subscribes to a specified event. */
+        /** Subscribes to an event. */
         on(eventName: string, eventHandler: Function): any;
-        /** Subscribes to the specified events. */
+        /** Subscribes to events. */
         on(events: any): any;
-        /** Specifies the index of the currently loaded page. */
+        /** Gets the current page index. */
         pageIndex(): number;
-        /** Specifies the index of the page to be loaded during the next load() method execution. */
+        /** Sets the index of the page that should be loaded on the next call of the load() method. */
         pageIndex(newIndex: number): void;
-        /** Returns the current pageSize option value. */
+        /** Gets the page size. */
         pageSize(): number;
-        /** Sets the pageSize option value. */
+        /** Sets the page size. */
         pageSize(value: number): void;
-        /** Returns the current paginate option value. */
+        /** Gets the paginate option's value. */
         paginate(): boolean;
-        /** Sets the paginate option value. */
+        /** Sets the paginate option's value. */
         paginate(value: boolean): void;
         /** Clears currently loaded DataSource items and calls the load() method. */
         reload(): Promise<any> & JQueryPromise<any>;
-        /** Returns the current requireTotalCount option value. */
+        /** Gets the requireTotalCount option's value. */
         requireTotalCount(): boolean;
-        /** Sets the requireTotalCount option value. */
+        /** Sets the requireTotalCount option's value. */
         requireTotalCount(value: boolean): void;
-        /** Returns the searchExpr option value. */
+        /** Gets the searchExpr option's value. */
         searchExpr(): string & Function & Array<string | Function>;
-        /** Sets the searchExpr option value. */
+        /** Sets the searchExpr option's value. */
         searchExpr(expr: string | Function | Array<string | Function>): void;
-        /** Returns the currently specified search operation. */
+        /** Gets the searchOperation option's value. */
         searchOperation(): string;
-        /** Sets the current search operation. */
+        /** Sets the searchOperation option's value. */
         searchOperation(op: string): void;
-        /** Returns the searchValue option value. */
+        /** Gets the searchValue option's value. */
         searchValue(): any;
-        /** Sets the searchValue option value. */
+        /** Sets the searchValue option's value. */
         searchValue(value: any): void;
-        /** Returns the current select option value. */
+        /** Gets the select option's value. */
         select(): any;
-        /** Sets the select option value. */
+        /** Sets the select option's value. */
         select(expr: any): void;
-        /** Returns the current sort option value. */
+        /** Gets the sort option's value. */
         sort(): any;
-        /** Sets the sort option value. */
+        /** Sets the sort option's value. */
         sort(sortExpr: any): void;
-        /** Returns the underlying Store instance. */
+        /** Gets the underlying Store instance. */
         store(): any;
         /** Returns the number of data items available in an underlying Store after the last load() operation without paging. */
         totalCount(): number;
@@ -1084,49 +1086,49 @@ declare module DevExpress.data {
     }
     /** An universal chainable data query interface object. */
     export class Query {
-        /** Calculates a custom summary for the items in the current Query. */
+        /** Calculates a custom summary for all data items. */
         aggregate(seed: any, step: Function, finalize: Function): Promise<any> & JQueryPromise<any>;
-        /** Calculates a custom summary for the items in the current Query. */
+        /** Calculates a custom summary for all data items. */
         aggregate(step: Function): Promise<any> & JQueryPromise<any>;
-        /** Calculates the average item value for the current Query, if each Query item has a numeric type. */
+        /** Calculates the average item value. Takes effect only if data is a numeric array. */
         avg(): Promise<number> & JQueryPromise<number>;
-        /** Calculates the average item value for the current Query. */
+        /** Calculates the average getter value. */
         avg(getter: any): Promise<number> & JQueryPromise<number>;
-        /** Returns the total count of items in the current Query. */
+        /** Gets the total item count. */
         count(): Promise<number> & JQueryPromise<number>;
         /** Executes the Query. */
         enumerate(): Promise<any> & JQueryPromise<any>;
-        /** Filters the current Query data. */
+        /** Filters data items using a filter expression. */
         filter(criteria: Array<any>): Query;
-        /** Filters the current Query data. */
+        /** Filters data items using a custom function. */
         filter(predicate: Function): Query;
-        /** Groups the current Query data. */
+        /** Groups data items. */
         groupBy(getter: any): Query;
-        /** Finds the item with the maximum value in the Query. */
+        /** Finds a data item with the maximum value. Takes effect only if data is a numeric array. */
         max(): Promise<number | Date> & JQueryPromise<number | Date>;
-        /** Finds the item with the maximum getter value. */
+        /** Finds a data item with the maximum getter value. */
         max(getter: any): Promise<number | Date> & JQueryPromise<number | Date>;
-        /** Finds the item with the minimum value in the Query. */
+        /** Finds a data item with the minimum value. Takes effect only if data is a numeric array. */
         min(): Promise<number | Date> & JQueryPromise<number | Date>;
-        /** Finds the item with the minimum getter value. */
+        /** Finds a data item with the minimum getter value. */
         min(getter: any): Promise<number | Date> & JQueryPromise<number | Date>;
-        /** Applies the specified transformation to each item. */
+        /** Selects data using a getter. */
         select(getter: any): Query;
-        /** Limits the data item count. */
+        /** Limits the number of data items. */
         slice(skip: number, take?: number): Query;
-        /** Sorts current Query data. */
+        /** Sorts data items. */
         sortBy(getter: any): Query;
-        /** Sorts current Query data. */
+        /** Sorts data items in the specified sort order. */
         sortBy(getter: any, desc: boolean): Query;
-        /** Calculates the sum of item values in the current Query. */
+        /** Calculates the sum of item values. */
         sum(): Promise<number> & JQueryPromise<number>;
-        /** Calculates the sum of item getter values in the current Query. */
+        /** Calculates the sum of getter values. */
         sum(getter: any): Promise<number> & JQueryPromise<number>;
-        /** Adds one more sorting option to the current Query. */
+        /** Adds one more sorting expression to the Query. */
         thenBy(getter: any): Query;
-        /** Adds one more sorting option to the current Query. */
+        /** Adds one more sorting expression to the Query. The sort order depends on the second argument. */
         thenBy(getter: any, desc: boolean): Query;
-        /** Returns the array of current Query items. */
+        /** Gets data items. */
         toArray(): Array<any>;
     }
     export interface ODataContextOptions {
@@ -1150,11 +1152,11 @@ declare module DevExpress.data {
     /** Provides access to the entire OData service. */
     export class ODataContext {
         constructor(options?: ODataContextOptions)
-        /** Initiates the specified WebGet service operation that returns a value. For the information on service operations, refer to the OData documentation. */
+        /** Invokes a WebGet service operation that returns a value. */
         get(operationName: string, params: any): Promise<any> & JQueryPromise<any>;
-        /** Initiates the specified WebGet service operation that returns nothing. For the information on service operations, refer to the OData documentation. */
+        /** Invokes a WebGet service operation that returns nothing. */
         invoke(operationName: string, params: any, httpMethod: any): Promise<void> & JQueryPromise<void>;
-        /** Return a special proxy object to describe the entity link. */
+        /** Gets a special proxy object to describe the entity link. */
         objectLink(entityAlias: string, key: any | string | number): any;
     }
     export interface ODataStoreOptions extends StoreOptions {
@@ -1180,11 +1182,11 @@ declare module DevExpress.data {
     /** A Store providing access to a separate OData web service entity. */
     export class ODataStore extends Store {
         constructor(options?: ODataStoreOptions)
-        /** Returns the data item specified by the key. */
+        /** Gets a data item with a specific key. */
         byKey(key: any | string | number): Promise<any> & JQueryPromise<any>;
-        /** Returns the data item specified by the key. */
+        /** Gets a data item with a specific key. */
         byKey(key: any | string | number, extraOptions: { expand?: string | Array<string> }): Promise<any> & JQueryPromise<any>;
-        /** Creates the Query object for the OData endpoint. */
+        /** Creates a Query object for the OData endpoint. */
         createQuery(loadOptions: any): any;
         /** Starts loading data. */
         load(): Promise<any> & JQueryPromise<any>;
@@ -1194,7 +1196,7 @@ declare module DevExpress.data {
     /** An object used to work with primitive data types not supported by JavaScript when accessing an OData web service. */
     export class EdmLiteral {
         constructor(value: string);
-        /** Returns a string representation of the value associated with this EdmLiteral object. */
+        /** Gets the EdmLiteral's value converted to a string. */
         valueOf(): string;
     }
     export interface PivotGridDataSourceOptions {
@@ -1222,7 +1224,7 @@ declare module DevExpress.data {
         constructor(options?: PivotGridDataSourceOptions)
         /** Collapses all header items of a field. */
         collapseAll(id: number | string): void;
-        /** Collapses a specified header item. */
+        /** Collapses a header item. */
         collapseHeaderItem(area: string, path: Array<string | number | Date>): void;
         /** Provides access to a list of records (facts) that were used to calculate a specific summary. */
         createDrillDownDataSource(options: { columnPath?: Array<string | number | Date>, rowPath?: Array<string | number | Date>, dataIndex?: number, maxRowCount?: number, customColumns?: Array<string> }): DataSource;
@@ -1230,39 +1232,39 @@ declare module DevExpress.data {
         dispose(): void;
         /** Expands all header items of a field. */
         expandAll(id: number | string): void;
-        /** Expands a specified header item. */
+        /** Expands a header item. */
         expandHeaderItem(area: string, path: Array<any>): void;
-        /** Gets current options of a specified field. */
+        /** Gets all options of a field with a specific identifier. */
         field(id: number | string): any;
-        /** Sets one or more options of a specified field. */
+        /** Updates the values of several field options. */
         field(id: number | string, options: any): void;
-        /** Gets all fields from the data source. */
+        /** Gets all the fields. */
         fields(): Array<PivotGridDataSourceField>;
-        /** Sets the fields option. */
+        /** Updates all the fields. */
         fields(fields: Array<PivotGridDataSourceField>): void;
-        /** Gets the current filter expression. Cannot be used for the XmlaStore store type. */
+        /** Gets the filter option's value. Does not take effect for the XmlaStore. */
         filter(): any;
-        /** Applies a new filter expression. Cannot be used for the XmlaStore store type. */
+        /** Sets the filter option's value. Does not take effect for the XmlaStore. */
         filter(filterExpr: any): void;
-        /** Gets all fields within a specified area. */
+        /** Gets all the fields within an area. */
         getAreaFields(area: string, collectGroups: boolean): Array<PivotGridDataSourceField>;
-        /** Gets data displayed in a PivotGrid. */
+        /** Gets the PivotGrid's data. */
         getData(): any;
-        /** Indicates whether or not the PivotGridDataSource is currently being loaded. */
+        /** Checks whether the PivotGridDataSource is being loaded. */
         isLoading(): boolean;
         /** Starts updating the data source. Reloads data from the XMLA store only. */
         load(): Promise<any> & JQueryPromise<any>;
-        /** Detaches all event handlers from the specified event. */
+        /** Detaches all event handlers from a single event. */
         off(eventName: string): any;
-        /** Detaches a particular event handler from the specified event. */
+        /** Detaches a particular event handler from a single event. */
         off(eventName: string, eventHandler: Function): any;
-        /** Subscribes to a specified event. */
+        /** Subscribes to an event. */
         on(eventName: string, eventHandler: Function): any;
-        /** Subscribes to the specified events. */
+        /** Subscribes to events. */
         on(events: any): any;
         /** Starts reloading data from any store and updating the data source. */
         reload(): Promise<any> & JQueryPromise<any>;
-        /** Gets the current PivotGridDataSource state (fields configuration, sorting, filters, expanded headers, etc.) */
+        /** Gets the current PivotGridDataSource state. */
         state(): any;
         /** Sets the PivotGridDataSource state. */
         state(state: any): void;
@@ -1285,9 +1287,9 @@ declare module DevExpress.data {
     export function errorHandler(e: Error): void;
     /** Creates a Query instance. */
     export function query(array: Array<any>): Query;
-    /** Creates a Query instance for accessing the remote service specified by a URL. */
+    /** Creates a Query instance for accessing a remote service by its URL. */
     export function query(url: string, queryOptions: any): Query;
-    /** Encodes the specified string or array of bytes to base64 encoding. */
+    /** Encodes a string or an array of bytes to base64 encoding. */
     export function base64encode(input: string | Array<number>): string;
     /** An array of pivot grid fields. */
     export interface PivotGridDataSourceField {
@@ -1374,13 +1376,13 @@ declare module DevExpress.data {
 declare module DevExpress.core {
     /** A mixin that provides a capability to fire and subscribe to events. */
     export class EventsMixin {
-        /** Detaches all event handlers from the specified event. */
+        /** Detaches all event handlers from a single event. */
         off(eventName: string): any;
-        /** Detaches a particular event handler from the specified event. */
+        /** Detaches a particular event handler from a single event. */
         off(eventName: string, eventHandler: Function): any;
-        /** Subscribes to a specified event. */
+        /** Subscribes to an event. */
         on(eventName: string, eventHandler: Function): any;
-        /** Subscribes to the specified events. */
+        /** Subscribes to events. */
         on(events: any): any;
     }
     export type dxElement = Element & JQuery; 
@@ -1450,13 +1452,13 @@ declare module DevExpress.framework {
         getView(key: string): any;
         /** Checks whether or not a viewInfo object is contained in the view cache under the specified key. */
         hasView(key: string): boolean;
-        /** Detaches all event handlers from the specified event. */
+        /** Detaches all event handlers from a single event. */
         off(eventName: string): any;
-        /** Detaches a particular event handler from the specified event. */
+        /** Detaches a particular event handler from a single event. */
         off(eventName: string, eventHandler: Function): any;
-        /** Subscribes to a specified event. */
+        /** Subscribes to an event. */
         on(eventName: string, eventHandler: Function): any;
-        /** Subscribes to the specified events. */
+        /** Subscribes to events. */
         on(events: any): any;
         /** Removes a viewInfo object from the cache by the specified key. */
         removeView(key: string): any;
@@ -1604,13 +1606,13 @@ declare module DevExpress.framework.html {
         navigate(uri?: string | any): void;
         /** Navigates to the specified URI. */
         navigate(uri: string | any, options: { root?: boolean, target?: string, direction?: string, modal?: boolean }): void;
-        /** Detaches all event handlers from the specified event. */
+        /** Detaches all event handlers from a single event. */
         off(eventName: string): any;
-        /** Detaches a particular event handler from the specified event. */
+        /** Detaches a particular event handler from a single event. */
         off(eventName: string, eventHandler: Function): any;
-        /** Subscribes to a specified event. */
+        /** Subscribes to an event. */
         on(eventName: string, eventHandler: Function): any;
-        /** Subscribes to the specified events. */
+        /** Subscribes to events. */
         on(events: any): any;
         /** Renders navigation commands to the navigation command containers that are located in the layouts used in the application. */
         renderNavigation(): void;
@@ -1653,9 +1655,9 @@ declare module DevExpress.ui {
     export class dxAccordion extends CollectionWidget {
         constructor(element: Element, options?: dxAccordionOptions)
         constructor(element: JQuery, options?: dxAccordionOptions)
-        /** Collapses the specified item. */
+        /** Collapses an item with a specific index. */
         collapseItem(index: number): Promise<void> & JQueryPromise<void>;
-        /** Expands the specified item. */
+        /** Expands an item with a specific index. */
         expandItem(index: number): Promise<void> & JQueryPromise<void>;
         /** Updates the dimensions of the widget contents. */
         updateDimensions(): Promise<void> & JQueryPromise<void>;
@@ -1677,7 +1679,7 @@ declare module DevExpress.ui {
         showCancelButton?: boolean;
         /** A Boolean value specifying whether or not the title of the action sheet is visible. */
         showTitle?: boolean;
-        /** Specifies the element the action sheet popover points at. */
+        /** Specifies the element the action sheet popover points at. Applies only if usePopover is true. */
         target?: string | Element | JQuery;
         /** The title of the action sheet. */
         title?: string;
@@ -1694,7 +1696,7 @@ declare module DevExpress.ui {
         hide(): Promise<void> & JQueryPromise<void>;
         /** Shows the widget. */
         show(): Promise<void> & JQueryPromise<void>;
-        /** Shows or hides the widget depending on the Boolean value passed as the parameter. */
+        /** Shows or hides the widget depending on the argument. */
         toggle(showing: boolean): Promise<void> & JQueryPromise<void>;
     }
     export interface dxActionSheetItemTemplate {
@@ -1740,7 +1742,7 @@ declare module DevExpress.ui {
         box?: dxBoxOptions;
         /** Specifies the ratio value used to count the item element size along the main direction. */
         ratio?: number;
-        /** A factor that defines how much an item shrinks when all the items do not fit into the container. */
+        /** A factor that defines how much an item shrinks relative to the rest of the items in the container. */
         shrink?: number;
     }
     export interface dxButtonOptions extends WidgetOptions {
@@ -1856,7 +1858,7 @@ declare module DevExpress.ui {
         constructor(element: JQuery, options?: dxColorBoxOptions)
     }
     export interface dxContextMenuOptions extends dxMenuBaseOptions {
-        /** A Boolean value specifying whether or not the widget is closed if a user clicks outside of the context menu. */
+        /** Specifies whether to close the ContextMenu if a user clicks outside it. */
         closeOnOutsideClick?: boolean | ((event: event) => boolean);
         /** A handler for the hidden event. */
         onHidden?: ((e: { component?: DOMComponent, element?: DevExpress.core.dxElement, model?: any }) => any);
@@ -2088,7 +2090,7 @@ declare module DevExpress.ui {
         trueText?: string;
         /** Specifies validation rules to be checked on updating cell values. */
         validationRules?: Array<RequiredRule | NumericRule | RangeRule | StringLengthRule | CustomRule | CompareRule | PatternRule | EmailRule>;
-        /** Specifies whether the column is visible or not. */
+        /** Specifies whether the column is visible, that is, occupies space in the table. */
         visible?: boolean;
         /** Specifies the position of the column regarding other columns in the resulting widget. */
         visibleIndex?: number;
@@ -2160,19 +2162,19 @@ declare module DevExpress.ui {
     export class GridBase extends Widget {
         constructor(element: Element, options?: GridBaseOptions)
         constructor(element: JQuery, options?: GridBaseOptions)
-        /** Displays the load panel. */
+        /** Shows the load panel. */
         beginCustomLoading(messageText: string): void;
-        /** Allows you to obtain a data object by its key. */
+        /** Gets a data object with a specific key. */
         byKey(key: any | string | number): Promise<any> & JQueryPromise<any>;
         /** Discards changes that a user made to data. */
         cancelEditData(): void;
-        /** Gets the value of a cell found by the row index and data field. */
+        /** Gets the value of a cell with a specific row index and a data field. */
         cellValue(rowIndex: number, dataField: string): any;
-        /** Assigns a new value to a cell found by the row index and data field. */
+        /** Sets a new value to a cell with a specific row index and a data field. */
         cellValue(rowIndex: number, dataField: string, value: any): void;
-        /** Gets the value of a cell found by the row index and column index. */
+        /** Gets the value of a cell with specific row and column indexes. */
         cellValue(rowIndex: number, visibleColumnIndex: number): any;
-        /** Assigns a new value to a cell found by the row index and column index. */
+        /** Sets a new value to a cell with specific row and column indexes. */
         cellValue(rowIndex: number, visibleColumnIndex: number, value: any): void;
         /** Clears all filters applied to widget rows. */
         clearFilter(): void;
@@ -2186,35 +2188,35 @@ declare module DevExpress.ui {
         closeEditCell(): void;
         /** Collapses the currently expanded adaptive detail row (if there is one). */
         collapseAdaptiveDetailRow(): void;
-        /** Returns the number of data columns in the widget including visible and hidden columns, but without command columns. */
+        /** Gets the data column count. Includes visible and hidden columns, excludes command columns. */
         columnCount(): number;
-        /** Gets the options of a column using its identifier. */
+        /** Gets all options of a column with a specific identifier. */
         columnOption(id: number | string): any;
-        /** Gets the value of a specific option set for a specific column. */
+        /** Gets the value of a single column option. */
         columnOption(id: number | string, optionName: string): any;
-        /** Assigns a new value to a single option of a specific column. */
+        /** Updates the value of a single column option. */
         columnOption(id: number | string, optionName: string, optionValue: any): void;
-        /** Assigns new values to several options of a specific column at once. */
+        /** Updates the values of several column options. */
         columnOption(id: number | string, options: any): void;
-        /** Removes a specific column from the widget. */
+        /** Removes a column. */
         deleteColumn(id: number | string): void;
-        /** Removes a specific row from the widget. */
+        /** Removes a row with a specific index. */
         deleteRow(rowIndex: number): void;
         /** Clears the selection of all rows on all pages or the currently rendered page only. */
         deselectAll(): Promise<void> & JQueryPromise<void>;
-        /** Clears selection of specific rows. */
+        /** Cancels the selection of rows with specific keys. */
         deselectRows(keys: Array<any>): Promise<any> & JQueryPromise<any>;
-        /** Switches a specific cell into the editing state. The cell is found by the row index and data field. Takes effect only if the editing mode is 'batch' or 'cell'. */
+        /** Switches a cell with a specific row index and a data field to the editing state. Takes effect only if the editing mode is 'batch' or 'cell'. */
         editCell(rowIndex: number, dataField: string): void;
-        /** Switches a specific cell into the editing state. The cell is found by the row index and column index. Takes effect only if the editing mode is 'batch' or 'cell'. */
+        /** Switches a cell with specific row and column indexes to the editing state. Takes effect only if the editing mode is 'batch' or 'cell'. */
         editCell(rowIndex: number, visibleColumnIndex: number): void;
-        /** Switches a specific row into the editing state. Takes effect only if the editing mode is 'row', 'popup' or 'form'. */
+        /** Switches a row with a specific index to the editing state. Takes effect only if the editing mode is 'row', 'popup' or 'form'. */
         editRow(rowIndex: number): void;
         /** Hides the load panel. */
         endCustomLoading(): void;
-        /** Expands an adaptive detail row found by the key of its parent data row. */
+        /** Expands an adaptive detail row. */
         expandAdaptiveDetailRow(key: any): void;
-        /** Returns a filter expression applied to the widget's data source using the filter(filterExpr) method. */
+        /** Gets a filter expression applied to the widget's data source using the filter(filterExpr) method. */
         filter(): any;
         /** Applies a filter to the widget's data source. */
         filter(filterExpr: any): void;
@@ -2222,31 +2224,31 @@ declare module DevExpress.ui {
         focus(): void;
         /** Sets focus on a specific cell. */
         focus(element: Element | JQuery): void;
-        /** Gets a cell by the row index and data field. */
+        /** Gets a cell with a specific row index and a data field. */
         getCellElement(rowIndex: number, dataField: string): DevExpress.core.dxElement & undefined;
-        /** Gets a cell by the row index and column index. */
+        /** Gets a cell with specific row and column indexes. */
         getCellElement(rowIndex: number, visibleColumnIndex: number): DevExpress.core.dxElement & undefined;
-        /** Returns the total filter that combines all the filters applied. */
+        /** Gets the total filter that combines all the filters applied. */
         getCombinedFilter(): any;
-        /** Returns the total filter that combines all the filters applied. */
+        /** Gets the total filter that combines all the filters applied. */
         getCombinedFilter(returnDataField: boolean): any;
         /** Gets the DataSource instance. */
         getDataSource(): DevExpress.data.DataSource;
-        /** Gets the key of a row by its index. */
+        /** Gets the key of a row with a specific index. */
         getKeyByRowIndex(rowIndex: number): any;
-        /** Gets the element of a row by its index. */
+        /** Gets the container of a row with a specific index. */
         getRowElement(rowIndex: number): Array<Element> & JQuery & undefined;
-        /** Gets the index of a row by its key. */
+        /** Gets the index of a row with a specific key. */
         getRowIndexByKey(key: any | string | number): number;
-        /** Gets the instance of the scrollable part of the widget. */
+        /** Gets the instance of the widget's scrollable part. */
         getScrollable(): dxScrollable;
         /** Checks whether the widget has unsaved changes. */
         hasEditData(): boolean;
         /** Hides the column chooser. */
         hideColumnChooser(): void;
-        /** Checks whether a specific adaptive detail row is expanded or collapsed. */
+        /** Checks whether an adaptive detail row is expanded or collapsed. */
         isAdaptiveDetailRowExpanded(key: any): void;
-        /** Checks whether the row with a specific key is selected. */
+        /** Checks whether a row with a specific key is selected. */
         isRowSelected(key: any): boolean;
         /** Gets a data object's key. */
         keyOf(obj: any): any;
@@ -2260,9 +2262,9 @@ declare module DevExpress.ui {
         searchByText(text: string): void;
         /** Selects all rows. */
         selectAll(): Promise<void> & JQueryPromise<void>;
-        /** Selects rows by keys. */
+        /** Selects rows with specific keys. */
         selectRows(keys: Array<any>, preserve: boolean): Promise<any> & JQueryPromise<any>;
-        /** Selects rows by indexes. */
+        /** Selects rows with specific indexes. */
         selectRowsByIndexes(indexes: Array<number>): Promise<any> & JQueryPromise<any>;
         /** Shows the column chooser. */
         showColumnChooser(): void;
@@ -2387,19 +2389,19 @@ declare module DevExpress.ui {
     export class dxDataGrid extends GridBase {
         constructor(element: Element, options?: dxDataGridOptions)
         constructor(element: JQuery, options?: dxDataGridOptions)
-        /** Adds a new column to the widget. */
+        /** Adds a new column. */
         addColumn(columnOptions: any | string): void;
         /** Adds an empty data row. */
         addRow(): void;
         /** Ungroups grid records. */
         clearGrouping(): void;
-        /** Collapses groups or master rows in a grid. */
+        /** Collapses master rows or groups of a specific level. */
         collapseAll(groupIndex?: number): void;
-        /** Allows you to collapse a specific group or master row by its key. */
+        /** Collapses a group or a master row with a specific key. */
         collapseRow(key: any): Promise<void> & JQueryPromise<void>;
-        /** Expands groups or master rows in a grid. */
+        /** Expands master rows or groups of a specific level. */
         expandAll(groupIndex?: number): void;
-        /** Allows you to expand a specific group or master row by its key. */
+        /** Expands a group or a master row with a specific key. */
         expandRow(key: any): Promise<void> & JQueryPromise<void>;
         /** Exports grid data to Excel. */
         exportToExcel(selectionOnly: boolean): void;
@@ -2419,27 +2421,27 @@ declare module DevExpress.ui {
         insertRow(): void;
         /** Checks whether a specific group or master row is expanded or collapsed. */
         isRowExpanded(key: any): boolean;
-        /** Checks whether the row that represents a specific data object is selected. Takes effect only if selection.deferred is true. */
+        /** Checks whether a row found using its data object is selected. Takes effect only if selection.deferred is true. */
         isRowSelected(data: any): boolean;
-        /** Checks whether the row with a specific key is selected. */
+        /** Checks whether a row with a specific key is selected. */
         isRowSelected(key: any): boolean;
-        /** Returns how many pages the grid contains. */
+        /** Gets the total page count. */
         pageCount(): number;
-        /** Gets the index of the current page. */
+        /** The current page index. */
         pageIndex(): number;
         /** Switches a grid to a specified page. */
-        pageIndex(newIndex: number): void;
+        pageIndex(newIndex: number): Promise<void> & JQueryPromise<void>;
         /** Gets the current page size. */
         pageSize(): number;
         /** Sets the page size. */
         pageSize(value: number): void;
         /** @deprecated Use the deleteRow(rowIndex) method instead. */
         removeRow(rowIndex: number): void;
-        /** Returns the current state of the grid. */
+        /** Gets the current grid state. */
         state(): any;
         /** Sets the grid state. */
         state(state: any): void;
-        /** Returns the number of records currently held by a grid. */
+        /** Gets the total row count. */
         totalCount(): number;
     }
     export interface dxDateBoxOptions extends dxDropDownEditorOptions {
@@ -2556,9 +2558,9 @@ declare module DevExpress.ui {
         onItemClick?: ((e: { component?: DOMComponent, element?: DevExpress.core.dxElement, model?: any, itemData?: any, itemElement?: DevExpress.core.dxElement, itemIndex?: number }) => any) | string;
         /** Specifies whether or not the drop-down menu is displayed. */
         opened?: boolean;
-        /** The height of the menu popup in pixels. */
+        /** Specifies the popup element's height in pixels. */
         popupHeight?: number | string | Function;
-        /** The width of the menu popup in pixels. */
+        /** Specifies the popup element's width in pixels. */
         popupWidth?: number | string | Function;
         /** Specifies whether or not to show the drop down menu within a Popover widget. */
         usePopover?: boolean;
@@ -2704,19 +2706,19 @@ declare module DevExpress.ui {
     export class dxForm extends Widget {
         constructor(element: Element, options?: dxFormOptions)
         constructor(element: JQuery, options?: dxFormOptions)
-        /** Returns an editor instance associated with the specified formData field or name of the form item. */
+        /** Gets an editor instance. Takes effect only if the form item is visible. */
         getEditor(field: string): any;
-        /** Gets the value of the form item option. */
+        /** Gets a form item's configuration. */
         itemOption(field: string): any;
-        /** Updates the value of a form item option. */
+        /** Updates the value of a single item option. */
         itemOption(field: string, option: string, value: any): void;
-        /** Updates the values of form item options. */
+        /** Updates the values of several item options. */
         itemOption(field: string, options: any): void;
         /** Resets the editor's value to undefined. */
         resetValues(): void;
-        /** Updates the specified fields of the formData object and the corresponding editors on the form. */
+        /** Updates formData fields and the corresponding editors. */
         updateData(data: any): void;
-        /** Updates the specified field of the formData object and the corresponding editor on the form. */
+        /** Updates a formData field and the corresponding editor. */
         updateData(dataField: string, value: any): void;
         /** Updates the dimensions of the widget contents. */
         updateDimensions(): Promise<void> & JQueryPromise<void>;
@@ -2755,11 +2757,11 @@ declare module DevExpress.ui {
     export class dxGallery extends CollectionWidget {
         constructor(element: Element, options?: dxGalleryOptions)
         constructor(element: JQuery, options?: dxGalleryOptions)
-        /** Shows the specified gallery item. */
+        /** Shows a specific image. */
         goToItem(itemIndex: number, animation: boolean): Promise<void> & JQueryPromise<void>;
-        /** Shows the next gallery item. */
+        /** Shows the next image. */
         nextItem(animation: boolean): Promise<void> & JQueryPromise<void>;
-        /** Shows the previous gallery item. */
+        /** Shows the previous image. */
         prevItem(animation: boolean): Promise<void> & JQueryPromise<void>;
     }
     export interface dxGalleryItemTemplate {
@@ -2858,49 +2860,49 @@ declare module DevExpress.ui {
     export class dxList extends CollectionWidget {
         constructor(element: Element, options?: dxListOptions)
         constructor(element: JQuery, options?: dxListOptions)
-        /** Returns the height of the widget in pixels. */
+        /** Gets the widget's height in pixels. */
         clientHeight(): number;
-        /** Collapses the specified group. */
+        /** Collapses a group with a specific index. */
         collapseGroup(groupIndex: number): Promise<void> & JQueryPromise<void>;
-        /** Removes the specified item from the list. */
+        /** Removes an item found using its DOM node. */
         deleteItem(itemElement: Element): Promise<void> & JQueryPromise<void>;
-        /** Removes the specified item from the list. */
+        /** Removes an item with a specific index. */
         deleteItem(itemIndex: number | any): Promise<void> & JQueryPromise<void>;
-        /** Expands the specified group. */
+        /** Expands a group with a specific index. */
         expandGroup(groupIndex: number): Promise<void> & JQueryPromise<void>;
-        /** Returns a Boolean value that indicates whether or not the specified item is selected. */
+        /** Checks whether an item found using its DOM node is selected. */
         isItemSelected(itemElement: Element): boolean;
-        /** Returns a Boolean value that indicates whether or not the specified item is selected. */
+        /** Checks whether an item with a specific index is selected. */
         isItemSelected(itemIndex: number | any): boolean;
         /** Reloads list data. */
         reload(): void;
-        /** Moves the specified item to the specified position in the list. */
+        /** Reorders items found using their DOM nodes. */
         reorderItem(itemElement: Element, toItemElement: Element): Promise<void> & JQueryPromise<void>;
-        /** Moves the specified item to the specified position in the list. */
+        /** Reorders items with specific indexes. */
         reorderItem(itemIndex: number | any, toItemIndex: number | any): Promise<void> & JQueryPromise<void>;
-        /** Scrolls the list content by the specified number of pixels. */
+        /** Scrolls the content by a specified distance. */
         scrollBy(distance: number): void;
-        /** Returns the height of the list content in pixels. */
+        /** Gets the content's height in pixels. */
         scrollHeight(): number;
-        /** Scrolls list content to the specified position. */
+        /** Scrolls the content to a specific position. */
         scrollTo(location: number): void;
-        /** Scrolls the list to the specified item. */
+        /** Scrolls the content to an item found using its DOM node. */
         scrollToItem(itemElement: Element): void;
-        /** Scrolls the list to the specified item. */
+        /** Scrolls the content to an item with a specific index. */
         scrollToItem(itemIndex: number | any): void;
-        /** Returns how far the list content is scrolled from the top. */
+        /** Gets the top scroll offset. */
         scrollTop(): number;
         /** Selects all items. */
         selectAll(): void;
-        /** Selects the specified item. */
+        /** Selects an item found using its DOM node. */
         selectItem(itemElement: Element): void;
-        /** Selects the specified item from the list. */
+        /** Selects an item with a specific index. */
         selectItem(itemIndex: number | any): void;
-        /** Clears selection of all items. */
+        /** Cancels the selection of all items. */
         unselectAll(): void;
-        /** Clears selection of the specified item. */
+        /** Cancels the selection of an item found using its DOM node. */
         unselectItem(itemElement: Element): void;
-        /** Clears selection of the specified item from the list. */
+        /** Cancels the selection of an item with a specific index. */
         unselectItem(itemIndex: number | any): void;
         /** Updates the widget scrollbar according to widget content size. */
         updateDimensions(): Promise<void> & JQueryPromise<void>;
@@ -2921,7 +2923,7 @@ declare module DevExpress.ui {
         delay?: number;
         /** Specifies whether or not the widget can be focused. */
         focusStateEnabled?: boolean;
-        /** The height of the widget. */
+        /** Specified the widget's height. */
         height?: number;
         /** A URL pointing to an image to be used as a load indicator. */
         indicatorSrc?: string;
@@ -2961,7 +2963,7 @@ declare module DevExpress.ui {
         cleanSearchOnOpening?: boolean;
         /** The text displayed on the Clear button. */
         clearButtonText?: string;
-        /** A Boolean value specifying whether or not a widget is closed if a user clicks outside of the overlaying window. */
+        /** Specifies whether to close the drop-down menu if a user clicks outside it. */
         closeOnOutsideClick?: boolean | (() => boolean);
         /** @deprecated This option is deprecated, because the functionality controlled by it was not supposed to belong to the Lookup widget. Instead, we suggest that you use the SelectBox widget with the acceptCustomValue option set to true. */
         fieldEditEnabled?: any;
@@ -2995,9 +2997,9 @@ declare module DevExpress.ui {
         pagingEnabled?: any;
         /** The text displayed by the widget when nothing is selected. */
         placeholder?: string;
-        /** The height of the widget popup element. */
+        /** Specifies the popup element's height. Applies only if fullScreen is false. */
         popupHeight?: number | string | (() => number | string);
-        /** The width of the widget popup element. */
+        /** Specifies the popup element's width. Applies only if fullScreen is false. */
         popupWidth?: number | string | (() => number | string);
         /** An object defining widget positioning options. */
         position?: positionConfig;
@@ -3185,7 +3187,7 @@ declare module DevExpress.ui {
         animation?: dxOverlayAnimation;
         /** A Boolean value specifying whether or not the widget is closed if a user presses the Back hardware button. */
         closeOnBackButton?: boolean;
-        /** A Boolean value specifying whether or not the widget is closed if a user clicks outside of the overlapping window. */
+        /** Specifies whether to close the widget if a user clicks outside it. */
         closeOnOutsideClick?: boolean | ((event: event) => boolean);
         /** A template to be used for rendering widget content. */
         contentTemplate?: template | ((contentElement: DevExpress.core.dxElement) => string | JQuery);
@@ -3193,7 +3195,7 @@ declare module DevExpress.ui {
         deferRendering?: boolean;
         /** Specifies whether or not an end-user can drag the widget. */
         dragEnabled?: boolean;
-        /** The height of the widget in pixels. */
+        /** Specifies the widget's height in pixels. */
         height?: number | string | (() => number | string);
         /** Specifies the maximum height the widget can reach while resizing. */
         maxHeight?: number | string | (() => number | string);
@@ -3219,7 +3221,7 @@ declare module DevExpress.ui {
         shadingColor?: string;
         /** A Boolean value specifying whether or not the widget is visible. */
         visible?: boolean;
-        /** The widget width in pixels. */
+        /** Specifies the widget's width in pixels. */
         width?: number | string | (() => number | string);
     }
     /** Configures widget visibility animations. This object contains two fields: show and hide. */
@@ -3233,7 +3235,7 @@ declare module DevExpress.ui {
     export class dxOverlay extends Widget {
         constructor(element: Element, options?: dxOverlayOptions)
         constructor(element: JQuery, options?: dxOverlayOptions)
-        /** The widget's container. */
+        /** Gets the widget's content. */
         content(): DevExpress.core.dxElement;
         /** Hides the widget. */
         hide(): Promise<void> & JQueryPromise<void>;
@@ -3241,7 +3243,7 @@ declare module DevExpress.ui {
         repaint(): void;
         /** Shows the widget. */
         show(): Promise<void> & JQueryPromise<void>;
-        /** Toggles the visibility of the widget. */
+        /** Shows or hides the widget depending on the argument. */
         toggle(showing: boolean): Promise<void> & JQueryPromise<void>;
     }
     export interface dxPanoramaOptions extends CollectionWidgetOptions {
@@ -3368,7 +3370,7 @@ declare module DevExpress.ui {
         dataSource?: DevExpress.data.PivotGridDataSource;
         /** Configures the header filter feature. */
         headerFilter?: { width?: number, height?: number, allowSearch?: boolean, texts?: any };
-        /** Specifies the height of the widget. */
+        /** Specifies the widget's height. */
         height?: number | string | (() => number | string);
         /** Specifies the field chooser layout. */
         layout?: number;
@@ -3421,7 +3423,7 @@ declare module DevExpress.ui {
         constructor(element: JQuery, options?: dxPopoverOptions)
         /** Shows the widget. */
         show(): Promise<void> & JQueryPromise<void>;
-        /** Displays the widget for the specified target element. */
+        /** Shows the widget for a target element. */
         show(target: string | Element | JQuery): Promise<void> & JQueryPromise<void>;
     }
     export interface dxPopupOptions extends dxOverlayOptions {
@@ -3457,8 +3459,6 @@ declare module DevExpress.ui {
         titleTemplate?: template | ((titleElement: DevExpress.core.dxElement) => string | Element | JQuery);
         /** Specifies items displayed on the top or bottom toolbar of the popup window. */
         toolbarItems?: Array<dxPopupToolbarItem>;
-        /** The widget width in pixels. */
-        width?: any;
     }
     /** Configures widget visibility animations. This object contains two fields: show and hide. */
     export interface dxPopupAnimation extends dxOverlayAnimation {
@@ -3547,6 +3547,8 @@ declare module DevExpress.ui {
     export class dxRangeSlider extends dxSliderBase {
         constructor(element: Element, options?: dxRangeSliderOptions)
         constructor(element: JQuery, options?: dxRangeSliderOptions)
+        /** Resets the value option to the default value. */
+        reset(): void;
     }
     export interface dxResizableOptions extends DOMComponentOptions {
         /** Specifies which borders of the widget element are used as a handle. */
@@ -3708,29 +3710,29 @@ declare module DevExpress.ui {
     export class dxScheduler extends Widget {
         constructor(element: Element, options?: dxSchedulerOptions)
         constructor(element: JQuery, options?: dxSchedulerOptions)
-        /** Add the appointment defined by the object passed as a parameter to the data associated with the widget. */
+        /** Adds an appointment. */
         addAppointment(appointment: any): void;
-        /** Deletes the appointment defined by the parameter from the data associated with the widget. */
+        /** Deletes an appointment. */
         deleteAppointment(appointment: any): void;
         /** Gets the DataSource instance. */
         getDataSource(): DevExpress.data.DataSource;
-        /** Returns the end date of the current view. */
+        /** Gets the current view's end date. */
         getEndViewDate(): Date;
-        /** Returns the start date of the current view. */
+        /** Gets the current view's start date. */
         getStartViewDate(): Date;
-        /** Hides an appointment details popup. */
+        /** Hides an appointment details form. */
         hideAppointmentPopup(saveChanges?: boolean): void;
         /** Hides an appointment tooltip. */
         hideAppointmentTooltip(): void;
         /** Registers a handler to be executed when a user presses a specific key. */
         registerKeyHandler(): void;
-        /** Scrolls the scheduler work space to the specified time of the specified day. */
+        /** Scrolls the current view to a specific day and time. */
         scrollToTime(hours: number, minutes: number, date?: Date): void;
-        /** Displays the Appointment Details popup. */
+        /** Shows the appointment details form. */
         showAppointmentPopup(appointmentData: any, createNewAppointment?: boolean, currentAppointmentData?: any): void;
-        /** Displays the appointment tooltip for the specified target element. */
+        /** Shows a tooltip for a target element. */
         showAppointmentTooltip(appointmentData: any, target: string | Element | JQuery, currentAppointmentData?: any): void;
-        /** Updates the appointment specified by the first method parameter by the appointment object specified by the second method parameter in the data associated with the widget. */
+        /** Updates an appointment. */
         updateAppointment(target: any, appointment: any): void;
     }
     export interface dxScrollViewOptions extends dxScrollableOptions {
@@ -3753,7 +3755,7 @@ declare module DevExpress.ui {
         constructor(element: JQuery, options?: dxScrollViewOptions)
         /** Locks the widget until the release(preventScrollBottom) method is called and executes the function passed to the onPullDown option and the handler assigned to the pullDown event. */
         refresh(): void;
-        /** Notifies the scroll view that data loading is finished. */
+        /** Notifies the ScrollView that data loading is finished. */
         release(preventScrollBottom: boolean): Promise<void> & JQueryPromise<void>;
     }
     export interface dxSelectBoxOptions extends dxDropDownListOptions {
@@ -3816,7 +3818,7 @@ declare module DevExpress.ui {
         hideMenu(): Promise<void> & JQueryPromise<void>;
         /** Displays the widget's slide-out menu. */
         showMenu(): Promise<void> & JQueryPromise<void>;
-        /** Toggles the visibility of the widget's slide-out menu. */
+        /** Shows or hides the slide-out menu depending on the argument. */
         toggleMenuVisibility(showing: boolean): Promise<void> & JQueryPromise<void>;
     }
     export interface dxSlideOutItemTemplate {
@@ -3839,15 +3841,15 @@ declare module DevExpress.ui {
     export class dxSlideOutView extends Widget {
         constructor(element: Element, options?: dxSlideOutViewOptions)
         constructor(element: JQuery, options?: dxSlideOutViewOptions)
-        /** Returns an HTML element of the widget content block. */
+        /** Gets the widget's content. */
         content(): DevExpress.core.dxElement;
-        /** Hides the widget's menu block. */
+        /** Hides the widget's slide-out menu. */
         hideMenu(): Promise<void> & JQueryPromise<void>;
-        /** Returns an HTML element of the widget menu block. */
+        /** Gets the slide-out menu's content. */
         menuContent(): DevExpress.core.dxElement;
-        /** Displays the widget's menu block. */
+        /** Shows the slide-out menu. */
         showMenu(): Promise<void> & JQueryPromise<void>;
-        /** Toggles the visibility of the widget's menu block. */
+        /** Shows or hides the slide-out menu depending on the argument. */
         toggleMenuVisibility(): Promise<void> & JQueryPromise<void>;
     }
     export interface dxSwitchOptions extends EditorOptions {
@@ -4026,7 +4028,7 @@ declare module DevExpress.ui {
     export class dxTileView extends CollectionWidget {
         constructor(element: Element, options?: dxTileViewOptions)
         constructor(element: JQuery, options?: dxTileViewOptions)
-        /** Returns the current scroll position of the widget content. */
+        /** Gets the current scroll position. */
         scrollPosition(): number;
     }
     export interface dxTileViewItemTemplate {
@@ -4042,13 +4044,13 @@ declare module DevExpress.ui {
         closeOnBackButton?: boolean;
         /** A Boolean value specifying whether or not the toast is closed if a user clicks it. */
         closeOnClick?: boolean;
-        /** A Boolean value specifying whether or not the widget is closed if a user clicks outside of the overlapping window. */
+        /** Specifies whether to close the widget if a user clicks outside it. */
         closeOnOutsideClick?: any;
         /** A Boolean value specifying whether or not the toast is closed if a user swipes it out of the screen boundaries. */
         closeOnSwipe?: boolean;
         /** The time span in milliseconds during which the Toast widget is visible. */
         displayTime?: number;
-        /** The height of the widget in pixels. */
+        /** Specifies the widget's height in pixels. */
         height?: any;
         /** The Toast message text. */
         message?: string;
@@ -4058,7 +4060,7 @@ declare module DevExpress.ui {
         shading?: boolean;
         /** Specifies the Toast widget type. */
         type?: string;
-        /** The widget width in pixels. */
+        /** Specifies the widget's width in pixels. */
         width?: any;
     }
     /** Configures widget visibility animations. This object contains two fields: show and hide. */
@@ -4197,17 +4199,17 @@ declare module DevExpress.ui {
     export class dxTreeList extends GridBase {
         constructor(element: Element, options?: dxTreeListOptions)
         constructor(element: JQuery, options?: dxTreeListOptions)
-        /** Adds a new column to the widget. */
+        /** Adds a new column. */
         addColumn(columnOptions: any | string): void;
         /** Adds an empty data row to the highest hierarchical level. */
         addRow(): void;
         /** Adds an empty data row to a specified parent row. */
         addRow(parentId: any): void;
-        /** Collapses a specific row. */
+        /** Collapses a row with a specific key. */
         collapseRow(key: any): Promise<void> & JQueryPromise<void>;
-        /** Expands a specific row. */
+        /** Expands a row with a specific key. */
         expandRow(key: any): Promise<void> & JQueryPromise<void>;
-        /** Gets a node by its key. */
+        /** Gets a node with a specific key. */
         getNodeByKey(key: any | string | number): dxTreeListNode;
         /** Gets the root node. */
         getRootNode(): dxTreeListNode;
@@ -4292,35 +4294,35 @@ declare module DevExpress.ui {
     export class dxTreeView extends HierarchicalCollectionWidget {
         constructor(element: Element, options?: dxTreeViewOptions)
         constructor(element: JQuery, options?: dxTreeViewOptions)
-        /** Collapses an item found using a key. */
+        /** Collapses an item with a specific key. */
         collapseItem(itemData: any): void;
-        /** Collapses an item found using an HTML element. */
+        /** Collapses an item found using its DOM node. */
         collapseItem(itemElement: Element): void;
-        /** Collapses an item found using a key. */
+        /** Collapses an item with a specific key. */
         collapseItem(key: any): void;
-        /** Expands an item found using a data object. */
+        /** Expands an item found using its data object. */
         expandItem(itemData: any): void;
-        /** Expands an item found using an HTML element. */
+        /** Expands an item found using its DOM node. */
         expandItem(itemElement: Element): void;
-        /** Expands an item found using a key. */
+        /** Expands an item with a specific key. */
         expandItem(key: any): void;
-        /** Returns all nodes of the tree view. */
+        /** Gets all nodes. */
         getNodes(): Array<dxTreeViewNode>;
-        /** Selects all widget items. */
+        /** Selects all items. */
         selectAll(): void;
-        /** Selects an item found using a data object. */
+        /** Selects an item found using its data object. */
         selectItem(itemData: any): void;
-        /** Selects an item found using an HTML element. */
+        /** Selects an item found using its DOM node. */
         selectItem(itemElement: Element): void;
-        /** Selects an item found using a key. */
+        /** Selects an item with a specific key. */
         selectItem(key: any): void;
-        /** Unselects all widget items. */
+        /** Cancels the selection of all items. */
         unselectAll(): void;
-        /** Clears the selection of an item found using a data object. */
+        /** Cancels the selection of an item found using its data object. */
         unselectItem(itemData: any): void;
-        /** Clears the selection of an item found using an HTML element. */
+        /** Cancels the selection of an item found using its DOM node. */
         unselectItem(itemElement: Element): void;
-        /** Clears the selection of an item found using a key. */
+        /** Cancels the selection of an item with a specific key. */
         unselectItem(key: any): void;
         /** Updates the tree view scrollbars according to the current size of the widget content. */
         updateDimensions(): Promise<void> & JQueryPromise<void>;
@@ -4530,9 +4532,9 @@ declare module DevExpress.ui {
     export class dxMenuBase extends HierarchicalCollectionWidget {
         constructor(element: Element, options?: dxMenuBaseOptions)
         constructor(element: JQuery, options?: dxMenuBaseOptions)
-        /** Selects the specified item. */
+        /** Selects an item found using its DOM node. */
         selectItem(itemElement: Element): void;
-        /** Cancels the selection of the specified item. */
+        /** Cancels the selection of an item found using its DOM node. */
         unselectItem(itemElement: Element): void;
     }
     export interface dxMenuBaseItemTemplate {
@@ -4585,13 +4587,13 @@ declare module DevExpress.ui {
         constructor(element: JQuery, options?: dxDropDownEditorOptions)
         /** Closes the drop-down editor. */
         close(): void;
-        /** Returns an HTML element of the popup window content. */
+        /** Gets the popup window's content. */
         content(): DevExpress.core.dxElement;
-        /** Returns an &lt;input&gt; element of the widget. */
+        /** Gets the widget's `` element. */
         field(): DevExpress.core.dxElement;
         /** Opens the drop-down editor. */
         open(): void;
-        /** Resets the widget's value to null. */
+        /** Resets the value option to the default value. */
         reset(): void;
     }
     export interface dxDropDownListOptions extends DataExpressionMixinOptions, dxDropDownEditorOptions {
@@ -4655,7 +4657,7 @@ declare module DevExpress.ui {
     export class Editor extends Widget {
         constructor(element: Element, options?: EditorOptions)
         constructor(element: JQuery, options?: EditorOptions)
-        /** Resets the editor's value to undefined. */
+        /** Resets the value option to the default value. */
         reset(): void;
     }
     export interface DataExpressionMixinOptions {
@@ -4690,15 +4692,27 @@ declare module DevExpress.ui {
         visible?: boolean;
     }
     export interface dxFilterBuilderField {
+        /** Specifies the data field's caption. */
         caption?: string;
+        /** Customizes the input value's display text. */
         customizeText?: ((fieldInfo: { value?: string | number | Date, valueText?: string }) => string);
+        /** Specifies the name of a field to be filtered. */
         dataField?: string;
+        /** Casts field values to a specific data type. */
         dataType?: string;
+        /** Configures the widget used to edit the field value. */
+        editorOptions?: any;
+        /** Specifies the editor's custom template. */
         editorTemplate?: template | ((conditionInfo: { value?: string | number | Date, filterOperation?: string, field?: dxFilterBuilderField, setValue?: Function }, container: DevExpress.core.dxElement) => string | Element | JQuery);
+        /** Specifies the false value text. Applies only if dataType is "boolean". */
         falseText?: string;
+        /** Specifies a set of available filter operations. */
         filterOperations?: Array<string>;
+        /** Formats a value before it is displayed. */
         format?: format;
+        /** Configures the lookup field. */
         lookup?: { dataSource?: Array<any> | DevExpress.data.DataSourceOptions, valueExpr?: string | Function, displayExpr?: string | ((data: any) => any), allowClearing?: boolean };
+        /** Specifies the true value text. Applies only if dataType is "boolean". */
         trueText?: string;
     }
     /** Specifies dependency between the screen factor and the count of columns. */
@@ -4994,31 +5008,31 @@ declare module DevExpress.ui {
     export class dxScrollable extends DOMComponent {
         constructor(element: Element, options?: dxScrollableOptions)
         constructor(element: JQuery, options?: dxScrollableOptions)
-        /** Returns the height of the scrollable widget in pixels. */
+        /** Gets the widget's height. */
         clientHeight(): number;
-        /** Returns the width of the scrollable widget in pixels. */
+        /** Gets the widget's width. */
         clientWidth(): number;
-        /** Returns the widget's container. */
+        /** Gets the widget's content. */
         content(): DevExpress.core.dxElement;
-        /** Scrolls the widget content by the specified number of pixels. */
+        /** Scrolls the content by a specific distance. */
         scrollBy(distance: number): void;
-        /** Scrolls widget content by the specified number of pixels in horizontal and vertical directions. */
+        /** Scrolls the content by a specific distance in horizontal and vertical directions. */
         scrollBy(distanceObject: any): void;
-        /** Returns the height of the scrollable content in pixels. */
+        /** Gets the scrollable content's height in pixels. */
         scrollHeight(): number;
-        /** Returns the current scroll position against the leftmost position. */
+        /** Gets the left scroll offset. */
         scrollLeft(): number;
-        /** Returns how far the scrollable content is scrolled from the top and from the left. */
+        /** Gets the scroll offset. */
         scrollOffset(): any;
-        /** Scrolls widget content to the specified position. */
+        /** Scrolls the content to a specific position. */
         scrollTo(targetLocation: number): void;
-        /** Scrolls widget content to a specified position. */
+        /** Scrolls the content to a specific position. */
         scrollTo(targetLocation: any): void;
-        /** Scrolls widget content to the specified element. */
+        /** Scrolls the content to an element. */
         scrollToElement(element: Element | JQuery): void;
-        /** Returns the current scroll position against the topmost position. */
+        /** Gets the top scroll offset. */
         scrollTop(): number;
-        /** Returns the width of the scrollable content in pixels. */
+        /** Gets the scrollable content's width in pixels. */
         scrollWidth(): number;
         /** Updates the scrollable contents' dimensions. */
         update(): Promise<void> & JQueryPromise<void>;
@@ -5173,6 +5187,7 @@ declare module DevExpress.ui {
         searchExpr?: string | Function | Array<string | Function>;
         /** Specifies whether the widget finds entries that contain your search string or entries that only start with it. */
         searchMode?: string;
+        searchTimeout?: number;
         /** Specifies the current search string. */
         searchValue?: string;
     }
@@ -5230,16 +5245,16 @@ declare module DevExpress.ui {
         static alert(message: string, title: string): Promise<void> & JQueryPromise<void>;
         /** Creates a confirm dialog that contains "Yes" and "No" buttons. */
         static confirm(message: string, title: string): Promise<boolean> & JQueryPromise<boolean>;
-        /** Creates a custom dialog using the options specified by the passed configuration object. */
+        /** Creates a custom dialog. */
         static custom(options: { title?: string, message?: string, buttons?: Array<any> }): any;
     }
     /** An object that serves as a namespace for the methods that work with DevExtreme CSS Themes. */
     export class themes {
-        /** Returns the name of the currently applied theme. */
+        /** Gets the current theme's name. */
         static current(): string;
-        /** Changes the current theme to the specified one. */
+        /** Sets a theme with a specific name. */
         static current(themeName: string): void;
-        /** Specifies a function to execute when the theme is loaded. */
+        /** Specifies a function to be executed after the theme is loaded. */
         static ready(callback: Function): void;
     }
 }
@@ -5370,9 +5385,9 @@ declare module DevExpress.viz {
     export class BaseWidget extends DOMComponent {
         constructor(element: Element, options?: BaseWidgetOptions)
         constructor(element: JQuery, options?: BaseWidgetOptions)
-        /** Exports the widget into a document with a specified name and format. */
+        /** Exports the widget. */
         exportTo(fileName: string, format: string): void;
-        /** Gets the current size of the widget. */
+        /** Gets the current widget size. */
         getSize(): BaseWidgetSize;
         /** Hides the loading indicator. */
         hideLoadingIndicator(): void;
@@ -5382,7 +5397,7 @@ declare module DevExpress.viz {
         render(): void;
         /** Shows the loading indicator. */
         showLoadingIndicator(): void;
-        /** Returns the widget's SVG markup. */
+        /** Gets the widget's SVG markup. */
         svg(): string;
     }
     /** A class describing a scale break range. Inherited by scale breaks in the Chart and RangeSelector. */
@@ -5417,7 +5432,7 @@ declare module DevExpress.viz {
     export class dxChart extends BaseChart {
         constructor(element: Element, options?: DevExpress.viz.charts.dxChartOptions)
         constructor(element: JQuery, options?: DevExpress.viz.charts.dxChartOptions)
-        /** Sets the specified start and end values for the chart's argument axis. */
+        /** Sets the argument axis' start and end values. */
         zoomArgument(startValue: number | Date | string, endValue: number | Date | string): void;
     }
     /** The PieChart is a widget that visualizes data as a circle divided into sectors that each represents a portion of the whole. */
@@ -5426,9 +5441,9 @@ declare module DevExpress.viz {
         constructor(element: JQuery, options?: DevExpress.viz.charts.dxPieChartOptions)
         /** @deprecated Use the getAllSeries() method instead. */
         getSeries(): pieChartSeriesObject;
-        /** Gets a series within the chart's series array by the specified name. */
+        /** Gets a series with a specific name. */
         getSeriesByName(seriesName: any): chartSeriesObject;
-        /** Gets a series within the chart's series array by index. */
+        /** Gets a series with a specific index. */
         getSeriesByPos(seriesIndex: number): chartSeriesObject;
     }
     /** The PolarChart is a widget that visualizes data in a polar coordinate system. */
@@ -5442,19 +5457,19 @@ declare module DevExpress.viz {
         constructor(element: JQuery, options?: DevExpress.viz.charts.BaseChartOptions)
         /** Deselects the chart's selected series. The series is displayed in an initial style. */
         clearSelection(): void;
-        /** Returns an array of all series in the chart. */
+        /** Gets all the series. */
         getAllSeries(): Array<baseSeriesObject>;
-        /** Returns the DataSource instance. */
+        /** Gets the DataSource instance. */
         getDataSource(): DevExpress.data.DataSource;
-        /** Gets a series within the chart's series array by the specified name. */
+        /** Gets a series with a specific name. */
         getSeriesByName(seriesName: any): chartSeriesObject;
-        /** Gets a series within the chart's series array by index. */
+        /** Gets a series with a specific index. */
         getSeriesByPos(seriesIndex: number): chartSeriesObject;
         /** Hides all widget tooltips. */
         hideTooltip(): void;
         /** Redraws the widget. */
         render(): void;
-        /** Redraws a widget. */
+        /** Redraws the widget. */
         render(renderOptions: any): void;
     }
     interface dxChartSeriesTypes {
@@ -6171,7 +6186,7 @@ declare module DevExpress.viz {
     /** @deprecated [note]This widget is deprecated. Instead of it, use the built-in client-side exporting. For further information, refer to the export option of a particular widget. */
     export class dxExporter extends Component {
         constructor(options?: dxExporterOptions)
-        /** Exports a DevExtreme data visualization widget into a file with a specified name and format. */
+        /** Exports the widget. */
         exportTo(fileName: string, format: string): void;
         /** Calls the browser's print window. */
         print(): void;
@@ -6189,7 +6204,8 @@ declare module DevExpress.viz {
         /** Hides all widget tooltips. */
         hideTooltip(): void;
     }
-    export interface CommonIndicatorOptions {
+    /** A base object for gauge value and subvalue indicators. Includes the options of indicators of all types. */
+    export interface CommonIndicator {
         /** Specifies the length of an arrow for the indicator of the textCloud type in pixels. */
         arrowLength?: number;
         /** Specifies the background color for the indicator of the rangeBar type. */
@@ -6240,21 +6256,15 @@ declare module DevExpress.viz {
         /** @deprecated Use the text.format.precision option instead. */
         precision?: number;
     }
-    /** A base object for gauge value and subvalue indicators. Includes the options of indicators of all types. */
-    export class CommonIndicator {
-        constructor(options?: CommonIndicatorOptions)
-    }
-    interface circularTriangleMarkerOptions extends CommonIndicatorOptions {
+    /** An object that defines a gauge indicator of the triangleMarker type. */
+    interface circularTriangleMarker extends CommonIndicator {
         /** Specifies the indicator length. */
         length?: number;
         /** Specifies the width of an indicator in pixels. */
         width?: number;
     }
-    /** An object that defines a gauge indicator of the triangleMarker type. */
-    class circularTriangleMarker extends CommonIndicator {
-        constructor(options?: circularTriangleMarkerOptions)
-    }
-    interface circularTextCloudOptions extends CommonIndicatorOptions {
+    /** An object that defines a gauge indicator of the textCloud type. */
+    interface circularTextCloud extends CommonIndicator {
         /** Specifies the appearance of the text displayed in an indicator of the rangeBar type. */
         text?: circularTextCloudText;
     }
@@ -6263,47 +6273,32 @@ declare module DevExpress.viz {
         /** Specifies font options for the text displayed by the indicator. */
         font?: Font;
     }
-    /** An object that defines a gauge indicator of the textCloud type. */
-    class circularTextCloud extends CommonIndicator {
-        constructor(options?: circularTextCloudOptions)
-    }
-    export interface linearRectangleOptions extends CommonIndicatorOptions {
+    /** An object defining a gauge indicator of the rectangle type. */
+    export interface linearRectangle extends CommonIndicator {
         /** Specifies the distance between the indicator and the invisible scale line. */
         offset?: number;
         /** Specifies the width of an indicator in pixels. */
         width?: number;
-    }
-    /** An object defining a gauge indicator of the rectangle type. */
-    export class linearRectangle extends CommonIndicator {
-        constructor(options?: linearRectangleOptions)
-    }
-    export interface linearCircleOptions extends CommonIndicatorOptions {
-        /** Specifies the distance between the indicator and the invisible scale line. */
-        offset?: number;
     }
     /** An object that defines a gauge indicator of the circle type. */
-    export class linearCircle extends CommonIndicator {
-        constructor(options?: linearCircleOptions)
+    export interface linearCircle extends CommonIndicator {
+        /** Specifies the distance between the indicator and the invisible scale line. */
+        offset?: number;
     }
-    export interface linearRhombusOptions extends CommonIndicatorOptions {
+    /** An object defining a gauge indicator of the rhombus type. */
+    export interface linearRhombus extends CommonIndicator {
         /** Specifies the distance between the indicator and the invisible scale line. */
         offset?: number;
         /** Specifies the width of an indicator in pixels. */
         width?: number;
     }
-    /** An object defining a gauge indicator of the rhombus type. */
-    export class linearRhombus extends CommonIndicator {
-        constructor(options?: linearRhombusOptions)
-    }
-    export interface linearRangeBarOptions extends CommonIndicatorOptions {
+    /** An object that defines a gauge indicator of the rangeBar type. */
+    export interface linearRangeBar extends CommonIndicator {
         /** Specifies the distance between the indicator and the invisible scale line. */
         offset?: number;
     }
-    /** An object that defines a gauge indicator of the rangeBar type. */
-    export class linearRangeBar extends CommonIndicator {
-        constructor(options?: linearRangeBarOptions)
-    }
-    export interface linearTriangleMarkerOptions extends CommonIndicatorOptions {
+    /** An object that defines a gauge indicator of the triangleMarker type. */
+    export interface linearTriangleMarker extends CommonIndicator {
         /** Specifies the indicator length. */
         length?: number;
         /** Specifies the distance between the indicator and the invisible scale line. */
@@ -6311,11 +6306,8 @@ declare module DevExpress.viz {
         /** Specifies the width of an indicator in pixels. */
         width?: number;
     }
-    /** An object that defines a gauge indicator of the triangleMarker type. */
-    export class linearTriangleMarker extends CommonIndicator {
-        constructor(options?: linearTriangleMarkerOptions)
-    }
-    export interface linearTextCloudOptions extends CommonIndicatorOptions {
+    /** An object that defines a gauge indicator of the textCloud type. */
+    export interface linearTextCloud extends CommonIndicator {
         /** Specifies the distance between the indicator and the invisible scale line. */
         offset?: number;
         /** Specifies the appearance of the text displayed in an indicator of the rangeBar type. */
@@ -6326,21 +6318,17 @@ declare module DevExpress.viz {
         /** Specifies font options for the text displayed by the indicator. */
         font?: Font;
     }
-    /** An object that defines a gauge indicator of the textCloud type. */
-    export class linearTextCloud extends CommonIndicator {
-        constructor(options?: linearTextCloudOptions)
-    }
     /** A gauge widget. */
     export class BaseGauge extends BaseWidget {
         constructor(element: Element, options?: DevExpress.viz.gauges.BaseGaugeOptions)
         constructor(element: JQuery, options?: DevExpress.viz.gauges.BaseGaugeOptions)
-        /** Returns an array of gauge subvalues. */
+        /** Gets subvalues. */
         subvalues(): Array<number>;
-        /** Updates gauge subvalues. */
+        /** Updates subvalues. */
         subvalues(subvalues: Array<number>): void;
-        /** Returns the main gauge value. */
+        /** Gets the main value. */
         value(): number;
-        /** Updates a gauge value. */
+        /** Updates the main value. */
         value(value: number): void;
     }
     /** The CircularGauge is a widget that indicates values on a circular numeric scale. */
@@ -6357,9 +6345,9 @@ declare module DevExpress.viz {
     export class dxBarGauge extends BaseWidget {
         constructor(element: Element, options?: DevExpress.viz.gauges.dxBarGaugeOptions)
         constructor(element: JQuery, options?: DevExpress.viz.gauges.dxBarGaugeOptions)
-        /** Returns an array of gauge values. */
+        /** Gets all the values. */
         values(): Array<number>;
-        /** Updates the values displayed by a gauge. */
+        /** Updates all the values. */
         values(values: Array<number>): void;
     }
     /** This section describes the Series object, which represents a series. */
@@ -6841,7 +6829,7 @@ declare module DevExpress.viz {
     export class dxRangeSelector extends BaseWidget {
         constructor(element: Element, options?: DevExpress.viz.rangeSelector.dxRangeSelectorOptions)
         constructor(element: JQuery, options?: DevExpress.viz.rangeSelector.dxRangeSelectorOptions)
-        /** Returns the DataSource instance. */
+        /** Gets the DataSource instance. */
         getDataSource(): DevExpress.data.DataSource;
         /** @deprecated Use the getValue() method instead. */
         getSelectedRange(): any;
@@ -6849,11 +6837,11 @@ declare module DevExpress.viz {
         getValue(): Array<number | string | Date>;
         /** Redraws the widget. */
         render(): void;
-        /** Redraws a widget. */
+        /** Redraws the widget. */
         render(skipChartAnimation: boolean): void;
         /** @deprecated Use the setValue(value) method instead. */
         setSelectedRange(selectedRange: { startValue?: Date | number | string, endValue?: Date | number | string }): void;
-        /** Selects a specific range. */
+        /** Sets the selected range. */
         setValue(value: Array<number | string | Date>): void;
     }
     /** Overridden by descriptions for particular widgets. */
@@ -6865,7 +6853,7 @@ declare module DevExpress.viz {
     export class dxSparkline extends BaseSparkline {
         constructor(element: Element, options?: DevExpress.viz.sparklines.dxSparklineOptions)
         constructor(element: JQuery, options?: DevExpress.viz.sparklines.dxSparklineOptions)
-        /** Returns the DataSource instance. */
+        /** Gets the DataSource instance. */
         getDataSource(): DevExpress.data.DataSource;
     }
     /** The Bullet widget is useful when you need to compare a single measure to a target value. The widget comprises a horizontal bar indicating the measure and a vertical line indicating the target value. */
@@ -6881,11 +6869,11 @@ declare module DevExpress.viz {
         clearSelection(): void;
         /** Drills one level up. */
         drillUp(): void;
-        /** Returns the current node. */
+        /** Gets the current node. */
         getCurrentNode(): dxTreeMapNode;
-        /** Returns the DataSource instance. */
+        /** Gets the DataSource instance. */
         getDataSource(): DevExpress.data.DataSource;
-        /** Returns the root node. */
+        /** Gets the root node. */
         getRootNode(): dxTreeMapNode;
         /** Hides the tooltip. */
         hideTooltip(): void;
@@ -6896,9 +6884,9 @@ declare module DevExpress.viz {
     export class dxVectorMap extends BaseWidget {
         constructor(element: Element, options?: DevExpress.viz.map.dxVectorMapOptions)
         constructor(element: JQuery, options?: DevExpress.viz.map.dxVectorMapOptions)
-        /** Gets the current coordinates of the map center. */
+        /** Gets the current map center coordinates. */
         center(): Array<number>;
-        /** Sets the coordinates of the map center. */
+        /** Sets the map center coordinates. */
         center(centerCoordinates: Array<number>): void;
         /** @deprecated Use the layer's clearSelection() method instead. */
         clearAreaSelection(): void;
@@ -6910,21 +6898,21 @@ declare module DevExpress.viz {
         convertCoordinates(x: number, y: number): Array<number>;
         /** @deprecated Use the layer's getElements() method instead. */
         getAreas(): Array<areaObjects>;
-        /** Gets the layer by its index. */
+        /** Gets a layer with a specific index. */
         getLayerByIndex(index: number): MapLayer;
-        /** Gets the layer by its name. */
+        /** Gets a layer with a specific name. */
         getLayerByName(name: string): MapLayer;
-        /** Gets all map layers. */
+        /** Gets all layers. */
         getLayers(): Array<MapLayer>;
         /** @deprecated Use the layer's getElements() method instead. */
         getMarkers(): Array<markerObjects>;
-        /** Gets the current coordinates of the map viewport. */
+        /** Gets the current map viewport coordinates. */
         viewport(): Array<number>;
-        /** Sets the coordinates of the map viewport. */
+        /** Sets the map viewport coordinates. */
         viewport(viewportCoordinates: Array<number>): void;
-        /** Gets the current value of the map zoom factor. */
+        /** Gets the current zoom factor value. */
         zoomFactor(): number;
-        /** Sets the value of the map zoom factor. */
+        /** Sets the zoom factor value. */
         zoomFactor(zoomFactor: number): void;
     }
     /** Font options. */
@@ -6968,9 +6956,9 @@ declare module DevExpress.events {
     export function triggerHandler(element: DevExpress.core.dxElement, event: string | event, extraParameters: any): void;
 }
 declare module DevExpress.data.utils {
-    /** Compiles a getter function from the getter expression. */
+    /** Compiles a getter function from a getter expression. */
     export function compileGetter(expr: string | Array<string>): Function;
-    /** Compiles a setter function from the setter expression. */
+    /** Compiles a setter function from a setter expression. */
     export function compileSetter(expr: string | Array<string>): Function;
 }
 declare module DevExpress.data.utils.odata {
@@ -6978,23 +6966,23 @@ declare module DevExpress.data.utils.odata {
     export var keyConverters: any;
 }
 declare module DevExpress.utils {
-    /** Requests that the browser call a specified function to update animation before the next repaint. */
+    /** Makes the browser call a function to update animation before the next repaint. */
     export function requestAnimationFrame(callback: Function): number;
     /** Cancels an animation frame request scheduled with the requestAnimationFrame method. */
     export function cancelAnimationFrame(requestID: number): void;
-    /** Sets parameters for the viewport meta tag. */
+    /** Sets parameters for the viewport meta tag. Takes effect for mobile applications only. */
     export function initMobileViewport(options: { allowZoom?: boolean, allowPan?: boolean, allowSelection?: boolean }): void;
 }
 declare module DevExpress.fx {
-    /** Animates the specified element. */
+    /** Animates an element. */
     export function animate(element: Element, config: animationConfig): Promise<void> & JQueryPromise<void>;
-    /** Returns a value indicating whether the specified element is being animated. */
+    /** Checks whether an element is being animated. */
     export function isAnimating(element: Element): boolean;
-    /** Stops the animation. */
+    /** Stops an element's animation. */
     export function stop(element: Element, jumpToEnd: boolean): void;
 }
 declare module DevExpress.ui.dxOverlay {
-    /** A static method that specifies the base z-index for all overlay widgets. */
+    /** Specifies the base z-index for all overlay widgets. */
     export function baseZIndex(zIndex: number): void;
 }
 declare module DevExpress.viz.charts {
@@ -7084,6 +7072,8 @@ declare module DevExpress.viz.charts {
         constantLines?: Array<dxChartArgumentAxisConstantLines>;
         /** Specifies the appearance of those constant lines that belong to the argument axis. */
         constantLineStyle?: dxChartArgumentAxisConstantLineStyle;
+        /** Specifies whether to force the axis to start and end on ticks. */
+        endOnTick?: boolean;
         /** Dates to be excluded from the axis when workdaysOnly is true. */
         holidays?: Array<Date | string> | Array<number>;
         /** Specifies chart elements to be highlighted when a user points to an axis label. */
@@ -7815,6 +7805,8 @@ declare module DevExpress.viz.charts {
         categories?: Array<number | string | Date>;
         /** Defines an array of the value axis constant lines. */
         constantLines?: Array<dxPolarChartValueAxisConstantLines>;
+        /** Specifies whether to force the axis to start and end on ticks. */
+        endOnTick?: boolean;
         /** Specifies options for value axis labels. */
         label?: dxPolarChartValueAxisLabel;
         /** Specifies the value to be raised to a power when generating ticks for a logarithmic axis. */
@@ -8154,9 +8146,9 @@ declare module DevExpress.viz.gauges {
         /** Specifies a gauge's scale options. */
         scale?: dxCircularGaugeScale;
         /** Specifies the appearance options of subvalue indicators. */
-        subvalueIndicator?: { type?: string };
+        subvalueIndicator?: dxCircularGaugeSubvalueIndicator;
         /** Specifies the appearance options of the value indicator. */
-        valueIndicator?: { type?: string };
+        valueIndicator?: dxCircularGaugeValueIndicator;
     }
     /** Specifies gauge range container options. */
     export interface dxCircularGaugeRangeContainer extends BaseGaugeRangeContainer {
@@ -8186,6 +8178,16 @@ declare module DevExpress.viz.gauges {
         /** @deprecated Use the scale.label.hideFirstOrLast option instead. */
         hideFirstOrLast?: string;
     }
+    /** Specifies the appearance options of subvalue indicators. */
+    export interface dxCircularGaugeSubvalueIndicator extends CommonIndicator {
+        /** Specifies the type of subvalue indicators. */
+        type?: string;
+    }
+    /** Specifies the appearance options of the value indicator. */
+    export interface dxCircularGaugeValueIndicator extends CommonIndicator {
+        /** Specifies the value indicator type. */
+        type?: string;
+    }
     export interface dxLinearGaugeOptions extends BaseGaugeOptions {
         /** Specifies the options required to set the geometry of the LinearGauge widget. */
         geometry?: { orientation?: string };
@@ -8194,9 +8196,9 @@ declare module DevExpress.viz.gauges {
         /** Specifies the gauge's scale options. */
         scale?: dxLinearGaugeScale;
         /** Specifies the appearance options of subvalue indicators. */
-        subvalueIndicator?: { type?: string };
+        subvalueIndicator?: dxLinearGaugeSubvalueIndicator;
         /** Specifies the appearance options of the value indicator. */
-        valueIndicator?: { type?: string };
+        valueIndicator?: dxLinearGaugeValueIndicator;
     }
     /** Specifies gauge range container options. */
     export interface dxLinearGaugeRangeContainer extends BaseGaugeRangeContainer {
@@ -8227,6 +8229,16 @@ declare module DevExpress.viz.gauges {
     export interface dxLinearGaugeScaleLabelOverlappingBehavior extends BaseGaugeScaleLabelOverlappingBehavior {
         /** @deprecated This functionality is deprecated as redundant. */
         hideFirstOrLast?: string;
+    }
+    /** Specifies the appearance options of subvalue indicators. */
+    export interface dxLinearGaugeSubvalueIndicator extends CommonIndicator {
+        /** Specifies the type of subvalue indicators. */
+        type?: string;
+    }
+    /** Specifies the appearance options of the value indicator. */
+    export interface dxLinearGaugeValueIndicator extends CommonIndicator {
+        /** Specifies the type of the value indicator. */
+        type?: string;
     }
     export interface dxBarGaugeOptions extends BaseWidgetOptions {
         /** Specifies animation options. */

@@ -5,6 +5,7 @@ var $ = require("../../core/renderer"),
     core = require("./ui.grid_core.modules"),
     isDefined = require("../../core/utils/type").isDefined,
     inArray = require("../../core/utils/array").inArray,
+    focused = require("../widget/selectors").focused,
     each = require("../../core/utils/iterator").each,
     KeyboardProcessor = require("../widget/ui.keyboard_processor"),
     eventUtils = require("../../events/utils"),
@@ -380,7 +381,7 @@ var KeyboardNavigationController = core.ViewController.inherit({
             $row = this._focusedView && this._focusedView.getRow(rowIndex),
             $cell;
 
-        if(!isEditing && !isDetailRow($row)) {
+        if(!isEditing && $row && !isDetailRow($row)) {
             $cell = this._getNextCell(eventArgs.key);
             if($cell && this._isCellValid($cell)) {
                 this._focus($cell);
@@ -855,6 +856,7 @@ var KeyboardNavigationController = core.ViewController.inherit({
 
     _scrollToElement: function($element, offset) {
         var scrollable = this._focusedView.getScrollable();
+        scrollable && scrollable.update();
         scrollable && scrollable.scrollToElement($element, offset);
     },
 
@@ -979,7 +981,7 @@ module.exports = {
                         $cell,
                         $element = that.element();
 
-                    if($element && !$element.is(":focus")) {
+                    if($element && !focused($element)) {
                         $element.attr("tabIndex", null);
                     }
 

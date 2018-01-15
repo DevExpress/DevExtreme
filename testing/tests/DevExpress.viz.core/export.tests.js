@@ -1078,7 +1078,7 @@ QUnit.test("Return empty layout options if was hidden due to small container", f
     var layout = exportMenu.getLayoutOptions();
 
     //assert
-    assert.deepEqual(layout, { width: 0, height: 0 });
+    assert.deepEqual(layout, { width: 0, height: 0, cutSide: "vertical", cutLayoutSide: "top" });
 });
 
 QUnit.test("Send warning message if was hidden due to small container", function(assert) {

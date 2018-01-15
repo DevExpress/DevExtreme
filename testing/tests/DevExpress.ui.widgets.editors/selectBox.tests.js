@@ -2832,12 +2832,12 @@ QUnit.test("the list item value should not be displayed in input after click on 
         clock.tick();
         var $input = this.$selectBox.find("." + TEXTEDITOR_INPUT_CLASS);
 
-        assert.equal($input.val(), "2", "input value is correct");
+        assert.equal($input.val(), "", "input value should not be changed when selection is not complete");
 
         listItem.trigger("dxclick");
         $input = this.$selectBox.find("." + TEXTEDITOR_INPUT_CLASS);
 
-        assert.equal($input.val(), "2", "input value is correct");
+        assert.equal($input.val(), "2", "input value should be changed after selection complete");
         clock.tick(100000);
     } finally {
         clock.restore();

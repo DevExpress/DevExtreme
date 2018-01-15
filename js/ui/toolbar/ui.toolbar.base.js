@@ -205,20 +205,21 @@ var ToolbarBase = CollectionWidget.inherit({
     _alignSectionLabels: function(labels, difference, expanding) {
         for(var i = 0; i < labels.length; i++) {
             var $label = $(labels[i]),
-                currentLabelWidth = $label.outerWidth(),
+                currentLabelWidth = Math.ceil($label.outerWidth()),
                 labelMaxWidth;
 
             if(expanding) {
                 $label.css("maxWidth", "inherit");
             }
 
-            var possibleLabelWidth = expanding ? $($label).outerWidth() : currentLabelWidth;
+            var possibleLabelWidth = Math.ceil(expanding ? $($label).outerWidth() : currentLabelWidth);
 
             if(possibleLabelWidth < difference) {
                 labelMaxWidth = expanding ? possibleLabelWidth : 0;
                 difference = difference - possibleLabelWidth;
             } else {
                 labelMaxWidth = expanding ? currentLabelWidth + difference : currentLabelWidth - difference;
+
                 $label.css("maxWidth", labelMaxWidth);
                 break;
             }

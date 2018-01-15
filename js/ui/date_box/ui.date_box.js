@@ -338,7 +338,7 @@ var DateBox = DropDownEditor.inherit({
                     /**
                     * @name dxDateBoxOptions_pickerType
                     * @publicName pickerType
-                    * @custom_default_for_android_below_version_4 "rollers"
+                    * @custom_default_for_android_below_version_4.4 "rollers"
                     * @custom_default_for_desktop "rollers"
                     * @custom_default_for_windows "rollers"
                     */
