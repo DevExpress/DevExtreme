@@ -53,7 +53,7 @@ var EditorFactoryController = modules.ViewController.inherit((function() {
     };
 
     var checkEnterBug = function() {
-        return (browser.msie && parseInt(browser.version) <= 11) || devices.real().ios;//T344096, T249363, T314719 rid off after fix https://connect.microsoft.com/IE/feedback/details/1552272/
+        return (browser.msie && parseInt(browser.version) <= 11) || browser.mozilla || devices.real().ios;//T344096, T249363, T314719 rid off after fix https://connect.microsoft.com/IE/feedback/details/1552272/
     };
 
     var getTextEditorConfig = function(options) {
