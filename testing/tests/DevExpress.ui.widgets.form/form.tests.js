@@ -16,6 +16,9 @@ require("ui/text_area");
 require("common.css!");
 require("generic_light.css!");
 
+var INVALID_CLASS = "dx-invalid",
+    VALIDATION_SUMMARY_ITEM_CLASS = "dx-validationsummary-item";
+
 QUnit.testStart(function() {
     var markup =
         '<div id="form"></div>\
@@ -1087,7 +1090,7 @@ QUnit.test("Reset editor's value with validation", function(assert) {
     assert.equal(form.getEditor("name").option("value"), "", "editor for the name dataField");
     assert.equal(form.getEditor("lastName").option("value"), "", "editor for the lastName dataField");
 
-    assert.ok(!form.getEditor("lastName").$element().hasClass("dx-invalid"), "not invalid css class");
+    assert.ok(!form.getEditor("lastName").$element().hasClass(INVALID_CLASS), "not invalid css class");
     assert.ok(form.getEditor("lastName").option("isValid"), "isValid");
 });
 
@@ -3015,9 +3018,10 @@ QUnit.test("Validate via validation rules", function(assert) {
     form.validate();
 
     //assert
-    assert.equal(form.$element().find(".dx-invalid").length, 2, "invalid editors count");
-    assert.equal(form.$element().find(".dx-invalid [id=" + getID(form, "name") + "]").length, 1, "invalid name editor");
-    assert.equal(form.$element().find(".dx-invalid [id=" + getID(form, "firstName") + "]").length, 1, "invalid firstName editor");
+    var invalidSelector = "." + INVALID_CLASS;
+    assert.equal(form.$element().find(invalidSelector).length, 2, "invalid editors count");
+    assert.equal(form.$element().find(invalidSelector + " [id=" + getID(form, "name") + "]").length, 1, "invalid name editor");
+    assert.equal(form.$element().find(invalidSelector + " [id=" + getID(form, "firstName") + "]").length, 1, "invalid firstName editor");
 });
 
 QUnit.test("Validate with a custom validation group", function(assert) {
@@ -3040,9 +3044,39 @@ QUnit.test("Validate with a custom validation group", function(assert) {
     form.validate();
 
     //assert
-    assert.equal(form.$element().find(".dx-invalid").length, 2, "invalid editors count");
-    assert.equal(form.$element().find(".dx-invalid [id=" + getID(form, "name") + "]").length, 1, "invalid name editor");
-    assert.equal(form.$element().find(".dx-invalid [id=" + getID(form, "firstName") + "]").length, 1, "invalid firstName editor");
+    var invalidSelector = "." + INVALID_CLASS;
+    assert.equal(form.$element().find(invalidSelector).length, 2, "invalid editors count");
+    assert.equal(form.$element().find(invalidSelector + " [id=" + getID(form, "name") + "]").length, 1, "invalid name editor");
+    assert.equal(form.$element().find(invalidSelector + " [id=" + getID(form, "firstName") + "]").length, 1, "invalid firstName editor");
+});
+
+QUnit.test("Reset validation summary items when using a custom validation group", function(assert) {
+    //arrange
+    var form = $("#form").dxForm({
+        validationGroup: "Custom validation group",
+        showValidationSummary: true,
+        formData: {
+            name: "",
+            lastName: "John",
+            firstName: ""
+        },
+        customizeItem: function(item) {
+            if(item.dataField !== "lastName") {
+                item.validationRules = [{ type: "required" }];
+            }
+        }
+    }).dxForm("instance");
+
+    //act
+    form.validate();
+    form.resetValues();
+
+    //assert
+    var $invalidElements = form.$element().find("." + INVALID_CLASS),
+        $validationSummaryItems = form.$element().find("." + VALIDATION_SUMMARY_ITEM_CLASS);
+
+    assert.equal($invalidElements.length, 0, "There is no invalid elements");
+    assert.equal($validationSummaryItems.length, 0, "There is no validation summary items");
 });
 
 QUnit.test("Validate form when several forms are rendered", function(assert) {
@@ -3076,13 +3110,14 @@ QUnit.test("Validate form when several forms are rendered", function(assert) {
     form1.validate();
 
     //assert
-    assert.equal(form1.$element().find(".dx-invalid").length, 2, "invalid editors count");
-    assert.equal(form1.$element().find(".dx-invalid [id=" + getID(form1, "name") + "]").length, 1, "invalid name editor");
-    assert.equal(form1.$element().find(".dx-invalid [id=" + getID(form1, "firstName") + "]").length, 1, "invalid firstName editor");
+    var invalidSelector = "." + INVALID_CLASS;
+    assert.equal(form1.$element().find(invalidSelector).length, 2, "invalid editors count");
+    assert.equal(form1.$element().find(invalidSelector + " [id=" + getID(form1, "name") + "]").length, 1, "invalid name editor");
+    assert.equal(form1.$element().find(invalidSelector + " [id=" + getID(form1, "firstName") + "]").length, 1, "invalid firstName editor");
 
-    assert.equal(form2.$element().find(".dx-invalid").length, 0, "invalid editors count");
-    assert.equal(form2.$element().find(".dx-invalid [id=" + getID(form2, "name2") + "]").length, 0, "invalid name editor");
-    assert.equal(form2.$element().find(".dx-invalid [id=" + getID(form2, "firstName2") + "]").length, 0, "invalid firstName editor");
+    assert.equal(form2.$element().find(invalidSelector).length, 0, "invalid editors count");
+    assert.equal(form2.$element().find(invalidSelector + " [id=" + getID(form2, "name2") + "]").length, 0, "invalid name editor");
+    assert.equal(form2.$element().find(invalidSelector + " [id=" + getID(form2, "firstName2") + "]").length, 0, "invalid firstName editor");
 });
 
 QUnit.test("Validate via 'isRequired' item option", function(assert) {
@@ -3107,10 +3142,11 @@ QUnit.test("Validate via 'isRequired' item option", function(assert) {
     form.validate();
 
     //assert
-    assert.equal(form.$element().find(".dx-invalid").length, 2, "invalid editors count");
-    assert.equal(form.$element().find(".dx-invalid [id=" + getID(form, "name") + "]").length, 1, "invalid name editor");
-    assert.equal(form.$element().find(".dx-invalid-message").first().text(), "Middle name is required", "Message contains the custom label name of validated field by default");
-    assert.equal(form.$element().find(".dx-invalid [id=" + getID(form, "firstName") + "]").length, 1, "invalid firstName editor");
+    var invalidSelector = "." + INVALID_CLASS;
+    assert.equal(form.$element().find(invalidSelector).length, 2, "invalid editors count");
+    assert.equal(form.$element().find(invalidSelector + " [id=" + getID(form, "name") + "]").length, 1, "invalid name editor");
+    assert.equal(form.$element().find(invalidSelector + "-message").first().text(), "Middle name is required", "Message contains the custom label name of validated field by default");
+    assert.equal(form.$element().find(invalidSelector + " [id=" + getID(form, "firstName") + "]").length, 1, "invalid firstName editor");
     assert.equal(form.$element().find(".dx-invalid-message").last().text(), "First Name is required", "Message contains the name of validated field by default if label isn't defined");
 });
 
@@ -3132,8 +3168,9 @@ QUnit.test("Validate via validationRules when rules and 'isRequired' item option
     form.validate();
 
     //assert
-    assert.equal(form.$element().find(".dx-invalid").length, 1, "invalid editors count");
-    assert.equal(form.$element().find(".dx-invalid [id=" + getID(form, "lastName") + "]").length, 1, "invalid lastName editor");
+    var invalidSelector = "." + INVALID_CLASS;
+    assert.equal(form.$element().find(invalidSelector).length, 1, "invalid editors count");
+    assert.equal(form.$element().find(invalidSelector + " [id=" + getID(form, "lastName") + "]").length, 1, "invalid lastName editor");
 });
 
 QUnit.test("Reset validation summary when values are reset in form", function(assert) {
@@ -3155,7 +3192,7 @@ QUnit.test("Reset validation summary when values are reset in form", function(as
     form.resetValues();
 
     //assert
-    assert.equal($(".dx-validationsummary-item").length, 0, "validation summary items");
+    assert.equal($("." + VALIDATION_SUMMARY_ITEM_CLASS).length, 0, "validation summary items");
 });
 
 QUnit.test("Changing an editor options of an any item does not invalidate whole form (T311892)", function(assert) {
