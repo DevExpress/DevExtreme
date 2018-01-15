@@ -1,7 +1,6 @@
 "use strict";
 
 var $ = require("../../core/renderer"),
-    window = require("../../core/dom_adapter").getWindow(),
     noop = require("../../core/utils/common").noop,
     typeUtils = require("../../core/utils/type"),
     isWrapped = require("../../core/utils/variable_wrapper").isWrapped,
@@ -54,11 +53,11 @@ var EditorFactoryMixin = (function() {
                     options && options.setValue(e.value, notFireEvent);
                 };
 
-                window.clearTimeout(data.valueChangeTimeout);
+                clearTimeout(data.valueChangeTimeout);
 
                 if(e.event && e.event.type === "keyup" && !options.updateValueImmediately) {
                     if(options.parentType === "filterRow" || options.parentType === "searchPanel") {
-                        sharedData.valueChangeTimeout = data.valueChangeTimeout = window.setTimeout(function() {
+                        sharedData.valueChangeTimeout = data.valueChangeTimeout = setTimeout(function() {
                             updateValue(e, data.valueChangeTimeout !== sharedData.valueChangeTimeout);
                         }, typeUtils.isDefined(options.updateValueTimeout) ? options.updateValueTimeout : 0);
                     } else {
