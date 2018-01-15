@@ -1703,6 +1703,21 @@ QUnit.test("control keys should not be prevented", function(assert) {
     });
 });
 
+QUnit.test("Subtract key is not prevented", function(assert) {
+    var keyPressStub = sinon.stub();
+    var $numberBox = $("#numberbox").dxNumberBox({
+        focusStateEnabled: true
+    });
+
+    var $input = $numberBox.find("." + INPUT_CLASS);
+    var keyboard = keyboardMock($input);
+
+    $input.on("keypress", keyPressStub);
+
+    keyboard.triggerEvent("keypress", { keyCode: 109, key: "Subtract" });
+    assert.equal(keyPressStub.lastCall.args[0].isDefaultPrevented(), false, "Subtract key is not prevented");
+});
+
 QUnit.module("number validation");
 
 QUnit.test("decimal is not removed on valueChangeEvent", function(assert) {

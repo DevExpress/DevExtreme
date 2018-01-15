@@ -220,7 +220,7 @@ var NumberBoxBase = TextEditor.inherit({
         this.callBase(e);
 
         var ch = e.key || String.fromCharCode(e.which),
-            validCharRegExp = /[\d.,eE\-+]/,
+            validCharRegExp = /[\d.,eE\-+]|Subtract/, //Workaround for IE (T592690)
             isInputCharValid = validCharRegExp.test(ch);
 
         if(!isInputCharValid) {
