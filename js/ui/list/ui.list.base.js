@@ -527,9 +527,10 @@ var ListBase = CollectionWidget.inherit({
         this._refreshItemElements();
     },
 
-    _deleteItem: function(itemElement) {
-        this.callBase(itemElement);
+    deleteItem: function(itemElement) {
+        var promise = this.callBase(itemElement);
         this._refreshItemElements();
+        return promise;
     },
 
     _itemElements: function() {

@@ -126,6 +126,22 @@ QUnit.test("index should be correct for grouped list", function(assert) {
     assert.equal(list.getItemElementByFlatIndex(5).get(0), $item.get(0), "item correct");
 });
 
+QUnit.test("deleteItem should remove an item", function(assert) {
+    var $list = $("#templated-list").dxList({
+            items: [1, 2, 3, 4],
+            allowItemDeleting: true
+        }),
+        list = $list.dxList("instance"),
+        $items = $list.find(toSelector(LIST_ITEM_CLASS));
+
+    list.deleteItem($items.eq(0).get(0));
+    assert.deepEqual(list.option("items"), [2, 3, 4], "delete item by node");
+
+    list.deleteItem(0);
+    assert.deepEqual(list.option("items"), [3, 4], "delete item by index");
+    assert.equal($list.find(toSelector(LIST_ITEM_CLASS)).length, 2, "items were removed from the dom");
+});
+
 
 var groupedListData = {
     data: [
