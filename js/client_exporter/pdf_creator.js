@@ -60,7 +60,7 @@ var getBlob = function(binaryData) {
         dataArray[i] = binaryData.charCodeAt(i);
     }
 
-    return new Blob([dataArray.buffer], { type: "application/pdf" });
+    return new window.Blob([dataArray.buffer], { type: "application/pdf" });
 };
 
 var getBase64 = function(binaryData) {

@@ -483,7 +483,7 @@ initEvent(normalizeEventArguments(function(src, config) {
 
     extend(that, src);
 
-    if(src instanceof eventsEngine.Event || src instanceof Event) {
+    if(src instanceof eventsEngine.Event || src instanceof window.Event) {
         that.originalEvent = src;
         that.currentTarget = undefined;
     }

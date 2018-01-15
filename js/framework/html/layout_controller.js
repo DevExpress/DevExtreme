@@ -3,6 +3,7 @@
 require("../../integration/jquery");
 
 var $ = require("jquery"),
+    document = require("../../core/dom_adapter").getWindow().document,
     eventsEngine = require("../../events/core/events_engine"),
     Class = require("../../core/class"),
     commonUtils = require("../../core/utils/common"),

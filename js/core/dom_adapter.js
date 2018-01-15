@@ -1,8 +1,9 @@
 "use strict";
 
+/* global window */
 module.exports = {
     createElement: function(tagName, text, context) {
-        context = context || document;
+        context = context || this.getWindow().document;
         if(tagName === "#text") {
             return context.createTextNode(text);
         }

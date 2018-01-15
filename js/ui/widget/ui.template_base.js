@@ -1,6 +1,7 @@
 "use strict";
 
 var $ = require("../../core/renderer"),
+    document = require("../../core/dom_adapter").getWindow().document,
     Callbacks = require("../../core/utils/callbacks"),
     domUtils = require("../../core/utils/dom"),
     Class = require("../../core/class"),

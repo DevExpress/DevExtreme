@@ -1,4 +1,5 @@
 // jshint strict:implied, -W098, -W117
+/* eslint-disable no-undef*/
 
 function wrapBuffer(arrayBuffer) {
     return new DataView(arrayBuffer);

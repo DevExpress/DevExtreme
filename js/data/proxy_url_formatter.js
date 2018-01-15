@@ -2,6 +2,7 @@
 
 var each = require("../core/utils/iterator").each,
     window = require("../core/dom_adapter").getWindow(),
+    document = window.document,
     location = window.location,
     DXPROXY_HOST = "dxproxy.devexpress.com:8000",
     IS_DXPROXY_ORIGIN = location.host === DXPROXY_HOST,

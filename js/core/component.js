@@ -1,6 +1,7 @@
 "use strict";
 
 var Config = require("./config"),
+    window = require("./dom_adapter").getWindow(),
     extend = require("./utils/extend").extend,
     Class = require("./class"),
     Action = require("./action"),
@@ -214,7 +215,7 @@ var Component = Class.inherit({
             return true;
         }
 
-        if(oldValue === null || typeof oldValue !== "object" || oldValue instanceof HTMLElement) {
+        if(oldValue === null || typeof oldValue !== "object" || oldValue instanceof window.HTMLElement) {
             return oldValue === newValue;
         }
 
