@@ -404,7 +404,7 @@ QUnit.test("Create palette", function(assert) {
     assert.ok(this.Palette.calledOnce);
     assert.ok(this.Palette.firstCall.calledWithNew);
     assert.strictEqual(palette, this.Palette.firstCall.returnValue);
-    assert.deepEqual(this.Palette.firstCall.args, ['paletteName', { palette: 'options' }]);
+    assert.deepEqual(this.Palette.firstCall.args, ['paletteName', { palette: 'options' }, undefined]);
 });
 
 QUnit.test("Create discrete palette", function(assert) {
@@ -415,7 +415,7 @@ QUnit.test("Create discrete palette", function(assert) {
     assert.ok(this.DiscretePalette.calledOnce);
     assert.ok(this.DiscretePalette.firstCall.calledWithNew);
     assert.strictEqual(palette, this.DiscretePalette.firstCall.returnValue);
-    assert.deepEqual(this.DiscretePalette.firstCall.args, ['paletteName', 13]);
+    assert.deepEqual(this.DiscretePalette.firstCall.args, ['paletteName', 13, undefined]);
 });
 
 QUnit.test("Create gradient palette", function(assert) {
@@ -434,7 +434,7 @@ QUnit.test("Create palette. With default palette", function(assert) {
     assert.ok(this.Palette.calledOnce);
     assert.ok(this.Palette.firstCall.calledWithNew);
     assert.strictEqual(palette, this.Palette.firstCall.returnValue);
-    assert.deepEqual(this.Palette.firstCall.args, ['some-default-palette', { palette: 'options' }]);
+    assert.deepEqual(this.Palette.firstCall.args, [undefined, { palette: 'options' }, 'some-default-palette']);
 });
 
 QUnit.test("Create discrete palette. With default palette", function(assert) {
@@ -445,7 +445,7 @@ QUnit.test("Create discrete palette. With default palette", function(assert) {
     assert.ok(this.DiscretePalette.calledOnce);
     assert.ok(this.DiscretePalette.firstCall.calledWithNew);
     assert.strictEqual(palette, this.DiscretePalette.firstCall.returnValue);
-    assert.deepEqual(this.DiscretePalette.firstCall.args, ['some-default-palette', 13]);
+    assert.deepEqual(this.DiscretePalette.firstCall.args, [undefined, 13, 'some-default-palette']);
 });
 
 QUnit.test("Create gradient palette. With default palette", function(assert) {
@@ -464,7 +464,7 @@ QUnit.test("Create palette. Palette and default palette", function(assert) {
     assert.ok(this.Palette.calledOnce);
     assert.ok(this.Palette.firstCall.calledWithNew);
     assert.strictEqual(palette, this.Palette.firstCall.returnValue);
-    assert.deepEqual(this.Palette.firstCall.args, ['paletteName', { palette: 'options' }]);
+    assert.deepEqual(this.Palette.firstCall.args, ['paletteName', { palette: 'options' }, "some-default-palette"]);
 });
 
 QUnit.test("Create discrete palette. Palette and default palette", function(assert) {
@@ -475,5 +475,5 @@ QUnit.test("Create discrete palette. Palette and default palette", function(asse
     assert.ok(this.DiscretePalette.calledOnce);
     assert.ok(this.DiscretePalette.firstCall.calledWithNew);
     assert.strictEqual(palette, this.DiscretePalette.firstCall.returnValue);
-    assert.deepEqual(this.DiscretePalette.firstCall.args, ['paletteName', 13]);
+    assert.deepEqual(this.DiscretePalette.firstCall.args, ['paletteName', 13, "some-default-palette"]);
 });
