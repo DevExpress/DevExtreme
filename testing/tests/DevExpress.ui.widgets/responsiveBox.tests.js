@@ -675,6 +675,16 @@ QUnit.test("update does not rerender items", function(assert) {
     assert.equal($responsiveBox.find(".test").get(0), $div.get(0), "item was not rerendered");
 });
 
+QUnit.test("responsive box should work correctly after item option changing", function(assert) {
+    var responsiveBox = $("#responsiveBox").dxResponsiveBox({
+        rows: [{}],
+        cols: [{}],
+        items: [{ location: { col: 0, row: 0 }, html: "<div class='test'>" }]
+    }).dxResponsiveBox("instance");
+
+    responsiveBox.option("items[0].visible", false);
+    assert.ok($("#responsiveBox").find(".dx-item").eq(0).hasClass("dx-state-invisible"), "responsive box works correctly");
+});
 
 QUnit.module("templates");
 
