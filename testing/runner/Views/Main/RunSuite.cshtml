@@ -1,11 +1,13 @@
 @model RunSuiteViewModel
 @{
     var isNoJQueryTest = Model.ScriptVirtualPath.Contains("nojquery");
+    var isServerSideTest = Model.ScriptVirtualPath.Contains("DevExpress.serverSide");
     var isSelfSufficientTest  = Model.ScriptVirtualPath.Contains("_bundled")
         || Model.ScriptVirtualPath.Contains("Bundles")
         || Model.ScriptVirtualPath.Contains("DevExpress.angular")
         || Model.ScriptVirtualPath.Contains("DevExpress.framework")
-        || Model.ScriptVirtualPath.Contains("DevExpress.jquery");
+        || Model.ScriptVirtualPath.Contains("DevExpress.jquery")
+        || isServerSideTest;
 
     string GetJQueryUrl() {
         if(isNoJQueryTest)
@@ -27,6 +29,9 @@
                 yield return Url.Content("~/testing/helpers/dataPatch.js");
                 yield return Url.Content("~/js/integration/jquery/component_registrator.js");
             }
+        }
+        if(isServerSideTest) {
+            yield return Url.Content("~/testing/helpers/emptyDOMAdapterPatch.js");
         }
     }
 }
