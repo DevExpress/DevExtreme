@@ -87,7 +87,7 @@ QUnit.test('Text editor', function(assert) {
     textBox.option('value', 'B');
 
     //assert
-    if((browser.msie && parseInt(browser.version) <= 11) || devices.real().ios) {
+    if((browser.msie && parseInt(browser.version) <= 11) || browser.mozilla || devices.real().ios) {
         assert.equal(valueChangeEvent, 'change keyup', 'value change event is correct for ie <= 11 and ios');
     } else {
         assert.equal(valueChangeEvent, 'change', 'value change event is correct');
