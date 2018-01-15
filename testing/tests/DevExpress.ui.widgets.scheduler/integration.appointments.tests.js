@@ -2517,6 +2517,25 @@ QUnit.test("Appointment should have correct position while dragging from group",
     assert.deepEqual(appointmentData.ownerId, { id: [2] }, "Resources is correct");
 });
 
+QUnit.test("Appointment should be rendered correctly after changing view (T593699)", function(assert) {
+    this.createInstance({
+        currentDate: new Date(2015, 6, 10),
+        views: ["month", "week"],
+        currentView: "month",
+        maxAppointmentsPerCell: "auto",
+        dataSource: [{
+            text: "a",
+            startDate: new Date(2015, 6, 10, 0),
+            endDate: new Date(2015, 6, 10, 0, 30),
+            ownerId: { id: 1 }
+        }],
+        height: 300
+    });
+
+    this.instance.option("currentView", "week");
+    assert.notOk(this.instance.$element().find(".dx-scheduler-appointment").eq(0).data("dxItemData").settings, "Item hasn't excess settings");
+});
+
 QUnit.test("Appointment should push correct data to the onAppointmentUpdating event on changing group by drag'n'drop ", function(assert) {
     this.createInstance({
         currentDate: new Date(2015, 4, 25),
