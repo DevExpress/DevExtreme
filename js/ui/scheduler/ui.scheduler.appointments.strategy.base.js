@@ -29,7 +29,7 @@ var BaseRenderingStrategy = Class.inherit({
     },
 
     keepAppointmentSettings: function() {
-        return true;
+        return false;
     },
 
     getDeltaTime: abstract,
