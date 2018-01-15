@@ -28,6 +28,10 @@ var BaseRenderingStrategy = Class.inherit({
         return APPOINTMENT_MIN_SIZE;
     },
 
+    keepAppointmentSettings: function() {
+        return true;
+    },
+
     getDeltaTime: abstract,
 
     getAppointmentGeometry: function(coordinates) {
