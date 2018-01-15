@@ -222,7 +222,7 @@ var CollectionWidget = Widget.inherit({
             * @name CollectionWidgetItemTemplate_template
             * @publicName template
             * @type template|function
-            * @type_function_return string|jQuery
+            * @type_function_return string|Node|jQuery
             */
 
             _itemAttributes: {},

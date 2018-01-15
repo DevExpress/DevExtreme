@@ -339,7 +339,7 @@ var Overlay = Widget.inherit({
             * @type template|function
             * @default "content"
             * @type_function_param1 contentElement:dxElement
-            * @type_function_return string|jQuery
+            * @type_function_return string|Node|jQuery
             */
             contentTemplate: "content",
 
