@@ -1031,3 +1031,27 @@ QUnit.test("Filter value should be reset after disabled search", function(assert
     //assert
     assert.strictEqual($(popupInstance.content()).find(".dx-column-chooser-item").length, 2, "hidden column count");
 });
+
+//T595315
+QUnit.test("Change width and height after first rendering", function(assert) {
+    //arrange
+    var popupInstance,
+        $testElement = $('#container');
+
+    this.setTestElement($testElement);
+    this.renderColumnChooser();
+    popupInstance = this.columnChooserView._popupContainer;
+
+    //asert
+    assert.strictEqual(popupInstance.option("width"), 300, "default width");
+    assert.strictEqual(popupInstance.option("height"), 350, "default height");
+
+    //act
+    this.options.columnChooser.width = 500;
+    this.options.columnChooser.height = 600;
+    this.columnChooserView.optionChanged({ name: "columnChooser" });
+
+    //asert
+    assert.strictEqual(popupInstance.option("width"), 500, "changed width");
+    assert.strictEqual(popupInstance.option("height"), 600, "changed height");
+});
