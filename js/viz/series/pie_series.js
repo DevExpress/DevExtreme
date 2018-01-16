@@ -71,6 +71,17 @@ exports.pie = _extend({}, barSeries, {
 
     _prepareSeriesToDrawing: _noop,
 
+    _getPointsCount: function() {
+        return this._pointsCount;
+    },
+
+    _beginUpdateData: function(data) {
+        var that = this,
+            options = that._options;
+
+        that._pointsCount = data.filter(function(d) { return that._checkData(that._getPointData(d, options)); }).length;
+    },
+
     _endUpdateData: function() {
         chartScatterSeries._prepareSeriesToDrawing.call(this);
     },

@@ -38,11 +38,23 @@ QUnit.test("Discrete", function(assert) {
 QUnit.test("Discrete. Pass correct leafs count to palette", function(assert) {
     common.createWidget({
         dataSource: [{
-            value: 1
+            value: 10,
+            items: [
+                { value: 1 },
+                { value: 2 },
+                { value: 3 }
+            ]
         }, {
-            value: 2
+            value: 5,
+            items: [
+                { value: 1 },
+                { value: 2 }
+            ]
         }, {
-            value: 3
+            value: 3,
+            items: [
+                { value: 1 }
+            ]
         }],
         colorizer: {
             type: "Discrete",
@@ -50,9 +62,14 @@ QUnit.test("Discrete. Pass correct leafs count to palette", function(assert) {
         }
     });
 
-    assert.strictEqual(this.tile(0).attr.getCall(0).args[0].fill, "green", "tile 1");
-    assert.strictEqual(this.tile(1).attr.getCall(0).args[0].fill, "red", "tile 2");
-    assert.strictEqual(this.tile(2).attr.getCall(0).args[0].fill, "#804000", "tile 3");
+    assert.strictEqual(this.tile(2).attr.getCall(0).args[0].fill, "green", "tile 1");
+    assert.strictEqual(this.tile(3).attr.getCall(0).args[0].fill, "red", "tile 2");
+    assert.strictEqual(this.tile(4).attr.getCall(0).args[0].fill, "#804000", "tile 3");
+
+    assert.strictEqual(this.tile(7).attr.getCall(0).args[0].fill, "green", "tile 4");
+    assert.strictEqual(this.tile(8).attr.getCall(0).args[0].fill, "red", "tile 5");
+
+    assert.strictEqual(this.tile(11).attr.getCall(0).args[0].fill, "green", "tile 6");
 });
 
 QUnit.test("Gradient", function(assert) {
