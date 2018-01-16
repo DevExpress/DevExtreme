@@ -1,6 +1,7 @@
 "use strict";
 
 var camelize = require("./inflector").camelize,
+    callOnce = require("./common").callOnce,
     document = require("../dom_adapter").getWindow().document;
 
 var jsPrefixes = ["", "Webkit", "Moz", "O", "Ms"],
@@ -11,15 +12,9 @@ var jsPrefixes = ["", "Webkit", "Moz", "O", "Ms"],
         "O": "-o-",
         "ms": "-ms-"
     },
-    styles,
-    getStyles = function() {
-        styles = document.createElement("dx").style;
-        getStyles = function() {
-            return styles;
-        };
-
-        return styles;
-    };
+    getStyles = callOnce(function() {
+        return document.createElement("dx").style;
+    });
 
 var forEachPrefixes = function(prop, callBack) {
     prop = camelize(prop, true);
