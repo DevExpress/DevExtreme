@@ -907,15 +907,17 @@ QUnit.test("Resizing columns should work correctly when scrolling mode is 'virtu
             }
         });
 
+        //assert
+        assert.strictEqual(instance.pageIndex(), 10, "current page index");
+
         setTimeout(function() {
-            //assert
             assert.notStrictEqual(rowsView._rowHeight, rowHeight, "row height has changed");
             assert.ok(rowsView._rowHeight < 50, "rowHeight < 50");
             assert.strictEqual(instance.getVisibleRows().length, 8, "row count");
             assert.strictEqual(instance.pageIndex(), 10, "current page index");
             done();
-        }, 100);
-    });
+        }, 200);
+    }, 200);
 });
 
 //T527538
