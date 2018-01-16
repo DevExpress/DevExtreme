@@ -9,9 +9,7 @@ var serverSideWindowMock = {
     getComputedStyle: originalWindow.getComputedStyle.bind(originalWindow),
     getSelection: originalWindow.getSelection.bind(originalWindow),
     HTMLElement: originalWindow.HTMLElement.bind(originalWindow),
-    isNaN: originalWindow.isNaN.bind(originalWindow),
     Node: originalWindow.Node.bind(originalWindow),
-    Number: originalWindow.Number.bind(originalWindow),
     Promise: originalWindow.Promise.bind(originalWindow),
     requestAnimationFrame: originalWindow.requestAnimationFrame.bind(originalWindow),
     WeakMap: originalWindow.WeakMap.bind(originalWindow),
@@ -24,7 +22,6 @@ var serverSideWindowMock = {
     innerHeight: originalWindow.innerHeight,
     innerWidth: originalWindow.innerWidth,
     location: originalWindow.location,
-    NaN: originalWindow.NaN,
     navigator: originalWindow.navigator,
     screen: originalWindow.screen,
     width: originalWindow.width
