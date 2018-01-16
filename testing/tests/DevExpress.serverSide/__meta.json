@@ -1,5 +1,5 @@
 {
     "constellation": "misc",
     "explicit": true,
-    "runOnDevices": true
+    "runOnDevices": false
 }
