@@ -1,13 +1,13 @@
 "use strict";
 
+/* global WeakMap */
 var inArray = require("../../core/utils/array").inArray,
-    window = require("../../core/dom_adapter").getWindow(),
-    WeakMap = window.WeakMap;
+    weakMap = WeakMap;
 
-if(!WeakMap) {
+if(!weakMap) {
     // NOTE: This is an incomplete WeakMap polyfill but it is enough for creation purposes
 
-    WeakMap = function() {
+    weakMap = function() {
         var keys = [],
             values = [];
 
@@ -48,4 +48,4 @@ if(!WeakMap) {
     };
 }
 
-module.exports = WeakMap;
+module.exports = weakMap;
