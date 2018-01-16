@@ -2,6 +2,7 @@
 
 var $ = require("jquery"),
     config = require("core/config"),
+    localization = require("localization"),
     keyboardMock = require("../../../helpers/keyboardMock.js"),
     browser = require("core/utils/browser");
 
@@ -373,6 +374,22 @@ QUnit.test("boundary value should correctly apply after second try to set overfl
 
 
 QUnit.module("format: text input", moduleConfig);
+
+QUnit.test("input should not be prevented in arabic locale", function(assert) {
+    var originalCulture = localization.locale();
+
+    try {
+        localization.locale("ar");
+        this.instance.repaint();
+
+        this.keyboard.type("١٢٣٫٤٥");
+        this.keyboard.press("backspace");
+
+        assert.equal(this.input.val(), "١٢٣٫٤", "input was not prevented");
+    } finally {
+        localization.locale(originalCulture);
+    }
+});
 
 QUnit.test("invalid chars should be prevented on keydown", function(assert) {
     this.keyboard.type("12e*3.456");
