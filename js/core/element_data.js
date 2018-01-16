@@ -1,7 +1,7 @@
 "use strict";
 
 var WeakMap = require("./polyfills/weak_map");
-var Element = require("./dom_adapter").getWindow().Element;
+var window = require("./dom_adapter").getWindow();
 var eventsEngine = require("../events/core/events_engine");
 var MemorizedCallbacks = require("./memorized_callbacks");
 
@@ -106,7 +106,7 @@ exports.removeData = function(element, key) {
 };
 
 exports.cleanDataRecursive = function(element, cleanSelf) {
-    if(!(element instanceof Element)) {
+    if(!(element instanceof window.Element)) {
         return;
     }
 
