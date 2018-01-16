@@ -1,4 +1,7 @@
 {
+    "parserOptions": {
+        "sourceType": "module"
+    },
     "rules": {
         "no-restricted-modules": [
             "error",
