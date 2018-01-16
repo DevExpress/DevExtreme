@@ -1336,7 +1336,16 @@ module.exports = {
         })())
     }
 };
-
+/**
+ * @name dxDataGridRowObject
+ * @publicName dxDataGridRowObject
+ * @type object
+ */
+/**
+ * @name dxTreeListRowObject
+ * @publicName dxTreeListRowObject
+ * @type object
+ */
 /**
  * @name dxDataGridRowObject_data
  * @publicName data
