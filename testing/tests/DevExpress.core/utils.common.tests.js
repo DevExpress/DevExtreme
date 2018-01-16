@@ -87,6 +87,17 @@ QUnit.test("executeAsync with timeout", function(assert) {
     assert.ok(called, "action is called");
 });
 
+QUnit.test("callOnce", function(assert) {
+    var i = 0;
+
+    var callOnceHandler = commonUtils.callOnce(function() {
+        return ++i;
+    });
+
+    assert.equal(callOnceHandler(), 1);
+    assert.equal(callOnceHandler(), 1);
+
+});
 
 QUnit.module("findBestMatches");
 
