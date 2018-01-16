@@ -224,7 +224,6 @@ var FilterBuilder = Widget.inherit({
              * @publicName defaultFilterOperation
              * @type string
              * @acceptValues "=" | "<>" | "<" | "<=" | ">" | ">=" | "notcontains" | "contains" | "startswith" | "endswith" | "isblank" | "isnotblank"
-             * @default
              * @hidden
              */
 
