@@ -365,34 +365,38 @@ treeListCore.registerModule("selection", extend(true, {}, selectionModule, {
                     return mode === "leaves" || mode === true;
                 },
 
-                _getAllSelectedRowKeys: function(parentKeys, skipParent) {
-                    var that = this,
+                _getAllSelectedParentKeys: function(key) {
+                    var node = this._dataController.getNodeByKey(key),
+                        parentNode = node.parent,
+                        parentKey = parentNode.key,
                         result = [];
 
                     var nodeExists = function(parentKey) {
                         return result.filter(function(key) { return key === parentKey; });
                     };
 
+                    while(parentNode.level >= 0) {
+                        if(nodeExists(parentKey).length === 0 && this.isRowSelected(parentKey)) {
+                            result.unshift(parentKey);
+                            parentNode = parentNode.parent;
+                        } else {
+                            break;
+                        }
+                    }
+
+                    return result;
+                },
+
+                _getAllSelectedRowKeys: function(parentKeys) {
+                    var that = this,
+                        result = [];
                     parentKeys.forEach(function(key) {
                         var insertIndex = result.length,
-                            node = that._dataController.getNodeByKey(key),
-                            parentNode = node.parent,
-                            parentKey = parentNode.key,
-                            childKeys = node.children.map(function(child) {
-                                return child.key;
-                            });
+                            parentKeys = that._getAllSelectedParentKeys(key);
 
-                        while(parentNode.level >= 0 && !skipParent) {
-                            if(nodeExists(parentKey).length === 0 && that.isRowSelected(parentKey)) {
-                                result.splice(insertIndex, 0, parentKey);
-                                parentNode = parentNode.parent;
-                            } else {
-                                break;
-                            }
-                        }
-
+                        result.splice.apply(result, [insertIndex, 0].concat(parentKeys));
                         result.push(key);
-                        result = result.concat(that._getAllSelectedRowKeys(childKeys, true));
+                        result = result.concat(that._dataController.getChildNodeKeys(key));
                     });
 
                     return result;
@@ -439,18 +443,16 @@ treeListCore.registerModule("selection", extend(true, {}, selectionModule, {
                         dataController = that._dataController,
                         selectedRowKeys = that.callBase.apply(that, arguments) || [];
 
-                    if(!this.isRecursiveSelection() || !dataController) {
-                        return selectedRowKeys;
-                    }
+                    if(this.isRecursiveSelection() && dataController) {
+                        if(that._isModeLeavesOnly(mode)) {
+                            selectedRowKeys = dataController.getNodeLeafKeys(selectedRowKeys, function(childNode, nodes) {
+                                return !childNode.hasChildren && that.isRowSelected(childNode.key);
+                            });
+                        }
 
-                    if(that._isModeLeavesOnly(mode)) {
-                        selectedRowKeys = dataController.getNodeLeafKeys(selectedRowKeys, function(childNode, nodes) {
-                            return !childNode.hasChildren && that.isRowSelected(childNode.key);
-                        });
-                    }
-
-                    if(mode === "all") {
-                        return that._getAllSelectedRowKeys(selectedRowKeys);
+                        if(mode === "all") {
+                            selectedRowKeys = this._getAllSelectedRowKeys(selectedRowKeys);
+                        }
                     }
 
                     return selectedRowKeys;

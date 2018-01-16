@@ -192,6 +192,14 @@ exports.DataController = dataControllerModule.controllers.data.inherit((function
             return this._dataSource.getNodeLeafKeys(keys, callBack);
         },
 
+        getChildNodeKeys: function(parentKey) {
+            if(!this._dataSource) {
+                return;
+            }
+
+            return this._dataSource.getChildNodeKeys(parentKey);
+        },
+
         /**
          * @name dxTreeListMethods_loadDescendants
          * @publicName loadDescendants()

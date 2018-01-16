@@ -568,6 +568,17 @@ DataSourceAdapter = DataSourceAdapter.inherit((function() {
             return result;
         },
 
+        getChildNodeKeys: function(parentKey) {
+            var node = this.getNodeByKey(parentKey),
+                childrenKeys = [];
+
+            node && treeListCore.foreachNodes(node.children, function(childNode) {
+                childrenKeys.push(childNode.key);
+            });
+
+            return childrenKeys;
+        },
+
         loadDescendants: function(keys, childrenOnly) {
             var that = this,
                 loadOptions,
