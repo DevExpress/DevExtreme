@@ -375,8 +375,10 @@ var DropDownMenu = Widget.inherit({
                     .toggleClass(DROP_DOWN_MENU_POPUP_CLASS, usePopup);
             },
             visible: this.option("opened"),
-            onContentReady: this._popupContentReadyHandler.bind(this),
             deferRendering: false,
+            contentTemplate: (function(contentElement) {
+                this._renderList(contentElement);
+            }).bind(this),
             position: this.option("popupPosition"),
             animation: this.option("popupAnimation"),
             onOptionChanged: (function(args) {
@@ -391,13 +393,8 @@ var DropDownMenu = Widget.inherit({
         };
     },
 
-    _popupContentReadyHandler: function() {
-        var popup = Popover.getInstance(this._$popup);
-        this._renderList(popup);
-    },
-
-    _renderList: function(instance) {
-        var $content = instance.$content(),
+    _renderList: function(contentElement) {
+        var $content = $(contentElement),
             listConfig = this._listOptions();
 
         $content.addClass(DROP_DOWN_MENU_LIST_CLASS);
