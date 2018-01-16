@@ -1,6 +1,6 @@
 "use strict";
 
-var Element = require("../dom_adapter").getWindow().Element;
+var window = require("../dom_adapter").getWindow();
 
 var types = {
     "[object Array]": "array",
@@ -78,7 +78,7 @@ var isWindow = function(object) {
 };
 
 var isDomNode = function(node) {
-    return node instanceof Element;
+    return node instanceof window.Element;
 };
 
 var isRenderer = function(object) {
