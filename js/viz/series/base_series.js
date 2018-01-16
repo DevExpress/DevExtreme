@@ -387,7 +387,6 @@ Series.prototype = {
         }
 
         that._beginUpdateData(data);
-        this._pointsCount = len;
 
         while(i < len) {
             if(that._createPoint(that._getPointData(data[i], options), points, lastPointIndex)) {
@@ -401,10 +400,6 @@ Series.prototype = {
         that._points = that._originalPoints = points;
         that._correctPointsLength(lastPointIndex, points);
         that._endUpdateData();
-    },
-
-    _getPointsCount: function() {
-        return this._pointsCount;
     },
 
     getTemplateFields: function() {

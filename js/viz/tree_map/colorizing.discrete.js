@@ -19,7 +19,7 @@ function getLeafsCount(root) {
     for(i = 0; i < ii; ++i) {
         node = allNodes[i];
         if(node.isNode()) {
-            count += getLeafsCount(node);
+            count = Math.max(count, getLeafsCount(node));
         } else {
             count += 1;
         }

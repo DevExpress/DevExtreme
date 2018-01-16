@@ -613,6 +613,23 @@ var checkTwoGroups = function(assert, series) {
         checkMainSeriesColor(assert, series, 5, "arg3", 5, 6);
     });
 
+    QUnit.test("mainSeriesColor. data with undefined values", function(assert) {
+        var series = createSeries();
+        series.updateData([{ arg: "arg1", val: undefined },
+            { arg: "arg2", val: "val2" },
+            { arg: "arg3", val: "val3" },
+            { arg: "arg4", val: undefined },
+            { arg: "arg5", val: "val5" },
+            { arg: "arg6", val: "val6" }]);
+
+        assert.equal(series.getOptions().mainSeriesColor.callCount, 4);
+
+        checkMainSeriesColor(assert, series, 0, "arg2", 0, 4);
+        checkMainSeriesColor(assert, series, 1, "arg3", 1, 4);
+        checkMainSeriesColor(assert, series, 2, "arg5", 2, 4);
+        checkMainSeriesColor(assert, series, 3, "arg6", 3, 4);
+    });
+
     QUnit.test("mainSeriesColor, update", function(assert) {
         var series = createSeries(),
             data = [{ arg: "arg1", val: "val1" },
