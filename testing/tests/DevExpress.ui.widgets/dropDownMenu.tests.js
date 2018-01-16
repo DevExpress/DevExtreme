@@ -106,7 +106,6 @@ var testRendering = function(usePopover) {
         } finally {
             ddMenu._popupOptions = initialPopupOptions;
         }
-
     });
 
     QUnit.test("w/ options - items", function(assert) {
