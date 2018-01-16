@@ -361,6 +361,43 @@ treeListCore.registerModule("selection", extend(true, {}, selectionModule, {
                     }
                 },
 
+                _isModeLeavesOnly: function(mode) {
+                    return mode === "leaves" || mode === true;
+                },
+
+                _getAllSelectedRowKeys: function(parentKeys, skipParent) {
+                    var that = this,
+                        result = [];
+
+                    var nodeExists = function(parentKey) {
+                        return result.filter(function(key) { return key === parentKey; });
+                    };
+
+                    parentKeys.forEach(function(key) {
+                        var insertIndex = result.length,
+                            node = that._dataController.getNodeByKey(key),
+                            parentNode = node.parent,
+                            parentKey = parentNode.key,
+                            childKeys = node.children.map(function(child) {
+                                return child.key;
+                            });
+
+                        while(parentNode.level >= 0 && !skipParent) {
+                            if(nodeExists(parentKey).length === 0 && that.isRowSelected(parentKey)) {
+                                result.splice(insertIndex, 0, parentKey);
+                                parentNode = parentNode.parent;
+                            } else {
+                                break;
+                            }
+                        }
+
+                        result.push(key);
+                        result = result.concat(that._getAllSelectedRowKeys(childKeys, true));
+                    });
+
+                    return result;
+                },
+
                 isRecursiveSelection: function() {
                     var selectionMode = this.option("selection.mode"),
                         isRecursive = this.option("selection.recursive");
@@ -392,19 +429,28 @@ treeListCore.registerModule("selection", extend(true, {}, selectionModule, {
 
                 /**
                 * @name dxTreeListMethods_getSelectedRowKeys
-                * @publicName getSelectedRowKeys(leavesOnly)
-                * @param1 leavesOnly:boolean
+                * @publicName getSelectedRowKeys(mode)
+                * @param1 leavesOnly:boolean:deprecated(mode)
+                * @param1 mode:string
                 * @return Array<any>
                 */
-                getSelectedRowKeys: function(leavesOnly) {
+                getSelectedRowKeys: function(mode) {
                     var that = this,
                         dataController = that._dataController,
                         selectedRowKeys = that.callBase.apply(that, arguments) || [];
 
-                    if(leavesOnly && dataController) {
+                    if(!this.isRecursiveSelection() || !dataController) {
+                        return selectedRowKeys;
+                    }
+
+                    if(that._isModeLeavesOnly(mode)) {
                         selectedRowKeys = dataController.getNodeLeafKeys(selectedRowKeys, function(childNode, nodes) {
                             return !childNode.hasChildren && that.isRowSelected(childNode.key);
                         });
+                    }
+
+                    if(mode === "all") {
+                        return that._getAllSelectedRowKeys(selectedRowKeys);
                     }
 
                     return selectedRowKeys;

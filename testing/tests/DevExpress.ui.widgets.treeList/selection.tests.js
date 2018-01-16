@@ -172,6 +172,27 @@ QUnit.test("Select all rows if filter is applied", function(assert) {
     assert.deepEqual(this.option("selectedRowKeys"), [1, 2], "all visible rows are selected");
 });
 
+QUnit.test("getSelectedRowKeys with non-recursive selection", function(assert) {
+   //arrange
+    var $testElement = $('#treeList');
+
+    this.options.dataSource = [
+            { id: 1, field1: 'test1', field2: 1, field3: new Date(2001, 0, 1) },
+            { id: 2, parentId: 1, field1: 'test2', field2: 2, field3: new Date(2002, 1, 2) },
+            { id: 3, parentId: 1, field1: 'test3', field2: 3, field3: new Date(2002, 1, 3) },
+            { id: 4, parentId: 1, field1: 'test4', field2: 4, field3: new Date(2002, 1, 4) },
+            { id: 5, parentId: 4, field1: 'test5', field2: 5, field3: new Date(2002, 1, 5) }
+    ];
+    this.options.expandedRowKeys = [1, 4];
+    this.options.selectedRowKeys = [1, 2, 4];
+    this.setupTreeList();
+    this.rowsView.render($testElement);
+
+    //act, assert
+    assert.deepEqual(this.getSelectedRowKeys(), [1, 2, 4], "right selection");
+    assert.deepEqual(this.getSelectedRowKeys("leaves"), [1, 2, 4], "right selection");
+});
+
 QUnit.test("Checkboxes should be rendered in right place", function(assert) {
    //arrange
     var $testElement = $('#treeList');
@@ -414,13 +435,16 @@ QUnit.testInActiveWindow("Focused border is not displayed around expandable cell
     clock.restore();
 });
 
-QUnit.module("Recursive selection", { beforeEach: function() {
-    setupModule.call(this);
-    this.options.selection = {
-        mode: "multiple",
-        recursive: true
-    };
-}, afterEach: teardownModule });
+QUnit.module("Recursive selection", {
+    beforeEach: function() {
+        setupModule.call(this);
+        this.options.selection = {
+            mode: "multiple",
+            recursive: true
+        };
+    },
+    afterEach: teardownModule
+});
 
 QUnit.test("Selecting row", function(assert) {
    //arrange
@@ -729,12 +753,33 @@ QUnit.test("getSelectedRowKeys with 'leavesOnly' parameter", function(assert) {
             { id: 5, parentId: 4, field1: 'test5', field2: 5, field3: new Date(2002, 1, 5) }
     ];
     this.options.expandedRowKeys = [1];
-    this.options.selectedRowKeys = [1];
+    this.options.selectedRowKeys = [2, 4];
     this.setupTreeList();
     this.rowsView.render($testElement);
 
     //act, assert
-    assert.deepEqual(this.getSelectedRowKeys(true), [2, 3, 5], "leaves");
+    assert.deepEqual(this.getSelectedRowKeys(true), [2, 5], "leaves"); //deprecated in 18.1
+    assert.deepEqual(this.getSelectedRowKeys("leaves"), [2, 5], "leaves");
+});
+
+QUnit.test("getSelectedRowKeys with 'all' parameter", function(assert) {
+   //arrange
+    var $testElement = $('#treeList');
+
+    this.options.dataSource = [
+            { id: 1, field1: 'test1', field2: 1, field3: new Date(2001, 0, 1) },
+            { id: 2, parentId: 1, field1: 'test2', field2: 2, field3: new Date(2002, 1, 2) },
+            { id: 3, parentId: 1, field1: 'test3', field2: 3, field3: new Date(2002, 1, 3) },
+            { id: 4, parentId: 1, field1: 'test4', field2: 4, field3: new Date(2002, 1, 4) },
+            { id: 5, parentId: 4, field1: 'test5', field2: 5, field3: new Date(2002, 1, 5) }
+    ];
+    this.options.expandedRowKeys = [1, 4];
+    this.options.selectedRowKeys = [2, 4];
+    this.setupTreeList();
+    this.rowsView.render($testElement);
+
+    //act, assert
+    assert.deepEqual(this.getSelectedRowKeys("all"), [2, 4, 5], "all");
 });
 
 QUnit.test("Selection state of rows should be updated on loadDescendants", function(assert) {
@@ -757,14 +802,14 @@ QUnit.test("Selection state of rows should be updated on loadDescendants", funct
     this.rowsView.render($testElement);
 
     //assert
-    assert.deepEqual(this.getSelectedRowKeys(true), [], "leaves");
+    assert.deepEqual(this.getSelectedRowKeys("leaves"), [], "leaves");
 
     //act
     this.loadDescendants();
     clock.tick();
 
     //assert
-    assert.deepEqual(this.getSelectedRowKeys(true), [2, 3, 4], "leaves");
+    assert.deepEqual(this.getSelectedRowKeys("leaves"), [2, 3, 4], "leaves");
     clock.restore();
 });
 
