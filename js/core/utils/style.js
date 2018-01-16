@@ -11,7 +11,15 @@ var jsPrefixes = ["", "Webkit", "Moz", "O", "Ms"],
         "O": "-o-",
         "ms": "-ms-"
     },
-    styles = document.createElement("dx").style;
+    styles,
+    getStyles = function() {
+        styles = document.createElement("dx").style;
+        getStyles = function() {
+            return styles;
+        };
+
+        return styles;
+    };
 
 var forEachPrefixes = function(prop, callBack) {
     prop = camelize(prop, true);
@@ -38,14 +46,14 @@ var forEachPrefixes = function(prop, callBack) {
 };
 
 var styleProp = function(name) {
-    if(name in styles) {
+    if(name in getStyles()) {
 	    return name;
     }
 
     name = name.charAt(0).toUpperCase() + name.substr(1);
     for(var i = 1; i < jsPrefixes.length; i++) {
         var prefixedProp = jsPrefixes[i].toLowerCase() + name;
-        if(prefixedProp in styles) {
+        if(prefixedProp in getStyles()) {
             return prefixedProp;
         }
     }
@@ -53,7 +61,7 @@ var styleProp = function(name) {
 
 var stylePropPrefix = function(prop) {
     return forEachPrefixes(prop, function(specific, jsPrefix) {
-        if(specific in styles) {
+        if(specific in getStyles()) {
             return cssPrefixes[jsPrefix];
         }
     });
