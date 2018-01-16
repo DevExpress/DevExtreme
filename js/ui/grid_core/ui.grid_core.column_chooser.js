@@ -282,6 +282,7 @@ var ColumnChooserView = columnsView.ColumnsView.inherit({
     optionChanged: function(args) {
         switch(args.name) {
             case "columnChooser":
+                this._initializePopupContainer();
                 this.render(null, true);
                 break;
             default:
