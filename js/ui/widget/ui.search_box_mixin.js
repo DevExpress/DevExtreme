@@ -1,7 +1,6 @@
 "use strict";
 
 var $ = require("../../core/renderer"),
-    window = require("../../core/dom_adapter").getWindow(),
     extend = require("../../core/utils/extend").extend,
     messageLocalization = require("../../localization/message"),
     TextBox = require("../text_box"),
@@ -115,7 +114,7 @@ module.exports = {
             valueChangeEvent: "input",
             onValueChanged: function(e) {
                 var searchTimeout = that.option("searchTimeout");
-                window.clearTimeout(that._valueChangeTimeout);
+                clearTimeout(that._valueChangeTimeout);
 
                 if(e.event && e.event.type === "input" && searchTimeout) {
                     that._valueChangeTimeout = setTimeout(function() {

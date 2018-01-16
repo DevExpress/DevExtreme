@@ -1,7 +1,6 @@
 "use strict";
 
 var Class = require("../../core/class"),
-    window = require("../../core/dom_adapter").getWindow(),
     commonUtils = require("../../core/utils/common"),
     contains = require("../../core/utils/dom").contains,
     devices = require("../../core/devices"),
@@ -34,7 +33,7 @@ var FeedbackEvent = Class.inherit({
 
     _schedule: function(fn) {
         this.stop();
-        this._timer = window.setTimeout(fn, this._timeout);
+        this._timer = setTimeout(fn, this._timeout);
     },
 
     stop: function() {
