@@ -1776,7 +1776,11 @@ var TreeViewBase = HierarchicalCollectionWidget.inherit({
     * @publicName getNodes()
     * @return Array<dxTreeViewNode>
     */
-
+         /**
+         * @name dxTreeViewNode
+         * @publicName dxTreeViewNode
+         * @type object
+         */
          /**
          * @name dxTreeViewNode_children
          * @publicName children
