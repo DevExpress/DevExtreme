@@ -1,6 +1,7 @@
 "use strict";
 
 var $ = require("../../core/renderer"),
+    window = require("../../core/dom_adapter").getWindow(),
     registerComponent = require("../../core/component_registrator"),
     typeUtils = require("../../core/utils/type"),
     each = require("../../core/utils/iterator").each,

@@ -1,6 +1,9 @@
 "use strict";
 
 var $ = require("../core/renderer"),
+    window = require("../core/dom_adapter").getWindow(),
+    navigator = window.navigator,
+    document = window.document,
     eventsEngine = require("../events/core/events_engine"),
     fx = require("../animation/fx"),
     translator = require("../animation/translator"),
@@ -336,7 +339,7 @@ var Overlay = Widget.inherit({
             * @type template|function
             * @default "content"
             * @type_function_param1 contentElement:dxElement
-            * @type_function_return string|jQuery
+            * @type_function_return string|Node|jQuery
             */
             contentTemplate: "content",
 
@@ -380,7 +383,7 @@ var Overlay = Widget.inherit({
                 /**
                  * @name dxOverlayOptions_animation
                  * @publicName animation
-                 * @custom_default_for_android_below_version_4.2 { show: { type: "fade", duration: 400 }, hide: { type: "fade", duration: 400, to: { opacity: 0 }, from: { opacity: 1 } } }
+                 * @custom_default_for_Android_below_version_4.2 { show: { type: "fade", duration: 400 }, hide: { type: "fade", duration: 400, to: { opacity: 0 }, from: { opacity: 1 } } }
                  */
                 animation: {
                     show: {

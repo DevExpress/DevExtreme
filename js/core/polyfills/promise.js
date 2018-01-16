@@ -1,6 +1,7 @@
 "use strict";
 
 var deferredUtils = require("../../core/utils/deferred"),
+    window = require("../../core/dom_adapter").getWindow(),
     Deferred = deferredUtils.Deferred,
     when = deferredUtils.when,
     Promise = window.Promise;

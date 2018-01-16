@@ -1,6 +1,7 @@
 "use strict";
 
 var $ = require("../core/renderer"),
+    window = require("../core/dom_adapter").getWindow(),
     noop = require("../core/utils/common").noop,
     messageLocalization = require("../localization/message"),
     registerComponent = require("../core/component_registrator"),
@@ -227,7 +228,7 @@ var ActionSheet = CollectionWidget.inherit({
                 /**
                 * @name dxActionSheetOptions_usePopover
                 * @publicName usePopover
-                * @custom_default_for_tablet_ios true
+                * @custom_default_for_iPad true
                 */
                 usePopover: true
             }

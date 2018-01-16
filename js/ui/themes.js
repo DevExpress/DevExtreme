@@ -1,6 +1,8 @@
 "use strict";
 
 var $ = require("../core/renderer"),
+    window = require("../core/dom_adapter").getWindow(),
+    document = window.document,
     errors = require("./widget/ui.errors"),
     domUtils = require("../core/utils/dom"),
     ready = require("../core/utils/ready"),

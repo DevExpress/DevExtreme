@@ -1,6 +1,7 @@
 "use strict";
 
-var each = require("../../core/utils/iterator").each;
+var each = require("../../core/utils/iterator").each,
+    document = require("../../core/dom_adapter").getWindow().document;
 
 var addEventsListener = function(events, handler) {
     events

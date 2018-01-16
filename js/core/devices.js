@@ -1,6 +1,8 @@
 "use strict";
 
 var $ = require("../core/renderer"),
+    window = require("../core/dom_adapter").getWindow(),
+    navigator = window.navigator,
     extend = require("./utils/extend").extend,
     isPlainObject = require("./utils/type").isPlainObject,
     each = require("./utils/iterator").each,

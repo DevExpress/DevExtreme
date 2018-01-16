@@ -1,6 +1,9 @@
 "use strict";
 
 var eventsEngine = require("../events/core/events_engine"),
+    window = require("../core/dom_adapter").getWindow(),
+    document = window.document,
+    localStorage = window.localStorage,
     Class = require("../core/class"),
     abstract = Class.abstract,
     errors = require("./errors").errors,

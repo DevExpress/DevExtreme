@@ -4,6 +4,8 @@ require("../../integration/jquery");
 
 var $ = require("jquery"),
     commonUtils = require("../../core/utils/common"),
+    window = require("../../core/dom_adapter").getWindow(),
+    document = window.document,
     Component = require("../../core/component"),
     extendUtils = require("../../core/utils/extend"),
     each = require("../../core/utils/iterator").each,

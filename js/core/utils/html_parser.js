@@ -1,6 +1,7 @@
 "use strict";
 
-var merge = require("./array").merge;
+var merge = require("./array").merge,
+    document = require("../dom_adapter").getWindow().document;
 
 var isTagName = (/<([a-z][^\/\0>\x20\t\r\n\f]+)/i);
 

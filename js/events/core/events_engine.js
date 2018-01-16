@@ -2,6 +2,7 @@
 
 var registerEventCallbacks = require("./event_registrator_callbacks");
 var extend = require("../../core/utils/extend").extend;
+var window = require("../../core/dom_adapter").getWindow();
 var injector = require("../../core/utils/dependency_injector");
 var typeUtils = require("../../core/utils/type");
 var Callbacks = require("../../core/utils/callbacks");
@@ -482,7 +483,7 @@ initEvent(normalizeEventArguments(function(src, config) {
 
     extend(that, src);
 
-    if(src instanceof eventsEngine.Event || src instanceof Event) {
+    if(src instanceof eventsEngine.Event || src instanceof window.Event) {
         that.originalEvent = src;
         that.currentTarget = undefined;
     }

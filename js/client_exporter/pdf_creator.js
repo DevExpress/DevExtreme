@@ -1,6 +1,7 @@
 "use strict";
 
 var VERSION = require("../core/version"),
+    window = require("../core/dom_adapter").getWindow(),
     imageCreator = require("./image_creator").imageCreator,
     isFunction = require("../core/utils/type").isFunction,
     extend = require("../core/utils/extend").extend,
@@ -59,7 +60,7 @@ var getBlob = function(binaryData) {
         dataArray[i] = binaryData.charCodeAt(i);
     }
 
-    return new Blob([dataArray.buffer], { type: "application/pdf" });
+    return new window.Blob([dataArray.buffer], { type: "application/pdf" });
 };
 
 var getBase64 = function(binaryData) {

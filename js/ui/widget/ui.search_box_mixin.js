@@ -1,6 +1,7 @@
 "use strict";
 
 var $ = require("../../core/renderer"),
+    window = require("../../core/dom_adapter").getWindow(),
     extend = require("../../core/utils/extend").extend,
     messageLocalization = require("../../localization/message"),
     TextBox = require("../text_box"),

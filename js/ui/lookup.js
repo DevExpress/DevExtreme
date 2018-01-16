@@ -2,6 +2,7 @@
 
 var $ = require("../core/renderer"),
     eventsEngine = require("../events/core/events_engine"),
+    window = require("../core/dom_adapter").getWindow(),
     support = require("../core/utils/support"),
     commonUtils = require("../core/utils/common"),
     domUtils = require("../core/utils/dom"),
@@ -556,7 +557,7 @@ var Lookup = DropDownList.inherit({
                     * @name dxLookupOptions_useNativeScrolling
                     * @publicName useNativeScrolling
                     * @custom_default_for_desktop false
-                    * @custom_default_for_mac_desktop true
+                    * @custom_default_for_Mac true
                     */
                     useNativeScrolling: false
                 }
@@ -569,13 +570,13 @@ var Lookup = DropDownList.inherit({
                     /**
                     * @name dxLookupOptions_usePopover
                     * @publicName usePopover
-                    * @custom_default_for_desktop true
+                    * @custom_default_for_desktop_and_iOS true
                     */
                     usePopover: true,
                     /**
                     * @name dxLookupOptions_popupHeight
                     * @publicName popupHeight
-                    * @custom_default_for_desktop "auto"
+                    * @custom_default_for_desktop_and_iPad "auto"
                     */
                     popupHeight: "auto"
                 }
@@ -625,17 +626,9 @@ var Lookup = DropDownList.inherit({
                     * @custom_default_for_iPad function() { return Math.min($(window).width(), $(window).height()) * 0.4; }
                     */
                     popupWidth: function() { return Math.min($(window).width(), $(window).height()) * 0.4; },
-                    /**
-                    * @name dxLookupOptions_popupHeight
-                    * @publicName popupHeight
-                    * @custom_default_for_iPad "auto"
-                    */
+
                     popupHeight: "auto",
-                    /**
-                    * @name dxLookupOptions_usePopover
-                    * @publicName usePopover
-                    * @custom_default_for_ios true
-                    */
+
                     usePopover: true,
                     useInkRipple: false
                 }

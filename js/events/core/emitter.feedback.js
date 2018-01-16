@@ -1,6 +1,7 @@
 "use strict";
 
 var Class = require("../../core/class"),
+    window = require("../../core/dom_adapter").getWindow(),
     commonUtils = require("../../core/utils/common"),
     contains = require("../../core/utils/dom").contains,
     devices = require("../../core/devices"),

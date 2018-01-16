@@ -1,6 +1,7 @@
 "use strict";
 
 var $ = require("../../core/renderer"),
+    document = require("../../core/dom_adapter").getWindow().document,
     eventsEngine = require("../../events/core/events_engine"),
     Callbacks = require("../../core/utils/callbacks"),
     typeUtils = require("../../core/utils/type"),
@@ -669,6 +670,18 @@ var ColumnsResizerViewController = modules.ViewController.inherit({
             that._columnsSeparatorView.hide();
             that._columnsSeparatorView.changeCursor();
             that._trackerView.hide();
+
+            if(!isNextColumnResizingMode(that)) {
+                var pageIndex = that.component.pageIndex();
+                that.component.updateDimensions();
+
+                if(that.option("wordWrapEnabled") && that.option("scrolling.mode") === "virtual") {
+                    that.component.refresh().done(function() {
+                        that._rowsView.scrollToPage(pageIndex);
+                    });
+                }
+            }
+
             that._isReadyResizing = false;
             that._isResizing = false;
         }
@@ -834,10 +847,6 @@ var ColumnsResizerViewController = modules.ViewController.inherit({
             }
 
             columnsController.endUpdate();
-
-            if(!isNextColumnMode) {
-                this.component.updateDimensions();
-            }
         }
 
         return needUpdate;
@@ -1227,5 +1236,18 @@ module.exports = {
         draggingHeader: DraggingHeaderViewController,
         tablePosition: TablePositionViewController,
         columnsResizer: ColumnsResizerViewController
+    },
+    extenders: {
+        views: {
+            rowsView: {
+                _needUpdateRowHeight: function(itemCount) {
+                    var wordWrapEnabled = this.option("wordWrapEnabled"),
+                        columnsResizerController = this.getController("columnsResizer"),
+                        isResizing = columnsResizerController.isResizing();
+
+                    return this.callBase.apply(this, arguments) || itemCount > 0 && wordWrapEnabled && isResizing;
+                }
+            }
+        }
     }
 };

@@ -1,6 +1,7 @@
 "use strict";
 
-var errors = require("./errors");
+var errors = require("./errors"),
+    window = require("./dom_adapter").getWindow();
 
 var wrapOverridden = function(baseProto, methodName, method) {
     return function() {

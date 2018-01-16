@@ -1,6 +1,7 @@
 "use strict";
 
 var isFunction = require("../core/utils/type").isFunction,
+    window = require("../core/dom_adapter").getWindow(),
     map = require("../core/utils/iterator").map,
     toComparable = require("../core/utils/data").toComparable,
     Deferred = require("../core/utils/deferred").Deferred;

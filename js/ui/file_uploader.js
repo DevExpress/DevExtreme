@@ -1,6 +1,7 @@
 "use strict";
 
 var $ = require("../core/renderer"),
+    window = require("../core/dom_adapter").getWindow(),
     eventsEngine = require("../events/core/events_engine"),
     registerComponent = require("../core/component_registrator"),
     Callbacks = require("../core/utils/callbacks"),
@@ -1222,7 +1223,7 @@ var FileUploader = Editor.inherit({
     },
 
     _createFormData: function(fieldName, fieldValue) {
-        var formData = new FormData();
+        var formData = new window.FormData();
         formData.append(fieldName, fieldValue);
         return formData;
     },

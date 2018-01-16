@@ -1,6 +1,8 @@
 "use strict";
 
 var eventsEngine = require("../../events/core/events_engine"),
+    window = require("../../core/dom_adapter").getWindow(),
+    localStorage = window.localStorage,
     modules = require("./ui.grid_core.modules"),
     errors = require("../widget/ui.errors"),
     browser = require("../../core/utils/browser"),
@@ -8,7 +10,7 @@ var eventsEngine = require("../../events/core/events_engine"),
     extend = require("../../core/utils/extend").extend,
     each = require("../../core/utils/iterator").each,
     typeUtils = require("../../core/utils/type"),
-    Deferred = require("../../core/utils/deferred").Deferred;
+    fromPromise = require("../../core/utils/deferred").fromPromise;
 
 var DATE_REGEX = /^(\d{4})-(\d{2})-(\d{2})T(\d{2}):(\d{2}):(\d{2}(?:\.\d*)?)Z$/;
 
@@ -112,12 +114,7 @@ exports.StateStoringController = modules.ViewController.inherit((function() {
                 loadResult;
 
             that._isLoading = true;
-            loadResult = that._loadState();
-
-            if(!loadResult || !typeUtils.isFunction(loadResult.done)) {
-                loadResult = new Deferred().resolve(loadResult);
-            }
-
+            loadResult = fromPromise(that._loadState());
             loadResult.done(function(state) {
                 that._isLoaded = true;
                 that._isLoading = false;

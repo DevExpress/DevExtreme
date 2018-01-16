@@ -147,7 +147,7 @@ var Scheduler = Widget.inherit({
                 * @default "appointmentTooltip"
                 * @type_function_param1 appointmentData:object
                 * @type_function_param2 contentElement:dxElement
-                * @type_function_return string|jQuery
+                * @type_function_return string|Node|jQuery
                 */
 
                 /**
@@ -782,7 +782,7 @@ var Scheduler = Widget.inherit({
                 * @default "appointmentPopup"
                 * @type_function_param1 appointmentData:object
                 * @type_function_param2 contentElement:dxElement
-                * @type_function_return string|jQuery
+                * @type_function_return string|Node|jQuery
                 */
             appointmentPopupTemplate: "appointmentPopup",
 
@@ -1055,20 +1055,20 @@ var Scheduler = Widget.inherit({
                         /**
                        * @name dxSchedulerOptions_useDropDownViewSwitcher
                        * @publicName useDropDownViewSwitcher
-                       * @custom_default_for_mobile true
+                       * @custom_default_for_Android,_iOS_and_Windows_Mobile true
                        */
                     useDropDownViewSwitcher: true,
 
                         /**
                        * @name dxSchedulerOptions_editing_allowResizing
                        * @publicName allowResizing
-                       * @custom_default_for_mobile false
+                       * @custom_default_for_Android,_iOS_and_Windows_Mobile false
                        */
 
                         /**
                        * @name dxSchedulerOptions_editing_allowDragging
                        * @publicName allowDragging
-                       * @custom_default_for_mobile false
+                       * @custom_default_for_Android,_iOS_and_Windows_Mobile false
                        */
                     editing: {
                         allowDragging: false,

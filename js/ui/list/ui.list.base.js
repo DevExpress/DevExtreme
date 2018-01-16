@@ -436,7 +436,7 @@ var ListBase = CollectionWidget.inherit({
         * @name dxListOptions_useNativeScrolling
         * @publicName useNativeScrolling
         * @custom_default_for_desktop false
-        * @custom_default_for_mac_desktop true
+        * @custom_default_for_Mac true
         */
         return this.callBase().concat(deviceDependentOptions(), [
             {
@@ -542,9 +542,10 @@ var ListBase = CollectionWidget.inherit({
         this._refreshItemElements();
     },
 
-    _deleteItem: function(itemElement) {
-        this.callBase(itemElement);
+    deleteItem: function(itemElement) {
+        var promise = this.callBase(itemElement);
         this._refreshItemElements();
+        return promise;
     },
 
     _itemElements: function() {

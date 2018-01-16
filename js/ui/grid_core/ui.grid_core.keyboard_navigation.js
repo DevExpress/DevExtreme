@@ -1,10 +1,12 @@
 "use strict";
 
 var $ = require("../../core/renderer"),
+    document = require("../../core/dom_adapter").getWindow().document,
     eventsEngine = require("../../events/core/events_engine"),
     core = require("./ui.grid_core.modules"),
     isDefined = require("../../core/utils/type").isDefined,
     inArray = require("../../core/utils/array").inArray,
+    focused = require("../widget/selectors").focused,
     each = require("../../core/utils/iterator").each,
     KeyboardProcessor = require("../widget/ui.keyboard_processor"),
     eventUtils = require("../../events/utils"),
@@ -980,7 +982,7 @@ module.exports = {
                         $cell,
                         $element = that.element();
 
-                    if($element && !$element.is(":focus")) {
+                    if($element && !focused($element)) {
                         $element.attr("tabIndex", null);
                     }
 

@@ -1,5 +1,7 @@
 "use strict";
 
+var Element = require("../dom_adapter").getWindow().Element;
+
 var matches = Element.prototype.matches ||
     Element.prototype.matchesSelector ||
     Element.prototype.mozMatchesSelector ||

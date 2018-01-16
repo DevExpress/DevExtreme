@@ -4,6 +4,7 @@ var $ = require("../../core/renderer"),
     eventsEngine = require("../../events/core/events_engine"),
     commonUtils = require("../../core/utils/common"),
     getPublicElement = require("../../core/utils/dom").getPublicElement,
+    document = require("../../core/dom_adapter").getWindow().document,
     isPlainObject = require("../../core/utils/type").isPlainObject,
     when = require("../../core/utils/deferred").when,
     extend = require("../../core/utils/extend").extend,
@@ -221,7 +222,7 @@ var CollectionWidget = Widget.inherit({
             * @name CollectionWidgetItemTemplate_template
             * @publicName template
             * @type template|function
-            * @type_function_return string|jQuery
+            * @type_function_return string|Node|jQuery
             */
 
             _itemAttributes: {},

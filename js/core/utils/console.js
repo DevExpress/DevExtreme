@@ -1,6 +1,7 @@
 "use strict";
 
-var isFunction = require("./type").isFunction;
+var isFunction = require("./type").isFunction,
+    window = require("../../core/dom_adapter").getWindow();
 
 var logger = (function() {
     var console = window.console;

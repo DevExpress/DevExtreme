@@ -181,7 +181,7 @@ var Pivot = CollectionWidget.inherit({
             * @name dxPivotItemTemplate_titleTemplate
             * @publicName titleTemplate
             * @type template|function
-            * @type_function_return string|jQuery
+            * @type_function_return string|Node|jQuery
             */
 
             /**

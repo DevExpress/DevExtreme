@@ -1,6 +1,7 @@
 "use strict";
 
 var $ = require("../../core/renderer"),
+    window = require("../../core/dom_adapter").getWindow(),
     noop = require("../../core/utils/common").noop,
     typeUtils = require("../../core/utils/type"),
     isWrapped = require("../../core/utils/variable_wrapper").isWrapped,
@@ -34,7 +35,7 @@ var EditorFactoryMixin = (function() {
     };
 
     var checkEnterBug = function() {
-        return (browser.msie && parseInt(browser.version) <= 11) || devices.real().ios;// Workaround for T344096, T249363, T314719, caused by https://connect.microsoft.com/IE/feedback/details/1552272/
+        return (browser.msie && parseInt(browser.version) <= 11) || browser.mozilla || devices.real().ios;// Workaround for T344096, T249363, T314719, caused by https://connect.microsoft.com/IE/feedback/details/1552272/
     };
 
     var getTextEditorConfig = function(options) {

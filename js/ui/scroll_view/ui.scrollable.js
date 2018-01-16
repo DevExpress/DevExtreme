@@ -1,6 +1,9 @@
 "use strict";
 
 var $ = require("../../core/renderer"),
+    window = require("../../core/dom_adapter").getWindow(),
+    navigator = window.navigator,
+    document = window.document,
     eventsEngine = require("../../events/core/events_engine"),
     support = require("../../core/utils/support"),
     browser = require("../../core/utils/browser"),
@@ -41,7 +44,7 @@ var deviceDependentOptions = function() {
             * @name dxScrollableOptions_useNative
             * @publicName useNative
             * @custom_default_for_desktop false
-            * @custom_default_for_mac_desktop true
+            * @custom_default_for_Mac true
             */
             useNative: false
         }
@@ -67,7 +70,7 @@ var deviceDependentOptions = function() {
             /**
             * @name dxScrollableOptions_scrollByContent
             * @publicName scrollByContent
-            * @custom_default_for_desktop true for a touch screen. Otherwise, false.
+            * @custom_default_for_non-touch_devices false
             */
             scrollByContent: support.touch,
 

@@ -2,6 +2,7 @@
 
 var $ = require("../core/renderer"),
     ajax = require("../core/utils/ajax"),
+    window = require("../core/dom_adapter").getWindow(),
     isFunction = require("../core/utils/type").isFunction,
     each = require("../core/utils/iterator").each,
     getSvgMarkup = require("../core/utils/svg").getSvgMarkup,
@@ -47,7 +48,7 @@ exports.svgCreator = {
                 for(i = 0; i < length; i++) {
                     binary += String.fromCharCode(bytes[i]);
                 }
-                that._imageArray[src] = "data:image/png;base64," + btoa(binary);
+                that._imageArray[src] = "data:image/png;base64," + window.btoa(binary);
                 deferred.resolve();
             });
         });
@@ -81,7 +82,7 @@ exports.svgCreator = {
             that = this,
             xmlVersion = '<?xml version="1.0" encoding="UTF-8" standalone="yes" ?>',
             blob = new Deferred(),
-            parser = new DOMParser(),
+            parser = new window.DOMParser(),
             elem = parser.parseFromString(data, "image/svg+xml"),
             svgElem = elem.childNodes[0],
             $svgObject = $(svgElem);
@@ -101,7 +102,7 @@ exports.svgCreator = {
     },
 
     _getBlob: function(markup) {
-        return new Blob([markup], { type: "image/svg+xml" });
+        return new window.Blob([markup], { type: "image/svg+xml" });
     },
 
     _getBase64: function(markup) {

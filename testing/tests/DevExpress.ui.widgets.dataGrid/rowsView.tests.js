@@ -38,6 +38,7 @@ var $ = require("jquery"),
     support = require("core/utils/support"),
     browser = require("core/utils/browser"),
     pointerMock = require("../../helpers/pointerMock.js"),
+    nativePointerMock = require("../../helpers/nativePointerMock.js"),
     dataGridMocks = require("../../helpers/dataGridMocks.js"),
     numberLocalization = require("localization/number"),
     setupDataGridModules = dataGridMocks.setupDataGridModules,
@@ -3941,7 +3942,7 @@ QUnit.module('Rows view with real dataController and columnController', {
         };
     },
     afterEach: function() {
-        this.dispose();
+        this.dispose && this.dispose();
     }
 });
 
@@ -3986,6 +3987,52 @@ QUnit.test("onCellHoverChanged event handling", function(assert) {
 
     //assert
     assert.strictEqual(onCellHoverChanged.eventType, "mouseout", "eventType");
+});
+
+QUnit.test('Touch click on cell should raise rowClick with correct target arguments (T593150)', function(assert) {
+    if(devices.real().deviceType !== "desktop") {
+        assert.ok(true, "The test is not actual for mobile devices");
+        return;
+    }
+
+    var rowClickCount = 0,
+        clock = sinon.useFakeTimers();
+
+    this.options.dataSource.group = "name";
+
+    this.options.grouping = { autoExpandAll: true };
+
+    this.options.onRowClick = function(e) {
+        rowClickCount++;
+        //assert
+        assert.equal(e.event.target, $targetTouchCell[0]);
+        assert.equal(e.event.currentTarget, $targetTouchCell.parent()[0]);
+    };
+
+    this.setupDataGridModules();
+
+    var testElement = $('#container');
+
+    this.rowsView.render(testElement);
+
+    var $targetTouchCell = testElement.find('tbody > tr').eq(1).children().eq(1);
+    var $targetClickCell = testElement.find('tbody > tr').eq(0).children().eq(1);
+
+    //fix wrong clickEmitter prevented state after running another tests
+    pointerMock($targetClickCell)
+        .start()
+        .down();
+
+    //act
+    nativePointerMock($targetTouchCell).start().touchStart().touchEnd();
+    nativePointerMock($targetClickCell).start().click(true);
+
+    clock.tick();
+
+    //assert
+    assert.equal(rowClickCount, 1);
+
+    clock.restore();
 });
 
 QUnit.testInActiveWindow('ScrollToPage when virtual scrolling mode', function(assert) {

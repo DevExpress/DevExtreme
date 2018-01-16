@@ -1,6 +1,7 @@
 "use strict";
 
 var $ = require("../../core/renderer"),
+    document = require("../../core/dom_adapter").getWindow().document,
     eventsEngine = require("../../events/core/events_engine"),
     translator = require("../../animation/translator"),
     Widget = require("../widget/ui.widget"),

@@ -1,8 +1,10 @@
 "use strict";
 
 var $ = require("../../core/renderer"),
+    document = require("../../core/dom_adapter").getWindow().document,
     eventsEngine = require("../../events/core/events_engine"),
     domUtils = require("../../core/utils/dom"),
+    focused = require("../widget/selectors").focused,
     isDefined = require("../../core/utils/type").isDefined,
     extend = require("../../core/utils/extend").extend,
     inArray = require("../../core/utils/array").inArray,
@@ -558,7 +560,7 @@ var TextEditorBase = Editor.inherit({
         this._valueChangeEventHandler(e);
         this.reset();
 
-        !$input.is(":focus") && eventsEngine.trigger($input, "focus");
+        !focused($input) && eventsEngine.trigger($input, "focus");
         eventsEngine.trigger($input, "input");
     },
 

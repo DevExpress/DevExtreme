@@ -1,5 +1,5 @@
 // jshint strict:implied, -W098, -W117
-/* eslint-disable no-console */
+/* eslint-disable no-console, no-undef*/
 
 var path = require("path");
 

@@ -333,11 +333,12 @@ function BlendColors(palette, parameters) {
     };
 }
 
-function Palette(palette, parameters) {
+function Palette(palette, parameters, themeDefaultPalette) {
     parameters = parameters || {};
 
     var extensionMode = parameters.extensionMode,
-        colors = getPalette(palette, { type: parameters.type || "simpleSet" });
+        keyPalette = selectPaletteOnSeniority(palette, themeDefaultPalette),
+        colors = getPalette(keyPalette, { type: parameters.type || "simpleSet" });
 
     if(extensionMode === "repeat") {
         this._extensionStrategy = RepeatColors(colors, parameters);
@@ -391,8 +392,9 @@ function getLightness(color) {
     return color.r * 0.3 + color.g * 0.59 + color.b * 0.11;
 }
 
-function DiscretePalette(source, size) {
-    var palette = size > 0 ? createDiscreteColors(getPalette(source, { type: "gradientSet" }), size) : [];
+function DiscretePalette(source, size, themeDefaultPalette) {
+    var keyPalette = selectPaletteOnSeniority(source, themeDefaultPalette),
+        palette = size > 0 ? createDiscreteColors(getPalette(keyPalette, { type: "gradientSet" }), size) : [];
     this.getColor = function(index) {
         return palette[index] || null;
     };
@@ -425,14 +427,20 @@ function createDiscreteColors(source, count) {
     return gradient;
 }
 
-function GradientPalette(source) {
+function GradientPalette(source, themeDefaultPalette) {
     // TODO: Looks like some new set is going to be added
-    var palette = getPalette(source, { type: "gradientSet" }),
+    var keyPalette = selectPaletteOnSeniority(source, themeDefaultPalette),
+        palette = getPalette(keyPalette, { type: "gradientSet" }),
         color1 = new _Color(palette[0]),
         color2 = new _Color(palette[1]);
     this.getColor = function(ratio) {
         return 0 <= ratio && ratio <= 1 ? color1.blend(color2, ratio).toHex() : null;
     };
+}
+
+function selectPaletteOnSeniority(source, themeDefaultPalette) {
+    var curPalette = currentPalette();
+    return source || (curPalette !== DEFAULT ? curPalette : themeDefaultPalette);
 }
 
 _extend(exports, {
