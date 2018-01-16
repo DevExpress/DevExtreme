@@ -3,7 +3,6 @@
 var noop = require("../../core/utils/common").noop,
     typeUtils = require("../../core/utils/type"),
     extend = require("../../core/utils/extend").extend,
-    window = require("../../core/dom_adapter").getWindow(),
     each = require("../../core/utils/iterator").each,
     adjust = require("../../core/utils/math").adjust,
     isDefined = typeUtils.isDefined,
@@ -25,13 +24,13 @@ var cosFunc = Math.cos,
     floor = Math.floor,
     ceil = Math.ceil,
     max = Math.max,
-    isNaN = window.isNaN,
-    Number = window.Number,
-    NaN = window.NaN;
+    _isNaN = isNaN,
+    _Number = Number,
+    _NaN = NaN;
 
 var getLog = function(value, base) {
     if(!value) {
-        return NaN;
+        return _NaN;
     }
     return Math.log(value) / Math.log(base);
 };
@@ -83,7 +82,7 @@ var getDistance = function(x1, y1, x2, y2) {
 
 var getDecimalOrder = function(number) {
     var n = abs(number), cn;
-    if(!isNaN(n)) {
+    if(!_isNaN(n)) {
         if(n > 0) {
             n = log(n) / LN10;
             cn = ceil(n);
@@ -91,7 +90,7 @@ var getDecimalOrder = function(number) {
         }
         return 0;
     }
-    return NaN;
+    return _NaN;
 };
 
 var getAppropriateFormat = function(start, end, count) {
@@ -99,7 +98,7 @@ var getAppropriateFormat = function(start, end, count) {
         precision = -getDecimalOrder(abs(end - start) / count),
         format;
 
-    if(!isNaN(order) && !isNaN(precision)) {
+    if(!_isNaN(order) && !_isNaN(precision)) {
         if(abs(order) <= 4) {
             format = 'fixedPoint';
             precision < 0 && (precision = 0);
@@ -120,9 +119,9 @@ var roundValue = function(value, precision) {
     }
     if(isNumber(value)) {
         if(isExponential(value)) {
-            return Number(value.toExponential(precision));
+            return _Number(value.toExponential(precision));
         } else {
-            return Number(value.toFixed(precision));
+            return _Number(value.toFixed(precision));
         }
     }
 };
@@ -198,8 +197,8 @@ function normalizeBBox(bBox) {
 
 // Angle is expected to be from right-handed cartesian (not svg) space - positive is counterclockwise
 function rotateBBox(bBox, center, angle) {
-    var cos = Number(cosFunc(angle * PI_DIV_180).toFixed(3)),
-        sin = Number(sinFunc(angle * PI_DIV_180).toFixed(3)),
+    var cos = _Number(cosFunc(angle * PI_DIV_180).toFixed(3)),
+        sin = _Number(sinFunc(angle * PI_DIV_180).toFixed(3)),
         w2 = bBox.width / 2,
         h2 = bBox.height / 2,
         centerX = bBox.x + w2,
