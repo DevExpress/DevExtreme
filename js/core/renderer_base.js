@@ -5,7 +5,6 @@ var domAdapter = require("./dom_adapter");
 var window = domAdapter.getWindow();
 var Node = window.Node;
 var document = window.document;
-var HTMLCollection = window.HTMLCollection;
 var typeUtils = require("./utils/type");
 var styleUtils = require("./utils/style");
 var sizeUtils = require("./utils/size");
@@ -42,7 +41,7 @@ var initRender = function(selector, context) {
         this[0] = selector;
         this.length = 1;
         return this;
-    } else if(selector instanceof HTMLCollection || selector instanceof window.NodeList || Array.isArray(selector)) {
+    } else if(Array.isArray(selector)) {
         [].push.apply(this, selector);
         return this;
     }
@@ -488,7 +487,11 @@ initRender.prototype.val = function(value) {
 };
 
 initRender.prototype.contents = function() {
-    return renderer(this[0] ? this[0].childNodes : []);
+    if(!this[0]) return renderer();
+
+    var result = [];
+    result.push.apply(result, this[0].childNodes);
+    return renderer(result);
 };
 
 initRender.prototype.find = function(selector) {
