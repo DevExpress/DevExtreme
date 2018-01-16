@@ -1,9 +1,10 @@
 "use strict";
 
-var window = require("../dom_adapter").getWindow();
+var window = require("../dom_adapter").getWindow(),
+    callOnce = require("../utils/common").callOnce;
 var matches,
-    getMatches = function() {
-        return window.Element.prototype.matches ||
+    setMatches = callOnce(function() {
+        matches = window.Element.prototype.matches ||
             window.Element.prototype.matchesSelector ||
             window.Element.prototype.mozMatchesSelector ||
             window.Element.prototype.msMatchesSelector ||
@@ -18,10 +19,10 @@ var matches,
                     }
                 }
             };
-    };
+    });
 
 module.exports = function(element, selector) {
-    matches = matches ? matches : getMatches();
+    setMatches();
 
     return matches.call(element, selector);
 };
