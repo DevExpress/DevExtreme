@@ -376,7 +376,7 @@ var DropDownMenu = Widget.inherit({
             visible: this.option("opened"),
             deferRendering: false,
             contentTemplate: (function(contentElement) {
-                return this._renderList(contentElement);
+                this._renderList(contentElement);
             }).bind(this),
             position: this.option("popupPosition"),
             animation: this.option("popupAnimation"),
