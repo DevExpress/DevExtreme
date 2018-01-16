@@ -4,9 +4,9 @@ var isFunction = require("./type").isFunction,
     window = require("../../core/dom_adapter").getWindow();
 
 var logger = (function() {
-    var console = window.console;
-
     function info(text) {
+        var console = window.console;
+
         if(!console || !isFunction(console.info)) {
             return;
         }
@@ -15,6 +15,8 @@ var logger = (function() {
     }
 
     function warn(text) {
+        var console = window.console;
+
         if(!console || !isFunction(console.warn)) {
             return;
         }
@@ -23,6 +25,8 @@ var logger = (function() {
     }
 
     function error(text) {
+        var console = window.console;
+
         if(!console || !isFunction(console.error)) {
             return;
         }
