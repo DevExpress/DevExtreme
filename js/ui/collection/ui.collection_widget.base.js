@@ -216,7 +216,11 @@ var CollectionWidget = Widget.inherit({
             * @default null
             */
             dataSource: null,
-
+            /**
+            * @name CollectionWidgetItemTemplate
+            * @publicName CollectionWidgetItemTemplate
+            * @type object
+            */
             /**
             * @name CollectionWidgetItemTemplate_template
             * @publicName template

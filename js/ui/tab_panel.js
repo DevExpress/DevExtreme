@@ -111,6 +111,12 @@ var TabPanel = MultiView.inherit({
             onTitleRendered: null
 
             /**
+            * @name dxTabPanelItemTemplate
+            * @publicName dxTabPanelItemTemplate
+            * @inherits dxMultiViewItemTemplate
+            * @type object
+            */
+            /**
             * @name dxTabPanelItemTemplate_tabtemplate
             * @publicName tabTemplate
             * @type template|function

@@ -396,7 +396,12 @@ var TreeViewBase = HierarchicalCollectionWidget.inherit({
             * @hidden
             * @extend_doc
             */
-
+            /**
+            * @name dxTreeViewItemTemplate
+            * @publicName dxTreeViewItemTemplate
+            * @inherits CollectionWidgetItemTemplate
+            * @type object
+            */
             /**
             * @name dxTreeViewItemTemplate_selected
             * @publicName selected

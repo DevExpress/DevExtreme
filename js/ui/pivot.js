@@ -176,26 +176,6 @@ var Pivot = CollectionWidget.inherit({
             * @hidden
             * @extend_doc
             */
-
-            /**
-            * @name dxPivotItemTemplate_titleTemplate
-            * @publicName titleTemplate
-            * @type template|function
-            * @type_function_return string|Node|jQuery
-            */
-
-            /**
-            * @name dxPivotItemTemplate_visible
-            * @publicName visible
-            * @hidden
-            * @extend_doc
-            */
-
-            /**
-            * @name dxPivotItemTemplate_title
-            * @publicName title
-            * @type String
-            */
         });
     },
 
@@ -239,7 +219,29 @@ var Pivot = CollectionWidget.inherit({
 
     _initTemplates: function() {
         this.callBase();
-
+        /**
+        * @name dxPivotItemTemplate
+        * @publicName dxPivotItemTemplate
+        * @inherits CollectionWidgetItemTemplate
+        * @type object
+        */
+        /**
+        * @name dxPivotItemTemplate_titleTemplate
+        * @publicName titleTemplate
+        * @type template|function
+        * @type_function_return string|Node|jQuery
+        */
+        /**
+        * @name dxPivotItemTemplate_visible
+        * @publicName visible
+        * @hidden
+        * @extend_doc
+        */
+        /**
+        * @name dxPivotItemTemplate_title
+        * @publicName title
+        * @type String
+        */
         this._defaultTemplates["content"] = new EmptyTemplate();
         this._defaultTemplates["title"] = new ChildDefaultTemplate("item", this);
     },

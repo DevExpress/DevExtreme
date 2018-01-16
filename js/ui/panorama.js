@@ -1009,7 +1009,12 @@ var Panorama = CollectionWidget.inherit({
     * @extend_doc
     */
 });
-
+/**
+* @name dxPanoramaItemTemplate
+* @publicName dxPanoramaItemTemplate
+* @inherits CollectionWidgetItemTemplate
+* @type object
+*/
 /**
 * @name dxPanoramaItemTemplate_title
 * @publicName title
