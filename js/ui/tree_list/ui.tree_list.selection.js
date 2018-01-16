@@ -13,6 +13,10 @@ var TREELIST_SELECT_ALL_CLASS = "dx-treelist-select-all",
 
 var originalRowClick = selectionModule.extenders.views.rowsView._rowClick;
 
+var nodeExists = function(array, currentKey) {
+    return array.filter(function(key) { return key === currentKey; });
+};
+
 treeListCore.registerModule("selection", extend(true, {}, selectionModule, {
     defaultOptions: function() {
         return extend(true, selectionModule.defaultOptions(), {
@@ -371,12 +375,8 @@ treeListCore.registerModule("selection", extend(true, {}, selectionModule, {
                         parentKey = parentNode.key,
                         result = [];
 
-                    var nodeExists = function(parentKey) {
-                        return result.filter(function(key) { return key === parentKey; });
-                    };
-
                     while(parentNode.level >= 0) {
-                        if(nodeExists(parentKey).length === 0 && this.isRowSelected(parentKey)) {
+                        if(nodeExists(result, parentKey).length === 0 && this.isRowSelected(parentKey)) {
                             result.unshift(parentKey);
                             parentNode = parentNode.parent;
                         } else {
@@ -434,8 +434,7 @@ treeListCore.registerModule("selection", extend(true, {}, selectionModule, {
                 /**
                 * @name dxTreeListMethods_getSelectedRowKeys
                 * @publicName getSelectedRowKeys(mode)
-                * @param1 leavesOnly:boolean:deprecated(mode)
-                * @param1 mode:string
+                * @param1 mode:string|boolean
                 * @return Array<any>
                 */
                 getSelectedRowKeys: function(mode) {
