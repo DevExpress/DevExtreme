@@ -41,13 +41,15 @@ var resizeCallbacks = (function() {
         callbacks.fire(changedDimension);
     };
 
+    var setPrevSize = callOnce(function() {
+        prevSize = formatSize();
+    });
+
     callbacks.add = function() {
         var result = originalCallbacksAdd.apply(callbacks, arguments);
         var jqWindow = $(window);
 
-        callOnce(function() {
-            prevSize = formatSize();
-        });
+        setPrevSize();
 
         if(!resizeEventHandlerAttached && callbacks.has()) {
             eventsEngine.subscribeGlobal(jqWindow, "resize", handleResize);
