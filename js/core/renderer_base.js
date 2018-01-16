@@ -3,7 +3,6 @@
 var dataUtils = require("./element_data");
 var domAdapter = require("./dom_adapter");
 var window = domAdapter.getWindow();
-var Node = window.Node;
 var document = window.document;
 var typeUtils = require("./utils/type");
 var styleUtils = require("./utils/style");
@@ -187,7 +186,7 @@ initRender.prototype.toggleClass = function(className, value) {
             return isOuter ? element["inner" + partialName] : element.document.documentElement["client" + partialName];
         }
 
-        if(element.nodeType === Node.DOCUMENT_NODE) {
+        if(element.nodeType === window.Node.DOCUMENT_NODE) {
             var documentElement = element.documentElement;
 
             return Math.max(
@@ -508,7 +507,7 @@ initRender.prototype.find = function(selector) {
 
         for(i = 0; i < this.length; i++) {
             var element = this[i];
-            if(element.nodeType === Node.ELEMENT_NODE) {
+            if(element.nodeType === window.Node.ELEMENT_NODE) {
                 var elementId = element.getAttribute("id"),
                     queryId = elementId || "dx-query-children";
 
@@ -520,7 +519,7 @@ initRender.prototype.find = function(selector) {
                 var querySelector = queryId + selector.replace(/([^\\])(\,)/g, "$1, " + queryId);
                 nodes.push.apply(nodes, element.querySelectorAll(querySelector));
                 setAttributeValue(element, "id", elementId);
-            } else if(element.nodeType === Node.DOCUMENT_NODE) {
+            } else if(element.nodeType === window.Node.DOCUMENT_NODE) {
                 nodes.push.apply(nodes, element.querySelectorAll(selector));
             }
         }
@@ -555,7 +554,7 @@ initRender.prototype.filter = function(selector) {
     var result = [];
     for(var i = 0; i < this.length; i++) {
         var item = this[i];
-        if(item.nodeType === Node.ELEMENT_NODE && typeUtils.type(selector) === "string") {
+        if(item.nodeType === window.Node.ELEMENT_NODE && typeUtils.type(selector) === "string") {
             matches(item, selector) && result.push(item);
         } else if(selector.nodeType || typeUtils.isWindow(selector)) {
             selector === item && result.push(item);
@@ -593,7 +592,7 @@ initRender.prototype.children = function(selector) {
     for(var i = 0; i < this.length; i++) {
         var nodes = this[i] ? this[i].childNodes : [];
         for(var j = 0; j < nodes.length; j++) {
-            if(nodes[j].nodeType === Node.ELEMENT_NODE) {
+            if(nodes[j].nodeType === window.Node.ELEMENT_NODE) {
                 result.push(nodes[j]);
             }
         }
@@ -615,7 +614,7 @@ initRender.prototype.siblings = function() {
 
     for(var i = 0; i < parentChildNodes.length; i++) {
         var node = parentChildNodes[i];
-        if(node.nodeType === Node.ELEMENT_NODE && node !== element) {
+        if(node.nodeType === window.Node.ELEMENT_NODE && node !== element) {
             result.push(node);
         }
     }
@@ -667,8 +666,8 @@ initRender.prototype.parents = function(selector) {
     var result = [],
         parent = this.parent();
 
-    while(parent && parent[0] && parent[0].nodeType !== Node.DOCUMENT_NODE) {
-        if(parent[0].nodeType === Node.ELEMENT_NODE) {
+    while(parent && parent[0] && parent[0].nodeType !== window.Node.DOCUMENT_NODE) {
+        if(parent[0].nodeType === window.Node.ELEMENT_NODE) {
             if(!selector || (selector && parent.is(selector))) {
                 result.push(parent.get(0));
             }

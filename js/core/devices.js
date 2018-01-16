@@ -3,6 +3,7 @@
 var $ = require("../core/renderer"),
     window = require("../core/dom_adapter").getWindow(),
     navigator = window.navigator,
+    commonUtils = require("./utils/common"),
     extend = require("./utils/extend").extend,
     isPlainObject = require("./utils/type").isPlainObject,
     each = require("./utils/iterator").each,
@@ -207,8 +208,6 @@ var Devices = Class.inherit({
         this._currentOrientation = undefined;
 
         this.changed = Callbacks();
-        this._recalculateOrientation();
-        resizeCallbacks.add(this._recalculateOrientation.bind(this));
     },
     /**
     * @name DevicesObjectmethods_current
@@ -279,6 +278,10 @@ var Devices = Class.inherit({
      * @return String
      */
     orientation: function() {
+        commonUtils.callOnce(function() {
+            this._recalculateOrientation();
+            resizeCallbacks.add(this._recalculateOrientation.bind(this));
+        });
         return this._currentOrientation;
     },
 
