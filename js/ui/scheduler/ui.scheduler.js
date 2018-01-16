@@ -1055,20 +1055,20 @@ var Scheduler = Widget.inherit({
                         /**
                        * @name dxSchedulerOptions_useDropDownViewSwitcher
                        * @publicName useDropDownViewSwitcher
-                       * @custom_default_for_Android,_iOS_and_Windows_Mobile true
+                       * @custom_default_for_Android,_iOS,_and_Windows_Mobile true
                        */
                     useDropDownViewSwitcher: true,
 
                         /**
                        * @name dxSchedulerOptions_editing_allowResizing
                        * @publicName allowResizing
-                       * @custom_default_for_Android,_iOS_and_Windows_Mobile false
+                       * @custom_default_for_Android,_iOS,_and_Windows_Mobile false
                        */
 
                         /**
                        * @name dxSchedulerOptions_editing_allowDragging
                        * @publicName allowDragging
-                       * @custom_default_for_Android,_iOS_and_Windows_Mobile false
+                       * @custom_default_for_Android,_iOS,_and_Windows_Mobile false
                        */
                     editing: {
                         allowDragging: false,
