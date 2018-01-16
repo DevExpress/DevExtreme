@@ -14,7 +14,6 @@ var serverSideWindowMock = {
     Number: originalWindow.Number.bind(originalWindow),
     Promise: originalWindow.Promise.bind(originalWindow),
     requestAnimationFrame: originalWindow.requestAnimationFrame.bind(originalWindow),
-    WeakMap: originalWindow.WeakMap.bind(originalWindow),
     XMLHttpRequest: originalWindow.XMLHttpRequest.bind(originalWindow),
 
     console: originalWindow.console,
