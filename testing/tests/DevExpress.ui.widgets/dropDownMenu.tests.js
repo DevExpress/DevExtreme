@@ -92,6 +92,23 @@ var testRendering = function(usePopover) {
         assert.ok(this.$popup.dxPopover("instance"));
     });
 
+    QUnit.test("list should be rendered before onContentReady of the popup", function(assert) {
+        var ddMenu = this.element.dxDropDownMenu("instance"),
+            initialPopupOptions = ddMenu._popupOptions;
+        try {
+            ddMenu._popupOptions = function() {
+                return $.extend(initialPopupOptions.call(ddMenu), { onContentReady: function() {
+                    assert.ok(this._$content.find("." + DROP_DOWN_MENU_LIST_CLASS).length, "List is already rendered");
+                }
+                });
+            };
+            this.toggleMenu();
+        } finally {
+            ddMenu._popupOptions = initialPopupOptions;
+        }
+
+    });
+
     QUnit.test("w/ options - items", function(assert) {
         this.element.dxDropDownMenu({
             items: [
