@@ -450,6 +450,14 @@ var dxTreeMap = {
         * @extends CommonVizPalette
         */
         palette: undefined,
+         /**
+        * @name dxtreemapoptions_colorizer_paletteextensionmode
+        * @publicName paletteExtensionMode
+        * @type string
+        * @default 'blend'
+        * @acceptValues 'blend' | 'repeat' | 'extrapolate'
+        */
+        paletteExtensionMode: 'blend',
         /**
         * @name dxtreemapoptions_colorizer_colorizegroups
         * @publicName colorizeGroups

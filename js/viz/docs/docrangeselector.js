@@ -1030,7 +1030,15 @@ var dxRangeSelector = {
         * @publicName palette
         * @extends CommonVizPalette
         */
-        palette: []
+        palette: [],
+        /**
+        * @name dxrangeselectoroptions_chart_paletteextensionmode
+        * @publicName paletteExtensionMode
+        * @type string
+        * @default 'blend'
+        * @acceptValues 'blend' | 'repeat' | 'extrapolate'
+        */
+        paletteExtensionMode: 'blend'
     },
     /**
     * @name dxrangeselectoroptions_datasource

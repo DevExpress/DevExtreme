@@ -1,29 +1,62 @@
 "use strict";
 
 function discreteColorizer(options, themeManager, root) {
-    var palette = themeManager.createPalette(options.palette, { useHighlight: true });
+    var palette = themeManager.createPalette(options.palette, {
+        useHighlight: true,
+        extensionMode: options.paletteExtensionMode,
+    });
 
     return (options.colorizeGroups ? discreteGroupColorizer : discreteLeafColorizer)(palette, root);
 }
 
-function generateColors(palette, colors, count) {
-    var i;
+function getLeafsCount(root) {
+    var allNodes = root.nodes.slice(),
+        i,
+        ii = allNodes.length,
+        count = 0,
+        node;
 
-    for(i = colors.length; i < count; ++i) {
-        colors.push(palette.getNextColor());
+    for(i = 0; i < ii; ++i) {
+        node = allNodes[i];
+        if(node.isNode()) {
+            count += getLeafsCount(node);
+        } else {
+            count += 1;
+        }
     }
+
+    return count;
 }
 
-function discreteLeafColorizer(palette) {
-    var colors = [];
+function discreteLeafColorizer(palette, root) {
+    var colors = [],
+        count = getLeafsCount(root),
+        i;
 
-    generateColors(palette, colors, 4);
+    for(i = 0; i < count; ++i) {
+        colors.push(palette.getNextColor(count));
+    }
+
     return function(node) {
-        if(node.index >= colors.length) {
-            generateColors(palette, colors, colors.length * 2);
-        }
         return colors[node.index];
     };
+}
+
+function getNodesCount(root) {
+    var allNodes = root.nodes.slice(),
+        i,
+        ii = allNodes.length,
+        count = 0,
+        node;
+
+    for(i = 0; i < ii; ++i) {
+        node = allNodes[i];
+        if(node.isNode()) {
+            count += getNodesCount(node) + 1;
+        }
+    }
+
+    return count;
 }
 
 function prepareDiscreteGroupColors(palette, root) {
@@ -31,6 +64,7 @@ function prepareDiscreteGroupColors(palette, root) {
         allNodes = root.nodes.slice(),
         i,
         ii = allNodes.length,
+        count = getNodesCount(root),
         node;
 
     for(i = 0; i < ii; ++i) {
@@ -39,7 +73,7 @@ function prepareDiscreteGroupColors(palette, root) {
             allNodes = allNodes.concat(node.nodes);
             ii = allNodes.length;
         } else if(!colors[node.parent._id]) {
-            colors[node.parent._id] = palette.getNextColor();
+            colors[node.parent._id] = palette.getNextColor(count);
         }
     }
     return colors;

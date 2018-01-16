@@ -147,40 +147,224 @@ function RingBuf(buf) {
     };
 }
 
+function RepeatColors(palette, parameters) {
+    var stepHighlight = parameters.useHighlight ? HIGHLIGHTING_STEP : 0,
+        paletteSteps = new RingBuf([0, stepHighlight, -stepHighlight]),
+        currentPalette = [];
+
+    function reset() {
+        var step = paletteSteps.next();
+        currentPalette = step ? getAlteredPalette(palette, step) : palette.slice(0);
+    }
+
+    return {
+        getColor: function(index) {
+            var color = currentPalette[index % palette.length];
+
+            if(index % palette.length === palette.length - 1) {
+                reset();
+            }
+            return color;
+        },
+
+        reset: function() {
+            paletteSteps.reset();
+            reset();
+        }
+    };
+}
+
+function ExtrapolateColors(palette) {
+    function convertColor(color, cycleIndex, cycleCount) {
+        var hsl = new _Color(color).hsl,
+            l = hsl.l / 100,
+            diapason = cycleCount - 1 / cycleCount,
+            minL = l - diapason * 0.5,
+            maxL = l + diapason * 0.5,
+            cycleMiddle = (cycleCount - 1) / 2,
+            cycleDiff = cycleIndex - cycleMiddle;
+
+        if(minL < Math.min(0.5, l * 0.9)) {
+            minL = Math.min(0.5, l * 0.9);
+        }
+
+        if(maxL > Math.max(0.8, l + (1 - l) * 0.15)) {
+            maxL = Math.max(0.8, l + (1 - l) * 0.15);
+        }
+
+        if(cycleDiff < 0) {
+            l = l - (minL - l) * cycleDiff / cycleMiddle;
+        } else {
+            l = l + (maxL - l) * (cycleDiff / cycleMiddle);
+        }
+        hsl.l = l * 100;
+
+        return _Color.prototype.fromHSL(hsl).toHex();
+
+    }
+
+    return {
+        getColor: function(index, count) {
+            var paletteCount = palette.length,
+                cycles = _floor((count - 1) / (paletteCount) + 1),
+                color = palette[index % paletteCount];
+
+            if(cycles > 1) {
+                return convertColor(color, _floor(index / paletteCount), cycles);
+            }
+
+            return color;
+        },
+
+        reset: function() {
+
+        }
+    };
+}
+
+function BlendColors(palette, parameters) {
+    var paletteCount = palette.length,
+        extendedPalette = [];
+
+    function distributeColors(count, colorsCount, startIndex, distribution) {
+        var groupSize = Math.floor(count / colorsCount),
+            extraItems = count - colorsCount * groupSize,
+            i = startIndex,
+            middleIndex,
+            size;
+
+        while(i < startIndex + count) {
+            size = groupSize;
+            if(extraItems > 0) {
+                size += 1;
+                extraItems--;
+            }
+            middleIndex = size > 2 ? Math.floor(size / 2) : 0;
+
+            distribution.push(i + middleIndex);
+            i += size;
+        }
+
+        return distribution.sort(function(a, b) {
+            return a - b;
+        });
+    }
+
+    function getColorAndDistance(arr, startIndex, count) {
+        startIndex = (count + startIndex) % count;
+
+        var distance = 0;
+
+        for(var i = startIndex; i < count * 2; i += 1) {
+            var index = (count + i) % count;
+            if(arr[index]) {
+                return [arr[index], distance];
+            }
+            distance++;
+        }
+    }
+
+    function blendColors(paletteWithEmptyColors, paletteLength) {
+        for(var i = 0; i < paletteLength; i++) {
+            var color = paletteWithEmptyColors[i];
+            if(!color) {
+                var color1 = paletteWithEmptyColors[i - 1];
+                if(!color1) {
+                    continue;
+                } else {
+                    var c2 = getColorAndDistance(paletteWithEmptyColors, i, paletteLength),
+                        color2 = new _Color(c2[0]);
+
+                    color1 = new _Color(color1);
+
+                    for(var j = 0; j < c2[1]; j++, i++) {
+                        paletteWithEmptyColors[i] = color1.blend(color2, (j + 1) / (c2[1] + 1)).toHex();
+                    }
+                }
+            }
+        }
+
+        return paletteWithEmptyColors;
+    }
+
+    function extendPalette(count) {
+        if(count <= paletteCount) {
+            return palette;
+        }
+
+        var result = [],
+            colorInGroups = paletteCount - 2,
+            currentColorIndex = 0,
+            cleanColorIndices = [];
+
+
+        if(parameters.keepLastColorInEnd) {
+            cleanColorIndices = distributeColors(count - 2, colorInGroups, 1, [0, count - 1]);
+        } else {
+            cleanColorIndices = distributeColors(count - 1, paletteCount - 1, 1, [0]);
+        }
+
+        for(var i = 0; i < count; i++) {
+            if(cleanColorIndices.indexOf(i) > -1) {
+                result[i] = palette[currentColorIndex++];
+            }
+        }
+
+        result = blendColors(result, count);
+
+
+        return result;
+    }
+
+    return {
+        getColor: function(index, count) {
+            count = count || paletteCount;
+
+            if(extendedPalette.length !== count) {
+                extendedPalette = extendPalette(count);
+            }
+
+            return extendedPalette[index % count];
+        },
+
+        reset: function() {
+
+        }
+    };
+}
+
 function Palette(palette, parameters, themeDefaultPalette) {
     parameters = parameters || {};
-    var stepHighlight = parameters.useHighlight ? HIGHLIGHTING_STEP : 0,
-        keyPalette = selectPaletteOnSeniority(palette, themeDefaultPalette);
-    this._originalPalette = getPalette(keyPalette, { type: parameters.type || "simpleSet" });
-    this._paletteSteps = new RingBuf([0, stepHighlight, -stepHighlight]);
-    this._resetPalette();
+
+    var extensionMode = parameters.extensionMode,
+        keyPalette = selectPaletteOnSeniority(palette, themeDefaultPalette),
+        colors = getPalette(keyPalette, { type: parameters.type || "simpleSet" });
+
+    if(extensionMode === "repeat") {
+        this._extensionStrategy = RepeatColors(colors, parameters);
+    } else if(extensionMode === "extrapolate") {
+        this._extensionStrategy = ExtrapolateColors(colors);
+    } else {
+        this._extensionStrategy = BlendColors(colors, parameters);
+    }
+
+    this.reset();
 }
 
 Palette.prototype = {
     constructor: Palette,
 
     dispose: function() {
-        this._originalPalette = this._palette = this._paletteSteps = null;
+        this._extensionStrategy = null;
     },
 
-    getNextColor: function() {
-        var that = this;
-        if(that._currentColor >= that._palette.length) {
-            that._resetPalette();
-        }
-        return that._palette[that._currentColor++];
-    },
-
-    _resetPalette: function() {
-        var that = this,
-            step = that._paletteSteps.next();
-        that._palette = step ? getAlteredPalette(that._originalPalette, step) : that._originalPalette.slice(0);
-        that._currentColor = 0;
+    getNextColor: function(count) {
+        return this._extensionStrategy.getColor(this._currentColor++, count);
     },
 
     reset: function() {
-        this._paletteSteps.reset();
-        this._resetPalette();
+        this._currentColor = 0;
+        this._extensionStrategy.reset();
         return this;
     }
 };

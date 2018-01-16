@@ -532,6 +532,14 @@ var baseGauge = {
         */
         palette: 'default',
         /**
+        * @name basegaugeoptions_rangeContainer_paletteextensionmode
+        * @publicName paletteExtensionMode
+        * @type string
+        * @default 'blend'
+        * @acceptValues 'blend' | 'repeat' | 'extrapolate'
+        */
+        paletteExtensionMode: 'blend',
+        /**
         * @name basegaugeoptions_rangeContainer_ranges
         * @publicName ranges
         * @type Array<Object>
@@ -1046,6 +1054,14 @@ var dxBarGauge = {
     * @extends CommonVizPalette
     */
     palette: 'Default',
+    /**
+    * @name dxbargaugeoptions_paletteextensionmode
+    * @publicName paletteExtensionMode
+    * @default 'blend'
+    * @type string
+    * @acceptValues 'blend' | 'repeat' | 'extrapolate'
+    */
+    paletteExtensionMode: 'blend',
     /**
     * @name dxbargaugeoptions_backgroundColor
     * @publicName backgroundColor

@@ -267,6 +267,45 @@ QUnit.test("series theme", function(assert) {
     assert.equal(series[1].type, "line");
 });
 
+QUnit.test("Pass series count to themeManager", function(assert) {
+
+    //arrange, act
+    var seriesDataSource = new SeriesDataSource({
+        dataSource: [
+            { x: 10, y1: 3, y2: 5 },
+            { x: 50, y1: 16, y2: 1 }
+        ],
+        chart: {
+            palette: ["green", "red"],
+            series: [{
+                type: "area",
+                argumentField: "x",
+                valueField: "y1"
+            }, {
+                argumentField: "x",
+                valueField: "y2"
+            }, {
+                argumentField: "x",
+                valueField: "y2"
+            }],
+            theme: {
+                name: "default",
+                commonSeriesSettings: {
+                    type: "line"
+                }
+            }
+        },
+        renderer: new vizMocks.Renderer()
+    });
+
+    var series = seriesDataSource.getSeries();
+    //assert
+    assert.equal(series.length, 3);
+    assert.equal(series[0].getColor(), "green");
+    assert.equal(series[1].getColor(), "red");
+    assert.equal(series[2].getColor(), "#804000");
+});
+
 QUnit.test("getBoundRange with topIndent, bottomIndent", function(assert) {
     //arrange, act
     var seriesDataSource = new SeriesDataSource({

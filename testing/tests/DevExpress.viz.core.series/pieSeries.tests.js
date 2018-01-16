@@ -97,9 +97,10 @@ var environment = {
     }
 };
 
-function checkMainSeriesColor(assert, series, i, arg, index) {
+function checkMainSeriesColor(assert, series, i, arg, index, pointCount) {
     assert.equal(series.getOptions().mainSeriesColor.getCall(i).args[0], arg);
     assert.equal(series.getOptions().mainSeriesColor.getCall(i).args[1], index);
+    assert.equal(series.getOptions().mainSeriesColor.getCall(i).args[2], pointCount);
 }
 
 var checkTwoGroups = function(assert, series) {
@@ -604,12 +605,12 @@ var checkTwoGroups = function(assert, series) {
 
         assert.equal(series.getOptions().mainSeriesColor.callCount, 6);
 
-        checkMainSeriesColor(assert, series, 0, "arg1", 0);
-        checkMainSeriesColor(assert, series, 1, "arg2", 1);
-        checkMainSeriesColor(assert, series, 2, "arg3", 2);
-        checkMainSeriesColor(assert, series, 3, "arg2", 3);
-        checkMainSeriesColor(assert, series, 4, "arg2", 4);
-        checkMainSeriesColor(assert, series, 5, "arg3", 5);
+        checkMainSeriesColor(assert, series, 0, "arg1", 0, 6);
+        checkMainSeriesColor(assert, series, 1, "arg2", 1, 6);
+        checkMainSeriesColor(assert, series, 2, "arg3", 2, 6);
+        checkMainSeriesColor(assert, series, 3, "arg2", 3, 6);
+        checkMainSeriesColor(assert, series, 4, "arg2", 4, 6);
+        checkMainSeriesColor(assert, series, 5, "arg3", 5, 6);
     });
 
     QUnit.test("mainSeriesColor, update", function(assert) {
@@ -626,12 +627,12 @@ var checkTwoGroups = function(assert, series) {
 
         assert.equal(series.getOptions().mainSeriesColor.callCount, 6);
 
-        checkMainSeriesColor(assert, series, 0, "arg1", 0);
-        checkMainSeriesColor(assert, series, 1, "arg2", 1);
-        checkMainSeriesColor(assert, series, 2, "arg3", 2);
-        checkMainSeriesColor(assert, series, 3, "arg2", 3);
-        checkMainSeriesColor(assert, series, 4, "arg2", 4);
-        checkMainSeriesColor(assert, series, 5, "arg3", 5);
+        checkMainSeriesColor(assert, series, 0, "arg1", 0, 6);
+        checkMainSeriesColor(assert, series, 1, "arg2", 1, 6);
+        checkMainSeriesColor(assert, series, 2, "arg3", 2, 6);
+        checkMainSeriesColor(assert, series, 3, "arg2", 3, 6);
+        checkMainSeriesColor(assert, series, 4, "arg2", 4, 6);
+        checkMainSeriesColor(assert, series, 5, "arg3", 5, 6);
     });
 
     QUnit.test("without borders", function(assert) {

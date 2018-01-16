@@ -931,6 +931,7 @@ var BaseChart = BaseWidget.inherit({
         animation: "ANIMATION",
         dataSource: "DATA_SOURCE",
         palette: "PALETTE",
+        paletteExtensionMode: "PALETTE",
 
         legend: "DATA_INIT",
         seriesTemplate: "DATA_INIT",
@@ -965,7 +966,7 @@ var BaseChart = BaseWidget.inherit({
     },
 
     _change_PALETTE: function() {
-        this._themeManager.updatePalette(this.option("palette"));
+        this._themeManager.updatePalette();
         this._refreshSeries(DATA_INIT_REFRESH_ACTION);
     },
 
@@ -1210,7 +1211,7 @@ var BaseChart = BaseWidget.inherit({
             particularSeriesOptions.visibilityChanged = seriesVisibilityChanged;
             particularSeriesOptions.incidentOccurred = that._incidentOccurred;
 
-            seriesTheme = themeManager.getOptions("series", particularSeriesOptions);
+            seriesTheme = themeManager.getOptions("series", particularSeriesOptions, allSeriesOptions.length);
 
             if(!that._checkPaneName(seriesTheme)) {
                 continue;

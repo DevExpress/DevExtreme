@@ -440,7 +440,7 @@ QUnit.test('descending width', function(assert) {
 });
 
 QUnit.module('BaseRangeContainer - palette', $.extend({}, environment, {
-    checkColors: function(assert, rangeColors, palette, expectedColors) {
+    checkColors: function(assert, rangeColors, palette, expectedColors, paletteExtensionMode) {
         var ranges, list,
             step = 100 / (rangeColors.length + 1),
             pos = 0;
@@ -450,10 +450,12 @@ QUnit.module('BaseRangeContainer - palette', $.extend({}, environment, {
             return range;
         });
         this.rangeContainer._translator = new Translator1D(0, 100, 300, 400);
+        paletteExtensionMode = paletteExtensionMode || "blend";
         this.rangeContainer.render({
             width: 1,
             ranges: ranges,
-            palette: palette
+            palette: palette,
+            paletteExtensionMode: paletteExtensionMode
         }).resize();
         list = this.rangeContainer.elements;
         $.each(expectedColors, function(i, color) {
@@ -462,7 +464,7 @@ QUnit.module('BaseRangeContainer - palette', $.extend({}, environment, {
         assert.strictEqual(list[list.length - 1].range.color, 'none', 'background color');
 
         assert.strictEqual(this.themeManager.createPalette.callCount, 1);
-        assert.deepEqual(this.themeManager.createPalette.firstCall.args, [palette, { type: 'indicatingSet' }]);
+        assert.deepEqual(this.themeManager.createPalette.firstCall.args, [palette, { type: 'indicatingSet', keepLastColorInEnd: true, extensionMode: paletteExtensionMode }]);
     }
 }));
 
@@ -482,8 +484,12 @@ QUnit.test('palette, no colors', function(assert) {
     this.checkColors(assert, [null, null, null], ['p1', 'p2', 'p3'], ['p1', 'p2', 'p3', 'none']);
 });
 
-QUnit.test('palette is shorter than ranges', function(assert) {
-    this.checkColors(assert, [null, null, null, null, null], ['p1', 'p2'], ['p1', 'p2', 'p1', 'p2']);
+QUnit.test('palette is shorter than ranges when paletteExtensionMode is repeat', function(assert) {
+    this.checkColors(assert, [null, null, null, null, null], ['p1', 'p2'], ['p1', 'p2', 'p1', 'p2'], "repeat");
+});
+
+QUnit.test('palette is shorter than ranges when paletteExtensionMode is blend', function(assert) {
+    this.checkColors(assert, [null, null, null, null, null], ["green", "red"], ["green", "#406000", "#804000", "#bf2000", "red"]);
 });
 
 QUnit.test('palette is longer than ranges', function(assert) {

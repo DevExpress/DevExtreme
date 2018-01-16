@@ -3979,6 +3979,14 @@ var BaseChart = {
     */
     palette: [],
     /**
+    * @name basechartoptions_paletteextensionmode
+    * @publicName paletteExtensionMode
+    * @type string
+    * @default 'blend'
+    * @acceptValues 'blend' | 'repeat' | 'extrapolate'
+    */
+    paletteExtensionMode: 'blend',
+    /**
     * @name basechartoptions_legend
     * @publicName legend
     * @type object

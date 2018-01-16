@@ -112,7 +112,7 @@ exports.pie = _extend({}, barSeries, {
     },
 
     _getMainColor: function(data) {
-        return this._options.mainSeriesColor(data.argument, data.index);
+        return this._options.mainSeriesColor(data.argument, data.index, this._getPointsCount());
     },
 
     _getPointOptions: function(data) {

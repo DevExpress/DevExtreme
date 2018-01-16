@@ -1060,7 +1060,7 @@ QUnit.test("Arrange", function(assert) {
         { proxy: { attribute: sinon.stub().returns([1]) } }
     ]);
 
-    assert.deepEqual(createPalette.lastCall.args, ["test-palette", { useHighlight: true }], "palette");
+    assert.deepEqual(createPalette.lastCall.args, ["test-palette", { useHighlight: true, extensionMode: "repeat" }], "palette");
     assert.strictEqual(getNextColor.callCount, 3, "get color");
     assert.deepEqual(this.context.settings._colors, ["c1", "c2", "c3"], "colors");
     assert.deepEqual(this.context.grouping, { color: { callback: noop, field: "", partition: [], values: [] } }, "grouping");
