@@ -2,6 +2,7 @@
 
 var $ = require("../../core/renderer"),
     window = require("../../core/dom_adapter").getWindow(),
+    noop = require("../../core/utils/common").noop,
     eventsEngine = require("../../events/core/events_engine"),
     Callbacks = require("../../core/utils/callbacks");
 
@@ -39,12 +40,17 @@ var resizeCallbacks = (function() {
 
         callbacks.fire(changedDimension);
     };
-    prevSize = formatSize();
+
+    var setPrevSize = function() {
+        prevSize = formatSize();
+        setPrevSize = noop;
+    };
 
     callbacks.add = function() {
         var result = originalCallbacksAdd.apply(callbacks, arguments);
         var jqWindow = $(window);
 
+        setPrevSize();
         if(!resizeEventHandlerAttached && callbacks.has()) {
             eventsEngine.subscribeGlobal(jqWindow, "resize", handleResize);
             resizeEventHandlerAttached = true;
