@@ -464,7 +464,7 @@ viewPort.changeCallback.add(function(viewPort, prevViewport) {
 });
 
 // TODO: remove with win8 theme
-if(window && !devices.isForced() && devices.current().platform === "win") {
+if(window.navigator && !devices.isForced() && devices.current().platform === "win") {
     devices.current({ version: [10] });
 }
 
