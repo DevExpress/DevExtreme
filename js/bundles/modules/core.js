@@ -30,7 +30,7 @@ var animationFrame = require("../../animation/frame");
  * @namespace DevExpress
  * @type method
  * @deprecated utils_requestAnimationFrame
- * @extend_doc
+ * @inheritdoc
  */
 DevExpress.requestAnimationFrame = function() {
     errors.log("W0000", "DevExpress.requestAnimationFrame", "15.2", "Use the 'DevExpress.utils.requestAnimationFrame' method instead.");
@@ -43,7 +43,7 @@ DevExpress.requestAnimationFrame = function() {
  * @namespace DevExpress
  * @type method
  * @deprecated utils_cancelAnimationFrame
- * @extend_doc
+ * @inheritdoc
  */
 DevExpress.cancelAnimationFrame = function() {
     errors.log("W0000", "DevExpress.cancelAnimationFrame", "15.2", "Use the 'DevExpress.utils.cancelAnimationFrame' method instead.");

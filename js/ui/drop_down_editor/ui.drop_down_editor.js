@@ -103,7 +103,7 @@ var DropDownEditor = TextBox.inherit({
              * @name dxDropDownEditorOptions_fieldEditEnabled
              * @publicName fieldEditEnabled
              * @deprecated dxDropDownEditorOptions_acceptCustomValue
-             * @extend_doc
+             * @inheritdoc
              */
             "fieldEditEnabled": { since: "16.1", alias: "acceptCustomValue" },
 
@@ -175,7 +175,7 @@ var DropDownEditor = TextBox.inherit({
             * @publicName activeStateEnabled
             * @type boolean
             * @default true
-            * @extend_doc
+            * @inheritdoc
             */
             activeStateEnabled: true,
 
@@ -209,49 +209,49 @@ var DropDownEditor = TextBox.inherit({
             * @name dxDropDownEditorOptions_mask
             * @publicName mask
             * @hidden
-            * @extend_doc
+            * @inheritdoc
             */
 
             /**
             * @name dxDropDownEditorOptions_maskChar
             * @publicName maskChar
             * @hidden
-            * @extend_doc
+            * @inheritdoc
             */
 
             /**
             * @name dxDropDownEditorOptions_maskRules
             * @publicName maskRules
             * @hidden
-            * @extend_doc
+            * @inheritdoc
             */
 
             /**
             * @name dxDropDownEditorOptions_maskInvalidMessage
             * @publicName maskInvalidMessage
             * @hidden
-            * @extend_doc
+            * @inheritdoc
             */
 
             /**
             * @name dxDropDownEditorOptions_useMaskedValue
             * @publicName useMaskedValue
             * @hidden
-            * @extend_doc
+            * @inheritdoc
             */
 
             /**
             * @name dxDropDownEditorOptions_mode
             * @publicName mode
             * @hidden
-            * @extend_doc
+            * @inheritdoc
             */
 
             /**
              * @name dxDropDownEditorOptions_showMaskMode
              * @publicName showMaskMode
              * @hidden
-             * @extend_doc
+             * @inheritdoc
              */
         });
     },

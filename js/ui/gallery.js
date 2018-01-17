@@ -211,28 +211,28 @@ var Gallery = CollectionWidget.inherit({
             * @name dxGalleryOptions_noDataText
             * @publicName noDataText
             * @hidden
-            * @extend_doc
+            * @inheritdoc
             */
 
             /**
             * @name dxGalleryOptions_selectedItems
             * @publicName selectedItems
             * @hidden
-            * @extend_doc
+            * @inheritdoc
             */
 
             /**
             * @name dxGalleryOptions_selectedItemKeys
             * @publicName selectedItemKeys
             * @hidden
-            * @extend_doc
+            * @inheritdoc
             */
 
             /**
             * @name dxGalleryOptions_keyExpr
             * @publicName keyExpr
             * @hidden
-            * @extend_doc
+            * @inheritdoc
             */
 
             _itemAttributes: { role: "option" },
@@ -256,7 +256,7 @@ var Gallery = CollectionWidget.inherit({
                     * @publicName focusStateEnabled
                     * @type boolean
                     * @default true @for desktop
-                    * @extend_doc
+                    * @inheritdoc
                     */
                     focusStateEnabled: true
                 }
@@ -292,7 +292,7 @@ var Gallery = CollectionWidget.inherit({
         * @name dxGalleryItemTemplate_visible
         * @publicName visible
         * @hidden
-        * @extend_doc
+        * @inheritdoc
         */
         this._defaultTemplates["item"] = new BindableTemplate(function($container, data) {
             var $img = $('<img>').addClass(GALLERY_IMAGE_CLASS);

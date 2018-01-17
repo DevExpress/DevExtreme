@@ -240,31 +240,31 @@ var DropDownList = DropDownEditor.inherit({
             * @name dxDropDownListOptions_fieldTemplate
             * @publicName fieldTemplate
             * @hidden
-            * @extend_doc
+            * @inheritdoc
             */
             /**
             * @name dxDropDownListOptions_fieldRender
             * @publicName fieldRender
             * @hidden
-            * @extend_doc
+            * @inheritdoc
             */
             /**
             * @name dxDropDownListOptions_contentTemplate
             * @publicName contentTemplate
             * @hidden
-            * @extend_doc
+            * @inheritdoc
             */
             /**
             * @name dxDropDownListOptions_contentRender
             * @publicName contentRender
             * @hidden
-            * @extend_doc
+            * @inheritdoc
             */
             /**
             * @name dxDropDownListOptions_applyValueMode
             * @publicName applyValueMode
             * @hidden
-            * @extend_doc
+            * @inheritdoc
             */
 
             popupWidthExtension: 0
@@ -312,7 +312,7 @@ var DropDownList = DropDownEditor.inherit({
             * @name dxDropDownListOptions_value
             * @publicName value
             * @ref
-            * @extend_doc
+            * @inheritdoc
             */
             value: true,
             selectedItem: true,
