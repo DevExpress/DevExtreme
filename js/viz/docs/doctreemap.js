@@ -2,7 +2,6 @@
 * @name dxtreemap
 * @publicName dxTreeMap
 * @inherits BaseWidget
-* @groupName TreeMap
 * @module viz/tree_map
 * @export default
 */

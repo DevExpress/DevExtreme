@@ -112,7 +112,6 @@ var POPOVER_CLASS = "dx-popover",
  * @name dxPopover
  * @publicName dxPopover
  * @inherits dxPopup
- * @groupName Overlays
  * @module ui/popover
  * @export default
  */

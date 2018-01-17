@@ -50,7 +50,6 @@ eventsEngine.subscribeGlobal(document, pointerEvents.down, function(e) {
 * @name dxToast
 * @publicName dxToast
 * @inherits dxOverlay
-* @groupName Overlays
 * @module ui/toast
 * @export default
 */

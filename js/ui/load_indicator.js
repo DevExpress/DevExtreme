@@ -23,7 +23,6 @@ var LOADINDICATOR_CLASS = "dx-loadindicator",
 * @name dxLoadIndicator
 * @publicName dxLoadIndicator
 * @inherits Widget
-* @groupName Indicator Widgets
 * @module ui/load_indicator
 * @export default
 */

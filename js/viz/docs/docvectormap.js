@@ -2,7 +2,6 @@
 * @name dxvectormap
 * @publicName dxVectorMap
 * @inherits BaseWidget
-* @groupName Maps
 * @module viz/vector_map
 * @export default
 */

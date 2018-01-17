@@ -17,7 +17,6 @@ var TEXTAREA_CLASS = "dx-textarea",
 * @isEditor
 * @publicName dxTextArea
 * @inherits dxTextBox
-* @groupName Editors
 * @module ui/text_area
 * @export default
 */
