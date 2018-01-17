@@ -414,9 +414,9 @@ var ListBase = CollectionWidget.inherit({
         /**
         * @name dxListOptions_useNativeScrolling
         * @publicName useNativeScrolling
-        * @custom_default_for_android_below_version_4 false
-        * @custom_default_for_desktop false
-        * @custom_default_for_mac_desktop true
+        * @default false @for android_below_version_4
+        * @default false @for desktop
+        * @default true @for mac_desktop
         */
         return this.callBase().concat(deviceDependentOptions(), [
             {
@@ -441,16 +441,16 @@ var ListBase = CollectionWidget.inherit({
                     /**
                     * @name dxListOptions_showScrollbar
                     * @publicName showScrollbar
-                    * @custom_default_for_android_below_version_4 "onHover"
-                    * @custom_default_for_desktop "onHover"
+                    * @default "onHover" @for android_below_version_4
+                    * @default "onHover" @for desktop
                     */
                     showScrollbar: "onHover",
 
                     /**
                     * @name dxListOptions_pageLoadMode
                     * @publicName pageLoadMode
-                    * @custom_default_for_android_below_version_4 "nextButton"
-                    * @custom_default_for_desktop "nextButton"
+                    * @default "nextButton" @for android_below_version_4
+                    * @default "nextButton" @for desktop
                     */
                     pageLoadMode: "nextButton"
                 }
@@ -464,7 +464,7 @@ var ListBase = CollectionWidget.inherit({
                     * @name dxListOptions_focusStateEnabled
                     * @publicName focusStateEnabled
                     * @type boolean
-                    * @custom_default_for_generic true
+                    * @default true @for generic
                     * @extend_doc
                     */
                     focusStateEnabled: true

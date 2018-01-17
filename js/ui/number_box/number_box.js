@@ -169,7 +169,7 @@ var NumberBox = TextEditor.inherit({
                     /**
                     * @name dxNumberBoxOptions_mode
                     * @publicName mode
-                    * @custom_default_for_mobile_devices "number"
+                    * @default "number" @for mobile_devices
                     */
                     mode: "number"
                 }
