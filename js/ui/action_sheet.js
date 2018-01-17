@@ -183,41 +183,6 @@ var ActionSheet = CollectionWidget.inherit({
             focusStateEnabled: false,
 
             selectionByClick: false
-
-            /**
-            * @name dxActionSheetItemtemplate_type
-            * @publicName type
-            * @type String
-            * @default 'normal'
-            * @acceptValues 'normal'|'default'|'back'|'danger'|'success'
-            */
-            /**
-            * @name dxActionSheetItemTemplate_onClick
-            * @publicName onClick
-            * @type function(e)|string
-            * @extends Action
-            * @type_function_param1 e:object
-            * @type_function_param1_field4 jQueryEvent:jQuery.Event:deprecated(event)
-            * @type_function_param1_field5 event:event
-            */
-            /**
-            * @name dxActionSheetItemTemplate_icon
-            * @publicName icon
-            * @type String
-            */
-            /**
-            * @name dxActionSheetItemTemplate_visible
-            * @publicName visible
-            * @type boolean
-            * @default true
-            * @hidden
-            */
-            /**
-            * @name dxActionSheetItemTemplate_html
-            * @publicName html
-            * @type String
-            * @hidden
-            */
         });
     },
 
@@ -237,7 +202,46 @@ var ActionSheet = CollectionWidget.inherit({
 
     _initTemplates: function() {
         this.callBase();
-
+        /**
+        * @name dxActionSheetItemTemplate
+        * @publicName dxActionSheetItemTemplate
+        * @inherits CollectionWidgetItemTemplate
+        * @type object
+        */
+        /**
+        * @name dxActionSheetItemTemplate_type
+        * @publicName type
+        * @type String
+        * @default 'normal'
+        * @acceptValues 'normal'|'default'|'back'|'danger'|'success'
+        */
+        /**
+        * @name dxActionSheetItemTemplate_onClick
+        * @publicName onClick
+        * @type function(e)|string
+        * @extends Action
+        * @type_function_param1 e:object
+        * @type_function_param1_field4 jQueryEvent:jQuery.Event:deprecated(event)
+        * @type_function_param1_field5 event:event
+        */
+        /**
+        * @name dxActionSheetItemTemplate_icon
+        * @publicName icon
+        * @type String
+        */
+        /**
+        * @name dxActionSheetItemTemplate_visible
+        * @publicName visible
+        * @type boolean
+        * @default true
+        * @hidden
+        */
+        /**
+        * @name dxActionSheetItemTemplate_html
+        * @publicName html
+        * @type String
+        * @hidden
+        */
         this._defaultTemplates["item"] = new BindableTemplate(function($container, data) {
             var button = new Button($("<div>"), extend({ onClick: data && data.click }, data));
             $container.append(button.$element());

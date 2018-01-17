@@ -450,7 +450,12 @@ var MultiView = CollectionWidget.inherit({
     }
 
 });
-
+/**
+* @name dxMultiViewItemTemplate
+* @publicName dxMultiViewItemTemplate
+* @inherits CollectionWidgetItemTemplate
+* @type object
+*/
 /**
 * @name dxMultiViewItemTemplate_visible
 * @publicName visible

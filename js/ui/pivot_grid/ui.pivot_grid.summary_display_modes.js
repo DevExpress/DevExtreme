@@ -165,7 +165,11 @@ var SummaryCell = function(columnPath, rowPath, data, descriptions, fieldIndex, 
     }
 
 };
-
+/**
+* @name dxPivotGridSummaryCell
+* @publicName dxPivotGridSummaryCell
+* @type object
+*/
 SummaryCell.prototype = extend(SummaryCell.prototype, {
 
     _getPath: function(dimension) {

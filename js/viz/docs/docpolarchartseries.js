@@ -1,4 +1,10 @@
 /**
+* @name dxPolarChartSeriesTypes
+* @publicName dxPolarChartSeriesTypes
+* @type object
+* @hidden
+*/
+/**
 * @name dxPolarChartSeriesTypes_CommonPolarChartSeries
 * @publicName CommonPolarChartSeries
 * @type object

@@ -33,6 +33,12 @@ var SlideOut = CollectionWidget.inherit({
 
     _getDefaultOptions: function() {
         /**
+        * @name dxSlideOutItemTemplate
+        * @publicName dxSlideOutItemTemplate
+        * @inherits CollectionWidgetItemTemplate
+        * @type object
+        */
+        /**
         * @name dxSlideOutItemTemplate_menutemplate
         * @publicName menuTemplate
         * @type template|function
