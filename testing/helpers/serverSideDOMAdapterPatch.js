@@ -10,7 +10,6 @@ exports.set = function() {
             configurable: true,
             value: serverSideWindowMock[field]
         });
-        // domAdapter._window[field] = serverSideWindowMock[field];
     }
     domAdapter._readyCallbacks.fire();
 };
