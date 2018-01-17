@@ -17,8 +17,7 @@ var DropDownEditor = require("./drop_down_editor/ui.drop_down_editor"),
     extend = require("../core/utils/extend").extend,
     registerComponent = require("../core/component_registrator");
 
-var DROP_DOWN_BOX_CLASS = "dx-dropdownbox",
-    DIMENSION_DEPENDENT_OPTIONS = ["width", "height", "maxWidth", "maxHeight", "minWidth", "minHeight"];
+var DROP_DOWN_BOX_CLASS = "dx-dropdownbox";
 
 /**
  * @name dxDropDownBox
@@ -263,10 +262,6 @@ var DropDownBox = DropDownEditor.inherit({
         this._setPopupOption("width", this.$element().outerWidth());
     },
 
-    _dimensionChanged: function() {
-        this._popup && !this.option("dropDownOptions.width") && this._updatePopupWidth();
-    },
-
     _popupElementTabHandler: function(e) {
         if(e.key !== "tab") return;
 
@@ -288,6 +283,11 @@ var DropDownBox = DropDownEditor.inherit({
 
     _renderPopup: function(e) {
         this.callBase();
+        this._options.dropDownOptions = extend({}, this._popup.option());
+
+        this._popup.on("optionChanged", function(e) {
+            this.option("dropDownOptions" + "." + e.fullName, e.value);
+        }.bind(this));
 
         if(this.option("focusStateEnabled")) {
             this._popup._keyboardProcessor.push(new KeyboardProcessor({
@@ -336,13 +336,9 @@ var DropDownBox = DropDownEditor.inherit({
 
         this._setPopupOption(options);
 
-        Object.keys(options).every(function(option) {
-            if(DIMENSION_DEPENDENT_OPTIONS.indexOf(option) >= 0) {
-                this._dimensionChanged();
-                return false;
-            }
-            return true;
-        }, this);
+        if(Object.keys(options).indexOf("width") !== -1 && options["width"] === undefined) {
+            this._updatePopupWidth();
+        }
     },
 
     _setCollectionWidgetOption: commonUtils.noop,
@@ -352,7 +348,7 @@ var DropDownBox = DropDownEditor.inherit({
         switch(args.name) {
             case "width":
                 this.callBase(args);
-                this._dimensionChanged();
+                this._updatePopupWidth();
                 break;
             case "dropDownOptions":
                 this._popupOptionChanged(args);

@@ -324,33 +324,14 @@ QUnit.test("customize width and height", function(assert) {
     assert.equal($popupContent.outerWidth(), 200, "popup width customization has been cancelled");
 });
 
-QUnit.test("dimensionChanged should be called after dimension popup option changing", function(assert) {
-    var instance = new DropDownBox(this.$element, {
-            opened: true
-        }),
-        dimensionChangedSpy = sinon.spy(instance, "_dimensionChanged");
+QUnit.test("two way binding should work with dropDownOptions", function(assert) {
+    var instance = new DropDownBox(this.$element, { opened: true }),
+        popup = instance._popup;
 
-    var dimensionOptions = ["width", "height", "maxWidth", "maxHeight", "minWidth", "minHeight"];
-    dimensionOptions.forEach(function(dimensionOption) {
-        instance.option("dropDownOptions." + dimensionOption, 100);
-    });
+    assert.equal(instance.option("dropDownOptions.visible", true, "visible is correct"));
 
-    assert.equal(dimensionChangedSpy.callCount, dimensionOptions.length, "dimensionChanged was called correct number of times");
-});
-
-QUnit.test("dimensionChanged should be called once when different popup options changing simultaneously", function(assert) {
-    var instance = new DropDownBox(this.$element, {
-            opened: true
-        }),
-        dimensionChangedSpy = sinon.spy(instance, "_dimensionChanged");
-
-    instance.option("dropDownOptions", {
-        title: "Test",
-        width: 100,
-        height: 100
-    });
-
-    assert.equal(dimensionChangedSpy.callCount, 1, "dimensionChanged was called once");
+    popup.option("resizeEnabled", true);
+    assert.strictEqual(instance.option("dropDownOptions.resizeEnabled"), true, "popup option change leads to dropDownOptions change");
 });
 
 QUnit.test("popup should not be draggable by default", function(assert) {
