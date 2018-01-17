@@ -256,7 +256,7 @@ var Toast = Overlay.inherit({
                     /**
                     * @name dxToastOptions_position
                     * @publicName position
-                    * @default "{ at: 'bottom left', my: 'bottom lef', offset: '20 -20'}" @for Android
+                    * @default { at: 'bottom left', my: 'bottom lef', offset: '20 -20'} @for Android
                     * @extend_doc
                     */
                     position: {
@@ -268,7 +268,7 @@ var Toast = Overlay.inherit({
                     /**
                     * @name dxToastOptions_animation
                     * @publicName animation
-                    * @default "{show: {type: 'slide', duration: 200, from: { top: $(window).height() }}, hide: { type: 'slide', duration: 200, to: { top: $(window).height()}}}" @for Android
+                    * @default {show: {type: 'slide', duration: 200, from: { top: $(window).height() }}, hide: { type: 'slide', duration: 200, to: { top: $(window).height()}}} @for Android
                     * @extend_doc
                     */
                     animation: {
@@ -297,7 +297,7 @@ var Toast = Overlay.inherit({
                     /**
                     * @name dxToastOptions_width
                     * @publicName width
-                    * @default "function() { return $(window).width(); }" @for Android_Phone|Windows_10_Mobile
+                    * @default function() { return $(window).width(); } @for Android_Phone|Windows_10_Mobile
                     * @extend_doc
                     */
                     width: function() { return $(window).width(); },
@@ -305,7 +305,7 @@ var Toast = Overlay.inherit({
                     /**
                     * @name dxToastOptions_position
                     * @publicName position
-                    * @default "{ at: 'bottom center', my: 'bottom center', offset: '0 0' }" @for Android_Phone|Windows_10_Mobile
+                    * @default { at: 'bottom center', my: 'bottom center', offset: '0 0' } @for Android_Phone|Windows_10_Mobile
                     * @extend_doc
                     */
                     position: {
