@@ -226,7 +226,7 @@ var Toast = Overlay.inherit({
                    /**
                    * @name dxToastOptions_position
                    * @publicName position
-                   * @custom_default_for_Windows_10_Mobile "bottom right"
+                   * @default 'bottom right' @for Windows_10_Mobile
                    * @extend_doc
                    */
                     position: "bottom right",
@@ -234,7 +234,7 @@ var Toast = Overlay.inherit({
                     /**
                     * @name dxToastOptions_width
                     * @publicName width
-                    * @custom_default_for_Android_and_Windows_10_Mobile "auto"
+                    * @default 'auto' @for Android_and_Windows_10_Mobile
                     * @extend_doc
                     */
                     width: "auto"
@@ -246,7 +246,7 @@ var Toast = Overlay.inherit({
                     /**
                     * @name dxToastOptions_closeOnOutsideClick
                     * @publicName closeOnOutsideClick
-                    * @custom_default_for_Android true
+                    * @default true @for Android
                     * @extend_doc
                     */
                     closeOnOutsideClick: true,
@@ -256,7 +256,7 @@ var Toast = Overlay.inherit({
                     /**
                     * @name dxToastOptions_position
                     * @publicName position
-                    * @custom_default_for_Android { at: "bottom left", my: "bottom left", offset: "20 -20" }
+                    * @default { at: 'bottom left', my: 'bottom left', offset: '20 -20'} @for Android
                     * @extend_doc
                     */
                     position: {
@@ -268,7 +268,7 @@ var Toast = Overlay.inherit({
                     /**
                     * @name dxToastOptions_animation
                     * @publicName animation
-                    * @custom_default_for_Android {show: {type: "slide", duration: 200, from: { top: $(window).height() }}, hide: { type: "slide", duration: 200, to: { top: $(window).height() }}}
+                    * @default {show: {type: 'slide', duration: 200, from: { top: $(window).height() }}, hide: { type: 'slide', duration: 200, to: { top: $(window).height()}}} @for Android
                     * @extend_doc
                     */
                     animation: {
@@ -297,7 +297,7 @@ var Toast = Overlay.inherit({
                     /**
                     * @name dxToastOptions_width
                     * @publicName width
-                    * @custom_default_for_phones_on_Android_and_Windows_10_Mobile function() { return $(window).width(); }
+                    * @default function() { return $(window).width(); } @for Android_Phone|Windows_10_Mobile
                     * @extend_doc
                     */
                     width: function() { return $(window).width(); },
@@ -305,7 +305,7 @@ var Toast = Overlay.inherit({
                     /**
                     * @name dxToastOptions_position
                     * @publicName position
-                    * @custom_default_for_phones_on_Android_and_Windows_10_Mobile { at: "bottom center", my: "bottom center", offset: "0 0" }
+                    * @default { at: 'bottom center', my: 'bottom center', offset: '0 0' } @for Android_Phone|Windows_10_Mobile
                     * @extend_doc
                     */
                     position: {

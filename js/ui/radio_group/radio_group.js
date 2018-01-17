@@ -116,7 +116,7 @@ var RadioGroup = Editor.inherit({
                     /**
                      * @name dxRadioGroupOptions_layout
                      * @publicName layout
-                     * @custom_default_for_tablets 'horizontal'
+                     * @default 'horizontal' @for tablets
                      */
                     layout: "horizontal"
                 }
@@ -130,7 +130,7 @@ var RadioGroup = Editor.inherit({
                     * @name dxRadioGroupOptions_focusStateEnabled
                     * @publicName focusStateEnabled
                     * @type boolean
-                    * @custom_default_for_desktop true
+                    * @default true @for desktop
                     * @extend_doc
                     */
                     focusStateEnabled: true

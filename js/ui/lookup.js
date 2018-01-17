@@ -555,8 +555,8 @@ var Lookup = DropDownList.inherit({
                     /**
                     * @name dxLookupOptions_useNativeScrolling
                     * @publicName useNativeScrolling
-                    * @custom_default_for_desktop false
-                    * @custom_default_for_Mac true
+                    * @default false @for desktop
+                    * @default true @for Mac
                     */
                     useNativeScrolling: false
                 }
@@ -569,13 +569,13 @@ var Lookup = DropDownList.inherit({
                     /**
                     * @name dxLookupOptions_usePopover
                     * @publicName usePopover
-                    * @custom_default_for_desktop_and_iOS true
+                    * @default true @for desktop|iOS
                     */
                     usePopover: true,
                     /**
                     * @name dxLookupOptions_popupHeight
                     * @publicName popupHeight
-                    * @custom_default_for_desktop_and_iPad "auto"
+                    * @default 'auto' @for desktop|iPad
                     */
                     popupHeight: "auto"
                 }
@@ -611,7 +611,7 @@ var Lookup = DropDownList.inherit({
                     /**
                     * @name dxLookupOptions_fullScreen
                     * @publicName fullScreen
-                    * @custom_default_for_iPhone true
+                    * @default true @for iPhone
                     */
                     fullScreen: true
                 }
@@ -622,7 +622,7 @@ var Lookup = DropDownList.inherit({
                     /**
                     * @name dxLookupOptions_popupWidth
                     * @publicName popupWidth
-                    * @custom_default_for_iPad function() { return Math.min($(window).width(), $(window).height()) * 0.4; }
+                    * @default function() { return Math.min($(window).width(), $(window).height()) * 0.4; } @for iPad
                     */
                     popupWidth: function() { return Math.min($(window).width(), $(window).height()) * 0.4; },
 
@@ -641,7 +641,7 @@ var Lookup = DropDownList.inherit({
                     * @name dxLookupOptions_focusStateEnabled
                     * @publicName focusStateEnabled
                     * @type boolean
-                    * @custom_default_for_desktop true
+                    * @default true @for desktop
                     * @extend_doc
                     */
                     focusStateEnabled: true
