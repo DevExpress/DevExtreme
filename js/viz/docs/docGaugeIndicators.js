@@ -10,8 +10,8 @@ var commonIndicator = {
 	* @name commonIndicatoroptions_color
 	* @publicName color
 	* @type string
-	* @custom_default_for_value_indicators '#C2C2C2'
-	* @custom_default_for_subvalue_indicators '#8798a5'
+	* @default '#C2C2C2' @for value_indicators
+	* @default '#8798a5' @for subvalue_indicators
 	*/
     color: '#C2C2C2',
     /**
@@ -164,8 +164,8 @@ var commonIndicator = {
 	* @name commonIndicatoroptions_offset
 	* @publicName offset
 	* @type number
-	* @custom_default_for_value_indicators 20
-	* @custom_default_for_subvalue_indicators 6
+	* @default 20 @for value_indicators
+	* @default 6 @for subvalue_indicators
 	*/
     offset: 20,
     /**
@@ -212,8 +212,8 @@ var commonIndicator = {
 	* @name commonIndicatoroptions_horizontalOrientation
 	* @publicName horizontalOrientation
 	* @type string
-	* @custom_default_for_value_indicators 'right'
-	* @custom_default_for_subvalue_indicators 'left'
+	* @default 'right' @for value_indicators
+	* @default 'left' @for subvalue_indicators
 	* @acceptValues 'left' | 'right'
 	* @propertyOf linearRangeBar
 	*/
@@ -222,8 +222,8 @@ var commonIndicator = {
 	* @name commonIndicatoroptions_verticalOrientation
 	* @publicName verticalOrientation
 	* @type string
-	* @custom_default_for_value_indicators 'bottom'
-	* @custom_default_for_subvalue_indicators 'top'
+	* @default 'bottom' @for value_indicators
+	* @default 'top' @for subvalue_indicators
 	* @acceptValues 'top' | 'bottom'
 	* @propertyOf linearRangeBar
 	*/
@@ -357,7 +357,7 @@ var linearRectangle = {
 	* @name linearRectangleoptions_offset
 	* @publicName offset
     * @type number
-	* @custom_default_for_value_and_subvalue_indicators 10
+	* @default 10 @for value_and_subvalue_indicators
 	* @extend_doc
 	*/
     offset: 10
@@ -375,7 +375,7 @@ var linearCircle = {
 	* @name linearCircleoptions_offset
 	* @publicName offset
     * @type number
-	* @custom_default_for_value_and_subvalue_indicators 10
+	* @default 10 @for value_and_subvalue_indicators
 	* @extend_doc
 	*/
     offset: 10
@@ -401,7 +401,7 @@ var linearRhombus = {
 	* @name linearRhombusoptions_offset
 	* @publicName offset
     * @type number
-	* @custom_default_for_value_and_subvalue_indicators 10
+	* @default 10 @for value_and_subvalue_indicators
 	* @extend_doc
 	*/
     offset: 10
@@ -419,7 +419,7 @@ var linearRangeBar = {
 	* @name linearRangeBaroptions_offset
 	* @publicName offset
     * @type number
-	* @custom_default_for_value_and_subvalue_indicators 10
+	* @default 10 @for value_and_subvalue_indicators
 	* @extend_doc
 	*/
     offset: 10
@@ -453,7 +453,7 @@ var linearTriangleMarker = {
 	* @name linearTriangleMarkeroptions_offset
 	* @publicName offset
     * @type number
-	* @custom_default_for_value_and_subvalue_indicators 10
+	* @default 10 @for value_and_subvalue_indicators
 	* @extend_doc
 	*/
     offset: 10
@@ -503,7 +503,7 @@ var linearTextCloud = {
 	* @name linearTextCloudoptions_offset
 	* @publicName offset
     * @type number
-	* @custom_default_for_value_and_subvalue_indicators 10
+	* @default 10 @for value_and_subvalue_indicators
 	* @extend_doc
 	*/
     offset: 10

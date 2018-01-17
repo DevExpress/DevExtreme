@@ -88,7 +88,7 @@ var NumberBox = TextEditor.inherit({
             * @publicName useLargeSpinButtons
             * @type boolean
             * @default true
-            * @custom_default_for_desktop false
+            * @default false @for desktop
             */
             useLargeSpinButtons: true,
 
@@ -171,7 +171,7 @@ var NumberBox = TextEditor.inherit({
                     /**
                     * @name dxNumberBoxOptions_mode
                     * @publicName mode
-                    * @custom_default_for_mobile_devices "number"
+                    * @default "number" @for mobile_devices
                     */
                     mode: "number"
                 }
