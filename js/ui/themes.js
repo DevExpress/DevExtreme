@@ -273,6 +273,10 @@ function getCssClasses(themeName) {
 
 var themeClasses;
 function attachCssClasses(element, themeName) {
+    if(!themeName && !knownThemes) {
+        return;
+    }
+
     themeClasses = getCssClasses(themeName).join(" ");
     $(element).addClass(themeClasses);
 
