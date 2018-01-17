@@ -160,13 +160,13 @@ var Tabs = CollectionWidget.inherit({
                     /**
                     * @name dxTabsOptions_showNavButtons
                     * @publicName showNavButtons
-                    * @custom_default_for_desktop true
+                    * @default true @for desktop
                     */
                     showNavButtons: true,
                     /**
                     * @name dxTabsOptions_scrollByContent
                     * @publicName scrollByContent
-                    * @custom_default_for_desktop false
+                    * @default false @for desktop
                     */
                     scrollByContent: false
                 }
@@ -180,7 +180,7 @@ var Tabs = CollectionWidget.inherit({
                     * @name dxTabsOptions_focusStateEnabled
                     * @publicName focusStateEnabled
                     * @type boolean
-                    * @custom_default_for_generic true
+                    * @default true @for generic
                     * @extend_doc
                     */
                     focusStateEnabled: true

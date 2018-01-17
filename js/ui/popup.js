@@ -250,7 +250,7 @@ var Popup = Overlay.inherit({
                     * @name dxPopupOptions_width
                     * @publicName width
                     * @type string|number|function
-                    * @custom_default_for_windows_8 function() { return $(window).width(); }
+                    * @default function() { return $(window).width(); } @for windows_8
                     * @extend_doc
                     */
                     width: function() { return $(window).width(); }
@@ -266,7 +266,7 @@ var Popup = Overlay.inherit({
                     * @name dxPopupOptions_position
                     * @publicName position
                     * @type positionConfig
-                    * @custom_default_for_windows_phone_8 { my: 'top center', at: 'top center', of: window, offset: '0 0' }
+                    * @default { my: 'top center', at: 'top center', of: window, offset: '0 0' } @for windows_phone_8
                     * @extend_doc
                     */
                     position: {
@@ -282,19 +282,19 @@ var Popup = Overlay.inherit({
                     /**
                     * @name dxPopupOptions_animation
                     * @publicName animation
-                    * @custom_default_for_iOS { show: { type: "slide", duration: 400, from: { position: { my: "top", at: "bottom", of: window } }, to: { position: { my: "center", at: "center", of: window } } }, hide: { type: "slide", duration: 400, from: { position: { my: "center", at: "center", of: window } }, to: { position: { my: "top", at: "bottom", of: window } } } }
+                    * @default { show: { type: "slide", duration: 400, from: { position: { my: "top", at: "bottom", of: window } }, to: { position: { my: "center", at: "center", of: window } } }, hide: { type: "slide", duration: 400, from: { position: { my: "center", at: "center", of: window } }, to: { position: { my: "top", at: "bottom", of: window } } } } @for iOS
                     * @extend_doc
                     */
                     /**
                     * @name dxPopupOptions_animation_show
                     * @publicName show
-                    * @custom_default_for_iOS { type: "slide", duration: 400, from: { position: { my: "top", at: "bottom", of: window } }, to: { position: { my: "center", at: "center", of: window } } }
+                    * @default { type: "slide", duration: 400, from: { position: { my: "top", at: "bottom", of: window } }, to: { position: { my: "center", at: "center", of: window } } } @for iOS
                     * @extend_doc
                     */
                     /**
                     * @name dxPopupOptions_animation_hide
                     * @publicName hide
-                    * @custom_default_for_iOS { type: "slide", duration: 400, from: { position: { my: "center", at: "center", of: window } }, to: { position: { my: "top", at: "bottom", of: window } } }
+                    * @default { type: "slide", duration: 400, from: { position: { my: "center", at: "center", of: window } }, to: { position: { my: "top", at: "bottom", of: window } } } @for iOS
                     * @extend_doc
                     */
                     animation: this._iosAnimation
@@ -312,7 +312,7 @@ var Popup = Overlay.inherit({
                     /**
                     * @name dxPopupOptions_showCloseButton
                     * @publicName showCloseButton
-                    * @custom_default_for_desktop true
+                    * @default true @for desktop
                     */
                     showCloseButton: true
                 }
@@ -325,7 +325,7 @@ var Popup = Overlay.inherit({
                     /**
                     * @name dxPopupOptions_dragEnabled
                     * @publicName dragEnabled
-                    * @custom_default_for_desktop true
+                    * @default true @for desktop
                     */
                     dragEnabled: true
                 }
@@ -339,7 +339,7 @@ var Popup = Overlay.inherit({
                     * @name dxPopupOptions_focusStateEnabled
                     * @publicName focusStateEnabled
                     * @type boolean
-                    * @custom_default_for_generic true
+                    * @default true @for generic
                     * @extend_doc
                     */
                     focusStateEnabled: true

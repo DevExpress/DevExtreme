@@ -216,7 +216,7 @@ var Calendar = Editor.inherit({
                     * @name dxCalendarOptions_focusStateEnabled
                     * @publicName focusStateEnabled
                     * @type boolean
-                    * @custom_default_for_generic true
+                    * @default true @for generic
                     * @extend_doc
                     */
                     focusStateEnabled: true
