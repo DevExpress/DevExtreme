@@ -141,6 +141,13 @@ QUnit.test("DropDown menu should have correct popup size", function(assert) {
     assert.equal(menu.option("popupMaxHeight"), 200, "Popup has correct maxHeight");
 });
 
+QUnit.test("DropDown menu should have focusStateEnabled = true on init", function(assert) {
+    var $dropDownMenu = this.renderDropDownAppointmentsContainer(),
+        menu = $dropDownMenu.dxDropDownMenu("instance");
+
+    assert.ok(menu.option("focusStateEnabled"), "focusStateEnabled option value is correct");
+});
+
 QUnit.test("DropDown menu should have a correct button template", function(assert) {
     var $dropDownMenu = this.renderDropDownAppointmentsContainer(),
         menu,
@@ -352,15 +359,21 @@ QUnit.test("Click on list item should not close menu", function(assert) {
     assert.ok(dropDownMenu.option("opened"), "Menu is opened");
 });
 
-QUnit.test("List items should not have active and focused state", function(assert) {
+QUnit.test("List items should not have active state", function(assert) {
     this.renderDropDownAppointmentsContainer().trigger("dxclick");
 
     var dropDownMenu = $(".dx-scheduler-dropdown-appointments").dxDropDownMenu("instance");
 
     assert.strictEqual(dropDownMenu._list.option("activeStateEnabled"), false, "Active state isn't enabled");
-    assert.strictEqual(dropDownMenu._list.option("focusStateEnabled"), false, "Focus state isn't enabled");
 });
 
+QUnit.test("List items should have focus state", function(assert) {
+    this.renderDropDownAppointmentsContainer().trigger("dxclick");
+
+    var dropDownMenu = $(".dx-scheduler-dropdown-appointments").dxDropDownMenu("instance");
+
+    assert.strictEqual(dropDownMenu._list.option("focusStateEnabled"), true, "Focus state isn't enabled");
+});
 
 QUnit.test("the 'repaintExisting' should repaint dropdown menus", function(assert) {
     sinon.stub(this.widgetMock, "fire");
