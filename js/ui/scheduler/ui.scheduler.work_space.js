@@ -384,7 +384,6 @@ var SchedulerWorkSpace = Widget.inherit({
             case "timeCellTemplate":
             case "startDayHour":
             case "endDayHour":
-            case "hoursInterval":
             case "firstDayOfWeek":
             case "currentDate":
             case "groups":
@@ -399,6 +398,10 @@ var SchedulerWorkSpace = Widget.inherit({
                 this.notifyObserver("allDayPanelToggled");
                 this._attachTablesEvents();
                 this.headerPanelOffsetRecalculate();
+                this._updateScrollable();
+                break;
+            case "hoursInterval":
+                this._cleanWorkSpace();
                 this._updateScrollable();
                 break;
             case "onCellClick":

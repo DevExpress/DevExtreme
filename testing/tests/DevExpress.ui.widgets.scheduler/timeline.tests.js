@@ -434,6 +434,24 @@ QUnit.test("Ensure cell min height is equal to cell height if crossScrollingEnab
     assert.ok(recalculateGroupHeader.called, "Group header was recalculated");
 });
 
+QUnit.test("Scrollables should be updated after hoursInterval changing", function(assert) {
+    this.instance.option({
+        currentDate: new Date(2017, 1, 15),
+        hoursInterval: 0.5
+    });
+
+    var scrollable = this.instance.$element().find(".dx-scheduler-date-table-scrollable").dxScrollable("instance"),
+        updateSpy = sinon.spy(scrollable, "update");
+
+    try {
+        this.instance.option("hoursInterval", 0.1);
+
+        assert.ok(updateSpy.calledOnce, "update was called");
+    } finally {
+        scrollable.update.restore();
+    }
+});
+
 QUnit.module("Timeline Day", {
     beforeEach: function() {
         this.instance = $("#scheduler-timeline").dxSchedulerTimelineDay().dxSchedulerTimelineDay("instance");
