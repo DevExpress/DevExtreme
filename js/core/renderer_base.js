@@ -2,8 +2,7 @@
 
 var dataUtils = require("./element_data");
 var domAdapter = require("./dom_adapter");
-var getWindow = domAdapter.getWindow;
-var window = getWindow();
+var window = domAdapter.getWindow();
 var typeUtils = require("./utils/type");
 var styleUtils = require("./utils/style");
 var sizeUtils = require("./utils/size");
@@ -21,7 +20,7 @@ var initRender = function(selector, context) {
     }
 
     if(typeof selector === "string") {
-        context = context || getWindow().document;
+        context = context || window.document;
         if(selector === "body") {
             this[0] = context.body;
             this.length = 1;
@@ -213,7 +212,7 @@ initRender.prototype.toggleClass = function(className, value) {
         }
 
         if(typeUtils.isNumeric(value)) {
-            var elementStyles = getWindow().getComputedStyle(element);
+            var elementStyles = window.getComputedStyle(element);
             var sizeAdjustment = sizeUtils.getElementBoxParams(propName, elementStyles);
             var isBorderBox = elementStyles.boxSizing === "border-box";
 
@@ -307,7 +306,7 @@ initRender.prototype.css = function(name, value) {
 
             name = styleUtils.styleProp(name);
 
-            var result = getWindow().getComputedStyle(this[0])[name] || this[0].style[name];
+            var result = window.getComputedStyle(this[0])[name] || this[0].style[name];
             return typeUtils.isNumeric(result) ? result.toString() : result;
         }
     } else if(typeUtils.isPlainObject(name)) {
@@ -769,7 +768,7 @@ initRender.prototype.offsetParent = function() {
         offsetParent = renderer(offsetParent[0].offsetParent);
     }
 
-    offsetParent = offsetParent[0] ? offsetParent : renderer(getWindow().document.documentElement);
+    offsetParent = offsetParent[0] ? offsetParent : renderer(window.document.documentElement);
 
     return offsetParent;
 };

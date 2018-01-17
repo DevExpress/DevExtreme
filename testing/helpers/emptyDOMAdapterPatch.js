@@ -11,15 +11,16 @@ for(var field in domAdapter) {
     }
 }
 
-domAdapter._window = null;
+domAdapter._window = domAdapterBackup._window = {};
 
-QUnit.testStart(function() {
-    serverSideDOMAdapter.set();
-    domAdapter._readyCallbacks.fire();
-});
-
-domAdapter.__restoreOriginal = function() {
-    for(var method in domAdapterBackup) {
-        domAdapter[method] = domAdapterBackup[method];
+var restoreOriginal = function() {
+    for(var field in domAdapterBackup) {
+        domAdapter[field] = domAdapterBackup[field];
     }
 };
+
+QUnit.begin(function() {
+    restoreOriginal();
+    serverSideDOMAdapter.set();
+});
+

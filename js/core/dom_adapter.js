@@ -80,7 +80,7 @@ var domAdapter = module.exports = {
         return domAdapter._window;
     },
 
-    _window: window,
+    _window: window || { },
 
     ready: function(callback) {
         domAdapter._readyCallbacks.add(callback);
