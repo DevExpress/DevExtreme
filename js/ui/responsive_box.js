@@ -738,7 +738,12 @@ var ResponsiveBox = CollectionWidget.inherit({
     * @extend_doc
     */
 });
-
+/**
+* @name dxResponsiveBoxItemTemplate
+* @publicName dxResponsiveBoxItemTemplate
+* @inherits CollectionWidgetItemTemplate
+* @type object
+*/
 /**
 * @name dxResponsiveBoxItemTemplate_location
 * @publicName location

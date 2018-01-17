@@ -212,6 +212,13 @@ var MenuBase = HierarchicalCollectionWidget.inherit({
             */
 
             /**
+            * @name dxMenuBaseItemTemplate
+            * @publicName dxMenuBaseItemTemplate
+            * @inherits CollectionWidgetItemTemplate
+            * @type object
+            */
+
+            /**
             * @name dxMenuBaseItemTemplate_beginGroup
             * @publicName beginGroup
             * @type Boolean

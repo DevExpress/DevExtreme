@@ -140,23 +140,6 @@ var Accordion = CollectionWidget.inherit({
             selectionByClick: true,
             activeStateEnabled: true,
             _itemAttributes: { role: "tab" }
-
-            /**
-            * @name dxAccordionItemTemplate_title
-            * @publicName title
-            * @type String
-            */
-            /**
-            * @name dxAccordionItemTemplate_icon
-            * @publicName icon
-            * @type String
-            */
-            /**
-            * @name dxAccordionItemTemplate_iconSrc
-            * @publicName iconSrc
-            * @type String
-            * @deprecated dxAccordionItemTemplate_icon
-            */
         });
     },
 
@@ -199,7 +182,28 @@ var Accordion = CollectionWidget.inherit({
 
     _initTemplates: function() {
         this.callBase();
-
+        /**
+        * @name dxAccordionItemTemplate
+        * @publicName dxAccordionItemTemplate
+        * @inherits CollectionWidgetItemTemplate
+        * @type object
+        */
+        /**
+        * @name dxAccordionItemTemplate_title
+        * @publicName title
+        * @type String
+        */
+        /**
+        * @name dxAccordionItemTemplate_icon
+        * @publicName icon
+        * @type String
+        */
+        /**
+        * @name dxAccordionItemTemplate_iconSrc
+        * @publicName iconSrc
+        * @type String
+        * @deprecated dxAccordionItemTemplate_icon
+        */
         this._defaultTemplates["title"] = new BindableTemplate(function($container, data) {
             if(isPlainObject(data)) {
                 if(data.title) {

@@ -411,7 +411,12 @@ var ListBase = CollectionWidget.inherit({
 
             showChevronExpr: function(data) { return data ? data.showChevron : undefined; },
             badgeExpr: function(data) { return data ? data.badge : undefined; }
-
+            /**
+            * @name dxListItemTemplate
+            * @publicName dxListItemTemplate
+            * @inherits CollectionWidgetItemTemplate
+            * @type object
+            */
             /**
             * @name dxListItemTemplate_badge
             * @publicName badge
@@ -422,7 +427,6 @@ var ListBase = CollectionWidget.inherit({
             * @publicName showChevron
             * @type boolean
             */
-
             /**
             * @name dxListItemTemplate_key
             * @publicName key

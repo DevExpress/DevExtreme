@@ -132,7 +132,12 @@ var Tabs = CollectionWidget.inherit({
             loopItemFocus: false,
             useInkRipple: false,
             badgeExpr: function(data) { return data ? data.badge : undefined; }
-
+            /**
+            * @name dxTabsItemTemplate
+            * @publicName dxTabsItemTemplate
+            * @inherits CollectionWidgetItemTemplate
+            * @type object
+            */
             /**
             * @name dxTabsItemTemplate_icon
             * @publicName icon

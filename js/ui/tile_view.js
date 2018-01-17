@@ -126,6 +126,13 @@ var TileView = CollectionWidget.inherit({
             indicateLoading: true
 
             /**
+            * @name dxTileViewItemTemplate
+            * @publicName dxTileViewItemTemplate
+            * @inherits CollectionWidgetItemTemplate
+            * @type object
+            */
+
+            /**
             * @name dxTileViewItemTemplate_widthRatio
             * @publicName widthRatio
             * @type number

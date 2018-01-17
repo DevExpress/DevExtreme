@@ -201,6 +201,11 @@ var Calendar = Editor.inherit({
             */
 
             /**
+            * @name dxCalendarCellTemplate
+            * @publicName dxCalendarCellTemplate
+            * @type object
+            */
+            /**
             * @name dxCalendarCellTemplate_text
             * @publicName text
             * @type String
