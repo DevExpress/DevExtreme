@@ -47,7 +47,7 @@ var Command = DOMComponent.inherit({
             * @name dxCommandOptions_iconSrc
             * @publicName iconSrc
             * @deprecated dxCommandOptions_icon
-            * @extend_doc
+            * @inheritdoc
             */
             "iconSrc": { since: "15.1", alias: "icon" }
         });

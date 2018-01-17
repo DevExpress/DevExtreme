@@ -141,28 +141,28 @@ function clickedOnFieldsArea($targetElement) {
 * @name dxPivotGridOptions_activeStateEnabled
 * @publicName activeStateEnabled
 * @hidden
-* @extend_doc
+* @inheritdoc
 */
 
 /**
  * @name dxPivotGridOptions_hoverStateEnabled
  * @publicName hoverStateEnabled
  * @hidden
-* @extend_doc
+* @inheritdoc
 */
 
 /**
  * @name dxPivotGridOptions_focusStateEnabled
  * @publicName focusStateEnabled
  * @hidden
-* @extend_doc
+* @inheritdoc
 */
 
 /**
  * @name dxPivotGridOptions_accessKey
  * @publicName accessKey
  * @hidden
-* @extend_doc
+* @inheritdoc
 */
 
 var PivotGrid = Widget.inherit({
@@ -799,7 +799,7 @@ var PivotGrid = Widget.inherit({
             * @publicName useNativeScrolling
             * @deprecated dxPivotGridOptions_scrolling_useNative
             * @type string|boolean
-            * @extend_doc
+            * @inheritdoc
             */
             useNativeScrolling: { since: "15.2", alias: "scrolling.useNative" }
         });

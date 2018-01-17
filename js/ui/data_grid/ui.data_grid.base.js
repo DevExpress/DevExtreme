@@ -76,63 +76,63 @@ var DataGrid = Widget.inherit({
             * @name dxDataGridOptions_editing_editMode
             * @publicName editMode
             * @deprecated GridBaseOptions_editing_mode
-            * @extend_doc
+            * @inheritdoc
             */
             "editing.editMode": { since: "15.2", alias: "editing.mode" },
             /**
             * @name dxDataGridOptions_editing_editEnabled
             * @publicName editEnabled
             * @deprecated GridBaseOptions_editing_allowUpdating
-            * @extend_doc
+            * @inheritdoc
             */
             "editing.editEnabled": { since: "15.2", alias: "editing.allowUpdating" },
             /**
             * @name dxDataGridOptions_editing_insertEnabled
             * @publicName insertEnabled
             * @deprecated GridBaseOptions_editing_allowAdding
-            * @extend_doc
+            * @inheritdoc
             */
             "editing.insertEnabled": { since: "15.2", alias: "editing.allowAdding" },
             /**
             * @name dxDataGridOptions_editing_removeEnabled
             * @publicName removeEnabled
             * @deprecated GridBaseOptions_editing_allowDeleting
-            * @extend_doc
+            * @inheritdoc
             */
             "editing.removeEnabled": { since: "15.2", alias: "editing.allowDeleting" },
             /**
             * @name dxDataGridOptions_grouping_groupContinuedMessage
             * @publicName groupContinuedMessage
             * @deprecated dxDataGridOptions_grouping_texts_groupContinuedMessage
-            * @extend_doc
+            * @inheritdoc
             */
             "grouping.groupContinuedMessage": { since: "16.1", alias: "grouping.texts.groupContinuedMessage" },
             /**
             * @name dxDataGridOptions_grouping_groupContinuesMessage
             * @publicName groupContinuesMessage
             * @deprecated dxDataGridOptions_grouping_texts_groupContinuesMessage
-            * @extend_doc
+            * @inheritdoc
             */
             "grouping.groupContinuesMessage": { since: "16.1", alias: "grouping.texts.groupContinuesMessage" },
             /**
             * @name dxDataGridOptions_export_texts_excelFormat
             * @publicName excelFormat
             * @deprecated dxDataGridOptions_export_texts_exportAll
-            * @extend_doc
+            * @inheritdoc
             */
             "export.texts.excelFormat": { since: "16.1", alias: "export.texts.exportAll" },
             /**
             * @name dxDataGridOptions_export_texts_exportToExcel
             * @publicName exportToExcel
             * @deprecated dxDataGridOptions_export_texts_exportAll
-            * @extend_doc
+            * @inheritdoc
             */
             "export.texts.exportToExcel": { since: "16.1", alias: "export.texts.exportAll" },
             /**
             * @name dxDataGridOptions_export_texts_selectedRows
             * @publicName selectedRows
             * @deprecated dxDataGridOptions_export_texts_exportSelectedRows
-            * @extend_doc
+            * @inheritdoc
             */
             "export.texts.selectedRows": { since: "16.1", alias: "export.texts.exportSelectedRows" },
 

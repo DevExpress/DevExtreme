@@ -73,7 +73,7 @@ var Lookup = DropDownList.inherit({
             * @name dxLookupOptions_pagingEnabled
             * @publicName pagingEnabled
             * @deprecated DataSourceOptions_paginate
-            * @extend_doc
+            * @inheritdoc
             */
             "pagingEnabled": { since: "15.1", message: "Use the 'dataSource.paginate' option instead" }
         });
@@ -389,7 +389,7 @@ var Lookup = DropDownList.inherit({
             * @publicName focusStateEnabled
             * @type boolean
             * @default false
-            * @extend_doc
+            * @inheritdoc
             */
             focusStateEnabled: false
 
@@ -417,109 +417,109 @@ var Lookup = DropDownList.inherit({
             * @name dxLookupOptions_fieldEditEnabled
             * @publicName fieldEditEnabled
             * @deprecated
-            * @extend_doc
+            * @inheritdoc
             */
 
             /**
             * @name dxLookupOptions_acceptCustomValue
             * @publicName acceptCustomValue
             * @hidden
-            * @extend_doc
+            * @inheritdoc
             */
             /**
             * @name dxLookupOptions_readOnly
             * @publicName readOnly
             * @hidden
-            * @extend_doc
+            * @inheritdoc
             */
             /**
             * @name dxLookupOptions_onFocusIn
             * @publicName onFocusIn
             * @hidden
             * @action
-            * @extend_doc
+            * @inheritdoc
             */
             /**
             * @name dxLookupOptions_onFocusOut
             * @publicName onFocusOut
             * @hidden
             * @action
-            * @extend_doc
+            * @inheritdoc
             */
             /**
             * @name dxLookupOptions_onKeyDown
             * @publicName onKeyDown
             * @hidden
             * @action
-            * @extend_doc
+            * @inheritdoc
             */
             /**
             * @name dxLookupOptions_onKeyPress
             * @publicName onKeyPress
             * @hidden
             * @action
-            * @extend_doc
+            * @inheritdoc
             */
             /**
             * @name dxLookupOptions_onKeyUp
             * @publicName onKeyUp
             * @hidden
             * @action
-            * @extend_doc
+            * @inheritdoc
             */
             /**
             * @name dxLookupOptions_onChange
             * @publicName onChange
             * @action
             * @hidden
-            * @extend_doc
+            * @inheritdoc
             */
             /**
             * @name dxLookupOptions_onInput
             * @publicName onInput
             * @hidden
             * @action
-            * @extend_doc
+            * @inheritdoc
             */
             /**
             * @name dxLookupOptions_onCut
             * @publicName onCut
             * @hidden
             * @action
-            * @extend_doc
+            * @inheritdoc
             */
             /**
             * @name dxLookupOptions_onCopy
             * @publicName onCopy
             * @hidden
             * @action
-            * @extend_doc
+            * @inheritdoc
             */
             /**
             * @name dxLookupOptions_onPaste
             * @publicName onPaste
             * @hidden
             * @action
-            * @extend_doc
+            * @inheritdoc
             */
             /**
             * @name dxLookupOptions_onEnterKey
             * @publicName onEnterKey
             * @hidden
             * @action
-            * @extend_doc
+            * @inheritdoc
             */
             /**
             * @name dxLookupOptions_maxlength
             * @publicName maxLength
             * @hidden
-            * @extend_doc
+            * @inheritdoc
             */
             /**
             * @name dxLookupOptions_spellcheck
             * @publicName spellcheck
             * @hidden
-            * @extend_doc
+            * @inheritdoc
             */
 
             /**
@@ -527,7 +527,7 @@ var Lookup = DropDownList.inherit({
             * @publicName applyValueMode
             * @type string
             * @hidden false
-            * @extend_doc
+            * @inheritdoc
             */
         });
     },
@@ -640,7 +640,7 @@ var Lookup = DropDownList.inherit({
                     * @publicName focusStateEnabled
                     * @type boolean
                     * @default true @for desktop
-                    * @extend_doc
+                    * @inheritdoc
                     */
                     focusStateEnabled: true
                 }

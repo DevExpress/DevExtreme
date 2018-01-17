@@ -56,7 +56,7 @@ var Button = Widget.inherit({
             * @name dxbuttonoptions_iconSrc
             * @publicName iconSrc
             * @deprecated dxButtonOptions_icon
-            * @extend_doc
+            * @inheritdoc
             */
             "iconSrc": { since: "15.1", alias: "icon" }
         });
@@ -70,7 +70,7 @@ var Button = Widget.inherit({
              * @publicName hoverStateEnabled
              * @type boolean
              * @default true
-             * @extend_doc
+             * @inheritdoc
              */
             hoverStateEnabled: true,
 
@@ -174,7 +174,7 @@ var Button = Widget.inherit({
                     * @publicName focusStateEnabled
                     * @type boolean
                     * @default true @for generic
-                    * @extend_doc
+                    * @inheritdoc
                     */
                     focusStateEnabled: true
                 }

@@ -208,28 +208,28 @@ var Gallery = CollectionWidget.inherit({
             * @name dxGalleryOptions_noDataText
             * @publicName noDataText
             * @hidden
-            * @extend_doc
+            * @inheritdoc
             */
 
             /**
             * @name dxGalleryOptions_selectedItems
             * @publicName selectedItems
             * @hidden
-            * @extend_doc
+            * @inheritdoc
             */
 
             /**
             * @name dxGalleryOptions_selectedItemKeys
             * @publicName selectedItemKeys
             * @hidden
-            * @extend_doc
+            * @inheritdoc
             */
 
             /**
             * @name dxGalleryOptions_keyExpr
             * @publicName keyExpr
             * @hidden
-            * @extend_doc
+            * @inheritdoc
             */
 
             _itemAttributes: { role: "option" },
@@ -253,7 +253,7 @@ var Gallery = CollectionWidget.inherit({
             * @name dxGalleryItemTemplate_visible
             * @publicName visible
             * @hidden
-            * @extend_doc
+            * @inheritdoc
             */
         });
     },
@@ -270,7 +270,7 @@ var Gallery = CollectionWidget.inherit({
                     * @publicName focusStateEnabled
                     * @type boolean
                     * @default true @for generic
-                    * @extend_doc
+                    * @inheritdoc
                     */
                     focusStateEnabled: true
                 }

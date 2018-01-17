@@ -171,7 +171,7 @@ var Menu = MenuBase.inherit({
             * @name dxMenuOptions_selectedItems
             * @publicName selectedItems
             * @hidden
-            * @extend_doc
+            * @inheritdoc
             */
 
             /**
@@ -179,14 +179,14 @@ var Menu = MenuBase.inherit({
             * @publicName onSelectionChange
             * @hidden
             * @action
-            * @extend_doc
+            * @inheritdoc
             */
 
             /**
             * @name dxMenuOptions_onItemReordered
             * @publicName onItemReordered
             * @hidden
-            * @extend_doc
+            * @inheritdoc
             */
         });
     },

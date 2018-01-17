@@ -557,42 +557,42 @@ var Panorama = CollectionWidget.inherit({
             * @name dxPanoramaOptions_noDataText
             * @publicName noDataText
             * @hidden
-            * @extend_doc
+            * @inheritdoc
             */
 
             /**
             * @name dxPanoramaOptions_selectedItems
             * @publicName selectedItems
             * @hidden
-            * @extend_doc
+            * @inheritdoc
             */
 
             /**
             * @name dxPanoramaOptions_selectedItemKeys
             * @publicName selectedItemKeys
             * @hidden
-            * @extend_doc
+            * @inheritdoc
             */
 
             /**
             * @name dxPanoramaOptions_keyExpr
             * @publicName keyExpr
             * @hidden
-            * @extend_doc
+            * @inheritdoc
             */
 
             /**
             * @name dxPanoramaOptions_accessKey
             * @publicName accessKey
             * @hidden
-            * @extend_doc
+            * @inheritdoc
             */
 
             /**
             * @name dxPanoramaOptions_tabIndex
             * @publicName tabIndex
             * @hidden
-            * @extend_doc
+            * @inheritdoc
             */
 
             /**
@@ -997,14 +997,14 @@ var Panorama = CollectionWidget.inherit({
     * @name dxPanoramaMethods_registerKeyHandler
     * @publicName registerKeyHandler(key, handler)
     * @hidden
-    * @extend_doc
+    * @inheritdoc
     */
 
     /**
     * @name dxPanoramaMethods_focus
     * @publicName focus()
     * @hidden
-    * @extend_doc
+    * @inheritdoc
     */
 });
 
@@ -1017,7 +1017,7 @@ var Panorama = CollectionWidget.inherit({
 * @name dxPanoramaItemTemplate_visible
 * @publicName visible
 * @hidden
-* @extend_doc
+* @inheritdoc
 */
 Panorama.ItemClass = PanoramaItem;
 

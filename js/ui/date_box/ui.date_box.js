@@ -100,7 +100,7 @@ var DateBox = DropDownEditor.inherit({
             * @name dxDateBoxOptions_format
             * @publicName format
             * @deprecated dxDateBoxOptions_type
-            * @extend_doc
+            * @inheritdoc
             */
             "format": { since: "16.1", alias: "type" },
 
@@ -108,7 +108,7 @@ var DateBox = DropDownEditor.inherit({
             * @name dxDateBoxOptions_formatString
             * @publicName formatString
             * @deprecated dxDateBoxOptions_displayFormat
-            * @extend_doc
+            * @inheritdoc
             */
             "formatString": { since: "16.1", alias: "displayFormat" },
 

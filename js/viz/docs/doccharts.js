@@ -2128,7 +2128,7 @@ var dxChart = {
     * @name dxchartoptions_tooltip
     * @type object
     * @publicName tooltip
-    * @extend_doc
+    * @inheritdoc
     **/
     tooltip: {
         /**
@@ -3390,7 +3390,7 @@ var dxPolarChart = {
         * @name dxpolarchartoptions_valueaxis_tick
         * @publicName tick
         * @type object
-        * @extend_doc
+        * @inheritdoc
         */
         tick: {
             /**
@@ -3398,7 +3398,7 @@ var dxPolarChart = {
             * @publicName visible
             * @type boolean
             * @default false
-            * @extend_doc
+            * @inheritdoc
             */
             visible: false,
         },
@@ -3578,7 +3578,7 @@ var dxPolarChart = {
     * @name dxpolarchartoptions_tooltip
     * @type object
     * @publicName tooltip
-    * @extend_doc
+    * @inheritdoc
     **/
     tooltip: {
         /**
@@ -4157,7 +4157,7 @@ var BaseChart = {
         * @publicName width
         * @type number
         * @default 170
-        * @extend_doc
+        * @inheritdoc
         */
         width: 80,
         /**
@@ -4171,7 +4171,7 @@ var BaseChart = {
         * @publicName height
         * @type number
         * @default 170
-        * @extend_doc
+        * @inheritdoc
         */
         height: 80,
         /**
@@ -4185,7 +4185,7 @@ var BaseChart = {
         * @publicName keepLabels
         * @type boolean
         * @default false
-        * @extend_doc
+        * @inheritdoc
         */
         keepLabels: true
     }

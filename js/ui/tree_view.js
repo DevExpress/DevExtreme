@@ -204,7 +204,7 @@ var TreeView = HierarchicalCollectionWidget.inherit({
             * @extends Action
             * @type_function_param1_field7 node:dxtreeviewnode
             * @action
-            * @extend_doc
+            * @inheritdoc
             */
 
             /**
@@ -213,7 +213,7 @@ var TreeView = HierarchicalCollectionWidget.inherit({
             * @extends Action
             * @type_function_param1_field8 node:dxtreeviewnode
             * @action
-            * @extend_doc
+            * @inheritdoc
             */
 
             /**
@@ -222,7 +222,7 @@ var TreeView = HierarchicalCollectionWidget.inherit({
             * @extends Action
             * @type_function_param1_field8 node:dxtreeviewnode
             * @action
-            * @extend_doc
+            * @inheritdoc
             */
 
             /**
@@ -231,7 +231,7 @@ var TreeView = HierarchicalCollectionWidget.inherit({
             * @extends Action
             * @type_function_param1_field8 node:dxtreeviewnode
             * @action
-            * @extend_doc
+            * @inheritdoc
             */
 
             /**
@@ -338,7 +338,7 @@ var TreeView = HierarchicalCollectionWidget.inherit({
             * @type_function_param1_field4 addedItems:hidden
             * @type_function_param1_field5 removedItems:hidden
             * @action
-            * @extend_doc
+            * @inheritdoc
             */
 
             /**
@@ -361,28 +361,28 @@ var TreeView = HierarchicalCollectionWidget.inherit({
             * @name dxTreeViewOptions_selectedItem
             * @publicName selectedItem
             * @hidden
-            * @extend_doc
+            * @inheritdoc
             */
 
             /**
             * @name dxTreeViewOptions_selectedItems
             * @publicName selectedItems
             * @hidden
-            * @extend_doc
+            * @inheritdoc
             */
 
             /**
             * @name dxTreeViewOptions_selectedItemKeys
             * @publicName selectedItemKeys
             * @hidden
-            * @extend_doc
+            * @inheritdoc
             */
 
             /**
             * @name dxTreeViewOptions_selectedIndex
             * @publicName selectedIndex
             * @hidden
-            * @extend_doc
+            * @inheritdoc
             */
 
             /**
