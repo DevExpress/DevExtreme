@@ -20,7 +20,8 @@ var $ = require("jquery"),
     DataSource = require("data/data_source/data_source").DataSource,
     CustomStore = require("data/custom_store"),
     SchedulerTimezones = require("ui/scheduler/ui.scheduler.timezones"),
-    dataUtils = require("core/element_data");
+    dataUtils = require("core/element_data"),
+    keyboardMock = require("../../helpers/keyboardMock.js");
 
 require("common.css!");
 require("generic_light.css!");
@@ -2838,6 +2839,42 @@ QUnit.testStart(function() {
 
         assert.equal(workspace.option("allowMultipleCellSelection"), true, "allowMultipleCellSelection");
 
+    });
+
+    QUnit.test("Workspace navigation by arrows should work correctly with opened dropDown appointments", function(assert) {
+        this.createInstance({
+            dataSource: [{
+                startDate: new Date(2015, 4, 24, 9, 10),
+                endDate: new Date(2015, 4, 24, 11, 1),
+                allDay: true,
+                text: "Task 1"
+            }, {
+                startDate: new Date(2015, 4, 24, 9, 10),
+                endDate: new Date(2015, 4, 24, 11, 1),
+                allDay: true,
+                text: "Task 2"
+            }, {
+                startDate: new Date(2015, 4, 24, 9, 10),
+                endDate: new Date(2015, 4, 24, 11, 1),
+                allDay: true,
+                text: "Task 3"
+            }],
+            currentDate: new Date(2015, 4, 24),
+            views: ["month"],
+            currentView: "month"
+        });
+
+        var $workSpace = this.instance.getWorkSpace().$element(),
+            keyboard = keyboardMock($workSpace);
+
+        $(this.instance.$element().find(".dx-scheduler-dropdown-appointments")).trigger("dxclick");
+
+        keyboard.keyDown("down");
+        keyboard.keyDown("up");
+        keyboard.keyDown("right");
+        keyboard.keyDown("left");
+
+        assert.ok(true, "Scheduler works correctly");
     });
 })("Keyboard Navigation");
 
