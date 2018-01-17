@@ -1,7 +1,7 @@
 "use strict";
 
 var $ = require("../../core/renderer"),
-    document = require("../../core/dom_adapter").getWindow().document,
+    window = require("../../core/dom_adapter").getWindow(),
     eventsEngine = require("../../events/core/events_engine"),
     errors = require("./ui.errors"),
     Action = require("../../core/action"),
@@ -60,7 +60,7 @@ var DX_POLYMORPH_WIDGET_TEMPLATE = new FunctionTemplate(function(options) {
     return $();
 });
 
-var beforeActivateExists = document["onbeforeactivate"] !== undefined;
+var beforeActivateExists = window.document["onbeforeactivate"] !== undefined;
 
 /**
  * @name ui

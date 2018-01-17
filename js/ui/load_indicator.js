@@ -2,7 +2,6 @@
 
 var $ = require("../core/renderer"),
     window = require("../core/dom_adapter").getWindow(),
-    navigator = window.navigator,
     support = require("../core/utils/support"),
     themes = require("./themes"),
     browser = require("../core/utils/browser"),
@@ -100,7 +99,7 @@ var LoadIndicator = Widget.inherit({
             {
                 device: function() {
                     var realDevice = devices.real(),
-                        obsoleteAndroid = realDevice.platform === "android" && !(/chrome/i.test(navigator.userAgent));
+                        obsoleteAndroid = realDevice.platform === "android" && !(/chrome/i.test(window.navigator.userAgent));
                     return (browser.msie && browser.version < 10 || obsoleteAndroid);
                 },
                 options: {

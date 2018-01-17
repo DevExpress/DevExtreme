@@ -1,7 +1,7 @@
 "use strict";
 
 var $ = require("../../core/renderer"),
-    document = require("../../core/dom_adapter").getWindow().document,
+    window = require("../../core/dom_adapter").getWindow(),
     eventsEngine = require("../../events/core/events_engine"),
     dataUtils = require("../../core/element_data"),
     domUtils = require("../../core/utils/dom"),
@@ -96,7 +96,7 @@ var BaseView = Widget.inherit({
 
             prevCellDate = cellDate;
 
-            var cell = document.createElement("td"),
+            var cell = window.document.createElement("td"),
                 $cell = $(cell),
                 className = CALENDAR_CELL_CLASS;
 
@@ -146,7 +146,7 @@ var BaseView = Widget.inherit({
             prevCellDate;
 
         for(var indexRow = 0, len = this.option("rowCount"); indexRow < len; indexRow++) {
-            var row = document.createElement("tr");
+            var row = window.document.createElement("tr");
             this.$body.get(0).appendChild(row);
             this._iterateCells(colCount, renderCell);
         }

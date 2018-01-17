@@ -2,8 +2,6 @@
 
 var $ = require("../../core/renderer"),
     window = require("../../core/dom_adapter").getWindow(),
-    navigator = window.navigator,
-    document = window.document,
     eventsEngine = require("../../events/core/events_engine"),
     support = require("../../core/utils/support"),
     browser = require("../../core/utils/browser"),
@@ -32,7 +30,7 @@ var SCROLLABLE = "dxScrollable",
     HORIZONTAL = "horizontal",
     BOTH = "both";
 
-var beforeActivateExists = document["onbeforeactivate"] !== undefined;
+var beforeActivateExists = window.document["onbeforeactivate"] !== undefined;
 
 var deviceDependentOptions = function() {
     return [{
@@ -282,7 +280,7 @@ var Scrollable = DOMComponent.inherit({
     _attachNativeScrollbarsCustomizationCss: function() {
         // NOTE: Customize native scrollbars for dashboard team
 
-        if(devices.real().deviceType === "desktop" && !(navigator.platform.indexOf('Mac') > -1 && browser['webkit'])) {
+        if(devices.real().deviceType === "desktop" && !(window.navigator.platform.indexOf('Mac') > -1 && browser['webkit'])) {
             this.$element().addClass("dx-scrollable-customizable-scrollbars");
         }
     },

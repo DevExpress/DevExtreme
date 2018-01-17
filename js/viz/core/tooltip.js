@@ -1,8 +1,6 @@
 "use strict";
 
 var window = require("../../core/dom_adapter").getWindow(),
-    doc = window.document,
-    win = window,
     $ = require("../../core/renderer"),
     rendererModule = require("./renderers/renderer"),
     typeUtils = require("../../core/utils/type"),
@@ -170,7 +168,7 @@ Tooltip.prototype = {
             xOff = ss.offsetX,
             yOff = ss.offsetY,
             blur = ss.blur * 2 + 1,
-            getComputedStyle = win.getComputedStyle;
+            getComputedStyle = window.getComputedStyle;
 
         if(!that._prepare(formatObject, state)) {
             return false;
@@ -432,10 +430,10 @@ Tooltip.prototype = {
     _getCanvas: function() {
         var container = this._getContainer(),
             containerBox = container.getBoundingClientRect(),
-            html = doc.documentElement,
-            body = doc.body,
-            left = win.pageXOffset || html.scrollLeft || 0,
-            top = win.pageYOffset || html.scrollTop || 0;
+            html = window.document.documentElement,
+            body = window.document.body,
+            left = window.pageXOffset || html.scrollLeft || 0,
+            top = window.pageYOffset || html.scrollTop || 0;
 
         var box = {
             left: left,

@@ -5,7 +5,6 @@ require("../../integration/jquery");
 var $ = require("jquery"),
     commonUtils = require("../../core/utils/common"),
     window = require("../../core/dom_adapter").getWindow(),
-    document = window.document,
     Component = require("../../core/component"),
     extendUtils = require("../../core/utils/extend"),
     each = require("../../core/utils/iterator").each,
@@ -139,7 +138,7 @@ var HtmlApplication = Application.inherit({
 
         this.callBase(options);
 
-        this._$root = $(options.rootNode || document.body);
+        this._$root = $(options.rootNode || window.document.body);
 
         this._initViewport(options.viewPort);
 

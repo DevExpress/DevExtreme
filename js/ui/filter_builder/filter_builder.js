@@ -1,7 +1,7 @@
 "use strict";
 
 var $ = require("../../core/renderer"),
-    document = require("../../core/dom_adapter").getWindow().document,
+    window = require("../../core/dom_adapter").getWindow(),
     Class = require("../../core/class"),
     eventsEngine = require("../../events/core/events_engine"),
     Widget = require("../widget/ui.widget"),
@@ -834,7 +834,8 @@ var FilterBuilder = Widget.inherit({
     },
 
     _createValueEditorWithEvents: function(item, field, $container) {
-        var that = this,
+        var document = window.document,
+            that = this,
             value = item[2],
             removeEvents = function() {
                 eventsEngine.off(document, "keyup", documentKeyUpHandler);

@@ -1,7 +1,7 @@
 "use strict";
 
 var $ = require("../../core/renderer"),
-    document = require("../../core/dom_adapter").getWindow().document,
+    window = require("../../core/dom_adapter").getWindow(),
     isDefined = require("../../core/utils/type").isDefined,
     compileGetter = require("../../core/utils/data").compileGetter,
     each = require("../../core/utils/iterator").each,
@@ -314,7 +314,7 @@ module.exports = {
                                         }
                                         $content.after($searchTextSpan.text(text.substr(index, searchText.length)));
 
-                                        $content = $(document.createTextNode(text.substr(index + searchText.length))).insertAfter($searchTextSpan);
+                                        $content = $(window.document.createTextNode(text.substr(index + searchText.length))).insertAfter($searchTextSpan);
                                         return highlightSearchTextInTextNode($content, searchText);
                                     }
                                 };

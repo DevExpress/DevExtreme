@@ -2,14 +2,14 @@
 
 var $ = require("../../core/renderer"),
     eventsEngine = require("../../events/core/events_engine"),
-    document = require("../../core/dom_adapter").getWindow().document,
+    window = require("../../core/dom_adapter").getWindow(),
     registerEvent = require("./event_registrator"),
     eventUtils = require("../utils");
 
 var EVENT_NAME = "dxmousewheel",
     EVENT_NAMESPACE = "dxWheel";
 
-var wheelEvent = document["onwheel"] !== undefined ? "wheel" : "mousewheel";
+var wheelEvent = window.document["onwheel"] !== undefined ? "wheel" : "mousewheel";
 
 var wheel = {
 

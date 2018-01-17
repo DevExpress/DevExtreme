@@ -1,7 +1,7 @@
 "use strict";
 
 var merge = require("./array").merge,
-    document = require("../dom_adapter").getWindow().document;
+    window = require("../dom_adapter").getWindow();
 
 var isTagName = (/<([a-z][^\/\0>\x20\t\r\n\f]+)/i);
 
@@ -41,8 +41,8 @@ var parseHTML = function(html) {
         return null;
     }
 
-    var fragment = document.createDocumentFragment();
-    var container = fragment.appendChild(document.createElement("div"));
+    var fragment = window.document.createDocumentFragment();
+    var container = fragment.appendChild(window.document.createElement("div"));
 
     var tags = isTagName.exec(html);
     var firstRootTag = tags && tags[1].toLowerCase();

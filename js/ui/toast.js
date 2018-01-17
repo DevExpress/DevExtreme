@@ -5,7 +5,6 @@
 
 var $ = require("../core/renderer"),
     window = require("../core/dom_adapter").getWindow(),
-    document = window.document,
     eventsEngine = require("../events/core/events_engine"),
     commonUtils = require("../core/utils/common"),
     typeUtils = require("../core/utils/type"),
@@ -38,7 +37,7 @@ var TOAST_CLASS = "dx-toast",
         "left": { my: "center left", at: "center left", of: null, offset: "0 0" }
     };
 
-eventsEngine.subscribeGlobal(document, pointerEvents.down, function(e) {
+eventsEngine.subscribeGlobal(window.document, pointerEvents.down, function(e) {
     for(var i = TOAST_STACK.length - 1; i >= 0; i--) {
         if(!TOAST_STACK[i]._proxiedDocumentDownHandler(e)) {
             return;

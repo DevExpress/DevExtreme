@@ -1,13 +1,13 @@
 "use strict";
 
 var each = require("../../core/utils/iterator").each,
-    document = require("../../core/dom_adapter").getWindow().document;
+    window = require("../../core/dom_adapter").getWindow();
 
 var addEventsListener = function(events, handler) {
     events
         .split(" ")
         .forEach(function(event) {
-            document.addEventListener(event, handler, true);
+            window.document.addEventListener(event, handler, true);
         });
 };
 

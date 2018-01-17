@@ -2,7 +2,6 @@
 
 var $ = require("../core/renderer"),
     window = require("../core/dom_adapter").getWindow(),
-    navigator = window.navigator,
     extend = require("./utils/extend").extend,
     isPlainObject = require("./utils/type").isPlainObject,
     each = require("./utils/iterator").each,
@@ -364,7 +363,7 @@ var Devices = Class.inherit({
                     throw errors.Error("E0005");
                 }
             } else {
-                ua = navigator.userAgent;
+                ua = window.navigator.userAgent;
             }
             return this._fromUA(ua);
         }

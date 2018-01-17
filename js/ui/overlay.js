@@ -2,8 +2,6 @@
 
 var $ = require("../core/renderer"),
     window = require("../core/dom_adapter").getWindow(),
-    navigator = window.navigator,
-    document = window.document,
     eventsEngine = require("../events/core/events_engine"),
     fx = require("../animation/fx"),
     translator = require("../animation/translator"),
@@ -61,7 +59,7 @@ var realDevice = devices.real(),
     firefoxDesktop = browser.mozilla && realDevice.deviceType === "desktop",
     iOS = realDevice.platform === "ios",
     iOS7_0andBelow = iOS && compareVersions(realVersion, [7, 1]) < 0,
-    android4_0nativeBrowser = realDevice.platform === "android" && compareVersions(realVersion, [4, 0], 2) === 0 && navigator.userAgent.indexOf("Chrome") === -1;
+    android4_0nativeBrowser = realDevice.platform === "android" && compareVersions(realVersion, [4, 0], 2) === 0 && window.navigator.userAgent.indexOf("Chrome") === -1;
 
 var forceRepaint = function($element) {
     // NOTE: force layout recalculation on iOS 6 & iOS 7.0 (B254713) and FF desktop (T581681)
@@ -87,7 +85,7 @@ var getElement = function(value) {
     return value && $(value.target || value);
 };
 
-eventsEngine.subscribeGlobal(document, pointerEvents.down, function(e) {
+eventsEngine.subscribeGlobal(window.document, pointerEvents.down, function(e) {
     for(var i = OVERLAY_STACK.length - 1; i >= 0; i--) {
         if(!OVERLAY_STACK[i]._proxiedDocumentDownHandler(e)) {
             return;
@@ -540,7 +538,7 @@ var Overlay = Widget.inherit({
         }
         if(closeOnOutsideClick) {
             var $container = this._$content,
-                outsideClick = (!$container.is(e.target) && !domUtils.contains($container.get(0), e.target) && $(e.target).closest(document).length);
+                outsideClick = (!$container.is(e.target) && !domUtils.contains($container.get(0), e.target) && $(e.target).closest(window.document).length);
 
             if(outsideClick) {
                 if(this.option("shading")) {
@@ -731,6 +729,7 @@ var Overlay = Widget.inherit({
     },
 
     _forceFocusLost: function() {
+        var document = window.document;
         document.activeElement && this._$content.find(document.activeElement).length && document.activeElement.blur();
     },
 
@@ -825,9 +824,9 @@ var Overlay = Widget.inherit({
     _toggleTabTerminator: function(enabled) {
         var eventName = eventUtils.addNamespace("keydown", this.NAME);
         if(enabled) {
-            eventsEngine.on(document, eventName, this._proxiedTabTerminatorHandler);
+            eventsEngine.on(window.document, eventName, this._proxiedTabTerminatorHandler);
         } else {
-            eventsEngine.off(document, eventName, this._proxiedTabTerminatorHandler);
+            eventsEngine.off(window.document, eventName, this._proxiedTabTerminatorHandler);
         }
     },
 
@@ -965,7 +964,7 @@ var Overlay = Widget.inherit({
             }
         });
 
-        return isHidden || !document.body.contains($parent.get(0));
+        return isHidden || !window.document.body.contains($parent.get(0));
     },
 
     _renderContentImpl: function() {
@@ -1086,8 +1085,8 @@ var Overlay = Widget.inherit({
             containerHeight = $container.outerHeight();
 
         if(this._isWindow($container)) {
-            var fullPageHeight = Math.max($(document).outerHeight(), containerHeight),
-                fullPageWidth = Math.max($(document).outerWidth(), containerWidth);
+            var fullPageHeight = Math.max($(window.document).outerHeight(), containerHeight),
+                fullPageWidth = Math.max($(window.document).outerWidth(), containerWidth);
 
             containerHeight = fullPageHeight;
             containerWidth = fullPageWidth;

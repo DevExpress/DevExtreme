@@ -1,14 +1,14 @@
 "use strict";
 
 var $ = require("../../core/renderer"),
-    document = require("../../core/dom_adapter").getWindow().document,
+    window = require("../../core/dom_adapter").getWindow(),
     ko = require("knockout"),
     typeUtils = require("../../core/utils/type"),
     TemplateBase = require("../../ui/widget/ui.template_base"),
     domUtils = require("../../core/utils/dom");
 
 var getParentContext = function(data) {
-    var parentNode = document.createElement("div");
+    var parentNode = window.document.createElement("div");
 
     ko.applyBindingsToNode(parentNode, null, data);
     var parentContext = ko.contextFor(parentNode);
