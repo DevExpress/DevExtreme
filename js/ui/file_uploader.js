@@ -227,7 +227,7 @@ var FileUploader = Editor.inherit({
             * @publicName uploadMode
             * @type string
             * @default "instantly"
-            * @custom_default_for_Internet_Explorer_9_and_10 "useForm"
+            * @default 'useForm' @for Internet_Explorer_9|Internet_Explorer_10
             * @acceptValues "instantly"|"useButtons"|"useForm"
             */
             uploadMode: "instantly",
@@ -371,7 +371,7 @@ var FileUploader = Editor.inherit({
                     * @name dxFileUploaderOptions_focusStateEnabled
                     * @publicName focusStateEnabled
                     * @type boolean
-                    * @custom_default_for_desktop true
+                    * @default true @for desktop
                     * @extend_doc
                     */
                     focusStateEnabled: true

@@ -2,7 +2,6 @@
 
 var $ = require("../../core/renderer"),
     window = require("../../core/dom_adapter").getWindow(),
-    Node = window.Node,
     document = window.document,
     eventsEngine = require("../../events/core/events_engine"),
     errors = require("../errors"),
@@ -167,10 +166,10 @@ var clipboardText = function(event, text) {
 
 var contains = function(container, element) {
     if(element) {
-        element = element.nodeType === Node.TEXT_NODE ? element.parentNode : element;
+        element = element.nodeType === window.Node.TEXT_NODE ? element.parentNode : element;
     }
 
-    return container.nodeType === Node.DOCUMENT_NODE ? container.body.contains(element) : container.contains(element);
+    return container.nodeType === window.Node.DOCUMENT_NODE ? container.body.contains(element) : container.contains(element);
 };
 
 var getPublicElement = function($element) {

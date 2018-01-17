@@ -193,7 +193,7 @@ var ActionSheet = CollectionWidget.inherit({
                 /**
                 * @name dxActionSheetOptions_usePopover
                 * @publicName usePopover
-                * @custom_default_for_iPad true
+                * @default true @for iPad
                 */
                 usePopover: true
             }
