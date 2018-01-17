@@ -10,7 +10,6 @@ var serverSideWindowMock = {
     getSelection: originalWindow.getSelection.bind(originalWindow),
     HTMLElement: originalWindow.HTMLElement.bind(originalWindow),
     Node: originalWindow.Node.bind(originalWindow),
-    Promise: originalWindow.Promise.bind(originalWindow),
     requestAnimationFrame: originalWindow.requestAnimationFrame.bind(originalWindow),
     XMLHttpRequest: originalWindow.XMLHttpRequest.bind(originalWindow),
 

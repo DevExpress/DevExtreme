@@ -1,33 +1,34 @@
 "use strict";
 
+/* global Promise */
 var deferredUtils = require("../../core/utils/deferred"),
     window = require("../../core/dom_adapter").getWindow(),
     Deferred = deferredUtils.Deferred,
     when = deferredUtils.when,
-    Promise = window.Promise;
+    promise = window ? window.Promise : Promise;
 
-if(!Promise) {
+if(!promise) {
     // NOTE: This is an incomplete Promise polyfill but it is enough for creation purposes
 
-    Promise = function(resolver) {
+    promise = function(resolver) {
         var d = new Deferred();
         resolver(d.resolve.bind(this), d.reject.bind(this));
         return d.promise();
     };
 
-    Promise.resolve = function(val) {
+    promise.resolve = function(val) {
         return new Deferred().resolve(val).promise();
     };
 
-    Promise.reject = function(val) {
+    promise.reject = function(val) {
         return new Deferred().reject(val).promise();
     };
 
-    Promise.all = function(promises) {
+    promise.all = function(promises) {
         return when.apply(this, promises).then(function() {
             return [].slice.call(arguments);
         });
     };
 }
 
-module.exports = Promise;
+module.exports = promise;
