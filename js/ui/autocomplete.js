@@ -16,7 +16,6 @@ var AUTOCOMPLETE_CLASS = "dx-autocomplete",
 * @isEditor
 * @publicName dxAutocomplete
 * @inherits dxDropDownList
-* @groupName Editors
 * @module ui/autocomplete
 * @export default
 */

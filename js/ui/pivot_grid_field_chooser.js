@@ -4,7 +4,6 @@
 * @name dxPivotGridFieldChooser
 * @publicName dxPivotGridFieldChooser
 * @inherits Widget
-* @groupName Helpers
 * @module ui/pivot_grid_field_chooser
 * @export default
 */

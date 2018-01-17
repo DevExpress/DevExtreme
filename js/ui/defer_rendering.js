@@ -32,7 +32,6 @@ var WIDGET_CLASS = "dx-widget",
 /**
 * @name dxDeferRendering
 * @publicName dxDeferRendering
-* @groupName Helpers
 * @inherits Widget
 * @module ui/defer_rendering
 * @export default

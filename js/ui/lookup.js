@@ -45,7 +45,6 @@ var POPUP_OPTION_MAP = {
 * @isEditor
 * @publicName dxLookup
 * @inherits dxDropDownList
-* @groupName Editors
 * @module ui/lookup
 * @export default
 */

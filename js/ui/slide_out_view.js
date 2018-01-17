@@ -47,7 +47,6 @@ var animation = {
 * @name dxSlideOutView
 * @publicName dxSlideOutView
 * @inherits Widget
-* @groupName Navigation and Layouting
 * @module ui/slide_out_view
 * @export default
 */
