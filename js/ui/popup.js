@@ -80,7 +80,6 @@ var getButtonPlace = function(name) {
  * @name dxPopup
  * @publicName dxPopup
  * @inherits dxOverlay
- * @groupName Overlays
  * @module ui/popup
  * @export default
  */

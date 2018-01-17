@@ -52,7 +52,6 @@ var isFormDataSupported = function() {
 * @name dxFileUploader
 * @publicName dxFileUploader
 * @inherits Editor
-* @groupName Editors
 * @module ui/file_uploader
 * @export default
 */

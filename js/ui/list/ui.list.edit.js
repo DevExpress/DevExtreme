@@ -16,7 +16,6 @@ var LIST_ITEM_SELECTED_CLASS = "dx-list-item-selected",
 * @publicName dxList
 * @type object
 * @inherits CollectionWidget
-* @groupName Collection Widgets
 */
 
 var ListEdit = ListBase.inherit({

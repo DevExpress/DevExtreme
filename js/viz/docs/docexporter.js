@@ -4,7 +4,6 @@
 * @type object
 * @inherits Component
 * @deprecated
-* @groupName Helpers
 */
 var dxExporter = {
     /**

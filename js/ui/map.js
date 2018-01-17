@@ -35,7 +35,6 @@ var MAP_CLASS = "dx-map",
 * @name dxmap
 * @publicName dxMap
 * @inherits Widget
-* @groupName Maps
 * @module ui/map
 * @export default
 */

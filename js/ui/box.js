@@ -429,7 +429,6 @@ var FallbackLayoutStrategy = Class.inherit({
 * @name dxBox
 * @publicName dxBox
 * @inherits CollectionWidget
-* @groupName Navigation and Layouting
 * @module ui/box
 * @export default
 */

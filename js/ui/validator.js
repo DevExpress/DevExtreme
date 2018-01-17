@@ -15,7 +15,6 @@ var VALIDATOR_CLASS = "dx-validator";
 * @name dxValidator
 * @publicName dxValidator
 * @inherits DOMComponent
-* @groupName Helpers
 * @module ui/validator
 * @export default
 */

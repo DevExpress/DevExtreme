@@ -19,7 +19,6 @@ var PROGRESSBAR_CLASS = "dx-progressbar",
 * @name dxProgressBar
 * @publicName dxProgressBar
 * @inherits dxTrackBar
-* @groupName Indicator Widgets
 * @module ui/progress_bar
 * @export default
 */
