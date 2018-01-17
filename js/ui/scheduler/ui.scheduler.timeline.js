@@ -156,7 +156,6 @@ var SchedulerTimeline = SchedulerWorkSpace.inherit({
         var groupCellTemplates = this._renderGroupHeader();
         this._renderDateHeader();
 
-        this._renderAllDayPanel();
         this._renderTimePanel();
         this._renderDateTable();
 
