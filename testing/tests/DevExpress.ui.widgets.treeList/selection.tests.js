@@ -774,12 +774,12 @@ QUnit.test("getSelectedRowKeys with 'all' parameter", function(assert) {
             { id: 5, parentId: 4, field1: 'test5', field2: 5, field3: new Date(2002, 1, 5) }
     ];
     this.options.expandedRowKeys = [1, 4];
-    this.options.selectedRowKeys = [2, 4];
+    this.options.selectedRowKeys = [2, 3, 4];
     this.setupTreeList();
     this.rowsView.render($testElement);
 
     //act, assert
-    assert.deepEqual(this.getSelectedRowKeys("all"), [2, 4, 5], "all");
+    assert.deepEqual(this.getSelectedRowKeys("all"), [1, 2, 3, 4, 5], "all");
 });
 
 QUnit.test("Selection state of rows should be updated on loadDescendants", function(assert) {
@@ -1096,4 +1096,28 @@ QUnit.test("Selection state should be updated correctly after options are change
     } finally {
         clock.restore();
     }
+});
+
+QUnit.test("Check selectedRowKeys after deselecting nested node", function(assert) {
+    //arrange
+    var $testElement = $('#treeList');
+
+    this.options.dataSource = [
+            { id: 1, field1: 'test1', field2: 1, field3: new Date(2002, 1, 1) },
+            { id: 2, parentId: 1, field1: 'test2', field2: 2, field3: new Date(2002, 1, 2) },
+            { id: 3, parentId: 2, field1: 'test3', field2: 3, field3: new Date(2002, 1, 3) },
+            { id: 4, parentId: 3, field1: 'test4', field2: 4, field3: new Date(2002, 1, 4) },
+            { id: 5, parentId: 2, field1: 'test5', field2: 5, field3: new Date(2002, 1, 5) },
+            { id: 6, parentId: 1, field1: 'test6', field2: 6, field3: new Date(2002, 1, 6) }
+    ];
+
+    this.options.selectedRowKeys = [2];
+    this.setupTreeList();
+    this.rowsView.render($testElement);
+
+    //act
+    this.deselectRows(4);
+
+    //assert
+    assert.deepEqual(this.option("selectedRowKeys"), [5], "selected row keys");
 });

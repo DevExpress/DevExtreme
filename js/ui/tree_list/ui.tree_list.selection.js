@@ -14,7 +14,7 @@ var TREELIST_SELECT_ALL_CLASS = "dx-treelist-select-all",
 var originalRowClick = selectionModule.extenders.views.rowsView._rowClick;
 
 var nodeExists = function(array, currentKey) {
-    return array.filter(function(key) { return key === currentKey; });
+    return !!array.filter(function(key) { return key === currentKey; }).length;
 };
 
 treeListCore.registerModule("selection", extend(true, {}, selectionModule, {
@@ -229,19 +229,22 @@ treeListCore.registerModule("selection", extend(true, {}, selectionModule, {
                     }
                 },
 
-                _getSelectedParentKeys: function(node, selectedItemKeys) {
-                    var index,
+                _getSelectedParentKeys: function(key, selectedItemKeys, useCash) {
+                    var isSelected,
                         selectedParentNode,
+                        node = this._dataController.getNodeByKey(key),
                         parentNode = node && node.parent,
                         result = [];
 
                     while(parentNode && parentNode.level >= 0) {
-                        result.push(parentNode.key);
+                        result.unshift(parentNode.key);
+                        isSelected = useCash ? !nodeExists(selectedItemKeys, parentNode.key) && this.isRowSelected(parentNode.key) : selectedItemKeys.indexOf(parentNode.key) >= 0;
 
-                        index = selectedItemKeys.indexOf(parentNode.key);
-                        if(index >= 0) {
+                        if(isSelected) {
                             selectedParentNode = parentNode;
-                            result = result.concat(this._getSelectedParentKeys(selectedParentNode, selectedItemKeys));
+                            result = this._getSelectedParentKeys(selectedParentNode.key, selectedItemKeys, useCash).concat(result);
+                            break;
+                        } else if(useCash) {
                             break;
                         }
 
@@ -274,8 +277,7 @@ treeListCore.registerModule("selection", extend(true, {}, selectionModule, {
                         childKeys,
                         parentNode,
                         keysToIgnore = [key],
-                        node = that._dataController.getNodeByKey(key),
-                        parentNodeKeys = that._getSelectedParentKeys(node, args.selectedRowKeys);
+                        parentNodeKeys = that._getSelectedParentKeys(key, args.selectedRowKeys);
 
                     if(parentNodeKeys.length) {
                         keysToIgnore = keysToIgnore.concat(parentNodeKeys);
@@ -288,7 +290,7 @@ treeListCore.registerModule("selection", extend(true, {}, selectionModule, {
                             }
                         });
 
-                        parentNode = that._dataController.getNodeByKey(parentNodeKeys[parentNodeKeys.length - 1]);
+                        parentNode = that._dataController.getNodeByKey(parentNodeKeys[0]);
                         childKeys = that._getSelectedChildKeys(parentNode, keysToIgnore);
                         args.selectedRowKeys = args.selectedRowKeys.concat(childKeys);
                     }
@@ -369,34 +371,17 @@ treeListCore.registerModule("selection", extend(true, {}, selectionModule, {
                     return mode === "leaves" || mode === true;
                 },
 
-                _getAllSelectedParentKeys: function(key) {
-                    var node = this._dataController.getNodeByKey(key),
-                        parentNode = node.parent,
-                        parentKey = parentNode.key,
-                        result = [];
-
-                    while(parentNode.level >= 0) {
-                        if(nodeExists(result, parentKey).length === 0 && this.isRowSelected(parentKey)) {
-                            result.unshift(parentKey);
-                            parentNode = parentNode.parent;
-                        } else {
-                            break;
-                        }
-                    }
-
-                    return result;
-                },
-
                 _getAllSelectedRowKeys: function(parentKeys) {
                     var that = this,
                         result = [];
                     parentKeys.forEach(function(key) {
                         var insertIndex = result.length,
-                            parentKeys = that._getAllSelectedParentKeys(key);
+                            parentKeys = that._getSelectedParentKeys(key, result, true),
+                            childKeys = that._dataController.getChildNodeKeys(key);
 
                         result.splice.apply(result, [insertIndex, 0].concat(parentKeys));
                         result.push(key);
-                        result = result.concat(that._dataController.getChildNodeKeys(key));
+                        result = result.concat(childKeys);
                     });
 
                     return result;
