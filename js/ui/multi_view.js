@@ -155,7 +155,7 @@ var MultiView = CollectionWidget.inherit({
                     * @name dxMultiViewOptions_focusStateEnabled
                     * @publicName focusStateEnabled
                     * @type boolean
-                    * @custom_default_for_desktop true
+                    * @default true @for desktop
                     * @extend_doc
                     */
                     focusStateEnabled: true

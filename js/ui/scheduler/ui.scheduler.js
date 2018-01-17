@@ -1041,7 +1041,7 @@ var Scheduler = Widget.inherit({
                         * @name dxSchedulerOptions_focusStateEnabled
                         * @publicName focusStateEnabled
                         * @type boolean
-                        * @custom_default_for_desktop true
+                        * @default true @for desktop
                         * @extend_doc
                         */
                     focusStateEnabled: true
@@ -1055,20 +1055,20 @@ var Scheduler = Widget.inherit({
                         /**
                        * @name dxSchedulerOptions_useDropDownViewSwitcher
                        * @publicName useDropDownViewSwitcher
-                       * @custom_default_for_Android,_iOS_and_Windows_Mobile true
+                       * @default true @for Android|iOS|Windows_Mobile
                        */
                     useDropDownViewSwitcher: true,
 
                         /**
                        * @name dxSchedulerOptions_editing_allowResizing
                        * @publicName allowResizing
-                       * @custom_default_for_Android,_iOS_and_Windows_Mobile false
+                       * @default false @for Android|iOS|Windows_Mobile
                        */
 
                         /**
                        * @name dxSchedulerOptions_editing_allowDragging
                        * @publicName allowDragging
-                       * @custom_default_for_Android,_iOS_and_Windows_Mobile false
+                       * @default false @for Android|iOS|Windows_Mobile
                        */
                     editing: {
                         allowDragging: false,

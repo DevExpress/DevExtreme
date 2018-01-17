@@ -203,7 +203,7 @@ var TileView = CollectionWidget.inherit({
                     * @name dxTileViewOptions_focusStateEnabled
                     * @publicName focusStateEnabled
                     * @type boolean
-                    * @custom_default_for_desktop true
+                    * @default true @for desktop
                     * @extend_doc
                     */
                     focusStateEnabled: true
