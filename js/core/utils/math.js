@@ -30,9 +30,9 @@ function getExponent(value) {
 
 function _checkPrecision() {
     var value = 0.0003,
-        currentValue = 0.000300,
+        correctValue = 0.000300,
         precisionValue = 3;
-    return currentValue === value.toPrecision(precisionValue);
+    return correctValue === value.toPrecision(precisionValue);
 }
 
 function adjust(value, interval) {
