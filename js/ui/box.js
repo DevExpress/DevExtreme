@@ -755,7 +755,12 @@ var Box = CollectionWidget.inherit({
     * @inheritdoc
     */
 });
-
+/**
+* @name dxBoxItemTemplate
+* @publicName dxBoxItemTemplate
+* @inherits CollectionWidgetItemTemplate
+* @type object
+*/
 /**
 * @name dxBoxItemTemplate_ratio
 * @publicName ratio

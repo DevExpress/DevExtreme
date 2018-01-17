@@ -1,4 +1,10 @@
 /**
+* @name dxChartSeriesTypes
+* @publicName dxChartSeriesTypes
+* @type object
+* @hidden
+*/
+/**
 * @name dxChartSeriesTypes_CommonSeries
 * @publicName CommonSeries
 * @type object

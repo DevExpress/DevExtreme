@@ -66,7 +66,11 @@ exports.DataController = Class.inherit((function() {
         };
 
         var createInfoItem = function(headerItem, breadth, isHorizontal, isTree) {
-
+            /**
+            * @name dxPivotGridPivotGridCell
+            * @publicName dxPivotGridPivotGridCell
+            * @type object
+            */
             var infoItem = {
                 /**
                 * @name dxPivotGridPivotGridCell_type

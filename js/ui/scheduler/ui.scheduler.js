@@ -799,7 +799,12 @@ var Scheduler = Widget.inherit({
                 * @hidden
                 * @inheritdoc
                 */
-
+                /**
+                * @name dxSchedulerAppointmentTemplate
+                * @publicName dxSchedulerAppointmentTemplate
+                * @inherits CollectionWidgetItemTemplate
+                * @type object
+                */
                 /**
                 * @name dxSchedulerAppointmentTemplate_html
                 * @publicName html
@@ -867,7 +872,11 @@ var Scheduler = Widget.inherit({
                 * @publicName endDateTimeZone
                 * @type String
                 */
-
+                /**
+                * @name dxSchedulerAppointmentTooltipTemplate
+                * @publicName dxSchedulerAppointmentTooltipTemplate
+                * @type object
+                */
                 /**
                 * @name dxSchedulerAppointmentTooltipTemplate_text
                 * @publicName text
