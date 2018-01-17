@@ -177,7 +177,7 @@ var LoadPanel = Overlay.inherit({
                 /**
                 * @name dxLoadPanelOptions_shadingColor
                 * @publicName shadingColor
-                * @custom_default_for_generic "transparent",
+                * @default "transparent", @for generic
                 * @extend_doc
                 */
                 device: { platform: "generic" },

@@ -214,14 +214,14 @@ var ListEdit = ListBase.inherit({
                     /**
                     * @name dxListOptions_menuMode
                     * @publicName menuMode
-                    * @custom_default_for_ios 'slide'
+                    * @default 'slide' @for ios
                     */
                     menuMode: "slide",
 
                     /**
                     * @name dxListOptions_itemDeleteMode
                     * @publicName itemDeleteMode
-                    * @custom_default_for_ios 'slideItem'
+                    * @default 'slideItem' @for ios
                     */
                     itemDeleteMode: "slideItem"
                 }
@@ -232,7 +232,7 @@ var ListEdit = ListBase.inherit({
                     /**
                     * @name dxListOptions_itemDeleteMode
                     * @publicName itemDeleteMode
-                    * @custom_default_for_android 'swipe'
+                    * @default 'swipe' @for android
                     */
                     itemDeleteMode: "swipe"
                 }
@@ -243,7 +243,7 @@ var ListEdit = ListBase.inherit({
                     /**
                     * @name dxListOptions_itemDeleteMode
                     * @publicName itemDeleteMode
-                    * @custom_default_for_windows 'context'
+                    * @default 'context' @for windows
                     */
                     itemDeleteMode: "context"
                 }
@@ -254,7 +254,7 @@ var ListEdit = ListBase.inherit({
                     /**
                     * @name dxListOptions_itemDeleteMode
                     * @publicName itemDeleteMode
-                    * @custom_default_for_generic 'static'
+                    * @default 'static' @for generic
                     */
                     itemDeleteMode: "static"
                 }

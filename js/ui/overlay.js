@@ -380,7 +380,7 @@ var Overlay = Widget.inherit({
                 /**
                  * @name dxOverlayOptions_animation
                  * @publicName animation
-                 * @custom_default_for_android_below_version_4 { show: { type: "fade", duration: 400 }, hide: { type: "fade", duration: 400, to: { opacity: 0 }, from: { opacity: 1 } } }
+                 * @default { show: { type: "fade", duration: 400 }, hide: { type: "fade", duration: 400, to: { opacity: 0 }, from: { opacity: 1 } } } @for android_below_version_4
                  */
                 animation: {
                     show: {

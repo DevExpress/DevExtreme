@@ -166,7 +166,7 @@ var DataGrid = Widget.inherit({
                     * @name dxDataGridOptions_showRowLines
                     * @publicName showRowLines
                     * @type boolean
-                    * @custom_default_for_ios true
+                    * @default true @for ios
                     */
                     showRowLines: true
                 }
