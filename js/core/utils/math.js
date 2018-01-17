@@ -1,7 +1,6 @@
 "use strict";
 
-var browser = require("./browser"),
-    isExponential = require("./type").isExponential;
+var isExponential = require("./type").isExponential;
 
 var sign = function(value) {
     if(value === 0) {
@@ -29,13 +28,19 @@ function getExponent(value) {
     return Math.abs(parseInt(value.toExponential().split("e")[1]));
 }
 
+function _checkPrecision() {
+    var value = 0.0003,
+        currentValue = 0.000300,
+        precisionValue = 3;
+    return currentValue === value.toPrecision(precisionValue);
+}
+
 function adjust(value, interval) {
     var precision = getPrecision(interval || 0) + 2,
         separatedValue = value.toString().split("."),
         sourceValue = value,
         absValue = Math.abs(value),
         separatedAdjustedValue,
-        isEdge = browser.msie && browser.version >= 13,
         isExponentValue = isExponential(value),
         integerPart = absValue > 1 ? 10 : 0;
 
@@ -51,7 +56,7 @@ function adjust(value, interval) {
         value = value - Math.floor(value) + integerPart;
     }
 
-    precision = ((isEdge && (getExponent(value) > 6)) || precision > 7) ? 15 : 7; //fix toPrecision() bug in Edge (T570217)
+    precision = ((_checkPrecision() && (getExponent(value) > 6)) || precision > 7) ? 15 : 7; //fix toPrecision() bug in Edge (T570217)
 
     if(!isExponentValue) {
         separatedAdjustedValue = parseFloat(value.toPrecision(precision)).toString().split(".");

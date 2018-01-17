@@ -2,7 +2,7 @@
 
 var $ = require("../core/renderer"),
     window = require("../core/dom_adapter").getWindow(),
-    navigator = window.navigator,
+    navigator = require("./utils/navigator").getNavigator,
     extend = require("./utils/extend").extend,
     isPlainObject = require("./utils/type").isPlainObject,
     each = require("./utils/iterator").each,
@@ -362,7 +362,7 @@ var Devices = Class.inherit({
                     throw errors.Error("E0005");
                 }
             } else {
-                ua = navigator.userAgent;
+                ua = navigator.userAgent || "";
             }
             return this._fromUA(ua);
         }
@@ -464,7 +464,7 @@ viewPort.changeCallback.add(function(viewPort, prevViewport) {
 });
 
 // TODO: remove with win8 theme
-if(!devices.isForced() && devices.current().platform === "win") {
+if(window && !devices.isForced() && devices.current().platform === "win") {
     devices.current({ version: [10] });
 }
 

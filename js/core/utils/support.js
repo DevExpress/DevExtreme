@@ -2,6 +2,7 @@
 
 var inArray = require("./array").inArray,
     window = require("../../core/dom_adapter").getWindow(),
+    navigator = require("../../core/utils/navigator").getNavigator,
     document = window.document,
     devices = require("../devices"),
     styleUtils = require("./style");
@@ -44,8 +45,8 @@ var inputType = function(type) {
 };
 
 var touchEvents = "ontouchstart" in window && !('callPhantom' in window),
-    pointerEvents = !!window.navigator.pointerEnabled || !!window.navigator.msPointerEnabled,
-    touchPointersPresent = !!window.navigator.maxTouchPoints || !!window.navigator.msMaxTouchPoints;
+    pointerEvents = !!navigator.pointerEnabled || !!navigator.msPointerEnabled,
+    touchPointersPresent = !!navigator.maxTouchPoints || !!navigator.msMaxTouchPoints;
 
 exports.touchEvents = touchEvents;
 exports.pointerEvents = pointerEvents;
