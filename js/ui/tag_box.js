@@ -261,7 +261,7 @@ var TagBox = SelectBox.inherit({
             * @name dxTagBoxOptions_values
             * @publicName values
             * @deprecated dxTagBoxOptions_value
-            * @extend_doc
+            * @inheritdoc
             */
             "values": { since: "16.1", alias: "value" }
         });
@@ -388,91 +388,91 @@ var TagBox = SelectBox.inherit({
             * @name dxTagBoxOptions_closeAction
             * @publicName closeAction
             * @hidden
-            * @extend_doc
+            * @inheritdoc
             */
 
             /**
             * @name dxTagBoxOptions_hiddenAction
             * @publicName hiddenAction
             * @hidden
-            * @extend_doc
+            * @inheritdoc
             */
 
             /**
             * @name dxTagBoxOptions_itemRender
             * @publicName itemRender
             * @hidden
-            * @extend_doc
+            * @inheritdoc
             */
 
             /**
             * @name dxTagBoxOptions_openAction
             * @publicName openAction
             * @hidden
-            * @extend_doc
+            * @inheritdoc
             */
 
             /**
             * @name dxTagBoxOptions_shownAction
             * @publicName shownAction
             * @hidden
-            * @extend_doc
+            * @inheritdoc
             */
 
             /**
             * @name dxTagBoxOptions_valueChangeEvent
             * @publicName valueChangeEvent
             * @hidden
-            * @extend_doc
+            * @inheritdoc
             */
 
             /**
             * @name dxTagBoxOptions_maxLength
             * @publicName maxLength
             * @hidden
-            * @extend_doc
+            * @inheritdoc
             */
 
             /**
             * @name dxTagBoxOptions_onCopy
             * @publicName onCopy
             * @hidden
-            * @extend_doc
+            * @inheritdoc
             */
 
             /**
             * @name dxTagBoxOptions_onCut
             * @publicName onCut
             * @hidden
-            * @extend_doc
+            * @inheritdoc
             */
 
             /**
             * @name dxTagBoxOptions_onPaste
             * @publicName onPaste
             * @hidden
-            * @extend_doc
+            * @inheritdoc
             */
 
             /**
             * @name dxTagBoxOptions_spellcheck
             * @publicName spellcheck
             * @hidden
-            * @extend_doc
+            * @inheritdoc
             */
 
             /**
             * @name dxTagBoxOptions_displayValue
             * @publicName displayValue
             * @hidden
-            * @extend_doc
+            * @inheritdoc
             */
 
             /**
             * @name dxTagBoxOptions_selectedItem
             * @publicName selectedItem
             * @hidden
-            * @extend_doc
+            * @inheritdoc
             */
         });
     },

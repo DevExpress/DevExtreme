@@ -123,7 +123,7 @@ var ListBase = CollectionWidget.inherit({
             * @name dxListOptions_autoPagingEnabled
             * @publicName autoPagingEnabled
             * @deprecated #pageLoadMode
-            * @extend_doc
+            * @inheritdoc
             */
             "autoPagingEnabled": { since: "15.1", message: "Use the 'pageLoadMode' option instead" },
 
@@ -131,7 +131,7 @@ var ListBase = CollectionWidget.inherit({
             * @name dxListOptions_showNextButton
             * @publicName showNextButton
             * @deprecated #pageLoadMode
-            * @extend_doc
+            * @inheritdoc
             */
             "showNextButton": { since: "15.1", message: "Use the 'pageLoadMode' option instead" }
         });
@@ -145,7 +145,7 @@ var ListBase = CollectionWidget.inherit({
              * @publicName hoverStateEnabled
              * @type boolean
              * @default true
-             * @extend_doc
+             * @inheritdoc
              */
             hoverStateEnabled: true,
 
@@ -359,7 +359,7 @@ var ListBase = CollectionWidget.inherit({
             * @name dxListOptions_selectedItem
             * @publicName selectedItem
             * @hidden
-            * @extend_doc
+            * @inheritdoc
             */
 
             /**
@@ -367,7 +367,7 @@ var ListBase = CollectionWidget.inherit({
              * @publicName activeStateEnabled
              * @type boolean
              * @default true
-             * @extend_doc
+             * @inheritdoc
              */
             activeStateEnabled: true,
 
@@ -395,7 +395,7 @@ var ListBase = CollectionWidget.inherit({
             * @type_function_param1 e:object
             * @type_function_param1_field6 itemIndex:number | object
             * @action
-            * @extend_doc
+            * @inheritdoc
             */
 
             /**
@@ -406,7 +406,7 @@ var ListBase = CollectionWidget.inherit({
             * @type_function_param1 e:object
             * @type_function_param1_field6 itemIndex:number | object
             * @action
-            * @extend_doc
+            * @inheritdoc
             */
 
             showChevronExpr: function(data) { return data ? data.showChevron : undefined; },
@@ -487,7 +487,7 @@ var ListBase = CollectionWidget.inherit({
                     * @publicName focusStateEnabled
                     * @type boolean
                     * @default true @for desktop
-                    * @extend_doc
+                    * @inheritdoc
                     */
                     focusStateEnabled: true
                 }

@@ -42,14 +42,14 @@ var LoadIndicator = Widget.inherit({
             * @name dxLoadIndicatoroptions_disabled
             * @publicName disabled
             * @hidden
-            * @extend_doc
+            * @inheritdoc
             */
 
             /**
             * @name dxLoadIndicatoroptions_activeStateEnabled
             * @publicName activeStateEnabled
             * @hidden
-            * @extend_doc
+            * @inheritdoc
             */
             activeStateEnabled: false,
 
@@ -58,7 +58,7 @@ var LoadIndicator = Widget.inherit({
              * @publicName hoverStateEnabled
              * @default false
              * @hidden
-            * @extend_doc
+            * @inheritdoc
             */
             hoverStateEnabled: false,
 
@@ -66,21 +66,21 @@ var LoadIndicator = Widget.inherit({
             * @name dxLoadIndicatoroptions_focusStateEnabled
             * @publicName focusStateEnabled
             * @hidden
-            * @extend_doc
+            * @inheritdoc
             */
 
             /**
             * @name dxLoadIndicatoroptions_accessKey
             * @publicName accessKey
             * @hidden
-            * @extend_doc
+            * @inheritdoc
             */
 
             /**
             * @name dxLoadIndicatoroptions_tabIndex
             * @publicName tabIndex
             * @hidden
-            * @extend_doc
+            * @inheritdoc
             */
 
             _animatingSegmentCount: 1,
@@ -266,14 +266,14 @@ var LoadIndicator = Widget.inherit({
     * @name dxLoadIndicatorMethods_registerKeyHandler
     * @publicName registerKeyHandler(key, handler)
     * @hidden
-    * @extend_doc
+    * @inheritdoc
     */
 
     /**
     * @name dxLoadIndicatorMethods_focus
     * @publicName focus()
     * @hidden
-    * @extend_doc
+    * @inheritdoc
     */
 });
 

@@ -116,49 +116,49 @@ var NumberBoxBase = TextEditor.inherit({
              * @name dxNumberBoxOptions_mask
              * @publicName mask
              * @hidden
-             * @extend_doc
+             * @inheritdoc
              */
 
             /**
              * @name dxNumberBoxOptions_maskChar
              * @publicName maskChar
              * @hidden
-             * @extend_doc
+             * @inheritdoc
              */
 
             /**
              * @name dxNumberBoxOptions_maskRules
              * @publicName maskRules
              * @hidden
-             * @extend_doc
+             * @inheritdoc
              */
 
             /**
              * @name dxNumberBoxOptions_maskInvalidMessage
              * @publicName maskInvalidMessage
              * @hidden
-             * @extend_doc
+             * @inheritdoc
              */
 
             /**
              * @name dxNumberBoxOptions_useMaskedValue
              * @publicName useMaskedValue
              * @hidden
-             * @extend_doc
+             * @inheritdoc
              */
 
             /**
              * @name dxNumberBoxOptions_showMaskMode
              * @publicName showMaskMode
              * @hidden
-             * @extend_doc
+             * @inheritdoc
              */
 
             /**
              * @name dxNumberBoxOptions_spellcheck
              * @publicName spellcheck
              * @hidden
-             * @extend_doc
+             * @inheritdoc
              */
         });
     },

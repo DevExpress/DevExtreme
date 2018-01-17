@@ -114,7 +114,7 @@ var ColorBox = DropDownEditor.inherit({
             * @publicName applyValueMode
             * @type string
             * @default "useButtons"
-            * @extend_doc
+            * @inheritdoc
             */
             applyValueMode: "useButtons",
 
@@ -147,42 +147,42 @@ var ColorBox = DropDownEditor.inherit({
             * @name dxColorBoxOptions_value
             * @publicName value
             * @type string
-            * @extend_doc
+            * @inheritdoc
             */
 
             /**
             * @name dxColorBoxOptions_fieldEditEnabled
             * @publicName fieldEditEnabled
             * @hidden
-            * @extend_doc
+            * @inheritdoc
             */
 
             /**
             * @name dxColorBoxOptions_maxLength
             * @publicName maxLength
             * @hidden
-            * @extend_doc
+            * @inheritdoc
             */
 
             /**
             * @name dxColorBoxOptions_showClearButton
             * @publicName showClearButton
             * @hidden
-            * @extend_doc
+            * @inheritdoc
             */
 
             /**
             * @name dxColorBoxOptions_valueChangeEvent
             * @publicName valueChangeEvent
             * @hidden
-            * @extend_doc
+            * @inheritdoc
             */
 
             /**
             * @name dxColorBoxOptions_spellcheck
             * @publicName spellcheck
             * @hidden
-            * @extend_doc
+            * @inheritdoc
             */
         });
     },
