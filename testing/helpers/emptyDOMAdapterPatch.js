@@ -1,16 +1,22 @@
 "use strict";
 
 var domAdapter = require("core/dom_adapter");
+var serverSideDOMAdapter = require("./serverSideDOMAdapterPatch.js");
 var domAdapterBackup = {};
 
-for(var method in domAdapter) {
-    domAdapterBackup[method] = domAdapter[method];
-    delete domAdapter[method];
+for(var field in domAdapter) {
+    domAdapterBackup[field] = domAdapter[field];
+    if(field !== "getWindow" && field !== "ready" && field !== "_readyCallbacks") {
+        delete domAdapter[field];
+    }
 }
 
-domAdapter.getWindow = function() {
-    return null;
-};
+domAdapter._window = null;
+
+QUnit.testStart(function() {
+    serverSideDOMAdapter.set();
+    domAdapter._readyCallbacks.fire();
+});
 
 domAdapter.__restoreOriginal = function() {
     for(var method in domAdapterBackup) {

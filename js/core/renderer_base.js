@@ -2,9 +2,8 @@
 
 var dataUtils = require("./element_data");
 var domAdapter = require("./dom_adapter");
-var window = domAdapter.getWindow();
-var Node = window.Node;
-var document = window.document;
+var getWindow = domAdapter.getWindow;
+var Node = getWindow().Node;
 var typeUtils = require("./utils/type");
 var styleUtils = require("./utils/style");
 var sizeUtils = require("./utils/size");
@@ -22,7 +21,7 @@ var initRender = function(selector, context) {
     }
 
     if(typeof selector === "string") {
-        context = context || document;
+        context = context || getWindow().document;
         if(selector === "body") {
             this[0] = context.body;
             this.length = 1;
@@ -214,7 +213,7 @@ initRender.prototype.toggleClass = function(className, value) {
         }
 
         if(typeUtils.isNumeric(value)) {
-            var elementStyles = window.getComputedStyle(element);
+            var elementStyles = getWindow().getComputedStyle(element);
             var sizeAdjustment = sizeUtils.getElementBoxParams(propName, elementStyles);
             var isBorderBox = elementStyles.boxSizing === "border-box";
 
@@ -308,7 +307,7 @@ initRender.prototype.css = function(name, value) {
 
             name = styleUtils.styleProp(name);
 
-            var result = window.getComputedStyle(this[0])[name] || this[0].style[name];
+            var result = getWindow().getComputedStyle(this[0])[name] || this[0].style[name];
             return typeUtils.isNumeric(result) ? result.toString() : result;
         }
     } else if(typeUtils.isPlainObject(name)) {
@@ -737,7 +736,7 @@ initRender.prototype.toArray = function() {
     return emptyArray.slice.call(this);
 };
 
-var getWindow = function(element) {
+var getWindowByElement = function(element) {
     return typeUtils.isWindow(element) ? element : element.defaultView;
 };
 
@@ -752,7 +751,7 @@ initRender.prototype.offset = function() {
     }
 
     var rect = this[0].getBoundingClientRect();
-    var win = getWindow(this[0].ownerDocument);
+    var win = getWindowByElement(this[0].ownerDocument);
     var docElem = this[0].ownerDocument.documentElement;
 
     return {
@@ -770,7 +769,7 @@ initRender.prototype.offsetParent = function() {
         offsetParent = renderer(offsetParent[0].offsetParent);
     }
 
-    offsetParent = offsetParent[0] ? offsetParent : renderer(document.documentElement);
+    offsetParent = offsetParent[0] ? offsetParent : renderer(getWindow().document.documentElement);
 
     return offsetParent;
 };
@@ -834,7 +833,7 @@ initRender.prototype.position = function() {
             return;
         }
 
-        var window = getWindow(this[0]);
+        var window = getWindowByElement(this[0]);
 
         if(value === undefined) {
             return window ? window[directionStrategy.offsetProp] : this[0][propName];

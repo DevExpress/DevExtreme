@@ -6,7 +6,5 @@ var serverSideWindowMock = require("./serverSideWindowMock.js");
 exports.set = function() {
     domAdapter.__restoreOriginal();
 
-    domAdapter.getWindow = function() {
-        return serverSideWindowMock;
-    };
+    domAdapter._window = serverSideWindowMock;
 };
