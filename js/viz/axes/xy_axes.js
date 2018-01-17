@@ -20,7 +20,11 @@ var formatHelper = require("../../format_helper"),
     RIGHT = constants.right,
     CENTER = constants.center,
     SCALE_BREAK_OFFSET = 3,
-    RANGE_RATIO = 0.3;
+    RANGE_RATIO = 0.3,
+    WAVED_LINE_CENTER = 2,
+    WAVED_LINE_TOP = 0,
+    WAVED_LINE_BOTTOM = 4,
+    WAVED_LINE_LENGTH = 24;
 
 function prepareDatesDifferences(datesDifferences, tickInterval) {
     var dateUnitInterval,
@@ -1035,21 +1039,27 @@ module.exports = {
             return filterBreaks(sortingBreaks(breaks), viewport, axisOptions.breakStyle);
         },
 
-        _drawBreak: function(br, scaleBreakPattern, positionFrom, positionTo, length) {
+        _drawBreak: function(translatedEnd, positionFrom, positionTo, width, options) {
             var that = this,
-                translatedEnd = that._getTranslatedCoord(br.to),
-                breakStart = Math.min(translatedEnd, !that._translator.isInverted() ? translatedEnd - length : translatedEnd + length),
-                rect;
+                breakStart = translatedEnd - (!that._translator.isInverted() ? width + 1 : 0),
+                attr = {
+                    "stroke-width": 1,
+                    stroke: options.borderColor,
+                    sharp: !options.isWaved ? options.isHorizontal ? "h" : "v" : undefined
+                },
+                spaceAttr = {
+                    stroke: options.color,
+                    "stroke-width": width
+                },
+                getPoints = that._isHorizontal ? rotateLine : function(p) { return p; },
+                drawer = getLineDrawer(that._renderer, spaceAttr, attr, that._axisBreaksGroup, getPoints, positionFrom, breakStart, positionTo, options.isWaved);
 
-            if(that._isHorizontal) {
-                rect = that._renderer.rect(breakStart, positionFrom, scaleBreakPattern.size, positionTo - positionFrom);
-            } else {
-                rect = that._renderer.rect(positionFrom, breakStart, positionTo - positionFrom, scaleBreakPattern.size);
-            }
-            rect.attr({ fill: scaleBreakPattern.id }).append(that._axisBreaksGroup);
+            drawer(width / 2, spaceAttr);
+            drawer(0, attr);
+            drawer(width, attr);
         },
 
-        drawScaleBreaks: function(canvas) {
+        drawScaleBreaks: function(customCanvas) {
             var that = this,
                 options = that._options,
                 breakStyle = options.breakStyle,
@@ -1057,37 +1067,44 @@ module.exports = {
                 positionFrom,
                 positionTo,
                 breaks = that._translator.getBusinessRange().breaks || [],
-                scaleBreakPattern;
+                canvas = that._canvas,
+                clipRect,
+                breakOptions;
 
             if(!(breaks && breaks.length)) {
                 return;
             }
 
-            if(canvas) {
-                positionFrom = canvas.start;
-                positionTo = canvas.end;
+            that._axisBreaksGroup.clear();
+            breakOptions = {
+                color: that._options.containerColor,
+                borderColor: breakStyle.color,
+                isHorizontal: that._isHorizontal,
+                isWaved: breakStyle.line.toLowerCase() !== "straight"
+            };
+            if(customCanvas) {
+                positionFrom = customCanvas.start;
+                positionTo = customCanvas.end;
             } else {
                 positionFrom = that._orthogonalPositions.start - (options.visible && (position === "left" || position === "top") ? SCALE_BREAK_OFFSET : 0);
                 positionTo = that._orthogonalPositions.end + (options.visible && (position === "right" || position === "bottom") ? SCALE_BREAK_OFFSET : 0);
             }
 
-            if(that._scaleBreakPattern) {
-                that._scaleBreakPattern.dispose();
-            }
-            that._scaleBreakPattern = scaleBreakPattern = that._renderer.linePattern({
-                color: that._options.containerColor,
-                borderColor: breakStyle.color,
-                size: breakStyle.width,
-                canvasLength: positionTo - positionFrom,
-                isHorizontal: that._isHorizontal,
-                isWaved: breakStyle.line.toLowerCase() !== "straight"
-            });
+            that._brakesClipRect && that._brakesClipRect.dispose();
 
             breaks.forEach(function(br) {
                 if(!br.gapSize) {
-                    that._drawBreak(br, scaleBreakPattern, positionFrom, positionTo, breakStyle.width / 2 + scaleBreakPattern.size / 2);
+                    that._drawBreak(that._getTranslatedCoord(br.to), positionFrom, positionTo, breakStyle.width, breakOptions);
                 }
             });
+
+            if(that._isHorizontal) {
+                clipRect = that._renderer.clipRect(canvas.left, positionFrom, canvas.width, positionTo - positionFrom);
+            } else {
+                clipRect = that._renderer.clipRect(positionFrom, canvas.top, positionTo - positionFrom, canvas.height);
+            }
+            that._axisBreaksGroup.attr({ "clip-path": clipRect.id });
+            that._brakesClipRect = clipRect;
         },
 
         _getSpiderCategoryOption: noop,
@@ -1121,3 +1138,49 @@ module.exports = {
         }
     }
 };
+
+function getLineDrawer(renderer, spaceAttr, elementAttr, root, rotatePoints, positionFrom, breakStart, positionTo, isWaved) {
+    var elementType = isWaved ? "bezier" : "line",
+        group = renderer.g().append(root);
+
+    return function(offset, attr) {
+        renderer.path(rotatePoints(getPoints(positionFrom, breakStart, positionTo, offset, isWaved)), elementType).attr(attr).append(group);
+    };
+}
+
+function getPoints(positionFrom, breakStart, positionTo, offset, isWaved) {
+    if(!isWaved) {
+        return [positionFrom, breakStart + offset, positionTo, breakStart + offset];
+    }
+
+    breakStart += offset;
+
+    var currentPosition,
+        topPoint = breakStart + WAVED_LINE_TOP,
+        centerPoint = breakStart + WAVED_LINE_CENTER,
+        bottomPoint = breakStart + WAVED_LINE_BOTTOM,
+        points = [[positionFrom, centerPoint]];
+
+    for(currentPosition = positionFrom; currentPosition < positionTo + WAVED_LINE_LENGTH; currentPosition += WAVED_LINE_LENGTH) {
+        points.push([
+            currentPosition + 6, topPoint,
+            currentPosition + 6, topPoint,
+            currentPosition + 12, centerPoint,
+            currentPosition + 18, bottomPoint,
+            currentPosition + 18, bottomPoint,
+            currentPosition + 24, centerPoint
+        ]);
+    }
+    return [].concat.apply([], points);
+}
+
+function rotateLine(lineCoords) {
+    var points = [],
+        i;
+
+    for(i = 0; i < lineCoords.length; i += 2) {
+        points.push(lineCoords[i + 1]);
+        points.push(lineCoords[i]);
+    }
+    return points;
+}
