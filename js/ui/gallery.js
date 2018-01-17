@@ -242,23 +242,6 @@ var Gallery = CollectionWidget.inherit({
             selectionMode: "single",
             selectionRequired: true,
             selectionByClick: false
-
-            /**
-            * @name dxGalleryItemTemplate_imageSrc
-            * @publicName imageSrc
-            * @type String
-            */
-            /**
-            * @name dxGalleryItemTemplate_imageAlt
-            * @publicName imageAlt
-            * @type String
-            */
-            /**
-            * @name dxGalleryItemTemplate_visible
-            * @publicName visible
-            * @hidden
-            * @extend_doc
-            */
         });
     },
 
@@ -290,7 +273,28 @@ var Gallery = CollectionWidget.inherit({
 
     _initTemplates: function() {
         this.callBase();
-
+        /**
+        * @name dxGalleryItemTemplate
+        * @publicName dxGalleryItemTemplate
+        * @inherits CollectionWidgetItemTemplate
+        * @type object
+        */
+        /**
+        * @name dxGalleryItemTemplate_imageSrc
+        * @publicName imageSrc
+        * @type String
+        */
+        /**
+        * @name dxGalleryItemTemplate_imageAlt
+        * @publicName imageAlt
+        * @type String
+        */
+        /**
+        * @name dxGalleryItemTemplate_visible
+        * @publicName visible
+        * @hidden
+        * @extend_doc
+        */
         this._defaultTemplates["item"] = new BindableTemplate(function($container, data) {
             var $img = $('<img>').addClass(GALLERY_IMAGE_CLASS);
 

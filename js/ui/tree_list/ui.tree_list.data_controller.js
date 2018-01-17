@@ -303,7 +303,11 @@ treeListCore.registerModule("data", {
         data: exports.DataController
     }
 });
-
+/**
+ * @name dxTreeListNode
+ * @publicName dxTreeListNode
+ * @type object
+ */
 /**
  * @name dxTreeListNode_key
  * @publicName key

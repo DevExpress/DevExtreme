@@ -248,7 +248,11 @@ var DataExpressionMixin = extend(DataHelperMixin, {
         }
     }
 });
-
+/**
+* @name DataExpressionMixinItemTemplate
+* @publicName DataExpressionMixinItemTemplate
+* @type object
+*/
 /**
 * @name DataExpressionMixinItemTemplate_disabled
 * @publicName disabled

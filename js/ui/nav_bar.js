@@ -66,7 +66,12 @@ var NavBar = Tabs.inherit({
         }
     }
 });
-
+/**
+* @name dxNavBarItemTemplate
+* @publicName dxNavBarItemTemplate
+* @inherits dxTabsItemTemplate
+* @type object
+*/
 /**
 * @name dxNavBarItemTemplate_badge
 * @publicName badge
