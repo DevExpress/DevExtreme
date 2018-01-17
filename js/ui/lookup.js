@@ -623,7 +623,7 @@ var Lookup = DropDownList.inherit({
                     /**
                     * @name dxLookupOptions_popupWidth
                     * @publicName popupWidth
-                    * @default "function() { return Math.min($(window).width(), $(window).height()) * 0.4; }" @for iPad
+                    * @default function() { return Math.min($(window).width(), $(window).height()) * 0.4; } @for iPad
                     */
                     popupWidth: function() { return Math.min($(window).width(), $(window).height()) * 0.4; },
 
