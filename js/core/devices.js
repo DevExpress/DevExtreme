@@ -207,8 +207,10 @@ var Devices = Class.inherit({
         this._currentOrientation = undefined;
 
         this.changed = Callbacks();
-        this._recalculateOrientation();
-        resizeCallbacks.add(this._recalculateOrientation.bind(this));
+        if(window) {
+            this._recalculateOrientation();
+            resizeCallbacks.add(this._recalculateOrientation.bind(this));
+        }
     },
     /**
     * @name DevicesObjectmethods_current
