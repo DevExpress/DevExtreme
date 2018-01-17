@@ -229,6 +229,10 @@ function current(options) {
         }
     }
 
+    if(!currentThemeName && !knownThemes) {
+        return;
+    }
+
     attachCssClasses(viewPortUtils.originalViewPort(), currentThemeName);
 }
 
