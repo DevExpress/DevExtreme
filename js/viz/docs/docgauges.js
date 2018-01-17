@@ -645,7 +645,6 @@ var baseGauge = {
 * @name dxcirculargauge
 * @publicName dxCircularGauge
 * @inherits BaseGauge
-* @groupName Data Management and Visualization
 * @module viz/circular_gauge
 * @export default
 */
@@ -793,7 +792,6 @@ var dxCircularGauge = {
 * @name dxlineargauge
 * @publicName dxLinearGauge
 * @inherits BaseGauge
-* @groupName Data Management and Visualization
 * @module viz/linear_gauge
 * @export default
 */
@@ -958,7 +956,6 @@ var dxLinearGauge = {
 * @name dxbargauge
 * @publicName dxBarGauge
 * @inherits BaseWidget
-* @groupName Data Management and Visualization
 * @module viz/bar_gauge
 * @export default
 */

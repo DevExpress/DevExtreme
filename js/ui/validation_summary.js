@@ -17,7 +17,6 @@ var VALIDATION_SUMMARY_CLASS = "dx-validationsummary",
 * @name dxValidationSummary
 * @publicName dxValidationSummary
 * @inherits CollectionWidget
-* @groupName Helpers
 * @module ui/validation_summary
 * @export default
 */

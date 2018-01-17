@@ -4,7 +4,6 @@
 * @name dxfilterbuilder
 * @publicName dxFilterBuilder
 * @inherits Widget
-* @groupName Data Management and Visualization
 * @module ui/filter_builder
 * @export default
 */

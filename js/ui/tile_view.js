@@ -45,7 +45,6 @@ var CONFIGS = {
 * @name dxtileview
 * @publicName dxTileView
 * @inherits CollectionWidget
-* @groupName Collection Widgets
 * @module ui/tile_view
 * @export default
 */

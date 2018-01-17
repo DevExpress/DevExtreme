@@ -120,7 +120,6 @@ var BaseSparkline = {
 * @name dxsparkline
 * @publicName dxSparkline
 * @inherits BaseSparkline
-* @groupName Data Management and Visualization
 * @module viz/sparkline
 * @export default
 */
@@ -298,7 +297,6 @@ var dxSparkline = {
 * @name dxbullet
 * @publicName dxBullet
 * @inherits BaseSparkline
-* @groupName Data Management and Visualization
 * @module viz/bullet
 * @export default
 */

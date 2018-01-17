@@ -26,7 +26,6 @@ var ACTION_SHEET_CLASS = "dx-actionsheet",
 * @name dxactionsheet
 * @publicName dxActionSheet
 * @inherits CollectionWidget
-* @groupName Action Widgets
 * @module ui/action_sheet
 * @export default
 */

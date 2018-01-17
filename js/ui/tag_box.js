@@ -52,7 +52,6 @@ var TAGBOX_MOUSE_WHEEL_DELTA_MULTIPLIER = -0.3;
 * @isEditor
 * @publicName dxTagBox
 * @inherits dxSelectBox
-* @groupName Editors
 * @module ui/tag_box
 * @export default
 */

@@ -46,7 +46,6 @@ var TABS_CLASS = "dx-tabs",
 * @name dxTabs
 * @publicName dxTabs
 * @inherits CollectionWidget
-* @groupName Navigation and Layouting
 * @module ui/tabs
 * @export default
 */

@@ -2,7 +2,6 @@
 * @name dxchart
 * @publicName dxChart
 * @inherits BaseChart
-* @groupName Data Management and Visualization
 * @module viz/chart
 * @export default
 */
@@ -2381,7 +2380,6 @@ var dxChart = {
 * @name dxpiechart
 * @publicName dxPieChart
 * @inherits BaseChart
-* @groupName Data Management and Visualization
 * @module viz/pie_chart
 * @export default
 */
@@ -2600,7 +2598,6 @@ var dxPieChart = {
 * @name dxpolarchart
 * @publicName dxPolarChart
 * @inherits BaseChart
-* @groupName Data Management and Visualization
 * @module viz/polar_chart
 * @export default
 */
