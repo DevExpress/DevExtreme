@@ -22,7 +22,7 @@ var baseGauge = {
     /**
     * @name basegaugeoptions_title
     * @publicName title
-    * @extend_doc
+    * @inheritdoc
     */
     title: {
         /**
@@ -723,7 +723,7 @@ var dxCircularGauge = {
             * @name dxcirculargaugeoptions_scale_label_overlappingBehavior
             * @publicName overlappingBehavior
             * @type string|object
-            * @extend_doc
+            * @inheritdoc
             */
             overlappingBehavior: {
                 /**
@@ -864,7 +864,7 @@ var dxLinearGauge = {
             * @name dxlineargaugeoptions_scale_label_overlappingBehavior
             * @publicName overlappingBehavior
             * @type string|object
-            * @extend_doc
+            * @inheritdoc
             */
             overlappingBehavior: {
                 /**
@@ -984,7 +984,7 @@ var dxBarGauge = {
     /**
     * @name dxbargaugeoptions_title
     * @publicName title
-    * @extend_doc
+    * @inheritdoc
     */
     title: {
         /**

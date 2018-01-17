@@ -33,13 +33,13 @@ var NavBar = Tabs.inherit({
             * @name dxNavBarOptions_showNavButtons
             * @publicName showNavButtons
             * @hidden
-            * @extend_doc
+            * @inheritdoc
             */
 
             /**
             * @name dxNavBarOptions_scrollByContent
             * @publicName scrollByContent
-            * @extend_doc
+            * @inheritdoc
             */
         });
     },

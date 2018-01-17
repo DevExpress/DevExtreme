@@ -56,7 +56,7 @@ var Calendar = Editor.inherit({
             * @publicName hoverStateEnabled
             * @type boolean
             * @default true
-            * @extend_doc
+            * @inheritdoc
             */
             hoverStateEnabled: true,
 
@@ -65,7 +65,7 @@ var Calendar = Editor.inherit({
             * @publicName activeStateEnabled
             * @type boolean
             * @default true
-            * @extend_doc
+            * @inheritdoc
             */
             activeStateEnabled: true,
 
@@ -190,7 +190,7 @@ var Calendar = Editor.inherit({
             * @publicName name
             * @type string
             * @hidden false
-            * @extend_doc
+            * @inheritdoc
             */
 
             /**
@@ -236,7 +236,7 @@ var Calendar = Editor.inherit({
                     * @publicName focusStateEnabled
                     * @type boolean
                     * @default true @for desktop
-                    * @extend_doc
+                    * @inheritdoc
                     */
                     focusStateEnabled: true
                 }

@@ -218,7 +218,7 @@ var TreeViewBase = HierarchicalCollectionWidget.inherit({
             * @type_function_param1 e:object
             * @type_function_param1_field7 node:dxTreeViewNode
             * @action
-            * @extend_doc
+            * @inheritdoc
             */
 
             /**
@@ -229,7 +229,7 @@ var TreeViewBase = HierarchicalCollectionWidget.inherit({
             * @type_function_param1 e:object
             * @type_function_param1_field8 node:dxTreeViewNode
             * @action
-            * @extend_doc
+            * @inheritdoc
             */
 
             /**
@@ -240,7 +240,7 @@ var TreeViewBase = HierarchicalCollectionWidget.inherit({
             * @type_function_param1 e:object
             * @type_function_param1_field8 node:dxTreeViewNode
             * @action
-            * @extend_doc
+            * @inheritdoc
             */
 
             /**
@@ -251,7 +251,7 @@ var TreeViewBase = HierarchicalCollectionWidget.inherit({
             * @type_function_param1 e:object
             * @type_function_param1_field8 node:dxTreeViewNode
             * @action
-            * @extend_doc
+            * @inheritdoc
             */
 
             /**
@@ -350,7 +350,7 @@ var TreeViewBase = HierarchicalCollectionWidget.inherit({
             * @type_function_param1_field4 addedItems:Array<any>
             * @type_function_param1_field5 removedItems:Array<any>
             * @action
-            * @extend_doc
+            * @inheritdoc
             */
 
             /**
@@ -373,28 +373,28 @@ var TreeViewBase = HierarchicalCollectionWidget.inherit({
             * @name dxTreeViewOptions_selectedItem
             * @publicName selectedItem
             * @hidden
-            * @extend_doc
+            * @inheritdoc
             */
 
             /**
             * @name dxTreeViewOptions_selectedItems
             * @publicName selectedItems
             * @hidden
-            * @extend_doc
+            * @inheritdoc
             */
 
             /**
             * @name dxTreeViewOptions_selectedItemKeys
             * @publicName selectedItemKeys
             * @hidden
-            * @extend_doc
+            * @inheritdoc
             */
 
             /**
             * @name dxTreeViewOptions_selectedIndex
             * @publicName selectedIndex
             * @hidden
-            * @extend_doc
+            * @inheritdoc
             */
             /**
             * @name dxTreeViewItemTemplate

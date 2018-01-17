@@ -16,42 +16,42 @@ var BaseSparkline = {
     * @name basesparklineoptions_redrawOnResize
     * @publicName redrawOnResize
     * @hidden
-    * @extend_doc
+    * @inheritdoc
     */
     redrawOnResize: undefined,
     /**
     * @name basesparklineoptions_title
     * @publicName title
     * @hidden
-    * @extend_doc
+    * @inheritdoc
     */
     title: undefined,
     /**
     * @name basesparklineoptions_export
     * @publicName export
     * @hidden
-    * @extend_doc
+    * @inheritdoc
     */
     "export": undefined,
     /**
     * @name basesparklineoptions_loadingIndicator
     * @publicName loadingIndicator
     * @hidden
-    * @extend_doc
+    * @inheritdoc
     */
     loadingIndicator: undefined,
     /**
     * @name basesparklinemethods_showLoadingIndicator
     * @publicName showLoadingIndicator()
     * @hidden
-    * @extend_doc
+    * @inheritdoc
     */
     showLoadingIndicator: function() { },
     /**
     * @name basesparklinemethods_hideLoadingIndicator
     * @publicName hideLoadingIndicator()
     * @hidden
-    * @extend_doc
+    * @inheritdoc
     */
     hideLoadingIndicator: function() { },
     /**
@@ -65,7 +65,7 @@ var BaseSparkline = {
         * @type boolean
         * @publicName enabled
         * @default true
-        * @extend_doc
+        * @inheritdoc
         */
         enabled: true,
         /**

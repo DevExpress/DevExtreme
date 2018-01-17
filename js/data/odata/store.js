@@ -101,7 +101,7 @@ var ODataStore = Store.inherit({
          * @name ODataStoreOptions_onLoading
          * @publicName onLoading
          * @action
-         * @extend_doc
+         * @inheritdoc
          */
         this._extractServiceOptions(options);
 
@@ -156,7 +156,7 @@ var ODataStore = Store.inherit({
     * @type function
     * @param1 options:LoadOptions
     * @return Promise<any>
-    * @extend_doc
+    * @inheritdoc
     */
 
     /**

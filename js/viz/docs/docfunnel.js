@@ -758,7 +758,7 @@ var dxFunnel = {
     * @name dxFunneloptions_tooltip
     * @publicName tooltip
     * @type object
-    * @extend_doc
+    * @inheritdoc
     */
     tooltip: {
         /**

@@ -44,14 +44,14 @@ var DOMComponent = Component.inherit({
             * @type_function_param1_field6 value:any
             * @action
             * @extends Action
-            * @extend_doc
+            * @inheritdoc
             */
             /**
             * @name domcomponentoptions_onDisposing
             * @publicName onDisposing
             * @action
             * @extends Action
-            * @extend_doc
+            * @inheritdoc
             */
 
             /**
