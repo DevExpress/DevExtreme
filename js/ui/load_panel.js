@@ -20,7 +20,6 @@ var LOADPANEL_CLASS = "dx-loadpanel",
 * @name dxLoadPanel
 * @publicName dxLoadPanel
 * @inherits dxOverlay
-* @groupName Overlays
 * @module ui/load_panel
 * @export default
 */

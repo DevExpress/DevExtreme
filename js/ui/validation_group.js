@@ -12,7 +12,6 @@ var VALIDATION_ENGINE_CLASS = "dx-validationgroup";
  * @name dxValidationGroup
  * @publicName dxValidationGroup
  * @inherits DOMComponent
- * @groupName Helpers
  * @module ui/validation_group
  * @export default
  */

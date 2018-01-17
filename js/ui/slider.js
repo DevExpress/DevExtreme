@@ -5,7 +5,6 @@
 * @isEditor
 * @publicName dxSlider
 * @inherits dxTrackBar
-* @groupName Editors
 * @module ui/slider
 * @export default
 */

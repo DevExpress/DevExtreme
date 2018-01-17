@@ -41,7 +41,6 @@ var WIDGET_CLASS = "dx-treeview",
 * @name dxTreeView
 * @publicName dxTreeView
 * @inherits HierarchicalCollectionWidget
-* @groupName Navigation and Layouting
 * @module ui/tree_view
 * @export default
 */

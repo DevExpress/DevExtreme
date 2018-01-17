@@ -26,7 +26,6 @@ var DISABLED_STATE_SELECTOR = ".dx-state-disabled",
 * @isEditor
 * @publicName dxSelectBox
 * @inherits dxDropDownList
-* @groupName Editors
 * @module ui/select_box
 * @export default
 */

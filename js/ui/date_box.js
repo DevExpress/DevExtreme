@@ -5,7 +5,6 @@
 * @isEditor
 * @publicName dxDateBox
 * @inherits dxDropDownEditor
-* @groupName Editors
 * @module ui/date_box
 * @export default
 */

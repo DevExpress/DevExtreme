@@ -36,7 +36,6 @@ var RESIZABLE = "dxResizable",
 * @name dxResizable
 * @publicName dxResizable
 * @inherits DOMComponent
-* @groupName Helpers
 * @module ui/resizable
 * @export default
 */

@@ -85,7 +85,6 @@ var GalleryNavButton = Widget.inherit({
 * @name dxgallery
 * @publicName dxGallery
 * @inherits CollectionWidget
-* @groupName Collection Widgets
 * @module ui/gallery
 * @export default
 */

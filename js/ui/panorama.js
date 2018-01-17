@@ -499,7 +499,6 @@ var PanoramaThreeAndMoreItemsRenderStrategy = PanoramaItemsRenderStrategy.inheri
 * @name dxPanorama
 * @publicName dxPanorama
 * @inherits CollectionWidget
-* @groupName Navigation and Layouting
 * @module ui/panorama
 * @export default
 */

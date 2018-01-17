@@ -27,7 +27,6 @@ var TOOLBAR_AUTO_HIDE_ITEM_CLASS = "dx-toolbar-item-auto-hide",
 * @name dxToolbar
 * @publicName dxToolbar
 * @inherits CollectionWidget
-* @groupName Action Widgets
 * @module ui/toolbar
 * @export default
 */
