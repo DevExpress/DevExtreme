@@ -2,7 +2,8 @@
 
 var $ = require("jquery"),
     keyboardMock = require("../../../helpers/keyboardMock.js"),
-    caretWorkaround = require("./caretWorkaround.js");
+    caretWorkaround = require("./caretWorkaround.js"),
+    devices = require("core/devices");
 
 require("ui/text_box/ui.text_editor");
 
@@ -494,6 +495,37 @@ QUnit.test("backspace should remove chars correctly considering fixed letters", 
     this.clock.tick();
 
     assert.equal($input.val(), "_-_x", "chars removed correctly");
+});
+
+QUnit.test("backspace should remove char on android device", function(assert) {
+    var realDevice = devices.real(),
+        BACKSPACE_INPUT_TYPE = "deleteContentBackward";
+
+    devices.real({ platform: "android", deviceType: "phone" });
+
+    try {
+        var $textEditor = $("#texteditor").dxTextEditor({
+            mask: "X-XX",
+            maskRules: {
+                "X": "x"
+            },
+            value: "xxx"
+        });
+
+        var $input = $textEditor.find(".dx-texteditor-input");
+        var keyboard = keyboardMock($input, true);
+
+        caretWorkaround($input);
+        keyboard
+            .caret(3)
+            .input(null, BACKSPACE_INPUT_TYPE);
+
+        this.clock.tick();
+
+        assert.equal($input.val(), "x-x_", "char removed correctly");
+    } finally {
+        devices.real(realDevice);
+    }
 });
 
 
