@@ -110,7 +110,7 @@
         "dxDataGrid-trueText": "Platí",
         "dxDataGrid-falseText": "Neplatí",
         "dxDataGrid-sortingAscendingText": "Srovnat vzestupně",
-        "dxDataGrid-sortingDescendingText": "Srovnat zestupně",
+        "dxDataGrid-sortingDescendingText": "Srovnat sestupně",
         "dxDataGrid-sortingClearText": "Zrušit rovnání",
         "dxDataGrid-editingSaveAllChanges": "Uložit změny",
         "dxDataGrid-editingCancelAllChanges": "Zrušit změny",
@@ -175,7 +175,7 @@
 
         "dxScheduler-editorLabelTitle": "Předmět",
         "dxScheduler-editorLabelStartDate": "Počáteční datum",
-        "dxScheduler-editorLabelEndDate": "Konecné datum",
+        "dxScheduler-editorLabelEndDate": "Koncové datum",
         "dxScheduler-editorLabelDescription": "Popis",
         "dxScheduler-editorLabelRecurrence": "Opakovat",
 
