@@ -258,7 +258,7 @@ var Toast = Overlay.inherit({
                     /**
                     * @name dxToastOptions_position
                     * @publicName position
-                    * @default { at: 'bottom left', my: 'bottom lef', offset: '20 -20'} @for Android
+                    * @default { at: 'bottom left', my: 'bottom left', offset: '20 -20'} @for Android
                     * @extend_doc
                     */
                     position: {
