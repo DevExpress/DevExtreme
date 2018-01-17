@@ -153,13 +153,16 @@ var SchedulerWorkSpace = Widget.inherit({
     },
 
     _getCellFromNextRow: function(direction) {
-        var $currentCell = this._$focusedCell,
-            cellIndex = $currentCell.index(),
-            $row = $currentCell.parent(),
-            $cell = $row[direction]().children().eq(cellIndex);
+        var $currentCell = this._$focusedCell;
 
-        $cell = this._checkForViewBounds($cell);
-        return $cell;
+        if(isDefined($currentCell)) {
+            var cellIndex = $currentCell.index(),
+                $row = $currentCell.parent(),
+                $cell = $row[direction]().children().eq(cellIndex);
+
+            $cell = this._checkForViewBounds($cell);
+            return $cell;
+        }
     },
 
     _checkForViewBounds: function($item) {
@@ -170,6 +173,9 @@ var SchedulerWorkSpace = Widget.inherit({
     },
 
     _getRightCell: function(isMultiSelection) {
+        if(!isDefined(this._$focusedCell)) {
+            return;
+        }
         var $rightCell,
             $focusedCell = this._$focusedCell,
             groupCount = this._getGroupCount(),
@@ -201,6 +207,9 @@ var SchedulerWorkSpace = Widget.inherit({
     },
 
     _getLeftCell: function(isMultiSelection) {
+        if(!isDefined(this._$focusedCell)) {
+            return;
+        }
         var $leftCell,
             $focusedCell = this._$focusedCell,
             groupCount = this._getGroupCount(),
@@ -239,7 +248,7 @@ var SchedulerWorkSpace = Widget.inherit({
     },
 
     _setFocusedCell: function($cell, isMultiSelection) {
-        if(!$cell.length) {
+        if(!isDefined($cell) || !$cell.length) {
             return;
         }
 
