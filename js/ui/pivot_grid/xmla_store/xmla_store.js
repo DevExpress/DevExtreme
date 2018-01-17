@@ -672,7 +672,7 @@ exports.XmlaStore = Class.inherit((function() {
     function checkError(xml) {
         var faultElementNS = xml.getElementsByTagName("soap:Fault"),
             faultElement = xml.getElementsByTagName("Fault"),
-            errorElement = $(faultElement.length ? faultElement : faultElementNS).find("Error"),
+            errorElement = $([].slice.call(faultElement.length ? faultElement : faultElementNS)).find("Error"),
             description,
             error;
 
