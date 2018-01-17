@@ -10,8 +10,8 @@ var commonIndicator = {
 	* @name commonIndicator_color
 	* @publicName color
 	* @type string
-	* @custom_default_for_value_indicators '#C2C2C2'
-	* @custom_default_for_subvalue_indicators '#8798a5'
+	* @default '#C2C2C2' @for value_indicators
+	* @default '#8798a5' @for subvalue_indicators
 	*/
     color: '#C2C2C2',
     /**
@@ -219,8 +219,8 @@ var commonIndicator = {
 	* @name commonIndicator_horizontalOrientation
 	* @publicName horizontalOrientation
 	* @type string
-	* @custom_default_for_value_indicators 'right'
-	* @custom_default_for_subvalue_indicators 'left'
+	* @default 'right' @for value_indicators
+	* @default 'left' @for subvalue_indicators
 	* @acceptValues 'left' | 'right'
 	* @propertyOf linearRangeBar
 	*/
@@ -229,8 +229,8 @@ var commonIndicator = {
 	* @name commonIndicator_verticalOrientation
 	* @publicName verticalOrientation
 	* @type string
-	* @custom_default_for_value_indicators 'bottom'
-	* @custom_default_for_subvalue_indicators 'top'
+	* @default 'bottom' @for value_indicators
+	* @default 'top' @for subvalue_indicators
 	* @acceptValues 'top' | 'bottom'
 	* @propertyOf linearRangeBar
 	*/
@@ -364,7 +364,7 @@ var linearRectangle = {
 	* @name linearRectangle_offset
 	* @publicName offset
     * @type number
-	* @custom_default_for_value_and_subvalue_indicators 10
+	* @default 10 @for value_and_subvalue_indicators
 	* @extend_doc
 	*/
     offset: 10
@@ -382,7 +382,7 @@ var linearCircle = {
 	* @name linearCircle_offset
 	* @publicName offset
     * @type number
-	* @custom_default_for_value_and_subvalue_indicators 10
+	* @default 10 @for value_and_subvalue_indicators
 	* @extend_doc
 	*/
     offset: 10
@@ -408,7 +408,7 @@ var linearRhombus = {
 	* @name linearRhombus_offset
 	* @publicName offset
     * @type number
-	* @custom_default_for_value_and_subvalue_indicators 10
+	* @default 10 @for value_and_subvalue_indicators
 	* @extend_doc
 	*/
     offset: 10
@@ -426,7 +426,7 @@ var linearRangeBar = {
 	* @name linearRangeBar_offset
 	* @publicName offset
     * @type number
-	* @custom_default_for_value_and_subvalue_indicators 10
+	* @default 10 @for value_and_subvalue_indicators
 	* @extend_doc
 	*/
     offset: 10
@@ -460,7 +460,7 @@ var linearTriangleMarker = {
 	* @name linearTriangleMarker_offset
 	* @publicName offset
     * @type number
-	* @custom_default_for_value_and_subvalue_indicators 10
+	* @default 10 @for value_and_subvalue_indicators
 	* @extend_doc
 	*/
     offset: 10
@@ -510,7 +510,7 @@ var linearTextCloud = {
 	* @name linearTextCloud_offset
 	* @publicName offset
     * @type number
-	* @custom_default_for_value_and_subvalue_indicators 10
+	* @default 10 @for value_indicators|subvalue_indicators
 	* @extend_doc
 	*/
     offset: 10
