@@ -100,7 +100,7 @@ var ODataStore = Store.inherit({
          * @publicName onLoading
          * @type_function_param1_field8 requireTotalCount:boolean
          * @action
-         * @extend_doc
+         * @inheritdoc
          */
         this._extractServiceOptions(options);
 
@@ -155,7 +155,7 @@ var ODataStore = Store.inherit({
     * @param1_field8 expand:string|array
     * @param1_field9 requireTotalCount:boolean
     * @param1_field10 customQueryParams:object
-    * @extend_doc
+    * @inheritdoc
     */
 
     /**

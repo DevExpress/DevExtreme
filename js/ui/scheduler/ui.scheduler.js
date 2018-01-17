@@ -790,14 +790,14 @@ var Scheduler = Widget.inherit({
                 * @name dxSchedulerOptions_activeStateEnabled
                 * @publicName activeStateEnabled
                 * @hidden
-                * @extend_doc
+                * @inheritdoc
                 */
 
                 /**
                 * @name dxSchedulerOptions_hoverStateEnabled
                 * @publicName hoverStateEnabled
                 * @hidden
-                * @extend_doc
+                * @inheritdoc
                 */
 
                 /**
@@ -928,7 +928,7 @@ var Scheduler = Widget.inherit({
                         * @publicName focusStateEnabled
                         * @type boolean
                         * @default true @for generic
-                        * @extend_doc
+                        * @inheritdoc
                         */
                     focusStateEnabled: true
                 }
@@ -973,7 +973,7 @@ var Scheduler = Widget.inherit({
                 * @name dxSchedulerOptions_horizontalScrollingEnabled
                 * @publicName horizontalScrollingEnabled
                 * @deprecated dxSchedulerOptions_crossScrollingEnabled
-                * @extend_doc
+                * @inheritdoc
                 */
             "horizontalScrollingEnabled": { since: "16.1", alias: "crossScrollingEnabled" }
         });
@@ -2725,7 +2725,7 @@ var Scheduler = Widget.inherit({
         * @name dxSchedulerMethods_registerKeyHandler
         * @publicName registerKeyHandler(key, handler)
         * hidden
-        * @extend_doc
+        * @inheritdoc
         */
 
 }).include(DataHelperMixin);

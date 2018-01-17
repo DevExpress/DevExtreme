@@ -26,14 +26,14 @@ var TextArea = TextBox.inherit({
             * @name dxTextAreaOptions_mode
             * @publicName mode
             * @hidden
-            * @extend_doc
+            * @inheritdoc
             */
 
             /**
             * @name dxTextAreaOptions_showClearButton
             * @publicName showClearButton
             * @hidden
-            * @extend_doc
+            * @inheritdoc
             */
 
             /**
@@ -72,35 +72,35 @@ var TextArea = TextBox.inherit({
             * @name dxTextAreaOptions_mask
             * @publicName mask
             * @hidden
-            * @extend_doc
+            * @inheritdoc
             */
 
             /**
             * @name dxTextAreaOptions_maskChar
             * @publicName maskChar
             * @hidden
-            * @extend_doc
+            * @inheritdoc
             */
 
             /**
             * @name dxTextAreaOptions_maskRules
             * @publicName maskRules
             * @hidden
-            * @extend_doc
+            * @inheritdoc
             */
 
             /**
             * @name dxTextAreaOptions_maskInvalidMessage
             * @publicName maskInvalidMessage
             * @hidden
-            * @extend_doc
+            * @inheritdoc
             */
 
             /**
             * @name dxTextAreaOptions_useMaskedValue
             * @publicName useMaskedValue
             * @hidden
-            * @extend_doc
+            * @inheritdoc
             */
         });
     },

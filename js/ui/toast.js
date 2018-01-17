@@ -83,7 +83,7 @@ var Toast = Overlay.inherit({
             * @publicName position
             * @type positionConfig|string
             * @default: "bottom center"
-            * @extend_doc
+            * @inheritdoc
             */
             position: "bottom center",
 
@@ -92,7 +92,7 @@ var Toast = Overlay.inherit({
             * @publicName animation
             * @type object
             * @default { show: { type: "fade", duration: 400, from: 0, to: 1 }, hide: { type: "fade", duration: 400, to: 0 } }
-            * @extend_doc
+            * @inheritdoc
             */
             animation: {
                 /**
@@ -125,7 +125,7 @@ var Toast = Overlay.inherit({
             * @publicName shading
             * @type boolean
             * @default false
-            * @extend_doc
+            * @inheritdoc
             */
             shading: false,
 
@@ -133,7 +133,7 @@ var Toast = Overlay.inherit({
             * @name dxToastOptions_disabled
             * @publicName disabled
             * @hidden
-            * @extend_doc
+            * @inheritdoc
             */
 
             /**
@@ -141,7 +141,7 @@ var Toast = Overlay.inherit({
             * @publicName width
             * @type number|string|function
             * @default function() {return $(window).width() * 0.8 }
-            * @extend_doc
+            * @inheritdoc
             */
 
             /**
@@ -149,7 +149,7 @@ var Toast = Overlay.inherit({
             * @publicName height
             * @type number|string|function
             * @default 'auto'
-            * @extend_doc
+            * @inheritdoc
             */
             height: "auto",
 
@@ -158,7 +158,7 @@ var Toast = Overlay.inherit({
             * @publicName closeOnBackButton
             * @type boolean
             * @default false
-            * @extend_doc
+            * @inheritdoc
             */
             closeOnBackButton: false,
 
@@ -182,7 +182,7 @@ var Toast = Overlay.inherit({
             * @name dxToastOptions_resizeEnabled
             * @publicName resizeEnabled
             * @hidden
-            * @extend_doc
+            * @inheritdoc
             */
             resizeEnabled: false
 
@@ -190,7 +190,7 @@ var Toast = Overlay.inherit({
             * @name dxToastOptions_dragEnabled
             * @publicName dragEnabled
             * @hidden
-            * @extend_doc
+            * @inheritdoc
             */
         });
     },
@@ -206,7 +206,7 @@ var Toast = Overlay.inherit({
                     * @name dxToastOptions_position
                     * @publicName position
                     * @default "top center" @for windows_8
-                    * @extend_doc
+                    * @inheritdoc
                     */
                     position: "top center",
 
@@ -214,7 +214,7 @@ var Toast = Overlay.inherit({
                     * @name dxToastOptions_width
                     * @publicName width
                     * @default function() { return $(window).width(); } @for windows_8
-                    * @extend_doc
+                    * @inheritdoc
                     */
                     width: function() { return $(window).width(); }
                 }
@@ -228,7 +228,7 @@ var Toast = Overlay.inherit({
                    * @name dxToastOptions_position
                    * @publicName position
                    * @default "bottom right" @for windows_10
-                   * @extend_doc
+                   * @inheritdoc
                    */
                     position: "bottom right",
 
@@ -236,7 +236,7 @@ var Toast = Overlay.inherit({
                     * @name dxToastOptions_width
                     * @publicName width
                     * @default "auto" @for windows_10
-                    * @extend_doc
+                    * @inheritdoc
                     */
                     width: "auto"
                 }
@@ -248,7 +248,7 @@ var Toast = Overlay.inherit({
                     * @name dxToastOptions_closeOnOutsideClick
                     * @publicName closeOnOutsideClick
                     * @default true @for android
-                    * @extend_doc
+                    * @inheritdoc
                     */
                     closeOnOutsideClick: true,
 
@@ -256,7 +256,7 @@ var Toast = Overlay.inherit({
                     * @name dxToastOptions_width
                     * @publicName width
                     * @default "auto" @for android
-                    * @extend_doc
+                    * @inheritdoc
                     */
                     width: "auto",
 
@@ -264,7 +264,7 @@ var Toast = Overlay.inherit({
                     * @name dxToastOptions_position
                     * @publicName position
                     * @default { at: "bottom left", my: "bottom left", offset: "20 -20" } @for android
-                    * @extend_doc
+                    * @inheritdoc
                     */
                     position: {
                         at: "bottom left",
@@ -276,7 +276,7 @@ var Toast = Overlay.inherit({
                     * @name dxToastOptions_animation
                     * @publicName animation
                     * @default {show: {type: "slide", duration: 200, from: { top: $(window).height() }}, hide: { type: "slide", duration: 200, to: { top: $(window).height() }}} @for android
-                    * @extend_doc
+                    * @inheritdoc
                     */
                     animation: {
                         show: {
@@ -305,13 +305,13 @@ var Toast = Overlay.inherit({
                     * @name dxToastOptions_width
                     * @publicName width
                     * @default function() { return $(window).width(); } @for android_phone
-                    * @extend_doc
+                    * @inheritdoc
                     */
                     /**
                     * @name dxToastOptions_width
                     * @publicName width
                     * @default function() { return $(window).width(); } @for windows_phone_10
-                    * @extend_doc
+                    * @inheritdoc
                     */
                     width: function() { return $(window).width(); },
 
@@ -319,13 +319,13 @@ var Toast = Overlay.inherit({
                     * @name dxToastOptions_position
                     * @publicName position
                     * @default { at: "bottom center", my: "bottom center", offset: "0 0" } @for android_phone
-                    * @extend_doc
+                    * @inheritdoc
                     */
                     /**
                     * @name dxToastOptions_position
                     * @publicName position
                     * @default { at: "bottom center", my: "bottom center", offset: "0 0" } @for windows_phone_10
-                    * @extend_doc
+                    * @inheritdoc
                     */
                     position: {
                         at: "bottom center",

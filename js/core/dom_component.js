@@ -33,14 +33,14 @@ var DOMComponent = Component.inherit({
             * @publicName onOptionChanged
             * @action
             * @extends Action
-            * @extend_doc
+            * @inheritdoc
             */
             /**
             * @name domcomponentoptions_onDisposing
             * @publicName onDisposing
             * @action
             * @extends Action
-            * @extend_doc
+            * @inheritdoc
             */
 
             /**

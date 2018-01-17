@@ -221,7 +221,7 @@ var CollectionWidget = Widget.inherit({
             * @type jQuery
             * @default null
             * @hidden
-            * @extend_doc
+            * @inheritdoc
             */
             focusedElement: null,
 

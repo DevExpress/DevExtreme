@@ -68,14 +68,14 @@ var LoadPanel = Overlay.inherit({
             * @publicName show
             * @default null
             * @type animationConfig
-            * @extend_doc
+            * @inheritdoc
             */
             /**
             * @name dxLoadPanelOptions_animation_hide
             * @publicName hide
             * @default null
             * @type animationConfig
-            * @extend_doc
+            * @inheritdoc
             */
             animation: null,
 
@@ -83,7 +83,7 @@ var LoadPanel = Overlay.inherit({
             * @name dxLoadPanelOptions_disabled
             * @publicName disabled
             * @hidden
-            * @extend_doc
+            * @inheritdoc
             */
 
             /**
@@ -123,7 +123,7 @@ var LoadPanel = Overlay.inherit({
             * @publicName closeOnBackButton
             * @default false
             * @hidden
-            * @extend_doc
+            * @inheritdoc
             */
             closeOnBackButton: false,
 
@@ -131,7 +131,7 @@ var LoadPanel = Overlay.inherit({
             * @name dxLoadPanelOptions_resizeEnabled
             * @publicName resizeEnabled
             * @hidden
-            * @extend_doc
+            * @inheritdoc
             */
             resizeEnabled: false,
 
@@ -147,27 +147,27 @@ var LoadPanel = Overlay.inherit({
             * @name dxLoadPanelOptions_dragEnabled
             * @publicName dragEnabled
             * @hidden
-            * @extend_doc
+            * @inheritdoc
             */
             /**
             * @name dxLoadPanelOptions_contentTemplate
             * @publicName contentTemplate
             * @hidden
-            * @extend_doc
+            * @inheritdoc
             */
 
             /**
             * @name dxLoadPanelOptions_accessKey
             * @publicName accessKey
             * @hidden
-            * @extend_doc
+            * @inheritdoc
             */
 
             /**
             * @name dxLoadPanelOptions_tabIndex
             * @publicName tabIndex
             * @hidden
-            * @extend_doc
+            * @inheritdoc
             */
         });
     },
@@ -179,7 +179,7 @@ var LoadPanel = Overlay.inherit({
                 * @name dxLoadPanelOptions_shadingColor
                 * @publicName shadingColor
                 * @default "transparent", @for generic
-                * @extend_doc
+                * @inheritdoc
                 */
                 device: { platform: "generic" },
                 options: {
@@ -320,14 +320,14 @@ var LoadPanel = Overlay.inherit({
     * @name dxLoadPanelMethods_registerKeyHandler
     * @publicName registerKeyHandler(key, handler)
     * @hidden
-    * @extend_doc
+    * @inheritdoc
     */
 
     /**
     * @name dxLoadPanelMethods_focus
     * @publicName focus()
     * @hidden
-    * @extend_doc
+    * @inheritdoc
     */
 });
 

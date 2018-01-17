@@ -61,7 +61,7 @@ var Tabs = CollectionWidget.inherit({
              * @publicName hoverStateEnabled
              * @type boolean
              * @default true
-             * @extend_doc
+             * @inheritdoc
              */
             hoverStateEnabled: true,
 
@@ -102,14 +102,14 @@ var Tabs = CollectionWidget.inherit({
             * @name dxTabsOptions_activeStateEnabled
             * @publicName activeStateEnabled
             * @hidden
-            * @extend_doc
+            * @inheritdoc
             */
 
             /**
             * @name dxTabsOptions_noDataText
             * @publicName noDataText
             * @hidden
-            * @extend_doc
+            * @inheritdoc
             */
 
             /**
@@ -122,7 +122,7 @@ var Tabs = CollectionWidget.inherit({
              * @name dxTabsOptions_activeStateEnabled
              * @publicName activeStateEnabled
              * @default true
-             * @extend_doc
+             * @inheritdoc
              */
 
             activeStateEnabled: true,
@@ -180,7 +180,7 @@ var Tabs = CollectionWidget.inherit({
                     * @publicName focusStateEnabled
                     * @type boolean
                     * @default true @for generic
-                    * @extend_doc
+                    * @inheritdoc
                     */
                     focusStateEnabled: true
                 }

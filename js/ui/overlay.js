@@ -131,7 +131,7 @@ var Overlay = Widget.inherit({
             * @name dxOverlayOptions_activeStateEnabled
             * @publicName activeStateEnabled
             * @hidden
-            * @extend_doc
+            * @inheritdoc
             */
             activeStateEnabled: false,
 

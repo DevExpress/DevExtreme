@@ -52,14 +52,14 @@ var DropDownBox = DropDownEditor.inherit({
             /**
              * @name dxDropDownBoxOptions_attr
              * @publicName attr
-             * @extend_doc
+             * @inheritdoc
              * @hidden
              */
 
             /**
              * @name dxDropDownBoxOptions_fieldEditEnabled
              * @publicName fieldEditEnabled
-             * @extend_doc
+             * @inheritdoc
              * @hidden
              */
 
@@ -127,7 +127,7 @@ var DropDownBox = DropDownEditor.inherit({
              * @publicName itemTemplate
              * @type template
              * @default "item"
-             * @extend_doc
+             * @inheritdoc
              * @hidden
              */
 

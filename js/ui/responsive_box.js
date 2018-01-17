@@ -99,7 +99,7 @@ var ResponsiveBox = CollectionWidget.inherit({
             * @name dxResponsiveBoxOptions_height
             * @publicName height
             * @default '100%'
-            * @extend_doc
+            * @inheritdoc
             */
             height: "100%",
 
@@ -107,7 +107,7 @@ var ResponsiveBox = CollectionWidget.inherit({
             * @name dxResponsiveBoxOptions_width
             * @publicName width
             * @default '100%'
-            * @extend_doc
+            * @inheritdoc
             */
             width: "100%",
 
@@ -115,7 +115,7 @@ var ResponsiveBox = CollectionWidget.inherit({
             * @name dxResponsiveBoxOptions_activeStateEnabled
             * @publicName activeStateEnabled
             * @hidden
-            * @extend_doc
+            * @inheritdoc
             */
             activeStateEnabled: false,
 
@@ -123,7 +123,7 @@ var ResponsiveBox = CollectionWidget.inherit({
             * @name dxResponsiveBoxOptions_focusStateEnabled
             * @publicName focusStateEnabled
             * @hidden
-            * @extend_doc
+            * @inheritdoc
             */
             focusStateEnabled: false,
 
@@ -133,62 +133,62 @@ var ResponsiveBox = CollectionWidget.inherit({
             * @name dxResponsiveBoxOptions_accessKey
             * @publicName accessKey
             * @hidden
-            * @extend_doc
+            * @inheritdoc
             */
 
             /**
             * @name dxResponsiveBoxOptions_hint
             * @publicName hint
             * @hidden
-            * @extend_doc
+            * @inheritdoc
             */
             /**
             * @name dxResponsiveBoxOptions_noDataText
             * @publicName noDataText
             * @hidden
-            * @extend_doc
+            * @inheritdoc
             */
             /**
             * @name dxResponsiveBoxOptions_onSelectionChanged
             * @publicName onSelectionChanged
             * @hidden
-            * @extend_doc
+            * @inheritdoc
             */
             /**
             * @name dxResponsiveBoxOptions_selectedIndex
             * @publicName selectedIndex
             * @hidden
-            * @extend_doc
+            * @inheritdoc
             */
             /**
             * @name dxResponsiveBoxOptions_selectedItem
             * @publicName selectedItem
             * @hidden
-            * @extend_doc
+            * @inheritdoc
             */
             /**
             * @name dxResponsiveBoxOptions_selectedItems
             * @publicName selectedItems
             * @hidden
-            * @extend_doc
+            * @inheritdoc
             */
             /**
             * @name dxResponsiveBoxOptions_selectedItemKeys
             * @publicName selectedItemKeys
             * @hidden
-            * @extend_doc
+            * @inheritdoc
             */
             /**
             * @name dxResponsiveBoxOptions_keyExpr
             * @publicName keyExpr
             * @hidden
-            * @extend_doc
+            * @inheritdoc
             */
             /**
             * @name dxResponsiveBoxOptions_tabIndex
             * @publicName tabIndex
             * @hidden
-            * @extend_doc
+            * @inheritdoc
             */
 
             onLayoutChanged: null,
@@ -715,14 +715,14 @@ var ResponsiveBox = CollectionWidget.inherit({
     * @name dxResponsiveBoxMethods_registerKeyHandler
     * @publicName registerKeyHandler(key, handler)
     * @hidden
-    * @extend_doc
+    * @inheritdoc
     */
 
     /**
     * @name dxResponsiveBoxMethods_focus
     * @publicName focus()
     * @hidden
-    * @extend_doc
+    * @inheritdoc
     */
 });
 

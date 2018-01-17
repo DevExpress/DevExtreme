@@ -61,7 +61,7 @@ var DropDownMenu = Widget.inherit({
             * @name dxDropDownMenuOptions_buttonIconSrc
             * @publicName buttonIconSrc
             * @deprecated dxDropDownMenuOptions_buttonIcon
-            * @extend_doc
+            * @inheritdoc
             */
             "buttonIconSrc": { since: "15.1", alias: "buttonIcon" }
         });
@@ -167,7 +167,7 @@ var DropDownMenu = Widget.inherit({
              * @publicName activeStateEnabled
              * @type boolean
              * @default true
-             * @extend_doc
+             * @inheritdoc
              */
             activeStateEnabled: true,
 
@@ -176,7 +176,7 @@ var DropDownMenu = Widget.inherit({
              * @publicName hoverStateEnabled
              * @type boolean
              * @default true
-             * @extend_doc
+             * @inheritdoc
              */
             hoverStateEnabled: true,
 

@@ -79,7 +79,7 @@ var TextEditorBase = Editor.inherit({
             * @name dxTextEditorOptions_attr
             * @publicName attr
             * @deprecated dxTextEditorOptions_inputAttr
-            * @extend_doc
+            * @inheritdoc
             */
             "attr": { since: "16.2", alias: "inputAttr" }
         });
@@ -242,7 +242,7 @@ var TextEditorBase = Editor.inherit({
              * @publicName hoverStateEnabled
              * @type boolean
              * @default true
-             * @extend_doc
+             * @inheritdoc
              */
             hoverStateEnabled: true,
 
@@ -251,7 +251,7 @@ var TextEditorBase = Editor.inherit({
              * @publicName focusStateEnabled
              * @type boolean
              * @default true
-             * @extend_doc
+             * @inheritdoc
              */
             focusStateEnabled: true,
 
@@ -272,7 +272,7 @@ var TextEditorBase = Editor.inherit({
             * @publicName name
             * @type string
             * @hidden false
-            * @extend_doc
+            * @inheritdoc
             */
         });
     },

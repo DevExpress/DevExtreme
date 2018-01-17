@@ -180,14 +180,14 @@ var ContextMenu = MenuBase.inherit((function() {
                 * @name dxContextMenuOptions_itemHoldAction
                 * @publicName itemHoldAction
                 * @hidden
-                * @extend_doc
+                * @inheritdoc
                 */
 
                 /**
                 * @name dxContextMenuOptions_onItemReordered
                 * @publicName onItemReordered
                 * @hidden
-                * @extend_doc
+                * @inheritdoc
                 */
 
 

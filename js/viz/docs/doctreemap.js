@@ -10,7 +10,7 @@ var dxTreeMap = {
     * @name dxtreemapoptions_margin
     * @publicName margin
     * @hidden
-    * @extend_doc
+    * @inheritdoc
     */
     margin: undefined,
     /**
@@ -498,7 +498,7 @@ var dxTreeMap = {
     * @name dxtreemapoptions_tooltip
     * @publicName tooltip
     * @type object
-    * @extend_doc
+    * @inheritdoc
     */
     tooltip: {
         /**

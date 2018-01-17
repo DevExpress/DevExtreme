@@ -787,7 +787,7 @@ var dxRangeSelector = {
     * @name dxrangeselectoroptions_tooltip
     * @publicName tooltip
     * @hidden
-    * @extend_doc
+    * @inheritdoc
     */
     tooltip: undefined,
     /**

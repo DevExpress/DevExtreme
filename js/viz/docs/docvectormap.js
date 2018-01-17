@@ -10,7 +10,7 @@ var dxVectorMap = {
     * @name dxvectormapoptions_margin
     * @publicName margin
     * @hidden
-    * @extend_doc
+    * @inheritdoc
     */
     margin: undefined,
     /**
@@ -902,14 +902,14 @@ var dxVectorMap = {
         * @name dxvectormapoptions_tooltip_format
         * @publicName format
         * @hidden
-        * @extend_doc
+        * @inheritdoc
         */
         format: undefined,
         /**
         * @name dxvectormapoptions_tooltip_precision
         * @publicName precision
         * @hidden
-        * @extend_doc
+        * @inheritdoc
         */
         precision: undefined
     },
