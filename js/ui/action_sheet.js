@@ -103,7 +103,7 @@ var ActionSheet = CollectionWidget.inherit({
             * @name dxActionSheetOptions_noDataText
             * @publicName noDataText
             * @hidden
-            * @extend_doc
+            * @inheritdoc
             */
             noDataText: "",
 
@@ -111,21 +111,21 @@ var ActionSheet = CollectionWidget.inherit({
             * @name dxActionSheetOptions_activeStateEnabled
             * @publicName activeStateEnabled
             * @hidden
-            * @extend_doc
+            * @inheritdoc
             */
 
             /**
             * @name dxActionSheetOptions_selectedIndex
             * @publicName selectedIndex
             * @hidden
-            * @extend_doc
+            * @inheritdoc
             */
 
             /**
             * @name dxActionSheetOptions_selectedItem
             * @publicName selectedItem
             * @hidden
-            * @extend_doc
+            * @inheritdoc
             */
 
             /**
@@ -133,42 +133,42 @@ var ActionSheet = CollectionWidget.inherit({
             * @publicName onSelectionChanged
             * @action
             * @hidden
-            * @extend_doc
+            * @inheritdoc
             */
 
             /**
             * @name dxActionSheetOptions_selectedItems
             * @publicName selectedItems
             * @hidden
-            * @extend_doc
+            * @inheritdoc
             */
 
             /**
             * @name dxActionSheetOptions_selectedItemKeys
             * @publicName selectedItemKeys
             * @hidden
-            * @extend_doc
+            * @inheritdoc
             */
 
             /**
             * @name dxActionSheetOptions_keyExpr
             * @publicName keyExpr
             * @hidden
-            * @extend_doc
+            * @inheritdoc
             */
 
             /**
             * @name dxActionSheetOptions_accessKey
             * @publicName accessKey
             * @hidden
-            * @extend_doc
+            * @inheritdoc
             */
 
             /**
             * @name dxActionSheetOptions_tabIndex
             * @publicName tabIndex
             * @hidden
-            * @extend_doc
+            * @inheritdoc
             */
 
             /**
@@ -509,14 +509,14 @@ var ActionSheet = CollectionWidget.inherit({
     * @name dxactionsheetmethods_registerKeyHandler
     * @publicName registerKeyHandler(key, handler)
     * @hidden
-    * @extend_doc
+    * @inheritdoc
     */
 
     /**
     * @name dxactionsheetmethods_focus
     * @publicName focus()
     * @hidden
-    * @extend_doc
+    * @inheritdoc
     */
 
 });

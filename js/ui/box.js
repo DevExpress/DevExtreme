@@ -469,7 +469,7 @@ var Box = CollectionWidget.inherit({
             * @name dxBoxOptions_activeStateEnabled
             * @publicName activeStateEnabled
             * @hidden
-            * @extend_doc
+            * @inheritdoc
             */
             activeStateEnabled: false,
 
@@ -477,7 +477,7 @@ var Box = CollectionWidget.inherit({
             * @name dxBoxOptions_focusStateEnabled
             * @publicName focusStateEnabled
             * @hidden
-            * @extend_doc
+            * @inheritdoc
             */
             focusStateEnabled: false,
 
@@ -491,61 +491,61 @@ var Box = CollectionWidget.inherit({
             * @name dxBoxOptions_hint
             * @publicName hint
             * @hidden
-            * @extend_doc
+            * @inheritdoc
             */
             /**
             * @name dxBoxOptions_noDataText
             * @publicName noDataText
             * @hidden
-            * @extend_doc
+            * @inheritdoc
             */
             /**
             * @name dxBoxOptions_onSelectionChanged
             * @publicName onSelectionChanged
             * @hidden
-            * @extend_doc
+            * @inheritdoc
             */
             /**
             * @name dxBoxOptions_selectedIndex
             * @publicName selectedIndex
             * @hidden
-            * @extend_doc
+            * @inheritdoc
             */
             /**
             * @name dxBoxOptions_selectedItem
             * @publicName selectedItem
             * @hidden
-            * @extend_doc
+            * @inheritdoc
             */
             /**
             * @name dxBoxOptions_selectedItems
             * @publicName selectedItems
             * @hidden
-            * @extend_doc
+            * @inheritdoc
             */
             /**
             * @name dxBoxOptions_selectedItemKeys
             * @publicName selectedItemKeys
             * @hidden
-            * @extend_doc
+            * @inheritdoc
             */
             /**
             * @name dxBoxOptions_keyExpr
             * @publicName keyExpr
             * @hidden
-            * @extend_doc
+            * @inheritdoc
             */
             /**
             * @name dxBoxOptions_tabIndex
             * @publicName tabIndex
             * @hidden
-            * @extend_doc
+            * @inheritdoc
             */
             /**
             * @name dxBoxOptions_accessKey
             * @publicName accessKey
             * @hidden
-            * @extend_doc
+            * @inheritdoc
             */
         });
     },
@@ -748,14 +748,14 @@ var Box = CollectionWidget.inherit({
     * @name dxBoxMethods_registerKeyHandler
     * @publicName registerKeyHandler(key, handler)
     * @hidden
-    * @extend_doc
+    * @inheritdoc
     */
 
     /**
     * @name dxBoxMethods_focus
     * @publicName focus()
     * @hidden
-    * @extend_doc
+    * @inheritdoc
     */
 });
 /**

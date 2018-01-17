@@ -398,7 +398,7 @@ var Map = Widget.inherit({
                     * @publicName focusStateEnabled
                     * @type boolean
                     * @default true @for desktop
-                    * @extend_doc
+                    * @inheritdoc
                     */
                     focusStateEnabled: true
                 }

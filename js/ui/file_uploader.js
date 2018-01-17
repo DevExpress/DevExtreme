@@ -93,14 +93,14 @@ var FileUploader = Editor.inherit({
             * @name dxFileUploaderOptions_buttonText
             * @publicName buttonText
             * @deprecated dxFileUploaderOptions_selectButtonText
-            * @extend_doc
+            * @inheritdoc
             */
             "buttonText": { since: "15.1", alias: "selectButtonText" },
             /**
             * @name dxFileUploaderOptions_values
             * @publicName values
             * @deprecated dxFileUploaderOptions_value
-            * @extend_doc
+            * @inheritdoc
             */
             "values": { since: "16.1", alias: "value" }
         });
@@ -333,7 +333,7 @@ var FileUploader = Editor.inherit({
             * @name dxFileUploaderOptions_validationMessageMode
             * @publicName validationMessageMode
             * @hidden
-            * @extend_doc
+            * @inheritdoc
             */
             validationMessageMode: "always",
 
@@ -370,7 +370,7 @@ var FileUploader = Editor.inherit({
                     * @publicName focusStateEnabled
                     * @type boolean
                     * @default true @for desktop
-                    * @extend_doc
+                    * @inheritdoc
                     */
                     focusStateEnabled: true
                 }

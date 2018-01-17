@@ -187,7 +187,7 @@ var ListEdit = ListBase.inherit({
             * @type_function_param1_field7 cancel:boolean | Promise<void>
             * @action
             * @hidden false
-            * @extend_doc
+            * @inheritdoc
             */
 
             /**

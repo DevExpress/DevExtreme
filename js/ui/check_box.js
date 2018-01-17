@@ -48,7 +48,7 @@ var CheckBox = Editor.inherit({
              * @publicName hoverStateEnabled
              * @type boolean
              * @default true
-             * @extend_doc
+             * @inheritdoc
              */
             hoverStateEnabled: true,
 
@@ -57,7 +57,7 @@ var CheckBox = Editor.inherit({
              * @publicName activeStateEnabled
              * @type boolean
              * @default true
-             * @extend_doc
+             * @inheritdoc
              */
             activeStateEnabled: true,
 
@@ -84,7 +84,7 @@ var CheckBox = Editor.inherit({
             * @publicName name
             * @type string
             * @hidden false
-            * @extend_doc
+            * @inheritdoc
             */
         });
     },
@@ -101,7 +101,7 @@ var CheckBox = Editor.inherit({
                     * @publicName focusStateEnabled
                     * @type boolean
                     * @default true @for desktop
-                    * @extend_doc
+                    * @inheritdoc
                     */
                     focusStateEnabled: true
                 }

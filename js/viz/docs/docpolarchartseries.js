@@ -908,7 +908,7 @@ var areaPolarSeries = {
     * @name dxPolarChartSeriesTypes_areapolarseries_point
     * @publicName point
     * @type object
-    * @extend_doc
+    * @inheritdoc
     */
     point: {
         /**
@@ -916,7 +916,7 @@ var areaPolarSeries = {
 		* @publicName visible
         * @type boolean
 		* @default false
-		* @extend_doc
+		* @inheritdoc
 		*/
         visible: false
     },
@@ -1009,14 +1009,14 @@ var stackedbarPolarSeries = {
     * @name dxPolarChartSeriesTypes_stackedbarpolarseries_label
     * @publicName label
     * @type object
-    * @extend_doc
+    * @inheritdoc
     */
     /**
     * @name dxPolarChartSeriesTypes_stackedbarpolarseries_label_position
     * @publicName position
     * @type string
     * @default 'inside'
-    * @extend_doc
+    * @inheritdoc
     */
     /**
     * @name dxPolarChartSeriesTypes_stackedbarpolarseries_hovermode
