@@ -21,7 +21,6 @@ var TABPANEL_CLASS = "dx-tabpanel",
 * @name dxTabPanel
 * @publicName dxTabPanel
 * @inherits dxMultiView
-* @groupName Navigation and Layouting
 * @module ui/tab_panel
 * @export default
 */

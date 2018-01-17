@@ -76,7 +76,6 @@ var animation = {
 * @name dxPivot
 * @publicName dxPivot
 * @inherits CollectionWidget
-* @groupName Navigation and Layouting
 * @module ui/pivot
 * @export default
 */

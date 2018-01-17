@@ -25,7 +25,6 @@ var CHECKBOX_CLASS = "dx-checkbox",
 * @isEditor
 * @publicName dxCheckBox
 * @inherits Editor
-* @groupName Editors
 * @module ui/check_box
 * @export default
 */

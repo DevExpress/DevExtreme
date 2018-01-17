@@ -32,7 +32,6 @@ var ACCORDION_CLASS = "dx-accordion",
 * @name dxAccordion
 * @publicName dxAccordion
 * @inherits CollectionWidget
-* @groupName Navigation and Layouting
 * @module ui/accordion
 * @export default
 */

@@ -33,7 +33,6 @@ var BUTTON_CLASS = "dx-button",
 * @name dxbutton
 * @publicName dxButton
 * @inherits Widget
-* @groupName Action Widgets
 * @module ui/button
 * @export default
 */

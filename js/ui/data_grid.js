@@ -13,7 +13,6 @@
 * @name dxdataGrid
 * @publicName dxDataGrid
 * @inherits GridBase
-* @groupName Data Management and Visualization
 * @module ui/data_grid
 * @export default
 */

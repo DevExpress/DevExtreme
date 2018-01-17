@@ -57,7 +57,6 @@ var animation = {
 * @name dxMultiView
 * @publicName dxMultiView
 * @inherits CollectionWidget
-* @groupName Navigation and Layouting
 * @module ui/multi_view
 * @export default
 */

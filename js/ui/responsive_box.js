@@ -23,7 +23,6 @@ var RESPONSIVE_BOX_CLASS = "dx-responsivebox",
 * @publicName dxResponsiveBox
 * @type object
 * @inherits CollectionWidget
-* @groupName Navigation and Layouting
 * @module ui/responsive_box
 * @export default
 */

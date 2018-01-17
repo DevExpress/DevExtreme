@@ -2,7 +2,6 @@
 * @name dxFunnel
 * @publicName dxFunnel
 * @inherits BaseWidget
-* @groupName Funnel
 * @module viz/funnel
 * @export default
 */

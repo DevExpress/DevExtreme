@@ -14,7 +14,6 @@ var NAVBAR_CLASS = "dx-navbar",
 * @name dxNavBar
 * @publicName dxNavBar
 * @inherits dxTabs
-* @groupName Navigation and Layouting
 * @module ui/nav_bar
 * @export default
 */

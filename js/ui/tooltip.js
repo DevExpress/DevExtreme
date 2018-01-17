@@ -4,7 +4,6 @@
  * @name dxTooltip
  * @publicName dxTooltip
  * @inherits dxPopover
- * @groupName Overlays
  * @module ui/tooltip
  * @export default
  */

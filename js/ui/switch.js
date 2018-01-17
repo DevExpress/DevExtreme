@@ -33,7 +33,6 @@ var SWITCH_CLASS = "dx-switch",
 * @isEditor
 * @publicName dxSwitch
 * @inherits Editor
-* @groupName Editors
 * @module ui/switch
 * @export default
 */

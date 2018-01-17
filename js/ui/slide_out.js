@@ -25,7 +25,6 @@ var SLIDEOUT_CLASS = "dx-slideout",
 * @name dxSlideout
 * @publicName dxSlideOut
 * @inherits CollectionWidget
-* @groupName Navigation and Layouting
 * @module ui/slide_out
 * @export default
 */
