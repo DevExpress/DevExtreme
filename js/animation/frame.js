@@ -13,7 +13,6 @@ var FRAME_ANIMATION_STEP_TIME = 1000 / 60,
         this.clearTimeout(requestID);
     };
 
-
 var setAnimationFrameMethods = callOnce(function() {
     var nativeRequest = window.requestAnimationFrame ||
             window.webkitRequestAnimationFrame ||
