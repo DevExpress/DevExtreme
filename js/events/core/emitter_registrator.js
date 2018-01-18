@@ -1,7 +1,8 @@
 "use strict";
 
 var $ = require("../../core/renderer"),
-    window = require("../../core/dom_adapter").getWindow(),
+    domAdapter = require("../../core/dom_adapter"),
+    window = domAdapter.getWindow(),
     eventsEngine = require("../../events/core/events_engine"),
     dataUtils = require("../../core/element_data"),
     Class = require("../../core/class"),
@@ -230,8 +231,11 @@ var EventManager = Class.inherit({
     }
 });
 
-var eventManager = new EventManager();
 
+var eventManager;
+domAdapter.ready(function() {
+    eventManager = new EventManager();
+});
 
 var EMITTER_SUBSCRIPTION_DATA = "dxEmitterSubscription";
 
