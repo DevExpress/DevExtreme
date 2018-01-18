@@ -218,21 +218,19 @@ var commonIndicator = {
     /**
 	* @name commonIndicator_horizontalOrientation
 	* @publicName horizontalOrientation
-	* @type string
+	* @type Enums.HorizontalEdge
 	* @default 'right' @for value_indicators
 	* @default 'left' @for subvalue_indicators
-	* @acceptValues 'left' | 'right'
-	* @propertyOf linearRangeBar
+		* @propertyOf linearRangeBar
 	*/
     horizontalOrientation: 'right',
     /**
 	* @name commonIndicator_verticalOrientation
 	* @publicName verticalOrientation
-	* @type string
+	* @type Enums.VerticalEdge
 	* @default 'bottom' @for value_indicators
 	* @default 'top' @for subvalue_indicators
-	* @acceptValues 'top' | 'bottom'
-	* @propertyOf linearRangeBar
+		* @propertyOf linearRangeBar
 	*/
     verticalOrientation: 'bottom'
 };

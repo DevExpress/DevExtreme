@@ -35,8 +35,7 @@ var ToolbarBase = CollectionWidget.inherit({
     /**
     * @name dxToolbarItemTemplate_widget
     * @publicName widget
-    * @type String
-    * @acceptValues 'dxButton'|'dxTabs'|'dxCheckBox'|'dxSelectBox'|'dxTextBox'|'dxAutocomplete'|'dxDateBox'|'dxMenu'
+    * @type Enums.ToolbarItemWidget
     */
     /**
     * @name dxToolbarItemTemplate_options

@@ -166,9 +166,8 @@ var DropDownEditor = TextBox.inherit({
             /**
             * @name dxDropDownEditorOptions_applyValueMode
             * @publicName applyValueMode
-            * @type string
+            * @type Enums.EditorApplyValueMode
             * @default "instantly"
-            * @acceptValues 'useButtons'|'instantly'
             */
             applyValueMode: "instantly",
 

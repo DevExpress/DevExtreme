@@ -1809,8 +1809,7 @@ module.exports = {
                 /**
                  * @name GridBaseOptions_editing_mode
                  * @publicName mode
-                 * @type string
-                 * @acceptValues "row" | "batch" | "cell" | "form" | "popup"
+                 * @type Enums.GridEditMode
                  * @default "row"
                  */
                 mode: "row", //"batch"

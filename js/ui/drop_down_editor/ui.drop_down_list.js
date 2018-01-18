@@ -101,9 +101,8 @@ var DropDownList = DropDownEditor.inherit({
             /**
             * @name dxDropDownListOptions_searchMode
             * @publicName searchMode
-            * @type string
+            * @type Enums.DropDownSearchMode
             * @default "contains"
-            * @acceptValues "contains"|"startswith"
             */
             searchMode: "contains",
 

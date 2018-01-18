@@ -76,9 +76,8 @@ var dxFunnel = {
     /**
     * @name dxFunneloptions_paletteextensionmode
     * @publicName paletteExtensionMode
-    * @type string
+    * @type Enums.VizPaletteExtensionMode
     * @default 'blend'
-    * @acceptValues 'blend' | 'repeat' | 'extrapolate'
     */
     paletteExtensionMode: 'blend',
     /**
@@ -91,17 +90,15 @@ var dxFunnel = {
     /**
     * @name dxFunneloptions_selectionmode
     * @publicName selectionMode
-    * @type string
+    * @type Enums.SelectionMode
     * @default 'single'
-    * @acceptValues 'single'|'multiple'|'none'
     */
     selectionMode: 'single',
     /**
     * @name dxFunneloptions_algorithm
     * @publicName algorithm
-    * @type string
+    * @type Enums.FunnelAlgorithm
     * @default 'dynamicSlope'
-    * @acceptValues 'dynamicSlope'|'dynamicHeight'
     */
     algorithm: "dynamicSlope",
     /**
@@ -209,9 +206,8 @@ var dxFunnel = {
                 /**
                 * @name dxFunneloptions_item_hoverstyle_hatching_direction
                 * @publicName direction
-                * @type string
+                * @type Enums.HatchingDirection
                 * @default 'right'
-                * @acceptValues 'none'|'right'|'left'
                 */
                 direction: "right",
                 /**
@@ -302,9 +298,8 @@ var dxFunnel = {
                 /**
                 * @name dxFunneloptions_item_selectionstyle_hatching_direction
                 * @publicName direction
-                * @type string
+                * @type Enums.HatchingDirection
                 * @default "right"
-                * @acceptValues 'none'|'right'|'left'
                 */
                 direction: "right"
             }
@@ -362,8 +357,7 @@ var dxFunnel = {
         /**
         * @name dxFunneloptions_label_position
         * @publicName position
-        * @type string
-        * @acceptValues 'inside'|'outside'|'columns'
+        * @type Enums.FunnelLabelPosition
         * @default 'columns'
         */
         position: "columns",
@@ -377,8 +371,7 @@ var dxFunnel = {
         /**
         * @name dxFunneloptions_label_horizontalalignment
         * @publicName horizontalAlignment
-        * @type string
-        * @acceptValues 'left'|'right'
+        * @type Enums.HorizontalEdge
         * @default 'right'
         */
         horizontalAlignment: "right",
@@ -460,9 +453,8 @@ var dxFunnel = {
             /**
             * @name  dxFunneloptions_label_border_dashstyle
             * @publicName dashStyle
-            * @type string
+            * @type Enums.DashStyle
             * @default 'solid'
-            * @acceptValues 'solid'|'longDash'|'dash'|'dot'
             */
             dashStyle: 'solid'
         },
@@ -504,41 +496,36 @@ var dxFunnel = {
         /**
         * @name dxFunneloptions_legend_verticalalignment
         * @publicName verticalAlignment
-        * @type string
+        * @type Enums.VerticalEdge
         * @default 'top'
-        * @acceptValues 'top' | 'bottom'
         */
         verticalAlignment: 'top',
         /**
         * @name dxFunneloptions_legend_horizontalalignment
         * @publicName horizontalAlignment
-        * @type string
+        * @type Enums.HorizontalAlignment
         * @default 'right'
-        * @acceptValues 'right' | 'center' | 'left'
         */
         horizontalAlignment: 'right',
         /**
         * @name dxFunneloptions_legend_orientation
         * @publicName orientation
-        * @type string
+        * @type Enums.Orientation
         * @default undefined
-        * @acceptValues 'vertical' | 'horizontal'
         */
         orientation: undefined,
         /**
         * @name dxFunneloptions_legend_itemtextposition
         * @publicName itemTextPosition
-        * @type string
+        * @type Enums.Position
         * @default undefined
-        * @acceptValues 'right' | 'left' | 'top' | 'bottom'
         */
         itemTextPosition: undefined,
         /**
         * @name dxFunneloptions_legend_itemsalignment
         * @publicName itemsAlignment
-        * @type string
+        * @type Enums.HorizontalAlignment
         * @default undefined
-        * @acceptValues 'right' | 'center' | 'left'
         */
         itemsAlignment: undefined,
         /**
@@ -684,9 +671,8 @@ var dxFunnel = {
             /**
             * @name dxFunneloptions_legend_border_dashstyle
             * @publicName dashStyle
-            * @type string
+            * @type Enums.DashStyle
             * @default 'solid'
-            * @acceptValues 'solid'|'longDash'|'dash'|'dot'
             */
             dashStyle: 'solid'
         },

@@ -59,10 +59,9 @@ var commonSeries = {
         /**
 		* @name dxChartSeriesTypes_CommonSeries_reduction_level
 		* @publicName level
-		* @type string
+		* @type Enums.FinancialChartReductionLevel
 		* @default 'close'
-		* @acceptValues 'close' | 'open' | 'low' | 'high'
-		* @propertyOf dxChartSeriesTypes_CandleStickSeries,dxChartSeriesTypes_StockSeries
+				* @propertyOf dxChartSeriesTypes_CandleStickSeries,dxChartSeriesTypes_StockSeries
 		*/
         level: 'close'
     },
@@ -85,10 +84,9 @@ var commonSeries = {
     /**
 	* @name dxChartSeriesTypes_CommonSeries_dashstyle
 	* @publicName dashStyle
-	* @type string
+	* @type Enums.DashStyle
 	* @default 'solid'
-	* @acceptValues 'solid'|'longDash'|'dash'|'dot'
-	* @propertyOf dxChartSeriesTypes_LineSeries,dxChartSeriesTypes_StackedLineSeries,dxChartSeriesTypes_FullStackedLineSeries,dxChartSeriesTypes_StackedSplineSeries,dxChartSeriesTypes_FullStackedSplineSeries,dxChartSeriesTypes_SplineSeries,dxChartSeriesTypes_StepLineSeries
+		* @propertyOf dxChartSeriesTypes_LineSeries,dxChartSeriesTypes_StackedLineSeries,dxChartSeriesTypes_FullStackedLineSeries,dxChartSeriesTypes_StackedSplineSeries,dxChartSeriesTypes_FullStackedSplineSeries,dxChartSeriesTypes_SplineSeries,dxChartSeriesTypes_StepLineSeries
 	*/
     dashStyle: 'solid',
     /**
@@ -234,26 +232,23 @@ var commonSeries = {
         /**
 	    * @name dxChartSeriesTypes_CommonSeries_border_dashstyle
 	    * @publicName dashStyle
-	    * @type string
+	    * @type Enums.DashStyle
 	    * @default undefined
-	    * @acceptValues 'solid'|'longDash'|'dash'|'dot'
-	    * @propertyOf dxChartSeriesTypes_AreaSeries,dxChartSeriesTypes_StackedAreaSeries,dxChartSeriesTypes_FullStackedAreaSeries,dxChartSeriesTypes_StackedSplineAreaSeries,dxChartSeriesTypes_FullStackedSplineAreaSeries,dxChartSeriesTypes_SplineAreaSeries,dxChartSeriesTypes_StepAreaSeries,dxChartSeriesTypes_RangeAreaSeries,dxChartSeriesTypes_BarSeries,dxChartSeriesTypes_StackedBarSeries,dxChartSeriesTypes_FullStackedBarSeries,dxChartSeriesTypes_RangeBarSeries,dxChartSeriesTypes_BubbleSeries
+		    * @propertyOf dxChartSeriesTypes_AreaSeries,dxChartSeriesTypes_StackedAreaSeries,dxChartSeriesTypes_FullStackedAreaSeries,dxChartSeriesTypes_StackedSplineAreaSeries,dxChartSeriesTypes_FullStackedSplineAreaSeries,dxChartSeriesTypes_SplineAreaSeries,dxChartSeriesTypes_StepAreaSeries,dxChartSeriesTypes_RangeAreaSeries,dxChartSeriesTypes_BarSeries,dxChartSeriesTypes_StackedBarSeries,dxChartSeriesTypes_FullStackedBarSeries,dxChartSeriesTypes_RangeBarSeries,dxChartSeriesTypes_BubbleSeries
 	    */
         dashStyle: undefined
     },
     /**
 	* @name dxChartSeriesTypes_CommonSeries_hovermode
 	* @publicName hoverMode
-	* @type string
-	* @acceptValues 'onlyPoint'|'allSeriesPoints'|'allArgumentPoints'|'nearestPoint'|'includePoints'|'excludePoints'|'none'
-	*/
+	* @type Enums.ChartSeriesHoverMode
+		*/
     hoverMode: 'nearestPoint',
     /**
 	* @name dxChartSeriesTypes_CommonSeries_selectionmode
 	* @publicName selectionMode
-	* @type string
-	* @acceptValues 'onlyPoint'|'allSeriesPoints'|'allArgumentPoints'|'includePoints'|'excludePoints'|'none'
-	*/
+	* @type Enums.ChartSeriesSelectionMode
+		*/
     selectionMode: 'includePoints',
     /**
 	* @name dxChartSeriesTypes_CommonSeries_hoverstyle
@@ -279,10 +274,9 @@ var commonSeries = {
         /**
 		* @name dxChartSeriesTypes_CommonSeries_hoverstyle_dashstyle
 		* @publicName dashStyle
-		* @type string
+		* @type Enums.DashStyle
 		* @default 'solid'
-		* @acceptValues 'solid'|'longDash'|'dash'|'dot'
-		* @propertyOf dxChartSeriesTypes_LineSeries,dxChartSeriesTypes_StackedLineSeries,dxChartSeriesTypes_FullStackedLineSeries,dxChartSeriesTypes_StackedSplineSeries,dxChartSeriesTypes_FullStackedSplineSeries,dxChartSeriesTypes_SplineSeries,dxChartSeriesTypes_StepLineSeries
+				* @propertyOf dxChartSeriesTypes_LineSeries,dxChartSeriesTypes_StackedLineSeries,dxChartSeriesTypes_FullStackedLineSeries,dxChartSeriesTypes_StackedSplineSeries,dxChartSeriesTypes_FullStackedSplineSeries,dxChartSeriesTypes_SplineSeries,dxChartSeriesTypes_StepLineSeries
 		*/
         dashStyle: 'solid',
         /**
@@ -295,9 +289,8 @@ var commonSeries = {
             /**
             * @name dxChartSeriesTypes_CommonSeries_hoverstyle_hatching_direction
             * @publicName direction
-            * @type string
+            * @type Enums.HatchingDirection
             * @default 'right'
-            * @acceptValues 'none'|'right'|'left'
             */
             direction: 'right',
             /**
@@ -353,10 +346,9 @@ var commonSeries = {
             /**
 		    * @name dxChartSeriesTypes_CommonSeries_hoverstyle_border_dashstyle
 		    * @publicName dashStyle
-		    * @type string
+		    * @type Enums.DashStyle
 		    * @default 'solid'
-		    * @acceptValues 'solid'|'longDash'|'dash'|'dot'
-		    */
+				    */
             dashStyle: 'solid'
         }
     },
@@ -384,10 +376,9 @@ var commonSeries = {
         /**
 		* @name dxChartSeriesTypes_CommonSeries_selectionstyle_dashstyle
 		* @publicName dashStyle
-		* @type string
+		* @type Enums.DashStyle
 		* @default 'solid'
-		* @acceptValues 'solid'|'longDash'|'dash'|'dot'
-		* @propertyOf dxChartSeriesTypes_LineSeries,dxChartSeriesTypes_StackedLineSeries,dxChartSeriesTypes_FullStackedLineSeries,dxChartSeriesTypes_StackedSplineSeries,dxChartSeriesTypes_FullStackedSplineSeries,dxChartSeriesTypes_SplineSeries,dxChartSeriesTypes_StepLineSeries
+				* @propertyOf dxChartSeriesTypes_LineSeries,dxChartSeriesTypes_StackedLineSeries,dxChartSeriesTypes_FullStackedLineSeries,dxChartSeriesTypes_StackedSplineSeries,dxChartSeriesTypes_FullStackedSplineSeries,dxChartSeriesTypes_SplineSeries,dxChartSeriesTypes_StepLineSeries
 		*/
         dashStyle: 'solid',
         /**
@@ -400,9 +391,8 @@ var commonSeries = {
             /**
             * @name dxChartSeriesTypes_CommonSeries_selectionstyle_hatching_direction
             * @publicName direction
-            * @type string
+            * @type Enums.HatchingDirection
             * @default 'right'
-            * @acceptValues 'none'|'right'|'left'
             */
             direction: 'right',
             /**
@@ -458,10 +448,9 @@ var commonSeries = {
             /**
 		    * @name dxChartSeriesTypes_CommonSeries_selectionstyle_border_dashstyle
 		    * @publicName dashStyle
-		    * @type string
+		    * @type Enums.DashStyle
 		    * @default 'solid'
-		    * @acceptValues 'solid'|'longDash'|'dash'|'dot'
-		    */
+				    */
             dashStyle: 'solid'
         }
     },
@@ -475,18 +464,16 @@ var commonSeries = {
         /**
 		* @name dxChartSeriesTypes_CommonSeries_point_hovermode
 		* @publicName hoverMode
-		* @type string
-		* @acceptValues 'onlyPoint' | 'allSeriesPoints' | 'allArgumentPoints' | 'none'
-        * @default 'onlyPoint'
+		* @type Enums.ChartPointInteractionMode
+		        * @default 'onlyPoint'
 		* @propertyOf dxChartSeriesTypes_LineSeries,dxChartSeriesTypes_StackedLineSeries,dxChartSeriesTypes_FullStackedLineSeries,dxChartSeriesTypes_StackedSplineSeries,dxChartSeriesTypes_FullStackedSplineSeries,dxChartSeriesTypes_SplineSeries,dxChartSeriesTypes_StepLineSeries,dxChartSeriesTypes_AreaSeries,dxChartSeriesTypes_StackedAreaSeries,dxChartSeriesTypes_FullStackedAreaSeries,dxChartSeriesTypes_StackedSplineAreaSeries,dxChartSeriesTypes_FullStackedSplineAreaSeries,dxChartSeriesTypes_SplineAreaSeries,dxChartSeriesTypes_StepAreaSeries,dxChartSeriesTypes_RangeAreaSeries,dxChartSeriesTypes_ScatterSeries
 		*/
         hoverMode: 'onlyPoint',
         /**
 		* @name dxChartSeriesTypes_CommonSeries_point_selectionmode
 		* @publicName selectionMode
-		* @type string
-		* @acceptValues 'onlyPoint' | 'allSeriesPoints' | 'allArgumentPoints' | 'none'
-        * @default 'onlyPoint'
+		* @type Enums.ChartPointInteractionMode
+		        * @default 'onlyPoint'
 		* @propertyOf dxChartSeriesTypes_LineSeries,dxChartSeriesTypes_StackedLineSeries,dxChartSeriesTypes_FullStackedLineSeries,dxChartSeriesTypes_StackedSplineSeries,dxChartSeriesTypes_FullStackedSplineSeries,dxChartSeriesTypes_SplineSeries,dxChartSeriesTypes_StepLineSeries,dxChartSeriesTypes_AreaSeries,dxChartSeriesTypes_StackedAreaSeries,dxChartSeriesTypes_FullStackedAreaSeries,dxChartSeriesTypes_SplineAreaSeries,dxChartSeriesTypes_StepAreaSeries,dxChartSeriesTypes_RangeAreaSeries,dxChartSeriesTypes_ScatterSeries
 		*/
         selectionMode: 'onlyPoint',
@@ -509,10 +496,9 @@ var commonSeries = {
         /**
 		* @name dxChartSeriesTypes_CommonSeries_point_symbol
 		* @publicName symbol
-		* @type string
+		* @type Enums.PointSymbol
 		* @default 'circle'
-		* @acceptValues 'circle' | 'square' | 'polygon' | 'triangleDown' | 'triangleUp' | 'cross'
-		* @propertyOf dxChartSeriesTypes_LineSeries,dxChartSeriesTypes_StackedLineSeries,dxChartSeriesTypes_FullStackedLineSeries,dxChartSeriesTypes_StackedSplineSeries,dxChartSeriesTypes_FullStackedSplineSeries,dxChartSeriesTypes_SplineSeries,dxChartSeriesTypes_StepLineSeries,dxChartSeriesTypes_AreaSeries,dxChartSeriesTypes_StackedAreaSeries,dxChartSeriesTypes_FullStackedAreaSeries,dxChartSeriesTypes_StackedSplineAreaSeries,dxChartSeriesTypes_FullStackedSplineAreaSeries,dxChartSeriesTypes_SplineAreaSeries,dxChartSeriesTypes_StepAreaSeries,dxChartSeriesTypes_RangeAreaSeries,dxChartSeriesTypes_ScatterSeries
+				* @propertyOf dxChartSeriesTypes_LineSeries,dxChartSeriesTypes_StackedLineSeries,dxChartSeriesTypes_FullStackedLineSeries,dxChartSeriesTypes_StackedSplineSeries,dxChartSeriesTypes_FullStackedSplineSeries,dxChartSeriesTypes_SplineSeries,dxChartSeriesTypes_StepLineSeries,dxChartSeriesTypes_AreaSeries,dxChartSeriesTypes_StackedAreaSeries,dxChartSeriesTypes_FullStackedAreaSeries,dxChartSeriesTypes_StackedSplineAreaSeries,dxChartSeriesTypes_FullStackedSplineAreaSeries,dxChartSeriesTypes_SplineAreaSeries,dxChartSeriesTypes_StepAreaSeries,dxChartSeriesTypes_RangeAreaSeries,dxChartSeriesTypes_ScatterSeries
 		*/
         symbol: 'circle',
         /**
@@ -814,10 +800,9 @@ var commonSeries = {
         /**
 		* @name dxChartSeriesTypes_CommonSeries_label_alignment
 		* @publicName alignment
-		* @type string
+		* @type Enums.HorizontalAlignment
 		* @default 'center'
-		* @acceptValues 'left' | 'center' | 'right'
-		*/
+				*/
         alignment: 'center',
         /**
 		* @name dxChartSeriesTypes_CommonSeries_label_rotationangle
@@ -876,9 +861,8 @@ var commonSeries = {
         /**
         * @name dxChartSeriesTypes_CommonSeries_label_position
         * @publicName position
-        * @type string
+        * @type Enums.RelativePosition
         * @default 'outside'
-        * @acceptValues 'outside' | 'inside'
         * @propertyOf dxChartSeriesTypes_BarSeries,dxChartSeriesTypes_StackedBarSeries,dxChartSeriesTypes_FullStackedBarSeries,dxChartSeriesTypes_RangeBarSeries,dxChartSeriesTypes_RangeAreaSeries,dxChartSeriesTypes_BubbleSeries
         */
         position: 'outside',
@@ -961,9 +945,8 @@ var commonSeries = {
             /**
             * @name dxChartSeriesTypes_CommonSeries_label_border_dashstyle
             * @publicName dashStyle
-            * @type string
+            * @type Enums.DashStyle
             * @default 'solid'
-            * @acceptValues 'solid'|'longDash'|'dash'|'dot'
             */
             dashStyle: 'solid'
         },
@@ -1010,8 +993,7 @@ var commonSeries = {
         /**
         * @name dxChartSeriesTypes_CommonSeries_valueerrorbar_displaymode
         * @publicName displayMode
-        * @type string
-        * @acceptValues 'auto' | 'low' | 'high' | 'none'
+        * @type Enums.ValueErrorBarDisplayMode
         * @default 'auto'
         */
         displayMode: 'auto',
@@ -1032,9 +1014,8 @@ var commonSeries = {
         /**
         * @name dxChartSeriesTypes_CommonSeries_valueerrorbar_type
         * @publicName type
-        * @type string
+        * @type Enums.ValueErrorBarType
         * @default undefined
-        * @acceptValues 'percent' | 'stdError' | 'stdDeviation' | 'variance' | 'fixed'
         */
         type: undefined,
         /**

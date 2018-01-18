@@ -686,8 +686,7 @@ gridCore.registerModule("grouping", {
                 /**
                  * @name dxDataGridOptions_grouping_expandMode
                  * @publicName expandMode
-                 * @type string
-                 * @acceptValues "buttonClick" | "rowClick"
+                 * @type Enums.GridGroupingExpandMode
                  * @default "buttonClick"
                  */
                 expandMode: "buttonClick",
@@ -743,8 +742,7 @@ gridCore.registerModule("grouping", {
                 /**
                  * @name dxDataGridOptions_groupPanel_visible
                  * @publicName visible
-                 * @type boolean|string
-                 * @acceptValues "auto"
+                 * @type boolean|Enums.Mode
                  * @default false
                  */
                 visible: false,
