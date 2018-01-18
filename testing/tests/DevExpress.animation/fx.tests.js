@@ -129,7 +129,7 @@ QUnit.test("Fallback to no animation strategy", function(assert) {
         result,
         savedSupport = support.transition;
 
-    support.transition = false;
+    support.transition = function() { return false; };
 
     result = this.animate($element, {
         type: "css",

@@ -33,7 +33,7 @@ QUnit.module("indicator with browser animation", {
     beforeEach: function() {
         // Override support styleProp
         this._defaultAnimation = support.animation;
-        support.animation = true;
+        support.animation = function() { return true; };
     },
     afterEach: function() {
         // Restoring support styleProp
@@ -80,7 +80,7 @@ QUnit.module("indicator with image", {
     beforeEach: function() {
         // Override support styleProp
         this._defaultAnimation = support.animation;
-        support.animation = false;
+        support.animation = function() { return false; };
     },
     afterEach: function() {
         // Restoring support styleProp

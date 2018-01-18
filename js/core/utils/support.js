@@ -50,9 +50,9 @@ var touchEvents = "ontouchstart" in window && !('callPhantom' in window),
 exports.touchEvents = touchEvents;
 exports.pointerEvents = pointerEvents;
 exports.touch = touchEvents || pointerEvents && touchPointersPresent;
-exports.transition = supportProp("transition");
-exports.transitionEndEventName = transitionEndEventNames[styleUtils.styleProp("transition")];
-exports.animation = supportProp("animation");
+exports.transition = function() { return supportProp("transition"); };
+exports.transitionEndEventName = function() { return transitionEndEventNames[styleUtils.styleProp("transition")]; };
+exports.animation = function() { return supportProp("animation"); };
 exports.nativeScrolling = isNativeScrollingSupported();
 
 exports.styleProp = styleUtils.styleProp;
