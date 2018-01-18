@@ -71,7 +71,8 @@ var $ = require("jquery"),
     ajaxMock = require("../../helpers/ajaxMock.js"),
 
     DX_STATE_HOVER_CLASS = "dx-state-hover",
-    TEXTEDITOR_INPUT_SELECTOR = ".dx-texteditor-input";
+    TEXTEDITOR_INPUT_SELECTOR = ".dx-texteditor-input",
+    gridCoreUtils = require("ui/grid_core/ui.grid_core.utils");
 
 if("chrome" in window && devices.real().deviceType !== "desktop") {
     // Chrome DevTools device emulation
@@ -548,6 +549,44 @@ QUnit.test("Check grouping context menu operability", function(assert) {
     assert.equal(dataGrid.columnOption("field2", "groupIndex"), undefined, "field2 has no groupIndex");
 
     clock.restore();
+});
+
+//T315857
+QUnit.test("Check edit data through the get/set fields (aka ES6 class support)", function(assert) {
+    //arrange
+    function Person(id, c0, c1) {
+        return {
+            id: id, c0: c0, c1: c1,
+            get ID() { return this.id; },
+            set ID(value) { this.id = value; },
+            get C0() { return this.c0; },
+            set C0(value) { this.c0 = value; },
+            get C1() { return this.c1; },
+            set C1(value) { this.c1 = value; }
+        };
+    }
+    var dataItem0 = Person(0, "c0_1", "c1_1"),
+        dataItem1 = Person(0, "c0_2", "c1_2"),
+        dataGrid = $("#dataGrid").dxDataGrid({
+            loadingTimeout: undefined,
+            columns: ["C0", "c1"],
+            dataSource: {
+                key: "ID",
+                store: [ dataItem0, dataItem1 ]
+            },
+            editing: { allowUpdating: true, mode: "batch" }
+        }).dxDataGrid("instance");
+
+    // act
+    dataGrid.cellValue(1, 1, "test");
+
+    // assert
+    var items = dataGrid.getDataSource().items();
+    assert.equal(items.length, 2);
+    assert.deepEqual(gridCoreUtils.getObjectPropertyNames(items[0]), gridCoreUtils.getObjectPropertyNames(dataItem0));
+    assert.deepEqual(gridCoreUtils.getObjectPropertyNames(items[1]), gridCoreUtils.getObjectPropertyNames(dataItem1));
+    assert.equal(dataGrid.$element().find(".dx-data-row").eq(1).find("td").first().text(), "c0_2");
+    assert.equal(dataGrid.$element().find(".dx-data-row").eq(1).find("td").last().text(), "test");
 });
 
 QUnit.test("Group panel should set correct 'max-width' after clear grouping", function(assert) {
