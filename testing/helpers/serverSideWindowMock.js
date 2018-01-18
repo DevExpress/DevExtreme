@@ -3,7 +3,6 @@
 var originalWindow = window;
 
 var serverSideWindowMock = {
-    addEventListener: originalWindow.addEventListener.bind(originalWindow),
     cancelAnimationFrame: originalWindow.cancelAnimationFrame.bind(originalWindow),
     FormData: originalWindow.FormData.bind(originalWindow),
     getComputedStyle: originalWindow.getComputedStyle.bind(originalWindow),
