@@ -493,7 +493,7 @@ module.exports = {
                     that.callBase();
                     dataSource = that._dataSource;
 
-                    if(that.option("keyExpr") && dataSource.key() !== that.option("keyExpr")) {
+                    if(dataSource && that.option("keyExpr") && dataSource.key() !== that.option("keyExpr")) {
                         errors.log("W1011", that.component.NAME);
                     }
 
