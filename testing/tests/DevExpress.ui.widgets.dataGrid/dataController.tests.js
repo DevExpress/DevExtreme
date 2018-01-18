@@ -109,13 +109,11 @@ QUnit.test("Initialize array with keyExpr option", function(assert) {
 QUnit.test("Raise warning if keyExp is set and dataSource is not an array", function(assert) {
     //arrange
     var dataSource = new DataSource({
-        store: {
-            load: function() {
-                return [
-                    { name: 'Alex', phone: '55-55-55' },
-                    { name: 'Dan', phone: '98-75-21' }
-                ];
-            }
+        load: function() {
+            return [
+                { name: 'Alex', phone: '55-55-55' },
+                { name: 'Dan', phone: '98-75-21' }
+            ];
         }
     });
     sinon.spy(errors, "log");
