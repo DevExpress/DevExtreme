@@ -42,4 +42,4 @@ var browserFromUA = function(ua) {
 
     return result;
 };
-module.exports = extend({ _fromUA: browserFromUA }, browserFromUA(navigator.userAgent || ""));
+module.exports = extend({ _fromUA: browserFromUA }, browserFromUA(navigator.userAgent));

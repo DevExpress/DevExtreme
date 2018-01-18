@@ -362,7 +362,7 @@ var Devices = Class.inherit({
                     throw errors.Error("E0005");
                 }
             } else {
-                ua = navigator.userAgent || "";
+                ua = navigator.userAgent;
             }
             return this._fromUA(ua);
         }
