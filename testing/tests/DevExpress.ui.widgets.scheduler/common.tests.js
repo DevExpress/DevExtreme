@@ -2841,6 +2841,38 @@ QUnit.testStart(function() {
 
     });
 
+    QUnit.test("focusedStateEnabled option value should be passed to ddAppointments", function(assert) {
+        this.createInstance({
+            dataSource: [{
+                startDate: new Date(2015, 4, 24, 9, 10),
+                endDate: new Date(2015, 4, 24, 11, 1),
+                allDay: true,
+                text: "Task 1"
+            }, {
+                startDate: new Date(2015, 4, 24, 9, 10),
+                endDate: new Date(2015, 4, 24, 11, 1),
+                allDay: true,
+                text: "Task 2"
+            }, {
+                startDate: new Date(2015, 4, 24, 9, 10),
+                endDate: new Date(2015, 4, 24, 11, 1),
+                allDay: true,
+                text: "Task 3"
+            }],
+            currentDate: new Date(2015, 4, 24),
+            views: ["month"],
+            currentView: "month",
+            focusStateEnabled: false
+        });
+
+        var ddAppointments = this.instance.$element().find(".dx-scheduler-dropdown-appointments").eq(0).dxDropDownMenu("instance");
+        assert.notOk(ddAppointments.option("focusStateEnabled"), "focusStateEnabled was passed correctly");
+
+        this.instance.option("focusStateEnabled", true);
+        ddAppointments = this.instance.$element().find(".dx-scheduler-dropdown-appointments").eq(0).dxDropDownMenu("instance");
+        assert.ok(ddAppointments.option("focusStateEnabled"), "focusStateEnabled was passed correctly");
+    });
+
     QUnit.test("Workspace navigation by arrows should work correctly with opened dropDown appointments", function(assert) {
         this.createInstance({
             dataSource: [{

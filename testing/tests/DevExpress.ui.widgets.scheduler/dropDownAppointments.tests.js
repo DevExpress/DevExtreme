@@ -141,13 +141,6 @@ QUnit.test("DropDown menu should have correct popup size", function(assert) {
     assert.equal(menu.option("popupMaxHeight"), 200, "Popup has correct maxHeight");
 });
 
-QUnit.test("DropDown menu should have focusStateEnabled = true on init", function(assert) {
-    var $dropDownMenu = this.renderDropDownAppointmentsContainer(),
-        menu = $dropDownMenu.dxDropDownMenu("instance");
-
-    assert.ok(menu.option("focusStateEnabled"), "focusStateEnabled option value is correct");
-});
-
 QUnit.test("DropDown menu should have a correct button template", function(assert) {
     var $dropDownMenu = this.renderDropDownAppointmentsContainer(),
         menu,

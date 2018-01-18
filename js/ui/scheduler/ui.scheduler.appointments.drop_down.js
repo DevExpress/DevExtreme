@@ -141,7 +141,7 @@ var dropDownAppointments = Class.inherit({
                     that._appointmentClickAction(extendFromObject(mappedData, args, false));
                 },
                 activeStateEnabled: false,
-                focusStateEnabled: true,
+                focusStateEnabled: this.instance.option("focusStateEnabled"),
                 itemTemplate: new FunctionTemplate(function(options) {
                     return template.render({
                         model: options.model,
