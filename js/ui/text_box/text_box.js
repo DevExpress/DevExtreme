@@ -2,7 +2,7 @@
 
 var $ = require("../../core/renderer"),
     window = require("../../core/dom_adapter").getWindow(),
-    navigator = require("../core/utils/navigator").getNavigator,
+    navigator = require("../../core/utils/navigator").getNavigator,
     eventsEngine = require("../../events/core/events_engine"),
     devices = require("../../core/devices"),
     inArray = require("../../core/utils/array").inArray,
