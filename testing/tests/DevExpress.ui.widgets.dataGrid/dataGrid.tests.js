@@ -922,14 +922,15 @@ QUnit.test("Resizing columns should work correctly when scrolling mode is 'virtu
 
 //T596274
 QUnit.testInActiveWindow("Resize a column with the 'between' filter should not throw an exception", function(assert) {
+    //arrange
+    var resizeController,
+        $filterRangeContent,
+        clock = sinon.useFakeTimers();
+
     fx.off = true;
 
     try {
-        //arrange
-        var resizeController,
-            $filterRangeContent,
-            clock = sinon.useFakeTimers(),
-            dataGrid = $("#dataGrid").dxDataGrid({
+        var dataGrid = $("#dataGrid").dxDataGrid({
                 width: 200,
                 allowColumnResizing: true,
                 loadingTimeout: undefined,
@@ -984,6 +985,7 @@ QUnit.testInActiveWindow("Resize a column with the 'between' filter should not t
         assert.ok(false, "exception");
     } finally {
         fx.off = false;
+        clock.restore();
     }
 });
 
