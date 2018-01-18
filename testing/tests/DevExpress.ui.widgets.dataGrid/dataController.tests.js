@@ -112,22 +112,22 @@ QUnit.test("Raise warning if keyExp is set and dataSource is not an array", func
     var dataSource = new DataSource({
         store: new CustomStore({
             load: function() {
-                var deferred = $.Deferred();
-                $.ajax({
-                    url: "https://js.devexpress.com/Demos/WidgetsGallery/data/orderItems",
-                });
-                return deferred.promise();
+                return [
+                    { name: 'Alex', phone: '55-55-55' },
+                    { name: 'Dan', phone: '98-75-21' }
+                ];
             }
         })
     });
+    sinon.spy(errors, "log");
 
     //act
-    sinon.spy(errors, "log");
-    this.applyOptions({ keyExpr: "id", dataSource: dataSource });
-    this.dataController._refreshDataSource();
+    this.applyOptions({ keyExpr: "name", dataSource: dataSource });
+    this.dataController.init();
 
     //assert
     assert.equal(errors.log.lastCall.args[0], "W1011", "Warning about keyExpr is raised");
+    assert.equal(errors.log.callCount, 1, "Warning about keyExpr is raised one time");
     errors.log.restore();
 });
 

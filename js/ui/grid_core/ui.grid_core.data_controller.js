@@ -493,10 +493,6 @@ module.exports = {
                     that.callBase();
                     dataSource = that._dataSource;
 
-                    if(dataSource && that.option("keyExpr") && dataSource.key() !== that.option("keyExpr")) {
-                        errors.log("W1011", that.component.NAME);
-                    }
-
                     that._isFirstLoading = true;
                     if(dataSource) {
                         that._setPagingOptions(dataSource);
