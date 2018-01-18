@@ -32,7 +32,6 @@ var ACCORDION_CLASS = "dx-accordion",
 * @name dxAccordion
 * @publicName dxAccordion
 * @inherits CollectionWidget
-* @groupName Navigation and Layouting
 * @module ui/accordion
 * @export default
 */
@@ -48,7 +47,7 @@ var Accordion = CollectionWidget.inherit({
              * @publicName hoverStateEnabled
              * @type boolean
              * @default true
-             * @extend_doc
+             * @inheritdoc
              */
             hoverStateEnabled: true,
 
@@ -140,23 +139,6 @@ var Accordion = CollectionWidget.inherit({
             selectionByClick: true,
             activeStateEnabled: true,
             _itemAttributes: { role: "tab" }
-
-            /**
-            * @name dxAccordionItemTemplate_title
-            * @publicName title
-            * @type String
-            */
-            /**
-            * @name dxAccordionItemTemplate_icon
-            * @publicName icon
-            * @type String
-            */
-            /**
-            * @name dxAccordionItemTemplate_iconSrc
-            * @publicName iconSrc
-            * @type String
-            * @deprecated dxAccordionItemTemplate_icon
-            */
         });
     },
 
@@ -171,8 +153,8 @@ var Accordion = CollectionWidget.inherit({
                     * @name dxAccordionOptions_focusStateEnabled
                     * @publicName focusStateEnabled
                     * @type boolean
-                    * @custom_default_for_desktop true
-                    * @extend_doc
+                    * @default true @for desktop
+                    * @inheritdoc
                     */
                     focusStateEnabled: true
                 }
@@ -199,7 +181,28 @@ var Accordion = CollectionWidget.inherit({
 
     _initTemplates: function() {
         this.callBase();
-
+        /**
+        * @name dxAccordionItemTemplate
+        * @publicName dxAccordionItemTemplate
+        * @inherits CollectionWidgetItemTemplate
+        * @type object
+        */
+        /**
+        * @name dxAccordionItemTemplate_title
+        * @publicName title
+        * @type String
+        */
+        /**
+        * @name dxAccordionItemTemplate_icon
+        * @publicName icon
+        * @type String
+        */
+        /**
+        * @name dxAccordionItemTemplate_iconSrc
+        * @publicName iconSrc
+        * @type String
+        * @deprecated dxAccordionItemTemplate_icon
+        */
         this._defaultTemplates["title"] = new BindableTemplate(function($container, data) {
             if(isPlainObject(data)) {
                 if(data.title) {

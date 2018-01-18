@@ -2,7 +2,6 @@
 
 var $ = require("../../core/renderer"),
     window = require("../../core/dom_adapter").getWindow(),
-    document = window.document,
     eventsEngine = require("../../events/core/events_engine"),
     extend = require("../../core/utils/extend").extend,
     resizeCallbacks = require("../../core/utils/window").resizeCallbacks,
@@ -55,8 +54,8 @@ var initMobileViewport = function(options) {
     realDevice = devices.real();
 
     if(support.touch && !(realDevice.platform === "win" && realDevice.version[0] === 10)) {
-        eventsEngine.off(document, ".dxInitMobileViewport");
-        eventsEngine.on(document, "dxpointermove.dxInitMobileViewport", function(e) {
+        eventsEngine.off(window.document, ".dxInitMobileViewport");
+        eventsEngine.on(window.document, "dxpointermove.dxInitMobileViewport", function(e) {
             var count = e.pointers.length,
                 isTouchEvent = e.pointerType === "touch",
                 zoomDisabled = !allowZoom && count > 1,
@@ -69,7 +68,7 @@ var initMobileViewport = function(options) {
     }
 
     if(realDevice.ios) {
-        var isPhoneGap = (document.location.protocol === "file:");
+        var isPhoneGap = (window.document.location.protocol === "file:");
 
         if(!isPhoneGap) {
             // NOTE: fix app size after device rotation in Safari when keyboard was shown
@@ -83,7 +82,7 @@ var initMobileViewport = function(options) {
     if(realDevice.android) {
         resizeCallbacks.add(function() {
             setTimeout(function() {
-                var activeElement = document.activeElement;
+                var activeElement = window.document.activeElement;
 
                 activeElement.scrollIntoViewIfNeeded ?
                     activeElement.scrollIntoViewIfNeeded() :

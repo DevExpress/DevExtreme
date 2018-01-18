@@ -2,8 +2,7 @@
 
 var eventsEngine = require("../../events/core/events_engine"),
     window = require("../../core/dom_adapter").getWindow(),
-    navigator = require("../../core/utils/navigator"),
-    document = window.document,
+    navigator = require("../../core/utils/navigator")
     _math = Math,
     _abs = _math.abs,
     _sqrt = _math.sqrt,
@@ -397,7 +396,7 @@ Tracker.prototype = {
                 off(_addNamespace("MSHoldVisual", _NAME)).
                 off(_addNamespace("contextmenu", _NAME));
         }
-        eventsEngine.off(document, that._docHandlers);
+        eventsEngine.off(window.document, that._docHandlers);
         that._root.off(that._rootHandlers);
     },
 
@@ -412,7 +411,7 @@ Tracker.prototype = {
                     isTouchEvent(event) && event.preventDefault();
                 });
         }
-        eventsEngine.on(document, that._docHandlers);
+        eventsEngine.on(window.document, that._docHandlers);
         that._root.on(that._rootHandlers);
     }
 };
@@ -537,7 +536,7 @@ function selectItem(flags, items) {
 }
 
 function setupEvents() {
-    var flags = [navigator.pointerEnabled, navigator.msPointerEnabled, "ontouchstart" in window];
+    var flags = [window.document.pointerEnabled, navigator.msPointerEnabled, "ontouchstart" in window];
     ///#DEBUG
     if(arguments.length) {
         flags = [

@@ -76,7 +76,6 @@ var animation = {
 * @name dxPivot
 * @publicName dxPivot
 * @inherits CollectionWidget
-* @groupName Navigation and Layouting
 * @module ui/pivot
 * @export default
 */
@@ -139,62 +138,42 @@ var Pivot = CollectionWidget.inherit({
             * @name dxPivotOptions_noDataText
             * @publicName noDataText
             * @hidden
-            * @extend_doc
+            * @inheritdoc
             */
 
             /**
             * @name dxPivotOptions_selectedItems
             * @publicName selectedItems
             * @hidden
-            * @extend_doc
+            * @inheritdoc
             */
 
             /**
             * @name dxPivotOptions_selectedItemKeys
             * @publicName selectedItemKeys
             * @hidden
-            * @extend_doc
+            * @inheritdoc
             */
 
             /**
             * @name dxPivotOptions_keyExpr
             * @publicName keyExpr
             * @hidden
-            * @extend_doc
+            * @inheritdoc
             */
 
             /**
             * @name dxPivotOptions_accessKey
             * @publicName accessKey
             * @hidden
-            * @extend_doc
+            * @inheritdoc
             */
 
             /**
             * @name dxPivotOptions_tabIndex
             * @publicName tabIndex
             * @hidden
-            * @extend_doc
-            */
-
-            /**
-            * @name dxPivotItemTemplate_titleTemplate
-            * @publicName titleTemplate
-            * @type template|function
-            * @type_function_return string|Node|jQuery
-            */
-
-            /**
-            * @name dxPivotItemTemplate_visible
-            * @publicName visible
-            * @hidden
-            * @extend_doc
-            */
-
-            /**
-            * @name dxPivotItemTemplate_title
-            * @publicName title
-            * @type String
+            * @inheritdoc
             */
         });
     },
@@ -239,7 +218,29 @@ var Pivot = CollectionWidget.inherit({
 
     _initTemplates: function() {
         this.callBase();
-
+        /**
+        * @name dxPivotItemTemplate
+        * @publicName dxPivotItemTemplate
+        * @inherits CollectionWidgetItemTemplate
+        * @type object
+        */
+        /**
+        * @name dxPivotItemTemplate_titleTemplate
+        * @publicName titleTemplate
+        * @type template|function
+        * @type_function_return string|Node|jQuery
+        */
+        /**
+        * @name dxPivotItemTemplate_visible
+        * @publicName visible
+        * @hidden
+        * @inheritdoc
+        */
+        /**
+        * @name dxPivotItemTemplate_title
+        * @publicName title
+        * @type String
+        */
         this._defaultTemplates["content"] = new EmptyTemplate();
         this._defaultTemplates["title"] = new ChildDefaultTemplate("item", this);
     },
@@ -543,14 +544,14 @@ var Pivot = CollectionWidget.inherit({
     * @name dxPivotMethods_registerKeyHandler
     * @publicName registerKeyHandler(key, handler)
     * @hidden
-    * @extend_doc
+    * @inheritdoc
     */
 
     /**
     * @name dxPivotMethods_focus
     * @publicName focus()
     * @hidden
-    * @extend_doc
+    * @inheritdoc
     */
 
 });

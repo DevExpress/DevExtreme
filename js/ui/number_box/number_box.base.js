@@ -1,7 +1,7 @@
 "use strict";
 
 var $ = require("../../core/renderer"),
-    document = require("../../core/dom_adapter").getWindow().document,
+    window = require("../../core/dom_adapter").getWindow(),
     eventsEngine = require("../../events/core/events_engine"),
     commonUtils = require("../../core/utils/common"),
     mathUtils = require("../../core/utils/math"),
@@ -91,7 +91,7 @@ var NumberBoxBase = TextEditor.inherit({
              * @publicName useLargeSpinButtons
              * @type boolean
              * @default true
-             * @custom_default_for_desktop false
+             * @default false @for desktop
              */
             useLargeSpinButtons: true,
 
@@ -116,49 +116,49 @@ var NumberBoxBase = TextEditor.inherit({
              * @name dxNumberBoxOptions_mask
              * @publicName mask
              * @hidden
-             * @extend_doc
+             * @inheritdoc
              */
 
             /**
              * @name dxNumberBoxOptions_maskChar
              * @publicName maskChar
              * @hidden
-             * @extend_doc
+             * @inheritdoc
              */
 
             /**
              * @name dxNumberBoxOptions_maskRules
              * @publicName maskRules
              * @hidden
-             * @extend_doc
+             * @inheritdoc
              */
 
             /**
              * @name dxNumberBoxOptions_maskInvalidMessage
              * @publicName maskInvalidMessage
              * @hidden
-             * @extend_doc
+             * @inheritdoc
              */
 
             /**
              * @name dxNumberBoxOptions_useMaskedValue
              * @publicName useMaskedValue
              * @hidden
-             * @extend_doc
+             * @inheritdoc
              */
 
             /**
              * @name dxNumberBoxOptions_showMaskMode
              * @publicName showMaskMode
              * @hidden
-             * @extend_doc
+             * @inheritdoc
              */
 
             /**
              * @name dxNumberBoxOptions_spellcheck
              * @publicName spellcheck
              * @hidden
-             * @extend_doc
+             * @inheritdoc
              */
         });
     },
@@ -181,7 +181,7 @@ var NumberBoxBase = TextEditor.inherit({
                     /**
                      * @name dxNumberBoxOptions_mode
                      * @publicName mode
-                     * @custom_default_for_mobile_devices "number"
+                     * @default 'number' @for mobile_devices
                      */
                     mode: "number"
                 }
@@ -372,7 +372,7 @@ var NumberBoxBase = TextEditor.inherit({
 
     _spinButtonsPointerDownHandler: function() {
         var $input = this._input();
-        if(!this.option("useLargeSpinButtons") && document.activeElement !== $input[0]) {
+        if(!this.option("useLargeSpinButtons") && window.document.activeElement !== $input[0]) {
             eventsEngine.trigger($input, "focus");
         }
     },

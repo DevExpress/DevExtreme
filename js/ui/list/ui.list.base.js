@@ -123,7 +123,7 @@ var ListBase = CollectionWidget.inherit({
             * @name dxListOptions_autoPagingEnabled
             * @publicName autoPagingEnabled
             * @deprecated #pageLoadMode
-            * @extend_doc
+            * @inheritdoc
             */
             "autoPagingEnabled": { since: "15.1", message: "Use the 'pageLoadMode' option instead" },
 
@@ -131,7 +131,7 @@ var ListBase = CollectionWidget.inherit({
             * @name dxListOptions_showNextButton
             * @publicName showNextButton
             * @deprecated #pageLoadMode
-            * @extend_doc
+            * @inheritdoc
             */
             "showNextButton": { since: "15.1", message: "Use the 'pageLoadMode' option instead" }
         });
@@ -145,7 +145,7 @@ var ListBase = CollectionWidget.inherit({
              * @publicName hoverStateEnabled
              * @type boolean
              * @default true
-             * @extend_doc
+             * @inheritdoc
              */
             hoverStateEnabled: true,
 
@@ -359,7 +359,7 @@ var ListBase = CollectionWidget.inherit({
             * @name dxListOptions_selectedItem
             * @publicName selectedItem
             * @hidden
-            * @extend_doc
+            * @inheritdoc
             */
 
             /**
@@ -367,7 +367,7 @@ var ListBase = CollectionWidget.inherit({
              * @publicName activeStateEnabled
              * @type boolean
              * @default true
-             * @extend_doc
+             * @inheritdoc
              */
             activeStateEnabled: true,
 
@@ -395,7 +395,7 @@ var ListBase = CollectionWidget.inherit({
             * @type_function_param1 e:object
             * @type_function_param1_field6 itemIndex:number | object
             * @action
-            * @extend_doc
+            * @inheritdoc
             */
 
             /**
@@ -406,12 +406,17 @@ var ListBase = CollectionWidget.inherit({
             * @type_function_param1 e:object
             * @type_function_param1_field6 itemIndex:number | object
             * @action
-            * @extend_doc
+            * @inheritdoc
             */
 
             showChevronExpr: function(data) { return data ? data.showChevron : undefined; },
             badgeExpr: function(data) { return data ? data.badge : undefined; }
-
+            /**
+            * @name dxListItemTemplate
+            * @publicName dxListItemTemplate
+            * @inherits CollectionWidgetItemTemplate
+            * @type object
+            */
             /**
             * @name dxListItemTemplate_badge
             * @publicName badge
@@ -422,7 +427,6 @@ var ListBase = CollectionWidget.inherit({
             * @publicName showChevron
             * @type boolean
             */
-
             /**
             * @name dxListItemTemplate_key
             * @publicName key
@@ -435,8 +439,8 @@ var ListBase = CollectionWidget.inherit({
         /**
         * @name dxListOptions_useNativeScrolling
         * @publicName useNativeScrolling
-        * @custom_default_for_desktop false
-        * @custom_default_for_Mac true
+        * @default false @for desktop
+        * @default true @for Mac
         */
         return this.callBase().concat(deviceDependentOptions(), [
             {
@@ -461,14 +465,14 @@ var ListBase = CollectionWidget.inherit({
                     /**
                     * @name dxListOptions_showScrollbar
                     * @publicName showScrollbar
-                    * @custom_default_for_desktop "onHover"
+                    * @default 'onHover' @for desktop
                     */
                     showScrollbar: "onHover",
 
                     /**
                     * @name dxListOptions_pageLoadMode
                     * @publicName pageLoadMode
-                    * @custom_default_for_desktop "nextButton"
+                    * @default 'nextButton' @for desktop
                     */
                     pageLoadMode: "nextButton"
                 }
@@ -482,8 +486,8 @@ var ListBase = CollectionWidget.inherit({
                     * @name dxListOptions_focusStateEnabled
                     * @publicName focusStateEnabled
                     * @type boolean
-                    * @custom_default_for_desktop true
-                    * @extend_doc
+                    * @default true @for desktop
+                    * @inheritdoc
                     */
                     focusStateEnabled: true
                 }

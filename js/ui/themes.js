@@ -2,10 +2,9 @@
 
 var $ = require("../core/renderer"),
     window = require("../core/dom_adapter").getWindow(),
-    document = window.document,
     errors = require("./widget/ui.errors"),
     domUtils = require("../core/utils/dom"),
-    ready = require("../core/utils/ready"),
+    ready = require("../core/dom_adapter").ready,
     each = require("../core/utils/iterator").each,
     devices = require("../core/devices"),
     viewPortUtils = require("../core/utils/view_port"),
@@ -166,7 +165,7 @@ function initContext(newContext) {
 
 function init(options) {
     options = options || {};
-    initContext(options.context || document);
+    initContext(options.context || window.document);
 
     processMarkup();
 
@@ -273,6 +272,10 @@ function getCssClasses(themeName) {
 
 var themeClasses;
 function attachCssClasses(element, themeName) {
+    if(!themeName && !knownThemes) {
+        return;
+    }
+
     themeClasses = getCssClasses(themeName).join(" ");
     $(element).addClass(themeClasses);
 

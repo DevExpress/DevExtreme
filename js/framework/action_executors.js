@@ -3,7 +3,7 @@
 require("../integration/jquery");
 
 var $ = require("jquery"),
-    document = require("../core/dom_adapter").getWindow().document,
+    window = require("../core/dom_adapter").getWindow(),
     dataCoreUtils = require("../core/utils/data"),
     extend = require("../core/utils/extend").extend,
     isPlainObject = require("../core/utils/type").isPlainObject,
@@ -104,7 +104,7 @@ var createActionExecutors = function(app) {
         "url": {
             execute: function(e) {
                 if(typeof e.action === "string" && e.action.charAt(0) !== "#") {
-                    document.location = e.action;
+                    window.document.location = e.action;
                 }
             }
         }

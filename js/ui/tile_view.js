@@ -45,7 +45,6 @@ var CONFIGS = {
 * @name dxtileview
 * @publicName dxTileView
 * @inherits CollectionWidget
-* @groupName Collection Widgets
 * @module ui/tile_view
 * @export default
 */
@@ -71,7 +70,7 @@ var TileView = CollectionWidget.inherit({
              * @publicName hoverStateEnabled
              * @type boolean
              * @default true
-             * @extend_doc
+             * @inheritdoc
              */
             hoverStateEnabled: true,
 
@@ -126,6 +125,13 @@ var TileView = CollectionWidget.inherit({
             indicateLoading: true
 
             /**
+            * @name dxTileViewItemTemplate
+            * @publicName dxTileViewItemTemplate
+            * @inherits CollectionWidgetItemTemplate
+            * @type object
+            */
+
+            /**
             * @name dxTileViewItemTemplate_widthRatio
             * @publicName widthRatio
             * @type number
@@ -151,35 +157,35 @@ var TileView = CollectionWidget.inherit({
             * @name dxTileViewOptions_selectedIndex
             * @publicName selectedIndex
             * @hidden
-            * @extend_doc
+            * @inheritdoc
             */
 
             /**
             * @name dxTileViewOptions_selectedItem
             * @publicName selectedItem
             * @hidden
-            * @extend_doc
+            * @inheritdoc
             */
 
             /**
             * @name dxTileViewOptions_selectedItems
             * @publicName selectedItems
             * @hidden
-            * @extend_doc
+            * @inheritdoc
             */
 
             /**
             * @name dxTileViewOptions_selectedItemKeys
             * @publicName selectedItemKeys
             * @hidden
-            * @extend_doc
+            * @inheritdoc
             */
 
             /**
              * @name dxTileViewOptions_keyExpr
              * @publicName keyExpr
              * @hidden
-             * @extend_doc
+             * @inheritdoc
              */
 
             /**
@@ -187,7 +193,7 @@ var TileView = CollectionWidget.inherit({
             * @publicName onSelectionChanged
             * @action
             * @hidden
-            * @extend_doc
+            * @inheritdoc
             */
         });
     },
@@ -203,8 +209,8 @@ var TileView = CollectionWidget.inherit({
                     * @name dxTileViewOptions_focusStateEnabled
                     * @publicName focusStateEnabled
                     * @type boolean
-                    * @custom_default_for_desktop true
-                    * @extend_doc
+                    * @default true @for desktop
+                    * @inheritdoc
                     */
                     focusStateEnabled: true
                 }

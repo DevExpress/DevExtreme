@@ -352,15 +352,13 @@ QUnit.test("Click on list item should not close menu", function(assert) {
     assert.ok(dropDownMenu.option("opened"), "Menu is opened");
 });
 
-QUnit.test("List items should not have active and focused state", function(assert) {
+QUnit.test("List items should not have active state", function(assert) {
     this.renderDropDownAppointmentsContainer().trigger("dxclick");
 
     var dropDownMenu = $(".dx-scheduler-dropdown-appointments").dxDropDownMenu("instance");
 
     assert.strictEqual(dropDownMenu._list.option("activeStateEnabled"), false, "Active state isn't enabled");
-    assert.strictEqual(dropDownMenu._list.option("focusStateEnabled"), false, "Focus state isn't enabled");
 });
-
 
 QUnit.test("the 'repaintExisting' should repaint dropdown menus", function(assert) {
     sinon.stub(this.widgetMock, "fire");

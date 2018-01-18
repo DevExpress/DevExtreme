@@ -1,7 +1,7 @@
 "use strict";
 
 var $ = require("../../core/renderer"),
-    document = require("../../core/dom_adapter").getWindow().document,
+    window = require("../../core/dom_adapter").getWindow(),
     eventsEngine = require("../../events/core/events_engine"),
     dataUtils = require("../../core/element_data"),
     dateUtils = require("../../core/utils/date"),
@@ -154,13 +154,16 @@ var SchedulerWorkSpace = Widget.inherit({
     },
 
     _getCellFromNextRow: function(direction) {
-        var $currentCell = this._$focusedCell,
-            cellIndex = $currentCell.index(),
-            $row = $currentCell.parent(),
-            $cell = $row[direction]().children().eq(cellIndex);
+        var $currentCell = this._$focusedCell;
 
-        $cell = this._checkForViewBounds($cell);
-        return $cell;
+        if(isDefined($currentCell)) {
+            var cellIndex = $currentCell.index(),
+                $row = $currentCell.parent(),
+                $cell = $row[direction]().children().eq(cellIndex);
+
+            $cell = this._checkForViewBounds($cell);
+            return $cell;
+        }
     },
 
     _checkForViewBounds: function($item) {
@@ -171,6 +174,9 @@ var SchedulerWorkSpace = Widget.inherit({
     },
 
     _getRightCell: function(isMultiSelection) {
+        if(!isDefined(this._$focusedCell)) {
+            return;
+        }
         var $rightCell,
             $focusedCell = this._$focusedCell,
             groupCount = this._getGroupCount(),
@@ -202,6 +208,9 @@ var SchedulerWorkSpace = Widget.inherit({
     },
 
     _getLeftCell: function(isMultiSelection) {
+        if(!isDefined(this._$focusedCell)) {
+            return;
+        }
         var $leftCell,
             $focusedCell = this._$focusedCell,
             groupCount = this._getGroupCount(),
@@ -240,7 +249,7 @@ var SchedulerWorkSpace = Widget.inherit({
     },
 
     _setFocusedCell: function($cell, isMultiSelection) {
-        if(!$cell.length) {
+        if(!isDefined($cell) || !$cell.length) {
             return;
         }
 
@@ -1340,8 +1349,8 @@ var SchedulerWorkSpace = Widget.inherit({
             if(eventUtils.isMouseEvent(e) && e.which === 1) {
                 isPointerDown = true;
                 that.$element().addClass(WORKSPACE_WITH_MOUSE_SELECTION_CLASS);
-                eventsEngine.off(document, SCHEDULER_CELL_DXPOINTERUP_EVENT_NAME);
-                eventsEngine.on(document, SCHEDULER_CELL_DXPOINTERUP_EVENT_NAME, function() {
+                eventsEngine.off(window.document, SCHEDULER_CELL_DXPOINTERUP_EVENT_NAME);
+                eventsEngine.on(window.document, SCHEDULER_CELL_DXPOINTERUP_EVENT_NAME, function() {
                     isPointerDown = false;
                     that.$element().removeClass(WORKSPACE_WITH_MOUSE_SELECTION_CLASS);
                 });

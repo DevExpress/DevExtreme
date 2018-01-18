@@ -1,7 +1,7 @@
 "use strict";
 
 /* global window */
-module.exports = {
+var domAdapter = module.exports = {
     createElement: function(tagName, text, context) {
         context = context || this.getWindow().document;
         if(tagName === "#text") {
@@ -77,6 +77,51 @@ module.exports = {
     },
 
     getWindow: function() {
-        return window;
-    }
+        return domAdapter._window;
+    },
+
+    _window: typeof window === "undefined" ? {} : window,
+
+    hasDocument: function() {
+        return "document" in domAdapter.getWindow();
+    },
+
+    ready: function(callback) {
+        domAdapter._readyCallbacks.add(callback);
+
+        if(!domAdapter.hasDocument()) {
+            return;
+        }
+
+        var document = domAdapter.getWindow().document;
+
+        //NOTE: we can't use document.readyState === "interactive" because of ie9/ie10 support
+        if(document.readyState === "complete" || (document.readyState !== "loading" && !document.documentElement.doScroll)) {
+            callback();
+            return;
+        }
+
+        if(!domAdapter._contentLoadedListening) {
+            domAdapter._contentLoadedListening = true;
+            var loadedCallback = function() {
+                domAdapter._readyCallbacks.fire();
+                document.removeEventListener("DOMContentLoaded", loadedCallback);
+            };
+            document.addEventListener("DOMContentLoaded", loadedCallback);
+        }
+    },
+
+    _readyCallbacks: (function() {
+        var callbacks = [];
+        return {
+            add: function(callback) {
+                callbacks.push(callback);
+            },
+            fire: function() {
+                callbacks.forEach(function(callback) {
+                    callback();
+                });
+            }
+        };
+    })()
 };

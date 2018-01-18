@@ -4,9 +4,12 @@ var domAdapter = require("core/dom_adapter");
 var serverSideWindowMock = require("./serverSideWindowMock.js");
 
 exports.set = function() {
-    domAdapter.__restoreOriginal();
-
-    domAdapter.getWindow = function() {
-        return serverSideWindowMock;
-    };
+    for(var field in serverSideWindowMock) {
+        Object.defineProperty(domAdapter._window, field, {
+            enumerable: true,
+            configurable: true,
+            value: serverSideWindowMock[field]
+        });
+    }
+    domAdapter._readyCallbacks.fire();
 };

@@ -46,7 +46,6 @@ var TABS_CLASS = "dx-tabs",
 * @name dxTabs
 * @publicName dxTabs
 * @inherits CollectionWidget
-* @groupName Navigation and Layouting
 * @module ui/tabs
 * @export default
 */
@@ -62,7 +61,7 @@ var Tabs = CollectionWidget.inherit({
              * @publicName hoverStateEnabled
              * @type boolean
              * @default true
-             * @extend_doc
+             * @inheritdoc
              */
             hoverStateEnabled: true,
 
@@ -103,14 +102,14 @@ var Tabs = CollectionWidget.inherit({
             * @name dxTabsOptions_activeStateEnabled
             * @publicName activeStateEnabled
             * @hidden
-            * @extend_doc
+            * @inheritdoc
             */
 
             /**
             * @name dxTabsOptions_noDataText
             * @publicName noDataText
             * @hidden
-            * @extend_doc
+            * @inheritdoc
             */
 
             /**
@@ -123,7 +122,7 @@ var Tabs = CollectionWidget.inherit({
              * @name dxTabsOptions_activeStateEnabled
              * @publicName activeStateEnabled
              * @default true
-             * @extend_doc
+             * @inheritdoc
              */
 
             activeStateEnabled: true,
@@ -132,7 +131,12 @@ var Tabs = CollectionWidget.inherit({
             loopItemFocus: false,
             useInkRipple: false,
             badgeExpr: function(data) { return data ? data.badge : undefined; }
-
+            /**
+            * @name dxTabsItemTemplate
+            * @publicName dxTabsItemTemplate
+            * @inherits CollectionWidgetItemTemplate
+            * @type object
+            */
             /**
             * @name dxTabsItemTemplate_icon
             * @publicName icon
@@ -160,13 +164,13 @@ var Tabs = CollectionWidget.inherit({
                     /**
                     * @name dxTabsOptions_showNavButtons
                     * @publicName showNavButtons
-                    * @custom_default_for_desktop true
+                    * @default true @for desktop
                     */
                     showNavButtons: true,
                     /**
                     * @name dxTabsOptions_scrollByContent
                     * @publicName scrollByContent
-                    * @custom_default_for_desktop false
+                    * @default false @for desktop
                     */
                     scrollByContent: false
                 }
@@ -180,8 +184,8 @@ var Tabs = CollectionWidget.inherit({
                     * @name dxTabsOptions_focusStateEnabled
                     * @publicName focusStateEnabled
                     * @type boolean
-                    * @custom_default_for_desktop true
-                    * @extend_doc
+                    * @default true @for desktop
+                    * @inheritdoc
                     */
                     focusStateEnabled: true
                 }

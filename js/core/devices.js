@@ -1,8 +1,9 @@
 "use strict";
 
 var $ = require("../core/renderer"),
-    window = require("../core/dom_adapter").getWindow(),
     navigator = require("./utils/navigator"),
+    domAdapter = require("../core/dom_adapter"),
+    window = domAdapter.getWindow(),
     extend = require("./utils/extend").extend,
     isPlainObject = require("./utils/type").isPlainObject,
     each = require("./utils/iterator").each,
@@ -207,8 +208,10 @@ var Devices = Class.inherit({
         this._currentOrientation = undefined;
 
         this.changed = Callbacks();
-        this._recalculateOrientation();
-        resizeCallbacks.add(this._recalculateOrientation.bind(this));
+        if(domAdapter.hasDocument()) {
+            this._recalculateOrientation();
+            resizeCallbacks.add(this._recalculateOrientation.bind(this));
+        }
     },
     /**
     * @name DevicesObjectmethods_current

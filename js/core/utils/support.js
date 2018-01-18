@@ -3,7 +3,6 @@
 var inArray = require("./array").inArray,
     window = require("../../core/dom_adapter").getWindow(),
     navigator = require("../../core/utils/navigator"),
-    document = window.document,
     devices = require("../devices"),
     styleUtils = require("./style");
 
@@ -34,7 +33,7 @@ var inputType = function(type) {
         return true;
     }
 
-    var input = document.createElement("input");
+    var input = window.document.createElement("input");
     try {
         input.setAttribute("type", type);
         input.value = "wrongValue";

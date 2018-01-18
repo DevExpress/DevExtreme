@@ -38,7 +38,6 @@ var MAP_CLASS = "dx-map",
 * @name dxmap
 * @publicName dxMap
 * @inherits Widget
-* @groupName Maps
 * @module ui/map
 * @export default
 */
@@ -399,8 +398,8 @@ var Map = Widget.inherit({
                     * @name dxMapOptions_focusStateEnabled
                     * @publicName focusStateEnabled
                     * @type boolean
-                    * @custom_default_for_desktop true
-                    * @extend_doc
+                    * @default true @for desktop
+                    * @inheritdoc
                     */
                     focusStateEnabled: true
                 }

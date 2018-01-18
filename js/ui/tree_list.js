@@ -4,7 +4,6 @@
 * @name dxTreeList
 * @publicName dxTreeList
 * @inherits GridBase
-* @groupName Data Management and Visualization
 * @module ui/tree_list
 * @export default
 */

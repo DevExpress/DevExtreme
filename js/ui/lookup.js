@@ -46,7 +46,6 @@ var POPUP_OPTION_MAP = {
 * @isEditor
 * @publicName dxLookup
 * @inherits dxDropDownList
-* @groupName Editors
 * @module ui/lookup
 * @export default
 */
@@ -79,7 +78,7 @@ var Lookup = DropDownList.inherit({
             * @name dxLookupOptions_pagingEnabled
             * @publicName pagingEnabled
             * @deprecated DataSourceOptions_paginate
-            * @extend_doc
+            * @inheritdoc
             */
             "pagingEnabled": { since: "15.1", message: "Use the 'dataSource.paginate' option instead" }
         });
@@ -400,7 +399,7 @@ var Lookup = DropDownList.inherit({
             * @publicName focusStateEnabled
             * @type boolean
             * @default false
-            * @extend_doc
+            * @inheritdoc
             */
             focusStateEnabled: false
 
@@ -431,109 +430,109 @@ var Lookup = DropDownList.inherit({
             * @name dxLookupOptions_fieldEditEnabled
             * @publicName fieldEditEnabled
             * @deprecated
-            * @extend_doc
+            * @inheritdoc
             */
 
             /**
             * @name dxLookupOptions_acceptCustomValue
             * @publicName acceptCustomValue
             * @hidden
-            * @extend_doc
+            * @inheritdoc
             */
             /**
             * @name dxLookupOptions_readOnly
             * @publicName readOnly
             * @hidden
-            * @extend_doc
+            * @inheritdoc
             */
             /**
             * @name dxLookupOptions_onFocusIn
             * @publicName onFocusIn
             * @hidden
             * @action
-            * @extend_doc
+            * @inheritdoc
             */
             /**
             * @name dxLookupOptions_onFocusOut
             * @publicName onFocusOut
             * @hidden
             * @action
-            * @extend_doc
+            * @inheritdoc
             */
             /**
             * @name dxLookupOptions_onKeyDown
             * @publicName onKeyDown
             * @hidden
             * @action
-            * @extend_doc
+            * @inheritdoc
             */
             /**
             * @name dxLookupOptions_onKeyPress
             * @publicName onKeyPress
             * @hidden
             * @action
-            * @extend_doc
+            * @inheritdoc
             */
             /**
             * @name dxLookupOptions_onKeyUp
             * @publicName onKeyUp
             * @hidden
             * @action
-            * @extend_doc
+            * @inheritdoc
             */
             /**
             * @name dxLookupOptions_onChange
             * @publicName onChange
             * @action
             * @hidden
-            * @extend_doc
+            * @inheritdoc
             */
             /**
             * @name dxLookupOptions_onInput
             * @publicName onInput
             * @hidden
             * @action
-            * @extend_doc
+            * @inheritdoc
             */
             /**
             * @name dxLookupOptions_onCut
             * @publicName onCut
             * @hidden
             * @action
-            * @extend_doc
+            * @inheritdoc
             */
             /**
             * @name dxLookupOptions_onCopy
             * @publicName onCopy
             * @hidden
             * @action
-            * @extend_doc
+            * @inheritdoc
             */
             /**
             * @name dxLookupOptions_onPaste
             * @publicName onPaste
             * @hidden
             * @action
-            * @extend_doc
+            * @inheritdoc
             */
             /**
             * @name dxLookupOptions_onEnterKey
             * @publicName onEnterKey
             * @hidden
             * @action
-            * @extend_doc
+            * @inheritdoc
             */
             /**
             * @name dxLookupOptions_maxlength
             * @publicName maxLength
             * @hidden
-            * @extend_doc
+            * @inheritdoc
             */
             /**
             * @name dxLookupOptions_spellcheck
             * @publicName spellcheck
             * @hidden
-            * @extend_doc
+            * @inheritdoc
             */
 
             /**
@@ -541,7 +540,7 @@ var Lookup = DropDownList.inherit({
             * @publicName applyValueMode
             * @type string
             * @hidden false
-            * @extend_doc
+            * @inheritdoc
             */
         });
     },
@@ -556,8 +555,8 @@ var Lookup = DropDownList.inherit({
                     /**
                     * @name dxLookupOptions_useNativeScrolling
                     * @publicName useNativeScrolling
-                    * @custom_default_for_desktop false
-                    * @custom_default_for_Mac true
+                    * @default false @for desktop
+                    * @default true @for Mac
                     */
                     useNativeScrolling: false
                 }
@@ -570,13 +569,13 @@ var Lookup = DropDownList.inherit({
                     /**
                     * @name dxLookupOptions_usePopover
                     * @publicName usePopover
-                    * @custom_default_for_desktop_and_iOS true
+                    * @default true @for desktop|iOS
                     */
                     usePopover: true,
                     /**
                     * @name dxLookupOptions_popupHeight
                     * @publicName popupHeight
-                    * @custom_default_for_desktop_and_iPad "auto"
+                    * @default 'auto' @for desktop|iPad
                     */
                     popupHeight: "auto"
                 }
@@ -612,7 +611,7 @@ var Lookup = DropDownList.inherit({
                     /**
                     * @name dxLookupOptions_fullScreen
                     * @publicName fullScreen
-                    * @custom_default_for_iPhone true
+                    * @default true @for iPhone
                     */
                     fullScreen: true
                 }
@@ -623,7 +622,7 @@ var Lookup = DropDownList.inherit({
                     /**
                     * @name dxLookupOptions_popupWidth
                     * @publicName popupWidth
-                    * @custom_default_for_iPad function() { return Math.min($(window).width(), $(window).height()) * 0.4; }
+                    * @default function() { return Math.min($(window).width(), $(window).height()) * 0.4; } @for iPad
                     */
                     popupWidth: function() { return Math.min($(window).width(), $(window).height()) * 0.4; },
 
@@ -642,8 +641,8 @@ var Lookup = DropDownList.inherit({
                     * @name dxLookupOptions_focusStateEnabled
                     * @publicName focusStateEnabled
                     * @type boolean
-                    * @custom_default_for_desktop true
-                    * @extend_doc
+                    * @default true @for desktop
+                    * @inheritdoc
                     */
                     focusStateEnabled: true
                 }

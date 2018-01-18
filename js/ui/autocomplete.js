@@ -16,7 +16,6 @@ var AUTOCOMPLETE_CLASS = "dx-autocomplete",
 * @isEditor
 * @publicName dxAutocomplete
 * @inherits dxDropDownList
-* @groupName Editors
 * @module ui/autocomplete
 * @export default
 */
@@ -65,7 +64,7 @@ var Autocomplete = DropDownList.inherit({
             * @name dxAutocompleteOptions_displayExpr
             * @publicName displayExpr
             * @deprecated DataExpressionMixinOptions_valueExpr
-            * @extend_doc
+            * @inheritdoc
             */
             "displayExpr": { since: "15.2", alias: "valueExpr" }
         });
@@ -112,35 +111,35 @@ var Autocomplete = DropDownList.inherit({
             * @name dxAutocompleteOptions_fieldEditEnabled
             * @publicName fieldEditEnabled
             * @hidden
-            * @extend_doc
+            * @inheritdoc
             */
 
             /**
             * @name dxAutocompleteOptions_acceptCustomValue
             * @publicName acceptCustomValue
             * @hidden
-            * @extend_doc
+            * @inheritdoc
             */
 
             /**
             * @name dxAutocompleteOptions_searchEnabled
             * @publicName searchEnabled
             * @hidden
-            * @extend_doc
+            * @inheritdoc
             */
 
             /**
             * @name dxAutocompleteOptions_showDataBeforeSearch
             * @publicName showDataBeforeSearch
             * @hidden
-            * @extend_doc
+            * @inheritdoc
             */
 
             /**
             * @name dxAutocompleteOptions_pagingEnabled
             * @publicName pagingEnabled
             * @hidden
-            * @extend_doc
+            * @inheritdoc
             */
         });
     },

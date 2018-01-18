@@ -21,7 +21,6 @@ var TABPANEL_CLASS = "dx-tabpanel",
 * @name dxTabPanel
 * @publicName dxTabPanel
 * @inherits dxMultiView
-* @groupName Navigation and Layouting
 * @module ui/tab_panel
 * @export default
 */
@@ -46,7 +45,7 @@ var TabPanel = MultiView.inherit({
              * @publicName hoverStateEnabled
              * @type boolean
              * @default true
-             * @extend_doc
+             * @inheritdoc
              */
             hoverStateEnabled: true,
 
@@ -111,6 +110,12 @@ var TabPanel = MultiView.inherit({
             onTitleRendered: null
 
             /**
+            * @name dxTabPanelItemTemplate
+            * @publicName dxTabPanelItemTemplate
+            * @inherits dxMultiViewItemTemplate
+            * @type object
+            */
+            /**
             * @name dxTabPanelItemTemplate_tabtemplate
             * @publicName tabTemplate
             * @type template|function
@@ -121,7 +126,7 @@ var TabPanel = MultiView.inherit({
             * @name dxTabPanelItemTemplate_visible
             * @publicName visible
             * @hidden
-            * @extend_doc
+            * @inheritdoc
             */
             /**
             * @name dxTabPanelItemTemplate_title
@@ -158,8 +163,8 @@ var TabPanel = MultiView.inherit({
                     * @name dxTabPanelOptions_focusStateEnabled
                     * @publicName focusStateEnabled
                     * @type boolean
-                    * @custom_default_for_desktop true
-                    * @extend_doc
+                    * @default true @for desktop
+                    * @inheritdoc
                     */
                     focusStateEnabled: true
                 }
@@ -173,8 +178,8 @@ var TabPanel = MultiView.inherit({
                     * @name dxTabPanelOptions_swipeEnabled
                     * @publicName swipeEnabled
                     * @type boolean
-                    * @custom_default_for_non-touch_devices false
-                    * @extend_doc
+                    * @default false @for non-touch_devices
+                    * @inheritdoc
                     */
                     swipeEnabled: false
                 }
@@ -186,8 +191,8 @@ var TabPanel = MultiView.inherit({
                     * @name dxTabPanelOptions_animationEnabled
                     * @publicName animationEnabled
                     * @type boolean
-                    * @custom_default_for_generic false
-                    * @extend_doc
+                    * @default false @for generic
+                    * @inheritdoc
                     */
                     animationEnabled: false
                 }

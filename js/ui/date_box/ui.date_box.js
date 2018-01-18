@@ -102,7 +102,7 @@ var DateBox = DropDownEditor.inherit({
             * @name dxDateBoxOptions_format
             * @publicName format
             * @deprecated dxDateBoxOptions_type
-            * @extend_doc
+            * @inheritdoc
             */
             "format": { since: "16.1", alias: "type" },
 
@@ -110,7 +110,7 @@ var DateBox = DropDownEditor.inherit({
             * @name dxDateBoxOptions_formatString
             * @publicName formatString
             * @deprecated dxDateBoxOptions_displayFormat
-            * @extend_doc
+            * @inheritdoc
             */
             "formatString": { since: "16.1", alias: "displayFormat" },
 
@@ -339,9 +339,9 @@ var DateBox = DropDownEditor.inherit({
                     /**
                     * @name dxDateBoxOptions_pickerType
                     * @publicName pickerType
-                    * @custom_default_for_android_below_version_4.4 "rollers"
-                    * @custom_default_for_desktop "rollers"
-                    * @custom_default_for_windows "rollers"
+                    * @default 'rollers' @for android_below_version_4.4
+                    * @default 'rollers' @for desktop
+                    * @default 'rollers' @for windows
                     */
                     pickerType: PICKER_TYPE.rollers
                 }
@@ -355,7 +355,7 @@ var DateBox = DropDownEditor.inherit({
                     /**
                     * @name dxDateBoxOptions_pickerType
                     * @publicName pickerType
-                    * @custom_default_for_generic_desktop "calendar"
+                    * @default 'calendar' @for generic_desktop
                     */
                     pickerType: PICKER_TYPE.calendar,
                     buttonsLocation: "bottom after"
@@ -373,7 +373,7 @@ var DateBox = DropDownEditor.inherit({
                     /**
                     * @name dxDateBoxOptions_pickerType
                     * @publicName pickerType
-                    * @custom_default_for_no-phone_windows "calendar"
+                    * @default 'calendar' @for no-phone_windows
                     */
                     pickerType: PICKER_TYPE.calendar
                 }

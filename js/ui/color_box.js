@@ -5,7 +5,6 @@
 * @isEditor
 * @publicName dxColorBox
 * @inherits dxDropDownEditor
-* @groupName Editors
 * @module ui/color_box
 * @export default
 */

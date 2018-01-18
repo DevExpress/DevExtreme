@@ -14,7 +14,6 @@ var NAVBAR_CLASS = "dx-navbar",
 * @name dxNavBar
 * @publicName dxNavBar
 * @inherits dxTabs
-* @groupName Navigation and Layouting
 * @module ui/nav_bar
 * @export default
 */
@@ -34,13 +33,13 @@ var NavBar = Tabs.inherit({
             * @name dxNavBarOptions_showNavButtons
             * @publicName showNavButtons
             * @hidden
-            * @extend_doc
+            * @inheritdoc
             */
 
             /**
             * @name dxNavBarOptions_scrollByContent
             * @publicName scrollByContent
-            * @extend_doc
+            * @inheritdoc
             */
         });
     },
@@ -66,7 +65,12 @@ var NavBar = Tabs.inherit({
         }
     }
 });
-
+/**
+* @name dxNavBarItemTemplate
+* @publicName dxNavBarItemTemplate
+* @inherits dxTabsItemTemplate
+* @type object
+*/
 /**
 * @name dxNavBarItemTemplate_badge
 * @publicName badge

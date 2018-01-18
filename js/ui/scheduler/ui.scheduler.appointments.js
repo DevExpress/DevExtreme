@@ -1,7 +1,7 @@
 "use strict";
 
 var $ = require("../../core/renderer"),
-    document = require("../../core/dom_adapter").getWindow().document,
+    window = require("../../core/dom_adapter").getWindow(),
     eventsEngine = require("../../events/core/events_engine"),
     dataUtils = require("../../core/element_data"),
     translator = require("../../animation/translator"),
@@ -155,6 +155,7 @@ var SchedulerAppointments = CollectionWidget.inherit({
             case "items":
                 this._cleanFocusState();
                 this._clearDropDownItems();
+                this._clearDropDownItemsElements();
 
                 this._repaintAppointments(args.value);
                 this._renderDropDownAppointments();
@@ -175,6 +176,12 @@ var SchedulerAppointments = CollectionWidget.inherit({
                 this.callBase(args);
                 break;
             case "allowDelete":
+                break;
+            case "focusStateEnabled":
+                this._clearDropDownItemsElements();
+                this._renderDropDownAppointments();
+
+                this.callBase(args);
                 break;
             default:
                 this.callBase(args);
@@ -256,7 +263,9 @@ var SchedulerAppointments = CollectionWidget.inherit({
 
     _clearDropDownItems: function() {
         this._virtualAppointments = {};
+    },
 
+    _clearDropDownItemsElements: function() {
         var $items = this._getDropDownAppointments();
         if(!$items.length) {
             return;
@@ -421,7 +430,7 @@ var SchedulerAppointments = CollectionWidget.inherit({
         }
 
         this._appointmentClickTimeout = setTimeout((function() {
-            if(!this._preventSingleAppointmentClick && document.body.contains($target[0])) {
+            if(!this._preventSingleAppointmentClick && window.document.body.contains($target[0])) {
                 this.notifyObserver("showAppointmentTooltip", { data: data, target: $target });
             }
 

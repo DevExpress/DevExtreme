@@ -4,7 +4,6 @@
 * @name dxscrollview
 * @publicName dxScrollView
 * @inherits dxScrollable
-* @groupName Helpers
 * @module ui/scroll_view
 * @export default
 */

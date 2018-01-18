@@ -1,7 +1,7 @@
 "use strict";
 
 var $ = require("../../core/renderer"),
-    document = require("../../core/dom_adapter").getWindow().document,
+    window = require("../../core/dom_adapter").getWindow(),
     eventsEngine = require("../../events/core/events_engine"),
     eventUtils = require("../../events/utils"),
     extend = require("../../core/utils/extend").extend,
@@ -45,7 +45,8 @@ function _getYCoord(canvas, pos, offset, width) {
 ScrollBar.prototype = {
 
     _addEvents: function() {
-        var that = this,
+        var document = window.document,
+            that = this,
             $scroll = $(that._scroll.element),
             startPosX = 0,
             startPosY = 0,

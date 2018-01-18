@@ -25,13 +25,18 @@ var SLIDEOUT_CLASS = "dx-slideout",
 * @name dxSlideout
 * @publicName dxSlideOut
 * @inherits CollectionWidget
-* @groupName Navigation and Layouting
 * @module ui/slide_out
 * @export default
 */
 var SlideOut = CollectionWidget.inherit({
 
     _getDefaultOptions: function() {
+        /**
+        * @name dxSlideOutItemTemplate
+        * @publicName dxSlideOutItemTemplate
+        * @inherits CollectionWidgetItemTemplate
+        * @type object
+        */
         /**
         * @name dxSlideOutItemTemplate_menutemplate
         * @publicName menuTemplate
@@ -148,42 +153,42 @@ var SlideOut = CollectionWidget.inherit({
             * @name dxSlideOutOptions_selectedItems
             * @publicName selectedItems
             * @hidden
-            * @extend_doc
+            * @inheritdoc
             */
 
             /**
             * @name dxSlideOutOptions_selectedItemKeys
             * @publicName selectedItemKeys
             * @hidden
-            * @extend_doc
+            * @inheritdoc
             */
 
             /**
             * @name dxSlideOutOptions_keyExpr
             * @publicName keyExpr
             * @hidden
-            * @extend_doc
+            * @inheritdoc
             */
 
             /**
             * @name dxSlideOutOptions_focusStateEnabled
             * @publicName focusStateEnabled
             * @hidden
-            * @extend_doc
+            * @inheritdoc
             */
 
             /**
             * @name dxSlideOutOptions_accessKey
             * @publicName accessKey
             * @hidden
-            * @extend_doc
+            * @inheritdoc
             */
 
             /**
             * @name dxSlideOutOptions_tabIndex
             * @publicName tabIndex
             * @hidden
-            * @extend_doc
+            * @inheritdoc
             */
         });
     },
@@ -452,14 +457,14 @@ var SlideOut = CollectionWidget.inherit({
     * @name dxslideoutmethods_registerKeyHandler
     * @publicName registerKeyHandler(key, handler)
     * @hidden
-    * @extend_doc
+    * @inheritdoc
     */
 
     /**
     * @name dxslideoutmethods_focus
     * @publicName focus()
     * @hidden
-    * @extend_doc
+    * @inheritdoc
     */
 });
 

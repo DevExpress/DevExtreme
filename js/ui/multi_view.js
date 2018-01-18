@@ -57,7 +57,6 @@ var animation = {
 * @name dxMultiView
 * @publicName dxMultiView
 * @inherits CollectionWidget
-* @groupName Navigation and Layouting
 * @module ui/multi_view
 * @export default
 */
@@ -118,21 +117,21 @@ var MultiView = CollectionWidget.inherit({
             * @name dxMultiViewOptions_selectedItems
             * @publicName selectedItems
             * @hidden
-            * @extend_doc
+            * @inheritdoc
             */
 
             /**
             * @name dxMultiViewOptions_selectedItemKeys
             * @publicName selectedItemKeys
             * @hidden
-            * @extend_doc
+            * @inheritdoc
             */
 
             /**
             * @name dxMultiViewOptions_keyExpr
             * @publicName keyExpr
             * @hidden
-            * @extend_doc
+            * @inheritdoc
             */
 
             _itemAttributes: { role: "tabpanel" },
@@ -155,8 +154,8 @@ var MultiView = CollectionWidget.inherit({
                     * @name dxMultiViewOptions_focusStateEnabled
                     * @publicName focusStateEnabled
                     * @type boolean
-                    * @custom_default_for_desktop true
-                    * @extend_doc
+                    * @default true @for desktop
+                    * @inheritdoc
                     */
                     focusStateEnabled: true
                 }
@@ -450,12 +449,17 @@ var MultiView = CollectionWidget.inherit({
     }
 
 });
-
+/**
+* @name dxMultiViewItemTemplate
+* @publicName dxMultiViewItemTemplate
+* @inherits CollectionWidgetItemTemplate
+* @type object
+*/
 /**
 * @name dxMultiViewItemTemplate_visible
 * @publicName visible
 * @hidden
-* @extend_doc
+* @inheritdoc
 */
 
 registerComponent("dxMultiView", MultiView);

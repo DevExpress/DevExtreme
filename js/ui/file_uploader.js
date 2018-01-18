@@ -60,7 +60,6 @@ var isFormDataSupported = function() {
 * @name dxFileUploader
 * @publicName dxFileUploader
 * @inherits Editor
-* @groupName Editors
 * @module ui/file_uploader
 * @export default
 */
@@ -95,14 +94,14 @@ var FileUploader = Editor.inherit({
             * @name dxFileUploaderOptions_buttonText
             * @publicName buttonText
             * @deprecated dxFileUploaderOptions_selectButtonText
-            * @extend_doc
+            * @inheritdoc
             */
             "buttonText": { since: "15.1", alias: "selectButtonText" },
             /**
             * @name dxFileUploaderOptions_values
             * @publicName values
             * @deprecated dxFileUploaderOptions_value
-            * @extend_doc
+            * @inheritdoc
             */
             "values": { since: "16.1", alias: "value" }
         });
@@ -227,7 +226,7 @@ var FileUploader = Editor.inherit({
             * @publicName uploadMode
             * @type string
             * @default "instantly"
-            * @custom_default_for_Internet_Explorer_9_and_10 "useForm"
+            * @default 'useForm' @for Internet_Explorer_9|Internet_Explorer_10
             * @acceptValues "instantly"|"useButtons"|"useForm"
             */
             uploadMode: "instantly",
@@ -335,7 +334,7 @@ var FileUploader = Editor.inherit({
             * @name dxFileUploaderOptions_validationMessageMode
             * @publicName validationMessageMode
             * @hidden
-            * @extend_doc
+            * @inheritdoc
             */
             validationMessageMode: "always",
 
@@ -371,8 +370,8 @@ var FileUploader = Editor.inherit({
                     * @name dxFileUploaderOptions_focusStateEnabled
                     * @publicName focusStateEnabled
                     * @type boolean
-                    * @custom_default_for_desktop true
-                    * @extend_doc
+                    * @default true @for desktop
+                    * @inheritdoc
                     */
                     focusStateEnabled: true
                 }

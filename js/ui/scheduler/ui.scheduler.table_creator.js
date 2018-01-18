@@ -1,7 +1,7 @@
 "use strict";
 
 var $ = require("../../core/renderer"),
-    document = require("../../core/dom_adapter").getWindow().document,
+    window = require("../../core/dom_adapter").getWindow(),
     dataUtils = require("../../core/element_data"),
     typeUtils = require("../../core/utils/type"),
     getPublicElement = require("../../core/utils/dom").getPublicElement;
@@ -12,7 +12,8 @@ var SchedulerTableCreator = {
     HORIZONTAL: "horizontal",
 
     makeTable: function(options) {
-        var tableBody = document.createElement("tbody"),
+        var document = window.document,
+            tableBody = document.createElement("tbody"),
             templateCallbacks = [];
 
         $(options.container).append(tableBody);
@@ -103,7 +104,8 @@ var SchedulerTableCreator = {
     },
 
     makeGroupedTableFromJSON: function(type, data, config) {
-        var table,
+        var document = window.document,
+            table,
             cellStorage = [],
             rowIndex = 0;
 
@@ -172,7 +174,7 @@ var SchedulerTableCreator = {
 
         function putCellsToRows() {
             cellStorage.forEach(function(cells) {
-                var row = document.createElement("tr");
+                var row = window.document.createElement("tr");
                 if(groupRowClass) {
                     row.className = groupRowClass;
                 }

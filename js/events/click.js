@@ -1,7 +1,7 @@
 "use strict";
 
 var $ = require("../core/renderer"),
-    document = require("../core/dom_adapter").getWindow().document,
+    window = require("../core/dom_adapter").getWindow(),
     eventsEngine = require("../events/core/events_engine"),
     devices = require("../core/devices"),
     domUtils = require("../core/utils/dom"),
@@ -183,8 +183,8 @@ var ClickEmitter = Emitter.inherit({
         };
 
         var NATIVE_CLICK_FIXER_NAMESPACE = "NATIVE_CLICK_FIXER";
-        eventsEngine.subscribeGlobal(document, eventUtils.addNamespace(pointerEvents.down, NATIVE_CLICK_FIXER_NAMESPACE), pointerDownHandler);
-        eventsEngine.subscribeGlobal(document, eventUtils.addNamespace("click", NATIVE_CLICK_FIXER_NAMESPACE), clickHandler);
+        eventsEngine.subscribeGlobal(window.document, eventUtils.addNamespace(pointerEvents.down, NATIVE_CLICK_FIXER_NAMESPACE), pointerDownHandler);
+        eventsEngine.subscribeGlobal(window.document, eventUtils.addNamespace("click", NATIVE_CLICK_FIXER_NAMESPACE), clickHandler);
     }
 })();
 

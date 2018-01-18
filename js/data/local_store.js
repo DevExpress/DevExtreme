@@ -2,8 +2,6 @@
 
 var eventsEngine = require("../events/core/events_engine"),
     window = require("../core/dom_adapter").getWindow(),
-    document = window.document,
-    localStorage = window.localStorage,
     Class = require("../core/class"),
     abstract = Class.abstract,
     errors = require("./errors").errors,
@@ -24,7 +22,7 @@ var LocalStoreBackend = Class.inherit({
             setInterval(saveProxy, flushInterval);
             eventsEngine.on(window, "beforeunload", saveProxy);
             if(window.cordova) {
-                document.addEventListener("pause", saveProxy, false);
+                window.document.addEventListener("pause", saveProxy, false);
             }
         }
     },
@@ -67,7 +65,7 @@ var DomLocalStoreBackend = LocalStoreBackend.inherit({
     },
 
     _loadImpl: function() {
-        var raw = localStorage.getItem(this._key);
+        var raw = window.localStorage.getItem(this._key);
         if(raw) {
             return JSON.parse(raw);
         }
@@ -76,9 +74,9 @@ var DomLocalStoreBackend = LocalStoreBackend.inherit({
 
     _saveImpl: function(array) {
         if(!array.length) {
-            localStorage.removeItem(this._key);
+            window.localStorage.removeItem(this._key);
         } else {
-            localStorage.setItem(this._key, JSON.stringify(array));
+            window.localStorage.setItem(this._key, JSON.stringify(array));
         }
     }
 

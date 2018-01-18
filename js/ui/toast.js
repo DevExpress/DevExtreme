@@ -5,7 +5,6 @@
 
 var $ = require("../core/renderer"),
     window = require("../core/dom_adapter").getWindow(),
-    document = window.document,
     eventsEngine = require("../events/core/events_engine"),
     commonUtils = require("../core/utils/common"),
     typeUtils = require("../core/utils/type"),
@@ -38,7 +37,7 @@ var TOAST_CLASS = "dx-toast",
         "left": { my: "center left", at: "center left", of: null, offset: "0 0" }
     };
 
-eventsEngine.subscribeGlobal(document, pointerEvents.down, function(e) {
+eventsEngine.subscribeGlobal(window.document, pointerEvents.down, function(e) {
     for(var i = TOAST_STACK.length - 1; i >= 0; i--) {
         if(!TOAST_STACK[i]._proxiedDocumentDownHandler(e)) {
             return;
@@ -50,7 +49,6 @@ eventsEngine.subscribeGlobal(document, pointerEvents.down, function(e) {
 * @name dxToast
 * @publicName dxToast
 * @inherits dxOverlay
-* @groupName Overlays
 * @module ui/toast
 * @export default
 */
@@ -88,7 +86,7 @@ var Toast = Overlay.inherit({
             * @publicName position
             * @type positionConfig|string
             * @default: "bottom center"
-            * @extend_doc
+            * @inheritdoc
             */
             position: "bottom center",
 
@@ -97,7 +95,7 @@ var Toast = Overlay.inherit({
             * @publicName animation
             * @type object
             * @default { show: { type: "fade", duration: 400, from: 0, to: 1 }, hide: { type: "fade", duration: 400, to: 0 } }
-            * @extend_doc
+            * @inheritdoc
             */
             animation: {
                 /**
@@ -130,7 +128,7 @@ var Toast = Overlay.inherit({
             * @publicName shading
             * @type boolean
             * @default false
-            * @extend_doc
+            * @inheritdoc
             */
             shading: false,
 
@@ -138,21 +136,21 @@ var Toast = Overlay.inherit({
             * @name dxToastOptions_disabled
             * @publicName disabled
             * @hidden
-            * @extend_doc
+            * @inheritdoc
             */
 
             /**
             * @name dxToastOptions_width
             * @publicName width
             * @default function() {return $(window).width() * 0.8 }
-            * @extend_doc
+            * @inheritdoc
             */
 
             /**
             * @name dxToastOptions_height
             * @publicName height
             * @default 'auto'
-            * @extend_doc
+            * @inheritdoc
             */
             height: "auto",
 
@@ -161,7 +159,7 @@ var Toast = Overlay.inherit({
             * @publicName closeOnBackButton
             * @type boolean
             * @default false
-            * @extend_doc
+            * @inheritdoc
             */
             closeOnBackButton: false,
 
@@ -185,7 +183,7 @@ var Toast = Overlay.inherit({
             * @name dxToastOptions_resizeEnabled
             * @publicName resizeEnabled
             * @hidden
-            * @extend_doc
+            * @inheritdoc
             */
             resizeEnabled: false
 
@@ -193,7 +191,7 @@ var Toast = Overlay.inherit({
             * @name dxToastOptions_dragEnabled
             * @publicName dragEnabled
             * @hidden
-            * @extend_doc
+            * @inheritdoc
             */
         });
     },
@@ -208,14 +206,14 @@ var Toast = Overlay.inherit({
                     /**
                     * @name dxToastOptions_position
                     * @publicName position
-                    * @extend_doc
+                    * @inheritdoc
                     */
                     position: "top center",
 
                     /**
                     * @name dxToastOptions_width
                     * @publicName width
-                    * @extend_doc
+                    * @inheritdoc
                     */
                     width: function() { return $(window).width(); }
                 }
@@ -228,16 +226,16 @@ var Toast = Overlay.inherit({
                    /**
                    * @name dxToastOptions_position
                    * @publicName position
-                   * @custom_default_for_Windows_10_Mobile "bottom right"
-                   * @extend_doc
+                   * @default 'bottom right' @for Windows_10_Mobile
+                   * @inheritdoc
                    */
                     position: "bottom right",
 
                     /**
                     * @name dxToastOptions_width
                     * @publicName width
-                    * @custom_default_for_Android_and_Windows_10_Mobile "auto"
-                    * @extend_doc
+                    * @default 'auto' @for Android_and_Windows_10_Mobile
+                    * @inheritdoc
                     */
                     width: "auto"
                 }
@@ -248,8 +246,8 @@ var Toast = Overlay.inherit({
                     /**
                     * @name dxToastOptions_closeOnOutsideClick
                     * @publicName closeOnOutsideClick
-                    * @custom_default_for_Android true
-                    * @extend_doc
+                    * @default true @for Android
+                    * @inheritdoc
                     */
                     closeOnOutsideClick: true,
 
@@ -258,8 +256,8 @@ var Toast = Overlay.inherit({
                     /**
                     * @name dxToastOptions_position
                     * @publicName position
-                    * @custom_default_for_Android { at: "bottom left", my: "bottom left", offset: "20 -20" }
-                    * @extend_doc
+                    * @default { at: 'bottom left', my: 'bottom left', offset: '20 -20'} @for Android
+                    * @inheritdoc
                     */
                     position: {
                         at: "bottom left",
@@ -270,8 +268,8 @@ var Toast = Overlay.inherit({
                     /**
                     * @name dxToastOptions_animation
                     * @publicName animation
-                    * @custom_default_for_Android {show: {type: "slide", duration: 200, from: { top: $(window).height() }}, hide: { type: "slide", duration: 200, to: { top: $(window).height() }}}
-                    * @extend_doc
+                    * @default {show: {type: 'slide', duration: 200, from: { top: $(window).height() }}, hide: { type: 'slide', duration: 200, to: { top: $(window).height()}}} @for Android
+                    * @inheritdoc
                     */
                     animation: {
                         show: {
@@ -299,16 +297,16 @@ var Toast = Overlay.inherit({
                     /**
                     * @name dxToastOptions_width
                     * @publicName width
-                    * @custom_default_for_phones_on_Android_and_Windows_10_Mobile function() { return $(window).width(); }
-                    * @extend_doc
+                    * @default function() { return $(window).width(); } @for Android_Phone|Windows_10_Mobile
+                    * @inheritdoc
                     */
                     width: function() { return $(window).width(); },
 
                     /**
                     * @name dxToastOptions_position
                     * @publicName position
-                    * @custom_default_for_phones_on_Android_and_Windows_10_Mobile { at: "bottom center", my: "bottom center", offset: "0 0" }
-                    * @extend_doc
+                    * @default { at: 'bottom center', my: 'bottom center', offset: '0 0' } @for Android_Phone|Windows_10_Mobile
+                    * @inheritdoc
                     */
                     position: {
                         at: "bottom center",

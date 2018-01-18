@@ -56,7 +56,7 @@ var Calendar = Editor.inherit({
             * @publicName hoverStateEnabled
             * @type boolean
             * @default true
-            * @extend_doc
+            * @inheritdoc
             */
             hoverStateEnabled: true,
 
@@ -65,7 +65,7 @@ var Calendar = Editor.inherit({
             * @publicName activeStateEnabled
             * @type boolean
             * @default true
-            * @extend_doc
+            * @inheritdoc
             */
             activeStateEnabled: true,
 
@@ -190,7 +190,7 @@ var Calendar = Editor.inherit({
             * @publicName name
             * @type string
             * @hidden false
-            * @extend_doc
+            * @inheritdoc
             */
 
             /**
@@ -200,6 +200,11 @@ var Calendar = Editor.inherit({
             * @action
             */
 
+            /**
+            * @name dxCalendarCellTemplate
+            * @publicName dxCalendarCellTemplate
+            * @type object
+            */
             /**
             * @name dxCalendarCellTemplate_text
             * @publicName text
@@ -230,8 +235,8 @@ var Calendar = Editor.inherit({
                     * @name dxCalendarOptions_focusStateEnabled
                     * @publicName focusStateEnabled
                     * @type boolean
-                    * @custom_default_for_desktop true
-                    * @extend_doc
+                    * @default true @for desktop
+                    * @inheritdoc
                     */
                     focusStateEnabled: true
                 }

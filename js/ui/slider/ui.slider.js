@@ -127,7 +127,7 @@ var Slider = TrackBar.inherit({
              * @publicName hoverStateEnabled
              * @type boolean
              * @default true
-             * @extend_doc
+             * @inheritdoc
              */
             hoverStateEnabled: true,
 
@@ -136,7 +136,7 @@ var Slider = TrackBar.inherit({
             * @publicName activeStateEnabled
             * @type boolean
             * @default true
-            * @extend_doc
+            * @inheritdoc
             */
 
             activeStateEnabled: true,
@@ -249,7 +249,7 @@ var Slider = TrackBar.inherit({
             * @publicName name
             * @type string
             * @hidden false
-            * @extend_doc
+            * @inheritdoc
             */
         });
     },
@@ -264,8 +264,8 @@ var Slider = TrackBar.inherit({
                     /**
                     * @name dxSliderBaseOptions_focusStateEnabled
                     * @publicName focusStateEnabled
-                    * @custom_default_for_desktop true
-                    * @extend_doc
+                    * @default true @for desktop
+                    * @inheritdoc
                     */
                     focusStateEnabled: true
                 }

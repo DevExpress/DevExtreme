@@ -3,7 +3,6 @@
 var $ = require("../../core/renderer"),
     window = require("../../core/dom_adapter").getWindow(),
     navigator = require("../../core/utils/navigator"),
-    document = window.document,
     eventsEngine = require("../../events/core/events_engine"),
     support = require("../../core/utils/support"),
     browser = require("../../core/utils/browser"),
@@ -32,7 +31,7 @@ var SCROLLABLE = "dxScrollable",
     HORIZONTAL = "horizontal",
     BOTH = "both";
 
-var beforeActivateExists = document["onbeforeactivate"] !== undefined;
+var beforeActivateExists = window.document["onbeforeactivate"] !== undefined;
 
 var deviceDependentOptions = function() {
     return [{
@@ -43,8 +42,8 @@ var deviceDependentOptions = function() {
             /**
             * @name dxScrollableOptions_useNative
             * @publicName useNative
-            * @custom_default_for_desktop false
-            * @custom_default_for_Mac true
+            * @default false @for desktop
+            * @default true @for Mac
             */
             useNative: false
         }
@@ -56,28 +55,28 @@ var deviceDependentOptions = function() {
             /**
             * @name dxScrollableOptions_bounceEnabled
             * @publicName bounceEnabled
-            * @custom_default_for_desktop false
+            * @default false @for desktop
             */
             bounceEnabled: false,
 
             /**
             * @name dxScrollableOptions_scrollByThumb
             * @publicName scrollByThumb
-            * @custom_default_for_desktop true
+            * @default true @for desktop
             */
             scrollByThumb: true,
 
             /**
             * @name dxScrollableOptions_scrollByContent
             * @publicName scrollByContent
-            * @custom_default_for_non-touch_devices false
+            * @default false @for non-touch_devices
             */
             scrollByContent: support.touch,
 
             /**
             * @name dxScrollableOptions_showScrollbar
             * @publicName showScrollbar
-            * @custom_default_for_desktop "onHover"
+            * @default 'onHover' @for desktop
             */
             showScrollbar: "onHover"
         }

@@ -1,4 +1,10 @@
 /**
+* @name dxChartSeriesTypes
+* @publicName dxChartSeriesTypes
+* @type object
+* @hidden
+*/
+/**
 * @name dxChartSeriesTypes_CommonSeries
 * @publicName CommonSeries
 * @type object
@@ -1082,7 +1088,7 @@ var areaSeries = {
 	* @name dxChartSeriesTypes_areaseries_label
 	* @publicName label
 	* @type object
-	* @extend_doc
+	* @inheritdoc
 	*/
     label: {
         /**
@@ -1099,7 +1105,7 @@ var areaSeries = {
 	* @name dxChartSeriesTypes_areaseries_point
 	* @publicName point
 	* @type object
-    * @extend_doc
+    * @inheritdoc
     **/
     point: {
         /**
@@ -1107,7 +1113,7 @@ var areaSeries = {
 		* @publicName visible
 		* @type boolean
 		* @default false
-		* @extend_doc
+		* @inheritdoc
 		*/
         visible: false
     },
@@ -1141,7 +1147,7 @@ var barSeries = {
 	* @name dxChartSeriesTypes_barseries_label
 	* @publicName label
 	* @type object
-	* @extend_doc
+	* @inheritdoc
 	*/
     label: {
         /**
@@ -1191,7 +1197,7 @@ var candlestickSeries = {
 	* @name dxChartSeriesTypes_candlestickseries_label
 	* @publicName label
 	* @type object
-	* @extend_doc
+	* @inheritdoc
 	*/
     label: {
         /**
@@ -1224,14 +1230,14 @@ var candlestickSeries = {
     * @name dxChartSeriesTypes_candlestickseries_hoverstyle
     * @publicName hoverStyle
     * @type object
-    * @extend_doc
+    * @inheritdoc
     */
     hoverStyle: {
         /**
         * @name dxChartSeriesTypes_candlestickseries_hoverstyle_hatching
         * @publicName hatching
         * @type object
-        * @extend_doc
+        * @inheritdoc
         */
         hatching: {
             /**
@@ -1239,7 +1245,7 @@ var candlestickSeries = {
             * @publicName direction
             * @default 'none'
             * @type string
-            * @extend_doc
+            * @inheritdoc
             */
             direction: 'none'
         }
@@ -1248,14 +1254,14 @@ var candlestickSeries = {
     * @name dxChartSeriesTypes_candlestickseries_selectionstyle
     * @publicName selectionStyle
     * @type object
-    * @extend_doc
+    * @inheritdoc
     */
     selectionStyle: {
         /**
         * @name dxChartSeriesTypes_candlestickseries_selectionstyle_hatching
         * @publicName hatching
         * @type object
-        * @extend_doc
+        * @inheritdoc
         */
         hatching: {
             /**
@@ -1263,7 +1269,7 @@ var candlestickSeries = {
             * @publicName direction
             * @default 'none'
             * @type string
-            * @extend_doc
+            * @inheritdoc
             */
             direction: 'none'
         }
@@ -1282,7 +1288,7 @@ var fullstackedareaSeries = {
 	* @name dxChartSeriesTypes_fullstackedareaseries_point
 	* @publicName point
 	* @type object
-    * @extend_doc
+    * @inheritdoc
     **/
     point: {
         /**
@@ -1290,7 +1296,7 @@ var fullstackedareaSeries = {
         * @publicName visible
         * @type boolean
         * @default false
-        * @extend_doc
+        * @inheritdoc
         */
         visible: false
     },
@@ -1340,7 +1346,7 @@ var fullstackedsplineareaSeries = {
 	* @name dxChartSeriesTypes_fullstackedsplineareaseries_point
 	* @publicName point
 	* @type object
-    * @extend_doc
+    * @inheritdoc
     **/
     point: {
         /**
@@ -1348,7 +1354,7 @@ var fullstackedsplineareaSeries = {
         * @publicName visible
         * @type boolean
         * @default false
-        * @extend_doc
+        * @inheritdoc
         */
         visible: false
     },
@@ -1356,7 +1362,7 @@ var fullstackedsplineareaSeries = {
 	* @name dxChartSeriesTypes_fullstackedsplineareaseries_label
 	* @publicName label
 	* @type object
-	* @extend_doc
+	* @inheritdoc
 	*/
     label: {
         /**
@@ -1399,7 +1405,7 @@ var fullstackedbarSeries = {
 	* @name dxChartSeriesTypes_fullstackedbarseries_label
 	* @publicName label
 	* @type object
-	* @extend_doc
+	* @inheritdoc
 	*/
     label: {
         /**
@@ -1416,7 +1422,7 @@ var fullstackedbarSeries = {
         * @publicName position
         * @type string
         * @default 'inside'
-        * @extend_doc
+        * @inheritdoc
         */
         position: 'inside'
     },
@@ -1450,7 +1456,7 @@ var fullstackedlineSeries = {
 	* @name dxChartSeriesTypes_fullstackedlineseries_label
 	* @publicName label
 	* @type object
-	* @extend_doc
+	* @inheritdoc
 	*/
     label: {
         /**
@@ -1493,7 +1499,7 @@ var fullstackedsplineSeries = {
 	* @name dxChartSeriesTypes_fullstackedsplineseries_label
 	* @publicName label
 	* @type object
-	* @extend_doc
+	* @inheritdoc
 	*/
     label: {
         /**
@@ -1537,7 +1543,7 @@ var lineSeries = {
 	* @name dxChartSeriesTypes_lineseries_label
 	* @publicName label
 	* @type object
-	* @extend_doc
+	* @inheritdoc
 	*/
     label: {
         /**
@@ -1580,7 +1586,7 @@ var rangeareaSeries = {
 	* @name dxChartSeriesTypes_rangeareaseries_label
 	* @publicName label
 	* @type object
-	* @extend_doc
+	* @inheritdoc
 	*/
     label: {
         /**
@@ -1597,7 +1603,7 @@ var rangeareaSeries = {
 	* @name dxChartSeriesTypes_rangeareaseries_point
 	* @publicName point
 	* @type object
-    * @extend_doc
+    * @inheritdoc
     **/
     point: {
         /**
@@ -1605,7 +1611,7 @@ var rangeareaSeries = {
         * @publicName visible
         * @type boolean
         * @default false
-        * @extend_doc
+        * @inheritdoc
         */
         visible: false
     },
@@ -1639,7 +1645,7 @@ var rangebarSeries = {
 	* @name dxChartSeriesTypes_rangebarseries_label
 	* @publicName label
 	* @type object
-	* @extend_doc
+	* @inheritdoc
 	*/
     label: {
         /**
@@ -1682,7 +1688,7 @@ var scatterSeries = {
 	* @name dxChartSeriesTypes_scatterseries_label
 	* @publicName label
 	* @type object
-	* @extend_doc
+	* @inheritdoc
 	*/
     label: {
         /**
@@ -1709,7 +1715,7 @@ var splineareaSeries = {
 	* @name dxChartSeriesTypes_splineareaseries_label
 	* @publicName label
 	* @type object
-	* @extend_doc
+	* @inheritdoc
 	*/
     label: {
         /**
@@ -1726,7 +1732,7 @@ var splineareaSeries = {
 	* @name dxChartSeriesTypes_splineareaseries_point
 	* @publicName point
 	* @type object
-    * @extend_doc
+    * @inheritdoc
     **/
     point: {
         /**
@@ -1734,7 +1740,7 @@ var splineareaSeries = {
         * @publicName visible
         * @type boolean
         * @default false
-        * @extend_doc
+        * @inheritdoc
         */
         visible: false
     },
@@ -1768,7 +1774,7 @@ var splineSeries = {
 	* @name dxChartSeriesTypes_splineseries_label
 	* @publicName label
 	* @type object
-	* @extend_doc
+	* @inheritdoc
 	*/
     label: {
         /**
@@ -1811,7 +1817,7 @@ var stackedareaSeries = {
 	* @name dxChartSeriesTypes_stackedareaseries_label
 	* @publicName label
 	* @type object
-	* @extend_doc
+	* @inheritdoc
 	*/
     label: {
         /**
@@ -1828,7 +1834,7 @@ var stackedareaSeries = {
 	* @name dxChartSeriesTypes_stackedareaseries_point
 	* @publicName point
 	* @type object
-    * @extend_doc
+    * @inheritdoc
     **/
     point: {
         /**
@@ -1836,7 +1842,7 @@ var stackedareaSeries = {
         * @publicName visible
         * @type boolean
         * @default false
-        * @extend_doc
+        * @inheritdoc
         */
         visible: false
     },
@@ -1870,7 +1876,7 @@ var stackedsplineareaSeries = {
     * @name dxChartSeriesTypes_stackedsplineareaseries_label
     * @publicName label
     * @type object
-    * @extend_doc
+    * @inheritdoc
     */
     label: {
         /**
@@ -1887,7 +1893,7 @@ var stackedsplineareaSeries = {
 	* @name dxChartSeriesTypes_stackedsplineareaseries_point
 	* @publicName point
 	* @type object
-    * @extend_doc
+    * @inheritdoc
     **/
     point: {
         /**
@@ -1895,7 +1901,7 @@ var stackedsplineareaSeries = {
         * @publicName visible
         * @type boolean
         * @default false
-        * @extend_doc
+        * @inheritdoc
         */
         visible: false
     },
@@ -1929,7 +1935,7 @@ var stackedbarSeries = {
     * @name dxChartSeriesTypes_stackedbarseries_label
     * @publicName label
     * @type object
-    * @extend_doc
+    * @inheritdoc
     */
     label: {
         /**
@@ -1946,7 +1952,7 @@ var stackedbarSeries = {
         * @publicName position
         * @type string
         * @default 'inside'
-        * @extend_doc
+        * @inheritdoc
         */
         position: 'inside'
     },
@@ -1980,7 +1986,7 @@ var stackedlineSeries = {
     * @name dxChartSeriesTypes_stackedlineseries_label
     * @publicName label
     * @type object
-    * @extend_doc
+    * @inheritdoc
     */
     label: {
         /**
@@ -2023,7 +2029,7 @@ var stackedsplineSeries = {
     * @name dxChartSeriesTypes_stackedsplineseries_label
     * @publicName label
     * @type object
-    * @extend_doc
+    * @inheritdoc
     */
     label: {
         /**
@@ -2066,7 +2072,7 @@ var stepareaSeries = {
     * @name dxChartSeriesTypes_stepareaseries_border
     * @publicName border
     * @type object
-    * @extend_doc
+    * @inheritdoc
     */
     border: {
         /**
@@ -2074,7 +2080,7 @@ var stepareaSeries = {
         * @publicName visible
         * @type boolean
         * @default true
-        * @extend_doc
+        * @inheritdoc
         */
         visible: true
     },
@@ -2082,7 +2088,7 @@ var stepareaSeries = {
 	* @name dxChartSeriesTypes_stepareaseries_point
 	* @publicName point
 	* @type object
-    * @extend_doc
+    * @inheritdoc
     **/
     point: {
         /**
@@ -2090,7 +2096,7 @@ var stepareaSeries = {
 		* @publicName visible
 		* @type boolean
 		* @default false
-		* @extend_doc
+		* @inheritdoc
 		*/
         visible: false
     },
@@ -2098,14 +2104,14 @@ var stepareaSeries = {
 	* @name dxChartSeriesTypes_stepareaseries_hoverstyle
 	* @publicName hoverStyle
 	* @type object
-	* @extend_doc
+	* @inheritdoc
 	*/
     hoverStyle: {
         /**
         * @name dxChartSeriesTypes_stepareaseries_hoverstyle_border
         * @publicName border
 	    * @type object
-        * @extend_doc
+        * @inheritdoc
         */
         border: {
             /**
@@ -2113,7 +2119,7 @@ var stepareaSeries = {
             * @publicName visible
             * @type boolean
             * @default true
-            * @extend_doc
+            * @inheritdoc
             */
             visible: true
         }
@@ -2122,7 +2128,7 @@ var stepareaSeries = {
     * @name dxChartSeriesTypes_stepareaseries_label
     * @publicName label
     * @type object
-    * @extend_doc
+    * @inheritdoc
     */
     label: {
         /**
@@ -2139,14 +2145,14 @@ var stepareaSeries = {
 	* @name dxChartSeriesTypes_stepareaseries_selectionStyle
 	* @publicName selectionStyle
 	* @type object
-	* @extend_doc
+	* @inheritdoc
 	*/
     selectionStyle: {
         /**
         * @name dxChartSeriesTypes_stepareaseries_selectionStyle_border
         * @publicName border
 	    * @type object
-        * @extend_doc
+        * @inheritdoc
         */
         border: {
             /**
@@ -2154,7 +2160,7 @@ var stepareaSeries = {
             * @publicName visible
             * @type boolean
             * @default false
-            * @extend_doc
+            * @inheritdoc
             */
             visible: true
         }
@@ -2189,7 +2195,7 @@ var steplineSeries = {
     * @name dxChartSeriesTypes_steplineseries_label
     * @publicName label
     * @type object
-    * @extend_doc
+    * @inheritdoc
     */
     label: {
         /**
@@ -2239,7 +2245,7 @@ var stockSeries = {
 	* @name dxChartSeriesTypes_stockseries_label
 	* @publicName label
 	* @type object
-	* @extend_doc
+	* @inheritdoc
 	*/
     label: {
         /**
@@ -2281,7 +2287,7 @@ var bubbleSeries = {
 	* @name dxChartSeriesTypes_bubbleseries_label
 	* @publicName label
 	* @type object
-	* @extend_doc
+	* @inheritdoc
 	*/
     label: {
         /**

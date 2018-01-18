@@ -5,7 +5,6 @@ require("../../integration/jquery");
 var $ = require("jquery"),
     version = require("../../core/version"),
     window = require("../../core/dom_adapter").getWindow(),
-    location = window.location,
     Class = require("../../core/class"),
     Callbacks = require("../../core/utils/callbacks"),
     commonUtils = require("../../core/utils/common"),
@@ -42,7 +41,7 @@ var ViewEngine = Class.inherit({
     },
 
     _isReleaseVersion: function() {
-        return !/http:\/\/localhost/.test(location.href);
+        return !/http:\/\/localhost/.test(window.location.href);
     },
 
     _enumerateTemplates: function(processFn) {
@@ -173,8 +172,8 @@ var ViewEngine = Class.inherit({
     },
 
     _getWinPhonePrefix: function() {
-        if(location.protocol.indexOf("wmapp") >= 0) {
-            return location.protocol + "www/";
+        if(window.location.protocol.indexOf("wmapp") >= 0) {
+            return window.location.protocol + "www/";
         }
 
         return "";

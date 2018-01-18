@@ -33,7 +33,6 @@ var SWITCH_CLASS = "dx-switch",
 * @isEditor
 * @publicName dxSwitch
 * @inherits Editor
-* @groupName Editors
 * @module ui/switch
 * @export default
 */
@@ -65,7 +64,7 @@ var Switch = Editor.inherit({
             * @publicName hoverStateEnabled
             * @type boolean
             * @default true
-            * @extend_doc
+            * @inheritdoc
             */
             hoverStateEnabled: true,
 
@@ -74,7 +73,7 @@ var Switch = Editor.inherit({
             * @publicName activeStateEnabled
             * @type boolean
             * @default true
-            * @extend_doc
+            * @inheritdoc
             */
             activeStateEnabled: true,
 
@@ -111,7 +110,7 @@ var Switch = Editor.inherit({
                 * @publicName name
                 * @type string
                 * @hidden false
-                * @extend_doc
+                * @inheritdoc
                 */
         });
     },
@@ -127,8 +126,8 @@ var Switch = Editor.inherit({
                     * @name dxSwitchOptions_focusStateEnabled
                     * @publicName focusStateEnabled
                     * @type boolean
-                    * @custom_default_for_desktop true
-                    * @extend_doc
+                    * @default true @for desktop
+                    * @inheritdoc
                     */
                     focusStateEnabled: true
                 }

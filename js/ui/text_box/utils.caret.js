@@ -3,7 +3,7 @@
 var $ = require("../../core/renderer"),
     isDefined = require("../../core/utils/type").isDefined,
     browser = require("../../core/utils/browser"),
-    document = require("../../core/dom_adapter").getWindow().document;
+    window = require("../../core/dom_adapter").getWindow();
 
 var isFocusingOnCaretChange = browser.msie || browser.safari;
 
@@ -23,7 +23,7 @@ var setCaret = function(input, position) {
         setCaretForObsoleteBrowser(input, position);
         return;
     }
-    if(!document.body.contains(input)) {
+    if(!window.document.body.contains(input)) {
         return;
     }
 
@@ -36,7 +36,7 @@ var isObsoleteBrowser = function(input) {
 };
 
 var getCaretForObsoleteBrowser = function(input) {
-    var range = document.selection.createRange();
+    var range = window.document.selection.createRange();
     var rangeCopy = range.duplicate();
 
     range.move('character', -input.value.length);
@@ -49,7 +49,7 @@ var getCaretForObsoleteBrowser = function(input) {
 };
 
 var setCaretForObsoleteBrowser = function(input, position) {
-    if(!document.body.contains(input)) {
+    if(!window.document.body.contains(input)) {
         return;
     }
 
@@ -68,7 +68,7 @@ var caret = function(input, position) {
     }
 
     // NOTE: IE focuses element input after caret position has changed
-    if(isFocusingOnCaretChange && document.activeElement !== input) {
+    if(isFocusingOnCaretChange && window.document.activeElement !== input) {
         return;
     }
 

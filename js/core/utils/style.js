@@ -2,7 +2,7 @@
 
 var camelize = require("./inflector").camelize,
     callOnce = require("./common").callOnce,
-    document = require("../dom_adapter").getWindow().document;
+    window = require("../dom_adapter").getWindow();
 
 var jsPrefixes = ["", "Webkit", "Moz", "O", "Ms"],
     cssPrefixes = {
@@ -13,7 +13,7 @@ var jsPrefixes = ["", "Webkit", "Moz", "O", "Ms"],
         "ms": "-ms-"
     },
     getStyles = callOnce(function() {
-        return document.createElement("dx").style;
+        return window.document.createElement("dx").style;
     });
 
 var forEachPrefixes = function(prop, callBack) {

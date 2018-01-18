@@ -904,16 +904,21 @@ var Scheduler = Widget.inherit({
                 * @name dxSchedulerOptions_activeStateEnabled
                 * @publicName activeStateEnabled
                 * @hidden
-                * @extend_doc
+                * @inheritdoc
                 */
 
                 /**
                 * @name dxSchedulerOptions_hoverStateEnabled
                 * @publicName hoverStateEnabled
                 * @hidden
-                * @extend_doc
+                * @inheritdoc
                 */
-
+                /**
+                * @name dxSchedulerAppointmentTemplate
+                * @publicName dxSchedulerAppointmentTemplate
+                * @inherits CollectionWidgetItemTemplate
+                * @type object
+                */
                 /**
                 * @name dxSchedulerAppointmentTemplate_html
                 * @publicName html
@@ -981,7 +986,11 @@ var Scheduler = Widget.inherit({
                 * @publicName endDateTimeZone
                 * @type String
                 */
-
+                /**
+                * @name dxSchedulerAppointmentTooltipTemplate
+                * @publicName dxSchedulerAppointmentTooltipTemplate
+                * @type object
+                */
                 /**
                 * @name dxSchedulerAppointmentTooltipTemplate_text
                 * @publicName text
@@ -1041,8 +1050,8 @@ var Scheduler = Widget.inherit({
                         * @name dxSchedulerOptions_focusStateEnabled
                         * @publicName focusStateEnabled
                         * @type boolean
-                        * @custom_default_for_desktop true
-                        * @extend_doc
+                        * @default true @for desktop
+                        * @inheritdoc
                         */
                     focusStateEnabled: true
                 }
@@ -1055,20 +1064,20 @@ var Scheduler = Widget.inherit({
                         /**
                        * @name dxSchedulerOptions_useDropDownViewSwitcher
                        * @publicName useDropDownViewSwitcher
-                       * @custom_default_for_Android,_iOS_and_Windows_Mobile true
+                       * @default true @for Android|iOS|Windows_Mobile
                        */
                     useDropDownViewSwitcher: true,
 
                         /**
                        * @name dxSchedulerOptions_editing_allowResizing
                        * @publicName allowResizing
-                       * @custom_default_for_Android,_iOS_and_Windows_Mobile false
+                       * @default false @for Android|iOS|Windows_Mobile
                        */
 
                         /**
                        * @name dxSchedulerOptions_editing_allowDragging
                        * @publicName allowDragging
-                       * @custom_default_for_Android,_iOS_and_Windows_Mobile false
+                       * @default false @for Android|iOS|Windows_Mobile
                        */
                     editing: {
                         allowDragging: false,
@@ -1087,7 +1096,7 @@ var Scheduler = Widget.inherit({
                 * @name dxSchedulerOptions_horizontalScrollingEnabled
                 * @publicName horizontalScrollingEnabled
                 * @deprecated dxSchedulerOptions_crossScrollingEnabled
-                * @extend_doc
+                * @inheritdoc
                 */
             "horizontalScrollingEnabled": { since: "16.1", alias: "crossScrollingEnabled" }
         });
@@ -2897,7 +2906,7 @@ var Scheduler = Widget.inherit({
         * @name dxSchedulerMethods_registerKeyHandler
         * @publicName registerKeyHandler(key, handler)
         * hidden
-        * @extend_doc
+        * @inheritdoc
         */
 
 }).include(DataHelperMixin);

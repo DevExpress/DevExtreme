@@ -33,7 +33,6 @@ var BUTTON_CLASS = "dx-button",
 * @name dxbutton
 * @publicName dxButton
 * @inherits Widget
-* @groupName Action Widgets
 * @module ui/button
 * @export default
 */
@@ -59,7 +58,7 @@ var Button = Widget.inherit({
             * @name dxbuttonoptions_iconSrc
             * @publicName iconSrc
             * @deprecated dxButtonOptions_icon
-            * @extend_doc
+            * @inheritdoc
             */
             "iconSrc": { since: "15.1", alias: "icon" }
         });
@@ -73,7 +72,7 @@ var Button = Widget.inherit({
              * @publicName hoverStateEnabled
              * @type boolean
              * @default true
-             * @extend_doc
+             * @inheritdoc
              */
             hoverStateEnabled: true,
 
@@ -153,7 +152,11 @@ var Button = Widget.inherit({
             useSubmitBehavior: false,
 
             useInkRipple: false
-
+            /**
+            * @name dxButtonDefaultTemplate
+            * @publicName dxButtonDefaultTemplate
+            * @type object
+            */
             /**
             * @name dxButtonDefaultTemplate_text
             * @publicName text
@@ -178,8 +181,8 @@ var Button = Widget.inherit({
                     * @name dxButtonOptions_focusStateEnabled
                     * @publicName focusStateEnabled
                     * @type boolean
-                    * @custom_default_for_desktop true
-                    * @extend_doc
+                    * @default true @for desktop
+                    * @inheritdoc
                     */
                     focusStateEnabled: true
                 }

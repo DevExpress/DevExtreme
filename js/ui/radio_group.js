@@ -5,7 +5,6 @@
 * @isEditor
 * @publicName dxRadioGroup
 * @inherits Editor, DataExpressionMixin
-* @groupName Editors
 * @module ui/radio_group
 * @export default
 */

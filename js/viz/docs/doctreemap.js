@@ -2,7 +2,6 @@
 * @name dxtreemap
 * @publicName dxTreeMap
 * @inherits BaseWidget
-* @groupName TreeMap
 * @module viz/tree_map
 * @export default
 */
@@ -17,7 +16,7 @@ var dxTreeMap = {
     * @name dxtreemapoptions_margin
     * @publicName margin
     * @hidden
-    * @extend_doc
+    * @inheritdoc
     */
     margin: undefined,
     /**
@@ -513,7 +512,7 @@ var dxTreeMap = {
     * @name dxtreemapoptions_tooltip
     * @publicName tooltip
     * @type object
-    * @extend_doc
+    * @inheritdoc
     */
     tooltip: {
         /**

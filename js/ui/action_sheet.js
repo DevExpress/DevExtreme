@@ -27,7 +27,6 @@ var ACTION_SHEET_CLASS = "dx-actionsheet",
 * @name dxactionsheet
 * @publicName dxActionSheet
 * @inherits CollectionWidget
-* @groupName Action Widgets
 * @module ui/action_sheet
 * @export default
 */
@@ -105,7 +104,7 @@ var ActionSheet = CollectionWidget.inherit({
             * @name dxActionSheetOptions_noDataText
             * @publicName noDataText
             * @hidden
-            * @extend_doc
+            * @inheritdoc
             */
             noDataText: "",
 
@@ -113,21 +112,21 @@ var ActionSheet = CollectionWidget.inherit({
             * @name dxActionSheetOptions_activeStateEnabled
             * @publicName activeStateEnabled
             * @hidden
-            * @extend_doc
+            * @inheritdoc
             */
 
             /**
             * @name dxActionSheetOptions_selectedIndex
             * @publicName selectedIndex
             * @hidden
-            * @extend_doc
+            * @inheritdoc
             */
 
             /**
             * @name dxActionSheetOptions_selectedItem
             * @publicName selectedItem
             * @hidden
-            * @extend_doc
+            * @inheritdoc
             */
 
             /**
@@ -135,42 +134,42 @@ var ActionSheet = CollectionWidget.inherit({
             * @publicName onSelectionChanged
             * @action
             * @hidden
-            * @extend_doc
+            * @inheritdoc
             */
 
             /**
             * @name dxActionSheetOptions_selectedItems
             * @publicName selectedItems
             * @hidden
-            * @extend_doc
+            * @inheritdoc
             */
 
             /**
             * @name dxActionSheetOptions_selectedItemKeys
             * @publicName selectedItemKeys
             * @hidden
-            * @extend_doc
+            * @inheritdoc
             */
 
             /**
             * @name dxActionSheetOptions_keyExpr
             * @publicName keyExpr
             * @hidden
-            * @extend_doc
+            * @inheritdoc
             */
 
             /**
             * @name dxActionSheetOptions_accessKey
             * @publicName accessKey
             * @hidden
-            * @extend_doc
+            * @inheritdoc
             */
 
             /**
             * @name dxActionSheetOptions_tabIndex
             * @publicName tabIndex
             * @hidden
-            * @extend_doc
+            * @inheritdoc
             */
 
             /**
@@ -183,41 +182,6 @@ var ActionSheet = CollectionWidget.inherit({
             focusStateEnabled: false,
 
             selectionByClick: false
-
-            /**
-            * @name dxActionSheetItemtemplate_type
-            * @publicName type
-            * @type String
-            * @default 'normal'
-            * @acceptValues 'normal'|'default'|'back'|'danger'|'success'
-            */
-            /**
-            * @name dxActionSheetItemTemplate_onClick
-            * @publicName onClick
-            * @type function(e)|string
-            * @extends Action
-            * @type_function_param1 e:object
-            * @type_function_param1_field4 jQueryEvent:jQuery.Event:deprecated(event)
-            * @type_function_param1_field5 event:event
-            */
-            /**
-            * @name dxActionSheetItemTemplate_icon
-            * @publicName icon
-            * @type String
-            */
-            /**
-            * @name dxActionSheetItemTemplate_visible
-            * @publicName visible
-            * @type boolean
-            * @default true
-            * @hidden
-            */
-            /**
-            * @name dxActionSheetItemTemplate_html
-            * @publicName html
-            * @type String
-            * @hidden
-            */
         });
     },
 
@@ -228,7 +192,7 @@ var ActionSheet = CollectionWidget.inherit({
                 /**
                 * @name dxActionSheetOptions_usePopover
                 * @publicName usePopover
-                * @custom_default_for_iPad true
+                * @default true @for iPad
                 */
                 usePopover: true
             }
@@ -237,7 +201,46 @@ var ActionSheet = CollectionWidget.inherit({
 
     _initTemplates: function() {
         this.callBase();
-
+        /**
+        * @name dxActionSheetItemTemplate
+        * @publicName dxActionSheetItemTemplate
+        * @inherits CollectionWidgetItemTemplate
+        * @type object
+        */
+        /**
+        * @name dxActionSheetItemTemplate_type
+        * @publicName type
+        * @type String
+        * @default 'normal'
+        * @acceptValues 'normal'|'default'|'back'|'danger'|'success'
+        */
+        /**
+        * @name dxActionSheetItemTemplate_onClick
+        * @publicName onClick
+        * @type function(e)|string
+        * @extends Action
+        * @type_function_param1 e:object
+        * @type_function_param1_field4 jQueryEvent:jQuery.Event:deprecated(event)
+        * @type_function_param1_field5 event:event
+        */
+        /**
+        * @name dxActionSheetItemTemplate_icon
+        * @publicName icon
+        * @type String
+        */
+        /**
+        * @name dxActionSheetItemTemplate_visible
+        * @publicName visible
+        * @type boolean
+        * @default true
+        * @hidden
+        */
+        /**
+        * @name dxActionSheetItemTemplate_html
+        * @publicName html
+        * @type String
+        * @hidden
+        */
         this._defaultTemplates["item"] = new BindableTemplate(function($container, data) {
             var button = new Button($("<div>"), extend({ onClick: data && data.click }, data));
             $container.append(button.$element());
@@ -507,14 +510,14 @@ var ActionSheet = CollectionWidget.inherit({
     * @name dxactionsheetmethods_registerKeyHandler
     * @publicName registerKeyHandler(key, handler)
     * @hidden
-    * @extend_doc
+    * @inheritdoc
     */
 
     /**
     * @name dxactionsheetmethods_focus
     * @publicName focus()
     * @hidden
-    * @extend_doc
+    * @inheritdoc
     */
 
 });

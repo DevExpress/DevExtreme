@@ -26,7 +26,12 @@ var TOOLBAR_CLASS = "dx-toolbar",
     TOOLBAR_ITEM_DATA_KEY = "dxToolbarItemDataKey";
 
 var ToolbarBase = CollectionWidget.inherit({
-
+    /**
+    * @name dxToolbarItemTemplate
+    * @publicName dxToolbarItemTemplate
+    * @inherits CollectionWidgetItemTemplate
+    * @type object
+    */
     /**
     * @name dxToolbarItemTemplate_widget
     * @publicName widget
@@ -347,14 +352,14 @@ var ToolbarBase = CollectionWidget.inherit({
     * @name dxToolbarMethods_registerKeyHandler
     * @publicName registerKeyHandler(key, handler)
     * @hidden
-    * @extend_doc
+    * @inheritdoc
     */
 
     /**
     * @name dxToolbarMethods_focus
     * @publicName focus()
     * @hidden
-    * @extend_doc
+    * @inheritdoc
     */
 });
 

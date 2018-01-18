@@ -67,7 +67,7 @@ var RadioGroup = Editor.inherit({
              * @publicName hoverStateEnabled
              * @type boolean
              * @default true
-             * @extend_doc
+             * @inheritdoc
              */
             hoverStateEnabled: true,
 
@@ -76,7 +76,7 @@ var RadioGroup = Editor.inherit({
             * @publicName activeStateEnabled
             * @type boolean
             * @default true
-            * @extend_doc
+            * @inheritdoc
             */
             activeStateEnabled: true,
 
@@ -95,7 +95,7 @@ var RadioGroup = Editor.inherit({
             * @name dxRadioGroupOptions_value
             * @publicName value
             * @ref
-            * @extend_doc
+            * @inheritdoc
             */
 
             /**
@@ -103,7 +103,7 @@ var RadioGroup = Editor.inherit({
             * @publicName name
             * @type string
             * @hidden false
-            * @extend_doc
+            * @inheritdoc
             */
         }));
     },
@@ -116,7 +116,7 @@ var RadioGroup = Editor.inherit({
                     /**
                      * @name dxRadioGroupOptions_layout
                      * @publicName layout
-                     * @custom_default_for_tablets 'horizontal'
+                     * @default 'horizontal' @for tablets
                      */
                     layout: "horizontal"
                 }
@@ -130,8 +130,8 @@ var RadioGroup = Editor.inherit({
                     * @name dxRadioGroupOptions_focusStateEnabled
                     * @publicName focusStateEnabled
                     * @type boolean
-                    * @custom_default_for_desktop true
-                    * @extend_doc
+                    * @default true @for desktop
+                    * @inheritdoc
                     */
                     focusStateEnabled: true
                 }

@@ -84,7 +84,6 @@ var getButtonPlace = function(name) {
  * @name dxPopup
  * @publicName dxPopup
  * @inherits dxOverlay
- * @groupName Overlays
  * @module ui/popup
  * @export default
  */
@@ -256,7 +255,7 @@ var Popup = Overlay.inherit({
                     * @name dxPopupOptions_position
                     * @publicName position
                     * @type positionConfig
-                    * @extend_doc
+                    * @inheritdoc
                     */
                     position: {
                         my: "top center",
@@ -271,20 +270,20 @@ var Popup = Overlay.inherit({
                     /**
                     * @name dxPopupOptions_animation
                     * @publicName animation
-                    * @custom_default_for_iOS { show: { type: "slide", duration: 400, from: { position: { my: "top", at: "bottom", of: window } }, to: { position: { my: "center", at: "center", of: window } } }, hide: { type: "slide", duration: 400, from: { position: { my: "center", at: "center", of: window } }, to: { position: { my: "top", at: "bottom", of: window } } } }
-                    * @extend_doc
+                    * @default { show: { type: 'slide', duration: 400, from: { position: { my: 'top', at: 'bottom', of: window } }, to: { position: { my: 'center', at: 'center', of: window } } }, hide: { type: 'slide', duration: 400, from: { position: { my: 'center', at: 'center', of: window } }, to: { position: { my: 'top', at: 'bottom', of: window } } }} @for iOS
+                    * @inheritdoc
                     */
                     /**
                     * @name dxPopupOptions_animation_show
                     * @publicName show
-                    * @custom_default_for_iOS { type: "slide", duration: 400, from: { position: { my: "top", at: "bottom", of: window } }, to: { position: { my: "center", at: "center", of: window } } }
-                    * @extend_doc
+                    * @default { type: 'slide', duration: 400, from: { position: { my: 'top', at: 'bottom', of: window } }, to: { position: { my: 'center', at: 'center', of: window } }} @for iOS
+                    * @inheritdoc
                     */
                     /**
                     * @name dxPopupOptions_animation_hide
                     * @publicName hide
-                    * @custom_default_for_iOS { type: "slide", duration: 400, from: { position: { my: "center", at: "center", of: window } }, to: { position: { my: "top", at: "bottom", of: window } } }
-                    * @extend_doc
+                    * @default { type: 'slide', duration: 400, from: { position: { my: 'center', at: 'center', of: window } }, to: { position: { my: 'top', at: 'bottom', of: window } }} @for iOS
+                    * @inheritdoc
                     */
                     animation: this._iosAnimation
                 }
@@ -301,7 +300,7 @@ var Popup = Overlay.inherit({
                     /**
                     * @name dxPopupOptions_showCloseButton
                     * @publicName showCloseButton
-                    * @custom_default_for_desktop true
+                    * @default true @for desktop
                     */
                     showCloseButton: true
                 }
@@ -314,7 +313,7 @@ var Popup = Overlay.inherit({
                     /**
                     * @name dxPopupOptions_dragEnabled
                     * @publicName dragEnabled
-                    * @custom_default_for_desktop true
+                    * @default true @for desktop
                     */
                     dragEnabled: true
                 }
@@ -328,8 +327,8 @@ var Popup = Overlay.inherit({
                     * @name dxPopupOptions_focusStateEnabled
                     * @publicName focusStateEnabled
                     * @type boolean
-                    * @custom_default_for_desktop true
-                    * @extend_doc
+                    * @default true @for desktop
+                    * @inheritdoc
                     */
                     focusStateEnabled: true
                 }

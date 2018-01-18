@@ -88,7 +88,6 @@ var GalleryNavButton = Widget.inherit({
 * @name dxgallery
 * @publicName dxGallery
 * @inherits CollectionWidget
-* @groupName Collection Widgets
 * @module ui/gallery
 * @export default
 */
@@ -212,28 +211,28 @@ var Gallery = CollectionWidget.inherit({
             * @name dxGalleryOptions_noDataText
             * @publicName noDataText
             * @hidden
-            * @extend_doc
+            * @inheritdoc
             */
 
             /**
             * @name dxGalleryOptions_selectedItems
             * @publicName selectedItems
             * @hidden
-            * @extend_doc
+            * @inheritdoc
             */
 
             /**
             * @name dxGalleryOptions_selectedItemKeys
             * @publicName selectedItemKeys
             * @hidden
-            * @extend_doc
+            * @inheritdoc
             */
 
             /**
             * @name dxGalleryOptions_keyExpr
             * @publicName keyExpr
             * @hidden
-            * @extend_doc
+            * @inheritdoc
             */
 
             _itemAttributes: { role: "option" },
@@ -242,23 +241,6 @@ var Gallery = CollectionWidget.inherit({
             selectionMode: "single",
             selectionRequired: true,
             selectionByClick: false
-
-            /**
-            * @name dxGalleryItemTemplate_imageSrc
-            * @publicName imageSrc
-            * @type String
-            */
-            /**
-            * @name dxGalleryItemTemplate_imageAlt
-            * @publicName imageAlt
-            * @type String
-            */
-            /**
-            * @name dxGalleryItemTemplate_visible
-            * @publicName visible
-            * @hidden
-            * @extend_doc
-            */
         });
     },
 
@@ -273,8 +255,8 @@ var Gallery = CollectionWidget.inherit({
                     * @name dxGalleryOptions_focusStateEnabled
                     * @publicName focusStateEnabled
                     * @type boolean
-                    * @custom_default_for_desktop true
-                    * @extend_doc
+                    * @default true @for desktop
+                    * @inheritdoc
                     */
                     focusStateEnabled: true
                 }
@@ -290,7 +272,28 @@ var Gallery = CollectionWidget.inherit({
 
     _initTemplates: function() {
         this.callBase();
-
+        /**
+        * @name dxGalleryItemTemplate
+        * @publicName dxGalleryItemTemplate
+        * @inherits CollectionWidgetItemTemplate
+        * @type object
+        */
+        /**
+        * @name dxGalleryItemTemplate_imageSrc
+        * @publicName imageSrc
+        * @type String
+        */
+        /**
+        * @name dxGalleryItemTemplate_imageAlt
+        * @publicName imageAlt
+        * @type String
+        */
+        /**
+        * @name dxGalleryItemTemplate_visible
+        * @publicName visible
+        * @hidden
+        * @inheritdoc
+        */
         this._defaultTemplates["item"] = new BindableTemplate(function($container, data) {
             var $img = $('<img>').addClass(GALLERY_IMAGE_CLASS);
 

@@ -3,7 +3,6 @@
 var $ = require("../core/renderer"),
     window = require("../core/dom_adapter").getWindow(),
     navigator = require("../core/utils/navigator"),
-    document = window.document,
     eventsEngine = require("../events/core/events_engine"),
     fx = require("../animation/fx"),
     translator = require("../animation/translator"),
@@ -87,7 +86,7 @@ var getElement = function(value) {
     return value && $(value.target || value);
 };
 
-eventsEngine.subscribeGlobal(document, pointerEvents.down, function(e) {
+eventsEngine.subscribeGlobal(window.document, pointerEvents.down, function(e) {
     for(var i = OVERLAY_STACK.length - 1; i >= 0; i--) {
         if(!OVERLAY_STACK[i]._proxiedDocumentDownHandler(e)) {
             return;
@@ -138,7 +137,7 @@ var Overlay = Widget.inherit({
             * @name dxOverlayOptions_activeStateEnabled
             * @publicName activeStateEnabled
             * @hidden
-            * @extend_doc
+            * @inheritdoc
             */
             activeStateEnabled: false,
 
@@ -383,7 +382,7 @@ var Overlay = Widget.inherit({
                 /**
                  * @name dxOverlayOptions_animation
                  * @publicName animation
-                 * @custom_default_for_Android_below_version_4.2 { show: { type: "fade", duration: 400 }, hide: { type: "fade", duration: 400, to: { opacity: 0 }, from: { opacity: 1 } } }
+                 * @default { show: { type: 'fade', duration: 400 }, hide: { type: 'fade', duration: 400, to: { opacity: 0 }, from: { opacity: 1 } }} @for Android_below_version_4.2
                  */
                 animation: {
                     show: {
@@ -540,7 +539,7 @@ var Overlay = Widget.inherit({
         }
         if(closeOnOutsideClick) {
             var $container = this._$content,
-                outsideClick = (!$container.is(e.target) && !domUtils.contains($container.get(0), e.target) && $(e.target).closest(document).length);
+                outsideClick = (!$container.is(e.target) && !domUtils.contains($container.get(0), e.target) && $(e.target).closest(window.document).length);
 
             if(outsideClick) {
                 if(this.option("shading")) {
@@ -731,6 +730,7 @@ var Overlay = Widget.inherit({
     },
 
     _forceFocusLost: function() {
+        var document = window.document;
         document.activeElement && this._$content.find(document.activeElement).length && document.activeElement.blur();
     },
 
@@ -825,9 +825,9 @@ var Overlay = Widget.inherit({
     _toggleTabTerminator: function(enabled) {
         var eventName = eventUtils.addNamespace("keydown", this.NAME);
         if(enabled) {
-            eventsEngine.on(document, eventName, this._proxiedTabTerminatorHandler);
+            eventsEngine.on(window.document, eventName, this._proxiedTabTerminatorHandler);
         } else {
-            eventsEngine.off(document, eventName, this._proxiedTabTerminatorHandler);
+            eventsEngine.off(window.document, eventName, this._proxiedTabTerminatorHandler);
         }
     },
 
@@ -965,7 +965,7 @@ var Overlay = Widget.inherit({
             }
         });
 
-        return isHidden || !document.body.contains($parent.get(0));
+        return isHidden || !window.document.body.contains($parent.get(0));
     },
 
     _renderContentImpl: function() {
@@ -1086,8 +1086,8 @@ var Overlay = Widget.inherit({
             containerHeight = $container.outerHeight();
 
         if(this._isWindow($container)) {
-            var fullPageHeight = Math.max($(document).outerHeight(), containerHeight),
-                fullPageWidth = Math.max($(document).outerWidth(), containerWidth);
+            var fullPageHeight = Math.max($(window.document).outerHeight(), containerHeight),
+                fullPageWidth = Math.max($(window.document).outerWidth(), containerWidth);
 
             containerHeight = fullPageHeight;
             containerWidth = fullPageWidth;

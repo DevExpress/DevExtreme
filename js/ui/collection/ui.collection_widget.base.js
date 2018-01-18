@@ -4,7 +4,7 @@ var $ = require("../../core/renderer"),
     eventsEngine = require("../../events/core/events_engine"),
     commonUtils = require("../../core/utils/common"),
     getPublicElement = require("../../core/utils/dom").getPublicElement,
-    document = require("../../core/dom_adapter").getWindow().document,
+    window = require("../../core/dom_adapter").getWindow(),
     isPlainObject = require("../../core/utils/type").isPlainObject,
     when = require("../../core/utils/deferred").when,
     extend = require("../../core/utils/extend").extend,
@@ -217,7 +217,11 @@ var CollectionWidget = Widget.inherit({
             * @default null
             */
             dataSource: null,
-
+            /**
+            * @name CollectionWidgetItemTemplate
+            * @publicName CollectionWidgetItemTemplate
+            * @type object
+            */
             /**
             * @name CollectionWidgetItemTemplate_template
             * @publicName template
@@ -234,7 +238,7 @@ var CollectionWidget = Widget.inherit({
             * @type dxElement
             * @default null
             * @hidden
-            * @extend_doc
+            * @inheritdoc
             */
             focusedElement: null,
 
@@ -768,7 +772,7 @@ var CollectionWidget = Widget.inherit({
             return $target;
         } else {
             $target = $target.parent();
-            while($target.length && !$target.is(document)) {
+            while($target.length && !$target.is(window.document)) {
                 if($target.is(selectors.focusable)) {
                     return $target;
                 }

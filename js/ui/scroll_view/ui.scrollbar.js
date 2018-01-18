@@ -1,7 +1,7 @@
 "use strict";
 
 var $ = require("../../core/renderer"),
-    document = require("../../core/dom_adapter").getWindow().document,
+    window = require("../../core/dom_adapter").getWindow(),
     eventsEngine = require("../../events/core/events_engine"),
     translator = require("../../animation/translator"),
     Widget = require("../widget/ui.widget"),
@@ -227,7 +227,7 @@ var Scrollbar = Widget.inherit({
 
 var activeScrollbar = null;
 
-eventsEngine.subscribeGlobal(document, eventUtils.addNamespace(pointerEvents.up, SCROLLBAR), function() {
+eventsEngine.subscribeGlobal(window.document, eventUtils.addNamespace(pointerEvents.up, SCROLLBAR), function() {
     if(activeScrollbar) {
         activeScrollbar.feedbackOff();
     }

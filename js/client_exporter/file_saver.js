@@ -4,7 +4,6 @@
 var $ = require("../core/renderer"),
     window = require("../core/dom_adapter").getWindow(),
     navigator = require("../core/utils/navigator"),
-    document = window.document,
     eventsEngine = require("../events/core/events_engine"),
     errors = require("../ui/widget/ui.errors"),
     browser = require("../core/utils/browser"),
@@ -45,14 +44,14 @@ exports.fileSaver = {
     },*/
 
     _linkDownloader: function(fileName, href, callback) {
-        var exportLinkElement = document.createElement('a'),
+        var exportLinkElement = window.document.createElement('a'),
             attributes = { 'download': fileName, "href": href };
 
         ///#DEBUG
         if(typeUtils.isDefined(callback)) attributes["onclick"] = callback;
         ///#ENDDEBUG
 
-        document.body.appendChild(exportLinkElement);
+        window.document.body.appendChild(exportLinkElement);
         $(exportLinkElement).css({ "display": "none" }).text("load").attr(attributes)[0].click();
         return exportLinkElement;
     },

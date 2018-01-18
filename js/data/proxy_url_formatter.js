@@ -2,14 +2,12 @@
 
 var each = require("../core/utils/iterator").each,
     window = require("../core/dom_adapter").getWindow(),
-    document = window.document,
-    location = window.location,
     DXPROXY_HOST = "dxproxy.devexpress.com:8000",
-    IS_DXPROXY_ORIGIN = location.host === DXPROXY_HOST,
+    IS_DXPROXY_ORIGIN = window.location.host === DXPROXY_HOST,
     urlMapping = {};
 
 var parseUrl = (function() {
-    var a = document.createElement("a"),
+    var a = window.document.createElement("a"),
         props = ["protocol", "hostname", "port", "pathname", "search", "hash"];
 
     var normalizePath = function(value) {
@@ -32,7 +30,7 @@ var parseUrl = (function() {
 })();
 
 var extractProxyAppId = function() {
-    return location.pathname.split("/")[1];
+    return window.location.pathname.split("/")[1];
 };
 
 module.exports = {
