@@ -80,7 +80,7 @@ var domAdapter = module.exports = {
         return domAdapter._window;
     },
 
-    _window: window || { },
+    _window: typeof window === "undefined" ? {} : window,
 
     _hasDocument: true,
 

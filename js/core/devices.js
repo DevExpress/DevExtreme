@@ -206,7 +206,7 @@ var Devices = Class.inherit({
         this._currentOrientation = undefined;
 
         this.changed = Callbacks();
-        if(window) {
+        if("document" in window) {
             this._recalculateOrientation();
             resizeCallbacks.add(this._recalculateOrientation.bind(this));
         }
