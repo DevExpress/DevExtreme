@@ -360,14 +360,6 @@ QUnit.test("List items should not have active state", function(assert) {
     assert.strictEqual(dropDownMenu._list.option("activeStateEnabled"), false, "Active state isn't enabled");
 });
 
-QUnit.test("List items should have focus state", function(assert) {
-    this.renderDropDownAppointmentsContainer().trigger("dxclick");
-
-    var dropDownMenu = $(".dx-scheduler-dropdown-appointments").dxDropDownMenu("instance");
-
-    assert.strictEqual(dropDownMenu._list.option("focusStateEnabled"), true, "Focus state isn't enabled");
-});
-
 QUnit.test("the 'repaintExisting' should repaint dropdown menus", function(assert) {
     sinon.stub(this.widgetMock, "fire");
 
