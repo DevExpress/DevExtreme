@@ -2,7 +2,8 @@
 
 var camelize = require("./inflector").camelize,
     callOnce = require("./common").callOnce,
-    window = require("../dom_adapter").getWindow();
+    domAdapter = require("../dom_adapter"),
+    window = domAdapter.getWindow();
 
 var jsPrefixes = ["", "Webkit", "Moz", "O", "Ms"],
     cssPrefixes = {
