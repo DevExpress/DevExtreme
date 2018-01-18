@@ -3,7 +3,6 @@
 var Deferred = require("./deferred").Deferred;
 var domAdapter = require("../../core/dom_adapter");
 var window = domAdapter.getWindow();
-var location = window.location;
 var extendFromObject = require("./extend").extendFromObject;
 var isDefined = require("./type").isDefined;
 var Promise = require("../polyfills/promise");
@@ -146,7 +145,7 @@ var isCrossDomain = function(url) {
         originAnchor = window.document.createElement("a"),
         urlAnchor = window.document.createElement("a");
 
-    originAnchor.href = location.href;
+    originAnchor.href = window.location.href;
 
     try {
         urlAnchor.href = url;
@@ -183,7 +182,7 @@ var getJsonpOptions = function(options) {
 var getRequestOptions = function(options, headers) {
 
     var params = options.data,
-        url = options.url || location.href;
+        url = options.url || window.location.href;
 
     if(options.noCache) {
         params = params || {};
