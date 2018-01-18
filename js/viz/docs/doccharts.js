@@ -2,7 +2,6 @@
 * @name dxchart
 * @publicName dxChart
 * @inherits BaseChart
-* @groupName Data Management and Visualization
 * @module viz/chart
 * @export default
 */
@@ -1919,7 +1918,7 @@ var dxChart = {
         * @publicName endOnTick
         * @type boolean
         * @default false
-        * @extend_doc
+        * @inheritdoc
         */
         endOnTick: false
     },
@@ -2247,7 +2246,7 @@ var dxChart = {
         * @publicName endOnTick
         * @type boolean
         * @default undefined
-        * @extend_doc
+        * @inheritdoc
         */
         endOnTick: undefined
     },
@@ -2255,7 +2254,7 @@ var dxChart = {
     * @name dxchartoptions_tooltip
     * @type object
     * @publicName tooltip
-    * @extend_doc
+    * @inheritdoc
     **/
     tooltip: {
         /**
@@ -2381,7 +2380,6 @@ var dxChart = {
 * @name dxpiechart
 * @publicName dxPieChart
 * @inherits BaseChart
-* @groupName Data Management and Visualization
 * @module viz/pie_chart
 * @export default
 */
@@ -2600,7 +2598,6 @@ var dxPieChart = {
 * @name dxpolarchart
 * @publicName dxPolarChart
 * @inherits BaseChart
-* @groupName Data Management and Visualization
 * @module viz/polar_chart
 * @export default
 */
@@ -3540,7 +3537,7 @@ var dxPolarChart = {
         * @name dxpolarchartoptions_valueaxis_tick
         * @publicName tick
         * @type object
-        * @extend_doc
+        * @inheritdoc
         */
         tick: {
             /**
@@ -3548,7 +3545,7 @@ var dxPolarChart = {
             * @publicName visible
             * @type boolean
             * @default false
-            * @extend_doc
+            * @inheritdoc
             */
             visible: false,
         },
@@ -3728,7 +3725,7 @@ var dxPolarChart = {
         * @publicName endOnTick
         * @type boolean
         * @default false
-        * @extend_doc
+        * @inheritdoc
         */
         endOnTick: false
     },
@@ -3736,7 +3733,7 @@ var dxPolarChart = {
     * @name dxpolarchartoptions_tooltip
     * @type object
     * @publicName tooltip
-    * @extend_doc
+    * @inheritdoc
     **/
     tooltip: {
         /**
@@ -4321,7 +4318,7 @@ var BaseChart = {
         * @publicName width
         * @type number
         * @default 170
-        * @extend_doc
+        * @inheritdoc
         */
         width: 80,
         /**
@@ -4335,7 +4332,7 @@ var BaseChart = {
         * @publicName height
         * @type number
         * @default 170
-        * @extend_doc
+        * @inheritdoc
         */
         height: 80,
         /**
@@ -4349,7 +4346,7 @@ var BaseChart = {
         * @publicName keepLabels
         * @type boolean
         * @default false
-        * @extend_doc
+        * @inheritdoc
         */
         keepLabels: true
     }

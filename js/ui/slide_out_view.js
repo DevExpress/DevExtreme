@@ -47,7 +47,6 @@ var animation = {
 * @name dxSlideOutView
 * @publicName dxSlideOutView
 * @inherits Widget
-* @groupName Navigation and Layouting
 * @module ui/slide_out_view
 * @export default
 */
@@ -101,7 +100,7 @@ var SlideOutView = Widget.inherit({
             * @name dxSlideOutViewOptions_contentOffset
             * @publicName contentOffset
             * @hidden
-            * @extend_doc
+            * @inheritdoc
             */
             contentOffset: 45
 
@@ -116,21 +115,21 @@ var SlideOutView = Widget.inherit({
             * @name dxSlideOutViewOptions_focusStateEnabled
             * @publicName focusStateEnabled
             * @hidden
-            * @extend_doc
+            * @inheritdoc
             */
 
             /**
             * @name dxSlideOutViewOptions_accessKey
             * @publicName accessKey
             * @hidden
-            * @extend_doc
+            * @inheritdoc
             */
 
             /**
             * @name dxSlideOutViewOptions_tabIndex
             * @publicName tabIndex
             * @hidden
-            * @extend_doc
+            * @inheritdoc
             */
         });
     },
@@ -445,14 +444,14 @@ var SlideOutView = Widget.inherit({
     * @name dxSlideOutViewMethods_registerKeyHandler
     * @publicName registerKeyHandler(key, handler)
     * @hidden
-    * @extend_doc
+    * @inheritdoc
     */
 
     /**
     * @name dxSlideOutViewMethods_focus
     * @publicName focus()
     * @hidden
-    * @extend_doc
+    * @inheritdoc
     */
 });
 

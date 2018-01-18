@@ -5,7 +5,6 @@
 * @isEditor
 * @publicName dxTextBox
 * @inherits dxTextEditor
-* @groupName Editors
 * @module ui/text_box
 * @export default
 */

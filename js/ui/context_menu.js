@@ -4,7 +4,6 @@
 * @name dxContextMenu
 * @publicName dxContextMenu
 * @inherits dxMenuBase
-* @groupName Action Widgets
 * @module ui/context_menu
 * @export default
 */

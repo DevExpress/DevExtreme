@@ -288,7 +288,7 @@ var circularTriangleMarker = {
 	* @publicName width
     * @type number
 	* @default 13
-	* @extend_doc
+	* @inheritdoc
 	*/
     width: 13,
 	/**
@@ -296,7 +296,7 @@ var circularTriangleMarker = {
 	* @publicName length
     * @type number
 	* @default 14
-	* @extend_doc
+	* @inheritdoc
 	*/
     length: 14,
 }
@@ -313,14 +313,14 @@ var circularTextCloud = {
 	* @name circularTextCloud_text
 	* @publicName text
     * @type object
-	* @extend_doc
+	* @inheritdoc
 	*/
     text: {
         /**
 		* @name circularTextCloud_text_font
 		* @publicName font
         * @type object
-		* @extend_doc
+		* @inheritdoc
 		*/
         font: {
             /**
@@ -328,7 +328,7 @@ var circularTextCloud = {
 			* @publicName color
             * @type string
 			* @default '#FFFFFF'
-			* @extend_doc
+			* @inheritdoc
 			*/
             color: '#FFFFFF',
             /**
@@ -336,7 +336,7 @@ var circularTextCloud = {
 			* @publicName size
             * @type number|string
 			* @default 18
-			* @extend_doc
+			* @inheritdoc
 			*/
             size: 18,
         }
@@ -357,7 +357,7 @@ var linearRectangle = {
 	* @publicName width
     * @type number
 	* @default 15
-	* @extend_doc
+	* @inheritdoc
 	*/
     width: 15,
 	/**
@@ -365,7 +365,7 @@ var linearRectangle = {
 	* @publicName offset
     * @type number
 	* @default 10 @for value_and_subvalue_indicators
-	* @extend_doc
+	* @inheritdoc
 	*/
     offset: 10
 }
@@ -383,7 +383,7 @@ var linearCircle = {
 	* @publicName offset
     * @type number
 	* @default 10 @for value_and_subvalue_indicators
-	* @extend_doc
+	* @inheritdoc
 	*/
     offset: 10
 }
@@ -401,7 +401,7 @@ var linearRhombus = {
 	* @publicName width
     * @type number
 	* @default 15
-	* @extend_doc
+	* @inheritdoc
 	*/
     width: 15,
 	/**
@@ -409,7 +409,7 @@ var linearRhombus = {
 	* @publicName offset
     * @type number
 	* @default 10 @for value_and_subvalue_indicators
-	* @extend_doc
+	* @inheritdoc
 	*/
     offset: 10
 }
@@ -427,7 +427,7 @@ var linearRangeBar = {
 	* @publicName offset
     * @type number
 	* @default 10 @for value_and_subvalue_indicators
-	* @extend_doc
+	* @inheritdoc
 	*/
     offset: 10
 }
@@ -445,7 +445,7 @@ var linearTriangleMarker = {
 	* @publicName width
     * @type number
 	* @default 13
-	* @extend_doc
+	* @inheritdoc
 	*/
     width: 13,
 	/**
@@ -453,7 +453,7 @@ var linearTriangleMarker = {
 	* @publicName length
     * @type number
 	* @default 14
-	* @extend_doc
+	* @inheritdoc
 	*/
     length: 14,
 	/**
@@ -461,7 +461,7 @@ var linearTriangleMarker = {
 	* @publicName offset
     * @type number
 	* @default 10 @for value_and_subvalue_indicators
-	* @extend_doc
+	* @inheritdoc
 	*/
     offset: 10
 }
@@ -478,14 +478,14 @@ var linearTextCloud = {
 	* @name linearTextCloud_text
 	* @publicName text
     * @type object
-	* @extend_doc
+	* @inheritdoc
 	*/
     text: {
 		/**
 		* @name linearTextCloud_text_font
 		* @publicName font
         * @type object
-		* @extend_doc
+		* @inheritdoc
 		*/
         font: {
 			/**
@@ -493,7 +493,7 @@ var linearTextCloud = {
 			* @publicName color
             * @type string
 			* @default '#FFFFFF'
-			* @extend_doc
+			* @inheritdoc
 			*/
         color: '#FFFFFF',
 			/**
@@ -501,7 +501,7 @@ var linearTextCloud = {
 			* @publicName size
             * @type number|string
 			* @default 18
-			* @extend_doc
+			* @inheritdoc
 			*/
         size: 18,
     }
@@ -511,7 +511,7 @@ var linearTextCloud = {
 	* @publicName offset
     * @type number
 	* @default 10 @for value_indicators|subvalue_indicators
-	* @extend_doc
+	* @inheritdoc
 	*/
     offset: 10
 }

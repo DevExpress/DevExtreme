@@ -32,7 +32,6 @@ var ACCORDION_CLASS = "dx-accordion",
 * @name dxAccordion
 * @publicName dxAccordion
 * @inherits CollectionWidget
-* @groupName Navigation and Layouting
 * @module ui/accordion
 * @export default
 */
@@ -48,7 +47,7 @@ var Accordion = CollectionWidget.inherit({
              * @publicName hoverStateEnabled
              * @type boolean
              * @default true
-             * @extend_doc
+             * @inheritdoc
              */
             hoverStateEnabled: true,
 
@@ -155,7 +154,7 @@ var Accordion = CollectionWidget.inherit({
                     * @publicName focusStateEnabled
                     * @type boolean
                     * @default true @for desktop
-                    * @extend_doc
+                    * @inheritdoc
                     */
                     focusStateEnabled: true
                 }

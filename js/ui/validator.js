@@ -17,7 +17,6 @@ var VALIDATOR_CLASS = "dx-validator";
 * @name dxValidator
 * @publicName dxValidator
 * @inherits DOMComponent
-* @groupName Helpers
 * @module ui/validator
 * @export default
 */
@@ -95,26 +94,26 @@ var Validator = DOMComponent.inherit({
             * @name dxValidatorOptions_rtlEnabled
             * @publicName rtlEnabled
             * @hidden
-            * @extend_doc
+            * @inheritdoc
             */
 
             /**
             * @name dxValidatorMethods_beginUpdate
             * @publicName beginUpdate()
             * @hidden
-            * @extend_doc
+            * @inheritdoc
             */
             /**
             * @name dxValidatorMethods_defaultOptions
             * @publicName defaultOptions(rule)
             * @hidden
-            * @extend_doc
+            * @inheritdoc
             */
             /**
             * @name dxValidatorMethods_endUpdate
             * @publicName endUpdate()
             * @hidden
-            * @extend_doc
+            * @inheritdoc
             */
         });
     },

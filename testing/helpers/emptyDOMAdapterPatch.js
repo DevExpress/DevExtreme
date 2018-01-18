@@ -46,4 +46,3 @@ QUnit.begin(function() {
     restoreOriginal();
     serverSideDOMAdapter.set();
 });
-

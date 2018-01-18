@@ -111,7 +111,6 @@ var POPOVER_CLASS = "dx-popover",
  * @name dxPopover
  * @publicName dxPopover
  * @inherits dxPopup
- * @groupName Overlays
  * @module ui/popover
  * @export default
  */
@@ -131,7 +130,7 @@ var Popover = Popup.inherit({
             * @type boolean
             * @publicName shading
             * @default false
-            * @extend_doc
+            * @inheritdoc
             */
             shading: false,
 
@@ -148,7 +147,7 @@ var Popover = Popup.inherit({
             * @name dxPopoverOptions_closeOnOutsideClick
             * @publicName closeOnOutsideClick
             * @default true
-            * @extend_doc
+            * @inheritdoc
             */
             closeOnOutsideClick: true,
 
@@ -212,7 +211,7 @@ var Popover = Popup.inherit({
              * @name dxPopoverOptions_dragEnabled
              * @publicName dragEnabled
              * @hidden
-             * @extend_doc
+             * @inheritdoc
              */
             dragEnabled: false,
 
@@ -220,7 +219,7 @@ var Popover = Popup.inherit({
             * @name dxPopoverOptions_resizeEnabled
             * @publicName resizeEnabled
             * @hidden
-            * @extend_doc
+            * @inheritdoc
             */
             resizeEnabled: false,
 
@@ -230,7 +229,7 @@ var Popover = Popup.inherit({
             * @extends Action
             * @action
             * @hidden
-            * @extend_doc
+            * @inheritdoc
             */
 
             /**
@@ -239,7 +238,7 @@ var Popover = Popup.inherit({
             * @extends Action
             * @action
             * @hidden
-            * @extend_doc
+            * @inheritdoc
             */
 
             /**
@@ -248,14 +247,14 @@ var Popover = Popup.inherit({
             * @extends Action
             * @action
             * @hidden
-            * @extend_doc
+            * @inheritdoc
             */
 
             /**
             * @name dxPopoverOptions_fullScreen
             * @publicName fullScreen
             * @hidden
-            * @extend_doc
+            * @inheritdoc
             */
 
             /**
@@ -306,21 +305,21 @@ var Popover = Popup.inherit({
             * @name dxPopoverOptions_focusStateEnabled
             * @publicName focusStateEnabled
             * @hidden
-            * @extend_doc
+            * @inheritdoc
             */
 
             /**
             * @name dxPopoverOptions_accessKey
             * @publicName accessKey
             * @hidden
-            * @extend_doc
+            * @inheritdoc
             */
 
             /**
             * @name dxPopoverOptions_tabIndex
             * @publicName tabIndex
             * @hidden
-            * @extend_doc
+            * @inheritdoc
             */
         });
     },
@@ -673,14 +672,14 @@ var Popover = Popup.inherit({
     * @name dxPopoverMethods_registerKeyHandler
     * @publicName registerKeyHandler(key, handler)
     * @hidden
-    * @extend_doc
+    * @inheritdoc
     */
 
     /**
     * @name dxPopoverMethods_focus
     * @publicName focus()
     * @hidden
-    * @extend_doc
+    * @inheritdoc
     */
 
 });
