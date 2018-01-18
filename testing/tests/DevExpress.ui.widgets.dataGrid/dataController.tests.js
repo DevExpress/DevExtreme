@@ -7,7 +7,6 @@ var $ = require("jquery"),
     typeUtils = require("core/utils/type"),
     DataSource = require("data/data_source/data_source").DataSource,
     ArrayStore = require("data/array_store"),
-    CustomStore = require("data/custom_store"),
     dataGridMocks = require("../../helpers/dataGridMocks.js"),
     setupDataGridModules = dataGridMocks.setupDataGridModules,
     MockGridDataSource = dataGridMocks.MockGridDataSource;
@@ -110,14 +109,14 @@ QUnit.test("Initialize array with keyExpr option", function(assert) {
 QUnit.test("Raise warning if keyExp is set and dataSource is not an array", function(assert) {
     //arrange
     var dataSource = new DataSource({
-        store: new CustomStore({
+        store: {
             load: function() {
                 return [
                     { name: 'Alex', phone: '55-55-55' },
                     { name: 'Dan', phone: '98-75-21' }
                 ];
             }
-        })
+        }
     });
     sinon.spy(errors, "log");
 

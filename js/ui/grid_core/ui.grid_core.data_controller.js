@@ -492,7 +492,6 @@ module.exports = {
 
                     that.callBase();
                     dataSource = that._dataSource;
-
                     that._isFirstLoading = true;
                     if(dataSource) {
                         that._setPagingOptions(dataSource);
