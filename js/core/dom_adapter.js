@@ -3,7 +3,7 @@
 /* global window */
 var domAdapter = module.exports = {
     createElement: function(tagName, text, context) {
-        context = context || this.getWindow().document;
+        context = context || domAdapter.getWindow().document;
         if(tagName === "#text") {
             return context.createTextNode(text);
         }
@@ -41,7 +41,7 @@ var domAdapter = module.exports = {
     },
 
     setEvent: function(element, name, value) {
-        this.listen(element, name, value);
+        domAdapter.listen(element, name, value);
     },
 
     setText: function(element, text) {
@@ -111,7 +111,7 @@ var domAdapter = module.exports = {
                 domAdapter._readyCallbacks.fire();
                 document.removeEventListener("DOMContentLoaded", loadedCallback);
             };
-            this.listen(document, "DOMContentLoaded", loadedCallback);
+            domAdapter.listen(document, "DOMContentLoaded", loadedCallback);
         }
     },
 
