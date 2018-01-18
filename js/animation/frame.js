@@ -1,6 +1,7 @@
 "use strict";
 
-var window = require("../core/dom_adapter").getWindow();
+var window = require("../core/dom_adapter").getWindow(),
+    callOnce = require("../core/utils/common").callOnce;
 
 var FRAME_ANIMATION_STEP_TIME = 1000 / 60,
 
@@ -10,48 +11,51 @@ var FRAME_ANIMATION_STEP_TIME = 1000 / 60,
 
     cancel = function(requestID) {
         this.clearTimeout(requestID);
-    },
+    };
 
-    nativeRequest = window.requestAnimationFrame ||
-        window.webkitRequestAnimationFrame ||
-        window.mozRequestAnimationFrame ||
-        window.oRequestAnimationFrame ||
-        window.msRequestAnimationFrame,
 
-    nativeCancel = window.cancelAnimationFrame ||
-        window.webkitCancelAnimationFrame ||
-        window.mozCancelAnimationFrame ||
-        window.oCancelAnimationFrame ||
-        window.msCancelAnimationFrame;
+var setAnimationFrameMethods = callOnce(function() {
+    var nativeRequest = window.requestAnimationFrame ||
+            window.webkitRequestAnimationFrame ||
+            window.mozRequestAnimationFrame ||
+            window.oRequestAnimationFrame ||
+            window.msRequestAnimationFrame,
 
-if(nativeRequest && nativeCancel) {
-    request = nativeRequest;
-    cancel = nativeCancel;
-}
+        nativeCancel = window.cancelAnimationFrame ||
+            window.webkitCancelAnimationFrame ||
+            window.mozCancelAnimationFrame ||
+            window.oCancelAnimationFrame ||
+            window.msCancelAnimationFrame;
 
-if(nativeRequest && !nativeCancel) {
-    // NOTE: https://code.google.com/p/android/issues/detail?id=66243
+    if(nativeRequest && nativeCancel) {
+        request = nativeRequest;
+        cancel = nativeCancel;
+    }
 
-    var canceledRequests = {};
+    if(nativeRequest && !nativeCancel) {
+        // NOTE: https://code.google.com/p/android/issues/detail?id=66243
 
-    request = function(callback) {
-        var requestId = nativeRequest.call(window, function() {
-            try {
-                if(requestId in canceledRequests) {
-                    return;
+        var canceledRequests = {};
+
+        request = function(callback) {
+            var requestId = nativeRequest.call(window, function() {
+                try {
+                    if(requestId in canceledRequests) {
+                        return;
+                    }
+                    callback.apply(this, arguments);
+                } finally {
+                    delete canceledRequests[requestId];
                 }
-                callback.apply(this, arguments);
-            } finally {
-                delete canceledRequests[requestId];
-            }
-        });
-        return requestId;
-    };
+            });
+            return requestId;
+        };
 
-    cancel = function(requestId) {
-        canceledRequests[requestId] = true;
-    };
-}
+        cancel = function(requestId) {
+            canceledRequests[requestId] = true;
+        };
+    }
+});
 
 /**
  * @name utils_requestAnimationFrame
@@ -63,7 +67,10 @@ if(nativeRequest && !nativeCancel) {
  * @module animation/frame
  * @export request
  */
-exports.requestAnimationFrame = request.bind(window);
+exports.requestAnimationFrame = function() {
+    setAnimationFrameMethods();
+    return request.apply(window, arguments);
+};
 
 /**
  * @name utils_cancelAnimationFrame
@@ -74,4 +81,7 @@ exports.requestAnimationFrame = request.bind(window);
  * @module animation/frame
  * @export cancel
  */
-exports.cancelAnimationFrame = cancel.bind(window);
+exports.cancelAnimationFrame = function() {
+    setAnimationFrameMethods();
+    cancel.apply(window, arguments);
+};
