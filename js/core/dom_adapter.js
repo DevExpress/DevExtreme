@@ -40,10 +40,6 @@ var domAdapter = module.exports = {
         element[name] = value;
     },
 
-    setEvent: function(element, name, value) {
-        domAdapter.listen(element, name, value);
-    },
-
     setText: function(element, text) {
         if(element) {
             element.textContent = text;
