@@ -2,6 +2,7 @@
 
 var eventsEngine = require("../../events/core/events_engine"),
     window = require("../../core/dom_adapter").getWindow(),
+    navigator = require("../../core/utils/navigator"),
     _math = Math,
     _abs = _math.abs,
     _sqrt = _math.sqrt,
@@ -535,7 +536,7 @@ function selectItem(flags, items) {
 }
 
 function setupEvents() {
-    var flags = [window.document.pointerEnabled, window.navigator.msPointerEnabled, "ontouchstart" in window];
+    var flags = [window.document.pointerEnabled, navigator.msPointerEnabled, "ontouchstart" in window];
     ///#DEBUG
     if(arguments.length) {
         flags = [

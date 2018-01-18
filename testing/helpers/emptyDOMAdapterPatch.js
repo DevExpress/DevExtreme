@@ -21,7 +21,7 @@ domAdapter.hasDocument = function() {
 };
 
 windowFields.forEach(function(field) {
-    if(field === "window") {
+    if(field === "window" || field === "navigator") {
         return;
     }
 

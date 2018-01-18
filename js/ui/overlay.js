@@ -2,6 +2,7 @@
 
 var $ = require("../core/renderer"),
     window = require("../core/dom_adapter").getWindow(),
+    navigator = require("../core/utils/navigator"),
     eventsEngine = require("../events/core/events_engine"),
     fx = require("../animation/fx"),
     translator = require("../animation/translator"),
@@ -59,7 +60,7 @@ var realDevice = devices.real(),
     firefoxDesktop = browser.mozilla && realDevice.deviceType === "desktop",
     iOS = realDevice.platform === "ios",
     iOS7_0andBelow = iOS && compareVersions(realVersion, [7, 1]) < 0,
-    android4_0nativeBrowser = realDevice.platform === "android" && compareVersions(realVersion, [4, 0], 2) === 0 && window.navigator.userAgent.indexOf("Chrome") === -1;
+    android4_0nativeBrowser = realDevice.platform === "android" && compareVersions(realVersion, [4, 0], 2) === 0 && navigator.userAgent.indexOf("Chrome") === -1;
 
 var forceRepaint = function($element) {
     // NOTE: force layout recalculation on iOS 6 & iOS 7.0 (B254713) and FF desktop (T581681)

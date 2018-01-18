@@ -3,6 +3,7 @@
 /* global Windows */
 var $ = require("../core/renderer"),
     window = require("../core/dom_adapter").getWindow(),
+    navigator = require("../core/utils/navigator"),
     eventsEngine = require("../events/core/events_engine"),
     errors = require("../ui/widget/ui.errors"),
     browser = require("../core/utils/browser"),
@@ -97,7 +98,6 @@ exports.fileSaver = {
     },
 
     _saveBlobAs: function(fileName, format, data, linkClick) {
-        var navigator = window.navigator;
         this._blobSaved = false;
 
         if(typeUtils.isDefined(navigator.msSaveOrOpenBlob)) {
@@ -122,8 +122,6 @@ exports.fileSaver = {
     },
 
     saveAs: function(fileName, format, data, proxyURL, linkClick) {
-        var navigator = window.navigator;
-
         fileName += "." + FILE_EXTESIONS[format];
 
         /*if(commonUtils.isDefined(window.cordova)) {

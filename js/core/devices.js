@@ -1,6 +1,7 @@
 "use strict";
 
 var $ = require("../core/renderer"),
+    navigator = require("./utils/navigator"),
     domAdapter = require("../core/dom_adapter"),
     window = domAdapter.getWindow(),
     extend = require("./utils/extend").extend,
@@ -364,7 +365,7 @@ var Devices = Class.inherit({
                     throw errors.Error("E0005");
                 }
             } else {
-                ua = window.navigator.userAgent;
+                ua = navigator.userAgent;
             }
             return this._fromUA(ua);
         }

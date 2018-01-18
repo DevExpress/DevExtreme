@@ -2,6 +2,7 @@
 
 var $ = require("../../core/renderer"),
     window = require("../../core/dom_adapter").getWindow(),
+    navigator = require("../../core/utils/navigator"),
     eventsEngine = require("../../events/core/events_engine"),
     devices = require("../../core/devices"),
     inArray = require("../../core/utils/array").inArray,
@@ -10,7 +11,7 @@ var $ = require("../../core/renderer"),
     TextEditor = require("./ui.text_editor"),
     eventUtils = require("../../events/utils");
 
-var ua = window.navigator.userAgent,
+var ua = navigator.userAgent,
     ignoreCode = [8, 9, 13, 33, 34, 35, 36, 37, 38, 39, 40, 46],
 
     TEXTBOX_CLASS = "dx-textbox",

@@ -1,7 +1,7 @@
 "use strict";
 
 var $ = require("../core/renderer"),
-    window = require("../core/dom_adapter").getWindow(),
+    navigator = require("../core/utils/navigator"),
     support = require("../core/utils/support"),
     themes = require("./themes"),
     browser = require("../core/utils/browser"),
@@ -98,7 +98,7 @@ var LoadIndicator = Widget.inherit({
             {
                 device: function() {
                     var realDevice = devices.real(),
-                        obsoleteAndroid = realDevice.platform === "android" && !(/chrome/i.test(window.navigator.userAgent));
+                        obsoleteAndroid = realDevice.platform === "android" && !(/chrome/i.test(navigator.userAgent));
                     return (browser.msie && browser.version < 10 || obsoleteAndroid);
                 },
                 options: {
