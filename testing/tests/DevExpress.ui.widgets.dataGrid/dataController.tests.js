@@ -7,6 +7,7 @@ var $ = require("jquery"),
     typeUtils = require("core/utils/type"),
     DataSource = require("data/data_source/data_source").DataSource,
     ArrayStore = require("data/array_store"),
+    CustomStore = require("data/custom_store"),
     dataGridMocks = require("../../helpers/dataGridMocks.js"),
     setupDataGridModules = dataGridMocks.setupDataGridModules,
     MockGridDataSource = dataGridMocks.MockGridDataSource;
@@ -104,6 +105,30 @@ QUnit.test("Initialize array with keyExpr option", function(assert) {
 
     //assert
     assert.equal(this.getDataSource().store().key(), "id", "keyExpr is assigned to store");
+});
+
+QUnit.test("Raise warning if keyExp is set and dataSource is not an array", function(assert) {
+    //arrange
+    var dataSource = new DataSource({
+        store: new CustomStore({
+            load: function() {
+                var deferred = $.Deferred();
+                $.ajax({
+                    url: "https://js.devexpress.com/Demos/WidgetsGallery/data/orderItems",
+                });
+                return deferred.promise();
+            }
+        })
+    });
+
+    //act
+    sinon.spy(errors, "log");
+    this.applyOptions({ keyExpr: "id", dataSource: dataSource });
+    this.dataController._refreshDataSource();
+
+    //assert
+    assert.equal(errors.log.lastCall.args[0], "W1011", "Warning about keyExpr is raised");
+    errors.log.restore();
 });
 
 QUnit.test("changed on initialize", function(assert) {
