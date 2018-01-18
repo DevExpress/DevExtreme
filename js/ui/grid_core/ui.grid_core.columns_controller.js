@@ -70,9 +70,8 @@ module.exports = {
             /**
              * @name GridBaseOptions_columnResizingMode
              * @publicName columnResizingMode
-             * @type string
+             * @type Enums.ColumnResizingMode
              * @default "nextColumn"
-             * @acceptValues "nextColumn" | "widget"
              */
             columnResizingMode: "nextColumn",
             /**
@@ -147,9 +146,8 @@ module.exports = {
             /**
              * @name GridBaseOptions_columns_fixedPosition
              * @publicName fixedPosition
-             * @type string
+             * @type Enums.HorizontalEdge
              * @default undefined
-             * @acceptValues "left" | "right"
              */
             /**
              * @name GridBaseOptions_columns_visibleIndex
@@ -172,9 +170,8 @@ module.exports = {
             /**
              * @name GridBaseOptions_columns_dataType
              * @publicName dataType
-             * @type string
+             * @type Enums.GridColumnDataType
              * @default undefined
-             * @acceptValues "string" | "number" | "date" | "boolean" | "object"
              */
             /**
              * @name GridBaseOptions_columns_validationRules
@@ -273,9 +270,8 @@ module.exports = {
             /**
              * @name GridBaseOptions_columns_sortOrder
              * @publicName sortOrder
-             * @type string
+             * @type Enums.SortOrder
              * @default undefined
-             * @acceptValues undefined | "asc" | "desc"
              */
             /**
              * @name GridBaseOptions_columns_sortIndex
@@ -292,9 +288,8 @@ module.exports = {
             /**
              * @name GridBaseOptions_columns_alignment
              * @publicName alignment
-             * @type string
+             * @type Enums.HorizontalAlignment
              * @default undefined
-             * @acceptValues undefined | "left" | "center" | "right"
              */
             /**
              * @name GridBaseOptions_columns_format
@@ -330,8 +325,7 @@ module.exports = {
             /**
              * @name GridBaseOptions_columns_selectedFilterOperation
              * @publicName selectedFilterOperation
-             * @type string
-             * @acceptValues "=" | "<>" | "<" | "<=" | ">" | ">=" | "notcontains" | "contains" | "startswith" | "endswith" | "between"
+             * @type Enums.FilterOperations
              * @default undefined
              */
             /**
@@ -349,9 +343,8 @@ module.exports = {
             /**
              * @name GridBaseOptions_columns_filterType
              * @publicName filterType
-             * @type string
+             * @type Enums.FilterType
              * @default "include"
-             * @acceptValues "include" | "exclude"
             */
             /**
              * @name GridBaseOptions_columns_cellTemplate
@@ -533,9 +526,8 @@ module.exports = {
             /**
              * @name GridBaseOptions_columns_headerFilter_groupInterval
              * @publicName groupInterval
-             * @type string|number
+             * @type Enums.HeaderFilterGroupInterval|number
              * @default undefined
-             * @acceptValues 'year' | 'month' | 'day' | 'quarter' | 'hour' | 'minute' | 'second'
              */
             /**
              * @name GridBaseOptions_columns_editorOptions

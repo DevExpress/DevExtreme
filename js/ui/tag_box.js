@@ -299,9 +299,8 @@ var TagBox = SelectBox.inherit({
             /**
              * @name  dxTagBoxOptions_selectAllMode
              * @publicName selectAllMode
-             * @type string
+             * @type Enums.SelectAllMode
              * @default 'page'
-             * @acceptValues 'page'|'allPages'
              */
             selectAllMode: 'page',
 
@@ -325,9 +324,8 @@ var TagBox = SelectBox.inherit({
             /**
             * @name dxTagBoxOptions_applyValueMode
             * @publicName applyValueMode
-            * @type string
+            * @type Enums.EditorApplyValueMode
             * @default "instantly"
-            * @acceptValues 'useButtons'|'instantly'
             */
 
             /**

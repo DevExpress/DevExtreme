@@ -134,8 +134,7 @@ var Popover = Popup.inherit({
             /**
             * @name dxPopoverOptions_position
             * @publicName position
-            * @type string|positionConfig
-            * @acceptValues 'top'|'bottom'|'left'|'right'
+            * @type Enums.Position|positionConfig
             * @default 'bottom'
             */
             position: 'bottom',

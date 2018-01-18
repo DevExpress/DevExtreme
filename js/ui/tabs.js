@@ -92,9 +92,8 @@ var Tabs = CollectionWidget.inherit({
             /**
             * @name dxTabsOptions_selectionMode
             * @publicName selectionMode
-            * @type string
+            * @type Enums.NavSelectionMode
             * @default 'single'
-            * @acceptValues 'multiple'|'single'
             */
             selectionMode: "single",
 

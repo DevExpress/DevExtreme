@@ -180,8 +180,7 @@ var PivotGrid = Widget.inherit({
                 /**
                  * @name dxPivotGridOptions_scrolling_mode
                  * @publicName mode
-                 * @type string
-                 * @acceptValues "standard" | "virtual"
+                 * @type Enums.PivotGridScrollingMode
                  * @default "standard"
                  */
                 mode: "standard",
@@ -428,8 +427,7 @@ var PivotGrid = Widget.inherit({
             /**
             * @name dxPivotGridOptions_dataFieldArea
             * @publicName dataFieldArea
-            * @type string
-            * @acceptValues "row" | "column"
+            * @type Enums.PivotGridDataFieldArea
             * @default "column"
             */
             dataFieldArea: "column",
@@ -500,16 +498,14 @@ var PivotGrid = Widget.inherit({
             /**
              * @name dxPivotGridOptions_showTotalsPrior
              * @publicName showTotalsPrior
-             * @type string
-             * @acceptValues "rows" | "columns" | "both" | "none"
+             * @type Enums.PivotGridTotalsDisplayMode
              * @default "none"
              */
             showTotalsPrior: "none",
             /**
             * @name dxPivotGridOptions_rowHeaderLayout
             * @publicName rowHeaderLayout
-            * @type string
-            * @acceptValues "standard" | "tree"
+            * @type Enums.PivotGridRowHeadersLayout
             * @default "standard"
             */
             rowHeaderLayout: "standard",
@@ -721,8 +717,7 @@ var PivotGrid = Widget.inherit({
                 /**
                  * @name dxPivotGridOptions_stateStoring_type
                  * @publicName type
-                 * @type string
-                 * @acceptValues "localStorage" | "sessionStorage" | "custom"
+                 * @type Enums.StateStoringType
                  * @default "localStorage"
                  */
                 type: "localStorage",

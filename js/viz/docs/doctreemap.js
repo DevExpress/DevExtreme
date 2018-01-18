@@ -64,29 +64,26 @@ var dxTreeMap = {
     /**
     * @name dxtreemapoptions_layoutalgorithm
     * @publicName layoutAlgorithm
-    * @type string | function
+    * @type Enums.TreeMapLayoutAlgorithm | function
     * @type_function_param1 e:object
     * @type_function_param1_field1 rect:array
     * @type_function_param1_field2 sum:number
     * @type_function_param1_field3 items:array
     * @default 'squarified'
-    * @acceptValues 'squarified' | 'strip' | 'sliceanddice'
     */
     layoutAlgorithm: "squarified",
     /**
     * @name dxtreemapoptions_layoutdirection
     * @publicName layoutDirection
-    * @type string
+    * @type Enums.TreeMapLayoutDirection
     * @default 'leftTopRightBottom'
-    * @acceptValues 'leftTopRightBottom' | 'leftBottomRightTop' | 'rightTopLeftBottom' | 'rightBottomLeftTop'
     */
     layoutDirection: "leftTopRightBottom",
     /**
      * @name dxtreemapoptions_resolvelabeloverflow
      * @publicName resolveLabelOverflow
-     * @type string
+     * @type Enums.TreeMapResolveLabelOverflow
      * @default 'hide'
-     * @acceptValues 'hide' | 'ellipsis'
      */
     resolveLabelOverflow: 'hide',
     /**
@@ -432,9 +429,8 @@ var dxTreeMap = {
         /**
         * @name dxtreemapoptions_colorizer_type
         * @publicName type
-        * @type string
+        * @type Enums.TreeMapColorizerType
         * @default undefined
-        * @acceptValues "discrete" | "gradient" | "range" | "none"
         */
         type: undefined,
         /**
@@ -489,8 +485,7 @@ var dxTreeMap = {
     /**
     * @name dxtreemapoptions_selectionmode
     * @publicName selectionMode
-    * @type string
-    * @acceptValues "single" | "multiple" | "none"
+    * @type Enums.SelectionMode
     * @default undefined
     */
     selectionMode: undefined,

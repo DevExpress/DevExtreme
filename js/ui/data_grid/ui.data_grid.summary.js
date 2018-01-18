@@ -295,8 +295,7 @@ gridCore.registerModule("summary", {
                 /**
                  * @name dxDataGridOptions_summary_groupItems_summaryType
                  * @publicName summaryType
-                 * @type string
-                 * @acceptValues "sum" | "min" | "max" | "avg" | "count" | "custom"
+                 * @type Enums.SummaryType
                  * @default undefined
                  */
                 /**
@@ -378,8 +377,7 @@ gridCore.registerModule("summary", {
                 /**
                  * @name dxDataGridOptions_summary_totalItems_summaryType
                  * @publicName summaryType
-                 * @type string
-                 * @acceptValues "sum" | "min" | "max" | "avg" | "count" | "custom"
+                 * @type Enums.SummaryType
                  * @default undefined
                  */
                 /**
@@ -413,8 +411,7 @@ gridCore.registerModule("summary", {
                 /**
                  * @name dxDataGridOptions_summary_totalItems_alignment
                  * @publicName alignment
-                 * @type string
-                 * @acceptValues "left" | "center" | "right"
+                 * @type Enums.HorizontalAlignment
                  * @default undefined
                  */
                 /**
@@ -540,9 +537,8 @@ gridCore.registerModule("summary", {
             /**
              * @name dxDataGridOptions_sortByGroupSummaryInfo_sortOrder
              * @publicName sortOrder
-             * @type string
+             * @type Enums.SortOrder
              * @default undefined
-             * @acceptValues undefined | "asc" | "desc"
              */
         };
     },

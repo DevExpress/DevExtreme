@@ -39,8 +39,7 @@ var RequiredRuleValidator = BaseRuleValidator.inherit({
     /**
      * @name requiredRuleOptions_type
      * @publicName type
-     * @type string
-     * @acceptValues 'required'
+     * @type Enums.ValidationRuleType
      */
     /**
      * @name requiredRuleOptions_trim
@@ -74,8 +73,7 @@ var NumericRuleValidator = BaseRuleValidator.inherit({
     /**
      * @name numericRuleOptions_type
      * @publicName type
-     * @type string
-     * @acceptValues 'numeric'
+     * @type Enums.ValidationRuleType
      */
     /**
      * @name numericRuleOptions_message
@@ -102,8 +100,7 @@ var RangeRuleValidator = BaseRuleValidator.inherit({
     /**
      * @name rangeRuleOptions_type
      * @publicName type
-     * @type string
-     * @acceptValues 'range'
+     * @type Enums.ValidationRuleType
      */
     /**
      * @name rangeRuleOptions_min
@@ -164,8 +161,7 @@ var StringLengthRuleValidator = BaseRuleValidator.inherit({
     /**
      * @name stringLengthRuleOptions_type
      * @publicName type
-     * @type string
-     * @acceptValues 'stringLength'
+     * @type Enums.ValidationRuleType
      */
     /**
      * @name stringLengthRuleOptions_min
@@ -206,8 +202,7 @@ var CustomRuleValidator = BaseRuleValidator.inherit({
     /**
      * @name customRuleOptions_type
      * @publicName type
-     * @type string
-     * @acceptValues 'custom'
+     * @type Enums.ValidationRuleType
      */
     /**
      * @name customRuleOptions_validationCallback
@@ -246,8 +241,7 @@ var CompareRuleValidator = BaseRuleValidator.inherit({
     /**
      * @name compareRuleOptions_type
      * @publicName type
-     * @type string
-     * @acceptValues 'compare'
+     * @type Enums.ValidationRuleType
      */
     /**
      * @name compareRuleOptions_comparisonTarget
@@ -258,9 +252,8 @@ var CompareRuleValidator = BaseRuleValidator.inherit({
     /**
      * @name compareRuleOptions_comparisonType
      * @publicName comparisonType
-     * @type string
+     * @type Enums.ComparisonOperator
      * @default '=='
-     * @acceptValues '=='|'!='|'==='|'!=='|'>'|'>='|'<'|'<='
      */
     /**
      * @name compareRuleOptions_message
@@ -312,8 +305,7 @@ var PatternRuleValidator = BaseRuleValidator.inherit({
     /**
      * @name patternRuleOptions_type
      * @publicName type
-     * @type string
-     * @acceptValues 'pattern'
+     * @type Enums.ValidationRuleType
      */
     /**
      * @name patternRuleOptions_pattern
@@ -344,8 +336,7 @@ var EmailRuleValidator = BaseRuleValidator.inherit({
     /**
      * @name emailRuleOptions_type
      * @publicName type
-     * @type string
-     * @acceptValues 'email'
+     * @type Enums.ValidationRuleType
      */
     /**
      * @name emailRuleOptions_message

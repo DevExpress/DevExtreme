@@ -115,9 +115,8 @@ var Scrollable = DOMComponent.inherit({
             /**
             * @name dxScrollableOptions_direction
             * @publicName direction
-            * @type string
+            * @type Enums.ScrollDirection
             * @default "vertical"
-            * @acceptValues 'vertical'|'horizontal'|'both'
             */
             direction: VERTICAL,
 

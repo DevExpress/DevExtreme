@@ -154,9 +154,8 @@ var ContextMenu = MenuBase.inherit((function() {
                 /**
                 * @name dxContextMenuOptions_submenuDirection
                 * @publicName submenuDirection
-                * @type string
+                * @type Enums.ContextMenuSubmenuDirection
                 * @default "auto"
-                * @acceptValues "auto"|"right"|"left"
                 */
                 submenuDirection: "auto",
 

@@ -134,9 +134,8 @@ var TreeView = HierarchicalCollectionWidget.inherit({
             /**
             * @name dxTreeViewOptions_dataStructure
             * @publicName dataStructure
-            * @type string
+            * @type Enums.TreeViewDataStructure
             * @default 'tree'
-            * @acceptValues 'tree'|'plain'
             */
             dataStructure: "tree",
 
@@ -175,8 +174,7 @@ var TreeView = HierarchicalCollectionWidget.inherit({
             /**
              * @name dxTreeViewOptions_showCheckBoxesMode
              * @publicName showCheckBoxesMode
-             * @type string
-             * @acceptValues 'none'|'normal'|'selectAll'
+             * @type Enums.TreeViewCheckBoxMode
              * @default 'none'
              */
             showCheckBoxesMode: "none",
@@ -263,9 +261,8 @@ var TreeView = HierarchicalCollectionWidget.inherit({
             /**
             * @name dxTreeViewOptions_scrollDirection
             * @publicName scrollDirection
-            * @type string
+            * @type Enums.ScrollDirection
             * @default "vertical"
-            * @acceptValues 'vertical'|'horizontal'|'both'
             */
             scrollDirection: "vertical",
 
@@ -306,9 +303,8 @@ var TreeView = HierarchicalCollectionWidget.inherit({
             /**
              * @name dxTreeViewOptions_selectionMode
              * @publicName selectionMode
-             * @type string
+             * @type Enums.NavSelectionMode
              * @default "multiple"
-             * @acceptValues "single"|"multiple"
              */
             selectionMode: "multiple",
 

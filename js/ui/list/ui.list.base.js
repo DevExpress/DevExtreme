@@ -163,8 +163,7 @@ var ListBase = CollectionWidget.inherit({
             /**
             * @name dxListOptions_showScrollbar
             * @publicName showScrollbar
-            * @type string
-            * @acceptValues 'onScroll'|'onHover'|'always'|'never'
+            * @type Enums.ShowScrollbarMode
             * @default 'onScroll'
             */
             showScrollbar: "onScroll",
@@ -260,9 +259,8 @@ var ListBase = CollectionWidget.inherit({
             /**
             * @name dxListOptions_pageLoadMode
             * @publicName pageLoadMode
-            * @type string
+            * @type Enums.ListPageLoadMode
             * @default "scrollBottom"
-            * @acceptValues 'scrollBottom'|'nextButton'
             */
             pageLoadMode: "scrollBottom",
 

@@ -378,8 +378,7 @@ module.exports = {
                 /**
                  * @name GridBaseOptions_columnChooser_mode
                  * @publicName mode
-                 * @type string
-                 * @acceptValues "dragAndDrop" | "select"
+                 * @type Enums.GridColumnChooserMode
                  * @default "dragAndDrop"
                  */
                 mode: "dragAndDrop",
