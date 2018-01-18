@@ -123,9 +123,8 @@ var DateBox = DropDownEditor.inherit({
             /**
             * @name dxDateBoxOptions_type
             * @publicName type
-            * @type string
+            * @type Enums.DateBoxType
             * @default "date"
-            * @acceptValues 'date'|'time'|'datetime'
             */
             type: "date",
 
@@ -209,18 +208,16 @@ var DateBox = DropDownEditor.inherit({
             /**
             * @name dxDateBoxOptions_maxZoomLevel
             * @publicName maxZoomLevel
-            * @type string
+            * @type Enums.CalendarZoomLevel
             * @default 'month'
-            * @acceptValues 'month'|'year'|'decade'|'century'
             */
             maxZoomLevel: "month",
 
             /**
             * @name dxDateBoxOptions_minZoomLevel
             * @publicName minZoomLevel
-            * @type string
+            * @type Enums.CalendarZoomLevel
             * @default 'century'
-            * @acceptValues 'month'|'year'|'decade'|'century'
             */
             minZoomLevel: "century",
 
@@ -236,9 +233,8 @@ var DateBox = DropDownEditor.inherit({
             /**
             * @name dxDateBoxOptions_pickerType
             * @publicName pickerType
-            * @type string
+            * @type Enums.DateBoxPickerType
             * @default 'native'
-            * @acceptValues 'native'|'calendar'|'rollers'|'list'
             */
             pickerType: PICKER_TYPE["native"],
 

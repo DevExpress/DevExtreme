@@ -70,17 +70,15 @@ var MenuBase = HierarchicalCollectionWidget.inherit({
             /**
             * @name dxMenuBaseOptions_showSubmenuMode
             * @publicName showSubmenuMode
-            * @type Object|string
+            * @type Object|Enums.ShowSubmenuMode
             * @default { name: "onHover", delay: { show: 0, hide: 0 } }
-            * @acceptValues "onHover"|"onClick"
             */
             showSubmenuMode: {
                 /**
                 * @name dxMenuBaseOptions_showSubmenuMode_name
                 * @publicName name
-                * @type string
+                * @type Enums.ShowSubmenuMode
                 * @default "onHover"
-                * @acceptValues "onHover"|"onClick"
                 */
                 name: "onHover",
 
@@ -227,9 +225,8 @@ var MenuBase = HierarchicalCollectionWidget.inherit({
             /**
             * @name dxMenuBaseOptions_selectionMode
             * @publicName selectionMode
-            * @type string
+            * @type Enums.MenuSelectionMode
             * @default none
-            * @acceptValues "single"|"none"
              */
 
             _itemAttributes: { role: "menuitem" },

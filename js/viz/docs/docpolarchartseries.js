@@ -52,10 +52,9 @@ var CommonPolarChartSeries = {
     /**
 	* @name dxPolarChartSeriesTypes_CommonPolarChartSeries_dashstyle
 	* @publicName dashStyle
-	* @type string
+	* @type Enums.DashStyle
 	* @default 'solid'
-	* @acceptValues 'solid'|'longDash'|'dash'|'dot'
-	* @propertyOf dxPolarChartSeriesTypes_linepolarseries
+		* @propertyOf dxPolarChartSeriesTypes_linepolarseries
 	*/
     dashStyle: 'solid',
     /**
@@ -132,28 +131,25 @@ var CommonPolarChartSeries = {
         /**
 	    * @name dxPolarChartSeriesTypes_CommonPolarChartSeries_border_dashstyle
 	    * @publicName dashStyle
-	    * @type string
+	    * @type Enums.DashStyle
 	    * @default undefined
-	    * @acceptValues 'solid'|'longDash'|'dash'|'dot'
-	    * @propertyOf dxPolarChartSeriesTypes_areapolarseries,dxPolarChartSeriesTypes_barpolarseries,dxPolarChartSeriesTypes_stackedbarpolarseries
+		    * @propertyOf dxPolarChartSeriesTypes_areapolarseries,dxPolarChartSeriesTypes_barpolarseries,dxPolarChartSeriesTypes_stackedbarpolarseries
 	    */
         dashStyle: undefined
     },
     /**
 	* @name dxPolarChartSeriesTypes_CommonPolarChartSeries_hovermode
 	* @publicName hoverMode
-	* @type string
+	* @type Enums.ChartSeriesHoverMode
 	* @propertyOf dxPolarChartSeriesTypes_areapolarseries,dxPolarChartSeriesTypes_barpolarseries,dxPolarChartSeriesTypes_stackedbarpolarseries,dxPolarChartSeriesTypes_linepolarseries
-	* @acceptValues 'onlyPoint'|'allSeriesPoints'|'allArgumentPoints'|'nearestPoint'|'includePoints'|'excludePoints'|'none'
-	*/
+		*/
     hoverMode: 'nearestPoint',
     /**
 	* @name dxPolarChartSeriesTypes_CommonPolarChartSeries_selectionmode
 	* @publicName selectionMode
-	* @type string
+	* @type Enums.ChartSeriesSelectionMode
 	* @propertyOf dxPolarChartSeriesTypes_areapolarseries,dxPolarChartSeriesTypes_barpolarseries,dxPolarChartSeriesTypes_stackedbarpolarseries,dxPolarChartSeriesTypes_linepolarseries
-	* @acceptValues 'onlyPoint'|'allSeriesPoints'|'allArgumentPoints'|'includePoints'|'excludePoints'|'none'
-	*/
+		*/
     selectionMode: 'includePoints',
     /**
 	* @name dxPolarChartSeriesTypes_CommonPolarChartSeries_hoverstyle
@@ -180,10 +176,9 @@ var CommonPolarChartSeries = {
         /**
 		* @name dxPolarChartSeriesTypes_CommonPolarChartSeries_hoverstyle_dashstyle
 		* @publicName dashStyle
-		* @type string
+		* @type Enums.DashStyle
 		* @default 'solid'
-		* @acceptValues 'solid'|'longDash'|'dash'|'dot'
-		* @propertyOf dxPolarChartSeriesTypes_linepolarseries
+				* @propertyOf dxPolarChartSeriesTypes_linepolarseries
 		*/
         dashStyle: 'solid',
         /**
@@ -196,9 +191,8 @@ var CommonPolarChartSeries = {
             /**
             * @name dxPolarChartSeriesTypes_CommonPolarChartSeries_hoverstyle_hatching_direction
             * @publicName direction
-            * @type string
+            * @type Enums.HatchingDirection
             * @default 'none'
-            * @acceptValues 'none'|'right'|'left'
             */
             direction: 'right',
             /**
@@ -254,10 +248,9 @@ var CommonPolarChartSeries = {
             /**
 		    * @name dxPolarChartSeriesTypes_CommonPolarChartSeries_hoverstyle_border_dashstyle
 		    * @publicName dashStyle
-		    * @type string
+		    * @type Enums.DashStyle
 		    * @default 'solid'
-		    * @acceptValues 'solid'|'longDash'|'dash'|'dot'
-		    */
+				    */
             dashStyle: 'solid'
         }
     },
@@ -286,10 +279,9 @@ var CommonPolarChartSeries = {
         /**
 		* @name dxPolarChartSeriesTypes_CommonPolarChartSeries_selectionstyle_dashstyle
 		* @publicName dashStyle
-		* @type string
+		* @type Enums.DashStyle
 		* @default 'solid'
-		* @acceptValues 'solid'|'longDash'|'dash'|'dot'
-		* @propertyOf dxPolarChartSeriesTypes_linepolarseries
+				* @propertyOf dxPolarChartSeriesTypes_linepolarseries
 		*/
         dashStyle: 'solid',
         /**
@@ -302,9 +294,8 @@ var CommonPolarChartSeries = {
             /**
             * @name dxPolarChartSeriesTypes_CommonPolarChartSeries_selectionstyle_hatching_direction
             * @publicName direction
-            * @type string
+            * @type Enums.HatchingDirection
             * @default 'none'
-            * @acceptValues 'none'|'right'|'left'
             */
             direction: 'right',
             /**
@@ -360,10 +351,9 @@ var CommonPolarChartSeries = {
             /**
 		    * @name dxPolarChartSeriesTypes_CommonPolarChartSeries_selectionstyle_border_dashstyle
 		    * @publicName dashStyle
-		    * @type string
+		    * @type Enums.DashStyle
 		    * @default 'solid'
-		    * @acceptValues 'solid'|'longDash'|'dash'|'dot'
-		    */
+				    */
             dashStyle: 'solid'
         }
     },
@@ -377,18 +367,16 @@ var CommonPolarChartSeries = {
         /**
 		* @name dxPolarChartSeriesTypes_CommonPolarChartSeries_point_hovermode
 		* @publicName hoverMode
-		* @type string
-		* @acceptValues 'onlyPoint' | 'allSeriesPoints' | 'allArgumentPoints' | 'none'
-        * @default 'onlyPoint'
+		* @type Enums.ChartPointInteractionMode
+		        * @default 'onlyPoint'
 		* @propertyOf dxPolarChartSeriesTypes_linepolarseries,dxPolarChartSeriesTypes_areapolarseries,dxPolarChartSeriesTypes_scatterpolarseries
 		*/
         hoverMode: 'onlyPoint',
         /**
 		* @name dxPolarChartSeriesTypes_CommonPolarChartSeries_point_selectionmode
 		* @publicName selectionMode
-		* @type string
-		* @acceptValues 'onlyPoint' | 'allSeriesPoints' | 'allArgumentPoints' | 'none'
-        * @default 'onlyPoint'
+		* @type Enums.ChartPointInteractionMode
+		        * @default 'onlyPoint'
 		* @propertyOf dxPolarChartSeriesTypes_linepolarseries,dxPolarChartSeriesTypes_areapolarseries,dxPolarChartSeriesTypes_scatterpolarseries
 		*/
         selectionMode: 'onlyPoint',
@@ -411,10 +399,9 @@ var CommonPolarChartSeries = {
         /**
 		* @name dxPolarChartSeriesTypes_CommonPolarChartSeries_point_symbol
 		* @publicName symbol
-		* @type string
+		* @type Enums.VizPointSymbol
 		* @default 'circle'
-		* @acceptValues 'circle' | 'square' | 'polygon' | 'triangle' | 'cross'
-		* @propertyOf dxPolarChartSeriesTypes_linepolarseries,dxPolarChartSeriesTypes_areapolarseries,dxPolarChartSeriesTypes_scatterpolarseries
+				* @propertyOf dxPolarChartSeriesTypes_linepolarseries,dxPolarChartSeriesTypes_areapolarseries,dxPolarChartSeriesTypes_scatterpolarseries
 		*/
         symbol: 'circle',
         /**
@@ -697,9 +684,8 @@ var CommonPolarChartSeries = {
         /**
         * @name dxPolarChartSeriesTypes_CommonPolarChartSeries_label_position
         * @publicName position
-        * @type string
+        * @type Enums.RelativePosition
         * @default 'outside'
-        * @acceptValues 'outside' | 'inside'
         * @propertyOf dxPolarChartSeriesTypes_barpolarseries,dxPolarChartSeriesTypes_stackedbarpolarseries
         */
         position: 'outside',
@@ -782,9 +768,8 @@ var CommonPolarChartSeries = {
             /**
             * @name dxPolarChartSeriesTypes_CommonPolarChartSeries_label_border_dashstyle
             * @publicName dashStyle
-            * @type string
+            * @type Enums.DashStyle
             * @default 'solid'
-            * @acceptValues 'solid'|'longDash'|'dash'|'dot'
             */
             dashStyle: 'solid'
         },
@@ -831,8 +816,7 @@ var CommonPolarChartSeries = {
         /**
         * @name dxPolarChartSeriesTypes_CommonPolarChartSeries_valueerrorbar_displaymode
         * @publicName displayMode
-        * @type string
-        * @acceptValues 'auto' | 'low' | 'high' | 'none'
+        * @type Enums.ValueErrorBarDisplayMode
         * @default 'auto'
         */
         displayMode: 'auto',
@@ -853,9 +837,8 @@ var CommonPolarChartSeries = {
         /**
         * @name dxPolarChartSeriesTypes_CommonPolarChartSeries_valueerrorbar_type
         * @publicName type
-        * @type string
+        * @type Enums.ValueErrorBarType
         * @default undefined
-        * @acceptValues 'percent' | 'stdError' | 'stdDeviation' | 'variance' | 'fixed'
         */
         type: undefined,
         /**

@@ -441,27 +441,24 @@ var Box = CollectionWidget.inherit({
             /**
             * @name dxBoxOptions_direction
             * @publicName direction
-            * @type string
+            * @type Enums.BoxDirection
             * @default 'row'
-            * @acceptValues 'row'|'col'
             */
             direction: "row",
 
             /**
             * @name dxBoxOptions_align
             * @publicName align
-            * @type string
+            * @type Enums.BoxAlign
             * @default 'start'
-            * @acceptValues 'start'|'end'|'center'|'space-between'|'space-around'
             */
             align: "start",
 
             /**
             * @name dxBoxOptions_crossAlign
             * @publicName crossAlign
-            * @type string
+            * @type Enums.BoxCrossAlign
             * @default 'start'
-            * @acceptValues 'start'|'end'|'center'|'stretch'
             */
             crossAlign: "stretch",
 
@@ -773,8 +770,7 @@ var Box = CollectionWidget.inherit({
 /**
 * @name dxBoxItemTemplate_baseSize
 * @publicName baseSize
-* @type number | string
-* @acceptValues 'auto'
+* @type number | Enums.Mode
 * @default 0
 */
 /**

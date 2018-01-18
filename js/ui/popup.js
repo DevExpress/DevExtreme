@@ -179,8 +179,7 @@ var Popup = Overlay.inherit({
             /**
             * @name dxPopupOptions_toolbarItems_toolbar
             * @publicName toolbar
-            * @type string
-            * @acceptValues 'bottom'|'top'
+            * @type Enums.Toolbar
             * @default 'top'
             */
             /**
@@ -213,8 +212,7 @@ var Popup = Overlay.inherit({
             /**
             * @name dxPopupOptions_toolbarItems_widget
             * @publicName widget
-            * @type String
-            * @acceptValues 'dxButton'|'dxTabs'|'dxCheckBox'|'dxSelectBox'|'dxTextBox'|'dxAutocomplete'|'dxDateBox'|'dxMenu'
+            * @type Enums.ToolbarItemWidget
             */
             /**
             * @name dxPopupOptions_toolbarItems_options
@@ -224,9 +222,8 @@ var Popup = Overlay.inherit({
             /**
             * @name dxPopupOptions_toolbarItems_location
             * @publicName location
-            * @type string
+            * @type Enums.ToolbarItemLocation
             * @default 'center'
-            * @acceptValues 'before'|'after'|'center'
             */
             toolbarItems: [],
 

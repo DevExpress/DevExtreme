@@ -10,39 +10,33 @@
 /**
 * @name positionConfig_my
 * @publicName my
-* @type string|object
-* @acceptValues 'left'|'right'|'top'|'bottom'|'center'|'left top'|'left bottom'|'right top'|'right bottom'
+* @type Enums.PositionAlignment|object
 */
 /**
 * @name positionConfig_my_x
 * @publicName x
-* @type string
-* @acceptValues 'left'|'right'|'center'
+* @type Enums.HorizontalAlignment
 */
 /**
 * @name positionConfig_my_y
 * @publicName y
-* @type string
-* @acceptValues 'top'|'bottom'|'center'
+* @type Enums.VerticalAlignment
 */
 
 /**
 * @name positionConfig_at
 * @publicName at
-* @type string|object
-* @acceptValues 'left'|'right'|'top'|'bottom'|'center'|'left top'|'left bottom'|'right top'|'right bottom'
+* @type Enums.PositionAlignment|object
 */
 /**
 * @name positionConfig_at_x
 * @publicName x
-* @type string
-* @acceptValues 'left'|'right'|'center'
+* @type Enums.HorizontalAlignment
 */
 /**
 * @name positionConfig_at_y
 * @publicName y
-* @type string
-* @acceptValues 'top'|'bottom'|'center'
+* @type Enums.VerticalAlignment
 */
 
 /**
@@ -72,22 +66,19 @@
 /**
 * @name positionConfig_collision
 * @publicName collision
-* @type string|object
-* @acceptValues 'none'|'flip'|'fit'|'flipfit'|'none flip'|'flip none'|'none fit'|'fit none'|'none flipfit'|'flipfit none'|'flip fit'|'fit flip'|'fit flipfit'|'flipfit fit'
+* @type Enums.PositionResolveCollisionXY|object
 */
 /**
 * @name positionConfig_collision_x
 * @publicName x
-* @type string
+* @type Enums.PositionResolveCollision
 * @default 'none'
-* @acceptValues 'none'|'flip'|'fit'|'flipfit'
 */
 /**
 * @name positionConfig_collision_y
 * @publicName y
-* @type string
+* @type Enums.PositionResolveCollision
 * @default 'none'
-* @acceptValues 'none'|'flip'|'fit'|'flipfit'
 */
 
 /**

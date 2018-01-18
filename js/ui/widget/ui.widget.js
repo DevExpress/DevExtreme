@@ -209,18 +209,16 @@ var Widget = DOMComponent.inherit({
             /**
             * @name format
             * @publicName format
-            * @type String|function|Object
+            * @type Enums.Format|function|Object
             * @type_function_param1 value:number|date
             * @type_function_return string
             * @default undefined
-            * @acceptValues "currency" | "fixedPoint" | "percent" | "decimal" | "exponential" | "largeNumber" | "thousands" | "millions" | "billions" | "trillions" | "longDate" | "longTime" | "longDateLongTime" | "monthAndDay" | "monthAndYear" | "quarterAndYear" | "shortDate" | "shortTime" | "shortDateShortTime" | "second" | "millisecond" | "day" | "month" | "quarter" | "year" | "dayOfWeek" | "hour" | "minute"
             * @section Common
             */
             /**
             * @name format_type
             * @publicName type
-            * @type String
-            * @acceptValues "currency" | "fixedPoint" | "percent" | "decimal" | "exponential" | "largeNumber" | "thousands" | "millions" | "billions" | "trillions" | "longDate" | "longTime" | "longDateLongTime" | "monthAndDay" | "monthAndYear" | "quarterAndYear" | "shortDate" | "shortTime" | "shortDateShortTime" | "second" | "millisecond" | "day" | "month" | "quarter" | "year" | "dayOfWeek" | "hour" | "minute"
+            * @type Enums.Format
             */
             /**
             * @name format_precision

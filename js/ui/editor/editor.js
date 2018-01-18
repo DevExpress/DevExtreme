@@ -103,8 +103,7 @@ var Editor = Widget.inherit({
             /**
              * @name EditorOptions_validationMessageMode
              * @publicName validationMessageMode
-             * @type String
-             * @acceptValues 'auto'|'always'
+             * @type Enums.ValidationMessageMode
              * @default "auto"
              */
             validationMessageMode: "auto",

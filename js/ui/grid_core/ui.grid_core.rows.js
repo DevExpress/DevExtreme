@@ -101,8 +101,7 @@ module.exports = {
                 /**
                 * @name GridBaseOptions_scrolling_showScrollbar
                 * @publicName showScrollbar
-                * @type string
-                * @acceptValues 'onScroll'|'onHover'|'always'|'never'
+                * @type Enums.ShowScrollbarMode
                 * @default 'onScroll'
                 */
                 /**

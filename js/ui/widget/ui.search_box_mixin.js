@@ -20,9 +20,8 @@ module.exports = {
             /**
             * @name SearchBoxMixinOptions_searchMode
             * @publicName searchMode
-            * @type string
+            * @type Enums.CollectionSearchMode
             * @default 'contains'
-            * @acceptValues "contains"|"startswith"
             */
             searchMode: "",
 

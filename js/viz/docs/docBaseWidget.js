@@ -215,17 +215,15 @@ var BaseWidget = {
         /**
         * @name BaseWidgetOptions_title_verticalalignment
         * @publicName verticalAlignment
-        * @type string
+        * @type Enums.VerticalEdge
         * @default 'top'
-        * @acceptValues 'top' | 'bottom'
         */
         verticalAlignment: 'top',
         /**
         * @name BaseWidgetOptions_title_horizontalalignment
         * @publicName horizontalAlignment
-        * @type string
+        * @type Enums.HorizontalAlignment
         * @default 'center'
-        * @acceptValues 'right' | 'center' | 'left'
         */
         horizontalAlignment: 'center',
         /**
@@ -534,9 +532,8 @@ var BaseWidget = {
             /**
             * @name BaseWidgetOptions_tooltip_border_dashstyle
             * @publicName dashStyle
-            * @type string
+            * @type Enums.DashStyle
             * @default 'solid'
-            * @acceptValues 'solid'|'longDash'|'dash'|'dot'
             */
             dashStyle: 'solid',
             /**

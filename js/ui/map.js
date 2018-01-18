@@ -155,18 +155,16 @@ var Map = Widget.inherit({
             /**
             * @name dxMapOptions_type
             * @publicName type
-            * @type string
+            * @type Enums.GeoMapType
             * @default "roadmap"
-            * @acceptValues 'hybrid'|'roadmap'|'satellite'
             */
             type: "roadmap",
 
             /**
             * @name dxMapOptions_provider
             * @publicName provider
-            * @type string
+            * @type Enums.GeoMapProvider
             * @default "google"
-            * @acceptValues 'bing'|'google'|'googleStatic'
             */
             provider: "google",
 
@@ -262,8 +260,7 @@ var Map = Widget.inherit({
             /**
             * @name dxMapOptions_routes_mode
             * @publicName mode
-            * @type string
-            * @acceptValues 'driving'|'walking'
+            * @type Enums.GeoMapRouteMode
             * @default 'driving'
             */
             /**

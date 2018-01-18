@@ -63,25 +63,22 @@ var Toolbar = ToolbarBase.inherit({
             /**
             * @name dxToolbarItemTemplate_location
             * @publicName location
-            * @type string
+            * @type Enums.ToolbarItemLocation
             * @default 'center'
-            * @acceptValues 'before'|'after'|'center'
             */
 
             /**
             * @name dxToolbarItemTemplate_locateInMenu
             * @publicName locateInMenu
-            * @type string
+            * @type Enums.ToolbarItemLocateInMenuMode
             * @default 'never'
-            * @acceptValues 'always'|'never'|'auto'
             */
 
             /**
             * @name dxToolbarItemTemplate_showText
             * @publicName showText
-            * @type string
+            * @type Enums.ToolbarItemShowTextMode
             * @default 'always'
-            * @acceptValues 'always'|'inMenu'
             */
 
             /**
@@ -94,9 +91,8 @@ var Toolbar = ToolbarBase.inherit({
             /**
             * @name dxToolbarOptions_renderAs
             * @publicName renderAs
-            * @type string
+            * @type Enums.ToolbarRenderMode
             * @default 'topToolbar'
-            * @acceptValues 'topToolbar'|'bottomToolbar'
             */
 
             /**
