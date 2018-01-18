@@ -31,9 +31,9 @@ function getExponent(value) {
 //T570217
 function _isEdgeBug() {
     var value = 0.0003,
-        correctValue = 0.000300,
+        correctValue = "0.000300",
         precisionValue = 3;
-    return correctValue === value.toPrecision(precisionValue);
+    return correctValue !== value.toPrecision(precisionValue);
 }
 
 function adjust(value, interval) {
