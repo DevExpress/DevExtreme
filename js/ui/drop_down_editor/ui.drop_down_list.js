@@ -651,6 +651,10 @@ var DropDownList = DropDownEditor.inherit({
     _listContentReadyHandler: function() {
         this._list = this._list || this._$list.dxList("instance");
 
+        if(!this.option("deferRendering")) {
+            this._refreshSelected();
+        }
+
         this._dimensionChanged();
         this._contentReadyAction();
     },
