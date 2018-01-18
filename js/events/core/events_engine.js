@@ -2,7 +2,8 @@
 
 var registerEventCallbacks = require("./event_registrator_callbacks");
 var extend = require("../../core/utils/extend").extend;
-var window = require("../../core/dom_adapter").getWindow();
+var domAdapter = require("../../core/dom_adapter");
+var window = domAdapter.getWindow();
 var injector = require("../../core/utils/dependency_injector");
 var typeUtils = require("../../core/utils/type");
 var Callbacks = require("../../core/utils/callbacks");
@@ -163,7 +164,7 @@ var getHandlersController = function(element, eventName) {
 
             if(shouldAddNativeListener) {
                 eventData.nativeHandler = getNativeHandler(eventName);
-                element.addEventListener(NATIVE_EVENTS_TO_SUBSCRIBE[eventName] || eventName, eventData.nativeHandler);
+                domAdapter.listen(element, NATIVE_EVENTS_TO_SUBSCRIBE[eventName] || eventName, eventData.nativeHandler);
             }
 
             special.callMethod(eventName, "add", element, [ handleObject ]);

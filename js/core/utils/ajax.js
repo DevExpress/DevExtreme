@@ -1,7 +1,8 @@
 "use strict";
 
 var Deferred = require("./deferred").Deferred;
-var window = require("../../core/dom_adapter").getWindow();
+var domAdapter = require("../../core/dom_adapter");
+var window = domAdapter.getWindow();
 var location = window.location;
 var extendFromObject = require("./extend").extendFromObject;
 var isDefined = require("./type").isDefined;
@@ -70,7 +71,7 @@ var evalCrossDomainScript = function(url) {
         };
 
         for(var event in events) {
-            script.addEventListener(event, loadHandler);
+            domAdapter.listen(script, event, loadHandler);
         }
 
         appendToHead(script);

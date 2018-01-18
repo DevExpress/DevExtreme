@@ -1,14 +1,16 @@
 "use strict";
 
 var each = require("../../core/utils/iterator").each,
-    window = require("../../core/dom_adapter").getWindow();
+    domAdapter = require("../../core/dom_adapter");
 
 var addEventsListener = function(events, handler) {
-    events
-        .split(" ")
-        .forEach(function(event) {
-            window.document.addEventListener(event, handler, true);
-        });
+    domAdapter.ready(function() {
+        events
+            .split(" ")
+            .forEach(function(event) {
+                domAdapter.listen(domAdapter.getWindow().document, event, handler, true);
+            });
+    });
 };
 
 var Observer = function(eventMap, pointerEquals, onPointerAdding) {

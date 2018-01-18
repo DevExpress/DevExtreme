@@ -1,6 +1,8 @@
 // jshint strict:implied, -W098, -W117
 /* eslint-disable no-undef*/
 
+var domAdapter = require("../../core/dom_adapter");
+
 function wrapBuffer(arrayBuffer) {
     return new DataView(arrayBuffer);
 }
@@ -27,7 +29,7 @@ function f64LE(stream, position) {
 
 function sendRequest(url, callback) {
     var request = new XMLHttpRequest();
-    request.addEventListener("load", function() {
+    domAdapter.listen(request, "load", function() {
         callback(this.response ? null : this.statusText, this.response);
     });
     request.open('GET', url);

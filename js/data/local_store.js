@@ -1,7 +1,8 @@
 "use strict";
 
 var eventsEngine = require("../events/core/events_engine"),
-    window = require("../core/dom_adapter").getWindow(),
+    domAdapter = require("../core/dom_adapter"),
+    window = domAdapter.getWindow(),
     Class = require("../core/class"),
     abstract = Class.abstract,
     errors = require("./errors").errors,
@@ -22,7 +23,7 @@ var LocalStoreBackend = Class.inherit({
             setInterval(saveProxy, flushInterval);
             eventsEngine.on(window, "beforeunload", saveProxy);
             if(window.cordova) {
-                window.document.addEventListener("pause", saveProxy, false);
+                domAdapter.listen(window.document, "pause", saveProxy, false);
             }
         }
     },

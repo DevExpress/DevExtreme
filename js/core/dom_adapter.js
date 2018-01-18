@@ -41,7 +41,7 @@ var domAdapter = module.exports = {
     },
 
     setEvent: function(element, name, value) {
-        element.addEventListener(name, value);
+        this.listen(element, name, value);
     },
 
     setText: function(element, text) {
@@ -86,6 +86,10 @@ var domAdapter = module.exports = {
         return "document" in domAdapter.getWindow();
     },
 
+    listen: function(element, event, callback, useCapture) {
+        element.addEventListener(event, callback, useCapture);
+    },
+
     ready: function(callback) {
         domAdapter._readyCallbacks.add(callback);
 
@@ -107,7 +111,7 @@ var domAdapter = module.exports = {
                 domAdapter._readyCallbacks.fire();
                 document.removeEventListener("DOMContentLoaded", loadedCallback);
             };
-            document.addEventListener("DOMContentLoaded", loadedCallback);
+            this.listen(document, "DOMContentLoaded", loadedCallback);
         }
     },
 
