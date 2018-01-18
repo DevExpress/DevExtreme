@@ -59,5 +59,4 @@ exports.styleProp = styleUtils.styleProp;
 exports.stylePropPrefix = styleUtils.stylePropPrefix;
 exports.supportProp = supportProp;
 
-exports.hasKo = !!window.ko;
 exports.inputType = inputType;
