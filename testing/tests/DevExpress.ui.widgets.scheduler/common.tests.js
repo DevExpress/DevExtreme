@@ -2861,7 +2861,8 @@ QUnit.testStart(function() {
             }],
             currentDate: new Date(2015, 4, 24),
             views: ["month"],
-            currentView: "month"
+            currentView: "month",
+            focusStateEnabled: true
         });
 
         var $workSpace = this.instance.getWorkSpace().$element(),
