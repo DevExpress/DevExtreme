@@ -2,7 +2,7 @@
 
 var eventsEngine = require("../../events/core/events_engine"),
     window = require("../../core/dom_adapter").getWindow(),
-    navigator = require("../../core/utils/navigator").getNavigator,
+    navigator = require("../../core/utils/navigator"),
     document = window.document,
     _math = Math,
     _abs = _math.abs,

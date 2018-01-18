@@ -6,8 +6,4 @@ var navigator = {
     userAgent: ""
 };
 
-function getNavigator() {
-    return window.navigator ? window.navigator : navigator;
-}
-
-exports.getNavigator = getNavigator();
+module.exports = window.navigator ? window.navigator : navigator;

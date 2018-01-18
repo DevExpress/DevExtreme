@@ -2,7 +2,7 @@
 
 var inArray = require("./array").inArray,
     window = require("../../core/dom_adapter").getWindow(),
-    navigator = require("../../core/utils/navigator").getNavigator,
+    navigator = require("../../core/utils/navigator"),
     document = window.document,
     devices = require("../devices"),
     styleUtils = require("./style");
