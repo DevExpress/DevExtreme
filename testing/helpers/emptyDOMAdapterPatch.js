@@ -16,10 +16,12 @@ for(var field in domAdapter) {
 domAdapter._window = domAdapterBackup._window = {};
 
 domAdapter._window.window = domAdapter._window;
-domAdapter._hasDocument = false;
+domAdapter.hasDocument = function() {
+    return false;
+};
 
 windowFields.forEach(function(field) {
-    if(field === "window" || field === "_hasDocument") {
+    if(field === "window") {
         return;
     }
 

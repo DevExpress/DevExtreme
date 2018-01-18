@@ -82,12 +82,14 @@ var domAdapter = module.exports = {
 
     _window: typeof window === "undefined" ? {} : window,
 
-    _hasDocument: true,
+    hasDocument: function() {
+        return "document" in domAdapter.getWindow();
+    },
 
     ready: function(callback) {
         domAdapter._readyCallbacks.add(callback);
 
-        if(!domAdapter._hasDocument) {
+        if(!domAdapter.hasDocument()) {
             return;
         }
 
