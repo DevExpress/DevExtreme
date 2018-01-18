@@ -179,9 +179,14 @@ var ActionSheet = CollectionWidget.inherit({
             focusStateEnabled: false,
 
             selectionByClick: false
-
             /**
-            * @name dxActionSheetItemtemplate_type
+            * @name dxActionSheetItemTemplate
+            * @publicName dxActionSheetItemTemplate
+            * @inherits CollectionWidgetItemTemplate
+            * @type object
+            */
+            /**
+            * @name dxActionSheetItemTemplate_type
             * @publicName type
             * @type String
             * @default 'normal'

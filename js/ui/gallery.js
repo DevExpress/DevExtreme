@@ -238,7 +238,12 @@ var Gallery = CollectionWidget.inherit({
             selectionMode: "single",
             selectionRequired: true,
             selectionByClick: false
-
+            /**
+            * @name dxGalleryItemTemplate
+            * @publicName dxGalleryItemTemplate
+            * @inherits CollectionWidgetItemTemplate
+            * @type object
+            */
             /**
             * @name dxGalleryItemTemplate_imageSrc
             * @publicName imageSrc

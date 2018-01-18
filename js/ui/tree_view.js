@@ -384,7 +384,12 @@ var TreeView = HierarchicalCollectionWidget.inherit({
             * @hidden
             * @inheritdoc
             */
-
+            /**
+            * @name dxTreeViewItemTemplate
+            * @publicName dxTreeViewItemTemplate
+            * @inherits CollectionWidgetItemTemplate
+            * @type object
+            */
             /**
             * @name dxTreeViewItemTemplate_selected
             * @publicName selected
@@ -1784,7 +1789,11 @@ var TreeView = HierarchicalCollectionWidget.inherit({
     * @publicName getNodes()
     * @return array
     */
-
+         /**
+         * @name dxTreeViewNode
+         * @publicName dxTreeViewNode
+         * @type object
+         */
          /**
          * @name dxTreeViewNode_children
          * @publicName children

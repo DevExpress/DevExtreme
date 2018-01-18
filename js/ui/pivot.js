@@ -175,6 +175,13 @@ var Pivot = CollectionWidget.inherit({
             */
 
             /**
+            * @name dxPivotItemTemplate
+            * @publicName dxPivotItemTemplate
+            * @inherits CollectionWidgetItemTemplate
+            * @type object
+            */
+
+            /**
             * @name dxPivotItemTemplate_titleTemplate
             * @publicName titleTemplate
             * @type template

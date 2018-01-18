@@ -57,7 +57,12 @@ var Toolbar = ToolbarBase.inherit({
             * @hidden
             */
             submenuType: "dropDownMenu"
-
+            /**
+            * @name dxToolbarItemTemplate
+            * @publicName dxToolbarItemTemplate
+            * @inherits CollectionWidgetItemTemplate
+            * @type object
+            */
             /**
             * @name dxToolbarItemTemplate_location
             * @publicName location
