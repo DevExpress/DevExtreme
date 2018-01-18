@@ -920,6 +920,73 @@ QUnit.test("Resizing columns should work correctly when scrolling mode is 'virtu
     }, 200);
 });
 
+//T596274
+QUnit.testInActiveWindow("Resize a column with the 'between' filter should not throw an exception", function(assert) {
+    fx.off = true;
+
+    try {
+        //arrange
+        var resizeController,
+            $filterRangeContent,
+            clock = sinon.useFakeTimers(),
+            dataGrid = $("#dataGrid").dxDataGrid({
+                width: 200,
+                allowColumnResizing: true,
+                loadingTimeout: undefined,
+                filterRow: {
+                    visible: true
+                },
+                dataSource: [{ name: "Bob", age: 16 }],
+                columns: [
+                    { dataField: "name", width: 100 },
+                    { dataField: "age", width: 100, selectedFilterOperation: "between" }
+                ]
+            }),
+            instance = dataGrid.dxDataGrid("instance");
+
+        $filterRangeContent = $("#dataGrid").find(".dx-datagrid-filter-row").find(".dx-filter-range-content").first();
+        $filterRangeContent.focus();
+        clock.tick();
+
+        //assert
+        assert.strictEqual($(".dx-overlay-wrapper.dx-datagrid-filter-range-overlay").length, 1, "has overlay wrapper");
+
+        //act
+        resizeController = instance.getController("columnsResizer");
+        resizeController._startResizing({
+            event: {
+                data: resizeController,
+                type: 'touchstart',
+                pageX: -9900,
+                pageY: -9990,
+                preventDefault: function() {},
+                stopPropagation: function() {}
+            }
+        });
+        resizeController._moveSeparator({
+            event: {
+                data: resizeController,
+                pageX: -9850,
+                preventDefault: commonUtils.noop
+            }
+        });
+        resizeController._endResizing({
+            event: {
+                data: resizeController
+            }
+        });
+
+        //assert
+        assert.strictEqual(instance.columnOption(0, "width"), 150);
+        assert.strictEqual(instance.columnOption(1, "width"), 50);
+    } catch(e) {
+        //assert
+        assert.ok(false, "exception");
+    } finally {
+        fx.off = false;
+    }
+});
+
 //T527538
 QUnit.test("Grid's height should be updated during column resizing if column headers height is changed", function(assert) {
     //arrange

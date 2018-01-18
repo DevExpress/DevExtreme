@@ -834,7 +834,7 @@ module.exports = {
                         overlayInstance = that._columnHeadersView.getFilterRangeOverlayInstance();
 
                         if(overlayInstance) {
-                            cellIndex = overlayInstance.element().closest("td").index();
+                            cellIndex = overlayInstance.$element().closest("td").index();
 
                             if(cellIndex === that._targetPoint.columnIndex || cellIndex === that._targetPoint.columnIndex + 1) {
                                 overlayInstance.$content().hide();
@@ -852,7 +852,7 @@ module.exports = {
                         overlayInstance = that._columnHeadersView.getFilterRangeOverlayInstance();
 
                         if(overlayInstance) {
-                            $cell = overlayInstance.element().closest("td");
+                            $cell = overlayInstance.$element().closest("td");
                             that._columnHeadersView._updateFilterRangeOverlay({ width: $cell.outerWidth(true) + CORRECT_FILTER_RANGE_OVERLAY_WIDTH });
                             overlayInstance.$content().show();
                         }
