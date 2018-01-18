@@ -60,8 +60,6 @@ var DX_POLYMORPH_WIDGET_TEMPLATE = new FunctionTemplate(function(options) {
     return $();
 });
 
-var beforeActivateExists = window.document["onbeforeactivate"] !== undefined;
-
 /**
  * @name ui
  * @publicName ui
@@ -571,7 +569,7 @@ var Widget = DOMComponent.inherit({
 
         focusEvents = focusEvents + " " + eventUtils.addNamespace("focusout", namespace);
 
-        if(beforeActivateExists) {
+        if(this._beforeActivateExists()) {
             focusEvents = focusEvents + " " + eventUtils.addNamespace("beforeactivate", namespace);
         }
 
@@ -587,7 +585,7 @@ var Widget = DOMComponent.inherit({
         eventsEngine.on($focusTarget, focusInEvent, this._focusInHandler.bind(this));
         eventsEngine.on($focusTarget, focusOutEvent, this._focusOutHandler.bind(this));
 
-        if(beforeActivateExists) {
+        if(this._beforeActivateExists()) {
             var beforeActivateEvent = eventUtils.addNamespace("beforeactivate", namespace);
 
             eventsEngine.on(this._focusTarget(), beforeActivateEvent, function(e) {
@@ -597,6 +595,10 @@ var Widget = DOMComponent.inherit({
             });
         }
     },
+
+    _beforeActivateExists: commonUtils.callOnce(function() {
+        return window.document["onbeforeactivate"] !== undefined;
+    }),
 
     _refreshFocusEvent: function() {
         this._detachFocusEvents();
