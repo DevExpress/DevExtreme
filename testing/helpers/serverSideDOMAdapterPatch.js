@@ -4,7 +4,7 @@ var domAdapter = require("core/dom_adapter");
 var serverSideWindowMock = require("./serverSideWindowMock.js");
 
 exports.set = function() {
-    domAdapter.addListener = function(element, event, callback, useCapture) {
+    domAdapter.listen = function(element, event, callback, useCapture) {
         // Note: in Angular domAdapter it wiil be "window"
         if(element === domAdapter.getWindow()) {
             window.addEventListener(event, callback, useCapture);
