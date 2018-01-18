@@ -155,6 +155,7 @@ var SchedulerAppointments = CollectionWidget.inherit({
             case "items":
                 this._cleanFocusState();
                 this._clearDropDownItems();
+                this._clearDropDownItemsElements();
 
                 this._repaintAppointments(args.value);
                 this._renderDropDownAppointments();
@@ -175,6 +176,12 @@ var SchedulerAppointments = CollectionWidget.inherit({
                 this.callBase(args);
                 break;
             case "allowDelete":
+                break;
+            case "focusStateEnabled":
+                this._clearDropDownItemsElements();
+                this._renderDropDownAppointments();
+
+                this.callBase(args);
                 break;
             default:
                 this.callBase(args);
@@ -256,7 +263,9 @@ var SchedulerAppointments = CollectionWidget.inherit({
 
     _clearDropDownItems: function() {
         this._virtualAppointments = {};
+    },
 
+    _clearDropDownItemsElements: function() {
         var $items = this._getDropDownAppointments();
         if(!$items.length) {
             return;
