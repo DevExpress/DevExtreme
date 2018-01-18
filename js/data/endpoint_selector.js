@@ -5,9 +5,8 @@ var errors = require("../core/errors"),
     window = require("../core/dom_adapter").getWindow(),
     proxyUrlFormatter = require("./proxy_url_formatter");
 
-var location = window.location,
-    IS_WINJS_ORIGIN = location.protocol === "ms-appx:",
-    IS_LOCAL_ORIGIN = isLocalHostName(location.hostname);
+var IS_WINJS_ORIGIN,
+    IS_LOCAL_ORIGIN;
 
 function isLocalHostName(url) {
     return /^(localhost$|127\.)/i.test(url); // TODO more precise check for 127.x.x.x IP
@@ -29,6 +28,8 @@ function isLocalHostName(url) {
 */
 var EndpointSelector = function(config) {
     this.config = config;
+    IS_WINJS_ORIGIN = window.location.protocol === "ms-appx:";
+    IS_LOCAL_ORIGIN = isLocalHostName(window.location.hostname);
 };
 
 EndpointSelector.prototype = {
