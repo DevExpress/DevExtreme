@@ -1,7 +1,7 @@
 "use strict";
 
 var $ = require("../../core/renderer"),
-    document = require("../../core/dom_adapter").getWindow().document,
+    window = require("../../core/dom_adapter").getWindow(),
     eventsEngine = require("../../events/core/events_engine"),
     dataUtils = require("../../core/element_data"),
     Class = require("../../core/class"),
@@ -27,6 +27,7 @@ var EventManager = Class.inherit({
     },
 
     _attachHandlers: function() {
+        var document = window.document;
         eventsEngine.subscribeGlobal(document, eventUtils.addNamespace(pointerEvents.down, MANAGER_EVENT), this._pointerDownHandler.bind(this));
         eventsEngine.subscribeGlobal(document, eventUtils.addNamespace(pointerEvents.move, MANAGER_EVENT), this._pointerMoveHandler.bind(this));
         eventsEngine.subscribeGlobal(document, eventUtils.addNamespace([pointerEvents.up, pointerEvents.cancel].join(" "), MANAGER_EVENT), this._pointerUpHandler.bind(this));

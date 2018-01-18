@@ -1,7 +1,7 @@
 "use strict";
 
 var $ = require("../../core/renderer"),
-    document = require("../../core/dom_adapter").getWindow().document,
+    window = require("../../core/dom_adapter").getWindow(),
     eventsEngine = require("../../events/core/events_engine"),
     core = require("./ui.grid_core.modules"),
     isDefined = require("../../core/utils/type").isDefined,
@@ -851,7 +851,7 @@ var KeyboardNavigationController = core.ViewController.inherit({
 
             that.createAction("onKeyDown");
 
-            eventsEngine.on(document, eventUtils.addNamespace(pointerEvents.down, "dxDataGridKeyboardNavigation"), that._documentClickHandler);
+            eventsEngine.on(window.document, eventUtils.addNamespace(pointerEvents.down, "dxDataGridKeyboardNavigation"), that._documentClickHandler);
         }
     },
 
@@ -945,7 +945,7 @@ var KeyboardNavigationController = core.ViewController.inherit({
         this._focusedView = null;
         this._focusedViews = null;
         this._keyDownProcessor && this._keyDownProcessor.dispose();
-        eventsEngine.off(document, eventUtils.addNamespace(pointerEvents.down, "dxDataGridKeyboardNavigation"), this._documentClickHandler);
+        eventsEngine.off(window.document, eventUtils.addNamespace(pointerEvents.down, "dxDataGridKeyboardNavigation"), this._documentClickHandler);
     }
 });
 

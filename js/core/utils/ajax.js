@@ -2,7 +2,6 @@
 
 var Deferred = require("./deferred").Deferred;
 var window = require("../../core/dom_adapter").getWindow();
-var document = window.document;
 var location = window.location;
 var extendFromObject = require("./extend").extendFromObject;
 var isDefined = require("./type").isDefined;
@@ -35,7 +34,7 @@ var paramsConvert = function(params) {
 };
 
 var createScript = function(options) {
-    var script = document.createElement("script");
+    var script = window.document.createElement("script");
     for(var name in options) {
         script[name] = options[name];
     }
@@ -47,7 +46,7 @@ var removeScript = function(scriptNode) {
 };
 
 var appendToHead = function(element) {
-    return document.head.appendChild(element);
+    return window.document.head.appendChild(element);
 };
 
 var evalScript = function(code) {
@@ -143,8 +142,8 @@ var postProcess = function(deferred, xhr, dataType) {
 
 var isCrossDomain = function(url) {
     var crossDomain = false,
-        originAnchor = document.createElement("a"),
-        urlAnchor = document.createElement("a");
+        originAnchor = window.document.createElement("a"),
+        urlAnchor = window.document.createElement("a");
 
     originAnchor.href = location.href;
 

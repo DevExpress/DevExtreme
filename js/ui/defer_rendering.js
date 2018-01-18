@@ -2,7 +2,6 @@
 
 var $ = require("../core/renderer"),
     window = require("../core/dom_adapter").getWindow(),
-    document = window.document,
     eventsEngine = require("../events/core/events_engine"),
     registerComponent = require("../core/component_registrator"),
     commonUtils = require("../core/utils/common"),
@@ -170,8 +169,8 @@ var DeferRendering = Widget.inherit({
 
         return rect.bottom >= 0 &&
             rect.right >= 0 &&
-            rect.top <= (window.innerHeight || document.documentElement.clientHeight) &&
-            rect.left <= (window.innerWidth || document.documentElement.clientWidth);
+            rect.top <= (window.innerHeight || window.document.documentElement.clientHeight) &&
+            rect.left <= (window.innerWidth || window.document.documentElement.clientWidth);
     },
 
     _animate: function() {

@@ -82,14 +82,18 @@ var domAdapter = module.exports = {
 
     _window: typeof window === "undefined" ? {} : window,
 
+    hasDocument: function() {
+        return "document" in domAdapter.getWindow();
+    },
+
     ready: function(callback) {
         domAdapter._readyCallbacks.add(callback);
 
-        var document = domAdapter.getWindow().document;
-
-        if(!document) {
+        if(!domAdapter.hasDocument()) {
             return;
         }
+
+        var document = domAdapter.getWindow().document;
 
         //NOTE: we can't use document.readyState === "interactive" because of ie9/ie10 support
         if(document.readyState === "complete" || (document.readyState !== "loading" && !document.documentElement.doScroll)) {

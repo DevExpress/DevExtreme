@@ -2,7 +2,6 @@
 
 var $ = require("../core/renderer"),
     window = require("../core/dom_adapter").getWindow(),
-    document = window.document,
     eventsEngine = require("../events/core/events_engine"),
     registerComponent = require("../core/component_registrator"),
     stringUtils = require("../core/utils/string"),
@@ -88,7 +87,7 @@ var POPOVER_CLASS = "dx-popover",
             eventsEngine.on(target, eventName, handler);
         } else {
             that["_" + name + "EventHandler"] = handler;
-            eventsEngine.on(document, eventName, target, handler);
+            eventsEngine.on(window.document, eventName, target, handler);
         }
     },
     detachEvent = function(that, target, name) {
@@ -102,7 +101,7 @@ var POPOVER_CLASS = "dx-popover",
         eventName = eventUtils.addNamespace(event, that.NAME);
 
         if(that["_" + name + "EventHandler"]) {
-            eventsEngine.off(document, eventName, target, that["_" + name + "EventHandler"]);
+            eventsEngine.off(window.document, eventName, target, that["_" + name + "EventHandler"]);
         } else {
             eventsEngine.off(target, eventName);
         }

@@ -1,7 +1,7 @@
 "use strict";
 
 var eventsEngine = require("../../events/core/events_engine"),
-    document = require("../../core/dom_adapter").getWindow().document,
+    window = require("../../core/dom_adapter").getWindow(),
     isFunction = require("../../core/utils/type").isFunction,
     BaseWidget = require("../core/base_widget"),
     extend = require("../../core/utils/extend").extend,
@@ -306,7 +306,7 @@ var touchEvents = {
     "touchstart.sparkline-tooltip": touchStartTooltipProcessing
 };
 
-eventsEngine.subscribeGlobal(document, {
+eventsEngine.subscribeGlobal(window.document, {
     "pointerdown.sparkline-tooltip": function() {
         isPointerDownCalled = true;
         touchStartDocumentProcessing();

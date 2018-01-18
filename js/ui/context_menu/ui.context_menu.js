@@ -1,7 +1,7 @@
 "use strict";
 
 var $ = require("../../core/renderer"),
-    document = require("../../core/dom_adapter").getWindow().document,
+    window = require("../../core/dom_adapter").getWindow(),
     eventsEngine = require("../../events/core/events_engine"),
     Guid = require("../../core/guid"),
     registerComponent = require("../../core/component_registrator"),
@@ -459,7 +459,7 @@ var ContextMenu = MenuBase.inherit((function() {
             eventName = eventUtils.addNamespace(showEvent, this.NAME);
 
             if(this._showContextMenuEventHandler) {
-                eventsEngine.off(document, eventName, target, this._showContextMenuEventHandler);
+                eventsEngine.off(window.document, eventName, target, this._showContextMenuEventHandler);
             } else {
                 eventsEngine.off(target, eventName);
             }
@@ -502,7 +502,7 @@ var ContextMenu = MenuBase.inherit((function() {
                 eventsEngine.on(target, eventName, handler);
             } else {
                 that._showContextMenuEventHandler = handler;
-                eventsEngine.on(document, eventName, target, that._showContextMenuEventHandler);
+                eventsEngine.on(window.document, eventName, target, that._showContextMenuEventHandler);
             }
         },
 
@@ -609,7 +609,7 @@ var ContextMenu = MenuBase.inherit((function() {
                 return false;
             }
 
-            if(e.target === document) {
+            if(e.target === window.document) {
                 return true;
             }
 
@@ -945,7 +945,7 @@ var ContextMenu = MenuBase.inherit((function() {
         },
 
         _getTarget: function() {
-            return this.option("target") || this.option("position").of || $(document);
+            return this.option("target") || this.option("position").of || $(window.document);
         },
 
         _getContextMenuPosition: function() {

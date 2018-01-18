@@ -2,11 +2,9 @@
 
 var $ = require("../../../core/renderer"),
     window = require("../../../core/dom_adapter").getWindow(),
-    Node = window.Node,
     eventsEngine = require("../../../events/core/events_engine"),
     browser = require("../../../core/utils/browser"),
     getSvgMarkup = require("../../../core/utils/svg").getSvgMarkup,
-    doc = window.document,
     animation = require("./animation"),
     math = Math,
     mathMin = math.min,
@@ -77,14 +75,14 @@ var DEFAULTS = {
     scaleY: 1
 };
 
-var backupContainer = doc.createElement("div"),
+var backupContainer = window.document.createElement("div"),
     backupCounter = 0;
 backupContainer.style.left = "-9999px";
 backupContainer.style.position = "absolute";
 
 function backupRoot(root) {
     if(backupCounter === 0) {
-        doc.body.appendChild(backupContainer);
+        window.document.body.appendChild(backupContainer);
     }
     ++backupCounter;
     root.append({ element: backupContainer });
@@ -94,7 +92,7 @@ function restoreRoot(root, container) {
     root.append({ element: container });
     --backupCounter;
     if(backupCounter === 0) {
-        doc.body.removeChild(backupContainer);
+        window.document.body.removeChild(backupContainer);
     }
 }
 
@@ -108,7 +106,7 @@ function isObjectArgument(value) {
 }
 
 function createElement(tagName) {
-    return doc.createElementNS("http://www.w3.org/2000/svg", tagName);
+    return window.document.createElementNS("http://www.w3.org/2000/svg", tagName);
 }
 
 function getFuncIri(id, pathModified) {
@@ -673,7 +671,7 @@ function orderHtmlTree(list, line, node, parentStyle, parentClassName) {
         list.push({ value: node.wholeText, style: parentStyle, className: parentClassName /* EXPERIMENTAL */, line: line, height: parentStyle[KEY_FONT_SIZE] || 0 });
     } else if(node.tagName === "BR") {
         ++line;
-    } else if(node.nodeType === Node.ELEMENT_NODE) {
+    } else if(node.nodeType === window.Node.ELEMENT_NODE) {
         extend(style = {}, parentStyle);
         switch(node.tagName) {
             case "B":
@@ -733,7 +731,7 @@ function removeExtraAttrs(html) {
 
 function parseHTML(text) {
     var items = [],
-        div = doc.createElement("div");
+        div = window.document.createElement("div");
     div.innerHTML = text.replace(/\r/g, "").replace(/\n/g, "<br/>");
     orderHtmlTree(items, 0, div, {}, "");
     adjustLineHeights(items);
@@ -755,7 +753,7 @@ function createTspans(items, element, fieldName) {
     for(i = 0, ii = items.length; i < ii; ++i) {
         item = items[i];
         item[fieldName] = createElement("tspan");
-        item[fieldName].appendChild(doc.createTextNode(item.value));
+        item[fieldName].appendChild(window.document.createTextNode(item.value));
         item.style && baseCss({ element: item[fieldName], _styles: {} }, item.style);
         item.className && item[fieldName].setAttribute("class", item.className);    // EXPERIMENTAL
         element.appendChild(item[fieldName]);
@@ -902,7 +900,7 @@ function createTextNodes(wrapper, text, isStroked) {
             createTspans(items, wrapper.element, "tspan");
         }
     } else {
-        wrapper.element.appendChild(doc.createTextNode(text));
+        wrapper.element.appendChild(window.document.createTextNode(text));
     }
 }
 
@@ -1046,7 +1044,7 @@ exports.DEBUG_set_getNextDefsSvgId = function(newFunction) {
 exports.DEBUG_removeBackupContainer = function() {
     if(backupCounter) {
         backupCounter = 0;
-        doc.body.removeChild(backupContainer);
+        window.document.body.removeChild(backupContainer);
     }
 };
 ///#ENDDEBUG

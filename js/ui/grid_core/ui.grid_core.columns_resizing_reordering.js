@@ -1,7 +1,7 @@
 "use strict";
 
 var $ = require("../../core/renderer"),
-    document = require("../../core/dom_adapter").getWindow().document,
+    window = require("../../core/dom_adapter").getWindow(),
     eventsEngine = require("../../events/core/events_engine"),
     Callbacks = require("../../core/utils/callbacks"),
     typeUtils = require("../../core/utils/type"),
@@ -435,8 +435,8 @@ var DraggingHeaderView = modules.View.inherit({
             sourceColumnElement: options.columnElement,
             sourceLocation: options.sourceLocation
         };
-        that._onSelectStart = document["onselectstart"];
-        document["onselectstart"] = function() {
+        that._onSelectStart = window.document["onselectstart"];
+        window.document["onselectstart"] = function() {
             return false;
         };
 
@@ -554,7 +554,7 @@ var DraggingHeaderView = modules.View.inherit({
         that._dragOptions = null;
         that._dropOptions = null;
         that._isDragging = false;
-        document["onselectstart"] = that._onSelectStart || null;
+        window.document["onselectstart"] = that._onSelectStart || null;
     }
 });
 
@@ -761,11 +761,11 @@ var ColumnsResizerViewController = modules.ViewController.inherit({
     },
 
     _unsubscribeFromEvents: function() {
-        this._moveSeparatorHandler && eventsEngine.off(document, addNamespace(pointerEvents.move, MODULE_NAMESPACE), this._moveSeparatorHandler);
+        this._moveSeparatorHandler && eventsEngine.off(window.document, addNamespace(pointerEvents.move, MODULE_NAMESPACE), this._moveSeparatorHandler);
         this._startResizingHandler && eventsEngine.off(this._$parentContainer, addNamespace(pointerEvents.down, MODULE_NAMESPACE), this._startResizingHandler);
         if(this._endResizingHandler) {
             eventsEngine.off(this._columnsSeparatorView.element(), addNamespace(pointerEvents.up, MODULE_NAMESPACE), this._endResizingHandler);
-            eventsEngine.off(document, addNamespace(pointerEvents.up, MODULE_NAMESPACE), this._endResizingHandler);
+            eventsEngine.off(window.document, addNamespace(pointerEvents.up, MODULE_NAMESPACE), this._endResizingHandler);
         }
     },
 
@@ -774,10 +774,10 @@ var ColumnsResizerViewController = modules.ViewController.inherit({
         this._startResizingHandler = this.createAction(this._startResizing);
         this._endResizingHandler = this.createAction(this._endResizing);
 
-        eventsEngine.on(document, addNamespace(pointerEvents.move, MODULE_NAMESPACE), this, this._moveSeparatorHandler);
+        eventsEngine.on(window.document, addNamespace(pointerEvents.move, MODULE_NAMESPACE), this, this._moveSeparatorHandler);
         eventsEngine.on(this._$parentContainer, addNamespace(pointerEvents.down, MODULE_NAMESPACE), this, this._startResizingHandler);
         eventsEngine.on(this._columnsSeparatorView.element(), addNamespace(pointerEvents.up, MODULE_NAMESPACE), this, this._endResizingHandler);
-        eventsEngine.on(document, addNamespace(pointerEvents.up, MODULE_NAMESPACE), this, this._endResizingHandler);
+        eventsEngine.on(window.document, addNamespace(pointerEvents.up, MODULE_NAMESPACE), this, this._endResizingHandler);
     },
 
     _updateColumnsWidthIfNeeded: function(posX) {

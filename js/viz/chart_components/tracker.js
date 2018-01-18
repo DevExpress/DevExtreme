@@ -2,7 +2,6 @@
 
 var $ = require("../../core/renderer"),
     window = require("../../core/dom_adapter").getWindow(),
-    document = window.document,
     eventsEngine = require("../../events/core/events_engine"),
     clickEvent = require("../../events/click"),
     extend = require("../../core/utils/extend").extend,
@@ -264,12 +263,12 @@ var baseTrackerPrototype = {
                 }
             };
 
-        eventsEngine.on(document, POINTER_ACTION, handler);
+        eventsEngine.on(window.document, POINTER_ACTION, handler);
         this._outHandler = handler;
     },
 
     _disableOutHandler: function() {
-        this._outHandler && eventsEngine.off(document, POINTER_ACTION, this._outHandler);
+        this._outHandler && eventsEngine.off(window.document, POINTER_ACTION, this._outHandler);
         this._outHandler = null;
     },
 
@@ -543,7 +542,7 @@ extend(ChartTracker.prototype, baseTrackerPrototype, {
                 that._gestureEnd && that._gestureEnd();     // T235643
             };
 
-            eventsEngine.on(document, addNamespace(pointerEvents.up, EVENT_NS), that._gestureEndHandler);
+            eventsEngine.on(window.document, addNamespace(pointerEvents.up, EVENT_NS), that._gestureEndHandler);
         }
         wheelZoomingEnabled && root.on(addNamespace(wheelEvent.name, EVENT_NS), function(e) {
             var rootOffset = that._renderer.getRootOffset(),
@@ -798,7 +797,7 @@ extend(ChartTracker.prototype, baseTrackerPrototype, {
     },
 
     dispose: function() {
-        eventsEngine.off(document, DOT_EVENT_NS, this._gestureEndHandler);
+        eventsEngine.off(window.document, DOT_EVENT_NS, this._gestureEndHandler);
         this._resetTimer();
         baseTrackerPrototype.dispose.call(this);
     }

@@ -1,7 +1,7 @@
 "use strict";
 
 var $ = require("../../core/renderer"),
-    document = require("../../core/dom_adapter").getWindow().document,
+    window = require("../../core/dom_adapter").getWindow(),
     eventsEngine = require("../../events/core/events_engine"),
     dataUtils = require("../../core/element_data"),
     dateUtils = require("../../core/utils/date"),
@@ -1349,8 +1349,8 @@ var SchedulerWorkSpace = Widget.inherit({
             if(eventUtils.isMouseEvent(e) && e.which === 1) {
                 isPointerDown = true;
                 that.$element().addClass(WORKSPACE_WITH_MOUSE_SELECTION_CLASS);
-                eventsEngine.off(document, SCHEDULER_CELL_DXPOINTERUP_EVENT_NAME);
-                eventsEngine.on(document, SCHEDULER_CELL_DXPOINTERUP_EVENT_NAME, function() {
+                eventsEngine.off(window.document, SCHEDULER_CELL_DXPOINTERUP_EVENT_NAME);
+                eventsEngine.on(window.document, SCHEDULER_CELL_DXPOINTERUP_EVENT_NAME, function() {
                     isPointerDown = false;
                     that.$element().removeClass(WORKSPACE_WITH_MOUSE_SELECTION_CLASS);
                 });

@@ -1,7 +1,7 @@
 "use strict";
 
 var $ = require("../../core/renderer"),
-    document = require("../../core/dom_adapter").getWindow().document,
+    window = require("../../core/dom_adapter").getWindow(),
     eventsEngine = require("../../events/core/events_engine"),
     domUtils = require("../../core/utils/dom"),
     focused = require("../widget/selectors").focused,
@@ -783,7 +783,7 @@ var TextEditorBase = Editor.inherit({
     * @publicName blur()
     */
     blur: function() {
-        if(this._input().is(document.activeElement)) {
+        if(this._input().is(window.document.activeElement)) {
             domUtils.resetActiveElement();
         }
     },

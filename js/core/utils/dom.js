@@ -2,7 +2,6 @@
 
 var $ = require("../../core/renderer"),
     window = require("../../core/dom_adapter").getWindow(),
-    document = window.document,
     eventsEngine = require("../../events/core/events_engine"),
     errors = require("../errors"),
     inArray = require("./array").inArray,
@@ -13,8 +12,8 @@ var $ = require("../../core/renderer"),
     elementStrategy;
 
 var resetActiveElement = function() {
-    var activeElement = document.activeElement;
-    if(activeElement && activeElement !== document.body && activeElement.blur) {
+    var activeElement = window.document.activeElement;
+    if(activeElement && activeElement !== window.document.body && activeElement.blur) {
         activeElement.blur();
     }
 };

@@ -2,7 +2,6 @@
 
 var eventsEngine = require("../../events/core/events_engine"),
     window = require("../../core/dom_adapter").getWindow(),
-    localStorage = window.localStorage,
     modules = require("./ui.grid_core.modules"),
     errors = require("../widget/ui.errors"),
     browser = require("../../core/utils/browser"),
@@ -31,7 +30,7 @@ var parseDates = function(state) {
 
 exports.StateStoringController = modules.ViewController.inherit((function() {
     var getStorage = function(options) {
-        var storage = options.type === "sessionStorage" ? sessionStorage() : localStorage;
+        var storage = options.type === "sessionStorage" ? sessionStorage() : window.localStorage;
 
         if(!storage) {
             if(window.location.protocol === "file:" && browser.msie) {

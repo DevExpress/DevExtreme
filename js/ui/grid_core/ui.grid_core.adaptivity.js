@@ -1,7 +1,7 @@
 "use strict";
 
 var $ = require("../../core/renderer"),
-    document = require("../../core/dom_adapter").getWindow().document,
+    window = require("../../core/dom_adapter").getWindow(),
     eventsEngine = require("../../events/core/events_engine"),
     eventUtils = require("../../events/utils"),
     clickEvent = require("../../events/click"),
@@ -86,7 +86,7 @@ var AdaptiveColumnsController = modules.ViewController.inherit({
 
         if(column.cellTemplate) {
             var templateOptions = extend({}, cellOptions, { value: cellValue, text: cellText, column: column });
-            that._rowsView.renderTemplate($container, column.cellTemplate, templateOptions, !!$container.closest(document).length);
+            that._rowsView.renderTemplate($container, column.cellTemplate, templateOptions, !!$container.closest(window.document).length);
         } else {
             container = $container.get(0);
             if(column.encodeHtml) {

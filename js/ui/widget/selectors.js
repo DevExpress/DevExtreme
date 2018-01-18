@@ -1,7 +1,7 @@
 "use strict";
 
 var $ = require("../../core/renderer"),
-    document = require("../../core/dom_adapter").getWindow().document;
+    window = require("../../core/dom_adapter").getWindow();
 
 var focusable = function(element, tabIndex) {
     if(!visible(element)) {
@@ -43,7 +43,7 @@ module.exports = {
     //note: use this method instead of is(":focus")
     focused: function($element) {
         var element = $($element).get(0);
-        return document.activeElement === element;
+        return window.document.activeElement === element;
     }
 };
 

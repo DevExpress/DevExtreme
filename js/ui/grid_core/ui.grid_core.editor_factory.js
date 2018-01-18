@@ -1,7 +1,7 @@
 "use strict";
 
 var $ = require("../../core/renderer"),
-    document = require("../../core/dom_adapter").getWindow().document,
+    window = require("../../core/dom_adapter").getWindow(),
     eventsEngine = require("../../events/core/events_engine"),
     modules = require("./ui.grid_core.modules"),
     clickEvent = require("../../events/click"),
@@ -168,7 +168,7 @@ var EditorFactory = modules.ViewController.inherit({
         this.createAction("onEditorPrepared", { excludeValidators: ["designMode", "disabled", "readOnly"], category: "rendering" });
 
         this._updateFocusHandler = this._updateFocusHandler || this.createAction(this._updateFocus.bind(this));
-        eventsEngine.on(document, UPDATE_FOCUS_EVENTS, this._updateFocusHandler);
+        eventsEngine.on(window.document, UPDATE_FOCUS_EVENTS, this._updateFocusHandler);
 
         this._attachContainerEventHandlers();
     },
@@ -220,7 +220,7 @@ var EditorFactory = modules.ViewController.inherit({
     dispose: function() {
         clearTimeout(this._focusTimeoutID);
         clearTimeout(this._updateFocusTimeoutID);
-        eventsEngine.off(document, UPDATE_FOCUS_EVENTS, this._updateFocusHandler);
+        eventsEngine.off(window.document, UPDATE_FOCUS_EVENTS, this._updateFocusHandler);
     }
 }).include(EditorFactoryMixin);
 

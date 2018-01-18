@@ -1,7 +1,7 @@
 "use strict";
 
 var $ = require("../../core/renderer"),
-    document = require("../../core/dom_adapter").getWindow().document,
+    window = require("../../core/dom_adapter").getWindow(),
     eventsEngine = require("../../events/core/events_engine"),
     Guid = require("../../core/guid"),
     typeUtils = require("../../core/utils/type"),
@@ -145,7 +145,7 @@ var EditingController = modules.ViewController.inherit((function() {
                     if(!isRowEditMode(that) && !that._editCellInProgress) {
                         $target = $(event.target);
                         isEditorPopup = $target.closest(".dx-dropdowneditor-overlay").length;
-                        isDomElement = $target.closest(document).length;
+                        isDomElement = $target.closest(window.document).length;
                         isAddRowButton = $target.closest("." + that.addWidgetPrefix(ADD_ROW_BUTTON_CLASS)).length;
                         isFocusOverlay = $target.hasClass(that.addWidgetPrefix(FOCUS_OVERLAY_CLASS));
                         isCellEditMode = getEditMode(that) === EDIT_MODE_CELL;
@@ -156,7 +156,7 @@ var EditingController = modules.ViewController.inherit((function() {
                     }
                 });
 
-                eventsEngine.on(document, clickEvent.name, that._saveEditorHandler);
+                eventsEngine.on(window.document, clickEvent.name, that._saveEditorHandler);
             }
             that._updateEditColumn();
             that._updateEditButtons();
@@ -251,7 +251,7 @@ var EditingController = modules.ViewController.inherit((function() {
         dispose: function() {
             this.callBase();
             clearTimeout(this._inputFocusTimeoutID);
-            eventsEngine.off(document, clickEvent.name, this._saveEditorHandler);
+            eventsEngine.off(window.document, clickEvent.name, this._saveEditorHandler);
         },
 
         optionChanged: function(args) {
@@ -1357,7 +1357,7 @@ var EditingController = modules.ViewController.inherit((function() {
                 }
             } else {
                 setTimeout(function() {
-                    var $focusedElement = $(document.activeElement),
+                    var $focusedElement = $(window.document.activeElement),
                         columnIndex = that._rowsView.getCellIndex($focusedElement, row.rowIndex),
                         focusedElement = $focusedElement.get(0),
                         selectionStart = focusedElement && focusedElement.selectionStart,
@@ -1369,7 +1369,7 @@ var EditingController = modules.ViewController.inherit((function() {
                         var $focusedItem = that._rowsView._getCellElement(row.rowIndex, columnIndex);
                         that._delayedInputFocus($focusedItem, function() {
                             setTimeout(function() {
-                                focusedElement = document.activeElement;
+                                focusedElement = window.document.activeElement;
                                 if(selectionStart >= 0 && focusedElement && focusedElement.setSelectionRange) {
                                     try {
                                         focusedElement.setSelectionRange(selectionStart, selectionEnd);
@@ -1424,7 +1424,7 @@ var EditingController = modules.ViewController.inherit((function() {
                 }),
                 template = that._getFormEditItemTemplate.bind(that)(cellOptions, column);
 
-            if(that._rowsView.renderTemplate($container, template, cellOptions, !!$container.closest(document).length)) {
+            if(that._rowsView.renderTemplate($container, template, cellOptions, !!$container.closest(window.document).length)) {
                 that._rowsView._updateCell($container, cellOptions);
             }
         },
