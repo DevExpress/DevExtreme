@@ -739,7 +739,7 @@ function parseHTML(text) {
 }
 
 function parseMultiline(text) {
-    var texts = text.replace(/\r/g, "").split("\n"),
+    var texts = text.replace(/\r/g, "").split(/\n/g),
         i = 0,
         items = [];
     for(; i < texts.length; i++) {
@@ -886,7 +886,7 @@ function createTextNodes(wrapper, text, isStroked) {
         ///#DEBUG
         wrapper.DEBUG_parsedHtml = parsedHtml;
         ///#ENDDEBUG
-    } else if(text.indexOf("\n") !== -1) {
+    } else if(/\n/g.test(text)) {
         items = parseMultiline(text);
     } else if(isStroked) {
         items = [{ value: text, height: 0 }];
