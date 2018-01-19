@@ -740,6 +740,63 @@ QUnit.test("Set five series, width is specified", function(assert) {
     checkSeries(assert, series5, expectedWidth, ZERO + expectedWidth / 2 + expectedSpacing + expectedWidth + expectedSpacing + expectedWidth / 2);
 });
 
+QUnit.test("Set five series, barGroupWidth is specified", function(assert) {
+    var series1 = createSeries({ points: pointsForStacking.points1() }),
+        series2 = createSeries({ points: pointsForStacking.points2() }),
+        series3 = createSeries({ points: pointsForStacking.points3() }),
+        series4 = createSeries({ points: pointsForStacking.points4() }),
+        series5 = createSeries({ points: pointsForStacking.points5() }),
+        series = [series1, series2, series3, series4, series5],
+        expectedSpacing = 2,
+        expectedWidth = 10;
+
+    createSeriesFamily("bar", series, { barGroupWidth: 60 });
+
+    checkSeries(assert, series1, expectedWidth, 0 - expectedWidth / 2 - expectedSpacing - expectedWidth - expectedSpacing - expectedWidth / 2);
+    checkSeries(assert, series2, expectedWidth, 0 - expectedWidth / 2 - expectedSpacing - expectedWidth / 2);
+    checkSeries(assert, series3, expectedWidth, 0);
+    checkSeries(assert, series4, expectedWidth, ZERO + expectedWidth / 2 + expectedSpacing + expectedWidth / 2);
+    checkSeries(assert, series5, expectedWidth, ZERO + expectedWidth / 2 + expectedSpacing + expectedWidth + expectedSpacing + expectedWidth / 2);
+});
+
+QUnit.test("Set five series, barGroupWidth > interval - group width should be equal to interval", function(assert) {
+    var series1 = createSeries({ points: pointsForStacking.points1() }),
+        series2 = createSeries({ points: pointsForStacking.points2() }),
+        series3 = createSeries({ points: pointsForStacking.points3() }),
+        series4 = createSeries({ points: pointsForStacking.points4() }),
+        series5 = createSeries({ points: pointsForStacking.points5() }),
+        series = [series1, series2, series3, series4, series5],
+        expectedSpacing = 4,
+        expectedWidth = 17;
+
+    createSeriesFamily("bar", series, { barGroupWidth: 200 });
+
+    checkSeries(assert, series1, expectedWidth, 0 - expectedWidth / 2 - expectedSpacing - expectedWidth - expectedSpacing - expectedWidth / 2);
+    checkSeries(assert, series2, expectedWidth, 0 - expectedWidth / 2 - expectedSpacing - expectedWidth / 2);
+    checkSeries(assert, series3, expectedWidth, 0);
+    checkSeries(assert, series4, expectedWidth, ZERO + expectedWidth / 2 + expectedSpacing + expectedWidth / 2);
+    checkSeries(assert, series5, expectedWidth, ZERO + expectedWidth / 2 + expectedSpacing + expectedWidth + expectedSpacing + expectedWidth / 2);
+});
+
+QUnit.test("Set five series, barGroupWidth = 0 - group width ignor barGroupWidth option", function(assert) {
+    var series1 = createSeries({ points: pointsForStacking.points1() }),
+        series2 = createSeries({ points: pointsForStacking.points2() }),
+        series3 = createSeries({ points: pointsForStacking.points3() }),
+        series4 = createSeries({ points: pointsForStacking.points4() }),
+        series5 = createSeries({ points: pointsForStacking.points5() }),
+        series = [series1, series2, series3, series4, series5],
+        expectedSpacing = 3,
+        expectedWidth = 12;
+
+    createSeriesFamily("bar", series, { barGroupWidth: 0 });
+
+    checkSeries(assert, series1, expectedWidth, 0 - expectedWidth / 2 - expectedSpacing - expectedWidth - expectedSpacing - expectedWidth / 2);
+    checkSeries(assert, series2, expectedWidth, 0 - expectedWidth / 2 - expectedSpacing - expectedWidth / 2);
+    checkSeries(assert, series3, expectedWidth, 0);
+    checkSeries(assert, series4, expectedWidth, ZERO + expectedWidth / 2 + expectedSpacing + expectedWidth / 2);
+    checkSeries(assert, series5, expectedWidth, ZERO + expectedWidth / 2 + expectedSpacing + expectedWidth + expectedSpacing + expectedWidth / 2);
+});
+
 QUnit.test("Set three series, barPadding is specified", function(assert) {
     var series1 = createSeries({ points: pointsForStacking.points1(), barPadding: 0.2 }),
         series2 = createSeries({ points: pointsForStacking.points2(), barPadding: 0.5 }),
@@ -773,6 +830,17 @@ QUnit.test("Set two series, barPadding less than 0", function(assert) {
 
     checkSeries(assert, series1, 32, -19.5);
     checkSeries(assert, series2, 32, 19.5);
+});
+
+QUnit.test("Set two series, barPadding is 1", function(assert) {
+    var series1 = createSeries({ points: pointsForStacking.points1(), barPadding: 1 }),
+        series2 = createSeries({ points: pointsForStacking.points2(), barPadding: 1 }),
+        series = [series1, series2];
+
+    createSeriesFamily("bar", series);
+
+    checkSeries(assert, series1, 1, -35.5);
+    checkSeries(assert, series2, 1, 35.5);
 });
 
 QUnit.test("Set three series, barWidth is specified", function(assert) {

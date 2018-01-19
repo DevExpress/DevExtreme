@@ -59,8 +59,10 @@ function adjustBarSeriesDimensionsCore(series, options, seriesStackIndexCallback
         allArguments = [],
         seriesInStacks = {},
         barWidth = options.barWidth,
+        barGroupWidth = options.barGroupWidth,
         stack,
-        barsArea = series[0] && series[0].getArgumentAxis().getTranslator().getInterval() * (1 - validateBarGroupPadding(options.barGroupPadding));
+        interval = series[0] && series[0].getArgumentAxis().getTranslator().getInterval(),
+        barsArea = barGroupWidth ? (interval > barGroupWidth ? barGroupWidth : interval) : (interval * (1 - validateBarGroupPadding(options.barGroupPadding)));
 
     series.forEach(function(s, i) {
         var stackName = s.getStackName && s.getStackName() || i.toString(),
@@ -101,7 +103,7 @@ function calculateParams(barsArea, count, percentWidth, fixedBarWidth) {
     if(fixedBarWidth) {
         width = Math.min(fixedBarWidth, _round(barsArea / count));
         spacing = count > 1 ? _round((barsArea - width * count) / (count - 1)) : 0;
-    } else if(percentWidth) {
+    } else if(isDefined(percentWidth)) {
         width = _round(barsArea * percentWidth / count);
         spacing = _round(count > 1 ? (barsArea - barsArea * percentWidth) / (count - 1) : 0);
     } else {
