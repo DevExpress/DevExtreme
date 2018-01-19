@@ -773,6 +773,34 @@ QUnit.test("selectedItem should be chosen synchronously if item is already loade
     assert.equal($dropDownList.dxDropDownList("option", "selectedItem"), 0, "selectedItem is fetched");
 });
 
+QUnit.test("selectedItem should be chosen correctly if deferRendering = false and dataSource is async", function(assert) {
+    var dropDownList = $("#dropDownList").dxDropDownList({
+        dataSource: {
+            store: new CustomStore({
+                load: function(options) {
+                    var deferred = $.Deferred();
+                    setTimeout(function() {
+                        deferred.resolve([1, 2, 3, 4, 5, 6, 7]);
+                    }, 100);
+                    return deferred.promise();
+                },
+                byKey: function(key) {
+                    var res = $.Deferred();
+                    setTimeout(function() { res.resolve(key); }, 10);
+                    return res.promise();
+                }
+            }),
+        },
+        opened: false,
+        value: 1,
+        deferRendering: false
+    }).dxDropDownList("instance");
+
+    dropDownList.option("opened", true);
+    this.clock.tick(1000);
+
+    assert.equal(dropDownList._list.option("selectedItem"), 1, "selectedItem is correct");
+});
 
 QUnit.test("reset()", function(assert) {
     var dropDownList = $("#dropDownList").dxDropDownList({
