@@ -3457,7 +3457,8 @@ QUnit.test("list items selection should not be reset after next page loading", f
     this.reinit({
         dataSource: dataSource,
         applyValueMode: "useButtons",
-        opened: true
+        opened: true,
+        deferRendering: true
     });
 
     var list = this.getListInstance(),
