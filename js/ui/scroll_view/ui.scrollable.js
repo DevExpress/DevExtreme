@@ -1,7 +1,6 @@
 "use strict";
 
 var $ = require("../../core/renderer"),
-    window = require("../../core/dom_adapter").getWindow(),
     navigator = require("../../core/utils/navigator"),
     eventsEngine = require("../../events/core/events_engine"),
     support = require("../../core/utils/support"),
@@ -30,8 +29,6 @@ var SCROLLABLE = "dxScrollable",
     VERTICAL = "vertical",
     HORIZONTAL = "horizontal",
     BOTH = "both";
-
-var beforeActivateExists = window.document["onbeforeactivate"] !== undefined;
 
 var deviceDependentOptions = function() {
     return [{
@@ -261,7 +258,7 @@ var Scrollable = DOMComponent.inherit({
             $wrapper = this._$wrapper = $("<div>").addClass(SCROLLABLE_WRAPPER_CLASS),
             $content = this._$content = $("<div>").addClass(SCROLLABLE_CONTENT_CLASS);
 
-        if(beforeActivateExists) {
+        if(this._beforeActivateExists) {
             eventsEngine.on($element, eventUtils.addNamespace("beforeactivate", SCROLLABLE), function(e) {
                 if(!$(e.target).is(selectors.focusable)) {
                     e.preventDefault();
