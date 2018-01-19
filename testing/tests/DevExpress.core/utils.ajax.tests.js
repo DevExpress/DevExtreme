@@ -580,6 +580,16 @@ QUnit.test("Handle timeout", function(assert) {
     assert.equal(status, "timeout");
 });
 
+QUnit.test("cache=false for dataType=json", function(assert) {
+    ajax.sendRequest({
+        url: "any",
+        dataType: "json",
+        cache: false
+    });
+
+    assert.ok(/_=\d+/.test(this.requests[0].url));
+});
+
 QUnit.module("sendRequest async tests");
 
 QUnit.test("Handle error", function(assert) {
