@@ -49,11 +49,14 @@ var assignValueToProperty = function(target, property, value, assignByReference)
     }
 };
 
-// B239679, http://bugs.jquery.com/ticket/9477
-var deepExtendArraySafe = function(target, changes, extendComplexObject, assignByReference) {
-    var prevValue, newValue;
+var deepExtendArraySafeCore = function(target, changes, getPropertyNamesFunc, extendComplexObject, assignByReference) {
+    if(!changes) return target;
 
-    for(var name in changes) {
+    var prevValue, newValue;
+    var changeablePropertyNames = getPropertyNamesFunc ? getPropertyNamesFunc(changes) : Object.getOwnPropertyNames(changes);
+
+    for(var key in changeablePropertyNames) {
+        var name = changeablePropertyNames[key];
         prevValue = target[name];
         newValue = changes[name];
 
@@ -63,17 +66,22 @@ var deepExtendArraySafe = function(target, changes, extendComplexObject, assignB
 
         if(typeUtils.isPlainObject(newValue)) {
             var goDeeper = extendComplexObject ? typeUtils.isObject(prevValue) : typeUtils.isPlainObject(prevValue);
-            newValue = deepExtendArraySafe(goDeeper ? prevValue : {}, newValue, extendComplexObject, assignByReference);
+            newValue = deepExtendArraySafeCore(goDeeper ? prevValue : {}, newValue, getPropertyNamesFunc, extendComplexObject, assignByReference);
         }
 
         if(newValue !== undefined) {
             assignValueToProperty(target, name, newValue, assignByReference);
         }
     }
-
     return target;
+};
+
+// B239679, http://bugs.jquery.com/ticket/9477
+var deepExtendArraySafe = function(target, changes, extendComplexObject, assignByReference) {
+    return changes ? deepExtendArraySafeCore(target, changes, null, extendComplexObject, assignByReference) : target;
 };
 
 exports.clone = clone;
 exports.orderEach = orderEach;
 exports.deepExtendArraySafe = deepExtendArraySafe;
+exports.deepExtendArraySafeCore = deepExtendArraySafeCore;
