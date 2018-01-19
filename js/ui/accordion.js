@@ -16,7 +16,8 @@ var $ = require("../core/renderer"),
     when = deferredUtils.when,
     Deferred = deferredUtils.Deferred,
     BindableTemplate = require("./widget/bindable_template"),
-    iconUtils = require("../core/utils/icon");
+    iconUtils = require("../core/utils/icon"),
+    isDefined = require("../core/utils/type").isDefined;
 
 var ACCORDION_CLASS = "dx-accordion",
     ACCORDION_WRAPPER_CLASS = "dx-accordion-wrapper",
@@ -281,7 +282,11 @@ var Accordion = CollectionWidget.inherit({
         }));
 
         var deferred = new Deferred();
-        this._deferredItems.push(deferred);
+        if(isDefined(this._deferredItems[args.index])) {
+            this._deferredItems[args.index] = deferred;
+        } else {
+            this._deferredItems.push(deferred);
+        }
 
         if(!this.option("deferRendering") || this._getSelectedItemIndices().indexOf(args.index) >= 0) {
             deferred.resolve();

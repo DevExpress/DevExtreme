@@ -184,6 +184,21 @@ QUnit.test("Item body should be rendered on item changing when the 'deferRenderi
     assert.equal($element.find("." + ACCORDION_ITEM_BODY_CLASS).length, 1, "body is rendered");
 });
 
+QUnit.test("Item body should be rendered on item changing and selectionChanging when the 'deferRendering' option is true (T586536)", function(assert) {
+    var $element = this.$element.dxAccordion({
+            items: this.items,
+            selectedIndex: 0,
+            multiple: false,
+            deferRendering: true
+        }),
+        instance = $element.dxAccordion("instance");
+
+    instance.option("items[1].title", "Changed Title");
+    instance.option("selectedIndex", 1);
+
+    assert.equal($element.find("." + ACCORDION_ITEM_BODY_CLASS).length, 2, "bodies were rendered");
+});
+
 QUnit.test("Body should be rendered for each item on init when the 'deferRendering' option is false", function(assert) {
     var $element = this.$element.dxAccordion({
         items: this.items,
