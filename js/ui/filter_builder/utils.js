@@ -375,7 +375,7 @@ function getFieldFormat(field) {
 }
 
 function getCurrentLookupValueText(field, value, handler) {
-    if(!value) {
+    if(value === "") {
         handler("");
         return;
     }
