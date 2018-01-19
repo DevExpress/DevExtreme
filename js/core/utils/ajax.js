@@ -184,7 +184,7 @@ var getRequestOptions = function(options, headers) {
     var params = options.data,
         url = options.url || window.location.href;
 
-    if(options.noCache) {
+    if(!options.cache) {
         params = params || {};
         params["_"] = Date.now();
     }
@@ -239,7 +239,10 @@ var sendRequest = function(options) {
         timeoutId;
 
     options.crossDomain = isCrossDomain(options.url);
-    options.noCache = dataType === "jsonp" || dataType === "script";
+
+    if(options.cache === undefined) {
+        options.cache = dataType !== "jsonp" && dataType !== "script";
+    }
 
     var callbackName = getJsonpOptions(options),
         headers = getRequestHeaders(options),
@@ -253,7 +256,7 @@ var sendRequest = function(options) {
         };
     }
 
-    if(options.crossDomain && options.noCache) {
+    if(options.crossDomain && !options.cache) {
 
         var reject = function() {
                 d.reject(xhr, ERROR);
