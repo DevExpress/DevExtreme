@@ -296,5 +296,10 @@ module.exports = errorUtils(errors.ERROR_MESSAGES, {
      * @name Errors and Warnings_W1010
      * @publicName W1010
      */
-    W1010: "The capability to select all items works with source data of plain structure only"
+    W1010: "The capability to select all items works with source data of plain structure only",
+    /**
+     * @name Errors and Warnings_W1011
+     * @publicName W1011
+     */
+    W1011: "The \"keyExpr\" option is not applied when dataSource is not an array"
 });
