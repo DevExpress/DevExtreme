@@ -222,6 +222,7 @@
         "dxScheduler-confirmRecurrenceDeleteOccurrence": "Smazat schůzku",
 
         "dxScheduler-noTimezoneTitle": "Bez časové zóny",
+        "dxScheduler-moreAppointments": "",
 
         "dxCalendar-todayButtonText": "Dnes",
         "dxCalendar-ariaWidgetName": "Kalendář",
@@ -232,8 +233,32 @@
         "dxColorView-ariaAlpha": "Průhledná",
         "dxColorView-ariaHex": "Kód barvy",
 
+        "dxTagBox-selected": "",
+        "dxTagBox-allSelected": "",
+        "dxTagBox-moreSelected": "",
+
         "vizExport-printingButtonText": "Tisk",
         "vizExport-titleMenuText": "Export/import",
-        "vizExport-exportButtonText": "{0} souborů"
+        "vizExport-exportButtonText": "{0} souborů",
+
+        "dxFilterBuilder-and": "",
+        "dxFilterBuilder-or": "",
+        "dxFilterBuilder-notAnd": "",
+        "dxFilterBuilder-notOr": "",
+        "dxFilterBuilder-addCondition": "",
+        "dxFilterBuilder-addGroup": "",
+        "dxFilterBuilder-enterValueText": "",
+        "dxFilterBuilder-filterOperationEquals": "",
+        "dxFilterBuilder-filterOperationNotEquals": "",
+        "dxFilterBuilder-filterOperationLess": "",
+        "dxFilterBuilder-filterOperationLessOrEquals": "",
+        "dxFilterBuilder-filterOperationGreater": "",
+        "dxFilterBuilder-filterOperationGreaterOrEquals": "",
+        "dxFilterBuilder-filterOperationStartsWith": "",
+        "dxFilterBuilder-filterOperationContains": "",
+        "dxFilterBuilder-filterOperationNotContains": "",
+        "dxFilterBuilder-filterOperationEndsWith": "",
+        "dxFilterBuilder-filterOperationIsBlank": "",
+        "dxFilterBuilder-filterOperationIsNotBlank": ""
     }
 }
