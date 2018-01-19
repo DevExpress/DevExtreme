@@ -38,6 +38,14 @@ var DROP_DOWN_EDITOR_CLASS = "dx-dropdowneditor",
 var DropDownEditor = TextBox.inherit({
 
     _supportedKeys: function() {
+        var homeEndHandler = function(e) {
+            if(this.option("opened")) {
+                e.preventDefault();
+                return true;
+            }
+            return false;
+        };
+
         return extend({}, this.callBase(), {
             tab: function(e) {
                 if(!this.option("opened")) {
@@ -86,7 +94,9 @@ var DropDownEditor = TextBox.inherit({
                     this._valueChangeEventHandler(e);
                 }
                 return true;
-            }
+            },
+            home: homeEndHandler,
+            end: homeEndHandler
         });
     },
 

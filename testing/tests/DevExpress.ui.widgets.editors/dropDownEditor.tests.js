@@ -560,6 +560,44 @@ QUnit.test("Enter and escape key press does not prevent default when popup in no
     assert.equal(prevented, 0, "defaults has not prevented on enter and escape keys");
 });
 
+QUnit.test("Home and end key press prevent default when popup in opened", function(assert) {
+    assert.expect(1);
+
+    var prevented = 0;
+
+    this.dropDownEditor.option("opened", true);
+
+    this.$rootElement.on("keydown", function(e) {
+        if(e.isDefaultPrevented()) {
+            prevented++;
+        }
+    });
+
+    this.keyboard.keyDown("home");
+    this.keyboard.keyDown("end");
+
+    assert.equal(prevented, 2, "defaults prevented on home and end keys");
+});
+
+QUnit.test("Home and end key press does not prevent default when popup in not opened", function(assert) {
+    assert.expect(1);
+
+    var prevented = 0;
+
+    this.dropDownEditor.option("opened", false);
+
+    this.$rootElement.on("keydown", function(e) {
+        if(e.isDefaultPrevented()) {
+            prevented++;
+        }
+    });
+
+    this.keyboard.keyDown("home");
+    this.keyboard.keyDown("end");
+
+    assert.equal(prevented, 0, "defaults has not prevented on home and end keys");
+});
+
 QUnit.test("Keyboard navigation with field template", function(assert) {
     this.dropDownEditor.option("fieldTemplate", function(data, container) {
         container.append($("<div>").dxTextBox({ value: data }));
