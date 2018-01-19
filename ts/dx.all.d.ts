@@ -4215,8 +4215,7 @@ declare module DevExpress.ui {
         getRootNode(): dxTreeListNode;
         /** Gets the currently selected rows' keys. */
         getSelectedRowKeys(): Array<any>;
-        /** Gets the currently selected row keys. */
-        getSelectedRowKeys(leavesOnly: boolean): Array<any>;
+        getSelectedRowKeys(mode: string | boolean): Array<any>;
         /** Gets data objects of currently selected rows. */
         getSelectedRowsData(): Array<any>;
         /** Gets all visible columns. */
