@@ -10,7 +10,8 @@ var $ = require("../../core/renderer"),
     toComparable = require("../../core/utils/data").toComparable,
     LoadPanel = require("../load_panel"),
     dataUtils = require("../../data/utils"),
-    formatHelper = require("../../format_helper");
+    formatHelper = require("../../format_helper"),
+    deepExtendArraySafeCore = require("../../core/utils/object").deepExtendArraySafeCore;
 
 var NO_DATA_CLASS = "nodata",
     DATE_INTERVAL_SELECTORS = {
@@ -568,6 +569,23 @@ module.exports = (function() {
                 columnIndex++;
             }
             return result;
+        },
+        getObjectPropertyNames: function(obj) {
+            if(!obj) return [];
+
+            var names = Object.getOwnPropertyNames(obj);
+            var objectProto = Object.getPrototypeOf(obj);
+            var propertyNames = Object.getOwnPropertyNames(objectProto).filter(function(name) {
+                var propertyDescriptor = Object.getOwnPropertyDescriptor(objectProto, name);
+                return name !== "__proto__" && propertyDescriptor.get && propertyDescriptor.set;
+            });
+            return names.concat(propertyNames);
+        },
+        deepExtendArraySafe: function(target, changes, extendComplexObject, assignByReference, cloneTarget) {
+            if(cloneTarget) {
+                target = deepExtendArraySafeCore({}, target);
+            }
+            return changes ? deepExtendArraySafeCore(target, changes, this.getObjectPropertyNames, extendComplexObject, assignByReference) : target;
         },
 
         isDateType: isDateType
