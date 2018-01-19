@@ -1026,6 +1026,13 @@ var dxRangeSelector = {
         */
         barGroupPadding: 0.3,
         /**
+        * @name dxrangeselectoroptions_chart_bargroupwidth
+        * @publicName barGroupWidth
+        * @type number
+        * @default undefined
+        */
+        barGroupWidth: undefined,
+        /**
         * @name dxrangeselectoroptions_chart_negativesaszeroes
         * @publicName negativesAsZeroes
         * @type boolean

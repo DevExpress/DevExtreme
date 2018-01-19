@@ -107,6 +107,13 @@ var dxChart = {
     */
     barGroupPadding: 0.3,
     /**
+    * @name dxchartoptions_bargroupwidth
+    * @publicName barGroupWidth
+    * @type number
+    * @default undefined
+    */
+    barGroupWidth: undefined,
+    /**
     * @name dxchartoptions_negativesaszeroes
     * @publicName negativesAsZeroes
     * @type boolean
@@ -2716,6 +2723,13 @@ var dxPolarChart = {
     * @default 0.3
     */
     barGroupPadding: 0.3,
+    /**
+    * @name dxpolarchartoptions_bargroupwidth
+    * @publicName barGroupWidth
+    * @type number
+    * @default undefined
+    */
+    barGroupWidth: undefined,
     /**
     * @name dxpolarchartoptions_negativesaszeroes
     * @publicName negativesAsZeroes

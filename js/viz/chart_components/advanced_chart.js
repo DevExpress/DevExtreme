@@ -256,6 +256,7 @@ var AdvancedChart = BaseChart.inherit({
                 maxBubbleSize: themeManager.getOptions("maxBubbleSize"),
                 barWidth: themeManager.getOptions("barWidth"),
                 barGroupPadding: themeManager.getOptions("barGroupPadding"),
+                barGroupWidth: themeManager.getOptions("barGroupWidth"),
                 negativesAsZeroes: _isDefined(negativesAsZeroes) ? negativesAsZeroes : negativesAsZeros
             };
 
@@ -285,6 +286,7 @@ var AdvancedChart = BaseChart.inherit({
                     maxBubbleSize: familyOptions.maxBubbleSize,
                     barWidth: familyOptions.barWidth,
                     barGroupPadding: familyOptions.barGroupPadding,
+                    barGroupWidth: familyOptions.barGroupWidth,
                     negativesAsZeroes: familyOptions.negativesAsZeroes,
                     rotated: that._isRotated()
                 });
