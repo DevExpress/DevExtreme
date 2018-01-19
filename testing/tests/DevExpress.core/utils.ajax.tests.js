@@ -4,7 +4,6 @@ var $ = require("jquery");
 var ajax = require("core/utils/ajax");
 var browser = require("core/utils/browser");
 var compareVersion = require("core/utils/version").compare;
-require("integration/jquery/ajax");
 
 QUnit.module("sendRequest", {
     beforeEach: function() {
