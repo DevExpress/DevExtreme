@@ -233,7 +233,6 @@ var EventManager = Class.inherit({
     }
 });
 
-
 var eventManager = new EventManager();
 
 var EMITTER_SUBSCRIPTION_DATA = "dxEmitterSubscription";
