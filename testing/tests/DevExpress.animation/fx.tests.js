@@ -470,7 +470,7 @@ QUnit.test("position my/at/of style", function(assert) {
 });
 
 
-if(support.transition) {
+if(support.transition()) {
 
     QUnit.module("CSS3 transitions", {
         beforeEach: function() {
@@ -1028,7 +1028,7 @@ if(support.transition) {
             }
         });
 
-        $element.trigger(support.transitionEndEventName);
+        $element.trigger(support.transitionEndEventName());
         fx.stop($element);
     });
 }
