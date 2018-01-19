@@ -4,7 +4,6 @@ var $ = require("jquery");
 var ajax = require("core/utils/ajax");
 var browser = require("core/utils/browser");
 var compareVersion = require("core/utils/version").compare;
-require("integration/jquery/ajax");
 
 QUnit.module("sendRequest", {
     beforeEach: function() {
@@ -579,6 +578,16 @@ QUnit.test("Handle timeout", function(assert) {
     this.clock.tick(20);
 
     assert.equal(status, "timeout");
+});
+
+QUnit.test("cache=false for dataType=json", function(assert) {
+    ajax.sendRequest({
+        url: "any",
+        dataType: "json",
+        cache: false
+    });
+
+    assert.ok(/_=\d+/.test(this.requests[0].url));
 });
 
 QUnit.module("sendRequest async tests");
