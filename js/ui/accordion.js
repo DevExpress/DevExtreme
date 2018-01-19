@@ -12,7 +12,8 @@ var $ = require("../core/renderer"),
     when = require("../integration/jquery/deferred").when,
     BindableTemplate = require("./widget/bindable_template"),
     iconUtils = require("../core/utils/icon"),
-    isDefined = require("../core/utils/type").isDefined;
+    commonUtils = require("../../core/utils/common"),
+    isDefined = commonUtils.isDefined;
 
 var ACCORDION_CLASS = "dx-accordion",
     ACCORDION_WRAPPER_CLASS = "dx-accordion-wrapper",
