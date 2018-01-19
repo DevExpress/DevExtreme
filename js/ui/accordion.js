@@ -11,7 +11,8 @@ var $ = require("../core/renderer"),
     CollectionWidget = require("./collection/ui.collection_widget.edit"),
     when = require("../integration/jquery/deferred").when,
     BindableTemplate = require("./widget/bindable_template"),
-    iconUtils = require("../core/utils/icon");
+    iconUtils = require("../core/utils/icon"),
+    commonUtils = require("../core/utils/common");
 
 var ACCORDION_CLASS = "dx-accordion",
     ACCORDION_WRAPPER_CLASS = "dx-accordion-wrapper",
@@ -274,8 +275,13 @@ var Accordion = CollectionWidget.inherit({
             defaultTemplateName: this.option("itemTitleTemplate")
         }));
 
+
         var deferred = $.Deferred();
-        this._deferredItems.push(deferred);
+        if(commonUtils.isDefined(this._deferredItems[args.index])) {
+            this._deferredItems[args.index] = deferred;
+        } else {
+            this._deferredItems.push(deferred);
+        }
 
         if(!this.option("deferRendering") || this._getSelectedItemIndices().indexOf(args.index) >= 0) {
             deferred.resolve();
