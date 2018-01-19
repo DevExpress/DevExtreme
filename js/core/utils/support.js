@@ -2,6 +2,8 @@
 
 var inArray = require("./array").inArray,
     window = require("../../core/dom_adapter").getWindow(),
+    commonUtils = require("../../core/utils/common"),
+    callOnce = commonUtils.callOnce,
     navigator = require("../../core/utils/navigator"),
     devices = require("../devices"),
     styleUtils = require("./style");
@@ -50,9 +52,9 @@ var touchEvents = "ontouchstart" in window && !('callPhantom' in window),
 exports.touchEvents = touchEvents;
 exports.pointerEvents = pointerEvents;
 exports.touch = touchEvents || pointerEvents && touchPointersPresent;
-exports.transition = function() { return supportProp("transition"); };
-exports.transitionEndEventName = function() { return transitionEndEventNames[styleUtils.styleProp("transition")]; };
-exports.animation = function() { return supportProp("animation"); };
+exports.transition = callOnce(function() { return supportProp("transition"); });
+exports.transitionEndEventName = callOnce(function() { return transitionEndEventNames[styleUtils.styleProp("transition")]; });
+exports.animation = callOnce(function() { return supportProp("animation"); });
 exports.nativeScrolling = isNativeScrollingSupported();
 
 exports.styleProp = styleUtils.styleProp;
