@@ -4,7 +4,8 @@ var $ = require("../core/renderer"),
     window = require("../core/dom_adapter").getWindow(),
     errors = require("./widget/ui.errors"),
     domUtils = require("../core/utils/dom"),
-    ready = require("../core/dom_adapter").ready,
+    domAdapter = require("../core/dom_adapter"),
+    ready = domAdapter.ready,
     each = require("../core/utils/iterator").each,
     devices = require("../core/devices"),
     viewPortUtils = require("../core/utils/view_port"),
@@ -300,24 +301,24 @@ function detachCssClasses(element) {
     $(element).removeClass(themeClasses);
 }
 
-init({
-    _autoInit: true,
-    _forceTimeout: true
-});
-
 function themeReady(callback) {
     themeReadyCallback.add(callback);
 }
 
 ready(function() {
+    init({
+        _autoInit: true,
+        _forceTimeout: true
+    });
+
     if($(DX_LINK_SELECTOR, context).length) {
         throw errors.Error("E0022");
     }
-});
 
-viewPortChanged.add(function(viewPort, prevViewPort) {
-    detachCssClasses(prevViewPort);
-    attachCssClasses(viewPort);
+    viewPortChanged.add(function(viewPort, prevViewPort) {
+        attachCssClasses(viewPort);
+        detachCssClasses(prevViewPort);
+    });
 });
 
 devices.changed.add(function() {

@@ -306,7 +306,7 @@ initRender.prototype.css = function(name, value) {
 
             name = styleUtils.styleProp(name);
 
-            var result = window.getComputedStyle(this[0])[name] || this[0].style[name];
+            var result = domAdapter.getComputedStyle(this[0])[name] || this[0].style[name];
             return typeUtils.isNumeric(result) ? result.toString() : result;
         }
     } else if(typeUtils.isPlainObject(name)) {

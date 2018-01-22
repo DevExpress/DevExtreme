@@ -86,6 +86,15 @@ var domAdapter = module.exports = {
         return domAdapter._window;
     },
 
+    getComputedStyle: function(element) {
+        if(typeof window !== "undefined") {
+            return window.getComputedStyle(element);
+        }
+        return {
+            "font-family": "dx.generic.light"
+        };
+    },
+
     _window: typeof window === "undefined" ? {} : window,
 
     hasDocument: function() {
