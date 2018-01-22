@@ -13,8 +13,7 @@ var $ = require("../../core/renderer"),
     messageLocalization = require("../../localization/message"),
     TextEditorBase = require("./ui.text_editor.base"),
     MaskRules = require("./ui.text_editor.mask.rule"),
-    eventUtils = require("../../events/utils"),
-    devices = require("../../core/devices");
+    eventUtils = require("../../events/utils");
 
 var stubCaret = function() {
     return {};
@@ -393,8 +392,8 @@ var TextEditorMask = TextEditorBase.inherit({
     },
 
     _maskInputHandler: function(e) {
-        if(devices.real().platform === "android") {
-            this._handleAndroidBackspaceInput(e);
+        if(this._isBackspaceInputNotHandled(e)) {
+            this._handleBackspaceInput(e);
         }
 
         if(this._keyPressHandled) {
@@ -425,12 +424,14 @@ var TextEditorMask = TextEditorBase.inherit({
         }).bind(this));
     },
 
-    _handleAndroidBackspaceInput: function(e) {
-        if(e.originalEvent.inputType === BACKSPACE_INPUT_TYPE) {
-            var caret = this._caret();
-            this._caret({ start: caret.start + 1, end: caret.end + 1 });
-            this._maskBackspaceHandler(e);
-        }
+    _isBackspaceInputNotHandled: function(e) {
+        return e.originalEvent.inputType === BACKSPACE_INPUT_TYPE && !this._keyPressHandled;
+    },
+
+    _handleBackspaceInput: function(e) {
+        var caret = this._caret();
+        this._caret({ start: caret.start + 1, end: caret.end + 1 });
+        this._maskBackspaceHandler(e);
     },
 
     _isControlKeyFired: function(e) {
