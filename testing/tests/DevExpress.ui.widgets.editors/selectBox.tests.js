@@ -1888,6 +1888,32 @@ QUnit.test("creating custom item via the 'customItem' event parameter", function
     assert.equal($input.val(), "display " + customValue, "displayed value is correct");
 });
 
+QUnit.test("create custom item by subscribe on event via 'on' method", function(assert) {
+    var $selectBox = $("#selectBox").dxSelectBox({
+            acceptCustomValue: true,
+            displayExpr: "display",
+            valueExpr: "value"
+        }),
+        $input = $selectBox.find(".dx-texteditor-input"),
+        keyboard = keyboardMock($input),
+        customValue = "Custom value",
+        onCustomItemCreating = function(event) {
+            event.customItem = {
+                display: "display " + event.text,
+                value: "value " + event.text
+            };
+        };
+
+    $selectBox.dxSelectBox("instance").on("customItemCreating", onCustomItemCreating);
+
+    keyboard
+        .type(customValue)
+        .change();
+
+    assert.equal($selectBox.dxSelectBox("option", "value"), "value " + customValue, "value is correct");
+    assert.equal($input.val(), "display " + customValue, "displayed value is correct");
+});
+
 QUnit.test("The 'onCustomItemCreating' option with Deferred", function(assert) {
     var deferred = $.Deferred(),
         $selectBox = $("#selectBox").dxSelectBox({
