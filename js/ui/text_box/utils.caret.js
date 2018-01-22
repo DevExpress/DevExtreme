@@ -24,7 +24,7 @@ var setCaret = function(input, position) {
         setCaretForObsoleteBrowser(input, position);
         return;
     }
-    if(!window.document.body.contains(input)) {
+    if(!domAdapter.getBody().contains(input)) {
         return;
     }
 
@@ -50,7 +50,7 @@ var getCaretForObsoleteBrowser = function(input) {
 };
 
 var setCaretForObsoleteBrowser = function(input, position) {
-    if(!window.document.body.contains(input)) {
+    if(!domAdapter.getBody().contains(input)) {
         return;
     }
 

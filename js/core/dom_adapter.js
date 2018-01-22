@@ -77,6 +77,11 @@ var domAdapter = module.exports = {
         return document.activeElement;
     },
 
+    getBody: function() {
+        var document = domAdapter.getWindow().document;
+        return document.body;
+    },
+
     getWindow: function() {
         return domAdapter._window;
     },

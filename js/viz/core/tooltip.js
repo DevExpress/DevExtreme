@@ -1,6 +1,7 @@
 "use strict";
 
-var window = require("../../core/dom_adapter").getWindow(),
+var domAdapter = require("../../core/dom_adapter"),
+    window = domAdapter.getWindow(),
     $ = require("../../core/renderer"),
     rendererModule = require("./renderers/renderer"),
     typeUtils = require("../../core/utils/type"),
@@ -431,7 +432,7 @@ Tooltip.prototype = {
         var container = this._getContainer(),
             containerBox = container.getBoundingClientRect(),
             html = window.document.documentElement,
-            body = window.document.body,
+            body = domAdapter.getBody(),
             left = window.pageXOffset || html.scrollLeft || 0,
             top = window.pageYOffset || html.scrollTop || 0;
 

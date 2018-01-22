@@ -1,7 +1,8 @@
 "use strict";
 
 var $ = require("../../../core/renderer"),
-    window = require("../../../core/dom_adapter").getWindow(),
+    domAdapter = require("../../../core/dom_adapter"),
+    window = domAdapter.getWindow(),
     eventsEngine = require("../../../events/core/events_engine"),
     browser = require("../../../core/utils/browser"),
     getSvgMarkup = require("../../../core/utils/svg").getSvgMarkup,
@@ -82,7 +83,7 @@ backupContainer.style.position = "absolute";
 
 function backupRoot(root) {
     if(backupCounter === 0) {
-        window.document.body.appendChild(backupContainer);
+        domAdapter.getBody().appendChild(backupContainer);
     }
     ++backupCounter;
     root.append({ element: backupContainer });
@@ -92,7 +93,7 @@ function restoreRoot(root, container) {
     root.append({ element: container });
     --backupCounter;
     if(backupCounter === 0) {
-        window.document.body.removeChild(backupContainer);
+        domAdapter.getBody().removeChild(backupContainer);
     }
 }
 
@@ -1044,7 +1045,7 @@ exports.DEBUG_set_getNextDefsSvgId = function(newFunction) {
 exports.DEBUG_removeBackupContainer = function() {
     if(backupCounter) {
         backupCounter = 0;
-        window.document.body.removeChild(backupContainer);
+        domAdapter.getBody().removeChild(backupContainer);
     }
 };
 ///#ENDDEBUG

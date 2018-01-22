@@ -1,7 +1,7 @@
 "use strict";
 
 var $ = require("../../core/renderer"),
-    window = require("../../core/dom_adapter").getWindow(),
+    domAdapter = require("../../core/dom_adapter"),
     eventsEngine = require("../../events/core/events_engine"),
     dataUtils = require("../../core/element_data"),
     translator = require("../../animation/translator"),
@@ -430,7 +430,7 @@ var SchedulerAppointments = CollectionWidget.inherit({
         }
 
         this._appointmentClickTimeout = setTimeout((function() {
-            if(!this._preventSingleAppointmentClick && window.document.body.contains($target[0])) {
+            if(!this._preventSingleAppointmentClick && domAdapter.getBody().contains($target[0])) {
                 this.notifyObserver("showAppointmentTooltip", { data: data, target: $target });
             }
 
