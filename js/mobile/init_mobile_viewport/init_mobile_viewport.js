@@ -1,7 +1,8 @@
 "use strict";
 
 var $ = require("../../core/renderer"),
-    window = require("../../core/dom_adapter").getWindow(),
+    domAdapter = require("../../core/dom_adapter"),
+    window = domAdapter.getWindow(),
     eventsEngine = require("../../events/core/events_engine"),
     extend = require("../../core/utils/extend").extend,
     resizeCallbacks = require("../../core/utils/window").resizeCallbacks,
@@ -82,7 +83,7 @@ var initMobileViewport = function(options) {
     if(realDevice.android) {
         resizeCallbacks.add(function() {
             setTimeout(function() {
-                var activeElement = window.document.activeElement;
+                var activeElement = domAdapter.getActiveElement();
 
                 activeElement.scrollIntoViewIfNeeded ?
                     activeElement.scrollIntoViewIfNeeded() :
