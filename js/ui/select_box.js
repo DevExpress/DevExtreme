@@ -169,10 +169,12 @@ var SelectBox = DropDownList.inherit({
             * @type_function_param1_field5 customItem:string|object|Promise
             * @type_function_return string|object|Promise
             * @action
-            * @default function(e) { e.customItem = e.text; }
+            * @default function(e) { if(!e.customItem) { e.customItem = e.text; } }
             */
             onCustomItemCreating: function(e) {
-                e.customItem = e.text;
+                if(!e.customItem) {
+                    e.customItem = e.text;
+                }
             },
 
             /**
