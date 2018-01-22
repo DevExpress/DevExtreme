@@ -239,7 +239,7 @@ var Form = Widget.inherit({
             /**
              * @name dxFormOptions_items
              * @publicName items
-             * @type array
+             * @type Array<dxFormSimpleItem,dxFormGroupItem,dxFormTabbedItem,dxFormEmptyItem>
              * @default undefined
              */
             items: undefined,
