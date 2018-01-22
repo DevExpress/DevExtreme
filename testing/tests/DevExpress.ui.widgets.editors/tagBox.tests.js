@@ -749,9 +749,10 @@ QUnit.test("create custom item by subscribe on event via 'on' method", function(
                 display: "display " + event.text,
                 value: "value " + event.text
             };
-        };
+        },
+        instance = $tagBox.dxTagBox("instance");
 
-    $tagBox.dxTagBox("instance").on("customItemCreating", onCustomItemCreating);
+    instance.on("customItemCreating", onCustomItemCreating);
 
     keyboard
         .type(customValue)
@@ -759,7 +760,7 @@ QUnit.test("create custom item by subscribe on event via 'on' method", function(
 
     var $tags = $tagBox.find(".dx-tag");
 
-    assert.deepEqual($tagBox.dxTagBox("option", "value"), ["value " + customValue]);
+    assert.deepEqual(instance.option("value"), ["value " + customValue]);
     assert.equal($tags.length, 1, "tag is added");
     assert.equal($tags.eq(0).text(), "display " + customValue);
 });
