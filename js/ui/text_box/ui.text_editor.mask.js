@@ -28,6 +28,7 @@ var MASK_EVENT_NAMESPACE = "dxMask";
 var FORWARD_DIRECTION = "forward";
 var BACKWARD_DIRECTION = "backward";
 var BLUR_EVENT = "blur beforedeactivate";
+var BACKSPACE_INPUT_TYPE = "deleteContentBackward";
 
 var buildInMaskRules = {
     "0": /[0-9]/,
@@ -391,6 +392,10 @@ var TextEditorMask = TextEditorBase.inherit({
     },
 
     _maskInputHandler: function(e) {
+        if(this._isBackspaceInputNotHandled(e)) {
+            this._handleBackspaceInput(e);
+        }
+
         if(this._keyPressHandled) {
             return;
         }
@@ -417,6 +422,16 @@ var TextEditorMask = TextEditorBase.inherit({
                 return true;
             });
         }).bind(this));
+    },
+
+    _isBackspaceInputNotHandled: function(e) {
+        return e.originalEvent.inputType === BACKSPACE_INPUT_TYPE && !this._keyPressHandled;
+    },
+
+    _handleBackspaceInput: function(e) {
+        var caret = this._caret();
+        this._caret({ start: caret.start + 1, end: caret.end + 1 });
+        this._maskBackspaceHandler(e);
     },
 
     _isControlKeyFired: function(e) {
