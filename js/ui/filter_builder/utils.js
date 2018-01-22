@@ -375,6 +375,10 @@ function getFieldFormat(field) {
 }
 
 function getCurrentLookupValueText(field, value, handler) {
+    if(value === "") {
+        handler("");
+        return;
+    }
     var dataSource = new DataSource(field.lookup.dataSource);
     dataSource.filter(field.lookup.valueExpr, value);
     dataSource.load().done(function(result) {
