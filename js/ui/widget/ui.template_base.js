@@ -1,7 +1,7 @@
 "use strict";
 
 var $ = require("../../core/renderer"),
-    window = require("../../core/dom_adapter").getWindow(),
+    domAdapter = require("../../core/dom_adapter"),
     Callbacks = require("../../core/utils/callbacks"),
     domUtils = require("../../core/utils/dom"),
     Class = require("../../core/class"),
@@ -48,7 +48,7 @@ var TemplateBase = Class.inherit({
             return;
         }
 
-        var resultInBody = window.document.body.contains($container.get(0));
+        var resultInBody = domAdapter.getBody().contains($container.get(0));
         if(!resultInBody) {
             return;
         }

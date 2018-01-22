@@ -14,7 +14,7 @@ var $ = require("../../core/renderer"),
 
 var resetActiveElement = function() {
     var activeElement = domAdapter.getActiveElement();
-    if(activeElement && activeElement !== window.document.body && activeElement.blur) {
+    if(activeElement && activeElement !== domAdapter.getBody() && activeElement.blur) {
         activeElement.blur();
     }
 };

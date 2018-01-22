@@ -966,7 +966,7 @@ var Overlay = Widget.inherit({
             }
         });
 
-        return isHidden || !window.document.body.contains($parent.get(0));
+        return isHidden || !domAdapter.getBody().contains($parent.get(0));
     },
 
     _renderContentImpl: function() {

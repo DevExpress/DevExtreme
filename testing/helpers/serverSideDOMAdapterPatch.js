@@ -13,6 +13,10 @@ exports.set = function() {
         }
     };
 
+    domAdapter.getBody = function() {
+        return document.body;
+    };
+
     for(var field in serverSideWindowMock) {
         Object.defineProperty(domAdapter._window, field, {
             enumerable: true,

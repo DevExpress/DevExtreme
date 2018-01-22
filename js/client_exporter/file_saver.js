@@ -2,7 +2,8 @@
 
 /* global Windows */
 var $ = require("../core/renderer"),
-    window = require("../core/dom_adapter").getWindow(),
+    domAdapter = require("../core/dom_adapter"),
+    window = domAdapter.getWindow(),
     navigator = require("../core/utils/navigator"),
     eventsEngine = require("../events/core/events_engine"),
     errors = require("../ui/widget/ui.errors"),
@@ -51,7 +52,7 @@ exports.fileSaver = {
         if(typeUtils.isDefined(callback)) attributes["onclick"] = callback;
         ///#ENDDEBUG
 
-        window.document.body.appendChild(exportLinkElement);
+        domAdapter.getBody().appendChild(exportLinkElement);
         $(exportLinkElement).css({ "display": "none" }).text("load").attr(attributes)[0].click();
         return exportLinkElement;
     },

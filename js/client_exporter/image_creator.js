@@ -5,7 +5,8 @@ var $ = require("../core/renderer"),
     isFunction = require("../core/utils/type").isFunction,
     iteratorUtils = require("../core/utils/iterator"),
     extend = require("../core/utils/extend").extend,
-    window = require("../core/dom_adapter").getWindow(),
+    domAdapter = require("../core/dom_adapter"),
+    window = domAdapter.getWindow(),
     camelize = require("../core/utils/inflector").camelize,
     deferredUtils = require("../core/utils/deferred"),
     when = deferredUtils.when,
@@ -615,7 +616,7 @@ function getCanvasFromSvg(markup, width, height, backgroundColor) {
     context.translate(DEFAULT_MARGIN_SIZE.x, DEFAULT_MARGIN_SIZE.y);
 
     imageDeferreds = [];
-    window.document.body.appendChild(canvas); // for rtl mode
+    domAdapter.getBody().appendChild(canvas); // for rtl mode
     if(svgElem.attributes.direction) {
         canvas.dir = svgElem.attributes.direction.textContent;
     }
@@ -623,7 +624,7 @@ function getCanvasFromSvg(markup, width, height, backgroundColor) {
     drawBackground(context, width, height, backgroundColor);
     drawCanvasElements(svgElem.childNodes, context, {});
 
-    window.document.body.removeChild(canvas);
+    domAdapter.getBody().removeChild(canvas);
 
     return canvas;
 }
