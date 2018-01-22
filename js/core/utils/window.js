@@ -2,7 +2,8 @@
 
 var $ = require("../../core/renderer"),
     window = require("../../core/dom_adapter").getWindow(),
-    callOnce = require("../../core/utils/common").callOnce,
+    commonUtils = require("../../core/utils/common"),
+    callOnce = commonUtils.callOnce,
     eventsEngine = require("../../events/core/events_engine"),
     Callbacks = require("../../core/utils/callbacks");
 
@@ -90,6 +91,12 @@ var getCurrentScreenFactor = function(screenFactorCallback) {
     return screenFactorFunc($(window).width());
 };
 
+
+var beforeActivateExists = callOnce(function() {
+    return window.document["onbeforeactivate"] !== undefined;
+});
+
 exports.resizeCallbacks = resizeCallbacks;
 exports.defaultScreenFactorFunc = defaultScreenFactorFunc;
 exports.getCurrentScreenFactor = getCurrentScreenFactor;
+exports.beforeActivateExists = beforeActivateExists;
