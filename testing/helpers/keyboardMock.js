@@ -391,9 +391,15 @@ var browser;
                 return this;
             },
 
-            input: function(key) {
+            input: function(key, inputType) {
                 key = typeof key === "string" ? keyHelper(key) : key;
-                this.triggerEvent("input", { keyCode: key, charCode: key, which: key });
+                var params = { keyCode: key, charCode: key, which: key };
+
+                if(inputType) {
+                    params.originalEvent = $.Event("input", { inputType: inputType });
+                }
+
+                this.triggerEvent("input", params);
                 return this;
             },
 
