@@ -1908,15 +1908,16 @@ QUnit.test("create custom item by subscribe on event via 'on' method", function(
                 display: "display " + event.text,
                 value: "value " + event.text
             };
-        };
+        },
+        instance = $selectBox.dxSelectBox("instance");
 
-    $selectBox.dxSelectBox("instance").on("customItemCreating", onCustomItemCreating);
+    instance.on("customItemCreating", onCustomItemCreating);
 
     keyboard
         .type(customValue)
         .change();
 
-    assert.equal($selectBox.dxSelectBox("option", "value"), "value " + customValue, "value is correct");
+    assert.equal(instance.option("value"), "value " + customValue, "value is correct");
     assert.equal($input.val(), "display " + customValue, "displayed value is correct");
 });
 
