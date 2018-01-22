@@ -1,7 +1,8 @@
 "use strict";
 
 var $ = require("../core/renderer"),
-    window = require("../core/dom_adapter").getWindow(),
+    domAdapter = require("../core/dom_adapter"),
+    window = domAdapter.getWindow(),
     navigator = require("../core/utils/navigator"),
     eventsEngine = require("../events/core/events_engine"),
     fx = require("../animation/fx"),
@@ -730,8 +731,8 @@ var Overlay = Widget.inherit({
     },
 
     _forceFocusLost: function() {
-        var document = window.document;
-        document.activeElement && this._$content.find(document.activeElement).length && document.activeElement.blur();
+        var activeElement = domAdapter.getActiveElement();
+        activeElement && this._$content.find(activeElement).length && activeElement.blur();
     },
 
     _animate: function(animation, completeCallback, startCallback) {

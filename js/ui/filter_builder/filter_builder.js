@@ -1,7 +1,8 @@
 "use strict";
 
 var $ = require("../../core/renderer"),
-    window = require("../../core/dom_adapter").getWindow(),
+    domAdapter = require("../../core/dom_adapter"),
+    window = domAdapter.getWindow(),
     Class = require("../../core/class"),
     eventsEngine = require("../../events/core/events_engine"),
     Widget = require("../widget/ui.widget"),
@@ -842,7 +843,7 @@ var FilterBuilder = Widget.inherit({
                 eventsEngine.off(document, "dxclick", documentClickHandler);
             },
             isFocusOnEditorParts = function() {
-                var activeElement = document.activeElement;
+                var activeElement = domAdapter.getActiveElement();
                 return $(activeElement).closest($editor.children()).length
                     || $(activeElement).closest(".dx-dropdowneditor-overlay").length;
             },

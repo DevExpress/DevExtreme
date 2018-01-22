@@ -1,7 +1,8 @@
 "use strict";
 
 var $ = require("../../core/renderer"),
-    window = require("../../core/dom_adapter").getWindow(),
+    domAdapter = require("../../core/dom_adapter"),
+    window = domAdapter.getWindow(),
     eventsEngine = require("../../events/core/events_engine"),
     Guid = require("../../core/guid"),
     typeUtils = require("../../core/utils/type"),
@@ -1357,7 +1358,7 @@ var EditingController = modules.ViewController.inherit((function() {
                 }
             } else {
                 setTimeout(function() {
-                    var $focusedElement = $(window.document.activeElement),
+                    var $focusedElement = $(domAdapter.getActiveElement()),
                         columnIndex = that._rowsView.getCellIndex($focusedElement, row.rowIndex),
                         focusedElement = $focusedElement.get(0),
                         selectionStart = focusedElement && focusedElement.selectionStart,
@@ -1369,7 +1370,7 @@ var EditingController = modules.ViewController.inherit((function() {
                         var $focusedItem = that._rowsView._getCellElement(row.rowIndex, columnIndex);
                         that._delayedInputFocus($focusedItem, function() {
                             setTimeout(function() {
-                                focusedElement = window.document.activeElement;
+                                focusedElement = domAdapter.getActiveElement();
                                 if(selectionStart >= 0 && focusedElement && focusedElement.setSelectionRange) {
                                     try {
                                         focusedElement.setSelectionRange(selectionStart, selectionEnd);

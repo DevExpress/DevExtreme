@@ -1,7 +1,7 @@
 "use strict";
 
 var $ = require("../../core/renderer"),
-    window = require("../../core/dom_adapter").getWindow(),
+    domAdapter = require("../../core/dom_adapter"),
     eventsEngine = require("../../events/core/events_engine"),
     commonUtils = require("../../core/utils/common"),
     mathUtils = require("../../core/utils/math"),
@@ -372,7 +372,7 @@ var NumberBoxBase = TextEditor.inherit({
 
     _spinButtonsPointerDownHandler: function() {
         var $input = this._input();
-        if(!this.option("useLargeSpinButtons") && window.document.activeElement !== $input[0]) {
+        if(!this.option("useLargeSpinButtons") && domAdapter.getActiveElement() !== $input[0]) {
             eventsEngine.trigger($input, "focus");
         }
     },

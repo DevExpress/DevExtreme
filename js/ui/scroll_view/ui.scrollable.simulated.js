@@ -1,7 +1,7 @@
 "use strict";
 
 var $ = require("../../core/renderer"),
-    window = require("../../core/dom_adapter").getWindow(),
+    domAdapter = require("../../core/dom_adapter"),
     eventsEngine = require("../../events/core/events_engine"),
     math = Math,
     titleize = require("../../core/utils/inflector").titleize,
@@ -678,7 +678,7 @@ var SimulatedStrategy = Class.inherit({
     },
 
     _keyDownHandler: function(e) {
-        if(!this._$container.is(window.document.activeElement)) {
+        if(!this._$container.is(domAdapter.getActiveElement())) {
             return;
         }
 

@@ -1,7 +1,8 @@
 "use strict";
 
 var $ = require("../../core/renderer"),
-    window = require("../../core/dom_adapter").getWindow(),
+    domAdapter = require("../../core/dom_adapter"),
+    window = domAdapter.getWindow(),
     eventsEngine = require("../../events/core/events_engine"),
     errors = require("../errors"),
     inArray = require("./array").inArray,
@@ -12,7 +13,7 @@ var $ = require("../../core/renderer"),
     elementStrategy;
 
 var resetActiveElement = function() {
-    var activeElement = window.document.activeElement;
+    var activeElement = domAdapter.getActiveElement();
     if(activeElement && activeElement !== window.document.body && activeElement.blur) {
         activeElement.blur();
     }

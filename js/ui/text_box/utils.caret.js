@@ -3,7 +3,8 @@
 var $ = require("../../core/renderer"),
     isDefined = require("../../core/utils/type").isDefined,
     browser = require("../../core/utils/browser"),
-    window = require("../../core/dom_adapter").getWindow();
+    domAdapter = require("../../core/dom_adapter"),
+    window = domAdapter.getWindow();
 
 var isFocusingOnCaretChange = browser.msie || browser.safari;
 
@@ -68,7 +69,7 @@ var caret = function(input, position) {
     }
 
     // NOTE: IE focuses element input after caret position has changed
-    if(isFocusingOnCaretChange && window.document.activeElement !== input) {
+    if(isFocusingOnCaretChange && domAdapter.getActiveElement() !== input) {
         return;
     }
 

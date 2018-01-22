@@ -72,6 +72,11 @@ var domAdapter = module.exports = {
         element.style[name] = value || '';
     },
 
+    getActiveElement: function() {
+        var document = domAdapter.getWindow().document;
+        return document.activeElement;
+    },
+
     getWindow: function() {
         return domAdapter._window;
     },
