@@ -113,7 +113,7 @@ var Calendar = Editor.inherit({
             /**
             * @name dxCalendarOptions_firstDayOfWeek
             * @publicName firstDayOfWeek
-            * @type Enums.DayOfWeek
+            * @type Enums.FirstDayOfWeek
             * @default undefined
             */
             firstDayOfWeek: undefined,
