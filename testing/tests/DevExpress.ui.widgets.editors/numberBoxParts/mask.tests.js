@@ -3,6 +3,7 @@
 var $ = require("jquery"),
     config = require("core/config"),
     keyboardMock = require("../../../helpers/keyboardMock.js"),
+    numberLocalization = require("localization/number"),
     browser = require("core/utils/browser");
 
 require("ui/text_box/ui.text_editor");
@@ -373,6 +374,19 @@ QUnit.test("boundary value should correctly apply after second try to set overfl
 
 
 QUnit.module("format: text input", moduleConfig);
+
+QUnit.test("numberbox should call convertDigits every time when digits are using in regular expressions", function(assert) {
+    var convertDigits = sinon.spy(numberLocalization, "convertDigits");
+
+    try {
+        this.keyboard.type("12345");
+        this.keyboard.press("backspace").press("enter");
+
+        assert.equal(convertDigits.callCount, 59, "convertDigits calls");
+    } finally {
+        convertDigits.restore();
+    }
+});
 
 QUnit.test("invalid chars should be prevented on keydown", function(assert) {
     this.keyboard.type("12e*3.456");

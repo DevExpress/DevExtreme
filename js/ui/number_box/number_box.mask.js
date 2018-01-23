@@ -183,7 +183,7 @@ var NumberBoxMask = NumberBoxBase.inherit({
         var text = this._input().val(),
             caret = this._caret();
 
-        this._lastKey = e.originalEvent.key;
+        this._lastKey = number.convertDigits(e.originalEvent.key);
 
         var enteredChar = this._lastKey === MINUS ? "" : this._lastKey,
             newValue = this._tryParse(text, caret, enteredChar);
@@ -235,7 +235,9 @@ var NumberBoxMask = NumberBoxBase.inherit({
 
         if(end - start < text.length) {
             var editedText = this._getEditedText(text, { start: start, end: end }, ""),
-                noDigits = editedText.search(/[0-9]/) < 0;
+                regExp = new RegExp(number.convertDigits("[0-9]")),
+                noDigits = editedText.search(regExp) < 0;
+
             if(noDigits && this._isValueInRange(0)) {
                 this._parsedValue = this._parsedValue < 0 || 1 / this._parsedValue === -Infinity ? -0 : 0;
                 return;
@@ -441,7 +443,8 @@ var NumberBoxMask = NumberBoxBase.inherit({
 
     _isStub: function(str, isString) {
         var escapedDecimalSeparator = escapeRegExp(number.getDecimalSeparator()),
-            stubRegExp = new RegExp("^[^0-9" + escapedDecimalSeparator + "]+$", "g");
+            regExpString = number.convertDigits("^[^0-9" + escapedDecimalSeparator + "]+$"),
+            stubRegExp = new RegExp(regExpString, "g");
 
         return stubRegExp.test(str) && (isString || this._isChar(str));
     },
@@ -606,7 +609,8 @@ var NumberBoxMask = NumberBoxBase.inherit({
 
     _removeStubInText: function(text) {
         var decimalSeparator = number.getDecimalSeparator(),
-            regExp = new RegExp("[^0-9" + decimalSeparator + "]+", "g");
+            regExpString = number.convertDigits("[^0-9" + decimalSeparator + "]+"),
+            regExp = new RegExp(regExpString, "g");
 
         text = text || this._input().val();
 
