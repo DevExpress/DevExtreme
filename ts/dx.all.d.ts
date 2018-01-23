@@ -1860,6 +1860,8 @@ declare module DevExpress.ui {
     export interface dxContextMenuOptions extends dxMenuBaseOptions {
         /** Specifies whether to close the ContextMenu if a user clicks outside it. */
         closeOnOutsideClick?: boolean | ((event: event) => boolean);
+        /** Holds an array of menu items. */
+        items?: Array<dxContextMenuItemTemplate>;
         /** A handler for the hidden event. */
         onHidden?: ((e: { component?: DOMComponent, element?: DevExpress.core.dxElement, model?: any }) => any);
         /** A handler for the hiding event. */
@@ -1913,7 +1915,6 @@ declare module DevExpress.ui {
         columnMinWidth?: number;
         /** Specifies how the widget resizes columns. Applies only if allowColumnResizing is true. */
         columnResizingMode?: string;
-        /** Overridden. */
         columns?: Array<GridBaseColumn>;
         /** Specifies the origin of data for the widget. */
         dataSource?: string | Array<any> | DevExpress.data.DataSource | DevExpress.data.DataSourceOptions;
@@ -1989,113 +1990,6 @@ declare module DevExpress.ui {
         twoWayBindingEnabled?: boolean;
         /** Specifies whether text that does not fit into a column should be wrapped. */
         wordWrapEnabled?: boolean;
-    }
-    /** Overridden. */
-    export interface GridBaseColumn {
-        /** Aligns the content of the column. */
-        alignment?: string;
-        /** Specifies whether a user can edit values in the column at runtime. By default, inherits the value of the editing.allowUpdating option. */
-        allowEditing?: boolean;
-        /** Specifies whether data can be filtered by this column. Applies only if filterRow.visible is true. */
-        allowFiltering?: boolean;
-        /** Specifies whether a user can fix the column at runtime. Applies only if columnFixing.enabled is true. */
-        allowFixing?: boolean;
-        /** Specifies whether the header filter can be used to filter data by this column. Applies only if headerFilter.visible is true. By default, inherits the value of the allowFiltering option. */
-        allowHeaderFiltering?: boolean;
-        /** Specifies whether a user can hide the column using the column chooser at runtime. Applies only if columnChooser.enabled is true. */
-        allowHiding?: boolean;
-        /** Specifies whether this column can be used in column reordering at runtime. Applies only if allowColumnReordering is true. */
-        allowReordering?: boolean;
-        /** Specifies whether a user can resize the column at runtime. Applies only if allowColumnResizing is true. */
-        allowResizing?: boolean;
-        /** Specifies whether this column can be searched. Applies only if searchPanel.visible is true. Inherits the value of the allowFiltering option by default. */
-        allowSearch?: boolean;
-        /** Specifies whether a user can sort rows by this column at runtime. Applies only if sorting.mode differs from "none". */
-        allowSorting?: boolean;
-        /** Calculates custom values for column cells. */
-        calculateCellValue?: ((rowData: any) => any);
-        /** Calculates custom display values for column cells. Used when display values should differ from values for editing. */
-        calculateDisplayValue?: string | ((rowData: any) => any);
-        /** Specifies the column's custom filtering rules. */
-        calculateFilterExpression?: ((filterValue: any, selectedFilterOperation: string, target: string) => string | Array<any>);
-        /** Calculates custom values to be used in sorting. */
-        calculateSortValue?: string | ((rowData: any) => any);
-        /** Specifies a caption for the column. */
-        caption?: string;
-        /** Specifies a custom template for column cells. */
-        cellTemplate?: template | ((cellElement: DevExpress.core.dxElement, cellInfo: any) => any);
-        /** Specifies a CSS class to be applied to the column. */
-        cssClass?: string;
-        /** Customizes the text displayed in column cells. */
-        customizeText?: ((cellInfo: { value?: string | number | Date, valueText?: string, target?: string, groupInterval?: string | number }) => string);
-        /** Binds the column to a field of the dataSource. */
-        dataField?: string;
-        /** Casts column values to a specific data type. */
-        dataType?: string;
-        /** Specifies a custom template for column cells in the editing state. */
-        editCellTemplate?: template | ((cellElement: DevExpress.core.dxElement, cellInfo: any) => any);
-        /** Specifies options for the underlain editor. */
-        editorOptions?: any;
-        /** Specifies whether HTML tags are displayed as plain text or applied to the values of the column. */
-        encodeHtml?: boolean;
-        /** In a boolean column, replaces all false items with a specified text. Applies only if showEditorAlways option is false. */
-        falseText?: string;
-        /** Specifies a set of available filter operations. Applies only if filterRow.visible and allowFiltering are true. */
-        filterOperations?: Array<string>;
-        /** Specifies whether a user changes the current filter by including (selecting) or excluding (clearing the selection of) values. Applies only if headerFilter.visible and allowHeaderFiltering are true. */
-        filterType?: string;
-        /** Specifies a filter value for the column. */
-        filterValue?: any;
-        /** Specifies filter values for the column's header filter. */
-        filterValues?: Array<any>;
-        /** Fixes the column. */
-        fixed?: boolean;
-        /** Specifies the widget's edge to which the column is fixed. Applies only if columns].[fixed is true. */
-        fixedPosition?: string;
-        /** Formats a value before it is displayed in a column cell. */
-        format?: format;
-        /** Configures the form item produced by this column in the editing state. Used only if editing.mode is "form" or "popup". */
-        formItem?: dxFormSimpleItem;
-        /** Specifies a custom template for column headers. */
-        headerCellTemplate?: template | ((columnHeader: DevExpress.core.dxElement, headerInfo: any) => any);
-        /** Specifies data settings for the header filter. */
-        headerFilter?: { dataSource?: Array<any> | ((options: { component?: any, dataSource?: DevExpress.data.DataSourceOptions }) => any) | DevExpress.data.DataSourceOptions, groupInterval?: string | number, allowSearch?: boolean, width?: number, height?: number };
-        /** Specifies the order in which columns are hidden when the widget adapts to the screen or container size. Ignored if allowColumnResizing is true and columnResizingMode is "widget". */
-        hidingPriority?: number;
-        /** Specifies whether the column bands other columns or not. */
-        isBand?: boolean;
-        /** Specifies options of a lookup column. */
-        lookup?: { dataSource?: Array<any> | DevExpress.data.DataSourceOptions | ((options: { data?: any, key?: any }) => Array<any> | DevExpress.data.DataSourceOptions), valueExpr?: string, displayExpr?: string | ((data: any) => any), allowClearing?: boolean };
-        /** Specifies the minimum width of the column. */
-        minWidth?: number;
-        /** Specifies the identifier of the column. */
-        name?: string;
-        /** Specifies the band column that owns the current column. Accepts the index of the band column in the columns array. */
-        ownerBand?: number;
-        /** Specifies the selected filter operation for the column. */
-        selectedFilterOperation?: string;
-        /** Specifies a function to be invoked after the user has edited a cell value, but before it will be saved in the data source. */
-        setCellValue?: ((newData: any, value: any, currentRowData: any) => any);
-        /** Specifies whether the column displays its values using editors. */
-        showEditorAlways?: boolean;
-        /** Specifies whether the column chooser can contain the column header. */
-        showInColumnChooser?: boolean;
-        /** Specifies the index according to which columns participate in sorting. */
-        sortIndex?: number;
-        /** Specifies a custom comparison function for sorting. Applies only when sorting is performed on the client. */
-        sortingMethod?: ((value1: any, value2: any) => number);
-        /** Specifies the sort order of column values. */
-        sortOrder?: string;
-        /** In a boolean column, replaces all true items with a specified text. Applies only if showEditorAlways option is false. */
-        trueText?: string;
-        /** Specifies validation rules to be checked on updating cell values. */
-        validationRules?: Array<RequiredRule | NumericRule | RangeRule | StringLengthRule | CustomRule | CompareRule | PatternRule | EmailRule>;
-        /** Specifies whether the column is visible, that is, occupies space in the table. */
-        visible?: boolean;
-        /** Specifies the position of the column regarding other columns in the resulting widget. */
-        visibleIndex?: number;
-        /** Specifies the column's width in pixels or percentages. Ignored if less than minWidth. */
-        width?: number | string;
     }
     /** Overriden. */
     export interface GridBaseEditing {
@@ -2274,7 +2168,6 @@ declare module DevExpress.ui {
         updateDimensions(): void;
     }
     export interface dxDataGridOptions extends GridBaseOptions {
-        /** An array of grid columns. */
         columns?: Array<dxDataGridColumn>;
         /** Specifies a function that customizes grid columns after they are created. */
         customizeColumns?: ((columns: Array<dxDataGridColumn>) => any);
@@ -2336,27 +2229,6 @@ declare module DevExpress.ui {
         stateStoring?: { enabled?: boolean, storageKey?: string, type?: string, customLoad?: (() => Promise<any> | JQueryPromise<any>), customSave?: ((gridState: any) => any), savingTimeout?: number };
         /** Specifies the options of the grid summary. */
         summary?: { groupItems?: Array<any>, totalItems?: Array<any>, calculateCustomSummary?: ((options: { component?: dxDataGrid, name?: string, summaryProcess?: string, value?: any, totalValue?: any }) => any), skipEmptyValues?: boolean, texts?: any };
-    }
-    /** An array of grid columns. */
-    export interface dxDataGridColumn extends GridBaseColumn {
-        /** Specifies whether data from this column should be exported. */
-        allowExporting?: boolean;
-        /** Specifies whether the user can group data by values of this column. Applies only when grouping is enabled. */
-        allowGrouping?: boolean;
-        /** Specifies whether groups appear expanded or not when records are grouped by a specific column. Setting this option makes sense only when grouping is allowed for this column. */
-        autoExpandGroup?: boolean;
-        /** Specifies a field name or a function that returns a field name or a value to be used for grouping column cells. */
-        calculateGroupValue?: string | ((rowData: any) => any);
-        /** An array of grid columns. */
-        columns?: Array<dxDataGridColumn>;
-        /** Specifies a custom template for group cells. */
-        groupCellTemplate?: template | ((cellElement: DevExpress.core.dxElement, cellInfo: any) => any);
-        /** Specifies the index of a column when grid records are grouped by the values of this column. */
-        groupIndex?: number;
-        /** @deprecated Use the format.precision option instead. */
-        precision?: number;
-        /** Specifies whether or not to display the column when grid records are grouped by it. */
-        showWhenGrouped?: boolean;
     }
     /** Configures editing. */
     export interface dxDataGridEditing extends GridBaseEditing {
@@ -3103,6 +2975,8 @@ declare module DevExpress.ui {
         adaptivityEnabled?: boolean;
         /** Specifies whether or not the submenu is hidden when the mouse pointer leaves it. */
         hideSubmenuOnMouseLeave?: boolean;
+        /** Holds an array of menu items. */
+        items?: Array<dxMenuItemTemplate>;
         /** A handler for the submenuHidden event. */
         onSubmenuHidden?: ((e: { component?: DOMComponent, element?: DevExpress.core.dxElement, model?: any, rootItem?: DevExpress.core.dxElement }) => any);
         /** A handler for the submenuHiding event. */
@@ -3214,7 +3088,7 @@ declare module DevExpress.ui {
         /** A handler for the shown event. */
         onShown?: ((e: { component?: DOMComponent, element?: DevExpress.core.dxElement, model?: any }) => any);
         /** An object defining widget positioning options. */
-        position?: positionConfig;
+        position?: string | positionConfig;
         /** A Boolean value specifying whether or not the main screen is inactive while the widget is active. */
         shading?: boolean;
         /** Specifies the shading color. */
@@ -3398,7 +3272,7 @@ declare module DevExpress.ui {
         /** Specifies options of popover hiding. */
         hideEvent?: { name?: string, delay?: number } | string;
         /** An object defining widget positioning options. */
-        position?: positionConfig;
+        position?: string | positionConfig;
         /** A Boolean value specifying whether or not the main screen is inactive while the widget is active. */
         shading?: boolean;
         /** Specifies options for displaying the widget. */
@@ -3446,7 +3320,7 @@ declare module DevExpress.ui {
         /** A handler for the titleRendered event. */
         onTitleRendered?: ((e: { component?: DOMComponent, element?: DevExpress.core.dxElement, model?: any, titleElement?: DevExpress.core.dxElement }) => any);
         /** An object defining widget positioning options. */
-        position?: positionConfig;
+        position?: string | positionConfig;
         /** Specifies whether or not an end user can resize the widget. */
         resizeEnabled?: boolean;
         /** Specifies whether or not the widget displays the Close button. */
@@ -4055,7 +3929,7 @@ declare module DevExpress.ui {
         /** The Toast message text. */
         message?: string;
         /** An object defining widget positioning options. */
-        position?: positionConfig;
+        position?: positionConfig | string;
         /** A Boolean value specifying whether or not the main screen is inactive while the widget is active. */
         shading?: boolean;
         /** Specifies the Toast widget type. */
@@ -4121,7 +3995,6 @@ declare module DevExpress.ui {
     export interface dxTreeListOptions extends GridBaseOptions {
         /** Specifies whether all rows are expanded initially. */
         autoExpandAll?: boolean;
-        /** Configures columns. */
         columns?: Array<dxTreeListColumn>;
         /** Customizes columns after they are created. */
         customizeColumns?: ((columns: Array<dxTreeListColumn>) => any);
@@ -4169,11 +4042,6 @@ declare module DevExpress.ui {
         scrolling?: dxTreeListScrolling;
         /** Configures runtime selection. */
         selection?: dxTreeListSelection;
-    }
-    /** Configures columns. */
-    export interface dxTreeListColumn extends GridBaseColumn {
-        /** Configures columns. */
-        columns?: Array<dxTreeListColumn>;
     }
     /** Configures editing. */
     export interface dxTreeListEditing extends GridBaseEditing {
@@ -4511,6 +4379,10 @@ declare module DevExpress.ui {
         /** Specifies whether or not a widget item must be displayed. */
         visible?: boolean;
     }
+    export interface dxContextMenuItemTemplate extends dxMenuBaseItemTemplate {
+        /** Holds an array of menu items. */
+        items?: Array<dxContextMenuItemTemplate>;
+    }
     export interface dxMenuBaseOptions extends HierarchicalCollectionWidgetOptions {
         /** A Boolean value specifying whether or not the widget changes its state when interacting with a user. */
         activeStateEnabled?: boolean;
@@ -4558,6 +4430,26 @@ declare module DevExpress.ui {
         text?: string;
         /** Specifies whether or not the menu item is visible. */
         visible?: boolean;
+    }
+    export interface dxDataGridColumn extends GridBaseColumn {
+        /** Specifies whether data from this column should be exported. */
+        allowExporting?: boolean;
+        /** Specifies whether the user can group data by values of this column. Applies only when grouping is enabled. */
+        allowGrouping?: boolean;
+        /** Specifies whether groups appear expanded or not when records are grouped by a specific column. Setting this option makes sense only when grouping is allowed for this column. */
+        autoExpandGroup?: boolean;
+        /** Specifies a field name or a function that returns a field name or a value to be used for grouping column cells. */
+        calculateGroupValue?: string | ((rowData: any) => any);
+        /** An array of grid columns. */
+        columns?: Array<dxDataGridColumn>;
+        /** Specifies a custom template for group cells. */
+        groupCellTemplate?: template | ((cellElement: DevExpress.core.dxElement, cellInfo: any) => any);
+        /** Specifies the index of a column when grid records are grouped by the values of this column. */
+        groupIndex?: number;
+        /** @deprecated Use the format.precision option instead. */
+        precision?: number;
+        /** Specifies whether or not to display the column when grid records are grouped by it. */
+        showWhenGrouped?: boolean;
     }
     export interface dxDropDownEditorOptions extends dxTextBoxOptions {
         /** Specifies whether or not the widget allows an end-user to enter a custom value. */
@@ -4814,6 +4706,116 @@ declare module DevExpress.ui {
         /** Specifies the sequence number of the item in a form, group or tab. */
         visibleIndex?: number;
     }
+    export interface GridBaseColumn {
+        /** Aligns the content of the column. */
+        alignment?: string;
+        /** Specifies whether a user can edit values in the column at runtime. By default, inherits the value of the editing.allowUpdating option. */
+        allowEditing?: boolean;
+        /** Specifies whether data can be filtered by this column. Applies only if filterRow.visible is true. */
+        allowFiltering?: boolean;
+        /** Specifies whether a user can fix the column at runtime. Applies only if columnFixing.enabled is true. */
+        allowFixing?: boolean;
+        /** Specifies whether the header filter can be used to filter data by this column. Applies only if headerFilter.visible is true. By default, inherits the value of the allowFiltering option. */
+        allowHeaderFiltering?: boolean;
+        /** Specifies whether a user can hide the column using the column chooser at runtime. Applies only if columnChooser.enabled is true. */
+        allowHiding?: boolean;
+        /** Specifies whether this column can be used in column reordering at runtime. Applies only if allowColumnReordering is true. */
+        allowReordering?: boolean;
+        /** Specifies whether a user can resize the column at runtime. Applies only if allowColumnResizing is true. */
+        allowResizing?: boolean;
+        /** Specifies whether this column can be searched. Applies only if searchPanel.visible is true. Inherits the value of the allowFiltering option by default. */
+        allowSearch?: boolean;
+        /** Specifies whether a user can sort rows by this column at runtime. Applies only if sorting.mode differs from "none". */
+        allowSorting?: boolean;
+        /** Calculates custom values for column cells. */
+        calculateCellValue?: ((rowData: any) => any);
+        /** Calculates custom display values for column cells. Used when display values should differ from values for editing. */
+        calculateDisplayValue?: string | ((rowData: any) => any);
+        /** Specifies the column's custom filtering rules. */
+        calculateFilterExpression?: ((filterValue: any, selectedFilterOperation: string, target: string) => string | Array<any>);
+        /** Calculates custom values to be used in sorting. */
+        calculateSortValue?: string | ((rowData: any) => any);
+        /** Specifies a caption for the column. */
+        caption?: string;
+        /** Specifies a custom template for column cells. */
+        cellTemplate?: template | ((cellElement: DevExpress.core.dxElement, cellInfo: any) => any);
+        /** Specifies a CSS class to be applied to the column. */
+        cssClass?: string;
+        /** Customizes the text displayed in column cells. */
+        customizeText?: ((cellInfo: { value?: string | number | Date, valueText?: string, target?: string, groupInterval?: string | number }) => string);
+        /** Binds the column to a field of the dataSource. */
+        dataField?: string;
+        /** Casts column values to a specific data type. */
+        dataType?: string;
+        /** Specifies a custom template for column cells in the editing state. */
+        editCellTemplate?: template | ((cellElement: DevExpress.core.dxElement, cellInfo: any) => any);
+        /** Specifies options for the underlain editor. */
+        editorOptions?: any;
+        /** Specifies whether HTML tags are displayed as plain text or applied to the values of the column. */
+        encodeHtml?: boolean;
+        /** In a boolean column, replaces all false items with a specified text. Applies only if showEditorAlways option is false. */
+        falseText?: string;
+        /** Specifies a set of available filter operations. Applies only if filterRow.visible and allowFiltering are true. */
+        filterOperations?: Array<string>;
+        /** Specifies whether a user changes the current filter by including (selecting) or excluding (clearing the selection of) values. Applies only if headerFilter.visible and allowHeaderFiltering are true. */
+        filterType?: string;
+        /** Specifies a filter value for the column. */
+        filterValue?: any;
+        /** Specifies filter values for the column's header filter. */
+        filterValues?: Array<any>;
+        /** Fixes the column. */
+        fixed?: boolean;
+        /** Specifies the widget's edge to which the column is fixed. Applies only if columns].[fixed is true. */
+        fixedPosition?: string;
+        /** Formats a value before it is displayed in a column cell. */
+        format?: format;
+        /** Configures the form item produced by this column in the editing state. Used only if editing.mode is "form" or "popup". */
+        formItem?: dxFormSimpleItem;
+        /** Specifies a custom template for column headers. */
+        headerCellTemplate?: template | ((columnHeader: DevExpress.core.dxElement, headerInfo: any) => any);
+        /** Specifies data settings for the header filter. */
+        headerFilter?: { dataSource?: Array<any> | ((options: { component?: any, dataSource?: DevExpress.data.DataSourceOptions }) => any) | DevExpress.data.DataSourceOptions, groupInterval?: string | number, allowSearch?: boolean, width?: number, height?: number };
+        /** Specifies the order in which columns are hidden when the widget adapts to the screen or container size. Ignored if allowColumnResizing is true and columnResizingMode is "widget". */
+        hidingPriority?: number;
+        /** Specifies whether the column bands other columns or not. */
+        isBand?: boolean;
+        /** Specifies options of a lookup column. */
+        lookup?: { dataSource?: Array<any> | DevExpress.data.DataSourceOptions | ((options: { data?: any, key?: any }) => Array<any> | DevExpress.data.DataSourceOptions), valueExpr?: string, displayExpr?: string | ((data: any) => any), allowClearing?: boolean };
+        /** Specifies the minimum width of the column. */
+        minWidth?: number;
+        /** Specifies the identifier of the column. */
+        name?: string;
+        /** Specifies the band column that owns the current column. Accepts the index of the band column in the columns array. */
+        ownerBand?: number;
+        /** Specifies the selected filter operation for the column. */
+        selectedFilterOperation?: string;
+        /** Specifies a function to be invoked after the user has edited a cell value, but before it will be saved in the data source. */
+        setCellValue?: ((newData: any, value: any, currentRowData: any) => any);
+        /** Specifies whether the column displays its values using editors. */
+        showEditorAlways?: boolean;
+        /** Specifies whether the column chooser can contain the column header. */
+        showInColumnChooser?: boolean;
+        /** Specifies the index according to which columns participate in sorting. */
+        sortIndex?: number;
+        /** Specifies a custom comparison function for sorting. Applies only when sorting is performed on the client. */
+        sortingMethod?: ((value1: any, value2: any) => number);
+        /** Specifies the sort order of column values. */
+        sortOrder?: string;
+        /** In a boolean column, replaces all true items with a specified text. Applies only if showEditorAlways option is false. */
+        trueText?: string;
+        /** Specifies validation rules to be checked on updating cell values. */
+        validationRules?: Array<RequiredRule | NumericRule | RangeRule | StringLengthRule | CustomRule | CompareRule | PatternRule | EmailRule>;
+        /** Specifies whether the column is visible, that is, occupies space in the table. */
+        visible?: boolean;
+        /** Specifies the position of the column regarding other columns in the resulting widget. */
+        visibleIndex?: number;
+        /** Specifies the column's width in pixels or percentages. Ignored if less than minWidth. */
+        width?: number | string;
+    }
+    export interface dxTreeListColumn extends GridBaseColumn {
+        /** Configures columns. */
+        columns?: Array<dxTreeListColumn>;
+    }
     export interface dxDataGridRowObject {
         /** The data object represented by the row. */
         data?: any;
@@ -4881,6 +4883,10 @@ declare module DevExpress.ui {
         key?: string;
         /** Specifies whether or not to display a chevron for the list item. */
         showChevron?: boolean;
+    }
+    export interface dxMenuItemTemplate extends dxMenuBaseItemTemplate {
+        /** Holds an array of menu items. */
+        items?: Array<dxMenuItemTemplate>;
     }
     export interface dxPivotGridPivotGridCell {
         /** The cell's column path. Available for data area cells only. */
@@ -5154,7 +5160,7 @@ declare module DevExpress.ui {
         /** @deprecated Use the icon field instead. */
         iconSrc?: string;
         /** Holds an array of tree view items. */
-        items?: Array<any>;
+        items?: Array<dxTreeViewItemTemplate>;
         /** Holds the key of the parent item. */
         parentId?: number | string;
         /** Specifies whether or not the tree view item is displayed selected. */
