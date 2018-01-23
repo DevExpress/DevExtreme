@@ -2,7 +2,7 @@
 
 var $ = require("jquery"),
     config = require("core/config"),
-    localization = require("localization"),
+    localizationNumber = require("localization/number"),
     keyboardMock = require("../../../helpers/keyboardMock.js"),
     browser = require("core/utils/browser");
 
@@ -376,18 +376,15 @@ QUnit.test("boundary value should correctly apply after second try to set overfl
 QUnit.module("format: text input", moduleConfig);
 
 QUnit.test("input should not be prevented in arabic locale", function(assert) {
-    var originalCulture = localization.locale();
+    var convertDigits = sinon.spy(localizationNumber, "convertDigits");
 
     try {
-        localization.locale("ar");
-        this.instance.repaint();
-
-        this.keyboard.type("١٢٣٫٤٥");
+        this.keyboard.type("12345");
         this.keyboard.press("backspace");
 
-        assert.equal(this.input.val(), "١٢٣٫٤", "input was not prevented");
+        assert.equal(convertDigits.callCount, 57, "numberBox calls convertDigits method");
     } finally {
-        localization.locale(originalCulture);
+        convertDigits.restore();
     }
 });
 
