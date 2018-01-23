@@ -87,6 +87,11 @@ var domAdapter = module.exports = {
         return document.createDocumentFragment();
     },
 
+    getDocumentElement: function() {
+        var document = domAdapter.getWindow().document;
+        return document.documentElement;
+    },
+
     getWindow: function() {
         return domAdapter._window;
     },
@@ -111,7 +116,7 @@ var domAdapter = module.exports = {
         var document = domAdapter.getWindow().document;
 
         //NOTE: we can't use document.readyState === "interactive" because of ie9/ie10 support
-        if(document.readyState === "complete" || (document.readyState !== "loading" && !document.documentElement.doScroll)) {
+        if(document.readyState === "complete" || (document.readyState !== "loading" && !domAdapter.getDocumentElement().doScroll)) {
             callback();
             return;
         }

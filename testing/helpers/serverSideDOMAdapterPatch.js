@@ -21,6 +21,10 @@ exports.set = function() {
         return document.createDocumentFragment();
     };
 
+    domAdapter.getDocumentElement = function() {
+        return document.documentElement;
+    };
+
     for(var field in serverSideWindowMock) {
         Object.defineProperty(domAdapter._window, field, {
             enumerable: true,

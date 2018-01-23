@@ -119,7 +119,8 @@
 var $ = require("../core/renderer"),
     commonUtils = require("../core/utils/common"),
     each = require("../core/utils/iterator").each,
-    window = require("../core/dom_adapter").getWindow(),
+    domAdapter = require("../core/dom_adapter"),
+    window = domAdapter.getWindow(),
     isWindow = require("../core/utils/type").isWindow,
     stringUtils = require("../core/utils/string"),
     extend = require("../core/utils/extend").extend,
@@ -388,10 +389,11 @@ var calculatePosition = function(what, options) {
             left = win.scrollLeft(),
             top = win.scrollTop(),
             document = window.document,
-            hScrollbar = document.width > document.documentElement.clientWidth,
-            vScrollbar = document.height > document.documentElement.clientHeight,
-            hZoomLevel = support.touch ? document.documentElement.clientWidth / (vScrollbar ? windowWidth - scrollbarWidth : windowWidth) : 1,
-            vZoomLevel = support.touch ? document.documentElement.clientHeight / (hScrollbar ? windowHeight - scrollbarWidth : windowHeight) : 1;
+            documentElement = domAdapter.getDocumentElement(),
+            hScrollbar = document.width > documentElement.clientWidth,
+            vScrollbar = document.height > documentElement.clientHeight,
+            hZoomLevel = support.touch ? documentElement.clientWidth / (vScrollbar ? windowWidth - scrollbarWidth : windowWidth) : 1,
+            vZoomLevel = support.touch ? documentElement.clientHeight / (hScrollbar ? windowHeight - scrollbarWidth : windowHeight) : 1;
 
         if(scrollbarWidth === undefined) {
             calculateScrollbarWidth();
