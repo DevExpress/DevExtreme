@@ -64,6 +64,12 @@ var ContextMenu = MenuBase.inherit((function() {
         _getDefaultOptions: function() {
             return extend(this.callBase(), {
                 /**
+                * @name dxContextMenuOptions_items
+                * @publicName items
+                * @type Array<dxContextMenuItemTemplate>
+                * @inheritdoc
+                */
+                /**
                 * @name dxContextMenuOptions_showEvent
                 * @publicName showEvent
                 * @type Object|string
@@ -190,6 +196,19 @@ var ContextMenu = MenuBase.inherit((function() {
                 * @inheritdoc
                 */
 
+                /**
+                * @name dxContextMenuItemTemplate
+                * @publicName dxContextMenuItemTemplate
+                * @inherits dxMenuBaseItemTemplate
+                * @type object
+                * @inheritdoc
+                */
+                /**
+                * @name dxContextMenuItemTemplate_items
+                * @publicName items
+                * @type Array<dxContextMenuItemTemplate>
+                * @inheritdoc
+                */
 
                 onLeftFirstItem: null,
                 onLeftLastItem: null,

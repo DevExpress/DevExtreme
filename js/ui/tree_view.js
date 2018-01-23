@@ -124,6 +124,12 @@ var TreeView = HierarchicalCollectionWidget.inherit({
     _getDefaultOptions: function() {
         return extend(this.callBase(), {
             /**
+            * @name dxTreeViewOptions_items
+            * @publicName items
+            * @type Array<dxTreeViewItemTemplate>
+            * @inheritdoc
+            */
+            /**
             * @name dxTreeViewOptions_animationEnabled
             * @publicName animationEnabled
             * @type boolean
@@ -416,7 +422,7 @@ var TreeView = HierarchicalCollectionWidget.inherit({
             /**
             * @name dxTreeViewItemTemplate_items
             * @publicName items
-            * @type Array
+            * @type Array<dxTreeViewItemTemplate>
             */
             /**
             * @name dxTreeViewItemTemplate_parentId
