@@ -228,9 +228,9 @@ exports.DataController = dataControllerModule.controllers.data.inherit((function
 
         /**
          * @name dxTreeListMethods_forEachNode
-         * @publicName forEachNode(nodes, function)
+         * @publicName forEachNode(nodes, callback)
          * @param1 nodes:Array<dxTreeListNode>
-         * @param2 function:function
+         * @param2 callback:function
          */
         forEachNode: function(nodes, callback) {
             this._dataSource.forEachNode(nodes, callback);
