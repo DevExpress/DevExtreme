@@ -1,7 +1,8 @@
 "use strict";
 
+/* global window */
 var $ = require("../../core/renderer"),
-    window = require("../../core/dom_adapter").getWindow(),
+    _window = require("../../core/dom_adapter").getWindow(),
     commonUtils = require("../../core/utils/common"),
     callOnce = commonUtils.callOnce,
     eventsEngine = require("../../events/core/events_engine"),
@@ -15,7 +16,7 @@ var resizeCallbacks = (function() {
         originalCallbacksRemove = callbacks.remove;
 
     var formatSize = function() {
-        var jqWindow = $(window);
+        var jqWindow = $(_window);
 
         return {
             width: jqWindow.width(),
@@ -48,7 +49,7 @@ var resizeCallbacks = (function() {
 
     callbacks.add = function() {
         var result = originalCallbacksAdd.apply(callbacks, arguments);
-        var jqWindow = $(window);
+        var jqWindow = $(_window);
 
         setPrevSize();
 
@@ -61,7 +62,7 @@ var resizeCallbacks = (function() {
 
     callbacks.remove = function() {
         var result = originalCallbacksRemove.apply(callbacks, arguments);
-        var jqWindow = $(window);
+        var jqWindow = $(_window);
 
         if(!callbacks.has() && resizeEventHandlerAttached) {
             eventsEngine.off(jqWindow, "resize", handleResize);
@@ -88,15 +89,25 @@ var defaultScreenFactorFunc = function(width) {
 var getCurrentScreenFactor = function(screenFactorCallback) {
     var screenFactorFunc = screenFactorCallback || defaultScreenFactorFunc;
 
-    return screenFactorFunc($(window).width());
+    return screenFactorFunc($(_window).width());
 };
 
-
 var beforeActivateExists = callOnce(function() {
-    return window.document["onbeforeactivate"] !== undefined;
+    return _window.document["onbeforeactivate"] !== undefined;
 });
+
+
+var getComputedStyle = function(element) {
+    if(typeof window !== "undefined") {
+        return window.getComputedStyle(element);
+    }
+    return {
+        "font-family": "dx.generic.light"
+    };
+};
 
 exports.resizeCallbacks = resizeCallbacks;
 exports.defaultScreenFactorFunc = defaultScreenFactorFunc;
 exports.getCurrentScreenFactor = getCurrentScreenFactor;
 exports.beforeActivateExists = beforeActivateExists;
+exports.getComputedStyle = getComputedStyle;

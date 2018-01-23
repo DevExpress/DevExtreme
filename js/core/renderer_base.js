@@ -3,6 +3,7 @@
 var dataUtils = require("./element_data");
 var domAdapter = require("./dom_adapter");
 var window = domAdapter.getWindow();
+var windowUtils = require("./utils/window");
 var typeUtils = require("./utils/type");
 var styleUtils = require("./utils/style");
 var sizeUtils = require("./utils/size");
@@ -306,7 +307,7 @@ initRender.prototype.css = function(name, value) {
 
             name = styleUtils.styleProp(name);
 
-            var result = domAdapter.getComputedStyle(this[0])[name] || this[0].style[name];
+            var result = windowUtils.getComputedStyle(this[0])[name] || this[0].style[name];
             return typeUtils.isNumeric(result) ? result.toString() : result;
         }
     } else if(typeUtils.isPlainObject(name)) {
