@@ -97,6 +97,11 @@ var domAdapter = module.exports = {
         return document.readyState;
     },
 
+    getHead: function() {
+        var document = domAdapter.getWindow().document;
+        return document.head;
+    },
+
     getWindow: function() {
         return domAdapter._window;
     },
