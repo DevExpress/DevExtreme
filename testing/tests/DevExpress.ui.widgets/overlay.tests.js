@@ -627,6 +627,18 @@ QUnit.test("position change should not show the content if the overlay is hidden
     assert.ok(instance.$content().is(":hidden"));
 });
 
+QUnit.test("position in string format should be parsed correctly", function(assert) {
+    var $overlay = $("#overlay").dxOverlay({
+        visible: true,
+        position: "top"
+    });
+
+    var overlay = $overlay.dxOverlay("instance"),
+        $content = $(overlay.content());
+
+    assert.equal($content.position().top, 0, "overlay positioned correctly");
+});
+
 QUnit.test("position should be correct on second showing (B238662, B232822)", function(assert) {
     var $overlay = $("#overlay").html("123").dxOverlay(),
         overlay = $overlay.dxOverlay("instance"),
