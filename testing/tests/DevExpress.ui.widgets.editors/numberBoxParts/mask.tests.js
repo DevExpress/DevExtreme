@@ -3,6 +3,7 @@
 var $ = require("jquery"),
     config = require("core/config"),
     keyboardMock = require("../../../helpers/keyboardMock.js"),
+    numberLocalization = require("localization/number"),
     browser = require("core/utils/browser");
 
 require("ui/text_box/ui.text_editor");
@@ -373,6 +374,51 @@ QUnit.test("boundary value should correctly apply after second try to set overfl
 
 
 QUnit.module("format: text input", moduleConfig);
+
+QUnit.test("mask should work with arabic digit shaping", function(assert) {
+    var arabicDigits = "٠١٢٣٤٥٦٧٨٩";
+    var arabicSeparator = "٫";
+
+    var standardToArabicMock = function(text) {
+        return text.split("").map(function(sign) {
+            if(sign === ".") {
+                return arabicSeparator;
+            }
+            return arabicDigits[sign] || sign;
+        }).join("");
+    };
+
+    var arabicToStandardMock = function(text) {
+        return text.split("").map(function(sign) {
+            if(sign === arabicSeparator) {
+                return ".";
+            }
+            var standardSign = arabicDigits.indexOf(sign);
+            return standardSign < 0 ? sign : standardSign;
+        }).join("");
+    };
+
+    numberLocalization.inject({
+        format: function(number) {
+            return number && standardToArabicMock(String(number));
+        },
+        parse: function(text) {
+            return text && parseFloat(arabicToStandardMock(text));
+        }
+    });
+
+    try {
+        this.keyboard
+            .type("١٢٣٤٥")
+            .press("backspace")
+            .change();
+
+        assert.equal(this.input.val(), "١٢٣٤");
+        assert.equal(this.instance.option("value"), 1234);
+    } finally {
+        numberLocalization.resetInjection();
+    }
+});
 
 QUnit.test("invalid chars should be prevented on keydown", function(assert) {
     this.keyboard.type("12e*3.456");
