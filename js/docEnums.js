@@ -5,6 +5,16 @@
  */
 
 /**
+ * @typedef {number} Enums.DayOfWeek
+ * @enum {0|1|2|3|4|5|6}
+ */
+
+/**
+ * @typedef {number} Enums.PivotGridFieldChooserLayout
+* @enum {0|1|2}
+*/
+
+/**
  * @typedef {string} Enums.DropDownSearchMode
  * @enum {'contains'|'startswith'}
  */
