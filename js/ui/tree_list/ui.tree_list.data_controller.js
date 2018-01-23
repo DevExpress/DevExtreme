@@ -72,7 +72,7 @@ exports.DataController = dataControllerModule.controllers.data.inherit((function
         },
 
         publicMethods: function() {
-            return this.callBase().concat(["expandRow", "collapseRow", "isRowExpanded", "getRootNode", "getNodeByKey", "loadDescendants"]);
+            return this.callBase().concat(["expandRow", "collapseRow", "isRowExpanded", "getRootNode", "getNodeByKey", "loadDescendants", "forEachNode"]);
         },
 
         changeRowExpand: function(key) {
@@ -216,6 +216,16 @@ exports.DataController = dataControllerModule.controllers.data.inherit((function
             }
 
             return this._dataSource.loadDescendants(keys, childrenOnly);
+        },
+
+        /**
+         * @name dxTreeListMethods_forEachNode
+         * @publicName forEachNode(nodes, callback)
+         * @param1 nodes:Array<dxTreeListNode>
+         * @param2 callback:function
+         */
+        forEachNode: function(nodes, callback) {
+            this._dataSource.forEachNode(nodes, callback);
         }
     };
 })());

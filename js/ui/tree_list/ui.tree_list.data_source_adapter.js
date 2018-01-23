@@ -602,6 +602,11 @@ DataSourceAdapter = DataSourceAdapter.inherit((function() {
                 .fail(d.reject);
 
             return d.promise();
+        },
+
+        forEachNode: function(nodes, callback) {
+            nodes = Array.isArray(nodes) ? nodes : [nodes];
+            treeListCore.foreachNodes(nodes, callback);
         }
     };
 })());
