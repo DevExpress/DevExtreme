@@ -49,8 +49,8 @@ var AdvancedChart = BaseChart.inherit({
     _setDeprecatedOptions: function() {
         this.callBase.apply(this, arguments);
         _extend(this._deprecatedOptions, {
-            "barWidth": { since: "17.2", message: "Use the 'commonSeriesSettings.barPadding' or 'series.barPadding' option instead" },
-            "equalBarWidth": { since: "17.2", message: "Use the 'commonSeriesSettings.ignoreEmptyPoints' or 'series.ignoreEmptyPoints' option instead" }
+            "barWidth": { since: "18.1", message: "Use the 'commonSeriesSettings.barPadding' or 'series.barPadding' option instead" },
+            "equalBarWidth": { since: "18.1", message: "Use the 'commonSeriesSettings.ignoreEmptyPoints' or 'series.ignoreEmptyPoints' option instead" }
         });
     },
 
