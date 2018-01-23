@@ -82,6 +82,11 @@ var domAdapter = module.exports = {
         return document.body;
     },
 
+    createDocumentFragment: function() {
+        var document = domAdapter.getWindow().document;
+        return document.createDocumentFragment();
+    },
+
     getWindow: function() {
         return domAdapter._window;
     },
