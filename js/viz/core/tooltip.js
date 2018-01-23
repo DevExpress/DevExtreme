@@ -431,7 +431,7 @@ Tooltip.prototype = {
     _getCanvas: function() {
         var container = this._getContainer(),
             containerBox = container.getBoundingClientRect(),
-            html = window.document.documentElement,
+            html = domAdapter.getDocumentElement(),
             body = domAdapter.getBody(),
             left = window.pageXOffset || html.scrollLeft || 0,
             top = window.pageYOffset || html.scrollTop || 0;

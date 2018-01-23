@@ -182,11 +182,11 @@ initRender.prototype.toggleClass = function(className, value) {
         }
 
         if(typeUtils.isWindow(element)) {
-            return isOuter ? element["inner" + partialName] : element.document.documentElement["client" + partialName];
+            return isOuter ? element["inner" + partialName] : domAdapter.getDocumentElement()["client" + partialName];
         }
 
         if(element.nodeType === window.Node.DOCUMENT_NODE) {
-            var documentElement = element.documentElement;
+            var documentElement = domAdapter.getDocumentElement();
 
             return Math.max(
                 element.body["scroll" + partialName],
@@ -768,7 +768,7 @@ initRender.prototype.offsetParent = function() {
         offsetParent = renderer(offsetParent[0].offsetParent);
     }
 
-    offsetParent = offsetParent[0] ? offsetParent : renderer(window.document.documentElement);
+    offsetParent = offsetParent[0] ? offsetParent : renderer(domAdapter.getDocumentElement());
 
     return offsetParent;
 };
