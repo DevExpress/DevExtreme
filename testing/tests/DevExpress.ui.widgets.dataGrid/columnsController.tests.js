@@ -2721,6 +2721,9 @@ QUnit.test("update column serializer for date type", function(assert) {
     assert.deepEqual(column.calculateCellValue(items[0]), new Date('1985/5/16'));
     assert.deepEqual(column.serializeValue(new Date('1980/9/20')), '1980/09/20');
 
+    //T596758
+    assert.strictEqual(column.serializeValue("1980/09/20"), "1980/09/20");
+
     column.setCellValue(data, new Date('1980/9/20'));
     assert.deepEqual(data, { birthDate: '1980/09/20' }, "setCellValue");
     //T138486

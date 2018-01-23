@@ -3657,3 +3657,29 @@ QUnit.test("Updating selection state should be correct when headerFilter.dataSou
     //assert
     assert.notOk($listItems.first().find(".dx-checkbox-checked").length, "checkbox unchecked");
 });
+
+//T596758
+QUnit.test("Checking filter in loadOptions when value in headerFilter.dataSource is specified as filter expression for a date column", function(assert) {
+    //arrange
+    var spy = sinon.spy(function(loadOptions) {
+        return [{ date: "2018/01/01" }, { date: "2018/01/02" }, { date: "2018/01/03" }];
+    });
+
+    this.options.remoteOperations = { filtering: true };
+    this.options.columns = [{
+        dataField: "date",
+        dataType: "date",
+        headerFilter: {
+            dataSource: [{ text: "2018/01/01", value: ["date", "=", "2018/01/01"] }]
+        }
+    }];
+    this.options.dataSource = { load: spy };
+    this.setupDataGrid();
+    spy.reset();
+
+    //act
+    this.columnOption("date", "filterValues", [["date", "=", "2018/01/01"]]);
+
+    //assert
+    assert.deepEqual(spy.getCall(0).args[0].filter, ["date", "=", "2018/01/01"]);
+});

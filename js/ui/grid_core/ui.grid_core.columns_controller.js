@@ -787,7 +787,7 @@ module.exports = {
                             return dateSerialization.deserializeDate(value);
                         };
                         options.serializeValue = function(value) {
-                            return dateSerialization.serializeDate(value, this.serializationFormat);
+                            return typeUtils.isString(value) ? value : dateSerialization.serializeDate(value, this.serializationFormat);
                         };
                     }
                     if(dataType === "number") {
