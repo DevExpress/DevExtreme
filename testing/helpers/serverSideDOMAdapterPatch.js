@@ -25,6 +25,10 @@ exports.set = function() {
         return document.documentElement;
     };
 
+    domAdapter.getHead = function() {
+        return document.head;
+    };
+
     for(var field in serverSideWindowMock) {
         Object.defineProperty(domAdapter._window, field, {
             enumerable: true,
