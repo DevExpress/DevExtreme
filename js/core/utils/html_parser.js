@@ -1,7 +1,8 @@
 "use strict";
 
 var merge = require("./array").merge,
-    window = require("../dom_adapter").getWindow();
+    domAdapter = require("../dom_adapter"),
+    window = domAdapter.getWindow();
 
 var isTagName = (/<([a-z][^\/\0>\x20\t\r\n\f]+)/i);
 
@@ -41,7 +42,7 @@ var parseHTML = function(html) {
         return null;
     }
 
-    var fragment = window.document.createDocumentFragment();
+    var fragment = domAdapter.createDocumentFragment();
     var container = fragment.appendChild(window.document.createElement("div"));
 
     var tags = isTagName.exec(html);
