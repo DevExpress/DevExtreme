@@ -616,9 +616,7 @@ DataSourceAdapter = DataSourceAdapter.inherit((function() {
         },
 
         forEachNode: function(nodes, callback) {
-            if(typeUtils.isObject(nodes)) {
-                nodes = [nodes];
-            }
+            nodes = Array.isArray(nodes) ? nodes : [nodes];
             treeListCore.foreachNodes(nodes, callback);
         }
     };
