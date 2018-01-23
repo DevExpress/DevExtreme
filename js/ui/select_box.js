@@ -172,7 +172,7 @@ var SelectBox = DropDownList.inherit({
             * @default function(e) { if(!e.customItem) { e.customItem = e.text; } }
             */
             onCustomItemCreating: function(e) {
-                if(!e.customItem) {
+                if(!commonUtils.isDefined(e.customItem)) {
                     e.customItem = e.text;
                 }
             },

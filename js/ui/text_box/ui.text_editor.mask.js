@@ -344,7 +344,7 @@ var TextEditorMask = TextEditorBase.inherit({
     },
 
     _maskInputHandler: function(e) {
-        if(this._isBackspaceInputNotHandled(e.originalEvent && e.originalEvent.inputType)) {
+        if(this._backspaceInputHandled(e.originalEvent && e.originalEvent.inputType)) {
             this._handleBackspaceInput(e);
         }
 
@@ -376,7 +376,7 @@ var TextEditorMask = TextEditorBase.inherit({
         }).bind(this));
     },
 
-    _isBackspaceInputNotHandled: function(inputType) {
+    _backspaceInputHandled: function(inputType) {
         return inputType === BACKSPACE_INPUT_TYPE && !this._keyPressHandled;
     },
 
