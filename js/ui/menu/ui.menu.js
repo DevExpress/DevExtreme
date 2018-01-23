@@ -56,7 +56,12 @@ var Menu = MenuBase.inherit({
 
     _getDefaultOptions: function() {
         return extend(this.callBase(), {
-
+            /**
+            * @name dxMenuOptions_items
+            * @publicName items
+            * @type Array<dxMenuItemTemplate>
+            * @inheritdoc
+            */
             /**
             * @name dxMenuOptions_orientation
             * @publicName orientation
@@ -197,6 +202,19 @@ var Menu = MenuBase.inherit({
             * @name dxMenuOptions_onItemReordered
             * @publicName onItemReordered
             * @hidden
+            * @inheritdoc
+            */
+            /**
+            * @name dxMenuItemTemplate
+            * @publicName dxMenuItemTemplate
+            * @inherits dxMenuBaseItemTemplate
+            * @type object
+            * @inheritdoc
+            */
+            /**
+            * @name dxMenuItemTemplate_items
+            * @publicName items
+            * @type Array<dxMenuItemTemplate>
             * @inheritdoc
             */
         });
