@@ -5054,6 +5054,39 @@ QUnit.test("pager.visible change", function(assert) {
     assert.ok($("#dataGrid").find(".dx-datagrid-rowsview").height() > rowsViewHeight, "rowsView height updated");
 });
 
+//T121445
+QUnit.test("pager light-mode should be correct after change pageSize", function(assert) {
+    //arrange, act
+    var data = [];
+    for(var i = 0; i < 11; ++i) {
+        data.push({ value: i });
+    }
+    var dataGrid = createDataGrid({
+        width: 250,
+        loadingTimeout: undefined,
+        dataSource: data,
+        pager: {
+            allowedPageSizes: [2, 6],
+            showInfo: true,
+            showNavigationButtons: true,
+            showPageSizeSelector: true,
+            visible: true
+        },
+        paging: {
+            pageSize: 6
+        }
+    });
+
+    //assert
+    assert.notOk($("#dataGrid .dx-pager").hasClass("dx-light-mode"));
+
+    //act
+    dataGrid.option("paging.pageSize", 2);
+    dataGrid.option("paging.pageSize", 6);
+
+    //assert
+    assert.notOk($("#dataGrid .dx-pager").hasClass("dx-light-mode"), "is not light-mode");
+});
 
 QUnit.test("scrolling change", function(assert) {
     //arrange, act
