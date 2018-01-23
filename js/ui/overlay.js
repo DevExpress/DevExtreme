@@ -51,8 +51,15 @@ var OVERLAY_CLASS = "dx-overlay",
 
     DISABLED_STATE_CLASS = "dx-state-disabled",
 
-    TAB_KEY = 9;
+    TAB_KEY = 9,
 
+    POSITION_ALIASES = {
+        "top": { my: "top center", at: "top center" },
+        "bottom": { my: "bottom center", at: "bottom center" },
+        "right": { my: "right center", at: "right center" },
+        "left": { my: "left center", at: "left center" },
+        "center": { my: 'center', at: 'center' }
+    };
 
 var realDevice = devices.real(),
     realVersion = realDevice.version,
@@ -176,7 +183,7 @@ var Overlay = Widget.inherit({
             /**
             * @name dxOverlayOptions_position
             * @publicName position
-            * @type positionConfig
+            * @type string|positionConfig
             * @default { my: 'center', at: 'center', of: window }
             */
             position: {
@@ -1265,7 +1272,9 @@ var Overlay = Widget.inherit({
             this._renderOverlayBoundaryOffset();
 
             translator.resetPosition(this._$content);
-            var resultPosition = positionUtils.setup(this._$content, this._position);
+
+            var position = this._transformStringPosition(this._position, POSITION_ALIASES),
+                resultPosition = positionUtils.setup(this._$content, position);
 
             forceRepaint(this._$content);
 
@@ -1274,6 +1283,14 @@ var Overlay = Widget.inherit({
 
             return resultPosition;
         }
+    },
+
+    _transformStringPosition: function(position, positionAliases) {
+        if(typeUtils.isString(position)) {
+            position = extend({}, positionAliases[position]);
+        }
+
+        return position;
     },
 
     _renderOverlayBoundaryOffset: function() {

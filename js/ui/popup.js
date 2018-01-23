@@ -254,7 +254,7 @@ var Popup = Overlay.inherit({
                     /**
                     * @name dxPopupOptions_position
                     * @publicName position
-                    * @type positionConfig
+                    * @type string|positionConfig
                     * @inheritdoc
                     */
                     position: {

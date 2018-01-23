@@ -531,21 +531,12 @@ var Popover = Popup.inherit({
     },
 
     _isPopoverInside: function() {
-        var position = this._getPosition();
+        var position = this._transformStringPosition(this.option("position"), POSITION_ALIASES);
 
         var my = positionUtils.setup.normalizeAlign(position.my);
         var at = positionUtils.setup.normalizeAlign(position.at);
 
         return my.h === at.h && my.v === at.v;
-    },
-
-    _getPosition: function() {
-        var position = this.option("position");
-
-        if(typeUtils.isString(position)) {
-            position = extend({}, POSITION_ALIASES[position]);
-        }
-        return position;
     },
 
     _setContentHeight: function(fullUpdate) {
@@ -570,7 +561,7 @@ var Popover = Popup.inherit({
     },
 
     _normalizePosition: function() {
-        var position = extend({}, this._getPosition());
+        var position = extend({}, this._transformStringPosition(this.option("position"), POSITION_ALIASES));
 
         if(!position.of) {
             position.of = this.option("target");
