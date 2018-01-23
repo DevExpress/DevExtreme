@@ -501,7 +501,7 @@
                 var pointsByArgument = {};
 
                 $.each(options.points, function(_, p) {
-                    if(p.argument && p.argument.valueOf()) {
+                    if(p.argument) {
                         pointsByArgument[p.argument.valueOf()] = pointsByArgument[p.argument.valueOf()] || [];
                         pointsByArgument[p.argument.valueOf()].push(p);
                     }
