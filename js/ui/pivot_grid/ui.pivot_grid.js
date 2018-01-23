@@ -234,8 +234,7 @@ var PivotGrid = Widget.inherit({
                 /**
                  * @name dxPivotGridOptions_fieldChooser_layout
                  * @publicName layout
-                 * @type number
-                 * @acceptValues 0 | 1 | 2
+                 * @type Enums.PivotGridFieldChooserLayout
                  * @default 0
                  */
                 layout: 0,
