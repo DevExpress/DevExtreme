@@ -116,7 +116,7 @@ module.exports = {
              * @type_function_param1_field5 target:string
              * @type_function_param1_field6 targetElement:dxElement
              * @type_function_param1_field7 columnIndex:number
-             * @type_function_param1_field8 column:dxDataGridOptions_columns
+             * @type_function_param1_field8 column:dxDataGridColumn
              * @type_function_param1_field9 rowIndex:number
              * @type_function_param1_field10 row:dxDataGridRowObject
              * @extends Action
@@ -131,7 +131,7 @@ module.exports = {
              * @type_function_param1_field5 target:string
              * @type_function_param1_field6 targetElement:dxElement
              * @type_function_param1_field7 columnIndex:number
-             * @type_function_param1_field8 column:dxTreeListOptions_columns
+             * @type_function_param1_field8 column:dxTreeListColumn
              * @type_function_param1_field9 rowIndex:number
              * @type_function_param1_field10 row:dxTreeListRowObject
              * @extends Action
