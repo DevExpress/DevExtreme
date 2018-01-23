@@ -375,11 +375,11 @@ QUnit.test("boundary value should correctly apply after second try to set overfl
 
 QUnit.module("format: text input", moduleConfig);
 
-QUnit.test("numberbox should call convertDigits every time when digits are using in regular expressions", function(assert) {
+QUnit.test("mask should work with arabic digit shaping", function(assert) {
     var arabicDigits = "٠١٢٣٤٥٦٧٨٩";
     var arabicSeparator = "٫";
 
-    var europeanToArabicMock = function(text) {
+    var standardToArabicMock = function(text) {
         return text.split("").map(function(sign) {
             if(sign === ".") {
                 return arabicSeparator;
@@ -388,22 +388,22 @@ QUnit.test("numberbox should call convertDigits every time when digits are using
         }).join("");
     };
 
-    var arabicToEuropeanMock = function(text) {
+    var arabicToStandardMock = function(text) {
         return text.split("").map(function(sign) {
             if(sign === arabicSeparator) {
                 return ".";
             }
-            var europeanSign = arabicDigits.indexOf(sign);
-            return europeanSign < 0 ? sign : europeanSign;
+            var standardSign = arabicDigits.indexOf(sign);
+            return standardSign < 0 ? sign : standardSign;
         }).join("");
     };
 
     numberLocalization.inject({
         format: function(number) {
-            return number && europeanToArabicMock(String(number));
+            return number && standardToArabicMock(String(number));
         },
         parse: function(text) {
-            return text && parseFloat(arabicToEuropeanMock(text));
+            return text && parseFloat(arabicToStandardMock(text));
         }
     });
 
