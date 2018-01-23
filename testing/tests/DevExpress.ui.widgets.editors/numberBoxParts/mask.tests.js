@@ -376,15 +376,47 @@ QUnit.test("boundary value should correctly apply after second try to set overfl
 QUnit.module("format: text input", moduleConfig);
 
 QUnit.test("numberbox should call convertDigits every time when digits are using in regular expressions", function(assert) {
-    var convertDigits = sinon.spy(numberLocalization, "convertDigits");
+    var arabicDigits = "٠١٢٣٤٥٦٧٨٩";
+    var arabicSeparator = "٫";
+
+    var europeanToArabicMock = function(text) {
+        return text.split("").map(function(sign) {
+            if(sign === ".") {
+                return arabicSeparator;
+            }
+            return arabicDigits[sign] || sign;
+        }).join("");
+    };
+
+    var arabicToEuropeanMock = function(text) {
+        return text.split("").map(function(sign) {
+            if(sign === arabicSeparator) {
+                return ".";
+            }
+            var europeanSign = arabicDigits.indexOf(sign);
+            return europeanSign < 0 ? sign : europeanSign;
+        }).join("");
+    };
+
+    numberLocalization.inject({
+        format: function(number) {
+            return number && europeanToArabicMock(String(number));
+        },
+        parse: function(text) {
+            return text && parseFloat(arabicToEuropeanMock(text));
+        }
+    });
 
     try {
-        this.keyboard.type("12345");
-        this.keyboard.press("backspace").press("enter");
+        this.keyboard
+            .type("١٢٣٤٥")
+            .press("backspace")
+            .change();
 
-        assert.equal(convertDigits.callCount, 59, "convertDigits calls");
+        assert.equal(this.input.val(), "١٢٣٤");
+        assert.equal(this.instance.option("value"), 1234);
     } finally {
-        convertDigits.restore();
+        numberLocalization.resetInjection();
     }
 });
 

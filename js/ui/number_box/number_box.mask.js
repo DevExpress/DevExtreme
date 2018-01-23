@@ -174,16 +174,20 @@ var NumberBoxMask = NumberBoxBase.inherit({
         return moveToFloat || zeroToZeroReplace;
     },
 
+    _getInputVal: function() {
+        return number.convertDigits(this._input().val(), true);
+    },
+
     _keyboardHandler: function(e) {
         if(!this._shouldHandleKey(e.originalEvent)) {
             this._lastKey = null;
             return this.callBase(e);
         }
 
-        var text = this._input().val(),
+        var text = this._getInputVal(),
             caret = this._caret();
 
-        this._lastKey = number.convertDigits(e.originalEvent.key);
+        this._lastKey = number.convertDigits(e.originalEvent.key, true);
 
         var enteredChar = this._lastKey === MINUS ? "" : this._lastKey,
             newValue = this._tryParse(text, caret, enteredChar);
@@ -203,9 +207,15 @@ var NumberBoxMask = NumberBoxBase.inherit({
         return this.callBase(e);
     },
 
+    _keyPressHandler: function(e) {
+        if(!this._useMaskBehavior()) {
+            this.callBase(e);
+        }
+    },
+
     _removeHandler: function(e) {
         var caret = this._caret(),
-            text = this._input().val(),
+            text = this._getInputVal(),
             start = caret.start,
             end = caret.end;
 
@@ -235,8 +245,7 @@ var NumberBoxMask = NumberBoxBase.inherit({
 
         if(end - start < text.length) {
             var editedText = this._getEditedText(text, { start: start, end: end }, ""),
-                regExp = new RegExp(number.convertDigits("[0-9]")),
-                noDigits = editedText.search(regExp) < 0;
+                noDigits = editedText.search(/[0-9]/) < 0;
 
             if(noDigits && this._isValueInRange(0)) {
                 this._parsedValue = this._parsedValue < 0 || 1 / this._parsedValue === -Infinity ? -0 : 0;
@@ -337,7 +346,7 @@ var NumberBoxMask = NumberBoxBase.inherit({
         }
 
         var caret = this._caret(),
-            textAfterCaret = this._input().val().slice(caret.start);
+            textAfterCaret = this._getInputVal().slice(caret.start);
 
         return !textAfterCaret || this._isStub(textAfterCaret, true);
     },
@@ -354,7 +363,7 @@ var NumberBoxMask = NumberBoxBase.inherit({
             newLength = text.length,
             wasRemoved = newLength < oldLength;
 
-        this._input().val(text);
+        this._input().val(number.convertDigits(text));
         this._formattedValue = text;
 
         if(wasRemoved) {
@@ -437,13 +446,13 @@ var NumberBoxMask = NumberBoxBase.inherit({
     },
 
     _isNonStubAfter: function(index, text) {
-        text = (text || this._input().val()).slice(index);
+        text = (text || this._getInputVal()).slice(index);
         return text && !this._isStub(text, true);
     },
 
     _isStub: function(str, isString) {
         var escapedDecimalSeparator = escapeRegExp(number.getDecimalSeparator()),
-            regExpString = number.convertDigits("^[^0-9" + escapedDecimalSeparator + "]+$"),
+            regExpString = "^[^0-9" + escapedDecimalSeparator + "]+$",
             stubRegExp = new RegExp(regExpString, "g");
 
         return stubRegExp.test(str) && (isString || this._isChar(str));
@@ -488,7 +497,7 @@ var NumberBoxMask = NumberBoxBase.inherit({
     },
 
     _isCaretOnFloat: function() {
-        var text = this._input().val(),
+        var text = this._getInputVal(),
             caret = this._caret(),
             decimalSeparator = number.getDecimalSeparator(),
             decimalSeparatorIndex = text.indexOf(decimalSeparator);
@@ -497,7 +506,7 @@ var NumberBoxMask = NumberBoxBase.inherit({
     },
 
     _getCaretDelta: function(formatted) {
-        var text = this._input().val(),
+        var text = this._getInputVal(),
             caret = this._caret(),
             caretDelta = 0,
             isFirstInput = this._formattedValue === "",
@@ -537,7 +546,7 @@ var NumberBoxMask = NumberBoxBase.inherit({
     },
 
     _formatValue: function() {
-        var text = this._input().val(),
+        var text = this._getInputVal(),
             caret = this._caret();
 
         this._isInputTriggered = true;
@@ -609,10 +618,10 @@ var NumberBoxMask = NumberBoxBase.inherit({
 
     _removeStubInText: function(text) {
         var decimalSeparator = number.getDecimalSeparator(),
-            regExpString = number.convertDigits("[^0-9" + decimalSeparator + "]+"),
+            regExpString = "[^0-9" + decimalSeparator + "]+",
             regExp = new RegExp(regExpString, "g");
 
-        text = text || this._input().val();
+        text = text || this._getInputVal();
 
         return text.replace(regExp, "");
     },
