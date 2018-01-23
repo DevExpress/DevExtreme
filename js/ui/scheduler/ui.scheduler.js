@@ -115,7 +115,7 @@ var Scheduler = Widget.inherit({
 
                 /**
                 * @pseudo FirstDayOfWeek
-                * @type Enums.DayOfWeek
+                * @type Enums.FirstDayOfWeek
                 * @default undefined
                 */
 
