@@ -9,7 +9,6 @@ var $ = require("../../core/renderer"),
     typeUtils = require("../../core/utils/type"),
     extend = require("../../core/utils/extend").extend,
     focused = require("../widget/selectors").focused,
-    deepExtendArraySafe = require("../../core/utils/object").deepExtendArraySafe,
     equalByValue = commonUtils.equalByValue,
     messageLocalization = require("../../localization/message"),
     Button = require("../button"),
@@ -222,7 +221,7 @@ var ValidatingController = modules.Controller.inherit((function() {
                         applyValidationResults: defaultValidationResult
                     },
                     dataGetter: function() {
-                        return deepExtendArraySafe(deepExtendArraySafe({}, editData.oldData), editData.data);
+                        return gridCoreUtils.createObjectWithChanges(editData.oldData, editData.data);
                     }
                 });
 
