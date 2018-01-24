@@ -337,18 +337,9 @@ exports.compareArrays = function(array1, array2) {
 
 function compareArraysElements(array1, array2) {
     var i,
-        ii = array1.length,
-        array1ValueIsNaN,
-        array2ValueIsNaN;
+        ii = array1.length;
 
     for(i = 0; i < ii; ++i) {
-        array1ValueIsNaN = array1[i] !== array1[i];
-        array2ValueIsNaN = array2[i] !== array2[i];
-
-        if(array1ValueIsNaN && array2ValueIsNaN) {
-            continue;
-        }
-
         if(array1[i] !== array2[i]) return false;
     }
     return true;
