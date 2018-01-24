@@ -278,6 +278,7 @@ module.exports = {
              * @publicName sortOrder
              * @type Enums.SortOrder
              * @default undefined
+             * @acceptValues undefined
              */
             /**
              * @name GridBaseOptions_columns_sortIndex
@@ -296,6 +297,7 @@ module.exports = {
              * @publicName alignment
              * @type Enums.HorizontalAlignment
              * @default undefined
+             * @acceptValues undefined
              */
             /**
              * @name GridBaseOptions_columns_format
