@@ -66,9 +66,8 @@ var Toast = Overlay.inherit({
             /**
             * @name dxToastOptions_type
             * @publicName type
-            * @type string
+            * @type Enums.ToastType
             * @default 'info'
-            * @acceptValues 'info'|'warning'|'error'|'success'|'custom'
             */
             type: "info",
 

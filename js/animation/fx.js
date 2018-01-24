@@ -77,15 +77,13 @@ var RELATIVE_VALUE_REGEX = /^([+-])=(.*)/i,
 /**
 * @name animationConfig_type
 * @publicName type
-* @type string
-* @acceptValues 'fade'|'fadeIn'|'fadeOut'|'pop'|'slide'|'slideIn'|'slideOut'|'css'
+* @type Enums.AnimationType
 * @default 'custom'
 */
 /**
 * @name animationConfig_direction
 * @publicName direction
-* @type string
-* @acceptValues 'top'|'bottom'|'left'|'right'
+* @type Enums.Direction
 * @default undefined
 */
 /**

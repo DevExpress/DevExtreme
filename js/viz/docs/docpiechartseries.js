@@ -34,9 +34,8 @@ var commonPieChartSeries = {
         /**
          * @name dxPieChartSeriesTypes_CommonPieChartSeries_smallvaluesgrouping_mode
          * @publicName mode
-         * @type string
+         * @type Enums.SmallValuesGroupingMode
          * @default 'none'
-         * @acceptValues 'topN' | 'smallValueThreshold' | 'none'
          */
         mode: 'none',
         /**
@@ -78,9 +77,8 @@ var commonPieChartSeries = {
     /**
     * @name dxPieChartSeriesTypes_CommonPieChartSeries_argumentType
     * @publicName argumentType
-    * @type string
+    * @type Enums.ChartDataType
     * @default undefined
-    * @acceptValues 'numeric' | 'datetime' | 'string'
     */
     argumentType: undefined,
     /**
@@ -120,26 +118,23 @@ var commonPieChartSeries = {
         /**
        * @name dxPieChartSeriesTypes_CommonPieChartSeries_border_dashstyle
        * @publicName dashStyle
-       * @type string
+       * @type Enums.DashStyle
        * @default undefined
-       * @acceptValues 'solid'|'longDash'|'dash'|'dot'
        */
         dashStyle: undefined
     },
     /**
     * @name dxPieChartSeriesTypes_CommonPieChartSeries_hovermode
     * @publicName hoverMode
-    * @type string
-    * @acceptValues 'onlyPoint' | 'none'
+    * @type Enums.PieChartSeriesInteractionMode
     * @default 'onlyPoint'
     */
     hoverMode: 'onlyPoint',
     /**
 	* @name dxPieChartSeriesTypes_CommonPieChartSeries_selectionmode
 	* @publicName selectionMode
-	* @type string
-	* @acceptValues 'onlyPoint' | 'none'
-    * @default 'onlyPoint'
+	* @type Enums.PieChartSeriesInteractionMode
+	    * @default 'onlyPoint'
 	*/
     selectionMode: 'onlyPoint',
     /**
@@ -164,9 +159,8 @@ var commonPieChartSeries = {
             /**
             * @name dxPieChartSeriesTypes_CommonPieChartSeries_hoverstyle_hatching_direction
             * @publicName direction
-            * @type string
+            * @type Enums.HatchingDirection
             * @default 'right'
-            * @acceptValues 'none'|'right'|'left'
             */
             direction: 'right',
             /**
@@ -221,9 +215,8 @@ var commonPieChartSeries = {
             /**
             * @name dxPieChartSeriesTypes_CommonPieChartSeries_hoverstyle_border_dashstyle
             * @publicName dashStyle
-            * @type string
+            * @type Enums.DashStyle
             * @default undefined
-            * @acceptValues 'solid'|'longDash'|'dash'|'dot'
             */
             dashStyle: undefined
         }
@@ -250,9 +243,8 @@ var commonPieChartSeries = {
             /**
             * @name dxPieChartSeriesTypes_CommonPieChartSeries_selectionstyle_hatching_direction
             * @publicName direction
-            * @type string
+            * @type Enums.HatchingDirection
             * @default 'right'
-            * @acceptValues 'none'|'right'|'left'
             */
             direction: 'right',
             /**
@@ -307,9 +299,8 @@ var commonPieChartSeries = {
             /**
             * @name dxPieChartSeriesTypes_CommonPieChartSeries_selectionstyle_border_dashstyle
             * @publicName dashStyle
-            * @type string
+            * @type Enums.DashStyle
             * @default undefined
-            * @acceptValues 'solid'|'longDash'|'dash'|'dot'
             */
             dashStyle: undefined
         }
@@ -324,10 +315,9 @@ var commonPieChartSeries = {
     /**
 	* @name dxPieChartSeriesTypes_CommonPieChartSeries_segmentsdirection
 	* @publicName segmentsDirection
-	* @type string
+	* @type Enums.PieChartSegmentsDirection
 	* @default 'clockwise'
-	* @acceptValues 'clockwise' | 'anticlockwise'
-    * @deprecated dxpiechartoptions_segmentsdirection
+	    * @deprecated dxpiechartoptions_segmentsdirection
 	*/
     segmentsDirection: 'clockwise',
     /**
@@ -418,9 +408,8 @@ var commonPieChartSeries = {
         /**
         * @name dxPieChartSeriesTypes_CommonPieChartSeries_label_position
         * @publicName position
-        * @type string
+        * @type Enums.PieChartLabelPosition
         * @default 'outside'
-        * @acceptValues 'outside' | 'inside' | 'columns'
         */
         position: 'outside',
         /**
@@ -502,9 +491,8 @@ var commonPieChartSeries = {
             /**
             * @name dxPieChartSeriesTypes_CommonPieChartSeries_label_border_dashstyle
             * @publicName dashStyle
-            * @type string
+            * @type Enums.DashStyle
             * @default 'solid'
-            * @acceptValues 'solid'|'longDash'|'dash'|'dot'
             */
             dashStyle: 'solid'
         },

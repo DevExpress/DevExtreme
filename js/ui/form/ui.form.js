@@ -73,9 +73,8 @@ var Form = Widget.inherit({
             /**
              * @name dxFormOptions_colCount
              * @publicName colCount
-             * @type number|string
+             * @type number|Enums.Mode
              * @default 1
-             * @acceptValues 'auto'
              */
             colCount: 1,
 
@@ -133,9 +132,8 @@ var Form = Widget.inherit({
             /**
              * @name dxFormOptions_labelLocation
              * @publicName labelLocation
-             * @type string
+             * @type Enums.FormLabelLocation
              * @default "left"
-             * @acceptValues 'left'|'right'|'top'
              */
             labelLocation: "left",
             /**
@@ -285,8 +283,7 @@ var Form = Widget.inherit({
             /**
              * @name dxFormSimpleItem_editorType
              * @publicName editorType
-             * @type string
-             * @acceptValues 'dxTextBox'|'dxNumberBox'|'dxDateBox'|'dxCheckBox'|'dxSwitch'|'dxSelectBox'|'dxLookup'|'dxTagBox'|'dxTextArea'|'dxColorBox'|'dxCalendar'|'dxAutocomplete'|'dxRadioGroup'|'dxSlider'|'dxDropDownBox'
+             * @type Enums.FormItemEditorType
              */
             /**
              * @name dxFormSimpleItem_editorOptions
@@ -303,8 +300,7 @@ var Form = Widget.inherit({
             /**
              * @name dxFormSimpleItem_itemType
              * @publicName itemType
-             * @type string
-             * @acceptValues 'simple'|'group'|'tabbed'|'empty'
+             * @type Enums.FormItemType
              * @default "simple"
              */
             /**
@@ -360,16 +356,14 @@ var Form = Widget.inherit({
             /**
              * @name dxFormSimpleItem_label_location
              * @publicName location
-             * @type string
+             * @type Enums.FormLabelLocation
              * @default "left"
-             * @acceptValues 'left'|'right'|'top'
              */
             /**
              * @name dxFormSimpleItem_label_alignment
              * @publicName alignment
-             * @type string
+             * @type Enums.HorizontalAlignment
              * @default "left"
-             * @acceptValues 'left'|'right'|'center'
              */
             /**
              * @name dxFormSimpleItem_helpText
@@ -417,8 +411,7 @@ var Form = Widget.inherit({
             /**
              * @name dxFormGroupItem_itemType
              * @publicName itemType
-             * @type string
-             * @acceptValues 'simple'|'group'|'tabbed'|'empty'
+             * @type Enums.FormItemType
              * @default "simple"
              */
             /**
@@ -480,8 +473,7 @@ var Form = Widget.inherit({
             /**
              * @name dxFormTabbedItem_itemType
              * @publicName itemType
-             * @type string
-             * @acceptValues 'simple'|'group'|'tabbed'|'empty'
+             * @type Enums.FormItemType
              * @default "simple"
              */
             /**
@@ -602,8 +594,7 @@ var Form = Widget.inherit({
             /**
              * @name dxFormEmptyItem_itemType
              * @publicName itemType
-             * @type string
-             * @acceptValues 'simple'|'group'|'tabbed'|'empty'
+             * @type Enums.FormItemType
              * @default "simple"
              */
             /**

@@ -113,36 +113,32 @@ var Calendar = Editor.inherit({
             /**
             * @name dxCalendarOptions_firstDayOfWeek
             * @publicName firstDayOfWeek
-            * @type number
+            * @type Enums.FirstDayOfWeek
             * @default undefined
-            * @acceptValues 0|1|2|3|4|5|6
             */
             firstDayOfWeek: undefined,
 
             /**
             * @name dxCalendarOptions_zoomLevel
             * @publicName zoomLevel
-            * @type string
+            * @type Enums.CalendarZoomLevel
             * @default 'month'
-            * @acceptValues 'month'|'year'|'decade'|'century'
             */
             zoomLevel: "month",
 
             /**
             * @name dxCalendarOptions_maxZoomLevel
             * @publicName maxZoomLevel
-            * @type string
+            * @type Enums.CalendarZoomLevel
             * @default 'month'
-            * @acceptValues 'month'|'year'|'decade'|'century'
             */
             maxZoomLevel: "month",
 
             /**
             * @name dxCalendarOptions_minZoomLevel
             * @publicName minZoomLevel
-            * @type string
+            * @type Enums.CalendarZoomLevel
             * @default 'century'
-            * @acceptValues 'month'|'year'|'decade'|'century'
             */
             minZoomLevel: "century",
 

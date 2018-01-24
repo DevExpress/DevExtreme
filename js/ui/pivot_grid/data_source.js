@@ -721,22 +721,19 @@ module.exports = Class.inherit((function() {
             /**
              * @name PivotGridDataSourceOptions_fields_dataType
              * @publicName dataType
-             * @type string
+             * @type Enums.PivotGridDataType
              * @default undefined
-             * @acceptValues 'string' | 'number' | 'date'
              */
             /**
              * @name PivotGridDataSourceOptions_fields_groupInterval
              * @publicName groupInterval
-             * @type string|number
+             * @type Enums.PivotGridGroupInterval|number
              * @default undefined
-             * @acceptValues 'year' | 'quarter' | 'month' |  'day' | 'dayOfWeek'
              */
             /**
              * @name PivotGridDataSourceOptions_fields_summaryType
              * @publicName summaryType
-             * @type string
-             * @acceptValues 'sum' | 'min' | 'max' | 'avg' | 'count' | 'custom'
+             * @type Enums.SummaryType
              * @default 'count'
              */
             /**
@@ -757,9 +754,9 @@ module.exports = Class.inherit((function() {
             /**
             * @name PivotGridDataSourceOptions_fields_area
             * @publicName area
-            * @type string
+            * @type Enums.PivotGridArea
             * @default undefined
-            * @acceptValues undefined | 'row' | 'column' | 'data' | 'filter'
+            * @acceptValues undefined
             */
             /**
             * @name PivotGridDataSourceOptions_fields_areaIndex
@@ -794,16 +791,14 @@ module.exports = Class.inherit((function() {
             /**
             * @name PivotGridDataSourceOptions_fields_sortOrder
             * @publicName sortOrder
-            * @type string
+            * @type Enums.SortOrder
             * @default 'asc'
-            * @acceptValues 'asc' | 'desc'
             */
             /**
             * @name PivotGridDataSourceOptions_fields_sortBy
             * @publicName sortBy
-            * @type string
+            * @type Enums.PivotGridSortBy
             * @default undefined
-            * @acceptValues 'displayText' | 'value' | 'none'
             */
             /**
              * @name PivotGridDataSourceOptions_fields_sortingMethod
@@ -839,9 +834,8 @@ module.exports = Class.inherit((function() {
             /**
              * @name PivotGridDataSourceOptions_fields_filterType
              * @publicName filterType
-             * @type string
+             * @type Enums.FilterType
              * @default 'include'
-             * @acceptValues 'include' | 'exclude'
             */
             /**
              * @name PivotGridDataSourceOptions_fields_expanded
@@ -911,15 +905,13 @@ module.exports = Class.inherit((function() {
             /**
              * @name PivotGridDataSourceOptions_fields_summaryDisplayMode
              * @publicName summaryDisplayMode
-             * @type string
-             * @acceptValues 'absoluteVariation' | 'percentVariation' | 'percentOfColumnTotal' | 'percentOfRowTotal' | 'percentOfColumnGrandTotal' | 'percentOfRowGrandTotal' | 'percentOfGrandTotal'
+             * @type Enums.PivotGridSummaryDisplayMode
              * @default undefined
              */
             /**
             * @name PivotGridDataSourceOptions_fields_runningTotal
             * @publicName runningTotal
-            * @type string
-            * @acceptValues 'row' | 'column'
+            * @type Enums.PivotGridRunningTotalMode
             * @default undefined
             */
             /**

@@ -518,16 +518,14 @@ module.exports = {
                 /**
                  * @name GridBaseOptions_selection_mode
                  * @publicName mode
-                 * @type string
-                 * @acceptValues "none" | "single" | "multiple"
+                 * @type Enums.SelectionMode
                  * @default "none"
                  */
                 mode: "none", // "single", "multiple"
                 /**
                  * @name  dxDataGridOptions_selection_showCheckBoxesMode
                  * @publicName showCheckBoxesMode
-                 * @type string
-                 * @acceptValues "onClick" | "onLongTap" | "always" | "none"
+                 * @type Enums.GridSelectionShowCheckBoxesMode
                  * @default "onClick"
                  */
                 showCheckBoxesMode: "onClick", // "onLongTap", "always", "none"
@@ -541,8 +539,7 @@ module.exports = {
                 /**
                  * @name dxDataGridOptions_selection_selectAllMode
                  * @publicName selectAllMode
-                 * @type string
-                 * @acceptValues "page" | "allPages"
+                 * @type Enums.SelectAllMode
                  * @default "allPages"
                  */
                 selectAllMode: "allPages",

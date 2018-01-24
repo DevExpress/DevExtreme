@@ -568,8 +568,7 @@ module.exports = {
                 /**
                  * @name dxDataGridOptions_scrolling_mode
                  * @publicName mode
-                 * @type string
-                 * @acceptValues "standard" | "virtual" | "infinite"
+                 * @type Enums.GridScrollingMode
                  * @default "standard"
                  */
                 mode: "standard",

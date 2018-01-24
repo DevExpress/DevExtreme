@@ -209,9 +209,8 @@ var ActionSheet = CollectionWidget.inherit({
         /**
         * @name dxActionSheetItemTemplate_type
         * @publicName type
-        * @type String
+        * @type Enums.ButtonType
         * @default 'normal'
-        * @acceptValues 'normal'|'default'|'back'|'danger'|'success'
         */
         /**
         * @name dxActionSheetItemTemplate_onClick
