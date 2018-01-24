@@ -786,6 +786,7 @@ var commonSeries = {
     * @publicName barPadding
     * @type number
     * @default undefined
+    * @propertyOf dxChartSeriesTypes_BarSeries,dxChartSeriesTypes_StackedBarSeries,dxChartSeriesTypes_FullStackedBarSeries,dxChartSeriesTypes_RangeBarSeriesSeries
     */
     barPadding: undefined,
     /**
@@ -793,6 +794,7 @@ var commonSeries = {
     * @publicName barWidth
     * @type number
     * @default undefined
+    * @propertyOf dxChartSeriesTypes_BarSeries,dxChartSeriesTypes_StackedBarSeries,dxChartSeriesTypes_FullStackedBarSeries,dxChartSeriesTypes_RangeBarSeriesSeries
     */
     barWidth: undefined,
     /**

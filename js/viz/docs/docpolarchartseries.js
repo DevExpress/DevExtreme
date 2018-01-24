@@ -637,6 +637,7 @@ var CommonPolarChartSeries = {
     * @publicName barPadding
     * @type number
     * @default undefined
+    * @propertyOf dxPolarChartSeriesTypes_barpolarseries,dxPolarChartSeriesTypes_stackedbarpolarseries
     */
     barPadding: undefined,
     /**
@@ -644,6 +645,7 @@ var CommonPolarChartSeries = {
     * @publicName barWidth
     * @type number
     * @default undefined
+    * @propertyOf dxPolarChartSeriesTypes_barpolarseries,dxPolarChartSeriesTypes_stackedbarpolarseries
     */
     barWidth: undefined,
     /**
