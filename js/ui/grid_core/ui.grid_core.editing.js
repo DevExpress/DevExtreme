@@ -404,12 +404,12 @@ var EditingController = modules.ViewController.inherit((function() {
                     case DATA_EDIT_DATA_UPDATE_TYPE:
                         item.modified = true;
                         item.oldData = item.data;
-                        item.data = deepExtendArraySafe(deepExtendArraySafe({}, item.data), data, false, true);
+                        item.data = gridCoreUtils.createObjectWithChanges(item.data, data);
                         item.modifiedValues = generateDataValues(data, columns);
                         break;
                     case DATA_EDIT_DATA_REMOVE_TYPE:
                         if(editMode === EDIT_MODE_BATCH) {
-                            item.data = deepExtendArraySafe(deepExtendArraySafe({}, item.data), data, false, true);
+                            item.data = gridCoreUtils.createObjectWithChanges(item.data, data);
                         }
                         item.removed = true;
                         break;
@@ -1393,7 +1393,7 @@ var EditingController = modules.ViewController.inherit((function() {
                 options.type = that._editData[editDataIndex].type || options.type;
                 deepExtendArraySafe(that._editData[editDataIndex], { data: options.data, type: options.type });
                 if(row) {
-                    row.data = deepExtendArraySafe(deepExtendArraySafe({}, row.data), options.data, false, true);
+                    row.data = gridCoreUtils.createObjectWithChanges(row.data, options.data);
                 }
             }
 
