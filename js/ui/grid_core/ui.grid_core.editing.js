@@ -7,7 +7,6 @@ var $ = require("../../core/renderer"),
     Guid = require("../../core/guid"),
     typeUtils = require("../../core/utils/type"),
     each = require("../../core/utils/iterator").each,
-    deepExtendArraySafe = require("../../core/utils/object").deepExtendArraySafe,
     extend = require("../../core/utils/extend").extend,
     modules = require("./ui.grid_core.modules"),
     clickEvent = require("../../events/click"),
@@ -25,7 +24,8 @@ var $ = require("../../core/renderer"),
     holdEvent = require("../../events/hold"),
     deferredUtils = require("../../core/utils/deferred"),
     when = deferredUtils.when,
-    Deferred = deferredUtils.Deferred;
+    Deferred = deferredUtils.Deferred,
+    deepExtendArraySafe = require("../../core/utils/object").deepExtendArraySafe;
 
 var EDIT_FORM_CLASS = "edit-form",
     EDIT_FORM_ITEM_CLASS = "edit-form-item",
@@ -406,12 +406,12 @@ var EditingController = modules.ViewController.inherit((function() {
                     case DATA_EDIT_DATA_UPDATE_TYPE:
                         item.modified = true;
                         item.oldData = item.data;
-                        item.data = deepExtendArraySafe(deepExtendArraySafe({}, item.data), data, false, true);
+                        item.data = gridCoreUtils.createObjectWithChanges(item.data, data);
                         item.modifiedValues = generateDataValues(data, columns);
                         break;
                     case DATA_EDIT_DATA_REMOVE_TYPE:
                         if(editMode === EDIT_MODE_BATCH) {
-                            item.data = deepExtendArraySafe(deepExtendArraySafe({}, item.data), data, false, true);
+                            item.data = gridCoreUtils.createObjectWithChanges(item.data, data);
                         }
                         item.removed = true;
                         break;
@@ -1395,7 +1395,7 @@ var EditingController = modules.ViewController.inherit((function() {
                 options.type = that._editData[editDataIndex].type || options.type;
                 deepExtendArraySafe(that._editData[editDataIndex], { data: options.data, type: options.type });
                 if(row) {
-                    row.data = deepExtendArraySafe(deepExtendArraySafe({}, row.data), options.data, false, true);
+                    row.data = gridCoreUtils.createObjectWithChanges(row.data, options.data);
                 }
             }
 
