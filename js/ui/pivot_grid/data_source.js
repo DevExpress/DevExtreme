@@ -756,6 +756,7 @@ module.exports = Class.inherit((function() {
             * @publicName area
             * @type Enums.PivotGridArea
             * @default undefined
+            * @acceptValues undefined
             */
             /**
             * @name PivotGridDataSourceOptions_fields_areaIndex

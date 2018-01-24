@@ -541,6 +541,7 @@ gridCore.registerModule("summary", {
              * @publicName sortOrder
              * @type Enums.SortOrder
              * @default undefined
+             * @acceptValues undefined
              */
         };
     },
