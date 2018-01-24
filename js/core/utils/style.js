@@ -1,7 +1,7 @@
 "use strict";
 
 var camelize = require("./inflector").camelize,
-    callOnce = require("./common").callOnce,
+    callOnce = require("./call_once"),
     domAdapter = require("../dom_adapter");
 
 var jsPrefixes = ["", "Webkit", "Moz", "O", "Ms"],

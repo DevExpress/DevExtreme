@@ -1,10 +1,11 @@
 "use strict";
 
 var $ = require("../core/renderer"),
-    window = require("../core/dom_adapter").getWindow(),
+    window = require("../core/utils/window").getWindow(),
     errors = require("./widget/ui.errors"),
     domUtils = require("../core/utils/dom"),
-    ready = require("../core/dom_adapter").ready,
+    readyCallbacks = require("../core/utils/ready_callbacks"),
+    ready = readyCallbacks.add,
     each = require("../core/utils/iterator").each,
     devices = require("../core/devices"),
     viewPortUtils = require("../core/utils/view_port"),

@@ -1,44 +1,48 @@
 "use strict";
 
 var domAdapter = require("core/dom_adapter");
+var windowUtils = require("core/utils/window");
 var serverSideDOMAdapter = require("./serverSideDOMAdapterPatch.js");
-var serverSideWindowMock = require("./serverSideWindowMock.js");
-var windowFields = Object.keys(serverSideWindowMock);
 var domAdapterBackup = {};
+var temporaryAllowedWindowFields = [
+    "document",
+    "Event",
+];
+var windowMock = {};
+
+temporaryAllowedWindowFields.forEach(function(field) {
+    Object.defineProperty(windowMock, field, {
+        enumerable: true,
+        configurable: true,
+        get: function() {
+            return window[field];
+        },
+
+        set: function(value) {
+            window[field] = value;
+        }
+    });
+});
+windowMock.window = windowMock;
 
 for(var field in domAdapter) {
     domAdapterBackup[field] = domAdapter[field];
-    if(field !== "getWindow" && field !== "ready" && field !== "_readyCallbacks") {
+    if(field !== "ready" && field !== "_readyCallbacks") {
         delete domAdapter[field];
     }
 }
 
-domAdapter._window = domAdapterBackup._window = {};
-
-domAdapter._window.window = domAdapter._window;
-domAdapter.hasDocument = function() {
+var originalWindowGetter = windowUtils.getWindow;
+windowUtils.getWindow = function() {
+    return windowMock;
+};
+windowUtils.hasWindow = function() {
     return false;
 };
 
-windowFields.forEach(function(field) {
-    if(field === "window" || field === "navigator") {
-        return;
-    }
-
-    Object.defineProperty(domAdapter._window, field, {
-        enumerable: true,
-        configurable: true,
-        get: function() {
-            throw new Error("Access for window['" + field + "'] is denied for testing");
-        },
-
-        set: function(value) {
-            throw new Error("Access for window['" + field + "'] is denied for testing");
-        }
-    });
-});
-
 var restoreOriginal = function() {
+    windowUtils.getWindow = originalWindowGetter;
+
     for(var field in domAdapterBackup) {
         domAdapter[field] = domAdapterBackup[field];
     }

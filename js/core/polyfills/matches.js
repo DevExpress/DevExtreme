@@ -1,7 +1,7 @@
 "use strict";
 
-var window = require("../dom_adapter").getWindow(),
-    callOnce = require("../utils/common").callOnce;
+var window = require("../utils/window").getWindow(),
+    callOnce = require("../utils/call_once");
 var matches,
     setMatches = callOnce(function() {
         matches = window.Element.prototype.matches ||

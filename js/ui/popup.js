@@ -1,7 +1,7 @@
 "use strict";
 
 var $ = require("../core/renderer"),
-    window = require("../core/dom_adapter").getWindow(),
+    window = require("../core/utils/window").getWindow(),
     translator = require("../animation/translator"),
     camelize = require("../core/utils/inflector").camelize,
     noop = require("../core/utils/common").noop,

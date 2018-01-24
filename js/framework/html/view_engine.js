@@ -4,7 +4,7 @@ require("../../integration/jquery");
 
 var $ = require("jquery"),
     version = require("../../core/version"),
-    window = require("../../core/dom_adapter").getWindow(),
+    window = require("../../core/utils/window").getWindow(),
     Class = require("../../core/class"),
     Callbacks = require("../../core/utils/callbacks"),
     commonUtils = require("../../core/utils/common"),

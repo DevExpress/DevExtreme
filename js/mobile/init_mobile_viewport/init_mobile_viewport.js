@@ -2,10 +2,11 @@
 
 var $ = require("../../core/renderer"),
     domAdapter = require("../../core/dom_adapter"),
-    window = domAdapter.getWindow(),
+    windowUtils = require("../../core/utils/window"),
+    window = windowUtils.getWindow(),
     eventsEngine = require("../../events/core/events_engine"),
     extend = require("../../core/utils/extend").extend,
-    resizeCallbacks = require("../../core/utils/window").resizeCallbacks,
+    resizeCallbacks = windowUtils.resizeCallbacks,
     support = require("../../core/utils/support"),
     styleUtils = require("../../core/utils/style"),
     devices = require("../../core/devices");

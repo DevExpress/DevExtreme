@@ -1,7 +1,8 @@
 "use strict";
 
 var domAdapter = require("../../core/dom_adapter"),
-    window = domAdapter.getWindow(),
+    windowUtils = require("../../core/utils/window"),
+    window = windowUtils.getWindow(),
     $ = require("../../core/renderer"),
     rendererModule = require("./renderers/renderer"),
     typeUtils = require("../../core/utils/type"),

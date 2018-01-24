@@ -1,35 +1,52 @@
 "use strict";
 
-var $ = require("jquery"),
-    renderer = require("core/renderer"),
-    resizeCallbacks = require("core/utils/window").resizeCallbacks;
+var resizeCallbacks = require("core/utils/window").resizeCallbacks,
+    domAdapter = require("core/dom_adapter");
 
 QUnit.module('resizeCallbacks', {
     beforeEach: function() {
-        this.__width = renderer.fn.width;
-        this.__height = renderer.fn.height;
         var test = this;
+        test.__originalDocumentElementGetter = domAdapter.getDocumentElement;
         test.width = 400;
         test.height = 300;
-        renderer.fn.width = function() { return test.width; };
-        renderer.fn.height = function() { return test.height; };
+
+        domAdapter.getDocumentElement = function() {
+            return {
+                clientWidth: test.width,
+                clientHeight: test.height
+            };
+        };
+
+        test.__originalListener = domAdapter.listen;
+
+        var resizeHandlers = [];
+        domAdapter.listen = function(element, event, handler) {
+            if(element.window === element && event === "resize") {
+                resizeHandlers.push(handler);
+            }
+        };
+
         this.callbacks = resizeCallbacks;
-        var $window = $(window);
+
         this.triggerResize = function() {
             if(!arguments.length || arguments[0]) {
                 ++test.width;
                 ++test.height;
             }
-            $window.trigger('resize');
+            resizeHandlers.forEach(function(handler) {
+                handler();
+            });
         };
         this.callbacks.add(function() { });
         this.triggerResize();   //  to reset size cache
     },
     afterEach: function() {
-        renderer.fn.width = this.__width;
-        renderer.fn.height = this.__height;
-        delete this.__width;
-        delete this.__height;
+        domAdapter.getDocumentElement = this.__originalDocumentElementGetter;
+        domAdapter.listen = this.__originalListener;
+        delete this.__originalDocumentElementGetter;
+        delete this.__originalListener;
+        delete this.width;
+        delete this.height;
         delete this.callbacks;
         this.triggerResize();   //  to reset size cache
         delete this.triggerResize;

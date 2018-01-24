@@ -3,7 +3,7 @@
 var DropDownEditor = require("./drop_down_editor/ui.drop_down_editor"),
     DataExpressionMixin = require("./editor/ui.data_expression"),
     commonUtils = require("../core/utils/common"),
-    window = require("../core/dom_adapter").getWindow(),
+    window = require("../core/utils/window").getWindow(),
     map = require("../core/utils/iterator").map,
     isDefined = require("../core/utils/type").isDefined,
     selectors = require("./widget/selectors"),

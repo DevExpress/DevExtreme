@@ -2,7 +2,7 @@
 
 /* global Promise */
 var deferredUtils = require("../../core/utils/deferred"),
-    window = require("../../core/dom_adapter").getWindow(),
+    window = require("../../core/utils/window").getWindow(),
     Deferred = deferredUtils.Deferred,
     when = deferredUtils.when,
     promise = window ? window.Promise : Promise;

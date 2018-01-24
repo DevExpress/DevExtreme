@@ -1,6 +1,7 @@
 "use strict";
 
-var window = require("../../core/dom_adapter").getWindow();
+var windowUtils = require("../../core/utils/window");
+var window = windowUtils.getWindow();
 
 var DevExpress = window.DevExpress = window.DevExpress || {};
 
@@ -80,7 +81,7 @@ DevExpress.utils.date = require("../../core/utils/date");
 DevExpress.utils.browser = require("../../core/utils/browser");
 DevExpress.utils.inflector = require("../../core/utils/inflector");
 DevExpress.utils.iterator = require("../../core/utils/iterator");
-DevExpress.utils.resizeCallbacks = require("../../core/utils/window").resizeCallbacks;
+DevExpress.utils.resizeCallbacks = windowUtils.resizeCallbacks;
 DevExpress.utils.console = require("../../core/utils/console");
 DevExpress.utils.string = require("../../core/utils/string");
 DevExpress.utils.support = require("../../core/utils/support");

@@ -1,7 +1,7 @@
 "use strict";
 
 var VERSION = require("../core/version"),
-    window = require("../core/dom_adapter").getWindow(),
+    window = require("../core/utils/window").getWindow(),
     imageCreator = require("./image_creator").imageCreator,
     isFunction = require("../core/utils/type").isFunction,
     extend = require("../core/utils/extend").extend,

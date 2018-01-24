@@ -1,7 +1,7 @@
 "use strict";
 
 var noop = require("../../core/utils/common").noop,
-    window = require("../../core/dom_adapter").getWindow(),
+    window = require("../../core/utils/window").getWindow(),
     Promise = require("../../core/polyfills/promise"),
     extend = require("../../core/utils/extend").extend,
     iteratorUtils = require("../../core/utils/iterator"),

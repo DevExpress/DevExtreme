@@ -2,7 +2,8 @@
 
 var $ = require("../../../core/renderer"),
     domAdapter = require("../../../core/dom_adapter"),
-    window = domAdapter.getWindow(),
+    windowUtils = require("../../../core/utils/window"),
+    window = windowUtils.getWindow(),
     eventsEngine = require("../../../events/core/events_engine"),
     browser = require("../../../core/utils/browser"),
     getSvgMarkup = require("../../../core/utils/svg").getSvgMarkup,

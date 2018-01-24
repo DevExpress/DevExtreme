@@ -1,6 +1,6 @@
 "use strict";
 
-var window = require("../../core/dom_adapter").getWindow();
+var window = require("../../core/utils/window").getWindow();
 
 var getSizeByStyles = function(elementStyles, styles) {
     var result = 0;

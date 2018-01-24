@@ -1,7 +1,8 @@
 "use strict";
 
 var extend = require("./extend").extend,
-    navigator = require("./navigator");
+    windowUtils = require("./window"),
+    navigator = windowUtils.getNavigator();
 
 var webkitRegExp = /(webkit)[ \/]([\w.]+)/,
     ieRegExp = /(msie) (\d{1,2}\.\d)/,

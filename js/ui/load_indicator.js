@@ -1,7 +1,8 @@
 "use strict";
 
 var $ = require("../core/renderer"),
-    navigator = require("../core/utils/navigator"),
+    windowUtils = require("../core/utils/window"),
+    navigator = windowUtils.getNavigator(),
     support = require("../core/utils/support"),
     themes = require("./themes"),
     browser = require("../core/utils/browser"),

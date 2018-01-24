@@ -1,7 +1,7 @@
 "use strict";
 
 var WeakMap = require("./polyfills/weak_map");
-var window = require("./dom_adapter").getWindow();
+var window = require("./utils/window").getWindow();
 var eventsEngine = require("../events/core/events_engine");
 var MemorizedCallbacks = require("./memorized_callbacks");
 

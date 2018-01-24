@@ -1,11 +1,11 @@
 "use strict";
 
 var inArray = require("./array").inArray,
-    domAdapter = require("../../core/dom_adapter"),
-    window = domAdapter.getWindow(),
-    commonUtils = require("../../core/utils/common"),
-    callOnce = commonUtils.callOnce,
-    navigator = require("../../core/utils/navigator"),
+    domAdapter = require("../dom_adapter"),
+    callOnce = require("./call_once"),
+    windowUtils = require("./window"),
+    window = windowUtils.getWindow(),
+    navigator = windowUtils.getNavigator(),
     devices = require("../devices"),
     styleUtils = require("./style");
 

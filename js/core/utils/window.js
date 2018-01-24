@@ -1,25 +1,34 @@
 "use strict";
 
-var $ = require("../../core/renderer"),
-    window = require("../../core/dom_adapter").getWindow(),
-    commonUtils = require("../../core/utils/common"),
-    callOnce = commonUtils.callOnce,
-    eventsEngine = require("../../events/core/events_engine"),
-    Callbacks = require("../../core/utils/callbacks");
+var domAdapter = require("../dom_adapter"),
+    callOnce = require("./call_once"),
+    readyCallbacks = require("./ready_callbacks"),
+    Callbacks = require("./callbacks");
+
+var hasWindow = function() {
+    return typeof window !== "undefined";
+};
+
+var getWindow = function() {
+    /* global window */
+    return hasWindow() && window;
+};
 
 var resizeCallbacks = (function() {
     var prevSize,
         callbacks = Callbacks(),
-        resizeEventHandlerAttached = false,
         originalCallbacksAdd = callbacks.add,
         originalCallbacksRemove = callbacks.remove;
 
-    var formatSize = function() {
-        var jqWindow = $(window);
+    if(!hasWindow()) {
+        return callbacks;
+    }
 
+    var formatSize = function() {
+        var documentElement = domAdapter.getDocumentElement();
         return {
-            width: jqWindow.width(),
-            height: jqWindow.height()
+            width: documentElement.clientWidth,
+            height: documentElement.clientHeight
         };
     };
 
@@ -46,26 +55,28 @@ var resizeCallbacks = (function() {
         prevSize = formatSize();
     });
 
+    var removeListener;
+
     callbacks.add = function() {
         var result = originalCallbacksAdd.apply(callbacks, arguments);
-        var jqWindow = $(window);
 
         setPrevSize();
 
-        if(!resizeEventHandlerAttached && callbacks.has()) {
-            eventsEngine.subscribeGlobal(jqWindow, "resize", handleResize);
-            resizeEventHandlerAttached = true;
-        }
+        readyCallbacks.add(function() {
+            if(!removeListener && callbacks.has()) {
+                removeListener = domAdapter.listen(getWindow(), "resize", handleResize);
+            }
+        });
+
         return result;
     };
 
     callbacks.remove = function() {
         var result = originalCallbacksRemove.apply(callbacks, arguments);
-        var jqWindow = $(window);
 
-        if(!callbacks.has() && resizeEventHandlerAttached) {
-            eventsEngine.off(jqWindow, "resize", handleResize);
-            resizeEventHandlerAttached = false;
+        if(!callbacks.has() && removeListener) {
+            removeListener();
+            removeListener = undefined;
         }
         return result;
     };
@@ -87,16 +98,27 @@ var defaultScreenFactorFunc = function(width) {
 
 var getCurrentScreenFactor = function(screenFactorCallback) {
     var screenFactorFunc = screenFactorCallback || defaultScreenFactorFunc;
+    var windowWidth = domAdapter.getDocumentElement()["clientWidth"];
 
-    return screenFactorFunc($(window).width());
+    return screenFactorFunc(windowWidth);
 };
 
-
 var beforeActivateExists = callOnce(function() {
-    return window.document["onbeforeactivate"] !== undefined;
+    return getWindow().document["onbeforeactivate"] !== undefined;
 });
+
+var getNavigator = function() {
+    return hasWindow() ? getWindow().navigator : {
+        userAgent: ""
+    };
+};
 
 exports.resizeCallbacks = resizeCallbacks;
 exports.defaultScreenFactorFunc = defaultScreenFactorFunc;
 exports.getCurrentScreenFactor = getCurrentScreenFactor;
 exports.beforeActivateExists = beforeActivateExists;
+exports.hasWindow = hasWindow;
+exports.getNavigator = getNavigator;
+
+// TODO: get rid of method
+exports.getWindow = getWindow;

@@ -2,8 +2,9 @@
 
 var $ = require("../core/renderer"),
     domAdapter = require("../core/dom_adapter"),
-    window = domAdapter.getWindow(),
-    navigator = require("../core/utils/navigator"),
+    windowUtils = require("../core/utils/window"),
+    window = windowUtils.getWindow(),
+    navigator = windowUtils.getNavigator(),
     eventsEngine = require("../events/core/events_engine"),
     fx = require("../animation/fx"),
     translator = require("../animation/translator"),

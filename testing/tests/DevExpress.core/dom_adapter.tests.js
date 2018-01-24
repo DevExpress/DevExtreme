@@ -1,7 +1,6 @@
 "use strict";
 
-var domAdapter = require("core/dom_adapter"),
-    isWindow = require("core/utils/type").isWindow;
+var domAdapter = require("core/dom_adapter");
 
 QUnit.module("DOM Adapter", {
     beforeEach: function() {
@@ -18,8 +17,3 @@ QUnit.test("insertElement", function(assert) {
 
     assert.equal(this.container.childNodes.length, 1);
 });
-
-QUnit.test("getWindow", function(assert) {
-    assert.equal(isWindow(domAdapter.getWindow()), true);
-});
-

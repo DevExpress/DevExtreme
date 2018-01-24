@@ -3,7 +3,7 @@
 var extend = require("../../../core/utils/extend").extend,
     each = require("../../../core/utils/iterator").each,
     noop = require("../../../core/utils/common").noop,
-    window = require("../../../core/dom_adapter").getWindow(),
+    window = require("../../../core/utils/window").getWindow(),
     labelModule = require("./label"),
     _extend = extend,
     _isDefined = require("../../../core/utils/type").isDefined,

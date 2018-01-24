@@ -1,7 +1,6 @@
 "use strict";
 
 var $ = require("../../core/renderer"),
-    navigator = require("../../core/utils/navigator"),
     eventsEngine = require("../../events/core/events_engine"),
     support = require("../../core/utils/support"),
     browser = require("../../core/utils/browser"),
@@ -10,6 +9,7 @@ var $ = require("../../core/renderer"),
     extend = require("../../core/utils/extend").extend,
     getPublicElement = require("../../core/utils/dom").getPublicElement,
     windowUtils = require("../../core/utils/window"),
+    navigator = windowUtils.getNavigator(),
     beforeActivateExists = windowUtils.beforeActivateExists,
     devices = require("../../core/devices"),
     registerComponent = require("../../core/component_registrator"),

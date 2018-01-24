@@ -1,7 +1,5 @@
 "use strict";
 
-var isFunction = require("../../core/utils/type").isFunction;
-
 var Callback = function(options) {
     this._options = options || {};
     this._list = [];
@@ -30,7 +28,7 @@ Callback.prototype._fireCore = function(context, args) {
 
 
 Callback.prototype.add = function(fn) {
-    if(isFunction(fn) && (!this._options.unique || !this.has(fn))) {
+    if(typeof fn === "function" && (!this._options.unique || !this.has(fn))) {
         this._list.push(fn);
     }
     return this;

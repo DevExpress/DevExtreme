@@ -2,7 +2,8 @@
 
 var Deferred = require("./deferred").Deferred;
 var domAdapter = require("../../core/dom_adapter");
-var window = domAdapter.getWindow();
+var windowUtils = require("../../core/utils/window");
+var window = windowUtils.getWindow();
 var extendFromObject = require("./extend").extendFromObject;
 var isDefined = require("./type").isDefined;
 var Promise = require("../polyfills/promise");
