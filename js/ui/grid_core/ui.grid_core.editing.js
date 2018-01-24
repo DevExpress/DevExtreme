@@ -5,7 +5,6 @@ var $ = require("../../core/renderer"),
     Guid = require("../../core/guid"),
     typeUtils = require("../../core/utils/type"),
     each = require("../../core/utils/iterator").each,
-    deepExtendArraySafe = require("../../core/utils/object").deepExtendArraySafe,
     extend = require("../../core/utils/extend").extend,
     modules = require("./ui.grid_core.modules"),
     clickEvent = require("../../events/click"),
@@ -23,7 +22,8 @@ var $ = require("../../core/renderer"),
     holdEvent = require("../../events/hold"),
     deferredUtils = require("../../core/utils/deferred"),
     when = deferredUtils.when,
-    Deferred = deferredUtils.Deferred;
+    Deferred = deferredUtils.Deferred,
+    deepExtendArraySafe = require("../../core/utils/object").deepExtendArraySafe;
 
 var EDIT_FORM_CLASS = "edit-form",
     EDIT_FORM_ITEM_CLASS = "edit-form-item",
