@@ -2,13 +2,19 @@
 
 /* global window */
 var domAdapter = module.exports = {
-    createElement: function(tagName, text, context) {
+    createElement: function(tagName, context) {
         context = context || domAdapter.getWindow().document;
-        if(tagName === "#text") {
-            return context.createTextNode(text);
-        }
+        return context.createElement(tagName);
+    },
 
-        return context.createElement(typeof tagName === "string" ? tagName : "div");
+    createElementNS: function(ns, tagName, context) {
+        context = context || domAdapter.getWindow().document;
+        return context.createElementNS(ns, tagName);
+    },
+
+    createTextNode: function(text, context) {
+        context = context || domAdapter.getWindow().document;
+        return context.createTextNode(text);
     },
 
     removeElement: function(element) {

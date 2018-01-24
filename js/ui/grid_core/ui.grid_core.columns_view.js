@@ -1,7 +1,7 @@
 "use strict";
 
 var $ = require("../../core/renderer"),
-    window = require("../../core/dom_adapter").getWindow(),
+    domAdapter = require("../../core/dom_adapter"),
     eventsEngine = require("../../events/core/events_engine"),
     dataUtils = require("../../core/element_data"),
     clickEvent = require("../../events/click"),
@@ -120,7 +120,7 @@ exports.ColumnsView = modules.View.inherit(columnStateMixin).inherit({
         var column = options.column,
             alignment = column.alignment || getDefaultAlignment(this.option("rtlEnabled"));
 
-        var cell = window.document.createElement("td");
+        var cell = domAdapter.createElement("td");
         cell.style.textAlign = alignment;
 
         var $cell = $(cell);

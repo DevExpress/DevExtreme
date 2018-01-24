@@ -1,7 +1,7 @@
 "use strict";
 
 var $ = require("../../core/renderer"),
-    window = require("../../core/dom_adapter").getWindow(),
+    domAdapter = require("../../core/dom_adapter"),
     noop = require("../../core/utils/common").noop,
     each = require("../../core/utils/iterator").each,
     getPublicElement = require("../../core/utils/dom").getPublicElement,
@@ -235,8 +235,8 @@ var SchedulerAgenda = SchedulerWorkSpace.inherit({
             groupRowClass: this._getGroupRowClass(),
             groupCellClass: this._getGroupHeaderClass(),
             groupCellCustomContent: function(cell, cellText, index, data) {
-                var container = window.document.createElement("div"),
-                    contentWrapper = window.document.createElement("div");
+                var container = domAdapter.createElement("div"),
+                    contentWrapper = domAdapter.createElement("div");
 
                 container.className = getGroupHeaderContentClass;
                 contentWrapper.appendChild(cellText);

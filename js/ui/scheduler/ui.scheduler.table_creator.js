@@ -1,7 +1,7 @@
 "use strict";
 
 var $ = require("../../core/renderer"),
-    window = require("../../core/dom_adapter").getWindow(),
+    domAdapter = require("../../core/dom_adapter"),
     dataUtils = require("../../core/element_data"),
     typeUtils = require("../../core/utils/type"),
     getPublicElement = require("../../core/utils/dom").getPublicElement;
@@ -12,14 +12,13 @@ var SchedulerTableCreator = {
     HORIZONTAL: "horizontal",
 
     makeTable: function(options) {
-        var document = window.document,
-            tableBody = document.createElement("tbody"),
+        var tableBody = domAdapter.createElement("tbody"),
             templateCallbacks = [];
 
         $(options.container).append(tableBody);
 
         for(var i = 0; i < options.rowCount; i++) {
-            var row = document.createElement("tr");
+            var row = domAdapter.createElement("tr");
             tableBody.appendChild(row);
 
             if(options.rowClass) {
@@ -27,7 +26,7 @@ var SchedulerTableCreator = {
             }
 
             for(var j = 0; j < options.cellCount; j++) {
-                var td = document.createElement("td");
+                var td = domAdapter.createElement("td");
                 row.appendChild(td);
 
                 if(options.cellClass) {
@@ -104,8 +103,7 @@ var SchedulerTableCreator = {
     },
 
     makeGroupedTableFromJSON: function(type, data, config) {
-        var document = window.document,
-            table,
+        var table,
             cellStorage = [],
             rowIndex = 0;
 
@@ -120,7 +118,7 @@ var SchedulerTableCreator = {
             groupCellCustomContent = config.groupCellCustomContent;
 
         function createTable() {
-            table = document.createElement("table");
+            table = domAdapter.createElement("table");
 
             if(groupTableClass) {
                 table.className = groupTableClass;
@@ -136,7 +134,7 @@ var SchedulerTableCreator = {
 
         function createCell(text, childCount, index, data) {
             var cell = {
-                element: document.createElement(cellTag),
+                element: domAdapter.createElement(cellTag),
                 childCount: childCount
             };
 
@@ -144,7 +142,7 @@ var SchedulerTableCreator = {
                 cell.element.className = groupCellClass;
             }
 
-            var cellText = document.createTextNode(text);
+            var cellText = domAdapter.createTextNode(text);
             if(typeof groupCellCustomContent === "function") {
                 groupCellCustomContent(cell.element, cellText, index, data);
             } else {
@@ -174,7 +172,7 @@ var SchedulerTableCreator = {
 
         function putCellsToRows() {
             cellStorage.forEach(function(cells) {
-                var row = window.document.createElement("tr");
+                var row = domAdapter.createElement("tr");
                 if(groupRowClass) {
                     row.className = groupRowClass;
                 }
