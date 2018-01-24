@@ -2,6 +2,10 @@
 
 /* global window */
 var domAdapter = module.exports = {
+    querySelectorAll: function(element, selector) {
+        return element.querySelectorAll(selector);
+    },
+
     createElement: function(tagName, context) {
         context = context || domAdapter.getWindow().document;
         return context.createElement(tagName);
