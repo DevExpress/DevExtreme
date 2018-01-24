@@ -4897,6 +4897,40 @@ function checkDashStyle(assert, elem, result, style, value) {
         assert.deepEqual(attrs, { text: "simple text\r\nwith multiple\nlines", x: 10, y: 20 }, "function param is not changed");
     });
 
+    QUnit.test("Single line text with the spaces in the start of the line and with stroke, tspans should be w/o spaces there", function(assert) {
+        //arrange
+        var text = this.createText(),
+            attrs = { text: "  simple text", x: 10, y: 20, stroke: "black", "stroke-width": 3, "stroke-opacity": 0.4 },
+            result;
+
+        //act
+        result = text.attr(attrs);
+
+        //assert
+        assert.strictEqual(result, text, "method result");
+        this.checkTspans(assert, text, [
+            { x: 10, y: 20, text: "simple text" }
+        ], { x: 10, y: 20 }, { stroke: "black", "stroke-width": 3, "stroke-opacity": 0.4 });
+    });
+
+    QUnit.test("Multiline text with the spaces in the start of each line, tspans should be w/o spaces there", function(assert) {
+        //arrange
+        var text = this.createText(),
+            attrs = { text: "  simple text\r\n with multiple\n lines", x: 10, y: 20 },
+            result;
+
+        //act
+        result = text.attr(attrs);
+
+        //assert
+        assert.strictEqual(result, text, "method result");
+        this.checkTspans(assert, text, [
+            { x: 10, y: 20, text: "simple text" },
+            { x: 10, dy: 12, text: "with multiple" },
+            { x: 10, dy: 12, text: "lines" }
+        ], { x: 10, y: 20 });
+    });
+
     QUnit.test("Multiline text, default line height / HTML encoding", function(assert) {
         //arrange
         this.renderer.encodeHtml = true;
