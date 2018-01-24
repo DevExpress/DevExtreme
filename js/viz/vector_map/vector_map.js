@@ -3,6 +3,7 @@
 var noop = require("../../core/utils/common").noop,
     _parseScalar = require("../core/utils").parseScalar,
     extend = require("../../core/utils/extend").extend,
+    iteratorUtils = require("../../core/utils/iterator"),
     projectionModule = require("./projection.main"),
     controlBarModule = require("./control_bar"),
     gestureHandlerModule = require("./gesture_handler"),
@@ -93,6 +94,8 @@ var dxVectorMap = require("../core/base_widget").inherit({
         // DEPRECATED_15_2
         if(that._options.layers === undefined && (that._options.mapData || that._options.markers)) {
             applyDeprecatedMode(that);
+        } else {
+            suspendLayersData(that._layerCollection, that._options.layers);
         }
     },
 
@@ -161,13 +164,20 @@ var dxVectorMap = require("../core/base_widget").inherit({
         that._tooltipViewer = new tooltipViewerModule.TooltipViewer({ tracker: that._tracker, tooltip: that._tooltip, layerCollection: that._layerCollection });
     },
 
-    _change_RESUME_LAYOUT: function() {
+    // There are already 2 cases!
+    _init: function() {
+        this.callBase.apply(this, arguments);
+        this._afterInit();
         this._layoutControl.resume();
     },
 
-    _initialChanges: ["PROJECTION", "RESUME_LAYOUT", "LAYOUT_INIT", "BOUNDS", "MAX_ZOOM_FACTOR", "ZOOM_FACTOR", "CENTER"],
+    _initialChanges: ["PROJECTION", "BOUNDS", "MAX_ZOOM_FACTOR", "ZOOM_FACTOR", "CENTER"],
 
-    _layoutChangesOrder: ["RESUME_LAYOUT", "LAYERS"],
+    _afterInit: function() {
+        // This is a total shit but for now I haven't found a better way
+        // The problem is that items can only be drawn when container size (after layout) is available
+        resumeLayersData(this._layerCollection, this._options.layers, this._renderer);
+    },
 
     _initCore: function() {
         this._root = this._renderer.root.attr({ align: "center", cursor: "default" });
@@ -265,7 +275,7 @@ var dxVectorMap = require("../core/base_widget").inherit({
         center: "CENTER"
     },
 
-    _optionChangesOrder: ["PROJECTION", "BOUNDS", "MAX_ZOOM_FACTOR", "ZOOM_FACTOR", "CENTER", "BACKGROUND", "CONTROL_BAR", "LEGENDS", "TRACKER", "INTERACTION"],
+    _optionChangesOrder: ["PROJECTION", "BOUNDS", "MAX_ZOOM_FACTOR", "ZOOM_FACTOR", "CENTER", "BACKGROUND", "LAYERS", "CONTROL_BAR", "LEGENDS", "TRACKER", "INTERACTION"],
 
     _change_PROJECTION: function() {
         this._setProjection();
@@ -435,10 +445,55 @@ var dxVectorMap = require("../core/base_widget").inherit({
     }
 });
 
+function suspendLayersData(layerCollection, options) {
+    if(options) {
+        layerCollection.__data = options.length ? iteratorUtils.map(options, patch) : patch(options);
+    }
+    function patch(ops) {
+        var result = {};
+        swapData(ops || {}, result);
+        return result;
+    }
+}
+
+function resumeLayersData(layerCollection, options, renderer) {
+    var data = layerCollection.__data;
+    if(data) {
+        layerCollection.__data = undefined;
+        if(data.length) {
+            iteratorUtils.each(data, function(i, item) {
+                swapData(item, options[i]);
+            });
+        } else {
+            swapData(data, options);
+        }
+        renderer.lock();
+        layerCollection.setOptions(options);
+        renderer.unlock();
+    }
+}
+
+// DEPRECATED_15_2
+function swapData(source, target) {
+    var name = !("dataSource" in source) && ("data" in source) ? "data" : "dataSource";
+    target[name] = source[name];
+    source[name] = undefined;
+}
+
 // DEPRECATED_15_2
 function applyDeprecatedMode(map) {
-    var log = require("../../core/errors").log;
-
+    var log = require("../../core/errors").log,
+        mapData = map._options.mapData,
+        markers = map._options.markers;
+    map._options.mapData = map._options.markers = undefined;
+    map._afterInit = function() {
+        this._options.mapData = mapData;
+        this._options.markers = markers;
+        this._renderer.lock();
+        this._setLayerCollectionOptions();
+        this._renderer.unlock();
+        mapData = markers = undefined;
+    };
     map._setLayerCollectionOptions = function() {
         var options = this._options,
             mapData = options.mapData,

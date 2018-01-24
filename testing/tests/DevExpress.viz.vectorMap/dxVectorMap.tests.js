@@ -67,7 +67,7 @@ QUnit.test("Layer collection", function(assert) {
     assert.deepEqual(this.layerCollection.setOptions.getCall(0).args, [[{ tag: "layer-1", dataSource: "data-1" }, { tag: "layer-2", dataSource: "data-2" }]], "data is passed");
     assert.deepEqual(this.layerCollection.setOptions.getCall(1).args, [[{ tag: "layer-1", dataSource: "data-1" }, { tag: "layer-2", dataSource: "data-2" }]], "options are passed");
     assert.ok(this.renderer.lock.getCall(0).calledBefore(this.layerCollection.setOptions.getCall(0)), "data is passed inside the renderer lock");
-    assert.ok(this.renderer.unlock.getCall(0).calledAfter(this.layerCollection.setOptions.getCall(0)), "data is passed inside the renderer lock");
+    assert.ok(this.renderer.unlock.getCall(2).calledAfter(this.layerCollection.setOptions.getCall(0)), "data is passed inside the renderer lock");
 });
 
 QUnit.test("Layer collection - object option", function(assert) {
@@ -89,9 +89,10 @@ QUnit.test("Layer collection - deprecated", function(assert) {
         markers: "markers"
     });
 
-    assert.deepEqual(this.layerCollection.setOptions.firstCall.args, [[{ name: "areas", type: "area", _deprecated: true, dataSource: "map-data", tag: "area" }, { name: "markers", type: "marker", _deprecated: true, dataSource: "markers", tag: "marker" }]], "options are passed");
+    assert.deepEqual(this.layerCollection.setOptions.getCall(0).args, [[{ name: "areas", type: "area", _deprecated: true, tag: "area" }, { name: "markers", type: "marker", _deprecated: true, tag: "marker" }]], "data is passed");
+    assert.deepEqual(this.layerCollection.setOptions.getCall(1).args, [[{ name: "areas", type: "area", _deprecated: true, dataSource: "map-data", tag: "area" }, { name: "markers", type: "marker", _deprecated: true, dataSource: "markers", tag: "marker" }]], "options are passed");
     assert.ok(this.renderer.lock.getCall(0).calledBefore(this.layerCollection.setOptions.getCall(0)), "data is passed inside the renderer lock");
-    assert.ok(this.renderer.unlock.getCall(0).calledAfter(this.layerCollection.setOptions.getCall(0)), "data is passed inside the renderer lock");
+    assert.ok(this.renderer.unlock.getCall(1).calledAfter(this.layerCollection.setOptions.getCall(0)), "data is passed inside the renderer lock");
 });
 
 QUnit.test('Projection', function(assert) {
@@ -161,15 +162,13 @@ QUnit.test('LayoutControl', function(assert) {
     var spy = sinon.spy(layoutModule, "LayoutControl");
 
     this.createMap({ layers: {} });
+    vizMocks.forceThemeOptions(this.themeManager);
 
     assert.deepEqual(spy.lastCall.args, [], "created");
-    assert.ok(this.layoutControl.suspend.getCall(0).calledBefore(this.controlBar.setOptions.lastCall), "suspend");
-
-    assert.ok(this.layoutControl.resume.getCall(0).calledBefore(this.layerCollection.setOptions.lastCall), "resume");
-    assert.ok(this.layoutControl.resume.getCall(0).calledAfter(this.controlBar.setOptions.getCall(0)), "resume");
-
-    assert.equal(this.layoutControl.resume.callCount, 1);
-    assert.equal(this.controlBar.setOptions.callCount, 1);
+    assert.ok(this.layoutControl.suspend.getCall(0).calledBefore(this.controlBar.setOptions.lastCall), "suspend 1");
+    //assert.ok(this.layoutControl.suspend.getCall(1).calledBefore(this.controlBar.setOptions.lastCall), "suspend 2");
+    assert.ok(this.layoutControl.resume.getCall(0).calledAfter(this.layerCollection.setOptions.getCall(0)), "resume 1");
+    //assert.ok(this.layoutControl.resume.getCall(1).calledAfter(this.controlBar.setInteraction.lastCall), "resume 2");
 });
 
 QUnit.test("Tracker", function(assert) {

@@ -136,6 +136,7 @@ module.exports = DOMComponent.inherit({
         that._initCore();
         linkTarget && linkTarget.linkAfter();
         that._change(that._initialChanges);
+        that._resumeChanges();
     },
 
     _initialChanges: ["LAYOUT", "RESIZE_HANDLER", "THEME"],
@@ -398,9 +399,12 @@ module.exports = DOMComponent.inherit({
     },
 
     endUpdate: function() {
-        var that = this;
+        var that = this,
+            initialized = that._initialized;
+        // The "_initialized" flag is checked because first time "endUpdate" is called in the constructor.
+        // Local is used because the flag is toggled in the base method.
         that.callBase.apply(that, arguments);
-        if(that._updateLockCount === 0) {
+        if(initialized && that._updateLockCount === 0) {
             that._resumeChanges();
         }
         return that;
