@@ -25,6 +25,10 @@ exports.set = function() {
         return document.documentElement;
     };
 
+    domAdapter.getReadyState = function() {
+        return document.readyState;
+    };
+
     domAdapter.getHead = function() {
         return document.head;
     };
