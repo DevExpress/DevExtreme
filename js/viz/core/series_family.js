@@ -3,7 +3,7 @@
 var isNumeric = require("../../core/utils/type").isNumeric,
     extend = require("../../core/utils/extend").extend,
     each = require("../../core/utils/iterator").each,
-    inArray = require("../../core/utils/array").inArray,
+    isDefined = require("../../core/utils/type").isDefined,
     _math = Math,
     _round = _math.round,
     _abs = _math.abs,
@@ -11,103 +11,107 @@ var isNumeric = require("../../core/utils/type").isNumeric,
     _each = each,
     _noop = require("../../core/utils/common").noop,
     vizUtils = require("./utils"),
+    DEFAULT_BAR_GROUP_PADDING = 0.3,
     _normalizeEnum = vizUtils.normalizeEnum;
 
-function getStacksWithArgument(stackKeepers, argument) {
-    var stacksWithArgument = [];
-    _each(stackKeepers, function(stackName, seriesInStack) {
-        _each(seriesInStack, function(_, singleSeries) {
-            var points = singleSeries.getPointsByArg(argument),
-                pointsLength = points.length,
-                i;
-            for(i = 0; i < pointsLength; ++i) {
-                if(points[i].hasValue()) {
-                    stacksWithArgument.push(stackName);
-                    return false;
-                }
-            }
-        });
-    });
-    return stacksWithArgument;
+function validateBarPadding(barPadding) {
+    return (barPadding < 0 || barPadding > 1) ? undefined : barPadding;
 }
 
-function correctPointCoordinatesForStacks(stackKeepers, stacksWithArgument, argument, parameters) {
-    _each(stackKeepers, function(stackName, seriesInStack) {
-        var stackIndex = inArray(stackName, stacksWithArgument),
-            offset;
+function validateBarGroupPadding(barGroupPadding) {
+    return (barGroupPadding < 0 || barGroupPadding > 1) ? DEFAULT_BAR_GROUP_PADDING : barGroupPadding;
+}
+
+function isStackExist(series, arg, equalBarWidth) {
+    return series.some(function(s) {
+        return (equalBarWidth && !s.getOptions().ignoreEmptyPoints) || s.getPointsByArg(arg).some(function(point) {
+            return point.hasValue();
+        });
+    });
+}
+
+function correctStackCoordinates(series, currentStacks, arg, stack, parameters, barsArea, seriesStackIndexCallback) {
+    series.forEach(function(series) {
+        var stackIndex = seriesStackIndexCallback(currentStacks.indexOf(stack), currentStacks.length),
+            points = series.getPointsByArg(arg),
+            barPadding = validateBarPadding(series.getOptions().barPadding),
+            barWidth = series.getOptions().barWidth,
+            offset = getOffset(stackIndex, parameters),
+            width = parameters.width,
+            extraParameters;
+
         if(stackIndex === -1) {
             return;
         }
-        offset = getOffset(stackIndex, parameters);
-        _each(seriesInStack, function(_, singleSeries) {
-            correctPointCoordinates(singleSeries.getPointsByArg(argument) || [], parameters.width, offset);
-        });
+
+        if(isDefined(barPadding) || isDefined(barWidth)) {
+            extraParameters = calculateParams(barsArea, currentStacks.length, 1 - barPadding, barWidth);
+            width = extraParameters.width;
+            offset = getOffset(stackIndex, extraParameters);
+        }
+
+        correctPointCoordinates(points, width, offset);
     });
 }
 
-function adjustBarSeriesDimensionsCore(series, stackCount, options, seriesStackIndexCallback) {
-    var percentWidth,
-        stackIndex,
-        i,
-        points,
-        stackName,
-        argumentsKeeper = {},
-        stackKeepers = {},
-        stacksWithArgument,
-        barsArea = series[0] && series[0].getArgumentAxis().getTranslator().getInterval() * 0.7,
+function adjustBarSeriesDimensionsCore(series, options, seriesStackIndexCallback) {
+    var commonStacks = [],
+        allArguments = [],
+        seriesInStacks = {},
         barWidth = options.barWidth,
-        parameters;
+        barGroupWidth = options.barGroupWidth,
+        stack,
+        interval = series[0] && series[0].getArgumentAxis().getTranslator().getInterval(),
+        barsArea = barGroupWidth ? (interval > barGroupWidth ? barGroupWidth : interval) : (interval * (1 - validateBarGroupPadding(options.barGroupPadding)));
 
-    if(options.equalBarWidth) {
-        percentWidth = (barWidth && (barWidth < 0 || barWidth > 1)) ? 0 : barWidth;
-
-        parameters = calculateParams(barsArea, stackCount, percentWidth);
-        for(i = 0; i < series.length; i++) {
-            stackIndex = seriesStackIndexCallback(i, stackCount);
-            points = series[i].getPoints();
-            correctPointCoordinates(points, parameters.width, getOffset(stackIndex, parameters));
-        }
-    } else {
-        //TODO: optimize everything
-        //collect every stack which we have
-        //every single series with no stack
-        _each(series, function(i, singleSeries) {
-            stackName = singleSeries.getStackName && singleSeries.getStackName();
-            stackName = stackName || i.toString();
-            if(!stackKeepers[stackName]) {
-                stackKeepers[stackName] = [];
+    series.forEach(function(s, i) {
+        var stackName = s.getStackName && s.getStackName() || i.toString(),
+            argument;
+        for(argument in s.pointsByArgument) {
+            if(allArguments.indexOf(argument.valueOf()) === -1) {
+                allArguments.push(argument.valueOf());
             }
-            stackKeepers[stackName].push(singleSeries);
-            _each(singleSeries.getPoints(), function(_, point) {
-                var argument = point.argument;
-                if(!argumentsKeeper.hasOwnProperty(argument)) {
-                    argumentsKeeper[argument.valueOf()] = 1;
-                }
-            });
-        });
-
-        for(var argument in argumentsKeeper) {
-            stacksWithArgument = getStacksWithArgument(stackKeepers, argument);
-            parameters = calculateParams(barsArea, stacksWithArgument.length);
-            correctPointCoordinatesForStacks(stackKeepers, stacksWithArgument, argument, parameters);
         }
-    }
+        if(commonStacks.indexOf(stackName) === -1) {
+            commonStacks.push(stackName);
+            seriesInStacks[stackName] = [];
+        }
+        seriesInStacks[stackName].push(s);
+    });
+
+    allArguments.forEach(function(arg) {
+        var currentStacks = [],
+            parameters;
+
+        for(stack in seriesInStacks) {
+            if(isStackExist(seriesInStacks[stack], arg, options.equalBarWidth)) {
+                currentStacks.push(stack);
+            }
+        }
+
+        parameters = calculateParams(barsArea, currentStacks.length, barWidth);
+        for(stack in seriesInStacks) {
+            correctStackCoordinates(seriesInStacks[stack], currentStacks, arg, stack, parameters, barsArea, seriesStackIndexCallback);
+        }
+    });
 }
 
-function calculateParams(barsArea, count, percentWidth) {
+function calculateParams(barsArea, count, percentWidth, fixedBarWidth) {
     var spacing,
-        width,
-        middleIndex = count / 2;
+        width;
 
-    if(!percentWidth) {
-        spacing = _round(barsArea / count * 0.2);
-        width = _round((barsArea - spacing * (count - 1)) / count);
-    } else {
+    if(fixedBarWidth) {
+        width = Math.min(fixedBarWidth, _round(barsArea / count));
+        spacing = count > 1 ? _round((barsArea - width * count) / (count - 1)) : 0;
+    } else if(isDefined(percentWidth)) {
         width = _round(barsArea * percentWidth / count);
         spacing = _round(count > 1 ? (barsArea - barsArea * percentWidth) / (count - 1) : 0);
+    } else {
+        spacing = _round(barsArea / count * 0.2);
+        width = _round((barsArea - spacing * (count - 1)) / count);
     }
 
-    return { width: width > 1 ? width : 1, spacing: spacing, middleIndex: middleIndex };
+    return { width: width > 1 ? width : 1, spacing: spacing, middleIndex: count / 2 };
 }
 
 function getOffset(stackIndex, parameters) {
@@ -145,35 +149,16 @@ function getStackSumByArg(stackKeepers, stackName, argument) {
     return positiveStackValue + negativeStackValue;
 }
 
-function getSeriesStackIndexCallback(rotated, series, stackIndexes) {
+function getSeriesStackIndexCallback(rotated) {
     if(!rotated) {
-        return function(seriesIndex) { return stackIndexes ? stackIndexes[series[seriesIndex].getStackName()] : seriesIndex; };
+        return function(index) { return index; };
     } else {
-        return function(seriesIndex, stackCount) { return stackCount - (stackIndexes ? stackIndexes[series[seriesIndex].getStackName()] : seriesIndex) - 1; };
+        return function(index, stackCount) { return stackCount - index - 1; };
     }
 }
 
 function adjustBarSeriesDimensions() {
-    var that = this,
-        series = getVisibleSeries(that);
-
-    adjustBarSeriesDimensionsCore(series, series.length, that._options, getSeriesStackIndexCallback(that.rotated, series));
-}
-
-function adjustStackedBarSeriesDimensions() {
-    var that = this,
-        series = getVisibleSeries(that),
-        stackIndexes = {},
-        stackCount = 0;
-
-    _each(series, function() {
-        var stackName = this.getStackName();
-        if(!(stackIndexes.hasOwnProperty(stackName))) {
-            stackIndexes[stackName] = stackCount++;
-        }
-    });
-
-    adjustBarSeriesDimensionsCore(series, stackCount, that._options, getSeriesStackIndexCallback(that.rotated, series, stackIndexes));
+    adjustBarSeriesDimensionsCore(getVisibleSeries(this), this._options, getSeriesStackIndexCallback(this.rotated));
 }
 
 function adjustStackedSeriesValues() {
@@ -337,9 +322,7 @@ function updateBarSeriesValues() {
 }
 
 function adjustCandlestickSeriesDimensions() {
-    var series = getVisibleSeries(this);
-
-    adjustBarSeriesDimensionsCore(series, series.length, { barWidth: null, equalBarWidth: true }, getSeriesStackIndexCallback(this.rotated, series));
+    adjustBarSeriesDimensionsCore(getVisibleSeries(this), { barWidth: null, equalBarWidth: true, barGroupPadding: 0.3 }, getSeriesStackIndexCallback(this.rotated));
 }
 
 function adjustBubbleSeriesDimensions() {
@@ -416,13 +399,13 @@ function SeriesFamily(options) {
 
         case "fullstackedbar":
             that.fullStacked = true;
-            that.adjustSeriesDimensions = adjustStackedBarSeriesDimensions;
+            that.adjustSeriesDimensions = adjustBarSeriesDimensions;
             that.adjustSeriesValues = adjustStackedSeriesValues;
             that.updateSeriesValues = updateStackedSeriesValues;
             break;
 
         case "stackedbar":
-            that.adjustSeriesDimensions = adjustStackedBarSeriesDimensions;
+            that.adjustSeriesDimensions = adjustBarSeriesDimensions;
             that.adjustSeriesValues = adjustStackedSeriesValues;
             that.updateSeriesValues = updateStackedSeriesValues;
             break;

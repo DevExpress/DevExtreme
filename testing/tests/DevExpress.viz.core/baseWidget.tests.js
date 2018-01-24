@@ -403,8 +403,8 @@ QUnit.module('Order of methods calls', $.extend({}, environment, {
             result = true;
         for(i = 0; i < ii && result; ++i) {
             result = list[i].calledBefore(list[i + 1]);
+            assert.ok(result, i.toString());
         }
-        assert.ok(result, "call order");
     },
     reset: function() {
         var test = this;
@@ -432,7 +432,10 @@ QUnit.module('Order of methods calls', $.extend({}, environment, {
 }));
 
 QUnit.test('Create and destroy', function(assert) {
-    this.createWidget();
+    var onInitialized = sinon.spy();
+    this.createWidget({
+        onInitialized: onInitialized
+    });
     this.$container.remove();
 
     this.checkOrder(assert, [
@@ -440,8 +443,9 @@ QUnit.test('Create and destroy', function(assert) {
         rendererModule.Renderer.lastCall,
         this.renderer.resize.lastCall,
         this.onInitCore.lastCall,
-        this.onApplySize.lastCall,
+        onInitialized.lastCall,
         this.onRender.lastCall,
+        this.onApplySize.lastCall,
         this.onClean.lastCall,
         this.onDisposeCore.lastCall,
         this.renderer.dispose.lastCall
@@ -458,8 +462,8 @@ QUnit.test('Create and destroy / hidden', function(assert) {
         rendererModule.Renderer.lastCall,
         this.renderer.resize.lastCall,
         this.onInitCore.lastCall,
-        this.onApplySize.lastCall,
         this.onRender.lastCall,
+        this.onApplySize.lastCall,
         this.onClean.lastCall,
         this.onDisposeCore.lastCall,
         this.renderer.dispose.lastCall

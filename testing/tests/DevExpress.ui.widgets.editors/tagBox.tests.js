@@ -1083,6 +1083,36 @@ QUnit.test("creating custom item via the 'customItem' event parameter", function
     assert.equal($tags.eq(0).text(), "display " + customValue);
 });
 
+QUnit.test("create custom item by subscribe on event via 'on' method", function(assert) {
+    var $tagBox = $("#tagBox").dxTagBox({
+            acceptCustomValue: true,
+            displayExpr: "display",
+            valueExpr: "value"
+        }),
+        $input = $tagBox.find(".dx-texteditor-input"),
+        keyboard = keyboardMock($input),
+        customValue = "Custom value",
+        onCustomItemCreating = function(event) {
+            event.customItem = {
+                display: "display " + event.text,
+                value: "value " + event.text
+            };
+        },
+        instance = $tagBox.dxTagBox("instance");
+
+    instance.on("customItemCreating", onCustomItemCreating);
+
+    keyboard
+        .type(customValue)
+        .press('enter');
+
+    var $tags = $tagBox.find(".dx-tag");
+
+    assert.deepEqual(instance.option("value"), ["value " + customValue]);
+    assert.equal($tags.length, 1, "tag is added");
+    assert.equal($tags.eq(0).text(), "display " + customValue);
+});
+
 QUnit.test("the 'onCustomItemCreating' option with Deferred", function(assert) {
     var deferred = $.Deferred(),
         $tagBox = $("#tagBox").dxTagBox({

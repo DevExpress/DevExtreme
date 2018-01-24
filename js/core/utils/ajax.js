@@ -46,7 +46,7 @@ var removeScript = function(scriptNode) {
 };
 
 var appendToHead = function(element) {
-    return window.document.head.appendChild(element);
+    return domAdapter.getHead().appendChild(element);
 };
 
 var evalScript = function(code) {

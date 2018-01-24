@@ -45,6 +45,15 @@ function estimateBubbleSize(size, panesCount, maxSize, rotated) {
 }
 
 var AdvancedChart = BaseChart.inherit({
+
+    _setDeprecatedOptions: function() {
+        this.callBase.apply(this, arguments);
+        _extend(this._deprecatedOptions, {
+            "barWidth": { since: "18.1", message: "Use the 'commonSeriesSettings.barPadding' or 'series.barPadding' option instead" },
+            "equalBarWidth": { since: "18.1", message: "Use the 'commonSeriesSettings.ignoreEmptyPoints' or 'series.ignoreEmptyPoints' option instead" }
+        });
+    },
+
     _dispose: function() {
         var that = this,
             disposeObjectsInArray = this._disposeObjectsInArray;
@@ -246,6 +255,8 @@ var AdvancedChart = BaseChart.inherit({
                 minBubbleSize: themeManager.getOptions("minBubbleSize"),
                 maxBubbleSize: themeManager.getOptions("maxBubbleSize"),
                 barWidth: themeManager.getOptions("barWidth"),
+                barGroupPadding: themeManager.getOptions("barGroupPadding"),
+                barGroupWidth: themeManager.getOptions("barGroupWidth"),
                 negativesAsZeroes: _isDefined(negativesAsZeroes) ? negativesAsZeroes : negativesAsZeros
             };
 
@@ -274,6 +285,8 @@ var AdvancedChart = BaseChart.inherit({
                     minBubbleSize: familyOptions.minBubbleSize,
                     maxBubbleSize: familyOptions.maxBubbleSize,
                     barWidth: familyOptions.barWidth,
+                    barGroupPadding: familyOptions.barGroupPadding,
+                    barGroupWidth: familyOptions.barGroupWidth,
                     negativesAsZeroes: familyOptions.negativesAsZeroes,
                     rotated: that._isRotated()
                 });

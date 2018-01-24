@@ -48,7 +48,7 @@ module.exports = {
             * @type_function_param1_field9 displayValue:string
             * @type_function_param1_field10 columnIndex:number
             * @type_function_param1_field11 rowIndex:number
-            * @type_function_param1_field12 column:dxDataGridOptions_columns
+            * @type_function_param1_field12 column:dxDataGridColumn
             * @type_function_param1_field13 rowType:string
             * @type_function_param1_field14 cellElement:dxElement
             * @type_function_param1_field15 row:dxDataGridRowObject
@@ -68,7 +68,7 @@ module.exports = {
             * @type_function_param1_field9 displayValue:string
             * @type_function_param1_field10 columnIndex:number
             * @type_function_param1_field11 rowIndex:number
-            * @type_function_param1_field12 column:dxTreeListOptions_columns
+            * @type_function_param1_field12 column:dxTreeListColumn
             * @type_function_param1_field13 rowType:string
             * @type_function_param1_field14 cellElement:dxElement
             * @type_function_param1_field15 row:dxTreeListRowObject
@@ -323,7 +323,7 @@ module.exports = {
              * @type_function_param1_field7 displayValue:string
              * @type_function_param1_field8 text:string
              * @type_function_param1_field9 columnIndex:number
-             * @type_function_param1_field10 column:dxDataGridOptions_columns
+             * @type_function_param1_field10 column:dxDataGridColumn
              * @type_function_param1_field11 rowIndex:number
              * @type_function_param1_field12 rowType:string
              * @type_function_param1_field13 row:dxDataGridRowObject
@@ -344,7 +344,7 @@ module.exports = {
              * @type_function_param1_field7 displayValue:string
              * @type_function_param1_field8 text:string
              * @type_function_param1_field9 columnIndex:number
-             * @type_function_param1_field10 column:dxTreeListOptions_columns
+             * @type_function_param1_field10 column:dxTreeListColumn
              * @type_function_param1_field11 rowIndex:number
              * @type_function_param1_field12 rowType:string
              * @type_function_param1_field13 row:dxTreeListRowObject
@@ -362,7 +362,7 @@ module.exports = {
              * @type_function_param1_field4 data:object
              * @type_function_param1_field5 key:any
              * @type_function_param1_field6 values:Array<Object>
-             * @type_function_param1_field7 columns:Array<dxDataGridOptions_columns>
+             * @type_function_param1_field7 columns:Array<dxDataGridColumn>
              * @type_function_param1_field8 rowIndex:number
              * @type_function_param1_field9 rowType:string
              * @type_function_param1_field10 groupIndex:number
@@ -380,7 +380,7 @@ module.exports = {
              * @type_function_param1_field4 data:object
              * @type_function_param1_field5 key:any
              * @type_function_param1_field6 values:Array<Object>
-             * @type_function_param1_field7 columns:Array<dxTreeListOptions_columns>
+             * @type_function_param1_field7 columns:Array<dxTreeListColumn>
              * @type_function_param1_field8 rowIndex:number
              * @type_function_param1_field9 rowType:string
              * @type_function_param1_field10 isSelected:boolean

@@ -782,6 +782,20 @@ var commonSeries = {
 		*/
     ignoreEmptyPoints: false,
     /**
+    * @name dxChartSeriesTypes_CommonSeries_barpadding
+    * @publicName barPadding
+    * @type number
+    * @default undefined
+    */
+    barPadding: undefined,
+    /**
+    * @name dxChartSeriesTypes_CommonSeries_barwidth
+    * @publicName barWidth
+    * @type number
+    * @default undefined
+    */
+    barWidth: undefined,
+    /**
 	* @name dxChartSeriesTypes_CommonSeries_label
 	* @publicName label
 	* @type object
@@ -1073,7 +1087,6 @@ var commonSeries = {
         */
         opacity: undefined
     }
-
 };
 
 /**
