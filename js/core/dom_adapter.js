@@ -92,9 +92,9 @@ var domAdapter = module.exports = {
         return document.documentElement;
     },
 
-    setLocation: function(value) {
+    getLocation: function() {
         var document = domAdapter.getWindow().document;
-        document.location = value;
+        return document.location;
     },
 
     getWindow: function() {
