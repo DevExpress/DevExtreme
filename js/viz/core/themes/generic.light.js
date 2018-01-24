@@ -704,6 +704,7 @@ registerTheme({
         scrollingMode: NONE,
         synchronizeMultiAxes: true,
         equalBarWidth: true,
+        barGroupPadding: 0.3,
         minBubbleSize: 12,
         maxBubbleSize: 0.2
     },
@@ -1085,6 +1086,7 @@ registerTheme({
         chart: {
             useAggregation: false,
             equalBarWidth: true,
+            barGroupPadding: 0.3,
             minBubbleSize: 12,
             maxBubbleSize: 0.2,
             topIndent: 0.1,
@@ -1414,6 +1416,7 @@ registerTheme({
             keepLabels: true
         },
         equalBarWidth: true,
+        barGroupPadding: 0.3,
         commonAxisSettings: {
             visible: true,
             forceUserTickInterval: false,

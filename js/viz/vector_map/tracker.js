@@ -536,7 +536,7 @@ function selectItem(flags, items) {
 }
 
 function setupEvents() {
-    var flags = [window.document.pointerEnabled, navigator.msPointerEnabled, "ontouchstart" in window];
+    var flags = [navigator.pointerEnabled, navigator.msPointerEnabled, "ontouchstart" in window];
     ///#DEBUG
     if(arguments.length) {
         flags = [

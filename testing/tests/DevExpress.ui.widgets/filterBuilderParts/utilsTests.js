@@ -991,4 +991,25 @@ QUnit.module("Lookup Value", function() {
             assert.equal(r, "");
         });
     });
+
+    //T597637
+    QUnit.test("lookup with ODataStore shouldn't send getValueText query when value is empty", function(assert) {
+        var fakeStore = {
+            load: function() {
+                assert.ok(false, "load shoudn't execute");
+            }
+        };
+        var field = {
+                lookup: {
+                    dataSource: {
+                        store: fakeStore
+                    }
+                }
+            },
+            value = "";
+
+        utils.getCurrentLookupValueText(field, value, function(r) {
+            assert.equal(r, "");
+        });
+    });
 });
