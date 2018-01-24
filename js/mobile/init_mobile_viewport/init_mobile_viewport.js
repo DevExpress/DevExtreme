@@ -69,7 +69,7 @@ var initMobileViewport = function(options) {
     }
 
     if(realDevice.ios) {
-        var isPhoneGap = (window.document.location.protocol === "file:");
+        var isPhoneGap = (domAdapter.getLocation().protocol === "file:");
 
         if(!isPhoneGap) {
             // NOTE: fix app size after device rotation in Safari when keyboard was shown

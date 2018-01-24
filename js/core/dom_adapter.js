@@ -92,6 +92,11 @@ var domAdapter = module.exports = {
         return document.documentElement;
     },
 
+    getLocation: function() {
+        var document = domAdapter.getWindow().document;
+        return document.location;
+    },
+
     getReadyState: function() {
         var document = domAdapter.getWindow().document;
         return document.readyState;
