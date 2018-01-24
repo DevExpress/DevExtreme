@@ -45,7 +45,7 @@ exports.fileSaver = {
     },*/
 
     _linkDownloader: function(fileName, href, callback) {
-        var exportLinkElement = window.document.createElement('a'),
+        var exportLinkElement = domAdapter.createElement('a'),
             attributes = { 'download': fileName, "href": href };
 
         ///#DEBUG

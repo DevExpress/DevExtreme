@@ -1,7 +1,8 @@
 "use strict";
 
 var inArray = require("./array").inArray,
-    window = require("../../core/dom_adapter").getWindow(),
+    domAdapter = require("../../core/dom_adapter"),
+    window = domAdapter.getWindow(),
     commonUtils = require("../../core/utils/common"),
     callOnce = commonUtils.callOnce,
     navigator = require("../../core/utils/navigator"),
@@ -35,7 +36,7 @@ var inputType = function(type) {
         return true;
     }
 
-    var input = window.document.createElement("input");
+    var input = domAdapter.createElement("input");
     try {
         input.setAttribute("type", type);
         input.value = "wrongValue";

@@ -34,7 +34,7 @@ var paramsConvert = function(params) {
 };
 
 var createScript = function(options) {
-    var script = window.document.createElement("script");
+    var script = domAdapter.createElement("script");
     for(var name in options) {
         script[name] = options[name];
     }
@@ -142,8 +142,8 @@ var postProcess = function(deferred, xhr, dataType) {
 
 var isCrossDomain = function(url) {
     var crossDomain = false,
-        originAnchor = window.document.createElement("a"),
-        urlAnchor = window.document.createElement("a");
+        originAnchor = domAdapter.createElement("a"),
+        urlAnchor = domAdapter.createElement("a");
 
     originAnchor.href = window.location.href;
 

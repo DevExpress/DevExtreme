@@ -1,13 +1,14 @@
 "use strict";
 
 var each = require("../core/utils/iterator").each,
-    window = require("../core/dom_adapter").getWindow(),
+    domAdapter = require("../core/dom_adapter"),
+    window = domAdapter.getWindow(),
     DXPROXY_HOST = "dxproxy.devexpress.com:8000",
     IS_DXPROXY_ORIGIN = window.location.host === DXPROXY_HOST,
     urlMapping = {};
 
 var parseUrl = (function() {
-    var a = window.document.createElement("a"),
+    var a = domAdapter.createElement("a"),
         props = ["protocol", "hostname", "port", "pathname", "search", "hash"];
 
     var normalizePath = function(value) {

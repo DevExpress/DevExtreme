@@ -28,7 +28,7 @@ var initRender = function(selector, context) {
         }
 
         if(selector[0] === "<") {
-            this[0] = domAdapter.createElement(selector.slice(1, -1), undefined, context);
+            this[0] = domAdapter.createElement(selector.slice(1, -1), context);
             this.length = 1;
             return this;
         }
@@ -256,7 +256,7 @@ var appendElements = function(element, nextSibling) {
     } else if(element.nodeType) {
         element = [element];
     } else if(typeUtils.isNumeric(element)) {
-        element = [domAdapter.createElement("#text", element)];
+        element = [domAdapter.createTextNode(element)];
     }
 
     for(var i = 0; i < element.length; i++) {

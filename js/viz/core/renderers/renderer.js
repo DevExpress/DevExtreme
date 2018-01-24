@@ -72,7 +72,7 @@ var DEFAULTS = {
     scaleY: 1
 };
 
-var backupContainer = window.document.createElement("div"),
+var backupContainer = domAdapter.createElement("div"),
     backupCounter = 0;
 backupContainer.style.left = "-9999px";
 backupContainer.style.position = "absolute";
@@ -103,7 +103,7 @@ function isObjectArgument(value) {
 }
 
 function createElement(tagName) {
-    return window.document.createElementNS("http://www.w3.org/2000/svg", tagName);
+    return domAdapter.createElementNS("http://www.w3.org/2000/svg", tagName);
 }
 
 function getFuncIri(id, pathModified) {
@@ -728,7 +728,7 @@ function removeExtraAttrs(html) {
 
 function parseHTML(text) {
     var items = [],
-        div = window.document.createElement("div");
+        div = domAdapter.createElement("div");
     div.innerHTML = text.replace(/\r/g, "").replace(/\n/g, "<br/>");
     orderHtmlTree(items, 0, div, {}, "");
     adjustLineHeights(items);
@@ -750,7 +750,7 @@ function createTspans(items, element, fieldName) {
     for(i = 0, ii = items.length; i < ii; ++i) {
         item = items[i];
         item[fieldName] = createElement("tspan");
-        item[fieldName].appendChild(window.document.createTextNode(item.value));
+        item[fieldName].appendChild(domAdapter.createTextNode(item.value));
         item.style && baseCss({ element: item[fieldName], _styles: {} }, item.style);
         item.className && item[fieldName].setAttribute("class", item.className);    // EXPERIMENTAL
         element.appendChild(item[fieldName]);
@@ -897,7 +897,7 @@ function createTextNodes(wrapper, text, isStroked) {
             createTspans(items, wrapper.element, "tspan");
         }
     } else {
-        wrapper.element.appendChild(window.document.createTextNode(text));
+        wrapper.element.appendChild(domAdapter.createTextNode(text));
     }
 }
 

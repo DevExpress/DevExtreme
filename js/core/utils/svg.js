@@ -1,9 +1,9 @@
 "use strict";
 
-var window = require("../dom_adapter").getWindow();
+var domAdapter = require("../dom_adapter");
 
 function getMarkup(element) {
-    var temp = window.document.createElement('div');
+    var temp = domAdapter.createElement('div');
     temp.appendChild(element.cloneNode(true));
     return temp.innerHTML;
 }
