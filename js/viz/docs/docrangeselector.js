@@ -21,17 +21,15 @@ var dxRangeSelector = {
         /**
         * @name dxrangeselectoroptions_scale_valueType
         * @publicName valueType
-        * @type string
+        * @type Enums.ChartDataType
         * @default undefined
-        * @acceptValues 'datetime' | 'numeric' | 'string'
         */
         valueType: undefined,
         /**
         * @name dxrangeselectoroptions_scale_type
         * @publicName type
-        * @type string
+        * @type Enums.RangeSelectorAxisScaleType
         * @default undefined
-        * @acceptValues 'logarithmic' | 'continuous' | 'discrete' | 'semidiscrete'
         */
         type: 'continuous',
         /**
@@ -146,18 +144,16 @@ var dxRangeSelector = {
             /**
             * @name dxrangeselectoroptions_scale_breakStyle_line
             * @publicName line
-            * @type string
+            * @type Enums.ScaleBreakLineStyle
             * @default "waved"
-            * @acceptValues 'waved'| 'straight'
             */
             line: "waved"
         },
         /**
         * @name dxrangeselectoroptions_scale_majortickinterval
         * @publicName majorTickInterval
-        * @type number|object|string
+        * @type number|object|Enums.VizTimeInterval
         * @default undefined
-        * @acceptValues 'millisecond' | 'second' | 'minute' | 'hour' | 'day' | 'week' | 'month' | 'quarter' | 'year'
         * @deprecated dxrangeselectoroptions_scale_tickinterval
         */
         majorTickInterval: {
@@ -343,9 +339,8 @@ var dxRangeSelector = {
             /**
             * @name dxrangeselectoroptions_scale_label_overlappingbehavior
             * @publicName overlappingBehavior
-            * @type string
+            * @type Enums.ScaleLabelOverlappingBehavior
             * @default "hide"
-            * @acceptValues 'hide' | 'none'
             */
             overlappingBehavior: "hide"
         },
@@ -812,18 +807,16 @@ var dxRangeSelector = {
         /**
         * @name dxrangeselectoroptions_behavior_callselectedrangechanged
         * @publicName callSelectedRangeChanged
-        * @type string
+        * @type Enums.ValueChangedCallMode
         * @default 'onMovingComplete'
-        * @acceptValues 'onMovingComplete' | 'onMoving'
         * @deprecated dxrangeselectoroptions_behavior_callvaluechanged
         */
         callSelectedRangeChanged: "onMovingComplete",
         /**
         * @name dxrangeselectoroptions_behavior_callvaluechanged
         * @publicName callValueChanged
-        * @type string
+        * @type Enums.ValueChangedCallMode
         * @default 'onMovingComplete'
-        * @acceptValues 'onMovingComplete' | 'onMoving'
         */
         callValueChanged: "onMovingComplete"
     },
@@ -863,8 +856,7 @@ var dxRangeSelector = {
             /**
             * @name dxrangeselectoroptions_background_image_location
             * @publicName location
-            * @type string
-            * @acceptValues 'full' | 'leftTop' | 'leftCenter' | 'leftBottom' | 'centerTop' | 'center' | 'centerBottom' | 'rightTop' | 'rightTop' | 'rightCenter' | 'rightBottom'
+            * @type Enums.BackgroundImageLocation
             * @default 'full'
             */
             location: 'full'
@@ -975,17 +967,15 @@ var dxRangeSelector = {
             /**
             * @name dxrangeselectoroptions_chart_valueaxis_valuetype
             * @publicName valueType
-            * @type string
+            * @type Enums.ChartDataType
             * @default undefined
-            * @acceptValues 'numeric' | 'datetime' | 'string'
             */
             valueType: undefined,
             /**
             * @name dxrangeselectoroptions_chart_valueaxis_type
             * @publicName type
-            * @type string
+            * @type Enums.RangeSelectorChartAxisScaleType
             * @default undefined
-            * @acceptValues 'logarithmic' | 'continuous'
             */
             type: 'continuous',
             /**
@@ -1050,9 +1040,8 @@ var dxRangeSelector = {
         /**
         * @name dxrangeselectoroptions_chart_paletteextensionmode
         * @publicName paletteExtensionMode
-        * @type string
+        * @type Enums.VizPaletteExtensionMode
         * @default 'blend'
-        * @acceptValues 'blend' | 'repeat' | 'extrapolate'
         */
         paletteExtensionMode: 'blend'
     },

@@ -65,35 +65,31 @@ var Menu = MenuBase.inherit({
             /**
             * @name dxMenuOptions_orientation
             * @publicName orientation
-            * @type string
+            * @type Enums.Orientation
             * @default "horizontal"
-            * @acceptValues "horizontal"|"vertical"
             */
             orientation: "horizontal",
 
             /**
             * @name dxMenuOptions_submenuDirection
             * @publicName submenuDirection
-            * @type string
+            * @type Enums.SubmenuDirection
             * @default "auto"
-            * @acceptValues "auto"|"rightOrBottom"|"leftOrTop"
             */
             submenuDirection: "auto",
 
             /**
             * @name dxMenuOptions_showFirstSubmenuMode
             * @publicName showFirstSubmenuMode
-            * @type Object|string
+            * @type Object|Enums.ShowSubmenuMode
             * @default { name: "onClick", delay: { show: 50, hide: 300 } }
-            * @acceptValues "onHover"|"onClick"
             */
             showFirstSubmenuMode: {
                 /**
                 * @name dxMenuOptions_showFirstSubmenuMode_name
                 * @publicName name
-                * @type string
+                * @type Enums.ShowSubmenuMode
                 * @default "onClick"
-                * @acceptValues "onHover"|"onClick"
                 */
                 name: "onClick",
 

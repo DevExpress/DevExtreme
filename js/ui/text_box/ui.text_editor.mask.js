@@ -110,9 +110,8 @@ var TextEditorMask = TextEditorBase.inherit({
             /**
              * @name dxTextEditorOptions_showMaskMode
              * @publicName showMaskMode
-             * @type string
+             * @type Enums.ShowMaskMode
              * @default "always"
-             * @acceptValues 'always'|'onFocus'
              */
             showMaskMode: "always"
         });

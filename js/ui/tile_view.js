@@ -59,9 +59,8 @@ var TileView = CollectionWidget.inherit({
             /**
             * @name dxTileViewOptions_direction
             * @publicName direction
-            * @type string
+            * @type Enums.Orientation
             * @default 'horizontal'
-            * @acceptValues 'horizontal'|'vertical'
             */
             direction: "horizontal",
 

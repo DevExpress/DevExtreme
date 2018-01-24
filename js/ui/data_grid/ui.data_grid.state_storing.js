@@ -127,8 +127,7 @@ gridCore.registerModule("stateStoring", {
                 /**
                  * @name dxDataGridOptions_stateStoring_type
                  * @publicName type
-                 * @type string
-                 * @acceptValues "localStorage" | "sessionStorage" | "custom"
+                 * @type Enums.StateStoringType
                  * @default "localStorage"
                  */
                 type: "localStorage",

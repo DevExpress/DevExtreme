@@ -152,9 +152,8 @@ var FilterBuilder = Widget.inherit({
             /**
              * @name dxFilterBuilderField_dataType
              * @publicName dataType
-             * @type string
+             * @type Enums.FilterBuilderFieldDataType
              * @default "string"
-             * @acceptValues "string" | "number" | "date" | "datetime" | "boolean" | "object"
              */
 
             /**

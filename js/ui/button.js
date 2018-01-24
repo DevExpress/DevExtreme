@@ -92,9 +92,8 @@ var Button = Widget.inherit({
             /**
             * @name dxButtonOptions_type
             * @publicName type
-            * @type string
+            * @type Enums.ButtonType
             * @default 'normal'
-            * @acceptValues 'normal'|'default'|'back'|'danger'|'success'
             */
             type: "normal",
 

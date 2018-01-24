@@ -73,16 +73,14 @@ var dxVectorMap = {
         /**
         * @name dxvectormapoptions_layers_type
         * @publicName type
-        * @type string
-        * @acceptValues 'area' | 'line' | 'marker'
+        * @type Enums.VectorMapLayerType
         * @notUsedInTheme
         */
         type: undefined,
         /**
         * @name dxvectormapoptions_layers_elementType
         * @publicName elementType
-        * @type string
-        * @acceptValues 'dot' | 'bubble' | 'pie' | 'image'
+        * @type Enums.VectorMapMarkerType
         * @notUsedInTheme
         */
         elementType: undefined,
@@ -187,9 +185,8 @@ var dxVectorMap = {
         /**
         * @name dxvectormapoptions_layers_selectionMode
         * @publicName selectionMode
-        * @type string
+        * @type Enums.SelectionMode
         * @default 'single'
-        * @acceptValues 'single' | 'multiple' | 'none'
         */
         selectionMode: 'single',
         /**
@@ -410,9 +407,8 @@ var dxVectorMap = {
         /**
         * @name dxvectormapoptions_areaSettings_selectionMode
         * @publicName selectionMode
-        * @type string
+        * @type Enums.SelectionMode
         * @default 'single'
-        * @acceptValues 'single' | 'multiple' | 'none'
         * @deprecated dxvectormapoptions_layers_selectionMode
         */
         selectionMode: 'single',
@@ -589,9 +585,8 @@ var dxVectorMap = {
         /**
         * @name dxvectormapoptions_markerSettings_type
         * @publicName type
-        * @type string
+        * @type Enums.VectorMapMarkerType
         * @default 'dot'
-        * @acceptValues 'dot' | 'bubble' | 'pie' | 'image'
         * @deprecated dxvectormapoptions_layers_elementType
         */
         type: 'dot',
@@ -813,9 +808,8 @@ var dxVectorMap = {
         /**
         * @name dxvectormapoptions_markerSettings_selectionMode
         * @publicName selectionMode
-        * @type string
+        * @type Enums.SelectionMode
         * @default 'single'
-        * @acceptValues 'single' | 'multiple' | 'none'
         * @deprecated dxvectormapoptions_layers_selectionMode
         */
         selectionMode: 'single',
@@ -867,16 +861,14 @@ var dxVectorMap = {
         /**
         * @name dxvectormapoptions_controlbar_horizontalAlignment
         * @publicName horizontalAlignment
-        * @type string
-        * @acceptValues 'left'|'center'|'right'
+        * @type Enums.HorizontalAlignment
         * @default 'left'
         */
         horizontalAlignment: 'left',
         /**
         * @name dxvectormapoptions_controlbar_verticalAlignment
         * @publicName verticalAlignment
-        * @type string
-        * @acceptValues 'top'|'bottom'
+        * @type Enums.VerticalEdge
         * @default 'top'
         */
         verticalAlignment: 'top',
@@ -1001,41 +993,36 @@ var dxVectorMap = {
         /**
         * @name dxvectormapoptions_legends_verticalalignment
         * @publicName verticalAlignment
-        * @type string
+        * @type Enums.VerticalEdge
         * @default 'bottom'
-        * @acceptValues 'top' | 'bottom'
         */
         verticalAlignment: 'bottom',
         /**
         * @name dxvectormapoptions_legends_horizontalalignment
         * @publicName horizontalAlignment
-        * @type string
+        * @type Enums.HorizontalAlignment
         * @default 'right'
-        * @acceptValues 'right' | 'center' | 'left'
         */
         horizontalAlignment: 'right',
         /**
         * @name dxvectormapoptions_legends_orientation
         * @publicName orientation
-        * @type string
+        * @type Enums.Orientation
         * @default undefined
-        * @acceptValues 'vertical' | 'horizontal'
         */
         orientation: undefined,
         /**
         * @name dxvectormapoptions_legends_itemtextposition
         * @publicName itemTextPosition
-        * @type string
+        * @type Enums.Position
         * @default undefined
-        * @acceptValues 'right' | 'left' | 'top' | 'bottom'
         */
         itemTextPosition: undefined,
         /**
         * @name dxvectormapoptions_legends_itemsalignment
         * @publicName itemsAlignment
-        * @type string
+        * @type Enums.HorizontalAlignment
         * @default undefined
-        * @acceptValues 'right' | 'center' | 'left'
         */
         itemsAlignment: undefined,
         /**
@@ -1140,8 +1127,7 @@ var dxVectorMap = {
         /**
         * @name dxvectormapoptions_legends_markerShape
         * @publicName markerShape
-        * @type string
-        * @acceptValues "square" | "circle"
+        * @type Enums.VectorMapMarkerShape
         * @default "square"
         */
         markerShape: "square",
@@ -1196,9 +1182,8 @@ var dxVectorMap = {
             /**
             * @name dxvectormapoptions_legends_border_dashstyle
             * @publicName dashStyle
-            * @type string
+            * @type Enums.DashStyle
             * @default 'solid'
-            * @acceptValues 'solid'|'longDash'|'dash'|'dot'
             */
             dashStyle: 'solid'
         },

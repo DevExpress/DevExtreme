@@ -112,7 +112,7 @@ var ColorBox = DropDownEditor.inherit({
             /**
             * @name dxColorBoxOptions_applyValueMode
             * @publicName applyValueMode
-            * @type string
+            * @type Enums.EditorApplyValueMode
             * @default "useButtons"
             * @inheritdoc
             */

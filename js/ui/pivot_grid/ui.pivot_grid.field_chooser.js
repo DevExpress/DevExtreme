@@ -105,9 +105,8 @@ var FieldChooser = BaseFieldChooser.inherit({
             /**
              * @name dxPivotGridFieldChooserOptions_layout
              * @publicName layout
-             * @type number
+             * @type Enums.PivotGridFieldChooserLayout
              * @default 0
-             * @acceptValues 0 | 1 | 2
              */
             layout: 0,
             /**

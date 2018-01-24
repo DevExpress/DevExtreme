@@ -71,18 +71,16 @@ var BaseSparkline = {
         /**
         * @name basesparklineoptions_tooltip_verticalalignment
         * @publicName verticalAlignment
-        * @type string
+        * @type Enums.VerticalEdge
         * @default undefined
-        * @acceptValues 'top' | 'bottom'
         * @deprecated
         */
         verticalAlignment: 'top',
         /**
         * @name basesparklineoptions_tooltip_horizontalalignment
         * @publicName horizontalAlignment
-        * @type string
+        * @type Enums.HorizontalAlignment
         * @default undefined
-        * @acceptValues 'left' | 'center' | 'right'
         * @deprecated
         */
         horizontalAlignment: 'center',
@@ -153,9 +151,8 @@ var dxSparkline = {
     /**
     * @name dxsparklineoptions_type
     * @publicName type
-    * @type string
+    * @type Enums.SparklineType
     * @default 'line'
-    * @acceptValues 'line' | 'spline' | 'stepline' | 'area' | 'splinearea' | 'steparea' | 'bar' | 'winloss'
     */
     type: 'line',
     /**
@@ -238,9 +235,8 @@ var dxSparkline = {
     /**
     * @name dxsparklineoptions_pointsymbol
     * @publicName pointSymbol
-    * @type string
+    * @type Enums.VizPointSymbol
     * @default 'circle'
-    * @acceptValues 'circle' | 'square' | 'polygon' | 'triangle' | 'cross'
     */
     pointSymbol: 'circle',
     /**
