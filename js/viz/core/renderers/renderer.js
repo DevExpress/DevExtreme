@@ -750,7 +750,7 @@ function createTspans(items, element, fieldName) {
     for(i = 0, ii = items.length; i < ii; ++i) {
         item = items[i];
         item[fieldName] = createElement("tspan");
-        item[fieldName].appendChild(window.document.createTextNode(item.value));
+        item[fieldName].appendChild(domAdapter.createTextNode(item.value));
         item.style && baseCss({ element: item[fieldName], _styles: {} }, item.style);
         item.className && item[fieldName].setAttribute("class", item.className);    // EXPERIMENTAL
         element.appendChild(item[fieldName]);
@@ -897,7 +897,7 @@ function createTextNodes(wrapper, text, isStroked) {
             createTspans(items, wrapper.element, "tspan");
         }
     } else {
-        wrapper.element.appendChild(window.document.createTextNode(text));
+        wrapper.element.appendChild(domAdapter.createTextNode(text));
     }
 }
 
