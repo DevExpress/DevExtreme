@@ -121,6 +121,7 @@ var SelectBox = DropDownList.inherit({
                 } else {
                     if(this.option("acceptCustomValue")) {
                         e.preventDefault();
+                        return this.option("opened");
                     }
                     if(parent.enter.apply(this, arguments)) {
                         return this.option("opened");
