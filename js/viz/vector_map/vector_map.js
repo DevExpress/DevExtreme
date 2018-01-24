@@ -124,13 +124,15 @@ var dxVectorMap = require("../core/base_widget").inherit({
     _initElements: function() {
         var that = this,
             dataKey = generateDataKey(),
-            notifyCounter = 0;
+            notifyCounter = 0,
+            preventProjectionEvents = true;
 
         that._notifyDirty = function() {
             that._resetIsReady();
             ++notifyCounter;
         };
         that._notifyReady = function() {
+            preventProjectionEvents = false;
             if(--notifyCounter === 0) {
                 that._drawn();
             }
@@ -140,12 +142,12 @@ var dxVectorMap = require("../core/base_widget").inherit({
         // The `{ eventTrigger: that._eventTrigger }` object cannot be passed to the Projection because later backward option updating is going to be added.
         that._projection = new projectionModule.Projection({
             centerChanged: function(value) {
-                if(that._initialized) {
+                if(!preventProjectionEvents) {
                     that._eventTrigger("centerChanged", { center: value });
                 }
             },
             zoomChanged: function(value) {
-                if(that._initialized) {
+                if(!preventProjectionEvents) {
                     that._eventTrigger("zoomFactorChanged", { zoomFactor: value });
                 }
             }

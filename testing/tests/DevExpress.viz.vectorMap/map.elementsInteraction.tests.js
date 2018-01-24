@@ -20,17 +20,6 @@ QUnit.test('On center', function(assert) {
     assert.deepEqual(onCenterChanged.lastCall.args[0].center, 'test-center');
 });
 
-QUnit.test('On center when not initialized', function(assert) {
-    var onCenterChanged = sinon.spy(),
-        spy = sinon.spy(projectionModule, "Projection");
-    this.createMap({ onCenterChanged: onCenterChanged });
-
-    this.map._initialized = false;
-    spy.lastCall.args[0].centerChanged("test-center");
-
-    assert.strictEqual(onCenterChanged.lastCall, null);
-});
-
 QUnit.test('On zoom', function(assert) {
     var onZoomFactorChanged = sinon.spy(),
         spy = sinon.spy(projectionModule, "Projection");
@@ -39,17 +28,6 @@ QUnit.test('On zoom', function(assert) {
     spy.lastCall.args[0].zoomChanged("test-zoom");
 
     assert.deepEqual(onZoomFactorChanged.lastCall.args[0].zoomFactor, 'test-zoom');
-});
-
-QUnit.test('On zoom when not initialized', function(assert) {
-    var onZoomFactorChanged = sinon.spy(),
-        spy = sinon.spy(projectionModule, "Projection");
-    this.createMap({ onZoomFactorChanged: onZoomFactorChanged });
-
-    this.map._initialized = false;
-    spy.lastCall.args[0].zoomChanged("test-zoom");
-
-    assert.strictEqual(onZoomFactorChanged.lastCall, null);
 });
 
 QUnit.module('Map - event trigger interaction', $.extend({}, commons.environment, {
