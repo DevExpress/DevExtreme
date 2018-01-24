@@ -1870,6 +1870,27 @@ QUnit.test("The 'onCustomItemCreating' option", function(assert) {
     assert.equal($input.val(), "display " + customValue, "displayed value is correct");
 });
 
+QUnit.test("onCustomItemCreating should not be called when existing item selecting", function(assert) {
+    var onCustomItemCreating = sinon.stub().returns("Custom item"),
+        $selectBox = $("#selectBox").dxSelectBox({
+            items: ["Item 11", "Item 22", "Item 33"],
+            opened: true,
+            acceptCustomValue: true,
+            searchTimeout: 0,
+            searchEnabled: true,
+            onCustomItemCreating: onCustomItemCreating
+        }),
+        $input = $selectBox.find(".dx-texteditor-input"),
+        keyboard = keyboardMock($input);
+
+    keyboard
+        .type("Item 2")
+        .press("down")
+        .press("enter");
+
+    assert.equal(onCustomItemCreating.callCount, 0, "action has not been called");
+});
+
 QUnit.test("creating custom item via the 'customItem' event parameter", function(assert) {
     var $selectBox = $("#selectBox").dxSelectBox({
             acceptCustomValue: true,

@@ -120,7 +120,9 @@ var SelectBox = DropDownList.inherit({
                     this.close();
                 } else {
                     if(this.option("acceptCustomValue")) {
+                        this._keyboardProcessor._childProcessors[0].process(e);
                         e.preventDefault();
+                        return false;
                     }
                     if(parent.enter.apply(this, arguments)) {
                         return this.option("opened");
