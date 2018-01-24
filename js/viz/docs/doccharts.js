@@ -104,6 +104,7 @@ var dxChart = {
     * @publicName barGroupPadding
     * @type number
     * @default 0.3
+    * @propertyOf dxChartSeriesTypes_BarSeries,dxChartSeriesTypes_StackedBarSeries,dxChartSeriesTypes_FullStackedBarSeries,dxChartSeriesTypes_RangeBarSeriesSeries
     */
     barGroupPadding: 0.3,
     /**
@@ -111,6 +112,7 @@ var dxChart = {
     * @publicName barGroupWidth
     * @type number
     * @default undefined
+    * @propertyOf dxChartSeriesTypes_BarSeries,dxChartSeriesTypes_StackedBarSeries,dxChartSeriesTypes_FullStackedBarSeries,dxChartSeriesTypes_RangeBarSeriesSeries
     */
     barGroupWidth: undefined,
     /**
@@ -2721,6 +2723,7 @@ var dxPolarChart = {
     * @publicName barGroupPadding
     * @type number
     * @default 0.3
+    * @propertyOf dxPolarChartSeriesTypes_barpolarseries,dxPolarChartSeriesTypes_stackedbarpolarseries
     */
     barGroupPadding: 0.3,
     /**
@@ -2728,6 +2731,7 @@ var dxPolarChart = {
     * @publicName barGroupWidth
     * @type number
     * @default undefined
+    * @propertyOf dxPolarChartSeriesTypes_barpolarseries,dxPolarChartSeriesTypes_stackedbarpolarseries
     */
     barGroupWidth: undefined,
     /**

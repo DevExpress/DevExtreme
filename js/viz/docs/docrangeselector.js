@@ -1023,6 +1023,7 @@ var dxRangeSelector = {
         * @publicName barGroupPadding
         * @type number
         * @default 0.3
+        * @propertyOf dxChartSeriesTypes_BarSeries,dxChartSeriesTypes_StackedBarSeries,dxChartSeriesTypes_FullStackedBarSeries,dxChartSeriesTypes_RangeBarSeriesSeries
         */
         barGroupPadding: 0.3,
         /**
@@ -1030,6 +1031,7 @@ var dxRangeSelector = {
         * @publicName barGroupWidth
         * @type number
         * @default undefined
+        * @propertyOf dxChartSeriesTypes_BarSeries,dxChartSeriesTypes_StackedBarSeries,dxChartSeriesTypes_FullStackedBarSeries,dxChartSeriesTypes_RangeBarSeriesSeries
         */
         barGroupWidth: undefined,
         /**
