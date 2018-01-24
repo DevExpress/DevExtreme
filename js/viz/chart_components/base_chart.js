@@ -48,6 +48,8 @@ var commonUtils = require("../../core/utils/common"),
         "minBubbleSize",
         "maxBubbleSize",
         "barWidth",
+        "barGroupPadding",
+        "barGroupWidth",
         "negativesAsZeroes",
         "negativesAsZeros" //misspelling case
     ],

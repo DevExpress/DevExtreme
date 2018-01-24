@@ -1092,6 +1092,53 @@ var environment = {
         assert.ok(argAxis === chart._argumentAxes[0], "Arg axis should not be recreated");
     });
 
+    QUnit.test("barGroupPadding updating", function(assert) {
+        //arrange
+        var chart = this.createChart({
+            barGroupPadding: 2,
+            dataSource: [{ arg: 1, val: 1 }],
+            series: { type: "line" }
+        });
+        seriesMockData.series.push(new MockSeries({ points: getPoints(DEFAULT_ANIMATION_LIMIT - 1) }));
+        $.each(chart.seriesFamilies, function(_, family) {
+            sinon.stub(family, "updateOptions", function(options) {
+                chart.seriesFamiliesUpdatingOptions = options;
+            });
+        });
+
+        //act
+        this.themeManager.getOptions.withArgs("barGroupPadding").returns(5);
+        chart.option({
+            barGroupPadding: 5
+        });
+        //assert
+        assert.equal(chart.seriesFamiliesUpdatingOptions.barGroupPadding, 5, "barGroupPadding should be updated");
+    });
+
+    QUnit.test("barGroupWidth updating", function(assert) {
+        //arrange
+        var chart = this.createChart({
+            barGroupWidth: 7,
+            dataSource: [{ arg: 1, val: 1 }],
+            series: { type: "line" }
+        });
+        seriesMockData.series.push(new MockSeries({ points: getPoints(DEFAULT_ANIMATION_LIMIT - 1) }));
+        $.each(chart.seriesFamilies, function(_, family) {
+            sinon.stub(family, "updateOptions", function(options) {
+                chart.seriesFamiliesUpdatingOptions = options;
+            });
+        });
+
+        //act
+        this.themeManager.getOptions.withArgs("barGroupWidth").returns(10);
+
+        chart.option({
+            barGroupWidth: 10
+        });
+        //assert
+        assert.equal(chart.seriesFamiliesUpdatingOptions.barGroupWidth, 10, "barGroupWidth should be updated");
+    });
+
     QUnit.test("NegativesAsZeroes updating", function(assert) {
         //arrange
         var chart = this.createChart({
