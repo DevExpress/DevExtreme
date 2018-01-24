@@ -33,16 +33,14 @@ var dxChart = {
     /**
     * @name dxchartoptions_resolvelabeloverlapping
     * @publicName resolveLabelOverlapping
-    * @type string
+    * @type Enums.ChartResolveLabelOverlapping
     * @default "none"
-    * @acceptValues "none" | "hide" | "stack"
     */
     resolveLabelOverlapping: "none",
     /**
     * @name dxchartoptions_seriesSelectionMode
     * @publicName seriesSelectionMode
-    * @type string
-    * @acceptValues 'single' | 'multiple'
+    * @type Enums.ChartElementSelectionMode
     * @default 'single'
     */
     seriesSelectionMode: 'single',
@@ -113,9 +111,8 @@ var dxChart = {
         /**
         * @name dxchartoptions_commonseriessettings_type
         * @publicName type
-        * @type string
+        * @type Enums.SeriesType
         * @default 'line'
-        * @acceptValues 'line' | 'stackedline' | 'fullstackedline' | 'area' | 'stackedarea' | 'fullstackedarea' | 'bar' | 'stackedbar' | 'fullstackedbar' | 'spline' | 'splinearea' | 'scatter' | 'candlestick' | 'stock' | 'rangearea' | 'rangebar' | 'stepline' | 'steparea' | 'bubble' | 'fullstackedspline' | 'stackedspline' | 'stackedsplinearea' | 'fullstackedsplinearea'
         */
         type: 'line',
         /**
@@ -350,9 +347,8 @@ var dxChart = {
             /**
             * @name dxchartoptions_commonpanesettings_border_dashstyle
             * @publicName dashStyle
-            * @type string
+            * @type Enums.DashStyle
             * @default 'solid'
-            * @acceptValues 'solid'|'longDash'|'dash'|'dot'
             */
             dashStyle: 'solid',
             /**
@@ -462,8 +458,7 @@ var dxChart = {
         /**
        * @name dxchartoptions_scrollbar_position
        * @publicName position
-       * @type string
-       * @acceptValues 'left'|'top'|'bottom'|'right'
+       * @type Enums.Position
        * @default 'top'
        */
         position: 'top'
@@ -471,16 +466,14 @@ var dxChart = {
     /**
     * @name dxchartoptions_zoomingmode
     * @publicName zoomingMode
-    * @type string
-    * @acceptValues 'none'|'touch'|'mouse'|'all'
+    * @type Enums.ChartPointerType
     * @default 'none'
     */
     zoomingMode: 'none',
     /**
     * @name dxchartoptions_scrollingmode
     * @publicName scrollingMode
-    * @type string
-    * @acceptValues 'none'|'touch'|'mouse'|'all'
+    * @type Enums.ChartPointerType
     * @default 'none'
     */
     scrollingMode: 'none',
@@ -521,9 +514,8 @@ var dxChart = {
         /**
         * @name dxchartoptions_crosshair_dashstyle
         * @publicName dashStyle
-        * @type string
+        * @type Enums.DashStyle
         * @default 'solid'
-        * @acceptValues 'solid'|'longDash'|'dash'|'dot'
         */
         dashStyle: 'solid',
         /**
@@ -650,9 +642,8 @@ var dxChart = {
             /**
             * @name dxchartoptions_crosshair_verticalline_dashstyle
             * @publicName dashStyle
-            * @type string
+            * @type Enums.DashStyle
             * @default 'solid'
-            * @acceptValues 'solid'|'longDash'|'dash'|'dot'
             */
             dashStyle: 'solid',
             /**
@@ -780,9 +771,8 @@ var dxChart = {
             /**
             * @name dxchartoptions_crosshair_horizontalline_dashstyle
             * @publicName dashStyle
-            * @type string
+            * @type Enums.DashStyle
             * @default 'solid'
-            * @acceptValues 'solid'|'longDash'|'dash'|'dot'
             */
             dashStyle: 'solid',
             /**
@@ -927,17 +917,15 @@ var dxChart = {
         /**
         * @name dxchartoptions_legend_hovermode
         * @publicName hoverMode
-        * @type string
+        * @type Enums.ChartLegendHoverMode
         * @default 'includePoints'
-        * @acceptValues 'includePoints' | 'excludePoints' | 'none'
         */
         hoverMode: 'includePoints',
         /**
         * @name dxchartoptions_legend_position
         * @publicName position
-        * @type string
+        * @type Enums.RelativePosition
         * @default 'outside'
-        * @acceptValues 'outside' | 'inside'
         */
         position: 'outside'
     },
@@ -957,9 +945,8 @@ var dxChart = {
         /**
         * @name dxchartoptions_commonaxissettings_discreteaxisdivisionMode
         * @publicName discreteAxisDivisionMode
-        * @type string
+        * @type Enums.DiscreteAxisDivisionMode
         * @default 'betweenLabels'
-        * @acceptValues 'betweenLabels' | 'crossLabels'
         */
         discreteAxisDivisionMode: 'betweenLabels',
         /**
@@ -1006,9 +993,8 @@ var dxChart = {
             /**
             * @name dxchartoptions_commonaxissettings_label_alignment
             * @publicName alignment
-            * @type string
+            * @type Enums.HorizontalAlignment
             * @default undefined
-            * @acceptValues 'left' | 'center' | 'right'
             */
             alignment: undefined,
             /**
@@ -1035,9 +1021,8 @@ var dxChart = {
             /**
             * @name dxchartoptions_commonaxissettings_label_displaymode
             * @publicName displayMode
-            * @type string
+            * @type Enums.ChartLabelDisplayMode
             * @default 'standard'
-            * @acceptValues 'standard' | 'rotate' | 'stagger'
             */
             displayMode: "standard",
             /**
@@ -1365,17 +1350,15 @@ var dxChart = {
                 /**
                 * @name dxchartoptions_commonaxissettings_stripstyle_label_horizontalalignment
                 * @publicName horizontalAlignment
-                * @type string
+                * @type Enums.HorizontalAlignment
                 * @default 'left'
-                * @acceptValues 'right' | 'center' | 'left'
                 */
                 horizontalAlignment: 'left',
                 /**
                 * @name dxchartoptions_commonaxissettings_stripstyle_label_verticalalignment
                 * @publicName verticalAlignment
-                * @type string
+                * @type Enums.VerticalAlignment
                 * @default 'center'
-                * @acceptValues 'top' | 'center' | 'bottom'
                 */
                 verticalAlignment: 'center',
                 /**
@@ -1452,9 +1435,8 @@ var dxChart = {
             /**
             * @name dxchartoptions_commonaxissettings_constantlinestyle_dashstyle
             * @publicName dashStyle
-            * @type string
+            * @type Enums.DashStyle
             * @default 'solid'
-            * @acceptValues 'solid'|'longDash'|'dash'|'dot'
             */
             dashStyle: 'solid',
             /**
@@ -1480,9 +1462,8 @@ var dxChart = {
                 /**
                 * @name dxchartoptions_commonaxissettings_constantlinestyle_label_position
                 * @publicName position
-                * @type string
+                * @type Enums.RelativePosition
                 * @default 'inside'
-                * @acceptValues 'inside'|'outside'
                 */
                 position: 'inside',
                 /**
@@ -1699,17 +1680,15 @@ var dxChart = {
                 /**
                 * @name dxchartoptions_argumentaxis_constantlinestyle_label_horizontalalignment
                 * @publicName horizontalAlignment
-                * @type string
+                * @type Enums.HorizontalAlignment
                 * @default 'right'
-                * @acceptValues 'right'| 'center' | 'left'
                 */
                 horizontalAlignment: 'right',
                 /**
                 * @name dxchartoptions_argumentaxis_constantlinestyle_label_verticalalignment
                 * @publicName verticalAlignment
-                * @type string
+                * @type Enums.VerticalAlignment
                 * @default 'top'
-                * @acceptValues 'top' | 'center' | 'bottom'
                 */
                 verticalAlignment: 'top'
             }
@@ -1745,17 +1724,15 @@ var dxChart = {
                 /**
                 * @name dxchartoptions_argumentaxis_constantlines_label_horizontalalignment
                 * @publicName horizontalAlignment
-                * @type string
+                * @type Enums.HorizontalAlignment
                 * @default 'right'
-                * @acceptValues 'right'| 'center' | 'left'
                 */
                 horizontalAlignment: 'right',
                 /**
                 * @name dxchartoptions_argumentaxis_constantlines_label_verticalalignment
                 * @publicName verticalAlignment
-                * @type string
+                * @type Enums.VerticalAlignment
                 * @default 'top'
-                * @acceptValues 'top' | 'center' | 'bottom'
                 */
                 verticalAlignment: 'top'
             }
@@ -1763,9 +1740,8 @@ var dxChart = {
         /**
         * @name dxchartoptions_argumentaxis_position
         * @publicName position
-        * @type string
+        * @type Enums.Position
         * @default 'bottom'
-        * @acceptValues 'bottom' | 'top' | 'left' | 'right'
         */
         position: 'bottom',
         /**
@@ -1798,9 +1774,8 @@ var dxChart = {
         /**
         * @name dxchartoptions_argumentaxis_type
         * @publicName type
-        * @type string
+        * @type Enums.AxisScaleType
         * @default undefined
-        * @acceptValues 'discrete' | 'continuous' | 'logarithmic'
         */
         type: undefined,
         /**
@@ -1813,17 +1788,15 @@ var dxChart = {
         /**
         * @name dxchartoptions_argumentaxis_argumenttype
         * @publicName argumentType
-        * @type string
+        * @type Enums.ChartDataType
         * @default undefined
-        * @acceptValues 'numeric' | 'datetime' | 'string'
         */
         argumentType: undefined,
         /**
         * @name dxchartoptions_argumentaxis_hovermode
         * @publicName hoverMode
-        * @type string
+        * @type Enums.ArgumentAxisHoverMode
         * @default 'none'
-        * @acceptValues 'none' | 'allArgumentPoints'
         */
         hoverMode: 'none'
     },
@@ -1997,17 +1970,15 @@ var dxChart = {
                 /**
                 * @name dxchartoptions_valueaxis_constantlinestyle_label_horizontalalignment
                 * @publicName horizontalAlignment
-                * @type string
+                * @type Enums.HorizontalAlignment
                 * @default 'left'
-                * @acceptValues 'right' | 'center' | 'left'
                 */
                 horizontalAlignment: 'left',
                 /**
                 * @name dxchartoptions_valueaxis_constantlinestyle_label_verticalalignment
                 * @publicName verticalAlignment
-                * @type string
+                * @type Enums.VerticalAlignment
                 * @default 'top'
-                * @acceptValues 'top'| 'center' | 'bottom'
                 */
                 verticalAlignment: 'top'
             }
@@ -2043,17 +2014,15 @@ var dxChart = {
                 /**
                 * @name dxchartoptions_valueaxis_constantlines_label_horizontalalignment
                 * @publicName horizontalAlignment
-                * @type string
+                * @type Enums.HorizontalAlignment
                 * @default 'left'
-                * @acceptValues 'right' | 'center' | 'left'
                 */
                 horizontalAlignment: 'left',
                 /**
                 * @name dxchartoptions_valueaxis_constantlines_label_verticalalignment
                 * @publicName verticalAlignment
-                * @type string
+                * @type Enums.VerticalAlignment
                 * @default 'top'
-                * @acceptValues 'top'| 'center' | 'bottom'
                 */
                 verticalAlignment: 'top'
             }
@@ -2061,9 +2030,8 @@ var dxChart = {
         /**
         * @name dxchartoptions_valueaxis_position
         * @publicName position
-        * @type string
+        * @type Enums.Position
         * @default 'left'
-        * @acceptValues 'right' | 'left' | 'top' | 'bottom'
         */
         position: 'left',
         /**
@@ -2096,9 +2064,8 @@ var dxChart = {
         /**
         * @name dxchartoptions_valueaxis_type
         * @publicName type
-        * @type string
+        * @type Enums.AxisScaleType
         * @default undefined
-        * @acceptValues 'discrete' | 'continuous' | 'logarithmic'
         */
         type: undefined,
         /**
@@ -2111,9 +2078,8 @@ var dxChart = {
         /**
         * @name dxchartoptions_valueaxis_valuetype
         * @publicName valueType
-        * @type string
+        * @type Enums.ChartDataType
         * @default undefined
-        * @acceptValues 'numeric' | 'datetime' | 'string'
         */
         valueType: undefined,
         /**
@@ -2141,9 +2107,8 @@ var dxChart = {
         /**
         * @name dxchartoptions_tooltip_location
         * @publicName location
-        * @type string
+        * @type Enums.ChartTooltipLocation
         * @default 'center'
-        * @acceptValues 'center' | 'edge'
         * @propertyOf dxChartSeriesTypes_BarSeries,dxChartSeriesTypes_StackedBarSeries,dxChartSeriesTypes_FullStackedBarSeries,dxChartSeriesTypes_BubbleSeries,dxChartSeriesTypes_StockSeries,dxChartSeriesTypes_CandlestickSeries
         */
         location: 'center'
@@ -2224,9 +2189,8 @@ var dxChart = {
         /**
         * @name dxchartoptions_series_type
         * @publicName type
-        * @type string
+        * @type Enums.SeriesType
         * @default 'line'
-        * @acceptValues 'line' | 'stackedline' | 'fullstackedline' | 'area' | 'stackedarea' | 'fullstackedarea' | 'bar' | 'stackedbar' | 'fullstackedbar' | 'spline' | 'splinearea' | 'scatter' | 'candlestick' | 'stock' | 'rangearea' | 'rangebar' | 'stepline' | 'steparea' | 'bubble' | 'fullstackedspline' | 'stackedspline' | 'stackedsplinearea' | 'fullstackedsplinearea'
         */
         type: 'line'
     }],
@@ -2297,9 +2261,8 @@ var dxPieChart = {
         /**
         * @name dxpiechartoptions_legend_hovermode
         * @publicName hoverMode
-        * @type string
+        * @type Enums.PieChartLegendHoverMode
         * @default 'allArgumentPoints'
-        * @acceptValues 'allArgumentPoints' | 'none'
         */
         hoverMode: 'allArgumentPoints',
         /**
@@ -2329,9 +2292,8 @@ var dxPieChart = {
     /**
     * @name dxpiechartoptions_resolvelabeloverlapping
     * @publicName resolveLabelOverlapping
-    * @type string
+    * @type Enums.PieChartResolveLabelOverlapping
     * @default "none"
-    * @acceptValues "none" | "hide" | "shift"
     */
     resolveLabelOverlapping: "none",
     /**
@@ -2367,9 +2329,8 @@ var dxPieChart = {
         /**
         * @name dxpiechartoptions_series_type
         * @publicName type
-        * @type string
+        * @type Enums.PieChartType
         * @default 'pie'
-        * @acceptValues 'pie' | 'doughnut' | 'donut'
         * @deprecated dxpiechartoptions_type
         */
         type: 'pie'
@@ -2377,9 +2338,8 @@ var dxPieChart = {
     /**
     * @name dxpiechartoptions_type
     * @publicName type
-    * @type string
+    * @type Enums.PieChartType
     * @default 'pie'
-    * @acceptValues 'pie' | 'doughnut' | 'donut'
     */
     type: 'pie',
     /**
@@ -2394,9 +2354,8 @@ var dxPieChart = {
         /**
         * @name dxpiechartoptions_commonseriessettings_type
         * @publicName type
-        * @type string
+        * @type Enums.PieChartType
         * @default 'pie'
-        * @acceptValues 'pie' | 'doughnut' | 'donut'
         * @deprecated dxpiechartoptions_type
         */
         type: 'pie'
@@ -2425,9 +2384,8 @@ var dxPieChart = {
     /**
    * @name dxpiechartoptions_segmentsdirection
    * @publicName segmentsDirection
-   * @type string
+   * @type Enums.PieChartSegmentsDirection
    * @default 'clockwise'
-   * @acceptValues 'clockwise' | 'anticlockwise'
    */
     segmentsDirection: 'clockwise',
     /**
@@ -2510,16 +2468,14 @@ var dxPolarChart = {
     /**
     * @name dxpolarchartoptions_resolvelabeloverlapping
     * @publicName resolveLabelOverlapping
-    * @type string
+    * @type Enums.PolarChartResolveLabelOverlapping
     * @default "none"
-    * @acceptValues "none" | "hide"
     */
     resolveLabelOverlapping: "none",
     /**
     * @name dxpolarchartoptions_seriesSelectionMode
     * @publicName seriesSelectionMode
-    * @type string
-    * @acceptValues 'single' | 'multiple'
+    * @type Enums.ChartElementSelectionMode
     * @default 'single'
     */
     seriesSelectionMode: 'single',
@@ -2590,9 +2546,8 @@ var dxPolarChart = {
         /**
         * @name dxpolarchartoptions_commonseriessettings_type
         * @publicName type
-        * @type string
+        * @type Enums.PolarChartSeriesType
         * @default 'scatter'
-        * @acceptValues 'line' | 'area' | 'bar' | 'stackedbar' | 'scatter'
         */
         type: 'scatter',
         /**
@@ -2706,9 +2661,8 @@ var dxPolarChart = {
         /**
         * @name dxpolarchartoptions_legend_hovermode
         * @publicName hoverMode
-        * @type string
+        * @type Enums.ChartLegendHoverMode
         * @default 'includePoints'
-        * @acceptValues 'includePoints' | 'excludePoints' | 'none'
         */
         hoverMode: 'includePoints'
     },
@@ -2728,9 +2682,8 @@ var dxPolarChart = {
         /**
         * @name dxpolarchartoptions_commonaxissettings_discreteaxisdivisionMode
         * @publicName discreteAxisDivisionMode
-        * @type string
+        * @type Enums.DiscreteAxisDivisionMode
         * @default 'betweenLabels'
-        * @acceptValues 'betweenLabels' | 'crossLabels'
         */
         discreteAxisDivisionMode: 'betweenLabels',
         /**
@@ -3059,9 +3012,8 @@ var dxPolarChart = {
             /**
             * @name dxpolarchartoptions_commonaxissettings_constantlinestyle_dashstyle
             * @publicName dashStyle
-            * @type string
+            * @type Enums.DashStyle
             * @default 'solid'
-            * @acceptValues 'solid'|'longDash'|'dash'|'dot'
             */
             dashStyle: 'solid',
             /**
@@ -3322,9 +3274,8 @@ var dxPolarChart = {
         /**
         * @name dxpolarchartoptions_argumentaxis_type
         * @publicName type
-        * @type string
+        * @type Enums.AxisScaleType
         * @default undefined
-        * @acceptValues 'discrete' | 'continuous' | 'logarithmic'
         */
         type: undefined,
         /**
@@ -3337,17 +3288,15 @@ var dxPolarChart = {
         /**
         * @name dxpolarchartoptions_argumentaxis_argumenttype
         * @publicName argumentType
-        * @type string
+        * @type Enums.ChartDataType
         * @default undefined
-        * @acceptValues 'numeric' | 'datetime' | 'string'
         */
         argumentType: undefined,
         /**
         * @name dxpolarchartoptions_argumentaxis_hovermode
         * @publicName hoverMode
-        * @type string
+        * @type Enums.ArgumentAxisHoverMode
         * @default 'none'
-        * @acceptValues 'none' | 'allArgumentPoints'
         */
         hoverMode: 'none'
     },
@@ -3553,9 +3502,8 @@ var dxPolarChart = {
         /**
         * @name dxpolarchartoptions_valueaxis_type
         * @publicName type
-        * @type string
+        * @type Enums.AxisScaleType
         * @default undefined
-        * @acceptValues 'discrete' | 'continuous' | 'logarithmic'
         */
         type: undefined,
         /**
@@ -3568,9 +3516,8 @@ var dxPolarChart = {
         /**
         * @name dxpolarchartoptions_valueaxis_valuetype
         * @publicName valueType
-        * @type string
+        * @type Enums.ChartDataType
         * @default undefined
-        * @acceptValues 'numeric' | 'datetime' | 'string'
         */
         valueType: undefined
     },
@@ -3641,9 +3588,8 @@ var dxPolarChart = {
         /**
         * @name dxpolarchartoptions_series_type
         * @publicName type
-        * @type string
+        * @type Enums.PolarChartSeriesType
         * @default 'scatter'
-        * @acceptValues 'line' | 'area' | 'bar' | 'stackedbar' | 'scatter'
         */
         type: 'scatter'
     }],
@@ -3695,8 +3641,7 @@ var BaseChart = {
     /**
     * @name basechartoptions_pointSelectionMode
     * @publicName pointSelectionMode
-    * @type string
-    * @acceptValues 'single' | 'multiple'
+    * @type Enums.ChartElementSelectionMode
     * @default 'single'
     */
     pointSelectionMode: 'single',
@@ -3723,9 +3668,8 @@ var BaseChart = {
         /**
         * @name basechartoptions_animation_easing
         * @publicName easing
-        * @type string
+        * @type Enums.VizAnimationEasing
         * @default 'easeOutCubic'
-        * @acceptValues 'easeOutCubic' | 'linear'
         */
         easing: 'easeOutCubic',
         /**
@@ -3832,41 +3776,36 @@ var BaseChart = {
         /**
         * @name basechartoptions_legend_verticalalignment
         * @publicName verticalAlignment
-        * @type string
+        * @type Enums.VerticalEdge
         * @default 'top'
-        * @acceptValues 'top' | 'bottom'
         */
         verticalAlignment: 'top',
         /**
         * @name basechartoptions_legend_horizontalalignment
         * @publicName horizontalAlignment
-        * @type string
+        * @type Enums.HorizontalAlignment
         * @default 'right'
-        * @acceptValues 'right' | 'center' | 'left'
         */
         horizontalAlignment: 'right',
         /**
         * @name basechartoptions_legend_orientation
         * @publicName orientation
-        * @type string
+        * @type Enums.Orientation
         * @default undefined
-        * @acceptValues 'vertical' | 'horizontal'
         */
         orientation: undefined,
         /**
         * @name basechartoptions_legend_itemtextposition
         * @publicName itemTextPosition
-        * @type string
+        * @type Enums.Position
         * @default undefined
-        * @acceptValues 'right' | 'left' | 'top' | 'bottom'
         */
         itemTextPosition: undefined,
         /**
         * @name basechartoptions_legend_itemsalignment
         * @publicName itemsAlignment
-        * @type string
+        * @type Enums.HorizontalAlignment
         * @default undefined
-        * @acceptValues 'right' | 'center' | 'left'
         */
         itemsAlignment: undefined,
         /**
@@ -4012,9 +3951,8 @@ var BaseChart = {
             /**
             * @name basechartoptions_legend_border_dashstyle
             * @publicName dashStyle
-            * @type string
+            * @type Enums.DashStyle
             * @default 'solid'
-            * @acceptValues 'solid'|'longDash'|'dash'|'dot'
             */
             dashStyle: 'solid'
         },

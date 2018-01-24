@@ -143,8 +143,7 @@ module.exports = {
                 /**
                  * @name GridBaseOptions_sorting_sortingMode
                  * @publicName mode
-                 * @type string
-                 * @acceptValues "none" | "single" | "multiple"
+                 * @type Enums.GridSortingMode
                  * @default "single"
                  */
                 mode: "single",

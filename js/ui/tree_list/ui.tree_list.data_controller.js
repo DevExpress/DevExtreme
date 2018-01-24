@@ -224,8 +224,7 @@ treeListCore.registerModule("data", {
             /**
             * @name dxTreeListOptions_dataStructure
             * @publicName dataStructure
-            * @type string
-            * @acceptValues "plain" | "tree"
+            * @type Enums.TreeListDataStructure
             * @default "plain"
             */
             dataStructure: "plain",

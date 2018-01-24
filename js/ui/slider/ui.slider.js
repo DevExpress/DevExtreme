@@ -177,8 +177,7 @@ var Slider = TrackBar.inherit({
                 /**
                 * @name dxSliderOptions_tooltip_position
                 * @publicName position
-                * @type string
-                * @acceptValues 'top'|'bottom'
+                * @type Enums.VerticalEdge
                 * @default 'top'
                 */
                 position: "top",
@@ -186,8 +185,7 @@ var Slider = TrackBar.inherit({
                 /**
                 * @name dxSliderOptions_tooltip_showMode
                 * @publicName showMode
-                * @type string
-                * @acceptValues 'onHover'|'always'
+                * @type Enums.SliderTooltipShowMode
                 * @default 'onHover'
                 */
                 showMode: "onHover"
@@ -210,8 +208,7 @@ var Slider = TrackBar.inherit({
                 /**
                 * @name dxSliderOptions_label_position
                 * @publicName position
-                * @type string
-                * @acceptValues 'top'|'bottom'
+                * @type Enums.VerticalEdge
                 * @default 'bottom'
                 */
                 position: "bottom",

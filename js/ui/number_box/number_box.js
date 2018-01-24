@@ -95,9 +95,8 @@ var NumberBox = TextEditor.inherit({
             /**
             * @name dxNumberBoxOptions_mode
             * @publicName mode
-            * @type string
+            * @type Enums.NumberBoxMode
             * @default "text"
-            * @acceptValues 'text'|'number'
             */
             mode: "text",
 

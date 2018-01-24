@@ -31,9 +31,8 @@ var TextBox = TextEditor.inherit({
             /**
             * @name dxTextBoxOptions_mode
             * @publicName mode
-            * @type string
+            * @type Enums.TextBoxMode
             * @default "text"
-            * @acceptValues 'text'|'email'|'search'|'tel'|'url'|'password'
             */
             mode: "text",
 

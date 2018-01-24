@@ -55,9 +55,8 @@ var SlideOutView = Widget.inherit({
             /**
             * @name dxSlideOutViewOptions_menuPosition
             * @publicName menuPosition
-            * @type string
+            * @type Enums.SlideOutMenuPosition
             * @default "normal"
-            * @acceptValues 'normal' | 'inverted'
             */
             menuPosition: "normal",
 

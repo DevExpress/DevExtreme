@@ -83,9 +83,8 @@ var RadioGroup = Editor.inherit({
             /**
             * @name dxRadioGroupOptions_layout
             * @publicName layout
-            * @type string
+            * @type Enums.Orientation
             * @default "vertical"
-            * @acceptValues 'vertical'|'horizontal'
             */
             layout: "vertical",
 

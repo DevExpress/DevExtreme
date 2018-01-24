@@ -332,9 +332,8 @@ var Lookup = DropDownList.inherit({
             /**
             * @name dxLookupOptions_pageLoadMode
             * @publicName pageLoadMode
-            * @type string
+            * @type Enums.ListPageLoadMode
             * @default "scrollBottom"
-            * @acceptValues 'scrollBottom'|'nextButton'
             */
             pageLoadMode: "scrollBottom",
 
@@ -525,7 +524,7 @@ var Lookup = DropDownList.inherit({
             /**
             * @name dxLookupOptions_applyValueMode
             * @publicName applyValueMode
-            * @type string
+            * @type Enums.EditorApplyValueMode
             * @hidden false
             * @inheritdoc
             */

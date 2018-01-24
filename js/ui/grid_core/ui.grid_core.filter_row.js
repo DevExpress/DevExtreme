@@ -700,8 +700,7 @@ module.exports = {
                 /**
                  * @name GridBaseOptions_filterRow_applyFilter
                  * @publicName applyFilter
-                 * @type string
-                 * @acceptValues "auto" | "onClick"
+                 * @type Enums.GridApplyFilterMode
                  * @default "auto"
                  */
                 applyFilter: "auto",

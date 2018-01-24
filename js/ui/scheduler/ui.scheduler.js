@@ -115,9 +115,8 @@ var Scheduler = Widget.inherit({
 
                 /**
                 * @pseudo FirstDayOfWeek
-                * @type number
+                * @type Enums.FirstDayOfWeek
                 * @default undefined
-                * @acceptValues 0|1|2|3|4|5|6
                 */
 
                 /**
@@ -197,9 +196,8 @@ var Scheduler = Widget.inherit({
                 /**
                 * @name dxSchedulerOptions_views_type
                 * @publicName type
-                * @type string
+                * @type Enums.SchedulerViewType
                 * @default undefined
-                * @acceptValues 'day'|'week'|'workWeek'|'month'|'timelineDay'|'timelineWeek'|'timelineWorkWeek'|'timelineMonth'|'agenda'
                 */
 
                 /**
@@ -278,9 +276,8 @@ var Scheduler = Widget.inherit({
                 /**
                 * @name dxSchedulerOptions_currentView
                 * @publicName currentView
-                * @type string
+                * @type Enums.SchedulerViewType
                 * @default "day"
-                * @acceptValues 'day'|'week'|'workWeek'|'month'|'timelineDay'|'timelineWeek'|'timelineWorkWeek'|'timelineMonth'|'agenda'
                 */
             currentView: "day", //TODO: should we calculate currentView if views array contains only one item, for example 'month'?
                 /**
@@ -517,9 +514,8 @@ var Scheduler = Widget.inherit({
                 /**
                 * @name dxSchedulerOptions_recurrenceEditMode
                 * @publicName recurrenceEditMode
-                * @type string
+                * @type Enums.SchedulerRecurrenceEditMode
                 * @default "dialog"
-                * @acceptValues 'dialog'|'series'|'occurrence'
                 */
             recurrenceEditMode: "dialog",
 

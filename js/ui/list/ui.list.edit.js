@@ -93,18 +93,16 @@ var ListEdit = ListBase.inherit({
             /**
             * @name dxListOptions_selectionMode
             * @publicName selectionMode
-            * @type string
+            * @type Enums.ListSelectionMode
             * @default 'none'
-            * @acceptValues 'none'|'multiple'|'single'|'all'
             */
             selectionMode: 'none',
 
             /**
              * @name dxListOptions_selectAllMode
              * @publicName selectAllMode
-             * @type string
+             * @type Enums.SelectAllMode
              * @default 'page'
-             * @acceptValues 'page'|'allPages'
              */
             selectAllMode: 'page',
 
@@ -149,9 +147,8 @@ var ListEdit = ListBase.inherit({
             /**
             * @name dxListOptions_menuMode
             * @publicName menuMode
-            * @type string
+            * @type Enums.ListMenuMode
             * @default 'context'
-            * @acceptValues 'context'|'slide'
             */
             menuMode: "context",
 
@@ -166,9 +163,8 @@ var ListEdit = ListBase.inherit({
             /**
             * @name dxListOptions_itemDeleteMode
             * @publicName itemDeleteMode
-            * @type string
+            * @type Enums.ListItemDeleteMode
              * @default 'static'
-            * @acceptValues 'static'|'toggle'|'slideButton'|'slideItem'|'swipe'|'context'
             */
             itemDeleteMode: "static",
 

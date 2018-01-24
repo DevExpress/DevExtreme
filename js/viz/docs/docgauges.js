@@ -22,9 +22,8 @@ var baseGauge = {
         /**
         * @name basegaugeoptions_title_position
         * @publicName position
-        * @type string
+        * @type Enums.GaugeTitlePosition
         * @default 'top-center'
-        * @acceptValues 'top-left' | 'top-center' | 'top-right' | 'bottom-left' | 'bottom-center' | 'bottom-right'
         * @deprecated BaseWidgetOptions_title_horizontalalignment
         */
         position: undefined
@@ -52,9 +51,8 @@ var baseGauge = {
         /**
         * @name basegaugeoptions_animation_easing
         * @publicName easing
-        * @type string
+        * @type Enums.VizAnimationEasing
         * @default 'easeOutCubic'
-        * @acceptValues 'easeOutCubic' | 'linear'
         */
         easing: 'easeOutCubic'
     },
@@ -668,9 +666,8 @@ var dxCircularGauge = {
         /**
         * @name dxcirculargaugeoptions_scale_orientation
         * @publicName orientation
-        * @type string
+        * @type Enums.CircularGaugeElementOrientation
         * @default 'outside'
-        * @acceptValues 'outside' | 'center' | 'inside'
         */
         orientation: 'outside',
         /**
@@ -689,24 +686,22 @@ var dxCircularGauge = {
             /**
             * @name dxcirculargaugeoptions_scale_label_hideFirstOrLast
             * @publicName hideFirstOrLast
-            * @type string
+            * @type Enums.GaugeOverlappingBehavior
             * @default 'last'
-            * @acceptValues 'last' | 'first'
             */
             hideFirstOrLast: "last",
             /**
             * @name dxcirculargaugeoptions_scale_label_overlappingBehavior
             * @publicName overlappingBehavior
-            * @type string|object
+            * @type Enums.ScaleLabelOverlappingBehavior|object
             * @inheritdoc
             */
             overlappingBehavior: {
                 /**
                 * @name dxcirculargaugeoptions_scale_label_overlappingBehavior_hideFirstOrLast
                 * @publicName hideFirstOrLast
-                * @type string
+                * @type Enums.GaugeOverlappingBehavior
                 * @default "last"
-                * @acceptValues 'last' | 'first'
                 * @deprecated dxcirculargaugeoptions_scale_label_hideFirstOrLast
                 */
                 hideFirstOrLast: "last"
@@ -729,9 +724,8 @@ var dxCircularGauge = {
         /**
         * @name dxcirculargaugeoptions_rangeContainer_orientation
         * @publicName orientation
-        * @type string
+        * @type Enums.CircularGaugeElementOrientation
         * @default 'outside'
-        * @acceptValues 'outside' | 'center' | 'inside'
         */
         orientation: 'outside'
     },
@@ -784,9 +778,8 @@ var dxLinearGauge = {
         /**
         * @name dxlineargaugeoptions_geometry_orientation
         * @publicName orientation
-        * @type string
+        * @type Enums.Orientation
         * @default 'horizontal'
-        * @acceptValues 'horizontal' | 'vertical'
         */
         orientation: 'horizontal'
     },
@@ -799,17 +792,15 @@ var dxLinearGauge = {
         /**
         * @name dxlineargaugeoptions_scale_verticalOrientation
         * @publicName verticalOrientation
-        * @type string
+        * @type Enums.VerticalAlignment
         * @default 'bottom'
-        * @acceptValues 'top' | 'center' | 'bottom'
         */
         verticalOrientation: 'bottom',
         /**
         * @name dxlineargaugeoptions_scale_horizontalOrientation
         * @publicName horizontalOrientation
-        * @type string
+        * @type Enums.HorizontalAlignment
         * @default 'right'
-        * @acceptValues 'left' | 'center' | 'right'
         */
         horizontalOrientation: 'right',
         /**
@@ -828,16 +819,15 @@ var dxLinearGauge = {
             /**
             * @name dxlineargaugeoptions_scale_label_overlappingBehavior
             * @publicName overlappingBehavior
-            * @type string|object
+            * @type Enums.ScaleLabelOverlappingBehavior|object
             * @inheritdoc
             */
             overlappingBehavior: {
                 /**
                 * @name dxlineargaugeoptions_scale_label_overlappingBehavior_hideFirstOrLast
                 * @publicName hideFirstOrLast
-                * @type string
+                * @type Enums.GaugeOverlappingBehavior
                 * @default "last"
-                * @acceptValues 'last' | 'first'
                 * @deprecated
                 */
                 hideFirstOrLast: "last"
@@ -875,17 +865,15 @@ var dxLinearGauge = {
         /**
         * @name dxlineargaugeoptions_rangeContainer_verticalOrientation
         * @publicName verticalOrientation
-        * @type string
+        * @type Enums.VerticalAlignment
         * @default 'bottom'
-        * @acceptValues 'top' | 'center' | 'bottom'
         */
         verticalOrientation: 'bottom',
         /**
         * @name dxlineargaugeoptions_rangeContainer_horizontalOrientation
         * @publicName horizontalOrientation
-        * @type string
+        * @type Enums.HorizontalAlignment
         * @default 'right'
-        * @acceptValues 'left' | 'center' | 'right'
         */
         horizontalOrientation: 'right'
     },
@@ -945,9 +933,8 @@ var dxBarGauge = {
         /**
         * @name dxbargaugeoptions_title_position
         * @publicName position
-        * @type string
+        * @type Enums.GaugeTitlePosition
         * @default 'top-center'
-        * @acceptValues 'top-left' | 'top-center' | 'top-right' | 'bottom-left' | 'bottom-center' | 'bottom-right'
         * @deprecated BaseWidgetOptions_title_horizontalalignment
         */
         position: undefined

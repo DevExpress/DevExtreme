@@ -216,19 +216,17 @@ var FileUploader = Editor.inherit({
             /**
             * @name dxFileUploaderOptions_uploadMode
             * @publicName uploadMode
-            * @type string
+            * @type Enums.FileUploadMode
             * @default "instantly"
             * @default "useForm" @for Internet_Explorer_9_and_10
-            * @acceptValues "instantly"|"useButtons"|"useForm"
             */
             uploadMode: "instantly",
 
             /**
             * @name dxFileUploaderOptions_uploadMethod
             * @publicName uploadMethod
-            * @type string
+            * @type Enums.UploadHttpMethod
             * @default "POST"
-            * @acceptValues "POST"|"PUT"
             */
             uploadMethod: "POST",
 
