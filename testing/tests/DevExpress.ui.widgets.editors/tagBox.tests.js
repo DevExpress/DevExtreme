@@ -2592,7 +2592,6 @@ QUnit.test("select all is not applied when filterable items are selected", funct
             searchTimeout: 0,
             items: items,
             searchEnabled: true,
-            opened: true,
             showSelectionControls: true,
             selectAllMode: "allPages"
         }),
@@ -2600,8 +2599,8 @@ QUnit.test("select all is not applied when filterable items are selected", funct
         $input = $element.find("input");
 
     keyboardMock($input).type("1");
-
-    $(".dx-tagbox-popup-wrapper .dx-list-select-checkbox.dx-checkbox").trigger("dxclick");
+    $input.trigger("focusout");
+    $(".dx-list-item").trigger("dxclick");
 
     assert.equal(instance.option("selectedItems").length, 1, "selected items count");
 });
