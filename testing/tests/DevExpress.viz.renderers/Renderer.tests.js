@@ -18,36 +18,6 @@ function getMockElement() {
     };
 }
 
-function checkScaleBreakPattern(assert, linePattern, renderer, parameters) {
-    assert.ok(linePattern instanceof renderers.SvgElement);
-    assert.deepEqual(linePattern.ctorArgs, [renderer, "pattern", undefined]);
-    assert.equal(linePattern.id, "DevExpressId", "id");
-    assert.equal(linePattern.size, parameters.size, "size");
-    assert.deepEqual(linePattern.attr.lastCall.args[0], { height: parameters.height, width: parameters.width, id: "DevExpressId" }, "pattern's attr params");
-    assert.equal(linePattern.append.lastCall.args[0], renderers.SvgElement.getCall(1).returnValue, "pattern is appended to defs");
-
-    assert.ok(linePattern.elements[0], "middle line");
-    assert.ok(linePattern.elements[0] instanceof renderers.PathSvgElement);
-    assert.deepEqual(linePattern.elements[0].ctorArgs, [renderer, parameters.type]);
-    assert.deepEqual(linePattern.elements[0].stub("attr").firstCall.args[0].points, parameters.points1, "points of middle line");
-    assert.deepEqual(linePattern.elements[0].stub("attr").lastCall.args[0], { stroke: "white", "stroke-width": 10, "stroke-linecap": "round" }, "attr of middle line");
-    assert.equal(linePattern.elements[0].stub("append").firstCall.args[0], linePattern, "middle line is appended to pattern");
-
-    assert.ok(linePattern.elements[1], "first border line");
-    assert.ok(linePattern.elements[1] instanceof renderers.PathSvgElement);
-    assert.deepEqual(linePattern.elements[1].ctorArgs, [renderer, parameters.type]);
-    assert.deepEqual(linePattern.elements[1].stub("attr").firstCall.args[0].points, parameters.points2, "points of the first border line");
-    assert.deepEqual(linePattern.elements[1].stub("attr").lastCall.args[0], { sharp: parameters.sharp, stroke: "black", "stroke-width": 1 }, "attr of the first border line");
-    assert.equal(linePattern.elements[1].stub("append").firstCall.args[0], linePattern, "first border line is appended to pattern");
-
-    assert.ok(linePattern.elements[2], "second border line");
-    assert.ok(linePattern.elements[2] instanceof renderers.PathSvgElement);
-    assert.deepEqual(linePattern.elements[2].ctorArgs, [renderer, parameters.type]);
-    assert.deepEqual(linePattern.elements[2].stub("attr").firstCall.args[0].points, parameters.points3, "points of the second border line");
-    assert.deepEqual(linePattern.elements[2].stub("attr").lastCall.args[0], { sharp: parameters.sharp, stroke: "black", "stroke-width": 1 }, "attr of the second border line");
-    assert.equal(linePattern.elements[2].stub("append").firstCall.args[0], linePattern, "second border line is appended to pattern");
-}
-
 renderers.DEBUG_set_getNextDefsSvgId(function() { return "DevExpressId"; });
 
 QUnit.testDone(function() {
@@ -754,100 +724,6 @@ QUnit.test('clipRect disposing', function(assert) {
 
     //assert
     assert.ok(clipRect.clipPath.stub("dispose").called);
-});
-
-QUnit.test("Scale break. Straight line", function(assert) {
-    var linePattern = this.renderer.linePattern({
-        color: "white",
-        borderColor: "black",
-        size: 10,
-        canvasLength: 600,
-        isHorizontal: false,
-        isWaved: false
-    });
-
-    checkScaleBreakPattern(assert, linePattern, this.renderer, {
-        size: 12,
-        height: 1,
-        width: 10 / 600,
-        points1: [0, 5, 10, 5],
-        points2: [0, 0, 10, 0],
-        points3: [0, 10, 10, 10],
-        sharp: 'v',
-        type: 'line'
-    });
-});
-
-QUnit.test("Scale break. Waved line", function(assert) {
-    var linePattern = this.renderer.linePattern({
-        color: "white",
-        borderColor: "black",
-        size: 10,
-        canvasLength: 600,
-        isHorizontal: false,
-        isWaved: true
-    });
-
-    checkScaleBreakPattern(assert, linePattern, this.renderer, {
-        size: 16,
-        height: 1,
-        width: 24 / 600,
-        points1: [0, 7, 6, 5, 6, 5, 12, 7, 18, 9, 18, 9, 24, 7],
-        points2: [0, 2, 6, 0, 6, 0, 12, 2, 18, 4, 18, 4, 24, 2],
-        points3: [0, 12, 6, 10, 6, 10, 12, 12, 18, 14, 18, 14, 24, 12],
-        sharp: undefined,
-        type: 'bezier'
-    });
-});
-
-QUnit.test("Vertical scale break. Straigh line", function(assert) {
-    var linePattern = this.renderer.linePattern({
-        color: "white",
-        borderColor: "black",
-        size: 10,
-        canvasLength: 600,
-        isHorizontal: true,
-        isWaved: false
-    });
-
-    checkScaleBreakPattern(assert, linePattern, this.renderer, {
-        size: 12,
-        height: 10 / 600,
-        width: 1,
-        points1: [0, 5, 10, 5],
-        points2: [0, 0, 10, 0],
-        points3: [0, 10, 10, 10],
-        sharp: 'h',
-        type: 'line'
-    });
-    assert.deepEqual(linePattern.elements[0].stub("rotate").lastCall.args, [90, 5, 5]);
-    assert.deepEqual(linePattern.elements[1].stub("rotate").lastCall.args, [90, 5, 5]);
-    assert.deepEqual(linePattern.elements[2].stub("rotate").lastCall.args, [90, 5, 5]);
-});
-
-QUnit.test("Vertical scale break. Waved line", function(assert) {
-    var linePattern = this.renderer.linePattern({
-        color: "white",
-        borderColor: "black",
-        size: 10,
-        canvasLength: 600,
-        isHorizontal: true,
-        isWaved: true
-    });
-
-    checkScaleBreakPattern(assert, linePattern, this.renderer, {
-        size: 16,
-        height: 24 / 600,
-        width: 1,
-        points1: [0, 7, 6, 5, 6, 5, 12, 7, 18, 9, 18, 9, 24, 7],
-        points2: [0, 2, 6, 0, 6, 0, 12, 2, 18, 4, 18, 4, 24, 2],
-        points3: [0, 12, 6, 10, 6, 10, 12, 12, 18, 14, 18, 14, 24, 12],
-        sharp: undefined,
-        type: 'bezier'
-    });
-    assert.deepEqual(linePattern.elements[0].stub("rotate").lastCall.args, [90, 7, 7]);
-    assert.deepEqual(linePattern.elements[1].stub("rotate").lastCall.args, [90, 7, 7]);
-    assert.deepEqual(linePattern.elements[2].stub("rotate").lastCall.args, [90, 7, 7]);
 });
 
 QUnit.test('shadowFilter with params', function(assert) {
