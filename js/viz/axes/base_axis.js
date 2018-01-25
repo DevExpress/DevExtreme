@@ -869,7 +869,6 @@ Axis.prototype = {
         that._axesContainerGroup = that._stripsGroup = that._constantLinesGroup = null;
 
         that._scaleBreaksGroup = null;
-        that._scaleBreakPattern && that._scaleBreakPattern.dispose();
 
         that._renderer = that._options = that._textOptions = that._textFontStyles = null;
         that._translator = null;
