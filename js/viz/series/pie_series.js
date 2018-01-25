@@ -123,16 +123,6 @@ exports.pie = _extend({}, barSeries, {
         return this._rangeData;
     },
 
-    _getArrangeTotal: function(points) {
-        var total = 0;
-        _each(points, function(_, point) {
-            if(point.isVisible()) {
-                total += point.initialValue;
-            }
-        });
-        return total;
-    },
-
     _createPointStyles: function(pointOptions, data) {
         var that = this,
             mainColor = pointOptions.color || that._getMainColor(data);
@@ -158,10 +148,10 @@ exports.pie = _extend({}, barSeries, {
 
         _each(points, function(_, point) {
             if(point.isVisible()) {
-                if(point.initialValue < minSegmentSize * total / 360) {
+                if(point.normalInitialValue < minSegmentSize * total / 360) {
                     totalMinSegmentSize += minSegmentSize;
                 } else {
-                    totalNotMinValues += point.initialValue;
+                    totalNotMinValues += point.normalInitialValue;
                 }
             }
         });
@@ -184,7 +174,7 @@ exports.pie = _extend({}, barSeries, {
         }
 
         _each(isClockWise ? points : points.concat([]).reverse(), function(_, point) {
-            var val = point.isVisible() ? zeroTotalCorrection || point.initialValue : 0,
+            var val = point.isVisible() ? zeroTotalCorrection || point.normalInitialValue : 0,
                 updatedZeroValue;
 
             if(minSegmentSize && point.isVisible() && val < minShownValue) {
@@ -213,7 +203,8 @@ exports.pie = _extend({}, barSeries, {
             isAllPointsNegative = true,
             points,
             i = 0,
-            len = originalPoints.length;
+            len = originalPoints.length,
+            maxValue;
 
         while(i < len && isAllPointsNegative) {
             isAllPointsNegative = originalPoints[i].value <= 0;
@@ -229,7 +220,16 @@ exports.pie = _extend({}, barSeries, {
             }
         });
 
-        total = that._getArrangeTotal(points);
+        maxValue = points.reduce(function(max, p) {
+            return _max(max, Math.abs(p.initialValue));
+        }, 0);
+        points.forEach(function(p) {
+            p.normalInitialValue = p.initialValue / (maxValue !== 0 ? maxValue : 1);
+        });
+
+        total = points.reduce(function(total, point) {
+            return total + (point.isVisible() ? point.normalInitialValue : 0);
+        }, 0);
         if(minSegmentSize) {
             minShownValue = this._getArrangeMinShownValue(points, total);
         }

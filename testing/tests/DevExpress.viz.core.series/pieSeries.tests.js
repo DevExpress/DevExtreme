@@ -792,14 +792,14 @@ var checkTwoGroups = function(assert, series) {
         //assert
         var points = series.getPoints();
         assert.strictEqual(points.length, 4, "Every point should be corrected");
-        assert.strictEqual(points[0].value, data[0].val);
         assert.strictEqual(points[0].minValue, 0);
-        assert.strictEqual(points[1].value, data[0].val + data[1].val);
-        assert.strictEqual(points[1].minValue, data[0].val);
-        assert.strictEqual(points[2].value, data[0].val + data[1].val + data[2].val);
-        assert.strictEqual(points[2].minValue, data[0].val + data[1].val);
-        assert.strictEqual(points[3].value, data[0].val + data[1].val + data[2].val + data[3].val);
-        assert.strictEqual(points[3].minValue, data[0].val + data[1].val + data[2].val);
+        assert.strictEqual(points[0].value, 0.25);
+        assert.strictEqual(points[1].minValue, 0.25);
+        assert.strictEqual(points[1].value, 0.75);
+        assert.strictEqual(points[2].minValue, 0.75);
+        assert.strictEqual(points[2].value, 1.5);
+        assert.strictEqual(points[3].minValue, 1.5);
+        assert.strictEqual(points[3].value, 2.5);
         assert.equal(series.getRangeData().val.max, points[3].value);
     });
 
@@ -823,14 +823,14 @@ var checkTwoGroups = function(assert, series) {
         //assert
         var points = series.getPoints();
         assert.strictEqual(points.length, 4, "Every point should be corrected");
-        assert.strictEqual(points[0].value, data[0].val);
         assert.strictEqual(points[0].minValue, 0);
-        assert.strictEqual(points[1].value, data[0].val + data[1].val);
-        assert.strictEqual(points[1].minValue, data[0].val);
-        assert.strictEqual(points[2].value, data[0].val + data[1].val + data[2].val);
-        assert.strictEqual(points[2].minValue, data[0].val + data[1].val);
-        assert.strictEqual(points[3].value, data[0].val + data[1].val + data[2].val + data[3].val);
-        assert.strictEqual(points[3].minValue, data[0].val + data[1].val + data[2].val);
+        assert.strictEqual(points[0].value, -0.25);
+        assert.strictEqual(points[1].minValue, -0.25);
+        assert.strictEqual(points[1].value, -0.75);
+        assert.strictEqual(points[2].minValue, -0.75);
+        assert.strictEqual(points[2].value, -1.5);
+        assert.strictEqual(points[3].minValue, -1.5);
+        assert.strictEqual(points[3].value, -2.5);
         assert.equal(series.getRangeData().val.max, points[3].value);
     });
 
@@ -854,14 +854,14 @@ var checkTwoGroups = function(assert, series) {
         //assert
         var points = series.getPoints();
         assert.strictEqual(points.length, 4, "Every point should be corrected");
-        assert.strictEqual(points[0].value, data[0].val);
         assert.strictEqual(points[0].minValue, 0);
-        assert.strictEqual(points[1].value, data[0].val + data[1].val);
-        assert.strictEqual(points[1].minValue, data[0].val);
-        assert.strictEqual(points[2].value, data[0].val + data[1].val + data[2].val);
-        assert.strictEqual(points[2].minValue, data[0].val + data[1].val);
-        assert.strictEqual(points[3].value, data[0].val + data[1].val + data[2].val + data[3].val);
-        assert.strictEqual(points[3].minValue, data[0].val + data[1].val + data[2].val);
+        assert.strictEqual(points[0].value, 0.25);
+        assert.strictEqual(points[1].minValue, 0.25);
+        assert.strictEqual(points[1].value, 0.75);
+        assert.strictEqual(points[2].minValue, 0.75);
+        assert.strictEqual(points[2].value, 1.5);
+        assert.strictEqual(points[3].minValue, 1.5);
+        assert.strictEqual(points[3].value, 2.5);
     });
 
     QUnit.test("All defaults. arrange after point visibility changed", function(assert) {
@@ -888,16 +888,16 @@ var checkTwoGroups = function(assert, series) {
         //act
         series.arrangePoints(series.getVisiblePoints());
         //assert
-        assert.strictEqual(points[2].value, data[0].val + data[1].val + data[2].val);
-        assert.strictEqual(points[2].minValue, data[0].val + data[1].val);
+        assert.strictEqual(points[2].value, 1.5);
+        assert.strictEqual(points[2].minValue, 0.75);
 
         assert.strictEqual(points.length, 4, "Every point should be corrected");
-        assert.strictEqual(points[0].value, data[0].val);
         assert.strictEqual(points[0].minValue, 0);
-        assert.strictEqual(points[1].value, data[0].val + data[1].val);
-        assert.strictEqual(points[1].minValue, data[0].val);
-        assert.strictEqual(points[3].value, data[0].val + data[1].val + data[3].val);
-        assert.strictEqual(points[3].minValue, data[0].val + data[1].val);
+        assert.strictEqual(points[0].value, 0.25);
+        assert.strictEqual(points[1].minValue, 0.25);
+        assert.strictEqual(points[1].value, 0.75);
+        assert.strictEqual(points[3].minValue, 0.75);
+        assert.strictEqual(points[3].value, 1.75);
 
         assert.deepEqual(series.getRangeData(), { val: { min: 0, max: points[3].value } });
     });
@@ -910,7 +910,7 @@ var checkTwoGroups = function(assert, series) {
                 { arg: 4, val: 20 },
                 { arg: 5, val: 40 }],
             series = createSeries({ type: seriesType, minSegmentSize: 2 });
-        var minShownValue = 180 / 358;
+        var minShownValue = 180 / 40 / 358;
         series.updateData(data);
         //act
         series.arrangePoints();
@@ -918,16 +918,16 @@ var checkTwoGroups = function(assert, series) {
         var points = series.getPoints();
         assert.ok(points);
         assert.strictEqual(points.length, 5);
-        assert.strictEqual(points[0].value, data[0].val);
         assert.strictEqual(points[0].minValue, 0);
-        assert.strictEqual(points[1].value, data[0].val + data[1].val);
-        assert.strictEqual(points[1].minValue, data[0].val);
-        assert.strictEqual(points[2].value, data[0].val + data[1].val + minShownValue);
-        assert.strictEqual(points[2].minValue, data[0].val + data[1].val);
-        assert.strictEqual(points[3].value, data[0].val + data[1].val + data[3].val + minShownValue);
-        assert.strictEqual(points[3].minValue, data[0].val + data[1].val + minShownValue);
-        assert.equal(points[4].value, data[0].val + data[1].val + data[3].val + data[4].val + minShownValue);
-        assert.strictEqual(points[4].minValue, data[0].val + data[1].val + data[3].val + minShownValue);
+        assert.strictEqual(points[0].value, 0.25);
+        assert.strictEqual(points[1].minValue, 0.25);
+        assert.strictEqual(points[1].value, 0.75);
+        assert.strictEqual(points[2].minValue, 0.75);
+        assert.strictEqual(points[2].value, 0.75 + minShownValue);
+        assert.strictEqual(points[3].minValue, 0.75 + minShownValue);
+        assert.strictEqual(points[3].value, 1.25 + minShownValue);
+        assert.strictEqual(points[4].minValue, 1.25 + minShownValue);
+        assert.strictEqual(points[4].value, 2.25 + minShownValue);
 
         assert.equal(series.getRangeData().val.max, points[4].value);
     });
@@ -967,7 +967,7 @@ var checkTwoGroups = function(assert, series) {
                 { arg: 4, val: 20 },
                 { arg: 5, val: 40 }],
             series = createSeries({ type: seriesType, minSegmentSize: 2 });
-        var minShownValue = 140 / 358;
+        var minShownValue = 140 / 40 / 358;
         series.updateData(data);
         series._points[1].isVisible = function() {
             return false;
@@ -978,14 +978,14 @@ var checkTwoGroups = function(assert, series) {
         var points = series.getPoints();
         assert.ok(points);
         assert.strictEqual(points.length, 5);
-        assert.strictEqual(points[0].value, data[0].val);
         assert.strictEqual(points[0].minValue, 0);
-        assert.strictEqual(points[2].value, data[0].val + minShownValue);
-        assert.strictEqual(points[2].minValue, data[0].val);
-        assert.strictEqual(points[3].value, data[0].val + data[3].val + minShownValue);
-        assert.strictEqual(points[3].minValue, data[0].val + minShownValue);
-        assert.equal(points[4].value, data[0].val + data[3].val + data[4].val + minShownValue);
-        assert.strictEqual(points[4].minValue, data[0].val + data[3].val + minShownValue);
+        assert.strictEqual(points[0].value, 0.25);
+        assert.strictEqual(points[2].minValue, 0.25);
+        assert.strictEqual(points[2].value, 0.25 + minShownValue);
+        assert.strictEqual(points[3].minValue, 0.25 + minShownValue);
+        assert.strictEqual(points[3].value, 0.75 + minShownValue);
+        assert.strictEqual(points[4].minValue, 0.75 + minShownValue);
+        assert.strictEqual(points[4].value, 1.75 + minShownValue);
 
         assert.equal(series.getRangeData().val.max, points[4].value);
     });
@@ -1006,16 +1006,16 @@ var checkTwoGroups = function(assert, series) {
         //assert
         var points = series.getPoints();
         assert.strictEqual(points.length, 5);
-        assert.strictEqual(points[0].value, 1);
         assert.strictEqual(points[0].minValue, 0);
-        assert.strictEqual(points[1].value, 1);
+        assert.strictEqual(points[0].value, 1);
         assert.strictEqual(points[1].minValue, 0);
-        assert.strictEqual(points[2].value, 2);
+        assert.strictEqual(points[1].value, 1);
         assert.strictEqual(points[2].minValue, 1);
-        assert.strictEqual(points[3].value, 3);
+        assert.strictEqual(points[2].value, 2);
         assert.strictEqual(points[3].minValue, 2);
-        assert.strictEqual(points[4].value, 4);
+        assert.strictEqual(points[3].value, 3);
         assert.strictEqual(points[4].minValue, 3);
+        assert.strictEqual(points[4].value, 4);
     });
 
     QUnit.test("All points with zero value", function(assert) {
@@ -1034,6 +1034,16 @@ var checkTwoGroups = function(assert, series) {
         var points = series.getPoints();
         assert.ok(points);
         assert.strictEqual(points.length, 5, "All points should be showed");
+        assert.strictEqual(points[0].minValue, 0);
+        assert.strictEqual(points[0].value, 1);
+        assert.strictEqual(points[1].minValue, 1);
+        assert.strictEqual(points[1].value, 2);
+        assert.strictEqual(points[2].minValue, 2);
+        assert.strictEqual(points[2].value, 3);
+        assert.strictEqual(points[3].minValue, 3);
+        assert.strictEqual(points[3].value, 4);
+        assert.strictEqual(points[4].minValue, 4);
+        assert.strictEqual(points[4].value, 5);
     });
 
     QUnit.test("All points with zero value, minSegmentSize is specify", function(assert) {
@@ -1051,16 +1061,16 @@ var checkTwoGroups = function(assert, series) {
         var points = series.getPoints();
         assert.ok(points);
         assert.strictEqual(points.length, 5);
-        assert.strictEqual(points[0].value, 1);
         assert.strictEqual(points[0].minValue, 0);
-        assert.strictEqual(points[1].value, 2);
+        assert.strictEqual(points[0].value, 1);
         assert.strictEqual(points[1].minValue, 1);
-        assert.strictEqual(points[2].value, 3);
+        assert.strictEqual(points[1].value, 2);
         assert.strictEqual(points[2].minValue, 2);
-        assert.strictEqual(points[3].value, 4);
+        assert.strictEqual(points[2].value, 3);
         assert.strictEqual(points[3].minValue, 3);
-        assert.strictEqual(points[4].value, 5);
+        assert.strictEqual(points[3].value, 4);
         assert.strictEqual(points[4].minValue, 4);
+        assert.strictEqual(points[4].value, 5);
         assert.equal(series.getRangeData().val.max, points[4].value);
     });
 
@@ -1080,16 +1090,16 @@ var checkTwoGroups = function(assert, series) {
         var points = series.getPoints();
         assert.ok(points);
         assert.strictEqual(points.length, 5);
-        assert.strictEqual(points[0].value, 1);
         assert.strictEqual(points[0].minValue, 0);
-        assert.strictEqual(points[1].value, 2);
+        assert.strictEqual(points[0].value, 1);
         assert.strictEqual(points[1].minValue, 1);
-        assert.strictEqual(points[2].value, 3);
+        assert.strictEqual(points[1].value, 2);
         assert.strictEqual(points[2].minValue, 2);
-        assert.strictEqual(points[3].value, 4);
+        assert.strictEqual(points[2].value, 3);
         assert.strictEqual(points[3].minValue, 3);
-        assert.strictEqual(points[4].value, 5);
+        assert.strictEqual(points[3].value, 4);
         assert.strictEqual(points[4].minValue, 4);
+        assert.strictEqual(points[4].value, 5);
         assert.equal(series.getRangeData().val.max, points[4].value);
     });
 
@@ -1097,7 +1107,7 @@ var checkTwoGroups = function(assert, series) {
         //arrange
         var data = [{ arg: 1, val: 300 },
                     { arg: 2, val: 400 },
-                    { arg: 3, val: 3 },
+                    { arg: 3, val: 2 },
                     { arg: 4, val: 500 },
                     { arg: 5, val: 200 }],
 
@@ -1109,16 +1119,16 @@ var checkTwoGroups = function(assert, series) {
         var points = series.getPoints();
         assert.ok(points);
         assert.strictEqual(points.length, 5);
-        assert.strictEqual(points[0].value, 300);
         assert.strictEqual(points[0].minValue, 0);
-        assert.strictEqual(points[1].value, 700);
-        assert.strictEqual(points[1].minValue, 300);
-        assert.strictEqual(points[2].value, 703);
-        assert.strictEqual(points[2].minValue, 700);
-        assert.strictEqual(points[3].value, 1203);
-        assert.strictEqual(points[3].minValue, 703);
-        assert.strictEqual(points[4].value, 1403);
-        assert.strictEqual(points[4].minValue, 1203);
+        assert.strictEqual(points[0].value, 0.6);
+        assert.strictEqual(points[1].minValue, 0.6);
+        assert.strictEqual(points[1].value, 1.4);
+        assert.strictEqual(points[2].minValue, 1.4);
+        assert.strictEqual(points[2].value, 1.404);
+        assert.strictEqual(points[3].minValue, 1.404);
+        assert.strictEqual(points[3].value, 2.404);
+        assert.strictEqual(points[4].minValue, 2.404);
+        assert.strictEqual(points[4].value, 2.804);
         assert.equal(series.getRangeData().val.max, points[4].value);
     });
 
@@ -1131,7 +1141,7 @@ var checkTwoGroups = function(assert, series) {
                     { arg: 5, val: 200 }],
             series = createSeries({ type: seriesType, minSegmentSize: 30 });
 
-        var minShownValue = 30 * 1400 / 330;
+        var minShownValue = 30 * 1400 / 500 / 330;
         series.updateData(data);
         //act
         series.arrangePoints();
@@ -1139,16 +1149,16 @@ var checkTwoGroups = function(assert, series) {
         var points = series.getPoints();
         assert.ok(points);
         assert.strictEqual(points.length, 5);
-        assert.strictEqual(points[0].value, data[0].val);
         assert.strictEqual(points[0].minValue, 0);
-        assert.strictEqual(points[1].value, data[0].val + data[1].val);
-        assert.strictEqual(points[1].minValue, data[0].val);
-        assert.strictEqual(points[2].value, data[0].val + data[1].val + minShownValue);
-        assert.strictEqual(points[2].minValue, data[0].val + data[1].val);
-        assert.strictEqual(points[3].value, data[0].val + data[1].val + data[3].val + minShownValue);
-        assert.strictEqual(points[3].minValue, data[0].val + data[1].val + minShownValue);
-        assert.strictEqual(points[4].value, data[0].val + data[1].val + data[3].val + data[4].val + minShownValue);
-        assert.strictEqual(points[4].minValue, data[0].val + data[1].val + data[3].val + minShownValue);
+        assert.strictEqual(points[0].value, 0.6);
+        assert.strictEqual(points[1].minValue, 0.6);
+        assert.strictEqual(points[1].value, 1.4);
+        assert.strictEqual(points[2].minValue, 1.4);
+        assert.strictEqual(points[2].value, 1.4 + minShownValue);
+        assert.strictEqual(points[3].minValue, 1.4 + minShownValue);
+        assert.strictEqual(points[3].value, 2.4 + minShownValue);
+        assert.strictEqual(points[4].minValue, 2.4 + minShownValue);
+        assert.strictEqual(points[4].value, 2.8 + minShownValue);
     });
 
     QUnit.test("minSegmentSize = 360", function(assert) {
@@ -1163,10 +1173,10 @@ var checkTwoGroups = function(assert, series) {
         var points = series.getPoints();
         assert.ok(points);
         assert.strictEqual(points.length, 2);
-        assert.strictEqual(points[0].value, data[0].val);
         assert.strictEqual(points[0].minValue, 0);
-        assert.strictEqual(points[1].value, data[0].val + 4);
-        assert.strictEqual(points[1].minValue, data[0].val);
+        assert.strictEqual(points[0].value, 1);
+        assert.strictEqual(points[1].minValue, 1);
+        assert.strictEqual(points[1].value, 1 + 4 / 300);
     });
 
     QUnit.test("minSegmentSize = 180", function(assert) {
@@ -1182,19 +1192,19 @@ var checkTwoGroups = function(assert, series) {
         var points = series.getPoints();
         assert.ok(points);
         assert.strictEqual(points.length, 3);
-        assert.strictEqual(points[0].value, 300);
         assert.strictEqual(points[0].minValue, 0);
-        assert.strictEqual(points[1].value, 700);
-        assert.strictEqual(points[1].minValue, 300);
-        assert.strictEqual(points[2].value, 703);
-        assert.strictEqual(points[2].minValue, 700);
+        assert.strictEqual(points[0].value, 0.75);
+        assert.strictEqual(points[1].minValue, 0.75);
+        assert.strictEqual(points[1].value, 1.75);
+        assert.strictEqual(points[2].minValue, 1.75);
+        assert.strictEqual(points[2].value, 1.7575);
     });
 
     QUnit.test("Remove negative points defaults", function(assert) {
         //arrange
         var data = [{ arg: 1, val: 10 },
                 { arg: 2, val: 20 },
-                { arg: 3, val: -20 },
+                { arg: 3, val: -50 },
                 { arg: 4, val: 30 },
                 { arg: 5, val: 40 }],
             series = createSeries({ type: seriesType, argumentField: "arg", valueField: "val", label: {} });
@@ -1207,15 +1217,15 @@ var checkTwoGroups = function(assert, series) {
         assert.ok(points);
         assert.strictEqual(points.length, 4, "One point should be removed");
 
-        assert.deepEqual(series.getPointsByArg(3), [], "no point with argument is -20");
-        assert.strictEqual(points[0].value, data[0].val);
+        assert.deepEqual(series.getPointsByArg(3), [], "no point with argument is -50");
         assert.strictEqual(points[0].minValue, 0);
-        assert.strictEqual(points[1].value, data[0].val + data[1].val);
-        assert.strictEqual(points[1].minValue, data[0].val);
-        assert.strictEqual(points[2].value, data[0].val + data[1].val + data[3].val);
-        assert.strictEqual(points[2].minValue, data[0].val + data[1].val);
-        assert.strictEqual(points[3].value, data[0].val + data[1].val + data[3].val + data[4].val);
-        assert.strictEqual(points[3].minValue, data[0].val + data[1].val + data[3].val);
+        assert.strictEqual(points[0].value, 0.25);
+        assert.strictEqual(points[1].minValue, 0.25);
+        assert.strictEqual(points[1].value, 0.75);
+        assert.strictEqual(points[2].minValue, 0.75);
+        assert.strictEqual(points[2].value, 1.5);
+        assert.strictEqual(points[3].minValue, 1.5);
+        assert.strictEqual(points[3].value, 2.5);
     });
 
     QUnit.test("Percents are filled", function(assert) {
@@ -1282,13 +1292,13 @@ var checkTwoGroups = function(assert, series) {
         //assert
         var points = series.getPoints();
         assert.strictEqual(points.length, 4, "Every point should be corrected");
-        assert.strictEqual(points[0].value, data[3].val + data[2].val + data[1].val + data[0].val);
-        assert.strictEqual(points[0].minValue, data[3].val + data[2].val + data[1].val);
-        assert.strictEqual(points[1].value, data[3].val + data[2].val + data[1].val);
-        assert.strictEqual(points[1].minValue, data[3].val + data[2].val);
-        assert.strictEqual(points[2].value, data[3].val + data[2].val);
-        assert.strictEqual(points[2].minValue, data[3].val);
-        assert.strictEqual(points[3].value, data[3].val);
+        assert.strictEqual(points[0].value, 2.5);
+        assert.strictEqual(points[0].minValue, 2.25);
+        assert.strictEqual(points[1].value, 2.25);
+        assert.strictEqual(points[1].minValue, 1.75);
+        assert.strictEqual(points[2].value, 1.75);
+        assert.strictEqual(points[2].minValue, 1);
+        assert.strictEqual(points[3].value, 1);
         assert.strictEqual(points[3].minValue, 0);
     });
 
