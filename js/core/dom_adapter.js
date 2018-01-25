@@ -112,6 +112,11 @@ var domAdapter = module.exports = {
         return document.location;
     },
 
+    getSelection: function() {
+        var document = domAdapter.getDocument();
+        return document.selection;
+    },
+
     getReadyState: function() {
         var document = domAdapter.getDocument();
         return document.readyState;

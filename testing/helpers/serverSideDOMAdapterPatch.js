@@ -20,6 +20,10 @@ exports.set = function() {
         }
     };
 
+    domAdapter.getSelection = function() {
+        return {};
+    };
+
     domAdapter.getBody = function() {
         return document.body;
     };
