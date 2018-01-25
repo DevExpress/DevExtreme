@@ -708,6 +708,17 @@ QUnit.test("Projection.zoom", function(assert) {
     });
 });
 
+QUnit.test("Apply transform on setOptions", function(assert) {
+    var context = this.context,
+        transform = { tag: "transform" };
+    this.projection.stub("getTransform").returns(transform);
+
+    this.layer.setOptions();
+
+    assert.deepEqual(this.projection.getTransform.lastCall.args, [], "projection is called");
+    assert.deepEqual(context.root.attr.lastCall.args, [transform], "root is transformed");
+});
+
 QUnit.test("getProxies", function(assert) {
     assert.deepEqual(this.layer.getProxies(), $.map(this.items, function(item) { return item.proxy; }));
 });
