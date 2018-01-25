@@ -345,16 +345,6 @@ var TreeViewBase = HierarchicalCollectionWidget.inherit({
             createChildren: null
 
             /**
-            * @name dxTreeViewOptions_onSelectionChanged
-            * @publicName onSelectionChanged
-            * @extends Action
-            * @type function(e)
-            * @type_function_param1 e:object
-            * @action
-            * @inheritdoc
-            */
-
-            /**
             * @name dxTreeViewOptions_parentIdExpr
             * @publicName parentIdExpr
             * @type string|function

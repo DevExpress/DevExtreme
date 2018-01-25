@@ -4140,7 +4140,7 @@ declare module DevExpress.ui {
         /** A handler for the itemSelectionChanged event. */
         onItemSelectionChanged?: ((e: { component?: DOMComponent, element?: DevExpress.core.dxElement, model?: any, node?: dxTreeViewNode, itemElement?: DevExpress.core.dxElement }) => any);
         /** A handler for the selectionChanged event. Raised after an item is selected or unselected. */
-        onSelectionChanged?: ((e: any) => any);
+        onSelectionChanged?: ((e: { component?: DOMComponent, element?: DevExpress.core.dxElement, model?: any }) => any);
         /** Specifies the name of the data source item field for holding the parent key of the corresponding node. */
         parentIdExpr?: string | Function;
         /** Specifies the parent ID value of the root item. */
