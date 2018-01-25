@@ -10,7 +10,8 @@ var $ = require("../../core/renderer"),
     toComparable = require("../../core/utils/data").toComparable,
     LoadPanel = require("../load_panel"),
     dataUtils = require("../../data/utils"),
-    formatHelper = require("../../format_helper");
+    formatHelper = require("../../format_helper"),
+    objectUtils = require("../../core/utils/object");
 
 var NO_DATA_CLASS = "nodata",
     DATE_INTERVAL_SELECTORS = {
@@ -568,6 +569,11 @@ module.exports = (function() {
                 columnIndex++;
             }
             return result;
+        },
+        createObjectWithChanges: function(target, changes) {
+            var emptyTarget = target ? Object.create(target) : { };
+            target = objectUtils.deepExtendArraySafe(emptyTarget, target, false, true);
+            return objectUtils.deepExtendArraySafe(target, changes, false, true);
         },
 
         isDateType: isDateType
