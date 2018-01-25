@@ -28,6 +28,10 @@ exports.set = function() {
         return 0;
     };
 
+    domAdapter.getSelection = function() {
+        return {};
+    };
+
     domAdapter.getBody = function() {
         return document.body;
     };

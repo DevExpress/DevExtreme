@@ -3,9 +3,7 @@
 var $ = require("../../core/renderer"),
     isDefined = require("../../core/utils/type").isDefined,
     browser = require("../../core/utils/browser"),
-    domAdapter = require("../../core/dom_adapter"),
-    windowUtils = require("../../core/utils/window"),
-    window = windowUtils.getWindow();
+    domAdapter = require("../../core/dom_adapter");
 
 var isFocusingOnCaretChange = browser.msie || browser.safari;
 
@@ -38,7 +36,7 @@ var isObsoleteBrowser = function(input) {
 };
 
 var getCaretForObsoleteBrowser = function(input) {
-    var range = window.document.selection.createRange();
+    var range = domAdapter.getSelection().createRange();
     var rangeCopy = range.duplicate();
 
     range.move('character', -input.value.length);
