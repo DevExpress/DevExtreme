@@ -959,6 +959,7 @@ MapLayer.prototype = _extend({
             that._update((options.type !== undefined && options.type !== that._context.str.type) ||
                 (options.elementType !== undefined && options.elementType !== that._context.str.elementType));
         }
+        that._transformCore();
     },
 
     _update: function(isContextChanged) {
