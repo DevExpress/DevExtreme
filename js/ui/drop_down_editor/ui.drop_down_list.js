@@ -10,7 +10,6 @@ var $ = require("../../core/renderer"),
     List = require("../list"),
     errors = require("../widget/ui.errors"),
     eventUtils = require("../../events/utils"),
-    pointerEvents = require("../../events/pointer"),
     devices = require("../../core/devices"),
     DataExpressionMixin = require("../editor/ui.data_expression"),
     messageLocalization = require("../../localization/message"),
@@ -538,7 +537,7 @@ var DropDownList = DropDownEditor.inherit({
     },
 
     _renderPreventBlur: function($target) {
-        var eventName = eventUtils.addNamespace(pointerEvents.down, "dxDropDownList");
+        var eventName = eventUtils.addNamespace("mousedown", "dxDropDownList");
 
         $target
             .off(eventName)
