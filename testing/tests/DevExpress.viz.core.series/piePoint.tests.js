@@ -223,23 +223,24 @@ QUnit.module("Values correction", {
             },
             label: { visible: false }
         });
+        this.point.normalInitialValue = 10 / 20;
     }
 });
 
 QUnit.test("Positive correction", function(assert) {
-    var correction = 10;
+    var correction = 10 / 20;
     this.point.correctValue(correction);
 
-    assert.strictEqual(this.point.value, 20);
+    assert.strictEqual(this.point.value, 1);
     assert.strictEqual(this.point.initialValue, 10);
-    assert.strictEqual(this.point.minValue, 10);
+    assert.strictEqual(this.point.minValue, 0.5);
 });
 
 QUnit.test("Zero Correction", function(assert) {
     var correction = 0;
     this.point.correctValue(correction);
 
-    assert.strictEqual(this.point.value, 10);
+    assert.strictEqual(this.point.value, 0.5);
     assert.strictEqual(this.point.initialValue, 10);
     assert.strictEqual(this.point.minValue, 0);
 });
