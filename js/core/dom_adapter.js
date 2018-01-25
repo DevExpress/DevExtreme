@@ -129,6 +129,10 @@ var domAdapter = module.exports = {
 
     listen: function(element, event, callback, useCapture) {
         element.addEventListener(event, callback, useCapture);
+
+        return function() {
+            element.removeEventListener(event, callback);
+        };
     },
 
     ready: function(callback) {
@@ -138,7 +142,8 @@ var domAdapter = module.exports = {
             return;
         }
 
-        var document = domAdapter.getWindow().document;
+        var document = domAdapter.getWindow().document,
+            removeContentLoadedListener;
 
         //NOTE: we can't use document.readyState === "interactive" because of ie9/ie10 support
         if(domAdapter.getReadyState() === "complete" || (domAdapter.getReadyState() !== "loading" && !domAdapter.getDocumentElement().doScroll)) {
@@ -150,9 +155,9 @@ var domAdapter = module.exports = {
             domAdapter._contentLoadedListening = true;
             var loadedCallback = function() {
                 domAdapter._readyCallbacks.fire();
-                document.removeEventListener("DOMContentLoaded", loadedCallback);
+                removeContentLoadedListener();
             };
-            domAdapter.listen(document, "DOMContentLoaded", loadedCallback);
+            removeContentLoadedListener = domAdapter.listen(document, "DOMContentLoaded", loadedCallback);
         }
     },
 

@@ -8,8 +8,14 @@ exports.set = function() {
         // Note: in Angular domAdapter it wiil be "window"
         if(element === domAdapter.getWindow()) {
             window.addEventListener(event, callback, useCapture);
+            return function() {
+                window.removeEventListener(event, callback);
+            };
         } else {
             element.addEventListener(event, callback, useCapture);
+            return function() {
+                element.removeEventListener(event, callback);
+            };
         }
     };
 
