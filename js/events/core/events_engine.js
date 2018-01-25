@@ -164,7 +164,7 @@ var getHandlersController = function(element, eventName) {
 
             if(shouldAddNativeListener) {
                 eventData.nativeHandler = getNativeHandler(eventName);
-                eventData.remover = domAdapter.listen(element, NATIVE_EVENTS_TO_SUBSCRIBE[eventName] || eventName, eventData.nativeHandler);
+                eventData.removeListen = domAdapter.listen(element, NATIVE_EVENTS_TO_SUBSCRIBE[eventName] || eventName, eventData.nativeHandler);
             }
 
             special.callMethod(eventName, "add", element, [ handleObject ]);
@@ -199,7 +199,7 @@ var getHandlersController = function(element, eventName) {
                 if(shouldRemoveNativeListener) {
                     special.callMethod(eventName, "teardown", element, [ namespaces, removedHandler ]);
                     if(eventData.nativeHandler) {
-                        eventData.remover();
+                        eventData.removeListen();
                     }
                     delete elementData[eventName];
                 }
