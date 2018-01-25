@@ -1,6 +1,7 @@
 "use strict";
 
-var window = require("../utils/window").getWindow(),
+var domAdapter = require("../dom_adapter"),
+    window = require("../utils/window").getWindow(),
     callOnce = require("../utils/call_once");
 var matches,
     setMatches = callOnce(function() {
@@ -11,7 +12,7 @@ var matches,
             window.Element.prototype.oMatchesSelector ||
             window.Element.prototype.webkitMatchesSelector ||
             function(selector) {
-                var items = (this.document || this.ownerDocument).querySelectorAll(selector);
+                var items = domAdapter.querySelectorAll(this.document || this.ownerDocument, selector);
 
                 for(var i = 0; i < items.length; i++) {
                     if(items[i] === this) {

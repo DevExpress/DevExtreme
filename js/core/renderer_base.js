@@ -34,7 +34,7 @@ var initRender = function(selector, context) {
             return this;
         }
 
-        [].push.apply(this, context.querySelectorAll(selector));
+        [].push.apply(this, domAdapter.querySelectorAll(context, selector));
         return this;
     } else if(selector.nodeType) {
         this[0] = selector;
@@ -517,10 +517,10 @@ initRender.prototype.find = function(selector) {
                 queryId = "[id='" + queryId + "'] ";
 
                 var querySelector = queryId + selector.replace(/([^\\])(\,)/g, "$1, " + queryId);
-                nodes.push.apply(nodes, element.querySelectorAll(querySelector));
+                nodes.push.apply(nodes, domAdapter.querySelectorAll(element, querySelector));
                 setAttributeValue(element, "id", elementId);
             } else if(element.nodeType === window.Node.DOCUMENT_NODE) {
-                nodes.push.apply(nodes, element.querySelectorAll(selector));
+                nodes.push.apply(nodes, domAdapter.querySelectorAll(element, selector));
             }
         }
     } else {

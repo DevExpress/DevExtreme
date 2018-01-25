@@ -103,6 +103,14 @@ var getCurrentScreenFactor = function(screenFactorCallback) {
     return screenFactorFunc(windowWidth);
 };
 
+var openWindow = function() {
+    if("open" in window) {
+        return window.open();
+    }
+
+    return null;
+};
+
 var beforeActivateExists = callOnce(function() {
     return getWindow().document["onbeforeactivate"] !== undefined;
 });
@@ -117,6 +125,7 @@ exports.resizeCallbacks = resizeCallbacks;
 exports.defaultScreenFactorFunc = defaultScreenFactorFunc;
 exports.getCurrentScreenFactor = getCurrentScreenFactor;
 exports.beforeActivateExists = beforeActivateExists;
+exports.openWindow = openWindow;
 exports.hasWindow = hasWindow;
 exports.getNavigator = getNavigator;
 

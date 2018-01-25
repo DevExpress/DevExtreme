@@ -3,6 +3,10 @@
 /* global document */
 
 var domAdapter = module.exports = {
+    querySelectorAll: function(element, selector) {
+        return element.querySelectorAll(selector);
+    },
+
     createElement: function(tagName, context) {
         context = context || domAdapter.getDocument();
         return context.createElement(tagName);
