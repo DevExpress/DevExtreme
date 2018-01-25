@@ -13,7 +13,6 @@ var $ = require("../../core/renderer"),
     List = require("../list"),
     errors = require("../widget/ui.errors"),
     eventUtils = require("../../events/utils"),
-    pointerEvents = require("../../events/pointer"),
     devices = require("../../core/devices"),
     DataExpressionMixin = require("../editor/ui.data_expression"),
     messageLocalization = require("../../localization/message"),
@@ -567,7 +566,7 @@ var DropDownList = DropDownEditor.inherit({
     },
 
     _renderPreventBlur: function($target) {
-        var eventName = eventUtils.addNamespace(pointerEvents.down, "dxDropDownList");
+        var eventName = eventUtils.addNamespace("mousedown", "dxDropDownList");
 
         eventsEngine.off($target, eventName);
         eventsEngine.on($target, eventName, function(e) {
@@ -664,6 +663,7 @@ var DropDownList = DropDownEditor.inherit({
     },
 
     _listItemClickAction: function(e) {
+        $("#log").append($("<p>").html("list onItemClick"));
         this._listItemClickHandler(e);
         this._itemClickAction(e);
     },
