@@ -41,16 +41,20 @@ exports.fileSaver = {
         transfer.download(href, window.cordova.file.externalRootDirectory + fileName, fileAlert, fileAlert);
     },*/
 
-    _linkDownloader: function(fileName, href, callback) {
+    _linkDownloader: function(fileName, href, clickHandler) {
         var exportLinkElement = document.createElement('a'),
-            attributes = { 'download': fileName, "href": href };
+            attributes = {
+                "download": fileName,
+                "href": href
+            };
 
-        ///#DEBUG
-        if(typeUtils.isDefined(callback)) attributes["onclick"] = callback;
-        ///#ENDDEBUG
-
+        eventsEngine.on($(exportLinkElement), "click", function() {
+            $(exportLinkElement).remove();
+            clickHandler && clickHandler.apply(this, arguments);
+        });
         document.body.appendChild(exportLinkElement);
         $(exportLinkElement).css({ "display": "none" }).text("load").attr(attributes)[0].click();
+
         return exportLinkElement;
     },
 
@@ -96,25 +100,34 @@ exports.fileSaver = {
     },
 
     _saveBlobAs: function(fileName, format, data, linkClick) {
-        this._blobSaved = false;
+        var that = this;
+
+        that._blobSaved = false;
 
         if(typeUtils.isDefined(navigator.msSaveOrOpenBlob)) {
             navigator.msSaveOrOpenBlob(data, fileName);
-            this._blobSaved = true;
+            that._blobSaved = true;
         } else if(typeUtils.isDefined(window.WinJS)) {
-            this._winJSBlobSave(data, fileName, format);
-            this._blobSaved = true;
+            that._winJSBlobSave(data, fileName, format);
+            that._blobSaved = true;
         } else {
             var URL = window.URL || window.webkitURL || window.mozURL || window.msURL || window.oURL;
-            linkClick = typeUtils.isDefined(linkClick) ? linkClick : function() {
-                var link = $('#dxExportLink');
-                URL.revokeObjectURL(link.attr('href'));
-                link.remove();
-                //exporter.blobSaved = true;
-            };
 
             if(typeUtils.isDefined(URL)) {
-                return this._linkDownloader(fileName, URL.createObjectURL(data), linkClick);
+                var objectURL = URL.createObjectURL(data),
+                    clickHandler = function(e) {
+                        setTimeout(function() {
+                            URL.revokeObjectURL(objectURL);
+                            ///#DEBUG
+                            that._objectUrlRevoked = true;
+                            ///#ENDDEBUG
+                        });
+                        ///#DEBUG
+                        typeUtils.isFunction(linkClick) && linkClick.apply(this, arguments);
+                        ///#ENDDEBUG
+                    };
+
+                return that._linkDownloader(fileName, objectURL, clickHandler);
             }
         }
     },

@@ -51,15 +51,31 @@ QUnit.test("exportLinkElement generate", function(assert) {
         return;
     }
 
-    //act
-    var testExportLink = fileSaver._saveBlobAs("test.xlsx", "EXCEL", new Blob([], { type: "test/plain" }), "$(this).attr('rel','clicked'); return false;");
+    var clock = sinon.useFakeTimers();
 
-    //assert
-    assert.ok(testExportLink);
-    assert.ok(String($(testExportLink).attr("href")).indexOf("blob:") !== -1, "ExportLink href corrected");
-    assert.equal($(testExportLink).attr("download"), "test.xlsx", "ExportLink download attribute corrected");
-    assert.equal($(testExportLink).css("display"), "none", "ExportLink is styled display none");
-    assert.equal($(testExportLink).attr("rel"), "clicked", "ExportLink is clicked");
+    try {
+        //act
+        var clickHandler = function(e) {
+                $(e.target).attr('rel', 'clicked');
+                e.preventDefault();
+            },
+            testExportLink = fileSaver._saveBlobAs("test.xlsx", "EXCEL", new Blob([], { type: "test/plain" }), clickHandler);
+
+        clock.tick();
+
+        //assert
+        assert.ok(testExportLink);
+        assert.ok(String($(testExportLink).attr("href")).indexOf("blob:") !== -1, "ExportLink href corrected");
+        assert.equal($(testExportLink).attr("download"), "test.xlsx", "ExportLink download attribute corrected");
+        assert.equal($(testExportLink).css("display"), "none", "ExportLink is styled display none");
+        assert.equal($(testExportLink).attr("rel"), "clicked", "ExportLink is clicked");
+
+        //T596771
+        assert.notOk($(testExportLink).parent().length, "link is removed");
+        assert.ok(fileSaver._objectUrlRevoked, "objectURL is revoked");
+    } finally {
+        clock.restore();
+    }
 });
 
 QUnit.test("Proxy Url exportForm generate", function(assert) {
