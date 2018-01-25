@@ -343,12 +343,12 @@ var TreeViewBase = HierarchicalCollectionWidget.inherit({
             createChildren: null
 
             /**
-             * @name dxTreeViewOptions_onSelectionChanged
-             * @publicName onSelectionChanged
-             * @extends Action
-             * @action
-             * @inheritdoc
-             */
+            * @name dxTreeViewOptions_onSelectionChanged
+            * @publicName onSelectionChanged
+            * @extends Action
+            * @action
+            * @inheritdoc
+            */
 
             /**
             * @name dxTreeViewOptions_parentIdExpr
@@ -471,8 +471,8 @@ var TreeViewBase = HierarchicalCollectionWidget.inherit({
             * @deprecated dxTreeViewOptions_onItemSelectionChanged
             * @type function(e)
             * @type_function_param1 e:object
-             * @type_function_param1_field7 itemElement:dxElement
-             * @type_function_param1_field8 node:dxTreeViewNode
+            * @type_function_param1_field7 itemElement:dxElement
+            * @type_function_param1_field8 node:dxTreeViewNode
             * @action
             */
             "onItemSelected": { since: "16.1", alias: "onItemSelectionChanged" }
