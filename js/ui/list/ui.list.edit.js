@@ -275,6 +275,20 @@ var ListEdit = ListBase.inherit({
         }
     },
 
+    _getCombinedFilter: function() {
+        var filter,
+            storeLoadOptions,
+            dataSource = this._dataSource;
+
+        if(dataSource) {
+            storeLoadOptions = { filter: dataSource.filter() };
+            dataSource._addSearchFilter(storeLoadOptions);
+            filter = storeLoadOptions.filter;
+        }
+
+        return filter;
+    },
+
     _isPageSelectAll: function() {
         return this.option("selectAllMode") === "page";
     },
