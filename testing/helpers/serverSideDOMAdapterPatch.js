@@ -20,14 +20,6 @@ exports.set = function() {
         }
     };
 
-    domAdapter.getHeight = function() {
-        return 0;
-    };
-
-    domAdapter.getWidth = function() {
-        return 0;
-    };
-
     domAdapter.getSelection = function() {
         return {};
     };
