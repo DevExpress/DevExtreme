@@ -1267,7 +1267,7 @@ Axis.prototype = {
             marginSize = margins.size,
             marginValue = 0,
             type = options.type,
-            valueMarginsEnabled = options.valueMarginsEnabled && type !== constants.discrete,
+            valueMarginsEnabled = options.valueMarginsEnabled && type.indexOf(constants.discrete) === -1,
             minValueMargin = options.minValueMargin,
             maxValueMargin = options.maxValueMargin,
             add = getAddFunction(range, !that.isArgumentAxis),
