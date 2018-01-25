@@ -20,6 +20,14 @@ exports.set = function() {
         }
     };
 
+    domAdapter.getHeight = function() {
+        return 0;
+    };
+
+    domAdapter.getWidth = function() {
+        return 0;
+    };
+
     domAdapter.getBody = function() {
         return document.body;
     };

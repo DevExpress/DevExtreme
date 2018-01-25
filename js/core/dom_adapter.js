@@ -122,6 +122,16 @@ var domAdapter = module.exports = {
         return document.head;
     },
 
+    getWidth: function() {
+        var document = domAdapter.getDocument();
+        return document.width;
+    },
+
+    getHeight: function() {
+        var document = domAdapter.getDocument();
+        return document.height;
+    },
+
     listen: function(element, event, callback, useCapture) {
         element.addEventListener(event, callback, useCapture);
 
