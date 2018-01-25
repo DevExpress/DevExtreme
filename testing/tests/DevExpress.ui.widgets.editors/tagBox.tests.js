@@ -3854,11 +3854,13 @@ QUnit.test("focusOut should be prevented when tagContainer clicked - T454876", f
 
     var $inputWrapper = this.$element.find(".dx-dropdowneditor-input-wrapper");
 
-    $inputWrapper.on("dxpointerdown", function(e) {
-        assert.ok(e.isDefaultPrevented(), "pointerdown was prevented and lead to focusout prevent");
+    $inputWrapper.on("mousedown", function(e) {
+        //note: you should not prevent pointerdown because it will prevent click on ios real devices
+        //you must use preventDefault in code because it is possible to use .on('focusout', handler) instead of onFocusOut option
+        assert.ok(e.isDefaultPrevented(), "mousedown was prevented and lead to focusout prevent");
     });
 
-    $inputWrapper.trigger("dxpointerdown");
+    $inputWrapper.trigger("mousedown");
 });
 
 
