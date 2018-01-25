@@ -572,7 +572,7 @@ module.exports = (function() {
         },
         createObjectWithChanges: function(target, changes) {
             var emptyTarget = target ? Object.create(target) : { };
-            target = objectUtils.deepExtendArraySafe(emptyTarget, target);
+            target = objectUtils.deepExtendArraySafe(emptyTarget, target, false, true);
             return objectUtils.deepExtendArraySafe(target, changes, false, true);
         },
 
