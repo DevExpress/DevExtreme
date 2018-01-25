@@ -89,6 +89,26 @@ QUnit.test("selectionChanged should fire only when selection was changed", funct
     assert.equal(selectionChanged, 2, "selectionChanged should call twice");
 });
 
+QUnit.test("onItemSelectionChanged should have correct arguments", function(assert) {
+    var itemSelectionChanged = sinon.spy(),
+        $treeview = initTree({
+            items: [{ text: "Item 1", id: 1 }],
+            onItemSelectionChanged: itemSelectionChanged
+        }),
+        instance = $treeview.dxTreeView("instance");
+
+    instance.selectItem(1);
+    instance.unselectItem(1);
+
+    assert.equal(itemSelectionChanged.callCount, 2, "selection was changed 2 times");
+
+    //note: other parameters are redundant but they were saved in the code to prevent a BC
+    assert.strictEqual(itemSelectionChanged.getCall(0).args[0].component, instance, "component is correct");
+    assert.strictEqual(itemSelectionChanged.getCall(0).args[0].element, $treeview.get(0), "element is correct");
+    assert.deepEqual(itemSelectionChanged.getCall(0).args[0].node, instance.getNodes()[0], "node is correct");
+    assert.strictEqual(itemSelectionChanged.getCall(0).args[0].itemElement, $treeview.find(".dx-treeview-item").get(0), "itemElement is correct");
+});
+
 QUnit.test("itemSelected should fire when select", function(assert) {
     var items = [{ text: "item 1", selected: true }, { text: "item 2" }],
         itemSelected = 0,
