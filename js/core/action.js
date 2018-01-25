@@ -2,7 +2,7 @@
 
 var $ = require("./renderer"),
     config = require("./config"),
-    window = require("./dom_adapter").getWindow(),
+    window = require("./utils/window").getWindow(),
     typeUtils = require("./utils/type"),
     each = require("./utils/iterator").each,
     Class = require("./class"),

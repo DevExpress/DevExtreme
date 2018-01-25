@@ -1,6 +1,6 @@
 "use strict";
 
-var window = require("../dom_adapter").getWindow();
+var window = require("./window").getWindow();
 
 var types = {
     "[object Array]": "array",

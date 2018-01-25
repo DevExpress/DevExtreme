@@ -1,16 +1,16 @@
 "use strict";
 
 var $ = require("../core/renderer"),
-    navigator = require("./utils/navigator"),
-    domAdapter = require("../core/dom_adapter"),
-    window = domAdapter.getWindow(),
+    windowUtils = require("./utils/window"),
+    navigator = windowUtils.getNavigator(),
+    window = windowUtils.getWindow(),
     extend = require("./utils/extend").extend,
     isPlainObject = require("./utils/type").isPlainObject,
     each = require("./utils/iterator").each,
     Class = require("./class"),
     errors = require("./errors"),
     Callbacks = require("./utils/callbacks"),
-    resizeCallbacks = require("./utils/window").resizeCallbacks,
+    resizeCallbacks = windowUtils.resizeCallbacks,
     EventsMixin = require("./events_mixin"),
     SessionStorage = require("./utils/storage").sessionStorage,
     viewPort = require("./utils/view_port"),
@@ -208,7 +208,7 @@ var Devices = Class.inherit({
         this._currentOrientation = undefined;
 
         this.changed = Callbacks();
-        if(domAdapter.hasDocument()) {
+        if(windowUtils.hasWindow()) {
             this._recalculateOrientation();
             resizeCallbacks.add(this._recalculateOrientation.bind(this));
         }

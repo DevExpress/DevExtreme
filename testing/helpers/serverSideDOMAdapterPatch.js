@@ -1,12 +1,13 @@
 "use strict";
 
 var domAdapter = require("core/dom_adapter");
-var serverSideWindowMock = require("./serverSideWindowMock.js");
+var windowUtils = require("core/utils/window");
+var readyCallbacks = require("core/utils/ready_callbacks");
 
 exports.set = function() {
     domAdapter.listen = function(element, event, callback, useCapture) {
         // Note: in Angular domAdapter it wiil be "window"
-        if(element === domAdapter.getWindow()) {
+        if(element === windowUtils.getWindow()) {
             window.addEventListener(event, callback, useCapture);
             return function() {
                 window.removeEventListener(event, callback);
@@ -39,12 +40,5 @@ exports.set = function() {
         return document.head;
     };
 
-    for(var field in serverSideWindowMock) {
-        Object.defineProperty(domAdapter._window, field, {
-            enumerable: true,
-            configurable: true,
-            value: serverSideWindowMock[field]
-        });
-    }
-    domAdapter._readyCallbacks.fire();
+    readyCallbacks.fire();
 };

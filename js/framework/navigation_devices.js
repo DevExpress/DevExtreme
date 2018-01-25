@@ -4,7 +4,7 @@ require("../integration/jquery");
 
 var $ = require("jquery"),
     noop = require("../core/utils/common").noop,
-    window = require("../core/dom_adapter").getWindow(),
+    window = require("../core/utils/window").getWindow(),
     Class = require("../core/class"),
     Callbacks = require("../core/utils/callbacks"),
     browserAdapters = require("./browser_adapters"),

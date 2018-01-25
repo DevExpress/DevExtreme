@@ -299,22 +299,6 @@ var applyServerDecimalSeparator = function(value) {
 
 var noop = function() {};
 
-var callOnce = function(handler) {
-    var result;
-
-    var wrappedHandler = function() {
-        result = handler.apply(this, arguments);
-        wrappedHandler = function() {
-            return result;
-        };
-        return result;
-    };
-
-    return function() {
-        return wrappedHandler.apply(this, arguments);
-    };
-};
-
 var grep = function(elements, checkFunction, invert) {
     var result = [],
         check,
@@ -357,4 +341,3 @@ exports.applyServerDecimalSeparator = applyServerDecimalSeparator;
 
 exports.noop = noop;
 exports.grep = grep;
-exports.callOnce = callOnce;

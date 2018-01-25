@@ -2,7 +2,7 @@
 
 /* global WeakMap */
 var inArray = require("../../core/utils/array").inArray,
-    window = require("../../core/dom_adapter").getWindow(),
+    window = require("../../core/utils/window").getWindow(),
     weakMap = window ? window.WeakMap : WeakMap;
 
 if(!weakMap) {

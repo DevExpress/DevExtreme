@@ -1,8 +1,9 @@
 "use strict";
 
-var $ = require("../../core/renderer"),
-    ready = require("../dom_adapter").ready,
-    changeCallback = require("../../core/utils/callbacks")(),
+var $ = require("../renderer"),
+    readyCallbacks = require("./ready_callbacks"),
+    ready = readyCallbacks.add,
+    changeCallback = require("./callbacks")(),
     $originalViewPort = $();
 
 var value = (function() {

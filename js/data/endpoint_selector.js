@@ -2,7 +2,7 @@
 
 /* global Debug*/
 var errors = require("../core/errors"),
-    window = require("../core/dom_adapter").getWindow(),
+    window = require("../core/utils/window").getWindow(),
     proxyUrlFormatter = require("./proxy_url_formatter");
 
 var IS_WINJS_ORIGIN,

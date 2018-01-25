@@ -1,7 +1,7 @@
 "use strict";
 
 var _eventData = require("../../events/utils").eventData,
-    window = require("../../core/dom_adapter").getWindow(),
+    window = require("../../core/utils/window").getWindow(),
     clickEventName = require("../../events/click").name,
     downPointerEventName = require("../../events/pointer").down,
     movePointerEventName = require("../../events/pointer").move,

@@ -4,7 +4,8 @@ var $ = require("../../core/renderer"),
     isDefined = require("../../core/utils/type").isDefined,
     browser = require("../../core/utils/browser"),
     domAdapter = require("../../core/dom_adapter"),
-    window = domAdapter.getWindow();
+    windowUtils = require("../../core/utils/window"),
+    window = windowUtils.getWindow();
 
 var isFocusingOnCaretChange = browser.msie || browser.safari;
 

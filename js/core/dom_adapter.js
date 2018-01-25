@@ -1,23 +1,24 @@
 "use strict";
 
-/* global window */
+/* global document */
+
 var domAdapter = module.exports = {
     querySelectorAll: function(element, selector) {
         return element.querySelectorAll(selector);
     },
 
     createElement: function(tagName, context) {
-        context = context || domAdapter.getWindow().document;
+        context = context || domAdapter.getDocument();
         return context.createElement(tagName);
     },
 
     createElementNS: function(ns, tagName, context) {
-        context = context || domAdapter.getWindow().document;
+        context = context || domAdapter.getDocument();
         return context.createElementNS(ns, tagName);
     },
 
     createTextNode: function(text, context) {
-        context = context || domAdapter.getWindow().document;
+        context = context || domAdapter.getDocument();
         return context.createTextNode(text);
     },
 
@@ -82,49 +83,43 @@ var domAdapter = module.exports = {
         element.style[name] = value || '';
     },
 
+    getDocument: function() {
+        return typeof document !== "undefined" && document;
+    },
+
     getActiveElement: function() {
-        var document = domAdapter.getWindow().document;
+        var document = domAdapter.getDocument();
         return document.activeElement;
     },
 
     getBody: function() {
-        var document = domAdapter.getWindow().document;
+        var document = domAdapter.getDocument();
         return document.body;
     },
 
     createDocumentFragment: function() {
-        var document = domAdapter.getWindow().document;
+        var document = domAdapter.getDocument();
         return document.createDocumentFragment();
     },
 
     getDocumentElement: function() {
-        var document = domAdapter.getWindow().document;
+        var document = domAdapter.getDocument();
         return document.documentElement;
     },
 
     getLocation: function() {
-        var document = domAdapter.getWindow().document;
+        var document = domAdapter.getDocument();
         return document.location;
     },
 
     getReadyState: function() {
-        var document = domAdapter.getWindow().document;
+        var document = domAdapter.getDocument();
         return document.readyState;
     },
 
     getHead: function() {
-        var document = domAdapter.getWindow().document;
+        var document = domAdapter.getDocument();
         return document.head;
-    },
-
-    getWindow: function() {
-        return domAdapter._window;
-    },
-
-    _window: typeof window === "undefined" ? {} : window,
-
-    hasDocument: function() {
-        return "document" in domAdapter.getWindow();
     },
 
     listen: function(element, event, callback, useCapture) {
@@ -133,45 +128,5 @@ var domAdapter = module.exports = {
         return function() {
             element.removeEventListener(event, callback);
         };
-    },
-
-    ready: function(callback) {
-        domAdapter._readyCallbacks.add(callback);
-
-        if(!domAdapter.hasDocument()) {
-            return;
-        }
-
-        var document = domAdapter.getWindow().document,
-            removeContentLoadedListener;
-
-        //NOTE: we can't use document.readyState === "interactive" because of ie9/ie10 support
-        if(domAdapter.getReadyState() === "complete" || (domAdapter.getReadyState() !== "loading" && !domAdapter.getDocumentElement().doScroll)) {
-            callback();
-            return;
-        }
-
-        if(!domAdapter._contentLoadedListening) {
-            domAdapter._contentLoadedListening = true;
-            var loadedCallback = function() {
-                domAdapter._readyCallbacks.fire();
-                removeContentLoadedListener();
-            };
-            removeContentLoadedListener = domAdapter.listen(document, "DOMContentLoaded", loadedCallback);
-        }
-    },
-
-    _readyCallbacks: (function() {
-        var callbacks = [];
-        return {
-            add: function(callback) {
-                callbacks.push(callback);
-            },
-            fire: function() {
-                callbacks.forEach(function(callback) {
-                    callback();
-                });
-            }
-        };
-    })()
+    }
 };

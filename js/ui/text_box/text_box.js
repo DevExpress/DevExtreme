@@ -1,8 +1,9 @@
 "use strict";
 
 var $ = require("../../core/renderer"),
-    window = require("../../core/dom_adapter").getWindow(),
-    navigator = require("../../core/utils/navigator"),
+    windowUtils = require("../../core/utils/window"),
+    window = windowUtils.getWindow(),
+    navigator = windowUtils.getNavigator(),
     eventsEngine = require("../../events/core/events_engine"),
     devices = require("../../core/devices"),
     inArray = require("../../core/utils/array").inArray,

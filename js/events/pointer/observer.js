@@ -1,14 +1,16 @@
 "use strict";
 
 var each = require("../../core/utils/iterator").each,
-    domAdapter = require("../../core/dom_adapter");
+    readyCallbacks = require("../../core/utils/ready_callbacks"),
+    domAdapter = require("../../core/dom_adapter"),
+    windowUtils = require("../../core/utils/window");
 
 var addEventsListener = function(events, handler) {
-    domAdapter.ready(function() {
+    readyCallbacks.add(function() {
         events
             .split(" ")
             .forEach(function(event) {
-                domAdapter.listen(domAdapter.getWindow().document, event, handler, true);
+                domAdapter.listen(windowUtils.getWindow().document, event, handler, true);
             });
     });
 };

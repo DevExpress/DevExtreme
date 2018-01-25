@@ -1,7 +1,7 @@
 "use strict";
 
 var $ = require("../../../core/renderer"),
-    window = require("../../../core/dom_adapter").getWindow(),
+    window = require("../../../core/utils/window").getWindow(),
     Class = require("../../../core/class"),
     stringFormat = require("../../../core/utils/string").format,
     errors = require("../../../data/errors").errors,

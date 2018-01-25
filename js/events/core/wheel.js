@@ -2,8 +2,8 @@
 
 var $ = require("../../core/renderer"),
     eventsEngine = require("../../events/core/events_engine"),
-    window = require("../../core/dom_adapter").getWindow(),
-    callOnce = require("../../core/utils/common").callOnce,
+    window = require("../../core/utils/window").getWindow(),
+    callOnce = require("../../core/utils/call_once"),
     registerEvent = require("./event_registrator"),
     eventUtils = require("../utils");
 

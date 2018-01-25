@@ -2,7 +2,8 @@
 
 var $ = require("../../core/renderer"),
     domAdapter = require("../../core/dom_adapter"),
-    window = domAdapter.getWindow(),
+    windowUtils = require("./window"),
+    window = windowUtils.getWindow(),
     eventsEngine = require("../../events/core/events_engine"),
     errors = require("../errors"),
     inArray = require("./array").inArray,

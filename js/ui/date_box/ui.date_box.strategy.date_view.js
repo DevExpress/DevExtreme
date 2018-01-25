@@ -1,7 +1,7 @@
 "use strict";
 
 var $ = require("../../core/renderer"),
-    window = require("../../core/dom_adapter").getWindow(),
+    window = require("../../core/utils/window").getWindow(),
     DateView = require("./ui.date_view"),
     DateBoxStrategy = require("./ui.date_box.strategy"),
     support = require("../../core/utils/support"),

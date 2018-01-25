@@ -2,7 +2,8 @@
 
 var isFunction = require("../core/utils/type").isFunction,
     domAdapter = require("../core/dom_adapter"),
-    window = domAdapter.getWindow(),
+    windowUtils = require("../core/utils/window"),
+    window = windowUtils.getWindow(),
     map = require("../core/utils/iterator").map,
     toComparable = require("../core/utils/data").toComparable,
     Deferred = require("../core/utils/deferred").Deferred;

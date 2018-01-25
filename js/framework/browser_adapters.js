@@ -5,7 +5,7 @@ require("../integration/jquery");
 var $ = require("jquery"),
     Class = require("../core/class"),
     Callbacks = require("../core/utils/callbacks"),
-    window = require("../core/dom_adapter").getWindow(),
+    window = require("../core/utils/window").getWindow(),
     queue = require("../core/utils/queue");
 
 var ROOT_PAGE_URL = "__root__",
