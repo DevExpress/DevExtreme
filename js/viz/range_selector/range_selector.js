@@ -753,7 +753,7 @@ var dxRangeSelector = require("../core/base_widget").inherit({
     },
 
     _change_DATA_SOURCE: function() {
-        if(this._initialized || this._options.dataSource) {
+        if(this._options.dataSource) {
             this._options[SELECTED_RANGE] = this._options[VALUE] = null;
             this._updateDataSource();
         }
