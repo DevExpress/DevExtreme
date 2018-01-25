@@ -100,9 +100,8 @@ QUnit.test("onItemSelectionChanged should have correct arguments", function(asse
         instance = $treeview.dxTreeView("instance");
 
     instance.selectItem(2);
-    instance.unselectItem(2);
 
-    assert.equal(itemSelectionChanged.callCount, 2, "selection was changed 2 times");
+    assert.equal(itemSelectionChanged.callCount, 1, "selection was changed once");
 
     //note: other parameters are redundant but they were saved in the code to prevent a BC
     assert.equal(itemSelectionChanged.getCall(0).args[0].component.NAME, instance.NAME, "component is correct");
