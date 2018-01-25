@@ -2062,7 +2062,7 @@ QUnit.module("Get range data. Pie series", {
 });
 
 QUnit.test("Positive points", function(assert) {
-    var data = [{ arg: "1", val: 11 }, { arg: "2", val: 22 }, { arg: "3", val: 3 }, { arg: "4", val: 15 }],
+    var data = [{ arg: "1", val: 12 }, { arg: "2", val: 20 }, { arg: "3", val: 3 }, { arg: "4", val: 15 }],
         rangeData,
         series = createSeries(this.defaultOptions);
 
@@ -2071,11 +2071,11 @@ QUnit.test("Positive points", function(assert) {
     rangeData = series.getRangeData();
 
     assert.ok(rangeData, "Range data should be created");
-    assert.deepEqual(rangeData, { val: { min: 0, max: 51 } });
+    assert.deepEqual(rangeData, { val: { min: 0, max: 50 / 20 } });
 });
 
 QUnit.test("Positive and negative points", function(assert) {
-    var data = [{ arg: "1", val: -11 }, { arg: "2", val: 22 }, { arg: "3", val: -3 }, { arg: "4", val: 15 }],
+    var data = [{ arg: "1", val: -11 }, { arg: "2", val: 20 }, { arg: "3", val: -3 }, { arg: "4", val: 15 }],
         rangeData,
         series = createSeries(this.defaultOptions);
 
@@ -2083,11 +2083,11 @@ QUnit.test("Positive and negative points", function(assert) {
     series.arrangePoints();
     rangeData = series.getRangeData();
 
-    assert.deepEqual(rangeData, { val: { min: 0, max: 37 } });
+    assert.deepEqual(rangeData, { val: { min: 0, max: 35 / 20 } });
 });
 
 QUnit.test("Negative points", function(assert) {
-    var data = [{ arg: "1", val: -11 }, { arg: "2", val: -22 }, { arg: "3", val: -3 }, { arg: "4", val: -15 }],
+    var data = [{ arg: "1", val: -12 }, { arg: "2", val: -20 }, { arg: "3", val: -3 }, { arg: "4", val: -15 }],
         rangeData,
         series = createSeries(this.defaultOptions);
 
@@ -2095,7 +2095,7 @@ QUnit.test("Negative points", function(assert) {
     series.arrangePoints();
     rangeData = series.getRangeData();
 
-    assert.deepEqual(rangeData, { val: { min: 0, max: -51 } });
+    assert.deepEqual(rangeData, { val: { min: 0, max: -50 / 20 } });
 });
 
 QUnit.module("Get range data. Pie series. For each types", {
@@ -2112,7 +2112,7 @@ QUnit.module("Get range data. Pie series. For each types", {
 });
 
 QUnit.test("Pie", function(assert) {
-    var data = [{ arg: "1", val: 11 }, { arg: "2", val: 22 }, { arg: "3", val: 3 }, { arg: "4", val: 15 }],
+    var data = [{ arg: "1", val: 12 }, { arg: "2", val: 20 }, { arg: "3", val: 3 }, { arg: "4", val: 15 }],
         rangeData,
         series = createSeries($.extend(true, {}, this.defaultOptions, { type: "pie" }), null, "pie");
 
@@ -2120,11 +2120,11 @@ QUnit.test("Pie", function(assert) {
     series.arrangePoints();
     rangeData = series.getRangeData();
 
-    assert.deepEqual(rangeData, { val: { min: 0, max: 51 } });
+    assert.deepEqual(rangeData, { val: { min: 0, max: 50 / 20 } });
 });
 
 QUnit.test("Doughnut", function(assert) {
-    var data = [{ arg: "1", val: 11 }, { arg: "2", val: 22 }, { arg: "3", val: 3 }, { arg: "4", val: 15 }],
+    var data = [{ arg: "1", val: 12 }, { arg: "2", val: 20 }, { arg: "3", val: 3 }, { arg: "4", val: 15 }],
         rangeData,
         series = createSeries($.extend(true, {}, this.defaultOptions, { type: "doughnut" }), null, "pie");
 
@@ -2132,7 +2132,7 @@ QUnit.test("Doughnut", function(assert) {
     series.arrangePoints();
     rangeData = series.getRangeData();
 
-    assert.deepEqual(rangeData, { val: { min: 0, max: 51 } });
+    assert.deepEqual(rangeData, { val: { min: 0, max: 50 / 20 } });
 });
 
 QUnit.module("Zooming range data", {

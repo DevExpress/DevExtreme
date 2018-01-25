@@ -60,7 +60,7 @@ module.exports = _extend({}, symbolPoint, {
 
     correctValue: function(correction, percent, base) {
         var that = this;
-        that.value = (base || that.initialValue) + correction;
+        that.value = (base || that.normalInitialValue) + correction;
         that.minValue = correction;
         that.percent = percent;
         that._label.setDataField("percent", percent);
