@@ -688,9 +688,34 @@
         margin-left: 15px;
     }
 
+    .dx-gridbase-container {
+        display: flex;
+        flex-direction: column;
+        height: 100%;
+        min-height: inherit;
+        max-height: inherit;
+    }
+
+    .dx-gridbase-container > * {
+        flex: 0 0 auto;
+    }
+
+    .dx-gridbase-container > .dx-@{widgetName}-rowsview {
+        flex: auto;
+    }
+
+    .dx-gridbase-container .dx-pages {
+        position: absolute;
+        right: 0;
+    }
+
     .dx-@{widgetName}-rowsview {
         position: relative;
         overflow: hidden;
+
+        &.dx-empty {
+            height: 100px;
+        }
 
         &.dx-fixed-columns {
             &.dx-scrollable .dx-scrollable-content {
