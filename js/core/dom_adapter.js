@@ -124,5 +124,9 @@ var domAdapter = module.exports = {
 
     listen: function(element, event, callback, useCapture) {
         element.addEventListener(event, callback, useCapture);
+
+        return function() {
+            element.removeEventListener(event, callback);
+        };
     }
 };

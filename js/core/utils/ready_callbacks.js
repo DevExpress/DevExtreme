@@ -13,11 +13,10 @@ var isReady = function() {
 var subscribeReady = callOnce(function() {
     // TODO: get rid of document
     var document = windowUtils.getWindow().document;
-    var loadedCallback = function() {
+    var removeListener = domAdapter.listen(document, "DOMContentLoaded", function() {
         readyCallbacks.fire();
-        document.removeEventListener("DOMContentLoaded", loadedCallback);
-    };
-    domAdapter.listen(document, "DOMContentLoaded", loadedCallback);
+        removeListener();
+    });
 });
 
 var readyCallbacks = {
