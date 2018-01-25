@@ -1121,7 +1121,7 @@ var TagBox = SelectBox.inherit({
         }
     },
 
-    _prepareSearchValue: function() {
+    _getActualSearchValue: function() {
         return this.callBase() || this._searchValue();
     },
 

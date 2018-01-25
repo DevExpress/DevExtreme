@@ -2586,7 +2586,7 @@ QUnit.testInActiveWindow("input should be focused after click on field (searchEn
     assert.ok($input.is(":focus"), "input was focused");
 });
 
-QUnit.test("select all is not applied when filterable items are selected", function(assert) {
+QUnit.test("Select all' checkBox is checked when filtered items are selected only", function(assert) {
     var items = ["111", "222", "333"],
         $element = $("#tagBox").dxTagBox({
             searchTimeout: 0,
