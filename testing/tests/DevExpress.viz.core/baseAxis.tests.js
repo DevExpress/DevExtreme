@@ -1723,6 +1723,34 @@ QUnit.test("Do not calculate any margin for discrete axis", function(assert) {
     });
 });
 
+QUnit.test("Do not calculate any margin for semidiscrete axis", function(assert) {
+    this.testMargins(assert, {
+        options: {
+            type: "semidiscrete",
+            dataType: "numeric",
+            minRange: 1,
+            valueMarginsEnabled: true
+        },
+        marginOptions: {
+            checkInterval: true
+        },
+        range: {
+            min: 1,
+            max: 2,
+            interval: 1
+        },
+        ticks: [0, 1, 2],
+        expectedRange: {
+            min: 0,
+            max: 2,
+            minVisible: 0,
+            maxVisible: 2,
+            interval: 1
+        },
+        isArgumentAxis: true
+    });
+});
+
 QUnit.test("Logarithmic axis. Correctly adjust boundary values", function(assert) {
     this.testMargins(assert, {
         options: {
