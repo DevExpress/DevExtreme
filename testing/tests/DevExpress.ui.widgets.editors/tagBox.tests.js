@@ -2958,6 +2958,46 @@ QUnit.testInActiveWindow("input should be focused after click on field (searchEn
     assert.ok($input.is(":focus"), "input was focused");
 });
 
+QUnit.test("Select all' checkBox is checked when filtered items are selected only", function(assert) {
+    var items = ["111", "222", "333"],
+        $element = $("#tagBox").dxTagBox({
+            searchTimeout: 0,
+            items: items,
+            searchEnabled: true,
+            showSelectionControls: true,
+            selectAllMode: "allPages"
+        }),
+        instance = $element.dxTagBox("instance"),
+        $input = $element.find("input");
+
+    keyboardMock($input).type("1");
+    $input.trigger("focusout");
+    $(".dx-list-item").trigger("dxclick");
+
+    assert.equal(instance.option("selectedItems").length, 1, "selected items count");
+});
+
+QUnit.test("filter should not be cleared when no focusout and no item selection happened", function(assert) {
+    var items = ["111", "222", "333"],
+        $element = $("#tagBox").dxTagBox({
+            searchTimeout: 0,
+            items: items,
+            searchEnabled: true,
+            opened: true,
+            showSelectionControls: true,
+            selectAllMode: "allPages"
+        }),
+        $input = $element.find("input");
+
+    var keyboard = keyboardMock($input);
+    keyboard.type("1");
+    keyboard.press("esc");
+
+    $input.trigger("dxclick");
+
+    assert.equal($(".dx-item").length, 1, "items count of list");
+    assert.equal($.trim($(".dx-item").first().text()), "111", "value of first item");
+});
 
 QUnit.module("popup position and size", moduleSetup);
 
