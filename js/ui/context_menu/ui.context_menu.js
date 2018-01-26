@@ -2,6 +2,7 @@
 
 var $ = require("../../core/renderer"),
     window = require("../../core/utils/window").getWindow(),
+    domAdapter = require("../../core/dom_adapter"),
     eventsEngine = require("../../events/core/events_engine"),
     Guid = require("../../core/guid"),
     registerComponent = require("../../core/component_registrator"),
@@ -476,7 +477,7 @@ var ContextMenu = MenuBase.inherit((function() {
             eventName = eventUtils.addNamespace(showEvent, this.NAME);
 
             if(this._showContextMenuEventHandler) {
-                eventsEngine.off(window.document, eventName, target, this._showContextMenuEventHandler);
+                eventsEngine.off(domAdapter.getDocument(), eventName, target, this._showContextMenuEventHandler);
             } else {
                 eventsEngine.off(target, eventName);
             }
@@ -519,7 +520,7 @@ var ContextMenu = MenuBase.inherit((function() {
                 eventsEngine.on(target, eventName, handler);
             } else {
                 that._showContextMenuEventHandler = handler;
-                eventsEngine.on(window.document, eventName, target, that._showContextMenuEventHandler);
+                eventsEngine.on(domAdapter.getDocument(), eventName, target, that._showContextMenuEventHandler);
             }
         },
 

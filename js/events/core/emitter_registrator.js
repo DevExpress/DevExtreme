@@ -2,8 +2,7 @@
 
 var $ = require("../../core/renderer"),
     readyCallbacks = require("../../core/utils/ready_callbacks"),
-    windowUtils = require("../../core/utils/window"),
-    window = windowUtils.getWindow(),
+    domAdapter = require("../../core/dom_adapter"),
     eventsEngine = require("../../events/core/events_engine"),
     dataUtils = require("../../core/element_data"),
     Class = require("../../core/class"),
@@ -30,7 +29,7 @@ var EventManager = Class.inherit({
 
     _attachHandlers: function() {
         readyCallbacks.add(function() {
-            var document = window.document;
+            var document = domAdapter.getDocument();
             eventsEngine.subscribeGlobal(document, eventUtils.addNamespace(pointerEvents.down, MANAGER_EVENT), this._pointerDownHandler.bind(this));
             eventsEngine.subscribeGlobal(document, eventUtils.addNamespace(pointerEvents.move, MANAGER_EVENT), this._pointerMoveHandler.bind(this));
             eventsEngine.subscribeGlobal(document, eventUtils.addNamespace([pointerEvents.up, pointerEvents.cancel].join(" "), MANAGER_EVENT), this._pointerUpHandler.bind(this));

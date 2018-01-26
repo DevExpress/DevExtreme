@@ -2,7 +2,7 @@
 
 var eventsEngine = require("../../events/core/events_engine"),
     browser = require("../../core/utils/browser"),
-    window = require("../../core/utils/window").getWindow(),
+    domAdapter = require("../../core/dom_adapter"),
     Class = require("../../core/class"),
     eventUtils = require("../utils");
 
@@ -59,7 +59,7 @@ var BaseStrategy = Class.inherit({
     add: function(element, handleObj) {
         if(this._handlerCount <= 0 || this.noBubble) {
             this._selector = handleObj.selector;
-            element = this.noBubble ? element : window.document;
+            element = this.noBubble ? element : domAdapter.getDocument();
 
             var that = this;
             eventsEngine.on(element, this._originalEvents, this._selector, function(e) {
@@ -83,7 +83,7 @@ var BaseStrategy = Class.inherit({
             return;
         }
 
-        element = this.noBubble ? element : window.document;
+        element = this.noBubble ? element : domAdapter.getDocument();
 
         if(this._originalEvents !== "." + POINTER_EVENTS_NAMESPACE) {
             eventsEngine.off(element, this._originalEvents, this._selector);
@@ -91,7 +91,7 @@ var BaseStrategy = Class.inherit({
     },
 
     dispose: function(element) {
-        element = this.noBubble ? element : window.document;
+        element = this.noBubble ? element : domAdapter.getDocument();
 
         eventsEngine.off(element, this._originalEvents);
     }

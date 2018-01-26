@@ -158,7 +158,7 @@ var EditingController = modules.ViewController.inherit((function() {
                     }
                 });
 
-                eventsEngine.on(window.document, clickEvent.name, that._saveEditorHandler);
+                eventsEngine.on(domAdapter.getDocument(), clickEvent.name, that._saveEditorHandler);
             }
             that._updateEditColumn();
             that._updateEditButtons();
@@ -253,7 +253,7 @@ var EditingController = modules.ViewController.inherit((function() {
         dispose: function() {
             this.callBase();
             clearTimeout(this._inputFocusTimeoutID);
-            eventsEngine.off(window.document, clickEvent.name, this._saveEditorHandler);
+            eventsEngine.off(domAdapter.getDocument(), clickEvent.name, this._saveEditorHandler);
         },
 
         optionChanged: function(args) {

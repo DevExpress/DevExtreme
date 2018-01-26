@@ -4,6 +4,7 @@
 
 var domAdapter = module.exports = {
     querySelectorAll: function(element, selector) {
+        element = element || domAdapter.getDocument();
         return element.querySelectorAll(selector);
     },
 

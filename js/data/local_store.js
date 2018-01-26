@@ -24,7 +24,7 @@ var LocalStoreBackend = Class.inherit({
             setInterval(saveProxy, flushInterval);
             eventsEngine.on(window, "beforeunload", saveProxy);
             if(window.cordova) {
-                domAdapter.listen(window.document, "pause", saveProxy, false);
+                domAdapter.listen(domAdapter.getDocument(), "pause", saveProxy, false);
             }
         }
     },
