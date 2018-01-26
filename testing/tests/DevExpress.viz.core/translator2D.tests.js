@@ -2228,6 +2228,34 @@ QUnit.test('getMinScale', function(assert) {
     assert.strictEqual(new translator2DModule.Translator2D(logarithmicRange, canvas, optionsHorizontal).getMinScale(true), 1.1, "logarithmic zoom in");
 });
 
+QUnit.test('check reset zoom for single point. Numeric', function(assert) {
+    var range = $.extend({}, numericRange, { min: 100, minVisible: 99, maxVisible: 101 }),
+        canvas = $.extend({}, canvasTemplate),
+        translator = new translator2DModule.Translator2D(range, canvas, optionsHorizontal),
+        zoomInfo;
+
+    zoomInfo = translator.zoom(50, 1.1);
+    translator.updateBusinessRange($.extend({}, numericRange, { min: 99, max: 101, minVisible: zoomInfo.min, maxVisible: zoomInfo.max }));
+    zoomInfo = translator.zoom(-50, 0.9);
+    translator.updateBusinessRange($.extend({}, numericRange, { min: 100, max: 100, minVisible: zoomInfo.min, maxVisible: zoomInfo.max }));
+
+    assert.ok(translator.zoomArgsIsEqualCanvas(zoomInfo));
+});
+
+QUnit.test('check reset zoom for single point. DateTime', function(assert) {
+    var range = $.extend({}, datetimeRange, { min: new Date(2012, 9, 2), minVisible: new Date(2012, 9, 1, 23, 59), maxVisible: new Date(2012, 9, 2, 0, 1) }),
+        canvas = $.extend({}, canvasTemplate),
+        translator = new translator2DModule.Translator2D(range, canvas, optionsHorizontal),
+        zoomInfo;
+
+    zoomInfo = translator.zoom(50, 1.1);
+    translator.updateBusinessRange($.extend({}, datetimeRange, { min: new Date(2012, 9, 1, 23, 59), max: new Date(2012, 9, 2, 0, 1), minVisible: zoomInfo.min, maxVisible: zoomInfo.max }));
+    zoomInfo = translator.zoom(-50, 0.9);
+    translator.updateBusinessRange($.extend({}, datetimeRange, { min: new Date(2012, 9, 2), max: new Date(2012, 9, 2), minVisible: zoomInfo.min, maxVisible: zoomInfo.max }));
+
+    assert.ok(translator.zoomArgsIsEqualCanvas(zoomInfo));
+});
+
 QUnit.module('Zooming and scrolling. Discrete translator', {
     beforeEach: function() {
         this.createTranslator = function(range, options, canvas) {
