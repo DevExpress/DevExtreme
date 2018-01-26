@@ -692,6 +692,22 @@ QUnit.module("Zoom", {
     updateOptions: environment.updateOptions
 });
 
+QUnit.test("hold min/max for single point series", function(assert) {
+    var businessRange;
+    this.updateOptions({
+        tick: {
+            visible: true
+        }
+    });
+
+    this.axis.setBusinessRange({ min: 4, max: 4, minVisible: 3.1, maxVisible: 4.9 });
+    this.generatedTicks = [3.2, 3.4, 3.6, 3.8, 4.0, 4.2, 4.4, 4.6, 4.8];
+    this.axis.createTicks(this.canvas);
+    businessRange = this.axis.getTranslator().getBusinessRange();
+    assert.equal(businessRange.min, 4, "min");
+    assert.equal(businessRange.max, 4, "max");
+});
+
 QUnit.test("range min and max are not defined", function(assert) {
     this.updateOptions();
 

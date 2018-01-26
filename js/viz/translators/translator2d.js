@@ -132,6 +132,18 @@ function getCanvasBounds(range) {
     return { base: base, rangeMin: min, rangeMax: max, rangeMinVisible: minVisible, rangeMaxVisible: maxVisible };
 }
 
+function zoomArgsIsEqualCanvas(zoomArgs) {
+    var that = this,
+        businessRange = that.getBusinessRange(),
+        canvasOptions = getCanvasBounds(businessRange),
+        isDateTime = typeUtils.isDate(businessRange.min) || typeUtils.isDate(businessRange.max),
+        correctionPrecision = (isDateTime ? DATETIME_EQUALITY_CORRECTION : NUMBER_EQUALITY_CORRECTION) / 100;
+
+    return zoomArgs && valuesIsDefinedAndEqual(businessRange.min, businessRange.max) &&
+        _abs(zoomArgs.min - canvasOptions.rangeMin) <= correctionPrecision &&
+        _abs(zoomArgs.max - canvasOptions.rangeMax) <= correctionPrecision;
+}
+
 function getCheckingMethodsAboutBreaks(inverted) {
     return {
         isStartSide: !inverted ? function(pos, breaks, start, end) {
@@ -418,6 +430,7 @@ _Translator2d.prototype = {
     getInterval: _noop,
     zoom: _noop,
     getMinScale: _noop,
+    zoomArgsIsEqualCanvas: zoomArgsIsEqualCanvas,
 
     // dxRangeSelector specific
 

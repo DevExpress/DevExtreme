@@ -1192,6 +1192,8 @@ Axis.prototype = {
 
     _reinitTranslator: function(range) {
         var that = this,
+            min = range.min,
+            max = range.max,
             minVisible = range.minVisible,
             maxVisible = range.maxVisible,
             interval = range.interval,
@@ -1218,6 +1220,10 @@ Axis.prototype = {
                 maxVisible: maxVisible,
                 interval: interval
             });
+
+            if(isDefined(min) && isDefined(max) && min.valueOf() === max.valueOf()) {
+                range.min = range.max = min;
+            }
         }
 
         range.breaks = that._correctedBreaks;
@@ -1475,7 +1481,8 @@ Axis.prototype = {
             options = that._options,
             minOpt = options.min,
             maxOpt = options.max,
-            isDiscrete = options.type === constants.discrete;
+            isDiscrete = options.type === constants.discrete,
+            translator = that.getTranslator();
 
         skipAdjusting = skipAdjusting || isDiscrete;
 
@@ -1503,6 +1510,10 @@ Axis.prototype = {
             minVisible: min,
             maxVisible: max
         }, that._series, that.isArgumentAxis) : [];
+
+        if(translator.zoomArgsIsEqualCanvas(that._zoomArgs)) {
+            that.resetZoom();
+        }
 
         return that._zoomArgs;
     },
