@@ -7,6 +7,7 @@ var $ = require("jquery"),
     tickManagerModule = require("viz/axes/base_tick_manager"),
     errors = require("viz/core/errors_warnings"),
     translator2DModule = require("viz/translators/translator2d"),
+    rangeModule = require("viz/translators/range"),
     dxErrors = errors.ERROR_MESSAGES,
     originalAxis = require("viz/axes/base_axis").Axis,
     vizMocks = require("../../helpers/vizMocks.js"),
@@ -1227,6 +1228,24 @@ QUnit.module("Zoom", {
         environment.afterEach.call(this);
     },
     updateOptions: environment.updateOptions
+});
+
+QUnit.test("hold min/max for single point series", function(assert) {
+    var businessRange;
+    this.tickManager.stub("getTicks").returns([3.2, 3.4, 3.6, 3.8, 4.0, 4.2, 4.4, 4.6, 4.8]);
+    this.tickManager.stub("getTickBounds").returns({ minVisible: 3.1, maxVisible: 4.9 });
+    this.updateOptions({
+        tick: {
+            visible: true
+        }
+    });
+
+    this.axis.setBusinessRange({ min: 4, max: 4, minVisible: 3.1, maxVisible: 4.9, addRange: rangeModule.Range.prototype.addRange });
+    this.axis.createTicks(this.canvas);
+    businessRange = this.axis.getTranslator().getBusinessRange();
+
+    assert.equal(businessRange.min, 4, "min");
+    assert.equal(businessRange.max, 4, "max");
 });
 
 QUnit.test("range min and max are not defined", function(assert) {

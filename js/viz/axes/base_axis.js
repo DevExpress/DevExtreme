@@ -197,6 +197,8 @@ Axis.prototype = {
             minInterval,
             translator = that._translator,
             businessRange = translator.getBusinessRange(),
+            min = businessRange.min,
+            max = businessRange.max,
             bounds;
 
         if(!isEmptyArray(businessRange.categories)) {
@@ -215,6 +217,9 @@ Axis.prototype = {
 
             if(bounds) {
                 businessRange.addRange(bounds);
+                if(_isDefined(min) && _isDefined(max) && min.valueOf() === max.valueOf()) {
+                    businessRange.min = businessRange.max = min;
+                }
                 translator.reinit();
             }
         }
@@ -1311,7 +1316,7 @@ Axis.prototype = {
             }
         }
 
-        that._zoomArgs = { min: min, max: max, stick: stick };
+        that._zoomArgs = this._translator.zoomArgsIsEqualCanvas({ min: min, max: max }) ? null : { min: min, max: max, stick: stick };
 
         businessRange.minVisible = min;
         businessRange.maxVisible = max;
