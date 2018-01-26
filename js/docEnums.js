@@ -36,7 +36,7 @@
 
 /**
  * @typedef {string} Enums.Format
- * @enum {'billions'|'currency'|'day'|'dayOfWeek'|'decimal'|'exponential'|'fixedPoint'|'hour'|'largeNumber'|'longDate'|'longDateLongTime'|'longTime'|'millions'|'millisecond'|'minute'|'month'|'monthAndDay'|'monthAndYear'|'percent'|'quarter'|'quarterAndYear'|'second'|'shortDate'|'shortDateShortTime'|'shortTime'|'thousands'|'trillions'|'year'}
+ * @enum {'billions'|'currency'|'day'|'decimal'|'exponential'|'fixedPoint'|'largeNumber'|'longDate'|'longTime'|'millions'|'millisecond'|'month'|'monthAndDay'|'monthAndYear'|'percent'|'quarter'|'quarterAndYear'|'shortDate'|'shortTime'|'thousands'|'trillions'|'year'|'dayOfWeek'|'hour'|'longDateLongTime'|'minute'|'second'|'shortDateShortTime'}
  */
 
 /**
@@ -191,7 +191,7 @@
 
 /**
  * @typedef {string} Enums.PieChartLegendHoverMode
- * @enum {'allArgumentPoints'|'none'}
+ * @enum {'none'|'allArgumentPoints'}
  */
 
 /**
@@ -256,7 +256,7 @@
 
 /**
  * @typedef {string} Enums.GridColumnDataType
- * @enum {'boolean'|'date'|'number'|'object'|'string'}
+ * @enum {'string'|'number'|'date'|'boolean'|'object'}
  */
 
 /**
@@ -281,7 +281,7 @@
 
 /**
  * @typedef {string} Enums.GridEditMode
- * @enum {'batch'|'cell'|'form'|'popup'|'row'}
+ * @enum {'batch'|'cell'|'row'|'form'|'popup'}
  */
 
 /**
@@ -631,7 +631,7 @@
 
 /**
  * @typedef {string} Enums.ValidationRuleType
- * @enum {'compare'|'custom'|'email'|'numeric'|'pattern'|'range'|'required'|'stringLength'}
+ * @enum {'required'|'numeric'|'range'|'stringLength'|'custom'|'compare'|'pattern'|'email'}
  */
 
 /**
