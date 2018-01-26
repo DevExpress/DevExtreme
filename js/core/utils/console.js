@@ -1,24 +1,46 @@
 "use strict";
 
-/* global console */
-/*eslint no-console: off */
+var isFunction = require("./type").isFunction,
+    windowUtils = require("./window"),
+    window = windowUtils.getWindow();
 
-var isFunction = require("./type").isFunction;
+var logger = (function() {
+    function info(text) {
+        var console = window.console;
 
-var noop = function() {};
-var getConsoleMethod = function(method) {
-    if(typeof console === "undefined" || !isFunction(console[method])) {
-        return noop;
+        if(!console || !isFunction(console.info)) {
+            return;
+        }
+
+        console.info(text);
     }
 
-    return console[method];
-};
+    function warn(text) {
+        var console = window.console;
 
-var logger = {
-    info: getConsoleMethod("info"),
-    warn: getConsoleMethod("warn"),
-    error: getConsoleMethod("error")
-};
+        if(!console || !isFunction(console.warn)) {
+            return;
+        }
+
+        console.warn(text);
+    }
+
+    function error(text) {
+        var console = window.console;
+
+        if(!console || !isFunction(console.error)) {
+            return;
+        }
+
+        console.error(text);
+    }
+
+    return {
+        info: info,
+        warn: warn,
+        error: error
+    };
+}());
 
 var debug = (function() {
     function assert(condition, message) {
