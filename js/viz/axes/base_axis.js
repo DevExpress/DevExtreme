@@ -878,10 +878,10 @@ Axis.prototype = {
     //public
     dispose: function() {
         var that = this;
-        that._axisElementsGroup && that._axisElementsGroup.dispose();
 
-        that._strips = null;
-        that._title = null;
+        [that._axisElementsGroup, that._axisStripGroup, that._axisGroup].forEach(function(g) { g.dispose(); });
+
+        that._strips = that._title = null;
         that._axisStripGroup = that._axisConstantLineGroups = that._axisStripLabelGroup = null;
         that._axisLineGroup = that._axisElementsGroup = that._axisGridGroup = null;
         that._axisGroup = that._axisTitleGroup = null;
