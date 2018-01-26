@@ -1272,7 +1272,7 @@ Axis.prototype = {
             marginSize = margins.size,
             marginValue = 0,
             type = options.type,
-            valueMarginsEnabled = options.valueMarginsEnabled && type !== constants.discrete,
+            valueMarginsEnabled = options.valueMarginsEnabled && type !== constants.discrete && type !== "semidiscrete",
             minValueMargin = options.minValueMargin,
             maxValueMargin = options.maxValueMargin,
             add = getAddFunction(range, !that.isArgumentAxis),
