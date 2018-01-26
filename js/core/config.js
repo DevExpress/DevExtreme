@@ -1,7 +1,8 @@
 "use strict";
 
-var extendUtils = require("./utils/extend"),
-    window = require("./utils/window").getWindow();
+/* global DevExpress */
+
+var extendUtils = require("./utils/extend");
 /**
 * @name globalConfig
 * @section commonObjectStructures
@@ -73,8 +74,8 @@ var configMethod = function() {
     extendUtils.extend(config, arguments[0]);
 };
 
-if(window && window.DevExpress && window.DevExpress.config) {
-    configMethod(window.DevExpress.config);
+if(typeof DevExpress !== "undefined" && DevExpress.config) {
+    configMethod(DevExpress.config);
 }
 
 /**
