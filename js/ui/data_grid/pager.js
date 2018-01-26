@@ -546,6 +546,7 @@ var Pager = Widget.inherit({
     },
 
     _render: function() {
+        this.option().lightModeEnabled = false;
         this.callBase();
         this._updateLightMode();
     },
