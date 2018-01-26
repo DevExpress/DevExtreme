@@ -659,7 +659,6 @@ var TagBox = SelectBox.inherit({
 
     _restoreInputText: function() {
         this._clearTextValue();
-        this._clearFilter();
     },
 
     _focusOutHandler: function(e) {
@@ -721,7 +720,6 @@ var TagBox = SelectBox.inherit({
             .addClass(NATIVE_CLICK_CLASS);
 
         this._renderInputSize();
-        this._clearFilter();
         this._renderTags();
         this._popup && this._popup.refreshPosition();
     },
@@ -1201,6 +1199,7 @@ var TagBox = SelectBox.inherit({
     _applyButtonHandler: function() {
         this.option("value", this._getListValues());
         this._clearTextValue();
+        this._clearFilter();
         this.callBase();
     },
 
@@ -1290,6 +1289,15 @@ var TagBox = SelectBox.inherit({
             default:
                 this.callBase(args);
         }
+    },
+
+    _getActualSearchValue: function() {
+        return this.callBase() || this._searchValue();
+    },
+
+    _popupHidingHandler: function() {
+        this.callBase();
+        this._clearFilter();
     },
 
     reset: function() {

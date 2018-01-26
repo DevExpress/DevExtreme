@@ -519,6 +519,10 @@ var SelectBox = DropDownList.inherit({
         }).bind(this));
     },
 
+    _getActualSearchValue: function() {
+        return this._dataSource.searchValue();
+    },
+
     _toggleOpenState: function(isVisible) {
         if(this.option("disabled")) {
             return;
@@ -536,7 +540,7 @@ var SelectBox = DropDownList.inherit({
             if(this.option("showDataBeforeSearch") || this.option("minSearchLength") === 0) {
                 if(this._searchTimer) return;
 
-                var searchValue = this._dataSource.searchValue();
+                var searchValue = this._getActualSearchValue();
                 searchValue && this._wasSearch(true);
                 this._filterDataSource(searchValue || null);
             } else {
