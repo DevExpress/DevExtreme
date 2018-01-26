@@ -663,7 +663,6 @@ var DropDownList = DropDownEditor.inherit({
     },
 
     _listItemClickAction: function(e) {
-        $("#log").append($("<p>").html("list onItemClick"));
         this._listItemClickHandler(e);
         this._itemClickAction(e);
     },
