@@ -1,7 +1,7 @@
 "use strict";
 
 var errors = require("./errors"),
-    window = require("./utils/window").getWindow();
+    typeUtils = require("./utils/type");
 
 var wrapOverridden = function(baseProto, methodName, method) {
     return function() {
@@ -103,7 +103,7 @@ var classImpl = function() { };
 
 classImpl.inherit = function(members) {
     var inheritor = function() {
-        if(!this || this === window || typeof this.constructor !== "function") {
+        if(!this || typeUtils.isWindow(this) || typeof this.constructor !== "function") {
             throw errors.Error("E0003");
         }
 
