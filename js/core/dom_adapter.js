@@ -1,11 +1,28 @@
 "use strict";
 
-/* global document */
+/* global document, Node */
+
 var injector = require("./utils/dependency_injector");
 
 var nativeDOMAdapterStrategy = {
     querySelectorAll: function(element, selector) {
         return element.querySelectorAll(selector);
+    },
+
+    elementMatches: function(element, selector) {
+        var matches = element.matches || element.matchesSelector || element.mozMatchesSelector ||
+            element.msMatchesSelector || element.oMatchesSelector || element.webkitMatchesSelector ||
+            function(selector) {
+                var items = this.querySelectorAll(element.document || element.ownerDocument, selector);
+
+                for(var i = 0; i < items.length; i++) {
+                    if(items[i] === element) {
+                        return true;
+                    }
+                }
+            }.bind(this);
+
+        return matches.call(element, selector);
     },
 
     createElement: function(tagName, context) {
@@ -21,6 +38,18 @@ var nativeDOMAdapterStrategy = {
     createTextNode: function(text, context) {
         context = context || this.getDocument();
         return context.createTextNode(text);
+    },
+
+    isElementNode: function(element) {
+        return element && element.nodeType === Node.ELEMENT_NODE;
+    },
+
+    isTextNode: function(element) {
+        return element && element.nodeType === Node.TEXT_NODE;
+    },
+
+    isDocument: function(element) {
+        return element && element.nodeType === Node.DOCUMENT_NODE;
     },
 
     removeElement: function(element) {

@@ -10,7 +10,6 @@ var typeUtils = require("../../core/utils/type");
 var Callbacks = require("../../core/utils/callbacks");
 var isWindow = typeUtils.isWindow;
 var isFunction = typeUtils.isFunction;
-var matches = require("../../core/polyfills/matches");
 var WeakMap = require("../../core/polyfills/weak_map");
 var hookTouchProps = require("../../events/core/hook_touch_props");
 
@@ -28,7 +27,7 @@ var NATIVE_EVENTS_TO_TRIGGER = {
 var NO_BUBBLE_EVENTS = ["blur", "focusout", "focus", "focusin", "load"];
 
 var matchesSafe = function(target, selector) {
-    return !isWindow(target) && target.nodeName !== "#document" && matches(target, selector);
+    return !isWindow(target) && target.nodeName !== "#document" && domAdapter.elementMatches(target, selector);
 };
 var elementDataMap = new WeakMap();
 var guid = 0;

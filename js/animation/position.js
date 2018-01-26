@@ -380,12 +380,9 @@ var calculatePosition = function(what, options) {
             windowHeight = win.height(),
             left = win.scrollLeft(),
             top = win.scrollTop(),
-            document = window.document,
             documentElement = domAdapter.getDocumentElement(),
-            hScrollbar = document.width > documentElement.clientWidth,
-            vScrollbar = document.height > documentElement.clientHeight,
-            hZoomLevel = support.touch ? documentElement.clientWidth / (vScrollbar ? windowWidth - scrollbarWidth : windowWidth) : 1,
-            vZoomLevel = support.touch ? documentElement.clientHeight / (hScrollbar ? windowHeight - scrollbarWidth : windowHeight) : 1;
+            hZoomLevel = support.touch ? documentElement.clientWidth / windowWidth : 1,
+            vZoomLevel = support.touch ? documentElement.clientHeight / windowHeight : 1;
 
         if(scrollbarWidth === undefined) {
             calculateScrollbarWidth();
