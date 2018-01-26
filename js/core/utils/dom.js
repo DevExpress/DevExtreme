@@ -167,10 +167,10 @@ var clipboardText = function(event, text) {
 
 var contains = function(container, element) {
     if(element) {
-        element = element.nodeType === window.Node.TEXT_NODE ? element.parentNode : element;
+        element = domAdapter.isTextNode(element) ? element.parentNode : element;
     }
 
-    return container.nodeType === window.Node.DOCUMENT_NODE ? container.body.contains(element) : container.contains(element);
+    return domAdapter.isDocument(container) ? container.body.contains(element) : container.contains(element);
 };
 
 var getPublicElement = function($element) {
