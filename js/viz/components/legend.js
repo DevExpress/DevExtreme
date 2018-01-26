@@ -2,7 +2,7 @@
 
 var vizUtils = require("../core/utils"),
     extend = require("../../core/utils/extend").extend,
-    each = require("../../core/utils/iterator").each,
+    _each = require("../../core/utils/iterator").each,
     layoutElementModule = require("../core/layout_element"),
     typeUtils = require("../../core/utils/type"),
 
@@ -22,7 +22,6 @@ var vizUtils = require("../core/utils"),
     _normalizeEnum = vizUtils.normalizeEnum,
 
     _extend = extend,
-    _each = each,
 
     DEFAULT_MARGIN = 10,
     DEFAULT_MARKER_HATCHING_WIDTH = 2,
@@ -164,16 +163,25 @@ function inRect(rect, x, y) {
     return x >= rect.left && x <= rect.right && y >= rect.top && y <= rect.bottom;
 }
 
-function checkLinesSize(lines, layoutOptions, countItems) {
+function checkLinesSize(lines, layoutOptions, countItems, margins) {
     var position = { x: 0, y: 0 },
         maxMeasureLength = 0,
-        maxAltMeasureLength = 0;
+        maxAltMeasureLength = 0,
+        margin = 0;
 
-    _each(lines, function(i, line) {
-        var firstItem = line[0];
-        _each(line, function(_, item) {
+    if(layoutOptions.direction === "y") {
+        margin = margins.top + margins.bottom;
+    } else {
+        margin = margins.left + margins.right;
+    }
+
+    lines.forEach(function(line, i) {
+        var firstItem = line[0],
+            lineLength = line.length;
+
+        line.forEach(function(item, index) {
             var offset = item.offset || layoutOptions.spacing;
-            position[layoutOptions.direction] += item[layoutOptions.measure] + offset;
+            position[layoutOptions.direction] += item[layoutOptions.measure] + (index !== lineLength - 1 ? offset : 0);
             maxMeasureLength = _max(maxMeasureLength, position[layoutOptions.direction]);
         });
 
@@ -183,7 +191,7 @@ function checkLinesSize(lines, layoutOptions, countItems) {
         maxAltMeasureLength = _max(maxAltMeasureLength, position[layoutOptions.altDirection]);
     });
 
-    if(maxMeasureLength > layoutOptions.length) {
+    if(maxMeasureLength + margin > layoutOptions.length) {
         layoutOptions.countItem = decreaseItemCount(layoutOptions, countItems);
         return true;
     }
@@ -528,7 +536,7 @@ extend(legendPrototype, {
         }
     },
 
-    _locateRowsColumns: function() {
+    _locateRowsColumns: function(options) {
         var that = this,
             iteration = 0,
             layoutOptions = that._getItemsLayoutOptions(),
@@ -540,7 +548,7 @@ extend(legendPrototype, {
             that._createLines(lines, layoutOptions);
             that._alignLines(lines, layoutOptions);
             iteration++;
-        } while(checkLinesSize(lines, layoutOptions, countItems) && iteration < countItems);
+        } while(checkLinesSize(lines, layoutOptions, countItems, options.margin) && iteration < countItems);
 
         that._applyItemPosition(lines, layoutOptions);
     },
