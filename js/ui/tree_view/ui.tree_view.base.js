@@ -1,6 +1,7 @@
 "use strict";
 
 var $ = require("../../core/renderer"),
+    domAdapter = require("../../core/dom_adapter"),
     eventsEngine = require("../../events/core/events_engine"),
     messageLocalization = require("../../localization/message"),
     clickEvent = require("../../events/click"),
@@ -1049,7 +1050,7 @@ var TreeViewBase = HierarchicalCollectionWidget.inherit({
             return null;
         }
 
-        if(typeUtils.isDomNode(itemElement)) {
+        if(domAdapter.isElementNode(itemElement)) {
             return this._getNodeByElement(itemElement);
         }
 

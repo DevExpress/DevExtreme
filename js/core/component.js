@@ -1,7 +1,7 @@
 "use strict";
 
 var Config = require("./config"),
-    window = require("./utils/window").getWindow(),
+    domAdapter = require("./dom_adapter"),
     extend = require("./utils/extend").extend,
     Class = require("./class"),
     Action = require("./action"),
@@ -215,7 +215,7 @@ var Component = Class.inherit({
             return true;
         }
 
-        if(oldValue === null || typeof oldValue !== "object" || oldValue instanceof window.HTMLElement) {
+        if(oldValue === null || typeof oldValue !== "object" || domAdapter.isElementNode(oldValue)) {
             return oldValue === newValue;
         }
 
