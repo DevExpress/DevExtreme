@@ -2,7 +2,9 @@
 
 /* global document, Node */
 
-var domAdapter = module.exports = {
+var injector = require("./utils/dependency_injector");
+
+var nativeDOMAdapterStrategy = {
     querySelectorAll: function(element, selector) {
         return element.querySelectorAll(selector);
     },
@@ -11,30 +13,30 @@ var domAdapter = module.exports = {
         var matches = element.matches || element.matchesSelector || element.mozMatchesSelector ||
             element.msMatchesSelector || element.oMatchesSelector || element.webkitMatchesSelector ||
             function(selector) {
-                var items = domAdapter.querySelectorAll(element.document || element.ownerDocument, selector);
+                var items = this.querySelectorAll(element.document || element.ownerDocument, selector);
 
                 for(var i = 0; i < items.length; i++) {
                     if(items[i] === element) {
                         return true;
                     }
                 }
-            };
+            }.bind(this);
 
         return matches.call(element, selector);
     },
 
     createElement: function(tagName, context) {
-        context = context || domAdapter.getDocument();
+        context = context || this.getDocument();
         return context.createElement(tagName);
     },
 
     createElementNS: function(ns, tagName, context) {
-        context = context || domAdapter.getDocument();
+        context = context || this.getDocument();
         return context.createElementNS(ns, tagName);
     },
 
     createTextNode: function(text, context) {
-        context = context || domAdapter.getDocument();
+        context = context || this.getDocument();
         return context.createTextNode(text);
     },
 
@@ -116,42 +118,42 @@ var domAdapter = module.exports = {
     },
 
     getActiveElement: function() {
-        var document = domAdapter.getDocument();
+        var document = this.getDocument();
         return document.activeElement;
     },
 
     getBody: function() {
-        var document = domAdapter.getDocument();
+        var document = this.getDocument();
         return document.body;
     },
 
     createDocumentFragment: function() {
-        var document = domAdapter.getDocument();
+        var document = this.getDocument();
         return document.createDocumentFragment();
     },
 
     getDocumentElement: function() {
-        var document = domAdapter.getDocument();
+        var document = this.getDocument();
         return document.documentElement;
     },
 
     getLocation: function() {
-        var document = domAdapter.getDocument();
+        var document = this.getDocument();
         return document.location;
     },
 
     getSelection: function() {
-        var document = domAdapter.getDocument();
+        var document = this.getDocument();
         return document.selection;
     },
 
     getReadyState: function() {
-        var document = domAdapter.getDocument();
+        var document = this.getDocument();
         return document.readyState;
     },
 
     getHead: function() {
-        var document = domAdapter.getDocument();
+        var document = this.getDocument();
         return document.head;
     },
 
@@ -163,3 +165,5 @@ var domAdapter = module.exports = {
         };
     }
 };
+
+module.exports = injector(nativeDOMAdapterStrategy);
