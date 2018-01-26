@@ -627,7 +627,7 @@ var ContextMenu = MenuBase.inherit((function() {
                 return false;
             }
 
-            if(e.target === window.document) {
+            if(domAdapter.isDocument(e.target)) {
                 return true;
             }
 

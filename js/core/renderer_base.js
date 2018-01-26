@@ -675,6 +675,19 @@ initRender.prototype.parents = function(selector) {
     return renderer(result);
 };
 
+initRender.prototype.mainParent = function() {
+    var result,
+        parent = this.parent();
+
+    while(parent && parent[0]) {
+        if(domAdapter.isElementNode(parent[0]) || domAdapter.isDocument(parent[0])) {
+            result = parent.get(0);
+        }
+        parent = parent.parent();
+    }
+    return renderer(result);
+};
+
 initRender.prototype.closest = function(selector) {
     if(this.is(selector)) {
         return this;

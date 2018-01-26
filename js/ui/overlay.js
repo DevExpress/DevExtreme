@@ -548,7 +548,7 @@ var Overlay = Widget.inherit({
         }
         if(closeOnOutsideClick) {
             var $container = this._$content,
-                outsideClick = (!$container.is(e.target) && !domUtils.contains($container.get(0), e.target) && $(e.target).closest(window.document).length);
+                outsideClick = (!$container.is(e.target) && !domUtils.contains($container.get(0), e.target) && domAdapter.isDocument($(e.target).mainParent()));
 
             if(outsideClick) {
                 if(this.option("shading")) {

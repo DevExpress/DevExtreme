@@ -2,6 +2,7 @@
 
 var $ = require("../../core/renderer"),
     window = require("../../core/utils/window").getWindow(),
+    domAdapter = require("../../core/dom_adapter"),
     commonUtils = require("../../core/utils/common"),
     virtualScrollingCore = require("./ui.grid_core.virtual_scrolling_core"),
     gridCoreUtils = require("./ui.grid_core.utils"),
@@ -523,7 +524,7 @@ var VirtualScrollingRowsViewExtender = (function() {
 
             that.callBase();
 
-            if(that.component.$element() && !that._windowScroll && $element.closest(window.document).length) {
+            if(that.component.$element() && !that._windowScroll && domAdapter.isDocument($element.mainParent())) {
                 that._windowScroll = virtualScrollingCore.subscribeToExternalScrollers($element, function(scrollPos) {
                     if(!that._hasHeight && that._rowHeight) {
                         that._setViewportScrollTop(scrollPos);
