@@ -39,15 +39,15 @@ var domAdapter = module.exports = {
     },
 
     isElementNode: function(element) {
-        return element.nodeType === Node.ELEMENT_NODE;
+        return element && element.nodeType === Node.ELEMENT_NODE;
     },
 
     isTextNode: function(element) {
-        return element.nodeType === Node.TEXT_NODE;
+        return element && element.nodeType === Node.TEXT_NODE;
     },
 
     isDocument: function(element) {
-        return element.nodeType === Node.DOCUMENT_NODE;
+        return element && element.nodeType === Node.DOCUMENT_NODE;
     },
 
     removeElement: function(element) {
