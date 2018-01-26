@@ -577,7 +577,7 @@ QUnit.test("Vertical orientation. Two columns", function(assert) {
 
 QUnit.test("Vertical orientation. Two columns. ItemTextPosition = 'right'", function(assert) {
     this.options.border.visible = true;
-    this.createSimpleLegend().draw(200, 75);
+    this.createSimpleLegend().draw(200, 91);
 
     this.checkItems(assert, [
         { id: 0, marker: { translateX: 0, translateY: 0 }, label: { translateX: 20, translateY: -1 } },
@@ -618,6 +618,18 @@ QUnit.test("Horizontal orientation. itemTextPosition = 'top'", function(assert) 
         { id: 0, marker: { translateX: 3, translateY: 14 }, label: { translateX: -1, translateY: -3 } },
         { id: 1, marker: { translateX: 31, translateY: 14 }, label: { translateX: 27, translateY: -3 } },
         { id: 2, marker: { translateX: 59, translateY: 14 }, label: { translateX: 55, translateY: -3 } }
+    ]);
+});
+
+QUnit.test("Horizontal orientation. two rows", function(assert) {
+    this.options.orientation = 'horizontal';
+    this.options.itemTextPosition = "top";
+    this.createSimpleLegend().draw(91, 200);
+
+    this.checkItems(assert, [
+        { id: 0, marker: { translateX: 3, translateY: 14 }, label: { translateX: -1, translateY: -3 } },
+        { id: 1, marker: { translateX: 31, translateY: 14 }, label: { translateX: 27, translateY: -3 } },
+        { id: 2, marker: { translateX: 3, translateY: 50 }, label: { translateX: -1, translateY: 33 } }
     ]);
 });
 
@@ -729,7 +741,7 @@ QUnit.test("paddingLeftRight options", function(assert) {
 QUnit.test("paddingTopBottom options", function(assert) {
     this.options.border.visible = true;
     this.options.paddingTopBottom = 20;
-    this.createSimpleLegend().draw(200, 85);
+    this.createSimpleLegend().draw(200, 101);
 
     this.checkItems(assert, [
         { id: 0, marker: { translateX: 0, translateY: 0 }, label: { translateX: 20, translateY: -1 } },
@@ -753,7 +765,7 @@ QUnit.test("T405783, border is visible", function(assert) {
 QUnit.test("T405783, border is not visible", function(assert) {
     this.options.border.visible = false;
     this.options.columnCount = 2;
-    this.createSimpleLegend().draw(200, 56);
+    this.createSimpleLegend().draw(200, 72);
 
     this.checkItems(assert, [
             { id: 0, marker: { translateX: 0, translateY: 0 }, label: { translateX: 20, translateY: -1 } },

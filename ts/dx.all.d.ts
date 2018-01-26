@@ -530,7 +530,7 @@ declare module DevExpress {
         /** Stops the event's propagation up the DOM tree, keeping parent handlers unnotified of the event. */
         stopPropagation(): void;
     }
-    export type event = dxEvent | JQueryEventObject; 
+    export type event = dxEvent | JQueryEventObject;
     /** An object that serves as a namespace for the methods that are used to localize an application. */
     export class localization {
         /** Loads DevExtreme messages. */
@@ -1385,11 +1385,11 @@ declare module DevExpress.core {
         /** Subscribes to events. */
         on(events: any): any;
     }
-    export type dxElement = Element & JQuery; 
+    export type dxElement = Element & JQuery;
 }
 declare module DevExpress.framework {
     /** Custom Knockout binding that links an HTML element with a specific action. */
-    export type dxAction = ((e: { element?: JQuery, model?: any, jQueryEvent?: JQueryEventObject, event?: event }) => any) | string | any; 
+    export type dxAction = ((e: { element?: JQuery, model?: any, jQueryEvent?: JQueryEventObject, event?: event }) => any) | string | any;
     export interface dxCommandOptions extends DOMComponentOptions {
         /** Indicates whether or not the widget that displays this command is disabled. */
         disabled?: boolean;
@@ -1915,6 +1915,7 @@ declare module DevExpress.ui {
         columnMinWidth?: number;
         /** Specifies how the widget resizes columns. Applies only if allowColumnResizing is true. */
         columnResizingMode?: string;
+        /** Overridden. */
         columns?: Array<GridBaseColumn>;
         /** Specifies the origin of data for the widget. */
         dataSource?: string | Array<any> | DevExpress.data.DataSource | DevExpress.data.DataSourceOptions;
@@ -2168,6 +2169,7 @@ declare module DevExpress.ui {
         updateDimensions(): void;
     }
     export interface dxDataGridOptions extends GridBaseOptions {
+        /** An array of grid columns. */
         columns?: Array<dxDataGridColumn>;
         /** Specifies a function that customizes grid columns after they are created. */
         customizeColumns?: ((columns: Array<dxDataGridColumn>) => any);
@@ -3456,7 +3458,7 @@ declare module DevExpress.ui {
         rows?: Array<{ baseSize?: number | string, shrink?: number, ratio?: number, screen?: string }>;
         /** Specifies the function returning the size qualifier depending on the screen's width. */
         screenByWidth?: Function;
-        /** Decides on which screens all layout elements should be arranged in a single column. */
+        /** Specifies on which screens all layout elements should be arranged in a single column. Accepts a single or several size qualifiers separated by a space. */
         singleColumnScreen?: string;
         /** Specifies the widget's width. */
         width?: any;
@@ -3995,6 +3997,7 @@ declare module DevExpress.ui {
     export interface dxTreeListOptions extends GridBaseOptions {
         /** Specifies whether all rows are expanded initially. */
         autoExpandAll?: boolean;
+        /** Configures columns. */
         columns?: Array<dxTreeListColumn>;
         /** Customizes columns after they are created. */
         customizeColumns?: ((columns: Array<dxTreeListColumn>) => any);
@@ -4077,6 +4080,8 @@ declare module DevExpress.ui {
         collapseRow(key: any): Promise<void> & JQueryPromise<void>;
         /** Expands a row with a specific key. */
         expandRow(key: any): Promise<void> & JQueryPromise<void>;
+
+        forEachNode(nodes: Array<dxTreeListNode>, callback: Function): void;
         /** Gets a node with a specific key. */
         getNodeByKey(key: any | string | number): dxTreeListNode;
         /** Gets the root node. */
@@ -4116,6 +4121,8 @@ declare module DevExpress.ui {
         expandNodesRecursive?: boolean;
         /** Specifies the name of the data source item field whose value defines whether or not the corresponding node includes child nodes. */
         hasItemsExpr?: string | Function;
+        /** An array of items displayed by the widget. */
+        items?: Array<dxTreeViewItemTemplate>;
         /** A handler for the itemClick event. */
         onItemClick?: ((e: { component?: DOMComponent, element?: DevExpress.core.dxElement, model?: any, node?: dxTreeViewNode }) => any);
         /** A handler for the itemCollapsed event. */
@@ -4129,11 +4136,11 @@ declare module DevExpress.ui {
         /** A handler for the itemRendered event. */
         onItemRendered?: ((e: { component?: DOMComponent, element?: DevExpress.core.dxElement, model?: any, node?: dxTreeViewNode }) => any);
         /** @deprecated Use the itemSelectionChanged event instead. */
-        onItemSelected?: ((e: { component?: DOMComponent, element?: DevExpress.core.dxElement, model?: any, node?: dxTreeViewNode }) => any);
+        onItemSelected?: ((e: { component?: DOMComponent, element?: DevExpress.core.dxElement, model?: any, itemElement?: DevExpress.core.dxElement, node?: dxTreeViewNode }) => any);
         /** A handler for the itemSelectionChanged event. */
-        onItemSelectionChanged?: ((e: { component?: DOMComponent, element?: DevExpress.core.dxElement, model?: any, node?: dxTreeViewNode }) => any);
+        onItemSelectionChanged?: ((e: { component?: DOMComponent, element?: DevExpress.core.dxElement, model?: any, node?: dxTreeViewNode, itemElement?: DevExpress.core.dxElement }) => any);
         /** A handler for the selectionChanged event. Raised after an item is selected or unselected. */
-        onSelectionChanged?: ((e: { component?: DOMComponent, element?: DevExpress.core.dxElement, model?: any, addedItems?: Array<any>, removedItems?: Array<any> }) => any);
+        onSelectionChanged?: ((e: { component?: DOMComponent, element?: DevExpress.core.dxElement, model?: any }) => any);
         /** Specifies the name of the data source item field for holding the parent key of the corresponding node. */
         parentIdExpr?: string | Function;
         /** Specifies the parent ID value of the root item. */
@@ -5242,9 +5249,9 @@ declare module DevExpress.ui {
         repaint(): void;
     }
     /** A template notation used to specify templates for widget elements. */
-    export type template = string | Function | Element | JQuery; 
+    export type template = string | Function | Element | JQuery;
     /** Formats values. */
-    export type format = string | ((value: number | Date) => string) | { type?: string, precision?: number, currency?: string, formatter?: ((value: number | Date) => string), parser?: ((value: string) => number | Date) }; 
+    export type format = string | ((value: number | Date) => string) | { type?: string, precision?: number, currency?: string, formatter?: ((value: number | Date) => string), parser?: ((value: string) => number | Date) };
     /** An object that serves as a namespace for methods displaying a message in an application/site. */
     export class dialog {
         /** Creates an alert dialog message containing a single "OK" button. */
@@ -5623,6 +5630,8 @@ declare module DevExpress.viz {
         argumentField?: string;
         /** Binds the series to a value axis. */
         axis?: string;
+        barPadding?: number;
+        barWidth?: number;
         /** Configures the series border (in area-like series) or the series point border (in bar-like and bubble series). */
         border?: dxChartSeriesTypesCommonSeriesBorder;
         /** Specifies which data source field provides close values for points of a financial series. */
@@ -6715,6 +6724,8 @@ declare module DevExpress.viz {
     export interface dxPolarChartSeriesTypesCommonPolarChartSeries {
         /** Specifies the data source field that provides arguments for series points. */
         argumentField?: string;
+        barPadding?: number;
+        barWidth?: number;
         /** An object defining the series border configuration options. */
         border?: { visible?: boolean, width?: number, color?: string, dashStyle?: string };
         /** Specifies whether or not to close the chart by joining the end point with the first point. */
@@ -6997,7 +7008,9 @@ declare module DevExpress.viz.charts {
         adjustOnZoom?: boolean;
         /** Configures the argument axis. */
         argumentAxis?: dxChartArgumentAxis;
-        /** Controls the width of bars in the widget. Applies only to bar-like series and when the equalBarWidth option is true. */
+        barGroupPadding?: number;
+        barGroupWidth?: number;
+        /** @deprecated */
         barWidth?: number;
         /** Defines common settings for both the argument and value axis in a chart. */
         commonAxisSettings?: dxChartCommonAxisSettings;
@@ -7013,7 +7026,7 @@ declare module DevExpress.viz.charts {
         dataPrepareSettings?: { checkTypeForAllData?: boolean, convertToAxisDataType?: boolean, sortingMethod?: boolean | ((a: any, b: any) => number) };
         /** Specifies which pane should be used by default. */
         defaultPane?: string;
-        /** Specifies whether all bars should have equal width, even if some values are missing from a series. Applies only to bar-like series. */
+        /** @deprecated */
         equalBarWidth?: boolean;
         /** Specifies the options of a chart's legend. */
         legend?: dxChartLegend;
@@ -7556,7 +7569,9 @@ declare module DevExpress.viz.charts {
         adaptiveLayout?: dxPolarChartAdaptiveLayout;
         /** Specifies argument axis options for the PolarChart widget. */
         argumentAxis?: dxPolarChartArgumentAxis;
-        /** Specifies a common bar width as a percentage from 0 to 1. */
+        barGroupPadding?: number;
+        barGroupWidth?: number;
+        /** @deprecated */
         barWidth?: number;
         /** An object defining the configuration options that are common for all axes of the PolarChart widget. */
         commonAxisSettings?: dxPolarChartCommonAxisSettings;
@@ -7566,7 +7581,7 @@ declare module DevExpress.viz.charts {
         containerBackgroundColor?: string;
         /** An object providing options for managing data from a data source. */
         dataPrepareSettings?: { checkTypeForAllData?: boolean, convertToAxisDataType?: boolean, sortingMethod?: boolean | ((a: { arg?: Date | number | string, val?: Date | number | string }, b: { arg?: Date | number | string, val?: Date | number | string }) => number) };
-        /** Specifies whether or not all bars in a series must have the same angle, or may have different angles if any points in other series are missing. */
+        /** @deprecated */
         equalBarWidth?: boolean;
         /** Specifies the options of a chart's legend. */
         legend?: dxPolarChartLegend;
@@ -8302,7 +8317,7 @@ declare module DevExpress.viz.rangeSelector {
         /** Specifies the RangeSelector's behavior options. */
         behavior?: { animationEnabled?: boolean, snapToTicks?: boolean, moveSelectedRangeByClick?: boolean, manualRangeSelectionEnabled?: boolean, allowSlidersSwap?: boolean, callSelectedRangeChanged?: string, callValueChanged?: string };
         /** Specifies the options required to display a chart as the range selector's background. */
-        chart?: { commonSeriesSettings?: any, bottomIndent?: number, topIndent?: number, dataPrepareSettings?: any, useAggregation?: boolean, valueAxis?: any, series?: any | Array<any>, equalBarWidth?: boolean, barWidth?: number, negativesAsZeroes?: boolean, palette?: Array<string> | string, paletteExtensionMode?: string, seriesTemplate?: any };
+        chart?: { commonSeriesSettings?: any, bottomIndent?: number, topIndent?: number, dataPrepareSettings?: any, useAggregation?: boolean, valueAxis?: any, series?: any | Array<any>, equalBarWidth?: boolean, barWidth?: number, barGroupPadding?: number, barGroupWidth?: number, negativesAsZeroes?: boolean, palette?: Array<string> | string, paletteExtensionMode?: string, seriesTemplate?: any };
         /** Specifies the color of the parent page element. */
         containerBackgroundColor?: string;
         /** Specifies a data source for the scale values and for the chart at the background. */

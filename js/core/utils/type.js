@@ -1,7 +1,5 @@
 "use strict";
 
-var window = require("./window").getWindow();
-
 var types = {
     "[object Array]": "array",
     "[object Date]": "date",
@@ -77,10 +75,6 @@ var isWindow = function(object) {
     return object != null && object === object.window;
 };
 
-var isDomNode = function(node) {
-    return node instanceof window.Element;
-};
-
 var isRenderer = function(object) {
     return !!(object.jquery || object.dxRenderer);
 };
@@ -105,7 +99,6 @@ exports.isEmptyObject = isEmptyObject;
 exports.isPlainObject = isPlainObject;
 exports.isPrimitive = isPrimitive;
 exports.isWindow = isWindow;
-exports.isDomNode = isDomNode;
 exports.isRenderer = isRenderer;
 exports.isPromise = isPromise;
 exports.isDeferred = isDeferred;

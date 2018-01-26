@@ -669,7 +669,7 @@ function orderHtmlTree(list, line, node, parentStyle, parentClassName) {
         list.push({ value: node.wholeText, style: parentStyle, className: parentClassName /* EXPERIMENTAL */, line: line, height: parentStyle[KEY_FONT_SIZE] || 0 });
     } else if(node.tagName === "BR") {
         ++line;
-    } else if(node.nodeType === window.Node.ELEMENT_NODE) {
+    } else if(domAdapter.isElementNode(node)) {
         extend(style = {}, parentStyle);
         switch(node.tagName) {
             case "B":

@@ -1,11 +1,27 @@
 "use strict";
 
-/* global document */
+/* global document, Node */
 
 var domAdapter = module.exports = {
     querySelectorAll: function(element, selector) {
         element = element || domAdapter.getDocument();
         return element.querySelectorAll(selector);
+    },
+
+    elementMatches: function(element, selector) {
+        var matches = element.matches || element.matchesSelector || element.mozMatchesSelector ||
+            element.msMatchesSelector || element.oMatchesSelector || element.webkitMatchesSelector ||
+            function(selector) {
+                var items = domAdapter.querySelectorAll(element.document || element.ownerDocument, selector);
+
+                for(var i = 0; i < items.length; i++) {
+                    if(items[i] === element) {
+                        return true;
+                    }
+                }
+            };
+
+        return matches.call(element, selector);
     },
 
     createElement: function(tagName, context) {
@@ -21,6 +37,18 @@ var domAdapter = module.exports = {
     createTextNode: function(text, context) {
         context = context || domAdapter.getDocument();
         return context.createTextNode(text);
+    },
+
+    isElementNode: function(element) {
+        return element && element.nodeType === Node.ELEMENT_NODE;
+    },
+
+    isTextNode: function(element) {
+        return element && element.nodeType === Node.TEXT_NODE;
+    },
+
+    isDocument: function(element) {
+        return element && element.nodeType === Node.DOCUMENT_NODE;
     },
 
     removeElement: function(element) {

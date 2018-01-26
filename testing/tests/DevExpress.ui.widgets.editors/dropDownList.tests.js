@@ -165,11 +165,13 @@ QUnit.test("focusout should be prevented when list clicked", function(assert) {
 
     var $list = $(this.instance.content()).find(".dx-list");
 
-    $list.on("dxpointerdown", function(e) {
-        assert.ok(e.isDefaultPrevented(), "pointerdown was prevented and lead to focusout prevent");
+    $list.on("mousedown", function(e) {
+        //note: you should not prevent pointerdown because it will prevent click on ios real devices
+        //you must use preventDefault in code because it is possible to use .on('focusout', handler) instead of onFocusOut option
+        assert.ok(e.isDefaultPrevented(), "mousedown was prevented and lead to focusout prevent");
     });
 
-    $list.trigger("dxpointerdown");
+    $list.trigger("mousedown");
 });
 
 QUnit.test("list should not have tab index to prevent its focusing when scrollbar clicked", function(assert) {

@@ -869,7 +869,6 @@ Axis.prototype = {
         that._axesContainerGroup = that._stripsGroup = that._constantLinesGroup = null;
 
         that._scaleBreaksGroup = null;
-        that._scaleBreakPattern && that._scaleBreakPattern.dispose();
 
         that._renderer = that._options = that._textOptions = that._textFontStyles = null;
         that._translator = null;
@@ -1193,6 +1192,8 @@ Axis.prototype = {
 
     _reinitTranslator: function(range) {
         var that = this,
+            min = range.min,
+            max = range.max,
             minVisible = range.minVisible,
             maxVisible = range.maxVisible,
             interval = range.interval,
@@ -1219,6 +1220,10 @@ Axis.prototype = {
                 maxVisible: maxVisible,
                 interval: interval
             });
+
+            if(isDefined(min) && isDefined(max) && min.valueOf() === max.valueOf()) {
+                range.min = range.max = min;
+            }
         }
 
         range.breaks = that._correctedBreaks;
@@ -1267,7 +1272,7 @@ Axis.prototype = {
             marginSize = margins.size,
             marginValue = 0,
             type = options.type,
-            valueMarginsEnabled = options.valueMarginsEnabled && type !== constants.discrete,
+            valueMarginsEnabled = options.valueMarginsEnabled && type !== constants.discrete && type !== "semidiscrete",
             minValueMargin = options.minValueMargin,
             maxValueMargin = options.maxValueMargin,
             add = getAddFunction(range, !that.isArgumentAxis),
@@ -1476,7 +1481,8 @@ Axis.prototype = {
             options = that._options,
             minOpt = options.min,
             maxOpt = options.max,
-            isDiscrete = options.type === constants.discrete;
+            isDiscrete = options.type === constants.discrete,
+            translator = that.getTranslator();
 
         skipAdjusting = skipAdjusting || isDiscrete;
 
@@ -1504,6 +1510,10 @@ Axis.prototype = {
             minVisible: min,
             maxVisible: max
         }, that._series, that.isArgumentAxis) : [];
+
+        if(translator.zoomArgsIsEqualCanvas(that._zoomArgs)) {
+            that.resetZoom();
+        }
 
         return that._zoomArgs;
     },
