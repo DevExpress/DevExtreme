@@ -2471,7 +2471,7 @@ QUnit.test("min-height from styles when showBorders true", function(assert) {
 });
 
 //T450683
-QUnit.skip("rowsview height should not be reseted during updateDimension when min-height/max-height are not specified", function(assert) {
+QUnit.test("rowsview height should not be reseted during updateDimension when min-height/max-height are not specified", function(assert) {
     var $dataGrid = $("#dataGrid").dxDataGrid({
             height: 200,
             showBorders: true,
@@ -2495,10 +2495,7 @@ QUnit.skip("rowsview height should not be reseted during updateDimension when mi
 
     //assert
     var heightCalls = rowsView.height.getCalls().filter(function(call) { return call.args.length > 0; });
-    assert.equal(heightCalls.length, 1, "rowsview height is assigned once");
-
-    var firstAssignedHeight = heightCalls[0].args[0];
-    assert.equal(typeof firstAssignedHeight, "number", "assigned rowsview height is number");
+    assert.equal(heightCalls.length, 0, "rowsview height is not assigned");
 });
 
 //T108204
