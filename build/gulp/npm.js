@@ -76,10 +76,7 @@ gulp.task('npm-sources', ['bundler-config', 'npm-dts-generator'], function() {
 
         gulp.src(SRC_GLOBS)
             .pipe(compressionPipes.removeDebug())
-            .pipe(babel({
-                presets: ['env'],
-                plugins: ['transform-es2015-modules-commonjs', 'add-module-exports']
-            }))
+            .pipe(babel())
             .pipe(addDefaultExport())
             .pipe(headerPipes.starLicense())
             .pipe(compressionPipes.beautify())
