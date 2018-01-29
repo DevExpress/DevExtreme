@@ -20,8 +20,9 @@ var initRender = function(selector, context) {
     }
 
     if(typeof selector === "string") {
+        context = context || window.document;
         if(selector === "body") {
-            this[0] = domAdapter.getBody();
+            this[0] = context;
             this.length = 1;
             return this;
         }

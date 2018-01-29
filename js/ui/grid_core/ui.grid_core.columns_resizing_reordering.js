@@ -435,7 +435,7 @@ var DraggingHeaderView = modules.View.inherit({
             sourceColumnElement: options.columnElement,
             sourceLocation: options.sourceLocation
         };
-        that._onSelectStart = domAdapter.getProperty("onselectstart");
+        that._onSelectStart = domAdapter.getDocumentProperty("onselectstart");
 
         var onSelectStart = function() {
             return false;

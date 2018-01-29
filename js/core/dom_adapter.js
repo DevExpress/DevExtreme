@@ -4,7 +4,6 @@
 
 var domAdapter = module.exports = {
     querySelectorAll: function(element, selector) {
-        element = element || domAdapter.getDocument();
         return element.querySelectorAll(selector);
     },
 
@@ -157,7 +156,7 @@ var domAdapter = module.exports = {
         return document.head;
     },
 
-    getProperty: function(name) {
+    getDocumentProperty: function(name) {
         var document = domAdapter.getDocument();
         return document[name];
     },
