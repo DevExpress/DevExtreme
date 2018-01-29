@@ -1,9 +1,9 @@
 "use strict";
 
 var $ = require("../core/renderer"),
-    window = require("../core/utils/window").getWindow(),
     eventsEngine = require("../events/core/events_engine"),
     devices = require("../core/devices"),
+    domAdapter = require("../core/dom_adapter"),
     domUtils = require("../core/utils/dom"),
     animationFrame = require("../animation/frame"),
     eventUtils = require("./utils"),
@@ -182,9 +182,10 @@ var ClickEmitter = Emitter.inherit({
             blurPrevented = false;
         };
 
-        var NATIVE_CLICK_FIXER_NAMESPACE = "NATIVE_CLICK_FIXER";
-        eventsEngine.subscribeGlobal(window.document, eventUtils.addNamespace(pointerEvents.down, NATIVE_CLICK_FIXER_NAMESPACE), pointerDownHandler);
-        eventsEngine.subscribeGlobal(window.document, eventUtils.addNamespace("click", NATIVE_CLICK_FIXER_NAMESPACE), clickHandler);
+        var NATIVE_CLICK_FIXER_NAMESPACE = "NATIVE_CLICK_FIXER",
+            document = domAdapter.getDocument();
+        eventsEngine.subscribeGlobal(document, eventUtils.addNamespace(pointerEvents.down, NATIVE_CLICK_FIXER_NAMESPACE), pointerDownHandler);
+        eventsEngine.subscribeGlobal(document, eventUtils.addNamespace("click", NATIVE_CLICK_FIXER_NAMESPACE), clickHandler);
     }
 })();
 

@@ -11,9 +11,7 @@ var isReady = function() {
 };
 
 var subscribeReady = callOnce(function() {
-    // TODO: get rid of document
-    var document = windowUtils.getWindow().document;
-    var removeListener = domAdapter.listen(document, "DOMContentLoaded", function() {
+    var removeListener = domAdapter.listen(domAdapter.getDocument(), "DOMContentLoaded", function() {
         readyCallbacks.fire();
         removeListener();
     });

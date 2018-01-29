@@ -1,7 +1,7 @@
 "use strict";
 
 var $ = require("../../core/renderer"),
-    window = require("../../core/utils/window").getWindow(),
+    domAdapter = require("../../core/dom_adapter"),
     eventsEngine = require("../../events/core/events_engine"),
     Widget = require("../widget/ui.widget"),
     extend = require("../../core/utils/extend").extend,
@@ -62,8 +62,9 @@ var SpinButton = Widget.inherit({
             this._holdTimer = setInterval(this._spinChangeHandler, SPIN_HOLD_DELAY, { event: e });
         }).bind(this));
 
-        eventsEngine.on(window.document, POINTERUP_EVENT_NAME, this._clearTimer.bind(this));
-        eventsEngine.on(window.document, POINTERCANCEL_EVENT_NAME, this._clearTimer.bind(this));
+        var document = domAdapter.getDocument();
+        eventsEngine.on(document, POINTERUP_EVENT_NAME, this._clearTimer.bind(this));
+        eventsEngine.on(document, POINTERCANCEL_EVENT_NAME, this._clearTimer.bind(this));
 
         this._spinChangeHandler({ event: e });
     },
@@ -76,8 +77,9 @@ var SpinButton = Widget.inherit({
     _clearTimer: function() {
         eventsEngine.off(this.$element(), holdEvent.name);
 
-        eventsEngine.off(window.document, POINTERUP_EVENT_NAME);
-        eventsEngine.off(window.document, POINTERCANCEL_EVENT_NAME);
+        var document = domAdapter.getDocument();
+        eventsEngine.off(document, POINTERUP_EVENT_NAME);
+        eventsEngine.off(document, POINTERCANCEL_EVENT_NAME);
 
         if(this._feedBackDeferred) {
             this._feedBackDeferred.resolve();

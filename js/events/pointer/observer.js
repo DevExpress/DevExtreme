@@ -2,15 +2,14 @@
 
 var each = require("../../core/utils/iterator").each,
     readyCallbacks = require("../../core/utils/ready_callbacks"),
-    domAdapter = require("../../core/dom_adapter"),
-    windowUtils = require("../../core/utils/window");
+    domAdapter = require("../../core/dom_adapter");
 
 var addEventsListener = function(events, handler) {
     readyCallbacks.add(function() {
         events
             .split(" ")
             .forEach(function(event) {
-                domAdapter.listen(windowUtils.getWindow().document, event, handler, true);
+                domAdapter.listen(domAdapter.getDocument(), event, handler, true);
             });
     });
 };

@@ -840,7 +840,6 @@ module.exports = {
                         $table = that.callBase(options),
                         resizeCompletedHandler = function() {
                             var scrollableInstance = that.getScrollable();
-
                             if(scrollableInstance && that.element().closest(window.document).length) {
                                 that.resizeCompleted.remove(resizeCompletedHandler);
                                 scrollableInstance._visibilityChanged(true);

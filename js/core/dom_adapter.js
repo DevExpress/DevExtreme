@@ -157,6 +157,10 @@ var nativeDOMAdapterStrategy = {
         return document.head;
     },
 
+    getProperty: function(element, name) {
+        return element[name];
+    },
+
     listen: function(element, event, callback, useCapture) {
         element.addEventListener(event, callback, useCapture);
 

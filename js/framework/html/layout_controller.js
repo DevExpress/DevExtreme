@@ -3,7 +3,7 @@
 require("../../integration/jquery");
 
 var $ = require("jquery"),
-    window = require("../../core/utils/window").getWindow(),
+    domAdapter = require("../../core/dom_adapter"),
     eventsEngine = require("../../events/core/events_engine"),
     Class = require("../../core/class"),
     commonUtils = require("../../core/utils/common"),
@@ -471,7 +471,7 @@ var DefaultLayoutController = Class.inherit({
     },
 
     _onViewShown: function(viewInfo) {
-        eventsEngine.trigger(window.document, "dx.viewchanged");
+        eventsEngine.trigger(domAdapter.getDocument(), "dx.viewchanged");
     },
 
     _enter: function(animationItems, animationModifier) {

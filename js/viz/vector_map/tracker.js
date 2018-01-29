@@ -3,6 +3,7 @@
 var eventsEngine = require("../../events/core/events_engine"),
     windowUtils = require("../../core/utils/window"),
     window = windowUtils.getWindow(),
+    domAdapter = require("../../core/dom_adapter"),
     navigator = windowUtils.getNavigator(),
     _math = Math,
     _abs = _math.abs,
@@ -397,7 +398,7 @@ Tracker.prototype = {
                 off(_addNamespace("MSHoldVisual", _NAME)).
                 off(_addNamespace("contextmenu", _NAME));
         }
-        eventsEngine.off(window.document, that._docHandlers);
+        eventsEngine.off(domAdapter.getDocument(), that._docHandlers);
         that._root.off(that._rootHandlers);
     },
 
@@ -412,7 +413,7 @@ Tracker.prototype = {
                     isTouchEvent(event) && event.preventDefault();
                 });
         }
-        eventsEngine.on(window.document, that._docHandlers);
+        eventsEngine.on(domAdapter.getDocument(), that._docHandlers);
         that._root.on(that._rootHandlers);
     }
 };

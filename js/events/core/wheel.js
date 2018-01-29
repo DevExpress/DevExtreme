@@ -2,7 +2,7 @@
 
 var $ = require("../../core/renderer"),
     eventsEngine = require("../../events/core/events_engine"),
-    window = require("../../core/utils/window").getWindow(),
+    domAdapter = require("../../core/dom_adapter"),
     callOnce = require("../../core/utils/call_once"),
     registerEvent = require("./event_registrator"),
     eventUtils = require("../utils");
@@ -11,7 +11,7 @@ var EVENT_NAME = "dxmousewheel",
     EVENT_NAMESPACE = "dxWheel";
 
 var getWheelEventName = callOnce(function() {
-    return window.document["onwheel"] !== undefined ? "wheel" : "mousewheel";
+    return domAdapter.getProperty(domAdapter.getDocument(), "onwheel") !== undefined ? "wheel" : "mousewheel";
 });
 
 var wheel = {

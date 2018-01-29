@@ -1,7 +1,7 @@
 "use strict";
 
 var _eventData = require("../../events/utils").eventData,
-    window = require("../../core/utils/window").getWindow(),
+    domAdapter = require("../../core/dom_adapter"),
     clickEventName = require("../../events/click").name,
     downPointerEventName = require("../../events/pointer").down,
     movePointerEventName = require("../../events/pointer").move,
@@ -15,7 +15,7 @@ Tracker.prototype = {
     constructor: Tracker,
 
     _initHandlers: function(parameters) {
-        var document = window.document;
+        var document = domAdapter.getDocument();
 
         parameters.getCoords = function(e) {
             // TODO: Looks like "eventData" just returns e.pageX, e.pageY. Investigate and use just e.pageX, e.pageY is possible. Don't forget about touch.

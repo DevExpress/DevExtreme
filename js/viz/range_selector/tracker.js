@@ -3,6 +3,7 @@
 var eventsEngine = require("../../events/core/events_engine"),
     pointerEvents = require("../../events/pointer"),
     window = require("../../core/utils/window").getWindow(),
+    domAdapter = require("../../core/dom_adapter"),
     each = require("../../core/utils/iterator").each,
     msPointerEnabled = require("../../core/utils/support").pointer,
 
@@ -220,7 +221,7 @@ function Tracker(params) {
     ];
     // TODO: 3 "move" and 3 "end" events - do we really need that much?
     each(this._docEvents, function(_, events) {
-        eventsEngine.on(window.document, events);
+        eventsEngine.on(domAdapter.getDocument(), events);
     });
 
     function getRootOffsetLeft() {
@@ -233,7 +234,7 @@ Tracker.prototype = {
 
     dispose: function() {
         each(this._docEvents, function(_, events) {
-            eventsEngine.off(window.document, events);
+            eventsEngine.off(domAdapter.getDocument(), events);
         });
     },
 

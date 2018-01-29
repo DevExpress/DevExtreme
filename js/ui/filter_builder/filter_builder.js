@@ -2,8 +2,6 @@
 
 var $ = require("../../core/renderer"),
     domAdapter = require("../../core/dom_adapter"),
-    windowUtils = require("../../core/utils/window"),
-    window = windowUtils.getWindow(),
     Class = require("../../core/class"),
     eventsEngine = require("../../events/core/events_engine"),
     Widget = require("../widget/ui.widget"),
@@ -835,7 +833,7 @@ var FilterBuilder = Widget.inherit({
     },
 
     _createValueEditorWithEvents: function(item, field, $container) {
-        var document = window.document,
+        var document = domAdapter.getDocument(),
             that = this,
             value = item[2],
             removeEvents = function() {

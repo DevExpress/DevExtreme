@@ -2,8 +2,7 @@
 
 var $ = require("../../core/renderer"),
     domAdapter = require("../../core/dom_adapter"),
-    windowUtils = require("../../core/utils/window"),
-    window = windowUtils.getWindow(),
+    window = require("../../core/utils/window").getWindow(),
     eventsEngine = require("../../events/core/events_engine"),
     Guid = require("../../core/guid"),
     typeUtils = require("../../core/utils/type"),
@@ -158,7 +157,7 @@ var EditingController = modules.ViewController.inherit((function() {
                     }
                 });
 
-                eventsEngine.on(window.document, clickEvent.name, that._saveEditorHandler);
+                eventsEngine.on(domAdapter.getDocument(), clickEvent.name, that._saveEditorHandler);
             }
             that._updateEditColumn();
             that._updateEditButtons();
@@ -253,7 +252,7 @@ var EditingController = modules.ViewController.inherit((function() {
         dispose: function() {
             this.callBase();
             clearTimeout(this._inputFocusTimeoutID);
-            eventsEngine.off(window.document, clickEvent.name, this._saveEditorHandler);
+            eventsEngine.off(domAdapter.getDocument(), clickEvent.name, this._saveEditorHandler);
         },
 
         optionChanged: function(args) {

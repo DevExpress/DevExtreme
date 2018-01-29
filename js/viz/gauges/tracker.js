@@ -3,7 +3,7 @@
 var eventsEngine = require("../../events/core/events_engine"),
     _abs = Math.abs,
     Class = require("../../core/class"),
-    window = require("../../core/utils/window").getWindow(),
+    domAdapter = require("../../core/dom_adapter"),
     wheelEvent = require("../../events/core/wheel"),
 
     TOOLTIP_SHOW_DELAY = 300,
@@ -222,7 +222,7 @@ function handleTooltipDocumentTouchEnd() {
     }
 }
 
-eventsEngine.subscribeGlobal(window.document, {
+eventsEngine.subscribeGlobal(domAdapter.getDocument(), {
     'touchstart.gauge-tooltip': handleTooltipDocumentTouchStart,
     'touchend.gauge-tooltip': handleTooltipDocumentTouchEnd
 });
