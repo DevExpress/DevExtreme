@@ -33,7 +33,8 @@ var TS = require('./ts_metadata.json');
 
 var widgetNameByPath = exports.widgetNameByPath = function(path) {
     if(path.startsWith('ui.dx') || path.startsWith('viz.dx')) {
-        return path.split('.')[1];
+        var parts = path.split('.');
+        return parts.length === 2 ? parts[1] : '';
     }
 };
 
