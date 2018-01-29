@@ -235,9 +235,9 @@ var DateBox = DropDownEditor.inherit({
             * @name dxDateBoxOptions_pickerType
             * @publicName pickerType
             * @type Enums.DateBoxPickerType
-            * @default 'native'
+            * @default 'calendar'
             */
-            pickerType: PICKER_TYPE["native"],
+            pickerType: PICKER_TYPE["calendar"],
 
             /**
             * @name dxDateBoxOptions_invalidDateMessage
@@ -296,6 +296,12 @@ var DateBox = DropDownEditor.inherit({
             {
                 device: { platform: "ios" },
                 options: {
+                    /**
+                    * @name dxDateBoxOptions_pickerType
+                    * @publicName pickerType
+                    * @default 'native'
+                    */
+                    pickerType: PICKER_TYPE.native,
                     showPopupTitle: true
                 }
             },
@@ -304,6 +310,12 @@ var DateBox = DropDownEditor.inherit({
                     return device.platform === "android";
                 },
                 options: {
+                    /**
+                    * @name dxDateBoxOptions_pickerType
+                    * @publicName pickerType
+                    * @default 'native'
+                    */
+                    pickerType: PICKER_TYPE.native,
                     buttonsLocation: "bottom after"
                 }
             },
@@ -335,9 +347,9 @@ var DateBox = DropDownEditor.inherit({
                     /**
                     * @name dxDateBoxOptions_pickerType
                     * @publicName pickerType
-                    * @default 'rollers' @for android_below_version_4.4
-                    * @default 'rollers' @for desktop
-                    * @default 'rollers' @for windows
+                    * @default 'rollers' @for Android_below_version_4.4
+                    * @default 'rollers' @for Mac
+                    * @default 'rollers' @for phones_on_Windows_Mobile
                     */
                     pickerType: PICKER_TYPE.rollers
                 }
@@ -351,7 +363,7 @@ var DateBox = DropDownEditor.inherit({
                     /**
                     * @name dxDateBoxOptions_pickerType
                     * @publicName pickerType
-                    * @default 'calendar' @for generic_desktop
+                    * @default 'calendar'
                     */
                     pickerType: PICKER_TYPE.calendar,
                     buttonsLocation: "bottom after"
@@ -369,7 +381,7 @@ var DateBox = DropDownEditor.inherit({
                     /**
                     * @name dxDateBoxOptions_pickerType
                     * @publicName pickerType
-                    * @default 'calendar' @for no-phone_windows
+                    * @default 'calendar' @for tablets_on_Windows_Mobile
                     */
                     pickerType: PICKER_TYPE.calendar
                 }
