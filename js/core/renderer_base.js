@@ -22,7 +22,7 @@ var initRender = function(selector, context) {
     if(typeof selector === "string") {
         context = context || window.document;
         if(selector === "body") {
-            this[0] = context;
+            this[0] = context.body;
             this.length = 1;
             return this;
         }
