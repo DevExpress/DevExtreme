@@ -338,16 +338,16 @@ var DateBox = DropDownEditor.inherit({
                 device: function() {
                     var realDevice = devices.real(),
                         platform = realDevice.platform,
-                        version = realDevice.version;
+                        version = realDevice.version,
+                        isPhone = realDevice.phone;
 
-                    return platform === "generic" || platform === "win" || (platform === "android" && compareVersions(version, [4, 4]) < 0);
+                    return platform === "win" && isPhone || (platform === "android" && compareVersions(version, [4, 4]) < 0);
                 },
                 options: {
                     /**
                     * @name dxDateBoxOptions_pickerType
                     * @publicName pickerType
                     * @default 'rollers' @for Android_below_version_4.4
-                    * @default 'rollers' @for Mac
                     * @default 'rollers' @for phones_on_Windows_Mobile
                     */
                     pickerType: PICKER_TYPE.rollers
@@ -359,30 +359,7 @@ var DateBox = DropDownEditor.inherit({
                     deviceType: "desktop"
                 },
                 options: {
-                    /**
-                    * @name dxDateBoxOptions_pickerType
-                    * @publicName pickerType
-                    * @default 'calendar'
-                    */
-                    pickerType: PICKER_TYPE.calendar,
                     buttonsLocation: "bottom after"
-                }
-            },
-            {
-                device: function() {
-                    var realDevice = devices.real(),
-                        platform = realDevice.platform,
-                        isPhone = realDevice.phone;
-
-                    return platform === "win" && !isPhone;
-                },
-                options: {
-                    /**
-                    * @name dxDateBoxOptions_pickerType
-                    * @publicName pickerType
-                    * @default 'calendar' @for tablets_on_Windows_Mobile
-                    */
-                    pickerType: PICKER_TYPE.calendar
                 }
             }
         ]);
