@@ -1109,17 +1109,19 @@ QUnit.test("pickerType should be 'native' on android >= 4.4 (Q588373, Q588012)",
         return true;
     };
 
-    var originalDevice;
+    var originalDevice = devices.real(),
+        currentDevice = devices.current();
 
     try {
-        originalDevice = devices.real();
         devices.real({ platform: "android", deviceType: "phone", version: [4, 4, 2], android: true });
+        devices.current({ platform: "android" });
 
         var dateBox = $("#dateBoxWithPicker").dxDateBox().dxDateBox("instance");
         assert.ok(dateBox.option("pickerType") === "native");
     } finally {
         support.inputType = this.originalInputType;
         devices.real(originalDevice);
+        devices.current(currentDevice);
     }
 });
 
