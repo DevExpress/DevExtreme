@@ -307,22 +307,10 @@ function detachCssClasses(element) {
     $(element).removeClass(themeClasses);
 }
 
-var readyToInit = function() {
-    var readyDeferred = Deferred();
+var readyDeferred = new Deferred();
+var initDeferred = new Deferred();
 
-    if(windowUtils.hasWindow()) {
-        readyDeferred.resolve();
-    } else {
-        ready(function() {
-            readyDeferred.resolve();
-        });
-    }
-
-    return readyDeferred.promise();
-};
-
-
-var inited = readyToInit().then(function() {
+readyDeferred.done(function() {
     init({
         _autoInit: true,
         _forceTimeout: true
@@ -331,14 +319,23 @@ var inited = readyToInit().then(function() {
     if($(DX_LINK_SELECTOR, context).length) {
         throw errors.Error("E0022");
     }
+    initDeferred.resolve();
 });
+
+if(windowUtils.hasWindow()) {
+    readyDeferred.resolve();
+} else {
+    ready(function() {
+        readyDeferred.resolve();
+    });
+}
 
 function themeReady(callback) {
     themeReadyCallback.add(callback);
 }
 
 viewPortChanged.add(function(viewPort, prevViewPort) {
-    inited.then(function() {
+    initDeferred.done(function() {
         detachCssClasses(prevViewPort);
         attachCssClasses(viewPort);
     });
