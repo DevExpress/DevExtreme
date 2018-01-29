@@ -2,9 +2,9 @@
 
 var BaseStrategy = require("./base"),
     Observer = require("./observer"),
-    window = require("../../core/utils/window").getWindow(),
+    windowUtils = require("../../core/utils/window"),
     extend = require("../../core/utils/extend").extend,
-    onlyMSPointerSupport = !window.PointerEvent && window.MSPointerEvent;
+    onlyMSPointerSupport = !windowUtils.hasProperty("PointerEvent") && windowUtils.hasProperty("MSPointerEvent");
 
 var eventMap = {
     "dxpointerdown": onlyMSPointerSupport ? "MSPointerDown" : "pointerdown",

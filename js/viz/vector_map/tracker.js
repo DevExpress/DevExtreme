@@ -2,7 +2,6 @@
 
 var eventsEngine = require("../../events/core/events_engine"),
     windowUtils = require("../../core/utils/window"),
-    window = windowUtils.getWindow(),
     domAdapter = require("../../core/dom_adapter"),
     navigator = windowUtils.getNavigator(),
     _math = Math,
@@ -538,7 +537,7 @@ function selectItem(flags, items) {
 }
 
 function setupEvents() {
-    var flags = [navigator.pointerEnabled, navigator.msPointerEnabled, "ontouchstart" in window];
+    var flags = [navigator.pointerEnabled, navigator.msPointerEnabled, windowUtils.hasProperty("ontouchstart")];
     ///#DEBUG
     if(arguments.length) {
         flags = [

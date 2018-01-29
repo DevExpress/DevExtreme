@@ -3,7 +3,8 @@
 var extend = require("../../../core/utils/extend").extend,
     each = require("../../../core/utils/iterator").each,
     noop = require("../../../core/utils/common").noop,
-    window = require("../../../core/utils/window").getWindow(),
+    windowUtils = require("../../../core/utils/window"),
+    window = windowUtils.getWindow(),
     labelModule = require("./label"),
     _extend = extend,
     _isDefined = require("../../../core/utils/type").isDefined,
@@ -520,7 +521,7 @@ module.exports = {
         navigator = that.__debug_navigator || navigator;
         that.__debug_browserNavigator = navigator;
         ///#ENDDEBUG
-        minTrackerSize = ("ontouchstart" in window) || (navigator.msPointerEnabled && navigator.msMaxTouchPoints || navigator.pointerEnabled && navigator.maxTouchPoints) ? 20 : 6;
+        minTrackerSize = windowUtils.hasProperty("ontouchstart") || (navigator.msPointerEnabled && navigator.msMaxTouchPoints || navigator.pointerEnabled && navigator.maxTouchPoints) ? 20 : 6;
         that._options.trackerR = r < minTrackerSize ? minTrackerSize : r;
         return that._options.trackerR;
     },

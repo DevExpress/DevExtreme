@@ -3,52 +3,34 @@
 var domAdapter = require("core/dom_adapter");
 var windowUtils = require("core/utils/window");
 var serverSideDOMAdapter = require("./serverSideDOMAdapterPatch.js");
+
 var domAdapterBackup = {};
-var temporaryAllowedWindowFields = [
-    "document",
-    "Event",
-];
-var windowMock = {};
-
-temporaryAllowedWindowFields.forEach(function(field) {
-    Object.defineProperty(windowMock, field, {
-        enumerable: true,
-        configurable: true,
-        get: function() {
-            return window[field];
-        },
-
-        set: function(value) {
-            window[field] = value;
-        }
-    });
-});
-windowMock.window = windowMock;
-
-for(var field in domAdapter) {
-    domAdapterBackup[field] = domAdapter[field];
-    if(field !== "ready" && field !== "_readyCallbacks") {
+var makeDOMAdapterEmpty = function() {
+    for(var field in domAdapter) {
+        domAdapterBackup[field] = domAdapter[field];
         delete domAdapter[field];
     }
-}
-
-var originalWindowGetter = windowUtils.getWindow;
-windowUtils.getWindow = function() {
-    return windowMock;
 };
-windowUtils.hasWindow = function() {
-    return false;
-};
-
-var restoreOriginal = function() {
-    windowUtils.getWindow = originalWindowGetter;
-
+var restoreOriginalDomAdapter = function() {
     for(var field in domAdapterBackup) {
         domAdapter[field] = domAdapterBackup[field];
     }
 };
 
+var makeWindowEmpty = function() {
+    windowUtils.hasWindow = function() {
+        return false;
+    };
+};
+
+// Ensure domAdapter is not used on scripts loading stage (until the integration is not injected)
+makeDOMAdapterEmpty();
+// Emulate SSR where window is not exists
+makeWindowEmpty();
+
 QUnit.begin(function() {
-    restoreOriginal();
+    // Now domAdapter is allowed to use
+    restoreOriginalDomAdapter();
+    // Emulate DOMAdapter integration
     serverSideDOMAdapter.set();
 });
