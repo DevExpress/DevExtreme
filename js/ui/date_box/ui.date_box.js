@@ -299,7 +299,7 @@ var DateBox = DropDownEditor.inherit({
                     /**
                     * @name dxDateBoxOptions_pickerType
                     * @publicName pickerType
-                    * @default 'native'
+                    * @default 'native' @for iOS
                     */
                     pickerType: PICKER_TYPE.native,
                     showPopupTitle: true
@@ -313,7 +313,7 @@ var DateBox = DropDownEditor.inherit({
                     /**
                     * @name dxDateBoxOptions_pickerType
                     * @publicName pickerType
-                    * @default 'native'
+                    * @default 'native' @for Android
                     */
                     pickerType: PICKER_TYPE.native,
                     buttonsLocation: "bottom after"
