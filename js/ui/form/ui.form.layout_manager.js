@@ -854,7 +854,7 @@ var LayoutManager = Widget.inherit({
         readOnlyState && instance.option("readOnly", readOnlyState);
 
         that.on("optionChanged", function(args) {
-            if(args.name === "readOnly") {
+            if(args.name === "readOnly" && !typeUtils.isDefined(editorOptions.readOnly)) {
                 instance.option(args.name, args.value);
             }
         });
