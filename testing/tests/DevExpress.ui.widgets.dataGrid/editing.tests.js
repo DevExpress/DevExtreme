@@ -39,6 +39,7 @@ var fx = require("animation/fx"),
     getCells = dataGridMocks.getCells,
     devices = require("core/devices"),
     device = devices.real(),
+    domUtils = require("core/utils/dom"),
     browser = require("core/utils/browser");
 
 function getInputElements($container) {
@@ -11208,4 +11209,74 @@ QUnit.testInActiveWindow("Form should repaint after change data of the column wi
     assert.ok(callSetCellValue, "setCellValue is called");
     assert.strictEqual($popupContent.find("input[type!='hidden']").eq(2).val(), "Test2", "value of the third cell");
     assert.ok($popupContent.find(".dx-texteditor").eq(1).hasClass("dx-state-focused"), "second cell is focused");
+});
+
+QUnit.test("Repaint of popup is should be called when form layout is changed", function(assert) {
+    var that = this,
+        screenFactor = "xs";
+
+    that.options.editing.form = {
+        screenByWidth: function() {
+            return screenFactor;
+        },
+        colCountByScreen: {
+            lg: 2,
+            xs: 1
+        }
+    };
+
+    that.options.editing.popup = {
+        width: "auto",
+        height: "auto",
+        minHeight: 150,
+    };
+
+    that.setupModules(that);
+    that.renderRowsView();
+
+    //act
+    this.addRow();
+
+    var spy = sinon.spy(this.editingController._editPopup, "repaint"),
+        editForm = this.editingController._editForm;
+
+    screenFactor = "lg";
+    domUtils.triggerResizeEvent(editForm.element());
+
+    assert.equal(spy.callCount, 1, "repaint is thrown");
+});
+
+QUnit.test("Unnecessary render of popup is not called when form layout is changed", function(assert) {
+    var that = this,
+        screenFactor = "xs";
+
+    that.options.editing.form = {
+        screenByWidth: function() {
+            return screenFactor;
+        },
+        colCountByScreen: {
+            lg: 2,
+            xs: 1
+        }
+    };
+
+    that.options.editing.popup = {
+        width: "auto",
+        height: "auto",
+        minHeight: 150,
+    };
+
+    that.setupModules(that);
+    that.renderRowsView();
+
+    //act
+    this.addRow();
+
+    var spy = sinon.spy(this.editingController._editPopup, "_render"),
+        editForm = this.editingController._editForm;
+
+    screenFactor = "lg";
+    domUtils.triggerResizeEvent(editForm.element());
+
+    assert.equal(spy.callCount, 0, "render is called after repaint");
 });
