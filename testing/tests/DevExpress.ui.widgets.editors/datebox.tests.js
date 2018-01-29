@@ -342,8 +342,11 @@ QUnit.test("T266206 - validation should be correct when max value is chosen", fu
 });
 
 QUnit.test("T278148 - picker type should be 'rollers' if the real device is phone in generic theme", function(assert) {
-    var realDevice = devices.real();
-    devices.real({ platform: "generic", deviceType: "phone" });
+    var realDevice = devices.real(),
+        currentDevice = devices.current();
+
+    devices.real({ deviceType: "phone", platform: "android" });
+    devices.current({ platform: "generic" });
 
     try {
         var dateBox = $("<div>").dxDateBox({
@@ -352,6 +355,7 @@ QUnit.test("T278148 - picker type should be 'rollers' if the real device is phon
         assert.equal(dateBox.option("pickerType"), "rollers", "the 'pickerType' option is correct");
     } finally {
         devices.real(realDevice);
+        devices.current(currentDevice);
     }
 });
 
