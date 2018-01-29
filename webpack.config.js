@@ -25,11 +25,7 @@ module.exports = {
             test: /\.js$/,
             exclude: /(node_modules|bower_components)/,
             use: {
-                loader: 'babel-loader',
-                options: {
-                    presets: ['env'],
-                    plugins: ['transform-es2015-modules-commonjs', 'add-module-exports']
-                }
+                loader: 'babel-loader'
             }
         }]
     }
