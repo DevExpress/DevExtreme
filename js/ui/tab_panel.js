@@ -191,7 +191,8 @@ var TabPanel = MultiView.inherit({
                     * @name dxTabPanelOptions_animationEnabled
                     * @publicName animationEnabled
                     * @type boolean
-                    * @default false @for generic
+                    * @default false
+                    * @default true @for Android|iOS|Windows_Mobile
                     * @inheritdoc
                     */
                     animationEnabled: false
