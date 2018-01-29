@@ -1097,16 +1097,11 @@ SvgElement.prototype = {
 
     dispose: function() {
         var clearChildren = function(element) {
-            var i,
-                childrenLen;
+            var i;
 
-            if(!element.children) {
-                return;
-            }
-            childrenLen = element.children.length;
-            for(i = 0; i < childrenLen; i++) {
-                removeFuncIriCallback(element.children[i]._fixFuncIri);
-                clearChildren(element.children[i]);
+            for(i = 0; i < element.childNodes.length; i++) {
+                removeFuncIriCallback(element.childNodes[i]._fixFuncIri);
+                clearChildren(element.childNodes[i]);
             }
         };
 
