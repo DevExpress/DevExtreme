@@ -179,8 +179,9 @@ var ColumnChooserView = columnsView.ColumnsView.inherit({
             scrollableInstance,
             columnChooser = this.option("columnChooser"),
             isSelectMode = columnChooser.mode === "select",
+            chooserItems = isSelectMode ? items.filter(function(item) { return item.allowHiding !== false; }) : items,
             treeViewConfig = {
-                items: items,
+                items: chooserItems,
                 dataStructure: "plain",
                 activeStateEnabled: true,
                 focusStateEnabled: true,
@@ -190,7 +191,6 @@ var ColumnChooserView = columnsView.ColumnsView.inherit({
                 rootValue: null,
                 searchEnabled: columnChooser.allowSearch
             };
-
 
         if(isSelectMode) {
             scrollableInstance = $container.find(".dx-scrollable").data("dxScrollable");
