@@ -470,7 +470,9 @@ QUnit.test("Disposing", function(assert) {
 
     this.axis.dispose();
 
-    assert.ok(renderer.g.getCall(3).returnValue.dispose.called, "dispose is called");
+    assert.ok(renderer.g.getCall(0).returnValue.dispose.called, "axis group was cleared");
+    assert.ok(renderer.g.getCall(1).returnValue.dispose.called, "strips group was cleared");
+    assert.ok(renderer.g.getCall(3).returnValue.dispose.called, "elements group was cleared");
 });
 
 QUnit.test("restore business range", function(assert) {
