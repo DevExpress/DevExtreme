@@ -1069,6 +1069,11 @@ function SvgElement(renderer, tagName, type) {
         that.type = type || "line";
     }
 }
+
+function removeFuncIriCallback(callback) {
+    fixFuncIriCallbacks.remove(callback);
+}
+
 exports.SvgElement = SvgElement;
 
 SvgElement.prototype = {
@@ -1079,19 +1084,38 @@ SvgElement.prototype = {
     },
 
     _addFixIRICallback: function() {
-        var that = this;
-        that._fixFuncIri = function() {
-            fixFuncIri(that, "fill");
-            fixFuncIri(that, "clip-path");
-            fixFuncIri(that, "filter");
-        };
-        that._fixFuncIri.renderer = that.renderer;
-        fixFuncIriCallbacks.add(that._fixFuncIri);
+        var that = this,
+            fn = function() {
+                fixFuncIri(that, "fill");
+                fixFuncIri(that, "clip-path");
+                fixFuncIri(that, "filter");
+            };
+
+        that.element._fixFuncIri = fn;
+        fn.renderer = that.renderer;
+        fixFuncIriCallbacks.add(fn);
         that._addFixIRICallback = function() {};
     },
 
     dispose: function() {
-        fixFuncIriCallbacks.remove(this._fixFuncIri);
+        var clearChildren = function(element) {
+            var i,
+                childrenLen;
+
+            if(!element.children) {
+                return;
+            }
+            childrenLen = element.children.length;
+            for(i = 0; i < childrenLen; i++) {
+                removeFuncIriCallback(element.children[i]._fixFuncIri);
+                clearChildren(element.children[i]);
+            }
+        };
+
+        removeFuncIriCallback(this.element._fixFuncIri);
+        clearChildren(this.element);
+
+
         this._getJQElement().remove();
         return this;
     },
