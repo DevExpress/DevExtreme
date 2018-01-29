@@ -2,6 +2,7 @@
 
 var $ = require("../../core/renderer"),
     domAdapter = require("../../core/dom_adapter"),
+    window = require("../../core/utils/window").getWindow(),
     eventsEngine = require("../../events/core/events_engine"),
     Guid = require("../../core/guid"),
     typeUtils = require("../../core/utils/type"),
@@ -145,7 +146,7 @@ var EditingController = modules.ViewController.inherit((function() {
                     if(!isRowEditMode(that) && !that._editCellInProgress) {
                         $target = $(event.target);
                         isEditorPopup = $target.closest(".dx-dropdowneditor-overlay").length;
-                        isDomElement = domAdapter.isDocument($target.mainParent());
+                        isDomElement = $target.closest(window.document).length;
                         isAddRowButton = $target.closest("." + that.addWidgetPrefix(ADD_ROW_BUTTON_CLASS)).length;
                         isFocusOverlay = $target.hasClass(that.addWidgetPrefix(FOCUS_OVERLAY_CLASS));
                         isCellEditMode = getEditMode(that) === EDIT_MODE_CELL;
@@ -1424,7 +1425,7 @@ var EditingController = modules.ViewController.inherit((function() {
                 }),
                 template = that._getFormEditItemTemplate.bind(that)(cellOptions, column);
 
-            if(that._rowsView.renderTemplate($container, template, cellOptions, domAdapter.isDocument($container.mainParent()))) {
+            if(that._rowsView.renderTemplate($container, template, cellOptions, !!$container.closest(window.document).length)) {
                 that._rowsView._updateCell($container, cellOptions);
             }
         },

@@ -4,7 +4,7 @@ var $ = require("../../core/renderer"),
     eventsEngine = require("../../events/core/events_engine"),
     commonUtils = require("../../core/utils/common"),
     getPublicElement = require("../../core/utils/dom").getPublicElement,
-    domAdapter = require("../../core/dom_adapter"),
+    window = require("../../core/utils/window").getWindow(),
     isPlainObject = require("../../core/utils/type").isPlainObject,
     when = require("../../core/utils/deferred").when,
     extend = require("../../core/utils/extend").extend,
@@ -772,7 +772,7 @@ var CollectionWidget = Widget.inherit({
             return $target;
         } else {
             $target = $target.parent();
-            while($target.length && !domAdapter.isDocument($target)) {
+            while($target.length && !$target.is(window.document)) {
                 if($target.is(selectors.focusable)) {
                     return $target;
                 }

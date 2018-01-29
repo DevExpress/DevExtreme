@@ -1,7 +1,7 @@
 "use strict";
 
 var eventsEngine = require("../../events/core/events_engine"),
-    domAdapter = require("../../core/dom_adapter").getDocument(),
+    domAdapter = require("../../core/dom_adapter"),
     isFunction = require("../../core/utils/type").isFunction,
     BaseWidget = require("../core/base_widget"),
     extend = require("../../core/utils/extend").extend,

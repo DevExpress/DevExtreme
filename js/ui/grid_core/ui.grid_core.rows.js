@@ -1,7 +1,7 @@
 "use strict";
 
 var $ = require("../../core/renderer"),
-    domAdapter = require("../../core/dom_adapter"),
+    window = require("../../core/utils/window").getWindow(),
     eventsEngine = require("../../events/core/events_engine"),
     commonUtils = require("../../core/utils/common"),
     typeUtils = require("../../core/utils/type"),
@@ -840,7 +840,7 @@ module.exports = {
                         $table = that.callBase(options),
                         resizeCompletedHandler = function() {
                             var scrollableInstance = that.getScrollable();
-                            if(scrollableInstance && domAdapter.isDocument(that.element().mainParent())) {
+                            if(scrollableInstance && that.element().closest(window.document).length) {
                                 that.resizeCompleted.remove(resizeCompletedHandler);
                                 scrollableInstance._visibilityChanged(true);
                             }

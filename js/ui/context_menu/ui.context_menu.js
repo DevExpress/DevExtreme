@@ -1,6 +1,7 @@
 "use strict";
 
 var $ = require("../../core/renderer"),
+    window = require("../../core/utils/window").getWindow(),
     domAdapter = require("../../core/dom_adapter"),
     eventsEngine = require("../../events/core/events_engine"),
     Guid = require("../../core/guid"),
@@ -962,7 +963,7 @@ var ContextMenu = MenuBase.inherit((function() {
         },
 
         _getTarget: function() {
-            return this.option("target") || this.option("position").of || $(domAdapter.getDocument());
+            return this.option("target") || this.option("position").of || $(window.document);
         },
 
         _getContextMenuPosition: function() {

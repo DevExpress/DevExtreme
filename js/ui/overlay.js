@@ -548,7 +548,7 @@ var Overlay = Widget.inherit({
         }
         if(closeOnOutsideClick) {
             var $container = this._$content,
-                outsideClick = (!$container.is(e.target) && !domUtils.contains($container.get(0), e.target) && domAdapter.isDocument($(e.target).mainParent()));
+                outsideClick = (!$container.is(e.target) && !domUtils.contains($container.get(0), e.target) && $(e.target).closest(window.document).length);
 
             if(outsideClick) {
                 if(this.option("shading")) {
@@ -1095,8 +1095,8 @@ var Overlay = Widget.inherit({
             containerHeight = $container.outerHeight();
 
         if(this._isWindow($container)) {
-            var fullPageHeight = Math.max($(domAdapter.getDocument()).outerHeight(), containerHeight),
-                fullPageWidth = Math.max($(domAdapter.getDocument()).outerWidth(), containerWidth);
+            var fullPageHeight = Math.max($(window.document).outerHeight(), containerHeight),
+                fullPageWidth = Math.max($(window.document).outerWidth(), containerWidth);
 
             containerHeight = fullPageHeight;
             containerWidth = fullPageWidth;
