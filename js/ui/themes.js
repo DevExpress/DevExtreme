@@ -2,6 +2,7 @@
 
 var $ = require("../core/renderer"),
     window = require("../core/utils/window").getWindow(),
+    domAdapter = require("../core/dom_adapter"),
     errors = require("./widget/ui.errors"),
     domUtils = require("../core/utils/dom"),
     readyCallbacks = require("../core/utils/ready_callbacks"),
@@ -166,7 +167,7 @@ function initContext(newContext) {
 
 function init(options) {
     options = options || {};
-    initContext(options.context || window.document);
+    initContext(options.context || domAdapter.getDocument());
 
     if(!context) return;
     processMarkup();

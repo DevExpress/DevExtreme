@@ -1,7 +1,6 @@
 "use strict";
 
 var $ = require("../../core/renderer"),
-    window = require("../../core/utils/window").getWindow(),
     domAdapter = require("../../core/dom_adapter"),
     eventsEngine = require("../../events/core/events_engine"),
     Callbacks = require("../../core/utils/callbacks"),
@@ -436,10 +435,12 @@ var DraggingHeaderView = modules.View.inherit({
             sourceColumnElement: options.columnElement,
             sourceLocation: options.sourceLocation
         };
-        that._onSelectStart = window.document["onselectstart"];
-        window.document["onselectstart"] = function() {
+        that._onSelectStart = domAdapter.getProperty("onselectstart");
+
+        var onSelectStart = function() {
             return false;
         };
+        domAdapter.setProperty("document", "onselectstart", onSelectStart);
 
         that._controller.drag(that._dropOptions);
 
@@ -555,7 +556,7 @@ var DraggingHeaderView = modules.View.inherit({
         that._dragOptions = null;
         that._dropOptions = null;
         that._isDragging = false;
-        window.document["onselectstart"] = that._onSelectStart || null;
+        domAdapter.setProperty("document", "onselectstart", that._onSelectStart || null);
     }
 });
 

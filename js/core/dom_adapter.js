@@ -77,6 +77,7 @@ var domAdapter = module.exports = {
     },
 
     setProperty: function(element, name, value) {
+        element = element === "document" ? domAdapter.getDocument() : element;
         element[name] = value;
     },
 
@@ -154,6 +155,11 @@ var domAdapter = module.exports = {
     getHead: function() {
         var document = domAdapter.getDocument();
         return document.head;
+    },
+
+    getProperty: function(name) {
+        var document = domAdapter.getDocument();
+        return document[name];
     },
 
     listen: function(element, event, callback, useCapture) {
