@@ -339,7 +339,8 @@ QUnit.test("Editor's read only state should not be reset on the dxForm 'readOnly
     layoutManager.option("readOnly", false);
 
     //assert
-    assert.ok($testContainer.find("." + internals.FIELD_ITEM_CLASS + " .dx-texteditor").hasClass("dx-state-readonly"), "editor is read only");
+    var $textEditor = $testContainer.find("." + internals.FIELD_ITEM_CLASS + " .dx-texteditor");
+    assert.ok($textEditor.hasClass("dx-state-readonly"), "editor is read only");
 });
 
 QUnit.test("Layout strategy when flex is not supported", function(assert) {
