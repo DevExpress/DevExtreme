@@ -21,6 +21,13 @@ var staticMethods = {
     * @module viz/themes
     * @export currentTheme
     */
+    /**
+    * @name vizmethods_currentTheme
+    * @publicName currentTheme()
+    * @static
+    * @module viz/themes
+    * @export currentTheme
+    */
     currentTheme: function() { },
     /**
     * @name vizmethods_registerTheme
@@ -178,7 +185,7 @@ var staticMethods = {
         * @param1 data:object
         * @param1_field1 to:function(coordinates)
         * @param1_field2 from:function(coordinates)
-        * @param1_field3 aspectRatio:number        
+        * @param1_field3 aspectRatio:number
         * @return object
         * @static
         * @namespace DevExpress.viz.map
