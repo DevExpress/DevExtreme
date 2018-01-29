@@ -11031,6 +11031,34 @@ QUnit.testInActiveWindow("Focus on lookup column should be preserved after chang
     assert.ok($(this.getCellElement(0, 1)).find(".dx-selectbox").hasClass("dx-state-focused"), "second cell is focused");
 });
 
+//
+QUnit.test("getCellElement returns correct editor with form editing and enabled masterDetail", function(assert) {
+    var that = this,
+        $editorElements,
+        $testElement = $('#container');
+
+    that.options.editing = {
+        mode: "form",
+        allowUpdating: true
+    };
+
+    that.options.masterDetail = {
+        enabled: true
+    };
+
+    that.setupModules(that);
+    that.rowsView.render($testElement);
+
+    //act
+    that.editRow(1);
+
+    $editorElements = $testElement.find(".dx-datagrid-edit-form-item");
+
+    //assert
+    assert.deepEqual($(that.getCellElement(1, 1))[0], $editorElements[0], "first editor");
+    assert.deepEqual($(that.getCellElement(1, "age"))[0], $editorElements[1], "second editor");
+});
+
 
 QUnit.module('Editing - "popup" mode', {
     beforeEach: function() {
