@@ -1516,6 +1516,8 @@ var Overlay = Widget.inherit({
 * @publicName baseZIndex(zIndex)
 * @param1 zIndex:number
 * @namespace DevExpress.ui.dxOverlay
+* @module ui/overlay
+* @export dxOverlay.baseZIndex
 * @static
 */
 Overlay.baseZIndex = function(zIndex) {
