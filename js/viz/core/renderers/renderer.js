@@ -1105,8 +1105,8 @@ SvgElement.prototype = {
             }
             childrenLen = element.children.length;
             for(i = 0; i < childrenLen; i++) {
-                element.children[i]._fixFuncIri && removeFuncIriCallback(element.children[i]._fixFuncIri);
-                element.children[i].children && clearChildren(element.children[i]);
+                removeFuncIriCallback(element.children[i]._fixFuncIri);
+                clearChildren(element.children[i]);
             }
         };
 
