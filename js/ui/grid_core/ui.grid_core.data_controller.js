@@ -508,6 +508,9 @@ module.exports = {
 
                     return result.promise();
                 },
+                _beforeProcessItems: function(items) {
+                    return items.slice(0);
+                },
                 _processItems: function(items, changeType) {
                     var that = this,
                         visibleColumns = that._columnsController.getVisibleColumns(),
@@ -575,7 +578,8 @@ module.exports = {
 
                     if(dataSource) {
                         items = change.items || dataSource.items();
-                        items = that._processItems(items.slice(0), changeType);
+                        items = that._beforeProcessItems(items);
+                        items = that._processItems(items, changeType);
 
                         change.items = items;
 
@@ -892,13 +896,15 @@ module.exports = {
                             };
                             dataSource._handleDataLoaded(options);
                             when(options.data).done(function(data) {
+                                data = that._beforeProcessItems(data);
                                 d.resolve(that._processItems(data, "loadingAll"), options.extra && options.extra.summary);
                             }).fail(d.reject);
                         } else {
                             if(!that.isLoading()) {
                                 var loadOptions = extend({}, dataSource.loadOptions(), { isLoadingAll: true, requireTotalCount: false });
                                 dataSource.load(loadOptions).done(function(items, extra) {
-                                    items = that._processItems(items.slice(0), "loadingAll");
+                                    items = that._beforeProcessItems(items);
+                                    items = that._processItems(items, "loadingAll");
                                     d.resolve(items, extra && extra.summary);
                                 }).fail(d.reject);
                             } else {
