@@ -2,6 +2,8 @@
 
 /* global initTree */
 
+var $ = require("jquery");
+
 QUnit.module("selection common");
 
 QUnit.test("selection should work without checkboxes on init", function(assert) {
@@ -87,6 +89,25 @@ QUnit.test("selectionChanged should fire only when selection was changed", funct
     instance.unselectItem(1);
 
     assert.equal(selectionChanged, 2, "selectionChanged should call twice");
+});
+
+QUnit.test("onItemSelectionChanged should have correct arguments", function(assert) {
+    var itemSelectionChanged = sinon.spy(),
+        $treeview = initTree({
+            items: [{ text: "Item 1", id: 2 }],
+            onItemSelectionChanged: itemSelectionChanged
+        }),
+        instance = $treeview.dxTreeView("instance");
+
+    instance.selectItem(2);
+
+    assert.equal(itemSelectionChanged.callCount, 1, "selection was changed once");
+
+    //note: other parameters are redundant but they were saved in the code to prevent a BC
+    assert.equal(itemSelectionChanged.getCall(0).args[0].component.NAME, instance.NAME, "component is correct");
+    assert.ok($(itemSelectionChanged.getCall(0).args[0].element).hasClass("dx-treeview"), "element is correct");
+    assert.equal(itemSelectionChanged.getCall(0).args[0].node.key, 2, "node is correct");
+    assert.ok($(itemSelectionChanged.getCall(0).args[0].itemElement).hasClass("dx-treeview-item"), "itemElement is correct");
 });
 
 QUnit.test("itemSelected should fire when select", function(assert) {
