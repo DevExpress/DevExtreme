@@ -14,7 +14,7 @@ module.exports = {
         if(isDefined(specialValue)) {
             return specialValue;
         }
-        if(that._isValueOutOfCanvas(getLog(bp, that._businessRange.base))) {
+        if(isNaN(getLog(bp, that._businessRange.base))) {
             return null;
         }
         return that.to(bp, direction);
