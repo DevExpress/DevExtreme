@@ -10,8 +10,7 @@ var getConsoleMethod = function(method) {
     if(typeof console === "undefined" || !isFunction(console[method])) {
         return noop;
     }
-
-    return console[method];
+    return console[method].bind(console);
 };
 
 var logger = {
