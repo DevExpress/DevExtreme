@@ -106,6 +106,28 @@ QUnit.test("Initialize array with keyExpr option", function(assert) {
     assert.equal(this.getDataSource().store().key(), "id", "keyExpr is assigned to store");
 });
 
+QUnit.test("Raise warning if keyExp is set and dataSource is not an array", function(assert) {
+    //arrange
+    var dataSource = new DataSource({
+        load: function() {
+            return [
+                { name: 'Alex', phone: '55-55-55' },
+                { name: 'Dan', phone: '98-75-21' }
+            ];
+        }
+    });
+    sinon.spy(errors, "log");
+
+    //act
+    this.applyOptions({ keyExpr: "name", dataSource: dataSource });
+    this.dataController.init();
+
+    //assert
+    assert.equal(errors.log.lastCall.args[0], "W1011", "Warning about keyExpr is raised");
+    assert.equal(errors.log.callCount, 1, "Warning about keyExpr is raised one time");
+    errors.log.restore();
+});
+
 QUnit.test("changed on initialize", function(assert) {
     var changedCount = 0;
     var lastArgs;
