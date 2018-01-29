@@ -112,7 +112,7 @@ var openWindow = function() {
 };
 
 var beforeActivateExists = callOnce(function() {
-    return domAdapter.getDocumentProperty("onbeforeactivate") !== undefined;
+    return domAdapter.getProperty(domAdapter.getDocument(), "onbeforeactivate") !== undefined;
 });
 
 var getNavigator = function() {

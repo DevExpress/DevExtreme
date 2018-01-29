@@ -78,7 +78,6 @@ var nativeDOMAdapterStrategy = {
     },
 
     setProperty: function(element, name, value) {
-        element = element === "document" ? this.getDocument() : element;
         element[name] = value;
     },
 
@@ -158,9 +157,8 @@ var nativeDOMAdapterStrategy = {
         return document.head;
     },
 
-    getDocumentProperty: function(name) {
-        var document = this.getDocument();
-        return document[name];
+    getProperty: function(element, name) {
+        return element[name];
     },
 
     listen: function(element, event, callback, useCapture) {
