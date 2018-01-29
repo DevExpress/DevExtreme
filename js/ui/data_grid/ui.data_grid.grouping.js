@@ -169,12 +169,14 @@ var GroupingDataControllerExtender = (function() {
             that.createAction("onRowCollapsing");
             that.createAction("onRowCollapsed");
         },
-        _processItems: function(items, changeType) {
+        _beforeProcessItems: function(items) {
             var groupColumns = this._columnsController.getGroupColumns();
+
+            items = this.callBase(items);
             if(items.length && groupColumns.length) {
                 items = this._processGroupItems(items, groupColumns.length);
             }
-            return this.callBase(items, changeType);
+            return items;
         },
         _processItem: function(item, options) {
             if(typeUtils.isDefined(item.groupIndex) && typeUtils.isString(item.rowType) && item.rowType.indexOf("group") === 0) {
