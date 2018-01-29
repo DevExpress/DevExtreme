@@ -20,13 +20,13 @@ var initRender = function(selector, context) {
     }
 
     if(typeof selector === "string") {
-        context = context || window.document;
         if(selector === "body") {
-            this[0] = context.body;
+            this[0] = context ? context.body : domAdapter.getBody();
             this.length = 1;
             return this;
         }
 
+        context = context || domAdapter.getDocument();
         if(selector[0] === "<") {
             this[0] = domAdapter.createElement(selector.slice(1, -1), context);
             this.length = 1;
