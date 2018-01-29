@@ -2312,7 +2312,7 @@ QUnit.test("resize on change height from fixed to auto", function(assert) {
 
 
     //assert
-    assert.equal($dataGrid.find(".dx-datagrid-rowsview").get(0).style.height, "auto");
+    assert.equal($dataGrid.find(".dx-datagrid-rowsview").get(0).style.height, "");
 });
 
 QUnit.test("resize on change height from auto to fixed", function(assert) {
@@ -2697,10 +2697,7 @@ QUnit.test("rowsview height should not be reseted during updateDimension when mi
 
     //assert
     var heightCalls = rowsView.height.getCalls().filter(function(call) { return call.args.length > 0; });
-    assert.equal(heightCalls.length, 1, "rowsview height is assigned once");
-
-    var firstAssignedHeight = heightCalls[0].args[0];
-    assert.equal(typeof firstAssignedHeight, "number", "assigned rowsview height is number");
+    assert.equal(heightCalls.length, 0, "rowsview height is not assigned");
 });
 
 //T108204
@@ -5742,7 +5739,7 @@ QUnit.test("Height rows view auto when no height option", function(assert) {
 
     //assert
     rowsViewElement = $dataGrid.find(".dx-datagrid-rowsview");
-    assert.equal(rowsViewElement[0].style.height, "auto", "rowsview height is auto");
+    assert.equal(rowsViewElement[0].style.height, "", "rowsview height is auto");
 });
 
 QUnit.test("Assign column options", function(assert) {

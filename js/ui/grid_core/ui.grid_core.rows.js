@@ -676,7 +676,7 @@ module.exports = {
                     var $rowElements = $tableElement.children("tbody").children().not("." + FREE_SPACE_CLASS);
 
                     return $rowElements.toArray().reduce(function(sum, row) {
-                        return sum + row.offsetHeight;
+                        return sum + row.getBoundingClientRect().height;
                     }, 0);
                 },
 

@@ -651,7 +651,7 @@ function createGridView(options, userOptions) {
 
         var rowsViewViewContainer = gridView.getView("rowsView").element();
 
-        assert.strictEqual(rowsViewViewContainer.height(), 90 + 50);
+        assert.strictEqual(rowsViewViewContainer.height(), 100);
     });
 
     QUnit.test('RowsView height calculation when data not loaded and allRowsCount defined', function(assert) {
@@ -678,7 +678,7 @@ function createGridView(options, userOptions) {
 
         var rowsViewViewContainer = gridView.getView("rowsView").element();
 
-        assert.strictEqual(rowsViewViewContainer.height(), 90 + 50);
+        assert.strictEqual(rowsViewViewContainer.height(), 100);
     });
 
     QUnit.test('RowsView height calculation when no data and loadIndicator is not visible', function(assert) {
@@ -924,7 +924,7 @@ function createGridView(options, userOptions) {
 
         //assert
         $rowsViewContainer = gridView.getView("rowsView").element();
-        assert.strictEqual($rowsViewContainer.get(0).style.height, "auto", "height of the rowsView");
+        assert.strictEqual($rowsViewContainer.get(0).style.height, "", "height of the rowsView");
     });
 }());
 

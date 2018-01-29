@@ -14,12 +14,11 @@ var TABLE_CLASS = "table",
     IMPORTANT_MARGIN_CLASS = "important-margin",
     TEXT_CONTENT_CLASS = "text-content",
     HIDDEN_CLASS = "dx-hidden",
+    GRIDBASE_CONTAINER_CLASS = "dx-gridbase-container",
 
     HIDDEN_COLUMNS_WIDTH = "adaptiveHidden",
     EDITORS_INPUT_SELECTOR = "input:not([type='hidden'])",
 
-    EMPTY_GRID_ROWS_HEIGHT = 100,
-    LOADPANEL_MARGIN = 50,
     VIEW_NAMES = ["columnsSeparatorView", "blockSeparatorView", "trackerView", "headerPanel", "columnHeadersView", "rowsView", "footerView", "columnChooserView", "pagerView", "draggingHeaderView", "contextMenuView", "errorView", "headerFilterView"];
 
 var isPercentWidth = function(width) {
@@ -219,7 +218,7 @@ var ResizingController = modules.ViewController.inherit({
     },
 
     _needBestFit: function() {
-        return this.option("columnAutoWidth") || this._maxHeightHappened;
+        return this.option("columnAutoWidth");
     },
 
     _getAverageColumnsWidth: function(resultWidths) {
@@ -387,10 +386,7 @@ var ResizingController = modules.ViewController.inherit({
     * @publicName updateDimensions()
     */
     updateDimensions: function(checkSize) {
-        var that = this,
-            $element = that.component.$element(),
-            maxHeight = parseFloat($element.css("maxHeight")),
-            minHeight = parseFloat($element.css("minHeight"));
+        var that = this;
 
         that._initPostRenderHandlers();
 
@@ -400,19 +396,13 @@ var ResizingController = modules.ViewController.inherit({
         }
 
         return commonUtils.deferRender(function() {
-            var scrollable = that._rowsView.getScrollable(),
-                scrollTop;
             if(that._dataController.isLoaded()) {
                 that._synchronizeColumns();
-                if(maxHeight || minHeight) {
-                    scrollTop = scrollable && scrollable._container().get(0).scrollTop;
-                    that._rowsView.height("auto");
-                }
             }
             commonUtils.deferUpdate(function() {
                 commonUtils.deferRender(function() {
                     commonUtils.deferUpdate(function() {
-                        that._updateDimensionsCore(maxHeight, scrollTop);
+                        that._updateDimensionsCore();
                     });
                 });
             });
@@ -426,24 +416,20 @@ var ResizingController = modules.ViewController.inherit({
         }
         return true;
     },
-    _updateDimensionsCore: function(maxHeight, scrollTop) {
+    _updateDimensionsCore: function() {
         var that = this,
-            scrollable = that._rowsView.getScrollable(),
             dataController = that._dataController,
             rowsView = that._rowsView,
             columnHeadersView = that._columnHeadersView,
             footerView = that._footerView,
             $rootElement = that.component.$element(),
             rootElementHeight = $rootElement && ($rootElement.get(0).clientHeight || $rootElement.height()),
+            maxHeight = parseFloat($rootElement.css("maxHeight")),
             maxHeightHappened = maxHeight && rootElementHeight >= maxHeight,
             hasHeight = that._hasHeight || maxHeightHappened,
-            loadPanelOptions = that.option("loadPanel"),
             height = that.option("height") || $rootElement.get(0).style.height,
-            rowsViewHeight,
             editorFactory = that.getController("editorFactory"),
             $testDiv;
-
-        that._maxHeightHappened = maxHeightHappened; // T362517 (for FF)
 
         that.updateSize($rootElement);
 
@@ -453,27 +439,10 @@ var ResizingController = modules.ViewController.inherit({
             $testDiv.remove();
         }
 
-        if(that.option("scrolling") && (that._hasHeight && rootElementHeight > 0 || maxHeightHappened)) {
-            rowsViewHeight = rootElementHeight;
-
-            each(that.getViews(), function() {
-                if(this.isVisible() && this.getHeight) {
-                    rowsViewHeight -= this.getHeight();
-                }
-            });
-        } else if(!that._hasHeight && dataController.items().length === 0) {
-            rowsViewHeight = loadPanelOptions && loadPanelOptions.enabled ? loadPanelOptions.height + LOADPANEL_MARGIN : EMPTY_GRID_ROWS_HEIGHT;
-        } else {
-            rowsViewHeight = "auto";
-        }
+        rowsView.element().toggleClass("dx-empty", !that._hasHeight && dataController.items().length === 0);
 
         commonUtils.deferRender(function() {
-            rowsView.height(rowsViewHeight, hasHeight);
-
-            if(scrollTop && scrollable) {
-                //TODO Use public API
-                scrollable._container().get(0).scrollTop = scrollTop;
-            }
+            rowsView._hasHeight = hasHeight;
 
             if(!dataController.isLoaded()) {
                 rowsView.setLoading(true);
@@ -607,6 +576,7 @@ var GridView = modules.View.inherit({
             isFirstRender = !that._groupElement,
             $groupElement = that._groupElement || $("<div>").addClass(that.getWidgetContainerClass());
 
+        $groupElement.addClass(GRIDBASE_CONTAINER_CLASS);
         $groupElement.toggleClass(that.addWidgetPrefix(BORDERS_CLASS), !!that.option("showBorders"));
         that.component.setAria({
             "role": "application",

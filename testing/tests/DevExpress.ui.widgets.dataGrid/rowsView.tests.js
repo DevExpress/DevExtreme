@@ -5876,7 +5876,7 @@ QUnit.test('Update rowsView on changed', function(assert) {
     assert.equal(content.length, 1);
     assert.equal(content.children().length, 2);
     assert.equal(content.children().eq(0).find('tbody > tr').length, 7);
-    assert.equal(Math.round(content.children().last().height()), Math.round(rowHeight * (12 + 1) + content.find('.dx-datagrid-table-content').first().outerHeight()));
+    assert.equal(Math.floor(content.children().last().height()), Math.floor(rowHeight * (12 + 1) + content.find('.dx-datagrid-table-content').first().outerHeight()));
     assert.equal(getText(getCells(content.children().find('tbody > tr').eq(0))), '4');
 });
 

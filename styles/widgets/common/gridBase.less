@@ -1,3 +1,15 @@
+.dx-gridbase-container {
+    display: flex;
+    flex-direction: column;
+    height: 100%;
+    min-height: inherit;
+    max-height: inherit;
+}
+
+.dx-gridbase-container > * {
+    flex: 0 0 auto;
+}
+
 .grid-base(@widgetName) {
     @GRID_CELL_PADDING: 7px;
     @GRID_TEXTEDITOR_INPUT_PADDING: 32px;
@@ -688,9 +700,17 @@
         margin-left: 15px;
     }
 
+    .dx-gridbase-container > .dx-@{widgetName}-rowsview {
+        flex: auto;
+    }
+
     .dx-@{widgetName}-rowsview {
         position: relative;
         overflow: hidden;
+
+        &.dx-empty {
+            height: 100px;
+        }
 
         &.dx-fixed-columns {
             &.dx-scrollable .dx-scrollable-content {
