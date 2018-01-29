@@ -177,6 +177,7 @@ exports.ColumnsView = modules.View.inherit(columnStateMixin).inherit({
         if(that.option("cellHintEnabled")) {
             eventsEngine.on($table, "mousemove", ".dx-row > td", this.createAction(function(args) {
                 var e = args.event,
+                    difference,
                     $element = $(e.target),
                     $cell = $(e.currentTarget),
                     $row = $cell.parent(),
@@ -188,7 +189,8 @@ exports.ColumnsView = modules.View.inherit(columnStateMixin).inherit({
                     rowOptions = $row.data("options"),
                     columnIndex = $cell.index(),
                     cellOptions = rowOptions && rowOptions.cells && rowOptions.cells[columnIndex],
-                    column = cellOptions ? cellOptions.column : visibleColumns[columnIndex];
+                    column = cellOptions ? cellOptions.column : visibleColumns[columnIndex],
+                    msieCorrection = browser.msie ? 1 : 0;
 
                 if(!isFilterRow && (!isDataRow || (isDataRow && column && !column.cellTemplate)) &&
                     (!isHeaderRow || (isHeaderRow && column && !column.headerCellTemplate)) &&
@@ -198,7 +200,8 @@ exports.ColumnsView = modules.View.inherit(columnStateMixin).inherit({
                         $element.data(CELL_HINT_VISIBLE, false);
                     }
 
-                    if($element[0].scrollWidth > $element[0].clientWidth && !typeUtils.isDefined($element.attr("title"))) {
+                    difference = $element[0].scrollWidth - $element[0].clientWidth - msieCorrection; //T598499
+                    if(difference > 0 && !typeUtils.isDefined($element.attr("title"))) {
                         $element.attr("title", $element.text());
                         $element.data(CELL_HINT_VISIBLE, true);
                     }
