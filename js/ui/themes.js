@@ -307,6 +307,10 @@ function detachCssClasses(element) {
     $(element).removeClass(themeClasses);
 }
 
+function themeReady(callback) {
+    themeReadyCallback.add(callback);
+}
+
 var readyDeferred = new Deferred();
 var initDeferred = new Deferred();
 
@@ -328,10 +332,6 @@ if(windowUtils.hasWindow()) {
     ready(function() {
         readyDeferred.resolve();
     });
-}
-
-function themeReady(callback) {
-    themeReadyCallback.add(callback);
 }
 
 viewPortChanged.add(function(viewPort, prevViewPort) {
