@@ -1095,8 +1095,8 @@ var Overlay = Widget.inherit({
             containerHeight = $container.outerHeight();
 
         if(this._isWindow($container)) {
-            var fullPageHeight = Math.max($(window.document).outerHeight(), containerHeight),
-                fullPageWidth = Math.max($(window.document).outerWidth(), containerWidth);
+            var fullPageHeight = Math.max($(domAdapter.getDocument()).outerHeight(), containerHeight),
+                fullPageWidth = Math.max($(domAdapter.getDocument()).outerWidth(), containerWidth);
 
             containerHeight = fullPageHeight;
             containerWidth = fullPageWidth;
