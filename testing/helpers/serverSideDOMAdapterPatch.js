@@ -24,25 +24,5 @@ exports.set = function() {
         return {};
     };
 
-    domAdapter.getBody = function() {
-        return document.body;
-    };
-
-    domAdapter.createDocumentFragment = function() {
-        return document.createDocumentFragment();
-    };
-
-    domAdapter.getDocumentElement = function() {
-        return document.documentElement;
-    };
-
-    domAdapter.getReadyState = function() {
-        return document.readyState;
-    };
-
-    domAdapter.getHead = function() {
-        return document.head;
-    };
-
     readyCallbacks.fire();
 };
