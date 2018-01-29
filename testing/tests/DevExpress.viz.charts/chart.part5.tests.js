@@ -182,6 +182,29 @@ QUnit.test("chart with single value axis. Adjust on zoom = false", function(asse
     assert.ok(!series1.getValueAxis().zoom.called, "value axis are not zoomed");
 });
 
+QUnit.test("showZero has affect to value axis on zoom", function(assert) {
+    var series = new MockSeries({});
+
+    series.getViewport.returns({
+        min: 10,
+        max: 15
+    });
+    series.showZero = true;
+
+    seriesMockData.series.push(series);
+
+    var chart = this.createChart({
+        series: [{ type: "line" }]
+    });
+    //act
+
+    chart.zoomArgument(10, 50);
+    //assert
+    assert.deepEqual(chart._argumentAxes[0].zoom.lastCall.args, [10, 50, undefined]);
+    assert.strictEqual(series.getValueAxis().zoom.lastCall.args[0], 0, "min passed in value axis");
+    assert.strictEqual(series.getValueAxis().zoom.lastCall.args[1], 15, "max passed in value axis");
+});
+
 QUnit.test("MultiAxis chart", function(assert) {
     var series1 = new MockSeries({}),
         series2 = new MockSeries({});
