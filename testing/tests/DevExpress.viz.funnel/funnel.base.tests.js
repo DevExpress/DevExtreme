@@ -800,6 +800,42 @@ QUnit.test("Selection", function(assert) {
     });
 });
 
+QUnit.test("Can select an item in onDrawn enven", function(assert) {
+    createFunnel({
+        dataSource: [{ value: 10, argument: "One" }, { value: 5, argument: "Two", color: "#234234" }],
+        item: {
+            border: {
+                visible: true,
+                color: "#ffffff",
+                width: 2
+            },
+            selectionStyle: {
+                border: {
+                    visible: true,
+                    color: "#123123",
+                    width: 3
+                }
+            }
+        },
+        onDrawn: function(e) {
+            e.component.getAllItems()[1].select(true);
+        }
+    });
+
+
+    var item = this.items()[1];
+
+    assert.equal(item.smartAttr.lastCall.args[0].fill, "#234234");
+    assert.deepEqual(item.smartAttr.lastCall.args[0].stroke, "#123123");
+    assert.deepEqual(item.smartAttr.lastCall.args[0]["stroke-width"], 3);
+    assert.deepEqual(item.smartAttr.lastCall.args[0].hatching, {
+        opacity: 0.5,
+        step: 6,
+        width: 2,
+        direction: "right"
+    });
+});
+
 QUnit.test("Inherit border for selection style if selection.border option is not set", function(assert) {
     var funnel = createFunnel({
         dataSource: [{ value: 10, argument: "One" }, { value: 5, argument: "Two", color: "#234234" }],
