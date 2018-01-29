@@ -2654,6 +2654,32 @@ function checkDashStyle(assert, elem, result, style, value) {
             assert.strictEqual(testElement.getAttribute("fill"), "url(" + oldUrl + "#DevExpress_12)");
         });
 
+        QUnit.test("No path refreshing when parent element was disposed", function(assert) {
+            //arrange
+            this.rendererStub.pathModified = true;
+
+            var parent = { element: document.createElement("div") },
+                svg = (new this.Element(this.rendererStub, "svg")).append(parent),
+                rootGroup = (new this.Element(this.rendererStub, "group")).append(svg),
+                rect1 = (new this.Element(this.rendererStub, "rect")).attr({ fill: "DevExpress_12" }).append(rootGroup),
+                childGroup = (new this.Element(this.rendererStub, "group")).append(rootGroup),
+                rect2 = (new this.Element(this.rendererStub, "rect")).attr({ fill: "DevExpress_13" }).append(childGroup),
+                href = window.location.href,
+                oldUrl = href.split("#")[0],
+                newUrl = href.split("?")[0] + "?testparam=2";
+
+            window.history.pushState("", document.title, newUrl);
+
+            rootGroup.dispose();
+
+            //act
+            this.refreshPaths();
+
+            //assert
+            assert.strictEqual(rect1.element.getAttribute("fill"), "url(" + oldUrl + "#DevExpress_12)");
+            assert.strictEqual(rect2.element.getAttribute("fill"), "url(" + oldUrl + "#DevExpress_13)");
+        });
+
         QUnit.test("Attribute with FuncIRI is removed and re-set. IMPORTANT due to FF and Edge bugs", function(assert) {
             //arrange
             var parent = { element: document.createElement("div") },
