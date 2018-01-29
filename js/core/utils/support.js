@@ -4,7 +4,6 @@ var inArray = require("./array").inArray,
     domAdapter = require("../dom_adapter"),
     callOnce = require("./call_once"),
     windowUtils = require("./window"),
-    window = windowUtils.getWindow(),
     navigator = windowUtils.getNavigator(),
     devices = require("../devices"),
     styleUtils = require("./style");
@@ -46,7 +45,7 @@ var inputType = function(type) {
     }
 };
 
-var touchEvents = "ontouchstart" in window && !('callPhantom' in window),
+var touchEvents = windowUtils.hasProperty("ontouchstart") && !windowUtils.hasProperty("callPhantom"),
     pointerEvents = !!navigator.pointerEnabled || !!navigator.msPointerEnabled,
     touchPointersPresent = !!navigator.maxTouchPoints || !!navigator.msMaxTouchPoints;
 

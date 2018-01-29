@@ -1,5 +1,7 @@
 "use strict";
 
+/* global window */
+
 var domAdapter = require("../dom_adapter"),
     callOnce = require("./call_once"),
     readyCallbacks = require("./ready_callbacks"),
@@ -10,8 +12,11 @@ var hasWindow = function() {
 };
 
 var getWindow = function() {
-    /* global window */
     return hasWindow() && window;
+};
+
+var hasProperty = function(prop) {
+    return hasWindow() && prop in window;
 };
 
 var resizeCallbacks = (function() {
@@ -127,6 +132,7 @@ exports.getCurrentScreenFactor = getCurrentScreenFactor;
 exports.beforeActivateExists = beforeActivateExists;
 exports.openWindow = openWindow;
 exports.hasWindow = hasWindow;
+exports.hasProperty = hasProperty;
 exports.getNavigator = getNavigator;
 
 // TODO: get rid of method

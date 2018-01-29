@@ -5,24 +5,22 @@ var windowUtils = require("core/utils/window");
 var readyCallbacks = require("core/utils/ready_callbacks");
 
 exports.set = function() {
-    domAdapter.listen = function(element, event, callback, useCapture) {
-        // Note: in Angular domAdapter it wiil be "window"
-        if(element === windowUtils.getWindow()) {
-            window.addEventListener(event, callback, useCapture);
-            return function() {
-                window.removeEventListener(event, callback);
-            };
-        } else {
-            element.addEventListener(event, callback, useCapture);
-            return function() {
-                element.removeEventListener(event, callback);
-            };
+    // Emulate Angular DOM Adapter considering it's restricitons
+    domAdapter.inject({
+        listen: function(element, event, callback, useCapture) {
+            var args = Array.prototype.slice.call(arguments, 0);
+            // Note: in Angular domAdapter it wiil be "window"
+            if(element === windowUtils.getWindow()) {
+                args[0] === window;
+            }
+            return this.callBase.apply(this, args);
+        },
+
+        getSelection: function() {
+            return {};
         }
-    };
+    });
 
-    domAdapter.getSelection = function() {
-        return {};
-    };
-
+    // Ready callbacks should be fired by the integrqtion
     readyCallbacks.fire();
 };
