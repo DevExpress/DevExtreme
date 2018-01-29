@@ -12,7 +12,7 @@ module.exports = {
             return specialValue;
         }
 
-        if(that._isValueOutOfCanvas(bp)) {
+        if(isNaN(bp)) {
             return null;
         }
         return that.to(bp, direction);
