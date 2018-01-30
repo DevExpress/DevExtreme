@@ -8,7 +8,7 @@ require("common.css!");
 require("generic_light.css!");
 
 var $ = require("jquery"),
-    resizeCallbacks = require("core/utils/window").resizeCallbacks,
+    resizeCallbacks = require("core/utils/resize_callbacks"),
     data = [
         { startDate: new Date(2016, 2, 9, 1), endDate: new Date(2016, 2, 9, 2), text: "Meeting" },
         { startDate: new Date(2016, 2, 9, 3), endDate: new Date(2016, 2, 9, 4), text: "Go to a shop" },

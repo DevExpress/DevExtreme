@@ -5,7 +5,7 @@ var $ = require("jquery"),
     commons = require("./vectorMapParts/commons.js"),
     mapLayerModule = require("viz/vector_map/map_layer"),
     projectionModule = require("viz/vector_map/projection.main"),
-    resizeCallbacks = require("core/utils/window").resizeCallbacks,
+    resizeCallbacks = require("core/utils/resize_callbacks"),
     vizMocks = require("../../helpers/vizMocks.js");
 
 QUnit.module('Map - projection events', commons.environment);

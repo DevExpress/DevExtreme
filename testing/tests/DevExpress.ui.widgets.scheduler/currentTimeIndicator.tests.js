@@ -2,7 +2,7 @@
 
 var $ = require("jquery"),
     SchedulerResourcesManager = require("ui/scheduler/ui.scheduler.resource_manager"),
-    resizeCallbacks = require("core/utils/window").resizeCallbacks;
+    resizeCallbacks = require("core/utils/resize_callbacks");
 
 var SCHEDULER_DATE_TIME_SHADER_CLASS = "dx-scheduler-date-time-shader",
     SCHEDULER_DATE_TIME_SHADER_ALL_DAY_CLASS = "dx-scheduler-date-time-shader-all-day",
