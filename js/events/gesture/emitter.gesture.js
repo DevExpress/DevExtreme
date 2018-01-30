@@ -36,34 +36,32 @@ var supportPointerEvents = function() {
     return cssSupport && !msieLess11;
 };
 
-var setGestureCover = callOnce(
-    function() {
-        var GESTURE_COVER_CLASS = "dx-gesture-cover";
+var setGestureCover = callOnce(function() {
+    var GESTURE_COVER_CLASS = "dx-gesture-cover";
 
-        var isDesktop = devices.real().platform === "generic";
+    var isDesktop = devices.real().platform === "generic";
 
-        if(!supportPointerEvents() || !isDesktop) {
-            return noop;
-        }
-
-        var $cover = $("<div>")
-            .addClass(GESTURE_COVER_CLASS)
-            .css("pointerEvents", "none");
-
-        eventsEngine.subscribeGlobal($cover, "dxmousewheel", function(e) {
-            e.preventDefault();
-        });
-
-        ready(function() {
-            $cover.appendTo("body");
-        });
-
-        return function(toggle, cursor) {
-            $cover.css("pointerEvents", toggle ? "all" : "none");
-            toggle && $cover.css("cursor", cursor);
-        };
+    if(!supportPointerEvents() || !isDesktop) {
+        return noop;
     }
-);
+
+    var $cover = $("<div>")
+        .addClass(GESTURE_COVER_CLASS)
+        .css("pointerEvents", "none");
+
+    eventsEngine.subscribeGlobal($cover, "dxmousewheel", function(e) {
+        e.preventDefault();
+    });
+
+    ready(function() {
+        $cover.appendTo("body");
+    });
+
+    return function(toggle, cursor) {
+        $cover.css("pointerEvents", toggle ? "all" : "none");
+        toggle && $cover.css("cursor", cursor);
+    };
+});
 
 var gestureCover = function(toggle, cursor) {
     var gestureCoverStrategy = setGestureCover();
