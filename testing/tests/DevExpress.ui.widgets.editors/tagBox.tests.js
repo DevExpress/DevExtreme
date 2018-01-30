@@ -4392,6 +4392,34 @@ QUnit.test("Select All should use cache", function(assert) {
     assert.equal(isValueEqualsSpy.callCount, 0, "_isValueEquals is not called");
 });
 
+QUnit.test("Unnecessary a load calls do not happen of custom store when item is selected", function(assert) {
+    var loadCallCounter = 0,
+        store = new CustomStore({
+            key: "id",
+            loadMode: "raw",
+            load: function() {
+                loadCallCounter++;
+                return [{ id: 1, text: "item 1" }, { id: 2, text: "item 2" }];
+            }
+        });
+
+    $("#tagBox").dxTagBox({
+        dataSource: {
+            store: store
+        },
+        valueExpr: "id",
+        displayExpr: "text",
+        opened: true,
+        hideSelectedItems: true
+    });
+
+    var $item = $(".dx-list-item").eq(0);
+
+    $item.trigger("dxclick");
+
+    assert.equal(loadCallCounter, 1);
+});
+
 QUnit.module("deprecated options");
 
 QUnit.test("the 'values' option should work correctly", function(assert) {
