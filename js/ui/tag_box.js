@@ -1166,7 +1166,7 @@ var TagBox = SelectBox.inherit({
             dataSource.filter(this._dataSourceFilterFunction.bind(this));
         }
 
-        dataSource.reload();
+        dataSource.load();
     },
 
     _dataSourceFilterExpr: function() {
