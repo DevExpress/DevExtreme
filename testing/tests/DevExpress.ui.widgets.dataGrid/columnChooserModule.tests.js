@@ -198,6 +198,37 @@ QUnit.test("Draw column chooser with hidden columns (select mode)", function(ass
     assert.ok(items[2].selected, "selected third item");
 });
 
+QUnit.test("Draw column chooser with columns.allowHiding == false (select mode)", function(assert) {
+    //arrange
+    var testElement = $("#container"),
+        columnChooserView = this.columnChooserView,
+        $columnChooser,
+        items,
+        treeView;
+
+    this.options.columnChooser.mode = "select";
+    $.extend(this.columns, [{ caption: "Column 1", index: 0, visible: true, allowHiding: false }, { caption: "Column 2", index: 1, visible: false }]);
+    this.setTestElement(testElement);
+
+    //act
+    this.renderColumnChooser();
+
+    columnChooserView._popupContainer.option("visible", true);
+
+    //assert
+    $columnChooser = $("body").children(".dx-datagrid-column-chooser");
+    treeView = $columnChooser.find(".dx-treeview").dxTreeView("instance");
+
+    items = treeView.option("items");
+    assert.ok($columnChooser.length, "have wrapper column chooser");
+    assert.ok(treeView, "column chooser has dxTreeView");
+    assert.equal(items.length, 2, "treeView has 2 items");
+    assert.ok(items[0].selected, "1st item selected");
+    assert.ok(items[0].disabled, "1st item disabled");
+    assert.notOk(items[1].selected, "2nd item not selected");
+    assert.notOk(items[1].disabled, "2nd item enabled");
+});
+
 QUnit.test("Hide column chooser when is visible true", function(assert) {
     //arrange
     var testElement = $("#container"),
