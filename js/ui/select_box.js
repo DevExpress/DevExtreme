@@ -692,13 +692,19 @@ var SelectBox = DropDownList.inherit({
         this._customItemCreatingAction = this._createActionByOption("onCustomItemCreating");
     },
 
-    _customItemAddedHandler: function() {
-        var searchValue = this._searchValue(),
-            params = {
-                text: searchValue
+    _createCustomItem: function(text) {
+        var params = {
+                text: text
             },
             actionResult = this._customItemCreatingAction(params),
             item = commonUtils.ensureDefined(actionResult, params.customItem);
+
+        return item;
+    },
+
+    _customItemAddedHandler: function() {
+        var searchValue = this._searchValue(),
+            item = this._createCustomItem(searchValue);
 
         if(item === undefined) {
             this._renderValue();

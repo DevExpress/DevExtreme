@@ -564,7 +564,7 @@ QUnit.test("TagBox has right tag order if byKey return value in wrong order", fu
             paging: false
         })
     });
-    this.clock.tick(timeToWait * 3);
+    this.clock.tick(timeToWait * 4);
 
     var content = $tagBox.find("." + TAGBOX_TAG_CONTENT_CLASS);
     assert.equal(content.eq(0).text(), "1", "first tag has right content");
@@ -4217,7 +4217,7 @@ QUnit.test("first page should be displayed after search and tag select", functio
     assert.equal($.trim($(".dx-item").first().text()), "0", "first item loaded");
 });
 
-QUnit.test("'byKey' called once per 'value' item (T533200)", function(assert) {
+QUnit.test("'byKey' should not be called on initialization (T533200)", function(assert) {
     var byKeySpy = sinon.spy(function(key) {
         return key;
     });
@@ -4232,7 +4232,7 @@ QUnit.test("'byKey' called once per 'value' item (T533200)", function(assert) {
         }
     });
 
-    assert.equal(byKeySpy.callCount, 1);
+    assert.equal(byKeySpy.callCount, 0);
 });
 
 QUnit.module("performance");
@@ -4482,12 +4482,16 @@ QUnit.test("tagBox should not render duplicated tags after searching", function(
         dataSource: new CustomStore({
             key: "id",
             load: function(loadOptions) {
-                var loadedItems = [];
-                if(!loadOptions.searchValue) return data;
+                var loadedItems = [],
+                    filteredData = loadOptions.filter ? dataQuery(data).filter(loadOptions.filter).toArray() : data;
+
+                if(!loadOptions.searchValue) {
+                    return filteredData;
+                }
 
                 var d = $.Deferred();
                 setTimeout(function(i) {
-                    data.forEach(function(i) {
+                    filteredData.forEach(function(i) {
                         if(i.Name.indexOf(loadOptions.searchValue) >= 0) {
                             loadedItems.push(i);
                         }

@@ -780,29 +780,53 @@ var TagBox = SelectBox.inherit({
         return $tag;
     },
 
+    _getItemFilter: function(values) {
+        return function(item) {
+            return values.indexOf(this._valueGetter(item)) !== -1;
+        }.bind(this);
+    },
+
+    _getFilteredItems: function(values) {
+        var filter = this._getItemFilter(values);
+
+        return this._dataSource.store().load({ filter: filter });
+    },
+
+    _createTagData: function(values, filteredItems) {
+        var items = [];
+
+        iteratorUtils.each(values, function(valueIndex, value) {
+            var item = filteredItems[valueIndex];
+
+            if(isDefined(item)) {
+                this._selectedItems.push(item);
+                items.splice(valueIndex, 0, item);
+            } else {
+                var selectedItem = this.option("selectedItem"),
+                    customItem = this._valueGetter(selectedItem) === value ? selectedItem : value;
+
+                items.splice(valueIndex, 0, customItem);
+            }
+        }.bind(this));
+
+        return items;
+    },
+
     _loadTagData: function() {
         var values = this._getValue(),
-            tagData = new Deferred(),
-            cache = {},
-            items = [];
+            tagData = new Deferred();
 
         this._selectedItems = [];
-        var itemLoadDeferreds = iteratorUtils.map(values, (function(value) {
-            return this._loadItem(value, cache).always((function(item) {
-                var valueIndex = values.indexOf(value);
 
-                if(isDefined(item)) {
-                    this._selectedItems.push(item);
-                    items.splice(valueIndex, 0, item);
-                } else {
-                    items.splice(valueIndex, 0, value);
-                }
-            }).bind(this));
-        }).bind(this));
-
-        when.apply($, itemLoadDeferreds)
-            .done(function() { tagData.resolve(items); })
-            .fail(function() { tagData.reject(items); });
+        this._getFilteredItems(values)
+            .done(function(filteredItems) {
+                var items = this._createTagData(values, filteredItems);
+                tagData.resolve(items);
+            }.bind(this))
+            .fail(function(filteredItems) {
+                var items = this._createTagData(values, filteredItems);
+                tagData.reject(items);
+            }.bind(this));
 
         return tagData.promise();
     },
