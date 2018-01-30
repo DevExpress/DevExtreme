@@ -2035,10 +2035,12 @@ module.exports = {
                         editFormRowIndex = this._editingController.getEditFormRowIndex();
 
                     if(editFormRowIndex === rowIndex) {
+                        var visibleColumn = this._columnsController.getVisibleColumns()[visibleIndex];
+
                         each($cells, function(index, cellElement) {
                             item = $(cellElement).find(".dx-field-item-content").data("dx-form-item");
 
-                            if(item && item.column && item.column.visibleIndex === visibleIndex) {
+                            if(item && item.column && visibleColumn && item.column.index === visibleColumn.index) {
                                 visibleIndex = index;
                                 return false;
                             }
