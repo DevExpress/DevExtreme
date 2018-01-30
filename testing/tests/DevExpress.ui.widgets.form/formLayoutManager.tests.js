@@ -320,6 +320,29 @@ QUnit.test("Check readOnly state for editor when readOnly is enabled in the edit
     assert.ok($testContainer.find("." + internals.FIELD_ITEM_CLASS + " .dx-texteditor").hasClass("dx-state-readonly"), "editor is read only");
 });
 
+QUnit.test("Editor's read only state should not be reset on the dxForm 'readOnly' option changing", function(assert) {
+    //arrange, act
+    var $testContainer = $("#container").dxLayoutManager({
+            items: [
+                {
+                    dataField: "name",
+                    editorType: "dxTextBox",
+                    editorOptions: {
+                        readOnly: true
+                    }
+                }
+            ]
+        }),
+        layoutManager = $testContainer.dxLayoutManager("instance");
+
+    layoutManager.option("readOnly", true);
+    layoutManager.option("readOnly", false);
+
+    //assert
+    var $textEditor = $testContainer.find("." + internals.FIELD_ITEM_CLASS + " .dx-texteditor");
+    assert.ok($textEditor.hasClass("dx-state-readonly"), "editor is read only");
+});
+
 QUnit.test("Layout strategy when flex is not supported", function(assert) {
     //arrange, act
     var items = [
