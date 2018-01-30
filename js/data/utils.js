@@ -66,7 +66,9 @@ var errorMessageFromXhr = (function() {
 
     // T542570, https://stackoverflow.com/a/18170879
     var unloading;
-    domAdapter.listen(window, "beforeunload", function() { unloading = true; });
+    if(windowUtils.hasWindow()) {
+        domAdapter.listen(window, "beforeunload", function() { unloading = true; });
+    }
 
     return function(xhr, textStatus) {
         if(unloading) {

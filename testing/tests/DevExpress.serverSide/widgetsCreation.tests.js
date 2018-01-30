@@ -1,11 +1,16 @@
 "use strict";
 
-var Button = require("ui/button");
+var widgets = {
+    Accordion: require("ui/accordion"),
+    Button: require("ui/button")
+};
 
 QUnit.module("Scripts loading");
 
-QUnit.test("Button", function(assert) {
-    assert.ok(Button);
+QUnit.test("Widgets", function(assert) {
+    for(var widget in widgets) {
+        assert.ok(widgets[widget], widget);
+    }
 });
 
 QUnit.module("Widget creation", {
@@ -20,7 +25,7 @@ QUnit.module("Widget creation", {
 });
 
 QUnit.test("Button", function(assert) {
-    this.instance = new Button(this.element);
+    this.instance = new widgets.Button(this.element);
     assert.ok(this.instance);
 });
 
