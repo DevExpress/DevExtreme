@@ -345,7 +345,7 @@ QUnit.test("T278148 - picker type should be 'rollers' if the real device is phon
     var realDevice = devices.real(),
         currentDevice = devices.current();
 
-    devices.real({ deviceType: "phone", platform: "win" });
+    devices.real({ deviceType: "phone", platform: "android", version: [4, 3] });
     devices.current({ platform: "generic" });
 
     try {
