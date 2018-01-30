@@ -311,10 +311,9 @@ function themeReady(callback) {
     themeReadyCallback.add(callback);
 }
 
-var readyDeferred = new Deferred();
 var initDeferred = new Deferred();
 
-readyDeferred.done(function() {
+function autoInit() {
     init({
         _autoInit: true,
         _forceTimeout: true
@@ -323,15 +322,14 @@ readyDeferred.done(function() {
     if($(DX_LINK_SELECTOR, context).length) {
         throw errors.Error("E0022");
     }
+
     initDeferred.resolve();
-});
+}
 
 if(windowUtils.hasWindow()) {
-    readyDeferred.resolve();
+    autoInit();
 } else {
-    ready(function() {
-        readyDeferred.resolve();
-    });
+    ready(autoInit);
 }
 
 viewPortChanged.add(function(viewPort, prevViewPort) {
