@@ -141,6 +141,10 @@ var LayoutManager = Widget.inherit({
         var layoutData = this.option("layoutData"),
             newValue = value;
 
+        if(!typeUtils.isDefined(layoutData)) {
+            return;
+        }
+
         if(!isWrapped(layoutData[dataField]) && typeUtils.isDefined(dataField)) {
             this.option("layoutData." + dataField, newValue);
         } else if(isWritableWrapped(layoutData[dataField])) {

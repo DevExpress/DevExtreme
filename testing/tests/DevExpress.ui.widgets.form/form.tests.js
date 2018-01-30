@@ -1136,6 +1136,17 @@ QUnit.test("Refresh form when visibility changed to 'true' in msie browser", fun
     refreshStub.restore();
 });
 
+QUnit.test("Item with data field is rendered when formData has 'undefined' value", function(assert) {
+    //arrange, act
+    var $testContainer = $("#form").dxForm({
+        formData: undefined,
+        items: [{ dataField: "Address" }]
+    });
+
+    //assert
+    assert.equal($testContainer.find(".dx-field-item").length, 1, "form item is rendered");
+});
+
 QUnit.module("Grouping");
 
 QUnit.test("Render groups", function(assert) {
