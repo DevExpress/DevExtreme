@@ -7,7 +7,7 @@ var $ = require("jquery"),
     Toolbar = require("ui/toolbar"),
     fx = require("animation/fx"),
     hideTopOverlayCallback = require("mobile/hide_top_overlay").hideCallback,
-    resizeCallbacks = require("core/utils/window").resizeCallbacks,
+    resizeCallbacks = require("core/utils/resize_callbacks"),
     pointerMock = require("../../helpers/pointerMock.js");
 
 require("common.css!");

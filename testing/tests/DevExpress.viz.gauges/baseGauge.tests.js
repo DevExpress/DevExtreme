@@ -5,7 +5,7 @@
 var $ = require("jquery"),
     vizMocks = require("../../helpers/vizMocks.js"),
     registerComponent = require("core/component_registrator"),
-    resizeCallbacks = require("core/utils/window").resizeCallbacks,
+    resizeCallbacks = require("core/utils/resize_callbacks"),
     baseGaugeModule = require("viz/gauges/base_gauge"),
     dxBaseGauge = baseGaugeModule.dxBaseGauge,
     formatValue = baseGaugeModule.formatValue,

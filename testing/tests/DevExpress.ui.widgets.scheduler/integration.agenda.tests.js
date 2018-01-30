@@ -15,7 +15,7 @@ require("generic_light.css!");
 
 var $ = require("jquery"),
     devices = require("core/devices"),
-    resizeCallbacks = require("core/utils/window").resizeCallbacks,
+    resizeCallbacks = require("core/utils/resize_callbacks"),
     dblclickEvent = require("events/dblclick"),
     fx = require("animation/fx"),
     Color = require("color"),

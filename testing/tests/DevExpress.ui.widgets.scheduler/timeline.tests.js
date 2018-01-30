@@ -15,7 +15,7 @@ var $ = require("jquery"),
     SchedulerResourcesManager = require("ui/scheduler/ui.scheduler.resource_manager"),
     domUtils = require("core/utils/dom"),
     dateLocalization = require("localization/date"),
-    resizeCallbacks = require("core/utils/window").resizeCallbacks,
+    resizeCallbacks = require("core/utils/resize_callbacks"),
     dateUtils = require("core/utils/date"),
     dataUtils = require("core/element_data");
 
