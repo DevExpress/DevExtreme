@@ -666,6 +666,29 @@ QUnit.test("Call forEachNode method when the first parameter as node", function(
     assert.deepEqual(spy.getCall(3).args[0], this.dataController.getNodeByKey(3));
 });
 
+QUnit.test("Call forEachNode method with one parameter", function(assert) {
+    //arrange
+    var array = [
+            { name: 'Category1', phone: '55-55-55', id: 1, parentId: 0 },
+            { name: 'Category2', phone: '98-75-21', id: 2, parentId: 0 },
+            { name: 'SubCategory1', phone: '55-66-77', id: 3, parentId: 2 }
+        ],
+        dataSource = createDataSource(array),
+        spy = sinon.spy();
+
+    this.dataController.setDataSource(dataSource);
+    dataSource.load();
+
+    //act
+    this.dataController.forEachNode(spy);
+
+    //assert
+    assert.strictEqual(spy.callCount, 3);
+    assert.deepEqual(spy.getCall(0).args[0], this.dataController.getNodeByKey(1));
+    assert.deepEqual(spy.getCall(1).args[0], this.dataController.getNodeByKey(2));
+    assert.deepEqual(spy.getCall(2).args[0], this.dataController.getNodeByKey(3));
+});
+
 QUnit.module("Expand/Collapse nodes", { beforeEach: setupModule, afterEach: teardownModule });
 
 QUnit.test("Expand node (plain structure)", function(assert) {
