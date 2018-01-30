@@ -15,8 +15,7 @@ var $ = require("../../core/renderer"),
     eventUtils = require("../utils"),
     Emitter = require("../core/emitter"),
     sign = mathUtils.sign,
-    abs = Math.abs,
-    gestureCover;
+    abs = Math.abs;
 
 var SLEEP = 0,
     INITED = 1,
@@ -37,33 +36,39 @@ var supportPointerEvents = function() {
     return cssSupport && !msieLess11;
 };
 
-var setGestureCover = callOnce(function() {
-    var GESTURE_COVER_CLASS = "dx-gesture-cover";
+var setGestureCover = callOnce(
+    function() {
+        var GESTURE_COVER_CLASS = "dx-gesture-cover";
 
-    var isDesktop = devices.real().platform === "generic";
+        var isDesktop = devices.real().platform === "generic";
 
-    if(!supportPointerEvents() || !isDesktop) {
-        return noop;
+        if(!supportPointerEvents() || !isDesktop) {
+            return noop;
+        }
+
+        var $cover = $("<div>")
+            .addClass(GESTURE_COVER_CLASS)
+            .css("pointerEvents", "none");
+
+        eventsEngine.subscribeGlobal($cover, "dxmousewheel", function(e) {
+            e.preventDefault();
+        });
+
+        ready(function() {
+            $cover.appendTo("body");
+        });
+
+        return function(toggle, cursor) {
+            $cover.css("pointerEvents", toggle ? "all" : "none");
+            toggle && $cover.css("cursor", cursor);
+        };
     }
+);
 
-    var $cover = $("<div>")
-        .addClass(GESTURE_COVER_CLASS)
-        .css("pointerEvents", "none");
-
-    eventsEngine.subscribeGlobal($cover, "dxmousewheel", function(e) {
-        e.preventDefault();
-    });
-
-    ready(function() {
-        $cover.appendTo("body");
-    });
-
-    gestureCover = function(toggle, cursor) {
-        $cover.css("pointerEvents", toggle ? "all" : "none");
-        toggle && $cover.css("cursor", cursor);
-    };
-});
-
+var gestureCover = function(toggle, cursor) {
+    var gestureCoverStrategy = setGestureCover();
+    gestureCoverStrategy(toggle, cursor);
+};
 
 var GestureEmitter = Emitter.inherit({
 
@@ -185,7 +190,6 @@ var GestureEmitter = Emitter.inherit({
         var isStarted = this._stage === STARTED;
 
         if(isStarted) {
-            setGestureCover();
             gestureCover(toggle, this.getElement().css("cursor"));
         }
     },
