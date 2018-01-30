@@ -1302,6 +1302,41 @@ QUnit.test("Set values from layoutData", function(assert) {
     assert.deepEqual($editors.eq(3).dxDateBox("instance").option("value"), new Date("10/10/2010"), "4 editor");
 });
 
+QUnit.test("Value from layoutData shouldn't pass to the editor in case when the 'dataField' options isn't specified", function(assert) {
+    //arrange, act
+    var $testContainer = $("#container");
+
+    $testContainer.dxLayoutManager({
+        layoutData: {
+            firstName: "Alex",
+        },
+        items: [{ name: "firstName", editorType: "dxTextBox" }]
+    });
+
+    var editor = $testContainer.find(".dx-texteditor").dxTextBox("instance");
+
+    //assert
+    assert.equal(editor.option("value"), null, "Editor hasn't a value");
+});
+
+QUnit.test("layoutData isn't updating on editor value change if the 'dataField' option isn't specified", function(assert) {
+    //arrange, act
+    var $testContainer = $("#container");
+
+    $testContainer.dxLayoutManager({
+        layoutData: {
+            firstName: "Alex",
+        },
+        items: [{ name: "firstName", editorType: "dxTextBox" }]
+    });
+
+    $testContainer.find(".dx-texteditor").dxTextBox("option", "value", "John");
+
+    //assert
+    var layoutManager = $testContainer.dxLayoutManager("instance");
+    assert.deepEqual(layoutManager.option("layoutData"), { firstName: "Alex" }, "layoutData keeps the same data");
+});
+
 QUnit.test("Set value via editor options", function(assert) {
     //arrange, act
     var $editors,
