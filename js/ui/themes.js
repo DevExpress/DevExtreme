@@ -1,7 +1,10 @@
 "use strict";
 
 var $ = require("../core/renderer"),
-    window = require("../core/utils/window").getWindow(),
+    domAdapter = require("../core/dom_adapter"),
+    windowUtils = require("../core/utils/window"),
+    window = windowUtils.getWindow(),
+    Deferred = require("../core/utils/deferred").Deferred,
     errors = require("./widget/ui.errors"),
     domUtils = require("../core/utils/dom"),
     readyCallbacks = require("../core/utils/ready_callbacks"),
@@ -29,6 +32,9 @@ var timerId;
 var THEME_MARKER_PREFIX = "dx.";
 
 function readThemeMarker() {
+    if(!windowUtils.hasWindow()) {
+        return null;
+    }
     var element = $("<div>", context).addClass("dx-theme-marker").appendTo(context.documentElement),
         result;
 
@@ -166,7 +172,7 @@ function initContext(newContext) {
 
 function init(options) {
     options = options || {};
-    initContext(options.context || window.document);
+    initContext(options.context || domAdapter.getDocument());
 
     if(!context) return;
     processMarkup();
@@ -301,24 +307,36 @@ function detachCssClasses(element) {
     $(element).removeClass(themeClasses);
 }
 
-init({
-    _autoInit: true,
-    _forceTimeout: true
-});
-
 function themeReady(callback) {
     themeReadyCallback.add(callback);
 }
 
-ready(function() {
+var initDeferred = new Deferred();
+
+function autoInit() {
+    init({
+        _autoInit: true,
+        _forceTimeout: true
+    });
+
     if($(DX_LINK_SELECTOR, context).length) {
         throw errors.Error("E0022");
     }
-});
+
+    initDeferred.resolve();
+}
+
+if(windowUtils.hasWindow()) {
+    autoInit();
+} else {
+    ready(autoInit);
+}
 
 viewPortChanged.add(function(viewPort, prevViewPort) {
-    detachCssClasses(prevViewPort);
-    attachCssClasses(viewPort);
+    initDeferred.done(function() {
+        detachCssClasses(prevViewPort);
+        attachCssClasses(viewPort);
+    });
 });
 
 devices.changed.add(function() {
