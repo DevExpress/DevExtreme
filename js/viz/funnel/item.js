@@ -71,7 +71,7 @@ Item.prototype = {
         } else {
             this.code &= ~code;
         }
-        this.widget._change(["TILES"]);
+        this.widget._applyTilesAppearance();
     },
 
     select: function(state) {

@@ -1865,6 +1865,35 @@ QUnit.test("Header should have alignment if there's no dataSource and sorting is
     assert.ok($headerCellContent.eq(2).hasClass("dx-text-content-alignment-left"), "alignment is left");
 });
 
+//T598499
+QUnit.test("Not set title attribute when cell text isn't trimmed in dx-datagrid-text-content container", function(assert) {
+    //arrange
+    var $testElement = $("#container").addClass("dx-widget"),
+        $cellElements,
+        $firstContentElement,
+        $lastContentElement;
+
+    this.options.cellHintEnabled = true;
+    this.options.sorting = { mode: "single" };
+    $.extend(this.columns, [{ caption: "First Name", allowSorting: true }, { caption: "Last Name", allowSorting: true }]);
+    this.columnHeadersView.render($testElement);
+    $cellElements = dataGridMocks.getCells($testElement);
+
+    //act
+    $firstContentElement = $cellElements.first().find(".dx-datagrid-text-content");
+    $firstContentElement.trigger("mousemove");
+
+    //assert
+    assert.strictEqual($firstContentElement.attr("title"), undefined, "not has attribute title in first cell");
+
+    //act
+    $lastContentElement = $cellElements.last().find(".dx-datagrid-text-content");
+    $lastContentElement.trigger("mousemove");
+
+    //assert
+    assert.strictEqual($lastContentElement.attr("title"), undefined, "not has attribute title in last cell");
+});
+
 QUnit.module('Headers with grouping', {
     beforeEach: function() {
         this.clock = sinon.useFakeTimers();

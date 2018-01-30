@@ -649,9 +649,9 @@ QUnit.module('Numeric translator', environment);
 QUnit.test('Translate. Positive values. Invert = false', function(assert) {
     var translator = this.createTranslator({ min: 200, max: 700 });
 
-    assert.equal(translator.translate(100), null, 'BP less than min');
+    assert.equal(translator.translate(100), 300, 'BP less than min');
     assert.equal(translator.translate(undefined), null, 'BP undefined');
-    assert.equal(translator.translate(1000), null, 'BP more than min');
+    assert.equal(translator.translate(1000), 2100, 'BP more than min');
     assert.equal(translator.translate(300), 700, 'BP inside range');
     assert.equal(translator.translate(200), 500, 'BP on the min');
     assert.equal(translator.translate(700), 1500, 'BP on the max');
@@ -662,8 +662,8 @@ QUnit.test('Translate. Positive values. Invert = false', function(assert) {
 QUnit.test('Translate. Positive values. Invert = true', function(assert) {
     var translator = this.createTranslator({ min: 200, max: 700, invert: true });
 
-    assert.equal(translator.translate(100), null, 'BP less than min');
-    assert.equal(translator.translate(1000), null, 'BP more than min');
+    assert.equal(translator.translate(100), 1700, 'BP less than min');
+    assert.equal(translator.translate(1000), -100, 'BP more than min');
     assert.equal(translator.translate(undefined), null, 'BP undefined');
     assert.equal(translator.translate(300), 1300, 'BP inside range');
     assert.equal(translator.translate(200), 1500, 'BP on the min');
@@ -675,8 +675,8 @@ QUnit.test('Translate. Positive values. Invert = true', function(assert) {
 QUnit.test('Translate. Negative values. Invert = false', function(assert) {
     var translator = this.createTranslator({ min: -700, max: -200 });
 
-    assert.equal(translator.translate(-1000), null, 'BP less than min');
-    assert.equal(translator.translate(-100), null, 'BP more than min');
+    assert.equal(translator.translate(-1000), -100, 'BP less than min');
+    assert.equal(translator.translate(-100), 1700, 'BP more than min');
     assert.equal(translator.translate(undefined), null, 'BP undefined');
     assert.equal(translator.translate(-600), 700, 'BP inside range');
     assert.equal(translator.translate(-700), 500, 'BP on the min');
@@ -688,8 +688,8 @@ QUnit.test('Translate. Negative values. Invert = false', function(assert) {
 QUnit.test('Translate. Negative values. Invert = true', function(assert) {
     var translator = this.createTranslator({ min: -700, max: -200, invert: true });
 
-    assert.equal(translator.translate(-1000), null, 'BP less than min');
-    assert.equal(translator.translate(-100), null, 'BP more than min');
+    assert.equal(translator.translate(-1000), 2100, 'BP less than min');
+    assert.equal(translator.translate(-100), 300, 'BP more than min');
     assert.equal(translator.translate(undefined), null, 'BP undefined');
     assert.equal(translator.translate(-600), 1300, 'BP inside range');
     assert.equal(translator.translate(-700), 1500, 'BP on the min');
@@ -928,8 +928,8 @@ QUnit.module('Datetime translator', {
 QUnit.test('Translate. Invert = false', function(assert) {
     var translator = this.createTranslator({ min: new Date(2012, 8, 1), max: new Date(2012, 8, 2) });
 
-    assert.equal(translator.translate(new Date(2012, 7, 1)), null, 'BP less than min');
-    assert.equal(translator.translate(new Date(2012, 9, 1)), null, 'BP more than min');
+    assert.equal(translator.translate(new Date(2012, 7, 1)), -30500, 'BP less than min');
+    assert.equal(translator.translate(new Date(2012, 9, 1)), 30500, 'BP more than min');
     assert.equal(translator.translate(undefined), null, 'BP undefined');
     assert.equal(translator.translate(new Date(2012, 8, 1, 12)), 1000, 'BP inside range');
     assert.equal(translator.translate(new Date(2012, 8, 1)), 500, 'BP on the min');
@@ -941,8 +941,8 @@ QUnit.test('Translate. Invert = false', function(assert) {
 QUnit.test('Translate. Invert = true', function(assert) {
     var translator = this.createTranslator({ min: new Date(2012, 8, 1), max: new Date(2012, 8, 2), invert: true });
 
-    assert.equal(translator.translate(new Date(2012, 7, 1)), null, 'BP less than min');
-    assert.equal(translator.translate(new Date(2012, 9, 1)), null, 'BP more than min');
+    assert.equal(translator.translate(new Date(2012, 7, 1)), 32500, 'BP less than min');
+    assert.equal(translator.translate(new Date(2012, 9, 1)), -28500, 'BP more than min');
     assert.equal(translator.translate(undefined), null, 'BP undefined');
     assert.equal(translator.translate(new Date(2012, 8, 1, 12)), 1000, 'BP inside range');
     assert.equal(translator.translate(new Date(2012, 8, 1)), 1500, 'BP on the min');
@@ -1045,8 +1045,8 @@ QUnit.test('Translate. Big numbers. Invert = false', function(assert) {
     var doubleDelta = 0.00002,
         translator = this.createTranslator({ min: 100, max: 10000 });
 
-    assert.equal(translator.translate(10), null, 'BP less than min');
-    assert.equal(translator.translate(100000), null, 'BP more than min');
+    assert.equal(translator.translate(10), 0, 'BP less than min');
+    assert.equal(translator.translate(100000), 2000, 'BP more than min');
     assert.equal(translator.translate(undefined), null, 'BP undefined');
     assert.equal(translator.translate(1000), 1000, 'BP inside range');
     assert.equal(translator.translate(100), 500, 'BP on the min');
@@ -1059,8 +1059,8 @@ QUnit.test('Translate. Big numbers. Invert = true', function(assert) {
     var doubleDelta = 0.00002,
         translator = this.createTranslator({ min: 100, max: 10000, invert: true });
 
-    assert.equal(translator.translate(10), null, 'BP less than min');
-    assert.equal(translator.translate(100000), null, 'BP more than min');
+    assert.equal(translator.translate(10), 2000, 'BP less than min');
+    assert.equal(translator.translate(100000), 0, 'BP more than min');
     assert.equal(translator.translate(undefined), null, 'BP undefined');
     assert.equal(translator.translate(1000), 1000, 'BP inside range');
     assert.equal(translator.translate(100), 1500, 'BP on the min');
@@ -1073,8 +1073,8 @@ QUnit.test('Translate. Small numbers. Invert = false', function(assert) {
     var doubleDelta = 0.00002,
         translator = this.createTranslator({ min: 0.0001, max: 0.01 });
 
-    assert.equal(translator.translate(0.00001), null, 'BP less than min');
-    assert.equal(translator.translate(0.1), null, 'BP more than min');
+    assert.equal(translator.translate(0.00001), 0, 'BP less than min');
+    assert.equal(translator.translate(0.1), 2000, 'BP more than min');
     assert.equal(translator.translate(undefined), null, 'BP undefined');
     assert.equal(translator.translate(0.001), 1000, 'BP inside range');
     assert.equal(translator.translate(0.0001), 500, 'BP on the min');
@@ -1087,8 +1087,8 @@ QUnit.test('Translate. Small numbers. Invert = true', function(assert) {
     var doubleDelta = 0.00002,
         translator = this.createTranslator({ min: 0.0001, max: 0.01, invert: true });
 
-    assert.equal(translator.translate(0.00001), null, 'BP less than min');
-    assert.equal(translator.translate(0.1), null, 'BP more than min');
+    assert.equal(translator.translate(0.00001), 2000, 'BP less than min');
+    assert.equal(translator.translate(0.1), 0, 'BP more than min');
     assert.equal(translator.translate(0.001), 1000, 'BP inside range');
     assert.equal(translator.translate(0.0001), 1500, 'BP on the min');
     assert.equal(translator.translate(0.01), 500, 'BP on the max');
@@ -1251,8 +1251,8 @@ QUnit.test('Translate. Big numbers. Invert = false. Base = 2', function(assert) 
     var doubleDelta = 0.0000069,
         translator = this.createTranslator({ min: 4, max: 16, base: 2 });
 
-    assert.equal(translator.translate(2), null, 'BP less than min');
-    assert.equal(translator.translate(32), null, 'BP more than min');
+    assert.equal(translator.translate(2), 0, 'BP less than min');
+    assert.equal(translator.translate(32), 2000, 'BP more than min');
     assert.equal(translator.translate(8), 1000, 'BP inside range');
     assert.equal(translator.translate(4), 500, 'BP on the min');
     assert.equal(translator.translate(16), 1500, 'BP on the max');
@@ -1264,8 +1264,8 @@ QUnit.test('Translate. Big numbers. Invert = true. Base = 2', function(assert) {
     var doubleDelta = 0.0000069,
         translator = this.createTranslator({ min: 4, max: 16, base: 2, invert: true });
 
-    assert.equal(translator.translate(2), null, 'BP less than min');
-    assert.equal(translator.translate(34), null, 'BP more than min');
+    assert.equal(translator.translate(2), 2000, 'BP less than min');
+    assert.equal(translator.translate(34), -44, 'BP more than min');
     assert.equal(translator.translate(8), 1000, 'BP inside range');
     assert.equal(translator.translate(4), 1500, 'BP on the min');
     assert.equal(translator.translate(16), 500, 'BP on the max');
@@ -1277,8 +1277,8 @@ QUnit.test('Translate. Small numbers. Invert = false. Base = 2', function(assert
     var doubleDelta = 0.0000069,
         translator = this.createTranslator({ min: 0.0625, max: 0.25, base: 2 });
 
-    assert.equal(translator.translate(0.03125), null, 'BP less than min');
-    assert.equal(translator.translate(0.5), null, 'BP more than min');
+    assert.equal(translator.translate(0.03125), 0, 'BP less than min');
+    assert.equal(translator.translate(0.5), 2000, 'BP more than min');
     assert.equal(translator.translate(0.125), 1000, 'BP inside range');
     assert.equal(translator.translate(0.0625), 500, 'BP on the min');
     assert.equal(translator.translate(0.25), 1500, 'BP on the max');
@@ -1290,8 +1290,8 @@ QUnit.test('Translate. Small numbers. Invert = true. Base = 2', function(assert)
     var doubleDelta = 0.0000069,
         translator = this.createTranslator({ min: 0.0625, max: 0.25, base: 2, invert: true });
 
-    assert.equal(translator.translate(0.03125), null, 'BP less than min');
-    assert.equal(translator.translate(0.5), null, 'BP more than min');
+    assert.equal(translator.translate(0.03125), 2000, 'BP less than min');
+    assert.equal(translator.translate(0.5), 0, 'BP more than min');
     assert.equal(translator.translate(0.125), 1000, 'BP inside range');
     assert.equal(translator.translate(0.0625), 1500, 'BP on the min');
     assert.equal(translator.translate(0.25), 500, 'BP on the max');

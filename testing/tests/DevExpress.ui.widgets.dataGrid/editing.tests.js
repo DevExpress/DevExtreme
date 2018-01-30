@@ -10080,6 +10080,40 @@ QUnit.test("Edit row after the infinite scrolling when there is inserted row", f
     assert.equal(testElement.find("input").val(), "Item51", "text edit cell");
 });
 
+//T600046
+QUnit.test("Position of the inserted row if grouping is used", function(assert) {
+    //arrange
+    var testElement = $('#container');
+
+    this.options.keyExpr = "column2";
+    this.options.dataSource = [
+        { column1: 1, column2: 1 },
+        { column1: 1, column2: 2 },
+        { column1: 2, column2: 3 },
+        { column1: 2, column2: 4 }
+    ];
+    this.options.paging.pageSize = 20;
+    this.options.scrolling = { useNative: false };
+    this.options.columns[0].groupIndex = 0;
+    this.options.grouping = { autoExpandAll: true };
+
+    this.setupDataGrid();
+    this.rowsView.render(testElement);
+    this.rowsView.height(30);
+    this.rowsView.resize();
+
+    var y = $(this.rowsView.getRowElement(2)).offset().top - $(this.rowsView.getRowElement(0)).offset().top;
+
+    this.rowsView.scrollTo({ y: y });
+
+    //act
+    this.addRow();
+
+    //assert
+    var item3 = this.dataController.items()[2];
+    assert.ok(item3.inserted, "Item3 is inserted");
+    assert.deepEqual(item3.data, {}, "Item3 is empty");
+});
 
 QUnit.module('Edit Form', {
     beforeEach: function() {

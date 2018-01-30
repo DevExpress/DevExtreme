@@ -410,12 +410,6 @@ _Translator2d.prototype = {
         return canvasOptions.invert ? canvasOptions.rangeMaxVisible.valueOf() - distance : canvasOptions.rangeMinVisible.valueOf() + distance;
     },
 
-    _isValueOutOfCanvas: function(bp) {
-        var canvasOptions = this._canvasOptions,
-            doubleError = canvasOptions.rangeDoubleError;
-
-        return isNaN(bp) || bp.valueOf() + doubleError < canvasOptions.rangeMin || bp.valueOf() - doubleError > canvasOptions.rangeMax;
-    },
     getMinBarSize: function(minBarSize) {
         var visibleArea = this.getCanvasVisibleArea(),
             minValue = this.untranslate(visibleArea.min + minBarSize);
