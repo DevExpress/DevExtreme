@@ -11237,46 +11237,13 @@ QUnit.test("Repaint of popup is should be called when form layout is changed", f
     //act
     this.addRow();
 
-    var spy = sinon.spy(this.editingController._editPopup, "repaint"),
+    var spy1 = sinon.spy(this.editingController._editPopup, "repaint"),
+        spy2 = sinon.spy(this.editingController._editPopup, "_render"),
         editForm = this.editingController._editForm;
 
     screenFactor = "lg";
     domUtils.triggerResizeEvent(editForm.element());
 
-    assert.equal(spy.callCount, 1, "repaint is thrown");
-});
-
-QUnit.test("Unnecessary render of popup is not called when form layout is changed", function(assert) {
-    var that = this,
-        screenFactor = "xs";
-
-    that.options.editing.form = {
-        screenByWidth: function() {
-            return screenFactor;
-        },
-        colCountByScreen: {
-            lg: 2,
-            xs: 1
-        }
-    };
-
-    that.options.editing.popup = {
-        width: "auto",
-        height: "auto",
-        minHeight: 150,
-    };
-
-    that.setupModules(that);
-    that.renderRowsView();
-
-    //act
-    this.addRow();
-
-    var spy = sinon.spy(this.editingController._editPopup, "_render"),
-        editForm = this.editingController._editForm;
-
-    screenFactor = "lg";
-    domUtils.triggerResizeEvent(editForm.element());
-
-    assert.equal(spy.callCount, 0, "render is called after repaint");
+    assert.equal(spy1.callCount, 1, "repaint is thrown");
+    assert.equal(spy2.callCount, 0, "render is called after repaint");
 });
