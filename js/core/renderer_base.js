@@ -186,11 +186,12 @@ initRender.prototype.toggleClass = function(className, value) {
         }
 
         if(domAdapter.isDocument(element)) {
-            var documentElement = domAdapter.getDocumentElement();
+            var documentElement = domAdapter.getDocumentElement(),
+                body = domAdapter.getBody();
 
             return Math.max(
-                element.body["scroll" + partialName],
-                element.body["offset" + partialName],
+                body["scroll" + partialName],
+                body["offset" + partialName],
                 documentElement["scroll" + partialName],
                 documentElement["offset" + partialName],
                 documentElement["client" + partialName]
