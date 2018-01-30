@@ -2,7 +2,6 @@
 * @name dxPieChartSeriesTypes
 * @publicName dxPieChartSeriesTypes
 * @type object
-* @hidden
 */
 /**
 * @name dxPieChartSeriesTypes_CommonPieChartSeries
