@@ -1478,6 +1478,10 @@ var EditingController = modules.ViewController.inherit((function() {
                     that._createComponent($("<div>").appendTo($buttonsContainer), Button, that._getSaveButtonConfig());
                     that._createComponent($("<div>").appendTo($buttonsContainer), Button, that._getCancelButtonConfig());
                 }
+
+                that._editForm.on("contentReady", function() {
+                    that._editPopup && that._editPopup.repaint();
+                });
             };
         },
 
