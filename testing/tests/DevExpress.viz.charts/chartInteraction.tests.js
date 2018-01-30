@@ -184,17 +184,14 @@ QUnit.test("number of rendering on updating dataSource", function(assert) {
 
 //T600660
 QUnit.test("useSpiderWeb option changing", function(assert) {
-    var drawn = sinon.spy(),
-        polar = $("#chart").dxPolarChart({
-            onDrawn: drawn,
+    var polar = $("#chart").dxPolarChart({
             series: [{}]
-        }).dxPolarChart("instance");
-
-    drawn.reset();
+        }).dxPolarChart("instance"),
+        initialSeries = polar.getAllSeries()[0];
 
     polar.option("useSpiderWeb", true);
 
-    assert.equal(drawn.callCount, 1);
+    assert.ok(initialSeries !== polar.getAllSeries()[0]);
 });
 
 QUnit.module("series API", {
