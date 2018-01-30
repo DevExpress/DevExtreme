@@ -449,6 +449,8 @@ var Form = Widget.inherit({
              * @publicName template
              * @type template|function
              * @type_function_param1 data:object
+             * @type_function_param1_field1 component:dxForm
+             * @type_function_param1_field2 formData:object
              * @type_function_param2 itemElement:dxElement
              * @type_function_return string|Node|jQuery
              */
