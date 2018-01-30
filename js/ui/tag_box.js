@@ -3,6 +3,7 @@
 var $ = require("../core/renderer"),
     eventsEngine = require("../events/core/events_engine"),
     dataUtils = require("../core/element_data"),
+    dataQuery = require("../data/query"),
     getPublicElement = require("../core/utils/dom").getPublicElement,
     devices = require("../core/devices"),
     commonUtils = require("../core/utils/common"),
@@ -787,9 +788,16 @@ var TagBox = SelectBox.inherit({
     },
 
     _getFilteredItems: function(values) {
-        var filter = this._getItemFilter(values);
+        var filter = this._getItemFilter(values),
+            selectedItems = this.option("selectedItems"),
+            filteredItems = dataQuery(selectedItems).filter(filter).toArray();
 
-        return this._dataSource.store().load({ filter: filter });
+        if(filteredItems.length === values.length) {
+            return new Deferred().resolve(filteredItems).promise();
+        } else {
+            return this._dataSource.store().load({ filter: filter });
+        }
+
     },
 
     _createTagData: function(values, filteredItems) {

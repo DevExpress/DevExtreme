@@ -2714,8 +2714,8 @@ QUnit.test("remove tag by backspace", function(assert) {
 
 QUnit.test("removing tag by backspace should not load data from DS", function(assert) {
     var data = ["one", "two", "three"],
-        loadedCount = 0
-    ;
+        loadedCount = 0;
+
     var $tagBox = $("#tagBox").dxTagBox({
         dataSource: {
             load: function() {
@@ -2727,6 +2727,7 @@ QUnit.test("removing tag by backspace should not load data from DS", function(as
             }
         },
         value: ["one", "two"],
+        deferRendering: true,
         searchEnabled: true,
         searchTimeout: 0
     });
