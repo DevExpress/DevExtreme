@@ -1,11 +1,16 @@
 "use strict";
 
 var Button = require("ui/button");
+var CheckBox = require("ui/check_box");
 
 QUnit.module("Scripts loading");
 
 QUnit.test("Button", function(assert) {
     assert.ok(Button);
+});
+
+QUnit.test("CheckBox", function(assert) {
+    assert.ok(CheckBox);
 });
 
 QUnit.module("Widget creation", {
