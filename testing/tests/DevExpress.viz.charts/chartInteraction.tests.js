@@ -5,6 +5,7 @@ var $ = require("jquery"),
     DataSource = require("data/data_source/data_source").DataSource;
 
 require("viz/chart");
+require("viz/polar_chart");
 
 QUnit.testStart(function() {
     var markup =
@@ -179,6 +180,21 @@ QUnit.test("number of rendering on updating dataSource", function(assert) {
     data.load();
 
     assert.equal(drawn.callCount, 2, "drawn only on changing dataSource & load");
+});
+
+//T600660
+QUnit.test("useSpiderWeb option changing", function(assert) {
+    var drawn = sinon.spy(),
+        polar = $("#chart").dxPolarChart({
+            onDrawn: drawn,
+            series: [{}]
+        }).dxPolarChart("instance");
+
+    drawn.reset();
+
+    polar.option("useSpiderWeb", true);
+
+    assert.equal(drawn.callCount, 1);
 });
 
 QUnit.module("series API", {
