@@ -18,7 +18,6 @@ var $ = require("../core/renderer"),
     deferredUtils = require("../core/utils/deferred"),
     when = deferredUtils.when,
     Deferred = deferredUtils.Deferred,
-    transitionEndEventName = support.transitionEndEventName() + ".dxFX",
     removeEventName = eventUtils.addNamespace(removeEvent, "dxFX"),
     isFunction = typeUtils.isFunction,
     isPlainObject = typeUtils.isPlainObject,
@@ -161,7 +160,8 @@ var TransitionAnimationStrategy = {
             transitionEndFired = new Deferred(),
             simulatedTransitionEndFired = new Deferred(),
             simulatedEndEventTimer,
-            waitForJSCompleteTimer;
+            waitForJSCompleteTimer,
+            transitionEndEventName = support.transitionEndEventName() + ".dxFX";
 
         config.transitionAnimation.cleanup = function() {
             clearTimeout(simulatedEndEventTimer);
@@ -441,14 +441,13 @@ var FallbackToNoAnimationStrategy = {
     isSynchronous: true
 };
 
-var animationStrategies = {
-    "transition": support.transition() ? TransitionAnimationStrategy : FrameAnimationStrategy,
-    "frame": FrameAnimationStrategy,
-    "noAnimation": FallbackToNoAnimationStrategy
-};
-
 var getAnimationStrategy = function(config) {
     config = config || {};
+    var animationStrategies = {
+        "transition": support.transition() ? TransitionAnimationStrategy : FrameAnimationStrategy,
+        "frame": FrameAnimationStrategy,
+        "noAnimation": FallbackToNoAnimationStrategy
+    };
     var strategy = config.strategy || "transition";
 
     if(config.type === "css" && !support.transition()) {

@@ -4,6 +4,7 @@ var $ = require("../../core/renderer"),
     eventsEngine = require("../../events/core/events_engine"),
     devices = require("../../core/devices"),
     styleUtils = require("../../core/utils/style"),
+    callOnce = require("../../core/utils/call_once"),
     browser = require("../../core/utils/browser"),
     domUtils = require("../../core/utils/dom"),
     readyCallbacks = require("../../core/utils/ready_callbacks"),
@@ -14,7 +15,8 @@ var $ = require("../../core/renderer"),
     eventUtils = require("../utils"),
     Emitter = require("../core/emitter"),
     sign = mathUtils.sign,
-    abs = Math.abs;
+    abs = Math.abs,
+    gestureCover;
 
 var SLEEP = 0,
     INITED = 1,
@@ -35,7 +37,7 @@ var supportPointerEvents = function() {
     return cssSupport && !msieLess11;
 };
 
-var gestureCover = (function() {
+var setGestureCover = callOnce(function() {
     var GESTURE_COVER_CLASS = "dx-gesture-cover";
 
     var isDesktop = devices.real().platform === "generic";
@@ -56,11 +58,11 @@ var gestureCover = (function() {
         $cover.appendTo("body");
     });
 
-    return function(toggle, cursor) {
+    gestureCover = function(toggle, cursor) {
         $cover.css("pointerEvents", toggle ? "all" : "none");
         toggle && $cover.css("cursor", cursor);
     };
-})();
+});
 
 
 var GestureEmitter = Emitter.inherit({
@@ -183,6 +185,7 @@ var GestureEmitter = Emitter.inherit({
         var isStarted = this._stage === STARTED;
 
         if(isStarted) {
+            setGestureCover();
             gestureCover(toggle, this.getElement().css("cursor"));
         }
     },
