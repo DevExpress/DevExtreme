@@ -2,7 +2,8 @@
 
 var widgets = {
     Accordion: require("ui/accordion"),
-    Button: require("ui/button")
+    Button: require("ui/button"),
+    CheckBox: require("ui/check_box")
 };
 
 QUnit.module("Scripts loading");
