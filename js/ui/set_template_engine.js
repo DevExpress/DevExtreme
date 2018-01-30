@@ -3,7 +3,6 @@
 /**
 * @name ui
 * @publicName ui
-* @hidden
 * @namespace DevExpress
 */
 
