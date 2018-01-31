@@ -1049,6 +1049,7 @@ var dxRangeSelector = require("../core/base_widget").inherit({
     setValue: function(value) {
         var current;
         if(!this._isUpdating && value) {
+            this._validateRange(value[0], value[1]);
             // TODO: Move the check inside the SlidersController
             current = this._slidersController.getSelectedRange();
             if(!current || current.startValue !== value[0] || current.endValue !== value[1]) {
