@@ -400,7 +400,7 @@ QUnit.test("Reset editor's value when the formData option is empty object", func
     assert.equal(form.getEditor("name").option("value"), "", "editor for the name dataField");
     assert.equal(form.getEditor("lastName").option("value"), "", "editor for the lastName dataField");
     assert.equal(form.getEditor("sex").option("value"), "", "editor for the sex dataField");
-    assert.equal(form.getEditor("room").option("value"), "", "editor for the room dataField");
+    assert.equal(form.getEditor("room").option("value"), null, "editor for the room dataField");
     assert.equal(form.getEditor("isDeveloper").option("value"), undefined, "editor for the isDeveloper dataField");
 });
 
