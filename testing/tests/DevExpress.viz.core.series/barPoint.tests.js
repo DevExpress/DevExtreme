@@ -1629,7 +1629,7 @@ QUnit.test("Default, inside, not rotated, label height > point height", function
     assert.equal(point._label.draw.callCount, 0);
 });
 
-QUnit.test("Inside, not rotated, label height > point height with resolveLabelOverlapping", function(assert) {
+QUnit.test("Inside, label height > point height with resolveLabelsOverlapping - label is not shifted and hide", function(assert) {
     this.label.getBoundingRect.returns({ width: 20, height: 11 });
     this.options.resolveLabelsOverlapping = true;
     this.options.label.position = "inside";
@@ -1648,8 +1648,8 @@ QUnit.test("Inside, not rotated, label height > point height with resolveLabelOv
     assert.deepEqual(point._label.draw.lastCall.args, [false]);
 });
 
-QUnit.test("Inside, not rotated, label width > point width with resolveLabelOverlapping", function(assert) {
-    this.label.getBoundingRect.returns({ width: 33, height: 10 });
+QUnit.test("Inside, label width > point width with resolveLabelsOverlapping - label is not shifted and hide", function(assert) {
+    this.label.getBoundingRect.returns({ width: 33, height: 9 });
     this.options.resolveLabelsOverlapping = true;
     this.options.label.position = "inside";
 
@@ -1665,6 +1665,94 @@ QUnit.test("Inside, not rotated, label width > point width with resolveLabelOver
 
     assert.ok(!label.shift.called);
     assert.deepEqual(point._label.draw.lastCall.args, [false]);
+});
+
+QUnit.test("Outside, label width > point width with resolveLabelsOverlapping - label is shifted", function(assert) {
+    this.label.getBoundingRect.returns({ width: 22, height: 9 });
+    this.options.label.position = "outside";
+    this.options.resolveLabelsOverlapping = true;
+
+    var point = createPoint(this.series, this.data, this.options),
+        label = point._label;
+
+    point.x = 33;
+    point.y = 22;
+    point.width = 20;
+    point.height = 10;
+
+    point.correctLabelPosition(label);
+
+    assert.equal(label.shift.firstCall.args[0], 32);
+    assert.equal(label.shift.firstCall.args[1], 3);
+
+    assert.equal(point._label.draw.callCount, 0);
+});
+
+QUnit.test("Outside, label under the point, label width > point width with resolveLabelsOverlapping - label is shifted", function(assert) {
+    this.label.getBoundingRect.returns({ width: 22, height: 9 });
+    this.options.label.position = "outside";
+    this.data.value = -20;
+    this.options.resolveLabelsOverlapping = true;
+
+    var point = createPoint(this.series, this.data, this.options),
+        label = point._label;
+
+    point.x = 33;
+    point.y = 22;
+    point.width = 20;
+    point.height = 10;
+
+    point.correctLabelPosition(label);
+
+    assert.equal(label.shift.firstCall.args[0], 32);
+    assert.equal(label.shift.firstCall.args[1], 42);
+
+    assert.equal(point._label.draw.callCount, 0);
+});
+
+QUnit.test("Outside, rotated, label height > point height with resolveLabelsOverlapping - label is shifted", function(assert) {
+    this.label.getBoundingRect.returns({ width: 20, height: 11 });
+    this.options.resolveLabelsOverlapping = true;
+    this.options.rotated = true;
+    this.options.label.position = "outside";
+
+    var point = createPoint(this.series, this.data, this.options),
+        label = point._label;
+
+    point.x = 33;
+    point.y = 22;
+    point.width = 20;
+    point.height = 10;
+
+    point.correctLabelPosition(label);
+
+    assert.equal(label.shift.firstCall.args[0], 63);
+    assert.equal(label.shift.firstCall.args[1], 22);
+
+    assert.equal(point._label.draw.callCount, 0);
+});
+
+QUnit.test("Outside, rotated, label under the point, label height > point height with resolveLabelsOverlapping - label is shifted", function(assert) {
+    this.label.getBoundingRect.returns({ width: 20, height: 11 });
+    this.options.resolveLabelsOverlapping = true;
+    this.options.rotated = true;
+    this.data.value = -20;
+    this.options.label.position = "outside";
+
+    var point = createPoint(this.series, this.data, this.options),
+        label = point._label;
+
+    point.x = 33;
+    point.y = 22;
+    point.width = 20;
+    point.height = 10;
+
+    point.correctLabelPosition(label);
+
+    assert.equal(label.shift.firstCall.args[0], 3);
+    assert.equal(label.shift.firstCall.args[1], 22);
+
+    assert.equal(point._label.draw.callCount, 0);
 });
 
 QUnit.test("Default, inside, not rotated with negative value", function(assert) {
@@ -1743,70 +1831,6 @@ QUnit.test("Default, inside, not rotated, label width > point width", function(a
     assert.equal(label.shift.firstCall.args[1], 22);
 
     assert.equal(point._label.draw.callCount, 0);
-});
-
-
-QUnit.test("Inside, rotated, label width > point width with resolveLabelOverlapping", function(assert) {
-    this.label.getBoundingRect.returns({ width: 22, height: 10 });
-    this.options.label.position = "inside";
-    this.options.resolveLabelsOverlapping = true;
-    this.options.rotated = true;
-    var point = createPoint(this.series, this.data, this.options),
-        label = point._label;
-
-    point.x = 33;
-    point.y = 22;
-    point.width = 20;
-    point.height = 10;
-
-    point.correctLabelPosition(label);
-
-    assert.ok(!label.shift.called);
-    assert.deepEqual(point._label.draw.lastCall.args, [false]);
-});
-
-QUnit.test("Outside, rotated, label width > point width with resolveLabelOverlapping", function(assert) {
-    this.label.getBoundingRect.returns({ width: 22, height: 10 });
-    this.options.label.position = "outside";
-    this.options.resolveLabelsOverlapping = true;
-    this.options.rotated = true;
-    var point = createPoint(this.series, this.data, this.options),
-        label = point._label;
-
-    this.renderer.bBoxTemplate.x = 33;
-    this.renderer.bBoxTemplate.y = 22;
-    this.renderer.bBoxTemplate.width = 21;
-
-    point.x = 33;
-    point.y = 22;
-    point.width = 20;
-    point.height = 10;
-
-    point.correctLabelPosition(label);
-
-    assert.equal(label.shift.firstCall.args[0], 63);
-    assert.equal(label.shift.firstCall.args[1], 22);
-
-    assert.equal(point._label.draw.callCount, 0);
-});
-
-QUnit.test("Inside, rotated, label height > point height with resolveLabelOverlapping", function(assert) {
-    this.label.getBoundingRect.returns({ width: 20, height: 22 });
-    this.options.label.position = "inside";
-    this.options.resolveLabelsOverlapping = true;
-    this.options.rotated = true;
-    var point = createPoint(this.series, this.data, this.options),
-        label = point._label;
-
-    point.x = 33;
-    point.y = 22;
-    point.width = 20;
-    point.height = 10;
-
-    point.correctLabelPosition(label);
-
-    assert.ok(!label.shift.called);
-    assert.deepEqual(point._label.draw.lastCall.args, [false]);
 });
 
 QUnit.test("Default, inside, rotated with negative value", function(assert) {
