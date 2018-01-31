@@ -70,7 +70,7 @@ var widgets = {
     ValidationGroup: require("ui/validation_group"),
     ValidationSummary: require("ui/validation_summary"),
     Validator: require("ui/validator"),
-    //VectorMap: require("viz/vector_map"),
+    //VectorMap: require("viz/vector_map")
 };
 
 QUnit.module("Scripts loading");
