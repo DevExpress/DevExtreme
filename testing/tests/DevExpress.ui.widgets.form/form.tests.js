@@ -1136,14 +1136,39 @@ QUnit.test("Refresh form when visibility changed to 'true' in msie browser", fun
     refreshStub.restore();
 });
 
-QUnit.test("Item with data field is rendered when formData has 'undefined' value", function(assert) {
-    //arrange, act
+QUnit.test("The formData is updated correctly when formData has 'undefined' value", function(assert) {
+    //arrange
     var $testContainer = $("#form").dxForm({
-        formData: undefined,
-        items: [{ dataField: "Address" }]
-    });
+            formData: undefined,
+            items: [{ dataField: "City" }]
+        }),
+        form = $testContainer.dxForm("instance");
+
+    //act
+    var editor = form.getEditor("City");
+    editor.option("value", "New York");
 
     //assert
+    var formData = form.option("formData");
+    assert.deepEqual(formData, { City: "New York" }, "updated formData");
+    assert.equal($testContainer.find(".dx-field-item").length, 1, "form item is rendered");
+});
+
+QUnit.test("The formData with composite object is updated correctly when formData has 'undefined' value", function(assert) {
+    //arrange
+    var $testContainer = $("#form").dxForm({
+            formData: undefined,
+            items: [{ dataField: "Employee.City" }]
+        }),
+        form = $testContainer.dxForm("instance");
+
+    //act
+    var editor = form.getEditor("Employee.City");
+    editor.option("value", "New York");
+
+    //assert
+    var formData = form.option("formData");
+    assert.deepEqual(formData, { Employee: { City: "New York" } }, "formData is updated");
     assert.equal($testContainer.find(".dx-field-item").length, 1, "form item is rendered");
 });
 

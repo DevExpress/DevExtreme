@@ -50,6 +50,10 @@ var Form = Widget.inherit({
 
         this._cachedColCountOptions = [];
         this._groupsColCount = [];
+
+        if(!typeUtils.isDefined(this.option("formData"))) {
+            this.option("formData", {});
+        }
     },
 
     _initOptions: function(options) {
