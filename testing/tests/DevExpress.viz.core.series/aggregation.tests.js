@@ -1062,6 +1062,22 @@ QUnit.test("10 points -> 5 points. All points", function(assert) {
     assert.ok(spy.calledOnce);
 });
 
+QUnit.test("getPointsByArg usage", function(assert) {
+    //arrange
+    var initialPointsCountOnFirstArgument;
+
+    this.series.updateData([{ arg: 1, val: 1 }, { arg: 2, val: 2 }]);
+
+    initialPointsCountOnFirstArgument = this.series.getPointsByArg(1).length;
+    this.setup(0, 1);
+
+    //act
+    this.series.resamplePoints(10);
+
+    //assert
+    assert.strictEqual(this.series.getPointsByArg(1).length, initialPointsCountOnFirstArgument);
+});
+
 QUnit.test("10 points -> 10 points. All points", function(assert) {
     var options = {
             argument: {
