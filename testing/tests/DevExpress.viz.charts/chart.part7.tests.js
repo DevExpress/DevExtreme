@@ -1780,6 +1780,21 @@ $('<div id="chartContainer">').appendTo("#qunit-fixture");
         assert.ok(!this.labels[0].shift.called);
     });
 
+    QUnit.test("Labels inside of the point - it shouldn't shifted", function(assert) {
+        this.createFakeSeriesWithLabels([{ x: 5, y: 0, width: 10, height: 10 }, { x: 5, y: 5, width: 10, height: 10 }]);
+
+        this.labels[0].hideInsideLabel.returns(true);
+        this.labels[1].hideInsideLabel.returns(true);
+
+        this.createChart({
+            resolveLabelOverlapping: "stack",
+            series: [{ type: "mockType" }]
+        });
+
+        assert.ok(!this.labels[0].shift.called);
+        assert.ok(!this.labels[1].shift.called);
+    });
+
     QUnit.module("resolveLabelOverlapping. stack. range series", $.extend({}, commons.environment, {
         beforeEach: function() {
             commons.environment.beforeEach.apply(this, arguments);

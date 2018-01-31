@@ -275,7 +275,7 @@ module.exports = {
         return bBox;
     },
 
-    _isLabelInsidePoint: noop,
+    hideInsideLabel: noop,
 
     _getShiftLabelCoords: function(label) {
         var coord = this._addLabelAlignmentAndOffset(label, this._getLabelCoords(label));
@@ -294,9 +294,8 @@ module.exports = {
 
     correctLabelPosition: function(label) {
         var that = this,
-            coord;
-        if(!that._isLabelInsidePoint(label)) {
             coord = that._getShiftLabelCoords(label);
+        if(!that.hideInsideLabel(label, coord)) {
             label.setFigureToDrawConnector(that._getLabelConnector(label.pointPosition));
             label.shift(_round(coord.x), _round(coord.y));
         }

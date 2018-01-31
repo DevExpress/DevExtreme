@@ -99,13 +99,15 @@ module.exports = _extend({}, symbolPoint, {
         return coord;
     },
 
-    _isLabelInsidePoint: function(label) {
-        var that = this,
-            graphicBBox = that._getGraphicBBox(),
+    hideInsideLabel: function(label, coord) {
+        var graphicBBox = this._getGraphicBBox(),
             labelBBox = label.getBoundingRect();
 
-        if(that._options.resolveLabelsOverlapping && label.getLayoutOptions().position === "inside") {
-            if(labelBBox.width > graphicBBox.width || labelBBox.height > graphicBBox.height) {
+        if(this._options.resolveLabelsOverlapping) {
+            if(((coord.y < graphicBBox.y && coord.y + labelBBox.height > graphicBBox.y + graphicBBox.height) ||
+                (coord.x < graphicBBox.x && coord.x + labelBBox.width > graphicBBox.x + graphicBBox.width)) &&
+                !(coord.y > graphicBBox.y + graphicBBox.height || coord.y + labelBBox.height < graphicBBox.y ||
+                coord.x > graphicBBox.x + graphicBBox.width || coord.x + labelBBox.width < graphicBBox.x)) {
                 label.draw(false);
                 return true;
             }

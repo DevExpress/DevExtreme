@@ -254,7 +254,9 @@ RollingStock.prototype = {
         _each(this.labels, function(index, label) {
             var bBox = label.getBoundingRect(),
                 coords = shiftFunction(bBox, shiftLength);
-            label.shift(coords.x, coords.y);
+            if(!label.hideInsideLabel(coords)) {
+                label.shift(coords.x, coords.y);
+            }
         });
         this._bBox.end -= shiftLength;
         this._bBox.start -= shiftLength;
