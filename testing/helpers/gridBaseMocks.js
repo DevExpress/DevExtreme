@@ -921,6 +921,8 @@ module.exports = function($, gridCore, columnResizingReordering, domUtils, commo
             return instance;
         };
 
+        that._notifyOptionChanged = function() {};
+
         that._createActionByOption = function(optionName, config) {
             this.__actionConfigs = this.__actionConfigs || {};
             this.__actionConfigs[optionName] = config;
