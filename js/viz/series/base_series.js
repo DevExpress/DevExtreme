@@ -825,6 +825,7 @@ Series.prototype = {
             });
         }
 
+        that.pointsByArgument = {};
         that._aggregatedPoints = that._aggregatedPoints || [];
         _each(originalPoints, function(_, point) {
             point.setInvisibility();
