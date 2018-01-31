@@ -11,7 +11,7 @@ var EVENT_NAME = "dxmousewheel",
     EVENT_NAMESPACE = "dxWheel";
 
 var getWheelEventName = callOnce(function() {
-    return domAdapter.getProperty(domAdapter.getDocument(), "onwheel") !== undefined ? "wheel" : "mousewheel";
+    return domAdapter.hasDocumentProperty("onwheel") ? "wheel" : "mousewheel";
 });
 
 var wheel = {

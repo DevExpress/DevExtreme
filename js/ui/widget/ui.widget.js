@@ -10,8 +10,7 @@ var $ = require("../../core/renderer"),
     commonUtils = require("../../core/utils/common"),
     typeUtils = require("../../core/utils/type"),
     domUtils = require("../../core/utils/dom"),
-    windowUtils = require("../../core/utils/window"),
-    beforeActivateExists = windowUtils.beforeActivateExists,
+    domAdapter = require("../../core/dom_adapter"),
     devices = require("../../core/devices"),
     DOMComponent = require("../../core/dom_component"),
     Template = require("./jquery.template"),
@@ -568,7 +567,7 @@ var Widget = DOMComponent.inherit({
 
         focusEvents = focusEvents + " " + eventUtils.addNamespace("focusout", namespace);
 
-        if(beforeActivateExists()) {
+        if(domAdapter.hasDocumentProperty("onbeforeactivate")) {
             focusEvents = focusEvents + " " + eventUtils.addNamespace("beforeactivate", namespace);
         }
 
@@ -584,7 +583,7 @@ var Widget = DOMComponent.inherit({
         eventsEngine.on($focusTarget, focusInEvent, this._focusInHandler.bind(this));
         eventsEngine.on($focusTarget, focusOutEvent, this._focusOutHandler.bind(this));
 
-        if(beforeActivateExists()) {
+        if(domAdapter.hasDocumentProperty("onbeforeactivate")) {
             var beforeActivateEvent = eventUtils.addNamespace("beforeactivate", namespace);
 
             eventsEngine.on(this._focusTarget(), beforeActivateEvent, function(e) {

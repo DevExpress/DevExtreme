@@ -2,16 +2,19 @@
 
 /* global window */
 
-var domAdapter = require("../dom_adapter"),
-    callOnce = require("./call_once");
+var domAdapter = require("../dom_adapter");
 
-var windowUtils = {
+module.exports = {
     hasWindow: function() {
         return typeof window !== "undefined";
     },
 
+    getWindow: function() {
+        return this.hasWindow() && window;
+    },
+
     hasProperty: function(prop) {
-        return windowUtils.hasWindow() && prop in window;
+        return this.hasWindow() && prop in this.getWindow();
     },
 
     defaultScreenFactorFunc: function(width) {
@@ -27,34 +30,23 @@ var windowUtils = {
     },
 
     getCurrentScreenFactor: function(screenFactorCallback) {
-        var screenFactorFunc = screenFactorCallback || windowUtils.defaultScreenFactorFunc;
+        var screenFactorFunc = screenFactorCallback || this.defaultScreenFactorFunc;
         var windowWidth = domAdapter.getDocumentElement()["clientWidth"];
 
         return screenFactorFunc(windowWidth);
     },
 
     openWindow: function() {
-        if("open" in window) {
-            return window.open();
+        if(this.hasProperty("open")) {
+            return this.getWindow().open();
         }
 
         return null;
     },
 
-    beforeActivateExists: callOnce(function() {
-        return domAdapter.getProperty(domAdapter.getDocument(), "onbeforeactivate") !== undefined;
-    }),
-
     getNavigator: function() {
-        return windowUtils.hasWindow() ? windowUtils.getWindow().navigator : {
+        return this.hasWindow() ? this.getWindow().navigator : {
             userAgent: ""
         };
-    },
-
-    // TODO: get rid of method
-    getWindow: function() {
-        return windowUtils.hasWindow() && window;
     }
 };
-
-module.exports = windowUtils;
