@@ -3,6 +3,7 @@
 var $ = require("../../../core/renderer"),
     domAdapter = require("../../../core/dom_adapter"),
     windowUtils = require("../../../core/utils/window"),
+    callOnce = require("../../../core/utils/call_once"),
     window = windowUtils.getWindow(),
     eventsEngine = require("../../../events/core/events_engine"),
     browser = require("../../../core/utils/browser"),
@@ -73,24 +74,31 @@ var DEFAULTS = {
     scaleY: 1
 };
 
-var backupContainer = domAdapter.createElement("div"),
-    backupCounter = 0;
-backupContainer.style.left = "-9999px";
-backupContainer.style.position = "absolute";
+var getBackup = callOnce(function() {
+    var backupContainer = domAdapter.createElement("div"),
+        backupCounter = 0;
+    backupContainer.style.left = "-9999px";
+    backupContainer.style.position = "absolute";
+
+    return {
+        backupContainer: backupContainer,
+        backupCounter: backupCounter
+    };
+});
 
 function backupRoot(root) {
-    if(backupCounter === 0) {
-        domAdapter.getBody().appendChild(backupContainer);
+    if(getBackup().backupCounter === 0) {
+        domAdapter.getBody().appendChild(getBackup().backupContainer);
     }
-    ++backupCounter;
-    root.append({ element: backupContainer });
+    ++getBackup().backupCounter;
+    root.append({ element: getBackup().backupContainer });
 }
 
 function restoreRoot(root, container) {
     root.append({ element: container });
-    --backupCounter;
-    if(backupCounter === 0) {
-        domAdapter.getBody().removeChild(backupContainer);
+    --getBackup().backupCounter;
+    if(getBackup().backupCounter === 0) {
+        domAdapter.getBody().removeChild(getBackup().backupContainer);
     }
 }
 
@@ -1040,9 +1048,9 @@ exports.DEBUG_set_getNextDefsSvgId = function(newFunction) {
 };
 
 exports.DEBUG_removeBackupContainer = function() {
-    if(backupCounter) {
-        backupCounter = 0;
-        domAdapter.getBody().removeChild(backupContainer);
+    if(getBackup().backupCounter) {
+        getBackup().backupCounter = 0;
+        domAdapter.getBody().removeChild(getBackup().backupContainer);
     }
 };
 ///#ENDDEBUG
