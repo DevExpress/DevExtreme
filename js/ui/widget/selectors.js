@@ -11,9 +11,10 @@ var focusable = function(element, tabIndex) {
         isDisabled = element.disabled,
         isDefaultFocus = /^(input|select|textarea|button|object|iframe)$/.test(nodeName),
         isHyperlink = nodeName === "a",
-        isFocusable = true;
+        isFocusable = true,
+        isContentEditable = element.isContentEditable;
 
-    if(isDefaultFocus) {
+    if(isDefaultFocus || isContentEditable) {
         isFocusable = !isDisabled;
     } else {
         if(isHyperlink) {
