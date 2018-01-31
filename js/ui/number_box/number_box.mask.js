@@ -292,11 +292,11 @@ var NumberBoxMask = NumberBoxBase.inherit({
     _tryParse: function(text, selection, char) {
         var editedText = this._getEditedText(text, selection, char),
             format = this._getFormatPattern(),
-            removing = selection.start !== selection.end,
+            isTextSelected = selection.start !== selection.end,
             parsed = number.parse(editedText, format),
             isValueChanged = parsed !== this._parsedValue;
 
-        if(!removing && !isValueChanged && char !== MINUS && !this._isValueIncomplete(editedText)) {
+        if(!isTextSelected && !isValueChanged && char !== MINUS && !this._isValueIncomplete(editedText)) {
             return undefined;
         }
 
