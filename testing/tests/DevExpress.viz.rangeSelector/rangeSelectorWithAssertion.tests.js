@@ -573,6 +573,17 @@ QUnit.module("Value", function(hook) {
         assert.deepEqual(spy.getCall(0).args[0].target.id, "E2203");
         assert.deepEqual(spy.getCall(0).args[0].target.text, "The range you are trying to set is invalid");
     });
+
+    QUnit.test("Warnings rising on using setValue method", function(assert) {
+        var spy = sinon.spy();
+        this.rangeSelector.option({
+            onIncidentOccurred: spy
+        });
+
+        this.rangeSelector.setValue([1, 12]);
+
+        assert.strictEqual(spy.getCall(0).args[0].target.id, "E2203");
+    });
 });
 
 QUnit.module("T465345, onOptionChanged", function(hook) {
