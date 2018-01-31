@@ -282,19 +282,6 @@ Series.prototype = {
         }
     },
 
-    _saveOldAnimationMethods: function() {
-        var that = this;
-        that._oldClearingAnimation = that._clearingAnimation;
-        that._oldUpdateElement = that._updateElement;
-        that._oldGetAffineCoordOptions = that._getAffineCoordOptions;
-    },
-
-    _deleteOldAnimationMethods: function() {
-        this._oldClearingAnimation = null;
-        this._oldUpdateElement = null;
-        this._oldGetAffineCoordOptions = null;
-    },
-
     updateOptions: function(newOptions) {
         var that = this,
             widgetType = newOptions.widgetType,
@@ -311,9 +298,6 @@ Series.prototype = {
 
         if(oldType !== that.type) {
             that._firstDrawing = true;
-
-            that._saveOldAnimationMethods();
-
             that._resetType(oldType, widgetType);
             that._setType(that.type, widgetType);
         }
@@ -396,6 +380,8 @@ Series.prototype = {
         }
 
         that._disposePoints(that._aggregatedPoints);
+        that._disposePoints(that._oldPoints);
+        that._oldPoints = null;
         that._aggregatedPoints = null;
         that._points = that._originalPoints = points;
         that._correctPointsLength(lastPointIndex, points);
@@ -467,20 +453,6 @@ Series.prototype = {
 
     draw: function(animationEnabled, hideLayoutLabels, legendCallback) {
         var that = this,
-            drawComplete;
-
-        if(that._oldClearingAnimation && animationEnabled && that._firstDrawing) {
-            drawComplete = function() {
-                that._draw(true, hideLayoutLabels);
-            };
-            that._oldClearingAnimation(drawComplete);
-        } else {
-            that._draw(animationEnabled, hideLayoutLabels, legendCallback);
-        }
-    },
-
-    _draw: function(animationEnabled, hideLayoutLabels, legendCallback) {
-        var that = this,
             points = that._points || [],
             segment = [],
             segmentCount = 0,
@@ -490,7 +462,6 @@ Series.prototype = {
 
         that._legendCallback = legendCallback || that._legendCallback;
         that._graphics = that._graphics || [];
-        that._prepareSeriesToDrawing();
 
         if(!that._visible) {
             animationEnabled = false;
@@ -529,7 +500,6 @@ Series.prototype = {
         });
         segment.length && that._drawSegment(segment, animationEnabled, segmentCount++, closeSegment);
         that._removeOldSegments(segmentCount);
-        that._defaultSegments = that._generateDefaultSegments();
 
         hideLayoutLabels && that.hideLabels();
 

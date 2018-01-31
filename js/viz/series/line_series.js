@@ -107,33 +107,10 @@ var lineMethods = {
         element.line.remove();
     },
 
-    _generateDefaultSegments: function() {
-        var that = this;
-
-        return _map(that._segments || [], function(segment) {
-            return that._getDefaultSegment(segment);
-        });
-    },
-
     _updateElement: function(element, segment, animate, animateParams, complete) {
         var params = { points: segment.line },
             lineElement = element.line;
         animate ? lineElement.animate(params, animateParams, complete) : lineElement.attr(params);
-    },
-
-    _clearingAnimation: function(drawComplete) {
-        var that = this,
-            lastIndex = that._graphics.length - 1,
-            settings = { opacity: 0.001 },
-            options = { duration: that._defaultDuration, partitionDuration: 0.5 };
-
-        that._labelsGroup && that._labelsGroup.animate(settings, options, function() {
-            that._markersGroup && that._markersGroup.animate(settings, options, function() {
-                _each(that._defaultSegments || [], function(i, segment) {
-                    that._oldUpdateElement(that._graphics[i], segment, true, { partitionDuration: 0.5 }, i === lastIndex ? drawComplete : undefined);
-                });
-            });
-        });
     },
 
     _animateComplete: function() {

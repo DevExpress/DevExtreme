@@ -69,8 +69,6 @@ exports.pie = _extend({}, barSeries, {
 
     areErrorBarsVisible: _noop,
 
-    _prepareSeriesToDrawing: _noop,
-
     _getPointsCount: function() {
         return this._pointsCount;
     },
@@ -80,10 +78,6 @@ exports.pie = _extend({}, barSeries, {
             options = that._options;
 
         that._pointsCount = data.filter(function(d) { return that._checkData(that._getPointData(d, options)); }).length;
-    },
-
-    _endUpdateData: function() {
-        chartScatterSeries._prepareSeriesToDrawing.call(this);
     },
 
     drawLabelsWOPoints: function() {
