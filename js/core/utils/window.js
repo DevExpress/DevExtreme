@@ -4,17 +4,20 @@
 
 var domAdapter = require("../dom_adapter");
 
+var hasWindow = typeof window !== "undefined";
+var windowObject = hasWindow ? window : {};
+
 module.exports = {
     hasWindow: function() {
-        return typeof window !== "undefined";
+        return hasWindow;
     },
 
     getWindow: function() {
-        return this.hasWindow() && window;
+        return windowObject;
     },
 
     hasProperty: function(prop) {
-        return this.hasWindow() && prop in this.getWindow();
+        return hasWindow && prop in windowObject;
     },
 
     defaultScreenFactorFunc: function(width) {
@@ -38,14 +41,14 @@ module.exports = {
 
     openWindow: function() {
         if(this.hasProperty("open")) {
-            return this.getWindow().open();
+            return windowObject.open();
         }
 
         return null;
     },
 
     getNavigator: function() {
-        return this.hasWindow() ? this.getWindow().navigator : {
+        return hasWindow ? windowObject.navigator : {
             userAgent: ""
         };
     }
