@@ -1,6 +1,6 @@
 "use strict";
 
-var resizeCallbacks = require("core/utils/window").resizeCallbacks,
+var resizeCallbacks = require("core/utils/resize_callbacks"),
     domAdapter = require("core/dom_adapter");
 
 QUnit.module('resizeCallbacks', {

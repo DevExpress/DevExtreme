@@ -3,7 +3,7 @@
 var $ = require("jquery"),
     Autocomplete = require("ui/autocomplete"),
     devices = require("core/devices"),
-    resizeCallbacks = require("core/utils/window").resizeCallbacks,
+    resizeCallbacks = require("core/utils/resize_callbacks"),
     fx = require("animation/fx"),
     ArrayStore = require("data/array_store"),
     executeAsyncMock = require("../../helpers/executeAsyncMock.js"),
