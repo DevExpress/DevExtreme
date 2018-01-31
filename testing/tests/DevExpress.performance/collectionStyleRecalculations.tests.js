@@ -5,7 +5,7 @@ require("../../helpers/qunitPerformanceExtension.js");
 require("common.css!");
 
 var $ = require("jquery"),
-    resizeCallbacks = require("core/utils/window").resizeCallbacks;
+    resizeCallbacks = require("core/utils/resize_callbacks");
 
 require("ui/accordion");
 require("ui/tabs");

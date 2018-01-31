@@ -542,7 +542,8 @@ var LayoutManager = Widget.inherit({
 
         that._renderEditor({
             $container: $editor,
-            dataField: name,
+            dataField: item.dataField,
+            name: name,
             editorType: item.editorType,
             editorOptions: item.editorOptions,
             template: that._getTemplateByFieldItem(item),
@@ -759,7 +760,7 @@ var LayoutManager = Widget.inherit({
                 dataField: renderOptions.dataField,
                 editorType: renderOptions.editorType,
                 editorOptions: editorOptions,
-                component: that.option("form") || that
+                component: that._getComponentOwner()
             };
 
             template.render({
@@ -773,21 +774,30 @@ var LayoutManager = Widget.inherit({
                 editorInstance = that._createComponent($editor, renderOptions.editorType, editorOptions);
                 editorInstance.setAria("describedby", renderOptions.helpID);
                 editorInstance.setAria("required", renderOptions.isRequired);
+                that._registerEditorInstance(editorInstance, renderOptions);
 
                 if(renderOptions.dataField) {
-                    var componentOwner = that.option("form") || that;
-
-                    editorInstance.on("enterKey", function(args) {
-                        componentOwner._createActionByOption("onEditorEnterKey")(extend(args, { dataField: renderOptions.dataField }));
-                    });
-                    that._registerEditorInstance(editorInstance, renderOptions.dataField);
-                    that._createWatcher(editorInstance, $container, renderOptions);
-                    that.linkEditorToDataField(editorInstance, renderOptions.dataField, renderOptions.editorType);
+                    that._bindDataField(editorInstance, renderOptions, $container);
                 }
             } catch(e) {
                 errors.log("E1035", e.message);
             }
         }
+    },
+
+    _getComponentOwner: function() {
+        return this.option("form") || this;
+    },
+
+    _bindDataField: function(editorInstance, renderOptions, $container) {
+        var componentOwner = this._getComponentOwner();
+
+        editorInstance.on("enterKey", function(args) {
+            componentOwner._createActionByOption("onEditorEnterKey")(extend(args, { dataField: renderOptions.dataField }));
+        });
+
+        this._createWatcher(editorInstance, $container, renderOptions);
+        this.linkEditorToDataField(editorInstance, renderOptions.dataField, renderOptions.editorType);
     },
 
     _createWatcher: function(editorInstance, $container, renderOptions) {
@@ -840,8 +850,12 @@ var LayoutManager = Widget.inherit({
         return FIELD_ITEM_CONTENT_LOCATION_CLASS + oppositeClasses[labelLocation];
     },
 
-    _registerEditorInstance: function(instance, dataField) {
-        this._editorInstancesByField[dataField] = instance;
+    _registerEditorInstance: function(instance, options) {
+        var name = this._getName(options);
+
+        if(name) {
+            this._editorInstancesByField[name] = instance;
+        }
     },
 
     _createComponent: function($editor, type, editorOptions) {

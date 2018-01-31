@@ -41,6 +41,7 @@ var fx = require("animation/fx"),
     getCells = dataGridMocks.getCells,
     devices = require("core/devices"),
     device = devices.real(),
+    domUtils = require("core/utils/dom"),
     browser = require("core/utils/browser"),
     typeUtils = require("core/utils/type"),
     config = require("core/config");
@@ -9355,6 +9356,32 @@ QUnit.testInActiveWindow("SelectBox should be closed on focus another editor if 
     }
 });
 
+//T599181
+QUnit.test("Prevent cell validation if template with editor is used", function(assert) {
+    this.rowsView.render($("#container"));
+    //arrange
+    this.options.editing = {};
+    this.options.columns = ['name', {
+        dataField: 'age',
+        cellTemplate: function(cellElement) {
+            var inputDiv = $("<div />");
+            inputDiv.dxNumberBox({}).dxValidator({ validationRules: [{ type: "required" }] });
+            $(cellElement).append(inputDiv);
+        }
+    }];
+
+    this.columnsController.init();
+    this.editingController.init();
+
+    //act
+    var cells = this.rowsView.element().find("td");
+    this.editorFactoryController.focus(cells.eq(1));
+    var validator = this.validatingController.getValidator();
+
+    //assert
+    assert.ok(!validator, "only internal editor validator");
+});
+
 
 QUnit.module('Editing with real dataController with grouping, masterDetail', {
     beforeEach: function() {
@@ -11537,4 +11564,41 @@ QUnit.testInActiveWindow("Form should repaint after change data of the column wi
     assert.ok(callSetCellValue, "setCellValue is called");
     assert.strictEqual($popupContent.find("input").not("[type='hidden']").eq(2).val(), "Test2", "value of the third cell");
     assert.ok($popupContent.find(".dx-texteditor").eq(1).hasClass("dx-state-focused"), "second cell is focused");
+});
+
+QUnit.test("Repaint of popup is should be called when form layout is changed", function(assert) {
+    var that = this,
+        screenFactor = "xs";
+
+    that.options.editing.form = {
+        screenByWidth: function() {
+            return screenFactor;
+        },
+        colCountByScreen: {
+            lg: 2,
+            xs: 1
+        }
+    };
+
+    that.options.editing.popup = {
+        width: "auto",
+        height: "auto",
+        minHeight: 150,
+    };
+
+    that.setupModules(that);
+    that.renderRowsView();
+
+    //act
+    this.addRow();
+
+    var spy1 = sinon.spy(this.editingController._editPopup, "repaint"),
+        spy2 = sinon.spy(this.editingController._editPopup, "_render"),
+        editForm = this.editingController._editForm;
+
+    screenFactor = "lg";
+    domUtils.triggerResizeEvent(editForm.element());
+
+    assert.equal(spy1.callCount, 1, "repaint is thrown");
+    assert.equal(spy2.callCount, 0, "render is called after repaint");
 });

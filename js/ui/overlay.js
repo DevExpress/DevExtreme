@@ -3,6 +3,7 @@
 var $ = require("../core/renderer"),
     domAdapter = require("../core/dom_adapter"),
     windowUtils = require("../core/utils/window"),
+    ready = require("../core/utils/ready_callbacks").add,
     window = windowUtils.getWindow(),
     navigator = windowUtils.getNavigator(),
     eventsEngine = require("../events/core/events_engine"),
@@ -95,12 +96,14 @@ var getElement = function(value) {
     return value && $(value.target || value);
 };
 
-eventsEngine.subscribeGlobal(domAdapter.getDocument(), pointerEvents.down, function(e) {
-    for(var i = OVERLAY_STACK.length - 1; i >= 0; i--) {
-        if(!OVERLAY_STACK[i]._proxiedDocumentDownHandler(e)) {
-            return;
+ready(function() {
+    eventsEngine.subscribeGlobal(domAdapter.getDocument(), pointerEvents.down, function(e) {
+        for(var i = OVERLAY_STACK.length - 1; i >= 0; i--) {
+            if(!OVERLAY_STACK[i]._proxiedDocumentDownHandler(e)) {
+                return;
+            }
         }
-    }
+    });
 });
 
 /**
@@ -1095,8 +1098,9 @@ var Overlay = Widget.inherit({
             containerHeight = $container.outerHeight();
 
         if(this._isWindow($container)) {
-            var fullPageHeight = Math.max($(window.document).outerHeight(), containerHeight),
-                fullPageWidth = Math.max($(window.document).outerWidth(), containerWidth);
+            var document = domAdapter.getDocument(),
+                fullPageHeight = Math.max($(document).outerHeight(), containerHeight),
+                fullPageWidth = Math.max($(document).outerWidth(), containerWidth);
 
             containerHeight = fullPageHeight;
             containerWidth = fullPageWidth;

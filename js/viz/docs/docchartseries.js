@@ -2,7 +2,6 @@
 * @name dxChartSeriesTypes
 * @publicName dxChartSeriesTypes
 * @type object
-* @hidden
 */
 /**
 * @name dxChartSeriesTypes_CommonSeries

@@ -9,7 +9,7 @@ var $ = require("jquery"),
     fromUA = $.proxy(devices._fromUA, devices),
     viewPort = require("core/utils/view_port"),
     viewPortChanged = viewPort.changeCallback,
-    resizeCallbacks = require("core/utils/window").resizeCallbacks,
+    resizeCallbacks = require("core/utils/resize_callbacks"),
     config = require("core/config"),
     errors = require("core/errors");
 

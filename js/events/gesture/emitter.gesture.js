@@ -4,6 +4,7 @@ var $ = require("../../core/renderer"),
     eventsEngine = require("../../events/core/events_engine"),
     devices = require("../../core/devices"),
     styleUtils = require("../../core/utils/style"),
+    callOnce = require("../../core/utils/call_once"),
     browser = require("../../core/utils/browser"),
     domUtils = require("../../core/utils/dom"),
     readyCallbacks = require("../../core/utils/ready_callbacks"),
@@ -35,7 +36,7 @@ var supportPointerEvents = function() {
     return cssSupport && !msieLess11;
 };
 
-var gestureCover = (function() {
+var setGestureCover = callOnce(function() {
     var GESTURE_COVER_CLASS = "dx-gesture-cover";
 
     var isDesktop = devices.real().platform === "generic";
@@ -60,8 +61,12 @@ var gestureCover = (function() {
         $cover.css("pointerEvents", toggle ? "all" : "none");
         toggle && $cover.css("cursor", cursor);
     };
-})();
+});
 
+var gestureCover = function(toggle, cursor) {
+    var gestureCoverStrategy = setGestureCover();
+    gestureCoverStrategy(toggle, cursor);
+};
 
 var GestureEmitter = Emitter.inherit({
 

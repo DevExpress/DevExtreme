@@ -341,15 +341,14 @@ var DateBox = DropDownEditor.inherit({
                         platform = realDevice.platform,
                         version = realDevice.version,
                         isPhone = realDevice.phone;
-
-                    return platform === "win" && isPhone || (platform === "android" && compareVersions(version, [4, 4]) < 0);
+                    return platform === "generic" && isPhone || platform === "win" && isPhone || (platform === "android" && compareVersions(version, [4, 4]) < 0);
                 },
                 options: {
                     /**
                     * @name dxDateBoxOptions_pickerType
                     * @publicName pickerType
                     * @default 'rollers' @for Android_below_version_4.4
-                    * @default 'rollers' @for phones_on_Windows_Mobile
+                    * @default 'rollers' @for mobile_devices
                     */
                     pickerType: PICKER_TYPE.rollers
                 }

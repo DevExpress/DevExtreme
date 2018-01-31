@@ -5,7 +5,7 @@
 var $ = require("jquery"),
     renderer = require("core/renderer"),
     version = require("core/version"),
-    resizeCallbacks = require("core/utils/window").resizeCallbacks,
+    resizeCallbacks = require("core/utils/resize_callbacks"),
     registerComponent = require("core/component_registrator"),
     logger = require("core/utils/console").logger,
     errors = require("viz/core/errors_warnings"),
