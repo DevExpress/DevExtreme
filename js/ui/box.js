@@ -19,10 +19,6 @@ var BOX_CLASS = "dx-box",
     BOX_ITEM_CLASS = "dx-box-item",
     BOX_ITEM_DATA_KEY = "dxBoxItemData";
 
-var flexGrowProp = styleUtils.styleProp("flexGrow");
-var flexShrinkProp = styleUtils.styleProp("flexShrink");
-var flexPropPrefix = styleUtils.stylePropPrefix("flexDirection");
-
 var MINSIZE_MAP = {
     "row": "minWidth",
     "col": "minHeight"
@@ -107,6 +103,10 @@ var FlexLayoutStrategy = Class.inherit({
     },
 
     renderItems: function($items) {
+        var flexGrowProp = styleUtils.styleProp("flexGrow");
+        var flexShrinkProp = styleUtils.styleProp("flexShrink");
+        var flexPropPrefix = styleUtils.stylePropPrefix("flexDirection");
+
         var direction = this._option("direction");
 
         each($items, function() {
