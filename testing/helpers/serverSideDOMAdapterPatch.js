@@ -57,7 +57,7 @@ exports.set = function() {
 
         createElement: function(tagName, context) {
             var args = Array.prototype.slice.call(arguments, 0);
-            if(context.isDocumentMock) {
+            if(context && context.isDocumentMock) {
                 args[1] = document;
             }
             return this.callBase.apply(this, args);
