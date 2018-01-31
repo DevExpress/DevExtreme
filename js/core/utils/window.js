@@ -51,12 +51,6 @@ var windowUtils = {
         };
     },
 
-    listen: function(event, callback) {
-        if(windowUtils.hasWindow()) {
-            domAdapter.listen(windowUtils.getWindow(), event, callback);
-        }
-    },
-
     // TODO: get rid of method
     getWindow: function() {
         return windowUtils.hasWindow() && window;
