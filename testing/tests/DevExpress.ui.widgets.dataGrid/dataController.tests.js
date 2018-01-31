@@ -6749,6 +6749,134 @@ QUnit.test("CustomStore load options when remote summary and remote grouping and
     }], "footerItems");
 });
 
+QUnit.test("CustomStore load options when remote operations enabled and grouping with sort by summary info is defined", function(assert) {
+    var storeLoadOptions;
+    this.options = {
+        dataSource: {
+            group: "group",
+            key: "id",
+            load: function(options) {
+                storeLoadOptions = options;
+                if(options.group) {
+                    return $.Deferred().resolve([
+                        { key: 'Group0', items: null, count: 2, summary: [2] },
+                        { key: 'Group1', items: null, count: 1, summary: [1] }
+                    ], {
+                        totalCount: 3
+                    });
+                } else {
+                    return $.Deferred().resolve([
+                        { id: 0, group: "Group0" },
+                        { id: 1, group: "Group0" },
+                        { id: 2, group: "Group1" }
+                    ]);
+                }
+            },
+            pageSize: 4
+        },
+        paging: {
+            enabled: true
+        },
+        grouping: {
+            autoExpandAll: true
+        },
+        columns: [ "id", "group" ],
+        sortByGroupSummaryInfo: [{
+            summaryItem: "count"
+        }],
+        summary: {
+            groupItems: [{
+                summaryType: "count"
+            }]
+        },
+        remoteOperations: true
+    };
+
+    //act
+    this.setupDataGridModules();
+    this.clock.tick();
+
+    //assert
+    assert.strictEqual(storeLoadOptions.skip, undefined, "no skip option");
+    assert.strictEqual(storeLoadOptions.take, undefined, "no take option");
+    assert.deepEqual(storeLoadOptions.filter, [["group", "=", "Group1"], "or", ["group", "=", "Group0"]], "filter option");
+    assert.deepEqual(storeLoadOptions.sort, [{ "desc": false, "isExpanded": true, "selector": "group" }], "sort option");
+    assert.equal(this.dataController.totalCount(), 3, "totalCount");
+    assert.equal(this.dataController.pageCount(), 2, "pageCount");
+    var items = this.dataController.items();
+    assert.equal(items.length, 4, "item count");
+    assert.deepEqual(items[0].key, ["Group1"], "item 0");
+    assert.equal(items[1].key, 2, "item 1");
+    assert.deepEqual(items[2].key, ["Group0"], "item 2");
+    assert.equal(items[3].key, 0, "item 3");
+});
+
+QUnit.test("CustomStore load options when remote operations enabled and multi-grouping with sort by summary info is defined", function(assert) {
+    var storeLoadOptions;
+    this.options = {
+        dataSource: {
+            group: ["group1", "group2"],
+            key: "id",
+            load: function(options) {
+                storeLoadOptions = options;
+                if(options.group) {
+                    return $.Deferred().resolve([
+                        { key: 'Group0', items: [{ key: "Group0_0", items: null, count: 2, summary: [2] }], count: 2, summary: [2] },
+                        { key: 'Group1', items: [{ key: "Group1_0", items: null, count: 1, summary: [1] }], count: 1, summary: [1] }
+                    ], {
+                        totalCount: 3
+                    });
+                } else {
+                    return $.Deferred().resolve([
+                        { id: 0, group1: "Group0", group2: "Group0_0" },
+                        { id: 1, group1: "Group0", group2: "Group0_0" },
+                        { id: 2, group1: "Group1", group2: "Group1_0" }
+                    ]);
+                }
+            },
+            pageSize: 6
+        },
+        paging: {
+            enabled: true
+        },
+        grouping: {
+            autoExpandAll: true
+        },
+        columns: ["id", "group1", "group2"],
+        sortByGroupSummaryInfo: [{
+            summaryItem: "count"
+        }],
+        summary: {
+            groupItems: [{
+                summaryType: "count"
+            }]
+        },
+        remoteOperations: true
+    };
+
+    //act
+    this.setupDataGridModules();
+    this.clock.tick();
+
+    //assert
+    assert.strictEqual(storeLoadOptions.skip, undefined, "no skip option");
+    assert.strictEqual(storeLoadOptions.take, undefined, "no take option");
+    assert.deepEqual(storeLoadOptions.filter,
+        [[["group1", "=", "Group1"], "and", ["group2", "=", "Group1_0"]], "or", [["group1", "=", "Group0"], "and", ["group2", "=", "Group0_0"]]], "filter option");
+    assert.deepEqual(storeLoadOptions.sort,
+        [{ "desc": false, "isExpanded": true, "selector": "group1" }, { "desc": false, "isExpanded": true, "selector": "group2" }], "sort option");
+    assert.equal(this.dataController.totalCount(), 3, "totalCount");
+    assert.equal(this.dataController.pageCount(), 2, "pageCount");
+    var items = this.dataController.items();
+    assert.equal(items.length, 6, "item count");
+    assert.deepEqual(items[0].key, ["Group1"], "item 0");
+    assert.deepEqual(items[1].key, ["Group1", "Group1_0"], "item 1");
+    assert.equal(items[2].key, 2, "item 2");
+    assert.deepEqual(items[3].key, ["Group0"], "item 3");
+    assert.deepEqual(items[4].key, ["Group0", "Group0_0"], "item 4");
+});
+
+
 QUnit.test("One total summary item for second column", function(assert) {
     this.options = {
         dataSource: [
