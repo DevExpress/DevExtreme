@@ -292,10 +292,11 @@ var NumberBoxMask = NumberBoxBase.inherit({
     _tryParse: function(text, selection, char) {
         var editedText = this._getEditedText(text, selection, char),
             format = this._getFormatPattern(),
+            isTextSelected = selection.start !== selection.end,
             parsed = number.parse(editedText, format),
             isValueChanged = parsed !== this._parsedValue;
 
-        if(!isValueChanged && char !== MINUS && !this._isValueIncomplete(editedText)) {
+        if(!isTextSelected && !isValueChanged && char !== MINUS && !this._isValueIncomplete(editedText)) {
             return undefined;
         }
 
@@ -311,7 +312,7 @@ var NumberBoxMask = NumberBoxBase.inherit({
             pow = Math.pow(10, precision),
             value = (parsed === null ? this._parsedValue : parsed);
 
-        parsed = Math.round(value * pow) / pow;
+        parsed = Math.floor(Math.round(value * pow * 10) / 10) / pow;
 
         return this._isPercentFormat() ? (parsed && parsed / 100) : parsed;
     },
@@ -346,9 +347,11 @@ var NumberBoxMask = NumberBoxBase.inherit({
         }
 
         var caret = this._caret(),
+            floatLength = clearedText.length - decimalSeparatorIndex - 1,
+            maxPrecisionOverflow = floatLength > this._getMaxPrecision(this._getFormatPattern(), clearedText),
             textAfterCaret = this._getInputVal().slice(caret.start);
 
-        return !textAfterCaret || this._isStub(textAfterCaret, true);
+        return !maxPrecisionOverflow && (!textAfterCaret || this._isStub(textAfterCaret, true));
     },
 
     _isValueInRange: function(value) {
