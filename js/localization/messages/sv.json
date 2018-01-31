@@ -88,7 +88,7 @@
         "dxDataGrid-editingUndeleteRow": "Ångra radering",
         "dxDataGrid-editingConfirmDeleteMessage": "Är du säker på att du vill radera denna post?",
         "dxDataGrid-validationCancelChanges": "Avbryt ändringarna",
-        "dxDataGrid-groupPanelEmptyText": "Dra en kolumnrubrik hit för att dölja den",
+        "dxDataGrid-groupPanelEmptyText": "Dra en kolumnrubrik hit för att gruppera enligt den kolumnen",
         "dxDataGrid-noDataText": "Inget data",
         "dxDataGrid-searchPanelPlaceholder": "Sök...",
         "dxDataGrid-filterRowShowAllText": "(Allt)",
@@ -143,7 +143,7 @@
         "dxDataGrid-ariaCollapse": "Kollapsa",
         "dxDataGrid-ariaExpand": "Expandera",
         "dxDataGrid-ariaDataGrid": "Datarutnät",
-        "dxDataGrid-ariaSearchInGrid": "Säk i datarutnätet",
+        "dxDataGrid-ariaSearchInGrid": "Sök i datarutnätet",
         "dxDataGrid-ariaSelectAll": "Välj allt",
         "dxDataGrid-ariaSelectRow": "Välj rad",
 
