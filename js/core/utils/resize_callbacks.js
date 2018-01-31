@@ -56,7 +56,7 @@ var resizeCallbacks = (function() {
 
         readyCallbacks.add(function() {
             if(!removeListener && callbacks.has()) {
-                removeListener = domAdapter.listen(windowUtils.getWindow(), "resize", handleResize);
+                removeListener = windowUtils.listen("resize", handleResize);
             }
         });
 

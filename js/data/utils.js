@@ -1,9 +1,7 @@
 "use strict";
 
 var isFunction = require("../core/utils/type").isFunction,
-    domAdapter = require("../core/dom_adapter"),
     windowUtils = require("../core/utils/window"),
-    window = windowUtils.getWindow(),
     map = require("../core/utils/iterator").map,
     toComparable = require("../core/utils/data").toComparable,
     Deferred = require("../core/utils/deferred").Deferred;
@@ -66,9 +64,7 @@ var errorMessageFromXhr = (function() {
 
     // T542570, https://stackoverflow.com/a/18170879
     var unloading;
-    if(windowUtils.hasWindow()) {
-        domAdapter.listen(window, "beforeunload", function() { unloading = true; });
-    }
+    windowUtils.listen("beforeunload", function() { unloading = true; });
 
     return function(xhr, textStatus) {
         if(unloading) {
