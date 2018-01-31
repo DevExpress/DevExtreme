@@ -2,6 +2,7 @@
 
 var isFunction = require("../core/utils/type").isFunction,
     domAdapter = require("../core/dom_adapter"),
+    ready = require("../core/utils/ready_callbacks").add,
     windowUtils = require("../core/utils/window"),
     window = windowUtils.getWindow(),
     map = require("../core/utils/iterator").map,
@@ -66,7 +67,9 @@ var errorMessageFromXhr = (function() {
 
     // T542570, https://stackoverflow.com/a/18170879
     var unloading;
-    domAdapter.listen(window, "beforeunload", function() { unloading = true; });
+    ready(function() {
+        domAdapter.listen(window, "beforeunload", function() { unloading = true; });
+    });
 
     return function(xhr, textStatus) {
         if(unloading) {

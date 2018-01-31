@@ -240,9 +240,10 @@ var sendRequest = function(options) {
         timeoutId;
 
     options.crossDomain = isCrossDomain(options.url);
+    var needScriptEvaluation = dataType === "jsonp" || dataType === "script";
 
     if(options.cache === undefined) {
-        options.cache = dataType !== "jsonp" && dataType !== "script";
+        options.cache = !needScriptEvaluation;
     }
 
     var callbackName = getJsonpOptions(options),
@@ -257,8 +258,7 @@ var sendRequest = function(options) {
         };
     }
 
-    if(options.crossDomain && !options.cache) {
-
+    if(options.crossDomain && needScriptEvaluation) {
         var reject = function() {
                 d.reject(xhr, ERROR);
             },

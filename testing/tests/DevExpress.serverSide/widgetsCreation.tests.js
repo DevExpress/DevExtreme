@@ -5,7 +5,7 @@ var widgets = {
     ActionSheet: require("ui/action_sheet"),
     Autocomplete: require("ui/autocomplete"),
     BarGauge: require("viz/bar_gauge"),
-    //Box: require("ui/box"),
+    Box: require("ui/box"),
     Bullet: require("viz/Bullet"),
     Button: require("ui/button"),
     Calendar: require("ui/calendar"),
@@ -46,7 +46,7 @@ var widgets = {
     RangeSlider: require("ui/range_slider"),
     RadioGroup: require("ui/radio_group"),
     Resizable: require("ui/resizable"),
-    //ResponsiveBox: require("ui/responsive_box"),
+    ResponsiveBox: require("ui/responsive_box"),
     //Scheduler: require("ui/scheduler"),
     ScrollView: require("ui/scroll_view"),
     SelectBox: require("ui/select_box"),
@@ -61,7 +61,7 @@ var widgets = {
     TextArea: require("ui/text_area"),
     TextBox: require("ui/text_box"),
     TileView: require("ui/tile_view"),
-    //Toast: require("ui/toast"),
+    Toast: require("ui/toast"),
     Toolbar: require("ui/toolbar"),
     Tooltip: require("ui/tooltip"),
     //TreeList: require("ui/tree_list"),
@@ -70,7 +70,7 @@ var widgets = {
     ValidationGroup: require("ui/validation_group"),
     ValidationSummary: require("ui/validation_summary"),
     Validator: require("ui/validator"),
-    VectorMap: require("viz/vector_map"),
+    VectorMap: require("viz/vector_map")
 };
 
 QUnit.module("Scripts loading");
