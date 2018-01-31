@@ -160,7 +160,7 @@ testComponentDefaults(DateBox,
     function() {
         this._origDevice = devices.real();
 
-        devices.real({ platform: "generic" });
+        devices.real({ platform: "generic", deviceType: "desktop", phone: false });
     },
     function() {
         devices.real(this._origDevice);

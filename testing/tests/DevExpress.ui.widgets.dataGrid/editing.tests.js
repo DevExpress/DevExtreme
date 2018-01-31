@@ -9356,6 +9356,32 @@ QUnit.testInActiveWindow("SelectBox should be closed on focus another editor if 
     }
 });
 
+//T599181
+QUnit.test("Prevent cell validation if template with editor is used", function(assert) {
+    this.rowsView.render($("#container"));
+    //arrange
+    this.options.editing = {};
+    this.options.columns = ['name', {
+        dataField: 'age',
+        cellTemplate: function(cellElement) {
+            var inputDiv = $("<div />");
+            inputDiv.dxNumberBox({}).dxValidator({ validationRules: [{ type: "required" }] });
+            $(cellElement).append(inputDiv);
+        }
+    }];
+
+    this.columnsController.init();
+    this.editingController.init();
+
+    //act
+    var cells = this.rowsView.element().find("td");
+    this.editorFactoryController.focus(cells.eq(1));
+    var validator = this.validatingController.getValidator();
+
+    //assert
+    assert.ok(!validator, "only internal editor validator");
+});
+
 
 QUnit.module('Editing with real dataController with grouping, masterDetail', {
     beforeEach: function() {

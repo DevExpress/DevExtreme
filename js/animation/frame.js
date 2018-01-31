@@ -6,11 +6,11 @@ var window = require("../core/utils/window").getWindow(),
 var FRAME_ANIMATION_STEP_TIME = 1000 / 60,
 
     request = function(callback) {
-        return this.setTimeout(callback, FRAME_ANIMATION_STEP_TIME);
+        return setTimeout(callback, FRAME_ANIMATION_STEP_TIME);
     },
 
     cancel = function(requestID) {
-        this.clearTimeout(requestID);
+        clearTimeout(requestID);
     };
 
 var setAnimationFrameMethods = callOnce(function() {
