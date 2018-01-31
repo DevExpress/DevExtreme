@@ -554,3 +554,15 @@ QUnit.test("Tab template", function(assert) {
     assert.equal($form.find("#tabTemplate").length, 1);
     assert.equal($form.find("#tabTemplate").first().text(), "Test tab template");
 });
+
+QUnit.test("The formData is empty object when formData has 'undefined' value", function(assert) {
+    //arrange
+    var viewModel = {
+        formData: ko.observable(),
+        items: [{ dataField: "City" }]
+    };
+    ko.applyBindings(viewModel, $("#formWithItems").get(0));
+
+    //assert
+    assert.deepEqual(viewModel.formData(), { });
+});
