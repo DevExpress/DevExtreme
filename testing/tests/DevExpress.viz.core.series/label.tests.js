@@ -1254,3 +1254,15 @@ QUnit.test("has no text", function(assert) {
     this.data = { formatObject: {} };
     assert.ok(!this.createAndDrawLabel().isVisible());
 });
+
+QUnit.module("hideInsideLabel", environment);
+
+QUnit.test("Called 'hideInsideLabel' method", function(assert) {
+    this.point.hideInsideLabel = sinon.stub().returns(true);
+    var label = this.createLabel(),
+        coords = { x: 2, y: 3 };
+
+    assert.ok(label.hideInsideLabel(coords));
+    assert.equal(this.point.hideInsideLabel.lastCall.args[0], label);
+    assert.equal(this.point.hideInsideLabel.lastCall.args[1], coords);
+});
