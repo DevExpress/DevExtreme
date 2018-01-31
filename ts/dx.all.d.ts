@@ -1913,7 +1913,7 @@ declare module DevExpress.ui {
         /** Configures the column chooser. */
         columnChooser?: { enabled?: boolean, allowSearch?: boolean, mode?: string, width?: number, height?: number, title?: string, emptyPanelText?: string };
         /** Configures column fixing. */
-        columnFixing?: { enabled?: boolean, texts?: any };
+        columnFixing?: { enabled?: boolean, texts?: { fix?: string, unfix?: string, leftPosition?: string, rightPosition?: string } };
         /** Specifies whether the widget should hide columns to adapt to the screen or container size. Ignored if allowColumnResizing is true and columnResizingMode is "widget". */
         columnHidingEnabled?: boolean;
         /** Specifies the minimum width of columns. */
@@ -1931,9 +1931,9 @@ declare module DevExpress.ui {
         /** Indicates whether to show the error row. */
         errorRowEnabled?: boolean;
         /** Configures the filter row. */
-        filterRow?: { visible?: boolean, showOperationChooser?: boolean, showAllText?: string, resetOperationText?: string, applyFilter?: string, applyFilterText?: string, operationDescriptions?: any, betweenStartText?: string, betweenEndText?: string };
+        filterRow?: { visible?: boolean, showOperationChooser?: boolean, showAllText?: string, resetOperationText?: string, applyFilter?: string, applyFilterText?: string, operationDescriptions?: { equal?: string, notEqual?: string, lessThan?: string, lessThanOrEqual?: string, greaterThan?: string, greaterThanOrEqual?: string, startsWith?: string, contains?: string, notContains?: string, endsWith?: string, between?: string }, betweenStartText?: string, betweenEndText?: string };
         /** Configures the header filter feature. */
-        headerFilter?: { visible?: boolean, width?: number, height?: number, allowSearch?: boolean, texts?: any };
+        headerFilter?: { visible?: boolean, width?: number, height?: number, allowSearch?: boolean, texts?: { emptyValue?: string, ok?: string, cancel?: string } };
         /** Configures the load panel. */
         loadPanel?: { enabled?: string | boolean, text?: string, width?: number, height?: number, showIndicator?: boolean, indicatorSrc?: string, showPane?: boolean };
         /** Specifies text shown when the widget does not display any data. */
@@ -2183,9 +2183,9 @@ declare module DevExpress.ui {
         /** Configures editing. */
         editing?: dxDataGridEditing;
         /** Configures client-side exporting. */
-        export?: { texts?: any, enabled?: boolean, fileName?: string, excelFilterEnabled?: boolean, excelWrapTextEnabled?: boolean, proxyUrl?: string, allowExportSelectedData?: boolean };
+        export?: { texts?: { excelFormat?: any, exportToExcel?: any, selectedRows?: any, exportTo?: string, exportAll?: string, exportSelectedRows?: string }, enabled?: boolean, fileName?: string, excelFilterEnabled?: boolean, excelWrapTextEnabled?: boolean, proxyUrl?: string, allowExportSelectedData?: boolean };
         /** Configures grouping. */
-        grouping?: { groupContinuedMessage?: any, groupContinuesMessage?: any, autoExpandAll?: boolean, allowCollapsing?: boolean, contextMenuEnabled?: boolean, expandMode?: string, texts?: any };
+        grouping?: { groupContinuedMessage?: any, groupContinuesMessage?: any, autoExpandAll?: boolean, allowCollapsing?: boolean, contextMenuEnabled?: boolean, expandMode?: string, texts?: { groupContinuesMessage?: string, groupContinuedMessage?: string, groupByThisColumn?: string, ungroup?: string, ungroupAll?: string } };
         /** Configures the group panel. */
         groupPanel?: { visible?: boolean | string, emptyPanelText?: string, allowColumnDragging?: boolean };
         /** Specifies which data field provides keys for data items. Applies only if data is a simple array. */
@@ -2235,7 +2235,7 @@ declare module DevExpress.ui {
         /** Specifies options of state storing. */
         stateStoring?: { enabled?: boolean, storageKey?: string, type?: string, customLoad?: (() => Promise<any> | JQueryPromise<any>), customSave?: ((gridState: any) => any), savingTimeout?: number };
         /** Specifies the options of the grid summary. */
-        summary?: { groupItems?: Array<any>, totalItems?: Array<any>, calculateCustomSummary?: ((options: { component?: dxDataGrid, name?: string, summaryProcess?: string, value?: any, totalValue?: any }) => any), skipEmptyValues?: boolean, texts?: any };
+        summary?: { groupItems?: Array<{ name?: string, column?: string, summaryType?: string, valueFormat?: format, precision?: number, displayFormat?: string, customizeText?: ((itemInfo: { value?: string | number | Date, valueText?: string }) => string), showInGroupFooter?: boolean, alignByColumn?: boolean, showInColumn?: string, skipEmptyValues?: boolean }>, totalItems?: Array<{ name?: string, column?: string, showInColumn?: string, summaryType?: string, valueFormat?: format, precision?: number, displayFormat?: string, customizeText?: ((itemInfo: { value?: string | number | Date, valueText?: string }) => string), alignment?: string, cssClass?: string, skipEmptyValues?: boolean }>, calculateCustomSummary?: ((options: { component?: dxDataGrid, name?: string, summaryProcess?: string, value?: any, totalValue?: any }) => any), skipEmptyValues?: boolean, texts?: { sum?: string, sumOtherColumn?: string, min?: string, minOtherColumn?: string, max?: string, maxOtherColumn?: string, avg?: string, avgOtherColumn?: string, count?: string } };
     }
     /** Configures editing. */
     export interface dxDataGridEditing extends GridBaseEditing {
@@ -2935,7 +2935,7 @@ declare module DevExpress.ui {
         /** A URL pointing to the custom icon to be used for map markers. */
         markerIconSrc?: string;
         /** An array of markers displayed on a map. */
-        markers?: Array<{ location?: any | string | Array<number>, tooltip?: string | any, onClick?: Function, iconSrc?: string }>;
+        markers?: Array<{ location?: any | string | Array<number>, tooltip?: string | { text?: string, isShown?: boolean }, onClick?: Function, iconSrc?: string }>;
         /** A handler for the click event. */
         onClick?: ((e: { component?: DOMComponent, element?: DevExpress.core.dxElement, model?: any, location?: any, jQueryEvent?: JQueryEventObject, event?: event }) => any) | string;
         /** A handler for the markerAdded event. */
@@ -2996,7 +2996,7 @@ declare module DevExpress.ui {
         /** Specifies whether the menu has horizontal or vertical orientation. */
         orientation?: string;
         /** Specifies options for showing and hiding the first level submenu. */
-        showFirstSubmenuMode?: { name?: string, delay?: any | number } | string;
+        showFirstSubmenuMode?: { name?: string, delay?: { show?: number, hide?: number } | number } | string;
         /** Specifies the direction at which the submenus are displayed. */
         submenuDirection?: string;
     }
@@ -3188,11 +3188,11 @@ declare module DevExpress.ui {
         /** Configures client-side exporting. */
         export?: { enabled?: boolean, fileName?: string, proxyUrl?: string };
         /** The Field Chooser configuration options. */
-        fieldChooser?: { enabled?: boolean, allowSearch?: boolean, layout?: number, title?: string, width?: number, height?: number, texts?: any };
+        fieldChooser?: { enabled?: boolean, allowSearch?: boolean, layout?: number, title?: string, width?: number, height?: number, texts?: { columnFields?: string, rowFields?: string, dataFields?: string, filterFields?: string, allFields?: string } };
         /** Configures the field panel. */
-        fieldPanel?: { showColumnFields?: boolean, showFilterFields?: boolean, showDataFields?: boolean, showRowFields?: boolean, allowFieldDragging?: boolean, visible?: boolean, texts?: any };
+        fieldPanel?: { showColumnFields?: boolean, showFilterFields?: boolean, showDataFields?: boolean, showRowFields?: boolean, allowFieldDragging?: boolean, visible?: boolean, texts?: { columnFieldArea?: string, rowFieldArea?: string, filterFieldArea?: string, dataFieldArea?: string } };
         /** Configures the header filter feature. */
-        headerFilter?: { width?: number, height?: number, allowSearch?: boolean, texts?: any };
+        headerFilter?: { width?: number, height?: number, allowSearch?: boolean, texts?: { emptyValue?: string, ok?: string, cancel?: string } };
         /** Specifies whether or not to hide rows and columns with no data. */
         hideEmptySummaryCells?: boolean;
         /** Specifies options configuring the load panel. */
@@ -3255,7 +3255,7 @@ declare module DevExpress.ui {
         /** The data source of a PivotGrid widget. */
         dataSource?: DevExpress.data.PivotGridDataSource;
         /** Configures the header filter feature. */
-        headerFilter?: { width?: number, height?: number, allowSearch?: boolean, texts?: any };
+        headerFilter?: { width?: number, height?: number, allowSearch?: boolean, texts?: { emptyValue?: string, ok?: string, cancel?: string } };
         /** Specifies the widget's height. */
         height?: number | string | (() => number | string);
         /** Specifies the field chooser layout. */
@@ -4426,7 +4426,7 @@ declare module DevExpress.ui {
         /** Specifies the selection mode supported by the menu. */
         selectionMode?: string;
         /** Specifies options of submenu showing and hiding. */
-        showSubmenuMode?: { name?: string, delay?: any | number } | string;
+        showSubmenuMode?: { name?: string, delay?: { show?: number, hide?: number } | number } | string;
     }
     export class dxMenuBase extends HierarchicalCollectionWidget {
         constructor(element: Element, options?: dxMenuBaseOptions)
@@ -5823,13 +5823,13 @@ declare module DevExpress.viz {
         /** Specifies series elements to be highlighted when a user pauses on a series point. */
         hoverMode?: string;
         /** Configures the appearance adopted by a series point when a user pauses on it. */
-        hoverStyle?: { color?: string, border?: any, size?: number };
+        hoverStyle?: { color?: string, border?: { visible?: boolean, width?: number, color?: string }, size?: number };
         /** Substitutes the standard point symbols with an image. */
-        image?: string | { url?: string | any, width?: number | any, height?: number | any };
+        image?: string | { url?: string | { rangeMinPoint?: string, rangeMaxPoint?: string }, width?: number | { rangeMinPoint?: number, rangeMaxPoint?: number }, height?: number | { rangeMinPoint?: number, rangeMaxPoint?: number } };
         /** Specifies series elements to be highlighted when a user selects a series point. */
         selectionMode?: string;
         /** Configures the appearance of a selected series point. */
-        selectionStyle?: { color?: string, border?: any, size?: number };
+        selectionStyle?: { color?: string, border?: { visible?: boolean, width?: number, color?: string }, size?: number };
         /** Specifies the diameter of series points in pixels. */
         size?: number;
         /** Specifies which symbol should represent series points in scatter, line- and area-like series. */
@@ -6682,11 +6682,11 @@ declare module DevExpress.viz {
         /** Specifies the chart elements to highlight when a series is hovered over. */
         hoverMode?: string;
         /** An object defining configuration options for a hovered series. */
-        hoverStyle?: { color?: string, hatching?: any, border?: any };
+        hoverStyle?: { color?: string, hatching?: { direction?: string, width?: number, step?: number, opacity?: number }, border?: { visible?: boolean, width?: number, color?: string, dashStyle?: string } };
         /** @deprecated Use the innerRadius option instead. */
         innerRadius?: number;
         /** An object defining the label configuration options. */
-        label?: { customizeText?: ((pointInfo: any) => string), visible?: boolean, rotationAngle?: number, radialOffset?: number, format?: DevExpress.ui.format, precision?: number, argumentFormat?: DevExpress.ui.format, argumentPrecision?: number, percentPrecision?: number, position?: string, backgroundColor?: string, border?: any, connector?: any, font?: Font };
+        label?: { customizeText?: ((pointInfo: any) => string), visible?: boolean, rotationAngle?: number, radialOffset?: number, format?: DevExpress.ui.format, precision?: number, argumentFormat?: DevExpress.ui.format, argumentPrecision?: number, percentPrecision?: number, position?: string, backgroundColor?: string, border?: { visible?: boolean, width?: number, color?: string, dashStyle?: string }, connector?: { visible?: boolean, width?: number, color?: string }, font?: Font };
         /** Specifies how many points are acceptable to be in a series to display all labels for these points. Otherwise, the labels will not be displayed. */
         maxLabelCount?: number;
         /** Specifies a minimal size of a displayed pie segment. */
@@ -6696,7 +6696,7 @@ declare module DevExpress.viz {
         /** Specifies the chart elements to highlight when the series is selected. */
         selectionMode?: string;
         /** An object defining configuration options for the series when it is selected. */
-        selectionStyle?: { color?: string, hatching?: any, border?: any };
+        selectionStyle?: { color?: string, hatching?: { direction?: string, width?: number, step?: number, opacity?: number }, border?: { visible?: boolean, width?: number, color?: string, dashStyle?: string } };
         /** Specifies chart segment grouping options. */
         smallValuesGrouping?: { mode?: string, topCount?: number, threshold?: number, groupName?: string };
         /** @deprecated Use the startAngle option instead. */
@@ -6759,7 +6759,7 @@ declare module DevExpress.viz {
         /** Specifies the series elements to highlight when a series is hovered over. */
         hoverMode?: string;
         /** An object defining configuration options for a hovered series. */
-        hoverStyle?: { color?: string, width?: number, dashStyle?: string, hatching?: any, border?: any };
+        hoverStyle?: { color?: string, width?: number, dashStyle?: string, hatching?: { direction?: string, width?: number, step?: number, opacity?: number }, border?: { visible?: boolean, width?: number, color?: string, dashStyle?: string } };
         /** Specifies whether a chart ignores null data points or not. */
         ignoreEmptyPoints?: boolean;
         /** An object defining the label configuration options. */
@@ -6775,7 +6775,7 @@ declare module DevExpress.viz {
         /** Specifies the series elements to highlight when the series is selected. */
         selectionMode?: string;
         /** An object defining configuration options for a selected series. */
-        selectionStyle?: { color?: string, width?: number, dashStyle?: string, hatching?: any, border?: any };
+        selectionStyle?: { color?: string, width?: number, dashStyle?: string, hatching?: { direction?: string, width?: number, step?: number, opacity?: number }, border?: { visible?: boolean, width?: number, color?: string, dashStyle?: string } };
         /** Specifies whether or not to show the series in the chart's legend. */
         showInLegend?: boolean;
         /** Specifies the name of the stack where the values of the 'stackedBar' series must be located. */
@@ -6829,13 +6829,13 @@ declare module DevExpress.viz {
         /** Specifies what series points to highlight when a point is hovered over. */
         hoverMode?: string;
         /** An object defining configuration options for a hovered point. */
-        hoverStyle?: { color?: string, border?: any, size?: number };
+        hoverStyle?: { color?: string, border?: { visible?: boolean, width?: number, color?: string }, size?: number };
         /** An object specifying the parameters of an image that is used as a point marker. */
         image?: string | { url?: string, width?: number, height?: number };
         /** Specifies what series points to highlight when a point is selected. */
         selectionMode?: string;
         /** An object defining configuration options for a selected point. */
-        selectionStyle?: { color?: string, border?: any, size?: number };
+        selectionStyle?: { color?: string, border?: { visible?: boolean, width?: number, color?: string }, size?: number };
         /** Specifies the point diameter in pixels for those series that represent data points as symbols (not as bars for instance). */
         size?: number;
         /** Specifies a symbol for presenting points of the line and area series. */
@@ -7043,7 +7043,7 @@ declare module DevExpress.viz.charts {
         /** Colors the background of the chart container. */
         containerBackgroundColor?: string;
         /** Configures the crosshair feature. */
-        crosshair?: { enabled?: boolean, color?: string, width?: number, dashStyle?: string, opacity?: number, label?: any, verticalLine?: any | boolean, horizontalLine?: any | boolean };
+        crosshair?: { enabled?: boolean, color?: string, width?: number, dashStyle?: string, opacity?: number, label?: { backgroundColor?: string, visible?: boolean, format?: DevExpress.ui.format, precision?: number, customizeText?: ((info: { value?: Date | number | string, valueText?: string, point?: chartPointObject }) => string), font?: Font }, verticalLine?: { visible?: boolean, color?: string, width?: number, dashStyle?: string, opacity?: number, label?: { backgroundColor?: string, visible?: boolean, format?: DevExpress.ui.format, precision?: number, customizeText?: ((info: { value?: Date | number | string, valueText?: string, point?: chartPointObject }) => string), font?: Font } } | boolean, horizontalLine?: { visible?: boolean, color?: string, width?: number, dashStyle?: string, opacity?: number, label?: { backgroundColor?: string, visible?: boolean, format?: DevExpress.ui.format, precision?: number, customizeText?: ((info: { value?: Date | number | string, valueText?: string, point?: chartPointObject }) => string), font?: Font } } | boolean };
         /** Processes data before visualizing it. */
         dataPrepareSettings?: { checkTypeForAllData?: boolean, convertToAxisDataType?: boolean, sortingMethod?: boolean | ((a: any, b: any) => number) };
         /** Specifies which pane should be used by default. */
@@ -8032,11 +8032,11 @@ declare module DevExpress.viz.funnel {
         /** Turns the funnel upside down. */
         inverted?: boolean;
         /** Configures funnel items' appearance. */
-        item?: { border?: any, hoverStyle?: any, selectionStyle?: any };
+        item?: { border?: { visible?: boolean, width?: number, color?: string }, hoverStyle?: { border?: { visible?: boolean, width?: number, color?: string }, hatching?: { direction?: string, opacity?: number, step?: number, width?: number } }, selectionStyle?: { border?: { visible?: boolean, width?: number, color?: string }, hatching?: { opacity?: number, step?: number, width?: number, direction?: string } } };
         /** Configures funnel item labels. */
-        label?: { position?: string, horizontalOffset?: number, horizontalAlignment?: string, format?: DevExpress.ui.format, connector?: any, backgroundColor?: string, border?: any, visible?: boolean, showForZeroValues?: boolean, customizeText?: ((itemInfo: { item?: dxFunnelItem, value?: number, valueText?: string, percent?: number, percentText?: string }) => string), font?: Font };
+        label?: { position?: string, horizontalOffset?: number, horizontalAlignment?: string, format?: DevExpress.ui.format, connector?: { visible?: boolean, width?: number, color?: string, opacity?: number }, backgroundColor?: string, border?: { visible?: boolean, width?: number, color?: string, dashStyle?: string }, visible?: boolean, showForZeroValues?: boolean, customizeText?: ((itemInfo: { item?: dxFunnelItem, value?: number, valueText?: string, percent?: number, percentText?: string }) => string), font?: Font };
         /** Configures the legend. */
-        legend?: { verticalAlignment?: string, horizontalAlignment?: string, orientation?: string, itemTextPosition?: string, itemsAlignment?: string, visible?: boolean, margin?: number | any, markerSize?: number, backgroundColor?: string, border?: any, paddingLeftRight?: number, paddingTopBottom?: number, columnCount?: number, rowCount?: number, columnItemSpacing?: number, rowItemSpacing?: number, customizeText?: ((itemInfo: { item?: dxFunnelItem, text?: string }) => string), customizeHint?: ((itemInfo: { item?: dxFunnelItem, text?: string }) => string), font?: Font };
+        legend?: { verticalAlignment?: string, horizontalAlignment?: string, orientation?: string, itemTextPosition?: string, itemsAlignment?: string, visible?: boolean, margin?: number | { top?: number, bottom?: number, left?: number, right?: number }, markerSize?: number, backgroundColor?: string, border?: { visible?: boolean, width?: number, color?: string, cornerRadius?: number, opacity?: number, dashStyle?: string }, paddingLeftRight?: number, paddingTopBottom?: number, columnCount?: number, rowCount?: number, columnItemSpacing?: number, rowItemSpacing?: number, customizeText?: ((itemInfo: { item?: dxFunnelItem, text?: string }) => string), customizeHint?: ((itemInfo: { item?: dxFunnelItem, text?: string }) => string), font?: Font };
         /** Specifies the ratio between the height of the neck and that of the whole funnel. Accepts values from 0 to 1. Applies only if the algorithm is "dynamicHeight". */
         neckHeight?: number;
         /** Specifies the ratio between the width of the neck and that of the whole funnel. Accepts values from 0 to 1. Applies only if the algorithm is "dynamicHeight". */
@@ -8339,11 +8339,11 @@ declare module DevExpress.viz.gauges {
 declare module DevExpress.viz.rangeSelector {
     export interface dxRangeSelectorOptions extends BaseWidgetOptions {
         /** Specifies the options for the range selector's background. */
-        background?: { visible?: boolean, color?: string, image?: any };
+        background?: { visible?: boolean, color?: string, image?: { url?: string, location?: string } };
         /** Specifies the RangeSelector's behavior options. */
         behavior?: { animationEnabled?: boolean, snapToTicks?: boolean, moveSelectedRangeByClick?: boolean, manualRangeSelectionEnabled?: boolean, allowSlidersSwap?: boolean, callSelectedRangeChanged?: string, callValueChanged?: string };
         /** Specifies the options required to display a chart as the range selector's background. */
-        chart?: { commonSeriesSettings?: DevExpress.viz.charts.dxChartCommonSeriesSettings, bottomIndent?: number, topIndent?: number, dataPrepareSettings?: any, useAggregation?: boolean, valueAxis?: any, series?: DevExpress.viz.charts.dxChartSeries | Array<DevExpress.viz.charts.dxChartSeries>, seriesTemplate?: any, equalBarWidth?: boolean, barWidth?: number, barGroupPadding?: number, barGroupWidth?: number, negativesAsZeroes?: boolean, palette?: Array<string> | string, paletteExtensionMode?: string };
+        chart?: { commonSeriesSettings?: DevExpress.viz.charts.dxChartCommonSeriesSettings, bottomIndent?: number, topIndent?: number, dataPrepareSettings?: { checkTypeForAllData?: boolean, convertToAxisDataType?: boolean, sortingMethod?: boolean | ((a: { arg?: Date | number | string, val?: Date | number | string }, b: { arg?: Date | number | string, val?: Date | number | string }) => number) }, useAggregation?: boolean, valueAxis?: { min?: number, max?: number, inverted?: boolean, valueType?: string, type?: string, logarithmBase?: number }, series?: DevExpress.viz.charts.dxChartSeries | Array<DevExpress.viz.charts.dxChartSeries>, seriesTemplate?: { nameField?: string, customizeSeries?: ((seriesName: any) => DevExpress.viz.charts.dxChartSeries) }, equalBarWidth?: boolean, barWidth?: number, barGroupPadding?: number, barGroupWidth?: number, negativesAsZeroes?: boolean, palette?: Array<string> | string, paletteExtensionMode?: string };
         /** Specifies the color of the parent page element. */
         containerBackgroundColor?: string;
         /** Specifies a data source for the scale values and for the chart at the background. */
@@ -8357,7 +8357,7 @@ declare module DevExpress.viz.rangeSelector {
         /** A handler for the valueChanged event. */
         onValueChanged?: ((e: { component?: DOMComponent, element?: DevExpress.core.dxElement, model?: any, value?: Array<number | string | Date>, previousValue?: Array<number | string | Date> }) => any);
         /** Specifies options of the range selector's scale. */
-        scale?: { valueType?: string, type?: string, logarithmBase?: number, minorTickCount?: number, showBoundaryTicks?: boolean, startValue?: number | Date | string, endValue?: number | Date | string, showMinorTicks?: boolean, minorTickInterval?: number | any | string, breaks?: Array<ScaleBreak>, workdaysOnly?: boolean, workWeek?: Array<number>, holidays?: Array<Date | string> | Array<number>, singleWorkdays?: Array<Date | string> | Array<number>, breakStyle?: any, majorTickInterval?: number | any | string, tickInterval?: number | any | string, useTicksAutoArrangement?: boolean, setTicksAtUnitBeginning?: boolean, placeholderHeight?: number, minRange?: number | any | string, maxRange?: number | any | string, label?: any, tick?: any, minorTick?: any, marker?: any, categories?: Array<number | string | Date>, allowDecimals?: boolean, endOnTick?: boolean };
+        scale?: { valueType?: string, type?: string, logarithmBase?: number, minorTickCount?: number, showBoundaryTicks?: boolean, startValue?: number | Date | string, endValue?: number | Date | string, showMinorTicks?: boolean, minorTickInterval?: number | any | string, breaks?: Array<ScaleBreak>, workdaysOnly?: boolean, workWeek?: Array<number>, holidays?: Array<Date | string> | Array<number>, singleWorkdays?: Array<Date | string> | Array<number>, breakStyle?: { width?: number, color?: string, line?: string }, majorTickInterval?: number | { years?: number, months?: number, days?: number, hours?: number, minutes?: number, seconds?: number, milliseconds?: number } | string, tickInterval?: number | any | string, useTicksAutoArrangement?: boolean, setTicksAtUnitBeginning?: boolean, placeholderHeight?: number, minRange?: number | any | string, maxRange?: number | any | string, label?: { visible?: boolean, format?: DevExpress.ui.format, precision?: number, customizeText?: ((scaleValue: { value?: Date | number, valueText?: string }) => string), topIndent?: number, overlappingBehavior?: string, font?: Font }, tick?: { width?: number, color?: string, opacity?: number }, minorTick?: { width?: number, color?: string, opacity?: number, visible?: boolean }, marker?: { visible?: boolean, separatorHeight?: number, topIndent?: number, textLeftIndent?: number, textTopIndent?: number, label?: { format?: DevExpress.ui.format, customizeText?: ((markerValue: { value?: Date | number, valueText?: string }) => string) } }, categories?: Array<number | string | Date>, allowDecimals?: boolean, endOnTick?: boolean };
         /** @deprecated Use the value option instead. */
         selectedRange?: { startValue?: number | Date | string, endValue?: number | Date | string };
         /** Specifies the color of the selected range. */
@@ -8367,7 +8367,7 @@ declare module DevExpress.viz.rangeSelector {
         /** Specifies the appearance of the range selector's slider handles. */
         sliderHandle?: { color?: string, width?: number, opacity?: number };
         /** Defines the options of the range selector slider markers. */
-        sliderMarker?: { visible?: boolean, format?: DevExpress.ui.format, precision?: number, customizeText?: ((scaleValue: { value?: Date | number, valueText?: string }) => string), padding?: number, paddingTopBottom?: number, paddingLeftRight?: number, color?: string, invalidRangeColor?: string, placeholderSize?: number | any, placeholderHeight?: number, font?: Font };
+        sliderMarker?: { visible?: boolean, format?: DevExpress.ui.format, precision?: number, customizeText?: ((scaleValue: { value?: Date | number, valueText?: string }) => string), padding?: number, paddingTopBottom?: number, paddingLeftRight?: number, color?: string, invalidRangeColor?: string, placeholderSize?: number | { width?: number | { left?: number, right?: number }, height?: number }, placeholderHeight?: number, font?: Font };
         /** The selected range, initial or current. */
         value?: Array<number | string | Date>;
     }
@@ -8474,9 +8474,9 @@ declare module DevExpress.viz.map {
         /** Specifies the options of the control bar. */
         controlBar?: { enabled?: boolean, borderColor?: string, color?: string, margin?: number, horizontalAlignment?: string, verticalAlignment?: string, opacity?: number };
         /** Specifies options for VectorMap widget layers. */
-        layers?: Array<{ name?: string, dataSource?: any | DevExpress.data.DataSource | DevExpress.data.DataSourceOptions | string, data?: any | DevExpress.data.DataSource | DevExpress.data.DataSourceOptions, type?: string, elementType?: string, borderWidth?: number, borderColor?: string, color?: string, hoveredBorderWidth?: number, hoveredBorderColor?: string, hoveredColor?: string, selectedBorderWidth?: number, selectedBorderColor?: string, selectedColor?: string, opacity?: number, size?: number, minSize?: number, maxSize?: number, hoverEnabled?: boolean, selectionMode?: string, palette?: Array<string> | string, paletteSize?: number, colorGroups?: Array<number>, colorGroupingField?: string, sizeGroups?: Array<number>, sizeGroupingField?: string, dataField?: string, customize?: ((elements: Array<MapLayerElement>) => any), label?: any }> | { name?: string, dataSource?: any | DevExpress.data.DataSource | DevExpress.data.DataSourceOptions | string, data?: any | DevExpress.data.DataSource | DevExpress.data.DataSourceOptions, type?: string, elementType?: string, borderWidth?: number, borderColor?: string, color?: string, hoveredBorderWidth?: number, hoveredBorderColor?: string, hoveredColor?: string, selectedBorderWidth?: number, selectedBorderColor?: string, selectedColor?: string, opacity?: number, size?: number, minSize?: number, maxSize?: number, hoverEnabled?: boolean, selectionMode?: string, palette?: Array<string> | string, paletteSize?: number, colorGroups?: Array<number>, colorGroupingField?: string, sizeGroups?: Array<number>, sizeGroupingField?: string, dataField?: string, customize?: ((elements: Array<MapLayerElement>) => any), label?: any };
+        layers?: Array<{ name?: string, dataSource?: any | DevExpress.data.DataSource | DevExpress.data.DataSourceOptions | string, data?: any | DevExpress.data.DataSource | DevExpress.data.DataSourceOptions, type?: string, elementType?: string, borderWidth?: number, borderColor?: string, color?: string, hoveredBorderWidth?: number, hoveredBorderColor?: string, hoveredColor?: string, selectedBorderWidth?: number, selectedBorderColor?: string, selectedColor?: string, opacity?: number, size?: number, minSize?: number, maxSize?: number, hoverEnabled?: boolean, selectionMode?: string, palette?: Array<string> | string, paletteSize?: number, colorGroups?: Array<number>, colorGroupingField?: string, sizeGroups?: Array<number>, sizeGroupingField?: string, dataField?: string, customize?: ((elements: Array<MapLayerElement>) => any), label?: { enabled?: boolean, dataField?: string, font?: Font } }> | { name?: string, dataSource?: any | DevExpress.data.DataSource | DevExpress.data.DataSourceOptions | string, data?: any | DevExpress.data.DataSource | DevExpress.data.DataSourceOptions, type?: string, elementType?: string, borderWidth?: number, borderColor?: string, color?: string, hoveredBorderWidth?: number, hoveredBorderColor?: string, hoveredColor?: string, selectedBorderWidth?: number, selectedBorderColor?: string, selectedColor?: string, opacity?: number, size?: number, minSize?: number, maxSize?: number, hoverEnabled?: boolean, selectionMode?: string, palette?: Array<string> | string, paletteSize?: number, colorGroups?: Array<number>, colorGroupingField?: string, sizeGroups?: Array<number>, sizeGroupingField?: string, dataField?: string, customize?: ((elements: Array<MapLayerElement>) => any), label?: { enabled?: boolean, dataField?: string, font?: Font } };
         /** Configures map legends. */
-        legends?: Array<{ source?: any, customizeText?: ((itemInfo: { start?: number, end?: number, index?: number, color?: string, size?: number }) => string), customizeHint?: ((itemInfo: { start?: number, end?: number, index?: number, color?: string, size?: number }) => string), verticalAlignment?: string, horizontalAlignment?: string, orientation?: string, itemTextPosition?: string, itemsAlignment?: string, visible?: boolean, margin?: number | any, markerSize?: number, markerColor?: string, markerShape?: string, backgroundColor?: string, border?: any, paddingLeftRight?: number, paddingTopBottom?: number, columnCount?: number, rowCount?: number, columnItemSpacing?: number, rowItemSpacing?: number, font?: Font }>;
+        legends?: Array<{ source?: { layer?: string, grouping?: string }, customizeText?: ((itemInfo: { start?: number, end?: number, index?: number, color?: string, size?: number }) => string), customizeHint?: ((itemInfo: { start?: number, end?: number, index?: number, color?: string, size?: number }) => string), verticalAlignment?: string, horizontalAlignment?: string, orientation?: string, itemTextPosition?: string, itemsAlignment?: string, visible?: boolean, margin?: number | { top?: number, bottom?: number, left?: number, right?: number }, markerSize?: number, markerColor?: string, markerShape?: string, backgroundColor?: string, border?: { visible?: boolean, width?: number, color?: string, cornerRadius?: number, opacity?: number, dashStyle?: string }, paddingLeftRight?: number, paddingTopBottom?: number, columnCount?: number, rowCount?: number, columnItemSpacing?: number, rowItemSpacing?: number, font?: Font }>;
         /** @deprecated Use the layers.dataSource option instead. */
         mapData?: Array<string> | string;
         /** @deprecated Use the layers.dataSource option instead. */
@@ -8629,7 +8629,7 @@ declare module DevExpress.viz.treeMap {
         /** Specifies the origin of data for the widget. */
         dataSource?: Array<any> | DevExpress.data.DataSource | DevExpress.data.DataSourceOptions | string;
         /** Configures groups. */
-        group?: { headerHeight?: number, border?: any, color?: string, hoverStyle?: any, selectionStyle?: any, label?: any, hoverEnabled?: boolean };
+        group?: { headerHeight?: number, border?: { width?: number, color?: string }, color?: string, hoverStyle?: { border?: { width?: number, color?: string }, color?: string }, selectionStyle?: { border?: { width?: number, color?: string }, color?: string }, label?: { visible?: boolean, font?: Font }, hoverEnabled?: boolean };
         /** Specifies whether tiles and groups change their style when a user pauses on them. */
         hoverEnabled?: boolean;
         /** Specifies the name of the data source field that provides IDs for items. Applies to plain data sources only. */
@@ -8663,7 +8663,7 @@ declare module DevExpress.viz.treeMap {
         /** Specifies whether a single or multiple nodes can be in the selected state simultaneously. */
         selectionMode?: string;
         /** Configures tiles. */
-        tile?: { border?: any, color?: string, hoverStyle?: any, selectionStyle?: any, label?: any };
+        tile?: { border?: { width?: number, color?: string }, color?: string, hoverStyle?: { border?: { width?: number, color?: string }, color?: string }, selectionStyle?: { border?: { width?: number, color?: string }, color?: string }, label?: { visible?: boolean, font?: Font } };
         /** Configures tooltips - small pop-up rectangles that display information about a data-visualizing widget element being pressed or hovered over with the mouse pointer. */
         tooltip?: dxTreeMapTooltip;
         /** Specifies the name of the data source field that provides values for tiles. */
