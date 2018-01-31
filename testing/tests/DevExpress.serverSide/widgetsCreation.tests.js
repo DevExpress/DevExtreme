@@ -4,7 +4,8 @@ var widgets = {
     Accordion: require("ui/accordion"),
     Box: require("ui/box"),
     Button: require("ui/button"),
-    CheckBox: require("ui/check_box")
+    CheckBox: require("ui/check_box"),
+    ResponsiveBox: require("ui/responsive_box")
 };
 
 QUnit.module("Scripts loading");
