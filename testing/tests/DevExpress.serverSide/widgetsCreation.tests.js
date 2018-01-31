@@ -61,7 +61,7 @@ var widgets = {
     TextArea: require("ui/text_area"),
     TextBox: require("ui/text_box"),
     TileView: require("ui/tile_view"),
-    //Toast: require("ui/toast"),
+    Toast: require("ui/toast"),
     Toolbar: require("ui/toolbar"),
     Tooltip: require("ui/tooltip"),
     //TreeList: require("ui/tree_list"),
