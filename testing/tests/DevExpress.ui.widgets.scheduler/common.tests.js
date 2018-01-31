@@ -16,6 +16,7 @@ var $ = require("jquery"),
     config = require("core/config"),
     dxSchedulerAppointmentModel = require("ui/scheduler/ui.scheduler.appointment_model"),
     dxSchedulerWorkSpace = require("ui/scheduler/ui.scheduler.work_space"),
+    dxSchedulerWorkSpaceDay = require("ui/scheduler/ui.scheduler.work_space_day"),
     dragEvents = require("events/drag"),
     DataSource = require("data/data_source/data_source").DataSource,
     CustomStore = require("data/custom_store"),
@@ -1022,6 +1023,19 @@ QUnit.testStart(function() {
         afterEach: function() {
             this.clock.restore();
         }
+    });
+
+    QUnit.test("Changing of 'currentView' option after initializing should work correctly", function(assert) {
+        this.createInstance({
+            currentDate: new Date(2018, 0, 30),
+            views: ["day", "week"],
+            currentView: "week",
+            onInitialized: function(e) {
+                e.component.option("currentView", "day");
+            }
+        });
+
+        assert.ok(this.instance.getWorkSpace() instanceof dxSchedulerWorkSpaceDay, "correct view");
     });
 
     QUnit.test("It should be possible to init currentDate as timestamp", function(assert) {
