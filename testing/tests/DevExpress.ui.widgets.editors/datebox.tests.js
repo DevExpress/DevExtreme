@@ -1496,7 +1496,7 @@ QUnit.test("calendar picker should be used on generic device by default and 'typ
     var currentDevice = devices.current(),
         realDevice = devices.real();
 
-    devices.real({ platform: "generic", deviceType: "desktop" });
+    devices.real({ platform: "generic", deviceType: "desktop", phone: false });
     devices.current({ platform: "generic" });
 
     try {
