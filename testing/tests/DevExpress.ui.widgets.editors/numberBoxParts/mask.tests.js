@@ -222,12 +222,12 @@ QUnit.test("extra decimal points should be ignored", function(assert) {
     assert.equal(this.input.val(), "2.05", "text is correct");
 });
 
-QUnit.test("value should be rounded to the nearest digit on input an extra float digits", function(assert) {
+QUnit.test("value should be rounded to the low digit on input an extra float digits", function(assert) {
     this.instance.option("format", "#0.00");
 
     this.keyboard.type("2.057").change();
-    assert.equal(this.input.val(), "2.06", "text is correct");
-    assert.equal(this.instance.option("value"), 2.06, "value is correct");
+    assert.equal(this.input.val(), "2.05", "text is correct");
+    assert.equal(this.instance.option("value"), 2.05, "value is correct");
 });
 
 QUnit.test("required digits should be replaced on input", function(assert) {
@@ -286,7 +286,18 @@ QUnit.test("input with non-required digit", function(assert) {
     assert.equal(this.input.val(), "1.0", "zero should not be rounded");
 
     this.keyboard.type("56");
-    assert.equal(this.input.val(), "1.06", "extra digit should be rounded");
+    assert.equal(this.input.val(), "1.05", "extra digit should be rounded");
+});
+
+QUnit.test("extra zeros in the end should be prevented from input", function(assert) {
+    this.instance.option({
+        format: "#.##",
+        value: 1.52
+    });
+
+    this.keyboard.caret(4).type("0");
+
+    assert.equal(this.input.val(), "1.52", "extra zero input has been prevented");
 });
 
 QUnit.test("removed digits should not be replaced to 0 when they are not required", function(assert) {
@@ -422,7 +433,7 @@ QUnit.test("mask should work with arabic digit shaping", function(assert) {
 
 QUnit.test("invalid chars should be prevented on keydown", function(assert) {
     this.keyboard.type("12e*3.456");
-    assert.equal(this.input.val(), "123.46", "value is correct");
+    assert.equal(this.input.val(), "123.45", "value is correct");
 });
 
 QUnit.test("input should be correct with group separators", function(assert) {
@@ -530,6 +541,7 @@ QUnit.test("valueChanged event fires on value apply", function(assert) {
     assert.ok(valueChangedSpy.calledOnce, "valueChanged event called once");
 });
 
+
 QUnit.module("format: percent format", moduleConfig);
 
 QUnit.test("percent format should work properly on value change", function(assert) {
@@ -625,6 +637,13 @@ QUnit.test("removing non required char with negative value", function(assert) {
 
     this.keyboard.press("backspace").change();
     assert.equal(this.input.val(), "-123", "value is correct");
+});
+
+QUnit.test("removing non required zero should be possible", function(assert) {
+    this.instance.option("format", "#.##");
+    this.keyboard.type("1.50").press("backspace");
+
+    assert.equal(this.input.val(), "1.5", "zero has been removed");
 });
 
 QUnit.test("removing with group separators using delete key", function(assert) {
