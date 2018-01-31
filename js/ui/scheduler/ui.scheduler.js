@@ -1503,7 +1503,6 @@ var Scheduler = Widget.inherit({
         }, combinedDataAccessors);
 
         this._initActions();
-        this._processCurrentView();
 
         this._dropDownAppointments = new DropDownAppointments();
         this._subscribes = subscribes;
@@ -1722,6 +1721,7 @@ var Scheduler = Widget.inherit({
 
     _render: function() {
         this.callBase();
+        this._processCurrentView();
         this._renderHeader();
 
         this._layoutManager = new SchedulerLayoutManager(this, this._getAppointmentsRenderingStrategy());

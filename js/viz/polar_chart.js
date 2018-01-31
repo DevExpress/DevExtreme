@@ -50,7 +50,7 @@ var dxPolarChart = AdvancedChart.inherit({
     },
 
     _optionChangesMap: {
-        useSpiderWeb: "REINIT"
+        useSpiderWeb: "AXES_AND_PANES"
     },
 
     _getExtraOptions: function() {

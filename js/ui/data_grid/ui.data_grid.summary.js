@@ -13,6 +13,7 @@ var $ = require("../../core/renderer"),
     columnsView = require("../grid_core/ui.grid_core.columns_view"),
     AggregateCalculator = require("./aggregate_calculator"),
     dataQuery = require("../../data/query"),
+    storeHelper = require("../../data/store_helper"),
     dataUtils = require("../../data/utils");
 
 var DATAGRID_TOTAL_FOOTER_CLASS = "dx-datagrid-total-footer",
@@ -122,6 +123,20 @@ exports.FooterView = columnsView.ColumnsView.inherit((function() {
 })());
 
 var SummaryDataSourceAdapterExtender = (function() {
+
+    function forEachGroup(groups, groupCount, callback, path) {
+        path = path || [];
+        for(var i = 0; i < groups.length; i++) {
+            path.push(groups[i].key);
+            if(groupCount === 1) {
+                callback(path, groups[i].items);
+            } else {
+                forEachGroup(groups[i].items, groupCount - 1, callback, path);
+            }
+            path.pop();
+        }
+    }
+
     return {
         init: function() {
             this.callBase.apply(this, arguments);
@@ -146,6 +161,26 @@ var SummaryDataSourceAdapterExtender = (function() {
         },
         totalAggregates: function() {
             return this._totalAggregates;
+        },
+        isLastLevelGroupItemsPagingLocal: function() {
+            var summary = this.summary(),
+                sortByGroupsInfo = summary && summary.sortByGroups();
+
+            return sortByGroupsInfo && sortByGroupsInfo.length;
+        },
+        sortLastLevelGroupItems: function(items, groups, paths) {
+            var groupedItems = storeHelper.multiLevelGroup(dataQuery(items), groups).toArray(),
+                result = [];
+
+            paths.forEach(function(path) {
+                forEachGroup(groupedItems, groups.length, function(itemsPath, items) {
+                    if(path.toString() === itemsPath.toString()) {
+                        result = result.concat(items);
+                    }
+                });
+            });
+
+            return result;
         }
     };
 })();

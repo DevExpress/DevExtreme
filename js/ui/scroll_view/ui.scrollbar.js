@@ -3,6 +3,7 @@
 var $ = require("../../core/renderer"),
     domAdapter = require("../../core/dom_adapter"),
     eventsEngine = require("../../events/core/events_engine"),
+    ready = require("../../core/utils/ready_callbacks").add,
     translator = require("../../animation/translator"),
     Widget = require("../widget/ui.widget"),
     eventUtils = require("../../events/utils"),
@@ -227,10 +228,12 @@ var Scrollbar = Widget.inherit({
 
 var activeScrollbar = null;
 
-eventsEngine.subscribeGlobal(domAdapter.getDocument(), eventUtils.addNamespace(pointerEvents.up, SCROLLBAR), function() {
-    if(activeScrollbar) {
-        activeScrollbar.feedbackOff();
-    }
+ready(function() {
+    eventsEngine.subscribeGlobal(domAdapter.getDocument(), eventUtils.addNamespace(pointerEvents.up, SCROLLBAR), function() {
+        if(activeScrollbar) {
+            activeScrollbar.feedbackOff();
+        }
+    });
 });
 
 module.exports = Scrollbar;
