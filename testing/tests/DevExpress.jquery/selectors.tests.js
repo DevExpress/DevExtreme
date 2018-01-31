@@ -17,6 +17,8 @@ QUnit.testStart(function() {
         <iframe class="focusable tabbable"></iframe>\
         <a class="focusable tabbable" href="#">1</a>\
         <a class="focusable tabbable" tabindex="0">1</a>\
+        <div class="focusable tabbable" tabindex="0" contenteditable="true"></div>\
+        <div contenteditable="true"><div class="focusable tabbable" tabindex="0"></div></div>\
         \
         <div class="focusable nottabbable" tabindex="-1"></div>\
         \
