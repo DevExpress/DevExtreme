@@ -878,7 +878,7 @@ var dxRangeSelector = {
         /**
         * @name dxrangeselectoroptions_chart_commonseriessettings
         * @publicName commonSeriesSettings
-        * @type object
+        * @type dxChartOptions_commonSeriesSettings
         */
         commonSeriesSettings: undefined,
         /**
@@ -989,11 +989,34 @@ var dxRangeSelector = {
         /**
         * @name dxrangeselectoroptions_chart_series
         * @publicName series
-        * @type Object|Array<Object>
+        * @type dxChartOptions_series|Array<dxChartOptions_series>
         * @default undefined
         * @notUsedInTheme
         */
         series: undefined,
+        /**
+        * @name dxrangeselectoroptions_chart_seriestemplate
+        * @publicName seriesTemplate
+        * @type object
+        * @default undefined
+        */
+        seriesTemplate: {
+            /**
+            * @name dxrangeselectoroptions_chart_seriestemplate_nameField
+            * @publicName nameField
+            * @type string
+            * @default 'series'
+            */
+            nameField: 'series',
+            /**
+            * @name dxrangeselectoroptions_chart_seriestemplate_customizeSeries
+            * @publicName customizeSeries
+            * @type function(seriesName)
+            * @type_function_param1 seriesName:any
+            * @type_function_return dxChartOptions_series
+            */
+            customizeSeries: function() { }
+        },
         /**
         * @name dxrangeselectoroptions_chart_equalbarwidth
         * @publicName equalBarWidth
@@ -1092,29 +1115,6 @@ var dxRangeSelector = {
     * @default '#FFFFFF'
     */
     containerBackgroundColor: '#FFFFFF',
-    /**
-    * @name dxrangeselectoroptions_chart_seriestemplate
-    * @publicName seriesTemplate
-    * @type object
-    * @default undefined
-    */
-    seriesTemplate: {
-        /**
-        * @name dxrangeselectoroptions_chart_seriestemplate_nameField
-        * @publicName nameField
-        * @type string
-        * @default 'series'
-        */
-        nameField: 'series',
-        /**
-        * @name dxrangeselectoroptions_chart_seriestemplate_customizeSeries
-        * @publicName customizeSeries
-        * @type function(seriesName)
-        * @type_function_param1 seriesName:any
-        * @type_function_return dxChartOptions_series
-        */
-        customizeSeries: function() { }
-    },
     /**
     * @name dxrangeselectormethods_getSelectedRange
     * @publicName getSelectedRange()
