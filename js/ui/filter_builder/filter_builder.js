@@ -111,7 +111,7 @@ var FilterBuilder = Widget.inherit({
             /**
             * @name dxFilterBuilderField
             * @publicName dxFilterBuilderField
-            * @category Internal
+            * @type object
             */
 
             /**
