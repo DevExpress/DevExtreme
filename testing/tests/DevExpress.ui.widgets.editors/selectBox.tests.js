@@ -1706,6 +1706,27 @@ QUnit.testInActiveWindow("input value should be restored on focusout if clearing
     assert.equal(instance.option("value"), 1, "value have been restored");
 });
 
+QUnit.test("byKey should not be called on focusout if text was not changed", function(assert) {
+    var byKeyMock = sinon.stub().returnsArg(0),
+        loadMock = sinon.stub().returns(["Item 1", "Item 2", "Item 3"]),
+        $element = $("#selectBox").dxSelectBox({
+            deferRendering: true,
+            dataSource: {
+                load: loadMock,
+                byKey: byKeyMock
+            },
+            value: "Item 2"
+        }),
+        $input = $element.find("." + TEXTEDITOR_INPUT_CLASS);
+
+    assert.equal(loadMock.callCount, 0, "load should not be called on init if defer rendering is true");
+    assert.equal(byKeyMock.callCount, 1, "bykey should be called on init if value is specified");
+
+    $input.trigger("focusout");
+
+    assert.equal(byKeyMock.callCount, 1, "byKey should not be called after input text restoring");
+});
+
 QUnit.test("acceptCustomValue", function(assert) {
     var $selectBox = $("#selectBox").dxSelectBox({
         acceptCustomValue: true,
