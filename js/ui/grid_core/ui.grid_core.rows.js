@@ -9,6 +9,7 @@ var $ = require("../../core/renderer"),
     stringUtils = require("../../core/utils/string"),
     getDefaultAlignment = require("../../core/utils/position").getDefaultAlignment,
     compileGetter = require("../../core/utils/data").compileGetter,
+    errors = require("../widget/ui.errors"),
     gridCoreUtils = require("./ui.grid_core.utils"),
     columnsView = require("./ui.grid_core.columns_view"),
     Scrollable = require("../scroll_view/ui.scrollable"),
@@ -667,6 +668,18 @@ module.exports = {
                     that._appendRow(tableElement, freeSpaceRowElement, appendFreeSpaceRowTemplate);
                 },
 
+                _checkRowKeys: function(options) {
+                    var rows = this._getRows(options),
+                        keyExpr = this._dataController.store() && this._dataController.store().key();
+
+                    keyExpr && rows.some(function(row) {
+                        if(row.rowType === "data" && !isDefined(row.key)) {
+                            errors.log("W1012", keyExpr);
+                            return true;
+                        }
+                    });
+                },
+
                 _needUpdateRowHeight: function(itemsCount) {
                     return itemsCount > 0 && !this._rowHeight;
                 },
@@ -815,6 +828,8 @@ module.exports = {
                         scrollingMode: scrollingMode,
                         columnsCountBeforeGroups: columnsCountBeforeGroups
                     }, options));
+
+                    that._checkRowKeys(options.change);
 
                     that._renderFreeSpaceRow($table);
                     if(!that._hasHeight) {

@@ -3645,6 +3645,7 @@ QUnit.test("Console errors should not be occurs when stateStoring enabled with s
     assert.ok(dataGrid);
     assert.equal(errors.log.getCalls().length, 0, "no error maeesages in console");
 
+    errors.log.restore();
     clock.restore();
 });
 
@@ -4018,6 +4019,28 @@ QUnit.test("Error on loading", function(assert) {
     assert.equal($errorRow.find(".dx-error-message").text(), "Test Error", "error row text");
     clock.restore();
 });
+
+QUnit.test("Raise error if key field is missed", function(assert) {
+    //act
+    var clock = sinon.useFakeTimers();
+    sinon.spy(errors, "log");
+
+    createDataGrid({
+        columns: ["field1"],
+        keyExpr: "ID",
+        dataSource: [{ ID: 1, field1: "John" }, { field1: "Olivia" }]
+    });
+
+    clock.tick();
+
+    //assert
+    assert.equal(errors.log.lastCall.args[0], "W1012", "Warning about keyExpr is raised");
+    assert.equal(errors.log.callCount, 1, "Warning about keyExpr is raised one time");
+
+    errors.log.restore();
+    clock.restore();
+});
+
 
 //T481276
 QUnit.test("updateDimensions during grouping when fixed to right column exists", function(assert) {

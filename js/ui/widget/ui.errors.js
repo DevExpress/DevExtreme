@@ -301,5 +301,11 @@ module.exports = errorUtils(errors.ERROR_MESSAGES, {
      * @name Errors and Warnings_W1011
      * @publicName W1011
      */
-    W1011: "The \"keyExpr\" option is not applied when dataSource is not an array"
+    W1011: "The \"keyExpr\" option is not applied when dataSource is not an array",
+
+    /**
+    * @name Errors and Warnings_W1012
+    * @publicName W1012
+    */
+    W1012: "The '{0}' key field is not found in data objects"
 });
