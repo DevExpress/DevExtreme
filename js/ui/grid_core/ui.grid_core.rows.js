@@ -668,17 +668,16 @@ module.exports = {
                     that._appendRow(tableElement, freeSpaceRowElement, appendFreeSpaceRowTemplate);
                 },
 
-                _renderErrorMessage: function(rows, keyExpr) {
-                    var showError;
+                _checkRowKeys: function(options) {
+                    var rows = this._getRows(options),
+                        keyExpr = this._dataController.store() && this._dataController.store().key();
 
-                    rows.forEach(function(row, i, rows) {
+                    rows.some(function(row) {
                         if(row.rowType === "data" && !isDefined(row.key)) {
-                            showError = true;
-                            return false;
+                            errors.log("W1012", keyExpr);
+                            return true;
                         }
                     });
-
-                    showError && errors.log("W1012", keyExpr);
                 },
 
                 _needUpdateRowHeight: function(itemsCount) {
@@ -816,9 +815,7 @@ module.exports = {
                         i,
                         columns = options.columns,
                         columnsCountBeforeGroups = 0,
-                        scrollingMode = that.option("scrolling.mode"),
-                        rows = this._getRows(options.change),
-                        keyExpr = that._dataController.store() && that._dataController.store().key();
+                        scrollingMode = that.option("scrolling.mode");
 
                     for(i = 0; i < columns.length; i++) {
                         if(columns[i].command === "expand") {
@@ -832,7 +829,7 @@ module.exports = {
                         columnsCountBeforeGroups: columnsCountBeforeGroups
                     }, options));
 
-                    keyExpr && that._renderErrorMessage(rows, keyExpr);
+                    that._checkRowKeys(options.change);
 
                     that._renderFreeSpaceRow($table);
                     if(!that._hasHeight) {
