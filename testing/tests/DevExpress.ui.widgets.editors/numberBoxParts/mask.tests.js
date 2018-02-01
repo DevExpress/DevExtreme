@@ -463,6 +463,18 @@ QUnit.test("ctrl+v should not be prevented", function(assert) {
     assert.strictEqual(this.keyboard.event.isDefaultPrevented(), false, "keydown event is not prevented");
 });
 
+QUnit.test("decimal point input should be prevented when it is restricted by the format", function(assert) {
+    this.instance.option({
+        format: "#0",
+        value: 123
+    });
+
+    this.keyboard.caret(1).type(".");
+
+    assert.equal(this.input.val(), "123", "value is correct");
+    assert.equal(this.keyboard.caret().start, 1, "caret should not be moved");
+});
+
 QUnit.test("incomplete input should not be prevented when there are stubs and zeros after the caret", function(assert) {
     this.instance.option({
         format: "#0.## kg",
