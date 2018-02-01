@@ -2,6 +2,7 @@
 
 var eventsEngine = require("../../events/core/events_engine"),
     domAdapter = require("../../core/dom_adapter"),
+    ready = require("../../core/utils/ready_callbacks").add,
     isFunction = require("../../core/utils/type").isFunction,
     BaseWidget = require("../core/base_widget"),
     extend = require("../../core/utils/extend").extend,
@@ -305,15 +306,16 @@ var touchEvents = {
     "pointerdown.sparkline-tooltip": touchStartTooltipProcessing,
     "touchstart.sparkline-tooltip": touchStartTooltipProcessing
 };
-
-eventsEngine.subscribeGlobal(domAdapter.getDocument(), {
-    "pointerdown.sparkline-tooltip": function() {
-        isPointerDownCalled = true;
-        touchStartDocumentProcessing();
-    },
-    "touchstart.sparkline-tooltip": touchStartDocumentProcessing,
-    "pointerup.sparkline-tooltip": touchEndDocumentProcessing,
-    "touchend.sparkline-tooltip": touchEndDocumentProcessing
+ready(function() {
+    eventsEngine.subscribeGlobal(domAdapter.getDocument(), {
+        "pointerdown.sparkline-tooltip": function() {
+            isPointerDownCalled = true;
+            touchStartDocumentProcessing();
+        },
+        "touchstart.sparkline-tooltip": touchStartDocumentProcessing,
+        "pointerup.sparkline-tooltip": touchEndDocumentProcessing,
+        "touchend.sparkline-tooltip": touchEndDocumentProcessing
+    });
 });
 
 module.exports = BaseSparkline;
