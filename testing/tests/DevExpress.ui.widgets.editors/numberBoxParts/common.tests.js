@@ -590,6 +590,16 @@ QUnit.test("T351846 - the value should be reset to null if input is cleared", fu
     assert.equal($numberBox.dxNumberBox("option", "value"), null, "value is correct");
 });
 
+QUnit.test("the value should be reset to null if reset method called", function(assert) {
+    var numberBox = $("#numberbox").dxNumberBox({
+        value: 0
+    }).dxNumberBox("instance");
+
+    numberBox.reset();
+
+    assert.equal(numberBox.option("value"), null, "value is correct");
+});
+
 QUnit.test("The value option should not be changed if it is invalid", function(assert) {
     var value = "any invalid value",
         $numberBox = $("#numberbox").dxNumberBox({
