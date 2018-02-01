@@ -2,8 +2,8 @@
 
 /* global WeakMap */
 var inArray = require("../../core/utils/array").inArray,
-    window = require("../../core/utils/window").getWindow(),
-    weakMap = window ? window.WeakMap : WeakMap;
+    windowUtils = require("../../core/utils/window"),
+    weakMap = windowUtils.hasWindow() ? windowUtils.getWindow().WeakMap : WeakMap;
 
 if(!weakMap) {
     // NOTE: This is an incomplete WeakMap polyfill but it is enough for creation purposes
