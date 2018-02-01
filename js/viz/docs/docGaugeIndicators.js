@@ -362,7 +362,7 @@ var linearRectangle = {
 	* @name linearRectangle_offset
 	* @publicName offset
     * @type number
-	* @default 10 @for value_and_subvalue_indicators
+	* @default 10 @for value_indicators|subvalue_indicators
 	* @inheritdoc
 	*/
     offset: 10
@@ -380,7 +380,7 @@ var linearCircle = {
 	* @name linearCircle_offset
 	* @publicName offset
     * @type number
-	* @default 10 @for value_and_subvalue_indicators
+	* @default 10 @for value_indicators|subvalue_indicators
 	* @inheritdoc
 	*/
     offset: 10
@@ -406,7 +406,7 @@ var linearRhombus = {
 	* @name linearRhombus_offset
 	* @publicName offset
     * @type number
-	* @default 10 @for value_and_subvalue_indicators
+	* @default 10 @for value_indicators|subvalue_indicators
 	* @inheritdoc
 	*/
     offset: 10
@@ -424,7 +424,7 @@ var linearRangeBar = {
 	* @name linearRangeBar_offset
 	* @publicName offset
     * @type number
-	* @default 10 @for value_and_subvalue_indicators
+	* @default 10 @for value_indicators|subvalue_indicators
 	* @inheritdoc
 	*/
     offset: 10
@@ -458,7 +458,7 @@ var linearTriangleMarker = {
 	* @name linearTriangleMarker_offset
 	* @publicName offset
     * @type number
-	* @default 10 @for value_and_subvalue_indicators
+	* @default 10 @for value_indicators|subvalue_indicators
 	* @inheritdoc
 	*/
     offset: 10

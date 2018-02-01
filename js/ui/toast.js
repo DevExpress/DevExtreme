@@ -232,7 +232,7 @@ var Toast = Overlay.inherit({
                     /**
                     * @name dxToastOptions_width
                     * @publicName width
-                    * @default 'auto' @for Android_and_Windows_10_Mobile
+                    * @default 'auto' @for Android|Windows_10_Mobile
                     * @inheritdoc
                     */
                     width: "auto"
@@ -295,7 +295,7 @@ var Toast = Overlay.inherit({
                     /**
                     * @name dxToastOptions_width
                     * @publicName width
-                    * @default function() { return $(window).width(); } @for Android_Phone|Windows_10_Mobile
+                    * @default function() { return $(window).width(); } @for phones_on_Android|phones_on_Windows_10_Mobile
                     * @inheritdoc
                     */
                     width: function() { return $(window).width(); },
@@ -303,7 +303,7 @@ var Toast = Overlay.inherit({
                     /**
                     * @name dxToastOptions_position
                     * @publicName position
-                    * @default { at: 'bottom center', my: 'bottom center', offset: '0 0' } @for Android_Phone|Windows_10_Mobile
+                    * @default { at: 'bottom center', my: 'bottom center', offset: '0 0' } @for phones_on_Android|phones_on_Windows_10_Mobile
                     * @inheritdoc
                     */
                     position: {
