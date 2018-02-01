@@ -31,4 +31,3 @@ QUnit.test("inject document", function(assert) {
     });
     assert.equal(domAdapter.getDocument(), doc);
 });
-
