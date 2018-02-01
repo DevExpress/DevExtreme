@@ -672,7 +672,7 @@ module.exports = {
                     var rows = this._getRows(options),
                         keyExpr = this._dataController.store() && this._dataController.store().key();
 
-                    rows.some(function(row) {
+                    keyExpr && rows.some(function(row) {
                         if(row.rowType === "data" && !isDefined(row.key)) {
                             errors.log("W1012", keyExpr);
                             return true;
