@@ -892,6 +892,7 @@ module.exports = {
                                 isCustomLoading: true,
                                 storeLoadOptions: {},
                                 loadOptions: {
+                                    filter: that.getCombinedFilter(),
                                     group: dataSource.group(),
                                     sort: dataSource.sort()
                                 }

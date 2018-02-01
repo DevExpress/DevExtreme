@@ -9644,7 +9644,7 @@ QUnit.module("Exporting", {
         ];
 
         this.setupDataGridModules = function(options) {
-            setupDataGridModules(this, ['data', 'virtualScrolling', 'columns', 'filterRow', 'search', 'editing', 'grouping', 'masterDetail', 'summary'], {
+            setupDataGridModules(this, ['data', 'virtualScrolling', 'columns', 'filterRow', 'search', 'editing', 'grouping', 'masterDetail', 'summary', 'headerFilter'], {
                 initDefaultOptions: true,
                 options: options
             });
@@ -10417,6 +10417,30 @@ QUnit.test("loadAll with data parameter and grouping", function(assert) {
     assert.deepEqual(allItems[4].rowType, "data", 'rowType');
     assert.deepEqual(allItems[4].data, this.array[4], 'data');
     assert.deepEqual(allItems[4].values, [null, 3, 7], 'values');
+});
+
+//T595243
+QUnit.test("loadAll with data parameter and filtering", function(assert) {
+    var allItems;
+
+    this.setupDataGridModules({
+        dataSource: this.array,
+        columns: [{ dataField: 'field1', filterValues: [2] }, 'field2', 'field3']
+    });
+
+    this.clock.tick();
+
+    //act
+    this.dataController.loadAll([this.array[1], this.array[2], this.array[3]]).done(function(items) {
+        allItems = items;
+    });
+
+    this.clock.tick();
+
+    //assert
+    assert.equal(allItems.length, 2, 'two items are loaded');
+    assert.equal(allItems[0].data, this.array[2], 'item 0');
+    assert.equal(allItems[1].data, this.array[3], 'item 1');
 });
 
 QUnit.test("LoadAll with data parameter and modified values", function(assert) {
