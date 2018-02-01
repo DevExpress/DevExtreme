@@ -778,7 +778,6 @@ var dxRangeSelector = require("../core/base_widget").inherit({
             option = that._rangeOption && that._rangeOption[SELECTED_RANGE];
         if(option) {
             that._options[SELECTED_RANGE] = option;
-            that._validateRange(option.startValue, option.endValue);
             that.setValue(parseSelectedRange(option));
         }
     },
@@ -788,7 +787,6 @@ var dxRangeSelector = require("../core/base_widget").inherit({
             option = that._rangeOption && that._rangeOption[VALUE];
         if(option) {
             that._options[VALUE] = option;
-            that._validateRange(option[0], option[1]);
             that.setValue(option);
         }
     },
