@@ -2726,9 +2726,7 @@ if(device.deviceType === "desktop") {
 
         this.dataController.store = function() {
             return {
-                key: function() {
-                    return false;
-                },
+                key: function() { },
                 update: function(key, values) {
                     isStoreUpdated = true;
                     return $.Deferred().resolve(key, values);
