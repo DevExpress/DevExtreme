@@ -57,7 +57,7 @@ var applyForEach = function(args, method) {
         return;
     }
 
-    if(element.nodeType || isWindow(element)) {
+    if(domAdapter.isNode(element) || isWindow(element)) {
         method.apply(eventsEngine, args);
     } else if(element.each) {
         var itemArgs = Array.prototype.slice.call(args, 0);
@@ -484,7 +484,7 @@ initEvent(normalizeEventArguments(function(src, config) {
 
     extend(that, src);
 
-    if(src instanceof eventsEngine.Event || (window && src instanceof window.Event)) {
+    if(src instanceof eventsEngine.Event || (windowUtils.hasWindow() && src instanceof window.Event)) {
         that.originalEvent = src;
         that.currentTarget = undefined;
     }

@@ -284,7 +284,7 @@ function attachCssClasses(element, themeName) {
     $(element).addClass(themeClasses);
 
     var activateHairlines = function() {
-        var pixelRatio = window.devicePixelRatio;
+        var pixelRatio = windowUtils.hasWindow() && window.devicePixelRatio;
 
         if(!pixelRatio || pixelRatio < 2) {
             return;

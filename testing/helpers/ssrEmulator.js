@@ -17,9 +17,27 @@ var restoreOriginalDomAdapter = function() {
     }
 };
 
+var windowMock = {
+    isWindowMock: true
+};
+
+var errorFunc = function() {
+    throw new Error("Window fields using is prevented");
+};
+
+for(var field in window) {
+    Object.defineProperty(windowMock, field, {
+        get: errorFunc,
+        set: errorFunc
+    });
+}
+
 var makeWindowEmpty = function() {
     windowUtils.hasWindow = function() {
         return false;
+    };
+    windowUtils.getWindow = function() {
+        return windowMock;
     };
 };
 
