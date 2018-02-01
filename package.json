@@ -14,12 +14,18 @@
   "devDependencies": {
     "@types/jquery": "^2.0.34",
     "angular": "^1.6.8",
+    "babel-core": "^6.26.0",
+    "babel-loader": "^7.1.2",
+    "babel-plugin-add-module-exports": "^0.2.1",
+    "babel-plugin-transform-es2015-modules-commonjs": "^6.26.0",
+    "babel-preset-env": "^1.6.1",
     "bootstrap": "^3.3.7",
     "cldr-core": "latest",
     "del": "^2.2.2",
     "eslint": "^3.12.2",
     "eslint-plugin-spellcheck": "0.0.6",
     "gulp": "^3.9.1",
+    "gulp-babel": "^7.0.1",
     "gulp-concat": "^2.6.0",
     "gulp-eol": "^0.1.2",
     "gulp-file": "^0.3.0",
@@ -44,13 +50,14 @@
     "qunitjs": "^2.0.1",
     "run-sequence": "^1.1.5",
     "systemjs": "<=0.19.41",
+    "systemjs-plugin-babel": "0.0.25",
     "systemjs-plugin-css": "0.1.33",
     "systemjs-plugin-json": "0.2.2",
     "systemjs-plugin-text": "0.0.8",
     "through2": "^2.0.1",
     "typescript": "^2.0.3",
     "vinyl-named": "^1.1.0",
-    "webpack": "^1.13.0",
+    "webpack": "^3.10.0",
     "webpack-stream": "^3.2.0",
     "yargs": "^4.6.0"
   },
@@ -61,7 +68,6 @@
   "scripts": {
     "lint": "jshint --verbose . && eslint .",
     "lint-staged": "lint-staged",
-
     "build": "dotnet build build/build-dotnet.sln && gulp default",
     "build-dist": "dotnet build build/build-dotnet.sln && gulp default --uglify",
     "build-themes": "gulp style-compiler-themes"
