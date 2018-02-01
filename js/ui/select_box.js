@@ -576,12 +576,17 @@ var SelectBox = DropDownList.inherit({
         }
 
         var oldSelectedItem = this.option("selectedItem");
-        this._renderInputValue().always((function(selectedItem) {
-            var newSelectedItem = commonUtils.ensureDefined(selectedItem, oldSelectedItem);
-            this._setSelectedItem(newSelectedItem);
-            this._updateField(newSelectedItem);
+        if(!this._isValueEquals(this._displayGetter(oldSelectedItem), this._searchValue())) {
+            this._renderInputValue().always((function(selectedItem) {
+                var newSelectedItem = commonUtils.ensureDefined(selectedItem, oldSelectedItem);
+                this._setSelectedItem(newSelectedItem);
+                this._updateField(newSelectedItem);
+                this._clearFilter();
+            }).bind(this));
+        } else {
+            this._updateField(oldSelectedItem);
             this._clearFilter();
-        }).bind(this));
+        }
     },
 
     _focusOutHandler: function(e) {
