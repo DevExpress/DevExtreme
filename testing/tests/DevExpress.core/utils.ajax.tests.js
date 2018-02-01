@@ -22,6 +22,11 @@ QUnit.module("sendRequest", {
 });
 
 QUnit.test("cache=false for dataType=json (cross domain)", function(assert) {
+    if(browser.msie && parseInt(browser.version) < 10) {
+        assert.expect(0);
+        return;
+    }
+
     var json = { foo: "bar" };
     var crossDomainResult;
 
