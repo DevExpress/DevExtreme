@@ -7,7 +7,7 @@ window.includeThemesLinks();
 
 var viewport = document.createElement("div");
 viewport.className = "dx-viewport";
-document.body.append(viewport);
+document.body.appendChild(viewport);
 
 QUnit.module("themes", {
     beforeEach: function() {
@@ -38,7 +38,7 @@ QUnit.test("viewport changing", function(assert) {
 
     var fixture = document.getElementById("qunit-fixture");
     var newViewport = document.createElement("div");
-    fixture.append(newViewport);
+    fixture.appendChild(newViewport);
     viewportUtils.value(newViewport);
 
     assert.equal(viewportUtils.value()[0], newViewport);
