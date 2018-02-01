@@ -293,9 +293,13 @@ var NumberBoxMask = NumberBoxBase.inherit({
         var editedText = this._getEditedText(text, selection, char),
             format = this._getFormatPattern(),
             parsed = number.parse(editedText, format),
+            maxPrecision = this._getMaxPrecision(format, parsed),
             isValueChanged = parsed !== this._parsedValue;
 
-        if(!isValueChanged && char !== MINUS && !this._isValueIncomplete(editedText)) {
+        var isDecimalPointRestricted = char === number.getDecimalSeparator() && maxPrecision === 0,
+            isUselessCharRestricted = !isValueChanged && char !== MINUS && !this._isValueIncomplete(editedText);
+
+        if(isDecimalPointRestricted || isUselessCharRestricted) {
             return undefined;
         }
 
@@ -307,8 +311,7 @@ var NumberBoxMask = NumberBoxBase.inherit({
             return undefined;
         }
 
-        var precision = this._getMaxPrecision(format, parsed),
-            pow = Math.pow(10, precision),
+        var pow = Math.pow(10, maxPrecision),
             value = (parsed === null ? this._parsedValue : parsed);
 
         parsed = Math.round(value * pow) / pow;
