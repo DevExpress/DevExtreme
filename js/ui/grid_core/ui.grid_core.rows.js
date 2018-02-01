@@ -10,6 +10,7 @@ var $ = require("../../core/renderer"),
     stringUtils = require("../../core/utils/string"),
     getDefaultAlignment = require("../../core/utils/position").getDefaultAlignment,
     compileGetter = require("../../core/utils/data").compileGetter,
+    errors = require("../widget/ui.errors"),
     gridCoreUtils = require("./ui.grid_core.utils"),
     columnsView = require("./ui.grid_core.columns_view"),
     Scrollable = require("../scroll_view/ui.scrollable"),
@@ -668,6 +669,19 @@ module.exports = {
                     that._appendRow(tableElement, freeSpaceRowElement, appendFreeSpaceRowTemplate);
                 },
 
+                _renderErrorMessage: function(rows, keyExpr) {
+                    var showError;
+
+                    rows.forEach(function(row, i, rows) {
+                        if(row.rowType === "data" && !isDefined(row.key)) {
+                            showError = true;
+                            return false;
+                        }
+                    });
+
+                    showError && this._dataController.dataErrorOccurred.fire(errors.Error("E1046", keyExpr));
+                },
+
                 _needUpdateRowHeight: function(itemsCount) {
                     return itemsCount > 0 && !this._rowHeight;
                 },
@@ -803,7 +817,9 @@ module.exports = {
                         i,
                         columns = options.columns,
                         columnsCountBeforeGroups = 0,
-                        scrollingMode = that.option("scrolling.mode");
+                        scrollingMode = that.option("scrolling.mode"),
+                        rows = this._getRows(options.change),
+                        keyExpr = that._dataController.store() && that._dataController.store().key();
 
                     for(i = 0; i < columns.length; i++) {
                         if(columns[i].command === "expand") {
@@ -816,6 +832,8 @@ module.exports = {
                         scrollingMode: scrollingMode,
                         columnsCountBeforeGroups: columnsCountBeforeGroups
                     }, options));
+
+                    keyExpr && that._renderErrorMessage(rows, keyExpr);
 
                     that._renderFreeSpaceRow($table);
                     if(!that._hasHeight) {

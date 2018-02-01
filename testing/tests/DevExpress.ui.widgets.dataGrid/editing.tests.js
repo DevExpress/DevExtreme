@@ -1372,6 +1372,9 @@ QUnit.test('Remove Row without message', function(assert) {
         }
     };
     that.dataControllerOptions.store = {
+        key: function() {
+            return false;
+        },
         remove: function(key) {
             removeKey = key;
             return $.Deferred().resolve(key);
@@ -1406,6 +1409,9 @@ QUnit.test('Remove row when batch editing', function(assert) {
         }
     };
     that.dataControllerOptions.store = {
+        key: function() {
+            return false;
+        },
         remove: function(key) {
             removeKey = key;
             return $.Deferred().resolve(key);
@@ -1443,6 +1449,9 @@ QUnit.test('Remove row with message', function(assert) {
             }
         };
         that.dataControllerOptions.store = {
+            key: function() {
+                return false;
+            },
             remove: function(key) {
                 removeKey = key;
                 return $.Deferred().resolve(key);
@@ -1496,6 +1505,9 @@ QUnit.test('Remove row with message ("cell" edit mode)', function(assert) {
             }
         };
         that.dataControllerOptions.store = {
+            key: function() {
+                return false;
+            },
             remove: function(key) {
                 removeKey = key;
                 return $.Deferred().resolve(key);
@@ -1545,6 +1557,9 @@ QUnit.test('Not remove row with message', function(assert) {
             }
         };
         that.dataControllerOptions.store = {
+            key: function() {
+                return false;
+            },
             remove: function(key) {
                 removeKey = key;
                 return $.Deferred().resolve(key);
@@ -1594,6 +1609,9 @@ QUnit.test('Save Row', function(assert) {
     };
 
     that.dataControllerOptions.store = {
+        key: function() {
+            return false;
+        },
         update: function(key, values) {
             updateArgs = [key, values];
             return $.Deferred().resolve(key, values);
@@ -1638,6 +1656,9 @@ QUnit.test('Save Row for calculated column', function(assert) {
     };
 
     that.dataControllerOptions.store = {
+        key: function() {
+            return false;
+        },
         update: function(key, values) {
             updateArgs = [key, values];
             return $.Deferred().resolve(key, values);
@@ -1710,6 +1731,9 @@ QUnit.test('Serialize value before saving', function(assert) {
     };
 
     that.dataControllerOptions.store = {
+        key: function() {
+            return false;
+        },
         update: function(key, values) {
             updateArgs = [key, values];
             return $.Deferred().resolve(key, values);
@@ -1774,6 +1798,9 @@ QUnit.test('Close Editing Cell when batch mode on click outside dataGrid', funct
     };
 
     that.dataControllerOptions.store = {
+        key: function() {
+            return false;
+        },
         update: function(key, values) {
             updateArgs = [key, values];
             return $.Deferred().resolve(key, values);
@@ -1954,6 +1981,9 @@ QUnit.test('Save changes when batch mode', function(assert) {
     };
 
     that.dataControllerOptions.store = {
+        key: function() {
+            return false;
+        },
         update: function(key, values) {
             updateArgs.push([key, values]);
             return $.Deferred().resolve(key, values);
@@ -2002,6 +2032,9 @@ QUnit.test('Save changes on save button click when batch mode', function(assert)
     };
 
     that.dataControllerOptions.store = {
+        key: function() {
+            return false;
+        },
         update: function(key, values) {
             updateArgs.push([key, values]);
             return $.Deferred().resolve(key, values);
@@ -2051,6 +2084,9 @@ QUnit.test('Cancel changes when batch mode', function(assert) {
     };
 
     that.dataControllerOptions.store = {
+        key: function() {
+            return false;
+        },
         update: function(key, values) {
             updateArgs.push([key, values]);
             return $.Deferred().resolve(key, values);
@@ -2110,6 +2146,9 @@ QUnit.test('Save changes when batch mode when one the changes is canceled from e
     };
 
     that.dataControllerOptions.store = {
+        key: function() {
+            return false;
+        },
         update: function(key, values) {
             updateArgs.push([key, values]);
             return $.Deferred().resolve(key, values);
@@ -2156,6 +2195,9 @@ QUnit.test('Close Editing Cell when batch mode on click inside freespace row', f
     };
 
     that.dataControllerOptions.store = {
+        key: function() {
+            return false;
+        },
         update: function(key, values) {
             updateArgs = [key, values];
             return $.Deferred().resolve(key, values);
@@ -2196,6 +2238,9 @@ QUnit.test('Save Editing Cell when batch mode on click another cell', function(a
     };
 
     that.dataControllerOptions.store = {
+        key: function() {
+            return false;
+        },
         update: function(key, values) {
             updateArgs = [key, values];
             return $.Deferred().resolve(key, values);
