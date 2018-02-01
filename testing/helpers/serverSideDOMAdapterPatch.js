@@ -11,6 +11,15 @@ var errorFunc = function() {
     throw new Error("Document fields using is prevented");
 };
 
+var originalContains = Element.prototype.contains;
+Element.prototype.contains = function(element) {
+    if(!element) {
+        throw new Error("element should be defined");
+    }
+
+    return originalContains.apply(this, arguments);
+};
+
 for(var field in document) {
     Object.defineProperty(documentMock, field, {
         get: errorFunc,
