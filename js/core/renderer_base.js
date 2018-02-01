@@ -159,9 +159,7 @@ initRender.prototype.toggleClass = function(className, value) {
 
     var classNames = className.split(" ");
     for(var i = 0; i < classNames.length; i++) {
-        if(classNames[i]) {
-            domAdapter.setClass(this[0], classNames[i], value);
-        }
+        domAdapter.setClass(this[0], classNames[i], value);
     }
     return this;
 };
