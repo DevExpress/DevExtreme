@@ -463,16 +463,16 @@ QUnit.test("currentTheme returns previously set theme, regardles of what ui them
     assert.strictEqual(currentTheme, "generic.light");
 });
 
-QUnit.test("Setting theme through ui.themes.current leads to refreshing themes", function(assert) {
-    this.writeToFrame("<link rel='dx-theme' href='style1.css' data-theme='platform1' />");
-    this.writeToFrame("<link rel='dx-theme' href='style1.css' data-theme='platform2' />");
-    var item = this.createItem();
-    themeModule.addCacheItem(item);
-
-    uiThemeModule.init({ theme: "platform1", context: this.frameDoc() });
+QUnit.test("currentTheme returns default theme if ui theme returns wrong theme", function(assert) {
+    this.writeToFrame("<link rel='dx-theme' href='style1.css' data-theme='some-platform2' />");
+    uiThemeModule.init({ theme: "some-platform2", context: this.frameDoc() });
+    themeModule.registerTheme({
+        name: "viz default theme",
+        isDefault: true
+    });
 
     //act
-    uiThemeModule.current("platform2");
+    var currentTheme = themeModule.currentTheme();
 
-    assert.ok(item.refreshed);
+    assert.strictEqual(currentTheme, "viz default theme");
 });

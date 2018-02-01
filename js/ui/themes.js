@@ -8,8 +8,6 @@ var $ = require("../core/renderer"),
     devices = require("../core/devices"),
     viewPortUtils = require("../core/utils/view_port"),
     themeReadyCallback = require("./themes_callback"),
-    Callbacks = require("../core/utils/callbacks"),
-    currentThemeChangedCallback = new Callbacks(),
     viewPort = viewPortUtils.value,
     viewPortChanged = viewPortUtils.changeCallback;
 
@@ -220,8 +218,6 @@ function current(options) {
                 pendingThemeName = currentThemeName;
             }
         }
-
-        currentThemeChangedCallback.fire();
     } else {
         if(isAutoInit) {
             themeReadyCallback.fire();
@@ -362,10 +358,6 @@ exports.detachCssClasses = detachCssClasses;
 
 exports.themeNameFromDevice = themeNameFromDevice;
 exports.waitForThemeLoad = waitForThemeLoad;
-
-exports.changed = function(callback) {
-    currentThemeChangedCallback.add(callback);
-};
 
 exports.resetTheme = function() {
     $activeThemeLink && $activeThemeLink.attr("href", "about:blank");

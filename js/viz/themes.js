@@ -30,7 +30,7 @@ function findThemeNameByPlatform(platform, version, scheme) {
 
 function currentTheme(themeName, colorScheme) {
     if(!arguments.length) {
-        return currentThemeName || uiThemes.current() || defaultTheme;
+        return currentThemeName || findThemeNameByName(uiThemes.current()) || defaultTheme;
     }
 
     var scheme = _normalizeEnum(colorScheme);
@@ -191,8 +191,6 @@ function refreshTheme() {
     // For chaining only
     return this;
 }
-
-uiThemes.changed(refreshTheme);
 
 _extend(exports, {
     currentTheme: currentTheme,

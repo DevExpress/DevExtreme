@@ -445,21 +445,6 @@ require("style-compiler-test-server/known-css-files");
         assert.equal($element.hasClass("dx-theme-oldtheme-typography"), false, "old typography class deleted");
     });
 
-    QUnit.test("method themes.changed calls a callback function anytime theme is changed", function(assert) {
-        var done = assert.async();
-
-        this.writeToFrame("<link rel='dx-theme' href='style1.css' data-theme='myPlatform.theme1' />");
-        this.writeToFrame("<link rel='dx-theme' href='style2.css' data-theme='myPlatform.theme2' />");
-        themes.init({ theme: "myPlatform.theme1", context: this.frameDoc() });
-
-        themes.changed(function() {
-            assert.equal(themes.current(), "myPlatform.theme2");
-            done();
-        });
-
-        //act
-        themes.current("myPlatform.theme2");
-    });
 })();
 
 
