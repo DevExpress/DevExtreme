@@ -432,13 +432,6 @@ QUnit.module('Interaction with ui.themes', {
     },
     writeToFrame: function writeToFrame(markup) {
         this.frameDoc().write(markup);
-    },
-    createItem: function() {
-        return {
-            refresh: function() {
-                this.refreshed = true;
-            }
-        };
     }
 });
 
