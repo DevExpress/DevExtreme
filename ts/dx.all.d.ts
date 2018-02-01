@@ -765,9 +765,9 @@ declare module DevExpress {
         /** Unregisters all the Validator objects extending fields of the specified ViewModel. */
         static unregisterModelForValidation(model: any): void;
         /** Validates editors from the default validation group. */
-        static validateGroup(): any;
+        static validateGroup(): DevExpress.ui.dxValidationGroupResult;
         /** Validates editors from a specific validation group. */
-        static validateGroup(group: string | any): any;
+        static validateGroup(group: string | any): DevExpress.ui.dxValidationGroupResult;
         /** Validates a view model. */
         static validateModel(model: any): any;
     }
@@ -790,7 +790,7 @@ declare module DevExpress {
     export class viz {
         /** Changes the current palette for all data visualization widgets on the page. */
         static currentPalette(paletteName: string): void;
-        static currentTheme(): void;
+        static currentTheme(): string;
         /** Changes the current theme for all data visualization widgets on the page. The color scheme is defined separately. */
         static currentTheme(platform: string, colorScheme: string): void;
         /** Changes the current theme for all data visualization widgets on the page. */
@@ -1967,7 +1967,7 @@ declare module DevExpress.ui {
         /** A handler for the rowUpdating event. Executed before a row is updated in the data source. */
         onRowUpdating?: ((e: { component?: DOMComponent, element?: DevExpress.core.dxElement, model?: any, oldData?: any, newData?: any, key?: any, cancel?: boolean | Promise<void> | JQueryPromise<void> }) => any);
         /** A handler for the rowValidating event. Executed after cells in a row are validated against validation rules. */
-        onRowValidating?: ((e: { component?: DOMComponent, element?: DevExpress.core.dxElement, model?: any, brokenRules?: Array<any>, isValid?: boolean, key?: any, newData?: any, oldData?: any, errorText?: string }) => any);
+        onRowValidating?: ((e: { component?: DOMComponent, element?: DevExpress.core.dxElement, model?: any, brokenRules?: Array<dxValidationRule>, isValid?: boolean, key?: any, newData?: any, oldData?: any, errorText?: string }) => any);
         /** A handler for the selectionChanged event. Executed after selecting a row or clearing its selection. */
         onSelectionChanged?: ((e: { component?: DOMComponent, element?: DevExpress.core.dxElement, model?: any, currentSelectedRowKeys?: Array<any>, currentDeselectedRowKeys?: Array<any>, selectedRowKeys?: Array<any>, selectedRowsData?: Array<any> }) => any);
         /** A handler for the toolbarPreparing event. Executed before the toolbar is created. */
@@ -2602,7 +2602,7 @@ declare module DevExpress.ui {
         /** Updates the dimensions of the widget contents. */
         updateDimensions(): Promise<void> & JQueryPromise<void>;
         /** Validates the values of all editors on the form against the list of the validation rules specified for each form item. */
-        validate(): any;
+        validate(): dxValidationGroupResult;
     }
     export interface dxGalleryOptions extends CollectionWidgetOptions {
         /** The time, in milliseconds, spent on slide animation. */
@@ -4301,6 +4301,18 @@ declare module DevExpress.ui {
         /** Specifies the type of the current rule. */
         type?: string;
     }
+    export type dxValidationRule = RequiredRule | NumericRule | RangeRule | StringLengthRule | CustomRule | CompareRule | PatternRule | EmailRule; 
+    export interface dxValidationGroupResult {
+        brokenRules?: Array<dxValidationRule>;
+        isValid?: boolean;
+        validators?: Array<any>;
+    }
+    export interface dxValidatorResult {
+        brokenRule?: dxValidationRule;
+        isValid?: boolean;
+        validationRules?: Array<dxValidationRule>;
+        value?: any;
+    }
     export interface dxValidationGroupOptions extends DOMComponentOptions {
     }
     /** The widget that is used in the Knockout and AngularJS approaches to combine the editors to be validated. */
@@ -4310,7 +4322,7 @@ declare module DevExpress.ui {
         /** Resets the value and validation result of the editors that are included to the current validation group. */
         reset(): void;
         /** Validates rules of the validators that belong to the current validation group. */
-        validate(): any;
+        validate(): dxValidationGroupResult;
     }
     export interface dxValidationSummaryOptions extends CollectionWidgetOptions {
         /** Specifies the validation group for which summary should be generated. */
@@ -4327,11 +4339,11 @@ declare module DevExpress.ui {
         /** Specifies the editor name to be used in the validation default messages. */
         name?: string;
         /** A handler for the validated event. */
-        onValidated?: ((validatedInfo: { name?: string, isValid?: boolean, value?: any, validationRules?: Array<any>, brokenRule?: any }) => any);
+        onValidated?: ((validatedInfo: { name?: string, isValid?: boolean, value?: any, validationRules?: Array<dxValidationRule>, brokenRule?: dxValidationRule }) => any);
         /** Specifies the validation group the editor will be related to. */
         validationGroup?: string;
         /** An array of validation rules to be checked for the editor with which the dxValidator object is associated. */
-        validationRules?: Array<RequiredRule | NumericRule | RangeRule | StringLengthRule | CustomRule | CompareRule | PatternRule | EmailRule>;
+        validationRules?: Array<dxValidationRule>;
     }
     /** A widget that is used to validate the associated DevExtreme editors against the defined validation rules. */
     export class dxValidator extends DOMComponent {
@@ -4342,7 +4354,7 @@ declare module DevExpress.ui {
         /** Resets the value and validation result of the editor associated with the current Validator object. */
         reset(): void;
         /** Validates the value of the editor that is controlled by the current Validator object against the list of the specified validation rules. */
-        validate(): any;
+        validate(): dxValidatorResult;
     }
     /** This section lists the fields that are used in a default template for calendar cells. */
     export interface dxCalendarCellTemplate {
@@ -4673,7 +4685,7 @@ declare module DevExpress.ui {
         /** A template to be used for rendering the form item. */
         template?: template | ((data: any, itemElement: DevExpress.core.dxElement) => string | Element | JQuery);
         /** An array of validation rules to be checked for the form item editor. */
-        validationRules?: Array<RequiredRule | NumericRule | RangeRule | StringLengthRule | CustomRule | CompareRule | PatternRule | EmailRule>;
+        validationRules?: Array<dxValidationRule>;
         /** Specifies whether or not the current form item is visible. */
         visible?: boolean;
         /** Specifies the sequence number of the item in a form, group or tab. */
@@ -6326,18 +6338,34 @@ declare module DevExpress.viz {
     }
     /** An object defining a gauge indicator of the rectangle type. */
     export interface linearRectangle extends CommonIndicator {
+        /** Specifies the distance between the indicator and the invisible scale line. */
+        offset?: number;
         /** Specifies the width of an indicator in pixels. */
         width?: number;
     }
+    /** An object that defines a gauge indicator of the circle type. */
+    export interface linearCircle extends CommonIndicator {
+        /** Specifies the distance between the indicator and the invisible scale line. */
+        offset?: number;
+    }
     /** An object defining a gauge indicator of the rhombus type. */
     export interface linearRhombus extends CommonIndicator {
+        /** Specifies the distance between the indicator and the invisible scale line. */
+        offset?: number;
         /** Specifies the width of an indicator in pixels. */
         width?: number;
+    }
+    /** An object that defines a gauge indicator of the rangeBar type. */
+    export interface linearRangeBar extends CommonIndicator {
+        /** Specifies the distance between the indicator and the invisible scale line. */
+        offset?: number;
     }
     /** An object that defines a gauge indicator of the triangleMarker type. */
     export interface linearTriangleMarker extends CommonIndicator {
         /** Specifies the indicator length. */
         length?: number;
+        /** Specifies the distance between the indicator and the invisible scale line. */
+        offset?: number;
         /** Specifies the width of an indicator in pixels. */
         width?: number;
     }
