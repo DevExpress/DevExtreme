@@ -3935,8 +3935,9 @@ QUnit.test("move column from group panel to headers", function(assert) {
     assert.strictEqual(this.columnsController.getVisibleColumns()[3].dataField, 'field4');
     assert.strictEqual(this.columnsController.getVisibleColumns()[4].dataField, 'field5');
     assert.deepEqual(columnsChangedArgs, {
-        changeTypes: { grouping: true, length: 1 },
-        optionNames: { all: true, length: 1 }
+        changeTypes: { columns: true, grouping: true, length: 2 },
+        optionNames: { groupIndex: true, visibleIndex: true, length: 2 },
+        columnIndex: 2
     });
 });
 
@@ -3962,7 +3963,8 @@ QUnit.test("move column from group panel to headers without visibleIndex", funct
     assert.strictEqual(this.columnsController.getColumns()[4].dataField, 'field5');
     assert.deepEqual(columnsChangedArgs, {
         changeTypes: { grouping: true, length: 1 },
-        optionNames: { all: true, length: 1 }
+        optionNames: { groupIndex: true, length: 1 },
+        columnIndex: 2
     });
 });
 
@@ -3985,9 +3987,9 @@ QUnit.test("move column from group panel to column chooser", function(assert) {
     assert.strictEqual(hiddenColumns[0].dataField, "field2", "dataField column");
 
     assert.deepEqual(columnsChangedArgs, {
-        changeTypes: { grouping: true, length: 1 },
+        changeTypes: { columns: true, grouping: true, length: 2 },
         columnIndex: 1,
-        optionNames: { length: 1, visible: true }
+        optionNames: { length: 3, visible: true, groupIndex: true, visibleIndex: true }
     }, "changeType");
 });
 
@@ -4013,7 +4015,8 @@ QUnit.test("move column from group panel to group panel", function(assert) {
     assert.strictEqual(this.columnsController.getColumns()[4].groupIndex, 2);
     assert.deepEqual(columnsChangedArgs, {
         changeTypes: { grouping: true, length: 1 },
-        optionNames: { all: true, length: 1 }
+        optionNames: { groupIndex: true, length: 1 },
+        columnIndex: 3
     });
 });
 
@@ -4041,7 +4044,8 @@ QUnit.test("move column from group panel to group panel unknown visible index", 
     assert.strictEqual(this.columnsController.getColumns()[4].groupIndex, 1);
     assert.deepEqual(columnsChangedArgs, {
         changeTypes: { grouping: true, length: 1 },
-        optionNames: { all: true, length: 1 }
+        optionNames: { groupIndex: true, length: 1 },
+        columnIndex: 3
     });
 });
 
@@ -4067,7 +4071,8 @@ QUnit.test("move column from group panel to group panel visible index more max",
     assert.strictEqual(this.columnsController.getColumns()[4].groupIndex, 1);
     assert.deepEqual(columnsChangedArgs, {
         changeTypes: { grouping: true, length: 1 },
-        optionNames: { all: true, length: 1 }
+        optionNames: { groupIndex: true, length: 1 },
+        columnIndex: 3
     });
 });
 
@@ -4093,7 +4098,8 @@ QUnit.test("move column from headers to group panel", function(assert) {
     assert.strictEqual(this.columnsController.getColumns()[4].dataField, 'field5');
     assert.deepEqual(columnsChangedArgs, {
         changeTypes: { grouping: true, length: 1 },
-        optionNames: { all: true, length: 1 }
+        optionNames: { groupIndex: true, length: 1 },
+        columnIndex: 0
     });
 });
 
@@ -4117,7 +4123,7 @@ QUnit.test("move column from headers to column chooser", function(assert) {
     assert.deepEqual(columnsChangedArgs, {
         changeTypes: { columns: true, length: 1 },
         columnIndex: 1,
-        optionNames: { length: 1, visible: true }
+        optionNames: { length: 2, visible: true, visibleIndex: true }
     }, "changeType");
 });
 
@@ -4143,7 +4149,8 @@ QUnit.test("move column with groupIndex from headers to group panel", function(a
     assert.strictEqual(this.columnsController.getVisibleColumns()[4].dataField, 'field5');
     assert.deepEqual(columnsChangedArgs, {
         changeTypes: { grouping: true, length: 1 },
-        optionNames: { all: true, length: 1 }
+        optionNames: { groupIndex: true, length: 1 },
+        columnIndex: 3
     });
 });
 
@@ -4171,7 +4178,8 @@ QUnit.test("move column with groupIndex from headers to headers", function(asser
     assert.strictEqual(this.columnsController.getVisibleColumns()[4].dataField, 'field2');
     assert.deepEqual(columnsChangedArgs, {
         changeTypes: { columns: true, length: 1 },
-        optionNames: { all: true, length: 1 }
+        optionNames: { visibleIndex: true, length: 1 },
+        columnIndex: 2
     });
 });
 
@@ -4197,7 +4205,7 @@ QUnit.test("move column from column chooser to headers", function(assert) {
     assert.deepEqual(columnsChangedArgs, {
         changeTypes: { columns: true, length: 1 },
         columnIndex: 1,
-        optionNames: { length: 1, visible: true }
+        optionNames: { length: 2, visible: true, visibleIndex: true }
     }, "changeType");
 });
 
@@ -4221,9 +4229,9 @@ QUnit.test("move column from column chooser to group", function(assert) {
     assert.equal(visibleGroupColumns[0].groupIndex, 0, "group index");
 
     assert.deepEqual(columnsChangedArgs, {
-        changeTypes: { grouping: true, length: 1 },
+        changeTypes: { grouping: true, length: 2, columns: true },
         columnIndex: 1,
-        optionNames: { length: 1, visible: true }
+        optionNames: { length: 2, visible: true, groupIndex: true }
     }, "changeType");
 });
 
@@ -5168,9 +5176,9 @@ QUnit.test("Rise columnsChanged for single mode", function(assert) {
         columnsChangedCount++;
     });
 
-    this.columnsController.changeSortOrder(1, 'asc');
+    this.columnsController.changeSortOrder(1);
 
-    assert.strictEqual(this.columnsController.getColumns()[1].sortOrder, 'asc');
+    assert.strictEqual(this.columnsController.getColumns()[1].sortOrder, 'desc');
     assert.strictEqual(this.columnsController.getColumns()[2].sortOrder, undefined);
     assert.strictEqual(columnsChangedCount, 1);
 });
@@ -7972,4 +7980,81 @@ QUnit.test("isBandColumnsUsed should return false when bandcolumns are not set",
 
     //assert
     assert.notOk(this.columnsController.isBandColumnsUsed(), "band column is not used");
+});
+
+QUnit.module("onOptionChanged", {
+    beforeEach: function() {
+        setupModule.apply(this);
+        sinon.spy(this, "_notifyOptionChanged");
+    },
+    afterEach: function() {
+        teardownModule.apply(this);
+        this._notifyOptionChanged.restore();
+    }
+}, function() {
+    QUnit.test("Event should be fired when changing the column.visible option", function(assert) {
+        //arrange
+        this.applyOptions({
+            columns: ["field1", "field2"]
+        });
+
+        //act
+        this.columnOption("field1", "visible", false);
+
+        //assert
+        assert.strictEqual(this._notifyOptionChanged.callCount, 1, "call count the onOptionChanged");
+        assert.deepEqual(this._notifyOptionChanged.getCall(0).args, ["columns[0].visible", false, true], "onOptionChanged args");
+    });
+
+    QUnit.test("Event should be fired when grouping", function(assert) {
+        //arrange
+        var groupIndexCall;
+
+        this.applyOptions({
+            columns: ["field1", "field2"]
+        });
+
+        //act
+        this.columnsController.moveColumn(0, -1, "headers", "group");
+
+        //assert
+        groupIndexCall = this._notifyOptionChanged.getCalls().filter(function(params) {
+            if(params.args[0] === "columns[0].groupIndex") {
+                return true;
+            }
+        })[0];
+        assert.deepEqual(groupIndexCall.args, ["columns[0].groupIndex", 0, undefined], "onOptionChanged args");
+    });
+
+    QUnit.test("Event should be fired when sorting", function(assert) {
+        //arrange
+        this.applyOptions({
+            sorting: { mode: "single" },
+            columns: [{ dataField: "field1", sortOrder: "asc", allowSorting: true }, "field2"]
+        });
+
+        //act
+        this.columnsController.changeSortOrder(0, "desc");
+
+        //assert
+        assert.deepEqual(this._notifyOptionChanged.getCall(0).args, ["columns[0].sortOrder", "desc", "asc"], "onOptionChanged args");
+    });
+
+    QUnit.test("Checking arguments when sorting a banded column", function(assert) {
+        this.applyOptions({
+            columns: ["field1", {
+                caption: "Band column 1",
+                columns: ["field2", {
+                    caption: "Band column 2",
+                    columns: ["field3", "field4"]
+                }]
+            }]
+        });
+
+        //act
+        this.columnsController.columnOption("field3", "sortOrder", "desc");
+
+        //assert
+        assert.deepEqual(this._notifyOptionChanged.getCall(0).args, ["columns[1].columns[1].columns[0].sortOrder", "desc", undefined], "onOptionChanged args");
+    });
 });

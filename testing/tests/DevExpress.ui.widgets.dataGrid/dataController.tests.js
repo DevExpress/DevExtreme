@@ -10605,3 +10605,49 @@ QUnit.test("LoadAll with data parameter and modified values", function(assert) {
     assert.deepEqual(allItems[1].data, { field1: 1, field2: 2, field3: 4 }, 'item 0 data');
     assert.deepEqual(allItems[1].values, [1, 2, 4], 'item 1 values');
 });
+
+QUnit.module("onOptionChanged", {
+    beforeEach: function() {
+        this.array = [
+            { field1: 1, field2: "test1" },
+            { field1: 2, field2: "test2" },
+            { field1: 3, field2: "test3" },
+            { field1: 4, field2: "test4" },
+            { field1: 5, field2: "test5" },
+            { field1: 6, field2: "test6" }
+        ];
+        this.options = {
+            dataSource: this.array,
+            paging: { enabled: true, pageSize: 2 }
+        };
+        setupModule.apply(this);
+        sinon.spy(this, "option");
+    },
+    afterEach: function() {
+        teardownModule.apply(this);
+        this.option.restore();
+    }
+}, function() {
+    QUnit.test("Event should be fired when changing the pageSize", function(assert) {
+        //arrange
+        var that = this;
+
+        //act
+        that.dataController.pageSize(4).done(function() {
+            //assert
+            assert.ok(that.option.withArgs("paging.pageSize", 4).calledOnce, "onOptionChanged args");
+        });
+    });
+
+    QUnit.test("Event should be fired when changing the pageIndex", function(assert) {
+        //arrange
+        var that = this;
+
+        //act
+        that.dataController.pageIndex(1).done(function(items) {
+            //assert
+            assert.deepEqual(items, [{ field1: 3, field2: "test3" }, { field1: 4, field2: "test4" }], "items of second page");
+            assert.ok(that.option.withArgs("paging.pageIndex", 1).calledOnce, "onOptionChanged args");
+        });
+    });
+});
