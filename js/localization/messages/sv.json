@@ -222,7 +222,6 @@
         "dxScheduler-confirmRecurrenceDeleteOccurrence": "Radera avtalad tid",
 
         "dxScheduler-noTimezoneTitle": "Ingen tidszon",
-        "dxScheduler-moreAppointments": "{0} mer",
 
         "dxCalendar-todayButtonText": "I dag",
         "dxCalendar-ariaWidgetName": "Kalender",
@@ -233,32 +232,8 @@
         "dxColorView-ariaAlpha": "Transparens",
         "dxColorView-ariaHex": "Färgkod",
 
-        "dxTagBox-selected": "{0} valda",
-        "dxTagBox-allSelected": "Alla valda ({0})",
-        "dxTagBox-moreSelected": "{0} mer",
-
         "vizExport-printingButtonText": "Skriv ut",
         "vizExport-titleMenuText": "Export/Utskrift",
-        "vizExport-exportButtonText": "{0} fil",
-
-        "dxFilterBuilder-and": "Och",
-        "dxFilterBuilder-or": "Eller",
-        "dxFilterBuilder-notAnd": "Inte och",
-        "dxFilterBuilder-notOr": "Inte eller",
-        "dxFilterBuilder-addCondition": "Lägg till villkor",
-        "dxFilterBuilder-addGroup": "Lägg till grupp",
-        "dxFilterBuilder-enterValueText": "<ange värde>",
-        "dxFilterBuilder-filterOperationEquals": "Är lika med",
-        "dxFilterBuilder-filterOperationNotEquals": "Är olika",
-        "dxFilterBuilder-filterOperationLess": "Mindre än",
-        "dxFilterBuilder-filterOperationLessOrEquals": "Mindre än eller lika med",
-        "dxFilterBuilder-filterOperationGreater": "Större än",
-        "dxFilterBuilder-filterOperationGreaterOrEquals": "Större än eller lika med",
-        "dxFilterBuilder-filterOperationStartsWith": "Börjar med",
-        "dxFilterBuilder-filterOperationContains": "Innehåller",
-        "dxFilterBuilder-filterOperationNotContains": "Innehåller inte",
-        "dxFilterBuilder-filterOperationEndsWith": "Slutar med",
-        "dxFilterBuilder-filterOperationIsBlank": "Är tom",
-        "dxFilterBuilder-filterOperationIsNotBlank": "Är inte tom"
+        "vizExport-exportButtonText": "{0} fil"
     }
 }
