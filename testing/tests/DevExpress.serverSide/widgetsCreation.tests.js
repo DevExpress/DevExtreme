@@ -6,7 +6,7 @@ var widgets = {
     Autocomplete: require("ui/autocomplete"),
     BarGauge: require("viz/bar_gauge"),
     Box: require("ui/box"),
-    Bullet: require("viz/Bullet"),
+    Bullet: require("viz/bullet"),
     Button: require("ui/button"),
     Calendar: require("ui/calendar"),
     Chart: require("viz/chart"),

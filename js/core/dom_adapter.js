@@ -117,7 +117,7 @@ var nativeDOMAdapterStrategy = {
         element.style[name] = value || '';
     },
 
-    _document: document,
+    _document: typeof document === "undefined" ? undefined : document,
 
     getDocument: function() {
         return this._document;
