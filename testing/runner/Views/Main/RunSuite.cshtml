@@ -31,6 +31,7 @@
             }
         }
         if(isServerSideTest) {
+            yield return Url.Content("~/js/integration/jquery/component_registrator.js");
             yield return Url.Content("~/testing/helpers/ssrEmulator.js");
         }
     }
