@@ -1155,7 +1155,7 @@ module.exports = {
                 }
             };
 
-            var columnOptionCore = function(that, column, optionName, value, notFireEvent, notUpdateSortOrder) {
+            var columnOptionCore = function(that, column, optionName, value, notFireEvent) {
                 var optionGetter = dataCoreUtils.compileGetter(optionName),
                     columnIndex = column.index,
                     prevValue,
@@ -1171,7 +1171,7 @@ module.exports = {
                 if(prevValue !== value) {
                     if(optionName === "groupIndex") {
                         changeType = "grouping";
-                        notUpdateSortOrder || updateSortOrderWhenGrouping(column, value, prevValue);
+                        updateSortOrderWhenGrouping(column, value, prevValue);
                     } else if(optionName === "sortIndex" || optionName === "sortOrder") {
                         changeType = "sorting";
                     } else {
@@ -1882,7 +1882,7 @@ module.exports = {
                 moveColumn: function(fromVisibleIndex, toVisibleIndex, sourceLocation, targetLocation) {
                     var that = this,
                         options = {},
-                        notUpdateSortOrder,
+                        prevGroupIndex,
                         fromIndex = getColumnIndexByVisibleIndex(that, fromVisibleIndex, sourceLocation),
                         toIndex = getColumnIndexByVisibleIndex(that, toVisibleIndex, targetLocation),
                         targetGroupIndex,
@@ -1900,14 +1900,15 @@ module.exports = {
                             if(targetLocation !== GROUP_LOCATION) {
                                 options.groupIndex = undefined;
                             } else {
+                                prevGroupIndex = column.groupIndex;
                                 delete column.groupIndex;
                                 updateColumnGroupIndexes(that);
-                                notUpdateSortOrder = true;
                             }
                         }
 
                         if(targetLocation === GROUP_LOCATION) {
                             options.groupIndex = moveColumnToGroup(that, column, targetGroupIndex);
+                            column.groupIndex = prevGroupIndex;
                         } else if(toVisibleIndex >= 0) {
                             var targetColumn = that._columns[toIndex];
 
@@ -1928,7 +1929,7 @@ module.exports = {
                             options.visible = isVisible;
                         }
 
-                        that.columnOption(column.index, options, null, null, notUpdateSortOrder);
+                        that.columnOption(column.index, options);
                     }
                 },
                 changeSortOrder: function(columnIndex, sortOrder) {
@@ -2354,7 +2355,7 @@ module.exports = {
                  * @param1 id:number|string
                  * @param2 options:object
                  */
-                columnOption: function(identifier, option, value, notFireEvent, notUpdateSortOrder) {
+                columnOption: function(identifier, option, value, notFireEvent) {
                     var that = this,
                         i,
                         identifierOptionName = typeUtils.isString(identifier) && identifier.substr(0, identifier.indexOf(":")),
@@ -2391,12 +2392,12 @@ module.exports = {
                                 return columnOptionCore(that, column, option);
                             } else {
                                 needUpdateIndexes = needUpdateIndexes || COLUMN_INDEX_OPTIONS[option];
-                                columnOptionCore(that, column, option, value, notFireEvent, notUpdateSortOrder);
+                                columnOptionCore(that, column, option, value, notFireEvent);
                             }
                         } else if(typeUtils.isObject(option)) {
                             iteratorUtils.each(option, function(optionName, value) {
                                 needUpdateIndexes = needUpdateIndexes || COLUMN_INDEX_OPTIONS[optionName];
-                                columnOptionCore(that, column, optionName, value, notFireEvent, notUpdateSortOrder);
+                                columnOptionCore(that, column, optionName, value, notFireEvent);
                             });
                         }
                         if(needUpdateIndexes) {
