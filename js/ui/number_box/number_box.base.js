@@ -568,6 +568,10 @@ var NumberBoxBase = TextEditor.inherit({
         return mathUtils.fitIntoRange(number, this.option("min"), this.option("max"));
     },
 
+    reset: function() {
+        this.option("value", null);
+    },
+
     _clean: function() {
         delete this._$spinContainer;
         delete this._$spinUp;

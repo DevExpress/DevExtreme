@@ -10,7 +10,7 @@ var $ = require("../../core/renderer"),
     getPublicElement = require("../../core/utils/dom").getPublicElement,
     windowUtils = require("../../core/utils/window"),
     navigator = windowUtils.getNavigator(),
-    beforeActivateExists = windowUtils.beforeActivateExists,
+    domAdapter = require("../../core/dom_adapter"),
     devices = require("../../core/devices"),
     registerComponent = require("../../core/component_registrator"),
     DOMComponent = require("../../core/dom_component"),
@@ -259,7 +259,7 @@ var Scrollable = DOMComponent.inherit({
             $wrapper = this._$wrapper = $("<div>").addClass(SCROLLABLE_WRAPPER_CLASS),
             $content = this._$content = $("<div>").addClass(SCROLLABLE_CONTENT_CLASS);
 
-        if(beforeActivateExists() && browser.msie && browser.version < 12) {
+        if(domAdapter.hasDocumentProperty("onbeforeactivate") && browser.msie && browser.version < 12) {
             eventsEngine.on($element, eventUtils.addNamespace("beforeactivate", SCROLLABLE), function(e) {
                 if(!$(e.target).is(selectors.focusable)) {
                     e.preventDefault();

@@ -24,6 +24,7 @@ var staticMethods = {
     /**
     * @name vizmethods_currentTheme
     * @publicName currentTheme()
+    * @return string
     * @static
     * @module viz/themes
     * @export currentTheme
