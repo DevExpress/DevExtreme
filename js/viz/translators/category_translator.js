@@ -141,7 +141,7 @@ module.exports = {
         return isDefined(value) ? this._categoriesToPoints[value.valueOf()] >= 0 : false;
     },
 
-    parse: function(value) {
+    getCorrectValue: function(value) {
         return value;
     },
 

@@ -92,22 +92,32 @@ module.exports = {
 
     isValid: function(value) {
         var that = this,
-            co = that._canvasOptions,
-            breaks = that._breaks,
-            prop;
-
-        if(breaks !== undefined) {
-            prop = that._checkValueAboutBreaks(breaks, value, "trFrom", "trTo", that._checkingMethodsAboutBreaks[0]);
-        }
+            co = that._canvasOptions;
 
         return value !== null &&
             !isNaN(value) &&
             value.valueOf() + co.rangeDoubleError >= co.rangeMin &&
-            value.valueOf() - co.rangeDoubleError <= co.rangeMax &&
-            (!prop || !prop.inBreak);
+            value.valueOf() - co.rangeDoubleError <= co.rangeMax;
     },
 
-    parse: function(value) {
+    getCorrectValue: function(value, direction) {
+        var that = this,
+            breaks = that._breaks,
+            prop;
+
+        value = that._parse(value);
+
+        if(that._breaks) {
+            prop = that._checkValueAboutBreaks(breaks, value, "trFrom", "trTo", that._checkingMethodsAboutBreaks[0]);
+            if(prop.inBreak === true) {
+                return direction > 0 ? prop.break.trTo : prop.break.trFrom;
+            }
+        }
+
+        return value;
+    },
+
+    _parse: function(value) {
         return Number(value);
     },
 
