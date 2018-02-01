@@ -36,6 +36,16 @@ exports.pie = _extend({}, barSeries, {
         point.isSelected() && legendCallback();
     },
 
+    _getOldPoint: function(data, oldPointsByArgument, index) {
+        var point = (this._originalPoints || [])[index];
+        if(point) {
+            oldPointsByArgument[point.argument] = oldPointsByArgument[point.argument].filter(function(p) {
+                return p !== point;
+            });
+        }
+        return point;
+    },
+
     adjustLabels: function(moveLabelsFromCenter) {
         var that = this,
             points = that._points || [],

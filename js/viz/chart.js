@@ -592,6 +592,16 @@ var dxChart = AdvancedChart.inherit({
         return panesBorderOptions;
     },
 
+    _seriesPopulatedHandlerCore: function() {
+        var that = this,
+            animationOptions = that._getAnimationOptions();
+
+        this.callBase();
+        this.series.forEach(function(s) {
+            s.prepareToDrawing(s.getPoints().length <= animationOptions.maxPointCountSupported && that._renderer.animationEnabled());
+        });
+    },
+
     _isLegendInside: function() {
         return this._legend && this._legend.getPosition() === "inside";
     },

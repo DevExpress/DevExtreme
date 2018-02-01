@@ -598,7 +598,7 @@ QUnit.test("Update series data when points are not empty. Old points length < ne
     assert.ok(series._rangeData);
 });
 
-QUnit.test("Update series data when points are not empty. points with same argument should be updated", function(assert) {
+QUnit.test("Update series data when points are not empty. Points with same argument should be updated", function(assert) {
     var options = { type: "mockType", argumentField: "arg", valueField: "val", label: { visible: false } },
         series = createSeries(options, {
             argumentAxis: new MockAxis({ renderer: this.renderer }),
@@ -617,7 +617,30 @@ QUnit.test("Update series data when points are not empty. points with same argum
     assert.equal(series._originalPoints[1].mockOptions.argument, 4, "Arg");
     assert.equal(series._originalPoints[1].mockOptions.value, 11, "Val");
     assert.equal(this.pointsCreatingCount, 2);
-    assert.ok(series._rangeData);
+});
+
+QUnit.test("Update points when series has several points at the same argument", function(assert) {
+    var options = { type: "mockType", argumentField: "arg", valueField: "val", label: { visible: false } },
+        series = createSeries(options, {
+            argumentAxis: new MockAxis({ renderer: this.renderer }),
+            valueAxis: new MockAxis({ renderer: this.renderer })
+        }),
+        data = [{ arg: 1, val: 10 }, { arg: 1, val: 10 }],
+        newData = [{ arg: 1, val: 4 }, { arg: 1, val: 5 }, { arg: 4, val: 11 }];
+
+    series.updateData(data);
+
+    series.updateData(newData);
+
+    assert.equal(series._originalPoints.length, 3);
+    assert.equal(series._originalPoints[0].mockOptions.argument, 1, "Arg");
+    assert.equal(series._originalPoints[0].mockOptions.value, 4, "Val");
+    assert.equal(series._originalPoints[1].mockOptions.argument, 1, "Arg");
+    assert.equal(series._originalPoints[1].mockOptions.value, 5, "Val");
+
+    assert.equal(series._originalPoints[2].mockOptions.argument, 4, "Arg");
+    assert.equal(series._originalPoints[2].mockOptions.value, 11, "Val");
+    assert.equal(this.pointsCreatingCount, 3);
 });
 
 QUnit.module("ErrorBars", environmentWithSinonStubPoint);
@@ -1242,6 +1265,31 @@ QUnit.test("T243926", function(assert) {
         assert.ok(p.disposed);
     });
 });
+
+QUnit.test("Draw aggragated points", function(assert) {
+    var series = createSeries({ type: "scatter" }, {
+        argumentAxis: this.argumentAxis,
+        valueAxis: new MockAxis({
+            renderer: this.renderer
+        })
+    });
+
+    var data = [];
+    for(var i = 0; i < 100; i++) {
+        data.push({ arg: i, val: i * 2 });
+    }
+
+    series.updateData(data);
+    series.draw(false);
+    this.setupAggregation(0, 99);
+    series.resamplePoints(10);
+    assert.ok(series.getPoints().length);
+    series.prepareToDrawing(true);
+    series.draw(false);
+
+    assert.equal(series.getVisiblePoints().length, 5);
+});
+
 
 QUnit.test("Style of marker group. Scatter", function(assert) {
     var series = this.series,

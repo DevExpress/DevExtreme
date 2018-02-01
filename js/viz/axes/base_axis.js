@@ -1779,7 +1779,8 @@ Axis.prototype = {
     },
 
     _updateTranslator: function() {
-        this._translator.update({}, {}, this._getTranslatorOptions());
+        var translator = this._translator;
+        translator.update(translator.getBusinessRange(), this._canvas || {}, this._getTranslatorOptions());
     },
 
     _getTranslatorOptions: function() {

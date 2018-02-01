@@ -229,7 +229,7 @@ Series.prototype = {
         return rangeCalculator.getPointsInViewPort(this);
     },
 
-    _createPoint: function(data, index, oldPointsByArgument) {
+    _createPoint: function(data, index, oldPoint) {
         data.index = index;
         var that = this,
             pointsByArgument = that.pointsByArgument,
@@ -241,8 +241,7 @@ Series.prototype = {
         if(that._checkData(data)) {
             options = that._getCreatingPointOptions(data);
             arg = data.argument.valueOf();
-            point = (oldPointsByArgument[arg] || [])[0];
-
+            point = oldPoint;
             if(point) {
                 point.update(data, options);
             } else {
@@ -349,14 +348,27 @@ Series.prototype = {
         this._rangeData = getEmptyBusinessRange();
     },
 
+    _getOldPoint: function(data, oldPointsByArgument, index) {
+        var arg = data.argument && data.argument.valueOf(),
+            point = (oldPointsByArgument[arg] || [])[0];
+
+        if(point) {
+            oldPointsByArgument[arg].splice(0, 1);
+        }
+
+        return point;
+    },
+
     updateData: function(data) {
         var that = this,
             points = that._originalPoints || [],
             options = that._options,
+            allPoints = that._allPoints = (that._originalPoints || []).slice(),
             oldPointsByArgument = that.pointsByArgument || {};
 
         data = data || [];
         that.pointsByArgument = {};
+
         that._resetRangeData();
 
         if(data.length) {
@@ -365,15 +377,25 @@ Series.prototype = {
 
         that._beginUpdateData(data);
 
-        var allPoints = that._allPoints = (that._originalPoints || []).slice();
-
         points = data.reduce(function(points, dataItem) {
-            var p = that._createPoint(that._getPointData(dataItem, options), points.length, oldPointsByArgument);
+            var data = that._getPointData(dataItem, options),
+                index = points.length,
+                oldPoint = that._getOldPoint(data, oldPointsByArgument, index),
+                p = that._createPoint(data, index, oldPoint);
+
             if(p) {
                 points.push(p);
-                if(allPoints.indexOf(p) === -1) {
+                if(!oldPoint) {
                     allPoints.push(p);
                 }
+            }
+            return points;
+        }, []);
+
+        that._oldPoints = Object.keys(oldPointsByArgument).reduce(function(points, key) {
+            var argPoints = oldPointsByArgument[key];
+            if(argPoints.length) {
+                points.push.apply(points, argPoints);
             }
             return points;
         }, []);
@@ -390,15 +412,12 @@ Series.prototype = {
             points = that._points || [],
             allPoints = that._allPoints || [];
 
-        if(animationEnabled && !that._firstDrawing) {
+        if(animationEnabled && !that._firstDrawing && !this._aggregatedPoints) {
             that._pointsToDraw = allPoints;
-            that._drawElements(false, false);
+            that._drawElements(true, false);
         } else {
             that._pointsToDraw = points;
         }
-        that._oldPoints = allPoints.filter(function(p) {
-            return points.indexOf(p) === -1;
-        });
     },
 
     getTemplateFields: function() {
@@ -449,6 +468,7 @@ Series.prototype = {
             }
 
             that._points = that._resample(tickInterval, min - tickInterval, max + tickInterval, minMaxDefined);
+            that.prepareToDrawing(false);
         }
     },
 
@@ -475,35 +495,39 @@ Series.prototype = {
                 errorBars: that._errorBarGroup
             },
 
-            segments = points.reduce(function(segments, p) {
-                var segment = segments[segments.length - 1];
-                p.translate();
-                if(p.hasValue() && p.hasCoords()) {
-                    that._drawPoint({ point: p, groups: groupForPoint, hasAnimation: animationEnabled, firstDrawing: firstDrawing });
-                    segment.push(p);
-                } else {
-                    if(!p.hasCoords()) {
-                        p.setInvisibility();
-                    }
-                    segment.length && segments.push([]);
-                }
+            segments;
 
-                return segments;
-            }, [[]]),
-            segmentCount = segments.length;
+        that._drawnPoints = [];
+        that._graphics = that._graphics || [];
+        that._segments = [];
+
+        segments = points.reduce(function(segments, p) {
+            var segment = segments[segments.length - 1];
+            p.translate();
+            if(p.hasValue() && p.hasCoords()) {
+                that._drawPoint({ point: p, groups: groupForPoint, hasAnimation: animationEnabled, firstDrawing: firstDrawing });
+                segment.push(p);
+            } else {
+                if(!p.hasCoords()) {
+                    p.setInvisibility();
+                }
+                segment.length && segments.push([]);
+            }
+
+            return segments;
+        }, [[]]);
 
         segments.forEach(function(segment, index) {
             if(segment.length) {
-                animationEnabled && segment.sort(function(p1, p2) {
-                    return p1.x - p2.x;
-                });
-                that._drawSegment(segment, animationEnabled, index, closeSegment && index === segmentCount - 1);
+                that._drawSegment(segment, animationEnabled, index, closeSegment && index === this.length - 1);
             }
-        });
+        }, segments);
 
         that._firstDrawing = points.length ? false : true;
 
         that._removeOldSegments();
+
+        animationEnabled && that._animate(firstDrawing);
     },
 
     _drawComplete: function() {
@@ -519,8 +543,6 @@ Series.prototype = {
             firstDrawing = that._firstDrawing;
 
         that._legendCallback = legendCallback || that._legendCallback;
-        that._graphics = that._graphics || [];
-        that._segments = [];
 
         if(!that._pointsToDraw) {
             that.prepareToDrawing(false);
@@ -537,13 +559,9 @@ Series.prototype = {
         that._applyVisibleArea();
         that._setGroupsSettings(animationEnabled, firstDrawing);
 
-        that._drawnPoints = [];
-
         that._drawElements(animationEnabled, firstDrawing);
 
         hideLayoutLabels && that.hideLabels();
-
-        animationEnabled && that._animate(firstDrawing);
 
         if(that.isSelected()) {
             that._changeStyle(that.lastSelectionMode, undefined, true);
@@ -838,6 +856,9 @@ Series.prototype = {
         }
 
         that.pointsByArgument = {};
+
+        that._disposePoints(that._aggregatedPoints);
+
         that._aggregatedPoints = originalPoints.reduce(function(aggregatedPoints, point) {
             point.setInvisibility();
             if(!fusionPoints.length) {
@@ -848,7 +869,7 @@ Series.prototype = {
                 pointData = that._fusionPoints(fusionPoints, minTick, nowIndexTicks);
                 nowIndexTicks++;
 
-                aggregatedPoints.push(that._createPoint(pointData, aggregatedPoints.length, {}));
+                aggregatedPoints.push(that._createPoint(pointData, aggregatedPoints.length));
 
                 fusionPoints = [];
                 addFirstFusionPoint(point);
@@ -860,7 +881,7 @@ Series.prototype = {
 
         if(fusionPoints.length) {
             pointData = that._fusionPoints(fusionPoints, minTick, nowIndexTicks);
-            that._aggregatedPoints.push(that._createPoint(pointData, that._aggregatedPoints.length, {}));
+            that._aggregatedPoints.push(that._createPoint(pointData, that._aggregatedPoints.length));
         }
 
         that._endUpdateData();

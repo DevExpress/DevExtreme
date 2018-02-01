@@ -275,6 +275,19 @@ QUnit.test("Set types", function(assert) {
     assert.equal(this.axis.getOptions().valueType, "someType");
 });
 
+
+QUnit.test("Update translator on setTypes pass old business range and canvas", function(assert) {
+    this.updateOptions();
+
+    var translator = translator2DModule.Translator2D.lastCall.returnValue;
+    this.axis.updateCanvas(this.canvas);
+    //act
+    this.axis.setTypes("someAxisType", "someType", "valueType");
+
+    assert.strictEqual(translator.update.lastCall.args[0], translator.getBusinessRange());
+    assert.deepEqual(translator.update.lastCall.args[1], this.canvas);
+});
+
 QUnit.test("set undefined types", function(assert) {
     this.updateOptions();
     this.axis.setTypes("someAxisType", "someType", "valueType");
