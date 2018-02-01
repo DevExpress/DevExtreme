@@ -165,16 +165,12 @@ QUnit.test("class should be set for only an element node", function(assert) {
 QUnit.module("removeClass method");
 
 QUnit.test("class should not be set when class name empty", function(assert) {
-    var element = renderer("<div>"),
-        error = "";
+    var element = renderer("<div>");
+    element.addClass("someClass");
 
-    try {
-        element.removeClass(" dx-class");
-    } catch(e) {
-        error = e.message;
-    }
+    element.removeClass(" someClass");
 
-    assert.equal(error, "");
+    assert.notOk(element.hasClass("someClass"));
 });
 
 QUnit.module("width and height methods");
