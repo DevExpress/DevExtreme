@@ -69,7 +69,7 @@ var ValidationGroup = DOMComponent.inherit({
     /**
      * @name dxValidationGroupMethods_validate
      * @publicName validate()
-     * @return Object
+     * @return dxValidationGroupResult
      */
     validate: function() {
         return ValidationEngine.validateGroup(this);

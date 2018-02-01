@@ -367,7 +367,11 @@ var EmailRuleValidator = BaseRuleValidator.inherit({
                 }));
     }
 });
-
+/**
+ * @name dxValidationRule
+ * @publicName dxValidationRule
+ * @type RequiredRule|NumericRule|RangeRule|StringLengthRule|CustomRule|CompareRule|PatternRule|EmailRule
+ */
 var rulesValidators = {
     /**
      * @name requiredRule
@@ -441,9 +445,29 @@ var GroupConfig = Class.inherit({
     },
 
     validate: function() {
+        /**
+         * @name dxValidationGroupResult
+         * @publicName dxValidationGroupResult
+         * @type Object
+         */
         var result = {
+            /**
+             * @name dxValidationGroupResult_isValid
+             * @publicName isValid
+             * @type boolean
+             */
             isValid: true,
+            /**
+             * @name dxValidationGroupResult_brokenRules
+             * @publicName brokenRules
+             * @type Array<dxValidationRule>
+             */
             brokenRules: [],
+            /**
+             * @name dxValidationGroupResult_validators
+             * @publicName validators
+             * @type Array<Object>
+             */
             validators: []
         };
 
@@ -548,11 +572,36 @@ var ValidationEngine = {
     },
 
     validate: function(value, rules, name) {
+        /**
+         * @name dxValidatorResult
+         * @publicName dxValidatorResult
+         * @type Object
+         */
         var result = {
                 name: name,
+                /**
+                 * @name dxValidatorResult_value
+                 * @publicName value
+                 * @type any
+                 */
                 value: value,
+                /**
+                 * @name dxValidatorResult_brokenRule
+                 * @publicName brokenRule
+                 * @type dxValidationRule
+                 */
                 brokenRule: null,
+                /**
+                 * @name dxValidatorResult_isValid
+                 * @publicName isValid
+                 * @type boolean
+                 */
                 isValid: true,
+                /**
+                 * @name dxValidatorResult_validationRules
+                 * @publicName validationRules
+                 * @type Array<dxValidationRule>
+                 */
                 validationRules: rules
             },
             that = this;
@@ -627,14 +676,14 @@ var ValidationEngine = {
     * @section Core
     * @publicName validateGroup(group)
     * @param1 group:string|object
-    * @return object
+    * @return dxValidationGroupResult
     * @static
     */
     /**
     * @name validationEngineMethods_validateGroup
     * @section Core
     * @publicName validateGroup()
-    * @return object
+    * @return dxValidationGroupResult
     * @static
     */
     validateGroup: function(group) {

@@ -292,12 +292,13 @@ var NumberBoxMask = NumberBoxBase.inherit({
     _tryParse: function(text, selection, char) {
         var editedText = this._getEditedText(text, selection, char),
             format = this._getFormatPattern(),
+            isTextSelected = selection.start !== selection.end,
             parsed = number.parse(editedText, format),
             maxPrecision = this._getMaxPrecision(format, parsed),
             isValueChanged = parsed !== this._parsedValue;
 
         var isDecimalPointRestricted = char === number.getDecimalSeparator() && maxPrecision === 0,
-            isUselessCharRestricted = !isValueChanged && char !== MINUS && !this._isValueIncomplete(editedText);
+            isUselessCharRestricted = !isTextSelected && !isValueChanged && char !== MINUS && !this._isValueIncomplete(editedText);
 
         if(isDecimalPointRestricted || isUselessCharRestricted) {
             return undefined;
@@ -314,7 +315,7 @@ var NumberBoxMask = NumberBoxBase.inherit({
         var pow = Math.pow(10, maxPrecision),
             value = (parsed === null ? this._parsedValue : parsed);
 
-        parsed = Math.round(value * pow) / pow;
+        parsed = Math.floor(Math.round(value * pow * 10) / 10) / pow;
 
         return this._isPercentFormat() ? (parsed && parsed / 100) : parsed;
     },
@@ -349,9 +350,11 @@ var NumberBoxMask = NumberBoxBase.inherit({
         }
 
         var caret = this._caret(),
+            floatLength = clearedText.length - decimalSeparatorIndex - 1,
+            maxPrecisionOverflow = floatLength > this._getMaxPrecision(this._getFormatPattern(), clearedText),
             textAfterCaret = this._getInputVal().slice(caret.start);
 
-        return !textAfterCaret || this._isStub(textAfterCaret, true);
+        return !maxPrecisionOverflow && (!textAfterCaret || this._isStub(textAfterCaret, true));
     },
 
     _isValueInRange: function(value) {

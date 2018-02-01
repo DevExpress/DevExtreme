@@ -9928,6 +9928,29 @@ QUnit.test("Position of the inserted row if top visible row is master detail", f
     assert.equal(items.filter(function(item) { return item.inserted; })[0].rowIndex, 10, "insert item");
 });
 
+//T601854
+QUnit.test("Editing if unbound column presents and form edit mode", function(assert) {
+    //arrange
+    var that = this,
+        testElement = $('#container');
+
+    that.options.editing = {
+        allowUpdating: true,
+        mode: "form"
+    };
+    that.options.columns = ["C0", { }];
+    that.options.dataSource.store = [{ C0: 0 }, { C0: 1 }];
+
+    that.setupDataGrid();
+    that.rowsView.render(testElement);
+
+    //act
+    that.editRow(0);
+
+    //assert
+    assert.equal($(".dx-datagrid-edit-form-item .dx-textbox").length, 2, "contains editor for empty column");
+});
+
 //T538954
 QUnit.test("Position of the inserted row if top visible row is adaptive detail", function(assert) {
     //arrange
