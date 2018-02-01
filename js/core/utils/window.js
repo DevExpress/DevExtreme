@@ -17,7 +17,7 @@ module.exports = {
     },
 
     hasProperty: function(prop) {
-        return hasWindow && prop in windowObject;
+        return this.hasWindow() && prop in windowObject;
     },
 
     defaultScreenFactorFunc: function(width) {
@@ -48,7 +48,7 @@ module.exports = {
     },
 
     getNavigator: function() {
-        return hasWindow ? windowObject.navigator : {
+        return this.hasWindow() ? windowObject.navigator : {
             userAgent: ""
         };
     }
