@@ -729,6 +729,24 @@ module.exports = {
                 return result;
             };
 
+            var getColumnFullPath = function(that, column) {
+                var result = [],
+                    bandColumnsCache = that.getBandColumnsCache(),
+                    callbackFilter = function(item) {
+                        return item.ownerBand === column.ownerBand;
+                    },
+                    columns = that._columns.filter(callbackFilter);
+
+                while(columns.length) {
+                    result.unshift("columns[" + columns.indexOf(column) + "]");
+
+                    column = bandColumnsCache.columnParentByIndex[column.index];
+                    columns = column ? that._columns.filter(callbackFilter) : [];
+                }
+
+                return result.join(".");
+            };
+
             var calculateColspan = function(that, columnID) {
                 var colspan = 0,
                     columns = that.getChildrenByBandColumn(columnID, true);
@@ -958,7 +976,8 @@ module.exports = {
                         groupIndex = Math.max(groupIndex, groupColumns[i].groupIndex + 1);
                     }
                 }
-                column.groupIndex = groupIndex;
+
+                return groupIndex;
             };
 
             var checkUserStateColumn = function(column, userStateColumn) {
@@ -1142,7 +1161,8 @@ module.exports = {
                     prevValue,
                     optionSetter,
                     columns,
-                    changeType;
+                    changeType,
+                    fullOptionName;
 
                 if(arguments.length === 3) {
                     return optionGetter(column, { functionsAsIs: true });
@@ -1159,6 +1179,11 @@ module.exports = {
                     }
                     optionSetter = dataCoreUtils.compileSetter(optionName);
                     optionSetter(column, value, { functionsAsIs: true });
+
+                    fullOptionName = getColumnFullPath(that, column);
+                    that._skipProcessingColumnsChange = true;
+                    that.component._notifyOptionChanged(fullOptionName + "." + optionName, value, prevValue);
+                    that._skipProcessingColumnsChange = false;
 
                     if(!isDefined(prevValue) && !isDefined(value) && optionName.indexOf("buffer") !== 0) {
                         notFireEvent = true;
@@ -1356,12 +1381,14 @@ module.exports = {
                             break;
                         case "columns":
                             args.handled = true;
-                            if(args.name === args.fullName) {
-                                this._columnsUserState = null;
-                                this._ignoreColumnOptionNames = null;
-                                this.init();
-                            } else {
-                                this._columnOptionChanged(args);
+                            if(!this._skipProcessingColumnsChange) {
+                                if(args.name === args.fullName) {
+                                    this._columnsUserState = null;
+                                    this._ignoreColumnOptionNames = null;
+                                    this.init();
+                                } else {
+                                    this._columnOptionChanged(args);
+                                }
                             }
                             break;
                         case "commonColumnSettings":
@@ -1854,10 +1881,11 @@ module.exports = {
                 },
                 moveColumn: function(fromVisibleIndex, toVisibleIndex, sourceLocation, targetLocation) {
                     var that = this,
+                        options = {},
+                        prevGroupIndex,
                         fromIndex = getColumnIndexByVisibleIndex(that, fromVisibleIndex, sourceLocation),
                         toIndex = getColumnIndexByVisibleIndex(that, toVisibleIndex, targetLocation),
                         targetGroupIndex,
-                        isGroupMoving = sourceLocation === GROUP_LOCATION || targetLocation === GROUP_LOCATION,
                         column;
 
                     if(fromIndex >= 0) {
@@ -1869,48 +1897,44 @@ module.exports = {
                             if(targetGroupIndex > column.groupIndex) {
                                 targetGroupIndex--;
                             }
-                            delete column.groupIndex;
-                            updateColumnGroupIndexes(that);
+                            if(targetLocation !== GROUP_LOCATION) {
+                                options.groupIndex = undefined;
+                            } else {
+                                prevGroupIndex = column.groupIndex;
+                                delete column.groupIndex;
+                                updateColumnGroupIndexes(that);
+                            }
                         }
 
                         if(targetLocation === GROUP_LOCATION) {
-                            moveColumnToGroup(that, column, targetGroupIndex);
-                            updateColumnGroupIndexes(that);
+                            options.groupIndex = moveColumnToGroup(that, column, targetGroupIndex);
+                            column.groupIndex = prevGroupIndex;
                         } else if(toVisibleIndex >= 0) {
                             var targetColumn = that._columns[toIndex];
 
                             if(!targetColumn || column.ownerBand !== targetColumn.ownerBand) {
-                                column.visibleIndex = undefined;
+                                options.visibleIndex = undefined;
                             } else {
-
                                 if(column.fixed ^ targetColumn.fixed) {
-                                    column.visibleIndex = undefined;
+                                    options.visibleIndex = undefined;
                                 } else {
-                                    column.visibleIndex = targetColumn.visibleIndex;
+                                    options.visibleIndex = targetColumn.visibleIndex;
                                 }
                             }
-                            updateColumnVisibleIndexes(that, column);
                         }
 
-                        var isVisible = targetLocation !== COLUMN_CHOOSER_LOCATION,
-                            changeType = isGroupMoving ? "grouping" : "columns";
+                        var isVisible = targetLocation !== COLUMN_CHOOSER_LOCATION;
 
                         if(column.visible !== isVisible) {
-                            column.visible = isVisible;
-                            updateColumnChanges(that, changeType, "visible", column.index);
-                        } else {
-                            updateColumnChanges(that, changeType);
+                            options.visible = isVisible;
                         }
 
-                        if(sourceLocation === GROUP_LOCATION ^ targetLocation === GROUP_LOCATION) {
-                            updateSortOrderWhenGrouping(column, column.groupIndex, -1);
-                        }
-
-                        fireColumnsChanged(that);
+                        that.columnOption(column.index, options);
                     }
                 },
                 changeSortOrder: function(columnIndex, sortOrder) {
                     var that = this,
+                        options = {},
                         sortingOptions = that.option("sorting"),
                         sortingMode = sortingOptions && sortingOptions.mode,
                         needResetSorting = sortingMode === "single" || !sortOrder,
@@ -1922,17 +1946,16 @@ module.exports = {
                                     return false;
                                 }
 
-                                delete column.sortOrder;
-                                delete column.sortIndex;
+                                options.sortOrder = undefined;
+                                options.sortIndex = undefined;
                             } else if(isDefined(column.groupIndex) || isDefined(column.sortIndex)) {
-                                column.sortOrder = column.sortOrder === "desc" ? "asc" : "desc";
+                                options.sortOrder = column.sortOrder === "desc" ? "asc" : "desc";
                             } else {
-                                column.sortOrder = "asc";
+                                options.sortOrder = "asc";
                             }
 
                             return true;
-                        },
-                        isSortingChanged = false;
+                        };
 
                     if(allowSorting && column && column.allowSorting) {
                         if(needResetSorting && !isDefined(column.groupIndex)) {
@@ -1940,30 +1963,24 @@ module.exports = {
                                 if(index !== columnIndex && this.sortOrder && !isDefined(this.groupIndex)) {
                                     delete this.sortOrder;
                                     delete this.sortIndex;
-                                    isSortingChanged = true;
                                 }
                             });
                         }
                         if(isSortOrderValid(sortOrder)) {
                             if(column.sortOrder !== sortOrder) {
-                                column.sortOrder = sortOrder;
-                                isSortingChanged = true;
+                                options.sortOrder = sortOrder;
                             }
                         } else if(sortOrder === "none") {
                             if(column.sortOrder) {
-                                delete column.sortIndex;
-                                delete column.sortOrder;
-                                isSortingChanged = true;
+                                options.sortIndex = undefined;
+                                options.sortOrder = undefined;
                             }
                         } else {
-                            isSortingChanged = nextSortOrder(column);
+                            nextSortOrder(column);
                         }
                     }
-                    if(isSortingChanged) {
-                        updateColumnSortIndexes(that);
-                        updateColumnChanges(that, "sorting");
-                        fireColumnsChanged(that);
-                    }
+
+                    that.columnOption(column.index, options);
                 },
                 getSortDataSourceParameters: function(useLocalSelector) {
                     var that = this,

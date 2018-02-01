@@ -380,7 +380,7 @@ var Form = Widget.inherit({
             /**
              * @name dxFormSimpleItem_validationRules
              * @publicName validationRules
-             * @type Array<RequiredRule,NumericRule,RangeRule,StringLengthRule,CustomRule,CompareRule,PatternRule,EmailRule>
+             * @type Array<dxValidationRule>
              * @default undefined
              */
             /**
@@ -1644,7 +1644,7 @@ var Form = Widget.inherit({
     /**
      * @name dxFormMethods_validate
      * @publicName validate()
-     * @return object
+     * @return dxValidationGroupResult
      */
     validate: function() {
         try {

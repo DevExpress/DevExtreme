@@ -92,7 +92,7 @@ var nativeDOMAdapterStrategy = {
     },
 
     setClass: function(element, className, isAdd) {
-        if(element.nodeType === 1) {
+        if(element.nodeType === 1 && className) {
             if(element.classList) {
                 if(isAdd) {
                     element.classList.add(className);
@@ -117,7 +117,7 @@ var nativeDOMAdapterStrategy = {
         element.style[name] = value || '';
     },
 
-    _document: document,
+    _document: typeof document === "undefined" ? undefined : document,
 
     getDocument: function() {
         return this._document;

@@ -17,3 +17,17 @@ QUnit.test("insertElement", function(assert) {
 
     assert.equal(this.container.childNodes.length, 1);
 });
+
+QUnit.module("DOM Adapter injection", {
+    afterEach: function() {
+        domAdapter.resetInjection();
+    }
+});
+
+QUnit.test("inject document", function(assert) {
+    var doc = {};
+    domAdapter.inject({
+        _document: doc
+    });
+    assert.equal(domAdapter.getDocument(), doc);
+});
