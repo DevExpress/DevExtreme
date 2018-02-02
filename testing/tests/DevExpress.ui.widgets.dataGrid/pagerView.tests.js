@@ -624,3 +624,27 @@ QUnit.test("Invalidate instead of render for options", function(assert) {
     //assert
     assert.equal(renderCounter, 1, "count of rendering");
 });
+
+QUnit.test("Pager should be visible when set the pageSize equal to totalCount", function(assert) {
+    //arrange
+    var $testElement = $("#container");
+
+    this.options.pager.allowedPageSizes = [2, 4, 6];
+    this.dataControllerOptions = {
+        pageSize: 4,
+        pageCount: 2,
+        pageIndex: 0,
+        totalCount: 6
+    };
+    this.pagerView.render($testElement);
+    sinon.spy(this.pagerView, "_invalidate");
+
+    //act
+    this.dataController.skipProcessingPagingChange = function() { return true; };
+    this.pagerView.optionChanged({ name: "paging", fullName: "paging.pageSize", value: 6 });
+
+    //assert
+    assert.ok(this.pagerView._isVisible, "pager visible");
+    assert.strictEqual(this.pagerView._invalidate.callCount, 0, "render not execute");
+    this.pagerView._invalidate.restore();
+});
