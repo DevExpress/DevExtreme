@@ -537,42 +537,42 @@ var dxVectorMap = {
     * @publicName coordinates
     * @type Array<number>
     * @default undefined
-    * @deprecated dxvectormapoptions_layers_dataSource
+    * @deprecated
     */
     /**
     * @name dxvectormapoptions_markers_attributes
     * @publicName attributes
     * @type object
     * @default undefined
-    * @deprecated dxvectormapoptions_layers_dataSource
+    * @deprecated
     */
     /**
     * @name dxvectormapoptions_markers_text
     * @publicName text
     * @type string
     * @default undefined
-    * @deprecated dxvectormapoptions_layers_dataSource
+    * @deprecated
     */
     /**
     * @name dxvectormapoptions_markers_value
     * @publicName value
     * @type number
     * @default undefined
-    * @deprecated dxvectormapoptions_layers_dataSource
+    * @deprecated
     */
     /**
     * @name dxvectormapoptions_markers_values
     * @publicName values
     * @type Array<number>
     * @default undefined
-    * @deprecated dxvectormapoptions_layers_dataSource
+    * @deprecated
     */
     /**
     * @name dxvectormapoptions_markers_url
     * @publicName url
     * @type string
     * @default undefined
-    * @deprecated dxvectormapoptions_layers_dataSource
+    * @deprecated
     */
     markers: undefined,
     /**
