@@ -181,36 +181,31 @@ module.exports = {
     },
     controllers: {
         data: modules.Controller.inherit({}).include(DataHelperMixin).inherit((function() {
-            var changePagingCore = function(that, optionName, value) {
-                    var dataSource = that._dataSource;
+            var changePaging = function(that, optionName, value) {
+                var dataSource = that._dataSource;
 
-                    if(optionName === "pageSize") {
-                        dataSource.pageIndex(0);
-                    }
-                    dataSource[optionName](value);
-
-                    return dataSource[optionName === "pageIndex" ? "load" : "reload"]()
-                        .done(that.pageChanged.fire.bind(that.pageChanged));
-                },
-                changePaging = function(that, optionName, value) {
-                    var dataSource = that._dataSource;
-
-                    if(dataSource) {
-                        if(value !== undefined) {
-                            if(dataSource[optionName]() !== value) {
-                                that._skipProcessingPagingChange = true;
-                                that.option("paging." + optionName, value);
-                                that._skipProcessingPagingChange = false;
-
-                                return changePagingCore(that, optionName, value);
+                if(dataSource) {
+                    if(value !== undefined) {
+                        if(dataSource[optionName]() !== value) {
+                            if(optionName === "pageSize") {
+                                dataSource.pageIndex(0);
                             }
-                            return Deferred().resolve().promise();
-                        }
-                        return dataSource[optionName]();
-                    }
+                            dataSource[optionName](value);
 
-                    return 0;
-                };
+                            that._skipProcessingPagingChange = true;
+                            that.option("paging." + optionName, value);
+                            that._skipProcessingPagingChange = false;
+
+                            return dataSource[optionName === "pageIndex" ? "load" : "reload"]()
+                                .done(that.pageChanged.fire.bind(that.pageChanged));
+                        }
+                        return Deferred().resolve().promise();
+                    }
+                    return dataSource[optionName]();
+                }
+
+                return 0;
+            };
 
             var members = {
                 init: function() {
@@ -299,7 +294,7 @@ module.exports = {
                         case "scrolling":
                         case "paging":
                             handled();
-                            if(!that._skipProcessingPagingChange || (args.fullName !== "paging.pageIndex" && args.fullName !== "paging.pageSize")) {
+                            if(!that.skipProcessingPagingChange(args.fullName)) {
                                 reload();
                             }
                             break;
@@ -1122,6 +1117,10 @@ module.exports = {
                     if(rowIndexes.length > 1 || typeUtils.isDefined(rowIndexes[0])) {
                         this.updateItems({ changeType: "update", rowIndices: rowIndexes });
                     }
+                },
+
+                skipProcessingPagingChange: function(fullName) {
+                    return this._skipProcessingPagingChange && (fullName === "paging.pageIndex" || fullName === "paging.pageSize");
                 }
             };
 

@@ -190,6 +190,7 @@ module.exports = function($, gridCore, columnResizingReordering, domUtils, commo
             getRowIndexByKey: function() {
                 return -1;
             },
+            skipProcessingPagingChange: commonUtils.noop,
             changed: $.Callbacks(),
             loadingChanged: $.Callbacks(),
             pageChanged: $.Callbacks(),
