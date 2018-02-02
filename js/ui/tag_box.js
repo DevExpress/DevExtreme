@@ -1195,10 +1195,18 @@ var TagBox = SelectBox.inherit({
     },
 
     _applyButtonHandler: function() {
-        this.option("value", this._getListValues());
+        this.option("value", this._getSortedListValues());
         this._clearTextValue();
         this._clearFilter();
         this.callBase();
+    },
+
+    _getSortedListValues: function() {
+        var listValues = this._getListValues(),
+            currentValue = this.option("value"),
+            sortFunction = function(item1, item2) { return currentValue.indexOf(item2) - currentValue.indexOf(item1); };
+
+        return currentValue ? listValues.sort(sortFunction) : listValues;
     },
 
     _getListValues: function() {
