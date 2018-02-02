@@ -192,28 +192,28 @@ var MarkerObjects = {
     * @name markerObjectsfields_text
     * @publicName text
     * @type string
-    * @deprecated MapLayerElementmethods_attribute
+    * @deprecated
     */
     text: null,
     /**
    * @name markerObjectsfields_value
    * @publicName value
    * @type number
-   * @deprecated MapLayerElementmethods_attribute
+   * @deprecated
    */
     value: null,
     /**
    * @name markerObjectsfields_values
    * @publicName values
    * @type Array<number>
-   * @deprecated MapLayerElementmethods_attribute
+   * @deprecated
    */
     values: null,
     /**
    * @name markerObjectsfields_url
    * @publicName url
    * @type string
-   * @deprecated MapLayerElementmethods_attribute
+   * @deprecated
    */
     url: null
 };
