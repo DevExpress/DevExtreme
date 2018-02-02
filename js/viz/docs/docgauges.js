@@ -30,7 +30,7 @@ var baseGauge = {
         * @publicName position
         * @type Enums.GaugeTitlePosition
         * @default 'top-center'
-        * @deprecated BaseWidgetOptions_title_horizontalalignment
+        * @deprecated
         */
         position: undefined
     },
@@ -972,7 +972,7 @@ var dxBarGauge = {
         * @publicName position
         * @type Enums.GaugeTitlePosition
         * @default 'top-center'
-        * @deprecated BaseWidgetOptions_title_horizontalalignment
+        * @deprecated
         */
         position: undefined
     },
