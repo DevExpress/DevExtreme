@@ -368,7 +368,7 @@ treeListCore.registerModule("selection", extend(true, {}, selectionModule, {
                 },
 
                 _isModeLeavesOnly: function(mode) {
-                    return mode === "leaves" || mode === true;
+                    return mode === "leavesOnly" || mode === true;
                 },
 
                 _getAllSelectedRowKeys: function(parentKeys) {
@@ -419,22 +419,21 @@ treeListCore.registerModule("selection", extend(true, {}, selectionModule, {
                 /**
                 * @name dxTreeListMethods_getSelectedRowKeys
                 * @publicName getSelectedRowKeys(mode)
-                * @param1 mode:string|boolean
+                * @param1 mode:string
                 * @return Array<any>
                 */
                 getSelectedRowKeys: function(mode) {
                     var that = this,
                         dataController = that._dataController,
                         selectedRowKeys = that.callBase.apply(that, arguments) || [];
-
-                    if(this.isRecursiveSelection() && dataController) {
+                    if(dataController) {
                         if(that._isModeLeavesOnly(mode)) {
                             selectedRowKeys = dataController.getNodeLeafKeys(selectedRowKeys, function(childNode, nodes) {
                                 return !childNode.hasChildren && that.isRowSelected(childNode.key);
                             });
                         }
 
-                        if(mode === "all") {
+                        if(this.isRecursiveSelection() && mode === "includeRecursive") {
                             selectedRowKeys = this._getAllSelectedRowKeys(selectedRowKeys);
                         }
                     }
