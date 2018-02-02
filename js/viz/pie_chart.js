@@ -393,7 +393,7 @@ var dxPieChart = BaseChart.inherit({
     },
 
     getSizeGroupLayout: function() {
-        return this._sizeGroupLayout;
+        return this._sizeGroupLayout || {};
     }
 });
 
@@ -409,12 +409,12 @@ var pieSizeEqualizer = (function() {
     function equalize(group, allPies) {
         var pies = allPies.filter(function(p) { return p.getSizeGroup() === group; }),
             minRadius = Math.min.apply(null, pies.map(function(p) { return p.getSizeGroupLayout().radius; })),
-            layout = pies.filter(function(p) { return p.getSizeGroupLayout().radius === minRadius; })[0].getSizeGroupLayout();
+            minPie = pies.filter(function(p) { return p.getSizeGroupLayout().radius === minRadius; });
 
         pies.forEach(function(p) {
             p.render({
                 force: true,
-                sizeGroupLayout: layout
+                sizeGroupLayout: minPie.length ? minPie[0].getSizeGroupLayout() : {}
             });
         });
     }
