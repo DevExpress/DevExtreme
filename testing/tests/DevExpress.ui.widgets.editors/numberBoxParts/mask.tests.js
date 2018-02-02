@@ -733,7 +733,7 @@ QUnit.test("removing integer digit using backspace if group separator is hiding"
     assert.deepEqual(this.keyboard.caret(), { start: 2, end: 2 }, "caret position is correct");
 });
 
-QUnit.test("removing all characters should change value to null", function(assert) {
+QUnit.test("removing all characters should change value to 0", function(assert) {
     this.instance.option({
         format: "$#0",
         value: 1
