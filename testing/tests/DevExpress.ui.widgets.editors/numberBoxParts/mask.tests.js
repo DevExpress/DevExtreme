@@ -695,11 +695,11 @@ QUnit.test("removing with group separators using backspace key", function(assert
     assert.equal(this.input.val(), "$ 2,390 d", "value is correct");
 });
 
-QUnit.test("removing required last char should not replace it to 0", function(assert) {
+QUnit.test("removing required last char should replace it to 0", function(assert) {
     this.instance.option("value", 1);
     this.keyboard.caret(1).press("backspace");
 
-    assert.equal(this.input.val(), "", "value is correct");
+    assert.equal(this.input.val(), "0", "value is correct");
 });
 
 QUnit.test("removing required last char should replace it to 0 if percent format", function(assert) {
@@ -741,8 +741,8 @@ QUnit.test("removing all characters should change value to null", function(asser
 
     this.keyboard.caret({ start: 0, end: 2 }).press("backspace").change();
 
-    assert.strictEqual(this.input.val(), "", "value is correct");
-    assert.strictEqual(this.instance.option("value"), null, "value is reseted");
+    assert.strictEqual(this.input.val(), "$0", "value is correct");
+    assert.strictEqual(this.instance.option("value"), 0, "value is reseted");
 });
 
 QUnit.test("removing all digits but not all characters should change value to 0", function(assert) {

@@ -301,7 +301,7 @@ var NumberBoxMask = NumberBoxBase.inherit({
         }
 
         if(editedText === "") {
-            return null;
+            parsed = 0;
         }
 
         if(isNaN(parsed)) {
