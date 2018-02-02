@@ -617,7 +617,7 @@ QUnit.test("getBoundRange of Line series with equal values", function(assert) {
 QUnit.test("getBoundRange valueAxis has logarithmic type", function(assert) {
     //arrange, act
     var seriesDataSource = new SeriesDataSource({
-        dataSource: [{ arg: 1, val: 0 },
+        dataSource: [{ arg: 1, val: 4 },
                     { arg: 3, val: 200 },
                     { arg: 5, val: 12 }],
         chart: {
@@ -636,6 +636,48 @@ QUnit.test("getBoundRange valueAxis has logarithmic type", function(assert) {
     //assert
     assert.equal(boundRange.val.axisType, "logarithmic");
     assert.equal(boundRange.val.base, 2);
+});
+
+//T602076
+QUnit.test("Logarithmic value axis. 'Type' option should be passed to the series", function(assert) {
+    var seriesDataSource = new SeriesDataSource({
+        dataSource: [{ arg: 1, val: 4 },
+                    { arg: 3, val: 200 },
+                    { arg: 5, val: 12 }],
+        chart: {
+            commonSeriesSettings: {
+                type: "area"
+            },
+            valueAxis: {
+                type: "logarithmic",
+                logarithmBase: 2
+            },
+            series: {}
+        },
+        renderer: new vizMocks.Renderer()
+    });
+
+    assert.equal(seriesDataSource.getSeries()[0].valueAxisType, "logarithmic");
+});
+
+QUnit.test("'valueType' option should be passed to the series", function(assert) {
+    var seriesDataSource = new SeriesDataSource({
+        dataSource: [{ arg: 1, val: 4 },
+                    { arg: 3, val: 200 },
+                    { arg: 5, val: 12 }],
+        chart: {
+            commonSeriesSettings: {
+                type: "area"
+            },
+            valueAxis: {
+                valueType: "string",
+            },
+            series: {}
+        },
+        renderer: new vizMocks.Renderer()
+    });
+
+    assert.equal(seriesDataSource.getSeries()[0].valueType, "string");
 });
 
 QUnit.test("dataSource is null or is empty", function(assert) {
