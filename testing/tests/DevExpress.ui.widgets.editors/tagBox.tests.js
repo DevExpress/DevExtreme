@@ -3672,6 +3672,29 @@ QUnit.test("value should keep initial tag order with object items", function(ass
 });
 
 
+QUnit.test("value should keep initial tag order with object items and 'this' valueExpr", function(assert) {
+    this.reinit({
+        items: [{ id: 1, name: "Alex" }, { id: 2, name: "John" }, { id: 3, name: "Max" }],
+        valueExpr: "this",
+        displayExpr: "name",
+        opened: true
+    });
+
+    var items = this.instance.option("items"),
+        $listItems = this.$listItems;
+
+    $($listItems.eq(1)).trigger("dxclick");
+    $(this.$popupWrapper.find(".dx-popup-done")).trigger("dxclick");
+
+    this.instance.option("opened", true);
+
+    $($listItems.eq(0)).trigger("dxclick");
+    $(this.$popupWrapper.find(".dx-popup-done")).trigger("dxclick");
+
+    assert.deepEqual(this.instance.option("value"), [items[1], items[0]], "tags order is correct");
+});
+
+
 QUnit.module("the 'onSelectAllValueChanged' option", {
     _init: function(options) {
         this.spy = sinon.spy();
