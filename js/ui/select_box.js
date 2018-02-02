@@ -576,6 +576,10 @@ var SelectBox = DropDownList.inherit({
         }
 
         var oldSelectedItem = this.option("selectedItem");
+        if(this._displayGetter(oldSelectedItem) === this._searchValue()) {
+            return;
+        }
+
         this._renderInputValue().always((function(selectedItem) {
             var newSelectedItem = commonUtils.ensureDefined(selectedItem, oldSelectedItem);
             this._setSelectedItem(newSelectedItem);
