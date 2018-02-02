@@ -127,8 +127,7 @@ var FlexLayoutStrategy = Class.inherit({
                     width: "auto",
                     height: "auto",
                     display: styleUtils.stylePropPrefix("flexDirection") + "flex",
-                    flexDirection: $item.children().css("flexDirection") || "column",
-                    flexBasis: 0
+                    flexDirection: $item.children().css("flexDirection") || "column"
                 });
 
                 // NOTE: workaround for jQuery version < 1.11.1 (T181692)
