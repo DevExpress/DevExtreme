@@ -1,0 +1,25 @@
+.dx-size-default() {
+    @GENERIC_PIVOTTABS_HEIGHT: 74px;
+    @GENERIC_PIVOTTABS_FONT_SIZE: 40px;
+    @GENERIC_PIVOTTABS_ITEM_PADDING: 10px;
+}
+.dx-size-compact() {
+    @GENERIC_PIVOTTABS_HEIGHT: 46px;
+    @GENERIC_PIVOTTABS_FONT_SIZE: 30px;
+    @GENERIC_PIVOTTABS_ITEM_PADDING: 3px 7px;
+}
+
+
+.dx-pivottabs {
+    height: @GENERIC_PIVOTTABS_HEIGHT;
+}
+
+.dx-pivottabs-tab, .dx-pivottabs-ghosttab {
+    padding: @GENERIC_PIVOTTABS_ITEM_PADDING;
+    color: @pivottabs-tab-color;
+    font-size: @GENERIC_PIVOTTABS_FONT_SIZE;
+}
+
+.dx-pivottabs-tab-selected {
+    color: @pivottabs-tab-selected-color;
+}
