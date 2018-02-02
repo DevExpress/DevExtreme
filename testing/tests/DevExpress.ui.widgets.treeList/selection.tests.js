@@ -18,6 +18,7 @@ require("ui/tree_list/ui.tree_list");
 
 var $ = require("jquery"),
     fx = require("animation/fx"),
+    errors = require("ui/widget/ui.errors"),
     treeListMocks = require("../../helpers/treeListMocks.js"),
     setupTreeListModules = treeListMocks.setupTreeListModules;
 
@@ -766,6 +767,7 @@ QUnit.test("getSelectedRowKeys with default parameter", function(assert) {
 
 QUnit.test("getSelectedRowKeys with 'leavesOnly' parameter", function(assert) {
    //arrange
+    sinon.spy(errors, "log");
     var $testElement = $('#treeList');
 
     this.options.dataSource = [
@@ -782,7 +784,12 @@ QUnit.test("getSelectedRowKeys with 'leavesOnly' parameter", function(assert) {
 
     //act, assert
     assert.deepEqual(this.getSelectedRowKeys(true), [2, 5], "only leaves selected"); //deprecated in 18.1
+    assert.equal(errors.log.lastCall.args[0], "W0002", "Warning is raised");
+
     assert.deepEqual(this.getSelectedRowKeys("leavesOnly"), [2, 5], "only leaves selected");
+    assert.equal(errors.log.callCount, 1, "Warning is raised one time");
+
+    errors.log.restore();
 });
 
 QUnit.test("getSelectedRowKeys with 'includeRecursive' parameter", function(assert) {
