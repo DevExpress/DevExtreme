@@ -1287,6 +1287,29 @@ QUnit.test("Timepanel text should be calculated correctly if DST makes sense (T4
     assert.equal($cells.eq(2).text(), dateLocalization.format(new Date(2016, 10, 6, 2), "shorttime"), "Cell text is OK");
 });
 
+QUnit.test("DateTimeIndicator should show correct time in current time zone", function(assert) {
+    this.createInstance({
+        dataSource: [],
+        views: ["week"],
+        currentView: "week",
+        cellDuration: 60,
+        showCurrentTimeIndicator: true,
+        currentDate: new Date(2018, 1, 4),
+        indicatorTime: new Date(2018, 1, 4, 9, 30),
+        height: 600
+    });
+
+    var indicatorPositionBefore = this.instance.$element().find(".dx-scheduler-date-time-indicator").position(),
+        cellHeight = $(this.instance.$element()).find(".dx-scheduler-date-table td").eq(0).outerHeight();
+
+    this.instance.option("timeZone", "Europe/Berlin");
+
+    var indicatorPositionAfter = this.instance.$element().find(".dx-scheduler-date-time-indicator").position(),
+        tzDiff = this.instance.fire("getClientTimezoneOffset") / 3600000 + this.instance.fire("getTimezone");
+
+    assert.equal(indicatorPositionAfter.top, indicatorPositionBefore.top + cellHeight * tzDiff, "indicator has correct position");
+});
+
 QUnit.test("Tables should take css class after width calculation(T491453)", function(assert) {
     assert.expect(1);
 
