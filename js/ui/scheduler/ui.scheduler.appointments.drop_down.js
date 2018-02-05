@@ -134,8 +134,8 @@ var dropDownAppointments = Class.inherit({
                 items: items.data,
                 buttonTemplate: this._createButtonTemplate(items.data.length),
                 buttonWidth: config.buttonWidth,
+                closeOnClick: false,
                 onItemClick: function(args) {
-                    args.component.open();
                     var mappedData = that.instance.fire("mapAppointmentFields", args);
 
                     that._appointmentClickAction(extendFromObject(mappedData, args, false));
