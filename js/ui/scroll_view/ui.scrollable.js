@@ -237,7 +237,7 @@ var Scrollable = DOMComponent.inherit({
 
     _init: function() {
         this.callBase();
-        this._initMarkup();
+        this._initScrollableMarkup();
         this._attachNativeScrollbarsCustomizationCss();
         this._locked = false;
     },
@@ -253,7 +253,7 @@ var Scrollable = DOMComponent.inherit({
         }
     },
 
-    _initMarkup: function() {
+    _initScrollableMarkup: function() {
         var $element = this.$element().addClass(SCROLLABLE_CLASS),
             $container = this._$container = $("<div>").addClass(SCROLLABLE_CONTAINER_CLASS),
             $wrapper = this._$wrapper = $("<div>").addClass(SCROLLABLE_WRAPPER_CLASS),
