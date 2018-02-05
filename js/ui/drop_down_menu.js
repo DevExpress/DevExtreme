@@ -197,7 +197,9 @@ var DropDownMenu = Widget.inherit({
             popupAnimation: undefined,
             onItemRendered: null,
             menuWidget: List,
-            popupMaxHeight: undefined
+            popupMaxHeight: undefined,
+
+            hideMenuOnItemClick: true
         });
     },
 
@@ -421,7 +423,9 @@ var DropDownMenu = Widget.inherit({
             noDataText: "",
             itemTemplate: this._getTemplateByOption("itemTemplate"),
             onItemClick: (function(e) {
-                this.option("opened", false);
+                if(this.option("hideMenuOnItemClick")) {
+                    this.option("opened", false);
+                }
                 this._itemClickAction(e);
             }).bind(this),
             tabIndex: -1,
@@ -522,6 +526,7 @@ var DropDownMenu = Widget.inherit({
                 break;
             case "deferRendering":
             case "popupPosition":
+            case "hideMenuOnItemClick":
                 break;
             default:
                 this.callBase(args);
