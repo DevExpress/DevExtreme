@@ -198,7 +198,6 @@ var DropDownMenu = Widget.inherit({
             onItemRendered: null,
             menuWidget: List,
             popupMaxHeight: undefined,
-
             hideMenuOnItemClick: true
         });
     },
