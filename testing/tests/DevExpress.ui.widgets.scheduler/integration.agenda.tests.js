@@ -68,6 +68,20 @@ QUnit.test("Scheduler should have a right rendering strategy for agenda view", f
     assert.ok(renderingStrategy instanceof AgendaAppointmentsStrategy, "Strategy is OK");
 });
 
+QUnit.test("showAllDayPanel option shouldn't have any effect on agenda", function(assert) {
+    this.createInstance({
+        views: ["agenda"],
+        currentView: "agenda",
+        currentDate: new Date(2016, 1, 22),
+        showAllDayPanel: false,
+        dataSource: [
+            { startDate: new Date(2016, 1, 22, 1), endDate: new Date(2016, 1, 24, 1, 30) }
+        ]
+    });
+
+    assert.equal(this.instance.$element().find(".dx-scheduler-appointment").length, 3, "Appointment count is OK");
+});
+
 QUnit.test("Appointments should not be resizable/draggable if current view is agenda", function(assert) {
     this.createInstance({
         views: ["agenda", "day"],

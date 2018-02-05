@@ -461,7 +461,7 @@ var subscribes = {
             resources = this._resourcesManager.getResourcesData(),
             allDay;
 
-        if(!this.option("showAllDayPanel") && this._workSpace.supportAllDayRow()) {
+        if(!this._isAgenda() && !this.option("showAllDayPanel") && this._workSpace.supportAllDayRow()) {
             allDay = false;
         }
 
