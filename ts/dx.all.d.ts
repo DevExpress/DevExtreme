@@ -1967,7 +1967,7 @@ declare module DevExpress.ui {
         /** A handler for the rowUpdating event. Executed before a row is updated in the data source. */
         onRowUpdating?: ((e: { component?: DOMComponent, element?: DevExpress.core.dxElement, model?: any, oldData?: any, newData?: any, key?: any, cancel?: boolean | Promise<void> | JQueryPromise<void> }) => any);
         /** A handler for the rowValidating event. Executed after cells in a row are validated against validation rules. */
-        onRowValidating?: ((e: { component?: DOMComponent, element?: DevExpress.core.dxElement, model?: any, brokenRules?: Array<dxValidationRule>, isValid?: boolean, key?: any, newData?: any, oldData?: any, errorText?: string }) => any);
+        onRowValidating?: ((e: { component?: DOMComponent, element?: DevExpress.core.dxElement, model?: any, brokenRules?: Array<RequiredRule | NumericRule | RangeRule | StringLengthRule | CustomRule | CompareRule | PatternRule | EmailRule>, isValid?: boolean, key?: any, newData?: any, oldData?: any, errorText?: string }) => any);
         /** A handler for the selectionChanged event. Executed after selecting a row or clearing its selection. */
         onSelectionChanged?: ((e: { component?: DOMComponent, element?: DevExpress.core.dxElement, model?: any, currentSelectedRowKeys?: Array<any>, currentDeselectedRowKeys?: Array<any>, selectedRowKeys?: Array<any>, selectedRowsData?: Array<any> }) => any);
         /** A handler for the toolbarPreparing event. Executed before the toolbar is created. */
@@ -4301,16 +4301,15 @@ declare module DevExpress.ui {
         /** Specifies the type of the current rule. */
         type?: string;
     }
-    export type dxValidationRule = RequiredRule | NumericRule | RangeRule | StringLengthRule | CustomRule | CompareRule | PatternRule | EmailRule; 
     export interface dxValidationGroupResult {
-        brokenRules?: Array<dxValidationRule>;
+        brokenRules?: Array<RequiredRule | NumericRule | RangeRule | StringLengthRule | CustomRule | CompareRule | PatternRule | EmailRule>;
         isValid?: boolean;
         validators?: Array<any>;
     }
     export interface dxValidatorResult {
-        brokenRule?: dxValidationRule;
+        brokenRule?: RequiredRule | NumericRule | RangeRule | StringLengthRule | CustomRule | CompareRule | PatternRule | EmailRule;
         isValid?: boolean;
-        validationRules?: Array<dxValidationRule>;
+        validationRules?: Array<RequiredRule | NumericRule | RangeRule | StringLengthRule | CustomRule | CompareRule | PatternRule | EmailRule>;
         value?: any;
     }
     export interface dxValidationGroupOptions extends DOMComponentOptions {
@@ -4339,11 +4338,11 @@ declare module DevExpress.ui {
         /** Specifies the editor name to be used in the validation default messages. */
         name?: string;
         /** A handler for the validated event. */
-        onValidated?: ((validatedInfo: { name?: string, isValid?: boolean, value?: any, validationRules?: Array<dxValidationRule>, brokenRule?: dxValidationRule }) => any);
+        onValidated?: ((validatedInfo: { name?: string, isValid?: boolean, value?: any, validationRules?: Array<RequiredRule | NumericRule | RangeRule | StringLengthRule | CustomRule | CompareRule | PatternRule | EmailRule>, brokenRule?: RequiredRule | NumericRule | RangeRule | StringLengthRule | CustomRule | CompareRule | PatternRule | EmailRule }) => any);
         /** Specifies the validation group the editor will be related to. */
         validationGroup?: string;
         /** An array of validation rules to be checked for the editor with which the dxValidator object is associated. */
-        validationRules?: Array<dxValidationRule>;
+        validationRules?: Array<RequiredRule | NumericRule | RangeRule | StringLengthRule | CustomRule | CompareRule | PatternRule | EmailRule>;
     }
     /** A widget that is used to validate the associated DevExtreme editors against the defined validation rules. */
     export class dxValidator extends DOMComponent {
@@ -4685,7 +4684,7 @@ declare module DevExpress.ui {
         /** A template to be used for rendering the form item. */
         template?: template | ((data: any, itemElement: DevExpress.core.dxElement) => string | Element | JQuery);
         /** An array of validation rules to be checked for the form item editor. */
-        validationRules?: Array<dxValidationRule>;
+        validationRules?: Array<RequiredRule | NumericRule | RangeRule | StringLengthRule | CustomRule | CompareRule | PatternRule | EmailRule>;
         /** Specifies whether or not the current form item is visible. */
         visible?: boolean;
         /** Specifies the sequence number of the item in a form, group or tab. */
