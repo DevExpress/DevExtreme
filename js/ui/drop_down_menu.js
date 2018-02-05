@@ -197,7 +197,8 @@ var DropDownMenu = Widget.inherit({
             popupAnimation: undefined,
             onItemRendered: null,
             menuWidget: List,
-            popupMaxHeight: undefined
+            popupMaxHeight: undefined,
+            closeOnClick: true
         });
     },
 
@@ -421,7 +422,9 @@ var DropDownMenu = Widget.inherit({
             noDataText: "",
             itemTemplate: this._getTemplateByOption("itemTemplate"),
             onItemClick: (function(e) {
-                this.option("opened", false);
+                if(this.option("closeOnClick")) {
+                    this.option("opened", false);
+                }
                 this._itemClickAction(e);
             }).bind(this),
             tabIndex: -1,
@@ -522,6 +525,7 @@ var DropDownMenu = Widget.inherit({
                 break;
             case "deferRendering":
             case "popupPosition":
+            case "closeOnClick":
                 break;
             default:
                 this.callBase(args);
