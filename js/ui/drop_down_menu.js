@@ -422,7 +422,7 @@ var DropDownMenu = Widget.inherit({
             noDataText: "",
             itemTemplate: this._getTemplateByOption("itemTemplate"),
             onItemClick: (function(e) {
-                if(this.option("hideMenuOnItemClick")) {
+                if(this.option("hideOnItemClick")) {
                     this.option("opened", false);
                 }
                 this._itemClickAction(e);
