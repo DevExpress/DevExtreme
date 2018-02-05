@@ -198,7 +198,7 @@ var DropDownMenu = Widget.inherit({
             onItemRendered: null,
             menuWidget: List,
             popupMaxHeight: undefined,
-            hideMenuOnItemClick: true
+            hideOnItemClick: true
         });
     },
 
@@ -525,7 +525,7 @@ var DropDownMenu = Widget.inherit({
                 break;
             case "deferRendering":
             case "popupPosition":
-            case "hideMenuOnItemClick":
+            case "hideOnItemClick":
                 break;
             default:
                 this.callBase(args);

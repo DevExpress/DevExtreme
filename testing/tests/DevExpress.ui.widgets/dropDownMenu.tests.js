@@ -424,12 +424,12 @@ QUnit.test("click outside of popup hides drop-down list", function(assert) {
     assert.equal(popup.option("visible"), false);
 });
 
-QUnit.test("click on list item hides drop-down list if hideMenuOnItemClick=true", function(assert) {
+QUnit.test("click on list item hides drop-down list if hideOnItemClick=true", function(assert) {
     assert.expect(4);
 
     this.ddMenu.option({
         items: [1, 2, 3],
-        hideMenuOnItemClick: false
+        hideOnItemClick: false
     });
     this.toggleMenu();
 
@@ -444,7 +444,7 @@ QUnit.test("click on list item hides drop-down list if hideMenuOnItemClick=true"
     $($list.find(".dx-list-item").first()).trigger("dxclick");
     assert.equal(popup.option("visible"), true, "popup is visible");
 
-    this.ddMenu.option("hideMenuOnItemClick", true);
+    this.ddMenu.option("hideOnItemClick", true);
     $($list.find(".dx-list-item").first()).trigger("dxclick");
     assert.equal(popup.option("visible"), false, "popup is hidden");
 });
