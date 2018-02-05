@@ -13,7 +13,9 @@ var SCHEDULER_DATE_TIME_INDICATOR_CLASS = "dx-scheduler-date-time-indicator",
 
 var SchedulerWorkSpaceIndicator = SchedulerWorkSpace.inherit({
     _getToday: function() {
-        return this.option("indicatorTime") || new Date();
+        var date = this.option("indicatorTime") || new Date();
+
+        return this.invoke("convertDateByTimezone", date) || date;
     },
 
     _needRenderDateTimeIndicator: function() {
