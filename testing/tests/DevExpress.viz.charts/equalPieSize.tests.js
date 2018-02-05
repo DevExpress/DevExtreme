@@ -427,6 +427,21 @@ QUnit.test("Hide labes after first measuring render", function(assert) {
 
 });
 
+QUnit.test("Create pie with group but w/o series. Do not ask for common layout. T602149", function(assert) {
+    var done = assert.async();
+
+    this.createPieChart({
+        sizeGroup: "group1",
+        onDrawn: checkPie
+    },
+    { radiusInner: 0, radiusOuter: 300, centerX: 100, centerY: 200, canvas: {} });
+
+    function checkPie(e) {
+        assert.equal(e.component.layoutManager.applyEqualPieChartLayout.callCount, 0);
+        done();
+    }
+});
+
 
 
 
