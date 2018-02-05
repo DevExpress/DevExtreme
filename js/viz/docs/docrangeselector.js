@@ -535,7 +535,7 @@ var dxRangeSelector = {
         * @publicName padding
         * @type number
         * @default 6
-        * @deprecated dxrangeselectoroptions_slidermarker_paddingleftright
+        * @deprecated
         */
         padding: 6,
         /**
@@ -571,7 +571,7 @@ var dxRangeSelector = {
         * @publicName placeholderSize
         * @type number|object
         * @default undefined
-        * @deprecated dxrangeselectoroptions_slidermarker_placeholderHeight
+        * @deprecated
         */
         placeholderSize: {
             /**

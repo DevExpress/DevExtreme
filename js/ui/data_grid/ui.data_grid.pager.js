@@ -116,9 +116,16 @@ exports.PagerView = gridCore.View.inherit({
             isPager = name === "pager",
             isPaging = name === "paging",
             isDataSource = name === "dataSource",
-            isScrolling = name === "scrolling";
+            isScrolling = name === "scrolling",
+            dataController = that.getController("data");
 
         if(isPager || isPaging || isScrolling || isDataSource) {
+            args.handled = true;
+
+            if(dataController.skipProcessingPagingChange(args.fullName)) {
+                return;
+            }
+
             if(isPager || isPaging) {
                 that._pageSizes = null;
             }
@@ -132,8 +139,6 @@ exports.PagerView = gridCore.View.inherit({
                     that.component.resize();
                 }
             }
-
-            args.handled = true;
         }
     }
 });

@@ -26,7 +26,7 @@ var Validator = DOMComponent.inherit({
             /**
             * @name dxValidatorOptions_validationRules
             * @publicName validationRules
-            * @type Array<dxValidationRule>
+            * @type Array<RequiredRule,NumericRule,RangeRule,StringLengthRule,CustomRule,CompareRule,PatternRule,EmailRule>
             */
             validationRules: []
             /**
@@ -85,8 +85,8 @@ var Validator = DOMComponent.inherit({
             * @type_function_param1_field1 name:string
             * @type_function_param1_field2 isValid:boolean
             * @type_function_param1_field3 value:Object
-            * @type_function_param1_field4 validationRules:Array<dxValidationRule>
-            * @type_function_param1_field5 brokenRule:dxValidationRule
+            * @type_function_param1_field4 validationRules:Array<RequiredRule,NumericRule,RangeRule,StringLengthRule,CustomRule,CompareRule,PatternRule,EmailRule>
+            * @type_function_param1_field5 brokenRule:RequiredRule|NumericRule|RangeRule|StringLengthRule|CustomRule|CompareRule|PatternRule|EmailRule
             * @action
             */
 

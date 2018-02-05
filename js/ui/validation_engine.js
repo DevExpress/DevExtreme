@@ -367,11 +367,7 @@ var EmailRuleValidator = BaseRuleValidator.inherit({
                 }));
     }
 });
-/**
- * @name dxValidationRule
- * @publicName dxValidationRule
- * @type RequiredRule|NumericRule|RangeRule|StringLengthRule|CustomRule|CompareRule|PatternRule|EmailRule
- */
+
 var rulesValidators = {
     /**
      * @name requiredRule
@@ -460,7 +456,7 @@ var GroupConfig = Class.inherit({
             /**
              * @name dxValidationGroupResult_brokenRules
              * @publicName brokenRules
-             * @type Array<dxValidationRule>
+             * @type Array<RequiredRule,NumericRule,RangeRule,StringLengthRule,CustomRule,CompareRule,PatternRule,EmailRule>
              */
             brokenRules: [],
             /**
@@ -588,7 +584,7 @@ var ValidationEngine = {
                 /**
                  * @name dxValidatorResult_brokenRule
                  * @publicName brokenRule
-                 * @type dxValidationRule
+                 * @type RequiredRule|NumericRule|RangeRule|StringLengthRule|CustomRule|CompareRule|PatternRule|EmailRule
                  */
                 brokenRule: null,
                 /**
@@ -600,7 +596,7 @@ var ValidationEngine = {
                 /**
                  * @name dxValidatorResult_validationRules
                  * @publicName validationRules
-                 * @type Array<dxValidationRule>
+                 * @type Array<RequiredRule,NumericRule,RangeRule,StringLengthRule,CustomRule,CompareRule,PatternRule,EmailRule>
                  */
                 validationRules: rules
             },

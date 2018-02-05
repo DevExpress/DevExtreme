@@ -4016,6 +4016,24 @@ QUnit.test("Error on loading", function(assert) {
     clock.restore();
 });
 
+QUnit.test("Raise error if key field is missed", function(assert) {
+    //act
+    var clock = sinon.useFakeTimers(),
+        dataGrid = createDataGrid({
+            columns: ["field1"],
+            keyExpr: "ID",
+            dataSource: [{ ID: 1, field1: "John" }, { field1: "Olivia" }]
+        });
+
+    clock.tick();
+
+    //assert
+    var $errorRow = $($(dataGrid.$element()).find(".dx-error-row"));
+    assert.equal($errorRow.length, 1, "error row is shown");
+    assert.equal($errorRow.find(".dx-error-message").text().slice(0, 5), "E1046", "error number");
+    clock.restore();
+});
+
 //T481276
 QUnit.test("updateDimensions during grouping when fixed to right column exists", function(assert) {
     var loadResult = $.Deferred().resolve([{}]),

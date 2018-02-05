@@ -19,7 +19,9 @@ module.exports = {
         return numericTranslator.isValid.call(this, new Date(value));
     },
 
-    parse: function(value) {
+    getCorrectValue: numericTranslator.getCorrectValue,
+
+    _parse: function(value) {
         return new Date(value);
     },
 

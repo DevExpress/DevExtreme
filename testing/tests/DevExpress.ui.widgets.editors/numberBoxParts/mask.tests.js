@@ -474,6 +474,18 @@ QUnit.test("ctrl+v should not be prevented", function(assert) {
     assert.strictEqual(this.keyboard.event.isDefaultPrevented(), false, "keydown event is not prevented");
 });
 
+QUnit.test("decimal point input should be prevented when it is restricted by the format", function(assert) {
+    this.instance.option({
+        format: "#0",
+        value: 123
+    });
+
+    this.keyboard.caret(1).type(".");
+
+    assert.equal(this.input.val(), "123", "value is correct");
+    assert.equal(this.keyboard.caret().start, 1, "caret should not be moved");
+});
+
 QUnit.test("incomplete input should not be prevented when there are stubs and zeros after the caret", function(assert) {
     this.instance.option({
         format: "#0.## kg",
@@ -695,11 +707,11 @@ QUnit.test("removing with group separators using backspace key", function(assert
     assert.equal(this.input.val(), "$ 2,390 d", "value is correct");
 });
 
-QUnit.test("removing required last char should not replace it to 0", function(assert) {
+QUnit.test("removing required last char should replace it to 0", function(assert) {
     this.instance.option("value", 1);
     this.keyboard.caret(1).press("backspace");
 
-    assert.equal(this.input.val(), "", "value is correct");
+    assert.equal(this.input.val(), "0", "value is correct");
 });
 
 QUnit.test("removing required last char should replace it to 0 if percent format", function(assert) {
@@ -733,7 +745,7 @@ QUnit.test("removing integer digit using backspace if group separator is hiding"
     assert.deepEqual(this.keyboard.caret(), { start: 2, end: 2 }, "caret position is correct");
 });
 
-QUnit.test("removing all characters should change value to null", function(assert) {
+QUnit.test("removing all characters should change value to 0", function(assert) {
     this.instance.option({
         format: "$#0",
         value: 1
@@ -741,8 +753,8 @@ QUnit.test("removing all characters should change value to null", function(asser
 
     this.keyboard.caret({ start: 0, end: 2 }).press("backspace").change();
 
-    assert.strictEqual(this.input.val(), "", "value is correct");
-    assert.strictEqual(this.instance.option("value"), null, "value is reseted");
+    assert.strictEqual(this.input.val(), "$0", "value is correct");
+    assert.strictEqual(this.instance.option("value"), 0, "value is reseted");
 });
 
 QUnit.test("removing all digits but not all characters should change value to 0", function(assert) {
