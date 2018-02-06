@@ -59,11 +59,11 @@ var applyForEach = function(args, method) {
 
     if(domAdapter.isNode(element) || isWindow(element)) {
         method.apply(eventsEngine, args);
-    } else if(element.each) {
+    } else if(element.length) {
         var itemArgs = Array.prototype.slice.call(args, 0);
 
-        element.each(function() {
-            itemArgs[0] = this;
+        Array.prototype.forEach.call(element, function(itemElement) {
+            itemArgs[0] = itemElement;
             applyForEach(itemArgs, method);
         });
     }
