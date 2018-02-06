@@ -214,7 +214,7 @@ var ValidatingController = modules.Controller.inherit((function() {
                 var useDefaultValidator = $container && $container.hasClass("dx-widget");
                 $container && $container.addClass(that.addWidgetPrefix(VALIDATOR_CLASS));
 
-                var validator = new Validator($container || {}, {
+                var validator = new Validator($container || $("<div>"), {
                     name: column.caption,
                     validationRules: extend(true, [], column.validationRules),
                     validationGroup: editData,
