@@ -39,7 +39,10 @@ QUnit.module("State Storing", {
                     columns: [{ dataField: "name", dataType: "string" }, { dataField: "age", dataType: "number" }],
                     keyExpr: "id",
                     parentIdExpr: "parentId",
-                    loadingTimeout: undefined
+                    loadingTimeout: undefined,
+                    scrolling: {
+                        mode: "virtual"
+                    }
                 }, options)
             });
             this.clock.tick();
@@ -113,7 +116,7 @@ QUnit.test("Save user state", function(assert) {
         ],
         expandedRowKeys: [1],
         pageIndex: 0,
-        pageSize: 0,
+        pageSize: 20,
         searchText: ""
     }, "state");
 });
