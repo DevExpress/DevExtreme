@@ -660,24 +660,29 @@ var SelectBox = DropDownList.inherit({
     },
 
     _loadItem: function(value, cache) {
-        var that = this;
-
-        this._loadItemDeferred = new Deferred();
+        var that = this,
+            deferred = new Deferred();
 
         this.callBase(value, cache)
             .done((function(item) {
-                this._loadItemDeferred.resolve(item);
+                deferred.resolve(item);
             }).bind(this))
             .fail((function() {
                 var selectedItem = that.option("selectedItem");
                 if(that.option("acceptCustomValue") && value === that._valueGetter(selectedItem)) {
-                    this._loadItemDeferred.resolve(selectedItem);
+                    deferred.resolve(selectedItem);
                 } else {
-                    this._loadItemDeferred.reject();
+                    deferred.reject();
                 }
             }).bind(this));
 
-        return this._loadItemDeferred.promise();
+        return deferred.promise();
+    },
+
+    _loadInputValue: function(value, callback) {
+        this._loadItemDeferred = this._loadItem(value).always(callback);
+
+        return this._loadItemDeferred;
     },
 
     _isCustomItemSelected: function() {
