@@ -259,14 +259,6 @@ function isCondition(criteria) {
     });
 }
 
-function removeAndOperationFromGroup(group) {
-    var index = group.indexOf(AND_GROUP_OPERATION);
-    while(index !== -1) {
-        group.splice(index, 1);
-        index = group.indexOf(AND_GROUP_OPERATION);
-    }
-}
-
 function convertToInnerGroup(group) {
     var groupOperation = getCriteriaOperation(group).toLowerCase() || AND_GROUP_OPERATION,
         innerGroup = [];
@@ -359,8 +351,6 @@ function getNormalizedFilter(group, fields) {
 
     if(criteria.length === 1) {
         group = setGroupCriteria(group, criteria[0]);
-    } else if(isGroup(criteria)) {
-        removeAndOperationFromGroup(criteria);
     }
 
     if(group.length === 0) {
