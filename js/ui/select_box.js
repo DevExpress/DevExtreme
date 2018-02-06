@@ -564,27 +564,29 @@ var SelectBox = DropDownList.inherit({
     },
 
     _restoreInputText: function() {
-        if(this.option("acceptCustomValue")) {
-            return;
-        }
-
-        if(this.option("searchEnabled")) {
-            if(!this._searchValue() && this.option("allowClearing")) {
-                this._clearTextValue();
+        this._loadItemDeferred.always((function() {
+            if(this.option("acceptCustomValue")) {
                 return;
             }
-        }
 
-        var oldSelectedItem = this.option("selectedItem");
-        if(this._displayGetter(oldSelectedItem) === this._searchValue()) {
-            return;
-        }
+            if(this.option("searchEnabled")) {
+                if(!this._searchValue() && this.option("allowClearing")) {
+                    this._clearTextValue();
+                    return;
+                }
+            }
 
-        this._renderInputValue().always((function(selectedItem) {
-            var newSelectedItem = commonUtils.ensureDefined(selectedItem, oldSelectedItem);
-            this._setSelectedItem(newSelectedItem);
-            this._updateField(newSelectedItem);
-            this._clearFilter();
+            var oldSelectedItem = this.option("selectedItem");
+            if(this._displayGetter(oldSelectedItem) === this._searchValue()) {
+                return;
+            }
+
+            this._renderInputValue().always((function(selectedItem) {
+                var newSelectedItem = commonUtils.ensureDefined(selectedItem, oldSelectedItem);
+                this._setSelectedItem(newSelectedItem);
+                this._updateField(newSelectedItem);
+                this._clearFilter();
+            }).bind(this));
         }).bind(this));
     },
 
@@ -658,23 +660,24 @@ var SelectBox = DropDownList.inherit({
     },
 
     _loadItem: function(value, cache) {
-        var that = this,
-            deferred = new Deferred();
+        var that = this;
+
+        this._loadItemDeferred = new Deferred();
 
         this.callBase(value, cache)
-            .done(function(item) {
-                deferred.resolve(item);
-            })
-            .fail(function() {
+            .done((function(item) {
+                this._loadItemDeferred.resolve(item);
+            }).bind(this))
+            .fail((function() {
                 var selectedItem = that.option("selectedItem");
                 if(that.option("acceptCustomValue") && value === that._valueGetter(selectedItem)) {
-                    deferred.resolve(selectedItem);
+                    this._loadItemDeferred.resolve(selectedItem);
                 } else {
-                    deferred.reject();
+                    this._loadItemDeferred.reject();
                 }
-            });
+            }).bind(this));
 
-        return deferred.promise();
+        return this._loadItemDeferred.promise();
     },
 
     _isCustomItemSelected: function() {
