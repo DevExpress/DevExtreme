@@ -652,7 +652,10 @@ var MenuBase = HierarchicalCollectionWidget.inherit({
 
         // deprecated since 15.1 (itemData.iconSrc)
         $itemFrame.toggleClass(DX_ITEM_HAS_ICON, hasIcon);
-        this.hasIcons = hasIcon;
+
+        if(!this.hasIcons) {
+            this.hasIcons = hasIcon;
+        }
 
         $itemFrame.toggleClass(DX_ITEM_HAS_SUBMENU, hasSubmenu);
     },
