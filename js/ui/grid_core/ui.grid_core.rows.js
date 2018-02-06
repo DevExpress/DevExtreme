@@ -675,7 +675,7 @@ module.exports = {
                         keyExpr = that._dataController.store() && that._dataController.store().key();
 
                     keyExpr && rows.some(function(row) {
-                        if(row.rowType === "data" && !isDefined(row.key)) {
+                        if(row.rowType === "data" && row.key === undefined) {
                             that._dataController.dataErrorOccurred.fire(errors.Error("E1046", keyExpr));
                             return true;
                         }
