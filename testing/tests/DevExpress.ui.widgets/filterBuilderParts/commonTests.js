@@ -571,7 +571,7 @@ QUnit.module("Rendering", function() {
         selectMenuItem(0);
 
         assert.ok($(".dx-filterbuilder-add-condition").length === 0);
-        assert.deepEqual(instance.option("value"), [["State", "<>", "Test"], ["CompanyName", "contains", ""]]);
+        assert.deepEqual(instance.option("value"), [["State", "<>", "Test"], "and", ["CompanyName", "contains", ""]]);
 
         $("." + FILTER_BUILDER_IMAGE_REMOVE_CLASS).eq(1).trigger("dxclick");
         assert.deepEqual(instance.option("value"), ["State", "<>", "Test"]);
