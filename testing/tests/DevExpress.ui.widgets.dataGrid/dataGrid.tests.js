@@ -4041,6 +4041,26 @@ QUnit.test("Raise error if key field is missed", function(assert) {
     clock.restore();
 });
 
+QUnit.test("Not raise error if key field is null", function(assert) {
+    //act
+    var clock = sinon.useFakeTimers();
+    sinon.spy(errors, "log");
+
+    createDataGrid({
+        columns: ["field1"],
+        keyExpr: "ID",
+        dataSource: [{ ID: 1, field1: "John" }, { ID: null, field1: "Olivia" }]
+    });
+
+    clock.tick();
+
+    //assert
+    assert.equal(errors.log.callCount, 0, "Warning about keyExpr not raised");
+
+    errors.log.restore();
+    clock.restore();
+});
+
 
 //T481276
 QUnit.test("updateDimensions during grouping when fixed to right column exists", function(assert) {
