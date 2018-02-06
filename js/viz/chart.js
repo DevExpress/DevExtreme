@@ -1125,7 +1125,8 @@ var dxChart = AdvancedChart.inherit({
     _resetZoom: function() {
         var that = this;
         that._zoomMinArg = that._zoomMaxArg = that._notApplyMargins = undefined; // T190927
-        that._argumentAxes[0] && that._argumentAxes[0].resetZoom();
+        that._argumentAxes[0].resetZoom();
+        that._valueAxes.forEach(function(axis) { axis.resetZoom(); }); // T602156
     },
 
     // T218011 for dashboards

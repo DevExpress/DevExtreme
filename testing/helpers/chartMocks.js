@@ -1020,9 +1020,7 @@
                 return { min: min, max: max };
             }),
             getViewport: sinon.stub().returns({}),
-            resetZoom: function() {
-
-            },
+            resetZoom: sinon.spy(),
             drawScaleBreaks: sinon.spy(),
             resetTypes: sinon.spy(),
             setMarginOptions: sinon.spy()
