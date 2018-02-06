@@ -1,7 +1,6 @@
 "use strict";
 
 var dataErrors = require("../../data/errors").errors,
-    domAdapter = require("../../core/dom_adapter"),
     errors = require("../widget/ui.errors"),
     extend = require("../../core/utils/extend").extend,
     formatHelper = require("../../format_helper"),
@@ -525,9 +524,8 @@ function isValidCondition(condition, field) {
 }
 
 function setFocusToBody() {
-    var doc = domAdapter.getDocument();
-    if(doc && doc.activeElement && doc.activeElement.nodeName.toLowerCase() !== "body") {
-        doc.activeElement.blur();
+    if(document.activeElement && document.activeElement.nodeName.toLowerCase() !== "body") {
+        document.activeElement.blur();
     }
 }
 
