@@ -85,7 +85,8 @@ QUnit.module("Keyboard navigation", {
                         }
                         this.eventsInfo[name].unsubscribeFromEventCounter++;
                     },
-                    attr: function() { }
+                    attr: function() { },
+                    length: 0
                 };
 
                 return {

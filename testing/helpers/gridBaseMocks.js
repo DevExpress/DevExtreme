@@ -702,7 +702,8 @@ module.exports = function($, gridCore, columnResizingReordering, domUtils, commo
                     }
                 },
                 off: commonUtils.noop,
-                on: commonUtils.noop
+                on: commonUtils.noop,
+                length: 0
             };
         };
         return {
