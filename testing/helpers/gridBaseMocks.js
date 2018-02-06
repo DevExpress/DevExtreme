@@ -186,6 +186,13 @@ module.exports = function($, gridCore, columnResizingReordering, domUtils, commo
                 return result;
             },
 
+            getUserState: function() {
+                return {
+                    pageIndex: this.pageIndex(),
+                    pageSize: this.pageSize()
+                };
+            },
+
             getCombinedFilter: commonUtils.noop,
             getRowIndexByKey: function() {
                 return -1;
