@@ -130,7 +130,7 @@
     "dxDataGrid-columnFixingRightPosition": "向右",
     "dxDataGrid-exportTo": "导出",
     "dxDataGrid-exportToExcel": "导出Excel文件",
-    "dxDataGrid-excelFormat": "导出文件",
+    "dxDataGrid-excelFormat": "Excel文件",
     "dxDataGrid-selectedRows": "选中行",
     "dxDataGrid-exportSelectedRows": "导出选中行",
     "dxDataGrid-exportAll": "导出所有数据",
@@ -153,7 +153,7 @@
     "dxPager-infoText": "第{0}页,共{1}页 ({2} 项目)",
     "dxPager-pagesCountText": "到",
 
-    "dxPivotGrid-grandTotal": "总计",
+    "dxPivotGrid-grandTotal": "合计",
     "dxPivotGrid-total": "{0} 总计",
     "dxPivotGrid-fieldChooserTitle": "字段选择器",
     "dxPivotGrid-showFieldChooser": "显示字段选择器",
@@ -192,10 +192,10 @@
     "dxScheduler-recurrenceAfter": "之后",
     "dxScheduler-recurrenceOn": "在",
 
-    "dxScheduler-recurrenceRepeatDaily": "日(s)",
-    "dxScheduler-recurrenceRepeatWeekly": "周(s)",
-    "dxScheduler-recurrenceRepeatMonthly": "月(s)",
-    "dxScheduler-recurrenceRepeatYearly": "年(s)",
+    "dxScheduler-recurrenceRepeatDaily": "日",
+    "dxScheduler-recurrenceRepeatWeekly": "周",
+    "dxScheduler-recurrenceRepeatMonthly": "月",
+    "dxScheduler-recurrenceRepeatYearly": "年",
 
     "dxScheduler-switcherDay": "日",
     "dxScheduler-switcherWeek": "周",
@@ -204,13 +204,13 @@
 
     "dxScheduler-switcherAgenda": "议程",
 
-    "dxScheduler-switcherTimelineDay": "日",
-    "dxScheduler-switcherTimelineWeek": "周",
-    "dxScheduler-switcherTimelineWorkWeek": "工作日",
-    "dxScheduler-switcherTimelineMonth": "月",
+    "dxScheduler-switcherTimelineDay": "时间轴日",
+    "dxScheduler-switcherTimelineWeek": "时间轴周",
+    "dxScheduler-switcherTimelineWorkWeek": "时间轴工作周",
+    "dxScheduler-switcherTimelineMonth": "时间轴月",
 
     "dxScheduler-recurrenceRepeatOnDate": "日期",
-    "dxScheduler-recurrenceRepeatCount": "事件(s)",
+    "dxScheduler-recurrenceRepeatCount": "事件",
     "dxScheduler-allDay": "全天",
 
     "dxScheduler-confirmRecurrenceEditMessage": "你只想修改这个日程还是想修改这个系列的日程?",
