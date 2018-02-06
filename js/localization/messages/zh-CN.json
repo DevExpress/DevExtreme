@@ -222,7 +222,6 @@
     "dxScheduler-confirmRecurrenceDeleteOccurrence": "删除日程",
 
     "dxScheduler-noTimezoneTitle": "没有时区",
-    "dxScheduler-moreAppointments": "{0} 更多",
 
     "dxCalendar-todayButtonText": "今天",
     "dxCalendar-ariaWidgetName": "日历",
@@ -233,32 +232,8 @@
     "dxColorView-ariaAlpha": "透明度",
     "dxColorView-ariaHex": "色标",
 
-    "dxTagBox-selected": "{0} 选择",
-    "dxTagBox-allSelected": "全选 ({0})",
-    "dxTagBox-moreSelected": "{0} 更多",
-
     "vizExport-printingButtonText": "打印",
     "vizExport-titleMenuText": "导出/打印",
-    "vizExport-exportButtonText": "{0} 文件",
-
-    "dxFilterBuilder-and": "与",
-    "dxFilterBuilder-or": "或",
-    "dxFilterBuilder-notAnd": "非与",
-    "dxFilterBuilder-notOr": "非或",
-    "dxFilterBuilder-addCondition": "添加条件",
-    "dxFilterBuilder-addGroup": "添加组",
-    "dxFilterBuilder-enterValueText": "<输入值>",
-    "dxFilterBuilder-filterOperationEquals": "等于",
-    "dxFilterBuilder-filterOperationNotEquals": "不等于",
-    "dxFilterBuilder-filterOperationLess": "小于",
-    "dxFilterBuilder-filterOperationLessOrEquals": "小于或等于",
-    "dxFilterBuilder-filterOperationGreater": "大于",
-    "dxFilterBuilder-filterOperationGreaterOrEquals": "大于或等于",
-    "dxFilterBuilder-filterOperationStartsWith": "开始于",
-    "dxFilterBuilder-filterOperationContains": "包含",
-    "dxFilterBuilder-filterOperationNotContains": "不包含",
-    "dxFilterBuilder-filterOperationEndsWith": "结束于",
-    "dxFilterBuilder-filterOperationIsBlank": "空",
-    "dxFilterBuilder-filterOperationIsNotBlank": "不为空"
+    "vizExport-exportButtonText": "{0} 文件"
   }
 }
