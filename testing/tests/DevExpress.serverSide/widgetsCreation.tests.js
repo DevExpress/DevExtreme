@@ -86,7 +86,6 @@ var notDisposableWidgets = [
     "ActionSheet",
     "ContextMenu",
     "Gallery",
-    "LoadIndicator",
     "Lookup",
     "ProgressBar",
     "Toolbar"
